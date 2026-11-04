@@ -1,0 +1,86 @@
+--- evidence/slice-q-mul7-20261104/NFF_Driver.lean
++++ evidence/slice-q-mul8-20261104/NFI_Driver.lean
+@@ -64,34 +64,52 @@
+   let mode := args.headD "small"
+   let (modules, roots) :=
+     if mode == "proof0" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_BaseMultiply.product_bound, `AspisR1.NFF_LoggedOuterLoop.replay, `AspisR1.NFF_RawLog.same_log])
++      (#[`NFI_CombinedFinal], #[`AspisR1.NFF_BaseMultiply.product_bound, `AspisR1.NFF_QueryProduct.emitted, `AspisR1.NFI_InnerCut.same_input, `AspisR1.NFI_TraceResult.erase_pure])
+     else if mode == "proof1" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_BaseMultiply.word_product, `AspisR1.NFF_LoggedOuterStep.active, `AspisR1.NFF_RawLog.replay])
++      (#[`NFI_CombinedFinal], #[`AspisR1.NFF_LoggedOuterLoop.replay, `AspisR1.NFF_FullWrapper.replay, `AspisR1.NFI_InnerCut.erased, `AspisR1.NFI_TraceResult.fail_prefix])
+     else if mode == "proof2" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_BaseMultiply.source, `AspisR1.NFF_LoggedOuterStep.stopped, `AspisR1.NFF_RawTypedLog.canonical])
++      (#[`NFI_CombinedFinal], #[`AspisR1.NFF_RawLog.same_log, `AspisR1.NFF_LoggedStep.active, `AspisR1.NFI_InnerTrace.replay, `AspisR1.NFI_TraceResult.div_prefix])
+     else if mode == "proof3" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_Cell.replay, `AspisR1.NFF_LoggedPush.private_replay, `AspisR1.NFF_RawTypedLog.operands])
++      (#[`NFI_CombinedFinal], #[`AspisR1.NFF_BaseMultiply.word_product, `AspisR1.RPx_Deployed.deployed, `AspisR1.NFI_InnerTrace.frames, `AspisR1.NFI_WrapperDomains.reached])
+     else if mode == "proof4" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_Cell.primitive_reply, `AspisR1.NFF_LoggedPush.public_replay, `AspisR1.NFF_RawTypedLog.replay])
++      (#[`NFI_CombinedFinal], #[`AspisR1.NFF_LoggedOuterStep.active, `AspisR1.NFF_FullWrapper.headline, `AspisR1.NFI_OpeningFrame.original_byte, `AspisR1.NFI_WrapperTrace.erased])
+     else if mode == "proof5" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_CoreReduction.same, `AspisR1.NFF_LoggedRaw.replay, `AspisR1.NFF_ReadDomains.canonical])
++      (#[`NFI_CombinedFinal], #[`AspisR1.NFF_RawLog.replay, `AspisR1.NFF_LoggedTail.replay, `AspisR1.NFI_OpeningFrame.same_heap_frame, `AspisR1.NFI_WrapperTrace.headline])
+     else if mode == "proof6" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_CoreReduction.source, `AspisR1.NFF_LoggedRaw.headline, `AspisR1.NFF_ReadDomains.selected])
++      (#[`NFI_CombinedFinal], #[`AspisR1.NFF_BaseMultiply.source, `AspisR1.NFE_DotBridge.one, `AspisR1.NFI_OpeningFrame.arbitrary_complement])
+     else if mode == "proof7" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_FullOne.replay, `AspisR1.NFF_LoggedStep.update_replay, `AspisR1.NFF_QueryProduct.emitted])
++      (#[`NFI_CombinedFinal], #[`AspisR1.NFF_LoggedOuterStep.stopped, `AspisR1.NFF_LoggedEight.cell_replay, `AspisR1.NFI_OpeningFrame.receiver_and_return_frame])
+     else if mode == "proof8" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_FullWrapper.replay, `AspisR1.NFF_LoggedStep.active, `AspisR1.RPx_Deployed.deployed])
++      (#[`NFI_CombinedFinal], #[`AspisR1.NFF_RawTypedLog.canonical, `AspisR1.NFF_LoggedWrapper.replay, `AspisR1.NFI_OuterActual.emitted])
+     else if mode == "proof9" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_FullWrapper.headline, `AspisR1.NFF_LoggedTail.replay, `AspisR1.NFE_DotBridge.one])
++      (#[`NFI_CombinedFinal], #[`AspisR1.NFF_Cell.replay, `AspisR1.NFE_WrapperBridge.four, `AspisR1.NFI_OuterCut.same_input])
+     else if mode == "proof10" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_LoggedEight.cell_replay, `AspisR1.NFF_LoggedWrapper.replay, `AspisR1.NFE_WrapperBridge.four])
++      (#[`NFI_CombinedFinal], #[`AspisR1.NFF_LoggedPush.private_replay, `AspisR1.NFF_LoggedEight.replay, `AspisR1.NFI_OuterCut.erased])
+     else if mode == "proof11" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_LoggedEight.replay, `AspisR1.NFF_LoggedWrapper.headline, `AspisR1.NFF_LoggedDomains.one])
++      (#[`NFI_CombinedFinal], #[`AspisR1.NFF_RawTypedLog.operands, `AspisR1.NFF_LoggedWrapper.headline, `AspisR1.NFI_OuterTrace.replay])
+     else if mode == "proof12" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_LoggedLoop.replay, `AspisR1.NFF_ProductCall.replay, `AspisR1.NFF_LoggedDomains.four])
++      (#[`NFI_CombinedFinal], #[`AspisR1.NFF_Cell.primitive_reply, `AspisR1.NFF_LoggedDomains.one, `AspisR1.NFI_OuterTrace.frames])
+     else if mode == "proof13" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_LoggedOne.replay, `AspisR1.NFF_RawLog.natural])
+-    else if mode == "scan" then (#[`NFF_CombinedFinal], #[])
++      (#[`NFI_CombinedFinal], #[`AspisR1.NFF_LoggedPush.public_replay, `AspisR1.NFF_LoggedLoop.replay, `AspisR1.NFI_PrivateCuts.installed])
++    else if mode == "proof14" then
++      (#[`NFI_CombinedFinal], #[`AspisR1.NFF_RawTypedLog.replay, `AspisR1.NFF_ProductCall.replay, `AspisR1.NFI_SingleDomains.reached])
++    else if mode == "proof15" then
++      (#[`NFI_CombinedFinal], #[`AspisR1.NFF_CoreReduction.same, `AspisR1.NFF_LoggedDomains.four, `AspisR1.NFI_SingleTrace.main_erased])
++    else if mode == "proof16" then
++      (#[`NFI_CombinedFinal], #[`AspisR1.NFF_LoggedRaw.replay, `AspisR1.NFF_LoggedOne.replay, `AspisR1.NFI_SingleTrace.erased])
++    else if mode == "proof17" then
++      (#[`NFI_CombinedFinal], #[`AspisR1.NFF_ReadDomains.canonical, `AspisR1.NFF_RawLog.natural, `AspisR1.NFI_SingleTrace.emitted])
++    else if mode == "proof18" then
++      (#[`NFI_CombinedFinal], #[`AspisR1.NFF_CoreReduction.source, `AspisR1.NFI_FailurePrefixes.rejected, `AspisR1.NFI_TailTrace.erased])
++    else if mode == "proof19" then
++      (#[`NFI_CombinedFinal], #[`AspisR1.NFF_LoggedRaw.headline, `AspisR1.NFI_FailurePrefixes.trace_prefix, `AspisR1.NFI_TailTrace.emitted])
++    else if mode == "proof20" then
++      (#[`NFI_CombinedFinal], #[`AspisR1.NFF_ReadDomains.selected, `AspisR1.NFI_InnerActual.emitted, `AspisR1.NFI_TraceResult.erase_bind])
++    else if mode == "proof21" then
++      (#[`NFI_CombinedFinal], #[`AspisR1.NFF_FullOne.replay, `AspisR1.NFI_InnerActual.borrowed_frame, `AspisR1.NFI_TraceResult.erase_lift])
++    else if mode == "proof22" then
++      (#[`NFI_CombinedFinal], #[`AspisR1.NFF_LoggedStep.update_replay, `AspisR1.NFI_InnerActual.canonical_at_cut, `AspisR1.NFI_TraceResult.erase_mark])
++    else if mode == "scan" then (#[`NFI_CombinedFinal], #[])
+     else if mode == "fixtures" then
+       (#[`NEP_Planted, `NEP_Mutations],
+        #[`NEP_Planted.matcher, `NEP_Planted.viaPrivate, `NEP_Planted.proof,
+@@ -102,12 +120,12 @@
+     {} (loadExts := true) (level := .private)
+   if mode == "scan" then
+     let mut expected : Std.HashMap String (Array String) := {}
+-    for line in ← IO.FS.lines "NFF_EXPECTED_IMPORTS.jsonl" do
++    for line in ← IO.FS.lines "NFI_EXPECTED_IMPORTS.jsonl" do
+       let j ← IO.ofExcept (Json.parse line)
+       expected := expected.insert (← IO.ofExcept (j.getObjValAs? String "module"))
+         (← IO.ofExcept (j.getObjValAs? (Array String) "imports"))
+-    let failed ← NER.loadedScan env "NFF_LOADED_scan.jsonl" expected
+-    IO.println (if failed then "NFF_SCAN_FAILED" else "NFF_SCAN_ZERO_DANGLING")
++    let failed ← NER.loadedScan env "NFI_LOADED_scan.jsonl" expected
++    IO.println (if failed then "NFI_SCAN_FAILED" else "NFI_SCAN_ZERO_DANGLING")
+     return if failed then 1 else 0
+   let ctx : Command.Context := {
+     fileName := "NEP_Driver"

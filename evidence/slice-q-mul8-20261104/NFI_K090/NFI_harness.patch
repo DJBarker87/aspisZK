@@ -1,0 +1,1016 @@
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -3266,3 +3266,17 @@
+     let s = a + P - b;
+     M31(if s >= P { s - P } else { s })
+ }
++
++#[cfg(kani)]
++mod NFI_arbitrary {
++    impl kani::Arbitrary for super::M31 {
++        fn any() -> Self { Self(kani::any()) }
++    }
++    impl kani::Arbitrary for super::QM31 {
++        fn any() -> Self {
++            Self { c0: super::CM31 { a: kani::any(), b: kani::any() },
++                   c1: super::CM31 { a: kani::any(), b: kani::any() } }
++        }
++    }
++
++}
+--- a/crates/aspis-core/src/field/wide_exact.rs
++++ b/crates/aspis-core/src/field/wide_exact.rs
+@@ -626,3 +626,10 @@
+         assert_canonical(x.sub(x.neg()));
+     }
+ }
++
++#[cfg(kani)]
++mod NFI_wide_arbitrary {
++    impl kani::Arbitrary for super::WideExact {
++        fn any() -> Self { Self { c0: kani::any(), c1: kani::any() } }
++    }
++}
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -1,5 +1,6 @@
+ //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
+ #![no_std]
++#![cfg_attr(kani,feature(allocator_api))]
+ extern crate alloc;
+ pub mod sampler;
+ pub mod semantic_wire;
+@@ -44,3 +45,7 @@
+ compile_error!("`audit-eight-way` is audit-only: it is never combined with the prover (PREREG-PROOF-SIZE-2 item 4)");
+ #[cfg(all(feature="audit-eight-way",any(target_os="solana",feature="program-build")))]
+ compile_error!("`audit-eight-way` is audit-only: it is never built for a program (PREREG-PROOF-SIZE-2 item 4)");
++
++#[cfg(kani)] pub(crate) mod NFI_copy { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs")); }
++
++#[cfg(kani)] mod NFI_original;
+--- a/crates/aspis-r1-cost-probe/src/fast_dots.rs
++++ b/crates/aspis-r1-cost-probe/src/fast_dots.rs
+@@ -73,3 +73,5 @@
+         four_dots_one(q, g, 3),
+     ]
+ }
++
++#[cfg(kani)] #[path="NFI_dots.rs"] mod NFI_dots;
+--- a/KMX_stubs.rs
++++ b/KMX_stubs.rs
+@@ -0,0 +1,76 @@
++use alloc::vec::Vec;
++// Scratch-only replacements. T: Copy excludes Clone side effects.
++#[inline(never)]
++pub unsafe fn KMX_copy_nonoverlapping<T: Copy>(src: *const T,dst: *mut T,count:usize){
++    let mut i=0;while i<count {let value=unsafe{src.add(i).read()};unsafe{dst.add(i).write(value)};i+=1;}
++}
++#[inline(never)]
++pub fn KMX_copy_from_slice<T: Copy>(dst:&mut [T],src:&[T]){
++    assert_eq!(dst.len(),src.len());let mut i=0;while i<src.len(){dst[i]=src[i];i+=1;}
++}
++#[inline(never)]
++pub fn KMX_clone_from_slice<T: Copy>(dst:&mut [T],src:&[T]){KMX_copy_from_slice(dst,src)}
++#[inline(never)]
++pub fn KMX_extend_from_slice<T: Copy,A:alloc::alloc::Allocator>(dst:&mut Vec<T,A>,src:&[T]){
++    dst.reserve(src.len());let mut i=0;while i<src.len(){dst.push(src[i]);i+=1;}
++}
++#[inline(never)]
++pub fn KMX_to_vec<T: Copy>(src:&[T])->Vec<T>{
++    let mut dst=Vec::with_capacity(src.len());KMX_extend_from_slice(&mut dst,src);dst
++}
++// Match the successful-reallocation byte law, preserving the old allocation on failure.
++// MaybeUninit permits copying spare-capacity bytes without reading them as values.
++pub unsafe fn KMX_realloc(ptr:*mut u8,layout:alloc::alloc::Layout,new_size:usize)->*mut u8{
++ let new_layout=alloc::alloc::Layout::from_size_align(new_size,layout.align()).unwrap();
++ let out=unsafe{alloc::alloc::alloc(new_layout)};
++ if !out.is_null(){
++  let mut i=0;while i<core::cmp::min(layout.size(),new_size){
++   let value=unsafe{ptr.cast::<core::mem::MaybeUninit<u8>>().add(i).read()};
++   unsafe{out.cast::<core::mem::MaybeUninit<u8>>().add(i).write(value)};i+=1;
++  }
++  unsafe{alloc::alloc::dealloc(ptr,layout)};
++ }
++ out
++}
++#[cfg(kani)]
++mod KMX_checks{
++use super::*;
++#[kani::proof] #[kani::unwind(18)]
++#[kani::stub(<[u32]>::copy_from_slice,KMX_copy_from_slice)]
++fn KMX_slice_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.copy_from_slice(&src);let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[k],src[k]);}
++#[kani::proof] #[kani::unwind(18)]
++#[kani::stub(<[u32]>::copy_from_slice,KMX_copy_from_slice)]
++fn KMX_slice_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];dst.copy_from_slice(&src);assert_eq!(dst[15],0);}
++#[kani::proof] #[kani::unwind(18)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn KMX_ptr_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as_mut_ptr(),16)};let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[k],src[k]);}
++#[kani::proof] #[kani::unwind(18)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn KMX_ptr_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as_mut_ptr(),16)};assert_eq!(dst[15],0);}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(<[u32]>::clone_from_slice,KMX_clone_from_slice)]
++fn KMX_clone_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.clone_from_slice(&src);let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[k],src[k]);}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(<[u32]>::clone_from_slice,KMX_clone_from_slice)]
++fn KMX_clone_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];dst.clone_from_slice(&src);assert_eq!(dst[15],0);}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(Vec::<u32>::extend_from_slice,KMX_extend_from_slice)]
++fn KMX_extend_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[k],src[k]);}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(Vec::<u32>::extend_from_slice,KMX_extend_from_slice)]
++fn KMX_extend_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);assert_eq!(dst[15],0);}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(<[u32]>::to_vec,KMX_to_vec)]
++fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[k],src[k]);}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(<[u32]>::to_vec,KMX_to_vec)]
++fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[k+1],src[k]);}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}assert_eq!(dst[16],0);}
++}
+--- a/KMX_native.rs
++++ b/KMX_native.rs
+@@ -0,0 +1,98 @@
++#![feature(allocator_api)]
++extern crate alloc;
++include!("KMX_stubs.rs");
++fn differential<T:Copy+Eq+core::fmt::Debug>(src:&[T],seed:T)->usize{
++ let mut checks=0;
++ for offset in [0,1,3] {
++  let mut real=vec![seed;src.len()+offset+2];let mut stub=real.clone();
++  real[offset..offset+src.len()].copy_from_slice(src);KMX_copy_from_slice(&mut stub[offset..offset+src.len()],src);assert_eq!(real,stub);checks+=1;
++  real.fill(seed);stub.fill(seed);real[offset..offset+src.len()].clone_from_slice(src);KMX_clone_from_slice(&mut stub[offset..offset+src.len()],src);assert_eq!(real,stub);checks+=1;
++  real.fill(seed);stub.fill(seed);unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),real.as_mut_ptr().add(offset),src.len());KMX_copy_nonoverlapping(src.as_ptr(),stub.as_mut_ptr().add(offset),src.len())};assert_eq!(real,stub);checks+=1;
++ }
++ for capacity in [0,1,src.len(),src.len()+3] {
++  let mut real=Vec::with_capacity(capacity);real.push(seed);let mut stub=Vec::with_capacity(capacity);stub.push(seed);
++  real.extend_from_slice(src);KMX_extend_from_slice(&mut stub,src);assert_eq!(real,stub);checks+=1;
++ }
++ assert_eq!(src.to_vec(),KMX_to_vec(src));checks+1
++}
++fn realloc_compare(src:&[u8])->usize{
++ if src.is_empty(){return 0;}let mut checks=0;
++ for new_size in [1,src.len(),src.len()+1,src.len()*2+3]{unsafe{
++  let layout=alloc::alloc::Layout::array::<u8>(src.len()).unwrap();
++  let a=alloc::alloc::alloc(layout);let b=alloc::alloc::alloc(layout);assert!(!a.is_null()&&!b.is_null());
++  for i in 0..src.len(){a.add(i).write(src[i]);b.add(i).write(src[i]);}
++  let a=alloc::alloc::realloc(a,layout,new_size);let b=KMX_realloc(b,layout,new_size);assert!(!a.is_null()&&!b.is_null());
++  for i in 0..src.len().min(new_size){assert_eq!(a.add(i).read(),b.add(i).read());}
++  let layout=alloc::alloc::Layout::array::<u8>(new_size).unwrap();alloc::alloc::dealloc(a,layout);alloc::alloc::dealloc(b,layout);checks+=1;
++ }}checks
++}
++fn random(state:&mut u64)->u64{*state^=*state<<13;*state^=*state>>7;*state^=*state<<17;*state}
++#[derive(Clone,Copy,Eq,PartialEq,Debug)]struct Pair{a:u32,b:u32}
++#[derive(Clone,Copy,Eq,PartialEq,Debug)]struct KMX_Pair{a:u32,b:u32}
++fn main(){
++{let mut input=[0u8;1];input[0]=1u8;let n:usize=1;let mut level=[0u8;1];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[0],1u8,"KMX_c000_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c000");}
++{let mut input=[0u8;2];input[1]=1u8;let n:usize=2;let mut level=[0u8;2];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[1],1u8,"KMX_c001_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c001");}
++{let mut input=[0u8;3];input[2]=1u8;let n:usize=3;let mut level=[0u8;3];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[2],1u8,"KMX_c002_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c002");}
++{let mut input=[0u8;4];input[3]=1u8;let n:usize=4;let mut level=[0u8;4];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[3],1u8,"KMX_c003_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c003");}
++{let mut input=[0u8;8];input[7]=1u8;let n:usize=8;let mut level=[0u8;8];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[7],1u8,"KMX_c004_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c004");}
++{let mut input=[0u8;16];input[15]=1u8;let n:usize=16;let mut level=[0u8;16];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[15],1u8,"KMX_c005_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c005");}
++{let mut input=[0u32;1];input[0]=512u32;let n:usize=1;let mut level=[0u32;1];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[0],512u32,"KMX_c006_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c006");}
++{let mut input=[0u32;2];input[1]=512u32;let n:usize=2;let mut level=[0u32;2];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[1],512u32,"KMX_c007_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c007");}
++{let mut input=[0u32;3];input[2]=512u32;let n:usize=3;let mut level=[0u32;3];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[2],512u32,"KMX_c008_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c008");}
++{let mut input=[0u32;4];input[3]=512u32;let n:usize=4;let mut level=[0u32;4];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[3],512u32,"KMX_c009_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c009");}
++{let mut input=[0u32;8];input[7]=512u32;let n:usize=8;let mut level=[0u32;8];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[7],512u32,"KMX_c010_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c010");}
++{let mut input=[0u32;16];input[15]=512u32;let n:usize=16;let mut level=[0u32;16];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[15],512u32,"KMX_c011_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c011");}
++{let mut input=[0u64;1];input[0]=512u64;let n:usize=1;let mut level=[0u64;1];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[0],512u64,"KMX_c012_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c012");}
++{let mut input=[0u64;2];input[1]=512u64;let n:usize=2;let mut level=[0u64;2];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[1],512u64,"KMX_c013_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c013");}
++{let mut input=[0u64;3];input[2]=512u64;let n:usize=3;let mut level=[0u64;3];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[2],512u64,"KMX_c014_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c014");}
++{let mut input=[0u64;4];input[3]=512u64;let n:usize=4;let mut level=[0u64;4];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[3],512u64,"KMX_c015_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c015");}
++{let mut input=[0u64;8];input[7]=512u64;let n:usize=8;let mut level=[0u64;8];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[7],512u64,"KMX_c016_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c016");}
++{let mut input=[0u64;16];input[15]=512u64;let n:usize=16;let mut level=[0u64;16];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[15],512u64,"KMX_c017_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c017");}
++{let mut input=[[0u8;32];1];input[0]=[1u8;32];let n:usize=1;let mut level=[[0u8;32];1];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[0],[1u8;32],"KMX_c018_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c018");}
++{let mut input=[[0u8;32];2];input[1]=[1u8;32];let n:usize=2;let mut level=[[0u8;32];2];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[1],[1u8;32],"KMX_c019_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c019");}
++{let mut input=[[0u8;32];3];input[2]=[1u8;32];let n:usize=3;let mut level=[[0u8;32];3];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[2],[1u8;32],"KMX_c020_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c020");}
++{let mut input=[[0u8;32];4];input[3]=[1u8;32];let n:usize=4;let mut level=[[0u8;32];4];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[3],[1u8;32],"KMX_c021_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c021");}
++{let mut input=[[0u8;32];8];input[7]=[1u8;32];let n:usize=8;let mut level=[[0u8;32];8];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[7],[1u8;32],"KMX_c022_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c022");}
++{let mut input=[[0u8;32];16];input[15]=[1u8;32];let n:usize=16;let mut level=[[0u8;32];16];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[15],[1u8;32],"KMX_c023_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c023");}
++{let mut input=[KMX_Pair{a:0,b:0};1];input[0]=KMX_Pair{a:512,b:1};let n:usize=1;let mut level=[KMX_Pair{a:0,b:0};1];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[0],KMX_Pair{a:512,b:1},"KMX_c024_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c024");}
++{let mut input=[KMX_Pair{a:0,b:0};2];input[1]=KMX_Pair{a:512,b:1};let n:usize=2;let mut level=[KMX_Pair{a:0,b:0};2];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[1],KMX_Pair{a:512,b:1},"KMX_c025_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c025");}
++{let mut input=[KMX_Pair{a:0,b:0};3];input[2]=KMX_Pair{a:512,b:1};let n:usize=3;let mut level=[KMX_Pair{a:0,b:0};3];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[2],KMX_Pair{a:512,b:1},"KMX_c026_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c026");}
++{let mut input=[KMX_Pair{a:0,b:0};4];input[3]=KMX_Pair{a:512,b:1};let n:usize=4;let mut level=[KMX_Pair{a:0,b:0};4];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[3],KMX_Pair{a:512,b:1},"KMX_c027_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c027");}
++{let mut input=[KMX_Pair{a:0,b:0};8];input[7]=KMX_Pair{a:512,b:1};let n:usize=8;let mut level=[KMX_Pair{a:0,b:0};8];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[7],KMX_Pair{a:512,b:1},"KMX_c028_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c028");}
++{let mut input=[KMX_Pair{a:0,b:0};16];input[15]=KMX_Pair{a:512,b:1};let n:usize=16;let mut level=[KMX_Pair{a:0,b:0};16];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[15],KMX_Pair{a:512,b:1},"KMX_c029_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c029");}
++{let mut input=[0u8;64];input[63]=1u8;let n:usize=64;let mut level=[0u8;64];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[63],1u8,"KMX_c030_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c030");}
++{let mut input=[0u32;16];input[15]=512u32;let n:usize=16;let mut level=[0u32;16];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[15],512u32,"KMX_c031_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c031");}
++{let mut input=[0u8;128];input[127]=1u8;let n:usize=128;let mut level=[0u8;128];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[127],1u8,"KMX_c032_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c032");}
++{let mut input=[0u32;32];input[31]=512u32;let n:usize=32;let mut level=[0u32;32];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[31],512u32,"KMX_c033_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c033");}
++{let mut input=[0u8;1024];input[1023]=1u8;let n:usize=1024;let mut level=[0u8;1024];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[1023],1u8,"KMX_c034_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c034");}
++{let mut input=[0u32;256];input[255]=512u32;let n:usize=256;let mut level=[0u32;256];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[255],512u32,"KMX_c035_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c035");}
++{let mut input=[0u8;1736];input[1735]=1u8;let n:usize=1736;let mut level=[0u8;1736];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[1735],1u8,"KMX_c036_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c036");}
++{let mut input=[0u32;434];input[433]=512u32;let n:usize=434;let mut level=[0u32;434];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[433],512u32,"KMX_c037_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c037");}
++{let mut input=[0u8;1768];input[1767]=1u8;let n:usize=1768;let mut level=[0u8;1768];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[1767],1u8,"KMX_c038_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c038");}
++{let mut input=[0u32;442];input[441]=512u32;let n:usize=442;let mut level=[0u32;442];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[441],512u32,"KMX_c039_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c039");}
++{let mut input=[0u32;16];input[15]=512u32;let n:usize=16;let mut level=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(input.as_ptr(),level.as_mut_ptr().add(0),n);}assert_eq!(level[15],512u32,"KMX_c040_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c040");}
++{let mut input=[0u32;16];input[15]=512u32;let n:usize=16;let mut level=[0u32;16];level[0..0+n].clone_from_slice(&input[..n]);assert_eq!(level[15],512u32,"KMX_c041_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c041");}
++{let mut input=[0u32;16];input[15]=512u32;let n:usize=16;let mut level=Vec::<u32>::with_capacity(16);level.extend_from_slice(&input[..n]);assert_eq!(level[15],512u32,"KMX_c042_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c042");}
++{let mut input=[0u32;16];input[15]=512u32;let n:usize=16;let level=input[..n].to_vec();assert_eq!(level[15],512u32,"KMX_c043_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c043");}
++{let mut input=[0u32;16];input[15]=512u32;let n:usize=16;let mut level=Vec::<u32>::with_capacity(1);level.push(0u32);level.extend_from_slice(&input[..n]);assert_eq!(level[16],512u32,"KMX_c044_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c044");}
++{let mut input=[0u32;16];input[15]=512u32;let n:usize=16;let mut level=[0u32;17];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[15],512u32,"KMX_c045_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c045");}
++{let mut input=[0u32;16];input[15]=512u32;let n:usize=16;let mut level=[0u32;18];level[1..1+n].copy_from_slice(&input[..n]);assert_eq!(level[16],512u32,"KMX_c046_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c046");}
++{let mut input=[0u32;16];input[15]=512u32;let n:usize=16;let mut level=[0u32;24];level[3..3+n].copy_from_slice(&input[..n]);assert_eq!(level[18],512u32,"KMX_c047_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c047");}
++{let mut input=[0u32;16];input[15]=512u32;let n:usize=16;let mut level=vec![0u32;16];level[0..0+n].copy_from_slice(&input[..n]);assert_eq!(level[15],512u32,"KMX_c048_correct");println!("KMX_NATIVE_CONFIG_PASS KMX_c048");}
++ let mut checks=0usize;let vals=[0u32,1,255,256,512];
++ for n in 0..=6 {for mut code in 0..5usize.pow(n as u32) {let mut src=vec![0u32;n];for x in &mut src{*x=vals[code%5];code/=5;}checks+=differential(&src,0);
++ let b:Vec<u8>=src.iter().map(|x|(*x/256+*x%256) as u8).collect();checks+=differential(&b,0);checks+=realloc_compare(&b);
++ let b:Vec<u64>=src.iter().map(|x|*x as u64).collect();checks+=differential(&b,0);
++ let b:Vec<[u8;32]>=src.iter().map(|x|[(*x/256+*x%256) as u8;32]).collect();checks+=differential(&b,[0;32]);
++ let b:Vec<Pair>=src.iter().map(|x|Pair{a:*x,b:*x}).collect();checks+=differential(&b,Pair{a:0,b:0});
++ }}
++ let mut state=0x1234567812345678u64;
++ for n in [0,1,2,3,4,7,8,15,16,31,32,63,64,127,128,1024,1736,1768] {for _ in 0..16 {
++  let a:Vec<u8>=(0..n).map(|_|random(&mut state) as u8).collect();checks+=differential(&a,0);checks+=realloc_compare(&a);
++  let a:Vec<u32>=(0..n).map(|_|random(&mut state) as u32).collect();checks+=differential(&a,0);
++  let a:Vec<u64>=(0..n).map(|_|random(&mut state)).collect();checks+=differential(&a,0);
++  let a:Vec<[u8;32]>=(0..n).map(|_|{let mut x=[0;32];for b in &mut x{*b=random(&mut state) as u8;}x}).collect();checks+=differential(&a,[0;32]);
++  let a:Vec<Pair>=(0..n).map(|_|Pair{a:random(&mut state) as u32,b:random(&mut state) as u32}).collect();checks+=differential(&a,Pair{a:0,b:0});
++ }}
++ println!("KMX_NATIVE_PASS checks={checks} seed=0x1234567812345678 exhaustive_u32_alphabet=0,1,255,256,512 max_exhaustive_len=6 random_trials_per_type_len=16");
++}
+--- a/KMX_CopyMeaning.lean
++++ b/KMX_CopyMeaning.lean
+@@ -0,0 +1,66 @@
++import Std
++set_option autoImplicit false
++namespace KMX_CopyMeaning
++/-- Value-level semantics for explicit indexed writes. Pointer validity,
++non-overlap, lengths and allocation remain caller obligations. -/
++def write {α : Type} (dst : Nat → α) (i : Nat) (v : α) : Nat → α :=
++  fun k => if k = i then v else dst k
++
++def loop {α : Type} (src dst : Nat → α) (start : Nat) : Nat → Nat → α
++  | 0 => dst
++  | n+1 => loop src (write dst start (src start)) (start+1) n
++
++theorem loop_spec {α : Type} (src dst : Nat → α) (start count k : Nat) :
++    loop src dst start count k =
++      if start ≤ k ∧ k < start + count then src k else dst k := by
++  induction count generalizing dst start with
++  | zero =>
++    have h : ¬ (start ≤ k ∧ k < start + 0) := by omega
++    simp only [loop, if_neg h]
++  | succ n ih =>
++    rw [loop, ih]
++    by_cases hk : k = start
++    · subst k
++      have hn : ¬ (start + 1 ≤ start ∧ start < start + 1 + n) := by omega
++      have hy : start ≤ start ∧ start < start + (n + 1) := by omega
++      simp [hn, hy, write]
++    · by_cases h : start + 1 ≤ k ∧ k < start + 1 + n
++      · have hy : start ≤ k ∧ k < start + (n + 1) := by omega
++        simp [h, hy]
++      · have hn : ¬ (start ≤ k ∧ k < start + (n + 1)) := by omega
++        simp [h, hn, write, hk]
++
++theorem copy_prefix {α : Type} (src dst : Nat → α) (count k : Nat) :
++    loop src dst 0 count k = if k < count then src k else dst k := by
++  simpa using loop_spec src dst 0 count k
++
++theorem copy_frame {α : Type} (src dst : Nat → α) (start count k : Nat)
++    (outside : k < start ∨ start + count ≤ k) :
++    loop src dst start count k = dst k := by
++  rw [loop_spec, if_neg]; omega
++
++/-- Vector append value law. This says nothing about allocation failure,
++capacity, pointer identity, or the allocator's reallocation implementation. -/
++def appendLoop {α : Type} (dst : List α) : List α → List α
++  | [] => dst
++  | x::xs => appendLoop (dst ++ [x]) xs
++
++theorem append_spec {α : Type} (dst src : List α) :
++    appendLoop dst src = dst ++ src := by
++  induction src generalizing dst with
++  | nil => simp [appendLoop]
++  | cons x xs ih => simp [appendLoop, ih, List.append_assoc]
++
++/-- Successful reallocation preserves the overlapping byte prefix. Allocation
++success, ownership and uninitialized-byte validity are external obligations. -/
++theorem realloc_prefix {α : Type} (src dst : Nat → α) (oldSize newSize k : Nat) :
++    loop src dst 0 (min oldSize newSize) k =
++      if k < min oldSize newSize then src k else dst k :=
++  copy_prefix src dst (min oldSize newSize) k
++
++#print axioms realloc_prefix
++#print axioms loop_spec
++#print axioms copy_prefix
++#print axioms copy_frame
++#print axioms append_spec
++end KMX_CopyMeaning
+--- a/crates/aspis-r1-cost-probe/src/NFI_dots.rs
++++ b/crates/aspis-r1-cost-probe/src/NFI_dots.rs
+@@ -0,0 +1,221 @@
++use super::*;
++const NFI_BOUND:u64=4611686009837453316; // (P-1)^2
++struct NFI_Log { replies:[u64;8],left:[u32;8],right:[u32;8],calls:[u8;8],order:[usize;8],next:usize }
++fn NFI_product(log:&mut NFI_Log,lane:usize,a:u32,b:u32)->u64 {
++ log.order[log.next]=lane;log.next+=1;
++ log.left[lane]=a;log.right[lane]=b;log.calls[lane]+=1;log.replies[lane]
++}
++fn NFI_step(q:&[u8;608],g:&[WideExact;29],slot:usize,term:usize,sums:&mut[u64;8],log:&mut NFI_Log) {
++                let scalar = M31::from_le_bytes(
++                    q[slot * 120 + term * 4..slot * 120 + term * 4 + 4]
++                        .try_into()
++                        .unwrap(),
++                )
++                .unwrap();
++                let coefficient = g[term].to_limbs();
++                sums[0] += NFI_product(log, 0, coefficient[0], scalar.0);
++                sums[1] += NFI_product(log, 1, coefficient[1], scalar.0);
++                sums[2] += NFI_product(log, 2, coefficient[2], scalar.0);
++                sums[3] += NFI_product(log, 3, coefficient[3], scalar.0);
++                sums[4] += NFI_product(log, 4, coefficient[4], scalar.0);
++                sums[5] += NFI_product(log, 5, coefficient[5], scalar.0);
++                sums[6] += NFI_product(log, 6, coefficient[6], scalar.0);
++                sums[7] += NFI_product(log, 7, coefficient[7], scalar.0);
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn main_term_window() {
++ let q:[u8;608]=kani::any();let g:[WideExact;29]=kani::any();
++ let slot:usize=kani::any();let term:usize=kani::any();let lane:usize=kani::any();
++ kani::assume(slot<4 && term<26 && lane<8);
++ let at=slot*120+term*4;
++ let scalar=u32::from_le_bytes([q[at],q[at+1],q[at+2],q[at+3]]);
++ kani::assume(scalar<2147483647);
++ let mut sums:[u64;8]=kani::any();let replies:[u64;8]=kani::any();
++ for i in 0..8 {kani::assume(sums[i]<=3*NFI_BOUND);kani::assume(replies[i]<=NFI_BOUND);}
++ let before=sums[lane];let byte=q[at];let coefficient=g[term].to_limbs()[lane];
++ let mut log=NFI_Log{replies,left:[0;8],right:[0;8],calls:[0;8],order:[99;8],next:0};
++ NFI_step(&q,&g,slot,term,&mut sums,&mut log);
++ assert_eq!(log.next,8);assert_eq!(log.order[lane],lane);
++ assert_eq!(log.calls[lane],1);
++ assert_eq!(log.left[lane],coefficient);assert_eq!(log.right[lane],scalar);
++ assert_eq!(q[at],byte);assert_eq!(g[term].to_limbs()[lane],coefficient);
++ let expected=before+replies[lane];
++ assert_eq!(sums[lane],if cfg!(NFI_wrong_main_term){expected^1}else{expected});
++}
++
++fn NFI_fold(sums:[u64;8],limbs:&mut[u64;8]) {
++            limbs[0] += (sums[0] & 0x7fff_ffff) + (sums[0] >> 31);
++            limbs[1] += (sums[1] & 0x7fff_ffff) + (sums[1] >> 31);
++            limbs[2] += (sums[2] & 0x7fff_ffff) + (sums[2] >> 31);
++            limbs[3] += (sums[3] & 0x7fff_ffff) + (sums[3] >> 31);
++            limbs[4] += (sums[4] & 0x7fff_ffff) + (sums[4] >> 31);
++            limbs[5] += (sums[5] & 0x7fff_ffff) + (sums[5] >> 31);
++            limbs[6] += (sums[6] & 0x7fff_ffff) + (sums[6] >> 31);
++            limbs[7] += (sums[7] & 0x7fff_ffff) + (sums[7] >> 31);
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn outer_fold_window() {
++ let sums:[u64;8]=kani::any();let mut limbs:[u64;8]=kani::any();
++ for i in 0..8 {kani::assume(limbs[i]<=6*10737418238u64);}
++ let lane:usize=kani::any();kani::assume(lane<8);let before=limbs[lane];let selected=sums[lane];
++ NFI_fold(sums,&mut limbs);
++ let expected=before+(selected&0x7fff_ffff)+(selected>>31);
++ assert_eq!(limbs[lane],if cfg!(NFI_wrong_fold){expected^1}else{expected});
++ assert!(limbs[lane]<=7*10737418238u64);
++}
++struct NFI_ChildLog { calls:usize,slots:[usize;4],qptr:[usize;4],gptr:[usize;4],replies:[WideExact;4] }
++fn NFI_child(q:&[u8;608],g:&[WideExact;29],slot:usize,log:&mut NFI_ChildLog)->WideExact {
++ let at=log.calls;log.calls+=1;log.slots[at]=slot;
++ log.qptr[at]=q.as_ptr() as usize;log.gptr[at]=g.as_ptr() as usize;
++ log.replies[at]
++}
++fn NFI_four(q:&[u8],g:&[WideExact;29],log:&mut NFI_ChildLog)->[WideExact;4] {
++ let q:&[u8;608]=q[..608].try_into().unwrap();
++ [NFI_child(q,g,0,log),NFI_child(q,g,1,log),NFI_child(q,g,2,log),NFI_child(q,g,3,log),]
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn wrapper_calls_window() {
++ let q:[u8;609]=kani::any();let g:[WideExact;29]=kani::any();
++ let replies:[WideExact;4]=kani::any();
++ let mut log=NFI_ChildLog{calls:0,slots:[99;4],qptr:[0;4],gptr:[0;4],replies};
++ let out=NFI_four(&q,&g,&mut log);
++ let at:usize=kani::any();let lane:usize=kani::any();kani::assume(at<4 && lane<8);
++ assert_eq!(log.calls,4);assert_eq!(log.slots[at],at);
++ assert_eq!(log.qptr[at],q.as_ptr() as usize);assert_eq!(log.gptr[at],g.as_ptr() as usize);
++ let expected=replies[at].to_limbs()[lane];
++ assert_eq!(out[at].to_limbs()[lane],if cfg!(NFI_wrong_wrapper){expected^1}else{expected});
++}
++
++// Adjacent native cuts share the actual records. No complete-loop harness.
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn entry_to_inner_frame(){
++ let limbs=[0u64;WideExact::LIMB_COUNT];
++ let mut outer=(0..26).step_by(4);let start=outer.next().unwrap();
++ let sums=[0u64;WideExact::LIMB_COUNT];
++ let inner=start..core::cmp::min(start+4,26);
++ let lane:usize=kani::any();kani::assume(lane<8);
++ assert_eq!(limbs[lane],0);assert_eq!(sums[lane],0);assert_eq!(inner.end,4);
++ assert_eq!(inner.start,if cfg!(NFI_wrong_entry){1}else{0});
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn cursor_to_product_frame(){
++ let q:[u8;608]=kani::any();let g:[WideExact;29]=kani::any();
++ let slot:usize=kani::any();let start:usize=kani::any();let end:usize=kani::any();
++ let lane:usize=kani::any();let observed:usize=kani::any();let gi:usize=kani::any();let gl:usize=kani::any();
++ kani::assume(slot<4 && start<end && end<=26 && lane<8 && observed<608 && gi<29 && gl<8);
++ let at=slot*120+start*4;let scalar=u32::from_le_bytes([q[at],q[at+1],q[at+2],q[at+3]]);
++ kani::assume(scalar<2147483647);
++ let mut sums:[u64;8]=kani::any();let replies:[u64;8]=kani::any();
++ for i in 0..8{kani::assume(sums[i]<=3*NFI_BOUND);kani::assume(replies[i]<=NFI_BOUND);}
++ let before=sums[lane];let byte=q[observed];let coeff=g[gi].to_limbs()[gl];
++ let qp=q.as_ptr() as usize;let gp=g.as_ptr() as usize;
++ let mut iter=start..end;let term=iter.next().unwrap();
++ let mut log=NFI_Log{replies,left:[0;8],right:[0;8],calls:[0;8],order:[99;8],next:0};
++ NFI_step(&q,&g,slot,term,&mut sums,&mut log);
++ assert_eq!(iter.start,start+1);assert_eq!(iter.end,end);
++ assert_eq!(log.left[lane],g[start].to_limbs()[lane]);assert_eq!(log.right[lane],scalar);assert_eq!(log.calls[lane],1);
++ assert_eq!(q.as_ptr() as usize,qp);assert_eq!(g.as_ptr() as usize,gp);
++ assert_eq!(q[observed],byte);assert_eq!(g[gi].to_limbs()[gl],coeff);
++ assert_eq!(sums[lane],if cfg!(NFI_wrong_cursor_product){(before+replies[lane])^1}else{before+replies[lane]});
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn exhausted_inner_to_fold_frame(){
++ let cursor:usize=kani::any();kani::assume(cursor<=26);
++ let mut iter=cursor..cursor;
++ let sums:[u64;8]=kani::any();let mut limbs:[u64;8]=kani::any();
++ for i in 0..8{kani::assume(limbs[i]<=6*10737418238u64);}
++ let lane:usize=kani::any();kani::assume(lane<8);let before=limbs[lane];
++ assert_eq!(iter.next(),None);
++ NFI_fold(sums,&mut limbs);
++ assert_eq!(iter.start,cursor);assert_eq!(iter.end,cursor);
++ let expected=before+(sums[lane]&0x7fffffff)+(sums[lane]>>31);
++ assert_eq!(limbs[lane],if cfg!(NFI_wrong_exhaust_fold){expected^1}else{expected});
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn fold_to_next_outer_frame(){
++ let start:usize=kani::any();kani::assume(start<26 && start%4==0);
++ let sums:[u64;8]=kani::any();let mut limbs:[u64;8]=kani::any();
++ for i in 0..8{kani::assume(limbs[i]<=6*10737418238u64);}
++ let lane:usize=kani::any();kani::assume(lane<8);let before=limbs[lane];
++ let mut outer=(start..26).step_by(4);assert_eq!(outer.next(),Some(start));
++ NFI_fold(sums,&mut limbs);
++ let after=limbs[lane];let next=outer.next();
++ assert_eq!(after,before+(sums[lane]&0x7fffffff)+(sums[lane]>>31));
++ let expected=if start+4<26{Some(start+4)}else{None};
++ assert_eq!(next,if cfg!(NFI_wrong_fold_next){Some(99)}else{expected});
++ assert_eq!(limbs[lane],after);
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn wrapper_slot0_installation(){
++ let q:[u8;609]=kani::any();let g:[WideExact;29]=kani::any();let replies:[WideExact;4]=kani::any();
++ let byte:usize=kani::any();let gi:usize=kani::any();let lane:usize=kani::any();
++ kani::assume(byte<609 && gi<29 && lane<8);
++ let original=q[byte];let coefficient=g[gi].to_limbs()[lane];
++ let mut log=NFI_ChildLog{calls:0,slots:[99;4],qptr:[0;4],gptr:[0;4],replies};
++ let out=NFI_four(&q,&g,&mut log);
++ assert_eq!(log.calls,4);assert_eq!(log.slots[0],0);
++ assert_eq!(log.qptr[0],q.as_ptr() as usize);assert_eq!(log.gptr[0],g.as_ptr() as usize);
++ assert_eq!(q[byte],original);assert_eq!(g[gi].to_limbs()[lane],coefficient);
++ let expected=replies[0].to_limbs()[lane];
++ assert_eq!(out[0].to_limbs()[lane],if cfg!(NFI_wrong_wrapper_slot0){expected^1}else{expected});
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn wrapper_slot1_installation(){
++ let q:[u8;609]=kani::any();let g:[WideExact;29]=kani::any();let replies:[WideExact;4]=kani::any();
++ let byte:usize=kani::any();let gi:usize=kani::any();let lane:usize=kani::any();
++ kani::assume(byte<609 && gi<29 && lane<8);
++ let original=q[byte];let coefficient=g[gi].to_limbs()[lane];
++ let mut log=NFI_ChildLog{calls:0,slots:[99;4],qptr:[0;4],gptr:[0;4],replies};
++ let out=NFI_four(&q,&g,&mut log);
++ assert_eq!(log.calls,4);assert_eq!(log.slots[1],1);
++ assert_eq!(log.qptr[1],q.as_ptr() as usize);assert_eq!(log.gptr[1],g.as_ptr() as usize);
++ assert_eq!(q[byte],original);assert_eq!(g[gi].to_limbs()[lane],coefficient);
++ let expected=replies[1].to_limbs()[lane];
++ assert_eq!(out[1].to_limbs()[lane],if cfg!(NFI_wrong_wrapper_slot1){expected^1}else{expected});
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn wrapper_slot2_installation(){
++ let q:[u8;609]=kani::any();let g:[WideExact;29]=kani::any();let replies:[WideExact;4]=kani::any();
++ let byte:usize=kani::any();let gi:usize=kani::any();let lane:usize=kani::any();
++ kani::assume(byte<609 && gi<29 && lane<8);
++ let original=q[byte];let coefficient=g[gi].to_limbs()[lane];
++ let mut log=NFI_ChildLog{calls:0,slots:[99;4],qptr:[0;4],gptr:[0;4],replies};
++ let out=NFI_four(&q,&g,&mut log);
++ assert_eq!(log.calls,4);assert_eq!(log.slots[2],2);
++ assert_eq!(log.qptr[2],q.as_ptr() as usize);assert_eq!(log.gptr[2],g.as_ptr() as usize);
++ assert_eq!(q[byte],original);assert_eq!(g[gi].to_limbs()[lane],coefficient);
++ let expected=replies[2].to_limbs()[lane];
++ assert_eq!(out[2].to_limbs()[lane],if cfg!(NFI_wrong_wrapper_slot2){expected^1}else{expected});
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn wrapper_slot3_installation(){
++ let q:[u8;609]=kani::any();let g:[WideExact;29]=kani::any();let replies:[WideExact;4]=kani::any();
++ let byte:usize=kani::any();let gi:usize=kani::any();let lane:usize=kani::any();
++ kani::assume(byte<609 && gi<29 && lane<8);
++ let original=q[byte];let coefficient=g[gi].to_limbs()[lane];
++ let mut log=NFI_ChildLog{calls:0,slots:[99;4],qptr:[0;4],gptr:[0;4],replies};
++ let out=NFI_four(&q,&g,&mut log);
++ assert_eq!(log.calls,4);assert_eq!(log.slots[3],3);
++ assert_eq!(log.qptr[3],q.as_ptr() as usize);assert_eq!(log.gptr[3],g.as_ptr() as usize);
++ assert_eq!(q[byte],original);assert_eq!(g[gi].to_limbs()[lane],coefficient);
++ let expected=replies[3].to_limbs()[lane];
++ assert_eq!(out[3].to_limbs()[lane],if cfg!(NFI_wrong_wrapper_slot3){expected^1}else{expected});
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn wrapper_prefix_failure(){
++ let q:[u8;608]=kani::any();let len:usize=kani::any();kani::assume(len<608);
++ let prefix=q[..len].get(..608);
++ assert_eq!(prefix.is_none(),if cfg!(NFI_wrong_wrapper_prefix){false}else{true});
++}
+--- a/crates/aspis-r1-cost-probe/src/fast_pairing.rs
++++ b/crates/aspis-r1-cost-probe/src/fast_pairing.rs
+@@ -122,6 +122,8 @@
+         }
+         pub fn finish(self)->Q {Q([reduce(self.sums[0]),reduce(self.sums[1]),reduce(self.sums[2]),reduce(self.sums[3])])}
+     }
++#[cfg(kani)] mod NFI_pairing { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/src/NFI_pairing.rs")); }
++
+ }
+ 
+ 
+--- a/crates/aspis-r1-cost-probe/src/NFI_pairing.rs
++++ b/crates/aspis-r1-cost-probe/src/NFI_pairing.rs
+@@ -0,0 +1,406 @@
++use crate::fast_pairing::canonical;
++use super::*;
++use super::super::{EbyKDot,E,QM31,MAX_TERMS,checked_q};
++struct NFI_RawLog { replies:[u64;16],left:[u64;16],right:[u64;16],order:[usize;16],calls:usize }
++fn NFI_product(log:&mut NFI_RawLog,at:usize,a:u64,b:u64)->u64 {
++ log.order[log.calls]=at;log.calls+=1;log.left[at]=a;log.right[at]=b;log.replies[at]
++}
++fn NFI_raw(left:Q,rhs:Q,log:&mut NFI_RawLog)->[u64;4] {
++
++            let [a,b,c,d]=[u64::from(left.0[0]),u64::from(left.0[1]),u64::from(left.0[2]),u64::from(left.0[3])];
++            let [e,f,g,h]=[u64::from(rhs.0[0]),u64::from(rhs.0[1]),u64::from(rhs.0[2]),u64::from(rhs.0[3])];
++            const PP:u64=(P as u64)*(P as u64);
++            let partial=|x:u64|(x&u64::from(P)).wrapping_add(x>>31u32);
++            let u=partial((NFI_product(log,0,c,g)).wrapping_add(PP).wrapping_sub(NFI_product(log,1,d,h)));
++            let v=partial((NFI_product(log,2,c,h)).wrapping_add(NFI_product(log,3,d,g)));
++            [(NFI_product(log,4,a,e)).wrapping_add(PP).wrapping_sub(NFI_product(log,5,b,f)).wrapping_add(2*u).wrapping_add(3*u64::from(P)).wrapping_sub(v),
++             (NFI_product(log,6,a,f)).wrapping_add(NFI_product(log,7,b,e)).wrapping_add(u).wrapping_add(2*v),
++             (NFI_product(log,8,a,g)).wrapping_add(NFI_product(log,9,c,e)).wrapping_add(2*PP).wrapping_sub(NFI_product(log,10,b,h)).wrapping_sub(NFI_product(log,11,d,f)),
++             (NFI_product(log,12,a,h)).wrapping_add(NFI_product(log,13,b,g)).wrapping_add(NFI_product(log,14,c,f)).wrapping_add(NFI_product(log,15,d,e))]
++        
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn raw_operand_window() {
++ let left:[u32;4]=kani::any();let right:[u32;4]=kani::any();
++ for i in 0..4 {kani::assume(left[i]<P && right[i]<P);}
++ let replies:[u64;16]=kani::any();for i in 0..16 {kani::assume(replies[i]<=4611686009837453316);}
++ let mut log=NFI_RawLog{replies,left:[0;16],right:[0;16],order:[99;16],calls:0};
++ let out=NFI_raw(Q(left),Q(right),&mut log);
++ let at:usize=kani::any();kani::assume(at<16);
++ let pairs=[(2, 2), (3, 3), (2, 3), (3, 2), (0, 0), (1, 1), (0, 1), (1, 0), (0, 2), (2, 0), (1, 3), (3, 1), (0, 3), (1, 2), (2, 1), (3, 0)];
++ assert_eq!(log.calls,16);assert_eq!(log.order[at],at);
++ assert_eq!(log.left[at],u64::from(left[pairs[at].0]));
++ let expected=u64::from(right[pairs[at].1]);
++ assert_eq!(log.right[at],if cfg!(NFI_wrong_raw_operand){expected^1}else{expected});
++ // The result is computed from the SAME local product replies, never picked afterwards.
++ const PP:u64=4611686014132420609;
++ let fold=|x:u64|(x&0x7fffffff).wrapping_add(x>>31);
++ let u=fold(replies[0].wrapping_add(PP).wrapping_sub(replies[1]));
++ let v=fold(replies[2].wrapping_add(replies[3]));
++ let expected=[replies[4].wrapping_add(PP).wrapping_sub(replies[5]).wrapping_add(2*u).wrapping_add(3*u64::from(P)).wrapping_sub(v),
++ replies[6].wrapping_add(replies[7]).wrapping_add(u).wrapping_add(2*v),
++ replies[8].wrapping_add(replies[9]).wrapping_add(2*PP).wrapping_sub(replies[10]).wrapping_sub(replies[11]),
++ replies[12].wrapping_add(replies[13]).wrapping_add(replies[14]).wrapping_add(replies[15])];
++ let lane:usize=kani::any();kani::assume(lane<4);assert_eq!(out[lane],expected[lane]);
++}
++fn NFI_dot_step(dot:&mut Dot,raw:&[u64;4],j:usize) {
++ dot.sums[j]=dot.sums[j].wrapping_add((raw[j]&u64::from(P)).wrapping_add(raw[j]>>31u32));
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn private_push_step_window() {
++ let old:[u64;4]=kani::any();let raw:[u64;4]=kani::any();let j:usize=kani::any();let observed:usize=kani::any();
++ kani::assume(j<4 && observed<4);let mut dot=Dot{sums:old};NFI_dot_step(&mut dot,&raw,j);
++ let expected=if observed==j{old[j].wrapping_add((raw[j]&u64::from(P)).wrapping_add(raw[j]>>31))}else{old[observed]};
++ assert_eq!(dot.sums[observed],if cfg!(NFI_wrong_private_step){expected^1}else{expected});
++}
++
++struct NFI_PublicLog { calls:usize,half:[usize;2],receiver:[usize;2],before:[[u64;4];2],left:[[u32;4];2],right:[[u32;4];2],replies:[[u64;4];2] }
++fn NFI_private_push(log:&mut NFI_PublicLog,half:usize,dot:&mut Dot,a:Q,b:Q) {
++ let at=log.calls;log.calls+=1;log.half[at]=half;
++ log.receiver[at]=dot as *mut Dot as usize;log.before[at]=dot.sums;
++ log.left[at]=a.0;log.right[at]=b.0;dot.sums=log.replies[at];
++}
++fn NFI_public_push(receiver:&mut EbyKDot,value:E,scalar:QM31,log:&mut NFI_PublicLog)->Result<(),()> {
++
++        if receiver.count >= MAX_TERMS { return Err(()); }
++        let [value_c0,value_c1] = canonical::Q::from_wide(value);
++        let scalar = checked_q(scalar)?;
++        NFI_private_push(log,0,&mut receiver.c0,value_c0,scalar);
++        NFI_private_push(log,1,&mut receiver.c1,value_c1,scalar);
++        receiver.count += 1;
++        Ok(())
++    
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn public_push_context() {
++ let mut receiver=EbyKDot{c0:Dot{sums:kani::any()},c1:Dot{sums:kani::any()},count:kani::any()};
++ let count=receiver.count;let old=[receiver.c0.sums,receiver.c1.sums];
++ let pointer=[&mut receiver.c0 as *mut Dot as usize,&mut receiver.c1 as *mut Dot as usize];
++ let value:E=kani::any();let scalar:QM31=kani::any();let limbs=value.to_limbs();
++ let q=super::super::limbs_of(scalar);
++ let valid=q[0]<P && q[1]<P && q[2]<P && q[3]<P;
++ let mut log=NFI_PublicLog{calls:0,half:[99;2],receiver:[0;2],before:[[0;4];2],left:[[0;4];2],right:[[0;4];2],replies:kani::any()};
++ let returned=NFI_public_push(&mut receiver,value,scalar,&mut log);
++ let half:usize=kani::any();let lane:usize=kani::any();kani::assume(half<2 && lane<4);
++ if count>=4096 || !valid {
++  assert!(returned.is_err());assert_eq!(log.calls,0);assert_eq!(receiver.count,count);
++  let observed=if half==0{receiver.c0.sums[lane]}else{receiver.c1.sums[lane]};
++  assert_eq!(observed,old[half][lane]);
++ } else {
++  assert!(returned.is_ok());assert_eq!(log.calls,2);assert_eq!(receiver.count,count+1);
++  assert_eq!(log.half[half],half);assert_eq!(log.receiver[half],pointer[half]);
++  assert_eq!(log.before[half][lane],old[half][lane]);
++  assert_eq!(log.left[half][lane],limbs[half*4+lane]);assert_eq!(log.right[half][lane],q[lane]);
++  let observed=if half==0{receiver.c0.sums[lane]}else{receiver.c1.sums[lane]};
++  let expected=log.replies[half][lane];
++  assert_eq!(observed,if cfg!(NFI_wrong_public_push){expected^1}else{expected});
++ }
++}
++
++fn NFI_log()->NFI_PublicLog {NFI_PublicLog{calls:0,half:[99;2],receiver:[0;2],before:[[0;4];2],left:[[0;4];2],right:[[0;4];2],replies:kani::any()}}
++fn NFI_tail_chain(values:[E;3],scalars:[QM31;3],logs:&mut[NFI_PublicLog;3])->EbyKDot {
++ let mut tail=EbyKDot::new();
++ NFI_public_push(&mut tail,values[0],scalars[0],&mut logs[0]).unwrap();
++ NFI_public_push(&mut tail,values[1],scalars[1],&mut logs[1]).unwrap();
++ NFI_public_push(&mut tail,values[2],scalars[2],&mut logs[2]).unwrap();tail
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn tail_chain_window() {
++ let values:[E;3]=kani::any();let scalars:[QM31;3]=kani::any();
++ for scalar in scalars {for word in super::super::limbs_of(scalar){kani::assume(word<P);}}
++ let mut logs=[NFI_log(),NFI_log(),NFI_log()];let tail=NFI_tail_chain(values,scalars,&mut logs);
++ let call:usize=kani::any();let half:usize=kani::any();let lane:usize=kani::any();
++ kani::assume(call<3 && half<2 && lane<4);
++ assert_eq!(tail.count,3);assert_eq!((logs[0].calls,logs[1].calls,logs[2].calls),(2,2,2));
++ assert_eq!(logs[call].left[half][lane],values[call].to_limbs()[half*4+lane]);
++ assert_eq!(logs[call].right[half][lane],super::super::limbs_of(scalars[call])[lane]);
++ let before=if call==0{0}else{logs[call-1].replies[half][lane]};
++ assert_eq!(logs[call].before[half][lane],before);
++ let observed=if half==0{tail.c0.sums[lane]}else{tail.c1.sums[lane]};
++ let expected=logs[2].replies[half][lane];
++ assert_eq!(observed,if cfg!(NFI_wrong_tail_chain){expected^1}else{expected});
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn tail_selected_finish_add() {
++ let old:[u64;8]=kani::any();let count:usize=kani::any();let head:E=kani::any();
++ for word in head.to_limbs(){kani::assume(word<P);}
++ let receiver=EbyKDot{c0:Dot{sums:[old[0],old[1],old[2],old[3]]},c1:Dot{sums:[old[4],old[5],old[6],old[7]]},count};
++ let out=head.add(receiver.finish());
++ let lane:usize=kani::any();kani::assume(lane<8);
++ let sum=head.to_limbs()[lane]+reduce(old[lane]);let expected=if sum>=P{sum-P}else{sum};
++ assert_eq!(out.to_limbs()[lane],if cfg!(NFI_wrong_tail_finish_add){expected^1}else{expected});
++ assert!(out.to_limbs()[lane]<P);
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn tail_initializer_frame(){
++ let mut tail=EbyKDot::new();let k:usize=kani::any();kani::assume(k<4);
++ assert_eq!(tail.count,0);assert_eq!(tail.c0.sums[k],0);
++ assert_ne!(&mut tail.c0 as *mut Dot as usize,&mut tail.c1 as *mut Dot as usize);
++ assert_eq!(tail.c1.sums[k],if cfg!(NFI_wrong_tail_init){1}else{0});
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn raw_to_half0_frame(){
++ let left:[u32;4]=kani::any();let right:[u32;4]=kani::any();
++ for i in 0..4{kani::assume(left[i]<P && right[i]<P);}
++ let replies:[u64;16]=kani::any();for i in 0..16{kani::assume(replies[i]<=4611686009837453316);}
++ let mut log=NFI_RawLog{replies,left:[0;16],right:[0;16],order:[99;16],calls:0};
++ let old:[[u64;4];2]=kani::any();let count:usize=kani::any();
++ let mut receiver=EbyKDot{c0:Dot{sums:old[0]},c1:Dot{sums:old[1]},count};
++ let j:usize=kani::any();let k:usize=kani::any();kani::assume(j<4 && k<4);
++ let raw=NFI_raw(Q(left),Q(right),&mut log);let raw_before=raw[k];
++ let receiver_place=&mut receiver.c0 as *mut Dot as usize;
++ NFI_dot_step(&mut receiver.c0,&raw,j);
++ assert_eq!(&mut receiver.c0 as *mut Dot as usize,receiver_place);
++ assert_eq!(receiver.c1.sums[k],old[1][k]);assert_eq!(receiver.count,count);
++ assert_eq!(raw[k],raw_before);assert_eq!(log.calls,16);
++ let expected=if j==k{old[0][k].wrapping_add((raw[k]&u64::from(P)).wrapping_add(raw[k]>>31))}else{old[0][k]};
++ assert_eq!(receiver.c0.sums[k],if cfg!(NFI_wrong_raw_half0){expected^1}else{expected});
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn raw_to_half1_frame(){
++ let left:[u32;4]=kani::any();let right:[u32;4]=kani::any();
++ for i in 0..4{kani::assume(left[i]<P && right[i]<P);}
++ let replies:[u64;16]=kani::any();for i in 0..16{kani::assume(replies[i]<=4611686009837453316);}
++ let mut log=NFI_RawLog{replies,left:[0;16],right:[0;16],order:[99;16],calls:0};
++ let old:[[u64;4];2]=kani::any();let count:usize=kani::any();
++ let mut receiver=EbyKDot{c0:Dot{sums:old[0]},c1:Dot{sums:old[1]},count};
++ let j:usize=kani::any();let k:usize=kani::any();kani::assume(j<4 && k<4);
++ let raw=NFI_raw(Q(left),Q(right),&mut log);let raw_before=raw[k];
++ let receiver_place=&mut receiver.c1 as *mut Dot as usize;
++ NFI_dot_step(&mut receiver.c1,&raw,j);
++ assert_eq!(&mut receiver.c1 as *mut Dot as usize,receiver_place);
++ assert_eq!(receiver.c0.sums[k],old[0][k]);assert_eq!(receiver.count,count);
++ assert_eq!(raw[k],raw_before);assert_eq!(log.calls,16);
++ let expected=if j==k{old[1][k].wrapping_add((raw[k]&u64::from(P)).wrapping_add(raw[k]>>31))}else{old[1][k]};
++ assert_eq!(receiver.c1.sums[k],if cfg!(NFI_wrong_raw_half1){expected^1}else{expected});
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn private_cursor_to_step_frame(){
++ let old:[u64;4]=kani::any();let raw:[u64;4]=kani::any();
++ let cursor:usize=kani::any();let k:usize=kani::any();kani::assume(cursor<4 && k<4);
++ let mut dot=Dot{sums:old};let mut iter=cursor..4;let j=iter.next().unwrap();
++ let same_raw=raw[k];let place=&mut dot as *mut Dot as usize;
++ NFI_dot_step(&mut dot,&raw,j);
++ assert_eq!(raw[k],same_raw);assert_eq!(&mut dot as *mut Dot as usize,place);
++ assert_eq!(iter.start,cursor+1);assert_eq!(iter.end,4);
++ let expected=if k==cursor{old[k].wrapping_add((raw[k]&u64::from(P)).wrapping_add(raw[k]>>31))}else{old[k]};
++ assert_eq!(dot.sums[k],if cfg!(NFI_wrong_private_cursor){expected^1}else{expected});
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn private_exhaust_to_caller_frame(){
++ let old:[[u64;4];2]=kani::any();let count:usize=kani::any();
++ let receiver=EbyKDot{c0:Dot{sums:old[0]},c1:Dot{sums:old[1]},count};
++ let mut iter=4..4;assert_eq!(iter.next(),None);
++ let k:usize=kani::any();kani::assume(k<4);
++ assert_eq!(receiver.c0.sums[k],old[0][k]);assert_eq!(receiver.c1.sums[k],old[1][k]);
++ assert_eq!(receiver.count,if cfg!(NFI_wrong_private_exhaust){count^1}else{count});
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn halves_to_count_frame(){
++ let old:[[u64;4];2]=kani::any();let count:usize=kani::any();kani::assume(count<MAX_TERMS);
++ let mut receiver=EbyKDot{c0:Dot{sums:old[0]},c1:Dot{sums:old[1]},count};
++ receiver.count+=1;let returned:Result<(),()>=Ok(());
++ let k:usize=kani::any();kani::assume(k<4);
++ assert!(returned.is_ok());assert_eq!(receiver.c0.sums[k],old[0][k]);assert_eq!(receiver.c1.sums[k],old[1][k]);
++ assert_eq!(receiver.count,if cfg!(NFI_wrong_count_frame){count+2}else{count+1});
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn finish_to_final_carrier_frame(){
++ let old:[[u64;4];2]=kani::any();let count:usize=kani::any();let head:E=kani::any();
++ for word in head.to_limbs(){kani::assume(word<P);}
++ let receiver=EbyKDot{c0:Dot{sums:old[0]},c1:Dot{sums:old[1]},count};
++ let finished=receiver.finish();let returned=head.add(finished);
++ let lane:usize=kani::any();kani::assume(lane<8);
++ let selected=if lane<4{old[0][lane]}else{old[1][lane-4]};
++ assert_eq!(finished.to_limbs()[lane],reduce(selected));
++ let sum=head.to_limbs()[lane]+reduce(selected);let expected=if sum>=P{sum-P}else{sum};
++ assert_eq!(returned.to_limbs()[lane],if cfg!(NFI_wrong_final_carrier){expected^1}else{expected});
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn tail_parser_push0_frame(){
++ let q:[u8;608]=kani::any();let g:[E;29]=kani::any();let slot:usize=kani::any();
++ let lane:usize=kani::any();let half:usize=kani::any();let observed:usize=kani::any();
++ kani::assume(slot<4 && lane<4 && half<2 && observed<608);
++ let offset=slot*120+104;
++ for i in 0..4{let at=offset+4*i;kani::assume(u32::from_le_bytes([q[at],q[at+1],q[at+2],q[at+3]])<P);}
++ let old:[[u64;4];2]=kani::any();let mut receiver=EbyKDot{c0:Dot{sums:old[0]},c1:Dot{sums:old[1]},count:0};
++ let pointer=[&mut receiver.c0 as *mut Dot as usize,&mut receiver.c1 as *mut Dot as usize];
++ let qp=q.as_ptr() as usize;let gp=g.as_ptr() as usize;let byte=q[observed];let coefficient=g[28].to_limbs()[half*4+lane];
++ let scalar=QM31::from_le_bytes(&q[offset..offset+16]).unwrap();
++ let mut log=NFI_log();let returned=NFI_public_push(&mut receiver,g[28],scalar,&mut log);
++ assert!(returned.is_ok());assert_eq!(receiver.count,1);assert_eq!(log.calls,2);
++ assert_eq!(log.receiver[half],pointer[half]);assert_eq!(log.before[half][lane],old[half][lane]);
++ assert_eq!(log.right[half][lane],u32::from_le_bytes([q[offset+lane*4],q[offset+lane*4+1],q[offset+lane*4+2],q[offset+lane*4+3]]));
++ assert_eq!(q.as_ptr() as usize,qp);assert_eq!(g.as_ptr() as usize,gp);assert_eq!(q[observed],byte);
++ assert_eq!(g[28].to_limbs()[half*4+lane],coefficient);
++ assert_eq!(log.left[half][lane],if cfg!(NFI_wrong_tail_call0){coefficient^1}else{coefficient});
++ let actual=if half==0{receiver.c0.sums[lane]}else{receiver.c1.sums[lane]};
++ assert_eq!(actual,log.replies[half][lane]);
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn tail_parser_push1_frame(){
++ let q:[u8;608]=kani::any();let g:[E;29]=kani::any();let slot:usize=kani::any();
++ let lane:usize=kani::any();let half:usize=kani::any();let observed:usize=kani::any();
++ kani::assume(slot<4 && lane<4 && half<2 && observed<608);
++ let offset=480+slot*32+0*16;
++ for i in 0..4{let at=offset+4*i;kani::assume(u32::from_le_bytes([q[at],q[at+1],q[at+2],q[at+3]])<P);}
++ let old:[[u64;4];2]=kani::any();let mut receiver=EbyKDot{c0:Dot{sums:old[0]},c1:Dot{sums:old[1]},count:1};
++ let pointer=[&mut receiver.c0 as *mut Dot as usize,&mut receiver.c1 as *mut Dot as usize];
++ let qp=q.as_ptr() as usize;let gp=g.as_ptr() as usize;let byte=q[observed];let coefficient=g[26].to_limbs()[half*4+lane];
++ let scalar=QM31::from_le_bytes(&q[offset..offset+16]).unwrap();
++ let mut log=NFI_log();let returned=NFI_public_push(&mut receiver,g[26],scalar,&mut log);
++ assert!(returned.is_ok());assert_eq!(receiver.count,2);assert_eq!(log.calls,2);
++ assert_eq!(log.receiver[half],pointer[half]);assert_eq!(log.before[half][lane],old[half][lane]);
++ assert_eq!(log.right[half][lane],u32::from_le_bytes([q[offset+lane*4],q[offset+lane*4+1],q[offset+lane*4+2],q[offset+lane*4+3]]));
++ assert_eq!(q.as_ptr() as usize,qp);assert_eq!(g.as_ptr() as usize,gp);assert_eq!(q[observed],byte);
++ assert_eq!(g[26].to_limbs()[half*4+lane],coefficient);
++ assert_eq!(log.left[half][lane],if cfg!(NFI_wrong_tail_call1){coefficient^1}else{coefficient});
++ let actual=if half==0{receiver.c0.sums[lane]}else{receiver.c1.sums[lane]};
++ assert_eq!(actual,log.replies[half][lane]);
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn tail_parser_push2_frame(){
++ let q:[u8;608]=kani::any();let g:[E;29]=kani::any();let slot:usize=kani::any();
++ let lane:usize=kani::any();let half:usize=kani::any();let observed:usize=kani::any();
++ kani::assume(slot<4 && lane<4 && half<2 && observed<608);
++ let offset=480+slot*32+1*16;
++ for i in 0..4{let at=offset+4*i;kani::assume(u32::from_le_bytes([q[at],q[at+1],q[at+2],q[at+3]])<P);}
++ let old:[[u64;4];2]=kani::any();let mut receiver=EbyKDot{c0:Dot{sums:old[0]},c1:Dot{sums:old[1]},count:2};
++ let pointer=[&mut receiver.c0 as *mut Dot as usize,&mut receiver.c1 as *mut Dot as usize];
++ let qp=q.as_ptr() as usize;let gp=g.as_ptr() as usize;let byte=q[observed];let coefficient=g[27].to_limbs()[half*4+lane];
++ let scalar=QM31::from_le_bytes(&q[offset..offset+16]).unwrap();
++ let mut log=NFI_log();let returned=NFI_public_push(&mut receiver,g[27],scalar,&mut log);
++ assert!(returned.is_ok());assert_eq!(receiver.count,3);assert_eq!(log.calls,2);
++ assert_eq!(log.receiver[half],pointer[half]);assert_eq!(log.before[half][lane],old[half][lane]);
++ assert_eq!(log.right[half][lane],u32::from_le_bytes([q[offset+lane*4],q[offset+lane*4+1],q[offset+lane*4+2],q[offset+lane*4+3]]));
++ assert_eq!(q.as_ptr() as usize,qp);assert_eq!(g.as_ptr() as usize,gp);assert_eq!(q[observed],byte);
++ assert_eq!(g[27].to_limbs()[half*4+lane],coefficient);
++ assert_eq!(log.left[half][lane],if cfg!(NFI_wrong_tail_call2){coefficient^1}else{coefficient});
++ let actual=if half==0{receiver.c0.sums[lane]}else{receiver.c1.sums[lane]};
++ assert_eq!(actual,log.replies[half][lane]);
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn q_receiver_disjoint(){
++ let q:[u8;608]=kani::any();let g:[E;29]=kani::any();
++ let mut receiver=EbyKDot{c0:Dot{sums:kani::any()},c1:Dot{sums:kani::any()},count:0};
++ let output:E=kani::any();
++ let qptr=q.as_ptr() as usize;let gptr=g.as_ptr() as usize;
++ let rptr=&mut receiver as *mut EbyKDot as usize;let optr=&output as *const E as usize;
++ let (source,width,target,size)=match 0{0=>(qptr,608,rptr,core::mem::size_of::<EbyKDot>()),1=>(gptr,core::mem::size_of::<[E;29]>(),rptr,core::mem::size_of::<EbyKDot>()),_=>(qptr,608,optr,core::mem::size_of::<E>())};
++ let separate=source+width<=target || target+size<=source;
++ assert_eq!(separate,if cfg!(NFI_wrong_q_receiver_disjoint){false}else{true});
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn g_receiver_disjoint(){
++ let q:[u8;608]=kani::any();let g:[E;29]=kani::any();
++ let mut receiver=EbyKDot{c0:Dot{sums:kani::any()},c1:Dot{sums:kani::any()},count:0};
++ let output:E=kani::any();
++ let qptr=q.as_ptr() as usize;let gptr=g.as_ptr() as usize;
++ let rptr=&mut receiver as *mut EbyKDot as usize;let optr=&output as *const E as usize;
++ let (source,width,target,size)=match 1{0=>(qptr,608,rptr,core::mem::size_of::<EbyKDot>()),1=>(gptr,core::mem::size_of::<[E;29]>(),rptr,core::mem::size_of::<EbyKDot>()),_=>(qptr,608,optr,core::mem::size_of::<E>())};
++ let separate=source+width<=target || target+size<=source;
++ assert_eq!(separate,if cfg!(NFI_wrong_g_receiver_disjoint){false}else{true});
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn q_return_disjoint(){
++ let q:[u8;608]=kani::any();let g:[E;29]=kani::any();
++ let mut receiver=EbyKDot{c0:Dot{sums:kani::any()},c1:Dot{sums:kani::any()},count:0};
++ let output:E=kani::any();
++ let qptr=q.as_ptr() as usize;let gptr=g.as_ptr() as usize;
++ let rptr=&mut receiver as *mut EbyKDot as usize;let optr=&output as *const E as usize;
++ let (source,width,target,size)=match 2{0=>(qptr,608,rptr,core::mem::size_of::<EbyKDot>()),1=>(gptr,core::mem::size_of::<[E;29]>(),rptr,core::mem::size_of::<EbyKDot>()),_=>(qptr,608,optr,core::mem::size_of::<E>())};
++ let separate=source+width<=target || target+size<=source;
++ assert_eq!(separate,if cfg!(NFI_wrong_q_return_disjoint){false}else{true});
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn public_count_reject_frame(){
++ let old:[[u64;4];2]=kani::any();let count:usize=kani::any();
++ kani::assume(count>=MAX_TERMS);
++ let mut receiver=EbyKDot{c0:Dot{sums:old[0]},c1:Dot{sums:old[1]},count};
++ let value:E=kani::any();let scalar:QM31=kani::any();
++ 
++ let mut log=NFI_log();let out=NFI_public_push(&mut receiver,value,scalar,&mut log);
++ let half:usize=kani::any();let lane:usize=kani::any();kani::assume(half<2 && lane<4);
++ assert!(out.is_err());assert_eq!(log.calls,0);assert_eq!(receiver.count,count);
++ let after=if half==0{receiver.c0.sums[lane]}else{receiver.c1.sums[lane]};
++ assert_eq!(after,if cfg!(NFI_wrong_count_reject){old[half][lane]^1}else{old[half][lane]});
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn public_scalar_reject_frame(){
++ let old:[[u64;4];2]=kani::any();let count:usize=kani::any();
++ kani::assume(count<MAX_TERMS);
++ let mut receiver=EbyKDot{c0:Dot{sums:old[0]},c1:Dot{sums:old[1]},count};
++ let value:E=kani::any();let scalar:QM31=kani::any();
++ let words=super::super::limbs_of(scalar);kani::assume(words[0]>=P || words[1]>=P || words[2]>=P || words[3]>=P);
++ let mut log=NFI_log();let out=NFI_public_push(&mut receiver,value,scalar,&mut log);
++ let half:usize=kani::any();let lane:usize=kani::any();kani::assume(half<2 && lane<4);
++ assert!(out.is_err());assert_eq!(log.calls,0);assert_eq!(receiver.count,count);
++ let after=if half==0{receiver.c0.sums[lane]}else{receiver.c1.sums[lane]};
++ assert_eq!(after,if cfg!(NFI_wrong_scalar_reject){old[half][lane]^1}else{old[half][lane]});
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn public_half0_raw_arguments(){
++ let value:E=kani::any();let scalar:QM31=kani::any();
++ for word in value.to_limbs(){kani::assume(word<P);}for word in super::super::limbs_of(scalar){kani::assume(word<P);}
++ let mut receiver=EbyKDot{c0:Dot{sums:kani::any()},c1:Dot{sums:kani::any()},count:0};
++ let mut parent=NFI_log();let accepted=NFI_public_push(&mut receiver,value,scalar,&mut parent);assert!(accepted.is_ok());
++ let replies:[u64;16]=kani::any();for i in 0..16{kani::assume(replies[i]<=4611686009837453316);}
++ let mut raw=NFI_RawLog{replies,left:[0;16],right:[0;16],order:[99;16],calls:0};
++ let _=NFI_raw(Q(parent.left[0]),Q(parent.right[0]),&mut raw);
++ let at:usize=kani::any();kani::assume(at<16);let pairs=[(2, 2), (3, 3), (2, 3), (3, 2), (0, 0), (1, 1), (0, 1), (1, 0), (0, 2), (2, 0), (1, 3), (3, 1), (0, 3), (1, 2), (2, 1), (3, 0)];
++ assert_eq!(raw.calls,16);assert_eq!(raw.order[at],at);
++ assert_eq!(raw.left[at],u64::from(value.to_limbs()[0+pairs[at].0]));
++ let expected=u64::from(super::super::limbs_of(scalar)[pairs[at].1]);
++ assert_eq!(raw.right[at],if cfg!(NFI_wrong_half0_raw_arguments){expected^1}else{expected});
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn public_half1_raw_arguments(){
++ let value:E=kani::any();let scalar:QM31=kani::any();
++ for word in value.to_limbs(){kani::assume(word<P);}for word in super::super::limbs_of(scalar){kani::assume(word<P);}
++ let mut receiver=EbyKDot{c0:Dot{sums:kani::any()},c1:Dot{sums:kani::any()},count:0};
++ let mut parent=NFI_log();let accepted=NFI_public_push(&mut receiver,value,scalar,&mut parent);assert!(accepted.is_ok());
++ let replies:[u64;16]=kani::any();for i in 0..16{kani::assume(replies[i]<=4611686009837453316);}
++ let mut raw=NFI_RawLog{replies,left:[0;16],right:[0;16],order:[99;16],calls:0};
++ let _=NFI_raw(Q(parent.left[1]),Q(parent.right[1]),&mut raw);
++ let at:usize=kani::any();kani::assume(at<16);let pairs=[(2, 2), (3, 3), (2, 3), (3, 2), (0, 0), (1, 1), (0, 1), (1, 0), (0, 2), (2, 0), (1, 3), (3, 1), (0, 3), (1, 2), (2, 1), (3, 0)];
++ assert_eq!(raw.calls,16);assert_eq!(raw.order[at],at);
++ assert_eq!(raw.left[at],u64::from(value.to_limbs()[4+pairs[at].0]));
++ let expected=u64::from(super::super::limbs_of(scalar)[pairs[at].1]);
++ assert_eq!(raw.right[at],if cfg!(NFI_wrong_half1_raw_arguments){expected^1}else{expected});
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn final_carrier_input_frame(){
++ let q:[u8;608]=kani::any();let g:[E;29]=kani::any();let old:[[u64;4];2]=kani::any();let head:E=kani::any();
++ for word in head.to_limbs(){kani::assume(word<P);}
++ let byte:usize=kani::any();let gi:usize=kani::any();let lane:usize=kani::any();kani::assume(byte<608 && gi<29 && lane<8);
++ let before=q[byte];let coefficient=g[gi].to_limbs()[lane];
++ let tail=EbyKDot{c0:Dot{sums:old[0]},c1:Dot{sums:old[1]},count:3};
++ let returned=head.add(tail.finish());
++ assert_eq!(q[byte],before);assert_eq!(g[gi].to_limbs()[lane],coefficient);
++ let sum=head.to_limbs()[lane]+reduce(if lane<4{old[0][lane]}else{old[1][lane-4]});
++ let expected=if sum>=P{sum-P}else{sum};
++ assert_eq!(returned.to_limbs()[lane],if cfg!(NFI_wrong_final_input_frame){expected^1}else{expected});
++}
+--- a/crates/aspis-r1-cost-probe/src/NFI_original.rs
++++ b/crates/aspis-r1-cost-probe/src/NFI_original.rs
+@@ -0,0 +1,62 @@
++use aspis_core::field::WideExact;
++fn NFI_opening(proof:&[u8],i:usize)->&[u8]{
++ let at=crate::compact::OFF_OPENINGS+i*crate::compact::OPENING;
++ &proof[at..at+crate::compact::OPENING]
++}
++struct NFI_Log{qplace:usize,gplace:usize,byte:u8,reply:WideExact,calls:usize}
++fn NFI_selected_call(q:&[u8;608],g:&[WideExact;29],j:usize,log:&mut NFI_Log)->WideExact{
++ log.qplace=q.as_ptr() as usize;log.gplace=g.as_ptr() as usize;log.byte=q[j];log.calls+=1;log.reply
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn original_proof_one_cell(){
++ // ONE symbolic cell; all other cells are a fixed frame. Lean composes
++ // arbitrary frames from the exact read-only slice footprint, not a whole-buffer SAT gate.
++ let mut proof=[0u8;57607];let i:usize=kani::any();let j:usize=kani::any();
++ let lane:usize=kani::any();kani::assume(i<22 && j<608 && lane<8);
++ let at=crate::compact::OFF_OPENINGS+i*832;
++ let original:u8=kani::any();proof[at+j]=original;
++ let g:[WideExact;29]=kani::any();let reply:WideExact=kani::any();
++ let coefficient=g[0].to_limbs()[lane];let root=proof.as_ptr() as usize;
++ let q=NFI_opening(&proof,i);let fixed:&[u8;608]=q[..608].try_into().unwrap();
++ let mut log=NFI_Log{qplace:0,gplace:0,byte:0,reply,calls:0};
++ let out=NFI_selected_call(fixed,&g,j,&mut log);
++ assert_eq!(q.len(),832);assert_eq!(log.calls,1);
++ assert_eq!(log.qplace,root+at);assert_eq!(log.gplace,g.as_ptr() as usize);
++ assert_eq!(log.byte,original);assert_eq!(proof[at+j],original);assert_eq!(g[0].to_limbs()[lane],coefficient);
++ let expected=reply.to_limbs()[lane];
++ assert_eq!(out.to_limbs()[lane],if cfg!(NFI_wrong_original_cell){expected^1}else{expected});
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn original_allocation_borrow(){
++ // Split of K038: allocation/provenance ONLY, no symbolic indexed write.
++ let proof=[0u8;57607];let i:usize=kani::any();kani::assume(i<22);
++ let original=proof.as_ptr();let q=NFI_opening(&proof,i);
++ let fixed:&[u8;608]=q[..608].try_into().unwrap();
++ let at=crate::compact::OFF_OPENINGS+i*832;
++ assert_eq!(q.len(),832);assert_eq!(proof.as_ptr(),original);
++ assert!(core::ptr::eq(q.as_ptr(),proof[at..].as_ptr()));
++ assert!(core::ptr::eq(fixed.as_ptr(),q.as_ptr()));
++ assert_eq!(fixed.as_ptr() as usize,if cfg!(NFI_wrong_original_borrow){original as usize+at+1}else{original as usize+at});
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn original_window_value(){
++ // Split of K038: arbitrary window values; the allocation check above and
++ // NFI_OpeningFrame pair this with the SAME original heap, not a new opening witness.
++ let proof_window:[u8;832]=kani::any();let j:usize=kani::any();kani::assume(j<608);
++ let before=proof_window[j];let q:&[u8;608]=proof_window[..608].try_into().unwrap();
++ assert!(core::ptr::eq(q.as_ptr(),proof_window.as_ptr()));
++ assert_eq!(q[j],if cfg!(NFI_wrong_original_value){before^1}else{before});
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFI_copy::KMX_copy_nonoverlapping)]
++fn original_allocation_disjoint_receiver(){
++ let proof=[0u8;57607];let receiver:[[u64;4];2]=kani::any();let returned:WideExact=kani::any();
++ let base=proof.as_ptr() as usize;let end=base+proof.len();
++ let r=&receiver as *const [[u64;4];2] as usize;let out=&returned as *const WideExact as usize;
++ assert!(end<=out || out+core::mem::size_of::<WideExact>()<=base);
++ let separate=end<=r || r+core::mem::size_of::<[[u64;4];2]>()<=base;
++ assert_eq!(separate,if cfg!(NFI_wrong_original_disjoint){false}else{true});
++}
