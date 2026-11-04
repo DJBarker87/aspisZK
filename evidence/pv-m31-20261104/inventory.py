@@ -62,6 +62,7 @@ producer_paths = [
     "crates/aspis-core/src/field.rs", "crates/aspis-core/src/field/ct.rs",
     "crates/aspis-core/src/transcript.rs", "crates/aspis-core/src/v6_onefold.rs",
     "crates/aspis-core/src/state_only_prefix.rs", "crates/aspis-prover/src/v5_mask.rs",
+    "crates/aspis-core/src/r0_transcript.rs",
     "crates/aspis-r1-cost-probe/src/host_sumcheck.rs",
     "crates/aspis-r1-cost-probe/src/host_semantic.rs",
     "crates/aspis-r1-cost-probe/src/r1_wire.rs",
