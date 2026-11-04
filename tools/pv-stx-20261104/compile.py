@@ -13,6 +13,9 @@ for p in E.glob('refusal-*.json'):
  assert time.time()-json.loads(p.read_text())['epoch']>=180,'cooldown'
 rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
 cmd=['systemd-run','--user','--scope','--quiet',f'--unit=PV_STX_{a}','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','/usr/bin/time','-v','-o',H+f'/evidence/time-{a}.log','timeout','600','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',H+'/J.json',H+'/objects',H+'/sources',H+'/objects/'+m+'.olean',H+'/sources/'+m+'.lean','7000']
+if a == 91799:
+ assert m == 'PV_STX_AuditDriver'
+ cmd=cmd[:cmd.index('python3')]+['python3',H+'/run-audit.py',H+'/J.json',H+'/sources/'+m+'.lean']
 intent=dict(attempt=a,target=m,source_revision=rev,source_sha256=digest,command=cmd,deps_fingerprint=hashlib.sha256(prep.read_bytes()).hexdigest())
 (E/f'submission-{a}.json').write_text(json.dumps(intent,indent=2)+'\n')
 def ssh(cmd):return subprocess.run(['ssh','dombarker@100.108.41.90',cmd],capture_output=True,text=True)

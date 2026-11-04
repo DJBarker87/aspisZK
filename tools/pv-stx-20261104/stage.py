@@ -15,7 +15,7 @@ for p in E.glob('receipt-*.json'):
  r=json.loads(p.read_text())
  if r.get('accepted'):
   checks.append(dict(module=r['target'],sha256=r['object_sha256'],path=H+'/objects/'+r['target']+'.olean'))
-known={x['module'] for x in checks}|{'Aeneas'}
+known={x['module'] for x in checks}|{x['module'] for x in base['external_checks']}
 assert set(re.findall(r'^import (\S+)',raw.decode(),re.M))<=known
 payload=dict(H=H,module=m,source=raw.decode(),sha256=hashlib.sha256(raw).hexdigest(),revision=rev,
  external=base['external_checks'],checks=checks,roots=[H+'/objects']+base['LEAN_PATH'].split(':'),toolchain=base['toolchain'])
