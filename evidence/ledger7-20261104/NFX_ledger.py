@@ -111,6 +111,8 @@ def build():
  out['NFX_per_function']=per_function
  out['NFX_unique_functions']=dict(total=len(per_function),fully_CLOSED=sum(v['CLOSED']==v['total'] for v in per_function.values()),with_QUALIFIED=sum(v['QUALIFIED']>0 for v in per_function.values()))
  out['NFX_per_tx']={tx:counts([r for r in out['rows'] if r['transaction']==tx]) for tx in ['TX1','TX2']}
+ out['NFX_prior_coverage']=copy.deepcopy(out['coverage'])
+ out['coverage']={'all_rows':counts(out['rows']),**out['NFX_per_tx']}
  out['NFX_D_transaction_roots']=[dict(row=r['row'],function=r['function'],status=r['composed_status']) for r in out['rows'] if r['function'] in ds['roots']]
  out.update(NFX_source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),NFX_headline='AspisR1.RPx_Deployed.deployed',NFX_coverage=counts(out['rows']),NFX_slices=slices,NFX_inventory_defects=outside,NFX_newly_admitted=sorted(promotions),NFX_certificates=certs,NFX_security_target_established=False,NFX_cold_release_replay=False,NFX_historical_fields='Only NFX fields and composed_status govern this checkpoint; NFK/NEN/NEZ fields are preserved history')
  routes={r['row']:dict(function=r['function'],status=r['composed_status'],route=r['NFX_route'],provider=r['NFX_provider'],trust_rows=r['NFX_trust_rows'],transport=r['NFX_transport'],certificate=r.get('NFX_certificate_id'),reason=r['NFX_rejections']) for r in out['rows']}

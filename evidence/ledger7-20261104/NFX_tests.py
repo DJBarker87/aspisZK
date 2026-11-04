@@ -23,6 +23,7 @@ def check(d,routes,trust,audit):
    need(all(h['discharged_by'] for h in r['named_hypotheses']),'undischarged hypothesis')
    need(all(o['status']=='CLOSED' and o['discharged_by'] for o in r['caller_domain_obligations']),'open domain obligation')
   need(routes[r['row']]['status']==r['composed_status'] and routes[r['row']]['route']==r['NFX_route'],'route reconciliation')
+ need(d['coverage']==dict(all_rows=d['NFX_coverage'],**d['NFX_per_tx']),'generic coverage stale')
  need(ledger.counts(rows)==d['NFX_coverage']==dict(total=587,CLOSED=167,QUALIFIED=89,OPEN=331,CLOSED_under_ae=4),'coverage mismatch')
  need(d['NFX_slices']['Q']['roots_CLOSED']==2 and d['NFX_slices']['S']['roots_CLOSED']==0 and d['NFX_slices']['D']['roots_CLOSED']==0,'root status inflation')
  need(d['NFX_inventory_defects']==['TX2:046','TX2:211'],'inventory defects hidden')
