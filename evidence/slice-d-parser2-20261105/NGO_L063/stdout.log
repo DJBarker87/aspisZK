@@ -1,0 +1,154 @@
+def NGD_ParseCut.invoke : (U8 →
+    Slice U8 → Result (core.result.Result Unit AspisR1PrefixAggregateParser.r1_wire.Error)) →
+  U8 → Slice U8 → Result (core.result.Result (Slice U8) AspisR1PrefixAggregateParser.r1_wire.Error) :=
+fun validate row record1 =>
+  @Bind.bind Result instBindResult (Option (Prod U8 Usize))
+    (core.result.Result (Slice U8) AspisR1PrefixAggregateParser.r1_wire.Error)
+    (AspisR1PrefixAggregateParser.r1_wire.row_shape row) fun o =>
+    @Bind.bind Result instBindResult (core.result.Result (Prod U8 Usize) AspisR1PrefixAggregateParser.r1_wire.Error)
+      (core.result.Result (Slice U8) AspisR1PrefixAggregateParser.r1_wire.Error)
+      (@AspisR1PrefixAggregateParser.core.option.Option.ok_or (Prod U8 Usize) AspisR1PrefixAggregateParser.r1_wire.Error
+        o AspisR1PrefixAggregateParser.r1_wire.Error.InvalidRow)
+      fun r =>
+      @Bind.bind Result instBindResult
+        (core.ops.control_flow.ControlFlow
+          (core.result.Result core.convert.Infallible AspisR1PrefixAggregateParser.r1_wire.Error) (Prod U8 Usize))
+        (core.result.Result (Slice U8) AspisR1PrefixAggregateParser.r1_wire.Error)
+        (@core.result.Result.Insts.CoreOpsTry.branch (Prod U8 Usize) AspisR1PrefixAggregateParser.r1_wire.Error r)
+        fun cf =>
+        NGD_ParseCut.invoke.match_1
+          (fun cf => Result (core.result.Result (Slice U8) AspisR1PrefixAggregateParser.r1_wire.Error)) cf
+          (fun val =>
+            let (tag, size) := val
+            have i := @Slice.len U8 record1;
+            @Bind.bind Result instBindResult (UScalar UScalarTy.Usize)
+              (core.result.Result (Slice U8) AspisR1PrefixAggregateParser.r1_wire.Error)
+              (@HAdd.hAdd (UScalar UScalarTy.Usize) Usize (Result (UScalar UScalarTy.Usize))
+                (@instHAddUScalarResult UScalarTy.Usize)
+                (Usize.ofNat (@OfNat.ofNat Nat (nat_lit 5) (instOfNatNat (nat_lit 5))) NGD_ParseCut.invoke._proof_1)
+                size)
+              fun i1 =>
+              @ite (Result (core.result.Result (Slice U8) AspisR1PrefixAggregateParser.r1_wire.Error))
+                (@Eq Bool (@bne Usize (@instBEqUScalar_1 UScalarTy.Usize) i i1) true)
+                (instDecidableEqBool (@bne Usize (@instBEqUScalar_1 UScalarTy.Usize) i i1) true)
+                (@ok (core.result.Result (Slice U8) AspisR1PrefixAggregateParser.r1_wire.Error)
+                  (@core.result.Result.Err (Slice U8) AspisR1PrefixAggregateParser.r1_wire.Error
+                    (AspisR1PrefixAggregateParser.r1_wire.Error.Length row)))
+                (@Bind.bind Result instBindResult U8
+                  (core.result.Result (Slice U8) AspisR1PrefixAggregateParser.r1_wire.Error)
+                  (@Slice.index_usize U8 record1
+                    (Usize.ofNat (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                      NGD_ParseCut.invoke._proof_2))
+                  fun i2 =>
+                  @ite (Result (core.result.Result (Slice U8) AspisR1PrefixAggregateParser.r1_wire.Error))
+                    (@Eq Bool (@bne U8 (@instBEqUScalar_1 UScalarTy.U8) i2 tag) true)
+                    (instDecidableEqBool (@bne U8 (@instBEqUScalar_1 UScalarTy.U8) i2 tag) true)
+                    (@ok (core.result.Result (Slice U8) AspisR1PrefixAggregateParser.r1_wire.Error)
+                      (@core.result.Result.Err (Slice U8) AspisR1PrefixAggregateParser.r1_wire.Error
+                        (AspisR1PrefixAggregateParser.r1_wire.Error.Tag row)))
+                    (@Bind.bind Result instBindResult U8
+                      (core.result.Result (Slice U8) AspisR1PrefixAggregateParser.r1_wire.Error)
+                      (@Slice.index_usize U8 record1
+                        (Usize.ofNat (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                          NGD_ParseCut.invoke._proof_3))
+                      fun i3 =>
+                      @Bind.bind Result instBindResult U8
+                        (core.result.Result (Slice U8) AspisR1PrefixAggregateParser.r1_wire.Error)
+                        (@Slice.index_usize U8 record1
+                          (Usize.ofNat (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                            NGD_ParseCut.invoke._proof_4))
+                        fun i4 =>
+                        @Bind.bind Result instBindResult U8
+                          (core.result.Result (Slice U8) AspisR1PrefixAggregateParser.r1_wire.Error)
+                          (@Slice.index_usize U8 record1
+                            (Usize.ofNat (@OfNat.ofNat Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))
+                              NGD_ParseCut.invoke._proof_5))
+                          fun i5 =>
+                          @Bind.bind Result instBindResult U8
+                            (core.result.Result (Slice U8) AspisR1PrefixAggregateParser.r1_wire.Error)
+                            (@Slice.index_usize U8 record1
+                              (Usize.ofNat (@OfNat.ofNat Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+                                NGD_ParseCut.invoke._proof_6))
+                            fun i6 =>
+                            @Bind.bind Result instBindResult U32
+                              (core.result.Result (Slice U8) AspisR1PrefixAggregateParser.r1_wire.Error)
+                              (@lift U32
+                                (core.num.U32.from_le_bytes
+                                  (@Array.make U8
+                                    (Usize.ofNat (@OfNat.ofNat Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+                                      NGD_ParseCut.invoke._proof_6)
+                                    (@List.cons U8 i3
+                                      (@List.cons U8 i4 (@List.cons U8 i5 (@List.cons U8 i6 (@List.nil U8)))))
+                                    ⋯)))
+                              fun i7 =>
+                              @Bind.bind Result instBindResult (UScalar UScalarTy.Usize)
+                                (core.result.Result (Slice U8) AspisR1PrefixAggregateParser.r1_wire.Error)
+                                (@lift (UScalar UScalarTy.Usize) (@UScalar.cast UScalarTy.U32 UScalarTy.Usize i7))
+                                fun i8 =>
+                                @ite (Result (core.result.Result (Slice U8) AspisR1PrefixAggregateParser.r1_wire.Error))
+                                  (@Eq Bool (@bne (UScalar UScalarTy.Usize) (@instBEqUScalar_1 UScalarTy.Usize) i8 size)
+                                    true)
+                                  (instDecidableEqBool
+                                    (@bne (UScalar UScalarTy.Usize) (@instBEqUScalar_1 UScalarTy.Usize) i8 size) true)
+                                  (@ok (core.result.Result (Slice U8) AspisR1PrefixAggregateParser.r1_wire.Error)
+                                    (@core.result.Result.Err (Slice U8) AspisR1PrefixAggregateParser.r1_wire.Error
+                                      (AspisR1PrefixAggregateParser.r1_wire.Error.Length row)))
+                                  (@Bind.bind Result instBindResult (Slice U8)
+                                    (core.result.Result (Slice U8) AspisR1PrefixAggregateParser.r1_wire.Error)
+                                    (@core.slice.index.Slice.index U8 (core.ops.range.RangeFrom Usize) (Slice U8)
+                                      (core.slice.index.SliceIndexRangeFromUsizeSlice U8) record1
+                                      (@core.ops.range.RangeFrom.mk Usize
+                                        (Usize.ofNat (@OfNat.ofNat Nat (nat_lit 5) (instOfNatNat (nat_lit 5)))
+                                          NGD_ParseCut.invoke._proof_1)))
+                                    fun payload =>
+                                    @ite
+                                      (Result
+                                        (core.result.Result (Slice U8) AspisR1PrefixAggregateParser.r1_wire.Error))
+                                      (@GE.ge U8 (@instLEUScalar UScalarTy.U8) row
+                                        (U8.ofNat (@OfNat.ofNat Nat (nat_lit 14) (instOfNatNat (nat_lit 14)))
+                                          NGD_ParseCut.invoke._proof_8))
+                                      (UScalarDecidableLE UScalarTy.U8
+                                        (U8.ofNat (@OfNat.ofNat Nat (nat_lit 14) (instOfNatNat (nat_lit 14)))
+                                          NGD_ParseCut.invoke._proof_8)
+                                        row)
+                                      (@Bind.bind Result instBindResult
+                                        (core.result.Result Unit AspisR1PrefixAggregateParser.r1_wire.Error)
+                                        (core.result.Result (Slice U8) AspisR1PrefixAggregateParser.r1_wire.Error)
+                                        (validate row payload) fun r1 =>
+                                        @Bind.bind Result instBindResult
+                                          (core.ops.control_flow.ControlFlow
+                                            (core.result.Result core.convert.Infallible
+                                              AspisR1PrefixAggregateParser.r1_wire.Error)
+                                            Unit)
+                                          (core.result.Result (Slice U8) AspisR1PrefixAggregateParser.r1_wire.Error)
+                                          (@core.result.Result.Insts.CoreOpsTry.branch Unit
+                                            AspisR1PrefixAggregateParser.r1_wire.Error r1)
+                                          fun cf1 =>
+                                          NGD_ParseCut.invoke.match_2
+                                            (fun cf1 =>
+                                              Result
+                                                (core.result.Result (Slice U8)
+                                                  AspisR1PrefixAggregateParser.r1_wire.Error))
+                                            cf1
+                                            (fun a =>
+                                              @ok
+                                                (core.result.Result (Slice U8)
+                                                  AspisR1PrefixAggregateParser.r1_wire.Error)
+                                                (@core.result.Result.Ok (Slice U8)
+                                                  AspisR1PrefixAggregateParser.r1_wire.Error payload))
+                                            fun residual =>
+                                            @core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              (Slice U8) AspisR1PrefixAggregateParser.r1_wire.Error
+                                              AspisR1PrefixAggregateParser.r1_wire.Error
+                                              (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error)
+                                              residual)
+                                      (@ok (core.result.Result (Slice U8) AspisR1PrefixAggregateParser.r1_wire.Error)
+                                        (@core.result.Result.Ok (Slice U8) AspisR1PrefixAggregateParser.r1_wire.Error
+                                          payload))))))
+          fun residual =>
+          @core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+            AspisR1PrefixAggregateParser.r1_wire.Error AspisR1PrefixAggregateParser.r1_wire.Error
+            (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+NGO_generated/NGO_AddInspect.lean:5:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Usize.add`
+Aeneas.Std.UScalar.add {ty : UScalarTy} (x y : UScalar ty) : Result (UScalar ty)
+HAdd.hAdd.{u, v, w} {α : Type u} {β : Type v} {γ : outParam (Type w)} [self : HAdd α β γ] : α → β → γ

@@ -1,5 +1,5 @@
 import NGD_DecodeEntry
-import RawActualDecodeKMainAdapter
+import FIq_S_RawActualDecodeKMainAdapter
 open Aeneas Aeneas.Std Result
 #print Usize.checked_mul
 #print UScalar.checked_mul

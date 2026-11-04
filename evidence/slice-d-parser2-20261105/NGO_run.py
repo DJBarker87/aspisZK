@@ -66,14 +66,12 @@ elif kind=='lean':
 elif kind=='linkaudit':
  sources=['NGO_native/'+target+'.c','NGO_native/NFA_WALKER.c','NGO_native/NFA_MemoryLimit.c']
  command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NGO_native/'+target,*sources]
-elif kind=='auditbatch' and target=='NGO_Stage2Driver':
- files['NGO_stage2_audit_batch.py']=(E/'NGO_stage2_audit_batch.py').read_text()
- sources=['NGO_generated/NGO_Stage2Driver.lean','NGO_stage2_audit_batch.py','NGO_native/NGO_Stage2Driver.c','NGO_native/NFA_WALKER.c','NGO_native/NFA_MemoryLimit.c']
- command=['python3','NGO_stage2_audit_batch.py']
 elif kind=='auditbatch':
- files['NGO_final_audit_batch.py']=(E/'NGO_final_audit_batch.py').read_text()
- sources=['NGO_generated/NGO_ProofDriver.lean','NGO_final_audit_batch.py','NGO_native/NGO_ProofDriver.c','NGO_native/NFA_WALKER.c','NGO_native/NFA_MemoryLimit.c']
- command=['python3','NGO_final_audit_batch.py']
+ files['NGO_audit_batch.py']=(E/'NGO_audit_batch.py').read_text()
+ files['NGO_AUDIT_ROOTS.json']=(E/'NGO_AUDIT_ROOTS.json').read_text()
+ files['NGO_EXPECTED_IMPORTS.jsonl']=(E/'NGO_EXPECTED_IMPORTS.jsonl').read_text()
+ sources=['NGO_generated/NGO_ProofDriver.lean','NGO_generated/NGO_Driver.lean','NGO_audit_batch.py','NGO_AUDIT_ROOTS.json','NGO_EXPECTED_IMPORTS.jsonl','NGO_native/NGO_ProofDriver.c','NGO_native/NGO_Driver.c','NGO_native/NFA_WALKER.c','NGO_native/NFA_MemoryLimit.c']
+ command=['python3','NGO_audit_batch.py',a+'.json']
 elif kind=='auditbin':
  sources=['NGO_generated/NGO_Driver.lean'];command=['NGO_native/NGO_Driver',target]
 else:raise ValueError(kind)
@@ -115,7 +113,7 @@ for root in roots:
    if Path(root,stem+suf).is_file():rels.add(stem+suf)
 for rel in sorted(rels):
  p=next(Path(root)/rel for root in roots if (Path(root)/rel).is_file());pins[str(p)]={{'path':str(p),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}}
-for module in (['NGO_COMBINED_IMPORT'] if x['kind']=='auditbatch' else [])+(['NEP_Planted','NEP_Mutations'] if x['module'] in ['NGO_Driver','NGO_ProofDriver','NGO_Stage2Driver','fixtures'] else [])+(['NGO_QueryModel'] if x['kind']=='auditbin' and x['module'].startswith('query') else [])+(['NGO_COMBINED_IMPORT'] if x['kind']=='auditbin' and (x['module'].startswith('proof') or x['module']=='scan') else [])+[n for line in (b/x['sources'][0]).read_text().splitlines() if line.startswith('import ') for n in line[7:].split() if n!='all'] if x['kind'] not in ['linkaudit','kani','extract'] else []:
+for module in (['NGO_COMBINED_IMPORT','NEP_Planted','NEP_Mutations'] if x['kind']=='auditbatch' else [])+(['NEP_Planted','NEP_Mutations'] if x['module'] in ['NGO_Driver','NGO_ProofDriver','NGO_Stage2Driver','fixtures'] else [])+(['NGO_QueryModel'] if x['kind']=='auditbin' and x['module'].startswith('query') else [])+(['NGO_COMBINED_IMPORT'] if x['kind']=='auditbin' and (x['module'].startswith('proof') or x['module']=='scan') else [])+[n for line in (b/x['sources'][0]).read_text().splitlines() if line.startswith('import ') for n in line[7:].split() if n!='all'] if x['kind'] not in ['linkaudit','kani','extract'] else []:
  rel=module.replace('.','/')+'.olean';p=next((Path(root)/rel for root in roots if (Path(root)/rel).is_file()),None)
  assert p is not None,module
  for z in [p,Path(str(p)+'.private'),Path(str(p)+'.server'),p.with_suffix('.ir')]:

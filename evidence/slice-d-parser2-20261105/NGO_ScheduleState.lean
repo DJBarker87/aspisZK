@@ -32,7 +32,8 @@ theorem step (original : CE) (count finish next : Usize)
     refine ⟨chunk,?_,?_⟩
     · simpa only [state,suffixEq,tailEq,same] using native
     · have head := congrArg (fun xs : List (Slice U8)=>xs[0]?) suffixEq
-      simpa using head
+      have hidx : count.val<original.chunks.length := by omega
+      simpa [List.getElem?_eq_getElem hidx] using head
 
 theorem stop (original : CE) (count : Usize) (length : original.chunks.length=count.val) :
     core.iter.adapters.enumerate.IteratorEnumerate.next

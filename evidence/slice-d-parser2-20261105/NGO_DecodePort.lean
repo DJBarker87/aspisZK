@@ -1,6 +1,6 @@
 import NGO_DecodeTotal
 import NGO_FirstError
-import RawActualDecodeKMainAdapter
+import FIq_S_RawActualDecodeKMainAdapter
 set_option autoImplicit false
 open Aeneas Aeneas.Std Result
 namespace NGO_DecodePort

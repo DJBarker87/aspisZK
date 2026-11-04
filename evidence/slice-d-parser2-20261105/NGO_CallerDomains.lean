@@ -14,7 +14,7 @@ inductive Call : Nat → Nat → Nat → Prop where
 theorem numeric (row n off : Nat) (call : Call row n off) :
     14≤row ∧ row<27 ∧ 0<n ∧ off+n≤116 ∧
       32*off+32*n≤NFU_PacketDomains.payloadSize row := by
-  cases call <;> simp_all [NFU_PacketDomains.payloadSize] <;> omega
+  cases call <;> simp_all [NFU_PacketDomains.payloadSize] <;> (try split_ifs) <;> omega
 
 /-- These bounds are derived from the original record's header size. They
 require no decoder result or canonicality fact. Producer substitution remains

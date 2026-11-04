@@ -33,8 +33,7 @@ theorem specification_codec (arr : Array U8 16#usize) :
     have notCodec : ¬∀ j, (decodeWordLE (qm31LimbBytes bytes j)).val<m31Modulus := by
       intro all
       have h:=all i
-      have eq:=word_value arr i
-      exact bad (by change (word arr i).val<2147483647;change (decodeWordLE (qm31LimbBytes bytes i)).val<2147483647 at h;omega)
+      exact bad (by rw [word_value];exact h)
     have strict : decodeQM31LE bytes=none := by unfold decodeQM31LE;rw [dif_neg notCodec]
     change _=(decodeQM31LE bytes).map limbsToRef
     rw [strict]

@@ -13,7 +13,7 @@
 +#[cfg(kani)] mod NGO_q;
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NGO_q.rs
-@@ -0,0 +1,65 @@
+@@ -0,0 +1,78 @@
 +use aspis_core::field::{M31,CM31,QM31};
 +include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
 +pub fn NGO_decode_le(bytes:&[u8])->Option<QM31>{
@@ -78,4 +78,17 @@
 + let q=out[i];
 + #[cfg(not(NGO_invert))] assert!(q.c0.a.0==0 && q.c0.b.0==0 && q.c1.a.0==0 && q.c1.b.0==0);
 + #[cfg(NGO_invert)] assert!(q.c0.a.0==1);
++}
++
++#[kani::proof] fn NGO_round_domain() {
++ let round:usize=kani::any();kani::assume(round<10);
++ let row = 15 + round as u8;
++ #[cfg(not(NGO_invert))] assert!(row as usize==15+round && row>=15 && row<=24);
++ #[cfg(NGO_invert)] assert!(row==14);
++}
++#[kani::proof] fn NGO_claims_domain() {
++ let p:usize=kani::any();kani::assume(p<3);
++ let offset=p*29;
++ #[cfg(not(NGO_invert))] assert!(offset+29<=116 && offset<=58);
++ #[cfg(NGO_invert)] assert!(offset+29>116);
 +}
