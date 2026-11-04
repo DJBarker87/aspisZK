@@ -1,0 +1,7 @@
+{
+ "kind": "marker-predicate",
+ "mode": "positive",
+ "source": "use super::*;\n#[kani::proof]\n#[kani::unwind(209)]\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFO_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NFO_KMX::KMX_copy_from_slice)]\n#[kani::stub(alloc::alloc::realloc,crate::NFO_KMX::KMX_realloc)]\nfn association(){\nlet active:bool=kani::any();let byte:u8=kani::any();let mut calls=0u8;let predicate=|byte: &u8| *byte == 0;\nlet mut actual=if active{calls+=1;predicate(&byte)}else{false};\nassert!(actual==(active&&byte==0));assert!(calls==if active{1}else{0});\n}\n",
+ "domain": "one native byte predicate and local short-circuit log only; actual Iterator::all step/control association remains OPEN",
+ "production_credit": false
+}

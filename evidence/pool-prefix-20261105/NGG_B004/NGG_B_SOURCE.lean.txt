@@ -1,0 +1,13 @@
+import NGG_Ref.Funs
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result
+namespace NGG_Count
+/-- Full Result, without any bound on actual or expected length. -/
+theorem result (actual expected : Usize) :
+    NGG_Ref.count actual expected = ok (if actual != expected then
+      if actual < expected then .Err NGG_Ref.Error.NotEnoughAccountKeys
+      else .Err NGG_Ref.Error.InvalidArgument else .Ok ()) := by
+  unfold NGG_Ref.count
+  split <;> simp_all
+#print axioms result
+end NGG_Count

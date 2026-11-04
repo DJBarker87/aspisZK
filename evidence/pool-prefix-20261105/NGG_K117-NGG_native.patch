@@ -1,0 +1,42 @@
+--- a/programs/aspis-pool/src/nullifier.rs
++++ b/programs/aspis-pool/src/nullifier.rs
+@@ -807,3 +807,7 @@
+         assert_eq!(zeroed, before);
+     }
+ }
++
++#[cfg(kani)]
++#[path="NGG_Marker.rs"]
++mod NGG_Marker;
+--- a/programs/aspis-pool/src/lib.rs
++++ b/programs/aspis-pool/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! Pool V1 authenticated state-transition kernel.
+ //!
+ //! The native entrypoint exposes exact V1 initialization, vault-backed
+@@ -145,3 +146,9 @@
+     plan_authenticated_verifier_dispatch_v1, AuthenticatedVerifierDispatchV1,
+     PlannedVerifierDispatchV1, VerifierDispatchClaimV1,
+ };
++
++#[cfg(kani)]
++extern crate alloc;
++#[cfg(kani)]
++#[path="../../../KMX_stubs.rs"]
++pub mod NFO_KMX;
+--- /dev/null
++++ b/programs/aspis-pool/src/NGG_Marker.rs
+@@ -0,0 +1,12 @@
++use super::*;
++#[kani::proof]
++#[kani::unwind(209)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFO_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NFO_KMX::KMX_copy_from_slice)]
++#[kani::stub(alloc::alloc::realloc,crate::NFO_KMX::KMX_realloc)]
++fn association(){
++let active:bool=kani::any();let byte:u8=kani::any();let mut calls=0u8;let predicate=|byte| *byte == 0;
++let mut actual=if active{calls+=1;predicate(&byte)}else{false};
++actual=!actual;
++assert!(actual==(active&&byte==0));assert!(calls==if active{1}else{0});
++}

@@ -1,0 +1,17 @@
+import Lean
+import NGG_COMBINED_IMPORT
+open Lean Elab Command
+run_cmd do
+ let env ← getEnv
+ for name in [`NGG_PoolReturnData.association, `NFV_PoolReturnData.association,
+              `RuntimeCpiReadonlyEntry7] do
+  if env.contains name then throwError "Unexpected published association/pending-runtime constant: {name}"
+ let mut modules := 0
+ let mut declarations := 0
+ for idx in [0:env.header.moduleNames.size] do
+  if !(env.header.moduleNames[idx]!.toString.startsWith "NGG_") then continue
+  modules := modules+1
+  for c in env.header.moduleData[idx]!.constants do
+   declarations := declarations+1
+   if let .axiomInfo _ := c then throwError "New NGG axiom declaration: {c.name}"
+ logInfo m!"NGG claim audit: {modules} own modules, {declarations} declarations; no new axiom/pending runtime item/production association published"

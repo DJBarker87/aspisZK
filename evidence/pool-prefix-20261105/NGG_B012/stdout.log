@@ -1,0 +1,13 @@
+def Aeneas.Std.Array.index_usize.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → Result α :=
+fun {α} {n} v i =>
+  match v[i]? with
+  | none => Result.fail Error.arrayOutOfBounds
+  | some x => Result.ok x
+Aeneas.Std.Array.index_usize_spec.{u} {α : Type u} {n : Usize} (v : Std.Array α n) (i : Usize)
+  (hbound : ↑i < v.length) : v.index_usize i ⦃ x => x = (↑v)[↑i] ⦄
+def Aeneas.Std.core.array.equality.PartialEqArray.ne : {T U : Type} →
+  {N : Usize} → core.cmp.PartialEq T U → Std.Array T N → Std.Array U N → Result Bool :=
+fun {T U} {N} partialEqInst a0 a1 => do
+  let b ← core.array.equality.PartialEqArray.eq partialEqInst a0 a1
+  Result.ok (decide ¬b = true)
+NGG_B_generated/NGG_Inspect.lean:6:7: error(lean.unknownIdentifier): Unknown constant `Array.index`

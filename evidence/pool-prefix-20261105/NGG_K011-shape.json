@@ -1,0 +1,9 @@
+{
+ "kind": "count",
+ "mode": "negative",
+ "source": "use super::*;\n#[kani::proof]\n#[kani::unwind(325)]\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFO_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NFO_KMX::KMX_copy_from_slice)]\n#[kani::stub(alloc::alloc::realloc,crate::NFO_KMX::KMX_realloc)]\nfn association(){\nlet keys:[[u8;32];4]=kani::any();let owners:[[u8;32];3]=kani::any();\n let k0=Pubkey::new_from_array(keys[0]);let k1=Pubkey::new_from_array(keys[1]);let k2=Pubkey::new_from_array(keys[2]);let selected=Pubkey::new_from_array(keys[3]);\n let o0=Pubkey::new_from_array(owners[0]);let o1=Pubkey::new_from_array(owners[1]);let o2=Pubkey::new_from_array(owners[2]);\n let mut l0:u64=kani::any();let mut l1:u64=kani::any();let mut l2:u64=kani::any();let mut d0:[u8;1]=kani::any();let mut d1:[u8;1]=kani::any();let mut d2:[u8;1]=kani::any();\n let f:[bool;9]=kani::any();let epochs:[u64;3]=kani::any();\n let a0=AccountInfo::new(&k0,f[0],f[1],&mut l0,&mut d0,&o0,f[2],epochs[0]);\n let a1=AccountInfo::new(&k1,f[3],f[4],&mut l1,&mut d1,&o1,f[5],epochs[1]);\n let a2=AccountInfo::new(&k2,f[6],f[7],&mut l2,&mut d2,&o2,f[8],epochs[2]);\nlet all=[a0,a1,a2];let n:usize=kani::any();kani::assume(n<=3);let expected_count:usize=kani::any();let mut actual=require_exact_account_count(&all[..n],expected_count);let expected=if n==expected_count{Ok(())}else if n<expected_count{Err(ProgramError::NotEnoughAccountKeys)}else{Err(ProgramError::InvalidArgument)};actual=if actual.is_ok(){Err(ProgramError::InvalidArgument)}else{Ok(())}; assert!(actual==expected);\n}\n",
+ "parent": "pair_forest",
+ "modifies": [],
+ "domain": "all metadata values; data/lamports unused by leaf (source-footprint lifting remains model obligation); hints length <=324; count list length <=3",
+ "status": "candidate; no composed credit"
+}
