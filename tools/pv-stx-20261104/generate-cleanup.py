@@ -7,17 +7,12 @@ E=Path('evidence/pv-stx-20261104')
 s=Path('lean/PV_STX_Entropy.lean').read_text()
 b=s[s.index('def\n  entropyBody'):s.index('theorem erases_bind')]
 b=b.replace('Request.', 'Request.entropy <| PV_STX_Entropy.Request.')
-zi=''
 # Source lexical-scope order: retry increment, leaf, field, bytes.
 cleanup='''          let _ ← Code.call (Request.drop 32 leaf_salt_seed1)
           let _ ← Code.call (Request.drop 32 field_mask_entropy1)
           let _ ← Code.call (Request.drop 64 bytes1)
 '''
 b=b.replace('          pure (cont retry1)',cleanup+'          pure (cont retry1)')
-b=b.replace('        pure (cont retry1)', '''        let _ ← Code.call (Request.drop 32 leaf_salt_seed1)
-        let _ ← Code.call (Request.drop 32 field_mask_entropy1)
-        let _ ← Code.call (Request.drop 64 bytes1)
-        pure (cont retry1)''',1) if False else b
 # Handle the outer false branch separately, without touching the nested branch.
 old='''        pure (cont retry1)
     | core.ops.control_flow.ControlFlow.Break'''

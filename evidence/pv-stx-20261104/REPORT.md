@@ -1,3 +1,42 @@
+# D594 continuation checkpoint — vertical slice incomplete
+
+Continuation of f9e335854e on codex/pv-stx-20261104. Detailed current claims,
+primitive request/answer/mutation/frame/event matrix, reuse provenance and
+remaining source associations: [VERTICAL-SLICE.md](VERTICAL-SLICE.md).
+The report below this section describes the PREVIOUS checkpoint.
+
+Checked new source work: Rust entropy cleanup/partial-error restoration requests,
+full Result erasure through the loop and original account callback, actual
+machine exhaustion suffix, nonce sync_directory source continuation, and ports
+of the evh entropy/files/runtime and evhB generic allocator/callback semantics.
+Local full-answer entropy logs and primitive caller/child substitution follow
+ruling(y)'s method, without a new native/Kani certificate. Actual V183 reserve
+and RawVecOwner were inspected only. Reuse sources and distinctions are pinned
+in reuse-source/manifest.json, verified by check-slice.py --check.
+
+The requested reject→redraw→success/failure slice is NOT complete. Source-local
+owner/drop/resource handling, actual nonzero/entropy loop machine execution,
+nonce reservation/path/write_all continuation, concrete op12/callback association,
+and native terminal still need construction in the SAME world. Accordingly no
+source_entry_world, oraclePrefix/countTrace or other deployed projection was
+defined. No privacy row/premise was removed, added or changed; T is unchanged.
+This is a context handoff with remaining source budget, not completion,
+impossibility, checked shipped-source counterexample or budget exhaustion.
+
+Validation:17 new focused scopes91721–91737 (12 successes, five retained failed
+source/proof attempts followed by CHANGED sources); no new native/Kani scope,
+extractor run, raw audit or full manifest replay. Current24 modules have accepted
+objects. New axioms evidence is SUMMARY-BASED, standard-only; historical91799
+raw audit covers only its previous42 roots and is NOT an audit of this new
+closure. All41 exact preparation inputs retained. New maximum RSS2,691,412KiB,
+wall≤3.40s, swaps0; one own scope at a time, 6G/8G/swap0/64 tasks, Lean-M7000.
+No new admission refusal/transport failure. host-slice-checkpoint.json verifies
+24 current object hashes and an empty own-scope list. No implementation,
+soundness, wallet/key change or push. Next focused91738; audits all consumed;
+native nextN91801. HANDOFF.md carries the exact next construction and rules.
+
+---
+
 # PV_STX checkpoint: checked fallback substrate, entry still open
 
 Branch codex/pv-stx-20261104; base fd4a644fd414079022f8781c14a6683b41504ab7.

@@ -8,6 +8,9 @@ for p in sorted(E.glob('receipt-*.json')):
  assert hashlib.sha256(prep_input.read_bytes()).hexdigest()==r['deps_fingerprint'],p
  if r['accepted']:
   assert not any('sorryAx' in x for x in r['print_axioms_summary_based']),p
+  for line in r['print_axioms_summary_based']:
+   names=re.search(r'depends on axioms: \[(.*?)\]',line,re.S)
+   if names: assert set(names[1].replace(' ','').replace('\n','').split(',')) <= {'propext','Classical.choice','Quot.sound'},p
   latest[r['target']]=r
 current=[]
 for m,r in latest.items():
@@ -24,6 +27,6 @@ changed=subprocess.check_output(['git','diff','--name-only','fd4a644fd4'],text=T
 assert not [p for p in changed if p.startswith(('crates/','programs/','tools/r1-cost-probe/'))]
 audit=json.loads((E/'raw-audit/results.json').read_text())
 assert audit['complete'] and audit['unresolved_constants']==0 and len(audit['roots'])==42
-result=dict(current_modules=current,lean_executions=len(receipts),failed_executions=[r['attempt'] for r in receipts if not r['accepted']],focused_executions=sum(r['attempt']<=91796 for r in receipts),audit_executions=sum(r['attempt']>=91797 for r in receipts),native_executions=1,kani_executions=0,max_rss_kib=max(int(r['peak_rss_kib']) for r in receipts),summary_axioms_only=False,raw_audit=dict(attempt=91799,complete=True,roots=42,unresolved=0,standard_axioms_only=True),forbidden_paths_changed=False,rows_removed=[],target='not yet established',remaining='source_entry_world/full source call closure/native interpretation/five deployed projections')
+result=dict(current_modules=current,lean_executions=len(receipts),failed_executions=[r['attempt'] for r in receipts if not r['accepted']],focused_executions=sum(r['attempt']<=91796 for r in receipts),audit_executions=sum(r['attempt']>=91797 for r in receipts),native_executions=1,kani_executions=0,max_rss_kib=max(int(r['peak_rss_kib']) for r in receipts),summary_axioms_only=False,summary_axioms_only_for_new_modules=True,raw_audit=dict(attempt=91799,complete=True,roots=42,unresolved=0,standard_axioms_only=True,scope='historical substrate at f9e335854e; new continuation modules NOT raw-audited',covers_current_new_modules=False),forbidden_paths_changed=False,rows_removed=[],target='not yet established',remaining='source_entry_world/full source call closure/native interpretation/five deployed projections')
 (E/'validation.json').write_text(json.dumps(result,indent=2)+'\n')
-print('validated',len(current),'current modules;',len(receipts),'Lean executions; 42 raw roots complete')
+print('validated',len(current),'current modules;',len(receipts),'Lean executions; historical 42 raw roots complete; new continuation closure unaudited')
