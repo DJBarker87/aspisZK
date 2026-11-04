@@ -1,0 +1,62 @@
+{"attempt": "NFB_L042", "exit_status": 1, "wall_seconds": 2.5284536129329354, "peak_rss_kib": "4928772", "swaps": "0", "print_axioms": ["'NFB_GatherFrame.owned' depends on axioms: [propext, Quot.sound]", "'NFB_GatherFrame.query_frame' depends on axioms: [propext, Quot.sound]", "'NFB_GatherFrame.payloads' depends on axioms: [sorryAx]"]}
+NFB_GatherFrame.lean:32:24: error: Ambiguous term
+  run
+Possible interpretations:
+  NFB_GatherTrace.run : Usize → It → Vec → Vec → Result Answer
+  
+  NFB_PhysicalFrame.run : List Action → Heap → Heap
+NFB_GatherFrame.lean:32:7: error: unsolved goals
+case nil
+heap : Heap
+flat lines : List U32
+hflat : heap Place.flat.id = some flat
+hlines : heap Place.lines.id = some lines
+⊢ NFB_PhysicalFrame.run [] heap Place.flat.id = some flat ∧ NFB_PhysicalFrame.run [] heap Place.lines.id = some lines
+NFB_GatherFrame.lean:35:55: error: unsolved goals
+r : Row
+rs : List Row
+ih :
+  ∀ (heap : Heap) (flat lines : List U32),
+    heap Place.flat.id = some flat →
+      heap Place.lines.id = some lines →
+        NFB
+...
+w.words r ++
+            List.flatMap (fun r => AspisR1.Port4C_GeometryGather.Row.words r) rs)))
+    (NFB_PhysicalFrame.run
+        (append Place.flat (AspisR1.Port4C_GeometryGather.Row.words r) :: append Place.lines [r.lineZ] :: actions rs)
+        heap Place.lines.id =
+      some (lines ++ r.lineZ :: List.map (fun r => r.lineZ) rs))
+NFB_GatherFrame.lean:32:28: warning: This simp argument is unused:
+  hflat
+
+Hint: Omit it from the simp argument list.
+  simp [̵a̵c̵t̵i̵o̵n̵s̵,̵r̵u̵n̵,̵h̵f̵l̵a̵t̵,̵h̵l̵i̵n̵e̵s̵]̵[̲a̲c̲t̲i̲o̲n̲s̲,̲ ̲r̲u̲n̲,̲ ̲h̲l̲i̲n̲e̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFB_GatherFrame.lean:32:34: warning: This simp argument is unused:
+  hlines
+
+Hint: Omit it from the simp argument list.
+  simp [̵a̵c̵t̵i̵o̵n̵s̵,̵r̵u̵n̵,̵h̵f̵l̵a̵t̵,̵h̵l̵i̵n̵e̵s̵]̵[̲a̲c̲t̲i̲o̲n̲s̲,̲ ̲r̲u̲n̲,̲ ̲h̲f̲l̲a̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFB_GatherFrame.lean:36:49: warning: This simp argument is unused:
+  hflat
+
+Hint: Omit it from the simp argument list.
+  simp [next, ̲append, ̲Action.apply, ̲write, ̲Place.id,̵h̵f̵l̵a̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFB_GatherFrame.lean:38:49: warning: This simp argument is unused:
+  hlines
+
+Hint: Omit it from the simp argument list.
+  simp [̵n̵e̵x̵t̵,̵a̵p̵p̵e̵n̵d̵,̵A̵c̵t̵i̵o̵n̵.̵a̵p̵p̵l̵y̵,̵w̵r̵i̵t̵e̵,̵P̵l̵a̵c̵e̵.̵i̵d̵,̵h̵l̵i̵n̵e̵s̵]̵[̲n̲e̲x̲t̲,̲ ̲a̲p̲p̲e̲n̲d̲,̲ ̲A̲c̲t̲i̲o̲n̲.̲a̲p̲p̲l̲y̲,̲ ̲w̲r̲i̲t̲e̲,̲ ̲P̲l̲a̲c̲e̲.̲i̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NFB_GatherFrame.owned' depends on axioms: [propext, Quot.sound]
+'NFB_GatherFrame.query_frame' depends on axioms: [propext, Quot.sound]
+'NFB_GatherFrame.payloads' depends on axioms: [sorryAx]
+
+Running as unit: run-r40b356cd2f7d4391aaa02a815c7bbb56.scope; invocation ID: d44ab0a1134a437c9ed3bb6262aaeddf

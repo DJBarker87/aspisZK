@@ -1,0 +1,62 @@
+import NFB_RowPrimitives
+set_option autoImplicit false
+namespace NFB_RowLog
+open Aeneas Aeneas.Std Result
+abbrev Call := NFB_RowRef.NFB_RowCall
+abbrev Log := NFB_RowRef.NFB_RowLog
+
+def calls (c0 c1 c2 c3 : Call) : Array Call 4#usize := Array.make 4#usize [c0,c1,c2,c3]
+def state (i : Usize) (c0 c1 c2 c3 : Call) : Log := ⟨calls c0 c1 c2 c3,i⟩
+def event (kind : U8) (a b reply reply2 : U32) : Call := ⟨kind,a,b,reply,reply2⟩
+def empty : Call := ⟨0#u8,0#u32,0#u32,0#u32,0#u32⟩
+def initial : Log := state 0#usize empty empty empty empty
+
+theorem step0 (c0 c1 c2 c3 : Call) (kind : U8) (a b r r2 : U32) :
+ NFB_RowRef.NFB_row_call (state 0#usize c0 c1 c2 c3) kind a b r r2=
+ ok (state 1#usize (event kind a b r r2) c1 c2 c3) := by
+ have inc : Usize.wrapping_add 0#usize 1#usize=1#usize := by
+  apply UScalar.eq_of_val_eq
+  rw [Usize.wrapping_add_val_eq]
+  have cap : 4 < UScalar.size .Usize := by rw [UScalar.size_def]; scalar_tac
+  change (0+1)%UScalar.size .Usize=1
+  rw [Nat.mod_eq_of_lt (by omega)]
+ simp [NFB_RowRef.NFB_row_call,state,calls,event,Array.update,Array.getElem?_Usize_eq,Array.make,inc,lift,bind_tc_ok]
+
+theorem step1 (c0 c1 c2 c3 : Call) (kind : U8) (a b r r2 : U32) :
+ NFB_RowRef.NFB_row_call (state 1#usize c0 c1 c2 c3) kind a b r r2=
+ ok (state 2#usize c0 (event kind a b r r2) c2 c3) := by
+ have inc : Usize.wrapping_add 1#usize 1#usize=2#usize := by
+  apply UScalar.eq_of_val_eq
+  rw [Usize.wrapping_add_val_eq]
+  have cap : 4 < UScalar.size .Usize := by rw [UScalar.size_def]; scalar_tac
+  change (1+1)%UScalar.size .Usize=2
+  rw [Nat.mod_eq_of_lt (by omega)]
+ simp [NFB_RowRef.NFB_row_call,state,calls,event,Array.update,Array.getElem?_Usize_eq,Array.make,inc,lift,bind_tc_ok]
+
+theorem step2 (c0 c1 c2 c3 : Call) (kind : U8) (a b r r2 : U32) :
+ NFB_RowRef.NFB_row_call (state 2#usize c0 c1 c2 c3) kind a b r r2=
+ ok (state 3#usize c0 c1 (event kind a b r r2) c3) := by
+ have inc : Usize.wrapping_add 2#usize 1#usize=3#usize := by
+  apply UScalar.eq_of_val_eq
+  rw [Usize.wrapping_add_val_eq]
+  have cap : 4 < UScalar.size .Usize := by rw [UScalar.size_def]; scalar_tac
+  change (2+1)%UScalar.size .Usize=3
+  rw [Nat.mod_eq_of_lt (by omega)]
+ simp [NFB_RowRef.NFB_row_call,state,calls,event,Array.update,Array.getElem?_Usize_eq,Array.make,inc,lift,bind_tc_ok]
+
+theorem step3 (c0 c1 c2 c3 : Call) (kind : U8) (a b r r2 : U32) :
+ NFB_RowRef.NFB_row_call (state 3#usize c0 c1 c2 c3) kind a b r r2=
+ ok (state 4#usize c0 c1 c2 (event kind a b r r2)) := by
+ have inc : Usize.wrapping_add 3#usize 1#usize=4#usize := by
+  apply UScalar.eq_of_val_eq
+  rw [Usize.wrapping_add_val_eq]
+  have cap : 4 < UScalar.size .Usize := by rw [UScalar.size_def]; scalar_tac
+  change (3+1)%UScalar.size .Usize=4
+  rw [Nat.mod_eq_of_lt (by omega)]
+ simp [NFB_RowRef.NFB_row_call,state,calls,event,Array.update,Array.getElem?_Usize_eq,Array.make,inc,lift,bind_tc_ok]
+
+#print axioms step0
+#print axioms step1
+#print axioms step2
+#print axioms step3
+end NFB_RowLog

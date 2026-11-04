@@ -1,0 +1,55 @@
+{"attempt": "NFB_L006", "exit_status": 1, "wall_seconds": 2.158614242915064, "peak_rss_kib": "4944428", "swaps": "0", "print_axioms": ["'NFB_ZeroFinite.next_active' depends on axioms: [propext, sorryAx, Quot.sound]", "'NFB_ZeroFinite.next_end' depends on axioms: [propext, sorryAx, Quot.sound]", "'NFB_ZeroFinite.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NFB_ZeroFinite.lean:16:57: error: Application type mismatch: The argument
+  it.i
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.4
+of sort `Type (?u.4 + 1)` in the application
+  @PrincipalSeg it.i
+NFB_ZeroFinite.lean:16:63: error(lean.unknownIdentifier): Unknown identifier `t.slice.val.length`
+NFB_ZeroFinite.lean:18:15: error: failed to prove index is valid, possible solutions:
+  - Use `have`-expressions to prove the index is valid
+  - Use `a[i]!` notation instead, runtime check is performed, and 'Panic' error message is produced if index is not valid
+  - Use `a[i]?` notation instead, result is an `Option` type
+  - Use `a[i]'h` notation instead, where `h` is a proof that i
+...
+e.slice.iter.Iter U32))
+heq✝ :
+  (do
+      let (next, it) ← core.slice.iter.IteratorSliceIter.next it
+      match next with
+        | none => ok (done (false, it))
+        | some value => if decide (value = 0#u32) = true then ok (done (true, it)) else ok (cont (it, ()))) =
+    div
+⊢ div = do
+    let (next, after) ← core.slice.iter.IteratorSliceIter.next it
+    match next with
+      | none => ok (false, after)
+      | some value => if decide (value = 0#u32) = true then ok (true, after) else bounded fuel after
+NFB_ZeroFinite.lean:38:59: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [NFB_ZeroScan.zeroStep, ̲next_end it (by omega), ̲bi̵n̵d̵_̵t̵c̵_̵ok̵,̵b̵o̵unded]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFB_ZeroFinite.lean:44:36: warning: This simp argument is unused:
+  next_active it active
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵F̵B̵_̵Z̵e̵r̵o̵S̵c̵a̵n̵.̵z̵e̵r̵o̵S̵t̵e̵p̵,̵n̵e̵x̵t̵_̵a̵c̵t̵i̵v̵e̵ ̵i̵t̵ ̵a̵c̵t̵i̵v̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵b̵o̵u̵n̵d̵e̵d̵]̵[̲N̲F̲B̲_̲Z̲e̲r̲o̲S̲c̲a̲n̲.̲z̲e̲r̲o̲S̲t̲e̲p̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲b̲o̲u̲n̲d̲e̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFB_ZeroFinite.lean:44:58: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [NFB_ZeroScan.zeroStep, ̲next_active it active, ̲bi̵n̵d̵_̵t̵c̵_̵ok̵,̵b̵o̵unded]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NFB_ZeroFinite.next_active' depends on axioms: [propext, sorryAx, Quot.sound]
+'NFB_ZeroFinite.next_end' depends on axioms: [propext, sorryAx, Quot.sound]
+'NFB_ZeroFinite.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r856c8c2bf62c4db48e054b908c5f005b.scope; invocation ID: 8466d9d4f92f4c0fac1db60c4c17845c

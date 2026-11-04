@@ -1,0 +1,58 @@
+NFB_ZeroFinite.lean:48:5: error: Tactic `rfl` failed: The left-hand side
+  match r✝ with
+  | cont x => loop NFB_ZeroScan.zeroStep x
+  | done x => ok x
+is not definitionally equal to the right-hand side
+  if decide ((↑it.slice)[it.i] = 0#u32) = true then ok (true, { slice := it.slice, i := it.i + 1 })
+  else bounded fuel { slice := it.slice, i := it.i + 1 }
+
+case h_1
+fuel : ℕ
+ih :
+  ∀ (it : core.slice.iter.Iter U32),
+    it.i + fuel = (↑it.slice).length → loop NFB_ZeroScan.zeroStep (it, ()) = bounded fuel it
+it : core.slice.iter.Iter U32
+remaining : it.i + (fuel + 1) = (↑it.slice).length
+active : it.i < (↑it.slice).length
+rest : { slice := it.slice, i := it.i + 1 }.i + fuel = (↑it.slice).length
+x✝ : Result (ControlFlow (core.slice.iter.Iter U32 × Unit) (Bool × core.slice.iter.Iter U32))
+r✝ : ControlFlow (core.slice.iter.Iter U32 × Unit) (Bool × core.slice.iter.Iter U32)
+heq✝ :
+  (if decide ((↑it.slice)[it.i] = 0#u32) = true then ok (done (true, { slice := it.slice, i := it.i + 1 }))
+    else ok (cont ({ slice := it.slice, i := it.i + 1 }, ()))) =
+    ok r✝
+⊢ (match r✝ with
+    | cont x => loop NFB_ZeroScan.zeroStep x
+    | done x => ok x) =
+    if decide ((↑it.slice)[it.i] = 0#u32) = true then ok (true, { slice := it.slice, i := it.i + 1 })
+    else bounded fuel { slice := it.slice, i := it.i + 1 }
+NFB_ZeroFinite.lean:49:5: error: Type mismatch
+  ih { slice := it.slice, i := it.i + 1 } rest
+has type
+  loop NFB_ZeroScan.zeroStep ({ slice := it.slice, i := it.i + 1 }, ()) =
+    bounded fuel { slice := it.slice, i := it.i + 1 }
+but is expected to have type
+  fail e✝ =
+    if decide ((↑it.slice)[it.i] = 0#u32) = true then ok (true, { slice := it.slice, i := it.i + 1 })
+    else bounded fuel { slice := it.slice, i := it.i + 1 }
+NFB_ZeroFinite.lean:41:16: error: unsolved goals
+case h_3
+fuel : ℕ
+ih :
+  ∀ (it : core.slice.iter.Iter U32),
+    it.i + fuel = (↑it.slice).length → loop NFB_ZeroScan.zeroStep (it, ()) = bounded fuel it
+it : core.slice.iter.Iter U32
+remaining : it.i + (fuel + 1) = (↑it.slice).length
+active : it.i < (↑it.slice).length
+rest : { slice := it.slice, i := it.i + 1 }.i + fuel = (↑it.slice).length
+x✝ : Result (ControlFlow (core.slice.iter.Iter U32 × Unit) (Bool × core.slice.iter.Iter U32))
+heq✝ :
+  (if decide ((↑it.slice)[it.i] = 0#u32) = true then ok (done (true, { slice := it.slice, i := it.i + 1 }))
+    else ok (cont ({ slice := it.slice, i := it.i + 1 }, ()))) =
+    div
+⊢ div =
+    if decide ((↑it.slice)[it.i] = 0#u32) = true then ok (true, { slice := it.slice, i := it.i + 1 })
+    else bounded fuel { slice := it.slice, i := it.i + 1 }
+'NFB_ZeroFinite.next_active' depends on axioms: [propext, Quot.sound]
+'NFB_ZeroFinite.next_end' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFB_ZeroFinite.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,153 @@
+NFB_RowG.lean:35:1: error: unsolved goals
+case pos
+query x y lineX lineY product : U32
+u : UScalar UScalarTy.Usize := UScalar.cast UScalarTy.Usize query
+bound : ↑u < 262144
+parent left right : Usize
+division : UScalar.cast UScalarTy.Usize query / 4#usize = ok parent
+leftEq : left = parent.wrapping_mul 4#usize
+rightEq : right = left.wrapping_add 3#usize
+lv : ↑left = ↑u / 4 * 4
+rv : ↑right = ↑u / 4 * 4 + 3
+lb : ↑left < 262144
+rb : ↑right < 262144
+left✝ :
+  NEB_GeometryIndices.indexPort NFB_RowRef.aspis_core.r0.Error.IndexOutOfRange left = ok (core.result.Result.Ok left)
+right✝ :
+  NEB_GeometryIndices.indexPort NFB_RowRef.aspis_core.r0.Error.IndexOutOfRange right = ok (core.result.Result.Ok right)
+leftRun : NFB_RowRef.aspis_core.r0.domain.FibreIndex.new left = ok (core.result.Result.Ok left)
+rightRun : NFB_RowRef.aspis_core.r0.domain.FibreIndex.new right = ok (core.result.Result.Ok right)
+first :
+  NFB_RowRef.aspis_core.r0.domain.FibreIndex.new (UScalar.cast UScalarTy.Usize query) =
+    ok (core.result.Result.Ok (UScalar.cast UScalarTy.Usize query))
+guard : UScalar.cast UScalarTy.Usize query < 262144#usize
+⊢ (do
+      let i2 ←
+        match [x, y, lineX, lineY, product][↑0#usize]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      let i3 ←
+        match [x, y, lineX, lineY, product][↑1#usize]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      let i8 ←
+        match [x, y, lineX, lineY, product][↑2#usize]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      let i13 ←
+        match [x, y, lineX, lineY, product][↑3#usize]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      let i14 ←
+        match [x, y, lineX, lineY, product][↑4#usize]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      let m1 ← NEW_GeometryActual.aspis_core.field.M31.double i14
+      let line_z ← NEW_GeometryActual.aspis_core.field.M31.sub m1 1#u32
+      ok
+          (core.result.Result.Ok ⟨[i2, i3, i8, i13, line_z], ⋯⟩,
+            state 4#usize (event 1#u8 (UScalar.cast UScalarTy.U32 (UScalar.cast UScalarTy.Usize query)) 0#u32 i2 i3)
+              (event 2#u8 (UScalar.cast UScalarTy.U32 left) 0#u32 i8 0#u32)
+              (event 3#u8 (UScalar.cast UScalarTy.U32 right) 0#u32 i13 0#u32) (event 4#u8 i8 i8 i14 0#u32))) =
+    do
+    let doubled ← NEW_GeometryActual.aspis_core.field.M31.double product
+    let z ← doubled.sub 1#u32
+    ok
+        (core.result.Result.Ok ⟨[x, y, lineX, lineY, z], ⋯⟩,
+          state 4#usize (event 1#u8 (UScalar.cast UScalarTy.U32 (UScalar.cast UScalarTy.Usize query)) 0#u32 x y)
+            (event 2#u8 (UScalar.cast UScalarTy.U32 left) 0#u32 lineX 0#u32)
+            (event 3#u8 (UScalar.cast UScalarTy.U32 right) 0#u32 lineY 0#u32) (event 4#u8 lineX lineX product 0#u32))
+NFB_RowG.lean:46:4: warning: This simp argument is unused:
+  NFB_RowRef.NFB_row.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵F̵B̵_̵R̵o̵w̵R̵e̵f̵.̵N̵F̵B̵_̵r̵o̵w̵,̵m̵o̵d̵e̵l̵,̵r̵e̵p̵l̵y̵,̵i̵n̵i̵t̵i̵a̵l̵,̵
+  ̵ ̵ ̵ ̵ ̵f̵i̵r̵s̵t̵,̵d̵i̵v̵i̵s̵i̵o̵n̵,̵←̵l̵e̵f̵t̵E̵q̵,̵←̵r̵i̵g̵h̵t̵E̵q̵,̵l̵e̵f̵t̵R̵u̵n̵,̵r̵i̵g̵h̵t̵R̵u̵n̵,̵[̲N̲F̲B̲_̲R̲o̲w̲R̲e̲f̲.̲N̲F̲B̲_̲r̲o̲w̲,̲ ̲m̲o̲d̲e̲l̲,̲ ̲r̲e̲p̲l̲y̲,̲ ̲i̲n̲i̲t̲i̲a̲l̲,̲ ̲f̲i̲r̲s̲t̲,̲ ̲d̲i̲v̲i̲s̲i̲o̲n̲,̲ ̲←̲ ̲l̲e̲f̲t̲E̲q̲,̲ ̲←̲ ̲r̲i̲g̲h̲t̲E̲q̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲l̲e̲f̲t̲R̲u̲n̲,̲ ̲r̲i̲g̲h̲t̲R̲u̲n̲,̲ NFB_RowRef.aspis_core.r0.domain.FibreIndex.get, c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵A̵s̵p̵i̵s̵R̵1̵.̵P̵o̵r̵t̵4̵C̵_̵G̵e̵o̵m̵e̵t̵r̵y̵S̵t̵d̵.̵m̵a̵p̵E̵r̵r̵o̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵N̵F̵B̵_̵R̵o̵w̵R̵e̵f̵.̵N̵F̵B̵_̵r̵o̵w̵.̵c̵l̵o̵s̵u̵r̵e̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵E̵r̵r̵o̵r̵E̵r̵r̵o̵r̵,̵c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲m̲a̲p̲_̲e̲r̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲A̲s̲p̲i̲s̲R̲1̲.̲P̲o̲r̲t̲4̲C̲_̲G̲e̲o̲m̲e̲t̲r̲y̲S̲t̲d̲.̲m̲a̲p̲E̲r̲r̲o̲r̲,̲
+       NFB_RowRef.NFB_row.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+       NFB_RowRef.NFB_row.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+       NFB_RowRef.NFB_row.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+       NFB_RowRef.NFB_row.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+       NFB_RowRef.NFB_row.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+       core.result.Result.Insts.CoreOpsTry.branch, A̵r̵r̵a̵y̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵A̵r̵r̵a̵y̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵U̵s̵i̵z̵e̵_̵e̵q̵,̵A̵r̵r̵a̵y̵.̵m̵a̵k̵e̵,̵A̲r̲r̲a̲y̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ ̲A̲r̲r̲a̲y̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲U̲s̲i̲z̲e̲_̲e̲q̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲A̲r̲r̲a̲y̲.̲m̲a̲k̲e̲,̲ NFB_RowRef.NFB_row_product, N̵F̵B̵_̵R̵o̵w̵L̵o̵g̵.̵s̵t̵e̵p̵0̵,̵N̵F̵B̵_̵R̵o̵w̵L̵o̵g̵.̵s̵t̵e̵p̵1̵,̵N̵F̵B̵_̵R̵o̵w̵L̵o̵g̵.̵s̵t̵e̵p̵2̵,̵N̵F̵B̵_̵R̵o̵w̵L̵o̵g̵.̵s̵t̵e̵p̵3̵,̵
+  ̵ ̵ ̵ ̵ ̵N̵F̵B̵_̵R̵o̵w̵P̵r̵i̵m̵i̵t̵i̵v̵e̵s̵.̵d̵o̵u̵b̵l̵e̵,̵N̵F̵B̵_̵R̵o̵w̵P̵r̵i̵m̵i̵t̵i̵v̵e̵s̵.̵s̵u̵b̵t̵r̵a̵c̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵N̵F̵B̵_̵R̵o̵w̵R̵e̵f̵.̵a̵s̵p̵i̵s̵_̵c̵o̵r̵e̵.̵f̵i̵e̵l̵d̵.̵M̵3̵1̵.̵O̵N̵E̵,̵g̵u̵a̵r̵d̵,̵i̵f̵_̵t̵r̵u̵e̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵u̵n̵c̵u̵r̵r̵y̵]̵N̲F̲B̲_̲R̲o̲w̲L̲o̲g̲.̲s̲t̲e̲p̲0̲,̲ ̲N̲F̲B̲_̲R̲o̲w̲L̲o̲g̲.̲s̲t̲e̲p̲1̲,̲ ̲N̲F̲B̲_̲R̲o̲w̲L̲o̲g̲.̲s̲t̲e̲p̲2̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲N̲F̲B̲_̲R̲o̲w̲L̲o̲g̲.̲s̲t̲e̲p̲3̲,̲ ̲N̲F̲B̲_̲R̲o̲w̲P̲r̲i̲m̲i̲t̲i̲v̲e̲s̲.̲d̲o̲u̲b̲l̲e̲,̲ ̲N̲F̲B̲_̲R̲o̲w̲P̲r̲i̲m̲i̲t̲i̲v̲e̲s̲.̲s̲u̲b̲t̲r̲a̲c̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲N̲F̲B̲_̲R̲o̲w̲R̲e̲f̲.̲a̲s̲p̲i̲s̲_̲c̲o̲r̲e̲.̲f̲i̲e̲l̲d̲.̲M̲3̲1̲.̲O̲N̲E̲,̲ ̲g̲u̲a̲r̲d̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲u̲n̲c̲u̲r̲r̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFB_RowG.lean:48:4: warning: This simp argument is unused:
+  NFB_RowRef.NFB_row.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵F̵B̵_̵R̵o̵w̵R̵e̵f̵.̵N̵F̵B̵_̵r̵o̵w̵,̵m̵o̵d̵e̵l̵,̵r̵e̵p̵l̵y̵,̵i̵n̵i̵t̵i̵a̵l̵,̵
+  ̵ ̵ ̵ ̵ ̵f̵i̵r̵s̵t̵,̵d̵i̵v̵i̵s̵i̵o̵n̵,̵←̵l̵e̵f̵t̵E̵q̵,̵←̵r̵i̵g̵h̵t̵E̵q̵,̵l̵e̵f̵t̵R̵u̵n̵,̵r̵i̵g̵h̵t̵R̵u̵n̵,̵[̲N̲F̲B̲_̲R̲o̲w̲R̲e̲f̲.̲N̲F̲B̲_̲r̲o̲w̲,̲ ̲m̲o̲d̲e̲l̲,̲ ̲r̲e̲p̲l̲y̲,̲ ̲i̲n̲i̲t̲i̲a̲l̲,̲ ̲f̲i̲r̲s̲t̲,̲ ̲d̲i̲v̲i̲s̲i̲o̲n̲,̲ ̲←̲ ̲l̲e̲f̲t̲E̲q̲,̲ ̲←̲ ̲r̲i̲g̲h̲t̲E̲q̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲l̲e̲f̲t̲R̲u̲n̲,̲ ̲r̲i̲g̲h̲t̲R̲u̲n̲,̲ NFB_RowRef.aspis_core.r0.domain.FibreIndex.get, c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵A̵s̵p̵i̵s̵R̵1̵.̵P̵o̵r̵t̵4̵C̵_̵G̵e̵o̵m̵e̵t̵r̵y̵S̵t̵d̵.̵m̵a̵p̵E̵r̵r̵o̵r̵,̵c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲m̲a̲p̲_̲e̲r̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲A̲s̲p̲i̲s̲R̲1̲.̲P̲o̲r̲t̲4̲C̲_̲G̲e̲o̲m̲e̲t̲r̲y̲S̲t̲d̲.̲m̲a̲p̲E̲r̲r̲o̲r̲,̲
+       NFB_RowRef.NFB_row.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+       NFB_RowRef.NFB_row.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+       N̵F̵B̵_̵R̵o̵w̵R̵e̵f̵.̵N̵F̵B̵_̵r̵o̵w̵.̵c̵l̵o̵s̵u̵r̵e̵_̵1̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵E̵r̵r̵o̵r̵E̵r̵r̵o̵r̵,̵NFB_RowRef.NFB_row.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+       NFB_RowRef.NFB_row.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+       NFB_RowRef.NFB_row.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+       core.result.Result.Insts.CoreOpsTry.branch, A̵r̵r̵a̵y̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵A̵r̵r̵a̵y̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵U̵s̵i̵z̵e̵_̵e̵q̵,̵A̵r̵r̵a̵y̵.̵m̵a̵k̵e̵,̵A̲r̲r̲a̲y̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ ̲A̲r̲r̲a̲y̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲U̲s̲i̲z̲e̲_̲e̲q̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲A̲r̲r̲a̲y̲.̲m̲a̲k̲e̲,̲ NFB_RowRef.NFB_row_product, N̵F̵B̵_̵R̵o̵w̵L̵o̵g̵.̵s̵t̵e̵p̵0̵,̵N̵F̵B̵_̵R̵o̵w̵L̵o̵g̵.̵s̵t̵e̵p̵1̵,̵N̵F̵B̵_̵R̵o̵w̵L̵o̵g̵.̵s̵t̵e̵p̵2̵,̵N̵F̵B̵_̵R̵o̵w̵L̵o̵g̵.̵s̵t̵e̵p̵3̵,̵
+  ̵ ̵ ̵ ̵ ̵N̵F̵B̵_̵R̵o̵w̵P̵r̵i̵m̵i̵t̵i̵v̵e̵s̵.̵d̵o̵u̵b̵l̵e̵,̵N̵F̵B̵_̵R̵o̵w̵P̵r̵i̵m̵i̵t̵i̵v̵e̵s̵.̵s̵u̵b̵t̵r̵a̵c̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵N̵F̵B̵_̵R̵o̵w̵R̵e̵f̵.̵a̵s̵p̵i̵s̵_̵c̵o̵r̵e̵.̵f̵i̵e̵l̵d̵.̵M̵3̵1̵.̵O̵N̵E̵,̵g̵u̵a̵r̵d̵,̵i̵f̵_̵t̵r̵u̵e̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵u̵n̵c̵u̵r̵r̵y̵]̵N̲F̲B̲_̲R̲o̲w̲L̲o̲g̲.̲s̲t̲e̲p̲0̲,̲ ̲N̲F̲B̲_̲R̲o̲w̲L̲o̲g̲.̲s̲t̲e̲p̲1̲,̲ ̲N̲F̲B̲_̲R̲o̲w̲L̲o̲g̲.̲s̲t̲e̲p̲2̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲N̲F̲B̲_̲R̲o̲w̲L̲o̲g̲.̲s̲t̲e̲p̲3̲,̲ ̲N̲F̲B̲_̲R̲o̲w̲P̲r̲i̲m̲i̲t̲i̲v̲e̲s̲.̲d̲o̲u̲b̲l̲e̲,̲ ̲N̲F̲B̲_̲R̲o̲w̲P̲r̲i̲m̲i̲t̲i̲v̲e̲s̲.̲s̲u̲b̲t̲r̲a̲c̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲N̲F̲B̲_̲R̲o̲w̲R̲e̲f̲.̲a̲s̲p̲i̲s̲_̲c̲o̲r̲e̲.̲f̲i̲e̲l̲d̲.̲M̲3̲1̲.̲O̲N̲E̲,̲ ̲g̲u̲a̲r̲d̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲u̲n̲c̲u̲r̲r̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFB_RowG.lean:50:4: warning: This simp argument is unused:
+  NFB_RowRef.NFB_row.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵F̵B̵_̵R̵o̵w̵R̵e̵f̵.̵N̵F̵B̵_̵r̵o̵w̵,̵m̵o̵d̵e̵l̵,̵r̵e̵p̵l̵y̵,̵i̵n̵i̵t̵i̵a̵l̵,̵
+  ̵ ̵ ̵ ̵ ̵f̵i̵r̵s̵t̵,̵d̵i̵v̵i̵s̵i̵o̵n̵,̵←̵l̵e̵f̵t̵E̵q̵,̵←̵r̵i̵g̵h̵t̵E̵q̵,̵l̵e̵f̵t̵R̵u̵n̵,̵r̵i̵g̵h̵t̵R̵u̵n̵,̵[̲N̲F̲B̲_̲R̲o̲w̲R̲e̲f̲.̲N̲F̲B̲_̲r̲o̲w̲,̲ ̲m̲o̲d̲e̲l̲,̲ ̲r̲e̲p̲l̲y̲,̲ ̲i̲n̲i̲t̲i̲a̲l̲,̲ ̲f̲i̲r̲s̲t̲,̲ ̲d̲i̲v̲i̲s̲i̲o̲n̲,̲ ̲←̲ ̲l̲e̲f̲t̲E̲q̲,̲ ̲←̲ ̲r̲i̲g̲h̲t̲E̲q̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲l̲e̲f̲t̲R̲u̲n̲,̲ ̲r̲i̲g̲h̲t̲R̲u̲n̲,̲ NFB_RowRef.aspis_core.r0.domain.FibreIndex.get, c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵A̵s̵p̵i̵s̵R̵1̵.̵P̵o̵r̵t̵4̵C̵_̵G̵e̵o̵m̵e̵t̵r̵y̵S̵t̵d̵.̵m̵a̵p̵E̵r̵r̵o̵r̵,̵c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲m̲a̲p̲_̲e̲r̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲A̲s̲p̲i̲s̲R̲1̲.̲P̲o̲r̲t̲4̲C̲_̲G̲e̲o̲m̲e̲t̲r̲y̲S̲t̲d̲.̲m̲a̲p̲E̲r̲r̲o̲r̲,̲
+       NFB_RowRef.NFB_row.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+       NFB_RowRef.NFB_row.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+       NFB_RowRef.NFB_row.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+       NFB_RowRef.NFB_row.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+       N̵F̵B̵_̵R̵o̵w̵R̵e̵f̵.̵N̵F̵B̵_̵r̵o̵w̵.̵c̵l̵o̵s̵u̵r̵e̵_̵2̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵E̵r̵r̵o̵r̵E̵r̵r̵o̵r̵,̵NFB_RowRef.NFB_row.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+       core.result.Result.Insts.CoreOpsTry.branch, A̵r̵r̵a̵y̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵A̵r̵r̵a̵y̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵U̵s̵i̵z̵e̵_̵e̵q̵,̵A̵r̵r̵a̵y̵.̵m̵a̵k̵e̵,̵A̲r̲r̲a̲y̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ ̲A̲r̲r̲a̲y̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲U̲s̲i̲z̲e̲_̲e̲q̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲A̲r̲r̲a̲y̲.̲m̲a̲k̲e̲,̲ NFB_RowRef.NFB_row_product, N̵F̵B̵_̵R̵o̵w̵L̵o̵g̵.̵s̵t̵e̵p̵0̵,̵N̵F̵B̵_̵R̵o̵w̵L̵o̵g̵.̵s̵t̵e̵p̵1̵,̵N̵F̵B̵_̵R̵o̵w̵L̵o̵g̵.̵s̵t̵e̵p̵2̵,̵N̵F̵B̵_̵R̵o̵w̵L̵o̵g̵.̵s̵t̵e̵p̵3̵,̵
+  ̵ ̵ ̵ ̵ ̵N̵F̵B̵_̵R̵o̵w̵P̵r̵i̵m̵i̵t̵i̵v̵e̵s̵.̵d̵o̵u̵b̵l̵e̵,̵N̵F̵B̵_̵R̵o̵w̵P̵r̵i̵m̵i̵t̵i̵v̵e̵s̵.̵s̵u̵b̵t̵r̵a̵c̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵N̵F̵B̵_̵R̵o̵w̵R̵e̵f̵.̵a̵s̵p̵i̵s̵_̵c̵o̵r̵e̵.̵f̵i̵e̵l̵d̵.̵M̵3̵1̵.̵O̵N̵E̵,̵g̵u̵a̵r̵d̵,̵i̵f̵_̵t̵r̵u̵e̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵u̵n̵c̵u̵r̵r̵y̵]̵N̲F̲B̲_̲R̲o̲w̲L̲o̲g̲.̲s̲t̲e̲p̲0̲,̲ ̲N̲F̲B̲_̲R̲o̲w̲L̲o̲g̲.̲s̲t̲e̲p̲1̲,̲ ̲N̲F̲B̲_̲R̲o̲w̲L̲o̲g̲.̲s̲t̲e̲p̲2̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲N̲F̲B̲_̲R̲o̲w̲L̲o̲g̲.̲s̲t̲e̲p̲3̲,̲ ̲N̲F̲B̲_̲R̲o̲w̲P̲r̲i̲m̲i̲t̲i̲v̲e̲s̲.̲d̲o̲u̲b̲l̲e̲,̲ ̲N̲F̲B̲_̲R̲o̲w̲P̲r̲i̲m̲i̲t̲i̲v̲e̲s̲.̲s̲u̲b̲t̲r̲a̲c̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲N̲F̲B̲_̲R̲o̲w̲R̲e̲f̲.̲a̲s̲p̲i̲s̲_̲c̲o̲r̲e̲.̲f̲i̲e̲l̲d̲.̲M̲3̲1̲.̲O̲N̲E̲,̲ ̲g̲u̲a̲r̲d̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲u̲n̲c̲u̲r̲r̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFB_RowG.lean:65:4: warning: This simp argument is unused:
+  NFB_RowRef.NFB_row.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵F̵B̵_̵R̵o̵w̵R̵e̵f̵.̵N̵F̵B̵_̵r̵o̵w̵,̵m̵o̵d̵e̵l̵,̵f̵i̵r̵s̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵A̵s̵p̵i̵s̵R̵1̵.̵P̵o̵r̵t̵4̵C̵_̵G̵e̵o̵m̵e̵t̵r̵y̵S̵t̵d̵.̵m̵a̵p̵E̵r̵r̵o̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵N̵F̵B̵_̵R̵o̵w̵R̵e̵f̵.̵N̵F̵B̵_̵r̵o̵w̵.̵c̵l̵o̵s̵u̵r̵e̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵E̵r̵r̵o̵r̵E̵r̵r̵o̵r̵,̵[̲N̲F̲B̲_̲R̲o̲w̲R̲e̲f̲.̲N̲F̲B̲_̲r̲o̲w̲,̲ ̲m̲o̲d̲e̲l̲,̲ ̲f̲i̲r̲s̲t̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲m̲a̲p̲_̲e̲r̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲A̲s̲p̲i̲s̲R̲1̲.̲P̲o̲r̲t̲4̲C̲_̲G̲e̲o̲m̲e̲t̲r̲y̲S̲t̲d̲.̲m̲a̲p̲E̲r̲r̲o̲r̲,̲
+       NFB_RowRef.NFB_row.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+       core.result.Result.Insts.CoreOpsTry.branch,
+       core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual, g̵u̵a̵r̵d̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵u̵n̵c̵u̵r̵r̵y̵]̵g̲u̲a̲r̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲u̲n̲c̲u̲r̲r̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFB_RowG.lean:69:35: warning: This simp argument is unused:
+  uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [NFB_RowRef.NFB_row, ̲model, ̲first,
+  ̵  ̵ ̵ ̵core.result.Result.map_err,
+  ̲ ̲ ̲ ̲ ̲ ̲AspisR1.Port4C_GeometryStd.mapError,
+       ̲NFB_RowRef.NFB_row.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+       ̲NFB_RowRef.NFB_row.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+       ̲core.result.Result.Insts.CoreOpsTry.branch,
+       ̲core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+  ̵  ̵ ̵ ̵guard,
+  ̲ ̲ ̲ ̲ ̲ ̲if_false, ̲lift, ̲bind_tc_ok,̵u̵n̵c̵u̵r̵r̵y̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NFB_RowG.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

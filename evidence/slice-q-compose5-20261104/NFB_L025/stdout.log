@@ -1,0 +1,40 @@
+NFB_RowLog.lean:16:57: error: Tactic `rfl` failed: The left-hand side
+  NFB_RowRef.NFB_row_call (state 0#usize c0 c1 c2 c3) kind a b r r2
+is not definitionally equal to the right-hand side
+  ok (state 1#usize (event kind a b r r2) c1 c2 c3)
+
+c0 c1 c2 c3 : Call
+kind : U8
+a b r r2 : U32
+⊢ NFB_RowRef.NFB_row_call (state 0#usize c0 c1 c2 c3) kind a b r r2 = ok (state 1#usize (event kind a b r r2) c1 c2 c3)
+NFB_RowLog.lean:20:57: error: Tactic `rfl` failed: The left-hand side
+  NFB_RowRef.NFB_row_call (state 1#usize c0 c1 c2 c3) kind a b r r2
+is not definitionally equal to the right-hand side
+  ok (state 2#usize c0 (event kind a b r r2) c2 c3)
+
+c0 c1 c2 c3 : Call
+kind : U8
+a b r r2 : U32
+⊢ NFB_RowRef.NFB_row_call (state 1#usize c0 c1 c2 c3) kind a b r r2 = ok (state 2#usize c0 (event kind a b r r2) c2 c3)
+NFB_RowLog.lean:24:57: error: Tactic `rfl` failed: The left-hand side
+  NFB_RowRef.NFB_row_call (state 2#usize c0 c1 c2 c3) kind a b r r2
+is not definitionally equal to the right-hand side
+  ok (state 3#usize c0 c1 (event kind a b r r2) c3)
+
+c0 c1 c2 c3 : Call
+kind : U8
+a b r r2 : U32
+⊢ NFB_RowRef.NFB_row_call (state 2#usize c0 c1 c2 c3) kind a b r r2 = ok (state 3#usize c0 c1 (event kind a b r r2) c3)
+NFB_RowLog.lean:28:57: error: Tactic `rfl` failed: The left-hand side
+  NFB_RowRef.NFB_row_call (state 3#usize c0 c1 c2 c3) kind a b r r2
+is not definitionally equal to the right-hand side
+  ok (state 4#usize c0 c1 c2 (event kind a b r r2))
+
+c0 c1 c2 c3 : Call
+kind : U8
+a b r r2 : U32
+⊢ NFB_RowRef.NFB_row_call (state 3#usize c0 c1 c2 c3) kind a b r r2 = ok (state 4#usize c0 c1 c2 (event kind a b r r2))
+'NFB_RowLog.step0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NFB_RowLog.step1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NFB_RowLog.step2' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NFB_RowLog.step3' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

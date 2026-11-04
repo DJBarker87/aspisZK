@@ -1,0 +1,87 @@
+{"attempt": "NFB_L085", "exit_status": 1, "wall_seconds": 2.4551222301088274, "peak_rss_kib": "5298756", "swaps": "0", "print_axioms": ["'NFB_TailReadDomains.first' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NFB_TailReadDomains.later' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NFB_TailReadDomains.lean:36:49: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+q : Std.Array U8 608#usize
+g : Coeff
+stride position : Usize
+canonical : NEV_DotInputs.Canonical g
+small : ↑position < 2
+e : E
+scalar : Q
+accepted✝⁶ :
+  (do
+      let base ← 480#usize + stride
+      let delta ← position * 16#usize
+      let start ← base + delta
+      let index ← position + 26#usize
+      let e ← Array.index_usize g index
+      let stop ← start + 16#usize
+      let scalar ← NFA_TailQM.read q start stop
+      ok (e, scalar)) =
+    ok (e, scalar)
+base : UScalar UScalarTy.Usize
+left✝³ : 480#usize + stride = ok bas
+...
+   let delta ← position * 16#usize
+      let start ← base + delta
+      let index ← position + 26#usize
+      let e ← Array.index_usize g index
+      let stop ← start + 16#usize
+      let scalar ← NFA_TailQM.read q start stop
+      ok (e, scalar)) =
+    ok (e, scalar)
+delta : UScalar UScalarTy.Usize
+left✝² : position * 16#usize = ok delta
+accepted✝⁴ :
+  (do
+      let start ← base + delta
+      let index ← position + 26#usize
+      let e ← Array.index_usize g index
+      let stop ← start + 16#usize
+      let scalar ← NFA_TailQM.read q start stop
+      ok (e, scalar)) =
+    ok (e, scalar)
+start : UScalar UScalarTy.Usize
+left✝¹ : base + delta = ok start
+accepted✝³ :
+  (do
+      let index ← position + 26#usize
+      let e ← Array.index_usize g index
+      let stop ← start + 16#usize
+      let scalar ← NFA_TailQM.read q start stop
+      ok (e, scalar)) =
+    ok (e, scalar)
+index : UScalar UScalarTy.Usize
+indexRun : position + 26#usize = ok index
+accepted✝² :
+  (do
+      let e ← Array.index_usize g index
+      let stop ← start + 16#usize
+      let scalar ← NFA_TailQM.read q start stop
+      ok (e, scalar)) =
+    ok (e, scalar)
+stop : UScalar UScalarTy.Usize
+left✝ : start + 16#usize = ok stop
+select : Array.index_usize g index = ok e
+accepted✝¹ :
+  (do
+      let stop ← start + 16#usize
+      let scalar ← NFA_TailQM.read q start stop
+      ok (e, scalar)) =
+    ok (e, scalar)
+accepted✝ :
+  (do
+      let scalar ← NFA_TailQM.read q start stop
+      ok (e, scalar)) =
+    ok (e, scalar)
+read : NFA_TailQM.read q start stop = ok scalar
+accepted : ok (e, scalar) = ok (e, scalar)
+⊢ ↑index = ↑position + 26
+'NFB_TailReadDomains.first' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFB_TailReadDomains.later' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r7f45bc0150f04801a8202dfeb3c6481c.scope; invocation ID: 9cd1e980a2c442c48c9a37dad4879384
