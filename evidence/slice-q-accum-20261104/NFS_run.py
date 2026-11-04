@@ -46,13 +46,15 @@ if kind=='lean':
  if target in ['NFS_Driver','NFS_ProofDriver','NFA_WALKER','NFA_MemoryLimit']:command+=['-c','NFS_native/'+target+'.c']
 elif kind=='linkaudit':
  sources=['NFS_native/'+target+'.c','NFS_native/NFA_WALKER.c','NFS_native/NFA_MemoryLimit.c']
+ for support in ['NFA_WALKER.c','NFA_MemoryLimit.c']:files['NFS_native/'+support]=(E/'NFS_native'/support).read_text()
  command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NFS_native/'+target,*sources]
 elif kind=='auditbatch':
  files['NFS_final_audit_batch.py']=(E/'NFS_final_audit_batch.py').read_text()
  sources=['NFS_generated/NFS_ProofDriver.lean','NFS_final_audit_batch.py','NFS_native/NFS_ProofDriver.c','NFS_native/NFA_WALKER.c','NFS_native/NFA_MemoryLimit.c']
  command=['python3','NFS_final_audit_batch.py']
 elif kind=='auditbin':
- sources=['NFS_generated/NFS_Driver.lean'];command=['NFS_native/NFS_Driver',target]
+ driver='NFS_ProofDriver' if target.startswith('proof') or target=='fixtures' else 'NFS_Driver'
+ sources=['NFS_generated/'+driver+'.lean'];command=['NFS_native/'+driver,target]
 else:raise ValueError(kind)
 if target in ['scan','queryscan']:
  name='NFS_QUERY_EXPECTED_IMPORTS.jsonl' if target=='queryscan' else 'NFS_EXPECTED_IMPORTS.jsonl'

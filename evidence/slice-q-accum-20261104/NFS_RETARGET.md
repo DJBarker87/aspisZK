@@ -9,3 +9,7 @@ Reuse NFN_GeometryPart02's LPf_ReductionWord/CoreReduction/BaseMultiply and LPi_
 NFS_generate.py deterministically creates only the remaining 39 dependency modules, using the same namespace/import retarget method as NFN. Original bodies and hashes, maps and transformed hashes are recorded in NFS_RETARGET_PROVENANCE.json. Generated emitted function namespaces remain unchanged; proof namespaces receive NFS_. Every theorem in each new module is enumerated for #print axioms. Regeneration check compares exact bytes. Compilation and combined audit remain pending.
 
 No crates/programs, ELF, protocol parameter, security metric, trust item or key changed. Prepared/powers/prepare remain out-of-slice boundaries. Cache setup validates NFP and NFN export hashes and copies inputs into the owned retained cache, with imported hashes in NFS_CACHE_IMPORTS.json.xz. No seed cache is modified.
+
+## Focused replay
+
+NFS_L001–039 replay every remaining module individually in dependency order. All exit 0, under -M7000 and 6G/8G/swap0/tasks64; no timeout, memory kill or rejected proof shape. Full section-6 fields, source/dependency/Aeneas hashes and theorem axiom lines are in NFS_ATTEMPTS.jsonl and per-attempt receipts. All printed axioms are standard. NFS_L039 checks the complete accumulation packet. This establishes focused retarget correctness, pending joint coherence and raw ax2 audit; no row promotion yet.
