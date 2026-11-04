@@ -1,0 +1,28 @@
+{
+  "existing_law": "R1Z.PV_CB_Op71Source.op71_source",
+  "composition": "(PV_CB_Codecs.selected ops).op71 bytes = existing parser bytes = corrected reference bytes.val",
+  "qualification": "First equality is the existing source-law rfl pinned below, not recompiled through its full dictionary closure here. The new parser_instance supplies the second complete Result equality at the same callback. No whole-dictionary or endpoint replay credit.",
+  "sources": [
+    {
+      "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_CB_Codecs.lean",
+      "revision": "ef8ce0cbf45a95fe6f08c141960767b09b4b0891",
+      "blob": "bd81c6694ce147f3cd8cdc1886a8d8daabe6b39b",
+      "sha256": "eacd0015edab05369c747e587bd7359893ca6278134db3af004099403105bea3",
+      "text": "import R1Z.PV_CB_VecArray\nimport R1Z.ProverRwP6FlatSource\nimport R1Z.ProverRwSuccessParser\nset_option autoImplicit false\nnoncomputable section\nnamespace R1Z.PV_CB_Codecs\nopen Aeneas Aeneas.Std Result ProverRwFull\nvariable [ExternalTypes]\n/-- Retain source bounds checks, short-input failure and sequential slice writes. -/\n@[reducible] def selected (ops : ExternalFuns) : ExternalFuns :=\n  {PV_CB_VecArray.selected ops with\n    op51 := ProverRwP6FlatSource.wide_bytes_flat\n    op71 := ProverRwSuccessParser.parse\n    op72 := ProverRwDictionaryBytes.Src.write}\ntheorem op51_installed (ops : ExternalFuns) (x : aspis_core.field.wide_exact.WideExact) :\n    (selected ops).op51 x = ProverRwP6FlatSource.wide_bytes_flat x := rfl\ntheorem op71_installed (ops : ExternalFuns) (s : Slice U8) :\n    (selected ops).op71 s =\n      ProverRwSuccessParserSource.aspis_core.field.QM31.from_le_bytes s := rfl\ntheorem op72_installed (ops : ExternalFuns) (x : aspis_core.field.QM31) (s : Slice U8) :\n    (selected ops).op72 x s =\n      ProverRwDictionaryBytesSource.aspis_core.field.QM31.write_le_bytes x s := rfl\n#print axioms op51_installed\n#print axioms op71_installed\n#print axioms op72_installed\nend R1Z.PV_CB_Codecs\n"
+    },
+    {
+      "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_CB_Op71Source.lean",
+      "revision": "ef8ce0cbf45a95fe6f08c141960767b09b4b0891",
+      "blob": "9d6adacc0b41926ce0c63291e6a8d18343686c3f",
+      "sha256": "f0e836c4e16fbe4ce8b0e1302603a51fb59b02cda2213ee035ddecbde869f698",
+      "text": "import R1Z.PV_CB_Codecs\nset_option autoImplicit false\nnoncomputable section\nnamespace R1Z.PV_CB_Op71Source\nopen Aeneas Aeneas.Std Result ProverRwFull\nvariable [ExternalTypes]\ntheorem op71_source (ops : ExternalFuns) (s : Slice U8) :\n    (PV_CB_Codecs.selected ops).op71 s =\n      ProverRwSuccessParserSource.aspis_core.field.QM31.from_le_bytes s := rfl\n#print axioms op71_source\nend R1Z.PV_CB_Op71Source\n"
+    },
+    {
+      "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/ProverRwSuccessParser.lean",
+      "revision": "ef8ce0cbf45a95fe6f08c141960767b09b4b0891",
+      "blob": "16f4c77b13bf9a64fc463d71698f53200ab4d657",
+      "sha256": "23c80aac6e25e7da4a81065eb5602970beb2723287d31e30f9f5a9b8fef9c53b",
+      "text": "import R1Z.ProverRwSuccessConstants\nimport R1Z.ProverRwSuccessParserSource\nset_option autoImplicit false\nnoncomputable section\nnamespace R1Z.ProverRwSuccessParser\nopen Aeneas Aeneas.Std Result ProverRwFull\nabbrev parse := ProverRwSuccessParserSource.aspis_core.field.QM31.from_le_bytes\nabbrev parseM := ProverRwSuccessParserSource.aspis_core.field.M31.from_le_bytes\nvariable [ExternalTypes]\n@[reducible] def selected (ops : ExternalFuns) : ExternalFuns :=\n  {ProverRwSuccessConstants.selected ops with op71 := parse}\n\ntheorem source (ops : ExternalFuns) (bytes : Slice U8) :\n    (selected ops).op71 bytes = parse bytes := rfl\n\ntheorem base_guard (bytes : Array U8 4#usize) :\n    parseM bytes =\n      (if core.num.U32.from_le_bytes bytes >= ProverRwDictionaryBytesSource.aspis_core.field.P\n       then .ok none else .ok (some (core.num.U32.from_le_bytes bytes))) := by\n  rfl\n\ntheorem base_reject (bytes : Array U8 4#usize)\n    (bad : core.num.U32.from_le_bytes bytes >= ProverRwDictionaryBytesSource.aspis_core.field.P) :\n    parseM bytes = .ok none := by rw [base_guard]; simp only [bad,if_true]\n\ntheorem base_accept (bytes : Array U8 4#usize)\n    (good : \u00ac core.num.U32.from_le_bytes bytes >= ProverRwDictionaryBytesSource.aspis_core.field.P) :\n    parseM bytes = .ok (some (core.num.U32.from_le_bytes bytes)) := by\n  rw [base_guard]; simp only [good,if_false]\n#print axioms source\n#print axioms base_guard\n#print axioms base_reject\n#print axioms base_accept\nend R1Z.ProverRwSuccessParser\n"
+    }
+  ]
+}
