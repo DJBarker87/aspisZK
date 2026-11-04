@@ -1,0 +1,312 @@
+NEP standalone command ["/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean", "-M7000", "--run", "/home/dombarker/project-offloads/codex-pv-rdcd7-20261102/lean-sources/R1Z/PV_RDCD5_NEPDriver.lean"]
+@R1Z.PV_RDCD4_SliceRange194.success : ∀ {T : Type} (xs : List T) (start stop : ℕ),
+  start ≤ stop →
+    stop ≤ xs.length →
+      R1Z.PV_RDCD4_SliceRange194.index xs start stop =
+        Aeneas.Std.Result.ok (R1Z.PV_RDCD4_SliceRange194.window xs start stop)
+'R1Z.PV_RDCD4_SliceRange194.success' depends on axioms: [propext]
+NEP_RESULT {"collect_axioms":["propext"],"edges_scanned":1222,"equal":true,"reachable_constants":191,"root":"R1Z.PV_RDCD4_SliceRange194.success","walked_axioms":["propext"]}
+@R1Z.PV_RDCD4_SliceRange194.reversed : ∀ {T : Type} (xs : List T) (start stop : ℕ),
+  stop < start →
+    R1Z.PV_RDCD4_SliceRange194.index xs start stop = Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds
+'R1Z.PV_RDCD4_SliceRange194.reversed' depends on axioms: [propext, Quot.sound]
+NEP_RESULT {"collect_axioms":["Quot.sound","propext"],"edges_scanned":20439,"equal":true,"reachable_constants":1418,"root":"R1Z.PV_RDCD4_SliceRange194.reversed","walked_axioms":["Quot.sound","propext"]}
+@R1Z.PV_RDCD4_SliceRange194.oversized : ∀ {T : Type} (xs : List T) (start stop : ℕ),
+  xs.length < stop →
+    R1Z.PV_RDCD4_SliceRange194.index xs start stop = Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds
+'R1Z.PV_RDCD4_SliceRange194.oversized' depends on axioms: [propext, Quot.sound]
+NEP_RESULT {"collect_axioms":["Quot.sound","propext"],"edges_scanned":20444,"equal":true,"reachable_constants":1418,"root":"R1Z.PV_RDCD4_SliceRange194.oversized","walked_axioms":["Quot.sound","propext"]}
+@R1Z.PV_RDCD4_SliceRange194.length : ∀ {T : Type} (xs : List T) (start stop : ℕ),
+  stop ≤ xs.length → (R1Z.PV_RDCD4_SliceRange194.window xs start stop).length = stop - start
+'R1Z.PV_RDCD4_SliceRange194.length' depends on axioms: [propext, Quot.sound]
+NEP_RESULT {"collect_axioms":["Quot.sound","propext"],"edges_scanned":22223,"equal":true,"reachable_constants":1496,"root":"R1Z.PV_RDCD4_SliceRange194.length","walked_axioms":["Quot.sound","propext"]}
+@R1Z.PV_RDCD4_SliceRange194.empty : ∀ {T : Type} (xs : List T) (n : ℕ), R1Z.PV_RDCD4_SliceRange194.window xs n n = []
+'R1Z.PV_RDCD4_SliceRange194.empty' depends on axioms: [propext]
+NEP_RESULT {"collect_axioms":["propext"],"edges_scanned":404,"equal":true,"reachable_constants":80,"root":"R1Z.PV_RDCD4_SliceRange194.empty","walked_axioms":["propext"]}
+@R1Z.PV_RDCD4_SliceRange194.full : ∀ {T : Type} (xs : List T), R1Z.PV_RDCD4_SliceRange194.window xs 0 xs.length = xs
+'R1Z.PV_RDCD4_SliceRange194.full' depends on axioms: [propext]
+NEP_RESULT {"collect_axioms":["propext"],"edges_scanned":1736,"equal":true,"reachable_constants":214,"root":"R1Z.PV_RDCD4_SliceRange194.full","walked_axioms":["propext"]}
+@R1Z.PV_RDCD5_ParserRange.success : ∀ {T : Type} (xs : List T) (start stop : ℕ),
+  start ≤ stop →
+    stop ≤ xs.length →
+      R1Z.PV_RDCD5_ParserRange.index xs start stop =
+        Aeneas.Std.Result.ok (R1Z.PV_RDCD4_SliceRange194.window xs start stop)
+'R1Z.PV_RDCD5_ParserRange.success' depends on axioms: [propext]
+NEP_RESULT {"collect_axioms":["propext"],"edges_scanned":1222,"equal":true,"reachable_constants":191,"root":"R1Z.PV_RDCD5_ParserRange.success","walked_axioms":["propext"]}
+@R1Z.PV_RDCD5_ParserRange.oversized : ∀ {T : Type} (xs : List T) (start stop : ℕ),
+  xs.length < stop → R1Z.PV_RDCD5_ParserRange.index xs start stop = Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+'R1Z.PV_RDCD5_ParserRange.oversized' depends on axioms: [propext, Quot.sound]
+NEP_RESULT {"collect_axioms":["Quot.sound","propext"],"edges_scanned":20444,"equal":true,"reachable_constants":1418,"root":"R1Z.PV_RDCD5_ParserRange.oversized","walked_axioms":["Quot.sound","propext"]}
+@R1Z.PV_RDCD5_ParserRange.binding : ∀ {T : Type} (s : Aeneas.Std.Slice T) (a b : Aeneas.Std.Usize),
+  (do
+      let out ←
+        Aeneas.Std.core.slice.index.Slice.index (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice T) s
+            { start := a, «end» := b }
+      Aeneas.Std.Result.ok ↑out) =
+    R1Z.PV_RDCD5_ParserRange.index ↑s ↑a ↑b
+'R1Z.PV_RDCD5_ParserRange.binding' depends on axioms: [propext, Quot.sound]
+NEP_RESULT {"collect_axioms":["Quot.sound","propext"],"edges_scanned":25707,"equal":true,"reachable_constants":1792,"root":"R1Z.PV_RDCD5_ParserRange.binding","walked_axioms":["Quot.sound","propext"]}
+@R1Z.PV_RDCD4_TryArray194.success : ∀ {T : Type} (n : Aeneas.Std.Usize) (xs : List T) (size : xs.length = ↑n),
+  R1Z.PV_RDCD4_TryArray194.into n xs = some ⟨xs, size⟩
+'R1Z.PV_RDCD4_TryArray194.success' does not depend on any axioms
+NEP_RESULT {"collect_axioms":[],"edges_scanned":745,"equal":true,"reachable_constants":144,"root":"R1Z.PV_RDCD4_TryArray194.success","walked_axioms":[]}
+@R1Z.PV_RDCD4_TryArray194.mismatch : ∀ {T : Type} (n : Aeneas.Std.Usize) (xs : List T),
+  xs.length ≠ ↑n → R1Z.PV_RDCD4_TryArray194.into n xs = none
+'R1Z.PV_RDCD4_TryArray194.mismatch' does not depend on any axioms
+NEP_RESULT {"collect_axioms":[],"edges_scanned":748,"equal":true,"reachable_constants":145,"root":"R1Z.PV_RDCD4_TryArray194.mismatch","walked_axioms":[]}
+@R1Z.PV_RDCD4_TryArray194.backing : ∀ {T : Type} (n : Aeneas.Std.Usize) (xs : List T),
+  Option.map (fun out => ↑out) (R1Z.PV_RDCD4_TryArray194.into n xs) = if xs.length = ↑n then some xs else none
+'R1Z.PV_RDCD4_TryArray194.backing' does not depend on any axioms
+NEP_RESULT {"collect_axioms":[],"edges_scanned":875,"equal":true,"reachable_constants":160,"root":"R1Z.PV_RDCD4_TryArray194.backing","walked_axioms":[]}
+@R1Z.PV_RDCD4_TryArray194.roundtrip : ∀ {T : Type} {n : Aeneas.Std.Usize} (xs : Aeneas.Std.Array T n),
+  R1Z.PV_RDCD4_TryArray194.into n ↑xs = some xs
+'R1Z.PV_RDCD4_TryArray194.roundtrip' does not depend on any axioms
+NEP_RESULT {"collect_axioms":[],"edges_scanned":802,"equal":true,"reachable_constants":152,"root":"R1Z.PV_RDCD4_TryArray194.roundtrip","walked_axioms":[]}
+R1Z.PV_RDCD4_Endian194.binding : ∀ (bytes : Aeneas.Std.Array Aeneas.Std.U8 4#usize),
+  R1Z.PV_RDCD4_Endian194.word bytes = Aeneas.Std.core.num.U32.from_le_bytes bytes
+'R1Z.PV_RDCD4_Endian194.binding' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":28890,"equal":true,"reachable_constants":2065,"root":"R1Z.PV_RDCD4_Endian194.binding","walked_axioms":["Classical.choice","Quot.sound","propext"]}
+R1Z.PV_RDCD4_BytesSource.scalar_binding : ∀ (bytes : Aeneas.Std.Array Aeneas.Std.U8 4#usize),
+  R1Z.PV_RDCD4_BytesSource.scalar bytes =
+    have v := Aeneas.Std.core.num.U32.from_le_bytes bytes;
+    if v ≥ R1Z.PV_RDCD4_FieldSource.aspis_core.field.P then none else some v
+'R1Z.PV_RDCD4_BytesSource.scalar_binding' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":29126,"equal":true,"reachable_constants":2077,"root":"R1Z.PV_RDCD4_BytesSource.scalar_binding","walked_axioms":["Classical.choice","Quot.sound","propext"]}
+@R1Z.PV_RDCD4_ParserWindows.compose : ∀ {T : Type} (xs : List T) (a b c d : ℕ),
+  d ≤ b - a →
+    R1Z.PV_RDCD4_SliceRange194.window (R1Z.PV_RDCD4_SliceRange194.window xs a b) c d =
+      R1Z.PV_RDCD4_SliceRange194.window xs (a + c) (a + d)
+'R1Z.PV_RDCD4_ParserWindows.compose' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":23663,"equal":true,"reachable_constants":1567,"root":"R1Z.PV_RDCD4_ParserWindows.compose","walked_axioms":["Classical.choice","Quot.sound","propext"]}
+R1Z.PV_RDCD4_ParserWindows.component_window : ∀ (xs : List Aeneas.Std.U8) (base i : ℕ),
+  i + 4 ≤ 8 →
+    base + 8 ≤ xs.length →
+      R1Z.PV_RDCD4_BytesSource.component (R1Z.PV_RDCD4_SliceRange194.window xs base (base + 8)) i (i + 4) =
+        R1Z.PV_RDCD4_BytesSource.component xs (base + i) (base + (i + 4))
+'R1Z.PV_RDCD4_ParserWindows.component_window' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":31706,"equal":true,"reachable_constants":2194,"root":"R1Z.PV_RDCD4_ParserWindows.component_window","walked_axioms":["Classical.choice","Quot.sound","propext"]}
+@R1Z.PV_RDCD4_ParserWindows.no_write : ∀ {T : Type} (xs : List T) (a b : ℕ),
+  a ≤ b →
+    b ≤ xs.length →
+      (do
+          let out ← R1Z.PV_RDCD4_SliceRange194.index xs a b
+          Aeneas.Std.Result.ok (out, xs)) =
+        Aeneas.Std.Result.ok (R1Z.PV_RDCD4_SliceRange194.window xs a b, xs)
+'R1Z.PV_RDCD4_ParserWindows.no_write' depends on axioms: [propext]
+NEP_RESULT {"collect_axioms":["propext"],"edges_scanned":1313,"equal":true,"reachable_constants":203,"root":"R1Z.PV_RDCD4_ParserWindows.no_write","walked_axioms":["propext"]}
+R1Z.PV_RDCD4_V197.source_reference : ∀ (bytes : List Aeneas.Std.U8),
+  R1Z.PV_RDCD4_BytesSource.qm bytes = R1Z.PV_RDCD4_V197.reference bytes
+'R1Z.PV_RDCD4_V197.source_reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":29719,"equal":true,"reachable_constants":2124,"root":"R1Z.PV_RDCD4_V197.source_reference","walked_axioms":["Classical.choice","Quot.sound","propext"]}
+R1Z.PV_RDCD4_V197.short_failure : ∀ (bytes : List Aeneas.Std.U8),
+  bytes.length < 8 → R1Z.PV_RDCD4_BytesSource.qm bytes = Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+'R1Z.PV_RDCD4_V197.short_failure' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":29880,"equal":true,"reachable_constants":2127,"root":"R1Z.PV_RDCD4_V197.short_failure","walked_axioms":["Classical.choice","Quot.sound","propext"]}
+R1Z.PV_RDCD4_V197.frame : ∀ (bytes : List Aeneas.Std.U8),
+  (do
+      let out ← R1Z.PV_RDCD4_BytesSource.qm bytes
+      Aeneas.Std.Result.ok (out, bytes)) =
+    do
+    let out ← R1Z.PV_RDCD4_V197.reference bytes
+    Aeneas.Std.Result.ok (out, bytes)
+'R1Z.PV_RDCD4_V197.frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":29750,"equal":true,"reachable_constants":2125,"root":"R1Z.PV_RDCD4_V197.frame","walked_axioms":["Classical.choice","Quot.sound","propext"]}
+R1Z.PV_RDCD4_V197.slice_instance : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  R1Z.PV_RDCD4_BytesSource.qm ↑bytes = R1Z.PV_RDCD4_V197.reference ↑bytes
+'R1Z.PV_RDCD4_V197.slice_instance' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":29789,"equal":true,"reachable_constants":2132,"root":"R1Z.PV_RDCD4_V197.slice_instance","walked_axioms":["Classical.choice","Quot.sound","propext"]}
+@R1Z.PV_RDCD5_ParserWindows.compose : ∀ {T : Type} (xs : List T) (a b c d : ℕ),
+  d ≤ b - a →
+    R1Z.PV_RDCD4_SliceRange194.window (R1Z.PV_RDCD4_SliceRange194.window xs a b) c d =
+      R1Z.PV_RDCD4_SliceRange194.window xs (a + c) (a + d)
+'R1Z.PV_RDCD5_ParserWindows.compose' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":23663,"equal":true,"reachable_constants":1567,"root":"R1Z.PV_RDCD5_ParserWindows.compose","walked_axioms":["Classical.choice","Quot.sound","propext"]}
+R1Z.PV_RDCD5_ParserWindows.component_window : ∀ (xs : List Aeneas.Std.U8) (base i : ℕ),
+  i + 4 ≤ 8 →
+    base + 8 ≤ xs.length →
+      R1Z.PV_RDCD4_BytesSource.component (R1Z.PV_RDCD4_SliceRange194.window xs base (base + 8)) i (i + 4) =
+        R1Z.PV_RDCD4_BytesSource.component xs (base + i) (base + (i + 4))
+'R1Z.PV_RDCD5_ParserWindows.component_window' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":31706,"equal":true,"reachable_constants":2194,"root":"R1Z.PV_RDCD5_ParserWindows.component_window","walked_axioms":["Classical.choice","Quot.sound","propext"]}
+@R1Z.PV_RDCD5_ParserWindows.no_write : ∀ {T : Type} (xs : List T) (a b : ℕ),
+  a ≤ b →
+    b ≤ xs.length →
+      (do
+          let out ← R1Z.PV_RDCD4_SliceRange194.index xs a b
+          Aeneas.Std.Result.ok (out, xs)) =
+        Aeneas.Std.Result.ok (R1Z.PV_RDCD4_SliceRange194.window xs a b, xs)
+'R1Z.PV_RDCD5_ParserWindows.no_write' depends on axioms: [propext]
+NEP_RESULT {"collect_axioms":["propext"],"edges_scanned":1313,"equal":true,"reachable_constants":203,"root":"R1Z.PV_RDCD5_ParserWindows.no_write","walked_axioms":["propext"]}
+R1Z.PV_RDCD5_V197.source_reference : ∀ (bytes : List Aeneas.Std.U8),
+  R1Z.PV_RDCD4_BytesSource.qm bytes = R1Z.PV_RDCD5_V197.reference bytes
+'R1Z.PV_RDCD5_V197.source_reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":29719,"equal":true,"reachable_constants":2124,"root":"R1Z.PV_RDCD5_V197.source_reference","walked_axioms":["Classical.choice","Quot.sound","propext"]}
+R1Z.PV_RDCD5_V197.short_failure : ∀ (bytes : List Aeneas.Std.U8),
+  bytes.length < 8 → R1Z.PV_RDCD4_BytesSource.qm bytes = Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+'R1Z.PV_RDCD5_V197.short_failure' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":29880,"equal":true,"reachable_constants":2127,"root":"R1Z.PV_RDCD5_V197.short_failure","walked_axioms":["Classical.choice","Quot.sound","propext"]}
+R1Z.PV_RDCD5_V197.frame : ∀ (bytes : List Aeneas.Std.U8),
+  (do
+      let out ← R1Z.PV_RDCD4_BytesSource.qm bytes
+      Aeneas.Std.Result.ok (out, bytes)) =
+    do
+    let out ← R1Z.PV_RDCD5_V197.reference bytes
+    Aeneas.Std.Result.ok (out, bytes)
+'R1Z.PV_RDCD5_V197.frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":29750,"equal":true,"reachable_constants":2125,"root":"R1Z.PV_RDCD5_V197.frame","walked_axioms":["Classical.choice","Quot.sound","propext"]}
+R1Z.PV_RDCD5_V197.slice_instance : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  R1Z.PV_RDCD4_BytesSource.qm ↑bytes = R1Z.PV_RDCD5_V197.reference ↑bytes
+'R1Z.PV_RDCD5_V197.slice_instance' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":29789,"equal":true,"reachable_constants":2132,"root":"R1Z.PV_RDCD5_V197.slice_instance","walked_axioms":["Classical.choice","Quot.sound","propext"]}
+R1Z.PV_RDCD5_ParserFlat.cm_window : ∀ (bytes : List Aeneas.Std.U8) (base : ℕ),
+  base + 8 ≤ bytes.length →
+    R1Z.PV_RDCD4_BytesSource.cm (R1Z.PV_RDCD4_SliceRange194.window bytes base (base + 8)) =
+      R1Z.PV_RDCD5_ParserFlat.cmAt bytes base
+'R1Z.PV_RDCD5_ParserFlat.cm_window' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":31965,"equal":true,"reachable_constants":2204,"root":"R1Z.PV_RDCD5_ParserFlat.cm_window","walked_axioms":["Classical.choice","Quot.sound","propext"]}
+@R1Z.PV_RDCD5_ParserComponent.bind_congr : ∀ {A B : Type} (r : Aeneas.Std.Result A) (f g : A → Aeneas.Std.Result B),
+  (∀ (a : A), f a = g a) → r >>= f = r >>= g
+'R1Z.PV_RDCD5_ParserComponent.bind_congr' does not depend on any axioms
+NEP_RESULT {"collect_axioms":[],"edges_scanned":101,"equal":true,"reachable_constants":31,"root":"R1Z.PV_RDCD5_ParserComponent.bind_congr","walked_axioms":[]}
+@R1Z.PV_RDCD5_ParserComponent.range_bind : ∀ {T B : Type} (s : Aeneas.Std.Slice T) (a b : Aeneas.Std.Usize)
+  (g : List T → Aeneas.Std.Result B),
+  (do
+      let out ←
+        Aeneas.Std.core.slice.index.Slice.index (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice T) s
+            { start := a, «end» := b }
+      g ↑out) =
+    R1Z.PV_RDCD5_ParserRange.index ↑s ↑a ↑b >>= g
+'R1Z.PV_RDCD5_ParserComponent.range_bind' depends on axioms: [propext, Quot.sound]
+NEP_RESULT {"collect_axioms":["Quot.sound","propext"],"edges_scanned":25825,"equal":true,"reachable_constants":1798,"root":"R1Z.PV_RDCD5_ParserComponent.range_bind","walked_axioms":["Quot.sound","propext"]}
+R1Z.PV_RDCD5_ParserComponent.scalar : ∀ (bytes : Aeneas.Std.Array Aeneas.Std.U8 4#usize),
+  R1Z.ProverRwSuccessParserSource.aspis_core.field.M31.from_le_bytes bytes =
+    Aeneas.Std.Result.ok (R1Z.PV_RDCD4_BytesSource.scalar bytes)
+'R1Z.PV_RDCD5_ParserComponent.scalar' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":29380,"equal":true,"reachable_constants":2105,"root":"R1Z.PV_RDCD5_ParserComponent.scalar","walked_axioms":["Classical.choice","Quot.sound","propext"]}
+R1Z.PV_RDCD5_ParserComponent.convert_component : ∀ (part : Aeneas.Std.Slice Aeneas.Std.U8),
+  Aeneas.Std.core.array.TryFromArrayCopySlice.try_from 4#usize Aeneas.Std.core.marker.CopyU8 part >>=
+      R1Z.PV_RDCD5_ParserComponent.decodeArray =
+    have converted := R1Z.PV_RDCD4_TryArray194.into 4#usize ↑part;
+    match converted with
+    | none => Aeneas.Std.Result.ok none
+    | some value => Aeneas.Std.Result.ok (R1Z.PV_RDCD4_BytesSource.scalar value)
+'R1Z.PV_RDCD5_ParserComponent.convert_component' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":30383,"equal":true,"reachable_constants":2159,"root":"R1Z.PV_RDCD5_ParserComponent.convert_component","walked_axioms":["Classical.choice","Quot.sound","propext"]}
+R1Z.PV_RDCD5_ParserComponent.component_binding : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (a b : Aeneas.Std.Usize),
+  R1Z.PV_RDCD5_ParserComponent.nativeComponent bytes a b = R1Z.PV_RDCD4_BytesSource.component ↑bytes ↑a ↑b
+'R1Z.PV_RDCD5_ParserComponent.component_binding' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":33086,"equal":true,"reachable_constants":2320,"root":"R1Z.PV_RDCD5_ParserComponent.component_binding","walked_axioms":["Classical.choice","Quot.sound","propext"]}
+R1Z.PV_RDCD5_ParserComponent.residual_none : ∀ (T : Type),
+  R1Z.ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+      T none =
+    Aeneas.Std.Result.ok none
+'R1Z.PV_RDCD5_ParserComponent.residual_none' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":36823,"equal":true,"reachable_constants":2560,"root":"R1Z.PV_RDCD5_ParserComponent.residual_none","walked_axioms":["Classical.choice","Quot.sound","propext"]}
+@R1Z.PV_RDCD5_ParserComponent.first_bind : ∀ {B : Type} (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (g : List Aeneas.Std.U8 → Aeneas.Std.Result B),
+  (do
+      let part ←
+        Aeneas.Std.core.slice.index.Slice.index (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8)
+            bytes { start := 0#usize, «end» := 8#usize }
+      g ↑part) =
+    R1Z.PV_RDCD5_ParserRange.index (↑bytes) 0 8 >>= g
+'R1Z.PV_RDCD5_ParserComponent.first_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":30801,"equal":true,"reachable_constants":2196,"root":"R1Z.PV_RDCD5_ParserComponent.first_bind","walked_axioms":["Classical.choice","Quot.sound","propext"]}
+@R1Z.PV_RDCD5_ParserComponent.second_bind : ∀ {B : Type} (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (g : List Aeneas.Std.U8 → Aeneas.Std.Result B),
+  (do
+      let part ←
+        Aeneas.Std.core.slice.index.Slice.index (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8)
+            bytes { start := 8#usize, «end» := 16#usize }
+      g ↑part) =
+    R1Z.PV_RDCD5_ParserRange.index (↑bytes) 8 16 >>= g
+'R1Z.PV_RDCD5_ParserComponent.second_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":30801,"equal":true,"reachable_constants":2196,"root":"R1Z.PV_RDCD5_ParserComponent.second_bind","walked_axioms":["Classical.choice","Quot.sound","propext"]}
+R1Z.PV_RDCD5_ParserTransport.complex_shape : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  R1Z.ProverRwSuccessParserSource.aspis_core.field.CM31.from_le_bytes bytes = do
+    let a ← R1Z.PV_RDCD5_ParserComponent.nativeComponent bytes 0#usize 4#usize
+    match a with
+      | none => Aeneas.Std.Result.ok none
+      | some a => do
+        let b ← R1Z.PV_RDCD5_ParserComponent.nativeComponent bytes 4#usize 8#usize
+        match b with
+          | none => Aeneas.Std.Result.ok none
+          | some b => Aeneas.Std.Result.ok (some { a := a, b := b })
+'R1Z.PV_RDCD5_ParserTransport.complex_shape' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":41388,"equal":true,"reachable_constants":2831,"root":"R1Z.PV_RDCD5_ParserTransport.complex_shape","walked_axioms":["Classical.choice","Quot.sound","propext"]}
+R1Z.PV_RDCD5_ParserTransport.complex : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  R1Z.ProverRwSuccessParserSource.aspis_core.field.CM31.from_le_bytes bytes = R1Z.PV_RDCD4_BytesSource.cm ↑bytes
+'R1Z.PV_RDCD5_ParserTransport.complex' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":42446,"equal":true,"reachable_constants":2860,"root":"R1Z.PV_RDCD5_ParserTransport.complex","walked_axioms":["Classical.choice","Quot.sound","propext"]}
+R1Z.PV_RDCD5_ParserTransport.quartic_shape : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  R1Z.ProverRwSuccessParserSource.aspis_core.field.QM31.from_le_bytes bytes = do
+    let left ←
+      Aeneas.Std.core.slice.index.Slice.index (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8)
+          bytes { start := 0#usize, «end» := 8#usize }
+    let c0 ← R1Z.ProverRwSuccessParserSource.aspis_core.field.CM31.from_le_bytes left
+    match c0 with
+      | none => Aeneas.Std.Result.ok none
+      | some c0 => do
+        let right ←
+          Aeneas.Std.core.slice.index.Slice.index (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8)
+              bytes { start := 8#usize, «end» := 16#usize }
+        let c1 ← R1Z.ProverRwSuccessParserSource.aspis_core.field.CM31.from_le_bytes right
+        match c1 with
+          | none => Aeneas.Std.Result.ok none
+          | some c1 => Aeneas.Std.Result.ok (some { c0 := c0, c1 := c1 })
+'R1Z.PV_RDCD5_ParserTransport.quartic_shape' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":41265,"equal":true,"reachable_constants":2827,"root":"R1Z.PV_RDCD5_ParserTransport.quartic_shape","walked_axioms":["Classical.choice","Quot.sound","propext"]}
+R1Z.PV_RDCD5_ParserTransport.quartic : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  R1Z.ProverRwSuccessParserSource.aspis_core.field.QM31.from_le_bytes bytes = R1Z.PV_RDCD4_BytesSource.qm ↑bytes
+'R1Z.PV_RDCD5_ParserTransport.quartic' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":42895,"equal":true,"reachable_constants":2875,"root":"R1Z.PV_RDCD5_ParserTransport.quartic","walked_axioms":["Classical.choice","Quot.sound","propext"]}
+R1Z.PV_RDCD5_ParserErrors.existing_empty : R1Z.ProverRwSuccessParserSource.aspis_core.field.QM31.from_le_bytes ⟨[], ⋯⟩ =
+  Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+'R1Z.PV_RDCD5_ParserErrors.existing_empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":41153,"equal":true,"reachable_constants":2824,"root":"R1Z.PV_RDCD5_ParserErrors.existing_empty","walked_axioms":["Classical.choice","Quot.sound","propext"]}
+R1Z.PV_RDCD5_ParserErrors.owned_empty : R1Z.PV_RDCD4_BytesSource.qm [] = Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+'R1Z.PV_RDCD5_ParserErrors.owned_empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":29915,"equal":true,"reachable_constants":2128,"root":"R1Z.PV_RDCD5_ParserErrors.owned_empty","walked_axioms":["Classical.choice","Quot.sound","propext"]}
+R1Z.PV_RDCD5_ParserErrors.carrier_agreement : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  R1Z.ProverRwSuccessParserSource.aspis_core.field.QM31.from_le_bytes bytes = R1Z.PV_RDCD4_BytesSource.qm ↑bytes
+'R1Z.PV_RDCD5_ParserErrors.carrier_agreement' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":42913,"equal":true,"reachable_constants":2876,"root":"R1Z.PV_RDCD5_ParserErrors.carrier_agreement","walked_axioms":["Classical.choice","Quot.sound","propext"]}
+R1Z.PV_RDCD5_V197Restored.parser_instance : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  R1Z.ProverRwSuccessParserSource.aspis_core.field.QM31.from_le_bytes bytes = R1Z.PV_RDCD5_V197.reference ↑bytes
+'R1Z.PV_RDCD5_V197Restored.parser_instance' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":43468,"equal":true,"reachable_constants":2888,"root":"R1Z.PV_RDCD5_V197Restored.parser_instance","walked_axioms":["Classical.choice","Quot.sound","propext"]}
+R1Z.PV_RDCD5_V197Restored.window_instance : ∀ (bytes : List Aeneas.Std.U8) (base : ℕ),
+  base + 8 ≤ bytes.length →
+    R1Z.PV_RDCD4_BytesSource.cm (R1Z.PV_RDCD4_SliceRange194.window bytes base (base + 8)) =
+      R1Z.PV_RDCD5_ParserFlat.cmAt bytes base
+'R1Z.PV_RDCD5_V197Restored.window_instance' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":31995,"equal":true,"reachable_constants":2205,"root":"R1Z.PV_RDCD5_V197Restored.window_instance","walked_axioms":["Classical.choice","Quot.sound","propext"]}
+R1Z.PV_RDCD5_V197Restored.native_window : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (a b : Aeneas.Std.Usize),
+  ↑b = ↑a + 8 →
+    ↑b ≤ (↑bytes).length →
+      (do
+          let part ←
+            Aeneas.Std.core.slice.index.Slice.index
+                (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) bytes { start := a, «end» := b }
+          R1Z.ProverRwSuccessParserSource.aspis_core.field.CM31.from_le_bytes part) =
+        R1Z.PV_RDCD5_ParserFlat.cmAt ↑bytes ↑a
+'R1Z.PV_RDCD5_V197Restored.native_window' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":44871,"equal":true,"reachable_constants":2923,"root":"R1Z.PV_RDCD5_V197Restored.native_window","walked_axioms":["Classical.choice","Quot.sound","propext"]}
+R1Z.PV_RDCD5_V197Restored.input_frame : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  (do
+      let out ← R1Z.ProverRwSuccessParserSource.aspis_core.field.QM31.from_le_bytes bytes
+      Aeneas.Std.Result.ok (out, bytes)) =
+    do
+    let out ← R1Z.PV_RDCD5_V197.reference ↑bytes
+    Aeneas.Std.Result.ok (out, bytes)
+'R1Z.PV_RDCD5_V197Restored.input_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":43515,"equal":true,"reachable_constants":2889,"root":"R1Z.PV_RDCD5_V197Restored.input_frame","walked_axioms":["Classical.choice","Quot.sound","propext"]}
+R1Z.PV_RDCD5_V197Restored.rdcd4_instance : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  R1Z.ProverRwSuccessParserSource.aspis_core.field.QM31.from_le_bytes bytes = R1Z.PV_RDCD4_V197.reference ↑bytes
+'R1Z.PV_RDCD5_V197Restored.rdcd4_instance' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":43468,"equal":true,"reachable_constants":2888,"root":"R1Z.PV_RDCD5_V197Restored.rdcd4_instance","walked_axioms":["Classical.choice","Quot.sound","propext"]}
+R1Z.PV_RDCD5_V197ConsumerReplay.v197_corrected : R1Z.ProverRwSuccessParserSource.aspis_core.field.QM31.from_le_bytes
+    ⟨[], ⋯⟩ =
+  R1Z.PV_RDCD4_BytesSource.qm []
+'R1Z.PV_RDCD5_V197ConsumerReplay.v197_corrected' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEP_RESULT {"collect_axioms":["Classical.choice","Quot.sound","propext"],"edges_scanned":42970,"equal":true,"reachable_constants":2878,"root":"R1Z.PV_RDCD5_V197ConsumerReplay.v197_corrected","walked_axioms":["Classical.choice","Quot.sound","propext"]}
