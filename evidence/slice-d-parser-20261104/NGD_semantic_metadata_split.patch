@@ -1,0 +1,30 @@
+--- a/crates/aspis-r1-cost-probe/src/NGD_compact.rs
++++ b/crates/aspis-r1-cost-probe/src/NGD_compact.rs
+@@ -71,7 +71,8 @@
+  let cursors=src==if stopped{src0+5}else{src_cursor(row+1)}&&dst==if stopped{dst0+5}else{dst_cursor(row+1)};
+  let arguments=if row>=14{log.calls==1&&log.input==input.as_ptr().wrapping_add(src0+5)&&log.input_len==size/2&&log.output==base.wrapping_add(dst0+5)&&log.output_len==size&&(!log.inside||log.before==old)}else{log.calls==0};
+  let expected=if dst0<=j&&j<dst0+5{input[src0+j-dst0]}else if dst0+5<=j&&j<dst0+5+size{if row>=14{after}else{input[src0+j-dst0]}}else{old};
+- let good=if group==0{result_ok&&cursors&&arguments}else{out[j]==expected};assert!(good != cfg!(NGD_invert));
++ let metadata=if row>=14{log.calls==1&&log.input==input.as_ptr().wrapping_add(src0+5)&&log.input_len==size/2&&log.output==base.wrapping_add(dst0+5)&&log.output_len==size}else{log.calls==0};
++ let good=if group==0{result_ok&&cursors&&arguments}else if group==2{result_ok&&cursors&&metadata}else{out[j]==expected};assert!(good != cfg!(NGD_invert));
+ }
+ macro_rules! semantic_gate{($name:ident,$row:expr,$g:expr)=>{#[kani::proof]#[kani::unwind(35)]
+ #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+@@ -90,3 +91,17 @@
+ semantic_gate!(semantic_row25,25,0);
+ semantic_gate!(semantic_row26,26,0);
+ semantic_gate!(semantic_low_rows,2,0);semantic_gate!(semantic_row14_value,14,1);
++semantic_gate!(semantic_row14_callsite,14,2);
++semantic_gate!(semantic_row15_callsite,15,2);
++semantic_gate!(semantic_row16_callsite,16,2);
++semantic_gate!(semantic_row17_callsite,17,2);
++semantic_gate!(semantic_row18_callsite,18,2);
++semantic_gate!(semantic_row19_callsite,19,2);
++semantic_gate!(semantic_row20_callsite,20,2);
++semantic_gate!(semantic_row21_callsite,21,2);
++semantic_gate!(semantic_row22_callsite,22,2);
++semantic_gate!(semantic_row23_callsite,23,2);
++semantic_gate!(semantic_row24_callsite,24,2);
++semantic_gate!(semantic_row25_callsite,25,2);
++semantic_gate!(semantic_row26_callsite,26,2);
++semantic_gate!(semantic_low_callsite,2,2);

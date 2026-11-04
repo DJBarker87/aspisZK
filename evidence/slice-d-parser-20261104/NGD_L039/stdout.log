@@ -1,0 +1,169 @@
+NGD_generated/NGD_ParseReference.lean:36:87: error: unsolved goals
+case Ok
+row tag : U8
+size total : Usize
+record : Slice U8
+shape : NGD_AtG.shape row = ok (some (tag, size))
+add : 5#usize + size = ok total
+sourceShape : AspisR1PrefixAggregateParser.r1_wire.row_shape row = ok (some (tag, size))
+wrap : Usize.wrapping_add 5#usize size = total
+a✝ : Unit
+⊢ (match
+      if (↑record).length = (5 + ↑size) % Usize.size then do
+        let i2 ← record.index_usize 0#usize
+        if ↑i2 = ↑tag then do
+            let i3 ← record.index_usize 1#usize
+            let i4 ← record.index_usize 2#usize
+            let i5 ← record.index_usize 3#usize
+            let i6 ← record.index_usize 4#usize
+            if ↑(core.num.U32.from_le_bytes (Array.make 4#usize [i3, i4, i5, i6] ⋯)) = ↑size then do
+                let payload ← core.slice.index.SliceIndexRangeFromUsizeSlice.index { start := 5#usize } record
+                ok (core.result.Result.Ok payload)
+              else ok (core.result.Result.Err (NGD_AtG.Error.Length row))
+          else ok (core.result.Result.Err (NGD_AtG.Error.Tag row))
+      else ok (core.result.Result.Err (NGD_AtG.Error.Length row)) with
+    | ok x =>
+      ok
+        (match x with
+        | core.result.Result.Ok x => core.result.Result.Ok x
+        | core.result.Result.Err e =>
+          core.result.Result.Err
+            (match e with
+            | NGD_AtG.Error.Allocation => AspisR1PrefixAggregateParser.r1_wire.Error.Allocation
+            | NGD_AtG.Error.RowOrder a b => AspisR1PrefixAggregateParser.r1_wire.Error.RowOrder a b
+            | NGD_AtG.Error.InvalidRow => AspisR1PrefixAggregateParser.r1_wire.Error.InvalidRow
+            | NGD_AtG.Error.Tag r => AspisR1PrefixAggregateParser.r1_wire.Error.Tag r
+            | NGD_AtG.Error.Length r => AspisR1PrefixAggregateParser.r1_wire.Error.Length r
+            | NGD_AtG.Error.NonCanonical r i => AspisR1PrefixAggregateParser.r1_wire.Error.NonCanonical r i
+            | NGD_AtG.Error.Boundary r => AspisR1PrefixAggregateParser.r1_wire.Error.Boundary r
+            | NGD_AtG.Error.Terminal => AspisR1PrefixAggregateParser.r1_wire.Error.Terminal
+            | NGD_AtG.Error.EqualCirclePoints => AspisR1PrefixAggregateParser.r1_wire.Error.EqualCirclePoints
+            | NGD_AtG.Error.TrailingBytes => AspisR1PrefixAggregateParser.r1_wire.Error.TrailingBytes
+            | NGD_AtG.Error.Public => AspisR1PrefixAggregateParser.r1_wire.Error.Public))
+    | fail e => fail e
+    | div => div) =
+    if (↑record).length = ↑total then do
+      let i2 ← record.index_usize 0#usize
+      if ↑i2 = ↑tag then do
+          let i3 ← record.index_usize 1#usize
+          let i4 ← record.index_usize 2#usize
+          let i5 ← record.index_usize 3#usize
+          let i6 ← record.index_usize 4#usize
+          if ↑(core.num.U32.from_le_bytes (Array.make 4#usize [i3, i4, i5, i6] ⋯)) = ↑size then do
+              let payload ← core.slice.index.SliceIndexRangeFromUsizeSlice.index { start := 5#usize } record
+              ok (core.result.Result.Ok payload)
+            else ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length row))
+        else ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Tag row))
+    else ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length row))
+
+case Err
+row tag : U8
+size total : Usize
+record : Slice U8
+shape : NGD_AtG.shape row = ok (some (tag, size))
+add : 5#usize + size = ok total
+sourceShape : AspisR1PrefixAggregateParser.r1_wire.row_shape row = ok (some (tag, size))
+wrap : Usize.wrapping_add 5#usize size = total
+a✝ : NGD_AtG.Error
+⊢ (match
+      if (↑record).length = (5 + ↑size) % Usize.size then do
+        let i2 ← record.index_usize 0#usize
+        if ↑i2 = ↑tag then do
+            let i3 ← record.index_usize 1#usize
+            let i4 ← record.index_usize 2#usize
+            let i5 ← record.index_usize 3#usize
+            let i6 ← record.index_usize 4#usize
+            if ↑(core.num.U32.from_le_bytes (Array.make 4#usize [i3, i4, i5, i6] ⋯)) = ↑size then do
+                let payload ← core.slice.index.SliceIndexRangeFromUsizeSlice.index { start := 5#usize } record
+                if 14 ≤ ↑row then ok (core.result.Result.Err a✝) else ok (core.result.Result.Ok payload)
+              else ok (core.result.Result.Err (NGD_AtG.Error.Length row))
+          else ok (core.result.Result.Err (NGD_AtG.Error.Tag row))
+      else ok (core.result.Result.Err (NGD_AtG.Error.Length row)) with
+    | ok x =>
+      ok
+        (match x with
+        | core.result.Result.Ok x => core.result.Result.Ok x
+        | core.result.Result.Err e =>
+          core.result.Result.Err
+            (match e with
+            | NGD_AtG.Error.Allocation => AspisR1PrefixAggregateParser.r1_wire.Error.Allocation
+            | NGD_AtG.Error.RowOrder a b => AspisR1PrefixAggregateParser.r1_wire.Error.RowOrder a b
+            | NGD_AtG.Error.InvalidRow => AspisR1PrefixAggregateParser.r1_wire.Error.InvalidRow
+            | NGD_AtG.Error.Tag r => AspisR1PrefixAggregateParser.r1_wire.Error.Tag r
+            | NGD_AtG.Error.Length r => AspisR1PrefixAggregateParser.r1_wire.Error.Length r
+            | NGD_AtG.Error.NonCanonical r i => AspisR1PrefixAggregateParser.r1_wire.Error.NonCanonical r i
+            | NGD_AtG.Error.Boundary r => AspisR1PrefixAggregateParser.r1_wire.Error.Boundary r
+            | NGD_AtG.Error.Terminal => AspisR1PrefixAggregateParser.r1_wire.Error.Terminal
+            | NGD_AtG.Error.EqualCirclePoints => AspisR1PrefixAggregateParser.r1_wire.Error.EqualCirclePoints
+            | NGD_AtG.Error.TrailingBytes => AspisR1PrefixAggregateParser.r1_wire.Error.TrailingBytes
+            | NGD_AtG.Error.Public => AspisR1PrefixAggregateParser.r1_wire.Error.Public))
+    | fail e => fail e
+    | div => div) =
+    if (↑record).length = ↑total then do
+      let i2 ← record.index_usize 0#usize
+      if ↑i2 = ↑tag then do
+          let i3 ← record.index_usize 1#usize
+          let i4 ← record.index_usize 2#usize
+          let i5 ← record.index_usize 3#usize
+          let i6 ← record.index_usize 4#usize
+          if ↑(core.num.U32.from_le_bytes (Array.make 4#usize [i3, i4, i5, i6] ⋯)) = ↑size then do
+              let payload ← core.slice.index.SliceIndexRangeFromUsizeSlice.index { start := 5#usize } record
+              if 14 ≤ ↑row then
+                  ok
+                    (core.result.Result.Err
+                      (match a✝ with
+                      | NGD_AtG.Error.Allocation => AspisR1PrefixAggregateParser.r1_wire.Error.Allocation
+                      | NGD_AtG.Error.RowOrder a b => AspisR1PrefixAggregateParser.r1_wire.Error.RowOrder a b
+                      | NGD_AtG.Error.InvalidRow => AspisR1PrefixAggregateParser.r1_wire.Error.InvalidRow
+                      | NGD_AtG.Error.Tag r => AspisR1PrefixAggregateParser.r1_wire.Error.Tag r
+                      | NGD_AtG.Error.Length r => AspisR1PrefixAggregateParser.r1_wire.Error.Length r
+                      | NGD_AtG.Error.NonCanonical r i => AspisR1PrefixAggregateParser.r1_wire.Error.NonCanonical r i
+                      | NGD_AtG.Error.Boundary r => AspisR1PrefixAggregateParser.r1_wire.Error.Boundary r
+                      | NGD_AtG.Error.Terminal => AspisR1PrefixAggregateParser.r1_wire.Error.Terminal
+                      | NGD_AtG.Error.EqualCirclePoints => AspisR1PrefixAggregateParser.r1_wire.Error.EqualCirclePoints
+                      | NGD_AtG.Error.TrailingBytes => AspisR1PrefixAggregateParser.r1_wire.Error.TrailingBytes
+                      | NGD_AtG.Error.Public => AspisR1PrefixAggregateParser.r1_wire.Error.Public))
+                else ok (core.result.Result.Ok payload)
+            else ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length row))
+        else ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Tag row))
+    else ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length row))
+NGD_generated/NGD_ParseReference.lean:41:68: warning: This simp argument is unused:
+  wrap
+
+Hint: Omit it from the simp argument list.
+  simp [NGD_AtG.parse_g, ̲NGD_ParseCut.invoke, ̲shape, ̲sourceShape, ̲ad̵d̵d̲d̲,w̵r̵a̵p̵,̵ ̲lift,
+        NGD_AtG.core.option.Option.ok_or, ̲AspisR1PrefixAggregateParser.core.option.Option.ok_or,
+        core.result.Result.Insts.CoreOpsTry.branch,
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+  ̵  ̵ ̵ ̵ ̵ ̵map_bind,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲map_if, ̲mapResult, ̲NGD_ErrorPort.mapError, ̲NGD_ErrorPort.toWire]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGD_generated/NGD_ParseReference.lean:45:6: warning: This simp argument is unused:
+  map_bind
+
+Hint: Omit it from the simp argument list.
+  simp [NGD_AtG.parse_g, ̲NGD_ParseCut.invoke, ̲shape, ̲sourceShape, ̲add, ̲wrap, ̲lift,
+        NGD_AtG.core.option.Option.ok_or, ̲AspisR1PrefixAggregateParser.core.option.Option.ok_or,
+        core.result.Result.Insts.CoreOpsTry.branch,
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+  ̵  ̵ ̵ ̵ ̵ ̵map_b̵in̵d̵,̵m̵a̵p̵_̵i̵f,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲mapResult, ̲NGD_ErrorPort.mapError, ̲NGD_ErrorPort.toWire]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGD_generated/NGD_ParseReference.lean:45:15: warning: This simp argument is unused:
+  map_if
+
+Hint: Omit it from the simp argument list.
+  simp [NGD_AtG.parse_g, ̲NGD_ParseCut.invoke, ̲shape, ̲sourceShape, ̲add, ̲wrap, ̲lift,
+        NGD_AtG.core.option.Option.ok_or, ̲AspisR1PrefixAggregateParser.core.option.Option.ok_or,
+        core.result.Result.Insts.CoreOpsTry.branch,
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+  ̵  ̵ ̵ ̵ ̵ ̵map_bind,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲map_̵i̵f̵,̵m̵a̵p̵Result, ̲NGD_ErrorPort.mapError, ̲NGD_ErrorPort.toWire]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NGD_ParseReference.map_bind' does not depend on any axioms
+'NGD_ParseReference.map_if' does not depend on any axioms
+'NGD_ParseReference.wrap_checked' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NGD_ParseReference.framed_cut' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

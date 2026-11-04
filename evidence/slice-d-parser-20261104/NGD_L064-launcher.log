@@ -1,0 +1,58 @@
+{"attempt": "NGD_L064", "exit_status": 1, "wall_seconds": 2.1182158780284226, "peak_rss_kib": "3767752", "swaps": "0", "print_axioms": ["'NGD_DecodeTrace.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NGD_DecodeTrace.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NGD_generated/NGD_DecodeTrace.lean:39:18: error: unsolved goals
+case mk.Ok
+N off byteOffset : Usize
+iter nextIter : Range
+index : Usize
+out : Std.Array Q N
+live : ↑index < ↑N
+next : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some index, nextIter)
+row : U8
+framed : Slice U8
+d : Domain N { row := row, framed := framed } off byteOffset
+value : { row := row, framed := framed }.decode_k_value byteOffset index off = ok (answer d index live)
+a✝ : aspis_core.field.QM31
+h : answer d index live = core.result.Result.Ok a✝
+⊢ (do
+      let r ← { row := row, framed := framed }.decode_k_value byteOffset index off
+      let cf ←
+        match r with
+          | core.result.Resul
+...
+ let r ← { row := row, framed := framed }.decode_k_value byteOffset index off
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let out1 ← out.update index val
+          ok (cont (nextIter, out1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec
+                  (fun x => Result (core.result.Result (Std.Array aspis_core.field.QM31 N) r1_wire.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+          ok (done (out, some r1))) =
+    ok (done (out, some (core.result.Result.Err a✝)))
+NGD_generated/NGD_DecodeTrace.lean:40:74: warning: This simp argument is unused:
+  value
+
+Hint: Omit it from the simp argument list.
+  simp only [r1_wire.ValidatedRecord.decode_k_loop.body, ̲next, ̲bind_tc_ok,̵v̵a̵l̵u̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGD_generated/NGD_DecodeTrace.lean:42:12: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [h̵,̵core.result.Result.Insts.CoreOpsTry.branch,
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NGD_DecodeTrace.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NGD_DecodeTrace.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r6cf18f8ac41a424fbceff8549d7eab3a.scope; invocation ID: 14b41cb5c70e4c718200a261cdf17354

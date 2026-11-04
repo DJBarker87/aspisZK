@@ -1,0 +1,53 @@
+{"attempt": "NGD_L063", "exit_status": 1, "wall_seconds": 2.1380996080115438, "peak_rss_kib": "3765044", "swaps": "0", "print_axioms": ["'NGD_DecodeTrace.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NGD_DecodeTrace.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NGD_generated/NGD_DecodeTrace.lean:33:52: error: unsolved goals
+case Ok
+N : Usize
+r : Record
+off byteOffset : Usize
+d : Domain N r off byteOffset
+iter nextIter : Range
+index : Usize
+out : Std.Array Q N
+live : ↑index < ↑N
+next : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some index, nextIter)
+value : r1_wire.ValidatedRecord.decode_k_value r byteOffset index off = ok (answer d index live)
+a✝ : aspis_core.field.QM31
+h : answer d index live = core.result.Result.Ok a✝
+⊢ (do
+      let r ← { row := r.row, framed := r.framed }.decode_k_value byteOffset index off
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFl
+...
+ual => do
+          let r1 ←
+            match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec
+                  (fun x => Result (core.result.Result (Std.Array aspis_core.field.QM31 N) r1_wire.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+          ok (done (out, some r1))) =
+    ok (done (out, some (core.result.Result.Err a✝)))
+NGD_generated/NGD_DecodeTrace.lean:39:64: warning: This simp argument is unused:
+  value
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵ ̵(̵c̵o̵n̵f̵i̵g̵ ̵:̵=̵ ̵{̵z̵e̵t̵a̵ ̵:̵=̵ ̵t̵r̵u̵e̵,̵ ̵i̵o̵t̵a̵ ̵:̵=̵ ̵t̵r̵u̵e̵,̵ ̵b̵e̵t̵a̵ ̵:̵=̵ ̵t̵r̵u̵e̵,̵ ̵p̵r̵o̵j̵ ̵:̵=̵ ̵t̵r̵u̵e̵}̵)̵ ̵o̵n̵l̵y̵
+  ̵ ̵ ̵ ̵ ̵[̵r̵1̵_̵w̵i̵r̵e̵.̵V̵a̵l̵i̵d̵a̵t̵e̵d̵R̵e̵c̵o̵r̵d̵.̵d̵e̵c̵o̵d̵e̵_̵k̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵n̵e̵x̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵v̵a̵l̵u̵e̵]̵s̲i̲m̲p̲ ̲(̲c̲o̲n̲f̲i̲g̲ ̲:̲=̲
+  ̲ ̲ ̲ ̲ ̲{̲ ̲z̲e̲t̲a̲ ̲:̲=̲ ̲t̲r̲u̲e̲,̲ ̲i̲o̲t̲a̲ ̲:̲=̲ ̲t̲r̲u̲e̲,̲ ̲b̲e̲t̲a̲ ̲:̲=̲ ̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲p̲r̲o̲j̲ ̲:̲=̲ ̲t̲r̲u̲e̲ ̲}̲)̲ ̲o̲n̲l̲y̲ ̲[̲r̲1̲_̲w̲i̲r̲e̲.̲V̲a̲l̲i̲d̲a̲t̲e̲d̲R̲e̲c̲o̲r̲d̲.̲d̲e̲c̲o̲d̲e̲_̲k̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲n̲e̲x̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGD_generated/NGD_DecodeTrace.lean:41:10: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [h̵,̵core.result.Result.Insts.CoreOpsTry.branch,
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NGD_DecodeTrace.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NGD_DecodeTrace.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r840c488edf714f599dd60fd35b716e42.scope; invocation ID: 3e6c75dd6f3741b9a0f9dd66f24fa5e3

@@ -1,0 +1,420 @@
+NGD_generated/NGD_AtReference.lean:29:11: error: unsolved goals
+case fail
+row tag : U8
+size length finish offset : Usize
+bytes : Slice U8
+reply : core.result.Result Unit NGD_AtG.Error
+shape : NGD_AtG.shape row = ok (some (tag, size))
+lengthAdd : 5#usize + size = ok length
+endAdd : offset + length = ok finish
+sourceShape : AspisR1PrefixAggregateParser.r1_wire.row_shape row = ok (some (tag, size))
+wlen : Usize.wrapping_add 5#usize size = length
+wend : offset.wrapping_add length = finish
+e : Error
+get :
+  core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := finish } =
+    fail e
+⊢ (match do
+      let o1 ←
+        core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+            { start := offset, «end» := offset.wrapping_add (Usize.wrapping_add 5#usize size) }
+      let r ← NGD_AtG.core.option.Option.ok_or o1 (NGD_AtG.Error.Length row)
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ← NGD_AtG.parse_g row val reply
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a =>
+              ok (core.result.Result.Ok (val, offset.wrapping_add (Usize.wrapping_add 5#usize size)))
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+                (core.convert.FromSame NGD_AtG.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+            (core.convert.FromSame NGD_AtG.Error) residual with
+    | ok x => ok (NGD_ErrorPort.mapError x)
+    | fail e => fail e
+    | div => div) =
+    do
+    let length ← 5#usize + size
+    let i1 ← offset + length
+    let o1 ← core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := i1 }
+    let r ←
+      AspisR1PrefixAggregateParser.core.option.Option.ok_or o1 (AspisR1PrefixAggregateParser.r1_wire.Error.Length row)
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let r1 ← parser reply row val
+        let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, i1))
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+              (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+          (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+NGD_generated/NGD_AtReference.lean:30:8: error: unsolved goals
+case div
+row tag : U8
+size length finish offset : Usize
+bytes : Slice U8
+reply : core.result.Result Unit NGD_AtG.Error
+shape : NGD_AtG.shape row = ok (some (tag, size))
+lengthAdd : 5#usize + size = ok length
+endAdd : offset + length = ok finish
+sourceShape : AspisR1PrefixAggregateParser.r1_wire.row_shape row = ok (some (tag, size))
+wlen : Usize.wrapping_add 5#usize size = length
+wend : offset.wrapping_add length = finish
+get :
+  core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := finish } = div
+⊢ (match do
+      let o1 ←
+        core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+            { start := offset, «end» := offset.wrapping_add (Usize.wrapping_add 5#usize size) }
+      let r ← NGD_AtG.core.option.Option.ok_or o1 (NGD_AtG.Error.Length row)
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ← NGD_AtG.parse_g row val reply
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a =>
+              ok (core.result.Result.Ok (val, offset.wrapping_add (Usize.wrapping_add 5#usize size)))
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+                (core.convert.FromSame NGD_AtG.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+            (core.convert.FromSame NGD_AtG.Error) residual with
+    | ok x => ok (NGD_ErrorPort.mapError x)
+    | fail e => fail e
+    | div => div) =
+    do
+    let length ← 5#usize + size
+    let i1 ← offset + length
+    let o1 ← core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := i1 }
+    let r ←
+      AspisR1PrefixAggregateParser.core.option.Option.ok_or o1 (AspisR1PrefixAggregateParser.r1_wire.Error.Length row)
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let r1 ← parser reply row val
+        let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, i1))
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+              (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+          (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+NGD_generated/NGD_AtReference.lean:33:11: error: unsolved goals
+case ok.none
+row tag : U8
+size length finish offset : Usize
+bytes : Slice U8
+reply : core.result.Result Unit NGD_AtG.Error
+shape : NGD_AtG.shape row = ok (some (tag, size))
+lengthAdd : 5#usize + size = ok length
+endAdd : offset + length = ok finish
+sourceShape : AspisR1PrefixAggregateParser.r1_wire.row_shape row = ok (some (tag, size))
+wlen : Usize.wrapping_add 5#usize size = length
+wend : offset.wrapping_add length = finish
+get :
+  core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := finish } =
+    ok none
+⊢ (match do
+      let o1 ←
+        core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+            { start := offset, «end» := offset.wrapping_add (Usize.wrapping_add 5#usize size) }
+      let r ←
+        match o1 with
+          | none => ok (core.result.Result.Err (NGD_AtG.Error.Length row))
+          | some v => ok (core.result.Result.Ok v)
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ← NGD_AtG.parse_g row val reply
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a =>
+              ok (core.result.Result.Ok (val, offset.wrapping_add (Usize.wrapping_add 5#usize size)))
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result (Slice U8 × Usize) NGD_AtG.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result (Slice U8 × Usize) NGD_AtG.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v) with
+    | ok x =>
+      ok
+        (match x with
+        | core.result.Result.Ok x => core.result.Result.Ok x
+        | core.result.Result.Err e =>
+          core.result.Result.Err
+            (match e with
+            | NGD_AtG.Error.Allocation => AspisR1PrefixAggregateParser.r1_wire.Error.Allocation
+            | NGD_AtG.Error.RowOrder a b => AspisR1PrefixAggregateParser.r1_wire.Error.RowOrder a b
+            | NGD_AtG.Error.InvalidRow => AspisR1PrefixAggregateParser.r1_wire.Error.InvalidRow
+            | NGD_AtG.Error.Tag r => AspisR1PrefixAggregateParser.r1_wire.Error.Tag r
+            | NGD_AtG.Error.Length r => AspisR1PrefixAggregateParser.r1_wire.Error.Length r
+            | NGD_AtG.Error.NonCanonical r i => AspisR1PrefixAggregateParser.r1_wire.Error.NonCanonical r i
+            | NGD_AtG.Error.Boundary r => AspisR1PrefixAggregateParser.r1_wire.Error.Boundary r
+            | NGD_AtG.Error.Terminal => AspisR1PrefixAggregateParser.r1_wire.Error.Terminal
+            | NGD_AtG.Error.EqualCirclePoints => AspisR1PrefixAggregateParser.r1_wire.Error.EqualCirclePoints
+            | NGD_AtG.Error.TrailingBytes => AspisR1PrefixAggregateParser.r1_wire.Error.TrailingBytes
+            | NGD_AtG.Error.Public => AspisR1PrefixAggregateParser.r1_wire.Error.Public))
+    | fail e => fail e
+    | div => div) =
+    do
+    let length ← 5#usize + size
+    let i1 ← offset + length
+    let o1 ← core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := i1 }
+    let r ←
+      match o1 with
+        | none => ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length row))
+        | some v => ok (core.result.Result.Ok v)
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let r1 ← parser reply row val
+        let cf1 ←
+          match r1 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, i1))
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            match residual with
+            | core.result.Result.Ok x =>
+              core.convert.Infallible.rec
+                (fun x => Result (core.result.Result (Slice U8 × Usize) AspisR1PrefixAggregateParser.r1_wire.Error)) x
+            | core.result.Result.Err v => ok (core.result.Result.Err v)
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        match residual with
+        | core.result.Result.Ok x =>
+          core.convert.Infallible.rec
+            (fun x => Result (core.result.Result (Slice U8 × Usize) AspisR1PrefixAggregateParser.r1_wire.Error)) x
+        | core.result.Result.Err v => ok (core.result.Result.Err v)
+NGD_generated/NGD_AtReference.lean:45:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  parser reply row original
+in the target expression
+  (mapResult NGD_ErrorPort.mapError do
+      let (_, i) ← ofOption (some (tag, size)) Error.panic
+      let o1 ←
+        core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+            { start := offset, «end» := offset.wrapping_add (Usize.wrapping_add 5#usize i) }
+      let r ←
+        match o1 with
+          | none => ok (core.result.Result.Err (NGD_AtG.Error.Length row))
+          | some v => ok (core.result.Result.Ok v)
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ← NGD_AtG.parse_g row val reply
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a =>
+              ok (core.result.Result.Ok (val, offset.wrapping_add (Usize.wrapping_add 5#usize i)))
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+                (core.convert.FromSame NGD_AtG.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+            (core.convert.FromSame NGD_AtG.Error) residual) =
+    do
+    let (_, i) ← ofOption (some (tag, size)) Error.panic
+    let length ← 5#usize + i
+    let i1 ← offset + length
+    let o1 ← core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := i1 }
+    let r ←
+      match o1 with
+        | none => ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length row))
+        | some v => ok (core.result.Result.Ok v)
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let r1 ← parser reply row val
+        let cf1 ←
+          match r1 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, i1))
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+              (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+          (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+
+case ok.some
+row tag : U8
+size length finish offset : Usize
+bytes : Slice U8
+reply : core.result.Result Unit NGD_AtG.Error
+shape : NGD_AtG.shape row = ok (some (tag, size))
+lengthAdd : 5#usize + size = ok length
+endAdd : offset + length = ok finish
+sourceShape : AspisR1PrefixAggregateParser.r1_wire.row_shape row = ok (some (tag, size))
+wlen : Usize.wrapping_add 5#usize size = length
+wend : offset.wrapping_add length = finish
+original : Slice U8
+get :
+  core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := finish } =
+    ok (some original)
+child : mapResult NGD_ErrorPort.mapError (NGD_AtG.parse_g row original reply) = parser reply row original
+⊢ (mapResult NGD_ErrorPort.mapError do
+      let (_, i) ← ofOption (some (tag, size)) Error.panic
+      let o1 ←
+        core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+            { start := offset, «end» := offset.wrapping_add (Usize.wrapping_add 5#usize i) }
+      let r ←
+        match o1 with
+          | none => ok (core.result.Result.Err (NGD_AtG.Error.Length row))
+          | some v => ok (core.result.Result.Ok v)
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ← NGD_AtG.parse_g row val reply
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a =>
+              ok (core.result.Result.Ok (val, offset.wrapping_add (Usize.wrapping_add 5#usize i)))
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+                (core.convert.FromSame NGD_AtG.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+            (core.convert.FromSame NGD_AtG.Error) residual) =
+    do
+    let (_, i) ← ofOption (some (tag, size)) Error.panic
+    let length ← 5#usize + i
+    let i1 ← offset + length
+    let o1 ← core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := i1 }
+    let r ←
+      match o1 with
+        | none => ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length row))
+        | some v => ok (core.result.Result.Ok v)
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let r1 ← parser reply row val
+        let cf1 ←
+          match r1 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, i1))
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+              (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+          (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+NGD_generated/NGD_AtReference.lean:24:73: warning: This simp argument is unused:
+  wlen
+
+Hint: Omit it from the simp argument list.
+  simp only [shape, ̲sourceShape, ̲core.option.Option.unwrap, ̲bind_tc_ok, ̲lift, ̲wl̵en,̵w̵e̵n̵d, ̲lengthAdd,
+  ̲ ̲ ̲ ̲ ̲endAdd]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGD_generated/NGD_AtReference.lean:24:78: warning: This simp argument is unused:
+  wend
+
+Hint: Omit it from the simp argument list.
+  simp only [shape, ̲sourceShape, ̲core.option.Option.unwrap, ̲bind_tc_ok, ̲lift, ̲wlen,w̵e̵n̵d̵,̵ ̲lengthAdd,
+  ̲ ̲ ̲ ̲ ̲endAdd]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGD_generated/NGD_AtReference.lean:24:83: warning: This simp argument is unused:
+  lengthAdd
+
+Hint: Omit it from the simp argument list.
+  simp only [shape, ̲sourceShape, ̲core.option.Option.unwrap, ̲bind_tc_ok, ̲lift, ̲wlen, ̲wend,l̵ ̲eng̵t̵h̵A̵dd̵,̵e̵n̵d̵Add]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGD_generated/NGD_AtReference.lean:24:93: warning: This simp argument is unused:
+  endAdd
+
+Hint: Omit it from the simp argument list.
+  simp only [shape, ̲sourceShape, ̲core.option.Option.unwrap, ̲bind_tc_ok, ̲lift, ̲wlen, ̲wend, ̲lengthAdd,̵e̵n̵d̵A̵d̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGD_generated/NGD_AtReference.lean:29:20: warning: This simp argument is unused:
+  get
+
+Hint: Omit it from the simp argument list.
+  simp [g̵e̵t̵,̵mapResult]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGD_generated/NGD_AtReference.lean:30:17: warning: This simp argument is unused:
+  get
+
+Hint: Omit it from the simp argument list.
+  simp [g̵e̵t̵,̵mapResult]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGD_generated/NGD_AtReference.lean:34:12: warning: This simp argument is unused:
+  get
+
+Hint: Omit it from the simp argument list.
+  simp [g̵e̵t̵,̵NGD_AtG.core.option.Option.ok_or,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵AspisR1PrefixAggregateParser.core.option.Option.ok_or,
+          core.result.Result.Insts.CoreOpsTry.branch,
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+          mapResult, ̲NGD_ErrorPort.mapError, ̲NGD_ErrorPort.toWire]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGD_generated/NGD_AtReference.lean:42:17: warning: This simp argument is unused:
+  get
+
+Hint: Omit it from the simp argument list.
+  simp only [g̵e̵t̵,̵NGD_AtG.core.option.Option.ok_or,
+          AspisR1PrefixAggregateParser.core.option.Option.ok_or,
+          core.result.Result.Insts.CoreOpsTry.branch, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGD_generated/NGD_AtReference.lean:44:51: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [get, ̲NGD_AtG.core.option.Option.ok_or,
+          AspisR1PrefixAggregateParser.core.option.Option.ok_or,
+          core.result.Result.Insts.CoreOpsTry.branch,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NGD_AtReference.forward' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

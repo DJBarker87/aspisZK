@@ -1,0 +1,64 @@
+{"attempt": "NGD_K001", "exit_status": 0, "wall_seconds": 10.278474021004513, "peak_rss_kib": "532344", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-d-parser-20261104/NGD_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, 
+...
+b fn add(self,rhs:Self)->Self {
+   |                                  ^^^
+...
+42 |         #[inline(always)] pub fn sub(self,rhs:Self)->Self {
+   |                                  ^^^
+...
+47 |         #[inline(always)] pub fn half(self)->Self {
+   |                                  ^^^^
+...
+51 |         pub fn half_pow(self,n:u8)->Option<Self>{
+   |                ^^^^^^^^
+...
+57 |         #[inline(always)] pub fn mul_m31(self,rhs:u32)->Option<Self>{
+   |                                  ^^^^^^^
+...
+64 |         #[inline(always)] pub fn mul(self,rhs:Self)->Self {
+   |                                  ^^^
+
+warning: associated items `dot`, `neg`, and `square` are never used
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:95:16
+    |
+ 80 |     impl Q {
+    |     ------ associated items in this implementation
+...
+ 95 |         pub fn dot<const N:usize>(left:[Self;N],right:[Self;N])->Self {
+    |                ^^^
+...
+104 |         #[inline(always)] pub fn neg(self)->Self {Self::ZERO.sub(self)}
+    |                                  ^^^
+105 |         #[inline(always)] pub fn square(self)->Self {self.mul(self)}
+    |                                  ^^^^^^
+
+warning: module `NGD_compact` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/compact.rs:205:5
+    |
+205 | mod NGD_compact;
+    |     ^^^^^^^^^^^ help: convert the identifier to snake case: `ngd_compact`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+    Finished `dev` profile [optimized] target(s) in 9.26s
+Checking harness compact::NGD_compact::slot_all...
+
+VERIFICATION RESULT:
+ ** 0 of 6 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.036625557s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-rfcb2ea2cd2d4437c9a64992c9543b45f.scope; invocation ID: ab5d0241e8d9435d95692bcd8461c778

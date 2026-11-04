@@ -1,0 +1,32 @@
+--- a/crates/aspis-r1-cost-probe/src/NGD_wire.rs
++++ b/crates/aspis-r1-cost-probe/src/NGD_wire.rs
+@@ -144,3 +144,29 @@
+  let good=match(actual,expected){(Ok([q]),Some(v))=>{out[1]=q;same_q(q,v)&&same_q(out[j],if j==1{v}else{old})},(Err(Error::NonCanonical{row:r,value:0}),None)=>r==row&&same_q(out[j],old),_=>false};
+  assert!(good != cfg!(NGD_invert));
+ }
++
++fn parse_capture<'a>(row:u8,framed:&'a[u8],log:&mut ParseLog)->Result<&'a[u8],Error>{
++ log.row=row;log.ptr=framed.as_ptr();log.len=framed.len();log.calls+=1;
++ match log.reply{Ok(())=>Ok(&framed[5..]),Err(e)=>Err(e)}
++}
++fn native_parse_at<'a>(bytes:&'a[u8],row:u8,offset:usize,log:&mut ParseLog)->Result<(&'a[u8],usize),Error> {
++    let length = 5 + row_shape(row).unwrap().1;
++    let framed = bytes
++        .get(offset..offset + length)
++        .ok_or(Error::Length { row })?;
++    parse_capture(row, framed, log)?;
++    Ok((framed, offset + length))
++}
++fn at_g(group:u8){
++ let bytes:[u8;13831]=kani::any();let n:usize=kani::any();kani::assume(n<=13831);
++ let row:u8=kani::any();kani::assume(row<27);let offset:usize=kani::any();let length=5+row_shape(row).unwrap().1;kani::assume(offset<=usize::MAX-length);
++ let reply=if kani::any(){Ok(())}else{Err(arbitrary_error())};let mut log=ParseLog{reply,row:0,ptr:core::ptr::null(),len:0,calls:0};
++ let result=native_parse_at(&bytes[..n],row,offset,&mut log);let fits=offset<=n&&length<=n-offset;
++ let good_result=if fits{match(reply,result){(Ok(()),Ok((framed,end)))=>framed.as_ptr()==bytes.as_ptr().wrapping_add(offset)&&framed.len()==length&&end==offset+length,(Err(e),Err(r))=>e==r,_=>false}}else{matches!(result,Err(Error::Length{row:r})if r==row)};
++ let good_call=if fits{log.calls==1&&log.row==row&&log.ptr==bytes.as_ptr().wrapping_add(offset)&&log.len==length}else{log.calls==0};
++ assert!((if group==0{good_result}else{good_call}) != cfg!(NGD_invert));
++}
++macro_rules! atgate{($name:ident,$g:expr)=>{#[kani::proof]#[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]fn $name(){at_g($g)}};}
++atgate!(at_full_result,0);atgate!(at_original_window,1);

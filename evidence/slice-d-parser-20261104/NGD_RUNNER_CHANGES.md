@@ -1,0 +1,5 @@
+# Own runner changes
+
+Adapted NFU_run.py, NFU_gate.py, NFU_setup.py and NFU_native_prepare.py with provenance from this branch. Shared S2W launcher and admission scripts remain byte-identical. Limits and admission are unchanged. Budget ceiling is 70 Lean/support. Module paths now map dotted NGD names to directories; native source manifests name only real uploaded inputs. LEAN_PATH selects copied retained exports first, then the exact read-only NFU/SInt2 cache paths. Aeneas selected objects are hashed per receipt. The first inspection L001 failed before any scope because it named a nonexistent module; L002 confirmed the compact-only model omits slot_offset. Neither is closure. L001 is conservatively charged to the support budget.
+
+Cache seed copies 1,929 files, 299,682,741 source bytes (286 MiB), rather than the 40 GiB full cache. Selected bytes and original imported hashes are in NGD_CACHE_IMPORTS.json. Duplicate source exports are separately recorded. No own cache deletion is permitted.

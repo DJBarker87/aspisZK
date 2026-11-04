@@ -1,0 +1,50 @@
+--- a/crates/aspis-r1-cost-probe/src/r1_wire.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_wire.rs
+@@ -848,3 +848,5 @@
+         finite(row,tail,value.wrapping_add(1),remaining.wrapping_sub(1))
+     }
+ }
++
++#[cfg(kani)] #[path="NGD_wire.rs"] mod NGD_wire;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NGD_wire.rs
+@@ -0,0 +1,39 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[kani::proof] #[kani::unwind(2)]
++fn parse_low_valid(){
++ let mut bytes:[u8;37]=kani::any();let row:u8=kani::any();kani::assume(row<14);
++ let (tag,size)=row_shape(row).unwrap();bytes[0]=tag;bytes[1]=size as u8;bytes[2]=0;bytes[3]=0;bytes[4]=0;
++ let record=&bytes[..5+size];let result=parse_record(row,record);
++ let good=match result{Ok(payload)=>payload.as_ptr()==record.as_ptr().wrapping_add(5)&&payload.len()==size,Err(_)=>false};
++ assert!(good != cfg!(NGD_invert));
++}
++fn decode_guard<const N:usize>(which:u8){
++ let bytes:[u8;37]=kani::any();let row:u8=kani::any();let offset:usize=kani::any();
++ let record=ValidatedRecord{row,framed:&bytes};
++ match which{
++ 0=>kani::assume(row<14),
++ 1=>kani::assume(row>=14&&offset>usize::MAX/32),
++ 2=>kani::assume(row>=14&&offset<=usize::MAX/32&&offset*32>usize::MAX-32*N),
++ _=>kani::assume(row>=14&&offset<=usize::MAX/32&&offset*32<=usize::MAX-32*N&&offset*32+32*N>32)
++ }
++ let result=record.decode_k::<N>(offset);
++ let good=if row<14{matches!(result,Err(Error::InvalidRow))}else{matches!(result,Err(Error::Length{row:r})if r==row)};
++ assert!(good != cfg!(NGD_invert));
++}
++macro_rules! guard{($name:ident,$n:expr,$w:expr)=>{#[kani::proof]#[kani::unwind(2)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn $name(){decode_guard::<$n>($w)}};}
++guard!(decode1_guard0,1,0);
++guard!(decode1_guard1,1,1);
++guard!(decode1_guard2,1,2);
++guard!(decode1_guard3,1,3);
++guard!(decode28_guard0,28,0);
++guard!(decode28_guard1,28,1);
++guard!(decode28_guard2,28,2);
++guard!(decode28_guard3,28,3);
++guard!(decode29_guard0,29,0);
++guard!(decode29_guard1,29,1);
++guard!(decode29_guard2,29,2);
++guard!(decode29_guard3,29,3);

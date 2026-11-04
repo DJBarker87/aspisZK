@@ -1,0 +1,8 @@
+{
+  "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "frozen_body": "pub fn parse_record(row: u8, record: &[u8]) -> Result<&[u8], Error> {\n    let (tag, size) = row_shape(row).ok_or(Error::InvalidRow)?;\n    if record.len() != 5 + size {\n        return Err(Error::Length { row });\n    }\n    if record[0] != tag {\n        return Err(Error::Tag { row });\n    }\n    if u32::from_le_bytes([record[1], record[2], record[3], record[4]]) as usize != size {\n        return Err(Error::Length { row });\n    }\n    let payload = &record[5..];\n    if row >= 14 {\n        validate_record_fields(row, payload)?;\n    }\n    Ok(payload)\n}",
+  "frozen_body_sha256": "52080617919069a56a8268e243a1e3ba828f6a8d2bf74adae5d408ad2aa0c6b2",
+  "instrumented_body": "fn native_parse_record<'a>(row: u8, record: &'a [u8], log: &mut ParseLog) -> Result<&'a [u8], Error> {\n    let (tag, size) = row_shape(row).ok_or(Error::InvalidRow)?;\n    if record.len() != 5 + size {\n        return Err(Error::Length { row });\n    }\n    if record[0] != tag {\n        return Err(Error::Tag { row });\n    }\n    if u32::from_le_bytes([record[1], record[2], record[3], record[4]]) as usize != size {\n        return Err(Error::Length { row });\n    }\n    let payload = &record[5..];\n    if row >= 14 {\n        validate_capture(row, payload, log)?;\n    }\n    Ok(payload)\n}",
+  "transform": "Explicit local-record child cut, complete full Error reply; immutable borrowed payload original place; no body/guard/order change",
+  "status": "CANDIDATE; exact emitted model and source-erasure transport are required before closure"
+}

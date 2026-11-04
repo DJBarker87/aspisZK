@@ -1,0 +1,31 @@
+--- 
++++ 
+@@ -64,7 +64,11 @@
+   let mode := args.headD "small"
+   let (modules, roots) :=
+     if mode == "proof0" then
+-      (#[`NFU_COMBINED_IMPORT], #[`NFU_RecordGetters.row, `NFU_RecordGetters.framed, `NFU_RecordGetters.parser_row, `NFU_RecordGetters.parser_framed, `NFU_RecordGetters.same_token])
++      (#[`NGD_COMBINED_IMPORT], #[`NGD_WrapFacts.add, `NGD_WrapFacts.mul, `NGD_SlotBoundaries.step0, `NGD_SlotBoundaries.step1, `NGD_SlotBoundaries.step2, `NGD_SlotBoundaries.step3])
++    else if mode == "proof1" then
++      (#[`NGD_COMBINED_IMPORT], #[`NGD_SlotBoundaries.step4, `NGD_SlotBoundaries.step5, `NGD_SlotBoundaries.boundary0, `NGD_SlotBoundaries.boundary1, `NGD_SlotBoundaries.boundary2, `NGD_SlotBoundaries.boundary3])
++    else if mode == "proof2" then
++      (#[`NGD_COMBINED_IMPORT], #[`NGD_SlotBoundaries.boundary4, `NGD_SlotBoundaries.boundary5, `NGD_SlotBoundaries.boundary6, `NGD_SlotModel.reference, `NGD_SlotPanic.rejected, `AspisR1.RPx_Deployed.deployed])
+     else if mode == "fixtures" then
+       (#[`NEP_Planted, `NEP_Mutations],
+        #[`NEP_Planted.matcher, `NEP_Planted.viaPrivate, `NEP_Planted.proof,
+@@ -75,12 +79,12 @@
+     {} (loadExts := true) (level := .private)
+   if mode == "scan" || mode == "queryscan" then
+     let mut expected : Std.HashMap String (Array String) := {}
+-    for line in ← IO.FS.lines (if mode == "queryscan" then "NFU_QUERY_EXPECTED_IMPORTS.jsonl" else "NFU_EXPECTED_IMPORTS.jsonl") do
++    for line in ← IO.FS.lines (if mode == "queryscan" then "NGD_QUERY_EXPECTED_IMPORTS.jsonl" else "NGD_EXPECTED_IMPORTS.jsonl") do
+       let j ← IO.ofExcept (Json.parse line)
+       expected := expected.insert (← IO.ofExcept (j.getObjValAs? String "module"))
+         (← IO.ofExcept (j.getObjValAs? (Array String) "imports"))
+-    let failed ← NER.loadedScan env (if mode == "queryscan" then "NFU_QUERY_LOADED_scan.jsonl" else "NFU_LOADED_scan.jsonl") expected
+-    IO.println (if failed then "NFU_SCAN_FAILED" else "NFU_SCAN_ZERO_DANGLING")
++    let failed ← NER.loadedScan env (if mode == "queryscan" then "NGD_QUERY_LOADED_scan.jsonl" else "NGD_LOADED_scan.jsonl") expected
++    IO.println (if failed then "NGD_SCAN_FAILED" else "NGD_SCAN_ZERO_DANGLING")
+     return if failed then 1 else 0
+   let ctx : Command.Context := {
+     fileName := "NEP_Driver"

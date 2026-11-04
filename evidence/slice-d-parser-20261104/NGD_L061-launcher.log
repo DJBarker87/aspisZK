@@ -1,0 +1,59 @@
+{"attempt": "NGD_L061", "exit_status": 1, "wall_seconds": 2.1412984679918736, "peak_rss_kib": "3759904", "swaps": "0", "print_axioms": ["'NGD_DecodeTrace.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NGD_DecodeTrace.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NGD_generated/NGD_DecodeTrace.lean:39:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  r1_wire.ValidatedRecord.decode_k_value r byteOffset index off
+in the target expression
+  (let (o, iter1) := (some index, nextIter)
+    match o with
+    | none => ok (done (out, none))
+    | some value => do
+      let r ← { row := r.row, framed := r.framed }.decode_k_value byteOffset value off
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let out1 ← out.update value val
+          ok (cont (iter1, out1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+     
+...
+romSame r1_wire.Error) residual
+          ok (done (out, some r1))) =
+    match answer d index live with
+    | core.result.Result.Ok q => do
+      let updated ← out.update index q
+      ok (cont (nextIter, updated))
+    | core.result.Result.Err e => ok (done (out, some (core.result.Result.Err e)))
+
+N : Usize
+r : Record
+off byteOffset : Usize
+d : Domain N r off byteOffset
+iter nextIter : Range
+index : Usize
+out : Std.Array Q N
+live : ↑index < ↑N
+next : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some index, nextIter)
+value : r1_wire.ValidatedRecord.decode_k_value r byteOffset index off = ok (answer d index live)
+⊢ (let (o, iter1) := (some index, nextIter)
+    match o with
+    | none => ok (done (out, none))
+    | some value => do
+      let r ← { row := r.row, framed := r.framed }.decode_k_value byteOffset value off
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let out1 ← out.update value val
+          ok (cont (iter1, out1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (Std.Array aspis_core.field.QM31 N) (core.convert.FromSame r1_wire.Error) residual
+          ok (done (out, some r1))) =
+    match answer d index live with
+    | core.result.Result.Ok q => do
+      let updated ← out.update index q
+      ok (cont (nextIter, updated))
+    | core.result.Result.Err e => ok (done (out, some (core.result.Result.Err e)))
+'NGD_DecodeTrace.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NGD_DecodeTrace.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r228a0cc590934694be7a5d8592d7911c.scope; invocation ID: 6264c5b2948848d1ae18d89c0859449f
