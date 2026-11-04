@@ -9,7 +9,7 @@ def depth (count n : Nat) : Nat := min n count
 theorem depth_step (count n : Nat) :
     depth count (n+1) = if depth count n < count then depth count n+1 else depth count n := by
   simp only [depth]
-  omega
+  split <;> omega
 
 /-- This closed form has exactly the source width update on every continuing
 outer edge. Bounds here are local generic inputs, discharged at the two callers. -/
@@ -32,15 +32,18 @@ def sourceEvent (site : Site) (start count capacity outer inner : Nat)
     if start+count ≤ 10 ∧ 2^count ≤ capacity then
       let width := 2^d
       let parent := width-inner-1
-      if (match site with | .point => true | _ => false) then through effects (some ⟨start+d,10⟩)
-      else if inner < width then
-        let index := match site with
-          | .point => start+d
-          | .parent => parent
-          | .left => (2*parent) % UScalar.size .Usize
-          | .right => ((2*parent) % UScalar.size .Usize+1) % UScalar.size .Usize
-        through effects (some ⟨index,capacity⟩)
-      else .ok none
+      match site with
+      | .point => through effects (some ⟨start+d,10⟩)
+      | .parent =>
+        if inner < width then through effects (some ⟨parent,capacity⟩) else .ok none
+      | .left =>
+        if inner < width then
+          through effects (some ⟨(2*parent) % UScalar.size .Usize,capacity⟩)
+        else .ok none
+      | .right =>
+        if inner < width then
+          through effects (some ⟨((2*parent) % UScalar.size .Usize+1) % UScalar.size .Usize,capacity⟩)
+        else .ok none
     else .ok none
   else .ok none
 
