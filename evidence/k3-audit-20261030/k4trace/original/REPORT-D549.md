@@ -1,0 +1,37 @@
+# D549 continuation report
+
+Branch: `codex/pv-k3scan-20261101`; same sparse worktree and evidence directory. The immutable audit base is `bad175c553`. Campaign complete: sixty charged invocations (the two initially spent plus 58 D549 invocations), 29 positive PASS / 29 matched expected failures / two charged setup failures. 2 uncharged admission refusal(s) are retained. No push, ledger edit, production implementation edit or Lean invocation.
+
+## Established scope
+
+The unchanged Stream A classifier and its four pinned inputs were reviewed; the unchanged 29 diagnostics and boundary checks passed at resume. The original 305-observation / 407-row inventory is reused, with exact frozen provenance. Newly recovered selected closures came first from immutable per-run inputs, including K72122/K72135, split K26/K28 and D038. Missing literal/include modules were recovered from the pinned historical source, never a current same-name substitute. Sources, manifests, controls, source hashes, resolved Cargo features and symbol listings are retained.
+
+K3-CREDITS.md gives every credit's current recommendation. A controlled positive PASS establishes only that recorded bounded K-3 property, with the original names, bounds and stubs; it does not prove full deployed equivalence. Independent historical K-1 suspensions are retained. The two setup failures are disclosed separately from application assertion failures.
+
+K3-ROWS.md / K3-ROWS.json give all 34 touched rows at their CURRENT credited scopes. The actually installed V183 op32 allocator family uses ReserveSelected.complete / AllocatorWorld63, independently of the historical reserve tests. Other touched installed rows retain their qualified structural/extraction packets. The current V185 C042 and V244 C155/C157 local-body credit pairs were completed before lower-priority historical packets. The recount-8 V164/V182/V234/V235 restorations retain their explicitly parameterized structural scopes. Whole-row and native/world associations are not inferred.
+
+## Retained suspensions and endpoint
+
+C051 empty_gate::empty_noncopy_length_branches writes DROPS inside native Token::drop; C053 generic_default_gate::wrapper_default_arbitrary_core reads harness-written DEFAULT_STATE inside native Core::default. They remain SUSPENDED. C156 equivalence16::shared_repeat16 and C163/C164 old sum_high_nodes/sum_high_path use shared_callee16's USED/TAG/LEFT/RIGHT/OUTPUT memo and remain SUSPENDED. No local mock replaces these steps. Historical C002's no-stub split route remains suspended; fresh originally stubbed lo/hi coordinate packets cannot replace it. V233's typed GenericArray64/consumed bridge remains unproved.
+
+Before and after: PrivacyR1HeadlineDeployedReal.privacy_headline_deployed and its hypotheses are unchanged. Endpoint premises removed/added/weakened: 0/0/0. No trust-list field was added. E1/E2, actual RunJoin/carrier/world/allocator adequacy, compiler V370/D381/D386, proof-account client, and L1/L2/L3 obligations remain. Pinned Kani uses bundled rustc 1.93-nightly, not deployed 1.94.1. Exact reached symbols are preserved; D549-STD-COMPARISON.json reuses only exact old item mappings and explicitly retains unresolved ones. No blanket std/deployed release. Privacy target not established.
+
+## Measured / proposed / next
+
+Per-run receipts record exact target, exit, wall time, peak RSS, swap, source revision, caps, profile and N/A axioms. Every actual job has fresh allowed:true/exit0 admission, an inner barrier, 6G/8G/swap0/Tasks64 caps, CPU0-3 and optimized profile. Required launch spacing is retained. Refusals consume IDs but zero budget. Metadata preflight K79206-preflight checked no assertion and was uncharged; K79208 and K79219 were charged setup failures, repaired at fresh IDs. No unexpected checked application counterexample has been hidden.
+
+Only proposed: local-context/native-step association for the named logs/memo; complete reached-item std parity/structural mapping; remaining native typed/world/caller obligations. Those require their own reviewable evidence. This audit does not assert them.
+
+D549-VALIDATION.json records one final artifact/pair/resource/current-row audit, with no compiler or solver. Historical VALIDATION.json belongs to the initial two-run checkpoint. Do not regenerate current statuses with the old finalize.py: use d549_report.py then d549_rows.py. Commit history is recorded in COMMITS-D549.txt. Owned rebuildable caches are removed only after evidence capture; no wallet/task keys were created or deleted.
+
+Latest source refresh: CURRENT-SCOPE-REFRESH-D549.json pins the final read-only runjoin/research/b3p6 revisions, checks all nine installed-selector source hashes unchanged and the research ledger byte-identical to entry. V244 has36/36 local associations, still exactly two historical Kani bodies (reconstruct_10 and validate_transition). Its full deployed callback remains unproved. The corresponding handoffs and per-function table are retained under current-scope/.
+
+K79243 entered its capped scope but its inner resource scan returned allowed:false on a vanished unrelated cgroup. The barrier raised before /usr/bin/time or symbol_worker ran; time.log and symbols are absent. It is an uncharged transient refusal under local-lean rule6, not a Kani failure. The raw exit1 receipt is preserved. The same logical config resumed after full180s spacing at fresh K79244; no shared infrastructure changed.
+
+Current frontier addendum: the retained RUNJOIN-D564-REPORT.md identifies an interface counterexample over arbitrary residual dictionaries, not a deployed execution counterexample. Actual op257 binding, capture and Nonempty P remain independently required; callback equality alone cannot erase them. This is upstream evidence, not a Kani counterexample discovered by this campaign.
+
+Stop reason: all sixty authorized invocations are spent. No additional Kani or Lean run is authorized by this continuation. All 34 retained current row scopes have no still-SUSPENDED Kani dependency; historical suspensions and OPEN native/world/std associations remain expressly named. The next concrete deliverable is a checked local-context association for native Token::drop/Core::default and the shared memo, followed by exact reached-item std mapping before any deployed transfer.
+
+Receipt limitation: D549-QUIET-WINDOW-AUDIT.json records that the continuation wrapper omitted per-launch quiet-marker until values. The fresh outer/inner UTC and allowed receipts, identical enforcing scanner hashes, original two-launch marker audit, and independently captured early/end markers remain. Exact missing marker history is not reconstructed. The task never edited/deleted the marker or set its owner override. The final artifact audit records this limitation; it does not certify complete per-launch marker snapshots. No additional compiler run is authorized after budget exhaustion.
+
+Final measured audit: D549-VALIDATION.json PASS for its stated artifact checks, with the quiet-marker receipt limitation above. Sixty charged invocations:29 PASS,29 matched assertion FAIL, two setup failures; two uncharged refusals. Final recommendation totals:22 RESTORED (bounded K-3 only),81 UNAFFECTED,199 SUSPENDED,3 WITHDRAWN. Maximum peak RSS 3126776KiB; sum of per-run wall times 3039.254s; minimum charged launch gap 180.358s; swap0; longest K79258 398.684s. D549-CACHE-CLEANUP.json records removal of only resume-target after validation and a no-live-task-scope check. No wallet/task keys were generated or deleted.

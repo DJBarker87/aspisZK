@@ -1,5 +1,0 @@
-{
- "mode": "header",
- "source": "use super::*;\n#[kani::proof]\nfn same_buffers(){let bytes:[u8;688]=kani::any();let candidate_start=0;let proof_start=candidate_start+POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES;let candidate_bytes=&bytes[candidate_start..proof_start];assert!(candidate_bytes.len()==688&&core::ptr::eq(candidate_bytes.as_ptr(),bytes.as_ptr()));}\n",
- "classification": "local retained-allocation/slot oracle forwarding; runtime value law supplied ONLY by explicit RuntimeMemcmp(ac)"
-}

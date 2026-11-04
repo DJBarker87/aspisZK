@@ -1,0 +1,69 @@
+"""One frozen context-constructor certificate, using the existing capped runner."""
+from pathlib import Path
+import hashlib,json,subprocess,shlex,sys
+E=Path('evidence/pv-stx-20261104')
+H='/home/dombarker/project-offloads/codex-pv-stx-20261104'
+rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
+def sha(b):return hashlib.sha256(b).hexdigest()
+def ssh(code,data=None):
+    return subprocess.run(['ssh','dombarker@100.108.41.90','python3 -c '+shlex.quote(code)],input=data,text=True,capture_output=True)
+if sys.argv[1]=='stage':
+    paths=subprocess.check_output(['git','ls-tree','-r','--name-only',rev,'--','crates/aspis-core'],text=True).splitlines()
+    paths += ['tools/pv-stx-20261104/context-certificate/Cargo.toml',
+      'tools/pv-stx-20261104/context-certificate/src/lib.rs','tools/pv-stx-20261104/kmx/KMX_stubs.rs']
+    files={p:subprocess.check_output(['git','show',rev+':'+p],text=True) for p in paths}
+    assert sha(files['tools/pv-stx-20261104/kmx/KMX_stubs.rs'].split('#[cfg(kani)]',1)[0].encode())=='c282a1272676cd56fd2702f60b17009bac9d252e495b1508459b01d6ed1cf9d9'
+    # A harness-only outer workspace. Every core crate source and its manifest
+    # remain byte-identical; its reached deployed feature set is explicit.
+    files['Cargo.toml']='[workspace]\nmembers=["crates/aspis-core"]\nresolver="2"\n[workspace.package]\nedition="2021"\nlicense="MIT OR Apache-2.0"\nversion="0.1.0"\n'
+    x=dict(source_revision=rev,files=files)
+    code='''from pathlib import Path
+import sys,json,hashlib
+x=json.load(sys.stdin);h=Path(H)/'native-source';h.mkdir(exist_ok=True)
+rows=[]
+for p,s in x['files'].items():
+ q=h/p;q.parent.mkdir(parents=True,exist_ok=True);q.write_text(s)
+ rows.append(dict(path=p,sha256=hashlib.sha256(q.read_bytes()).hexdigest()))
+print(json.dumps(dict(source_revision=x['source_revision'],files=rows,workspace='isolated harness workspace; core manifest and all core source unchanged',features={'aspis-core':['r0','ct-host-prover']},profile={'opt_level':3,'debug_assertions':False,'overflow_checks':False})))
+'''.replace('Path(H)', 'Path('+repr(H)+')')
+    r=ssh(code,json.dumps(x));assert r.returncode==0,r.stderr
+    previous=E/'context-stage.json'
+    if previous.exists(): (E/('context-stage-'+sha(previous.read_bytes())+'.json')).write_bytes(previous.read_bytes())
+    previous.write_text(r.stdout)
+    print('staged frozen core and context harness',len(files),'files')
+elif sys.argv[1]=='run':
+    n=int(sys.argv[2]);assert 92625<=n<=92649
+    label='K'+str(n)
+    selector=sys.argv[3] if len(sys.argv)>3 else 'context_constructor'
+    assert selector in {'context_constructor','context_encoding'}
+    code='''from pathlib import Path
+import sys,json,subprocess,hashlib,types
+h=Path(H);label=LABEL;o=h/label;o.mkdir(exist_ok=False)
+n=types.SimpleNamespace();exec((h/'native.py').read_text().split("if sys.argv[1]=='inner':",1)[0],n.__dict__)
+cmd=['/usr/bin/env','PATH=/home/dombarker/.cargo/bin:/usr/bin:/bin','CARGO_BUILD_JOBS=4','CARGO_NET_OFFLINE=true','CARGO_TARGET_DIR='+str(h/'context-target'),
+ 'cargo','kani','--manifest-path',str(h/'native-source/tools/pv-stx-20261104/context-certificate/Cargo.toml'),'--lib','--harness',SELECTOR,'--solver','kissat','--output-format','terse','-j','1','-Z','unstable-options','-Z','stubbing','--keep-temps','--cbmc-args','--unwinding-assertions','--no-array-field-sensitivity']
+(o/'command.json').write_text(json.dumps(dict(command=cmd,cwd=str(h/'native-source'))))
+# Scan global attempt receipts before submission, as for the Lean wrapper.
+hits=[str(p) for job in h.parent.glob('codex-*') for p in
+ list(job.glob(label+'/receipt.json'))+list(job.glob('evidence/**/*'+label+'*')) if p.is_file() and p!=o/'receipt.json']
+assert not hits,hits
+n.admit(o,'reservation-before.json',8*2**30)
+scope=['systemd-run','--user','--scope','--unit','PV_STX_'+label,'-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(h/'native.py'),'inner',str(o)]
+with (o/'launcher.log').open('w') as f:r=subprocess.run(scope,stdout=f,stderr=subprocess.STDOUT)
+print(json.dumps(dict(exit=r.returncode,label=label)))
+'''.replace('Path(H)','Path('+repr(H)+')').replace('LABEL',repr(label)).replace('SELECTOR',repr(selector))
+    r=ssh(code)
+    (E/(label+'-transport.json')).write_text(json.dumps(dict(exit=r.returncode,stdout=r.stdout,stderr=r.stderr),indent=2)+'\n')
+    print(r.stdout,r.stderr);assert r.returncode==0
+elif sys.argv[1]=='collect':
+    label='K'+str(int(sys.argv[2]));assert 92625<=int(sys.argv[2])<=92649
+    r=ssh('''from pathlib import Path
+import json
+o=Path(H)/LABEL
+print(json.dumps({p.name:p.read_text() for p in o.iterdir() if p.is_file()}))
+'''.replace('Path(H)','Path('+repr(H)+')').replace('LABEL',repr(label)))
+    assert r.returncode==0,r.stderr
+    out=E/label;out.mkdir(exist_ok=True)
+    for p,s in json.loads(r.stdout).items():(out/p).write_text(s)
+    print((out/'output.log').read_text()[-8000:])
+else:raise SystemExit('stage | run ID | collect ID')

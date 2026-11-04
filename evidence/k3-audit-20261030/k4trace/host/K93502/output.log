@@ -1,0 +1,98 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+[Kani] Running: `CARGO_ENCODED_RUSTFLAGS="-Coverflow-checks=on-Zunstable-options-Ztrim-diagnostic-paths=no-Zhuman_readable_cgu_names-Zalways-encode-mir--cfg=kani-Zcrate-attr=feature(register_tool)-Zcrate-attr=register_tool(kanitool)--sysroot/home/dombarker/.kani/kani-0.67.0-L/home/dombarker/.kani/kani-0.67.0/lib--externkani--externnoprelude:std=/home/dombarker/.kani/kani-0.67.0/lib/libstd.rlib-Cpanic=abort-Csymbol-mangling-version=v0-Zpanic_abort_tests=yes-Zmir-enable-passes=-RemoveStorageMarkers--check-cfg=cfg(kani)-Clinker=echo--kani-compiler-Cllvm-args=--check-version=0.67.0" CARGO_TERM_PROGRESS_WHEN="never" RUSTC="/home/dombarker/.kani/kani-0.67.0/bin/kani-compiler" RUSTC_BOOTSTRAP="1" /home/dombarker/.kani/kani-0.67.0/toolchain/bin/cargo rustc --manifest-path /home/dombarker/project-offloads/codex-pv-k3scan-20261101/pathbuf/Cargo.toml --features=negative-control --target x86_64-unknown-linux-gnu -Zhost-config -Ztarget-applies-to-host --config=host.rustflags=["--cfg=kani_host"] --target-dir /home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani --message-format json-diagnostic-rendered-ansi -v -p path+file:///home/dombarker/project-offloads/codex-pv-k3scan-20261101/pathbuf#pv-k3scan-pathbuf@0.0.0 --lib -- "-Cllvm-args=--reachability=harnesses --log-level=info --assertion-reach-checks --harness path_checks::pathbuf_borrows --exact -Z unstable-options"`
+   Compiling pv-k3scan-pathbuf v0.0.0 (/home/dombarker/project-offloads/codex-pv-k3scan-20261101/pathbuf)
+     Running `/home/dombarker/.kani/kani-0.67.0/bin/kani-compiler --crate-name pv_k3scan_pathbuf --edition=2021 lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C opt-level=3 -C embed-bitcode=no -C debuginfo=2 --cfg 'feature="negative-control"' --check-cfg 'cfg(docsrs,test)' --check-cfg 'cfg(feature, values("negative-control"))' -C metadata=26ff511f7b81fdc3 -C extra-filename=-fec7d94bebd79ee0 --out-dir /home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps --target x86_64-unknown-linux-gnu -C incremental=/home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/incremental -L dependency=/home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps -L dependency=/home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/debug/deps '-Cllvm-args=--reachability=harnesses --log-level=info --assertion-reach-checks --harness path_checks::pathbuf_borrows --exact -Z unstable-options' -C overflow-checks=on -Z unstable-options -Z trim-diagnostic-paths=no -Z human_readable_cgu_names -Z always-encode-mir --cfg=kani -Z 'crate-attr=feature(register_tool)' -Z 'crate-attr=register_tool(kanitool)' --sysroot /home/dombarker/.kani/kani-0.67.0 -L /home/dombarker/.kani/kani-0.67.0/lib --extern kani --extern 'noprelude:std=/home/dombarker/.kani/kani-0.67.0/lib/libstd.rlib' -C panic=abort -C symbol-mangling-version=v0 -Z panic_abort_tests=yes -Z mir-enable-passes=-RemoveStorageMarkers '--check-cfg=cfg(kani)' -Clinker=echo --kani-compiler -Cllvm-args=--check-version=0.67.0`
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen reachability analysis in 0.008370812s
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen in 0.031055272s
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+====== Reachability Analysis Result =======
+Total # items: 244
+Total # statements: 2283
+Total # expressions: 527
+
+Reachable Items:
+  - function: 244
+
+Statements:
+  - Assert: 9
+  - Drop: 13
+  - Return: 230
+  - Assign: 527
+  - SwitchInt: 100
+  - Unreachable: 26
+  - Ignored: 845
+  - Goto: 149
+  - Intrinsic: 2
+  - Call: 382
+
+Expressions:
+  - Cast: 66
+  - Discriminant: 32
+  - UnaryOp: 9
+  - Aggregate: 103
+  - BinaryOp: 39
+  - Ref: 77
+  - AddressOf: 3
+  - Use: 185
+  - NullaryOp: 2
+  - CheckedBinaryOp: 11
+
+-------------------------------------------
+    Finished `dev` profile [optimized + debuginfo] target(s) in 0.12s
+[Kani] Running: `goto-cc /home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_k3scan_pathbuf-fec7d94bebd79ee0__RNvNtCs9bcGUNf0Ps3_17pv_k3scan_pathbuf11path_checks15pathbuf_borrows.symtab.out /home/dombarker/.kani/kani-0.67.0/library/kani/kani_lib.c -o /home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_k3scan_pathbuf-fec7d94bebd79ee0__RNvNtCs9bcGUNf0Ps3_17pv_k3scan_pathbuf11path_checks15pathbuf_borrows.out`
+Finished goto-cc in 0.053897507s
+[Kani] Running: `goto-cc /home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_k3scan_pathbuf-fec7d94bebd79ee0__RNvNtCs9bcGUNf0Ps3_17pv_k3scan_pathbuf11path_checks15pathbuf_borrows.out --function _RNvNtCs9bcGUNf0Ps3_17pv_k3scan_pathbuf11path_checks15pathbuf_borrows -o /home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_k3scan_pathbuf-fec7d94bebd79ee0__RNvNtCs9bcGUNf0Ps3_17pv_k3scan_pathbuf11path_checks15pathbuf_borrows.out`
+Finished goto-cc in 0.041720647s
+[Kani] Running: `goto-instrument --add-library --no-malloc-may-fail /home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_k3scan_pathbuf-fec7d94bebd79ee0__RNvNtCs9bcGUNf0Ps3_17pv_k3scan_pathbuf11path_checks15pathbuf_borrows.out /home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_k3scan_pathbuf-fec7d94bebd79ee0__RNvNtCs9bcGUNf0Ps3_17pv_k3scan_pathbuf11path_checks15pathbuf_borrows.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_k3scan_pathbuf-fec7d94bebd79ee0__RNvNtCs9bcGUNf0Ps3_17pv_k3scan_pathbuf11path_checks15pathbuf_borrows.out'
+Adding CPROVER library (x86_64)
+Writing GOTO program to '/home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_k3scan_pathbuf-fec7d94bebd79ee0__RNvNtCs9bcGUNf0Ps3_17pv_k3scan_pathbuf11path_checks15pathbuf_borrows.out'
+Finished goto-instrument in 0.11291083s
+[Kani] Running: `goto-instrument --generate-function-body-options assert-false-assume-false --generate-function-body .* --drop-unused-functions /home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_k3scan_pathbuf-fec7d94bebd79ee0__RNvNtCs9bcGUNf0Ps3_17pv_k3scan_pathbuf11path_checks15pathbuf_borrows.out /home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_k3scan_pathbuf-fec7d94bebd79ee0__RNvNtCs9bcGUNf0Ps3_17pv_k3scan_pathbuf11path_checks15pathbuf_borrows.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_k3scan_pathbuf-fec7d94bebd79ee0__RNvNtCs9bcGUNf0Ps3_17pv_k3scan_pathbuf11path_checks15pathbuf_borrows.out'
+generate function bodies: matched function '__CPROVER_array_set' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_array_replace' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_array_copy' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_precondition' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_assignable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_object_from' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_was_freed' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_is_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_assert' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_object_upto' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_assume' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_cover' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_object_whole' begins with __CPROVER the generated body for this function may interfere with analysis
+Function Pointer Removal
+Virtual function removal
+Cleaning inline assembler statements
+Removing unused functions
+Writing GOTO program to '/home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_k3scan_pathbuf-fec7d94bebd79ee0__RNvNtCs9bcGUNf0Ps3_17pv_k3scan_pathbuf11path_checks15pathbuf_borrows.out'
+Finished goto-instrument in 0.04684099s
+[Kani] Running: `goto-instrument --ensure-one-backedge-per-target /home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_k3scan_pathbuf-fec7d94bebd79ee0__RNvNtCs9bcGUNf0Ps3_17pv_k3scan_pathbuf11path_checks15pathbuf_borrows.out /home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_k3scan_pathbuf-fec7d94bebd79ee0__RNvNtCs9bcGUNf0Ps3_17pv_k3scan_pathbuf11path_checks15pathbuf_borrows.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_k3scan_pathbuf-fec7d94bebd79ee0__RNvNtCs9bcGUNf0Ps3_17pv_k3scan_pathbuf11path_checks15pathbuf_borrows.out'
+Trying to force one backedge per target
+Writing GOTO program to '/home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_k3scan_pathbuf-fec7d94bebd79ee0__RNvNtCs9bcGUNf0Ps3_17pv_k3scan_pathbuf11path_checks15pathbuf_borrows.out'
+Finished goto-instrument in 0.052260168s
+Thread 0: Checking harness path_checks::pathbuf_borrows...
+[Kani] Running: `cbmc --no-malloc-may-fail --no-undefined-shift-check --no-signed-overflow-check --no-div-by-zero-check --no-self-loops-to-assumptions --no-pointer-primitive-check --object-bits 16 --unwind 10 --external-sat-solver kissat --slice-formula --unwinding-assertions --trace /home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_k3scan_pathbuf-fec7d94bebd79ee0__RNvNtCs9bcGUNf0Ps3_17pv_k3scan_pathbuf11path_checks15pathbuf_borrows.out --verbosity 9 --json-ui`
+Finished run_cbmc in 0.91940004s
+Thread 0: 
+VERIFICATION RESULT:
+ ** 1 of 352 failed (8 unreachable)
+Failed Checks: assertion failed: len != r.len()
+ File: "lib.rs", line 74, in path_checks::pathbuf_borrows
+
+VERIFICATION:- FAILED
+Verification Time: 0.91918087s
+
+Manual Harness Summary:
+Verification failed for - path_checks::pathbuf_borrows
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.

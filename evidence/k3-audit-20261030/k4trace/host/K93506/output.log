@@ -1,0 +1,280 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+[Kani] Running: `CARGO_ENCODED_RUSTFLAGS="-Coverflow-checks=on-Zunstable-options-Ztrim-diagnostic-paths=no-Zhuman_readable_cgu_names-Zalways-encode-mir--cfg=kani-Zcrate-attr=feature(register_tool)-Zcrate-attr=register_tool(kanitool)--sysroot/home/dombarker/.kani/kani-0.67.0-L/home/dombarker/.kani/kani-0.67.0/lib--externkani--externnoprelude:std=/home/dombarker/.kani/kani-0.67.0/lib/libstd.rlib-Cpanic=abort-Csymbol-mangling-version=v0-Zpanic_abort_tests=yes-Zmir-enable-passes=-RemoveStorageMarkers--check-cfg=cfg(kani)-Clinker=echo--kani-compiler-Cllvm-args=--check-version=0.67.0" CARGO_TERM_PROGRESS_WHEN="never" RUSTC="/home/dombarker/.kani/kani-0.67.0/bin/kani-compiler" RUSTC_BOOTSTRAP="1" /home/dombarker/.kani/kani-0.67.0/toolchain/bin/cargo rustc --manifest-path /home/dombarker/project-offloads/codex-pv-k3scan-20261101/split-source/split/Cargo.toml --features=negative-lo --target x86_64-unknown-linux-gnu -Zhost-config -Ztarget-applies-to-host --config=host.rustflags=["--cfg=kani_host"] --target-dir /home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani --message-format json-diagnostic-rendered-ansi -v -p path+file:///home/dombarker/project-offloads/codex-pv-k3scan-20261101/split-source/split#block-buffer@0.10.4 --lib -- "-Cllvm-args=--reachability=harnesses --log-level=info --enable-stubbing --harness sealed::pv_alib_checks::split64_coordinate_lo --exact -Z unstable-options -Z stubbing"`
+       Fresh version_check v0.9.5
+       Fresh typenum v1.20.1
+       Fresh generic-array v0.14.7
+   Compiling block-buffer v0.10.4 (/home/dombarker/project-offloads/codex-pv-k3scan-20261101/split-source/split)
+     Running `/home/dombarker/.kani/kani-0.67.0/bin/kani-compiler --crate-name block_buffer --edition=2018 src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C opt-level=3 -C embed-bitcode=no -C debuginfo=2 --cfg 'feature="negative-lo"' --check-cfg 'cfg(docsrs,test)' --check-cfg 'cfg(feature, values("negative-hi", "negative-lo"))' -C metadata=e2b595f385262e19 -C extra-filename=-b9f7163831f34e9a --out-dir /home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps --target x86_64-unknown-linux-gnu -C incremental=/home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/incremental -L dependency=/home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps -L dependency=/home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/debug/deps --extern generic_array=/home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/libgeneric_array-c92dd543d918c559.rmeta '-Cllvm-args=--reachability=harnesses --log-level=info --enable-stubbing --harness sealed::pv_alib_checks::split64_coordinate_lo --exact -Z unstable-options -Z stubbing' -C overflow-checks=on -Z unstable-options -Z trim-diagnostic-paths=no -Z human_readable_cgu_names -Z always-encode-mir --cfg=kani -Z 'crate-attr=feature(register_tool)' -Z 'crate-attr=register_tool(kanitool)' --sysroot /home/dombarker/.kani/kani-0.67.0 -L /home/dombarker/.kani/kani-0.67.0/lib --extern kani --extern 'noprelude:std=/home/dombarker/.kani/kani-0.67.0/lib/libstd.rlib' -C panic=abort -C symbol-mangling-version=v0 -Z panic_abort_tests=yes -Z mir-enable-passes=-RemoveStorageMarkers '--check-cfg=cfg(kani)' -Clinker=echo --kani-compiler -Cllvm-args=--check-version=0.67.0`
+warning: function `compare` is never used
+  --> src/sealed.rs:77:8
+   |
+77 |     fn compare(data:&[u8]) {
+   |        ^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: module `KMX_stubs` should have a snake case name
+  --> src/lib.rs:11:38
+   |
+11 | #[path="../../KMX_stubs.rs"] pub mod KMX_stubs;
+   |                                      ^^^^^^^^^ help: convert the identifier to snake case: `kmx_stubs`
+   |
+   = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: missing documentation for a module
+  --> src/lib.rs:11:30
+   |
+11 | #[path="../../KMX_stubs.rs"] pub mod KMX_stubs;
+   |                              ^^^^^^^^^^^^^^^^^
+   |
+note: the lint level is defined here
+  --> src/lib.rs:8:9
+   |
+ 8 | #![warn(missing_docs, rust_2018_idioms)]
+   |         ^^^^^^^^^^^^
+
+warning: missing documentation for a function
+ --> src/../../KMX_stubs.rs:4:1
+  |
+4 | pub unsafe fn KMX_copy_nonoverlapping<T: Copy>(src: *const T,dst: *mut T,count:usize){
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `KMX_copy_nonoverlapping` should have a snake case name
+ --> src/../../KMX_stubs.rs:4:15
+  |
+4 | pub unsafe fn KMX_copy_nonoverlapping<T: Copy>(src: *const T,dst: *mut T,count:usize){
+  |               ^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_copy_nonoverlapping`
+
+warning: missing documentation for a function
+ --> src/../../KMX_stubs.rs:8:1
+  |
+8 | pub fn KMX_copy_from_slice<T: Copy>(dst:&mut [T],src:&[T]){
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `KMX_copy_from_slice` should have a snake case name
+ --> src/../../KMX_stubs.rs:8:8
+  |
+8 | pub fn KMX_copy_from_slice<T: Copy>(dst:&mut [T],src:&[T]){
+  |        ^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_copy_from_slice`
+
+warning: missing documentation for a function
+  --> src/../../KMX_stubs.rs:12:1
+   |
+12 | pub fn KMX_clone_from_slice<T: Copy>(dst:&mut [T],src:&[T]){KMX_copy_from_slice(dst,src)}
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `KMX_clone_from_slice` should have a snake case name
+  --> src/../../KMX_stubs.rs:12:8
+   |
+12 | pub fn KMX_clone_from_slice<T: Copy>(dst:&mut [T],src:&[T]){KMX_copy_from_slice(dst,src)}
+   |        ^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_clone_from_slice`
+
+warning: missing documentation for a function
+  --> src/../../KMX_stubs.rs:14:1
+   |
+14 | pub fn KMX_extend_from_slice<T: Copy,A:alloc::alloc::Allocator>(dst:&mut Vec<T,A>,src:&[T]){
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `KMX_extend_from_slice` should have a snake case name
+  --> src/../../KMX_stubs.rs:14:8
+   |
+14 | pub fn KMX_extend_from_slice<T: Copy,A:alloc::alloc::Allocator>(dst:&mut Vec<T,A>,src:&[T]){
+   |        ^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_from_slice`
+
+warning: missing documentation for a function
+  --> src/../../KMX_stubs.rs:18:1
+   |
+18 | pub fn KMX_to_vec<T: Copy>(src:&[T])->Vec<T>{
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `KMX_to_vec` should have a snake case name
+  --> src/../../KMX_stubs.rs:18:8
+   |
+18 | pub fn KMX_to_vec<T: Copy>(src:&[T])->Vec<T>{
+   |        ^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec`
+
+warning: missing documentation for a function
+  --> src/../../KMX_stubs.rs:23:1
+   |
+23 | pub unsafe fn KMX_realloc(ptr:*mut u8,layout:alloc::alloc::Layout,new_size:usize)->*mut u8{
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `KMX_realloc` should have a snake case name
+  --> src/../../KMX_stubs.rs:23:15
+   |
+23 | pub unsafe fn KMX_realloc(ptr:*mut u8,layout:alloc::alloc::Layout,new_size:usize)->*mut u8{
+   |               ^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_realloc`
+
+warning: module `KMX_checks` should have a snake case name
+  --> src/../../KMX_stubs.rs:36:5
+   |
+36 | mod KMX_checks{
+   |     ^^^^^^^^^^ help: convert the identifier to snake case: `kmx_checks`
+
+warning: function `KMX_slice_correct` should have a snake case name
+  --> src/../../KMX_stubs.rs:40:4
+   |
+40 | fn KMX_slice_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.copy_from_slice(&src);let k:usize=kani::any();kani::as...
+   |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_slice_correct`
+
+warning: function `KMX_slice_wrong` should have a snake case name
+  --> src/../../KMX_stubs.rs:43:4
+   |
+43 | fn KMX_slice_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];dst.copy_from_slice(&src);assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_slice_wrong`
+
+warning: function `KMX_ptr_correct` should have a snake case name
+  --> src/../../KMX_stubs.rs:46:4
+   |
+46 | fn KMX_ptr_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as_mu...
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_ptr_correct`
+
+warning: function `KMX_ptr_wrong` should have a snake case name
+  --> src/../../KMX_stubs.rs:49:4
+   |
+49 | fn KMX_ptr_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as...
+   |    ^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_ptr_wrong`
+
+warning: function `KMX_clone_correct` should have a snake case name
+  --> src/../../KMX_stubs.rs:52:4
+   |
+52 | fn KMX_clone_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.clone_from_slice(&src);let k:usize=kani::any();kani::a...
+   |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_clone_correct`
+
+warning: function `KMX_clone_wrong` should have a snake case name
+  --> src/../../KMX_stubs.rs:55:4
+   |
+55 | fn KMX_clone_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];dst.clone_from_slice(&src);assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_clone_wrong`
+
+warning: function `KMX_extend_correct` should have a snake case name
+  --> src/../../KMX_stubs.rs:58:4
+   |
+58 | fn KMX_extend_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);let k:usize=kani...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_correct`
+
+warning: function `KMX_extend_wrong` should have a snake case name
+  --> src/../../KMX_stubs.rs:61:4
+   |
+61 | fn KMX_extend_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);assert_eq!(ds...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_wrong`
+
+warning: function `KMX_to_vec_correct` should have a snake case name
+  --> src/../../KMX_stubs.rs:64:4
+   |
+64 | fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_correct`
+
+warning: function `KMX_to_vec_wrong` should have a snake case name
+  --> src/../../KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> src/../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> src/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen reachability analysis in 0.026669685s
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen in 0.123940706s
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+====== Reachability Analysis Result =======
+Total # items: 696
+Total # statements: 9965
+Total # expressions: 2742
+
+Reachable Items:
+  - function: 695
+  - static item: 1
+
+Statements:
+  - Intrinsic: 5
+  - Goto: 544
+  - Ignored: 4055
+  - Assign: 2742
+  - Unreachable: 70
+  - Assert: 203
+  - Drop: 33
+  - Call: 1277
+  - SwitchInt: 373
+  - Return: 663
+
+Expressions:
+  - NullaryOp: 6
+  - UnaryOp: 105
+  - Repeat: 10
+  - BinaryOp: 387
+  - AddressOf: 39
+  - Cast: 313
+  - Ref: 270
+  - Use: 1045
+  - Aggregate: 343
+  - Discriminant: 110
+  - CheckedBinaryOp: 114
+
+-------------------------------------------
+    Finished `dev` profile [optimized + debuginfo] target(s) in 0.51s
+[Kani] Running: `goto-cc /home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/block_buffer-b9f7163831f34e9a__RNvNtNtCs622bA8LpSk3_12block_buffer6sealed14pv_alib_checks21split64_coordinate_lo.symtab.out /home/dombarker/.kani/kani-0.67.0/library/kani/kani_lib.c -o /home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/block_buffer-b9f7163831f34e9a__RNvNtNtCs622bA8LpSk3_12block_buffer6sealed14pv_alib_checks21split64_coordinate_lo.out`
+Finished goto-cc in 0.2758746s
+[Kani] Running: `goto-cc /home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/block_buffer-b9f7163831f34e9a__RNvNtNtCs622bA8LpSk3_12block_buffer6sealed14pv_alib_checks21split64_coordinate_lo.out --function _RNvNtNtCs622bA8LpSk3_12block_buffer6sealed14pv_alib_checks21split64_coordinate_lo -o /home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/block_buffer-b9f7163831f34e9a__RNvNtNtCs622bA8LpSk3_12block_buffer6sealed14pv_alib_checks21split64_coordinate_lo.out`
+Finished goto-cc in 0.23873167s
+[Kani] Running: `goto-instrument --add-library --no-malloc-may-fail /home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/block_buffer-b9f7163831f34e9a__RNvNtNtCs622bA8LpSk3_12block_buffer6sealed14pv_alib_checks21split64_coordinate_lo.out /home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/block_buffer-b9f7163831f34e9a__RNvNtNtCs622bA8LpSk3_12block_buffer6sealed14pv_alib_checks21split64_coordinate_lo.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/block_buffer-b9f7163831f34e9a__RNvNtNtCs622bA8LpSk3_12block_buffer6sealed14pv_alib_checks21split64_coordinate_lo.out'
+Adding CPROVER library (x86_64)
+Writing GOTO program to '/home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/block_buffer-b9f7163831f34e9a__RNvNtNtCs622bA8LpSk3_12block_buffer6sealed14pv_alib_checks21split64_coordinate_lo.out'
+Finished goto-instrument in 0.3596183s
+[Kani] Running: `goto-instrument --generate-function-body-options assert-false-assume-false --generate-function-body .* --drop-unused-functions /home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/block_buffer-b9f7163831f34e9a__RNvNtNtCs622bA8LpSk3_12block_buffer6sealed14pv_alib_checks21split64_coordinate_lo.out /home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/block_buffer-b9f7163831f34e9a__RNvNtNtCs622bA8LpSk3_12block_buffer6sealed14pv_alib_checks21split64_coordinate_lo.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/block_buffer-b9f7163831f34e9a__RNvNtNtCs622bA8LpSk3_12block_buffer6sealed14pv_alib_checks21split64_coordinate_lo.out'
+generate function bodies: matched function '__CPROVER_array_replace' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_assume' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_assert' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_object_from' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_object_upto' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_assignable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_object_whole' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_array_set' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_precondition' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_was_freed' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_is_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_cover' begins with __CPROVER the generated body for this function may interfere with analysis
+Function Pointer Removal
+Virtual function removal
+Cleaning inline assembler statements
+Removing unused functions
+Writing GOTO program to '/home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/block_buffer-b9f7163831f34e9a__RNvNtNtCs622bA8LpSk3_12block_buffer6sealed14pv_alib_checks21split64_coordinate_lo.out'
+Finished goto-instrument in 0.13518554s
+[Kani] Running: `goto-instrument --ensure-one-backedge-per-target /home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/block_buffer-b9f7163831f34e9a__RNvNtNtCs622bA8LpSk3_12block_buffer6sealed14pv_alib_checks21split64_coordinate_lo.out /home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/block_buffer-b9f7163831f34e9a__RNvNtNtCs622bA8LpSk3_12block_buffer6sealed14pv_alib_checks21split64_coordinate_lo.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/block_buffer-b9f7163831f34e9a__RNvNtNtCs622bA8LpSk3_12block_buffer6sealed14pv_alib_checks21split64_coordinate_lo.out'
+Trying to force one backedge per target
+Writing GOTO program to '/home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/block_buffer-b9f7163831f34e9a__RNvNtNtCs622bA8LpSk3_12block_buffer6sealed14pv_alib_checks21split64_coordinate_lo.out'
+Finished goto-instrument in 0.104782686s
+Thread 2: Checking harness sealed::pv_alib_checks::split64_coordinate_lo...
+[Kani] Running: `cbmc --no-malloc-may-fail --no-undefined-shift-check --no-signed-overflow-check --no-div-by-zero-check --no-self-loops-to-assumptions --no-pointer-primitive-check --object-bits 16 --unwind 132 --external-sat-solver kissat --slice-formula --unwinding-assertions --trace /home/dombarker/project-offloads/codex-pv-k4trace-20261104/target/kani/x86_64-unknown-linux-gnu/debug/deps/block_buffer-b9f7163831f34e9a__RNvNtNtCs622bA8LpSk3_12block_buffer6sealed14pv_alib_checks21split64_coordinate_lo.out --verbosity 9 --json-ui`
+Finished run_cbmc in 59.844994s
+Thread 2: 
+VERIFICATION RESULT:
+ ** 1 of 388 failed
+Failed Checks: This is a placeholder message; Kani doesn't support message formatted at runtime
+ File: "/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panicking.rs", line 439, in core::panicking::assert_failed_inner
+
+VERIFICATION:- FAILED
+Verification Time: 59.84471s
+
+Manual Harness Summary:
+Verification failed for - sealed::pv_alib_checks::split64_coordinate_lo
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.

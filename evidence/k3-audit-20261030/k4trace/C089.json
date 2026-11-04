@@ -1,0 +1,14 @@
+{
+  "credit": "C089",
+  "classification": "RESTORE",
+  "positive": "K93507",
+  "positive_verdict": "SUCCESSFUL; exit 0; 0 of 426 checks failed",
+  "control": "K93508",
+  "control_verdict": "FAILED; intended inverted block-length assertion via assert_failed_inner",
+  "location": "src/sealed.rs:123 \u2192 core/panicking.rs:439",
+  "source_sha256": "41b348246dbcfb2b7d580cbc1fc048641b311e821a6ca89b3137040b9f78f2c4",
+  "reason": "Control feature negative-hi activates assert_ne!(blocks.len()*64,rb.len()) at sealed.rs:123. The full trace assigns n=65, blocks.len()=1 and compared lengths 64 and 64 (steps 19612-19628), then calls assert_failed::<usize,usize> and reaches panicking.rs:439. It therefore fails the intended scalar inequality. No wrap of an unconstrained pointer offset is needed; the later coordinate dereferences are not reached before this assertion.",
+  "trace_excerpt": "host/K93508/trace-excerpt.json",
+  "full_trace": "host/K93508/cbmc-1780269.json.xz",
+  "scope": "Original bounded stubbed hi-coordinate credit only."
+}

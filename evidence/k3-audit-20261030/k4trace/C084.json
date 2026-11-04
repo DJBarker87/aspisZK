@@ -1,0 +1,14 @@
+{
+  "credit": "C084",
+  "classification": "RESTORE",
+  "positive": "K93503",
+  "positive_verdict": "SUCCESSFUL; exit 0; 0 of 524 checks failed",
+  "control": "K93504",
+  "control_verdict": "FAILED; intended split_checks::string_path_negative.assertion.2",
+  "location": "lib.rs:145:13",
+  "reason": "Original control has literal [65;2] and i=0. Full trace has Path and String length 2, both get(0) replies pointing to dynamic_object, and compares byte 65 with byte 65 (trace steps 1216-1218). Option<&u8>::ne returns FALSE (1229), failing the intended inverted assertion at 145. No full-width offset truncation causes this failure.",
+  "trace_excerpt": "host/K93504/trace-excerpt.json",
+  "full_trace": "host/K93504/cbmc-1736959.json.xz",
+  "source_sha256": "64f58eb51dbecb0dae785132a806593a6ce1fc9d8651ea3ec499e016f18a4b92",
+  "scope": "Original bounded stubbed String-to-Path observation only; V179 current structural support remains independent."
+}

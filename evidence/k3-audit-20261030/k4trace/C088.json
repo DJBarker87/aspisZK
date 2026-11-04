@@ -1,0 +1,14 @@
+{
+  "credit": "C088",
+  "classification": "RESTORE",
+  "positive": "K93505",
+  "positive_verdict": "SUCCESSFUL; exit 0; 0 of 426 checks failed",
+  "control": "K93506",
+  "control_verdict": "FAILED; intended inverted block-length assertion via assert_failed_inner",
+  "location": "src/sealed.rs:105 \u2192 core/panicking.rs:439",
+  "source_sha256": "41b348246dbcfb2b7d580cbc1fc048641b311e821a6ca89b3137040b9f78f2c4",
+  "reason": "Control feature negative-lo activates assert_ne!(blocks.len()*64,rb.len()) at sealed.rs:105. The full trace sets n=0 and the compared scalar lengths to 0 and 0 (steps 509-525), then calls assert_failed::<usize,usize> and reaches assert_failed_inner at panicking.rs:439. This is the intended false scalar inequality; the large unconstrained b/j values are not dereferenced before that assertion. No 48-bit offset alias supplies the failure. The prior panic-placeholder summary is now resolved to its caller and operands.",
+  "trace_excerpt": "host/K93506/trace-excerpt.json",
+  "full_trace": "host/K93506/cbmc-1754807.json.xz",
+  "scope": "Original bounded stubbed lo-coordinate credit only."
+}
