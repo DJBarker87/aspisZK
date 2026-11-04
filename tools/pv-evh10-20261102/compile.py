@@ -4,7 +4,9 @@ import subprocess,json,shlex,sys,time,hashlib,re
 E=Path('evidence/pv-evh10-20261102'); H='/home/dombarker/project-offloads/codex-pv-evh-20261029';host='dombarker@100.108.41.90'
 a=int(sys.argv[1]);assert 79565<=a<=79599 or 90200<=a<=90299
 assert not (E/f'submission-{a}.json').exists()
-charged=[json.loads(p.read_text()) for p in E.glob('receipt-*.json')]
+# Native receipt IDs (N916xx) are not Lean attempts. D585 input repair.
+charged=[r for p in E.glob('receipt-*.json')
+         if isinstance((r := json.loads(p.read_text())).get('attempt'), int)]
 resume_charged=[r for r in charged if r['attempt']>=79565]
 assert len(resume_charged)<100, 'D566 resume budget exhausted'
 audit_ids={79597,79598,79599,90297,90298,90299}
