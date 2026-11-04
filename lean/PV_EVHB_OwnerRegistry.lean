@@ -118,10 +118,7 @@ theorem registered_header_delivery {A S F : Type} (backendStep : Request → S �
     let e := R1Z.PV_RunJoin_AllocatorWorld63.execute r w v n
     (r.metadata e.world v).address=e.buffer.address ∧
     (r.metadata e.world v).capacity=e.buffer.capacity := by
-  change let e := native (step backendStep) Usize.max (Usize.max/2) (shape A)
-      (R1Z.PV_FXM_ReserveSelected.buffer v (metadata w v)) n.val w
-    (metadata e.world v).address=e.buffer.address ∧
-    (metadata e.world v).capacity=e.buffer.capacity
+  dsimp only [R1Z.PV_RunJoin_AllocatorWorld63.execute,runtime]
   unfold native growExact
   split <;> try exact ⟨rfl,rfl⟩
   split <;> try exact ⟨rfl,rfl⟩
