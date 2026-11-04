@@ -20,3 +20,10 @@ The joint non-vacuity witness is deliberately not constructed in this job; it
 still needs the actual admitted account context and reachable successful
 continuation tied to RPx_Deployed.deployed and its SAME two transactions.
 Privacy, per-attempt soundness and the two-transaction design are unchanged.
+
+Late proof checkpoint: B039 adds six exact request-window index laws; B042
+proves generic U8-list/array equality and zero-binding semantics by induction.
+Both print standard axioms only. All intended request-model prerequisites are
+now green. The remaining8 Lean units are reserved for the aggregate module,
+compiled-driver fixtures/raw ax2 and one final loaded scan. Native remaining20;
+extraction0. The full production prefix and overall composition remain OPEN.

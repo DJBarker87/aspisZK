@@ -54,7 +54,7 @@ def visit(n):
  if q:
   for dep in re.findall(r'^(?:public )?import\\s+(?:all\\s+)?([\\w.]+)',q.read_text(),re.M):visit(dep)
 for n in re.findall(r'^(?:public )?import\\s+(?:all\\s+)?([\\w.]+)',{source!r},re.M):visit(n)
-for n in ({['NFV_Accounts','NFV_HelperModel','NFV_PoolReturnData','NFR_CHelperBridge','NEP_Planted','NEP_Mutations'] if mode=='final' else ['NFV_Accounts','NFV_HelperModel','NFV_PoolReturnData','NFR_CHelperBridge'] if mode=='scan' else ['NEP_Planted','NEP_Mutations'] if mode=='fixtures' else []!r}):visit(n)
+for n in ({['NFV_Accounts','NFV_HelperModel','NFV_Copy','NFV_ListFrames','NFV_Envelope','NFV_RequestWindows','NFV_RequestOracle','NFV_RequestIndexes','NFV_RequestGuards','NFV_PoolReturnData','NFR_CHelperBridge','NEP_Planted','NEP_Mutations'] if mode=='final' else ['NFV_Accounts','NFV_HelperModel','NFV_Copy','NFV_ListFrames','NFV_Envelope','NFV_RequestWindows','NFV_RequestOracle','NFV_RequestIndexes','NFV_RequestGuards','NFV_PoolReturnData','NFR_CHelperBridge'] if mode=='scan' else ['NEP_Planted','NEP_Mutations'] if mode=='fixtures' else []!r}):visit(n)
 for p in [coherent/'objects/Aeneas.olean',*(coherent/'objects/Aeneas').rglob('*.olean')]:
  selected[str(p)]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())
  for suffix in ['.private','.server','.ir']:

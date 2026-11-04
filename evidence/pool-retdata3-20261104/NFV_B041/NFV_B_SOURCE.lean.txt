@@ -1,0 +1,38 @@
+import NFV_RequestIndexes
+set_option autoImplicit false
+namespace NFV_RequestGuards
+open Aeneas Aeneas.Std Result
+
+def compare (p : U8 × U8) : Result Bool := do
+  let b ← core.cmp.PartialEqU8.ne p.1 p.2
+  ok (decide (¬b = true))
+
+theorem lists (xs ys : List U8) (same : xs.length = ys.length) :
+    List.allM compare (xs.zip ys) = ok (decide (xs = ys)) := by
+  induction xs generalizing ys with
+  | nil =>
+    cases ys with
+    | nil => rfl
+    | cons y ys => simp at same
+  | cons x xs ih =>
+    cases ys with
+    | nil => simp at same
+    | cons y ys =>
+      have tail : xs.length = ys.length := by simpa using same
+      by_cases equal : x = y
+      · subst y
+        simp [List.allM,compare,core.cmp.PartialEqU8,liftFun2,
+          core.cmp.impls.PartialEqU8.ne,ih ys tail]
+      · have unequal : x.val ≠ y.val := fun eq => equal (UScalar.eq_of_val_eq eq)
+        simp [List.allM,compare,core.cmp.PartialEqU8,liftFun2,
+          core.cmp.impls.PartialEqU8.ne,ih ys tail,equal,unequal]
+#print axioms lists
+
+theorem array {N : Usize} (a b : Array U8 N) :
+    core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 a b = ok (decide (a.val = b.val)) := by
+  have lengths : a.val.length = b.val.length := by rw [a.property,b.property]
+  simp only [core.array.equality.PartialEqArray.eq,Array.length,a.property,b.property,ite_true]
+  change List.allM compare (a.val.zip b.val) = _
+  rw [lists a.val b.val lengths]
+#print axioms array
+end NFV_RequestGuards

@@ -1,0 +1,35 @@
+{"attempt": "NFV_B039", "exit_status": 0, "wall_seconds": 4.175356479827315, "peak_rss_kib": "5282196", "swaps": "0", "print_axioms": ["'NFV_RequestIndexes.window' depends on axioms: [propext, Quot.sound]", "'NFV_RequestIndexes.header' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NFV_RequestIndexes.profile' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NFV_RequestIndexes.release' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NFV_RequestIndexes.program' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NFV_RequestIndexes.payment' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'NFV_RequestIndexes.window' depends on axioms: [propext, Quot.sound]
+'NFV_RequestIndexes.header' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFV_RequestIndexes.profile' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFV_RequestIndexes.release' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFV_RequestIndexes.program' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFV_RequestIndexes.payment' depends on axioms: [propext, Classical.choice, Quot.sound]
+def Aeneas.Std.core.array.equality.PartialEqArray.eq : {T U : Type} →
+  {N : Aeneas.Std.Usize} →
+    Aeneas.Std.core.cmp.PartialEq T U → Aeneas.Std.Array T N → Aeneas.Std.Array U N → Aeneas.St
+...
+'NFV_RequestIndexes.window' depends on axioms: [propext, Quot.sound]
+'NFV_RequestIndexes.header' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFV_RequestIndexes.profile' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFV_RequestIndexes.release' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFV_RequestIndexes.program' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFV_RequestIndexes.payment' depends on axioms: [propext, Classical.choice, Quot.sound]
+def Aeneas.Std.core.array.equality.PartialEqArray.eq : {T U : Type} →
+  {N : Aeneas.Std.Usize} →
+    Aeneas.Std.core.cmp.PartialEq T U → Aeneas.Std.Array T N → Aeneas.Std.Array U N → Aeneas.Std.Result Bool :=
+fun {T U} {N} partialEqInst a0 a1 =>
+  if a0.length = a1.length then
+    List.allM
+      (fun x =>
+        match x with
+        | (x, y) => do
+          let b ← partialEqInst.ne x y
+          Aeneas.Std.Result.ok (decide ¬b = true))
+      ((↑a0).zip ↑a1)
+  else Aeneas.Std.Result.ok false
+@[reducible] def Aeneas.Std.core.cmp.PartialEqU8 : Aeneas.Std.core.cmp.PartialEq Aeneas.Std.U8 Aeneas.Std.U8 :=
+{ eq := Aeneas.Std.liftFun2 Aeneas.Std.core.cmp.impls.PartialEqU8.eq,
+  ne := Aeneas.Std.liftFun2 Aeneas.Std.core.cmp.impls.PartialEqU8.ne }
+
+Running as unit: run-r69a30136033b41a99b2ef534b835180c.scope; invocation ID: da47da3b67f94a5680d304007d41b2e4

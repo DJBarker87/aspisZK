@@ -1,0 +1,48 @@
+{"attempt": "NFV_B040", "exit_status": 1, "wall_seconds": 14.328933720011264, "peak_rss_kib": "5185932", "swaps": "0", "print_axioms": ["'NFV_RequestGuards.lists' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NFV_RequestGuards.array' depends on axioms: [sorryAx]"]}
+NFV_B_generated/NFV_RequestGuards.lean:20:16: error: unsolved goals
+case cons.cons
+x : U8
+xs : List U8
+ih : ∀ (ys : List U8), xs.length = ys.length → List.allM compare (xs.zip ys) = ok (decide (xs = ys))
+y : U8
+ys : List U8
+same : (x :: xs).length = (y :: ys).length
+tail : xs.length = ys.length
+⊢ (if ↑x = ↑y then ok (decide (xs = ys)) else pure false) = ok (decide (x = y) && decide (xs = ys))
+NFV_B_generated/NFV_RequestGuards.lean:22:12: warning: This simp argument is unused:
+  List.allM
+
+Hint: Omit it from the simp argument list.
+  simp [̵L̵i̵s̵t̵.̵a̵l̵l̵M̵,̵c̵o̵m̵p̵a̵r̵e̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵U̵8̵,̵l̵i̵f̵t̵F̵u̵n̵2̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵c̵m̵p̵.̵i̵m̵p̵l̵s̵.̵P̵a̵r̵t̵
+...
+gth → List.allM compare (xs.zip ys) = ok (decide (xs = ys))
+y : U8
+ys : List U8
+same : (x :: xs).length = (y :: ys).length
+tail : xs.length = ys.length
+⊢ (if ↑x = ↑y then ok (decide (xs = ys)) else pure false) = ok (decide (x = y) && decide (xs = ys))
+NFV_B_generated/NFV_RequestGuards.lean:22:12: warning: This simp argument is unused:
+  List.allM
+
+Hint: Omit it from the simp argument list.
+  simp [̵L̵i̵s̵t̵.̵a̵l̵l̵M̵,̵c̵o̵m̵p̵a̵r̵e̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵U̵8̵,̵l̵i̵f̵t̵F̵u̵n̵2̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵c̵m̵p̵.̵i̵m̵p̵l̵s̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵U̵8̵.̵n̵e̵,̵i̵h̵[̲c̲o̲m̲p̲a̲r̲e̲,̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲U̲8̲,̲ ̲l̲i̲f̲t̲F̲u̲n̲2̲,̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲i̲m̲p̲l̲s̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲U̲8̲.̲n̲e̲,̲ ̲i̲h̲ ys tail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFV_B_generated/NFV_RequestGuards.lean:22:30: warning: This simp argument is unused:
+  core.cmp.PartialEqU8
+
+Hint: Omit it from the simp argument list.
+  simp [̵L̵i̵s̵t̵.̵a̵l̵l̵M̵,̵c̵o̵m̵p̵a̵r̵e̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵U̵8̵,̵l̵i̵f̵t̵F̵u̵n̵2̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵c̵m̵p̵.̵i̵m̵p̵l̵s̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵U̵8̵.̵n̵e̵,̵i̵h̵[̲L̲i̲s̲t̲.̲a̲l̲l̲M̲,̲ ̲c̲o̲m̲p̲a̲r̲e̲,̲ ̲l̲i̲f̲t̲F̲u̲n̲2̲,̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲i̲m̲p̲l̲s̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲U̲8̲.̲n̲e̲,̲ ̲i̲h̲ ys tail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NFV_RequestGuards.lists' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+NFV_B_generated/NFV_RequestGuards.lean:27:73: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable (a = b)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+'NFV_RequestGuards.array' depends on axioms: [sorryAx]
+
+Running as unit: run-r0096f50cd0be4aa99c5d2a0a88403861.scope; invocation ID: e064f15b90b744109bd1da8fa802d9f4
