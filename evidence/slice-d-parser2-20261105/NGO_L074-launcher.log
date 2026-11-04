@@ -1,0 +1,42 @@
+{"attempt": "NGO_L074", "exit_status": 1, "wall_seconds": 4.4146712981164455, "peak_rss_kib": "5803144", "swaps": "0", "print_axioms": []}
+def AspisR1PrefixAggregateParser.field.wide_exact.WideExact.from_le_bytes : Slice U8 →
+  Result (Option AspisR1PrefixAggregateParser.field.wide_exact.WideExact) :=
+fun bytes =>
+  have i := bytes.len;
+  if (i != AspisR1PrefixAggregateParser.field.wide_exact.WideExact.BYTE_LEN) = true then ok none
+  else do
+    let i1 ← bytes.index_usize 0#usize
+    let i2 ← bytes.index_usize 1#usize
+    let i3 ← bytes.index_usize 2#usize
+    let i4 ← bytes.index_usize 3#usize
+    let i5 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i1, i2, i3, i4] ⋯))
+    let i6 ← bytes.index_usize 4#usize
+    let i7 ← bytes.index_usize 5#usize
+    let i8 ← bytes.index_usize 6#usize
+    let i9 ← bytes.index_usize 7#
+...
+ist U8 → Bool :=
+fun width highZero bs =>
+  (List.range width).all fun j =>
+    have n := NFU_Retarget.LPl_Kit_Bytes.le32 (List.take 4 (List.drop (4 * j) bs));
+    decide (n < 2147483647) && (!highZero || decide (j < 4 ∨ n = 0))
+NGO_generated/NGO_ValidatorInspect.lean:6:7: error(lean.unknownIdentifier): Unknown constant `AspisR1PrefixAggregateParser.field.QM31.from_le_bytes`
+def AspisR1PrefixAggregateParser.field.wide_exact.WideExact.impl.c1 : AspisR1PrefixAggregateParser.field.wide_exact.WideExact →
+  Result AspisR1PrefixAggregateParser.field.QM31 :=
+fun self => ok self.c1
+inductive NFU_Retarget.LPl_Kit_Release.r1_wire.Error : Type
+number of parameters: 0
+constructors:
+NFU_Retarget.LPl_Kit_Release.r1_wire.Error.Allocation : NFU_Retarget.LPl_Kit_Release.r1_wire.Error
+NFU_Retarget.LPl_Kit_Release.r1_wire.Error.RowOrder : U8 → U8 → NFU_Retarget.LPl_Kit_Release.r1_wire.Error
+NFU_Retarget.LPl_Kit_Release.r1_wire.Error.InvalidRow : NFU_Retarget.LPl_Kit_Release.r1_wire.Error
+NFU_Retarget.LPl_Kit_Release.r1_wire.Error.Tag : U8 → NFU_Retarget.LPl_Kit_Release.r1_wire.Error
+NFU_Retarget.LPl_Kit_Release.r1_wire.Error.Length : U8 → NFU_Retarget.LPl_Kit_Release.r1_wire.Error
+NFU_Retarget.LPl_Kit_Release.r1_wire.Error.NonCanonical : U8 → Usize → NFU_Retarget.LPl_Kit_Release.r1_wire.Error
+NFU_Retarget.LPl_Kit_Release.r1_wire.Error.Boundary : Usize → NFU_Retarget.LPl_Kit_Release.r1_wire.Error
+NFU_Retarget.LPl_Kit_Release.r1_wire.Error.Terminal : NFU_Retarget.LPl_Kit_Release.r1_wire.Error
+NFU_Retarget.LPl_Kit_Release.r1_wire.Error.EqualCirclePoints : NFU_Retarget.LPl_Kit_Release.r1_wire.Error
+NFU_Retarget.LPl_Kit_Release.r1_wire.Error.TrailingBytes : NFU_Retarget.LPl_Kit_Release.r1_wire.Error
+NFU_Retarget.LPl_Kit_Release.r1_wire.Error.Public : NFU_Retarget.LPl_Kit_Release.r1_wire.Error
+
+Running as unit: run-r1c77717339884296b0a5e2c4c47fb373.scope; invocation ID: aad038c91e4245c193d4191c71e5455d
