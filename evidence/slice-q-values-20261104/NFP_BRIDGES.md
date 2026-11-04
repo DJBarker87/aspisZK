@@ -1,6 +1,6 @@
 # Slice Q query caller composition
 
-Work in progress. No NFP row or edge is CLOSED. Target not yet established.
+Final support disposition. No NFP row or edge is CLOSED. Target not yet established.
 
 Frozen implementation: 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387.
 Headline: AspisR1.RPx_Deployed.deployed. L154 remains a statement parameter;
@@ -57,7 +57,7 @@ lengths and arbitrary cells/indices (K025--035); no K024 timeout is reused.
 Loop initial-Err/stopped windows and controls pass K036--040. These are
 independent control support, not query-loop row closure.
 No query_values/query_loop row is promoted because NFP_COHERENCE_FINDING.md
-retains the failed accumulated-row callee import. The final audit is pending.
+retains the failed accumulated-row callee import. The final audit result is recorded in Stage 5 below.
 
 Stage 5 final support: K046--058 handle every actual Error variant, arbitrary
 owned raw64 state, initial error, stopped, child rejection and child success;
