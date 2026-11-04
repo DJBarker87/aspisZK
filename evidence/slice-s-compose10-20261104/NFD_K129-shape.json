@@ -1,0 +1,7 @@
+{
+ "shape": "tag",
+ "mode": "positive",
+ "source": "#[kani::proof]\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFD_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NFD_KMX::KMX_copy_from_slice)]\nfn raw(){use aspis_r1_cost_probe::transport::Variant;let selector:u8=kani::any();kani::assume(selector<3);let v=match selector{0=>Variant::S1,1=>Variant::S2,_=>Variant::D};assert!(v.tag()==(selector+1));}\n",
+ "domain": "every variant",
+ "classification": "raw carrier native getter/one serialization iteration; physical carrier/model certificate required separately"
+}

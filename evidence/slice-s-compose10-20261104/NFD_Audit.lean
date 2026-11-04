@@ -1,0 +1,11 @@
+import NEY_EmitComposed
+import NEY_ReachedResultDomains
+import NEX_PublicModel
+import NEM_ValidatorComposed
+import NEQ_EncoderOracle
+#print axioms NEY_EmitComposed.result_state_effects
+#print axioms NEY_EmitComposed.reached_encoder
+#print axioms NEY_ReachedResultDomains.encoder_argument
+#print axioms NEX_PublicModel.result_state_effects
+#print axioms NEM_ValidatorComposed.result_state_effects
+#print axioms NEQ_EncoderOracle.result_state_effects

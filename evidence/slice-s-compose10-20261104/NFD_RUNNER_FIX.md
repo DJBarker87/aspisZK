@@ -1,0 +1,3 @@
+NFD_K002 compiled the program manifest while requesting a statement-crate harness; no verification matched. Use the inherited statement-manifest runner for statement helpers. Validation is unchanged; frozen graph, deployed statement features, lock hash, KMX pin and resource checks remain mandatory. NFD_K003 is the corrected invocation, not a timeout rerun.
+
+After K035 outer timeout, added a mandatory read-only post-recovery Cargo.lock hash assertion to both own runners. This also runs when the in-scope timeout prevented the gate from reaching its normal post-run check. The frozen graph/feature/offline/KMX validation is unchanged and validation is strictly stronger. K035 itself was checked separately in NFD_K035-lock-recovery.log.

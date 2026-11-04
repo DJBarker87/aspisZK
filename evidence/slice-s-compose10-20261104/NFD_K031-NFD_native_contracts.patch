@@ -1,0 +1,16 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
+@@ -1563,3 +1563,7 @@
+     Ok(*bytes)
+ }
+ 
++
++#[cfg(kani)]
++#[path="NFD_length.rs"]
++mod NFD_length;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NFD_length.rs
+@@ -0,0 +1,3 @@
++use super::*;
++#[kani::proof]
++fn length_gate(){let bytes_len:usize=kani::any();let actual=bytes_len!=POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES;assert!(actual==(bytes_len!=320));}

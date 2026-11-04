@@ -1,0 +1,21 @@
+{
+ "shape": "finish",
+ "mode": "negative",
+ "field_slot": 1,
+ "fields": [
+  "pool[j]",
+  "deployment_domain[j]",
+  "anchor_sequence",
+  "anchor_root[i].0",
+  "nullifier[i].0",
+  "asset_id.0",
+  "change_commitment[i].0",
+  "amount",
+  "destination_token_account[j]"
+ ],
+ "all_fields": [],
+ "frozen_body": "fn reconstruct_asq8_statement(\n    request: &PoolV1PairForestTerminalRequestV1,\n    authenticated: &AuthenticatedAsq8Accounts,\n    candidate_afterstate: &aspis_statement::pool_v1::PoolV1PairVerifiedAfterstateV1,\n) -> Result<Box<PoolV1PairForestTerminalStatementV1>, ProgramError> {\n    if authenticated.live_snapshot.next_pair_index.checked_add(1)\n        != Some(candidate_afterstate.next_pair_index)\n    {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    let requested_asset_id = match request.public {\n        PoolV1PairForestTerminalPaymentV1::PrivateTransfer(public) => public.asset_id,\n        PoolV1PairForestTerminalPaymentV1::Withdrawal(public) => public.asset_id,\n    };\n    if authenticated.master.identity.asset_id != requested_asset_id {\n        return Err(ProgramError::InvalidInstructionData);\n    }\n    let common = asq8_common(authenticated, candidate_afterstate);\n    match request.public {\n        PoolV1PairForestTerminalPaymentV1::PrivateTransfer(public) => {\n            transfer_statement_box(common, public)\n        }\n        PoolV1PairForestTerminalPaymentV1::Withdrawal(public) => {\n            withdrawal_statement_box(common, public)\n        }\n    }\n}",
+ "native": "fn finish(request:&PoolV1PairForestTerminalRequestV1,authenticated:&AuthenticatedAsq8Accounts,candidate_afterstate:&PoolV1PairVerifiedAfterstateV1,f:&mut Frame)->Result<Box<PoolV1PairForestTerminalStatementV1>,ProgramError>{\n    let common = common(authenticated, candidate_afterstate,f);\n    match request.public {\n        PoolV1PairForestTerminalPaymentV1::PrivateTransfer(public) => {\n            transfer(common, public,f)\n        }\n        PoolV1PairForestTerminalPaymentV1::Withdrawal(public) => {\n            withdrawal(common, public,f)\n        }\n    }\n}",
+ "domain": "every typed Request/Auth/Candidate; all word values; valid owned Box carriers; arbitrary observed byte/word indices",
+ "classification": "source-isolated elemental common initializer or prefix/finish; native common allocation/move stays OPEN; local records only; finish constructor reply range needs NFD_BoxModel plus complete native child certificates; no inherited NEC static credit"
+}
