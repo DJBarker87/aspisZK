@@ -10,3 +10,5 @@ Isolation tree so far (original harness/module names retained):
 - K004 removes AccountMeta key observation from K002: readonly/signer flags PASS.
 - K005 matched K004 control requires writable: FAILS at intended assertion.
 No flags/key conjunction is being treated as a pass after dropping keys. Metadata key association remains OPEN.
+
+K006 fixes exactly one arbitrary input (meta=6) relative to K002 and PASSES: the newly appended verifier-checkpoint AccountMeta is correct. K007 matched key-corruption control FAILS at intended assertion. This narrows the trigger to preservation of existing vector entries; it does not alone distinguish reallocation from earlier copies.
