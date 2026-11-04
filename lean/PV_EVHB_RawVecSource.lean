@@ -125,6 +125,23 @@ def growOne {S F : Type} (runtime : Runtime S F) (wordMax byteMax : Nat)
 def drop {S F : Type} (runtime : Runtime S F) (h : Header) : Q S F Unit :=
   if h.shape.width=0 ∨ h.cap=0 then lift (.ok ()) else runtime.deallocate h
 
+theorem growing_layout_changes (h : Header) (cap : Nat)
+    (sized : 0<h.shape.width) (grows : h.cap<cap) :
+    layout h cap ≠ layout h h.cap := by
+  intro equal
+  exact (Nat.ne_of_gt (Nat.mul_lt_mul_of_pos_right grows sized))
+    (congrArg Allocation.bytes equal)
+
+theorem finish_transfers_old_ownership {S F : Type} (w : NativeWorld S F) (h : Header)
+    (pointer cap : Nat) (backend : S) (nonzero : h.cap≠0)
+    (sized : 0<h.shape.width) (grows : h.cap<cap) :
+    ¬ Owned (allocated w h pointer cap backend) h := by
+  by_cases same : h.pointer=pointer
+  · subst pointer
+    exact inplace_finish_grow_not_owned w h cap backend nonzero
+      (growing_layout_changes h cap sized grows)
+  · exact moving_finish_grow_not_owned w h pointer cap backend nonzero same
+
 theorem bind_fail {S F A B : Type} (m : Q S F A) (k : A → Q S F B)
     (w : NativeWorld S F) (error : Aeneas.Std.Error)
     (failed : (m w).outcome=.returned (.fail error)) :
@@ -256,6 +273,8 @@ theorem handle_inner_error {S F : Type} (runtime : Runtime S F)
   simp only [handle,bind,reply]
 
 #print axioms bind_fail
+#print axioms growing_layout_changes
+#print axioms finish_transfers_old_ownership
 #print axioms bind_div
 #print axioms bind_fault
 #print axioms bind_exhausted
