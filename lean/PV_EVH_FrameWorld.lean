@@ -31,9 +31,7 @@ theorem answer_world (q : EntryView) (r : ResourceReply (frame q).request)
 
 theorem answer_preserves (q : EntryView) (r : ResourceReply (frame q).request)
     (samePrefix : r.before = q.state) : Shape (resolve q r samePrefix).frame := by
-  have h := interpret_shape q.thread q.activation q.sp q.stackLimit q.retry
-    q.iteration .beforeInit q.answer
-  cases ha : r.answer <;> simpa only [resolve,ha,Shape] using h
+  cases ha : r.answer <;> simp [resolve,ha,Shape,frame,interpret]
 
 theorem answer_fault (q : EntryView) (r : ResourceReply (frame q).request)
     (samePrefix : r.before = q.state) (fault : PV_EVH_Runtime.Fault)
@@ -42,8 +40,7 @@ theorem answer_fault (q : EntryView) (r : ResourceReply (frame q).request)
     (resolve q r samePrefix).frame.phase = .stopped ∧
     (resolve q r samePrefix).state = r.after ∧
     (resolve q r samePrefix).events = r.events := by
-  simp only [resolve,resourceOutcome,h]
-  exact ⟨rfl,rfl,rfl,rfl⟩
+  simp [resolve,resourceOutcome,h]
 
 /-- Advance to the next initializer using the EXISTING rejected cleanup's
 post-state. A fresh pending resource answer avoids promising future accesses.
