@@ -10,7 +10,8 @@ to either final equation is claimed. No T/endpoint/deployment change.
 
 New accepted immutable sources: Owner91224 (3.38s,2633896KiB), Source91225
 (3.84s,2655744KiB), Projection91226 (4.21s,2628768KiB), Registry91228
-(1.62s,2652056KiB). All exit0/swap0, normal6G/8G caps, standard summary-based
+(1.62s,2652056KiB), RegistryStores91230 (1.32s,2635000KiB).
+All exit0/swap0, normal6G/8G caps, standard summary-based
 axioms only. Receipts pin source revisions, blobs, object/dependency hashes and
 complete logs. They are local construction laws, not a native release result.
 
@@ -22,6 +23,9 @@ header delivery for the constructed RETURNING MODEL. Its `step` records the
 post-store descriptor of a macro-step, not an extra native allocator action.
 The full native interpreter must retain nonreturns separately and prove its
 returning projection; do NOT use this model theorem as the unchanged target.
+RegistryStores derives the FULL modeled world commutation for allocation /
+source header installation and denial, including backend/memory/live/history;
+it does not supply actual native primitive/caller association.
 
 Exact next work: construct original constructor/receiver-place/lifetime
 identity interpretation, including moves, so selection of Registry.current is
@@ -32,8 +36,8 @@ store/length store and actual v263 runtime/growth instance. The model's
 dangling flag is not proof of native pointer provenance. Neither its metadata
 total extension nor any supplied target equality discharges source association.
 
-**30/97 attempts charged:21 accepted/9 rejected;67 remain; NEXT91229.**
-New IDs91222–91228:4 accepted/3 rejected. New failed sources91222/91223/91227
+**32/97 attempts charged:22 accepted/10 rejected;65 remain; NEXT91231.**
+New IDs91222–91230:5 accepted/4 rejected. New failed sources91222/91223/91227/91229
 were changed before retry; no failed summary earns credit. Five uncharged
 refusals (two91222,two91223,one91224), each followed by at least180s from the
 latest refusal before retrying its same unlaunched ID. Audits91298–91299 unused.

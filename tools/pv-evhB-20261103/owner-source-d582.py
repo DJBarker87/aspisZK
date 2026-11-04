@@ -20,6 +20,7 @@ lean = Path('lean/PV_EVHB_RawVecOwner.lean').read_text()
 control = Path('lean/PV_EVHB_RawVecSource.lean').read_text()
 projection = Path('lean/PV_EVHB_RawVecProjection.lean').read_text()
 registry = Path('lean/PV_EVHB_OwnerRegistry.lean').read_text()
+registry_stores = Path('lean/PV_EVHB_RegistryStores.lean').read_text()
 
 
 def span(start, end):
@@ -92,6 +93,9 @@ record = dict(
     projection_sha256=hashlib.sha256(projection.encode()).hexdigest(),
     registry_path='lean/PV_EVHB_OwnerRegistry.lean',
     registry_sha256=hashlib.sha256(registry.encode()).hexdigest(),
+    stores_path='lean/PV_EVHB_RegistryStores.lean',
+    stores_sha256=hashlib.sha256(registry_stores.encode()).hexdigest(),
+    modeled_returning_world_commutation='RegistryStores.project_denial/project_installed_allocation; native primitive association OPEN',
     constructed_returning_registry='OwnerRegistry; source-place/store and model header-delivery laws; actual native instance OPEN',
     allocator_metadata_transitions='specified returning semantics; native Global/System adequacy retained under rdea-1',
     source_to_machine='V370 retained',

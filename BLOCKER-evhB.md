@@ -2,7 +2,7 @@
 
 ## D582 partial construction; unchanged native target still OPEN
 
-Four new modules now construct descriptor ownership, source-slot stores and
+Five new modules now construct descriptor ownership, source-slot stores and
 moves, pending allocation installation, source-shaped RawVec control, an
 explicit world projection, and a returning allocator-side owner registry.
 See `evidence/pv-evhB-20261103/OWNER-D582.md` for exact scope and receipts.
@@ -27,8 +27,8 @@ This is NOT a counterexample to reserve-return header delivery, and neither
 requested final equation has been disproved. No native instance, new T field,
 endpoint weakening, or allocator-adequacy discharge is claimed.
 
-Final D582 accounting: IDs91222–91228 consumed (four accepted, three rejected);
-next91229,67 attempts remain; audits91298–91299 unused. Axioms are summary-based.
+Final D582 accounting: IDs91222–91230 consumed (five accepted, four rejected);
+next91231,65 attempts remain; audits91298–91299 unused. Axioms are summary-based.
 
 ## D580 generic Vec resume at c1b31fa688
 

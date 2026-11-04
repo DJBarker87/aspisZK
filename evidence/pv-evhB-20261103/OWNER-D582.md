@@ -88,6 +88,13 @@ The `max` in metadata is a total extension to unrelated erased vectors required
 by V183's type; `source_metadata` proves it is the source capacity on matching
 valid vectors. No owner is chosen by element equality.
 
+`PV_EVHB_RegistryStores.project_denial` and `project_installed_allocation`
+derive the complete modeled returning world equality for allocation/denial
+and the source header stores, including allocator backend, memory/live state,
+ordered allocation history and the retained frame. These are proved
+commuting diagrams, not supplied compatibility equalities. They still need
+the actual native primitive and original caller interpretation described above.
+
 The exact next construction is the original constructors' and callers'
 interpretation initializing this registry and selecting the actual receiver,
 with stable lifetime identity through moves. Prove the full returning macro

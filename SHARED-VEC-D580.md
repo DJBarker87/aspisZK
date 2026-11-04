@@ -3,7 +3,8 @@
 ## D582 construction update (original specifications below unchanged)
 
 `PV_EVHB_RawVecOwner`, `PV_EVHB_RawVecSource`,
-`PV_EVHB_RawVecProjection` and `PV_EVHB_OwnerRegistry` are accepted local
+`PV_EVHB_RawVecProjection`, `PV_EVHB_OwnerRegistry` and
+`PV_EVHB_RegistryStores` are accepted local
 construction modules. The source-slot lookup and two header stores are
 explicit; realloc uses a pending-allocation phase and drop consumes ownership.
 The registry has a concrete source-world injection, source-place/store laws,
@@ -19,7 +20,7 @@ equations and binders below remain OPEN and unchanged. Source control models
 retain complete outer outcomes, but their primitive/diagnostic bindings are
 not native adequacy proofs. No reached counterexample is claimed. rdea-1,
 rdea-2/V400, V370/L3 and V183 SUSPENDED(K-3) remain; no T/endpoint change.
-Next91229;67 attempts remain; audits91298–91299 unused.
+Next91231;65 attempts remain; audits91298–91299 unused.
 
 Resume source: `c1b31fa688727ff7e4a08216557f25eccb2a7a1e`, branch
 `codex/pv-evhB-20261103`. V263 inspected at
