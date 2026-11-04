@@ -30,6 +30,7 @@ if addition.exists():
   assert sha(raw)==pin['source_sha256']
   if v['module'] not in known:
    checks.append(v);known.add(v['module'])
+preparations=[]
 for p in sorted(OLD.glob('receipt-*.json'))+sorted(Path('evidence/pv-evh5-20261029').glob('receipt-*.json'))+sorted(PREV.glob('receipt-*.json'))+sorted(INHERITED.glob('receipt-*.json'))+sorted(E.glob('receipt-*.json')):
  r=json.loads(p.read_text())
  if not r.get('accepted'):continue
@@ -37,10 +38,14 @@ for p in sorted(OLD.glob('receipt-*.json'))+sorted(Path('evidence/pv-evh5-202610
  assert sha(raw)==r['source_sha256']
  prep=json.load(open(p.parent/('prepare-'+m+'.json')))['result']
  assert prep['LEAN_PATH']==base['LEAN_PATH'] and prep['toolchain']==base['toolchain']
- assert {x['module']:x['sha256'] for x in prep['project_checks']}=={x['module']:x['sha256'] for x in checks if x['module'] in {y['module'] for y in prep['project_checks']}}
+ preparations.append(prep)
  if m not in known:
   checks.append(dict(module=m,path=H+'/objects/'+m+'.olean',sha256=r['object_sha256'],source=dict(path=path,revision=rev,source_sha256=r['source_sha256'])))
   known.add(m)
+# A prior high-ID audit can already be an input of a newer low-ID proof.
+# Validate dependencies against the COMPLETE accepted set, not receipt-ID order.
+for prep in preparations:
+ assert {x['module']:x['sha256'] for x in prep['project_checks']}=={x['module']:x['sha256'] for x in checks if x['module'] in {y['module'] for y in prep['project_checks']}}
 source=Path('lean/'+module+'.lean').read_bytes();assert source==subprocess.check_output(['git','show',rev+':lean/'+module+'.lean'])
 imports=re.findall(r'^import (\S+)',source.decode(),re.M);assert set(imports)<=known,('new import needs full prepare',set(imports)-known)
 payload=dict(checks=checks,external=base['external_checks'],roots=base['LEAN_PATH'].split(':'),H=H,module=module,source=source.decode(),sha256=sha(source),revision=rev,toolchain=base['toolchain'])
