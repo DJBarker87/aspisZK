@@ -244,3 +244,23 @@ Restoration interfaces pass, but noRESTORED release claim until coherence and
 reserved90797raw+summary,90798focused,90799singlemanifest pass. Nativecoherence
 nextN90802, optional scoped cachecleanup nextN90803 AFTER all gates/addendum.
 All scope protocol/endpoint/T/physical-observer boundaries unchanged.
+
+### Session 3 focused closure/coherence PASS; reserved audit next
+
+Driver42057 is FINISHED.90728 ConsumerReplay PASS;90729 fixedNEPAudit helper PASS.
+30/60Lean spent (22pass,8fail),3/10native (N90802 coherencePASS),0Kani. No scope
+live. Coherence PASS22 project objects,5673 external hashes,22 actual-launch
+snapshots,23 native source pins; wall1.65s,RSS38248KiB,swap0. All15 focused source
+consumers PASS in CONSUMER-RECHECKS.json. Final live-ref census17 extra revisions,
+all45 addedvariants onlytaskbranch/remote; no otherbranchconsumer added.
+
+NEXT after>=180s cooldown fromN90802:90797 raw+summary audit:
+python3 tools/pv-rdcd7-20261102/lean.py 90797 R1Z/PV_RDCD5_NEPDriver --audit-runtime
+Then90798 V197Focused and90799 V197FrozenManifest, each aftercooldown, ONE final
+manifest only. Fixedwalker byteidentity checked. Runtime-onlyNEPDriver emitsno
+object; coherencemodules correctlyexcludeit. release-addendum.py collects51
+rawREACHABLEfiles and pins2 newreleaseobjects AFTERall3gates. Gate/admission before
+anyscp; no bypass. check-release.py writesRUNS/protocol whenallpass; sourcebindings,
+association,ROWS,REPORT,HANDOFF stillmustfinalize. cleanup.py onlyAFTERallchecks
+removesverifiedown lean-objects/external-objects; sources/evidenceretained,keysnever.
+NextnativeN90803 (cleanup). NoRESTOREDreleaseclaim untilaudit/replaypass.
