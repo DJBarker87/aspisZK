@@ -15,5 +15,6 @@ for p in E.rglob('*'):
   data=p.read_bytes();Path(str(p)+'.sha256').write_text(hashlib.sha256(data).hexdigest()+'\n');Path(str(p)+'.xz').write_bytes(lzma.compress(data,preset=6));p.unlink()
 for p in E.glob('NGE_L*/sources/*.ref.json'):
  x=json.loads(p.read_text());raw=(E/x['path']).read_bytes();assert hashlib.sha256(raw).hexdigest()==x['sha256'] and len(raw)==x['bytes']
+packed=[json.loads(p.read_text()) for p in sorted(E.glob('NGE_L*/sources/*.ref.json'))]
 (E/'NGE_PACK.json').write_text(json.dumps(dict(status='PASS',packed=packed,principle='Input bytes retained once with per-receipt hashes; no source/proof/receipt removed'),indent=1)+'\n')
 print(json.dumps(dict(references=len(packed))))

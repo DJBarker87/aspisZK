@@ -20,7 +20,8 @@ def emit(n,t):
  else:(E/n).write_text(t)
 records=[]
 for n in order:
- r=G[n];body='\n'.join(l for l in r['source'].splitlines() if not l.startswith('import '))+'\n';after=pat.sub(lambda m:ren[m.group()],body)
+ r=G[n];assert hashlib.sha256(r['source'].encode()).hexdigest()==r['sha256'],n
+ body='\n'.join(l for l in r['source'].splitlines() if not l.startswith('import '))+'\n';after=pat.sub(lambda m:ren[m.group()],body)
  qualify=('open AspisR1TerminalDecoder' in body or 'Result AspisR1TerminalDecoder' in body) and 'core.result.Result.map_err' in body
  if qualify:after=re.sub(r'(?<![A-Za-z0-9_.])core.result.Result.map_err','AspisR1TerminalDecoder.core.result.Result.map_err',after)
  imports=list(dict.fromkeys(['Lean']+[owner.get(d,d) for d in r['imports']]))

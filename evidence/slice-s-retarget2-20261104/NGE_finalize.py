@@ -5,6 +5,7 @@ sys.dont_write_bytecode=True
 from NGE_checks import check_bundle,check_delta,derive,STD
 E=Path(__file__).resolve().parent;P=E.parent/'slice-s-retarget-20261104';R=E.parents[1]
 J=lambda p:json.loads(p.read_text());H=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+inventory=J(E/'NGE_DECLARATION_INVENTORY.json');assert inventory['status']=='PASS' and not inventory['incompatible_owners']
 prov=J(E/'NGE_PROVENANCE.json');manifest=J(E/'NGE_AUDIT_ROOTS.json');certs=J(E/'NGE_CERTIFICATES.json')
 receipts={f.parent.name:J(f) for f in E.glob('NGE_L*/receipt.json')};latest={}
 for a,r in sorted(receipts.items()):
@@ -55,6 +56,10 @@ delta=dict(status='PASS',baseline='evidence/slice-s-retarget-20261104/NFY_LEDGER
 assert check_delta(base,prior,delta,certs,scan)
 check=dict(status='PASS_COMPLETE_INVENTORY',selected_rows=len(certs['rows']),recursive_record_count=certs['record_count'],distinct_names=len({t['canonical_name'] for r in certs['rows'] for t in r['theorems']}),missing_references=len(gaps),missing_unique_declarations=len({r['canonical_name'] for r in gaps}),missing_modules=sorted({r['canonical_module'] for r in gaps}),gaps=gaps,all_loaded_selected_names_raw_audited=True,chain_A_missing=[],chain_B_only=all(g['canonical_module'].startswith(('NEX_','NEY_','NED_')) for g in gaps),selected_callee_denials_propagated=True)
 assert check['chain_B_only']
+loaded_names={q['canonical_name'] for row in certs['rows'] for q in row['theorems'] if q['canonical_module'] in {s['module'] for s in scan}}
+assert loaded_names=={r['name'] for r in inventory['entries'] if r['found']}
+assert {g['canonical_name'] for g in gaps}=={r['name'] for r in inventory['entries'] if not r['found']}
+check.update(kernel_inventory='NGE_DECLARATION_INVENTORY.json',kernel_inventory_sha256=H(E/'NGE_DECLARATION_INVENTORY.json'),actual_owner_and_type_verified=True)
 (E/'NGE_CERT_CHECK.json').write_text(json.dumps(check,indent=1)+'\n');(E/'NGE_LEDGER_DELTA.json').write_text(json.dumps(delta,indent=1)+'\n')
 lines=['# Remaining S occurrences','','Every missing auxiliary belongs to chain B; all chain A selected names are compiled, coherently loaded and raw-audited. No Kani or extraction is needed. This is a scoped additive delta, preserving the corrected 599-row inventory.','','| Row | Function | Exact missing declaration or selected-callee denial |','|---|---|---|']
 for r in remaining:
