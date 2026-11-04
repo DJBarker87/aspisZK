@@ -3,6 +3,7 @@ from pathlib import Path
 import subprocess,json,time,hashlib,re,sys
 B=Path.cwd();mode=sys.argv[1];E=B/'NGJ_audit'/mode;E.mkdir(parents=True,exist_ok=True)
 if mode.startswith('inventory-'):jobs=[(mode,['NGJ_native/NGJ_InventoryDriver',mode.split('-')[1]])]
+elif mode in ['poolfixtures','poolroots','poolscan']:jobs=[('scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0',['NGJ_native/'+('NGJ_PoolDriver' if mode=='poolscan' else 'NGJ_PoolProofDriver'), 'scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0'])]
 elif mode in ['fixtures','scan']:jobs=[(mode,['NGJ_native/'+('NGJ_Driver' if mode=='scan' else 'NGJ_ProofDriver'),mode])]
 else:
  batch=int(mode.removeprefix('batch'));groups=json.loads((B/'NGJ_AUDIT_ROOTS.json').read_text())['groups'];jobs=[('proof'+str(i),['NGJ_native/NGJ_ProofDriver','proof'+str(i)]) for i in range(batch,min(batch+1,len(groups)))];assert jobs

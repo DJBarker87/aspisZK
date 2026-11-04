@@ -35,18 +35,20 @@ files={};sources=[]
 if kind=='lean':
  n='NGJ_generated/'+target+'.lean';files[n]=(E/(target+'.lean')).read_text();sources=[n]
  command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NGJ_generated','-o','NGJ_objects/'+target+'.olean',n]
- if target in ['NGJ_Driver','NGJ_ProofDriver']:command+=['-c','NGJ_native/'+target+'.c']
+ if target in ['NGJ_Driver','NGJ_ProofDriver','NGJ_PoolProofDriver','NGJ_PoolDriver']:command+=['-c','NGJ_native/'+target+'.c']
 elif kind=='link':
  sources=['NGJ_native/'+target+'.c','NGJ_native/NFA_WALKER.c','NGJ_native/NFA_MemoryLimit.c']
  command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NGJ_native/'+target,*sources]
 elif kind=='audit':
- sources=['NGJ_generated/NGJ_ProofDriver.lean','NGJ_generated/NGJ_Driver.lean','NGJ_batch.py','NGJ_AUDIT_ROOTS.json','NGJ_EXPECTED_IMPORTS.jsonl']
+ sources=['NGJ_generated/NGJ_ProofDriver.lean','NGJ_generated/NGJ_Driver.lean','NGJ_batch.py','NGJ_AUDIT_ROOTS.json','NGJ_EXPECTED_IMPORTS.jsonl']+(['NGJ_POOL_ROOTS.json'] if target.startswith('pool') else [])
  for n in sources:files[n]=(E/Path(n).name).read_text()
  command=['python3','NGJ_batch.py',target]
 else:raise ValueError(kind)
 config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NGJ_tmp',LEAN_PATH=':'.join([B+'/NGJ_objects',C+'/NGI_exports_20261105',C+'/NFT_exports_20261104',C+'/NFU_exports_20261104',C+'/NFV_final_objects_20261104',C+'/NGE_exports_20261104',C+'/NGF_exports_20261104',C+'/NFY_exports_20261104',C+'/NFY_priority',W,W+'/objects',C+'/NGJ_d_fallback/NFQ_exports_20261104',C+'/NGJ_d_fallback',C+'/NGJ_pool_fallback/NFR_final_objects_20261104',C+'/NGJ_pool_fallback/NFO_final_objects_20261104',C+'/NGJ_pool_fallback',C+'/NGJ_pool_fallback/NEY_final_objects_20261104',C+'/NGJ_pool_fallback/NEX_final_objects_20261104',C+'/NGJ_pool_fallback/NEQ_final_objects_20261103',C+'/NGJ_pool_fallback/NEM_final_objects_20261102',C+'/NGJ_pool_fallback/NEU_final_objects_20261104',C,T+'/lib/lean'])),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')
 if target in ['NGJ_S_PACKET','NGJ_S_ONLY','inventory-s']:
  config['env']['LEAN_PATH']=':'.join([B+'/NGJ_objects',C+'/NGJ_S_view/NFJ_final_objects_20261104',C+'/NGJ_S_view',C+'/NGJ_S_view/NEY_final_objects_20261104',C+'/NGJ_S_view/NEX_final_objects_20261104',C+'/NGJ_S_view/NEQ_final_objects_20261103',C+'/NGJ_S_view/NEM_final_objects_20261102',W,W+'/objects',C+'/NGJ_d_fallback/NFQ_exports_20261104',C+'/NGJ_d_fallback',C+'/NGJ_pool_fallback/NFR_final_objects_20261104',C+'/NGJ_pool_fallback/NFO_final_objects_20261104',C+'/NGJ_pool_fallback',C+'/NGJ_pool_fallback/NEY_final_objects_20261104',C+'/NGJ_pool_fallback/NEX_final_objects_20261104',C+'/NGJ_pool_fallback/NEQ_final_objects_20261103',C+'/NGJ_pool_fallback/NEM_final_objects_20261102',C+'/NGJ_pool_fallback/NEU_final_objects_20261104',C,T+'/lib/lean'])
+if target.startswith(('NGJ_POOL','NGJ_Pool','pool')):
+ config['env']['LEAN_PATH']=':'.join([B+'/NGJ_objects',C+'/NFV_final_objects_20261104',C+'/NGJ_pool_fallback/NFR_final_objects_20261104',C+'/NGJ_pool_fallback/NFO_final_objects_20261104',C+'/NGJ_pool_fallback',C+'/NGJ_pool_fallback/NEY_final_objects_20261104',C+'/NGJ_pool_fallback/NEX_final_objects_20261104',C+'/NGJ_pool_fallback/NEQ_final_objects_20261103',C+'/NGJ_pool_fallback/NEM_final_objects_20261102',W,W+'/objects',C,T+'/lib/lean'])
 files[a+'.json']=json.dumps(config)
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib,re,shutil
@@ -60,7 +62,7 @@ for n in ['NFA_WALKER.c','NFA_MemoryLimit.c']:
 x=json.loads((b/{(a+'.json')!r}).read_text());roots=x['env']['LEAN_PATH'].split(':');pins={{}}
 modules=['NFA_WALKER','NFA_MemoryLimit','NEP_Planted','NEP_Mutations']
 if x['kind']=='lean':modules += re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M)
-elif x['kind']=='audit':modules += ['NGJ_S_PACKET'] if x['module']=='inventory-s' else ['NGJ_D_ONLY'] if x['module']=='inventory-d' else ['NGJ_Q_ONLY'] if x['module']=='inventory-q' else ['NGJ_VERIFIER_IMPORT']
+elif x['kind']=='audit':modules += ['NGJ_S_PACKET'] if x['module']=='inventory-s' else ['NGJ_D_ONLY'] if x['module']=='inventory-d' else ['NGJ_Q_ONLY'] if x['module']=='inventory-q' else ['NGJ_POOL_LEGACY_IMPORT'] if {target!r}.startswith('pool') else ['NGJ_VERIFIER_IMPORT']
 rels=set()
 for root in roots:
  for stem in ['Aeneas','AeneasMeta']:
@@ -81,9 +83,9 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
-if {kind!r}=='audit':names += [str(p.relative_to(b)) for p in (b/'NGJ_audit'/{target!r}).rglob('*') if p.is_file()]+[str(p.relative_to(b)) for modepath in (b/'NGJ_audit'/{target!r}).glob('*.json') for row in json.loads(modepath.read_text()).get('results',[]) for p in [b/('NEP_'+modepath.stem+'_'+row['root']+'_REACHABLE.txt')] if p.exists()]+(['NGJ_LOADED_scan.jsonl'] if (b/'NGJ_LOADED_scan.jsonl').exists() else [])
+if {kind!r}=='audit':names += [str(p.relative_to(b)) for p in (b/'NGJ_audit'/{target!r}).rglob('*') if p.is_file()]+[str(p.relative_to(b)) for modepath in (b/'NGJ_audit'/{target!r}).glob('*.json') for row in json.loads(modepath.read_text()).get('results',[]) for p in [b/('NEP_'+modepath.stem+'_'+row['root']+'_REACHABLE.txt')] if p.exists()]+([n for n in ['NGJ_LOADED_scan.jsonl','NGJ_POOL_LOADED_scan.jsonl'] if (b/n).exists()])
 out={{n:(b/n).read_text() for n in names}}
-for name in ['NGJ_Driver','NGJ_ProofDriver']:
+for name in ['NGJ_Driver','NGJ_ProofDriver','NGJ_PoolProofDriver','NGJ_PoolDriver']:
  p=b/'NGJ_native'/name
  if p.is_file():out[a+'/'+name+'_BINARY_PIN.json']=json.dumps(dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size))
 print(json.dumps(out))

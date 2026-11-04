@@ -1,0 +1,20 @@
+--- evidence/ledger8-20261105/NGJ_Driver.lean
++++ evidence/ledger8-20261105/NGJ_PoolDriver.lean
+@@ -93,7 +93,7 @@
+   initSearchPath (← findSysroot)
+   enableInitializersExecution
+   let mode := args.headD "small"
+-  let (modules, roots) := if mode == "scan" then (#[`NGJ_VERIFIER_IMPORT], #[]) else (#[], #[])
++  let (modules, roots) := if mode == "scan" then (#[`NGJ_POOL_IMPORT], #[]) else (#[], #[])
+   let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
+     {} (loadExts := true) (level := .private)
+   if mode == "scan" || mode == "queryscan" then
+@@ -102,7 +102,7 @@
+       let j ← IO.ofExcept (Json.parse line)
+       expected := expected.insert (← IO.ofExcept (j.getObjValAs? String "module"))
+         (← IO.ofExcept (j.getObjValAs? (Array String) "imports"))
+-    let failed ← NER.loadedScan env (if mode == "queryscan" then "NFN_QUERY_LOADED_scan.jsonl" else "NGJ_LOADED_scan.jsonl") expected
++    let failed ← NER.loadedScan env (if mode == "queryscan" then "NFN_QUERY_LOADED_scan.jsonl" else "NGJ_POOL_LOADED_scan.jsonl") expected
+     IO.println (if failed then "NFN_SCAN_FAILED" else "NFN_SCAN_ZERO_DANGLING")
+     return if failed then 1 else 0
+   let ctx : Command.Context := {

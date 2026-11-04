@@ -1,0 +1,37 @@
+{"attempt": "NGJ_L040", "exit_status": 0, "wall_seconds": 3.7232580329291523, "peak_rss_kib": "5895516", "swaps": "0", "print_axioms": ["'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]", "'NFQ_PreparedMultiplier.source' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]", "'NFT_PreparedSum3.source' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]", "'NFU_CompactLeaves.check_result' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]", "'NFU_PrefixRecords.validated_record' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]", "'NFU_AdapterGetters.readonly' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]"]}
+@AspisR1.RPx_Deployed.deployed : ∀ {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (Nat → AspisR1.S2W_D189Entry.Record)),
+  @AspisR1.S2Trust.S2TrustedSdkBorrow W (Nat → AspisR1.S2W_D189Entry.Record) L →
+    ∀
+      (copy :
+        AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record) →
+          Nat → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (Nat → AspisR1.S2W_D189Entry.Record)),
+      @AspisR1.S2W_TrustedStd.TrustedStd (Nat → AspisR1.S2W_D189Entry.Record) copy →
+        ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W),
+          @AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission W L e1 w1
+           
+...
+es.check_result' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+NFU_PrefixRecords.validated_record : ∀ (p : AspisR1PublicPreparation.r1_wire.Prefix) (row : Aeneas.Std.U8),
+  @Eq.{1}
+    (Aeneas.Std.Result.{0}
+      (Aeneas.Std.core.result.Result.{0, 0} AspisR1PublicPreparation.r1_wire.ValidatedRecord
+        AspisR1PublicPreparation.r1_wire.Error))
+    (p.validated_record row) (NFU_PrefixRecords.token row (NFU_PrefixRecords.selected p row))
+'NFU_PrefixRecords.validated_record' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+NFU_AdapterGetters.readonly : ∀ (a : NFU_AdapterGetters.Account),
+  @Eq.{1}
+    (Aeneas.Std.Result.{0} (Aeneas.Std.core.result.Result.{0, 0} Unit AdapterRw.solana_program_error.ProgramError))
+    (AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a)
+    (@Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0} Bool
+      (Aeneas.Std.core.result.Result.{0, 0} Unit AdapterRw.solana_program_error.ProgramError)
+      (NFQ_ScanReference.readonly_buffer_ref a.is_signer a.is_writable a.executable) fun admitted =>
+      @Aeneas.Std.Result.ok.{0} (Aeneas.Std.core.result.Result.{0, 0} Unit AdapterRw.solana_program_error.ProgramError)
+        (@ite.{1} (Aeneas.Std.core.result.Result.{0, 0} Unit AdapterRw.solana_program_error.ProgramError)
+          (@Eq.{1} Bool admitted Bool.true) (instDecidableEqBool admitted Bool.true)
+          (@Aeneas.Std.core.result.Result.Ok.{0, 0} Unit AdapterRw.solana_program_error.ProgramError Unit.unit)
+          (@Aeneas.Std.core.result.Result.Err.{0, 0} Unit AdapterRw.solana_program_error.ProgramError
+            AdapterRw.solana_program_error.ProgramError.InvalidAccountData)))
+'NFU_AdapterGetters.readonly' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+
+Running as unit: run-ref32114818e145988d2348e8a3b3cfe2.scope; invocation ID: caf5cea86a024b4394354945ff32189c
