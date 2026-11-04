@@ -1,0 +1,50 @@
+{"attempt": "NFR_B003", "exit_status": 1, "wall_seconds": 18.160081994952634, "peak_rss_kib": "5357164", "swaps": "0", "print_axioms": ["'NFR_RawInverseFrames.frames' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NFR_B_generated/NFR_RawInverseFrames.lean:21:96: error: unsolved goals
+case h0
+bytes : Slice U8
+h✝⁴ : ¬(bytes.len != 792#usize) = true
+s : Slice U8
+_✝⁵ : [> let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 4#usize } bytes <]
+b : Bool
+_✝⁴ :
+  [> let b ←
+    core.cmp.PartialEq.ne.default (core.slice.cmp.PartialEqSlice.eq core.cmp.PartialEqU8) s
+      pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_RESULT_MAGIC.to_slice <]
+i2 : U8
+_✝³ : [> let i2 ← bytes.index_usize 4#usize <]
+i4 : U8
+_✝² : [> let i4 ← bytes.index_usize 5#usize <]
+r :
+  core.result.Result pool_v1.historical_anchor.PoolV1TransitionKind
+    pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormat
+...
+alidate_result
+            { transition_kind := val, master_account := val1, selected_lane_account := val2, output_lane := (↑bytes)[7],
+              nullifier := val4, verified_afterstate := val5 }
+      let cf6 ← core.result.Result.Insts.CoreOpsTry.branch r11
+      match cf6 with
+        | core.ops.control_flow.ControlFlow.Continue a =>
+          ok
+            (core.result.Result.Ok
+              { transition_kind := val, master_account := val1, selected_lane_account := val2,
+                output_lane := (↑bytes)[7], nullifier := val4, verified_afterstate := val5 })
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            pool_v1.pair_forest_terminal.PoolV1PairForestTerminalResultV1
+            (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual) ⦃
+    result =>
+    ∀ (value : pool_v1.pair_forest_terminal.PoolV1PairForestTerminalResultV1),
+      result = core.result.Result.Ok value →
+        (↑bytes).length = 792 ∧
+          List.take 4 ↑bytes = [65#u8, 83#u8, 82#u8, 56#u8] ∧
+            (↑bytes)[4]? = some 1#u8 ∧
+              (↑bytes)[5]? = some (kind value.transition_kind) ∧
+                (↑bytes)[6]? = some 1#u8 ∧
+                  (↑bytes)[7]? = some value.output_lane ∧
+                    ↑value.master_account = List.slice 8 40 ↑bytes ∧
+                      ↑value.selected_lane_account = List.slice 40 72 ↑bytes ∧
+                        ↑(DigestBytes.bytes value.nullifier) = List.slice 72 104 ↑bytes ∧
+                          ↑(AfterstateEncoding.bytes value.verified_afterstate) = List.drop 104 ↑bytes ⦄
+'NFR_RawInverseFrames.frames' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r313b58dcb9f54856a1f85b594ad4b372.scope; invocation ID: 47369ab5398d42769e753e9562242f2f

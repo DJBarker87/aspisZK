@@ -1,0 +1,28 @@
+import NFR_RawInverseHelpers
+set_option autoImplicit false
+noncomputable section
+namespace NFR_RawInverseFrames
+open Aeneas Aeneas.Std Result WP AspisR1TerminalDecoder
+open AspisR1.S2K NFO_ResultLayout
+
+def Frame (bytes : Slice U8) (value : Output) : Prop :=
+  bytes.val.length = 792 ∧
+  bytes.val.take 4 = [65#u8,83#u8,82#u8,56#u8] ∧
+  bytes.val[4]? = some (1#u8) ∧
+  bytes.val[5]? = some (kind value.transition_kind) ∧
+  bytes.val[6]? = some (1#u8) ∧
+  bytes.val[7]? = some value.output_lane ∧
+  value.master_account.val = List.slice 8 40 bytes.val ∧
+  value.selected_lane_account.val = List.slice 40 72 bytes.val ∧
+  (DigestBytes.bytes value.nullifier).val = List.slice 72 104 bytes.val ∧
+  (AfterstateEncoding.bytes value.verified_afterstate).val = bytes.val.drop 104
+
+theorem frames (bytes : Slice U8) :
+    NFO_RawDecode.decode bytes ⦃ result => ∀ value, result = .Ok value → Frame bytes value ⦄ := by
+  unfold NFO_RawDecode.decode core.cmp.PartialEq.ne.trait_default Slice.Insts.CoreCmpPartialEqSlice
+  step*
+  all_goals try exact AspisS6StdByteSlice.eq_spec _ _
+  all_goals step*
+  all_goals simp_all [Frame]
+#print axioms frames
+end NFR_RawInverseFrames
