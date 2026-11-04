@@ -263,3 +263,35 @@ fn NFB_resize_tx1(){NFB_resize_case::<50>()}
 #[kani::proof] #[kani::unwind(2)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NFB_resize_tx2(){NFB_resize_case::<60>()}
+
+// Actual derived M31 clone, used by every non-final std resize iteration.
+#[kani::proof]
+fn NFB_resize_clone(){
+ let raw:u32=kani::any();let value=M31(raw);let mut copy=value.clone();
+ #[cfg(NET_bad_reply)]{copy.0^=1;}
+ assert_eq!(copy.0,raw);assert_eq!(value.0,raw);
+}
+
+fn NFB_inverse_allocate(flat:&[M31])->Vec<M31>{Vec::with_capacity(flat.len())}
+fn NFB_inverse_initial_case<const M:usize>(){
+ assert_eq!(core::mem::size_of::<M31>(),core::mem::size_of::<u32>());
+ assert_eq!(core::mem::align_of::<M31>(),core::mem::align_of::<u32>());
+ let mut raw:[u32;M]=kani::any();let prefixes:[u32;M]=kani::any();
+ let j:usize=kani::any();kani::assume(j<M);let before=raw[j];let saved=prefixes[j];
+ let flat=unsafe{core::slice::from_raw_parts(raw.as_ptr().cast::<M31>(),M)};
+ let inverse=NFB_inverse_allocate(flat);
+ #[cfg(NET_bad_reply)]assert_eq!(inverse.capacity(),M+1);
+ #[cfg(not(NET_bad_reply))]assert_eq!(inverse.capacity(),M);
+ assert_eq!(inverse.len(),0);
+ #[cfg(NET_bad_argument)]assert_eq!(inverse.as_ptr(),flat.as_ptr());
+ #[cfg(not(NET_bad_argument))]assert_ne!(inverse.as_ptr(),flat.as_ptr());
+ assert_ne!(inverse.as_ptr(),prefixes.as_ptr().cast::<M31>());
+ #[cfg(NET_bad_frame)]{raw[j]^=1;}
+ assert_eq!(raw[j],before);assert_eq!(prefixes[j],saved);
+}
+#[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NFB_inverse_initial_tx1(){NFB_inverse_initial_case::<50>()}
+#[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NFB_inverse_initial_tx2(){NFB_inverse_initial_case::<60>()}

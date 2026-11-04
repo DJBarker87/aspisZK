@@ -15,6 +15,8 @@ if module in generated:
  assert hashlib.sha256(source_file.read_bytes()).hexdigest()==dep['sha256']
 elif module.startswith('NFB_'):source_file=E/rel
 else:raise ValueError('Only own new modules may compile through this driver')
+from NFB_dependency_check import check_imports
+own_imports=check_imports(source_file,E,generated)
 active=E/'NFB_ACTIVE.json';assert not active.exists();active.write_text(json.dumps(dict(attempt=a,module=module)))
 def ssh(code,stdin=None,submitted=False):
  for retry in range(11):
@@ -59,6 +61,11 @@ for line in src.splitlines():
    p=next((Path(root)/key for root in roots if (Path(root)/key).is_file()),None)
    if p is None:raise FileNotFoundError(mod)
    seen[str(p)]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size)
+for mod in {list(own_imports)!r}:
+ key=mod.replace('.','/')+'.olean'
+ p=next((Path(root)/key for root in roots if (Path(root)/key).is_file()),None)
+ if p is None:raise FileNotFoundError(mod)
+ seen[str(p)]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size)
 for p in Path({COHERENT!r}+'/objects').rglob('*.olean*'):
  if p.relative_to(Path({COHERENT!r}+'/objects')).parts[0].split('.')[0]=='Aeneas':
   seen[str(p)]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size)
@@ -66,6 +73,9 @@ print(json.dumps(seen))
 '''
 r=ssh('python3',code);assert r.returncode==0,r.stdout+r.stderr
 pins=json.loads(r.stdout)
+for dep,record in own_imports.items():
+ match=[p for p in pins.values() if p['path'].endswith('/'+dep.replace('.','/')+'.olean')]
+ assert len(match)==1 and match[0]['sha256']==record['sha256'],('own object drift',dep)
 cfg=dict(attempt=a,kind='lean',module=module,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),source_tree_dirty=True,sources=[rel],command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-o',module.replace('.','/')+'.olean',rel],timeout=180,env=dict(LEAN_PATH=':'.join([B,CACHE+'/NEW_exports_20261104',CACHE+'/NET_exports_20261104',CACHE,CACHE+'/NEB_exports_20261029',CACHE+'/NET_peer_exports',COHERENT,COHERENT+'/objects'])),deps_fingerprint=dict(selected_objects=pins,cache_import_manifest_sha256=hashlib.sha256((E/'NFB_CACHE_IMPORTS.json').read_bytes()).hexdigest(),peer_cache_import_manifest_sha256=hashlib.sha256((E/'NFB_CACHE_IMPORTS.json').read_bytes()).hexdigest()),expected_time='Focused symbolic call-domain proof; no native multiplication or recurrence evaluation')
 (E/(a+'.json')).write_text(json.dumps(cfg,indent=1)+'\n')
 files={rel:source,a+'.json':json.dumps(cfg)}
@@ -89,6 +99,14 @@ out=json.loads(r.stdout)
 for n,s in out.items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
 assert a+'/receipt.json' in out,'unresolved submitted attempt: recover read-only, never resubmit'
 rc=json.loads(out[a+'/receipt.json'])
+if rc['exit_status']==0:
+ r=ssh('python3',f'''from pathlib import Path
+import json,hashlib
+p=Path({B!r})/{(module.replace('.','/')+'.olean')!r}
+print(json.dumps(dict(attempt={a!r},module={module!r},source_sha256={hashlib.sha256(source.encode()).hexdigest()!r},path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size)))
+''');assert r.returncode==0,r.stderr
+ (E/a/'object.json').write_text(r.stdout)
+
 with (E/'NFB_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(rc)+'\n')
 active.unlink()
 print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}),flush=True)

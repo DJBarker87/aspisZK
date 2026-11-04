@@ -1,0 +1,55 @@
+{"attempt": "NFB_L026", "exit_status": 1, "wall_seconds": 2.0629534530453384, "peak_rss_kib": "4924684", "swaps": "0", "print_axioms": ["'NFB_RowLog.step0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NFB_RowLog.step1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NFB_RowLog.step2' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NFB_RowLog.step3' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NFB_RowLog.lean:16:54: error: unsolved goals
+c0 c1 c2 c3 : Call
+kind : U8
+a b r r2 : U32
+⊢ (do
+      let a1 ←
+        match (Array.make 4#usize [c0, c1, c2, c3] ⋯)[0#usize]? with
+          | none => fail Error.arrayOutOfBounds
+          | some val =>
+            ok
+              ⟨(↑(Array.make 4#usize [c0, c1, c2, c3] ⋯)).set ↑0#usize
+                  { kind := kind, a := a, b := b, reply := r, reply2 := r2 },
+                ⋯⟩
+      let i ← lift (Usize.wrapping_add 0#usize 1#usize)
+      ok { calls := a1, len := i }) =
+    ok
+      { calls := Array.make 4#usize [{ kind := kind, a := a, b := b, reply := r, reply2 := r2 }, c1, c2, c3] ⋯,
+        len := 1#usize }
+NFB_RowLog.lean:17:67: warni
+...
+̵N̵F̵B̵_̵r̵o̵w̵_̵c̵a̵l̵l̵,̵s̵t̵a̵t̵e̵,̵c̵a̵l̵l̵s̵,̵e̵v̵e̵n̵t̵,̵A̵r̵r̵a̵y̵.̵u̵p̵d̵a̵t̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲N̲F̲B̲_̲R̲o̲w̲R̲e̲f̲.̲N̲F̲B̲_̲r̲o̲w̲_̲c̲a̲l̲l̲,̲ ̲s̲t̲a̲t̲e̲,̲ ̲c̲a̲l̲l̲s̲,̲ ̲e̲v̲e̲n̲t̲,̲ ̲A̲r̲r̲a̲y̲.̲u̲p̲d̲a̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFB_RowLog.lean:31:54: error: unsolved goals
+c0 c1 c2 c3 : Call
+kind : U8
+a b r r2 : U32
+⊢ (do
+      let a1 ←
+        match (Array.make 4#usize [c0, c1, c2, c3] ⋯)[3#usize]? with
+          | none => fail Error.arrayOutOfBounds
+          | some val =>
+            ok
+              ⟨(↑(Array.make 4#usize [c0, c1, c2, c3] ⋯)).set ↑3#usize
+                  { kind := kind, a := a, b := b, reply := r, reply2 := r2 },
+                ⋯⟩
+      let i ← lift (Usize.wrapping_add 3#usize 1#usize)
+      ok { calls := a1, len := i }) =
+    ok
+      { calls := Array.make 4#usize [c0, c1, c2, { kind := kind, a := a, b := b, reply := r, reply2 := r2 }] ⋯,
+        len := 4#usize }
+NFB_RowLog.lean:32:67: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵F̵B̵_̵R̵o̵w̵R̵e̵f̵.̵N̵F̵B̵_̵r̵o̵w̵_̵c̵a̵l̵l̵,̵s̵t̵a̵t̵e̵,̵c̵a̵l̵l̵s̵,̵e̵v̵e̵n̵t̵,̵A̵r̵r̵a̵y̵.̵u̵p̵d̵a̵t̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲N̲F̲B̲_̲R̲o̲w̲R̲e̲f̲.̲N̲F̲B̲_̲r̲o̲w̲_̲c̲a̲l̲l̲,̲ ̲s̲t̲a̲t̲e̲,̲ ̲c̲a̲l̲l̲s̲,̲ ̲e̲v̲e̲n̲t̲,̲ ̲A̲r̲r̲a̲y̲.̲u̲p̲d̲a̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NFB_RowLog.step0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NFB_RowLog.step1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NFB_RowLog.step2' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NFB_RowLog.step3' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-ra515410eae714fffae05659fb2bc9bd8.scope; invocation ID: bc8cf91dd4bc4b3aaf16a24e3fd13c7e
