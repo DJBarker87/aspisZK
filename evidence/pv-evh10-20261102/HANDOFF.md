@@ -1,3 +1,42 @@
+# D581 STOP — adopted binary correspondence; runtime instance still absent
+
+Branch `codex/pv-evh-20261029`, same worktree; resume base565b5b5715.
+Read BLOCKER-D581.md and PHYSICAL-D581.md first. The l3-1 binary route is now
+recorded with tool hashes, deployed source/config pins, complete inlined entry,
+callback/retry/entropy/zeroize disassembly, frame sizes and secret-slot table.
+Label: binary-structural (adopted binary), plus V370 compiler-cohort.
+
+The requested actual_frame_entry statement is reproduced VERBATIM, with
+unchanged binders/domain. It remains unproved: ActualEntropyEntryPrefix has
+no implemented source/machine/physical-owner interpretation. Binary layout
+and ABI arithmetic do not establish all mapped writable permissions or the
+same abstract owners' exclusion. FRAME-ENTRY, source/machine/owner V370/L3 and
+same-prefix kernel/world association remain explicit. No arbitrary state,
+empty heap/domain, invented address or new trust field supplied.
+
+Lead's pv-evhB merge is present. Its BLOCKER-evhB.md still requires native
+reached_reserve_header_delivery and the advancing allocator/full salt loop.
+Step(2) was inspected: native/fileTrace/countTrace/timeTrace/oraclePrefix all
+still choose OPEN fields. No actual complete run or projection instance was
+manufactured. Exact five projections and blockers are in BLOCKER-D581.md.
+Rows removed NONE; T unchanged; target not established.
+
+Capped binary scopes N91600,N91601 exit0; walls3.95s/2.62s, peaks65224/65412KiB,
+swap0,6G/8G/swap0/tasks64, same-shell admitted. N91601 adds missing full
+plan::prove disassembly, a changed target/payload, not an unchanged rerun.
+No client execution, Lean/Kani/native harness, new theorem/axiom, full replay
+or release audit. check_binary_entry_d581.py --check passes; historical axiom
+summaries remain SUMMARY-BASED. No owned active scope remains.
+
+Native NEXT N91602 throughN91619. Lean NEXT90259;24 inherited attempts then
+91500–91596; audits91597–91599 untouched. No Lean ID consumed or pending job.
+Stopped at the exact missing runtime interpretation under the inherited focus
+rule, not budget exhaustion. Next: actual source/machine/owner/world instance,
+FRAME-ENTRY and kernel delivery, merged native reserve-header delivery, full
+advancing entry, then five projections. No unrelated local-law work.
+
+---
+
 # D580 STOP — actual entry frame/kernel interpretation missing
 
 Base `2c4e247055098415f0005992a0bb49e28b82e082`; same worktree and branch
