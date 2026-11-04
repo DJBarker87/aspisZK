@@ -3,8 +3,8 @@ import PV_EVHB_OwnerRegistry
 by moves. Header slots are indexed by minted lifetimes, not current places.
 This supplies the missing constructor/receiver mechanism; full original-entry
 reachability and the native primitive interpretation are separate obligations.
-The pointer argument is the interpretation of Alignment::of::<T>()'s
-without_provenance pointer, not an arbitrary live heap allocation. -/
+The pointer argument must still be bound to Alignment::of::<T>()'s
+without_provenance pointer. Its Nat type alone proves no provenance. -/
 set_option autoImplicit false
 namespace PV_EVHB_SourceLifetimes
 open PV_EVHB_RawVecOwner R1Z.PV_FXM_ReserveWorld
@@ -32,6 +32,9 @@ current source place. This is stronger than freshness of occupied places. -/
 def SlotsBefore {S F : Type} (s : State S F) : Prop :=
   ∀ id h, lookup s.world id = some h → id < s.next
 
+/-- Initialize the ghost source table at entry, retaining the allocator heap.
+This is not a permissible reset of an already-running source interpretation;
+its association to the original entry remains to be constructed. -/
 def start {S F : Type} (w : NativeWorld S F) : State S F :=
   {world := {w with frame := {w.frame with slots := fun _ => none}}
    next := 0
@@ -79,7 +82,7 @@ theorem new_fresh {S F : Type} (s : State S F) (p : Place)
   · simp only [newAt,same,ite_false] at selected
     exact Nat.lt.step (fresh q id selected)
 
-theorem constructor_distinct {S F : Type} (s : State S F) (p q : Place)
+theorem constructor_distinct {S F : Type} (s : State S F) (q : Place)
     (id : Nat) (fresh : Fresh s) (selected : s.places q=some id) : id≠s.next :=
   Nat.ne_of_lt (fresh q id selected)
 
