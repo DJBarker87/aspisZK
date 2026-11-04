@@ -1,0 +1,143 @@
+{
+  "evidence_class": "PARTIAL own-1 structural constructor/receiver binding; not complete reached native association",
+  "resume_revision": "26bc9dfd6b",
+  "adopted_client_sha256": "da36d6aa36f8566ffa2ce7276546941c745bcd6325613c5a98c5517328b7def0",
+  "toolchain": "rustc 1.94.1 (e408947bf 2026-03-25)\nbinary: rustc\ncommit-hash: e408947bfd200af42db322daf0fadfe7e26d3bd1\ncommit-date: 2026-03-25\nhost: x86_64-unknown-linux-gnu\nrelease: 1.94.1\nLLVM version: 21.1.8\n",
+  "std_source": [
+    {
+      "revision": "a5b8b16cf10ae7fa94a493a4e4723cefd83d3d1c",
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/vec/mod.rs",
+      "file_sha256": "4a27ab4bcce0908cb3338cb0c94983a00fb01bb3b25f70d37f62750eff3fd5ae",
+      "anchor": "pub const fn new() -> Self",
+      "source": {
+        "first": 465,
+        "last": 467,
+        "text": "pub const fn new() -> Self {\n        Vec { buf: RawVec::new(), len: 0 }\n    }"
+      },
+      "model": "emptyHeader.len=0; newAt mints the result lifetime"
+    },
+    {
+      "revision": "a5b8b16cf10ae7fa94a493a4e4723cefd83d3d1c",
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "anchor": "pub(crate) const fn new() -> Self",
+      "source": {
+        "first": 103,
+        "last": 105,
+        "text": "pub(crate) const fn new() -> Self {\n        Self::new_in(Global)\n    }"
+      },
+      "model": "constructor is Global, not an arbitrary allocator selection"
+    },
+    {
+      "revision": "a5b8b16cf10ae7fa94a493a4e4723cefd83d3d1c",
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "anchor": "pub(crate) const fn new_in(alloc: A)",
+      "source": {
+        "first": 199,
+        "last": 203,
+        "text": "pub(crate) const fn new_in(alloc: A) -> Self {\n        // Check assumption made in `current_memory`\n        const { assert!(T::LAYOUT.size() % T::LAYOUT.align() == 0) };\n        Self { inner: RawVecInner::new_in(alloc, Alignment::of::<T>()), _marker: PhantomData }\n    }"
+      },
+      "model": "shape and alignmentAddress interpret the same T; numeric interpretation OPEN"
+    },
+    {
+      "revision": "a5b8b16cf10ae7fa94a493a4e4723cefd83d3d1c",
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "anchor": "const fn new_in(alloc: A, align: Alignment)",
+      "source": {
+        "first": 556,
+        "last": 560,
+        "text": "const fn new_in(alloc: A, align: Alignment) -> Self {\n        let ptr = Unique::from_non_null(NonNull::without_provenance(align.as_nonzero()));\n        // `cap: 0` means \"unallocated\". zero-sized types are ignored.\n        Self { ptr, cap: ZERO_CAP, alloc }\n    }"
+      },
+      "model": "emptyHeader: pointer=alignmentAddress, stored cap=0, dangling=true"
+    },
+    {
+      "revision": "a5b8b16cf10ae7fa94a493a4e4723cefd83d3d1c",
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/vec/mod.rs",
+      "file_sha256": "4a27ab4bcce0908cb3338cb0c94983a00fb01bb3b25f70d37f62750eff3fd5ae",
+      "anchor": "pub fn try_reserve_exact(&mut self, additional: usize)",
+      "source": {
+        "first": 1560,
+        "last": 1562,
+        "text": "pub fn try_reserve_exact(&mut self, additional: usize) -> Result<(), TryReserveError> {\n        self.buf.try_reserve_exact(self.len, additional)\n    }"
+      },
+      "model": "receiverWorld selects the source local lifetime; borrow keeps that lifetime"
+    },
+    {
+      "revision": "a5b8b16cf10ae7fa94a493a4e4723cefd83d3d1c",
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "anchor": "pub(crate) fn try_reserve_exact(",
+      "source": {
+        "first": 377,
+        "last": 384,
+        "text": "pub(crate) fn try_reserve_exact(\n        &mut self,\n        len: usize,\n        additional: usize,\n    ) -> Result<(), TryReserveError> {\n        // SAFETY: All calls on self.inner pass T::LAYOUT as the elem_layout\n        unsafe { self.inner.try_reserve_exact(len, additional, T::LAYOUT) }\n    }"
+      },
+      "model": "buf/inner projections preserve the enclosing Vec lifetime, not element equality"
+    }
+  ],
+  "original_source": [
+    {
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "adopted_revision": "4ea2abfcc3a50f1b6e766ed41ff07cf815085a87",
+      "file_sha256": "979fe40da8c799688ce8c8283ff56c5f51dd8a5a3130dbd337af107aabf73c8e",
+      "adopted_file_sha256": "a67e714166d213b5b583bc026e23eba5dd7dd79b88210b1075266e87ee655c1c",
+      "source": {
+        "first": 273,
+        "last": 287,
+        "text": "fn derive_private_salts(reserved:&ReservedStateOnlyAttemptSecrets,context:StateOnlyHidingContext,hash:HashFn,tag:u8)->Result<PrivateSalts,Error> {\n    let count=aspis_core::r0::FIBRE_COUNT;\n\n    let mut salts=Vec::new();salts.try_reserve_exact(aspis_core::r0::FIBRE_COUNT).map_err(|_|Error::Allocation)?;\n    let mut result=Ok(salts);\n    let mut index=0usize;\n    while index<count {\n        result=match result {\n            Ok(salts)=>derive_private_salt_step(reserved,context,hash,tag,index as u32,salts),\n            Err(error)=>Err(error),\n        };\n        index+=1;\n    }\n    result.map(PrivateSalts::new)\n}"
+      }
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "adopted_revision": "4ea2abfcc3a50f1b6e766ed41ff07cf815085a87",
+      "file_sha256": "979fe40da8c799688ce8c8283ff56c5f51dd8a5a3130dbd337af107aabf73c8e",
+      "adopted_file_sha256": "a67e714166d213b5b583bc026e23eba5dd7dd79b88210b1075266e87ee655c1c",
+      "source": {
+        "first": 735,
+        "last": 739,
+        "text": "fn derive_private_salt_step(reserved:&ReservedStateOnlyAttemptSecrets,context:StateOnlyHidingContext,hash:HashFn,tag:u8,index:u32,mut salts:Vec<[u8;32]>)->Result<Vec<[u8;32]>,Error> {\n    let salt=reserved.derive_pool_v1_leaf_salt(hash,context,tag,index).map_err(|_|Error::Semantic)?;\n    salts.push(salt);\n    Ok(salts)\n}"
+      }
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/host_commitment.rs",
+      "adopted_revision": "4ea2abfcc3a50f1b6e766ed41ff07cf815085a87",
+      "file_sha256": "dec7a9f189415faa22a251fc17ee05901bfb51f4991c253a1725363f8538cf53",
+      "adopted_file_sha256": "dec7a9f189415faa22a251fc17ee05901bfb51f4991c253a1725363f8538cf53",
+      "source": {
+        "first": 135,
+        "last": 135,
+        "text": "pub fn new(values: Vec<[u8; 32]>) -> Self { Self(values) }"
+      }
+    }
+  ],
+  "lean_path": "lean/PV_EVHB_SourceLifetimes.lean",
+  "lean_sha256": "d955a10a55af6f53b1eef5d0e1ef4430039d42fe72171ddba8a30b1f4d572478",
+  "constructor_prefix": {
+    "source": "original derive_private_salts: Vec::new followed immediately by salts.try_reserve_exact",
+    "source_place": "saltsLocal activation = {activation, fields=[0]}",
+    "lifetime": "pre-constructor State.next, monotonically incremented by newAt",
+    "receiver": "computed by receiverWorld from the constructor-installed place",
+    "proof": "original_initial_receiver / constructor_receiver / constructor_selection",
+    "freshness": "new_fresh / constructor_distinct, under Fresh on the input place environment"
+  },
+  "move_scope": {
+    "proof": "move_receiver / move_fresh / move_selection",
+    "model": "source-place transport preserves lifetime-indexed header and allocator world",
+    "source_binding": "move mechanism only; full original control/drop interpreter remains OPEN"
+  },
+  "remaining": [
+    "Original extracted entry must construct State and activation identities, with Fresh and vacant destination invariants.",
+    "Bind shape/alignmentAddress to actual T layout and without_provenance interpretation, including ZST and numeric limits.",
+    "Install enum/argument/return/PrivateSalts payload moves in original control flow, including error-triggered drop and nonreturn prefixes.",
+    "Select receiverWorld at every reached call and thread the resulting world back into that same source state.",
+    "Bind actual Global/System primitives and complete returning macro projection to V183 (rdea-1).",
+    "Derive unchanged reached_reserve_header_delivery and v263 descriptor-view instance only after the preceding constructions."
+  ],
+  "source_to_machine": "V370 retained; no physical stack/frame premise added to source-level projections",
+  "reached_reserve_header_delivery": "OPEN",
+  "v263_descriptor_view": "OPEN",
+  "trust_fields_added": [],
+  "endpoint_rows_removed": []
+}

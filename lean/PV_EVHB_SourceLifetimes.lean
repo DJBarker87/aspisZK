@@ -27,6 +27,24 @@ def headerAt {S F : Type} (s : State S F) (p : Place) : Option Header :=
 def Fresh {S F : Type} (s : State S F) : Prop :=
   ∀ p id, s.places p = some id → id < s.next
 
+/-- Lifetime numbers are never reused, including slots no longer named by a
+current source place. This is stronger than freshness of occupied places. -/
+def SlotsBefore {S F : Type} (s : State S F) : Prop :=
+  ∀ id h, lookup s.world id = some h → id < s.next
+
+def start {S F : Type} (w : NativeWorld S F) : State S F :=
+  {world := {w with frame := {w.frame with slots := fun _ => none}}
+   next := 0
+   places := fun _ => none}
+
+theorem start_fresh {S F : Type} (w : NativeWorld S F) :
+    Fresh (start w) ∧ SlotsBefore (start w) := by
+  constructor
+  · intro p id selected
+    cases selected
+  · intro id h selected
+    cases selected
+
 def emptyHeader (shape : Shape) (alignmentAddress : Nat) : Header :=
   ⟨alignmentAddress,0,0,shape,true⟩
 
@@ -64,6 +82,17 @@ theorem new_fresh {S F : Type} (s : State S F) (p : Place)
 theorem constructor_distinct {S F : Type} (s : State S F) (p q : Place)
     (id : Nat) (fresh : Fresh s) (selected : s.places q=some id) : id≠s.next :=
   Nat.ne_of_lt (fresh q id selected)
+
+theorem new_slotsBefore {S F : Type} (s : State S F) (p : Place)
+    (shape : Shape) (alignmentAddress : Nat) (before : SlotsBefore s) :
+    SlotsBefore (newAt s p shape alignmentAddress) := by
+  intro id h selected
+  by_cases same : id=s.next
+  · subst id
+    exact Nat.lt_succ_self _
+  · change lookup (store s.world s.next (emptyHeader shape alignmentAddress)) id = some h at selected
+    rw [lookup_other _ _ _ _ same] at selected
+    exact Nat.lt.step (before id h selected)
 
 /-- Moves update only the source-place environment; lifetime/header do not
 move. The destination must be vacant or separately dropped by source control.
@@ -145,8 +174,10 @@ theorem original_initial_receiver {S F : Type} (s : State S F) (activation : Nat
   constructor_selection s (saltsLocal activation) shape alignmentAddress
 
 #print axioms constructor_receiver
+#print axioms start_fresh
 #print axioms new_fresh
 #print axioms constructor_distinct
+#print axioms new_slotsBefore
 #print axioms move_receiver
 #print axioms move_fresh
 #print axioms constructor_selection
