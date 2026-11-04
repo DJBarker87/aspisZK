@@ -1,0 +1,56 @@
+NFB_RowLog.lean:18:11: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+c0 c1 c2 c3 : Call
+kind : U8
+a b r r2 : U32
+⊢ (do
+      let i ← lift (Usize.wrapping_add 0#usize 1#usize)
+      ok { calls := ⟨[{ kind := kind, a := a, b := b, reply := r, reply2 := r2 }, c1, c2, c3], ⋯⟩, len := i }) =
+    ok { calls := ⟨[{ kind := kind, a := a, b := b, reply := r, reply2 := r2 }, c1, c2, c3], ⋯⟩, len := 1#usize }
+NFB_RowLog.lean:24:11: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+c0 c1 c2 c3 : Call
+kind : U8
+a b r r2 : U32
+⊢ (do
+      let i ← lift (Usize.wrapping_add 1#usize 1#usize)
+      ok { calls := ⟨[c0, { kind := kind, a := a, b := b, reply := r, reply2 := r2 }, c2, c3], ⋯⟩, len := i }) =
+    ok { calls := ⟨[c0, { kind := kind, a := a, b := b, reply := r, reply2 := r2 }, c2, c3], ⋯⟩, len := 2#usize }
+NFB_RowLog.lean:30:11: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+c0 c1 c2 c3 : Call
+kind : U8
+a b r r2 : U32
+⊢ (do
+      let i ← lift (Usize.wrapping_add 2#usize 1#usize)
+      ok { calls := ⟨[c0, c1, { kind := kind, a := a, b := b, reply := r, reply2 := r2 }, c3], ⋯⟩, len := i }) =
+    ok { calls := ⟨[c0, c1, { kind := kind, a := a, b := b, reply := r, reply2 := r2 }, c3], ⋯⟩, len := 3#usize }
+NFB_RowLog.lean:36:11: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+c0 c1 c2 c3 : Call
+kind : U8
+a b r r2 : U32
+⊢ (do
+      let i ← lift (Usize.wrapping_add 3#usize 1#usize)
+      ok { calls := ⟨[c0, c1, c2, { kind := kind, a := a, b := b, reply := r, reply2 := r2 }], ⋯⟩, len := i }) =
+    ok { calls := ⟨[c0, c1, c2, { kind := kind, a := a, b := b, reply := r, reply2 := r2 }], ⋯⟩, len := 4#usize }
+'NFB_RowLog.step0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NFB_RowLog.step1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NFB_RowLog.step2' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NFB_RowLog.step3' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

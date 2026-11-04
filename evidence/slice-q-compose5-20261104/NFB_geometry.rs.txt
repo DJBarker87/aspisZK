@@ -295,3 +295,131 @@ fn NFB_inverse_initial_tx1(){NFB_inverse_initial_case::<50>()}
 #[kani::proof]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NFB_inverse_initial_tx2(){NFB_inverse_initial_case::<60>()}
+
+// One native outer query iterator step on the SAME 22-word input allocation.
+fn NFB_query_next(queries:&[u32;22],start:usize,end:usize,cursor:usize)->(Option<u32>,usize,*const u32){
+ let mut it=queries[start..end][cursor..].iter();
+ let next=it.next().copied();
+ (next,it.len(),it.as_slice().as_ptr())
+}
+fn NFB_query_next_case<const START:usize,const END:usize>(){
+ let mut queries:[u32;22]=kani::any();let j:usize=kani::any();kani::assume(j<22);let saved=queries[j];
+ let cursor:usize=kani::any();kani::assume(cursor<=END-START);
+ let next=cursor+usize::from(cursor<END-START);
+ let expected=if cursor<END-START{Some(queries[START+cursor])}else{None};
+ let mut result=NFB_query_next(&queries,START,END,cursor);
+ #[cfg(NET_bad_reply)]{result.0=match result.0{Some(x)=>Some(x^1),None=>Some(1)};}
+ #[cfg(NET_bad_argument)]{result.1^=1;}
+ #[cfg(NFB_wrong_getter)]{result.2=queries.as_ptr();}
+ #[cfg(NET_bad_frame)]{queries[j]^=1;}
+ assert_eq!(result.0,expected);assert_eq!(result.1,END-START-next);
+ assert_eq!(result.2,unsafe{queries.as_ptr().add(START+next)});
+ assert_eq!(queries[j],saved);
+}
+#[kani::proof] #[kani::unwind(2)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NFB_query_next_tx1(){NFB_query_next_case::<0,10>()}
+#[kani::proof] #[kani::unwind(2)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NFB_query_next_tx2(){NFB_query_next_case::<10,22>()}
+
+// Exact std extend_trusted iteration: Vec.len is NOT published per iteration.
+// The local SetLenOnDrop counter owns the initialized prefix until finalization.
+unsafe fn NFB_collect_store(ptr:*mut [M31;5],local_len:&mut usize,element:[M31;5]){
+ unsafe{core::ptr::write(ptr.add(*local_len),element);}
+ *local_len+=1;
+}
+fn NFB_collect_store_case<const N:usize>(){
+ assert_eq!(core::mem::size_of::<[M31;5]>(),5*core::mem::size_of::<M31>());
+ let old:[u32;60]=kani::any();let k:usize=kani::any();kani::assume(k<N);
+ let mut rows:Vec<[M31;5]>=Vec::with_capacity(N);let p=rows.as_mut_ptr();
+ if 0<N && 0<k {unsafe{p.add(0).write([M31(old[0]),M31(old[1]),M31(old[2]),M31(old[3]),M31(old[4])]);}}
+ if 1<N && 1<k {unsafe{p.add(1).write([M31(old[5]),M31(old[6]),M31(old[7]),M31(old[8]),M31(old[9])]);}}
+ if 2<N && 2<k {unsafe{p.add(2).write([M31(old[10]),M31(old[11]),M31(old[12]),M31(old[13]),M31(old[14])]);}}
+ if 3<N && 3<k {unsafe{p.add(3).write([M31(old[15]),M31(old[16]),M31(old[17]),M31(old[18]),M31(old[19])]);}}
+ if 4<N && 4<k {unsafe{p.add(4).write([M31(old[20]),M31(old[21]),M31(old[22]),M31(old[23]),M31(old[24])]);}}
+ if 5<N && 5<k {unsafe{p.add(5).write([M31(old[25]),M31(old[26]),M31(old[27]),M31(old[28]),M31(old[29])]);}}
+ if 6<N && 6<k {unsafe{p.add(6).write([M31(old[30]),M31(old[31]),M31(old[32]),M31(old[33]),M31(old[34])]);}}
+ if 7<N && 7<k {unsafe{p.add(7).write([M31(old[35]),M31(old[36]),M31(old[37]),M31(old[38]),M31(old[39])]);}}
+ if 8<N && 8<k {unsafe{p.add(8).write([M31(old[40]),M31(old[41]),M31(old[42]),M31(old[43]),M31(old[44])]);}}
+ if 9<N && 9<k {unsafe{p.add(9).write([M31(old[45]),M31(old[46]),M31(old[47]),M31(old[48]),M31(old[49])]);}}
+ if 10<N && 10<k {unsafe{p.add(10).write([M31(old[50]),M31(old[51]),M31(old[52]),M31(old[53]),M31(old[54])]);}}
+ if 11<N && 11<k {unsafe{p.add(11).write([M31(old[55]),M31(old[56]),M31(old[57]),M31(old[58]),M31(old[59])]);}}
+ let mut counter=k;
+ let raw:[u32;5]=kani::any();let row=[M31(raw[0]),M31(raw[1]),M31(raw[2]),M31(raw[3]),M31(raw[4])];
+ let i:usize=kani::any();kani::assume(i<N);let j:usize=kani::any();kani::assume(j<5);
+ unsafe{NFB_collect_store(rows.as_mut_ptr(),&mut counter,row);}
+ #[cfg(NET_bad_reply)]{unsafe{let q=p.cast::<M31>().add(5*k+j);let v=q.read();q.write(M31(v.0^1));}}
+ #[cfg(NET_bad_frame)]{if i<k{unsafe{let q=p.cast::<M31>().add(5*i+j);let v=q.read();q.write(M31(v.0^1));}}}
+ #[cfg(NET_bad_argument)]{counter=k;}
+ assert_eq!(counter,k+1);assert_eq!(rows.len(),0);assert_eq!(rows.capacity(),N);assert_eq!(rows.as_ptr(),p);
+ assert_eq!(unsafe{p.cast::<M31>().add(5*k+j).read().0},raw[j]);if i<k{assert_eq!(unsafe{p.cast::<M31>().add(5*i+j).read().0},old[5*i+j]);}
+}
+#[kani::proof] #[kani::unwind(7)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NFB_collect_store_tx1(){NFB_collect_store_case::<10>()}
+#[kani::proof] #[kani::unwind(7)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NFB_collect_store_tx2(){NFB_collect_store_case::<12>()}
+
+// Exact SetLenOnDrop publication: the same initialized allocation is retained.
+fn NFB_collect_finalize_case<const N:usize>(){
+ let old:[u32;60]=kani::any();let k:usize=kani::any();kani::assume(k<=N);
+ let mut rows:Vec<[M31;5]>=Vec::with_capacity(N);let p=rows.as_mut_ptr();
+ if 0<N && 0<k {unsafe{p.add(0).write([M31(old[0]),M31(old[1]),M31(old[2]),M31(old[3]),M31(old[4])]);}}
+ if 1<N && 1<k {unsafe{p.add(1).write([M31(old[5]),M31(old[6]),M31(old[7]),M31(old[8]),M31(old[9])]);}}
+ if 2<N && 2<k {unsafe{p.add(2).write([M31(old[10]),M31(old[11]),M31(old[12]),M31(old[13]),M31(old[14])]);}}
+ if 3<N && 3<k {unsafe{p.add(3).write([M31(old[15]),M31(old[16]),M31(old[17]),M31(old[18]),M31(old[19])]);}}
+ if 4<N && 4<k {unsafe{p.add(4).write([M31(old[20]),M31(old[21]),M31(old[22]),M31(old[23]),M31(old[24])]);}}
+ if 5<N && 5<k {unsafe{p.add(5).write([M31(old[25]),M31(old[26]),M31(old[27]),M31(old[28]),M31(old[29])]);}}
+ if 6<N && 6<k {unsafe{p.add(6).write([M31(old[30]),M31(old[31]),M31(old[32]),M31(old[33]),M31(old[34])]);}}
+ if 7<N && 7<k {unsafe{p.add(7).write([M31(old[35]),M31(old[36]),M31(old[37]),M31(old[38]),M31(old[39])]);}}
+ if 8<N && 8<k {unsafe{p.add(8).write([M31(old[40]),M31(old[41]),M31(old[42]),M31(old[43]),M31(old[44])]);}}
+ if 9<N && 9<k {unsafe{p.add(9).write([M31(old[45]),M31(old[46]),M31(old[47]),M31(old[48]),M31(old[49])]);}}
+ if 10<N && 10<k {unsafe{p.add(10).write([M31(old[50]),M31(old[51]),M31(old[52]),M31(old[53]),M31(old[54])]);}}
+ if 11<N && 11<k {unsafe{p.add(11).write([M31(old[55]),M31(old[56]),M31(old[57]),M31(old[58]),M31(old[59])]);}}
+ 
+ unsafe{rows.set_len(k);}
+ #[cfg(NET_bad_argument)]{unsafe{rows.set_len(0);}}
+ let i:usize=kani::any();kani::assume(i<N);let j:usize=kani::any();kani::assume(j<5);
+ #[cfg(NET_bad_frame)]{if i<k{rows[i][j].0^=1;}}
+ assert_eq!(rows.len(),k);assert_eq!(rows.capacity(),N);assert_eq!(rows.as_ptr(),p);
+ if i<k{assert_eq!(rows[i][j].0,old[5*i+j]);}
+}
+#[kani::proof] #[kani::unwind(7)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NFB_collect_finalize_tx1(){NFB_collect_finalize_case::<10>()}
+#[kani::proof] #[kani::unwind(7)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NFB_collect_finalize_tx2(){NFB_collect_finalize_case::<12>()}
+
+// Exact std array Guard::push_unchecked iteration, with only live prefix read.
+unsafe fn NFB_array_store(data:&mut[core::mem::MaybeUninit<M31>;5],initialized:&mut usize,item:M31){
+ unsafe{data.get_unchecked_mut(*initialized).write(item);*initialized=initialized.unchecked_add(1);}
+}
+fn NFB_array_case<const N:usize,const M:usize>(){
+ assert_eq!(M,5*N);assert_eq!(core::mem::size_of::<M31>(),core::mem::size_of::<u32>());
+ assert_eq!(core::mem::align_of::<M31>(),core::mem::align_of::<u32>());
+ let flat_raw:[u32;M]=kani::any();let old:[u32;5]=kani::any();
+ let flat=unsafe{core::slice::from_raw_parts(flat_raw.as_ptr().cast::<M31>(),M)};
+ let row:usize=kani::any();kani::assume(row<N);let lane:usize=kani::any();kani::assume(lane<5);
+ let mut data=[core::mem::MaybeUninit::<M31>::uninit();5];
+ if 0<lane{data[0].write(M31(old[0]));}if 1<lane{data[1].write(M31(old[1]));}
+ if 2<lane{data[2].write(M31(old[2]));}if 3<lane{data[3].write(M31(old[3]));}
+ let mut initialized=lane;let item=flat[5*row+lane];
+ unsafe{NFB_array_store(&mut data,&mut initialized,item);}
+ let j:usize=kani::any();kani::assume(j<5);let f:usize=kani::any();kani::assume(f<M);
+ #[cfg(NET_bad_reply)]{unsafe{data[lane].assume_init_mut().0^=1;}}
+ #[cfg(NET_bad_frame)]{if j<lane{unsafe{data[j].assume_init_mut().0^=1;}}}
+ #[cfg(NET_bad_argument)]{initialized=lane;}
+ assert_eq!(initialized,lane+1);
+ assert_eq!(unsafe{data[lane].assume_init_ref().0},flat_raw[5*row+lane]);
+ if j<lane{assert_eq!(unsafe{data[j].assume_init_ref().0},old[j]);}
+ assert_eq!(flat[f].0,flat_raw[f]);
+}
+#[kani::proof] #[kani::unwind(7)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NFB_array_tx1(){NFB_array_case::<10,50>()}
+#[kani::proof] #[kani::unwind(7)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NFB_array_tx2(){NFB_array_case::<12,60>()}
