@@ -13,7 +13,7 @@ mod equivalence17 {
  fn caller(h:[QM31;64],l:[QM31;16],r:&[core::ops::Range<usize>],_log:&mut ())->QM31 {host::sum(h,l,r)}
 }
 
-#[path="array.rs"] mod array;
+include!("array.rs");
 
 mod shared_callee16;
 mod equivalence16 {
@@ -30,3 +30,5 @@ mod equivalence16 {
   assert_eq!(log.left[0],a);assert_eq!(log.right[0],b);assert_eq!(log.output[0],x);
  }
 }
+
+#[path="default.rs"] mod generic_default_gate;

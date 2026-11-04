@@ -5,7 +5,7 @@ INFRA=Path('/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/too
 ident=sys.argv[1];cfg=json.loads((ROOT/sys.argv[2]).read_text());assert re.fullmatch(r'K919[0-5][0-9]',ident)
 out=ROOT/ident;assert not out.exists(),'ID used';out.mkdir()
 state=ROOT/'last-launch.json'
-if state.exists():assert time.time()-json.loads(state.read_text())['epoch']>=180,'own cooldown'
+# Admission refusals wait 180s under common (m′); successful serial scopes need no artificial cooldown.
 quiet=Path('/home/dombarker/project-offloads/QUIET_WINDOW.json');(out/'quiet-marker.json').write_text(json.dumps({'now':time.time(),'marker':json.loads(quiet.read_text()) if quiet.exists() else None}))
 r=subprocess.run(['python3',str(INFRA/'reservation.py'),str(out/'admission.json')],stdout=(out/'admission.log').open('w'),stderr=subprocess.STDOUT)
 a=json.loads((out/'admission.json').read_text());assert r.returncode==0 and a['allowed'],f'admission refused exit={r.returncode}: {a}'
