@@ -1,5 +1,26 @@
 # PV evhB allocator/callback context checkpoint
 
+## D580 shared Vec resume from c1b31fa688
+
+Read `../../SHARED-VEC-D580.md` and `shared-vec-D580.json` alongside the blocker.
+Generic native reserve/push correspondence NOT established; header delivery
+and the exact v263 D579 value-erasure equality remain OPEN. No reached-state
+counterexample found. RawVec source hashes match across the slices. Source
+inspection identifies the actual pointer/capacity commit and push store/length
+ordering, but the source-bound owner/call lookup and its preservation are absent
+from the inspected interfaces. V183's returning Option-pointer step also does
+not supply the generic interpreter's nonreturning native outcomes. Do not install
+a model hook or last-history metadata lookup as a substitute for this proof.
+
+Stopped under the inherited blocker/focus rule. Memory fidelity and actual
+advancing loop/new/move/entry world delivery still depend on the missing native
+instance. No source/axiom/endpoint weakening or new T field. No compile, host,
+native, Kani, extraction or new axiom audit. **NEXT91222;74 attempts remain**;
+Audit91298–91299 untouched. Historical accepted sources and receipts unchanged.
+The earlier checkpoint below remains historical; the new shared document is a
+specification and inspection report, not an accepted theorem. The missing
+inherited `prompt-pv-evh4.txt` is still absent; no contents were invented.
+
 ## D580 resume stop
 
 Read `../../BLOCKER-evhB.md` and `resume-D580-blocker.json` before resuming.

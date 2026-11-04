@@ -1,5 +1,37 @@
 # D580 blocker: native reserve header delivery into the advancing world
 
+## D580 generic Vec resume at c1b31fa688
+
+The requested generic route was inspected against the pinned V183 interfaces,
+the v263 D579 blocker and its reserve/push/ownership/world models, and the
+deployed Rust 1.94.1 Vec/RawVec source snapshots. See `SHARED-VEC-D580.md` for
+the full generic specification and exact v263 instance statement. Neither is
+claimed proved or elaborated. The exact lemma and reached domain below are
+unchanged.
+
+The first missing construction is the native owner/call association in the
+advancing world, preserved through RawVec's actual `self.ptr`/`self.cap`
+assignments. V183 returns the old erased Vec; its metadata function receives no
+owner token. V263 retains an Owner but its method hook receives only a site,
+thread, length and layout. Neither inspected interface supplies that association.
+The two RawVec source snapshots have identical SHA256, so this is not an
+observed library-source version split. No reached-state counterexample was
+found. A fresh arbitrary metadata/hook definition or a supplied adapter equality
+would not prove the requested source-bound construction.
+
+The generic theorem also needs complete native allocator/OS outcomes: V183's
+total `Option Nat × S` step has no fault/divergence/exhaustion constructor.
+Those branches need a stateful native interpreter and faithful returning
+projection, not conversion to allocation denial. Stopped at this proof blocker
+under the inherited focus rule, before further memory/world wrappers.
+
+No Lean/native/Kani/extractor/host launch or new audit. No accepted proof source,
+endpoint premise, deployment condition or T field changed. Accounting remains
+next **91222**, **74 attempts**, audits **91298–91299 untouched**.
+New read-only source receipt: `evidence/pv-evhB-20261103/shared-vec-D580.json`.
+
+## Inherited exact obligation and evidence
+
 Start: `b5854a3a17efc1ae5676046b1d8d4d69ddc4934c`, branch
 `codex/pv-evhB-20261103`. Scope: native memory/resource fidelity and advancing
 world threading only. Stopped on the missing lemma below, as instructed.
