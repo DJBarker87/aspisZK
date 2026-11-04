@@ -20,18 +20,18 @@ def run {α : Type} (source before : Nat → α) : Nat → α :=
 theorem complete {α : Type} (source before : Nat → α) (k : Nat) (inside : k<792) :
     run source before k = source k := by
   simp only [run,KMX_CopyMeaning.loop_spec]
-  split_ifs <;> first | rfl | omega
+  all_goals repeat (first | rfl | (split <;> try omega))
 
 /-- Every cell outside the complete buffer retains its arbitrary pre-state. -/
 theorem frame {α : Type} (source before : Nat → α) (k : Nat) (outside : 792≤k) :
     run source before k = before k := by
   simp only [run,KMX_CopyMeaning.loop_spec]
-  split_ifs <;> first | rfl | omega
+  all_goals repeat (first | rfl | (split <;> try omega))
 
 /-- The final afterstate copy cannot change any previously established field. -/
-theorem suffix_frame {α : Type} (source before : Nat → α) (k : Nat) (prefix : k<104) :
+theorem suffix_frame {α : Type} (source before : Nat → α) (k : Nat) (beforeSuffix : k<104) :
     KMX_CopyMeaning.loop source before 104 688 k = before k :=
-  KMX_CopyMeaning.copy_frame source before 104 688 k (Or.inl prefix)
+  KMX_CopyMeaning.copy_frame source before 104 688 k (Or.inl beforeSuffix)
 
 #print axioms complete
 #print axioms frame

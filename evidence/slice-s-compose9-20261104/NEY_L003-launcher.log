@@ -1,0 +1,45 @@
+{"attempt": "NEY_L003", "exit_status": 1, "wall_seconds": 2.372056694002822, "peak_rss_kib": "5267328", "swaps": "0", "print_axioms": ["'NEY_BindingContinuation.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NEY_generated/NEY_BindingContinuation.lean:35:4: error: Tactic `apply` failed: could not unify the conclusion of `@NBN_LateFactor.bind_ext`
+  (do
+      let x ← ?r
+      ?f x) =
+    do
+    let x ← ?r
+    ?g x
+with the goal
+  validate_result (ResultAdmission.value s) = do
+    let r1 ← validate_result (ResultAdmission.value s)
+    let cf1 ←
+      match r1 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf1 with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        let common ← PoolV1PairForestTerminalStatementV1.common s
+...
+Result.Err PoolV1PairForestTerminalFormatErrorV1.ResultBindingMismatch)
+                    else do
+                      let a ← PoolV1PairForestTerminalStatementV1.nullifier s
+                      let b3 ←
+                        core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31
+                            (ResultAdmission.value s).nullifier a
+                      if b3 = true then
+                          ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.ResultBindingMismatch)
+                        else do
+                          let b4 ←
+                            core.cmp.PartialEq.ne.trait_default
+                                pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1.Insts.CoreCmpPartialEqPoolV1PairVerifiedAfterstateV1
+                                (ResultAdmission.value s).verified_afterstate
+                                common.lane_transition.candidate_afterstate
+                          if b4 = true then
+                              ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.ResultBindingMismatch)
+                            else ok (core.result.Result.Ok ())
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+          (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) residual
+NEY_generated/NEY_BindingContinuation.lean:32:7: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+'NEY_BindingContinuation.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rc8d7cc5ec4774f47b25cfa8b2448706d.scope; invocation ID: 6518af57df9748f29cac0e031f0d3d32

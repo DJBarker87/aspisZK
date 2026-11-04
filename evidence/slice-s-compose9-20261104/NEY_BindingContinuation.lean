@@ -32,14 +32,17 @@ theorem result (s : Statement) :
   | Ok unit =>
     cases unit
     simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
-    apply NBN_LateFactor.bind_ext
-    intro second
-    cases second with
-    | Err e => rfl
-    | Ok unit =>
-      cases unit
-      simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
-      cases s <;> simp [ResultAdmission.value,ResultAdmission.kind,
+    cases step : validate_result (ResultAdmission.value s) with
+    | fail e => simp only [step,bind_tc_fail]
+    | div => simp only [step,bind_tc_div]
+    | ok second =>
+      simp only [step,bind_tc_ok]
+      cases second with
+      | Err e => rfl
+      | Ok unit =>
+       cases unit
+       simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
+       cases s <;> simp [ResultAdmission.value,ResultAdmission.kind,
         StatementAdmission.common,StatementChecks.nullifier,
         PoolV1PairForestTerminalStatementV1.common,
         PoolV1PairForestTerminalStatementV1.transition_kind,

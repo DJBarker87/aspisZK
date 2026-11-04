@@ -1,0 +1,29 @@
+{"attempt": "NEY_L003", "exit_status": 1, "wall_seconds": 2.372056694002822, "peak_rss_kib": "5267328", "swaps": "0", "print_axioms": ["'NEY_BindingContinuation.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+minalFormatErrorV1.ResultBindingMismatch)
+                  else
+                    if ((ResultAdmission.value s).output_lane != common.output_lane) = true then
+                      ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.ResultBindingMismatch)
+                    else do
+                      let a ← PoolV1PairForestTerminalStatementV1.nullifier s
+                      let b3 ←
+                        core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31
+                            (ResultAdmission.value s).nullifier a
+                      if b3 = true then
+                          ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.ResultBindingMismatch)
+                        else do
+                          let b4 ←
+                            core.cmp.PartialEq.ne.trait_default
+                                pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1.Insts.CoreCmpPartialEqPoolV1PairVerifiedAfterstateV1
+                                (ResultAdmission.value s).verified_afterstate
+                                common.lane_transition.candidate_afterstate
+                          if b4 = true then
+                              ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.ResultBindingMismatch)
+                            else ok (core.result.Result.Ok ())
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+          (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) residual
+NEY_generated/NEY_BindingContinuation.lean:32:7: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+'NEY_BindingContinuation.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
