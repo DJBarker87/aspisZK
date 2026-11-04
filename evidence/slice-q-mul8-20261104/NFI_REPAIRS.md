@@ -1,0 +1,1 @@
+NFI_K003 failed codegen: new cursor harness omitted next/order fields from the inherited local log initializer. Repaired own payload; validation unchanged. No proof credit for K003. Same original harness names retained.
