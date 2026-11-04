@@ -36,7 +36,7 @@ def audit(review='NGH_review'):
 def helper_gate(candidate):
  assert candidate['row']in ['TX1:036','TX1:044','TX1:040','TX1:041','TX1:043']
  # Even all-True caller flags cannot manufacture the required actual-helper contract.
- raise AssertionError('No admitted proof_for_contract of the ACTUAL frozen generic helper; one-step support is not that contract. Ruling-(ah) status remains OPEN.')
+ raise AssertionError('Per-cell ruling-(ah) route incomplete: first cell K049 timed out; no matched passing nine-cell/frame packet. Ruling-(ah) status remains OPEN.')
 
 def build(stage='square',review='NGH_review'):
  assert stage in ['square','wide'];N.build();a=audit(review)
@@ -61,7 +61,7 @@ def build(stage='square',review='NGH_review'):
   edges += [dict(caller=W+'WideExact::square',callee=callee,status='CLOSED',selected=True,domain_proof='NGA_WideSquare.value derives same canonical operands and intermediate bb; NGH_WideBridge.source composes the actual operations',native='NFT_K098',control='NFT_K099',argument_control='NFT_K100')for callee in [F+'QM31::mul',F+'QM31::add',W+'mul_u']]
  for rid in ids:assert by[rid]['composed_status']=='OPEN'
  openids=['TX1:036','TX1:044','TX1:040','TX1:041','TX1:043']
- pending=[dict(row=r,function=by[r]['function'],status='OPEN',reason='Actual helper-level contract missing; checked one-step contract/reference transcription/Lean induction remain support. Do not promote under (ah) without that gate or a lead clarification.')for r in openids]
+ pending=[dict(row=r,function=by[r]['function'],status='OPEN',reason='Per-cell reference route blocked at K049 cell00 timeout; required nine passing cells/control/frame packet missing. Outer-step/reference/induction support does not close the OPEN accumulation child.')for r in openids]
  out=copy.deepcopy(base)
  for r in out['rows']:
   if r['row']in ids:r['composed_status']='CLOSED'

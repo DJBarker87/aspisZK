@@ -34,6 +34,21 @@ for rid in ['TX1:036','TX1:044','TX1:040','TX1:041','TX1:043']:
  try:m.helper_gate(dict(row=rid,native_valid=True,actual_helper_contract=True,all_actual_callees_closed=True,raw_ax2_standard=True,reference_transcription=True))
  except AssertionError:passed.append('all-True helper flags rejected '+rid)
  else:raise RuntimeError('Fabricated helper contract admitted')
-assert len(passed)==18
-(E/'NGH_TESTS.json').write_text(json.dumps(dict(status='PASS',mutations_rejected=passed,checks=18),indent=1)+'\n')
-print('18 mutation checks passed')
+for label,mutation in [
+ ('duplicate inversion cfg',lambda x:x['env'].update(RUSTFLAGS=x['env']['RUSTFLAGS']+' --cfg NGH_invert')),
+ ('missing inversion cfg',lambda x:x['env'].update(RUSTFLAGS=x['env']['RUSTFLAGS'].replace('--cfg NGH_invert',''))),
+ ('extra non-control cfg',lambda x:x['env'].update(RUSTFLAGS=x['env']['RUSTFLAGS']+' --cfg NGH_unexpected')),
+ ('unmatched control environment',lambda x:x['env'].update(NGH_UNEXPECTED='1'))]:
+ def patched_pair(p):
+  x=copy.deepcopy(original(p))
+  if p.parent.name=='NGH_K031'and p.name=='receipt.json':mutation(x)
+  return x
+ N.J=patched_pair
+ try:
+  try:N.pair(30,31)
+  except (AssertionError,KeyError,TypeError):passed.append(label)
+  else:raise RuntimeError('Mutation admitted: '+label)
+ finally:N.J=original
+assert len(passed)==22
+(E/'NGH_TESTS.json').write_text(json.dumps(dict(status='PASS',mutations_rejected=passed,checks=22),indent=1)+'\n')
+print('22 mutation checks passed')

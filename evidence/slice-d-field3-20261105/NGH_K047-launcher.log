@@ -1,0 +1,45 @@
+{"attempt": "NGH_K047", "exit_status": 1, "wall_seconds": 4.719235016964376, "peak_rss_kib": "527136", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-d-field3-20261105/NGH_src/crates/aspis-core)
+warning: unexpected `cfg` condition name: `NGH_for_diagnostic`
+ --> crates/aspis-core/src/lib.rs:1:13
+  |
+1 | #![cfg_attr(NGH_for_diagnostic,feature(stmt_expr_attributes,proc_macro_hygiene))]
+  |             ^^^^^^^^^^^^^^^^^^
+  |
+  = help: expected names are: `docsrs`, `feature`, `kani`, and `test` and 31 more
+  = help: consider using a Cargo feature instead
+  = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+           [lints.rust]
+           unexpected_cfgs = { level = "warn", check-cfg = ['
+...
+ttribute macro `kani::stub` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: failed to resolve `crate::KMX_stubs::KMX_copy_nonoverlapping`: unable to find `KMX_stubs` inside module `aspis_core`
+   --> crates/aspis-core/src/field/NGH_cells.rs:322:1
+    |
+322 | #[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: this error originates in the attribute macro `kani::stub` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: failed to resolve `crate::KMX_stubs::KMX_copy_nonoverlapping`: unable to find `KMX_stubs` inside module `aspis_core`
+   --> crates/aspis-core/src/field/NGH_cells.rs:361:1
+    |
+361 | #[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: this error originates in the attribute macro `kani::stub` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: failed to resolve `crate::KMX_stubs::KMX_copy_nonoverlapping`: unable to find `KMX_stubs` inside module `aspis_core`
+   --> crates/aspis-core/src/field/NGH_cells.rs:365:1
+    |
+365 | #[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: this error originates in the attribute macro `kani::stub` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: could not compile `aspis-core` (lib) due to 10 previous errors; 462 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 10 compilation errors.
+
+Running as unit: run-rbcf83259f45a4a3980f3db5a8e2ae90e.scope; invocation ID: 0976697a9c84448bb7784a91ad0f3137
