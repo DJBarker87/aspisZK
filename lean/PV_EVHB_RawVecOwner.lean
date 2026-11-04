@@ -90,7 +90,7 @@ theorem allocated_pending {S F : Type} (w : NativeWorld S F) (h : Header)
     (pointer cap : Nat) (backend : S) :
     Pending (allocated w h pointer cap backend) h pointer cap := by
   simp only [Pending,allocated,succeeded,attempted,resizedMetadata,ite_true]
-  exact ⟨rfl,rfl⟩
+  constructor <;> trivial
 
 theorem allocated_lookup {S F : Type} (w : NativeWorld S F) (h : Header)
     (owner pointer cap : Nat) (backend : S) :
@@ -187,14 +187,13 @@ theorem deallocate_consumes {S F : Type} (w : NativeWorld S F) (h : Header)
 for another vector with the same initialized values. -/
 def move {S F : Type} (w : NativeWorld S F) (source target : Nat) : NativeWorld S F :=
   {w with frame := {w.frame with slots := fun id =>
-    if id=target then lookup w source else if id=source then none else lookup w id}}
+    if id=target then w.frame.slots source else if id=source then none else w.frame.slots id}}
 
 theorem move_delivery {S F : Type} (w : NativeWorld S F) (source target : Nat)
     (different : source≠target) :
     lookup (move w source target) target = lookup w source ∧
     lookup (move w source target) source = none := by
   simp only [move,lookup,ite_true,different,ite_false]
-  exact ⟨rfl,rfl⟩
 
 #print axioms lookup_store
 #print axioms lookup_other
