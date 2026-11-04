@@ -2153,3 +2153,169 @@ Stream A edit, key action, merge or push. Endpoint premises removed/added/
 weakened0/0/0. Remaining work includes deployed op227/op257 and Nonempty P,
 actual event acquisition/joint D163/D166/V400, client gates, E1/E2 and the
 coherent final replay with complete NEP audit. **Target not yet established.**
+
+
+## Recount 11 2026-11-04 (B)
+
+All 407 rows are re-derived at the [immutable pins](../evidence/privacy-recount-20261026/recount11/pins.json): research base dc2c38a96fa,
+fixed candidate codex/cx-prover-rw-20261023@d4ed1ba89f, plus captured LIVE heads
+pv-b3p6, pv-evh, pv-evhB, pv-stx, pv-runjoin, pv-uc, pv-evhc and pv-k3scan.
+These are point-in-time snapshots, never moving authorities. LOG D569–D594 is
+read at the base and D595 at the separately pinned supplemental LOG revision.
+Full same-column table: [ROWS11.md](../evidence/privacy-recount-20261026/ROWS11.md).
+Machine-readable [rows](../evidence/privacy-recount-20261026/recount11/rows11.json),
+[totals](../evidence/privacy-recount-20261026/recount11/totals.json),
+[method](../evidence/privacy-recount-20261026/recount11/METHOD11.md),
+[independent audit](../evidence/privacy-recount-20261026/recount11/independent-audit11.json).
+Defining Lean bytes are unchanged from recount10; changed defining witnesses
+are LOG reporting only. Historical qualified derivations and all residuals are
+retained; import membership is recomputed, never counted as discharge.
+
+| Inventory / status | Recount 1 | Recount 2 | Recount 3 | Recount 4 | Recount 5 | Recount 6 | Recount 7 | Recount 8 | Recount 9 | Recount 10 | Recount 11 |
+|---|---:|---:|---:|---:|---:|---:|---:| ---: | ---: | ---: | ---: |
+| Rows | 400 | 403 | 407 | 407 | 407 | 407 | 407 | 407 | 407 | 407 | 407 |
+| T | 26 | 26 | 26 | 3 | 3 | 3 | 3 | 3 | 3 | 3 | 3 |
+| P | 370 | 372 | 376 | 400 | 400 | 400 | 400 | 400 | 400 | 400 | 400 |
+| C | 4 | 5 | 5 | 4 | 4 | 4 | 4 | 4 | 4 | 4 | 4 |
+| OPEN | 138 | 110 | 103 | 95 | 93 | 86 | 77 | 81 | 73 | 69 | 66 |
+| REDUCED | 152 | 154 | 176 | 176 | 176 | 176 | 176 | 176 | 176 | 176 | 176 |
+| EVIDENCED | 10 | 12 | 14 | 14 | 14 | 14 | 14 | 14 | 14 | 14 | 14 |
+| CLOSED-ON-RESEARCH | 87 | 87 | 87 | 87 | 87 | 87 | 87 | 87 | 87 | 87 | 87 |
+| CLOSED-ON-CANDIDATE | 13 | 40 | 27 | 35 | 37 | 44 | 53 | 49 | 57 | 61 | 64 |
+
+Status changes, all OPEN → CLOSED-ON-CANDIDATE at the original qualified boundary:
+
+- **V233 (D570):** original Eager64 typed split for every valid Slice and logical
+  origin; typed encode/flatten inverse, roundtrip/injectivity, pointer/count/tail
+  and alias geometry, and exact `PV_RDCD5_V233.consumed_instance`. This is more
+  than flattened-byte equality. Historical C002 remains suspended and is unused.
+- **V236 (D570):** original safe Eager64 length64/pos<64 domain, arbitrary Slice,
+  typed core callback, all branches/cursor/dead bytes and ordered typed batches.
+  `PV_RDCD5_V236.op216_instance` retains complete Result, including callback
+  errors/divergence, without a singleton-fold or additional callback premise.
+- **V197 (D595):** `PV_RDCD5_V197Restored.parser_instance` covers every Slice,
+  complete Result(Option QM31), plus actual checked borrowed-window transport.
+  The owned parser's invalid-range result is corrected from arrayOutOfBounds
+  to panic, matching deployed source; bounds/window/order are unchanged. First
+  None still short-circuits before the late second range. No length16 guard,
+  success-only equality or error erasure. All 15 affected source modules pass
+  focused hash/receipt checks; audit-only projections and unchanged consumers
+  are separately dispositioned. The wrong-kind local short_failure and old
+  diagnostic/replay are explicitly corrected; no restored row used that kind.
+  The old counterexample remains historical evidence, not a deployed bug.
+
+All three are source-structural own-1/k-prime arguments with complete typed
+Lean Result laws, retained compiler/runtime V370 boundaries and historical
+native differentials labelled finite validation. They are reclassifications
+within existing trust, not endpoint premise removal. Nine exact native/library
+source hashes and 16 complete body spans were independently checked, together
+with the three application parser bodies. Stale preparation-only labels in the
+V233/V236 binding JSONs are superseded by focused and final receipts, not silently
+called current. V197's51 fixed NEP raw roots resolve completely and match the
+summary sets, standard axioms only. Full evidence:
+[source binding audit](../evidence/privacy-recount-20261026/recount11/source-binding-audit11.json),
+[receipts](../evidence/privacy-recount-20261026/recount11/receipt-audit11.json).
+
+Thus **OPEN 69→66**, **candidate closures 61→64**; REDUCED 176, EVIDENCED 14,
+research closures 87 and P400/C4/T3 remain unchanged. Bucket removals are V197
+from a and V233/V236 from b. Remaining buckets **a4/b58/c3/d1**; no retained
+OPEN row changes bucket. No class changes, new rows, or counted row deletions.
+Import-status changes: V197,V233,V236 candidate→neither when the new exact
+closing module replaces the historical model/definition witness. Current totals
+are research 160 / candidate 103 / neither 144. The new laws exist on the candidate
+but are not imported by the fixed historical consumer roots; this is not a
+loss of source credit or proof of discharge.
+
+**K-3 final status changes:** live pv-k3scan's D592 packet supersedes the older
+305-observation rollup only for C051, C053, C163, C164: SUSPENDED→RESTORED.
+C051's original empty non-Copy Drop domain has no destructor calls; corrupt-drop,
+ZST-capacity and zero-length controls fail. C053's local full-Core reply/log/frame
+and recovered field-ordered constructor association retain the complete buffer
+and cursor; all 12 controls fail. C163/C164 have direct frozen all-raw sum pairs
+plus independent local-add reply/argument/frame controls. **C156 remains
+SUSPENDED**: passing local Memo and independent-reply caller checks do not supply
+the full-raw multiplication child/frame/G substitution. New totals are
+**26 RESTORED, 81 UNAFFECTED, 195 SUSPENDED, 3 WITHDRAWN**. Every current qualified
+support list excludes SUSPENDED credits; V244 still consumes C155/C157. These are
+credit counts, not row totals. New reached-item std transfer is WITHHELD; bounds,
+K-1/K-2, feature/body association, V370 and native/world conditions remain.
+The old K3-ROWS V233 typed-bridge wording is superseded by the independent typed
+restoration above. [Per-credit audit](../evidence/privacy-recount-20261026/recount11/k3-audit11.json).
+
+**User-client adoption (D586,D590,D591): CONFIRMED**, final executable
+fc8808eb454f3156dba550140398cc3a74af4c88ee5b3491d2d04d33ee904558,
+merged at 8897074612 and present byte-for-byte in candidate d4ed1ba89f.
+Every release gate is checked: three retained ELF identities and unchanged
+fixture, uc3's historical 1000/1000 differential attributed to that binary,
+final 100/100 pairs with 200 real calls, inherited decoder instruction-trace comparison,
+final extraction/source regeneration, symbolic replacement of 42 native-decision
+axioms, parametric entry compile and eight-root private NEP audit (main 5280
+constants, zero unresolved, standard-only). No native_decide credit is retained.
+The final entry explicitly retains 22 carriers / 105 operation parameters.
+The decoder trace is explicitly at historical 9310ca5e; the word/digest/long/
+decode source region is byte-identical between the recount10 client pin and
+adopted source. Its finite evidence is reused at that scope, not represented
+as a newly traced fc8808eb binary or whole-client constant-time result. The
+later three-pattern emitted/native comparison also passes. V370 remains.
+[Gate detail](../evidence/privacy-recount-20261026/recount11/client-gate-audit11.json).
+
+Owner **D575(A)** is implemented before witness input: PR_SET_DUMPABLE 0 and
+RLIMIT_CORE 0,0; early/post-wallet panic gates leave no core. Linux6.8 has no
+/proc/status Dumpable field: source-identical PR_GET_DUMPABLE helper, final-ELF
+successful syscall and proc core-limit evidence are used; CoreDumping alone
+is not evidence. Owner **D576(B)** removes secret recovery-file writes and returns
+all 212 original wallet bytes through a caller-owned writable output pipe.
+Seven rejection controls include stdout/stderr/input aliases by device/inode,
+not just descriptor number. The superseded stdout-alias leak remains recorded.
+All 100 custody records match in memory. Finite raw-secret-field/complete-record
+search across 500 outputs finds zero private matches; 103 public asset-pattern
+matches remain reported. This is finite search, not universal noninterference
+or absence under arbitrary encoding. Calling-wallet storage adds no T item.
+
+Lead timing N91120 was retrieved read-only with its JSON inputs, admissions and
+time log. On the exact final hash, ten paired samples PER fixture under allowed
+D359(A) throttling pass: transfer median 14.457180914s, ratio0.978815649
+(−2.1184%); withdrawal 14.728573905s, ratio0.998035628 (−0.1964%). Both medians<15s
+and ratios≤1.10. D590's 0.998 headline is the withdrawal ratio, not both fixtures.
+Exit 0, wall 9:47.26, peak 598864 KiB, swap 0, revision 025621b1e6. The client-release half
+is met for this adopted client. **V396 remains OPEN b** for actual native
+startup/pipe/OS, caller/upload/observer and joint-world integration; adoption is
+not endpoint closure. **V178 remains OPEN b**: no-core closes that readable
+core-image branch by construction, but panic=abort does not wipe the stack and
+its source abort/physical-world branch still needs binding. **V373/V374 remain
+OPEN a**: whole compiled-kernel audit and statistical leakage evidence are not
+supplied by throughput or a decoder trace.
+
+**Structural findings — status notes, no rows:** D589's pure Result extraction
+with fixed pure ExternalFuns cannot thread one advancing OS world through
+prove_for_proof_accounts. Retry/redraw, op259, op257, allocator and event stalls
+share this root. The pinned pv-stx route-B continuation/world machine has a
+fixed-handler no-regression bridge, finite-prefix/source lifts and 42 complete
+standard-only raw roots; full source_entry_world and the five deployed
+projections remain missing. No helper packet substitutes for that construction.
+Under **l3-2**, native events/fileTrace/countTrace/timeTrace/oraclePrefix are
+source-level effects of ONE source world run and do not depend on physical
+FRAME. The separate named **ActualEntropyEntryPrefix source-to-machine carrier
+(V370/L3)** is unconstructed/unproved, explicitly retained in L3 obligations.
+Heap OWNER does not establish stack slots/lifetimes/PC pairing. D581–D587 evidence
+is binary-structural on then-adopted da36d6aa plus V370; it needs binding/refresh
+for final fc8808eb, and is not a compiler-correctness proof. Stack/thread/resource
+exhaustion and failure remain world answers under rdea-2/rdea-2'; public request
+sizes/order/depth and failure witness-independence remain obligations, no T field.
+
+**Coherent closure:** NER's repaired base is distinguished from incoherent NDR.
+D595/92060 passes consumer compilation and a 16539-module zero-dangling combined
+scan, with matched imports and hash checks. Raw walk FAILS before traversal due
+to the adapted driver's missing Lean Elab Command opening. Therefore the required
+three-step composition gate **does NOT count**. evhc9's pinned driver/preflight
+work is not a completed aggregation. No coherent joint non-vacuity/release audit
+is credited. Every #print axioms is SUMMARY-BASED; local fixed NEP raw audits are
+labelled separately, never inferred from summaries or filtered unresolved names.
+
+Validation is inspection-only: **Lean 0/40, Kani 0/0**, Env-J 92100–92139 unused.
+No proof, build, full replay, unchanged regression, Stream A edit, key action,
+merge or push. Endpoint premises removed/added/weakened **0/0/0**. T remains
+entropy_law,entropy_kernel,observation; full observer,simE,bound and bad event
+are retained. E1/E2, actual event world, deployed op227/op257, native integration,
+L1/diag/L3 links, actual Nonempty P and coherent complete release audit remain.
+**Target not yet established.**

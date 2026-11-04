@@ -1,0 +1,18 @@
+{
+ "status": "PASS byte-identical word/digest/long/decode region",
+ "sources": [
+  {
+   "revision": "0c03eabf5f7ef354ad7b529da8dbbcece29edb51",
+   "path": "tools/r1-cost-probe/src/bin/user_client/wallet.rs",
+   "decoder_region": "fn word(r:&[u8;WIDTH],i:usize)->u32{u32::from_le_bytes([r[i],r[i+1],r[i+2],r[i+3]])}\nfn digest(r:&[u8;WIDTH],start:usize)->Digest{\n let mut out=[M31(0);8];let mut i=0;\n while i<8{out[i]=M31(word(r,start+4*i));i+=1;}out\n}\nfn long(r:&[u8;WIDTH],i:usize)->u64{word(r,i) as u64 | ((word(r,i+4) as u64)<<32u32)}\n// Fixed offsets and fixed trip counts; content validity is checked separately.\n#[inline(never)]\npub fn decode_wallet_record(r:&[u8;WIDTH])->Wallet{\n Wallet{input_key:digest(r,0),input_salt:digest(r,32),input_value:long(r,64),asset:M31(word(r,72)),\n change_key:digest(r,76),change_salt:digest(r,108),recipient_owner:digest(r,140),recipient_salt:digest(r,172),\n recipient_value:long(r,204),record:*r}\n}\n",
+   "region_sha256": "2a1f98dfb64908562b97c7faae252238cbb3399f1f8cc3426e2ef032c2de4ca8"
+  },
+  {
+   "revision": "889707461245b1d31a29ee9fcf148b25c4b976f9",
+   "path": "tools/r1-cost-probe/src/bin/user_client/wallet.rs",
+   "decoder_region": "fn word(r:&[u8;WIDTH],i:usize)->u32{u32::from_le_bytes([r[i],r[i+1],r[i+2],r[i+3]])}\nfn digest(r:&[u8;WIDTH],start:usize)->Digest{\n let mut out=[M31(0);8];let mut i=0;\n while i<8{out[i]=M31(word(r,start+4*i));i+=1;}out\n}\nfn long(r:&[u8;WIDTH],i:usize)->u64{word(r,i) as u64 | ((word(r,i+4) as u64)<<32u32)}\n// Fixed offsets and fixed trip counts; content validity is checked separately.\n#[inline(never)]\npub fn decode_wallet_record(r:&[u8;WIDTH])->Wallet{\n Wallet{input_key:digest(r,0),input_salt:digest(r,32),input_value:long(r,64),asset:M31(word(r,72)),\n change_key:digest(r,76),change_salt:digest(r,108),recipient_owner:digest(r,140),recipient_salt:digest(r,172),\n recipient_value:long(r,204),record:*r}\n}\n",
+   "region_sha256": "2a1f98dfb64908562b97c7faae252238cbb3399f1f8cc3426e2ef032c2de4ca8"
+  }
+ ],
+ "limits": "Source scope only; historical trace on9310ca5e is not a newly measured final-binary trace; V370 retained."
+}
