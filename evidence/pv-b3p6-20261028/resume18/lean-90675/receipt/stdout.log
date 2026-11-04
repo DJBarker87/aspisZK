@@ -1,0 +1,56 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ExpandEvents592227.lean:12:2: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  b ≥ 0
+  b - c ≥ 1
+  a ≥ 0
+  a - c ≥ 2
+where
+ a := ↑(if min n count < count then min n count + 1 else min n count)
+ b := ↑count
+ c := ↑n
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ExpandEvents592227.lean:74:10: error: 'change' tactic failed, pattern
+  2 ^ depth count outer - inner - 1 < capacity
+is not definitionally equal to target
+  indexGuard { index := start + depth count outer, length := 10 }
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ExpandEvents592227.lean:76:10: error: Dependent elimination failed: Failed to solve equation
+  Result.ok (some observed) =
+    Decidable.rec (fun h => (fun x => Result.ok none) h)
+      (fun h => (fun x => through effects (some { index := 2 ^ depth count outer - inner - 1, length := capacity })) h)
+      (inner.decLt (2 ^ depth count outer))
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ExpandEvents592227.lean:82:10: error: 'change' tactic failed, pattern
+  2 * (2 ^ depth count outer - inner - 1) % UScalar.size UScalarTy.Usize < capacity
+is not definitionally equal to target
+  indexGuard { index := start + depth count outer, length := 10 }
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ExpandEvents592227.lean:85:10: error: Dependent elimination failed: Failed to solve equation
+  Result.ok (some observed) =
+    Decidable.rec (fun h => (fun x => Result.ok none) h)
+      (fun h =>
+        (fun x =>
+            through effects
+              (some
+                { index := 2 * (2 ^ depth count outer - inner - 1) % UScalar.size UScalarTy.Usize,
+                  length := capacity }))
+          h)
+      (inner.decLt (2 ^ depth count outer))
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ExpandEvents592227.lean:91:10: error: 'change' tactic failed, pattern
+  (2 * (2 ^ depth count outer - inner - 1) % UScalar.size UScalarTy.Usize + 1) % UScalar.size UScalarTy.Usize < capacity
+is not definitionally equal to target
+  indexGuard { index := start + depth count outer, length := 10 }
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ExpandEvents592227.lean:95:10: error: Dependent elimination failed: Failed to solve equation
+  Result.ok (some observed) =
+    Decidable.rec (fun h => (fun x => Result.ok none) h)
+      (fun h =>
+        (fun x =>
+            through effects
+              (some
+                {
+                  index :=
+                    (2 * (2 ^ depth count outer - inner - 1) % UScalar.size UScalarTy.Usize + 1) %
+                      UScalar.size UScalarTy.Usize,
+                  length := capacity }))
+          h)
+      (inner.decLt (2 ^ depth count outer))
+'PV_B3P_ExpandEvents592227.depth_step' depends on axioms: [sorryAx]
+'PV_B3P_ExpandEvents592227.width_step' depends on axioms: [propext, Quot.sound]
+'PV_B3P_ExpandEvents592227.event_certificate' depends on axioms: [propext, sorryAx, Quot.sound]

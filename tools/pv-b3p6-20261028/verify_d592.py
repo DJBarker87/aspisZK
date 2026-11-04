@@ -37,6 +37,13 @@ for label in inv['refusals']:
  for r in later:
   allowed=json.loads((R/r['_label']/'reservation.json').read_text())
   assert datetime.fromisoformat(allowed['utc'])>=datetime.fromisoformat(rejected['utc'])+timedelta(seconds=180)
+for label in inv.get('cooldown_refusals',[]):
+ root=R/label;gate=json.loads((root/'cooldown-refusal.json').read_text())
+ assert not(root/'receipt/receipt.json').exists()
+ for r in receipts:
+  if r['attempt']==int(label.split('-')[1]):
+   admission=json.loads((R/r['_label']/'reservation.json').read_text())
+   assert datetime.fromisoformat(admission['utc']).timestamp()>=gate['epoch']
 for r in receipts:
  admission=json.loads((R/r['_label']/'reservation.json').read_text())
  assert datetime.fromisoformat(admission['utc']).timestamp()>=inv['quiet_window']['marker']['until']
@@ -61,5 +68,5 @@ for cohort in [592]:
  raws+=raw
 coverage=json.loads((R/'SOURCE-COVERAGE-D592.json').read_text());assert sum(v['local_source_state_certificates']for v in coverage['counts'].values())==528
 assert inv['budget']['lean_units_remaining']==280-inv['lean_attempts']
-x=dict(status='CONTEXT CHECKPOINT; DeployedWrapper557 and privacy target OPEN',new_lean_charged=len(receipts),success=sum(r['exit_status']==0 for r in receipts),failed=[r['attempt']for r in receipts if r['exit_status']!=0],uncharged_refusals=inv['refusals'],new_extraction=0,new_kani=0,host_hashes_verified=len(inv['hashes']),peak_rss_kib=max(r['peak_rss_kib']for r in receipts),longest_wall_seconds=max(r['wall_seconds']for r in receipts),zero_swap=True,raw_NEP_roots=raws,raw_audit_scope='96 requested top theorem complete reachable graphs; unchanged predecessor/endpoint graphs reuse D583/D571; not a full release replay',print_axioms_label='SUMMARY-BASED, checked separately',local_source_certificate_counts=coverage['counts'],guard_sha256=sha(R/'D592-compile_resume18_d569.py'),budget=inv['budget'],next_lean=inv['numerical_next_unused_id'],full_frozen_manifest_run=False,premises_removed=[],premises_added=[],premises_weakened=[],deterministic_checks=tools,receipts=[{k:r[k]for k in ['attempt','module','source_sha256','exit_status','wall_seconds','peak_rss_kib','swaps','source_revision','lean_source_revision','print_axioms']}for r in sorted(receipts,key=lambda r:r['attempt'])])
+x=dict(status='CONTEXT CHECKPOINT; DeployedWrapper557 and privacy target OPEN',new_lean_charged=len(receipts),success=sum(r['exit_status']==0 for r in receipts),failed=[r['attempt']for r in receipts if r['exit_status']!=0],uncharged_refusals=inv['refusals'],cooldown_refusals=inv.get('cooldown_refusals',[]),new_extraction=0,new_kani=0,host_hashes_verified=len(inv['hashes']),peak_rss_kib=max(r['peak_rss_kib']for r in receipts),longest_wall_seconds=max(r['wall_seconds']for r in receipts),zero_swap=True,raw_NEP_roots=raws,raw_audit_scope='96 requested top theorem complete reachable graphs; unchanged predecessor/endpoint graphs reuse D583/D571; not a full release replay',print_axioms_label='SUMMARY-BASED, checked separately',local_source_certificate_counts=coverage['counts'],guard_sha256=sha(R/'D592-compile_resume18_d569.py'),budget=inv['budget'],next_lean=inv['numerical_next_unused_id'],full_frozen_manifest_run=False,premises_removed=[],premises_added=[],premises_weakened=[],deterministic_checks=tools,receipts=[{k:r[k]for k in ['attempt','module','source_sha256','exit_status','wall_seconds','peak_rss_kib','swaps','source_revision','lean_source_revision','print_axioms']}for r in sorted(receipts,key=lambda r:r['attempt'])])
 (R/'verification-summary-D592.json').write_text(json.dumps(x,indent=2)+'\n');print(json.dumps({k:x[k]for k in ['new_lean_charged','success','failed','peak_rss_kib','budget','next_lean']}))
