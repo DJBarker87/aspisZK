@@ -1,0 +1,13 @@
+{
+ "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "source": "programs/aspis-pool/src/pair_forest.rs",
+ "source_sha256": "d9589cfde4f9c74c022850ba624f359b6dc35efa211ce1b117042f6984d085e4",
+ "settlement_cut": "    let result = authenticated.value();\n    #[cfg(not(feature = \"pair-forest-direct-result-audit\"))]\n    validate_authenticated_terminal_result_v1(\n        master_account.key,\n        checkpoint_account.key,\n        lane_account.key,\n        &master,\n        &checkpoint,\n        &lane,\n        output_lane,\n        &request,\n        result,\n    )?;\n    #[cfg(feature = \"pair-forest-direct-result-audit\")]\n    validate_pair_forest_terminal_result_direct_v1(\n        &request,\n        master_account.key,\n        lane_account.key,\n        output_lane,\n        &lane,\n        result,\n    )?;\n    let next_lane_image = next_lane_image_box_v1(&lane, result)?;\n    #[cfg(not(feature = \"pair-forest-direct-result-audit\"))]\n    let result_bytes = terminal_result_bytes_box_v1(result)?;\n    #[cfg(feature = \"pair-forest-direct-result-audit\")]\n    let result_bytes = authenticated.exact_bytes();\n",
+ "encoder_helper": "#[inline(never)]\nfn terminal_result_bytes_box_v1(\n    result: &aspis_statement::pool_v1::PoolV1PairForestTerminalResultV1,\n) -> Result<Box<[u8; POOL_V1_PAIR_FOREST_TERMINAL_RESULT_BYTES]>, ProgramError> {\n    Ok(Box::new(\n        encode_pool_v1_pair_forest_terminal_result_v1(result)\n            .map_err(|_| PoolV1ProgramError::InvalidVerifierReturnData)?,\n    ))\n}\n\n",
+ "domain": "accepted verifier return at post-verify/pre-validation cut; deployed direct-result shortcut OFF",
+ "limitations": [
+  "all earlier account/layout/marker/reserve/verify argument admission outside this cut",
+  "lane-image output abstracted because it does not affect result argument",
+  "native source cut needs enclosing process association before whole-process credit"
+ ]
+}

@@ -1,0 +1,312 @@
+NFR_B_generated/NFR_AfterstateForward.lean:12:7: error: Ambiguous term
+  Slice.Insts.CoreCmpPartialEqSlice
+Possible interpretations:
+  AspisS6SourceCodec.Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8 : core.cmp.PartialEq (Slice U8) (Slice U8)
+  
+  AspisR1TerminalDecoder.Slice.Insts.CoreCmpPartialEqSlice
+    core.cmp.PartialEqU8 : core.cmp.PartialEq (Slice U8) (Slice U8)
+NFR_B_generated/NFR_AfterstateForward.lean:13:44: error: Ambiguous term
+  Slice.Insts.CoreCmpPartialEqSlice
+Possible interpretations:
+  AspisS6SourceCodec.Slice.Insts.CoreCmpPartialEqSlice : core.cmp.PartialEq ?m.8 ?m.9 →
+    core.cmp.PartialEq (Slice ?m.8) (Slice ?m.9)
+  
+  AspisR1TerminalDecoder.Slice.Insts.CoreCmpPartialEqSlice : core.cmp.PartialEq ?m.8 ?m.9 →
+    core.cmp.PartialEq (Slice ?m.8) (Slice ?m.9)
+NFR_B_generated/NFR_AfterstateForward.lean:12:81: error: unsolved goals
+a : Slice U8
+⊢ (sorry ()).eq a a = ok true
+NFR_B_generated/NFR_AfterstateForward.lean:14:34: warning: This simp argument is unused:
+  NBG_Header.slice_equal
+
+Hint: Omit it from the simp argument list.
+  simp [̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵.̵n̵e̵.̵t̵r̵a̵i̵t̵_̵d̵e̵f̵a̵u̵l̵t̵,̵S̵l̵i̵c̵e̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵C̵m̵p̵P̵a̵r̵t̵i̵a̵l̵E̵q̵S̵l̵i̵c̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵.̵n̵e̵.̵d̵e̵f̵a̵u̵l̵t̵,̵N̵B̵G̵_̵H̵e̵a̵d̵e̵r̵.̵s̵l̵i̵c̵e̵_̵e̵q̵u̵a̵l̵]̵[̲c̲o̲r̲e̲.̲c̲m̲p̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲.̲n̲e̲.̲t̲r̲a̲i̲t̲_̲d̲e̲f̲a̲u̲l̲t̲,̲ ̲S̲l̲i̲c̲e̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲C̲m̲p̲P̲a̲r̲t̲i̲a̲l̲E̲q̲S̲l̲i̲c̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲.̲n̲e̲.̲d̲e̲f̲a̲u̲l̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NFR_AfterstateForward.self_ne' depends on axioms: [propext, sorryAx, Quot.sound]
+NFR_B_generated/NFR_AfterstateForward.lean:36:65: error: unsolved goals
+a : Afterstate
+valid : pool_v1.pair_terminal.validate_verified_afterstate a = ok (core.result.Result.Ok ())
+content : ↑(AfterstateEncoding.bytes a) = prefix_bytes a ++ List.flatMap DigestContents.chunks ↑a.next_frontier
+head :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) (encoded a) { «end» := 4#usize } =
+    ok pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC.to_slice
+get4 : (encoded a).index_usize 4#usize = ok 1#u8
+⊢ (match
+      (↑(Array.make 4#usize [65#u8, 83#u8, 74#u8, 65#u8]
+              pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC._proof_2) ++
+          pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIER_TRANSPORT_VERSION ::
+            1#u8 ::
+              pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION ::
+                1#u8 ::
+                  (↑(core.num.U64.to_le_bytes a.next_pair_index) ++
+                    (DigestContents.chunks a.next_root ++
+                      List.flatMap DigestContents.chunks ↑a.next_frontier)))[5]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x) =
+    ok 1#u8
+NFR_B_generated/NFR_AfterstateForward.lean:42:65: error: unsolved goals
+a : Afterstate
+valid : pool_v1.pair_terminal.validate_verified_afterstate a = ok (core.result.Result.Ok ())
+content : ↑(AfterstateEncoding.bytes a) = prefix_bytes a ++ List.flatMap DigestContents.chunks ↑a.next_frontier
+head :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) (encoded a) { «end» := 4#usize } =
+    ok pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC.to_slice
+get4 : (encoded a).index_usize 4#usize = ok 1#u8
+get5 : (encoded a).index_usize 5#usize = ok 1#u8
+⊢ (match
+      (↑(Array.make 4#usize [65#u8, 83#u8, 74#u8, 65#u8]
+              pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC._proof_2) ++
+          pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIER_TRANSPORT_VERSION ::
+            pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_STORAGE_FORMAT_VERSION ::
+              1#u8 ::
+                1#u8 ::
+                  (↑(core.num.U64.to_le_bytes a.next_pair_index) ++
+                    (DigestContents.chunks a.next_root ++
+                      List.flatMap DigestContents.chunks ↑a.next_frontier)))[6]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x) =
+    ok 1#u8
+NFR_B_generated/NFR_AfterstateForward.lean:48:65: error: unsolved goals
+a : Afterstate
+valid : pool_v1.pair_terminal.validate_verified_afterstate a = ok (core.result.Result.Ok ())
+content : ↑(AfterstateEncoding.bytes a) = prefix_bytes a ++ List.flatMap DigestContents.chunks ↑a.next_frontier
+head :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) (encoded a) { «end» := 4#usize } =
+    ok pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC.to_slice
+get4 : (encoded a).index_usize 4#usize = ok 1#u8
+get5 : (encoded a).index_usize 5#usize = ok 1#u8
+get6 : (encoded a).index_usize 6#usize = ok 1#u8
+⊢ (match
+      (↑(Array.make 4#usize [65#u8, 83#u8, 74#u8, 65#u8]
+              pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC._proof_2) ++
+          pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIER_TRANSPORT_VERSION ::
+            pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_STORAGE_FORMAT_VERSION ::
+              pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION ::
+                1#u8 ::
+                  (↑(core.num.U64.to_le_bytes a.next_pair_index) ++
+                    (DigestContents.chunks a.next_root ++
+                      List.flatMap DigestContents.chunks ↑a.next_frontier)))[7]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x) =
+    ok 1#u8
+NFR_B_generated/NFR_AfterstateForward.lean:59:82: error: unsolved goals
+a : Afterstate
+valid : pool_v1.pair_terminal.validate_verified_afterstate a = ok (core.result.Result.Ok ())
+content : ↑(AfterstateEncoding.bytes a) = prefix_bytes a ++ List.flatMap DigestContents.chunks ↑a.next_frontier
+head :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) (encoded a) { «end» := 4#usize } =
+    ok pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC.to_slice
+get4 : (encoded a).index_usize 4#usize = ok 1#u8
+get5 : (encoded a).index_usize 5#usize = ok 1#u8
+get6 : (encoded a).index_usize 6#usize = ok 1#u8
+get7 : (encoded a).index_usize 7#usize = ok 1#u8
+readRoot :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) (encoded a)
+      { start := 16#usize, «end» := 48#usize } =
+    ok (DigestBytes.bytes a.next_root).to_slice
+⊢ ⟨List.take 4 ↑pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC, ⋯⟩ =
+    ⟨↑pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC, ⋯⟩
+NFR_B_generated/NFR_AfterstateForward.lean:65:9: error: ambiguous term, use fully qualified name, possible interpretations [AspisS6NativeAfterstateDecoderFactored.decode,
+ AspisS6SourceCodec.decode]
+NFR_B_generated/NFR_AfterstateForward.lean:25:6: warning: This simp argument is unused:
+  core.slice.index.SliceIndexRangeUsizeSlice.index
+
+Hint: Omit it from the simp argument list.
+  simp [̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵T̵o̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵e̵n̵c̵o̵d̵e̵d̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵S̵l̵i̵c̵e̵.̵l̵e̵n̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵(̵A̵f̵t̵e̵r̵s̵t̵a̵t̵e̵E̵n̵c̵o̵d̵i̵n̵g̵.̵b̵y̵t̵e̵s̵ ̵a̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵c̵o̵n̵t̵e̵n̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵r̵e̵f̵i̵x̵_̵b̵y̵t̵e̵s̵,̵h̵e̵a̵d̵e̵r̵_̵b̵y̵t̵e̵s̵,̵L̵i̵s̵t̵.̵s̵l̵i̵c̵e̵,̵[̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲I̲n̲d̲e̲x̲R̲a̲n̲g̲e̲T̲o̲U̲s̲i̲z̲e̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲ ̲e̲n̲c̲o̲d̲e̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲ ̲(̲A̲f̲t̲e̲r̲s̲t̲a̲t̲e̲E̲n̲c̲o̲d̲i̲n̲g̲.̲b̲y̲t̲e̲s̲ ̲a̲)̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲c̲o̲n̲t̲e̲n̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲p̲r̲e̲f̲i̲x̲_̲b̲y̲t̲e̲s̲,̲ ̲h̲e̲a̲d̲e̲r̲_̲b̲y̲t̲e̲s̲,̲ ̲L̲i̲s̲t̲.̲s̲l̲i̲c̲e̲,̲
+        pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC.property,
+        pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFR_B_generated/NFR_AfterstateForward.lean:26:6: warning: This simp argument is unused:
+  Slice.len
+
+Hint: Omit it from the simp argument list.
+  simp [core.slice.index.Slice.index, ̲core.slice.index.SliceIndexRangeToUsizeSlice.index,
+        core.slice.index.SliceIndexRangeUsizeSlice.index, ̲encoded, ̲Array.to_slice,
+  ̵  ̵ ̵ ̵ ̵ ̵Slice.len,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵gth,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲(AfterstateEncoding.bytes a).property, ̲content,
+  ̵  ̵ ̵ ̵ ̵ ̵prefix_bytes, ̲header_bytes, ̲List.slice,
+        pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC.property,
+        pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFR_B_generated/NFR_AfterstateForward.lean:26:29: warning: This simp argument is unused:
+  (AfterstateEncoding.bytes a).property
+
+Hint: Omit it from the simp argument list.
+  simp [core.slice.index.Slice.index, ̲core.slice.index.SliceIndexRangeToUsizeSlice.index,
+        core.slice.index.SliceIndexRangeUsizeSlice.index, ̲encoded, ̲Array.to_slice,
+  ̵  ̵ ̵ ̵ ̵ ̵Slice.len,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲Slice.length,(̵A̵f̵t̵e̵r̵s̵t̵a̵t̵e̵E̵n̵c̵o̵d̵i̵n̵g̵.̵b̵y̵t̵e̵s̵ a̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵content,
+  ̵  ̵ ̵ ̵ ̵ ̵prefix_bytes, ̲header_bytes, ̲List.slice,
+        pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC.property,
+        pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFR_B_generated/NFR_AfterstateForward.lean:28:6: warning: This simp argument is unused:
+  pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC.property
+
+Hint: Omit it from the simp argument list.
+  simp [̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵T̵o̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵e̵n̵c̵o̵d̵e̵d̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵S̵l̵i̵c̵e̵.̵l̵e̵n̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵(̵A̵f̵t̵e̵r̵s̵t̵a̵t̵e̵E̵n̵c̵o̵d̵i̵n̵g̵.̵b̵y̵t̵e̵s̵ ̵a̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵c̵o̵n̵t̵e̵n̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵r̵e̵f̵i̵x̵_̵b̵y̵t̵e̵s̵,̵h̵e̵a̵d̵e̵r̵_̵b̵y̵t̵e̵s̵,̵L̵i̵s̵t̵.̵s̵l̵i̵c̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵o̵o̵l̵_̵v̵1̵.̵p̵a̵i̵r̵_̵t̵e̵r̵m̵i̵n̵a̵l̵.̵P̵O̵O̵L̵_̵V̵1̵_̵P̵A̵I̵R̵_̵V̵E̵R̵I̵F̵I̵E̵D̵_̵A̵F̵T̵E̵R̵S̵T̵A̵T̵E̵_̵M̵A̵G̵I̵C̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵[̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲I̲n̲d̲e̲x̲R̲a̲n̲g̲e̲T̲o̲U̲s̲i̲z̲e̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲I̲n̲d̲e̲x̲R̲a̲n̲g̲e̲U̲s̲i̲z̲e̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲ ̲e̲n̲c̲o̲d̲e̲d̲,̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲ ̲(̲A̲f̲t̲e̲r̲s̲t̲a̲t̲e̲E̲n̲c̲o̲d̲i̲n̲g̲.̲b̲y̲t̲e̲s̲ ̲a̲)̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲c̲o̲n̲t̲e̲n̲t̲,̲ ̲p̲r̲e̲f̲i̲x̲_̲b̲y̲t̲e̲s̲,̲ ̲h̲e̲a̲d̲e̲r̲_̲b̲y̲t̲e̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲s̲l̲i̲c̲e̲,̲ pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFR_B_generated/NFR_AfterstateForward.lean:31:51: warning: This simp argument is unused:
+  Slice.length
+
+Hint: Omit it from the simp argument list.
+  simp [Slice.index_usize, ̲encoded, ̲Array.to_slice,S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵
+  ̵  ̵ ̵ ̵ ̵ ̵(AfterstateEncoding.bytes a).property,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲content, ̲prefix_bytes, ̲header_bytes,
+        pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC.property,
+        pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC,
+        pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIER_TRANSPORT_VERSION]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFR_B_generated/NFR_AfterstateForward.lean:32:6: warning: This simp argument is unused:
+  (AfterstateEncoding.bytes a).property
+
+Hint: Omit it from the simp argument list.
+  simp [̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵e̵n̵c̵o̵d̵e̵d̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵(̵A̵f̵t̵e̵r̵s̵t̵a̵t̵e̵E̵n̵c̵o̵d̵i̵n̵g̵.̵b̵y̵t̵e̵s̵ ̵a̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵c̵o̵n̵t̵e̵n̵t̵,̵p̵r̵e̵f̵i̵x̵_̵b̵y̵t̵e̵s̵,̵h̵e̵a̵d̵e̵r̵_̵b̵y̵t̵e̵s̵,̵[̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ ̲e̲n̲c̲o̲d̲e̲d̲,̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲ ̲c̲o̲n̲t̲e̲n̲t̲,̲ ̲p̲r̲e̲f̲i̲x̲_̲b̲y̲t̲e̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲h̲e̲a̲d̲e̲r̲_̲b̲y̲t̲e̲s̲,̲ pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC.property,
+        pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC,
+        pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIER_TRANSPORT_VERSION]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFR_B_generated/NFR_AfterstateForward.lean:33:6: warning: This simp argument is unused:
+  pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC.property
+
+Hint: Omit it from the simp argument list.
+  simp [̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵e̵n̵c̵o̵d̵e̵d̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵[̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ ̲e̲n̲c̲o̲d̲e̲d̲,̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲
+        (AfterstateEncoding.bytes a̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵c̵o̵n̵t̵e̵n̵t̵,̵p̵r̵e̵f̵i̵x̵_̵b̵y̵t̵e̵s̵,̵h̵e̵a̵d̵e̵r̵_̵b̵y̵t̵e̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵o̵o̵l̵_̵v̵1̵.̵p̵a̵i̵r̵_̵t̵e̵r̵m̵i̵n̵a̵l̵.̵P̵O̵O̵L̵_̵V̵1̵_̵P̵A̵I̵R̵_̵V̵E̵R̵I̵F̵I̵E̵D̵_̵A̵F̵T̵E̵R̵S̵T̵A̵T̵E̵_̵M̵A̵G̵I̵C̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵a̲)̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲c̲o̲n̲t̲e̲n̲t̲,̲ ̲p̲r̲e̲f̲i̲x̲_̲b̲y̲t̲e̲s̲,̲ ̲h̲e̲a̲d̲e̲r̲_̲b̲y̲t̲e̲s̲,̲
+        pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC,
+        pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIER_TRANSPORT_VERSION]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFR_B_generated/NFR_AfterstateForward.lean:37:51: warning: This simp argument is unused:
+  Slice.length
+
+Hint: Omit it from the simp argument list.
+  simp [Slice.index_usize, ̲encoded, ̲Array.to_slice,S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵
+  ̵  ̵ ̵ ̵ ̵ ̵(AfterstateEncoding.bytes a).property,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲content, ̲prefix_bytes, ̲header_bytes,
+        pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC.property,
+        pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC,
+        pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_STORAGE_FORMAT_VERSION]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFR_B_generated/NFR_AfterstateForward.lean:38:6: warning: This simp argument is unused:
+  (AfterstateEncoding.bytes a).property
+
+Hint: Omit it from the simp argument list.
+  simp [̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵e̵n̵c̵o̵d̵e̵d̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵(̵A̵f̵t̵e̵r̵s̵t̵a̵t̵e̵E̵n̵c̵o̵d̵i̵n̵g̵.̵b̵y̵t̵e̵s̵ ̵a̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵c̵o̵n̵t̵e̵n̵t̵,̵p̵r̵e̵f̵i̵x̵_̵b̵y̵t̵e̵s̵,̵h̵e̵a̵d̵e̵r̵_̵b̵y̵t̵e̵s̵,̵[̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ ̲e̲n̲c̲o̲d̲e̲d̲,̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲ ̲c̲o̲n̲t̲e̲n̲t̲,̲ ̲p̲r̲e̲f̲i̲x̲_̲b̲y̲t̲e̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲h̲e̲a̲d̲e̲r̲_̲b̲y̲t̲e̲s̲,̲ pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC.property,
+        pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC,
+        pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_STORAGE_FORMAT_VERSION]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFR_B_generated/NFR_AfterstateForward.lean:39:6: warning: This simp argument is unused:
+  pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC.property
+
+Hint: Omit it from the simp argument list.
+  simp [̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵e̵n̵c̵o̵d̵e̵d̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵[̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ ̲e̲n̲c̲o̲d̲e̲d̲,̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲
+        (AfterstateEncoding.bytes a̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵c̵o̵n̵t̵e̵n̵t̵,̵p̵r̵e̵f̵i̵x̵_̵b̵y̵t̵e̵s̵,̵h̵e̵a̵d̵e̵r̵_̵b̵y̵t̵e̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵o̵o̵l̵_̵v̵1̵.̵p̵a̵i̵r̵_̵t̵e̵r̵m̵i̵n̵a̵l̵.̵P̵O̵O̵L̵_̵V̵1̵_̵P̵A̵I̵R̵_̵V̵E̵R̵I̵F̵I̵E̵D̵_̵A̵F̵T̵E̵R̵S̵T̵A̵T̵E̵_̵M̵A̵G̵I̵C̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵a̲)̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲c̲o̲n̲t̲e̲n̲t̲,̲ ̲p̲r̲e̲f̲i̲x̲_̲b̲y̲t̲e̲s̲,̲ ̲h̲e̲a̲d̲e̲r̲_̲b̲y̲t̲e̲s̲,̲
+        pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC,
+        pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_STORAGE_FORMAT_VERSION]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFR_B_generated/NFR_AfterstateForward.lean:43:51: warning: This simp argument is unused:
+  Slice.length
+
+Hint: Omit it from the simp argument list.
+  simp [Slice.index_usize, ̲encoded, ̲Array.to_slice,S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵
+  ̵  ̵ ̵ ̵ ̵ ̵(AfterstateEncoding.bytes a).property,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲content, ̲prefix_bytes, ̲header_bytes,
+        pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC.property,
+        pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC,
+        pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFR_B_generated/NFR_AfterstateForward.lean:44:6: warning: This simp argument is unused:
+  (AfterstateEncoding.bytes a).property
+
+Hint: Omit it from the simp argument list.
+  simp [̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵e̵n̵c̵o̵d̵e̵d̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵(̵A̵f̵t̵e̵r̵s̵t̵a̵t̵e̵E̵n̵c̵o̵d̵i̵n̵g̵.̵b̵y̵t̵e̵s̵ ̵a̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵c̵o̵n̵t̵e̵n̵t̵,̵p̵r̵e̵f̵i̵x̵_̵b̵y̵t̵e̵s̵,̵h̵e̵a̵d̵e̵r̵_̵b̵y̵t̵e̵s̵,̵[̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ ̲e̲n̲c̲o̲d̲e̲d̲,̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲ ̲c̲o̲n̲t̲e̲n̲t̲,̲ ̲p̲r̲e̲f̲i̲x̲_̲b̲y̲t̲e̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲h̲e̲a̲d̲e̲r̲_̲b̲y̲t̲e̲s̲,̲ pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC.property,
+        pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC,
+        pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFR_B_generated/NFR_AfterstateForward.lean:45:6: warning: This simp argument is unused:
+  pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC.property
+
+Hint: Omit it from the simp argument list.
+  simp [̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵e̵n̵c̵o̵d̵e̵d̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵[̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ ̲e̲n̲c̲o̲d̲e̲d̲,̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲
+        (AfterstateEncoding.bytes a̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵c̵o̵n̵t̵e̵n̵t̵,̵p̵r̵e̵f̵i̵x̵_̵b̵y̵t̵e̵s̵,̵h̵e̵a̵d̵e̵r̵_̵b̵y̵t̵e̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵o̵o̵l̵_̵v̵1̵.̵p̵a̵i̵r̵_̵t̵e̵r̵m̵i̵n̵a̵l̵.̵P̵O̵O̵L̵_̵V̵1̵_̵P̵A̵I̵R̵_̵V̵E̵R̵I̵F̵I̵E̵D̵_̵A̵F̵T̵E̵R̵S̵T̵A̵T̵E̵_̵M̵A̵G̵I̵C̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵a̲)̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲c̲o̲n̲t̲e̲n̲t̲,̲ ̲p̲r̲e̲f̲i̲x̲_̲b̲y̲t̲e̲s̲,̲ ̲h̲e̲a̲d̲e̲r̲_̲b̲y̲t̲e̲s̲,̲
+        pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC,
+        pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFR_B_generated/NFR_AfterstateForward.lean:49:51: warning: This simp argument is unused:
+  Slice.length
+
+Hint: Omit it from the simp argument list.
+  simp [Slice.index_usize, ̲encoded, ̲Array.to_slice,S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵
+  ̵  ̵ ̵ ̵ ̵ ̵(AfterstateEncoding.bytes a).property,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲content, ̲prefix_bytes, ̲header_bytes,
+        pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC.property,
+        pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFR_B_generated/NFR_AfterstateForward.lean:50:6: warning: This simp argument is unused:
+  (AfterstateEncoding.bytes a).property
+
+Hint: Omit it from the simp argument list.
+  simp [̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵e̵n̵c̵o̵d̵e̵d̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵(̵A̵f̵t̵e̵r̵s̵t̵a̵t̵e̵E̵n̵c̵o̵d̵i̵n̵g̵.̵b̵y̵t̵e̵s̵ ̵a̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵c̵o̵n̵t̵e̵n̵t̵,̵p̵r̵e̵f̵i̵x̵_̵b̵y̵t̵e̵s̵,̵h̵e̵a̵d̵e̵r̵_̵b̵y̵t̵e̵s̵,̵[̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ ̲e̲n̲c̲o̲d̲e̲d̲,̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲ ̲c̲o̲n̲t̲e̲n̲t̲,̲ ̲p̲r̲e̲f̲i̲x̲_̲b̲y̲t̲e̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲h̲e̲a̲d̲e̲r̲_̲b̲y̲t̲e̲s̲,̲ pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC.property,
+        pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFR_B_generated/NFR_AfterstateForward.lean:51:6: warning: This simp argument is unused:
+  pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC.property
+
+Hint: Omit it from the simp argument list.
+  simp [̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵e̵n̵c̵o̵d̵e̵d̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵[̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ ̲e̲n̲c̲o̲d̲e̲d̲,̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲
+        (AfterstateEncoding.bytes a̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵c̵o̵n̵t̵e̵n̵t̵,̵p̵r̵e̵f̵i̵x̵_̵b̵y̵t̵e̵s̵,̵h̵e̵a̵d̵e̵r̵_̵b̵y̵t̵e̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵o̵o̵l̵_̵v̵1̵.̵p̵a̵i̵r̵_̵t̵e̵r̵m̵i̵n̵a̵l̵.̵P̵O̵O̵L̵_̵V̵1̵_̵P̵A̵I̵R̵_̵V̵E̵R̵I̵F̵I̵E̵D̵_̵A̵F̵T̵E̵R̵S̵T̵A̵T̵E̵_̵M̵A̵G̵I̵C̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵a̲)̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲c̲o̲n̲t̲e̲n̲t̲,̲ ̲p̲r̲e̲f̲i̲x̲_̲b̲y̲t̲e̲s̲,̲ ̲h̲e̲a̲d̲e̲r̲_̲b̲y̲t̲e̲s̲,̲
+        pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFR_B_generated/NFR_AfterstateForward.lean:62:21: warning: This simp argument is unused:
+  Slice.len
+
+Hint: Omit it from the simp argument list.
+  simp [̵c̵o̵r̵e̵.̵a̵r̵r̵a̵y̵.̵A̵r̵r̵a̵y̵.̵i̵n̵d̵e̵x̵,̵c̵o̵r̵e̵.̵o̵p̵s̵.̵i̵n̵d̵e̵x̵.̵I̵n̵d̵e̵x̵S̵l̵i̵c̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵L̵i̵s̵t̵.̵s̵l̵i̵c̵e̵,̵[̲c̲o̲r̲e̲.̲a̲r̲r̲a̲y̲.̲A̲r̲r̲a̲y̲.̲i̲n̲d̲e̲x̲,̲ ̲c̲o̲r̲e̲.̲o̲p̲s̲.̲i̲n̲d̲e̲x̲.̲I̲n̲d̲e̲x̲S̲l̲i̲c̲e̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲I̲n̲d̲e̲x̲R̲a̲n̲g̲e̲U̲s̲i̲z̲e̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲ ̲L̲i̲s̲t̲.̲s̲l̲i̲c̲e̲,̲
+        pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC.property]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NFR_AfterstateForward.roundtrip' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,42 @@
+{"attempt": "NFR_B019", "exit_status": 1, "wall_seconds": 2.756400332087651, "peak_rss_kib": "5376416", "swaps": "0", "print_axioms": ["'NFR_AfterstateForward16.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NFR_B_generated/NFR_AfterstateForward16.lean:15:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  atomic_statement.decode_digest_canonical (DigestBytes.bytes (↑a.next_frontier)[↑⟨16, ?m.354⟩])
+in the target expression
+  (do
+      let cf34 ←
+        core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok (DigestBytes.bytes (↑a.next_frontier)[16]))
+      match cf34 with
+        | core.ops.control_flow.ControlFlow.Continue val34 => do
+          let r52 ← atomic_statement.decode_digest_canonical val34
+          let r53 ←
+            core.result.Result.map_err
+                pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure_17.Insts.C
+...
+           (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1
+                    (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1
+                (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1
+            (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual) =
+    ok (core.result.Result.Ok a)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'NFR_AfterstateForward16.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r6742e9a49dee4f0a9b81643e3b6486b2.scope; invocation ID: 844c9e1746b642dfbfcffa4971938616

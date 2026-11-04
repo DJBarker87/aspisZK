@@ -1,0 +1,49 @@
+{"attempt": "NFR_B032", "exit_status": 1, "wall_seconds": 2.481081116013229, "peak_rss_kib": "5298556", "swaps": "0", "print_axioms": ["'NFR_ResultForward.forward' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NFR_ResultForward.emitted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NFR_ResultForward.decoder_association' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NFR_B_generated/NFR_ResultForward.lean:22:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 ?m.20
+in the target expression
+  (do
+      let s1 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) (encoded r)
+            { start := pool_v1.pair_forest_terminal.RESULT_MASTER_OFFSET,
+              «end» := pool_v1.pair_forest_terminal.RESULT_SELECTED_LANE_OFFSET }
+      let r1 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1
+      let r2 ←
+        core.result.Result.map_err
+            NFO_RawDecode.decode.closure.Insts.CoreOpsFunctionFnOn
+...
+TryFromSliceErrorPoolV1PairForestTerminalFormatErrorV1
+      r1 ()
+NFR_B_generated/NFR_ResultForward.lean:21:47: warning: This simp argument is unused:
+  master_range
+
+Hint: Omit it from the simp argument list.
+  simp only [show Slice.len (encoded r) ̲= ̲792#usize from by
+  ̵  ̵ ̵ ̵ ̵ ̵unfold encoded;
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲have := (NFO_ResultLayout.bytes r).property; scalar_tac,
+      bne_self_eq_false, ̲Bool.false_eq_true, ̲reduceIte, ̲head,
+  ̵  ̵ ̵ ̵bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲NFR_AfterstateForward.self_ne,
+  ̵  ̵ ̵ ̵get4, ̲get5, ̲get6, ̲get7,
+      pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION,
+      pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION, ̲kind_roundtrip,
+      core.result.Result.Insts.CoreOpsTry.branch,̵m̵a̵s̵t̵e̵r̵_̵r̵a̵n̵g̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NFR_ResultForward.forward' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+NFR_B_generated/NFR_ResultForward.lean:44:2: error: Type mismatch: After simplification, term
+  raw
+ has type
+  @Eq
+    (Result
+      (core.result.Result pool_v1.pair_forest_terminal.PoolV1PairForestTerminalResultV1
+        pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1))
+    (NFO_RawDecode.decode (ResultPayload.bytes s).to_slice) (ok (core.result.Result.Ok (ResultAdmission.value s)))
+but is expected to have type
+  @Eq (Result (core.result.Result NFO_PacketDecoder.Output NFO_PacketDecoder.Error))
+    (NFO_RawDecode.decode (Array.to_slice ⟨↑(ResultPayload.bytes s), ⋯⟩))
+    (ok (core.result.Result.Ok (ResultAdmission.value s)))
+'NFR_ResultForward.emitted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NFR_ResultForward.decoder_association' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rad05088d63e5433d8cefcdfe69ff6b08.scope; invocation ID: 393fcad44b93438e8a605563d1cbc10c

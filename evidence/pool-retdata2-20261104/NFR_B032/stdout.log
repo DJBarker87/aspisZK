@@ -1,0 +1,290 @@
+NFR_B_generated/NFR_ResultForward.lean:22:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 ?m.20
+in the target expression
+  (do
+      let s1 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) (encoded r)
+            { start := pool_v1.pair_forest_terminal.RESULT_MASTER_OFFSET,
+              «end» := pool_v1.pair_forest_terminal.RESULT_SELECTED_LANE_OFFSET }
+      let r1 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1
+      let r2 ←
+        core.result.Result.map_err
+            NFO_RawDecode.decode.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromSliceErrorPoolV1PairForestTerminalFormatErrorV1
+            r1 ()
+      let cf1 ←
+        match r2 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue val1 => do
+          let s2 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) (encoded r)
+                { start := pool_v1.pair_forest_terminal.RESULT_SELECTED_LANE_OFFSET,
+                  «end» := pool_v1.pair_forest_terminal.RESULT_NULLIFIER_OFFSET }
+          let r3 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s2
+          let r4 ←
+            core.result.Result.map_err
+                NFO_RawDecode.decode.closure_1.Insts.CoreOpsFunctionFnOnceTupleTryFromSliceErrorPoolV1PairForestTerminalFormatErrorV1
+                r3 ()
+          let cf2 ←
+            match r4 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf2 with
+            | core.ops.control_flow.ControlFlow.Continue val2 => do
+              let s3 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) (encoded r)
+                    { start := pool_v1.pair_forest_terminal.RESULT_NULLIFIER_OFFSET,
+                      «end» := pool_v1.pair_forest_terminal.RESULT_AFTERSTATE_OFFSET }
+              let r5 ← core.array.TryFromSharedArraySlice.try_from 32#usize s3
+              let r6 ←
+                core.result.Result.map_err
+                    NFO_RawDecode.decode.closure_2.Insts.CoreOpsFunctionFnOnceTupleTryFromSliceErrorPoolV1PairForestTerminalFormatErrorV1
+                    r5 ()
+              let cf3 ←
+                match r6 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf3 with
+                | core.ops.control_flow.ControlFlow.Continue val3 => do
+                  let r7 ← atomic_statement.decode_digest_canonical val3
+                  let r8 ←
+                    core.result.Result.map_err
+                        NFO_RawDecode.decode.closure_3.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairForestTerminalFormatErrorV1
+                        r7 ()
+                  let cf4 ←
+                    match r8 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf4 with
+                    | core.ops.control_flow.ControlFlow.Continue val4 => do
+                      let s4 ←
+                        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) (encoded r)
+                            { start := pool_v1.pair_forest_terminal.RESULT_AFTERSTATE_OFFSET }
+                      let r9 ← pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1 s4
+                      let r10 ←
+                        core.result.Result.map_err
+                            NFO_RawDecode.decode.closure_4.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairForestTerminalFormatErrorV1
+                            r9 ()
+                      let cf5 ←
+                        match r10 with
+                          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                          | core.result.Result.Err e =>
+                            ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                      match cf5 with
+                        | core.ops.control_flow.ControlFlow.Continue val5 => do
+                          let r11 ←
+                            pool_v1.pair_forest_terminal.validate_result
+                                { transition_kind := r.transition_kind, master_account := val1,
+                                  selected_lane_account := val2, output_lane := r.output_lane, nullifier := val4,
+                                  verified_afterstate := val5 }
+                          let cf6 ←
+                            match r11 with
+                              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                              | core.result.Result.Err e =>
+                                ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                          match cf6 with
+                            | core.ops.control_flow.ControlFlow.Continue a =>
+                              ok
+                                (core.result.Result.Ok
+                                  { transition_kind := r.transition_kind, master_account := val1,
+                                    selected_lane_account := val2, output_lane := r.output_lane, nullifier := val4,
+                                    verified_afterstate := val5 })
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                pool_v1.pair_forest_terminal.PoolV1PairForestTerminalResultV1
+                                (core.convert.FromSame
+                                  pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+                                residual
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            pool_v1.pair_forest_terminal.PoolV1PairForestTerminalResultV1
+                            (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+                            residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        pool_v1.pair_forest_terminal.PoolV1PairForestTerminalResultV1
+                        (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+                        residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    pool_v1.pair_forest_terminal.PoolV1PairForestTerminalResultV1
+                    (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                pool_v1.pair_forest_terminal.PoolV1PairForestTerminalResultV1
+                (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            pool_v1.pair_forest_terminal.PoolV1PairForestTerminalResultV1
+            (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual) =
+    ok (core.result.Result.Ok r)
+
+r : Output
+canonical : NBD_DigestInduction.Canonical r.nullifier
+afterstate : pool_v1.pair_terminal.validate_verified_afterstate r.verified_afterstate = ok (core.result.Result.Ok ())
+validated : pool_v1.pair_forest_terminal.validate_result r = ok (core.result.Result.Ok ())
+⊢ (do
+      let s1 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) (encoded r)
+            { start := pool_v1.pair_forest_terminal.RESULT_MASTER_OFFSET,
+              «end» := pool_v1.pair_forest_terminal.RESULT_SELECTED_LANE_OFFSET }
+      let r1 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1
+      let r2 ←
+        core.result.Result.map_err
+            NFO_RawDecode.decode.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromSliceErrorPoolV1PairForestTerminalFormatErrorV1
+            r1 ()
+      let cf1 ←
+        match r2 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue val1 => do
+          let s2 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) (encoded r)
+                { start := pool_v1.pair_forest_terminal.RESULT_SELECTED_LANE_OFFSET,
+                  «end» := pool_v1.pair_forest_terminal.RESULT_NULLIFIER_OFFSET }
+          let r3 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s2
+          let r4 ←
+            core.result.Result.map_err
+                NFO_RawDecode.decode.closure_1.Insts.CoreOpsFunctionFnOnceTupleTryFromSliceErrorPoolV1PairForestTerminalFormatErrorV1
+                r3 ()
+          let cf2 ←
+            match r4 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf2 with
+            | core.ops.control_flow.ControlFlow.Continue val2 => do
+              let s3 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) (encoded r)
+                    { start := pool_v1.pair_forest_terminal.RESULT_NULLIFIER_OFFSET,
+                      «end» := pool_v1.pair_forest_terminal.RESULT_AFTERSTATE_OFFSET }
+              let r5 ← core.array.TryFromSharedArraySlice.try_from 32#usize s3
+              let r6 ←
+                core.result.Result.map_err
+                    NFO_RawDecode.decode.closure_2.Insts.CoreOpsFunctionFnOnceTupleTryFromSliceErrorPoolV1PairForestTerminalFormatErrorV1
+                    r5 ()
+              let cf3 ←
+                match r6 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf3 with
+                | core.ops.control_flow.ControlFlow.Continue val3 => do
+                  let r7 ← atomic_statement.decode_digest_canonical val3
+                  let r8 ←
+                    core.result.Result.map_err
+                        NFO_RawDecode.decode.closure_3.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairForestTerminalFormatErrorV1
+                        r7 ()
+                  let cf4 ←
+                    match r8 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf4 with
+                    | core.ops.control_flow.ControlFlow.Continue val4 => do
+                      let s4 ←
+                        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) (encoded r)
+                            { start := pool_v1.pair_forest_terminal.RESULT_AFTERSTATE_OFFSET }
+                      let r9 ← pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1 s4
+                      let r10 ←
+                        core.result.Result.map_err
+                            NFO_RawDecode.decode.closure_4.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairForestTerminalFormatErrorV1
+                            r9 ()
+                      let cf5 ←
+                        match r10 with
+                          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                          | core.result.Result.Err e =>
+                            ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                      match cf5 with
+                        | core.ops.control_flow.ControlFlow.Continue val5 => do
+                          let r11 ←
+                            pool_v1.pair_forest_terminal.validate_result
+                                { transition_kind := r.transition_kind, master_account := val1,
+                                  selected_lane_account := val2, output_lane := r.output_lane, nullifier := val4,
+                                  verified_afterstate := val5 }
+                          let cf6 ←
+                            match r11 with
+                              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                              | core.result.Result.Err e =>
+                                ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                          match cf6 with
+                            | core.ops.control_flow.ControlFlow.Continue a =>
+                              ok
+                                (core.result.Result.Ok
+                                  { transition_kind := r.transition_kind, master_account := val1,
+                                    selected_lane_account := val2, output_lane := r.output_lane, nullifier := val4,
+                                    verified_afterstate := val5 })
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                pool_v1.pair_forest_terminal.PoolV1PairForestTerminalResultV1
+                                (core.convert.FromSame
+                                  pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+                                residual
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            pool_v1.pair_forest_terminal.PoolV1PairForestTerminalResultV1
+                            (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+                            residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        pool_v1.pair_forest_terminal.PoolV1PairForestTerminalResultV1
+                        (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+                        residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    pool_v1.pair_forest_terminal.PoolV1PairForestTerminalResultV1
+                    (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                pool_v1.pair_forest_terminal.PoolV1PairForestTerminalResultV1
+                (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            pool_v1.pair_forest_terminal.PoolV1PairForestTerminalResultV1
+            (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual) =
+    ok (core.result.Result.Ok r)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    ()
+  has type
+    Unit
+  but is expected to have type
+    NFO_RawDecode.decode.closure
+  in the application
+    core.result.Result.map_err
+      NFO_RawDecode.decode.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromSliceErrorPoolV1PairForestTerminalFormatErrorV1
+      r1 ()
+NFR_B_generated/NFR_ResultForward.lean:21:47: warning: This simp argument is unused:
+  master_range
+
+Hint: Omit it from the simp argument list.
+  simp only [show Slice.len (encoded r) ̲= ̲792#usize from by
+  ̵  ̵ ̵ ̵ ̵ ̵unfold encoded;
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲have := (NFO_ResultLayout.bytes r).property; scalar_tac,
+      bne_self_eq_false, ̲Bool.false_eq_true, ̲reduceIte, ̲head,
+  ̵  ̵ ̵ ̵bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲NFR_AfterstateForward.self_ne,
+  ̵  ̵ ̵ ̵get4, ̲get5, ̲get6, ̲get7,
+      pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION,
+      pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION, ̲kind_roundtrip,
+      core.result.Result.Insts.CoreOpsTry.branch,̵m̵a̵s̵t̵e̵r̵_̵r̵a̵n̵g̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NFR_ResultForward.forward' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+NFR_B_generated/NFR_ResultForward.lean:44:2: error: Type mismatch: After simplification, term
+  raw
+ has type
+  @Eq
+    (Result
+      (core.result.Result pool_v1.pair_forest_terminal.PoolV1PairForestTerminalResultV1
+        pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1))
+    (NFO_RawDecode.decode (ResultPayload.bytes s).to_slice) (ok (core.result.Result.Ok (ResultAdmission.value s)))
+but is expected to have type
+  @Eq (Result (core.result.Result NFO_PacketDecoder.Output NFO_PacketDecoder.Error))
+    (NFO_RawDecode.decode (Array.to_slice ⟨↑(ResultPayload.bytes s), ⋯⟩))
+    (ok (core.result.Result.Ok (ResultAdmission.value s)))
+'NFR_ResultForward.emitted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NFR_ResultForward.decoder_association' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

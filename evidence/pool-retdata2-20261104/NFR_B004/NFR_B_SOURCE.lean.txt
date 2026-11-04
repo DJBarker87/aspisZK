@@ -1,0 +1,20 @@
+import NFR_RawInverseHelpers
+set_option autoImplicit false
+noncomputable section
+namespace NFR_RawInverseValidator
+open Aeneas Aeneas.Std Result WP AspisR1TerminalDecoder
+open AspisR1.S2K NFO_ResultLayout
+
+@[local step] theorem encoder (value : pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1) :
+    pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1 value ⦃ _ => True ⦄ := by
+  obtain ⟨result,run⟩ := AspisS6NativeAfterstateCodec.encode_total value
+  rw [run,WP.spec_ok]
+  trivial
+#print axioms encoder
+
+@[step] theorem validate (value : Output) :
+    pool_v1.pair_forest_terminal.validate_result value ⦃ _ => True ⦄ := by
+  unfold pool_v1.pair_forest_terminal.validate_result
+  step*
+#print axioms validate
+end NFR_RawInverseValidator

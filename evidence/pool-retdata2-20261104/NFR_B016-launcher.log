@@ -1,0 +1,47 @@
+{"attempt": "NFR_B016", "exit_status": 1, "wall_seconds": 3.7978266458958387, "peak_rss_kib": "5362096", "swaps": "0", "print_axioms": ["'NFR_AfterstateForwardHelpers.domain' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NFR_AfterstateForwardHelpers.range' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NFR_AfterstateForwardHelpers.uniform_window' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NFR_AfterstateForwardHelpers.digest_width' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NFR_AfterstateForwardHelpers.root_window' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NFR_AfterstateForwardHelpers.frontier_window' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+'NFR_AfterstateForwardHelpers.domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+NFR_B_generated/NFR_AfterstateForwardHelpers.lean:37:4: warning: 'all_goals try scalar_tac' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+'NFR_AfterstateForwardHelpers.range' depends on axioms: [propext, Classical.choice, Quot.sound]
+NFR_B_generated/NFR_AfterstateForwardHelpers.lean:52:38: warning: This simp argument is unused:
+  List.take_append
+
+Hint: Omit it from the simp argument list.
+  simp [̵L̵i̵s̵t̵.̵f̵l̵a̵t̵M̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵t̵a̵k̵e̵_̵a̵p̵p̵e̵n̵d̵,̵w̵i̵d̵t̵h̵]̵[̲L̲i̲s̲t̲.̲f̲l̲a̲t̲M̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲w̲i̲d̲t̲h̲]̲
+
+Note: This l
+...
+̵_̵a̵p̵p̵e̵n̵ ̲d,̵d̵igest_width,
+  ̵  ̵ ̵ ̵header_bytes,
+  ̲ ̲ ̲ ̲ ̲pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC.property,
+      (core.num.U64.to_le_bytes a.next_pair_index).property]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NFR_AfterstateForwardHelpers.root_window' depends on axioms: [propext, Classical.choice, Quot.sound]
+NFR_B_generated/NFR_AfterstateForwardHelpers.lean:77:52: error: Type mismatch: After simplification, term
+  bound
+ has type
+  @LT.lt ℕ instLTNat i 20
+but is expected to have type
+  @LT.lt ℕ instLTNat i ↑20#usize
+NFR_B_generated/NFR_AfterstateForwardHelpers.lean:78:2: error: Type mismatch: After simplification, term
+  uniform_window DigestContents.chunks 32 digest_width (↑a.next_frontier) i small
+ has type
+  List.take 32 (List.drop (32 * i) (List.flatMap DigestContents.chunks ↑a.next_frontier)) =
+    DigestContents.chunks (↑a.next_frontier)[i]
+but is expected to have type
+  List.take (80 + 32 * i - (48 + 32 * i))
+        (List.drop (48 + 32 * i) ↑pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC) ++
+      List.take (80 + 32 * i - (48 + 32 * i) - (4 - (48 + 32 * i)))
+        (List.drop (48 + 32 * i - 4)
+          (pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIER_TRANSPORT_VERSION ::
+            pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_STORAGE_FORMAT_VERSION ::
+              pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION ::
+                1#u8 ::
+                  (↑(core.num.U64.to_le_bytes a.next_pair_index) ++
+                    (DigestContents.chunks a.next_root ++ List.flatMap DigestContents.chunks ↑a.next_frontier)))) =
+    DigestContents.chunks (↑a.next_frontier)[i]
+'NFR_AfterstateForwardHelpers.frontier_window' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r1d3c2922331e41978e4b211545ac2137.scope; invocation ID: e1453036b98a470fbb65d07043f8560c

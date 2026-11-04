@@ -1,0 +1,48 @@
+{"attempt": "NFR_B006", "exit_status": 1, "wall_seconds": 8.823930558981374, "peak_rss_kib": "5405640", "swaps": "0", "print_axioms": ["'NFR_RawInverseFrames.frames' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NFR_B_generated/NFR_RawInverseFrames.lean:21:96: error: unsolved goals
+bytes : Slice U8
+h✝¹⁰ : ¬(bytes.len != 792#usize) = true
+s : Slice U8
+_✝²⁷ : [> let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 4#usize } bytes <]
+b : Bool
+_✝²⁶ :
+  [> let b ←
+    core.cmp.PartialEq.ne.default (core.slice.cmp.PartialEqSlice.eq core.cmp.PartialEqU8) s
+      pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_RESULT_MAGIC.to_slice <]
+i2 : U8
+_✝²⁵ : [> let i2 ← bytes.index_usize 4#usize <]
+i4 : U8
+_✝²⁴ : [> let i4 ← bytes.index_usize 5#usize <]
+r :
+  core.result.Result pool_v1.historical_anchor.PoolV1TransitionKind
+    pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErr
+...
+st : core.result.Result.Insts.CoreOpsTry.branch r6 = ok (core.ops.control_flow.ControlFlow.Continue val3)
+h✝³ : cf3 = core.ops.control_flow.ControlFlow.Continue val3
+r7_post : ∀ (value : Std.Array U32 8#usize), r7 = core.result.Result.Ok value → ↑(DigestBytes.bytes value) = ↑val3
+r8_post : ∀ (value : Std.Array U32 8#usize), r8 = core.result.Result.Ok value → r7 = core.result.Result.Ok value
+cf4_post : core.result.Result.Insts.CoreOpsTry.branch r8 = ok (core.ops.control_flow.ControlFlow.Continue val4)
+h✝² : cf4 = core.ops.control_flow.ControlFlow.Continue val4
+s4_post1 : ↑s4 = List.drop 104 ↑bytes
+r9_post :
+  ∀ (value : pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1),
+    r9 = core.result.Result.Ok value → ↑(AfterstateEncoding.bytes value) = List.drop 104 ↑bytes
+r10_post :
+  ∀ (value : pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1),
+    r10 = core.result.Result.Ok value → r9 = core.result.Result.Ok value
+cf5_post : core.result.Result.Insts.CoreOpsTry.branch r10 = ok (core.ops.control_flow.ControlFlow.Continue val5)
+h✝¹ : cf5 = core.ops.control_flow.ControlFlow.Continue val5
+cf6_post : core.result.Result.Insts.CoreOpsTry.branch r11 = ok (core.ops.control_flow.ControlFlow.Continue a✝)
+h✝ : cf6 = core.ops.control_flow.ControlFlow.Continue a✝
+⊢ (↑bytes).length = 792 ∧
+    List.take 4 ↑bytes = [65#u8, 83#u8, 82#u8, 56#u8] ∧
+      (↑bytes)[4]? = some 1#u8 ∧
+        (↑bytes)[5]? = some (kind val) ∧
+          (↑bytes)[6]? = some 1#u8 ∧
+            ↑val1 = List.slice 8 40 ↑bytes ∧
+              ↑val2 = List.slice 40 72 ↑bytes ∧
+                ↑(DigestBytes.bytes val4) = List.slice 72 104 ↑bytes ∧
+                  ↑(AfterstateEncoding.bytes val5) = List.drop 104 ↑bytes
+'NFR_RawInverseFrames.frames' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r167c3b8ea77846c4a6bb7182cad8194c.scope; invocation ID: 2e7da4c3db6b45b896640baf15625ee9

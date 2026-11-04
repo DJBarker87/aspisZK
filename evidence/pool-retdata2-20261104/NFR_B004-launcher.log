@@ -1,0 +1,48 @@
+{"attempt": "NFR_B004", "exit_status": 1, "wall_seconds": 2.6448760689236224, "peak_rss_kib": "5385036", "swaps": "0", "print_axioms": ["'NFR_RawInverseValidator.encoder' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NFR_RawInverseValidator.validate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+'NFR_RawInverseValidator.encoder' depends on axioms: [propext, Classical.choice, Quot.sound]
+NFR_B_generated/NFR_RawInverseValidator.lean:16:72: error: unsolved goals
+value : Output
+b : Bool
+_✝¹ :
+  [> let b ←
+    core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 value.master_account (Array.repeat 32#usize 0#u8) <]
+h✝¹ : ¬b = true
+b1 : Bool
+_✝ :
+  [> let b1 ←
+    core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 value.selected_lane_account
+      (Array.repeat 32#usize 0#u8) <]
+h✝ : ¬b1 = true
+r : core.result.Result U8 pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1
+_ : [> let r ← pool_v1.pair_forest_accounts.pool_v1_pair_forest_output_lane_v1 value.nullifier <]
+
+...
+r
+            pool_v1.pair_forest_terminal.validate_result.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1
+            r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          if (value.output_lane != val) = true then
+            ok
+              (core.result.Result.Err
+                pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+          else do
+            let r2 ← pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1 value.verified_afterstate
+            let r3 ←
+              core.result.Result.map_err
+                  pool_v1.pair_forest_terminal.validate_result.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairForestTerminalFormatErrorV1
+                  r2 ()
+            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                  (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual) ⦃
+    x✝ => True ⦄
+'NFR_RawInverseValidator.validate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r1028743725df4046b2cfb63570ee15c6.scope; invocation ID: 829d30e4fb834b6ea86545fac6937511
