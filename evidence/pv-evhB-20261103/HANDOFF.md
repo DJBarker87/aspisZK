@@ -1,3 +1,44 @@
+# D588 in-progress constructor/receiver checkpoint
+
+Resume from `26bc9dfd6b`; branch `codex/pv-evhB-20261103`.
+Read `CONSTRUCTOR-D588.md`, `lifetime-source-D588.json`, and
+`std-inputs-D588.json`. Four-stage task incomplete; stage 1 has a new
+constructor/lifetime/source-place mechanism, not full original-entry coverage.
+The unchanged native header equation and v263 descriptor-view equation remain
+OPEN. No T/endpoint/deployment/binder/domain change or reached counterexample.
+
+`PV_EVHB_SourceLifetimes` is committed and staged but **NOT ACCEPTED** at this
+checkpoint. It mints identities at construction; proves local freshness,
+source-place move, receiver/header selection and outcome-preserving place
+transport laws; and identifies the original salts initial constructor/receiver
+prefix. All theorem statements remain uncredited pending compilation.
+The pointer/layout interpretation and full original call/move/drop interpreter
+are still needed. Do not rename its model laws as native closure.
+
+Attempt 91231 has three uncharged quiet-window refusals, no submitted compile.
+Retry the SAME unlaunched ID only after at least180s from the latest epoch in
+`refusal-91231.json`, under the existing same-shell admission. The marker is
+never edited. See refusal-history files. A preliminary wrapper call before
+staging finished failed locally without submission; `prelaunch-order-D588.json`
+records the correction. **Accounting unchanged:32/97 charged,22 accepted,
+10 rejected,65 remain; NEXT91231.** Audits91298–91299 unused.
+
+No new Lean axioms result exists yet. `summary.json` remains the accepted D582
+summary; audit.py intentionally rejects any unaccepted current module, so do
+not claim its final audit passed with this draft. Source structural and std
+input --check commands passed. Collection is read-only and matches adopted
+rustc1.94.1; no native program, Kani, extraction, full manifest or build ran.
+
+Next: validate SourceLifetimes after admission, then construct the original
+entry's advancing source-state/activation/place interpretation (all reached
+constructor/move/borrow/drop paths). Only after stage 1 is source-bound, bind
+Global/System/world answers to V183, derive the original reserve header law,
+then derive the exact v263 instance, in that order. Keep rdea-1/rdea-2/V400,
+V370/L3, all source failures and V183 SUSPENDED(K-3). Source effects do not
+require physical stack pairing (l3-2); no compiler fact is silently assumed.
+
+---
+
 # PV evhB allocator/callback context checkpoint
 
 ## D582 final context checkpoint — native association still OPEN
