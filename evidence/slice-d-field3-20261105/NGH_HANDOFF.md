@@ -1,0 +1,13 @@
+# NGH handoff
+
+Stage 0: reference-contract continuation of NGA_; no new row closed. Target not yet established.
+
+Worktree/branch: cx-slice-d-field3, codex/cx-slice-d-field3-20261105. Only NGH_ files and this evidence directory may change. No push; no shipped source changes. No keys or accounts used.
+
+Order: TX1:036 accumulation; TX1:044 small helper; TX1:040/041/043 wrappers; TX1:056 WideExact square with expressly authorized slice-Q QM31 square boundary. Budget 60 Kani / 60 Lean / 1 extraction (zero helper extraction). Existing NGA_ support is read-only, pinned by hash. CLOSED under (ah) requires native reference contract, transcription, cohort law, deployed parity/control, combined headline replay and strict ax2 audit. Hand transcription is an additional reported trust boundary.
+
+Resource policy: one capped scope at a time; admission exit 0 AND allowed:true; MemoryHigh6G/MemoryMax8G/Swap0/Tasks64; Lean -M7000; optimized Rust. Cache retained, imported by copying named exports. Exact receipts and source/dependency pins accompany attempts.
+
+Assumptions retained: P6/D188 option A, physical ABI/borrows, compiler/library/Aeneas/source-to-ELF, SDK/std, RuntimePersistence, RuntimeReturnData (nonempty), RuntimeMemcmp, digest=H and cryptographic assumptions. L154 is a statement parameter. No change to security metric, privacy, or two transactions.
+
+Validation and remaining obligations will be updated after each stage. No release/ELF rebuild is triggered by evidence-only changes. Initial counts: 0 Kani, 0 Lean, 0 extraction.
