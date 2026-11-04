@@ -3,7 +3,8 @@ from pathlib import Path
 import subprocess,json,sys,time,hashlib,shlex,re
 E=Path(__file__).resolve().parent;B='/home/dombarker/project-offloads/codex-cx-pool-retdata2-20261104';H='dombarker@100.108.41.90'
 a,target=sys.argv[1:3];mode=sys.argv[3] if len(sys.argv)>3 else 'lean';assert mode in ['lean','link','fixtures','final','scan-link','scan','extract'];assert (a.startswith('NFR_B') and 1<=int(a[5:])<=100) or (a.startswith('NFR_E') and 1<=int(a[5:])<=3)
-assert len(list(E.glob('NFR_B*/receipt.json')))<49 if mode!='extract' else len(list(E.glob('NFR_E*/receipt.json')))<3
+prior=[json.loads(line) for line in (E/'NFR_ATTEMPTS.jsonl').read_text().splitlines()]
+assert sum(row['kind'] not in ['kani','extract'] for row in prior)<60 if mode!='extract' else sum(row['kind']=='extract' for row in prior)<2
 assert re.fullmatch(r'[A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*',target)
 moduleRel=target.replace('.','/')
 assert not (E/a).exists();active=E/'NFR_B_LEAN_ACTIVE.json';assert not active.exists();active.write_text(json.dumps(dict(attempt=a)))
@@ -60,26 +61,26 @@ for p in [coherent/'objects/Aeneas.olean',*(coherent/'objects/Aeneas').rglob('*.
   companion=Path(str(p)+suffix) if suffix!='.ir' else p.with_suffix('.ir')
   if companion.exists():selected[str(companion)]=dict(path=str(companion),sha256=hashlib.sha256(companion.read_bytes()).hexdigest())
 if {mode in ['fixtures','final','scan']!r}:
- p=b/({'NFO_native/NFO_Coherence' if mode=='scan' else 'NFO_native/NFO_Driver'!r});selected[str(p)]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())
+ p=b/({'NFO_native/NFR_Coherence' if mode=='scan' else 'NFO_native/NFR_Driver'!r});selected[str(p)]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())
 print(json.dumps(dict(selected_objects=selected,missing=missing)))
 '''
 r=ssh('python3',code);assert r.returncode==0,r.stderr;pins=json.loads(r.stdout)
 (E/(a+'-pins.json')).write_text(json.dumps(pins,indent=1)+'\n')
 if pins['missing']:active.unlink();raise SystemExit('Missing unchanged dependencies: '+str(pins['missing']))
 command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NFR_B_generated','-o','NFR_B_objects/'+moduleRel+'.olean','NFR_B_generated/'+moduleRel+'.lean']
-if target in ['NFO_WALKER','NFO_MemoryLimit','NFO_Driver','NFO_Coherence']:
+if target in ['NFO_WALKER','NFO_MemoryLimit','NFO_Driver','NFO_Coherence','NFR_Driver','NFR_Coherence','NFR_WALKER','NFR_MemoryLimit']:
  command[command.index('-o'):command.index('-o')]=['-c','NFO_native/'+moduleRel+'.c']
-if mode=='link':command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','leanc','-O3','-rdynamic','-o','NFO_native/NFO_Driver','NFO_native/NFO_Driver.c','NFO_native/NFO_WALKER.c','NFO_native/NFO_MemoryLimit.c']
-if mode in ['fixtures','final']:command=['NFO_native/NFO_Driver',mode]
-if mode=='final':command=['python3','NFO_audit_both.py']
-if mode=='scan-link':command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','leanc','-O3','-rdynamic','-o','NFO_native/NFO_Coherence','NFO_native/NFO_Coherence.c','NFO_native/NFO_MemoryLimit.c']
-if mode=='scan':command=['NFO_native/NFO_Coherence']
+if mode=='link':command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','leanc','-O3','-rdynamic','-o','NFO_native/NFR_Driver','NFO_native/NFR_Driver.c','NFO_native/NFR_WALKER.c','NFO_native/NFR_MemoryLimit.c']
+if mode in ['fixtures','final']:command=['NFO_native/NFR_Driver',mode]
+if mode=='final':command=['python3','NFR_audit_both.py']
+if mode=='scan-link':command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','leanc','-O3','-rdynamic','-o','NFO_native/NFR_Coherence','NFO_native/NFR_Coherence.c','NFO_native/NFR_MemoryLimit.c']
+if mode=='scan':command=['NFO_native/NFR_Coherence']
 if mode=='extract':command=['python3','NFO_extract.py']
-cfg=dict(attempt=a,kind='lean' if mode=='lean' else mode,module=target,sources=['NFO_native/NFO_Coherence.c','NFO_native/NFO_MemoryLimit.c'] if mode=='scan-link' else ['NFO_native/NFO_Driver.c','NFO_native/NFO_WALKER.c','NFO_native/NFO_MemoryLimit.c'] if mode=='link' else ['NFR_B_generated/'+moduleRel+'.lean'],command=command,env=dict(LEAN_SYSROOT='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0',PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',LEAN_PATH=B+'/NFR_B_objects:'+B+'/NFR_C_objects:/home/dombarker/project-offloads/codex-cx-pool-retdata2-cache-20261104/NFO_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata2-cache-20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata2-cache-20261104/NEY_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata2-cache-20261104/NEX_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata2-cache-20261104/NEQ_final_objects_20261103:/home/dombarker/project-offloads/codex-cx-pool-retdata2-cache-20261104/NEM_final_objects_20261102:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects'),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint=pins)
+cfg=dict(attempt=a,kind='lean' if mode=='lean' else mode,module=target,sources=['NFO_native/NFR_Coherence.c','NFO_native/NFR_MemoryLimit.c'] if mode=='scan-link' else ['NFO_native/NFR_Driver.c','NFO_native/NFR_WALKER.c','NFO_native/NFR_MemoryLimit.c'] if mode=='link' else ['NFR_B_generated/'+moduleRel+'.lean'],command=command,env=dict(LEAN_SYSROOT='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0',PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',LEAN_PATH=B+'/NFR_B_objects:'+B+'/NFR_C_objects:/home/dombarker/project-offloads/codex-cx-pool-retdata2-cache-20261104/NFO_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata2-cache-20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata2-cache-20261104/NEY_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata2-cache-20261104/NEX_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata2-cache-20261104/NEQ_final_objects_20261103:/home/dombarker/project-offloads/codex-cx-pool-retdata2-cache-20261104/NEM_final_objects_20261102:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects'),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint=pins)
 (E/a).mkdir();(E/a/'NFR_B_SOURCE.lean.txt').write_text(source)
 files={'NFR_B_generated/'+moduleRel+'.lean':source,a+'.json':json.dumps(cfg)}
 if mode=='final':
- files['NFO_audit_both.py']=(E/'NFO_audit_both.py').read_text();cfg['sources'].append('NFO_audit_both.py');files[a+'.json']=json.dumps(cfg)
+ files['NFR_audit_both.py']=(E/'NFR_audit_both.py').read_text();cfg['sources'].append('NFR_audit_both.py');files[a+'.json']=json.dumps(cfg)
 if mode=='extract':
  files.update({'NFO_extract.py':(E/'NFO_extract.py').read_text(),'NFO_ref/Cargo.toml':(E/'NFO_reference_Cargo.toml').read_text(),'NFO_ref/src/lib.rs':(E/'NFO_decode_ref.rs').read_text()})
  cfg['sources']=['NFO_extract.py','NFO_ref/Cargo.toml','NFO_ref/src/lib.rs'];files[a+'.json']=json.dumps(cfg)
@@ -107,7 +108,7 @@ r=ssh('python3',code);assert r.returncode==0,r.stderr;out=json.loads(r.stdout)
 for n,s in out.items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
 assert a+'/receipt.json' in out,'unresolved submitted attempt; never resubmit'
 if mode in ['link','scan-link']:
- r=ssh('python3',f"from pathlib import Path;import json;b=Path({B!r});print(json.dumps({{n:(b/n).read_text() for n in ['NFO_native/NFO_Driver.c','NFO_native/NFO_WALKER.c','NFO_native/NFO_MemoryLimit.c','NFO_native/NFO_Coherence.c'] if (b/n).exists()}}))")
+ r=ssh('python3',f"from pathlib import Path;import json;b=Path({B!r});print(json.dumps({{n:(b/n).read_text() for n in ['NFO_native/NFR_Driver.c','NFO_native/NFR_WALKER.c','NFO_native/NFR_MemoryLimit.c','NFO_native/NFR_Coherence.c'] if (b/n).exists()}}))")
  assert r.returncode==0,r.stderr
  for n,s in json.loads(r.stdout).items():
   p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)

@@ -1,0 +1,145 @@
+NFR_B_generated/NFR_ResultForward.lean:42:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1
+    (NFR_AfterstateForwardHelpers.encoded r.verified_afterstate)
+in the target expression
+  (do
+      let r9 ←
+        pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1
+            (AfterstateEncoding.bytes r.verified_afterstate).to_slice
+      let r10 ←
+        core.result.Result.map_err
+            NFO_RawDecode.decode.closure_4.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairForestTerminalFormatErrorV1
+            r9 ()
+      let cf5 ←
+        match r10 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf5 with
+        | core.ops.control_flow.ControlFlow.Continue val5 => do
+          let r11 ←
+            pool_v1.pair_forest_terminal.validate_result
+                { transition_kind := r.transition_kind, master_account := r.master_account,
+                  selected_lane_account := r.selected_lane_account, output_lane := r.output_lane,
+                  nullifier := r.nullifier, verified_afterstate := val5 }
+          let cf6 ←
+            match r11 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf6 with
+            | core.ops.control_flow.ControlFlow.Continue a =>
+              ok
+                (core.result.Result.Ok
+                  { transition_kind := r.transition_kind, master_account := r.master_account,
+                    selected_lane_account := r.selected_lane_account, output_lane := r.output_lane,
+                    nullifier := r.nullifier, verified_afterstate := val5 })
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                pool_v1.pair_forest_terminal.PoolV1PairForestTerminalResultV1
+                (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            pool_v1.pair_forest_terminal.PoolV1PairForestTerminalResultV1
+            (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual) =
+    ok (core.result.Result.Ok r)
+
+r : Output
+canonical : NBD_DigestInduction.Canonical r.nullifier
+afterstate : pool_v1.pair_terminal.validate_verified_afterstate r.verified_afterstate = ok (core.result.Result.Ok ())
+validated : pool_v1.pair_forest_terminal.validate_result r = ok (core.result.Result.Ok ())
+masterCast :
+  core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 r.master_account.to_slice =
+    ok (core.result.Result.Ok r.master_account)
+selectedCast :
+  core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 r.selected_lane_account.to_slice =
+    ok (core.result.Result.Ok r.selected_lane_account)
+digestCast :
+  core.array.TryFromSharedArraySlice.try_from 32#usize (DigestBytes.bytes r.nullifier).to_slice =
+    ok (core.result.Result.Ok (DigestBytes.bytes r.nullifier))
+⊢ (do
+      let r9 ←
+        pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1
+            (AfterstateEncoding.bytes r.verified_afterstate).to_slice
+      let r10 ←
+        core.result.Result.map_err
+            NFO_RawDecode.decode.closure_4.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairForestTerminalFormatErrorV1
+            r9 ()
+      let cf5 ←
+        match r10 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf5 with
+        | core.ops.control_flow.ControlFlow.Continue val5 => do
+          let r11 ←
+            pool_v1.pair_forest_terminal.validate_result
+                { transition_kind := r.transition_kind, master_account := r.master_account,
+                  selected_lane_account := r.selected_lane_account, output_lane := r.output_lane,
+                  nullifier := r.nullifier, verified_afterstate := val5 }
+          let cf6 ←
+            match r11 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf6 with
+            | core.ops.control_flow.ControlFlow.Continue a =>
+              ok
+                (core.result.Result.Ok
+                  { transition_kind := r.transition_kind, master_account := r.master_account,
+                    selected_lane_account := r.selected_lane_account, output_lane := r.output_lane,
+                    nullifier := r.nullifier, verified_afterstate := val5 })
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                pool_v1.pair_forest_terminal.PoolV1PairForestTerminalResultV1
+                (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            pool_v1.pair_forest_terminal.PoolV1PairForestTerminalResultV1
+            (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual) =
+    ok (core.result.Result.Ok r)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (688 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NFR_B_generated/NFR_ResultForward.lean:31:13: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFR_B_generated/NFR_ResultForward.lean:34:13: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵g̵e̵t̵7̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲g̲e̲t̲7̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFR_B_generated/NFR_ResultForward.lean:34:67: warning: This simp argument is unused:
+  get7
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.Insts.CoreOpsTry.branch, ̲bind_tc_ok,̵g̵e̵t̵7̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFR_B_generated/NFR_ResultForward.lean:37:13: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFR_B_generated/NFR_ResultForward.lean:40:13: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NFR_ResultForward.forward' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NFR_ResultForward.emitted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NFR_ResultForward.decoder_association' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

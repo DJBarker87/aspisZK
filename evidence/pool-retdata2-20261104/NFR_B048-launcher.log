@@ -1,0 +1,43 @@
+{"attempt": "NFR_B048", "exit_status": 1, "wall_seconds": 2.534696441143751, "peak_rss_kib": "5363844", "swaps": "0", "print_axioms": ["'NFR_ModelJoin.same_emitted_settlement' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NFR_ModelJoin.local_law' depends on axioms: [propext, Quot.sound]", "'NFR_ModelJoin.local_empty' depends on axioms: [propext]"]}
+NFR_B_generated/NFR_ModelJoin.lean:52:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NFR_CSettlement.run validate lane NEY_EmitComposed.encode
+    { value := AspisR1.S2K.ResultAdmission.value s, bytes := ↑(AspisR1.S2K.ResultPayload.bytes s) }
+in the target expression
+  (let (reply, events) :=
+      (core.result.Result.Ok
+          { value := AspisR1.S2K.ResultAdmission.value s, bytes := ↑(AspisR1.S2K.ResultPayload.bytes s) },
+        [NFO_ReadModel.Event.clear, NFO_ReadModel.Event.invoke, NFO_ReadModel.Event.read, NFO_ReadModel.Event.decode])
+    match reply with
+    | core.result.Result.Err e => ok (core.result.Result.Err (Sum.inl e), events, [])
+    | core.r
+...
+el.Event.clear, NFO_ReadModel.Event.invoke, NFO_ReadModel.Event.read, NFO_ReadModel.Event.decode])
+    match reply with
+    | core.result.Result.Err e => ok (core.result.Result.Err (Sum.inl e), events, [])
+    | core.result.Result.Ok authenticated => do
+      let (settled, continuation) ← NFR_CSettlement.run validate lane NEY_EmitComposed.encode authenticated
+      match settled with
+        | core.result.Result.Err e => ok (core.result.Result.Err (Sum.inr e), events, continuation)
+        | core.result.Result.Ok output => ok (core.result.Result.Ok output, events, continuation)) =
+    ok
+      (core.result.Result.Ok (image, AspisR1.S2K.ResultPayload.bytes s),
+        [NFO_ReadModel.Event.clear, NFO_ReadModel.Event.invoke, NFO_ReadModel.Event.read, NFO_ReadModel.Event.decode],
+        [NFR_CSettlement.Call.validate (AspisR1.S2K.ResultAdmission.value s),
+          NFR_CSettlement.Call.lane (AspisR1.S2K.ResultAdmission.value s),
+          NFR_CSettlement.Call.encode (AspisR1.S2K.ResultAdmission.value s)])
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (792 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'NFR_ModelJoin.same_emitted_settlement' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NFR_ModelJoin.local_law' depends on axioms: [propext, Quot.sound]
+'NFR_ModelJoin.local_empty' depends on axioms: [propext]
+
+Running as unit: run-r08eea9a8056e42349a34cc40af57a1b5.scope; invocation ID: 592a7a66afef404290511f569babb0ae

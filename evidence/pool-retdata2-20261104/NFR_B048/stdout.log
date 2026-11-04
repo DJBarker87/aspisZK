@@ -1,0 +1,84 @@
+NFR_B_generated/NFR_ModelJoin.lean:52:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NFR_CSettlement.run validate lane NEY_EmitComposed.encode
+    { value := AspisR1.S2K.ResultAdmission.value s, bytes := ↑(AspisR1.S2K.ResultPayload.bytes s) }
+in the target expression
+  (let (reply, events) :=
+      (core.result.Result.Ok
+          { value := AspisR1.S2K.ResultAdmission.value s, bytes := ↑(AspisR1.S2K.ResultPayload.bytes s) },
+        [NFO_ReadModel.Event.clear, NFO_ReadModel.Event.invoke, NFO_ReadModel.Event.read, NFO_ReadModel.Event.decode])
+    match reply with
+    | core.result.Result.Err e => ok (core.result.Result.Err (Sum.inl e), events, [])
+    | core.result.Result.Ok authenticated => do
+      let (settled, continuation) ← NFR_CSettlement.run validate lane NEY_EmitComposed.encode authenticated
+      match settled with
+        | core.result.Result.Err e => ok (core.result.Result.Err (Sum.inr e), events, continuation)
+        | core.result.Result.Ok output => ok (core.result.Result.Ok output, events, continuation)) =
+    ok
+      (core.result.Result.Ok (image, AspisR1.S2K.ResultPayload.bytes s),
+        [NFO_ReadModel.Event.clear, NFO_ReadModel.Event.invoke, NFO_ReadModel.Event.read, NFO_ReadModel.Event.decode],
+        [NFR_CSettlement.Call.validate (AspisR1.S2K.ResultAdmission.value s),
+          NFR_CSettlement.Call.lane (AspisR1.S2K.ResultAdmission.value s),
+          NFR_CSettlement.Call.encode (AspisR1.S2K.ResultAdmission.value s)])
+
+Context Key RuntimeState Accounts Other LaneImage : Type
+inst✝ : DecidableEq Key
+runtime : Runtime Context Key RuntimeState
+law : NFR_PoolReturnData.RuntimeReturnData runtime
+context : Context
+selected : Key
+state : AspisR1.S2I.ReturnData.State Accounts Other
+s : NEU_EmitModel.Statement
+valid :
+  AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1 s =
+    ok (core.result.Result.Ok ())
+validate : Output → Result (core.result.Result Unit PoolError)
+lane : Output → Result (core.result.Result LaneImage PoolError)
+image : LaneImage
+checked : validate (AspisR1.S2K.ResultAdmission.value s) = ok (core.result.Result.Ok ())
+advanced : lane (AspisR1.S2K.ResultAdmission.value s) = ok (core.result.Result.Ok image)
+linked :
+  AspisR1.JHb_Emit.source (fun st bytes => ok (AspisR1.S2I.ReturnData.set st bytes)) state s =
+      ok (core.result.Result.Ok (AspisR1.S2I.ReturnData.set state ↑(AspisR1.S2K.ResultPayload.bytes s))) ∧
+    NFO_ReadModel.run selected (core.result.Result.Ok ())
+          (runtime.read context (runtime.write context selected ↑(AspisR1.S2K.ResultPayload.bytes s)))
+          NFO_PacketDecoder.run =
+        ok
+          (core.result.Result.Ok
+              { value := AspisR1.S2K.ResultAdmission.value s, bytes := ↑(AspisR1.S2K.ResultPayload.bytes s) },
+            [NFO_ReadModel.Event.clear, NFO_ReadModel.Event.invoke, NFO_ReadModel.Event.read,
+              NFO_ReadModel.Event.decode]) ∧
+      NEY_EmitComposed.encode (AspisR1.S2K.ResultAdmission.value s) =
+          ok (core.result.Result.Ok (AspisR1.S2K.ResultPayload.bytes s)) ∧
+        NFR_CHelper.terminal_ref NEY_EmitComposed.encode (AspisR1.S2K.ResultAdmission.value s) =
+          ok (core.result.Result.Ok (AspisR1.S2K.ResultPayload.bytes s))
+⊢ (let (reply, events) :=
+      (core.result.Result.Ok
+          { value := AspisR1.S2K.ResultAdmission.value s, bytes := ↑(AspisR1.S2K.ResultPayload.bytes s) },
+        [NFO_ReadModel.Event.clear, NFO_ReadModel.Event.invoke, NFO_ReadModel.Event.read, NFO_ReadModel.Event.decode])
+    match reply with
+    | core.result.Result.Err e => ok (core.result.Result.Err (Sum.inl e), events, [])
+    | core.result.Result.Ok authenticated => do
+      let (settled, continuation) ← NFR_CSettlement.run validate lane NEY_EmitComposed.encode authenticated
+      match settled with
+        | core.result.Result.Err e => ok (core.result.Result.Err (Sum.inr e), events, continuation)
+        | core.result.Result.Ok output => ok (core.result.Result.Ok output, events, continuation)) =
+    ok
+      (core.result.Result.Ok (image, AspisR1.S2K.ResultPayload.bytes s),
+        [NFO_ReadModel.Event.clear, NFO_ReadModel.Event.invoke, NFO_ReadModel.Event.read, NFO_ReadModel.Event.decode],
+        [NFR_CSettlement.Call.validate (AspisR1.S2K.ResultAdmission.value s),
+          NFR_CSettlement.Call.lane (AspisR1.S2K.ResultAdmission.value s),
+          NFR_CSettlement.Call.encode (AspisR1.S2K.ResultAdmission.value s)])
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (792 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'NFR_ModelJoin.same_emitted_settlement' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NFR_ModelJoin.local_law' depends on axioms: [propext, Quot.sound]
+'NFR_ModelJoin.local_empty' depends on axioms: [propext]

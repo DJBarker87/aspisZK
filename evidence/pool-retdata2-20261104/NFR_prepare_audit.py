@@ -18,7 +18,8 @@ for p in sorted(E.glob('NFR_*.lean')):
  roots.extend(names);modules.append(p.stem);matches.append(dict(module=p.stem,sha256=sha,receipts=receipts,roots=names))
 s=(O/'NFO_Driver.lean').read_text();a=s.index('    (#[`NFO_Final],');b=s.index('    else if mode == "fixtures"',a)
 s=s[:a]+'    (#['+','.join('`'+m for m in modules)+'],\n     #['+','.join('`'+r for r in roots)+'])\n'+s[b:]
-# No walker/adaptation changes; labels retained deliberately for direct diff.
+s=s.replace('import NFO_WALKER','import NFR_WALKER').replace('import NFO_MemoryLimit','import NFR_MemoryLimit')
+# Prefix-owned copies are byte-identical, including the hardened walker body.
 (E/'NFR_Driver.lean').write_text(s)
 (E/'NFR_DRIVER.diff').write_text(''.join(difflib.unified_diff((O/'NFO_Driver.lean').read_text().splitlines(True),s.splitlines(True),fromfile='NFO_Driver.lean',tofile='NFR_Driver.lean')))
 walker=(O/'NFO_WALKER.lean').read_bytes();canonical=(E.parent/'axaudit2-20261102/NEP_WALKER.lean').read_bytes();assert walker==canonical
@@ -27,5 +28,6 @@ walker=(O/'NFO_WALKER.lean').read_bytes();canonical=(E.parent/'axaudit2-20261102
 s=(O/'NFO_Coherence.lean').read_text().replace('namespace NFO_Coherence','namespace NFR_Coherence').replace('end NFO_Coherence','end NFR_Coherence').replace('NFO_Coherence.referenceNames','NFR_Coherence.referenceNames').replace('NFO_LOADED.jsonl','NFR_LOADED.jsonl').replace('#[{module := `NFO_Final, importAll := true}]','[') if False else (O/'NFO_Coherence.lean').read_text()
 s=s.replace('namespace NFO_Coherence','namespace NFR_Coherence').replace('end NFO_Coherence','end NFR_Coherence').replace('NFO_Coherence.referenceNames','NFR_Coherence.referenceNames').replace('NFO_LOADED.jsonl','NFR_LOADED.jsonl')
 s=s.replace('#[{module := `NFO_Final, importAll := true}]', '#['+','.join('{module := `'+m+', importAll := true}' for m in modules)+']').replace('loaded NFO closure','loaded NFR closure')
+s=s.replace('import NFO_MemoryLimit','import NFR_MemoryLimit')
 (E/'NFR_Coherence.lean').write_text(s)
 print(len(modules),'modules',len(roots),'roots')

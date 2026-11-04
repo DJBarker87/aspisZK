@@ -46,3 +46,41 @@ No shipped source, existing proof owner, artifact, wallet or key was changed.
 No Kani/extraction run is charged to B; E001 is reused. Native account/context,
 carrier and settlement certificates are separate A/C obligations. The joint
 non-vacuity and cold coherent release gates remain separate.
+
+Continuation B035-B037: the final forward decode proof now compiles.
+B035 replaced elaboration-permissive rewrites with exact rewrites, removing the
+recursion-depth obstruction, and isolated the remaining afterstate encoded-slice
+numeral proof mismatch. B036 uses the named afterstate roundtrip after explicitly
+unfolding only its encoded-slice wrapper: forward/emitted/decoder_association
+all compile with standard axioms. This is a symbolic composition of the closed
+header, field-window, canonical-digest and afterstate laws, not wire-buffer
+normalization. B037 compiles the current NFR_PoolReturnData association, which
+derives accepting decoder/read output for every valid emitted statement; no
+independent accepted-read, inverse or decoder-association premise remains.
+The accepted_association root is retained too. This mathematical result does
+not establish a complete native Pool execution or a reachable two-transaction
+witness; A/C native caller and joint non-vacuity gates remain separate.
+
+B036: exit0, 2.5121 s, 5328848 KiB, swap0.
+B037: exit0, 2.6278 s, 5316304 KiB, swap0.
+
+B051 adds NFR_ModelJoin.same_emitted_settlement: the valid emitted statement
+fixes the exact accepted read record; the SAME record is the argument to the
+settlement continuation, whose successful validator/lane child outcomes are
+explicit hypotheses on that record's value. Its encoded output is the original
+emitted792-byte array, and ordered validate/lane/encode events all carry that
+same value. The encoder domain is derived from original statement validation,
+not assumed separately. This is typed model composition, not a native execution
+certificate or independent successful-run existential. B048-B050 are excluded
+failed diagnostics of an unfolded sequential-bind presentation; B051 uses the
+existing typed certificates directly and leaves no undecided buffer reduction.
+
+NFR_ModelJoin.local_law gives an explicit local runtime interpretation satisfying
+the nonempty return-data row; local_empty proves it returns None for an empty
+reply. This witnesses consistency of the scoped row, not a Solana implementation
+proof, not a reachable Pool success, and not the joint two-transaction witness.
+B051: exit0,2.4886s,5403088KiB,swap0; all3 roots standard axioms only.
+
+Final validation B052-B057 includes the new ModelJoin roots (source change justified the final replay). B054: same compiled driver passed all8 planted/mutation controls and69 raw roots, standard axioms only,0 missing reachable constants,0 summary disagreements; exit0,7.7415s,5343336KiB,swap0. Hardened walker is byte-identical to NEP_WALKER, with full driver diff committed. B057:9356 loaded modules,625019 declarations,21725408 edges;20 own proof modules zero dangling references; exactly the same650 references in15 inherited modules. Scan exit1 is retained, classified inherited and not waived. New raw roots pass; whole imported closure coherence remains OPEN. Own retained source/object/sidecar/audit pins are in NFR_RETAINED.json. No cache was deleted.
+
+All60 Lean/link/audit/scan units are charged, including pre-command B039 missing-input launcher failure. No Lean budget remains. Remaining native caller/context/carrier obligations and concrete joint execution witness are not discharged by these model theorems.

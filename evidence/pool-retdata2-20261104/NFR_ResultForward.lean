@@ -13,6 +13,10 @@ theorem forward (r : Output)
   have masterCast := AspisR1.JFt_ExactArray.cast 32#usize r.master_account.to_slice r.master_account rfl
   have selectedCast := AspisR1.JFt_ExactArray.cast 32#usize r.selected_lane_account.to_slice r.selected_lane_account rfl
   have digestCast := AspisR1.JFt_DigestArray.shared (DigestBytes.bytes r.nullifier).to_slice (DigestBytes.bytes r.nullifier) rfl
+  have afterstateRoundtrip : pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1
+      (AfterstateEncoding.bytes r.verified_afterstate).to_slice = ok (.Ok r.verified_afterstate) := by
+    simpa only [NFR_AfterstateForwardHelpers.encoded] using
+      (NFR_AfterstateForward.roundtrip r.verified_afterstate afterstate)
   unfold NFO_RawDecode.decode
   simp only [show Slice.len (encoded r)=792#usize from by
       unfold encoded; have := (NFO_ResultLayout.bytes r).property; scalar_tac,
@@ -26,24 +30,24 @@ theorem forward (r : Output)
     pool_v1.pair_forest_terminal.RESULT_SELECTED_LANE_OFFSET,
     pool_v1.pair_forest_terminal.RESULT_NULLIFIER_OFFSET,
     pool_v1.pair_forest_terminal.RESULT_AFTERSTATE_OFFSET,master_range]
-  erw [masterCast,bind_tc_ok]
-  erw [NFO_DecodeErrors.master (.Ok r.master_account),bind_tc_ok]
+  rw [masterCast,bind_tc_ok]
+  rw [NFO_DecodeErrors.master (.Ok r.master_account),bind_tc_ok]
   simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
-  erw [selected_range,bind_tc_ok,selectedCast,bind_tc_ok]
-  erw [NFO_DecodeErrors.selected (.Ok r.selected_lane_account),bind_tc_ok]
+  rw [selected_range,bind_tc_ok,selectedCast,bind_tc_ok]
+  rw [NFO_DecodeErrors.selected (.Ok r.selected_lane_account),bind_tc_ok]
   simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,get7]
-  erw [digest_range,bind_tc_ok,digestCast,bind_tc_ok]
-  erw [NFO_DecodeErrors.digest_width (.Ok (DigestBytes.bytes r.nullifier)),bind_tc_ok]
+  rw [digest_range,bind_tc_ok,digestCast,bind_tc_ok]
+  rw [NFO_DecodeErrors.digest_width (.Ok (DigestBytes.bytes r.nullifier)),bind_tc_ok]
   simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
-  erw [NFR_DigestForward.roundtrip _ canonical,bind_tc_ok]
-  erw [NFO_DecodeErrors.digest (.Ok r.nullifier),bind_tc_ok]
+  rw [NFR_DigestForward.roundtrip _ canonical,bind_tc_ok]
+  rw [NFO_DecodeErrors.digest (.Ok r.nullifier),bind_tc_ok]
   simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
-  erw [afterstate_range,bind_tc_ok]
-  erw [NFR_AfterstateForward.roundtrip _ afterstate,bind_tc_ok]
-  erw [NFO_DecodeErrors.afterstate (.Ok r.verified_afterstate),bind_tc_ok]
+  rw [afterstate_range,bind_tc_ok]
+  rw [afterstateRoundtrip,bind_tc_ok]
+  rw [NFO_DecodeErrors.afterstate (.Ok r.verified_afterstate),bind_tc_ok]
   simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
   have rebuilt : ({transition_kind:=r.transition_kind,master_account:=r.master_account,selected_lane_account:=r.selected_lane_account,output_lane:=r.output_lane,nullifier:=r.nullifier,verified_afterstate:=r.verified_afterstate} : Output) = r := by cases r; rfl
-  erw [rebuilt,validated]
+  rw [rebuilt,validated]
   rfl
 #print axioms forward
 
@@ -52,7 +56,7 @@ theorem emitted (s : NEU_EmitModel.Statement)
     NFO_PacketDecoder.run (ResultPayload.bytes s).val = ok (.Ok (ResultAdmission.value s)) := by
   have raw := forward (ResultAdmission.value s) (nullifier_domain s valid)
     (StatementAdmission.afterstate s valid) (ResultAdmission.validated s valid)
-  erw [NFO_PacketDecoder.on_packet _ (ResultPayload.bytes s).property]
+  rw [NFO_PacketDecoder.on_packet _ (ResultPayload.bytes s).property]
   simpa only [encoded,NFO_ResultLayout.emitted,Array.to_slice] using raw
 #print axioms emitted
 

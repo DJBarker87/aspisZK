@@ -1,0 +1,101 @@
+NFR_B_generated/NFR_ModelJoin.lean:48:60: error: unsolved goals
+Context Key RuntimeState Accounts Other LaneImage : Type
+inst✝ : DecidableEq Key
+runtime : Runtime Context Key RuntimeState
+law : NFR_PoolReturnData.RuntimeReturnData runtime
+context : Context
+selected : Key
+state : AspisR1.S2I.ReturnData.State Accounts Other
+s : NEU_EmitModel.Statement
+valid :
+  AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1 s =
+    ok (core.result.Result.Ok ())
+validate : Output → Result (core.result.Result Unit PoolError)
+lane : Output → Result (core.result.Result LaneImage PoolError)
+image : LaneImage
+checked : validate (AspisR1.S2K.ResultAdmission.value s) = ok (core.result.Result.Ok ())
+advanced : lane (AspisR1.S2K.ResultAdmission.value s) = ok (core.result.Result.Ok image)
+linked :
+  AspisR1.JHb_Emit.source (fun st bytes => ok (AspisR1.S2I.ReturnData.set st bytes)) state s =
+      ok (core.result.Result.Ok (AspisR1.S2I.ReturnData.set state ↑(AspisR1.S2K.ResultPayload.bytes s))) ∧
+    NFO_ReadModel.run selected (core.result.Result.Ok ())
+          (runtime.read context (runtime.write context selected ↑(AspisR1.S2K.ResultPayload.bytes s)))
+          NFO_PacketDecoder.run =
+        ok
+          (core.result.Result.Ok
+              { value := AspisR1.S2K.ResultAdmission.value s, bytes := ↑(AspisR1.S2K.ResultPayload.bytes s) },
+            [NFO_ReadModel.Event.clear, NFO_ReadModel.Event.invoke, NFO_ReadModel.Event.read,
+              NFO_ReadModel.Event.decode]) ∧
+      NEY_EmitComposed.encode (AspisR1.S2K.ResultAdmission.value s) =
+          ok (core.result.Result.Ok (AspisR1.S2K.ResultPayload.bytes s)) ∧
+        NFR_CHelper.terminal_ref NEY_EmitComposed.encode (AspisR1.S2K.ResultAdmission.value s) =
+          ok (core.result.Result.Ok (AspisR1.S2K.ResultPayload.bytes s))
+⊢ (let (reply, events) :=
+      (core.result.Result.Ok
+          { value := AspisR1.S2K.ResultAdmission.value s, bytes := ↑(AspisR1.S2K.ResultPayload.bytes s) },
+        [NFO_ReadModel.Event.clear, NFO_ReadModel.Event.invoke, NFO_ReadModel.Event.read, NFO_ReadModel.Event.decode])
+    match reply with
+    | core.result.Result.Err e => ok (core.result.Result.Err (Sum.inl e), events, [])
+    | core.result.Result.Ok authenticated => do
+      let (settled, continuation) ←
+        do
+          let checked ← validate authenticated.value
+          match checked with
+            | core.result.Result.Err e =>
+              ok (core.result.Result.Err e, [NFR_CSettlement.Call.validate authenticated.value])
+            | core.result.Result.Ok PUnit.unit => do
+              let image ← lane authenticated.value
+              match image with
+                | core.result.Result.Err e =>
+                  ok
+                    (core.result.Result.Err e,
+                      [NFR_CSettlement.Call.validate authenticated.value,
+                        NFR_CSettlement.Call.lane authenticated.value])
+                | core.result.Result.Ok image => do
+                  let encoded ← NEY_EmitComposed.encode authenticated.value
+                  match encoded with
+                    | core.result.Result.Err a =>
+                      ok
+                        (core.result.Result.Err NFR_CSettlement.invalidReturn,
+                          [NFR_CSettlement.Call.validate authenticated.value,
+                            NFR_CSettlement.Call.lane authenticated.value,
+                            NFR_CSettlement.Call.encode authenticated.value])
+                    | core.result.Result.Ok bytes =>
+                      ok
+                        (core.result.Result.Ok (image, bytes),
+                          [NFR_CSettlement.Call.validate authenticated.value,
+                            NFR_CSettlement.Call.lane authenticated.value,
+                            NFR_CSettlement.Call.encode authenticated.value])
+      match settled with
+        | core.result.Result.Err e => ok (core.result.Result.Err (Sum.inr e), events, continuation)
+        | core.result.Result.Ok output => ok (core.result.Result.Ok output, events, continuation)) =
+    ok
+      (core.result.Result.Ok (image, AspisR1.S2K.ResultPayload.bytes s),
+        [NFO_ReadModel.Event.clear, NFO_ReadModel.Event.invoke, NFO_ReadModel.Event.read, NFO_ReadModel.Event.decode],
+        [NFR_CSettlement.Call.validate (AspisR1.S2K.ResultAdmission.value s),
+          NFR_CSettlement.Call.lane (AspisR1.S2K.ResultAdmission.value s),
+          NFR_CSettlement.Call.encode (AspisR1.S2K.ResultAdmission.value s)])
+NFR_B_generated/NFR_ModelJoin.lean:51:59: warning: This simp argument is unused:
+  checked
+
+Hint: Omit it from the simp argument list.
+  simp only [run, ̲linked.2.1, ̲bind_tc_ok, ̲NFR_CSettlement.run,c̵h̵e̵c̵k̵e̵d̵,̵ ̲advanced, ̲linked.2.2.1]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFR_B_generated/NFR_ModelJoin.lean:51:67: warning: This simp argument is unused:
+  advanced
+
+Hint: Omit it from the simp argument list.
+  simp only [run, ̲linked.2.1, ̲bind_tc_ok, ̲NFR_CSettlement.run, ̲checked,a̵d̵v̵a̵n̵c̵e̵d̵,̵ ̲linked.2.2.1]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFR_B_generated/NFR_ModelJoin.lean:51:76: warning: This simp argument is unused:
+  linked.2.2.1
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵n̵,̵l̵i̵n̵k̵e̵d̵.̵2̵.̵1̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵N̵F̵R̵_̵C̵S̵e̵t̵t̵l̵e̵m̵e̵n̵t̵.̵r̵u̵n̵,̵c̵h̵e̵c̵k̵e̵d̵,̵a̵d̵v̵a̵n̵c̵e̵d̵,̵l̵i̵n̵k̵e̵d̵.̵2̵.̵2̵.̵1̵]̵[̲r̲u̲n̲,̲ ̲l̲i̲n̲k̲e̲d̲.̲2̲.̲1̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲N̲F̲R̲_̲C̲S̲e̲t̲t̲l̲e̲m̲e̲n̲t̲.̲r̲u̲n̲,̲ ̲c̲h̲e̲c̲k̲e̲d̲,̲ ̲a̲d̲v̲a̲n̲c̲e̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NFR_ModelJoin.same_emitted_settlement' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NFR_ModelJoin.local_law' depends on axioms: [propext, Quot.sound]
+'NFR_ModelJoin.local_empty' depends on axioms: [propext]
