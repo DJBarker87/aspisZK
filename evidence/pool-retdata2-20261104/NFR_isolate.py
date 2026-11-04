@@ -6,6 +6,13 @@ meta='assert!(instruction.accounts[self.meta].pubkey.to_bytes()==self.keys[self.
 infos='assert!(infos[self.meta].key.to_bytes()==self.keys[self.meta]&&infos[7].key==&self.selected);'
 request='assert!(instruction.data.len()==320&&core::ptr::eq(instruction.data.as_ptr(),self.request)&&instruction.data[self.j]==self.request_byte);'
 if mode=='no-infos':source=source.replace(infos,'')
+elif mode.startswith('kmx-split-'):
+ source=source.replace(infos,'')
+ attrs='#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFO_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NFO_KMX::KMX_copy_from_slice)]\n'
+ assert attrs in source
+ source=source.replace(attrs,attrs+'#[kani::stub(alloc::alloc::realloc,crate::NFO_KMX::KMX_realloc)]\n' if '-on' in mode else '')
+ if '-on' in mode:source=source.replace('#[kani::unwind(34)]','#[kani::unwind(512)]')
+ if mode.endswith('-negative'):source=source.replace(meta,meta.replace('==self.keys[self.meta]', '=={let mut wrong=self.keys[self.meta];wrong[0]^=1;wrong}'))
 elif mode=='no-meta':source=source.replace(meta,'')
 elif mode=='meta-key':source=source.replace(infos,'').replace(meta,'assert!(instruction.accounts[self.meta].pubkey.to_bytes()==self.keys[self.meta]);')
 elif mode=='meta-flags':source=source.replace(infos,'').replace(meta,'assert!(!instruction.accounts[self.meta].is_signer&&!instruction.accounts[self.meta].is_writable);')

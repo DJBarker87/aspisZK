@@ -1,6 +1,6 @@
 # Cone delta — Pool return-data continuation
 
-Checkpoint: model inverse discharged; native association still under investigation.
+Checkpoint: model inverse and forward emitted decode discharged; native association still under investigation.
 No composed NDT row or headline is promoted by this checkpoint.
 
 ## Exact mathematical change
@@ -21,7 +21,7 @@ hypothesis is the approved nonempty RuntimeReturnData row.
 
 This statement is not silently substituted for NFO's stronger forward-success
 form, which quantified over an arbitrary decoder under DecoderAssociation.
-The forward decode-on-emission route is being proved separately. Acceptance in
+The forward decode-on-emission route now passes: NFR_ResultForward.emitted (B036) and NFR_PoolReturnData.association (B037) derive the accepted result from valid emission with the same runtime law. Acceptance in
 the current theorem is the event analysed, not a proved existence/non-vacuity
 witness and not a new runtime trust row. The top's raw mathematical equality
 alone is not a certificate about a complete native Pool execution.
