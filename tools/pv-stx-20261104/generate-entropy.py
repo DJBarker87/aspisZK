@@ -86,6 +86,15 @@ def fixed : {X : Type} → Request X → Result X
 
 '''
 tail='''
+theorem erases_bind {A B : Type} (code : Code Request A) (next : A → Code Request B)
+    (r : Result A) (f : A → Result B)
+    (hc : denote fixed code = r) (hk : ∀ a, denote fixed (next a) = f a) :
+    denote fixed (code >>= next) = (do let a ← r; f a) := by
+  rw [bind_rule,hc]
+  congr 1
+  funext a
+  exact hk a
+
 /-- Symbolic erasure, not a native trace law. These equalities impose NO
 fixed-answer condition on an advancing handler. -/
 theorem nonzeroBody_erases (bytes : Array U8 32#usize) (combined : U8) (i : Usize) :
@@ -106,7 +115,24 @@ theorem nonzero_erases (bytes : Array U8 32#usize) :
 theorem entropyBody_erases (nonce : Array U8 32#usize) (limit retry : Usize) :
     denote fixed (entropyBody nonce limit retry) =
       aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop.body nonce limit retry := by
-  simp only [entropyBody, aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop.body, if_rule, bind_rule, call_rule, result_rule, pure_rule, cf_rule, pair_rule, fixed, nonzero_erases]
+  unfold entropyBody aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop.body
+  by_cases h : retry < limit
+  · simp only [h,if_true]
+    apply erases_bind
+    · rfl
+    · intro bytes
+      apply erases_bind
+      · rfl
+      · rintro ⟨s,back⟩
+        apply erases_bind
+        · rfl
+        · rintro ⟨r,s1⟩
+          apply erases_bind
+          · rfl
+          · intro cf
+            cases cf <;> simp only [bind_rule,call_rule,result_rule,pure_rule,if_rule,
+              fixed,nonzero_erases,Aeneas.Std.bind_tc_ok]
+  · simp only [h,if_false,pure_rule]
 
 theorem entropyLoop_erases (nonce : Array U8 32#usize) (limit retry : Usize) :
     denote fixed (entropyLoop nonce limit retry) =
@@ -118,6 +144,7 @@ theorem generate_erases (nonce : Array U8 32#usize) :
       aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce nonce := by
   simp only [generate, bind_rule, nonzero_erases, if_rule, entropyLoop_erases, pure_rule, aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce]
 
+#print axioms erases_bind
 #print axioms nonzeroBody_erases
 #print axioms nonzeroLoop_erases
 #print axioms nonzero_erases
