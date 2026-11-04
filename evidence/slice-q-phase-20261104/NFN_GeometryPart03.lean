@@ -551,7 +551,7 @@ set_option autoImplicit false
 namespace NFN_NFB_RowLog
 open Aeneas Aeneas.Std Result
 abbrev Call := NFB_RowRef.NFB_RowCall
-abbrev Log := NFB_RowRef.NFN_NFB_RowLog
+abbrev Log := NFB_RowRef.NFB_RowLog
 
 def calls (c0 c1 c2 c3 : Call) : Array Call 4#usize := Array.make 4#usize [c0,c1,c2,c3]
 def state (i : Usize) (c0 c1 c2 c3 : Call) : Log := ⟨calls c0 c1 c2 c3,i⟩
@@ -770,7 +770,7 @@ def reply (x y left right product : U32) : Array U32 5#usize :=
  Array.make 5#usize [x,y,left,right,product]
 
 def model (query x y lineX lineY product : U32) :
-    Result (core.result.Result (Array U32 5#usize) NFB_RowRef.Error × NFB_RowRef.NFN_NFB_RowLog) := do
+    Result (core.result.Result (Array U32 5#usize) NFB_RowRef.Error × NFB_RowRef.NFB_RowLog) := do
  let u ← lift (UScalar.cast .Usize query)
  if u<262144#usize then
   let parent ← u/4#usize
@@ -838,6 +838,6 @@ end NFN_NFB_RowG
 
 run_cmd do
  let env ← Lean.getEnv
- for (name, info) in env.constants do
-  if info.isTheorem && (env.getModuleIdxFor? name).isNone then
-   Lean.Elab.Command.elabCommand (← `(command| #print axioms $(Lean.mkIdent name)))
+ env.constants.toList.forM fun (n, ci) => do
+  if ci.isTheorem && (env.getModuleIdxFor? n).isNone then
+   Lean.Elab.Command.elabCommand (← `(command| #print axioms $(Lean.mkIdent n)))

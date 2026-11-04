@@ -42,14 +42,15 @@ for i,names in enumerate(groups):
   text='\n'.join(body)+'\n'
   if n=='FIo_NativeTypes':text=text.replace('AspisR1.NP6_StdModel.ReserveError','NFN_ReserveOwner.ReserveError')
   text=pattern.sub(lambda m:rename[m.group()],text)
+  text=text.replace('NFB_RowRef.NFN_NFB_RowLog','NFB_RowRef.NFB_RowLog')
   bodies.append(f'-- BEGIN copied {n}: {r["path"]}\n'+text+f'-- END copied {n}\n')
   records.append(dict(original_module=n,original_path=r['path'],original_sha256=hashlib.sha256(src.encode()).hexdigest(),target_module=module,transformed_body_sha256=hashlib.sha256(text.encode()).hexdigest(),namespace_retargets=rename,changes=['imports','proof namespace names']+(['definitionally equal ReserveError owner'] if n=='FIo_NativeTypes' else [])))
  # Ask Lean for every theorem created in this module, including private lemmas.
  audit='''\nrun_cmd do
  let env ← Lean.getEnv
- for (name, info) in env.constants do
-  if info.isTheorem && (env.getModuleIdxFor? name).isNone then
-   Lean.Elab.Command.elabCommand (← `(command| #print axioms $(Lean.mkIdent name)))
+ env.constants.toList.forM fun (n, ci) => do
+  if ci.isTheorem && (env.getModuleIdxFor? n).isNone then
+   Lean.Elab.Command.elabCommand (← `(command| #print axioms $(Lean.mkIdent n)))
 '''
  (E/(module+'.lean')).write_text(''.join('import '+m+'\n' for m in imports)+'\n'+''.join(bodies)+audit)
 (E/'NFN_RETARGET_PROVENANCE.json').write_text(json.dumps(dict(order=order,groups=groups,module_owner=owner,proof_namespace_map=rename,files=records),indent=1)+'\n')

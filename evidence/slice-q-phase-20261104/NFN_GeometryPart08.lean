@@ -78,6 +78,6 @@ end
 
 run_cmd do
  let env ← Lean.getEnv
- for (name, info) in env.constants do
-  if info.isTheorem && (env.getModuleIdxFor? name).isNone then
-   Lean.Elab.Command.elabCommand (← `(command| #print axioms $(Lean.mkIdent name)))
+ env.constants.toList.forM fun (n, ci) => do
+  if ci.isTheorem && (env.getModuleIdxFor? n).isNone then
+   Lean.Elab.Command.elabCommand (← `(command| #print axioms $(Lean.mkIdent n)))
