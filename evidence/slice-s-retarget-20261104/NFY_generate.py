@@ -39,13 +39,14 @@ for i,names in enumerate(groups):
  module=f'NFY_Part{i:03}';imports=['Lean'];bodies=[]
  for n in names:
   r=G[n];src=r['source'];body='\n'.join(l for l in src.splitlines() if not l.startswith('import '))+'\n';text=pattern.sub(lambda m:rename[m.group()],body)
+  if n=='NBP_CommonDecode':text=text.replace('core.result.Result.map_err','AspisR1TerminalDecoder.core.result.Result.map_err')
   for d in overrides.get(n,r['imports']):
    d=owner.get(d,d)
    if d!=module and d not in imports:imports.append(d)
   bodies.append(f'-- BEGIN copied {n}: {r["path"]}\n'+text+f'-- END copied {n}\n')
   # Exact before/after statements, including definitions and proof text, retained
   # in source graph and transformed body. No hypothesis is removed.
-  records.append(dict(source_module=n,source_path=r['path'],source_sha256=hashlib.sha256(src.encode()).hexdigest(),source_line_range=[1,len(src.splitlines())],target_module=module,original_body_sha256=hashlib.sha256(body.encode()).hexdigest(),transformed_body_sha256=hashlib.sha256(text.encode()).hexdigest(),imports_before=r['imports'],imports_after=[owner.get(d,d) for d in overrides.get(n,r['imports'])],changes=['imports','qualified proof namespace names'],before_body=body,after_body=text))
+  records.append(dict(source_module=n,source_path=r['path'],source_sha256=hashlib.sha256(src.encode()).hexdigest(),source_line_range=[1,len(src.splitlines())],target_module=module,original_body_sha256=hashlib.sha256(body.encode()).hexdigest(),transformed_body_sha256=hashlib.sha256(text.encode()).hexdigest(),imports_before=r['imports'],imports_after=[owner.get(d,d) for d in overrides.get(n,r['imports'])],changes=['imports','qualified proof namespace names']+(['fully qualify emitted decoder map_err owner'] if n=='NBP_CommonDecode' else []),before_body=body,after_body=text))
  audit='''\nrun_cmd do
  let env ← Lean.getEnv
  env.constants.toList.forM fun (n, ci) => do

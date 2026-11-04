@@ -1,0 +1,13 @@
+# Canonical S retarget
+
+Stage 1 diagnosis and generated source skeleton: commit f3e29166bee. The measured union of shortest legacy paths contains 289 distinct modules. Full dependency discovery also identifies proof-only intermediates absent from that minimal path union. NFY_SOURCE_GRAPH.json stores immutable committed source text once. NFY_PROVENANCE.json records each copied module, SHA-256, line range, before/after body, import owner map and precise transformations. Canonical RPz7/RPt/RPu/SInt2 modules and NFN/NFS proofs are reused, not duplicated.
+
+The first five modules isolate scalar serialization, the existing wide serializer proof, the native wide carrier port, the arbitrary-window frame/induction, and the full wide Result/state/effect theorem. The scalar theorem imports its actual emitted Funs owner instead of the unrelated NED_DigestCohorts aggregate. The frame/induction theorem imports LPi_EWriter instead of the unrelated NCA_InactiveModel. No body or statement changes in these cuts except NFY proof namespaces. L001–005 pass with only standard axioms.
+
+L006 reached a proof failure in NBP_CommonDecode.result: the unqualified `core.result.Result.map_err` simplifier reference selected the standard helper instead of `AspisR1TerminalDecoder.core.result.Result.map_err`. L008 qualifies that emitted owner explicitly and passes. This changes identifier resolution in the copied proof, not the theorem, its inputs, Results, error paths or premises. The failed snapshot and complete errors remain under L006, without pass credit. No sorry/admit was authored; Lean's failed elaboration printed sorryAx for the unresolved declaration, which is excluded.
+
+An accidental overlapping client reused attempt L006. The unchanged launcher rejected that client with FileExistsError before any Lean process. It is conservatively charged as L007, with the raw transport record retained. A local exclusive client marker now prevents overlap; no launcher or host infrastructure changed. Subsequent work is serial.
+
+The complete copied forest has 532 source modules in 52 NFY modules. These are candidate sources until their own successful receipts and the combined ax2/coherence gates exist. Neither compilation alone nor the source-validator baseline restores a QUALIFIED row.
+
+No old Prepared or Phase value is asserted equal to the canonical carrier. The relevant imported owners are replaced by their existing canonical owners. Any genuinely needed Phase observation transport must use NFN_PhaseTransport's already proved constructor bijection; no second Phase/Prepared definition is introduced. Before/after full bodies are retained to expose any remaining statement change or new transport need.

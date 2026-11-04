@@ -1,8 +1,9 @@
 """NFX-owned serial client for unchanged S2W launcher; no shared tool edits."""
 from pathlib import Path
-import subprocess,json,sys,time,hashlib,shlex,lzma,re
+import subprocess,json,sys,time,hashlib,shlex,lzma,re,os,atexit
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90'
 B='/home/dombarker/project-offloads/codex-cx-slice-s-retarget-20261104';C='/home/dombarker/project-offloads/codex-cx-slice-s-retarget-cache-20261104';W='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025';T='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0'
+guard=E/'NFY_CLIENT_ACTIVE'; fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,str(os.getpid()).encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
 a,kind,target=sys.argv[1:];assert re.fullmatch('NFY_L[0-9]{3}',a) and 1<=int(a[-3:])<=110 and not (E/a).exists()
 def ssh(code,data=None,submitted=False):
  for retry in range(11):

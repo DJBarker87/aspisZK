@@ -536,7 +536,7 @@ theorem result (b : Array U8 216#usize) :
     atomic_statement.unwrap_fixed_slice,aspis_core.field.P,
     NFY_NBP_DigestDecode.result,NFY_NBG_PaymentChecks.common_result,
     asset,common,decoded,NBP_Read.chunk,lift,bind_tc_ok,List.slice,
-    core.result.Result.map_err,
+    AspisR1TerminalDecoder.core.result.Result.map_err,
     pool_v1.payment_relation.decode_common.closure.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PaymentStatementFormatError,
     pool_v1.payment_relation.decode_common.closure.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PaymentStatementFormatError.call_once,
     pool_v1.payment_relation.decode_common.closure_1.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PaymentStatementFormatError,
