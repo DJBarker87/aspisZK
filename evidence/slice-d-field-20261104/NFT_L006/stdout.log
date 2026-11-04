@@ -1,0 +1,128 @@
+def AspisR1Post25Sampler.field.canonical_qm31 : AspisR1Post25Sampler.field.QM31 →
+  Aeneas.Std.Result AspisR1Post25Sampler.field.QM31 :=
+fun value => do
+  let m ← AspisR1Post25Sampler.field.canonical_qm31.closure.Insts.CoreOpsFunctionFnTupleM31M31.call () value.c0.a
+  let m1 ← AspisR1Post25Sampler.field.canonical_qm31.closure.Insts.CoreOpsFunctionFnTupleM31M31.call () value.c0.b
+  let m2 ← AspisR1Post25Sampler.field.canonical_qm31.closure.Insts.CoreOpsFunctionFnTupleM31M31.call () value.c1.a
+  let m3 ← AspisR1Post25Sampler.field.canonical_qm31.closure.Insts.CoreOpsFunctionFnTupleM31M31.call () value.c1.b
+  Aeneas.Std.Result.ok { c0 := { a := m, b := m1 }, c1 := { a := m2, b := m3 } }
+@[reducible] def AspisR1Post25Sampler.field.M31 : Type :=
+Aeneas.Std.U32
+@[irreducible] def AspisR1Post25Sampler.field.P : Aeneas.Std.U32 :=
+2147483647#u32
+theorem AspisR1.ExtractedMaskNeg.current_neg_mod : ∀ (x : AspisR1.ExtractedMaskNeg.M31),
+  ↑x < AspisR1.ExtractedMaskNeg.P →
+    ∃ z,
+      AspisR1SelectedMaskProbe.field.M31.neg x = Aeneas.Std.Result.ok z ∧
+        ↑z < AspisR1.ExtractedMaskNeg.P ∧ ↑z = (AspisR1.ExtractedMaskNeg.P - ↑x) % AspisR1.ExtractedMaskNeg.P :=
+fun x hx =>
+  if hzero : x = 0#u32 then
+    Eq.ndrec (motive := fun x =>
+      ↑x < AspisR1.ExtractedMaskNeg.P →
+        ∃ z,
+          AspisR1SelectedMaskProbe.field.M31.neg x = Aeneas.Std.Result.ok z ∧
+            ↑z < AspisR1.ExtractedMaskNeg.P ∧ ↑z = (AspisR1.ExtractedMaskNeg.P - ↑x) % AspisR1.ExtractedMaskNeg.P)
+      (fun hx =>
+        Exists.intro 0#u32
+          ⟨of_eq_true
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (ite_cond_eq_true (Aeneas.Std.Result.ok 0#u32)
+                      (do
+                        let i ← AspisR1SelectedMaskProbe.field.P - 0#u32
+                        Aeneas.Std.Result.ok i)
+                      (eq_self 0#u32)))
+                  (Aeneas.Std.Result.ok 0#u32))
+                (eq_self (Aeneas.Std.Result.ok 0#u32))),
+            ⟨of_eq_true
+                (Eq.trans
+                  (Eq.trans
+                    (congr
+                      (congrArg LT.lt
+                        (Aeneas.Std.UScalar.ofNatCore_val_eq
+                          (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.U32 0
+                            (of_decide_eq_true (id (Eq.refl true))))))
+                      (Mathlib.Meta.NormNum.IsNat.to_eq (Mathlib.Meta.NormNum.isNat_ofNat ℕ (Eq.refl 2147483647))
+                        (Eq.refl 2147483647)))
+                    Nat.ofNat_pos._simp_1)
+                  (eq_true True.intro)),
+              of_eq_true
+                (Eq.trans
+                  (congr
+                    (congrArg Eq
+                      (Aeneas.Std.UScalar.ofNatCore_val_eq
+                        (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.U32 0
+                          (of_decide_eq_true (id (Eq.refl true))))))
+                    (Eq.trans
+                      (congrFun'
+                        (congrArg HMod.hMod
+                          (Eq.trans
+                            (congrArg (HSub.hSub 2147483647)
+                              (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.U32 0
+                                  (of_decide_eq_true (id (Eq.refl true))))))
+                            (tsub_zero 2147483647)))
+                        2147483647)
+                      (Nat.mod_self 2147483647)))
+                  (eq_self 0))⟩⟩)
+      (Eq.symm hzero) hx
+  else
+    have hx0 := fun hv =>
+      hzero
+        (Aeneas.Std.UScalar.val_eq_imp x 0#u32
+          (Eq.mpr
+            (id
+              (congrArg (Eq ↑x)
+                (Aeneas.Std.UScalar.ofNatCore_val_eq
+                  (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.U32 0
+                    (of_decide_eq_true (id (Eq.refl true)))))))
+            hv));
+    let ⟨z, h✝⟩ :=
+      AspisR1.ExtractedMaskReducerOps.sub_success AspisR1SelectedMaskProbe.field.P x
+        (Eq.mpr (id (congrArg (fun _a => ↑x ≤ _a) AspisR1.ExtractedMaskNeg.sourceP_value)) (Nat.le_of_lt hx))
+    let ⟨hz, hvz⟩ := h✝
+    Exists.intro z
+      ⟨Eq.mpr
+          (id
+            (congrFun'
+              (congrArg Eq
+                (Eq.trans
+                  (ite_congr (eq_false hzero) (fun a => Eq.refl (Aeneas.Std.Result.ok 0#u32)) fun a =>
+                    Eq.refl do
+                      let i ← AspisR1SelectedMaskProbe.field.P - x
+                      Aeneas.Std.Result.ok i)
+                  (if_false (Aeneas.Std.Result.ok 0#u32) do
+                    let i ← AspisR1SelectedMaskProbe.field.P - x
+                    Aeneas.Std.Result.ok i)))
+              (Aeneas.Std.Result.ok z)))
+          (id
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    (do
+                        let i ← _a
+                        Aeneas.Std.Result.ok i) =
+                      Aeneas.Std.Result.ok z)
+                  hz))
+              (Eq.refl do
+                let i ← Aeneas.Std.Result.ok z
+                Aeneas.Std.Result.ok i))),
+        ⟨Eq.mpr (id (congrArg (fun _a => _a < AspisR1.ExtractedMaskNeg.P) hvz))
+            (Eq.mpr
+              (id (congrArg (fun _a => _a - ↑x < AspisR1.ExtractedMaskNeg.P) AspisR1.ExtractedMaskNeg.sourceP_value))
+              (Decidable.byContradiction fun a => AspisR1.ExtractedMaskNeg.current_neg_mod._proof_3 x hx hx0 z a)),
+          Eq.mpr (id (congrArg (fun _a => _a = (AspisR1.ExtractedMaskNeg.P - ↑x) % AspisR1.ExtractedMaskNeg.P) hvz))
+            (Eq.mpr
+              (id
+                (congrArg (fun _a => _a - ↑x = (AspisR1.ExtractedMaskNeg.P - ↑x) % AspisR1.ExtractedMaskNeg.P)
+                  AspisR1.ExtractedMaskNeg.sourceP_value))
+              (have hlt :=
+                Decidable.byContradiction fun a => AspisR1.ExtractedMaskNeg.current_neg_mod._proof_3 x hx hx0 z a;
+              Eq.symm (Nat.mod_eq_of_lt hlt)))⟩⟩
+Aeneas.Std.UScalar.rem_spec {ty : Aeneas.Std.UScalarTy} (x : Aeneas.Std.UScalar ty) {y : Aeneas.Std.UScalar ty}
+  (hzero : ↑y ≠ 0) : Aeneas.Std.WP.spec (x % y) fun z => ↑z = ↑x % ↑y
+NFT_generated/NFT_WideDefinitions.lean:7:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.rem_val`
+NFT_generated/NFT_WideDefinitions.lean:8:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Slice.ext`
+NFT_generated/NFT_WideDefinitions.lean:9:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Slice.ext_val`

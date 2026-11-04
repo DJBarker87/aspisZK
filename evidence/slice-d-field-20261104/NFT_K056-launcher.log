@@ -1,0 +1,54 @@
+{"attempt": "NFT_K056", "exit_status": 1, "wall_seconds": 49.296382552944124, "peak_rss_kib": "576396", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling version_check v0.9.5
+   Compiling proc-macro2 v1.0.106
+   Compiling quote v1.0.46
+   Compiling unicode-ident v1.0.24
+   Compiling serde_core v1.0.228
+   Compiling syn v2.0.118
+   Compiling cfg-if v1.0.4
+   Compiling generic-array v0.14.7
+   Compiling typenum v1.20.1
+   Compiling zerocopy v0.8.52
+   Compiling serde v1.0.228
+   Compiling libc v0.2.186
+   Compiling serde_derive v1.0.228
+   Compiling subtle v2.6.1
+   Compiling hashbrown v0.15.5
+   Compiling equivalent v1.0.2
+   Compiling autocfg v1.5.1
+   Compiling indexmap v2.7.1
+   Compiling toml_write v0.1.2
+   Compiling winnow v0.7.15
+   Compiling toml_datetime v0.6.11
+   Compiling toml_e
+...
+warn(deprecated)]` on by default
+
+error[E0658]: use of unstable library feature `allocator_api`
+  --> /home/dombarker/project-offloads/codex-cx-slice-d-field-20261104/NFT_src/programs/r1-cost-probe/../../KMX_stubs.rs:14:40
+   |
+14 | pub fn KMX_extend_from_slice<T: Copy,A:alloc::alloc::Allocator>(dst:&mut Vec<T,A>,src:&[T]){
+   |                                        ^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: see issue #32838 <https://github.com/rust-lang/rust/issues/32838> for more information
+   = help: add `#![feature(allocator_api)]` to the crate attributes to enable
+   = note: this compiler was built on 2025-11-20; consider upgrading it if it is out of date
+
+error[E0658]: use of unstable library feature `allocator_api`
+  --> /home/dombarker/project-offloads/codex-cx-slice-d-field-20261104/NFT_src/programs/r1-cost-probe/../../KMX_stubs.rs:14:80
+   |
+14 | pub fn KMX_extend_from_slice<T: Copy,A:alloc::alloc::Allocator>(dst:&mut Vec<T,A>,src:&[T]){
+   |                                                                              --^
+   |                                                                              |
+   |                                                                              help: consider wrapping the inner types in tuple: `(T,A)`
+   |
+   = note: see issue #32838 <https://github.com/rust-lang/rust/issues/32838> for more information
+   = help: add `#![feature(allocator_api)]` to the crate attributes to enable
+   = note: this compiler was built on 2025-11-20; consider upgrading it if it is out of date
+
+For more information about this error, try `rustc --explain E0658`.
+error: could not compile `aspis-r1-cost-probe-program` (lib) due to 2 previous errors; 16 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 2 compilation errors.
+
+Running as unit: run-r581c00b4641b41d8ad411c5142f0b444.scope; invocation ID: 6f17091f783c45139f7650cda4a9b3f1

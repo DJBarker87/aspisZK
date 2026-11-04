@@ -1,0 +1,74 @@
+{"attempt": "NFT_K056", "exit_status": 1, "wall_seconds": 49.296382552944124, "peak_rss_kib": "576396", "swaps": "0", "print_axioms": "N/A: kani"}
+warning: unexpected `cfg` condition name: `NFQ_invert`
+  --> programs/r1-cost-probe/src/NFQ_program.rs:27:40
+   |
+27 |  assert!((rest.len()==n-shift) != cfg!(NFQ_invert));
+   |                                        ^^^^^^^^^^
+   |
+   = help: consider using a Cargo feature instead
+   = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+            [lints.rust]
+            unexpected_cfgs = { level = "warn", check-cfg = ['cfg(NFQ_invert)'] }
+   = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(NFQ_invert)");` to the top of the `build.rs`
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `NFQ_invert`
+  --> programs/r1-cost-probe/src/NFQ_program.rs:33:69
+   |
+33 |  assert!((rest.as_ptr()==view.as_ptr().wrapping_add(shift)) != cfg!(NFQ_invert));
+   |                                                                     ^^^^^^^^^^
+   |
+   = help: consider using a Cargo feature instead
+   = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+            [lints.rust]
+            unexpected_cfgs = { level = "warn", check-cfg = ['cfg(NFQ_invert)'] }
+   = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(NFQ_invert)");` to the top of the `build.rs`
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `NFQ_invert`
+  --> programs/r1-cost-probe/src/NFQ_program.rs:40:71
+   |
+40 |  assert!((bytes[0]==a&&bytes[1]==b&&bytes[2]==c&&bytes[3]==d) != cfg!(NFQ_invert));
+   |                                                                       ^^^^^^^^^^
+   |
+   = help: consider using a Cargo feature instead
+   = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+            [lints.rust]
+            unexpected_cfgs = { level = "warn", check-cfg = ['cfg(NFQ_invert)'] }
+   = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(NFQ_invert)");` to the top of the `build.rs`
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: use of deprecated module `solana_program::bpf_loader_upgradeable`: Use solana-loader-v3-interface instead
+  --> programs/r1-cost-probe/src/r1_pool_adapter.rs:45:32
+   |
+45 |     account_info::AccountInfo, bpf_loader_upgradeable, clock::Clock, entrypoint::ProgramResult,
+   |                                ^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(deprecated)]` on by default
+
+error[E0658]: use of unstable library feature `allocator_api`
+  --> /home/dombarker/project-offloads/codex-cx-slice-d-field-20261104/NFT_src/programs/r1-cost-probe/../../KMX_stubs.rs:14:40
+   |
+14 | pub fn KMX_extend_from_slice<T: Copy,A:alloc::alloc::Allocator>(dst:&mut Vec<T,A>,src:&[T]){
+   |                                        ^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: see issue #32838 <https://github.com/rust-lang/rust/issues/32838> for more information
+   = help: add `#![feature(allocator_api)]` to the crate attributes to enable
+   = note: this compiler was built on 2025-11-20; consider upgrading it if it is out of date
+
+error[E0658]: use of unstable library feature `allocator_api`
+  --> /home/dombarker/project-offloads/codex-cx-slice-d-field-20261104/NFT_src/programs/r1-cost-probe/../../KMX_stubs.rs:14:80
+   |
+14 | pub fn KMX_extend_from_slice<T: Copy,A:alloc::alloc::Allocator>(dst:&mut Vec<T,A>,src:&[T]){
+   |                                                                              --^
+   |                                                                              |
+   |                                                                              help: consider wrapping the inner types in tuple: `(T,A)`
+   |
+   = note: see issue #32838 <https://github.com/rust-lang/rust/issues/32838> for more information
+   = help: add `#![feature(allocator_api)]` to the crate attributes to enable
+   = note: this compiler was built on 2025-11-20; consider upgrading it if it is out of date
+
+For more information about this error, try `rustc --explain E0658`.
+error: could not compile `aspis-r1-cost-probe-program` (lib) due to 2 previous errors; 16 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 2 compilation errors.
+

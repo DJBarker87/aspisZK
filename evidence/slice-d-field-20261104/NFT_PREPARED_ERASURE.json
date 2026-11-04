@@ -1,0 +1,10 @@
+{
+ "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "exact_right_prefix": "        let right_sum = right[index].c0.add(right[index].c1);\n        let right_components = [\n            [\n                right[index].c0.a,\n                right[index].c0.b,\n                right[index].c0.a.add(right[index].c0.b),\n            ],\n            [\n                right[index].c1.a,\n                right[index].c1.b,\n                right[index].c1.a.add(right[index].c1.b),\n            ],\n            [right_sum.a, right_sum.b, right_sum.a.add(right_sum.b)],\n        ];\n",
+ "right_prefix_sha256": "593bd7cba564b1e57bd07abfa77475d9125cdc6f02cba5d8a414477066211a5a",
+ "control": "for index in 0..3; for component in 0..3; for channel in 0..3",
+ "product_site": "sums[component][channel] += left[index].components[component][channel].0 as u64 * right_components[component][channel].0 as u64",
+ "instrumented_site": "product(log,index,component,channel,left[..],right_components[..])",
+ "method": "one arbitrary-prestate selected product cell plus 27-cut data-independent control, not whole-buffer multiplication",
+ "status": "OPEN pending exact model/native step association and final raw audit"
+}

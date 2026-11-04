@@ -1,0 +1,35 @@
+--- NFT_ProofDriver.lean
++++ NFT_Stage2Driver.lean
+@@ -64,11 +64,29 @@
+   let mode := args.headD "small"
+   let (modules, roots) :=
+     if mode == "proof0" then
+-      (#[`NFT_COMBINED_IMPORT], #[`NFT_ByteBits.lane2, `NFT_ByteBits.lane3, `NFT_Bytes.cm_value, `NFT_Bytes.qm_value, `NFT_WideNew.reduce_val])
++      (#[`NFT_STAGE2_IMPORT], #[`NFT_Bytes.cm_frame, `NFT_Square.source, `NFT_Square.wide_product, `NFT_Square.scalar_product, `NFT_Square.generated_scalar_product])
+     else if mode == "proof1" then
+-      (#[`NFT_COMBINED_IMPORT], #[`NFT_WideNew.reduce_lt, `NFT_WideNew.word_source, `NFT_WideNew.canonical_source, `NFT_WideNew.source, `NFT_ReferenceEq.canonical])
++      (#[`NFT_STAGE2_IMPORT], #[`NFT_Bytes.qm_frame, `NFT_NegWord.wrapping_value, `NFT_NegWord.source, `NFT_NegSub.scalar, `NFT_WideNeg.scalar])
+     else if mode == "proof2" then
+-      (#[`NFT_COMBINED_IMPORT], #[`NFT_ReferenceEq.cm, `NFT_ReferenceEq.qm])
++      (#[`NFT_STAGE2_IMPORT], #[`NFT_WideNeg.source, `NFT_Karatsuba.source, `NFT_Karatsuba.total, `NFT_Karatsuba.mul_r_eq_hiding, `NFT_Karatsuba.mul_r_value])
++    else if mode == "proof3" then
++      (#[`NFT_STAGE2_IMPORT], #[`NFT_PackPrefix.source, `NFT_ZeroPhysical.pad_length, `NFT_ZeroPhysical.take_append_bounded, `NFT_ZeroPhysical.window_pad, `NFT_ZeroPhysical.suffix_pad])
++    else if mode == "proof4" then
++      (#[`NFT_STAGE2_IMPORT], #[`NFT_ZeroPhysical.pointer_step, `NFT_ZeroPhysical.slice_step, `NFT_ZeroPhysical.length_step, `NFT_ZeroPhysical.frame, `NFT_ZeroPhysical.physical_view])
++    else if mode == "proof5" then
++      (#[`NFT_STAGE2_IMPORT], #[`NFT_Cmr.source, `NFT_Cmr.double_value, `NFT_Cmr.sub_value, `NFT_Cmr.add_value, `NFT_ChannelModel.product_bound])
++    else if mode == "proof6" then
++      (#[`NFT_STAGE2_IMPORT], #[`NFT_ChannelModel.addition_bound, `NFT_ChannelModel.selected, `NFT_ChannelModel.frame, `NFT_ChannelModel.control, `NFT_ChannelModel.complete])
++    else if mode == "proof7" then
++      (#[`NFT_STAGE2_IMPORT], #[`NFT_Pack.graph, `NFT_Pack.padded_length, `NFT_Pack.padded_canonical, `NFT_Pack.source, `NFT_PackWords.tail])
++    else if mode == "proof8" then
++      (#[`NFT_STAGE2_IMPORT], #[`NFT_PackWords.source, `NFT_ZeroJoin.source_and_frame, `NFT_ZeroJoin.checkpoint_bound, `NFT_Dot.scalar_product, `NFT_Dot.control])
++    else if mode == "proof9" then
++      (#[`NFT_STAGE2_IMPORT], #[`NFT_PreparedSum3.source, `NFT_PreparedSum3.constructor_domain, `AspisR1PoseidonPreparedChannelRunStepLocal.runStep_success, `AspisR1PoseidonPreparedChannelLoopExact.loop_success_fuel, `NFT_PreparedFrame.frame])
++    else if mode == "proof10" then
++      (#[`NFT_STAGE2_IMPORT], #[`NFT_PreparedFrame.control, `NFT_ChannelFour.generated_step, `NFT_DotSource.source, `NFT_DotSource.caller_rows, `AspisR1.FJh_M31DotInput.source_success])
++    else if mode == "proof11" then
++      (#[`NFT_STAGE2_IMPORT], #[`AspisR1.FJh_M31DotChunkModel.loop_success_fuel, `NFT_FieldFrontier.products_bound, `NFT_FieldFrontier.four_fit])
+     else if mode == "fixtures" then
+       (#[`NEP_Planted, `NEP_Mutations],
+        #[`NEP_Planted.matcher, `NEP_Planted.viaPrivate, `NEP_Planted.proof,

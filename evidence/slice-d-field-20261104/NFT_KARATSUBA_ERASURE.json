@@ -1,0 +1,15 @@
+{
+ "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "frozen_body": "\n    let reconstruct = |channels: [u64; 3]| {\n        let m0 = M31::reduce_u64(channels[0]);\n        let m1 = M31::reduce_u64(channels[1]);\n        let m2 = M31::reduce_u64(channels[2]);\n        CM31 {\n            a: m0.sub(m1),\n            b: m2.sub(m0).sub(m1),\n        }\n    };\n    let m0 = reconstruct(sums[0]);\n    let m1 = reconstruct(sums[1]);\n    let m2 = reconstruct(sums[2]);\n    QM31 {\n        c0: m0.add(mul_by_r(m1)),\n        c1: m2.sub(m0).sub(m1),\n    }\n",
+ "frozen_body_sha256": "4286730809b9b820929cee9ff0bd675954e19fecfb7d10d784b05fd878b103f2",
+ "instrumented_body": "\n    let reconstruct = |channels: [u64; 3]| {\n        let m0 = M31::reduce_u64(channels[0]);\n        let m1 = M31::reduce_u64(channels[1]);\n        let m2 = M31::reduce_u64(channels[2]);\n        CM31 {\n            a: m0.sub(m1),\n            b: m2.sub(m0).sub(m1),\n        }\n    };\n    let m0 = reconstruct(sums[0]);\n    let m1 = reconstruct(sums[1]);\n    let m2 = reconstruct(sums[2]);\n    QM31 {\n        c0: m0.add(mul_r(log,m1)),\n        c1: m2.sub(m0).sub(m1),\n    }\n",
+ "erasure_equal": true,
+ "stub": "mul_by_r -> local log with unconstrained canonical CM31 reply",
+ "retained_real_callees": [
+  "reduce_u64",
+  "M31::sub",
+  "CM31::add",
+  "CM31::sub"
+ ],
+ "status": "OPEN until paired Lean value/source association and raw audit"
+}

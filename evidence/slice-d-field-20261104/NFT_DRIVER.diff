@@ -1,0 +1,25 @@
+--- NFQ_Stage2Driver.lean
++++ NFT_ProofDriver.lean
+@@ -63,16 +63,12 @@
+   enableInitializersExecution
+   let mode := args.headD "small"
+   let (modules, roots) :=
+-    if mode == "stage2proof0" then
+-      (#[`NFQ_STAGE2_IMPORT], #[`NFQ_FieldLaws.neg_value, `NFQ_FieldLaws.cm_reference, `NFQ_FieldLaws.qm_reference, `NFQ_FieldPorts.fiq_cm, `NFQ_FieldPorts.fiq_qm, `NFQ_FieldPorts.sampler_neg, `NFQ_Readonly.reference, `NFQ_Reduce.source])
+-    else if mode == "stage2proof1" then
+-      (#[`NFQ_STAGE2_IMPORT], #[`NFQ_PreparedMultiplier.add_word, `NFQ_PreparedMultiplier.row_source, `NFQ_PreparedMultiplier.source, `NFQ_StatementLaws.expected_reference, `NFQ_StatementLaws.copied_reference, `NFQ_StatementLaws.limbs_reference, `NFQ_WideGetters.native_roundtrip, `NFQ_WideGetters.model_roundtrip])
+-    else if mode == "stage2proof2" then
+-      (#[`NFQ_STAGE2_IMPORT], #[`NFQ_WideGetters.c0, `NFQ_WideGetters.c1, `NFQ_Linear.source, `NFQ_ZeroPrimitives.index_read, `NFQ_ZeroPrimitives.wrap_add, `NFQ_ZeroGateModel.reject_at, `NFQ_ZeroGateModel.reject_after, `NFQ_ZeroSuccess.loop_zero])
+-    else if mode == "stage2proof3" then
+-      (#[`NFQ_STAGE2_IMPORT], #[`NFQ_ZeroSuccess.source, `NFQ_ZeroReference.false_loop, `NFQ_ZeroReference.loop_reference, `NFQ_ZeroSource.source, `NFQ_FieldDomains.cm_domain, `NFQ_FieldDomains.qm_domain, `NFQ_PreparedDomain.spec_canonical, `NFQ_PreparedDomain.output_domain])
+-    else if mode == "stage2proof4" then
+-      (#[`NFQ_STAGE2_IMPORT], #[`NFQ_StatementDomains.output_range, `NFQ_StatementDomains.limb_domains, `NFQ_ZeroStep.zero_step, `NFQ_ZeroStep.reject_step])
++    if mode == "proof0" then
++      (#[`NFT_COMBINED_IMPORT], #[`NFT_ByteBits.lane2, `NFT_ByteBits.lane3, `NFT_Bytes.cm_value, `NFT_Bytes.qm_value, `NFT_WideNew.reduce_val])
++    else if mode == "proof1" then
++      (#[`NFT_COMBINED_IMPORT], #[`NFT_WideNew.reduce_lt, `NFT_WideNew.word_source, `NFT_WideNew.canonical_source, `NFT_WideNew.source, `NFT_ReferenceEq.canonical])
++    else if mode == "proof2" then
++      (#[`NFT_COMBINED_IMPORT], #[`NFT_ReferenceEq.cm, `NFT_ReferenceEq.qm])
+     else if mode == "fixtures" then
+       (#[`NEP_Planted, `NEP_Mutations],
+        #[`NEP_Planted.matcher, `NEP_Planted.viaPrivate, `NEP_Planted.proof,

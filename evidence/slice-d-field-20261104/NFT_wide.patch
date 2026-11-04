@@ -1,0 +1,65 @@
+--- a/crates/aspis-core/src/field/wide_exact.rs
++++ b/crates/aspis-core/src/field/wide_exact.rs
+@@ -52,7 +52,9 @@
+     };
+ 
+     /// Construct `c0 + c1*v`, reducing each raw M31 representative modulo P.
+-    pub fn new(c0: QM31, c1: QM31) -> Self {
++    #[cfg_attr(kani,kani::modifies())]
++#[cfg_attr(kani,kani::ensures(|r| NFT_wide::new_matches(r,c0,c1) != cfg!(NFT_invert)))]
++pub fn new(c0: QM31, c1: QM31) -> Self {
+         Self {
+             c0: canonical_qm31(c0),
+             c1: canonical_qm31(c1),
+@@ -98,7 +100,10 @@
+     }
+ 
+     #[inline(always)]
+-    pub fn neg(self) -> Self {
++    #[cfg_attr(kani,kani::requires(NFT_wide::canonical(self)))]
++#[cfg_attr(kani,kani::modifies())]
++#[cfg_attr(kani,kani::ensures(|r| NFT_wide::neg_matches(r,self) != cfg!(NFT_invert)))]
++pub fn neg(self) -> Self {
+         #[cfg(feature = "r0-op-count")]
+         let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::ENeg);
+         Self {
+@@ -626,3 +631,7 @@
+         assert_canonical(x.sub(x.neg()));
+     }
+ }
++
++#[cfg(kani)]
++#[path="NFT_wide.rs"]
++mod NFT_wide;
+--- /dev/null
++++ b/crates/aspis-core/src/field/NFT_wide.rs
+@@ -0,0 +1,29 @@
++use super::*;
++use crate::field::{CM31,M31,P};
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn any_cm()->CM31{CM31{a:M31(kani::any()),b:M31(kani::any())}}
++fn any_q()->QM31{QM31{c0:any_cm(),c1:any_cm()}}
++fn any_e()->WideExact{WideExact{c0:any_q(),c1:any_q()}}
++fn new_q(r:QM31,v:QM31)->bool{r.c0.a.0==v.c0.a.0%P && r.c0.b.0==v.c0.b.0%P && r.c1.a.0==v.c1.a.0%P && r.c1.b.0==v.c1.b.0%P}
++pub(super) fn new_matches(r:&WideExact,c0:QM31,c1:QM31)->bool{new_q(r.c0,c0) && new_q(r.c1,c1)}
++fn cq(v:QM31)->bool{v.c0.a.0<P && v.c0.b.0<P && v.c1.a.0<P && v.c1.b.0<P}
++pub(super) fn canonical(v:WideExact)->bool{cq(v.c0)&&cq(v.c1)}
++fn nw(x:u32)->u32{if x==0{0}else{P-x}}
++fn neg_q(r:QM31,v:QM31)->bool{r.c0.a.0==nw(v.c0.a.0)&&r.c0.b.0==nw(v.c0.b.0)&&r.c1.a.0==nw(v.c1.a.0)&&r.c1.b.0==nw(v.c1.b.0)}
++pub(super) fn neg_matches(r:&WideExact,v:WideExact)->bool{neg_q(r.c0,v.c0)&&neg_q(r.c1,v.c1)}
++#[kani::proof_for_contract(WideExact::new)]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn new_contract(){let _=WideExact::new(any_q(),any_q());}
++#[kani::proof_for_contract(WideExact::neg)]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn neg_contract(){let v=any_e();kani::assume(canonical(v));let _=v.neg();}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn copy_positive(){let src=any_e();let mut dst=any_e();unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};assert!(dst.c0.c0.a.0==src.c0.c0.a.0&&dst.c1.c1.b.0==src.c1.c1.b.0);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn copy_negative(){let src=any_e();let mut dst=any_e();unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};assert!(dst.c1.c1.b.0!=src.c1.c1.b.0);}

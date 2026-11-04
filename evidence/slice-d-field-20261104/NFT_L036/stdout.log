@@ -1,0 +1,31 @@
+NFT_generated/NFT_PackPrefix.lean:11:69: error: unsolved goals
+case this
+α : Type
+init : α
+copyInst : core.marker.Copy α
+values : Slice α
+short : values.length ≤ 4
+padded : Std.Array α 4#usize := Array.repeat 4#usize init
+range : core.ops.range.RangeTo Usize := { «end» := values.len }
+range_val : ↑range.end = values.length
+⊢ ?m.51
+
+α : Type
+init : α
+copyInst : core.marker.Copy α
+values : Slice α
+short : values.length ≤ 4
+padded : Std.Array α 4#usize := Array.repeat 4#usize init
+range : core.ops.range.RangeTo Usize := { «end» := values.len }
+range_val : ↑range.end = values.length
+this : ?m.51
+⊢ ∃ out, copyPrefixWith init copyInst values = ok out ∧ ↑out = ↑values ++ List.replicate (4 - values.length) init
+NFT_generated/NFT_PackPrefix.lean:14:65: warning: This simp argument is unused:
+  Slice.len_val
+
+Hint: Omit it from the simp argument list.
+  simp [range,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵_̵v̵a̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFT_generated/NFT_PackPrefix.lean:15:7: error: unexpected token 'mut'; expected command
+'NFT_PackPrefix.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
