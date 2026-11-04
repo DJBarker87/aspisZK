@@ -45,3 +45,22 @@ Account matrix/splits are now terminal and reviewed: BOTH account associations
 are CLOSED-BY-RECLASSIFICATION under(af)(3), with NFV_AF_CERTIFICATE.json as the
 precise evidence table. There is no native copied-prefix PASS. The retained
 std/allocator realization remains visible. Production admission remains B.
+
+Final model audit: B043 aggregate module PASS; B044/B045 adapted driver build
+PASS; B046 eight matched fixtures PASS; B047 raw103-root audit PASS, standard
+axioms only. B048/B049 loaded-scanner build PASS; B050 scan exit1 because the
+EXACT inherited650 references remain,15 inherited modules. All10 NFV proof
+modules have zero unresolved references. NFV_AUDIT.json is authoritative with
+raw receipts, walker hash and the diff limited to module/root lists. No full
+frozen release replay or headline proof is claimed.
+
+Request model prerequisites now include generic copy/frame laws, exact emitted
+five-window envelope, index laws for every window, window extensionality,
+typed-oracle value erasure to the adopted caller and generic U8 comparison/
+zero-binding semantics. Each new top theorem prints standard axioms. These
+are the model side of(y), with native observations and SAME admitted decoder/
+child PacketDomains kept as separate obligations. No field multiplication is
+run in Kani, and no new field stub or LPh row is introduced. The only direct
+Kani stubs are the exact KMX configuration; non-scalar pure child calls use
+LOCAL typed result/call-log oracles under(y). There are no writable statics,
+Option<fn>-dependent credits, function-contract shape claims or renamed repairs.

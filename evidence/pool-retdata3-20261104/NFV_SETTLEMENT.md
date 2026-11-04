@@ -38,3 +38,23 @@ its local pointer log is checked, and no allocator implementation is invented.
 The proof does not establish the earlier process prefix or joint transaction
 reachability. C's source-cut consumption at the production cap=len792 is kept
 separate from B's obligation to instantiate the admitted full account context.
+
+The requested context lift is terminal and reviewed in NFV_C_LIFTS.json:
+K038..055 supply the byte plus eight value-family positives and matched
+controls. Every positive PASSES; every control FAILS at the intended assertion,
+with no timeout or unwind failure. K056 rejects a different Instruction object;
+K057 rejects a different AccountInfo-array object. All use the exact KMX patch,
+frozen dependency graph, deployed Pool features, caps and zero swap.
+The context dimensions are seven metas,320 request bytes,eight AccountInfos;
+returned capacity=len792. The SAME borrowed Instruction/Info array, returned
+Box and decoded result are preserved through the source-cut continuation.
+
+This lifts the retained NFR nine observations and K030/K034/K043 into the
+post-admission native source cut. K051 remains explicitly excluded. The cut
+only forwards input account infos; its fixture data slices are empty and it
+does not inspect their contents. Actual admitted account-data/roles, borrow
+pre-states and all child PacketDomains still have to be instantiated in the
+outer production prefix B. This is the remaining production-helper transport
+obligation, not a reason to count the local helper's equality as a whole-process
+certificate. NFR_ModelJoin.same_emitted_settlement is the consuming model
+join; native(y) semantic transport remains retained P6/D188 reclassification.

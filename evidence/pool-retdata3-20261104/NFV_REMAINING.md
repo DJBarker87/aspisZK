@@ -24,3 +24,25 @@ Both print standard axioms only. All intended request-model prerequisites are
 now green. The remaining8 Lean units are reserved for the aggregate module,
 compiled-driver fixtures/raw ax2 and one final loaded scan. Native remaining20;
 extraction0. The full production prefix and overall composition remain OPEN.
+
+Precise remaining B obligations (each needs a NEW native caller certificate,
+not another model equality alone):
+1. Frozen process prefix through request/master/checkpoint/lane decoding,
+   layout, payer/system checks, marker planning/creation and custody branch;
+   full typed child Results, touched-account pre-states and declared modifies.
+2. Prove the SAME decoded request/public reaches encoding, and the selected
+   verifier/registry and all seven meta keys come from those SAME admitted
+   accounts. Empty-data planner fixtures do not instantiate these domains.
+3. Associate verifier pool_route::admitted on the far side of THAT CPI with
+   the exact request/input windows; it is not a predecessor inside Pool.
+C's one-call helper value/error/place/allocation cut is controlled under(y),
+but an outer production-helper caller association with admitted account-data
+and borrows is still B. The retained nine observations do not supply it.
+D needs those native facts before applying the existing model join. No new
+NFV_PoolReturnData.association is asserted. No outstanding independent
+Lean-only recurrence/frame/comparison obligation is left in these new modules;
+Lean budget50 and extraction1 are fully consumed. Further B work needs native
+Kani call-log/domain evidence and its coupled model interpretation.
+
+<!-- budget checkpoint -->
+{"limits": {"extract": 1, "kani": 80, "lean": 50}, "remaining": {"extract": 0, "kani": 9, "lean": 0}, "used": {"extract": 1, "kani": 71, "lean": 50}}

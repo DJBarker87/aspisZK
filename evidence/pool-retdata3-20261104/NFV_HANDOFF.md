@@ -40,3 +40,6 @@ Both print standard axioms only. All intended request-model prerequisites are
 now green. The remaining8 Lean units are reserved for the aggregate module,
 compiled-driver fixtures/raw ax2 and one final loaded scan. Native remaining20;
 extraction0. The full production prefix and overall composition remain OPEN.
+
+<!-- budget checkpoint -->
+{"limits": {"extract": 1, "kani": 80, "lean": 50}, "remaining": {"extract": 0, "kani": 9, "lean": 0}, "used": {"extract": 1, "kani": 71, "lean": 50}}
