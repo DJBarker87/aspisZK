@@ -1,0 +1,64 @@
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -294,6 +294,9 @@
+     }
+ 
+     #[inline(always)]
++    #[cfg_attr(kani, kani::requires(self.a.0 < P && self.b.0 < P))]
++    #[cfg_attr(kani, kani::ensures(|r| (*r == NFG_contract::NFG_cm_ref(self)) != cfg!(NFG_bad_cm_contract)))]
++    #[cfg_attr(kani, kani::modifies())]
+     pub fn neg(self) -> CM31 {
+         CM31 {
+             a: self.a.neg(),
+@@ -982,6 +985,8 @@
+     }
+ 
+     #[inline(always)]
++    #[cfg_attr(kani, kani::ensures(|r| (*r == NFG_contract::NFG_qm_zero_ref(self)) != cfg!(NFG_bad_zero_contract)))]
++    #[cfg_attr(kani, kani::modifies())]
+     pub fn is_zero(self) -> bool {
+         self.c0.is_zero() && self.c1.is_zero()
+     }
+@@ -3266,3 +3271,5 @@
+     let s = a + P - b;
+     M31(if s >= P { s - P } else { s })
+ }
++
++#[cfg(kani)] pub mod NFG_contract;
+--- a/crates/aspis-core/src/lib.rs
++++ b/crates/aspis-core/src/lib.rs
+@@ -12,8 +12,10 @@
+ //! Stage 1 work and no soundness figure may be quoted from this code alone.
+ 
+ #![no_std]
++#![cfg_attr(kani, feature(allocator_api))]
+ 
+ extern crate alloc;
++#[cfg(kani)] extern crate self as aspis_core;
+ 
+ pub mod circle;
+ pub mod circle_fri;
+--- a/crates/aspis-core/src/field/NFG_contract.rs
++++ b/crates/aspis-core/src/field/NFG_contract.rs
+@@ -0,0 +1,9 @@
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../NFG_small_refs.rs"));
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++// NFG_bad_cm_contract / NFG_bad_zero_contract invert the original method's ensures.
++#[kani::proof_for_contract(CM31::neg)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn cm_neg_contract(){let a:u32=kani::any();let b:u32=kani::any();kani::assume(a<NFG_P && b<NFG_P);let _=CM31{a:M31(a),b:M31(b)}.neg();}
++#[kani::proof_for_contract(QM31::is_zero)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn qm_zero_contract(){let x=QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}};let _=x.is_zero();}
+--- a/NFG_small_refs.rs
++++ b/NFG_small_refs.rs
+@@ -0,0 +1,9 @@
++use aspis_core::field::{CM31,QM31,M31};
++const NFG_P:u32=2147483647;
++pub fn NFG_neg_word_ref(x:u32)->u32 {if x==0 {0}else{NFG_P-x}}
++pub fn NFG_cm_ref(x:CM31)->CM31 {
++ CM31{a:M31(NFG_neg_word_ref(x.a.0)),b:M31(NFG_neg_word_ref(x.b.0))}
++}
++pub fn NFG_qm_zero_ref(x:QM31)->bool {
++ x.c0.a.0==0 && x.c0.b.0==0 && x.c1.a.0==0 && x.c1.b.0==0
++}
