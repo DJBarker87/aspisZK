@@ -17,9 +17,9 @@ def sourceEvent (input : Result (Option IndexState)) (effects : List (Result Uni
   match state with
   | none => .ok none
   | some row =>
-    if small : row.index < 1024 then
+    (if small : row.index < 1024 then
       through effects (some ⟨(Usize.wrapping_shr (rowScalar row.index small) 4#u32).val,64⟩)
-    else .ok none
+    else .ok none)
 
 theorem event_certificate {α : Type} (input : Result (Option IndexState))
     (effects : List (Result Unit)) (observed : IndexState)
