@@ -26,9 +26,15 @@ theorem native_window (bytes : Slice U8) (a b : Usize)
         ProverRwSuccessParserSource.aspis_core.field.CM31.from_le_bytes part) =
       PV_RDCD5_ParserFlat.cmAt bytes.val a.val := by
   simp_rw [PV_RDCD5_ParserTransport.complex]
-  rw [PV_RDCD5_ParserComponent.range_bind,
-    PV_RDCD5_ParserRange.success bytes.val a.val b.val (by omega) bounded,bind_tc_ok]
-  simpa only [width] using PV_RDCD5_ParserFlat.cm_window bytes.val a.val (by omega)
+  change (do let part ← core.slice.index.Slice.index
+               (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes {start:=a, «end»:=b}
+             PV_RDCD4_BytesSource.cm part.val) = _
+  calc
+    _ = (PV_RDCD5_ParserRange.index bytes.val a.val b.val >>= PV_RDCD4_BytesSource.cm) :=
+      PV_RDCD5_ParserComponent.range_bind bytes a b PV_RDCD4_BytesSource.cm
+    _ = _ := by
+      rw [PV_RDCD5_ParserRange.success bytes.val a.val b.val (by omega) bounded,bind_tc_ok]
+      simpa only [width] using PV_RDCD5_ParserFlat.cm_window bytes.val a.val (by omega)
 
 /-- No returned borrow and no input mutation; failure remains in Result. -/
 theorem input_frame (bytes : Slice U8) :

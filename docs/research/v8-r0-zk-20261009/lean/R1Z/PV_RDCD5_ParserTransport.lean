@@ -123,7 +123,11 @@ theorem quartic (bytes : Slice U8) :
       intro firstOption
       cases firstOption with
       | none => rfl
-      | some c0 => exact second_bind bytes _
+      | some c0 => exact second_bind bytes (fun right => do
+          let c1 ← cm right
+          match c1 with
+          | none => ok none
+          | some c1 => ok (some (⟨c0,c1⟩ : Q)))
 
 #print axioms complex_shape
 #print axioms complex
