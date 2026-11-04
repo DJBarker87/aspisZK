@@ -85,6 +85,14 @@ def check(payload,frozen):
    a=f.index('        let mut tail=');b=f.index('\n    \n}',a)
    assert tok(tail)==tok(f[a:b]),'tail call-order or argument drift'
   checked.append('pairing: all 16 raw product sites, exact native private step, exact public checks when present')
+ if 'crates/aspis-r1-cost-probe/src/NFI_original.rs' in payload:
+  original=payload['crates/aspis-r1-cost-probe/src/NFI_original.rs']
+  opening=body(frozen['crates/aspis-r1-cost-probe/src/candidate.rs'],'opening')
+  restored=body(original,'NFI_opening').replace('crate::compact::OFF_OPENINGS','compact::OFF_OPENINGS').replace('crate::compact::OPENING','OPENING')
+  assert tok(restored)==tok(opening),'original proof opening drift'
+  assert 'let mut proof=[0u8;57607]' in original and 'proof[at+j]=original' in original
+  assert 'let q=NFI_opening(&proof,i)' in original and 'q[..608].try_into().unwrap()' in original
+  checked.append('original allocation: frozen opening body, one symbolic cell, exact 608-byte borrowed prefix; arbitrary frame composition is a separate Lean obligation')
  return dict(checked=checked,source_sha256=hashlib.sha256(s.encode()).hexdigest(),credit='Exact source fission only, paired native receipts and semantic association still required')
 if __name__=='__main__':
  f=json.loads((E/'NFI_FROZEN.json').read_text());reports=[]

@@ -19,6 +19,8 @@ errors=[n for n,h in pins.items() if sha(S/n)!=h]
 (B/(a+'-source-check.json')).write_text(json.dumps(dict(files=len(pins),errors=errors),indent=2)+'\n')
 assert not errors,errors
 # Strict frozen-source erasure check, in addition to the inherited source pins.
+frozen_ref=json.loads((B/'NFI_FROZEN_REF.json').read_text())
+assert sha(B/'NFI_FROZEN.json')==frozen_ref['sha256'],'STOP frozen corpus hash mismatch'
 frozen_sources=json.loads((B/'NFI_FROZEN.json').read_text())
 checked=[]
 base=json.loads((B/'NFI_BASE.json').read_text())
@@ -76,7 +78,7 @@ assert sha(S/'Cargo.lock')==frozen,'STOP metadata changed lock'
 out['resolved_features_all_crates']=[dict(name=p['name'],version=p['version'],source=p.get('source'),features=nodes[p['id']]['features']) for p in sorted(m['packages'],key=lambda p:p['id'])]
 (B/(a+'-graph-check.json')).write_text(json.dumps(out,indent=2)+'\n')
 from NFI_source_checks import check as source_check
-payload={n:(S/n).read_text() for n in pins if n.endswith('/NFI_dots.rs') or n.endswith('/NFI_incoming.rs') or (n.endswith('/NFI_pairing.rs') and 'NFI_pairing' in (S/'crates/aspis-r1-cost-probe/src/fast_pairing.rs').read_text())}
+payload={n:(S/n).read_text() for n in pins if n.endswith('/NFI_dots.rs') or n.endswith('/NFI_incoming.rs') or n.endswith('/NFI_original.rs') or (n.endswith('/NFI_pairing.rs') and 'NFI_pairing' in (S/'crates/aspis-r1-cost-probe/src/fast_pairing.rs').read_text())}
 fission=source_check(payload,frozen_sources)
 (B/(a+'-fission-check.json')).write_text(json.dumps(fission,indent=2))
 status=subprocess.run(x['native_command'],cwd=B).returncode
