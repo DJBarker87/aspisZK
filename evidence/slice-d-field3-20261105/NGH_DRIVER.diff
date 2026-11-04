@@ -1,6 +1,6 @@
 --- NGA_Driver.lean
 +++ NGH_Driver.lean
-@@ -99,41 +99,25 @@
+@@ -99,41 +99,27 @@
         #[`NEP_Planted.matcher, `NEP_Planted.viaPrivate, `NEP_Planted.proof,
           `NEP_Planted.viaAux, `NEP_MutateMatch.matcher, `NEP_MutatePrivate.viaPrivate,
           `NEP_MutateProof.proof, `NEP_MutateAux.viaAux])
@@ -17,7 +17,8 @@
 +      (#[`NGH_COMBINED_IMPORT], #[`NGH_QSquareOps.product, `NGH_QSquareOps.associate, `NGH_QSquareOps.source, `NGH_CMWords.sub_value, `NGH_CMWords.coordinates])
      else if mode == "proof3" then
 -      (#[`NGA_COMBINED_IMPORT], #[`NGA_Small.source, `NGA_PreparePairs.source, `NGA_PreparePairs.same_run, `NGA_SmallResult.source, `NGA_Wrappers.domain])
--    else if mode == "proof4" then
++      (#[`NGH_COMBINED_IMPORT], #[`NGH_CMWords.product, `NGH_CMWords.square, `NGH_WideBridge.same_square, `NGH_WideBridge.source, `NGH_WideBridge.cohort])
+     else if mode == "proof4" then
 -      (#[`NGA_COMBINED_IMPORT], #[`NGA_Wrappers.source, `NGA_Wrappers.two, `NGA_Wrappers.three, `NGA_Wrappers.four, `NGA_NativeOps.cm_square_total])
 -    else if mode == "proof5" then
 -      (#[`NGA_COMBINED_IMPORT], #[`NGA_NativeOps.qm_square_total, `NGA_NativeOps.product, `NGA_NativeOps.square, `NGA_NativeOps.mul_u, `NGA_NativeOps.addition])
@@ -33,7 +34,7 @@
 -      (#[`NGA_COMBINED_IMPORT], #[`NGA_ArrayExt.source, `NGA_OuterStep.source, `NGA_Indexed.same_inputs, `NGA_Indexed.full_value, `NGA_SquareCallees.product])
 -    else if mode == "proof11" then
 -      (#[`NGA_COMBINED_IMPORT], #[`NGA_SquareCallees.square, `NGA_SquareCallees.addition, `NGA_SquareCallees.mulU_words, `AspisR1.RPx_Deployed.deployed])
-+      (#[`NGH_COMBINED_IMPORT], #[`NGH_CMWords.product, `NGH_CMWords.square, `AspisR1.RPx_Deployed.deployed])
++      (#[`NGH_COMBINED_IMPORT], #[`AspisR1.RPx_Deployed.deployed])
      else (#[], #[])
    let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
      {} (loadExts := true) (level := .private)

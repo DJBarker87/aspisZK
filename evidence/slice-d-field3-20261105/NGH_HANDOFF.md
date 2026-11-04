@@ -13,3 +13,7 @@ Assumptions retained: P6/D188 option A, physical ABI/borrows, compiler/library/A
 Validation and remaining obligations will be updated after each stage. No release/ELF rebuild is triggered by evidence-only changes. Initial counts: 0 Kani, 0 Lean, 0 extraction.
 
 Stage 2: TX1:032/TX2:022 QM31 square CLOSED by ordinary ruling (y), validated delta and combined audit. See NGH_BRIDGES.md. The five helper/wrapper rows remain OPEN; WideExact square substitution is next. NGH_K019 one-step outer contract is active at this checkpoint; no active run is resubmitted.
+
+Correction: the provisional unsupported-for finding is withdrawn; the macro contains a ForLoop conversion before its while check. Actual helper invariant route continues. No helper closure follows from the initial diagnostic.
+
+Stage 3: WideExact square TX1:056 also CLOSED via the newly CLOSED QM square child and retained NFT native caller. L018 raw audit: 21 roots/13,174 modules, zero defects, standard axioms. Generic helper invariant route still proceeds after the false unsupported-for finding was corrected. K019 full outer contract and K020 selected-window contract timed out; neither is rerun unchanged.

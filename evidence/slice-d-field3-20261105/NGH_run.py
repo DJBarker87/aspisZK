@@ -51,6 +51,9 @@ if kind=='kani':
  import os
  if os.environ.get('NGH_INVERT'):env['RUSTFLAGS']+=' --cfg NGH_invert'
  if os.environ.get('NGH_BADARG'):env['RUSTFLAGS']+=' --cfg NGH_bad_argument'
+ if os.environ.get('NGH_FOR'):env['RUSTFLAGS']+=' --cfg NGH_for_diagnostic'
+elif kind=='help':
+ sources=['NGH_gate.py'];command=['/home/dombarker/.cargo/bin/cargo-kani','kani','--help']
 elif kind=='extract':
  files['NGH_extract.py']=(E/'NGH_extract.py').read_text();files['NGH_reference.rs.txt']=(E/'NGH_reference.rs.txt').read_text();sources=['NGH_extract.py','NGH_reference.rs.txt'];command=['python3','NGH_extract.py']
  if target=='NGH_ScanReference':
@@ -144,7 +147,7 @@ if {kind!r}=='extract':
  if {target!r}=='NGH_ScanReference':names+=['NGH_SCAN_EXTRACTION_PINS.json','NGH_scan_reference.llbc']+[str(p.relative_to(b)) for p in (b/'NGH_scan_extracted').rglob('*') if p.is_file()]
  else:names+=['NGH_EXTRACTION_PINS.json','NGH_reference.llbc']+[str(p.relative_to(b)) for p in (b/'NGH_extracted').rglob('*') if p.is_file()]
 names += [str(p.relative_to(b)) for p in b.glob('NEP_*_REACHABLE.txt')] if {kind!r} in ['auditbatch','review'] else [str(p.relative_to(b)) for p in b.glob('NEP_'+{target!r}+'_*_REACHABLE.txt')] if {kind!r}=='auditbin' else []
-if {kind!r}=='review':names += [str(p.relative_to(b)) for p in (b/'NGH_review').rglob('*') if p.is_file()]+['NGH_LOADED_scan.jsonl']
+if {kind!r}=='review':names += [str(p.relative_to(b)) for p in (b/{os.environ.get('NGH_REVIEW_OUTPUT','NGH_review')!r}).rglob('*') if p.is_file()]+['NGH_LOADED_scan.jsonl']
 if {kind!r}=='auditbatch':names += [str(p.relative_to(b)) for p in (b/('NGH_stage2_audit' if {target!r}=='NGH_Stage2Driver' else 'NGH_final_audit')).rglob('*') if p.is_file()]
 if {target!r} in ['scan','queryscan']:names+=['NGH_QUERY_LOADED_scan.jsonl' if {target!r}=='queryscan' else 'NGH_LOADED_scan.jsonl']
 out={{n:(b/n).read_text() for n in names}}

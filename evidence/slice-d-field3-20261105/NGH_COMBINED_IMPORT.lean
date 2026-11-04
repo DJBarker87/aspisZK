@@ -5,6 +5,7 @@ import NGH_SmallValue
 import NGH_QSquareRef
 import NGH_QSquareOps
 import NGH_CMWords
+import NGH_WideBridge
 #print axioms NGH_AccumulateRef.cells_eq
 #print axioms NGH_AccumulateRef.model_eq
 #print axioms NGH_AccumulateRef.cohort
@@ -22,4 +23,7 @@ import NGH_CMWords
 #print axioms NGH_CMWords.coordinates
 #print axioms NGH_CMWords.product
 #print axioms NGH_CMWords.square
+#print axioms NGH_WideBridge.same_square
+#print axioms NGH_WideBridge.source
+#print axioms NGH_WideBridge.cohort
 #print axioms AspisR1.RPx_Deployed.deployed

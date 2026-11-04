@@ -107,7 +107,9 @@ unsafe def main (args : List String) : IO UInt32 := do
     else if mode == "proof2" then
       (#[`NGH_COMBINED_IMPORT], #[`NGH_QSquareOps.product, `NGH_QSquareOps.associate, `NGH_QSquareOps.source, `NGH_CMWords.sub_value, `NGH_CMWords.coordinates])
     else if mode == "proof3" then
-      (#[`NGH_COMBINED_IMPORT], #[`NGH_CMWords.product, `NGH_CMWords.square, `AspisR1.RPx_Deployed.deployed])
+      (#[`NGH_COMBINED_IMPORT], #[`NGH_CMWords.product, `NGH_CMWords.square, `NGH_WideBridge.same_square, `NGH_WideBridge.source, `NGH_WideBridge.cohort])
+    else if mode == "proof4" then
+      (#[`NGH_COMBINED_IMPORT], #[`AspisR1.RPx_Deployed.deployed])
     else (#[], #[])
   let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
     {} (loadExts := true) (level := .private)

@@ -1,7 +1,7 @@
 from pathlib import Path
 import json,re,hashlib,difflib
 E=Path(__file__).resolve().parent;A=E.parent/'slice-d-field2-20261104'
-mods=['NGH_AccumulateRef','NGH_SmallRef','NGH_SmallValue','NGH_QSquareRef','NGH_QSquareOps','NGH_CMWords']
+mods=['NGH_AccumulateRef','NGH_SmallRef','NGH_SmallValue','NGH_QSquareRef','NGH_QSquareOps','NGH_CMWords','NGH_WideBridge']
 roots=[]
 for m in mods:
  roots += re.findall(r'^#print axioms (\w+)',(E/(m+'.lean')).read_text(),re.M)
