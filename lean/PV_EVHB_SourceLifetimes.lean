@@ -111,7 +111,7 @@ theorem move_receiver {S F : Type} (s : State S F) (source target : Place)
     headerAt (move s source target) target=headerAt s source ∧
     (move s source target).world=s.world := by
   simp only [move,headerAt,ite_true,different,ite_false]
-  exact ⟨rfl,rfl,rfl,rfl⟩
+  exact ⟨True.intro,True.intro,True.intro,True.intro⟩
 
 theorem move_fresh {S F : Type} (s : State S F) (source target : Place)
     (fresh : Fresh s) : Fresh (move s source target) := by
@@ -206,7 +206,7 @@ theorem receiver_install {S F : Type} (s : State S F) (p : Place)
     headerAt (installAt s p h pointer cap) p =
       some (capacityStore (pointerStore h pointer) cap) := by
   simp only [installAt,selected,headerAt,Option.bind_some,install_lookup]
-  exact ⟨rfl,rfl⟩
+  exact ⟨True.intro,True.intro⟩
 
 /-- Result/argument/return/aggregate payload moves use the same operation.
 The original salts constructor site is identified by its activation and local
