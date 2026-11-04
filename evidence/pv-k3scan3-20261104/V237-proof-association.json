@@ -1,0 +1,97 @@
+{
+  "row": "V237",
+  "theorem": "R1Z.PV_RDCD4_V237.complete",
+  "literal_theorems": [
+    "R1Z.PV_RDCD4_V237.buffer_literal",
+    "R1Z.PV_RDCD4_V237.result_literal"
+  ],
+  "consumed_callback": "R1Z.PV_DL_DefaultNative.consumed",
+  "original_gate": {
+    "rows": [
+      "V237"
+    ],
+    "steps": [
+      {
+        "path": "tools/pv-dlib-20261028/structural-default.py",
+        "original_sha256": "687dc96270d2cf476584d3a69f824cc380a09d3d173f993a5222a3f36491a0f4",
+        "status": "PASS",
+        "exit": 0
+      }
+    ],
+    "source_selection": "1.94.1 sysroot; zeroize1.9.0; all other dependencies resolved versions unchanged; x86_64 Linux release",
+    "result": "PASS"
+  },
+  "unchanged_constructor_binding": {
+    "evidence_class": "structural (K-1 substitute)",
+    "rulings": [
+      "r",
+      "k'"
+    ],
+    "sources": {
+      "digest-0.10.7/src/core_api/wrapper.rs": {
+        "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/digest-0.10.7/src/core_api/wrapper.rs",
+        "sha256": "033777bed7d140b158e15d50fda8a6e06557ce89bd0738fcca692be2c39e8b8a"
+      },
+      "block-buffer-0.10.4/src/lib.rs": {
+        "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/block-buffer-0.10.4/src/lib.rs",
+        "sha256": "b437252d389042d894b1ef17859b043e827d2bd2a1bca4b5311c67dff565274d"
+      },
+      "generic-array-0.14.7/src/impls.rs": {
+        "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.7/src/impls.rs",
+        "sha256": "18b285821421eea0cdbbcfcc896eef67bd55d72f8d85b5827cca6687e9c0fc27"
+      }
+    },
+    "wrapper_fields": "core:T then buffer:Buffer<T>; native derives Default in declaration order",
+    "native_buffer_default": "{\n        if BlockSize::USIZE == 0 {\n            panic!(\"Block size can not be equal to zero\");\n        }\n        Self {\n            buffer: Default::default(),\n            pos: 0,\n            _pd: PhantomData,\n        }\n    }",
+    "owned_reference": {
+      "path": "tools/pv-dlib-20261028/default-forward-helper.rs",
+      "sha256": "20e8983ed8f1db4231ecb9568850193d4e80ba77358c1ea7e5b52a90941f25f0",
+      "body": "{\n        Self {core:Default::default(),buffer:Default::default()}\n    }",
+      "tokens_checked": true
+    },
+    "differences": [
+      {
+        "native": "derived CoreWrapper Default",
+        "reference": "explicit same two field-default calls in declaration order",
+        "proofs": [
+          "PV_DL_DefaultLaw.source",
+          "PV_DL_WrapLaw.source_reference"
+        ]
+      },
+      {
+        "native": "BlockBuffer default checks size0 then byte-array Default,pos0,PhantomData",
+        "reference": "native64-byte storage constructor",
+        "proofs": [
+          "PV_DL_DefaultNative.native_callback",
+          "PV_DL_DefaultNative.consumed",
+          "PV_DL_DefaultBuffer.nonvacuous"
+        ]
+      }
+    ],
+    "native_size": "64, discharged by PV_AL_SplitNativeShape.native_size; core Default is an original complete-Result parameter; kind/size Default trait arguments are not executed by these fields",
+    "finite_validation": "../wrappers-native-combined-resume4/receipt.json; 4 paired Drop-core constructor cases; finite validation only",
+    "old_kani_credit": "suspended; not used",
+    "v232_untouched": true,
+    "kani": false
+  },
+  "influence": "v237-influence-census.json",
+  "singleton": "v237-singleton-result.json",
+  "coherence": "v237-coherence-result.json",
+  "evidence_classes": {
+    "wrapper_and_BlockBuffer": "structural (K-1 substitute); reclassification within existing Rust/Aeneas/compiler trust",
+    "byte_array_only": "exhaustive over a singleton input domain, deployed-configuration harness"
+  },
+  "before": "Complete deployed CoreWrapper Default source-to-reference Result law at original Core::default boundary was unbound because concrete byte default was not closed.",
+  "after": "Same generic Core result and moved-core owned reference, including failure/divergence. Fixed64-byte default equals literal zeros, position0. No arbitrary byte/default/library callback is introduced.",
+  "endpoint_premises_removed": [],
+  "endpoint_premises_added": [],
+  "endpoint_premises_changed": [],
+  "retained": [
+    "V370/D381/D386, including harness-to-shipped codegen",
+    "E1/E2",
+    "native RunJoin/world/physical observer",
+    "client route",
+    "L1/L2/L3",
+    "T exactly entropy_law/entropy_kernel/observation"
+  ]
+}

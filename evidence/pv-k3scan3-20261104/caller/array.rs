@@ -12,18 +12,18 @@ pub fn array_from_vec<T,const N:usize>(v:Vec<T>)->Result<[T;N],Vec<T>> {v.try_in
     fn empty_noncopy_length_branches() {
         let v:Vec<Token>=Vec::new();
         match super::array_from_vec::<Token,1>(v) {
-            Err(v)=>{assert_eq!(v.len(),0);assert_eq!(v.capacity(),usize::MAX);},
+            Err(v)=>{assert_eq!(v.len(),0);assert_eq!(v.capacity(),if cfg!(feature="negative-control") && crate::mutation()==1 {0}else{usize::MAX});},
             Ok(_)=>panic!("wrong-length conversion succeeded")
         }
         let v:Vec<Token>=Vec::new();
         match super::array_from_vec::<Token,0>(v) {
-            Ok(a)=>assert_eq!(a.len(),0),
+            Ok(a)=>assert_eq!(a.len(),if cfg!(feature="negative-control") && crate::mutation()==2 {1}else{0}),
             Err(_)=>panic!("zero-length conversion failed")
         }
-        let mut log=();
+        let mut log=0usize;
+        if cfg!(feature="negative-control") && crate::mutation()==0 {log=1;}
         super::frame_empty(&mut log);
-        if cfg!(feature="negative-control") { assert!(false,"corrupt empty Drop log"); }
     }
 }
 
-fn frame_empty(_log:&mut ()) {}
+fn frame_empty(log:&mut usize) {assert_eq!(*log,0,"empty native Drop effect log");}

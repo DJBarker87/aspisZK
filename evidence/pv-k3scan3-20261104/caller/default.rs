@@ -14,7 +14,11 @@ fn wrapper_default_arbitrary_core() {
  let frame:[u32;8]=kani::any();let mut log=Log{calls:0,reply:Core([0;8]),frame};
  let native=CoreWrapper::<Core>::pv_context_default(|| oracle(&mut log));
  let (core,buffer)=native.decompose();
- let expected=if cfg!(feature="negative-control") {Core([log.reply.0[0]^1,log.reply.0[1],log.reply.0[2],log.reply.0[3],log.reply.0[4],log.reply.0[5],log.reply.0[6],log.reply.0[7]])} else {log.reply};
- assert_eq!(core,expected);assert_eq!(buffer.pv_dl_bytes(),&[0;64]);assert_eq!(buffer.get_pos(),0);
+ let mut expected=log.reply;let mut bytes=[0u8;64];let mut pos=0;
+ if cfg!(feature="negative-control") {
+  let mode=crate::mutation();
+  if mode<8 {expected.0[mode]^=1;}else if mode==8 {bytes[0]=1;}else if mode==9 {bytes[63]=1;}else if mode==10 {pos=1;}else {log.frame[0]^=1;}
+ }
+ assert_eq!(core,expected);assert_eq!(buffer.pv_dl_bytes(),&bytes);assert_eq!(buffer.get_pos(),pos);
  assert_eq!(log.calls,1);assert_eq!(log.frame,frame);
 }
