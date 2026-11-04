@@ -9,8 +9,8 @@ l3-2, rdea-2', ax1' are read. The inherited recount9 prompt is absent from its
 temporary path; the committed recount10 copy and METHOD8/METHOD10 preserve its
 method. No moving head is an evidence authority after capture.
 
-All407 rows retain historical fields verbatim, except dependency_bucket is the
-current exclusive OPEN disposition (the previous value is saved explicitly).
+All 407 rows retain historical fields verbatim, except current dependency_bucket, closure_theorem and closure_route;
+their previous values are saved explicitly when changed.
 Current recount11 fields supersede dated text. Defining sources are re-fetched
 with git show at every captured revision and SHA-compared to recount10; only LOG
 reporting changes. Existing scoped derivations are reused for identical bytes,
@@ -36,18 +36,18 @@ full D159 observer, bound, bad event and endpoint are not weakened.
 
 V233 must preserve original Eager64 typed storage, arbitrary Slice/origin,
 roundtrip and consumed callback, rather than only flattened bytes. V236 must
-preserve pos<64, all64 live/dead bytes, every branch/cursor, ordered typed core
+preserve pos<64, all 64 live/dead bytes, every branch/cursor, ordered typed core
 callbacks and complete Result. V197 must cover every Slice without a length16
 or success guard, retain first-None short circuit and late second range panic,
 and repair all kind-sensitive consumers. The corrected parser-specific helper
 returns panic; the historical shared helper is unchanged and has no universal
-native failure-kind credit. All15 focused consumer hashes/receipts, audit-only
+native failure-kind credit. All 15 focused consumer hashes/receipts, audit-only
 query projections and unchanged scopes are checked. Current-reference searches
 at every captured pin supplement the original106-ref census and its refreshes.
 Historical wrong-kind diagnostics remain preserved; no restored consumer used
 them. Source-structural bindings retain V370 and physical/runtime observations.
 
-K-3 starts from all305 observations, then overlays the live D592 final per-credit
+K-3 starts from all 305 observations, then overlays the live D592 final per-credit
 packet, not preliminary classifier labels or passing diagnostics. Every new
 matched pair must keep the original harness, pass/fail as expected, have the
 same selected closure, allowed admissions and caps. Current support lists must
@@ -81,12 +81,12 @@ full source_entry_world or the five deployed projections.
 
 Every #print axioms result is SUMMARY-BASED. Existing fixed NEP_Driver audits
 import all private data, hard-error on unresolved constants and compare raw
-walks with summaries. rdcd7's51 roots and uc5's8 roots are reused, not rerun.
-92060's consumer compile and16539-module zero-dangling scan pass, but its raw
+walks with summaries. rdcd7's 51 roots and uc5's 8 roots are reused, not rerun.
+92060's consumer compile and 16539-module zero-dangling scan pass, but its raw
 driver fails before traversal, so the three-step composition gate does NOT
 count. No coherent joint release/non-vacuity claim follows from the scan alone.
 
-Lean0/40; Kani0/0. Env-J92100–92139 unused. No new proof, Lean module, host scope,
+Lean 0/40; Kani 0/0. Env-J 92100–92139 unused. No new proof, Lean module, host scope,
 Rust build, full replay, unchanged regression, key action, Stream A edit, merge
 or push. Historical receipts record target, exit, wall, peak RSS, swap, revision
 and summary/raw axiom classification. Budget is a ceiling for statement/NEP
