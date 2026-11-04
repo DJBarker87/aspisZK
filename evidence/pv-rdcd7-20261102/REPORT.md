@@ -16,7 +16,7 @@ credit is claimed.
 The owned model now returns `fail.panic` for invalid parser ranges, matching the
 source. Only its import and three range calls change; the same bounds predicate,
 window and ordered checks remain. The first `None` still returns before the late
-second-half check. No eager16 guard, success-only equality, error erasure or added
+second-half check. No guard for 16 bytes, success-only equality, error erasure or added
 hypothesis. [Source binding](v197-source-bindings.json) records three application
 bodies, nine library bodies, terminal panic dispatch, canonicality constant and
 three **syntactic** mutation controls. This is an own-1/k-prime structural argument,
@@ -26,7 +26,7 @@ only; no Rust build, extraction, new translator or Kani run occurred.
 
 [CONSUMERS.md](CONSUMERS.md) classifies all executable consumers on pinned candidate
 and live local/remote refs, credited or not. Literal git-grep/reverse-import/variant
-results and final live-ref refresh are committed. All15 affected source modules
+results and final live-ref refresh are committed. All 15 affected source modules
 pass [CONSUMER-RECHECKS.json](CONSUMER-RECHECKS.json). Audit-only wrappers use exact
 affected query projection; the corrected replay proof is copied exactly with only
 namespace mapping. Unrelated historical suites were not repeated. V197 local
@@ -36,13 +36,13 @@ verbatim in BEFORE-sources.json and original rdcd5 receipts. V233/V236 source an
 success-only dependencies are unchanged; the old shared range helper remains
 outside the corrected parser, without universal native error-kind credit.
 
-[Coherence](N90802/receipt.json) verifies22 fresh project objects,5673 external
-hashes,22 actual-launch import fingerprints and23 native source pins. The
-[addendum](release-object-addendum.json) checks2 new release objects, completing
-the24-project-object cohort; runtime-only NEPDriver emits no object. All51 fixed
+[Coherence](N90802/receipt.json) verifies 22 fresh project objects, 5,673 external
+hashes, 22 actual-launch import fingerprints and 23 native source pins. The
+[addendum](release-object-addendum.json) checks 2 new release objects, completing
+the 24 project object cohort; runtime-only NEPDriver emits no object. All 51 fixed
 NEP full-private-data raw walks resolve completely and match their summaries;
 only propext/Classical.choice/Quot.sound occur. [Raw summary](RAW-AUDIT-SUMMARY.json)
-and all51 reachable inventories are retained. Summary-based `#print axioms` is
+and all 51 reachable inventories are retained. Summary-based `#print axioms` is
 labelled separately; unresolved constants were hard errors.
 
 | Target / receipt | Exit | Wall | Peak RSS KiB | Swap |
@@ -53,16 +53,22 @@ labelled separately; unresolved constants were hard errors.
 | [Fixed raw + summary audit 90797](lean-90797/receipt.json) | 0 | 0:05.14 | 4481308 | 0 |
 | [Focused typed replay 90798](lean-90798/receipt.json) | 0 | 0:01.22 | 2553748 | 0 |
 | [Single frozen manifest 90799](lean-90799/receipt.json) | 0 | 0:01.16 | 2528468 | 0 |
+| [Coherence N90802](N90802/receipt.json) | 0 | 0:01.65 | 38248 | 0 |
+| [Cache-only cleanup N90803](N90803/receipt.json) | 0 | 0:08.26 | 51592 | 0 |
 
 [RUNS.json](RUNS.json) records exact commands, revisions, source hashes/blobs,
 launch fingerprints, exits, wall time, peak RSS, swap and full axiom lines.
-Current protocol audit passes: minimum actual launch gap189.615597s,
-zero void launches, caps6G/8G/swap0/Tasks64 and Lean-M7000 unchanged. Quiet marker
-was read only; current admitted launches followed its absence. Refused IDs were
+Final budget: **33/60 Lean (25 pass, 8 repaired failures), 4/10 capped native
+(3 pass, 1 repaired preflight failure), 0 Kani**. 27 Lean and 6 native remain unused.
+The native scopes here are staging/coherence/cache checks; historical parser
+native execution remains finite validation only. Final protocol audit passes
+for 37 actual scopes and 19 uncharged refusals: minimum actual launch gap 189.615597s,
+zero void launches, caps 6G/8G/swap0/Tasks64 and Lean-M7000 unchanged. Quiet marker
+was read only; current admitted launches had no active quiet window. Refused IDs were
 uncharged and retried only after full cooldowns. The failed-source guard hash is
 recorded in source-proof-precheck.json. Eight failed Lean elaborations and the
 initial failed native preflight remain in receipts, each corrected before retry;
-failed sorryAx diagnostics are not admitted source axioms. Session3 recovery
+failed sorryAx diagnostics are not admitted source axioms. Session 3 recovery
 verified all inherited receipts against the host and no live inherited scope.
 
 Endpoint premises removed/added/changed: **zero**. T stays exactly
@@ -74,6 +80,14 @@ ae1/fmt-1/k3/dup-1-prime boundaries remain. No production source, soundness file
 dictionary semantics, simulator, observer or key changed. **Privacy target not
 established.**
 
-Cache cleanup is awaiting compliant host admission. Formal work is complete;
-stop basis is the qualified restoration of assigned V197. Next substantive work
-belongs to the retained deployment/compiler/runtime/observer obligations.
+[Cleanup](cleanup-result.json) removed only the two verified private compiler
+cache directories: 22,011 files, 4,605,793,976 bytes. The full pre-deletion
+inventory is retained. Sources, manifests, receipts and all 51 raw inventories
+remain; keys were not touched. Object hashes describe the measured pre-cleanup
+files, whose private caches are now absent. [Final host state](FINAL-STATE.json)
+confirms no task process remains. No further Lean replay was performed.
+
+[Commit log](COMMITS.txt) records the work through the reporting checkpoint.
+Stop basis: assigned V197 qualified restoration and all release checks complete.
+Next substantive work belongs to the retained deployment/compiler/runtime/
+observer obligations. No assigned parser gate remains open.
