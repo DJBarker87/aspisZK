@@ -61,3 +61,19 @@ RuntimeReturnData(nonempty1..1024), RuntimeMemcmp, RuntimeClockSlotBinding;
 original cryptographic assumptions. None added, removed or strengthened here.
 Pool carrier equality is a separate job; this theorem establishes only the
 proof/public component of NGP_L159.Carrier_statement, on these packet inputs.
+
+## Direct persistence composition
+
+`NGS_PersistedCarriers.lean`, `NGS_CARRIERS.saved_to_carriers`, calls
+NGR_HISTORY.saved_to_loaded itself on the SAME source-outcome first entry and
+response-selected TX2 entry. It derives the full `loaded` equality internally
+and passes it to same_inputs_or_collision. Its saved vector is definitionally
+`NGR_HISTORY.checkpoint prepared accumulator domain hp hu hc`; there is no
+extra saved witness or checkpoint-byte equality input. It retains NGR's exact
+game, native_writer_result, source protection, ordinary-account eligibility,
+reference validity, RuntimePersistence and SDK/std hypotheses verbatim, plus
+the scanner/authentication packets above. NGR_HYPOTHESES.md is authoritative
+for their individual responsibilities. The native_writer_result and the ideal
+writerResult are named physical/model packet observations on the SAME entries,
+returned value and proof/public inputs; their upstream native association is
+not inferred or claimed closed. No stronger persistence/runtime law is used.
