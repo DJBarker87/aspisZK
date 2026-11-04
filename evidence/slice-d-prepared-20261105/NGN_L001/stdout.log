@@ -1,0 +1,21 @@
+'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NFW_PreparedControl.source (B : AspisR1PublicPreparation.PreparedScratchModel.Boundaries) {H : Type}
+  (D : AspisR1PublicPreparation.aspis_core.Digest32 H) (sem : AspisR1PublicPreparation.r1_semantic.Verified H)
+  (v : AspisR1PublicPreparation.verifier.View) (hash : H) (old : AspisR1.NFW_PreparedControl.Scratch) :
+  AspisR1PublicPreparation.PreparedScratchModel.prepare B D sem v hash old =
+    AspisR1.NFW_PreparedControl.run B D sem v hash old
+AspisR1.NFW_PreparedProducer.scratch {H : Type} (sampling : AspisR1PublicPreparation.PreparedModel.Boundaries)
+  (D : AspisR1PublicPreparation.aspis_core.Digest32 H) (sem : AspisR1PublicPreparation.r1_semantic.Verified H)
+  (v : AspisR1PublicPreparation.verifier.View) (hash : H) (out : AspisR1PublicPreparation.verifier.Prepared)
+  (scratch old : Aeneas.Std.Array AspisR1.NFW_PreparedPort.PE 29#usize)
+  (run :
+    AspisR1PublicPreparation.PreparedScratchModel.prepare
+        (AspisR1ClaimPreparedBridge.concreteBoundaries (AspisR1ClaimPreparedBridge.withCandidateSamplers sampling)) D
+        sem v hash old =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out, scratch)) :
+  ∃ g,
+    FIo_Native.weights.powers 29#usize (AspisR1.NFW_SampledDomains.toNative out.gamma) = Aeneas.Std.Result.ok g ∧
+      scratch = AspisR1.NFW_PowersCohort.mapArray AspisR1.NFW_PowersCohort.toPublic g ∧
+        AspisR1.NFW_PreparedPort.map AspisR1.NFW_PreparedPort.e scratch = AspisR1.FIp_DotsAdapter.fromArray g ∧
+          NEV_DotInputs.Canonical
+            (AspisR1.FIp_DotsAdapter.toArray (AspisR1.NFW_PreparedPort.map AspisR1.NFW_PreparedPort.e scratch))
