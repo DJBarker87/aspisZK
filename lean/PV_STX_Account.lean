@@ -3,7 +3,7 @@ import PV_STX_Map
 set_option autoImplicit false
 noncomputable section
 namespace PV_STX_Account
-open Aeneas Aeneas.Std ProverRwFull PV_STX_Code
+open Aeneas Aeneas.Std ProverRwFull PV_STX_Code PV_STX_DenoteRules
 variable [ExternalTypes] [ExternalFuns]
 abbrev Secrets := aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
 abbrev EntropyError := aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError
@@ -39,22 +39,24 @@ def next {T : Type} (inst : AccountInst T) (capture : T) (i : Usize) :
 theorem entropy_erases (nonce : Array U8 32#usize) :
     denote fixed (PV_STX_Map.map (fun op => Request.entropy op) (PV_STX_Entropy.generate nonce)) =
       aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce nonce := by
-  rw [PV_STX_Map.denote_map (fixed := PV_STX_Entropy.fixed) (same := fun _ => rfl)]
+  rw [PV_STX_Map.denote_map (fun op => Request.entropy op) PV_STX_Entropy.fixed fixed (fun _ => rfl)]
   exact PV_STX_Entropy.generate_erases nonce
 
 theorem callMut_erases {T : Type} (inst : AccountInst T) (capture : T) (i : Usize) :
     denote fixed (callMut inst capture i) =
       RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError.call_mut inst capture i := by
-  unfold callMut
-  simp only [denote,fixed,entropy_erases]
-  rfl
+  simp only [callMut,bind_rule,call_rule,pure_rule,entropy_erases,fixed,
+    RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError.call_mut]
+  simp only [Bind.bind,Aeneas.Std.bind]
+  repeat first | rfl | split
 
 theorem next_erases {T : Type} (inst : AccountInst T) (capture : T) (i : Usize) :
     denote fixed (next inst capture i) =
       (RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError inst).call_mut capture i := by
-  unfold next
-  simp only [denote,callMut_erases]
-  rfl
+  simp only [next,bind_rule,callMut_erases,pure_rule,
+    RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError]
+  simp only [Bind.bind,Aeneas.Std.bind]
+  repeat first | rfl | split
 
 #print axioms entropy_erases
 #print axioms callMut_erases
