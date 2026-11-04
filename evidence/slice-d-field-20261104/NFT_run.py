@@ -53,7 +53,7 @@ if kind=='kani':
  import os
  if os.environ.get('NFT_INVERT'):env['RUSTFLAGS']+=' --cfg NFT_invert'
 elif kind=='extract':
- files['NFT_extract.py']=(E/'NFT_extract.py').read_text();sources=['NFT_extract.py','NFT_src/crates/aspis-r1-cost-probe/src/NFT_reference.rs'];command=['python3','NFT_extract.py']
+ files['NFT_extract.py']=(E/'NFT_extract.py').read_text();files['NFT_src/crates/aspis-r1-cost-probe/src/NFT_reference.rs']=(E/'NFT_reference.rs.txt').read_text();sources=['NFT_extract.py','NFT_src/crates/aspis-r1-cost-probe/src/NFT_reference.rs'];command=['python3','NFT_extract.py']
  if target=='NFT_ScanReference':
   files={'NFT_scan_extract.py':(E/'NFT_scan_extract.py').read_text(),'NFT_src/programs/r1-cost-probe/src/NFT_scan_reference.rs':(E/'NFT_scan_reference.rs.txt').read_text(),'NFT_SOURCE_PINS.json':(E/'NFT_SOURCE_PINS.json').read_text()};sources=['NFT_scan_extract.py','NFT_src/programs/r1-cost-probe/src/NFT_scan_reference.rs'];command=['python3','NFT_scan_extract.py']
 elif kind=='dependency':
@@ -103,6 +103,12 @@ import json,hashlib
 b=Path({B!r});files=json.loads({json.dumps(files)!r})
 for directory in ['NFT_objects','NFT_tmp','NFT_native']:(b/directory).mkdir(parents=True,exist_ok=True)
 (b/'NFT_objects'/{(target+'.olean')!r}).parent.mkdir(parents=True,exist_ok=True)
+for support in ['NFA_WALKER.c','NFA_MemoryLimit.c']:
+ p=b.parent/'codex-cx-slice-d-define-20261104'/'NFQ_native'/support
+ if p.exists():(b/'NFT_native'/support).write_bytes(p.read_bytes())
+for support in ['NFA_WALKER.c','NFA_MemoryLimit.c']:
+ p=b.parent/'codex-cx-slice-d-define-20261104'/'NFQ_native'/support
+ if p.exists():(b/'NFT_native'/support).write_bytes(p.read_bytes())
 for n,t in files.items():
  p=b/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
 x=json.loads((b/{(a+'.json')!r}).read_text());roots=x['env']['LEAN_PATH'].split(':');pins={{}}
