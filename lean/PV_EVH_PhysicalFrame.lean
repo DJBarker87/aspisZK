@@ -5,19 +5,19 @@ namespace PV_EVH_PhysicalFrame
 This is the concrete stack interpretation, NOT an allocator interpretation or
 an assertion that every supplied source State is a reached machine state. -/
 inductive SlotId where
-  | local (index : Fin 6)
+  | inner (index : Fin 6)
   | mask (retry : Fin 8)
   | result (retry : Fin 8)
   deriving DecidableEq
 
 /-- Result records its 97 initialized bytes, not Rust allocation padding. -/
 def offset : SlotId → Nat
-  | .local i => if i.val = 0 then 0 else 32 + 32*i.val
+  | .inner i => if i.val = 0 then 0 else 32 + 32*i.val
   | .mask i => 304 + 336*i.val
   | .result i => 352 + 336*i.val
 
 def extent : SlotId → Nat
-  | .local i => if i.val = 0 then 64 else 32
+  | .inner i => if i.val = 0 then 64 else 32
   | .mask _ => 32
   | .result _ => 97
 
@@ -33,7 +33,7 @@ structure Slot where
 
 /-- Local addresses are reused across iterations; their lifetimes are not. -/
 def table (sp activation iteration : Nat) : SlotId → Slot
-  | id@(.local _) => ⟨sp + offset id, extent id, ⟨activation,iteration⟩⟩
+  | id@(.inner _) => ⟨sp + offset id, extent id, ⟨activation,iteration⟩⟩
   | id@(.mask i) => ⟨sp + offset id, extent id, ⟨activation+1+i.val,0⟩⟩
   | id@(.result i) => ⟨sp + offset id, extent id, ⟨activation+1+i.val,0⟩⟩
 
@@ -44,18 +44,18 @@ def Separate (a b : Slot) : Prop :=
 theorem offsets_separate (a b : SlotId) (hne : a ≠ b) :
     offset a + extent a ≤ offset b ∨ offset b + extent b ≤ offset a := by
   cases a with
-  | local i =>
+  | inner i =>
     cases b with
-    | local j =>
+    | inner j =>
       have hij : i.val ≠ j.val := by
-        intro h; exact hne (congrArg SlotId.local (Fin.ext h))
+        intro h; exact hne (congrArg SlotId.inner (Fin.ext h))
       simp only [offset,extent]
       split_ifs <;> omega
     | mask j => simp only [offset,extent]; split_ifs <;> omega
     | result j => simp only [offset,extent]; split_ifs <;> omega
   | mask i =>
     cases b with
-    | local j => simp only [offset,extent]; split_ifs <;> omega
+    | inner j => simp only [offset,extent]; split_ifs <;> omega
     | mask j =>
       have hij : i.val ≠ j.val := by
         intro h; exact hne (congrArg SlotId.mask (Fin.ext h))
@@ -63,7 +63,7 @@ theorem offsets_separate (a b : SlotId) (hne : a ≠ b) :
     | result j => simp only [offset,extent]; omega
   | result i =>
     cases b with
-    | local j => simp only [offset,extent]; split_ifs <;> omega
+    | inner j => simp only [offset,extent]; split_ifs <;> omega
     | mask j => simp only [offset,extent]; omega
     | result j =>
       have hij : i.val ≠ j.val := by
@@ -83,7 +83,7 @@ inductive Phase where
 remain present in memory even when this predicate is false. -/
 def live (phase : Phase) (retry : Fin 8) (id : SlotId) : Prop :=
   match id with
-  | .local i =>
+  | .inner i =>
     match phase with
     | .beforeInit | .returned | .stopped => False
     | .original => i.val = 0
