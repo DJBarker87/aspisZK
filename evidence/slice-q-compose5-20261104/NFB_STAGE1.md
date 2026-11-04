@@ -1,0 +1,5 @@
+Stage 1: zero-scan repair
+
+NFB_L001 tests the literal NEW proposed repair in a new namespace. It fails only because the final split has no remaining goal. NFB_L002 removes that redundant split and passes: zero_body, zero_loop and zero_loop_frame preserve the whole partial Result of the SAME coherent slice iterator/callback, with standard axioms only. Source and object/Aeneas pins, exact command, exit, wall, RSS, swap and revision are in the receipts. The generic product-with-state equality is not a physical heap frame proof. Root remains OPEN. NEW native K169..K193 controls are retained evidence; no new Kani credit in this stage.
+
+Private cache imports are SHA-pinned in NFB_CACHE_IMPORTS.json. New Lean driver is copied from NEW_run.py and changes only lane paths, prefix, 90-attempt bound and prepended NEW export path. Setup copies predecessor caches read-only. No host infrastructure changed. The actual assigned checkout branch is codex/cx-slice-q-compose5-20261104 (the prompt branch has a different date); it is retained.
