@@ -11,6 +11,10 @@ def ssh(code,data=None):
 attempt=sys.argv[1] if len(sys.argv)>1 else None
 assert attempt in ['NFZ_B005','NFZ_B006'], 'part 3 permits only B005/B006'
 assert not (E/attempt/'receipt.json').exists(), 'attempt retained: never resubmit'
+prior=E/'NFZ_B005/receipt.json'
+if prior.exists():
+ assert json.loads(prior.read_text())['exit_status']==0, 'part 3 binding STOP: B005 failed; B006 forbidden'
+
 # Fail closed locally before requesting admission or launching.
 subprocess.run([sys.executable,'-B',str(E/'NFZ_preflight.py')],check=True)
 for k in range(11):

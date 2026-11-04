@@ -1,4 +1,4 @@
-# NFZ part-2 resolution
+# NFZ part-3 resolution
 
 **INCOMPLETE.** Frozen Rust 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387; sha256-pinned NFX baseline. No reviewed entry edge, new row, exclusion or status change is claimed.
 
@@ -44,3 +44,7 @@ Source and frozen Cargo.lock were checked before/after the attempted Cargo check
 ## Claim boundary
 
 NFZ_inventory.py reapplies the empty blocked overlay and NFZ_slice_build.py regenerates Q/S/D. The ledger remains byte-equivalent in content to NFX. Independent authority exists only for the conditional core bodies, not the complete overlay. Runtime/security trust is unchanged; D188 trace fidelity and L187 remain open. Headline AspisR1.RPx_Deployed.deployed, L154 statement parameter and 100-bit PER-ATTEMPT target are unchanged; target not yet established.
+
+## Part 3 terminal result
+
+B005 failed for my own wrapper reason after successful verifier-library MIR emission: libc probes rustc from a Cargo build script whose environment omits RUSTFLAGS; NFZ_rustc.py:7 raised KeyError. The explicit lead stop applies: B006 unused, no repair rerun or independent scope. Peak17 threads,25.118775121169165s,751856KiB,swap0; stable1.94.1, one Cargo job/-j1/codegen unit and jobserver token. All495 source pins and lock unchanged. NFZ_B005_FAILURE.md and NFZ_REMAINING.md record exact failure and corrected unexecuted command. All39 candidate entry reviews remain pending; no edge, row, status, exclusion or security credit. Closure regeneration still585/587. The part2 sections above are historical; their “unsubmitted final payload” statement is superseded by the successful part3 preflight/staging and the terminal B005 attempt.
