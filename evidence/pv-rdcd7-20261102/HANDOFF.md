@@ -264,3 +264,16 @@ anyscp; no bypass. check-release.py writesRUNS/protocol whenallpass; sourcebindi
 association,ROWS,REPORT,HANDOFF stillmustfinalize. cleanup.py onlyAFTERallchecks
 removesverifiedown lean-objects/external-objects; sources/evidenceretained,keysnever.
 NextnativeN90803 (cleanup). NoRESTOREDreleaseclaim untilaudit/replaypass.
+
+### Session 3 raw audit PASS, focused/frozen next
+
+90797 COMPLETE PASS:51 exact declaration types,51 summary lines and51 full fixed
+NEP checked/private graph walks; every raw/summary set equal, no unresolved
+constant, onlypropext/Classical.choice/Quot.sound. wall5.14s,RSS4481308KiB,swap0.
+31/60Lean spent (23pass,8fail),3/10native,0Kani. No live scope. NEXTaftercooldown
+90798 R1Z/PV_RDCD5_V197Focused; then90799 R1Z/PV_RDCD5_V197FrozenManifest ONCE.
+Cleanup helper uploaded under admittedcleanup-stage;N90803 isUNSPENT, no cleanup
+executed. Coherence/source caches intact. After3releasegates: admission before
+release-addendum.py scp collection, collect51 rawREACHABLEfiles, verify2newrelease
+objects, runcheck-release.py, finalize docs, then scopedN90803 cleanup only after
+all artifacts retained. Remainingsourceprotocol/qualification rules unchanged.
