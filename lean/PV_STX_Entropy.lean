@@ -203,7 +203,9 @@ fixed-answer condition on an advancing handler. -/
 theorem nonzeroBody_erases (bytes : Array U8 32#usize) (combined : U8) (i : Usize) :
     denote fixed (nonzeroBody bytes combined i) =
       aspis_prover.state_only_entropy.entropy_nonzero32_loop.body bytes combined i := by
-  rfl
+  unfold nonzeroBody aspis_prover.state_only_entropy.entropy_nonzero32_loop.body
+  split <;> simp only [denote]
+  all_goals trace_state
 
 theorem nonzeroLoop_erases (bytes : Array U8 32#usize) (combined : U8) (i : Usize) :
     denote fixed (nonzeroLoop bytes combined i) =
