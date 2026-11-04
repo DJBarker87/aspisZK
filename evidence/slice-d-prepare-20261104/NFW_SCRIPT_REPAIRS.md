@@ -27,3 +27,10 @@ kept as NFW_InterfaceTargets.lean.failed.txt and its exact per-attempt snapshots
 remain retained. All ninety-eight claimed proof roots were already successfully
 compiled and raw-audited separately; neither failed metadata attempt supplies
 proof credit or changes admission.
+
+Cache export admits only modules with successful Lean/dependency receipts;
+failed inspection modules are excluded. The end-of-job inventory additionally
+found the two small extraction target directories, removed those exact own
+paths, and added them to the cleanup script and cache-end receipt. No cache,
+key, input, evidence snapshot, shared workspace or other worker output was
+removed.

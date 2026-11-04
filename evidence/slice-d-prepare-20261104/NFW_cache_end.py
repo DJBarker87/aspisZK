@@ -26,7 +26,7 @@ for p in sorted((b/'NFW_objects').rglob('*')):
   rows.append(dict(path=str(q),bytes=q.stat().st_size,sha256=digest(q)))
 assert rows
 out=dict(cache=str(c),files=rows,count=len(rows),bytes=sum(x['bytes'] for x in rows),cache_retained=True,removed_build_outputs=[])
-for name in ['NFW_target','NFW_objects','NFW_tmp','NFW_native']:
+for name in ['NFW_target','NFW_ref_target','NFW_error_ref_target','NFW_objects','NFW_tmp','NFW_native']:
  p=b/name
  if p.exists():
   assert p.parent==b and name.startswith('NFW_')
