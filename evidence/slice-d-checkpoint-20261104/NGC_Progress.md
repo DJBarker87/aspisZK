@@ -1,0 +1,1 @@
+Final status supersedes the initial disk-stop planning notes: five functions/seven new rows admitted; checkpoint TX1:186 OPEN on exact upstream preparation/initializer provenance. See NGC_HANDOFF.md, NGC_REMAINING.md, NGC_LEDGER_DELTA.json and NGC_VALIDATION.stdout. Target not yet established.

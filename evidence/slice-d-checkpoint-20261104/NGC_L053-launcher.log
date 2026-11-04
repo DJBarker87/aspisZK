@@ -1,0 +1,39 @@
+{"attempt": "NGC_L053", "exit_status": 0, "wall_seconds": 1.2871414029505104, "peak_rss_kib": "2592736", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.alloc.vec.Vec.resize : {T : Type} →
+  Aeneas.Std.core.clone.Clone T →
+    Aeneas.Std.alloc.vec.Vec T → Aeneas.Std.Usize → T → Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec T) :=
+fun {T} cloneInst v new_len value =>
+  if ↑new_len < v.length then Aeneas.Std.Result.ok ⟨(↑v).resize (↑new_len) value, ⋯⟩
+  else do
+    let value ← cloneInst.clone value
+    Aeneas.Std.Result.ok ⟨(↑v).resize (↑new_len) value, ⋯⟩
+def Aeneas.Std.Slice.update.{u} : {α : Type u} →
+  Aeneas.Std.Slice α → Aeneas.Std.Usize → α → Aeneas.Std.Result (Aeneas.Std.Slice α) :=
+fun {α} v i x =>
+  match (↑v)[↑i]? with
+  | none => Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds
+  | some val => Aeneas.Std.Result.
+...
+def Aeneas.Std.alloc.vec.Vec.resize : {T : Type} →
+  Aeneas.Std.core.clone.Clone T →
+    Aeneas.Std.alloc.vec.Vec T → Aeneas.Std.Usize → T → Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec T) :=
+fun {T} cloneInst v new_len value =>
+  if ↑new_len < v.length then Aeneas.Std.Result.ok ⟨(↑v).resize (↑new_len) value, ⋯⟩
+  else do
+    let value ← cloneInst.clone value
+    Aeneas.Std.Result.ok ⟨(↑v).resize (↑new_len) value, ⋯⟩
+def Aeneas.Std.Slice.update.{u} : {α : Type u} →
+  Aeneas.Std.Slice α → Aeneas.Std.Usize → α → Aeneas.Std.Result (Aeneas.Std.Slice α) :=
+fun {α} v i x =>
+  match (↑v)[↑i]? with
+  | none => Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds
+  | some val => Aeneas.Std.Result.ok ⟨(↑v).set (↑i) x, ⋯⟩
+Aeneas.Std.alloc.vec.Vec.resize_spec {T : Type} (cloneInst : Aeneas.Std.core.clone.Clone T)
+  (v : Aeneas.Std.alloc.vec.Vec T) (new_len : Aeneas.Std.Usize) (value : T)
+  (hClone : cloneInst.clone value = Aeneas.Std.Result.ok value) :
+  Aeneas.Std.WP.spec (Aeneas.Std.alloc.vec.Vec.resize cloneInst v new_len value) fun nv =>
+    ↑nv = (↑v).resize (↑new_len) value
+Aeneas.Std.Slice.update_spec.{u} {α : Type u} (v : Aeneas.Std.Slice α) (i : Aeneas.Std.Usize) (x : α)
+  (hbound : ↑i < v.length) : Aeneas.Std.WP.spec (v.update i x) fun nv => nv = v.set i x
+
+Running as unit: run-r235911929dd94a0aa9f718a0da0ddbdb.scope; invocation ID: f390f42b040d48fcb1890863e1db24c3
