@@ -1,6 +1,6 @@
 # NGD parser chain handoff
 
-Stage 1: slot_offset CLOSED on TX1:100 / TX2:066; 1 function, 2 composed rows. Driver root remains OPEN. NGD_validate.py passes with four rejected corruption controls. Stage 2 native guard work is in progress.
+Stage 1: slot_offset CLOSED on TX1:100 / TX2:066; 1 function, 2 composed rows. Driver root remains OPEN. NGD_validate.py passes with four rejected corruption controls. Stage 2 native budget is exhausted; supporting decoder/parser/schedule theorems compile. Four members remain OPEN. Final raw audit and scan are in progress.
 Branch codex/cx-slice-d-parser-20261104. Frozen source 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387.
 Budget: 100 Kani, 70 Lean/support, 3 extraction; charged 8 Kani / 21 Lean-support (including prelaunch L001) / 1 extraction at the slot checkpoint. Later queued attempts are recorded in NGD_ATTEMPTS.jsonl.
 Only NGD modules and this evidence directory may change. No shipped source changes, push, keys, or chain operations.
@@ -16,3 +16,5 @@ Host workspace /home/dombarker/project-offloads/codex-cx-slice-d-parser-20261104
 Slot evidence: NGD_K007 contract / K008 inverted ensures; E001 pinned extraction; L013 emitted steps/boundaries; L014 installed-cohort equality; L015 all-out-of-range failure; L016 combined headline replay; L019 raw ax2 plus same-driver fixture controls; L021 NFX scan (12,723 modules, zero dangling/duplicate/import defects). Source/function pins and receipts preserve exact argv, exit/wall/RSS/swap/revision/axioms. Only standard axioms passed. Every failed elaboration or compile remains excluded, including auto-recovery sorryAx in failed Lean logs. No timeout/memory-killed shape has been retried.
 
 Remaining exact obligations for decode_k, parse_record, parse_record_at and expand_semantic are in NGD_REMAINING.md. Full native caller/source-erasure and carrier association cannot be replaced by reduced references or by modeled final-result hypotheses.
+
+Stage 2 checkpoint: all 100 Kani and all 3 extraction slots used. Lean/support through L068 used; L069 raw ax2 is running, L070 reserved for NFX scan. Source-erasure controls pass, no additional row closure. L067 imports all 67 selected roots with the deployed headline; only standard axioms. See NGD_BRIDGES.md for per-member scope and excluded shapes.

@@ -1,0 +1,2510 @@
+NGD_generated/NGD_DecodeValueLaw.lean:55:8: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 32
+  0 ≤ d ≤ 15
+  c ≥ 0
+  c ≥ 0
+  b ≥ 1
+  b - c ≥ 1
+  32*b - 32*c - e ≤ 0
+  a ≥ 0
+  0 ≤ a + c ≤ 115
+  a + c ≥ 0
+  a + c ≥ 0
+  a + c ≥ 0
+  a + c ≥ 0
+  a + c ≥ 0
+  a + c ≥ 0
+  a + c ≥ 0
+  a + c ≥ 0
+  a + c ≥ 0
+  a + c ≥ 0
+  a + c ≥ 0
+  a + c ≥ 0
+  a + c ≥ 0
+  a + c ≥ 0
+  a + c ≥ 0
+  a + c ≥ 0
+  a + b ≤ 116
+  0 ≤ 32*a + 32*c + e ≤ 3712
+where
+ a := ↑↑off
+ b := ↑↑n
+ c := ↑↑index
+ d := ↑[i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31].length
+ e := ↑((↑r.framed).length - (5 + 32 * (↑off + ↑index)))
+NGD_generated/NGD_DecodeValueLaw.lean:57:32: error: Type mismatch: After simplification, term
+  hj
+ has type
+  @LT.lt ℕ instLTNat j [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31].length
+but is expected to have type
+  @LT.lt ℕ instLTNat j 16
+NGD_generated/NGD_DecodeValueLaw.lean:56:6: error: unsolved goals
+case h.«0»
+r : r1_wire.ValidatedRecord
+off byteOffset n index : Usize
+minlen : 5 ≤ (↑r.framed).length
+cap : (↑r.framed).length ≤ 3717
+byteStart : ↑byteOffset = 32 * ↑off
+positive : 0 < ↑n
+live : ↑index < ↑n
+range : 32 * ↑off + 32 * ↑n ≤ (↑r.framed).length - 5
+geometry :
+  ↑off + ↑index < 116 ∧
+    5 + 32 * ↑off + 32 * ↑index + 32 ≤ (↑r.framed).length ∧
+      32 * ↑off + 32 * ↑index + 16 ≤ (↑r.framed).length - 5 ∧ ↑off + ↑n ≤ 116
+i : Usize
+_✝³³ : [> let i ← index * 32#usize <]
+i_post : ↑i = ↑index * 32
+start : Usize
+_✝³² : [> let start ← byteOffset + i <]
+start_post : ↑start = ↑byteOffset + ↑i
+bytes : Slice U8
+_✝³¹ : [> let bytes ← r.payload <]
+bytes_post : ↑bytes = List.drop 5 ↑r.framed
+i1 : U8
+_✝³⁰ : [> let i1 ← bytes.index_usize start <]
+i1_post✝ : i1 = (↑bytes)[↑start]
+i2 : Usize
+_✝²⁹ : [> let i2 ← start + 1#usize <]
+i2_post : ↑i2 = ↑start + 1
+i3 : U8
+_✝²⁸ : [> let i3 ← bytes.index_usize i2 <]
+i3_post✝ : i3 = (↑bytes)[↑i2]
+i4 : Usize
+_✝²⁷ : [> let i4 ← start + 2#usize <]
+i4_post : ↑i4 = ↑start + 2
+i5 : U8
+_✝²⁶ : [> let i5 ← bytes.index_usize i4 <]
+i5_post✝ : i5 = (↑bytes)[↑i4]
+i6 : Usize
+_✝²⁵ : [> let i6 ← start + 3#usize <]
+i6_post : ↑i6 = ↑start + 3
+i7 : U8
+_✝²⁴ : [> let i7 ← bytes.index_usize i6 <]
+i7_post✝ : i7 = (↑bytes)[↑i6]
+i8 : Usize
+_✝²³ : [> let i8 ← start + 4#usize <]
+i8_post : ↑i8 = ↑start + 4
+i9 : U8
+_✝²² : [> let i9 ← bytes.index_usize i8 <]
+i9_post✝ : i9 = (↑bytes)[↑i8]
+i10 : Usize
+_✝²¹ : [> let i10 ← start + 5#usize <]
+i10_post : ↑i10 = ↑start + 5
+i11 : U8
+_✝²⁰ : [> let i11 ← bytes.index_usize i10 <]
+i11_post✝ : i11 = (↑bytes)[↑i10]
+i12 : Usize
+_✝¹⁹ : [> let i12 ← start + 6#usize <]
+i12_post : ↑i12 = ↑start + 6
+i13 : U8
+_✝¹⁸ : [> let i13 ← bytes.index_usize i12 <]
+i13_post✝ : i13 = (↑bytes)[↑i12]
+i14 : Usize
+_✝¹⁷ : [> let i14 ← start + 7#usize <]
+i14_post : ↑i14 = ↑start + 7
+i15 : U8
+_✝¹⁶ : [> let i15 ← bytes.index_usize i14 <]
+i15_post✝ : i15 = (↑bytes)[↑i14]
+i16 : Usize
+_✝¹⁵ : [> let i16 ← start + 8#usize <]
+i16_post : ↑i16 = ↑start + 8
+i17 : U8
+_✝¹⁴ : [> let i17 ← bytes.index_usize i16 <]
+i17_post✝ : i17 = (↑bytes)[↑i16]
+i18 : Usize
+_✝¹³ : [> let i18 ← start + 9#usize <]
+i18_post : ↑i18 = ↑start + 9
+i19 : U8
+_✝¹² : [> let i19 ← bytes.index_usize i18 <]
+i19_post✝ : i19 = (↑bytes)[↑i18]
+i20 : Usize
+_✝¹¹ : [> let i20 ← start + 10#usize <]
+i20_post : ↑i20 = ↑start + 10
+i21 : U8
+_✝¹⁰ : [> let i21 ← bytes.index_usize i20 <]
+i21_post✝ : i21 = (↑bytes)[↑i20]
+i22 : Usize
+_✝⁹ : [> let i22 ← start + 11#usize <]
+i22_post : ↑i22 = ↑start + 11
+i23 : U8
+_✝⁸ : [> let i23 ← bytes.index_usize i22 <]
+i23_post✝ : i23 = (↑bytes)[↑i22]
+i24 : Usize
+_✝⁷ : [> let i24 ← start + 12#usize <]
+i24_post : ↑i24 = ↑start + 12
+i25 : U8
+_✝⁶ : [> let i25 ← bytes.index_usize i24 <]
+i25_post✝ : i25 = (↑bytes)[↑i24]
+i26 : Usize
+_✝⁵ : [> let i26 ← start + 13#usize <]
+i26_post : ↑i26 = ↑start + 13
+i27 : U8
+_✝⁴ : [> let i27 ← bytes.index_usize i26 <]
+i27_post✝ : i27 = (↑bytes)[↑i26]
+i28 : Usize
+_✝³ : [> let i28 ← start + 14#usize <]
+i28_post : ↑i28 = ↑start + 14
+i29 : U8
+_✝² : [> let i29 ← bytes.index_usize i28 <]
+i29_post✝ : i29 = (↑bytes)[↑i28]
+i30 : Usize
+_✝¹ : [> let i30 ← start + 15#usize <]
+i30_post : ↑i30 = ↑start + 15
+i31 : U8
+_✝ : [> let i31 ← bytes.index_usize i30 <]
+i31_post✝ : i31 = (↑bytes)[↑i30]
+s : Slice U8
+_ :
+  [> let s ←
+    lift (Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯).to_slice <]
+assembled : Std.Array U8 16#usize :=
+  Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯
+j : ℕ
+hj : 0 < (↑assembled).length
+hk : 0 < (↑(input r off n index minlen cap positive live range)).length
+i1_post : i1 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32)]
+i3_post : i3 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 1)]
+i5_post : i5 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 2)]
+i7_post : i7 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 3)]
+i9_post : i9 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 4)]
+i11_post : i11 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 5)]
+i13_post : i13 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 6)]
+i15_post : i15 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 7)]
+i17_post : i17 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 8)]
+i19_post : i19 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 9)]
+i21_post : i21 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 10)]
+i23_post : i23 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 11)]
+i25_post : i25 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 12)]
+i27_post : i27 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 13)]
+i29_post : i29 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 14)]
+i31_post : i31 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 15)]
+s_post :
+  s =
+    Array.to_slice
+      ⟨[(↑r.framed)[5 + (32 * ↑off + ↑index * 32)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 1)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 2)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 3)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 4)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 5)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 6)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 7)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 8)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 9)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 10)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 11)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 12)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 13)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 14)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 15)]],
+        ⋯⟩
+⊢ (↑r.framed)[5 + (32 * ↑off + ↑index * 32)] = (↑r.framed)[5 + 32 * (↑off + ↑index)]
+
+case h.«1»
+r : r1_wire.ValidatedRecord
+off byteOffset n index : Usize
+minlen : 5 ≤ (↑r.framed).length
+cap : (↑r.framed).length ≤ 3717
+byteStart : ↑byteOffset = 32 * ↑off
+positive : 0 < ↑n
+live : ↑index < ↑n
+range : 32 * ↑off + 32 * ↑n ≤ (↑r.framed).length - 5
+geometry :
+  ↑off + ↑index < 116 ∧
+    5 + 32 * ↑off + 32 * ↑index + 32 ≤ (↑r.framed).length ∧
+      32 * ↑off + 32 * ↑index + 16 ≤ (↑r.framed).length - 5 ∧ ↑off + ↑n ≤ 116
+i : Usize
+_✝³³ : [> let i ← index * 32#usize <]
+i_post : ↑i = ↑index * 32
+start : Usize
+_✝³² : [> let start ← byteOffset + i <]
+start_post : ↑start = ↑byteOffset + ↑i
+bytes : Slice U8
+_✝³¹ : [> let bytes ← r.payload <]
+bytes_post : ↑bytes = List.drop 5 ↑r.framed
+i1 : U8
+_✝³⁰ : [> let i1 ← bytes.index_usize start <]
+i1_post✝ : i1 = (↑bytes)[↑start]
+i2 : Usize
+_✝²⁹ : [> let i2 ← start + 1#usize <]
+i2_post : ↑i2 = ↑start + 1
+i3 : U8
+_✝²⁸ : [> let i3 ← bytes.index_usize i2 <]
+i3_post✝ : i3 = (↑bytes)[↑i2]
+i4 : Usize
+_✝²⁷ : [> let i4 ← start + 2#usize <]
+i4_post : ↑i4 = ↑start + 2
+i5 : U8
+_✝²⁶ : [> let i5 ← bytes.index_usize i4 <]
+i5_post✝ : i5 = (↑bytes)[↑i4]
+i6 : Usize
+_✝²⁵ : [> let i6 ← start + 3#usize <]
+i6_post : ↑i6 = ↑start + 3
+i7 : U8
+_✝²⁴ : [> let i7 ← bytes.index_usize i6 <]
+i7_post✝ : i7 = (↑bytes)[↑i6]
+i8 : Usize
+_✝²³ : [> let i8 ← start + 4#usize <]
+i8_post : ↑i8 = ↑start + 4
+i9 : U8
+_✝²² : [> let i9 ← bytes.index_usize i8 <]
+i9_post✝ : i9 = (↑bytes)[↑i8]
+i10 : Usize
+_✝²¹ : [> let i10 ← start + 5#usize <]
+i10_post : ↑i10 = ↑start + 5
+i11 : U8
+_✝²⁰ : [> let i11 ← bytes.index_usize i10 <]
+i11_post✝ : i11 = (↑bytes)[↑i10]
+i12 : Usize
+_✝¹⁹ : [> let i12 ← start + 6#usize <]
+i12_post : ↑i12 = ↑start + 6
+i13 : U8
+_✝¹⁸ : [> let i13 ← bytes.index_usize i12 <]
+i13_post✝ : i13 = (↑bytes)[↑i12]
+i14 : Usize
+_✝¹⁷ : [> let i14 ← start + 7#usize <]
+i14_post : ↑i14 = ↑start + 7
+i15 : U8
+_✝¹⁶ : [> let i15 ← bytes.index_usize i14 <]
+i15_post✝ : i15 = (↑bytes)[↑i14]
+i16 : Usize
+_✝¹⁵ : [> let i16 ← start + 8#usize <]
+i16_post : ↑i16 = ↑start + 8
+i17 : U8
+_✝¹⁴ : [> let i17 ← bytes.index_usize i16 <]
+i17_post✝ : i17 = (↑bytes)[↑i16]
+i18 : Usize
+_✝¹³ : [> let i18 ← start + 9#usize <]
+i18_post : ↑i18 = ↑start + 9
+i19 : U8
+_✝¹² : [> let i19 ← bytes.index_usize i18 <]
+i19_post✝ : i19 = (↑bytes)[↑i18]
+i20 : Usize
+_✝¹¹ : [> let i20 ← start + 10#usize <]
+i20_post : ↑i20 = ↑start + 10
+i21 : U8
+_✝¹⁰ : [> let i21 ← bytes.index_usize i20 <]
+i21_post✝ : i21 = (↑bytes)[↑i20]
+i22 : Usize
+_✝⁹ : [> let i22 ← start + 11#usize <]
+i22_post : ↑i22 = ↑start + 11
+i23 : U8
+_✝⁸ : [> let i23 ← bytes.index_usize i22 <]
+i23_post✝ : i23 = (↑bytes)[↑i22]
+i24 : Usize
+_✝⁷ : [> let i24 ← start + 12#usize <]
+i24_post : ↑i24 = ↑start + 12
+i25 : U8
+_✝⁶ : [> let i25 ← bytes.index_usize i24 <]
+i25_post✝ : i25 = (↑bytes)[↑i24]
+i26 : Usize
+_✝⁵ : [> let i26 ← start + 13#usize <]
+i26_post : ↑i26 = ↑start + 13
+i27 : U8
+_✝⁴ : [> let i27 ← bytes.index_usize i26 <]
+i27_post✝ : i27 = (↑bytes)[↑i26]
+i28 : Usize
+_✝³ : [> let i28 ← start + 14#usize <]
+i28_post : ↑i28 = ↑start + 14
+i29 : U8
+_✝² : [> let i29 ← bytes.index_usize i28 <]
+i29_post✝ : i29 = (↑bytes)[↑i28]
+i30 : Usize
+_✝¹ : [> let i30 ← start + 15#usize <]
+i30_post : ↑i30 = ↑start + 15
+i31 : U8
+_✝ : [> let i31 ← bytes.index_usize i30 <]
+i31_post✝ : i31 = (↑bytes)[↑i30]
+s : Slice U8
+_ :
+  [> let s ←
+    lift (Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯).to_slice <]
+assembled : Std.Array U8 16#usize :=
+  Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯
+j : ℕ
+hj : 1 < (↑assembled).length
+hk : 1 < (↑(input r off n index minlen cap positive live range)).length
+i1_post : i1 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32)]
+i3_post : i3 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 1)]
+i5_post : i5 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 2)]
+i7_post : i7 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 3)]
+i9_post : i9 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 4)]
+i11_post : i11 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 5)]
+i13_post : i13 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 6)]
+i15_post : i15 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 7)]
+i17_post : i17 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 8)]
+i19_post : i19 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 9)]
+i21_post : i21 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 10)]
+i23_post : i23 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 11)]
+i25_post : i25 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 12)]
+i27_post : i27 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 13)]
+i29_post : i29 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 14)]
+i31_post : i31 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 15)]
+s_post :
+  s =
+    Array.to_slice
+      ⟨[(↑r.framed)[5 + (32 * ↑off + ↑index * 32)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 1)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 2)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 3)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 4)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 5)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 6)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 7)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 8)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 9)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 10)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 11)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 12)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 13)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 14)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 15)]],
+        ⋯⟩
+⊢ (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 1)] = (↑r.framed)[5 + 32 * (↑off + ↑index) + 1]
+
+case h.«2»
+r : r1_wire.ValidatedRecord
+off byteOffset n index : Usize
+minlen : 5 ≤ (↑r.framed).length
+cap : (↑r.framed).length ≤ 3717
+byteStart : ↑byteOffset = 32 * ↑off
+positive : 0 < ↑n
+live : ↑index < ↑n
+range : 32 * ↑off + 32 * ↑n ≤ (↑r.framed).length - 5
+geometry :
+  ↑off + ↑index < 116 ∧
+    5 + 32 * ↑off + 32 * ↑index + 32 ≤ (↑r.framed).length ∧
+      32 * ↑off + 32 * ↑index + 16 ≤ (↑r.framed).length - 5 ∧ ↑off + ↑n ≤ 116
+i : Usize
+_✝³³ : [> let i ← index * 32#usize <]
+i_post : ↑i = ↑index * 32
+start : Usize
+_✝³² : [> let start ← byteOffset + i <]
+start_post : ↑start = ↑byteOffset + ↑i
+bytes : Slice U8
+_✝³¹ : [> let bytes ← r.payload <]
+bytes_post : ↑bytes = List.drop 5 ↑r.framed
+i1 : U8
+_✝³⁰ : [> let i1 ← bytes.index_usize start <]
+i1_post✝ : i1 = (↑bytes)[↑start]
+i2 : Usize
+_✝²⁹ : [> let i2 ← start + 1#usize <]
+i2_post : ↑i2 = ↑start + 1
+i3 : U8
+_✝²⁸ : [> let i3 ← bytes.index_usize i2 <]
+i3_post✝ : i3 = (↑bytes)[↑i2]
+i4 : Usize
+_✝²⁷ : [> let i4 ← start + 2#usize <]
+i4_post : ↑i4 = ↑start + 2
+i5 : U8
+_✝²⁶ : [> let i5 ← bytes.index_usize i4 <]
+i5_post✝ : i5 = (↑bytes)[↑i4]
+i6 : Usize
+_✝²⁵ : [> let i6 ← start + 3#usize <]
+i6_post : ↑i6 = ↑start + 3
+i7 : U8
+_✝²⁴ : [> let i7 ← bytes.index_usize i6 <]
+i7_post✝ : i7 = (↑bytes)[↑i6]
+i8 : Usize
+_✝²³ : [> let i8 ← start + 4#usize <]
+i8_post : ↑i8 = ↑start + 4
+i9 : U8
+_✝²² : [> let i9 ← bytes.index_usize i8 <]
+i9_post✝ : i9 = (↑bytes)[↑i8]
+i10 : Usize
+_✝²¹ : [> let i10 ← start + 5#usize <]
+i10_post : ↑i10 = ↑start + 5
+i11 : U8
+_✝²⁰ : [> let i11 ← bytes.index_usize i10 <]
+i11_post✝ : i11 = (↑bytes)[↑i10]
+i12 : Usize
+_✝¹⁹ : [> let i12 ← start + 6#usize <]
+i12_post : ↑i12 = ↑start + 6
+i13 : U8
+_✝¹⁸ : [> let i13 ← bytes.index_usize i12 <]
+i13_post✝ : i13 = (↑bytes)[↑i12]
+i14 : Usize
+_✝¹⁷ : [> let i14 ← start + 7#usize <]
+i14_post : ↑i14 = ↑start + 7
+i15 : U8
+_✝¹⁶ : [> let i15 ← bytes.index_usize i14 <]
+i15_post✝ : i15 = (↑bytes)[↑i14]
+i16 : Usize
+_✝¹⁵ : [> let i16 ← start + 8#usize <]
+i16_post : ↑i16 = ↑start + 8
+i17 : U8
+_✝¹⁴ : [> let i17 ← bytes.index_usize i16 <]
+i17_post✝ : i17 = (↑bytes)[↑i16]
+i18 : Usize
+_✝¹³ : [> let i18 ← start + 9#usize <]
+i18_post : ↑i18 = ↑start + 9
+i19 : U8
+_✝¹² : [> let i19 ← bytes.index_usize i18 <]
+i19_post✝ : i19 = (↑bytes)[↑i18]
+i20 : Usize
+_✝¹¹ : [> let i20 ← start + 10#usize <]
+i20_post : ↑i20 = ↑start + 10
+i21 : U8
+_✝¹⁰ : [> let i21 ← bytes.index_usize i20 <]
+i21_post✝ : i21 = (↑bytes)[↑i20]
+i22 : Usize
+_✝⁹ : [> let i22 ← start + 11#usize <]
+i22_post : ↑i22 = ↑start + 11
+i23 : U8
+_✝⁸ : [> let i23 ← bytes.index_usize i22 <]
+i23_post✝ : i23 = (↑bytes)[↑i22]
+i24 : Usize
+_✝⁷ : [> let i24 ← start + 12#usize <]
+i24_post : ↑i24 = ↑start + 12
+i25 : U8
+_✝⁶ : [> let i25 ← bytes.index_usize i24 <]
+i25_post✝ : i25 = (↑bytes)[↑i24]
+i26 : Usize
+_✝⁵ : [> let i26 ← start + 13#usize <]
+i26_post : ↑i26 = ↑start + 13
+i27 : U8
+_✝⁴ : [> let i27 ← bytes.index_usize i26 <]
+i27_post✝ : i27 = (↑bytes)[↑i26]
+i28 : Usize
+_✝³ : [> let i28 ← start + 14#usize <]
+i28_post : ↑i28 = ↑start + 14
+i29 : U8
+_✝² : [> let i29 ← bytes.index_usize i28 <]
+i29_post✝ : i29 = (↑bytes)[↑i28]
+i30 : Usize
+_✝¹ : [> let i30 ← start + 15#usize <]
+i30_post : ↑i30 = ↑start + 15
+i31 : U8
+_✝ : [> let i31 ← bytes.index_usize i30 <]
+i31_post✝ : i31 = (↑bytes)[↑i30]
+s : Slice U8
+_ :
+  [> let s ←
+    lift (Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯).to_slice <]
+assembled : Std.Array U8 16#usize :=
+  Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯
+j : ℕ
+hj : 2 < (↑assembled).length
+hk : 2 < (↑(input r off n index minlen cap positive live range)).length
+i1_post : i1 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32)]
+i3_post : i3 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 1)]
+i5_post : i5 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 2)]
+i7_post : i7 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 3)]
+i9_post : i9 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 4)]
+i11_post : i11 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 5)]
+i13_post : i13 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 6)]
+i15_post : i15 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 7)]
+i17_post : i17 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 8)]
+i19_post : i19 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 9)]
+i21_post : i21 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 10)]
+i23_post : i23 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 11)]
+i25_post : i25 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 12)]
+i27_post : i27 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 13)]
+i29_post : i29 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 14)]
+i31_post : i31 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 15)]
+s_post :
+  s =
+    Array.to_slice
+      ⟨[(↑r.framed)[5 + (32 * ↑off + ↑index * 32)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 1)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 2)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 3)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 4)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 5)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 6)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 7)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 8)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 9)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 10)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 11)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 12)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 13)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 14)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 15)]],
+        ⋯⟩
+⊢ (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 2)] = (↑r.framed)[5 + 32 * (↑off + ↑index) + 2]
+
+case h.«3»
+r : r1_wire.ValidatedRecord
+off byteOffset n index : Usize
+minlen : 5 ≤ (↑r.framed).length
+cap : (↑r.framed).length ≤ 3717
+byteStart : ↑byteOffset = 32 * ↑off
+positive : 0 < ↑n
+live : ↑index < ↑n
+range : 32 * ↑off + 32 * ↑n ≤ (↑r.framed).length - 5
+geometry :
+  ↑off + ↑index < 116 ∧
+    5 + 32 * ↑off + 32 * ↑index + 32 ≤ (↑r.framed).length ∧
+      32 * ↑off + 32 * ↑index + 16 ≤ (↑r.framed).length - 5 ∧ ↑off + ↑n ≤ 116
+i : Usize
+_✝³³ : [> let i ← index * 32#usize <]
+i_post : ↑i = ↑index * 32
+start : Usize
+_✝³² : [> let start ← byteOffset + i <]
+start_post : ↑start = ↑byteOffset + ↑i
+bytes : Slice U8
+_✝³¹ : [> let bytes ← r.payload <]
+bytes_post : ↑bytes = List.drop 5 ↑r.framed
+i1 : U8
+_✝³⁰ : [> let i1 ← bytes.index_usize start <]
+i1_post✝ : i1 = (↑bytes)[↑start]
+i2 : Usize
+_✝²⁹ : [> let i2 ← start + 1#usize <]
+i2_post : ↑i2 = ↑start + 1
+i3 : U8
+_✝²⁸ : [> let i3 ← bytes.index_usize i2 <]
+i3_post✝ : i3 = (↑bytes)[↑i2]
+i4 : Usize
+_✝²⁷ : [> let i4 ← start + 2#usize <]
+i4_post : ↑i4 = ↑start + 2
+i5 : U8
+_✝²⁶ : [> let i5 ← bytes.index_usize i4 <]
+i5_post✝ : i5 = (↑bytes)[↑i4]
+i6 : Usize
+_✝²⁵ : [> let i6 ← start + 3#usize <]
+i6_post : ↑i6 = ↑start + 3
+i7 : U8
+_✝²⁴ : [> let i7 ← bytes.index_usize i6 <]
+i7_post✝ : i7 = (↑bytes)[↑i6]
+i8 : Usize
+_✝²³ : [> let i8 ← start + 4#usize <]
+i8_post : ↑i8 = ↑start + 4
+i9 : U8
+_✝²² : [> let i9 ← bytes.index_usize i8 <]
+i9_post✝ : i9 = (↑bytes)[↑i8]
+i10 : Usize
+_✝²¹ : [> let i10 ← start + 5#usize <]
+i10_post : ↑i10 = ↑start + 5
+i11 : U8
+_✝²⁰ : [> let i11 ← bytes.index_usize i10 <]
+i11_post✝ : i11 = (↑bytes)[↑i10]
+i12 : Usize
+_✝¹⁹ : [> let i12 ← start + 6#usize <]
+i12_post : ↑i12 = ↑start + 6
+i13 : U8
+_✝¹⁸ : [> let i13 ← bytes.index_usize i12 <]
+i13_post✝ : i13 = (↑bytes)[↑i12]
+i14 : Usize
+_✝¹⁷ : [> let i14 ← start + 7#usize <]
+i14_post : ↑i14 = ↑start + 7
+i15 : U8
+_✝¹⁶ : [> let i15 ← bytes.index_usize i14 <]
+i15_post✝ : i15 = (↑bytes)[↑i14]
+i16 : Usize
+_✝¹⁵ : [> let i16 ← start + 8#usize <]
+i16_post : ↑i16 = ↑start + 8
+i17 : U8
+_✝¹⁴ : [> let i17 ← bytes.index_usize i16 <]
+i17_post✝ : i17 = (↑bytes)[↑i16]
+i18 : Usize
+_✝¹³ : [> let i18 ← start + 9#usize <]
+i18_post : ↑i18 = ↑start + 9
+i19 : U8
+_✝¹² : [> let i19 ← bytes.index_usize i18 <]
+i19_post✝ : i19 = (↑bytes)[↑i18]
+i20 : Usize
+_✝¹¹ : [> let i20 ← start + 10#usize <]
+i20_post : ↑i20 = ↑start + 10
+i21 : U8
+_✝¹⁰ : [> let i21 ← bytes.index_usize i20 <]
+i21_post✝ : i21 = (↑bytes)[↑i20]
+i22 : Usize
+_✝⁹ : [> let i22 ← start + 11#usize <]
+i22_post : ↑i22 = ↑start + 11
+i23 : U8
+_✝⁸ : [> let i23 ← bytes.index_usize i22 <]
+i23_post✝ : i23 = (↑bytes)[↑i22]
+i24 : Usize
+_✝⁷ : [> let i24 ← start + 12#usize <]
+i24_post : ↑i24 = ↑start + 12
+i25 : U8
+_✝⁶ : [> let i25 ← bytes.index_usize i24 <]
+i25_post✝ : i25 = (↑bytes)[↑i24]
+i26 : Usize
+_✝⁵ : [> let i26 ← start + 13#usize <]
+i26_post : ↑i26 = ↑start + 13
+i27 : U8
+_✝⁴ : [> let i27 ← bytes.index_usize i26 <]
+i27_post✝ : i27 = (↑bytes)[↑i26]
+i28 : Usize
+_✝³ : [> let i28 ← start + 14#usize <]
+i28_post : ↑i28 = ↑start + 14
+i29 : U8
+_✝² : [> let i29 ← bytes.index_usize i28 <]
+i29_post✝ : i29 = (↑bytes)[↑i28]
+i30 : Usize
+_✝¹ : [> let i30 ← start + 15#usize <]
+i30_post : ↑i30 = ↑start + 15
+i31 : U8
+_✝ : [> let i31 ← bytes.index_usize i30 <]
+i31_post✝ : i31 = (↑bytes)[↑i30]
+s : Slice U8
+_ :
+  [> let s ←
+    lift (Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯).to_slice <]
+assembled : Std.Array U8 16#usize :=
+  Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯
+j : ℕ
+hj : 3 < (↑assembled).length
+hk : 3 < (↑(input r off n index minlen cap positive live range)).length
+i1_post : i1 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32)]
+i3_post : i3 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 1)]
+i5_post : i5 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 2)]
+i7_post : i7 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 3)]
+i9_post : i9 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 4)]
+i11_post : i11 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 5)]
+i13_post : i13 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 6)]
+i15_post : i15 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 7)]
+i17_post : i17 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 8)]
+i19_post : i19 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 9)]
+i21_post : i21 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 10)]
+i23_post : i23 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 11)]
+i25_post : i25 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 12)]
+i27_post : i27 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 13)]
+i29_post : i29 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 14)]
+i31_post : i31 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 15)]
+s_post :
+  s =
+    Array.to_slice
+      ⟨[(↑r.framed)[5 + (32 * ↑off + ↑index * 32)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 1)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 2)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 3)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 4)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 5)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 6)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 7)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 8)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 9)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 10)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 11)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 12)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 13)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 14)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 15)]],
+        ⋯⟩
+⊢ (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 3)] = (↑r.framed)[5 + 32 * (↑off + ↑index) + 3]
+
+case h.«4»
+r : r1_wire.ValidatedRecord
+off byteOffset n index : Usize
+minlen : 5 ≤ (↑r.framed).length
+cap : (↑r.framed).length ≤ 3717
+byteStart : ↑byteOffset = 32 * ↑off
+positive : 0 < ↑n
+live : ↑index < ↑n
+range : 32 * ↑off + 32 * ↑n ≤ (↑r.framed).length - 5
+geometry :
+  ↑off + ↑index < 116 ∧
+    5 + 32 * ↑off + 32 * ↑index + 32 ≤ (↑r.framed).length ∧
+      32 * ↑off + 32 * ↑index + 16 ≤ (↑r.framed).length - 5 ∧ ↑off + ↑n ≤ 116
+i : Usize
+_✝³³ : [> let i ← index * 32#usize <]
+i_post : ↑i = ↑index * 32
+start : Usize
+_✝³² : [> let start ← byteOffset + i <]
+start_post : ↑start = ↑byteOffset + ↑i
+bytes : Slice U8
+_✝³¹ : [> let bytes ← r.payload <]
+bytes_post : ↑bytes = List.drop 5 ↑r.framed
+i1 : U8
+_✝³⁰ : [> let i1 ← bytes.index_usize start <]
+i1_post✝ : i1 = (↑bytes)[↑start]
+i2 : Usize
+_✝²⁹ : [> let i2 ← start + 1#usize <]
+i2_post : ↑i2 = ↑start + 1
+i3 : U8
+_✝²⁸ : [> let i3 ← bytes.index_usize i2 <]
+i3_post✝ : i3 = (↑bytes)[↑i2]
+i4 : Usize
+_✝²⁷ : [> let i4 ← start + 2#usize <]
+i4_post : ↑i4 = ↑start + 2
+i5 : U8
+_✝²⁶ : [> let i5 ← bytes.index_usize i4 <]
+i5_post✝ : i5 = (↑bytes)[↑i4]
+i6 : Usize
+_✝²⁵ : [> let i6 ← start + 3#usize <]
+i6_post : ↑i6 = ↑start + 3
+i7 : U8
+_✝²⁴ : [> let i7 ← bytes.index_usize i6 <]
+i7_post✝ : i7 = (↑bytes)[↑i6]
+i8 : Usize
+_✝²³ : [> let i8 ← start + 4#usize <]
+i8_post : ↑i8 = ↑start + 4
+i9 : U8
+_✝²² : [> let i9 ← bytes.index_usize i8 <]
+i9_post✝ : i9 = (↑bytes)[↑i8]
+i10 : Usize
+_✝²¹ : [> let i10 ← start + 5#usize <]
+i10_post : ↑i10 = ↑start + 5
+i11 : U8
+_✝²⁰ : [> let i11 ← bytes.index_usize i10 <]
+i11_post✝ : i11 = (↑bytes)[↑i10]
+i12 : Usize
+_✝¹⁹ : [> let i12 ← start + 6#usize <]
+i12_post : ↑i12 = ↑start + 6
+i13 : U8
+_✝¹⁸ : [> let i13 ← bytes.index_usize i12 <]
+i13_post✝ : i13 = (↑bytes)[↑i12]
+i14 : Usize
+_✝¹⁷ : [> let i14 ← start + 7#usize <]
+i14_post : ↑i14 = ↑start + 7
+i15 : U8
+_✝¹⁶ : [> let i15 ← bytes.index_usize i14 <]
+i15_post✝ : i15 = (↑bytes)[↑i14]
+i16 : Usize
+_✝¹⁵ : [> let i16 ← start + 8#usize <]
+i16_post : ↑i16 = ↑start + 8
+i17 : U8
+_✝¹⁴ : [> let i17 ← bytes.index_usize i16 <]
+i17_post✝ : i17 = (↑bytes)[↑i16]
+i18 : Usize
+_✝¹³ : [> let i18 ← start + 9#usize <]
+i18_post : ↑i18 = ↑start + 9
+i19 : U8
+_✝¹² : [> let i19 ← bytes.index_usize i18 <]
+i19_post✝ : i19 = (↑bytes)[↑i18]
+i20 : Usize
+_✝¹¹ : [> let i20 ← start + 10#usize <]
+i20_post : ↑i20 = ↑start + 10
+i21 : U8
+_✝¹⁰ : [> let i21 ← bytes.index_usize i20 <]
+i21_post✝ : i21 = (↑bytes)[↑i20]
+i22 : Usize
+_✝⁹ : [> let i22 ← start + 11#usize <]
+i22_post : ↑i22 = ↑start + 11
+i23 : U8
+_✝⁸ : [> let i23 ← bytes.index_usize i22 <]
+i23_post✝ : i23 = (↑bytes)[↑i22]
+i24 : Usize
+_✝⁷ : [> let i24 ← start + 12#usize <]
+i24_post : ↑i24 = ↑start + 12
+i25 : U8
+_✝⁶ : [> let i25 ← bytes.index_usize i24 <]
+i25_post✝ : i25 = (↑bytes)[↑i24]
+i26 : Usize
+_✝⁵ : [> let i26 ← start + 13#usize <]
+i26_post : ↑i26 = ↑start + 13
+i27 : U8
+_✝⁴ : [> let i27 ← bytes.index_usize i26 <]
+i27_post✝ : i27 = (↑bytes)[↑i26]
+i28 : Usize
+_✝³ : [> let i28 ← start + 14#usize <]
+i28_post : ↑i28 = ↑start + 14
+i29 : U8
+_✝² : [> let i29 ← bytes.index_usize i28 <]
+i29_post✝ : i29 = (↑bytes)[↑i28]
+i30 : Usize
+_✝¹ : [> let i30 ← start + 15#usize <]
+i30_post : ↑i30 = ↑start + 15
+i31 : U8
+_✝ : [> let i31 ← bytes.index_usize i30 <]
+i31_post✝ : i31 = (↑bytes)[↑i30]
+s : Slice U8
+_ :
+  [> let s ←
+    lift (Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯).to_slice <]
+assembled : Std.Array U8 16#usize :=
+  Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯
+j : ℕ
+hj : 4 < (↑assembled).length
+hk : 4 < (↑(input r off n index minlen cap positive live range)).length
+i1_post : i1 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32)]
+i3_post : i3 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 1)]
+i5_post : i5 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 2)]
+i7_post : i7 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 3)]
+i9_post : i9 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 4)]
+i11_post : i11 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 5)]
+i13_post : i13 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 6)]
+i15_post : i15 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 7)]
+i17_post : i17 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 8)]
+i19_post : i19 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 9)]
+i21_post : i21 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 10)]
+i23_post : i23 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 11)]
+i25_post : i25 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 12)]
+i27_post : i27 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 13)]
+i29_post : i29 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 14)]
+i31_post : i31 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 15)]
+s_post :
+  s =
+    Array.to_slice
+      ⟨[(↑r.framed)[5 + (32 * ↑off + ↑index * 32)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 1)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 2)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 3)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 4)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 5)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 6)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 7)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 8)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 9)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 10)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 11)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 12)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 13)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 14)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 15)]],
+        ⋯⟩
+⊢ (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 4)] = (↑r.framed)[5 + 32 * (↑off + ↑index) + 4]
+
+case h.«5»
+r : r1_wire.ValidatedRecord
+off byteOffset n index : Usize
+minlen : 5 ≤ (↑r.framed).length
+cap : (↑r.framed).length ≤ 3717
+byteStart : ↑byteOffset = 32 * ↑off
+positive : 0 < ↑n
+live : ↑index < ↑n
+range : 32 * ↑off + 32 * ↑n ≤ (↑r.framed).length - 5
+geometry :
+  ↑off + ↑index < 116 ∧
+    5 + 32 * ↑off + 32 * ↑index + 32 ≤ (↑r.framed).length ∧
+      32 * ↑off + 32 * ↑index + 16 ≤ (↑r.framed).length - 5 ∧ ↑off + ↑n ≤ 116
+i : Usize
+_✝³³ : [> let i ← index * 32#usize <]
+i_post : ↑i = ↑index * 32
+start : Usize
+_✝³² : [> let start ← byteOffset + i <]
+start_post : ↑start = ↑byteOffset + ↑i
+bytes : Slice U8
+_✝³¹ : [> let bytes ← r.payload <]
+bytes_post : ↑bytes = List.drop 5 ↑r.framed
+i1 : U8
+_✝³⁰ : [> let i1 ← bytes.index_usize start <]
+i1_post✝ : i1 = (↑bytes)[↑start]
+i2 : Usize
+_✝²⁹ : [> let i2 ← start + 1#usize <]
+i2_post : ↑i2 = ↑start + 1
+i3 : U8
+_✝²⁸ : [> let i3 ← bytes.index_usize i2 <]
+i3_post✝ : i3 = (↑bytes)[↑i2]
+i4 : Usize
+_✝²⁷ : [> let i4 ← start + 2#usize <]
+i4_post : ↑i4 = ↑start + 2
+i5 : U8
+_✝²⁶ : [> let i5 ← bytes.index_usize i4 <]
+i5_post✝ : i5 = (↑bytes)[↑i4]
+i6 : Usize
+_✝²⁵ : [> let i6 ← start + 3#usize <]
+i6_post : ↑i6 = ↑start + 3
+i7 : U8
+_✝²⁴ : [> let i7 ← bytes.index_usize i6 <]
+i7_post✝ : i7 = (↑bytes)[↑i6]
+i8 : Usize
+_✝²³ : [> let i8 ← start + 4#usize <]
+i8_post : ↑i8 = ↑start + 4
+i9 : U8
+_✝²² : [> let i9 ← bytes.index_usize i8 <]
+i9_post✝ : i9 = (↑bytes)[↑i8]
+i10 : Usize
+_✝²¹ : [> let i10 ← start + 5#usize <]
+i10_post : ↑i10 = ↑start + 5
+i11 : U8
+_✝²⁰ : [> let i11 ← bytes.index_usize i10 <]
+i11_post✝ : i11 = (↑bytes)[↑i10]
+i12 : Usize
+_✝¹⁹ : [> let i12 ← start + 6#usize <]
+i12_post : ↑i12 = ↑start + 6
+i13 : U8
+_✝¹⁸ : [> let i13 ← bytes.index_usize i12 <]
+i13_post✝ : i13 = (↑bytes)[↑i12]
+i14 : Usize
+_✝¹⁷ : [> let i14 ← start + 7#usize <]
+i14_post : ↑i14 = ↑start + 7
+i15 : U8
+_✝¹⁶ : [> let i15 ← bytes.index_usize i14 <]
+i15_post✝ : i15 = (↑bytes)[↑i14]
+i16 : Usize
+_✝¹⁵ : [> let i16 ← start + 8#usize <]
+i16_post : ↑i16 = ↑start + 8
+i17 : U8
+_✝¹⁴ : [> let i17 ← bytes.index_usize i16 <]
+i17_post✝ : i17 = (↑bytes)[↑i16]
+i18 : Usize
+_✝¹³ : [> let i18 ← start + 9#usize <]
+i18_post : ↑i18 = ↑start + 9
+i19 : U8
+_✝¹² : [> let i19 ← bytes.index_usize i18 <]
+i19_post✝ : i19 = (↑bytes)[↑i18]
+i20 : Usize
+_✝¹¹ : [> let i20 ← start + 10#usize <]
+i20_post : ↑i20 = ↑start + 10
+i21 : U8
+_✝¹⁰ : [> let i21 ← bytes.index_usize i20 <]
+i21_post✝ : i21 = (↑bytes)[↑i20]
+i22 : Usize
+_✝⁹ : [> let i22 ← start + 11#usize <]
+i22_post : ↑i22 = ↑start + 11
+i23 : U8
+_✝⁸ : [> let i23 ← bytes.index_usize i22 <]
+i23_post✝ : i23 = (↑bytes)[↑i22]
+i24 : Usize
+_✝⁷ : [> let i24 ← start + 12#usize <]
+i24_post : ↑i24 = ↑start + 12
+i25 : U8
+_✝⁶ : [> let i25 ← bytes.index_usize i24 <]
+i25_post✝ : i25 = (↑bytes)[↑i24]
+i26 : Usize
+_✝⁵ : [> let i26 ← start + 13#usize <]
+i26_post : ↑i26 = ↑start + 13
+i27 : U8
+_✝⁴ : [> let i27 ← bytes.index_usize i26 <]
+i27_post✝ : i27 = (↑bytes)[↑i26]
+i28 : Usize
+_✝³ : [> let i28 ← start + 14#usize <]
+i28_post : ↑i28 = ↑start + 14
+i29 : U8
+_✝² : [> let i29 ← bytes.index_usize i28 <]
+i29_post✝ : i29 = (↑bytes)[↑i28]
+i30 : Usize
+_✝¹ : [> let i30 ← start + 15#usize <]
+i30_post : ↑i30 = ↑start + 15
+i31 : U8
+_✝ : [> let i31 ← bytes.index_usize i30 <]
+i31_post✝ : i31 = (↑bytes)[↑i30]
+s : Slice U8
+_ :
+  [> let s ←
+    lift (Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯).to_slice <]
+assembled : Std.Array U8 16#usize :=
+  Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯
+j : ℕ
+hj : 5 < (↑assembled).length
+hk : 5 < (↑(input r off n index minlen cap positive live range)).length
+i1_post : i1 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32)]
+i3_post : i3 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 1)]
+i5_post : i5 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 2)]
+i7_post : i7 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 3)]
+i9_post : i9 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 4)]
+i11_post : i11 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 5)]
+i13_post : i13 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 6)]
+i15_post : i15 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 7)]
+i17_post : i17 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 8)]
+i19_post : i19 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 9)]
+i21_post : i21 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 10)]
+i23_post : i23 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 11)]
+i25_post : i25 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 12)]
+i27_post : i27 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 13)]
+i29_post : i29 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 14)]
+i31_post : i31 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 15)]
+s_post :
+  s =
+    Array.to_slice
+      ⟨[(↑r.framed)[5 + (32 * ↑off + ↑index * 32)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 1)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 2)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 3)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 4)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 5)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 6)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 7)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 8)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 9)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 10)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 11)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 12)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 13)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 14)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 15)]],
+        ⋯⟩
+⊢ (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 5)] = (↑r.framed)[5 + 32 * (↑off + ↑index) + 5]
+
+case h.«6»
+r : r1_wire.ValidatedRecord
+off byteOffset n index : Usize
+minlen : 5 ≤ (↑r.framed).length
+cap : (↑r.framed).length ≤ 3717
+byteStart : ↑byteOffset = 32 * ↑off
+positive : 0 < ↑n
+live : ↑index < ↑n
+range : 32 * ↑off + 32 * ↑n ≤ (↑r.framed).length - 5
+geometry :
+  ↑off + ↑index < 116 ∧
+    5 + 32 * ↑off + 32 * ↑index + 32 ≤ (↑r.framed).length ∧
+      32 * ↑off + 32 * ↑index + 16 ≤ (↑r.framed).length - 5 ∧ ↑off + ↑n ≤ 116
+i : Usize
+_✝³³ : [> let i ← index * 32#usize <]
+i_post : ↑i = ↑index * 32
+start : Usize
+_✝³² : [> let start ← byteOffset + i <]
+start_post : ↑start = ↑byteOffset + ↑i
+bytes : Slice U8
+_✝³¹ : [> let bytes ← r.payload <]
+bytes_post : ↑bytes = List.drop 5 ↑r.framed
+i1 : U8
+_✝³⁰ : [> let i1 ← bytes.index_usize start <]
+i1_post✝ : i1 = (↑bytes)[↑start]
+i2 : Usize
+_✝²⁹ : [> let i2 ← start + 1#usize <]
+i2_post : ↑i2 = ↑start + 1
+i3 : U8
+_✝²⁸ : [> let i3 ← bytes.index_usize i2 <]
+i3_post✝ : i3 = (↑bytes)[↑i2]
+i4 : Usize
+_✝²⁷ : [> let i4 ← start + 2#usize <]
+i4_post : ↑i4 = ↑start + 2
+i5 : U8
+_✝²⁶ : [> let i5 ← bytes.index_usize i4 <]
+i5_post✝ : i5 = (↑bytes)[↑i4]
+i6 : Usize
+_✝²⁵ : [> let i6 ← start + 3#usize <]
+i6_post : ↑i6 = ↑start + 3
+i7 : U8
+_✝²⁴ : [> let i7 ← bytes.index_usize i6 <]
+i7_post✝ : i7 = (↑bytes)[↑i6]
+i8 : Usize
+_✝²³ : [> let i8 ← start + 4#usize <]
+i8_post : ↑i8 = ↑start + 4
+i9 : U8
+_✝²² : [> let i9 ← bytes.index_usize i8 <]
+i9_post✝ : i9 = (↑bytes)[↑i8]
+i10 : Usize
+_✝²¹ : [> let i10 ← start + 5#usize <]
+i10_post : ↑i10 = ↑start + 5
+i11 : U8
+_✝²⁰ : [> let i11 ← bytes.index_usize i10 <]
+i11_post✝ : i11 = (↑bytes)[↑i10]
+i12 : Usize
+_✝¹⁹ : [> let i12 ← start + 6#usize <]
+i12_post : ↑i12 = ↑start + 6
+i13 : U8
+_✝¹⁸ : [> let i13 ← bytes.index_usize i12 <]
+i13_post✝ : i13 = (↑bytes)[↑i12]
+i14 : Usize
+_✝¹⁷ : [> let i14 ← start + 7#usize <]
+i14_post : ↑i14 = ↑start + 7
+i15 : U8
+_✝¹⁶ : [> let i15 ← bytes.index_usize i14 <]
+i15_post✝ : i15 = (↑bytes)[↑i14]
+i16 : Usize
+_✝¹⁵ : [> let i16 ← start + 8#usize <]
+i16_post : ↑i16 = ↑start + 8
+i17 : U8
+_✝¹⁴ : [> let i17 ← bytes.index_usize i16 <]
+i17_post✝ : i17 = (↑bytes)[↑i16]
+i18 : Usize
+_✝¹³ : [> let i18 ← start + 9#usize <]
+i18_post : ↑i18 = ↑start + 9
+i19 : U8
+_✝¹² : [> let i19 ← bytes.index_usize i18 <]
+i19_post✝ : i19 = (↑bytes)[↑i18]
+i20 : Usize
+_✝¹¹ : [> let i20 ← start + 10#usize <]
+i20_post : ↑i20 = ↑start + 10
+i21 : U8
+_✝¹⁰ : [> let i21 ← bytes.index_usize i20 <]
+i21_post✝ : i21 = (↑bytes)[↑i20]
+i22 : Usize
+_✝⁹ : [> let i22 ← start + 11#usize <]
+i22_post : ↑i22 = ↑start + 11
+i23 : U8
+_✝⁸ : [> let i23 ← bytes.index_usize i22 <]
+i23_post✝ : i23 = (↑bytes)[↑i22]
+i24 : Usize
+_✝⁷ : [> let i24 ← start + 12#usize <]
+i24_post : ↑i24 = ↑start + 12
+i25 : U8
+_✝⁶ : [> let i25 ← bytes.index_usize i24 <]
+i25_post✝ : i25 = (↑bytes)[↑i24]
+i26 : Usize
+_✝⁵ : [> let i26 ← start + 13#usize <]
+i26_post : ↑i26 = ↑start + 13
+i27 : U8
+_✝⁴ : [> let i27 ← bytes.index_usize i26 <]
+i27_post✝ : i27 = (↑bytes)[↑i26]
+i28 : Usize
+_✝³ : [> let i28 ← start + 14#usize <]
+i28_post : ↑i28 = ↑start + 14
+i29 : U8
+_✝² : [> let i29 ← bytes.index_usize i28 <]
+i29_post✝ : i29 = (↑bytes)[↑i28]
+i30 : Usize
+_✝¹ : [> let i30 ← start + 15#usize <]
+i30_post : ↑i30 = ↑start + 15
+i31 : U8
+_✝ : [> let i31 ← bytes.index_usize i30 <]
+i31_post✝ : i31 = (↑bytes)[↑i30]
+s : Slice U8
+_ :
+  [> let s ←
+    lift (Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯).to_slice <]
+assembled : Std.Array U8 16#usize :=
+  Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯
+j : ℕ
+hj : 6 < (↑assembled).length
+hk : 6 < (↑(input r off n index minlen cap positive live range)).length
+i1_post : i1 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32)]
+i3_post : i3 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 1)]
+i5_post : i5 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 2)]
+i7_post : i7 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 3)]
+i9_post : i9 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 4)]
+i11_post : i11 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 5)]
+i13_post : i13 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 6)]
+i15_post : i15 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 7)]
+i17_post : i17 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 8)]
+i19_post : i19 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 9)]
+i21_post : i21 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 10)]
+i23_post : i23 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 11)]
+i25_post : i25 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 12)]
+i27_post : i27 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 13)]
+i29_post : i29 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 14)]
+i31_post : i31 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 15)]
+s_post :
+  s =
+    Array.to_slice
+      ⟨[(↑r.framed)[5 + (32 * ↑off + ↑index * 32)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 1)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 2)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 3)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 4)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 5)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 6)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 7)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 8)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 9)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 10)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 11)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 12)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 13)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 14)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 15)]],
+        ⋯⟩
+⊢ (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 6)] = (↑r.framed)[5 + 32 * (↑off + ↑index) + 6]
+
+case h.«7»
+r : r1_wire.ValidatedRecord
+off byteOffset n index : Usize
+minlen : 5 ≤ (↑r.framed).length
+cap : (↑r.framed).length ≤ 3717
+byteStart : ↑byteOffset = 32 * ↑off
+positive : 0 < ↑n
+live : ↑index < ↑n
+range : 32 * ↑off + 32 * ↑n ≤ (↑r.framed).length - 5
+geometry :
+  ↑off + ↑index < 116 ∧
+    5 + 32 * ↑off + 32 * ↑index + 32 ≤ (↑r.framed).length ∧
+      32 * ↑off + 32 * ↑index + 16 ≤ (↑r.framed).length - 5 ∧ ↑off + ↑n ≤ 116
+i : Usize
+_✝³³ : [> let i ← index * 32#usize <]
+i_post : ↑i = ↑index * 32
+start : Usize
+_✝³² : [> let start ← byteOffset + i <]
+start_post : ↑start = ↑byteOffset + ↑i
+bytes : Slice U8
+_✝³¹ : [> let bytes ← r.payload <]
+bytes_post : ↑bytes = List.drop 5 ↑r.framed
+i1 : U8
+_✝³⁰ : [> let i1 ← bytes.index_usize start <]
+i1_post✝ : i1 = (↑bytes)[↑start]
+i2 : Usize
+_✝²⁹ : [> let i2 ← start + 1#usize <]
+i2_post : ↑i2 = ↑start + 1
+i3 : U8
+_✝²⁸ : [> let i3 ← bytes.index_usize i2 <]
+i3_post✝ : i3 = (↑bytes)[↑i2]
+i4 : Usize
+_✝²⁷ : [> let i4 ← start + 2#usize <]
+i4_post : ↑i4 = ↑start + 2
+i5 : U8
+_✝²⁶ : [> let i5 ← bytes.index_usize i4 <]
+i5_post✝ : i5 = (↑bytes)[↑i4]
+i6 : Usize
+_✝²⁵ : [> let i6 ← start + 3#usize <]
+i6_post : ↑i6 = ↑start + 3
+i7 : U8
+_✝²⁴ : [> let i7 ← bytes.index_usize i6 <]
+i7_post✝ : i7 = (↑bytes)[↑i6]
+i8 : Usize
+_✝²³ : [> let i8 ← start + 4#usize <]
+i8_post : ↑i8 = ↑start + 4
+i9 : U8
+_✝²² : [> let i9 ← bytes.index_usize i8 <]
+i9_post✝ : i9 = (↑bytes)[↑i8]
+i10 : Usize
+_✝²¹ : [> let i10 ← start + 5#usize <]
+i10_post : ↑i10 = ↑start + 5
+i11 : U8
+_✝²⁰ : [> let i11 ← bytes.index_usize i10 <]
+i11_post✝ : i11 = (↑bytes)[↑i10]
+i12 : Usize
+_✝¹⁹ : [> let i12 ← start + 6#usize <]
+i12_post : ↑i12 = ↑start + 6
+i13 : U8
+_✝¹⁸ : [> let i13 ← bytes.index_usize i12 <]
+i13_post✝ : i13 = (↑bytes)[↑i12]
+i14 : Usize
+_✝¹⁷ : [> let i14 ← start + 7#usize <]
+i14_post : ↑i14 = ↑start + 7
+i15 : U8
+_✝¹⁶ : [> let i15 ← bytes.index_usize i14 <]
+i15_post✝ : i15 = (↑bytes)[↑i14]
+i16 : Usize
+_✝¹⁵ : [> let i16 ← start + 8#usize <]
+i16_post : ↑i16 = ↑start + 8
+i17 : U8
+_✝¹⁴ : [> let i17 ← bytes.index_usize i16 <]
+i17_post✝ : i17 = (↑bytes)[↑i16]
+i18 : Usize
+_✝¹³ : [> let i18 ← start + 9#usize <]
+i18_post : ↑i18 = ↑start + 9
+i19 : U8
+_✝¹² : [> let i19 ← bytes.index_usize i18 <]
+i19_post✝ : i19 = (↑bytes)[↑i18]
+i20 : Usize
+_✝¹¹ : [> let i20 ← start + 10#usize <]
+i20_post : ↑i20 = ↑start + 10
+i21 : U8
+_✝¹⁰ : [> let i21 ← bytes.index_usize i20 <]
+i21_post✝ : i21 = (↑bytes)[↑i20]
+i22 : Usize
+_✝⁹ : [> let i22 ← start + 11#usize <]
+i22_post : ↑i22 = ↑start + 11
+i23 : U8
+_✝⁸ : [> let i23 ← bytes.index_usize i22 <]
+i23_post✝ : i23 = (↑bytes)[↑i22]
+i24 : Usize
+_✝⁷ : [> let i24 ← start + 12#usize <]
+i24_post : ↑i24 = ↑start + 12
+i25 : U8
+_✝⁶ : [> let i25 ← bytes.index_usize i24 <]
+i25_post✝ : i25 = (↑bytes)[↑i24]
+i26 : Usize
+_✝⁵ : [> let i26 ← start + 13#usize <]
+i26_post : ↑i26 = ↑start + 13
+i27 : U8
+_✝⁴ : [> let i27 ← bytes.index_usize i26 <]
+i27_post✝ : i27 = (↑bytes)[↑i26]
+i28 : Usize
+_✝³ : [> let i28 ← start + 14#usize <]
+i28_post : ↑i28 = ↑start + 14
+i29 : U8
+_✝² : [> let i29 ← bytes.index_usize i28 <]
+i29_post✝ : i29 = (↑bytes)[↑i28]
+i30 : Usize
+_✝¹ : [> let i30 ← start + 15#usize <]
+i30_post : ↑i30 = ↑start + 15
+i31 : U8
+_✝ : [> let i31 ← bytes.index_usize i30 <]
+i31_post✝ : i31 = (↑bytes)[↑i30]
+s : Slice U8
+_ :
+  [> let s ←
+    lift (Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯).to_slice <]
+assembled : Std.Array U8 16#usize :=
+  Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯
+j : ℕ
+hj : 7 < (↑assembled).length
+hk : 7 < (↑(input r off n index minlen cap positive live range)).length
+i1_post : i1 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32)]
+i3_post : i3 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 1)]
+i5_post : i5 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 2)]
+i7_post : i7 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 3)]
+i9_post : i9 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 4)]
+i11_post : i11 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 5)]
+i13_post : i13 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 6)]
+i15_post : i15 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 7)]
+i17_post : i17 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 8)]
+i19_post : i19 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 9)]
+i21_post : i21 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 10)]
+i23_post : i23 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 11)]
+i25_post : i25 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 12)]
+i27_post : i27 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 13)]
+i29_post : i29 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 14)]
+i31_post : i31 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 15)]
+s_post :
+  s =
+    Array.to_slice
+      ⟨[(↑r.framed)[5 + (32 * ↑off + ↑index * 32)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 1)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 2)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 3)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 4)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 5)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 6)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 7)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 8)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 9)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 10)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 11)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 12)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 13)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 14)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 15)]],
+        ⋯⟩
+⊢ (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 7)] = (↑r.framed)[5 + 32 * (↑off + ↑index) + 7]
+
+case h.«8»
+r : r1_wire.ValidatedRecord
+off byteOffset n index : Usize
+minlen : 5 ≤ (↑r.framed).length
+cap : (↑r.framed).length ≤ 3717
+byteStart : ↑byteOffset = 32 * ↑off
+positive : 0 < ↑n
+live : ↑index < ↑n
+range : 32 * ↑off + 32 * ↑n ≤ (↑r.framed).length - 5
+geometry :
+  ↑off + ↑index < 116 ∧
+    5 + 32 * ↑off + 32 * ↑index + 32 ≤ (↑r.framed).length ∧
+      32 * ↑off + 32 * ↑index + 16 ≤ (↑r.framed).length - 5 ∧ ↑off + ↑n ≤ 116
+i : Usize
+_✝³³ : [> let i ← index * 32#usize <]
+i_post : ↑i = ↑index * 32
+start : Usize
+_✝³² : [> let start ← byteOffset + i <]
+start_post : ↑start = ↑byteOffset + ↑i
+bytes : Slice U8
+_✝³¹ : [> let bytes ← r.payload <]
+bytes_post : ↑bytes = List.drop 5 ↑r.framed
+i1 : U8
+_✝³⁰ : [> let i1 ← bytes.index_usize start <]
+i1_post✝ : i1 = (↑bytes)[↑start]
+i2 : Usize
+_✝²⁹ : [> let i2 ← start + 1#usize <]
+i2_post : ↑i2 = ↑start + 1
+i3 : U8
+_✝²⁸ : [> let i3 ← bytes.index_usize i2 <]
+i3_post✝ : i3 = (↑bytes)[↑i2]
+i4 : Usize
+_✝²⁷ : [> let i4 ← start + 2#usize <]
+i4_post : ↑i4 = ↑start + 2
+i5 : U8
+_✝²⁶ : [> let i5 ← bytes.index_usize i4 <]
+i5_post✝ : i5 = (↑bytes)[↑i4]
+i6 : Usize
+_✝²⁵ : [> let i6 ← start + 3#usize <]
+i6_post : ↑i6 = ↑start + 3
+i7 : U8
+_✝²⁴ : [> let i7 ← bytes.index_usize i6 <]
+i7_post✝ : i7 = (↑bytes)[↑i6]
+i8 : Usize
+_✝²³ : [> let i8 ← start + 4#usize <]
+i8_post : ↑i8 = ↑start + 4
+i9 : U8
+_✝²² : [> let i9 ← bytes.index_usize i8 <]
+i9_post✝ : i9 = (↑bytes)[↑i8]
+i10 : Usize
+_✝²¹ : [> let i10 ← start + 5#usize <]
+i10_post : ↑i10 = ↑start + 5
+i11 : U8
+_✝²⁰ : [> let i11 ← bytes.index_usize i10 <]
+i11_post✝ : i11 = (↑bytes)[↑i10]
+i12 : Usize
+_✝¹⁹ : [> let i12 ← start + 6#usize <]
+i12_post : ↑i12 = ↑start + 6
+i13 : U8
+_✝¹⁸ : [> let i13 ← bytes.index_usize i12 <]
+i13_post✝ : i13 = (↑bytes)[↑i12]
+i14 : Usize
+_✝¹⁷ : [> let i14 ← start + 7#usize <]
+i14_post : ↑i14 = ↑start + 7
+i15 : U8
+_✝¹⁶ : [> let i15 ← bytes.index_usize i14 <]
+i15_post✝ : i15 = (↑bytes)[↑i14]
+i16 : Usize
+_✝¹⁵ : [> let i16 ← start + 8#usize <]
+i16_post : ↑i16 = ↑start + 8
+i17 : U8
+_✝¹⁴ : [> let i17 ← bytes.index_usize i16 <]
+i17_post✝ : i17 = (↑bytes)[↑i16]
+i18 : Usize
+_✝¹³ : [> let i18 ← start + 9#usize <]
+i18_post : ↑i18 = ↑start + 9
+i19 : U8
+_✝¹² : [> let i19 ← bytes.index_usize i18 <]
+i19_post✝ : i19 = (↑bytes)[↑i18]
+i20 : Usize
+_✝¹¹ : [> let i20 ← start + 10#usize <]
+i20_post : ↑i20 = ↑start + 10
+i21 : U8
+_✝¹⁰ : [> let i21 ← bytes.index_usize i20 <]
+i21_post✝ : i21 = (↑bytes)[↑i20]
+i22 : Usize
+_✝⁹ : [> let i22 ← start + 11#usize <]
+i22_post : ↑i22 = ↑start + 11
+i23 : U8
+_✝⁸ : [> let i23 ← bytes.index_usize i22 <]
+i23_post✝ : i23 = (↑bytes)[↑i22]
+i24 : Usize
+_✝⁷ : [> let i24 ← start + 12#usize <]
+i24_post : ↑i24 = ↑start + 12
+i25 : U8
+_✝⁶ : [> let i25 ← bytes.index_usize i24 <]
+i25_post✝ : i25 = (↑bytes)[↑i24]
+i26 : Usize
+_✝⁵ : [> let i26 ← start + 13#usize <]
+i26_post : ↑i26 = ↑start + 13
+i27 : U8
+_✝⁴ : [> let i27 ← bytes.index_usize i26 <]
+i27_post✝ : i27 = (↑bytes)[↑i26]
+i28 : Usize
+_✝³ : [> let i28 ← start + 14#usize <]
+i28_post : ↑i28 = ↑start + 14
+i29 : U8
+_✝² : [> let i29 ← bytes.index_usize i28 <]
+i29_post✝ : i29 = (↑bytes)[↑i28]
+i30 : Usize
+_✝¹ : [> let i30 ← start + 15#usize <]
+i30_post : ↑i30 = ↑start + 15
+i31 : U8
+_✝ : [> let i31 ← bytes.index_usize i30 <]
+i31_post✝ : i31 = (↑bytes)[↑i30]
+s : Slice U8
+_ :
+  [> let s ←
+    lift (Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯).to_slice <]
+assembled : Std.Array U8 16#usize :=
+  Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯
+j : ℕ
+hj : 8 < (↑assembled).length
+hk : 8 < (↑(input r off n index minlen cap positive live range)).length
+i1_post : i1 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32)]
+i3_post : i3 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 1)]
+i5_post : i5 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 2)]
+i7_post : i7 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 3)]
+i9_post : i9 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 4)]
+i11_post : i11 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 5)]
+i13_post : i13 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 6)]
+i15_post : i15 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 7)]
+i17_post : i17 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 8)]
+i19_post : i19 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 9)]
+i21_post : i21 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 10)]
+i23_post : i23 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 11)]
+i25_post : i25 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 12)]
+i27_post : i27 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 13)]
+i29_post : i29 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 14)]
+i31_post : i31 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 15)]
+s_post :
+  s =
+    Array.to_slice
+      ⟨[(↑r.framed)[5 + (32 * ↑off + ↑index * 32)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 1)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 2)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 3)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 4)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 5)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 6)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 7)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 8)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 9)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 10)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 11)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 12)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 13)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 14)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 15)]],
+        ⋯⟩
+⊢ (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 8)] = (↑r.framed)[5 + 32 * (↑off + ↑index) + 8]
+
+case h.«9»
+r : r1_wire.ValidatedRecord
+off byteOffset n index : Usize
+minlen : 5 ≤ (↑r.framed).length
+cap : (↑r.framed).length ≤ 3717
+byteStart : ↑byteOffset = 32 * ↑off
+positive : 0 < ↑n
+live : ↑index < ↑n
+range : 32 * ↑off + 32 * ↑n ≤ (↑r.framed).length - 5
+geometry :
+  ↑off + ↑index < 116 ∧
+    5 + 32 * ↑off + 32 * ↑index + 32 ≤ (↑r.framed).length ∧
+      32 * ↑off + 32 * ↑index + 16 ≤ (↑r.framed).length - 5 ∧ ↑off + ↑n ≤ 116
+i : Usize
+_✝³³ : [> let i ← index * 32#usize <]
+i_post : ↑i = ↑index * 32
+start : Usize
+_✝³² : [> let start ← byteOffset + i <]
+start_post : ↑start = ↑byteOffset + ↑i
+bytes : Slice U8
+_✝³¹ : [> let bytes ← r.payload <]
+bytes_post : ↑bytes = List.drop 5 ↑r.framed
+i1 : U8
+_✝³⁰ : [> let i1 ← bytes.index_usize start <]
+i1_post✝ : i1 = (↑bytes)[↑start]
+i2 : Usize
+_✝²⁹ : [> let i2 ← start + 1#usize <]
+i2_post : ↑i2 = ↑start + 1
+i3 : U8
+_✝²⁸ : [> let i3 ← bytes.index_usize i2 <]
+i3_post✝ : i3 = (↑bytes)[↑i2]
+i4 : Usize
+_✝²⁷ : [> let i4 ← start + 2#usize <]
+i4_post : ↑i4 = ↑start + 2
+i5 : U8
+_✝²⁶ : [> let i5 ← bytes.index_usize i4 <]
+i5_post✝ : i5 = (↑bytes)[↑i4]
+i6 : Usize
+_✝²⁵ : [> let i6 ← start + 3#usize <]
+i6_post : ↑i6 = ↑start + 3
+i7 : U8
+_✝²⁴ : [> let i7 ← bytes.index_usize i6 <]
+i7_post✝ : i7 = (↑bytes)[↑i6]
+i8 : Usize
+_✝²³ : [> let i8 ← start + 4#usize <]
+i8_post : ↑i8 = ↑start + 4
+i9 : U8
+_✝²² : [> let i9 ← bytes.index_usize i8 <]
+i9_post✝ : i9 = (↑bytes)[↑i8]
+i10 : Usize
+_✝²¹ : [> let i10 ← start + 5#usize <]
+i10_post : ↑i10 = ↑start + 5
+i11 : U8
+_✝²⁰ : [> let i11 ← bytes.index_usize i10 <]
+i11_post✝ : i11 = (↑bytes)[↑i10]
+i12 : Usize
+_✝¹⁹ : [> let i12 ← start + 6#usize <]
+i12_post : ↑i12 = ↑start + 6
+i13 : U8
+_✝¹⁸ : [> let i13 ← bytes.index_usize i12 <]
+i13_post✝ : i13 = (↑bytes)[↑i12]
+i14 : Usize
+_✝¹⁷ : [> let i14 ← start + 7#usize <]
+i14_post : ↑i14 = ↑start + 7
+i15 : U8
+_✝¹⁶ : [> let i15 ← bytes.index_usize i14 <]
+i15_post✝ : i15 = (↑bytes)[↑i14]
+i16 : Usize
+_✝¹⁵ : [> let i16 ← start + 8#usize <]
+i16_post : ↑i16 = ↑start + 8
+i17 : U8
+_✝¹⁴ : [> let i17 ← bytes.index_usize i16 <]
+i17_post✝ : i17 = (↑bytes)[↑i16]
+i18 : Usize
+_✝¹³ : [> let i18 ← start + 9#usize <]
+i18_post : ↑i18 = ↑start + 9
+i19 : U8
+_✝¹² : [> let i19 ← bytes.index_usize i18 <]
+i19_post✝ : i19 = (↑bytes)[↑i18]
+i20 : Usize
+_✝¹¹ : [> let i20 ← start + 10#usize <]
+i20_post : ↑i20 = ↑start + 10
+i21 : U8
+_✝¹⁰ : [> let i21 ← bytes.index_usize i20 <]
+i21_post✝ : i21 = (↑bytes)[↑i20]
+i22 : Usize
+_✝⁹ : [> let i22 ← start + 11#usize <]
+i22_post : ↑i22 = ↑start + 11
+i23 : U8
+_✝⁸ : [> let i23 ← bytes.index_usize i22 <]
+i23_post✝ : i23 = (↑bytes)[↑i22]
+i24 : Usize
+_✝⁷ : [> let i24 ← start + 12#usize <]
+i24_post : ↑i24 = ↑start + 12
+i25 : U8
+_✝⁶ : [> let i25 ← bytes.index_usize i24 <]
+i25_post✝ : i25 = (↑bytes)[↑i24]
+i26 : Usize
+_✝⁵ : [> let i26 ← start + 13#usize <]
+i26_post : ↑i26 = ↑start + 13
+i27 : U8
+_✝⁴ : [> let i27 ← bytes.index_usize i26 <]
+i27_post✝ : i27 = (↑bytes)[↑i26]
+i28 : Usize
+_✝³ : [> let i28 ← start + 14#usize <]
+i28_post : ↑i28 = ↑start + 14
+i29 : U8
+_✝² : [> let i29 ← bytes.index_usize i28 <]
+i29_post✝ : i29 = (↑bytes)[↑i28]
+i30 : Usize
+_✝¹ : [> let i30 ← start + 15#usize <]
+i30_post : ↑i30 = ↑start + 15
+i31 : U8
+_✝ : [> let i31 ← bytes.index_usize i30 <]
+i31_post✝ : i31 = (↑bytes)[↑i30]
+s : Slice U8
+_ :
+  [> let s ←
+    lift (Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯).to_slice <]
+assembled : Std.Array U8 16#usize :=
+  Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯
+j : ℕ
+hj : 9 < (↑assembled).length
+hk : 9 < (↑(input r off n index minlen cap positive live range)).length
+i1_post : i1 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32)]
+i3_post : i3 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 1)]
+i5_post : i5 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 2)]
+i7_post : i7 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 3)]
+i9_post : i9 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 4)]
+i11_post : i11 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 5)]
+i13_post : i13 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 6)]
+i15_post : i15 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 7)]
+i17_post : i17 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 8)]
+i19_post : i19 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 9)]
+i21_post : i21 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 10)]
+i23_post : i23 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 11)]
+i25_post : i25 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 12)]
+i27_post : i27 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 13)]
+i29_post : i29 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 14)]
+i31_post : i31 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 15)]
+s_post :
+  s =
+    Array.to_slice
+      ⟨[(↑r.framed)[5 + (32 * ↑off + ↑index * 32)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 1)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 2)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 3)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 4)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 5)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 6)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 7)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 8)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 9)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 10)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 11)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 12)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 13)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 14)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 15)]],
+        ⋯⟩
+⊢ (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 9)] = (↑r.framed)[5 + 32 * (↑off + ↑index) + 9]
+
+case h.«10»
+r : r1_wire.ValidatedRecord
+off byteOffset n index : Usize
+minlen : 5 ≤ (↑r.framed).length
+cap : (↑r.framed).length ≤ 3717
+byteStart : ↑byteOffset = 32 * ↑off
+positive : 0 < ↑n
+live : ↑index < ↑n
+range : 32 * ↑off + 32 * ↑n ≤ (↑r.framed).length - 5
+geometry :
+  ↑off + ↑index < 116 ∧
+    5 + 32 * ↑off + 32 * ↑index + 32 ≤ (↑r.framed).length ∧
+      32 * ↑off + 32 * ↑index + 16 ≤ (↑r.framed).length - 5 ∧ ↑off + ↑n ≤ 116
+i : Usize
+_✝³³ : [> let i ← index * 32#usize <]
+i_post : ↑i = ↑index * 32
+start : Usize
+_✝³² : [> let start ← byteOffset + i <]
+start_post : ↑start = ↑byteOffset + ↑i
+bytes : Slice U8
+_✝³¹ : [> let bytes ← r.payload <]
+bytes_post : ↑bytes = List.drop 5 ↑r.framed
+i1 : U8
+_✝³⁰ : [> let i1 ← bytes.index_usize start <]
+i1_post✝ : i1 = (↑bytes)[↑start]
+i2 : Usize
+_✝²⁹ : [> let i2 ← start + 1#usize <]
+i2_post : ↑i2 = ↑start + 1
+i3 : U8
+_✝²⁸ : [> let i3 ← bytes.index_usize i2 <]
+i3_post✝ : i3 = (↑bytes)[↑i2]
+i4 : Usize
+_✝²⁷ : [> let i4 ← start + 2#usize <]
+i4_post : ↑i4 = ↑start + 2
+i5 : U8
+_✝²⁶ : [> let i5 ← bytes.index_usize i4 <]
+i5_post✝ : i5 = (↑bytes)[↑i4]
+i6 : Usize
+_✝²⁵ : [> let i6 ← start + 3#usize <]
+i6_post : ↑i6 = ↑start + 3
+i7 : U8
+_✝²⁴ : [> let i7 ← bytes.index_usize i6 <]
+i7_post✝ : i7 = (↑bytes)[↑i6]
+i8 : Usize
+_✝²³ : [> let i8 ← start + 4#usize <]
+i8_post : ↑i8 = ↑start + 4
+i9 : U8
+_✝²² : [> let i9 ← bytes.index_usize i8 <]
+i9_post✝ : i9 = (↑bytes)[↑i8]
+i10 : Usize
+_✝²¹ : [> let i10 ← start + 5#usize <]
+i10_post : ↑i10 = ↑start + 5
+i11 : U8
+_✝²⁰ : [> let i11 ← bytes.index_usize i10 <]
+i11_post✝ : i11 = (↑bytes)[↑i10]
+i12 : Usize
+_✝¹⁹ : [> let i12 ← start + 6#usize <]
+i12_post : ↑i12 = ↑start + 6
+i13 : U8
+_✝¹⁸ : [> let i13 ← bytes.index_usize i12 <]
+i13_post✝ : i13 = (↑bytes)[↑i12]
+i14 : Usize
+_✝¹⁷ : [> let i14 ← start + 7#usize <]
+i14_post : ↑i14 = ↑start + 7
+i15 : U8
+_✝¹⁶ : [> let i15 ← bytes.index_usize i14 <]
+i15_post✝ : i15 = (↑bytes)[↑i14]
+i16 : Usize
+_✝¹⁵ : [> let i16 ← start + 8#usize <]
+i16_post : ↑i16 = ↑start + 8
+i17 : U8
+_✝¹⁴ : [> let i17 ← bytes.index_usize i16 <]
+i17_post✝ : i17 = (↑bytes)[↑i16]
+i18 : Usize
+_✝¹³ : [> let i18 ← start + 9#usize <]
+i18_post : ↑i18 = ↑start + 9
+i19 : U8
+_✝¹² : [> let i19 ← bytes.index_usize i18 <]
+i19_post✝ : i19 = (↑bytes)[↑i18]
+i20 : Usize
+_✝¹¹ : [> let i20 ← start + 10#usize <]
+i20_post : ↑i20 = ↑start + 10
+i21 : U8
+_✝¹⁰ : [> let i21 ← bytes.index_usize i20 <]
+i21_post✝ : i21 = (↑bytes)[↑i20]
+i22 : Usize
+_✝⁹ : [> let i22 ← start + 11#usize <]
+i22_post : ↑i22 = ↑start + 11
+i23 : U8
+_✝⁸ : [> let i23 ← bytes.index_usize i22 <]
+i23_post✝ : i23 = (↑bytes)[↑i22]
+i24 : Usize
+_✝⁷ : [> let i24 ← start + 12#usize <]
+i24_post : ↑i24 = ↑start + 12
+i25 : U8
+_✝⁶ : [> let i25 ← bytes.index_usize i24 <]
+i25_post✝ : i25 = (↑bytes)[↑i24]
+i26 : Usize
+_✝⁵ : [> let i26 ← start + 13#usize <]
+i26_post : ↑i26 = ↑start + 13
+i27 : U8
+_✝⁴ : [> let i27 ← bytes.index_usize i26 <]
+i27_post✝ : i27 = (↑bytes)[↑i26]
+i28 : Usize
+_✝³ : [> let i28 ← start + 14#usize <]
+i28_post : ↑i28 = ↑start + 14
+i29 : U8
+_✝² : [> let i29 ← bytes.index_usize i28 <]
+i29_post✝ : i29 = (↑bytes)[↑i28]
+i30 : Usize
+_✝¹ : [> let i30 ← start + 15#usize <]
+i30_post : ↑i30 = ↑start + 15
+i31 : U8
+_✝ : [> let i31 ← bytes.index_usize i30 <]
+i31_post✝ : i31 = (↑bytes)[↑i30]
+s : Slice U8
+_ :
+  [> let s ←
+    lift (Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯).to_slice <]
+assembled : Std.Array U8 16#usize :=
+  Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯
+j : ℕ
+hj : 10 < (↑assembled).length
+hk : 10 < (↑(input r off n index minlen cap positive live range)).length
+i1_post : i1 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32)]
+i3_post : i3 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 1)]
+i5_post : i5 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 2)]
+i7_post : i7 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 3)]
+i9_post : i9 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 4)]
+i11_post : i11 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 5)]
+i13_post : i13 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 6)]
+i15_post : i15 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 7)]
+i17_post : i17 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 8)]
+i19_post : i19 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 9)]
+i21_post : i21 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 10)]
+i23_post : i23 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 11)]
+i25_post : i25 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 12)]
+i27_post : i27 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 13)]
+i29_post : i29 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 14)]
+i31_post : i31 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 15)]
+s_post :
+  s =
+    Array.to_slice
+      ⟨[(↑r.framed)[5 + (32 * ↑off + ↑index * 32)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 1)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 2)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 3)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 4)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 5)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 6)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 7)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 8)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 9)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 10)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 11)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 12)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 13)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 14)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 15)]],
+        ⋯⟩
+⊢ (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 10)] = (↑r.framed)[5 + 32 * (↑off + ↑index) + 10]
+
+case h.«11»
+r : r1_wire.ValidatedRecord
+off byteOffset n index : Usize
+minlen : 5 ≤ (↑r.framed).length
+cap : (↑r.framed).length ≤ 3717
+byteStart : ↑byteOffset = 32 * ↑off
+positive : 0 < ↑n
+live : ↑index < ↑n
+range : 32 * ↑off + 32 * ↑n ≤ (↑r.framed).length - 5
+geometry :
+  ↑off + ↑index < 116 ∧
+    5 + 32 * ↑off + 32 * ↑index + 32 ≤ (↑r.framed).length ∧
+      32 * ↑off + 32 * ↑index + 16 ≤ (↑r.framed).length - 5 ∧ ↑off + ↑n ≤ 116
+i : Usize
+_✝³³ : [> let i ← index * 32#usize <]
+i_post : ↑i = ↑index * 32
+start : Usize
+_✝³² : [> let start ← byteOffset + i <]
+start_post : ↑start = ↑byteOffset + ↑i
+bytes : Slice U8
+_✝³¹ : [> let bytes ← r.payload <]
+bytes_post : ↑bytes = List.drop 5 ↑r.framed
+i1 : U8
+_✝³⁰ : [> let i1 ← bytes.index_usize start <]
+i1_post✝ : i1 = (↑bytes)[↑start]
+i2 : Usize
+_✝²⁹ : [> let i2 ← start + 1#usize <]
+i2_post : ↑i2 = ↑start + 1
+i3 : U8
+_✝²⁸ : [> let i3 ← bytes.index_usize i2 <]
+i3_post✝ : i3 = (↑bytes)[↑i2]
+i4 : Usize
+_✝²⁷ : [> let i4 ← start + 2#usize <]
+i4_post : ↑i4 = ↑start + 2
+i5 : U8
+_✝²⁶ : [> let i5 ← bytes.index_usize i4 <]
+i5_post✝ : i5 = (↑bytes)[↑i4]
+i6 : Usize
+_✝²⁵ : [> let i6 ← start + 3#usize <]
+i6_post : ↑i6 = ↑start + 3
+i7 : U8
+_✝²⁴ : [> let i7 ← bytes.index_usize i6 <]
+i7_post✝ : i7 = (↑bytes)[↑i6]
+i8 : Usize
+_✝²³ : [> let i8 ← start + 4#usize <]
+i8_post : ↑i8 = ↑start + 4
+i9 : U8
+_✝²² : [> let i9 ← bytes.index_usize i8 <]
+i9_post✝ : i9 = (↑bytes)[↑i8]
+i10 : Usize
+_✝²¹ : [> let i10 ← start + 5#usize <]
+i10_post : ↑i10 = ↑start + 5
+i11 : U8
+_✝²⁰ : [> let i11 ← bytes.index_usize i10 <]
+i11_post✝ : i11 = (↑bytes)[↑i10]
+i12 : Usize
+_✝¹⁹ : [> let i12 ← start + 6#usize <]
+i12_post : ↑i12 = ↑start + 6
+i13 : U8
+_✝¹⁸ : [> let i13 ← bytes.index_usize i12 <]
+i13_post✝ : i13 = (↑bytes)[↑i12]
+i14 : Usize
+_✝¹⁷ : [> let i14 ← start + 7#usize <]
+i14_post : ↑i14 = ↑start + 7
+i15 : U8
+_✝¹⁶ : [> let i15 ← bytes.index_usize i14 <]
+i15_post✝ : i15 = (↑bytes)[↑i14]
+i16 : Usize
+_✝¹⁵ : [> let i16 ← start + 8#usize <]
+i16_post : ↑i16 = ↑start + 8
+i17 : U8
+_✝¹⁴ : [> let i17 ← bytes.index_usize i16 <]
+i17_post✝ : i17 = (↑bytes)[↑i16]
+i18 : Usize
+_✝¹³ : [> let i18 ← start + 9#usize <]
+i18_post : ↑i18 = ↑start + 9
+i19 : U8
+_✝¹² : [> let i19 ← bytes.index_usize i18 <]
+i19_post✝ : i19 = (↑bytes)[↑i18]
+i20 : Usize
+_✝¹¹ : [> let i20 ← start + 10#usize <]
+i20_post : ↑i20 = ↑start + 10
+i21 : U8
+_✝¹⁰ : [> let i21 ← bytes.index_usize i20 <]
+i21_post✝ : i21 = (↑bytes)[↑i20]
+i22 : Usize
+_✝⁹ : [> let i22 ← start + 11#usize <]
+i22_post : ↑i22 = ↑start + 11
+i23 : U8
+_✝⁸ : [> let i23 ← bytes.index_usize i22 <]
+i23_post✝ : i23 = (↑bytes)[↑i22]
+i24 : Usize
+_✝⁷ : [> let i24 ← start + 12#usize <]
+i24_post : ↑i24 = ↑start + 12
+i25 : U8
+_✝⁶ : [> let i25 ← bytes.index_usize i24 <]
+i25_post✝ : i25 = (↑bytes)[↑i24]
+i26 : Usize
+_✝⁵ : [> let i26 ← start + 13#usize <]
+i26_post : ↑i26 = ↑start + 13
+i27 : U8
+_✝⁴ : [> let i27 ← bytes.index_usize i26 <]
+i27_post✝ : i27 = (↑bytes)[↑i26]
+i28 : Usize
+_✝³ : [> let i28 ← start + 14#usize <]
+i28_post : ↑i28 = ↑start + 14
+i29 : U8
+_✝² : [> let i29 ← bytes.index_usize i28 <]
+i29_post✝ : i29 = (↑bytes)[↑i28]
+i30 : Usize
+_✝¹ : [> let i30 ← start + 15#usize <]
+i30_post : ↑i30 = ↑start + 15
+i31 : U8
+_✝ : [> let i31 ← bytes.index_usize i30 <]
+i31_post✝ : i31 = (↑bytes)[↑i30]
+s : Slice U8
+_ :
+  [> let s ←
+    lift (Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯).to_slice <]
+assembled : Std.Array U8 16#usize :=
+  Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯
+j : ℕ
+hj : 11 < (↑assembled).length
+hk : 11 < (↑(input r off n index minlen cap positive live range)).length
+i1_post : i1 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32)]
+i3_post : i3 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 1)]
+i5_post : i5 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 2)]
+i7_post : i7 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 3)]
+i9_post : i9 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 4)]
+i11_post : i11 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 5)]
+i13_post : i13 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 6)]
+i15_post : i15 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 7)]
+i17_post : i17 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 8)]
+i19_post : i19 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 9)]
+i21_post : i21 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 10)]
+i23_post : i23 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 11)]
+i25_post : i25 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 12)]
+i27_post : i27 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 13)]
+i29_post : i29 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 14)]
+i31_post : i31 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 15)]
+s_post :
+  s =
+    Array.to_slice
+      ⟨[(↑r.framed)[5 + (32 * ↑off + ↑index * 32)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 1)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 2)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 3)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 4)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 5)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 6)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 7)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 8)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 9)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 10)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 11)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 12)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 13)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 14)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 15)]],
+        ⋯⟩
+⊢ (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 11)] = (↑r.framed)[5 + 32 * (↑off + ↑index) + 11]
+
+case h.«12»
+r : r1_wire.ValidatedRecord
+off byteOffset n index : Usize
+minlen : 5 ≤ (↑r.framed).length
+cap : (↑r.framed).length ≤ 3717
+byteStart : ↑byteOffset = 32 * ↑off
+positive : 0 < ↑n
+live : ↑index < ↑n
+range : 32 * ↑off + 32 * ↑n ≤ (↑r.framed).length - 5
+geometry :
+  ↑off + ↑index < 116 ∧
+    5 + 32 * ↑off + 32 * ↑index + 32 ≤ (↑r.framed).length ∧
+      32 * ↑off + 32 * ↑index + 16 ≤ (↑r.framed).length - 5 ∧ ↑off + ↑n ≤ 116
+i : Usize
+_✝³³ : [> let i ← index * 32#usize <]
+i_post : ↑i = ↑index * 32
+start : Usize
+_✝³² : [> let start ← byteOffset + i <]
+start_post : ↑start = ↑byteOffset + ↑i
+bytes : Slice U8
+_✝³¹ : [> let bytes ← r.payload <]
+bytes_post : ↑bytes = List.drop 5 ↑r.framed
+i1 : U8
+_✝³⁰ : [> let i1 ← bytes.index_usize start <]
+i1_post✝ : i1 = (↑bytes)[↑start]
+i2 : Usize
+_✝²⁹ : [> let i2 ← start + 1#usize <]
+i2_post : ↑i2 = ↑start + 1
+i3 : U8
+_✝²⁸ : [> let i3 ← bytes.index_usize i2 <]
+i3_post✝ : i3 = (↑bytes)[↑i2]
+i4 : Usize
+_✝²⁷ : [> let i4 ← start + 2#usize <]
+i4_post : ↑i4 = ↑start + 2
+i5 : U8
+_✝²⁶ : [> let i5 ← bytes.index_usize i4 <]
+i5_post✝ : i5 = (↑bytes)[↑i4]
+i6 : Usize
+_✝²⁵ : [> let i6 ← start + 3#usize <]
+i6_post : ↑i6 = ↑start + 3
+i7 : U8
+_✝²⁴ : [> let i7 ← bytes.index_usize i6 <]
+i7_post✝ : i7 = (↑bytes)[↑i6]
+i8 : Usize
+_✝²³ : [> let i8 ← start + 4#usize <]
+i8_post : ↑i8 = ↑start + 4
+i9 : U8
+_✝²² : [> let i9 ← bytes.index_usize i8 <]
+i9_post✝ : i9 = (↑bytes)[↑i8]
+i10 : Usize
+_✝²¹ : [> let i10 ← start + 5#usize <]
+i10_post : ↑i10 = ↑start + 5
+i11 : U8
+_✝²⁰ : [> let i11 ← bytes.index_usize i10 <]
+i11_post✝ : i11 = (↑bytes)[↑i10]
+i12 : Usize
+_✝¹⁹ : [> let i12 ← start + 6#usize <]
+i12_post : ↑i12 = ↑start + 6
+i13 : U8
+_✝¹⁸ : [> let i13 ← bytes.index_usize i12 <]
+i13_post✝ : i13 = (↑bytes)[↑i12]
+i14 : Usize
+_✝¹⁷ : [> let i14 ← start + 7#usize <]
+i14_post : ↑i14 = ↑start + 7
+i15 : U8
+_✝¹⁶ : [> let i15 ← bytes.index_usize i14 <]
+i15_post✝ : i15 = (↑bytes)[↑i14]
+i16 : Usize
+_✝¹⁵ : [> let i16 ← start + 8#usize <]
+i16_post : ↑i16 = ↑start + 8
+i17 : U8
+_✝¹⁴ : [> let i17 ← bytes.index_usize i16 <]
+i17_post✝ : i17 = (↑bytes)[↑i16]
+i18 : Usize
+_✝¹³ : [> let i18 ← start + 9#usize <]
+i18_post : ↑i18 = ↑start + 9
+i19 : U8
+_✝¹² : [> let i19 ← bytes.index_usize i18 <]
+i19_post✝ : i19 = (↑bytes)[↑i18]
+i20 : Usize
+_✝¹¹ : [> let i20 ← start + 10#usize <]
+i20_post : ↑i20 = ↑start + 10
+i21 : U8
+_✝¹⁰ : [> let i21 ← bytes.index_usize i20 <]
+i21_post✝ : i21 = (↑bytes)[↑i20]
+i22 : Usize
+_✝⁹ : [> let i22 ← start + 11#usize <]
+i22_post : ↑i22 = ↑start + 11
+i23 : U8
+_✝⁸ : [> let i23 ← bytes.index_usize i22 <]
+i23_post✝ : i23 = (↑bytes)[↑i22]
+i24 : Usize
+_✝⁷ : [> let i24 ← start + 12#usize <]
+i24_post : ↑i24 = ↑start + 12
+i25 : U8
+_✝⁶ : [> let i25 ← bytes.index_usize i24 <]
+i25_post✝ : i25 = (↑bytes)[↑i24]
+i26 : Usize
+_✝⁵ : [> let i26 ← start + 13#usize <]
+i26_post : ↑i26 = ↑start + 13
+i27 : U8
+_✝⁴ : [> let i27 ← bytes.index_usize i26 <]
+i27_post✝ : i27 = (↑bytes)[↑i26]
+i28 : Usize
+_✝³ : [> let i28 ← start + 14#usize <]
+i28_post : ↑i28 = ↑start + 14
+i29 : U8
+_✝² : [> let i29 ← bytes.index_usize i28 <]
+i29_post✝ : i29 = (↑bytes)[↑i28]
+i30 : Usize
+_✝¹ : [> let i30 ← start + 15#usize <]
+i30_post : ↑i30 = ↑start + 15
+i31 : U8
+_✝ : [> let i31 ← bytes.index_usize i30 <]
+i31_post✝ : i31 = (↑bytes)[↑i30]
+s : Slice U8
+_ :
+  [> let s ←
+    lift (Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯).to_slice <]
+assembled : Std.Array U8 16#usize :=
+  Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯
+j : ℕ
+hj : 12 < (↑assembled).length
+hk : 12 < (↑(input r off n index minlen cap positive live range)).length
+i1_post : i1 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32)]
+i3_post : i3 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 1)]
+i5_post : i5 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 2)]
+i7_post : i7 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 3)]
+i9_post : i9 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 4)]
+i11_post : i11 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 5)]
+i13_post : i13 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 6)]
+i15_post : i15 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 7)]
+i17_post : i17 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 8)]
+i19_post : i19 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 9)]
+i21_post : i21 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 10)]
+i23_post : i23 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 11)]
+i25_post : i25 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 12)]
+i27_post : i27 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 13)]
+i29_post : i29 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 14)]
+i31_post : i31 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 15)]
+s_post :
+  s =
+    Array.to_slice
+      ⟨[(↑r.framed)[5 + (32 * ↑off + ↑index * 32)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 1)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 2)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 3)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 4)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 5)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 6)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 7)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 8)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 9)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 10)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 11)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 12)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 13)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 14)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 15)]],
+        ⋯⟩
+⊢ (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 12)] = (↑r.framed)[5 + 32 * (↑off + ↑index) + 12]
+
+case h.«13»
+r : r1_wire.ValidatedRecord
+off byteOffset n index : Usize
+minlen : 5 ≤ (↑r.framed).length
+cap : (↑r.framed).length ≤ 3717
+byteStart : ↑byteOffset = 32 * ↑off
+positive : 0 < ↑n
+live : ↑index < ↑n
+range : 32 * ↑off + 32 * ↑n ≤ (↑r.framed).length - 5
+geometry :
+  ↑off + ↑index < 116 ∧
+    5 + 32 * ↑off + 32 * ↑index + 32 ≤ (↑r.framed).length ∧
+      32 * ↑off + 32 * ↑index + 16 ≤ (↑r.framed).length - 5 ∧ ↑off + ↑n ≤ 116
+i : Usize
+_✝³³ : [> let i ← index * 32#usize <]
+i_post : ↑i = ↑index * 32
+start : Usize
+_✝³² : [> let start ← byteOffset + i <]
+start_post : ↑start = ↑byteOffset + ↑i
+bytes : Slice U8
+_✝³¹ : [> let bytes ← r.payload <]
+bytes_post : ↑bytes = List.drop 5 ↑r.framed
+i1 : U8
+_✝³⁰ : [> let i1 ← bytes.index_usize start <]
+i1_post✝ : i1 = (↑bytes)[↑start]
+i2 : Usize
+_✝²⁹ : [> let i2 ← start + 1#usize <]
+i2_post : ↑i2 = ↑start + 1
+i3 : U8
+_✝²⁸ : [> let i3 ← bytes.index_usize i2 <]
+i3_post✝ : i3 = (↑bytes)[↑i2]
+i4 : Usize
+_✝²⁷ : [> let i4 ← start + 2#usize <]
+i4_post : ↑i4 = ↑start + 2
+i5 : U8
+_✝²⁶ : [> let i5 ← bytes.index_usize i4 <]
+i5_post✝ : i5 = (↑bytes)[↑i4]
+i6 : Usize
+_✝²⁵ : [> let i6 ← start + 3#usize <]
+i6_post : ↑i6 = ↑start + 3
+i7 : U8
+_✝²⁴ : [> let i7 ← bytes.index_usize i6 <]
+i7_post✝ : i7 = (↑bytes)[↑i6]
+i8 : Usize
+_✝²³ : [> let i8 ← start + 4#usize <]
+i8_post : ↑i8 = ↑start + 4
+i9 : U8
+_✝²² : [> let i9 ← bytes.index_usize i8 <]
+i9_post✝ : i9 = (↑bytes)[↑i8]
+i10 : Usize
+_✝²¹ : [> let i10 ← start + 5#usize <]
+i10_post : ↑i10 = ↑start + 5
+i11 : U8
+_✝²⁰ : [> let i11 ← bytes.index_usize i10 <]
+i11_post✝ : i11 = (↑bytes)[↑i10]
+i12 : Usize
+_✝¹⁹ : [> let i12 ← start + 6#usize <]
+i12_post : ↑i12 = ↑start + 6
+i13 : U8
+_✝¹⁸ : [> let i13 ← bytes.index_usize i12 <]
+i13_post✝ : i13 = (↑bytes)[↑i12]
+i14 : Usize
+_✝¹⁷ : [> let i14 ← start + 7#usize <]
+i14_post : ↑i14 = ↑start + 7
+i15 : U8
+_✝¹⁶ : [> let i15 ← bytes.index_usize i14 <]
+i15_post✝ : i15 = (↑bytes)[↑i14]
+i16 : Usize
+_✝¹⁵ : [> let i16 ← start + 8#usize <]
+i16_post : ↑i16 = ↑start + 8
+i17 : U8
+_✝¹⁴ : [> let i17 ← bytes.index_usize i16 <]
+i17_post✝ : i17 = (↑bytes)[↑i16]
+i18 : Usize
+_✝¹³ : [> let i18 ← start + 9#usize <]
+i18_post : ↑i18 = ↑start + 9
+i19 : U8
+_✝¹² : [> let i19 ← bytes.index_usize i18 <]
+i19_post✝ : i19 = (↑bytes)[↑i18]
+i20 : Usize
+_✝¹¹ : [> let i20 ← start + 10#usize <]
+i20_post : ↑i20 = ↑start + 10
+i21 : U8
+_✝¹⁰ : [> let i21 ← bytes.index_usize i20 <]
+i21_post✝ : i21 = (↑bytes)[↑i20]
+i22 : Usize
+_✝⁹ : [> let i22 ← start + 11#usize <]
+i22_post : ↑i22 = ↑start + 11
+i23 : U8
+_✝⁸ : [> let i23 ← bytes.index_usize i22 <]
+i23_post✝ : i23 = (↑bytes)[↑i22]
+i24 : Usize
+_✝⁷ : [> let i24 ← start + 12#usize <]
+i24_post : ↑i24 = ↑start + 12
+i25 : U8
+_✝⁶ : [> let i25 ← bytes.index_usize i24 <]
+i25_post✝ : i25 = (↑bytes)[↑i24]
+i26 : Usize
+_✝⁵ : [> let i26 ← start + 13#usize <]
+i26_post : ↑i26 = ↑start + 13
+i27 : U8
+_✝⁴ : [> let i27 ← bytes.index_usize i26 <]
+i27_post✝ : i27 = (↑bytes)[↑i26]
+i28 : Usize
+_✝³ : [> let i28 ← start + 14#usize <]
+i28_post : ↑i28 = ↑start + 14
+i29 : U8
+_✝² : [> let i29 ← bytes.index_usize i28 <]
+i29_post✝ : i29 = (↑bytes)[↑i28]
+i30 : Usize
+_✝¹ : [> let i30 ← start + 15#usize <]
+i30_post : ↑i30 = ↑start + 15
+i31 : U8
+_✝ : [> let i31 ← bytes.index_usize i30 <]
+i31_post✝ : i31 = (↑bytes)[↑i30]
+s : Slice U8
+_ :
+  [> let s ←
+    lift (Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯).to_slice <]
+assembled : Std.Array U8 16#usize :=
+  Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯
+j : ℕ
+hj : 13 < (↑assembled).length
+hk : 13 < (↑(input r off n index minlen cap positive live range)).length
+i1_post : i1 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32)]
+i3_post : i3 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 1)]
+i5_post : i5 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 2)]
+i7_post : i7 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 3)]
+i9_post : i9 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 4)]
+i11_post : i11 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 5)]
+i13_post : i13 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 6)]
+i15_post : i15 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 7)]
+i17_post : i17 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 8)]
+i19_post : i19 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 9)]
+i21_post : i21 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 10)]
+i23_post : i23 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 11)]
+i25_post : i25 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 12)]
+i27_post : i27 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 13)]
+i29_post : i29 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 14)]
+i31_post : i31 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 15)]
+s_post :
+  s =
+    Array.to_slice
+      ⟨[(↑r.framed)[5 + (32 * ↑off + ↑index * 32)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 1)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 2)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 3)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 4)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 5)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 6)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 7)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 8)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 9)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 10)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 11)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 12)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 13)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 14)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 15)]],
+        ⋯⟩
+⊢ (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 13)] = (↑r.framed)[5 + 32 * (↑off + ↑index) + 13]
+
+case h.«14»
+r : r1_wire.ValidatedRecord
+off byteOffset n index : Usize
+minlen : 5 ≤ (↑r.framed).length
+cap : (↑r.framed).length ≤ 3717
+byteStart : ↑byteOffset = 32 * ↑off
+positive : 0 < ↑n
+live : ↑index < ↑n
+range : 32 * ↑off + 32 * ↑n ≤ (↑r.framed).length - 5
+geometry :
+  ↑off + ↑index < 116 ∧
+    5 + 32 * ↑off + 32 * ↑index + 32 ≤ (↑r.framed).length ∧
+      32 * ↑off + 32 * ↑index + 16 ≤ (↑r.framed).length - 5 ∧ ↑off + ↑n ≤ 116
+i : Usize
+_✝³³ : [> let i ← index * 32#usize <]
+i_post : ↑i = ↑index * 32
+start : Usize
+_✝³² : [> let start ← byteOffset + i <]
+start_post : ↑start = ↑byteOffset + ↑i
+bytes : Slice U8
+_✝³¹ : [> let bytes ← r.payload <]
+bytes_post : ↑bytes = List.drop 5 ↑r.framed
+i1 : U8
+_✝³⁰ : [> let i1 ← bytes.index_usize start <]
+i1_post✝ : i1 = (↑bytes)[↑start]
+i2 : Usize
+_✝²⁹ : [> let i2 ← start + 1#usize <]
+i2_post : ↑i2 = ↑start + 1
+i3 : U8
+_✝²⁸ : [> let i3 ← bytes.index_usize i2 <]
+i3_post✝ : i3 = (↑bytes)[↑i2]
+i4 : Usize
+_✝²⁷ : [> let i4 ← start + 2#usize <]
+i4_post : ↑i4 = ↑start + 2
+i5 : U8
+_✝²⁶ : [> let i5 ← bytes.index_usize i4 <]
+i5_post✝ : i5 = (↑bytes)[↑i4]
+i6 : Usize
+_✝²⁵ : [> let i6 ← start + 3#usize <]
+i6_post : ↑i6 = ↑start + 3
+i7 : U8
+_✝²⁴ : [> let i7 ← bytes.index_usize i6 <]
+i7_post✝ : i7 = (↑bytes)[↑i6]
+i8 : Usize
+_✝²³ : [> let i8 ← start + 4#usize <]
+i8_post : ↑i8 = ↑start + 4
+i9 : U8
+_✝²² : [> let i9 ← bytes.index_usize i8 <]
+i9_post✝ : i9 = (↑bytes)[↑i8]
+i10 : Usize
+_✝²¹ : [> let i10 ← start + 5#usize <]
+i10_post : ↑i10 = ↑start + 5
+i11 : U8
+_✝²⁰ : [> let i11 ← bytes.index_usize i10 <]
+i11_post✝ : i11 = (↑bytes)[↑i10]
+i12 : Usize
+_✝¹⁹ : [> let i12 ← start + 6#usize <]
+i12_post : ↑i12 = ↑start + 6
+i13 : U8
+_✝¹⁸ : [> let i13 ← bytes.index_usize i12 <]
+i13_post✝ : i13 = (↑bytes)[↑i12]
+i14 : Usize
+_✝¹⁷ : [> let i14 ← start + 7#usize <]
+i14_post : ↑i14 = ↑start + 7
+i15 : U8
+_✝¹⁶ : [> let i15 ← bytes.index_usize i14 <]
+i15_post✝ : i15 = (↑bytes)[↑i14]
+i16 : Usize
+_✝¹⁵ : [> let i16 ← start + 8#usize <]
+i16_post : ↑i16 = ↑start + 8
+i17 : U8
+_✝¹⁴ : [> let i17 ← bytes.index_usize i16 <]
+i17_post✝ : i17 = (↑bytes)[↑i16]
+i18 : Usize
+_✝¹³ : [> let i18 ← start + 9#usize <]
+i18_post : ↑i18 = ↑start + 9
+i19 : U8
+_✝¹² : [> let i19 ← bytes.index_usize i18 <]
+i19_post✝ : i19 = (↑bytes)[↑i18]
+i20 : Usize
+_✝¹¹ : [> let i20 ← start + 10#usize <]
+i20_post : ↑i20 = ↑start + 10
+i21 : U8
+_✝¹⁰ : [> let i21 ← bytes.index_usize i20 <]
+i21_post✝ : i21 = (↑bytes)[↑i20]
+i22 : Usize
+_✝⁹ : [> let i22 ← start + 11#usize <]
+i22_post : ↑i22 = ↑start + 11
+i23 : U8
+_✝⁸ : [> let i23 ← bytes.index_usize i22 <]
+i23_post✝ : i23 = (↑bytes)[↑i22]
+i24 : Usize
+_✝⁷ : [> let i24 ← start + 12#usize <]
+i24_post : ↑i24 = ↑start + 12
+i25 : U8
+_✝⁶ : [> let i25 ← bytes.index_usize i24 <]
+i25_post✝ : i25 = (↑bytes)[↑i24]
+i26 : Usize
+_✝⁵ : [> let i26 ← start + 13#usize <]
+i26_post : ↑i26 = ↑start + 13
+i27 : U8
+_✝⁴ : [> let i27 ← bytes.index_usize i26 <]
+i27_post✝ : i27 = (↑bytes)[↑i26]
+i28 : Usize
+_✝³ : [> let i28 ← start + 14#usize <]
+i28_post : ↑i28 = ↑start + 14
+i29 : U8
+_✝² : [> let i29 ← bytes.index_usize i28 <]
+i29_post✝ : i29 = (↑bytes)[↑i28]
+i30 : Usize
+_✝¹ : [> let i30 ← start + 15#usize <]
+i30_post : ↑i30 = ↑start + 15
+i31 : U8
+_✝ : [> let i31 ← bytes.index_usize i30 <]
+i31_post✝ : i31 = (↑bytes)[↑i30]
+s : Slice U8
+_ :
+  [> let s ←
+    lift (Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯).to_slice <]
+assembled : Std.Array U8 16#usize :=
+  Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯
+j : ℕ
+hj : 14 < (↑assembled).length
+hk : 14 < (↑(input r off n index minlen cap positive live range)).length
+i1_post : i1 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32)]
+i3_post : i3 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 1)]
+i5_post : i5 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 2)]
+i7_post : i7 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 3)]
+i9_post : i9 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 4)]
+i11_post : i11 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 5)]
+i13_post : i13 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 6)]
+i15_post : i15 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 7)]
+i17_post : i17 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 8)]
+i19_post : i19 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 9)]
+i21_post : i21 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 10)]
+i23_post : i23 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 11)]
+i25_post : i25 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 12)]
+i27_post : i27 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 13)]
+i29_post : i29 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 14)]
+i31_post : i31 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 15)]
+s_post :
+  s =
+    Array.to_slice
+      ⟨[(↑r.framed)[5 + (32 * ↑off + ↑index * 32)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 1)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 2)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 3)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 4)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 5)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 6)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 7)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 8)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 9)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 10)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 11)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 12)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 13)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 14)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 15)]],
+        ⋯⟩
+⊢ (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 14)] = (↑r.framed)[5 + 32 * (↑off + ↑index) + 14]
+
+case h.«15»
+r : r1_wire.ValidatedRecord
+off byteOffset n index : Usize
+minlen : 5 ≤ (↑r.framed).length
+cap : (↑r.framed).length ≤ 3717
+byteStart : ↑byteOffset = 32 * ↑off
+positive : 0 < ↑n
+live : ↑index < ↑n
+range : 32 * ↑off + 32 * ↑n ≤ (↑r.framed).length - 5
+geometry :
+  ↑off + ↑index < 116 ∧
+    5 + 32 * ↑off + 32 * ↑index + 32 ≤ (↑r.framed).length ∧
+      32 * ↑off + 32 * ↑index + 16 ≤ (↑r.framed).length - 5 ∧ ↑off + ↑n ≤ 116
+i : Usize
+_✝³³ : [> let i ← index * 32#usize <]
+i_post : ↑i = ↑index * 32
+start : Usize
+_✝³² : [> let start ← byteOffset + i <]
+start_post : ↑start = ↑byteOffset + ↑i
+bytes : Slice U8
+_✝³¹ : [> let bytes ← r.payload <]
+bytes_post : ↑bytes = List.drop 5 ↑r.framed
+i1 : U8
+_✝³⁰ : [> let i1 ← bytes.index_usize start <]
+i1_post✝ : i1 = (↑bytes)[↑start]
+i2 : Usize
+_✝²⁹ : [> let i2 ← start + 1#usize <]
+i2_post : ↑i2 = ↑start + 1
+i3 : U8
+_✝²⁸ : [> let i3 ← bytes.index_usize i2 <]
+i3_post✝ : i3 = (↑bytes)[↑i2]
+i4 : Usize
+_✝²⁷ : [> let i4 ← start + 2#usize <]
+i4_post : ↑i4 = ↑start + 2
+i5 : U8
+_✝²⁶ : [> let i5 ← bytes.index_usize i4 <]
+i5_post✝ : i5 = (↑bytes)[↑i4]
+i6 : Usize
+_✝²⁵ : [> let i6 ← start + 3#usize <]
+i6_post : ↑i6 = ↑start + 3
+i7 : U8
+_✝²⁴ : [> let i7 ← bytes.index_usize i6 <]
+i7_post✝ : i7 = (↑bytes)[↑i6]
+i8 : Usize
+_✝²³ : [> let i8 ← start + 4#usize <]
+i8_post : ↑i8 = ↑start + 4
+i9 : U8
+_✝²² : [> let i9 ← bytes.index_usize i8 <]
+i9_post✝ : i9 = (↑bytes)[↑i8]
+i10 : Usize
+_✝²¹ : [> let i10 ← start + 5#usize <]
+i10_post : ↑i10 = ↑start + 5
+i11 : U8
+_✝²⁰ : [> let i11 ← bytes.index_usize i10 <]
+i11_post✝ : i11 = (↑bytes)[↑i10]
+i12 : Usize
+_✝¹⁹ : [> let i12 ← start + 6#usize <]
+i12_post : ↑i12 = ↑start + 6
+i13 : U8
+_✝¹⁸ : [> let i13 ← bytes.index_usize i12 <]
+i13_post✝ : i13 = (↑bytes)[↑i12]
+i14 : Usize
+_✝¹⁷ : [> let i14 ← start + 7#usize <]
+i14_post : ↑i14 = ↑start + 7
+i15 : U8
+_✝¹⁶ : [> let i15 ← bytes.index_usize i14 <]
+i15_post✝ : i15 = (↑bytes)[↑i14]
+i16 : Usize
+_✝¹⁵ : [> let i16 ← start + 8#usize <]
+i16_post : ↑i16 = ↑start + 8
+i17 : U8
+_✝¹⁴ : [> let i17 ← bytes.index_usize i16 <]
+i17_post✝ : i17 = (↑bytes)[↑i16]
+i18 : Usize
+_✝¹³ : [> let i18 ← start + 9#usize <]
+i18_post : ↑i18 = ↑start + 9
+i19 : U8
+_✝¹² : [> let i19 ← bytes.index_usize i18 <]
+i19_post✝ : i19 = (↑bytes)[↑i18]
+i20 : Usize
+_✝¹¹ : [> let i20 ← start + 10#usize <]
+i20_post : ↑i20 = ↑start + 10
+i21 : U8
+_✝¹⁰ : [> let i21 ← bytes.index_usize i20 <]
+i21_post✝ : i21 = (↑bytes)[↑i20]
+i22 : Usize
+_✝⁹ : [> let i22 ← start + 11#usize <]
+i22_post : ↑i22 = ↑start + 11
+i23 : U8
+_✝⁸ : [> let i23 ← bytes.index_usize i22 <]
+i23_post✝ : i23 = (↑bytes)[↑i22]
+i24 : Usize
+_✝⁷ : [> let i24 ← start + 12#usize <]
+i24_post : ↑i24 = ↑start + 12
+i25 : U8
+_✝⁶ : [> let i25 ← bytes.index_usize i24 <]
+i25_post✝ : i25 = (↑bytes)[↑i24]
+i26 : Usize
+_✝⁵ : [> let i26 ← start + 13#usize <]
+i26_post : ↑i26 = ↑start + 13
+i27 : U8
+_✝⁴ : [> let i27 ← bytes.index_usize i26 <]
+i27_post✝ : i27 = (↑bytes)[↑i26]
+i28 : Usize
+_✝³ : [> let i28 ← start + 14#usize <]
+i28_post : ↑i28 = ↑start + 14
+i29 : U8
+_✝² : [> let i29 ← bytes.index_usize i28 <]
+i29_post✝ : i29 = (↑bytes)[↑i28]
+i30 : Usize
+_✝¹ : [> let i30 ← start + 15#usize <]
+i30_post : ↑i30 = ↑start + 15
+i31 : U8
+_✝ : [> let i31 ← bytes.index_usize i30 <]
+i31_post✝ : i31 = (↑bytes)[↑i30]
+s : Slice U8
+_ :
+  [> let s ←
+    lift (Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯).to_slice <]
+assembled : Std.Array U8 16#usize :=
+  Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯
+j : ℕ
+hj : 15 < (↑assembled).length
+hk : 15 < (↑(input r off n index minlen cap positive live range)).length
+i1_post : i1 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32)]
+i3_post : i3 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 1)]
+i5_post : i5 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 2)]
+i7_post : i7 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 3)]
+i9_post : i9 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 4)]
+i11_post : i11 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 5)]
+i13_post : i13 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 6)]
+i15_post : i15 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 7)]
+i17_post : i17 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 8)]
+i19_post : i19 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 9)]
+i21_post : i21 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 10)]
+i23_post : i23 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 11)]
+i25_post : i25 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 12)]
+i27_post : i27 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 13)]
+i29_post : i29 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 14)]
+i31_post : i31 = (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 15)]
+s_post :
+  s =
+    Array.to_slice
+      ⟨[(↑r.framed)[5 + (32 * ↑off + ↑index * 32)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 1)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 2)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 3)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 4)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 5)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 6)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 7)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 8)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 9)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 10)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 11)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 12)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 13)],
+          (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 14)], (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 15)]],
+        ⋯⟩
+⊢ (↑r.framed)[5 + (32 * ↑off + ↑index * 32 + 15)] = (↑r.framed)[5 + 32 * (↑off + ↑index) + 15]
+NGD_generated/NGD_DecodeValueLaw.lean:62:34: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.NonCanonical` could not be determined
+
+Hint: Using `r1_wire.Error.NonCanonical would be unambiguous:
+  [apply] `r1_wire.Error.NonCanonical`
+'NGD_DecodeValueLaw.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

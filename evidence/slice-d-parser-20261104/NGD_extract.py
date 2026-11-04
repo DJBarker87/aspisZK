@@ -2,7 +2,7 @@
 from pathlib import Path
 import json,subprocess,os,sys,hashlib
 B=Path(__file__).resolve().parent;x=json.loads((B/sys.argv[1]).read_text());a=x['attempt'];target=x['module']
-roots={'NGD_ParserG':'crate::parse_g','NGD_AtG':'crate::parse_at_g','NGD_SlotRef':'crate::slot_offset'};assert target in roots
+roots={'NGD_ParserG':'crate::parse_g','NGD_AtG':'crate::parse_at_g','NGD_SlotRef':'crate::slot_offset','NGD_ExpandRef':'crate::expand_semantic'};assert target in roots
 C=Path('/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon');A=C.parent/'aeneas-b59d5188-extended';sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 assert sha(C)=='daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8'
 assert sha(A)=='c0cf4fccb0879db4ce342da991f6215732a19fc01345b9eec84e632f4673b958'

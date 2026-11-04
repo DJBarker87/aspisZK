@@ -1,0 +1,7 @@
+{
+  "frozen_body": "fn parse_record_at<'a>(\n    bytes: &'a [u8],\n    row: u8,\n    offset: usize,\n) -> Result<(&'a [u8], usize), Error> {\n    let length = 5 + row_shape(row).unwrap().1;\n    let framed = bytes\n        .get(offset..offset + length)\n        .ok_or(Error::Length { row })?;\n    parse_record(row, framed)?;\n    Ok((framed, offset + length))\n}",
+  "frozen_body_sha256": "25a4d06951d9fd60f8386cf2d36f2e167fe599184a9463e4c80aac594ae19db0",
+  "instrumented_body": "fn native_parse_at<'a>(bytes:&'a[u8],row:u8,offset:usize,log:&mut ParseLog)->Result<(&'a[u8],usize),Error> {\n    let length = 5 + row_shape(row).unwrap().1;\n    let framed = bytes\n        .get(offset..offset + length)\n        .ok_or(Error::Length { row })?;\n    parse_capture(row, framed, log)?;\n    Ok((framed, offset + length))\n}",
+  "status": "CANDIDATE; original get and unchecked-add sequence retained, arbitrary full Error child reply, borrowed success place fixed to child frame contract",
+  "root_domain": "row<27 and offset<=usize::MAX-(5+row_shape(row).unwrap().1); cursor bound must be derived by each actual caller"
+}

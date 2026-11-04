@@ -1,0 +1,75 @@
+{"attempt": "NGD_L056", "exit_status": 1, "wall_seconds": 12.51039572712034, "peak_rss_kib": "3790220", "swaps": "0", "print_axioms": ["'NGD_DecodeValueLaw.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NGD_generated/NGD_DecodeValueLaw.lean:55:8: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 32
+  0 ≤ d ≤ 15
+  c ≥ 0
+  c ≥ 0
+  b ≥ 1
+  b - c ≥ 1
+  32*b - 32*c - e ≤ 0
+  a ≥ 0
+  0 ≤ a + c ≤ 115
+  a + c ≥ 0
+  a + c ≥ 0
+  a + c ≥ 0
+  a + c ≥ 0
+  a + c ≥ 0
+  a + c ≥ 0
+  a + c ≥ 0
+  a + c ≥ 0
+  a + c ≥ 0
+  a + c ≥ 0
+  a + c ≥ 0
+  a + c ≥ 0
+  a + c ≥ 0
+  a + c ≥ 0
+  a + c ≥ 0
+  a + c ≥ 0
+  a + b ≤ 116
+  0 ≤ 32*a + 32*c + e ≤ 3712
+where
+ a := ↑↑off
+ b := ↑↑n
+ c := ↑↑index
+ d := ↑[i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31].length
+ e := ↑((↑r.framed).length - (5 + 32 * (↑off + ↑index)))
+NGD_generated/NGD_DecodeValueLaw.
+...
+25, i27, i29, i31] ⋯).to_slice
+assembled : Std.Array U8 16#usize :=
+  Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯
+same : assembled = input r off n index minlen cap positive live range
+o : Option aspis_core.field.QM31
+_✝ : [> let o ← aspis_core.field.QM31.from_le_bytes (input r off n index minlen cap positive live range).to_slice <]
+o_post :
+  o =
+    Option.map AspisR1.ActualDecodeKStrictQM31Parser.limbsToActual
+      (AspisR1.RetainedFieldByteCodec.decodeQM31LE
+        (AspisR1.CandidateParserByteOrder.arrayBytes16 (input r off n index minlen cap positive live range)))
+i32 : Usize
+_ : [> let i32 ← off + index <]
+i32_post : ↑i32 = ↑off + ↑index
+lastEq : i32 = errorIndex r off n index minlen cap positive live range
+⊢ (match
+      Option.map AspisR1.ActualDecodeKStrictQM31Parser.limbsToActual
+        (AspisR1.RetainedFieldByteCodec.decodeQM31LE
+          (AspisR1.CandidateParserByteOrder.arrayBytes16 (input r off n index minlen cap positive live range))) with
+    | none =>
+      ok
+        (core.result.Result.Err
+          (r1_wire.Error.NonCanonical r.row (errorIndex r off n index minlen cap positive live range)))
+    | some v => ok (core.result.Result.Ok v)) ⦃
+    out =>
+    out =
+      match
+        Option.map AspisR1.ActualDecodeKStrictQM31Parser.limbsToActual
+          (AspisR1.RetainedFieldByteCodec.decodeQM31LE
+            (AspisR1.CandidateParserByteOrder.arrayBytes16 (input r off n index minlen cap positive live range))) with
+      | none =>
+        core.result.Result.Err
+          (r1_wire.Error.NonCanonical r.row (errorIndex r off n index minlen cap positive live range))
+      | some q => core.result.Result.Ok q ⦄
+'NGD_DecodeValueLaw.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf1675c7d51b7433597b7b02f06f7a35f.scope; invocation ID: 334bc8f643f94b40a989051655a752a6

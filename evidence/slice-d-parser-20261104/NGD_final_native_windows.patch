@@ -1,0 +1,16 @@
+--- a/crates/aspis-r1-cost-probe/src/NGD_compact.rs
++++ b/crates/aspis-r1-cost-probe/src/NGD_compact.rs
+@@ -105,3 +105,13 @@
+ semantic_gate!(semantic_row25_callsite,25,2);
+ semantic_gate!(semantic_row26_callsite,26,2);
+ semantic_gate!(semantic_low_callsite,2,2);
++
++#[kani::proof]#[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn semantic_low_all(){let row:u8=kani::any();kani::assume(row<14);semantic_cut(row,2);}
++fn copy_frame<const N:usize>(){let input:[u8;N]=kani::any();let mut output:[u8;96]=kani::any();let at:usize=kani::any();kani::assume(at<=96-N);let j:usize=kani::any();kani::assume(j<96);let old=output[j];let ptr=output.as_ptr();output[at..at+N].copy_from_slice(&input);let expected=if at<=j&&j<at+N{input[j-at]}else{old};assert!((output[j]==expected&&output.as_ptr()==ptr) != cfg!(NGD_invert));}
++macro_rules! copyframe{($name:ident,$n:expr)=>{#[kani::proof]#[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]fn $name(){copy_frame::<$n>()}};}
++copyframe!(semantic_header5_frame,5);copyframe!(semantic_payload32_frame,32);

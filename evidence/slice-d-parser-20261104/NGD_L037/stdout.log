@@ -1,0 +1,158 @@
+NGD_generated/NGD_ParseReference.lean:41:4: error: Tactic `rfl` failed: The left-hand side
+  mapResult NGD_ErrorPort.mapError
+    (let (tag, size) := (tag, size)
+    if (record.len != Usize.wrapping_add 5#usize size) = true then
+      ok (core.result.Result.Err (NGD_AtG.Error.Length row))
+    else do
+      let i2 ← record.index_usize 0#usize
+      if (i2 != tag) = true then ok (core.result.Result.Err (NGD_AtG.Error.Tag row))
+        else do
+          let i3 ← record.index_usize 1#usize
+          let i4 ← record.index_usize 2#usize
+          let i5 ← record.index_usize 3#usize
+          let i6 ← record.index_usize 4#usize
+          if
+                (UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes (Array.make 4#usize [i3, i4, i5, i6] ⋯)) !=
+                    size) =
+                  true then
+              ok (core.result.Result.Err (NGD_AtG.Error.Length row))
+            else do
+              let payload ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) record
+                    { start := 5#usize }
+              let cf1 ←
+                match reply with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok payload)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+                    (core.convert.FromSame NGD_AtG.Error) residual)
+is not definitionally equal to the right-hand side
+  let (tag, size) := (tag, size)
+  do
+  let i1 ← 5#usize + size
+  if (record.len != i1) = true then ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length row))
+    else do
+      let i2 ← record.index_usize 0#usize
+      if (i2 != tag) = true then ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Tag row))
+        else do
+          let i3 ← record.index_usize 1#usize
+          let i4 ← record.index_usize 2#usize
+          let i5 ← record.index_usize 3#usize
+          let i6 ← record.index_usize 4#usize
+          if
+                (UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes (Array.make 4#usize [i3, i4, i5, i6] ⋯)) !=
+                    size) =
+                  true then
+              ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length row))
+            else do
+              let payload ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) record
+                    { start := 5#usize }
+              let cf1 ←
+                match NGD_ErrorPort.mapError reply with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok payload)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+                    (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+
+case isTrue
+row tag : U8
+size total : Usize
+record : Slice U8
+reply : core.result.Result Unit NGD_AtG.Error
+shape : NGD_AtG.shape row = ok (some (tag, size))
+add : 5#usize + size = ok total
+sourceShape : AspisR1PrefixAggregateParser.r1_wire.row_shape row = ok (some (tag, size))
+wrap : Usize.wrapping_add 5#usize size = total
+h✝ : row ≥ 14#u8
+⊢ mapResult NGD_ErrorPort.mapError
+      (let (tag, size) := (tag, size)
+      if (record.len != Usize.wrapping_add 5#usize size) = true then
+        ok (core.result.Result.Err (NGD_AtG.Error.Length row))
+      else do
+        let i2 ← record.index_usize 0#usize
+        if (i2 != tag) = true then ok (core.result.Result.Err (NGD_AtG.Error.Tag row))
+          else do
+            let i3 ← record.index_usize 1#usize
+            let i4 ← record.index_usize 2#usize
+            let i5 ← record.index_usize 3#usize
+            let i6 ← record.index_usize 4#usize
+            if
+                  (UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes (Array.make 4#usize [i3, i4, i5, i6] ⋯)) !=
+                      size) =
+                    true then
+                ok (core.result.Result.Err (NGD_AtG.Error.Length row))
+              else do
+                let payload ←
+                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) record
+                      { start := 5#usize }
+                let cf1 ←
+                  match reply with
+                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    | core.result.Result.Err e =>
+                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok payload)
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+                      (core.convert.FromSame NGD_AtG.Error) residual) =
+    let (tag, size) := (tag, size)
+    do
+    let i1 ← 5#usize + size
+    if (record.len != i1) = true then
+        ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length row))
+      else do
+        let i2 ← record.index_usize 0#usize
+        if (i2 != tag) = true then ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Tag row))
+          else do
+            let i3 ← record.index_usize 1#usize
+            let i4 ← record.index_usize 2#usize
+            let i5 ← record.index_usize 3#usize
+            let i6 ← record.index_usize 4#usize
+            if
+                  (UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes (Array.make 4#usize [i3, i4, i5, i6] ⋯)) !=
+                      size) =
+                    true then
+                ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length row))
+              else do
+                let payload ←
+                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) record
+                      { start := 5#usize }
+                let cf1 ←
+                  match NGD_ErrorPort.mapError reply with
+                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    | core.result.Result.Err e =>
+                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok payload)
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+                      (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+NGD_generated/NGD_ParseReference.lean:42:4: error: `simp` made no progress
+NGD_generated/NGD_ParseReference.lean:39:58: warning: This simp argument is unused:
+  add
+
+Hint: Omit it from the simp argument list.
+  simp only [shape, ̲sourceShape, ̲NGD_AtG.core.option.Option.ok_or,
+      AspisR1PrefixAggregateParser.core.option.Option.ok_or,
+      core.result.Result.Insts.CoreOpsTry.branch, ̲bind_tc_ok,a̵d̵d̵,̵ ̲wrap, ̲lift]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGD_generated/NGD_ParseReference.lean:39:62: warning: This simp argument is unused:
+  wrap
+
+Hint: Omit it from the simp argument list.
+  simp only [shape, ̲sourceShape, ̲NGD_AtG.core.option.Option.ok_or,
+      AspisR1PrefixAggregateParser.core.option.Option.ok_or,
+      core.result.Result.Insts.CoreOpsTry.branch, ̲bind_tc_ok, ̲ad̵d̵d̲d̲,w̵r̵a̵p̵,̵ ̲lift]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NGD_ParseReference.map_bind' does not depend on any axioms
+'NGD_ParseReference.wrap_checked' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NGD_ParseReference.framed_cut' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

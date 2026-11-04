@@ -19,3 +19,45 @@ pub fn parse_at_g(bytes:&[u8],row:u8,offset:usize,reply:Result<(),Error>)->Resul
 pub const SLOT_NODES:[usize;6]=[146,146,128,172,172,150];
 pub const OFF_NODES:usize=28359;
 pub const fn slot_offset(slot:usize)->usize{let mut at=OFF_NODES;let mut i=0;while i<slot{at+=32*SLOT_NODES[i];i+=1;}at}
+
+#[derive(Clone,Copy)]pub enum CodecError{Length,NonZeroHigh,NonCanonical}
+pub const SEMANTIC_ROWS:u8=27;
+pub const COMPACT_SEMANTIC:usize=7015;
+pub const LOGICAL_SEMANTIC:usize=13831;
+fn row_shape(row:u8)->Option<(u8,usize)>{shape(row)}
+fn compact_row(row:u8)->bool{row>=14}
+pub fn expand_values(compact: &[u8], out: &mut [u8]) -> Result<(), CodecError> {
+    if compact.len() % 16 != 0 || out.len() != 2 * compact.len() {
+        return Err(CodecError::Length);
+    }
+    for (c, o) in compact.chunks_exact(16).zip(out.chunks_exact_mut(32)) {
+        o[..16].copy_from_slice(c);
+        o[16..].fill(0);
+    }
+    Ok(())
+}
+pub fn expand_semantic(compact: &[u8], out: &mut [u8]) -> Result<(), CodecError> {
+    if compact.len() != COMPACT_SEMANTIC || out.len() != LOGICAL_SEMANTIC {
+        return Err(CodecError::Length);
+    }
+    out[..32].copy_from_slice(&compact[..32]);
+    let (mut src, mut dst) = (32, 32);
+    for row in 0..SEMANTIC_ROWS {
+        let size = row_shape(row).ok_or(CodecError::Length)?.1;
+        out[dst..dst + 5].copy_from_slice(&compact[src..src + 5]);
+        src += 5;
+        dst += 5;
+        if compact_row(row) {
+            expand_values(&compact[src..src + size / 2], &mut out[dst..dst + size])?;
+            src += size / 2;
+        } else {
+            out[dst..dst + size].copy_from_slice(&compact[src..src + size]);
+            src += size;
+        }
+        dst += size;
+    }
+    if src != compact.len() || dst != out.len() {
+        return Err(CodecError::Length);
+    }
+    Ok(())
+}

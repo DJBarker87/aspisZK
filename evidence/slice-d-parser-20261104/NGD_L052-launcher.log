@@ -1,0 +1,57 @@
+{"attempt": "NGD_L052", "exit_status": 1, "wall_seconds": 6.2396851379889995, "peak_rss_kib": "3778572", "swaps": "0", "print_axioms": ["'NGD_DecodeValueTotal.q_parser_spec' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NGD_DecodeValueTotal.payload_spec' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NGD_DecodeValueTotal.value_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NGD_generated/NGD_DecodeValueTotal.lean:7:2: warning: `progress` has been renamed to `step`. The `progress` syntax is deprecated and will be removed in a future version. Set `set_option Aeneas.Deprecated.progressWarning false` to silence this warning.
+NGD_generated/NGD_DecodeValueTotal.lean:15:2: warning: `progress` has been renamed to `step`. The `progress` syntax is deprecated and will be removed in a future version. Set `set_option Aeneas.Deprecated.progressWarning false` to silence this warning.
+NGD_generated/NGD_DecodeValueTotal.lean:28:89: error: unsolved goals
+r : r1_wire.ValidatedRecord
+off byteOffset n i✝ : Usize
+minlen : 5 ≤ (↑r.framed).length
+cap : (↑r.framed).length ≤ 3717
+start✝
+...
+e
+_✝⁷ : [> let i26 ← start + 13#usize <]
+i26_post : ↑i26 = ↑start + 13
+i27 : U8
+_✝⁶ : [> let i27 ← bytes.index_usize i26 <]
+i27_post : i27 = (↑bytes)[↑i26]
+i28 : Usize
+_✝⁵ : [> let i28 ← start + 14#usize <]
+i28_post : ↑i28 = ↑start + 14
+i29 : U8
+_✝⁴ : [> let i29 ← bytes.index_usize i28 <]
+i29_post : i29 = (↑bytes)[↑i28]
+i30 : Usize
+_✝³ : [> let i30 ← start + 15#usize <]
+i30_post : ↑i30 = ↑start + 15
+i31 : U8
+_✝² : [> let i31 ← bytes.index_usize i30 <]
+i31_post : i31 = (↑bytes)[↑i30]
+s : Slice U8
+_✝¹ :
+  [> let s ←
+    lift (Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯).to_slice <]
+s_post :
+  s = (Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯).to_slice
+o : Option aspis_core.field.QM31
+_✝ :
+  [> let o ←
+    aspis_core.field.QM31.from_le_bytes
+      (Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯).to_slice <]
+o_post :
+  o =
+    Option.map AspisR1.ActualDecodeKStrictQM31Parser.limbsToActual
+      (AspisR1.RetainedFieldByteCodec.decodeQM31LE
+        (AspisR1.CandidateParserByteOrder.arrayBytes16
+          (Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯)))
+i32 : Usize
+_ : [> let i32 ← off + i✝ <]
+i32_post : ↑i32 = ↑off + ↑i✝
+⊢ (match o with
+    | none => ok (core.result.Result.Err (r1_wire.Error.NonCanonical r.row i32))
+    | some v => ok (core.result.Result.Ok v)) ⦃
+    x✝ => True ⦄
+'NGD_DecodeValueTotal.q_parser_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NGD_DecodeValueTotal.payload_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NGD_DecodeValueTotal.value_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r254be8b6e4ef4f198cfcd2632a9e139d.scope; invocation ID: 7fbf84c7732b420dbd209bd3f14538a6

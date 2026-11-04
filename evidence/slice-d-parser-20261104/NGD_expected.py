@@ -5,7 +5,13 @@ rows=[json.loads(l)for l in (E/'NGD_EXPECTED_IMPORTS.jsonl').read_text().splitli
 for m in list(tables):
  if m.startswith('NGD_') and 'Init'not in tables[m]:tables[m].insert(0,'Init')
 files=subprocess.check_output(['git','ls-tree','-r','--name-only','HEAD'],text=True).splitlines();prefix='docs/research/100bit-spend-path-20261013/lean/'
-pins=[];todo=['NBE_SlotLoop','NCO_LoopSteps']
+pins=json.loads((E/'NGD_BASELINE_ADDITIONS.json').read_text()) if (E/'NGD_BASELINE_ADDITIONS.json').exists() else []
+own=[E/(m['module'].replace('.','/')+'.lean') for m in json.loads((E/'NGD_AUDIT_ROOTS.json').read_text())['modules']]
+own += [E/'NGD_COMBINED_IMPORT.lean',E/'NGD_AtG/Types.lean',E/'NGD_AtG/Funs.lean',E/'NGD_SlotRef/Types.lean',E/'NGD_SlotRef/Funs.lean',E/'NGD_WrapFacts.lean',E/'NGD_SlotBoundaries.lean']
+for p in own:
+ m=str(p.relative_to(E)).removesuffix('.lean').replace('/','.')
+ tables[m]=list(dict.fromkeys(['Init']+[n for l in p.read_text().splitlines() if l.startswith('import ') for n in l[7:].split() if n!='all']))
+todo=['NBE_SlotLoop','NCO_LoopSteps']+[n for p in own for l in p.read_text().splitlines() if l.startswith('import ') for n in l[7:].split() if n!='all' and n not in tables]
 while todo:
  m=todo.pop()
  if m in tables:continue
