@@ -1,0 +1,37 @@
+# NGI joined slice S handoff
+
+**Slice S: 97/97 occurrences CLOSED; 7/7 roots CLOSED under the retained trust inventory. Overall 100-bit per-attempt target not yet established.**
+
+Branch `codex/cx-slice-s-join-20261105`. Only NGI-prefixed files and this evidence directory changed. Stage commits are local, plain, with no push or merge. Session A and sibling worktrees were not modified or read as mutable inputs.
+
+## Exact claim and association
+
+`NGI_COMBINED_IMPORT.lean` loads the committed NGE and NGF aggregate imports together. Their transitive imports include the actual `AspisR1.RPx_Deployed.deployed`, the admitted NFX forest and NFY forest. The predecessor chains are imported unchanged, with both copied export directories first in LEAN_PATH. No owner conflict or duplicated incompatible declaration was found; no chain was patched and no theorem was restated or re-proved. `NGI_S_STATEMENT.md` quotes the exact seven existing theorem names, owning modules and full kernel-loaded types plus `#print axioms`, suitable for the lead to quote with their hybrid-certificate qualifications.
+
+`NGI_AUDIT.json` raw-walks 3,946 roots using the byte-identical NEP walker. All raw axioms are standard; collectAxioms disagreements: 0. The SAME compiled proof binary passes all eight planted/mutation fixtures; source/object/binary pins and full driver diffs are retained. `NGI_SCAN.json` covers 13,284 modules, 686,548 declaration entries and 24,343,670 references: zero dangling references, incompatible owners and import mismatches. 1581 compatible cached replicas are disclosed.
+
+`NGI_CERT_CHECK.json` checks ALL 97 S occurrences, recursively enumerating 19,364 theorem records and 261 distinct names BEFORE environment lookup. Every named declaration is actually present with a matching kernel owner and raw audit. No graph/name-filter omission is accepted. `NGI_CERT_INVENTORY.json.xz` preserves every original record in traversal order; `NGI_CERT_ASSOCIATIONS.json.xz` records owners and type hashes. The two inherited to_limbs occurrences TX1:059/TX2:040 have no named Lean records in their selected historical row; their existing native admission is retained without inventing theorem names.
+
+The unchanged NFX builder exactly reproduces its historical 587-row ledger in a private sparse-read/write sandbox; `NGI_REPLAY_NFX_LEDGER.json` records all sparse input pins. The unchanged historical S source chain validates all 97 rows (`NGI_REPLAY_SOURCE.json`). Only extra checks are added. `NGI_TESTS.json` rejects 17 evidence mutations and demonstrates actual selected-callee denial from TX2:164 to TX2:219.
+
+`NGI_LEDGER_DELTA.json` is on the reviewed NGB 599-row basis. Relative to scoped NGE+NFY credit it restores the remaining 14 S rows; S rises 83/97 -> 97/97 and roots 4/7 -> 7/7. Before {'CLOSED': 242, 'OPEN': 343, 'QUALIFIED': 14}; after {'CLOSED': 256, 'OPEN': 343}. These are scoped counts, excluding unimported concurrent D/Pool deltas. The 12 NGB additions stay OPEN and no identity/edge is deleted. All selected-callee denials are propagated to a fixed point. No S occurrence remains QUALIFIED and no declaration is missing; see `NGI_REMAINING.md`.
+
+## Provenance, trust and release boundary
+
+`NGI_PROVENANCE_CHECK.json` reproduces all 82 transported predecessor bodies check-only. Imports/owner-qualified identifiers and the recorded meta-tactic name prefix remain the only changes inherited from those chains. No generator writes to predecessors occurred. Input source/export manifests are pinned once in `NGI_INPUT_PINS.json`; cache copies are byte-checked against NGE_EXPORT/NGF_EXPORT. NGE and NGF came from committed research imports at the assigned base, not WIP or sibling live files.
+
+No trust row is added, removed or discharged. P6/D188 option-A native-contract semantic transport remains a reclassification, never removal. Retained: std/allocator/SDK/ABI/compiler/source-to-ELF realization, RuntimePersistence, digest/H realization, RuntimeReturnData (nonempty 1..1024; ASR8=792), RuntimeMemcmp and cryptographic assumptions. L154 stays a statement parameter; coherent digest/error slots are op43/op44. This is a coherent cached hybrid-certificate join, not a cold release replay or a standalone proof of the 100-bit per-attempt headline. D/Pool joins, L159/L181, final replay L187 and final trust/source/artifact audit L188 remain outside this job. Privacy and the two-transaction design are unchanged.
+
+## Validation and resources
+
+All **30/30 charged slots passed**, 0 Kani, 0 extraction, 0 Rust/SBF builds. By kind: {'lean': 10, 'link': 2, 'audit': 18}. Scope wall sum 263.735s; maximum peak RSS 6,991,764 KiB; swaps 0. Every formal launch had fresh exit0 AND allowed:true admission, one own scope at a time, MemoryHigh6G/MemoryMax8G/MemorySwapMax0/TasksMax64; Lean -M7000. No timeout, memory kill, cap increase or unchanged failed-proof rerun occurred. Exact target/argv, source revision/hash, dependency and Aeneas object pins, exit/wall/RSS/swap and full axiom output are in `NGI_ATTEMPTS.jsonl` and the 30 linked receipts. New modules are import/query/audit drivers only; no new theorem was introduced. Root quotation prints universe annotations on standard axioms; the own checker strips only those annotations for constant-name comparison and retains the exact raw lines.
+
+Two prelaunch preparation errors (no scope charged) are recorded in `NGI_PREPARATION_FINDINGS.md`: a local-to-remote cache-path interpolation and an omitted fixture seed object. Both were corrected in owned inputs, with no host infrastructure changes or weakened validation. All 30 slots were then used for the planned join checks.
+
+Owned cache `/home/dombarker/project-offloads/codex-cx-slice-s-join-cache-20261104` is retained. Selected seed: 29,979 paths, 7,556,562,490 bytes, plus the small pinned fixture supplement; predecessor caches were read-only. `NGI_CACHE_IMPORTS.json.xz`, `NGI_FIXTURE_SEED.json`, `NGI_EXPORT.json` and `NGI_CLOSURE_PINS.json.xz` pin copied inputs and actually resolved closure, including Aeneas sidecars. Restore precedence: own exports, NGE_exports_20261104, NGF_exports_20261104, NFY_exports_20261104, NFY_priority, coherent SInt2 root/objects, own fallback, pinned Lean library. No own cache or wallet/account key was deleted.
+
+`NGI_SHIPPED_SOURCE_CHECK.json` verifies crates/ and programs/ byte-identical to frozen `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`. No shipped change triggered an ELF rebuild. Pins are INHERITED, not reproduced here: default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4; devnet 63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299; Pool 121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548.
+
+Next deliverable: lead incorporates this additive S join into the authoritative 599-row ledger alongside independent D/Pool results, then performs the remaining release gates. No S proof work remains in this job.
+
+Final hygiene: `NGI_HOST_END.json` verifies removal of 3,970 owned rebuildable scratch files after hash-checking 16 retained compiled exports and 3,954 committed raw-graph backups. The 7.6G owned cache remains; no own prover process remains. Old workspace object/native executable paths were scratch: restore the pinned exports, or use the export paths, before replaying old commands. `NGI_PACK.json` resolves 42 large/repeated receipt inputs to one exact SHA256-pinned copy; generated C and barrier log bytes are retained compressed. No committed file exceeds 20MB and no Python bytecode is retained.
