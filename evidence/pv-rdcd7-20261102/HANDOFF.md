@@ -203,3 +203,18 @@ op71-consumer-binding.json pins exact existing dictionary callback text and
 qualification; no whole dictionary compilation. After transport succeeds,
 refresh stage.py plan/source hashes before compiling through NEPAudit. Reserved
 90797/98/99 unspent. HANDOFF earlier driver13731/65601/19553 are FINISHED.
+
+### Session 3 whole-Result transport complete, consumer run active
+
+90721 failed only reflexive final branch after rewrite; changed source adds rfl.
+90722 ParserTransport PASS (all4 lemmas, standard summary axioms, wall1.59s,
+RSS2469372KiB,swap0). stage.py refreshed/staged26 committed sources. Driver
+exec42057 is ACTIVE from90723 throughNEPAudit.90723 V197 PASS (4lemmas).
+24/60Lean used (16pass,8fail),2/10native,0Kani. Next90724 ParserErrors,
+then rdcd4 windows/V197,Restored,ConsumerReplay,NEPAudit. Never duplicate driver.
+If any attempt fails edit source/commit then next unused ID. Reserved90797/98/99
+remain unspent. All previous driver sessions finished. Pending coherent closure,
+fixedNEP raw+summary audit,focused,one final manifest,report and own-cache cleanup.
+cleanup.py is prepared but MUST NOT run until release gates pass; it removes
+only lean-objects/external-objects after complete compiler-cache inventory.
+Source and physical/runtime qualifications unchanged; noRESTORED claim yet.

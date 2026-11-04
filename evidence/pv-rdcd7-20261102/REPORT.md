@@ -33,10 +33,12 @@ Kani credit or machine-code proof is claimed. Native-validation-reuse.json pins
 ## Current verification status
 
 Corrected range binding, owned BytesSource and bounded window proofs pass.
-ParserTransport's first compile90714 failed elaboration; its source is changed
-before90715. Release restoration is pending the full arbitrary-slice Result
-transport, all affected consumers, coherence and final audits. No new V197
-RESTORED claim is made at this checkpoint.
+ParserComponent passes90719 and the full arbitrary-slice complete Result
+transport passes90722. All four ParserTransport lemmas use only standard axioms
+in summary output; peak2469372KiB, swap0. Earlier elaboration failures are
+retained with changed-source retries. Affected consumer rechecks, coherence and
+final raw/summary audits are still pending. No new V197 RESTORED claim is made
+at this checkpoint.
 
 Endpoint premises removed/added/changed: zero. T remains exactly entropy_law,
 entropy_kernel and observation. V370/D381/D386, E1/E2, real RunJoin/world,
