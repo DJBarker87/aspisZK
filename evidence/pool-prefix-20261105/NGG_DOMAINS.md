@@ -31,3 +31,5 @@ THE frozen consumer operations on the admitted Pool state. Instantiate
 NFR_ModelJoin.same_emitted_settlement with that s, selected program and context,
 and NFV's read/helper cuts at that same live allocation/borrow context.
 These are OPEN obligations; none is assumed as a bundled equality or wrapper.
+
+Final qualification:NGG_RequestLength proves the model payload lengths, not the actual Pool decoder's admitted byte predicate. NGG_PaymentWindows proves point domains on an already320-byte payment; it does not derive each native payment-child PacketDomain. NGG_MarkerZero supplies list value/count/early-abort induction and an Aeneas byte-equality reference law; no full extracted marker body or actual Iterator::all step association is proved. All production pre-states, child Results and modifies-set obligations in NGG_REMAINING.md remain OPEN. The runtime CPI proposal is pending/unused. The combined headline target fails duplicate GuardBody ownership; the local raw audit cannot discharge that coherence obligation.
