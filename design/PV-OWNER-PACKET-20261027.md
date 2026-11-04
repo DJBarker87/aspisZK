@@ -435,3 +435,19 @@ Owner's reply: "A". The client keeps panic=abort, and at startup marks itself no
 ## OWNER DECISION 2026-11-03 (LOG D577): D576 option (B) ADOPTED
 
 Owner's reply: "B". The user client writes NO secret bytes to disk. The change note's secrets (and any other wallet secrets the user needs to keep) are returned over a caller-provided raw output pipe, a fixed-width record with nothing formatted, mirroring the N7 input pipe. The calling wallet owns all secret storage. The client's durable outputs are public data only (proof, statement, instruction). The observer boundary stays where N7 placed it (the user's own pipes); no trust item is added. Gate: in addition to the existing client gates, a check that no secret byte reaches any file, stdout or stderr across the fixture runs.
+
+## Decision request D625 (2026-11-04): what the privacy proof assumes about the client's threads
+
+**Finding (LOG D622-D625).** The client's prover runs part of its work in 16 threads: `ordered_families` (c3/check/src/native_workers.rs) always spawns 15 worker threads with `std::thread::scope`, runs one share itself and joins the rest; `THREADS` is a constant and no setting turns this off. To prove privacy for that code, the proof must know four things about the operating system's thread library, recorded exactly in evidence/pv-evhB-20261103/BLOCKER-D624.md on codex/pv-evhB-20261103:
+1. a successful thread creation hands this iteration's closure to exactly one new thread, which runs it at most once on its own captures, and a failed creation hands it to none;
+2. a successful join means that thread has finished, holds nothing of the parent's, and its result is visible to the parent;
+3. the scope's reference counts, counters and wake-ups belong to that one scope, so when the scope returns no worker can still touch the caller's data;
+4. thread setup (thread-local storage, stack, thread IDs, hooks) leaves the caller's other live data untouched.
+These are facts about libc and the kernel, not about our Rust code, so they cannot be proved from the source. Scheduling, timing, failures and witness-independence of all of this stay where they are now (named world-machine obligations and V400/V370/L3); the four items above only fix what a thread does with the data it is given. No current trust item covers them (THR.md, D624), and the trust list T is capped at three by your 2026-10-27 decision.
+
+**Options.**
+- (A) Add one trust item, ScopedThreadRuntime, containing exactly the four contracts above, raising the cap on T from 3 to 4. The proof work that binds our source code to these contracts still has to be done; only the four OS facts are assumed. This is the same kind of assumption as the getrandom behaviour already inside entropy_law (D474).
+- (B) Make the deployed client run that work in one thread: replace the spawn/join block in ordered_map_inner with the sequential map it already uses for small inputs (same output, by construction). No new trust, and the hardest thread proofs (op257/V263 and this interval) disappear. Cost: the 16-way parallel part of the prover becomes sequential; the slowdown is unmeasured but almost certainly far above the +10% prover budget, and the client would need re-adoption (pins, differential and timing gates). I can measure it in the next quiet timing window before you decide.
+- (C) Keep T at 3 and keep the threads. The four contracts stay open obligations, and the privacy target cannot be established for the deployed client while they do.
+
+**Recommendation: (A).** It assumes only how the operating system treats a thread's data, which the client relies on in any case, keeps the measured prover performance, and leaves every proof obligation about our own code in place. If you would rather avoid the new trust item, I recommend asking me to measure (B) first rather than choosing (C).
