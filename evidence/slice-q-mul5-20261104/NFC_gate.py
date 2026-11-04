@@ -20,7 +20,7 @@ errors=[n for n,h in pins.items() if sha(S/n)!=h]
 assert not errors,errors
 # Strict frozen-source erasure check, in addition to the inherited source pins.
 frozen_sources=json.loads((B/'NFC_FROZEN.json').read_text())
-changed={'crates/aspis-core/src/field/wide_exact.rs','crates/aspis-r1-cost-probe/src/fast_pairing.rs','crates/aspis-core/src/field.rs','crates/aspis-r1-cost-probe/src/lib.rs','crates/aspis-r1-cost-probe/src/verifier.rs'}
+changed={'crates/aspis-r1-cost-probe/src/candidate.rs','crates/aspis-core/src/field/wide_exact.rs','crates/aspis-r1-cost-probe/src/fast_pairing.rs','crates/aspis-core/src/field.rs','crates/aspis-r1-cost-probe/src/lib.rs','crates/aspis-r1-cost-probe/src/verifier.rs'}
 checked=[]
 for name,text in frozen_sources.items():
  p=S/name
@@ -39,7 +39,8 @@ for name,text in frozen_sources.items():
  else:
   assert actual.startswith(text),('changed frozen body',name)
   tail=actual[len(text):]
-  if name.endswith('verifier.rs'):assert tail=='\n#[cfg(kani)] #[path="NFC_prefix_step.rs"] mod NFC_prefix_step;\n\n#[cfg(kani)] #[path="NFC_row_step.rs"] mod NFC_row_step;\n',name
+  if name.endswith('candidate.rs'):assert tail=='\n#[cfg(kani)] #[path="NFC_query_window.rs"] mod NFC_query_window;\n',name
+  elif name.endswith('verifier.rs'):assert tail=='\n#[cfg(kani)] #[path="NFC_prefix_step.rs"] mod NFC_prefix_step;\n\n#[cfg(kani)] #[path="NFC_row_step.rs"] mod NFC_row_step;\n',name
   else:assert tail=='\n#[cfg(kani)]\nmod NFC_arbitrary {\n    impl kani::Arbitrary for super::M31 {\n        fn any() -> Self { Self(kani::any()) }\n    }\n    impl kani::Arbitrary for super::QM31 {\n        fn any() -> Self {\n            Self { c0: super::CM31 { a: kani::any(), b: kani::any() },\n                   c1: super::CM31 { a: kani::any(), b: kani::any() } }\n        }\n    }\n\n}\n',name
  checked.append(name)
 (B/(a+'-frozen-source-check.json')).write_text(json.dumps(dict(passed=True,files=checked,allowed_changes=sorted(changed),qualification='Only exact cfg(kani) module/feature additions; every frozen body unchanged'),indent=2))
@@ -47,6 +48,7 @@ for name,text in frozen_sources.items():
 # This is stricter than checking writes/interior mutability only.
 import re
 harnesses=[S/'crates/aspis-r1-cost-probe/src/NFC_dot_ctor.rs',S/'crates/aspis-r1-cost-probe/src/NFC_row_step.rs',S/'crates/aspis-r1-cost-probe/src/NFC_prefix_step.rs',S/'KMX_stubs.rs',S/'KMX_native.rs']
+harnesses += [S/'crates/aspis-r1-cost-probe/src/NFC_query_window.rs'] if (S/'crates/aspis-r1-cost-probe/src/NFC_query_window.rs').is_file() else []
 static_errors=[str(p) for p in harnesses if re.search(r'\bstatic\s+(?:mut\s+)?[A-Za-z_]',p.read_text())]
 (B/(a+'-rule16-check.json')).write_text(json.dumps(dict(static_declarations=static_errors,files={str(p):sha(p) for p in harnesses}),indent=2)+'\n')
 assert not static_errors,('STOP rule16',static_errors)

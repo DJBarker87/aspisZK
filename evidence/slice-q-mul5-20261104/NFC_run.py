@@ -41,12 +41,12 @@ files={};sources=[]
 if kind=='lean':
  n='NFC_generated/'+target+'.lean';files[n]=((E/(target+'.lean')) if target.startswith('NFC_') else (E.parent/'slice-q-mul4-20261104'/(target+'.lean'))).read_text();sources=[n]
  command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NFC_generated','-o','NFC_objects/'+target+'.olean',n]
- if target in ['NFC_Driver','NFA_WALKER','NFA_MemoryLimit']:command+=['-c','NFC_native/'+target+'.c']
+ if target in ['NFC_Driver','NFC_ProofDriver','NFA_WALKER','NFA_MemoryLimit']:command+=['-c','NFC_native/'+target+'.c']
 elif kind=='linkaudit':
- sources=['NFC_native/NFC_Driver.c','NFC_native/NFA_WALKER.c','NFC_native/NFA_MemoryLimit.c']
- command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NFC_native/NFC_Driver',*sources]
+ sources=['NFC_native/'+target+'.c','NFC_native/NFA_WALKER.c','NFC_native/NFA_MemoryLimit.c']
+ command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NFC_native/'+target,*sources]
 elif kind=='auditbin':
- sources=['NFC_generated/NFC_Driver.lean'];command=['NFC_native/NFC_Driver',target]
+ sources=['NFC_generated/NFC_ProofDriver.lean'];command=['NFC_native/NFC_ProofDriver',target]
 else:raise ValueError(kind)
 cfg=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=env,timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={'selected_objects':{}},expected_time='Focused elaboration' if kind=='lean' else 'Optimized audit linker' if kind=='linkaudit' else 'Raw checked-kernel graph traversal')
 files[a+'.json']=json.dumps(cfg)
@@ -66,7 +66,7 @@ for root in roots:
    if Path(root,stem+suf).is_file():rels.add(stem+suf)
 for rel in sorted(rels):
  p=next(Path(root)/rel for root in roots if (Path(root)/rel).is_file());pins[str(p)]={{'path':str(p),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}}
-for module in (['NEP_Planted','NEP_Mutations'] if x['module'] in ['NFC_Driver','fixtures'] else [])+[n for line in (b/x['sources'][0]).read_text().splitlines() if line.startswith('import ') for n in line[7:].split() if n!='all'] if x['kind']!='linkaudit' else []:
+for module in (['NEP_Planted','NEP_Mutations'] if x['module'] in ['NFC_Driver','NFC_ProofDriver','fixtures'] else [])+(['NFC_FinalAudit'] if x['kind']=='auditbin' and x['module'].startswith('proof') else [])+[n for line in (b/x['sources'][0]).read_text().splitlines() if line.startswith('import ') for n in line[7:].split() if n!='all'] if x['kind']!='linkaudit' else []:
  rel=module.replace('.','/')+'.olean';p=next((Path(root)/rel for root in roots if (Path(root)/rel).is_file()),None)
  assert p is not None,module
  for z in [p,Path(str(p)+'.private'),Path(str(p)+'.server'),p.with_suffix('.ir')]:
@@ -78,7 +78,7 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
-names += [str(p.relative_to(b)) for p in b.glob('NEP_*_REACHABLE.txt')]
+names += [str(p.relative_to(b)) for p in b.glob('NEP_'+{target!r}+'_*_REACHABLE.txt')] if {kind!r}=='auditbin' else []
 print(json.dumps({{n:(b/n).read_text() for n in names}}))
 ''');assert r.returncode==0,r.stderr
 out=json.loads(r.stdout)
