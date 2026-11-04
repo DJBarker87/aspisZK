@@ -25,6 +25,7 @@ mod equivalence16 {
  #[kani::proof] #[kani::unwind(128)]
  #[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
  fn shared_repeat16() {
+  if cfg!(feature="context") {crate::repeat_context::caller();return;}
   let mut log=shared_callee16::Memo::new();
   shared_callee16::roundtrip16(&mut log);
   let a=q();let b=q();
@@ -62,3 +63,5 @@ fn mutation()->usize {
  if cfg!(feature="mutation-11") {return 11;}
  0
 }
+
+mod repeat_context;
