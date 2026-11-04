@@ -1,0 +1,7 @@
+# Reuse and composition plan
+
+Pinned predecessor: research merge66dfea8c67c, NFI object exports imported by copying and hash in NFM_CACHE_IMPORTS.json. NFI_BRIDGES.md and NFI_NATIVE_VALIDATION.json's39 groups are local cut certificates; under ruling(ad) they can be substituted along fixed controls only after NFM's complete native control and new concrete-cut body checks. NFI_SingleTrace.emitted and NFF_FullOne.replay are reused, never re-proved. NFI_K067–074 supply four actual child slots and K099/K100 returned-array consumption. No prior timeout or writable-static/function-pointer credit is promoted.
+
+NFM_WINDOW_PAYLOAD proves each complete window's sum/fold and ordered operands on arbitrary incoming limbs within6-fold bound, sums within remaining4-product headroom, slot<4, canonical read scalars, arbitrary q/g. Outer entry supplies zero sums; prior successful folds supply the limb bound. Per-window rejected-read certificates cover arbitrary reached term and sums, preserving sums/limbs and executing no coefficient/product suffix. NFI's inner Result induction threads earlier successful terms into that terminal. Tail partial-Result and receiver laws remain NFI's original same-input trace.
+
+Active outer cut starts[0,4,8,12,16,20,24], widths[4,4,4,4,4,4,2]; the eighth iterator state is termination. Control harness's cuts counts7 active windows; its successful return includes exhaustion. The full pair list and eight model states are explicit in NFM_Control. The prose28 in ruling(ad) is corrected to26 without changing the source/model/trust.

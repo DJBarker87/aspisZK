@@ -1,0 +1,126 @@
+// Expose the frozen scalar unwrap terminal as an explicit abort tag. No
+// coefficient read/product/fold is executed on that terminal branch.
+fn NFM_read_or_abort(q:&[u8;608],slot:usize,term:usize)->Result<M31,usize>{
+ match M31::from_le_bytes(q[slot*120+term*4..slot*120+term*4+4].try_into().unwrap()){
+  Some(s)=>Ok(s),None=>Err(term)
+ }
+}
+#[kani::proof] #[kani::unwind(80)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFM_copy::KMX_copy_nonoverlapping)]
+fn reject_0(){
+ let q:[u8;608]=kani::any();let g:[WideExact;29]=kani::any();
+ let slot:usize=kani::any();let term:usize=kani::any();let lane:usize=kani::any();
+ kani::assume(slot<4 && 0<=term && term<4 && lane<8);
+ let mut sums:[u64;8]=kani::any();let limbs:[u64;8]=kani::any();
+ let old_s=sums[lane];let old_l=limbs[lane];let mut calls=0;
+ let at=slot*120+term*4;let word=u32::from_le_bytes([q[at],q[at+1],q[at+2],q[at+3]]);
+ kani::assume(word>=2147483647);
+ let terminal=match NFM_read_or_abort(&q,slot,term){
+  Err(t)=>{assert_eq!(t,term);true},
+  Ok(s)=>{let c=g[term].to_limbs();calls+=1;sums[lane]=u64::from(c[lane])+u64::from(s.0);false}
+ };
+ assert!(terminal);assert_eq!(calls,0);assert_eq!(sums[lane],old_s);
+ assert_eq!(limbs[lane],if cfg!(NFM_wrong_reject_0){old_l^1}else{old_l});
+}
+#[kani::proof] #[kani::unwind(80)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFM_copy::KMX_copy_nonoverlapping)]
+fn reject_1(){
+ let q:[u8;608]=kani::any();let g:[WideExact;29]=kani::any();
+ let slot:usize=kani::any();let term:usize=kani::any();let lane:usize=kani::any();
+ kani::assume(slot<4 && 4<=term && term<8 && lane<8);
+ let mut sums:[u64;8]=kani::any();let limbs:[u64;8]=kani::any();
+ let old_s=sums[lane];let old_l=limbs[lane];let mut calls=0;
+ let at=slot*120+term*4;let word=u32::from_le_bytes([q[at],q[at+1],q[at+2],q[at+3]]);
+ kani::assume(word>=2147483647);
+ let terminal=match NFM_read_or_abort(&q,slot,term){
+  Err(t)=>{assert_eq!(t,term);true},
+  Ok(s)=>{let c=g[term].to_limbs();calls+=1;sums[lane]=u64::from(c[lane])+u64::from(s.0);false}
+ };
+ assert!(terminal);assert_eq!(calls,0);assert_eq!(sums[lane],old_s);
+ assert_eq!(limbs[lane],if cfg!(NFM_wrong_reject_1){old_l^1}else{old_l});
+}
+#[kani::proof] #[kani::unwind(80)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFM_copy::KMX_copy_nonoverlapping)]
+fn reject_2(){
+ let q:[u8;608]=kani::any();let g:[WideExact;29]=kani::any();
+ let slot:usize=kani::any();let term:usize=kani::any();let lane:usize=kani::any();
+ kani::assume(slot<4 && 8<=term && term<12 && lane<8);
+ let mut sums:[u64;8]=kani::any();let limbs:[u64;8]=kani::any();
+ let old_s=sums[lane];let old_l=limbs[lane];let mut calls=0;
+ let at=slot*120+term*4;let word=u32::from_le_bytes([q[at],q[at+1],q[at+2],q[at+3]]);
+ kani::assume(word>=2147483647);
+ let terminal=match NFM_read_or_abort(&q,slot,term){
+  Err(t)=>{assert_eq!(t,term);true},
+  Ok(s)=>{let c=g[term].to_limbs();calls+=1;sums[lane]=u64::from(c[lane])+u64::from(s.0);false}
+ };
+ assert!(terminal);assert_eq!(calls,0);assert_eq!(sums[lane],old_s);
+ assert_eq!(limbs[lane],if cfg!(NFM_wrong_reject_2){old_l^1}else{old_l});
+}
+#[kani::proof] #[kani::unwind(80)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFM_copy::KMX_copy_nonoverlapping)]
+fn reject_3(){
+ let q:[u8;608]=kani::any();let g:[WideExact;29]=kani::any();
+ let slot:usize=kani::any();let term:usize=kani::any();let lane:usize=kani::any();
+ kani::assume(slot<4 && 12<=term && term<16 && lane<8);
+ let mut sums:[u64;8]=kani::any();let limbs:[u64;8]=kani::any();
+ let old_s=sums[lane];let old_l=limbs[lane];let mut calls=0;
+ let at=slot*120+term*4;let word=u32::from_le_bytes([q[at],q[at+1],q[at+2],q[at+3]]);
+ kani::assume(word>=2147483647);
+ let terminal=match NFM_read_or_abort(&q,slot,term){
+  Err(t)=>{assert_eq!(t,term);true},
+  Ok(s)=>{let c=g[term].to_limbs();calls+=1;sums[lane]=u64::from(c[lane])+u64::from(s.0);false}
+ };
+ assert!(terminal);assert_eq!(calls,0);assert_eq!(sums[lane],old_s);
+ assert_eq!(limbs[lane],if cfg!(NFM_wrong_reject_3){old_l^1}else{old_l});
+}
+#[kani::proof] #[kani::unwind(80)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFM_copy::KMX_copy_nonoverlapping)]
+fn reject_4(){
+ let q:[u8;608]=kani::any();let g:[WideExact;29]=kani::any();
+ let slot:usize=kani::any();let term:usize=kani::any();let lane:usize=kani::any();
+ kani::assume(slot<4 && 16<=term && term<20 && lane<8);
+ let mut sums:[u64;8]=kani::any();let limbs:[u64;8]=kani::any();
+ let old_s=sums[lane];let old_l=limbs[lane];let mut calls=0;
+ let at=slot*120+term*4;let word=u32::from_le_bytes([q[at],q[at+1],q[at+2],q[at+3]]);
+ kani::assume(word>=2147483647);
+ let terminal=match NFM_read_or_abort(&q,slot,term){
+  Err(t)=>{assert_eq!(t,term);true},
+  Ok(s)=>{let c=g[term].to_limbs();calls+=1;sums[lane]=u64::from(c[lane])+u64::from(s.0);false}
+ };
+ assert!(terminal);assert_eq!(calls,0);assert_eq!(sums[lane],old_s);
+ assert_eq!(limbs[lane],if cfg!(NFM_wrong_reject_4){old_l^1}else{old_l});
+}
+#[kani::proof] #[kani::unwind(80)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFM_copy::KMX_copy_nonoverlapping)]
+fn reject_5(){
+ let q:[u8;608]=kani::any();let g:[WideExact;29]=kani::any();
+ let slot:usize=kani::any();let term:usize=kani::any();let lane:usize=kani::any();
+ kani::assume(slot<4 && 20<=term && term<24 && lane<8);
+ let mut sums:[u64;8]=kani::any();let limbs:[u64;8]=kani::any();
+ let old_s=sums[lane];let old_l=limbs[lane];let mut calls=0;
+ let at=slot*120+term*4;let word=u32::from_le_bytes([q[at],q[at+1],q[at+2],q[at+3]]);
+ kani::assume(word>=2147483647);
+ let terminal=match NFM_read_or_abort(&q,slot,term){
+  Err(t)=>{assert_eq!(t,term);true},
+  Ok(s)=>{let c=g[term].to_limbs();calls+=1;sums[lane]=u64::from(c[lane])+u64::from(s.0);false}
+ };
+ assert!(terminal);assert_eq!(calls,0);assert_eq!(sums[lane],old_s);
+ assert_eq!(limbs[lane],if cfg!(NFM_wrong_reject_5){old_l^1}else{old_l});
+}
+#[kani::proof] #[kani::unwind(80)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFM_copy::KMX_copy_nonoverlapping)]
+fn reject_6(){
+ let q:[u8;608]=kani::any();let g:[WideExact;29]=kani::any();
+ let slot:usize=kani::any();let term:usize=kani::any();let lane:usize=kani::any();
+ kani::assume(slot<4 && 24<=term && term<26 && lane<8);
+ let mut sums:[u64;8]=kani::any();let limbs:[u64;8]=kani::any();
+ let old_s=sums[lane];let old_l=limbs[lane];let mut calls=0;
+ let at=slot*120+term*4;let word=u32::from_le_bytes([q[at],q[at+1],q[at+2],q[at+3]]);
+ kani::assume(word>=2147483647);
+ let terminal=match NFM_read_or_abort(&q,slot,term){
+  Err(t)=>{assert_eq!(t,term);true},
+  Ok(s)=>{let c=g[term].to_limbs();calls+=1;sums[lane]=u64::from(c[lane])+u64::from(s.0);false}
+ };
+ assert!(terminal);assert_eq!(calls,0);assert_eq!(sums[lane],old_s);
+ assert_eq!(limbs[lane],if cfg!(NFM_wrong_reject_6){old_l^1}else{old_l});
+}
