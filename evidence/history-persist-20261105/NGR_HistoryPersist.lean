@@ -1,6 +1,7 @@
 import NGR_Data
 import NGR_WriterOutput
 import NGR_NativeCopy
+import NGP_L159
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.NGR_HISTORY
@@ -66,6 +67,39 @@ theorem saved_to_loaded {Tx A W : Type}
     size, persisted, entryBuffer, written, sdkBytes, CPH_Trace.derive game⟩
 
 #print axioms saved_to_loaded
+
+/-- Supplies exactly NGP_L159's history component. The other cuts are passed
+through as values; no carrier/Pool statement is inferred for them. -/
+theorem history_statement {Tx A W : Type}
+    (p : CPG_Projection.Observations Tx A) (t u : Tx) (e1 e2 : Entry)
+    (actions : List (CPP_BankState.Action A))
+    (n1 : S2W_ExtractionBoundary.First) (n2 : S2W_ExtractionBoundary.Second)
+    (copy : Heap (Nat → Record) → Nat → Payload → S2W_TrustedStd.Outcome (Nat → Record))
+    (std : S2W_TrustedStd.TrustedStd copy) (allocator : Allocator A)
+    (_valid1 : Valid e1.heap)
+    (id system : S2W_ExtractionBoundary.Program)
+    (data1 : Slice U8) (state1 final1 : A) (post1 : Heap (Nat → Record))
+    (game : CPH_Game.DeployedPairExecution p t u e1 e2 saved actions n1 n2 copy allocator id)
+    (native_writer_result : first n1 copy allocator e1 id data1 state1 =
+      ok (.Ok (saved,post1,final1)))
+    (protection : CPH_Protection.Facts p t saved id)
+    (ordinary : CPG_Projection.ordinary p system t ((p.layout t).handles 2).1)
+    (RuntimePersistence : CPR_DataPersistence.TwoTransactionLaw
+      (CPG_Projection.adjacent p) (CPG_Projection.ordinary p system)
+      (CPG_Projection.before p) (CPG_Projection.tentative p)
+      (CPG_Projection.success p) (CPG_Projection.loaded p))
+    (L : Library W (Nat → Record)) (sdk : S2TrustedSdkBorrow L)
+    (w2 : W) (related2 : L.related w2 e2.heap) (valid2 : Valid e2.heap) (otherCuts : NGP_L159.Cuts) :
+    NGP_L159.History_statement p t u
+      {otherCuts with «saved» := saved, checkpointRead := e2.buffers (e2.handles 6).1} := by
+  obtain ⟨adjacent, keys, parent, copied, size, loaded, buffer, _, _, _⟩ :=
+    saved_to_loaded prepared accumulator domain hp hu hc p t u e1 e2 actions n1 n2
+      copy std allocator _valid1 id system data1 state1 final1 post1 game
+      native_writer_result protection ordinary RuntimePersistence L sdk w2 related2 valid2
+  exact ⟨adjacent, keys, parent, copied, size, loaded, congrArg bytesOf buffer⟩
+
+#print axioms history_statement
+
 end
 end AspisR1.NGR_HISTORY
 end

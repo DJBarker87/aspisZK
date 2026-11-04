@@ -35,10 +35,14 @@ files={};sources=[]
 if kind=='lean':
  n='NGR_generated/'+target+'.lean';files[n]=(E/(target+'.lean')).read_text();sources=[n]
  command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NGR_generated','-o','NGR_objects/'+target+'.olean',n]
- if target in ['NGR_Driver','NGR_ProofDriver','NGR_PoolProofDriver','NGR_PoolDriver']:command+=['-c','NGR_native/'+target+'.c']
+ if target in ['NGR_Driver','NGR_ProofDriver','NGR_PoolProofDriver','NGR_PoolDriver','NGR_PinDriver']:command+=['-c','NGR_native/'+target+'.c']
 elif kind=='link':
  sources=['NGR_native/'+target+'.c','NGR_native/NFA_WALKER.c','NGR_native/NFA_MemoryLimit.c']
  command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NGR_native/'+target,*sources]
+elif kind=='compare':
+ sources=['NGR_generated/NGR_PinDriver.lean','NGR_PIN_COMPARISON.json']
+ for n in sources:files[n]=(E/Path(n).name).read_text()
+ command=['NGR_native/NGR_PinDriver']
 elif kind=='audit':
  sources=['NGR_generated/NGR_ProofDriver.lean','NGR_generated/NGR_Driver.lean','NGR_batch.py','NGR_AUDIT_ROOTS.json','NGR_EXPECTED_IMPORTS.jsonl']+(['NGR_POOL_ROOTS.json'] if target.startswith('pool') else [])
  for n in sources:files[n]=(E/Path(n).name).read_text()
@@ -78,10 +82,10 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
-b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
+b=Path({B!r});a={a!r};names=(["NGR_PIN_SHAPES.json"] if {kind!r}=='compare' else [])+[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
 if {kind!r}=='audit':names += [str(p.relative_to(b)) for p in (b/'NGR_audit'/{target!r}).rglob('*') if p.is_file()]+[str(p.relative_to(b)) for modepath in (b/'NGR_audit'/{target!r}).glob('*.json') for row in json.loads(modepath.read_text()).get('results',[]) for p in [b/('NEP_'+modepath.stem+'_'+row['root']+'_REACHABLE.txt')] if p.exists()]+([n for n in ['NGR_LOADED_scan.jsonl','NGR_POOL_LOADED_scan.jsonl'] if (b/n).exists()])
 out={{n:(b/n).read_text() for n in names}}
-for name in ['NGR_Driver','NGR_ProofDriver','NGR_PoolProofDriver','NGR_PoolDriver']:
+for name in ['NGR_Driver','NGR_ProofDriver','NGR_PoolProofDriver','NGR_PoolDriver','NGR_PinDriver']:
  p=b/'NGR_native'/name
  if p.is_file():out[a+'/'+name+'_BINARY_PIN.json']=json.dumps(dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size))
 print(json.dumps(out))

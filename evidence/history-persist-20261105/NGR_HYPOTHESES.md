@@ -39,3 +39,10 @@ full U8 list equality for TX2 account6, TX1 account2 post-write payload bytes,
 TX2 SDK payload bytes, and CPH_Trace.Facts. All use this one saved value.
 No proof/public carrier equality, Pool settlement, hash collision elimination,
 or physical driver/source-to-ELF realization is claimed.
+
+The additional `history_statement` corollary supplies exactly
+NGP_L159.History_statement, by replacing the law-free Cuts.saved and
+Cuts.checkpointRead fields with the deterministic returned value and account6
+entry buffer. It adds no byte-equality premise. `otherCuts` carries no law and
+its proof/public/Pool values are not certified by this theorem. Full loaded
+binder types are printed with pp.all in NGR_L020/stdout.log.
