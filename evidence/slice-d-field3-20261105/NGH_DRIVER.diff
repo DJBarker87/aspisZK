@@ -1,0 +1,51 @@
+--- NGA_Driver.lean
++++ NGH_Driver.lean
+@@ -99,41 +99,25 @@
+        #[`NEP_Planted.matcher, `NEP_Planted.viaPrivate, `NEP_Planted.proof,
+          `NEP_Planted.viaAux, `NEP_MutateMatch.matcher, `NEP_MutatePrivate.viaPrivate,
+          `NEP_MutateProof.proof, `NEP_MutateAux.viaAux])
+-    else if mode == "scan" then (#[`NGA_COMBINED_IMPORT], #[])
++    else if mode == "scan" then (#[`NGH_COMBINED_IMPORT], #[])
+     else if mode == "proof0" then
+-      (#[`NGA_COMBINED_IMPORT], #[`NGA_Cache.prelude_source, `NGA_CacheDomain.row_bounded, `NGA_CacheDomain.prepared_bounded, `NGA_CacheDomain.source, `NGA_Cell.get_set])
++      (#[`NGH_COMBINED_IMPORT], #[`NGH_AccumulateRef.cells_eq, `NGH_AccumulateRef.model_eq, `NGH_AccumulateRef.cohort, `NGH_SmallRef.loop_eq, `NGH_SmallRef.model_eq])
+     else if mode == "proof1" then
+-      (#[`NGA_COMBINED_IMPORT], #[`NGA_Cell.index, `NGA_Step.bounded_get, `NGA_Step.source, `NGA_Nine.loop, `NGA_Nine.trace_nodup])
++      (#[`NGH_COMBINED_IMPORT], #[`NGH_SmallValue.cohort, `NGH_SmallValue.same_arrays, `NGH_QSquareRef.model_eq, `NGH_QSquareRef.cohort, `NGH_QSquareOps.square])
+     else if mode == "proof2" then
+-      (#[`NGA_COMBINED_IMPORT], #[`NGA_Nine.trace_complete, `NGA_Nine.source, `NGA_Small.product_bound, `NGA_Small.loop, `NGA_Small.zero_value])
++      (#[`NGH_COMBINED_IMPORT], #[`NGH_QSquareOps.product, `NGH_QSquareOps.associate, `NGH_QSquareOps.source, `NGH_CMWords.sub_value, `NGH_CMWords.coordinates])
+     else if mode == "proof3" then
+-      (#[`NGA_COMBINED_IMPORT], #[`NGA_Small.source, `NGA_PreparePairs.source, `NGA_PreparePairs.same_run, `NGA_SmallResult.source, `NGA_Wrappers.domain])
+-    else if mode == "proof4" then
+-      (#[`NGA_COMBINED_IMPORT], #[`NGA_Wrappers.source, `NGA_Wrappers.two, `NGA_Wrappers.three, `NGA_Wrappers.four, `NGA_NativeOps.cm_square_total])
+-    else if mode == "proof5" then
+-      (#[`NGA_COMBINED_IMPORT], #[`NGA_NativeOps.qm_square_total, `NGA_NativeOps.product, `NGA_NativeOps.square, `NGA_NativeOps.mul_u, `NGA_NativeOps.addition])
+-    else if mode == "proof6" then
+-      (#[`NGA_COMBINED_IMPORT], #[`NGA_CanonicalInjective.word, `NGA_CanonicalInjective.qm, `NGA_CanonicalInjective.wide, `NGA_WideSquare.value, `NGA_WideSquare.source])
+-    else if mode == "proof7" then
+-      (#[`NGA_COMBINED_IMPORT], #[`NGA_Converter.value, `NGA_ChannelAlgebra.row_add, `NGA_ChannelAlgebra.add, `NGA_ChannelAlgebra.zero, `NGA_ChannelAlgebra.row_product])
+-    else if mode == "proof8" then
+-      (#[`NGA_COMBINED_IMPORT], #[`NGA_ChannelAlgebra.product, `NGA_CacheValues.source, `NGA_Accumulate.source, `NGA_SumAlgebra.channels, `NGA_SumAlgebra.source])
+-    else if mode == "proof9" then
+-      (#[`NGA_COMBINED_IMPORT], #[`NGA_WrapperValues.source, `NGA_WrapperValues.two, `NGA_WrapperValues.three, `NGA_WrapperValues.four, `NGA_ArrayExt.row_eq])
+-    else if mode == "proof10" then
+-      (#[`NGA_COMBINED_IMPORT], #[`NGA_ArrayExt.source, `NGA_OuterStep.source, `NGA_Indexed.same_inputs, `NGA_Indexed.full_value, `NGA_SquareCallees.product])
+-    else if mode == "proof11" then
+-      (#[`NGA_COMBINED_IMPORT], #[`NGA_SquareCallees.square, `NGA_SquareCallees.addition, `NGA_SquareCallees.mulU_words, `AspisR1.RPx_Deployed.deployed])
++      (#[`NGH_COMBINED_IMPORT], #[`NGH_CMWords.product, `NGH_CMWords.square, `AspisR1.RPx_Deployed.deployed])
+     else (#[], #[])
+   let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
+     {} (loadExts := true) (level := .private)
+   if mode == "scan" || mode == "queryscan" then
+     let mut expected : Std.HashMap String (Array String) := {}
+-    for line in ← IO.FS.lines (if mode == "queryscan" then "NFN_QUERY_EXPECTED_IMPORTS.jsonl" else "NGA_EXPECTED_IMPORTS.jsonl") do
++    for line in ← IO.FS.lines (if mode == "queryscan" then "NFN_QUERY_EXPECTED_IMPORTS.jsonl" else "NGH_EXPECTED_IMPORTS.jsonl") do
+       let j ← IO.ofExcept (Json.parse line)
+       expected := expected.insert (← IO.ofExcept (j.getObjValAs? String "module"))
+         (← IO.ofExcept (j.getObjValAs? (Array String) "imports"))
+-    let failed ← NER.loadedScan env (if mode == "queryscan" then "NFN_QUERY_LOADED_scan.jsonl" else "NGA_LOADED_scan.jsonl") expected
++    let failed ← NER.loadedScan env (if mode == "queryscan" then "NFN_QUERY_LOADED_scan.jsonl" else "NGH_LOADED_scan.jsonl") expected
+     IO.println (if failed then "NFN_SCAN_FAILED" else "NFN_SCAN_ZERO_DANGLING")
+     return if failed then 1 else 0
+   let ctx : Command.Context := {

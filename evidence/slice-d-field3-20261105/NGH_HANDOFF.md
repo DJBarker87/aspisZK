@@ -11,3 +11,5 @@ Resource policy: one capped scope at a time; admission exit 0 AND allowed:true; 
 Assumptions retained: P6/D188 option A, physical ABI/borrows, compiler/library/Aeneas/source-to-ELF, SDK/std, RuntimePersistence, RuntimeReturnData (nonempty), RuntimeMemcmp, digest=H and cryptographic assumptions. L154 is a statement parameter. No change to security metric, privacy, or two transactions.
 
 Validation and remaining obligations will be updated after each stage. No release/ELF rebuild is triggered by evidence-only changes. Initial counts: 0 Kani, 0 Lean, 0 extraction.
+
+Stage 2: TX1:032/TX2:022 QM31 square CLOSED by ordinary ruling (y), validated delta and combined audit. See NGH_BRIDGES.md. The five helper/wrapper rows remain OPEN; WideExact square substitution is next. NGH_K019 one-step outer contract is active at this checkpoint; no active run is resubmitted.
