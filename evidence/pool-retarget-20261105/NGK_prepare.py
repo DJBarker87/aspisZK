@@ -55,12 +55,14 @@ audit='''\nrun_cmd do
 '''
 for n in order:
  r=source(n);body='\n'.join(l for l in r['source'].splitlines() if not l.startswith('import '))+'\n';after=pat.sub(lambda m:rename[m.group()],body)
+ qualify = n != 'NFO_DecodeErrors' and ('open Aeneas Aeneas.Std Result AspisR1TerminalDecoder' in body or n == 'NFR_RawInverseValidator') and 'core.result.Result.map_err' in body
+ if qualify:after=re.sub(r'(?<![A-Za-z0-9_.])core.result.Result.map_err','AspisR1TerminalDecoder.core.result.Result.map_err',after)
  imports=list(dict.fromkeys(['Lean']+[owner.get(d,d) for d in r['imports']]))
  t=''.join('import '+d+'\n' for d in imports)+'\n'+after+audit
  p=E/(owner[n]+'.lean')
  if '--check' in sys.argv:assert p.read_text()==t,p
  else:p.write_text(t)
- records.append(dict(source_module=n,source_path=r['path'],source_sha256=H(r['source'].encode()),source_line_range=[1,len(r['source'].splitlines())],target_module=owner[n],imports_before=r['imports'],imports_after=imports,before_body=body,after_body=after,original_body_sha256=H(body.encode()),transformed_body_sha256=H(after.encode()),changes=['imports','qualified owner/proof names only']))
+ records.append(dict(source_module=n,source_path=r['path'],source_sha256=H(r['source'].encode()),source_line_range=[1,len(r['source'].splitlines())],target_module=owner[n],imports_before=r['imports'],imports_after=imports,before_body=body,after_body=after,original_body_sha256=H(body.encode()),transformed_body_sha256=H(after.encode()),changes=['imports','qualified owner/proof names only']+(['fully qualify emitted decoder map_err owner; NFY_OwnerTransport.map_err_transport'] if qualify else [])))
 (E/'NGK_PROVENANCE.json').write_text(json.dumps(dict(order=order,module_owner=owner,namespace_map=rename,files=records),indent=1)+'\n')
 families={}
 for n in sorted(legacy):

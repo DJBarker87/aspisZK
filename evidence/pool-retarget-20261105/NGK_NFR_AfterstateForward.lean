@@ -82,7 +82,7 @@ theorem roundtrip (a : Afterstate)
   rw [readRoot,bind_tc_ok,AspisR1.NFY_JFt_ExactArray.source _ _ _ rfl,bind_tc_ok]
   simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
   rw [NGK_NFR_DigestForward.roundtrip _ (domain a valid).1,bind_tc_ok]
-  simp only [core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
+  simp only [AspisR1TerminalDecoder.core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
   exact NGK_NFR_AfterstateForward00.result a valid
 #print axioms roundtrip
 end NGK_NFR_AfterstateForward

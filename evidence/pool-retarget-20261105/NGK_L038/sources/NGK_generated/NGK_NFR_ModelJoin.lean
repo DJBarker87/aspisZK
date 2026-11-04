@@ -1,0 +1,69 @@
+import Lean
+import NGK_NFR_PoolReturnData
+
+set_option autoImplicit false
+noncomputable section
+namespace NGK_NFR_ModelJoin
+open Aeneas Aeneas.Std Result
+open NGK_NFO_PoolReturnData
+abbrev Output := NFY_NEU_EmitModel.Output
+abbrev Bytes := NGK_NFR_CSettlement.Bytes
+abbrev PoolError := NGK_NFR_CSettlement.Error
+
+/-- The original valid statement supplies the decoder and encoder domains.
+Only validation/lane success remain, on this very decoded statement value. -/
+theorem same_emitted_settlement {Context Key RuntimeState Accounts Other LaneImage : Type}
+    [DecidableEq Key]
+    (runtime : Runtime Context Key RuntimeState) (law : NGK_NFR_PoolReturnData.RuntimeReturnData runtime)
+    (context : Context) (selected : Key)
+    (state : AspisR1.S2I.ReturnData.State Accounts Other) (s : NFY_NEU_EmitModel.Statement)
+    (valid : AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1 s = ok (.Ok ()))
+    (validate : Output → Result (core.result.Result Unit PoolError))
+    (lane : Output → Result (core.result.Result LaneImage PoolError)) (image : LaneImage)
+    (checked : validate (AspisR1.S2K.ResultAdmission.value s) = ok (.Ok ()))
+    (advanced : lane (AspisR1.S2K.ResultAdmission.value s) = ok (.Ok image)) :
+    AspisR1.NFY_JHb_Emit.source (fun st bytes => ok (AspisR1.S2I.ReturnData.set st bytes)) state s =
+      ok (.Ok (AspisR1.S2I.ReturnData.set state (AspisR1.S2K.ResultPayload.bytes s).val)) ∧
+    NGK_NFO_ReadModel.run selected (.Ok ())
+      (runtime.read context (runtime.write context selected (AspisR1.S2K.ResultPayload.bytes s).val))
+      NGK_NFO_PacketDecoder.run = ok (.Ok ⟨AspisR1.S2K.ResultAdmission.value s,
+        (AspisR1.S2K.ResultPayload.bytes s).val⟩,[.clear,.invoke,.read,.decode]) ∧
+    NGK_NFR_CSettlement.run validate lane NFY_NEY_EmitComposed.encode
+      ⟨AspisR1.S2K.ResultAdmission.value s,(AspisR1.S2K.ResultPayload.bytes s).val⟩ =
+      ok (.Ok (image,AspisR1.S2K.ResultPayload.bytes s),
+        [.validate (AspisR1.S2K.ResultAdmission.value s),
+         .lane (AspisR1.S2K.ResultAdmission.value s),
+         .encode (AspisR1.S2K.ResultAdmission.value s)]) := by
+  have linked := NGK_NFR_PoolReturnData.association runtime law context selected state s valid
+  refine ⟨linked.1,linked.2.1,?_⟩
+  exact NGK_NFR_CSettlement.success validate lane NFY_NEY_EmitComposed.encode
+    ⟨AspisR1.S2K.ResultAdmission.value s,(AspisR1.S2K.ResultPayload.bytes s).val⟩
+    image (AspisR1.S2K.ResultPayload.bytes s) checked advanced linked.2.2.1
+#print axioms same_emitted_settlement
+
+/-- Explicit local interpretation witnessing consistency of the nonempty row;
+it is not an implementation proof about a Solana validator. Empty returns None. -/
+def localRuntime (Context Key : Type) [DecidableEq Context] :
+    Runtime Context Key (Context × Key × List U8) where
+  write context key bytes := (context,key,bytes)
+  read context state := if context = state.1 then
+    if state.2.2.length = 0 then none else some (state.2.1,state.2.2) else none
+
+theorem local_law (Context Key : Type) [DecidableEq Context] :
+    NGK_NFR_PoolReturnData.RuntimeReturnData (localRuntime Context Key) := by
+  intro context key bytes positive _bounded
+  have nonzero : bytes.length ≠ 0 := by omega
+  simp only [localRuntime,ite_true,nonzero,ite_false]
+#print axioms local_law
+
+theorem local_empty (Context Key : Type) [DecidableEq Context] (context : Context) (key : Key) :
+    (localRuntime Context Key).read context ((localRuntime Context Key).write context key []) = none := by
+  simp only [localRuntime,ite_true,List.length_nil]
+#print axioms local_empty
+end NGK_NFR_ModelJoin
+
+run_cmd do
+ let env ← Lean.getEnv
+ env.constants.toList.forM fun (n, ci) => do
+  if ci.isTheorem && (env.getModuleIdxFor? n).isNone then
+   Lean.Elab.Command.elabCommand (← `(command| #print axioms $(Lean.mkIdent n)))

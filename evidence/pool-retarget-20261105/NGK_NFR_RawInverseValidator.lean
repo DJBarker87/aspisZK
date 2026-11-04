@@ -16,13 +16,13 @@ open AspisR1.S2K NGK_NFO_ResultLayout
 
 
 @[local step] theorem map {T : Type} (r : core.result.Result T pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1) :
-    core.result.Result.map_err pool_v1.pair_forest_terminal.validate_result.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1 r () ⦃ _ => True ⦄ := by
+    AspisR1TerminalDecoder.core.result.Result.map_err pool_v1.pair_forest_terminal.validate_result.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1 r () ⦃ _ => True ⦄ := by
   apply exists_imp_spec
   cases r <;> exact ⟨_,rfl,trivial⟩
 #print axioms map
 
 @[local step] theorem map_1 {T : Type} (r : core.result.Result T pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) :
-    core.result.Result.map_err pool_v1.pair_forest_terminal.validate_result.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairForestTerminalFormatErrorV1 r () ⦃ _ => True ⦄ := by
+    AspisR1TerminalDecoder.core.result.Result.map_err pool_v1.pair_forest_terminal.validate_result.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairForestTerminalFormatErrorV1 r () ⦃ _ => True ⦄ := by
   apply exists_imp_spec
   cases r <;> exact ⟨_,rfl,trivial⟩
 #print axioms map_1

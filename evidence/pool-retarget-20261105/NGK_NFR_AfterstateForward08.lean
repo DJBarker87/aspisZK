@@ -16,28 +16,28 @@ theorem result (a : Afterstate)
   rw [AspisR1.NFY_JFt_ExactArray.source _ _ _ rfl,bind_tc_ok]
   simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
   rw [NGK_NFR_DigestForward.roundtrip _ ((domain a valid).2 ⟨8,by decide⟩),bind_tc_ok]
-  simp only [core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
+  simp only [AspisR1TerminalDecoder.core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
   rw [range (encoded a) 336#usize 368#usize (DigestBytes.bytes (a.next_frontier.val[9]'(by have := a.next_frontier.property; scalar_tac)))
     (by decide) (by simp [encoded,Array.to_slice,(AfterstateEncoding.bytes a).property])
     (frontier_window a 9 (by decide)),bind_tc_ok]
   rw [AspisR1.NFY_JFt_ExactArray.source _ _ _ rfl,bind_tc_ok]
   simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
   rw [NGK_NFR_DigestForward.roundtrip _ ((domain a valid).2 ⟨9,by decide⟩),bind_tc_ok]
-  simp only [core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
+  simp only [AspisR1TerminalDecoder.core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
   rw [range (encoded a) 368#usize 400#usize (DigestBytes.bytes (a.next_frontier.val[10]'(by have := a.next_frontier.property; scalar_tac)))
     (by decide) (by simp [encoded,Array.to_slice,(AfterstateEncoding.bytes a).property])
     (frontier_window a 10 (by decide)),bind_tc_ok]
   rw [AspisR1.NFY_JFt_ExactArray.source _ _ _ rfl,bind_tc_ok]
   simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
   rw [NGK_NFR_DigestForward.roundtrip _ ((domain a valid).2 ⟨10,by decide⟩),bind_tc_ok]
-  simp only [core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
+  simp only [AspisR1TerminalDecoder.core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
   rw [range (encoded a) 400#usize 432#usize (DigestBytes.bytes (a.next_frontier.val[11]'(by have := a.next_frontier.property; scalar_tac)))
     (by decide) (by simp [encoded,Array.to_slice,(AfterstateEncoding.bytes a).property])
     (frontier_window a 11 (by decide)),bind_tc_ok]
   rw [AspisR1.NFY_JFt_ExactArray.source _ _ _ rfl,bind_tc_ok]
   simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
   rw [NGK_NFR_DigestForward.roundtrip _ ((domain a valid).2 ⟨11,by decide⟩),bind_tc_ok]
-  simp only [core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
+  simp only [AspisR1TerminalDecoder.core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
   exact NGK_NFR_AfterstateForward12.result a valid
 #print axioms result
 end NGK_NFR_AfterstateForward08

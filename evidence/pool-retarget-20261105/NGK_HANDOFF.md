@@ -11,3 +11,5 @@ change or wallet/key operation. Budget 110 Lean/audit/link attempts. Own cache
 Canonical predecessors are read-only. RuntimeReturnData (nonempty 1..1024) and
 RuntimeMemcmp remain accepted trust rows; P6/D188 transport is reclassification.
 No security metric, privacy or two-transaction contract change.
+
+Replay stage: all 48 selected Pool modules compile, with standard-only printed axioms. 50 attempts: 48 successful, two excluded map_err name-resolution failures corrected by fully qualifying the emitted helper (existing NFY exact transport). Combined import/raw audit/fixtures/scan are PENDING. Seven unchanged NFV validators passed in private output sandbox. No consumer row is promoted.

@@ -1035,3 +1035,21 @@ Legacy GuardBody, PrepQM and Phase cannot coexist with canonical owners (NGJ_L02
 - `S2SdkSavedFirstV1` → `RPz7_S2SdkSavedFirstV1`
 - `S2SdkSizedSavedFirstV1` → `RPz7_S2SdkSizedSavedFirstV1`
 
+
+## Definitional equality and direct uses
+
+| Family | Legacy → canonical | Equality / transport disposition |
+|---|---|---|
+| GuardBody/S2Sdk* | RPz7_* via existing canonical proof chains | Competing module owners cannot load together (NGJ_L027). No cross-owner definitional equality asserted; consume canonical proofs read-only. |
+| Prepared/PrepQM | RPz7_PreparedFromQmSourceBridge and its consumers | Nominal carrier ownership differs (NGJ_L028); no rfl across duplicate owners. Entire canonical producer/consumer chain reused. |
+| Phase | AspisR1PublicPreparation.Types via RPz7 and NFN/NFS | Different inductive owners (NGJ_L029), not admitted as definitionally equal. No legacy Phase introduced. |
+| NED/NBN/NBK library | NFY/NGE/NGF module/namespace mapping above | Existing canonical retarget proofs reused; exact namespace substitution recorded, no new theorem transported by an assumed equality. |
+| NFO/NFR/NFV local carriers | NGK_NFO/NGK_NFR/NGK_NFV | Renamed nominal inductives are not definitionally equal to legacy carriers. ALL local producers/consumers retarget together; no old/new cast or equality premise. |
+| Decoder map_err | AspisR1TerminalDecoder.core.result.Result.map_err | NFY_OwnerTransport.map_err_transport proves complete Result equality (including failure/divergence) to canonical installed helper, by rfl. Seven Pool copies require qualified emitted names; recorded before/after statements. |
+| Other admitted dependencies | Identical already-loaded module names | Same canonical constants in final environment, no duplicated shared owner or assumed transport. Exact object hashes are pinned per attempt. |
+
+NGK_DECLARATION_USES.json enumerates every qualified direct token with exact
+before/after names. Unqualified uses are retained in full pinned bodies and
+resolved by the compiler; the full import closure is not shortened to lexical
+uses. NGK_CERTIFICATES.json enumerates all selected predecessor audit records
+and source theorem declarations before consulting a loaded-module graph.
