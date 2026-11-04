@@ -1,0 +1,107 @@
+{
+  "rows": [
+    {
+      "instance": "439:2e03c5491698fecf9779",
+      "function_id": 439,
+      "statement": 26460,
+      "lemma": "PV_B3P_StepPanic587227.certificate"
+    }
+  ],
+  "count": 1,
+  "chunks": [
+    "PV_B3P_StepPanic587227"
+  ],
+  "binding": {
+    "caller_edges": [
+      {
+        "caller": "96:6c8bd17f0abb0a38f461",
+        "callee": "439:2e03c5491698fecf9779",
+        "callee_id": 439,
+        "callee_name": "core::iter::adapters::step_by::{impl}::new",
+        "kind": "direct"
+      },
+      {
+        "caller": "224:95965c546ae80dd61779",
+        "callee": "96:6c8bd17f0abb0a38f461",
+        "callee_id": 96,
+        "callee_name": "core::iter::traits::iterator::Iterator::step_by",
+        "kind": "direct"
+      }
+    ],
+    "calls": [
+      {
+        "statement": 13535,
+        "call": {
+          "func": {
+            "Regular": {
+              "kind": {
+                "Fun": {
+                  "Regular": 96
+                }
+              }
+            }
+          },
+          "args": [
+            {
+              "Move": {
+                "kind": {
+                  "Local": 73
+                }
+              }
+            },
+            {
+              "Const": {
+                "kind": {
+                  "Literal": {
+                    "Scalar": {
+                      "Unsigned": [
+                        "Usize",
+                        "4"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "dest": {
+            "kind": {
+              "Local": 72
+            }
+          }
+        }
+      }
+    ],
+    "forward": 8964,
+    "zero_switch": 26456,
+    "nonzero_arm_terminal": 26455,
+    "panic_statement": 26460
+  },
+  "source_parity": [
+    {
+      "version": "1.94.1",
+      "path": "evidence/pv-b3p6-20261028/resume18/std587-source/1.94.1/step_by.rs.xz",
+      "source_sha256": "a8536e75829572545a34b382470b1c8906cac19ca81fcb80fc1eee2278f9a1f4",
+      "body": "{\n        assert!(step != 0);\n        let iter = <I as SpecRangeSetup<I>>::setup(iter, step);\n        StepBy { iter, step_minus_one: step - 1, first_take: true }\n    }",
+      "body_sha256": "612e874123b6a331a85af16f4a626592e52443bd00e7e269805cb484e434650b"
+    },
+    {
+      "version": "nightly-2026-06-01",
+      "path": "evidence/pv-b3p6-20261028/resume18/std587-source/nightly-2026-06-01/step_by.rs.xz",
+      "source_sha256": "a8536e75829572545a34b382470b1c8906cac19ca81fcb80fc1eee2278f9a1f4",
+      "body": "{\n        assert!(step != 0);\n        let iter = <I as SpecRangeSetup<I>>::setup(iter, step);\n        StepBy { iter, step_minus_one: step - 1, first_take: true }\n    }",
+      "body_sha256": "612e874123b6a331a85af16f4a626592e52443bd00e7e269805cb484e434650b"
+    }
+  ],
+  "negative_controls": {
+    "zero_or_wrong_step": "rejected",
+    "wrong_forwarding": "rejected",
+    "wrong_source_zero_switch": "rejected"
+  },
+  "llbc_sha256": "a164a64f8b65d598bbe17d27f43a3fe4df2d24cb0c4f3036e77f758345981f8e",
+  "validation_status": "PREPARATION; focused Lean compile and raw NEP audit pending",
+  "evidence_class": "SCRIPT-CHECKED own-1 literal incoming step/forward/control projection plus named kernel nonzero law",
+  "whole_caller_association": false,
+  "drop_and_specialization_association": false,
+  "premises_removed": []
+}
