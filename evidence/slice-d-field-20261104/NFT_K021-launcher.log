@@ -1,0 +1,48 @@
+{"attempt": "NFT_K021", "exit_status": 1, "wall_seconds": 2.605254838941619, "peak_rss_kib": "518364", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-d-field-20261104/NFT_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `
+...
+_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-slice-d-field-20261104/NFT_src/crates/aspis-core/../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-slice-d-field-20261104/NFT_src/crates/aspis-core/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: module `NFQ_hiding` should have a snake case name
+    --> crates/aspis-core/src/state_only_hiding.rs:1223:5
+     |
+1223 | mod NFQ_hiding;
+     |     ^^^^^^^^^^ help: convert the identifier to snake case: `nfq_hiding`
+
+    Finished `dev` profile [optimized] target(s) in 1.38s
+Checking harness field::NFT_square::square_log...
+
+VERIFICATION RESULT:
+ ** 1 of 91 failed
+Failed Checks: assertion failed: got.b.0 == if cfg!(NFT_invert) { expected ^ 1 } else { expected }
+ File: "crates/aspis-core/src/NFT_square.rs", line 26, in field::NFT_square::square_log
+
+VERIFICATION:- FAILED
+Verification Time: 0.2551159s
+
+Manual Harness Summary:
+Verification failed for - field::NFT_square::square_log
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-ra9c31a0dc26545adbad5fbccb5aac220.scope; invocation ID: e890bee7c54a44c79b5610933231b364

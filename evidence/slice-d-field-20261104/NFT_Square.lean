@@ -27,7 +27,14 @@ theorem scalar_product (a b : U32) :
       z.val=(a.val*b.val)%2147483647 ∧ z.val<2147483647 :=
   AspisR1.ExtractedMaskReducer.current_mul_mod a b
 
+theorem generated_scalar_product (a b : U32) :
+    ∃ z, AspisR1SemanticCallExtraction.aspis_core.field.M31.mul a b=ok z ∧
+      z.val=(a.val*b.val)%2147483647 ∧ z.val<2147483647 := by
+  rw [AspisR1PublicPreparation.RawExtractedSemanticCallOpsV20.generated_m31_mul_eq_probe]
+  exact scalar_product a b
+
 #print axioms source
 #print axioms wide_product
 #print axioms scalar_product
+#print axioms generated_scalar_product
 end NFT_Square
