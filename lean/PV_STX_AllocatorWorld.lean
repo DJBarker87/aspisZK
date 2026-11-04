@@ -61,7 +61,7 @@ theorem denied_prefix (allocator : Allocator) (encode : AllocationEvent → Byte
         base := {w.base with allocations := w.base.allocations+1}},
        [event encode (.request layout),event encode (.denied layout (allocator w layout).errno),
         side "allocator-abort" []]⟩ := by
-  simp only [allocate,run,advance,start,step,handler,tryAllocate,h,resumed,continueWith,
+  simp only [allocate,Bind.bind,Pure.pure,run,advance,start,step,handler,tryAllocate,h,resumed,continueWith,
     List.nil_append,List.append_nil,List.cons_append,List.nil_append]
 
 theorem allocated_frame (allocator : Allocator) (encode : AllocationEvent → Bytes)

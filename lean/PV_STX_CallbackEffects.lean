@@ -37,7 +37,7 @@ theorem construct_returned {E C F W Ev : Type} (handler : Handler Op W Ev)
        (handler (da error) w).events ++
          (handler (dc closure) (handler (da error) w).world).events⟩ := by
   cases r <;>
-    simp only [construct,run,advance,start,step,resumed,continueWith,ha,hc,
+    simp only [construct,Bind.bind,Pure.pure,run,advance,start,step,resumed,continueWith,ha,hc,
       List.nil_append,List.append_nil]
 
 theorem argument_fault {E C F W Ev : Type} (handler : Handler Op W Ev)
@@ -45,7 +45,7 @@ theorem argument_fault {E C F W Ev : Type} (handler : Handler Op W Ev)
     (w : W) (fault : Fault) (h : (handler (da error) w).answer = .fault fault) :
     run handler 5 (construct da dc value closure error) w =
       ⟨.fault fault,(handler (da error) w).world,(handler (da error) w).events⟩ := by
-  simp only [construct,run,advance,start,step,h,List.nil_append]
+  simp only [construct,Bind.bind,Pure.pure,run,advance,start,step,h,List.nil_append]
 
 #print axioms construct_returned
 #print axioms argument_fault
