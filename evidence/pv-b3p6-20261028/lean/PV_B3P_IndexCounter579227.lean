@@ -17,7 +17,7 @@ theorem state_ordered (n : Nat) (length : Usize) :
   | zero => change (0#usize).val ≤ length.val; scalar_tac
   | succ n ih =>
     by_cases done : sourceState n length = length
-    · simp only [sourceState,advance,if_pos done,done]
+    · simpa only [sourceState,advance,done,if_true] using (Nat.le_refl length.val)
     · have safe := PV_B3P_PreconditionFormatting569227.index_range_conditions
         (sourceState n length) length ih done
       simpa only [sourceState,advance,if_neg done] using safe.2.2
