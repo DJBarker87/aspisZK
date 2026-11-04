@@ -1,0 +1,167 @@
+import PV_B3P_KindEvents587227
+namespace PV_B3P_KindPanic587227
+open Aeneas Aeneas.Std PV_B3P_PanicPatterns571227 PV_B3P_KindEvents587227
+set_option autoImplicit false
+/-- Source247 complete literal initializer, weight_kind projection only. -/
+def sourceKinds : List (Fin 5) := [
+  kind0,
+  kind0,
+  kind0,
+  kind1,
+  kind1,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind1,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind1,
+  kind1,
+  kind2,
+  kind0,
+  kind3,
+  kind4,
+  kind3,
+  kind4,
+  kind3,
+  kind4,
+  kind3,
+  kind4,
+  kind3,
+  kind4,
+  kind3,
+  kind4,
+  kind3,
+  kind4,
+  kind3,
+  kind4,
+  kind3,
+  kind4,
+  kind3,
+  kind4,
+  kind3,
+  kind4,
+  kind3,
+  kind4,
+  kind3,
+  kind4,
+  kind3,
+  kind4,
+  kind3,
+  kind4,
+  kind3,
+  kind4,
+  kind3,
+  kind4,
+  kind3,
+  kind4,
+  kind3,
+  kind4,
+  kind3,
+  kind4,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0,
+  kind0]
+/-- Actual COPY_LINKS incoming/default exclusion at 68:95965c546ae80dd61779:7698. -/
+theorem certificate_68_7698 {α : Type} (index : Nat) (effects : List (Result Unit))
+    (observed : IndexState) (ran : sourceEvent sourceKinds index effects = .ok (some observed))
+    (normal first second : Result α) :
+    ¬ diagnostic (sourceCondition observed = true) ∧
+      branch (sourceCondition observed = true) normal first = branch (sourceCondition observed = true) normal second :=
+  event_certificate sourceKinds index effects observed ran normal first second
+#print axioms certificate_68_7698
+/-- Actual COPY_LINKS incoming/default exclusion at 68:95965c546ae80dd61779:7706. -/
+theorem certificate_68_7706 {α : Type} (index : Nat) (effects : List (Result Unit))
+    (observed : IndexState) (ran : sourceEvent sourceKinds index effects = .ok (some observed))
+    (normal first second : Result α) :
+    ¬ diagnostic (sourceCondition observed = true) ∧
+      branch (sourceCondition observed = true) normal first = branch (sourceCondition observed = true) normal second :=
+  event_certificate sourceKinds index effects observed ran normal first second
+#print axioms certificate_68_7706
+/-- Actual COPY_LINKS incoming/default exclusion at 250:95965c546ae80dd61779:21441. -/
+theorem certificate_250_21441 {α : Type} (index : Nat) (effects : List (Result Unit))
+    (observed : IndexState) (ran : sourceEvent sourceKinds index effects = .ok (some observed))
+    (normal first second : Result α) :
+    ¬ diagnostic (sourceCondition observed = true) ∧
+      branch (sourceCondition observed = true) normal first = branch (sourceCondition observed = true) normal second :=
+  event_certificate sourceKinds index effects observed ran normal first second
+#print axioms certificate_250_21441
+end PV_B3P_KindPanic587227
