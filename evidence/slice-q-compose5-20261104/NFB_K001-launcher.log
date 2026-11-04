@@ -1,0 +1,53 @@
+{"attempt": "NFB_K001", "exit_status": 1, "wall_seconds": 11.492064316989854, "peak_rss_kib": "533104", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-q-compose5-20261104/NFB_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`
+...
+ |                                                      ^^^^^^^^^^^^^^^^^
+   |
+   = help: maybe it is overwritten before being read?
+   = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/aspis-r1-cost-probe/src/candidate.rs:239:43
+    |
+239 | fn query_loop(proof: &[u8], p: &Prepared, mut a: Accumulator, g: &[E; 29], obs: Observer, geometry: &QueryGeometry, pending: Batche...
+    |                                           ----^
+    |                                           |
+    |                                           help: remove this `mut`
+
+warning: variable does not need to be mutable
+  --> crates/aspis-r1-cost-probe/src/verifier/NFB_geometry.rs:15:34
+   |
+15 |  let raw:[u32;5]=kani::any();let mut values=[M31(raw[0]),M31(raw[1]),M31(raw[2]),M31(raw[3]),M31(raw[4])];
+   |                                  ----^^^^^^
+   |                                  |
+   |                                  help: remove this `mut`
+
+warning: variable does not need to be mutable
+  --> crates/aspis-r1-cost-probe/src/verifier/NFB_geometry.rs:21:6
+   |
+21 |  let mut reply=NFB_zero_iteration(&values,i);
+   |      ----^^^^^
+   |      |
+   |      help: remove this `mut`
+
+warning: variable does not need to be mutable
+  --> crates/aspis-r1-cost-probe/src/verifier/NFB_geometry.rs:58:6
+   |
+58 |  let mut world:[u32;60]=kani::any();let j:usize=kani::any();kani::assume(j<60);let before=world[j];
+   |      ----^^^^^
+   |      |
+   |      help: remove this `mut`
+
+For more information about this error, try `rustc --explain E0658`.
+error: could not compile `aspis-r1-cost-probe` (lib) due to 2 previous errors; 21 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 2 compilation errors.
+
+Running as unit: run-r84c01a4780d54acb9b8850af7fb9f7be.scope; invocation ID: 7662000d775f488289fa0317713bfeb9

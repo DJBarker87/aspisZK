@@ -1,0 +1,66 @@
+{"attempt": "NFB_L008", "exit_status": 1, "wall_seconds": 2.0585962019395083, "peak_rss_kib": "4941388", "swaps": "0", "print_axioms": ["'NFB_ZeroFinite.next_active' depends on axioms: [propext, Quot.sound]", "'NFB_ZeroFinite.next_end' depends on axioms: [propext, sorryAx, Quot.sound]", "'NFB_ZeroFinite.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NFB_ZeroFinite.lean:28:16: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+  a - c ≤ -1
+where
+ a := ↑it.i
+ b := ↑(↑it.slice).length
+ c := ↑↑it.slice.len
+NFB_ZeroFinite.lean:36:8: error: unsolved goals
+case zero
+it : core.slice.iter.Iter U32
+remaining : it.i + 0 = (↑it.slice).length
+⊢ (match
+      let (next, it) := (none, it)
+      match next with
+      | none => ok (done (false, it))
+      | some value => if decide (value = 0#u32) = true then ok (done (true, it)) else ok (cont (it, ())) with
+    | ok r =>
+      match r with
+      | cont x => loop NFB_ZeroScan.zeroStep x
+      | done x => ok x
+    | fail e => fai
+...
+) = true then ok (true, after) else bounded fuel after
+NFB_ZeroFinite.lean:47:5: error: Type mismatch
+  ih { slice := it.slice, i := it.i + 1 } rest
+has type
+  loop NFB_ZeroScan.zeroStep ({ slice := it.slice, i := it.i + 1 }, ()) =
+    bounded fuel { slice := it.slice, i := it.i + 1 }
+but is expected to have type
+  fail e✝ =
+    let (next, after) := (some (↑it.slice)[it.i], { slice := it.slice, i := it.i + 1 })
+    match next with
+    | none => ok (false, after)
+    | some value => if decide (value = 0#u32) = true then ok (true, after) else bounded fuel after
+NFB_ZeroFinite.lean:39:16: error: unsolved goals
+case h_3
+fuel : ℕ
+ih :
+  ∀ (it : core.slice.iter.Iter U32),
+    it.i + fuel = (↑it.slice).length → loop NFB_ZeroScan.zeroStep (it, ()) = bounded fuel it
+it : core.slice.iter.Iter U32
+remaining : it.i + (fuel + 1) = (↑it.slice).length
+active : it.i < (↑it.slice).length
+rest : { slice := it.slice, i := it.i + 1 }.i + fuel = (↑it.slice).length
+x✝ : Result (ControlFlow (core.slice.iter.Iter U32 × Unit) (Bool × core.slice.iter.Iter U32))
+heq✝ :
+  (let (next, it) := (some (↑it.slice)[it.i], { slice := it.slice, i := it.i + 1 })
+    match next with
+    | none => ok (done (false, it))
+    | some value => if decide (value = 0#u32) = true then ok (done (true, it)) else ok (cont (it, ()))) =
+    div
+⊢ div =
+    let (next, after) := (some (↑it.slice)[it.i], { slice := it.slice, i := it.i + 1 })
+    match next with
+    | none => ok (false, after)
+    | some value => if decide (value = 0#u32) = true then ok (true, after) else bounded fuel after
+'NFB_ZeroFinite.next_active' depends on axioms: [propext, Quot.sound]
+'NFB_ZeroFinite.next_end' depends on axioms: [propext, sorryAx, Quot.sound]
+'NFB_ZeroFinite.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r9db1e92e5db74f0fae67d6b94cf0c197.scope; invocation ID: fa357ccdb010420eae0c6791420e4c30

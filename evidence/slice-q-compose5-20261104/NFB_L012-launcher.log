@@ -1,0 +1,42 @@
+{"attempt": "NFB_L012", "exit_status": 1, "wall_seconds": 2.1535880358424038, "peak_rss_kib": "4941552", "swaps": "0", "print_axioms": ["'NFB_ZeroFinite.next_active' depends on axioms: [propext, Quot.sound]", "'NFB_ZeroFinite.next_end' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NFB_ZeroFinite.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NFB_ZeroFinite.lean:49:5: error: Type mismatch: After simplification, term
+  ih { slice := it.slice, i := it.i + 1 } rest
+ has type
+  @Eq (Result (Bool × core.slice.iter.Iter U32)) (loop NFB_ZeroScan.zeroStep ({ slice := it.slice, i := it.i + 1 }, ()))
+    (bounded fuel { slice := it.slice, i := it.i + 1 })
+but is expected to have type
+  @Eq (Result (Bool × core.slice.iter.Iter U32))
+    (match
+      if false = true then ok (done (true, { slice := it.slice, i := it.i + 1 }))
+      else ok (cont ({ slice := it.slice, i := it.i + 1 }, ())) with
+    | ok r =>
+      match r with
+      | cont x => loop NFB_ZeroScan.zeroStep x
+      | done x => ok x
+    | fail e => fail e
+    | div => div)
+    (if
+...
+NFB_ZeroFinite.lean:49:5: error: Type mismatch: After simplification, term
+  ih { slice := it.slice, i := it.i + 1 } rest
+ has type
+  @Eq (Result (Bool × core.slice.iter.Iter U32)) (loop NFB_ZeroScan.zeroStep ({ slice := it.slice, i := it.i + 1 }, ()))
+    (bounded fuel { slice := it.slice, i := it.i + 1 })
+but is expected to have type
+  @Eq (Result (Bool × core.slice.iter.Iter U32))
+    (match
+      if false = true then ok (done (true, { slice := it.slice, i := it.i + 1 }))
+      else ok (cont ({ slice := it.slice, i := it.i + 1 }, ())) with
+    | ok r =>
+      match r with
+      | cont x => loop NFB_ZeroScan.zeroStep x
+      | done x => ok x
+    | fail e => fail e
+    | div => div)
+    (if false = true then ok (true, { slice := it.slice, i := it.i + 1 })
+    else bounded fuel { slice := it.slice, i := it.i + 1 })
+'NFB_ZeroFinite.next_active' depends on axioms: [propext, Quot.sound]
+'NFB_ZeroFinite.next_end' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFB_ZeroFinite.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rd28840ecfcd24b25ad0268f07aae6c71.scope; invocation ID: 9ca81c28049e423e82d463caf6f1ec7d
