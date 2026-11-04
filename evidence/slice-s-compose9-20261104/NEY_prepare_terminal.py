@@ -4,7 +4,8 @@ from NEY_source_tools import calls
 import sys,subprocess,json,difflib
 sys.path.insert(0,str(E.parent/'slice-s-compose7-20261103'))
 from NEU_bridge_checks import COMMON,PUBLIC
-mode=sys.argv[1];assert mode in ['positive','value','argument']
+slot=int(sys.argv[1]);assert 0<=slot<26
+mode=sys.argv[2];assert mode in ['positive','value','argument']
 subprocess.run([sys.executable,str(E/'NEY_prepare_window.py'),'1','positive'],check=True)
 p='crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs';f=frozen(p);name='decode_pool_v1_pair_forest_terminal_statement_v1';a=f.index('pub fn '+name+'(');z=f.index('\n}',a)+2;original=f[a:z]
 native=original.replace('pub fn '+name+'(','fn native(').replace('    bytes: &[u8],','    bytes: &[u8],f:&mut Frame,')
@@ -13,6 +14,8 @@ if mode=='argument':native=native.replace('bytes[PAYMENT_STATEMENT_OFFSET..]','b
 fields=['s.transition_kind() as u64']+['s.common().'+x+' as u64' for x in COMMON]
 for x in PUBLIC:fields.append('match s{PoolV1PairForestTerminalStatementV1::PrivateTransfer{public,..}=>public.'+x+' as u64,PoolV1PairForestTerminalStatementV1::Withdrawal{public,..}=>public.'+x+' as u64}')
 fields += ['match s{PoolV1PairForestTerminalStatementV1::PrivateTransfer{public,..}=>public.recipient_commitment[i].0 as u64,_=>0}','match s{PoolV1PairForestTerminalStatementV1::Withdrawal{public,..}=>public.amount as u64,_=>0}','match s{PoolV1PairForestTerminalStatementV1::Withdrawal{public,..}=>public.destination_token_account[j] as u64,_=>0}']
+fields_all=fields
+fields=[fields[slot]]
 project='fn project(s:&PoolV1PairForestTerminalStatementV1,slot:usize,i:usize,j:usize,k:usize)->u64{match slot{'+','.join(str(i)+'=>'+x for i,x in enumerate(fields))+',_=>0}}'
 base=helpers().replace('aspis_statement::','crate::')
 body=base+'\n'+project+'''
@@ -32,4 +35,4 @@ match header{{Err(e)=>{{assert!(f.calls==0);assert!(matches!(result,Err(x) if x=
 '''
 body=body.replace('@MAGIC@','||'.join(f'bytes[{i}]!=POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC[{i}]' for i in range(4)))
 h=f+'\n#[cfg(kani)]\n#[path="NEY_terminal.rs"]\nmod NEY_terminal;\n';patch=''.join(difflib.unified_diff(f.splitlines(True),h.splitlines(True),fromfile='a/'+p,tofile='b/'+p))+'--- /dev/null\n+++ b/crates/aspis-statement/src/pool_v1/NEY_terminal.rs\n@@ -0,0 +1,'+str(len(body.splitlines()))+' @@\n'+''.join('+'+l+'\n' for l in body.splitlines());(E/'NEY_native_contracts.patch').write_text(patch)
-(E/'NEY_TERMINAL_CURRENT.json').write_text(json.dumps(dict(mode=mode,full_child_Result=True,frozen_body=original,native=native,source=body,fields=fields,domain='all live1880-byte bodies; arbitrary complete child Results and all26 scalar/byte/word/frontier projections; other lengths handled by separate metadata gate',classification='ruling y actual common/payment Box inputs and validator pointer, full errors, returned record and ordered calls; no new allocation in caller'),indent=1))
+(E/'NEY_TERMINAL_CURRENT.json').write_text(json.dumps(dict(mode=mode,full_child_Result=True,frozen_body=original,native=native,source=body,fields=fields,field_slot=slot,all_fields=fields_all,domain='all live1880-byte bodies; arbitrary complete child Results and one scalar/byte/word/frontier projection at arbitrary component index; other lengths handled by separate metadata gate',classification='ruling y actual common/payment Box inputs and validator pointer, full errors, returned record and ordered calls; no new allocation in caller'),indent=1))

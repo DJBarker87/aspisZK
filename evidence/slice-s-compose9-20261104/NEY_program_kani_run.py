@@ -5,8 +5,8 @@ E=Path(__file__).resolve().parent;B='/home/dombarker/project-offloads/codex-cx-s
 a,kind,harness=sys.argv[1:];assert kind in ['metadata','kani'];assert a.startswith('NEY_M' if kind=='metadata' else 'NEY_K')
 if kind=='kani':
  assert 'fn '+harness.rsplit('::',1)[-1]+'(' in ((E/'NEY_oracle.patch').read_text()+(E/'NEY_native_contracts.patch').read_text()),'missing requested harness; no launch'
-assert not (E/a).exists();assert len(list(E.glob('NEY_K*/receipt.json')))<140
-assert 1<=int(a[5:])<=140 if kind=='kani' else True
+assert not (E/a).exists();assert len(list(E.glob('NEY_K*/receipt.json')))<150
+assert 1<=int(a[5:])<=150 if kind=='kani' else True
 active=E/'NEY_ACTIVE.json';assert not active.exists();active.write_text(json.dumps(dict(attempt=a,kind=kind)))
 def ssh(code,stdin=None,submitted=False):
  for retry in range(11):
