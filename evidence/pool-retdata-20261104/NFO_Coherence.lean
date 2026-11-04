@@ -22,7 +22,7 @@ unsafe def main (_args : List String) : IO UInt32 := do
  NFO_MemoryLimit.set
  initSearchPath (← findSysroot)
  enableInitializersExecution
- let env ← importModules #[{module := `NFO_PoolReturnData, importAll := true}] {} (loadExts := true) (level := .private)
+ let env ← importModules #[{module := `NFO_Final, importAll := true}] {} (loadExts := true) (level := .private)
  let env := env.setExporting false
  let output ← IO.FS.Handle.mk "NFO_LOADED.jsonl" .write
  let mut failures := 0

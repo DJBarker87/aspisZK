@@ -1,0 +1,139 @@
+--- a/programs/aspis-pool/src/pair_forest_dispatch.rs
++++ b/programs/aspis-pool/src/pair_forest_dispatch.rs
+@@ -1180,3 +1180,7 @@
+ 
+     const _: () = assert!(POOL_V1_PAIR_TREE_DEPTH == 20);
+ }
++
++#[cfg(kani)]
++#[path="NFO_read.rs"]
++mod NFO_read;
+--- a/programs/aspis-pool/src/lib.rs
++++ b/programs/aspis-pool/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! Pool V1 authenticated state-transition kernel.
+ //!
+ //! The native entrypoint exposes exact V1 initialization, vault-backed
+@@ -145,3 +146,9 @@
+     plan_authenticated_verifier_dispatch_v1, AuthenticatedVerifierDispatchV1,
+     PlannedVerifierDispatchV1, VerifierDispatchClaimV1,
+ };
++
++#[cfg(kani)]
++extern crate alloc;
++#[cfg(kani)]
++#[path="../../../KMX_stubs.rs"]
++pub mod NFO_KMX;
+--- /dev/null
++++ b/programs/aspis-pool/src/NFO_read.rs
+@@ -0,0 +1,109 @@
++const RESULT_MASTER_OFFSET: usize = 8;
++const RESULT_SELECTED_LANE_OFFSET: usize = 40;
++const RESULT_NULLIFIER_OFFSET: usize = 72;
++const RESULT_AFTERSTATE_OFFSET: usize = 104;
++use super::*;
++use aspis_statement::pool_v1::*;
++use aspis_core::field::M31;
++fn any_digest()->aspis_statement::Digest{core::array::from_fn(|_|M31(kani::any()))}
++fn result()->PoolV1PairForestTerminalResultV1{PoolV1PairForestTerminalResultV1{
++ transition_kind:if kani::any(){PoolV1TransitionKind::PrivateTransfer}else{PoolV1TransitionKind::Withdrawal},
++ master_account:kani::any(),selected_lane_account:kani::any(),output_lane:kani::any(),nullifier:any_digest(),
++ verified_afterstate:PoolV1PairVerifiedAfterstateV1{next_pair_index:kani::any(),next_root:any_digest(),next_frontier:[any_digest(),any_digest(),any_digest(),any_digest(),any_digest(),any_digest(),any_digest(),any_digest(),any_digest(),any_digest(),any_digest(),any_digest(),any_digest(),any_digest(),any_digest(),any_digest(),any_digest(),any_digest(),any_digest(),any_digest()]}}}
++fn observe(r:&PoolV1PairForestTerminalResultV1,family:u8,row:usize,word:usize,index:usize)->u64{match family{
++ 0=>r.transition_kind as u64,1=>r.master_account[index] as u64,2=>r.selected_lane_account[index] as u64,
++ 3=>r.output_lane as u64,4=>r.nullifier[word].0 as u64,5=>r.verified_afterstate.next_pair_index,
++ 6=>r.verified_afterstate.next_root[word].0 as u64,_=>r.verified_afterstate.next_frontier[row][word].0 as u64}}
++fn NFO_any_PoolV1PaymentStatementFormatError()->aspis_statement::pool_v1::PoolV1PaymentStatementFormatError { match kani::any::<u8>() {0=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::WrongLength,1=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::WrongMagic,2=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::WrongVersion,3=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::WrongTransitionKind,4=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::WrongDigestEncoding,5=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::NonZeroReserved,6=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::ZeroRequiredBinding,7=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::InvalidAnchorSequence,8=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::NonCanonicalDigest,9=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::NonCanonicalAssetId,10=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::InvalidWithdrawalAmount,11=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::InvalidDestination,12=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::InvalidEnvelope,_=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::EnvelopeMismatch} }
++fn NFO_any_PoolV1TreeError()->aspis_statement::pool_v1::PoolV1TreeError { match kani::any::<u8>() {0=>aspis_statement::pool_v1::PoolV1TreeError::TreeFull,1=>aspis_statement::pool_v1::PoolV1TreeError::InsufficientCapacity,2=>aspis_statement::pool_v1::PoolV1TreeError::IndexOutOfRange,3=>aspis_statement::pool_v1::PoolV1TreeError::RootMismatch,4=>aspis_statement::pool_v1::PoolV1TreeError::NonCanonicalFrontier,5=>aspis_statement::pool_v1::PoolV1TreeError::WrongLength,6=>aspis_statement::pool_v1::PoolV1TreeError::WrongMagic,7=>aspis_statement::pool_v1::PoolV1TreeError::WrongVersion,8=>aspis_statement::pool_v1::PoolV1TreeError::WrongDepth,9=>aspis_statement::pool_v1::PoolV1TreeError::WrongTreeHash,10=>aspis_statement::pool_v1::PoolV1TreeError::WrongDigestEncoding,11=>aspis_statement::pool_v1::PoolV1TreeError::NonCanonicalDigest,_=>aspis_statement::pool_v1::PoolV1TreeError::NonZeroReserved} }
++fn NFO_any_PoolV1PairForestAccountErrorV1()->aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1 { match kani::any::<u8>() {0=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::WrongLength,1=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::WrongMagic,2=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::WrongVersion,3=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::WrongLaneCount,4=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::WrongDigestEncoding,5=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::WrongDepth,6=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::WrongFormatBinding,7=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::NonZeroReserved,8=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::ZeroRequiredBinding,9=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::InvalidBoolean,10=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::InvalidMasterState,11=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::InvalidLane,12=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::LaneMasterMismatch,13=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::LaneOrderMismatch,14=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::LaneSequenceDecreased,15=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::DuplicateCheckpoint,16=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::CheckpointSequenceOverflow,17=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::NonCanonicalDigest,18=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::Identity,19=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::Policy,_=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::Tree(NFO_any_PoolV1TreeError())} }
++fn NFO_any_PoolV1PairLiveSnapshotErrorV1()->aspis_statement::pool_v1::PoolV1PairLiveSnapshotErrorV1 { match kani::any::<u8>() {0=>aspis_statement::pool_v1::PoolV1PairLiveSnapshotErrorV1::WrongLength,1=>aspis_statement::pool_v1::PoolV1PairLiveSnapshotErrorV1::WrongMagic,2=>aspis_statement::pool_v1::PoolV1PairLiveSnapshotErrorV1::WrongVersion,3=>aspis_statement::pool_v1::PoolV1PairLiveSnapshotErrorV1::WrongFormatBinding,4=>aspis_statement::pool_v1::PoolV1PairLiveSnapshotErrorV1::NonZeroReserved,5=>aspis_statement::pool_v1::PoolV1PairLiveSnapshotErrorV1::ZeroRequiredBinding,6=>aspis_statement::pool_v1::PoolV1PairLiveSnapshotErrorV1::SequenceIndexMismatch,7=>aspis_statement::pool_v1::PoolV1PairLiveSnapshotErrorV1::TreeFull,_=>aspis_statement::pool_v1::PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest} }
++fn NFO_any_PoolV1PairVerifierTransportErrorV1()->aspis_statement::pool_v1::PoolV1PairVerifierTransportErrorV1 { match kani::any::<u8>() {0=>aspis_statement::pool_v1::PoolV1PairVerifierTransportErrorV1::WrongLength,1=>aspis_statement::pool_v1::PoolV1PairVerifierTransportErrorV1::WrongMagic,2=>aspis_statement::pool_v1::PoolV1PairVerifierTransportErrorV1::WrongVersion,3=>aspis_statement::pool_v1::PoolV1PairVerifierTransportErrorV1::WrongStatementVersion,4=>aspis_statement::pool_v1::PoolV1PairVerifierTransportErrorV1::WrongDigestEncoding,5=>aspis_statement::pool_v1::PoolV1PairVerifierTransportErrorV1::InvalidTransitionKind,6=>aspis_statement::pool_v1::PoolV1PairVerifierTransportErrorV1::WrongSuccessCode,7=>aspis_statement::pool_v1::PoolV1PairVerifierTransportErrorV1::WrongPairFormat,8=>aspis_statement::pool_v1::PoolV1PairVerifierTransportErrorV1::ZeroRequiredBinding,9=>aspis_statement::pool_v1::PoolV1PairVerifierTransportErrorV1::InvalidProofBodyLength,10=>aspis_statement::pool_v1::PoolV1PairVerifierTransportErrorV1::InvalidStatementPayloadLength,11=>aspis_statement::pool_v1::PoolV1PairVerifierTransportErrorV1::InvalidLiveSnapshotPayloadLength,12=>aspis_statement::pool_v1::PoolV1PairVerifierTransportErrorV1::NonCanonicalOutputPair,13=>aspis_statement::pool_v1::PoolV1PairVerifierTransportErrorV1::InvalidAfterstateIndex,_=>aspis_statement::pool_v1::PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate} }
++fn NFO_any_PoolV1PairLatePublicStatementErrorV1()->aspis_statement::pool_v1::PoolV1PairLatePublicStatementErrorV1 { match kani::any::<u8>() {0=>aspis_statement::pool_v1::PoolV1PairLatePublicStatementErrorV1::WrongLength,1=>aspis_statement::pool_v1::PoolV1PairLatePublicStatementErrorV1::WrongMagic,2=>aspis_statement::pool_v1::PoolV1PairLatePublicStatementErrorV1::WrongVersion,3=>aspis_statement::pool_v1::PoolV1PairLatePublicStatementErrorV1::WrongItemCount,4=>aspis_statement::pool_v1::PoolV1PairLatePublicStatementErrorV1::WrongHeaderLength,5=>aspis_statement::pool_v1::PoolV1PairLatePublicStatementErrorV1::WrongSnapshotLength,6=>aspis_statement::pool_v1::PoolV1PairLatePublicStatementErrorV1::WrongAfterstateLength,7=>aspis_statement::pool_v1::PoolV1PairLatePublicStatementErrorV1::WrongTotalLength,8=>aspis_statement::pool_v1::PoolV1PairLatePublicStatementErrorV1::NonZeroReserved,9=>aspis_statement::pool_v1::PoolV1PairLatePublicStatementErrorV1::Snapshot(NFO_any_PoolV1PairLiveSnapshotErrorV1()),10=>aspis_statement::pool_v1::PoolV1PairLatePublicStatementErrorV1::Afterstate(NFO_any_PoolV1PairVerifierTransportErrorV1()),_=>aspis_statement::pool_v1::PoolV1PairLatePublicStatementErrorV1::AfterstateIndexMismatch} }
++fn any_error()->PoolV1PairForestTerminalFormatErrorV1{match kani::any::<u8>(){0=>PoolV1PairForestTerminalFormatErrorV1::WrongLength,1=>PoolV1PairForestTerminalFormatErrorV1::WrongMagic,2=>PoolV1PairForestTerminalFormatErrorV1::WrongVersion,3=>PoolV1PairForestTerminalFormatErrorV1::WrongDigestEncoding,4=>PoolV1PairForestTerminalFormatErrorV1::InvalidTransitionKind,5=>PoolV1PairForestTerminalFormatErrorV1::InvalidOutputLane,6=>PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding,7=>PoolV1PairForestTerminalFormatErrorV1::NonCanonicalDigest,8=>PoolV1PairForestTerminalFormatErrorV1::OutputLaneMismatch,9=>PoolV1PairForestTerminalFormatErrorV1::MasterBindingMismatch,10=>PoolV1PairForestTerminalFormatErrorV1::DeploymentBindingMismatch,11=>PoolV1PairForestTerminalFormatErrorV1::HistoricalAnchorMismatch,12=>PoolV1PairForestTerminalFormatErrorV1::CheckpointBindingMismatch,13=>PoolV1PairForestTerminalFormatErrorV1::SelectedLaneBindingMismatch,14=>PoolV1PairForestTerminalFormatErrorV1::LiveSnapshotMismatch,15=>PoolV1PairForestTerminalFormatErrorV1::CandidateAfterstateMismatch,16=>PoolV1PairForestTerminalFormatErrorV1::ResultBindingMismatch,17=>PoolV1PairForestTerminalFormatErrorV1::WithdrawalDestinationMismatch,18=>PoolV1PairForestTerminalFormatErrorV1::Payment(NFO_any_PoolV1PaymentStatementFormatError()),19=>PoolV1PairForestTerminalFormatErrorV1::LaneTransition(NFO_any_PoolV1PairLatePublicStatementErrorV1()),20=>PoolV1PairForestTerminalFormatErrorV1::Afterstate(NFO_any_PoolV1PairVerifierTransportErrorV1()),_=>PoolV1PairForestTerminalFormatErrorV1::Account(NFO_any_PoolV1PairForestAccountErrorV1())}}
++
++fn transition_kind(
++    byte: u8,
++) -> Result<PoolV1TransitionKind, PoolV1PairForestTerminalFormatErrorV1> {
++    match byte {
++        value if value == PoolV1TransitionKind::PrivateTransfer as u8 => {
++            Ok(PoolV1TransitionKind::PrivateTransfer)
++        }
++        value if value == PoolV1TransitionKind::Withdrawal as u8 => {
++            Ok(PoolV1TransitionKind::Withdrawal)
++        }
++        _ => Err(PoolV1PairForestTerminalFormatErrorV1::InvalidTransitionKind),
++    }
++}
++struct Frame<'a>{bytes:&'a [u8;792],calls:u8,dok:bool,aok:bool,vok:bool,digest:aspis_statement::Digest,
++ after:PoolV1PairVerifiedAfterstateV1,ae:PoolV1PairVerifierTransportErrorV1,ve:PoolV1PairForestTerminalFormatErrorV1,
++ expected:PoolV1PairForestTerminalResultV1,family:u8,row:usize,word:usize,index:usize,byte:usize}
++fn digest(a:&[u8;32],f:&mut Frame)->Result<aspis_statement::Digest,aspis_statement::AtomicStatementError>{
++ assert!(f.calls==0&&a[f.index]==f.bytes[72+f.index]);f.calls=1;
++ if f.dok{Ok(f.digest)}else{Err(aspis_statement::AtomicStatementError::NonCanonicalDigest)}}
++fn after(a:&[u8],f:&mut Frame)->Result<PoolV1PairVerifiedAfterstateV1,PoolV1PairVerifierTransportErrorV1>{
++ assert!(f.calls==1&&a.len()==688&&core::ptr::eq(a.as_ptr(),unsafe{f.bytes.as_ptr().add(104)})&&a[f.byte]==f.bytes[104+f.byte]);f.calls=2;
++ if f.aok{Ok(f.after)}else{Err(f.ae)}}
++fn validate(a:&PoolV1PairForestTerminalResultV1,f:&mut Frame)->Result<(),PoolV1PairForestTerminalFormatErrorV1>{
++ assert!(f.calls==2&&observe(a,f.family,f.row,f.word,f.index)==observe(&f.expected,f.family,f.row,f.word,f.index));f.calls=3;
++ if f.vok{Ok(())}else{Err(f.ve)}}
++fn native(bytes:&[u8],frame:&mut Frame)->Result<PoolV1PairForestTerminalResultV1,PoolV1PairForestTerminalFormatErrorV1>{
++
++    if bytes.len() != POOL_V1_PAIR_FOREST_TERMINAL_RESULT_BYTES {
++        return Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength);
++    }
++    if bytes[..4] != POOL_V1_PAIR_FOREST_TERMINAL_RESULT_MAGIC {
++        return Err(PoolV1PairForestTerminalFormatErrorV1::WrongMagic);
++    }
++    if bytes[4] != POOL_V1_PAIR_FOREST_TERMINAL_VERSION {
++        return Err(PoolV1PairForestTerminalFormatErrorV1::WrongVersion);
++    }
++    let transition_kind = transition_kind(bytes[5])?;
++    if bytes[6] != POOL_V1_DIGEST_ENCODING_VERSION {
++        return Err(PoolV1PairForestTerminalFormatErrorV1::WrongDigestEncoding);
++    }
++    let result = PoolV1PairForestTerminalResultV1 {
++        transition_kind,
++        master_account: bytes[RESULT_MASTER_OFFSET..RESULT_SELECTED_LANE_OFFSET]
++            .try_into()
++            .map_err(|_| PoolV1PairForestTerminalFormatErrorV1::WrongLength)?,
++        selected_lane_account: bytes[RESULT_SELECTED_LANE_OFFSET..RESULT_NULLIFIER_OFFSET]
++            .try_into()
++            .map_err(|_| PoolV1PairForestTerminalFormatErrorV1::WrongLength)?,
++        output_lane: bytes[7],
++        nullifier: digest(
++            bytes[RESULT_NULLIFIER_OFFSET..RESULT_AFTERSTATE_OFFSET]
++                .try_into()
++                .map_err(|_| PoolV1PairForestTerminalFormatErrorV1::WrongLength)?,frame)
++        .map_err(|_| PoolV1PairForestTerminalFormatErrorV1::NonCanonicalDigest)?,
++        verified_afterstate: after(
++            &bytes[RESULT_AFTERSTATE_OFFSET..],frame)
++        .map_err(|_| PoolV1PairForestTerminalFormatErrorV1::WrongVersion)?,
++    };
++    validate(&result,frame)?;
++    Ok(result)
++
++}
++#[kani::proof]
++#[kani::unwind(34)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFO_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NFO_KMX::KMX_copy_from_slice)]
++fn association(){
++ let bytes:[u8;792]=kani::any();let initial:usize=kani::any();kani::assume(initial<792);let original=bytes[initial];
++ let family:u8=kani::any();kani::assume(family<8);let row:usize=kani::any();kani::assume(row<20);let word:usize=kani::any();kani::assume(word<8);let index:usize=kani::any();kani::assume(index<32);let byte:usize=kani::any();kani::assume(byte<688);
++ let mut master=[0u8;32];master[index]=bytes[8+index];let mut selected=[0u8;32];selected[index]=bytes[40+index];
++ let digest=any_digest();let a=result().verified_afterstate;
++ let kind=if bytes[5]==1{PoolV1TransitionKind::PrivateTransfer}else{PoolV1TransitionKind::Withdrawal};
++ let expected=PoolV1PairForestTerminalResultV1{transition_kind:kind,master_account:master,selected_lane_account:selected,output_lane:bytes[7],nullifier:digest,verified_afterstate:a};
++ let mut f=Frame{bytes:&bytes,calls:0,dok:kani::any(),aok:kani::any(),vok:kani::any(),digest,after:a,ae:NFO_any_PoolV1PairVerifierTransportErrorV1(),ve:any_error(),expected,family,row,word,index,byte};
++ let actual=native(&bytes,&mut f);
++ if bytes[..4]!=POOL_V1_PAIR_FOREST_TERMINAL_RESULT_MAGIC {assert!(f.calls==0&&matches!(actual,Err(PoolV1PairForestTerminalFormatErrorV1::WrongMagic)));}
++ else if bytes[4]!=1 {assert!(f.calls==0&&matches!(actual,Err(PoolV1PairForestTerminalFormatErrorV1::WrongVersion)));}
++ else if bytes[5]!=1&&bytes[5]!=2 {assert!(f.calls==0&&matches!(actual,Err(PoolV1PairForestTerminalFormatErrorV1::InvalidTransitionKind)));}
++ else if bytes[6]!=1 {assert!(f.calls==0&&matches!(actual,Err(PoolV1PairForestTerminalFormatErrorV1::WrongDigestEncoding)));}
++ else if !f.dok{assert!(f.calls==1&&matches!(actual,Err(PoolV1PairForestTerminalFormatErrorV1::NonCanonicalDigest)));}
++ else if !f.aok{assert!(f.calls==2&&matches!(actual,Err(PoolV1PairForestTerminalFormatErrorV1::Afterstate(e)) if e==f.ae));}
++ else if !f.vok{assert!(f.calls==3&&matches!(actual,Err(e) if e==f.ve));}
++ else{let r=actual.unwrap();assert!(f.calls==3&&observe(&r,family,row,word,index)==observe(&expected,family,row,word,index));}
++ assert!(bytes[initial]==original);
++}

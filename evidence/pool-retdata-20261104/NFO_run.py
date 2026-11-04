@@ -2,8 +2,8 @@
 from pathlib import Path
 import subprocess,json,sys,time,hashlib,shlex,re
 E=Path(__file__).resolve().parent;B='/home/dombarker/project-offloads/codex-cx-pool-retdata-20261104';H='dombarker@100.108.41.90'
-a,target=sys.argv[1:3];mode=sys.argv[3] if len(sys.argv)>3 else 'lean';assert mode in ['lean','link','fixtures','final','scan-link','scan','extract'];assert (a.startswith('NFO_L') and 1<=int(a[5:])<=40) or (a.startswith('NFO_E') and 1<=int(a[5:])<=3)
-assert len(list(E.glob('NFO_L*/receipt.json')))<40
+a,target=sys.argv[1:3];mode=sys.argv[3] if len(sys.argv)>3 else 'lean';assert mode in ['lean','link','fixtures','final','scan-link','scan','extract'];assert (a.startswith('NFO_L') and 1<=int(a[5:])<=100) or (a.startswith('NFO_E') and 1<=int(a[5:])<=3)
+assert len(list(E.glob('NFO_L*/receipt.json')))<40 if mode!='extract' else len(list(E.glob('NFO_E*/receipt.json')))<3
 assert re.fullmatch(r'[A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*',target)
 moduleRel=target.replace('.','/')
 assert not (E/'NFO_ACTIVE.json').exists();assert not (E/a).exists();active=E/'NFO_LEAN_ACTIVE.json';assert not active.exists();active.write_text(json.dumps(dict(attempt=a)))
@@ -46,21 +46,21 @@ def visit(n):
  p=next((r/(rel+'.olean') for r in roots if (r/(rel+'.olean')).exists()),None)
  if p is None:missing.append(n);return
  selected[str(p)]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())
- for suffix in ['.private','.server']:
-  companion=Path(str(p)+suffix)
+ for suffix in ['.private','.server','.ir']:
+  companion=Path(str(p)+suffix) if suffix!='.ir' else p.with_suffix('.ir')
   if companion.exists():selected[str(companion)]=dict(path=str(companion),sha256=hashlib.sha256(companion.read_bytes()).hexdigest())
  q=next((r/(rel+'.lean') for r in [b/'NFO_generated',*roots] if (r/(rel+'.lean')).exists()),None)
  if q:
   for dep in re.findall(r'^(?:public )?import\\s+(?:all\\s+)?([\\w.]+)',q.read_text(),re.M):visit(dep)
 for n in re.findall(r'^(?:public )?import\\s+(?:all\\s+)?([\\w.]+)',{source!r},re.M):visit(n)
-for n in ({['NFO_PoolReturnData'] if mode=='final' else ['NEP_Planted','NEP_Mutations'] if mode=='fixtures' else []!r}):visit(n)
+for n in ({['NFO_Final','NEP_Planted','NEP_Mutations'] if mode=='final' else ['NFO_Final'] if mode=='scan' else ['NEP_Planted','NEP_Mutations'] if mode=='fixtures' else []!r}):visit(n)
 for p in [coherent/'objects/Aeneas.olean',*(coherent/'objects/Aeneas').rglob('*.olean')]:
  selected[str(p)]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())
- for suffix in ['.private','.server']:
-  companion=Path(str(p)+suffix)
+ for suffix in ['.private','.server','.ir']:
+  companion=Path(str(p)+suffix) if suffix!='.ir' else p.with_suffix('.ir')
   if companion.exists():selected[str(companion)]=dict(path=str(companion),sha256=hashlib.sha256(companion.read_bytes()).hexdigest())
-if {mode in ['fixtures','final']!r}:
- p=b/'NFO_native/NFO_Driver';selected[str(p)]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())
+if {mode in ['fixtures','final','scan']!r}:
+ p=b/({'NFO_native/NFO_Coherence' if mode=='scan' else 'NFO_native/NFO_Driver'!r});selected[str(p)]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())
 print(json.dumps(dict(selected_objects=selected,missing=missing)))
 '''
 r=ssh('python3',code);assert r.returncode==0,r.stderr;pins=json.loads(r.stdout)
@@ -71,12 +71,15 @@ if target in ['NFO_WALKER','NFO_MemoryLimit','NFO_Driver','NFO_Coherence']:
  command[command.index('-o'):command.index('-o')]=['-c','NFO_native/'+moduleRel+'.c']
 if mode=='link':command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','leanc','-O3','-rdynamic','-o','NFO_native/NFO_Driver','NFO_native/NFO_Driver.c','NFO_native/NFO_WALKER.c','NFO_native/NFO_MemoryLimit.c']
 if mode in ['fixtures','final']:command=['NFO_native/NFO_Driver',mode]
+if mode=='final':command=['python3','NFO_audit_both.py']
 if mode=='scan-link':command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','leanc','-O3','-rdynamic','-o','NFO_native/NFO_Coherence','NFO_native/NFO_Coherence.c','NFO_native/NFO_MemoryLimit.c']
 if mode=='scan':command=['NFO_native/NFO_Coherence']
 if mode=='extract':command=['python3','NFO_extract.py']
 cfg=dict(attempt=a,kind='lean' if mode=='lean' else mode,module=target,sources=['NFO_native/NFO_Coherence.c','NFO_native/NFO_MemoryLimit.c'] if mode=='scan-link' else ['NFO_native/NFO_Driver.c','NFO_native/NFO_WALKER.c','NFO_native/NFO_MemoryLimit.c'] if mode=='link' else ['NFO_generated/'+moduleRel+'.lean'],command=command,env=dict(LEAN_SYSROOT='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0',PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',LEAN_PATH=B+'/NFO_objects:/home/dombarker/project-offloads/codex-cx-pool-retdata-cache-20261104/NFO_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata-cache-20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata-cache-20261104/NEY_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata-cache-20261104/NEX_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata-cache-20261104/NEQ_final_objects_20261103:/home/dombarker/project-offloads/codex-cx-pool-retdata-cache-20261104/NEM_final_objects_20261102:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects'),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint=pins)
 (E/a).mkdir();(E/a/'NFO_SOURCE.lean.txt').write_text(source)
 files={'NFO_generated/'+moduleRel+'.lean':source,a+'.json':json.dumps(cfg)}
+if mode=='final':
+ files['NFO_audit_both.py']=(E/'NFO_audit_both.py').read_text();cfg['sources'].append('NFO_audit_both.py');files[a+'.json']=json.dumps(cfg)
 if mode=='extract':
  files.update({'NFO_extract.py':(E/'NFO_extract.py').read_text(),'NFO_ref/Cargo.toml':(E/'NFO_reference_Cargo.toml').read_text(),'NFO_ref/src/lib.rs':(E/'NFO_decode_ref.rs').read_text()})
  cfg['sources']=['NFO_extract.py','NFO_ref/Cargo.toml','NFO_ref/src/lib.rs'];files[a+'.json']=json.dumps(cfg)

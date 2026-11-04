@@ -2,6 +2,7 @@
 from pathlib import Path
 import subprocess,json,lzma,hashlib,base64,sys
 E=Path(__file__).resolve().parent;P=E.parent/'slice-s-compose10-20261104'
+sys.dont_write_bytecode=True
 sys.path.insert(0,str(P));from NFD_frozen_identity import frozen,apply
 files=dict(frozen())
 p=subprocess.check_output(['git','show','HEAD:evidence/kani-mitig-20261028/KMX_copy_stubs.patch'])

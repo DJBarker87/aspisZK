@@ -30,6 +30,7 @@ print((b/{(a+'-barrier.log')!r}).read_text());sys.exit(r.returncode)
  if (r.returncode==78 or ad.get('allowed') is False) and retry<10:time.sleep(180);continue
  raise SystemExit('STOP admission')
 # Per-run equality against frozen bytes plus the sole exact scratch patch.
+sys.dont_write_bytecode=True
 sys.path.insert(0,str(E.parent/'slice-s-compose10-20261104'));from NFD_frozen_identity import frozen,apply
 files=dict(frozen());files.update({n:v.encode() for n,v in json.loads((E/'NFO_INCLUDES.json').read_text()).items()})
 for p in ['NFO_KMX_copy_stubs.patch','NFO_native.patch']:apply(files,(E/p).read_text())

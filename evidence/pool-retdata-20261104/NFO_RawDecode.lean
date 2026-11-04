@@ -143,8 +143,8 @@ def
     AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
   := do
   let i := Slice.len bytes
-  let i1 ←
-    AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_RESULT_BYTES
+  let i1 :=
+    792#usize
   if i != i1
   then
     ok (core.result.Result.Err
@@ -154,16 +154,16 @@ def
       core.slice.index.Slice.index
         (core.slice.index.SliceIndexRangeToUsizeSlice Std.U8) bytes
         { «end» := 4#usize }
-    let a ←
+    let a :=
       AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_RESULT_MAGIC
-    let b ← Slice.Insts.CoreCmpPartialEqArray.ne core.cmp.PartialEqU8 s a
+    let b ← core.cmp.PartialEq.ne.trait_default (Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8) s (Array.to_slice a)
     if b
     then
       ok (core.result.Result.Err
         AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongMagic)
     else
       let i2 ← Slice.index_usize bytes 4#usize
-      let i3 ←
+      let i3 :=
         AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION
       if i2 != i3
       then
@@ -177,16 +177,16 @@ def
         match cf with
         | core.ops.control_flow.ControlFlow.Continue val =>
           let i5 ← Slice.index_usize bytes 6#usize
-          let i6 ←
+          let i6 :=
             AspisR1TerminalDecoder.pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION
           if i5 != i6
           then
             ok (core.result.Result.Err
               AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongDigestEncoding)
           else
-            let i7 ←
+            let i7 :=
               AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.RESULT_MASTER_OFFSET
-            let i8 ←
+            let i8 :=
               AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.RESULT_SELECTED_LANE_OFFSET
             let s1 ←
               core.slice.index.Slice.index
@@ -202,7 +202,7 @@ def
             let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
             match cf1 with
             | core.ops.control_flow.ControlFlow.Continue val1 =>
-              let i9 ←
+              let i9 :=
                 AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.RESULT_NULLIFIER_OFFSET
               let s2 ←
                 core.slice.index.Slice.index
@@ -219,7 +219,7 @@ def
               match cf2 with
               | core.ops.control_flow.ControlFlow.Continue val2 =>
                 let i10 ← Slice.index_usize bytes 7#usize
-                let i11 ←
+                let i11 :=
                   AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.RESULT_AFTERSTATE_OFFSET
                 let s3 ←
                   core.slice.index.Slice.index

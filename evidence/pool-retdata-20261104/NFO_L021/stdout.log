@@ -1,0 +1,26 @@
+NFO_generated/NFO_AfterstateInjective.lean:9:25: error(lean.unknownIdentifier): Unknown constant `AspisS6SourceCodec.DigestContents`
+NFO_generated/NFO_AfterstateInjective.lean:19:37: error(lean.unknownIdentifier): Unknown identifier `DigestContents.chunks`
+NFO_generated/NFO_AfterstateInjective.lean:19:77: error(lean.unknownIdentifier): Unknown identifier `PaymentContents.digest_chunks_length`
+NFO_generated/NFO_AfterstateInjective.lean:27:19: error(lean.unknownIdentifier): Unknown identifier `DigestContents.chunks`
+NFO_generated/NFO_AfterstateInjective.lean:27:55: error(lean.unknownIdentifier): Unknown identifier `DigestContents.chunks`
+NFO_generated/NFO_AfterstateInjective.lean:13:80: error: unsolved goals
+a b : Afterstate
+same : AfterstateEncoding.bytes a = AfterstateEncoding.bytes b
+content :
+  prefix_bytes a ++ List.flatMap AspisS6SourceCodec.DigestContents.chunks ↑a.next_frontier =
+    prefix_bytes b ++ List.flatMap AspisS6SourceCodec.DigestContents.chunks ↑b.next_frontier
+headerWidth : header_bytes.length = 8
+iw : ∀ (x : U64), (↑(core.num.U64.to_le_bytes x)).length = 8
+dw : ∀ (x : Std.Array U32 8#usize), sorry = 32
+selectedIndex :
+  List.take 8 (List.drop 8 (prefix_bytes a ++ List.flatMap AspisS6SourceCodec.DigestContents.chunks ↑a.next_frontier)) =
+    List.take 8 (List.drop 8 (prefix_bytes b ++ List.flatMap AspisS6SourceCodec.DigestContents.chunks ↑b.next_frontier))
+hi : ↑(core.num.U64.to_le_bytes a.next_pair_index) = ↑(core.num.U64.to_le_bytes b.next_pair_index)
+index : a.next_pair_index = b.next_pair_index
+selectedRoot :
+  List.take 32
+      (List.drop 16 (prefix_bytes a ++ List.flatMap AspisS6SourceCodec.DigestContents.chunks ↑a.next_frontier)) =
+    List.take 32
+      (List.drop 16 (prefix_bytes b ++ List.flatMap AspisS6SourceCodec.DigestContents.chunks ↑b.next_frontier))
+⊢ a = b
+'NFO_AfterstateInjective.injective' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

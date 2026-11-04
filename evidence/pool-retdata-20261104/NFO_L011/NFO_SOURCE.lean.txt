@@ -1,0 +1,49 @@
+import NFO_HeaderWrites
+import NEY_EmitComposed
+import S6NativeAfterstateContentsV1
+set_option autoImplicit false
+noncomputable section
+namespace NFO_ResultLayout
+open Aeneas Aeneas.Std Result AspisR1TerminalDecoder
+open AspisR1.S2K
+abbrev Output := NEU_EmitModel.Output
+
+def kind : pool_v1.historical_anchor.PoolV1TransitionKind → U8
+  | .PrivateTransfer => 1#u8 | .Withdrawal => 2#u8
+
+def bytes (r : Output) : Array U8 792#usize :=
+  ResultEncoding.stores (Array.repeat 792#usize 0#u8) r.master_account r.selected_lane_account
+    (DigestBytes.bytes r.nullifier) (kind r.transition_kind) r.output_lane
+    (AfterstateEncoding.bytes r.verified_afterstate)
+
+theorem emitted (s : NEU_EmitModel.Statement) :
+    bytes (ResultAdmission.value s) = ResultPayload.bytes s := by
+  cases s <;> rfl
+
+theorem stores_layout (master selected digest : Array U8 32#usize) (tag lane : U8)
+    (afterstate : Array U8 688#usize) :
+    (ResultEncoding.stores (Array.repeat 792#usize 0#u8) master selected digest tag lane afterstate).val =
+      [65#u8,83#u8,82#u8,56#u8,1#u8,tag,1#u8,lane] ++ master.val ++ selected.val ++ digest.val ++ afterstate.val := by
+  have hm : master.val.length=32 := master.property
+  have hs : selected.val.length=32 := selected.property
+  have hd : digest.val.length=32 := digest.property
+  have ha : afterstate.val.length=688 := afterstate.property
+  unfold ResultEncoding.stores
+  change ((((((((List.replicate 792 (0#u8)).setSlice! 0 [65#u8,83#u8,82#u8,56#u8]).set 4 1#u8).set 5 tag).set 6 1#u8).set 7 lane).setSlice! 8 master.val).setSlice! 40 selected.val).setSlice! 72 digest.val).setSlice! 104 afterstate.val = _
+  rw [NFO_HeaderWrites.header _ (by rfl) 784 0#u8 1#u8 tag 1#u8 lane]
+  let lead := [65#u8,83#u8,82#u8,56#u8,1#u8,tag,1#u8,lane]
+  have h1 := AspisS6SliceFrame.setSlice_append_chunk lead master.val 784 0#u8 (by rw [hm]; decide)
+  simp only [lead,List.length_cons,List.length_nil,hm,Nat.reduceSub] at h1
+  rw [h1]
+  have h2 := AspisS6SliceFrame.setSlice_append_chunk (lead++master.val) selected.val 752 0#u8 (by rw [hs]; decide)
+  simp only [lead,List.length_append,List.length_cons,List.length_nil,hm,hs,Nat.reduceAdd,Nat.reduceSub] at h2
+  rw [h2]
+  have h3 := AspisS6SliceFrame.setSlice_append_chunk (lead++master.val++selected.val) digest.val 720 0#u8 (by rw [hd]; decide)
+  simp only [lead,List.length_append,List.length_cons,List.length_nil,hm,hs,hd,Nat.reduceAdd,Nat.reduceSub] at h3
+  rw [h3]
+  have h4 := AspisS6SliceFrame.setSlice_append_chunk (lead++master.val++selected.val++digest.val) afterstate.val 688 0#u8 (by rw [ha]; decide)
+  simp only [lead,List.length_append,List.length_cons,List.length_nil,hm,hs,hd,ha,Nat.reduceAdd,Nat.reduceSub,List.replicate_zero,List.append_nil] at h4
+  exact h4
+#print axioms emitted
+#print axioms stores_layout
+end NFO_ResultLayout
