@@ -1,0 +1,11 @@
+import NFQ_STAGE2_IMPORT
+import NFW_PowersDomain
+#print AspisR1LoopPowers.field.WideExact.mul
+#print AspisR1LoopPowers.toOld
+#print AspisR1LoopPowers.fromOld
+#print AspisR1CurrentCaller.BorrowedClaimPrepared.powersPublic
+#print AspisR1ClaimPreparedBridge.InstalledMeaning.powersPublic
+#print AspisR1CurrentWideMul.field.CM31.mul
+#print AspisR1CurrentWideMul.field.M31.mul
+#print AspisR1CurrentWideMul.field.M31.add
+#print AspisR1CurrentWideMul.field.M31.sub

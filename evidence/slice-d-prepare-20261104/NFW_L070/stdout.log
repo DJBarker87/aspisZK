@@ -1,0 +1,127 @@
+INTEGRATION_TARGET AspisR1.NFW_PrepareQuery.tx1 : ∀ {H : Type}
+  (sampling : AspisR1PublicPreparation.PreparedModel.Boundaries) (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+  (sem : AspisR1PublicPreparation.r1_semantic.Verified H) (v : AspisR1PublicPreparation.verifier.View) (hash : H)
+  (out : AspisR1PublicPreparation.verifier.Prepared)
+  (scratch old : Aeneas.Std.Array AspisR1.NFW_PreparedPort.PE 29#usize),
+  AspisR1PublicPreparation.PreparedScratchModel.prepare
+        (AspisR1ClaimPreparedBridge.concreteBoundaries (AspisR1ClaimPreparedBridge.withCandidateSamplers sampling)) D
+        sem v hash old =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out, scratch) →
+    ∀ (base : AspisR1.Port3_NativeQueryBody.Ops) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+      (geometry : AspisR1Stage2.verifier.QueryGeometry) (qPlace gPlace : ℕ),
+      AspisR1.NFG_QueryLoopDefs.run
+          (AspisR1.NFS_QueryLoopRoot.child base proof (AspisR1.NFW_PreparedPort.prepared out)
+            (AspisR1.NFW_PreparedPort.map AspisR1.NFW_PreparedPort.e scratch) geometry qPlace gPlace)
+          10#usize 10
+          (Aeneas.Std.core.result.Result.Ok (AspisR1.NFW_QueryEntry.initial, AspisR1.NFW_QueryEntry.pending)) =
+        AspisR1.Port3_NativeQueryBody.verifier.candidate.query_loop (AspisR1.NFS_QueryOps.installed base) proof
+          (AspisR1.NFW_PreparedPort.prepared out) AspisR1.NFW_QueryEntry.initial
+          (AspisR1.NFW_PreparedPort.map AspisR1.NFW_PreparedPort.e scratch) none geometry AspisR1.NFW_QueryEntry.pending
+          10#usize
+OWNER AspisR1.NFW_PrepareQuery.tx1 := NFW_PrepareQuery
+INTEGRATION_TARGET AspisR1.NFW_QueryResume.tx2 : ∀ (base : AspisR1.Port3_NativeQueryBody.Ops)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (p : AspisR1Stage2.verifier.Prepared)
+  (a : AspisR1Stage2.verifier.Accumulator),
+  (↑a.weights).length = 64 →
+    NFS_NEV_WeightDomains.Canonical (NEV_AccumulateCarriers.fromAccumulator a).weights →
+      NBO_TailDomain.WideCanonical a.rhs →
+        NBF_PowerStep.Canonical a.power →
+          NBF_PowerStep.Canonical p.rho →
+            ↑a.next = 10 →
+              ∀ (gamma : AspisR1.NFN_LPi_FieldValues.NE),
+                AspisR1.NFN_LPi_FieldValues.canonE gamma →
+                  ∀ (g : Aeneas.Std.Array AspisR1.NFN_LPi_FieldValues.NE 29#usize),
+                    FIo_Native.weights.powers 29#usize gamma = Aeneas.Std.Result.ok g →
+                      ∀ (geometry : AspisR1Stage2.verifier.QueryGeometry) (qPlace gPlace : ℕ),
+                        AspisR1.NFG_QueryLoopDefs.run
+                            (AspisR1.NFS_QueryLoopRoot.child base proof p (AspisR1.FIp_DotsAdapter.fromArray g) geometry
+                              qPlace gPlace)
+                            22#usize 12 (Aeneas.Std.core.result.Result.Ok (a, AspisR1.NFW_QueryResume.pending a)) =
+                          AspisR1.Port3_NativeQueryBody.verifier.candidate.query_loop
+                            (AspisR1.NFS_QueryOps.installed base) proof p a (AspisR1.FIp_DotsAdapter.fromArray g) none
+                            geometry (AspisR1.NFW_QueryResume.pending a) 22#usize
+OWNER AspisR1.NFW_QueryResume.tx2 := NFW_QueryResume
+INTEGRATION_TARGET AspisR1.NFW_PreparedControl.source : ∀ (B : AspisR1PublicPreparation.PreparedScratchModel.Boundaries)
+  {H : Type} (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+  (sem : AspisR1PublicPreparation.r1_semantic.Verified H) (v : AspisR1PublicPreparation.verifier.View) (hash : H)
+  (old : AspisR1.NFW_PreparedControl.Scratch),
+  AspisR1PublicPreparation.PreparedScratchModel.prepare B D sem v hash old =
+    AspisR1.NFW_PreparedControl.run B D sem v hash old
+OWNER AspisR1.NFW_PreparedControl.source := NFW_PreparedControl
+INTEGRATION_TARGET AspisR1.NFW_PreparedCalls.calls : ∀ {H : Type}
+  (B : AspisR1PublicPreparation.PreparedScratchModel.Boundaries) (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+  (sem : AspisR1PublicPreparation.r1_semantic.Verified H) (v : AspisR1PublicPreparation.verifier.View) (hash : H)
+  (out : AspisR1PublicPreparation.verifier.Prepared)
+  (scratch old : Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.WideExact 29#usize),
+  AspisR1PublicPreparation.PreparedScratchModel.prepare B D sem v hash old =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out, scratch) →
+    B.powers 29#usize out.gamma = Aeneas.Std.Result.ok scratch ∧
+      B.claim D sem v.y1 v.inactive scratch out.kappa =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out.claim) ∧
+        ∃ row before afterQueries last,
+          (row = 30#u8 ∨ row = 31#u8) ∧
+            B.sampling.queries D before row v.final_message =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out.queries, afterQueries) ∧
+              AspisR1PublicPreparation.PreparedModel.scalar_k B.sampling D afterQueries
+                    (if row = 30#u8 then 31#u8 else 32#u8)
+                    AspisR1PublicPreparation.PreparedScratchReachability.emptyPayload =
+                  Aeneas.Std.Result.ok (out.rho, last) ∧
+                out.state = last.state
+OWNER AspisR1.NFW_PreparedCalls.calls := NFW_PreparedCalls
+INTEGRATION_TARGET AspisR1.NFW_PreparedProducer.scratch : ∀ {H : Type}
+  (sampling : AspisR1PublicPreparation.PreparedModel.Boundaries) (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+  (sem : AspisR1PublicPreparation.r1_semantic.Verified H) (v : AspisR1PublicPreparation.verifier.View) (hash : H)
+  (out : AspisR1PublicPreparation.verifier.Prepared)
+  (scratch old : Aeneas.Std.Array AspisR1.NFW_PreparedPort.PE 29#usize),
+  AspisR1PublicPreparation.PreparedScratchModel.prepare
+        (AspisR1ClaimPreparedBridge.concreteBoundaries (AspisR1ClaimPreparedBridge.withCandidateSamplers sampling)) D
+        sem v hash old =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out, scratch) →
+    ∃ g,
+      FIo_Native.weights.powers 29#usize (AspisR1.NFW_SampledDomains.toNative out.gamma) = Aeneas.Std.Result.ok g ∧
+        scratch = AspisR1.NFW_PowersCohort.mapArray AspisR1.NFW_PowersCohort.toPublic g ∧
+          AspisR1.NFW_PreparedPort.map AspisR1.NFW_PreparedPort.e scratch = AspisR1.FIp_DotsAdapter.fromArray g ∧
+            NEV_DotInputs.Canonical
+              (AspisR1.FIp_DotsAdapter.toArray (AspisR1.NFW_PreparedPort.map AspisR1.NFW_PreparedPort.e scratch))
+OWNER AspisR1.NFW_PreparedProducer.scratch := NFW_PreparedProducer
+INTEGRATION_TARGET AspisR1.NFW_ScalarRho.prepared : ∀ {H : Type}
+  (B : AspisR1PublicPreparation.PreparedScratchModel.Boundaries) (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+  (sem : AspisR1PublicPreparation.r1_semantic.Verified H) (v : AspisR1PublicPreparation.verifier.View) (hash : H)
+  (out : AspisR1PublicPreparation.verifier.Prepared)
+  (scratch old : Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.WideExact 29#usize),
+  AspisR1PublicPreparation.PreparedScratchModel.prepare B D sem v hash old =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out, scratch) →
+    NBF_PowerStep.Canonical (AspisR1.NFW_PreparedPort.prepared out).rho
+OWNER AspisR1.NFW_ScalarRho.prepared := NFW_ScalarRho
+INTEGRATION_TARGET AspisR1.NFS_QueryLoopRoot.tx1 : ∀ (base : AspisR1.Port3_NativeQueryBody.Ops)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (p : AspisR1Stage2.verifier.Prepared)
+  (a : AspisR1Stage2.verifier.Accumulator) (g : Aeneas.Std.Array AspisR1.NFP_QueryCuts.E 29#usize)
+  (geometry : AspisR1Stage2.verifier.QueryGeometry) (b : AspisR1Stage2.verifier.BatchedWeights) (qPlace gPlace : ℕ),
+  NEV_DotInputs.Canonical (AspisR1.FIp_DotsAdapter.toArray g) →
+    AspisR1.NFS_QueryInvariant.Domain p 0 10 a b →
+      ↑a.next = 0 →
+        AspisR1.NFG_QueryLoopDefs.run (AspisR1.NFS_QueryLoopRoot.child base proof p g geometry qPlace gPlace) 10#usize
+            10 (Aeneas.Std.core.result.Result.Ok (a, b)) =
+          AspisR1.Port3_NativeQueryBody.verifier.candidate.query_loop (AspisR1.NFS_QueryOps.installed base) proof p a g
+            none geometry b 10#usize
+OWNER AspisR1.NFS_QueryLoopRoot.tx1 := NFS_QueryLoopRoot
+INTEGRATION_TARGET AspisR1.NFS_QueryLoopRoot.tx2 : ∀ (base : AspisR1.Port3_NativeQueryBody.Ops)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (p : AspisR1Stage2.verifier.Prepared)
+  (a : AspisR1Stage2.verifier.Accumulator) (g : Aeneas.Std.Array AspisR1.NFP_QueryCuts.E 29#usize)
+  (geometry : AspisR1Stage2.verifier.QueryGeometry) (b : AspisR1Stage2.verifier.BatchedWeights) (qPlace gPlace : ℕ),
+  NEV_DotInputs.Canonical (AspisR1.FIp_DotsAdapter.toArray g) →
+    AspisR1.NFS_QueryInvariant.Domain p 10 22 a b →
+      ↑a.next = 10 →
+        AspisR1.NFG_QueryLoopDefs.run (AspisR1.NFS_QueryLoopRoot.child base proof p g geometry qPlace gPlace) 22#usize
+            12 (Aeneas.Std.core.result.Result.Ok (a, b)) =
+          AspisR1.Port3_NativeQueryBody.verifier.candidate.query_loop (AspisR1.NFS_QueryOps.installed base) proof p a g
+            none geometry b 22#usize
+OWNER AspisR1.NFS_QueryLoopRoot.tx2 := NFS_QueryLoopRoot
+NFW_generated/NFW_InterfaceTargets.lean:29:7: error: ill-formed syntax
+NFW_generated/NFW_InterfaceTargets.lean:25:18: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  OfNat MessageData 0
+numerals are polymorphic in Lean, but the numeral `0` cannot be used in a context where the expected type is
+  MessageData
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.

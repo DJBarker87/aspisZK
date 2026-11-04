@@ -1,0 +1,3 @@
+# Selected cache copy
+
+Initial own selector refused before copying: 73,263,719,520 bytes requested versus 58,442,346,496 free. Corrected own selector copies exported objects only; validation unchanged. Successful seed copied535 files /104,517,456 bytes, with individual source/destination SHA256 pins in NFW_CACHE_IMPORTS.json.xz. Flat cache uses NFQ export first, NFS export second, predecessor exports thereafter. Bulk unchanged dependency variants are read-only LEAN_PATH fallback, pinned per attempt including Aeneas. This avoids copying unused variant forests. No host launcher or admission code changed.

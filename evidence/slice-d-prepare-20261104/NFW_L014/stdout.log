@@ -1,0 +1,184 @@
+def AspisR1CurrentCaller.verifier.candidate.prepare : AspisR1CurrentCaller.Ops →
+  {H : Type} →
+    AspisR1CurrentCaller.aspis_core.digest.Digest32 H →
+      AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          H →
+            Option (AspisR1CurrentCaller.verifier.Phase → Aeneas.Std.Result Unit) →
+              Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize →
+                Aeneas.Std.Result
+                  (Aeneas.Std.core.result.Result AspisR1CurrentCaller.verifier.Prepared
+                      AspisR1CurrentCaller.verifier.Error ×
+                    Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize) :=
+fun ops {H} aspis_coredigestDigest32Inst public1 proof hash obs g => do
+  let i ← AspisR1CurrentCaller.compact.LOGICAL_SEMANTIC ops
+  let i1 ← AspisR1CurrentCaller.compact.LOGICAL_Y1
+  let i2 ← i + i1
+  let r ← ops.op1 Aeneas.Std.core.marker.CopyU8 i2 0#u8
+  let r1 ←
+    AspisR1CurrentCaller.core.result.Result.map_err
+        (AspisR1CurrentCaller.verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+          aspis_coredigestDigest32Inst)
+        r ()
+  let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1
+  match cf with
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val => do
+      let (s, deref_mut_back) ← Aeneas.Std.lift val.deref_mut
+      let ((semantic, y1), split_at_mut_back) ← Aeneas.Std.core.slice.Slice.split_at_mut s i
+      let i3 ← AspisR1CurrentCaller.compact.OFF_SEMANTIC ops
+      let i4 ← AspisR1CurrentCaller.compact.OFF_Y1 ops
+      let s1 ←
+        Aeneas.Std.core.slice.index.Slice.index (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8)
+            proof { start := i3, «end» := i4 }
+      let (r2, semantic1) ← ops.op10 s1 semantic
+      let cf1 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r2
+      match cf1 with
+        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+          let i5 ← AspisR1CurrentCaller.compact.OFF_INACTIVE ops
+          let s2 ←
+            Aeneas.Std.core.slice.index.Slice.index
+                (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) proof { start := i4, «end» := i5 }
+          let (r3, y11) ← ops.op11 s2 y1
+          let cf2 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r3
+          match cf2 with
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+              have s3 := split_at_mut_back (semantic1, y11);
+              have val1 := deref_mut_back s3;
+              do
+              let s4 ←
+                Aeneas.Std.alloc.vec.Vec.index (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice Aeneas.Std.U8)
+                    val1 { «end» := i }
+              let s5 ←
+                Aeneas.Std.alloc.vec.Vec.index (Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice Aeneas.Std.U8)
+                    val1 { start := i }
+              let r4 ← ops.op5 proof s4 s5
+              let cf3 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r4
+              match cf3 with
+                | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v => do
+                  let r5 ← ops.op9 aspis_coredigestDigest32Inst public1 v.semantic hash obs
+                  let r6 ←
+                    AspisR1CurrentCaller.core.result.Result.map_err
+                        (AspisR1CurrentCaller.verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                          aspis_coredigestDigest32Inst)
+                        r5 ()
+                  let cf4 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r6
+                  match cf4 with
+                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val2 => do
+                      AspisR1CurrentCaller.verifier.mark obs AspisR1CurrentCaller.verifier.Phase.Semantic
+                      ops.op8 aspis_coredigestDigest32Inst val2 v hash g
+                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+                      let r7 ←
+                        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            AspisR1CurrentCaller.verifier.Prepared
+                            (Aeneas.Std.core.convert.FromSame AspisR1CurrentCaller.verifier.Error) residual
+                      Aeneas.Std.Result.ok (r7, g)
+                | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+                  let r5 ←
+                    Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        AspisR1CurrentCaller.verifier.Prepared
+                        (Aeneas.Std.core.convert.FromSame AspisR1CurrentCaller.verifier.Error) residual
+                  Aeneas.Std.Result.ok (r5, g)
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+              let r4 ←
+                Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    AspisR1CurrentCaller.verifier.Prepared
+                    (AspisR1CurrentCaller.verifier.Error.Insts.CoreConvertFromCodecError ops) residual
+              Aeneas.Std.Result.ok (r4, g)
+        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+          let r3 ←
+            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                AspisR1CurrentCaller.verifier.Prepared
+                (AspisR1CurrentCaller.verifier.Error.Insts.CoreConvertFromCodecError ops) residual
+          Aeneas.Std.Result.ok (r3, g)
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+      let r2 ←
+        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            AspisR1CurrentCaller.verifier.Prepared
+            (Aeneas.Std.core.convert.FromSame AspisR1CurrentCaller.verifier.Error) residual
+      Aeneas.Std.Result.ok (r2, g)
+def AspisR1CurrentCaller.OriginalPreparedSource.powers : AspisR1CurrentCaller.OriginalPreparedSource.Boundaries →
+  (N : Aeneas.Std.Usize) →
+    AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact →
+      Aeneas.Std.Result (Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact N) :=
+fun B N x => do
+  let g ← B.powers N (AspisR1CurrentCaller.InstalledPreparation.retainedE x)
+  Aeneas.Std.Result.ok (AspisR1ClaimPreparedBridge.mapArray AspisR1CurrentCaller.InstalledPreparation.currentE g)
+structure AspisR1PublicPreparation.PreparedScratchModel.Boundaries : Type 1
+number of parameters: 0
+fields:
+  AspisR1PublicPreparation.PreparedScratchModel.Boundaries.sampling : AspisR1PublicPreparation.PreparedModel.Boundaries
+  AspisR1PublicPreparation.PreparedScratchModel.Boundaries.powers : (N : Aeneas.Std.Usize) →
+      AspisR1PublicPreparation.aspis_core.field.WideExact →
+        Aeneas.Std.Result (Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.WideExact N)
+  AspisR1PublicPreparation.PreparedScratchModel.Boundaries.claim : {H : Type} →
+      AspisR1PublicPreparation.aspis_core.Digest32 H →
+        AspisR1PublicPreparation.r1_semantic.Verified H →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            AspisR1PublicPreparation.aspis_core.field.WideExact →
+              Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.WideExact 29#usize →
+                AspisR1PublicPreparation.aspis_core.field.WideExact →
+                  Aeneas.Std.Result
+                    (Aeneas.Std.core.result.Result AspisR1PublicPreparation.aspis_core.field.WideExact
+                      AspisR1PublicPreparation.verifier.Error)
+constructor:
+  AspisR1PublicPreparation.PreparedScratchModel.Boundaries.mk
+    (sampling : AspisR1PublicPreparation.PreparedModel.Boundaries)
+    (powers :
+      (N : Aeneas.Std.Usize) →
+        AspisR1PublicPreparation.aspis_core.field.WideExact →
+          Aeneas.Std.Result (Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.WideExact N))
+    (claim :
+      {H : Type} →
+        AspisR1PublicPreparation.aspis_core.Digest32 H →
+          AspisR1PublicPreparation.r1_semantic.Verified H →
+            Aeneas.Std.Slice Aeneas.Std.U8 →
+              AspisR1PublicPreparation.aspis_core.field.WideExact →
+                Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.WideExact 29#usize →
+                  AspisR1PublicPreparation.aspis_core.field.WideExact →
+                    Aeneas.Std.Result
+                      (Aeneas.Std.core.result.Result AspisR1PublicPreparation.aspis_core.field.WideExact
+                        AspisR1PublicPreparation.verifier.Error)) :
+    AspisR1PublicPreparation.PreparedScratchModel.Boundaries
+def AspisR1LoopPowers.weights.early_powers : (N : Aeneas.Std.Usize) →
+  AspisR1LoopPowers.field.WideExact → Aeneas.Std.Result (Aeneas.Std.Array AspisR1LoopPowers.field.WideExact N) :=
+fun N x =>
+  have out := Aeneas.Std.Array.repeat N AspisR1LoopPowers.field.WideExact.ZERO;
+  AspisR1LoopPowers.weights.early_powers_loop x out AspisR1LoopPowers.field.WideExact.ONE 0#usize
+theorem AspisR1LoopPowers.early_powers_total_exact : ∀ (N : Aeneas.Std.Usize) (x : AspisR1LoopPowers.field.WideExact),
+  AspisR1LoopPowers.Canonical x →
+    ∃ out,
+      AspisR1LoopPowers.weights.early_powers N x = Aeneas.Std.Result.ok out ∧
+        ∀ (j : Fin ↑N),
+          AspisR1LoopPowers.Canonical (↑out)[↑j] ∧
+            AspisR1LoopPowers.decode (↑out)[↑j] = AspisR1LoopPowers.decode x ^ ↑j :=
+fun N x hx =>
+  let ⟨out, h✝⟩ :=
+    AspisR1LoopPowers.early_loop_total_exact x AspisR1LoopPowers.field.WideExact.ONE
+      (Aeneas.Std.Array.repeat N AspisR1LoopPowers.field.WideExact.ZERO) 0#usize hx
+      (AspisR1LoopPowers.early_powers_total_exact._proof_1 N) AspisR1LoopPowers.one_canonical
+      (Eq.mpr
+        (id
+          (congrArg (Eq (AspisR1LoopPowers.decode AspisR1LoopPowers.field.WideExact.ONE))
+            (Eq.trans
+              (congrArg (HPow.hPow (AspisR1LoopPowers.decode x))
+                (Aeneas.Std.UScalar.ofNatCore_val_eq
+                  (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 0
+                    (of_decide_eq_true (id (Eq.refl true))))))
+              (pow_zero (AspisR1LoopPowers.decode x)))))
+        AspisR1LoopPowers.one_decode)
+      fun j hj => id (fun hj => False.elim (Nat.not_lt_zero (↑j) hj)) hj
+  let ⟨hout, hpre⟩ := h✝
+  Exists.intro out ⟨hout, fun j => hpre j j.isLt⟩
+def AspisR1LoopPowers.Canonical : AspisR1LoopPowers.field.WideExact → Prop :=
+fun x => AspisR1PowersConcreteMul.Canonical (AspisR1LoopPowers.toOld x)
+def AspisR1LoopPowers.decode : AspisR1LoopPowers.field.WideExact → AspisWideTower.WideExact :=
+fun x => AspisR1PowersExactProduct.decode (AspisR1LoopPowers.toOld x)
+def NEV_DotInputs.Canonical : NEV_DotInputs.Coefficients → Prop :=
+fun g => ∀ value ∈ ↑g, NEV_DotCarrier.canonE value
+AspisR1LoopPowers.decode : AspisR1LoopPowers.field.WideExact → AspisWideTower.WideExact
+AspisR1LoopPowers.one_decode : AspisR1LoopPowers.decode AspisR1LoopPowers.field.WideExact.ONE = 1
+AspisR1.FJi_SelectedPowers.decode : ∀ (x : AspisR1.FJi_SelectedPowers.E),
+  AspisR1LoopPowers.decode (AspisR1.Tx2N_Powers.toPowers x) = AspisR1.CheckpointBytes5Output.ofE x
+AspisR1S3PowersCanonicalTraceV1.one_decode : AspisR1PowersExactProduct.decode AspisR1CurrentPowers.field.WideExact.ONE =
+  1
+AspisR1PowersExactProduct.decode : AspisR1PowersConcreteMul.CallbackWide → AspisWideTower.WideExact

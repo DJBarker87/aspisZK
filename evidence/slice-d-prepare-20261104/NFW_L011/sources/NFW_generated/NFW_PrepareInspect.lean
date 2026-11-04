@@ -1,0 +1,11 @@
+import NFQ_STAGE2_IMPORT
+import NFS_QueryLoopRoot
+#print AspisR1CurrentCaller.verifier.candidate.prepare
+#print AspisR1CurrentCaller.OriginalPreparedSource.powers
+#print AspisR1PublicPreparation.PreparedScratchModel.Boundaries
+#print AspisR1PublicPreparation.PreparedScratchModel.prepared
+#print AspisR1LoopPowers.weights.early_powers
+#print AspisR1LoopPowers.early_powers_total_exact
+#print AspisR1LoopPowers.Canonical
+#print AspisR1LoopPowers.decode
+#print AspisR1.NEV_DotInputs.Canonical

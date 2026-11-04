@@ -1,0 +1,14 @@
+// Validate the local cut adapter itself on an arbitrary caller-established
+// scalar index, so its replies are linked to the same declared slots.
+#[kani::proof] #[kani::unwind(258)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn scalar_reply_step(){let i:usize=if cfg!(NFW_invert){0}else{kani::any()};kani::assume(i<4);let mut o=ops(0);o.sc=i;let calls:usize=kani::any();kani::assume(calls<=10);o.calls=calls;let expected=o.scalars[i];let row:u8=kani::any();let nz:bool=kani::any();let reply={let mut t=OracleTranscript{state:kani::any(),hash:Hash(kani::any()),ops:&mut o};t.scalar(row,&[],nz)};assert!((reply==expected&&o.sc==i+1&&o.calls==calls+1&&o.rows[i]==row&&o.lens[i]==0&&o.nonzero[i]==nz)!=cfg!(NFW_invert));}
+
+// Exact data-independent final-fold tuple from the frozen opening prefix,
+// on an arbitrary valid prestate immediately before that block.
+#[kani::proof] #[kani::unwind(258)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+#[kani::stub(alloc::vec::Vec::extend_from_slice,KMX_extend_from_slice)]
+fn alpha_block(){let a:u8=kani::any();let variant=match a%3{0=>Variant::S1,1=>Variant::S2,_=>Variant::D};let root:[u8;32]=kani::any();let round1:[u8;224]=kani::any();let alpha0=any_e();let mut o=ops(0);o.sc=3;let expected=o.scalars[3];let (alpha,row)={let mut t=OracleTranscript{state:kani::any(),hash:Hash(kani::any()),ops:&mut o};if variant.folds()==2{let mut bytes=Vec::with_capacity(32+224);bytes.extend_from_slice(&root);bytes.extend_from_slice(&round1);([alpha0,t.scalar(30,&bytes,false)],31)}else{([alpha0,E::ZERO],30)}};let two=variant.folds()==2;let good=alpha[0]==alpha0&&alpha[1]==if two{expected}else{E::ZERO}&&row==if two{31}else{30}&&o.calls==if two{1}else{0};assert!(good!=cfg!(NFW_invert));}

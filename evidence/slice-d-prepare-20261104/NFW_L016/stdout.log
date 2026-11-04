@@ -1,0 +1,45 @@
+def AspisR1ClaimPreparedBridge.powersPublic : (N : Aeneas.Std.Usize) →
+  AspisR1ClaimPreparedBridge.PE → Aeneas.Std.Result (Aeneas.Std.Array AspisR1ClaimPreparedBridge.PE N) :=
+fun N x => do
+  let ys ← AspisR1CurrentPreparedClaim.ClaimPowers.powers N (AspisR1ClaimPreparedBridge.toClaimE x)
+  Aeneas.Std.Result.ok (AspisR1ClaimPreparedBridge.mapArray AspisR1ClaimPreparedBridge.fromClaimE ys)
+theorem AspisR1.FIp_PowersValue.powers : ∀ (N : Aeneas.Std.Usize) (x : AspisR1.FIo_FieldBridge.NE)
+  (result : Aeneas.Std.Array AspisR1.FIo_FieldBridge.NE N),
+  AspisR1.FIo_WideValues.Canon x →
+    FIo_Native.weights.powers N x = Aeneas.Std.Result.ok result → AspisR1.FIp_PowersState.Post x result :=
+fun N x result hx run =>
+  AspisR1.FIp_PowersValue.loop_value x hx
+    (Aeneas.Std.Array.repeat N FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO,
+      FIo_Native.aspis_core.field.wide_exact.WideExact.ONE, 0#usize)
+    result
+    ⟨⟨AspisR1.FIo_GroupCanonical.zeros N, AspisR1.FIo_Constants.one.left⟩,
+      ⟨id (Nat.zero_le ↑N),
+        ⟨id
+            (Eq.mpr
+              (id
+                (congrArg (fun _a => _a = AspisR1CurrentWide.Proof.decodeWide (AspisR1.FIo_FieldBridge.wide x) ^ 0)
+                  AspisR1.FIo_Constants.one.right))
+              (Eq.mpr
+                (id
+                  (congrArg (fun _a => 1 = _a)
+                    (pow_zero (AspisR1CurrentWide.Proof.decodeWide (AspisR1.FIo_FieldBridge.wide x)))))
+                (Eq.refl 1))),
+          fun j hj =>
+          id (fun hj => Decidable.byContradiction fun a => AspisR1.FIp_PowersValue.powers._proof_1 j hj) hj⟩⟩⟩
+    run
+def AspisR1.FIp_PowersState.Post : {N : Aeneas.Std.Usize} →
+  AspisR1.FIo_FieldBridge.NE → Aeneas.Std.Array AspisR1.FIo_FieldBridge.NE N → Prop :=
+fun {N} x a =>
+  AspisR1.FIo_ArrayCanon.Holds a ∧
+    ∀ j < ↑N,
+      AspisR1.FIp_ArrayValue.value a j = AspisR1CurrentWide.Proof.decodeWide (AspisR1.FIo_FieldBridge.wide x) ^ j
+def AspisR1CurrentWide.Proof.decodeWide : AspisR1CurrentWide.Proof.E → AspisWideTower.WideExact :=
+fun x => { re := AspisR1CurrentWide.Proof.decodeQM x.c0, im := AspisR1CurrentWide.Proof.decodeQM x.c1 }
+def AspisR1CurrentWide.Proof.decodeQM : AspisR1CurrentWide.field.QM31 → AspisR1CurrentWide.Proof.ExactQM :=
+fun x => AspisR1.ExtractedCurrentQM31Exact.decode (AspisR1CurrentWide.Proof.toQM x)
+def AspisR1CurrentWide.Proof.decodeCM : AspisR1CurrentWide.field.CM31 → AspisR1CurrentWide.Proof.ExactCM :=
+fun x => { re := R17CurrentM31Semantics.decode x.a, im := R17CurrentM31Semantics.decode x.b }
+NFW_generated/NFW_PowersOwnerInspect.lean:9:7: error(lean.unknownIdentifier): Unknown constant `AspisR1CurrentWide.Proof.decodeM31`
+OWNER AspisR1.FIp_PowersValue.powers := RPu_FIp_PowersValue
+OWNER FIo_Native.weights.powers := RPz7_FIo_NativeFuns
+OWNER AspisR1LoopPowers.early_powers_total_exact := LoopPowersEarlyTotal
