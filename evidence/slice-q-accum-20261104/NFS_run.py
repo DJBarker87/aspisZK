@@ -33,7 +33,7 @@ p=b/{(a+'-reservation.json')!r}; print(p.read_text() if p.exists() else 'MISSING
  if (r.returncode==78 or ad.get('allowed') is False) and retry<10:
   print('reservation wait',flush=True);time.sleep(180);continue
  raise RuntimeError('STOP admission')
-paths=[B+'/NFS_objects',C+'/NFP_exports_20261104',C+'/NFN_exports_20261104',C+'/NFM_exports_20261104',C+'/NFG_exports_20261104',C+'/NFG_NFF_objects',C+'/NFB_exports_20261104',C+'/NEW_exports_20261104',C+'/NET_exports_20261104',C+'/NFG_standard_view',C,C+'/NEB_exports_20261029',C+'/NET_peer_exports',W,W+'/objects',C+'/NEV_exports_20261104',C+'/NEI_exports_20261103',C+'/NEG_results_20261101',C+'/NEG_exports_20261029',C+'/NFB_reconcile_objects',C+'/NER_cohort',C+'/NFE_exports_20261104',C+'/NFC_audit_support_20261104',T+'/lib/lean']
+paths=[B+'/NFS_objects',C+'/NFP_exports_20261104',C+'/NFN_exports_20261104',C+'/NFM_exports_20261104',C+'/NFI_exports_20261104',C+'/NFF_exports_20261104',C+'/NFC_exports_20261104',C+'/NFA_exports_20261104',C+'/NFG_exports_20261104',C+'/NFG_NFF_objects',C+'/NFB_exports_20261104',C+'/NEW_exports_20261104',C+'/NET_exports_20261104',C+'/NFG_standard_view',C,C+'/NEB_exports_20261029',C+'/NET_peer_exports',W,W+'/objects',C+'/NEV_exports_20261104',C+'/NEI_exports_20261103',C+'/NEG_results_20261101',C+'/NEG_exports_20261029',C+'/NFB_reconcile_objects',C+'/NER_cohort',C+'/NFE_exports_20261104',C+'/NFC_audit_support_20261104',T+'/lib/lean']
 # Explicit fixture and unchanged support objects, selected only if not in private cache.
 paths+=json.loads((E/'NFS_FIXTURE_PATHS.json').read_text()) if (E/'NFS_FIXTURE_PATHS.json').exists() else []
 env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NFS_tmp',LEAN_PATH=':'.join(paths))

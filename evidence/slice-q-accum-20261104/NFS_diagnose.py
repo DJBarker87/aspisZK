@@ -24,6 +24,8 @@ def visit(n):
  graph[n]=r
  for d in r['imports']:visit(d)
 visit('NEV_AccumPacket')
+visit('NEI_CircleBridge')
+visit('NEI_LineBridge')
 # Full graph is retained once. Identify ALL paths to legacy Phase.
 from functools import lru_cache
 @lru_cache(None)
@@ -34,6 +36,8 @@ def ordervisit(n):
  for d in graph[n]['imports']:ordervisit(d)
  order.append(n)
 ordervisit('NEV_AccumPacket')
+visit('NEI_CircleBridge')
+visit('NEI_LineBridge')
 reuse=json.loads((E.parent/'slice-q-phase-20261104/NFN_RETARGET_PROVENANCE.json').read_text())
 (E/'NFS_SOURCE_GRAPH.json').write_text(json.dumps(graph,indent=1)+'\n')
 (E/'NFS_DIAGNOSIS.json').write_text(json.dumps({'root':'NEV_AccumPacket','legacy_owner':'S1SemanticPhaseV1','affected_dependency_order':order,'NFN_reuse':{n:reuse['module_owner'][n] for n in order if n in reuse['module_owner']},'missing_sources':missing},indent=1)+'\n')

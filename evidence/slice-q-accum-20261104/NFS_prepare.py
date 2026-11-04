@@ -1,7 +1,7 @@
 from pathlib import Path
 import json,difflib,hashlib
 E=Path(__file__).resolve().parent
-mods=['RPx_Deployed','NFM_ProductInstance','NFG_QueryLoopSource','NFG_PushRoot','NFN_GeometryPart08','NFS_NEV_AccumPacket']+json.loads((E.parent/'slice-q-values-20261104/NFP_AUDIT_ROOTS.json').read_text())['modules']
+mods=['RPx_Deployed','NFM_ProductInstance','NFG_QueryLoopSource','NFG_PushRoot','NFN_GeometryPart08','NFS_AccumPart02']+json.loads((E.parent/'slice-q-values-20261104/NFP_AUDIT_ROOTS.json').read_text())['modules']
 roots=['NFS_NEV_AccumPacket.raw_length','NFS_NEV_AccumPacket.result_state_effects','NFS_NEV_AccumPacket.no_base_dependency','NFS_NEV_AccumulateComplete.reference','NFS_NEV_AccumulateComplete.native','AspisR1.RPx_Deployed.deployed','AspisR1.NFM_ProductInstance.installed','AspisR1.NFM_ProductInstance.wrapper','AspisR1.NFG_QueryLoopSource.complete','NFN_NFB_GeometryComposed.result_state_effects','AspisR1.NFP_QueryTrace.erased','AspisR1.NFP_LoopTransport.complete']
 (E/'NFS_COMBINED_IMPORT.lean').write_text(''.join('import '+m+'\n' for m in mods)+''.join('#print axioms '+r+'\n' for r in roots))
 source=(E.parent/'slice-q-phase-20261104/NFN_ProofDriver.lean').read_text()
