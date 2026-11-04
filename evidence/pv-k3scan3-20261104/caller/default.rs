@@ -9,6 +9,7 @@ fn oracle(log:&mut Log)->Core {
  let reply=Core(kani::any());log.calls+=1;log.reply=reply;reply
 }
 #[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
 fn wrapper_default_arbitrary_core() {
  let frame:[u32;8]=kani::any();let mut log=Log{calls:0,reply:Core([0;8]),frame};
  let native=CoreWrapper::<Core>::pv_context_default(|| oracle(&mut log));

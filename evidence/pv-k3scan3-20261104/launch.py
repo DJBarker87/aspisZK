@@ -10,7 +10,7 @@ quiet=Path('/home/dombarker/project-offloads/QUIET_WINDOW.json');(out/'quiet-mar
 r=subprocess.run(['python3',str(INFRA/'reservation.py'),str(out/'admission.json')],stdout=(out/'admission.log').open('w'),stderr=subprocess.STDOUT)
 a=json.loads((out/'admission.json').read_text());assert r.returncode==0 and a['allowed'],f'admission refused exit={r.returncode}: {a}'
 P=ROOT/'caller';env=os.environ.copy();env.update(PATH='/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin',CARGO_BUILD_JOBS='4',CARGO_TARGET_DIR=str(ROOT/'target'),CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG_ASSERTIONS='false',CARGO_PROFILE_DEV_OVERFLOW_CHECKS='false')
-cmd=['cargo','kani','--manifest-path',str(P/'Cargo.toml'),'--lib','--exact','--harness',cfg['harness'],'--no-overflow-checks','--keep-temps','--solver','kissat','--output-format','terse','-j','4','-Z','unstable-options']
+cmd=['cargo','kani','--manifest-path',str(P/'Cargo.toml'),'--lib','--exact','--harness',cfg['harness'],'--no-overflow-checks','--keep-temps','--solver','kissat','--output-format','terse','-j','4','-Z','unstable-options','-Z','stubbing']
 features=cfg.get('features','');features=','.join(filter(None,[features,'negative-control' if cfg['negative'] else '']))
 if features:cmd+=['--features',features]
 cmd+=['--cbmc-args','--unwinding-assertions']
