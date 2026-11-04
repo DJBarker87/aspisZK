@@ -4,7 +4,7 @@ import sys,json,subprocess,datetime
 import NEY_validate as v
 import NEY_build_certificates as build
 E=v.E;R=v.R
-stage=sys.argv[1];assert stage in ['terminal','public','final']
+stage=sys.argv[1];assert stage in ['terminal','public','encoder','final']
 from NEY_frozen_identity import check as frozen_identity
 for path in sorted(E.glob('NEY_K*/receipt.json')):
  a=path.parent.name

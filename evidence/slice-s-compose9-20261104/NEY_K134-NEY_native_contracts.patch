@@ -1,0 +1,18 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
+@@ -1563,3 +1563,7 @@
+     Ok(*bytes)
+ }
+ 
++
++#[cfg(kani)]
++#[path="NEY_request_comparison.rs"]
++mod NEY_request_comparison;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEY_request_comparison.rs
+@@ -0,0 +1,5 @@
++use super::*;
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++fn request_comparison(){let bytes:[u8;4]=kani::any();let native=bytes[..4]!=POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC;let model=bytes[0]!=POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC[0]||bytes[1]!=POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC[1]||bytes[2]!=POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC[2]||bytes[3]!=POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC[3];assert!(native==!model);}

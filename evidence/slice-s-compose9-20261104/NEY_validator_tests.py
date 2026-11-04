@@ -99,4 +99,36 @@ class CompleteCertificate(unittest.TestCase):
   c=self.mutated(lambda c:c['hypotheses'].append('callee.PacketDomain'))
   self.assertFalse(v.certificate(c,b.TERMINAL,self.base))
   self.stays_open(c)
+class AddedCertificates(unittest.TestCase):
+ @classmethod
+ def setUpClass(cls):
+  cls.packet=v.read(v.E/'NEY_LEDGER_DELTA.json')
+  cls.base={'frozen_revision':next(iter(cls.packet['NEY_certificates'].values()))['frozen_revision'],'rows':v.read(v.E/'NEY_CHECKED_ROWS.json'),'trust_rows':[]}
+ def certificates(self):
+  return self.packet['NEY_certificates'].items()
+ def remains_open(self,f,c):
+  base=copy.deepcopy(self.base)
+  for r in base['rows']:
+   if r['function']==f:
+    r.update(composed_status='OPEN',bridge_status='OPEN',selected_claims=[],named_hypotheses=[])
+    r['claim_ids']=[n for n in r['claim_ids'] if not n.startswith('NEY::')]
+    for o in r['caller_domain_obligations']:o.update(status='OPEN',discharged_by=None)
+  packet={'NEY_certificates':{} if c is None else {f:c}}
+  out=b.compose_additions(base,copy.deepcopy(base),packet,v)
+  self.assertTrue(all(r['composed_status']=='OPEN' for r in out['rows'] if r['function']==f),f)
+ def test_missing_certificate_each_new_member(self):
+  for f,c in self.certificates():
+   with self.subTest(function=f):self.remains_open(f,None)
+ def test_wrong_call_domain_each_new_member(self):
+  for f,c in self.certificates():
+   with self.subTest(function=f):
+    c=copy.deepcopy(c);next(iter(c['call_domain_certificates'].values()))['same_arguments']=False
+    c['semantic_review_sha256']=v.sha(json.dumps({k:w for k,w in c.items() if k!='semantic_review_sha256'},sort_keys=True).encode())
+    self.assertFalse(v.certificate(c,f,self.base));self.remains_open(f,c)
+ def test_unresolved_inner_name_each_new_member(self):
+  for f,c in self.certificates():
+   with self.subTest(function=f):
+    c=copy.deepcopy(c);next(iter(c['call_domain_certificates'].values()))['inner_hypotheses_remaining']=['callee.PhysicalInterpretation']
+    c['semantic_review_sha256']=v.sha(json.dumps({k:w for k,w in c.items() if k!='semantic_review_sha256'},sort_keys=True).encode())
+    self.assertFalse(v.certificate(c,f,self.base));self.remains_open(f,c)
 if __name__=='__main__':unittest.main()

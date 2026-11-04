@@ -1,0 +1,9 @@
+{
+ "shape": "tag",
+ "mode": "value",
+ "frozen_path": "crates/aspis-r1-cost-probe/src/transport.rs",
+ "frozen_body": "    pub fn tag(self) -> u8 { match self { Self::S1=>1,Self::S2=>2,Self::D=>3 } }",
+ "source": "use super::*;\n#[kani::proof]\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEY_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NEY_KMX::KMX_copy_from_slice)]\nfn scalar(){use aspis_r1_cost_probe::transport::Variant;let selector:u8=kani::any();kani::assume(selector<3);let value=match selector{0=>Variant::S1,1=>Variant::S2,_=>Variant::D};assert!(value.tag()==(selector+1)^1);}\n",
+ "domain": "all three actual Variant constructors; selected frozen S2 root is the selector1 instance",
+ "classification": "actual frozen scalar/fixed-array call under deployed features; inherited model/domain/physical association still required for composition credit"
+}
