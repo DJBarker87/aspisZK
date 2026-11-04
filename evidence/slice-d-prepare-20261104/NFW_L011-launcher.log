@@ -1,0 +1,47 @@
+{"attempt": "NFW_L011", "exit_status": 1, "wall_seconds": 4.237301504937932, "peak_rss_kib": "5652824", "swaps": "0", "print_axioms": []}
+def AspisR1CurrentCaller.verifier.candidate.prepare : AspisR1CurrentCaller.Ops →
+  {H : Type} →
+    AspisR1CurrentCaller.aspis_core.digest.Digest32 H →
+      AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          H →
+            Option (AspisR1CurrentCaller.verifier.Phase → Aeneas.Std.Result Unit) →
+              Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize →
+                Aeneas.Std.Result
+                  (Aeneas.Std.core.result.Result AspisR1CurrentCaller.verifier.Prepared
+                      AspisR1CurrentCaller.verifier.Error ×
+                    Aeneas.Std.Ar
+...
+xact.ONE 0#usize
+theorem AspisR1LoopPowers.early_powers_total_exact : ∀ (N : Aeneas.Std.Usize) (x : AspisR1LoopPowers.field.WideExact),
+  AspisR1LoopPowers.Canonical x →
+    ∃ out,
+      AspisR1LoopPowers.weights.early_powers N x = Aeneas.Std.Result.ok out ∧
+        ∀ (j : Fin ↑N),
+          AspisR1LoopPowers.Canonical (↑out)[↑j] ∧
+            AspisR1LoopPowers.decode (↑out)[↑j] = AspisR1LoopPowers.decode x ^ ↑j :=
+fun N x hx =>
+  let ⟨out, h✝⟩ :=
+    AspisR1LoopPowers.early_loop_total_exact x AspisR1LoopPowers.field.WideExact.ONE
+      (Aeneas.Std.Array.repeat N AspisR1LoopPowers.field.WideExact.ZERO) 0#usize hx
+      (AspisR1LoopPowers.early_powers_total_exact._proof_1 N) AspisR1LoopPowers.one_canonical
+      (Eq.mpr
+        (id
+          (congrArg (Eq (AspisR1LoopPowers.decode AspisR1LoopPowers.field.WideExact.ONE))
+            (Eq.trans
+              (congrArg (HPow.hPow (AspisR1LoopPowers.decode x))
+                (Aeneas.Std.UScalar.ofNatCore_val_eq
+                  (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 0
+                    (of_decide_eq_true (id (Eq.refl true))))))
+              (pow_zero (AspisR1LoopPowers.decode x)))))
+        AspisR1LoopPowers.one_decode)
+      fun j hj => id (fun hj => False.elim (Nat.not_lt_zero (↑j) hj)) hj
+  let ⟨hout, hpre⟩ := h✝
+  Exists.intro out ⟨hout, fun j => hpre j j.isLt⟩
+def AspisR1LoopPowers.Canonical : AspisR1LoopPowers.field.WideExact → Prop :=
+fun x => AspisR1PowersConcreteMul.Canonical (AspisR1LoopPowers.toOld x)
+def AspisR1LoopPowers.decode : AspisR1LoopPowers.field.WideExact → AspisWideTower.WideExact :=
+fun x => AspisR1PowersExactProduct.decode (AspisR1LoopPowers.toOld x)
+NFW_generated/NFW_PrepareInspect.lean:11:7: error(lean.unknownIdentifier): Unknown constant `AspisR1.NEV_DotInputs.Canonical`
+
+Running as unit: run-r9e1c9525a5574d489fabe2a90a9883ef.scope; invocation ID: 33b2fc37bad2458387d9508702db847c

@@ -47,7 +47,7 @@ if kind=='kani':
   files['NFW_SOURCE_PINS.json']=(E/'NFW_SOURCE_PINS.json').read_text()
  sources=['NFW_gate.py','NFW_SOURCE_PINS.json','NFW_src/Cargo.lock','NFW_src/Cargo.toml','NFW_src/crates/aspis-r1-cost-probe/src/compact.rs','NFW_src/crates/aspis-r1-cost-probe/src/r1_wire.rs','NFW_src/crates/aspis-r1-cost-probe/src/transport.rs','NFW_src/crates/aspis-r1-cost-probe/src/verifier.rs']
  sources += [n for n in files if n.startswith('NFW_src/')]
- sources += ['NFW_src/crates/aspis-r1-cost-probe/src/'+n+'.rs' for n in ['NFW_reference','NFW_compact','NFW_wire','NFW_transport','NFW_verifier']]
+ sources += ['NFW_src/crates/aspis-r1-cost-probe/src/weights.rs']
  command=['python3','NFW_gate.py',a+'.json']
  env.update(CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-Copt-level=3 -C link-arg=-Wl,--threads=1')
  import os
