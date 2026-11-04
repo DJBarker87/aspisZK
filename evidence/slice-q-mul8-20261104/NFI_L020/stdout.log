@@ -1,0 +1,35 @@
+NFI_generated/NFI_FailurePrefixes.lean:12:14: error: Application type mismatch: The argument
+  ↑iter.start
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.16
+of sort `Type (?u.16 + 1)` in the application
+  @PrincipalSeg ↑iter.start
+NFI_generated/NFI_FailurePrefixes.lean:12:30: error(lean.unknownIdentifier): Unknown identifier `ter.end.val`
+NFI_generated/NFI_FailurePrefixes.lean:28:53: error: unsolved goals
+oracle : NFF_LoggedEight.Oracle
+fuel : ℕ
+before : NFI_InnerCut.Cut
+active : ↑before.iter.start < ↑before.iter.end
+e : Error
+read : NEV_DotRead.read before.input.q before.input.slot before.iter.start = fail e
+⊢ (do
+      let out ← NFF_LoggedStep.step oracle before.input.q before.input.g before.input.slot before.iter before.sums
+      match out with
+        | ControlFlow.done sums => ok (ControlFlow.done { input := before.input, sums := sums })
+        | ControlFlow.cont (iter, sums) =>
+          ok (ControlFlow.cont { input := before.input, iter := iter, sums := sums })) =
+    fail e
+NFI_generated/NFI_FailurePrefixes.lean:30:62: warning: This simp argument is unused:
+  bind_tc_fail
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵ ̵o̵n̵l̵y̵ ̵[̵N̵F̵I̵_̵I̵n̵n̵e̵r̵C̵u̵t̵.̵s̵t̵e̵p̵,̵r̵e̵j̵e̵c̵t̵e̵d̵ ̵o̵r̵a̵c̵l̵e̵ ̵b̵e̵f̵o̵r̵e̵.̵i̵n̵p̵u̵t̵.̵q̵ ̵b̵e̵f̵o̵r̵e̵.̵i̵n̵p̵u̵t̵.̵g̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵e̵f̵o̵r̵e̵.̵i̵n̵p̵u̵t̵.̵s̵l̵o̵t̵ ̵b̵e̵f̵o̵r̵e̵.̵i̵t̵e̵r̵ ̵b̵e̵f̵o̵r̵e̵.̵s̵u̵m̵s̵ ̵a̵c̵t̵i̵v̵e̵ ̵e̵ ̵r̵e̵a̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵f̵a̵i̵l̵]̵s̲i̲m̲p̲ ̲o̲n̲l̲y̲ ̲[̲N̲F̲I̲_̲I̲n̲n̲e̲r̲C̲u̲t̲.̲s̲t̲e̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲r̲e̲j̲e̲c̲t̲e̲d̲ ̲o̲r̲a̲c̲l̲e̲ ̲b̲e̲f̲o̲r̲e̲.̲i̲n̲p̲u̲t̲.̲q̲ ̲b̲e̲f̲o̲r̲e̲.̲i̲n̲p̲u̲t̲.̲g̲ ̲b̲e̲f̲o̲r̲e̲.̲i̲n̲p̲u̲t̲.̲s̲l̲o̲t̲ ̲b̲e̲f̲o̲r̲e̲.̲i̲t̲e̲r̲ ̲b̲e̲f̲o̲r̲e̲.̲s̲u̲m̲s̲ ̲a̲c̲t̲i̲v̲e̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲e̲ ̲r̲e̲a̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NFI_FailurePrefixes.rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NFI_FailurePrefixes.trace_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
