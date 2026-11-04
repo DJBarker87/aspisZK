@@ -1,9 +1,10 @@
 """Finite capacity partition; no single capacity is accepted as caller coverage."""
 from pathlib import Path
 import sys,json,difflib
-E=Path(__file__).resolve().parent;lo,hi=map(int,sys.argv[1:]);assert 1<=lo<=hi<=110
+E=Path(__file__).resolve().parent;lo,hi=map(int,sys.argv[1:3]);stride=int(sys.argv[3]) if len(sys.argv)>3 else 1;assert stride in [1,5];assert 1<=lo<=hi<=110
+if (lo,hi)==(17,32):raise SystemExit('STOP campaign before next launch: refine to actual five-element gather capacities')
 x=json.loads((E/'NEV_PAYLOAD.json').read_text());n='crates/aspis-r1-cost-probe/src/NEV_prefix_step.rs'
-s=x[n].split('// Partition ')[0].split('// Arbitrary valid prestate, built at fixed offsets.')[0]
+s=json.loads((E.parent/'slice-q-mul2-20261101/NEI_PAYLOAD.json').read_text())['crates/aspis-r1-cost-probe/src/NEI_prefix_step.rs'].replace('NEI_','NEV_')
 s+='''// Exact Kani arbitrary initialized allocation. Truncation only drops u32 wrappers.
 fn NEV_append_fixed_capacity<const CAP:usize>() {
  let mut before=kani::vec::exact_vec::<M31,CAP>();
@@ -23,8 +24,8 @@ fn NEV_append_fixed_capacity<const CAP:usize>() {
 fn prefix_push_fixed_offsets() {
  let length:usize=kani::any();
 '''
-s+=f' kani::assume({lo}<=length && length<={hi});\n match length {{\n'
-for cap in range(lo,hi+1):s+=f' {cap}=>NEV_append_fixed_capacity::<{cap}>(),\n'
+s+=f' kani::assume({lo}<=length && length<={hi} && (length-{lo})%{stride}==0);\n match length {{\n'
+for cap in range(lo,hi+1,stride):s+=f' {cap}=>NEV_append_fixed_capacity::<{cap}>(),\n'
 s+=' _=>unreachable!(),\n }\n}\n'
 x[n]=s;(E/'NEV_PREFIX_NATIVE.rs').write_text(s);(E/'NEV_PAYLOAD.json').write_text(json.dumps(x))
 frozen=json.loads((E/'NEV_FROZEN.json').read_text());patch=''

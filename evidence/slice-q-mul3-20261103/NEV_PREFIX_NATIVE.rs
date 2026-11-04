@@ -25,7 +25,9 @@ fn copy_window(){
     let expected=if cfg!(NEV_wrong_copy){old^1}else{old};
     assert_eq!(destination[offset].0,expected);
 }
-#[kani::proof] #[kani::unwind(8)]
+#[kani::proof] #[kani::unwind(114)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEV_copy::KMX_copy_nonoverlapping)]
+#[kani::stub(alloc::alloc::realloc,crate::NEV_copy::KMX_realloc)]
 fn allocation_capacity(){
     let length:usize=kani::any();kani::assume(length<=110);
     let vector:Vec<M31>=Vec::with_capacity(length);
@@ -200,7 +202,6 @@ fn prefix_old_word_frame() {
  let after=unsafe{before.as_ptr().add(observed).read()}.0;
  assert_eq!(after,if cfg!(NEV_wrong_prefix_old){old^1}else{old});
 }
-
 // Exact Kani arbitrary initialized allocation. Truncation only drops u32 wrappers.
 fn NEV_append_fixed_capacity<const CAP:usize>() {
  let mut before=kani::vec::exact_vec::<M31,CAP>();
@@ -219,9 +220,10 @@ fn NEV_append_fixed_capacity<const CAP:usize>() {
 #[kani::stub(alloc::alloc::realloc,crate::NEV_copy::KMX_realloc)]
 fn prefix_push_fixed_offsets() {
  let length:usize=kani::any();
- kani::assume(110<=length && length<=110);
+ kani::assume(100<=length && length<=105 && (length-100)%5==0);
  match length {
- 110=>NEV_append_fixed_capacity::<110>(),
+ 100=>NEV_append_fixed_capacity::<100>(),
+ 105=>NEV_append_fixed_capacity::<105>(),
  _=>unreachable!(),
  }
 }

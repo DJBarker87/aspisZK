@@ -43,6 +43,8 @@ sys.exit(r.returncode)
 files={}
 sources=[]
 env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_NET_OFFLINE='true',CARGO_BUILD_JOBS='1',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-C link-arg=-Wl,--threads=1',TMPDIR=B+'/NEV_tmp',LEAN_PATH=B+'/NEV_objects:'+C+'/NEI_exports_20261103:'+C+'/NEG_results_20261101:'+C+'/NEG_exports_20261029:'+C+'/NEB_exports_20261029:'+C+':/home/dombarker/project-offloads/codex-cx-reconcile-cache-20261028/objects:'+W+':'+W+'/objects')
+if os.environ.get('NEV_SINT2_FIRST')=='1':
+    env['LEAN_PATH']=':'.join([B+'/NEV_objects',W,W+'/objects']+[v for v in env['LEAN_PATH'].split(':') if v not in [B+'/NEV_objects',W,W+'/objects']])
 if os.environ.get('NEV_ARCHIVE_IMPORT')=='1':
     archive_set=os.environ.get('NEV_ARCHIVE_SET','NEV_exports_20261102')
     assert archive_set.startswith('NEV_exports_') and archive_set.replace('_','').isalnum()
@@ -116,6 +118,15 @@ x=json.loads((b/{(a+'.json')!r}).read_text())
 if x['kind']=='lean':(b/'NEV_objects'/{target!r}).parent.mkdir(parents=True,exist_ok=True)
 if x['kind']=='lean':
  roots=x['env']['LEAN_PATH'].split(':')
+ # Pin every selected Aeneas/AeneasMeta library object and sidecar, not merely
+ # the later fallback that supplied the predecessor's original library map.
+ for old in list(x['deps_fingerprint']['selected_objects']):
+  rel=old.split('/objects/')[-1]
+  if not rel.startswith(('Aeneas.','Aeneas/','AeneasMeta.','AeneasMeta/')):continue
+  q=next((Path(root)/rel for root in roots if (Path(root)/rel).is_file()),None)
+  assert q is not None,rel
+  for z in [q,Path(str(q)+'.private'),Path(str(q)+'.server'),q.with_suffix('.ir')]:
+   if z.is_file():x['deps_fingerprint']['selected_objects'][str(z)]=dict(path=str(z),sha256=hashlib.sha256(z.read_bytes()).hexdigest())
  for line in (b/x['sources'][0]).read_text().splitlines():
   if not line.startswith('import '):continue
   for module in line[7:].split():

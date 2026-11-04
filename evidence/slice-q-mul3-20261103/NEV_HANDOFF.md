@@ -1,3 +1,9 @@
+# Current continuation checkpoint
+
+Stage1 complete and continuing. Two new composed rows: TX1:185/TX2:111 batch_prefix_products; component68 rows/117 edges. NEO unchanged baseline and NET parser-only commit96ac88e728 both replayed, including NET's18/18 metadata controls, from committed archives with provenance. These are not yet one unified ledger. All thirteen audited prefix statements and the additional complete Result/state/effects packet compile with standard axioms. No source/ELF/key changes, no push.
+
+The incoming geometry edge remains OPEN. Other requested members remain OPEN, to be attempted next in the binding order. Budget29/70 Kani,9/120 Lean,0/20 extraction. Own and predecessor caches retained; no active host scope at this checkpoint. NEI generalized counter shell is already proved and must be reused.
+
 # NEV arithmetic continuation
 
 Work in progress. Actual branch codex/cx-slice-q-mul3-20261103; requested predecessor branch name was 20261029. Frozen Rust 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387. Scope: batch_prefix_products, accumulate_batched_with_node, four_dots_one, four_dots, in that order. Budgets: 70 Kani,120 Lean,20 extraction. No push. No shipped sources changed.

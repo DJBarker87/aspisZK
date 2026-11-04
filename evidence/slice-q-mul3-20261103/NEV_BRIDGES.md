@@ -1,3 +1,13 @@
+# Current checked result
+
+batch_prefix_products is composed CLOSED at TX1:185 and TX2:111. Four outgoing field edges are certified (one actual M31 call, three impossible receiver alternatives). Component baseline66/113 becomes68 rows/117 edges; this component ledger has not yet been unified with the separately replayed NEO/NET result. Both slice roots stay OPEN. Native capacity-family controls, fresh constructor/copy pairs, complete emitted Result/state/effects and same-site field laws are checked. Standard axioms only; P6/D188 remains reclassification. No suspended credit restored.
+
+Fourteen metadata controls passed:11 scope/capacity/callee mutations and3 focused full-Result/state/effects controls. Scope corrections of the original geometry/U08 descriptions are explicit in NEV_PREFIX_ASSOCIATION.md and the ledger's retained original text. No parent inverse-vector conclusion is claimed. Incoming for_range->prefix is OPEN pending actual gather/borrow/append context.
+
+Next: accumulate_batched_with_node, then four_dots_one, then four_dots. NEI_AccumIndependentCounters is already proved and imported; do not duplicate it. Close the documented small CodeField::from_m31 boundary next. Budget used29/70 Kani (including3 pre-backend gate failures),9/120 Lean,0/20 extraction. Two native timeout shapes are excluded, not retried unchanged.
+
+The entries below are stage history and are superseded by this current result.
+
 # NEV bridge status
 
 No new composed Slice-Q row is CLOSED yet. Imported NEI/NEG results keep their exact domains and qualifications. Root soundness remains OPEN.
