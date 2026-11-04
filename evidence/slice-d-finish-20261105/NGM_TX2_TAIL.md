@@ -1,8 +1,6 @@
 # NGM TX2 acceptance tail
 
-Target not yet established. No complete entry-to-accepted-spend path is closed.
-
-The exact incoming accumulator predicate is NGM_FinishDomain.AccumulatorDomain. Remaining Prepared/view producer predicates and the distinction between native-control and child domains are in NGM_DOMAIN.md.
+Target not yet established. Two supporting helper rows CLOSED; the four acceptance-tail root/helper rows remain OPEN. Exact incoming predicate and still-open producer boundary: NGM_DOMAIN.md.
 
 ## TX2:115 finish_relation
 
@@ -38,7 +36,7 @@ OPEN: Needs native owned record move/allocation/error/frame and emitted construc
 
 ## TX2:132 double
 
-OPEN: Independent canonical-input helper: local opaque two-product observation packet and paired total natural product law plus emitted model/reference association pending.
+CLOSED: NGM_DoubleProduct.cohort + K041..054, fresh E002 reference, canonical input only; no inner product premise.
 
 ## TX2:129 Weights::pair
 

@@ -30,7 +30,7 @@
 +pub fn guard_raw_ref(variant:u8,folds:usize,a:[[u32;4];4],b:[[u32;4];4],c:[[u32;4];4],d:[[u32;4];4])->bool{variant==1&&folds==2&&roweq_ref(a,b)&&roweq_ref(c,d)}
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NGM_weights.rs
-@@ -0,0 +1,21 @@
+@@ -0,0 +1,36 @@
 +use super::*;
 +include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
 +mod reference { include!("NGM_reference.rs"); }
@@ -52,6 +52,21 @@
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 +fn copy_control(){let src:[u8;64]=kani::any();let mut dst:[u8;64]=kani::any();dst.copy_from_slice(&src);let i:usize=kani::any();kani::assume(i<64);assert!((dst[i]==src[i]) != cfg!(NGM_invert));}
++
++mod double_reference{include!("NGM_double_reference.rs");}
++struct ProductLog{replies:[K;2],left:[K;2],right:[K;2],count:usize}
++fn opaque_product(x:K,y:K,log:&mut ProductLog)->K{let i=log.count;log.left[i]=x;log.right[i]=y;log.count+=1;log.replies[i]}
++fn source_double(x:K,log:&mut ProductLog)->K{opaque_product(x,x,log).add(opaque_product(x,x,log)).sub(K::ONE)}
++fn canonical_q()->K{let x:[u32;4]=kani::any();for word in x{kani::assume(word<0x7fffffff);}fromq(x)}
++fn exercise_double(group:u8){let x=canonical_q();let mut log=ProductLog{replies:[canonical_q(),canonical_q()],left:[K::ZERO;2],right:[K::ZERO;2],count:0};let expected=double_reference::double_observed_ref(qwords(log.replies[0]),qwords(log.replies[1]));let out=qwords(source_double(x,&mut log));let good=match group{0=>out[0]==expected[0],1=>out[1]==expected[1],2=>out[2]==expected[2],3=>out[3]==expected[3],4=>log.count==2,5=>log.left[0]==x&&log.right[0]==x,6=>log.left[1]==x&&log.right[1]==x,_=>false};assert!(good != cfg!(NGM_invert));}
++macro_rules! double_gate{($n:ident,$g:expr)=>{#[kani::proof]#[kani::unwind(17)]#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]fn $n(){exercise_double($g)}};}
++double_gate!(double_control_0,0);
++double_gate!(double_control_1,1);
++double_gate!(double_control_2,2);
++double_gate!(double_control_3,3);
++double_gate!(double_control_4,4);
++double_gate!(double_control_5,5);
++double_gate!(double_control_6,6);
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NGM_wire.rs
 @@ -0,0 +1 @@
@@ -66,7 +81,7 @@
 +// Prefix-owned reserved sidecar.
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NGM_verifier.rs
-@@ -0,0 +1,65 @@
+@@ -0,0 +1,73 @@
 +use super::*;
 +include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
 +mod reference {include!("NGM_control_reference.rs");}
@@ -109,8 +124,16 @@
 + let a=Accumulator{weights:alloc::vec![K::ZERO;64],rhs:anye(),power:K::ZERO,next:kani::any()};
 + let value=Weights{variant:p.variant,factors:core::array::from_fn(|_|core::array::from_fn(|_|core::array::from_fn(|_|anyk()))),points:core::array::from_fn(|_|core::array::from_fn(|_|anyk())),extra:[anyk(),anyk()]};
 + let mut log=Log{r0:reply(),r1:reply(),new_error:if kani::any(){Some(error(kani::any()))}else{None},new_value:Some(Box::new(value)),pair:reply(),dot:reply(),events:[255;7],len:0,rounds:[None,None],new_args:None,new_ptr:core::ptr::null(),pair_args:None,dot_args:None};
-+ let expected=reference::finish_ref(p.variant.folds()==2,a.next,a.rhs.to_limbs(),reference::Replies{round0:encode(log.r0),round1:encode(log.r1),weights:match log.new_error{Some(e)=>Err(code(e)),None=>Ok(())},pair:encode(log.pair),dot:encode(log.dot)});
++ let mut expected=reference::finish_ref(p.variant.folds()==2,a.next,a.rhs.to_limbs(),reference::Replies{round0:if cfg!(NGM_invert)&&group==0{match encode(log.r0){Ok(_)=>Err(0),Err(e)=>Err(if e==0{1}else{0})}}else{encode(log.r0)},round1:encode(log.r1),weights:match log.new_error{Some(e)=>Err(code(e)),None=>Ok(())},pair:encode(log.pair),dot:encode(log.dot)});
 + let r=source_finish(&v,&p,&a,None,&mut log);
++ if cfg!(NGM_invert){match group{
++ 1=>expected.len=if expected.len==7{6}else{expected.len+1},
++ 2=>log.events[0]=255,
++ 3=>if let Some(x)=&mut log.rounds[0]{x.ptr=x.ptr.wrapping_add(1);},
++ 4=>if let Some(x)=&mut log.rounds[1]{x.ptr=x.ptr.wrapping_add(1);},
++ 5=>if let Some(x)=&mut log.new_args{x.1=x.1.wrapping_add(1);},
++ 6=>if let Some(x)=&mut log.pair_args{x.alpha=x.alpha.wrapping_add(1);},
++ 7=>if let Some(x)=&mut log.dot_args{x.weights=x.weights.wrapping_add(1);},_=>{}}}
 + let good=match group{
 + 0=>result(r)==expected.result,
 + 1=>log.len==expected.len,
@@ -120,7 +143,7 @@
 + 5=>match log.new_args{Some((variant,alpha,z))=>variant==p.variant&&alpha==p.semantic_alpha.as_ptr()&&z==p.z.as_ptr(),None=>true},
 + 6=>match &log.pair_args{Some(x)=>x.weights==log.new_ptr&&x.alpha==p.alpha.as_ptr()&&x.folds==p.variant.folds()&&x.bytes==v.final_message.as_ptr()&&x.len==v.final_message.len()&&x.kappa==p.kappa,None=>true},
 + 7=>match &log.dot_args{Some(x)=>x.bytes==v.final_message.as_ptr()&&x.len==v.final_message.len()&&x.weights==a.weights.as_ptr()&&x.width==64,None=>true},_=>false};
-+ assert!(good != cfg!(NGM_invert));
++ assert!(good);
 +}
 +macro_rules! gate{($n:ident,$g:expr)=>{#[kani::proof]#[kani::unwind(65)]#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]fn $n(){exercise($g)}};}
 +gate!(finish_control_0,0);
@@ -134,12 +157,13 @@
 +gate!(finish_control_rename,0);
 --- a/crates/aspis-r1-cost-probe/src/verifier.rs
 +++ b/crates/aspis-r1-cost-probe/src/verifier.rs
-@@ -526,3 +526,5 @@
+@@ -526,3 +526,6 @@
  #[cfg(feature="audit-eight-way")]
  #[path="eight_way.rs"]
  pub mod eight_way;
 +
 +#[cfg(kani)] #[path="NGM_verifier.rs"] mod NGM_verifier;
++#[cfg(kani)] #[path="NGM_dot.rs"] mod NGM_dot;
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NGM_control_reference.rs
 @@ -0,0 +1,18 @@
@@ -161,3 +185,86 @@
 + if next!=22||actual!=rhs{o.result=Err(5);return o;}
 + event(&mut o,6);o
 +}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NGM_double_reference.rs
+@@ -0,0 +1,3 @@
++pub fn add_ref(x:u32,y:u32)->u32 {let s=x+y;if s>=2147483647{s-2147483647}else{s}}
++pub fn sub_ref(x:u32,y:u32)->u32 {let s=x+2147483647-y;if s>=2147483647{s-2147483647}else{s}}
++pub fn double_observed_ref(p0:[u32;4],p1:[u32;4])->[u32;4]{[sub_ref(add_ref(p0[0],p1[0]),1),sub_ref(add_ref(p0[1],p1[1]),0),sub_ref(add_ref(p0[2],p1[2]),0),sub_ref(add_ref(p0[3],p1[3]),0)]}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NGM_dot.rs
+@@ -0,0 +1,46 @@
++// OPEN one-iteration oracle candidate; no claimed actual Dot ABI transport.
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++struct Log{reply:bool,after:[u64;9],before:[u64;9],value:[u32;8],scalar:[u32;4],calls:usize,order:u8,field_ptr:*const u8,field_len:usize,field_index:usize,weight_ptr:*const K,weight_index:usize}
++fn recorded_push(dot:&mut crate::fast_pairing::EbyKDot,value:E,scalar:K,log:&mut Log)->Result<(),()>{log.before=crate::fast_pairing::NGM_helpers::read(dot);log.value=value.to_limbs();log.scalar=[scalar.c0.a.0,scalar.c0.b.0,scalar.c1.a.0,scalar.c1.b.0];log.calls+=1;log.order=if log.order==2{3}else{255};*dot=crate::fast_pairing::NGM_helpers::make(log.after);if log.reply{Ok(())}else{Err(())}}
++fn recorded_field(bytes:&[u8],j:usize,log:&mut Log)->E{let selected=&bytes[32*j..32*(j+1)];log.field_ptr=selected.as_ptr();log.field_len=selected.len();log.field_index=j;log.order=1;field(bytes,j)}
++fn recorded_weight(weights:&[K],j:usize,log:&mut Log)->K{log.weight_ptr=&weights[j];log.weight_index=j;log.order=if log.order==1{2}else{255};weights[j]}
++fn source_step(final_message:&[u8],weights:&[K],dot:&mut crate::fast_pairing::EbyKDot,j:&mut usize,log:&mut Log)->Result<(),Error>{
++ let value=recorded_field(final_message,*j,log);
++ let scalar=recorded_weight(weights,*j,log);
++ recorded_push(dot,value,scalar,log).map_err(|_|Error::Parse)?;*j+=1;Ok(())
++}
++fn exercise(group:u8){
++ let mut bytes:[u8;2048]=kani::any();let j:usize=kani::any();kani::assume(j<64);
++ let value:[u32;8]=kani::any();for x in value{kani::assume(x<0x7fffffff);}
++ for i in 0..8{bytes[32*j+4*i..32*j+4*i+4].copy_from_slice(&value[i].to_le_bytes());}
++ let scalar:[u32;4]=kani::any();let mut weights=[K::ZERO;64];weights[j]=K{c0:aspis_core::field::CM31{a:M31(scalar[0]),b:M31(scalar[1])},c1:aspis_core::field::CM31{a:M31(scalar[2]),b:M31(scalar[3])}};
++ let before:[u64;9]=kani::any();let after:[u64;9]=kani::any();let reply:bool=kani::any();
++ let mut log=Log{reply,after,before:[0;9],value:[0;8],scalar:[0;4],calls:0,order:0,field_ptr:core::ptr::null(),field_len:0,field_index:0,weight_ptr:core::ptr::null(),weight_index:0};
++ let mut dot=crate::fast_pairing::NGM_helpers::make(before);let mut index=j;let result=source_step(&bytes,&weights,&mut dot,&mut index,&mut log);let mut final_state=crate::fast_pairing::NGM_helpers::read(&dot);
++ if cfg!(NGM_invert){match group{1=>index=index.wrapping_add(1),2=>log.calls+=1,3=>log.before[0]^=1,4=>final_state[0]^=1,5=>log.value[0]^=1,6=>log.value[4]^=1,7=>log.scalar[0]^=1,8=>log.value[0]=0x7fffffff,9=>log.order=255,10=>log.field_ptr=log.field_ptr.wrapping_add(1),11=>log.field_len=31,12=>log.field_index+=1,13=>log.weight_ptr=log.weight_ptr.wrapping_add(1),_=>{}}}
++ let expected_reply=if cfg!(NGM_invert)&&group==0{!reply}else{reply};
++ let good=match group{
++ 0=>if expected_reply{matches!(result,Ok(()))}else{matches!(result,Err(Error::Parse))},
++ 1=>index==if reply{j+1}else{j},2=>log.calls==1,3=>(log.before[0]==before[0] && log.before[1]==before[1] && log.before[2]==before[2] && log.before[3]==before[3] && log.before[4]==before[4] && log.before[5]==before[5] && log.before[6]==before[6] && log.before[7]==before[7] && log.before[8]==before[8]),4=>(final_state[0]==after[0] && final_state[1]==after[1] && final_state[2]==after[2] && final_state[3]==after[3] && final_state[4]==after[4] && final_state[5]==after[5] && final_state[6]==after[6] && final_state[7]==after[7] && final_state[8]==after[8]),
++ 5=>log.value[..4]==value[..4],6=>log.value[4..]==value[4..],7=>log.scalar==scalar,
++ 8=>log.value.iter().all(|x|*x<0x7fffffff),9=>log.order==3,
++ 10=>log.field_ptr==bytes.as_ptr().wrapping_add(32*j),11=>log.field_len==32,
++ 12=>log.field_index==j,13=>log.weight_ptr==weights.as_ptr().wrapping_add(j)&&log.weight_index==j,
++ _=>false};assert!(good);
++}
++macro_rules! gate{($name:ident,$n:expr)=>{#[kani::proof]#[kani::unwind(35)]#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]fn $name(){exercise($n)}};}
++gate!(finish_g00,0);
++gate!(finish_g01,1);
++gate!(finish_g02,2);
++gate!(finish_g03,3);
++gate!(finish_g04,4);
++gate!(finish_g05,5);
++gate!(finish_g06,6);
++gate!(finish_g07,7);
++gate!(finish_g08,8);
++gate!(finish_g09,9);
++gate!(finish_g10,10);
++gate!(finish_g11,11);
++gate!(finish_g12,12);
++gate!(finish_g13,13);
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NGM_canonical.rs
+@@ -0,0 +1,3 @@
++use super::Dot;
++pub(in crate::fast_pairing) fn read(dot:&Dot)->[u64;4]{dot.sums}
++pub(in crate::fast_pairing) fn make(sums:[u64;4])->Dot{Dot{sums}}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NGM_fast_helpers.rs
+@@ -0,0 +1,3 @@
++use super::*;
++pub(crate) fn read(dot:&EbyKDot)->[u64;9]{let a=canonical::NGM_canonical::read(&dot.c0);let b=canonical::NGM_canonical::read(&dot.c1);[a[0],a[1],a[2],a[3],b[0],b[1],b[2],b[3],dot.count as u64]}
++pub(crate) fn make(s:[u64;9])->EbyKDot{assert_eq!(usize::BITS,64);EbyKDot{c0:canonical::NGM_canonical::make([s[0],s[1],s[2],s[3]]),c1:canonical::NGM_canonical::make([s[4],s[5],s[6],s[7]]),count:s[8] as usize}}
+--- a/crates/aspis-r1-cost-probe/src/fast_pairing.rs
++++ b/crates/aspis-r1-cost-probe/src/fast_pairing.rs
+@@ -2,6 +2,7 @@
+ mod canonical {
+     //! Private canonical representation: validate at the boundary, preserve internally.
+     //! No public unchecked constructor. This does NOT change aspis_core::M31.
++ #[cfg(kani)] pub(super) mod NGM_canonical { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/src/NGM_canonical.rs")); }
+     pub const P:u32=0x7fff_ffff;
+     const MASK:u64=0x7fff_ffff_7fff_ffff;
+     const ONES:u64=0x0000_0001_0000_0001;
+@@ -222,3 +223,5 @@
+         E::new(ac.add(bd.mul(E::U)), ad.add(bc))
+     }
+ }
++
++#[cfg(kani)] #[path="NGM_fast_helpers.rs"] pub(crate) mod NGM_helpers;

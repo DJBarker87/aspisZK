@@ -1,5 +1,27 @@
 {
-  "closed_edges": [],
-  "reason": "Guard has no inventory callees. TX2 write-back is a checked model boundary fragment; the actual NFW caller is not promoted.",
-  "boundary_theorem": "AspisR1.NGM_FinishDomain.tx2_writeback"
+  "closed_edges": [
+    {
+      "caller": "crates/aspis-r1-cost-probe/src/weights.rs::double",
+      "callee": "crates/aspis-core/src/field.rs::QM31::mul",
+      "status": "CLOSED",
+      "law": "NGM_DoubleProduct.cohort / NGM_DoubleModel.observed",
+      "domain": "same canonical inputs; product totality and intermediate canonical add values derived"
+    },
+    {
+      "caller": "crates/aspis-r1-cost-probe/src/weights.rs::double",
+      "callee": "crates/aspis-core/src/field.rs::QM31::add",
+      "status": "CLOSED",
+      "law": "NGM_DoubleProduct.cohort / NGM_DoubleModel.observed",
+      "domain": "same canonical inputs; product totality and intermediate canonical add values derived"
+    },
+    {
+      "caller": "crates/aspis-r1-cost-probe/src/weights.rs::double",
+      "callee": "crates/aspis-core/src/field.rs::QM31::sub",
+      "status": "CLOSED",
+      "law": "NGM_DoubleProduct.cohort / NGM_DoubleModel.observed",
+      "domain": "same canonical inputs; product totality and intermediate canonical add values derived"
+    }
+  ],
+  "boundary_theorem": "AspisR1.NGM_FinishDomain.tx2_writeback",
+  "boundary_caller_status": "OPEN NFW; no caller promotion"
 }

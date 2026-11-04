@@ -24,12 +24,29 @@ for c in closed['functions']:
   assert x['env']['CARGO_NET_OFFLINE']=='true'
   log=(E/a/'stdout.log').read_text();assert ('VERIFICATION:- SUCCESSFUL'if expected==0 else'VERIFICATION:- FAILED')in log
  positive=receipt(c['native_positive']);negative=receipt(c['matched_control']);assert positive['module']==negative['module']
- assert 'NGM_weights::guard_raw_post' in (E/c['matched_control']/'stdout.log').read_text()
- # The actual frozen body is retained; only cfg contracts and module hooks differ.
- src=(E/c['native_positive']/'sources/NGM_src/crates/aspis-r1-cost-probe/src/weights.rs').read_text()
- frozen=subprocess.check_output(['git','show',closed['frozen_revision']+':crates/aspis-r1-cost-probe/src/weights.rs'],text=True)
- sig='fn shared_two_point_guard(';a=frozen.index(sig);b=frozen.index('\n }',a)+3;assert frozen[a:b]in src
- raw=read('NGM_final_audit/proof0.json');result=next(r for r in raw['results']if r['root']==c['lean_root']);assert result['equal']and set(result['walked_axioms'])==set(result['collect_axioms'])<={'propext','Classical.choice','Quot.sound'}
+ if c['function'].endswith('::shared_two_point_guard'):
+  assert 'NGM_weights::guard_raw_post' in (E/c['matched_control']/'stdout.log').read_text()
+  src=(E/c['native_positive']/'sources/NGM_src/crates/aspis-r1-cost-probe/src/weights.rs').read_text()
+  frozen=subprocess.check_output(['git','show',closed['frozen_revision']+':crates/aspis-r1-cost-probe/src/weights.rs'],text=True)
+  sig='fn shared_two_point_guard(';lo=frozen.index(sig);hi=frozen.index('\n }',lo)+3;assert frozen[lo:hi]in src
+  raw=read('NGM_final_audit/proof0.json')['results']
+ elif c['function'].endswith('::double'):
+  assert read('NGM_DOUBLE_ERASURE.json')['status']=='PASS source erasure only'
+  assert len(c['native_pairs'])==7 and not c['inner_hypotheses_remaining']
+  for pair in c['native_pairs']:
+   for offset,a in enumerate(pair):
+    r=receipt(a);assert r['exit_status']==offset
+    log=(E/a/'stdout.log').read_text();assert ('VERIFICATION:- SUCCESSFUL'if offset==0 else'VERIFICATION:- FAILED')in log
+    assert not re.search(r'TIMEOUT|timed out|memory limit exceeded|SIGKILL',log,re.I)
+    assert read(a+'-graph-check.json')['graph_matches_frozen']and read(a+'-lock-check.json')['unchanged']
+   assert receipt(pair[0])['module']==receipt(pair[1])['module']
+  raw=[json.loads(line[11:])for line in(E/'NGM_L055/stdout.log').read_text().splitlines()if line.startswith('NEP_RESULT ')]
+  assert c['paired_product_law']in {r['root']for r in raw}
+  for suffix in ['QM31::mul','QM31::add','QM31::sub']:
+   selected=[r for r in base['rows']if r['function']=='crates/aspis-core/src/field.rs::'+suffix];assert selected and all(r['composed_status']=='CLOSED'for r in selected)
+  assert read('NGM_E002-extraction-pins.json')['reference_sha256']==hashlib.sha256((E/'NGM_double_reference.rs.txt').read_bytes()).hexdigest()
+ else:raise AssertionError('Unreviewed promotion')
+ result=next(r for r in raw if r['root']==c['lean_root']);assert result['equal']and set(result['walked_axioms'])==set(result['collect_axioms'])<={'propext','Classical.choice','Quot.sound'}
 assert audit['standard_axioms_only']and audit['dangling']==audit['incompatible_owners']==audit['import_mismatches']==0
 for a in [audit['combined_attempt'],audit['scan_attempt']]:assert receipt(a)['exit_status']==0
 scan=[json.loads(l)for l in (E/'NGM_LOADED_scan.jsonl').read_text().splitlines()];assert len(scan)==audit['modules'];assert all(not r['dangling']and not r['duplicate_owners']and r['imports_match']for r in scan)

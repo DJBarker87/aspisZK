@@ -1,0 +1,55 @@
+{"attempt": "NGM_L029", "exit_status": 1, "wall_seconds": 1.8519232170656323, "peak_rss_kib": "2609908", "swaps": "0", "print_axioms": ["'NGM_ProbeTransport.qm_mul' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NGM_ProbeTransport.base_add' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NGM_ProbeTransport.base_sub' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NGM_ProbeTransport.base_mul' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NGM_ProbeTransport.base_reduce' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NGM_ProbeTransport.cm_add' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NGM_ProbeTransport.cm_sub' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NGM_ProbeTransport.cm_mul' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NGM_ProbeTransport.by_r' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NGM_generated/NGM_ProbeTransport.lean:15:50: error: unsolved goals
+x y : U32
+⊢ (do
+      let s ← lift (x.wrapping_add y)
+      if 2147483647 ≤ ↑s then do
+          let s1 ← lift (s.wrapping_sub 2147483647#u32)
+          ok s1
+        else ok s) =
+    do
+    let s ← x + y
+    if 2147483647 ≤ ↑s then do
+        let s1 ← s - 2147483647#u32
+        ok s1
+      else ok s
+NGM_generated/NGM_ProbeTransport.lean:17:4: warning: This simp argument is unused:
+  FIn_WeightsExtract.field.reduce_u64
+
+Hint: Omit it from the simp argument list.
+  simp [̵F̵I̵n̵_̵W̵e̵i̵g̵h̵t̵s̵E̵x̵t̵r̵a̵c̵t̵.̵f̵i̵e̵l̵d̵.̵M̵3̵1̵.̵a̵d̵d̵,̵A̵s̵p̵i̵s̵R̵1̵S̵e̵l̵e̵c̵t̵e̵d̵M̵a̵s̵k̵P̵r̵o̵b̵e̵.̵f̵i̵e̵l̵d̵.̵M̵3̵1̵.̵a̵d̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵F
+...
+x_6 ← lift (x_4.wrapping_add x_5)
+      let x ← lift (x.wrapping_mul x_6)
+      let x ← AspisR1SelectedMaskProbe.field.M31.reduce_u64 x
+      let x_7 ← AspisR1SelectedMaskProbe.field.M31.sub x_1 x_2
+      let x ← AspisR1SelectedMaskProbe.field.M31.sub x x_1
+      let x ← AspisR1SelectedMaskProbe.field.M31.sub x x_2
+      ok { a := x_7, b := x }) =
+    do
+    let m0 ← AspisR1SelectedMaskProbe.field.M31.mul x.a y.a
+    let m1 ← AspisR1SelectedMaskProbe.field.M31.mul x.b y.b
+    let i1 ← lift (core.convert.num.FromU64U32.from x.a)
+    let i3 ← lift (core.convert.num.FromU64U32.from x.b)
+    let i4 ← i1 + i3
+    let i6 ← lift (core.convert.num.FromU64U32.from y.a)
+    let i8 ← lift (core.convert.num.FromU64U32.from y.b)
+    let i9 ← i6 + i8
+    let i10 ← i4 * i9
+    let m2 ← AspisR1SelectedMaskProbe.field.M31.reduce_u64 i10
+    let m ← m0.sub m1
+    let m3 ← m2.sub m0
+    let m4 ← m3.sub m1
+    ok { a := m, b := m4 }
+'NGM_ProbeTransport.qm_mul' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NGM_ProbeTransport.base_add' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NGM_ProbeTransport.base_sub' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NGM_ProbeTransport.base_mul' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NGM_ProbeTransport.base_reduce' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NGM_ProbeTransport.cm_add' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NGM_ProbeTransport.cm_sub' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NGM_ProbeTransport.cm_mul' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NGM_ProbeTransport.by_r' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r9e551267b26846868aa6985a7db808fc.scope; invocation ID: 20a2f134dfd541a88e88f40ca26186c5

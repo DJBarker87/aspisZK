@@ -1,0 +1,3 @@
+# Native caller control review
+
+K005..K022 are preliminary source-fission diagnostics. Their inverted assertions fail, but that can witness an unreached optional argument. They are not used as the final ruling-(y) argument controls. Replacement preserves the same harness names and actual caller property; it corrupts the first cached child reply for Result, one recorded argument for argument probes, or one call-count/tag for order probes. Optional argument controls keep the absent-call branch true, so failure must occur at the reached corrupted argument. No timeout or memory failure triggered this change; no verdict is repaired by renaming. K023..K040 are the strengthened pairs, including the one family rename-stability pair required by (ae).

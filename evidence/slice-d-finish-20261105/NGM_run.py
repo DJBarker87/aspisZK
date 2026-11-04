@@ -52,7 +52,7 @@ if kind=='kani':
  if os.environ.get('NGM_INVERT'):env['RUSTFLAGS']+=' --cfg NGM_invert'
 elif kind=='extract':
  files['NGM_extract.py']=(E/'NGM_extract.py').read_text()
- files['NGM_references.rs']=(E/'NGM_references.rs.txt').read_text()
+ files['NGM_references.rs']=(E/('NGM_double_reference.rs.txt' if target=='NGM_DoubleRef' else 'NGM_references.rs.txt')).read_text()
  sources=['NGM_extract.py','NGM_references.rs'];command=['python3','NGM_extract.py',a+'.json']
 elif kind=='dependency':
  assert target=='JHe_ZeroGate'
@@ -71,7 +71,10 @@ elif kind=='auditbatch':
  sources=['NGM_generated/NGM_ProofDriver.lean','NGM_generated/NGM_Driver.lean','NGM_audit_batch.py','NGM_AUDIT_ROOTS.json','NGM_EXPECTED_IMPORTS.jsonl','NGM_native/NGM_ProofDriver.c','NGM_native/NGM_Driver.c','NGM_native/NFA_WALKER.c','NGM_native/NFA_MemoryLimit.c']
  command=['python3','NGM_audit_batch.py']
 elif kind=='auditbin':
- sources=['NGM_generated/NGM_Driver.lean'];command=['NGM_native/NGM_Driver',target]
+ driver='NGM_ProofDriver' if target.startswith('proof') or target=='fixtures' else 'NGM_Driver'
+ sources=['NGM_generated/'+driver+'.lean'];command=['NGM_native/'+driver,target]
+ if target.startswith('proof'):
+  files['NGM_AUDIT_ROOTS.json']=(E/'NGM_AUDIT_ROOTS.json').read_text();sources+=['NGM_AUDIT_ROOTS.json']
 else:raise ValueError(kind)
 if target in ['scan','queryscan']:
  name='NGM_QUERY_EXPECTED_IMPORTS.jsonl' if target=='queryscan' else 'NGM_EXPECTED_IMPORTS.jsonl'
