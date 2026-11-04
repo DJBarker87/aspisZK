@@ -42,7 +42,7 @@ sys.exit(r.returncode)
     raise RuntimeError('STOP host admission')
 files={}
 sources=[]
-env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_NET_OFFLINE='true',CARGO_BUILD_JOBS='1',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-C link-arg=-Wl,--threads=1',TMPDIR=B+'/NFA_tmp',LEAN_PATH=B+'/NFA_objects:'+C+'/NEV_exports_20261104:'+C+'/NEI_exports_20261103:'+C+'/NEG_results_20261101:'+C+'/NEG_exports_20261029:'+C+'/NEB_exports_20261029:'+C+':/home/dombarker/project-offloads/codex-cx-reconcile-cache-20261028/objects:'+W+':'+W+'/objects')
+env=dict(LEAN_SYSROOT='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0',PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_NET_OFFLINE='true',CARGO_BUILD_JOBS='1',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-C link-arg=-Wl,--threads=1',TMPDIR=B+'/NFA_tmp',LEAN_PATH=B+'/NFA_objects:'+C+'/NEV_exports_20261104:'+C+'/NEI_exports_20261103:'+C+'/NEG_results_20261101:'+C+'/NEG_exports_20261029:'+C+'/NEB_exports_20261029:'+C+':/home/dombarker/project-offloads/codex-cx-reconcile-cache-20261028/objects:'+W+':'+W+'/objects')
 if os.environ.get('NFA_SINT2_FIRST')=='1':
     env['LEAN_PATH']=':'.join([B+'/NFA_objects',W,W+'/objects']+[v for v in env['LEAN_PATH'].split(':') if v not in [B+'/NFA_objects',W,W+'/objects']])
 if os.environ.get('NFA_ARCHIVE_IMPORT')=='1':
@@ -54,9 +54,25 @@ native=[]
 if kind=='lean':
     n='NFA_generated/'+target+'.lean'; files[n]=(json.loads((E/'NFA_PREREQUISITES.json').read_text())['sources'][target]['text'] if os.environ.get('NFA_UNCHANGED_MODULE')=='1' else (E/(target+'.lean')).read_text());sources=[n]
     command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NFA_generated','-o','NFA_objects/'+target+'.olean',n]
+    env['LEAN_PATH']+=':/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean'
+    if os.environ.get('NFA_EMIT_C')=='1':command+=['-c','NFA_native/'+target+'.c']
     library=json.loads((E/'NFA_SOURCE.json').read_text())['library']
     if os.environ.get('NFA_HEADLINE')=='1':library.update({p['object_path']:p['object_sha256'] for p in json.loads((E/'NFA_HEADLINE_OBJECT_PINS.json').read_text())['entries'] if p['module']=='Aeneas' or p['module'].startswith('Aeneas.')})
     deps['selected_objects']={p:dict(path=p,sha256=h) for p,h in library.items()}
+elif kind=='linkaudit':
+    sources=['NFA_native/NFA_Driver.c','NFA_native/NFA_WALKER.c','NFA_native/NFA_MemoryLimit.c']
+    command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','leanc','-O3','-rdynamic','-o','NFA_native/NFA_Driver',*sources]
+elif kind in ['audit','auditbin']:
+
+    entries=json.loads((E/'NFA_AUDIT_ROOTS.json').read_text())
+    entry=entries[int(target)]
+    files['NFA_generated/NFA_Driver.lean']=(E/'NFA_Driver.lean').read_text()
+    sources=list(files)
+    command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','--run','NFA_generated/NFA_Driver.lean',target]
+    if kind=='auditbin':command=['NFA_native/NFA_Driver',target]
+    library=json.loads((E/'NFA_SOURCE.json').read_text())['library']
+    deps['selected_objects']={p:dict(path=p,sha256=h) for p,h in library.items()}
+    deps['audit_entry']=entry
 elif kind=='kani':
     payload_path=(E/os.environ.get('NFA_KANI_PAYLOAD','NFA_PAYLOAD.json')).resolve()
     assert payload_path.parent==E and payload_path.name.startswith('NFA_')
@@ -120,7 +136,7 @@ for n in files:
 (b/'NFA_SOURCE_PINS.json').write_text(json.dumps(pins))
 x=json.loads((b/{(a+'.json')!r}).read_text())
 if x['kind']=='lean':(b/'NFA_objects'/{target!r}).parent.mkdir(parents=True,exist_ok=True)
-if x['kind']=='lean':
+if x['kind'] in ['lean','audit','auditbin']:
  roots=x['env']['LEAN_PATH'].split(':')
  # Pin every selected Aeneas/AeneasMeta library object and sidecar, not merely
  # the later fallback that supplied the predecessor's original library map.
@@ -131,9 +147,15 @@ if x['kind']=='lean':
   assert q is not None,rel
   for z in [q,Path(str(q)+'.private'),Path(str(q)+'.server'),q.with_suffix('.ir')]:
    if z.is_file():x['deps_fingerprint']['selected_objects'][str(z)]=dict(path=str(z),sha256=hashlib.sha256(z.read_bytes()).hexdigest())
+ if x['kind'] in ['audit','auditbin']:
+  module=x['deps_fingerprint']['audit_entry']['module'];rel=module.replace('.','/')+'.olean'
+  p=next(Path(root)/rel for root in roots if (Path(root)/rel).is_file())
+  assert hashlib.sha256(p.read_bytes()).hexdigest()==x['deps_fingerprint']['audit_entry']['object_sha256']
+  for q in [p,Path(str(p)+'.private'),Path(str(p)+'.server'),p.with_suffix('.ir')]:
+   if q.is_file():x['deps_fingerprint']['selected_objects'][str(q)]=dict(path=str(q),sha256=hashlib.sha256(q.read_bytes()).hexdigest())
  for line in (b/x['sources'][0]).read_text().splitlines():
   if not line.startswith('import '):continue
-  for module in line[7:].split():
+  for module in [n for n in line[7:].split() if n!='all']:
    key=module.replace('.','/')+'.olean'
    p=next((Path(root)/key for root in roots if (Path(root)/key).is_file()),None)
    if p is None:raise FileNotFoundError(module)
@@ -153,10 +175,14 @@ names=[str(p.relative_to(b)) for p in (b/a/'sources').rglob('*') if p.is_file()]
 
 if {kind!r}=='extract':
  names += [str(p.relative_to(b)) for p in (b/'NFA_extracted').rglob('*.lean')]
+names+=['NFA_native/NFA_Driver.c','NFA_native/NFA_WALKER.c','NFA_native/NFA_MemoryLimit.c']
 result={{n:(b/n).read_text() for n in names if (b/n).is_file()}}
 if {kind!r}=='extract' and (b/'NFA_isolated/src/lib.rs').is_file():
  for n in ['src/lib.rs','src/NFA_pairing.rs','Cargo.toml','Cargo.lock']:
   if (b/'NFA_isolated'/n).is_file():result[a+'/NFA_isolation_'+n.replace('/','_')+'.txt']=(b/'NFA_isolated'/n).read_text()
+if (b/'NFA_native/NFA_Driver').is_file():
+ import hashlib
+ result[{(a+'/NFA_BINARY_PIN.json')!r}]=json.dumps(dict(sha256=hashlib.sha256((b/'NFA_native/NFA_Driver').read_bytes()).hexdigest(),bytes=(b/'NFA_native/NFA_Driver').stat().st_size))
 print(json.dumps(result))
 '''
 r=ssh('python3',code);assert r.returncode==0,r.stderr

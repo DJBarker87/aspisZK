@@ -1,0 +1,82 @@
+NFA_generated/NFA_InnerLoop.lean:19:16: error: Application type mismatch: The argument
+  ↑iter.end
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.52
+of sort `Type (?u.52 + 1)` in the application
+  @InitialSeg ↑iter.end
+NFA_generated/NFA_InnerLoop.lean:19:30: error(lean.unknownIdentifier): Unknown identifier `ter.start.val`
+NFA_generated/NFA_InnerLoop.lean:19:50: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ f ≤ 26
+  0 ≤ e ≤ 4
+where
+ e := ↑n
+ f := ↑↑iter.end
+NFA_generated/NFA_InnerLoop.lean:25:109: error: unsolved goals
+q : Std.Array U8 608#usize
+g : NEV_DotInputs.Coefficients
+canonical : NEV_DotInputs.Canonical g
+slot : Usize
+out : Std.Array U64 8#usize
+iter : core.ops.range.Range Usize
+sums : Std.Array U64 8#usize
+n : ℕ
+width : n + 0 ≤ 4
+span : ↑iter.start + 0 = ↑iter.end
+endpoint : ↑iter.end ≤ 26
+invariant : NEV_DotSweep.Sweep n 0 sums
+run : FIp_NativeDots.fast_dots.four_dots_one_loop0_loop0 iter q g slot sums = ok out
+halt : InitialSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+cursor : core.ops.range.Range (UScalar UScalarTy.Usize)
+rest : cursor = iter
+advance :
+  core.iter.range.IteratorRange.next
+      (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize) iter =
+    ok (none, cursor)
+⊢ (let (o, next) := (none, cursor)
+    match o with
+    | none => ok (done sums)
+    | some term => do
+      let scalar ← NEV_DotRead.read q slot term
+      let out ← NEV_ActualDotStep.update g term scalar sums
+      ok (cont (next, out))) =
+    ok (done sums)
+NFA_generated/NFA_InnerLoop.lean:49:46: error: Application type mismatch: The argument
+  out
+has type
+  Std.Array U64 8#usize
+of sort `Type` but is expected to have type
+  FIp_NativeDots.fast_dots.four_dots_one_loop0_loop0 next q g slot after = ok out
+of sort `Prop` in the application
+  ih next after (n + 1) ?m.345 ?m.346 ?m.347 bound out
+NFA_generated/NFA_InnerLoop.lean:31:20: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [body,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵] at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFA_generated/NFA_InnerLoop.lean:40:39: warning: This simp argument is unused:
+  bind_tc_fail
+
+Hint: Omit it from the simp argument list.
+  simp only [bodyRun,̵b̵i̵n̵d̵_̵t̵c̵_̵f̵a̵i̵l̵] at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFA_generated/NFA_InnerLoop.lean:41:32: warning: This simp argument is unused:
+  bind_tc_div
+
+Hint: Omit it from the simp argument list.
+  simp only [bodyRun,̵b̵i̵n̵d̵_̵t̵c̵_̵d̵i̵v̵] at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFA_generated/NFA_InnerLoop.lean:47:25: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [bodyRun,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵] at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NFA_InnerLoop.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
