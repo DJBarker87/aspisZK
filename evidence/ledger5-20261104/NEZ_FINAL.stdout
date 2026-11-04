@@ -1,0 +1,215 @@
+{
+  "coverage": {
+    "TX1": {
+      "rows": 345,
+      "local_bridge_status": {
+        "CLOSED-CONDITIONAL": 111,
+        "OPEN": 233,
+        "quarantined": 1
+      },
+      "composed_status": {
+        "CLOSED": 101,
+        "OPEN": 244
+      },
+      "k3_status": {
+        "RESTORED": 30,
+        "UNAFFECTED": 81,
+        "SUSPENDED": 46,
+        "OPEN": 188
+      }
+    },
+    "TX2": {
+      "rows": 242,
+      "local_bridge_status": {
+        "CLOSED-CONDITIONAL": 112,
+        "OPEN": 129,
+        "quarantined": 1
+      },
+      "composed_status": {
+        "CLOSED": 101,
+        "OPEN": 141
+      },
+      "k3_status": {
+        "RESTORED": 31,
+        "UNAFFECTED": 81,
+        "SUSPENDED": 24,
+        "OPEN": 106
+      }
+    },
+    "all_rows": {
+      "rows": 587,
+      "local_bridge_status": {
+        "CLOSED-CONDITIONAL": 223,
+        "OPEN": 362,
+        "quarantined": 2
+      },
+      "composed_status": {
+        "CLOSED": 202,
+        "OPEN": 385
+      },
+      "k3_status": {
+        "RESTORED": 61,
+        "UNAFFECTED": 162,
+        "SUSPENDED": 70,
+        "OPEN": 294
+      }
+    },
+    "unique_functions": {
+      "count": 434,
+      "composed_status": {
+        "CLOSED": 109,
+        "OPEN": 325
+      },
+      "local_bridge_status": {
+        "CLOSED-CONDITIONAL": 122,
+        "OPEN": 311,
+        "quarantined": 1
+      }
+    }
+  },
+  "slices": {
+    "Q": {
+      "occurrences": 122,
+      "unique_functions": 61
+    },
+    "S": {
+      "occurrences": 84,
+      "unique_functions": 50
+    }
+  },
+  "roots": {
+    "Q": [
+      {
+        "function": "crates/aspis-r1-cost-probe/src/candidate.rs::query_loop",
+        "status": "OPEN",
+        "rows": [
+          "TX1:088",
+          "TX2:058"
+        ]
+      },
+      {
+        "function": "crates/aspis-r1-cost-probe/src/verifier.rs::QueryGeometry::for_range",
+        "status": "OPEN",
+        "rows": [
+          "TX1:181",
+          "TX2:104"
+        ]
+      }
+    ],
+    "S": [
+      {
+        "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::decode_public_statement_box",
+        "status": "OPEN",
+        "rows": [
+          "TX1:332"
+        ]
+      },
+      {
+        "function": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::validate_pool_v1_pair_forest_terminal_statement_v1",
+        "status": "CLOSED",
+        "rows": [
+          "TX1:276",
+          "TX2:169"
+        ]
+      },
+      {
+        "function": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::encode_pool_v1_pair_forest_terminal_statement_v1",
+        "status": "CLOSED",
+        "rows": [
+          "TX2:165"
+        ]
+      },
+      {
+        "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement",
+        "status": "OPEN",
+        "rows": [
+          "TX2:224"
+        ]
+      },
+      {
+        "function": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::decode_pool_v1_pair_forest_terminal_request_v1",
+        "status": "OPEN",
+        "rows": [
+          "TX2:163"
+        ]
+      },
+      {
+        "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::scan_proof_buffer",
+        "status": "OPEN",
+        "rows": [
+          "TX2:226"
+        ]
+      },
+      {
+        "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::emit_result",
+        "status": "OPEN",
+        "rows": [
+          "TX2:219"
+        ]
+      }
+    ]
+  },
+  "rejected": [],
+  "ab": {
+    "model_support": [
+      {
+        "theorem": "NEX_ReturnData.set_preserves_order",
+        "source": "evidence/slice-s-compose8-20261104/NEX_ReturnData.lean",
+        "source_sha256": "1e28ea4d73e1aa80c3d18a42978c7e467c2649a57dc7296536b86d5be1fca3f7",
+        "receipt": "evidence/slice-s-compose8-20261104/NEX_L014/receipt.json",
+        "trust_rows": [
+          "RuntimeReturnData"
+        ],
+        "classification": "MODEL SUPPORT ONLY; native BindingBridge/EncoderBridge remain OPEN"
+      },
+      {
+        "theorem": "NEX_ReturnData.runtime_bound",
+        "source": "evidence/slice-s-compose8-20261104/NEX_ReturnData.lean",
+        "source_sha256": "1e28ea4d73e1aa80c3d18a42978c7e467c2649a57dc7296536b86d5be1fca3f7",
+        "receipt": "evidence/slice-s-compose8-20261104/NEX_L014/receipt.json",
+        "trust_rows": [
+          "RuntimeReturnData"
+        ],
+        "classification": "MODEL SUPPORT ONLY; native BindingBridge/EncoderBridge remain OPEN"
+      },
+      {
+        "theorem": "NEX_ReturnData.observable",
+        "source": "evidence/slice-s-compose8-20261104/NEX_ReturnData.lean",
+        "source_sha256": "1e28ea4d73e1aa80c3d18a42978c7e467c2649a57dc7296536b86d5be1fca3f7",
+        "receipt": "evidence/slice-s-compose8-20261104/NEX_L014/receipt.json",
+        "trust_rows": [
+          "RuntimeReturnData"
+        ],
+        "classification": "MODEL SUPPORT ONLY; native BindingBridge/EncoderBridge remain OPEN"
+      },
+      {
+        "theorem": "NEX_EmitRuntime.result_state_effects",
+        "source": "evidence/slice-s-compose8-20261104/NEX_EmitRuntime.lean",
+        "source_sha256": "dfb74c3624cc54de2c17fedc35938f5bdae09b61786ce8abfef12e93c543a048",
+        "receipt": "evidence/slice-s-compose8-20261104/NEX_L039/receipt.json",
+        "trust_rows": [
+          "RuntimeReturnData"
+        ],
+        "classification": "MODEL SUPPORT ONLY; native BindingBridge/EncoderBridge remain OPEN"
+      },
+      {
+        "theorem": "NEX_EmitRuntime.success",
+        "source": "evidence/slice-s-compose8-20261104/NEX_EmitRuntime.lean",
+        "source_sha256": "dfb74c3624cc54de2c17fedc35938f5bdae09b61786ce8abfef12e93c543a048",
+        "receipt": "evidence/slice-s-compose8-20261104/NEX_L039/receipt.json",
+        "trust_rows": [
+          "RuntimeReturnData"
+        ],
+        "classification": "MODEL SUPPORT ONLY; native BindingBridge/EncoderBridge remain OPEN"
+      }
+    ],
+    "model_theorem_count": 5,
+    "closed_native_rows": [],
+    "closed_native_count": 0,
+    "open_support_rows": [
+      "TX2:219"
+    ],
+    "closed_roots": [],
+    "pool_status": "OPEN: separate native Pool association not supplied by this ledger"
+  }
+}

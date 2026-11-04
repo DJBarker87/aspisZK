@@ -474,15 +474,17 @@ def build():
 
 
 def markdown(d):
+    shared=collections.Counter(r['function'].split('::',1)[1] for r in d['rows'] if r['composed_status']=='CLOSED' and r['function'] in set(neo.SLICES['Q']['functions']) & set(neo.SLICES['S']['functions']))
+    extra_s=collections.Counter(r['function'].split('::',1)[1] for r in d['rows'] if r['composed_status']=='CLOSED' and r['function'] in neo.SLICES['S']['functions'] and r['row'] not in d['NEZ_slice_validator_results']['NEX'])
     lines = ['# NEZ authoritative ledger','','Target not yet established. Frozen source `'+d['frozen_revision']+'`.','',
         'NEN history is retained. Unchanged slice validators check actual certificates, call domains, full Result/carrier/state/ordered effects, review hashes, controls, features and K-3/K-2. No Lean or Kani ran. Rulings (z)/(aa) retain existing trust; (ab) ADDS RuntimeReturnData.','',
         '| Coverage | Total | CLOSED | OPEN |','|---|---:|---:|---:|']
     for label in ['TX1','TX2','all_rows','unique_functions']:
         c=d['coverage'][label];lines.append(f"| {label} | {c.get('rows',c.get('count'))} | {c['composed_status'].get('CLOSED',0)} | {c['composed_status'].get('OPEN',0)} |")
-    lines += ['', 'Contributing slice occurrences: '+str(d['NEZ_composed_per_slice'])+'. Overlapping membership: '+str(d['NEZ_slice_membership'])+'. Shared Q/S to_limbs counted once globally.','', '## Roots','']
+    lines += ['', 'Contributing slice occurrences: '+str(d['NEZ_composed_per_slice'])+'. Overlapping membership: '+str(d['NEZ_slice_membership'])+'. Shared CLOSED occurrences: '+str(dict(shared))+'. Counted once globally. NEX reports '+str(len(d['NEZ_slice_validator_results']['NEX']))+' S occurrences. Unified S membership beyond NEX: '+str(dict(extra_s))+'.','', '## Roots','']
     for lane,roots in d['NEZ_roots'].items():
         for root in roots:lines.append('- '+lane+' `'+root['function']+'`: '+root['status']+' ('+', '.join(root['rows'])+').')
-    lines += ['', 'Slice membership by TX: '+str(d['NEZ_slice_per_tx'])+'.', '', '## Slice closure reconciliation','', 'Actual validator CLOSED counts: '+', '.join(k+': '+str(len(ids)) for k,ids in d['NEZ_slice_validator_results'].items())+'.', '',
+    lines += ['', 'Slice membership by TX: '+str(d['NEZ_slice_per_tx'])+'.', '', '## Slice closure reconciliation','', 'Actual validator CLOSED counts: '+', '.join(k+': '+str(len(ids)) for k,ids in sorted(d['NEZ_slice_validator_results'].items()))+'.', '',
         'NEO/NET counts include inherited global rows; S continuations report their S rows. Full per-slice validator counts are in NEZ_validator_coverage. Rejected slice-reported CLOSED rows: '+str(len(d['NEZ_rejected_slice_closures']))+'.']
     for r in d['NEZ_rejected_slice_closures']:lines.append('- '+r['row']+' `'+r['function']+'`, reported by '+', '.join(r['reported_by'])+': '+'; '.join(r['reasons']))
     lines += ['', '## RuntimeReturnData additions and uses','', 'RuntimeReturnData is ADDED platform trust. Pool immediate read, program-id and instruction-context association remains a separate OPEN obligation.', '',
