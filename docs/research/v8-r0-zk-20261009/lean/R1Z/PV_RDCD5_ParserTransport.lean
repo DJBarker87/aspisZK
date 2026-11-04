@@ -113,6 +113,7 @@ theorem quartic (bytes : Slice U8) :
         apply PV_RDCD5_ParserComponent.bind_congr
         intro secondSlice
         rw [complex secondSlice]
+        rfl
     _ = (PV_RDCD5_ParserRange.index bytes.val 0 8 >>= tail) := first_bind bytes tail
     _ = qm bytes.val := by
       unfold qm
