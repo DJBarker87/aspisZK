@@ -71,8 +71,7 @@ theorem allocated_frame (allocator : Allocator) (encode : AllocationEvent → By
     (tryAllocate allocator encode layout owner w).world.base.files = w.base.files ∧
     (tryAllocate allocator encode layout owner w).world.base.entropyCursor = w.base.entropyCursor ∧
     (tryAllocate allocator encode layout owner w).world.handles = w.handles := by
-  unfold tryAllocate
-  cases (allocator w layout).answer <;> exact ⟨rfl,rfl,rfl⟩
+  cases h : (allocator w layout).answer <;> simp only [tryAllocate,h,and_self]
 
 #print axioms denied_prefix
 #print axioms allocated_frame
