@@ -53,8 +53,10 @@ theorem shape_consistent (f : Frame) (h : Shape f) :
 /-- A backedge keeps the activation/stack and replaces local source lifetimes.
 It does not erase staging, registers, retired bytes or any native events. -/
 def nextIteration (f : Frame) (guard : f.iteration.val+1 < 16) : Frame :=
-  {f with iteration := ⟨f.iteration.val+1,guard⟩, phase := .beforeInit,
-    slotTable := table f.sp f.activation (f.iteration.val+1),
+  { f with
+    iteration := ⟨f.iteration.val+1,guard⟩
+    phase := .beforeInit
+    slotTable := table f.sp f.activation (f.iteration.val+1)
     lifetimes := fun id => (table f.sp f.activation (f.iteration.val+1) id).lifetime}
 
 theorem iteration_preserves (f : Frame) (h : Shape f)
