@@ -1,0 +1,35 @@
+def FIo_Native.aspis_core.field.M31.add : FIo_Native.aspis_core.field.M31 →
+  FIo_Native.aspis_core.field.M31 → Aeneas.Std.Result FIo_Native.aspis_core.field.M31 :=
+fun self rhs => do
+  let s ← Aeneas.Std.lift (Aeneas.Std.U32.wrapping_add self rhs)
+  if s ≥ FIo_Native.aspis_core.field.P then do
+      let s1 ← Aeneas.Std.lift (s.wrapping_sub FIo_Native.aspis_core.field.P)
+      Aeneas.Std.Result.ok s1
+    else Aeneas.Std.Result.ok s
+def FIo_Native.aspis_core.field.M31.reduce_u64 : Aeneas.Std.U64 → Aeneas.Std.Result FIo_Native.aspis_core.field.M31 :=
+fun value => do
+  let i ← FIo_Native.aspis_core.field.reduce_u64 value
+  Aeneas.Std.Result.ok i
+def FIo_Native.aspis_core.field.CM31.add : FIo_Native.aspis_core.field.CM31 →
+  FIo_Native.aspis_core.field.CM31 → Aeneas.Std.Result FIo_Native.aspis_core.field.CM31 :=
+fun self rhs => do
+  let m ← self.a.add rhs.a
+  let m1 ← self.b.add rhs.b
+  Aeneas.Std.Result.ok { a := m, b := m1 }
+def FIo_Native.aspis_core.field.QM31.add : FIo_Native.aspis_core.field.QM31 →
+  FIo_Native.aspis_core.field.QM31 → Aeneas.Std.Result FIo_Native.aspis_core.field.QM31 :=
+fun self rhs => do
+  let c ← self.c0.add rhs.c0
+  let c1 ← self.c1.add rhs.c1
+  Aeneas.Std.Result.ok { c0 := c, c1 := c1 }
+def FIo_Native.aspis_core.field.wide_exact.WideExact.add : FIo_Native.aspis_core.field.wide_exact.WideExact →
+  FIo_Native.aspis_core.field.wide_exact.WideExact →
+    Aeneas.Std.Result FIo_Native.aspis_core.field.wide_exact.WideExact :=
+fun self rhs => do
+  let q ← self.c0.add rhs.c0
+  let q1 ← self.c1.add rhs.c1
+  Aeneas.Std.Result.ok { c0 := q, c1 := q1 }
+def FIo_Native.fast_pairing.EbyKDot.new : Aeneas.Std.Result FIo_Native.fast_pairing.EbyKDot :=
+do
+  let d ← FIo_Native.fast_pairing.canonical.Dot.new
+  Aeneas.Std.Result.ok { c0 := d, c1 := d, count := 0#usize }

@@ -1,0 +1,68 @@
+{"attempt": "NFC_L019", "exit_status": 1, "wall_seconds": 2.2195366478990763, "peak_rss_kib": "5289824", "swaps": "0", "print_axioms": ["'AspisR1.NFC_ScalarAdd.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NFC_generated/NFC_ScalarAdd.lean:13:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑(UScalar.wrapping_add ?x ?y)
+in the target expression
+  ↑(a.wrapping_add b) = ↑a + ↑b
+
+a b : U32
+ha : ↑a < 2147483647
+hb : ↑b < 2147483647
+sum : U32 := a.wrapping_add b
+⊢ ↑(a.wrapping_add b) = ↑a + ↑b
+NFC_generated/NFC_ScalarAdd.lean:25:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑(UScalar.wrapping_sub ?x ?y)
+in the target expression
+  ↑(sum.wrapping_sub 2147483647#u32) < 2147483647
+
+case isTrue.refine_1
+a b : U32
+ha : ↑a < 2147483647
+hb : ↑b < 2147483647
+sum : U32 := a.wrapping_add b
+sumVal : ↑sum = ↑a + ↑b
+above : sum ≥ 2147483647#u32
+lower
+...
+ ↑a + ↑b
+above : sum ≥ 2147483647#u32
+lower : 2147483647 ≤ ↑sum
+⊢ ↑(sum.wrapping_sub 2147483647#u32) < 2147483647
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (2147483647 ≤ UScalar.cMax UScalarTy.U32)) true
+  in the application
+    id (Eq.refl true)
+NFC_generated/NFC_ScalarAdd.lean:25:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑(UScalar.wrapping_sub ?x ?y)
+in the target expression
+  ↑(sum.wrapping_sub 2147483647#u32) = (↑a + ↑b) % 2147483647
+
+case isTrue.refine_2
+a b : U32
+ha : ↑a < 2147483647
+hb : ↑b < 2147483647
+sum : U32 := a.wrapping_add b
+sumVal : ↑sum = ↑a + ↑b
+above : sum ≥ 2147483647#u32
+lower : 2147483647 ≤ ↑sum
+⊢ ↑(sum.wrapping_sub 2147483647#u32) = (↑a + ↑b) % 2147483647
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (2147483647 ≤ UScalar.cMax UScalarTy.U32)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.NFC_ScalarAdd.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf9be223acfac4556882ed4e1d2c91bad.scope; invocation ID: 429bc858005c4df289edd5859267e59a

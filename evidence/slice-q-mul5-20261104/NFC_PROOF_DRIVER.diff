@@ -1,0 +1,92 @@
+--- NFA_Driver.lean
++++ NFC_ProofDriver.lean
+@@ -9,7 +9,88 @@
+   enableInitializersExecution
+   let mode := args.headD "small"
+   let (modules, roots) :=
+-    if mode == "0" then
++    if mode == "proof0" then
++      (#[`NFC_FinalAudit], #[`AspisR1.NFC_AddDomain.cm, `AspisR1.NFC_LaterJoin.association])
++    else if mode == "proof1" then
++      (#[`NFC_FinalAudit], #[`AspisR1.NFC_AddDomain.qm, `AspisR1.NFC_LaterSource.cut])
++    else if mode == "proof2" then
++      (#[`NFC_FinalAudit], #[`AspisR1.NFC_AddDomain.total, `AspisR1.NFC_LaterSource.domains])
++    else if mode == "proof3" then
++      (#[`NFC_FinalAudit], #[`AspisR1.NFC_AddDomain.canonical, `AspisR1.NFC_MainPacket.of_run])
++    else if mode == "proof4" then
++      (#[`NFC_FinalAudit], #[`AspisR1.NFC_ArrayFour.shape, `AspisR1.NFC_MainPacket.replay])
++    else if mode == "proof5" then
++      (#[`NFC_FinalAudit], #[`NFC_CalleeDomains.private_canon, `AspisR1.NFC_MainPacket.domains])
++    else if mode == "proof6" then
++      (#[`NFC_FinalAudit], #[`NFC_CalleeDomains.from_wide, `NFC_OpeningFrame.geometry])
++    else if mode == "proof7" then
++      (#[`NFC_FinalAudit], #[`NFC_CalleeDomains.from_limbs, `NFC_OpeningFrame.frame])
++    else if mode == "proof8" then
++      (#[`NFC_FinalAudit], #[`NFC_CalleeDomains.checked, `AspisR1.NFC_PacketDomains.counts])
++    else if mode == "proof9" then
++      (#[`NFC_FinalAudit], #[`NFC_CalleeDomains.value, `AspisR1.NFC_PacketDomains.inputs])
++    else if mode == "proof10" then
++      (#[`NFC_FinalAudit], #[`NFC_CalleeDomains.scalar, `AspisR1.NFC_PacketDomains.finish])
++    else if mode == "proof11" then
++      (#[`NFC_FinalAudit], #[`NFC_CalleeDomains.total, `AspisR1.NFC_PacketDomains.native_counts])
++    else if mode == "proof12" then
++      (#[`NFC_FinalAudit], #[`AspisR1.NFC_ChainAssociation.actual, `AspisR1.NFC_PushCut.actual])
++    else if mode == "proof13" then
++      (#[`NFC_FinalAudit], #[`AspisR1.NFC_ChainAssociation.finish, `AspisR1.NFC_PushCut.count])
++    else if mode == "proof14" then
++      (#[`NFC_FinalAudit], #[`AspisR1.NFC_ChainAssociation.zero, `AspisR1.NFC_RawAssociation.source_eq])
++    else if mode == "proof15" then
++      (#[`NFC_FinalAudit], #[`AspisR1.NFC_CheckedArithmetic.add, `AspisR1.NFC_RawValues.source])
++    else if mode == "proof16" then
++      (#[`NFC_FinalAudit], #[`AspisR1.NFC_CheckedArithmetic.mul, `AspisR1.NFC_ReceiverModel.roundtrip])
++    else if mode == "proof17" then
++      (#[`NFC_FinalAudit], #[`AspisR1.NFC_DotDomain.accepted, `AspisR1.NFC_ReceiverModel.represents])
++    else if mode == "proof18" then
++      (#[`NFC_FinalAudit], #[`AspisR1.NFC_DotPushCut.source, `AspisR1.NFC_ScalarAdd.total])
++    else if mode == "proof19" then
++      (#[`NFC_FinalAudit], #[`AspisR1.NFC_DotPushFour.source, `AspisR1.NFC_StepAssociation.exact])
++    else if mode == "proof20" then
++      (#[`NFC_FinalAudit], #[`AspisR1.NFC_DotPushStep.source, `AspisR1.NFC_StepAssociation.packet])
++    else if mode == "proof21" then
++      (#[`NFC_FinalAudit], #[`AspisR1.NFC_DotPushTotal.source, `AspisR1.NFC_TailAssociation.source])
++    else if mode == "proof22" then
++      (#[`NFC_FinalAudit], #[`AspisR1.NFC_DotWordStep.fold_bound, `AspisR1.NFC_TailPacket.of_run])
++    else if mode == "proof23" then
++      (#[`NFC_FinalAudit], #[`AspisR1.NFC_DotWordStep.value, `AspisR1.NFC_TailPacket.replay])
++    else if mode == "proof24" then
++      (#[`NFC_FinalAudit], #[`AspisR1.NFC_DotWordStep.reduced, `AspisR1.NFC_TailState.new_count])
++    else if mode == "proof25" then
++      (#[`NFC_FinalAudit], #[`AspisR1.NFC_FinalCalls.finish, `AspisR1.NFC_TailState.finish_canonical])
++    else if mode == "proof26" then
++      (#[`NFC_FinalAudit], #[`AspisR1.NFC_FinalCalls.add, `AspisR1.NFC_TailState.chain])
++    else if mode == "proof27" then
++      (#[`NFC_FinalAudit], #[`AspisR1.NFC_FirstGeometry.accepted, `AspisR1.NFC_TailState.accepted])
++    else if mode == "proof28" then
++      (#[`NFC_FinalAudit], #[`AspisR1.NFC_FirstJoin.association, `AspisR1.NFC_TailTrace.unwrap_unit])
++    else if mode == "proof29" then
++      (#[`NFC_FinalAudit], #[`AspisR1.NFC_FirstSource.cut, `AspisR1.NFC_TailTrace.accepted])
++    else if mode == "proof30" then
++      (#[`NFC_FinalAudit], #[`AspisR1.NFC_FirstSource.domains, `AspisR1.NFC_WideCanonical.from_limbs])
++    else if mode == "proof31" then
++      (#[`NFC_FinalAudit], #[`AspisR1.NFC_FourDomain.accepted, `AspisR1.NFC_WrapperPacket.accepted])
++    else if mode == "proof32" then
++      (#[`NFC_FinalAudit], #[`AspisR1.NFC_HeadDomain.canonical])
++    else if mode == "proof33" then
++      (#[`NFC_FinalAudit], #[`NFC_KmxFrames.final_region])
++    else if mode == "proof34" then
++      (#[`NFC_FinalAudit], #[`NFC_KmxFrames.frame])
++    else if mode == "proof35" then
++      (#[`NFC_FinalAudit], #[`NFC_KmxFrames.source_window])
++    else if mode == "proof36" then
++      (#[`NFC_FinalAudit], #[`NFC_KmxFrames.output_frame])
++    else if mode == "proof37" then
++      (#[`NFC_FinalAudit], #[`AspisR1.NFC_LaterGeometry.accepted])
++    else if mode == "fixtures" then
++      (#[`NEP_Planted, `NEP_Mutations],
++       #[`NEP_Planted.matcher, `NEP_Planted.viaPrivate, `NEP_Planted.proof,
++         `NEP_Planted.viaAux, `NEP_MutateMatch.matcher, `NEP_MutatePrivate.viaPrivate,
++         `NEP_MutateProof.proof, `NEP_MutateAux.viaAux])
++    else if mode == "0" then
+       (#[`NEV_PrefixAssembly], #[`NEV_PrefixAssembly.windows, `NEV_PrefixAssembly.active])
+     else if mode == "1" then
+       (#[`NEV_PrefixCapacity], #[`NEV_PrefixCapacity.representative, `NEV_PrefixCapacity.partition])
