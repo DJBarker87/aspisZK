@@ -7,7 +7,15 @@ C='/home/dombarker/project-offloads/codex-cx-slice-d-prepare-cache-20261104'
 W='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025'
 H='dombarker@100.108.41.90';T='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0'
 a,kind,target=sys.argv[1:];limit=100 if kind=='kani' else 3 if kind=='extract' else 70; assert a.startswith('NFW_') and 1<=int(a[-3:])<=limit
+if kind=='kani':
+ while (E/'NFW_NATIVE_PAUSE').exists():time.sleep(1)
 assert not (E/a).exists()
+# Required low-budget handoff precedes admission and source uploads.
+if (kind=='kani' and int(a[-3:])>=86) or (kind!='kani' and kind!='extract' and int(a[-3:])>=56):
+ for name in ['NFW_HANDOFF.md','NFW_REMAINING.md']:
+  p=E/name
+  with p.open('a') as f:f.write('\nBudget checkpoint before '+a+': powers remains the only newly CLOSED function (2 rows). Other native/model fragments remain OPEN pending complete producer/callee-domain and syscall association; see receipts and native queue results. No caps raised; no timeout shape replayed unchanged.\n')
+
 def ssh(code,data=None,submitted=False):
  for retry in range(11):
   r=subprocess.run(['ssh','-o','ControlMaster=no','-o','ConnectTimeout=15',H,code],input=data,capture_output=True,text=True)
@@ -52,14 +60,21 @@ if kind=='kani':
  env.update(CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-Copt-level=3 -C link-arg=-Wl,--threads=1')
  import os
  if os.environ.get('NFW_INVERT'):env['RUSTFLAGS']+=' --cfg NFW_invert'
+ if os.environ.get('NFW_EMPTY_RHO'):env['RUSTFLAGS']+=' --cfg NFW_EMPTY_RHO'
  if os.environ.get('NFW_BADARG'):env['RUSTFLAGS']+=' --cfg NFW_badarg'
  if os.environ.get('NFW_PART') is not None:
   part=int(os.environ['NFW_PART']);assert 0<=part<5;env['RUSTFLAGS']+=' --cfg NFW_part'+str(part)
+ if os.environ.get('NFW_CALL') is not None:
+  call=int(os.environ['NFW_CALL']);assert 0<=call<6;env['RUSTFLAGS']+=' --cfg NFW_call'+str(call)
  if os.environ.get('NFW_BADARG'):env['RUSTFLAGS']+=' --cfg NFW_badarg'
  if os.environ.get('NFW_PART') is not None:
   part=int(os.environ['NFW_PART']);assert 0<=part<5;env['RUSTFLAGS']+=' --cfg NFW_part'+str(part)
+ if os.environ.get('NFW_CALL') is not None:
+  call=int(os.environ['NFW_CALL']);assert 0<=call<6;env['RUSTFLAGS']+=' --cfg NFW_call'+str(call)
 elif kind=='extract':
- files['NFW_extract.py']=(E/'NFW_extract.py').read_text();sources=['NFW_extract.py','NFW_src/crates/aspis-r1-cost-probe/src/NFW_reference.rs'];command=['python3','NFW_extract.py']
+ files['NFW_extract.py']=(E/'NFW_extract.py').read_text();files['NFW_src/crates/aspis-r1-cost-probe/src/NFW_reference.rs']=(E/'NFW_reference.rs.txt').read_text();sources=['NFW_extract.py','NFW_src/crates/aspis-r1-cost-probe/src/NFW_reference.rs'];command=['python3','NFW_extract.py']
+ if target=='NFW_ErrorReference':
+  files={'NFW_error_extract.py':(E/'NFW_error_extract.py').read_text(),'NFW_error_reference.rs':(E/'NFW_error_reference.rs.txt').read_text()};sources=['NFW_error_extract.py','NFW_error_reference.rs'];command=['python3','NFW_error_extract.py']
  if target=='NFW_ScanReference':
   files={'NFW_scan_extract.py':(E/'NFW_scan_extract.py').read_text(),'NFW_src/programs/r1-cost-probe/src/NFW_scan_reference.rs':(E/'NFW_scan_reference.rs.txt').read_text(),'NFW_SOURCE_PINS.json':(E/'NFW_SOURCE_PINS.json').read_text()};sources=['NFW_scan_extract.py','NFW_src/programs/r1-cost-probe/src/NFW_scan_reference.rs'];command=['python3','NFW_scan_extract.py']
 elif kind=='dependency':
@@ -76,7 +91,7 @@ elif kind=='linkaudit':
 elif kind=='auditbatch' and target=='NFW_Stage2Driver':
  files['NFW_stage2_audit_batch.py']=(E/'NFW_stage2_audit_batch.py').read_text()
  sources=['NFW_generated/NFW_Stage2Driver.lean','NFW_stage2_audit_batch.py','NFW_native/NFW_Stage2Driver.c','NFW_native/NFA_WALKER.c','NFW_native/NFA_MemoryLimit.c']
- command=['python3','NFW_stage2_audit_batch.py']
+ command=['python3','NFW_stage2_audit_batch.py',a+'.json']
 elif kind=='auditbatch':
  files['NFW_final_audit_batch.py']=(E/'NFW_final_audit_batch.py').read_text()
  for n in ['NFA_WALKER.c','NFA_MemoryLimit.c']:files['NFW_native/'+n]=(E/'NFW_native'/n).read_text()
@@ -89,6 +104,7 @@ if target in ['scan','queryscan']:
  name='NFW_QUERY_EXPECTED_IMPORTS.jsonl' if target=='queryscan' else 'NFW_EXPECTED_IMPORTS.jsonl'
  files[name]=(E/name).read_text();sources+=[name]
 cfg=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=env,timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={'selected_objects':{}},expected_time='Focused elaboration' if kind=='lean' else 'Optimized audit linker' if kind=='linkaudit' else 'Raw checked-kernel graph traversal')
+if kind=='extract':cfg['expected_time']='Optimized safe-reference compilation, Charon extraction, Aeneas Lean emission'
 if kind=='kani':cfg['native_command']=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NFW_src/crates/aspis-r1-cost-probe/Cargo.toml','--target-dir',B+'/NFW_target','--features','private-leaf-salts,optimized-terminal,program-build','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse']
 if kind=='kani' and os.environ.get('NFW_PROGRAM'):
  cfg['root_package']='aspis-r1-cost-probe-program'
@@ -137,7 +153,8 @@ import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
 names += [str(p.relative_to(b)) for p in b.glob(a+'-graph*')]+[str(p.relative_to(b)) for p in b.glob(a+'-source*')]+[str(p.relative_to(b)) for p in b.glob(a+'-lock*')] if {kind!r}=='kani' else []
 if {kind!r}=='extract':
- if {target!r}=='NFW_ScanReference':names+=['NFW_SCAN_EXTRACTION_PINS.json','NFW_scan_reference.llbc']+[str(p.relative_to(b)) for p in (b/'NFW_scan_extracted').rglob('*') if p.is_file()]
+ if {target!r}=='NFW_ErrorReference':names+=['NFW_ERROR_EXTRACTION_PINS.json','NFW_error_reference.llbc']+[str(p.relative_to(b)) for p in (b/'NFW_error_extracted').rglob('*') if p.is_file()]
+ elif {target!r}=='NFW_ScanReference':names+=['NFW_SCAN_EXTRACTION_PINS.json','NFW_scan_reference.llbc']+[str(p.relative_to(b)) for p in (b/'NFW_scan_extracted').rglob('*') if p.is_file()]
  else:names+=['NFW_EXTRACTION_PINS.json','NFW_reference.llbc']+[str(p.relative_to(b)) for p in (b/'NFW_extracted').rglob('*') if p.is_file()]
 names += [str(p.relative_to(b)) for p in b.glob('NEP_*_REACHABLE.txt')] if {kind!r}=='auditbatch' else [str(p.relative_to(b)) for p in b.glob('NEP_'+{target!r}+'_*_REACHABLE.txt')] if {kind!r}=='auditbin' else []
 if {kind!r}=='auditbatch':names += [str(p.relative_to(b)) for p in (b/('NFW_stage2_audit' if {target!r}=='NFW_Stage2Driver' else 'NFW_final_audit')).rglob('*') if p.is_file()]

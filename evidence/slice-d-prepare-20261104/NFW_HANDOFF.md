@@ -13,3 +13,32 @@ Host private workspace `/home/dombarker/project-offloads/codex-cx-slice-d-prepar
 Native patches are external scratch-only. Frozen release crates/programs in the worktree remain untouched, so no ELF rebuild is triggered. Every Kani run validates the resolved frozen dependency graph offline and records unchanged lock hash. Never replay K019–K022 full backing syscall shapes or K033 combined state-chain shape unchanged. K035 inverted split control timed out; it is not a matched control for K034. Reviews describe split/restricted-witness replacements.
 
 No push, key cleanup, wallet activity, shared cache mutation, or Session A worktree changes.
+
+Model producer composition passed L049–L055: NFW_PreparedCalls derives powers,
+claim, query and rho child calls from the same successful cohort execution;
+NFW_ScalarRho derives canonical rho from the actual sampler call;
+NFW_PreparedProducer derives the exact entire scratch equality and its NFS
+g-domain; NFW_PrepareQuery.tx1 installs the CLOSED NFS root on that original
+scratch with every primitive consumer domain proved. These are concrete model
+producer postconditions, not an assumed whole native output match. The native
+Prepared/prepare associations and native initializer binding are still OPEN.
+The pending raw audit must include these new roots; old powers audit is reused.
+
+NFW_E002 used a separately admitted capped scope for 0.77 seconds while K056
+was populated, within the JOB's explicit up-to-two scope allowance. See
+NFW_SCOPE_INTERLEAVE.json. The remaining native/Lean queue is serialized by a
+local pre-admission pause marker. Every shared launcher/barrier is unchanged.
+
+Budget checkpoint before NFW_L056: powers remains the only newly CLOSED function (2 rows). Other native/model fragments remain OPEN pending complete producer/callee-domain and syscall association; see receipts and native queue results. No caps raised; no timeout shape replayed unchanged.
+
+Budget checkpoint before NFW_L057: powers remains the only newly CLOSED function (2 rows). Other native/model fragments remain OPEN pending complete producer/callee-domain and syscall association; see receipts and native queue results. No caps raised; no timeout shape replayed unchanged.
+
+Budget checkpoint before NFW_L058: powers remains the only newly CLOSED function (2 rows). Other native/model fragments remain OPEN pending complete producer/callee-domain and syscall association; see receipts and native queue results. No caps raised; no timeout shape replayed unchanged.
+
+Budget checkpoint before NFW_L059: powers remains the only newly CLOSED function (2 rows). Other native/model fragments remain OPEN pending complete producer/callee-domain and syscall association; see receipts and native queue results. No caps raised; no timeout shape replayed unchanged.
+
+Budget checkpoint before NFW_L060: powers remains the only newly CLOSED function (2 rows). Other native/model fragments remain OPEN pending complete producer/callee-domain and syscall association; see receipts and native queue results. No caps raised; no timeout shape replayed unchanged.
+
+Budget checkpoint before NFW_L061: powers remains the only newly CLOSED function (2 rows). Other native/model fragments remain OPEN pending complete producer/callee-domain and syscall association; see receipts and native queue results. No caps raised; no timeout shape replayed unchanged.
+
+Budget checkpoint before NFW_L062: powers remains the only newly CLOSED function (2 rows). Other native/model fragments remain OPEN pending complete producer/callee-domain and syscall association; see receipts and native queue results. No caps raised; no timeout shape replayed unchanged.

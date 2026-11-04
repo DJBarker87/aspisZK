@@ -15,3 +15,32 @@ Retained: root carrier/ABI, compiler/library/Aeneas interpretation, source-to-EL
 NFW_Transcript seed/absorb/block and row/payload domains compile (L024/L025); K009..K016 provide digest-copy and actual frozen transcript call-argument/reply checks with intended failures, on payload lengths up to2048 and rows≤95. They are local inputs, not new composed rows: the general runtime-wrapper/physical frame association remains OPEN. K019..K022 are distinct excluded full-backing normalization timeouts; no unchanged rerun or raised cap.
 
 NFW_PreparedControl.source factors the actual cohort constructor for every boundary/input, preserving full Result and scratch effects. NFW_PreparedResults proves query-error/claim-error/success and continuation composition, with NFW_PreparedFields supplying every output projection (L026..L028). Native local-record constructor facets are being checked on the frozen body with only child calls cut; the full transcript carrier includes state and hash handle. The control pair K027/K028 passes; subsequent facets are pending. No constructor row is CLOSED until every field/call, frame, child domain, model/effects association, copy shape and raw audit is complete.
+
+### Prepared model producer → query consumer composition
+
+L049–L055 prove the backward child-call extraction and same-scratch producer
+facts. `NFW_PreparedProducer.scratch` derives the entire actual scratch equality
+to the canonical powers result from the successful adopted prepare execution.
+`NFW_ScalarRho.prepared` obtains rho canonicality from the actual scalar_k
+sampler call. `NFW_PrepareQuery.tx1` installs `NFS_QueryLoopRoot.tx1` on that
+original scratch and ported Prepared record, with every primitive consumer
+domain derived. `NFW_QueryResume.tx2` supplies the symmetric pending-reset and
+powers/query consumer composition; the resume producer's primitive domains
+remain at the NFU boundary.
+
+L060/L061/L062 load these modules coherently with the prior powers/headline
+imports, compile the unchanged raw-audit machinery, and audit 60 new roots.
+All raw/collectAxioms sets agree and contain only standard axioms; all eight
+planted/mutation fixtures pass. Wall 38.193789s, peak RSS 5,725,444 KiB, swap0;
+see NFW_STAGE2_AUDIT.json and individual target receipts. The older 30 powers
+roots are reused, not replayed. These new model facts are not an assertion of
+whole native output equality; native prepare/Prepared/semantic/caller rows
+remain OPEN until their complete G and callee-domain packets are installed.
+
+All six constructor state/hash call positions now have prefix-window native
+checks and failing controls (call0 K048/K049; calls1..5 K038–K047). Payload
+positions0..4 have positive/control pairs K050–K059. K060 (empty rho with all
+unrelated expected payloads constructed) timed out and is excluded; its review
+specifies the direct empty-rho entry observation under the original harness
+name. Any current/newer native result is provisional until the final evidence
+inventory classifies its exact receipt, assertion and callee domain.
