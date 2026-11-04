@@ -1,5 +1,56 @@
 # PV evhB allocator/callback context checkpoint
 
+## D582 in-progress owner construction checkpoint
+
+Read `OWNER-D582.md` and `owner-source-D582.json`; the latter must be regenerated
+after final source edits. Resumed at `9f6c615e29`. Requested source-bound native
+construction and BOTH unchanged final equations remain OPEN. No T/endpoint/
+deployment change. This checkpoint records partial construction, not discharge.
+
+`PV_EVHB_RawVecOwner` is ACCEPTED and immutable at source `ee3131f5ed` (same
+bytes at subsequent commits), receipt91224: exit0, wall3.38s, peak2633896KiB,
+swap0, standard summary-based axioms only. It defines allocation metadata,
+physical RawVec-cap ownership, source-slot lookup/stores/move and pending
+allocation installation. It proves denial preservation and that a successful
+realloc's old positive-cap header cannot remain an exact-layout live owner
+before the pointer/capacity stores; Drop consumes ownership. These are local
+model/source-phase laws, not a reached-state counterexample to final reserve.
+
+`PV_EVHB_RawVecSource` and `PV_EVHB_RawVecProjection` are committed drafts,
+not yet accepted at this checkpoint. Source has explicit complete native
+outcome carriers and source-shaped reserve/exact/amortized/commit/error/drop
+control with primitive-answer transport laws. Projection explicitly forgets
+source slots and exposes V183's unchanged-frame property. Compile Source
+against the accepted Owner, then Projection. Current staged Source may need
+restaging after its latest no-growth conjunction correction; always use the
+existing `stage.py` source/commit guard. Never restage the accepted Owner.
+
+Accounting at this checkpoint: **26 charged / 18 accepted / 8 rejected;
+71 remain; next91225**. New failures91222 (pending conjunction and move parser)
+and91223 (simplified move conjunction) were repaired with changed source before
+91224. All refusal histories are uncharged and observed full180s cooldowns.
+No unresolved submitted compile at this checkpoint. Audits91298–91299 unused.
+The historical `summary.json` has not yet been refreshed: run the receipt
+audit only once all current Lean drafts are accepted. Per-run receipts are
+the accounting evidence meanwhile.
+
+Own `stage.py` had an ordering fault after introducing a proof prepared with
+the already-accepted Audit91297. It now loads the complete accepted object set
+before checking each recorded dependency subset. Same pin/effective-resolution
+checks, no shared launcher/environment/object edits; no compiler consumed by
+that staging fault. See `stage-order-D582.json`.
+
+The source table has NOT been associated with original constructors, receiver
+places, native pointer interpretation, or stable lifetime identity. It cannot
+be inserted into the existing V183 frame and assumed to advance: execute
+preserves that frame. Next build the source-derived owner/current-call registry
+recoverable after projection (for example in allocator S), with a proved
+pending/committed source-header association. Do NOT simply define metadata
+from the new buffer or assume a target equality. Bind Global/System primitive
+returns/nonreturns and diagnostics; complete shrink reachability/control,
+push's value/length stores and the v263 descriptor instance. rdea-1 stays an
+obligation; V370/L3 and all other inherited conditions remain unchanged.
+
 ## D580 shared Vec resume from c1b31fa688
 
 Read `../../SHARED-VEC-D580.md` and `shared-vec-D580.json` alongside the blocker.
