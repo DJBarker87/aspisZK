@@ -1,0 +1,13 @@
+"""Sequential own-scope orchestration; stop on any unexpected verdict."""
+from pathlib import Path
+import subprocess,os,json,sys
+E=Path(__file__).resolve().parent
+jobs={59:('dots_term_cell','NEV_wrong_dots_term',1),60:('dots_fold_cell',None,0),61:('dots_fold_cell','NEV_wrong_dots_fold',1),62:('dots_tail_context',None,0),63:('dots_tail_context','NEV_wrong_dots_tail',1),64:('dots_wrapper_context',None,0),65:('dots_wrapper_context','NEV_wrong_dots_wrapper',1),66:('dots_outer_cursor',None,0),67:('dots_outer_cursor','NEV_wrong_dots_cursor',1),68:('COPY_CORRECT',None,0),69:('COPY_WRONG',None,1)}
+for n in range(int(sys.argv[1]),int(sys.argv[2])+1):
+ target,flag,expected=jobs[n];label=f'NEV_K{n:03d}';env=dict(os.environ)
+ if flag:env['NEV_RUST_CFG']=flag
+ harness='NEV_copy::KMX_checks::KMX_ptr_'+('correct' if n==68 else 'wrong') if n>=68 else 'fast_pairing::canonical::NEV_dot_ctor::'+target
+ completed=subprocess.run(['python3',str(E/'NEV_run.py'),label,'kani',harness],env=env,capture_output=True,text=True)
+ print(completed.stdout,flush=True)
+ receipt=json.loads((E/label/'receipt.json').read_text())
+ assert receipt['exit_status']==expected,(label,receipt['exit_status'],completed.stderr)

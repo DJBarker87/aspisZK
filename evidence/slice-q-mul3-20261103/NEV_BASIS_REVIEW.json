@@ -1,0 +1,61 @@
+{
+  "status": "CHECKED_MODEL_BASIS_ASSOCIATION_NATIVE_COPY_CONTROL_PENDING",
+  "native": [
+    {
+      "positive": "NEV_K038",
+      "negative": "NEV_K039",
+      "function": "basis_inner_iteration",
+      "flag": "NEV_wrong_basis_inner",
+      "status": "CHECKED_NATIVE_CUT_ONLY"
+    },
+    {
+      "positive": "NEV_K034",
+      "negative": "NEV_K035",
+      "function": "basis_outer_scalar",
+      "flag": "NEV_wrong_basis_outer",
+      "status": "CHECKED_NATIVE_CUT_ONLY"
+    }
+  ],
+  "lean": [
+    {
+      "attempt": "NEV_L029",
+      "theorems": [
+        "'NEV_BasisRaw.inner_step' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'NEV_BasisRaw.inner_stop' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'NEV_BasisRaw.inner_loop' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "attempt": "NEV_L031",
+      "theorems": [
+        "'NEV_BasisOuterStep.multiply' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'NEV_BasisOuterStep.subtract' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'NEV_BasisOuterStep.double' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'NEV_BasisOuterStep.body' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "attempt": "NEV_L033",
+      "theorems": [
+        "'NEV_BasisOuterRaw.levels_eq' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    }
+  ],
+  "domain": "Accumulator width64; six levels n=1,2,4,8,16,32. Native inner bound j<n<=32; arbitrary raw input basis/node; product canonicality derived by reused NEI_PrefixProduct.actual.",
+  "superseded_native": [
+    {
+      "attempts": [
+        "NEV_K032",
+        "NEV_K033"
+      ],
+      "reason": "pure getter wrapper in inner read; literal indexing now checked under original harness name by K038/K039"
+    }
+  ],
+  "composed_rows_closed": [],
+  "remaining": [
+    "same-configuration KMX controls",
+    "complete accumulation row and tail/model association",
+    "all caller-established callee domains",
+    "NDT composition"
+  ]
+}

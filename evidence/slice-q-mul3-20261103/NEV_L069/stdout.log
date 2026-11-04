@@ -1,0 +1,48 @@
+NEV_generated/NEV_ReachedProgress.lean:29:36: error: Type mismatch
+  width
+has type
+  (↑v).length = 64
+but is expected to have type
+  (↑(mapVec toQ v)).length = 64
+NEV_generated/NEV_ReachedProgress.lean:37:2: error: Tactic `subst` failed: did not find equation for eliminating 'iter1'
+
+ops : Ops
+v : alloc.vec.Vec RawQ
+power : RawQ
+global : Usize
+basis : Std.Array U32 256#usize
+iter cursor : NEV_RowStep.Iter
+b after : NEV_AccumulateRaw.BatchedWeights
+t : ℕ
+width : (↑v).length = 64
+finish : iter.end = 64#usize
+inside : ↑iter.start < 64
+globalBound : ↑global < 22
+progress : S7JoinRowsTrace.Progress t (↑iter.start) (Port3_RowsInstall.toBW (toWeights b))
+canonical : NBF_PowerStep.Canonical (toQ power)
+basisCanonical : ∀ (j : Usize), ↑j < 64 → ∀ (m : U32), basis.index_usize j = ok m → ↑m < 2 ^ 31 - 1
+run :
+  NEV_AccumulateRaw.accumulate_batched_with_node_loop1.body v power global 64#usize basis iter b =
+    ok (cont (cursor, after))
+limbs : ∀ (k : Fin 4), ↑(S7Kani2OwnedRowRefinement.powerLimb (Port3_RowsInstall.toK (toQ power)) k) < 2 ^ 31 - 1
+iter1 : core.ops.range.Range Usize
+b1 : verifier.BatchedWeights
+step :
+  verifier.accumulate_batched_with_node_loop1.body (NBF_RowInstall.install ops) (mapVec toQ v) (toQ power) global
+      64#usize basis iter (toWeights b) =
+    ok (cont (iter1, b1))
+start : ↑iter1.start = ↑iter.start + 1
+endpoint : iter1.end = iter.end
+successor : S7JoinRowsTrace.Progress t (↑iter1.start) (Port3_RowsInstall.toBW b1)
+transport :
+  (do
+      let out ← NEV_AccumulateRaw.accumulate_batched_with_node_loop1.body v power global 64#usize basis iter b
+      ok (NEV_RowStep.mapFlow out)) =
+    verifier.accumulate_batched_with_node_loop1.body (NBF_RowInstall.install ops) (mapVec toQ v) (toQ power) global
+      64#usize basis iter (toWeights b)
+equal : (cursor, toWeights after) = (iter1, b1)
+eqCursor : (cursor, toWeights after).1 = (iter1, b1).1
+eqWeights : (cursor, toWeights after).2 = (iter1, b1).2
+⊢ ↑cursor.start = ↑iter.start + 1 ∧
+    cursor.end = iter.end ∧ S7JoinRowsTrace.Progress t (↑cursor.start) (Port3_RowsInstall.toBW (toWeights after))
+'NEV_ReachedProgress.next' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
