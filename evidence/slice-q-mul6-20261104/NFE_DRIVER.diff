@@ -1,0 +1,180 @@
+--- NEP_Driver.lean
++++ NFE_Driver.lean
+@@ -1,21 +1,168 @@
+ import Lean
+-import NEP_WALKER
++import NFA_WALKER
++import NFA_MemoryLimit
+ open Lean Elab Command
++namespace NER
++/-- Include recursor reduction rules and constant-name metadata, not only values. -/
++def referenceNames (c : ConstantInfo) : Array Name := Id.run do
++ let mut refs := c.type.getUsedConstants ++ ((c.value? true).map Expr.getUsedConstants).getD #[]
++ match c with
++ | .defnInfo v => refs := refs ++ v.all.toArray
++ | .thmInfo v => refs := refs ++ v.all.toArray
++ | .opaqueInfo v => refs := refs ++ v.all.toArray
++ | .inductInfo v => refs := refs ++ v.ctors.toArray ++ v.all.toArray
++ | .ctorInfo v => refs := refs.push v.induct
++ | .recInfo v =>
++  refs := refs ++ v.all.toArray
++  for rule in v.rules do refs := refs.push rule.ctor ++ rule.rhs.getUsedConstants
++ | _ => pure ()
++ return refs
++/-- Same stable first-occurrence projection as NER_ModuleTables.inspect. -/
++def canonicalImports (xs : Array String) : Array String := Id.run do
++ let mut result := #[]
++ for x in xs do
++  if !result.contains x then result := result.push x
++ return result
++def importsMatch (actual expected : Array String) : Bool := canonicalImports actual == expected
++/-- Inspect each module's own declarations against the checked private environment. -/
++def loadedScan (env : Environment) (output : System.FilePath)
++    (expected : Std.HashMap String (Array String)) : IO Bool := do
++ let env := env.setExporting false
++ let out ← IO.FS.Handle.mk output .write
++ let mut failed := false
++ for h : idx in [0:env.header.moduleNames.size] do
++  let n := env.header.moduleNames[idx]
++  let data := env.header.moduleData[idx]!
++  let mut dangling : Array Json := #[]
++  let mut edges := 0
++  for declared in data.constants do
++   let some c := env.checked.get.find? declared.name | do
++    dangling := dangling.push (Json.mkObj [("parent",toJson declared.name.toString),("missing",toJson declared.name.toString),("phase",toJson "own_declaration")])
++    continue
++   let refs := referenceNames c
++   for dep in refs do
++    edges := edges + 1
++    if (env.checked.get.find? dep).isNone then
++     dangling := dangling.push (Json.mkObj [("parent",toJson c.name.toString),("missing",toJson dep.toString)])
++  let loaderImports := data.imports.map (fun i => i.module.toString)
++  let imports := canonicalImports loaderImports
++  let importMatch := match expected[n.toString]? with
++   | some baseline => imports == baseline
++   | none => false
++  if !dangling.isEmpty || !importMatch then failed := true
++  out.putStrLn (Json.mkObj [("module",toJson n.toString), ("imports",toJson imports),
++   ("loader_imports",toJson loaderImports), ("imports_match",toJson importMatch), ("dangling",toJson dangling),
++   ("declarations",toJson data.constants.size), ("edges",toJson edges)]).compress
++ return failed
++end NER
++
+ /-- Standalone runtime avoids restoring a pre-initialization command environment. -/
+ unsafe def main (args : List String) : IO UInt32 := do
++  NFA_MemoryLimit.set
++  initSearchPath (← findSysroot)
+   enableInitializersExecution
+   let mode := args.headD "small"
+-  let (modules, roots) := if mode == "final" then
+-    (#[`RPx_Deployed, `NDR_CombinedAudit],
+-     #[`AspisR1.RPx_Deployed.deployed, `AspisR1.NDR_CombinedAudit.sourceOnHeadline])
++  let (modules, roots) :=
++    if mode == "proof0" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFC_AddDomain.canonical, `AspisR1.NFE_NFC_FirstJoin.association, `NFC_OpeningFrame.frame])
++    else if mode == "proof1" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFC_AddDomain.cm, `AspisR1.NFE_NFC_FirstSource.cut, `NFC_OpeningFrame.geometry])
++    else if mode == "proof2" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFC_AddDomain.qm, `AspisR1.NFE_NFC_FirstSource.domains, `NFE_NEI_DotFinishValues.source])
++    else if mode == "proof3" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFC_AddDomain.total, `AspisR1.NFE_NFC_FourDomain.accepted, `NFE_NEI_PublicDotFinishValues.source])
++    else if mode == "proof4" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFC_ArrayFour.shape, `AspisR1.NFE_NFC_HeadDomain.canonical, `NFE_NEI_ReductionWord.fold_value])
++    else if mode == "proof5" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFC_CheckedArithmetic.add, `AspisR1.NFE_NFC_LaterGeometry.accepted, `NFE_NEI_ReductionWord.native_reduce])
++    else if mode == "proof6" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFC_CheckedArithmetic.mul, `AspisR1.NFE_NFC_LaterJoin.association, `NFE_NEI_ReductionWord.twice_value])
++    else if mode == "proof7" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFC_ScalarAdd.total, `AspisR1.NFE_NFC_LaterSource.cut, `NFE_NEV_DotCell.total])
++    else if mode == "proof8" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFC_WideCanonical.from_limbs, `AspisR1.NFE_NFC_LaterSource.domains, `NFE_NEV_DotEight.suffix])
++    else if mode == "proof9" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFE_DotBridge.one, `AspisR1.NFE_NFC_MainPacket.domains, `NFE_NEV_DotEightTotal.eight])
++    else if mode == "proof10" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFE_DotBridge.one_iff, `AspisR1.NFE_NFC_MainPacket.of_run, `NFE_NEV_DotEightTotal.suffix])
++    else if mode == "proof11" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFE_NFA_BatchDomain.endpoint, `AspisR1.NFE_NFC_MainPacket.replay, `NFE_NEV_DotEightTotal.zero])
++    else if mode == "proof12" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFE_NFA_BatchDomain.minimum, `AspisR1.NFE_NFC_PacketDomains.counts, `NFE_NEV_DotScalar.product])
++    else if mode == "proof13" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFE_NFA_BatchDomain.returned, `AspisR1.NFE_NFC_PacketDomains.finish, `NFE_NEV_DotSweep.current])
++    else if mode == "proof14" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFE_NFA_DotCuts.accepted, `AspisR1.NFE_NFC_PacketDomains.inputs, `NFE_NEV_DotSweep.native_domain])
++    else if mode == "proof15" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFE_NFA_FoldEight.packed, `AspisR1.NFE_NFC_PacketDomains.native_counts, `NFE_NEV_DotSweep.write])
++    else if mode == "proof16" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFE_NFA_FoldEight.source, `AspisR1.NFE_NFC_PushCut.actual, `NFE_NEV_DotSweepStep.next_term])
++    else if mode == "proof17" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFE_NFA_FoldLane.fold_bound, `AspisR1.NFE_NFC_PushCut.count, `NFE_NEV_DotSweepStep.step])
++    else if mode == "proof18" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFE_NFA_FoldLane.shift, `AspisR1.NFE_NFC_RawAssociation.source_eq, `NFE_NFA_InnerLoop.accepted])
++    else if mode == "proof19" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFE_NFA_FoldLane.source, `AspisR1.NFE_NFC_RawValues.source, `NFE_NFA_InnerStep.accepted])
++    else if mode == "proof20" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFE_NFA_FourCuts.actual, `AspisR1.NFE_NFC_ReceiverModel.represents, `NFE_NFA_InnerStep.shape])
++    else if mode == "proof21" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFE_NFA_OuterAccepted.native_domain, `AspisR1.NFE_NFC_ReceiverModel.roundtrip, `NFE_NFC_CalleeDomains.checked])
++    else if mode == "proof22" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFE_NFA_OuterAccepted.step, `AspisR1.NFE_NFC_StepAssociation.exact, `NFE_NFC_CalleeDomains.from_limbs])
++    else if mode == "proof23" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFE_NFA_OuterLoop.accepted, `AspisR1.NFE_NFC_StepAssociation.packet, `NFE_NFC_CalleeDomains.from_wide])
++    else if mode == "proof24" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFE_NFA_OuterLoop.initialized, `AspisR1.NFE_NFC_TailAssociation.source, `NFE_NFC_CalleeDomains.private_canon])
++    else if mode == "proof25" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFE_NFA_OuterStep.body, `AspisR1.NFE_NFC_TailPacket.of_run, `NFE_NFC_CalleeDomains.scalar])
++    else if mode == "proof26" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFE_NFA_SuffixFactor.body, `AspisR1.NFE_NFC_TailPacket.replay, `NFE_NFC_CalleeDomains.total])
++    else if mode == "proof27" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFE_NFC_ChainAssociation.actual, `AspisR1.NFE_NFC_TailState.accepted, `NFE_NFC_CalleeDomains.value])
++    else if mode == "proof28" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFE_NFC_ChainAssociation.finish, `AspisR1.NFE_NFC_TailState.chain])
++    else if mode == "proof29" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFE_NFC_ChainAssociation.zero, `AspisR1.NFE_NFC_TailState.finish_canonical])
++    else if mode == "proof30" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFE_NFC_DotDomain.accepted, `AspisR1.NFE_NFC_TailState.new_count])
++    else if mode == "proof31" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFE_NFC_DotPushCut.source, `AspisR1.NFE_NFC_TailTrace.accepted])
++    else if mode == "proof32" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFE_NFC_DotPushFour.source, `AspisR1.NFE_NFC_TailTrace.unwrap_unit])
++    else if mode == "proof33" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFE_NFC_DotPushStep.source, `AspisR1.NFE_NFC_WrapperPacket.accepted])
++    else if mode == "proof34" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFE_NFC_DotPushTotal.source, `AspisR1.NFE_WrapperBridge.domains])
++    else if mode == "proof35" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFE_NFC_DotWordStep.fold_bound, `AspisR1.NFE_WrapperBridge.four])
++    else if mode == "proof36" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFE_NFC_DotWordStep.reduced, `AspisR1.RPx_Deployed.deployed])
++    else if mode == "proof37" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFE_NFC_DotWordStep.value, `NFC_KmxFrames.final_region])
++    else if mode == "proof38" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFE_NFC_FinalCalls.add, `NFC_KmxFrames.frame])
++    else if mode == "proof39" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFE_NFC_FinalCalls.finish, `NFC_KmxFrames.output_frame])
++    else if mode == "proof40" then
++      (#[`NFE_CombinedFinal], #[`AspisR1.NFE_NFC_FirstGeometry.accepted, `NFC_KmxFrames.source_window])
++    else if mode == "scan" then (#[`NFE_CombinedFinal], #[])
+     else if mode == "fixtures" then
+-    (#[`NEP_Planted, `NEP_Mutations],
+-     #[`NEP_Planted.matcher, `NEP_Planted.viaPrivate, `NEP_Planted.proof,
+-       `NEP_Planted.viaAux, `NEP_MutateMatch.matcher, `NEP_MutatePrivate.viaPrivate,
+-       `NEP_MutateProof.proof, `NEP_MutateAux.viaAux])
+-    else (#[`JGx_SdkAfterValidationEq], #[`AspisR1.JGx_SdkAfterValidationEq.source])
++      (#[`NEP_Planted, `NEP_Mutations],
++       #[`NEP_Planted.matcher, `NEP_Planted.viaPrivate, `NEP_Planted.proof,
++         `NEP_Planted.viaAux, `NEP_MutateMatch.matcher, `NEP_MutatePrivate.viaPrivate,
++         `NEP_MutateProof.proof, `NEP_MutateAux.viaAux])
++    else (#[], #[])
+   let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
+     {} (loadExts := true) (level := .private)
++  if mode == "scan" then
++    let mut expected : Std.HashMap String (Array String) := {}
++    for line in ← IO.FS.lines "NFE_EXPECTED_IMPORTS.jsonl" do
++      let j ← IO.ofExcept (Json.parse line)
++      expected := expected.insert (← IO.ofExcept (j.getObjValAs? String "module"))
++        (← IO.ofExcept (j.getObjValAs? (Array String) "imports"))
++    let failed ← NER.loadedScan env "NFE_LOADED_scan.jsonl" expected
++    IO.println (if failed then "NFE_SCAN_FAILED" else "NFE_SCAN_ZERO_DANGLING")
++    return if failed then 1 else 0
+   let ctx : Command.Context := {
+     fileName := "NEP_Driver"
+     fileMap := FileMap.ofString ""
