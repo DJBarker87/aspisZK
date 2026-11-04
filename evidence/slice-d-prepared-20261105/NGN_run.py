@@ -32,7 +32,9 @@ p=b/{(a+'-reservation.json')!r}; print(p.read_text() if p.exists() else 'MISSING
   print('reservation wait',flush=True);time.sleep(180);continue
  raise RuntimeError('STOP admission')
 files={};sources=[]
-if kind=='extract':
+if kind=='metadata':
+ files['NGN_capture_graph.py']=(E/'NGN_capture_graph.py').read_text();files['NGN_EXPECTED_GRAPH_HASHES.json']=(E/'NGN_EXPECTED_GRAPH_HASHES.json').read_text();sources=list(files);command=['python3','NGN_capture_graph.py']
+elif kind=='extract':
  files['NGN_extract.py']=(E/'NGN_extract.py').read_text();sources=['NGN_extract.py'];command=['python3','NGN_extract.py']
 elif kind=='kani':
  files['NGN_gate.py']=(E/'NGN_gate.py').read_text()
@@ -60,6 +62,8 @@ config['env']['LEAN_PATH']=':'.join(json.loads((E/'NGN_PATHS.json').read_text())
 if kind=='kani':
  config['native_command']=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NGN_src/crates/aspis-r1-cost-probe/Cargo.toml','--target-dir',B+'/NGN_target','--features','private-leaf-salts,optimized-terminal,program-build','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse']
  config['env'].update(CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-Copt-level=3 -C link-arg=-Wl,--threads=1'+(' --cfg NGN_invert' if os.environ.get('NGN_INVERT') else ''))
+ if os.environ.get('NGN_BAD_ALLOC'):config['env']['RUSTFLAGS']+=' --cfg NGN_bad_alloc'
+ if os.environ.get('NGN_BAD_BOX_VALUE'):config['env']['RUSTFLAGS']+=' --cfg NGN_bad_box_value'
  config['expected_time']='optimized compilation then one native staged cut with local records; no field multiplication'
 files[a+'.json']=json.dumps(config)
 r=ssh('python3',f'''from pathlib import Path
@@ -71,7 +75,7 @@ for n,t in files.items():
 x=json.loads((b/{(a+'.json')!r}).read_text());roots=x['env']['LEAN_PATH'].split(':');pins={{}}
 modules=[]
 if x['kind']=='lean':modules += re.findall(r'^import ([\w.]+)',(b/x['sources'][0]).read_text(),re.M)
-elif x['kind']=='audit':modules += ['NGN_S_PACKET'] if x['module']=='inventory-s' else ['NGN_D_ONLY'] if x['module']=='inventory-d' else ['NGN_Q_ONLY'] if x['module']=='inventory-q' else ['NGN_POOL_LEGACY_IMPORT'] if {target!r}.startswith('pool') else ['NGN_VERIFIER_IMPORT']
+elif x['kind']=='audit':modules += ['NGN_S_PACKET'] if x['module']=='inventory-s' else ['NGN_D_ONLY'] if x['module']=='inventory-d' else ['NGN_Q_ONLY'] if x['module']=='inventory-q' else ['NGN_POOL_LEGACY_IMPORT'] if {target!r}.startswith('pool') else ['NGN_COMBINED_IMPORT']
 rels=set()
 for root in roots:
  for stem in ['Aeneas','AeneasMeta']:
@@ -92,6 +96,7 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
+if {kind!r}=='metadata': names += ['NGN_FULL_GRAPH.json.sha256','NGN_ALL_CRATE_FEATURES.json']
 if {kind!r}=='extract': names += ['NGN_EXTRACTION_PINS.json']+([str(p.relative_to(b)) for p in (b/'NGN_extracted').rglob('*') if p.is_file()])+(['NGN_actual.llbc'] if (b/'NGN_actual.llbc').exists() else [])
 if {kind!r}=='kani': names += [str(p.relative_to(b)) for p in b.glob(a+'-graph*')]+[str(p.relative_to(b)) for p in b.glob(a+'-source*')]+[str(p.relative_to(b)) for p in b.glob(a+'-lock*')]
 if {kind!r}=='audit':names += [str(p.relative_to(b)) for p in (b/'NGN_audit'/{target!r}).rglob('*') if p.is_file()]+[str(p.relative_to(b)) for modepath in (b/'NGN_audit'/{target!r}).glob('*.json') for row in json.loads(modepath.read_text()).get('results',[]) for p in [b/('NEP_'+modepath.stem+'_'+row['root']+'_REACHABLE.txt')] if p.exists()]+([n for n in ['NGN_LOADED_scan.jsonl','NGN_POOL_LOADED_scan.jsonl'] if (b/n).exists()])

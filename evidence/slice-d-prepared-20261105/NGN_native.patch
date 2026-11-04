@@ -15,7 +15,7 @@
  extern crate alloc;
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NGN_stages.rs
-@@ -0,0 +1,70 @@
+@@ -0,0 +1,86 @@
 +use super::*;
 +use aspis_core::field::CM31;
 +include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
@@ -38,7 +38,7 @@
 + // Complete arbitrary live scalar locals; stage must retain both untouched.
 + let live_gamma=any_e();let live_kappa=any_e();let saved_gamma=live_gamma;let saved_kappa=live_kappa;
 + let inactive=any_e();let y1:[u8;928]=kani::any();let round0:[u8;224]=kani::any();
-+ let pos=l.position;let row:u8=kani::any();kani::assume(row==30||row==31);
++ let pos=l.position;let old_nonzero=l.nonzero;let row:u8=kani::any();kani::assume(row==30||row==31);
 + let r=match which{
 +  0=>t.scalar(27,&y1,true,&mut l),
 +  1=>t.scalar(28,&inactive.to_le_bytes(),false,&mut l),
@@ -46,7 +46,7 @@
 +  _=>{let rho=t.scalar_k(row+1,&[],&mut l);assert_eq!(rho,q);value}
 + };
 + let expected=match which{0=>if pos<928{y1[pos]}else{0},1=>if pos<32{inactive.to_le_bytes()[pos]}else{0},2=>if pos<224{round0[pos]}else{0},_=>0};
-+ let good=r==value&&l.calls==1&&l.row==match which{0=>27,1=>28,2=>29,_=>row+1}&&l.len==match which{0=>928,1=>32,2=>224,_=>0}&&l.byte==expected&&(which==3||l.nonzero==(which==0))&&l.before==before&&t.state==next&&t.hash==hash&&live_gamma==saved_gamma&&live_kappa==saved_kappa;
++ let good=r==value&&l.calls==1&&l.row==match which{0=>27,1=>28,2=>29,_=>row+1}&&l.len==match which{0=>928,1=>32,2=>224,_=>0}&&l.byte==expected&&(which==3||l.nonzero==(which==0))&&l.before==before&&t.state==next&&t.hash==hash&&live_gamma==saved_gamma&&live_kappa==saved_kappa&&l.after==next&&l.value==value&&l.q==q&&l.position==pos&&(which!=3||l.nonzero==old_nonzero);
 + assert!(good!=cfg!(NGN_invert));
 +}
 +#[kani::proof] #[kani::unwind(35)]
@@ -84,5 +84,21 @@
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 +fn query_stage(){let mut t=T{state:kani::any(),hash:kani::any()};let before=t.state;let hash=t.hash;let state:[u8;32]=kani::any();let after=state;let fail:bool=kani::any();let error=err(kani::any());let qs:[u32;22]=kani::any();let reply=if fail{Err(error)}else{Ok(qs)};let mut l=QLog{row:kani::any(),len:kani::any(),at:kani::any(),byte:kani::any(),before:kani::any(),after,reply,calls:0};let payload:[u8;2048]=kani::any();let row:u8=kani::any();kani::assume(row==30||row==31);let at=l.at;let i:usize=kani::any();kani::assume(i<22);let gamma=any_e();let kappa=any_e();let saved=(gamma,kappa);let result=query_cut(&mut t,row,&payload,&mut l);
-+ let value=match result{Err(e)=>fail&&e==error,Ok(out)=>!fail&&out[i]==qs[i]};let good=value&&l.row==row&&l.len==2048&&l.byte==(if at<2048{payload[at]}else{0})&&l.calls==1&&l.before==before&&t.state==after&&t.hash==hash&&saved==(gamma,kappa);assert!(good!=cfg!(NGN_invert));
++ let kept_reply=match l.reply{Err(e)=>fail&&e==error,Ok(out)=>!fail&&out[i]==qs[i]};let value=match result{Err(e)=>fail&&e==error,Ok(out)=>!fail&&out[i]==qs[i]};let good=value&&l.row==row&&l.len==2048&&l.byte==(if at<2048{payload[at]}else{0})&&l.calls==1&&l.before==before&&t.state==after&&t.hash==hash&&saved==(gamma,kappa)&&l.at==at&&l.after==after&&kept_reply;assert!(good!=cfg!(NGN_invert));
++}
++
++fn qs()->[K;10]{let mut out=[K::ZERO;10];let mut i=0;while i<10{out[i]=any_q();i+=1;}out}
++fn pre_return()->Prepared{let tag:u8=kani::any();Prepared{variant:match tag%3{0=>Variant::S1,1=>Variant::S2,_=>Variant::D},roots:kani::any(),gamma:any_e(),kappa:any_e(),alpha:[any_e(),any_e()],rho:any_q(),queries:kani::any(),semantic_alpha:qs(),z:[SecureCirclePoint{x:any_q(),y:any_q()},SecureCirclePoint{x:any_q(),y:any_q()}],claim:any_e(),state:kani::any()}}
++struct AllocationLog{allocated:*const Prepared}
++// Erasing the local pointer capture gives the frozen final Box expression,
++// with its eleven pre-return values supplied by the preceding cut.
++fn boxed_record(p:&Prepared,log:&mut AllocationLog)->Box<Prepared>{let mut result=Box::new(Prepared{variant:p.variant,roots:p.roots,gamma:p.gamma,kappa:p.kappa,alpha:p.alpha,rho:p.rho,queries:p.queries,semantic_alpha:p.semantic_alpha,z:p.z,claim:p.claim,state:p.state});if cfg!(NGN_bad_box_value){result.gamma=if p.gamma==E::ZERO{E::ONE}else{E::ZERO};}log.allocated=&*result as *const Prepared;result}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn boxed_ownership(){let input=Box::new(pre_return());let mut log=AllocationLog{allocated:core::ptr::null()};let first=boxed_record(&input,&mut log);let expected=log.allocated;
++ let result=if cfg!(NGN_bad_alloc){let mut second=AllocationLog{allocated:core::ptr::null()};boxed_record(&input,&mut second)}else{first};
++ assert!(core::ptr::eq(&*result,expected));
++ assert!(!core::ptr::eq(&*result,&*input));
++ assert!((result.gamma==input.gamma)!=cfg!(NGN_invert));
 +}

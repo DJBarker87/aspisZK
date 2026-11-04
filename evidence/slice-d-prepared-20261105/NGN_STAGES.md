@@ -13,6 +13,6 @@ Frozen body and source correspondence: NFW_PREPARED_NATIVE_SOURCE.json, hashed i
 | S6 | L84 scalar_k(row+1,empty) | same opening/queries; returned rho/transcript | NGN rho stage |
 | S7 | L86 scratch=powers29(gamma) | same gamma/kappa/opening/queries/rho; SAME overwritten scratch | NFW powers packet reused; whole-assignment association pending |
 | S8 | L87 prepared_claim(sem,y1,inactive,scratch,kappa)? | error retains overwritten scratch; success SAME claim and prior values | NFW call fragments + KNF/LPt leaf reused; full semantic/byte-domain installation OPEN |
-| S9 | L88 final record/Box | eleven result fields; current scratch | NFW_K065/K066 + field-copy controls reused; new predecessor link pending |
+| S9 | L88 final record/Box | eleven result fields; current scratch | NFW_K065/K066 + field-copy controls reused; NGN_K029/K030/K031 checks same allocation, no alias, corrupted value and different-allocation controls; predecessor link pending |
 
 Native stage oracles overapproximate replies; a passing local cut is not a callee semantic law. NGN_STUBS.md distinguishes installed laws from OPEN pairings. NGN_Cuts/NGN_Opening factor the model's exact Result computation. These facts do not by themselves certify native execution or close TX1:179.
