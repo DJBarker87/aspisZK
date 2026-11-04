@@ -18,7 +18,7 @@ qm='''    #[cfg_attr(kani, kani::ensures(|r| (*r == NFG_contract::NFG_qm_zero_re
 right=right.replace('    pub fn is_zero(self) -> bool {',qm+'    pub fn is_zero(self) -> bool {',1)
 field=left+right+'\n#[cfg(kani)] pub mod NFG_contract;\n'
 lib=old[paths[1]].replace('#![no_std]','#![no_std]\n#![cfg_attr(kani, feature(allocator_api))]').replace('extern crate alloc;','extern crate alloc;\n#[cfg(kani)] extern crate self as aspis_core;')
-files={paths[0]:field,paths[1]:lib,'crates/aspis-core/src/field/NFG_contract.rs':(E/'NFG_contract.rs.txt').read_text(),'NFG_small_refs.rs':(E/'NFG_small_refs.rs.txt').read_text()}
+files={paths[0]:field,paths[1]:lib,'crates/aspis-core/src/field/NFG_contract.rs':(E/'NFG_contract.rs.txt').read_text(),'NFG_small_refs.rs':(E/'NFG_small_refs.rs.txt').read_text(),'crates/aspis-core/src/field/NFG_chain.rs':(E/'NFG_chain.rs.txt').read_text()}
 (E/'NFG_SMALL.patch').write_text(''.join(''.join(difflib.unified_diff(old.get(n,'').splitlines(True),v.splitlines(True),fromfile='a/'+n,tofile='b/'+n)) for n,v in files.items()))
 upload(a,{'NFG_src/'+n:s for n,s in files.items()})
 r=ssh(a,'python3',f'''from pathlib import Path

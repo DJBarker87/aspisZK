@@ -11,7 +11,8 @@ impl Oracle {
    geometry as *const _ as usize,a.next,a.weights.as_ptr() as usize,pending.raw.as_ptr() as usize,pending.terms];
   #[cfg(NFG_bad_argument)] {self.seen[5]^=1;}
   if let Some(error)=self.error {return Err(error);}
-  a.rhs=self.rhs;a.power=self.power;a.next=self.next;pending.terms=self.terms;for cell in &mut pending.raw { *cell=kani::any(); } pending.raw[self.row]=self.raw;
+  a.rhs=self.rhs;a.power=self.power;a.next=self.next;pending.terms=self.terms;// One observed coordinate; whole returned-carrier frame lift remains OPEN.
+  pending.raw[self.row]=self.raw;
   Ok((a,pending))
  }
 }

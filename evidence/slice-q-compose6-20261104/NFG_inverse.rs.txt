@@ -1,21 +1,25 @@
 use aspis_core::field::{M31,CM31,QM31};
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
 const P:u32=2147483647;
 fn m()->M31 {let x:u32=kani::any();kani::assume(x<P);M31(x)}
 fn c()->CM31 {CM31::new(m(),m())}
 fn q()->QM31 {QM31{c0:c(),c1:c()}}
 fn neg_ref(x:u32)->u32 {if x==0 {0} else {P-x}}
 #[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn cm_neg(){let x=c();let y=x.neg();
  let a=neg_ref(x.a.0);let b=neg_ref(x.b.0);
  #[cfg(NFG_bad_neg)] assert_eq!(y.a.0,a^1);
  #[cfg(not(NFG_bad_neg))] assert_eq!(y.a.0,a);
  assert_eq!(y.b.0,b);assert!(y.a.0<P && y.b.0<P);}
 #[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn qm_is_zero(){let x=QM31{c0:CM31::new(M31(kani::any()),M31(kani::any())),c1:CM31::new(M31(kani::any()),M31(kani::any()))};
  let y=x.is_zero();let expected=x.c0.a.0==0 && x.c0.b.0==0 && x.c1.a.0==0 && x.c1.b.0==0;
  #[cfg(NFG_bad_zero)] assert_eq!(y,!expected);
  #[cfg(not(NFG_bad_zero))] assert_eq!(y,expected);}
 #[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn qm_neg(){let x=q();let y=x.neg();
  #[cfg(NFG_bad_neg)] assert_eq!(y.c0.a.0,neg_ref(x.c0.a.0)^1);
  #[cfg(not(NFG_bad_neg))] assert_eq!(y.c0.a.0,neg_ref(x.c0.a.0));

@@ -1,0 +1,58 @@
+// Local source-fission G only: no native credit for the abstracted callees.
+use super::{CM31,QM31,M31,NFG_P};
+struct Log {replies:[CM31;8],args:[[CM31;2];8],tags:[u8;8],calls:usize}
+impl Log {
+ fn c(&mut self,tag:u8,a:CM31,b:CM31)->CM31 {let i=self.calls;self.calls+=1;self.tags[i]=tag;self.args[i]=[a,b];self.replies[i]}
+ fn m(&mut self,tag:u8,a:M31,b:M31)->M31 {self.c(tag,CM31{a,b:M31(0)},CM31{a:b,b:M31(0)}).a}
+}
+fn m()->M31 {let n:u32=kani::any();kani::assume(n<NFG_P);M31(n)}
+fn c()->CM31 {CM31{a:m(),b:m()}}
+fn q()->QM31 {QM31{c0:c(),c1:c()}}
+fn log()->Log {Log{replies:core::array::from_fn(|_|c()),args:[[CM31::ZERO;2];8],tags:[0;8],calls:0}}
+// inv_with body specialized to the fixed direct M31::inv edge; abstract call 2.
+fn cm_fixed(x:CM31,l:&mut Log)->CM31 {
+ let norm=l.m(0,x.a,x.a).add(l.m(0,x.b,x.b));
+ let inv_norm=l.m(1,norm,M31(0));
+ CM31{a:l.m(0,x.a,inv_norm),b:l.m(0,x.b.neg(),inv_norm)}
+}
+fn square(x:QM31,l:&mut Log)->QM31 {
+ let c0_square=l.c(2,x.c0,CM31::ZERO);let c1_square=l.c(2,x.c1,CM31::ZERO);
+ QM31{c0:c0_square.add(super::super::mul_by_r(c1_square)),c1:l.c(3,x.c0,x.c1).double()}
+}
+fn try_inv(x:QM31,l:&mut Log)->Option<QM31>{
+ if x.is_zero(){return None;}
+ let norm=l.c(2,x.c0,CM31::ZERO).sub(super::super::mul_by_r(l.c(2,x.c1,CM31::ZERO)));
+ let inverse_norm=l.c(4,norm,CM31::ZERO);
+ Some(QM31{c0:l.c(3,x.c0,inverse_norm),c1:l.c(3,x.c1.neg(),inverse_norm)})
+}
+#[kani::proof] #[kani::unwind(12)]
+#[kani::stub(core::ptr::copy_nonoverlapping,super::KMX_copy_nonoverlapping)]
+fn cm_fixed_trace(){let x=c();let mut l=log();let out=cm_fixed(x,&mut l);
+ assert_eq!(l.calls,5);assert_eq!(l.tags,[0,0,1,0,0,0,0,0]);
+ let norm=l.replies[0].a.add(l.replies[1].a);let inv=l.replies[2].a;
+ let expected=[[CM31{a:x.a,b:M31(0)},CM31{a:x.a,b:M31(0)}],[CM31{a:x.b,b:M31(0)},CM31{a:x.b,b:M31(0)}],
+ [CM31{a:norm,b:M31(0)},CM31::ZERO],[CM31{a:x.a,b:M31(0)},CM31{a:inv,b:M31(0)}],
+ [CM31{a:x.b.neg(),b:M31(0)},CM31{a:inv,b:M31(0)}]];
+ let at:usize=kani::any();kani::assume(at<5);assert_eq!(l.args[at],expected[at]);
+ assert_eq!(out,if cfg!(NFG_bad_cm_chain){CM31::ZERO}else{CM31{a:l.replies[3].a,b:l.replies[4].a}});
+}
+#[kani::proof] #[kani::unwind(12)]
+#[kani::stub(core::ptr::copy_nonoverlapping,super::KMX_copy_nonoverlapping)]
+fn square_trace(){let x=q();let mut l=log();let out=square(x,&mut l);
+ assert_eq!(l.calls,3);assert_eq!(l.tags,[2,2,3,0,0,0,0,0]);
+ assert_eq!(l.args[0],[x.c0,CM31::ZERO]);assert_eq!(l.args[1],[x.c1,CM31::ZERO]);assert_eq!(l.args[2],[x.c0,x.c1]);
+ let expected=QM31{c0:l.replies[0].add(super::super::mul_by_r(l.replies[1])),c1:l.replies[2].double()};
+ assert_eq!(out,if cfg!(NFG_bad_square_chain){QM31::ZERO}else{expected});
+}
+#[kani::proof] #[kani::unwind(12)]
+#[kani::stub(core::ptr::copy_nonoverlapping,super::KMX_copy_nonoverlapping)]
+fn try_inv_zero(){let x=QM31::ZERO;let mut l=log();let out=try_inv(x,&mut l);assert_eq!(l.calls,0);
+ assert_eq!(out,if cfg!(NFG_bad_try_zero){Some(QM31::ZERO)}else{None});}
+#[kani::proof] #[kani::unwind(12)]
+#[kani::stub(core::ptr::copy_nonoverlapping,super::KMX_copy_nonoverlapping)]
+fn try_inv_nonzero(){let x=q();kani::assume(!x.is_zero());let mut l=log();let out=try_inv(x,&mut l);
+ assert_eq!(l.calls,5);assert_eq!(l.tags,[2,2,4,3,3,0,0,0]);
+ assert_eq!(l.args[0],[x.c0,CM31::ZERO]);assert_eq!(l.args[1],[x.c1,CM31::ZERO]);
+ let norm=l.replies[0].sub(super::super::mul_by_r(l.replies[1]));assert_eq!(l.args[2],[norm,CM31::ZERO]);
+ assert_eq!(l.args[3],[x.c0,l.replies[2]]);assert_eq!(l.args[4],[x.c1.neg(),l.replies[2]]);
+ assert_eq!(out,if cfg!(NFG_bad_try_some){None}else{Some(QM31{c0:l.replies[3],c1:l.replies[4]})});}
