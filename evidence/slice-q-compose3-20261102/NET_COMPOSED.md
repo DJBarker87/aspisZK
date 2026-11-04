@@ -8,7 +8,7 @@ The frozen source checker NET_inverse_checks.py passes its positive case and rej
 
 No shipped file, wallet key or release artifact changed. The inherited ELF pins remain default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4; devnet 63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299; Pool 121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548. No rebuild trigger.
 
-CM native stage: NET_K001 PASS; corrupt reply/argument/frame NET_K002..004 FAIL as required; exact KMX copy NET_K005 PASS/NET_K006 FAIL. All six have identical source pins and resolved features, frozen offline graph and unchanged lock, local records, capped scopes and zero swap. NET_native_review.py validates the receipts. No composed status promotion follows. NET_MultiplyBridge.lean is a pending uncompiled draft and is not proof credit.
+CM native stage: NET_K001 PASS; corrupt reply/argument/frame NET_K002..004 FAIL as required; exact KMX copy NET_K005 PASS/NET_K006 FAIL. All six have identical source pins and resolved features, frozen offline graph and unchanged lock, local records, capped scopes and zero swap. NET_native_review.py validates the receipts. No composed status promotion follows. The initial uncompiled multiplication draft was excluded; L008 is its changed, accepted replacement below.
 
 NET_L008 now proves the independent checked reducer/multiply equal the coherent release reducer/multiply on every raw input; its product_reply theorem gives the exact natural-number modulo value. All three audits contain only standard axioms. NET_L007 is an excluded failed draft, not credit; the compiler error-generated sorryAx appears only in that failed receipt. This pairs the CM log product slots with their emitted semantics, while the inverse and neg boundary remain open.
 
@@ -71,8 +71,8 @@ tests and eighteen full validator tests pass.
 The new total is 142/587 global occurrence rows. This does not establish
 query_loop, QueryGeometry::for_range, the inverse chain, source-to-ELF
 correspondence or the security headline. P6/D188 semantic transport remains
-explicit trust reclassification. Prefix native capacity cases are in flight
-and receive no composed credit at this stage.
+explicit trust reclassification. At that stage prefix received no composed credit; the closed packet below
+supersedes that frontier.
 
 ## Current prefix-product root closed
 
@@ -108,3 +108,31 @@ roots remain OPEN. The combined nonempty gather K089 timed out and is
 excluded; its split successors receive no credit until their own gates close.
 No geometry root, inverse chain, source-to-ELF or 100-bit per-attempt security
 headline is established.
+
+## Final nonempty geometry continuation
+
+K089 (combined gather), K090 (new-window split) and K091 (standalone
+reserve) timed out at90s and are excluded. No timeout/cap increase or
+unchanged rerun occurred. The original NET_gather_10/12 harness names were
+retained while splitting the obligations. K092/K093 and K094/K095 establish
+one actual KMX-loop push at arbitrary inner offset<5 for current capacities
+50/60, with arbitrary initialized logical prestate, uninitialized spare,
+complete old/input frame and matched failing controls. K096/K097/K098 checks
+one reverse-cell update, exact two-field-call local log and output/argument
+controls for TX1 capacity50. K099/K100 validates the final identical KMX
+configuration. These are PARTIAL packets, no new composed rows.
+
+NET_L030/L031/L033 establish generic append/assignment windows, SAME-two-buffer
+gather trace induction and caller sizes, and explicit reuse of KMX append,
+old-word/new-window and disjoint-buffer value laws. They do not assert
+native reserve/ownership or whole-geometry trace existence. The native reserve
+and line-buffer joins, TX2 reverse packet, M31 inverse child and complete
+Result/collection/caller associations remain OPEN. All17 remaining members
+and why no unused Lean/extraction run can close them are in NET_REMAINING.md.
+
+The named Allocator runtime item is retained from the security contract; no
+allocator premise is discharged or added here. The source/ABI/library,
+physical interpretation, native contract semantic transport, source-to-ELF
+and existing runtime trust remain. Quarantined/suspended historical harnesses
+receive no restored credit. NET introduces no Option<fn>-dependent or writable
+static harness, function-contract composition, or new trust axiom.

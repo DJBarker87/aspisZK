@@ -51,6 +51,9 @@ class Gates(unittest.TestCase):
  def test_prefix_no_uninitialized_spare(self):
   cs=copy.deepcopy(self.certificates);next(c for c in cs if c['function'].endswith('::batch_prefix_products'))['parts'].remove('uninitialized_spare_capacity')
   with self.assertRaises(ValueError):v.validate(self.edges,cs,replay=False)
+ def test_prefix_missing_retained_allocator(self):
+  cs=copy.deepcopy(self.certificates);next(c for c in cs if c['function'].endswith('::batch_prefix_products'))['top_hypotheses'].remove('Allocator')
+  with self.assertRaises(ValueError):v.validate(self.edges,cs,replay=False)
  def test_prefix_missing_induction(self):
   cs=copy.deepcopy(self.certificates);next(c for c in cs if c['function'].endswith('::batch_prefix_products'))['packet']['proofs']=[]
   with self.assertRaises(ValueError):v.validate(self.edges,cs,replay=False)

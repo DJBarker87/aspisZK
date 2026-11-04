@@ -52,3 +52,10 @@ and semantic transport remain the existing root trust. There is no new
 runtime syscall or cryptographic trust item. QueryGeometry::for_range and
 query_loop remain OPEN even if this local root is promoted. No incoming
 geometry-to-prefix edge is inferred from length arithmetic alone.
+
+Allocator qualification: the named Allocator runtime trust is inherited from
+the security contract (SECURITY-CONTRACT-20261021.md, owner amendment
+2026-10-26, existing runtime items). This packet checks successful constructor
+metadata and all nongrowing steps; it does not discharge allocator/abort
+realization or add an allocator trust item. NativeContractSemanticTransport,
+RootPhysicalInterpretation and Allocator are all retained explicitly.
