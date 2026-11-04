@@ -28,7 +28,7 @@ All required commands, exact targets, source revisions/hashes, selected dependen
 
 ## Reuse and release pins
 
-Retained owned cache: `/home/dombarker/project-offloads/codex-cx-slice-s-retarget-cache-20261104`; workspace: `/home/dombarker/project-offloads/codex-cx-slice-s-retarget-20261104`. NFY_EXPORT.json pins `NFY_exports_20261104` and `NFY_native_20261104`; NFY_CLOSURE_PINS.json.xz plus its uncompressed SHA-256 pins the complete actually resolved closure. Put the owned exports before the recorded canonical priority/SInt2/fallback paths; never substitute an unpinned legacy variant. No owned cache, source, account/wallet key or predecessor object was deleted. No binary/object/ELF is committed.
+Retained owned cache: `/home/dombarker/project-offloads/codex-cx-slice-s-retarget-cache-20261104`; workspace: `/home/dombarker/project-offloads/codex-cx-slice-s-retarget-20261104`. NFY_EXPORT.json pins `NFY_exports_20261104` and `NFY_native_20261104`; NFY_CLOSURE_PINS.json.xz plus its uncompressed SHA-256 pins the complete actually resolved closure. Put the owned exports before the recorded canonical priority/SInt2/fallback paths; never substitute an unpinned legacy variant. After byte-verifying retained exports and committed compressed graph backups, owned compiled scratch and uncompressed normal audit graphs were removed from the workspace (NFY_HOST_END.json). Restore the exported objects/native tools or put exports first before replaying old workspace commands. No owned cache, authored source, account/wallet key or predecessor object was deleted. No binary/object/ELF is committed.
 
 No shipped file changed, so no ELF rebuild trigger fired. Inherited pins only, not rehashed/rebuilt here:
 
@@ -37,3 +37,5 @@ No shipped file changed, so no ELF rebuild trigger fired. Inherited pins only, n
 - Pool `121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548`.
 
 Frozen Rust remains `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`. This is focused cached proof/coherence evidence, not a cold release replay or establishment of the 100-bit per-attempt security target.
+
+Final hygiene: NFY_SHIPPED_SOURCE_CHECK.json confirms crates/ and programs/ are byte-identical to the frozen revision, with no dirty shipped paths. NFY_HOST_END.json records byte-verified removal of 72 owned compiled-scratch files (retained in exports) and 3,622 raw graph outputs backed by committed xz/SHA files. The owned cache remains intact. The initial slow local cleanup inventory was stopped before any host action and replaced by one batched Git inventory; no prover was submitted. Stage commits before the final artifact record: f3e29166bee, 47487963ce3, b5b290d7e67, f826e745784. All messages are plain and no push occurred.
