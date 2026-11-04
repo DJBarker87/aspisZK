@@ -21,12 +21,14 @@ structure Input (p : verifier.Prepared) (a : verifier.Accumulator)
 
 /-- The actual line child establishes the value domain passed to accumulation.
 No independently successful line call or accumulation result is supplied. -/
-theorem line (alpha : E) (values : Dots) (inverse : Array U32 5#usize) (out : E)
+theorem line (alpha : NFP_QueryCuts.E) (values : Dots) (inverse : Array U32 5#usize) (out : NFP_QueryCuts.E)
  (run : SAQ_LineQuery.line alpha values inverse=ok out) :
- NBO_TailDomain.WideCanonical out := (SAQ_LineQuery.exact_line alpha values inverse out run).2
+ NBO_TailDomain.WideCanonical out := by
+ rcases (SAQ_LineQuery.exact_line alpha values inverse out run).2 with ⟨⟨a,b,c,d⟩,⟨e,f,g,h⟩⟩
+ constructor <;> intro k <;> fin_cases k <;> assumption
 
 theorem domain (p : verifier.Prepared) (a : verifier.Accumulator)
- (b : verifier.BatchedWeights) (value : E) (input : Input p a b)
+ (b : verifier.BatchedWeights) (value : NFP_QueryCuts.E) (input : Input p a b)
  (canonical : NBO_TailDomain.WideCanonical value) :
  NFS_NEV_AccumPacket.Domain (fromPrepared p) (fromAccumulator a) (fromE value) (fromWeights b) := by
  constructor
@@ -38,7 +40,7 @@ theorem domain (p : verifier.Prepared) (a : verifier.Accumulator)
  · simpa only [fromAccumulator,e_reverse] using input.rhs
  · simpa only [fromAccumulator,q_reverse] using input.power
  · simpa only [fromPrepared,q_reverse] using input.rho
- · simpa only [fromWeights,weights_reverse] using input.progress
+ · simpa only [fromWeights,toWeights] using input.progress
 #print axioms line
 #print axioms domain
 end AspisR1.NFS_AccumDomain

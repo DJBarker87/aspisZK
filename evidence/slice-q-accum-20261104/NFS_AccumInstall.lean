@@ -6,7 +6,7 @@ open Aeneas Aeneas.Std Result AspisR1Stage2
 open Port3_NativeQueryBody NEV_AccumulateCarriers NFP_QueryCuts
 
 def run (p : verifier.Prepared) (a : verifier.Accumulator) (node : U32)
- (value : E) (b : verifier.BatchedWeights) : Result (verifier.Accumulator × verifier.BatchedWeights) := do
+ (value : NFP_QueryCuts.E) (b : verifier.BatchedWeights) : Result (verifier.Accumulator × verifier.BatchedWeights) := do
  let out ← NEV_AccumulateRaw.accumulate_batched_with_node
   (fromPrepared p) (fromAccumulator a) node (fromE value) (fromWeights b)
  ok (NFS_NEV_TailModel.toPair out)
@@ -14,7 +14,7 @@ def run (p : verifier.Prepared) (a : verifier.Accumulator) (node : U32)
 /-- SAME complete input records; the raw packet's domain is derived from
 root inputs and the actual line return. No inner success is a premise. -/
 theorem installed (base : Ops) (p : verifier.Prepared) (a : verifier.Accumulator)
- (node : U32) (value : E) (b : verifier.BatchedWeights)
+ (node : U32) (value : NFP_QueryCuts.E) (b : verifier.BatchedWeights)
  (input : NFS_AccumDomain.Input p a b) (canonical : NBO_TailDomain.WideCanonical value) :
  run p a node value b = verifier.accumulate_batched_with_node
   (NBO_AccumulateAssociation.sourceOps (NFS_NEV_TailModel.fields base)) p a node value b := by

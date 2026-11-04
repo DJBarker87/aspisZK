@@ -1,0 +1,26 @@
+NFS_generated/NFS_LoopTrace.lean:51:6: error: Type mismatch: After simplification, term
+  h
+ has type
+  @Eq (Result State)
+    (verifier.candidate.query_values (NFP_ObserverErasure.erase (NFS_QueryOps.installed base)) proof p a g none geometry
+      b)
+    (ok next)
+but is expected to have type
+  @Eq (Result (core.result.Result (verifier.Accumulator × verifier.BatchedWeights) verifier.Error))
+    (verifier.candidate.query_values (NFS_QueryOps.installed base) proof p a g none geometry b) (ok next)
+NFS_generated/NFS_LoopTrace.lean:27:8: error: (kernel) excessive memory consumption detected
+NFS_generated/NFS_LoopTrace.lean:64:63: error: Tactic `rfl` failed: The left-hand side
+  (run query finish 0 (core.result.Result.Ok (fst✝, snd✝))).result
+is not definitionally equal to the right-hand side
+  NFG_QueryLoopDefs.run (fun a b => (query a b).result) finish 0 (core.result.Result.Ok (fst✝, snd✝))
+
+case zero.Ok.mk
+query : verifier.Accumulator → verifier.BatchedWeights → M State
+finish : Usize
+fst✝ : A
+snd✝ : B
+⊢ (run query finish 0 (core.result.Result.Ok (fst✝, snd✝))).result =
+    NFG_QueryLoopDefs.run (fun a b => (query a b).result) finish 0 (core.result.Result.Ok (fst✝, snd✝))
+'AspisR1.NFS_LoopTrace.bind_congr' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NFS_LoopTrace.source' depends on axioms: [propext, Classical.choice, Quot.sound, source]
+'AspisR1.NFS_LoopTrace.erased' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

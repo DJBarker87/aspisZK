@@ -9897,15 +9897,29 @@
 {"module": "NEG_RowIsolated.Types", "imports": ["Init", "Aeneas"]}
 {"module": "NEG_RowStepAssociation", "imports": ["Init", "NEG_RowAssociation", "NEG_RowDomain"]}
 {"module": "NEI_AccumIndependentCounters", "imports": ["Init", "NBO_AccumulateAssociation"]}
+{"module": "NEI_CircleActual", "imports": ["Init", "NEI_CircleShared.Funs", "NEI_LineActual", "NEI_CircleDomains"]}
+{"module": "NEI_CircleBridge", "imports": ["Init", "NEI_CircleActual"]}
+{"module": "NEI_CircleDomains", "imports": ["Init", "NEI_LineDomains", "JFr_TX2_CircleTotal", "FIp_CircleCuts"]}
+{"module": "NEI_CircleShared.Funs", "imports": ["Init", "Aeneas", "NEI_CircleShared.Types", "NEI_CircleShared.FunsExternal"]}
+{"module": "NEI_CircleShared.FunsExternal", "imports": ["Init", "NEI_CircleShared.Types", "NEI_LineFull.Funs"]}
+{"module": "NEI_CircleShared.Types", "imports": ["Init", "Aeneas", "NEI_CircleShared.TypesExternal"]}
+{"module": "NEI_CircleShared.TypesExternal", "imports": ["Init", "NEI_LineFull.Types"]}
 {"module": "NEI_DotFinishValues", "imports": ["Init", "NEI_ReductionWord"]}
+{"module": "NEI_FieldCM", "imports": ["Init", "NEI_FieldScalar"]}
 {"module": "NEI_FieldCarriers", "imports": ["Init", "NEI_LineFull.Funs", "NEG_FoldAssociation", "JFv_RawExtractedSemanticCallOpsV20"]}
+{"module": "NEI_FieldQM", "imports": ["Init", "NEI_FieldCM"]}
 {"module": "NEI_FieldScalar", "imports": ["Init", "NEI_FieldCarriers"]}
+{"module": "NEI_FieldWide", "imports": ["Init", "NEI_FieldQM"]}
 {"module": "NEI_FourWrapper.Funs", "imports": ["Init", "Aeneas", "NEI_FourWrapper.Types", "NEI_FourWrapper.FunsExternal"]}
 {"module": "NEI_FourWrapper.FunsExternal", "imports": ["Init", "NEI_FourWrapper.Types"]}
 {"module": "NEI_FourWrapper.Types", "imports": ["Init", "Aeneas", "NEI_FourWrapper.TypesExternal"]}
 {"module": "NEI_FourWrapper.TypesExternal", "imports": ["Init", "NEG_DotAssociation"]}
 {"module": "NEI_FourWrapperLaw", "imports": ["Init", "NEI_FourWrapper.Funs"]}
 {"module": "NEI_IteratorMeaning", "imports": ["Init", "NEG_RowIsolated.Funs"]}
+{"module": "NEI_LineActual", "imports": ["Init", "NEI_FieldWide", "NEI_LineCertificate"]}
+{"module": "NEI_LineBridge", "imports": ["Init", "NEI_LineActual"]}
+{"module": "NEI_LineCertificate", "imports": ["Init", "NEI_LineDomains", "NEB_PureFrame", "SAQ_LineJoin"]}
+{"module": "NEI_LineDomains", "imports": ["Init", "NEG_FoldAssociation", "JFn_LineTotal", "SAQ_LineArrays"]}
 {"module": "NEI_LineFull.Funs", "imports": ["Init", "Aeneas", "NEI_LineFull.Types"]}
 {"module": "NEI_LineFull.Types", "imports": ["Init", "Aeneas"]}
 {"module": "NEI_PrefixProduct", "imports": ["Init", "NEI_FieldScalar", "NEI_PrefixWindows"]}
@@ -10297,12 +10311,18 @@
 {"module": "NFS_AccumPart00", "imports": ["Init", "Lean", "NFN_PhaseTransport", "NEV_AccumulateRaw.Types", "NEV_CodeFieldRaw.Funs", "NEI_LineFull.Funs", "NEI_PushRaw.Funs", "RPz7_FIo_NativeFuns", "RPz7_S1M31EmbeddingTotalV1", "NBF_RowInstall", "NEV_AccumulateCarriers", "NEI_PushRawAssociation", "Port3_NativeRowFrame", "Aeneas", "NBF_BasisInstall", "NEG_FoldAssociation", "RPu_JFv_RawExtractedSemanticCallOpsV20"]}
 {"module": "NFS_AccumPart01", "imports": ["Init", "Lean", "NFN_PhaseTransport", "NFS_AccumPart00", "NBF_BasisInstall", "NBF_BasisOuter", "NBF_BasisDomain", "NBF_Accumulate", "NEI_AccumIndependentCounters", "NFN_GeometryPart02", "AspisR1Post25Sampler.Funs", "ExtractedMaskQM31Mul", "NBO_FieldSemantics"]}
 {"module": "NFS_AccumPart02", "imports": ["Init", "Lean", "NFN_PhaseTransport", "NFS_AccumPart01", "NFS_AccumPart00", "NEI_PushBridge", "NEI_PushRawAssociation", "NBF_Progress", "NFN_GeometryPart05", "NEG_PrefixStep", "KMX_CopyMeaning"]}
-{"module": "NFS_COMBINED_IMPORT", "imports": ["Init", "RPx_Deployed", "NFM_ProductInstance", "NFG_QueryLoopSource", "NFG_PushRoot", "NFN_GeometryPart08", "NFS_AccumPart02", "NFP_Advance", "NFP_Carrier", "NFP_DotCaller", "NFP_DotDomains", "NFP_DotInstall", "NFP_FrameExt", "NFP_GeometryDomains", "NFP_HeadDomain", "NFP_LoopBudget", "NFP_LoopTerminals", "NFP_LoopTransport", "NFP_NatBase", "NFP_NodeDictionary", "NFP_ObserverErasure", "NFP_ProductLaw", "NFP_QueryAdvance", "NFP_QueryCuts", "NFP_QueryTrace", "NFP_RejectionTrace", "NFP_Resume", "NFP_ReturnCuts", "NFP_SuffixCuts", "NFP_TraceBack", "NFP_TraceFront", "NFP_TraceHead", "NFP_TraceTypes"]}
+{"module": "NFS_COMBINED_IMPORT", "imports": ["Init", "RPx_Deployed", "NFM_ProductInstance", "NFG_QueryLoopSource", "NFG_PushRoot", "NFN_GeometryPart08", "NFS_AccumPart02", "NFP_Advance", "NFP_Carrier", "NFP_DotCaller", "NFP_DotDomains", "NFP_DotInstall", "NFP_FrameExt", "NFP_GeometryDomains", "NFP_HeadDomain", "NFP_LoopBudget", "NFP_LoopTerminals", "NFP_LoopTransport", "NFP_NatBase", "NFP_NodeDictionary", "NFP_ObserverErasure", "NFP_ProductLaw", "NFP_QueryAdvance", "NFP_QueryCuts", "NFP_QueryTrace", "NFP_RejectionTrace", "NFP_Resume", "NFP_ReturnCuts", "NFP_SuffixCuts", "NFP_TraceBack", "NFP_TraceFront", "NFP_TraceHead", "NFP_TraceTypes", "NFS_PacketRoot", "NFS_QueryLoopRoot", "NFS_LoopTrace"]}
+{"module": "NFS_CallerDomains", "imports": ["Init", "NFS_ReadCanonical", "NFS_QueryInvariant", "OraclePortStdBuilder", "RPz7_FIp_Equality", "Port5Q1_GeometryAccessor"]}
+{"module": "NFS_DotTrace", "imports": ["Init", "NFP_TraceHead", "NFP_DotInstall"]}
 {"module": "NFS_Driver", "imports": ["Init", "Lean", "NFA_WALKER", "NFA_MemoryLimit"]}
+{"module": "NFS_FoldInstall", "imports": ["Init", "NFS_Folds", "NFP_DotDomains", "FIp_CircleQuery"]}
+{"module": "NFS_Folds", "imports": ["Init", "Lean", "NFN_PhaseTransport", "NFS_AccumPart01", "NEI_LineCertificate", "NEI_CircleShared.Funs", "NEI_CircleDomains"]}
 {"module": "NFS_ImportInspect", "imports": ["Init", "NFS_NEV_AccumPacket", "Lean"]}
 {"module": "NFS_LPf_WideConstruction", "imports": ["Init", "Lean", "NFN_PhaseTransport", "NFN_GeometryPart02"]}
 {"module": "NFS_LPi_MixedValues", "imports": ["Init", "Lean", "NFN_PhaseTransport", "NFS_LPi_TowerValues"]}
 {"module": "NFS_LPi_TowerValues", "imports": ["Init", "Lean", "NFN_PhaseTransport", "NFN_GeometryPart02"]}
+{"module": "NFS_LoopTrace", "imports": ["Init", "NFS_LoopTraceDefs", "NFS_QueryLoopRoot", "NFP_QueryTrace"]}
+{"module": "NFS_LoopTraceDefs", "imports": ["Init", "NFG_QueryLoopDefs", "NFP_TraceTypes"]}
 {"module": "NFS_NBG_FieldDischarge", "imports": ["Init", "Lean", "NFN_PhaseTransport", "NFS_LPi_MixedValues", "NFS_NBG_WideCarriers"]}
 {"module": "NFS_NBG_WideCarriers", "imports": ["Init", "Lean", "NFN_PhaseTransport", "NFS_LPi_TowerValues", "NFS_LPf_WideConstruction", "AspisR1Post25Sampler.Funs"]}
 {"module": "NFS_NCB_PrefixCutTrace", "imports": ["Init", "Lean", "NFN_PhaseTransport", "NFS_NCB_PrefixNativeStep"]}
@@ -10339,9 +10359,15 @@
 {"module": "NFS_NEV_StageWideFields", "imports": ["Init", "Lean", "NFN_PhaseTransport", "NFS_NEV_StageFields"]}
 {"module": "NFS_NEV_TailModel", "imports": ["Init", "Lean", "NFN_PhaseTransport", "NFS_NEV_AccumulateTail", "NFS_NEV_PrimitiveTotal"]}
 {"module": "NFS_NEV_WeightDomains", "imports": ["Init", "Lean", "NFN_PhaseTransport", "NFS_NEV_StageFields", "NFS_NEV_BorrowMaps", "NFS_NEV_CtorNormalization"]}
+{"module": "NFS_PacketRoot", "imports": ["Init", "NFS_CallerDomains", "NFS_LoopTrace", "NFP_GeometryDomains", "NFP_NodeDictionary"]}
 {"module": "NFS_ProofDriver", "imports": ["Init", "Lean", "NFA_WALKER", "NFA_MemoryLimit"]}
 {"module": "NFS_QueryBack", "imports": ["Init", "NFS_QueryOps", "NFP_TraceBack"]}
+{"module": "NFS_QueryInvariant", "imports": ["Init", "NFS_QueryValuesPacket", "NFP_QueryAdvance"]}
+{"module": "NFS_QueryLoopRoot", "imports": ["Init", "NFS_QueryInvariant", "NFP_Resume"]}
 {"module": "NFS_QueryOps", "imports": ["Init", "NFS_AccumInstall", "NFP_DotCaller"]}
+{"module": "NFS_QueryValuesPacket", "imports": ["Init", "NFS_DotTrace", "NFS_TraceBack", "NFS_FoldInstall", "NFP_QueryTrace", "NFP_RejectionTrace"]}
+{"module": "NFS_ReadCanonical", "imports": ["Init", "NFS_AccumPart01", "NFP_Carrier"]}
+{"module": "NFS_TraceBack", "imports": ["Init", "NFP_TraceBack", "NFS_QueryOps"]}
 {"module": "NP6_StdModel", "imports": ["Init", "ClaimsUnrolledFinish"]}
 {"module": "OccupancyRangeTraversal", "imports": ["Init", "Aeneas.Std.RangeIter"]}
 {"module": "Op3I_Header", "imports": ["Init", "Op3I_Std", "OraclePortHeader"]}

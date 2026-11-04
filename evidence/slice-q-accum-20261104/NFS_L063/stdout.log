@@ -1,0 +1,58 @@
+NFS_generated/NFS_FoldInstall.lean:29:1: error: Type mismatch: After simplification, term
+  h
+ has type
+  (match
+      match
+        NEI_LineFull.line_fold_with_inverses (NFS_NEI_FieldCarriers.fromE (SAQ_WideABI.toW alpha)) (values v)
+          inverse with
+      | ok x => ok (NFS_NEI_FieldCarriers.toE x)
+      | fail e => fail e
+      | div => div with
+    | ok x => ok (SAQ_WideABI.fromW x)
+    | fail e => fail e
+    | div => div) =
+    match SAQ_LineSource.line (SAQ_WideABI.toW alpha) (SAQ_LineQuery.toValues v) inverse with
+    | ok x => ok (SAQ_WideABI.fromW x)
+    | fail e => fail e
+    | div => div
+but is expected to have type
+  (match
+      NEI_LineFull.line_fold_with_inverses (NFS_NEI_FieldCarriers.fromE (SAQ_WideABI.toW alpha)) (values v) inverse with
+    | ok x => ok (SAQ_WideABI.fromW (NFS_NEI_FieldCarriers.toE x))
+    | fail e => fail e
+    | div => div) =
+    do
+    let z ← SAQ_LineSource.line (SAQ_WideABI.toW alpha) (SAQ_LineQuery.toValues v) inverse
+    ok (SAQ_WideABI.fromW z)
+NFS_generated/NFS_FoldInstall.lean:36:1: error: Type mismatch: After simplification, term
+  h
+ has type
+  (match
+      match
+        NEI_CircleShared.circle_fold_with_inverses (NFS_NEI_FieldCarriers.fromE (SAQ_WideABI.toW alpha)) (values v)
+          inverse with
+      | ok x => ok (NFS_NEI_FieldCarriers.toE x)
+      | fail e => fail e
+      | div => div with
+    | ok x => ok (SAQ_WideABI.fromW x)
+    | fail e => fail e
+    | div => div) =
+    match FIp_CircleSource.circle (SAQ_WideABI.toW alpha) ⟨List.map SAQ_WideABI.toW ↑v, ⋯⟩ inverse with
+    | ok x => ok (SAQ_WideABI.fromW x)
+    | fail e => fail e
+    | div => div
+but is expected to have type
+  (match
+      NEI_CircleShared.circle_fold_with_inverses (NFS_NEI_FieldCarriers.fromE (SAQ_WideABI.toW alpha)) (values v)
+        inverse with
+    | ok x => ok (SAQ_WideABI.fromW (NFS_NEI_FieldCarriers.toE x))
+    | fail e => fail e
+    | div => div) =
+    do
+    let z ← FIp_CircleSource.circle (SAQ_WideABI.toW alpha) ⟨List.map SAQ_WideABI.toW ↑v, ⋯⟩ inverse
+    ok (SAQ_WideABI.fromW z)
+'AspisR1.NFS_FoldInstall.rows' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NFS_FoldInstall.map_map' does not depend on any axioms
+'AspisR1.NFS_FoldInstall.line' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NFS_FoldInstall.circle' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NFS_FoldInstall.domains' depends on axioms: [propext, Classical.choice, Quot.sound]
