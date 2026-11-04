@@ -1,6 +1,6 @@
 # NFD slice S composition checkpoint
 
-Validated: **88/97 rows,113/129 internal edges,4/7 roots CLOSED**. Baseline NEY86/97,110/129,3/7. Authority: NFD_REQUEST_VALIDATION.json, unchanged inherited NDT/NEX/NEY gates plus the additive NFD validator.28 mutation/admission tests pass. The seven-root target and deployed100-bit per-attempt target are not established.
+Validated: **89/97 rows,116/129 internal edges,5/7 roots CLOSED**. Baseline NEY86/97,110/129,3/7. Authority: NFD_REQUEST_VALIDATION.json, unchanged inherited NDT/NEX/NEY gates plus the additive NFD validator.38 mutation/admission tests pass. The seven-root target and deployed100-bit per-attempt target are not established.
 
 Frozen Rust4bb3b3f51e16b4525f1d10336e2b0bcbbd775387; headline AspisR1.RPx_Deployed.deployed; frozen3,L154 parameter,D188 narrowed. The root qualifications are ONLY the root's own PacketDomain and PhysicalInterpretation, approved trust rows/RuntimePersistence and CompositionTrustOptionA. P6/D188 optionA is trust reclassification, not removal. No shipped source changed; no ELF rebuild triggered. RuntimeReturnData(ab) is ADDED trust but has zero newly CLOSED native uses here.
 
@@ -94,10 +94,28 @@ Native/domain receipts and all explicit root qualifications remain in the pinned
 
 emit_result: the owned792-byte Ok return-to-send continuation remains unbound. NFD_K001 timed out despite a scalar-only oracle log; no controls were submitted after its timeout. The reviewed replacement splits discriminator/move/window/send instead of increasing limits. NEY_EmitComposed.result_state_effects is reused as the MODEL statement, with native emitter bridge still an explicit OPEN obligation. RuntimeReturnData(ab) remains ADDED trust; Pool readback is separate.
 
-reconstruct_asq8_statement: native asq8_common input-value/Box allocation/ownership association and original guard/common/constructor continuation remain OPEN. Existing general model/domain theorems are reused, never treated as native evidence.
+reconstruct_asq8_statement: CLOSED; see the certificate below.
 
 scan_proof_buffer: same688-byte header/child Result/Box frame, exact byte696 tag use and native equality-iteration association remain OPEN. Existing induction and child model proofs are reused.
 
 ## asq8_common — CLOSED member
 
 All fifteen scalar/array field families on unrestricted actual typed Auth/Candidate inputs agree with the cohort common record, preserving raw noncanonical words. NFD_K038–067 provide positive/corrupt-field pairs; K068 rejects returning a different allocation. The exact frozen body and same fresh uniquely owned returned Box are checked under ruling(aa), the existing Allocator item, and option-A reclassification. NEU_ReconstructCore.common_result, NEU_CallDomains.common_packet and NEU_CommonProjections.common_ext are reused; NFD_L020–034 align each native coordinate, standard axioms only. No inner callee hypotheses remain. This closes one member row; reconstruction root integration follows separately.
+
+## reconstruct_asq8_statement — CLOSED root
+
+The frozen native root agrees with installed op52 on every typed Request/Auth/Candidate, including noncanonical words and both ordered rejection guards. On success it passes the same Auth/Candidate to the CLOSED common child and transfers that same allocated common Box and complete selected public record to the CLOSED transfer/withdrawal constructor. It forwards the same child Result/owned Box and ordered validator effects. No external state changes and no inner callee hypotheses remain.
+
+Native prefix K085/086 checks full guard/error classification; K091–108 observe all nine payment field families with corruption controls; K109 rejects a different common allocation; K110 rejects a changed child reply. The child reply-range restriction (Ok or InvalidInstructionData) is DERIVED by NEU_CallDomains.transfer_reply_range/withdrawal_reply_range and the CLOSED constructor certificates. It is not a root precondition.
+
+Full kernel MODEL statement, reused unchanged from NEU_L011:
+```lean
+theorem result_state_effects {State : Type} (request : Request) (a : Auth)
+    (c : Candidate) (state : State) :
+    run request a c state =
+    (AspisR1.JHf_ReconstructionSlot.source request a c,state,
+      NEU_ReconstructCore.trace (toRequest request) (toAuthenticatedAsq8Accounts a)
+        (toPoolV1PairVerifiedAfterstateV1 c))
+```
+
+Axioms: [propext, Classical.choice, Quot.sound], NEU_L011, with raw model and reached-domain/carrier/range theorems in NEU_L010/L012. Root qualifications: its own PacketDomain/PhysicalInterpretation, RuntimePersistence, approved trust inventory and CompositionTrustOptionA. No (ab) use. NFD_RECONSTRUCT_TESTS.log records38 passing tests.

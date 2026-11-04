@@ -86,4 +86,31 @@ class CompleteCommon(unittest.TestCase):
  def test_missing_receipt(self):self.rejected(lambda c:c['support'].pop())
  def test_hidden_child_assumption(self):self.rejected(lambda c:c['inner_hypotheses_remaining'].append('callee.PhysicalInterpretation'))
 
+class CompleteReconstruction(unittest.TestCase):
+ @classmethod
+ def setUpClass(cls):
+  import NFD_reconstruction_checks as c
+  cls.f=c.F;cls.packet=v.read(v.E/'NFD_LEDGER_DELTA.json');cls.cert=cls.packet['NFD_certificates'][cls.f]
+  cls.base=dict(rows=v.read(v.inherited.E/'NEY_CHECKED_ROWS.json'),frozen_revision=cls.cert['frozen_revision'],trust_rows=[])
+ def rejected(self,fn):
+  packet=copy.deepcopy(self.packet);c=packet['NFD_certificates'][self.f];fn(c)
+  c['semantic_review_sha256']=v.sha(json.dumps({k:w for k,w in c.items() if k!='semantic_review_sha256'},sort_keys=True).encode())
+  out=v.compose(self.base,packet)
+  self.assertTrue(all(r['composed_status']=='OPEN' for r in out['rows'] if r['function']==self.f))
+ def test_positive(self):
+  out=v.compose(self.base,self.packet)
+  self.assertTrue(all(r['composed_status']=='CLOSED' for r in out['rows'] if r['function']==self.f))
+ def test_absent(self):
+  packet=copy.deepcopy(self.packet);packet['NFD_certificates'].pop(self.f)
+  out=v.compose(self.base,packet)
+  self.assertTrue(all(r['composed_status']=='OPEN' for r in out['rows'] if r['function']==self.f))
+ def test_missing_coordinate(self):self.rejected(lambda c:c['native_certificate']['pairs'].pop())
+ def test_wrong_coordinate(self):self.rejected(lambda c:c['native_certificate']['pairs'].__setitem__(0,c['native_certificate']['pairs'][1]))
+ def test_missing_box_control(self):self.rejected(lambda c:c['native_certificate']['controls'].pop())
+ def test_wrong_model(self):self.rejected(lambda c:c['domain_theorems'][0].__setitem__('name','NEU_ReconstructCore.common_result'))
+ def test_missing_edge(self):self.rejected(lambda c:c['edges'].pop())
+ def test_wrong_domain(self):self.rejected(lambda c:next(iter(c['call_domain_certificates'].values())).__setitem__('callee_domain_established',False))
+ def test_hidden_child(self):self.rejected(lambda c:c['inner_hypotheses_remaining'].append('asq8_common.PacketDomain'))
+ def test_missing_receipt(self):self.rejected(lambda c:c['support'].pop())
+
 if __name__=='__main__':unittest.main()

@@ -97,6 +97,8 @@ def check(c,base):
  if c['subject']==REQUEST:return request_check(c,base)
  from NFD_common_checks import COMMON,check as common_check
  if c['subject']==COMMON:return common_check(c,base)
+ from NFD_reconstruction_checks import F,check as reconstruct_check
+ if c['subject']==F:return reconstruct_check(c,base)
  return False
 
 def compose_additions(base,result,packet,api):

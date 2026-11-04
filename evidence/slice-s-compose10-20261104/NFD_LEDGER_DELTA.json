@@ -7142,6 +7142,2396 @@
    "callee_domain_established": true,
    "native_frame_complete": true,
    "semantic_review_sha256": "6d368a12a566e22f6566f5c6009da87928980ceb4623d026374864738e0db7b7"
+  },
+  "programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement": {
+   "id": "NFD_reconstruct_asq8_statement",
+   "subject": "programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement",
+   "kind": "root-composition",
+   "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+   "native_certificate": {
+    "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement",
+    "complete": true,
+    "domain": "all typed Request/Auth/Candidate; raw noncanonical fields admitted; no accepted-run condition",
+    "prefix": [
+     "NFD_K085",
+     "NFD_K086"
+    ],
+    "pairs": [
+     [
+      "NFD_K091",
+      "NFD_K092"
+     ],
+     [
+      "NFD_K093",
+      "NFD_K094"
+     ],
+     [
+      "NFD_K095",
+      "NFD_K096"
+     ],
+     [
+      "NFD_K097",
+      "NFD_K098"
+     ],
+     [
+      "NFD_K099",
+      "NFD_K100"
+     ],
+     [
+      "NFD_K101",
+      "NFD_K102"
+     ],
+     [
+      "NFD_K103",
+      "NFD_K104"
+     ],
+     [
+      "NFD_K105",
+      "NFD_K106"
+     ],
+     [
+      "NFD_K107",
+      "NFD_K108"
+     ]
+    ],
+    "controls": [
+     "NFD_K109",
+     "NFD_K110"
+    ]
+   },
+   "domain_theorems": [
+    {
+     "name": "NEU_ReconstructCore.result_state_effects",
+     "source": {
+      "path": "evidence/slice-s-compose7-20261103/NEU_L010/NEU_SOURCE.lean.txt",
+      "sha256": "701ef8712be86603db6f7ff292818cf1e5c4011d60978421d71291512de60d35"
+     },
+     "receipt": {
+      "path": "evidence/slice-s-compose7-20261103/NEU_L010/receipt.json",
+      "sha256": "2958156692b0f86b988c15709fb0dd743ef44b169886cf093ac05527f9f48ab1"
+     },
+     "snapshot_path": "NEU_generated/NEU_ReconstructCore.lean",
+     "statement": "theorem result_state_effects {State : Type} (request : Request) (a : Auth)\n    (c : Candidate) (state : State) :\n    run request a c state =\n      (r1_pool_adapter.reconstruct_asq8_statement request a c,state,trace request a c)",
+     "statement_sha256": "42beca463c43c32d5f9896723a53bb385754046db9de712a1064e3f8d9c88ca5"
+    },
+    {
+     "name": "NEU_ReconstructAdopted.result_state_effects",
+     "source": {
+      "path": "evidence/slice-s-compose7-20261103/NEU_L011/NEU_SOURCE.lean.txt",
+      "sha256": "8bfd87fa8435bb1a4eb5a129c26167f2a009d09c72c386e114a8239968ec916f"
+     },
+     "receipt": {
+      "path": "evidence/slice-s-compose7-20261103/NEU_L011/receipt.json",
+      "sha256": "24288180ee8ccca4d6754c9dfdecd5b2e21c9364dc7ab2a56d1ae5a080d5e676"
+     },
+     "snapshot_path": "NEU_generated/NEU_ReconstructAdopted.lean",
+     "statement": "theorem result_state_effects {State : Type} (request : Request) (a : Auth)\n    (c : Candidate) (state : State) :\n    run request a c state =\n    (AspisR1.JHf_ReconstructionSlot.source request a c,state,\n      NEU_ReconstructCore.trace (toRequest request) (toAuthenticatedAsq8Accounts a)\n        (toPoolV1PairVerifiedAfterstateV1 c))",
+     "statement_sha256": "834f770043a7ec908dc0b791767c330e664cba8afd9fbe0849dfc08b1dba29af"
+    },
+    {
+     "name": "NEU_CallDomains.reached_domains",
+     "source": {
+      "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+      "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+     },
+     "receipt": {
+      "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+      "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+     },
+     "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+     "statement": "theorem reached_domains (request : Request) (a : Auth) (c : Candidate) :\n    (\u2200 a' c', Call.common a' c' \u2208 calls request a c \u2192 a'=a \u2227 c'=c) \u2227\n    (\u2200 d p, Call.transfer d p \u2208 calls request a c \u2192\n      d=common a c \u2227 request.public=.PrivateTransfer p) \u2227\n    (\u2200 d p, Call.withdrawal d p \u2208 calls request a c \u2192\n      d=common a c \u2227 request.public=.Withdrawal p)",
+     "statement_sha256": "348e7ad7710b1e21dbd9664e78837d01140b2dc4a7237d7a4fd9889e791235b1"
+    },
+    {
+     "name": "NEU_CallDomains.common_packet",
+     "source": {
+      "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+      "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+     },
+     "receipt": {
+      "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+      "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+     },
+     "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+     "statement": "theorem common_packet (a : Auth) (c : Candidate) :\n    NED_ReconstructCarriers.toRawCommon\n      (NED_ReconstructCarriers.fromRawCommon (common a c)) = common a c",
+     "statement_sha256": "a608c9f5ae8ec6e23e1a79da590c74a5a313f822d72600eb8dd1033dfcbd9b7b"
+    },
+    {
+     "name": "NEU_CallDomains.transfer_packet",
+     "source": {
+      "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+      "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+     },
+     "receipt": {
+      "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+      "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+     },
+     "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+     "statement": "theorem transfer_packet (c : Common) (p : payment_relation.PoolV1PrivateTransferPublicV1) :\n    NED_ReconstructCarriers.toRaw\n      (NED_ReconstructCarriers.fromRaw (.PrivateTransfer c p)) = .PrivateTransfer c p",
+     "statement_sha256": "8c2a33fdf8c4cb46aadb1a880d967b48e6308a29b093aef3c7e47bacad1b32f4"
+    },
+    {
+     "name": "NEU_CallDomains.withdrawal_packet",
+     "source": {
+      "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+      "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+     },
+     "receipt": {
+      "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+      "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+     },
+     "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+     "statement": "theorem withdrawal_packet (c : Common) (p : payment_relation.PoolV1WithdrawalPublicV1) :\n    NED_ReconstructCarriers.toRaw\n      (NED_ReconstructCarriers.fromRaw (.Withdrawal c p)) = .Withdrawal c p",
+     "statement_sha256": "247ddead523dee047eb56fb9025bfa9237ce6c0367ae7079bb640d7caded6bf9"
+    },
+    {
+     "name": "NEU_CallDomains.transfer_reply_range",
+     "source": {
+      "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+      "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+     },
+     "receipt": {
+      "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+      "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+     },
+     "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+     "statement": "theorem transfer_reply_range (c : Common) (p : payment_relation.PoolV1PrivateTransferPublicV1) :\n    \u2203 r, r1_pool_adapter.transfer_statement_box c p=ok r \u2227 ReplyRange (.PrivateTransfer c p) r",
+     "statement_sha256": "a7cf03de36ee29c9ed8324b93183f7717ee403508567762c5b269d6f5eba007c"
+    },
+    {
+     "name": "NEU_CallDomains.withdrawal_reply_range",
+     "source": {
+      "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+      "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+     },
+     "receipt": {
+      "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+      "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+     },
+     "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+     "statement": "theorem withdrawal_reply_range (c : Common) (p : payment_relation.PoolV1WithdrawalPublicV1) :\n    \u2203 r, r1_pool_adapter.withdrawal_statement_box c p=ok r \u2227 ReplyRange (.Withdrawal c p) r",
+     "statement_sha256": "def811fe73da17426bc1e4a034afe04f3a3ecd13b273719d15d307d940f503ec"
+    }
+   ],
+   "physical_theorems": [
+    {
+     "name": "NEU_ReconstructCore.result_state_effects",
+     "source": {
+      "path": "evidence/slice-s-compose7-20261103/NEU_L010/NEU_SOURCE.lean.txt",
+      "sha256": "701ef8712be86603db6f7ff292818cf1e5c4011d60978421d71291512de60d35"
+     },
+     "receipt": {
+      "path": "evidence/slice-s-compose7-20261103/NEU_L010/receipt.json",
+      "sha256": "2958156692b0f86b988c15709fb0dd743ef44b169886cf093ac05527f9f48ab1"
+     },
+     "snapshot_path": "NEU_generated/NEU_ReconstructCore.lean",
+     "statement": "theorem result_state_effects {State : Type} (request : Request) (a : Auth)\n    (c : Candidate) (state : State) :\n    run request a c state =\n      (r1_pool_adapter.reconstruct_asq8_statement request a c,state,trace request a c)",
+     "statement_sha256": "42beca463c43c32d5f9896723a53bb385754046db9de712a1064e3f8d9c88ca5"
+    },
+    {
+     "name": "NEU_ReconstructAdopted.result_state_effects",
+     "source": {
+      "path": "evidence/slice-s-compose7-20261103/NEU_L011/NEU_SOURCE.lean.txt",
+      "sha256": "8bfd87fa8435bb1a4eb5a129c26167f2a009d09c72c386e114a8239968ec916f"
+     },
+     "receipt": {
+      "path": "evidence/slice-s-compose7-20261103/NEU_L011/receipt.json",
+      "sha256": "24288180ee8ccca4d6754c9dfdecd5b2e21c9364dc7ab2a56d1ae5a080d5e676"
+     },
+     "snapshot_path": "NEU_generated/NEU_ReconstructAdopted.lean",
+     "statement": "theorem result_state_effects {State : Type} (request : Request) (a : Auth)\n    (c : Candidate) (state : State) :\n    run request a c state =\n    (AspisR1.JHf_ReconstructionSlot.source request a c,state,\n      NEU_ReconstructCore.trace (toRequest request) (toAuthenticatedAsq8Accounts a)\n        (toPoolV1PairVerifiedAfterstateV1 c))",
+     "statement_sha256": "834f770043a7ec908dc0b791767c330e664cba8afd9fbe0849dfc08b1dba29af"
+    },
+    {
+     "name": "NEU_CallDomains.reached_domains",
+     "source": {
+      "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+      "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+     },
+     "receipt": {
+      "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+      "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+     },
+     "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+     "statement": "theorem reached_domains (request : Request) (a : Auth) (c : Candidate) :\n    (\u2200 a' c', Call.common a' c' \u2208 calls request a c \u2192 a'=a \u2227 c'=c) \u2227\n    (\u2200 d p, Call.transfer d p \u2208 calls request a c \u2192\n      d=common a c \u2227 request.public=.PrivateTransfer p) \u2227\n    (\u2200 d p, Call.withdrawal d p \u2208 calls request a c \u2192\n      d=common a c \u2227 request.public=.Withdrawal p)",
+     "statement_sha256": "348e7ad7710b1e21dbd9664e78837d01140b2dc4a7237d7a4fd9889e791235b1"
+    },
+    {
+     "name": "NEU_CallDomains.common_packet",
+     "source": {
+      "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+      "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+     },
+     "receipt": {
+      "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+      "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+     },
+     "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+     "statement": "theorem common_packet (a : Auth) (c : Candidate) :\n    NED_ReconstructCarriers.toRawCommon\n      (NED_ReconstructCarriers.fromRawCommon (common a c)) = common a c",
+     "statement_sha256": "a608c9f5ae8ec6e23e1a79da590c74a5a313f822d72600eb8dd1033dfcbd9b7b"
+    },
+    {
+     "name": "NEU_CallDomains.transfer_packet",
+     "source": {
+      "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+      "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+     },
+     "receipt": {
+      "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+      "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+     },
+     "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+     "statement": "theorem transfer_packet (c : Common) (p : payment_relation.PoolV1PrivateTransferPublicV1) :\n    NED_ReconstructCarriers.toRaw\n      (NED_ReconstructCarriers.fromRaw (.PrivateTransfer c p)) = .PrivateTransfer c p",
+     "statement_sha256": "8c2a33fdf8c4cb46aadb1a880d967b48e6308a29b093aef3c7e47bacad1b32f4"
+    },
+    {
+     "name": "NEU_CallDomains.withdrawal_packet",
+     "source": {
+      "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+      "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+     },
+     "receipt": {
+      "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+      "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+     },
+     "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+     "statement": "theorem withdrawal_packet (c : Common) (p : payment_relation.PoolV1WithdrawalPublicV1) :\n    NED_ReconstructCarriers.toRaw\n      (NED_ReconstructCarriers.fromRaw (.Withdrawal c p)) = .Withdrawal c p",
+     "statement_sha256": "247ddead523dee047eb56fb9025bfa9237ce6c0367ae7079bb640d7caded6bf9"
+    },
+    {
+     "name": "NEU_CallDomains.transfer_reply_range",
+     "source": {
+      "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+      "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+     },
+     "receipt": {
+      "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+      "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+     },
+     "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+     "statement": "theorem transfer_reply_range (c : Common) (p : payment_relation.PoolV1PrivateTransferPublicV1) :\n    \u2203 r, r1_pool_adapter.transfer_statement_box c p=ok r \u2227 ReplyRange (.PrivateTransfer c p) r",
+     "statement_sha256": "a7cf03de36ee29c9ed8324b93183f7717ee403508567762c5b269d6f5eba007c"
+    },
+    {
+     "name": "NEU_CallDomains.withdrawal_reply_range",
+     "source": {
+      "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+      "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+     },
+     "receipt": {
+      "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+      "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+     },
+     "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+     "statement": "theorem withdrawal_reply_range (c : Common) (p : payment_relation.PoolV1WithdrawalPublicV1) :\n    \u2203 r, r1_pool_adapter.withdrawal_statement_box c p=ok r \u2227 ReplyRange (.Withdrawal c p) r",
+     "statement_sha256": "def811fe73da17426bc1e4a034afe04f3a3ecd13b273719d15d307d940f503ec"
+    }
+   ],
+   "support": [
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_AUTH_INITIALIZATION.json",
+     "sha256": "528908450f103501a3525b2330c424bafd74df8ace1de7b5402a0d23e937eb80"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_FINISH_TEMPLATE.json",
+     "sha256": "4dca2519d01ec206b60089966a8511b9da4604f4817b48188dd1dfc71f575f55"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K085/receipt.json",
+     "sha256": "843a7e0dd448631b18e019b779e44242151193002b653f24d020ed3dacb94968"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K085/stdout.log",
+     "sha256": "67c3d1039d2a3f61a58ac19b378c2155ca98aa6a42ea25f5d26408892a1665fa"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K085-NFD_native_contracts.patch",
+     "sha256": "2f0ca62de6f011e9e9ce310170e8b67db4f0a416d8675df015bdc7537a854d05"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K085-NFD_oracle.patch",
+     "sha256": "20d7efa56826743b42b837d2c5ff4a3df3adc27e8f49eb2b6e5abafe9541c4be"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K085-admission.json",
+     "sha256": "4c06f6368f45844dde2cf7d8d73ce98c59d674a577ad6d0f284f99395805fd64"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K085-frozen-identity.json",
+     "sha256": "1dbb334c728dcb9b064c87991160cef9f3be2899a1983a0c56a01975b5fe29c2"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K085-graph-check.json",
+     "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K085-inputs.json.sha256",
+     "sha256": "2c4ae37365693a9254805a6e62b540eab03da76043e11fdce2b2560608128ed4"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K085-inputs.json.xz",
+     "sha256": "4022577d5fef917d3358d2265028e7d5703d5dd1569e9c008d05a2c1ce47b587"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K085-lock-check.json",
+     "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K085-metadata-pin.json",
+     "sha256": "08d1ddc47d424464514366d85221972e601570741656746b39367f105c073598"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K085-rule16-check.json",
+     "sha256": "704b39540dafd02ca53a79e839a7bbdad4f752ad432ca972c8e83768a20f5b6b"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K085-shape.json",
+     "sha256": "874e25382f05fbe42e8237db6cc4153c83d73dad146d484daab796a33498cf6f"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K085-source-check.json",
+     "sha256": "6164c1db6fc5f63683cc29ee1151bce5920f334dfd95110c292935575043ee6a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K085.json",
+     "sha256": "8c2da34a2e143de2536170ea835da42c54e80145ec9b879ea87ef7af2b24d7a3"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K086/receipt.json",
+     "sha256": "f2461a59b2151222efdaba88753936d675241737c74fb1c48634f01cef8be66e"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K086/stdout.log",
+     "sha256": "5587c4e750ff52f5b111d545ccdf19b1789434cdf3040950f88fa3edf09db78b"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K086-NFD_native_contracts.patch",
+     "sha256": "49882e67736fd2f9a6a716e6eeda80fe7851c6c8eea4bed0271e26c46763f608"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K086-NFD_oracle.patch",
+     "sha256": "20d7efa56826743b42b837d2c5ff4a3df3adc27e8f49eb2b6e5abafe9541c4be"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K086-admission.json",
+     "sha256": "4c06f6368f45844dde2cf7d8d73ce98c59d674a577ad6d0f284f99395805fd64"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K086-frozen-identity.json",
+     "sha256": "0d98e307340fc2f9a7bc64e5285779bdcc7343ba01098c00f6c81f78f8414cb3"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K086-graph-check.json",
+     "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K086-inputs.json.sha256",
+     "sha256": "4e671754c1c1d5bc3006cbdedb27bff7b0ad1cb43e89b4a8afbac9dceb2d229a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K086-inputs.json.xz",
+     "sha256": "d56d88e6fb19e523433a033cf6bebb16ddda8d891f80b771882c8baff69a93ac"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K086-lock-check.json",
+     "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K086-metadata-pin.json",
+     "sha256": "08d1ddc47d424464514366d85221972e601570741656746b39367f105c073598"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K086-rule16-check.json",
+     "sha256": "704b39540dafd02ca53a79e839a7bbdad4f752ad432ca972c8e83768a20f5b6b"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K086-shape.json",
+     "sha256": "a968a6669c71eb7750136d616302bc75eabd81f865cae94f78ecaabbddf449f9"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K086-source-check.json",
+     "sha256": "6164c1db6fc5f63683cc29ee1151bce5920f334dfd95110c292935575043ee6a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K086.json",
+     "sha256": "5ae6af6ba12a6c1fd7be1a26c957e92c6876cbf6096ec99fce08eea7153567ec"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K091/receipt.json",
+     "sha256": "4a8bc7759323c7526664a68b07bdf98ea830d52a6f1b67c6bee055c21d361a46"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K091/stdout.log",
+     "sha256": "171dbf4aaa5f26a9aa48fb539465dea95fb09f4eb0e2766bce9f7349a3f3c24a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K091-NFD_native_contracts.patch",
+     "sha256": "40a8d39d8da18749cd2ff16a66403114351582b5e109a531074db11876dd659e"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K091-NFD_oracle.patch",
+     "sha256": "20d7efa56826743b42b837d2c5ff4a3df3adc27e8f49eb2b6e5abafe9541c4be"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K091-admission.json",
+     "sha256": "aaf54f16ca0af72e0a2bebaf247503cee985abc3423a67b4c2c5ab43ee8091cd"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K091-frozen-identity.json",
+     "sha256": "4e532b5abae34288ca20a863be983e706a0ae440f2141d74b5ace32e6c3d1dc1"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K091-graph-check.json",
+     "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K091-inputs.json.sha256",
+     "sha256": "b36308e862b8bcc9aac777d22e0973a577c95dec658d68a99bbe677aa8406d9b"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K091-inputs.json.xz",
+     "sha256": "741e49379f08c53ebe9d72dde86dd462a7dc5b54051fb07de767b800aacb8b9f"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K091-lock-check.json",
+     "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K091-metadata-pin.json",
+     "sha256": "08d1ddc47d424464514366d85221972e601570741656746b39367f105c073598"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K091-rule16-check.json",
+     "sha256": "704b39540dafd02ca53a79e839a7bbdad4f752ad432ca972c8e83768a20f5b6b"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K091-shape.json",
+     "sha256": "0f1d397902cae3bf9ed166af5b456f99e3f95715fe1dbef67eee5e6017874c0b"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K091-source-check.json",
+     "sha256": "6164c1db6fc5f63683cc29ee1151bce5920f334dfd95110c292935575043ee6a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K091.json",
+     "sha256": "15f7e42e0a390cfa66c16521bc1716663466c91cf1c3af4c037473aad74b96ca"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K092/receipt.json",
+     "sha256": "1c048781d68cce04b67caf1b3f29ef5fd5490f175f364eb47ba291c66993ba37"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K092/stdout.log",
+     "sha256": "ba76f3d3471d029327da8f154007a4dcefe58e7c0929b091e9ca7cd9959d71fa"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K092-NFD_native_contracts.patch",
+     "sha256": "9c429e399d9279702adad98707895a8b08e34df8740048fb1b0681c8f7662562"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K092-NFD_oracle.patch",
+     "sha256": "20d7efa56826743b42b837d2c5ff4a3df3adc27e8f49eb2b6e5abafe9541c4be"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K092-admission.json",
+     "sha256": "ab281decc73bcffc3ea30a3085fc1739e276f3920225cc5f83d0653a3e4ccb6c"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K092-frozen-identity.json",
+     "sha256": "22e58d2263fc04e60382a3c92ec320777fe80b50bedfed9e922d14adff3891db"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K092-graph-check.json",
+     "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K092-inputs.json.sha256",
+     "sha256": "76c45eff48acb0561369e41dd394f808439e27bab7b1a02cb18feae16315e95a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K092-inputs.json.xz",
+     "sha256": "4262dbe9328e269b5e5310cd9397e2d7d4ac933d7bb524fa3ef3d5d477bf7bc3"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K092-lock-check.json",
+     "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K092-metadata-pin.json",
+     "sha256": "08d1ddc47d424464514366d85221972e601570741656746b39367f105c073598"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K092-rule16-check.json",
+     "sha256": "704b39540dafd02ca53a79e839a7bbdad4f752ad432ca972c8e83768a20f5b6b"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K092-shape.json",
+     "sha256": "245c0be5d6750f55d20846bd46930e76090c3870b1a62f9ebd8f7ca488a45821"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K092-source-check.json",
+     "sha256": "6164c1db6fc5f63683cc29ee1151bce5920f334dfd95110c292935575043ee6a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K092.json",
+     "sha256": "4dbeedd37dc78b0a4cc3009c27c57d97352851fbe5f5e3f80cc5230f9bab2a25"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K093/receipt.json",
+     "sha256": "738e502349102f0bc8876a1224ca312898c3254e0a88a402540d24a2989fbbcc"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K093/stdout.log",
+     "sha256": "9642da3a6501f3cb3c222d4075c28a26f34fed8034e9ab5438c849add3228df3"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K093-NFD_native_contracts.patch",
+     "sha256": "6973eb1d1897f00a27fb191f422b34758f8c7c62d74eb3d9554febd051abe4b9"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K093-NFD_oracle.patch",
+     "sha256": "20d7efa56826743b42b837d2c5ff4a3df3adc27e8f49eb2b6e5abafe9541c4be"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K093-admission.json",
+     "sha256": "ab281decc73bcffc3ea30a3085fc1739e276f3920225cc5f83d0653a3e4ccb6c"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K093-frozen-identity.json",
+     "sha256": "5fda68ed74d3417c72667291d33acfa53ffe931ee55ee636504674b1353fc7eb"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K093-graph-check.json",
+     "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K093-inputs.json.sha256",
+     "sha256": "918ed9bb267efa4fc9ebd1518ff2b359554c210ec402bd912691a02cd2dc7cf9"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K093-inputs.json.xz",
+     "sha256": "44a9e677fe8f74d0ef8e7c9aaa26e597778a89dce425fb3bb8136c67e5833ec9"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K093-lock-check.json",
+     "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K093-metadata-pin.json",
+     "sha256": "08d1ddc47d424464514366d85221972e601570741656746b39367f105c073598"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K093-rule16-check.json",
+     "sha256": "704b39540dafd02ca53a79e839a7bbdad4f752ad432ca972c8e83768a20f5b6b"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K093-shape.json",
+     "sha256": "3db8ea570ee37e21b3a930945cd32d80fb532c77d3d99bcbd1a82cb9a29c2e32"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K093-source-check.json",
+     "sha256": "6164c1db6fc5f63683cc29ee1151bce5920f334dfd95110c292935575043ee6a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K093.json",
+     "sha256": "2ab3d0bade9060328342f8a3a7e9b333db68bedccff20b79ee67ec241627073e"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K094/receipt.json",
+     "sha256": "79d8e3c61b1ecab66c3f3e3fd3d310961a0184413e51141c90f3d0dfd3031978"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K094/stdout.log",
+     "sha256": "a2f55a35c4b463a82928513ba69f4c8318db90dc530adf6827cb3a6942c757a6"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K094-NFD_native_contracts.patch",
+     "sha256": "11c1a6c796e5ea6c2014f8e2f7eaf9a0aada5e02eee1f7d14e49183edf9dc76b"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K094-NFD_oracle.patch",
+     "sha256": "20d7efa56826743b42b837d2c5ff4a3df3adc27e8f49eb2b6e5abafe9541c4be"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K094-admission.json",
+     "sha256": "ab281decc73bcffc3ea30a3085fc1739e276f3920225cc5f83d0653a3e4ccb6c"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K094-frozen-identity.json",
+     "sha256": "ef54943ed4922b00e75faad7fc1820fea752d61697a0b1ed99821f7824984a48"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K094-graph-check.json",
+     "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K094-inputs.json.sha256",
+     "sha256": "90850c870e95dbb095c86fba4743ae85470803bd76fb123628e8c16c71aa9b55"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K094-inputs.json.xz",
+     "sha256": "70ac9781d8f27e2f2bc4d95d46de61fd9c458fa5a5dffd3e6a94892f18f5875f"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K094-lock-check.json",
+     "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K094-metadata-pin.json",
+     "sha256": "08d1ddc47d424464514366d85221972e601570741656746b39367f105c073598"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K094-rule16-check.json",
+     "sha256": "704b39540dafd02ca53a79e839a7bbdad4f752ad432ca972c8e83768a20f5b6b"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K094-shape.json",
+     "sha256": "cb190ab7e09b396040ec8fecacad3cc7d50a8ca40db1c02879bae43fc4639711"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K094-source-check.json",
+     "sha256": "6164c1db6fc5f63683cc29ee1151bce5920f334dfd95110c292935575043ee6a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K094.json",
+     "sha256": "e22295ddbe3dcf3d6ae7f61dedf90aa5d5c5eab0fa7dc1b163e5644ef9fecdf8"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K095/receipt.json",
+     "sha256": "5998284e670ada0d14ac1bae1d756c2b093ef2ca28e80c9d65592512ff89eb00"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K095/stdout.log",
+     "sha256": "61952bfa28a1a997360024c61ac2b75d527cda69a1875e334c1f0c6df121b11b"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K095-NFD_native_contracts.patch",
+     "sha256": "a26507ca3f51a9f35fb2525e90a20578d302c27915c9f2049e901ed981613cea"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K095-NFD_oracle.patch",
+     "sha256": "20d7efa56826743b42b837d2c5ff4a3df3adc27e8f49eb2b6e5abafe9541c4be"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K095-admission.json",
+     "sha256": "ab281decc73bcffc3ea30a3085fc1739e276f3920225cc5f83d0653a3e4ccb6c"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K095-frozen-identity.json",
+     "sha256": "0a7c8918f5abb84d0c1aebdf0b909fa674f3a6b214b042acdbe19b49624e7538"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K095-graph-check.json",
+     "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K095-inputs.json.sha256",
+     "sha256": "1a323088305d9f67e01801d17c0d65d4c0a4f5be0b942a6f81b307a9b1b9f0b6"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K095-inputs.json.xz",
+     "sha256": "d19d64fdfbd93024421e806a5204fc6132fd889ad432acc242075611bfbd387d"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K095-lock-check.json",
+     "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K095-metadata-pin.json",
+     "sha256": "08d1ddc47d424464514366d85221972e601570741656746b39367f105c073598"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K095-rule16-check.json",
+     "sha256": "704b39540dafd02ca53a79e839a7bbdad4f752ad432ca972c8e83768a20f5b6b"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K095-shape.json",
+     "sha256": "7ec02e0e41b6cda28879da1089198a7386ed4f58171b0e6986272d131c842fd0"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K095-source-check.json",
+     "sha256": "6164c1db6fc5f63683cc29ee1151bce5920f334dfd95110c292935575043ee6a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K095.json",
+     "sha256": "7085a00ad45ff53378e4c08043d429bdb897359a2153d5cfff840078d4429d16"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K096/receipt.json",
+     "sha256": "58c543945658485a42de92a643afb965b59f630136b501f9070890d71e5a6d46"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K096/stdout.log",
+     "sha256": "303fc8cc125a9fb97a9080bc2a6815522074951b07861dc656668525fb7346af"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K096-NFD_native_contracts.patch",
+     "sha256": "eac186a329698351c85e749687dd282611b740669893586fa8854959b97b129a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K096-NFD_oracle.patch",
+     "sha256": "20d7efa56826743b42b837d2c5ff4a3df3adc27e8f49eb2b6e5abafe9541c4be"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K096-admission.json",
+     "sha256": "ab281decc73bcffc3ea30a3085fc1739e276f3920225cc5f83d0653a3e4ccb6c"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K096-frozen-identity.json",
+     "sha256": "07534fb6b8b7289d4873db46b29d57aff29950a9de711c8a9b18037e61fe6101"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K096-graph-check.json",
+     "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K096-inputs.json.sha256",
+     "sha256": "c220c9e1ed9c4218d40e6e0b3c4a2c63051056ef9d36ed6c9a64f214bb63cfc2"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K096-inputs.json.xz",
+     "sha256": "13088278d3255cb6da11114271d255281c129df8edc6030d806fda1c9a760c25"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K096-lock-check.json",
+     "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K096-metadata-pin.json",
+     "sha256": "08d1ddc47d424464514366d85221972e601570741656746b39367f105c073598"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K096-rule16-check.json",
+     "sha256": "704b39540dafd02ca53a79e839a7bbdad4f752ad432ca972c8e83768a20f5b6b"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K096-shape.json",
+     "sha256": "1719375b1b5e797355e0e78f8733001a9e692450e6388a7da7e0e92c4b4fe4a4"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K096-source-check.json",
+     "sha256": "6164c1db6fc5f63683cc29ee1151bce5920f334dfd95110c292935575043ee6a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K096.json",
+     "sha256": "bef8c20ad67f073eae3e59e17d3c64cb5c3cd49ec404330f3217c0af00e19fcb"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K097/receipt.json",
+     "sha256": "04f2a77484871de33fe40b3a7da7b20d3de85b3c90ad9d41c90651da2997108d"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K097/stdout.log",
+     "sha256": "8428de916a0f237070c79b59c632b58f7a234fb67973ab5df2f89bd5b65e03cb"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K097-NFD_native_contracts.patch",
+     "sha256": "f1281b4384344d691921d659357607e22783a514e01138d1aa4a5d641d430200"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K097-NFD_oracle.patch",
+     "sha256": "20d7efa56826743b42b837d2c5ff4a3df3adc27e8f49eb2b6e5abafe9541c4be"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K097-admission.json",
+     "sha256": "ab281decc73bcffc3ea30a3085fc1739e276f3920225cc5f83d0653a3e4ccb6c"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K097-frozen-identity.json",
+     "sha256": "2aeec4b531ed71c4255790997158fa01f1732bad6cf5d7438baddd35eaf7017b"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K097-graph-check.json",
+     "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K097-inputs.json.sha256",
+     "sha256": "fdec66a0d8e9690ecf62469a29aa8d1cda46c389f3c0e08346ae29c7b37869b4"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K097-inputs.json.xz",
+     "sha256": "6d1f854675d0de46e72fe245158cc0ede8b9fe2498e7da5c90b3dc2d713bdd00"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K097-lock-check.json",
+     "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K097-metadata-pin.json",
+     "sha256": "08d1ddc47d424464514366d85221972e601570741656746b39367f105c073598"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K097-rule16-check.json",
+     "sha256": "704b39540dafd02ca53a79e839a7bbdad4f752ad432ca972c8e83768a20f5b6b"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K097-shape.json",
+     "sha256": "5ac560daeffe924219af59bdb79ad8a8645d0f819019adf87dfc8ed0af3109f5"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K097-source-check.json",
+     "sha256": "6164c1db6fc5f63683cc29ee1151bce5920f334dfd95110c292935575043ee6a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K097.json",
+     "sha256": "13b6f3dedf70e55c49612d61a612416bcd8b2d0a1314dfe50635184fe5e80f09"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K098/receipt.json",
+     "sha256": "4e5786ff8f757c71716e691e4f643d1cce0d2a3d513886d5a089fbadf4e9776e"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K098/stdout.log",
+     "sha256": "1f875c7154d33019236929d6736abbacb4098b0ffc93df00715f0b90467cc7ca"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K098-NFD_native_contracts.patch",
+     "sha256": "40879bab36167eb1633f1d1be699a4ea7b5db66e34e045846f5028ec70d3e5d5"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K098-NFD_oracle.patch",
+     "sha256": "20d7efa56826743b42b837d2c5ff4a3df3adc27e8f49eb2b6e5abafe9541c4be"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K098-admission.json",
+     "sha256": "ab281decc73bcffc3ea30a3085fc1739e276f3920225cc5f83d0653a3e4ccb6c"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K098-frozen-identity.json",
+     "sha256": "3e0c1be4e60eba68bddf8278bc74355c9b2d53ed8de3021b7c189e6d23fa9e4a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K098-graph-check.json",
+     "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K098-inputs.json.sha256",
+     "sha256": "b71d154752336b7c72ad2c7ea7a8f5815987246aed6a39da8a19eab206a945b6"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K098-inputs.json.xz",
+     "sha256": "fd86c3bc8391907198fecbe509a9e93fae924212f012d9d5518eb1a7e1849def"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K098-lock-check.json",
+     "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K098-metadata-pin.json",
+     "sha256": "08d1ddc47d424464514366d85221972e601570741656746b39367f105c073598"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K098-rule16-check.json",
+     "sha256": "704b39540dafd02ca53a79e839a7bbdad4f752ad432ca972c8e83768a20f5b6b"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K098-shape.json",
+     "sha256": "c9847a61703996135d4fc108a2a7dbffb64f81602729ed5d1b95d5e4c09c3c6c"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K098-source-check.json",
+     "sha256": "6164c1db6fc5f63683cc29ee1151bce5920f334dfd95110c292935575043ee6a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K098.json",
+     "sha256": "173fbc0ba4373732868a14727c7e2658fa9c97a1062747f99d415058863d79d7"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K099/receipt.json",
+     "sha256": "1bbffe5413ffd862ad3517b07f112d8b8ca529f8d6e9adcd8a2afbef3542a80b"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K099/stdout.log",
+     "sha256": "e479d0fa601ba022d3d7592ffc7855849a424b208103d37c5dc59561beb6b845"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K099-NFD_native_contracts.patch",
+     "sha256": "c932b03a5a579a300ce57c18cb6882e390c79f88c3fba59013800e0c42398327"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K099-NFD_oracle.patch",
+     "sha256": "20d7efa56826743b42b837d2c5ff4a3df3adc27e8f49eb2b6e5abafe9541c4be"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K099-admission.json",
+     "sha256": "ab281decc73bcffc3ea30a3085fc1739e276f3920225cc5f83d0653a3e4ccb6c"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K099-frozen-identity.json",
+     "sha256": "b2b3a95dbb0d93d57b81e3275471ec23fb81efcc31c3cb07c6ce201a4b8fec8d"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K099-graph-check.json",
+     "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K099-inputs.json.sha256",
+     "sha256": "7a18646bce4374a42d5baaeb8c28859a3d867807ada92a32eab0ee7541e59b94"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K099-inputs.json.xz",
+     "sha256": "1b42b84a0d2f3bdccf2e0f87d221f9dd0fab4b74c9337ec650c1299f3f3d48f2"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K099-lock-check.json",
+     "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K099-metadata-pin.json",
+     "sha256": "08d1ddc47d424464514366d85221972e601570741656746b39367f105c073598"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K099-rule16-check.json",
+     "sha256": "704b39540dafd02ca53a79e839a7bbdad4f752ad432ca972c8e83768a20f5b6b"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K099-shape.json",
+     "sha256": "e559c6f4983c34fe62f012c9defef713c94cfe8aa3cf9f7d1798774bcf86d3ef"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K099-source-check.json",
+     "sha256": "6164c1db6fc5f63683cc29ee1151bce5920f334dfd95110c292935575043ee6a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K099.json",
+     "sha256": "8db3c22978200f4d17a9655fd528528a33a30d293d5ec643b3a29d10543fb167"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K100/receipt.json",
+     "sha256": "72e892517730daeddcd1c667f2dbc3b8d42d4bc9e5a5ca6616e9b6444530ef5b"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K100/stdout.log",
+     "sha256": "2375e04b94df97b4602b8f298168e4aa78cea901ec76780a81de689cd934714a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K100-NFD_native_contracts.patch",
+     "sha256": "e9674429ec9d6cfa6bce77fc124f8f7341b819b4aee0f06c7cf845445fe5cc55"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K100-NFD_oracle.patch",
+     "sha256": "20d7efa56826743b42b837d2c5ff4a3df3adc27e8f49eb2b6e5abafe9541c4be"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K100-admission.json",
+     "sha256": "aaf54f16ca0af72e0a2bebaf247503cee985abc3423a67b4c2c5ab43ee8091cd"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K100-frozen-identity.json",
+     "sha256": "668291f2299d0d8357eac6dd93317b82db76a8ea354e56d066c8fa99458e7493"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K100-graph-check.json",
+     "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K100-inputs.json.sha256",
+     "sha256": "dd0000eba076d0bf212dd320266ec255e409e6cec9e68cb384fd7123c863ffc8"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K100-inputs.json.xz",
+     "sha256": "bd4becaf9a15b1ac145e23637d9953b03426ed0a9177b6a5e5f8bd2ab13c8947"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K100-lock-check.json",
+     "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K100-metadata-pin.json",
+     "sha256": "08d1ddc47d424464514366d85221972e601570741656746b39367f105c073598"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K100-rule16-check.json",
+     "sha256": "704b39540dafd02ca53a79e839a7bbdad4f752ad432ca972c8e83768a20f5b6b"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K100-shape.json",
+     "sha256": "42d12aaed8192030238e1b5ea5732fb9b32b3b8233bf503368e824d9dd2ec73e"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K100-source-check.json",
+     "sha256": "6164c1db6fc5f63683cc29ee1151bce5920f334dfd95110c292935575043ee6a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K100.json",
+     "sha256": "f84d16029c652477093a9112cb3bf184fb6d2b9c9de60732b890a4e3d2fc3d32"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K101/receipt.json",
+     "sha256": "a17e8e8a989d558466f0b882a971d3f16159ad22d4236e72af5efd3c0de6362a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K101/stdout.log",
+     "sha256": "80a8c9ee35590d75f03f9f4e45a235e9d1502e6127a7d34307185d09dfea0a28"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K101-NFD_native_contracts.patch",
+     "sha256": "36ea19baf5894d01a5c66df72a4733f09f08b7b6b0409cacd1b63c1586ddd93f"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K101-NFD_oracle.patch",
+     "sha256": "20d7efa56826743b42b837d2c5ff4a3df3adc27e8f49eb2b6e5abafe9541c4be"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K101-admission.json",
+     "sha256": "aaf54f16ca0af72e0a2bebaf247503cee985abc3423a67b4c2c5ab43ee8091cd"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K101-frozen-identity.json",
+     "sha256": "a60a7ee43c3a28bb8fdf56c3e6ce811264fc18aaa884eb20c1300f6f6516976f"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K101-graph-check.json",
+     "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K101-inputs.json.sha256",
+     "sha256": "11b9e6821d28bedca74c5ffe5496bf7383d4a22b9328abd2d7c7c1f781e1ea1c"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K101-inputs.json.xz",
+     "sha256": "2c14eda4b9e97a49100c50b7430c22a7126068dc8abaf1f73e68014d36682c86"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K101-lock-check.json",
+     "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K101-metadata-pin.json",
+     "sha256": "08d1ddc47d424464514366d85221972e601570741656746b39367f105c073598"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K101-rule16-check.json",
+     "sha256": "704b39540dafd02ca53a79e839a7bbdad4f752ad432ca972c8e83768a20f5b6b"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K101-shape.json",
+     "sha256": "41b759d59f00c67b70c9229b3678db6ad72ae9273a310e629a3661a0ce3297e8"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K101-source-check.json",
+     "sha256": "6164c1db6fc5f63683cc29ee1151bce5920f334dfd95110c292935575043ee6a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K101.json",
+     "sha256": "c4798d7d8af33ac573da45216978282c00144c5989ccb12ff1cf8f2dad3e5acb"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K102/receipt.json",
+     "sha256": "604597ba5a4666966db9d44bab4ccec4e51eadd77517fc42e8537dd182335d2e"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K102/stdout.log",
+     "sha256": "df84a05499148845e7e050e5422f9c03bd79be5105fa79f228489c8725937bde"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K102-NFD_native_contracts.patch",
+     "sha256": "0563fd87153f2e06333d9971d45de2d0b9aeecf263f8cb1a5d4cc2c95e3f3255"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K102-NFD_oracle.patch",
+     "sha256": "20d7efa56826743b42b837d2c5ff4a3df3adc27e8f49eb2b6e5abafe9541c4be"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K102-admission.json",
+     "sha256": "aaf54f16ca0af72e0a2bebaf247503cee985abc3423a67b4c2c5ab43ee8091cd"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K102-frozen-identity.json",
+     "sha256": "021df1c1fd01b75aec3000e9af265bce943d37e6682bdbfe6306050abf966080"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K102-graph-check.json",
+     "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K102-inputs.json.sha256",
+     "sha256": "77a05829aa2b9fcdd7d5cfc2384f9f94b90ad616c8fa93888fdfb577ddbd5378"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K102-inputs.json.xz",
+     "sha256": "ae440ebd7bd561ce9d9a8b7f1d60370b701a8bc90ba1c1ac302612b59271c7fb"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K102-lock-check.json",
+     "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K102-metadata-pin.json",
+     "sha256": "08d1ddc47d424464514366d85221972e601570741656746b39367f105c073598"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K102-rule16-check.json",
+     "sha256": "704b39540dafd02ca53a79e839a7bbdad4f752ad432ca972c8e83768a20f5b6b"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K102-shape.json",
+     "sha256": "e6e144e305037a064d6154e964bc59f89ac103719ae622befe79c9393f9eb49f"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K102-source-check.json",
+     "sha256": "6164c1db6fc5f63683cc29ee1151bce5920f334dfd95110c292935575043ee6a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K102.json",
+     "sha256": "fd4fa5b616ecf369ef4b0479f656a1baa48cfdf7015883c6d36d69a7adfe0c6e"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K103/receipt.json",
+     "sha256": "eece1e773f8ec58fc400291f6164a55555816e30c7fff16abd43069e4b52b3b6"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K103/stdout.log",
+     "sha256": "313d8a5cc5c9b7c90f633ef9ebde574efd43ab34ae7fde60ea6835207dcc294a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K103-NFD_native_contracts.patch",
+     "sha256": "842b4ced98e2f6e11ef87bb967f14f6abaa21a6019a0fb3d17643fe11ce5c1a5"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K103-NFD_oracle.patch",
+     "sha256": "20d7efa56826743b42b837d2c5ff4a3df3adc27e8f49eb2b6e5abafe9541c4be"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K103-admission.json",
+     "sha256": "ab281decc73bcffc3ea30a3085fc1739e276f3920225cc5f83d0653a3e4ccb6c"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K103-frozen-identity.json",
+     "sha256": "0516dd3b2784c6543e3d8093281f4ea5c4354d0ad158ba874dc0a96dcecc5155"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K103-graph-check.json",
+     "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K103-inputs.json.sha256",
+     "sha256": "a7bdc6ad841cf358db71e3705f56286c1bc641a5960f9a7c5012207ecd878b93"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K103-inputs.json.xz",
+     "sha256": "142c309e5afe07674981623283b083aa4c99edf7b6ce779dcc4331bd53840335"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K103-lock-check.json",
+     "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K103-metadata-pin.json",
+     "sha256": "08d1ddc47d424464514366d85221972e601570741656746b39367f105c073598"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K103-rule16-check.json",
+     "sha256": "704b39540dafd02ca53a79e839a7bbdad4f752ad432ca972c8e83768a20f5b6b"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K103-shape.json",
+     "sha256": "eb550c8b02850b0f3fe1e2bc45c15545f8c9a14786a5c8bfc26f47d8bd5e339e"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K103-source-check.json",
+     "sha256": "6164c1db6fc5f63683cc29ee1151bce5920f334dfd95110c292935575043ee6a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K103.json",
+     "sha256": "39cc297f11220d0265a5ed2cb39f63bd4145b5ef111bf0070291938c740cfce3"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K104/receipt.json",
+     "sha256": "601b2f9105be9a0307f50881155e77cbced86aac8c18ec889e46f3ddd6695601"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K104/stdout.log",
+     "sha256": "482a037d0329a3f15b2cb0cf3930282b693bbcc0eb245f1b74f537b8bc0d12d2"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K104-NFD_native_contracts.patch",
+     "sha256": "d0789b4c089fdfd0a5b7691123e243d3f65d81247d14e639213b96143b5c92a5"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K104-NFD_oracle.patch",
+     "sha256": "20d7efa56826743b42b837d2c5ff4a3df3adc27e8f49eb2b6e5abafe9541c4be"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K104-admission.json",
+     "sha256": "ab281decc73bcffc3ea30a3085fc1739e276f3920225cc5f83d0653a3e4ccb6c"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K104-frozen-identity.json",
+     "sha256": "69fa9164e44cd8c5991e848652a14f53d2e29f5c9ace4e782eb6e8ebb1292ded"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K104-graph-check.json",
+     "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K104-inputs.json.sha256",
+     "sha256": "61d0b23886bb7ef3d51b4db1847ee4ab651112adf750e21adb7a4228b2950f0d"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K104-inputs.json.xz",
+     "sha256": "392a941940f3033204974976777f2d2d0c2eb508b55d48dfe28b904410bbf612"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K104-lock-check.json",
+     "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K104-metadata-pin.json",
+     "sha256": "08d1ddc47d424464514366d85221972e601570741656746b39367f105c073598"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K104-rule16-check.json",
+     "sha256": "704b39540dafd02ca53a79e839a7bbdad4f752ad432ca972c8e83768a20f5b6b"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K104-shape.json",
+     "sha256": "72d89314bc6b06f932e7a0ab8f0c8f01a0550e65c879c078150c998dd63e9a7f"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K104-source-check.json",
+     "sha256": "6164c1db6fc5f63683cc29ee1151bce5920f334dfd95110c292935575043ee6a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K104.json",
+     "sha256": "8a2bc3a1c290c76ca014d4eb59409ced6d8b6cc046255a305c06a1973957f9bd"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K105/receipt.json",
+     "sha256": "5556edf373fa90880290b301b220835be17ad4cbc79f0398457cb3e49cf51ca2"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K105/stdout.log",
+     "sha256": "dbb73455098e4758df475cfa4fcc1ca48f1bf1d034af545f1119a65964156fbf"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K105-NFD_native_contracts.patch",
+     "sha256": "a32771aa0917d57916b3e38061f4642557f4d4c0dfe62894545c4b95081e59c6"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K105-NFD_oracle.patch",
+     "sha256": "20d7efa56826743b42b837d2c5ff4a3df3adc27e8f49eb2b6e5abafe9541c4be"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K105-admission.json",
+     "sha256": "ab281decc73bcffc3ea30a3085fc1739e276f3920225cc5f83d0653a3e4ccb6c"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K105-frozen-identity.json",
+     "sha256": "11494a7ea8b27eb988af8bf336a3e3f7fa46e8f92eca933af06252572c65e5ff"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K105-graph-check.json",
+     "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K105-inputs.json.sha256",
+     "sha256": "381b38e601690d6a41ae3aadd00f112f1a4cbaaf22a8071a9f17caa93f5385a8"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K105-inputs.json.xz",
+     "sha256": "baa7cf8e968b33ed129ed4f87abb98281149b4eeff417cd40b62512e7f8b4f95"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K105-lock-check.json",
+     "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K105-metadata-pin.json",
+     "sha256": "08d1ddc47d424464514366d85221972e601570741656746b39367f105c073598"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K105-rule16-check.json",
+     "sha256": "704b39540dafd02ca53a79e839a7bbdad4f752ad432ca972c8e83768a20f5b6b"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K105-shape.json",
+     "sha256": "0dbdfce7fc64b43492ef6fb05ad87f7ca02c90f8410cd13fdc02aea7bab12007"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K105-source-check.json",
+     "sha256": "6164c1db6fc5f63683cc29ee1151bce5920f334dfd95110c292935575043ee6a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K105.json",
+     "sha256": "0145b275dac5c7e1c43348d653f7917ffce7332b1d817953fd8d342afa7304be"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K106/receipt.json",
+     "sha256": "490be8ff9afe92bfa1792ef69c71e82760084392dfa306474556ed7e02883ac5"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K106/stdout.log",
+     "sha256": "25dea289bf907b446ef855ceb308790403510cb1b959aafa4bd61f5178f8c104"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K106-NFD_native_contracts.patch",
+     "sha256": "be63cc5e8ba5d35099fef0c5de55806011956f8a1da4a4f001ce8cbe64d56d1c"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K106-NFD_oracle.patch",
+     "sha256": "20d7efa56826743b42b837d2c5ff4a3df3adc27e8f49eb2b6e5abafe9541c4be"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K106-admission.json",
+     "sha256": "ab281decc73bcffc3ea30a3085fc1739e276f3920225cc5f83d0653a3e4ccb6c"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K106-frozen-identity.json",
+     "sha256": "649040644a0e4b100491602570d2d3ef2fa0a357bb258cefbc4a14dced0297d0"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K106-graph-check.json",
+     "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K106-inputs.json.sha256",
+     "sha256": "39fac90bf971c13969a447b6f66921582a123f638d96ef6c9012e09b16669ff1"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K106-inputs.json.xz",
+     "sha256": "bed796d66995ff8988082ae71df34241dd3511f95c5fdabccd77a30b35d8145d"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K106-lock-check.json",
+     "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K106-metadata-pin.json",
+     "sha256": "08d1ddc47d424464514366d85221972e601570741656746b39367f105c073598"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K106-rule16-check.json",
+     "sha256": "704b39540dafd02ca53a79e839a7bbdad4f752ad432ca972c8e83768a20f5b6b"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K106-shape.json",
+     "sha256": "8cd6c409c91f1bc128c0f539fd00af0a998311b06edf2ac025fca868a3069e0f"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K106-source-check.json",
+     "sha256": "6164c1db6fc5f63683cc29ee1151bce5920f334dfd95110c292935575043ee6a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K106.json",
+     "sha256": "5d82719b8d724f15ec2ddcd35af992a5ec827f970e21a762866ea19bcdd02c58"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K107/receipt.json",
+     "sha256": "910dbaeac32e7d71719684700483647d0e8bf6a594385809c217abc0c8fcce1e"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K107/stdout.log",
+     "sha256": "859639927d7773545346f7927fa68de1a4513e418d5040742c51ce080aece5ed"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K107-NFD_native_contracts.patch",
+     "sha256": "70664bdc3e5f31ee2d01c64b3cf847af4247656951e4018cf1ae51bea7fe7190"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K107-NFD_oracle.patch",
+     "sha256": "20d7efa56826743b42b837d2c5ff4a3df3adc27e8f49eb2b6e5abafe9541c4be"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K107-admission.json",
+     "sha256": "ab281decc73bcffc3ea30a3085fc1739e276f3920225cc5f83d0653a3e4ccb6c"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K107-frozen-identity.json",
+     "sha256": "db3451ad65c97f97d2b3daf01f4409fdfc238356b94d5180c57eb7a769655b21"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K107-graph-check.json",
+     "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K107-inputs.json.sha256",
+     "sha256": "9b93081a0635abb2890ef457d9f7b8cd8c3143c95af26406a887b0b303dc491a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K107-inputs.json.xz",
+     "sha256": "f3d42dc2731b3c7476e4ca58406b1984b882a455b276522d9dc684b581cc8637"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K107-lock-check.json",
+     "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K107-metadata-pin.json",
+     "sha256": "08d1ddc47d424464514366d85221972e601570741656746b39367f105c073598"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K107-rule16-check.json",
+     "sha256": "704b39540dafd02ca53a79e839a7bbdad4f752ad432ca972c8e83768a20f5b6b"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K107-shape.json",
+     "sha256": "d02da95b62e41f594c47008137fb20495eff08b21e14be55b2ca15ec1cbffc66"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K107-source-check.json",
+     "sha256": "6164c1db6fc5f63683cc29ee1151bce5920f334dfd95110c292935575043ee6a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K107.json",
+     "sha256": "41189ab05d3056efc9ea6998c29b532b671189229b0ce828620be344f6eafdf1"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K108/receipt.json",
+     "sha256": "31a3537e15b92b84764dcf023194b796e4adab03bff73ff87da5268ace31dd27"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K108/stdout.log",
+     "sha256": "51da5c8a6631b90b78de0e9e08cb6c4ef4acb900ef3851c55c26c3a71bd8de53"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K108-NFD_native_contracts.patch",
+     "sha256": "17c77211c5b7ba83bf4035cab0709d601ba8728c34cc7399d40829d2a436bdb7"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K108-NFD_oracle.patch",
+     "sha256": "20d7efa56826743b42b837d2c5ff4a3df3adc27e8f49eb2b6e5abafe9541c4be"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K108-admission.json",
+     "sha256": "ab281decc73bcffc3ea30a3085fc1739e276f3920225cc5f83d0653a3e4ccb6c"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K108-frozen-identity.json",
+     "sha256": "960fd04e6601826d440258aa1e915757659e27c76d8c68fe89fb436cfab7f260"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K108-graph-check.json",
+     "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K108-inputs.json.sha256",
+     "sha256": "016db76bf98a1618ebfceb34cb0e5e2683e2ec934de33367655ea3fc2b847f33"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K108-inputs.json.xz",
+     "sha256": "aa097606c98cd1892342368799b4facf6371cbccd0839c8acce785c7a33b3b89"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K108-lock-check.json",
+     "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K108-metadata-pin.json",
+     "sha256": "08d1ddc47d424464514366d85221972e601570741656746b39367f105c073598"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K108-rule16-check.json",
+     "sha256": "704b39540dafd02ca53a79e839a7bbdad4f752ad432ca972c8e83768a20f5b6b"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K108-shape.json",
+     "sha256": "90bd471d9ccbd27e700830174a0d8e6cebbcbdbbf2c1853a846c57ba3c3bfcf2"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K108-source-check.json",
+     "sha256": "6164c1db6fc5f63683cc29ee1151bce5920f334dfd95110c292935575043ee6a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K108.json",
+     "sha256": "7c96527f6f0d4f036a3d952fa2cc52e4cbc737a4dd0323d21c7168208baf3428"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K109/receipt.json",
+     "sha256": "3ab38b15ebe7825d15f9e6307e9cbc3bc8fd25c1af8cf9f811ff73abbbe2d5a4"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K109/stdout.log",
+     "sha256": "f4ad7848a485df2c91d3318a0ca5df8f1b50ebaae18e45943be1df3b7ad61694"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K109-NFD_native_contracts.patch",
+     "sha256": "f44a39acea3aa15c6e1678eb2bbf74c980356784c52e9c1d4bddfb3d3fecebf2"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K109-NFD_oracle.patch",
+     "sha256": "20d7efa56826743b42b837d2c5ff4a3df3adc27e8f49eb2b6e5abafe9541c4be"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K109-admission.json",
+     "sha256": "ab281decc73bcffc3ea30a3085fc1739e276f3920225cc5f83d0653a3e4ccb6c"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K109-frozen-identity.json",
+     "sha256": "56553378f94ad16c63aad2d10dd2dd3a2dc570e5492451edab494497bf49b968"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K109-graph-check.json",
+     "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K109-inputs.json.sha256",
+     "sha256": "e61bf629453fbb8595e10c415815fc9b9c90839e3f9d6f836a2e5618f9915022"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K109-inputs.json.xz",
+     "sha256": "59073e4858d89927a027b30390f3e6c448a59cc02ec31b2db36995d8dec1514d"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K109-lock-check.json",
+     "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K109-metadata-pin.json",
+     "sha256": "08d1ddc47d424464514366d85221972e601570741656746b39367f105c073598"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K109-rule16-check.json",
+     "sha256": "704b39540dafd02ca53a79e839a7bbdad4f752ad432ca972c8e83768a20f5b6b"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K109-shape.json",
+     "sha256": "fd5214ebf6d748691a4dff792ccefac9599bb05e8dec8d1edb1f29488a5efe83"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K109-source-check.json",
+     "sha256": "6164c1db6fc5f63683cc29ee1151bce5920f334dfd95110c292935575043ee6a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K109.json",
+     "sha256": "5d1387a3cb5a961426742a4118c98e04917fde6443f3bae5cf10020d0085161e"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K110/receipt.json",
+     "sha256": "a0e7b70b74f4a445017b36d9526e2b59d5425c9ddf62043f11fb308c4bbf881a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K110/stdout.log",
+     "sha256": "271bcef72a4bd5eb9d81637ebcdd8fa8f0633ad00bbe45ac7768218a5794ec4f"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K110-NFD_native_contracts.patch",
+     "sha256": "919d7d35b07c8dab3431a6ceeb1e948246835574f8661813b25f09586bb49102"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K110-NFD_oracle.patch",
+     "sha256": "20d7efa56826743b42b837d2c5ff4a3df3adc27e8f49eb2b6e5abafe9541c4be"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K110-admission.json",
+     "sha256": "ab281decc73bcffc3ea30a3085fc1739e276f3920225cc5f83d0653a3e4ccb6c"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K110-frozen-identity.json",
+     "sha256": "31350bc640a47180177a6e7e20b10812cdbb8652139dbbad8e08f39744639f32"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K110-graph-check.json",
+     "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K110-inputs.json.sha256",
+     "sha256": "5259fe9e06fa209e00ce7f71b8afe64dcda7c5f2cde2586f37cd87f61d2c668d"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K110-inputs.json.xz",
+     "sha256": "54b1b41cade3ece7bfe5e1e02ee94fc85210ca89802a65e6f42bcf4496c96016"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K110-lock-check.json",
+     "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K110-metadata-pin.json",
+     "sha256": "08d1ddc47d424464514366d85221972e601570741656746b39367f105c073598"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K110-rule16-check.json",
+     "sha256": "704b39540dafd02ca53a79e839a7bbdad4f752ad432ca972c8e83768a20f5b6b"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K110-shape.json",
+     "sha256": "6ca52e63ccfe47ba71464ea7d3af4b3f14b0762fd6bf10f2f4f00ddc77c94e8a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K110-source-check.json",
+     "sha256": "6164c1db6fc5f63683cc29ee1151bce5920f334dfd95110c292935575043ee6a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K110.json",
+     "sha256": "296b54d5db3f9903eb8a7c88afbb4d68b62c9634886b144625ea47f0caf1ccec"
+    }
+   ],
+   "required_obligations": [
+    "call-domain:programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement->programs/r1-cost-probe/src/r1_pool_adapter.rs::asq8_common",
+    "call-domain:programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement->programs/r1-cost-probe/src/r1_pool_adapter.rs::transfer_statement_box",
+    "call-domain:programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement->programs/r1-cost-probe/src/r1_pool_adapter.rs::withdrawal_statement_box",
+    "external:TX2:224:3",
+    "external:TX2:224:4",
+    "external:TX2:224:5",
+    "external:TX2:224:6"
+   ],
+   "edges": [
+    "programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement -> programs/r1-cost-probe/src/r1_pool_adapter.rs::asq8_common",
+    "programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement -> programs/r1-cost-probe/src/r1_pool_adapter.rs::transfer_statement_box",
+    "programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement -> programs/r1-cost-probe/src/r1_pool_adapter.rs::withdrawal_statement_box"
+   ],
+   "call_domain_certificates": {
+    "programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement -> programs/r1-cost-probe/src/r1_pool_adapter.rs::asq8_common": {
+     "subject": "programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement -> programs/r1-cost-probe/src/r1_pool_adapter.rs::asq8_common",
+     "classification": "source-ordered checked-add/asset prefix, same immutable Auth/Candidate; same owned common Box into selected raw payment constructor; complete child reply and ordered validator effects",
+     "selected_callee_claims": [
+      "NFD::programs/r1-cost-probe/src/r1_pool_adapter.rs::asq8_common"
+     ],
+     "inner_names_discharged": [
+      "programs/r1-cost-probe/src/r1_pool_adapter.rs::asq8_common.PacketDomain",
+      "programs/r1-cost-probe/src/r1_pool_adapter.rs::asq8_common.PhysicalInterpretation"
+     ],
+     "domain_theorems": [
+      {
+       "name": "NEU_ReconstructCore.result_state_effects",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L010/NEU_SOURCE.lean.txt",
+        "sha256": "701ef8712be86603db6f7ff292818cf1e5c4011d60978421d71291512de60d35"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L010/receipt.json",
+        "sha256": "2958156692b0f86b988c15709fb0dd743ef44b169886cf093ac05527f9f48ab1"
+       },
+       "snapshot_path": "NEU_generated/NEU_ReconstructCore.lean",
+       "statement": "theorem result_state_effects {State : Type} (request : Request) (a : Auth)\n    (c : Candidate) (state : State) :\n    run request a c state =\n      (r1_pool_adapter.reconstruct_asq8_statement request a c,state,trace request a c)",
+       "statement_sha256": "42beca463c43c32d5f9896723a53bb385754046db9de712a1064e3f8d9c88ca5"
+      },
+      {
+       "name": "NEU_ReconstructAdopted.result_state_effects",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L011/NEU_SOURCE.lean.txt",
+        "sha256": "8bfd87fa8435bb1a4eb5a129c26167f2a009d09c72c386e114a8239968ec916f"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L011/receipt.json",
+        "sha256": "24288180ee8ccca4d6754c9dfdecd5b2e21c9364dc7ab2a56d1ae5a080d5e676"
+       },
+       "snapshot_path": "NEU_generated/NEU_ReconstructAdopted.lean",
+       "statement": "theorem result_state_effects {State : Type} (request : Request) (a : Auth)\n    (c : Candidate) (state : State) :\n    run request a c state =\n    (AspisR1.JHf_ReconstructionSlot.source request a c,state,\n      NEU_ReconstructCore.trace (toRequest request) (toAuthenticatedAsq8Accounts a)\n        (toPoolV1PairVerifiedAfterstateV1 c))",
+       "statement_sha256": "834f770043a7ec908dc0b791767c330e664cba8afd9fbe0849dfc08b1dba29af"
+      },
+      {
+       "name": "NEU_CallDomains.reached_domains",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem reached_domains (request : Request) (a : Auth) (c : Candidate) :\n    (\u2200 a' c', Call.common a' c' \u2208 calls request a c \u2192 a'=a \u2227 c'=c) \u2227\n    (\u2200 d p, Call.transfer d p \u2208 calls request a c \u2192\n      d=common a c \u2227 request.public=.PrivateTransfer p) \u2227\n    (\u2200 d p, Call.withdrawal d p \u2208 calls request a c \u2192\n      d=common a c \u2227 request.public=.Withdrawal p)",
+       "statement_sha256": "348e7ad7710b1e21dbd9664e78837d01140b2dc4a7237d7a4fd9889e791235b1"
+      },
+      {
+       "name": "NEU_CallDomains.common_packet",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem common_packet (a : Auth) (c : Candidate) :\n    NED_ReconstructCarriers.toRawCommon\n      (NED_ReconstructCarriers.fromRawCommon (common a c)) = common a c",
+       "statement_sha256": "a608c9f5ae8ec6e23e1a79da590c74a5a313f822d72600eb8dd1033dfcbd9b7b"
+      },
+      {
+       "name": "NEU_CallDomains.transfer_packet",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem transfer_packet (c : Common) (p : payment_relation.PoolV1PrivateTransferPublicV1) :\n    NED_ReconstructCarriers.toRaw\n      (NED_ReconstructCarriers.fromRaw (.PrivateTransfer c p)) = .PrivateTransfer c p",
+       "statement_sha256": "8c2a33fdf8c4cb46aadb1a880d967b48e6308a29b093aef3c7e47bacad1b32f4"
+      },
+      {
+       "name": "NEU_CallDomains.withdrawal_packet",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem withdrawal_packet (c : Common) (p : payment_relation.PoolV1WithdrawalPublicV1) :\n    NED_ReconstructCarriers.toRaw\n      (NED_ReconstructCarriers.fromRaw (.Withdrawal c p)) = .Withdrawal c p",
+       "statement_sha256": "247ddead523dee047eb56fb9025bfa9237ce6c0367ae7079bb640d7caded6bf9"
+      },
+      {
+       "name": "NEU_CallDomains.transfer_reply_range",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem transfer_reply_range (c : Common) (p : payment_relation.PoolV1PrivateTransferPublicV1) :\n    \u2203 r, r1_pool_adapter.transfer_statement_box c p=ok r \u2227 ReplyRange (.PrivateTransfer c p) r",
+       "statement_sha256": "a7cf03de36ee29c9ed8324b93183f7717ee403508567762c5b269d6f5eba007c"
+      },
+      {
+       "name": "NEU_CallDomains.withdrawal_reply_range",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem withdrawal_reply_range (c : Common) (p : payment_relation.PoolV1WithdrawalPublicV1) :\n    \u2203 r, r1_pool_adapter.withdrawal_statement_box c p=ok r \u2227 ReplyRange (.Withdrawal c p) r",
+       "statement_sha256": "def811fe73da17426bc1e4a034afe04f3a3ecd13b273719d15d307d940f503ec"
+      }
+     ],
+     "physical_theorems": [
+      {
+       "name": "NEU_ReconstructCore.result_state_effects",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L010/NEU_SOURCE.lean.txt",
+        "sha256": "701ef8712be86603db6f7ff292818cf1e5c4011d60978421d71291512de60d35"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L010/receipt.json",
+        "sha256": "2958156692b0f86b988c15709fb0dd743ef44b169886cf093ac05527f9f48ab1"
+       },
+       "snapshot_path": "NEU_generated/NEU_ReconstructCore.lean",
+       "statement": "theorem result_state_effects {State : Type} (request : Request) (a : Auth)\n    (c : Candidate) (state : State) :\n    run request a c state =\n      (r1_pool_adapter.reconstruct_asq8_statement request a c,state,trace request a c)",
+       "statement_sha256": "42beca463c43c32d5f9896723a53bb385754046db9de712a1064e3f8d9c88ca5"
+      },
+      {
+       "name": "NEU_ReconstructAdopted.result_state_effects",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L011/NEU_SOURCE.lean.txt",
+        "sha256": "8bfd87fa8435bb1a4eb5a129c26167f2a009d09c72c386e114a8239968ec916f"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L011/receipt.json",
+        "sha256": "24288180ee8ccca4d6754c9dfdecd5b2e21c9364dc7ab2a56d1ae5a080d5e676"
+       },
+       "snapshot_path": "NEU_generated/NEU_ReconstructAdopted.lean",
+       "statement": "theorem result_state_effects {State : Type} (request : Request) (a : Auth)\n    (c : Candidate) (state : State) :\n    run request a c state =\n    (AspisR1.JHf_ReconstructionSlot.source request a c,state,\n      NEU_ReconstructCore.trace (toRequest request) (toAuthenticatedAsq8Accounts a)\n        (toPoolV1PairVerifiedAfterstateV1 c))",
+       "statement_sha256": "834f770043a7ec908dc0b791767c330e664cba8afd9fbe0849dfc08b1dba29af"
+      },
+      {
+       "name": "NEU_CallDomains.reached_domains",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem reached_domains (request : Request) (a : Auth) (c : Candidate) :\n    (\u2200 a' c', Call.common a' c' \u2208 calls request a c \u2192 a'=a \u2227 c'=c) \u2227\n    (\u2200 d p, Call.transfer d p \u2208 calls request a c \u2192\n      d=common a c \u2227 request.public=.PrivateTransfer p) \u2227\n    (\u2200 d p, Call.withdrawal d p \u2208 calls request a c \u2192\n      d=common a c \u2227 request.public=.Withdrawal p)",
+       "statement_sha256": "348e7ad7710b1e21dbd9664e78837d01140b2dc4a7237d7a4fd9889e791235b1"
+      },
+      {
+       "name": "NEU_CallDomains.common_packet",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem common_packet (a : Auth) (c : Candidate) :\n    NED_ReconstructCarriers.toRawCommon\n      (NED_ReconstructCarriers.fromRawCommon (common a c)) = common a c",
+       "statement_sha256": "a608c9f5ae8ec6e23e1a79da590c74a5a313f822d72600eb8dd1033dfcbd9b7b"
+      },
+      {
+       "name": "NEU_CallDomains.transfer_packet",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem transfer_packet (c : Common) (p : payment_relation.PoolV1PrivateTransferPublicV1) :\n    NED_ReconstructCarriers.toRaw\n      (NED_ReconstructCarriers.fromRaw (.PrivateTransfer c p)) = .PrivateTransfer c p",
+       "statement_sha256": "8c2a33fdf8c4cb46aadb1a880d967b48e6308a29b093aef3c7e47bacad1b32f4"
+      },
+      {
+       "name": "NEU_CallDomains.withdrawal_packet",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem withdrawal_packet (c : Common) (p : payment_relation.PoolV1WithdrawalPublicV1) :\n    NED_ReconstructCarriers.toRaw\n      (NED_ReconstructCarriers.fromRaw (.Withdrawal c p)) = .Withdrawal c p",
+       "statement_sha256": "247ddead523dee047eb56fb9025bfa9237ce6c0367ae7079bb640d7caded6bf9"
+      },
+      {
+       "name": "NEU_CallDomains.transfer_reply_range",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem transfer_reply_range (c : Common) (p : payment_relation.PoolV1PrivateTransferPublicV1) :\n    \u2203 r, r1_pool_adapter.transfer_statement_box c p=ok r \u2227 ReplyRange (.PrivateTransfer c p) r",
+       "statement_sha256": "a7cf03de36ee29c9ed8324b93183f7717ee403508567762c5b269d6f5eba007c"
+      },
+      {
+       "name": "NEU_CallDomains.withdrawal_reply_range",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem withdrawal_reply_range (c : Common) (p : payment_relation.PoolV1WithdrawalPublicV1) :\n    \u2203 r, r1_pool_adapter.withdrawal_statement_box c p=ok r \u2227 ReplyRange (.Withdrawal c p) r",
+       "statement_sha256": "def811fe73da17426bc1e4a034afe04f3a3ecd13b273719d15d307d940f503ec"
+      }
+     ],
+     "inner_hypotheses_remaining": [],
+     "same_arguments": true,
+     "same_prestate": true,
+     "same_result": true,
+     "same_ordered_effects": true,
+     "canonical_carrier": true,
+     "callee_domain_established": true,
+     "native_frame_complete": true
+    },
+    "programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement -> programs/r1-cost-probe/src/r1_pool_adapter.rs::transfer_statement_box": {
+     "subject": "programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement -> programs/r1-cost-probe/src/r1_pool_adapter.rs::transfer_statement_box",
+     "classification": "source-ordered checked-add/asset prefix, same immutable Auth/Candidate; same owned common Box into selected raw payment constructor; complete child reply and ordered validator effects",
+     "selected_callee_claims": [
+      "NEU::programs/r1-cost-probe/src/r1_pool_adapter.rs::transfer_statement_box"
+     ],
+     "inner_names_discharged": [
+      "NEU_transfer_statement_box.PacketDomain",
+      "NEU_transfer_statement_box.PhysicalInterpretation"
+     ],
+     "domain_theorems": [
+      {
+       "name": "NEU_ReconstructCore.result_state_effects",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L010/NEU_SOURCE.lean.txt",
+        "sha256": "701ef8712be86603db6f7ff292818cf1e5c4011d60978421d71291512de60d35"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L010/receipt.json",
+        "sha256": "2958156692b0f86b988c15709fb0dd743ef44b169886cf093ac05527f9f48ab1"
+       },
+       "snapshot_path": "NEU_generated/NEU_ReconstructCore.lean",
+       "statement": "theorem result_state_effects {State : Type} (request : Request) (a : Auth)\n    (c : Candidate) (state : State) :\n    run request a c state =\n      (r1_pool_adapter.reconstruct_asq8_statement request a c,state,trace request a c)",
+       "statement_sha256": "42beca463c43c32d5f9896723a53bb385754046db9de712a1064e3f8d9c88ca5"
+      },
+      {
+       "name": "NEU_ReconstructAdopted.result_state_effects",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L011/NEU_SOURCE.lean.txt",
+        "sha256": "8bfd87fa8435bb1a4eb5a129c26167f2a009d09c72c386e114a8239968ec916f"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L011/receipt.json",
+        "sha256": "24288180ee8ccca4d6754c9dfdecd5b2e21c9364dc7ab2a56d1ae5a080d5e676"
+       },
+       "snapshot_path": "NEU_generated/NEU_ReconstructAdopted.lean",
+       "statement": "theorem result_state_effects {State : Type} (request : Request) (a : Auth)\n    (c : Candidate) (state : State) :\n    run request a c state =\n    (AspisR1.JHf_ReconstructionSlot.source request a c,state,\n      NEU_ReconstructCore.trace (toRequest request) (toAuthenticatedAsq8Accounts a)\n        (toPoolV1PairVerifiedAfterstateV1 c))",
+       "statement_sha256": "834f770043a7ec908dc0b791767c330e664cba8afd9fbe0849dfc08b1dba29af"
+      },
+      {
+       "name": "NEU_CallDomains.reached_domains",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem reached_domains (request : Request) (a : Auth) (c : Candidate) :\n    (\u2200 a' c', Call.common a' c' \u2208 calls request a c \u2192 a'=a \u2227 c'=c) \u2227\n    (\u2200 d p, Call.transfer d p \u2208 calls request a c \u2192\n      d=common a c \u2227 request.public=.PrivateTransfer p) \u2227\n    (\u2200 d p, Call.withdrawal d p \u2208 calls request a c \u2192\n      d=common a c \u2227 request.public=.Withdrawal p)",
+       "statement_sha256": "348e7ad7710b1e21dbd9664e78837d01140b2dc4a7237d7a4fd9889e791235b1"
+      },
+      {
+       "name": "NEU_CallDomains.common_packet",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem common_packet (a : Auth) (c : Candidate) :\n    NED_ReconstructCarriers.toRawCommon\n      (NED_ReconstructCarriers.fromRawCommon (common a c)) = common a c",
+       "statement_sha256": "a608c9f5ae8ec6e23e1a79da590c74a5a313f822d72600eb8dd1033dfcbd9b7b"
+      },
+      {
+       "name": "NEU_CallDomains.transfer_packet",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem transfer_packet (c : Common) (p : payment_relation.PoolV1PrivateTransferPublicV1) :\n    NED_ReconstructCarriers.toRaw\n      (NED_ReconstructCarriers.fromRaw (.PrivateTransfer c p)) = .PrivateTransfer c p",
+       "statement_sha256": "8c2a33fdf8c4cb46aadb1a880d967b48e6308a29b093aef3c7e47bacad1b32f4"
+      },
+      {
+       "name": "NEU_CallDomains.withdrawal_packet",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem withdrawal_packet (c : Common) (p : payment_relation.PoolV1WithdrawalPublicV1) :\n    NED_ReconstructCarriers.toRaw\n      (NED_ReconstructCarriers.fromRaw (.Withdrawal c p)) = .Withdrawal c p",
+       "statement_sha256": "247ddead523dee047eb56fb9025bfa9237ce6c0367ae7079bb640d7caded6bf9"
+      },
+      {
+       "name": "NEU_CallDomains.transfer_reply_range",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem transfer_reply_range (c : Common) (p : payment_relation.PoolV1PrivateTransferPublicV1) :\n    \u2203 r, r1_pool_adapter.transfer_statement_box c p=ok r \u2227 ReplyRange (.PrivateTransfer c p) r",
+       "statement_sha256": "a7cf03de36ee29c9ed8324b93183f7717ee403508567762c5b269d6f5eba007c"
+      },
+      {
+       "name": "NEU_CallDomains.withdrawal_reply_range",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem withdrawal_reply_range (c : Common) (p : payment_relation.PoolV1WithdrawalPublicV1) :\n    \u2203 r, r1_pool_adapter.withdrawal_statement_box c p=ok r \u2227 ReplyRange (.Withdrawal c p) r",
+       "statement_sha256": "def811fe73da17426bc1e4a034afe04f3a3ecd13b273719d15d307d940f503ec"
+      }
+     ],
+     "physical_theorems": [
+      {
+       "name": "NEU_ReconstructCore.result_state_effects",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L010/NEU_SOURCE.lean.txt",
+        "sha256": "701ef8712be86603db6f7ff292818cf1e5c4011d60978421d71291512de60d35"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L010/receipt.json",
+        "sha256": "2958156692b0f86b988c15709fb0dd743ef44b169886cf093ac05527f9f48ab1"
+       },
+       "snapshot_path": "NEU_generated/NEU_ReconstructCore.lean",
+       "statement": "theorem result_state_effects {State : Type} (request : Request) (a : Auth)\n    (c : Candidate) (state : State) :\n    run request a c state =\n      (r1_pool_adapter.reconstruct_asq8_statement request a c,state,trace request a c)",
+       "statement_sha256": "42beca463c43c32d5f9896723a53bb385754046db9de712a1064e3f8d9c88ca5"
+      },
+      {
+       "name": "NEU_ReconstructAdopted.result_state_effects",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L011/NEU_SOURCE.lean.txt",
+        "sha256": "8bfd87fa8435bb1a4eb5a129c26167f2a009d09c72c386e114a8239968ec916f"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L011/receipt.json",
+        "sha256": "24288180ee8ccca4d6754c9dfdecd5b2e21c9364dc7ab2a56d1ae5a080d5e676"
+       },
+       "snapshot_path": "NEU_generated/NEU_ReconstructAdopted.lean",
+       "statement": "theorem result_state_effects {State : Type} (request : Request) (a : Auth)\n    (c : Candidate) (state : State) :\n    run request a c state =\n    (AspisR1.JHf_ReconstructionSlot.source request a c,state,\n      NEU_ReconstructCore.trace (toRequest request) (toAuthenticatedAsq8Accounts a)\n        (toPoolV1PairVerifiedAfterstateV1 c))",
+       "statement_sha256": "834f770043a7ec908dc0b791767c330e664cba8afd9fbe0849dfc08b1dba29af"
+      },
+      {
+       "name": "NEU_CallDomains.reached_domains",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem reached_domains (request : Request) (a : Auth) (c : Candidate) :\n    (\u2200 a' c', Call.common a' c' \u2208 calls request a c \u2192 a'=a \u2227 c'=c) \u2227\n    (\u2200 d p, Call.transfer d p \u2208 calls request a c \u2192\n      d=common a c \u2227 request.public=.PrivateTransfer p) \u2227\n    (\u2200 d p, Call.withdrawal d p \u2208 calls request a c \u2192\n      d=common a c \u2227 request.public=.Withdrawal p)",
+       "statement_sha256": "348e7ad7710b1e21dbd9664e78837d01140b2dc4a7237d7a4fd9889e791235b1"
+      },
+      {
+       "name": "NEU_CallDomains.common_packet",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem common_packet (a : Auth) (c : Candidate) :\n    NED_ReconstructCarriers.toRawCommon\n      (NED_ReconstructCarriers.fromRawCommon (common a c)) = common a c",
+       "statement_sha256": "a608c9f5ae8ec6e23e1a79da590c74a5a313f822d72600eb8dd1033dfcbd9b7b"
+      },
+      {
+       "name": "NEU_CallDomains.transfer_packet",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem transfer_packet (c : Common) (p : payment_relation.PoolV1PrivateTransferPublicV1) :\n    NED_ReconstructCarriers.toRaw\n      (NED_ReconstructCarriers.fromRaw (.PrivateTransfer c p)) = .PrivateTransfer c p",
+       "statement_sha256": "8c2a33fdf8c4cb46aadb1a880d967b48e6308a29b093aef3c7e47bacad1b32f4"
+      },
+      {
+       "name": "NEU_CallDomains.withdrawal_packet",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem withdrawal_packet (c : Common) (p : payment_relation.PoolV1WithdrawalPublicV1) :\n    NED_ReconstructCarriers.toRaw\n      (NED_ReconstructCarriers.fromRaw (.Withdrawal c p)) = .Withdrawal c p",
+       "statement_sha256": "247ddead523dee047eb56fb9025bfa9237ce6c0367ae7079bb640d7caded6bf9"
+      },
+      {
+       "name": "NEU_CallDomains.transfer_reply_range",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem transfer_reply_range (c : Common) (p : payment_relation.PoolV1PrivateTransferPublicV1) :\n    \u2203 r, r1_pool_adapter.transfer_statement_box c p=ok r \u2227 ReplyRange (.PrivateTransfer c p) r",
+       "statement_sha256": "a7cf03de36ee29c9ed8324b93183f7717ee403508567762c5b269d6f5eba007c"
+      },
+      {
+       "name": "NEU_CallDomains.withdrawal_reply_range",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem withdrawal_reply_range (c : Common) (p : payment_relation.PoolV1WithdrawalPublicV1) :\n    \u2203 r, r1_pool_adapter.withdrawal_statement_box c p=ok r \u2227 ReplyRange (.Withdrawal c p) r",
+       "statement_sha256": "def811fe73da17426bc1e4a034afe04f3a3ecd13b273719d15d307d940f503ec"
+      }
+     ],
+     "inner_hypotheses_remaining": [],
+     "same_arguments": true,
+     "same_prestate": true,
+     "same_result": true,
+     "same_ordered_effects": true,
+     "canonical_carrier": true,
+     "callee_domain_established": true,
+     "native_frame_complete": true
+    },
+    "programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement -> programs/r1-cost-probe/src/r1_pool_adapter.rs::withdrawal_statement_box": {
+     "subject": "programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement -> programs/r1-cost-probe/src/r1_pool_adapter.rs::withdrawal_statement_box",
+     "classification": "source-ordered checked-add/asset prefix, same immutable Auth/Candidate; same owned common Box into selected raw payment constructor; complete child reply and ordered validator effects",
+     "selected_callee_claims": [
+      "NEU::programs/r1-cost-probe/src/r1_pool_adapter.rs::withdrawal_statement_box"
+     ],
+     "inner_names_discharged": [
+      "NEU_withdrawal_statement_box.PacketDomain",
+      "NEU_withdrawal_statement_box.PhysicalInterpretation"
+     ],
+     "domain_theorems": [
+      {
+       "name": "NEU_ReconstructCore.result_state_effects",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L010/NEU_SOURCE.lean.txt",
+        "sha256": "701ef8712be86603db6f7ff292818cf1e5c4011d60978421d71291512de60d35"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L010/receipt.json",
+        "sha256": "2958156692b0f86b988c15709fb0dd743ef44b169886cf093ac05527f9f48ab1"
+       },
+       "snapshot_path": "NEU_generated/NEU_ReconstructCore.lean",
+       "statement": "theorem result_state_effects {State : Type} (request : Request) (a : Auth)\n    (c : Candidate) (state : State) :\n    run request a c state =\n      (r1_pool_adapter.reconstruct_asq8_statement request a c,state,trace request a c)",
+       "statement_sha256": "42beca463c43c32d5f9896723a53bb385754046db9de712a1064e3f8d9c88ca5"
+      },
+      {
+       "name": "NEU_ReconstructAdopted.result_state_effects",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L011/NEU_SOURCE.lean.txt",
+        "sha256": "8bfd87fa8435bb1a4eb5a129c26167f2a009d09c72c386e114a8239968ec916f"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L011/receipt.json",
+        "sha256": "24288180ee8ccca4d6754c9dfdecd5b2e21c9364dc7ab2a56d1ae5a080d5e676"
+       },
+       "snapshot_path": "NEU_generated/NEU_ReconstructAdopted.lean",
+       "statement": "theorem result_state_effects {State : Type} (request : Request) (a : Auth)\n    (c : Candidate) (state : State) :\n    run request a c state =\n    (AspisR1.JHf_ReconstructionSlot.source request a c,state,\n      NEU_ReconstructCore.trace (toRequest request) (toAuthenticatedAsq8Accounts a)\n        (toPoolV1PairVerifiedAfterstateV1 c))",
+       "statement_sha256": "834f770043a7ec908dc0b791767c330e664cba8afd9fbe0849dfc08b1dba29af"
+      },
+      {
+       "name": "NEU_CallDomains.reached_domains",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem reached_domains (request : Request) (a : Auth) (c : Candidate) :\n    (\u2200 a' c', Call.common a' c' \u2208 calls request a c \u2192 a'=a \u2227 c'=c) \u2227\n    (\u2200 d p, Call.transfer d p \u2208 calls request a c \u2192\n      d=common a c \u2227 request.public=.PrivateTransfer p) \u2227\n    (\u2200 d p, Call.withdrawal d p \u2208 calls request a c \u2192\n      d=common a c \u2227 request.public=.Withdrawal p)",
+       "statement_sha256": "348e7ad7710b1e21dbd9664e78837d01140b2dc4a7237d7a4fd9889e791235b1"
+      },
+      {
+       "name": "NEU_CallDomains.common_packet",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem common_packet (a : Auth) (c : Candidate) :\n    NED_ReconstructCarriers.toRawCommon\n      (NED_ReconstructCarriers.fromRawCommon (common a c)) = common a c",
+       "statement_sha256": "a608c9f5ae8ec6e23e1a79da590c74a5a313f822d72600eb8dd1033dfcbd9b7b"
+      },
+      {
+       "name": "NEU_CallDomains.transfer_packet",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem transfer_packet (c : Common) (p : payment_relation.PoolV1PrivateTransferPublicV1) :\n    NED_ReconstructCarriers.toRaw\n      (NED_ReconstructCarriers.fromRaw (.PrivateTransfer c p)) = .PrivateTransfer c p",
+       "statement_sha256": "8c2a33fdf8c4cb46aadb1a880d967b48e6308a29b093aef3c7e47bacad1b32f4"
+      },
+      {
+       "name": "NEU_CallDomains.withdrawal_packet",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem withdrawal_packet (c : Common) (p : payment_relation.PoolV1WithdrawalPublicV1) :\n    NED_ReconstructCarriers.toRaw\n      (NED_ReconstructCarriers.fromRaw (.Withdrawal c p)) = .Withdrawal c p",
+       "statement_sha256": "247ddead523dee047eb56fb9025bfa9237ce6c0367ae7079bb640d7caded6bf9"
+      },
+      {
+       "name": "NEU_CallDomains.transfer_reply_range",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem transfer_reply_range (c : Common) (p : payment_relation.PoolV1PrivateTransferPublicV1) :\n    \u2203 r, r1_pool_adapter.transfer_statement_box c p=ok r \u2227 ReplyRange (.PrivateTransfer c p) r",
+       "statement_sha256": "a7cf03de36ee29c9ed8324b93183f7717ee403508567762c5b269d6f5eba007c"
+      },
+      {
+       "name": "NEU_CallDomains.withdrawal_reply_range",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem withdrawal_reply_range (c : Common) (p : payment_relation.PoolV1WithdrawalPublicV1) :\n    \u2203 r, r1_pool_adapter.withdrawal_statement_box c p=ok r \u2227 ReplyRange (.Withdrawal c p) r",
+       "statement_sha256": "def811fe73da17426bc1e4a034afe04f3a3ecd13b273719d15d307d940f503ec"
+      }
+     ],
+     "physical_theorems": [
+      {
+       "name": "NEU_ReconstructCore.result_state_effects",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L010/NEU_SOURCE.lean.txt",
+        "sha256": "701ef8712be86603db6f7ff292818cf1e5c4011d60978421d71291512de60d35"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L010/receipt.json",
+        "sha256": "2958156692b0f86b988c15709fb0dd743ef44b169886cf093ac05527f9f48ab1"
+       },
+       "snapshot_path": "NEU_generated/NEU_ReconstructCore.lean",
+       "statement": "theorem result_state_effects {State : Type} (request : Request) (a : Auth)\n    (c : Candidate) (state : State) :\n    run request a c state =\n      (r1_pool_adapter.reconstruct_asq8_statement request a c,state,trace request a c)",
+       "statement_sha256": "42beca463c43c32d5f9896723a53bb385754046db9de712a1064e3f8d9c88ca5"
+      },
+      {
+       "name": "NEU_ReconstructAdopted.result_state_effects",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L011/NEU_SOURCE.lean.txt",
+        "sha256": "8bfd87fa8435bb1a4eb5a129c26167f2a009d09c72c386e114a8239968ec916f"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L011/receipt.json",
+        "sha256": "24288180ee8ccca4d6754c9dfdecd5b2e21c9364dc7ab2a56d1ae5a080d5e676"
+       },
+       "snapshot_path": "NEU_generated/NEU_ReconstructAdopted.lean",
+       "statement": "theorem result_state_effects {State : Type} (request : Request) (a : Auth)\n    (c : Candidate) (state : State) :\n    run request a c state =\n    (AspisR1.JHf_ReconstructionSlot.source request a c,state,\n      NEU_ReconstructCore.trace (toRequest request) (toAuthenticatedAsq8Accounts a)\n        (toPoolV1PairVerifiedAfterstateV1 c))",
+       "statement_sha256": "834f770043a7ec908dc0b791767c330e664cba8afd9fbe0849dfc08b1dba29af"
+      },
+      {
+       "name": "NEU_CallDomains.reached_domains",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem reached_domains (request : Request) (a : Auth) (c : Candidate) :\n    (\u2200 a' c', Call.common a' c' \u2208 calls request a c \u2192 a'=a \u2227 c'=c) \u2227\n    (\u2200 d p, Call.transfer d p \u2208 calls request a c \u2192\n      d=common a c \u2227 request.public=.PrivateTransfer p) \u2227\n    (\u2200 d p, Call.withdrawal d p \u2208 calls request a c \u2192\n      d=common a c \u2227 request.public=.Withdrawal p)",
+       "statement_sha256": "348e7ad7710b1e21dbd9664e78837d01140b2dc4a7237d7a4fd9889e791235b1"
+      },
+      {
+       "name": "NEU_CallDomains.common_packet",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem common_packet (a : Auth) (c : Candidate) :\n    NED_ReconstructCarriers.toRawCommon\n      (NED_ReconstructCarriers.fromRawCommon (common a c)) = common a c",
+       "statement_sha256": "a608c9f5ae8ec6e23e1a79da590c74a5a313f822d72600eb8dd1033dfcbd9b7b"
+      },
+      {
+       "name": "NEU_CallDomains.transfer_packet",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem transfer_packet (c : Common) (p : payment_relation.PoolV1PrivateTransferPublicV1) :\n    NED_ReconstructCarriers.toRaw\n      (NED_ReconstructCarriers.fromRaw (.PrivateTransfer c p)) = .PrivateTransfer c p",
+       "statement_sha256": "8c2a33fdf8c4cb46aadb1a880d967b48e6308a29b093aef3c7e47bacad1b32f4"
+      },
+      {
+       "name": "NEU_CallDomains.withdrawal_packet",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem withdrawal_packet (c : Common) (p : payment_relation.PoolV1WithdrawalPublicV1) :\n    NED_ReconstructCarriers.toRaw\n      (NED_ReconstructCarriers.fromRaw (.Withdrawal c p)) = .Withdrawal c p",
+       "statement_sha256": "247ddead523dee047eb56fb9025bfa9237ce6c0367ae7079bb640d7caded6bf9"
+      },
+      {
+       "name": "NEU_CallDomains.transfer_reply_range",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem transfer_reply_range (c : Common) (p : payment_relation.PoolV1PrivateTransferPublicV1) :\n    \u2203 r, r1_pool_adapter.transfer_statement_box c p=ok r \u2227 ReplyRange (.PrivateTransfer c p) r",
+       "statement_sha256": "a7cf03de36ee29c9ed8324b93183f7717ee403508567762c5b269d6f5eba007c"
+      },
+      {
+       "name": "NEU_CallDomains.withdrawal_reply_range",
+       "source": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/NEU_SOURCE.lean.txt",
+        "sha256": "2bb9995287d20281d70e1600b00ad4efc59c4124428a182c07b2aa6304fefe46"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose7-20261103/NEU_L012/receipt.json",
+        "sha256": "a2d12b81a91d14fc15bd5a1b7227e6ae415f6e147e4efd44064d2081936bb8fb"
+       },
+       "snapshot_path": "NEU_generated/NEU_CallDomains.lean",
+       "statement": "theorem withdrawal_reply_range (c : Common) (p : payment_relation.PoolV1WithdrawalPublicV1) :\n    \u2203 r, r1_pool_adapter.withdrawal_statement_box c p=ok r \u2227 ReplyRange (.Withdrawal c p) r",
+       "statement_sha256": "def811fe73da17426bc1e4a034afe04f3a3ecd13b273719d15d307d940f503ec"
+      }
+     ],
+     "inner_hypotheses_remaining": [],
+     "same_arguments": true,
+     "same_prestate": true,
+     "same_result": true,
+     "same_ordered_effects": true,
+     "canonical_carrier": true,
+     "callee_domain_established": true,
+     "native_frame_complete": true
+    }
+   },
+   "hypotheses": [
+    "programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement.PacketDomain",
+    "programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement.PhysicalInterpretation",
+    "RuntimePersistence",
+    "CompositionTrustOptionA"
+   ],
+   "new_trust_rows": [],
+   "inner_hypotheses_remaining": [],
+   "trust_classification": "P6/D188 option A reclassification",
+   "exact_callsite": true,
+   "same_arguments": true,
+   "same_prestate": true,
+   "same_result": true,
+   "same_ordered_effects": true,
+   "canonical_carrier": true,
+   "callee_domain_established": true,
+   "native_frame_complete": true,
+   "semantic_review_sha256": "cbd0411b506a2a05c03548c260dea8805d4e0041c99c9b4a6ddf666f7b8a19da"
   }
  }
 }

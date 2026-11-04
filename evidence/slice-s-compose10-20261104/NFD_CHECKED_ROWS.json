@@ -29086,12 +29086,12 @@
   "named_hypotheses": [
    {
     "name": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::decode_pool_v1_pair_forest_terminal_request_v1.PacketDomain",
-    "statement": "Root-owned full immutable slice / exact native-cohort typed carrier",
+    "statement": "all valid immutable slices; every raw byte and error path; no canonicality restriction",
     "discharged_by": "NFD_request::crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::decode_pool_v1_pair_forest_terminal_request_v1.PacketDomain"
    },
    {
     "name": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::decode_pool_v1_pair_forest_terminal_request_v1.PhysicalInterpretation",
-    "statement": "Root-owned full immutable slice / exact native-cohort typed carrier",
+    "statement": "Root-owned valid native/cohort typed carrier, ABI and approved library/allocator interpretation",
     "discharged_by": "NFD_request::crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::decode_pool_v1_pair_forest_terminal_request_v1.PhysicalInterpretation"
    }
   ],
@@ -46623,12 +46623,12 @@
   "named_hypotheses": [
    {
     "name": "programs/r1-cost-probe/src/r1_pool_adapter.rs::asq8_common.PacketDomain",
-    "statement": "Root-owned full immutable slice / exact native-cohort typed carrier",
+    "statement": "every typed Auth/Candidate with every scalar independently arbitrary; no canonicality or accepted-run restriction",
     "discharged_by": "NFD_common::programs/r1-cost-probe/src/r1_pool_adapter.rs::asq8_common.PacketDomain"
    },
    {
     "name": "programs/r1-cost-probe/src/r1_pool_adapter.rs::asq8_common.PhysicalInterpretation",
-    "statement": "Root-owned full immutable slice / exact native-cohort typed carrier",
+    "statement": "Root-owned valid native/cohort typed carrier, ABI and approved library/allocator interpretation",
     "discharged_by": "NFD_common::programs/r1-cost-probe/src/r1_pool_adapter.rs::asq8_common.PhysicalInterpretation"
    }
   ],
@@ -47194,7 +47194,7 @@
   "trust_rows": []
  },
  {
-  "bridge_status": "OPEN",
+  "bridge_status": "CLOSED-CONDITIONAL",
   "callees": [
    {
     "cfg": [],
@@ -47263,42 +47263,57 @@
   "caller_domain_obligations": [
    {
     "callee": "programs/r1-cost-probe/src/r1_pool_adapter.rs::asq8_common",
-    "callee_claims": [],
+    "callee_claims": [
+     "NFD::programs/r1-cost-probe/src/r1_pool_adapter.rs::asq8_common"
+    ],
     "callee_local_status": "OPEN",
     "caller": "programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement",
-    "discharged_by": null,
+    "discharged_by": "NFD_reconstruct_asq8_statement::call-domain:programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement->programs/r1-cost-probe/src/r1_pool_adapter.rs::asq8_common",
     "id": "call-domain:programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement->programs/r1-cost-probe/src/r1_pool_adapter.rs::asq8_common",
     "owner": "Aspis S2 lead / programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement bridge owner",
     "owner_packets": [],
     "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
-    "required_named_hypotheses": [],
-    "status": "OPEN"
+    "required_named_hypotheses": [
+     "programs/r1-cost-probe/src/r1_pool_adapter.rs::asq8_common.PacketDomain",
+     "programs/r1-cost-probe/src/r1_pool_adapter.rs::asq8_common.PhysicalInterpretation"
+    ],
+    "status": "CLOSED"
    },
    {
     "callee": "programs/r1-cost-probe/src/r1_pool_adapter.rs::transfer_statement_box",
-    "callee_claims": [],
+    "callee_claims": [
+     "NEU::programs/r1-cost-probe/src/r1_pool_adapter.rs::transfer_statement_box"
+    ],
     "callee_local_status": "OPEN",
     "caller": "programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement",
-    "discharged_by": null,
+    "discharged_by": "NFD_reconstruct_asq8_statement::call-domain:programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement->programs/r1-cost-probe/src/r1_pool_adapter.rs::transfer_statement_box",
     "id": "call-domain:programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement->programs/r1-cost-probe/src/r1_pool_adapter.rs::transfer_statement_box",
     "owner": "Aspis S2 lead / programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement bridge owner",
     "owner_packets": [],
     "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
-    "required_named_hypotheses": [],
-    "status": "OPEN"
+    "required_named_hypotheses": [
+     "NEU_transfer_statement_box.PacketDomain",
+     "NEU_transfer_statement_box.PhysicalInterpretation"
+    ],
+    "status": "CLOSED"
    },
    {
     "callee": "programs/r1-cost-probe/src/r1_pool_adapter.rs::withdrawal_statement_box",
-    "callee_claims": [],
+    "callee_claims": [
+     "NEU::programs/r1-cost-probe/src/r1_pool_adapter.rs::withdrawal_statement_box"
+    ],
     "callee_local_status": "OPEN",
     "caller": "programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement",
-    "discharged_by": null,
+    "discharged_by": "NFD_reconstruct_asq8_statement::call-domain:programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement->programs/r1-cost-probe/src/r1_pool_adapter.rs::withdrawal_statement_box",
     "id": "call-domain:programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement->programs/r1-cost-probe/src/r1_pool_adapter.rs::withdrawal_statement_box",
     "owner": "Aspis S2 lead / programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement bridge owner",
     "owner_packets": [],
     "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
-    "required_named_hypotheses": [],
-    "status": "OPEN"
+    "required_named_hypotheses": [
+     "NEU_withdrawal_statement_box.PacketDomain",
+     "NEU_withdrawal_statement_box.PhysicalInterpretation"
+    ],
+    "status": "CLOSED"
    },
    {
     "call": {
@@ -47310,12 +47325,12 @@
      "syntax": "authenticated.live_snapshot.next_pair_index.checked_add",
      "targets": []
     },
-    "discharged_by": null,
+    "discharged_by": "NFD_reconstruct_asq8_statement::external:TX2:224:3",
     "id": "external:TX2:224:3",
     "owner": "Aspis S2 lead / programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement bridge owner",
     "owner_packets": [],
     "required": "Classify constructor/scalar operation or bind the exact SDK/std/allocator/runtime/callback law in the same execution. Inventory external does not itself imply trust adoption.",
-    "status": "OPEN"
+    "status": "CLOSED"
    },
    {
     "call": {
@@ -47326,12 +47341,12 @@
      "syntax": "Some",
      "targets": []
     },
-    "discharged_by": null,
+    "discharged_by": "NFD_reconstruct_asq8_statement::external:TX2:224:4",
     "id": "external:TX2:224:4",
     "owner": "Aspis S2 lead / programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement bridge owner",
     "owner_packets": [],
     "required": "Classify constructor/scalar operation or bind the exact SDK/std/allocator/runtime/callback law in the same execution. Inventory external does not itself imply trust adoption.",
-    "status": "OPEN"
+    "status": "CLOSED"
    },
    {
     "call": {
@@ -47342,12 +47357,12 @@
      "syntax": "Err",
      "targets": []
     },
-    "discharged_by": null,
+    "discharged_by": "NFD_reconstruct_asq8_statement::external:TX2:224:5",
     "id": "external:TX2:224:5",
     "owner": "Aspis S2 lead / programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement bridge owner",
     "owner_packets": [],
     "required": "Classify constructor/scalar operation or bind the exact SDK/std/allocator/runtime/callback law in the same execution. Inventory external does not itself imply trust adoption.",
-    "status": "OPEN"
+    "status": "CLOSED"
    },
    {
     "call": {
@@ -47358,12 +47373,12 @@
      "syntax": "Err",
      "targets": []
     },
-    "discharged_by": null,
+    "discharged_by": "NFD_reconstruct_asq8_statement::external:TX2:224:6",
     "id": "external:TX2:224:6",
     "owner": "Aspis S2 lead / programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement bridge owner",
     "owner_packets": [],
     "required": "Classify constructor/scalar operation or bind the exact SDK/std/allocator/runtime/callback law in the same execution. Inventory external does not itself imply trust adoption.",
-    "status": "OPEN"
+    "status": "CLOSED"
    }
   ],
   "canonical_callees": [
@@ -47371,9 +47386,11 @@
    "programs/r1-cost-probe/src/r1_pool_adapter.rs::transfer_statement_box",
    "programs/r1-cost-probe/src/r1_pool_adapter.rs::withdrawal_statement_box"
   ],
-  "claim_ids": [],
-  "composed_reason": "No per-edge caller-domain/physical interpretation certificate is newly instantiated by this evidence audit; packet-internal proofs retain their original scope. Local fragment and model-only evidence cannot fill it.",
-  "composed_status": "OPEN",
+  "claim_ids": [
+   "NFD::programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement"
+  ],
+  "composed_reason": "NFD full-field native request, exact frozen reference continuation, full carrier/domain and complete Result/order certificates; option A reclassification",
+  "composed_status": "CLOSED",
   "discovery_mentions": [
    {
     "association": "owner token plus source-file context",
@@ -47431,18 +47448,27 @@
   "inventory_id": "programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement",
   "inventory_row": null,
   "medium": [],
-  "named_hypotheses": [],
-  "no_credit_reason": "No unquarantined whole-body bridge with resolved feature association in the merged audited index; inspect discovery mentions for later partial or unindexed claims.",
-  "open_transitive_dependencies": [
-   "programs/r1-cost-probe/src/r1_pool_adapter.rs::asq8_common",
-   "programs/r1-cost-probe/src/r1_pool_adapter.rs::transfer_statement_box",
-   "programs/r1-cost-probe/src/r1_pool_adapter.rs::withdrawal_statement_box"
+  "named_hypotheses": [
+   {
+    "name": "programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement.PacketDomain",
+    "statement": "all typed Request/Auth/Candidate; raw noncanonical fields admitted; no accepted-run condition",
+    "discharged_by": "NFD_reconstruct_asq8_statement::programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement.PacketDomain"
+   },
+   {
+    "name": "programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement.PhysicalInterpretation",
+    "statement": "Root-owned valid native/cohort typed carrier, ABI and approved library/allocator interpretation",
+    "discharged_by": "NFD_reconstruct_asq8_statement::programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement.PhysicalInterpretation"
+   }
   ],
+  "no_credit_reason": "No unquarantined whole-body bridge with resolved feature association in the merged audited index; inspect discovery mentions for later partial or unindexed claims.",
+  "open_transitive_dependencies": [],
   "receipt_sha256": {},
   "receipts": [],
   "reviewed_packet_updates": [],
   "row": "TX2:224",
-  "selected_claims": [],
+  "selected_claims": [
+   "NFD::programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement"
+  ],
   "source_file": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
   "source_file_sha256": "09ce3b480cf772c843315b9bcdabd9bf266f4065e5a524ae2a4d5560ea4feaf3",
   "source_line": 857,
