@@ -1,6 +1,6 @@
 """Private serial runner; uses unchanged admitted S2W launcher."""
 from pathlib import Path
-import subprocess,json,sys,time,hashlib,shlex
+import subprocess,json,sys,time,hashlib,shlex,os
 E=Path(__file__).resolve().parent
 B='/home/dombarker/project-offloads/codex-cx-slice-d-field-20261104'
 C='/home/dombarker/project-offloads/codex-cx-slice-d-field-cache-20261104'
@@ -43,8 +43,8 @@ assert target.startswith('NFT_') or kind in ['auditbin','kani','extract','depend
 if kind=='kani':
  files['NFT_gate.py']=(E/'NFT_gate.py').read_text()
  if (E/'NFT_NATIVE_INPUTS.json').exists():
-  for n,t in json.loads((E/'NFT_NATIVE_INPUTS.json').read_text()).items():files['NFT_src/'+n]=t
-  files['NFT_SOURCE_PINS.json']=(E/'NFT_SOURCE_PINS.json').read_text()
+  for n,t in json.loads(Path(os.environ.get('NFT_INPUT_SET',str(E/'NFT_NATIVE_INPUTS.json'))).read_text()).items():files['NFT_src/'+n]=t
+  files['NFT_SOURCE_PINS.json']=Path(os.environ.get('NFT_PIN_SET',str(E/'NFT_SOURCE_PINS.json'))).read_text()
  sources=['NFT_gate.py','NFT_SOURCE_PINS.json','NFT_src/Cargo.lock','NFT_src/Cargo.toml']
  sources += [n for n in files if n.startswith('NFT_src/')]
 

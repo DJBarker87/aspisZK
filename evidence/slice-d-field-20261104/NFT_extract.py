@@ -8,8 +8,8 @@ S=B/'NFT_ref';(S/'src').mkdir(parents=True,exist_ok=True)
 (S/'src/lib.rs').write_bytes((B/'NFT_src/crates/aspis-r1-cost-probe/src/NFT_reference.rs').read_bytes())
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 parser=os.environ.get('NFT_EXTRACT_PARSER')=='1'
-roots=['crate::neg_ref','crate::canonical_ref','crate::cm_bytes_ref','crate::qm_bytes_ref']
-namespace='NFT_ParserRef' if parser else 'NFT_Reference'
+roots=['crate::wide_neg_ref']
+namespace='NFT_WideReference'
 dest=B/('NFT_parser_extracted' if parser else 'NFT_extracted')
 cmd=[str(C),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--include','core::option::Option','--include','core::result::Result','--include','core::option::_::ok_or']
 for root in roots:cmd+=['--start-from',root]
@@ -18,7 +18,7 @@ cmd+=['--dest-file',str(B/'NFT_reference.llbc'),'--','--manifest-path',str(S/'Ca
 env=dict(os.environ,RUSTUP_TOOLCHAIN='nightly-2026-09-17',CARGO_TARGET_DIR=str(B/'NFT_ref_target'),CARGO_NET_OFFLINE='true',CARGO_BUILD_JOBS='1',RUSTFLAGS='-Zthreads=1 -C link-arg=-Wl,--threads=1',RAYON_NUM_THREADS='1')
 assert sha(C)=='daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8'
 assert sha(A)=='c0cf4fccb0879db4ce342da991f6215732a19fc01345b9eec84e632f4673b958'
-pins=dict(charon_sha256=sha(C),aeneas_sha256=sha(A),rust_reference_sha256=sha(S/'src/lib.rs'),charon_command=cmd,toolchain='nightly-2026-09-17',aeneas_origin='b59d5188 extended binary; imported read-only, no tool patches by NFQ')
+pins=dict(charon_sha256=sha(C),aeneas_sha256=sha(A),rust_reference_sha256=sha(S/'src/lib.rs'),charon_command=cmd,toolchain='nightly-2026-09-17',aeneas_origin='b59d5188 extended binary; imported read-only, no tool patches by NFT')
 (B/'NFT_EXTRACTION_PINS.json').write_text(json.dumps(pins,indent=2))
 print(json.dumps(pins),flush=True)
 r=subprocess.run(cmd,cwd=S,env=env)
