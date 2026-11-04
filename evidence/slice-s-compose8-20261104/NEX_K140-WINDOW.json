@@ -1,0 +1,9 @@
+{
+ "slot": "digest",
+ "mode": "negative",
+ "source": "use super::*;\n#[kani::proof]\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]\nfn result_window(){let mut output:[u8;32]=kani::any();let j:usize=kani::any();kani::assume(j<32);let reply:[u8;32]=kani::any();output.copy_from_slice(&reply);assert!(output[j]==(reply[j])^1);}\n",
+ "frozen_statement": "output[RESULT_NULLIFIER_OFFSET..RESULT_AFTERSTATE_OFFSET]\n        .copy_from_slice(&encode_digest_canonical(&result.nullifier));",
+ "frozen_body_sha256": "fd67851990da17680be74d9204d3440ce54374b44f06495039b99eca9c4e3af5",
+ "domain": "all local bytes and arbitrary cell in the indicated fixed window; typed child reply for digest",
+ "classification": "native assignment/copy window projected from frozen encoder; whole792-byte frame, child arguments/results and caller association remain OPEN; error-only two-case cut has NO native composition credit"
+}

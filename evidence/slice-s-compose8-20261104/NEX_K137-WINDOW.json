@@ -1,0 +1,9 @@
+{
+ "slot": "lane",
+ "mode": "positive",
+ "source": "use super::*;\n#[kani::proof]\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]\nfn result_window(){let mut output:[u8;1]=kani::any();let j:usize=kani::any();kani::assume(j<1);let lane:u8=kani::any();output[0]=lane;assert!(output[j]==(lane));}\n",
+ "frozen_statement": "output[7] = result.output_lane;",
+ "frozen_body_sha256": "fd67851990da17680be74d9204d3440ce54374b44f06495039b99eca9c4e3af5",
+ "domain": "all local bytes and arbitrary cell in the indicated fixed window; typed child reply for digest",
+ "classification": "native assignment/copy window projected from frozen encoder; whole792-byte frame, child arguments/results and caller association remain OPEN; error-only two-case cut has NO native composition credit"
+}

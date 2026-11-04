@@ -6,7 +6,14 @@ EXACT='crates/aspis-statement/src/pool_v1/pair_terminal.rs::exact'
 sha=lambda b:hashlib.sha256(b).hexdigest()
 def check(c,ledger):
  import NEX_validate as v
- n=c['native_certificate'];assert n['function']==EXACT
+ n=c['native_certificate']
+ if 'template' in n:
+  from NEX_new_bridges import check as new_check
+  return new_check(c,ledger)
+ if n['function']!=EXACT:
+  from NEX_dependent_checks import check as dependent_check
+  return dependent_check(c,ledger)
+ assert n['function']==EXACT
  assert n['domain']=='width in {8,32}; live slice length <=33; all bytes unrestricted'
  assert n['classification']=='actual frozen call, KMX, full Result, readonly state and empty runtime trace'
  assert n['inner_hypotheses_remaining']==[] and n['box_ruling_aa'] is False
@@ -78,4 +85,7 @@ def compose_additions(base,out,packet,reviewed,v):
   else:assert {k:v for k,v in got.items() if k not in allowed}=={k:v for k,v in old.items() if k not in allowed}
  assert result['trust_rows']==base['trust_rows']
  result['NEX_native_admissions']=promoted
- return result
+ from NEX_dependent_checks import compose as dependent_compose
+ result=dependent_compose(base,result,packet,reviewed,v)
+ from NEX_new_bridges import compose as new_compose
+ return new_compose(base,result,packet,reviewed,v)

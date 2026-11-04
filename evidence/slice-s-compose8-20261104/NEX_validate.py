@@ -1,6 +1,6 @@
 """Additive NDT/NEU validation. Native certificates never bypass baseline gates."""
 from pathlib import Path
-import sys,json,hashlib,copy,argparse,lzma
+import sys,json,hashlib,copy,argparse,lzma,re
 sys.dont_write_bytecode=True
 E=Path(__file__).resolve().parent;R=E.parent.parent
 sys.path.insert(0,str(E.parent/'slice-s-compose7-20261103'))
@@ -15,6 +15,11 @@ def artifact(r):
 
 def native(a,positive):
  r=read(E/a/'receipt.json');c=read(E/(a+'.json'))
+ assert r['kind']=='kani' and r['source_revision'] and int(r['swaps'])==0
+ assert r['limits']=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}
+ assert c['env']['CARGO_NET_OFFLINE']=='true' and c['env']['CARGO_PROFILE_DEV_OPT_LEVEL']=='3'
+ assert c['native_command'][0]=='/home/dombarker/.cargo/bin/cargo-kani'
+ assert '--locked' not in c['native_command'] and c['native_command'][c['native_command'].index('--harness-timeout')+1]=='90s'
  assert r['exit_status']==(0 if positive else 1)
  assert all(r[k]==v for k,v in c.items())
  ad=read(E/(a+'-admission.json'));assert ad['exit']==0 and ad['reservation']['allowed'] is True
@@ -33,7 +38,8 @@ def native(a,positive):
  assert all(sha(s.encode())==r['source_hashes'][n] for n,s in snapshots.items())
  for n in ['NEX_native_contracts.patch','NEX_oracle.patch']:assert snapshots[n]==(E/(a+'-'+n)).read_text()
  source=snapshots['NEX_native_contracts.patch']
- assert not any(s in source for s in ['static mut','stub_verified','UnsafeCell','Atomic','transmute'])
+ assert not any(s in source.replace('AtomicStatementError','') for s in ['static mut','stub_verified','UnsafeCell','Atomic','transmute'])
+ assert not re.search(r'\bstatic\s+mut\b|\b(?:Cell|RefCell|UnsafeCell)\b',source)
  features={p['name']:set(p['features']) for p in read(E/(a+'-metadata-pin.json'))['features_all_crates']}
  assert set(c['required_statement_features'])<=features['aspis-statement']
  return snapshots
@@ -47,6 +53,10 @@ def certificate(c,subject,ledger,reviewed):
   for row in rows:
    allowed.update(function+'::'+h['name'] for h in row['named_hypotheses'])
    allowed.update(function+' -> '+o['callee'] if 'callee' in o else o['id'] for o in row['caller_domain_obligations'])
+  if 'template' in c['native_certificate']:
+   from NEX_new_bridges import FUNCTIONS,qualifiers
+   assert function in FUNCTIONS.values()
+   allowed.update(function+'::'+name for name in qualifiers(function))
   assert subject in allowed
   assert c['semantic_review_sha256']==reviewed[subject]==sha(json.dumps({k:v for k,v in c.items() if k!='semantic_review_sha256'},sort_keys=True).encode())
   assert c['inner_hypotheses_remaining']==[] and c['new_trust_rows']==[]

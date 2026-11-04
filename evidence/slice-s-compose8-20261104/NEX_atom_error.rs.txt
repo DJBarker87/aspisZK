@@ -1,0 +1,8 @@
+fn NEX_atom_error()->crate::AtomicStatementError {
+    use crate::AtomicStatementError::*;
+    match kani::any::<u8>() {
+        0=>NonCanonicalDigest,1=>NonCanonicalAssetId,2=>FeeOutOfRange,
+        3=>PathDepthMismatch,4=>InsertionIndexOutOfRange,
+        5=>CurrentAnchorMismatch,_=>OutputAnchorMismatch,
+    }
+}

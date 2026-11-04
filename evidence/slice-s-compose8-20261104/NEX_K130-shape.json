@@ -1,0 +1,8 @@
+{
+ "mode": "positive",
+ "frozen_prefix": "pub fn decode_pool_v1_pair_forest_terminal_statement_v1(\n    bytes: &[u8],\n) -> Result<PoolV1PairForestTerminalStatementV1, PoolV1PairForestTerminalFormatErrorV1> {\n    if bytes.len() != POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES {\n        return Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength);\n    }\n",
+ "source": "use super::*;\nfn length_gate(length:usize)->Result<(),PoolV1PairForestTerminalFormatErrorV1>{if length!=POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES{return Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength);}Ok(())}\n#[kani::proof]\nfn length_gate_all(){let length:usize=kani::any();assert!(length_gate(length)==if length==1880{Ok(())}else{Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength)});}\n",
+ "domain": "all usize metadata lengths; immutable typed Slice.len identity is the existing primitive ABI/std interpretation",
+ "classification": "slice metadata projection before any payload access; full scalar guard plus frozen prefix/no-read check, kernel wrong_length and fixed_carrier partition; not a whole buffer proof",
+ "trust": "P6/D188 option A reclassification; no new trust item"
+}

@@ -36,6 +36,6 @@ def common():
   for a,mode in zip(pair,['positive','value']):
    m=attempt(a,'common',mode);assert m['selected']==slot and len(m['fields'])==15
  for a,mode in [('NEX_K005','allocation'),('NEX_K006','argument'),('NEX_K007','reply')]:attempt(a,'common',mode)
- return dict(function=FUNCTIONS['common'],fields=15,native_pairs=pairs,allocation_control='NEX_K005',argument_control='NEX_K006',reply_control='NEX_K007',source_erasure=True,ruling_aa=True,composed_status='OPEN',exact_remaining_obligation='closed native lane child plus reached-child model/domain substitution; this packet audits supporting windows only')
+ return dict(function=FUNCTIONS['common'],fields=15,native_pairs=pairs,allocation_control='NEX_K005',argument_control='NEX_K006',reply_control='NEX_K007',source_erasure=True,ruling_aa=True,full_child_Result=False,composed_status='OPEN',exact_remaining_obligation='full AtomicStatementError oracle replacements required under ruling y; then closed native lane child and reached-child model/domain substitution; Unit-error windows have no composition credit')
 if __name__=='__main__':
  out=common();(E/'NEX_COMMON_CHECKED.json').write_text(json.dumps(out,indent=1)+'\n');print(json.dumps(out))

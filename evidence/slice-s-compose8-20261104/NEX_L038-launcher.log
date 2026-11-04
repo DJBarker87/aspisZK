@@ -1,0 +1,55 @@
+{"attempt": "NEX_L038", "exit_status": 1, "wall_seconds": 2.335957281058654, "peak_rss_kib": "5275040", "swaps": "0", "print_axioms": ["'NEX_EmitRuntime.result_state_effects' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEX_EmitRuntime.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NEX_generated/NEX_EmitRuntime.lean:29:61: error: unsolved goals
+A E : Type
+binding : Statement → Output → Result (core.result.Result Unit NEU_EmitModel.Error)
+encode : Output → Result (core.result.Result Bytes NEU_EmitModel.Error)
+state : AspisR1.S2I.ReturnData.State A E
+s : Statement
+bytes : Bytes
+hb : binding s (derived s) = ok (core.result.Result.Ok ())
+he : encode (derived s) = ok (core.result.Result.Ok bytes)
+header : List.take 4 ↑bytes = [65#u8, 83#u8, 82#u8, 56#u8]
+⊢ (do
+      let checked ← ok (core.result.Result.Ok ())
+      match checked with
+        | core.result.Result.Err a =>
+          ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+...
+8, 83#u8, 82#u8, 56#u8] then
+                  ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+                else do
+                  let state' ← ok (AspisR1.S2I.ReturnData.set state ↑bytes)
+                  ok (core.result.Result.Ok state')) =
+    ok (core.result.Result.Ok (AspisR1.S2I.ReturnData.set state ↑bytes))
+NEX_generated/NEX_EmitRuntime.lean:34:13: warning: This simp argument is unused:
+  bytes.property
+
+Hint: Omit it from the simp argument list.
+  simp only [b̵y̵t̵e̵s̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵ ̵ne_eq, not_true_eq_false, ↓reduceIte, header]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEX_generated/NEX_EmitRuntime.lean:34:36: warning: This simp argument is unused:
+  not_true_eq_false
+
+Hint: Omit it from the simp argument list.
+  simp only [bytes.property, ne_eq, n̵o̵t̵_̵t̵r̵u̵e̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵ ̵↓reduceIte, header]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEX_generated/NEX_EmitRuntime.lean:34:55: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp only [bytes.property, ne_eq, not_true_eq_false, ↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵ ̵header]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEX_generated/NEX_EmitRuntime.lean:34:67: warning: This simp argument is unused:
+  header
+
+Hint: Omit it from the simp argument list.
+  simp only [bytes.property, ne_eq, not_true_eq_false, ↓reduceIte,̵ ̵h̵e̵a̵d̵e̵r̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NEX_EmitRuntime.result_state_effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEX_EmitRuntime.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r57ab7611a13e49469ed79620ef23d0d8.scope; invocation ID: 144d3e75af434117b145336b10ef6e45

@@ -13,10 +13,10 @@ if mode=='error':native=native.replace('::NonCanonicalDigest','::WrongMagic')
 fields=['pool[j] as u64','deployment_domain[j] as u64','sequence','next_pair_index','current_root[i].0 as u64','frontier[k][i].0 as u64']
 expected=['f.bytes[48+j] as u64','f.bytes[80+j] as u64','u64::from_le_bytes(f.bytes[112..120].try_into().unwrap())','u64::from_le_bytes(f.bytes[120..128].try_into().unwrap())','f.replies[0][i].0 as u64','f.replies[1+k][i].0 as u64']
 check='assert!(s.'+fields[slot]+'=='+expected[slot]+('^1' if mode=='value' else '')+');'
-base=helpers().replace('aspis_statement::','crate::')
+base=helpers().replace('aspis_statement::','crate::')+(E/'NEX_atom_error.rs.txt').read_text()
 body=base+f'''
 struct Frame<'a>{{bytes:&'a [u8;800],replies:&'a [Digest;21],fail_at:usize,reply:Result<(),PoolV1PairLiveSnapshotErrorV1>,digests:usize,validations:u8,i:usize,k:usize,j:usize}}
-fn digest(bytes:&[u8;32],f:&mut Frame)->Result<Digest,()>{{let n=f.digests;assert!(n<21);assert!(bytes[f.j]==f.bytes[128+32*n+f.j]);f.digests+=1;if n==f.fail_at{{Err(())}}else{{Ok(f.replies[n])}}}}
+fn digest(bytes:&[u8;32],f:&mut Frame)->Result<Digest,crate::AtomicStatementError>{{let n=f.digests;assert!(n<21);assert!(bytes[f.j]==f.bytes[128+32*n+f.j]);f.digests+=1;if n==f.fail_at{{Err(NEX_atom_error())}}else{{Ok(f.replies[n])}}}}
 fn validate(s:&PoolV1PairLiveSnapshotV1,f:&mut Frame)->Result<(),PoolV1PairLiveSnapshotErrorV1>{{assert!(f.digests==21&&f.validations==0);let i=f.i;let k=f.k;let j=f.j;{check}f.validations=1;f.reply}}
 '''+native+f'''
 #[kani::proof]
@@ -28,4 +28,4 @@ match header{{Err(e)=>{{assert!(f.digests==0&&f.validations==0);assert!(matches!
 '''
 body=body.replace('@MAGIC@','||'.join(f'bytes[{i}]!=POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC[{i}]' for i in range(8))).replace('@RESERVED@','||'.join(f'bytes[{i}]!=0' for i in range(9,16))).replace('@BINDING@','||'.join(f'bytes[{16+i}]!=POOL_V1_PAIR_TREE_FORMAT_BINDING[{i}]' for i in range(32)))
 h=f+'\n#[cfg(kani)]\n#[path="NEX_snapshotdecode.rs"]\nmod NEX_snapshotdecode;\n';patch=''.join(difflib.unified_diff(f.splitlines(True),h.splitlines(True),fromfile='a/'+p,tofile='b/'+p))+'--- /dev/null\n+++ b/crates/aspis-statement/src/pool_v1/NEX_snapshotdecode.rs\n@@ -0,0 +1,'+str(len(body.splitlines()))+' @@\n'+''.join('+'+l+'\n' for l in body.splitlines());(E/'NEX_native_contracts.patch').write_text(patch)
-(E/'NEX_SNAPSHOTDECODE_CURRENT.json').write_text(json.dumps(dict(mode=mode,slot=slot,frozen_body=original,native=native,source=body,domain='all live800-byte slices; arbitrary full digest values, earliest failure index0..21; every validation Result/error; arbitrary indices',classification='ruling y frozen unrolled21 calls, exact read windows, header rejection order, complete returned fields; no native loop, no arithmetic stub'),indent=1))
+(E/'NEX_SNAPSHOTDECODE_CURRENT.json').write_text(json.dumps(dict(mode=mode,full_child_Result=True,slot=slot,frozen_body=original,native=native,source=body,domain='all live800-byte slices; arbitrary full digest values, earliest failure index0..21; every validation Result/error; arbitrary indices',classification='ruling y frozen unrolled21 calls, exact read windows, header rejection order, complete returned fields; no native loop, no arithmetic stub'),indent=1))
