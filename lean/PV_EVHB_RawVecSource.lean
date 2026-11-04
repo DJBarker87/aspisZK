@@ -9,6 +9,8 @@ set_option autoImplicit false
 namespace PV_EVHB_RawVecSource
 open Aeneas Aeneas.Std R1Z.PV_FXM_ReserveWorld PV_EVHB_RawVecOwner
 
+abbrev ReserveError := R1Z.PV_FXM_ReserveWorld.Error
+
 structure Run (S F A : Type) where
   outcome : PV_EVH_Runtime.Outcome A
   world : NativeWorld S F
@@ -37,7 +39,7 @@ structure Runtime (S F : Type) where
   capacityOverflow : Q S F Empty
   handleAllocError : core.alloc.layout.Layout → Q S F Empty
 
-def handleError {S F : Type} (runtime : Runtime S F) : Error → Q S F Empty
+def handleError {S F : Type} (runtime : Runtime S F) : ReserveError → Q S F Empty
   | .capacityOverflow => runtime.capacityOverflow
   | .allocError layout => runtime.handleAllocError layout
 
@@ -50,31 +52,31 @@ that domain. -/
 def needsToGrow (wordMax : Nat) (h : Header) (additional : Nat) : Prop :=
   additional > capacity wordMax h - h.len
 
-def allocError (h : Header) (cap : Nat) : Error :=
+def allocError (h : Header) (cap : Nat) : ReserveError :=
   .allocError ⟨usize (cap*h.shape.width),h.shape.align⟩
 
 def allocationCall {S F : Type} (runtime : Runtime S F) (h : Header) (cap : Nat) :
     Q S F (Except Unit Nat) :=
   if h.shape.width=0 ∨ h.cap=0 then runtime.allocate h cap else runtime.grow h cap
 
-def mappedAnswer (h : Header) (cap : Nat) : Except Unit Nat → Except Error Nat
+def mappedAnswer (h : Header) (cap : Nat) : Except Unit Nat → Except ReserveError Nat
   | .ok pointer => .ok pointer
   | .error _ => .error (allocError h cap)
 
 def finishGrow {S F : Type} (runtime : Runtime S F) (byteMax : Nat)
-    (h : Header) (cap : Nat) : Q S F (Except Error Nat) :=
+    (h : Header) (cap : Nat) : Q S F (Except ReserveError Nat) :=
   if cap*h.shape.width > byteMax then lift (.ok (.error .capacityOverflow))
   else
     bind (allocationCall runtime h cap) fun answer => lift (.ok (mappedAnswer h cap answer))
 
 def commit {S F : Type} (owner : Nat) (h : Header) (cap : Nat)
-    (answer : Except Error Nat) : Q S F (Except Error Unit) := fun w =>
+    (answer : Except ReserveError Nat) : Q S F (Except ReserveError Unit) := fun w =>
   match answer with
   | .error error => ⟨.returned (.ok (.error error)),w,[]⟩
   | .ok pointer => ⟨.returned (.ok (.ok ())),install w owner h pointer cap,[]⟩
 
 def growExact {S F : Type} (runtime : Runtime S F) (wordMax byteMax : Nat)
-    (owner : Nat) (h : Header) (additional : Nat) : Q S F (Except Error Unit) :=
+    (owner : Nat) (h : Header) (additional : Nat) : Q S F (Except ReserveError Unit) :=
   if h.shape.width=0 then lift (.ok (.error .capacityOverflow))
   else if h.len+additional>wordMax then lift (.ok (.error .capacityOverflow))
   else bind (finishGrow runtime byteMax h (h.len+additional))
@@ -83,7 +85,7 @@ def growExact {S F : Type} (runtime : Runtime S F) (wordMax byteMax : Nat)
 def minCap (size : Nat) : Nat := if size=1 then 8 else if size≤1024 then 4 else 1
 
 def growAmortized {S F : Type} (runtime : Runtime S F) (wordMax byteMax : Nat)
-    (owner : Nat) (h : Header) (len additional : Nat) : Q S F (Except Error Unit) :=
+    (owner : Nat) (h : Header) (len additional : Nat) : Q S F (Except ReserveError Unit) :=
   if h.shape.width=0 then lift (.ok (.error .capacityOverflow))
   else if len+additional>wordMax then lift (.ok (.error .capacityOverflow))
   else
@@ -91,19 +93,19 @@ def growAmortized {S F : Type} (runtime : Runtime S F) (wordMax byteMax : Nat)
     bind (finishGrow runtime byteMax h cap) (commit owner h cap)
 
 def tryReserveExact {S F : Type} (runtime : Runtime S F) (wordMax byteMax : Nat)
-    (owner : Nat) (h : Header) (additional : Nat) : Q S F (Except Error Unit) :=
+    (owner : Nat) (h : Header) (additional : Nat) : Q S F (Except ReserveError Unit) :=
   if additional > capacity wordMax h - h.len then
     growExact runtime wordMax byteMax owner h additional
   else lift (.ok (.ok ()))
 
 def tryReserve {S F : Type} (runtime : Runtime S F) (wordMax byteMax : Nat)
-    (owner : Nat) (h : Header) (additional : Nat) : Q S F (Except Error Unit) :=
+    (owner : Nat) (h : Header) (additional : Nat) : Q S F (Except ReserveError Unit) :=
   if additional > capacity wordMax h - h.len then
     growAmortized runtime wordMax byteMax owner h h.len additional
   else lift (.ok (.ok ()))
 
 def handle {S F : Type} (runtime : Runtime S F)
-    (action : Q S F (Except Error Unit)) : Q S F Unit :=
+    (action : Q S F (Except ReserveError Unit)) : Q S F Unit :=
   bind action fun answer => match answer with
   | .ok () => lift (.ok ())
   | .error error => bind (handleError runtime error) Empty.elim
@@ -146,7 +148,7 @@ theorem bind_exhausted {S F A B : Type} (m : Q S F A) (k : A → Q S F B)
   simp only [bind,exhausted]
 
 theorem commit_error {S F : Type} (w : NativeWorld S F) (owner : Nat)
-    (h : Header) (cap : Nat) (error : Error) :
+    (h : Header) (cap : Nat) (error : ReserveError) :
     commit owner h cap (.error error) w=⟨.returned (.ok (.error error)),w,[]⟩ := rfl
 
 theorem commit_owned {S F : Type} (w : NativeWorld S F) (owner : Nat)
@@ -245,8 +247,8 @@ theorem exact_denied_owned {S F : Type} (runtime : Runtime S F) (wordMax byteMax
   exact ⟨h,selected,(denied_owned w h h (h.len+additional) backend).mpr owned⟩
 
 theorem handle_inner_error {S F : Type} (runtime : Runtime S F)
-    (action : Q S F (Except Error Unit)) (w post : NativeWorld S F)
-    (events : List PV_RJ4IDB.NativeEvent) (error : Error)
+    (action : Q S F (Except ReserveError Unit)) (w post : NativeWorld S F)
+    (events : List PV_RJ4IDB.NativeEvent) (error : ReserveError)
     (reply : action w=⟨.returned (.ok (.error error)),post,events⟩) :
     handle runtime action w=
       let next := bind (handleError runtime error) Empty.elim post
