@@ -28,7 +28,7 @@ theorem source (r : Record) : validate_result r = ok (status r) := by
   repeat' first
     | rfl
     | (split <;> try simp_all only [decide_eq_true_eq,bne_iff_ne,bind_tc_ok,
-        core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch])
+        AspisR1TerminalDecoder.core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch])
 
   all_goals simp_all [
     validate_result.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once,

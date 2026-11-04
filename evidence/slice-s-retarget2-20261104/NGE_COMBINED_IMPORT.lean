@@ -1,0 +1,33 @@
+import NFY_COMBINED_IMPORT
+import NGE_NEE_CanonicalFrame
+import NGE_NEJ_ConcreteFrame
+import NGE_NEJ_CommonSourceFrame
+import NGE_NEJ_ScannerFramed
+import NGE_NEJ_ScannerWidth
+import NGE_NEJ_WindowStep
+import NGE_NEL_CommonOracle
+import NGE_NEL_DigestGeometry
+import NGE_NEL_DigestLoopFrame
+import NGE_NEL_PaymentFieldCarriers
+import NGE_NEL_PaymentDomains
+import NGE_NEL_PaymentOracle
+import NGE_NEM_ArraySnapshotView
+import NGE_NEM_DigestInstance
+import NGE_NEL_FrontierGeometry
+import NGE_NEM_EncoderFrame
+import NGE_NEM_KindInstance
+import NGE_NEM_EncoderReceiver
+import NGE_NEM_FrontierValidatorInstance
+import NGE_NEM_PaymentFrame
+import NGE_NEQ_BorrowWidth
+import NGE_NEQ_LateBorrow
+import NGE_NEQ_RootFrame
+import NGE_NEQ_EncoderDomains
+import NGE_NEQ_NullifierDomains
+import NGE_NEQ_ParserCanonical
+import NGE_NEQ_PaymentDomains
+import NGE_NBN_ResultValidator
+import NGE_NBN_ResultDependency
+import NGE_NEQ_ResultValidator
+
+#print axioms AspisR1.RPx_Deployed.deployed
