@@ -64,7 +64,7 @@ def collect(body,range_seeds=None,windows=False,initial=None):
       divisor=c[1]if c[0]=='literal'else None;expr=None;limit=None
       def bounded(value):
        if value[0]=='literal':return(dict(op='literal',value=value[1]),value[1]+1)
-       if value[0]=='rangeItem'or value not in bounds:return None
+       if value not in bounds:return None
        lim,pred,branch=bounds[value]
        return(bounds.get(('expr',value),dict(op='bounded',input=value,limit=lim,predicate=pred,branch=branch)),lim)
       if operator=={'Rem':'Panic'}and divisor is not None and divisor>0:
