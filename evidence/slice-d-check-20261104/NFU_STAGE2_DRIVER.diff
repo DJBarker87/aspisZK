@@ -1,0 +1,67 @@
+--- a/NFQ_ProofDriver.lean
++++ b/NFU_Stage2Driver.lean
+@@ -63,10 +63,44 @@
+   enableInitializersExecution
+   let mode := args.headD "small"
+   let (modules, roots) :=
+-    if mode == "proof0" then
+-      (#[`NFQ_COMBINED_IMPORT], #[`NFQ_RowShape.reference, `NFQ_RowShape.prefix_reference, `NFQ_RowShape.compact_reference])
+-    else if mode == "proof1" then
+-      (#[`NFQ_COMBINED_IMPORT], #[`NFQ_Transport.folds_reference, `NFQ_Transport.final_len_reference, `NFQ_Transport.checkpoint_size_reference])
++    if mode == "stage2proof0" then
++      (#[`NFU_STAGE2_IMPORT], #[`NFU_AdapterGetters.key, `NFU_AdapterGetters.owner, `NFU_AdapterGetters.readonly, `NFU_AdapterGetters.readonly_frame, `NFU_AdapterGetters.key_frame, `NFU_AdapterGetters.owner_frame, `NFU_CompactLeaves.validate_result, `NFU_CompactLeaves.check_result])
++    else if mode == "stage2proof1" then
++      (#[`NFU_STAGE2_IMPORT], #[`NFU_CompactLeaves.expand_result, `NFU_CompactLeaves.expand_reject, `NFU_Retarget.LPl_A.Check.loop_eq_model, `NFU_Retarget.LPl_A.Check.shipped_leaf_model, `NFU_Retarget.LPl_A.Check.loop_eq_fold, `NFU_Retarget.LPl_A.Check.accepts_iff, `NFU_Retarget.LPl_A.Check.rejects_of_bad_stage, `NFU_Retarget.LPl_A.Echeck.loop_eq_model])
++    else if mode == "stage2proof2" then
++      (#[`NFU_STAGE2_IMPORT], #[`NFU_Retarget.LPl_A.Echeck.shipped_leaf_model, `NFU_Retarget.LPl_A.Echeck.loop_eq_fold, `NFU_Retarget.LPl_A.Echeck.accepts_iff, `NFU_Retarget.LPl_A.Echeck.rejects_of_bad_stage, `NFU_Retarget.LPl_A.Expand.loop_eq_map, `NFU_Retarget.LPl_A.Expand.loop_eq_fold, `NFU_Retarget.LPl_A.Expand.shipped_leaf_model, `NFU_Retarget.LPl_A.Expand.loop_length])
++    else if mode == "stage2proof3" then
++      (#[`NFU_STAGE2_IMPORT], #[`NFU_Retarget.LPl_A.Expand.low_half, `NFU_Retarget.LPl_A.Expand.high_half, `NFU_Retarget.LPl_A.Expand.y1_loop_fold, `NFU_Retarget.LPl_A.firstBad_find, `NFU_Retarget.LPl_A.firstBad_fold, `NFU_Retarget.LPl_A.stages_fold, `NFU_Retarget.LPl_A.stages_all, `NFU_Retarget.LPl_A.stages_append])
++    else if mode == "stage2proof4" then
++      (#[`NFU_STAGE2_IMPORT], #[`NFU_Retarget.LPl_A.build_map, `NFU_Retarget.LPl_A.build_fold, `NFU_Retarget.LPl_A.check_stage_congruence, `NFU_Retarget.LPl_A.echeck_stage_congruence, `NFU_Retarget.LPl_A.stages_congr, `NFU_Retarget.LPl_A.firstBad_bound, `NFU_Retarget.LPl_A.firstBad_none, `NFU_Retarget.LPl_A.firstBad_is_bad])
++    else if mode == "stage2proof5" then
++      (#[`NFU_STAGE2_IMPORT], #[`NFU_Retarget.LPl_A.build_length, `NFU_Retarget.LPl_A.Validate.loop_eq_model, `NFU_Retarget.LPl_A.Validate.loop_eq_fold, `NFU_Retarget.LPl_A.Validate.shipped_leaf_model, `NFU_Retarget.LPl_A.Validate.error_index_bound, `NFU_Retarget.LPl_A.Validate.error_exact, `NFU_Retarget.LPl_A.Validate.accepts_of_all_stages, `NFU_Retarget.LPl_C.Echeck.caller_iff])
++    else if mode == "stage2proof6" then
++      (#[`NFU_STAGE2_IMPORT], #[`NFU_Retarget.LPl_C.Echeck.tail_class, `NFU_Retarget.LPl_C.Echeck.count_with_tail, `NFU_Retarget.LPl_C.Check.caller_iff, `NFU_Retarget.LPl_C.Check.caller_reject, `NFU_Retarget.LPl_C.Validate.caller_success, `NFU_Retarget.LPl_C.Validate.caller_error_bound, `NFU_Retarget.LPl_C.window_append, `NFU_Retarget.LPl_C.Expand.row_low])
++    else if mode == "stage2proof7" then
++      (#[`NFU_STAGE2_IMPORT], #[`NFU_Retarget.LPl_C.Expand.row_high, `NFU_Retarget.LPl_C.Expand.caller_rows, `NFU_Retarget.LPl_C.fold_simulation, `NFU_Retarget.LPl_C.Echeck.append_tail, `NFU_Retarget.LPl.Check.chunk_eq, `NFU_Retarget.LPl.Check.window, `NFU_Retarget.LPl.Check.stage, `NFU_Retarget.LPl.Check.native_result])
++    else if mode == "stage2proof8" then
++      (#[`NFU_STAGE2_IMPORT], #[`NFU_Retarget.LPl.Check.unique, `NFU_Retarget.LPl.Check.total, `NFU_Retarget.LPl.Check.zero_chunk, `NFU_Retarget.LPl.Check.rejected_chunk, `NFU_Retarget.LPl.Echeck.word_eq_le32, `NFU_Retarget.LPl.Echeck.chunk_eq, `NFU_Retarget.LPl.Echeck.window, `NFU_Retarget.LPl.Echeck.run_all])
++    else if mode == "stage2proof9" then
++      (#[`NFU_STAGE2_IMPORT], #[`NFU_Retarget.LPl.Echeck.run_loop, `NFU_Retarget.LPl.Echeck.native_result, `NFU_Retarget.LPl.Echeck.unique, `NFU_Retarget.LPl.Echeck.exists_trace, `NFU_Retarget.LPl.Echeck.read_eq, `NFU_Retarget.LPl.Echeck.read_size, `NFU_Retarget.LPl.Echeck.advance, `NFU_Retarget.LPl.Echeck.trace_result])
++    else if mode == "stage2proof10" then
++      (#[`NFU_STAGE2_IMPORT], #[`NFU_Retarget.LPl.Expand.inside, `NFU_Retarget.LPl.Expand.outside, `NFU_Retarget.LPl.Expand.length, `NFU_Retarget.LPl.Expand.invariant, `NFU_Retarget.LPl.Expand.update_write, `NFU_Retarget.LPl.Expand.total, `NFU_Retarget.LPl.Expand.output, `NFU_Retarget.LPl.Expand.unique])
++    else if mode == "stage2proof11" then
++      (#[`NFU_STAGE2_IMPORT], #[`NFU_Retarget.LPl.Expand.double, `NFU_Retarget.LPl.Expand.native_result, `NFU_Retarget.LPl.Expand.length_error, `NFU_Retarget.LPl_G.window_contained, `NFU_Retarget.LPl_G.scan928, `NFU_Retarget.LPl_G.record3712, `NFU_Retarget.LPl_G.claims_window, `NFU_Retarget.LPl_G.echeck_stages])
++    else if mode == "stage2proof12" then
++      (#[`NFU_STAGE2_IMPORT], #[`NFU_Retarget.LPl_G.check_stages, `NFU_Retarget.LPl_G.first_error_sticky, `NFU_Retarget.LPl_G.validation_error, `NFU_Retarget.LPl.Scan.result, `NFU_Retarget.LPl.Scan.run_find, `NFU_Retarget.LPl.Scan.first_error, `NFU_Retarget.LPl.Scan.unique, `NFU_Retarget.LPl.Scan.exists_trace])
++    else if mode == "stage2proof13" then
++      (#[`NFU_STAGE2_IMPORT], #[`NFU_Retarget.LPl.Scan.window_eq, `NFU_Retarget.LPl.Scan.bool_none, `NFU_Retarget.LPl.Validate.bad_eq, `NFU_Retarget.LPl.Validate.window, `NFU_Retarget.LPl.Validate.first_error, `NFU_Retarget.LPl.Validate.native_result, `NFU_Retarget.LPl.Validate.error_bound, `NFU_Retarget.LPl.Validate.earlier_error])
++    else if mode == "stage2proof14" then
++      (#[`NFU_STAGE2_IMPORT], #[`NFU_Retarget.LPl.Validate.unique, `NFU_Retarget.LPl.Validate.total, `NFU_Retarget.LPn.Expand.coordinate_bound, `NFU_Retarget.LPn.Expand.local_global, `NFU_Retarget.LPn.Expand.write_of_observations, `NFU_Retarget.LPn.Expand.windows_disjoint, `NFU_Retarget.LPn.Expand.iterator_partition, `NFU_Retarget.LPn.Expand.to_inherited])
++    else if mode == "stage2proof15" then
++      (#[`NFU_STAGE2_IMPORT], #[`NFU_Retarget.LPn.Expand.of_inherited, `NFU_Retarget.LPn.Expand.total, `NFU_Retarget.LPn.Expand.native_result, `NFU_Retarget.LPn.Expand.unique, `NFU_Retarget.LPn.Expand.length_error, `NFU_PacketDomains.payload_bound, `NFU_PacketDomains.framed_bound, `NFU_PacketDomains.compact_payload_bound])
++    else if mode == "stage2proof16" then
++      (#[`NFU_STAGE2_IMPORT], #[`NFU_PacketDomains.payload_aligned, `NFU_PacketDomains.low_window, `NFU_PacketDomains.expansion_window, `NFU_PacketDomains.expansion_disjoint, `NFU_PacketDomains.checkpoint_s2, `NFU_PrefixRecords.record, `NFU_PrefixRecords.validated_record, `NFU_RecordGetters.row])
++    else if mode == "stage2proof17" then
++      (#[`NFU_STAGE2_IMPORT], #[`NFU_RecordGetters.framed, `NFU_RecordGetters.parser_row, `NFU_RecordGetters.parser_framed, `NFU_RecordGetters.same_token, `NFU_RowDomains.shape, `NFU_RowDomains.parser_shape, `NFU_RowDomains.framed, `NFU_TransportTag.model])
++    else if mode == "stage2proof18" then
++      (#[`NFU_STAGE2_IMPORT], #[`NFU_TransportTag.canonical_range, `NFU_TransportTag.deployed_s2, `NFU_ZeroPort.head, `NFU_ZeroPort.length, `NFU_ZeroPort.advance, `NFU_ZeroPort.index_advance, `NFU_ZeroPort.source])
+     else if mode == "fixtures" then
+       (#[`NEP_Planted, `NEP_Mutations],
+        #[`NEP_Planted.matcher, `NEP_Planted.viaPrivate, `NEP_Planted.proof,
+@@ -77,12 +111,12 @@
+     {} (loadExts := true) (level := .private)
+   if mode == "scan" || mode == "queryscan" then
+     let mut expected : Std.HashMap String (Array String) := {}
+-    for line in ← IO.FS.lines (if mode == "queryscan" then "NFQ_QUERY_EXPECTED_IMPORTS.jsonl" else "NFQ_EXPECTED_IMPORTS.jsonl") do
++    for line in ← IO.FS.lines (if mode == "queryscan" then "NFU_QUERY_EXPECTED_IMPORTS.jsonl" else "NFU_EXPECTED_IMPORTS.jsonl") do
+       let j ← IO.ofExcept (Json.parse line)
+       expected := expected.insert (← IO.ofExcept (j.getObjValAs? String "module"))
+         (← IO.ofExcept (j.getObjValAs? (Array String) "imports"))
+-    let failed ← NER.loadedScan env (if mode == "queryscan" then "NFQ_QUERY_LOADED_scan.jsonl" else "NFQ_LOADED_scan.jsonl") expected
+-    IO.println (if failed then "NFQ_SCAN_FAILED" else "NFQ_SCAN_ZERO_DANGLING")
++    let failed ← NER.loadedScan env (if mode == "queryscan" then "NFU_QUERY_LOADED_scan.jsonl" else "NFU_LOADED_scan.jsonl") expected
++    IO.println (if failed then "NFU_SCAN_FAILED" else "NFU_SCAN_ZERO_DANGLING")
+     return if failed then 1 else 0
+   let ctx : Command.Context := {
+     fileName := "NEP_Driver"

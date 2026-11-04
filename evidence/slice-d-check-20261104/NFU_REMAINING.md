@@ -1,22 +1,10 @@
 # NFU remaining assigned members (live handoff)
 
-Checked new closure: 2 functions / 2 D rows. Driver OPEN. Receipt counts: {'lean': 53, 'kani': 68, 'auditbatch': 1}. No new unvalidated row is claimed.
+Checked new closure: 11 functions / 14 D rows. Driver OPEN. Receipt counts: {'lean': 56, 'kani': 70, 'auditbatch': 2, 'extract': 3}. No new unvalidated row is claimed.
 
 ## crates/aspis-r1-cost-probe/src/compact.rs::slot_offset
 
 Rows: TX1:100, TX2:066. Needs its own frozen native Result/state/frame/ordered-effects packet, matched controls, model association, all callee domains and raw ax2; a CLOSED child alone is insufficient.
-
-Callees: none.
-
-## crates/aspis-r1-cost-probe/src/compact.rs::check_values
-
-Rows: TX1:096. One-chunk K007/K008 and pointer-iterator K030/K031 pass/fail; check_one needs exact KMX replay because CM31::from_le_bytes reaches try_into copies. Namespaced retained complete Scan proofs compile through L045; own wrapper and raw audit/admission pending.
-
-Callees: crates/aspis-core/src/field.rs::QM31::from_le_bytes [opaque Q].
-
-## crates/aspis-r1-cost-probe/src/compact.rs::expand_values
-
-Rows: TX1:099. Exact KMX copy16 K024/K025, local write/frame K026/K027 and guard K028/K029 pass/fail. Retained spatial/induction proofs retargeted coherently under NFU_Retarget through L045; generic full iterator association, wrapper and raw audit/admission pending.
 
 Callees: none.
 
@@ -31,12 +19,6 @@ Callees: crates/aspis-r1-cost-probe/src/compact.rs::compact_row [D SCC 76]; crat
 Rows: TX1:147. Needs its own frozen native Result/state/frame/ordered-effects packet, matched controls, model association, all callee domains and raw ax2; a CLOSED child alone is insufficient.
 
 Callees: crates/aspis-core/src/field.rs::QM31::from_le_bytes [opaque Q].
-
-## crates/aspis-r1-cost-probe/src/r1_wire.rs::validate_record_fields
-
-Rows: TX1:154. Needs its own frozen native Result/state/frame/ordered-effects packet, matched controls, model association, all callee domains and raw ax2; a CLOSED child alone is insufficient.
-
-Callees: crates/aspis-core/src/field/wide_exact.rs::WideExact::c1 [D SCC 18]; crates/aspis-core/src/field/wide_exact.rs::WideExact::from_le_bytes [opaque Q].
 
 ## crates/aspis-r1-cost-probe/src/r1_wire.rs::parse_record
 
@@ -86,33 +68,15 @@ Rows: TX1:335, TX2:229. Needs its own frozen native Result/state/frame/ordered-e
 
 Callees: none.
 
-## programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::key
-
-Rows: TX1:337, TX2:231. Borrowed native pass/fail pairs K016..019 and K022/K023 plus L009 model/field-irrelevance laws are ready; raw ax2 and additive admission still required. K014/K020 timeouts excluded; no cleanup claim.
-
-Callees: none.
-
 ## programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_distinct_accounts
 
 Rows: TX1:339, TX2:235. Needs its own frozen native Result/state/frame/ordered-effects packet, matched controls, model association, all callee domains and raw ax2; a CLOSED child alone is insufficient.
 
 Callees: programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::key [D SCC 271].
 
-## programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_readonly_buffer
-
-Rows: TX1:340, TX2:237. Borrowed native pass/fail pairs K016..019 and K022/K023 plus L009 model/field-irrelevance laws are ready; raw ax2 and additive admission still required. K014/K020 timeouts excluded; no cleanup claim.
-
-Callees: programs/r1-cost-probe/src/r1_pool_adapter.rs::readonly_buffer_meta_ok [D SCC 273].
-
 ## programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data_len
 
 Rows: TX1:336, TX2:230. Needs its own frozen native Result/state/frame/ordered-effects packet, matched controls, model association, all callee domains and raw ax2; a CLOSED child alone is insufficient.
-
-Callees: none.
-
-## programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::owner
-
-Rows: TX1:338, TX2:232. Borrowed native pass/fail pairs K016..019 and K022/K023 plus L009 model/field-irrelevance laws are ready; raw ax2 and additive admission still required. K014/K020 timeouts excluded; no cleanup claim.
 
 Callees: none.
 
@@ -121,12 +85,6 @@ Callees: none.
 Rows: TX1:341, TX2:238. Needs its own frozen native Result/state/frame/ordered-effects packet, matched controls, model association, all callee domains and raw ax2; a CLOSED child alone is insufficient.
 
 Callees: crates/aspis-r1-cost-probe/src/verifier.rs::checkpoint_size [D SCC 208]; programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data_len [D SCC 275]; programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::owner [D SCC 276].
-
-## programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_zero
-
-Rows: TX1:342. Needs its own frozen native Result/state/frame/ordered-effects packet, matched controls, model association, all callee domains and raw ax2; a CLOSED child alone is insufficient.
-
-Callees: none.
 
 ## programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage1_owned
 
@@ -175,15 +133,3 @@ Callees: crates/aspis-r1-cost-probe/src/candidate.rs::tx2_authenticated [D SCC 2
 Rows: TX2:240. Decode/route composition must preserve exact arguments and abort/cleanup order. Transaction callees are outside this assignment; OPEN snapshot/authentication/validation/getter/observer dependencies must be cited, never assumed. No root promotion from a local routing check.
 
 Callees: crates/aspis-core/src/r0/domain.rs::FibreIndex::get [opaque Q]; programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::snapshot [D SCC 269]; programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage2_owned [D SCC 291].
-
-## crates/aspis-r1-cost-probe/src/r1_wire.rs::Prefix<'a>::record
-
-Rows: TX1:140. Needs its own frozen native Result/state/frame/ordered-effects packet, matched controls, model association, all callee domains and raw ax2; a CLOSED child alone is insufficient.
-
-Callees: none.
-
-## crates/aspis-r1-cost-probe/src/r1_wire.rs::Prefix<'a>::validated_record
-
-Rows: TX1:141. Needs its own frozen native Result/state/frame/ordered-effects packet, matched controls, model association, all callee domains and raw ax2; a CLOSED child alone is insufficient.
-
-Callees: crates/aspis-r1-cost-probe/src/r1_wire.rs::Prefix<'a>::record [D SCC 89].

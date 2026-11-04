@@ -1,0 +1,11 @@
+--- a/crates/aspis-r1-cost-probe/src/fast_pairing.rs
++++ b/crates/aspis-r1-cost-probe/src/fast_pairing.rs
+@@ -1,7 +1,7 @@
+ //! Exact-field dot accumulator candidates; arithmetic-only equivalence code.
+ mod canonical {
++    //! Private canonical representation: validate at the boundary, preserve internally.
+  #[cfg(kani)] pub(super) mod NFU_canonical { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/src/NFU_canonical.rs")); }
+-    //! Private canonical representation: validate at the boundary, preserve internally.
+     //! No public unchecked constructor. This does NOT change aspis_core::M31.
+     pub const P:u32=0x7fff_ffff;
+     const MASK:u64=0x7fff_ffff_7fff_ffff;

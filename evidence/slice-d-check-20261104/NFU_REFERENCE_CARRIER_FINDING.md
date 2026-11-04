@@ -1,0 +1,5 @@
+# Extracted reference carrier limitation
+
+E001/E002/E003 successfully extract the committed safe Rust references using the pinned NCO Charon/Aeneas binaries. These are reference artifacts only, not native or model closure.
+
+The shared reference `Error` is a reduced value-code carrier (InvalidRow, Length, Tag, NonCanonical, Parse), rather than the full deployed r1_wire::Error or verifier::Error types. It covers the actual validator's Ok/NonCanonical replies and the metadata errors, but it is NOT a full-error oracle type under ruling (y). No theorem in this job establishes the required injection/substitution or excludes the extra Parse case at the wire interface. Therefore none of the three extractions is used in NFU_CLOSED or a composed certificate. A continuation must either extract full exact error carriers or prove the restricted value-code transport after instantiating the CLOSED child, while keeping the native caller's oracle fully unconstrained. The finish reference similarly still needs actual typed Dot/cohort and full loop transport. The small generated Types preflight is not an emitted-reference equality proof.
