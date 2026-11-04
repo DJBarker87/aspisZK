@@ -1,0 +1,844 @@
+[
+ {
+  "ref": "b3p6",
+  "revision": "57b509036f2b74986b93a5f3c8e510cd1932f4b6",
+  "path": "tools/pv-b3p6-20261028/kmx/KMX_stubs.rs",
+  "sha256": "ad8efb63d8ff791274c91eff9ccc5b9fb126f5a3ac7f27aa811ca11b8e25c138",
+  "fullwidth_and_pointer_sites": [
+   {
+    "line": 5,
+    "text": "    let mut i=0;while i<count {let value=unsafe{src.add(i).read()};unsafe{dst.add(i).write(value)};i+=1;}"
+   },
+   {
+    "line": 28,
+    "text": "   let value=unsafe{ptr.cast::<core::mem::MaybeUninit<u8>>().add(i).read()};"
+   },
+   {
+    "line": 29,
+    "text": "   unsafe{out.cast::<core::mem::MaybeUninit<u8>>().add(i).write(value)};i+=1;"
+   },
+   {
+    "line": 40,
+    "text": "fn KMX_slice_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.copy_from_slice(&src);let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[k],src[k]);}"
+   },
+   {
+    "line": 46,
+    "text": "fn KMX_ptr_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as_mut_ptr(),16)};let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[k],src[k]);}"
+   },
+   {
+    "line": 52,
+    "text": "fn KMX_clone_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.clone_from_slice(&src);let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[k],src[k]);}"
+   },
+   {
+    "line": 58,
+    "text": "fn KMX_extend_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[k],src[k]);}"
+   },
+   {
+    "line": 64,
+    "text": "fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[k],src[k]);}"
+   },
+   {
+    "line": 71,
+    "text": "fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[k+1],src[k]);}"
+   }
+  ]
+ },
+ {
+  "ref": "b3p6",
+  "revision": "57b509036f2b74986b93a5f3c8e510cd1932f4b6",
+  "path": "tools/pv-b3p6-20261028/lib.rs",
+  "sha256": "8f3e41e0e7cfb2ec54611a5d1adaa116ec85ef6402139d2cd243bd3c45e14a3f",
+  "fullwidth_and_pointer_sites": [
+   {
+    "line": 22,
+    "text": "            Ok(rows) => { assert_eq!(rows.len(), 214); let index: u8 = kani::any(); kani::assume(index < 214); let i = usize::from(index); assert_eq!(rows[i], expected[i]); }"
+   }
+  ]
+ },
+ {
+  "ref": "b3p6",
+  "revision": "57b509036f2b74986b93a5f3c8e510cd1932f4b6",
+  "path": "tools/pv-b3p6-20261028/native226.rs",
+  "sha256": "1aa5a2b3b9ee73604a760252b4364dc7b08f4ff85ae91ea7676c4a066ba1207c",
+  "fullwidth_and_pointer_sites": []
+ },
+ {
+  "ref": "b3p6",
+  "revision": "57b509036f2b74986b93a5f3c8e510cd1932f4b6",
+  "path": "tools/pv-b3p6-20261028/v244-arithmetic630/arithmetic.rs",
+  "sha256": "2fa5e336dba5177b73586cbcb4b192a49ebeab60a4e960486b25711658e59e71",
+  "fullwidth_and_pointer_sites": [
+   {
+    "line": 6,
+    "text": "    QM31::ONE.sub(a).sub(b).add(ab).add(ab)"
+   }
+  ]
+ },
+ {
+  "ref": "b3p6",
+  "revision": "57b509036f2b74986b93a5f3c8e510cd1932f4b6",
+  "path": "tools/pv-b3p6-20261028/v244-closure636/closure.rs",
+  "sha256": "19c0cc6bcccbd804401376ba81264dfce8686a689af51109c26e8d3b64355795",
+  "fullwidth_and_pointer_sites": [
+   {
+    "line": 7,
+    "text": " let prepare=|component: CM31| [component.a, component.b, component.a.add(component.b)];"
+   },
+   {
+    "line": 8,
+    "text": " let index:usize=kani::any();kani::assume(index<3);"
+   }
+  ]
+ },
+ {
+  "ref": "b3p6",
+  "revision": "57b509036f2b74986b93a5f3c8e510cd1932f4b6",
+  "path": "tools/pv-b3p6-20261028/v244-component630/component.rs",
+  "sha256": "b5aaf96842d0dab1fcda548786356622442b52aaa609ab7d56ed1db13beb8ce8",
+  "fullwidth_and_pointer_sites": [
+   {
+    "line": 4,
+    "text": "    [component.a, component.b, component.a.add(component.b)]"
+   },
+   {
+    "line": 23,
+    "text": " let sum=component.a.add(component.b);let native=prepare_component(component);"
+   }
+  ]
+ },
+ {
+  "ref": "b3p6",
+  "revision": "57b509036f2b74986b93a5f3c8e510cd1932f4b6",
+  "path": "tools/pv-b3p6-20261028/v244-lift630/lift.rs",
+  "sha256": "2d7b6bb48fbd13cc60d7c08b23996cd2f23766b963f628fef3e167d2360ae0c0",
+  "fullwidth_and_pointer_sites": []
+ },
+ {
+  "ref": "b3p6",
+  "revision": "57b509036f2b74986b93a5f3c8e510cd1932f4b6",
+  "path": "tools/pv-b3p6-20261028/v244-pure636/pure.rs",
+  "sha256": "ce0f0cf4d0b5a8e0f94be3997293784e5b6ebe1c080f09e3d8bbd76e344c3c9f",
+  "fullwidth_and_pointer_sites": [
+   {
+    "line": 18,
+    "text": "        b: x.a.add(x.b.double()),"
+   },
+   {
+    "line": 51,
+    "text": " let actual:u32=M31(a).add(M31(b)).0;let expected:u32=g_add(a,b);"
+   },
+   {
+    "line": 141,
+    "text": " let actual:CM31=c.add(d);let expected:CM31=g_cadd(c,d);"
+   },
+   {
+    "line": 159,
+    "text": " let actual:QM31=q.add(r);let expected:QM31=g_qadd(q,r);"
+   }
+  ]
+ },
+ {
+  "ref": "b3p6",
+  "revision": "57b509036f2b74986b93a5f3c8e510cd1932f4b6",
+  "path": "tools/pv-b3p6-20261028/v244-selection610/selection.rs",
+  "sha256": "004e7154f916e2bf8f995eb492a1fcef1f320152ed12d60b0394b860a587ac55",
+  "fullwidth_and_pointer_sites": [
+   {
+    "line": 48,
+    "text": " let i:usize=kani::any::<u8>() as usize; let j:usize=kani::any::<u8>() as usize; kani::assume(j<84);"
+   }
+  ]
+ },
+ {
+  "ref": "b3p6",
+  "revision": "57b509036f2b74986b93a5f3c8e510cd1932f4b6",
+  "path": "tools/pv-b3p6-20261028/v244/equivalence16.rs",
+  "sha256": "c1b4ef82907f4651becd8fc5bf0f09db2d022be7d84206caae835ce11b8bacdb",
+  "fullwidth_and_pointer_sites": [
+   {
+    "line": 6,
+    "text": "fn canonical<const N:usize>()->[QM31;N] {let a=qs();let mut i=0;while i<N {kani::assume(a[i].c0.a.0<aspis_core::field::P);kani::assume(a[i].c0.b.0<aspis_core::field::P);kani::assume(a[i].c1.a.0<aspis_core::field::P);kani::assume(a[i].c1.b.0<aspis_core::field::P);i+=1;}a}"
+   },
+   {
+    "line": 12,
+    "text": "fn selector_domain() { let masks=dcopy::masks();let b:usize=kani::any();kani::assume(b<64);assert!(masks[b]==0||frozen(masks[b])); }"
+   },
+   {
+    "line": 24,
+    "text": "fn sum_high() { let h=qs();let l=qs();let a:usize=kani::any();let b:usize=kani::any();let c:usize=kani::any();let d:usize=kani::any();kani::assume(a<=64&&b<=64&&c<=64&&d<=64);let r=[a..b,c..d];assert_eq!(dep::sum(h,l,&r),reference::sum(h,l,&r)); }"
+   },
+   {
+    "line": 25,
+    "text": "fn pre<const N:usize>(start:usize) {let mut a=qs();let mut b=a;let v=canonical::<N>();dep::pre(&mut a,start,&v);reference::pre(&mut b,start,&v);let k:usize=kani::any();kani::assume(k<24);assert_eq!(a[k],b[k]);}"
+   },
+   {
+    "line": 41,
+    "text": "fn add_digest_binding() { let mut a=qs();let mut b=a;let v=qs();let q=q();let start:usize=kani::any();kani::assume(start<=8);let t:bool=kani::any();let x:[u32;8]=kani::any();let mut d=[M31(0);8];let mut i=0;while i<8 {d[i]=M31(x[i]);i+=1;}dep::digest(&mut a,q,&v,start,&d,t);reference::digest(&mut b,q,&v,start,&d,t);assert_eq!(a,b); }"
+   }
+  ]
+ },
+ {
+  "ref": "b3p6",
+  "revision": "57b509036f2b74986b93a5f3c8e510cd1932f4b6",
+  "path": "tools/pv-b3p6-20261028/v244/equivalence17.rs",
+  "sha256": "c1181f6768d71bf7955b841afa018e6687b17ee98ae641407774979aa4b32f25",
+  "fullwidth_and_pointer_sites": [
+   {
+    "line": 6,
+    "text": "fn lane(n:usize)->usize {let i:usize=kani::any();kani::assume(i<n);i}"
+   }
+  ]
+ },
+ {
+  "ref": "b3p6",
+  "revision": "57b509036f2b74986b93a5f3c8e510cd1932f4b6",
+  "path": "tools/pv-b3p6-20261028/v244/equivalence18.rs",
+  "sha256": "01887a3287a5f4b7d926634f50fa5c7cc69ca80b4d43300826ced1d13f0e5c4a",
+  "fullwidth_and_pointer_sites": []
+ },
+ {
+  "ref": "b3p6",
+  "revision": "57b509036f2b74986b93a5f3c8e510cd1932f4b6",
+  "path": "tools/pv-b3p6-20261028/v244/equivalence_helpers_k3_17.rs",
+  "sha256": "1641b68752eef7091f6d9218ed2fc77a700a3006aabe0654a4ac47b6c177298b",
+  "fullwidth_and_pointer_sites": []
+ },
+ {
+  "ref": "b3p6",
+  "revision": "57b509036f2b74986b93a5f3c8e510cd1932f4b6",
+  "path": "tools/pv-b3p6-20261028/v244/equivalence_k3_17.rs",
+  "sha256": "eeef355334887514fcbfc696d940369c34753a22d724987ae6671a973e76a0c3",
+  "fullwidth_and_pointer_sites": []
+ },
+ {
+  "ref": "b3p6",
+  "revision": "57b509036f2b74986b93a5f3c8e510cd1932f4b6",
+  "path": "tools/pv-b3p6-20261028/v244/inputs16.rs",
+  "sha256": "b98ffa68595a75f464805a1f5c8f1afefec5f9caf0eb8a8e496839b2364fe358",
+  "fullwidth_and_pointer_sites": []
+ },
+ {
+  "ref": "b3p6",
+  "revision": "57b509036f2b74986b93a5f3c8e510cd1932f4b6",
+  "path": "tools/pv-b3p6-20261028/v244/leaf_equivalence16.rs",
+  "sha256": "8d0afd2b617c3fbd75c20eeab4d0655ece90e2c1990e19b7610a6f42106b3d4d",
+  "fullwidth_and_pointer_sites": [
+   {
+    "line": 11,
+    "text": "fn selector_domain() { let masks=dcopy::masks();let b:usize=kani::any();kani::assume(b<64);assert!(masks[b]==0||frozen(masks[b])); }"
+   }
+  ]
+ },
+ {
+  "ref": "b3p6",
+  "revision": "57b509036f2b74986b93a5f3c8e510cd1932f4b6",
+  "path": "tools/pv-b3p6-20261028/v244/remaining_equivalence16.rs",
+  "sha256": "81436ba03080b5b056c1b1555609032a1794c3723528d38291ca6c60414583a7",
+  "fullwidth_and_pointer_sites": []
+ },
+ {
+  "ref": "b3p6",
+  "revision": "57b509036f2b74986b93a5f3c8e510cd1932f4b6",
+  "path": "tools/pv-b3p6-20261028/v244/shared_callee16.rs",
+  "sha256": "ff074c6c31c117328d9cadc1eea7e0721c156515896b97b16e173d8c4e2c3944",
+  "fullwidth_and_pointer_sites": [
+   {
+    "line": 21,
+    "text": " let r=mul(QM31::ONE,QM31::ZERO);let words=[r.c0.a.0,r.c0.b.0,r.c1.a.0,r.c1.b.0];let k:usize=kani::any();kani::assume(k<4);assert_eq!(words[k],raw[k]);USED=0;"
+   }
+  ]
+ },
+ {
+  "ref": "stx",
+  "revision": "83e7049f775afb6fb6a1044d5298b5de3d589f12",
+  "path": "tools/pv-stx-20261104/clone-certificate/src/element.rs",
+  "sha256": "e776f7723ae45c16d1de6ea303977c6ae6e0026e3f13dad0b986c0212b738c03",
+  "fullwidth_and_pointer_sites": [
+   {
+    "line": 10,
+    "text": "    let length: usize = kani::any();"
+   },
+   {
+    "line": 11,
+    "text": "    let source_capacity: usize = kani::any();"
+   },
+   {
+    "line": 12,
+    "text": "    let destination_capacity: usize = kani::any();"
+   },
+   {
+    "line": 13,
+    "text": "    let index: usize = kani::any();"
+   },
+   {
+    "line": 42,
+    "text": "        let lane: usize = kani::any(); kani::assume(lane < WORDS);"
+   },
+   {
+    "line": 83,
+    "text": "    let length: usize = kani::any();"
+   },
+   {
+    "line": 84,
+    "text": "    let capacity: usize = kani::any();"
+   },
+   {
+    "line": 85,
+    "text": "    kani::assume(length <= capacity && capacity <= isize::MAX as usize / size_of::<M31>());"
+   },
+   {
+    "line": 99,
+    "text": "    let capacity: usize = kani::any();"
+   },
+   {
+    "line": 100,
+    "text": "    kani::assume(1024 <= capacity && capacity <= isize::MAX as usize / size_of::<QM31>());"
+   },
+   {
+    "line": 112,
+    "text": "    let index: usize = kani::any();"
+   },
+   {
+    "line": 113,
+    "text": "    let element: usize = kani::any();"
+   }
+  ]
+ },
+ {
+  "ref": "stx",
+  "revision": "83e7049f775afb6fb6a1044d5298b5de3d589f12",
+  "path": "tools/pv-stx-20261104/clone-certificate/src/element_symbolic_allocation_failed.rs",
+  "sha256": "730b63b6660f29381397b87e4c74682cdbcda55dc1362a71c4f3d09f35fc177e",
+  "fullwidth_and_pointer_sites": [
+   {
+    "line": 10,
+    "text": "    let length: usize = kani::any();"
+   },
+   {
+    "line": 11,
+    "text": "    let source_capacity: usize = kani::any();"
+   },
+   {
+    "line": 12,
+    "text": "    let destination_capacity: usize = kani::any();"
+   },
+   {
+    "line": 13,
+    "text": "    let index: usize = kani::any();"
+   },
+   {
+    "line": 14,
+    "text": "    let query: usize = kani::any();"
+   },
+   {
+    "line": 31,
+    "text": "        src.add(index).write(value);"
+   },
+   {
+    "line": 32,
+    "text": "        dst.add(query).write(prior);"
+   },
+   {
+    "line": 35,
+    "text": "        core::ptr::copy_nonoverlapping(src.add(index), dst.add(index), 1);"
+   },
+   {
+    "line": 36,
+    "text": "        let result: [u32; WORDS] = core::mem::transmute_copy(&dst.add(index).read());"
+   },
+   {
+    "line": 37,
+    "text": "        let framed: [u32; WORDS] = core::mem::transmute_copy(&dst.add(query).read());"
+   },
+   {
+    "line": 38,
+    "text": "        let retained: [u32; WORDS] = core::mem::transmute_copy(&src.add(index).read());"
+   },
+   {
+    "line": 39,
+    "text": "        let lane: usize = kani::any(); kani::assume(lane < WORDS);"
+   }
+  ]
+ },
+ {
+  "ref": "stx",
+  "revision": "83e7049f775afb6fb6a1044d5298b5de3d589f12",
+  "path": "tools/pv-stx-20261104/clone-certificate/src/indexed.rs",
+  "sha256": "073fd146dc0eab518888d55f24bda3623e1abbad8d2ebcbc345af05fc91b6e49",
+  "fullwidth_and_pointer_sites": [
+   {
+    "line": 9,
+    "text": "    let length:usize=kani::any();"
+   },
+   {
+    "line": 10,
+    "text": "    let source_capacity:usize=kani::any();"
+   },
+   {
+    "line": 11,
+    "text": "    let destination_capacity:usize=kani::any();"
+   },
+   {
+    "line": 12,
+    "text": "    let index:usize=kani::any();let query:usize=kani::any();"
+   },
+   {
+    "line": 36,
+    "text": "        dst.add(observed).write(prior);"
+   },
+   {
+    "line": 39,
+    "text": "        let framed:[u32;WORDS]=core::mem::transmute_copy(&dst.add(observed).read());"
+   },
+   {
+    "line": 41,
+    "text": "        let lane:usize=kani::any();kani::assume(lane<WORDS);"
+   }
+  ]
+ },
+ {
+  "ref": "stx",
+  "revision": "83e7049f775afb6fb6a1044d5298b5de3d589f12",
+  "path": "tools/pv-stx-20261104/clone-certificate/src/lib.rs",
+  "sha256": "8c423f825c77145bb18d359fe87f6e86ead6ca69c24fc91f319fdfaafccf1f5d",
+  "fullwidth_and_pointer_sites": [
+   {
+    "line": 29,
+    "text": "            let i=self.log.n.get(); assert!(i<N);"
+   },
+   {
+    "line": 30,
+    "text": "            let mut order=self.log.order.get(); order[i]=i;"
+   },
+   {
+    "line": 32,
+    "text": "            let mut places=self.log.places.get();"
+   },
+   {
+    "line": 34,
+    "text": "            let mut seen=self.log.seen.get();seen[i]=self.value;self.log.seen.set(seen);"
+   },
+   {
+    "line": 48,
+    "text": "        assert_eq!(log.n.get(),N);"
+   },
+   {
+    "line": 49,
+    "text": "        let i:usize=kani::any();kani::assume(i<N);"
+   },
+   {
+    "line": 50,
+    "text": "        assert_eq!(log.order.get()[i],i);"
+   },
+   {
+    "line": 51,
+    "text": "        assert_eq!(log.seen.get()[i],inputs[i]);"
+   },
+   {
+    "line": 55,
+    "text": "        assert_eq!(log.places.get()[i],(expected as *const Child<'_>).cast());"
+   },
+   {
+    "line": 56,
+    "text": "        assert_eq!(log.state.get(),if wrong==3 {log.modifications[N-1]^1} else {log.modifications[N-1]});"
+   },
+   {
+    "line": 91,
+    "text": "            let i=self.log.n.get();assert!(i<CLONES);"
+   },
+   {
+    "line": 92,
+    "text": "            let mut seen=self.log.seen.get();seen[i]=self.value;self.log.seen.set(seen);"
+   },
+   {
+    "line": 93,
+    "text": "            let mut places=self.log.places.get();places[i]=(self as *const Self).cast();"
+   },
+   {
+    "line": 109,
+    "text": "        assert_eq!(log.n.get(),if wrong==1 {COUNT} else {CLONES});"
+   },
+   {
+    "line": 110,
+    "text": "        let i:usize=kani::any();kani::assume(i<COUNT);"
+   },
+   {
+    "line": 115,
+    "text": "        let j:usize=kani::any();kani::assume(j<CLONES);"
+   },
+   {
+    "line": 116,
+    "text": "        assert_eq!(log.seen.get()[j],original);"
+   },
+   {
+    "line": 117,
+    "text": "        assert_eq!(log.places.get()[j],log.places.get()[0]);"
+   },
+   {
+    "line": 118,
+    "text": "        assert!(!log.places.get()[j].is_null());"
+   },
+   {
+    "line": 119,
+    "text": "        assert_eq!(log.state.get(),if wrong==3 {log.modifications[CLONES-1]^1}"
+   },
+   {
+    "line": 155,
+    "text": "        let i:usize=kani::any();kani::assume(i<1024);"
+   },
+   {
+    "line": 156,
+    "text": "        let lane:usize=kani::any();kani::assume(lane<8);"
+   },
+   {
+    "line": 191,
+    "text": "        let limb:usize=kani::any();kani::assume(limb<8192);"
+   },
+   {
+    "line": 222,
+    "text": "        let initial:usize=kani::any();let increment:usize=kani::any();"
+   },
+   {
+    "line": 227,
+    "text": "        kani::assume(increment<=usize::MAX-initial);"
+   },
+   {
+    "line": 253,
+    "text": "        let capacity:usize=kani::any();"
+   },
+   {
+    "line": 255,
+    "text": "        kani::assume(capacity<=isize::MAX as usize/core::mem::size_of::<QM31>());"
+   },
+   {
+    "line": 273,
+    "text": "        let limb:usize=kani::any();kani::assume(limb<4096);"
+   },
+   {
+    "line": 277,
+    "text": "        let length:usize=kani::any();let capacity:usize=kani::any();"
+   },
+   {
+    "line": 280,
+    "text": "        kani::assume(capacity<=isize::MAX as usize/core::mem::size_of::<QM31>());"
+   },
+   {
+    "line": 339,
+    "text": "        let index:usize=kani::any();kani::assume(index<29);"
+   },
+   {
+    "line": 340,
+    "text": "        let limb:usize=kani::any();kani::assume(limb<8192);"
+   }
+  ]
+ },
+ {
+  "ref": "stx",
+  "revision": "83e7049f775afb6fb6a1044d5298b5de3d589f12",
+  "path": "tools/pv-stx-20261104/context-certificate/src/lib.rs",
+  "sha256": "0d9fa7314fa908e2d15ca4b5adff4c629d551724642ee68834ca7d83d7e619ee",
+  "fullwidth_and_pointer_sites": [
+   {
+    "line": 19,
+    "text": "        let k: usize = kani::any();"
+   },
+   {
+    "line": 44,
+    "text": "        let k: usize = kani::any();"
+   }
+  ]
+ },
+ {
+  "ref": "stx",
+  "revision": "83e7049f775afb6fb6a1044d5298b5de3d589f12",
+  "path": "tools/pv-stx-20261104/enum-certificate/src/lib.rs",
+  "sha256": "1ee4f4eebe8085a5dbd76cdcf2cee91bca263a6551810c2e2848e5cb0be7b800",
+  "fullwidth_and_pointer_sites": [
+   {
+    "line": 60,
+    "text": "            self.count.set(self.count.get()+1);}"
+   },
+   {
+    "line": 71,
+    "text": "        assert_eq!(count.get(),if wrong {2} else if ok {0} else {1});"
+   },
+   {
+    "line": 72,
+    "text": "        let lane:usize=kani::any();kani::assume(lane<32);"
+   },
+   {
+    "line": 73,
+    "text": "        assert_eq!(state.get()[lane],if ok {initial[lane]} else {after[lane]});"
+   },
+   {
+    "line": 74,
+    "text": "        if !ok {assert_eq!(seen.get()[lane],before[lane]);}"
+   }
+  ]
+ },
+ {
+  "ref": "stx",
+  "revision": "83e7049f775afb6fb6a1044d5298b5de3d589f12",
+  "path": "tools/pv-stx-20261104/kmx/KMX_stubs.rs",
+  "sha256": "ad8efb63d8ff791274c91eff9ccc5b9fb126f5a3ac7f27aa811ca11b8e25c138",
+  "fullwidth_and_pointer_sites": [
+   {
+    "line": 5,
+    "text": "    let mut i=0;while i<count {let value=unsafe{src.add(i).read()};unsafe{dst.add(i).write(value)};i+=1;}"
+   },
+   {
+    "line": 28,
+    "text": "   let value=unsafe{ptr.cast::<core::mem::MaybeUninit<u8>>().add(i).read()};"
+   },
+   {
+    "line": 29,
+    "text": "   unsafe{out.cast::<core::mem::MaybeUninit<u8>>().add(i).write(value)};i+=1;"
+   },
+   {
+    "line": 40,
+    "text": "fn KMX_slice_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.copy_from_slice(&src);let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[k],src[k]);}"
+   },
+   {
+    "line": 46,
+    "text": "fn KMX_ptr_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as_mut_ptr(),16)};let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[k],src[k]);}"
+   },
+   {
+    "line": 52,
+    "text": "fn KMX_clone_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.clone_from_slice(&src);let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[k],src[k]);}"
+   },
+   {
+    "line": 58,
+    "text": "fn KMX_extend_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[k],src[k]);}"
+   },
+   {
+    "line": 64,
+    "text": "fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[k],src[k]);}"
+   },
+   {
+    "line": 71,
+    "text": "fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[k+1],src[k]);}"
+   }
+  ]
+ },
+ {
+  "ref": "stx",
+  "revision": "83e7049f775afb6fb6a1044d5298b5de3d589f12",
+  "path": "tools/pv-stx-20261104/wrapper-certificate/src/lib.rs",
+  "sha256": "867a68fe2274cc2a0282b96b60d95b518d6ec1be19d69d451b866e06272cd3b0",
+  "fullwidth_and_pointer_sites": [
+   {
+    "line": 20,
+    "text": "        let k: usize = kani::any();"
+   },
+   {
+    "line": 45,
+    "text": "            let mut events=self.events.get(); let n=self.len.get();"
+   },
+   {
+    "line": 71,
+    "text": "        let k:usize=kani::any();kani::assume(k<32);"
+   },
+   {
+    "line": 74,
+    "text": "                assert_eq!(local.len.get(),if wrong {0} else {1});"
+   },
+   {
+    "line": 75,
+    "text": "                assert_eq!(local.events.get()[0],2);},"
+   },
+   {
+    "line": 77,
+    "text": "                assert_eq!(local.len.get(),2);assert_eq!(local.events.get(),[1,2]);"
+   },
+   {
+    "line": 78,
+    "text": "                assert_eq!(local.left.get()[k],error[k]);}"
+   },
+   {
+    "line": 80,
+    "text": "        assert_eq!(local.state.get()[k],drop_state[k]);"
+   },
+   {
+    "line": 107,
+    "text": "        let k:usize=kani::any();kani::assume(k<32);"
+   },
+   {
+    "line": 109,
+    "text": "            assert_eq!(local.len.get(),1);assert_eq!(local.events.get()[0],1);"
+   },
+   {
+    "line": 110,
+    "text": "            assert_eq!(local.left.get()[k],left[k]);assert_eq!(local.right.get()[k],right[k]);"
+   },
+   {
+    "line": 111,
+    "text": "            assert_eq!(local.state.get()[k],modified[k]);"
+   },
+   {
+    "line": 112,
+    "text": "        } else {assert_eq!(local.len.get(),0);assert_eq!(local.state.get()[k],initial[k]);}"
+   },
+   {
+    "line": 126,
+    "text": "        let k:usize=kani::any();kani::assume(k<32);"
+   },
+   {
+    "line": 163,
+    "text": "        assert_eq!(local.len.get(),1);assert_eq!(local.events.get()[0],1);"
+   },
+   {
+    "line": 164,
+    "text": "        assert_eq!(place.get(),designated);"
+   },
+   {
+    "line": 165,
+    "text": "        let k:usize=kani::any();kani::assume(k<32);"
+   },
+   {
+    "line": 166,
+    "text": "        assert_eq!(local.left.get()[k],value[k]);"
+   },
+   {
+    "line": 177,
+    "text": "        let k:usize=kani::any();kani::assume(k<32);"
+   }
+  ]
+ },
+ {
+  "ref": "stxb",
+  "revision": "112a1e95c2df757b8049d809cbff15653fff09a7",
+  "path": "evidence/pv-stxb-20261104/certificate/KMX_stubs.rs",
+  "sha256": "ad8efb63d8ff791274c91eff9ccc5b9fb126f5a3ac7f27aa811ca11b8e25c138",
+  "fullwidth_and_pointer_sites": [
+   {
+    "line": 5,
+    "text": "    let mut i=0;while i<count {let value=unsafe{src.add(i).read()};unsafe{dst.add(i).write(value)};i+=1;}"
+   },
+   {
+    "line": 28,
+    "text": "   let value=unsafe{ptr.cast::<core::mem::MaybeUninit<u8>>().add(i).read()};"
+   },
+   {
+    "line": 29,
+    "text": "   unsafe{out.cast::<core::mem::MaybeUninit<u8>>().add(i).write(value)};i+=1;"
+   },
+   {
+    "line": 40,
+    "text": "fn KMX_slice_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.copy_from_slice(&src);let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[k],src[k]);}"
+   },
+   {
+    "line": 46,
+    "text": "fn KMX_ptr_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as_mut_ptr(),16)};let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[k],src[k]);}"
+   },
+   {
+    "line": 52,
+    "text": "fn KMX_clone_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.clone_from_slice(&src);let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[k],src[k]);}"
+   },
+   {
+    "line": 58,
+    "text": "fn KMX_extend_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[k],src[k]);}"
+   },
+   {
+    "line": 64,
+    "text": "fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[k],src[k]);}"
+   },
+   {
+    "line": 71,
+    "text": "fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[k+1],src[k]);}"
+   }
+  ]
+ },
+ {
+  "ref": "stxb",
+  "revision": "112a1e95c2df757b8049d809cbff15653fff09a7",
+  "path": "evidence/pv-stxb-20261104/certificate/src/lib.rs",
+  "sha256": "bbf3126e728465cd9e341901f0d3ac860390a86cda05e8db3fdfaac10f4107a5",
+  "fullwidth_and_pointer_sites": [
+   {
+    "line": 47,
+    "text": " let i:usize=kani::any();kani::assume(i<=1024);"
+   },
+   {
+    "line": 49,
+    "text": " let word:usize=kani::any();kani::assume(word<4096);"
+   },
+   {
+    "line": 64,
+    "text": " let j:usize=kani::any();kani::assume(j<1024);"
+   },
+   {
+    "line": 78,
+    "text": " let witness:usize=kani::any();kani::assume(witness<1024);active[witness]=false;"
+   },
+   {
+    "line": 80,
+    "text": " let j:usize=kani::any();kani::assume(j<1024);"
+   }
+  ]
+ },
+ {
+  "ref": "evhB",
+  "revision": "a8516afedf9c6c3fe879e70a6ba5a05774f081fe",
+  "path": "tools/pv-evhB-20261103/boundary-preflight/src/lib.rs",
+  "sha256": "68626f7e6d19533dd2e17090b36b711605885902f162cbd7c6a7d5b52e1d78a6",
+  "fullwidth_and_pointer_sites": []
+ },
+ {
+  "ref": "evhB",
+  "revision": "a8516afedf9c6c3fe879e70a6ba5a05774f081fe",
+  "path": "tools/pv-evhB-20261103/kmx/KMX_stubs.rs",
+  "sha256": "ad8efb63d8ff791274c91eff9ccc5b9fb126f5a3ac7f27aa811ca11b8e25c138",
+  "fullwidth_and_pointer_sites": [
+   {
+    "line": 5,
+    "text": "    let mut i=0;while i<count {let value=unsafe{src.add(i).read()};unsafe{dst.add(i).write(value)};i+=1;}"
+   },
+   {
+    "line": 28,
+    "text": "   let value=unsafe{ptr.cast::<core::mem::MaybeUninit<u8>>().add(i).read()};"
+   },
+   {
+    "line": 29,
+    "text": "   unsafe{out.cast::<core::mem::MaybeUninit<u8>>().add(i).write(value)};i+=1;"
+   },
+   {
+    "line": 40,
+    "text": "fn KMX_slice_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.copy_from_slice(&src);let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[k],src[k]);}"
+   },
+   {
+    "line": 46,
+    "text": "fn KMX_ptr_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as_mut_ptr(),16)};let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[k],src[k]);}"
+   },
+   {
+    "line": 52,
+    "text": "fn KMX_clone_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.clone_from_slice(&src);let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[k],src[k]);}"
+   },
+   {
+    "line": 58,
+    "text": "fn KMX_extend_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[k],src[k]);}"
+   },
+   {
+    "line": 64,
+    "text": "fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[k],src[k]);}"
+   },
+   {
+    "line": 71,
+    "text": "fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[k+1],src[k]);}"
+   }
+  ]
+ },
+ {
+  "ref": "evhB",
+  "revision": "a8516afedf9c6c3fe879e70a6ba5a05774f081fe",
+  "path": "tools/pv-evhB-20261103/spawn-prefix/proofs.rs",
+  "sha256": "95e04b7b5533fe53f7c14692d6a3fbfefb83cac5db7c51d975d9c1ac1606488d",
+  "fullwidth_and_pointer_sites": []
+ },
+ {
+  "ref": "evhB",
+  "revision": "a8516afedf9c6c3fe879e70a6ba5a05774f081fe",
+  "path": "tools/pv-evhB-20261103/spawn-prefix/src/frozen.rs",
+  "sha256": "c40f54961443214790252ca436b96cbdce52ee9fc266c13ae69e651a1609858b",
+  "fullwidth_and_pointer_sites": []
+ }
+]
