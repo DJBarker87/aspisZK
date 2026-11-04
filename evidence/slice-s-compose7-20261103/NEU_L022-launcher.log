@@ -1,0 +1,33 @@
+{"attempt": "NEU_L022", "exit_status": 0, "wall_seconds": 2.1301572369411588, "peak_rss_kib": "5314888", "swaps": "0", "print_axioms": ["'NEU_BoxDecodeModel.transfer_result_state_effects' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEU_BoxDecodeModel.withdrawal_result_state_effects' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEU_BoxModel.transfer' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEU_BoxModel.transfer_result_state_effects' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEU_BoxModel.validator' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEU_BoxModel.withdrawal' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEU_BoxModel.withdrawal_result_state_effects' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEU_CallDomains.common_packet' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEU_CallDomains.reached_domains' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEU_CallDomains.transfer_packet' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEU_CallDomains.transfer_reply_range' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEU_CallDomains.withdrawal_packet' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEU_CallDomains.withdrawal_reply_range' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEU_CommonProjections.common_ext' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEU_DecoderProjections.common_ext' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEU_DecoderProjections.payment_packet' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEU_DecoderProjections.transfer_ext' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEU_DecoderProjections.withdrawal_ext' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEU_EqualityLoop.prefix_exact' depends on axioms: [propext]", "'NEU_EqualityLoop.prefix_frame' depends on axioms: [propext]", "'NEU_EqualityLoop.step_invariant' depends on axioms: [propext]", "'NEU_PublicProjections.transfer_ext' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEU_PublicProjections.withdrawal_ext' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEU_ReconstructAdopted.result_state_effects' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEU_ReconstructCore.common_result' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEU_ReconstructCore.result_state_effects' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'NEU_BoxDecodeModel.transfer_result_state_effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEU_BoxDecodeModel.withdrawal_result_state_effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEU_BoxModel.transfer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEU_BoxModel.transfer_result_state_effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEU_BoxModel.validator' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEU_BoxModel.withdrawal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEU_BoxModel.withdrawal_result_state_effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEU_CallDomains
+...
+xt, Classical.choice, Quot.sound]
+'NEU_CallDomains.withdrawal_reply_range' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEU_CommonProjections.common_ext' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEU_DecoderProjections.common_ext' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEU_DecoderProjections.payment_packet' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEU_DecoderProjections.transfer_ext' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEU_DecoderProjections.withdrawal_ext' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEU_EqualityLoop.prefix_exact' depends on axioms: [propext]
+'NEU_EqualityLoop.prefix_frame' depends on axioms: [propext]
+'NEU_EqualityLoop.step_invariant' depends on axioms: [propext]
+'NEU_PublicProjections.transfer_ext' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEU_PublicProjections.withdrawal_ext' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEU_ReconstructAdopted.result_state_effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEU_ReconstructCore.common_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEU_ReconstructCore.result_state_effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+@NEU_ReconstructAdopted.result_state_effects : ∀ {State : Type} (request : NEU_ReconstructAdopted.Request)
+  (a : NEU_ReconstructAdopted.Auth) (c : NEU_ReconstructAdopted.Candidate) (state : State),
+  NEU_ReconstructAdopted.run request a c state =
+    (AspisR1.JHf_ReconstructionSlot.source request a c, state,
+      NEU_ReconstructCore.trace (AspisR1.JHf_Carrier.toRequest request)
+        (AspisR1.JHf_Carrier.toAuthenticatedAsq8Accounts a) (AspisR1.JHf_Carrier.toPoolV1PairVerifiedAfterstateV1 c))
+
+Running as unit: run-r28bbdd1badef4025b06e2daced1671f1.scope; invocation ID: 5dac46456fd34d64b9133725197622ef

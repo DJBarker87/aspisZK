@@ -296,3 +296,88 @@ frozen compiler/library688-byte comparison still needs association to this
 iteration; neither the native window nor the induction alone closes the root.
 K126's reconstruction finish exits124 at180s after9.41s compilation and has no
 verifier verdict; its lock is recovered unchanged and scope is removed.
+
+## Root checkpoint and explicit remaining hypotheses
+
+| Slice S root | Composed root rows | Status |
+|---|---:|---|
+| decode_public_statement_box | 0/1 | OPEN |
+| validate_pool_v1_pair_forest_terminal_statement_v1 | 2/2 | CLOSED |
+| encode_pool_v1_pair_forest_terminal_statement_v1 | 1/1 | CLOSED |
+| reconstruct_asq8_statement | 0/1 | OPEN |
+| decode_pool_v1_pair_forest_terminal_request_v1 | 0/1 | OPEN |
+| scan_proof_buffer | 0/1 | OPEN |
+| emit_result | 0/1 | OPEN |
+
+These are the root's OWN ledger rows. NEU_ROOT_COUNTS.json separately gives
+reachability counts over the original conservative graph, including resolved
+alternative targets and shared descendants; those counts must not be summed
+or read as unresolved dependencies of a closed root. Final internal-edge
+inventory:79 CLOSED,50 OPEN, one entry for every129 original slice edge.
+
+Reconstruction's complete MODEL statement, with no inner Prop premise, is:
+
+```lean
+theorem result_state_effects {State : Type} (request : Request) (a : Auth)
+    (c : Candidate) (state : State) :
+    run request a c state =
+    (AspisR1.JHf_ReconstructionSlot.source request a c,state,
+      NEU_ReconstructCore.trace (toRequest request) (toAuthenticatedAsq8Accounts a)
+        (toPoolV1PairVerifiedAfterstateV1 c))
+```
+
+This is NEU_ReconstructAdopted.result_state_effects, NOT a theorem about the
+frozen native root. Its full type aliases, run and trace definitions are in
+the committed module and L011 snapshot. L022 audits its standard axioms.
+The remaining native guard/common/finish witnesses are explicitly OPEN.
+
+Emission's conditional MODEL statement is:
+
+```lean
+theorem result_state_effects {A E : Type}
+    (binding : Statement → Output → Result (core.result.Result Unit Error))
+    (encode : Output → Result (core.result.Result Bytes Error))
+    (bindingBridge : BindingBridge binding) (encoderBridge : EncoderBridge encode)
+    (syscall : AspisR1.S2I.ReturnData.State A E → List U8 →
+      Result (AspisR1.S2I.ReturnData.State A E))
+    (state : AspisR1.S2I.ReturnData.State A E) (s : Statement) :
+    run binding encode syscall state s = AspisR1.JHb_Emit.source syscall state s
+```
+
+BindingBridge is exactly `∀ s, binding s (derived s) =
+validate_pool_v1_pair_forest_terminal_result_against_statement_v1 s (derived s)`.
+EncoderBridge is exactly `∀ s, encode (derived s) =
+encode_pool_v1_pair_forest_terminal_result_v1 (derived s)`. Both are explicit
+OPEN leaf hypotheses. A compatible runtime effect carrier is also unresolved;
+an arbitrary syscall callback is not an adopted op53 instance. L023 audits
+[propext,Classical.choice,Quot.sound]. No native emission theorem is claimed.
+
+No complete root theorem has been established for the request decoder,
+decode_public_statement_box or scan_proof_buffer. Their exact child/native
+and physical/domain witnesses remain in NEU_STOP_AUDIT.json and NEU_EDGES.json;
+there is no hidden whole-root hypothesis or claimed theorem to print for them.
+The task's seven-native-root target is NOT achieved. The two inherited closed
+roots and four newly closed internal members are the only composed credit.
+
+Final review: L021's combined audit failed at import time because original
+S2K_ResultBytes and JHb_S2K_ResultBytes declare the same constant name. It is
+excluded. L022 audits the compatible reconstruction/decoder cone; L023 audits
+emission separately. Both pass with standard axioms. L001 retains the earlier
+inherited-root audit. No imported module is changed, no failed aggregate is
+called a joint replay, and no frozen release replay is claimed.
+
+Final budget:130/130 Kani,23/80 Lean. Native classification:58 passes,
+60 failing controls,9 timeouts,3 excluded compile/input failures. Successful
+Lean jobs14; excluded elaboration/import jobs9. NEU_EVIDENCE_AUDIT.json checks
+all1453 execution-source hashes, complete snapshots, caps, zero swap, lock
+recovery and standard axioms on every successful target. The20 remaining
+members each require an actual native/child/effect witness; no outstanding
+independent pure Lean obligation is identified. NEU_STOP_AUDIT.json records
+this member by member rather than treating native exhaustion as completion.
+
+K129 catches the deliberately changed215-byte child input; K130 catches the
+wrong child reply/error mapping. They are additional failing controls, not
+additional composed rows. Exact source patches and snapshots are retained.
+All successful new source/object pairs are preserved in the private cache
+with hashes (NEU_FINAL_CACHE.json); only this job's target/object/temp scratch
+was removed (NEU_FINAL_HOST_CLEANUP.json). The cache itself is retained.

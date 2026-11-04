@@ -1,0 +1,15 @@
+'NEU_EmitFrame.event_frame_changed' depends on axioms: [propext, Quot.sound]
+'NEU_EmitModel.result_state_effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+@NEU_EmitModel.result_state_effects : ∀ {A E : Type}
+  (binding :
+    NEU_EmitModel.Statement →
+      NEU_EmitModel.Output → Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit NEU_EmitModel.Error))
+  (encode :
+    NEU_EmitModel.Output → Aeneas.Std.Result (Aeneas.Std.core.result.Result NEU_EmitModel.Bytes NEU_EmitModel.Error)),
+  NEU_EmitModel.BindingBridge binding →
+    NEU_EmitModel.EncoderBridge encode →
+      ∀
+        (syscall :
+          AspisR1.S2I.ReturnData.State A E → List Aeneas.Std.U8 → Aeneas.Std.Result (AspisR1.S2I.ReturnData.State A E))
+        (state : AspisR1.S2I.ReturnData.State A E) (s : NEU_EmitModel.Statement),
+        NEU_EmitModel.run binding encode syscall state s = AspisR1.JHb_Emit.source syscall state s

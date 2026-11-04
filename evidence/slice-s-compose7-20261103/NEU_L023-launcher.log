@@ -1,0 +1,32 @@
+{"attempt": "NEU_L023", "exit_status": 0, "wall_seconds": 2.1042985261883587, "peak_rss_kib": "5280436", "swaps": "0", "print_axioms": ["'NEU_EmitFrame.event_frame_changed' depends on axioms: [propext, Quot.sound]", "'NEU_EmitModel.result_state_effects' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'NEU_EmitFrame.event_frame_changed' depends on axioms: [propext, Quot.sound]
+'NEU_EmitModel.result_state_effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+@NEU_EmitModel.result_state_effects : ∀ {A E : Type}
+  (binding :
+    NEU_EmitModel.Statement →
+      NEU_EmitModel.Output → Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit NEU_EmitModel.Error))
+  (encode :
+    NEU_EmitModel.Output → Aeneas.Std.Result (Aeneas.Std.core.result.Result NEU_EmitModel.Bytes NEU_EmitModel.Error)),
+  NEU_EmitModel.BindingBridge binding →
+    NEU_EmitModel.EncoderBridge encode →
+      ∀
+        (syscall :
+          AspisR1.S2I.ReturnData.State A E → List Aeneas.Std.U8 → Aeneas.Std.Result (As
+...
+'NEU_EmitFrame.event_frame_changed' depends on axioms: [propext, Quot.sound]
+'NEU_EmitModel.result_state_effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+@NEU_EmitModel.result_state_effects : ∀ {A E : Type}
+  (binding :
+    NEU_EmitModel.Statement →
+      NEU_EmitModel.Output → Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit NEU_EmitModel.Error))
+  (encode :
+    NEU_EmitModel.Output → Aeneas.Std.Result (Aeneas.Std.core.result.Result NEU_EmitModel.Bytes NEU_EmitModel.Error)),
+  NEU_EmitModel.BindingBridge binding →
+    NEU_EmitModel.EncoderBridge encode →
+      ∀
+        (syscall :
+          AspisR1.S2I.ReturnData.State A E → List Aeneas.Std.U8 → Aeneas.Std.Result (AspisR1.S2I.ReturnData.State A E))
+        (state : AspisR1.S2I.ReturnData.State A E) (s : NEU_EmitModel.Statement),
+        NEU_EmitModel.run binding encode syscall state s = AspisR1.JHb_Emit.source syscall state s
+
+Running as unit: run-rf201fa5782aa4bbe9ac7714f07624575.scope; invocation ID: 8b2ac564de704807a48fb6134dfb82e5

@@ -27,7 +27,7 @@ for root in slice['roots']:
   for r in byfunction[f]:
    for g in r['canonical_callees']:visit(g)
  visit(root);rr=[r for f in reached for r in byfunction[f]]
- perroot[root]=dict(root_status='CLOSED' if isclosed(root) else 'OPEN',closed_rows=sum(r['row'] in closed for r in rr),total_rows=len(rr),closed_functions=sum(isclosed(f) for f in reached),total_functions=len(reached),overlap_note='shared descendants count under each reachable root; do not sum these counts')
+ perroot[root]=dict(root_status='CLOSED' if isclosed(root) else 'OPEN',closed_rows=sum(r['row'] in closed for r in byfunction[root]),total_rows=len(byfunction[root]),conservative_reachable_closed_rows=sum(r['row'] in closed for r in rr),conservative_reachable_total_rows=len(rr),closed_functions=sum(isclosed(f) for f in reached),total_functions=len(reached),overlap_note='reachable counts use the original conservative graph, including resolved alternative targets and shared descendants; do not sum them or infer actual unresolved dependencies of a closed root')
 (E/'NEU_ROOT_COUNTS.json').write_text(json.dumps(dict(total_closed_rows=len(closed),total_rows=97,closed_functions=sum(isclosed(f) for f in functions),total_functions=61,roots=perroot),indent=1)+'\n')
 openmembers=[]
 for f in sorted(functions):
