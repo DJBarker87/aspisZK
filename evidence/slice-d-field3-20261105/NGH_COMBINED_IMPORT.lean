@@ -6,6 +6,8 @@ import NGH_QSquareRef
 import NGH_QSquareOps
 import NGH_CMWords
 import NGH_WideBridge
+import NGH_CellComposition
+import NGH_OuterRef
 #print axioms NGH_AccumulateRef.cells_eq
 #print axioms NGH_AccumulateRef.model_eq
 #print axioms NGH_AccumulateRef.cohort
@@ -26,4 +28,8 @@ import NGH_WideBridge
 #print axioms NGH_WideBridge.same_square
 #print axioms NGH_WideBridge.source
 #print axioms NGH_WideBridge.cohort
+#print axioms NGH_CellComposition.one_eq
+#print axioms NGH_CellComposition.nine
+#print axioms NGH_OuterRef.step_eq
+#print axioms NGH_OuterRef.source
 #print axioms AspisR1.RPx_Deployed.deployed

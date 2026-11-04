@@ -19,3 +19,9 @@ Retained trust: P6/D188 option-A native semantic transport (reclassification), p
 ## WideExact square closure
 
 NGH_WideBridge.same_square substitutes the exact coherent emitted QM square definition into NGA_WideSquare, and source/cohort give the complete canonical record and field value. The inherited actual native caller NFT_K098, its result/argument controls K099/K100, all its exact domains and the new CLOSED Q child are revalidated. No spurious inventory self-edge is treated as an actual recursive call. NGH_L014 is focused; L015 is the changed combined import; L018 runs the final stage audit with 21 roots and the unchanged NFX scan over 13,174 modules, zero defects, eight fixtures and standard axioms. L017 stopped before linking because of an own output-directory error; it has no proof credit.
+
+## Resume stage4 — mandatory member stop
+
+TX1:036 remains OPEN after NGH_K049, the first solver-submitted per-cell reference contract: cell(0,0), canonical full QM inputs, exact frozen cache prelude, one constrained natural product, arbitrary U64 matrix with selected pre-cell bound. Solver limit90s; wall95.736s; peak629424KiB; swap0. NGH_CELL_STOP.json records the exact shape. No other cell, frame or altered accumulator harness is submitted after this stop. NGH_CellComposition.one_eq/nine are checked model support, standard axioms only; they do not supply missing native facts.
+
+The reference-helper rows retain the additional ruling-(ah) hand-transcription trust and may only ever be labelled CLOSED under (ah) when their required native packet is complete. None is promoted here. The ordinary ruling-(y) square closures from stage3 remain separate.

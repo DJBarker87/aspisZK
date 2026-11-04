@@ -9,10 +9,10 @@ fn cut(log:&mut Log,sums:[[u64;3];3],left:QM31,right:QM31)->[[u64;3];3]{
  log.before=sums;log.left=left;log.right=right;log.count+=1;
  let reply:[[u64;3];3]=kani::any();log.reply=reply;reply
 }
-#[kani::requires(N>=2 && N<=4 && index<N && log.count==0 && canonical(left[index]) && canonical(right[index]))]
-#[kani::ensures(|out| out.1==index+1 && log.count==1 && log.before==sums && log.left==left[index] && log.right==right[index] && if cfg!(NGH_invert) {out.0!=log.reply} else {out.0==log.reply})]
+#[kani::requires(oi<3 && oj<3 && N>=2 && N<=4 && index<N && log.count==0 && canonical(left[index]) && canonical(right[index]))]
+#[kani::ensures(|out| out.1==index+1 && log.count==1 && log.before[oi][oj]==sums[oi][oj] && log.left==left[index] && log.right==right[index] && if cfg!(NGH_invert) {out.0[oi][oj]!=log.reply[oi][oj]} else {out.0[oi][oj]==log.reply[oi][oj]})]
 #[kani::modifies(log)]
-fn step<const N:usize>(mut sums:[[u64;3];3],left:[QM31;N],right:[QM31;N],mut index:usize,log:&mut Log)->([[u64;3];3],usize){
+fn step<const N:usize>(mut sums:[[u64;3];3],left:[QM31;N],right:[QM31;N],mut index:usize,log:&mut Log,oi:usize,oj:usize)->([[u64;3];3],usize){
         sums = cut(log,sums, left[index], right[index]);
         index += 1;
 (sums,index)
@@ -23,7 +23,7 @@ fn check<const N:usize>(left:[QM31;N],right:[QM31;N]){
  let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<3&&j<3);
  let old=sums[i][j];let expected_left=left[index];let expected_right=right[index];
  let mut log=Log{before:kani::any(),left:any_q(),right:any_q(),reply:kani::any(),count:0};
- let(out,next)=step(sums,left,right,index,&mut log);
+ let(out,next)=step(sums,left,right,index,&mut log,0,0);
  assert!(log.count==1&&next==index+1);
  assert!(log.before[i][j]==old&&log.left==expected_left&&log.right==expected_right);
  let want=log.reply[i][j];assert!(out[i][j]==if cfg!(NGA_invert){want^1}else{want});
@@ -55,7 +55,7 @@ fn copy_negative(){let src:[[u64;3];3]=kani::any();let mut dst:[[u64;3];3]=kani:
 fn contract2() {
  let sums=kani::any();let left=core::array::from_fn(|_|any_q());let right=core::array::from_fn(|_|any_q());
  let index=kani::any();let mut log=Log {before:kani::any(),left:any_q(),right:any_q(),reply:kani::any(),count:0};
- step::<2>(sums,left,right,index,&mut log);
+ let oi=kani::any();let oj=kani::any();step::<2>(sums,left,right,index,&mut log,oi,oj);
 }
 
 #[kani::proof_for_contract(step::<3>)]
@@ -64,7 +64,7 @@ fn contract2() {
 fn contract3() {
  let sums=kani::any();let left=core::array::from_fn(|_|any_q());let right=core::array::from_fn(|_|any_q());
  let index=kani::any();let mut log=Log {before:kani::any(),left:any_q(),right:any_q(),reply:kani::any(),count:0};
- step::<3>(sums,left,right,index,&mut log);
+ let oi=kani::any();let oj=kani::any();step::<3>(sums,left,right,index,&mut log,oi,oj);
 }
 
 #[kani::proof_for_contract(step::<4>)]
@@ -73,5 +73,5 @@ fn contract3() {
 fn contract4() {
  let sums=kani::any();let left=core::array::from_fn(|_|any_q());let right=core::array::from_fn(|_|any_q());
  let index=kani::any();let mut log=Log {before:kani::any(),left:any_q(),right:any_q(),reply:kani::any(),count:0};
- step::<4>(sums,left,right,index,&mut log);
+ let oi=kani::any();let oj=kani::any();step::<4>(sums,left,right,index,&mut log,oi,oj);
 }

@@ -5,7 +5,7 @@ from pathlib import Path
 import json,subprocess,time,re,os,hashlib,sys
 B=Path(__file__).resolve().parent;T='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0'
 parent=json.loads((B/os.environ['NGH_REVIEW_CONFIG']).read_text());roots=json.loads((B/'NGH_AUDIT_ROOTS.json').read_text())['roots']
-out=B/'NGH_review_wide';out.mkdir(exist_ok=False)
+out=B/'NGH_review_resume';out.mkdir(exist_ok=False)
 cmds=[('link',[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NGH_native/NGH_Driver','NGH_native/NGH_Driver.c','NGH_native/NFA_WALKER.c','NGH_native/NFA_MemoryLimit.c'])]
 cmds += [(mode,['NGH_native/NGH_Driver',mode]) for mode in ['fixtures']+[f'proof{i}'for i in range((len(roots)+4)//5)]+['scan']]
 rows=[]

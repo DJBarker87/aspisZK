@@ -1,6 +1,6 @@
 """Strict read-only validators. No prover launches or writes to inherited evidence."""
 from pathlib import Path
-import json,hashlib,importlib.util,sys,re
+import json,hashlib,importlib.util,sys,re,shlex
 sys.dont_write_bytecode=True
 E=Path(__file__).resolve().parent;R=E.parents[1]
 J=lambda p:json.loads(p.read_text())
@@ -31,7 +31,11 @@ def native(k,expected):
 def pair(a,b):
  x=native(a,0);y=native(b,1)
  assert x['source_hashes']==y['source_hashes']and x['module']==y['module']
- assert y['env']['RUSTFLAGS']==x['env']['RUSTFLAGS']+' --cfg NGH_invert'
+ xp=shlex.split(x['env']['RUSTFLAGS']);yp=shlex.split(y['env']['RUSTFLAGS'])
+ assert yp.count('NGH_invert')==1 and 'NGH_invert'not in xp
+ i=yp.index('NGH_invert');assert i>0 and yp[i-1]=='--cfg'
+ assert yp[:i-1]+yp[i+1:]==xp
+ assert {k:v for k,v in x['env'].items()if k!='RUSTFLAGS'}=={k:v for k,v in y['env'].items()if k!='RUSTFLAGS'}
  return x,y
 
 def copy_pair(a,b):
