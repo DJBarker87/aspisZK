@@ -8,9 +8,8 @@ import NDH_Geometry
 import R17CurrentCM31Semantics
 import Port3_PushFrame
 import NEA_LineTail
-import NEW_GeometryActual.Funs
-import JFv_RawExtractedSemanticCallOpsV20
-import NFB_RowRef.Funs
+import NFN_ExtractedGeometry
+import RPu_JFv_RawExtractedSemanticCallOpsV20
 import Port5Q1_GeometryCanonical
 import NEA_Index
 
@@ -378,8 +377,7 @@ theorem square_body (iter : core.ops.range.Range Usize) (x : U32) :
     NEW_GeometryActual.aspis_core.field.square_n_loop.body iter x =
       NEW_InverseActual.aspis_core.field.square_n_loop.body iter x := by
   simp only [NEW_GeometryActual.aspis_core.field.square_n_loop.body,
-    NEW_InverseActual.aspis_core.field.square_n_loop.body,multiply,NFN_NEW_InverseAssociation.multiply]
-  rfl
+    NEW_InverseActual.aspis_core.field.square_n_loop.body,multiply,NFN_NEW_InverseAssociation.multiply] <;> rfl
 
 theorem square_loop (iter : core.ops.range.Range Usize) (x : U32) :
     NEW_GeometryActual.aspis_core.field.square_n_loop iter x =

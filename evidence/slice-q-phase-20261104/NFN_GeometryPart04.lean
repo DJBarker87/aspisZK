@@ -4,10 +4,11 @@ import NFN_ReserveOwner
 import NFN_GeometryPart03
 import Port4C_NativePrefix
 import Port5Q1_Geometry
-import NEW_LoopMap
-import NEW_ResultMapSyntax
+import Aeneas
+import RPu_JFv_RawExtractedSemanticCallOpsV20
 import NEW_LiteralRefl
-import NEW_ShiftAssociation
+import NFN_ExtractedGeometry
+import NEW_ShiftLiteral
 
 -- BEGIN copied NEW_GeometryPrefix: evidence/slice-q-compose4-20261104/NEW_GeometryPrefix.lean
 set_option autoImplicit false
@@ -405,6 +406,84 @@ def ops : Port3_NativeGeometryBody.Ops NEW_GeometryActual.aspis_core.r0.Error wh
 #print axioms ops
 end NFN_NEW_GeometryRawInterface
 -- END copied NEW_GeometryRawInterface
+-- BEGIN copied NEW_LoopMap: evidence/slice-q-compose4-20261104/NEW_LoopMap.lean
+set_option autoImplicit false
+namespace NFN_NEW_LoopMap
+open Aeneas Aeneas.Std Result ControlFlow
+open AspisR1PublicPreparation.RawExtractedSemanticCallOpsV20
+
+def flowMap {S A B : Type} (f : A → B) : ControlFlow S A → ControlFlow S B
+ | .cont s => .cont s
+ | .done a => .done (f a)
+
+def bodyMap {S A B : Type} (body : S → Result (ControlFlow S A)) (f : A → B)
+    (s : S) : Result (ControlFlow S B) := resultMap (flowMap f) (body s)
+
+theorem map_ok {A B : Type} (f : A → B) (a : A) : resultMap f (ok a)=ok (f a) := rfl
+theorem map_fail {A B : Type} (f : A → B) (e : Error) : resultMap f (fail e)=fail e := rfl
+theorem map_div {A B : Type} (f : A → B) : resultMap f div=div := rfl
+
+/-- A defined native loop result follows the mapped loop with the SAME
+continuation state. Failure is retained; no termination or output premise. -/
+theorem defined_result {S A B : Type} (body : S → Result (ControlFlow S A)) (f : A → B)
+    (s : S) : loop body s=div ∨ resultMap f (loop body s)=loop (bodyMap body f) s := by
+  have all : ∀ s, loop body s=div ∨ resultMap f (loop body s)=loop (bodyMap body f) s := by
+    apply loop.fixpoint_induct body (fun rec =>
+      ∀ s, rec s=div ∨ resultMap f (rec s)=loop (bodyMap body f) s)
+    · refine Lean.Order.admissible_pi_apply
+        (fun x (r : Result A) => r=div ∨ resultMap f r=loop (bodyMap body f) x) ?_
+      intro x
+      apply Lean.Order.admissible_flatOrder
+      exact Or.inl rfl
+    · intro rec ih x
+      rw [loop.eq_def]
+      cases hb : body x with
+      | div => simp only [bodyMap,hb,map_div] <;> exact Or.inl True.intro
+      | fail e => simp only [bodyMap,hb,map_fail] <;> exact Or.inr True.intro
+      | ok c =>
+        cases c with
+        | done a => simp only [bodyMap,hb,map_ok,flowMap] <;> exact Or.inr True.intro
+        | cont next => simpa only [bodyMap,hb,map_ok,flowMap] using ih next
+  exact all s
+
+theorem body_inverse {S A B : Type} (body : S → Result (ControlFlow S A))
+    (f : A → B) (g : B → A) (back : ∀ a, g (f a)=a) :
+    bodyMap (bodyMap body f) g = body := by
+  funext s
+  cases h : body s with
+  | div => simp only [bodyMap,h,map_div]
+  | fail e => simp only [bodyMap,h,map_fail]
+  | ok c => cases c <;> simp only [bodyMap,h,map_ok,flowMap,back]
+
+theorem map_inverse {A B : Type} (f : A → B) (g : B → A)
+    (back : ∀ b, f (g b)=b) (r : Result B) : resultMap f (resultMap g r)=r := by
+  cases r <;> simp only [map_ok,map_fail,map_div,back]
+
+/-- Full partial Result transport through a lossless nominal return map.
+Both loop state and cont transitions are identical. Divergence and every
+failure are preserved using fixpoint induction in BOTH directions. -/
+theorem complete {S A B : Type} (body : S → Result (ControlFlow S A))
+    (f : A → B) (g : B → A) (gf : ∀ a, g (f a)=a) (fg : ∀ b, f (g b)=b)
+    (s : S) : resultMap f (loop body s)=loop (bodyMap body f) s := by
+  have forward := defined_result body f s
+  have backward := defined_result (bodyMap body f) g s
+  rw [body_inverse body f g gf] at backward
+  rcases forward with nativeDiv | done
+  · rcases backward with modelDiv | done
+    · rw [nativeDiv,modelDiv]; rfl
+    · have same := congrArg (resultMap f) done
+      simpa only [map_inverse f g fg] using same.symm
+  · exact done
+
+#print axioms map_ok
+#print axioms map_fail
+#print axioms map_div
+#print axioms defined_result
+#print axioms body_inverse
+#print axioms map_inverse
+#print axioms complete
+end NFN_NEW_LoopMap
+-- END copied NEW_LoopMap
 -- BEGIN copied NEW_GeometryRawHelpers: evidence/slice-q-compose4-20261104/NEW_GeometryRawHelpers.lean
 set_option autoImplicit false
 namespace NFN_NEW_GeometryRawHelpers
@@ -441,6 +520,26 @@ theorem backward (flat prefixes : alloc.vec.Vec U32)
 #print axioms backward
 end NFN_NEW_GeometryRawHelpers
 -- END copied NEW_GeometryRawHelpers
+-- BEGIN copied NEW_ResultMapSyntax: evidence/slice-q-compose4-20261104/NEW_ResultMapSyntax.lean
+set_option autoImplicit false
+namespace NFN_NEW_ResultMapSyntax
+open Aeneas Aeneas.Std Result
+open AspisR1PublicPreparation.RawExtractedSemanticCallOpsV20
+
+theorem pair {A B C D : Type} (f : C → D) (p : A × B) (k : A → B → Result C) :
+    resultMap f (let (a,b) := p; k a b) =
+      (let (a,b) := p; resultMap f (k a b)) := by cases p; rfl
+
+theorem option {A B C : Type} (f : B → C) (o : Option A) (noneCase : Result B)
+    (someCase : A → Result B) :
+    resultMap f (match o with | none => noneCase | some a => someCase a) =
+      (match o with | none => resultMap f noneCase | some a => resultMap f (someCase a)) := by
+  cases o <;> rfl
+
+#print axioms pair
+#print axioms option
+end NFN_NEW_ResultMapSyntax
+-- END copied NEW_ResultMapSyntax
 -- BEGIN copied NEW_GeometryRawBody: evidence/slice-q-compose4-20261104/NEW_GeometryRawBody.lean
 set_option autoImplicit false
 namespace NFN_NEW_GeometryRawBody
@@ -462,22 +561,22 @@ theorem bind_congr {A B : Type} (m : Result A) (k l : A → Result B)
 All child operations are the concrete emitted dictionary, with no free replies. -/
 theorem step (start : Usize) (iter : core.slice.iter.Iter U32)
     (lines flat : alloc.vec.Vec U32) :
-    resultMap (NEW_LoopMap.flowMap answer)
+    resultMap (NFN_NEW_LoopMap.flowMap answer)
       (NEW_GeometryActual.verifier.QueryGeometry.for_range_loop0.body start iter lines flat) =
       Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0.body ops start iter lines flat := by
   simp only [NEW_GeometryActual.verifier.QueryGeometry.for_range_loop0.body,
     Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0.body,
-    resultMap_bind,NEW_LoopMap.map_ok,NEW_LoopMap.flowMap,
+    resultMap_bind,NFN_NEW_LoopMap.map_ok,NFN_NEW_LoopMap.flowMap,
     ←zero_callback,←outer_callback,←backward,←clone,←map_iterator]
-  simp only [ops,bind_assoc_eq,bind_tc_ok,apply_ite,NEW_LoopMap.map_ok,
-    NEW_LoopMap.flowMap,answer,geometry,error]
+  simp only [ops,bind_assoc_eq,bind_tc_ok,apply_ite,NFN_NEW_LoopMap.map_ok,
+    NFN_NEW_LoopMap.flowMap,answer,geometry,error]
   congr 1
   funext following
   rcases following with ⟨query,iter1⟩
   all_goals
     repeat' first
     | rfl
-    | simp only [uncurry,resultMap_bind,NEW_LoopMap.map_ok,NEW_LoopMap.flowMap,
+    | simp only [uncurry,resultMap_bind,NFN_NEW_LoopMap.map_ok,NFN_NEW_LoopMap.flowMap,
         answer,geometry,error,bind_assoc_eq,bind_tc_ok,←clone,←map_iterator,
         alloc.vec.Vec.is_empty,core.result.Result.map_err,Port4C_GeometryStd.mapError,
         NEW_GeometryActual.verifier.QueryGeometry.for_range.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError,
@@ -520,7 +619,7 @@ theorem complete_loop (start : Usize) (iter : core.slice.iter.Iter U32)
   unfold NEW_GeometryActual.verifier.QueryGeometry.for_range_loop0
     Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0
   change resultMap answer (loop (body start) (iter,lines,flat)) = _
-  rw [NEW_LoopMap.complete (body start) answer answerBack answer_roundtrip answer_reverse]
+  rw [NFN_NEW_LoopMap.complete (body start) answer answerBack answer_roundtrip answer_reverse]
   congr 1
   funext s
   rcases s with ⟨it,ls,fl⟩
@@ -535,7 +634,7 @@ theorem complete (queries : Array U32 22#usize) (start finish : Usize) :
     Port3_NativeGeometryBody.verifier.QueryGeometry.for_range
   repeat' first
   | rfl
-  | simp only [apply_ite,resultMap_bind,NEW_LoopMap.map_ok,answer,geometry,error,complete_loop]
+  | simp only [apply_ite,resultMap_bind,NFN_NEW_LoopMap.map_ok,answer,geometry,error,complete_loop]
   | (apply bind_congr; intro)
   | split
 
@@ -588,6 +687,30 @@ theorem table_value (p : U32 × U32) :
 #print axioms table_value
 end NFN_NEW_GeometryPointPrimitives
 -- END copied NEW_GeometryPointPrimitives
+-- BEGIN copied NEW_ShiftAssociation: evidence/slice-q-compose4-20261104/NEW_ShiftAssociation.lean
+set_option autoImplicit false
+namespace NFN_NEW_ShiftAssociation
+open Aeneas Aeneas.Std Result
+
+theorem checked_to_wrapping (u : Usize) :
+    (u >>> 9#i32 : Result Usize) = ok (Usize.wrapping_shr u 9#u32) := by
+  have hbits : 9 < System.Platform.numBits := by
+    have lower := System.Platform.sixteen_le_numBits
+    omega
+  obtain ⟨z,hz,_,bits⟩ := WP.spec_imp_exists
+    (Usize.ShiftRight_IScalar_spec u 9#i32 (by decide) (by change (9 : Int) < (System.Platform.numBits : Int); omega))
+  rw [hz]
+  congr 1
+  apply UScalar.eq_of_val_eq
+  change z.bv.toNat = (Usize.wrapping_shr u 9#u32).bv.toNat
+  apply congrArg BitVec.toNat
+  rw [bits,Usize.wrapping_shr_bv_eq]
+  change (u.bv >>> 9) = (u.bv >>> (9 % System.Platform.numBits))
+  rw [Nat.mod_eq_of_lt hbits]
+
+#print axioms checked_to_wrapping
+end NFN_NEW_ShiftAssociation
+-- END copied NEW_ShiftAssociation
 -- BEGIN copied NEW_GeometryPoint: evidence/slice-q-compose4-20261104/NEW_GeometryPoint.lean
 set_option autoImplicit false
 namespace NFN_NEW_GeometryPoint
@@ -608,7 +731,7 @@ theorem complete (u : Usize) :
     NEW_GeometryActual.aspis_core.r0.domain.FibreIndex.get,
     AspisR1QueryGeometryActual.domain.FibreIndex.get,
     resultMap_bind,map_point_ok,lift,bind_tc_ok,tableA,tableB,
-    NEW_ShiftAssociation.checked_to_wrapping]
+    NFN_NEW_ShiftAssociation.checked_to_wrapping]
   generalize ha : Array.index_usize AspisR1QueryGeometryActual.fast_domain.TABLE_A
     (u &&& 511#usize) = a
   cases a with
@@ -741,121 +864,6 @@ theorem dictionary : ops = contextual := by
 end NFN_NEW_GeometryDictionary
 end
 -- END copied NEW_GeometryDictionary
--- BEGIN copied NEW_GeometryContextGeneric: evidence/slice-q-compose4-20261104/NEW_GeometryContextGeneric.lean
-set_option autoImplicit false
-namespace NFN_NEW_GeometryContextGeneric
-open Aeneas Aeneas.Std Result ControlFlow AspisR1
-open NFN_NEW_GeometryRawBody
-variable {CE : Type}
-
-def replace (o : Port3_NativeGeometryBody.Ops CE) (sub : U32 → U32 → Result U32)
-    (double : U32 → Result U32) : Port3_NativeGeometryBody.Ops CE :=
-  {o with op8:=sub,op10:=double}
-
-theorem reverse (o : Port3_NativeGeometryBody.Ops CE) (sub : U32 → U32 → Result U32)
-    (double : U32 → Result U32)
-    (it : core.iter.adapters.rev.Rev (core.ops.range.Range Usize))
-    (flat pref : alloc.vec.Vec U32) (suffix : U32) (inv : alloc.vec.Vec U32) :
-    Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0_loop0 (replace o sub double) it flat pref suffix inv =
-    Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0_loop0 o it flat pref suffix inv := by rfl
-
-theorem zero_callback (o : Port3_NativeGeometryBody.Ops CE) (sub : U32 → U32 → Result U32)
-    (double : U32 → Result U32) :
-    Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool (replace o sub double) =
-    Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool o := by rfl
-
-theorem collect_callback (o : Port3_NativeGeometryBody.Ops CE) (sub : U32 → U32 → Result U32)
-    (double : U32 → Result U32) :
-    Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 (replace o sub double) =
-    Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 o := by rfl
-
-theorem error_callback0 (o : Port3_NativeGeometryBody.Ops CE) (sub : U32 → U32 → Result U32)
-    (double : U32 → Result U32) :
-    Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError (replace o sub double) =
-    Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError o := by rfl
-
-theorem error_callback1 (o : Port3_NativeGeometryBody.Ops CE) (sub : U32 → U32 → Result U32)
-    (double : U32 → Result U32) :
-    Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError (replace o sub double) =
-    Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError o := by rfl
-
-theorem error_callback2 (o : Port3_NativeGeometryBody.Ops CE) (sub : U32 → U32 → Result U32)
-    (double : U32 → Result U32) :
-    Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError (replace o sub double) =
-    Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError o := by rfl
-
-/-- Generic one-body congruence. Its sole arithmetic premise is a contextual
-three-call law, later discharged without a parent-success assumption. -/
-theorem step (o : Port3_NativeGeometryBody.Ops CE) (sub : U32 → U32 → Result U32)
-    (double : U32 → Result U32)
-    (poly : ∀ (T : Type) (x : U32) (k : U32 → Result T),
-      (do let p ← o.op9 x x; let d ← double p; let one ← o.op7; let z ← sub d one; k z) =
-      (do let p ← o.op9 x x; let d ← o.op10 p; let one ← o.op7; let z ← o.op8 d one; k z))
-    (start : Usize) (iter : core.slice.iter.Iter U32) (lines flat : alloc.vec.Vec U32) :
-    Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0.body (replace o sub double) start iter lines flat =
-    Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0.body o start iter lines flat := by
-  simp only [Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0.body,
-    reverse,zero_callback,collect_callback,error_callback0,error_callback1,error_callback2]
-  simp only [replace,bind_assoc_eq,bind_tc_ok]
-  conv_lhs =>
-    pattern (o.op9 _ _ >>= _)
-    rw [poly]
-
-#print axioms replace
-#print axioms reverse
-#print axioms zero_callback
-#print axioms collect_callback
-#print axioms error_callback0
-#print axioms error_callback1
-#print axioms error_callback2
-#print axioms step
-end NFN_NEW_GeometryContextGeneric
--- END copied NEW_GeometryContextGeneric
--- BEGIN copied NEW_GeometryContext: evidence/slice-q-compose4-20261104/NEW_GeometryContext.lean
-set_option autoImplicit false
-noncomputable section
-namespace NFN_NEW_GeometryContext
-open Aeneas Aeneas.Std Result ControlFlow AspisR1
-open NFN_NEW_GeometryRawInterface NFN_NEW_GeometryRawBody NFN_NEW_GeometryDictionary
-open AspisR1PublicPreparation.RawExtractedSemanticCallOpsV20
-
-
-theorem one : adopted.op7=ok 1#u32 := by rfl
- theorem multiply : adopted.op9=AspisR1Qm31ArithmeticProbe.field.M31.mul := by rfl
- theorem double : adopted.op10=AspisR1Qm31ArithmeticProbe.field.M31.double := by rfl
- theorem subtract : adopted.op8=AspisR1Qm31ArithmeticProbe.field.M31.sub := by rfl
-
-theorem polynomial {T : Type} (x : U32) (k : U32 → Result T) :
- (do let p ← adopted.op9 x x
-     let d ← ops.op10 p
-     let one ← adopted.op7
-     let z ← ops.op8 d one
-     k z) =
- (do let p ← adopted.op9 x x
-     let d ← adopted.op10 p
-     let one ← adopted.op7
-     let z ← adopted.op8 d one
-     k z) := by
- simp only [one,multiply,double,subtract,ops,bind_tc_ok]
- simpa only [NFN_NEW_GeometryArithmetic.multiply_probe,NEW_GeometryActual.aspis_core.field.M31.ONE] using NFN_NEW_GeometryPolynomial.continuation x k
-
-/-- Contextual replacement of only the two operations whose unrestricted raw
-input specifications differ. The preceding product establishes their domains. -/
-theorem step (start : Usize) (iter : core.slice.iter.Iter U32) (lines flat : alloc.vec.Vec U32) :
-    Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0.body contextual start iter lines flat =
-    Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0.body adopted start iter lines flat := by
-  exact NFN_NEW_GeometryContextGeneric.step adopted ops.op8 ops.op10
-    (fun T x k => polynomial x k) start iter lines flat
-
-#print axioms one
-#print axioms multiply
-#print axioms double
-#print axioms subtract
-#print axioms polynomial
-#print axioms step
-end NFN_NEW_GeometryContext
-end
--- END copied NEW_GeometryContext
 
 run_cmd do
  let env ← Lean.getEnv

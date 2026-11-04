@@ -2,8 +2,111 @@ import Lean
 import NFN_PhaseTransport
 import NFN_ReserveOwner
 import NFN_GeometryPart05
+import NDI_IteratorFrame
 import KMX_CopyMeaning
 
+-- BEGIN copied NFB_QueryIterator: evidence/slice-q-compose5-20261104/NFB_QueryIterator.lean
+set_option autoImplicit false
+namespace NFN_NFB_QueryIterator
+open Aeneas Aeneas.Std Result
+
+/-- Native ptr/end denotes this exact suffix of the original protected input,
+not another allocation with equal contents. The kernel part is a value view. -/
+def view (queries : List U32) (start count cursor : Nat) : List U32 :=
+ ((queries.drop start).take count).drop cursor
+
+theorem view_length (queries : List U32) (start count cursor : Nat)
+    (fits : start+count≤queries.length) :
+    (view queries start count cursor).length=count-cursor := by
+ simp only [view,List.length_drop,NDI_IteratorFrame.remainder queries start count fits]
+
+theorem selected (queries : List U32) (start count cursor : Nat)
+    (active : cursor<count) :
+    ((queries.drop start).take count)[cursor]?=queries[start+cursor]? :=
+ NDI_IteratorFrame.selected queries start count cursor active
+
+theorem advance (queries : List U32) (start count cursor : Nat) :
+    (view queries start count cursor).drop 1=view queries start count (cursor+1) := by
+ simp only [view,List.drop_drop]
+
+/-- The outer iterator uses the SAME coherent next primitive as the zero
+scanner, with no arithmetic or child-domain premise. -/
+theorem next (it : core.slice.iter.Iter U32) (active : it.i < it.slice.val.length) :
+ core.slice.iter.IteratorSliceIter.next it=
+  ok (some it.slice.val[it.i],{it with i:=it.i+1}) := NFN_NFB_ZeroFinite.next_active it active
+
+theorem end_next (it : core.slice.iter.Iter U32) (finished : it.slice.val.length ≤ it.i) :
+ core.slice.iter.IteratorSliceIter.next it=ok (none,it) := NFN_NFB_ZeroFinite.next_end it finished
+
+#print axioms view_length
+#print axioms selected
+#print axioms advance
+#print axioms next
+#print axioms end_next
+end NFN_NFB_QueryIterator
+-- END copied NFB_QueryIterator
+-- BEGIN copied NET_GeometryGather: evidence/slice-q-compose3-20261102/NET_GeometryGather.lean
+set_option autoImplicit false
+namespace NFN_NET_GeometryGather
+
+/-- Ordered observations on the SAME two evolving buffers. The native
+existence/physical association of each observation remains a separate gate. -/
+inductive Trace {T : Type} : List (List T × T) → List T → List T → List T → List T → Prop
+ | done (flat lines : List T) : Trace [] flat lines flat lines
+ | step (row : List T × T) (rows : List (List T × T))
+     (flat lines nextFlat nextLines finalFlat finalLines : List T)
+     (flatStep : nextFlat = flat ++ row.1)
+     (lineStep : nextLines = lines ++ [row.2]) (width : row.1.length = 5)
+     (tail : Trace rows nextFlat nextLines finalFlat finalLines) :
+     Trace (row::rows) flat lines finalFlat finalLines
+
+/-- No independently chosen whole-buffer output appears as a premise. -/
+theorem meaning {T : Type} {rows : List (List T × T)}
+    {flat lines finalFlat finalLines : List T}
+    (trace : Trace rows flat lines finalFlat finalLines) :
+    finalFlat = flat ++ rows.flatMap Prod.fst ∧
+      finalLines = lines ++ rows.map Prod.snd := by
+  induction trace with
+  | done => simp
+  | step row rows flat lines nextFlat nextLines finalFlat finalLines flatStep lineStep width tail ih =>
+    rcases ih with ⟨hf,hl⟩
+    constructor
+    · rw [hf,flatStep]
+      simp only [List.flatMap_cons,List.append_assoc]
+    · rw [hl,lineStep]
+      simp only [List.map_cons,List.append_assoc,List.singleton_append]
+
+/-- Both counters advance together through every observed query. -/
+theorem lengths {T : Type} {rows : List (List T × T)}
+    {flat lines finalFlat finalLines : List T}
+    (trace : Trace rows flat lines finalFlat finalLines) :
+    finalFlat.length = flat.length + 5*rows.length ∧
+      finalLines.length = lines.length + rows.length := by
+  induction trace with
+  | done => simp
+  | step row rows flat lines nextFlat nextLines finalFlat finalLines flatStep lineStep width tail ih =>
+    rcases ih with ⟨hf,hl⟩
+    rw [flatStep,List.length_append,width] at hf
+    rw [lineStep,List.length_append,List.length_singleton] at hl
+    simp only [List.length_cons]
+    constructor <;> omega
+
+/-- Reaching the prefix call after all queries establishes its exact size
+on the same gathered value list. This is not native trace existence. -/
+theorem prefix_domain {T : Type} {rows : List (List T × T)}
+    {finalFlat finalLines : List T} (bound : rows.length ≤ 22)
+    (trace : Trace rows [] [] finalFlat finalLines) :
+    finalFlat.length = 5*rows.length ∧ finalFlat.length ≤ 110 ∧
+      finalLines.length = rows.length := by
+  obtain ⟨hf,hl⟩ := lengths trace
+  simp only [List.length_nil,Nat.zero_add] at hf hl
+  exact ⟨hf,by omega,hl⟩
+
+#print axioms meaning
+#print axioms lengths
+#print axioms prefix_domain
+end NFN_NET_GeometryGather
+-- END copied NET_GeometryGather
 -- BEGIN copied NFB_GatherTrace: evidence/slice-q-compose5-20261104/NFB_GatherTrace.lean
 set_option autoImplicit false
 noncomputable section
@@ -243,9 +346,9 @@ theorem continuation (start : Usize) (it it1 : It) (lines flat lines1 flat1 : Ve
  | div => simp [h,resultMap] at associated
  | ok flow =>
   cases flow with
-  | done value => simp [h,resultMap,NEW_LoopMap.flowMap] at associated
+  | done value => simp [h,resultMap,NFN_NEW_LoopMap.flowMap] at associated
   | cont state =>
-   simp only [h,resultMap,NEW_LoopMap.flowMap,Result.ok.injEq,ControlFlow.cont.injEq] at associated
+   simp only [h,resultMap,NFN_NEW_LoopMap.flowMap,Result.ok.injEq,ControlFlow.cont.injEq] at associated
    cases associated
    rfl
 
@@ -746,117 +849,6 @@ theorem complete {n : Nat} {before after : List U32} (trace : Trace n before aft
 #print axioms complete
 end NFN_NFB_ResizeTrace
 -- END copied NFB_ResizeTrace
--- BEGIN copied NFB_CollectorTrace: evidence/slice-q-compose5-20261104/NFB_CollectorTrace.lean
-set_option autoImplicit false
-namespace NFN_NFB_CollectorTrace
-open Aeneas.Std
-
-/-- Only initialized live payload is exposed. Publication remains zero until
-SetLenOnDrop finishes; this models the pinned TrustedLen specialization. -/
-structure Guard (A : Type) where
- initialized : List A
- published : Nat
- deriving Repr
-
-def store {A : Type} (s : Guard A) (x : A) : Guard A :=
- ⟨s.initialized++[x],s.published⟩
-def finish {A : Type} (s : Guard A) : Guard A :=
- ⟨s.initialized,s.initialized.length⟩
-def fill {A : Type} : List A → Guard A → Guard A
- | [],s => s
- | x::xs,s => fill xs (store s x)
-
-theorem stores {A : Type} (xs : List A) (s : Guard A) :
- (fill xs s).initialized=s.initialized++xs ∧ (fill xs s).published=s.published := by
- induction xs generalizing s with
- | nil => simp [fill]
- | cons x xs ih =>
-  have h := ih (store s x)
-  simpa [fill,store,List.append_assoc] using h
-
-theorem complete {A : Type} (xs : List A) :
- finish (fill xs (⟨[],0⟩ : Guard A))=⟨xs,xs.length⟩ := by
- have h:=stores xs (⟨[],0⟩ : Guard A)
- simp only [List.nil_append] at h
- simp only [finish,h.1]
-
-/-- Arbitrary old live windows and the new slot reconstruct one SAME-buffer
-store. This law is shared by array initialization and row collection. -/
-theorem window_step {A : Type} (before after : List A) (value : A)
- (size : after.length=before.length+1)
- (old : ∀ j,j<before.length → after[j]?=before[j]?)
- (new : after[before.length]?=some value) : after=before++[value] := by
- apply List.ext_getElem?
- intro j
- by_cases active : j<before.length
- · rw [old j active,List.getElem?_append_left active]
- · by_cases last : j=before.length
-   · subst j
-     rw [new,List.getElem?_append_right (by omega)]
-     simp only [Nat.sub_self,List.getElem?_cons_zero]
-   · rw [List.getElem?_eq_none (by omega : after.length≤j),
-       List.getElem?_eq_none (by simp only [List.length_append,List.length_singleton];omega)]
-
-inductive Trace {A : Type} : List A → Guard A → Guard A → Prop where
- | done (s : Guard A) : Trace [] s s
- | step (x : A) (xs : List A) (s next out : Guard A)
-  (size : next.initialized.length=s.initialized.length+1)
-  (old : ∀ j,j<s.initialized.length → next.initialized[j]?=s.initialized[j]?)
-  (new : next.initialized[s.initialized.length]?=some x)
-  (unpublished : next.published=s.published)
-  (tail : Trace xs next out) : Trace (x::xs) s out
-
-theorem meaning {A : Type} {xs : List A} {before after : Guard A}
- (trace : Trace xs before after) : after=fill xs before := by
- induction trace with
- | done => rfl
- | step x xs s next out size old new unpublished tail ih =>
-  have h:=window_step s.initialized next.initialized x size old new
-  have same : next=store s x := by cases next;cases s;simp_all [store]
-  rw [ih,same]
-  rfl
-#print axioms stores
-#print axioms complete
-#print axioms window_step
-#print axioms meaning
-end NFN_NFB_CollectorTrace
--- END copied NFB_CollectorTrace
--- BEGIN copied NFB_CollectAssociation: evidence/slice-q-compose5-20261104/NFB_CollectAssociation.lean
-set_option autoImplicit false
-noncomputable section
-namespace NFN_NFB_CollectAssociation
-open Aeneas Aeneas.Std Result AspisR1
-open NFN_NFB_CollectorTrace
-open NFN_NEW_GeometryDictionary
-
-/-- The adopted collector and the native guard-local store induction have
-ONE exact initialized payload and publication length. No child result premise. -/
-theorem complete (flat : alloc.vec.Vec U32) (count : Usize)
- (bound : count.val≤22) (size : flat.val.length=5*count.val) :
- ∃ out : alloc.vec.Vec (Array U32 5#usize),
- Port4C_CollectLoop.collect (Port4C_GeometryInverse.install
-  (NFN_NEB_ActualGeometryModel.install NFN_NEW_GeometryRawInterface.ops NFN_NEW_GeometryDictionary.err)) flat count=ok out ∧
- finish (fill ((List.range count.val).map (Port4C_CollectLoop.record flat))
-  (⟨[],0⟩ : Guard (Array U32 5#usize)))=⟨out.val,out.val.length⟩ ∧
- out.val.length=count.val := by
- obtain ⟨out,run,contents,length⟩ := Port4C_CollectLoop.total
-  (Port4C_GeometryInverse.install
-   (NFN_NEB_ActualGeometryModel.install NFN_NEW_GeometryRawInterface.ops NFN_NEW_GeometryDictionary.err))
-  flat count bound size
- refine ⟨out,run,?_,length⟩
- rw [NFN_NFB_CollectorTrace.complete,←contents]
-
-/-- Five initialized native slots match every lane of the adopted callback. -/
-theorem array_complete (flat : alloc.vec.Vec U32) (row : Nat) :
- finish (fill (Port4C_CollectLoop.record flat row).val (⟨[],0⟩ : Guard U32))=
- ⟨(Port4C_CollectLoop.record flat row).val,5⟩ := by
- rw [NFN_NFB_CollectorTrace.complete]
- congr 1
-#print axioms complete
-#print axioms array_complete
-end NFN_NFB_CollectAssociation
-end
--- END copied NFB_CollectAssociation
 
 run_cmd do
  let env ← Lean.getEnv

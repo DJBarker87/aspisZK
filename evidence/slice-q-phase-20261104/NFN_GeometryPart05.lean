@@ -10,8 +10,122 @@ import Port4B_Opening
 import Port4C_PrefixMeaning
 import Port4C_BatchInverse
 import KMX_CopyMeaning
-import NDI_IteratorFrame
 
+-- BEGIN copied NEW_GeometryContextGeneric: evidence/slice-q-compose4-20261104/NEW_GeometryContextGeneric.lean
+set_option autoImplicit false
+namespace NFN_NEW_GeometryContextGeneric
+open Aeneas Aeneas.Std Result ControlFlow AspisR1
+open NFN_NEW_GeometryRawBody
+variable {CE : Type}
+
+def replace (o : Port3_NativeGeometryBody.Ops CE) (sub : U32 → U32 → Result U32)
+    (double : U32 → Result U32) : Port3_NativeGeometryBody.Ops CE :=
+  {o with op8:=sub,op10:=double}
+
+theorem reverse (o : Port3_NativeGeometryBody.Ops CE) (sub : U32 → U32 → Result U32)
+    (double : U32 → Result U32)
+    (it : core.iter.adapters.rev.Rev (core.ops.range.Range Usize))
+    (flat pref : alloc.vec.Vec U32) (suffix : U32) (inv : alloc.vec.Vec U32) :
+    Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0_loop0 (replace o sub double) it flat pref suffix inv =
+    Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0_loop0 o it flat pref suffix inv := by rfl
+
+theorem zero_callback (o : Port3_NativeGeometryBody.Ops CE) (sub : U32 → U32 → Result U32)
+    (double : U32 → Result U32) :
+    Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool (replace o sub double) =
+    Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool o := by rfl
+
+theorem collect_callback (o : Port3_NativeGeometryBody.Ops CE) (sub : U32 → U32 → Result U32)
+    (double : U32 → Result U32) :
+    Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 (replace o sub double) =
+    Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 o := by rfl
+
+theorem error_callback0 (o : Port3_NativeGeometryBody.Ops CE) (sub : U32 → U32 → Result U32)
+    (double : U32 → Result U32) :
+    Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError (replace o sub double) =
+    Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError o := by rfl
+
+theorem error_callback1 (o : Port3_NativeGeometryBody.Ops CE) (sub : U32 → U32 → Result U32)
+    (double : U32 → Result U32) :
+    Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError (replace o sub double) =
+    Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError o := by rfl
+
+theorem error_callback2 (o : Port3_NativeGeometryBody.Ops CE) (sub : U32 → U32 → Result U32)
+    (double : U32 → Result U32) :
+    Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError (replace o sub double) =
+    Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError o := by rfl
+
+/-- Generic one-body congruence. Its sole arithmetic premise is a contextual
+three-call law, later discharged without a parent-success assumption. -/
+theorem step (o : Port3_NativeGeometryBody.Ops CE) (sub : U32 → U32 → Result U32)
+    (double : U32 → Result U32)
+    (poly : ∀ (T : Type) (x : U32) (k : U32 → Result T),
+      (do let p ← o.op9 x x; let d ← double p; let one ← o.op7; let z ← sub d one; k z) =
+      (do let p ← o.op9 x x; let d ← o.op10 p; let one ← o.op7; let z ← o.op8 d one; k z))
+    (start : Usize) (iter : core.slice.iter.Iter U32) (lines flat : alloc.vec.Vec U32) :
+    Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0.body (replace o sub double) start iter lines flat =
+    Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0.body o start iter lines flat := by
+  simp only [Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0.body,
+    reverse,zero_callback,collect_callback,error_callback0,error_callback1,error_callback2]
+  simp only [replace,bind_assoc_eq,bind_tc_ok]
+  conv_lhs =>
+    pattern (o.op9 _ _ >>= _)
+    rw [poly]
+
+#print axioms replace
+#print axioms reverse
+#print axioms zero_callback
+#print axioms collect_callback
+#print axioms error_callback0
+#print axioms error_callback1
+#print axioms error_callback2
+#print axioms step
+end NFN_NEW_GeometryContextGeneric
+-- END copied NEW_GeometryContextGeneric
+-- BEGIN copied NEW_GeometryContext: evidence/slice-q-compose4-20261104/NEW_GeometryContext.lean
+set_option autoImplicit false
+noncomputable section
+namespace NFN_NEW_GeometryContext
+open Aeneas Aeneas.Std Result ControlFlow AspisR1
+open NFN_NEW_GeometryRawInterface NFN_NEW_GeometryRawBody NFN_NEW_GeometryDictionary
+open AspisR1PublicPreparation.RawExtractedSemanticCallOpsV20
+
+
+theorem one : adopted.op7=ok 1#u32 := by rfl
+ theorem multiply : adopted.op9=AspisR1Qm31ArithmeticProbe.field.M31.mul := by rfl
+ theorem double : adopted.op10=AspisR1Qm31ArithmeticProbe.field.M31.double := by rfl
+ theorem subtract : adopted.op8=AspisR1Qm31ArithmeticProbe.field.M31.sub := by rfl
+
+theorem polynomial {T : Type} (x : U32) (k : U32 → Result T) :
+ (do let p ← adopted.op9 x x
+     let d ← ops.op10 p
+     let one ← adopted.op7
+     let z ← ops.op8 d one
+     k z) =
+ (do let p ← adopted.op9 x x
+     let d ← adopted.op10 p
+     let one ← adopted.op7
+     let z ← adopted.op8 d one
+     k z) := by
+ simp only [one,multiply,double,subtract,ops,bind_tc_ok]
+ simpa only [NFN_NEW_GeometryArithmetic.multiply_probe,NEW_GeometryActual.aspis_core.field.M31.ONE] using NFN_NEW_GeometryPolynomial.continuation x k
+
+/-- Contextual replacement of only the two operations whose unrestricted raw
+input specifications differ. The preceding product establishes their domains. -/
+theorem step (start : Usize) (iter : core.slice.iter.Iter U32) (lines flat : alloc.vec.Vec U32) :
+    Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0.body contextual start iter lines flat =
+    Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0.body adopted start iter lines flat := by
+  exact NFN_NEW_GeometryContextGeneric.step adopted ops.op8 ops.op10
+    (fun T x k => polynomial x k) start iter lines flat
+
+#print axioms one
+#print axioms multiply
+#print axioms double
+#print axioms subtract
+#print axioms polynomial
+#print axioms step
+end NFN_NEW_GeometryContext
+end
+-- END copied NEW_GeometryContext
 -- BEGIN copied NEW_GeometryComplete: evidence/slice-q-compose4-20261104/NEW_GeometryComplete.lean
 set_option autoImplicit false
 noncomputable section
@@ -104,7 +218,7 @@ theorem standard : Port4C_GeometryStd.install adopted=adopted := by rfl
 vectors; contextual arithmetic substitution has no free child premise. -/
 theorem step (start : Usize) (iter : core.slice.iter.Iter U32)
     (lines flat : alloc.vec.Vec U32) :
- resultMap (NEW_LoopMap.flowMap answer)
+ resultMap (NFN_NEW_LoopMap.flowMap answer)
    (NEW_GeometryActual.verifier.QueryGeometry.for_range_loop0.body start iter lines flat)=
  Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0.body adopted start iter lines flat :=
  (NFN_NEW_GeometryRawBody.step start iter lines flat).trans
@@ -722,108 +836,6 @@ theorem complete (it : core.slice.iter.Iter U32) (fuel : Nat)
 #print axioms complete
 end NFN_NFB_ZeroFinite
 -- END copied NFB_ZeroFinite
--- BEGIN copied NFB_QueryIterator: evidence/slice-q-compose5-20261104/NFB_QueryIterator.lean
-set_option autoImplicit false
-namespace NFN_NFB_QueryIterator
-open Aeneas Aeneas.Std Result
-
-/-- Native ptr/end denotes this exact suffix of the original protected input,
-not another allocation with equal contents. The kernel part is a value view. -/
-def view (queries : List U32) (start count cursor : Nat) : List U32 :=
- ((queries.drop start).take count).drop cursor
-
-theorem view_length (queries : List U32) (start count cursor : Nat)
-    (fits : start+count≤queries.length) :
-    (view queries start count cursor).length=count-cursor := by
- simp only [view,List.length_drop,NDI_IteratorFrame.remainder queries start count fits]
-
-theorem selected (queries : List U32) (start count cursor : Nat)
-    (active : cursor<count) :
-    ((queries.drop start).take count)[cursor]?=queries[start+cursor]? :=
- NDI_IteratorFrame.selected queries start count cursor active
-
-theorem advance (queries : List U32) (start count cursor : Nat) :
-    (view queries start count cursor).drop 1=view queries start count (cursor+1) := by
- simp only [view,List.drop_drop]
-
-/-- The outer iterator uses the SAME coherent next primitive as the zero
-scanner, with no arithmetic or child-domain premise. -/
-theorem next (it : core.slice.iter.Iter U32) (active : it.i < it.slice.val.length) :
- core.slice.iter.IteratorSliceIter.next it=
-  ok (some it.slice.val[it.i],{it with i:=it.i+1}) := NFN_NFB_ZeroFinite.next_active it active
-
-theorem end_next (it : core.slice.iter.Iter U32) (finished : it.slice.val.length ≤ it.i) :
- core.slice.iter.IteratorSliceIter.next it=ok (none,it) := NFN_NFB_ZeroFinite.next_end it finished
-
-#print axioms view_length
-#print axioms selected
-#print axioms advance
-#print axioms next
-#print axioms end_next
-end NFN_NFB_QueryIterator
--- END copied NFB_QueryIterator
--- BEGIN copied NET_GeometryGather: evidence/slice-q-compose3-20261102/NET_GeometryGather.lean
-set_option autoImplicit false
-namespace NFN_NET_GeometryGather
-
-/-- Ordered observations on the SAME two evolving buffers. The native
-existence/physical association of each observation remains a separate gate. -/
-inductive Trace {T : Type} : List (List T × T) → List T → List T → List T → List T → Prop
- | done (flat lines : List T) : Trace [] flat lines flat lines
- | step (row : List T × T) (rows : List (List T × T))
-     (flat lines nextFlat nextLines finalFlat finalLines : List T)
-     (flatStep : nextFlat = flat ++ row.1)
-     (lineStep : nextLines = lines ++ [row.2]) (width : row.1.length = 5)
-     (tail : Trace rows nextFlat nextLines finalFlat finalLines) :
-     Trace (row::rows) flat lines finalFlat finalLines
-
-/-- No independently chosen whole-buffer output appears as a premise. -/
-theorem meaning {T : Type} {rows : List (List T × T)}
-    {flat lines finalFlat finalLines : List T}
-    (trace : Trace rows flat lines finalFlat finalLines) :
-    finalFlat = flat ++ rows.flatMap Prod.fst ∧
-      finalLines = lines ++ rows.map Prod.snd := by
-  induction trace with
-  | done => simp
-  | step row rows flat lines nextFlat nextLines finalFlat finalLines flatStep lineStep width tail ih =>
-    rcases ih with ⟨hf,hl⟩
-    constructor
-    · rw [hf,flatStep]
-      simp only [List.flatMap_cons,List.append_assoc]
-    · rw [hl,lineStep]
-      simp only [List.map_cons,List.append_assoc,List.singleton_append]
-
-/-- Both counters advance together through every observed query. -/
-theorem lengths {T : Type} {rows : List (List T × T)}
-    {flat lines finalFlat finalLines : List T}
-    (trace : Trace rows flat lines finalFlat finalLines) :
-    finalFlat.length = flat.length + 5*rows.length ∧
-      finalLines.length = lines.length + rows.length := by
-  induction trace with
-  | done => simp
-  | step row rows flat lines nextFlat nextLines finalFlat finalLines flatStep lineStep width tail ih =>
-    rcases ih with ⟨hf,hl⟩
-    rw [flatStep,List.length_append,width] at hf
-    rw [lineStep,List.length_append,List.length_singleton] at hl
-    simp only [List.length_cons]
-    constructor <;> omega
-
-/-- Reaching the prefix call after all queries establishes its exact size
-on the same gathered value list. This is not native trace existence. -/
-theorem prefix_domain {T : Type} {rows : List (List T × T)}
-    {finalFlat finalLines : List T} (bound : rows.length ≤ 22)
-    (trace : Trace rows [] [] finalFlat finalLines) :
-    finalFlat.length = 5*rows.length ∧ finalFlat.length ≤ 110 ∧
-      finalLines.length = rows.length := by
-  obtain ⟨hf,hl⟩ := lengths trace
-  simp only [List.length_nil,Nat.zero_add] at hf hl
-  exact ⟨hf,by omega,hl⟩
-
-#print axioms meaning
-#print axioms lengths
-#print axioms prefix_domain
-end NFN_NET_GeometryGather
--- END copied NET_GeometryGather
 
 run_cmd do
  let env ← Lean.getEnv

@@ -50,8 +50,9 @@ elif kind=='linkaudit':
 elif kind=='auditbin':
  sources=['NFN_generated/NFN_Driver.lean'];command=['NFN_native/NFN_Driver',target]
 else:raise ValueError(kind)
-if target=='scan':
- files['NFN_EXPECTED_IMPORTS.jsonl']=(E/'NFN_EXPECTED_IMPORTS.jsonl').read_text();sources+=['NFN_EXPECTED_IMPORTS.jsonl']
+if target in ['scan','queryscan']:
+ name='NFN_QUERY_EXPECTED_IMPORTS.jsonl' if target=='queryscan' else 'NFN_EXPECTED_IMPORTS.jsonl'
+ files[name]=(E/name).read_text();sources+=[name]
 cfg=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=env,timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={'selected_objects':{}},expected_time='Focused elaboration' if kind=='lean' else 'Optimized audit linker' if kind=='linkaudit' else 'Raw checked-kernel graph traversal')
 files[a+'.json']=json.dumps(cfg)
 r=ssh('python3',f'''from pathlib import Path
@@ -70,7 +71,7 @@ for root in roots:
    if Path(root,stem+suf).is_file():rels.add(stem+suf)
 for rel in sorted(rels):
  p=next(Path(root)/rel for root in roots if (Path(root)/rel).is_file());pins[str(p)]={{'path':str(p),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}}
-for module in (['NEP_Planted','NEP_Mutations'] if x['module'] in ['NFN_Driver','NFN_ProofDriver','fixtures'] else [])+(['NFN_CombinedFinal'] if x['kind']=='auditbin' and (x['module'].startswith('proof') or x['module']=='scan') else [])+[n for line in (b/x['sources'][0]).read_text().splitlines() if line.startswith('import ') for n in line[7:].split() if n!='all'] if x['kind']!='linkaudit' else []:
+for module in (['NEP_Planted','NEP_Mutations'] if x['module'] in ['NFN_Driver','NFN_ProofDriver','fixtures'] else [])+(['NFN_QueryModel'] if x['kind']=='auditbin' and x['module'].startswith('query') else [])+(['NFN_COMBINED_IMPORT'] if x['kind']=='auditbin' and (x['module'].startswith('proof') or x['module']=='scan') else [])+[n for line in (b/x['sources'][0]).read_text().splitlines() if line.startswith('import ') for n in line[7:].split() if n!='all'] if x['kind']!='linkaudit' else []:
  rel=module.replace('.','/')+'.olean';p=next((Path(root)/rel for root in roots if (Path(root)/rel).is_file()),None)
  assert p is not None,module
  for z in [p,Path(str(p)+'.private'),Path(str(p)+'.server'),p.with_suffix('.ir')]:
@@ -83,7 +84,7 @@ r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
 names += [str(p.relative_to(b)) for p in b.glob('NEP_'+{target!r}+'_*_REACHABLE.txt')] if {kind!r}=='auditbin' else []
-if {target!r}=='scan':names+=['NFN_LOADED_scan.jsonl']
+if {target!r} in ['scan','queryscan']:names+=['NFN_QUERY_LOADED_scan.jsonl' if {target!r}=='queryscan' else 'NFN_LOADED_scan.jsonl']
 out={{n:(b/n).read_text() for n in names}}
 for name in ['NFN_Driver','NFN_ProofDriver']:
  p=b/'NFN_native'/name
