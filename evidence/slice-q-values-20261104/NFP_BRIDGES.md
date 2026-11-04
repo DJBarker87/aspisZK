@@ -43,3 +43,18 @@ Legacy field proof imports hit duplicate Phase owners (L012--014). The
 unchanged addition/subtraction proofs were retargeted by import and namespace
 only, recorded in NFP_NATBASE_PROVENANCE.json. NFP_NatBase compiles L016.
 No NEW/NFB forest is imported. The NFN branch was not yet present at intake.
+
+Stage 4: NFP_CombinedFinal compiles with RPx, NFM and the selected NFG roots
+(L046: exit0,3.446748s,RSS5462208KiB,swap0). It includes50 new top theorems,
+standard axioms only, and excludes the failed accumulation-packet candidate.
+The actual source trace is split at dot return and rejection (L029--035),
+independent TX1/TX2 counters advance on the SAME query (L041), actual end10/22
+loop models use fuels10/12 (L042), and the rejected prefix has no suffix event
+(L045). NFP_NodeDictionary (L039) connects the emitted scalar arithmetic to
+the selected probe dictionary by its exact natural value law.
+The separate native inverse/line receiver windows pass on actual TX starts,
+lengths and arbitrary cells/indices (K025--035); no K024 timeout is reused.
+Loop initial-Err/stopped windows and controls pass K036--040. These are
+independent control support, not query-loop row closure.
+No query_values/query_loop row is promoted because NFP_COHERENCE_FINDING.md
+retains the failed accumulated-row callee import. The final audit is pending.

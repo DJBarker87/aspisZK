@@ -39,6 +39,22 @@ if sys.argv[2].startswith('geometry_'):
  assert 'let inverse=*geometry.for_query(i);let z=geometry.line_z[i-geometry.start];(inverse,z)' in code
  (S/'crates/aspis-r1-cost-probe/src/NFP_query.rs').write_text(code)
  built.update(geometry_cut='actual for_query and line_z with arbitrary TX1/TX2 reached index',qualification='all raw input cells, actual start/end/length, no constructor success assumed')
+if sys.argv[2].startswith(('geometry_inverse_','geometry_line_','geometry_split_')):
+ code=(B/'NFP_geometry_split.rs.txt').read_text()
+ assert 'let inverse=*geometry.for_query(i);' in code and 'let z=geometry.line_z[i-geometry.start];' in code
+ (S/'crates/aspis-r1-cost-probe/src/NFP_query.rs').write_text(code)
+ built.update(geometry_split='one original read; actual TX1/TX2 starts/lengths; arbitrary index and cells',qualification='other unread geometry field is opaque; Lean accessor/frame composition required')
+if sys.argv[2].startswith('loop_'):
+ code=(B/'NFP_loop.rs.txt').read_text();frozen=json.loads((B/'NFP_FROZEN.json').read_text())
+ assert 'state = query_values(proof, p, a, g, obs, geometry, pending);' in frozen['crates/aspis-r1-cost-probe/src/candidate.rs']
+ assert 'if a.next>=end{return Step::Done(Ok((a,pending)));}' in code
+ assert 'let state=child(proof,p,a,g,obs,geometry,pending,c);' in code
+ assert 'Err(error)=>Step::Done(Err(error))' in code
+ (S/'crates/aspis-r1-cost-probe/src/NFP_query.rs').write_text(code)
+ from NFP_source_checks import loop as check_loop
+ built.update(check_loop(frozen['crates/aspis-r1-cost-probe/src/candidate.rs'],code))
+ built.update(loop_cut='one actual frozen match-body, Done/Continue ghost terminal; local arbitrary reply/raw state',qualification='No whole-loop unwind; context descriptor/receiver windows composed separately')
+built['compiled_native_source_sha256']=hashlib.sha256((S/'crates/aspis-r1-cost-probe/src/NFP_query.rs').read_bytes()).hexdigest()
 (B/(a+'-fission-check.json')).write_text(json.dumps(built,indent=2))
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 # Pin the compiler/backend binaries used by the existing fixed Kani install.

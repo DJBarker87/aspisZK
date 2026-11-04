@@ -1,0 +1,27 @@
+use super::*;
+pub(super) struct Log;impl Log{pub fn unused()->Self{Self}}
+pub(super) fn dots(_:&[u8],_:&[E;29],_:&mut Log)->[E;4]{[E::ZERO;4]}
+pub(super) fn consume(_:usize,_:usize,_:[E;4],_:&mut Log){}
+struct Product {seen:[M31;2],calls:usize,reply:M31}
+fn product(a:M31,b:M31,p:&mut Product)->M31{p.seen=[a,b];p.calls+=1;p.reply}
+fn NFP_node(z:M31,p:&mut Product)->M31{let node=product(z,z,p).double().sub(M31::ONE);node}
+fn run(mode:u8){
+ let z=M31(kani::any());let word:u32=kani::any();kani::assume(word<2147483647);
+ let mut p=Product{seen:[M31(0);2],calls:0,reply:M31(word)};
+ let out=NFP_node(z,&mut p);
+ assert_eq!(p.calls,1);assert_eq!(p.seen,[z,z]);
+ let sum=u64::from(word)+u64::from(word);let expected=((sum%2147483647+2147483647-1)%2147483647) as u32;
+ assert!(out.0<2147483647);assert_eq!(out.0,if mode==1 {expected^1}else{expected});
+}
+#[kani::proof] #[kani::unwind(18)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn node_value(){run(0)}
+#[kani::proof] #[kani::unwind(18)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn node_value_control(){run(1)}
+#[kani::proof] #[kani::unwind(18)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn node_value_renamed(){run(0)}
+#[kani::proof] #[kani::unwind(18)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn node_copy_control(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as_mut_ptr(),16)};assert_eq!(dst[15],0);}

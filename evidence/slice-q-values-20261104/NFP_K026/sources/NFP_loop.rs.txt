@@ -1,0 +1,81 @@
+use super::*;
+pub(super) struct Log;impl Log{pub fn unused()->Self{Self}}
+pub(super) fn dots(_:&[u8],_:&[E;29],_:&mut Log)->[E;4]{[E::ZERO;4]}
+pub(super) fn consume(_:usize,_:usize,_:[E;4],_:&mut Log){}
+type R=Result<(Accumulator,BatchedWeights),Error>;
+enum Step{Done(R),Continue(R)}
+struct Call{called:bool,error:bool,seen:[usize;9],rhs:E,power:K,next:usize,terms:usize,raw:[[u64;4];64]}
+fn child(proof:&[u8],p:&Prepared,mut a:Accumulator,g:&[E;29],_:Observer,geometry:&QueryGeometry,mut b:BatchedWeights,c:&mut Call)->R{
+ assert!(!c.called);c.called=true;c.seen=[proof.as_ptr() as usize,proof.len(),p as *const _ as usize,g.as_ptr() as usize,geometry as *const _ as usize,a.next,a.weights.as_ptr() as usize,b.raw.as_ptr() as usize,b.terms];
+ if c.error{return Err(Error::Query);}
+ a.rhs=c.rhs;a.power=c.power;a.next=c.next;b.terms=c.terms;
+ for j in 0..64 {b.raw[j]=c.raw[j];}
+ Ok((a,b))
+}
+fn NFP_step(proof:&[u8],p:&Prepared,g:&[E;29],obs:Observer,geometry:&QueryGeometry,end:usize,state:R,c:&mut Call)->Step{
+ match state{
+  Err(error)=>Step::Done(Err(error)),
+  Ok((a,pending))=>{
+   if a.next>=end{return Step::Done(Ok((a,pending)));}
+   let state=child(proof,p,a,g,obs,geometry,pending,c);
+   Step::Continue(state)
+  }
+ }
+}
+fn k()->K{let w:[u32;4]=kani::any();K{c0:aspis_core::field::CM31{a:M31(w[0]),b:M31(w[1])},c1:aspis_core::field::CM31{a:M31(w[2]),b:M31(w[3])}}}
+fn e()->E{let w:[u32;8]=kani::any();for x in w{kani::assume(x<2147483647);}E::from_limbs(w).unwrap()}
+fn run(mode:u8,bad:bool){
+ let end:usize=kani::any();kani::assume(end==10 || end==22);
+ // Only context descriptor forwarding is observed here. The byte-content
+ // lift is supplied by the separate original-proof prefix certificate.
+ let proof=[0u8;57607];let g=[E::ZERO;29];
+ let p=Prepared{variant:Variant::S2,roots:[[0;32];2],gamma:E::ZERO,kappa:E::ZERO,alpha:[E::ZERO;2],rho:K::ZERO,queries:[0;22],semantic_alpha:[K::ZERO;10],z:[SecureCirclePoint{x:K::ZERO,y:K::ZERO};2],claim:E::ZERO,state:[0;32]};
+ let geometry=QueryGeometry{start:if end==10{0}else{10},inverses:Vec::new(),line_z:Vec::new()};
+ let mut weights=Vec::with_capacity(64);let mut raw=Vec::with_capacity(64);for _ in 0..64{weights.push(k());raw.push(kani::any::<[u64;4]>());}
+ let next:usize=kani::any();kani::assume(next<=end);if mode==1{kani::assume(next==end);}else if mode>=2{kani::assume(next<end);}
+ let a=Accumulator{weights,rhs:e(),power:k(),next};let b=BatchedWeights{raw,terms:kani::any()};
+ let row:usize=kani::any();let lane:usize=kani::any();kani::assume(row<64 && lane<4);
+ let ow=a.weights[row];let oldraw=b.raw[row][lane];let oldrhs=a.rhs;let oldpower=a.power;let oldterms=b.terms;
+ let expected=[proof.as_ptr() as usize,proof.len(),&p as *const _ as usize,g.as_ptr() as usize,&geometry as *const _ as usize,next,a.weights.as_ptr() as usize,b.raw.as_ptr() as usize,b.terms];
+ let mut c=Call{called:false,error:mode==2,seen:[0;9],rhs:e(),power:k(),next:kani::any(),terms:kani::any(),raw:kani::any()};
+ let state=if mode==0{Err(Error::Parse)}else{Ok((a,b))};
+ match NFP_step(&proof,&p,&g,None,&geometry,end,state,&mut c){
+  Step::Done(Err(error))=>{assert_eq!(mode,0);assert_eq!(error,Error::Parse);assert!(!c.called);if bad{assert!(c.called);}}
+  Step::Done(Ok((a,b)))=>{assert_eq!(mode,1);assert!(!c.called);assert_eq!(a.next,next);assert_eq!(a.rhs,oldrhs);assert_eq!(a.power,oldpower);assert_eq!(b.terms,oldterms);assert_eq!(a.weights[row],ow);assert_eq!(b.raw[row][lane],oldraw);if bad{assert!(c.called);}}
+  Step::Continue(reply)=>{
+   assert!(mode>=2);assert!(c.called);let j:usize=kani::any();kani::assume(j<9);assert_eq!(c.seen[j],expected[j]);
+   if mode==2{assert!(matches!(reply,Err(Error::Query)));if bad{assert!(matches!(reply,Err(Error::Parse)));}}
+   else{let (a,b)=reply.unwrap();assert_eq!(a.rhs,c.rhs);assert_eq!(a.power,c.power);assert_eq!(a.next,c.next);assert_eq!(b.terms,c.terms);assert_eq!(a.weights[row],ow);assert_eq!(b.raw[row][lane],c.raw[row][lane]);assert_eq!(a.weights.len(),64);assert_eq!(b.raw.len(),64);assert_eq!(a.weights.as_ptr() as usize,expected[6]);assert_eq!(b.raw.as_ptr() as usize,expected[7]);if bad{assert_ne!(a.next,c.next);}}
+  }
+ }
+}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn loop_error(){run(0,false)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn loop_error_control(){run(0,true)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn loop_stopped(){run(1,false)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn loop_stopped_control(){run(1,true)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn loop_reject(){run(2,false)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn loop_reject_control(){run(2,true)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn loop_live(){run(3,false)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn loop_live_control(){run(3,true)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn loop_live_renamed(){run(3,false)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn loop_copy_control(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as_mut_ptr(),16)};assert_eq!(dst[15],0);}
