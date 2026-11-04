@@ -31,3 +31,4 @@ Running now. On restart, resume these with the standard preamble:
 - NEV_ slice Q arithmetic: .worktrees/cx-slice-q-mul3, codex/cx-slice-q-mul3-20261103, prompt-slice-q-mul3.txt, out/codex-slice-q-mul3.out
 Check each worktree's actual branch with rev-parse before merging.
 - 2026-11-04: NET_ done (merged 0e20f7ad5c: slice Q 61/78 functions, 164/257 edges; branch kept for NEV_). Now running: NEW_ slice Q composition (.worktrees/cx-slice-q-compose4, codex/cx-slice-q-compose4-20261104, prompt-slice-q-compose4.txt, out/codex-slice-q-compose4.out), plus NEU_ and NEV_.
+- 2026-11-04: NEU_ done (merged ecc226dfa67, slice S 72/97). Rulings (aa) Box and (ab) RuntimeReturnData (ADDED runtime trust row, reported to owner). Now running NEX_ slice S (.worktrees/cx-slice-s-compose8, codex/cx-slice-s-compose8-20261104, prompt-slice-s-compose8.txt, out/codex-slice-s-compose8.out), plus NEV_ and NEW_.
