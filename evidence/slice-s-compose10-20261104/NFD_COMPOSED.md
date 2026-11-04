@@ -1,6 +1,6 @@
 # NFD slice S composition checkpoint
 
-Validated: **87/97 rows,113/129 internal edges,4/7 roots CLOSED**. Baseline NEY86/97,110/129,3/7. Authority: NFD_REQUEST_VALIDATION.json, unchanged inherited NDT/NEX/NEY gates plus the additive NFD validator.19 mutation/admission tests pass. The seven-root target and deployed100-bit per-attempt target are not established.
+Validated: **88/97 rows,113/129 internal edges,4/7 roots CLOSED**. Baseline NEY86/97,110/129,3/7. Authority: NFD_REQUEST_VALIDATION.json, unchanged inherited NDT/NEX/NEY gates plus the additive NFD validator.28 mutation/admission tests pass. The seven-root target and deployed100-bit per-attempt target are not established.
 
 Frozen Rust4bb3b3f51e16b4525f1d10336e2b0bcbbd775387; headline AspisR1.RPx_Deployed.deployed; frozen3,L154 parameter,D188 narrowed. The root qualifications are ONLY the root's own PacketDomain and PhysicalInterpretation, approved trust rows/RuntimePersistence and CompositionTrustOptionA. P6/D188 optionA is trust reclassification, not removal. No shipped source changed; no ELF rebuild triggered. RuntimeReturnData(ab) is ADDED trust but has zero newly CLOSED native uses here.
 
@@ -97,3 +97,7 @@ emit_result: the owned792-byte Ok return-to-send continuation remains unbound. N
 reconstruct_asq8_statement: native asq8_common input-value/Box allocation/ownership association and original guard/common/constructor continuation remain OPEN. Existing general model/domain theorems are reused, never treated as native evidence.
 
 scan_proof_buffer: same688-byte header/child Result/Box frame, exact byte696 tag use and native equality-iteration association remain OPEN. Existing induction and child model proofs are reused.
+
+## asq8_common — CLOSED member
+
+All fifteen scalar/array field families on unrestricted actual typed Auth/Candidate inputs agree with the cohort common record, preserving raw noncanonical words. NFD_K038–067 provide positive/corrupt-field pairs; K068 rejects returning a different allocation. The exact frozen body and same fresh uniquely owned returned Box are checked under ruling(aa), the existing Allocator item, and option-A reclassification. NEU_ReconstructCore.common_result, NEU_CallDomains.common_packet and NEU_CommonProjections.common_ext are reused; NFD_L020–034 align each native coordinate, standard axioms only. No inner callee hypotheses remain. This closes one member row; reconstruction root integration follows separately.
