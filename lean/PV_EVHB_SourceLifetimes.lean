@@ -128,6 +128,56 @@ def receiverWorld {S F : Type} (s : State S F) (p : Place) :
     Option (World (PV_EVHB_OwnerRegistry.State (Heap S)) F) :=
   (s.places p).map (fun id => PV_EVHB_OwnerRegistry.project id s.world)
 
+structure Run (S F A : Type) where
+  outcome : PV_EVH_Runtime.Outcome A
+  state : State S F
+  events : List PV_RJ4IDB.NativeEvent
+
+/-- Resolve BOTH lifetime and header from the receiver place. Unmapped or
+moved-from places admit no call. On the corresponding source-valid domain the
+lookup succeeds; no chosen header/owner is a parameter of the operation. -/
+def callAt {S F A : Type} (s : State S F) (p : Place)
+    (operation : Nat → Header → PV_EVHB_RawVecSource.Q S F A) : Option (Run S F A) :=
+  (s.places p).bind fun id =>
+    (lookup s.world id).map fun h =>
+      let r := operation id h s.world
+      ⟨r.outcome,{s with world := r.world},r.events⟩
+
+def tryReserveExactAt {S F : Type} (runtime : PV_EVHB_RawVecSource.Runtime S F)
+    (wordMax byteMax : Nat) (s : State S F) (p : Place) (additional : Nat) :
+    Option (Run S F (Except PV_EVHB_RawVecSource.ReserveError Unit)) :=
+  callAt s p fun id h =>
+    PV_EVHB_RawVecSource.tryReserveExact runtime wordMax byteMax id h additional
+
+theorem constructor_call {S F A : Type} (s : State S F) (p : Place)
+    (shape : Shape) (alignmentAddress : Nat)
+    (operation : Nat → Header → PV_EVHB_RawVecSource.Q S F A) :
+    callAt (newAt s p shape alignmentAddress) p operation =
+      some (let r := operation s.next (emptyHeader shape alignmentAddress)
+        (store s.world s.next (emptyHeader shape alignmentAddress))
+        {outcome := r.outcome
+         state := {newAt s p shape alignmentAddress with world := r.world}
+         events := r.events}) := by
+  simp only [callAt,newAt,ite_true,Option.bind_some,lookup_store,Option.map_some]
+
+/-- Return, allocation Err, source failure, divergence, fault and exhaustion
+ALL carry the same lifetime environment into their exact post-world. -/
+theorem call_preserves_places {S F A : Type} (s : State S F) (p : Place)
+    (operation : Nat → Header → PV_EVHB_RawVecSource.Q S F A)
+    (r : Run S F A) (called : callAt s p operation = some r) :
+    r.state.places=s.places ∧ r.state.next=s.next := by
+  unfold callAt at called
+  cases selected : s.places p with
+  | none => simp only [selected,Option.bind_none] at called; cases called
+  | some id =>
+    simp only [selected,Option.bind_some] at called
+    cases header : lookup s.world id with
+    | none => simp only [header,Option.map_none] at called; cases called
+    | some h =>
+      simp only [header,Option.map_some,Option.some.injEq] at called
+      subst r
+      exact ⟨rfl,rfl⟩
+
 theorem constructor_selection {S F : Type} (s : State S F) (p : Place)
     (shape : Shape) (alignmentAddress : Nat) :
     receiverWorld (newAt s p shape alignmentAddress) p =
@@ -182,6 +232,8 @@ theorem original_initial_receiver {S F : Type} (s : State S F) (activation : Nat
 #print axioms move_fresh
 #print axioms constructor_selection
 #print axioms move_selection
+#print axioms constructor_call
+#print axioms call_preserves_places
 #print axioms receiver_install
 #print axioms original_initial_receiver
 end PV_EVHB_SourceLifetimes
