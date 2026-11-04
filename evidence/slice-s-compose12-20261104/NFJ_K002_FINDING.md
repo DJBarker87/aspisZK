@@ -1,0 +1,1 @@
+K002 failed before verification on missing cfg(kani) include glue_gen.rs. Own source transport now includes all frozen .rs include extras present in NFD_K150 source manifest, plus frozen builder reference files. No property change, timeout or OOM.

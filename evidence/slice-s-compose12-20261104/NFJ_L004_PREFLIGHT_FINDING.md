@@ -1,0 +1,1 @@
+Own wrapper preflight failed on indentation introduced in optional private/server pin expansion, before any compile upload/submission. Corrected pin-loop indentation and module-system import regex. Validation remains stricter than predecessor. Reservation receipt retained; attempt L004 unused for a host compile, counted conservatively as a preflight.
