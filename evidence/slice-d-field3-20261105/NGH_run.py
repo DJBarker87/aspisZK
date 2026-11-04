@@ -101,7 +101,7 @@ if kind=='kani' and os.environ.get('NGH_STATEMENT'):
  fs=[f for f in fs if f!='spend-dynamic-rate512'];cfg['root_package']='aspis-statement';cfg['metadata_features']=','.join('aspis-statement/'+f for f in fs)
  i=cfg['native_command'].index('--manifest-path');cfg['native_command'][i+1]=B+'/NGH_src/crates/aspis-statement/Cargo.toml'
  i=cfg['native_command'].index('--features');cfg['native_command'][i+1]=','.join(fs)
-cfg['expected_time']='optimized compilation then one selected outer data step; no field arithmetic' if kind=='kani' else cfg['expected_time']
+cfg['expected_time']='optimized compilation then selected native certificate (one loop iteration or loop-free square); multiplication only via Lean-discharged opaque sites' if kind=='kani' else cfg['expected_time']
 files[a+'.json']=json.dumps(cfg)
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
