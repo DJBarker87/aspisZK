@@ -14,18 +14,21 @@ actual receiver/capture and index. Entropy requests share the same machine. -/
 inductive Request : Type → Type 1 where
   | account {T : Type} (inst : AccountInst T) (capture : T) (index : Usize) :
       Request ((Array U8 32#usize) × T)
+  | mapError {T : Type} (inst : AccountInst T)
+      (r : core.result.Result Secrets EntropyError) : Request (core.result.Result Secrets verifier.Error)
   | entropy {X : Type} (request : PV_STX_Entropy.Request X) : Request X
 
 def fixed : {X : Type} → Request X → Result X
   | _, .account inst c i => inst.call_mut c i
+  | _, .mapError inst r => core.result.Result.map_err
+      (RealR1_client.prove_for_proof_accounts.closure.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyAttemptEntropyErrorError inst) r ()
   | _, .entropy op => PV_STX_Entropy.fixed op
 
 def callMut {T : Type} (inst : AccountInst T) (capture : T) (i : Usize) :
     Code Request ((core.result.Result Secrets verifier.Error) × T × (T → T)) := do
   let (a,t) ← Code.call (Request.account inst capture i)
   let r ← PV_STX_Map.map (fun op => Request.entropy op) (PV_STX_Entropy.generate a)
-  let r1 ← Code.result (core.result.Result.map_err
-    (RealR1_client.prove_for_proof_accounts.closure.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyAttemptEntropyErrorError inst) r ())
+  let r1 ← Code.call (Request.mapError inst r)
   pure (r1,t,fun c => c)
 
 def next {T : Type} (inst : AccountInst T) (capture : T) (i : Usize) :

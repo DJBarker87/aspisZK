@@ -45,3 +45,11 @@ OWNER/op227/op257, witness-independent resource/failure timing, and the separate
 named V370/L3 residual remain. No trust field, observer or simulator changes.
 No source_entry_world, five deployed projection theorem, or privacy row removal
 is currently claimed.
+
+Account's error mapping is also a typed request: ProverRwFull.map_err is
+ExternalFuns.op12, so it must not be evaluated eagerly inside a Result node.
+The account lift exposes that external point with its original callback instance
+and result argument. This does not supply op12's native interpretation.
+A mechanical alias check found no direct ExternalFuns alias in the entropy
+lift's 13 finite Result nodes. This is a direct-name check only, not transitive
+effect-freedom; the source/drop/resource qualifications above still apply.
