@@ -1,0 +1,56 @@
+NFG_PublicG.lean:13:50: error: failed to synthesize
+  Decidable (Valid scalar)
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+NFG_PublicG.lean:22:46: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable (Valid scalar)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NFG_PublicG.lean:24:92: warning: This simp argument is unused:
+  Valid
+
+Hint: Omit it from the simp argument list.
+  simp only [FIo_Native.fast_pairing.checked_q, ̲FIo_Native.fast_pairing.limbs_of, ̲h, ̲bind_tc_ok,V̵a̵l̵i̵d̵,̵
+  ̲ ̲ ̲ ̲NFE_NFC_CalleeDomains.q]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFG_PublicG.lean:24:98: warning: This simp argument is unused:
+  NFE_NFC_CalleeDomains.q
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵I̵o̵_̵N̵a̵t̵i̵v̵e̵.̵f̵a̵s̵t̵_̵p̵a̵i̵r̵i̵n̵g̵.̵c̵h̵e̵c̵k̵e̵d̵_̵q̵,̵F̵I̵o̵_̵N̵a̵t̵i̵v̵e̵.̵f̵a̵s̵t̵_̵p̵a̵i̵r̵i̵n̵g̵.̵l̵i̵m̵b̵s̵_̵o̵f̵,̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵V̵a̵l̵i̵d̵,̵N̵F̵E̵_̵N̵F̵C̵_̵C̵a̵l̵l̵e̵e̵D̵o̵m̵a̵i̵n̵s̵.̵q̵]̵[̲F̲I̲o̲_̲N̲a̲t̲i̲v̲e̲.̲f̲a̲s̲t̲_̲p̲a̲i̲r̲i̲n̲g̲.̲c̲h̲e̲c̲k̲e̲d̲_̲q̲,̲ ̲F̲I̲o̲_̲N̲a̲t̲i̲v̲e̲.̲f̲a̲s̲t̲_̲p̲a̲i̲r̲i̲n̲g̲.̲l̲i̲m̲b̲s̲_̲o̲f̲,̲ ̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲V̲a̲l̲i̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFG_PublicG.lean:33:61: error: unsolved goals
+case pos
+before : Acc
+value : NE
+scalar : NQ
+h✝ : ↑FIo_Native.fast_pairing.MAX_TERMS ≤ ↑before.count
+⊢ sorry () = ok (core.result.Result.Err (), before)
+
+case neg
+before : Acc
+value : NE
+scalar : NQ
+h✝ : ↑before.count < ↑FIo_Native.fast_pairing.MAX_TERMS
+⊢ sorry () = do
+    let cf ←
+      match sorry () with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let d ← before.c0.push (NFE_NFC_CalleeDomains.q value.c0) val
+        let d1 ← before.c1.push (NFE_NFC_CalleeDomains.q value.c1) val
+        ok (core.result.Result.Ok (), { c0 := d, c1 := d1, count := before.count.wrapping_add 1#usize })
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          match residual with
+            | core.result.Result.Ok x => core.convert.Infallible.rec (fun x => Result (core.result.Result Unit Unit)) x
+            | core.result.Result.Err e => ok (core.result.Result.Err e)
+        ok (r1, before)
+NFG_PublicG.lean:34:12: warning: declaration uses `sorry`
+'AspisR1.NFG_PublicG.check_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NFG_PublicG.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

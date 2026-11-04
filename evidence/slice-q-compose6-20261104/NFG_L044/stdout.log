@@ -1,0 +1,207 @@
+NFG_PrivateWindow.lean:28:16: error(lean.unknownIdentifier): Unknown constant `AspisR1.NFG_PrivateWindow.Dot.mk`
+NFG_PrivateWindow.lean:40:53: error: unsolved goals
+case «0»
+after : Dot
+a b c d r0 r1 r2 r3 : U64
+observed :
+  Window { sums := Array.make 4#usize [a, b, c, d] ⋯ } after (Array.make 4#usize [r0, r1, r2, r3] ⋯)
+    ((fun i => i) ⟨0, ⋯⟩)
+⊢ (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize).partialOrdInst.lt 0#usize
+        4#usize =
+      ok true ∧
+    ∃ a_1 b_1,
+      (∃ x,
+          (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize).cloneInst.clone
+                0#usize =
+              ok x ∧
+            ∃ x_1,
+              (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize
+                        core.cmp.PartialOrdUsize).forward_checked
+                    x 1#usize =
+                  ok x_1 ∧
+                (match x_1 with
+                  | none => fail Error.panic
+                  | some n => ok (some x, { start := n, «end» := 4#usize })) =
+                  ok (a_1, b_1)) ∧
+        (match a_1 with
+          | none => ok (done { sums := ⟨[a, b, c, d], ⋯⟩ })
+          | some j => do
+            let i ←
+              match [a, b, c, d][↑j]? with
+                | none => fail Error.arrayOutOfBounds
+                | some x => ok x
+            let i1 ←
+              match [r0, r1, r2, r3][↑j]? with
+                | none => fail Error.arrayOutOfBounds
+                | some x => ok x
+            let i2 ← lift (core.convert.num.FromU64U32.from 2147483647#u32)
+            let i3 ← lift (i1 &&& i2)
+            let i4 ← lift (i1.wrapping_shr 31#u32)
+            let i5 ← lift (core.num.U64.wrapping_add i3 i4)
+            let i6 ← lift (core.num.U64.wrapping_add i i5)
+            let a ← Array.update ⟨[a, b, c, d], ⋯⟩ j i6
+            ok (cont (b_1, { sums := a }))) =
+          ok
+            (cont
+              ({ start := 1#usize, «end» := 4#usize },
+                { sums := Std.Array.set ⟨[a, b, c, d], ⋯⟩ 0#usize (update a r0) }))
+
+case «1»
+after : Dot
+a b c d r0 r1 r2 r3 : U64
+observed :
+  Window { sums := Array.make 4#usize [a, b, c, d] ⋯ } after (Array.make 4#usize [r0, r1, r2, r3] ⋯)
+    ((fun i => i) ⟨1, ⋯⟩)
+⊢ (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize).partialOrdInst.lt 1#usize
+        4#usize =
+      ok true ∧
+    ∃ a_1 b_1,
+      (∃ x,
+          (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize).cloneInst.clone
+                1#usize =
+              ok x ∧
+            ∃ x_1,
+              (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize
+                        core.cmp.PartialOrdUsize).forward_checked
+                    x 1#usize =
+                  ok x_1 ∧
+                (match x_1 with
+                  | none => fail Error.panic
+                  | some n => ok (some x, { start := n, «end» := 4#usize })) =
+                  ok (a_1, b_1)) ∧
+        (match a_1 with
+          | none => ok (done { sums := ⟨[a, b, c, d], ⋯⟩ })
+          | some j => do
+            let i ←
+              match [a, b, c, d][↑j]? with
+                | none => fail Error.arrayOutOfBounds
+                | some x => ok x
+            let i1 ←
+              match [r0, r1, r2, r3][↑j]? with
+                | none => fail Error.arrayOutOfBounds
+                | some x => ok x
+            let i2 ← lift (core.convert.num.FromU64U32.from 2147483647#u32)
+            let i3 ← lift (i1 &&& i2)
+            let i4 ← lift (i1.wrapping_shr 31#u32)
+            let i5 ← lift (core.num.U64.wrapping_add i3 i4)
+            let i6 ← lift (core.num.U64.wrapping_add i i5)
+            let a ← Array.update ⟨[a, b, c, d], ⋯⟩ j i6
+            ok (cont (b_1, { sums := a }))) =
+          ok
+            (cont
+              ({ start := 2#usize, «end» := 4#usize },
+                { sums := Std.Array.set ⟨[a, b, c, d], ⋯⟩ 1#usize (update b r1) }))
+
+case «2»
+after : Dot
+a b c d r0 r1 r2 r3 : U64
+observed :
+  Window { sums := Array.make 4#usize [a, b, c, d] ⋯ } after (Array.make 4#usize [r0, r1, r2, r3] ⋯)
+    ((fun i => i) ⟨2, ⋯⟩)
+⊢ (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize).partialOrdInst.lt 2#usize
+        4#usize =
+      ok true ∧
+    ∃ a_1 b_1,
+      (∃ x,
+          (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize).cloneInst.clone
+                2#usize =
+              ok x ∧
+            ∃ x_1,
+              (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize
+                        core.cmp.PartialOrdUsize).forward_checked
+                    x 1#usize =
+                  ok x_1 ∧
+                (match x_1 with
+                  | none => fail Error.panic
+                  | some n => ok (some x, { start := n, «end» := 4#usize })) =
+                  ok (a_1, b_1)) ∧
+        (match a_1 with
+          | none => ok (done { sums := ⟨[a, b, c, d], ⋯⟩ })
+          | some j => do
+            let i ←
+              match [a, b, c, d][↑j]? with
+                | none => fail Error.arrayOutOfBounds
+                | some x => ok x
+            let i1 ←
+              match [r0, r1, r2, r3][↑j]? with
+                | none => fail Error.arrayOutOfBounds
+                | some x => ok x
+            let i2 ← lift (core.convert.num.FromU64U32.from 2147483647#u32)
+            let i3 ← lift (i1 &&& i2)
+            let i4 ← lift (i1.wrapping_shr 31#u32)
+            let i5 ← lift (core.num.U64.wrapping_add i3 i4)
+            let i6 ← lift (core.num.U64.wrapping_add i i5)
+            let a ← Array.update ⟨[a, b, c, d], ⋯⟩ j i6
+            ok (cont (b_1, { sums := a }))) =
+          ok
+            (cont
+              ({ start := 3#usize, «end» := 4#usize },
+                { sums := Std.Array.set ⟨[a, b, c, d], ⋯⟩ 2#usize (update c r2) }))
+
+case «3»
+after : Dot
+a b c d r0 r1 r2 r3 : U64
+observed :
+  Window { sums := Array.make 4#usize [a, b, c, d] ⋯ } after (Array.make 4#usize [r0, r1, r2, r3] ⋯)
+    ((fun i => i) ⟨3, ⋯⟩)
+⊢ (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize).partialOrdInst.lt 3#usize
+        4#usize =
+      ok true ∧
+    ∃ a_1 b_1,
+      (∃ x,
+          (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize).cloneInst.clone
+                3#usize =
+              ok x ∧
+            ∃ x_1,
+              (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize
+                        core.cmp.PartialOrdUsize).forward_checked
+                    x 1#usize =
+                  ok x_1 ∧
+                (match x_1 with
+                  | none => fail Error.panic
+                  | some n => ok (some x, { start := n, «end» := 4#usize })) =
+                  ok (a_1, b_1)) ∧
+        (match a_1 with
+          | none => ok (done { sums := ⟨[a, b, c, d], ⋯⟩ })
+          | some j => do
+            let i ←
+              match [a, b, c, d][↑j]? with
+                | none => fail Error.arrayOutOfBounds
+                | some x => ok x
+            let i1 ←
+              match [r0, r1, r2, r3][↑j]? with
+                | none => fail Error.arrayOutOfBounds
+                | some x => ok x
+            let i2 ← lift (core.convert.num.FromU64U32.from 2147483647#u32)
+            let i3 ← lift (i1 &&& i2)
+            let i4 ← lift (i1.wrapping_shr 31#u32)
+            let i5 ← lift (core.num.U64.wrapping_add i3 i4)
+            let i6 ← lift (core.num.U64.wrapping_add i i5)
+            let a ← Array.update ⟨[a, b, c, d], ⋯⟩ j i6
+            ok (cont (b_1, { sums := a }))) =
+          ok
+            (cont
+              ({ start := 4#usize, «end» := 4#usize },
+                { sums := Std.Array.set ⟨[a, b, c, d], ⋯⟩ 3#usize (update d r3) }))
+NFG_PrivateWindow.lean:50:21: warning: This simp argument is unused:
+  Array.set
+
+Hint: Omit it from the simp argument list.
+  simp [index, ̲next, ̲output, ̲FIo_Native.fast_pairing.canonical.Dot.push_loop.body,
+      ̲Array.index_usize, ̲Array.s̵e̵t̵,̵A̵r̵r̵a̵y̵.̵make, ̲FIo_Native.fast_pairing.canonical.P,
+      ̲core.iter.range.IteratorRange.next, ̲core.iter.range.StepUsize,
+  ̵  ̵ ̵FIo_ReduceBounds.fold]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFG_PrivateWindow.lean:52:3: warning: This simp argument is unused:
+  FIo_ReduceBounds.fold
+
+Hint: Omit it from the simp argument list.
+  simp [index, ̲next, ̲output, ̲FIo_Native.fast_pairing.canonical.Dot.push_loop.body,
+      ̲Array.index_usize, ̲Array.set, ̲Array.make, ̲FIo_Native.fast_pairing.canonical.P,
+      ̲core.iter.range.IteratorRange.next, ̲core.iter.range.StepUsize,̵
+  ̵ ̵ ̵ ̵F̵I̵o̵_̵R̵e̵d̵u̵c̵e̵B̵o̵u̵n̵d̵s̵.̵f̵o̵l̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NFG_PrivateWindow.window' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NFG_PrivateWindow.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
