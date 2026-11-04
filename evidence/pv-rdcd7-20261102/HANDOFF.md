@@ -228,3 +228,19 @@ refusal is QUIET WINDOW until2026-11-04T01:37:50Z, marker1793756270; observed
 00:57:06Z. Never edit/delete marker or bypass gate. Existing driver retries up
 to11checks with>=180s waits; if it exhausts before expiry, wait then resume SAME
 unlaunched90725. No task compiler is live. Quiet receipt retained separately.
+
+### Session 3 restoration interfaces checked
+
+Quiet marker was absent by admitted90725 at01:21:41Z; this task did not change
+it.90725 rdcd4 ParserWindows PASS;90726 rdcd4 V197 PASS;90727 V197Restored PASS,
+all5 interfaces parser_instance/window_instance/native_window/input_frame/
+rdcd4_instance.28/60Lean spent (20pass,8fail),2native,0Kani. Driver42057 still
+ACTIVE, next90728 ConsumerReplay then90729 NEPAudit; never duplicate it.
+Canonicality literal binding added to parser-source.py and source-binding JSON:
+source0x7fff_ffff equals both Lean2147483647 constants. Source plan unchanged.
+Consumer-rechecks.py/CONSUMER-RECHECKS.json records each focused/projection/
+unchanged disposition; rerun after focused run to collect new receipts.
+Restoration interfaces pass, but noRESTORED release claim until coherence and
+reserved90797raw+summary,90798focused,90799singlemanifest pass. Nativecoherence
+nextN90802, optional scoped cachecleanup nextN90803 AFTER all gates/addendum.
+All scope protocol/endpoint/T/physical-observer boundaries unchanged.
