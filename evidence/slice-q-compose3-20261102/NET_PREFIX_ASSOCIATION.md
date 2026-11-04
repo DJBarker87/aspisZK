@@ -36,6 +36,11 @@ installed S7Kani2PrefixLoop model. NET_PrefixClosure makes the current capacity
 invariant and whole observed-Result consumer explicit. Imported proofs are
 reused and hash-pinned; no stand-in loop or independently chosen output is used.
 
+NET_L029 audits the actual extracted M31 product pairing and every new prefix
+theorem using only propext, Classical.choice and Quot.sound. The failed L024
+import is excluded; nine unchanged missing dependency modules were rebuilt
+privately in L019..023/L025..028 with committed source provenance.
+
 Separate native constructor/empty-root packets must establish empty len,
 exact capacity, ONE and zero-size return before final promotion. Allocation
 failure, physical carrier interpretation and the approved standard allocator

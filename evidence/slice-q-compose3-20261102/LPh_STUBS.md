@@ -8,7 +8,7 @@ The inverse log certificates remain PARTIAL and receive no composed credit.
 |---|---|---|
 | NET_fixed_backend product slots 0,1,4,6 | NET_MultiplyBridge.product and product_reply (NET_L008) | All raw U32 operands; exact ok natural product modulo2147483647, canonical reply. Source-fission model pairing only; inverse/neg child transport remains OPEN. |
 | NET_QLog product slots | None newly claimed | OPEN: no whole inverse chain substitution is credited. |
-| NET_prefix::NET_product | NEG_PrefixStep.multiply, NEI_PrefixWindows.specialize_field_reply | All raw U32 operands, exact emitted prefix M31 product and canonical reply. Native oracle accepts every raw reply, a superset of the exact result; active caller index establishes both operands. Imported theorem replay and complete prefix composition are pending. |
+| NET_prefix::NET_product | NEI_PrefixProduct.actual (replayed in NET_L029), NEG_PrefixStep.multiply, NEI_PrefixWindows.specialize_field_reply | All raw U32 operands, exact emitted prefix M31 product and canonical reply. Native oracle accepts every raw reply, a superset of the exact result; active caller index establishes both operands. Imported theorem replay is green (NET_L029); constructor and complete native composition are pending. |
 
 The prefix oracle imposes no stronger arithmetic precondition than the actual
 callers establish: arbitrary raw inputs are admitted. Its Kani result covers
