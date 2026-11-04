@@ -1,0 +1,24 @@
+import NEU_EmitFrame
+set_option autoImplicit false
+namespace NEX_ReturnData
+open Aeneas Aeneas.Std Result
+open AspisR1.S2I.ReturnData
+/-- Ruling (ab), 2026-11-04, adds RuntimeReturnData as runtime trust. This
+model law preserves the visible set-return-data event; it is not an op53
+Unit-erasure or proof of Solana platform behaviour. -/
+theorem set_preserves_order {A E : Type} (state : State A E) (bytes : Array U8 792#usize) :
+    (set state bytes.val).events = state.events ++ [.setReturnData bytes.val] := by rfl
+
+theorem runtime_bound (bytes : Array U8 792#usize) : bytes.val.length ≤ 1024 := by
+  rw [bytes.property]
+  omega
+
+/-- Ruling (ab) is used by an emission certificate only if this event remains
+in its ordered trace. The platform readback assumption is additional trust. -/
+theorem observable {A E : Type} (state : State A E) (bytes : Array U8 792#usize) :
+    (set state bytes.val).events ≠ state.events := NEU_EmitFrame.event_frame_changed state bytes.val
+
+#print axioms set_preserves_order
+#print axioms runtime_bound
+#print axioms observable
+end NEX_ReturnData

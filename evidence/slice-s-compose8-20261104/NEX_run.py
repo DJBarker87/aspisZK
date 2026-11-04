@@ -6,7 +6,7 @@ a,target=sys.argv[1:];assert a.startswith('NEX_L') and 1<=int(a[5:])<=60
 assert len(list(E.glob('NEX_L*/receipt.json')))<60
 assert re.fullmatch(r'[A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*',target)
 moduleRel=target.replace('.','/')
-assert not (E/a).exists();active=E/'NEX_ACTIVE.json';assert not active.exists();active.write_text(json.dumps(dict(attempt=a)))
+assert not (E/a).exists();active=E/'NEX_LEAN_ACTIVE.json';assert not active.exists();active.write_text(json.dumps(dict(attempt=a)))
 def ssh(code,stdin=None,submitted=False):
  for retry in range(11):
   r=subprocess.run(['ssh','-o','ControlMaster=no','-o','ConnectTimeout=15','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2',H,code],input=stdin,text=True,capture_output=True)
