@@ -70,7 +70,12 @@ theorem component_binding (bytes : Slice U8) (a b : Usize) :
       apply bind_congr
       intro part
       exact convert_component part
-    _ = _ := range_bind bytes a b _
+    _ = _ := range_bind bytes a b (fun xs =>
+      let converted : Option (Array U8 4#usize) :=
+        PV_RDCD4_TryArray194.into (T := U8) 4#usize xs
+      match converted with
+      | Option.none => ok (Option.none : Option M)
+      | Option.some value => ok (PV_RDCD4_BytesSource.scalar value))
 
 /-- Public law for the actual source residual adapter; its private discriminant
 instance is not guessed or replaced by a new model. -/
