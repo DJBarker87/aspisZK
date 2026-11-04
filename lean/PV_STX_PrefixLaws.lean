@@ -11,7 +11,7 @@ theorem returned_stable (handler : Handler Op W E) (n : Nat)
 
 theorem fault_stable (handler : Handler Op W E) (n : Nat)
     (f : Fault) (w : W) (es : List E) :
-    advance handler n ⟨.fault f,w,es⟩ = ⟨.fault f,w,es⟩ := by
+    advance (A := A) handler n ⟨.fault f,w,es⟩ = ⟨.fault f,w,es⟩ := by
   cases n <;> rfl
 
 /-- Resumption uses the retained world and continuation, and appends ordered
@@ -19,7 +19,7 @@ new events. It never restarts from the original entry or initial world. -/
 theorem advance_add (handler : Handler Op W E) (m n : Nat) (p : Prefix Op W E A) :
     advance handler (m+n) p = advance handler n (advance handler m p) := by
   induction m generalizing p with
-  | zero => rfl
+  | zero => simp only [Nat.zero_add,advance]
   | succ m ih =>
     rcases p with ⟨status,w,es⟩
     cases status with
