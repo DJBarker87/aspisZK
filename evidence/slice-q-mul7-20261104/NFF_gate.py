@@ -75,6 +75,10 @@ if 'aspis-statement' in features and not manifest.endswith('aspis-core/Cargo.tom
 assert sha(S/'Cargo.lock')==frozen,'STOP metadata changed lock'
 out['resolved_features_all_crates']=[dict(name=p['name'],version=p['version'],source=p.get('source'),features=nodes[p['id']]['features']) for p in sorted(m['packages'],key=lambda p:p['id'])]
 (B/(a+'-graph-check.json')).write_text(json.dumps(out,indent=2)+'\n')
+from NFF_source_checks import check as source_check
+payload={n:(S/n).read_text() for n in pins if n.endswith('/NFF_dots.rs') or (n.endswith('/NFF_pairing.rs') and 'NFF_pairing' in (S/'crates/aspis-r1-cost-probe/src/fast_pairing.rs').read_text())}
+fission=source_check(payload,frozen_sources)
+(B/(a+'-fission-check.json')).write_text(json.dumps(fission,indent=2))
 status=subprocess.run(x['native_command'],cwd=B).returncode
 last=sha(S/'Cargo.lock');(B/(a+'-lock-check.json')).write_text(json.dumps(dict(before=frozen,after=last,unchanged=last==frozen),indent=2)+'\n');assert last==frozen,'STOP Kani changed lock'
 sys.exit(status)

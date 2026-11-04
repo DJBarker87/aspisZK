@@ -86,3 +86,44 @@ fn wrapper_calls_window() {
  let expected=replies[at].to_limbs()[lane];
  assert_eq!(out[at].to_limbs()[lane],if cfg!(NFF_wrong_wrapper){expected^1}else{expected});
 }
+
+fn NFF_select_tail(q:&[u8;608],g:&[WideExact;29],slot:usize,call:usize)->(WideExact,QM31) {
+ match call {
+  0 => (g[28],QM31::from_le_bytes(&q[slot*120+104..slot*120+120]).unwrap()),
+  1 => {let offset0=480+slot*32+0*16;(g[0+26],QM31::from_le_bytes(&q[offset0..offset0+16]).unwrap())},
+  _ => {let offset1=480+slot*32+1*16;(g[1+26],QM31::from_le_bytes(&q[offset1..offset1+16]).unwrap())}
+ }
+}
+#[kani::proof] #[kani::unwind(80)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFF_copy::KMX_copy_nonoverlapping)]
+fn tail_argument_window() {
+ let q:[u8;608]=kani::any();let g:[WideExact;29]=kani::any();
+ let slot:usize=kani::any();let call:usize=kani::any();let lane:usize=kani::any();let word:usize=kani::any();
+ kani::assume(slot<4 && call<3 && lane<8 && word<4);
+ let offset=if call==0{slot*120+104}else{480+slot*32+(call-1)*16};
+ for i in 0..4 {let at=offset+4*i;let x=u32::from_le_bytes([q[at],q[at+1],q[at+2],q[at+3]]);kani::assume(x<2147483647);}
+ let (value,scalar)=NFF_select_tail(&q,&g,slot,call);
+ let coefficient=if call==0{28}else if call==1{26}else{27};
+ assert_eq!(value.to_limbs()[lane],g[coefficient].to_limbs()[lane]);
+ let words=[scalar.c0.a.0,scalar.c0.b.0,scalar.c1.a.0,scalar.c1.b.0];
+ let at=offset+4*word;let expected=u32::from_le_bytes([q[at],q[at+1],q[at+2],q[at+3]]);
+ assert_eq!(words[word],if cfg!(NFF_wrong_tail_arguments){expected^1}else{expected});
+}
+#[kani::proof] #[kani::unwind(80)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFF_copy::KMX_copy_nonoverlapping)]
+fn native_inner_range_step() {
+ let start:usize=kani::any();let end:usize=kani::any();kani::assume(start<=end && end<=26);
+ let mut iter=start..end;let returned=iter.next();
+ if start<end {assert_eq!(returned,Some(start));assert_eq!(iter.start,start+1);}else{assert_eq!(returned,None);assert_eq!(iter.start,start);}
+ assert_eq!(iter.end,if cfg!(NFF_wrong_inner_range){end^1}else{end});
+}
+#[kani::proof] #[kani::unwind(80)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFF_copy::KMX_copy_nonoverlapping)]
+fn native_outer_cursor_step() {
+ let cursor:usize=kani::any();kani::assume(cursor<=26);
+ let mut iter=(cursor..26).step_by(4);
+ let first=iter.next();let next=iter.next();
+ if cursor<26 {assert_eq!(first,Some(cursor));}else{assert_eq!(first,None);}
+ let expected=if cursor+4<26{Some(cursor+4)}else{None};
+ assert_eq!(next,if cfg!(NFF_wrong_outer_cursor){Some(99)}else{expected});
+}

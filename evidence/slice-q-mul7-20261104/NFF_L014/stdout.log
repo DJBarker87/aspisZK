@@ -1,0 +1,47 @@
+NFF_generated/NFF_LoggedOuterStep.lean:47:12: error: Application type mismatch: The argument
+  ↑iter.iter.end
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.15
+of sort `Type (?u.15 + 1)` in the application
+  @InitialSeg ↑iter.iter.end
+NFF_generated/NFF_LoggedOuterStep.lean:47:31: error(lean.unknownIdentifier): Unknown identifier `ter.iter.start.val`
+NFF_generated/NFF_LoggedOuterStep.lean:52:13: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.40 = ?m.40
+but is expected to have type
+  (do
+      let (o, next) ←
+        core.iter.adapters.step_by.IteratorStepBy.next
+            (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize) iter
+      match o with
+        | none => ok (done limbs)
+        | some start => do
+          let stop ← start + 4#usize
+          let stop ← core.cmp.min core.cmp.OrdUsize stop 26#usize
+          let sums ←
+            FIp_NativeDots.fast_dots.four_dots_one_loop0_loop0 { start := start, «end» := stop } q g slot
+                (Array.repeat 8#usize 0#u64)
+          let out ← NFE_NFA_FoldEight.eight sums limbs
+          ok (cont (next, out))) =
+    ok (done limbs)
+in the application
+  ⟨?m.38, rfl⟩
+NFF_generated/NFF_LoggedOuterStep.lean:51:72: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [step, ̲NFE_NFA_OuterStep.step, ̲NFA_Iterator.stopped iter halt,b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵ ̲Aeneas.Std.uncurry]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFF_generated/NFF_LoggedOuterStep.lean:51:83: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵e̵p̵,̵N̵F̵E̵_̵N̵F̵A̵_̵O̵u̵t̵e̵r̵S̵t̵e̵p̵.̵s̵t̵e̵p̵,̵N̵F̵A̵_̵I̵t̵e̵r̵a̵t̵o̵r̵.̵s̵t̵o̵p̵p̵e̵d̵[̲s̲t̲e̲p̲,̲ ̲N̲F̲E̲_̲N̲F̲A̲_̲O̲u̲t̲e̲r̲S̲t̲e̲p̲.̲s̲t̲e̲p̲,̲ ̲N̲F̲A̲_̲I̲t̲e̲r̲a̲t̲o̲r̲.̲s̲t̲o̲p̲p̲e̲d̲ iter h̵a̵l̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵]̵h̲a̲l̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NFF_LoggedOuterStep.active' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NFF_LoggedOuterStep.stopped' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

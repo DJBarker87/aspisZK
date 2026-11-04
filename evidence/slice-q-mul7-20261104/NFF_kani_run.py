@@ -79,8 +79,9 @@ elif kind=='kani':
     payload=json.loads(payload_path.read_text())
     files={ 'NFF_src/'+n:t for n,t in payload.items() }
     files['NFF_FROZEN.json']=(E/'NFF_FROZEN.json').read_text()
-    files['NFF_BASE.json']=(E/'NFF_BASE.json').read_text()
-    for n in ['gate','graph']: files['NFF_'+n+'.py']=(E/('NFF_'+n+'.py')).read_text()
+    files['NFF_BASE.json']=(E/os.environ.get('NFF_KANI_BASE','NFF_BASE.json')).read_text()
+    for n in ['gate','graph','source_checks']: files['NFF_'+n+'.py']=(E/('NFF_'+n+'.py')).read_text()
+    files['NFF_RAW_SITES.json']=(E/'NFF_RAW_SITES.json').read_text()
     sources=list(files)+['NFF_src/Cargo.lock','NFF_SOURCE_PINS.json']
     (E/a).mkdir(exist_ok=True)
     frozen_payload=json.loads((E/'NFF_FROZEN.json').read_text())
@@ -107,7 +108,7 @@ elif kind=='inspect':
 else:
     files['NFF_extract.py']=(E/'NFF_extract.py').read_text()
     files['NFF_FROZEN.json']=(E/'NFF_FROZEN.json').read_text()
-    files['NFF_BASE.json']=(E/'NFF_BASE.json').read_text()
+    files['NFF_BASE.json']=(E/os.environ.get('NFF_KANI_BASE','NFF_BASE.json')).read_text()
     reference_path=E/os.environ.get('NFF_REFERENCE','NFF_reference.rs.txt')
     if not reference_path.exists():
         from NFF_restore import references
@@ -173,7 +174,7 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 code=f'''from pathlib import Path
 import json
 b=Path({B!r});a={a!r}
-names=[str(p.relative_to(b)) for p in (b/a/'sources').rglob('*') if p.is_file()]+[a+'/receipt.json',a+'/stdout.log',a+'/time.log',a+'-graph-check.json',a+'-source-check.json',a+'-graph.stderr',a+'-lock-check.json',a+'-rule16-check.json',a+'-frozen-source-check.json',a+'-tool-check.json','NFF_EXTRACTION_PINS.json','NFF_NATIVE_METADATA.json','NFF_NATIVE_PINS.json',a+'.json']
+names=[str(p.relative_to(b)) for p in (b/a/'sources').rglob('*') if p.is_file()]+[a+'/receipt.json',a+'/stdout.log',a+'/time.log',a+'-graph-check.json',a+'-source-check.json',a+'-graph.stderr',a+'-lock-check.json',a+'-rule16-check.json',a+'-frozen-source-check.json',a+'-tool-check.json',a+'-fission-check.json','NFF_EXTRACTION_PINS.json','NFF_NATIVE_METADATA.json','NFF_NATIVE_PINS.json',a+'.json']
 
 if {kind!r}=='extract':
  names += [str(p.relative_to(b)) for p in (b/'NFF_extracted').rglob('*.lean')]
