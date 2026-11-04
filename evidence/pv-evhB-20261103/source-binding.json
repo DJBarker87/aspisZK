@@ -1,0 +1,166 @@
+{
+  "evidence_class": "own-1 structural reached constructor-site/public-prefix binding; Lean source equations checked separately",
+  "extraction": {
+    "module": "R1Z.ProverRwFullFuns",
+    "path": "docs/research/100bit-spend-path-20261013/lean/prover-rw-20261023/ProverRwFullFuns.lean",
+    "revision": "8b3dc105f492f3a38f1bc9307e5adaf24ad4e5c7",
+    "authority": "h5 HEAD",
+    "git_blob": "43a49073e14747f1bc231d5b55fcd8b22e184098",
+    "source_sha256": "4b2e191421ae5572b665ec5cbef531709ed593f909256a57066f1234e411893f",
+    "object_sha256": "fe160e3b876cd081174ef9892c20c2e8d3f3b354f9d7c3dcc5b28ac6c8ebe1cb",
+    "imports": [
+      "Aeneas",
+      "R1Z.ProverRwFullTypes",
+      "R1Z.ProverRwFullExternalFuns"
+    ],
+    "cache": "runjoin32",
+    "object_path": "/home/dombarker/project-offloads/codex-pv-rjdec-20261028/objects/R1Z/ProverRwFullFuns.olean"
+  },
+  "source": [
+    {
+      "module": "PV_EVHB_MaterialFromEntropy",
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "anchor": "pub(crate) fn build_pool_v1_pair_forest_mask_material_v1_from_entropy_ref(",
+      "adopted_revision": "4ea2abfcc3a50f1b6e766ed41ff07cf815085a87",
+      "source_body": "pub(crate) fn build_pool_v1_pair_forest_mask_material_v1_from_entropy_ref(\n    hash: HashFn,\n    precommit_binding: [u8; 32],\n    context: StateOnlyHidingContext,\n    private_entropy: &[u8; 32],\n    nonce_store: &mut impl StateOnlyMaskNonceStore,\n) -> Result<StateOnlyMaskMaterial, StateOnlyMaskBuildError> {\n    if context.mask_layout_fingerprint\n        != PINNED_POOL_V1_PAIR_FOREST_RELATION_FREE_MASK_FINGERPRINT_V1\n        || context.layout_factor_fingerprint\n            != PINNED_POOL_V1_PAIR_FOREST_HIDING_LAYOUT_FACTOR_FINGERPRINT_V1\n    {\n        return Err(StateOnlyMaskBuildError::Layout);\n    }\n    let cells = pool_v1_pair_forest_relation_free_mask_cells_v1()\n        .map_err(|_| StateOnlyMaskBuildError::Layout)?;\n    build_mask_material_for_layout(\n        hash,\n        precommit_binding,\n        context,\n        private_entropy,\n        nonce_store,\n        &cells,\n        &pool_v1_pair_forest_copy_active_rows()?,\n    )\n}",
+      "body_sha256": "7f7dd8849c659e372b6a85a50963a78a9f6f6b59d36b59c77aa71ae072409855",
+      "file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
+      "adopted_file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
+      "lean_sha256": "f49c68a5a9c4aa26e745c06228f8410b11af9654bddc72ab30fcb9daa0fe3a9e",
+      "constructor_sites": [
+        "aspis_prover.state_only_hiding.StateOnlyMaskBuildError.Layout"
+      ]
+    },
+    {
+      "module": "PV_EVHB_ApplyMaterial",
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "anchor": "pub fn apply_pool_v1_pair_forest_mask_material_v1(",
+      "adopted_revision": "4ea2abfcc3a50f1b6e766ed41ff07cf815085a87",
+      "source_body": "pub fn apply_pool_v1_pair_forest_mask_material_v1(\n    trace: &mut StateOnlyTraceFoundation,\n    material: StateOnlyMaskMaterial,\n) -> Result<AppliedStateOnlyMasks, StateOnlyMaskBuildError> {\n    let cells = pool_v1_pair_forest_relation_free_mask_cells_v1()\n        .map_err(|_| StateOnlyMaskBuildError::Layout)?;\n    apply_mask_material_for_layout(\n        trace,\n        material,\n        &cells,\n        &pool_v1_pair_forest_copy_active_rows()?,\n    )\n}",
+      "body_sha256": "69bcce452dfdab4e03733a34fd0500f692fe8a51d5e784a8cc1d7140f619dde2",
+      "file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
+      "adopted_file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
+      "lean_sha256": "6fe1919c771cda8e6e41935b3482d54accb3e48ee5931915a2768e30f729a9b1",
+      "constructor_sites": [
+        "aspis_prover.state_only_hiding.StateOnlyMaskBuildError.Layout"
+      ]
+    },
+    {
+      "module": "PV_EVHB_PrivateSalts",
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "anchor": "fn derive_private_salts(",
+      "adopted_revision": "4ea2abfcc3a50f1b6e766ed41ff07cf815085a87",
+      "source_body": "fn derive_private_salts(reserved:&ReservedStateOnlyAttemptSecrets,context:StateOnlyHidingContext,hash:HashFn,tag:u8)->Result<PrivateSalts,Error> {\n    let count=aspis_core::r0::FIBRE_COUNT;\n\n    let mut salts=Vec::new();salts.try_reserve_exact(aspis_core::r0::FIBRE_COUNT).map_err(|_|Error::Allocation)?;\n    let mut result=Ok(salts);\n    let mut index=0usize;\n    while index<count {\n        result=match result {\n            Ok(salts)=>derive_private_salt_step(reserved,context,hash,tag,index as u32,salts),\n            Err(error)=>Err(error),\n        };\n        index+=1;\n    }\n    result.map(PrivateSalts::new)\n}",
+      "body_sha256": "26601526e0cab767a562c27c4cac172f9acf056eae8a85a9a2e7568ddf91e74f",
+      "file_sha256": "979fe40da8c799688ce8c8283ff56c5f51dd8a5a3130dbd337af107aabf73c8e",
+      "adopted_file_sha256": "a67e714166d213b5b583bc026e23eba5dd7dd79b88210b1075266e87ee655c1c",
+      "lean_sha256": "9f4694af90f5178adefae3e68d657e0901b3dcaad73b8db26347e48bace7ab91",
+      "constructor_sites": [
+        "verifier.Error.Allocation"
+      ]
+    },
+    {
+      "module": "PV_EVHB_PrepareOpening",
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "anchor": "fn prepare_opening(",
+      "adopted_revision": "4ea2abfcc3a50f1b6e766ed41ff07cf815085a87",
+      "source_body": "fn prepare_opening(variant:Variant,hash:HashFn,backend:Backend,sem:BuiltSemantics<LegacyHashFn>)->Result<PreparedOpening,Error> {\n    if variant!=Variant::S2 {return Err(Error::Semantic);}\n    let coefficients=opening_coefficients(variant,&backend.messages);\n    let z1=Point{x:E::from_qm31(sem.z[1].x),y:E::from_qm31(sem.z[1].y)};\n    let y1=opening_claim_bytes(&coefficients,z1);\n    let mut transcript=Transcript::new(LegacyHashFn(hash),sem.transcript.state(),variant);\n    let gamma=transcript.scalar(27,&y1,true);\n    let q=opening_batch(&coefficients,gamma);\n    let w=retain_weights_box(Weights::new(variant,&sem.alpha,&sem.z)?);\n    let inactive=opening_inactive(&q,&w);\n    let kappa=transcript.scalar(28,&inactive.to_le_bytes(),false);\n    let mut weights=match aspis_core::r0::heap::filled(1024,E::ZERO) { Ok(v)=>v, Err(_)=>return Err(Error::Allocation) };\n    w.materialize(kappa,weights.as_mut_slice().try_into().unwrap())?;\n    let c0=round(&q,&weights);\n    let c0bytes=encoded_slice(&c0);\n    let alpha0=transcript.scalar(29,&c0bytes,false);\n    let q1=fold(&q,alpha0,false);\n    let w1=fold(&weights,alpha0,true);\n    let folded_word=backend.domain.evaluate(&q1,0).map_err(|_|Error::Allocation)?;\n    Ok(PreparedOpening{backend,sem,transcript,y1,gamma,inactive,kappa,alpha0,c0bytes,q1,w1,folded_word})\n}",
+      "body_sha256": "01d1a3d1ab14a0170a040ebe2b80d1367fa99616d5f826fc9383048427fe5228",
+      "file_sha256": "979fe40da8c799688ce8c8283ff56c5f51dd8a5a3130dbd337af107aabf73c8e",
+      "adopted_file_sha256": "a67e714166d213b5b583bc026e23eba5dd7dd79b88210b1075266e87ee655c1c",
+      "lean_sha256": "46be402c0ae977cf5fa86a7f0f539e6868c9a65ed9d185afe5236d0ff4ec0630",
+      "constructor_sites": [
+        "verifier.Error.Allocation"
+      ]
+    },
+    {
+      "module": "PV_EVHB_PublishCompact",
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "anchor": "fn publish_compact(",
+      "adopted_revision": "4ea2abfcc3a50f1b6e766ed41ff07cf815085a87",
+      "source_body": "fn publish_compact(variant:Variant,p:Publication)->Result<Vec<u8>,Error> {\n    use crate::host_compact as compact;\n    let Publication{mut backend,semantic_bytes,y1,inactive,c0bytes,root,c1bytes,fbytes,\n        queries,folded_word,folded_salts,tree}=p;\n    let mut out=Vec::with_capacity(compact::PROOF_BYTES);\n    out.extend_from_slice(compact::MAGIC);\n    out.extend_from_slice(&[variant.tag(),0,0,0,0,0,0,0]);\n    compact::compact_semantic(&semantic_bytes,&mut out).map_err(|_|Error::Semantic)?;\n    compact::compact_values(&y1,&mut out).map_err(|_|Error::Semantic)?;\n    out.extend_from_slice(&inactive.to_le_bytes());out.extend_from_slice(&c0bytes);\n    out.extend_from_slice(&root);out.extend_from_slice(&c1bytes);out.extend_from_slice(&fbytes);\n    assert_eq!(out.len(),compact::OFF_OPENINGS);\n    let cc1=backend.c1.take().unwrap();\n    let cc2=backend.c2.take().unwrap();\n    out=append_query_openings(out,&cc1,&cc2,&queries,&folded_word,&folded_salts);\n    assert_eq!(out.len(),compact::OFF_NODES);\n    out=append_node_slots(out,&cc1,&cc2,&tree,&queries)?;\n    assert_eq!(out.len(),compact::PROOF_BYTES);\n    Ok(out)\n}",
+      "body_sha256": "d27dabcd79e049e66495cbbc83ed65cb3e6f25f4243d9bfca3c70e33aaadf9ab",
+      "file_sha256": "979fe40da8c799688ce8c8283ff56c5f51dd8a5a3130dbd337af107aabf73c8e",
+      "adopted_file_sha256": "a67e714166d213b5b583bc026e23eba5dd7dd79b88210b1075266e87ee655c1c",
+      "lean_sha256": "f5b8ac9f9a40d3061e54f582009fd045b1a54c03605e418d86b4ee22e49ced23",
+      "constructor_sites": [
+        "verifier.Error.Semantic",
+        "verifier.Error.Semantic"
+      ]
+    },
+    {
+      "module": "PV_EVHB_PrivateSaltStep",
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "anchor": "fn derive_private_salt_step(",
+      "adopted_revision": "4ea2abfcc3a50f1b6e766ed41ff07cf815085a87",
+      "source_body": "fn derive_private_salt_step(reserved:&ReservedStateOnlyAttemptSecrets,context:StateOnlyHidingContext,hash:HashFn,tag:u8,index:u32,mut salts:Vec<[u8;32]>)->Result<Vec<[u8;32]>,Error> {\n    let salt=reserved.derive_pool_v1_leaf_salt(hash,context,tag,index).map_err(|_|Error::Semantic)?;\n    salts.push(salt);\n    Ok(salts)\n}",
+      "body_sha256": "38dc8871cf8b4325a06afa8c7df974ba76508fc8bdbe109cee1135f928fb411f",
+      "file_sha256": "979fe40da8c799688ce8c8283ff56c5f51dd8a5a3130dbd337af107aabf73c8e",
+      "adopted_file_sha256": "a67e714166d213b5b583bc026e23eba5dd7dd79b88210b1075266e87ee655c1c",
+      "lean_sha256": "e17f63788d669ba8d6c99dc31b58f31d9dbdf5920194eb8b08eb9165b0356140",
+      "constructor_sites": [
+        "verifier.Error.Semantic"
+      ]
+    }
+  ],
+  "additional_source": [
+    {
+      "path": "crates/aspis-r1-cost-probe/src/host_work.rs",
+      "anchor": "pub(crate) fn map<",
+      "adopted_revision": "4ea2abfcc3a50f1b6e766ed41ff07cf815085a87",
+      "body": "pub(crate) fn map<T:Send,F:Fn(usize)->T+Sync>(_stage:usize,n:usize,f:F)->Vec<T> {\n    let chunks=pool::ordered_families(pool::THREADS,|k| {\n        let (a,b)=pool::range(n,k);\n        let mut out=Vec::with_capacity(b-a);\n        let mut completed=0;\n        for i in a..b {out.push(f(i));completed+=1;}\n        (out,completed)\n    });\n    let mut out=Vec::with_capacity(n);\n    for (k,(mut chunk,completed)) in chunks.into_iter().enumerate() {\n        #[cfg(feature=\"public-work-trace\")]\n        {let (a,b)=pool::range(n,k);TRACE.lock().unwrap().push([_stage,n,k,a,b,completed]);}\n        #[cfg(not(feature=\"public-work-trace\"))]\n        let _=(k,completed);\n        out.append(&mut chunk);\n    }\n    out\n}",
+      "body_sha256": "3d76c8edbb455f1d1f37297c0e549f336648288eec858008a5f030166e789ff2",
+      "file_sha256": "228143f4c77a39207b798e782c7351e63290a678183d75d6884a8f8332835f19"
+    },
+    {
+      "path": "docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs",
+      "anchor": "pub fn range(",
+      "adopted_revision": "4ea2abfcc3a50f1b6e766ed41ff07cf815085a87",
+      "body": "pub fn range(n: usize, k: usize) -> (usize, usize) {\n    assert!(k < THREADS);\n    let q = n / THREADS;\n    let r = n % THREADS;\n    let start = q * k + core::cmp::min(k,r);\n    (start, start + q + (k < r) as usize)\n}",
+      "body_sha256": "6c2742066db4352bb18711ce14d3bc30e0801580bfa4f5a967311be096e6866b",
+      "file_sha256": "0d45ccdb746d7fd2bbdc9776458df8a657c9d186dadb3745d74ae270a3a3314a"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/host_commitment.rs",
+      "anchor": "pub fn new(values: Vec<[u8; 32]>)",
+      "adopted_revision": "4ea2abfcc3a50f1b6e766ed41ff07cf815085a87",
+      "body": "pub fn new(values: Vec<[u8; 32]>) -> Self { Self(values) }",
+      "body_sha256": "cd4a5690f94616247449aaaeedfb33be6e81f196c770e79d3e8653d59d2d8aeb",
+      "file_sha256": "dec7a9f189415faa22a251fc17ee05901bfb51f4991c253a1725363f8538cf53"
+    }
+  ],
+  "public_initial_requests": [
+    {
+      "site": "derive_private_salts",
+      "count": "aspis_core::r0::FIBRE_COUNT",
+      "empty_buffer": true,
+      "element": "[u8;32]",
+      "byte_size": "FIBRE_COUNT * size_of::<[u8;32]>()",
+      "proof": "PV_EVHB_SaltsReserve.selected_prefix / initial_size"
+    },
+    {
+      "site": "publish_compact",
+      "count": "compact::PROOF_BYTES",
+      "empty_buffer": true,
+      "element": "u8",
+      "byte_size": "PROOF_BYTES * size_of::<u8>()",
+      "proof": "PV_EVHB_PublishInstall.install_view; native layout association remains OPEN"
+    }
+  ],
+  "retained": [
+    "V183 SUSPENDED(K-3) per runjoin73 handoff: these Lean laws do not reinstate the Kani source credit.",
+    "V370 compiler-cohort: source-to-machine preservation, capture layout, moves, drop glue and panic=abort interpretation.",
+    "HEAP-ENTRY/rdea-1: native metadata/address/capacity, layout/padding, Global/System answer validity, same physical memory and observation encoding association.",
+    "V400: initial allocator state/world answers witness-independent; equality of public metadata is a hypothesis of public_metadata, not inferred.",
+    "V400/rdea-2: op257/host_work.map thread/TLS initialization, joins, worker panic/exhaustion occurrence and timing need an advancing stateful WORLD source association. Shared public ranges do not establish this.",
+    "Later Vec push/extend/append growth, owned Vec/Box/drop and full prover entry event adequacy remain OPEN.",
+    "WorkerRequests is a source-indexed list of potential explicit capacities. It is not the temporal arrival order or a complete trace under callback panic/divergence; native scheduling/failure timing and std::thread/TLS/collect allocation remain V400.",
+    "PrivateSaltsNew installs typed new/move effects supplied by new_OPEN. Its actual physical move/drop/native observation association remains V370/L3; no PrivateSalts destructor zeroization is inferred.",
+    "Native diagnostic/hook/backtrace and unwind/abort effects remain in supplied effectful drops/leaves; no silence or infallibility assumed.",
+    "D520/U/D524 and V221/V222/L1/L2/L3 obligations remain; no endpoint/deployment row removed; T unchanged."
+  ],
+  "rows_removed": [],
+  "trust_fields_added": [],
+  "native_runs": 0,
+  "kani_runs": 0
+}

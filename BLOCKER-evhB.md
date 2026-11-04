@@ -1,0 +1,104 @@
+# D580 blocker: native reserve header delivery into the advancing world
+
+Start: `b5854a3a17efc1ae5676046b1d8d4d69ddc4934c`, branch
+`codex/pv-evhB-20261103`. Scope: native memory/resource fidelity and advancing
+world threading only. Stopped on the missing lemma below, as instructed.
+Target not established. No endpoint/deployment premise removed; T unchanged.
+
+## Exact missing lemma
+
+The first necessary law is **reached_reserve_header_delivery**. With the
+existing namespaces opened, its conclusion is exactly this proposition:
+
+```lean
+-- Parameters: [ExternalTypes], S : Type,
+-- runtime : R1Z.PV_RunJoin_AllocatorWorld63.Runtime S PV_EVH_Runtime.State,
+-- w : R1Z.PV_FXM_ReserveWorld.World S PV_EVH_Runtime.State,
+-- v : alloc.vec.Vec (Array Aeneas.Std.U8 32#usize), n : Aeneas.Std.Usize.
+let e := R1Z.PV_RunJoin_AllocatorWorld63.execute runtime w v n
+(runtime.metadata e.world v).address = e.buffer.address ∧
+(runtime.metadata e.world v).capacity = e.buffer.capacity
+```
+
+Quantification: every call reached from the ORIGINAL extracted prover entry,
+including the initial `derive_private_salts` reserve and subsequent reached
+growth, at the actual deployed allocator/runtime instance. The precondition is
+that `w` and `v` represent that reached native state and THAT owned vector,
+with its admitted header/layout. The two equalities must be derived from the
+deployed RawVec/Global/System operations and the physical header update; they
+must not be supplied as a new compatibility field. On allocation error the
+same law retains the old header and the NEW allocator post-state. Overflow
+and no-growth paths retain their respective actual effects.
+
+This is a requested proof statement, not an elaborated theorem or a new axiom.
+The concrete deployed instance and its reached-state/owned-vector association
+are themselves missing in the inspected interface. The statement does NOT
+quantify over arbitrary, unconstrained Runtime instances.
+
+## Why current accepted results do not prove it
+
+At their pinned source revisions (see the existing
+`evidence/pv-evhB-20261103/allocator-extension.json`):
+
+- `R1Z.PV_RunJoin_AllocatorWorld63.Runtime` supplies arbitrary `step`, `shape`,
+  `metadata` and `encode` functions. It has no metadata-update invariant or
+  physical ownership/source association.
+- `execute` returns `Execution.buffer` with the changed address/capacity.
+  `PV_FXM_ReserveSelected.selected` instead returns `(returned ..., v)`:
+  the extracted vector carries the element values, not that updated header.
+- `PV_EVHB_ReserveWorld.reserve` returns that same `v` and `e.world`.
+  Its `continuation` theorem correctly passes `e.world`; it cannot establish
+  what `runtime.metadata e.world v` says at the next allocation.
+- `PV_EVHB_SaltsReserve.selected_prefix` proves the original source prefix
+  at a dictionary fixed to one world. `afterReserve` then calls the original
+  loop under that dictionary. It does not reselect later effects at their
+  post-worlds. `PV_EVHB_PrivateSaltsNew` still takes a whole-loop OPEN leaf.
+
+The missing conclusion is not a consequence of Runtime's type: for an empty
+vector, a metadata function constantly returning capacity zero satisfies its
+sole `fits` field. With positive width, admitted request one and a successful
+allocator answer, `finish` produces capacity one, while that metadata function
+still returns zero. This is an interface-level symbolic obstruction, not a
+native experiment, compiled counterexample, or counterexample to shipped code.
+
+Simply forwarding the world through another caller wrapper would leave this
+header delivery unproved. Defining metadata to read an arbitrary latest history
+event would also leave the identity of the owned native vector unproved.
+
+## Remaining native/resource obligations
+
+Header delivery is necessary, not sufficient. The actual instance must also
+bind width/alignment/padding and the request to the deployed source, prove
+`PV_EVH_AllocatorWorld.ValidAnswer` for reached Global/System replies, and
+associate V183 memory/live state with the SAME physical heap and vector owner.
+Its `Option Nat` step always returns; it does not model nonreturning OS or
+allocator outcomes. Such outcomes need actual stateful delivery with their
+fault/divergence/exhaustion/abort and diagnostic prefixes retained.
+
+`PV_EVH_NativeOperatorProver.entry_OPEN` remains a source-spine composition
+with supplied leaves. `PV_EVHB_WorkerRequests` supplies potential public sizes,
+not an advancing thread/TLS/spawn/join/scheduling/worker-panic interpreter for
+op257. Neither those sizes nor header delivery establishes witness-independent
+resource answers or failure occurrence/timing. Those remain rdea-1/rdea-2,
+V400 runtime obligations; source-to-machine preservation stays V370. No new
+T field is proposed.
+
+Next concrete deliverable: construct and source-bind the reached owned-vector
+runtime instance and prove `reached_reserve_header_delivery`; then carry that
+instance's full world through each salt step, constructor/move and original
+entry call, with stateful resource deliveries. Do not replace native adequacy
+by a supplied whole-helper Result or assume the displayed equalities.
+
+## Validation and accounting
+
+Read-only inspection of the accepted bridge sources and the three pinned V183
+source revisions; no accepted source edited or restaged. No Lean/Kani/native
+run, host launch, new axiom audit, or unchanged regression. No new proof claim.
+**74 attempts remain; next ID 91222; audit IDs 91298–91299 untouched.**
+Existing receipt/axiom evidence is reused with its original summary-based
+qualification; no raw coherence or release audit is claimed.
+
+The inherited prompt chain also references `prompt-pv-evh4.txt`, absent at the
+given scratchpad location (read returned ENOENT). The current task prompt,
+handoff and available inherited rules were read; no missing-file contents are
+invented. This is separate from the native proof blocker above.
