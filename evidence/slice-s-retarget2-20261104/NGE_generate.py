@@ -8,7 +8,9 @@ for n in x['order']:
  if n.startswith('S2K_'):
   other='JHb_'+n;assert other in reuse
   # Generated/shared declarations already supplied by NFY, not retargeted.
-  shared.append(dict(module=n,reused_source=other,target=reuse[other],original_sha256=G[n]['sha256'],adopted_sha256=hashlib.sha256(F[other]['source'].encode()).hexdigest()))
+  body=lambda s:'\n'.join(l for l in s.splitlines() if not l.startswith('import '))+'\n'
+  assert body(G[n]['source'])==body(F[other]['source']),(n,'shared owner body drift')
+  shared.append(dict(module=n,reused_source=other,target=reuse[other],original_sha256=G[n]['sha256'],adopted_sha256=hashlib.sha256(F[other]['source'].encode()).hexdigest(),nonimport_bodies_byte_identical=True,body_sha256=hashlib.sha256(body(G[n]['source']).encode()).hexdigest()))
   reuse[n]=reuse[other]
 order=[n for n in x['order'] if n not in reuse]
 ren.update({n:'NGE_'+n for n in order});owner=dict(reuse,**{n:'NGE_'+n for n in order})
