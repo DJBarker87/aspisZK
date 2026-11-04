@@ -72,4 +72,4 @@ rc=json.loads(out[a+'/receipt.json']);entry={k:v for k,v in rc.items() if k!='de
 with (E/'NFV_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(entry)+'\n')
 from NFV_checkpoint import checkpoint
 checkpoint()
-active.unlink();print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps']}));print(out[a+'/stdout.log'][-1800:]);sys.exit(rc['exit_status'])
+active.unlink();print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps']}));print('Terminal stdout retained in receipt directory; source excerpts suppressed.');sys.exit(rc['exit_status'])

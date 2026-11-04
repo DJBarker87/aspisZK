@@ -6,3 +6,26 @@ bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67.
 AccountMeta layout: Pubkey [u8;32], two bool fields, byte alignment: 34 bytes.
 Six entries copy 6*34=204 bytes; loop bound 204+1=205.
 No NFR passing or timed-out configuration will be repeated unchanged.
+
+NFV_K001: prescribed unwind205 stops on the reached KMX realloc loop,
+not on a key assertion (exit1,98.696s,1345272KiB,swap0). The SAME caller
+also constructs seven AccountInfo values and inserts the checkpoint. On the
+host layout AccountInfo is 48 bytes, so its copied prefix is 7*48=336 and the
+complete bound is max(204,336)+1=337. K002 changes only the insufficient
+unwind bound; no timeout/cap increase or unchanged timed-out rerun.
+The requested 205 arithmetic covers AccountMeta only and does not bound all
+reached copies in this frozen caller. This discrepancy is recorded, not hidden.
+
+The constructor fact named K057/K058 in (af) is **NFO_K057/NFO_K058**,
+not NFR_K057/NFR_K058 (the latter are different settlement controls).
+Flag and appended-element facts are NFR_K004/K005 and NFR_K006/K007.
+These exact identifiers are retained to prevent an accidental evidence join.
+NFV_B002 proves the list-level account order and readonly flags, with only
+propext (flags) and no axioms (keys/account_order). B001 was a failed proof
+edit and is not credited. No list value law proves native Vec realization.
+
+Validation script change: campaign timeout detection now recognises the actual
+lowercase "CBMC timed out" diagnostic. Earlier generated campaign rows were
+recomputed from their immutable stdout. This changes reporting, not validation
+conditions or any native verdict. Allocator source excerpts are suppressed in
+runner summaries; full raw logs stay in evidence.
