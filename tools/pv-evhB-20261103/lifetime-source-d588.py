@@ -22,6 +22,21 @@ def read(rev, path):
     return subprocess.check_output(['git', 'show', f'{rev}:{path}'])
 
 
+graph_path = ADOPTED['adopted_getrandom']['graph_path']
+graph_bytes = read(APP_REV, graph_path)
+assert sha(graph_bytes) == ADOPTED['adopted_getrandom']['graph_sha256']
+graph = json.loads(graph_bytes)
+selected_unit = next(u for u in graph['units']
+                     if u['target']['name'] == 'aspis_r1_cost_probe')
+assert selected_unit['features'] == [
+    'ct-host-prover', 'default', 'private-leaf-salts', 'prover', 'r1p-check']
+assert selected_unit['profile']['name'] == 'client'
+assert selected_unit['profile']['opt_level'] == '3'
+assert selected_unit['profile']['panic'] == 'abort'
+assert selected_unit['profile']['debug_assertions'] is False
+assert selected_unit['profile']['overflow_checks'] is False
+
+
 def body(raw, anchor):
     text = raw.decode()
     start = text.index(anchor)
@@ -103,6 +118,12 @@ record = dict(
     resume_revision='26bc9dfd6b',
     adopted_client_sha256=ADOPTED['adopted_build_receipt']['receipt']['sha256'],
     toolchain=ADOPTED['adopted_build_receipt']['receipt']['toolchain'],
+    deployment=dict(unit_graph_revision=APP_REV, unit_graph_path=graph_path,
+                    unit_graph_sha256=sha(graph_bytes),
+                    units=[dict(package=u['pkg_id'], target=u['target']['name'],
+                                kind=u['target']['kind'], features=u['features'],
+                                profile=u['profile']) for u in graph['units']],
+                    scope='Original source bodies unchanged at adopted revision; no new build/extraction/harness'),
     std_source=rows, original_source=app_rows,
     lean_path='lean/PV_EVHB_SourceLifetimes.lean', lean_sha256=sha(lean),
     constructor_prefix=dict(
