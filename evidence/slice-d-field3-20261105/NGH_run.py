@@ -175,4 +175,4 @@ if kind in ['auditbin','auditbatch','review']:
 assert a+'/receipt.json' in out,'Missing receipt; no resubmit'
 rc=json.loads(out[a+'/receipt.json'])
 with (E/'NGH_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(rc)+'\n')
-print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}));print(out[a+'/stdout.log'][-4500:]);sys.exit(rc['exit_status'])
+print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}));print('Detailed output retained in receipt directory; source suppressed.');sys.exit(rc['exit_status'])
