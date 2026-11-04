@@ -1,0 +1,36 @@
+{"attempt": "NFX_L036", "exit_status": 0, "wall_seconds": 2.3395765111781657, "peak_rss_kib": "5824832", "swaps": "0", "print_axioms": ["'AspisR1.NFS_QueryValuesPacket.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NFS_QueryValuesPacket.result' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NFS_QueryLoopRoot.tx1' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NFS_QueryLoopRoot.tx2' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NFS_PacketRoot.query' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NFS_PacketRoot.loop' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NFS_QueryValuesPacket.source : ∀ (base : AspisR1.Port3_NativeQueryBody.Ops)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (p : AspisR1Stage2.verifier.Prepared)
+  (a : AspisR1Stage2.verifier.Accumulator) (g : Aeneas.Std.Array AspisR1.NFP_QueryCuts.E 29#usize)
+  (geometry : AspisR1Stage2.verifier.QueryGeometry) (pending : AspisR1Stage2.verifier.BatchedWeights)
+  (qPlace gPlace : ℕ),
+  NEV_DotInputs.Canonical (AspisR1.FIp_DotsAdapter.toArray g) →
+    AspisR1.NFS_AccumDomain.Input p a pending →
+      AspisR1.NFS_QueryValuesPacket.run base proof p a g geometry pending qPlace gPlace =
+        AspisR1.NFP_QueryTrace.run (AspisR1.NFS_QueryOps.installed base) proof p a g geometry pending
+...
+ geo b qPlace gPlace =
+        AspisR1.NFP_QueryTrace.run (AspisR1.NFS_CallerDomains.ops seed) proof p a g geo b :=
+fun seed proof p g geo start finish a b qPlace gPlace domain active =>
+  AspisR1.NFS_QueryValuesPacket.source (AspisR1.NFS_CallerDomains.select seed) proof p a g geo b qPlace gPlace
+    domain.gCanonical (AspisR1.NFS_QueryInvariant.active p start (↑finish) a b domain.invariant domain.limit active)
+'AspisR1.NFS_PacketRoot.query' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NFS_PacketRoot.loop : ∀ (seed : AspisR1.Port3_NativeQueryBody.Ops)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (p : AspisR1Stage2.verifier.Prepared)
+  (g : Aeneas.Std.Array AspisR1.NFP_QueryCuts.E 29#usize) (geo : AspisR1Stage2.verifier.QueryGeometry) (start : ℕ)
+  (finish : Aeneas.Std.Usize) (a : AspisR1Stage2.verifier.Accumulator) (b : AspisR1Stage2.verifier.BatchedWeights)
+  (qPlace gPlace fuel : ℕ),
+  AspisR1.NFS_PacketRoot.Domain proof p g geo start finish a b →
+    AspisR1.NFS_LoopTraceDefs.run
+        (fun a b =>
+          AspisR1.NFS_QueryValuesPacket.run (AspisR1.NFS_CallerDomains.select seed) proof p a g geo b qPlace gPlace)
+        finish fuel (Aeneas.Std.core.result.Result.Ok (a, b)) =
+      AspisR1.NFS_LoopTraceDefs.run
+        (fun a b => AspisR1.NFP_QueryTrace.run (AspisR1.NFS_CallerDomains.ops seed) proof p a g geo b) finish fuel
+        (Aeneas.Std.core.result.Result.Ok (a, b)) :=
+fun seed proof p g geo start finish a b qPlace gPlace fuel domain =>
+  AspisR1.NFS_LoopTrace.source (AspisR1.NFS_CallerDomains.select seed) proof p g geo qPlace gPlace start finish
+    domain.limit domain.gCanonical fuel (Aeneas.Std.core.result.Result.Ok (a, b)) domain.invariant
+'AspisR1.NFS_PacketRoot.loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rdcb950f1635843bcb99bb59249a9f7c9.scope; invocation ID: 55a56fe3f5214f5ea8a1ec42f5e5c5ed

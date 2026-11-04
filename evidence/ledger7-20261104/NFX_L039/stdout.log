@@ -1,0 +1,681 @@
+theorem NFQ_RowShape.reference : ∀ (row : Aeneas.Std.U8),
+  NFQ_Reference.row_shape_ref row = AspisS1NativeCompact.r1_wire.row_shape row :=
+fun row => id (NCO_ScalarBridge.row_shape row)
+'NFQ_RowShape.reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NFQ_RowShape.compact_reference : ∀ (row : Aeneas.Std.U8),
+  NFQ_Reference.compact_row_ref row = AspisS1NativeCompact.compact.compact_row row :=
+fun row => id (NCO_ScalarBridge.compact_row row)
+'NFQ_RowShape.compact_reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NFQ_Transport.folds_reference : ∀ (v : NFQ_Transport.V),
+  NFQ_Reference.folds_ref (NFQ_Transport.code v) = AspisR1PublicPreparation.transport.Variant.folds v :=
+fun v =>
+  AspisR1PublicPreparation.transport.Variant.casesOn (motive := fun t =>
+    v = t → NFQ_Reference.folds_ref (NFQ_Transport.code v) = AspisR1PublicPreparation.transport.Variant.folds v) v
+    (fun h =>
+      Eq.symm h ▸
+        of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg Eq
+                (ite_cond_eq_true (Aeneas.Std.Result.ok 1#usize) (Aeneas.Std.Result.ok 2#usize) (eq_self 0#u8)))
+              (Eq.trans
+                (Eq.trans
+                  (congrFun'
+                    (congrArg bind
+                      (congrArg Aeneas.Std.Result.ok
+                        (Eq.trans
+                          (Decidable.decide.congr_simp
+                            (AspisR1PublicPreparation.transport.Variant.S1.read_discriminant =
+                              AspisR1PublicPreparation.transport.Variant.S1.read_discriminant)
+                            True (eq_self 0#isize))
+                          (decide_true instDecidableTrue))))
+                    fun b => if b = true then Aeneas.Std.Result.ok 1#usize else Aeneas.Std.Result.ok 2#usize)
+                  (Aeneas.Std.bind_tc_ok true fun y =>
+                    if y = true then Aeneas.Std.Result.ok 1#usize else Aeneas.Std.Result.ok 2#usize))
+                (ite_cond_eq_true (Aeneas.Std.Result.ok 1#usize) (Aeneas.Std.Result.ok 2#usize) (eq_self true))))
+            (eq_self (Aeneas.Std.Result.ok 1#usize))))
+    (fun h =>
+      Eq.symm h ▸
+        of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg Eq
+                (ite_cond_eq_false (Aeneas.Std.Result.ok 1#usize) (Aeneas.Std.Result.ok 2#usize)
+                  (Aeneas.Std.UScalar.val_not_eq_imp_not_eq._simp_1 1#u8 0#u8
+                    (of_eq_true
+                      (Eq.trans
+                        (congr
+                          (congrArg Or
+                            (Eq.trans
+                              (congr
+                                (congrArg Ne
+                                  (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                    (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.U8 1
+                                      NFQ_Transport.code._proof_2)))
+                                (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                  (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.U8 0
+                                    NFQ_Reference.row_shape_ref._proof_1)))
+                              (Eq.trans (congrArg Not one_ne_zero._simp_1) not_false_eq_true)))
+                          (Eq.trans
+                            (congr
+                              (congrArg Or
+                                (Eq.trans
+                                  (congr
+                                    (congrArg Ne
+                                      (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                        (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.U8 0
+                                          NFQ_Reference.row_shape_ref._proof_1)))
+                                    (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                      (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.U8 1
+                                        NFQ_Transport.code._proof_2)))
+                                  (Eq.trans (congrArg Not zero_ne_one._simp_1) not_false_eq_true)))
+                              (Eq.trans
+                                (congr
+                                  (congrArg Or
+                                    (Eq.trans
+                                      (congr
+                                        (congrArg LT.lt
+                                          (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                            (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.U8 1
+                                              NFQ_Transport.code._proof_2)))
+                                        (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                          (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.U8 0
+                                            NFQ_Reference.row_shape_ref._proof_1)))
+                                      not_lt_zero._simp_1))
+                                  (Eq.trans
+                                    (Eq.trans
+                                      (congr
+                                        (congrArg LT.lt
+                                          (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                            (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.U8 0
+                                              NFQ_Reference.row_shape_ref._proof_1)))
+                                        (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                          (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.U8 1
+                                            NFQ_Transport.code._proof_2)))
+                                      Order.lt_one_iff._simp_1)
+                                    (eq_self 0)))
+                                (or_true False)))
+                            (or_self True)))
+                        (or_self True))))))
+              (Eq.trans
+                (Eq.trans
+                  (congrFun'
+                    (congrArg bind
+                      (congrArg Aeneas.Std.Result.ok
+                        (Eq.trans
+                          (Decidable.decide.congr_simp
+                            (AspisR1PublicPreparation.transport.Variant.S2.read_discriminant =
+                              AspisR1PublicPreparation.transport.Variant.S1.read_discriminant)
+                            False
+                            (Aeneas.Std.IScalar.val_not_eq_imp_not_eq._simp_1 1#isize 0#isize
+                              (of_eq_true
+                                (Eq.trans
+                                  (congr
+                                    (congrArg Or
+                                      (Eq.trans
+                                        (congr
+                                          (congrArg Ne
+                                            (Aeneas.Std.IScalar.ofInt_val_eq
+                                              (Aeneas.Std.IScalar.bound_suffices Aeneas.Std.IScalarTy.Isize 1
+                                                AspisR1PublicPreparation.aspis_core.state_only_prefix.r0.Error.read_discriminant._proof_2)))
+                                          (Aeneas.Std.IScalar.ofInt_val_eq
+                                            (Aeneas.Std.IScalar.bound_suffices Aeneas.Std.IScalarTy.Isize 0
+                                              AspisR1PublicPreparation.aspis_core.state_only_prefix.r0.Error.read_discriminant._proof_1)))
+                                        (Eq.trans (congrArg Not one_ne_zero._simp_1) not_false_eq_true)))
+                                    (Eq.trans
+                                      (congr
+                                        (congrArg Or
+                                          (Eq.trans
+                                            (congr
+                                              (congrArg Ne
+                                                (Aeneas.Std.IScalar.ofInt_val_eq
+                                                  (Aeneas.Std.IScalar.bound_suffices Aeneas.Std.IScalarTy.Isize 0
+                                                    AspisR1PublicPreparation.aspis_core.state_only_prefix.r0.Error.read_discriminant._proof_1)))
+                                              (Aeneas.Std.IScalar.ofInt_val_eq
+                                                (Aeneas.Std.IScalar.bound_suffices Aeneas.Std.IScalarTy.Isize 1
+                                                  AspisR1PublicPreparation.aspis_core.state_only_prefix.r0.Error.read_discriminant._proof_2)))
+                                            (Eq.trans (congrArg Not zero_ne_one._simp_1) not_false_eq_true)))
+                                        (Eq.trans
+                                          (congr
+                                            (congrArg Or
+                                              (Eq.trans
+                                                (congr
+                                                  (congrArg LT.lt
+                                                    (Aeneas.Std.IScalar.ofInt_val_eq
+                                                      (Aeneas.Std.IScalar.bound_suffices Aeneas.Std.IScalarTy.Isize 1
+                                                        AspisR1PublicPreparation.aspis_core.state_only_prefix.r0.Error.read_discriminant._proof_2)))
+                                                  (Aeneas.Std.IScalar.ofInt_val_eq
+                                                    (Aeneas.Std.IScalar.bound_suffices Aeneas.Std.IScalarTy.Isize 0
+                                                      AspisR1PublicPreparation.aspis_core.state_only_prefix.r0.Error.read_discriminant._proof_1)))
+                                                (eq_false_of_decide (Eq.refl false))))
+                                            (Eq.trans
+                                              (congr
+                                                (congrArg LT.lt
+                                                  (Aeneas.Std.IScalar.ofInt_val_eq
+                                                    (Aeneas.Std.IScalar.bound_suffices Aeneas.Std.IScalarTy.Isize 0
+                                                      AspisR1PublicPreparation.aspis_core.state_only_prefix.r0.Error.read_discriminant._proof_1)))
+                                                (Aeneas.Std.IScalar.ofInt_val_eq
+                                                  (Aeneas.Std.IScalar.bound_suffices Aeneas.Std.IScalarTy.Isize 1
+                                                    AspisR1PublicPreparation.aspis_core.state_only_prefix.r0.Error.read_discriminant._proof_2)))
+                                              zero_lt_one._simp_1))
+                                          (or_true False)))
+                                      (or_self True)))
+                                  (or_self True)))))
+                          (decide_false instDecidableFalse))))
+                    fun b => if b = true then Aeneas.Std.Result.ok 1#usize else Aeneas.Std.Result.ok 2#usize)
+                  (Aeneas.Std.bind_tc_ok false fun y =>
+                    if y = true then Aeneas.Std.Result.ok 1#usize else Aeneas.Std.Result.ok 2#usize))
+                (ite_cond_eq_false (Aeneas.Std.Result.ok 1#usize) (Aeneas.Std.Result.ok 2#usize) Bool.false_eq_true)))
+            (eq_self (Aeneas.Std.Result.ok 2#usize))))
+    (fun h =>
+      Eq.symm h ▸
+        of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg Eq
+                (ite_cond_eq_false (Aeneas.Std.Result.ok 1#usize) (Aeneas.Std.Result.ok 2#usize)
+                  (Aeneas.Std.UScalar.val_not_eq_imp_not_eq._simp_1 2#u8 0#u8
+                    (of_eq_true
+                      (Eq.trans
+                        (congr
+                          (congrArg Or
+                            (Eq.trans
+                              (congr
+                                (congrArg Ne
+                                  (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                    (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.U8 2
+                                      NFQ_Transport.code._proof_3)))
+                                (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                  (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.U8 0
+                                    NFQ_Reference.row_shape_ref._proof_1)))
+                              (Eq.trans (congrArg Not (OfNat.ofNat_ne_zero._simp_1 2)) not_false_eq_true)))
+                          (Eq.trans
+                            (congr
+                              (congrArg Or
+                                (Eq.trans
+                                  (congr
+                                    (congrArg Ne
+                                      (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                        (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.U8 0
+                                          NFQ_Reference.row_shape_ref._proof_1)))
+                                    (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                      (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.U8 2
+                                        NFQ_Transport.code._proof_3)))
+                                  (Eq.trans (congrArg Not (OfNat.zero_ne_ofNat._simp_1 2)) not_false_eq_true)))
+                              (Eq.trans
+                                (congr
+                                  (congrArg Or
+                                    (Eq.trans
+                                      (congr
+                                        (congrArg LT.lt
+                                          (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                            (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.U8 2
+                                              NFQ_Transport.code._proof_3)))
+                                        (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                          (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.U8 0
+                                            NFQ_Reference.row_shape_ref._proof_1)))
+                                      not_lt_zero._simp_1))
+                                  (Eq.trans
+                                    (Eq.trans
+                                      (congr
+                                        (congrArg LT.lt
+                                          (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                            (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.U8 0
+                                              NFQ_Reference.row_shape_ref._proof_1)))
+                                        (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                          (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.U8 2
+                                            NFQ_Transport.code._proof_3)))
+                                      Order.lt_two_iff._simp_1)
+                                    zero_le._simp_1))
+                                (or_true False)))
+                            (or_self True)))
+                        (or_self True))))))
+              (Eq.trans
+                (Eq.trans
+                  (congrFun'
+                    (congrArg bind
+                      (congrArg Aeneas.Std.Result.ok
+                        (Eq.trans
+                          (Decidable.decide.congr_simp
+                            (AspisR1PublicPreparation.transport.Variant.D.read_discriminant =
+                              AspisR1PublicPreparation.transport.Variant.S1.read_discriminant)
+                            False
+                            (Aeneas.Std.IScalar.val_not_eq_imp_not_eq._simp_1 2#isize 0#isize
+                              (of_eq_true
+                                (Eq.trans
+                                  (congr
+                                    (congrArg Or
+                                      (Eq.trans
+                                        (congr
+                                          (congrArg Ne
+                                            (Aeneas.Std.IScalar.ofInt_val_eq
+                                              (Aeneas.Std.IScalar.bound_suffices Aeneas.Std.IScalarTy.Isize 2
+                                                AspisR1PublicPreparation.aspis_core.state_only_prefix.r0.Error.read_discriminant._proof_3)))
+                                          (Aeneas.Std.IScalar.ofInt_val_eq
+                                            (Aeneas.Std.IScalar.bound_suffices Aeneas.Std.IScalarTy.Isize 0
+                                              AspisR1PublicPreparation.aspis_core.state_only_prefix.r0.Error.read_discriminant._proof_1)))
+                                        (Eq.trans (congrArg Not (OfNat.ofNat_ne_zero._simp_1 2)) not_false_eq_true)))
+                                    (Eq.trans
+                                      (congr
+                                        (congrArg Or
+                                          (Eq.trans
+                                            (congr
+                                              (congrArg Ne
+                                                (Aeneas.Std.IScalar.ofInt_val_eq
+                                                  (Aeneas.Std.IScalar.bound_suffices Aeneas.Std.IScalarTy.Isize 0
+                                                    AspisR1PublicPreparation.aspis_core.state_only_prefix.r0.Error.read_discriminant._proof_1)))
+                                              (Aeneas.Std.IScalar.ofInt_val_eq
+                                                (Aeneas.Std.IScalar.bound_suffices Aeneas.Std.IScalarTy.Isize 2
+                                                  AspisR1PublicPreparation.aspis_core.state_only_prefix.r0.Error.read_discriminant._proof_3)))
+                                            (Eq.trans (congrArg Not (OfNat.zero_ne_ofNat._simp_1 2))
+                                              not_false_eq_true)))
+                                        (Eq.trans
+                                          (congr
+                                            (congrArg Or
+                                              (Eq.trans
+                                                (congr
+                                                  (congrArg LT.lt
+                                                    (Aeneas.Std.IScalar.ofInt_val_eq
+                                                      (Aeneas.Std.IScalar.bound_suffices Aeneas.Std.IScalarTy.Isize 2
+                                                        AspisR1PublicPreparation.aspis_core.state_only_prefix.r0.Error.read_discriminant._proof_3)))
+                                                  (Aeneas.Std.IScalar.ofInt_val_eq
+                                                    (Aeneas.Std.IScalar.bound_suffices Aeneas.Std.IScalarTy.Isize 0
+                                                      AspisR1PublicPreparation.aspis_core.state_only_prefix.r0.Error.read_discriminant._proof_1)))
+                                                (eq_false_of_decide (Eq.refl false))))
+                                            (Eq.trans
+                                              (Eq.trans
+                                                (congr
+                                                  (congrArg LT.lt
+                                                    (Aeneas.Std.IScalar.ofInt_val_eq
+                                                      (Aeneas.Std.IScalar.bound_suffices Aeneas.Std.IScalarTy.Isize 0
+                                                        AspisR1PublicPreparation.aspis_core.state_only_prefix.r0.Error.read_discriminant._proof_1)))
+                                                  (Aeneas.Std.IScalar.ofInt_val_eq
+                                                    (Aeneas.Std.IScalar.bound_suffices Aeneas.Std.IScalarTy.Isize 2
+                                                      AspisR1PublicPreparation.aspis_core.state_only_prefix.r0.Error.read_discriminant._proof_3)))
+                                                Order.lt_two_iff._simp_1)
+                                              zero_le_one._simp_1))
+                                          (or_true False)))
+                                      (or_self True)))
+                                  (or_self True)))))
+                          (decide_false instDecidableFalse))))
+                    fun b => if b = true then Aeneas.Std.Result.ok 1#usize else Aeneas.Std.Result.ok 2#usize)
+                  (Aeneas.Std.bind_tc_ok false fun y =>
+                    if y = true then Aeneas.Std.Result.ok 1#usize else Aeneas.Std.Result.ok 2#usize))
+                (ite_cond_eq_false (Aeneas.Std.Result.ok 1#usize) (Aeneas.Std.Result.ok 2#usize) Bool.false_eq_true)))
+            (eq_self (Aeneas.Std.Result.ok 2#usize))))
+    (Eq.refl v)
+'NFQ_Transport.folds_reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NFQ_Transport.final_len_reference : ∀ (v : NFQ_Transport.V),
+  NFQ_Reference.final_len_ref (NFQ_Transport.code v) = AspisR1.CheckpointBytes4Ops.finalLen (NFQ_Transport.port v) :=
+fun v =>
+  AspisR1PublicPreparation.transport.Variant.casesOn (motive := fun t =>
+    v = t →
+      NFQ_Reference.final_len_ref (NFQ_Transport.code v) = AspisR1.CheckpointBytes4Ops.finalLen (NFQ_Transport.port v))
+    v
+    (fun h =>
+      Eq.symm h ▸
+        Eq.refl (NFQ_Reference.final_len_ref (NFQ_Transport.code AspisR1PublicPreparation.transport.Variant.S1)))
+    (fun h =>
+      Eq.symm h ▸
+        Eq.refl (NFQ_Reference.final_len_ref (NFQ_Transport.code AspisR1PublicPreparation.transport.Variant.S2)))
+    (fun h =>
+      Eq.symm h ▸
+        Eq.refl (NFQ_Reference.final_len_ref (NFQ_Transport.code AspisR1PublicPreparation.transport.Variant.D)))
+    (Eq.refl v)
+'NFQ_Transport.final_len_reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NFQ_Transport.checkpoint_size_reference : ∀ (v : NFQ_Transport.V),
+  NFQ_Reference.checkpoint_size_ref (NFQ_Transport.code v) =
+    AspisR1.CheckpointBytes4Ops.checkpointSize (NFQ_Transport.port v) :=
+fun v =>
+  AspisR1PublicPreparation.transport.Variant.casesOn (motive := fun t =>
+    v = t →
+      NFQ_Reference.checkpoint_size_ref (NFQ_Transport.code v) =
+        AspisR1.CheckpointBytes4Ops.checkpointSize (NFQ_Transport.port v))
+    v
+    (fun h =>
+      Eq.symm h ▸
+        Eq.mpr
+          (id
+            (congrArg
+              (Eq
+                (NFQ_Reference.checkpoint_size_ref (NFQ_Transport.code AspisR1PublicPreparation.transport.Variant.S1)))
+              (Aeneas.Std.bind_tc_ok 256#usize fun y => do
+                let weights ← 16#usize * y
+                744#usize + weights)))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  NFQ_Reference.checkpoint_size_ref (NFQ_Transport.code AspisR1PublicPreparation.transport.Variant.S1) =
+                    do
+                    let weights ← _a
+                    744#usize + weights)
+                (AspisR1.Port4A_ReaderInstall.mul_value 16#usize 256#usize (of_decide_eq_true (id (Eq.refl true))))))
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    NFQ_Reference.checkpoint_size_ref
+                        (NFQ_Transport.code AspisR1PublicPreparation.transport.Variant.S1) =
+                      _a)
+                  (Aeneas.Std.bind_tc_ok (↑16#usize * ↑256#usize)#usize (HAdd.hAdd 744#usize))))
+              (Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      NFQ_Reference.checkpoint_size_ref
+                          (NFQ_Transport.code AspisR1PublicPreparation.transport.Variant.S1) =
+                        _a)
+                    (AspisR1.Port4A_ReaderInstall.add_value 744#usize (↑16#usize * ↑256#usize)#usize
+                      (of_decide_eq_true (id (Eq.refl true))))))
+                (Eq.refl
+                  (NFQ_Reference.checkpoint_size_ref
+                    (NFQ_Transport.code AspisR1PublicPreparation.transport.Variant.S1)))))))
+    (fun h =>
+      Eq.symm h ▸
+        Eq.mpr
+          (id
+            (congrArg
+              (Eq
+                (NFQ_Reference.checkpoint_size_ref (NFQ_Transport.code AspisR1PublicPreparation.transport.Variant.S2)))
+              (Aeneas.Std.bind_tc_ok 64#usize fun y => do
+                let weights ← 16#usize * y
+                744#usize + weights)))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  NFQ_Reference.checkpoint_size_ref (NFQ_Transport.code AspisR1PublicPreparation.transport.Variant.S2) =
+                    do
+                    let weights ← _a
+                    744#usize + weights)
+                (AspisR1.Port4A_ReaderInstall.mul_value 16#usize 64#usize (of_decide_eq_true (id (Eq.refl true))))))
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    NFQ_Reference.checkpoint_size_ref
+                        (NFQ_Transport.code AspisR1PublicPreparation.transport.Variant.S2) =
+                      _a)
+                  (Aeneas.Std.bind_tc_ok (↑16#usize * ↑64#usize)#usize (HAdd.hAdd 744#usize))))
+              (Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      NFQ_Reference.checkpoint_size_ref
+                          (NFQ_Transport.code AspisR1PublicPreparation.transport.Variant.S2) =
+                        _a)
+                    (AspisR1.Port4A_ReaderInstall.add_value 744#usize (↑16#usize * ↑64#usize)#usize
+                      (of_decide_eq_true (id (Eq.refl true))))))
+                (Eq.refl
+                  (NFQ_Reference.checkpoint_size_ref
+                    (NFQ_Transport.code AspisR1PublicPreparation.transport.Variant.S2)))))))
+    (fun h =>
+      Eq.symm h ▸
+        Eq.mpr
+          (id
+            (congrArg
+              (Eq (NFQ_Reference.checkpoint_size_ref (NFQ_Transport.code AspisR1PublicPreparation.transport.Variant.D)))
+              (Aeneas.Std.bind_tc_ok 64#usize fun y => do
+                let weights ← 16#usize * y
+                744#usize + weights)))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  NFQ_Reference.checkpoint_size_ref (NFQ_Transport.code AspisR1PublicPreparation.transport.Variant.D) =
+                    do
+                    let weights ← _a
+                    744#usize + weights)
+                (AspisR1.Port4A_ReaderInstall.mul_value 16#usize 64#usize (of_decide_eq_true (id (Eq.refl true))))))
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    NFQ_Reference.checkpoint_size_ref
+                        (NFQ_Transport.code AspisR1PublicPreparation.transport.Variant.D) =
+                      _a)
+                  (Aeneas.Std.bind_tc_ok (↑16#usize * ↑64#usize)#usize (HAdd.hAdd 744#usize))))
+              (Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      NFQ_Reference.checkpoint_size_ref
+                          (NFQ_Transport.code AspisR1PublicPreparation.transport.Variant.D) =
+                        _a)
+                    (AspisR1.Port4A_ReaderInstall.add_value 744#usize (↑16#usize * ↑64#usize)#usize
+                      (of_decide_eq_true (id (Eq.refl true))))))
+                (Eq.refl
+                  (NFQ_Reference.checkpoint_size_ref
+                    (NFQ_Transport.code AspisR1PublicPreparation.transport.Variant.D)))))))
+    (Eq.refl v)
+'NFQ_Transport.checkpoint_size_reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NFQ_Readonly.reference : ∀ (signer writable executable : Bool),
+  (do
+      let admitted ← NFQ_ScanReference.readonly_buffer_ref signer writable executable
+      Aeneas.Std.Result.ok
+          (if admitted = true then Aeneas.Std.core.result.Result.Ok ()
+          else Aeneas.Std.core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)) =
+    AdapterRw.r1_pool_adapter.readonly_buffer_meta_ok signer writable executable :=
+fun signer writable executable =>
+  Bool.casesOn (motive := fun t =>
+    signer = t →
+      (do
+          let admitted ← NFQ_ScanReference.readonly_buffer_ref signer writable executable
+          Aeneas.Std.Result.ok
+              (if admitted = true then Aeneas.Std.core.result.Result.Ok ()
+              else Aeneas.Std.core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)) =
+        AdapterRw.r1_pool_adapter.readonly_buffer_meta_ok signer writable executable)
+    signer
+    (fun h =>
+      Eq.symm h ▸
+        Bool.casesOn (motive := fun t =>
+          writable = t →
+            (do
+                let admitted ← NFQ_ScanReference.readonly_buffer_ref false writable executable
+                Aeneas.Std.Result.ok
+                    (if admitted = true then Aeneas.Std.core.result.Result.Ok ()
+                    else
+                      Aeneas.Std.core.result.Result.Err
+                        AdapterRw.solana_program_error.ProgramError.InvalidAccountData)) =
+              AdapterRw.r1_pool_adapter.readonly_buffer_meta_ok false writable executable)
+          writable
+          (fun h =>
+            Eq.symm h ▸
+              Bool.casesOn (motive := fun t =>
+                executable = t →
+                  (do
+                      let admitted ← NFQ_ScanReference.readonly_buffer_ref false false executable
+                      Aeneas.Std.Result.ok
+                          (if admitted = true then Aeneas.Std.core.result.Result.Ok ()
+                          else
+                            Aeneas.Std.core.result.Result.Err
+                              AdapterRw.solana_program_error.ProgramError.InvalidAccountData)) =
+                    AdapterRw.r1_pool_adapter.readonly_buffer_meta_ok false false executable)
+                executable
+                (fun h =>
+                  Eq.symm h ▸
+                    Eq.refl do
+                      let admitted ← NFQ_ScanReference.readonly_buffer_ref false false false
+                      Aeneas.Std.Result.ok
+                          (if admitted = true then Aeneas.Std.core.result.Result.Ok ()
+                          else
+                            Aeneas.Std.core.result.Result.Err
+                              AdapterRw.solana_program_error.ProgramError.InvalidAccountData))
+                (fun h =>
+                  Eq.symm h ▸
+                    Eq.refl do
+                      let admitted ← NFQ_ScanReference.readonly_buffer_ref false false true
+                      Aeneas.Std.Result.ok
+                          (if admitted = true then Aeneas.Std.core.result.Result.Ok ()
+                          else
+                            Aeneas.Std.core.result.Result.Err
+                              AdapterRw.solana_program_error.ProgramError.InvalidAccountData))
+                (Eq.refl executable))
+          (fun h =>
+            Eq.symm h ▸
+              Bool.casesOn (motive := fun t =>
+                executable = t →
+                  (do
+                      let admitted ← NFQ_ScanReference.readonly_buffer_ref false true executable
+                      Aeneas.Std.Result.ok
+                          (if admitted = true then Aeneas.Std.core.result.Result.Ok ()
+                          else
+                            Aeneas.Std.core.result.Result.Err
+                              AdapterRw.solana_program_error.ProgramError.InvalidAccountData)) =
+                    AdapterRw.r1_pool_adapter.readonly_buffer_meta_ok false true executable)
+                executable
+                (fun h =>
+                  Eq.symm h ▸
+                    Eq.refl do
+                      let admitted ← NFQ_ScanReference.readonly_buffer_ref false true false
+                      Aeneas.Std.Result.ok
+                          (if admitted = true then Aeneas.Std.core.result.Result.Ok ()
+                          else
+                            Aeneas.Std.core.result.Result.Err
+                              AdapterRw.solana_program_error.ProgramError.InvalidAccountData))
+                (fun h =>
+                  Eq.symm h ▸
+                    Eq.refl do
+                      let admitted ← NFQ_ScanReference.readonly_buffer_ref false true true
+                      Aeneas.Std.Result.ok
+                          (if admitted = true then Aeneas.Std.core.result.Result.Ok ()
+                          else
+                            Aeneas.Std.core.result.Result.Err
+                              AdapterRw.solana_program_error.ProgramError.InvalidAccountData))
+                (Eq.refl executable))
+          (Eq.refl writable))
+    (fun h =>
+      Eq.symm h ▸
+        Bool.casesOn (motive := fun t =>
+          writable = t →
+            (do
+                let admitted ← NFQ_ScanReference.readonly_buffer_ref true writable executable
+                Aeneas.Std.Result.ok
+                    (if admitted = true then Aeneas.Std.core.result.Result.Ok ()
+                    else
+                      Aeneas.Std.core.result.Result.Err
+                        AdapterRw.solana_program_error.ProgramError.InvalidAccountData)) =
+              AdapterRw.r1_pool_adapter.readonly_buffer_meta_ok true writable executable)
+          writable
+          (fun h =>
+            Eq.symm h ▸
+              Bool.casesOn (motive := fun t =>
+                executable = t →
+                  (do
+                      let admitted ← NFQ_ScanReference.readonly_buffer_ref true false executable
+                      Aeneas.Std.Result.ok
+                          (if admitted = true then Aeneas.Std.core.result.Result.Ok ()
+                          else
+                            Aeneas.Std.core.result.Result.Err
+                              AdapterRw.solana_program_error.ProgramError.InvalidAccountData)) =
+                    AdapterRw.r1_pool_adapter.readonly_buffer_meta_ok true false executable)
+                executable
+                (fun h =>
+                  Eq.symm h ▸
+                    Eq.refl do
+                      let admitted ← NFQ_ScanReference.readonly_buffer_ref true false false
+                      Aeneas.Std.Result.ok
+                          (if admitted = true then Aeneas.Std.core.result.Result.Ok ()
+                          else
+                            Aeneas.Std.core.result.Result.Err
+                              AdapterRw.solana_program_error.ProgramError.InvalidAccountData))
+                (fun h =>
+                  Eq.symm h ▸
+                    Eq.refl do
+                      let admitted ← NFQ_ScanReference.readonly_buffer_ref true false true
+                      Aeneas.Std.Result.ok
+                          (if admitted = true then Aeneas.Std.core.result.Result.Ok ()
+                          else
+                            Aeneas.Std.core.result.Result.Err
+                              AdapterRw.solana_program_error.ProgramError.InvalidAccountData))
+                (Eq.refl executable))
+          (fun h =>
+            Eq.symm h ▸
+              Bool.casesOn (motive := fun t =>
+                executable = t →
+                  (do
+                      let admitted ← NFQ_ScanReference.readonly_buffer_ref true true executable
+                      Aeneas.Std.Result.ok
+                          (if admitted = true then Aeneas.Std.core.result.Result.Ok ()
+                          else
+                            Aeneas.Std.core.result.Result.Err
+                              AdapterRw.solana_program_error.ProgramError.InvalidAccountData)) =
+                    AdapterRw.r1_pool_adapter.readonly_buffer_meta_ok true true executable)
+                executable
+                (fun h =>
+                  Eq.symm h ▸
+                    Eq.refl do
+                      let admitted ← NFQ_ScanReference.readonly_buffer_ref true true false
+                      Aeneas.Std.Result.ok
+                          (if admitted = true then Aeneas.Std.core.result.Result.Ok ()
+                          else
+                            Aeneas.Std.core.result.Result.Err
+                              AdapterRw.solana_program_error.ProgramError.InvalidAccountData))
+                (fun h =>
+                  Eq.symm h ▸
+                    Eq.refl do
+                      let admitted ← NFQ_ScanReference.readonly_buffer_ref true true true
+                      Aeneas.Std.Result.ok
+                          (if admitted = true then Aeneas.Std.core.result.Result.Ok ()
+                          else
+                            Aeneas.Std.core.result.Result.Err
+                              AdapterRw.solana_program_error.ProgramError.InvalidAccountData))
+                (Eq.refl executable))
+          (Eq.refl writable))
+    (Eq.refl signer)
+'NFQ_Readonly.reference' does not depend on any axioms
+theorem NFQ_StatementLaws.expected_reference : ∀ (v : FIq_Native.pool_v1.pair_forest_semantic_terminal.CompiledVariant),
+  FIq_Native.pool_v1.pair_forest_semantic_terminal.variant_expected_output v =
+    Aeneas.Std.Result.ok (NFQ_StatementLaws.expected v) :=
+fun v =>
+  FIq_Native.pool_v1.pair_forest_semantic_terminal.CompiledVariant.casesOn (motive := fun t =>
+    v = t →
+      FIq_Native.pool_v1.pair_forest_semantic_terminal.variant_expected_output v =
+        Aeneas.Std.Result.ok (NFQ_StatementLaws.expected v))
+    v
+    (fun h =>
+      Eq.symm h ▸
+        Eq.refl
+          (FIq_Native.pool_v1.pair_forest_semantic_terminal.variant_expected_output
+            FIq_Native.pool_v1.pair_forest_semantic_terminal.CompiledVariant.PrivateTransfer))
+    (fun h =>
+      Eq.symm h ▸
+        Eq.refl
+          (FIq_Native.pool_v1.pair_forest_semantic_terminal.variant_expected_output
+            FIq_Native.pool_v1.pair_forest_semantic_terminal.CompiledVariant.Withdrawal))
+    (Eq.refl v)
+'NFQ_StatementLaws.expected_reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NFQ_StatementLaws.copied_reference : ∀ (v : FIq_Native.pool_v1.pair_forest_semantic_terminal.CompiledVariant),
+  FIq_Native.pool_v1.pair_forest_semantic_terminal.copy_variant v = Aeneas.Std.Result.ok (NFQ_StatementLaws.copied v) :=
+fun v =>
+  FIq_Native.pool_v1.pair_forest_semantic_terminal.CompiledVariant.casesOn (motive := fun t =>
+    v = t →
+      FIq_Native.pool_v1.pair_forest_semantic_terminal.copy_variant v =
+        Aeneas.Std.Result.ok (NFQ_StatementLaws.copied v))
+    v
+    (fun h =>
+      Eq.symm h ▸
+        Eq.refl
+          (FIq_Native.pool_v1.pair_forest_semantic_terminal.copy_variant
+            FIq_Native.pool_v1.pair_forest_semantic_terminal.CompiledVariant.PrivateTransfer))
+    (fun h =>
+      Eq.symm h ▸
+        Eq.refl
+          (FIq_Native.pool_v1.pair_forest_semantic_terminal.copy_variant
+            FIq_Native.pool_v1.pair_forest_semantic_terminal.CompiledVariant.Withdrawal))
+    (Eq.refl v)
+'NFQ_StatementLaws.copied_reference' does not depend on any axioms
+@[defeq] theorem NFQ_StatementLaws.limbs_reference : ∀ (v : FIq_Native.field.QM31),
+  FIq_Native.state_only_poseidon.extension_limbs v =
+    Aeneas.Std.Result.ok (Aeneas.Std.Array.make 4#usize [v.c0.a, v.c0.b, v.c1.a, v.c1.b] ⋯) :=
+fun v => rfl
+'NFQ_StatementLaws.limbs_reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+@[defeq] theorem NFQ_WideGetters.c0 : ∀ (x : NFQ_WideGetters.NE),
+  (NFQ_WideGetters.toE x).c0 = NFQ_WideGetters.toQ x.c0 :=
+fun x => rfl
+'NFQ_WideGetters.c0' does not depend on any axioms
+@[defeq] theorem NFQ_WideGetters.c1 : ∀ (x : NFQ_WideGetters.NE),
+  (NFQ_WideGetters.toE x).c1 = NFQ_WideGetters.toQ x.c1 :=
+fun x => rfl
+'NFQ_WideGetters.c1' does not depend on any axioms

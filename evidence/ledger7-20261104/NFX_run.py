@@ -39,7 +39,7 @@ elif kind=='link':
  command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NFX_native/'+target,*sources]
 elif kind=='audit':
  sources=['NFX_generated/NFX_ProofDriver.lean','NFX_generated/NFX_Driver.lean','NFX_batch.py','NFX_AUDIT_ROOTS.json','NFX_EXPECTED_IMPORTS.jsonl']
- for n in sources[2:]:files[n]=(E/n).read_text()
+ for n in sources:files[n]=(E/Path(n).name).read_text()
  command=['python3','NFX_batch.py',target]
 else:raise ValueError(kind)
 config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NFX_tmp',LEAN_PATH=':'.join([B+'/NFX_objects',C+'/NFX_priority',W,W+'/objects',C,T+'/lib/lean'])),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')
@@ -58,7 +58,7 @@ for n in ['NFA_WALKER.c','NFA_MemoryLimit.c']:
 x=json.loads((b/{(a+'.json')!r}).read_text());roots=x['env']['LEAN_PATH'].split(':');pins={{}}
 modules=['NFA_WALKER','NFA_MemoryLimit','NEP_Planted','NEP_Mutations']
 if x['kind']=='lean':modules += re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M)
-else:modules+=['NFX_COMBINED_IMPORT']
+elif x['kind']=='audit':modules += ['NFX_S_PACKET'] if x['module']=='inventory-s' else ['NFX_D_ONLY'] if x['module']=='inventory-d' else ['NFX_Q_ONLY'] if x['module']=='inventory-q' else ['NFX_COMBINED_IMPORT']
 rels=set()
 for root in roots:
  for stem in ['Aeneas','AeneasMeta']:

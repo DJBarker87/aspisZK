@@ -1,0 +1,160 @@
+theorem NFN_NFB_GeometryComposed.result_state_effects : ∀ {State Event : Type}
+  (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (start finish : Aeneas.Std.Usize) (state : State),
+  NEB_PureFrame.run state
+      (AspisR1.Port3_QueryInstall.result
+        (AspisR1PublicPreparation.RawExtractedSemanticCallOpsV20.resultMap NFN_NEW_GeometryRawInterface.answer
+          (NEW_GeometryActual.verifier.QueryGeometry.for_range queries start finish))) =
+    NEB_PureFrame.run state
+      (AspisR1.Port3_GeometryStage.geometry NFN_NEW_GeometryDictionary.adopted queries start finish) :=
+fun {State Event} queries start finish state =>
+  NEB_PureFrame.equality state
+    (AspisR1.Port3_QueryInstall.result
+      (AspisR1PublicPreparation.RawExtractedSemanticCallOpsV20.resultMap NFN_NEW_GeometryRawInterface.answer
+        (NEW_GeometryActual.verifier.QueryGeometry.for_range queries start finish)))
+    (AspisR1.Port3_GeometryStage.geometry NFN_NEW_GeometryDictionary.adopted queries start finish)
+    (NFN_NEW_GeometryComplete.complete queries start finish)
+'NFN_NFB_GeometryComposed.result_state_effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NFN_NFB_GeometryComposed.accepted_physical : ∀ (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (start finish : Aeneas.Std.Usize),
+  NFN_NFB_RangeTrace.Deployed start finish →
+    ∀ (heap : NFN_NFB_PhysicalFrame.Heap) (out : AspisR1Stage2.verifier.QueryGeometry),
+      AspisR1PublicPreparation.RawExtractedSemanticCallOpsV20.resultMap NFN_NEW_GeometryRawInterface.answer
+            (NEW_GeometryActual.verifier.QueryGeometry.for_range queries start finish) =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out) →
+        ∃ rows lines flat prefixes product suffix resized inverse groups,
+          rows.length = ↑finish - ↑start ∧
+            ↑flat = List.flatMap (fun r => AspisR1.Port4C_GeometryGather.Row.words r) rows ∧
+              ↑lines = List.map (fun r => r.lineZ) rows ∧
+                out.start = start ∧
+                  out.line_z = lines ∧
+                    out.inverses = groups ∧
+                      NFN_NEW_GeometryDictionary.adopted.op13 (Aeneas.Std.alloc.vec.Vec.deref flat) =
+                          Aeneas.Std.Result.ok (prefixes, product) ∧
+                        (↑prefixes).length = (↑flat).length ∧
+                          NFN_NEW_GeometryDictionary.adopted.op11 product = Aeneas.Std.Result.ok suffix ∧
+                            ↑resized = List.replicate (↑flat).length 0#u32 ∧
+                              NEW_GeometryActual.verifier.QueryGeometry.for_range_loop0_loop0
+                                    (AspisR1.Port4C_Reverse.reverse (Aeneas.Std.alloc.vec.Vec.len flat)) flat prefixes
+                                    suffix resized =
+                                  Aeneas.Std.Result.ok inverse ∧
+                                (↑inverse).length = (↑flat).length ∧
+                                  NFN_NEW_GeometryReverse.Trace (↑flat) (↑prefixes) (↑flat).length (↑resized) suffix
+                                      (↑inverse) (NFN_NEW_GeometryReverse.suffixAfter (↑flat) (↑flat).length suffix)
+                                      (NFN_NEW_GeometryReverse.callLog (↑flat) (↑prefixes) (↑flat).length suffix) ∧
+                                    ↑out.inverses =
+                                        List.map (AspisR1.Port4C_CollectLoop.record inverse)
+                                          (List.range (↑lines).length) ∧
+                                      NFN_NFB_CollectorTrace.finish
+                                            (NFN_NFB_CollectorTrace.fill ↑out.inverses
+                                              { initialized := [], published := 0 }) =
+                                          { initialized := ↑out.inverses, published := (↑out.inverses).length } ∧
+                                        NFN_NFB_PhysicalFrame.run (NFN_NFB_GatherFrame.actions rows)
+                                              (NFN_NFB_ReturnedBuffers.initial heap)
+                                              NFN_NFB_PrivateFrame.Place.lines.id =
+                                            some ↑out.line_z ∧
+                                          (∀ (count : ℕ),
+                                              NFN_NFB_PhysicalFrame.run
+                                                  (List.take count (NFN_NFB_GatherFrame.actions rows))
+                                                  (NFN_NFB_ReturnedBuffers.initial heap) 0 =
+                                                heap 0) ∧
+                                            ∀ (count : ℕ),
+                                              NFN_NFB_PhysicalFrame.run
+                                                  (List.take count
+                                                    (NFN_NFB_TerminalFrame.actions (↑flat) (↑prefixes) suffix
+                                                      (↑flat).length ↑groups))
+                                                  (NFN_NFB_PhysicalFrame.run (NFN_NFB_GatherFrame.actions rows)
+                                                    (NFN_NFB_ReturnedBuffers.initial heap))
+                                                  0 =
+                                                heap 0 :=
+fun queries start finish deployed heap out accepted =>
+  let ⟨order, right✝⟩ := NFN_NFB_RangeTrace.bounds start finish deployed
+  let ⟨bound, n⟩ := right✝
+  let ⟨rows, h✝⟩ := NFN_NFB_ReturnedBuffers.complete queries start finish deployed heap out accepted
+  let ⟨it, h✝¹⟩ := h✝
+  let ⟨lines, h✝²⟩ := h✝¹
+  let ⟨flat, h✝³⟩ := h✝²
+  let ⟨prefixes, h✝⁴⟩ := h✝³
+  let ⟨product, h✝⁵⟩ := h✝⁴
+  let ⟨suffix, h✝⁶⟩ := h✝⁵
+  let ⟨groups, h✝⁷⟩ := h✝⁶
+  let ⟨nrows, right✝¹⟩ := h✝⁷
+  let ⟨hflat, right✝²⟩ := right✝¹
+  let ⟨hlines, right✝³⟩ := right✝²
+  let ⟨size, right✝⁴⟩ := right✝³
+  let ⟨plen, right✝⁵⟩ := right✝⁴
+  let ⟨hp, right✝⁶⟩ := right✝⁵
+  let ⟨hs, right✝⁷⟩ := right✝⁶
+  let ⟨hstart, right✝⁸⟩ := right✝⁷
+  let ⟨hline, right✝⁹⟩ := right✝⁸
+  let ⟨hgroups, right✝¹⁰⟩ := right✝⁹
+  let ⟨ending, right✝¹¹⟩ := right✝¹⁰
+  let ⟨last, right✝¹²⟩ := right✝¹¹
+  let ⟨payload, right✝¹³⟩ := right✝¹²
+  let ⟨gatherFrame, terminalFrame⟩ := right✝¹³
+  have lineLength :=
+    Eq.mpr (id (congrArg (fun _a => _a.length = rows.length) hlines))
+      (Eq.mpr (id (congrArg (fun _a => _a = rows.length) (List.length_map fun r => r.lineZ))) (Eq.refl rows.length));
+  have count :=
+    Eq.mpr (id (congrArg (fun _a => _a ≤ 22) lineLength))
+      (Eq.mpr (id (congrArg (fun _a => _a ≤ 22) nrows))
+        (Decidable.byContradiction fun a =>
+          NFN_NFB_GeometryComposed.accepted_physical._proof_1 start finish order bound rows it lines flat prefixes nrows
+            lineLength a));
+  have positive :=
+    Or.casesOn n
+      (fun h =>
+        Decidable.byContradiction fun a =>
+          NFN_NFB_GeometryComposed.accepted_physical._proof_2 start finish rows it lines flat prefixes nrows size
+            lineLength h a)
+      fun h =>
+      Decidable.byContradiction fun a =>
+        NFN_NFB_GeometryComposed.accepted_physical._proof_3 start finish rows it lines flat prefixes nrows size
+          lineLength h a;
+  have nonempty := fun h =>
+    Nat.le.casesOn (motive := fun a t =>
+      [].length = a → Eq.mp (congrArg (fun _a => 0 < _a.length) h) positive ≍ t → False)
+      (Eq.mp (congrArg (fun _a => 0 < _a.length) h) positive)
+      (fun h_1 => False.elim (noConfusion_of_Nat Nat.ctorIdx h_1))
+      (fun {m} a h_1 => False.elim (noConfusion_of_Nat Nat.ctorIdx h_1)) (Eq.refl [].length)
+      (HEq.refl (Eq.mp (congrArg (fun _a => 0 < _a.length) h) positive));
+  let ⟨ps, h✝⁸⟩ :=
+    NFN_NFB_TerminalAssociation.complete start it lines flat out ending nonempty count
+      (Decidable.byContradiction fun a =>
+        NFN_NFB_GeometryComposed.accepted_physical._proof_4 start finish rows it lines flat prefixes nrows size
+          lineLength a)
+      last
+  let ⟨prod, h✝⁹⟩ := h✝⁸
+  let ⟨suff, h✝¹⁰⟩ := h✝⁹
+  let ⟨resized, h✝¹¹⟩ := h✝¹⁰
+  let ⟨inverse, h✝¹²⟩ := h✝¹¹
+  let ⟨hp1, right✝¹⁴⟩ := h✝¹²
+  let ⟨len1, right✝¹⁵⟩ := right✝¹⁴
+  let ⟨hs1, right✝¹⁶⟩ := right✝¹⁵
+  let ⟨resizeValue, right✝¹⁷⟩ := right✝¹⁶
+  let ⟨back, right✝¹⁸⟩ := right✝¹⁷
+  let ⟨inverseLength, right✝¹⁹⟩ := right✝¹⁸
+  let ⟨trace, right✝²⁰⟩ := right✝¹⁹
+  let ⟨contents, publication⟩ := right✝²⁰
+  have same := Aeneas.Std.Result.ok.inj (Eq.trans (Eq.symm hp1) hp);
+  let ⟨⟩ := (prefixes, product)
+  same
+'NFN_NFB_GeometryComposed.accepted_physical' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NFM_ProductInstance.installed : ∀ (input : AspisR1.NFI_InnerCut.Input),
+  NEV_DotInputs.Canonical input.g →
+    (AspisR1.NFM_Single.run AspisR1.NFM_ProductInstance.mainProduct AspisR1.NFM_ProductInstance.tailProduct
+          input).result =
+      AspisR1.FIp_NativeDots.fast_dots.four_dots_one input.q input.g input.slot :=
+fun input canonical =>
+  AspisR1.NFM_Single.emitted AspisR1.NFM_ProductInstance.mainProduct AspisR1.NFM_ProductInstance.main_law
+    AspisR1.NFM_ProductInstance.tailProduct AspisR1.NFM_ProductInstance.tail_law input canonical
+'AspisR1.NFM_ProductInstance.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NFM_ProductInstance.wrapper : ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8) (g : NEV_DotInputs.Coefficients)
+  (qPlace gPlace : ℕ),
+  NEV_DotInputs.Canonical g →
+    (AspisR1.NFI_WrapperTrace.run AspisR1.NFM_ProductInstance.mainProduct AspisR1.NFM_ProductInstance.tailProduct q g
+          qPlace gPlace).result =
+      NEI_FourWrapper.fast_dots.four_dots q g :=
+fun q g qPlace gPlace canonical =>
+  AspisR1.NFI_WrapperTrace.headline AspisR1.NFM_ProductInstance.mainProduct AspisR1.NFM_ProductInstance.main_law
+    AspisR1.NFM_ProductInstance.tailProduct AspisR1.NFM_ProductInstance.tail_law q g qPlace gPlace canonical
+'AspisR1.NFM_ProductInstance.wrapper' depends on axioms: [propext, Classical.choice, Quot.sound]

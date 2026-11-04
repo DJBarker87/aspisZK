@@ -1,0 +1,9 @@
+import NFX_COMBINED_IMPORT
+#print NFN_NFB_GeometryComposed.result_state_effects
+#print axioms NFN_NFB_GeometryComposed.result_state_effects
+#print NFN_NFB_GeometryComposed.accepted_physical
+#print axioms NFN_NFB_GeometryComposed.accepted_physical
+#print AspisR1.NFM_ProductInstance.installed
+#print axioms AspisR1.NFM_ProductInstance.installed
+#print AspisR1.NFM_ProductInstance.wrapper
+#print axioms AspisR1.NFM_ProductInstance.wrapper

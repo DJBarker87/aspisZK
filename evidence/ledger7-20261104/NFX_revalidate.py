@@ -10,7 +10,8 @@ os.environ['PYTHONDONTWRITEBYTECODE']='1'
 E=Path(__file__).resolve().parent;R=E.parents[1]
 for p in (R/'evidence').iterdir():
  if p.is_dir():sys.path.insert(0,str(p))
-name=sys.argv[1];assert name in ['NFK','NFS','NFJ','NFQ','NEZ']
+os.environ.update(NFX_REPOSITORY_ROOT=str(R),NFX_CHILD_REPORTS=str(E/'NFX_child_reports'),PYTHONPATH=str(E/'NFX_python_sandbox'))
+name=sys.argv[1];assert name in ['NFK','NFS','NFJ','NFQ','NEZ','NEN','NET','NFE']
 D=E/'NFX_replay_outputs'/name;D.mkdir(parents=True,exist_ok=True)
 # These validators sometimes emit regenerated reports. Preserve all input files.
 original_open=Path.open
@@ -32,6 +33,53 @@ def observe(frame,event,arg):
   k=str(p.relative_to(R))
   if k not in calls:calls[k]=dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),functions=set())
   calls[k]['functions'].add(frame.f_code.co_name)
+# Historical aggregate validators explicitly reject later report corpora. Give
+# them an actual private Git HEAD with shared immutable objects and a read-only
+# historical file overlay. No validator function, Git result or gate is mocked.
+if name in ['NEN','NEZ']:
+ directory=R/'evidence'/('ledger4-20261102' if name=='NEN' else 'ledger5-20261104')
+ pins=json.loads((directory/(name+'_INPUTS.json')).read_text())
+ revision=pins.get('revision') or json.loads((directory/(name+'_SCOPE.json')).read_text())['source_revision']
+ gitdir=Path('/private/tmp/NFX_pinned_git_'+name);gitdir.mkdir(exist_ok=True)
+ subprocess.run(['git','init','--bare',str(gitdir)],check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+ common=Path(subprocess.check_output(['git','rev-parse','--git-common-dir'],cwd=R,text=True).strip());common=(R/common).resolve()
+ (gitdir/'objects/info/alternates').write_text(str(common/'objects')+'\n');(gitdir/'HEAD').write_text(revision+'\n')
+ index=Path(subprocess.check_output(['git','rev-parse','--git-path','index'],cwd=R,text=True).strip());index=(R/index).resolve()
+ import shutil
+ shutil.copy2(index,gitdir/'index')
+ subprocess.run(['git','--git-dir='+str(gitdir),'config','core.bare','false'],check=True)
+ subprocess.run(['git','--git-dir='+str(gitdir),'config','core.worktree',str(R)],check=True)
+ os.environ['GIT_DIR']=str(gitdir);os.environ['GIT_WORK_TREE']=str(R)
+ # Pin changed materialized historical inputs, stored once, read bytes exactly.
+ mapping={};old_read=Path.read_bytes
+ for path,pin in {**pins['files'],**pins.get('report_files',{})}.items():
+  local=R/path
+  if not local.is_file():continue
+  raw=old_read(local);oid=hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()
+  if oid==pin['git_blob']:continue
+  hist=subprocess.check_output(['git','cat-file','blob',pin['git_blob']],cwd=R)
+  dest=E/'NFX_pinned_inputs'/revision/path;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(hist);mapping[local]=dest
+ if name=='NEZ':
+  # A private sparse historical filesystem view makes Git's own dirty check
+  # observe the same old bytes as Python, with no simulated Git responses.
+  view=Path('/private/tmp/NFX_gitview_NEZ');view.mkdir(exist_ok=True)
+  subprocess.run(['git','read-tree',revision],check=True)
+  tracked=subprocess.check_output(['git','ls-files','-z'])
+  subprocess.run(['git','update-index','--skip-worktree','-z','--stdin'],input=tracked,check=True)
+  selected=[]
+  for path,pin in pins['files'].items():
+   dest=view/path;dest.parent.mkdir(parents=True,exist_ok=True)
+   source=mapping.get(R/path,R/path)
+   if source.is_file():
+    data=old_read(source);oid=hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest();assert oid==pin['git_blob'],path
+    if not dest.exists():os.link(source,dest)
+   elif not dest.exists():dest.write_bytes(subprocess.check_output(['git','cat-file','blob',pin['git_blob']]))
+   selected.append(path)
+  subprocess.run(['git','--git-dir='+str(gitdir),'config','core.worktree',str(view)],check=True)
+  os.environ['GIT_WORK_TREE']=str(view)
+  subprocess.run(['git','update-index','--no-skip-worktree','-z','--stdin'],input=('\0'.join(selected)+'\0').encode(),check=True)
+ Path.read_bytes=lambda p:old_read(mapping.get(p,p))
+ (E/('NFX_'+name+'_SNAPSHOT.json')).write_text(json.dumps(dict(revision=revision,private_git=str(gitdir),object_store=str(common/'objects'),read_overlay={str(k.relative_to(R)):str(v.relative_to(R)) for k,v in mapping.items()}),indent=1)+'\n')
 start=time.monotonic();rc=0
 try:
  sys.setprofile(observe)
@@ -66,6 +114,13 @@ try:
   for n in ['NFQ_CERTIFICATES.json','NFQ_EDGES.json','NFQ_CLOSED.json','NFQ_LEDGER_DELTA.json','NFQ_AUDIT.json']:
    assert json.loads((D/'evidence/slice-d-define-20261104'/n).read_text())==json.loads((m.E/n).read_text()),n
   result=dict(rows=21,functions=16,roots='OPEN')
+ elif name=='NEN':
+  m=importlib.import_module('NEN_validate');inputs=m.Inputs()
+  try:result=m.build(inputs)
+  finally:inputs.close()
+  assert result==json.loads((m.E/'NEN_LEDGER.json').read_text());result=dict(coverage=result['coverage'])
+ elif name=='NFE':result=importlib.import_module('NFE_validate').validate()
+ elif name=='NET':result=importlib.import_module('NET_validate').validate(replay=True)
  elif name=='NEZ':
   m=importlib.import_module('NEZ_validate');result=m.build();assert result==m.read(m.E/'NEZ_LEDGER.json');result=dict(coverage=result['coverage'])
 except Exception:

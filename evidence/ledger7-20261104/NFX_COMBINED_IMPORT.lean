@@ -1,8 +1,7 @@
 import RPx_Deployed
 import NFS_COMBINED_IMPORT
-import NFD_FinalAudit
-import NFH_FinalAudit
-import NFJ_Scanner
+import NEQ_UnwrapDomains
+import NEX_Exact
 import NFQ_FieldLaws
 import NFQ_PreparedMultiplier
 import NFQ_Readonly
@@ -11,8 +10,103 @@ import NFQ_RowShape
 import NFQ_StatementLaws
 import NFQ_Transport
 import NFQ_WideGetters
-#print axioms AspisR1.NCA_SerializerWindow.frame
-#print axioms AspisR1.NCA_SerializerWindow.induction
+import NFE_DotBridge
+import NFE_WrapperBridge
+import NFF_BaseMultiply
+import NFF_Cell
+import NFF_CoreReduction
+import NFF_FullOne
+import NFF_FullWrapper
+import NFF_LoggedDomains
+import NFF_LoggedEight
+import NFF_LoggedLoop
+import NFF_LoggedOne
+import NFF_LoggedOuterLoop
+import NFF_LoggedOuterStep
+import NFF_LoggedPush
+import NFF_LoggedRaw
+import NFF_LoggedStep
+import NFF_LoggedTail
+import NFF_LoggedWrapper
+import NFF_ProductCall
+import NFF_QueryProduct
+import NFF_RawLog
+import NFF_RawTypedLog
+import NFF_ReadDomains
+import NFG_ProductOk
+import NFG_PushRoot
+import NFG_QueryLoopSource
+import NFG_SmallEffects
+import NFI_FailurePrefixes
+import NFI_InnerActual
+import NFI_InnerCut
+import NFI_InnerTrace
+import NFI_OpeningFrame
+import NFI_OuterActual
+import NFI_OuterCut
+import NFI_OuterTrace
+import NFI_PrivateCuts
+import NFI_SingleDomains
+import NFI_SingleTrace
+import NFI_TailTrace
+import NFI_TraceResult
+import NFI_WrapperDomains
+import NFI_WrapperTrace
+import NFM_CallDomains
+import NFM_Control
+import NFM_Cuts
+import NFM_Domains
+import NFM_Frames
+import NFM_InnerControl
+import NFM_ProductInstance
+import NFM_Single
+import NFM_Span
+import NFM_Thread
+import NFP_Advance
+import NFP_Carrier
+import NFP_DotCaller
+import NFP_DotDomains
+import NFP_DotInstall
+import NFP_FrameExt
+import NFP_GeometryDomains
+import NFP_HeadDomain
+import NFP_LoopBudget
+import NFP_LoopTerminals
+import NFP_LoopTransport
+import NFP_NatBase
+import NFP_NodeDictionary
+import NFP_ObserverErasure
+import NFP_ProductLaw
+import NFP_QueryAdvance
+import NFP_QueryCuts
+import NFP_QueryTrace
+import NFP_RejectionTrace
+import NFP_Resume
+import NFP_ReturnCuts
+import NFP_SuffixCuts
+import NFP_TraceBack
+import NFP_TraceFront
+import NFP_TraceHead
+import NFP_TraceTypes
+import NFS_AccumDomain
+import NFS_AccumInstall
+import NFS_CallerDomains
+import NFS_DotTrace
+import NFS_FoldInstall
+import NFS_LoopTrace
+import NFS_LoopTraceDefs
+import NFS_PacketRoot
+import NFS_QueryBack
+import NFS_QueryInvariant
+import NFS_QueryLoopRoot
+import NFS_QueryOps
+import NFS_QueryValuesPacket
+import NFS_ReadCanonical
+import NFS_TraceBack
+import NFG_InversePanic
+import NFG_InverseZeroDomain
+import NFN_PhaseTransport
+import NFN_ReserveOwner
 #print axioms AspisR1.NFE_DotBridge.one
 #print axioms AspisR1.NFE_WrapperBridge.four
 #print axioms AspisR1.NFF_BaseMultiply.product_bound
@@ -238,94 +332,12 @@ import NFQ_WideGetters
 #print axioms AspisR1.NFS_TraceBack.model_congr
 #print axioms AspisR1.NFS_TraceBack.source
 #print axioms AspisR1.RPx_Deployed.deployed
-#print axioms NEM_ValidatorComposed.result_state_effects
-#print axioms NEQ_EncoderOracle.result_state_effects
-#print axioms NEU_CallDomains.common_packet
-#print axioms NEU_CallDomains.reached_domains
-#print axioms NEU_CallDomains.transfer_packet
-#print axioms NEU_CallDomains.transfer_reply_range
-#print axioms NEU_CallDomains.withdrawal_packet
-#print axioms NEU_CallDomains.withdrawal_reply_range
-#print axioms NEU_CommonProjections.common_ext
-#print axioms NEU_EqualityLoop.prefix_exact
-#print axioms NEU_EqualityLoop.step_invariant
-#print axioms NEU_ReconstructAdopted.result_state_effects
-#print axioms NEU_ReconstructCore.common_result
-#print axioms NEU_ReconstructCore.result_state_effects
-#print axioms NEX_PublicModel.result_state_effects
-#print axioms NEY_EmitComposed.encoder_bridge
-#print axioms NEY_EmitComposed.reached_encoder
-#print axioms NEY_EmitComposed.result_state_effects
-#print axioms NFD_CommonField00.alignment
-#print axioms NFD_CommonField01.alignment
-#print axioms NFD_CommonField02.alignment
-#print axioms NFD_CommonField03.alignment
-#print axioms NFD_CommonField04.alignment
-#print axioms NFD_CommonField05.alignment
-#print axioms NFD_CommonField06.alignment
-#print axioms NFD_CommonField07.alignment
-#print axioms NFD_CommonField08.alignment
-#print axioms NFD_CommonField09.alignment
-#print axioms NFD_CommonField10.alignment
-#print axioms NFD_CommonField11.alignment
-#print axioms NFD_CommonField12.alignment
-#print axioms NFD_CommonField13.alignment
-#print axioms NFD_CommonField14.alignment
-#print axioms NFD_EmitProjection.alignment0
-#print axioms NFD_EmitProjection.alignment1
-#print axioms NFD_EmitProjection.alignment2
-#print axioms NFD_EmitProjection.alignment3
-#print axioms NFD_EmitProjection.alignment4
-#print axioms NFD_EmitProjection.alignment5
-#print axioms NFD_EmitProjection.alignment6
-#print axioms NFD_EmitProjection.alignment7
-#print axioms NFD_EmitProjection.complete
-#print axioms NFD_RawCarriers.limbs_result_state_effects
-#print axioms NFD_RawCarriers.raw_roundtrip
-#print axioms NFD_RawCarriers.tag_result_state_effects
-#print axioms NFD_RawCarriers.tag_roundtrip
-#print axioms NFD_RequestDomains.binding_fields
-#print axioms NFD_RequestDomains.payment_length
-#print axioms NFD_RequestDomains.payment_window
-#print axioms NFD_RequestDomains.wrong_length
-#print axioms NFD_RequestField00.alignment
-#print axioms NFD_RequestField01.alignment
-#print axioms NFD_RequestField02.alignment
-#print axioms NFD_RequestField03.alignment
-#print axioms NFD_RequestField04.alignment
-#print axioms NFD_RequestField05.alignment
-#print axioms NFD_RequestField06.alignment
-#print axioms NFD_RequestField07.alignment
-#print axioms NFD_RequestField08.alignment
-#print axioms NFD_RequestField09.alignment
-#print axioms NFD_RequestField10.alignment
-#print axioms NFD_RequestField11.alignment
-#print axioms NFD_RequestField12.alignment
-#print axioms NFD_RequestField13.alignment
-#print axioms NFD_RequestOracle.array_result_state_effects
-#print axioms NFD_RequestOracle.result_state_effects
-#print axioms NFD_RequestProjection.complete
-#print axioms NFD_RequestProjection.transfer_roundtrip
-#print axioms NFD_RequestProjection.withdrawal_roundtrip
-#print axioms NFD_ScanConditional.result_state_effects
-#print axioms NFD_WideSerialization.carrier_roundtrip
-#print axioms NFD_WideSerialization.result_state_effects
+#print axioms NEQ_UnwrapDomains.err_result_state_effects
+#print axioms NEQ_UnwrapDomains.fixed_read_packet
+#print axioms NEQ_UnwrapDomains.ok_result_state_effects
+#print axioms NEX_Exact.result_state_effects
 #print axioms NFG_InversePanic.zero
 #print axioms NFG_InverseZeroDomain.unique
-#print axioms NFH_ComparisonBoundary.opaque_reply_insufficient
-#print axioms NFH_ComparisonBoundary.reply_eq_loop
-#print axioms NFH_ComparisonBoundary.zeroLaw_necessary
-#print axioms NFH_ComparisonDomain.complete688_association
-#print axioms NFH_ComparisonDomain.complete688_on_domain
-#print axioms NFJ_Comparison.completion
-#print axioms NFJ_Comparison.header_length
-#print axioms NFJ_Comparison.nativeEqualityBridge
-#print axioms NFJ_Comparison.same_buffer_lengths
-#print axioms NFJ_Comparison.slot_zero_iff
-#print axioms NFJ_Scanner.decode_domain
-#print axioms NFJ_Scanner.encode_domain
-#print axioms NFJ_Scanner.result_state_effects
-#print axioms NFJ_Scanner.tag_domain
 #print axioms NFN_NEW_GeometryComplete.complete
 #print axioms NFN_NFB_GeometryComposed.accepted_physical
 #print axioms NFN_NFB_GeometryComposed.result_state_effects
