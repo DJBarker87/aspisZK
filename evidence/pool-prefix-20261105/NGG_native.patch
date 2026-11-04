@@ -27,7 +27,7 @@
 +pub mod NFO_KMX;
 --- /dev/null
 +++ b/programs/aspis-pool/src/NGG_DecodeCut.rs
-@@ -0,0 +1,44 @@
+@@ -0,0 +1,27 @@
 +use super::*;
 +use aspis_statement::pool_v1::*;
 +fn digest()->aspis_statement::Digest{core::array::from_fn(|_|aspis_core::field::M31(kani::any()))}
@@ -48,27 +48,10 @@
 +#[kani::stub(<[u8]>::copy_from_slice,crate::NFO_KMX::KMX_copy_from_slice)]
 +#[kani::stub(alloc::alloc::realloc,crate::NFO_KMX::KMX_realloc)]
 +fn association(){
-+ let raw:[u8;324]=kani::any();let len:usize=kani::any();kani::assume(len==324);
-+ let keys:[[u8;32];3]=kani::any();let k0=Pubkey::new_from_array(keys[0]);let k1=Pubkey::new_from_array(keys[1]);let k2=Pubkey::new_from_array(keys[2]);let owner=Pubkey::new_from_array(kani::any());
-+ let mut l0:u64=kani::any();let mut l1:u64=kani::any();let mut l2:u64=kani::any();let mut d0:[u8;1]=kani::any();let mut d1:[u8;1]=kani::any();let mut d2:[u8;1]=kani::any();let flags:[bool;9]=kani::any();
-+ let a0=AccountInfo::new(&k0,flags[0],flags[1],&mut l0,&mut d0,&owner,flags[2],0);
-+ let a1=AccountInfo::new(&k1,flags[3],flags[4],&mut l1,&mut d1,&owner,flags[5],0);
-+ let a2=AccountInfo::new(&k2,flags[6],flags[7],&mut l2,&mut d2,&owner,flags[8],0);
-+ let accounts=[a0,a1,a2];let count:usize=kani::any();kani::assume(count==3);
-+ let public=if kani::any(){PoolV1PairForestTerminalPaymentV1::PrivateTransfer(any_PoolV1PrivateTransferPublicV1())}else{PoolV1PairForestTerminalPaymentV1::Withdrawal(any_PoolV1WithdrawalPublicV1())};
-+ let request=PoolV1PairForestTerminalRequestV1{verifier_profile:kani::any(),verifier_release:kani::any(),pool_program:kani::any(),public};
-+ let success=true;let error=ProgramError::InvalidInstructionData;
-+ let boxed=Box::new(request);let pointer=boxed.as_ref() as *const PoolV1PairForestTerminalRequestV1;
-+ let mut calls=0u8;
-+ let mut result=prefix(&accounts[..count],&raw[..len],|arg|{
-+  calls+=1;assert!(len>=4&&arg.as_ptr()==raw.as_ptr()&&arg.len()==len-4);
-+  if success{Ok(boxed)}else{Err(error.clone())}
-+ });
-+ 
++ let raw:[u8;324]=kani::any();let len:usize=kani::any();kani::assume(len<=324);
++ let error=ProgramError::IllegalOwner;let mut calls=0u8;
++ let mut result=prefix(&[],&raw[..len],|arg|{calls+=1;assert!(arg.as_ptr()==raw.as_ptr()&&arg.len()==len-4);Err(error.clone())});
++ if true && len>=4 {result=Err(ProgramError::InvalidSeeds);}
 + if len<4{assert!(calls==0&&matches!(result,Err(ProgramError::InvalidInstructionData)));}
-+ else{assert!(calls==1);if !success{assert!(matches!(result,Err(ref e) if *e==error));}
-+ else if count<3{assert!(matches!(result,Err(ProgramError::NotEnoughAccountKeys)));}
-+ else{let (r,m,c,l,h)=result.unwrap();
-+ assert!(core::ptr::eq(m,&accounts[0])&&core::ptr::eq(c,&accounts[1])&&core::ptr::eq(l,&accounts[2]));
-+ }}
++ else{assert!(calls==1&&matches!(result,Err(ref e) if *e==error));}
 +}

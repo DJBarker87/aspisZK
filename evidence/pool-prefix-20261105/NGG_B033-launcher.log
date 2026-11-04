@@ -1,0 +1,51 @@
+{"attempt": "NGG_B033", "exit_status": 1, "wall_seconds": 1.412554105045274, "peak_rss_kib": "2604736", "swaps": "0", "print_axioms": ["'_private.NGG_DecodePrefix.0.NGG_DecodePrefix.list_four' depends on axioms: [propext]", "'NGG_DecodePrefix.cut' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NGG_B_generated/NGG_DecodePrefix.lean:67:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  tail.index_usize 0#usize
+in the target expression
+  (let (_, hints) := (body, tail)
+    do
+    let i1 ← hints.index_usize 0#usize
+    let i2 ← hints.index_usize 1#usize
+    let i3 ← hints.index_usize 2#usize
+    let i4 ← hints.index_usize 3#usize
+    let cf1 ←
+      match decoded with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf1 with
+      | core.ops.control_flow.ControlFlow.Continue val1 =>
+        if count = 
+...
+)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf1 with
+      | core.ops.control_flow.ControlFlow.Continue val1 =>
+        if count = 0#usize then ok (core.result.Result.Err NGGSpineError.NotEnoughAccountKeys)
+        else
+          if count < 2#usize then ok (core.result.Result.Err NGGSpineError.NotEnoughAccountKeys)
+          else
+            if count < 3#usize then ok (core.result.Result.Err NGGSpineError.NotEnoughAccountKeys)
+            else
+              ok
+                (core.result.Result.Ok
+                  (val1, Array.make 3#usize [0#usize, 1#usize, 2#usize] decode_prefix._proof_6,
+                    { current_page := i1, next_page := i2, vault_authority := i3, vault_token_account := i4 }))
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          (R × Std.Array Usize 3#usize × Hints) (core.convert.FromSame NGGSpineError) residual) =
+    ok (finish decoded count hints)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (3 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'_private.NGG_DecodePrefix.0.NGG_DecodePrefix.list_four' depends on axioms: [propext]
+'NGG_DecodePrefix.cut' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r9a42910cd34646478bf732c5795d8a19.scope; invocation ID: 9edbc83ff099476493faaaa7e2972b47

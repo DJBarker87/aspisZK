@@ -39,7 +39,7 @@ code=f'''from pathlib import Path
 import re,json,hashlib
 b=Path({B!r});coherent=b.parent/'codex-cx-sound-int2-20261025'
 cache=b.parent/'codex-cx-pool-prefix-cache-20261104'
-roots=[b/'NGG_B_objects',b/'NGG_C_objects',cache/'NGG_headline',cache/'NFV_final_objects_20261104',cache/'NFR_final_objects_20261104',cache/'NFO_final_objects_20261104',cache,*[cache/n for n in ['NEY_final_objects_20261104','NEX_final_objects_20261104','NEQ_final_objects_20261103','NEM_final_objects_20261102']],coherent,coherent/'objects']
+roots=[b/'NGG_B_objects',b/'NGG_C_objects',cache/'NGG_headline',cache/'NFV_final_objects_20261104',cache/'NFR_final_objects_20261104',cache/'NFO_final_objects_20261104',cache,*[cache/n for n in ['NEY_final_objects_20261104','NEX_final_objects_20261104','NEQ_final_objects_20261103','NEM_final_objects_20261102']],coherent,coherent/'objects',Path('/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean')]
 selected={{}};missing=[];seen=set()
 def visit(n):
  if n in seen:return
@@ -54,8 +54,11 @@ def visit(n):
  if q:
   for dep in re.findall(r'^(?:public )?import\\s+(?:all\\s+)?([\\w.]+)',q.read_text(),re.M):visit(dep)
 for n in re.findall(r'^(?:public )?import\\s+(?:all\\s+)?([\\w.]+)',{source!r},re.M):visit(n)
-for n in ({['NGG_Accounts','NGG_HelperModel','NGG_Copy','NGG_ListFrames','NGG_Envelope','NGG_RequestWindows','NGG_RequestOracle','NGG_RequestIndexes','NGG_RequestGuards','NGG_PoolReturnData','NFR_CHelperBridge','NEP_Planted','NEP_Mutations'] if mode=='final' else ['NGG_Accounts','NGG_HelperModel','NGG_Copy','NGG_ListFrames','NGG_Envelope','NGG_RequestWindows','NGG_RequestOracle','NGG_RequestIndexes','NGG_RequestGuards','NGG_PoolReturnData','NFR_CHelperBridge'] if mode=='scan' else ['NEP_Planted','NEP_Mutations'] if mode=='fixtures' else []!r}):visit(n)
-for p in [coherent/'objects/Aeneas.olean',*(coherent/'objects/Aeneas').rglob('*.olean')]:
+for n in ({['NGG_COMBINED_IMPORT'] if mode in ['final','scan'] else ['NEP_Planted','NEP_Mutations'] if mode=='fixtures' else []!r}):visit(n)
+for canonical_library_object in [coherent/'objects/Aeneas.olean',*(coherent/'objects/Aeneas').rglob('*.olean')]:
+ rel=canonical_library_object.relative_to(coherent/'objects')
+ p=next((r/rel for r in roots if (r/rel).exists()),None)
+ assert p is not None,('missing resolved Aeneas object',str(rel))
  selected[str(p)]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())
  for suffix in ['.private','.server','.ir']:
   companion=Path(str(p)+suffix) if suffix!='.ir' else p.with_suffix('.ir')

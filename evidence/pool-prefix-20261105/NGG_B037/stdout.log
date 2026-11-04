@@ -1,0 +1,39 @@
+NGG_B_generated/NGG_DecodePrefix.lean:69:4: error: 'change' tactic failed, pattern
+  (do
+      let x0 ← tail.index_usize 0#usize
+      let x1 ← tail.index_usize 1#usize
+      let x2 ← tail.index_usize 2#usize
+      let x3 ← tail.index_usize 3#usize
+      ok
+          (finish decoded count
+            { current_page := x0, next_page := x1, vault_authority := x2, vault_token_account := x3 })) =
+    ok (finish decoded count hints)
+is not definitionally equal to target
+  (let (_, hints) := (body, tail)
+    do
+    let i1 ← hints.index_usize 0#usize
+    let i2 ← hints.index_usize 1#usize
+    let i3 ← hints.index_usize 2#usize
+    let i4 ← hints.index_usize 3#usize
+    let cf1 ←
+      match decoded with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf1 with
+      | core.ops.control_flow.ControlFlow.Continue val1 =>
+        if count = 0#usize then ok (core.result.Result.Err NGGSpineError.NotEnoughAccountKeys)
+        else
+          if count < 2#usize then ok (core.result.Result.Err NGGSpineError.NotEnoughAccountKeys)
+          else
+            if count < 3#usize then ok (core.result.Result.Err NGGSpineError.NotEnoughAccountKeys)
+            else
+              ok
+                (core.result.Result.Ok
+                  (val1, Array.make 3#usize [0#usize, 1#usize, 2#usize] decode_prefix._proof_6,
+                    { current_page := i1, next_page := i2, vault_authority := i3, vault_token_account := i4 }))
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          (R × Std.Array Usize 3#usize × Hints) (core.convert.FromSame NGGSpineError) residual) =
+    ok (finish decoded count hints)
+'_private.NGG_DecodePrefix.0.NGG_DecodePrefix.list_four' depends on axioms: [propext]
+'NGG_DecodePrefix.cut' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,37 @@
+import Aeneas
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result
+namespace NGG_MarkerZero
+/-- The emitted byte equality operation at the marker's native predicate. -/
+theorem predicate (byte : U8) :
+    core.cmp.PartialEqU8.eq byte 0#u8 = ok (decide (byte.val=0)) := by
+  rfl
+#print axioms predicate
+
+def scan : List U8 → Bool × Nat
+  | [] => (true,0)
+  | byte::rest => if byte.val=0 then ((scan rest).1,(scan rest).2+1) else (false,1)
+
+theorem value (bytes : List U8) : (scan bytes).1 = bytes.all (fun b => decide (b.val=0)) := by
+  induction bytes with
+  | nil => rfl
+  | cons b bs ih => by_cases h : b.val=0 <;> simp [scan,h,ih]
+#print axioms value
+
+theorem bound (bytes : List U8) : (scan bytes).2 ≤ bytes.length := by
+  induction bytes with
+  | nil => simp [scan]
+  | cons b bs ih => by_cases h : b.val=0 <;> simp [scan,h] <;> omega
+#print axioms bound
+
+theorem abort (prefix suffix : List U8) (bad : U8)
+    (zeros : ∀ b ∈ prefix, b.val=0) (nonzero : bad.val≠0) :
+    (scan (prefix ++ bad::suffix)).2 = prefix.length+1 := by
+  induction prefix with
+  | nil => simp [scan,nonzero]
+  | cons b bs ih =>
+    have first : b.val=0 := zeros b (by simp)
+    have tail : ∀ x ∈ bs, x.val=0 := by intro x hx; exact zeros x (by simp [hx])
+    simp [scan,first,ih tail]
+#print axioms abort
+end NGG_MarkerZero

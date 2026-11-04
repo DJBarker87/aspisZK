@@ -1,4 +1,4 @@
-import NGG_SpineRef.Funs
+import NGG_DecodeFinish
 
 /-! Total exact-suffix theorem for the pinned, unedited Pool extraction.
 The four bytes are parsed hints, not an authorization certificate. -/
@@ -24,14 +24,6 @@ private theorem list_four (xs : List U8) (h : xs.length = 4) :
           cases xs with
           | nil => exact ⟨a,b,c,d,rfl⟩
           | cons e xs => simp at h
-
-def finish {R : Type} (decoded : core.result.Result R NGGSpineError)
-    (count : Usize) (hints : Hints) :
-    core.result.Result (R × Array Usize 3#usize × Hints) NGGSpineError :=
-  match decoded with
-  | .Err e => .Err e
-  | .Ok r => if count = 0#usize ∨ count < 2#usize ∨ count < 3#usize
-    then .Err .NotEnoughAccountKeys else .Ok (r,Array.make 3#usize [0#usize,1#usize,2#usize],hints)
 
 /-- Symbolic strip followed by the full child Result; no admitted-account premise. -/
 theorem cut {R : Type} (s : Slice U8) (decoded : core.result.Result R NGGSpineError)
@@ -64,6 +56,12 @@ theorem cut {R : Type} (s : Slice U8) (decoded : core.result.Result R NGGSpineEr
   · simp only [NGG_SpineRef.decode_prefix,lift,hsub,
       bind_tc_ok,NGG_SpineRef.core.option.Option.ok_or,
       core.result.Result.Insts.CoreOpsTry.branch,hsplit]
+    change (do
+      let x0 ← Slice.index_usize tail 0#usize
+      let x1 ← Slice.index_usize tail 1#usize
+      let x2 ← Slice.index_usize tail 2#usize
+      let x3 ← Slice.index_usize tail 3#usize
+      resume decoded count ⟨x0,x1,x2,x3⟩) = ok (finish decoded count hints)
     rw [h0]
     simp only [bind_tc_ok]
     rw [h1]
@@ -72,10 +70,7 @@ theorem cut {R : Type} (s : Slice U8) (decoded : core.result.Result R NGGSpineEr
     simp only [bind_tc_ok]
     rw [h3]
     simp only [bind_tc_ok]
-    cases decoded <;> simp [finish,hints,
-      core.result.Result.Insts.CoreOpsTry.branch,
-      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
-      core.convert.FromSame] <;> split_ifs <;> simp_all
+    exact resume_eq decoded count hints
   · simpa only [hv'] using hbval
   · have hp := List.take_append_drop n.val s.val
     rw [← hbval, ← htval, ht] at hp

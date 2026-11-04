@@ -3,6 +3,8 @@ from pathlib import Path
 import json,sys,subprocess,difflib,re,hashlib
 E=Path(__file__).resolve().parent;mode=sys.argv[1];assert mode in ['positive','argument','reply','error','allocation','account']
 accepted=len(sys.argv)>3 and sys.argv[3]=='accepted'
+error_case=sys.argv[4] if len(sys.argv)>4 else None
+string_control=sys.argv[5] if len(sys.argv)>5 else 'replace'
 family=sys.argv[2] if len(sys.argv)>2 else 'all'
 assert family in ['all','place','accounts','hints','errors','profile','release','program','place324','errors324','reject','kind'] or family.startswith('field:')
 rev='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387';read=lambda p:subprocess.check_output(['git','show',rev+':'+p],text=True)
@@ -82,7 +84,7 @@ if family=='reject':
  let raw:[u8;324]=kani::any();let len:usize=kani::any();kani::assume(len<=324);
  let error=ProgramError::from(kani::any::<u64>());let mut calls=0u8;
  let mut result=prefix(&[],&raw[..len],|arg|{calls+=1;assert!(arg.as_ptr()==raw.as_ptr()&&arg.len()==len-4);Err(error.clone())});
- if NEGATE {result=Err(ProgramError::InvalidSeeds);}
+ if NEGATE && len>=4 {result=Err(ProgramError::InvalidSeeds);}
  if len<4{assert!(calls==0&&matches!(result,Err(ProgramError::InvalidInstructionData)));}
  else{assert!(calls==1&&matches!(result,Err(ref e) if *e==error));}
 }
@@ -102,12 +104,25 @@ if mode=='reply' and family.startswith('field:'):
  control='if let Ok((ref mut r,_,_,_,_))=result{match r.public{'+','.join(arms)+',_=>{}}}'
 if mode=='reply' and family=='kind':
  control='if let Ok((ref mut r,_,_,_,_))=result{r.public=match r.public{PoolV1PairForestTerminalPaymentV1::PrivateTransfer(_)=>PoolV1PairForestTerminalPaymentV1::Withdrawal(any_PoolV1WithdrawalPublicV1()),_=>PoolV1PairForestTerminalPaymentV1::PrivateTransfer(any_PoolV1PrivateTransferPublicV1())};}'
+if family=='reject' and error_case:
+ variants=['Custom','InvalidArgument','InvalidInstructionData','InvalidAccountData','AccountDataTooSmall','InsufficientFunds','IncorrectProgramId','MissingRequiredSignature','AccountAlreadyInitialized','UninitializedAccount','NotEnoughAccountKeys','AccountBorrowFailed','MaxSeedLengthExceeded','InvalidSeeds','BorshIoError','AccountNotRentExempt','UnsupportedSysvar','IllegalOwner','MaxAccountsDataAllocationsExceeded','InvalidRealloc','MaxInstructionTraceLengthExceeded','BuiltinProgramsMustConsumeComputeUnits','InvalidAccountOwner','ArithmeticOverflow','Immutable','IncorrectAuthority']
+ assert error_case in variants
+ value='ProgramError::Custom(kani::any::<u32>())' if error_case=='Custom' else 'ProgramError::BorshIoError(alloc::string::String::from("NGG"))' if error_case=='BorshIoError' else 'ProgramError::'+error_case
+ s=s.replace('ProgramError::from(kani::any::<u64>())',value)
+ if mode=='error' and error_case=='InvalidSeeds':s=s.replace('result=Err(ProgramError::InvalidSeeds);','result=Err(ProgramError::InvalidArgument);')
+ if error_case=='BorshIoError':
+  s=s.replace('if true && len>=4 {result=Err(ProgramError::InvalidSeeds);}','if len>=4 {if let Err(ProgramError::BorshIoError(ref mut msg))=result{msg.replace_range(0..1,"X");}}')
+  s=s.replace('assert!(calls==1&&matches!(result,Err(ref e) if *e==error));','assert!(calls==1);let j:usize=kani::any();kani::assume(j<3);match result{Err(ProgramError::BorshIoError(msg))=>{assert!(msg.len()==3&&msg.as_bytes()[j]==b"NGG"[j]);},_=>panic!("error variant changed")};')
+if family=='reject' and error_case=='BorshIoError' and mode=='error' and string_control=='compare':
+ s=s.replace('if len>=4 {if let Err(ProgramError::BorshIoError(ref mut msg))=result{msg.replace_range(0..1,"X");}}','')
+ s=s.replace('msg.as_bytes()[j]==b"NGG"[j]','msg.as_bytes()[j]==(b"NGG"[j]^1)')
 if mode=='allocation':
  s=s.replace(' CORRUPT',' let retained=result.as_ref().ok().map(|(r,_,_,_,_)|Box::new(**r));\n if let (Ok((r,_,_,_,_)),Some(other))=(&mut result,retained){let original=core::mem::replace(r,other);assert!(!core::ptr::eq(r.as_ref(),original.as_ref()));core::mem::forget(original);}')
 else:s=s.replace('CORRUPT',control)
+s='\n'.join(line.rstrip() for line in s.splitlines())+'\n'
 patch=''
 for p in ['programs/aspis-pool/src/pair_forest.rs','programs/aspis-pool/src/lib.rs']:
  f=read(p);hook=f+'\n#[cfg(kani)]\n#[path="NGG_DecodeCut.rs"]\nmod NGG_DecodeCut;\n' if p.endswith('pair_forest.rs') else '#![cfg_attr(kani, feature(allocator_api))]\n'+f+'\n#[cfg(kani)]\nextern crate alloc;\n#[cfg(kani)]\n#[path="../../../KMX_stubs.rs"]\npub mod NFO_KMX;\n'
  patch+=''.join(difflib.unified_diff(f.splitlines(True),hook.splitlines(True),fromfile='a/'+p,tofile='b/'+p))
 p='programs/aspis-pool/src/NGG_DecodeCut.rs';patch+='--- /dev/null\n+++ b/'+p+'\n@@ -0,0 +1,'+str(len(s.splitlines()))+' @@\n'+''.join('+'+l+'\n' for l in s.splitlines())
-(E/'NGG_native.patch').write_text(patch);(E/'NGG_CURRENT.json').write_text(json.dumps(dict(kind='decode-cut',mode=mode,family=family,accepted_only=accepted,source=s,source_span_sha256=hashlib.sha256(src[a:b].encode()).hexdigest(),adaptation='first process cut; sole decoder call replaced by local closure, exact full typed Result; terminal continuation returns named cut values',domain='len<=324, account count<=3; native production decoder domains and subsequent master/checkpoint/lane admission OPEN',modifies=[]),indent=1)+'\n')
+(E/'NGG_native.patch').write_text(patch);(E/'NGG_CURRENT.json').write_text(json.dumps(dict(kind='decode-cut',mode=mode,family=family,accepted_only=accepted,error_case=error_case,string_control=string_control,source=s,source_span_sha256=hashlib.sha256(src[a:b].encode()).hexdigest(),adaptation='first process cut; sole decoder call replaced by local closure, exact full typed Result; terminal continuation returns named cut values',domain='len<=324, account count<=3; native production decoder domains and subsequent master/checkpoint/lane admission OPEN',modifies=[]),indent=1)+'\n')

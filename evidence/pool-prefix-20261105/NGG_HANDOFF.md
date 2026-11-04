@@ -9,3 +9,5 @@ Current stage: controlled metadata helper observations and emitted laws are avai
 The coded ProgramError oracle is incomplete for BorshIoError(String). Accepted-only windows are explicitly restricted, never complete caller certificates. Full native master/checkpoint/lane/marker/custody domains and selected CPI account/request association remain OPEN. No association theorem or new composed row exists.
 
 Native field-window checks are running serially with fresh admission; continue independent Lean source/audit preparation. No shipped source, keys, sibling worktrees or infrastructure changed. Cache is retained. Nothing pushed.
+
+Current checkpoint: {"extract": 2, "kani": 96, "lean": 43}. Generic decode cut B041, accepted-length B042, layout model B028..032 and bounds B043 compile with standard summary axioms. Accepted request windows K026..060 and error case splits are partial native inputs, not complete production certificates. The full runtime CPI transport proposal is ADDED-PENDING-LEAD and unused. Final combined import/raw audit/whole-environment scan are still pending. No composed row closed.

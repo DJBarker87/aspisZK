@@ -39,6 +39,7 @@ if accepted:
  s=s.replace('let child:ProgramResult=if kani::any(){Ok(())}else{Err(ProgramError::from(kani::any::<u64>()))};','let child:ProgramResult=Ok(());')
  s=s.replace('kani::assume(actual_len<=18);','kani::assume(actual_len==expected);')
 s=s.replace('CORRUPT','if let Ok(ref mut l)=actual{l.registry_start^=1;}' if mode=='index' else 'if let Ok(ref mut l)=actual{l.page=match page{PairForestSpendPageV1::Genesis=>PairForestSpendPageV1::SamePage(header),_=>PairForestSpendPageV1::Genesis};}' if mode=='page' else '')
+s='\n'.join(line.rstrip() for line in s.splitlines())+'\n'
 patch=''
 for p in ['programs/aspis-pool/src/pair_forest.rs','programs/aspis-pool/src/lib.rs']:
  f=read(p);hook=f+'\n#[cfg(kani)]\n#[path="NGG_Layout.rs"]\nmod NGG_Layout;\n' if p.endswith('pair_forest.rs') else '#![cfg_attr(kani, feature(allocator_api))]\n'+f+'\n#[cfg(kani)]\nextern crate alloc;\n#[cfg(kani)]\n#[path="../../../KMX_stubs.rs"]\npub mod NFO_KMX;\n'
