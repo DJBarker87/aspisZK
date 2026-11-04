@@ -423,3 +423,116 @@ fn NFB_array_tx1(){NFB_array_case::<10,50>()}
 #[kani::proof] #[kani::unwind(7)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NFB_array_tx2(){NFB_array_case::<12,60>()}
+
+// Deployed call-site arithmetic, selector represents the two frozen guarded sites.
+#[kani::proof]
+fn NFB_deployed_header(){
+ let second:bool=kani::any();let start=if second{10usize}else{0};let end=if second{22usize}else{10};
+ let mut count=end-start;
+ #[cfg(NET_bad_reply)]{count^=1;}
+ assert_eq!(count,if second{12}else{10});assert_eq!(5*count,if second{60}else{50});
+ assert!(start<=end && end<=22);
+}
+fn NFB_array_finish_case(){
+ let raw:[u32;5]=kani::any();
+ let mut data=[core::mem::MaybeUninit::new(M31(raw[0])),core::mem::MaybeUninit::new(M31(raw[1])),core::mem::MaybeUninit::new(M31(raw[2])),core::mem::MaybeUninit::new(M31(raw[3])),core::mem::MaybeUninit::new(M31(raw[4]))];
+ let j:usize=kani::any();kani::assume(j<5);
+ #[cfg(NET_bad_argument)]{unsafe{data[j].assume_init_mut().0^=1;}}
+ let mut out=unsafe{core::mem::MaybeUninit::array_assume_init(data)};
+ #[cfg(NET_bad_reply)]{out[j].0^=1;}
+ assert_eq!(out[j].0,raw[j]);
+}
+#[kani::proof] #[kani::unwind(7)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NFB_array_finish(){NFB_array_finish_case()}
+
+fn NFB_error_case<const N:usize,const M:usize>(){
+ let raw:[u32;22]=kani::any();let queries=raw;let j:usize=kani::any();kani::assume(j<22);
+ let n:usize=kani::any();kani::assume(n<=N);
+ let mut flat:Vec<M31>=Vec::with_capacity(M);let mut lines:Vec<M31>=Vec::with_capacity(N);
+ let fp=flat.as_mut_ptr();let lp=lines.as_mut_ptr();
+ if 0<5*n{unsafe{fp.add(0).write(M31(kani::any()));}}
+ if 1<5*n{unsafe{fp.add(1).write(M31(kani::any()));}}
+ if 2<5*n{unsafe{fp.add(2).write(M31(kani::any()));}}
+ if 3<5*n{unsafe{fp.add(3).write(M31(kani::any()));}}
+ if 4<5*n{unsafe{fp.add(4).write(M31(kani::any()));}}
+ if 5<5*n{unsafe{fp.add(5).write(M31(kani::any()));}}
+ if 6<5*n{unsafe{fp.add(6).write(M31(kani::any()));}}
+ if 7<5*n{unsafe{fp.add(7).write(M31(kani::any()));}}
+ if 8<5*n{unsafe{fp.add(8).write(M31(kani::any()));}}
+ if 9<5*n{unsafe{fp.add(9).write(M31(kani::any()));}}
+ if 10<5*n{unsafe{fp.add(10).write(M31(kani::any()));}}
+ if 11<5*n{unsafe{fp.add(11).write(M31(kani::any()));}}
+ if 12<5*n{unsafe{fp.add(12).write(M31(kani::any()));}}
+ if 13<5*n{unsafe{fp.add(13).write(M31(kani::any()));}}
+ if 14<5*n{unsafe{fp.add(14).write(M31(kani::any()));}}
+ if 15<5*n{unsafe{fp.add(15).write(M31(kani::any()));}}
+ if 16<5*n{unsafe{fp.add(16).write(M31(kani::any()));}}
+ if 17<5*n{unsafe{fp.add(17).write(M31(kani::any()));}}
+ if 18<5*n{unsafe{fp.add(18).write(M31(kani::any()));}}
+ if 19<5*n{unsafe{fp.add(19).write(M31(kani::any()));}}
+ if 20<5*n{unsafe{fp.add(20).write(M31(kani::any()));}}
+ if 21<5*n{unsafe{fp.add(21).write(M31(kani::any()));}}
+ if 22<5*n{unsafe{fp.add(22).write(M31(kani::any()));}}
+ if 23<5*n{unsafe{fp.add(23).write(M31(kani::any()));}}
+ if 24<5*n{unsafe{fp.add(24).write(M31(kani::any()));}}
+ if 25<5*n{unsafe{fp.add(25).write(M31(kani::any()));}}
+ if 26<5*n{unsafe{fp.add(26).write(M31(kani::any()));}}
+ if 27<5*n{unsafe{fp.add(27).write(M31(kani::any()));}}
+ if 28<5*n{unsafe{fp.add(28).write(M31(kani::any()));}}
+ if 29<5*n{unsafe{fp.add(29).write(M31(kani::any()));}}
+ if 30<5*n{unsafe{fp.add(30).write(M31(kani::any()));}}
+ if 31<5*n{unsafe{fp.add(31).write(M31(kani::any()));}}
+ if 32<5*n{unsafe{fp.add(32).write(M31(kani::any()));}}
+ if 33<5*n{unsafe{fp.add(33).write(M31(kani::any()));}}
+ if 34<5*n{unsafe{fp.add(34).write(M31(kani::any()));}}
+ if 35<5*n{unsafe{fp.add(35).write(M31(kani::any()));}}
+ if 36<5*n{unsafe{fp.add(36).write(M31(kani::any()));}}
+ if 37<5*n{unsafe{fp.add(37).write(M31(kani::any()));}}
+ if 38<5*n{unsafe{fp.add(38).write(M31(kani::any()));}}
+ if 39<5*n{unsafe{fp.add(39).write(M31(kani::any()));}}
+ if 40<5*n{unsafe{fp.add(40).write(M31(kani::any()));}}
+ if 41<5*n{unsafe{fp.add(41).write(M31(kani::any()));}}
+ if 42<5*n{unsafe{fp.add(42).write(M31(kani::any()));}}
+ if 43<5*n{unsafe{fp.add(43).write(M31(kani::any()));}}
+ if 44<5*n{unsafe{fp.add(44).write(M31(kani::any()));}}
+ if 45<5*n{unsafe{fp.add(45).write(M31(kani::any()));}}
+ if 46<5*n{unsafe{fp.add(46).write(M31(kani::any()));}}
+ if 47<5*n{unsafe{fp.add(47).write(M31(kani::any()));}}
+ if 48<5*n{unsafe{fp.add(48).write(M31(kani::any()));}}
+ if 49<5*n{unsafe{fp.add(49).write(M31(kani::any()));}}
+ if 50<5*n{unsafe{fp.add(50).write(M31(kani::any()));}}
+ if 51<5*n{unsafe{fp.add(51).write(M31(kani::any()));}}
+ if 52<5*n{unsafe{fp.add(52).write(M31(kani::any()));}}
+ if 53<5*n{unsafe{fp.add(53).write(M31(kani::any()));}}
+ if 54<5*n{unsafe{fp.add(54).write(M31(kani::any()));}}
+ if 55<5*n{unsafe{fp.add(55).write(M31(kani::any()));}}
+ if 56<5*n{unsafe{fp.add(56).write(M31(kani::any()));}}
+ if 57<5*n{unsafe{fp.add(57).write(M31(kani::any()));}}
+ if 58<5*n{unsafe{fp.add(58).write(M31(kani::any()));}}
+ if 59<5*n{unsafe{fp.add(59).write(M31(kani::any()));}}
+ if 0<n{unsafe{lp.add(0).write(M31(kani::any()));}}
+ if 1<n{unsafe{lp.add(1).write(M31(kani::any()));}}
+ if 2<n{unsafe{lp.add(2).write(M31(kani::any()));}}
+ if 3<n{unsafe{lp.add(3).write(M31(kani::any()));}}
+ if 4<n{unsafe{lp.add(4).write(M31(kani::any()));}}
+ if 5<n{unsafe{lp.add(5).write(M31(kani::any()));}}
+ if 6<n{unsafe{lp.add(6).write(M31(kani::any()));}}
+ if 7<n{unsafe{lp.add(7).write(M31(kani::any()));}}
+ if 8<n{unsafe{lp.add(8).write(M31(kani::any()));}}
+ if 9<n{unsafe{lp.add(9).write(M31(kani::any()));}}
+ if 10<n{unsafe{lp.add(10).write(M31(kani::any()));}}
+ if 11<n{unsafe{lp.add(11).write(M31(kani::any()));}}
+ unsafe{flat.set_len(5*n);lines.set_len(n);}
+ let protected=queries.as_ptr();drop(flat);drop(lines);let mut reply:Result<(),Error>=Err(Error::Query);
+ #[cfg(NET_bad_reply)]{reply=Ok(());}
+ let mut observed=queries[j];
+ #[cfg(NET_bad_frame)]{observed^=1;}
+ assert!(matches!(reply,Err(Error::Query)));assert_eq!(observed,raw[j]);assert_eq!(queries.as_ptr(),protected);
+}
+#[kani::proof] #[kani::unwind(2)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NFB_error_tx1(){NFB_error_case::<10,50>()}
+#[kani::proof] #[kani::unwind(2)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NFB_error_tx2(){NFB_error_case::<12,60>()}

@@ -1,0 +1,56 @@
+NFB_ReverseTrace.lean:15:10: error: Application type mismatch: The argument
+  n
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.11
+of sort `Type (?u.11 + 1)` in the application
+  @InitialSeg n
+NFB_ReverseTrace.lean:15:13: error(lean.unknownIdentifier): Unknown identifier `nverse.length`
+NFB_ReverseTrace.lean:28:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  e ≥ 0
+  e - f ≥ 0
+where
+ e := ↑n
+ f := ↑inverse.length
+NFB_ReverseTrace.lean:32:4: error: unsolved goals
+case pos
+flat prefixes : List U32
+bound : InitialSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+n : ℕ
+ih :
+  ∀ (inverse : List U32) (suffix : U32),
+    NEW_GeometryReverse.Trace flat prefixes n inverse suffix (Port4C_OwnedInverse.model flat prefixes n inverse suffix)
+      (NEW_GeometryReverse.suffixAfter flat n suffix) (NEW_GeometryReverse.callLog flat prefixes n suffix)
+inverse : List U32
+suffix : U32
+hj : n < inverse.length
+⊢ (inverse.set n (wordMul suffix (cell prefixes n)))[n]? = some (wordMul suffix (cell prefixes n))
+NFB_ReverseTrace.lean:35:10: error: Function expected at
+  ih ?m.81 ?m.82
+but this term has type
+  NEW_GeometryReverse.Trace flat prefixes n ?m.81 ?m.82 (Port4C_OwnedInverse.model flat prefixes n ?m.81 ?m.82)
+    (NEW_GeometryReverse.suffixAfter flat n ?m.82) (NEW_GeometryReverse.callLog flat prefixes n ?m.82)
+
+Note: Expected a function because this term is being applied to the argument
+  (by simpa only [List.length_set] using (show n ≤i nverse.length by omega))
+NFB_ReverseTrace.lean:54:13: error: unsolved goals
+case succ
+flat prefixes : List U32
+n : ℕ
+ih :
+  ∀ (inverse : List U32) (suffix : U32) (heap : Heap),
+    heap Place.inverse.id = some inverse →
+      run (writes flat prefixes n suffix) heap Place.inverse.id =
+        some (Port4C_OwnedInverse.model flat prefixes n inverse suffix)
+inverse : List U32
+suffix : U32
+heap : Heap
+selected : heap Place.inverse.id = some inverse
+⊢ some (inverse.set n (wordMul suffix (cell prefixes n))) =
+    some (inverse.set n (wordMul suffix (prefixes[n]?.getD 0#u32)))
+'NFB_ReverseTrace.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NFB_ReverseTrace.owned' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFB_ReverseTrace.payload' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

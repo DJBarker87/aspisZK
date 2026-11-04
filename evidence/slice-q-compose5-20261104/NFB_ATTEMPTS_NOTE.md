@@ -1,0 +1,1 @@
+L050 first preflight refused stale NFB_TraceBounds after failed L049; no host launch or budget charge. This demonstrates the strengthened freshness gate. L050 reused only because no attempt configuration or host directory was created.
