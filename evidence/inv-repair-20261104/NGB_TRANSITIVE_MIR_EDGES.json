@@ -1,0 +1,337 @@
+{
+ "inputs": [
+  {
+   "path": "evidence/inv-defects-20261104/LEAD_B006/aspis_r1_cost_probe_program.mir.xz",
+   "sha256": "f93b0dfd49aa4a67cf2883c299ec72527ca7f33f0b5040f4ae4297121db77163",
+   "uncompressed_sha256": "c9bebf9eb6f708bc4c4d9de7533d578eddc536b1152fac8404bd1bcb2ac01cff"
+  },
+  {
+   "path": "evidence/inv-defects-20261104/NFZ_B005_aspis_r1_cost_probe-2af8d844c3814c6b.mir.xz",
+   "sha256": "96ca62fe802529171ac002475277e13284b5ada2b4c7b072df7928dd4b6e78ec",
+   "uncompressed_sha256": "96da205b2db9889e5a48480137f7fd9df4fd5131b77882c2e0f14a248679e370"
+  },
+  {
+   "path": "evidence/inv-defects-20261104/NFZ_aspis_core.mir.xz",
+   "sha256": "f2bf1e5deb761882513c69c7c0df866e6697645f2b22fe69efa1f8e992af71df",
+   "uncompressed_sha256": "4bbe499a0f590cc42c57d90ee5154aa38dae7c40769fa4a941106dfe9259cd87"
+  }
+ ],
+ "edges": [
+  {
+   "id": "NGB_T0001",
+   "caller": "crates/aspis-core/src/r0/scalar.rs::CM31::from_m31",
+   "callee": "crates/aspis-core/src/r0/scalar.rs::M31::from_m31",
+   "caller_header": "fn scalar::<impl at crates/aspis-core/src/r0/scalar.rs:56:1: 56:24>::from_m31(_1: M31) -> CM31 {",
+   "mir_path": "evidence/inv-defects-20261104/NFZ_aspis_core.mir.xz",
+   "mir_line": 112863,
+   "mir_text": "_2 = <M31 as CodeField>::from_m31(copy _1) -> [return: bb1, unwind continue];",
+   "source_sites": [
+    {
+     "line": 59,
+     "expression": "CM31::from_m31",
+     "text": "CM31::from_m31(<M31 as CodeField>::from_m31(value))"
+    },
+    {
+     "line": 59,
+     "expression": "<M31 as CodeField>::from_m31",
+     "text": "<M31 as CodeField>::from_m31(value)"
+    }
+   ],
+   "source_check": "AGREES",
+   "features": [
+    "pool-adapter",
+    "private-leaf-salts"
+   ],
+   "prover": false
+  },
+  {
+   "id": "NGB_T0002",
+   "caller": "crates/aspis-core/src/r0/scalar.rs::CM31::from_m31",
+   "callee": "crates/aspis-core/src/field.rs::CM31::from_m31",
+   "caller_header": "fn scalar::<impl at crates/aspis-core/src/r0/scalar.rs:56:1: 56:24>::from_m31(_1: M31) -> CM31 {",
+   "mir_path": "evidence/inv-defects-20261104/NFZ_aspis_core.mir.xz",
+   "mir_line": 112867,
+   "mir_text": "_0 = CM31::from_m31(move _2) -> [return: bb2, unwind continue];",
+   "source_sites": [
+    {
+     "line": 59,
+     "expression": "CM31::from_m31",
+     "text": "CM31::from_m31(<M31 as CodeField>::from_m31(value))"
+    },
+    {
+     "line": 59,
+     "expression": "<M31 as CodeField>::from_m31",
+     "text": "<M31 as CodeField>::from_m31(value)"
+    }
+   ],
+   "source_check": "AGREES",
+   "features": [
+    "pool-adapter",
+    "private-leaf-salts"
+   ],
+   "prover": false
+  },
+  {
+   "id": "NGB_T0003",
+   "caller": "crates/aspis-core/src/r0/scalar.rs::QM31::from_m31",
+   "callee": "crates/aspis-core/src/r0/scalar.rs::CM31::from_m31",
+   "caller_header": "fn scalar::<impl at crates/aspis-core/src/r0/scalar.rs:70:1: 70:24>::from_m31(_1: M31) -> QM31 {",
+   "mir_path": "evidence/inv-defects-20261104/NFZ_aspis_core.mir.xz",
+   "mir_line": 113054,
+   "mir_text": "_2 = <CM31 as CodeField>::from_m31(copy _1) -> [return: bb1, unwind continue];",
+   "source_sites": [
+    {
+     "line": 73,
+     "expression": "<CM31 as CodeField>::from_m31",
+     "text": "<CM31 as CodeField>::from_m31(value)"
+    }
+   ],
+   "source_check": "AGREES",
+   "features": [
+    "pool-adapter",
+    "private-leaf-salts"
+   ],
+   "prover": false
+  },
+  {
+   "id": "NGB_T0004",
+   "caller": "crates/aspis-core/src/r0/scalar.rs::QM31::from_m31",
+   "callee": "crates/aspis-core/src/field.rs::QM31::from_cm31",
+   "caller_header": "fn scalar::<impl at crates/aspis-core/src/r0/scalar.rs:70:1: 70:24>::from_m31(_1: M31) -> QM31 {",
+   "mir_path": "evidence/inv-defects-20261104/NFZ_aspis_core.mir.xz",
+   "mir_line": 113058,
+   "mir_text": "_0 = QM31::from_cm31(move _2) -> [return: bb2, unwind continue];",
+   "source_sites": [
+    {
+     "line": 73,
+     "expression": "QM31::from_cm31",
+     "text": "QM31::from_cm31(<CM31 as CodeField>::from_m31(value))"
+    }
+   ],
+   "source_check": "AGREES",
+   "features": [
+    "pool-adapter",
+    "private-leaf-salts"
+   ],
+   "prover": false
+  },
+  {
+   "id": "NGB_T0005",
+   "caller": "crates/aspis-core/src/transcript.rs::circle_fallback_point",
+   "callee": "crates/aspis-core/src/circle.rs::secure_ood_circle_point_from_parameter",
+   "caller_header": "fn circle_fallback_point(_1: usize) -> SecureCirclePoint {",
+   "mir_path": "evidence/inv-defects-20261104/NFZ_aspis_core.mir.xz",
+   "mir_line": 198568,
+   "mir_text": "_7 = secure_ood_circle_point_from_parameter(copy _2) -> [return: bb3, unwind continue];",
+   "source_sites": [
+    {
+     "line": 288,
+     "expression": "secure_ood_circle_point_from_parameter",
+     "text": "secure_ood_circle_point_from_parameter(parameter)"
+    }
+   ],
+   "source_check": "AGREES",
+   "features": [
+    "pool-adapter",
+    "private-leaf-salts"
+   ],
+   "prover": false
+  },
+  {
+   "id": "NGB_T0006",
+   "caller": "crates/aspis-core/src/circle.rs::secure_ood_circle_point_from_parameter",
+   "callee": "crates/aspis-core/src/circle.rs::secure_circle_point_from_parameter",
+   "caller_header": "fn secure_ood_circle_point_from_parameter(_1: QM31) -> Result<SecureCirclePoint, CirclePointError> {",
+   "mir_path": "evidence/inv-defects-20261104/NFZ_aspis_core.mir.xz",
+   "mir_line": 306,
+   "mir_text": "_3 = secure_circle_point_from_parameter(copy _1) -> [return: bb1, unwind continue];",
+   "source_sites": [
+    {
+     "line": 60,
+     "expression": "secure_circle_point_from_parameter",
+     "text": "secure_circle_point_from_parameter(parameter)"
+    }
+   ],
+   "source_check": "AGREES",
+   "features": [
+    "pool-adapter",
+    "private-leaf-salts"
+   ],
+   "prover": false
+  },
+  {
+   "id": "NGB_T0007",
+   "caller": "crates/aspis-core/src/circle.rs::secure_circle_point_from_parameter",
+   "callee": "crates/aspis-core/src/field.rs::QM31::square",
+   "caller_header": "fn secure_circle_point_from_parameter(_1: QM31) -> Result<SecureCirclePoint, CirclePointError> {",
+   "mir_path": "evidence/inv-defects-20261104/NFZ_aspis_core.mir.xz",
+   "mir_line": 217,
+   "mir_text": "_2 = QM31::square(copy _1) -> [return: bb1, unwind continue];",
+   "source_sites": [
+    {
+     "line": 37,
+     "expression": "parameter.square",
+     "text": "parameter.square()"
+    }
+   ],
+   "source_check": "AGREES",
+   "features": [
+    "pool-adapter",
+    "private-leaf-salts"
+   ],
+   "prover": false
+  },
+  {
+   "id": "NGB_T0008",
+   "caller": "crates/aspis-core/src/circle.rs::secure_circle_point_from_parameter",
+   "callee": "crates/aspis-core/src/field.rs::QM31::add",
+   "caller_header": "fn secure_circle_point_from_parameter(_1: QM31) -> Result<SecureCirclePoint, CirclePointError> {",
+   "mir_path": "evidence/inv-defects-20261104/NFZ_aspis_core.mir.xz",
+   "mir_line": 221,
+   "mir_text": "_6 = QM31::add(const field::QM31::ONE, copy _2) -> [return: bb2, unwind continue];",
+   "source_sites": [
+    {
+     "line": 38,
+     "expression": "QM31::ONE\n        .add",
+     "text": "QM31::ONE\n        .add(square)"
+    },
+    {
+     "line": 44,
+     "expression": "parameter.add",
+     "text": "parameter.add(parameter)"
+    }
+   ],
+   "source_check": "AGREES",
+   "features": [
+    "pool-adapter",
+    "private-leaf-salts"
+   ],
+   "prover": false
+  },
+  {
+   "id": "NGB_T0009",
+   "caller": "crates/aspis-core/src/circle.rs::secure_circle_point_from_parameter",
+   "callee": "crates/aspis-core/src/field.rs::QM31::try_inv",
+   "caller_header": "fn secure_circle_point_from_parameter(_1: QM31) -> Result<SecureCirclePoint, CirclePointError> {",
+   "mir_path": "evidence/inv-defects-20261104/NFZ_aspis_core.mir.xz",
+   "mir_line": 225,
+   "mir_text": "_5 = QM31::try_inv(move _6) -> [return: bb3, unwind continue];",
+   "source_sites": [
+    {
+     "line": 38,
+     "expression": "QM31::ONE\n        .add(square)\n        .try_inv",
+     "text": "QM31::ONE\n        .add(square)\n        .try_inv()"
+    }
+   ],
+   "source_check": "AGREES",
+   "features": [
+    "pool-adapter",
+    "private-leaf-salts"
+   ],
+   "prover": false
+  },
+  {
+   "id": "NGB_T0010",
+   "caller": "crates/aspis-core/src/circle.rs::secure_circle_point_from_parameter",
+   "callee": "crates/aspis-core/src/field.rs::QM31::sub",
+   "caller_header": "fn secure_circle_point_from_parameter(_1: QM31) -> Result<SecureCirclePoint, CirclePointError> {",
+   "mir_path": "evidence/inv-defects-20261104/NFZ_aspis_core.mir.xz",
+   "mir_line": 248,
+   "mir_text": "_13 = QM31::sub(const field::QM31::ONE, copy _2) -> [return: bb9, unwind continue];",
+   "source_sites": [
+    {
+     "line": 43,
+     "expression": "QM31::ONE.sub",
+     "text": "QM31::ONE.sub(square)"
+    }
+   ],
+   "source_check": "AGREES",
+   "features": [
+    "pool-adapter",
+    "private-leaf-salts"
+   ],
+   "prover": false
+  },
+  {
+   "id": "NGB_T0011",
+   "caller": "crates/aspis-core/src/circle.rs::secure_circle_point_from_parameter",
+   "callee": "crates/aspis-core/src/field.rs::QM31::mul",
+   "caller_header": "fn secure_circle_point_from_parameter(_1: QM31) -> Result<SecureCirclePoint, CirclePointError> {",
+   "mir_path": "evidence/inv-defects-20261104/NFZ_aspis_core.mir.xz",
+   "mir_line": 257,
+   "mir_text": "_12 = QM31::mul(move _13, copy _10) -> [return: bb10, unwind continue];",
+   "source_sites": [
+    {
+     "line": 43,
+     "expression": "QM31::ONE.sub(square).mul",
+     "text": "QM31::ONE.sub(square).mul(inverse_denominator)"
+    },
+    {
+     "line": 44,
+     "expression": "parameter.add(parameter).mul",
+     "text": "parameter.add(parameter).mul(inverse_denominator)"
+    }
+   ],
+   "source_check": "AGREES",
+   "features": [
+    "pool-adapter",
+    "private-leaf-salts"
+   ],
+   "prover": false
+  },
+  {
+   "id": "NGB_T0012",
+   "caller": "crates/aspis-core/src/circle.rs::secure_circle_point_from_parameter",
+   "callee": "crates/aspis-core/src/field.rs::QM31::add",
+   "caller_header": "fn secure_circle_point_from_parameter(_1: QM31) -> Result<SecureCirclePoint, CirclePointError> {",
+   "mir_path": "evidence/inv-defects-20261104/NFZ_aspis_core.mir.xz",
+   "mir_line": 261,
+   "mir_text": "_15 = QM31::add(copy _1, copy _1) -> [return: bb11, unwind continue];",
+   "source_sites": [
+    {
+     "line": 38,
+     "expression": "QM31::ONE\n        .add",
+     "text": "QM31::ONE\n        .add(square)"
+    },
+    {
+     "line": 44,
+     "expression": "parameter.add",
+     "text": "parameter.add(parameter)"
+    }
+   ],
+   "source_check": "AGREES",
+   "features": [
+    "pool-adapter",
+    "private-leaf-salts"
+   ],
+   "prover": false
+  },
+  {
+   "id": "NGB_T0013",
+   "caller": "crates/aspis-core/src/circle.rs::secure_circle_point_from_parameter",
+   "callee": "crates/aspis-core/src/field.rs::QM31::mul",
+   "caller_header": "fn secure_circle_point_from_parameter(_1: QM31) -> Result<SecureCirclePoint, CirclePointError> {",
+   "mir_path": "evidence/inv-defects-20261104/NFZ_aspis_core.mir.xz",
+   "mir_line": 265,
+   "mir_text": "_14 = QM31::mul(move _15, copy _10) -> [return: bb12, unwind continue];",
+   "source_sites": [
+    {
+     "line": 43,
+     "expression": "QM31::ONE.sub(square).mul",
+     "text": "QM31::ONE.sub(square).mul(inverse_denominator)"
+    },
+    {
+     "line": 44,
+     "expression": "parameter.add(parameter).mul",
+     "text": "parameter.add(parameter).mul(inverse_denominator)"
+    }
+   ],
+   "source_check": "AGREES",
+   "features": [
+    "pool-adapter",
+    "private-leaf-salts"
+   ],
+   "prover": false
+  }
+ ]
+}
