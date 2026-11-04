@@ -13,3 +13,5 @@ RuntimeMemcmp remain accepted trust rows; P6/D188 transport is reclassification.
 No security metric, privacy or two-transaction contract change.
 
 Replay stage: all 48 selected Pool modules compile, with standard-only printed axioms. 50 attempts: 48 successful, two excluded map_err name-resolution failures corrected by fully qualifying the emitted helper (existing NFY exact transport). Combined import/raw audit/fixtures/scan are PENDING. Seven unchanged NFV validators passed in private output sandbox. No consumer row is promoted.
+
+Combined audit stage PASS: 4,714 raw roots, standard axioms only; all eight fixtures pass in the SAME proof binary. Full scan:13,424 modules,689,457 declarations,24,433,563 references;0 dangling,0 incompatible owners,0 import mismatches;1,583 compatible cached replicas disclosed. No legacy conflicting owner loaded. 77/110 attempts used; explicit statement/owner association review and additive final delta remain pending.

@@ -1048,6 +1048,15 @@ Legacy GuardBody, PrepQM and Phase cannot coexist with canonical owners (NGJ_L02
 | Decoder map_err | AspisR1TerminalDecoder.core.result.Result.map_err | NFY_OwnerTransport.map_err_transport proves complete Result equality (including failure/divergence) to canonical installed helper, by rfl. Seven Pool copies require qualified emitted names; recorded before/after statements. |
 | Other admitted dependencies | Identical already-loaded module names | Same canonical constants in final environment, no duplicated shared owner or assumed transport. Exact object hashes are pinned per attempt. |
 
+The three exact conflicting declarations reached indirectly by the Pool closure
+were `AspisS2OwnedStage1.SdkReference.GuardBody.tacticSdk_finish_guard_write`,
+`AspisR1PublicPreparation.PreparedFromQmSourceBridge.PrepQM`, and
+`AspisR1PublicPreparation.verifier.Phase`. The exact two import paths and
+object pins for each remain in the immutable NGJ_CONFLICTS.json input. Legacy
+and canonical copies do not form a simultaneously loadable environment, so
+NGK does not claim an untested cross-environment definitional equality. Its
+canonical dependency replacement avoids that ill-formed join entirely.
+
 NGK_DECLARATION_USES.json enumerates every qualified direct token with exact
 before/after names. Unqualified uses are retained in full pinned bodies and
 resolved by the compiler; the full import closure is not shortened to lexical

@@ -13,6 +13,19 @@ def check_record(r):
  assert re.findall(r'^import ([\w.]+)',text,re.M)==r['imports_after']
  assert r['target_module']=='NGK_'+r['source_module']
 for r in x['files']:check_record(r)
+# Every final copied module must match a successful source snapshot; exclude
+# the two retained failed elaborations rather than trusting their axiom output.
+for record in x['files']:
+ found=False
+ for p in E.glob('NGK_L*/receipt.json'):
+  rc=J(p)
+  if rc['exit_status']!=0 or rc['module']!=record['target_module']:continue
+  snapshot=p.parent/'sources'/'NGK_generated'/(record['target_module']+'.lean')
+  if snapshot.is_file():found = snapshot.read_bytes()==(E/(record['target_module']+'.lean')).read_bytes()
+  else:
+   ref=J(Path(str(snapshot)+'.REFERENCE.json'));found=ref['sha256']==H((E/(record['target_module']+'.lean')).read_bytes())
+  if found:break
+ assert found,record['target_module']
 assert len(x['files'])==48
 mutations=[]
 for label,key in [('body','after_body'),('before','before_body'),('source','source_sha256'),('owner','target_module'),('hash','transformed_body_sha256')]:
