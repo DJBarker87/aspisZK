@@ -1,0 +1,83 @@
+import NFR_DigestForward
+set_option autoImplicit false
+noncomputable section
+namespace NFR_AfterstateForwardHelpers
+open Aeneas Aeneas.Std Result WP AspisR1TerminalDecoder
+open AspisR1.S2K AspisS6NativeAfterstateEncoderReuse AspisS6SourceCodec
+abbrev Afterstate := pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1
+abbrev Digest := Array U32 8#usize
+
+def encoded (a : Afterstate) : Slice U8 := (AfterstateEncoding.bytes a).to_slice
+
+theorem domain (a : Afterstate)
+    (valid : pool_v1.pair_terminal.validate_verified_afterstate a = ok (.Ok ())) :
+    NBD_DigestInduction.Canonical a.next_root ∧
+    ∀ i : Fin 20, NBD_DigestInduction.Canonical
+      (a.next_frontier.val[i.val]'(by have := a.next_frontier.property; scalar_tac)) := by
+  rw [NBH_Validators.afterstate] at valid
+  unfold NBH_Validators.afterResult at valid
+  split at valid
+  · cases valid
+  · split at valid
+    · rename_i h
+      exact ⟨h.1,fun i => h.2 i (by omega)⟩
+    · cases valid
+#print axioms domain
+
+theorem range {N : Usize} (bytes : Slice U8) (start stop : Usize)
+    (arr : Array U8 N) (ordered : start.val ≤ stop.val)
+    (bounded : stop.val ≤ bytes.val.length)
+    (same : List.slice start.val stop.val bytes.val = arr.val) :
+    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+      bytes {start:=start,«end»:=stop} = ok arr.to_slice := by
+  have spec : core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+      bytes {start:=start,«end»:=stop} ⦃ out => out=arr.to_slice ⦄ := by
+    unfold core.slice.index.Slice.index
+    step*
+    all_goals try scalar_tac
+    all_goals apply Subtype.ext
+    all_goals exact out_post1.trans same
+  obtain ⟨out,run,equal⟩ := WP.spec_imp_exists spec
+  exact run.trans (congrArg ok equal)
+#print axioms range
+
+theorem uniform_window {T : Type} (f : T → List U8) (n : Nat)
+    (width : ∀ x, (f x).length = n) (xs : List T)
+    (i : Nat) (bound : i < xs.length) :
+    ((xs.flatMap f).drop (n*i)).take n = f xs[i] := by
+  induction xs generalizing i with
+  | nil => simp at bound
+  | cons x xs ih =>
+    cases i with
+    | zero => simp [List.flatMap_cons,List.take_append,width]
+    | succ i =>
+      have small : i < xs.length := by simpa using bound
+      simpa [List.flatMap_cons,List.drop_append,width,Nat.mul_succ] using ih i small
+#print axioms uniform_window
+
+theorem digest_width (d : Digest) : (DigestContents.chunks d).length = 32 :=
+  PaymentContents.digest_chunks_length d
+#print axioms digest_width
+
+theorem root_window (a : Afterstate) :
+    List.slice 16 48 (encoded a).val = (DigestBytes.bytes a.next_root).val := by
+  change List.slice 16 48 (AfterstateEncoding.bytes a).val = _
+  rw [native_afterstate_contents,native_digest_bytes]
+  simp [prefix_bytes,List.slice,List.drop_append,List.take_append,digest_width,
+    header_bytes,pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC.property,
+    (core.num.U64.to_le_bytes a.next_pair_index).property]
+#print axioms root_window
+
+theorem frontier_window (a : Afterstate) (i : Nat) (bound : i < 20) :
+    List.slice (48+32*i) (80+32*i) (encoded a).val =
+      (DigestBytes.bytes
+        (a.next_frontier.val[i]'(by have := a.next_frontier.property; scalar_tac))).val := by
+  change List.slice _ _ (AfterstateEncoding.bytes a).val = _
+  rw [native_afterstate_contents,native_digest_bytes]
+  have small : i < a.next_frontier.val.length := by simpa only [a.next_frontier.property] using bound
+  simpa [prefix_bytes,List.slice,List.drop_append,List.take_append,digest_width,
+    header_bytes,pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC.property,
+    (core.num.U64.to_le_bytes a.next_pair_index).property] using
+    uniform_window DigestContents.chunks 32 digest_width a.next_frontier.val i small
+#print axioms frontier_window
+end NFR_AfterstateForwardHelpers

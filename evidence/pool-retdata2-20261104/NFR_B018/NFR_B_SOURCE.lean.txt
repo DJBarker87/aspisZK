@@ -1,0 +1,45 @@
+import NFR_AfterstateForwardHelpers
+set_option autoImplicit false
+noncomputable section
+namespace NFR_AfterstateForward16
+open Aeneas Aeneas.Std Result AspisR1TerminalDecoder
+open AspisR1.S2K AspisS6NativeAfterstateDecoderFactored NFR_AfterstateForwardHelpers
+theorem result (a : Afterstate)
+    (valid : pool_v1.pair_terminal.validate_verified_afterstate a = ok (.Ok ())) :
+    part_16 (encoded a) a.next_root (a.next_frontier.val[0]'(by have := a.next_frontier.property; scalar_tac)) (a.next_frontier.val[1]'(by have := a.next_frontier.property; scalar_tac)) (a.next_frontier.val[2]'(by have := a.next_frontier.property; scalar_tac)) (a.next_frontier.val[3]'(by have := a.next_frontier.property; scalar_tac)) (a.next_frontier.val[4]'(by have := a.next_frontier.property; scalar_tac)) (a.next_frontier.val[5]'(by have := a.next_frontier.property; scalar_tac)) (a.next_frontier.val[6]'(by have := a.next_frontier.property; scalar_tac)) (a.next_frontier.val[7]'(by have := a.next_frontier.property; scalar_tac)) (a.next_frontier.val[8]'(by have := a.next_frontier.property; scalar_tac)) (a.next_frontier.val[9]'(by have := a.next_frontier.property; scalar_tac)) (a.next_frontier.val[10]'(by have := a.next_frontier.property; scalar_tac)) (a.next_frontier.val[11]'(by have := a.next_frontier.property; scalar_tac)) (a.next_frontier.val[12]'(by have := a.next_frontier.property; scalar_tac)) (a.next_frontier.val[13]'(by have := a.next_frontier.property; scalar_tac)) (a.next_frontier.val[14]'(by have := a.next_frontier.property; scalar_tac)) (a.next_frontier.val[15]'(by have := a.next_frontier.property; scalar_tac)) = ok (.Ok a) := by
+  unfold part_16
+  rw [range (encoded a) 560#usize 592#usize (DigestBytes.bytes (a.next_frontier.val[16]'(by have := a.next_frontier.property; scalar_tac)))
+    (by decide) (by simp [encoded,Array.to_slice,(AfterstateEncoding.bytes a).property])
+    (frontier_window a 16 (by decide)),bind_tc_ok]
+  rw [AspisR1.JFt_ExactArray.source _ _ _ rfl,bind_tc_ok]
+  rw [NFR_DigestForward.roundtrip _ ((domain a valid).2 ⟨16,by decide⟩),bind_tc_ok]
+  simp only [core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
+  rw [range (encoded a) 592#usize 624#usize (DigestBytes.bytes (a.next_frontier.val[17]'(by have := a.next_frontier.property; scalar_tac)))
+    (by decide) (by simp [encoded,Array.to_slice,(AfterstateEncoding.bytes a).property])
+    (frontier_window a 17 (by decide)),bind_tc_ok]
+  rw [AspisR1.JFt_ExactArray.source _ _ _ rfl,bind_tc_ok]
+  rw [NFR_DigestForward.roundtrip _ ((domain a valid).2 ⟨17,by decide⟩),bind_tc_ok]
+  simp only [core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
+  rw [range (encoded a) 624#usize 656#usize (DigestBytes.bytes (a.next_frontier.val[18]'(by have := a.next_frontier.property; scalar_tac)))
+    (by decide) (by simp [encoded,Array.to_slice,(AfterstateEncoding.bytes a).property])
+    (frontier_window a 18 (by decide)),bind_tc_ok]
+  rw [AspisR1.JFt_ExactArray.source _ _ _ rfl,bind_tc_ok]
+  rw [NFR_DigestForward.roundtrip _ ((domain a valid).2 ⟨18,by decide⟩),bind_tc_ok]
+  simp only [core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
+  rw [range (encoded a) 656#usize 688#usize (DigestBytes.bytes (a.next_frontier.val[19]'(by have := a.next_frontier.property; scalar_tac)))
+    (by decide) (by simp [encoded,Array.to_slice,(AfterstateEncoding.bytes a).property])
+    (frontier_window a 19 (by decide)),bind_tc_ok]
+  rw [AspisR1.JFt_ExactArray.source _ _ _ rfl,bind_tc_ok]
+  rw [NFR_DigestForward.roundtrip _ ((domain a valid).2 ⟨19,by decide⟩),bind_tc_ok]
+  simp only [core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
+  rw [range (encoded a) 8#usize 16#usize (core.num.U64.to_le_bytes a.next_pair_index)
+    (by decide) (by simp [encoded,Array.to_slice,(AfterstateEncoding.bytes a).property])
+    (index_window a),bind_tc_ok]
+  rw [AspisR1.JFt_ExactArray.source _ _ _ rfl,bind_tc_ok]
+  simp only [lift,NFO_U64Roundtrip.from_to,bind_tc_ok,twenty_eta]
+  have rebuilt : ({next_pair_index:=a.next_pair_index,next_root:=a.next_root,
+    next_frontier:=a.next_frontier} : Afterstate) = a := by cases a; rfl
+  rw [rebuilt,valid]
+  rfl
+#print axioms result
+end NFR_AfterstateForward16
