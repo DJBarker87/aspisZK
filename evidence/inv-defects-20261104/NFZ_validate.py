@@ -1,51 +1,48 @@
-"""Validate the blocked result and reject mutations at the review boundary."""
-import pathlib,json,lzma,hashlib,importlib.util,sys,copy,collections
+"""Validate terminal part-2 blocked packet; passing is not edge-repair credit."""
+import pathlib,json,lzma,hashlib,importlib.util,sys,copy,base64,ast
 sys.dont_write_bytecode=True
 E=pathlib.Path(__file__).resolve().parent;R=E.parents[1]
-def J(n):return json.loads((E/n).read_text())
-def sha(b):return hashlib.sha256(b).hexdigest()
+J=lambda n:json.loads((E/n).read_text())
+sha=lambda b:hashlib.sha256(b).hexdigest()
 sp=importlib.util.spec_from_file_location('NFZ_inventory',E/'NFZ_inventory.py');inv=importlib.util.module_from_spec(sp);sp.loader.exec_module(inv)
-o=J('NFZ_OVERLAY.json');edgebytes=(E/'NFZ_EDGES.json').read_bytes();edges=json.loads(edgebytes)
+o=J('NFZ_OVERLAY.json');edgebytes=(E/'NFZ_EDGES.json').read_bytes()
 for k in ['producer','canonical_producer','slice_tool','baseline']:
  p=o[k];assert sha(inv.read(p['path']))==p['sha256'],k
 for p in o['inventory_inputs']:assert sha(inv.read(p['path']))==p['sha256']
-assert not edges and o['review_status']=='BLOCKED_MISSING_COMPILER_EVIDENCE'
-base=json.loads(lzma.open(R/o['baseline']['path']).read());admitted=json.loads(lzma.open(E/'NFZ_ADMITTED_LEDGER.json.xz').read())
-assert base==admitted==inv.apply(base,o,edgebytes)
-assert len(admitted['rows'])==587 and len({r['row'] for r in admitted['rows']})==587
+assert not json.loads(edgebytes) and o['review_status']=='BLOCKED_MISSING_COMPILER_EVIDENCE'
+base=json.loads(lzma.open(R/o['baseline']['path']).read());after=json.loads(lzma.open(E/'NFZ_ADMITTED_LEDGER.json.xz').read())
+assert after==base==inv.apply(base,o,edgebytes)
 assert J('NFZ_COVERAGE.json')['counts']==dict(total=587,covered=585,outside=2,D_functions=295,D_edges=448,D_rows=343)
-assert J('NFZ_LEDGER_DELTA.json')['before']==J('NFZ_LEDGER_DELTA.json')['after']==base['coverage']
-assert J('NFZ_INDEPENDENT_CHECK.json')['agrees'] is True and J('NFZ_INDEPENDENT_CHECK.json')['compiler_independent_check_satisfied'] is False
-raw=lzma.decompress((E/'NFZ_FROZEN_SOURCE.json.xz').read_bytes());assert sha(raw)==(E/'NFZ_FROZEN_SOURCE.json.sha256').read_text().strip();source=json.loads(raw);pins=J('NFZ_SOURCE_PINS.json')
-assert all(sha(t.encode())==pins['files'][p] for p,t in source.items())
-receipt=J('NFZ_B001/receipt.json');ad=J('NFZ_B001-admission.json')
-# Host recovery retained the reservation's raw JSON; the transport record
-# carries the reservation subprocess exit (ssh propagates it). Require both.
-transport=[json.loads(line) for line in (E/'NFZ_TRANSPORT.jsonl').read_text().splitlines()]
-assert transport[0]['exit']==0 and ad['allowed'] is True
-assert json.loads((E/'NFZ_B001-admission-0.log').read_text())==ad
-assert receipt['exit_status']==1 and receipt['limits']=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'} and int(receipt['swaps'])==0
-for p,h in receipt['source_hashes'].items():assert sha((E/'NFZ_B001/sources'/p).read_bytes())==h
-assert 'AssertionError' in (E/'NFZ_B001/stdout.log').read_text() and not J('NFZ_TOOLS_AND_LOCK.json')['target_created']
-assert J('NFZ_TOOLS_AND_LOCK.json')['frozen_lock_after']==pins['files']['Cargo.lock']
-assert J('NFZ_PREFLIGHT_DIAGNOSIS.json')['metadata_projection_pass'] is True
-hyp=J('NFZ_HYPOTHETICAL_COVERAGE.json');assert hyp['covered_existing_rows']==587 and hyp['original_NFQ_slice_assertion_would_pass'] is False
-assert hyp['slice_root_closure_growth']['Q']==['crates/aspis-core/src/r0/scalar.rs::WideExact::from_m31']
+delta=J('NFZ_LEDGER_DELTA.json');assert delta['before']==delta['after']==base['coverage'];assert delta['QSD_regenerated']
+assert not any(v['added'] or v['removed'] for v in delta['slice_membership_changes'].values())
+assert not any(delta[k] for k in ['new_rows','removed_rows','status_changes','new_closed_rows'])
+c=J('NFZ_CANDIDATES.json');assert len(c['candidates'])==39 and not c['complete'] and not any(x['admitted'] for x in c['candidates'])
+assert sum(x['compiler_target_resolution']=='CONFIRMED_IN_CORE_BODY' for x in c['candidates'])==6
+ind=J('NFZ_INDEPENDENT_CHECK.json');assert ind['core_second_MIR_agrees'] and not ind['compiler_independent_check_satisfied']
+for stem in ['NFZ_FROZEN_SOURCE.json','NFZ_FROZEN_BINARY.json','NFZ_aspis_core.mir','NFZ_aspis_core.mir0','NFZ_aspis_core.hir']:
+ raw=lzma.open(E/(stem+'.xz')).read();assert sha(raw)==(E/(stem+'.sha256')).read_text().strip()
+for attempt,code in [('NFZ_B001',1),('NFZ_B002',101),('NFZ_B004',101),('NFZ_B003',101)]:
+ r=J(attempt+'/receipt.json');a=J(attempt+'-admission.json');assert a.get('allowed',a.get('reservation',{}).get('allowed')) is True
+ assert r['exit_status']==code and int(r['swaps'])==0
+ assert r['limits']=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}
+ for p,h in r['source_hashes'].items():assert sha((E/attempt/'sources'/p).read_bytes())==h
+assert J('NFZ_GRAPH_CHECK.json')['graph_matches_frozen'];assert J('NFZ_LOCK_CHECK.json')['unchanged']
+assert J('NFZ_PAYLOAD_PREFLIGHT.json')['result'].startswith('PASS compile-free')
+assert J('NFZ_PART2_SUMMARY.json')['scope_budget']==dict(authorized=3,used=3,remaining=0)
+# Check own scripts syntactically without executing any launch or producing pycache.
+for p in E.glob('NFZ_*.py'):ast.parse(p.read_text(),filename=str(p))
 tests=[]
 def deny(name,fn):
  try:fn()
  except (AssertionError,KeyError):tests.append(dict(test=name,status='rejected'))
  else:raise AssertionError('accepted mutation: '+name)
-bad=copy.deepcopy(o);bad['edge_list_sha256']='0'*64;deny('changed edge-list digest',lambda:inv.apply(base,bad,edgebytes))
-bad=copy.deepcopy(o);bad['review_status']='REVIEWED';deny('unearned reviewed empty overlay',lambda:inv.apply(base,bad,edgebytes))
-def edge_case(method='source',target='programs/r1-cost-probe/src/lib.rs::error'):
- edge={'from':'programs/r1-cost-probe/src/lib.rs::first_decoded','to':target,'kind':'callback','evidence':dict(path='evidence/inv-defects-20261104/NFZ_SCAN.json',sha256=sha((E/'NFZ_SCAN.json').read_bytes()),method=method,compiler_gate_passed=False)}
- b=json.dumps([edge]).encode();ov=copy.deepcopy(o);ov.update(review_status='REVIEWED',edge_list_sha256=sha(b));return ov,b
-a,b=edge_case();deny('source discovery cannot admit callback',lambda:inv.apply(base,a,b))
-a,b=edge_case('rustc-MIR');deny('missing successful compiler gate',lambda:inv.apply(base,a,b))
-a,b=edge_case('rustc-MIR','missing::node');deny('unlisted new node cannot silently enter graph',lambda:inv.apply(base,a,b))
+bad=copy.deepcopy(o);bad['edge_list_sha256']='0'*64;deny('edge digest mutation',lambda:inv.apply(base,bad,edgebytes))
+bad=copy.deepcopy(o);bad['review_status']='REVIEWED';deny('unearned review',lambda:inv.apply(base,bad,edgebytes))
+for method,gate,to in [('source',False,'programs/r1-cost-probe/src/lib.rs::error'),('rustc-MIR',False,'programs/r1-cost-probe/src/lib.rs::error'),('rustc-MIR',True,'absent::node')]:
+ edge=dict(from_function='programs/r1-cost-probe/src/lib.rs::first_decoded',to=to,kind='callback',evidence=dict(path='evidence/inv-defects-20261104/NFZ_SCAN.json',sha256=sha((E/'NFZ_SCAN.json').read_bytes()),method=method,compiler_gate_passed=gate));edge['from']=edge.pop('from_function')
+ raw=json.dumps([edge]).encode();ov=copy.deepcopy(o);ov.update(review_status='REVIEWED',edge_list_sha256=sha(raw));deny('unreviewed or missing target '+method+str(gate),lambda:inv.apply(base,ov,raw))
 for p in E.rglob('*'):
  if p.is_file():assert p.stat().st_size<=20*1024*1024,p
 assert not list(E.rglob('__pycache__'))
-report=dict(result='PASS for blocked-result consistency; NOT completion of requested compiler-backed repair',row_count=587,reviewed_edges=0,status_changes=0,coverage='585/587',tests=tests,scope_receipt={k:receipt[k] for k in ['exit_status','wall_seconds','peak_rss_kib','swaps','source_revision','print_axioms']},budget=dict(scopes=1,Kani=0,Lean=0,extraction=0,typecheck_builds_started=0),no_compiler_reachability_claim=True)
+report=dict(result='PASS blocked-packet consistency only; requested inventory repair remains INCOMPLETE',coverage='585/587',admitted_edges=0,status_changes=0,new_rows=0,partial_core_resolutions=6,unresolved_entry_candidates=39,part2_scopes_used=3,Kani=0,Lean=0,extraction=0,tests=tests)
 (E/'NFZ_VALIDATION.json').write_text(json.dumps(report,indent=1)+'\n');print(json.dumps(report))

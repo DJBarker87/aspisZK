@@ -10,6 +10,9 @@ def ssh(code,data=None):
   time.sleep(60)
 attempt=sys.argv[1] if len(sys.argv)>1 else None
 assert attempt in ['NFZ_B002','NFZ_B003','NFZ_B004'], 'part 2 permits only new attempt IDs'
+assert not (E/attempt/'receipt.json').exists(), 'attempt retained: never resubmit'
+# Fail closed locally before requesting admission or launching.
+subprocess.run([sys.executable,'-B',str(E/'NFZ_prepare.py')],check=True)
 for k in range(11):
  r=ssh('python3',f'''from pathlib import Path
 import subprocess,sys
@@ -30,15 +33,18 @@ print(p.read_text() if p.exists() else 'MISSING');sys.exit(r.returncode)
  raise RuntimeError(r.stdout+r.stderr)
 files={p.name:p.read_text() for p in [E/'NFZ_check.py',E/'NFZ_rustc.py',E/'NFZ_SOURCE_PINS.json']}
 payload=json.loads(lzma.decompress((E/'NFZ_FROZEN_SOURCE.json.xz').read_bytes()))
+binary=json.loads(lzma.decompress((E/'NFZ_FROZEN_BINARY.json.xz').read_bytes()))
 cfg=dict(attempt=attempt,kind='rust-typecheck',module=('independent frozen deployed MIR opt-level 0 vs 1 and typed HIR' if attempt=='NFZ_B003' else 'frozen deployed verifier MIR and typed HIR'),sources=['NFZ_check.py','NFZ_rustc.py','NFZ_SOURCE_PINS.json'],command=['python3','NFZ_check.py'],env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_NET_OFFLINE='true',CARGO_INCREMENTAL='0',CARGO_PROFILE_DEV_DEBUG='0',RUSTC_WRAPPER=B+'/NFZ_rustc.py'),timeout=600,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),frozen_revision='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387',source_tree_dirty=True,expected_time='debug type-check compilation and MIR/typed-HIR diagnostic emission; no arithmetic gate, Kani, extraction or ELF')
 files[f'{attempt}.json']=json.dumps(cfg)
 r=ssh('python3',f'''from pathlib import Path
-import json,os
+import json,os,base64
 b=Path({B!r});files=json.loads({json.dumps(files)!r});source=json.loads({json.dumps(payload)!r})
 assert not (b/'{attempt}').exists(),'attempt already submitted'
 for n,t in files.items():(b/n).write_text(t)
 for n,t in source.items():
  p=b/'NFZ_src'/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
+for n,t in json.loads({json.dumps(binary)!r}).items():
+ p=b/'NFZ_src'/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(base64.b64decode(t))
 os.chmod(b/'NFZ_rustc.py',0o700)
 (b/'S2W_run_host.py').write_bytes((Path({I!r})/'S2W_run_host.py').read_bytes())
 ''');assert r.returncode==0,r.stderr
