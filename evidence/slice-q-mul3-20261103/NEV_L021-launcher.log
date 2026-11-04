@@ -1,0 +1,69 @@
+{"attempt": "NEV_L021", "exit_status": 1, "wall_seconds": 2.6388785550370812, "peak_rss_kib": "4935992", "swaps": "0", "print_axioms": ["'NEV_BasisRaw.inner_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NEV_BasisRaw.inner_stop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NEV_BasisRaw.inner_loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NEV_generated/NEV_BasisRaw.lean:16:60: error: unsolved goals
+ops : Ops
+node : U32
+n : Usize
+iter : core.ops.range.Range Usize
+basis : Std.Array U32 256#usize
+small : ↑n ≤ 128
+finish : iter.end = n
+active : ↑iter.start < ↑n
+iter1 : core.ops.range.Range (UScalar UScalarTy.Usize)
+hs : ↑iter1.start = ↑iter.start + 1
+he : iter1.end = iter.end
+run :
+  core.iter.range.IteratorRange.next
+      (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize) iter =
+    ok (some iter.start, iter1)
+add : n + iter.start = ok (n.wrapping_add iter.start)
+⊢ (let (o, iter1) := (some iter.start, iter1)
+    match o with
+    | none => ok (done basis)
+    | some j => do
+      let m ←
+...
+ch (iter, basis) with
+      | (iter1, basis1) => NEV_AccumulateRaw.accumulate_batched_with_node_loop0_loop0.body node n iter1 basis1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, basis1) => NEV_AccumulateRaw.accumulate_batched_with_node_loop0_loop0.body node n iter1 basis1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    match
+      match (iter, basis) with
+      | (iter1, basis1) =>
+        verifier.accumulate_batched_with_node_loop0_loop0.body (NBF_BasisInstall.install ops) node n iter1 basis1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, basis1) =>
+              verifier.accumulate_batched_with_node_loop0_loop0.body (NBF_BasisInstall.install ops) node n iter1 basis1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (256 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'NEV_BasisRaw.inner_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEV_BasisRaw.inner_stop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEV_BasisRaw.inner_loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r06f853ae14264f6f953e3d4c15f8ede6.scope; invocation ID: 79497ca674bc443d93d95c52e6d3e78f

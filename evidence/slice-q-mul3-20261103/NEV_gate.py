@@ -37,7 +37,7 @@ for name,text in frozen_sources.items():
   assert actual.startswith(text),('changed frozen body',name)
   tail=actual[len(text):]
   if name.endswith('verifier.rs'):assert tail=='\n#[cfg(kani)] #[path="NEV_prefix_step.rs"] mod NEV_prefix_step;\n\n#[cfg(kani)] #[path="NEV_row_step.rs"] mod NEV_row_step;\n',name
-  else:assert tail=='\n#[cfg(kani)]\nmod NEV_arbitrary {\n    impl kani::Arbitrary for super::M31 {\n        fn any() -> Self { Self(kani::any()) }\n    }\n}\n',name
+  else:assert tail=='\n#[cfg(kani)]\nmod NEV_arbitrary {\n    impl kani::Arbitrary for super::M31 {\n        fn any() -> Self { Self(kani::any()) }\n    }\n    impl kani::Arbitrary for super::QM31 {\n        fn any() -> Self {\n            Self { c0: super::CM31 { a: kani::any(), b: kani::any() },\n                   c1: super::CM31 { a: kani::any(), b: kani::any() } }\n        }\n    }\n\n}\n',name
  checked.append(name)
 (B/(a+'-frozen-source-check.json')).write_text(json.dumps(dict(passed=True,files=checked,allowed_changes=sorted(changed),qualification='Only exact cfg(kani) module/feature additions; every frozen body unchanged'),indent=2))
 # Rule 16: reject every static declaration in own harnesses and exact KMX files.

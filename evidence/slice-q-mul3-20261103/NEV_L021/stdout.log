@@ -1,0 +1,280 @@
+NEV_generated/NEV_BasisRaw.lean:16:60: error: unsolved goals
+ops : Ops
+node : U32
+n : Usize
+iter : core.ops.range.Range Usize
+basis : Std.Array U32 256#usize
+small : ↑n ≤ 128
+finish : iter.end = n
+active : ↑iter.start < ↑n
+iter1 : core.ops.range.Range (UScalar UScalarTy.Usize)
+hs : ↑iter1.start = ↑iter.start + 1
+he : iter1.end = iter.end
+run :
+  core.iter.range.IteratorRange.next
+      (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize) iter =
+    ok (some iter.start, iter1)
+add : n + iter.start = ok (n.wrapping_add iter.start)
+⊢ (let (o, iter1) := (some iter.start, iter1)
+    match o with
+    | none => ok (done basis)
+    | some j => do
+      let m ← basis.index_usize j
+      let m1 ← AspisR1Qm31ArithmeticProbe.field.M31.mul m node
+      let i ← n + j
+      let basis1 ← basis.update i m1
+      ok (cont (iter1, basis1))) =
+    let (o, iter1) := (some iter.start, iter1)
+    match o with
+    | none => ok (done basis)
+    | some j => do
+      let m ← basis.index_usize j
+      let m1 ← AspisR1Qm31ArithmeticProbe.field.M31.mul m node
+      let basis1 ← basis.update (n.wrapping_add j) m1
+      ok (cont (iter1, basis1))
+NEV_generated/NEV_BasisRaw.lean:27:67: warning: This simp argument is unused:
+  add
+
+Hint: Omit it from the simp argument list.
+  simp only [NEV_AccumulateRaw.accumulate_batched_with_node_loop0_loop0.body,
+      verifier.accumulate_batched_with_node_loop0_loop0.body, ̲run, ̲bind_tc_ok,
+      NEV_AccumulateRaw.aspis_core.field.M31.mul, ̲NEI_FieldScalar.m_mul,
+      AspisR1CurrentWide.Proof.m31_mul_same, ̲NBF_BasisInstall.install,a̵d̵d̵,̵ ̲lift]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEV_generated/NEV_BasisRaw.lean:31:12: error: Application type mismatch: The argument
+  ↑iter.end
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.12
+of sort `Type (?u.12 + 1)` in the application
+  @InitialSeg ↑iter.end
+NEV_generated/NEV_BasisRaw.lean:31:26: error(lean.unknownIdentifier): Unknown identifier `ter.start.val`
+NEV_generated/NEV_BasisRaw.lean:34:60: error: unsolved goals
+ops : Ops
+node : U32
+n : Usize
+iter : core.ops.range.Range Usize
+basis : Std.Array U32 256#usize
+done : InitialSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+iter1 : core.ops.range.Range (UScalar UScalarTy.Usize)
+hi : iter1 = iter
+run :
+  core.iter.range.IteratorRange.next
+      (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize) iter =
+    ok (none, iter1)
+⊢ (let (o, iter1) := (none, iter1)
+    match o with
+    | none => ok (ControlFlow.done basis)
+    | some j => do
+      let m ← basis.index_usize j
+      let m1 ← NEV_AccumulateRaw.aspis_core.field.M31.mul m node
+      let i ← n + j
+      let basis1 ← basis.update i m1
+      ok (cont (iter1, basis1))) =
+    let (o, iter1) := (none, iter1)
+    match o with
+    | none => ok (ControlFlow.done basis)
+    | some j => do
+      let m ← basis.index_usize j
+      let m1 ← (NBF_BasisInstall.install ops).op7 m node
+      let i ← lift (n.wrapping_add j)
+      let basis1 ← basis.update i m1
+      ok (cont (iter1, basis1))
+NEV_generated/NEV_BasisRaw.lean:56:16: error: Application type mismatch: The argument
+  ↑iter.end
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.33
+of sort `Type (?u.33 + 1)` in the application
+  @InitialSeg ↑iter.end
+NEV_generated/NEV_BasisRaw.lean:56:30: error(lean.unknownIdentifier): Unknown identifier `ter.start.val`
+NEV_generated/NEV_BasisRaw.lean:57:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NEV_AccumulateRaw.accumulate_batched_with_node_loop0_loop0.body node n iter basis
+in the target expression
+  (match
+      match (iter, basis) with
+      | (iter1, basis1) => NEV_AccumulateRaw.accumulate_batched_with_node_loop0_loop0.body node n iter1 basis1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, basis1) => NEV_AccumulateRaw.accumulate_batched_with_node_loop0_loop0.body node n iter1 basis1)
+          x
+      | ControlFlow.done x => ok x
+    | fail e => fail e
+    | div => div) =
+    match
+      match (iter, basis) with
+      | (iter1, basis1) =>
+        verifier.accumulate_batched_with_node_loop0_loop0.body (NBF_BasisInstall.install ops) node n iter1 basis1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, basis1) =>
+              verifier.accumulate_batched_with_node_loop0_loop0.body (NBF_BasisInstall.install ops) node n iter1 basis1)
+          x
+      | ControlFlow.done x => ok x
+    | fail e => fail e
+    | div => div
+
+case zero
+ops : Ops
+node : U32
+n : Usize
+small : ↑n ≤ 128
+iter : core.ops.range.Range Usize
+basis : Std.Array U32 256#usize
+finish : iter.end = n
+span : ↑iter.start + 0 = ↑n
+done : InitialSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+⊢ (match
+      match (iter, basis) with
+      | (iter1, basis1) => NEV_AccumulateRaw.accumulate_batched_with_node_loop0_loop0.body node n iter1 basis1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, basis1) => NEV_AccumulateRaw.accumulate_batched_with_node_loop0_loop0.body node n iter1 basis1)
+          x
+      | ControlFlow.done x => ok x
+    | fail e => fail e
+    | div => div) =
+    match
+      match (iter, basis) with
+      | (iter1, basis1) =>
+        verifier.accumulate_batched_with_node_loop0_loop0.body (NBF_BasisInstall.install ops) node n iter1 basis1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, basis1) =>
+              verifier.accumulate_batched_with_node_loop0_loop0.body (NBF_BasisInstall.install ops) node n iter1 basis1)
+          x
+      | ControlFlow.done x => ok x
+    | fail e => fail e
+    | div => div
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (256 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NEV_generated/NEV_BasisRaw.lean:67:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NEV_AccumulateRaw.accumulate_batched_with_node_loop0_loop0.body node n iter basis
+in the target expression
+  (match
+      match (iter, basis) with
+      | (iter1, basis1) => NEV_AccumulateRaw.accumulate_batched_with_node_loop0_loop0.body node n iter1 basis1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, basis1) => NEV_AccumulateRaw.accumulate_batched_with_node_loop0_loop0.body node n iter1 basis1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    match
+      match (iter, basis) with
+      | (iter1, basis1) =>
+        verifier.accumulate_batched_with_node_loop0_loop0.body (NBF_BasisInstall.install ops) node n iter1 basis1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, basis1) =>
+              verifier.accumulate_batched_with_node_loop0_loop0.body (NBF_BasisInstall.install ops) node n iter1 basis1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div
+
+case succ
+ops : Ops
+node : U32
+n : Usize
+small : ↑n ≤ 128
+k : ℕ
+ih :
+  ∀ (iter : core.ops.range.Range Usize) (basis : Std.Array U32 256#usize),
+    iter.end = n →
+      ↑iter.start + k = ↑n →
+        NEV_AccumulateRaw.accumulate_batched_with_node_loop0_loop0 iter node basis n =
+          verifier.accumulate_batched_with_node_loop0_loop0 (NBF_BasisInstall.install ops) iter node basis n
+iter : core.ops.range.Range Usize
+basis : Std.Array U32 256#usize
+finish : iter.end = n
+span : ↑iter.start + (k + 1) = ↑n
+active : ↑iter.start < ↑n
+iter1 : core.ops.range.Range Usize
+hs : ↑iter1.start = ↑iter.start + 1
+he : iter1.end = iter.end
+body :
+  verifier.accumulate_batched_with_node_loop0_loop0.body (NBF_BasisInstall.install ops) node n iter basis = do
+    let out ← S7Kani2BasisLoop.step (NBF_BasisInstall.install ops).op7 node n iter.start basis
+    ok (cont (iter1, out))
+⊢ (match
+      match (iter, basis) with
+      | (iter1, basis1) => NEV_AccumulateRaw.accumulate_batched_with_node_loop0_loop0.body node n iter1 basis1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, basis1) => NEV_AccumulateRaw.accumulate_batched_with_node_loop0_loop0.body node n iter1 basis1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    match
+      match (iter, basis) with
+      | (iter1, basis1) =>
+        verifier.accumulate_batched_with_node_loop0_loop0.body (NBF_BasisInstall.install ops) node n iter1 basis1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, basis1) =>
+              verifier.accumulate_batched_with_node_loop0_loop0.body (NBF_BasisInstall.install ops) node n iter1 basis1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (256 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'NEV_BasisRaw.inner_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEV_BasisRaw.inner_stop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEV_BasisRaw.inner_loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

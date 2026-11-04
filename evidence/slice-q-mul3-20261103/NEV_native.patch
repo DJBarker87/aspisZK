@@ -1,6 +1,6 @@
 --- a/crates/aspis-core/src/field.rs
 +++ b/crates/aspis-core/src/field.rs
-@@ -3266,3 +3266,10 @@
+@@ -3266,3 +3266,17 @@
      let s = a + P - b;
      M31(if s >= P { s - P } else { s })
  }
@@ -10,6 +10,13 @@
 +    impl kani::Arbitrary for super::M31 {
 +        fn any() -> Self { Self(kani::any()) }
 +    }
++    impl kani::Arbitrary for super::QM31 {
++        fn any() -> Self {
++            Self { c0: super::CM31 { a: kani::any(), b: kani::any() },
++                   c1: super::CM31 { a: kani::any(), b: kani::any() } }
++        }
++    }
++
 +}
 --- a/crates/aspis-r1-cost-probe/src/lib.rs
 +++ b/crates/aspis-r1-cost-probe/src/lib.rs
@@ -450,7 +457,7 @@
 +}
 --- a/crates/aspis-r1-cost-probe/src/NEV_row_step.rs
 +++ b/crates/aspis-r1-cost-probe/src/NEV_row_step.rs
-@@ -0,0 +1,126 @@
+@@ -0,0 +1,288 @@
 +use super::*;
 +// Native constructor, arbitrary advance, next, write and borrow restoration.
 +// No product or field operation is reached. The row is the actual full array.
@@ -576,6 +583,168 @@
 + let mut expected=if valid{Some(words)}else{None};
 + if cfg!(NEV_wrong_wide_ctor){expected=if let Some(mut out)=expected{out[0]^=1;Some(out)}else{Some([0;8])};}
 + assert_eq!(got,expected);
++}
++
++// Small documented outside-Q constructor; actual frozen trait/body executes.
++#[kani::proof] #[kani::unwind(64)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEV_copy::KMX_copy_nonoverlapping)]
++fn codefield_m31_lift() {
++ let word:u32=kani::any();let observed:usize=kani::any();kani::assume(observed<8);
++ let actual=<E as aspis_core::r0::CodeField>::from_m31(M31(word)).to_limbs();
++ let expected=if observed==0{word%2147483647}else{0};
++ assert_eq!(actual[observed],if cfg!(NEV_wrong_lift){expected^1}else{expected});
++}
++// Local opaque product call. No native multiplication executes here; each
++// specialization is paired with NEI_PrefixProduct.actual (ALL raw M31 words).
++#[derive(Default)]
++struct NEV_BasisProductLog { called:bool, lhs:u32, rhs:u32, reply:u32 }
++impl NEV_BasisProductLog {
++ fn call(&mut self,left:M31,right:M31)->M31 {
++  assert!(!self.called);
++  self.called=true;self.lhs=left.0;self.rhs=right.0;
++  M31(self.reply)
++ }
++}
++// ONE native inner iteration at an arbitrary pre-state and arbitrary observed
++// frame cell. Source body's only replacement is product -> local call record.
++// No full-array duplication; the actual 256-cell carrier is retained.
++#[kani::proof] #[kani::unwind(260)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEV_copy::KMX_copy_nonoverlapping)]
++fn basis_inner_iteration() {
++ let mut basis:[M31;256]=kani::any();
++ let node=M31(kani::any());let n:usize=kani::any();let j:usize=kani::any();
++ kani::assume(n>0 && n<=32 && j<n);
++ let observed:usize=kani::any();kani::assume(observed<256);
++ let before=basis[observed].0;let operand=basis[j].0;
++ let mut product=NEV_BasisProductLog {reply:kani::any(),..Default::default()};
++ kani::assume(product.reply<2147483647);
++ let mut iter=j..n;
++ let selected=iter.next().unwrap();
++ basis[n+selected]=product.call(basis[selected],node);
++ assert!(product.called && product.lhs==operand && product.rhs==node.0);
++ assert!(iter.start==j+1 && iter.end==n);
++ let expected=if observed==n+j{product.reply}else{before};
++ assert_eq!(basis[observed].0,if cfg!(NEV_wrong_basis_inner){expected^1}else{expected});
++}
++// ONE outer scalar update after its inner loop: square is the sole opaque
++// operation. The actual M31::double and M31::sub execute on its canonical reply.
++#[kani::proof] #[kani::unwind(64)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEV_copy::KMX_copy_nonoverlapping)]
++fn basis_outer_scalar() {
++ let mut node=M31(kani::any());let original=node.0;
++ let mut n:usize=kani::any();kani::assume(n>0 && n<=32);let old_n=n;
++ let mut product=NEV_BasisProductLog {reply:kani::any(),..Default::default()};
++ kani::assume(product.reply<2147483647);
++ node=product.call(node,node).double().sub(M31::ONE);n*=2;
++ assert!(product.called && product.lhs==original && product.rhs==original);
++ assert_eq!(n,old_n+old_n);
++ let twice=product.reply+product.reply;
++ let reduced=if twice>=2147483647{twice-2147483647}else{twice};
++ let expected=if reduced==0{2147483646}else{reduced-1};
++ assert_eq!(node.0,if cfg!(NEV_wrong_basis_outer){expected^1}else{expected});
++ assert!(node.0<2147483647);
++}
++
++use aspis_core::field::{QM31,CM31};
++fn NEV_any_wide()->E {
++ let limbs:[u32;8]=kani::any();
++ for word in limbs {kani::assume(word<2147483647);}
++ E::from_limbs(limbs).unwrap()
++}
++fn NEV_any_qm()->QM31 {
++ let limbs:[u32;4]=kani::any();
++ for word in limbs {kani::assume(word<2147483647);}
++ QM31 {c0:CM31{a:M31(limbs[0]),b:M31(limbs[1])},
++       c1:CM31{a:M31(limbs[2]),b:M31(limbs[3])}}
++}
++fn NEV_qwords(q:QM31)->[u32;4] { [q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0] }
++struct NEV_TailLog {
++ phase:u8, product_left:[u32;8],product_right:[u32;4],
++ add_left:[u32;8],add_right:[u32;8],power_left:[u32;4],power_right:[u32;4],
++ product_reply:E,add_reply:E,power_reply:QM31,
++}
++impl NEV_TailLog {
++ fn product(&mut self,x:E,q:QM31)->E {
++  assert_eq!(self.phase,0);self.phase=1;
++  self.product_left=x.to_limbs();self.product_right=NEV_qwords(q);self.product_reply
++ }
++ fn add(&mut self,x:E,y:E)->E {
++  assert_eq!(self.phase,1);self.phase=2;
++  self.add_left=x.to_limbs();self.add_right=y.to_limbs();self.add_reply
++ }
++ fn power(&mut self,x:QM31,y:QM31)->QM31 {
++  assert_eq!(self.phase,2);self.phase=3;
++  self.power_left=NEV_qwords(x);self.power_right=NEV_qwords(y);self.power_reply
++ }
++}
++// The native tail after the row loop on independent TX1/TX2 counters. Field
++// calls are local owned records, and trace::value is the real deployed no-op.
++// This cut does not assume a successful preceding whole-loop result.
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEV_copy::KMX_copy_nonoverlapping)]
++fn accumulate_tail_context() {
++ let mut a=Accumulator {weights:kani::vec::exact_vec::<QM31,64>(),rhs:NEV_any_wide(),power:NEV_any_qm(),next:kani::any()};
++ let mut weights=BatchedWeights {raw:kani::vec::exact_vec::<[u64;4],64>(),terms:kani::any()};
++ kani::assume(a.next<22 && weights.terms<22);
++ let rho=NEV_any_qm();let value=NEV_any_wide();
++ let old_next=a.next;let old_terms=weights.terms;let old_rhs=a.rhs;let old_power=a.power;
++ let observed:usize=kani::any();let lane:usize=kani::any();kani::assume(observed<64 && lane<4);
++ let old_weight=a.weights[observed];let old_raw=weights.raw[observed][lane];
++ let ap=a.weights.as_ptr();let bp=weights.raw.as_ptr();
++ let ac=a.weights.capacity();let bc=weights.raw.capacity();
++ let mut log=NEV_TailLog {phase:0,product_left:[0;8],product_right:[0;4],add_left:[0;8],add_right:[0;8],power_left:[0;4],power_right:[0;4],product_reply:NEV_any_wide(),add_reply:NEV_any_wide(),power_reply:NEV_any_qm()};
++ weights.terms+=1;
++ let product=log.product(value,a.power);a.rhs=log.add(a.rhs,product);
++ crate::trace::value(11,a.next,a.rhs);
++ a.power=log.power(a.power,rho);a.next+=1;
++ assert_eq!(log.phase,3);
++ assert_eq!(log.product_left,value.to_limbs());assert_eq!(log.product_right,NEV_qwords(old_power));
++ assert_eq!(log.add_left,old_rhs.to_limbs());assert_eq!(log.add_right,log.product_reply.to_limbs());
++ assert_eq!(log.power_left,NEV_qwords(old_power));assert_eq!(log.power_right,NEV_qwords(rho));
++ assert_eq!(a.rhs.to_limbs(),log.add_reply.to_limbs());assert_eq!(NEV_qwords(a.power),NEV_qwords(log.power_reply));
++ assert!(a.next==old_next+1 && weights.terms==old_terms+1);
++ assert!(a.weights.len()==64 && weights.raw.len()==64 && a.weights.capacity()==ac && weights.raw.capacity()==bc && a.weights.as_ptr()==ap && weights.raw.as_ptr()==bp);
++ assert_eq!(a.weights[observed],old_weight);
++ assert_eq!(weights.raw[observed][lane],if cfg!(NEV_wrong_tail_context){old_raw^1}else{old_raw});
++}
++
++// The BW mutation itself is the CLOSED NEI push bridge, not a second native
++// proof of its arithmetic. This local record checks the caller's exact input
++// to that endpoint, followed by its two real diagnostic conversion calls.
++struct NEV_PushCallLog {called:bool,index:usize,power:[u32;4],basis:u32}
++impl NEV_PushCallLog {
++ fn call(&mut self,index:usize,power:QM31,basis:M31) {
++  assert!(!self.called);self.called=true;self.index=index;
++  self.power=NEV_qwords(power);self.basis=basis.0;
++ }
++}
++#[kani::proof] #[kani::unwind(260)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEV_copy::KMX_copy_nonoverlapping)]
++fn accumulate_row_context() {
++ let basis:[M31;256]=kani::any();
++ let weights=kani::vec::exact_vec::<QM31,64>();
++ let power=NEV_any_qm();let next:usize=kani::any();kani::assume(next<22);
++ let j:usize=kani::any();kani::assume(j<64);
++ let basis_word=basis[j].0;kani::assume(basis_word<2147483647);
++ let weight=weights[j];let pointer=weights.as_ptr();let capacity=weights.capacity();
++ let observed:usize=kani::any();kani::assume(observed<64);let before=weights[observed];
++ let mut log=NEV_PushCallLog {called:false,index:0,power:[0;4],basis:0};
++ let mut iter=j..64;let index=iter.next().unwrap();
++ let m=basis_at(&basis,index);log.call(index,power,m);
++ let offset=next*weights.len()+index;
++ let lift_q=E::from_qm31(accumulated_weight_at(&weights,index));
++ crate::trace::value(12,offset,lift_q);
++ let lift_m=<E as aspis_core::r0::CodeField>::from_m31(basis_at(&basis,index));
++ crate::trace::value(13,next*weights.len()+index,lift_m);
++ assert!(log.called && log.index==j && log.power==NEV_qwords(power) && log.basis==basis_word);
++ assert!(iter.start==j+1 && iter.end==64 && offset==next*64+j && offset<1408);
++ assert!(weights.len()==64 && weights.capacity()==capacity && weights.as_ptr()==pointer);
++ assert_eq!(weights[observed],before);
++ let got=lift_q.to_limbs();let w=NEV_qwords(weight);
++ for limb in 0..4 {assert_eq!(got[limb],w[limb]%2147483647);assert_eq!(got[limb+4],0);}
++ let expected=[basis_word,0,0,0,0,0,0,0];
++ let at:usize=kani::any();kani::assume(at<8);
++ assert_eq!(lift_m.to_limbs()[at],if cfg!(NEV_wrong_row_context){expected[at]^1}else{expected[at]});
 +}
 --- a/crates/aspis-r1-cost-probe/src/NEV_dot_ctor.rs
 +++ b/crates/aspis-r1-cost-probe/src/NEV_dot_ctor.rs

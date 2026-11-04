@@ -1,3 +1,17 @@
+## Basis continuation checkpoint, 2026-11-04
+
+K038/K039 validate the literal native basis read/write iteration under the
+original harness name; K032/K033 are superseded getter-wrapper evidence.
+K034/K035 validate its outer scalar update. L029/L031/L033 prove complete
+new emitted inner/outer loop association to retained NBF/S7 control flow;
+all audits use standard axioms. Full raw record transports pass L026, concrete
+bindings/body L027/L028, callee Result transports L032, exact source prefix/
+tail split and vector carrier frame L034. No accumulation closure yet.
+NEV_BASIS_REVIEW.json retains pending copy-control and full composition gates.
+Budget: 39 Kani labels /34 Lean launches /1 extraction. K040 row context is
+running; no second scope is active. Next: K041 control, fresh KMX controls,
+new NEV_PushUse association and full row/tail cohort/domain composition.
+
 ## Active accumulation continuation, 2026-11-04
 
 Prefix stage committed `2ac3ce2af3`. Small outside-slice constructor is now
