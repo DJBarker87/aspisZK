@@ -1,5 +1,23 @@
 # D580 blocker: native reserve header delivery into the advancing world
 
+## D588 constructor/receiver mechanism accepted; native equations still OPEN
+
+`PV_EVHB_SourceLifetimes` (receipt91232) now mints lifetime identities at
+construction, transports them through source places, and computes the registry
+owner AND header from the borrowed receiver before reserve. Its local laws are
+accepted; the original salts initial constructor/receiver spans are structurally
+pinned. See `evidence/pv-evhB-20261103/CONSTRUCTOR-D588.md` for precise scope.
+
+This is PARTIAL own-1. The original-entry interpreter constructing the actual
+activation/place environment and all reached move/drop/loop transitions is
+still missing, as are actual layout/pointer interpretation and Global/System
+world-answer association. Both original equations/binders/domains below remain
+unchanged and OPEN. The new model laws are not an installed native instance.
+No T/endpoint/deployment change or reached native counterexample is claimed.
+Next91233;63 attempts remain; audits91298–91299 unused. rdea-1/rdea-2/V400,
+V370/L3 and V183 SUSPENDED(K-3) remain. Axioms evidence is summary-based only.
+
+
 ## D582 partial construction; unchanged native target still OPEN
 
 Five new modules now construct descriptor ownership, source-slot stores and

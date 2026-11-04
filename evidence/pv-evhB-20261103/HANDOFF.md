@@ -1,41 +1,55 @@
-# D588 in-progress constructor/receiver checkpoint
+# D588 final constructor/receiver checkpoint — original association OPEN
 
-Resume from `26bc9dfd6b`; branch `codex/pv-evhB-20261103`.
-Read `CONSTRUCTOR-D588.md`, `lifetime-source-D588.json`, and
-`std-inputs-D588.json`. Four-stage task incomplete; stage 1 has a new
-constructor/lifetime/source-place mechanism, not full original-entry coverage.
-The unchanged native header equation and v263 descriptor-view equation remain
-OPEN. No T/endpoint/deployment/binder/domain change or reached counterexample.
+Resume `26bc9dfd6b`, branch `codex/pv-evhB-20261103`. Read
+`CONSTRUCTOR-D588.md`, `lifetime-source-D588.json`, `std-inputs-D588.json`
+and `validation-D588.json`. Four-stage task remains incomplete. Both unchanged
+native target equations remain OPEN; no reached counterexample is claimed.
+No T/endpoint/deployment/binder/domain change.
 
-`PV_EVHB_SourceLifetimes` is committed and staged but **NOT ACCEPTED** at this
-checkpoint. It mints identities at construction; proves local freshness,
-source-place move, receiver/header selection and outcome-preserving place
-transport laws; and identifies the original salts initial constructor/receiver
-prefix. All theorem statements remain uncredited pending compilation.
-The pointer/layout interpretation and full original call/move/drop interpreter
-are still needed. Do not rename its model laws as native closure.
+`PV_EVHB_SourceLifetimes` is now ACCEPTED and IMMUTABLE, receipt91232,
+source `32176754c608a927c6fd8601760fe9b068735d25`: exit0,wall1.74s,
+peak2652680KiB,swap0, normal6G/8G/zero-swap cap. All13 theorem axiom prints
+are SUMMARY-BASED, subsets of propext/Quot.sound. No raw NEP/cohort-coherence
+or release claim. Do not edit or restage this accepted source.
 
-Attempt 91231 has three uncharged quiet-window refusals, no submitted compile.
-Retry the SAME unlaunched ID only after at least180s from the latest epoch in
-`refusal-91231.json`, under the existing same-shell admission. The marker is
-never edited. See refusal-history files. A preliminary wrapper call before
-staging finished failed locally without submission; `prelaunch-order-D588.json`
-records the correction. **Accounting unchanged:32/97 charged,22 accepted,
-10 rejected,65 remain; NEXT91231.** Audits91298–91299 unused.
+The module separates source places from lifetime-indexed header slots, mints
+identities at construction, supplies Fresh/SlotsBefore and entry ghost-table
+initialization, transports places through moves, and COMPUTES the selected
+owner/header before a reserve call. All modeled outcomes retain the exact
+post-world/events and the same place/lifetime environment. The original salts
+initial constructor/receiver prefix has six exact std source spans and three
+adopted application bodies pinned. The complete adopted487-unit feature/profile
+graph is recorded. This remains PARTIAL own-1: numeric layout/pointer
+interpretation, full original-entry reachability, loop/payload/argument/return/
+drop transition installation and advancing world selection remain unproved.
 
-No new Lean axioms result exists yet. `summary.json` remains the accepted D582
-summary; audit.py intentionally rejects any unaccepted current module, so do
-not claim its final audit passed with this draft. Source structural and std
-input --check commands passed. Collection is read-only and matches adopted
-rustc1.94.1; no native program, Kani, extraction, full manifest or build ran.
+Exact remaining stage1: construct the original-prefix interpreter giving each
+actual receiver its activation/lvalue, minted lifetime and same source header.
+The specification is in CONSTRUCTOR-D588.md. The local callAt/newAt/move laws
+are not that construction and cannot be substituted for the requested native
+instance. Do not proceed to modeled header delivery as if stage1 were closed.
+Then bind actual Global/System/world answers to V183 (rdea-1); derive the
+original reached_reserve_header_delivery; derive the exact v263 runtime/growth
+instance, in that order. Seven installed1.94.1 allocator/pointer source inputs
+are committed and hash checked for stage2; their collection is not adequacy.
 
-Next: validate SourceLifetimes after admission, then construct the original
-entry's advancing source-state/activation/place interpretation (all reached
-constructor/move/borrow/drop paths). Only after stage 1 is source-bound, bind
-Global/System/world answers to V183, derive the original reserve header law,
-then derive the exact v263 instance, in that order. Keep rdea-1/rdea-2/V400,
-V370/L3, all source failures and V183 SUSPENDED(K-3). Source effects do not
-require physical stack pairing (l3-2); no compiler fact is silently assumed.
+**34/97 charged:23 accepted/11 rejected;63 remain;NEXT91233.**
+91231 failed (1.43s,2641852KiB,swap0): dependent conditional elimination in
+move_fresh and constructor_call let-layout parsing. Both source inputs changed
+before91232. Failed sorryAx summaries earn no credit. Three uncharged91231
+quiet-window refusals observed >=180s between admissions. The marker was
+released early and never edited; compilation resumed only under same-shell
+allowed:true/exit0 admission. One earlier local wrapper call before staging
+finished had no submission/ID charge; see prelaunch-order-D588.json.
+Audits91298–91299 unused. No pending compile or own active host scope.
+
+Final audit.py and both new source/input --check commands PASS; summary.json
+is refreshed to all34 attempts. Source/object/dependency hashes, caps, source
+revisions, exact targets/exits/walls/RSS/swap and full axiom prints are in the
+committed receipts/logs. No unchanged regression, frozen manifest, native
+program, Kani, extraction, raw axioms walk or deployment/key/funds action.
+V183 SUSPENDED(K-3), rdea-1/rdea-2/V400 and V370/L3 remain. Source-level
+L1/diagnostic effects do not require physical-frame pairing (l3-2).
 
 ---
 

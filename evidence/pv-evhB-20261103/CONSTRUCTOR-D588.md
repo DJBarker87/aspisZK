@@ -28,9 +28,12 @@ prefix, not an execution of the complete original entry or loop. The Nat
 pointer argument still needs the actual type/layout and `without_provenance`
 interpretation. A `dangling=true` boolean alone is not provenance evidence.
 
-The new Lean module is **staged, not yet accepted**. The compiler has not run:
-91231 has only uncharged quiet-window refusals so far. Its declarations must
-not be cited as accepted results before a successful receipt is recovered.
+The new Lean module is **accepted and immutable**, receipt91232: exit0,
+wall1.74s, peak2652680KiB, swap0, source32176754c608a927c6fd8601760fe9b068735d25.
+All13 axiom prints are SUMMARY-BASED, subsets of propext/Quot.sound. This
+acceptance credits the local laws described above, not native closure.
+Attempt91231 failed before the changed-source repair of move conditional
+elimination and constructor-call let syntax. Its sorryAx summary earns no credit.
 
 ## Source evidence
 
