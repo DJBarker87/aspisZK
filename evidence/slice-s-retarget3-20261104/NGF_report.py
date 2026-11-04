@@ -1,0 +1,45 @@
+from pathlib import Path
+import json,subprocess,collections
+E=Path(__file__).resolve().parent;R=E.parents[1];J=lambda p:json.loads(p.read_text())
+d=J(E/'NGF_LEDGER_DELTA.json');a=J(E/'NGF_AUDIT.json');s=J(E/'NGF_SCAN.json');c=J(E/'NGF_CERT_CHECK.json');exp=J(E/'NGF_EXPORT.json');p=J(E/'NGF_PROVENANCE.json');tests=J(E/'NGF_TESTS.json');rs=sorted([J(f) for f in E.glob('NGF_L*/receipt.json')],key=lambda r:r['attempt'])
+assert len(rs)==110 and len({r['attempt'] for r in rs})==110
+assert all(r['swaps']=='0' for r in rs);assert [(r['attempt'],r['exit_status']) for r in rs if r['exit_status']] == [('NGF_L014',1)]
+metrics=dict(charged_scopes=len(rs),by_kind=dict(collections.Counter(r['kind'] for r in rs)),success=sum(r['exit_status']==0 for r in rs),failed_elaboration=['NGF_L014'],wall_seconds=sum(r['wall_seconds'] for r in rs),peak_rss_kib=max(int(r['peak_rss_kib']) for r in rs),swaps=0,no_timeout_or_memory_kill=True,new_modules=len(p['files']),raw_audit_roots=a['root_count'],scope_limits=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64,Lean='-M7000'),Kani=0,extraction=0,Rust_builds=0,release_replay=False)
+(E/'NGF_METRICS.json').write_text(json.dumps(metrics,indent=1)+'\n')
+rows=', '.join(x['row'] for x in d['promotions']);root_closed=sum(r['status']=='CLOSED' for r in d['S_roots'])
+text=f'''# NGF canonical retarget chain B handoff
+
+**{len(d['promotions'])} additional rows CLOSED: {rows}. Slice S: {d['S_after'].get('CLOSED',0)}/97 CLOSED, {d['S_after'].get('QUALIFIED',0)} QUALIFIED; {root_closed}/7 roots CLOSED. Target not yet established.**
+
+Branch `codex/cx-slice-s-retarget3-20261104`; worktree is this assigned checkout. Commits are plain, with no push or merge. Only NGF-prefixed modules and the assigned evidence directory changed. No live sibling/session-A worktree or candidate was edited. The ORDER paragraph's reference to chain A was interpreted consistently with the explicit chain-B scope and prohibition on chain-A retargeting.
+
+## Claim and exact evidence
+
+All 52 NGF modules replay, covering NEX/NEY plus the NED/NEC auxiliary chain. Two independent emitted NEC reference modules are reused, not copied or redefined; generated options remain in their original modules. NGF_PROVENANCE.json pins byte-identical before/after bodies and exact source hashes/ranges, with only imports, qualified owner/proof names, and the snapshot meta-tactic name prefix changed. `NGF_prepare.py --check` reproduces the copies. No new axiom, hypothesis/domain restriction, trust row, quantifier, failure event or security metric was introduced.
+
+The complete inventory enumerates **{c['theorem_record_occurrences']:,} theorem-record occurrences** across all 89 selected historical certificates before loaded-module lookup. All 63 formerly missing chain-B declarations are now loaded and individually raw-audited. The remaining 62 missing declarations belong to chain A (NEE/NEJ/NEL/NEM/NEQ); none belongs to chain B. No chain-A source module was retargeted or imported from uncommitted WIP. NGF_CERT_INVENTORY.json preserves the original traversal; NGF_CERT_CHECK.json and NGF_CERT_ASSOCIATIONS.json.xz preserve every association and remaining gap. Selected-callee denials are propagated unchanged, so most newly coherent decoder models retain QUALIFIED caller rows. NGF_REMAINING.md lists every such row with exact transitive missing declaration names, selected callee claims and zero missing chain-B declarations.
+
+The combined import loads **AspisR1.RPx_Deployed.deployed**, NFX's admitted forest, NFY's packet forest and NGF's chain. NGF_AUDIT.json raw-walks **{a['root_count']:,} roots**, standard axioms only, with {len(a['collect_axioms_disagreements'])} collectAxioms disagreements. The exact compiled proof binary passed all eight planted/mutation fixtures. The walker source is byte-identical to NEP_WALKER; its selected object matches accepted NFY/NFX pins. Driver diffs change only module/root-manifest/runtime filenames. NGF_SCAN.json covers **{s['modules']:,} modules, {s['declarations']:,} declaration entries and {s['edges']:,} references**, with zero dangling references, incompatible owners or import mismatches. {s['compatible_cached_replicas']} compatible cached theorem replicas are disclosed separately.
+
+## Row admission and assumptions
+
+The unchanged complete historical S source validator passes all 97 rows. The unchanged NFX ledger builder exactly reproduces its historical 587-row baseline; outputs stayed in the private sandbox. NGF adds the full certificate-name check and retains its selected-callee denial algorithm. The 19 NFY promotions remain intact. NGF_LEDGER_DELTA.json uses the reviewed NGB overlay for the **599-row basis**: scoped before {d['before']}, after {d['after']}. Concurrent NFT/NFU/NGE and other lane deltas are separate; these are scoped NGF+NFY+NGB counts, not a claim about unimported concurrent work. No row is promoted solely from source compilation. {tests['rejected_mutations']} evidence-gate mutations are rejected.
+
+Retained: P6/D188 option-A native-contract semantic transport (reclassification, never removal), std/allocator/ABI/compiler/source-to-ELF realization, adopted SDK borrow semantics, RuntimePersistence, runtime digest/H realization, RuntimeReturnData (nonempty 1..1024; ASR8=792), RuntimeMemcmp and the existing cryptographic assumptions. L154 remains a statement parameter. Digest/error slots remain op43/op44 in the coherent SInt2 cohort. No Kani or extraction was run and no historical native pass is relabelled as new native evidence.
+
+## Budget, failures and pins
+
+**110/110 charged formal/audit scopes**, {metrics['success']} successful and one failed elaboration; 0 Kani, 0 extraction, 0 Rust/SBF builds. Measured cumulative scope wall time {metrics['wall_seconds']:.3f}s; maximum RSS {metrics['peak_rss_kib']:,} KiB; swaps0. Every scope had fresh admission exit0 AND allowed:true, one own scope at a time, 6G high / 8G max / swap0 / Tasks64; Lean -M7000. Each receipt and NGF_ATTEMPTS.jsonl records exact target/argv, source revision/hash, direct dependencies and resolved Aeneas objects, exit/time/RSS/swap, scope limits and full #print axioms lines. Successful proof/raw results use only propext/Classical.choice/Quot.sound, or none. Fixture axioms are intentionally confined to the eight audit controls.
+
+L014 failed because the original meta-tactic still searched `NEX_Snapshot` rather than renamed matcher names. The generator retargets the string prefix; changed L015 passes. Failed sorryAx output earns no credit. There was no timeout, memory kill, cap increase or unchanged failed-proof rerun. Initial seed size and sparse-input/parser failures are recorded in NGF_PREPARATION_FINDINGS.md; own validation scripts were corrected without weakening checks. Historical source snapshots use generic basenames, so admission maps the already-resolved NFY canonical owner rather than inferring it from a basename. This correction changed no raw root: all restored declarations were already selected by the complete top-theorem audit.
+
+Owned cache `{exp['cache_retained']}` is retained, with seed unique content **15,550,220,783 bytes** across 71,254 paths; all 138 NFY exports matched. A plain copy initially broke internal hardlinks and occupied 29G; owned-only hash-equal deduplication retained every path and byte, reducing the cache below20GiB. NGF_CACHE_IMPORTS.json.xz records imported hashes; NGF_EXPORT.json records retained exports, and NGF_CLOSURE_PINS.json.xz pins the actual resolved closure and Aeneas sidecars. Restore priority: owned NGF exports, NFY exports, copied NFY canonical priority, coherent SInt2 workspace/objects, copied fallback, pinned toolchain. Never substitute an unpinned legacy object. No cache, source or key was deleted.
+
+## Remaining work and release boundary
+
+Chain B has no remaining Lean obligation. Chain A's 62 exact missing declarations and their selected-callee consequences remain QUALIFIED. All three new closures are hybrid ruling-(y) certificate composition against the frozen implementation; no standalone source-to-security theorem is asserted. Integrate the independently committed chain-A result and repeat combined certificate/coherence admission under a new budget. The D/Pool joins, L159/L181, cold final replay L187 and final trust/source/artifact audit L188 remain outside this job. The 100-bit per-attempt target, privacy and two-transaction design are unchanged and not established by this retarget.
+
+No shipped file changed; NGF_SHIPPED_SOURCE_CHECK.json checks frozen `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`. The ELF rebuild trigger did not fire. Inherited only, not rebuilt/rehashed here: default `f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4`, devnet `63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299`, Pool `121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548`. This is focused cached coherence evidence, not a cold release replay.
+'''
+(E/'NGF_HANDOFF.md').write_text(text)
+print(json.dumps(metrics))
