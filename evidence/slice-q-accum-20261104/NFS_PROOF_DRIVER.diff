@@ -1,0 +1,75 @@
+--- NFN_ProofDriver.lean
++++ NFS_ProofDriver.lean
+@@ -64,25 +64,59 @@
+   let mode := args.headD "small"
+   let (modules, roots) :=
+     if mode == "proof0" then
+-      (#[`NFN_COMBINED_IMPORT], #[`NFN_NFB_GeometryComposed.result_state_effects, `NFN_NFB_GeometryComposed.accepted_physical, `NFN_NFB_GeometryInstall.standard])
++      (#[`NFS_COMBINED_IMPORT], #[`NFS_NEV_AccumPacket.raw_length, `NFS_NEV_AccumPacket.result_state_effects, `NFS_NEV_AccumPacket.no_base_dependency, `NFS_NEV_AccumulateComplete.reference])
+     else if mode == "proof1" then
+-      (#[`NFN_COMBINED_IMPORT], #[`NFN_NFB_GeometryInstall.step, `NFN_NFB_GeometryInstall.loop, `NFN_NEW_GeometryComplete.complete])
++      (#[`NFS_COMBINED_IMPORT], #[`NFS_NEV_AccumulateComplete.native, `AspisR1.RPx_Deployed.deployed, `AspisR1.NFM_ProductInstance.installed, `AspisR1.NFM_ProductInstance.wrapper])
+     else if mode == "proof2" then
+-      (#[`NFN_COMBINED_IMPORT], #[`NFN_PhaseTransport.legacy_roundtrip, `NFN_PhaseTransport.owner_roundtrip, `NFN_PhaseTransport.observer_none])
++      (#[`NFS_COMBINED_IMPORT], #[`AspisR1.NFG_QueryLoopSource.complete, `NFN_NFB_GeometryComposed.result_state_effects, `AspisR1.NFP_QueryTrace.erased, `AspisR1.NFP_LoopTransport.complete])
+     else if mode == "proof3" then
+-      (#[`NFN_COMBINED_IMPORT], #[`NFN_PhaseTransport.observer_some, `NFN_ReserveOwner.error_owner, `AspisR1.NFG_ProductOk.result])
++      (#[`NFS_COMBINED_IMPORT], #[`AspisR1.NFS_AccumDomain.line, `AspisR1.NFS_AccumDomain.domain, `AspisR1.NFS_AccumInstall.installed, `AspisR1.NFS_QueryOps.line])
+     else if mode == "proof4" then
+-      (#[`NFN_COMBINED_IMPORT], #[`AspisR1.NFG_PushRoot.private_result, `AspisR1.NFG_PushRoot.public_result, `AspisR1.NFG_PushRoot.private_domains])
++      (#[`NFS_COMBINED_IMPORT], #[`AspisR1.NFS_QueryOps.accumulation, `AspisR1.NFS_QueryBack.installed, `AspisR1.NFS_FoldInstall.rows, `AspisR1.NFS_FoldInstall.map_map])
+     else if mode == "proof5" then
+-      (#[`NFN_COMBINED_IMPORT], #[`AspisR1.NFG_SmallEffects.neg, `AspisR1.NFG_SmallEffects.zero, `NFG_InverseZeroDomain.unique])
++      (#[`NFS_COMBINED_IMPORT], #[`AspisR1.NFS_FoldInstall.line, `AspisR1.NFS_FoldInstall.circle, `AspisR1.NFS_FoldInstall.domains, `AspisR1.NFS_TraceBack.eval_bind])
+     else if mode == "proof6" then
+-      (#[`NFN_COMBINED_IMPORT], #[`NFG_InversePanic.zero, `AspisR1.RPx_Deployed.deployed])
+-    else if mode == "queryproof0" then
+-      (#[`NFN_QueryModel], #[`NFN_QueryModel.root, `NFN_QueryModel.geometry_then_query, `NFN_QueryModel.result_state_effects])
+-    else if mode == "queryproof1" then
+-      (#[`NFN_QueryModel], #[`NFN_QueryModel.progress, `NFN_QueryModel.fuel22_budget])
+-    else if mode == "queryscan" then (#[`NFN_QueryModel], #[])
+-    else if mode == "scan" then (#[`NFN_COMBINED_IMPORT], #[])
++      (#[`NFS_COMBINED_IMPORT], #[`AspisR1.NFS_TraceBack.model_congr, `AspisR1.NFS_TraceBack.source, `AspisR1.NFS_TraceBack.installed, `AspisR1.NFS_DotTrace.head])
++    else if mode == "proof7" then
++      (#[`NFS_COMBINED_IMPORT], #[`AspisR1.NFS_QueryValuesPacket.source, `AspisR1.NFS_QueryValuesPacket.result, `AspisR1.NFS_ReadCanonical.limbs, `AspisR1.NFS_ReadCanonical.bytes])
++    else if mode == "proof8" then
++      (#[`NFS_COMBINED_IMPORT], #[`AspisR1.NFS_ReadCanonical.field, `AspisR1.NFS_ReadCanonical.read_canonical, `AspisR1.NFS_QueryInvariant.form, `AspisR1.NFS_QueryInvariant.active])
++    else if mode == "proof9" then
++      (#[`NFS_COMBINED_IMPORT], #[`AspisR1.NFS_QueryInvariant.step, `AspisR1.NFS_CallerDomains.no_seed, `AspisR1.NFS_CallerDomains.loop_property, `AspisR1.NFS_CallerDomains.array_property])
++    else if mode == "proof10" then
++      (#[`NFS_COMBINED_IMPORT], #[`AspisR1.NFS_CallerDomains.fields, `AspisR1.NFS_CallerDomains.dots, `AspisR1.NFS_CallerDomains.folds, `AspisR1.NFS_QueryLoopRoot.finite])
++    else if mode == "proof11" then
++      (#[`NFS_COMBINED_IMPORT], #[`AspisR1.NFS_QueryLoopRoot.root, `AspisR1.NFS_QueryLoopRoot.tx1, `AspisR1.NFS_QueryLoopRoot.tx2, `AspisR1.NFS_LoopTraceDefs.bind_congr])
++    else if mode == "proof12" then
++      (#[`NFS_COMBINED_IMPORT], #[`AspisR1.NFS_LoopTraceDefs.compare, `AspisR1.NFS_LoopTraceDefs.erased, `AspisR1.NFS_LoopTrace.erase_fixed, `AspisR1.NFS_LoopTrace.source])
++    else if mode == "proof13" then
++      (#[`NFS_COMBINED_IMPORT], #[`AspisR1.NFS_PacketRoot.geometry, `AspisR1.NFS_PacketRoot.node, `AspisR1.NFS_PacketRoot.query, `AspisR1.NFS_PacketRoot.loop])
++    else if mode == "proof14" then
++      (#[`NFS_COMBINED_IMPORT], #[`AspisR1.NFP_Advance.accepted, `AspisR1.NFP_Carrier.from_to, `AspisR1.NFP_Carrier.to_from, `AspisR1.NFP_Carrier.words])
++    else if mode == "proof15" then
++      (#[`NFS_COMBINED_IMPORT], #[`AspisR1.NFP_Carrier.canonical, `AspisR1.NFP_DotCaller.tail, `AspisR1.NFP_DotCaller.query, `AspisR1.NFP_DotDomains.returned])
++    else if mode == "proof16" then
++      (#[`NFS_COMBINED_IMPORT], #[`AspisR1.NFP_DotInstall.dot_result, `AspisR1.NFP_DotInstall.head, `AspisR1.NFP_FrameExt.raw, `AspisR1.NFP_GeometryDomains.reads])
++    else if mode == "proof17" then
++      (#[`NFS_COMBINED_IMPORT], #[`AspisR1.NFP_HeadDomain.reached, `AspisR1.NFP_LoopBudget.tx1, `AspisR1.NFP_LoopBudget.tx2, `AspisR1.NFP_LoopBudget.maximum])
++    else if mode == "proof18" then
++      (#[`NFS_COMBINED_IMPORT], #[`AspisR1.NFP_LoopTerminals.error, `AspisR1.NFP_LoopTerminals.stopped, `AspisR1.NFP_LoopTerminals.rejected, `AspisR1.NFP_LoopTerminals.failed])
++    else if mode == "proof19" then
++      (#[`NFS_COMBINED_IMPORT], #[`AspisR1.NFP_LoopTerminals.diverged, `AspisR1.NFP_LoopTransport.child, `AspisR1.NFP_NatBase.sub_word, `AspisR1.NFP_NatBase.add])
++    else if mode == "proof20" then
++      (#[`NFS_COMBINED_IMPORT], #[`AspisR1.NFP_NatBase.sub, `AspisR1.NFP_NodeDictionary.product, `AspisR1.NFP_NodeDictionary.add, `AspisR1.NFP_NodeDictionary.sub])
++    else if mode == "proof21" then
++      (#[`NFS_COMBINED_IMPORT], #[`AspisR1.NFP_NodeDictionary.node, `AspisR1.NFP_ObserverErasure.query, `AspisR1.NFP_ObserverErasure.phase, `AspisR1.NFP_ObserverErasure.trace])
++    else if mode == "proof22" then
++      (#[`NFS_COMBINED_IMPORT], #[`AspisR1.NFP_ProductLaw.emitted, `AspisR1.NFP_ProductLaw.node, `AspisR1.NFP_QueryAdvance.accepted, `AspisR1.NFP_QueryAdvance.offset])
++    else if mode == "proof23" then
++      (#[`NFS_COMBINED_IMPORT], #[`AspisR1.NFP_QueryCuts.source, `AspisR1.NFP_RejectionTrace.guard, `AspisR1.NFP_RejectionTrace.rejected_prefix, `AspisR1.NFP_Resume.tx1])
++    else if mode == "proof24" then
++      (#[`NFS_COMBINED_IMPORT], #[`AspisR1.NFP_Resume.tx2, `AspisR1.NFP_ReturnCuts.erased, `AspisR1.NFP_ReturnCuts.continuation, `AspisR1.NFP_SuffixCuts.source])
++    else if mode == "proof25" then
++      (#[`NFS_COMBINED_IMPORT], #[`AspisR1.NFP_TraceBack.erased, `AspisR1.NFP_TraceFront.erased, `AspisR1.NFP_TraceHead.erased, `AspisR1.NFP_TraceTypes.pure_result])
++    else if mode == "proof26" then
++      (#[`NFS_COMBINED_IMPORT], #[`AspisR1.NFM_Cuts.abort_prefix, `AspisR1.NFG_PushRoot.private_result, `AspisR1.NFG_PushRoot.public_result])
+     else if mode == "fixtures" then
+       (#[`NEP_Planted, `NEP_Mutations],
+        #[`NEP_Planted.matcher, `NEP_Planted.viaPrivate, `NEP_Planted.proof,

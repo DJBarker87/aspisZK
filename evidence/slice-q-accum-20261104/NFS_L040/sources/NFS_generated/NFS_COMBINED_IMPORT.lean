@@ -1,0 +1,44 @@
+import RPx_Deployed
+import NFM_ProductInstance
+import NFG_QueryLoopSource
+import NFG_PushRoot
+import NFN_GeometryPart08
+import NFS_NEV_AccumPacket
+import NFP_Advance
+import NFP_Carrier
+import NFP_DotCaller
+import NFP_DotDomains
+import NFP_DotInstall
+import NFP_FrameExt
+import NFP_GeometryDomains
+import NFP_HeadDomain
+import NFP_LoopBudget
+import NFP_LoopTerminals
+import NFP_LoopTransport
+import NFP_NatBase
+import NFP_NodeDictionary
+import NFP_ObserverErasure
+import NFP_ProductLaw
+import NFP_QueryAdvance
+import NFP_QueryCuts
+import NFP_QueryTrace
+import NFP_RejectionTrace
+import NFP_Resume
+import NFP_ReturnCuts
+import NFP_SuffixCuts
+import NFP_TraceBack
+import NFP_TraceFront
+import NFP_TraceHead
+import NFP_TraceTypes
+#print axioms NFS_NEV_AccumPacket.raw_length
+#print axioms NFS_NEV_AccumPacket.result_state_effects
+#print axioms NFS_NEV_AccumPacket.no_base_dependency
+#print axioms NFS_NEV_AccumulateComplete.reference
+#print axioms NFS_NEV_AccumulateComplete.native
+#print axioms AspisR1.RPx_Deployed.deployed
+#print axioms AspisR1.NFM_ProductInstance.installed
+#print axioms AspisR1.NFM_ProductInstance.wrapper
+#print axioms AspisR1.NFG_QueryLoopSource.complete
+#print axioms NFN_NFB_GeometryComposed.result_state_effects
+#print axioms AspisR1.NFP_QueryTrace.erased
+#print axioms AspisR1.NFP_LoopTransport.complete
