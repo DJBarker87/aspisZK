@@ -53,13 +53,13 @@ for old,n in zip(names,new):
  body=re.sub(r'(?m)^(\s*)loop\s*$',r'\1Code.loop',body)
  blocks.append(sig+':= do'+body+'\n')
  records.append(dict(source_name=old,lifted_name=n,source_span=[src[:m.start()].count('\n')+1,src[:m.end()].count('\n')+1],source_text_sha256=hashlib.sha256(m[0].encode()).hexdigest()))
-head='''import PV_STX_Code
+head='''import PV_STX_DenoteRules
 import R1Z.ProverRwFullFuns
 set_option autoImplicit false
 noncomputable section
 namespace PV_STX_Entropy
 open Aeneas Aeneas.Std ProverRwFull ControlFlow
-open PV_STX_Code
+open PV_STX_Code PV_STX_DenoteRules
 variable [ExternalTypes]
 
 /-- The actual five opaque call points reached by the entropy source body.
@@ -91,33 +91,32 @@ fixed-answer condition on an advancing handler. -/
 theorem nonzeroBody_erases (bytes : Array U8 32#usize) (combined : U8) (i : Usize) :
     denote fixed (nonzeroBody bytes combined i) =
       aspis_prover.state_only_entropy.entropy_nonzero32_loop.body bytes combined i := by
-  unfold nonzeroBody aspis_prover.state_only_entropy.entropy_nonzero32_loop.body
-  trace_state
-  split <;> trace_state
+  simp only [nonzeroBody, aspis_prover.state_only_entropy.entropy_nonzero32_loop.body,
+    if_rule, bind_rule, result_rule, pure_rule]
 
 theorem nonzeroLoop_erases (bytes : Array U8 32#usize) (combined : U8) (i : Usize) :
     denote fixed (nonzeroLoop bytes combined i) =
       aspis_prover.state_only_entropy.entropy_nonzero32_loop bytes combined i := by
-  rfl
+  simp only [nonzeroLoop, loop_rule, nonzeroBody_erases, aspis_prover.state_only_entropy.entropy_nonzero32_loop]
 
 theorem nonzero_erases (bytes : Array U8 32#usize) :
     denote fixed (nonzero bytes) = aspis_prover.state_only_entropy.entropy_nonzero32 bytes := by
-  rfl
+  simp only [nonzero, bind_rule, nonzeroLoop_erases, pure_rule, aspis_prover.state_only_entropy.entropy_nonzero32]
 
 theorem entropyBody_erases (nonce : Array U8 32#usize) (limit retry : Usize) :
     denote fixed (entropyBody nonce limit retry) =
       aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop.body nonce limit retry := by
-  rfl
+  simp only [entropyBody, aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop.body, if_rule, bind_rule, call_rule, result_rule, pure_rule, cf_rule, pair_rule, fixed, nonzero_erases, Aeneas.Std.bind]
 
 theorem entropyLoop_erases (nonce : Array U8 32#usize) (limit retry : Usize) :
     denote fixed (entropyLoop nonce limit retry) =
       aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop nonce limit retry := by
-  rfl
+  simp only [entropyLoop, loop_rule, entropyBody_erases, aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop]
 
 theorem generate_erases (nonce : Array U8 32#usize) :
     denote fixed (generate nonce) =
       aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce nonce := by
-  rfl
+  simp only [generate, bind_rule, nonzero_erases, if_rule, entropyLoop_erases, pure_rule, aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce]
 
 #print axioms nonzeroBody_erases
 #print axioms nonzeroLoop_erases
