@@ -11,7 +11,9 @@ descriptor-view instance. The unchanged statements remain in
 parameter is `Heap S`, containing backend state and a pointer-to-layout
 metadata table; its frame is `Frame F`, containing the existing frame and an
 explicit source-slot table. A `Header` has pointer, **stored RawVec capacity**,
-length, element shape, and evidence of the source dangling-pointer constructor.
+length, element shape, and a flag intended to record the source dangling-pointer
+constructor. Association of that flag/address with the native pointer remains
+part of the source interpretation; the boolean alone is not such a proof.
 `Owned` is exactly allocation metadata for `cap * width` and the element
 alignment with `world.live pointer = true`, or dangling with stored capacity
 zero. Length validity and initialized element interpretation are separate.
@@ -69,19 +71,30 @@ types. Allocation/denial commute with the existing V183 updates. Source
 header installation changes the source table and disappears under this map.
 `execute_frame` proves that V183's existing execute does not change its frame.
 Consequently the new source table cannot just be read from that unchanged
-frame to discharge the requested post-world metadata equation. The source
-identity/current-call association must also be recoverable after projection,
-for example by an allocator-side owner registry with a proved returning
-projection and a pending/committed phase interpretation. Merely declaring
-such a registry, or defining its answer to be `Execution.buffer`, would not
-prove the source association.
+frame to discharge the requested post-world metadata equation.
 
-The exact next construction is that source-derived registry and selector,
-initialized at the original constructors and preserved through their moves
-and calls. Prove its correspondence to the actual native receiver and header
-stores, then derive the unchanged reserve equation and v263 instance. The
-source-slot model here supplies local store/phase laws for that construction;
-it does not supply the selector as an assumption.
+`PV_EVHB_OwnerRegistry` constructs an allocator-side returning projection.
+`fromSource` reads the selected source place; `project` constructs the world
+map rather than assuming two world types equal. `source_lookup`,
+`source_metadata` and `source_install_table` identify that place's descriptor
+and its pointer/capacity update. `registered_header_delivery` derives the
+header equation for this constructed returning registry, including denial,
+overflow and no-growth. It is NOT named or credited as the requested reached
+native theorem. Its `step` records the post-store descriptor of the returning
+macro-step, not an extra native allocator action. The actual native primitive
+returning projection and the complete source execution/macro projection must
+still be related, with nonreturning branches retained in the full interpreter.
+The `max` in metadata is a total extension to unrelated erased vectors required
+by V183's type; `source_metadata` proves it is the source capacity on matching
+valid vectors. No owner is chosen by element equality.
+
+The exact next construction is the original constructors' and callers'
+interpretation initializing this registry and selecting the actual receiver,
+with stable lifetime identity through moves. Prove the full returning macro
+projection from the native source execution, then derive the unchanged reached
+reserve equation and v263 instance. The source-slot and registry models here
+supply local store/phase laws; they do not supply the original selector as an
+assumption. A model header equation alone does not discharge native association.
 
 ## Evidence and retained obligations
 

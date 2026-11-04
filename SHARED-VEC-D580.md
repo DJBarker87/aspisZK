@@ -1,5 +1,26 @@
 # D580 shared native Vec correspondence — unresolved
 
+## D582 construction update (original specifications below unchanged)
+
+`PV_EVHB_RawVecOwner`, `PV_EVHB_RawVecSource`,
+`PV_EVHB_RawVecProjection` and `PV_EVHB_OwnerRegistry` are accepted local
+construction modules. The source-slot lookup and two header stores are
+explicit; realloc uses a pending-allocation phase and drop consumes ownership.
+The registry has a concrete source-world injection, source-place/store laws,
+and a derived header-delivery equation for its returning model. It selects by
+source-place identity, not element equality. See
+`evidence/pv-evhB-20261103/OWNER-D582.md` and `owner-source-D582.json`.
+
+This is NOT yet the generic source-bound native interpreter specified below.
+Original constructor/receiver/lifetime association and the complete native
+primitive/macro projection remain unproved; no constructed native v263
+runtime/growth pair or descriptor-view instance is delivered. Both original
+equations and binders below remain OPEN and unchanged. Source control models
+retain complete outer outcomes, but their primitive/diagnostic bindings are
+not native adequacy proofs. No reached counterexample is claimed. rdea-1,
+rdea-2/V400, V370/L3 and V183 SUSPENDED(K-3) remain; no T/endpoint change.
+Next91229;67 attempts remain; audits91298–91299 unused.
+
 Resume source: `c1b31fa688727ff7e4a08216557f25eccb2a7a1e`, branch
 `codex/pv-evhB-20261103`. V263 inspected at
 `a5b8b16cf10ae7fa94a493a4e4723cefd83d3d1c`, including

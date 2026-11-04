@@ -1,6 +1,55 @@
 # PV evhB allocator/callback context checkpoint
 
-## D582 in-progress owner construction checkpoint
+## D582 final context checkpoint — native association still OPEN
+
+Read `OWNER-D582.md`, the D582 updates in both root blocker/shared documents,
+and `owner-source-D582.json`. The original requested source-bound construction,
+`reached_reserve_header_delivery`, and v263 instance are NOT established. The
+original statements/binders/domain are unchanged; no reached counterexample
+to either final equation is claimed. No T/endpoint/deployment change.
+
+New accepted immutable sources: Owner91224 (3.38s,2633896KiB), Source91225
+(3.84s,2655744KiB), Projection91226 (4.21s,2628768KiB), Registry91228
+(1.62s,2652056KiB). All exit0/swap0, normal6G/8G caps, standard summary-based
+axioms only. Receipts pin source revisions, blobs, object/dependency hashes and
+complete logs. They are local construction laws, not a native release result.
+
+Registry constructs `project` rather than assuming a world equality;
+`source_lookup`/`source_metadata` read the selected source place;
+`source_install_table` derives the returning descriptor update from the same
+owner's source pointer/capacity stores. `registered_header_delivery` proves
+header delivery for the constructed RETURNING MODEL. Its `step` records the
+post-store descriptor of a macro-step, not an extra native allocator action.
+The full native interpreter must retain nonreturns separately and prove its
+returning projection; do NOT use this model theorem as the unchanged target.
+
+Exact next work: construct original constructor/receiver-place/lifetime
+identity interpretation, including moves, so selection of Registry.current is
+source-derived. Prove native Global/System/source macro projection using the
+pending/committed phase laws, numeric/layout interpretation and actual resource
+answers (rdea-1 retained). Complete shrink reachability/control, push's value
+store/length store and actual v263 runtime/growth instance. The model's
+dangling flag is not proof of native pointer provenance. Neither its metadata
+total extension nor any supplied target equality discharges source association.
+
+**30/97 attempts charged:21 accepted/9 rejected;67 remain; NEXT91229.**
+New IDs91222–91228:4 accepted/3 rejected. New failed sources91222/91223/91227
+were changed before retry; no failed summary earns credit. Five uncharged
+refusals (two91222,two91223,one91224), each followed by at least180s from the
+latest refusal before retrying its same unlaunched ID. Audits91298–91299 unused.
+No pending compile, native/Kani/extraction/full-manifest launch. The final
+receipt audit and source checks refresh `summary.json`; axioms are SUMMARY-
+BASED only, no raw NEP/cohort-coherence claim. Host final snapshot is read-only.
+
+Own staging order repair is in `stage-order-D582.json`: complete accepted
+object-set loading precedes dependency-subset validation, preserving hash and
+effective-resolution checks. No shared infrastructure/environment/object edit.
+The inherited prompt-pv-evh4.txt remains absent; no contents were invented.
+
+The earlier D582 checkpoint below is historical; its draft/status/counts are
+superseded by this section and the final receipts.
+
+## D582 earlier in-progress owner construction checkpoint
 
 Read `OWNER-D582.md` and `owner-source-D582.json`; the latter must be regenerated
 after final source edits. Resumed at `9f6c615e29`. Requested source-bound native

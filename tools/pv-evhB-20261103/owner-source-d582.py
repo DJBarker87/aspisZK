@@ -19,6 +19,7 @@ source = raw.decode()
 lean = Path('lean/PV_EVHB_RawVecOwner.lean').read_text()
 control = Path('lean/PV_EVHB_RawVecSource.lean').read_text()
 projection = Path('lean/PV_EVHB_RawVecProjection.lean').read_text()
+registry = Path('lean/PV_EVHB_OwnerRegistry.lean').read_text()
 
 
 def span(start, end):
@@ -89,6 +90,9 @@ record = dict(
     control_sha256=hashlib.sha256(control.encode()).hexdigest(),
     projection_path='lean/PV_EVHB_RawVecProjection.lean',
     projection_sha256=hashlib.sha256(projection.encode()).hexdigest(),
+    registry_path='lean/PV_EVHB_OwnerRegistry.lean',
+    registry_sha256=hashlib.sha256(registry.encode()).hexdigest(),
+    constructed_returning_registry='OwnerRegistry; source-place/store and model header-delivery laws; actual native instance OPEN',
     allocator_metadata_transitions='specified returning semantics; native Global/System adequacy retained under rdea-1',
     source_to_machine='V370 retained',
     original_caller_slot_interpretation='OPEN',
@@ -101,6 +105,7 @@ record = dict(
         'constructors and reached source receiver to owner-slot identity',
         'initialization and same native header/value interpretation',
         'allocator-side active-owner registry preserved by source calls',
+        'full source-execution to registry macro-step returning projection, retaining nonreturning native runs separately',
         'Global/System primitive request/outcome/event association',
         'numeric checked/wrapping/layout interpretation under admitted ABI',
         'shrink reachability and source interpreter',

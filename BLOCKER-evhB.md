@@ -1,5 +1,35 @@
 # D580 blocker: native reserve header delivery into the advancing world
 
+## D582 partial construction; unchanged native target still OPEN
+
+Four new modules now construct descriptor ownership, source-slot stores and
+moves, pending allocation installation, source-shaped RawVec control, an
+explicit world projection, and a returning allocator-side owner registry.
+See `evidence/pv-evhB-20261103/OWNER-D582.md` for exact scope and receipts.
+`PV_EVHB_OwnerRegistry.registered_header_delivery` proves the header equation
+for its CONSTRUCTED returning model, with denial/overflow/no-growth included.
+It is not the native `reached_reserve_header_delivery` statement below.
+
+The unresolved step is now to initialize and select this registry from the
+ORIGINAL native constructors/receiver places, retaining the same lifetime
+identity through moves, and prove the full source-execution/returning-macro
+projection for actual Global/System answers. The concrete `project` map and
+`source_install_table` avoid assuming equality of world types or supplying
+the desired header equality. They do not prove that the original native
+receiver is the selected source slot. Numeric/layout interpretation, shrink
+reachability/control, push's value/length stores, diagnostic/nonreturning
+association and the v263 descriptor-view installation also remain open.
+
+Source-phase finding: a successful realloc can invalidate ownership of the
+OLD header before `set_ptr_and_cap`; the new `Pending` relation is installed
+by its two stores. Drop consumes ownership without resetting the old header.
+This is NOT a counterexample to reserve-return header delivery, and neither
+requested final equation has been disproved. No native instance, new T field,
+endpoint weakening, or allocator-adequacy discharge is claimed.
+
+Final D582 accounting: IDs91222–91228 consumed (four accepted, three rejected);
+next91229,67 attempts remain; audits91298–91299 unused. Axioms are summary-based.
+
 ## D580 generic Vec resume at c1b31fa688
 
 The requested generic route was inspected against the pinned V183 interfaces,
