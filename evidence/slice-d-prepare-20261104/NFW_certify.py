@@ -26,7 +26,7 @@ def native(i,expected):
  return r
 
 def build():
- for p,n in [(3,4),(5,6),(7,8)]:
+ for p,n in [(3,4),(5,6),(7,8),(25,26)]:
   assert native(p,0)['module']==native(n,1)['module']
  patch=R/'evidence/kani-mitig-20261028/KMX_copy_stubs.patch'
  assert sha(patch.read_bytes())=='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67'
@@ -55,20 +55,20 @@ def build():
  for c in Q.functions[F]['callees']:
   target=c['function'];active=target==selected
   assert all(by[r]['composed_status']=='CLOSED' for r in c['rows'])
-  edges.append(dict(edge=F+' -> '+target,status='CLOSED',certificate=dict(selected=active,callee_packets=c['existing_packets'],domain_proof='NFW_LPi_PowersSource.one_canonical and NFW_LPi_PowersValue.loop derive canonical p at every continuing iteration; gamma is the root canonical input. NFW_LPi_TowerValues.wide_mul returns canonical output and exact natural mulE. K005/K007 record precisely the same operands; K006/K008 fail.' if active else 'Conservative receiver alternative excluded by actual frozen E=WideExact declaration and emitted powers_loop.body, which calls only WideExact.mul. The K005/K007 local-record cut has the identical typed E operands. Lower arithmetic remains inside the CLOSED WideExact callee packet.',lean_root='AspisR1.NFW_PowersCohort.source',native_positive=['NFW_K005','NFW_K007'],matched_control=['NFW_K006','NFW_K008'])))
+  edges.append(dict(edge=F+' -> '+target,status='CLOSED',certificate=dict(selected=active,callee_packets=c['existing_packets'],domain_proof='NFW_LPi_PowersSource.one_canonical and NFW_LPi_PowersValue.loop derive canonical p at every continuing iteration; gamma is the root canonical input. NFW_LPi_TowerValues.wide_mul returns canonical output and exact natural mulE. K005/K007 record precisely the same operands; K006/K008 fail.' if active else 'Conservative receiver alternative excluded by actual frozen E=WideExact declaration and emitted powers_loop.body, which calls only WideExact.mul. The K005/K007 local-record cut has the identical typed E operands. Lower arithmetic remains inside the CLOSED WideExact callee packet.',lean_root='AspisR1.NFW_PowersCohort.source',native_positive=['NFW_K005','NFW_K007','NFW_K025'],matched_control=['NFW_K006','NFW_K008','NFW_K026'])))
  physical='Root retained carrier/ABI, compiler/library/Aeneas interpretation, source-to-ELF and P6/D188 option-A native semantic transport; reclassification, no premise removal'
- cc=dict(function=F,rows=['TX1:197','TX2:138'],status='CLOSED',form='ruling(y), one arbitrary-prestate native iteration plus Lean induction',domain='N=7 or N=29; all eight input limbs canonical (<2147483647); no output equality, child-success or native trace assumed at the root',native_positive=['NFW_K005','NFW_K007'],matched_control=['NFW_K006','NFW_K008'],copy_positive='NFW_K003',copy_negative='NFW_K004',kmx_patch_sha256=sha(patch.read_bytes()),lean_root='AspisR1.NFW_PowersCohort.source',native_induction='NFW_LPi_PowersStep/Prefix/Value/Source; NFW_PowersFrame; NFW_LPm_PowersBridge; NFW_NBQ_Powers29',model_association='Canonical RPz7 emitted powers = adopted AspisR1ClaimPreparedBridge.powersPublic on the same ported input/output, via canonical coordinate injectivity; source theorem derives the result',field_stub_table='evidence/slice-d-prepare-20261104/LPh_STUBS.md',frame='Only local out/p/i and local ghost log change. Complete selected-word frame at arbitrary row/limb; input x unchanged. No hash, runtime, observer or writable static.',internal_edges=edges,physical_interpretation=physical,inner_hypotheses_remaining=[])
+ cc=dict(function=F,rows=['TX1:197','TX2:138'],status='CLOSED',form='ruling(y), one arbitrary-prestate native iteration plus Lean induction',domain='N=4, N=7 or N=29; all eight input limbs canonical (<2147483647); no output equality, child-success or native trace assumed at the root',native_positive=['NFW_K005','NFW_K007','NFW_K025'],matched_control=['NFW_K006','NFW_K008','NFW_K026'],copy_positive='NFW_K003',copy_negative='NFW_K004',kmx_patch_sha256=sha(patch.read_bytes()),lean_root='AspisR1.NFW_PowersCohort.source',native_induction='NFW_LPi_PowersStep/Prefix/Value/Source; NFW_PowersFrame; NFW_LPm_PowersBridge; NFW_NBQ_Powers29',model_association='Canonical RPz7 emitted powers = adopted AspisR1ClaimPreparedBridge.powersPublic on the same ported input/output, via canonical coordinate injectivity; source theorem derives the result',field_stub_table='evidence/slice-d-prepare-20261104/LPh_STUBS.md',frame='Only local out/p/i and local ghost log change. Complete selected-word frame at arbitrary row/limb; input x unchanged. No hash, runtime, observer or writable static.',internal_edges=edges,physical_interpretation=physical,inner_hypotheses_remaining=[])
  certs={};candidates={}
  class Support:
   def support(self,c):
    for x in N.walk(c):
     if isinstance(x,dict) and {'path','sha256'}<=x.keys():assert sha((R/x['path']).read_bytes())==x['sha256']
- support=[p for p in E.glob('NFW_*.lean') if p.stem in modules]+[E/'LPh_STUBS.md',E/'NFW_powers.patch']+[E/f'NFW_K{i:03}'/n for i in range(3,9) for n in ['receipt.json','stdout.log']]
+ support=[p for p in E.glob('NFW_*.lean') if p.stem in modules]+[E/'LPh_STUBS.md',E/'NFW_powers.patch']+[E/f'NFW_K{i:03}'/n for i in list(range(3,9))+[25,26] for n in ['receipt.json','stdout.log']]
  pins=[dict(path=str(p.relative_to(R)),sha256=sha(p.read_bytes())) for p in support]
  for rid in cc['rows']:
   row=by[rid];frozen=subprocess.check_output(['git','show',base['frozen_revision']+':crates/aspis-r1-cost-probe/src/weights.rs'],cwd=R)
   lo,hi=row['frozen_body_byte_range'];body=frozen[lo:hi];assert sha(body)==row['frozen_body_sha256']
-  for i in range(3,9):assert body in (E/f'NFW_K{i:03}/sources/NFW_src/crates/aspis-r1-cost-probe/src/weights.rs').read_bytes()
+  for i in list(range(3,9))+[25,26]:assert body in (E/f'NFW_K{i:03}/sources/NFW_src/crates/aspis-r1-cost-probe/src/weights.rs').read_bytes()
   c=dict(id='NFW::'+rid,row=rid,subject=F,function=F,frozen_body_sha256=row['frozen_body_sha256'],domain=cc['domain'],top_hypotheses=[physical],inner_hypotheses_remaining=[],native=cc,external_obligations={o['id']:dict(classification='source local array store, primitive index/increment and early-return control; complete frame and canonical induction',detail=o['call']) for o in row['caller_domain_obligations'] if 'callee' not in o},support=pins)
   c['semantic_review_sha256']=sha(json.dumps(c,sort_keys=True).encode());N.certificate_checks(Support(),c)
   r=N.materialize_recipe(row,c,'NFW',{'edges':edges})

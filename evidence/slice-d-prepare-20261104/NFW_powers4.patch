@@ -1,0 +1,11 @@
+--- a/crates/aspis-r1-cost-probe/src/NFW_weights.rs
++++ b/crates/aspis-r1-cost-probe/src/NFW_weights.rs
+@@ -41,3 +41,8 @@
+ #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+ #[kani::stub(<[u32]>::copy_from_slice,KMX_copy_from_slice)]
+ fn copy_e(){let src=arbitrary_e();let mut dst=arbitrary_e();unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};let word:usize=kani::any();kani::assume(word<8);assert!((dst.to_limbs()[word]==src.to_limbs()[word])!=cfg!(NFW_invert));}
++
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u32]>::copy_from_slice,KMX_copy_from_slice)]
++fn powers4_step(){check::<4>();}

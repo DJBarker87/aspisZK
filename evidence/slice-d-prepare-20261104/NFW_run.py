@@ -52,6 +52,12 @@ if kind=='kani':
  env.update(CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-Copt-level=3 -C link-arg=-Wl,--threads=1')
  import os
  if os.environ.get('NFW_INVERT'):env['RUSTFLAGS']+=' --cfg NFW_invert'
+ if os.environ.get('NFW_BADARG'):env['RUSTFLAGS']+=' --cfg NFW_badarg'
+ if os.environ.get('NFW_PART') is not None:
+  part=int(os.environ['NFW_PART']);assert 0<=part<5;env['RUSTFLAGS']+=' --cfg NFW_part'+str(part)
+ if os.environ.get('NFW_BADARG'):env['RUSTFLAGS']+=' --cfg NFW_badarg'
+ if os.environ.get('NFW_PART') is not None:
+  part=int(os.environ['NFW_PART']);assert 0<=part<5;env['RUSTFLAGS']+=' --cfg NFW_part'+str(part)
 elif kind=='extract':
  files['NFW_extract.py']=(E/'NFW_extract.py').read_text();sources=['NFW_extract.py','NFW_src/crates/aspis-r1-cost-probe/src/NFW_reference.rs'];command=['python3','NFW_extract.py']
  if target=='NFW_ScanReference':
@@ -97,7 +103,7 @@ if kind=='kani' and os.environ.get('NFW_STATEMENT'):
  fs=[f for f in fs if f!='spend-dynamic-rate512'];cfg['root_package']='aspis-statement';cfg['metadata_features']=','.join('aspis-statement/'+f for f in fs)
  i=cfg['native_command'].index('--manifest-path');cfg['native_command'][i+1]=B+'/NFW_src/crates/aspis-statement/Cargo.toml'
  i=cfg['native_command'].index('--features');cfg['native_command'][i+1]=','.join(fs)
-cfg['expected_time']='optimized compilation then scalar contract; no field multiplication' if kind=='kani' else cfg['expected_time']
+cfg['expected_time']=('optimized program compilation then selected syscall part/byte and reply association; no SHA execution' if target.startswith('NFW_syscall') else 'optimized compilation then local-record caller/cut association; no field multiplication') if kind=='kani' else cfg['expected_time']
 files[a+'.json']=json.dumps(cfg)
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
