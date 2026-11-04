@@ -20,4 +20,6 @@ old=json.loads((F/'NFA_AUDIT.json').read_text());assert old['unique_roots']==152
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 obj=json.loads((E/'NFC_L003/receipt.json').read_text())['deps_fingerprint']['selected_objects']
 out=dict(status='PASS_AX2_CONDITION_3',walker_unchanged=True,walker_sha256=sha(F/'NFA_WALKER.lean'),driver_diff_sha256=sha(E/'NFC_DRIVER.diff'),fixtures=results,fixture_sources={str(P/n):sha(P/n) for n in ['NEP_Planted.lean','NEP_Mutations.lean']},fixture_objects={k:v for k,v in obj.items() if 'NEP_Planted' in k or 'NEP_Mutations' in k},fixture_receipt='NFC_L005/receipt.json',print_axioms=re.findall(r"'[^']+' (?:depends on axioms: \[[^\]]*\]|does not depend on any axioms)",log),inherited_audit=dict(path=str(F/'NFA_AUDIT.json'),sha256=sha(F/'NFA_AUDIT.json'),unique_roots=152,rerun=False),rows_credited=['TX1:185','TX2:111','TX1:182','TX2:108'],credit='Inherited NEV local composed rows admitted by ax2; no incoming caller edge or slice-root closure',security_target_established=False)
+previous=json.loads((E/'NFC_AUDIT.json').read_text()) if (E/'NFC_AUDIT.json').exists() else {}
+if 'standalone_NFC' in previous:out['standalone_NFC']=previous['standalone_NFC']
 (E/'NFC_AUDIT.json').write_text(json.dumps(out,indent=2)+'\n');print('PASS: eight fixture roots; four NEV rows admitted')

@@ -79,7 +79,11 @@ r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
 names += [str(p.relative_to(b)) for p in b.glob('NEP_'+{target!r}+'_*_REACHABLE.txt')] if {kind!r}=='auditbin' else []
-print(json.dumps({{n:(b/n).read_text() for n in names}}))
+out={{n:(b/n).read_text() for n in names}}
+for name in ['NFC_Driver','NFC_ProofDriver']:
+ p=b/'NFC_native'/name
+ if p.is_file():out[a+'/'+name+'_BINARY_PIN.json']=json.dumps(dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size))
+print(json.dumps(out))
 ''');assert r.returncode==0,r.stderr
 out=json.loads(r.stdout)
 for n,t in out.items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
