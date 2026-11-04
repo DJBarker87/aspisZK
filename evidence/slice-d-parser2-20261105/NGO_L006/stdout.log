@@ -1,0 +1,64 @@
+@[irreducible] def Aeneas.Std.List.toChunksExact.{u_1} : {α : Type u_1} →
+  (n : ℕ) → 0 < n → List α → List (List α) × List α :=
+fun {α} n hn =>
+  WellFounded.Nat.fix (fun x => x.length) fun l a =>
+    if _h : l.length < n then ([], l)
+    else
+      match a (List.drop n l) ⋯ with
+      | (chunks, rem) => (List.take n l :: chunks, rem)
+def AspisR1PrefixAggregateParser.r1_wire.validate_record_fields_loop : core.iter.adapters.enumerate.Enumerate
+    (core.slice.iter.ChunksExact U8) →
+  U8 → Result (core.result.Result Unit AspisR1PrefixAggregateParser.r1_wire.Error) :=
+fun iter row => loop (fun iter1 => AspisR1PrefixAggregateParser.r1_wire.validate_record_fields_loop.body row iter1) iter
+def AspisR1PrefixAggregateParser.r1_wire.validate_record_fields_loop.body : U8 →
+  core.iter.adapters.enumerate.Enumerate (core.slice.iter.ChunksExact U8) →
+    Result
+      (ControlFlow (core.iter.adapters.enumerate.Enumerate (core.slice.iter.ChunksExact U8))
+        (core.result.Result Unit AspisR1PrefixAggregateParser.r1_wire.Error)) :=
+fun row iter => do
+  let (o, iter1) ←
+    core.iter.adapters.enumerate.IteratorEnumerate.next (core.iter.traits.iterator.IteratorChunksExact U8) iter
+  match o with
+    | none => ok (ControlFlow.done (core.result.Result.Ok ()))
+    | some p =>
+      let (value, bytes) := p
+      do
+      let o1 ← AspisR1PrefixAggregateParser.field.wide_exact.WideExact.from_le_bytes bytes
+      let r ←
+        AspisR1PrefixAggregateParser.core.option.Option.ok_or o1
+            (AspisR1PrefixAggregateParser.r1_wire.Error.NonCanonical row value)
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let q ← AspisR1PrefixAggregateParser.field.wide_exact.WideExact.impl.c1 val
+          let b ←
+            core.cmp.PartialEq.ne.trait_default AspisR1PrefixAggregateParser.field.QM31.Insts.CoreCmpPartialEqQM31 q
+                AspisR1PrefixAggregateParser.field.QM31.ZERO
+          if b = true then
+              ok
+                (ControlFlow.done
+                  (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.NonCanonical row value)))
+            else ok (ControlFlow.cont iter1)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+          ok (ControlFlow.done r1)
+Aeneas.Std.Array.set_getElem!_eq: ∀ {α : Type u_1} {n : Usize} [inst : Inhabited α] (x : Std.Array α n) (i : Usize),
+  x.set i (↑x)[↑i]! = x
+Aeneas.Std.Array.set_getElem_eq._simp_1_2: ∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, (a1 = a2) = (↑a1 = ↑a2)
+Aeneas.Std.Array.set_opt_val_eq: ∀ {α : Type u} {n : Usize} (v : Std.Array α n) (i : Usize) (x : Option α),
+  ↑(v.set_opt i x) = (↑v).set_opt (↑i) x
+Aeneas.Std.Array.set_getElem!_eq._simp_1_2: ∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }},
+  (a1 = a2) = (↑a1 = ↑a2)
+Aeneas.Std.Array.set_length: ∀ {α : Type u} {n : Usize} (v : Std.Array α n) (i : Usize) (x : α),
+  (v.set i x).length = v.length
+Aeneas.Std.Array.set_opt._proof_1: ∀ {α : Type u_1} {n : Usize} (v : Std.Array α n) (i : Usize) (x : Option α),
+  ((↑v).set_opt (↑i) x).length = ↑n
+Aeneas.Std.Array.set_getElem_eq: ∀ {α : Type u_1} {n : Usize} (x : Std.Array α n) (i : Usize) (h : ↑i < x.length),
+  x.set i x[i] = x
+Aeneas.Std.Array.set_opt: {α : Type u} → {n : Usize} → Std.Array α n → Usize → Option α → Std.Array α n
+Aeneas.Std.Array.set_val_eq: ∀ {α : Type u} {n : Usize} (v : Std.Array α n) (i : Usize) (x : α),
+  ↑(v.set i x) = (↑v).set (↑i) x
+Aeneas.Std.Array.set_opt.eq_1: ∀ {α : Type u} {n : Usize} (v : Std.Array α n) (i : Usize) (x : Option α),
+  v.set_opt i x = ⟨(↑v).set_opt (↑i) x, ⋯⟩

@@ -1,0 +1,28 @@
+NGO_generated/NGO_QResult.lean:25:4: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+NGO_generated/NGO_QResult.lean:14:74: error: unsolved goals
+arr : Std.Array U8 16#usize
+w0 : NGO_QRef.NGO_decode_le.word arr.to_slice 0#usize = ok (word arr 0)
+w1 : NGO_QRef.NGO_decode_le.word arr.to_slice 4#usize = ok (word arr 1)
+w2 : NGO_QRef.NGO_decode_le.word arr.to_slice 8#usize = ok (word arr 2)
+w3 : NGO_QRef.NGO_decode_le.word arr.to_slice 12#usize = ok (word arr 3)
+length : arr.to_slice.len = 16#usize
+⊢ (if 2147483647 ≤ ↑(word arr 0) then ok none
+    else
+      if 2147483647 ≤ ↑(word arr 1) then ok none
+      else
+        if 2147483647 ≤ ↑(word arr 2) then ok none
+        else
+          if 2147483647 ≤ ↑(word arr 3) then ok none
+          else ok (some { c0 := { a := word arr 0, b := word arr 1 }, c1 := { a := word arr 2, b := word arr 3 } })) =
+    ok
+      (if 2147483647 ≤ ↑(word arr 0) then none
+      else
+        if 2147483647 ≤ ↑(word arr 1) then none
+        else
+          if 2147483647 ≤ ↑(word arr 2) then none
+          else
+            if 2147483647 ≤ ↑(word arr 3) then none
+            else some { c0 := { a := word arr 0, b := word arr 1 }, c1 := { a := word arr 2, b := word arr 3 } })
+'NGO_QResult.emitted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

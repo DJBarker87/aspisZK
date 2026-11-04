@@ -1,0 +1,77 @@
+NGO_generated/NGO_WordLaw.lean:29:24: error: failed to prove index is valid, possible solutions:
+  - Use `have`-expressions to prove the index is valid
+  - Use `a[i]!` notation instead, runtime check is performed, and 'Panic' error message is produced if index is not valid
+  - Use `a[i]?` notation instead, result is an `Option` type
+  - Use `a[i]'h` notation instead, where `h` is a proof that index is valid
+arr : Std.Array U8 16#usize
+i : Usize
+bound : ↑i ≤ 12
+w1 : ↑(i.wrapping_add 1#usize) = ↑i + 1
+w2 : ↑(i.wrapping_add 2#usize) = ↑i + 2
+w3 : ↑(i.wrapping_add 3#usize) = ↑i + 3
+i1 : U8
+_✝² : [> let i1 ← arr.to_slice.index_usize i <]
+i4 : U8
+_✝¹ : [> let i4 ← arr.to_slice.index_usize (i.wrapping_add 1#usize) <]
+i9 : U8
+_✝ : [> let i9 ← arr.to_slice.index_usize (i.wrapping_add 2#usize) <]
+i14 : U8
+_ : [> let i14 ← arr.to_slice.index_usize (i.wrapping_add 3#usize) <]
+i1_post : i1 = (↑arr)[↑i]
+i4_post : i4 = (↑arr)[↑i + 1]
+i9_post : i9 = (↑arr)[↑i + 2]
+i14_post : i14 = (↑arr)[↑i + 3]
+⊢ ↑i < (↑arr).length
+NGO_generated/NGO_WordLaw.lean:29:41: error: failed to prove index is valid, possible solutions:
+  - Use `have`-expressions to prove the index is valid
+  - Use `a[i]!` notation instead, runtime check is performed, and 'Panic' error message is produced if index is not valid
+  - Use `a[i]?` notation instead, result is an `Option` type
+  - Use `a[i]'h` notation instead, where `h` is a proof that index is valid
+arr : Std.Array U8 16#usize
+i : Usize
+bound : ↑i ≤ 12
+w1 : ↑(i.wrapping_add 1#usize) = ↑i + 1
+w2 : ↑(i.wrapping_add 2#usize) = ↑i + 2
+w3 : ↑(i.wrapping_add 3#usize) = ↑i + 3
+i1 : U8
+_✝² : [> let i1 ← arr.to_slice.index_usize i <]
+i4 : U8
+_✝¹ : [> let i4 ← arr.to_slice.index_usize (i.wrapping_add 1#usize) <]
+i9 : U8
+_✝ : [> let i9 ← arr.to_slice.index_usize (i.wrapping_add 2#usize) <]
+i14 : U8
+_ : [> let i14 ← arr.to_slice.index_usize (i.wrapping_add 3#usize) <]
+i1_post : i1 = (↑arr)[↑i]
+i4_post : i4 = (↑arr)[↑i + 1]
+i9_post : i9 = (↑arr)[↑i + 2]
+i14_post : i14 = (↑arr)[↑i + 3]
+⊢ ↑i + 1 < (↑arr).length
+NGO_generated/NGO_WordLaw.lean:15:63: error: unsolved goals
+arr : Std.Array U8 16#usize
+i : Usize
+bound : ↑i ≤ 12
+spec : NGO_QRef.NGO_decode_le.word arr.to_slice i ⦃ out => out = core.num.U32.from_le_bytes (segment arr i bound) ⦄
+⊢ NGO_QRef.NGO_decode_le.word arr.to_slice i = ok (core.num.U32.from_le_bytes (segment arr i bound))
+NGO_generated/NGO_WordLaw.lean:27:24: warning: This simp argument is unused:
+  w1
+
+Hint: Omit it from the simp argument list.
+  simp_all [w1̵,̵w̵2, ̲w3, ̲Array.to_slice]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGO_generated/NGO_WordLaw.lean:27:27: warning: This simp argument is unused:
+  w2
+
+Hint: Omit it from the simp argument list.
+  simp_all [w1, ̲w2̵,̵w̵3, ̲Array.to_slice]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGO_generated/NGO_WordLaw.lean:27:30: warning: This simp argument is unused:
+  w3
+
+Hint: Omit it from the simp argument list.
+  simp_all [w1, ̲w2,w̵3̵,̵ ̲Array.to_slice]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGO_generated/NGO_WordLaw.lean:30:8: error: unexpected token '('; expected command
+'NGO_WordLaw.word' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

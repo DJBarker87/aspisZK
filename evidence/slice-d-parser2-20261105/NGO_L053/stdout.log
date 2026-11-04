@@ -1,0 +1,42 @@
+def Aeneas.Std.core.num.checked_mul_UScalar : {ty : UScalarTy} → UScalar ty → UScalar ty → Option (UScalar ty) :=
+fun {ty} x y => Option.ofResult (x.mul y)
+def Aeneas.Std.core.num.checked_add_UScalar : {ty : UScalarTy} → UScalar ty → UScalar ty → Option (UScalar ty) :=
+fun {ty} x y => Option.ofResult (x + y)
+NGO_generated/NGO_CheckedOps.lean:9:59: error: Type mismatch
+  UScalar.hmax z
+has type
+  ↑z < 2 ^ UScalarTy.Usize.numBits
+but is expected to have type
+  ↑z ≤ Usize.max
+NGO_generated/NGO_CheckedOps.lean:12:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+x y z : Usize
+equation : ↑x * ↑y = ↑z
+bounded : ↑x * ↑y ≤ Usize.max
+⊢ Option.ofResult (UScalar.mul x y) = some z
+x y z : Usize
+equation : ↑x * ↑y = ↑z
+bounded : ↑x * ↑y ≤ Usize.max
+⊢ Option.ofResult (UScalar.mul x y) = some z
+NGO_generated/NGO_CheckedOps.lean:18:59: error: Type mismatch
+  UScalar.hmax z
+has type
+  ↑z < 2 ^ UScalarTy.Usize.numBits
+but is expected to have type
+  ↑z ≤ Usize.max
+NGO_generated/NGO_CheckedOps.lean:21:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+x y z : Usize
+equation : ↑x + ↑y = ↑z
+bounded : ↑x + ↑y ≤ Usize.max
+⊢ Option.ofResult (x + y) = some z
+x y z : Usize
+equation : ↑x + ↑y = ↑z
+bounded : ↑x + ↑y ≤ Usize.max
+⊢ Option.ofResult (x + y) = some z
+'NGO_CheckedOps.mul' depends on axioms: [propext, sorryAx]
+'NGO_CheckedOps.add' depends on axioms: [propext, sorryAx]

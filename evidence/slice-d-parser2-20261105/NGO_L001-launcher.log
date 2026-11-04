@@ -1,0 +1,44 @@
+{"attempt": "NGO_L001", "exit_status": 0, "wall_seconds": 3.947673781076446, "peak_rss_kib": "5910404", "swaps": "0", "print_axioms": []}
+theorem Aeneas.Std.core.iter.range.IteratorRange.next_UScalar_some_spec : ∀ {ty : UScalarTy}
+  {cloneInst : core.clone.Clone (UScalar ty)} {partialOrdInst : core.cmp.PartialOrd (UScalar ty) (UScalar ty)},
+  (∀ (x : UScalar ty), cloneInst.clone x = ok x) →
+    (∀ (a b : UScalar ty), partialOrdInst.lt a b = ok (decide (↑a < ↑b))) →
+      ∀ (range : core.ops.range.Range (UScalar ty)),
+        ↑range.start < ↑range.end →
+          core.iter.range.IteratorRange.next (core.iter.range.UScalarStep ty cloneInst partialOrdInst) range ⦃
+            opt range' => opt = some range.start ∧ ↑range'.start = ↑range.start + 1 ∧ range'.end = range.end ⦄ :=
+fun {ty} {cloneInst} {partialOrdInst} h_clone h_lt ran
+...
+   (core.convert.FromSame AspisR1DecodeKFullV10.r1_wire.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          (Std.Array AspisR1DecodeKFullV10.aspis_core.field.QM31 N)
+          (core.convert.FromSame AspisR1DecodeKFullV10.r1_wire.Error) residual
+def AspisR1PrefixAggregateParser.r1_wire.validate_record_fields : U8 →
+  Slice U8 → Result (core.result.Result Unit AspisR1PrefixAggregateParser.r1_wire.Error) :=
+fun row payload => do
+  let ce ← core.slice.Slice.chunks_exact payload 32#usize
+  let iter ←
+    core.iter.traits.iterator.Iterator.enumerate.trait_default (core.iter.traits.iterator.IteratorChunksExact U8) ce
+  AspisR1PrefixAggregateParser.r1_wire.validate_record_fields_loop iter row
+structure AspisR1PrefixAggregateParser.r1_wire.ValidatedRecord : Type
+number of parameters: 0
+fields:
+  AspisR1PrefixAggregateParser.r1_wire.ValidatedRecord.row : U8
+  AspisR1PrefixAggregateParser.r1_wire.ValidatedRecord.framed : Slice U8
+constructor:
+  AspisR1PrefixAggregateParser.r1_wire.ValidatedRecord.mk (row : U8) (framed : Slice U8) :
+    AspisR1PrefixAggregateParser.r1_wire.ValidatedRecord
+def NFU_Retarget.r1_wire.validate_record_fields : U8 →
+  Slice U8 → Result (core.result.Result Unit NFU_Retarget.LPl_Kit_Release.r1_wire.Error) :=
+fun row bytes =>
+  match
+    List.find? (fun i => !NFU_Retarget.LPl_Kit_Bytes.validChunk 8 true (List.take 32 (List.drop (32 * i) ↑bytes)))
+      (List.range ((↑bytes).length / 32)) with
+  | none => ok (core.result.Result.Ok ())
+  | some i =>
+    if h : i ≤ UScalar.cMax UScalarTy.Usize then
+      ok (core.result.Result.Err (NFU_Retarget.LPl_Kit_Release.r1_wire.Error.NonCanonical row (UScalar.ofNat i h)))
+    else fail Error.panic
+
+Running as unit: run-r98fbe979a849414ea1181b0600b94bb3.scope; invocation ID: bf5dd93bd2b34e7798c0a29badac4c4e

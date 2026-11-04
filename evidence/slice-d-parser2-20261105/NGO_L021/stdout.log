@@ -1,0 +1,26 @@
+def Aeneas.Std.U32.wrapping_shl : U32 → U32 → U32 :=
+fun x s => UScalar.wrapping_shl x s
+def BitVec.fromLEBytes : (l : List Byte) → BitVec (8 * l.length) :=
+fun l => List.brecOn l BitVec.fromLEBytes._f
+NGO_generated/NGO_BitPack.lean:24:2: error: None of the hypotheses are in the supported BitVec fragment after applying preprocessing.
+There are three potential reasons for this:
+1. If you are using custom BitVec constructs simplify them to built-in ones.
+2. If your problem is using only built-in ones it might currently be out of reach.
+   Consider expressing it in terms of different operations that are better supported.
+3. The original goal was reduced to False and is thus invalid.
+a b c d : U8
+⊢ ↑(BitVec.setWidth UScalarTy.U32.numBits a.bv#uscalar |||
+            (BitVec.setWidth UScalarTy.U32.numBits b.bv).shiftLeft (↑8#u32 % UScalarTy.U32.numBits)#uscalar |||
+          (BitVec.setWidth UScalarTy.U32.numBits c.bv).shiftLeft (↑16#u32 % UScalarTy.U32.numBits)#uscalar |||
+        (BitVec.setWidth UScalarTy.U32.numBits d.bv).shiftLeft (↑24#u32 % UScalarTy.U32.numBits)#uscalar) =
+    ↑(BitVec.cast ⋯ (BitVec.fromLEBytes [a.bv, b.bv, c.bv, d.bv])#uscalar)
+NGO_generated/NGO_BitPack.lean:21:51: warning: This simp argument is unused:
+  UScalar.or
+
+Hint: Omit it from the simp argument list.
+  simp only [U32.wrapping_shl, ̲UScalar.wrapping_shl,U̵S̵c̵a̵l̵a̵r̵.̵o̵r̵,̵
+  ̵  ̵ ̵ ̵core.convert.num.FromU32U8.from,
+  ̲ ̲ ̲ ̲ ̲core.num.U32.from_le_bytes, ̲Array.make, ̲List.map_cons, ̲List.map_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NGO_BitPack.pack' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
