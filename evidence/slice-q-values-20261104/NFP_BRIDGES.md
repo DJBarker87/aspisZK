@@ -28,3 +28,18 @@ K001/K002 are excluded module-location setup failures. L002 is an excluded
 incomplete proof draft; L003 adds the final definitional equality step.
 Own runner initially interpreted Python imports as Lean module imports before
 submission; the parser now excludes Kani source files from that check.
+
+Stage 3 support: the post-dot suffix and full owned-return frame have paired
+native certificates (K012--019). The return window logs arbitrary prestate,
+applies arbitrary64-row raw mutations, and verifies the original Vec pointers,
+lengths and weight frame plus all returned scalar fields. L006/L009/L019
+install the existing NFM dot wrapper through the existing headline coordinate
+adapter and derive canonical dot outputs from the SAME four actual packets.
+L016/L017 replay the small canonical scalar laws on the selected FIo forest
+and give a paired emitted multiplication and node-value law. L020--022 reuse
+NFG finite partial-Result induction and retain rejection/failure/divergence
+terminals. None of these support results alone promotes an NDT row.
+Legacy field proof imports hit duplicate Phase owners (L012--014). The
+unchanged addition/subtraction proofs were retargeted by import and namespace
+only, recorded in NFP_NATBASE_PROVENANCE.json. NFP_NatBase compiles L016.
+No NEW/NFB forest is imported. The NFN branch was not yet present at intake.

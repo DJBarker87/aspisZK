@@ -1,0 +1,43 @@
+NFP_generated/NFP_ProductLaw.lean:14:12: error: Application type mismatch: The argument
+  run
+has type
+  AspisR1Qm31ArithmeticProbe.field.M31.mul x y = ok out
+but is expected to have type
+  FIo_Native.aspis_core.field.M31.mul x y = ok out
+in the application
+  And.intro run
+NFP_generated/NFP_ProductLaw.lean:27:1: error: unsolved goals
+case refine_1
+z : U32
+square : FIo_Native.aspis_core.field.M31
+hs : FIo_Native.aspis_core.field.M31.mul z z = ok square
+vs : ↑square = ↑z * ↑z % 2147483647
+cs : ↑square < 2147483647
+doubled : AspisR1Qm31ArithmeticProbe.field.M31
+hd : AspisR1Qm31ArithmeticProbe.field.M31.add square square = ok doubled
+vd : ↑doubled = (↑square + ↑square) % ExtractedCurrentM31AddSub.P
+cd : ↑doubled < ExtractedCurrentM31AddSub.P
+out : AspisR1Qm31ArithmeticProbe.field.M31
+ho : doubled.sub 1#u32 = ok out
+vo : ↑out = (↑doubled + ExtractedCurrentM31AddSub.P - ↑1#u32) % ExtractedCurrentM31AddSub.P
+co : ↑out < ExtractedCurrentM31AddSub.P
+⊢ (do
+      let doubled ← square.add square
+      doubled.sub 1#u32) =
+    ok out
+NFP_generated/NFP_ProductLaw.lean:27:65: warning: This simp argument is unused:
+  hd
+
+Hint: Omit it from the simp argument list.
+  simp only [nodeCall, ̲FIo_Native.aspis_core.field.M31.double, ̲hs, ̲hd̵,̵h̵o, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFP_generated/NFP_ProductLaw.lean:27:68: warning: This simp argument is unused:
+  ho
+
+Hint: Omit it from the simp argument list.
+  simp only [nodeCall, ̲FIo_Native.aspis_core.field.M31.double, ̲hs, ̲hd,h̵o̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NFP_ProductLaw.emitted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NFP_ProductLaw.node' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

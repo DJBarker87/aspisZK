@@ -9,6 +9,36 @@ if sys.argv[2].startswith('full_'):
  from NFP_full_build import apply
  built.update(apply(json.loads((B/'NFP_FROZEN.json').read_text()),S))
  built['changed']['crates/aspis-r1-cost-probe/src/candidate.rs']=hashlib.sha256((S/'crates/aspis-r1-cost-probe/src/candidate.rs').read_bytes()).hexdigest()
+if sys.argv[2].startswith('suffix_'):
+ from NFP_split_build import apply
+ built.update(apply(json.loads((B/'NFP_FROZEN.json').read_text()),S))
+if sys.argv[2].startswith('frame_'):
+ frozen=json.loads((B/'NFP_FROZEN.json').read_text())
+ code=(B/'NFP_frame.rs.txt').read_text()
+ assert 'accumulate_batched_with_node(p, &mut a, node, folded, &mut pending);\n    mark(obs, Phase::Query(i));\n    Ok((a, pending))' in frozen['crates/aspis-r1-cost-probe/src/candidate.rs']
+ import re
+ m=re.search(r'fn NFP_finish\([^\n]+\{(.*?)\n\}',code,re.S);assert m,'missing physical frame function'
+ body=m.group(1).replace('let i=a.next;','').replace('accumulate(p,&mut a,node,folded,&mut pending,f);','accumulate_batched_with_node(p, &mut a, node, folded, &mut pending);')
+ token=lambda t:re.findall(r'[A-Za-z_][A-Za-z_0-9]*|[0-9]+|::|->|[^\s]',t)
+ expected='accumulate_batched_with_node(p, &mut a, node, folded, &mut pending); mark(obs, Phase::Query(i)); Ok((a, pending))'
+ assert token(body)==token(expected),'native physical frame erasure drift'
+
+ (S/'crates/aspis-r1-cost-probe/src/NFP_query.rs').write_text(code)
+ built.update(frame_cut='original accumulator-call/phase-mark/Ok-return',qualification='Full raw64 arbitrary mutations; arbitrary observed coordinate, real Vec moves and final frame')
+if sys.argv[2].startswith('node_'):
+ code=(B/'NFP_node.rs.txt').read_text()
+ assert 'let node = z.mul(z).double().sub(M31::ONE);' in json.loads((B/'NFP_FROZEN.json').read_text())['crates/aspis-r1-cost-probe/src/candidate.rs']
+ assert 'let node=product(z,z,p).double().sub(M31::ONE);node' in code
+ (S/'crates/aspis-r1-cost-probe/src/NFP_query.rs').write_text(code)
+ built.update(node_cut='same raw-z pair; scalar M31 double/sub and returned node',qualification='Only M31 native add/sub; multiplication is opaque and Lean-discharged')
+if sys.argv[2].startswith('geometry_'):
+ code=(B/'NFP_geometry.rs.txt').read_text();frozen=json.loads((B/'NFP_FROZEN.json').read_text())
+ assert 'let inverse = *geometry.for_query(i);' in frozen['crates/aspis-r1-cost-probe/src/candidate.rs']
+ assert 'let z = geometry.line_z[i - geometry.start];' in frozen['crates/aspis-r1-cost-probe/src/candidate.rs']
+ assert 'fn for_query(&self,index:usize)->&[M31;5] {&self.inverses[index-self.start]}' in frozen['crates/aspis-r1-cost-probe/src/verifier.rs']
+ assert 'let inverse=*geometry.for_query(i);let z=geometry.line_z[i-geometry.start];(inverse,z)' in code
+ (S/'crates/aspis-r1-cost-probe/src/NFP_query.rs').write_text(code)
+ built.update(geometry_cut='actual for_query and line_z with arbitrary TX1/TX2 reached index',qualification='all raw input cells, actual start/end/length, no constructor success assumed')
 (B/(a+'-fission-check.json')).write_text(json.dumps(built,indent=2))
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 # Pin the compiler/backend binaries used by the existing fixed Kani install.

@@ -1,0 +1,67 @@
+{
+  "erasure_exact": true,
+  "changed": {
+    "crates/aspis-r1-cost-probe/src/candidate.rs": "9c9438daad9548ae82fdb48f904257f7aeae865bc22363643a3a34441e54ac13",
+    "crates/aspis-r1-cost-probe/src/lib.rs": "a924a9596c10e1fd197963bf56d11a8f2e2d25fe960a78a98e4f20b7dde8ef25"
+  },
+  "qualification": "Full caller G on restricted ambient carrier fixtures; array/Vec frame lifting and callee installation remain OPEN",
+  "full_erasure_exact": true,
+  "call_substitutions": [
+    [
+      "geometry: &QueryGeometry, mut pending: BatchedWeights) -> Result<(Accumulator, BatchedWeights), Error> {",
+      "geometry: &QueryGeometry, mut pending: BatchedWeights, #[cfg(kani)] nfp: &mut NFP_query::Log) -> Result<(Accumulator, BatchedWeights), Error> {"
+    ],
+    [
+      "crate::fast_dots::four_dots(q, g)",
+      "NFP_query::dots(q,g,nfp)"
+    ],
+    [
+      "circle_fold_with_inverses(p.alpha[0], dots, &inverse)",
+      "NFP_query::circle(p.alpha[0], dots, &inverse,nfp)"
+    ],
+    [
+      "core::array::from_fn(|s| field(&q[672..800], s))",
+      "core::array::from_fn(|s| NFP_query::field(&q[672..800], s,nfp))"
+    ],
+    [
+      "line_fold_with_inverses(p.alpha[1], values, &inverse)",
+      "NFP_query::line(p.alpha[1], values, &inverse,nfp)"
+    ],
+    [
+      "z.mul(z)",
+      "NFP_query::product(z,z,nfp)"
+    ],
+    [
+      "accumulate_batched_with_node(p, &mut a, node, folded, &mut pending)",
+      "NFP_query::accumulate(p, &mut a, node, folded, &mut pending,nfp)"
+    ],
+    [
+      "crate::trace::value(9, 4 * i, dots[0]);",
+      "NFP_query::trace(9, 4 * i, dots[0],nfp);"
+    ],
+    [
+      "crate::trace::value(9, 4 * i + 1, dots[1]);",
+      "NFP_query::trace(9, 4 * i + 1, dots[1],nfp);"
+    ],
+    [
+      "crate::trace::value(9, 4 * i + 2, dots[2]);",
+      "NFP_query::trace(9, 4 * i + 2, dots[2],nfp);"
+    ],
+    [
+      "crate::trace::value(9, 4 * i + 3, dots[3]);",
+      "NFP_query::trace(9, 4 * i + 3, dots[3],nfp);"
+    ],
+    [
+      "crate::trace::value(10, 2 * i, folded);",
+      "NFP_query::trace(10, 2 * i, folded,nfp);"
+    ],
+    [
+      "crate::trace::value(10, 2 * i + 1, folded);",
+      "NFP_query::trace(10, 2 * i + 1, folded,nfp);"
+    ],
+    [
+      "state = query_values(proof, p, a, g, obs, geometry, pending);",
+      "state = query_values(proof, p, a, g, obs, geometry, pending, #[cfg(kani)] &mut NFP_query::Log::unused());"
+    ]
+  ]
+}
