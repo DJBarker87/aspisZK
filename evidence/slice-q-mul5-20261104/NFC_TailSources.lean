@@ -39,19 +39,5 @@ def body (q : Array U8 608#usize) (g : NEV_DotInputs.Coefficients) (slot : Usize
   let state ← push state args
   FIo_Native.fast_pairing.EbyKDot.finish state
 
-/-- Complete Result factorization preserves the read/push interleaving and
-all rejection and divergence paths. No reordering of later reads is used. -/
-theorem association (q : Array U8 608#usize) (g : NEV_DotInputs.Coefficients) (slot : Usize) :
-    NFA_SuffixFactor.tail q g slot=body q g slot := by
-  simp only [NFA_SuffixFactor.tail,body,first,later,push,NFA_TailQM.read,
-    Aeneas.Std.uncurry,bind_assoc_eq,bind_tc_ok]
-  repeat' first
-  | rfl
-  | (apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
-     intro x hx
-     cases x
-     simp only [Aeneas.Std.uncurry,bind_assoc_eq,bind_tc_ok])
-
-#print axioms association
 end AspisR1.NFC_TailSources
 end

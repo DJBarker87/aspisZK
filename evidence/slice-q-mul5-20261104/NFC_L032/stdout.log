@@ -1,0 +1,104 @@
+NFC_generated/NFC_TailAssociation.lean:9:52: error: unsolved goals
+q : Std.Array U8 608#usize
+g : NEV_DotInputs.Coefficients
+slot : Usize
+⊢ (do
+      let tail ← FIo_Native.fast_pairing.EbyKDot.new
+      let we ← Array.index_usize g 28#usize
+      let i8 ← slot * 120#usize
+      let i9 ← i8 + 104#usize
+      let i10 ← i8 + 120#usize
+      let s ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) q
+            { start := i9, «end» := i10 }
+      let o1 ← FIp_DotDecode.field.QM31.from_le_bytes s
+      let q1 ← core.option.Option.unwrap o1
+      let (r, tail1) ← tail.push we q1
+      core.result.Result.unwrap core.fmt.DebugUnit r
+      let i11 ← slot * 32#usize
+      let i12 ← 480#usize + i11
+      let i13 ← 0#usize * 16#usize
+      let offset0 ← i12 + i13
+      let i14 ← 0#usize + 26#usize
+      let we1 ← Array.index_usize g i14
+      let i15 ← offset0 + 16#usize
+      let s1 ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) q
+            { start := offset0, «end» := i15 }
+      let o2 ← FIp_DotDecode.field.QM31.from_le_bytes s1
+      let q2 ← core.option.Option.unwrap o2
+      let (r1, tail2) ← tail1.push we1 q2
+      core.result.Result.unwrap core.fmt.DebugUnit r1
+      let i16 ← 480#usize + i11
+      let i17 ← 1#usize * 16#usize
+      let offset1 ← i16 + i17
+      let i18 ← 1#usize + 26#usize
+      let we2 ← Array.index_usize g i18
+      let i19 ← offset1 + 16#usize
+      let s2 ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) q
+            { start := offset1, «end» := i19 }
+      let o3 ← FIp_DotDecode.field.QM31.from_le_bytes s2
+      let q3 ← core.option.Option.unwrap o3
+      let (r2, tail3) ← tail2.push we2 q3
+      core.result.Result.unwrap core.fmt.DebugUnit r2
+      let we3 ← tail3.finish
+      ok we3) =
+    do
+    let state ← FIo_Native.fast_pairing.EbyKDot.new
+    let value ← Array.index_usize g 28#usize
+    let base ← slot * 120#usize
+    let start ← base + 104#usize
+    let stop ← base + 120#usize
+    let x ←
+      core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) q
+          { start := start, «end» := stop }
+    let x ← FIp_DotDecode.field.QM31.from_le_bytes x
+    let scalar ← core.option.Option.unwrap x
+    let (result, after) ← state.push value scalar
+    core.result.Result.unwrap core.fmt.DebugUnit result
+    let base ← slot * 32#usize
+    let origin ← 480#usize + base
+    let offset ← 0#usize * 16#usize
+    let start ← origin + offset
+    let index ← 0#usize + 26#usize
+    let value ← Array.index_usize g index
+    let stop ← start + 16#usize
+    let x ←
+      core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) q
+          { start := start, «end» := stop }
+    let x ← FIp_DotDecode.field.QM31.from_le_bytes x
+    let scalar ← core.option.Option.unwrap x
+    let (result, after) ← after.push value scalar
+    core.result.Result.unwrap core.fmt.DebugUnit result
+    let origin ← 480#usize + base
+    let offset ← 1#usize * 16#usize
+    let start ← origin + offset
+    let index ← 1#usize + 26#usize
+    let value ← Array.index_usize g index
+    let stop ← start + 16#usize
+    let x ←
+      core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) q
+          { start := start, «end» := stop }
+    let x ← FIp_DotDecode.field.QM31.from_le_bytes x
+    let scalar ← core.option.Option.unwrap x
+    let (result, after) ← after.push value scalar
+    core.result.Result.unwrap core.fmt.DebugUnit result
+    after.finish
+NFC_generated/NFC_TailAssociation.lean:12:51: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵F̵A̵_̵S̵u̵f̵f̵i̵x̵F̵a̵c̵t̵o̵r̵.̵t̵a̵i̵l̵,̵N̵F̵A̵_̵T̵a̵i̵l̵Q̵M̵.̵r̵e̵a̵d̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵
+  ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲N̲F̲A̲_̲S̲u̲f̲f̲i̲x̲F̲a̲c̲t̲o̲r̲.̲t̲a̲i̲l̲,̲ ̲N̲F̲A̲_̲T̲a̲i̲l̲Q̲M̲.̲r̲e̲a̲d̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFC_generated/NFC_TailAssociation.lean:13:18: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [NFA_SuffixFactor.tail, ̲NFA_TailQM.read, ̲Aeneas.Std.uncurry,
+  ̵  ̵ ̵ ̵bind_assoc_eq,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NFC_TailAssociation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
