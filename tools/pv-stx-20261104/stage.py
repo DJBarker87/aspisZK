@@ -44,6 +44,10 @@ for v in x['external']+x['checks']:
 print(json.dumps(dict(source_sha256=x['sha256'],source_revision=x['revision'],toolchain=x['toolchain'],LEAN_PATH=env['LEAN_PATH'],effective_resolution=resolved,external_authority='h4 pv-replay-20261027 (inherited verified evh4 manifest)',project_dependencies=x['checks'],shared_written=False)))
 '''
 r=subprocess.run(['ssh','dombarker@100.108.41.90','python3 -c '+shlex.quote(code)],input=json.dumps(payload),capture_output=True,text=True)
+prior=E/('prepare-'+m+'.json')
+if prior.exists():
+ archive=E/'prepare-history';archive.mkdir(exist_ok=True)
+ (archive/(hashlib.sha256(prior.read_bytes()).hexdigest()+'.json')).write_bytes(prior.read_bytes())
 (E/('prepare-'+m+'.json')).write_text(json.dumps(dict(exit=r.returncode,stderr=r.stderr,result=json.loads(r.stdout) if r.returncode==0 else r.stdout),indent=2)+'\n')
 assert r.returncode==0,r.stderr
 print('staged',m)

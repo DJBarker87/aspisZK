@@ -1,0 +1,33 @@
+/home/dombarker/project-offloads/codex-pv-stx-20261104/sources/PV_STX_Fixed.lean:50:16: error: unsolved goals
+case loop
+Op : Type → Type 1
+W E A : Type
+fixed : {X : Type} → Op X → Result X
+w : W
+X : Type
+k : Kont Op A X
+S✝ : Type
+s : S✝
+body : S✝ → Code Op (ControlFlow S✝ X)
+⊢ some
+      (kontDenote (fun {X} => fixed) k
+        (Std.bind (denote (fun {X} => fixed) (body s)) fun cf =>
+          match cf with
+          | ControlFlow.done a => Result.ok a
+          | ControlFlow.cont s => loop (fun t => denote (fun {X} => fixed) (body t)) s)) =
+    some
+      (kontDenote (fun {X} => fixed) k
+        (match denote (fun {X} => fixed) (body s) with
+        | Result.ok r =>
+          match r with
+          | ControlFlow.cont x => loop (fun t => denote (fun {X} => fixed) (body t)) x
+          | ControlFlow.done x => Result.ok x
+        | Result.fail e => Result.fail e
+        | Result.div => Result.div))
+'PV_STX_Fixed.kont_fail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_STX_Fixed.kont_div' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_STX_Fixed.resumed_view' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_STX_Fixed.step_view' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_STX_Fixed.advance_view' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_STX_Fixed.run_view' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_STX_Fixed.returned_agrees' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
