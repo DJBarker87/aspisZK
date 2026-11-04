@@ -50,15 +50,14 @@ theorem stop_map {S A B : Type} (stop : Q S Empty) (f : A → B) (w : State S) :
 /-- Exact World.Run equality for the constructed adapter. This serves Step 1,
 but does not claim that descriptor is a view of the deployed native heap or
 that the spawn loop maintains that view. Those are separate missing proofs.
-The bound holds for every source handle push (at most fifteen handles). -/
+No capacity equality or callback success is required. -/
 theorem push_erasure {S B : Type}
     (base : PV_V263_RetainedMethods.Runtime S)
     (resize : PV_V263_RawGrowth.Resize → Q S Nat) (stop : Q S Empty)
     (descriptor : State S → Allocation) (layouts : PV_V263_RetainedMethods.Layouts)
     (handles : Owner (PV_V263_RetainedSpine.Task S B))
     (task : PV_V263_RetainedSpine.Task S B) (w : State S)
-    (view : descriptor w=handles.allocation)
-    (bound : handles.initialized.values.length+1≤Usize.max) :
+    (view : descriptor w=handles.allocation) :
     mapAction (fun o => o.initialized.values)
       (PV_V263_GrowingPush.push (growth resize stop) handles task) w =
     mapAction (fun b => b.values)
@@ -82,7 +81,12 @@ theorem push_erasure {S B : Type}
           handles.allocation.rawCapacity≤Usize.max ∧
         PV_V263_RawGrowth.requestedCap handles.allocation.layout.size
           handles.allocation.rawCapacity*handles.allocation.layout.size≤Usize.max/2
-      · simp only [PV_V263_GrowingPush.push,dif_pos full,dif_neg zero,dif_pos sized,
+      · have raw : handles.initialized.values.length=handles.allocation.rawCapacity := by
+          simpa only [capacity,zero,if_false] using full
+        have bound : handles.initialized.values.length+1≤Usize.max := by
+          rw [raw]
+          exact (PV_V263_RawGrowth.enough _ _).trans sized.1
+        simp only [PV_V263_GrowingPush.push,dif_pos full,dif_neg zero,dif_pos sized,
           method,if_pos full,PV_V263_RawGrowth.grow,growth]
         cases h : (resize ⟨release handles.allocation,
           PV_V263_RawGrowth.requestedCap handles.allocation.layout.size
@@ -108,7 +112,10 @@ theorem push_erasure {S B : Type}
           | fail e => simp only [h]
           | div => simp only [h]
           | ok e => exact Empty.elim e
-  · simp only [PV_V263_GrowingPush.push,dif_neg full,method,if_neg full,
+  · have fits := handles.initialized.fits.trans handles.reserved
+    have room : handles.initialized.values.length+1≤capacity handles.allocation := by omega
+    have bound := room.trans (capacity_bound handles.allocation)
+    simp only [PV_V263_GrowingPush.push,dif_neg full,method,if_neg full,
       mapAction,PV_V263_World.bind,PV_V263_World.lift,dif_pos bound,
       PV_V263_RawGrowth.store,PV_V263_BufferLoop.stored,List.nil_append,
       List.append_nil]
