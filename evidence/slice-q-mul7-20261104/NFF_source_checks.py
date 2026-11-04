@@ -41,6 +41,26 @@ def check(payload,frozen):
   for text in ['g[28]','g[0+26]','g[1+26]','slot*120+104..slot*120+120','480+slot*32+0*16','480+slot*32+1*16']:
    assert ''.join(tok(text)) in ''.join(tok(f)),'frozen tail selection differs'
   checked.append('tail selection: one actual parser/coefficient at arbitrary call and slot')
+ if 'fn NFF_head(' in s:
+  a=f.index('        let mut value =');b=f.index('        let mut tail=',a)
+  expected=f[a:b].replace('let mut value =','let value =')+'value'
+  assert tok(body(s,'NFF_head'))==tok(expected),'head reduction/constructor drift'
+  checked.append('head: exact eight reductions, constructor and returned value')
+ if 'crates/aspis-r1-cost-probe/src/NFF_incoming.rs' in payload:
+  incoming=payload['crates/aspis-r1-cost-probe/src/NFF_incoming.rs']
+  candidate=frozen['crates/aspis-r1-cost-probe/src/candidate.rs']
+  a=candidate.index('    let i = a.next;',candidate.index('fn query_values('))
+  b=candidate.index('    crate::trace::value',a)
+  prefix=candidate[a:b].replace('a.next','next').replace('p.queries','queries')
+  prefix=prefix.replace('    let q = opening(proof, i);\n','').replace('crate::fast_dots::four_dots(q, g)','NFF_dots(q,g,log)')
+  assert tok(body(incoming,'NFF_prefix'))==tok(prefix+'(i,u,dots)'),'query prefix fission drift'
+  assert 'if folded != values[u % 4]' in candidate
+  assert tok('if folded!=values[u%4]{return Err(Error::Query);}')==tok(body(incoming,'NFF_guard').split('*calls')[0]),'query guard drift'
+  assert 'let node = z.mul(z).double().sub(M31::ONE);' in candidate
+  assert 'let node=NFF_mul(z,z,&mut log).double().sub(M31::ONE);' in incoming
+  assert not re.search(r'\bstatic\s+(?:mut\s+)?[A-Za-z_]',incoming),'incoming static'
+  assert 'Option<fn' not in incoming,'incoming function pointer'
+  checked.append('incoming: exact query prefix modulo named opening cut; actual guard, node continuation and field/window context. Original whole-proof binding remains OPEN')
  if 'crates/aspis-r1-cost-probe/src/NFF_pairing.rs' in payload:
   pair=payload['crates/aspis-r1-cost-probe/src/NFF_pairing.rs'];frozenPair=frozen['crates/aspis-r1-cost-probe/src/fast_pairing.rs']
   sites=json.loads((E/'NFF_RAW_SITES.json').read_text())['sites']
