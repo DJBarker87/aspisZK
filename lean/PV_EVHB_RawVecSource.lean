@@ -195,7 +195,7 @@ theorem reserve_no_growth {S F : Type} (runtime : Runtime S F) (wordMax byteMax 
     tryReserveExact runtime wordMax byteMax owner h additional=lift (.ok (.ok ())) ∧
     tryReserve runtime wordMax byteMax owner h additional=lift (.ok (.ok ())) := by
   simp only [tryReserveExact,tryReserve,if_neg (Nat.not_lt.mpr room)]
-  exact ⟨rfl,rfl⟩
+  exact ⟨True.intro,True.intro⟩
 
 /-- A returning allocator answer is mapped without replacing its post-world
 or its ordered native events. This is an implication about a primitive answer,
