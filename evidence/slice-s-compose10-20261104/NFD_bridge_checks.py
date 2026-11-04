@@ -103,6 +103,8 @@ def check(c,base):
  if c['subject']==EMIT:return emit_check(c,base)
  from NFD_raw_checks import LIMBS,TAG,check as raw_check
  if c['subject'] in [LIMBS,TAG]:return raw_check(c,base)
+ from NFD_wide_checks import F as WIDE,check as wide_check
+ if c['subject']==WIDE:return wide_check(c,base)
  return False
 
 def compose_additions(base,result,packet,api):
@@ -110,7 +112,13 @@ def compose_additions(base,result,packet,api):
  for r in result['rows']:by.setdefault(r['function'],[]).append(r)
  for f,c in packet.get('NFD_certificates',{}).items():
   if not api.certificate(c,f,result):continue
-  if any(any(r['composed_status']!='CLOSED' for r in by[g]) for g in by[f][0]['canonical_callees']):continue
+  # Only the exact, independently validated WideExact u32 method-resolution
+  # certificate may remove conservative M31/self alternatives.
+  noncalls=c.get('resolved_non_calls',{})
+  if noncalls:
+   from NFD_wide_checks import F as WIDE,RESOLVED
+   assert f==WIDE and noncalls==RESOLVED
+  if any(any(r['composed_status']!='CLOSED' for r in by[g]) for g in by[f][0]['canonical_callees'] if g not in noncalls):continue
   for r in by[f]:
    r.update(bridge_status='CLOSED-CONDITIONAL',selected_claims=['NFD::'+f])
    r['claim_ids']=list(dict.fromkeys(r['claim_ids']+['NFD::'+f]))
@@ -118,9 +126,12 @@ def compose_additions(base,result,packet,api):
     if name not in {h['name'] for h in r['named_hypotheses']}:r['named_hypotheses'].append(dict(name=name,statement=(c['native_certificate'].get('domain','Root-owned full immutable slice / exact native-cohort typed carrier') if name.endswith('.PacketDomain') else 'Root-owned valid native/cohort typed carrier, ABI and approved library/allocator interpretation'),discharged_by=c['id']+'::'+name))
    for h in r['named_hypotheses']:h['discharged_by']=c['id']+'::'+h['name']
    for o in r['caller_domain_obligations']:
-    if 'callee' in o:
+    if 'callee' in o and o['callee'] not in noncalls:
      d=c['call_domain_certificates'][f+' -> '+o['callee']];o['callee_claims']=list(dict.fromkeys(o['callee_claims']+d['selected_callee_claims']));o['required_named_hypotheses']=list(dict.fromkeys(o['required_named_hypotheses']+d['inner_names_discharged']))
     o.update(status='CLOSED',discharged_by=c['id']+'::'+o['id'])
-   r['open_transitive_dependencies']=[g for g in r['open_transitive_dependencies'] if any(x['composed_status']!='CLOSED' for x in by[g])]
+   if noncalls:
+    r['resolved_non_calls']=noncalls
+    r['canonical_callees']=[g for g in r['canonical_callees'] if g not in noncalls]
+   r['open_transitive_dependencies']=[g for g in r['open_transitive_dependencies'] if g not in noncalls and any(x['composed_status']!='CLOSED' for x in by[g])]
    if not r['open_transitive_dependencies']:r.update(composed_status='CLOSED',composed_reason='NFD full-field native request, exact frozen reference continuation, full carrier/domain and complete Result/order certificates; option A reclassification')
  return result

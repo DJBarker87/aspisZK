@@ -1,6 +1,6 @@
 # NFD slice S composition checkpoint
 
-Validated: **94/97 rows,124/129 internal edges,6/7 roots CLOSED**. Baseline NEY86/97,110/129,3/7. Authority: NFD_REQUEST_VALIDATION.json, unchanged inherited NDT/NEX/NEY gates plus the additive NFD validator.47 previously completed mutation/admission tests pass; raw getter tests follow separately. The seven-root target and deployed100-bit per-attempt target are not established.
+Validated: **96/97 rows,126/129 internal edges,6/7 roots CLOSED**. Baseline NEY86/97,110/129,3/7. Authority: NFD_REQUEST_VALIDATION.json, unchanged inherited NDT/NEX/NEY gates plus the additive NFD validator.all60 mutation/admission tests pass in the final combined replay (NFD_FINAL_TESTS.log). The seven-root target and deployed100-bit per-attempt target are not established.
 
 Frozen Rust4bb3b3f51e16b4525f1d10336e2b0bcbbd775387; headline AspisR1.RPx_Deployed.deployed; frozen3,L154 parameter,D188 narrowed. The root qualifications are ONLY the root's own PacketDomain and PhysicalInterpretation, approved trust rows/RuntimePersistence and CompositionTrustOptionA. P6/D188 optionA is trust reclassification, not removal. No shipped source changed; no ELF rebuild triggered. RuntimeReturnData(ab) is ADDED trust and has one newly CLOSED native use here: emit_result.
 
@@ -96,7 +96,7 @@ emit_result: CLOSED; see its full statement below. K001 timeout remains excluded
 
 reconstruct_asq8_statement: CLOSED; see the certificate below.
 
-scan_proof_buffer: same688-byte header/child Result/Box frame, exact byte696 tag use and native equality-iteration association remain OPEN. Existing induction and child model proofs are reused.
+scan_proof_buffer: the exact full688-byte native equality-to-iteration association remains OPEN; the conditional root theorem and all support cuts are recorded below.
 
 ## asq8_common — CLOSED member
 
@@ -140,3 +140,34 @@ Axioms: [propext, Classical.choice, Quot.sound]. Only root qualifications and ap
 ## Raw getters — CLOSED members
 
 WideExact::to_limbs now covers EVERY raw eight-u32 carrier, without canonicality. K127/128 use a safe actual-type raw constructor; NFD_RawCarriers.raw_roundtrip proves its surjectivity and limbs_result_state_effects binds the complete ordered array, state and empty effects. This resolves the NEY canonical-only finding. Variant::tag covers all three constructors, K129/130 and NFD_RawCarriers.tag_roundtrip/tag_result_state_effects. NFD_L036 audits all four theorems; axioms empty or the standard three. These four inventory rows are CLOSED.
+
+## WideExact::to_le_bytes — CLOSED member
+
+K131 executes ONE actual zip/chunks/copy body at arbitrary k<8 on an arbitrary32-byte prestate, observing arbitrary j<32, including the complete unselected frame. K132 corrupts a selected byte and K133 corrupts the next disjoint window; both fail with the exact KMX copy patch. The real to_limbs child is CLOSED on all raw words. Existing P6ToBytes.OutputInvariant induction and NCA_SerializerWindow.frame are reused, with their axioms audited by NFD_L037.
+
+NFD_WideSerialization.result_state_effects establishes existence of the exact returned32-byte array, external state frame and empty effects; its bytes are the eight original raw u32 words' little-endian encodings in order. carrier_roundtrip establishes the raw/cohort carrier bijection. The inventory's M31/self alternatives are resolved BEFORE pruning: frozen to_limbs returns [u32;Self::LIMB_COUNT], LIMB_COUNT=8; limb.to_le_bytes is the primitive u32 method, with neither an M31 nor a recursive call. Resolution is checked exactly by NFD_wide_checks.py; all original obligation records are retained. Standard axioms only, no canonicality assumption. Two further rows close; three scanner internal edges stay OPEN.
+
+## scan_proof_buffer — OPEN conditional root
+
+K134–150 provide checked scalar length/tag cuts, exact same688-byte decoder header, every candidate field family, fresh Box ownership and failing reply/allocation controls; the suffix forwards that same Box into encode, observes its same688-byte reply and forwards the same candidate/proof length on success, under an explicit equality predicate. Three one-byte equality controls establish only the local step. NONE of these proves the frozen full688-byte comparison is the iterated predicate; no root or edge credit is taken.
+
+Full conditional kernel MODEL statement (NFD_L039):
+```lean
+theorem result_state_effects {State : Type} (bytes : Slice U8) (state : State)
+    (equality : List U8 → List U8 → Bool)
+    (nativeEqualityBridge : NativeEqualityAssociation equality) :
+    (run equality bytes,state,([] : List Unit)) =
+    (AspisR1.JHf_Scan.source bytes,state,[])
+```
+
+NativeEqualityAssociation equality is explicitly `∀ left right, equality left right = decide (left=right)`. It is OPEN for the actual reached native/compiler/library comparison on the SAME buffers; it is not an approved trust row and is not hidden inside PhysicalInterpretation. Root remains OPEN and receives no ledger certificate. Pure list equality induction and arbitrary-accumulator step are inherited from NEU_EqualityLoop. L038 was an elaboration failure (the emitted sorryAx diagnostic is excluded); changed proof L039 succeeds with [propext, Classical.choice, Quot.sound]. No source contains sorry/admit/axiom declarations.
+
+## Final audit and scope
+
+NFD_L040 audits74 named theorem references, including all new certificate theorems and the seven root MODEL statements (scanner conditional). Exit0,2.419622s,peak5,317,464KiB RSS,swap0. Axioms are empty or a subset of [propext, Classical.choice, Quot.sound]. This is ordinary #print axioms, summary based, not an NEP raw-walker replay and not a cold release rebuild. No audit-driver adaptation was made. Exact source/object/Aeneas hashes and AGENTS section6 fields are in per-attempt receipts and NFD_SECTION6_RECEIPTS.json.
+
+Budget150/150 Kani,40/60 Lean;190/210 combined(90.48%). All native attempts, including expected failing controls, four excluded timeouts and wrong invocations, count. No changed timeout shape was rerun unchanged or with higher caps. Only the scanner remains OPEN; NFD_STOP_AUDIT.json explains why it requires native evidence and why20 unused Lean slots cannot discharge it. No function-pointer quarantine or writable-static suspension is used for credit.
+
+Only NFD evidence/new modules changed; harness Rust lives solely in the external scratch tree, committed as patches/snapshots. No crates/programs/ELFs, session A files, wallets or keys were changed; the inherited ELF pins remain default f8c0ec72…,devnet63ad3e9c…,Pool121f3e29…. Own compiled target/temp were removed after the last scope ended; the owned cache and accepted objects are retained and hashed in NFD_FINAL_CACHE.json. All four required scope limits, frozen/offline dependency graph, deployed feature graph, source identity, exact KMX patch and lock-after checks are per native attempt.
+
+Final additive replay: NFD_FINAL_VALIDATION.json reports96 CLOSED rows and6 CLOSED roots; NFD_EDGES.json reports126/129 CLOSED internal edges. The full60-test suite passes in257.549s. These final runs include the new serializer certificate and typed alternative resolution; no unchanged full regression was repeated.

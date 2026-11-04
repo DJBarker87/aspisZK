@@ -14518,6 +14518,471 @@
    "callee_domain_established": true,
    "native_frame_complete": true,
    "semantic_review_sha256": "ace1b0682f92ea42c27c82a9e8c9966316de66414e6c0dc99ad381b45e15f8f3"
+  },
+  "crates/aspis-core/src/field/wide_exact.rs::WideExact::to_le_bytes": {
+   "id": "NFD_to_le_bytes",
+   "subject": "crates/aspis-core/src/field/wide_exact.rs::WideExact::to_le_bytes",
+   "kind": "member-composition",
+   "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+   "native_certificate": {
+    "function": "crates/aspis-core/src/field/wide_exact.rs::WideExact::to_le_bytes",
+    "complete": true,
+    "domain": "all raw eight-u32 WideExact carriers; arbitrary32-byte prestate and observed j<32 at iteration k<8; no canonicality restriction",
+    "step": [
+     "NFD_K131",
+     "NFD_K132",
+     "NFD_K133"
+    ],
+    "callee": "crates/aspis-core/src/field/wide_exact.rs::WideExact::to_limbs"
+   },
+   "domain_theorems": [
+    {
+     "name": "NFD_WideSerialization.carrier_roundtrip",
+     "source": {
+      "path": "evidence/slice-s-compose10-20261104/NFD_L037/NFD_SOURCE.lean.txt",
+      "sha256": "f17dff888e4250e4854a3a51a646cdeaa299a12f5903c3575a1f0009f48c1cff"
+     },
+     "receipt": {
+      "path": "evidence/slice-s-compose10-20261104/NFD_L037/receipt.json",
+      "sha256": "6c50baddf5772bca50368c584796b2450f29d39d843d34853ec12cc416e6521a"
+     },
+     "snapshot_path": "NFD_generated/NFD_WideSerialization.lean",
+     "statement": "theorem carrier_roundtrip (x : NBG_WriterPorts.NE) : fromPort (NBG_WriterPorts.port x)=x",
+     "statement_sha256": "e9e6d3164d7098e981f77d06e95a1fce4abaabb53cb89dcef360f1149f7aba30"
+    },
+    {
+     "name": "NFD_WideSerialization.result_state_effects",
+     "source": {
+      "path": "evidence/slice-s-compose10-20261104/NFD_L037/NFD_SOURCE.lean.txt",
+      "sha256": "f17dff888e4250e4854a3a51a646cdeaa299a12f5903c3575a1f0009f48c1cff"
+     },
+     "receipt": {
+      "path": "evidence/slice-s-compose10-20261104/NFD_L037/receipt.json",
+      "sha256": "6c50baddf5772bca50368c584796b2450f29d39d843d34853ec12cc416e6521a"
+     },
+     "snapshot_path": "NFD_generated/NFD_WideSerialization.lean",
+     "statement": "theorem result_state_effects {State : Type} (x : NBG_WriterPorts.NE) (state : State) :\n    \u2203 out, (AspisR1WideToBytesSource.field.wide_exact.WideExact.to_le_bytes\n      (NBG_WriterPorts.port x),state,([] : List Unit)) = (Result.ok out,state,[]) \u2227\n      out.val = [x.c0.c0.a,x.c0.c0.b,x.c0.c1.a,x.c0.c1.b,\n        x.c1.c0.a,x.c1.c0.b,x.c1.c1.a,x.c1.c1.b].flatMap\n          (fun word => (core.num.U32.to_le_bytes word).val)",
+     "statement_sha256": "5a425088df4678c21fd3a88465ec4550c357d70630dbe07700ac0f7c2f8aa674"
+    }
+   ],
+   "physical_theorems": [
+    {
+     "name": "NFD_WideSerialization.carrier_roundtrip",
+     "source": {
+      "path": "evidence/slice-s-compose10-20261104/NFD_L037/NFD_SOURCE.lean.txt",
+      "sha256": "f17dff888e4250e4854a3a51a646cdeaa299a12f5903c3575a1f0009f48c1cff"
+     },
+     "receipt": {
+      "path": "evidence/slice-s-compose10-20261104/NFD_L037/receipt.json",
+      "sha256": "6c50baddf5772bca50368c584796b2450f29d39d843d34853ec12cc416e6521a"
+     },
+     "snapshot_path": "NFD_generated/NFD_WideSerialization.lean",
+     "statement": "theorem carrier_roundtrip (x : NBG_WriterPorts.NE) : fromPort (NBG_WriterPorts.port x)=x",
+     "statement_sha256": "e9e6d3164d7098e981f77d06e95a1fce4abaabb53cb89dcef360f1149f7aba30"
+    },
+    {
+     "name": "NFD_WideSerialization.result_state_effects",
+     "source": {
+      "path": "evidence/slice-s-compose10-20261104/NFD_L037/NFD_SOURCE.lean.txt",
+      "sha256": "f17dff888e4250e4854a3a51a646cdeaa299a12f5903c3575a1f0009f48c1cff"
+     },
+     "receipt": {
+      "path": "evidence/slice-s-compose10-20261104/NFD_L037/receipt.json",
+      "sha256": "6c50baddf5772bca50368c584796b2450f29d39d843d34853ec12cc416e6521a"
+     },
+     "snapshot_path": "NFD_generated/NFD_WideSerialization.lean",
+     "statement": "theorem result_state_effects {State : Type} (x : NBG_WriterPorts.NE) (state : State) :\n    \u2203 out, (AspisR1WideToBytesSource.field.wide_exact.WideExact.to_le_bytes\n      (NBG_WriterPorts.port x),state,([] : List Unit)) = (Result.ok out,state,[]) \u2227\n      out.val = [x.c0.c0.a,x.c0.c0.b,x.c0.c1.a,x.c0.c1.b,\n        x.c1.c0.a,x.c1.c0.b,x.c1.c1.a,x.c1.c1.b].flatMap\n          (fun word => (core.num.U32.to_le_bytes word).val)",
+     "statement_sha256": "5a425088df4678c21fd3a88465ec4550c357d70630dbe07700ac0f7c2f8aa674"
+    }
+   ],
+   "support": [
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K131/receipt.json",
+     "sha256": "792029a628236b97bacd9c74d29e2a12cefb2bf8a2a90c83fd28cc7f005b9c7c"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K131/stdout.log",
+     "sha256": "99c490bb5d0c8d352a8e9efa91a2ffe25f2c2af9e1a6bf1011f61775b7e4781e"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K131-NFD_native_contracts.patch",
+     "sha256": "53c101910424c76251a4692ced0e34fe4c881e6dda2164d5a7d80504a3b3efd7"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K131-NFD_oracle.patch",
+     "sha256": "20d7efa56826743b42b837d2c5ff4a3df3adc27e8f49eb2b6e5abafe9541c4be"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K131-admission.json",
+     "sha256": "ab281decc73bcffc3ea30a3085fc1739e276f3920225cc5f83d0653a3e4ccb6c"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K131-frozen-identity.json",
+     "sha256": "f74172583b959d447985445e828e9d15fe08c7491ac40e7b97e48bfd20d6c106"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K131-graph-check.json",
+     "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K131-inputs.json.sha256",
+     "sha256": "d089e71e9a66c52cddc074c0dce75a6e84e4619fae1b7cb809c39819d3198289"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K131-inputs.json.xz",
+     "sha256": "252f4cff888927bf10795a5c808f7d79977ccffe3ce29b4c793fc89abaeed4c7"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K131-lock-check.json",
+     "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K131-metadata-pin.json",
+     "sha256": "08d1ddc47d424464514366d85221972e601570741656746b39367f105c073598"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K131-rule16-check.json",
+     "sha256": "e2e2d33476720a2af6f69f962b66c95b639c25a51f225bee397a79ef1d24a452"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K131-shape.json",
+     "sha256": "5bd36ee4ab52f6b913e91e1ff2627e1e0ca171e2269f2c7a98d59b870518c200"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K131-source-check.json",
+     "sha256": "6164c1db6fc5f63683cc29ee1151bce5920f334dfd95110c292935575043ee6a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K131.json",
+     "sha256": "8fb8ecf147b7e595ed19444d7d5311afcab37454f9140f4bcbdc80fce1f805c7"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K132/receipt.json",
+     "sha256": "84cb6c3a9d2a2cc677f21b535ed634f21b8aadec1a4c5c2a01147e254a1ae443"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K132/stdout.log",
+     "sha256": "790fa49eedc1850e3e526b2a52c64c611b0287f1612492bccaad770bbac40845"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K132-NFD_native_contracts.patch",
+     "sha256": "db6cc2531253e6d5ff83ce90d0521a2bff6a97217f15d09c39910accfaa37b63"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K132-NFD_oracle.patch",
+     "sha256": "20d7efa56826743b42b837d2c5ff4a3df3adc27e8f49eb2b6e5abafe9541c4be"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K132-admission.json",
+     "sha256": "ab281decc73bcffc3ea30a3085fc1739e276f3920225cc5f83d0653a3e4ccb6c"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K132-frozen-identity.json",
+     "sha256": "979de98c7957ee67976c1e32873971dfa96c1759d92bf44c2146876eafbefdba"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K132-graph-check.json",
+     "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K132-inputs.json.sha256",
+     "sha256": "e354e03e84e7b1b7013cc18ede1043fe6dc3010a97c76c747d01060e5ed0b8b3"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K132-inputs.json.xz",
+     "sha256": "67905a36df72d9749f7eb1aafc284649134e151283b79691587e561939206de3"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K132-lock-check.json",
+     "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K132-metadata-pin.json",
+     "sha256": "08d1ddc47d424464514366d85221972e601570741656746b39367f105c073598"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K132-rule16-check.json",
+     "sha256": "e2e2d33476720a2af6f69f962b66c95b639c25a51f225bee397a79ef1d24a452"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K132-shape.json",
+     "sha256": "22fa999c1d58f511d081681886c057ce35e8462e5d58b6f7cffdf51e1be28aa3"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K132-source-check.json",
+     "sha256": "6164c1db6fc5f63683cc29ee1151bce5920f334dfd95110c292935575043ee6a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K132.json",
+     "sha256": "ef948a872ef40fdd968880ea76b6552118e1f6f19772f228c9b882853d974d1b"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K133/receipt.json",
+     "sha256": "5823ea224156b705e18ac84f391f78912f7c042806e76b66e21a6d3327bc97ad"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K133/stdout.log",
+     "sha256": "d8cd74e1e041ed98c55817ad983d47ccde1d5056b6ef98ec8ba267438101137d"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K133-NFD_native_contracts.patch",
+     "sha256": "d63cd5a3be83067143b054c0e8b54fb7e6998cbeaf5edb4fad372159607c3661"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K133-NFD_oracle.patch",
+     "sha256": "20d7efa56826743b42b837d2c5ff4a3df3adc27e8f49eb2b6e5abafe9541c4be"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K133-admission.json",
+     "sha256": "ab281decc73bcffc3ea30a3085fc1739e276f3920225cc5f83d0653a3e4ccb6c"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K133-frozen-identity.json",
+     "sha256": "b14341c856cb7b37f8678a67860d973921da816d521e41514f526cce42174753"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K133-graph-check.json",
+     "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K133-inputs.json.sha256",
+     "sha256": "a10e30b43fbc502c2aa4c282b8ca5d4dc4d1193ebb7e7195b93ed76a7e658685"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K133-inputs.json.xz",
+     "sha256": "6a9556d23ca66e18d55e85d92f6ee5948bd15c85842fde828e732f7acc0025b6"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K133-lock-check.json",
+     "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K133-metadata-pin.json",
+     "sha256": "08d1ddc47d424464514366d85221972e601570741656746b39367f105c073598"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K133-rule16-check.json",
+     "sha256": "e2e2d33476720a2af6f69f962b66c95b639c25a51f225bee397a79ef1d24a452"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K133-shape.json",
+     "sha256": "054f8a0fabd772f5d3d35fee0ec3da53f1805f20306fa9f599a296e0fc5b365d"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K133-source-check.json",
+     "sha256": "6164c1db6fc5f63683cc29ee1151bce5920f334dfd95110c292935575043ee6a"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_K133.json",
+     "sha256": "6c2953bdaf53474f1328a777fb40cec5ac415d21682c93134501d8d005cbd638"
+    },
+    {
+     "path": "evidence/slice-s-compose10-20261104/NFD_RAW_SOURCE_DIGESTS.json",
+     "sha256": "a3c293a149b54fa2ef58f9b9a40aa351c5e0a21729a2894f2f09b0e85c72e1d5"
+    }
+   ],
+   "required_obligations": [
+    "call-domain:crates/aspis-core/src/field/wide_exact.rs::WideExact::to_le_bytes->crates/aspis-core/src/field.rs::M31::to_le_bytes",
+    "call-domain:crates/aspis-core/src/field/wide_exact.rs::WideExact::to_le_bytes->crates/aspis-core/src/field/wide_exact.rs::WideExact::to_le_bytes",
+    "call-domain:crates/aspis-core/src/field/wide_exact.rs::WideExact::to_le_bytes->crates/aspis-core/src/field/wide_exact.rs::WideExact::to_limbs",
+    "external:TX1:58:3",
+    "external:TX1:58:4",
+    "external:TX1:58:5",
+    "call-domain:crates/aspis-core/src/field/wide_exact.rs::WideExact::to_le_bytes->crates/aspis-core/src/field.rs::M31::to_le_bytes",
+    "call-domain:crates/aspis-core/src/field/wide_exact.rs::WideExact::to_le_bytes->crates/aspis-core/src/field/wide_exact.rs::WideExact::to_le_bytes",
+    "call-domain:crates/aspis-core/src/field/wide_exact.rs::WideExact::to_le_bytes->crates/aspis-core/src/field/wide_exact.rs::WideExact::to_limbs",
+    "external:TX2:39:3",
+    "external:TX2:39:4",
+    "external:TX2:39:5"
+   ],
+   "edges": [
+    "crates/aspis-core/src/field/wide_exact.rs::WideExact::to_le_bytes -> crates/aspis-core/src/field.rs::M31::to_le_bytes",
+    "crates/aspis-core/src/field/wide_exact.rs::WideExact::to_le_bytes -> crates/aspis-core/src/field/wide_exact.rs::WideExact::to_limbs"
+   ],
+   "call_domain_certificates": {
+    "crates/aspis-core/src/field/wide_exact.rs::WideExact::to_le_bytes -> crates/aspis-core/src/field.rs::M31::to_le_bytes": {
+     "subject": "crates/aspis-core/src/field/wide_exact.rs::WideExact::to_le_bytes -> crates/aspis-core/src/field.rs::M31::to_le_bytes",
+     "classification": "actual raw eight-word getter and one arbitrary-prestate native zip/chunks/copy iteration; disjoint stride-four frame and existing P6 induction; conservative M31/self alternatives resolved to primitive u32",
+     "selected_callee_claims": [
+      "NBG::crates/aspis-core/src/field.rs::M31::to_le_bytes"
+     ],
+     "inner_names_discharged": [
+      "NCS_R050.PacketDomain",
+      "NCS_R050.PhysicalInterpretation"
+     ],
+     "domain_theorems": [
+      {
+       "name": "NFD_WideSerialization.carrier_roundtrip",
+       "source": {
+        "path": "evidence/slice-s-compose10-20261104/NFD_L037/NFD_SOURCE.lean.txt",
+        "sha256": "f17dff888e4250e4854a3a51a646cdeaa299a12f5903c3575a1f0009f48c1cff"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose10-20261104/NFD_L037/receipt.json",
+        "sha256": "6c50baddf5772bca50368c584796b2450f29d39d843d34853ec12cc416e6521a"
+       },
+       "snapshot_path": "NFD_generated/NFD_WideSerialization.lean",
+       "statement": "theorem carrier_roundtrip (x : NBG_WriterPorts.NE) : fromPort (NBG_WriterPorts.port x)=x",
+       "statement_sha256": "e9e6d3164d7098e981f77d06e95a1fce4abaabb53cb89dcef360f1149f7aba30"
+      },
+      {
+       "name": "NFD_WideSerialization.result_state_effects",
+       "source": {
+        "path": "evidence/slice-s-compose10-20261104/NFD_L037/NFD_SOURCE.lean.txt",
+        "sha256": "f17dff888e4250e4854a3a51a646cdeaa299a12f5903c3575a1f0009f48c1cff"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose10-20261104/NFD_L037/receipt.json",
+        "sha256": "6c50baddf5772bca50368c584796b2450f29d39d843d34853ec12cc416e6521a"
+       },
+       "snapshot_path": "NFD_generated/NFD_WideSerialization.lean",
+       "statement": "theorem result_state_effects {State : Type} (x : NBG_WriterPorts.NE) (state : State) :\n    \u2203 out, (AspisR1WideToBytesSource.field.wide_exact.WideExact.to_le_bytes\n      (NBG_WriterPorts.port x),state,([] : List Unit)) = (Result.ok out,state,[]) \u2227\n      out.val = [x.c0.c0.a,x.c0.c0.b,x.c0.c1.a,x.c0.c1.b,\n        x.c1.c0.a,x.c1.c0.b,x.c1.c1.a,x.c1.c1.b].flatMap\n          (fun word => (core.num.U32.to_le_bytes word).val)",
+       "statement_sha256": "5a425088df4678c21fd3a88465ec4550c357d70630dbe07700ac0f7c2f8aa674"
+      }
+     ],
+     "physical_theorems": [
+      {
+       "name": "NFD_WideSerialization.carrier_roundtrip",
+       "source": {
+        "path": "evidence/slice-s-compose10-20261104/NFD_L037/NFD_SOURCE.lean.txt",
+        "sha256": "f17dff888e4250e4854a3a51a646cdeaa299a12f5903c3575a1f0009f48c1cff"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose10-20261104/NFD_L037/receipt.json",
+        "sha256": "6c50baddf5772bca50368c584796b2450f29d39d843d34853ec12cc416e6521a"
+       },
+       "snapshot_path": "NFD_generated/NFD_WideSerialization.lean",
+       "statement": "theorem carrier_roundtrip (x : NBG_WriterPorts.NE) : fromPort (NBG_WriterPorts.port x)=x",
+       "statement_sha256": "e9e6d3164d7098e981f77d06e95a1fce4abaabb53cb89dcef360f1149f7aba30"
+      },
+      {
+       "name": "NFD_WideSerialization.result_state_effects",
+       "source": {
+        "path": "evidence/slice-s-compose10-20261104/NFD_L037/NFD_SOURCE.lean.txt",
+        "sha256": "f17dff888e4250e4854a3a51a646cdeaa299a12f5903c3575a1f0009f48c1cff"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose10-20261104/NFD_L037/receipt.json",
+        "sha256": "6c50baddf5772bca50368c584796b2450f29d39d843d34853ec12cc416e6521a"
+       },
+       "snapshot_path": "NFD_generated/NFD_WideSerialization.lean",
+       "statement": "theorem result_state_effects {State : Type} (x : NBG_WriterPorts.NE) (state : State) :\n    \u2203 out, (AspisR1WideToBytesSource.field.wide_exact.WideExact.to_le_bytes\n      (NBG_WriterPorts.port x),state,([] : List Unit)) = (Result.ok out,state,[]) \u2227\n      out.val = [x.c0.c0.a,x.c0.c0.b,x.c0.c1.a,x.c0.c1.b,\n        x.c1.c0.a,x.c1.c0.b,x.c1.c1.a,x.c1.c1.b].flatMap\n          (fun word => (core.num.U32.to_le_bytes word).val)",
+       "statement_sha256": "5a425088df4678c21fd3a88465ec4550c357d70630dbe07700ac0f7c2f8aa674"
+      }
+     ],
+     "inner_hypotheses_remaining": [],
+     "same_arguments": true,
+     "same_prestate": true,
+     "same_result": true,
+     "same_ordered_effects": true,
+     "canonical_carrier": true,
+     "callee_domain_established": true,
+     "native_frame_complete": true
+    },
+    "crates/aspis-core/src/field/wide_exact.rs::WideExact::to_le_bytes -> crates/aspis-core/src/field/wide_exact.rs::WideExact::to_limbs": {
+     "subject": "crates/aspis-core/src/field/wide_exact.rs::WideExact::to_le_bytes -> crates/aspis-core/src/field/wide_exact.rs::WideExact::to_limbs",
+     "classification": "actual raw eight-word getter and one arbitrary-prestate native zip/chunks/copy iteration; disjoint stride-four frame and existing P6 induction; conservative M31/self alternatives resolved to primitive u32",
+     "selected_callee_claims": [
+      "NFD::crates/aspis-core/src/field/wide_exact.rs::WideExact::to_limbs"
+     ],
+     "inner_names_discharged": [
+      "NCS_R074.PacketDomain",
+      "NCS_R074.PhysicalInterpretation",
+      "crates/aspis-core/src/field/wide_exact.rs::WideExact::to_limbs.PacketDomain",
+      "crates/aspis-core/src/field/wide_exact.rs::WideExact::to_limbs.PhysicalInterpretation"
+     ],
+     "domain_theorems": [
+      {
+       "name": "NFD_WideSerialization.carrier_roundtrip",
+       "source": {
+        "path": "evidence/slice-s-compose10-20261104/NFD_L037/NFD_SOURCE.lean.txt",
+        "sha256": "f17dff888e4250e4854a3a51a646cdeaa299a12f5903c3575a1f0009f48c1cff"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose10-20261104/NFD_L037/receipt.json",
+        "sha256": "6c50baddf5772bca50368c584796b2450f29d39d843d34853ec12cc416e6521a"
+       },
+       "snapshot_path": "NFD_generated/NFD_WideSerialization.lean",
+       "statement": "theorem carrier_roundtrip (x : NBG_WriterPorts.NE) : fromPort (NBG_WriterPorts.port x)=x",
+       "statement_sha256": "e9e6d3164d7098e981f77d06e95a1fce4abaabb53cb89dcef360f1149f7aba30"
+      },
+      {
+       "name": "NFD_WideSerialization.result_state_effects",
+       "source": {
+        "path": "evidence/slice-s-compose10-20261104/NFD_L037/NFD_SOURCE.lean.txt",
+        "sha256": "f17dff888e4250e4854a3a51a646cdeaa299a12f5903c3575a1f0009f48c1cff"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose10-20261104/NFD_L037/receipt.json",
+        "sha256": "6c50baddf5772bca50368c584796b2450f29d39d843d34853ec12cc416e6521a"
+       },
+       "snapshot_path": "NFD_generated/NFD_WideSerialization.lean",
+       "statement": "theorem result_state_effects {State : Type} (x : NBG_WriterPorts.NE) (state : State) :\n    \u2203 out, (AspisR1WideToBytesSource.field.wide_exact.WideExact.to_le_bytes\n      (NBG_WriterPorts.port x),state,([] : List Unit)) = (Result.ok out,state,[]) \u2227\n      out.val = [x.c0.c0.a,x.c0.c0.b,x.c0.c1.a,x.c0.c1.b,\n        x.c1.c0.a,x.c1.c0.b,x.c1.c1.a,x.c1.c1.b].flatMap\n          (fun word => (core.num.U32.to_le_bytes word).val)",
+       "statement_sha256": "5a425088df4678c21fd3a88465ec4550c357d70630dbe07700ac0f7c2f8aa674"
+      }
+     ],
+     "physical_theorems": [
+      {
+       "name": "NFD_WideSerialization.carrier_roundtrip",
+       "source": {
+        "path": "evidence/slice-s-compose10-20261104/NFD_L037/NFD_SOURCE.lean.txt",
+        "sha256": "f17dff888e4250e4854a3a51a646cdeaa299a12f5903c3575a1f0009f48c1cff"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose10-20261104/NFD_L037/receipt.json",
+        "sha256": "6c50baddf5772bca50368c584796b2450f29d39d843d34853ec12cc416e6521a"
+       },
+       "snapshot_path": "NFD_generated/NFD_WideSerialization.lean",
+       "statement": "theorem carrier_roundtrip (x : NBG_WriterPorts.NE) : fromPort (NBG_WriterPorts.port x)=x",
+       "statement_sha256": "e9e6d3164d7098e981f77d06e95a1fce4abaabb53cb89dcef360f1149f7aba30"
+      },
+      {
+       "name": "NFD_WideSerialization.result_state_effects",
+       "source": {
+        "path": "evidence/slice-s-compose10-20261104/NFD_L037/NFD_SOURCE.lean.txt",
+        "sha256": "f17dff888e4250e4854a3a51a646cdeaa299a12f5903c3575a1f0009f48c1cff"
+       },
+       "receipt": {
+        "path": "evidence/slice-s-compose10-20261104/NFD_L037/receipt.json",
+        "sha256": "6c50baddf5772bca50368c584796b2450f29d39d843d34853ec12cc416e6521a"
+       },
+       "snapshot_path": "NFD_generated/NFD_WideSerialization.lean",
+       "statement": "theorem result_state_effects {State : Type} (x : NBG_WriterPorts.NE) (state : State) :\n    \u2203 out, (AspisR1WideToBytesSource.field.wide_exact.WideExact.to_le_bytes\n      (NBG_WriterPorts.port x),state,([] : List Unit)) = (Result.ok out,state,[]) \u2227\n      out.val = [x.c0.c0.a,x.c0.c0.b,x.c0.c1.a,x.c0.c1.b,\n        x.c1.c0.a,x.c1.c0.b,x.c1.c1.a,x.c1.c1.b].flatMap\n          (fun word => (core.num.U32.to_le_bytes word).val)",
+       "statement_sha256": "5a425088df4678c21fd3a88465ec4550c357d70630dbe07700ac0f7c2f8aa674"
+      }
+     ],
+     "inner_hypotheses_remaining": [],
+     "same_arguments": true,
+     "same_prestate": true,
+     "same_result": true,
+     "same_ordered_effects": true,
+     "canonical_carrier": true,
+     "callee_domain_established": true,
+     "native_frame_complete": true
+    }
+   },
+   "hypotheses": [
+    "crates/aspis-core/src/field/wide_exact.rs::WideExact::to_le_bytes.PacketDomain",
+    "crates/aspis-core/src/field/wide_exact.rs::WideExact::to_le_bytes.PhysicalInterpretation",
+    "RuntimePersistence",
+    "CompositionTrustOptionA"
+   ],
+   "new_trust_rows": [],
+   "inner_hypotheses_remaining": [],
+   "trust_classification": "P6/D188 option A reclassification",
+   "exact_callsite": true,
+   "same_arguments": true,
+   "same_prestate": true,
+   "same_result": true,
+   "same_ordered_effects": true,
+   "canonical_carrier": true,
+   "callee_domain_established": true,
+   "native_frame_complete": true,
+   "semantic_review_sha256": "a8cd9037cfe60e23c0faa62272115122bfeb48245f80d9a93ea4709b81e022dc",
+   "resolved_non_calls": {
+    "crates/aspis-core/src/field.rs::M31::to_le_bytes": "limb is u32 from to_limbs()->[u32;8]; native primitive u32::to_le_bytes, no M31 call",
+    "crates/aspis-core/src/field/wide_exact.rs::WideExact::to_le_bytes": "limb is u32 from to_limbs()->[u32;8]; no recursive WideExact::to_le_bytes call"
+   }
   }
  }
 }

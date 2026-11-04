@@ -1,0 +1,49 @@
+{"attempt": "NFD_L038", "exit_status": 1, "wall_seconds": 2.385054366895929, "peak_rss_kib": "5319580", "swaps": "0", "print_axioms": ["'NFD_ScanConditional.result_state_effects' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NEU_EqualityLoop.prefix_exact' depends on axioms: [propext]", "'NEU_EqualityLoop.step_invariant' depends on axioms: [propext]"]}
+NFD_generated/NFD_ScanConditional.lean:41:48: error: unsolved goals
+State : Type
+bytes : Slice U8
+state : State
+equality : List U8 → List U8 → Bool
+nativeEqualityBridge : ∀ (left right : List U8), equality left right = decide (left = right)
+⊢ (do
+      let expected ← lift (Usize.checked_add 688#usize 57607#usize)
+      match expected with
+        | none => ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+        | some size =>
+          if bytes.len ≠ size then
+            ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+          else do
+            let header ←
+              core.slice.index.Slice.index (co
+...
+ndex.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                  { start := 0#usize, «end» := 688#usize }
+            let decoded ← decode_pool_v1_pair_verified_afterstate_v1 header
+            match decoded with
+              | core.result.Result.Err a =>
+                ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+              | core.result.Result.Ok candidate => do
+                let encoded ← encode_pool_v1_pair_verified_afterstate_v1 candidate
+                match encoded with
+                  | core.result.Result.Err a =>
+                    ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                  | core.result.Result.Ok encoded =>
+                    if ↑encoded ≠ ↑header then
+                      ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                    else do
+                      let tag ← bytes.index_usize 696#usize
+                      if tag ≠ 2#u8 then
+                          ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                        else
+                          ok
+                            (core.result.Result.Ok
+                              {
+                                candidate_afterstate :=
+                                  AspisS6CurrentAdapterCarrier.fromPoolV1PairVerifiedAfterstateV1 candidate,
+                                proof_length := 57607#usize }),
+      state, [])
+'NFD_ScanConditional.result_state_effects' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEU_EqualityLoop.prefix_exact' depends on axioms: [propext]
+'NEU_EqualityLoop.step_invariant' depends on axioms: [propext]
+
+Running as unit: run-r88bec176cf6942bdad49d17c1d03164c.scope; invocation ID: 04715fac0b0144239783e72cced12923

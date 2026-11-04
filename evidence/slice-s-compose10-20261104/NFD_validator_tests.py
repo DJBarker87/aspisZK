@@ -159,4 +159,25 @@ class CompleteRaw(unittest.TestCase):
  def test_wrong_model(self):self.mutate(lambda c:c['domain_theorems'][0].__setitem__('name','NBG_WideCarriers.wide_add'))
  def test_missing_receipt(self):self.mutate(lambda c:c['support'].pop())
 
+class CompleteWide(unittest.TestCase):
+ @classmethod
+ def setUpClass(cls):
+  import NFD_wide_checks as c
+  cls.f=c.F;cls.packet=v.read(v.E/'NFD_LEDGER_DELTA.json');cls.base=dict(rows=v.read(v.inherited.E/'NEY_CHECKED_ROWS.json'),frozen_revision='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387',trust_rows=[])
+ def rejected(self,fn):
+  p=copy.deepcopy(self.packet);c=p['NFD_certificates'][self.f];fn(c)
+  c['semantic_review_sha256']=v.sha(json.dumps({k:w for k,w in c.items() if k!='semantic_review_sha256'},sort_keys=True).encode())
+  out=v.compose(self.base,p)
+  self.assertTrue(all(r['composed_status']=='OPEN' for r in out['rows'] if r['function']==self.f))
+ def test_positive(self):
+  out=v.compose(self.base,self.packet)
+  self.assertTrue(all(r['composed_status']=='CLOSED' for r in out['rows'] if r['function']==self.f))
+ def test_absent_resolution(self):self.rejected(lambda c:c.pop('resolved_non_calls'))
+ def test_wrong_resolution(self):self.rejected(lambda c:c['resolved_non_calls'].__setitem__(self.f,'assumed recursion terminates'))
+ def test_missing_frame_control(self):self.rejected(lambda c:c['native_certificate']['step'].pop())
+ def test_wrong_callee(self):self.rejected(lambda c:c['native_certificate'].__setitem__('callee',self.f))
+ def test_narrowed_raw_domain(self):self.rejected(lambda c:c['native_certificate'].__setitem__('domain','canonical only'))
+ def test_wrong_source_theorem(self):self.rejected(lambda c:c['domain_theorems'][1].__setitem__('name','NBG_WideBytes.bytes_result'))
+ def test_hidden_child(self):self.rejected(lambda c:c['inner_hypotheses_remaining'].append('NCS_R074.PacketDomain'))
+
 if __name__=='__main__':unittest.main()

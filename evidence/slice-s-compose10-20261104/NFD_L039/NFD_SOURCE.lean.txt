@@ -1,0 +1,50 @@
+import JHf_Scan
+import NEU_EqualityLoop
+set_option autoImplicit false
+noncomputable section
+namespace NFD_ScanConditional
+open Aeneas Aeneas.Std Result
+open AspisR1TerminalDecoder pool_v1.pair_terminal
+/-- OPEN native/compiler/library obligation: the reached 688-byte comparison
+must agree with bytewise equality on the SAME two live buffers. -/
+def NativeEqualityAssociation (equality : List U8 → List U8 → Bool) : Prop :=
+  ∀ left right, equality left right = decide (left=right)
+
+def run (equality : List U8 → List U8 → Bool) (bytes : Slice U8) : Result (core.result.Result
+    AdapterRw.r1_pool_adapter.ScannedAsqaProof AdapterRw.solana_program_error.ProgramError) := do
+  let expected ← lift (Usize.checked_add 688#usize 57607#usize)
+  match expected with
+  | none=>ok (.Err .InvalidAccountData)
+  | some size=>
+    if Slice.len bytes != size then ok (.Err .InvalidAccountData) else do
+      let header ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+        bytes {start:=0#usize,«end»:=688#usize}
+      let decoded ← decode_pool_v1_pair_verified_afterstate_v1 header
+      match decoded with
+      | .Err _=>ok (.Err .InvalidAccountData)
+      | .Ok candidate=>
+        let encoded ← encode_pool_v1_pair_verified_afterstate_v1 candidate
+        match encoded with
+        | .Err _=>ok (.Err .InvalidAccountData)
+        | .Ok encoded=>
+          if equality encoded.val header.val = false then ok (.Err .InvalidAccountData) else do
+            let tag ← Slice.index_usize bytes 696#usize
+            if tag != 2#u8 then ok (.Err .InvalidAccountData) else
+              ok (.Ok ⟨AspisS6CurrentAdapterCarrier.fromPoolV1PairVerifiedAfterstateV1 candidate,57607#usize⟩)
+
+/-- Conditional root MODEL theorem. The named equality bridge is explicitly
+retained, so this is not a CLOSED native root certificate. -/
+theorem result_state_effects {State : Type} (bytes : Slice U8) (state : State)
+    (equality : List U8 → List U8 → Bool)
+    (nativeEqualityBridge : NativeEqualityAssociation equality) :
+    (run equality bytes,state,([] : List Unit)) =
+    (AspisR1.JHf_Scan.source bytes,state,[]) := by
+  unfold NativeEqualityAssociation at nativeEqualityBridge
+  unfold run AspisR1.JHf_Scan.source
+  simp only [nativeEqualityBridge,decide_eq_false_iff_not,bne_iff_ne]
+  rfl
+
+#print axioms result_state_effects
+#print axioms NEU_EqualityLoop.prefix_exact
+#print axioms NEU_EqualityLoop.step_invariant
+end NFD_ScanConditional

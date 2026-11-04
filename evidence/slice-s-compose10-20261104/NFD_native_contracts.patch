@@ -6,11 +6,11 @@
  mod rw_tests;
 +
 +#[cfg(kani)]
-+#[path="NFD_emit_continuation.rs"]
-+mod NFD_emit_continuation;
++#[path="NFD_scan.rs"]
++mod NFD_scan;
 --- /dev/null
-+++ b/programs/r1-cost-probe/src/NFD_emit_continuation.rs
-@@ -0,0 +1,42 @@
++++ b/programs/r1-cost-probe/src/NFD_scan.rs
+@@ -0,0 +1,24 @@
 +use super::*;
 +use aspis_statement::pool_v1::*;
 +use aspis_statement::Digest;
@@ -31,28 +31,10 @@
 +
 +
 +fn any_error()->PoolV1PairForestTerminalFormatErrorV1{match kani::any::<u8>(){0=>PoolV1PairForestTerminalFormatErrorV1::WrongLength,1=>PoolV1PairForestTerminalFormatErrorV1::WrongMagic,2=>PoolV1PairForestTerminalFormatErrorV1::WrongVersion,3=>PoolV1PairForestTerminalFormatErrorV1::WrongDigestEncoding,4=>PoolV1PairForestTerminalFormatErrorV1::InvalidTransitionKind,5=>PoolV1PairForestTerminalFormatErrorV1::InvalidOutputLane,6=>PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding,7=>PoolV1PairForestTerminalFormatErrorV1::NonCanonicalDigest,8=>PoolV1PairForestTerminalFormatErrorV1::OutputLaneMismatch,9=>PoolV1PairForestTerminalFormatErrorV1::MasterBindingMismatch,10=>PoolV1PairForestTerminalFormatErrorV1::DeploymentBindingMismatch,11=>PoolV1PairForestTerminalFormatErrorV1::HistoricalAnchorMismatch,12=>PoolV1PairForestTerminalFormatErrorV1::CheckpointBindingMismatch,13=>PoolV1PairForestTerminalFormatErrorV1::SelectedLaneBindingMismatch,14=>PoolV1PairForestTerminalFormatErrorV1::LiveSnapshotMismatch,15=>PoolV1PairForestTerminalFormatErrorV1::CandidateAfterstateMismatch,16=>PoolV1PairForestTerminalFormatErrorV1::ResultBindingMismatch,17=>PoolV1PairForestTerminalFormatErrorV1::WithdrawalDestinationMismatch,18=>PoolV1PairForestTerminalFormatErrorV1::Payment(NEE_any_PoolV1PaymentStatementFormatError()),19=>PoolV1PairForestTerminalFormatErrorV1::LaneTransition(NEE_any_PoolV1PairLatePublicStatementErrorV1()),20=>PoolV1PairForestTerminalFormatErrorV1::Afterstate(NEE_any_PoolV1PairVerifierTransportErrorV1()),_=>PoolV1PairForestTerminalFormatErrorV1::Account(NEE_any_PoolV1PairForestAccountErrorV1())}}
-+
-+struct Frame<'a>{s:&'a PoolV1PairForestTerminalStatementV1,record:*const PoolV1PairForestTerminalResultV1,calls:u8,j:usize,b_ok:bool,e_ok:bool,valid:bool,byte:u8,sent:Option<u8>}
-+fn binding(s:&PoolV1PairForestTerminalStatementV1,r:&PoolV1PairForestTerminalResultV1,f:&mut Frame)->Result<(),PoolV1PairForestTerminalFormatErrorV1>{assert!(f.calls==0&&core::ptr::eq(s,f.s));f.record=r;f.calls=1;f.b_ok=kani::any();if f.b_ok{Ok(())}else{Err(any_error())}}
-+fn encode(r:&PoolV1PairForestTerminalResultV1,f:&mut Frame)->Result<[u8;792],PoolV1PairForestTerminalFormatErrorV1>{assert!(f.calls==1&&core::ptr::eq(r,f.record));f.calls=2;f.e_ok=kani::any();if f.e_ok{let raw:[u8;792]=kani::any();f.valid=raw[0]==65&&raw[1]==83&&raw[2]==82&&raw[3]==56;f.byte=raw[f.j];Ok(raw)}else{Err(any_error())}}
-+fn send(bytes:&[u8],f:&mut Frame){assert!(f.calls==2&&bytes.len()==792);f.calls=3;f.sent=Some(bytes[f.j]);}
-+fn native(statement:&PoolV1PairForestTerminalStatementV1,result:PoolV1PairForestTerminalResultV1,f:&mut Frame)->ProgramResult{
-+    binding(statement, &result,f)
-+        .map_err(|_| ProgramError::InvalidInstructionData)?;
-+    let encoded = encode(&result,f)
-+        .map_err(|_| ProgramError::InvalidInstructionData)?;
-+    if encoded.len() != POOL_V1_PAIR_FOREST_TERMINAL_RESULT_BYTES
-+        || encoded[..4] != POOL_V1_PAIR_FOREST_TERMINAL_RESULT_MAGIC
-+    {
-+        return Err(ProgramError::InvalidInstructionData);
-+    }
-+    send(&encoded[1..],f);
-+    Ok(())
-+}
 +#[kani::proof]
 +#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFD_KMX::KMX_copy_nonoverlapping)]
 +#[kani::stub(<[u8]>::copy_from_slice,crate::NFD_KMX::KMX_copy_from_slice)]
-+fn emit_continuation(){let s=NEE_statement();let r=PoolV1PairForestTerminalResultV1{transition_kind:s.transition_kind(),master_account:kani::any(),selected_lane_account:kani::any(),output_lane:kani::any(),nullifier:NEE_digest(),verified_afterstate:NEE_common().lane_transition.candidate_afterstate};let j:usize=kani::any();kani::assume(j<792);let mut frame=Frame{s:&s,record:core::ptr::null(),calls:0,j,b_ok:false,e_ok:false,valid:false,byte:0,sent:None};let actual=native(&s,r,&mut frame);if !frame.b_ok{assert!(frame.calls==1&&frame.sent==None&&matches!(actual,Err(ProgramError::InvalidInstructionData)));}else if !frame.e_ok||!frame.valid{assert!(frame.calls==2&&frame.sent==None&&matches!(actual,Err(ProgramError::InvalidInstructionData)));}else{assert!(frame.calls==3&&frame.sent==Some(frame.byte)&&matches!(actual,Ok(())));}}
++fn scan_cut(){let a:u8=kani::any();let b:u8=kani::any();let same:bool=kani::any();let left=[a];let right=[b^1];let ls:&[u8]=left.as_ref();let rs:&[u8]=right.as_ref();let unequal=ls!=rs;let step=same&&!unequal;assert!(step==(same&&(a==b)));}
 --- a/programs/r1-cost-probe/src/lib.rs
 +++ b/programs/r1-cost-probe/src/lib.rs
 @@ -1,3 +1,4 @@
