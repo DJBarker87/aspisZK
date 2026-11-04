@@ -32,7 +32,7 @@
 +
 +fn any_error()->PoolV1PairForestTerminalFormatErrorV1{match kani::any::<u8>(){0=>PoolV1PairForestTerminalFormatErrorV1::WrongLength,1=>PoolV1PairForestTerminalFormatErrorV1::WrongMagic,2=>PoolV1PairForestTerminalFormatErrorV1::WrongVersion,3=>PoolV1PairForestTerminalFormatErrorV1::WrongDigestEncoding,4=>PoolV1PairForestTerminalFormatErrorV1::InvalidTransitionKind,5=>PoolV1PairForestTerminalFormatErrorV1::InvalidOutputLane,6=>PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding,7=>PoolV1PairForestTerminalFormatErrorV1::NonCanonicalDigest,8=>PoolV1PairForestTerminalFormatErrorV1::OutputLaneMismatch,9=>PoolV1PairForestTerminalFormatErrorV1::MasterBindingMismatch,10=>PoolV1PairForestTerminalFormatErrorV1::DeploymentBindingMismatch,11=>PoolV1PairForestTerminalFormatErrorV1::HistoricalAnchorMismatch,12=>PoolV1PairForestTerminalFormatErrorV1::CheckpointBindingMismatch,13=>PoolV1PairForestTerminalFormatErrorV1::SelectedLaneBindingMismatch,14=>PoolV1PairForestTerminalFormatErrorV1::LiveSnapshotMismatch,15=>PoolV1PairForestTerminalFormatErrorV1::CandidateAfterstateMismatch,16=>PoolV1PairForestTerminalFormatErrorV1::ResultBindingMismatch,17=>PoolV1PairForestTerminalFormatErrorV1::WithdrawalDestinationMismatch,18=>PoolV1PairForestTerminalFormatErrorV1::Payment(NEE_any_PoolV1PaymentStatementFormatError()),19=>PoolV1PairForestTerminalFormatErrorV1::LaneTransition(NEE_any_PoolV1PairLatePublicStatementErrorV1()),20=>PoolV1PairForestTerminalFormatErrorV1::Afterstate(NEE_any_PoolV1PairVerifierTransportErrorV1()),_=>PoolV1PairForestTerminalFormatErrorV1::Account(NEE_any_PoolV1PairForestAccountErrorV1())}}
 +
-+fn project(s:&PoolV1PairForestTerminalStatementV1,slot:usize,i:usize,j:usize,k:usize)->u64{match slot{0=>s.common().lane_transition.live_snapshot.next_pair_index as u64,_=>0}}
++fn project(s:&PoolV1PairForestTerminalStatementV1,slot:usize,i:usize,j:usize,k:usize)->u64{match slot{0=>s.transition_kind() as u64,_=>0}}
 +struct Frame<'a>{bytes:&'a [u8;1880],c:Result<PoolV1PairForestTerminalCommonV1,PoolV1PairForestTerminalFormatErrorV1>,s:Result<PoolV1PairForestTerminalStatementV1,PoolV1PairForestTerminalFormatErrorV1>,v:Result<(),PoolV1PairForestTerminalFormatErrorV1>,calls:u8,common_place:*const PoolV1PairForestTerminalCommonV1,statement_place:*const PoolV1PairForestTerminalStatementV1}
 +fn common(bytes:&[u8],f:&mut Frame)->Result<Box<PoolV1PairForestTerminalCommonV1>,PoolV1PairForestTerminalFormatErrorV1>{assert!(f.calls==0&&bytes.len()==1880&&core::ptr::eq(bytes.as_ptr(),f.bytes.as_ptr()));f.calls=1;f.c.map(|c|{let b=Box::new(c);f.common_place=&*b;b})}
 +fn payment(common:Box<PoolV1PairForestTerminalCommonV1>,bytes:&[u8],kind:u8,f:&mut Frame)->Result<Box<PoolV1PairForestTerminalStatementV1>,PoolV1PairForestTerminalFormatErrorV1>{assert!(f.calls==1&&core::ptr::eq(&*common,f.common_place)&&bytes.len()==216&&core::ptr::eq(bytes.as_ptr(),f.bytes[1664..].as_ptr())&&kind==f.bytes[5]);f.calls=2;f.s.map(|s|{let b=Box::new(s);f.statement_place=&*b;b})}
@@ -61,10 +61,10 @@
 +    let common = common(bytes,f)?;
 +    let statement = match kind {
 +        PoolV1TransitionKind::PrivateTransfer => {
-+            transfer(common, &bytes[PAYMENT_STATEMENT_OFFSET..],f)?
++            transfer(common, &bytes[PAYMENT_STATEMENT_OFFSET+1..],f)?
 +        }
 +        PoolV1TransitionKind::Withdrawal => {
-+            withdrawal(common, &bytes[PAYMENT_STATEMENT_OFFSET..],f)?
++            withdrawal(common, &bytes[PAYMENT_STATEMENT_OFFSET+1..],f)?
 +        }
 +    };
 +    validate(&statement,f)?;

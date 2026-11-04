@@ -5,7 +5,7 @@ E=Path(__file__).resolve().parent;B='/home/dombarker/project-offloads/codex-cx-s
 a,kind,harness=sys.argv[1:];assert kind in ['metadata','kani'];assert a.startswith('NEY_M' if kind=='metadata' else 'NEY_K')
 if kind=='kani':
  assert 'fn '+harness.rsplit('::',1)[-1]+'(' in ((E/'NEY_oracle.patch').read_text()+(E/'NEY_native_contracts.patch').read_text()),'missing requested harness; no launch'
-assert not (E/a).exists();assert len(list(E.glob('NEY_K*/receipt.json')))<150
+assert not (E/'NEY_LEAN_ACTIVE.json').exists();assert not (E/a).exists();assert len(list(E.glob('NEY_K*/receipt.json')))<150
 assert 1<=int(a[5:])<=150 if kind=='kani' else True
 active=E/'NEY_ACTIVE.json';assert not active.exists();active.write_text(json.dumps(dict(attempt=a,kind=kind)))
 def ssh(code,stdin=None,submitted=False):
@@ -94,6 +94,9 @@ manifest=r.stdout.removesuffix('\n')
 (E/'NEY_RUST_SHA256.json').write_text(manifest)
 (E/(a+'-RUST_SHA256.json')).write_text(manifest)
 (E/(a+'.json')).write_text(json.dumps(cfg,indent=1)+'\n')
+from NEY_frozen_identity import check as frozen_identity
+identity=frozen_identity(a)
+(E/(a+'-frozen-identity.json')).write_text(json.dumps(identity,indent=1)+'\n')
 r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_run_host.py '+a+'.json',submitted=True)
 (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
 code=f'''from pathlib import Path

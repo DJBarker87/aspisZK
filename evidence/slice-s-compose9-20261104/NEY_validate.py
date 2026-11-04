@@ -18,6 +18,8 @@ def native(a,positive):
  assert all(r[k]==v for k,v in c.items())
  ad=read(E/(a+'-admission.json'));assert ad['exit']==0 and ad['reservation']['allowed'] is True
  assert read(E/(a+'-graph-check.json'))['exact_LPm_graph'] is True
+ from NEY_frozen_identity import check as frozen_identity
+ assert read(E/(a+'-frozen-identity.json'))==frozen_identity(a)
  assert read(E/(a+'-lock-check.json'))['unchanged'] is True
  assert read(E/(a+'-rule16-check.json'))['no_writable_static'] is True
  assert not read(E/(a+'-source-check.json'))['errors']
@@ -59,6 +61,7 @@ def certificate(c,subject,base):
   return True
  except (AssertionError,KeyError,TypeError,ValueError,OSError,ImportError):return False
 def compose(base,packet):
+ assert packet['inherits']=='evidence/slice-s-compose8-20261104/NEX_LEDGER_DELTA.json.xz'
  result=copy.deepcopy(base)
  # No generic Boolean or arbitrary certificate can promote a row. New shapes
  # need their own frozen-source/native/Lean checker and bottom-up domain join.

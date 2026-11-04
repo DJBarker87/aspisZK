@@ -14,3 +14,5 @@ for family,slot,mode,a in jobs:
  assert (E/a/'receipt.json').exists(),'Missing receipt: recover read-only'
  r=json.loads((E/a/'receipt.json').read_text());print(json.dumps(dict(attempt=a,family=family,slot=slot,mode=mode,exit=r['exit_status'])),flush=True)
  if r['exit_status'] not in [0,1,124]:raise SystemExit('Non-verdict: inspect before next launch')
+ if a=='NEY_K053':subprocess.run([sys.executable,str(E/'NEY_stage.py'),'terminal'],check=True)
+ if a=='NEY_K107':subprocess.run([sys.executable,str(E/'NEY_stage.py'),'public'],check=True)
