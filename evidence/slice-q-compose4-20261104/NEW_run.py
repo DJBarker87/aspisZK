@@ -51,7 +51,7 @@ source=source_file.read_text()
 # coherent path; imported-cache hashes are independently recorded at intake.
 code=f'''from pathlib import Path
 import json,hashlib
-roots={[B,CACHE+'/NEW_exports_20261104',CACHE,CACHE+'/NEB_exports_20261029',CACHE+'/NEW_peer_exports',COHERENT,COHERENT+'/objects','/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean']!r};src={source!r};seen={{}}
+roots={[B,CACHE+'/NET_exports_20261104',CACHE,CACHE+'/NEB_exports_20261029',CACHE+'/NET_peer_exports',COHERENT,COHERENT+'/objects','/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean']!r};src={source!r};seen={{}}
 for line in src.splitlines():
  if line.startswith('import '):
   for mod in line[7:].split():
@@ -66,7 +66,7 @@ print(json.dumps(seen))
 '''
 r=ssh('python3',code);assert r.returncode==0,r.stdout+r.stderr
 pins=json.loads(r.stdout)
-cfg=dict(attempt=a,kind='lean',module=module,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),source_tree_dirty=True,sources=[rel],command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-o',module.replace('.','/')+'.olean',rel],timeout=180,env=dict(LEAN_PATH=':'.join([B,CACHE+'/NEW_exports_20261104',CACHE,CACHE+'/NEB_exports_20261029',CACHE+'/NEW_peer_exports',COHERENT,COHERENT+'/objects'])),deps_fingerprint=dict(selected_objects=pins,cache_import_manifest_sha256=hashlib.sha256((E/'NEW_CACHE_IMPORTS.json').read_bytes()).hexdigest(),peer_cache_import_manifest_sha256=hashlib.sha256((E/'NEW_PEER_CACHE_IMPORTS.json').read_bytes()).hexdigest()),expected_time='Focused symbolic call-domain proof; no native multiplication or recurrence evaluation')
+cfg=dict(attempt=a,kind='lean',module=module,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),source_tree_dirty=True,sources=[rel],command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-o',module.replace('.','/')+'.olean',rel],timeout=180,env=dict(LEAN_PATH=':'.join([B,CACHE+'/NET_exports_20261104',CACHE,CACHE+'/NEB_exports_20261029',CACHE+'/NET_peer_exports',COHERENT,COHERENT+'/objects'])),deps_fingerprint=dict(selected_objects=pins,cache_import_manifest_sha256=hashlib.sha256((E/'NEW_CACHE_IMPORTS.json').read_bytes()).hexdigest(),peer_cache_import_manifest_sha256=hashlib.sha256((E/'NEW_CACHE_IMPORTS.json').read_bytes()).hexdigest()),expected_time='Focused symbolic call-domain proof; no native multiplication or recurrence evaluation')
 (E/(a+'.json')).write_text(json.dumps(cfg,indent=1)+'\n')
 files={rel:source,a+'.json':json.dumps(cfg)}
 r=ssh('python3',f'''from pathlib import Path

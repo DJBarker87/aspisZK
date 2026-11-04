@@ -9,6 +9,9 @@ assert sum(json.loads(p.read_text()).get('kind')=='kani' for p in E.glob('NEW_K*
 assert harness.startswith(('field::NEW_wide_windows::','field::NEW_qinverse::','field::NEW_inverse::','field::NEW_windows::','verifier::NEW_prefix::','verifier::NEW_prefix_meta::','verifier::NEW_fields::','verifier::NEW_geometry::','verifier::candidate::NEW_query::'))
 assert all(c.isalnum() or c in '_:' for c in harness)
 target=harness
+if '::NEW_geometry::' in harness:
+ text=(E/'NEW_geometry.rs.txt').read_text()
+ for f in flag:assert f in text,('cfg flag absent from selected source',f)
 assert not (E/a).exists();active=E/'NEW_ACTIVE.json';assert not active.exists();active.write_text(json.dumps(dict(attempt=a,target=harness)))
 def ssh(code,stdin=None,submitted=False):
  for retry in range(11):
@@ -44,8 +47,8 @@ ni=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NEW_src
 env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_BUILD_JOBS='1',CARGO_NEW_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-C link-arg=-Wl,--threads=1',TMPDIR=B+'/NEW_tmp')
 if flag:
  assert len(flag)<=2 and len(set(flag))==len(flag)
- assert all(f in ['NEW_reserve_only','NEW_one_push','NEW_only_new','NEW_only_frame','NEW_bad_reply','NEW_bad_argument','NEW_bad_frame','NEW_bad_order','NEW_bad_option']+['NEW_wrong_field','NEW_wrong_badfield','NEW_wrong_empty','NEW_wrong_index','NEW_wrong_opening','NEW_wrong_inverse','NEW_wrong_zero','NEW_wrong_cell','NEW_wrong_window','NEW_wrong_getter','NEW_wrong_q','NEW_wrong_geometry','NEW_wrong_reduce','NEW_wrong_wrapper']+['NEW_wrong_'+p+'_'+o for p in ['m','c','q','e'] for o in ['add','sub','double']]+['NEW_wrong_limbs','NEW_wrong_canonical','NEW_wrong_embed'] for f in flag)
- assert len(set(flag)&{'NEW_only_new','NEW_only_frame','NEW_reserve_only','NEW_one_push'})<=1
+ assert all(f in ['NET_reserve_only','NET_one_push','NET_only_new','NET_only_frame','NET_bad_reply','NET_bad_argument','NET_bad_frame','NET_bad_order','NET_bad_option']+['NEW_wrong_field','NEW_wrong_badfield','NEW_wrong_empty','NEW_wrong_index','NEW_wrong_opening','NEW_wrong_inverse','NEW_wrong_zero','NEW_wrong_cell','NEW_wrong_window','NEW_wrong_getter','NEW_wrong_q','NEW_wrong_geometry','NEW_wrong_reduce','NEW_wrong_wrapper']+['NEW_wrong_'+p+'_'+o for p in ['m','c','q','e'] for o in ['add','sub','double']]+['NEW_wrong_limbs','NEW_wrong_canonical','NEW_wrong_embed'] for f in flag)
+ assert len(set(flag)&{'NET_only_new','NET_only_frame','NET_reserve_only','NET_one_push'})<=1
  for f in flag:env['RUSTFLAGS']+=' --cfg '+f
 sources=['NEW_TOOL_PINS.json','NEW_gate.py','NEW_graph.py','NEW_SOURCE_PINS.json','NEW_src/Cargo.lock','NEW_src/Cargo.toml','NEW_src/KMX_stubs.rs','NEW_src/KMX_native.rs','NEW_src/KMX_CopyMeaning.lean','NEW_src/crates/aspis-core/src/field.rs','NEW_src/crates/aspis-core/src/lib.rs','NEW_src/crates/aspis-core/src/field/NEW_inverse.rs']
 
