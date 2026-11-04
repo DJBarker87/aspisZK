@@ -4,7 +4,7 @@ E=Path(__file__).resolve().parent
 old=set(json.loads((E/'NFT_ROOTS.json').read_text()));roots=[];mods=[]
 for p in sorted(E.glob('NFT_L???/receipt.json')):
  r=json.loads(p.read_text());m=r['module'];f=E/(m+'.lean')
- if r['exit_status']!=0 or not f.exists() or m in ['NFT_ProofDriver','NFT_COMBINED_IMPORT','NFT_Driver']:continue
+ if r['exit_status']!=0 or not f.exists() or m in ['NFT_ProofDriver','NFT_COMBINED_IMPORT','NFT_Driver','NFT_STAGE2_IMPORT','NFT_Stage2Driver']:continue
  if hashlib.sha256(f.read_bytes()).hexdigest()not in r['source_hashes'].values():continue
  new=[s.split("'")[1]for s in r['print_axioms']if s.split("'")[1]not in old]
  if new and m not in mods:mods.append(m)

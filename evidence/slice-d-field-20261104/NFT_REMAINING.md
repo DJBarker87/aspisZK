@@ -1,87 +1,35 @@
-# NFT remaining members (interim)
+# NFT remaining obligations
 
-3 functions / 4 new D rows CLOSED; driver OPEN. Every unlisted closure remains OPEN. No Kani/Lean support pass alone is a composed row.
-
-## crates/aspis-core/src/field.rs::CM31::square
-
-Rows: TX1:011. Needs its own complete frozen-body hybrid contract/call-log gate and matched failing controls, exact existing/extracted model equality, frame/Result/effect correspondence and ax2. Prior local or WIP evidence is not a composed certificate; native budget is exhausted.
+Budget exhausted:100/100 Kani,60/60 Lean/support,3/3 extraction. No early stop. 11 functions/12 new D rows CLOSED; inherited D33 CLOSED/310 OPEN. Every unclaimed row and the deployed driver remain OPEN. These are exact proof gaps, not counterexamples to the target.
 
 ## crates/aspis-core/src/field.rs::qm31_accumulate_product_channels
 
-Rows: TX1:036. Needs one arbitrary-prestate native iteration (or (ad) data-independent factorization after its prerequisites), matched controls, full invariant/frame induction and native/model step association. No complete native packet for this member was admitted here.
-
-## crates/aspis-core/src/field.rs::qm31_from_karatsuba_channel_sums
-
-Rows: TX1:037. Needs its own complete frozen-body hybrid contract/call-log gate and matched failing controls, exact existing/extracted model equality, frame/Result/effect correspondence and ax2. Prior local or WIP evidence is not a composed certificate; native budget is exhausted.
-
-## crates/aspis-core/src/field.rs::qm31_m31_dot
-
-Rows: TX1:038. Needs one arbitrary-prestate native iteration (or (ad) data-independent factorization after its prerequisites), matched controls, full invariant/frame induction and native/model step association. No complete native packet for this member was admitted here.
-
-## crates/aspis-core/src/field.rs::qm31_pack_base4
-
-Rows: TX1:039. Needs its own complete frozen-body hybrid contract/call-log gate and matched failing controls, exact existing/extracted model equality, frame/Result/effect correspondence and ax2. Prior local or WIP evidence is not a composed certificate; native budget is exhausted.
+Rows: TX1:036. K024/025 cache prefix, K026/027 fixed9 control, K028/029 arbitrary-prestate selected product/frame and K030..033 copy controls passed. NFT_ChannelModel proves product/addition bounds and finite pointwise9-cell composition. Missing: an exact emitted/cohort definition for THIS generic helper and source-step/native association, with full cache/model invariant. L057 confirms the selected Probe/FIq environments contain no helper definition. A generic Nat trace theorem is not that association. Next: create/extract a prefix-owned helper model, prove its actual 9-cell/frame and cache association, audit, then compose. No native rerun is currently required for these existing shapes; a newly different shape would need fresh controlled Kani budget.
 
 ## crates/aspis-core/src/field.rs::qm31_sum_products_small
 
-Rows: TX1:044. Needs one arbitrary-prestate native iteration (or (ad) data-independent factorization after its prerequisites), matched controls, full invariant/frame induction and native/model step association. No complete native packet for this member was admitted here.
+Rows: TX1:044. K084/085 (N2), K086/087 (N3), K088/089 (N4) controlled exact data-independent outer while chronology. Its actual child qm31_accumulate_product_channels remains OPEN. Missing: same emitted/cohort small-helper model, initial-zero/arity invariant, exact child/result/final-converter association and full-loop induction. L057 confirms no selected Probe/FIq small-helper definition. NFT_ChannelFour.generated_step and NFT_FieldFrontier.four_fit discharge the extra fourth-product arithmetic bound, but close no source row. Next: Lean/source association first; native support remains available for these scopes.
 
 ## crates/aspis-core/src/field.rs::qm31_sum_products2
 
-Rows: TX1:040. Needs its own complete frozen-body hybrid contract/call-log gate and matched failing controls, exact existing/extracted model equality, frame/Result/effect correspondence and ax2. Prior local or WIP evidence is not a composed certificate; native budget is exhausted.
+Rows: TX1:040. K078/079 wrapper log proves exact two input arrays and arbitrary child reply in the original frozen one-call body. OPEN because the actual qm31_sum_products_small child and same model/caller join are OPEN. After the child closes, prove this wrapper's exact domain/model association and audit. A wrapper log alone earns no row; any new native shape needs new budget.
 
 ## crates/aspis-core/src/field.rs::qm31_sum_products3
 
-Rows: TX1:041. Needs its own complete frozen-body hybrid contract/call-log gate and matched failing controls, exact existing/extracted model equality, frame/Result/effect correspondence and ax2. Prior local or WIP evidence is not a composed certificate; native budget is exhausted.
-
-## crates/aspis-core/src/field.rs::qm31_sum_products3_prepared
-
-Rows: TX1:042. Needs one arbitrary-prestate native iteration (or (ad) data-independent factorization after its prerequisites), matched controls, full invariant/frame induction and native/model step association. No complete native packet for this member was admitted here.
+Rows: TX1:041. K080/081 wrapper log proves exact three input arrays and arbitrary child reply. OPEN because qm31_sum_products_small and the complete same-input wrapper model association are OPEN. Proceed after that real dependency; the independent prepared3 path is already CLOSED. Native caller support exists; no multiplication in Kani.
 
 ## crates/aspis-core/src/field.rs::qm31_sum_products4
 
-Rows: TX1:043. Needs its own complete frozen-body hybrid contract/call-log gate and matched failing controls, exact existing/extracted model equality, frame/Result/effect correspondence and ax2. Prior local or WIP evidence is not a composed certificate; native budget is exhausted.
-
-## crates/aspis-core/src/field/wide_exact.rs::WideExact::neg
-
-Rows: TX1:054. Needs its own complete frozen-body hybrid contract/call-log gate and matched failing controls, exact existing/extracted model equality, frame/Result/effect correspondence and ax2. Prior local or WIP evidence is not a composed certificate; native budget is exhausted.
+Rows: TX1:043. K082/083 wrapper log proves exact four input arrays and arbitrary child reply. OPEN because qm31_sum_products_small and full same-input wrapper association are OPEN. The prior three-product accumulator lemma had an insufficient 2*(P-1)^2 pre-cell bound for a fourth product: NFT_ChannelFour now proves3*(P-1)^2 and total4 products fitU64, but helper/source association still remains. Native wrapper and N4 control support exist.
 
 ## crates/aspis-core/src/field/wide_exact.rs::WideExact::square
 
-Rows: TX1:056. Needs its own complete frozen-body hybrid contract/call-log gate and matched failing controls, exact existing/extracted model equality, frame/Result/effect correspondence and ax2. Prior local or WIP evidence is not a composed certificate; native budget is exhausted.
+Rows: TX1:056. K098/099 prove the four-site opaque QM mul/square/mul_u caller result log with complete canonical local replies; K100 corrupts a recorded argument in the identical source and fails its intended assertion. This is support, not CLOSED. Missing: each emitted callee's exact full-value law on the same canonical domain, the complete coherent WideExact square/source equation and field-product substitution/frame/representation join. Existing real QM add calls execute. Next work is Lean-only pairing/model association; no Kani field multiplication. If additional physical/interface facts arise, they need new controlled native budget.
 
-## crates/aspis-core/src/state_only_hiding.rs::cm31_mul_r
+## Upward callers and slice boundaries
 
-Rows: TX1:072. NFQ_Linear.source proves full canonical model result. K050/K051 direct native value pair is excluded: prescribed field-product opaque-call-log form was not used. Needs an opaque-call-log native packet and paired emitted multiplication law; no Kani multiplication and no rename/retry of this shape.
+PreparedQm31Multiplier::new was already CLOSED by NFQ; its canonical cache output-domain law is reused. Prepared3 users may now cite the new caller certificate, but none closes automatically. Other Prepared users and arithmetic-prelude callers still require their own frozen native packet, complete same-input model join, actual child domains and ax2 audit. All proof-run budgets are exhausted, so no such new gate was launched. The additive ledger deliberately keeps every other status unchanged.
 
-## programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_zero
+TX2:046's unresolved CodeField::from_m31 resolves to <WideExact as CodeField>::from_m31 at frozen r0/scalar.rs:89, body90 (impl87–91), through the canonicalizing M31 trait embedding. NFT_FROM_M31_FINDING.md records exact source SHA and nested targets; inventory unchanged. Generic other qm31_m31_dot callers are outside this claimed seven-row SliceD occurrence and need explicit domain packets. Never infer global arbitrary-length closure.
 
-Rows: TX1:342. Full Lean extracted-reference/cohort theorem NFQ_ZeroSource.source plus arbitrary-index body laws and induction PASS. K058/K059 certify a length0..4 source-cut result only; K060 pointer fact lacks its negative control. General physical length/frame/window composition and native/model association remain missing. Needs a new split native shape and matched controls, not another whole-buffer run.
-
-Native support is progressing independently. Exact per-run logs are NFT_ATTEMPTS.jsonl. Final member-by-member packet and blocker updates will replace this interim text before the remaining Lean allowance falls below 15.
-
-## Exact current frontier at the budget checkpoint
-
-- CM31::square: K020/021 + exact two-site erasure and four passing model/value roots; pending raw audit and additive admission.
-- WideExact::neg: K014/015 + E003 and L034 full canonical reference/cohort equality; pending raw audit and admission.
-- qm31_from_karatsuba_channel_sums: K036/037, exact one-site erasure, L035 G substitution/totality/mul_r laws; pending raw audit and admission.
-- cm31_mul_r: K059/060 and copy K061/062, exact four-site ANF erasure, L040 scalar laws; pending raw audit and admission.
-- require_zero: K048..055 + K058/K057 copy pair covers every arbitrary suffix in a 4096-byte backing; L039 symbolic padding, pointer and immutable frame laws plus NFQ finite-loop model induction. Native allocator_api compiler failure K056 excluded. Pending final source/physical join, caller1768 bound, raw audit and admission.
-- qm31_pack_base4: K038..047 and L038/L045 cover lengths0..4, explicit initializer, canonical padding and complete model output; pending raw coordinate formula law, raw audit and admission.
-- qm31_m31_dot: canonical seven-term native term/fold/control supports and existing complete emitted seven-input theorem. Generic long-control K069 timeout excluded. Missing selected same-window read association and its controls, then exact step/control/model composition and raw audit. Actual D parent supplies7; generic other lengths outside this D row are unclaimed.
-- qm31_sum_products3_prepared: existing complete cohort theorem reusable read-only; still needs its own native27-cut control, exact right-cache prelude, selected left/right product-cell/frame association and actual model-step composition.
-- qm31_accumulate_product_channels: native cache prefix, fixed9-cut control, one selected-channel product/frame all controlled; L043 proves broad product bounds and pointwise finite trace composition. The same emitted/cohort helper model association is still missing; generic Nat induction alone closes no row.
-- qm31_sum_products_small: helper above remains OPEN; needs exact N=2/3/4 native cut/control and same model induction/initial-zero/final-converter association.
-- qm31_sum_products2/3/4: each still needs its own caller log/control and same callee-domain transport; sum_products_small remains OPEN, so a passed wrapper alone cannot close them.
-- WideExact::square: independent native opaque QM product/square/mul_u caller log and matched controls are still to be attempted; coherent whole-source square-to-cohort equality remains open. Field products will never be attempted in Kani.
-- Direct D callers (Prepared construction/users, prepare and Prepared::new arithmetic prefix): only proceed after their real field dependencies close; no S1/old-FIo forest is imported and no sibling source is edited. The full driver and unrelated callee boundaries remain OPEN.
-
-No early-stop waiver is used; remaining budget is being spent on those independent gates. These are exact outstanding obligations, not inferred failures of the security target.
-
-## Required low-budget checkpoint
-
-Kani is now **100/100**, extraction **3/3**; L046 is submitted, leaving **14 Lean/support slots**. All attempt identifiers are retained, including failures. No more native/extraction run is authorized by this job. This checkpoint is written before any further work.
-
-All remaining work is Lean-only composition, axioms audit and evidence validation. Native support for every assigned field family has been attempted: dot selected-window and typed7 copy, all sum2/3/4 wrappers and fixed2/3/4 controls, prepared27-control/cell/cache/copy, and wide-square four-site log/output control plus argument-corruption control. WIDE SQUARE remains OPEN until fully paired emitted value laws and whole coherent source/model association are proved; its native verdict is not admitted by itself. The other generic accumulation/small-sum members still require their exact coherent model and source-step association; they are not blocked on multiplication in Kani.
-
-The actual D dot parent is the seven-row internal-pair caller. Generic 5..80 control timed out; seven-term replacement is checked. Short-control K068 fails its two intended branch assertions; that controller diagnostic is recorded, not rerun. Generic/out-of-D dot lengths are unclaimed.
+Use the retained private cache/export and pinned coherent SInt2/Aeneas objects. Do not rerun K005's mutable-slice contract or K069's generic5..80 control unchanged, raise caps, prove multiplication in Kani, import legacy S1/old-FIo, or treat unvalidated horizontal WIP as closure. Native exhaustion is not a reason to abandon the Lean gaps above in a newly budgeted job; this job also exhausted every Lean slot.

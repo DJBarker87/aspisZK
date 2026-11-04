@@ -42,6 +42,14 @@ def pair(p,n):
  assert '--cfg NFT_invert'in b['env']['RUSTFLAGS']and '--cfg NFT_invert'not in a['env']['RUSTFLAGS']
  return a,b
 
+def copy_pair(p,n):
+ a,_=native(p,0);b,_=native(n,1)
+ assert a['source_hashes']==b['source_hashes']
+ assert a['env']==b['env']
+ assert a.get('root_package')==b.get('root_package')
+ assert a['module'].endswith('positive')and b['module'].endswith('negative')
+ return a,b
+
 def audit():
  out={}
  for d,manifest in [('NFT_final_audit','NFT_ROOTS.json'),('NFT_stage2_audit','NFT_STAGE2_ROOTS.json')]:
@@ -53,9 +61,16 @@ def audit():
     assert x['equal']and set(x['walked_axioms'])==set(x['collect_axioms'])<=standard
     name='NEP_'+file.stem+'_'+x['root']+'_REACHABLE.txt'
     graph=lzma.open(E/(name+'.xz')).read();assert sha(graph)==(E/(name+'.sha256')).read_text().split()[0]
+    x.update(raw_graph=name+'.xz',raw_graph_sha256=sha(graph))
     out[x['root']]=x
   assert set(J(manifest))<=out.keys()
  assert(E/'NFT_WALKER_SOURCE.lean.txt').read_bytes()==(R/'evidence/axaudit2-20261102/NEP_WALKER.lean').read_bytes()
+ # Source bytes of every added import must still match a successful pinned compile.
+ for line in (E/'NFT_STAGE2_IMPORT.lean').read_text().splitlines():
+  if not line.startswith('import NFT_'):continue
+  module=line[7:];source=E/(module+'.lean')
+  assert source.exists()
+  assert any(r['exit_status']==0 and r['module']==module and sha(source.read_bytes())in r['source_hashes'].values() for r in [json.loads(p.read_text())for p in E.glob('NFT_L???/receipt.json')])
  return out
 class Support:
  def support(self,c):
@@ -72,10 +87,10 @@ def build():
   detail=review.DETAILS.get(f)
   if detail:
    for pair_ids in detail['extra']:pair(*pair_ids)
-   for pair_ids in detail.get('copy_extra',[]):native(pair_ids[0],0);native(pair_ids[1],1)
+   for pair_ids in detail.get('copy_extra',[]):copy_pair(*pair_ids)
    assert all(r in audited for r in detail['roots'])
   if framepair:pair(*framepair)
-  native(kmx[0],0);native(kmx[1],1)
+  copy_pair(*kmx)
   assert sha((R/'evidence/kani-mitig-20261028/KMX_copy_stubs.patch').read_bytes())=='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67'
   module='NFT_QBytes'if root=='NFT_Bytes.qm_value'else root.split('.')[0];source=E/(module+'.lean')
   matching=[json.loads(rr.read_text())for rr in E.glob('NFT_L???/receipt.json')if json.loads(rr.read_text())['exit_status']==0 and json.loads(rr.read_text())['module']==module and sha(source.read_bytes())in json.loads(rr.read_text())['source_hashes'].values()]
@@ -103,6 +118,14 @@ def build():
     support+=detail['files']
     support+=[f'NFT_K{k:03}/{x}'for pair_ids in detail['extra']+detail.get('copy_extra',[])+[kmx]for k in pair_ids for x in ['receipt.json','stdout.log']]
    support+=['NFT_stage2_audit/SUMMARY.json','NFT_stage2_audit/BINARY_PIN.json']
+   support+=['LPh_STUBS.md','NFT_HARNESSES.patch','NFT_HARNESSES.patch.sha256']
+   all_native={p,n,*kmx}
+   if framepair:all_native.update(framepair)
+   if detail:
+    for pair_ids in detail['extra']+detail.get('copy_extra',[]):all_native.update(pair_ids)
+   support += [f'NFT_K{k:03}'+suffix for k in sorted(all_native)for suffix in ['-admission.json','-graph-check.json','-lock-check.json','-source-check.json']]
+   proof_attempt=matching[-1]['attempt'];support += [proof_attempt+'/receipt.json',proof_attempt+'/stdout.log']
+   support=sorted(set(support))
    cert=seal(dict(id='NFT::'+rid,row=rid,subject=f,function=f,frozen_body_sha256=r['frozen_body_sha256'],domain=domain,top_hypotheses=[cc['physical_interpretation']],inner_hypotheses_remaining=[],native=cc,external_obligations={o['id']:dict(classification=detail['proof']if detail else 'safe fixed-range borrow/copy or scalar modulo; exact complete typed body executed and emitted-model equation proved',detail=o['call'])for o in r['caller_domain_obligations']if'callee'not in o},support=pins(support)))
    NFK.certificate_checks(Support(),cert);candidate=NFK.materialize_recipe(r,cert,'NFT',{'edges':edges})
    for ob in candidate['caller_domain_obligations']:
