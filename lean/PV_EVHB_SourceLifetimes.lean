@@ -6,6 +6,7 @@ reachability and the native primitive interpretation are separate obligations.
 The pointer argument must still be bound to Alignment::of::<T>()'s
 without_provenance pointer. Its Nat type alone proves no provenance. -/
 set_option autoImplicit false
+noncomputable section
 namespace PV_EVHB_SourceLifetimes
 open PV_EVHB_RawVecOwner R1Z.PV_FXM_ReserveWorld
 
