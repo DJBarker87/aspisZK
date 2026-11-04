@@ -23,4 +23,4 @@ the Pool MODEL association; native/caller residuals are not hidden as assumption
 No privacy, per-attempt-soundness or transaction-design claim is made here.
 
 <!-- budget checkpoint -->
-Budget checkpoint: {"attempts": 119, "last_attempt": "NFR_K026", "ledger_sha256": "6dca485a4b98e19c2d567bf809888533f8b7eeec43b6ec21e9cf32baf61d1474", "remaining": {"extract": 0, "kani": 13, "lean": 0}, "used": {"extract": 2, "kani": 57, "lean": 60}}
+Budget checkpoint: {"attempts": 125, "last_attempt": "NFR_K063", "ledger_sha256": "f8108d40f5ca4d25e1588d77ffdb1e3050dab3eb7896bd1328743db5743febd0", "remaining": {"extract": 0, "kani": 7, "lean": 0}, "used": {"extract": 2, "kani": 63, "lean": 60}}

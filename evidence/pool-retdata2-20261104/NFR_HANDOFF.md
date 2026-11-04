@@ -37,7 +37,7 @@ C: K030 carrier, K034 getter and K043 source-exact suffix have controls. K051
 actual helper is a DIAGNOSTIC repr(C) local-frame geometry, not production Box
 credit. K060 integrated same-object join timed out; strict byte/projection
 observation splits preserve the original names/object/full child Results.
-NFR_C_SPLIT_CAMPAIGN.jsonl records current terminal results. The process
+NFR_C_SPLIT_CAMPAIGN.jsonl records all18 terminal split packets:9 passes and9 intended failing controls. The process
 prefix/admission, production-helper native transport and joint reachable
 execution remain distinct obligations. See NFR_C_REVIEW.md and NFR_Settlement.md.
 
@@ -53,4 +53,4 @@ were not changed. RuntimeReturnData is the approved nonempty1..1024 row (792
 here); native-contract transport remains P6/D188 reclassification, not removal.
 
 <!-- budget checkpoint -->
-Budget checkpoint: {"attempts": 119, "last_attempt": "NFR_K026", "ledger_sha256": "6dca485a4b98e19c2d567bf809888533f8b7eeec43b6ec21e9cf32baf61d1474", "remaining": {"extract": 0, "kani": 13, "lean": 0}, "used": {"extract": 2, "kani": 57, "lean": 60}}
+Budget checkpoint: {"attempts": 125, "last_attempt": "NFR_K063", "ledger_sha256": "f8108d40f5ca4d25e1588d77ffdb1e3050dab3eb7896bd1328743db5743febd0", "remaining": {"extract": 0, "kani": 7, "lean": 0}, "used": {"extract": 2, "kani": 63, "lean": 60}}

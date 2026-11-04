@@ -71,9 +71,9 @@ retained as a tooling finding under ruling(ab'). No whole closure pass claimed.
 
 K056 is terminal UNISOLATED after exact KMX positive/control timeouts; no
 copy-credit or bug claim. K013/K014 give controlled SAME-object byte/context
-source-cut evidence; independent typed projection packets are in progress.
+source-cut evidence; all eight independent typed projection packets and controls now pass as expected.
 K051 production geometry credit is explicitly excluded. No composed NDT row,
 headline native extraction premise, or trust row has been removed.
 
 <!-- budget checkpoint -->
-Budget checkpoint: {"attempts": 119, "last_attempt": "NFR_K026", "ledger_sha256": "6dca485a4b98e19c2d567bf809888533f8b7eeec43b6ec21e9cf32baf61d1474", "remaining": {"extract": 0, "kani": 13, "lean": 0}, "used": {"extract": 2, "kani": 57, "lean": 60}}
+Budget checkpoint: {"attempts": 125, "last_attempt": "NFR_K063", "ledger_sha256": "f8108d40f5ca4d25e1588d77ffdb1e3050dab3eb7896bd1328743db5743febd0", "remaining": {"extract": 0, "kani": 7, "lean": 0}, "used": {"extract": 2, "kani": 63, "lean": 60}}
