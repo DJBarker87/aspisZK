@@ -51,6 +51,11 @@ if kind=='kani':
  import os
  if os.environ.get('NGO_INVERT'):env['RUSTFLAGS']+=' --cfg NGO_invert'
  if os.environ.get('NGO_COPY_CONTROL'):env['RUSTFLAGS']+=' --cfg NGO_copy_corrupt'
+elif kind=='metadata':
+ files['NGO_metadata.py']=(E/'NGO_metadata.py').read_text()
+ sources=['NGO_metadata.py','NGO_src/Cargo.lock','NGO_src/Cargo.toml']
+ command=['python3','NGO_metadata.py',a+'.json']
+ env.update(CARGO_NET_OFFLINE='true',CARGO_BUILD_JOBS='1')
 elif kind=='extract':
  files['NGO_extract.py']=(E/'NGO_extract.py').read_text()
  files['NGO_references.rs']=(E/'NGO_references.rs.txt').read_text()
@@ -113,7 +118,7 @@ for root in roots:
    if Path(root,stem+suf).is_file():rels.add(stem+suf)
 for rel in sorted(rels):
  p=next(Path(root)/rel for root in roots if (Path(root)/rel).is_file());pins[str(p)]={{'path':str(p),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}}
-for module in (['NGO_COMBINED_IMPORT','NEP_Planted','NEP_Mutations'] if x['kind']=='auditbatch' else [])+(['NEP_Planted','NEP_Mutations'] if x['module'] in ['NGO_Driver','NGO_ProofDriver','NGO_Stage2Driver','fixtures'] else [])+(['NGO_QueryModel'] if x['kind']=='auditbin' and x['module'].startswith('query') else [])+(['NGO_COMBINED_IMPORT'] if x['kind']=='auditbin' and (x['module'].startswith('proof') or x['module']=='scan') else [])+[n for line in (b/x['sources'][0]).read_text().splitlines() if line.startswith('import ') for n in line[7:].split() if n!='all'] if x['kind'] not in ['linkaudit','kani','extract'] else []:
+for module in (['NGO_COMBINED_IMPORT','NEP_Planted','NEP_Mutations'] if x['kind']=='auditbatch' else [])+(['NEP_Planted','NEP_Mutations'] if x['module'] in ['NGO_Driver','NGO_ProofDriver','NGO_Stage2Driver','fixtures'] else [])+(['NGO_QueryModel'] if x['kind']=='auditbin' and x['module'].startswith('query') else [])+(['NGO_COMBINED_IMPORT'] if x['kind']=='auditbin' and (x['module'].startswith('proof') or x['module']=='scan') else [])+[n for line in (b/x['sources'][0]).read_text().splitlines() if line.startswith('import ') for n in line[7:].split() if n!='all'] if x['kind'] not in ['linkaudit','kani','extract','metadata'] else []:
  rel=module.replace('.','/')+'.olean';p=next((Path(root)/rel for root in roots if (Path(root)/rel).is_file()),None)
  assert p is not None,module
  for z in [p,Path(str(p)+'.private'),Path(str(p)+'.server'),p.with_suffix('.ir')]:
@@ -125,7 +130,7 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
-names += [str(p.relative_to(b)) for p in b.glob(a+'-graph*')]+[str(p.relative_to(b)) for p in b.glob(a+'-source*')]+[str(p.relative_to(b)) for p in b.glob(a+'-lock*')] if {kind!r}=='kani' else []
+names += [str(p.relative_to(b)) for p in b.glob(a+'-graph*')]+[str(p.relative_to(b)) for p in b.glob(a+'-source*')]+[str(p.relative_to(b)) for p in b.glob(a+'-lock*')] if {kind!r} in ['kani','metadata'] else []
 if {kind!r}=='extract':names += [a+'-extraction-pins.json',a+'.llbc']+[str(p.relative_to(b)) for p in (b/'NGO_extracted'/{target!r}).rglob('*') if p.is_file()]
 names += [str(p.relative_to(b)) for p in b.glob('NEP_*_REACHABLE.txt')] if {kind!r}=='auditbatch' else [str(p.relative_to(b)) for p in b.glob('NEP_'+{target!r}+'_*_REACHABLE.txt')] if {kind!r}=='auditbin' else []
 if {kind!r}=='auditbatch':names += [str(p.relative_to(b)) for p in (b/('NGO_stage2_audit' if {target!r}=='NGO_Stage2Driver' else 'NGO_final_audit')).rglob('*') if p.is_file()]

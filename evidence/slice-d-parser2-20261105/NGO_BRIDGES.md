@@ -1,13 +1,20 @@
 # NGO parser bridges
 
-No newly composed row is yet CLOSED. Four members remain OPEN. Passing support is not promoted to a complete caller bridge.
+One newly CLOSED composed function/row: ValidatedRecord::decode_k, TX1:147. NGO_CLOSED.json, NGO_EDGES.json and NGO_LEDGER_DELTA.json contain the exact additive scope and hashes. Inherited NGD slot_offset credit is not counted again.
 
-Decode trace: NGO_TraceTotal.exists_trace constructs all finite emitted traces on the original Domain; NGO_DecodeTotal.ready removes the old supplied-Trace premise. NGO_ChunkSchedule.original_window proves exact native chunk count/remainder/low bytes; NGO_ChunksNativeStart.construct constructs the typed original iterator with zero count. NGO_IteratorStep.live/stop and NGO_IteratorIndex.from_some give exact native/emitted index and successor association. NGO_DecodeFrame.store_value/store_frame/preserved_prefix and NGO_FirstError.suffix prove typed arbitrary-prestate frames and the first-error unchanged suffix. All listed accepted proofs print only standard axioms.
+| Member | Result | Complete packet / missing join |
+| --- | --- | --- |
+| decode_k TX1:147 | CLOSED | Constructed original/emitted traces, exact retained Q association, complete result/error carrier, original caller domains, canonical combined/raw/scan audit |
+| parse_record TX1:151 | OPEN | Full natural validator versus original emitted scan induction, then original parser/callee substitution |
+| parse_record_at TX1:152 | OPEN | Full parser packet and borrowed token/error/cursor substitution |
+| expand_semantic TX1:098 | OPEN | Original emitted row-loop induction and same-output frame/error composition |
 
-Q association: native NGO_K005 passes actual frozen QM31::from_le_bytes against the extracted NGO four-word reference; NGO_K006 inverted association fails; NGO_K007 wrong original byte control fails. NGO_K008 passes the EXACT retained NGD_decode_le body against NGO's explicitly typed reference; NGO_K009 inverse fails. K005/006/007/008/009 have frozen-graph equality, unchanged frozen lock, deployed features, exact KMX patch and local-only state. NGO_BitPack.pack (L035) replaces the EXCLUDED native-axiom version L026 with bit-index symbolic proof. NGO_WordLaw.word (L038), NGO_QAssociation.segment_word and carrier inverses (L039), and NGO_QResult.emitted (L041) establish the extracted scalar/body laws. Full retained codec theorem is still in progress; native pass alone earns no closure.
+Decoder roots: NGO_NativeConstruct.construct, NGO_DecodeComposed.result, NGO_QBridge.stub_law, NGO_SourceDomain.caller and NGO_CallerDomains.record_domain. These consume the exact hash-pinned NGD native scalar, iterator, typed-store and copy-control certificates. NGO_DecodeFrame and NGO_FirstError retain typed update and rejection frames. NGO_CheckedOps/EntryFacts derive arithmetic and get premises. NGO_CallCases plus native K014..K017 cover all dynamic caller shapes; K010..K013 pair the N=28/29 initializer checks. No unconstructed trace or successful-output assumption remains.
 
-Zero initialization: K010 passes one arbitrary index of the exact native initializer instantiated at N=28; K011 corruption control fails. This is source-expression support only, no caller closure. N=29 and the emitted initializer association are pending.
+Exact Q chain: native K005 passes actual frozen decoder versus E002 reference; K006 inverted result and K007 wrong original byte fail. K008 passes the exact retained NGD_decode_le stub versus that reference; K009 inverse fails. NGO_BitPack.pack, NGO_WordLaw.word, NGO_QAssociation, NGO_QResult, NGO_QCodec and NGO_QBridge.stub_law establish complete emitted codec/carrier association. L026's native reflection axiom is excluded and replaced by symbolic L035. The CLOSED NET Q callee citation is NGO_CALLEE_CITATION.json; suspended historical NBG credit is not used.
 
-Remaining: finite source/native iterator trace lift; full Q codec law; complete adopted result and caller/record producer domains; parse_record full NFU-to-Prefix validation port; parse_record_at parser substitution; expand_semantic original emitted full-output frame/error induction.
+Parser support, not closure: NGO_PrefixWidePort.bytes/limbs, NGO_PrefixLimbsLaw.result, NGO_PrefixHighPort.ne, NGO_ValidatorCallback.result, NGO_ValidatorWord.le32, NGO_ValidatorWindows.word and the full eleven-error NGO_ValidatorErrors bijection. Their remaining loop/substitution obligation is specified in NGO_REMAINING.md.
 
-Retained trust: P6/D188 option A native semantic transport (reclassification), std/allocator/SDK/ABI/compiler/Aeneas/source-to-ELF, RuntimePersistence, digest/H realization, accepted RuntimeReturnData and RuntimeMemcmp, cryptographic assumptions. No trust row is removed. Target not yet established.
+Final canonical import is NGO_COMBINED_IMPORT via NGO_CanonicalPort; exclude the historical standalone port objects. L090 and NGO_A001 pass: 57 standard-axiom roots, eight same-binary mutation fixtures, 13,434-module clean scan, ten rejected validator corruptions. Exact source/metrics/pins are in NGO_AUDIT.json. Native graph/lock/features/KMX and paired controls are validated without rerunning any passing NGD shape.
+
+P6/D188 option A transport is retained as trust reclassification. No trust row is removed; target not yet established.
