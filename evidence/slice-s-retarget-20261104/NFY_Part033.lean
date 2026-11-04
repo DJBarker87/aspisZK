@@ -1,732 +1,559 @@
 import Lean
-import NFY_Part023
-import NFY_Part024
-import NFY_Part032
-import NFY_Part022
-import NFY_Part020
+import RPz7_S2K_AfterstateEncoding
+import JHb_S2K_ResultBytes
+import S2I_ReturnData
 
--- BEGIN copied JFs_AfterstateHeader: lean/JFs_AfterstateHeader.lean
+-- BEGIN copied JHb_S2K_LateAdmission: lean/JHb_S2K_LateAdmission.lean
+
+/-! Success inversion through the actual late-public encoder, preserving the
+SAME candidate. Child encoders remain opaque; no call success is postulated. -/
 set_option autoImplicit false
-namespace AspisR1.NFY_JFs_AfterstateHeader
 open Aeneas Aeneas.Std Result
-open AspisR1TerminalDecoder pool_v1.pair_terminal
+namespace AspisR1.S2K.LateAdmission
+open AspisR1TerminalDecoder
+open pool_v1.pair_tree_profile pool_v1.pair_terminal
 
-def magic : Slice U8 := ⟨NFY_JFu_PublicMeta06.bytes.take 4,by simp [NFY_JFu_PublicMeta06.bytes];scalar_tac⟩
-theorem magic_selected : NFY_JFu_PublicRange.segment 976 4 (by decide)=magic := by
-  apply Subtype.ext
-  exact NFY_JFt_LocalWindow.selected 976 16 0 4 (by decide) (by decide) _ NFY_JFu_PublicMeta06.selected
+elab "s2k_unpair" : tactic =>
+  Lean.Elab.Tactic.liftMetaTactic fun goal => goal.withContext do
+    for decl in ← Lean.getLCtx do
+      let type ← Lean.Meta.whnf decl.type
+      if type.isAppOfArity ``Prod 2 then
+        return (← goal.cases decl.fvarId).toList.map (·.mvarId)
+    throwError "no product variable"
 
-theorem magic_array : core.array.Array.index
-    (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
-    POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC {start:=0#usize,«end»:=4#usize}=ok magic := by
-  unfold POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC
+elab "s2k_uncase" : tactic =>
+  Lean.Elab.Tactic.liftMetaTactic fun goal => goal.withContext do
+    for decl in ← Lean.getLCtx do
+      let type ← Lean.Meta.whnf decl.type
+      if type.isAppOfArity ``core.result.Result 2 ||
+          type.isAppOfArity ``core.ops.control_flow.ControlFlow 2 ||
+          type.isConstOf ``core.convert.Infallible then
+        return (← goal.cases decl.fvarId).toList.map (·.mvarId)
+    throwError "no result/control-flow variable"
+
+theorem candidate (s : PoolV1PairLatePublicStatementV1) (before after : Slice U8)
+    (h : encode_pool_v1_pair_late_public_statement_v1 s before = ok (.Ok (),after)) :
+    ∃ bytes, encode_pool_v1_pair_verified_afterstate_v1 s.candidate_afterstate = ok (.Ok bytes) := by
+  unfold encode_pool_v1_pair_late_public_statement_v1 at h
+  simp only [Bind.bind, Aeneas.Std.bind, AspisR1TerminalDecoder.core.result.Result.map_err,
+    core.result.Result.Insts.CoreOpsTry.branch,
+    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+    core.convert.FromSame.from] at h
+  repeat' first
+    | (solve | exact ⟨_,by assumption⟩)
+    | (solve | exact ⟨_,rfl⟩)
+    | (solve | cases h)
+    | (dsimp only [Aeneas.Std.uncurry] at h)
+    | (s2k_unpair <;> simp_all only [Result.ok.injEq,Prod.mk.injEq])
+    | (s2k_uncase <;> simp_all only [Result.ok.injEq,Prod.mk.injEq])
+    | (split at h)
+
+theorem validated (s : PoolV1PairLatePublicStatementV1) (before after : Slice U8)
+    (h : encode_pool_v1_pair_late_public_statement_v1 s before = ok (.Ok (),after)) :
+    validate_verified_afterstate s.candidate_afterstate = ok (.Ok ()) := by
+  obtain ⟨bytes,run⟩ := candidate s before after h
+  have status := AfterstateStatus.status_exact s.candidate_afterstate
+  rw [run] at status
+  exact status.symm
+
+theorem payload (s : PoolV1PairLatePublicStatementV1) (before after : Slice U8)
+    (h : encode_pool_v1_pair_late_public_statement_v1 s before = ok (.Ok (),after)) :
+    encode_pool_v1_pair_verified_afterstate_v1 s.candidate_afterstate =
+      ok (.Ok (AfterstateEncoding.bytes s.candidate_afterstate)) :=
+  AfterstateEncoding.encode_exact _ (validated s before after h)
+
+#print axioms candidate
+#print axioms validated
+#print axioms payload
+end AspisR1.S2K.LateAdmission
+-- END copied JHb_S2K_LateAdmission
+-- BEGIN copied JHb_S2K_StatementAdmission: lean/JHb_S2K_StatementAdmission.lean
+
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result
+namespace AspisR1.S2K.StatementAdmission
+open AspisR1TerminalDecoder
+open pool_v1.pair_forest_terminal pool_v1.pair_tree_profile pool_v1.pair_terminal
+abbrev Statement := PoolV1PairForestTerminalStatementV1
+
+def common : Statement → PoolV1PairForestTerminalCommonV1
+  | .PrivateTransfer c _ => c
+  | .Withdrawal c _ => c
+
+elab "s2k_unbool" : tactic =>
+  Lean.Elab.Tactic.liftMetaTactic fun goal => goal.withContext do
+    for decl in ← Lean.getLCtx do
+      let type ← Lean.Meta.whnf decl.type
+      if type.isConstOf ``Bool then
+        return (← goal.cases decl.fvarId).toList.map (·.mvarId)
+    throwError "no boolean variable"
+
+theorem late (s : Statement)
+    (h : validate_pool_v1_pair_forest_terminal_statement_v1 s = ok (.Ok ())) :
+    ∃ before after, encode_pool_v1_pair_late_public_statement_v1
+      (common s).lane_transition before = ok (.Ok (),after) := by
+  cases s <;> unfold validate_pool_v1_pair_forest_terminal_statement_v1 at h
+  all_goals simp only [common,PoolV1PairForestTerminalStatementV1.common,
+    statement_public_common,bind_tc_ok,Bind.bind,Aeneas.Std.bind,
+    AspisR1TerminalDecoder.core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch,
+    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+    core.convert.FromSame.from] at h ⊢
+  all_goals generalize Array.repeat 32#usize 0#u8 = zero_bindings at h
+  all_goals generalize Array.repeat 1520#usize 0#u8 = late_buffer at h
+  all_goals repeat' first
+    | (solve | exact ⟨_,_,by assumption⟩)
+    | (solve | exact ⟨_,_,rfl⟩)
+    | (solve | cases h)
+    | (rw [if_pos (show true = true from rfl)] at h)
+    | (rw [if_neg (show ¬ (false = true) by decide)] at h)
+    | (dsimp only [Aeneas.Std.uncurry] at h)
+    | (s2k_unpair <;> simp_all only [Result.ok.injEq,Prod.mk.injEq])
+    | (s2k_uncase <;> simp_all only [Result.ok.injEq,Prod.mk.injEq])
+    | s2k_unbool
+    | (split at h)
+
+theorem afterstate (s : Statement)
+    (h : validate_pool_v1_pair_forest_terminal_statement_v1 s = ok (.Ok ())) :
+    validate_verified_afterstate (common s).lane_transition.candidate_afterstate = ok (.Ok ()) := by
+  obtain ⟨before,after,run⟩ := late s h
+  exact LateAdmission.validated _ before after run
+
+theorem payload (s : Statement)
+    (h : validate_pool_v1_pair_forest_terminal_statement_v1 s = ok (.Ok ())) :
+    encode_pool_v1_pair_verified_afterstate_v1 (common s).lane_transition.candidate_afterstate =
+      ok (.Ok (AfterstateEncoding.bytes (common s).lane_transition.candidate_afterstate)) :=
+  AfterstateEncoding.encode_exact _ (afterstate s h)
+
+#print axioms late
+#print axioms afterstate
+#print axioms payload
+end AspisR1.S2K.StatementAdmission
+-- END copied JHb_S2K_StatementAdmission
+-- BEGIN copied JHb_S2K_ResultEncoding: lean/JHb_S2K_ResultEncoding.lean
+
+/-! Exact source field-boundary reference. The nullifier and afterstate inputs
+are sub-encoder bytes, to be instantiated with their SAME source values. -/
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result
+namespace AspisR1.S2K.ResultEncoding
+
+def stores (out : Array U8 792#usize) (master selected nullifier : Array U8 32#usize)
+    (kind lane : U8) (afterstate : Array U8 688#usize) : Array U8 792#usize :=
+  ⟨(((((((((out.val.setSlice! 0 [65#u8,83#u8,82#u8,56#u8]).set
+      4 1#u8).set 5 kind).set 6 1#u8).set 7 lane).setSlice! 8 master.val).setSlice!
+      40 selected.val).setSlice! 72 nullifier.val).setSlice! 104 afterstate.val), by
+        simp only [List.length_setSlice!,List.length_set,out.property]⟩
+
+theorem source_value (master selected nullifier : Array U8 32#usize)
+    (kind lane : U8) (afterstate : Array U8 688#usize) :
+    S2K_ResultBytes.S2K_reference_bytes master selected nullifier kind lane afterstate =
+      ok (stores (Array.repeat 792#usize 0#u8) master selected nullifier kind lane afterstate) := by
+  unfold S2K_ResultBytes.S2K_reference_bytes
+  generalize Array.repeat 792#usize 0#u8 = output
+  simp [S2K_ResultBytes.S2K_store_magic,S2K_ResultBytes.S2K_store_version,
+    S2K_ResultBytes.S2K_store_kind,S2K_ResultBytes.S2K_store_digest_version,
+    S2K_ResultBytes.S2K_store_lane,S2K_ResultBytes.S2K_store_master,
+    S2K_ResultBytes.S2K_store_selected,S2K_ResultBytes.S2K_store_nullifier_bytes,
+    S2K_ResultBytes.S2K_store_afterstate,
+    S2K_ResultBytes.POOL_V1_PAIR_FOREST_TERMINAL_RESULT_MAGIC,
+    S2K_ResultBytes.POOL_V1_PAIR_FOREST_TERMINAL_VERSION,
+    S2K_ResultBytes.POOL_V1_DIGEST_ENCODING_VERSION,
+    S2K_ResultBytes.RESULT_MASTER_OFFSET,S2K_ResultBytes.RESULT_SELECTED_LANE_OFFSET,
+    S2K_ResultBytes.RESULT_NULLIFIER_OFFSET,S2K_ResultBytes.RESULT_AFTERSTATE_OFFSET,
+    core.array.Array.index_mut,core.ops.index.IndexMutSlice,
+    core.slice.index.Slice.index_mut,core.slice.index.SliceIndexRangeToUsizeSlice,
+    core.slice.index.SliceIndexRangeToUsizeSlice.index_mut,
+    core.slice.index.SliceIndexRangeUsizeSlice,core.slice.index.SliceIndexRangeUsizeSlice.index_mut,
+    core.slice.index.SliceIndexRangeFromUsizeSlice,core.slice.index.SliceIndexRangeFromUsizeSlice.index_mut,
+    Array.to_slice,Array.from_slice,core.slice.Slice.copy_from_slice,
+    Slice.length,Slice.len,Array.update,output.property,List.slice,lift,stores]
   rfl
 
-theorem magic_compare : core.cmp.PartialEq.ne.trait_default
-    (Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8) magic magic=ok false := by rfl
+#print axioms source_value
+end AspisR1.S2K.ResultEncoding
+-- END copied JHb_S2K_ResultEncoding
+-- BEGIN copied JHb_S2K_StatementChecks: lean/JHb_S2K_StatementChecks.lean
 
-theorem b4 : Slice.index_usize NFY_JFu_PublicRange.afterstate 4#usize=ok 1#u8 := by
-  exact NFY_JFs_IndexWindow.source 976 688 16 (by decide) 4#usize (by decide) (by decide)
-    1#u8 NFY_JFu_PublicMeta06.bytes NFY_JFu_PublicMeta06.selected (by rfl)
-
-theorem b5 : Slice.index_usize NFY_JFu_PublicRange.afterstate 5#usize=ok 1#u8 := by
-  exact NFY_JFs_IndexWindow.source 976 688 16 (by decide) 5#usize (by decide) (by decide)
-    1#u8 NFY_JFu_PublicMeta06.bytes NFY_JFu_PublicMeta06.selected (by rfl)
-
-theorem b6 : Slice.index_usize NFY_JFu_PublicRange.afterstate 6#usize=ok 1#u8 := by
-  exact NFY_JFs_IndexWindow.source 976 688 16 (by decide) 6#usize (by decide) (by decide)
-    1#u8 NFY_JFu_PublicMeta06.bytes NFY_JFu_PublicMeta06.selected (by rfl)
-
-theorem b7 : Slice.index_usize NFY_JFu_PublicRange.afterstate 7#usize=ok 1#u8 := by
-  exact NFY_JFs_IndexWindow.source 976 688 16 (by decide) 7#usize (by decide) (by decide)
-    1#u8 NFY_JFu_PublicMeta06.bytes NFY_JFu_PublicMeta06.selected (by rfl)
-
-#print axioms magic_selected
-#print axioms magic_array
-#print axioms magic_compare
-#print axioms b4
-#print axioms b5
-#print axioms b6
-#print axioms b7
-end AspisR1.NFY_JFs_AfterstateHeader
--- END copied JFs_AfterstateHeader
--- BEGIN copied JFt_ExactArray: lean/JFt_ExactArray.lean
 set_option autoImplicit false
-namespace AspisR1.NFY_JFt_ExactArray
-open Aeneas Aeneas.Std Result WP
-open AspisR1TerminalDecoder
-
-theorem cast (N : Usize) (bytes : Slice U8) (arr : Array U8 N) (same : bytes.val=arr.val) :
-    core.array.TryFromArrayCopySlice.try_from N core.marker.CopyU8 bytes=ok (.Ok arr) := by
-  have size : bytes.length=N.val := by change bytes.val.length=N.val;rw [same,arr.property]
-  have spec : core.array.TryFromArrayCopySlice.try_from N core.marker.CopyU8 bytes
-      ⦃ out => out=.Ok arr ⦄ := by
-    step*
-    cases out with
-    | Err e => exact False.elim (out_post size)
-    | Ok value =>
-      congr 1
-      exact Subtype.ext (out_post.1.trans same)
-  obtain ⟨out,call,equal⟩:=WP.spec_imp_exists spec
-  rw [equal] at call
-  exact call
-
-theorem source (N : Usize) (bytes : Slice U8) (arr : Array U8 N) (same : bytes.val=arr.val) :
-    pool_v1.pair_terminal.exact N bytes=ok (.Ok arr) := by
-  unfold pool_v1.pair_terminal.exact
-  rw [cast N bytes arr same]
-  rfl
-
-#print axioms cast
-#print axioms source
-end AspisR1.NFY_JFt_ExactArray
--- END copied JFt_ExactArray
--- BEGIN copied JFt_DigestInjective: lean/JFt_DigestInjective.lean
-set_option autoImplicit false
-namespace AspisR1.NFY_JFt_DigestInjective
 open Aeneas Aeneas.Std Result
+namespace AspisR1.S2K.StatementChecks
+open AspisR1TerminalDecoder StatementAdmission
+open pool_v1.pair_forest_terminal pool_v1.pair_tree_profile pool_v1.pair_terminal
 
-theorem fromLEBytes_cast {b : BitVec 32} {bs : List Byte}
-    (same : bs=b.toLEBytes) : (BitVec.fromLEBytes bs).cast (by rw [same];simp [BitVec.toLEBytes_length])=b := by
-  cases same
-  rw [BitVec.fromLEBytes_toLEBytes (by decide : 32%8=0)]
-  simp
+theorem zero_guards (s : Statement)
+    (h : validate_pool_v1_pair_forest_terminal_statement_v1 s = ok (.Ok ())) :
+    core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8
+      (common s).master_account (Array.repeat 32#usize 0#u8) = ok false ∧
+    core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8
+      (common s).selected_lane_account (Array.repeat 32#usize 0#u8) = ok false := by
+  cases s <;> unfold validate_pool_v1_pair_forest_terminal_statement_v1 at h
+  all_goals simp only [common,PoolV1PairForestTerminalStatementV1.common,
+    statement_public_common,bind_tc_ok,Bind.bind,Aeneas.Std.bind,
+    AspisR1TerminalDecoder.core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch,
+    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+    core.convert.FromSame.from] at h ⊢
+  all_goals generalize Array.repeat 32#usize 0#u8 = zero_bindings at h ⊢
+  all_goals generalize Array.repeat 1520#usize 0#u8 = late_buffer at h
+  all_goals repeat' first
+    | (solve | exact ⟨by assumption,by assumption⟩)
 
-theorem from_to (x : U32) : core.num.U32.from_le_bytes (core.num.U32.to_le_bytes x)=x := by
-  have point : ∀ b : Byte,U8.bv (UScalar.mk b)=b := by intro b;rfl
-  have map : List.map U8.bv (List.map UScalar.mk x.bv.toLEBytes)=x.bv.toLEBytes := by
-    rw [List.map_map]
-    simpa [Function.comp_def] using congrArg (fun f : Byte → Byte => List.map f x.bv.toLEBytes) (funext point)
-  apply U32.bv_eq_imp_eq
-  simp only [core.num.U32.from_le_bytes,core.num.U32.to_le_bytes]
-  exact fromLEBytes_cast map
+    | (solve | cases h)
+    | (rw [if_pos (show true = true from rfl)] at h)
+    | (rw [if_neg (show ¬ (false = true) by decide)] at h)
+    | (dsimp only [Aeneas.Std.uncurry] at h)
+    | (s2k_unpair <;> simp_all only [Result.ok.injEq,Prod.mk.injEq])
+    | (s2k_uncase <;> simp_all only [Result.ok.injEq,Prod.mk.injEq])
+    | s2k_unbool
+    | (split at h)
 
-theorem word_length (x : U32) : (core.num.U32.to_le_bytes x).val.length=4 :=
-  (core.num.U32.to_le_bytes x).property
+def nullifier : Statement → Array aspis_core.field.M31 8#usize
+  | .PrivateTransfer _ p => p.nullifier
+  | .Withdrawal _ p => p.nullifier
 
-@[simp] theorem take_word (x : U32) : (core.num.U32.to_le_bytes x).val.take 4=(core.num.U32.to_le_bytes x).val :=
-  List.take_of_length_le (by rw [word_length])
+theorem raw_lane (s : Statement)
+    (h : validate_pool_v1_pair_forest_terminal_statement_v1 s = ok (.Ok ())) :
+    ∃ value, pool_v1.pair_forest_accounts.pool_v1_pair_forest_output_lane_v1 (nullifier s) =
+      ok (.Ok value) ∧ ¬ (value != (common s).output_lane) = true := by
+  cases s <;> unfold validate_pool_v1_pair_forest_terminal_statement_v1 at h
+  all_goals simp only [nullifier,common,PoolV1PairForestTerminalStatementV1.common,
+    statement_public_common,bind_tc_ok,Bind.bind,Aeneas.Std.bind,
+    AspisR1TerminalDecoder.core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch,
+    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+    core.convert.FromSame.from] at h ⊢
+  all_goals generalize Array.repeat 32#usize 0#u8 = zero_bindings at h
+  all_goals generalize Array.repeat 1520#usize 0#u8 = late_buffer at h
+  all_goals repeat' first
+    | (solve | exact ⟨_,by assumption,by assumption⟩)
+    | (solve | cases h)
+    | (rw [if_pos (show true = true from rfl)] at h)
+    | (rw [if_neg (show ¬ (false = true) by decide)] at h)
+    | (dsimp only [Aeneas.Std.uncurry] at h)
+    | (s2k_unpair <;> simp_all only [Result.ok.injEq,Prod.mk.injEq])
+    | (s2k_uncase <;> simp_all only [Result.ok.injEq,Prod.mk.injEq])
+    | s2k_unbool
+    | (split at h)
 
-theorem injective (a b : Array U32 8#usize)
-    (same : AspisS6SourceCodec.DigestContents.chunks a=AspisS6SourceCodec.DigestContents.chunks b) : a=b := by
-  apply Subtype.ext
-  apply List.ext_getElem
-  · rw [a.property,b.property]
-  · intro i ha hb
-    have small : i<8 := by simpa only [a.property,show (8#usize).val=8 from rfl] using ha
-    have selected:=congrArg (fun xs : List U8 => (xs.drop (4*i)).take 4) same
-    have word : (core.num.U32.to_le_bytes a.val[i]).val=(core.num.U32.to_le_bytes b.val[i]).val := by
-      interval_cases i <;>
-        simpa [AspisS6SourceCodec.DigestContents.chunks,word_length,List.drop_append,List.take_append] using selected
-    have arrays : core.num.U32.to_le_bytes a.val[i]=core.num.U32.to_le_bytes b.val[i] := Subtype.ext word
-    simpa only [from_to] using congrArg core.num.U32.from_le_bytes arrays
+  all_goals exact ⟨_,rfl,by assumption⟩
 
-#print axioms fromLEBytes_cast
-#print axioms from_to
-#print axioms word_length
-#print axioms take_word
-#print axioms injective
-end AspisR1.NFY_JFt_DigestInjective
--- END copied JFt_DigestInjective
--- BEGIN copied JFt_DigestArray: lean/JFt_DigestArray.lean
+#print axioms zero_guards
+#print axioms raw_lane
+end AspisR1.S2K.StatementChecks
+-- END copied JHb_S2K_StatementChecks
+-- BEGIN copied JHb_S2K_StatementLane: lean/JHb_S2K_StatementLane.lean
+
 set_option autoImplicit false
-namespace AspisR1.NFY_JFt_DigestArray
 open Aeneas Aeneas.Std Result
-open AspisR1TerminalDecoder
+namespace AspisR1.S2K.StatementLane
+open AspisR1TerminalDecoder StatementAdmission StatementChecks
+open pool_v1.pair_forest_terminal
 
-theorem shared (bytes : Slice U8) (arr : Array U8 32#usize) (same : bytes.val=arr.val) :
-    core.array.TryFromSharedArraySlice.try_from 32#usize bytes=ok (.Ok arr) := by
-  have size : Slice.len bytes=32#usize := by
-    have h : bytes.length=32 := by change bytes.val.length=32;rw [same,arr.property];rfl
-    scalar_tac
-  unfold core.array.TryFromSharedArraySlice.try_from
-  rw [dif_pos size]
-  apply congrArg ok
-  apply congrArg core.result.Result.Ok
-  exact Subtype.ext same
+theorem eq_of_no_difference (a b : U8) (h : ¬ (a != b) = true) : a = b := by
+  simpa only [bne_iff_ne,not_not] using h
 
-theorem source (bytes : Slice U8) (arr : Array U8 32#usize) (same : bytes.val=arr.val)
-    (digest : Array U32 8#usize)
-    (call : AspisS6NativeSnapshotReadDigest.read_digest bytes=ok (.Ok digest)) :
-    atomic_statement.decode_digest_canonical arr=ok (.Ok digest) := by
-  unfold AspisS6NativeSnapshotReadDigest.read_digest at call
-  rw [shared bytes arr same] at call
-  simpa only [bind_tc_ok,atomic_statement.unwrap_fixed_slice] using call
+theorem lane (s : Statement)
+    (h : validate_pool_v1_pair_forest_terminal_statement_v1 s = ok (.Ok ())) :
+    pool_v1.pair_forest_accounts.pool_v1_pair_forest_output_lane_v1 (nullifier s) =
+      ok (.Ok (common s).output_lane) := by
+  obtain ⟨value,run,same⟩ := raw_lane s h
+  rw [eq_of_no_difference value _ same] at run
+  exact run
 
-#print axioms shared
-#print axioms source
-end AspisR1.NFY_JFt_DigestArray
--- END copied JFt_DigestArray
--- BEGIN copied JFt_Digest22: lean/JFt_Digest22.lean
+#print axioms eq_of_no_difference
+#print axioms lane
+end AspisR1.S2K.StatementLane
+-- END copied JHb_S2K_StatementLane
+-- BEGIN copied JHb_S2K_ResultEvent: lean/JHb_S2K_ResultEvent.lean
+
+/-! Source field-boundary byte/effect composition. This is the returning
+syscall suffix, not an installed whole-native-emitter child. Validation and
+native caller reachability must still precede this cut. -/
 set_option autoImplicit false
-namespace AspisR1.NFY_JFt_Digest22
 open Aeneas Aeneas.Std Result
+namespace AspisR1.S2K.ResultEvent
+open S2I.ReturnData
 
-def value : Array AspisR1TerminalDecoder.aspis_core.field.M31 8#usize :=
-  Array.make 8#usize [67464615#u32,2144218473#u32,1164697229#u32,2001687059#u32,97906516#u32,820214304#u32,716699029#u32,134105794#u32]
+def emitFields {A E : Type} (syscall : State A E → List U8 → Result (State A E))
+    (state : State A E) (master selected nullifier : Array U8 32#usize)
+    (kind lane : U8) (afterstate : Array U8 688#usize) := do
+  let out ← S2K_ResultBytes.S2K_reference_bytes master selected nullifier kind lane afterstate
+  syscall state out.val
 
-/-- Exact numeric value is identified by the symbolic byte-injectivity lemma. -/
-theorem local_call : AspisS6NativeSnapshotReadDigest.read_digest NFY_JFu_PublicDigest22.window=ok (.Ok value) := by
-  obtain ⟨out,call,canon,contents⟩:=NFY_JFu_DigestSliceFacts.source NFY_JFu_PublicDigest22.window
-    NFY_JFu_PublicDigest22.length NFY_JFu_PublicDigest22.canonical_bytes
-  have bytes : AspisS6SourceCodec.DigestContents.chunks value=NFY_JFu_PublicDigest22.bytes := by
-    simp [AspisS6SourceCodec.DigestContents.chunks,value,Array.make,core.num.U32.to_le_bytes,BitVec.toLEBytes,NFY_JFu_PublicDigest22.bytes]
-    <;> (repeat' constructor) <;> scalar_tac
-  have same : out=value := NFY_JFt_DigestInjective.injective out value (contents.trans bytes.symm)
-  rw [same] at call
-  exact call
+theorem source_event {A E : Type}
+    (syscall : State A E → List U8 → Result (State A E))
+    (runtime : RuntimePremise syscall) (state : State A E)
+    (master selected nullifier : Array U8 32#usize)
+    (kind lane : U8) (afterstate : Array U8 688#usize) :
+    let out := ResultEncoding.stores (Array.repeat 792#usize 0#u8)
+      master selected nullifier kind lane afterstate
+    emitFields syscall state master selected nullifier kind lane afterstate = ok (set state out.val) ∧
+    out.val.length = 792 ∧ out.val ≠ [] ∧
+    (set state out.val).accounts = state.accounts ∧
+    (set state out.val).events = state.events ++ [.setReturnData out.val] := by
+  dsimp only
+  let out := ResultEncoding.stores (Array.repeat 792#usize 0#u8)
+    master selected nullifier kind lane afterstate
+  have width : out.val.length = 792 := out.property
+  have event := nonempty_event syscall runtime state out.val width
+  refine ⟨?_,width,event.2.1,event.2.2.1,event.2.2.2⟩
+  unfold emitFields
+  rw [ResultEncoding.source_value]
+  exact event.1
 
-theorem selected : NFY_JFu_PublicRange.segment 992 32 (by decide)=NFY_JFu_PublicDigest22.window := by
-  apply Subtype.ext
-  dsimp only [NFY_JFu_PublicRange.segment,NFY_JFu_PublicDigest22.window]
-  exact NFY_JFu_PublicDigest22.selected
+#print axioms source_event
+end AspisR1.S2K.ResultEvent
+-- END copied JHb_S2K_ResultEvent
+-- BEGIN copied JHb_S2K_ResultNativeSource: lean/JHb_S2K_ResultNativeSource.lean
 
-theorem source : AspisS6NativeSnapshotReadDigest.read_digest
-    (NFY_JFu_PublicRange.segment 992 32 (by decide))=ok (.Ok value) := by
-  rw [selected]
-  exact local_call
-
-theorem canonical : NFY_JFu_DigestCanonical.Canonical value :=
-  NFY_JFu_DigestSliceCanonical.source _ _ source
-
-#print axioms local_call
-#print axioms selected
-#print axioms source
-#print axioms canonical
-end AspisR1.NFY_JFt_Digest22
--- END copied JFt_Digest22
--- BEGIN copied JFt_Digest23: lean/JFt_Digest23.lean
+/-! Actual extracted result validator; only names/duplicate dependencies adapted.
+Opaque encoder declarations are replaced by the already-proved exact definitions
+on identical carriers. No new opaque constant or successful-child premise. -/
+open Aeneas Aeneas.Std Result ControlFlow Error
 set_option autoImplicit false
-namespace AspisR1.NFY_JFt_Digest23
-open Aeneas Aeneas.Std Result
+namespace AspisR1TerminalDecoder
 
-def value : Array AspisR1TerminalDecoder.aspis_core.field.M31 8#usize :=
-  Array.make 8#usize [1438900896#u32,782233260#u32,1544844157#u32,891350894#u32,986827501#u32,300047813#u32,266092546#u32,1155026732#u32]
+/-- [aspis_statement::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalResultV1]
+    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs', lines 169:0-176:1
+    Visibility: public -/
+structure pool_v1.pair_forest_terminal.PoolV1PairForestTerminalResultV1 where
+  transition_kind : pool_v1.historical_anchor.PoolV1TransitionKind
+  master_account : Array Std.U8 32#usize
+  selected_lane_account : Array Std.U8 32#usize
+  output_lane : Std.U8
+  nullifier : Array aspis_core.field.M31 8#usize
+  verified_afterstate : pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1
 
-/-- Exact numeric value is identified by the symbolic byte-injectivity lemma. -/
-theorem local_call : AspisS6NativeSnapshotReadDigest.read_digest NFY_JFu_PublicDigest23.window=ok (.Ok value) := by
-  obtain ⟨out,call,canon,contents⟩:=NFY_JFu_DigestSliceFacts.source NFY_JFu_PublicDigest23.window
-    NFY_JFu_PublicDigest23.length NFY_JFu_PublicDigest23.canonical_bytes
-  have bytes : AspisS6SourceCodec.DigestContents.chunks value=NFY_JFu_PublicDigest23.bytes := by
-    simp [AspisS6SourceCodec.DigestContents.chunks,value,Array.make,core.num.U32.to_le_bytes,BitVec.toLEBytes,NFY_JFu_PublicDigest23.bytes]
-    <;> (repeat' constructor) <;> scalar_tac
-  have same : out=value := NFY_JFt_DigestInjective.injective out value (contents.trans bytes.symm)
-  rw [same] at call
-  exact call
+/-- [aspis_statement::pool_v1::pair_forest_terminal::validate_result::closure#1]
+    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs', lines 549:17-549:81 -/
+@[reducible]
+def pool_v1.pair_forest_terminal.validate_result.closure_1 := Unit
 
-theorem selected : NFY_JFu_PublicRange.segment 1024 32 (by decide)=NFY_JFu_PublicDigest23.window := by
-  apply Subtype.ext
-  dsimp only [NFY_JFu_PublicRange.segment,NFY_JFu_PublicDigest23.window]
-  exact NFY_JFu_PublicDigest23.selected
+/-- [aspis_statement::pool_v1::pair_forest_terminal::validate_result::closure]
+    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs', lines 544:17-544:78 -/
+@[reducible]
+def pool_v1.pair_forest_terminal.validate_result.closure := Unit
 
-theorem source : AspisS6NativeSnapshotReadDigest.read_digest
-    (NFY_JFu_PublicRange.segment 1024 32 (by decide))=ok (.Ok value) := by
-  rw [selected]
-  exact local_call
+/-- [aspis_statement::pool_v1::pair_forest_terminal::validate_result::{impl core::ops::function::FnOnce<(aspis_statement::pool_v1::pair_terminal::PoolV1PairVerifierTransportErrorV1,), aspis_statement::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalFormatErrorV1> for aspis_statement::pool_v1::pair_forest_terminal::validate_result::closure#1}::call_once]:
+    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs', lines 549:17-549:81 -/
+def
+  pool_v1.pair_forest_terminal.validate_result.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once
+  (c : pool_v1.pair_forest_terminal.validate_result.closure_1)
+  (tupled_args : pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) :
+  Result pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1
+  := do
+  ok
+    (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Afterstate
+    tupled_args)
 
-theorem canonical : NFY_JFu_DigestCanonical.Canonical value :=
-  NFY_JFu_DigestSliceCanonical.source _ _ source
+/-- Trait implementation: [aspis_statement::pool_v1::pair_forest_terminal::validate_result::{impl core::ops::function::FnOnce<(aspis_statement::pool_v1::pair_terminal::PoolV1PairVerifierTransportErrorV1,), aspis_statement::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalFormatErrorV1> for aspis_statement::pool_v1::pair_forest_terminal::validate_result::closure#1}]
+    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs', lines 549:17-549:81 -/
+@[reducible]
+def
+  pool_v1.pair_forest_terminal.validate_result.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairForestTerminalFormatErrorV1
+  : core.ops.function.FnOnce
+  pool_v1.pair_forest_terminal.validate_result.closure_1
+  pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1
+  pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1 := {
+  call_once :=
+    pool_v1.pair_forest_terminal.validate_result.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once
+}
 
-#print axioms local_call
-#print axioms selected
-#print axioms source
-#print axioms canonical
-end AspisR1.NFY_JFt_Digest23
--- END copied JFt_Digest23
--- BEGIN copied JFt_Digest24: lean/JFt_Digest24.lean
+/-- [aspis_statement::pool_v1::pair_forest_terminal::validate_result::{impl core::ops::function::FnOnce<(aspis_statement::pool_v1::pair_forest_accounts::PoolV1PairForestAccountErrorV1,), aspis_statement::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalFormatErrorV1> for aspis_statement::pool_v1::pair_forest_terminal::validate_result::closure}::call_once]:
+    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs', lines 544:17-544:78 -/
+def
+  pool_v1.pair_forest_terminal.validate_result.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once
+  (c : pool_v1.pair_forest_terminal.validate_result.closure)
+  (tupled_args : pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1) :
+  Result pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1
+  := do
+  ok
+    (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account
+    tupled_args)
+
+/-- Trait implementation: [aspis_statement::pool_v1::pair_forest_terminal::validate_result::{impl core::ops::function::FnOnce<(aspis_statement::pool_v1::pair_forest_accounts::PoolV1PairForestAccountErrorV1,), aspis_statement::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalFormatErrorV1> for aspis_statement::pool_v1::pair_forest_terminal::validate_result::closure}]
+    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs', lines 544:17-544:78 -/
+@[reducible]
+def
+  pool_v1.pair_forest_terminal.validate_result.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1
+  : core.ops.function.FnOnce
+  pool_v1.pair_forest_terminal.validate_result.closure
+  pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1
+  pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1 := {
+  call_once :=
+    pool_v1.pair_forest_terminal.validate_result.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once
+}
+
+/-- [aspis_statement::pool_v1::pair_forest_terminal::validate_result]:
+    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs', lines 537:0-551:1 -/
+def pool_v1.pair_forest_terminal.validate_result
+  (result : pool_v1.pair_forest_terminal.PoolV1PairForestTerminalResultV1) :
+  Result (core.result.Result Unit
+    pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+  := do
+  let a := Array.repeat 32#usize 0#u8
+  let b ←
+    core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8
+      result.master_account a
+  if b
+  then
+    ok (core.result.Result.Err
+      pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+  else
+    let a1 := Array.repeat 32#usize 0#u8
+    let b1 ←
+      core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8
+        result.selected_lane_account a1
+    if b1
+    then
+      ok (core.result.Result.Err
+        pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+    else
+      let r ←
+        pool_v1.pair_forest_accounts.pool_v1_pair_forest_output_lane_v1
+          result.nullifier
+      let r1 ←
+        core.result.Result.map_err
+          pool_v1.pair_forest_terminal.validate_result.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1
+          r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+      | core.ops.control_flow.ControlFlow.Continue val =>
+        if result.output_lane != val
+        then
+          ok (core.result.Result.Err
+            pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+        else
+          let r2 ←
+            pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1
+              result.verified_afterstate
+          let r3 ←
+            core.result.Result.map_err
+              pool_v1.pair_forest_terminal.validate_result.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairForestTerminalFormatErrorV1
+              r2 ()
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+          match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue _ =>
+            ok (core.result.Result.Ok ())
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              Unit (core.convert.FromSame
+              pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+              residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          Unit (core.convert.FromSame
+          pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+          residual
+
+#print axioms pool_v1.pair_forest_terminal.validate_result
+end AspisR1TerminalDecoder
+-- END copied JHb_S2K_ResultNativeSource
+-- BEGIN copied JHb_S2K_ResultAdmission: lean/JHb_S2K_ResultAdmission.lean
+
+/-! SAME successful statement supplies every result-validator guard and child
+return. The success of the result validator is derived, never a premise. -/
 set_option autoImplicit false
-namespace AspisR1.NFY_JFt_Digest24
 open Aeneas Aeneas.Std Result
+namespace AspisR1.S2K.ResultAdmission
+open AspisR1TerminalDecoder StatementAdmission StatementChecks
+open pool_v1.pair_forest_terminal
 
-def value : Array AspisR1TerminalDecoder.aspis_core.field.M31 8#usize :=
-  Array.make 8#usize [248012357#u32,194341198#u32,430781749#u32,501414171#u32,630694870#u32,1921243919#u32,1220508734#u32,1000843895#u32]
+abbrev Output := PoolV1PairForestTerminalResultV1
 
-/-- Exact numeric value is identified by the symbolic byte-injectivity lemma. -/
-theorem local_call : AspisS6NativeSnapshotReadDigest.read_digest NFY_JFu_PublicDigest24.window=ok (.Ok value) := by
-  obtain ⟨out,call,canon,contents⟩:=NFY_JFu_DigestSliceFacts.source NFY_JFu_PublicDigest24.window
-    NFY_JFu_PublicDigest24.length NFY_JFu_PublicDigest24.canonical_bytes
-  have bytes : AspisS6SourceCodec.DigestContents.chunks value=NFY_JFu_PublicDigest24.bytes := by
-    simp [AspisS6SourceCodec.DigestContents.chunks,value,Array.make,core.num.U32.to_le_bytes,BitVec.toLEBytes,NFY_JFu_PublicDigest24.bytes]
-    <;> (repeat' constructor) <;> scalar_tac
-  have same : out=value := NFY_JFt_DigestInjective.injective out value (contents.trans bytes.symm)
-  rw [same] at call
-  exact call
+def kind : Statement → pool_v1.historical_anchor.PoolV1TransitionKind
+  | .PrivateTransfer _ _ => .PrivateTransfer
+  | .Withdrawal _ _ => .Withdrawal
 
-theorem selected : NFY_JFu_PublicRange.segment 1056 32 (by decide)=NFY_JFu_PublicDigest24.window := by
-  apply Subtype.ext
-  dsimp only [NFY_JFu_PublicRange.segment,NFY_JFu_PublicDigest24.window]
-  exact NFY_JFu_PublicDigest24.selected
+def value (s : Statement) : Output where
+  transition_kind := kind s
+  master_account := (common s).master_account
+  selected_lane_account := (common s).selected_lane_account
+  output_lane := (common s).output_lane
+  nullifier := nullifier s
+  verified_afterstate := (common s).lane_transition.candidate_afterstate
 
-theorem source : AspisS6NativeSnapshotReadDigest.read_digest
-    (NFY_JFu_PublicRange.segment 1056 32 (by decide))=ok (.Ok value) := by
-  rw [selected]
-  exact local_call
+theorem validated (s : Statement)
+    (accepted : validate_pool_v1_pair_forest_terminal_statement_v1 s = ok (.Ok ())) :
+    validate_result (value s) = ok (.Ok ()) := by
+  obtain ⟨master,selected⟩ := zero_guards s accepted
+  have lane := StatementLane.lane s accepted
+  have encoded := payload s accepted
+  simp only [validate_result,value,master,selected,lane,encoded,bind_tc_ok,
+    AspisR1TerminalDecoder.core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch,
+    bne_self_eq_false, Bool.false_eq_true,reduceIte]
 
-theorem canonical : NFY_JFu_DigestCanonical.Canonical value :=
-  NFY_JFu_DigestSliceCanonical.source _ _ source
+#print axioms validated
+end AspisR1.S2K.ResultAdmission
+-- END copied JHb_S2K_ResultAdmission
+-- BEGIN copied JHb_S2K_TrustedStd: lean/JHb_S2K_TrustedStd.lean
 
-#print axioms local_call
-#print axioms selected
-#print axioms source
-#print axioms canonical
-end AspisR1.NFY_JFt_Digest24
--- END copied JFt_Digest24
--- BEGIN copied JFt_Digest25: lean/JFt_Digest25.lean
+/-! D157 pure slice-copy semantics. The surrounding carrier contains everything
+outside the exclusively borrowed destination (including source bytes). This
+explicit named library assumption is not a theorem about the native SDK or a
+whole successful child. Valid typed slice provenance is a separate runtime port. -/
 set_option autoImplicit false
-namespace AspisR1.NFY_JFt_Digest25
 open Aeneas Aeneas.Std Result
+namespace AspisR1.S2K.StdCopy
 
-def value : Array AspisR1TerminalDecoder.aspis_core.field.M31 8#usize :=
-  Array.make 8#usize [560027647#u32,109760138#u32,2064904093#u32,345398497#u32,1214731266#u32,366495038#u32,459312327#u32,480913462#u32]
+inductive Outcome (Frame : Type) where
+  | returned : List U8 → Frame → Outcome Frame
+  | panicked : List U8 → Frame → Outcome Frame
 
-/-- Exact numeric value is identified by the symbolic byte-injectivity lemma. -/
-theorem local_call : AspisS6NativeSnapshotReadDigest.read_digest NFY_JFu_PublicDigest25.window=ok (.Ok value) := by
-  obtain ⟨out,call,canon,contents⟩:=NFY_JFu_DigestSliceFacts.source NFY_JFu_PublicDigest25.window
-    NFY_JFu_PublicDigest25.length NFY_JFu_PublicDigest25.canonical_bytes
-  have bytes : AspisS6SourceCodec.DigestContents.chunks value=NFY_JFu_PublicDigest25.bytes := by
-    simp [AspisS6SourceCodec.DigestContents.chunks,value,Array.make,core.num.U32.to_le_bytes,BitVec.toLEBytes,NFY_JFu_PublicDigest25.bytes]
-    <;> (repeat' constructor) <;> scalar_tac
-  have same : out=value := NFY_JFt_DigestInjective.injective out value (contents.trans bytes.symm)
-  rw [same] at call
-  exact call
+def model {Frame : Type} (dst src : List U8) (frame : Frame) : Outcome Frame :=
+  if dst.length = src.length then .returned src frame else .panicked dst frame
 
-theorem selected : NFY_JFu_PublicRange.segment 1088 32 (by decide)=NFY_JFu_PublicDigest25.window := by
-  apply Subtype.ext
-  dsimp only [NFY_JFu_PublicRange.segment,NFY_JFu_PublicDigest25.window]
-  exact NFY_JFu_PublicDigest25.selected
+/-- The only new TrustedStd field: exact copy or length-mismatch panic;
+all state outside the destination is preserved, including on mismatch. -/
+structure TrustedStd {Frame : Type}
+    (copy : List U8 → List U8 → Frame → Outcome Frame) : Prop where
+  slice_copy_from_slice : ∀ dst src frame, copy dst src frame = model dst src frame
 
-theorem source : AspisS6NativeSnapshotReadDigest.read_digest
-    (NFY_JFu_PublicRange.segment 1088 32 (by decide))=ok (.Ok value) := by
-  rw [selected]
-  exact local_call
+theorem consistent {Frame : Type} : TrustedStd (@model Frame) := ⟨by intros; rfl⟩
 
-theorem canonical : NFY_JFu_DigestCanonical.Canonical value :=
-  NFY_JFu_DigestSliceCanonical.source _ _ source
+theorem equal_lengths {Frame : Type}
+    (copy : List U8 → List U8 → Frame → Outcome Frame) (std : TrustedStd copy)
+    (dst src : List U8) (frame : Frame) (equal : dst.length = src.length) :
+    copy dst src frame = .returned src frame := by
+  rw [std.slice_copy_from_slice]; exact if_pos equal
 
-#print axioms local_call
-#print axioms selected
-#print axioms source
-#print axioms canonical
-end AspisR1.NFY_JFt_Digest25
--- END copied JFt_Digest25
--- BEGIN copied JFt_Digest26: lean/JFt_Digest26.lean
+theorem different_lengths {Frame : Type}
+    (copy : List U8 → List U8 → Frame → Outcome Frame) (std : TrustedStd copy)
+    (dst src : List U8) (frame : Frame) (different : dst.length ≠ src.length) :
+    copy dst src frame = .panicked dst frame := by
+  rw [std.slice_copy_from_slice]; exact if_neg different
+
+#print axioms consistent
+#print axioms equal_lengths
+#print axioms different_lengths
+end AspisR1.S2K.StdCopy
+-- END copied JHb_S2K_TrustedStd
+-- BEGIN copied JHb_S2K_CopyTransport: lean/JHb_S2K_CopyTransport.lean
+
+/-! Exact width32 primitive join. Native validity/region interpretation is an
+explicit runtime admission; this theorem supplies no enclosing caller success. -/
 set_option autoImplicit false
-namespace AspisR1.NFY_JFt_Digest26
 open Aeneas Aeneas.Std Result
-
-def value : Array AspisR1TerminalDecoder.aspis_core.field.M31 8#usize :=
-  Array.make 8#usize [1603344092#u32,1242405009#u32,1153352827#u32,393697509#u32,714169239#u32,2094351560#u32,55834509#u32,664305674#u32]
-
-/-- Exact numeric value is identified by the symbolic byte-injectivity lemma. -/
-theorem local_call : AspisS6NativeSnapshotReadDigest.read_digest NFY_JFu_PublicDigest26.window=ok (.Ok value) := by
-  obtain ⟨out,call,canon,contents⟩:=NFY_JFu_DigestSliceFacts.source NFY_JFu_PublicDigest26.window
-    NFY_JFu_PublicDigest26.length NFY_JFu_PublicDigest26.canonical_bytes
-  have bytes : AspisS6SourceCodec.DigestContents.chunks value=NFY_JFu_PublicDigest26.bytes := by
-    simp [AspisS6SourceCodec.DigestContents.chunks,value,Array.make,core.num.U32.to_le_bytes,BitVec.toLEBytes,NFY_JFu_PublicDigest26.bytes]
-    <;> (repeat' constructor) <;> scalar_tac
-  have same : out=value := NFY_JFt_DigestInjective.injective out value (contents.trans bytes.symm)
-  rw [same] at call
-  exact call
-
-theorem selected : NFY_JFu_PublicRange.segment 1120 32 (by decide)=NFY_JFu_PublicDigest26.window := by
-  apply Subtype.ext
-  dsimp only [NFY_JFu_PublicRange.segment,NFY_JFu_PublicDigest26.window]
-  exact NFY_JFu_PublicDigest26.selected
-
-theorem source : AspisS6NativeSnapshotReadDigest.read_digest
-    (NFY_JFu_PublicRange.segment 1120 32 (by decide))=ok (.Ok value) := by
-  rw [selected]
-  exact local_call
-
-theorem canonical : NFY_JFu_DigestCanonical.Canonical value :=
-  NFY_JFu_DigestSliceCanonical.source _ _ source
-
-#print axioms local_call
-#print axioms selected
-#print axioms source
-#print axioms canonical
-end AspisR1.NFY_JFt_Digest26
--- END copied JFt_Digest26
--- BEGIN copied JFt_Digest27: lean/JFt_Digest27.lean
-set_option autoImplicit false
-namespace AspisR1.NFY_JFt_Digest27
-open Aeneas Aeneas.Std Result
-
-def value : Array AspisR1TerminalDecoder.aspis_core.field.M31 8#usize :=
-  Array.make 8#usize [1410054462#u32,673771449#u32,940847521#u32,274330358#u32,1719505495#u32,1690439941#u32,203201419#u32,1855504616#u32]
-
-/-- Exact numeric value is identified by the symbolic byte-injectivity lemma. -/
-theorem local_call : AspisS6NativeSnapshotReadDigest.read_digest NFY_JFu_PublicDigest27.window=ok (.Ok value) := by
-  obtain ⟨out,call,canon,contents⟩:=NFY_JFu_DigestSliceFacts.source NFY_JFu_PublicDigest27.window
-    NFY_JFu_PublicDigest27.length NFY_JFu_PublicDigest27.canonical_bytes
-  have bytes : AspisS6SourceCodec.DigestContents.chunks value=NFY_JFu_PublicDigest27.bytes := by
-    simp [AspisS6SourceCodec.DigestContents.chunks,value,Array.make,core.num.U32.to_le_bytes,BitVec.toLEBytes,NFY_JFu_PublicDigest27.bytes]
-    <;> (repeat' constructor) <;> scalar_tac
-  have same : out=value := NFY_JFt_DigestInjective.injective out value (contents.trans bytes.symm)
-  rw [same] at call
-  exact call
-
-theorem selected : NFY_JFu_PublicRange.segment 1152 32 (by decide)=NFY_JFu_PublicDigest27.window := by
-  apply Subtype.ext
-  dsimp only [NFY_JFu_PublicRange.segment,NFY_JFu_PublicDigest27.window]
-  exact NFY_JFu_PublicDigest27.selected
-
-theorem source : AspisS6NativeSnapshotReadDigest.read_digest
-    (NFY_JFu_PublicRange.segment 1152 32 (by decide))=ok (.Ok value) := by
-  rw [selected]
-  exact local_call
-
-theorem canonical : NFY_JFu_DigestCanonical.Canonical value :=
-  NFY_JFu_DigestSliceCanonical.source _ _ source
-
-#print axioms local_call
-#print axioms selected
-#print axioms source
-#print axioms canonical
-end AspisR1.NFY_JFt_Digest27
--- END copied JFt_Digest27
--- BEGIN copied JFt_Digest28: lean/JFt_Digest28.lean
-set_option autoImplicit false
-namespace AspisR1.NFY_JFt_Digest28
-open Aeneas Aeneas.Std Result
-
-def value : Array AspisR1TerminalDecoder.aspis_core.field.M31 8#usize :=
-  Array.make 8#usize [1442759752#u32,1540325866#u32,188964047#u32,101815282#u32,1883549730#u32,1774537487#u32,1306717763#u32,561084592#u32]
-
-/-- Exact numeric value is identified by the symbolic byte-injectivity lemma. -/
-theorem local_call : AspisS6NativeSnapshotReadDigest.read_digest NFY_JFu_PublicDigest28.window=ok (.Ok value) := by
-  obtain ⟨out,call,canon,contents⟩:=NFY_JFu_DigestSliceFacts.source NFY_JFu_PublicDigest28.window
-    NFY_JFu_PublicDigest28.length NFY_JFu_PublicDigest28.canonical_bytes
-  have bytes : AspisS6SourceCodec.DigestContents.chunks value=NFY_JFu_PublicDigest28.bytes := by
-    simp [AspisS6SourceCodec.DigestContents.chunks,value,Array.make,core.num.U32.to_le_bytes,BitVec.toLEBytes,NFY_JFu_PublicDigest28.bytes]
-    <;> (repeat' constructor) <;> scalar_tac
-  have same : out=value := NFY_JFt_DigestInjective.injective out value (contents.trans bytes.symm)
-  rw [same] at call
-  exact call
-
-theorem selected : NFY_JFu_PublicRange.segment 1184 32 (by decide)=NFY_JFu_PublicDigest28.window := by
-  apply Subtype.ext
-  dsimp only [NFY_JFu_PublicRange.segment,NFY_JFu_PublicDigest28.window]
-  exact NFY_JFu_PublicDigest28.selected
-
-theorem source : AspisS6NativeSnapshotReadDigest.read_digest
-    (NFY_JFu_PublicRange.segment 1184 32 (by decide))=ok (.Ok value) := by
-  rw [selected]
-  exact local_call
-
-theorem canonical : NFY_JFu_DigestCanonical.Canonical value :=
-  NFY_JFu_DigestSliceCanonical.source _ _ source
-
-#print axioms local_call
-#print axioms selected
-#print axioms source
-#print axioms canonical
-end AspisR1.NFY_JFt_Digest28
--- END copied JFt_Digest28
--- BEGIN copied JFt_Digest29: lean/JFt_Digest29.lean
-set_option autoImplicit false
-namespace AspisR1.NFY_JFt_Digest29
-open Aeneas Aeneas.Std Result
-
-def value : Array AspisR1TerminalDecoder.aspis_core.field.M31 8#usize :=
-  Array.make 8#usize [244193611#u32,984304317#u32,1467689208#u32,2063463197#u32,1766003332#u32,1300835127#u32,1578947755#u32,745931587#u32]
-
-/-- Exact numeric value is identified by the symbolic byte-injectivity lemma. -/
-theorem local_call : AspisS6NativeSnapshotReadDigest.read_digest NFY_JFu_PublicDigest29.window=ok (.Ok value) := by
-  obtain ⟨out,call,canon,contents⟩:=NFY_JFu_DigestSliceFacts.source NFY_JFu_PublicDigest29.window
-    NFY_JFu_PublicDigest29.length NFY_JFu_PublicDigest29.canonical_bytes
-  have bytes : AspisS6SourceCodec.DigestContents.chunks value=NFY_JFu_PublicDigest29.bytes := by
-    simp [AspisS6SourceCodec.DigestContents.chunks,value,Array.make,core.num.U32.to_le_bytes,BitVec.toLEBytes,NFY_JFu_PublicDigest29.bytes]
-    <;> (repeat' constructor) <;> scalar_tac
-  have same : out=value := NFY_JFt_DigestInjective.injective out value (contents.trans bytes.symm)
-  rw [same] at call
-  exact call
-
-theorem selected : NFY_JFu_PublicRange.segment 1216 32 (by decide)=NFY_JFu_PublicDigest29.window := by
-  apply Subtype.ext
-  dsimp only [NFY_JFu_PublicRange.segment,NFY_JFu_PublicDigest29.window]
-  exact NFY_JFu_PublicDigest29.selected
-
-theorem source : AspisS6NativeSnapshotReadDigest.read_digest
-    (NFY_JFu_PublicRange.segment 1216 32 (by decide))=ok (.Ok value) := by
-  rw [selected]
-  exact local_call
-
-theorem canonical : NFY_JFu_DigestCanonical.Canonical value :=
-  NFY_JFu_DigestSliceCanonical.source _ _ source
-
-#print axioms local_call
-#print axioms selected
-#print axioms source
-#print axioms canonical
-end AspisR1.NFY_JFt_Digest29
--- END copied JFt_Digest29
--- BEGIN copied JFt_Digest30: lean/JFt_Digest30.lean
-set_option autoImplicit false
-namespace AspisR1.NFY_JFt_Digest30
-open Aeneas Aeneas.Std Result
-
-def value : Array AspisR1TerminalDecoder.aspis_core.field.M31 8#usize :=
-  Array.make 8#usize [673192756#u32,38070812#u32,1453532835#u32,1340577407#u32,368420458#u32,1834405704#u32,270061815#u32,711700631#u32]
-
-/-- Exact numeric value is identified by the symbolic byte-injectivity lemma. -/
-theorem local_call : AspisS6NativeSnapshotReadDigest.read_digest NFY_JFu_PublicDigest30.window=ok (.Ok value) := by
-  obtain ⟨out,call,canon,contents⟩:=NFY_JFu_DigestSliceFacts.source NFY_JFu_PublicDigest30.window
-    NFY_JFu_PublicDigest30.length NFY_JFu_PublicDigest30.canonical_bytes
-  have bytes : AspisS6SourceCodec.DigestContents.chunks value=NFY_JFu_PublicDigest30.bytes := by
-    simp [AspisS6SourceCodec.DigestContents.chunks,value,Array.make,core.num.U32.to_le_bytes,BitVec.toLEBytes,NFY_JFu_PublicDigest30.bytes]
-    <;> (repeat' constructor) <;> scalar_tac
-  have same : out=value := NFY_JFt_DigestInjective.injective out value (contents.trans bytes.symm)
-  rw [same] at call
-  exact call
-
-theorem selected : NFY_JFu_PublicRange.segment 1248 32 (by decide)=NFY_JFu_PublicDigest30.window := by
-  apply Subtype.ext
-  dsimp only [NFY_JFu_PublicRange.segment,NFY_JFu_PublicDigest30.window]
-  exact NFY_JFu_PublicDigest30.selected
-
-theorem source : AspisS6NativeSnapshotReadDigest.read_digest
-    (NFY_JFu_PublicRange.segment 1248 32 (by decide))=ok (.Ok value) := by
-  rw [selected]
-  exact local_call
-
-theorem canonical : NFY_JFu_DigestCanonical.Canonical value :=
-  NFY_JFu_DigestSliceCanonical.source _ _ source
-
-#print axioms local_call
-#print axioms selected
-#print axioms source
-#print axioms canonical
-end AspisR1.NFY_JFt_Digest30
--- END copied JFt_Digest30
--- BEGIN copied JFt_Digest31: lean/JFt_Digest31.lean
-set_option autoImplicit false
-namespace AspisR1.NFY_JFt_Digest31
-open Aeneas Aeneas.Std Result
-
-def value : Array AspisR1TerminalDecoder.aspis_core.field.M31 8#usize :=
-  Array.make 8#usize [27092219#u32,1272373356#u32,998194489#u32,1458413288#u32,887470405#u32,1204987730#u32,864453460#u32,553704718#u32]
-
-/-- Exact numeric value is identified by the symbolic byte-injectivity lemma. -/
-theorem local_call : AspisS6NativeSnapshotReadDigest.read_digest NFY_JFu_PublicDigest31.window=ok (.Ok value) := by
-  obtain ⟨out,call,canon,contents⟩:=NFY_JFu_DigestSliceFacts.source NFY_JFu_PublicDigest31.window
-    NFY_JFu_PublicDigest31.length NFY_JFu_PublicDigest31.canonical_bytes
-  have bytes : AspisS6SourceCodec.DigestContents.chunks value=NFY_JFu_PublicDigest31.bytes := by
-    simp [AspisS6SourceCodec.DigestContents.chunks,value,Array.make,core.num.U32.to_le_bytes,BitVec.toLEBytes,NFY_JFu_PublicDigest31.bytes]
-    <;> (repeat' constructor) <;> scalar_tac
-  have same : out=value := NFY_JFt_DigestInjective.injective out value (contents.trans bytes.symm)
-  rw [same] at call
-  exact call
-
-theorem selected : NFY_JFu_PublicRange.segment 1280 32 (by decide)=NFY_JFu_PublicDigest31.window := by
-  apply Subtype.ext
-  dsimp only [NFY_JFu_PublicRange.segment,NFY_JFu_PublicDigest31.window]
-  exact NFY_JFu_PublicDigest31.selected
-
-theorem source : AspisS6NativeSnapshotReadDigest.read_digest
-    (NFY_JFu_PublicRange.segment 1280 32 (by decide))=ok (.Ok value) := by
-  rw [selected]
-  exact local_call
-
-theorem canonical : NFY_JFu_DigestCanonical.Canonical value :=
-  NFY_JFu_DigestSliceCanonical.source _ _ source
-
-#print axioms local_call
-#print axioms selected
-#print axioms source
-#print axioms canonical
-end AspisR1.NFY_JFt_Digest31
--- END copied JFt_Digest31
--- BEGIN copied JFt_Digest32: lean/JFt_Digest32.lean
-set_option autoImplicit false
-namespace AspisR1.NFY_JFt_Digest32
-open Aeneas Aeneas.Std Result
-
-def value : Array AspisR1TerminalDecoder.aspis_core.field.M31 8#usize :=
-  Array.make 8#usize [1972918328#u32,1234090299#u32,977162835#u32,1704494754#u32,1617603773#u32,1819200880#u32,906453206#u32,1653526885#u32]
-
-/-- Exact numeric value is identified by the symbolic byte-injectivity lemma. -/
-theorem local_call : AspisS6NativeSnapshotReadDigest.read_digest NFY_JFu_PublicDigest32.window=ok (.Ok value) := by
-  obtain ⟨out,call,canon,contents⟩:=NFY_JFu_DigestSliceFacts.source NFY_JFu_PublicDigest32.window
-    NFY_JFu_PublicDigest32.length NFY_JFu_PublicDigest32.canonical_bytes
-  have bytes : AspisS6SourceCodec.DigestContents.chunks value=NFY_JFu_PublicDigest32.bytes := by
-    simp [AspisS6SourceCodec.DigestContents.chunks,value,Array.make,core.num.U32.to_le_bytes,BitVec.toLEBytes,NFY_JFu_PublicDigest32.bytes]
-    <;> (repeat' constructor) <;> scalar_tac
-  have same : out=value := NFY_JFt_DigestInjective.injective out value (contents.trans bytes.symm)
-  rw [same] at call
-  exact call
-
-theorem selected : NFY_JFu_PublicRange.segment 1312 32 (by decide)=NFY_JFu_PublicDigest32.window := by
-  apply Subtype.ext
-  dsimp only [NFY_JFu_PublicRange.segment,NFY_JFu_PublicDigest32.window]
-  exact NFY_JFu_PublicDigest32.selected
-
-theorem source : AspisS6NativeSnapshotReadDigest.read_digest
-    (NFY_JFu_PublicRange.segment 1312 32 (by decide))=ok (.Ok value) := by
-  rw [selected]
-  exact local_call
-
-theorem canonical : NFY_JFu_DigestCanonical.Canonical value :=
-  NFY_JFu_DigestSliceCanonical.source _ _ source
-
-#print axioms local_call
-#print axioms selected
-#print axioms source
-#print axioms canonical
-end AspisR1.NFY_JFt_Digest32
--- END copied JFt_Digest32
--- BEGIN copied JFt_Digest33: lean/JFt_Digest33.lean
-set_option autoImplicit false
-namespace AspisR1.NFY_JFt_Digest33
-open Aeneas Aeneas.Std Result
-
-def value : Array AspisR1TerminalDecoder.aspis_core.field.M31 8#usize :=
-  Array.make 8#usize [418360492#u32,472096212#u32,871749117#u32,98906847#u32,2026788776#u32,1504737042#u32,407274798#u32,1800828893#u32]
-
-/-- Exact numeric value is identified by the symbolic byte-injectivity lemma. -/
-theorem local_call : AspisS6NativeSnapshotReadDigest.read_digest NFY_JFu_PublicDigest33.window=ok (.Ok value) := by
-  obtain ⟨out,call,canon,contents⟩:=NFY_JFu_DigestSliceFacts.source NFY_JFu_PublicDigest33.window
-    NFY_JFu_PublicDigest33.length NFY_JFu_PublicDigest33.canonical_bytes
-  have bytes : AspisS6SourceCodec.DigestContents.chunks value=NFY_JFu_PublicDigest33.bytes := by
-    simp [AspisS6SourceCodec.DigestContents.chunks,value,Array.make,core.num.U32.to_le_bytes,BitVec.toLEBytes,NFY_JFu_PublicDigest33.bytes]
-    <;> (repeat' constructor) <;> scalar_tac
-  have same : out=value := NFY_JFt_DigestInjective.injective out value (contents.trans bytes.symm)
-  rw [same] at call
-  exact call
-
-theorem selected : NFY_JFu_PublicRange.segment 1344 32 (by decide)=NFY_JFu_PublicDigest33.window := by
-  apply Subtype.ext
-  dsimp only [NFY_JFu_PublicRange.segment,NFY_JFu_PublicDigest33.window]
-  exact NFY_JFu_PublicDigest33.selected
-
-theorem source : AspisS6NativeSnapshotReadDigest.read_digest
-    (NFY_JFu_PublicRange.segment 1344 32 (by decide))=ok (.Ok value) := by
-  rw [selected]
-  exact local_call
-
-theorem canonical : NFY_JFu_DigestCanonical.Canonical value :=
-  NFY_JFu_DigestSliceCanonical.source _ _ source
-
-#print axioms local_call
-#print axioms selected
-#print axioms source
-#print axioms canonical
-end AspisR1.NFY_JFt_Digest33
--- END copied JFt_Digest33
--- BEGIN copied JFt_Digest34: lean/JFt_Digest34.lean
-set_option autoImplicit false
-namespace AspisR1.NFY_JFt_Digest34
-open Aeneas Aeneas.Std Result
-
-def value : Array AspisR1TerminalDecoder.aspis_core.field.M31 8#usize :=
-  Array.make 8#usize [986339640#u32,660349625#u32,1012157959#u32,454024326#u32,987656904#u32,622864739#u32,1150440730#u32,1280042062#u32]
-
-/-- Exact numeric value is identified by the symbolic byte-injectivity lemma. -/
-theorem local_call : AspisS6NativeSnapshotReadDigest.read_digest NFY_JFu_PublicDigest34.window=ok (.Ok value) := by
-  obtain ⟨out,call,canon,contents⟩:=NFY_JFu_DigestSliceFacts.source NFY_JFu_PublicDigest34.window
-    NFY_JFu_PublicDigest34.length NFY_JFu_PublicDigest34.canonical_bytes
-  have bytes : AspisS6SourceCodec.DigestContents.chunks value=NFY_JFu_PublicDigest34.bytes := by
-    simp [AspisS6SourceCodec.DigestContents.chunks,value,Array.make,core.num.U32.to_le_bytes,BitVec.toLEBytes,NFY_JFu_PublicDigest34.bytes]
-    <;> (repeat' constructor) <;> scalar_tac
-  have same : out=value := NFY_JFt_DigestInjective.injective out value (contents.trans bytes.symm)
-  rw [same] at call
-  exact call
-
-theorem selected : NFY_JFu_PublicRange.segment 1376 32 (by decide)=NFY_JFu_PublicDigest34.window := by
-  apply Subtype.ext
-  dsimp only [NFY_JFu_PublicRange.segment,NFY_JFu_PublicDigest34.window]
-  exact NFY_JFu_PublicDigest34.selected
-
-theorem source : AspisS6NativeSnapshotReadDigest.read_digest
-    (NFY_JFu_PublicRange.segment 1376 32 (by decide))=ok (.Ok value) := by
-  rw [selected]
-  exact local_call
-
-theorem canonical : NFY_JFu_DigestCanonical.Canonical value :=
-  NFY_JFu_DigestSliceCanonical.source _ _ source
-
-#print axioms local_call
-#print axioms selected
-#print axioms source
-#print axioms canonical
-end AspisR1.NFY_JFt_Digest34
--- END copied JFt_Digest34
--- BEGIN copied JFt_Digest35: lean/JFt_Digest35.lean
-set_option autoImplicit false
-namespace AspisR1.NFY_JFt_Digest35
-open Aeneas Aeneas.Std Result
-
-def value : Array AspisR1TerminalDecoder.aspis_core.field.M31 8#usize :=
-  Array.make 8#usize [2118470693#u32,1706590589#u32,2128512933#u32,167263577#u32,409542414#u32,1323179656#u32,1880070613#u32,2053396184#u32]
-
-/-- Exact numeric value is identified by the symbolic byte-injectivity lemma. -/
-theorem local_call : AspisS6NativeSnapshotReadDigest.read_digest NFY_JFu_PublicDigest35.window=ok (.Ok value) := by
-  obtain ⟨out,call,canon,contents⟩:=NFY_JFu_DigestSliceFacts.source NFY_JFu_PublicDigest35.window
-    NFY_JFu_PublicDigest35.length NFY_JFu_PublicDigest35.canonical_bytes
-  have bytes : AspisS6SourceCodec.DigestContents.chunks value=NFY_JFu_PublicDigest35.bytes := by
-    simp [AspisS6SourceCodec.DigestContents.chunks,value,Array.make,core.num.U32.to_le_bytes,BitVec.toLEBytes,NFY_JFu_PublicDigest35.bytes]
-    <;> (repeat' constructor) <;> scalar_tac
-  have same : out=value := NFY_JFt_DigestInjective.injective out value (contents.trans bytes.symm)
-  rw [same] at call
-  exact call
-
-theorem selected : NFY_JFu_PublicRange.segment 1408 32 (by decide)=NFY_JFu_PublicDigest35.window := by
-  apply Subtype.ext
-  dsimp only [NFY_JFu_PublicRange.segment,NFY_JFu_PublicDigest35.window]
-  exact NFY_JFu_PublicDigest35.selected
-
-theorem source : AspisS6NativeSnapshotReadDigest.read_digest
-    (NFY_JFu_PublicRange.segment 1408 32 (by decide))=ok (.Ok value) := by
-  rw [selected]
-  exact local_call
-
-theorem canonical : NFY_JFu_DigestCanonical.Canonical value :=
-  NFY_JFu_DigestSliceCanonical.source _ _ source
-
-#print axioms local_call
-#print axioms selected
-#print axioms source
-#print axioms canonical
-end AspisR1.NFY_JFt_Digest35
--- END copied JFt_Digest35
--- BEGIN copied JFt_Digest36: lean/JFt_Digest36.lean
-set_option autoImplicit false
-namespace AspisR1.NFY_JFt_Digest36
-open Aeneas Aeneas.Std Result
-
-def value : Array AspisR1TerminalDecoder.aspis_core.field.M31 8#usize :=
-  Array.make 8#usize [260546973#u32,1375125357#u32,1584234519#u32,1097072342#u32,1685367984#u32,1070989054#u32,2113798037#u32,958210542#u32]
-
-/-- Exact numeric value is identified by the symbolic byte-injectivity lemma. -/
-theorem local_call : AspisS6NativeSnapshotReadDigest.read_digest NFY_JFu_PublicDigest36.window=ok (.Ok value) := by
-  obtain ⟨out,call,canon,contents⟩:=NFY_JFu_DigestSliceFacts.source NFY_JFu_PublicDigest36.window
-    NFY_JFu_PublicDigest36.length NFY_JFu_PublicDigest36.canonical_bytes
-  have bytes : AspisS6SourceCodec.DigestContents.chunks value=NFY_JFu_PublicDigest36.bytes := by
-    simp [AspisS6SourceCodec.DigestContents.chunks,value,Array.make,core.num.U32.to_le_bytes,BitVec.toLEBytes,NFY_JFu_PublicDigest36.bytes]
-    <;> (repeat' constructor) <;> scalar_tac
-  have same : out=value := NFY_JFt_DigestInjective.injective out value (contents.trans bytes.symm)
-  rw [same] at call
-  exact call
-
-theorem selected : NFY_JFu_PublicRange.segment 1440 32 (by decide)=NFY_JFu_PublicDigest36.window := by
-  apply Subtype.ext
-  dsimp only [NFY_JFu_PublicRange.segment,NFY_JFu_PublicDigest36.window]
-  exact NFY_JFu_PublicDigest36.selected
-
-theorem source : AspisS6NativeSnapshotReadDigest.read_digest
-    (NFY_JFu_PublicRange.segment 1440 32 (by decide))=ok (.Ok value) := by
-  rw [selected]
-  exact local_call
-
-theorem canonical : NFY_JFu_DigestCanonical.Canonical value :=
-  NFY_JFu_DigestSliceCanonical.source _ _ source
-
-#print axioms local_call
-#print axioms selected
-#print axioms source
-#print axioms canonical
-end AspisR1.NFY_JFt_Digest36
--- END copied JFt_Digest36
+namespace AspisR1.S2K.CopyTransport
+
+theorem range32 {Frame : Type}
+    (copy : List U8 → List U8 → Frame → StdCopy.Outcome Frame)
+    (std : StdCopy.TrustedStd copy) (frame : Frame)
+    (output : Array U8 688#usize) (start stop : Usize) (bytes : Array U8 32#usize)
+    (order : start.val ≤ stop.val) (bound : stop.val ≤ 688)
+    (width : stop.val - start.val = 32) :
+    copy ((output.val.drop start.val).take 32) bytes.val frame =
+      .returned bytes.val frame ∧
+    SourceStore.store output start stop bytes =
+      ok (output.setSlice! start.val bytes.val) := by
+  constructor
+  · apply StdCopy.equal_lengths copy std
+    have room : 32 ≤ 688-start.val := by omega
+    simp only [List.length_take,List.length_drop,output.property,bytes.property]
+    exact Nat.min_eq_left room
+  · exact SourceStore.store_exact output start stop bytes order bound width
+
+#print axioms range32
+end AspisR1.S2K.CopyTransport
+-- END copied JHb_S2K_CopyTransport
 
 run_cmd do
  let env ← Lean.getEnv

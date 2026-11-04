@@ -702,12 +702,12 @@ def raw (statement : PoolV1PairLatePublicStatementV1) (output : Slice U8) :
       let i7 ← 32#usize + pool_v1.pair_tree_profile.POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES
       let (s15, index_mut_back5) ← core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) output { start := 32#usize, «end» := i7 }
       let (r, s16) ← pool_v1.pair_tree_profile.encode_pool_v1_pair_live_snapshot_v1 statement.live_snapshot s15
-      let r1 ← core.result.Result.map_err pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLiveSnapshotErrorV1PoolV1PairLatePublicStatementErrorV1 r ()
+      let r1 ← AspisR1TerminalDecoder.core.result.Result.map_err pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLiveSnapshotErrorV1PoolV1PairLatePublicStatementErrorV1 r ()
       let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
       match cf with
       | core.ops.control_flow.ControlFlow.Continue _ =>
         let r2 ← pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1 statement.candidate_afterstate
-        let r3 ← core.result.Result.map_err pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairLatePublicStatementErrorV1 r2 ()
+        let r3 ← AspisR1TerminalDecoder.core.result.Result.map_err pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairLatePublicStatementErrorV1 r2 ()
         let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
         match cf1 with
         | core.ops.control_flow.ControlFlow.Continue val => let output9 := index_mut_back5 s16
@@ -745,7 +745,7 @@ theorem raw_eq (s : PoolV1PairLatePublicStatementV1) (output : Slice U8) :
   | Ok u =>
     cases u
     dsimp only [Aeneas.Std.uncurry]
-    simp only [core.result.Result.map_err,bind_tc_ok,
+    simp only [AspisR1TerminalDecoder.core.result.Result.map_err,bind_tc_ok,
       core.result.Result.Insts.CoreOpsTry.branch]
     apply bind_ext
     intro after

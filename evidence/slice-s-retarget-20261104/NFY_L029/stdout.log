@@ -1,0 +1,543 @@
+'NFY_NBN_LateResult.factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_LateResult.header_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_LateResult.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_LateSummary.tail_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_LateSummary.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_OutputLane.first_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_OutputLane.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_FirstByteDependency.first_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_FirstByteDependency.lane_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_WordArrayEq.list_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_WordArrayEq.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_ArrayNe.bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_ArrayNe.words' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBK_StatementPrefix.zero_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBK_StatementPrefix.lane_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+NFY_generated/NFY_Part025.lean:403:21: error: unsolved goals
+case h_2.isTrue
+a✝¹ : PoolV1PairForestTerminalCommonV1
+a✝ : pool_v1.payment_relation.PoolV1PrivateTransferPublicV1
+hm : ¬(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝¹ a✝)).master_account = zero
+hc : ¬(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝¹ a✝)).checkpoint_account = zero
+hs : ¬(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝¹ a✝)).selected_lane_account = zero
+lane : ¬8 ≤ ↑(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝¹ a✝)).output_lane
+cast :
+  core.convert.num.FromUsizeU8.from (common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝¹ a✝)).output_lane =
+    Usize.ofNatCore ↑(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝¹ a✝)).output_lane ⋯
+small : ¬Usize.ofNatCore ↑(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝¹ a✝)).output_lane ⋯ ≥ 8#usize
+bytes : Std.Array U8 216#usize
+h✝⁶ : ¬a✝.pool ≠ a✝¹.master_account
+h✝⁵ : ¬a✝.deployment_domain ≠ a✝¹.lane_transition.live_snapshot.deployment_domain
+h✝⁴ : ¬a✝¹.lane_transition.live_snapshot.pool ≠ a✝¹.master_account
+h✝³ : ¬a✝.anchor_sequence ≠ a✝¹.checkpoint_sequence
+h✝² : ¬a✝.anchor_root ≠ a✝¹.historical_global_anchor
+h✝¹ :
+  a✝¹.lane_transition.live_snapshot.next_pair_index.checked_add 1#u64 ≠
+    some a✝¹.lane_transition.candidate_afterstate.next_pair_index
+x✝ : core.result.Result U8 pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1
+lane✝ : U8
+heq✝ : NFY_NBN_OutputLane.result a✝.nullifier = core.result.Result.Ok lane✝
+h✝ : lane✝ ≠ a✝¹.output_lane
+⊢ (do
+      let r1 ←
+        AspisR1TerminalDecoder.core.result.Result.map_err
+            validate_pool_v1_pair_forest_terminal_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1
+            (core.result.Result.Ok bytes) ()
+      let cf ←
+        match r1 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let r3 ←
+            AspisR1TerminalDecoder.core.result.Result.map_err
+                validate_pool_v1_pair_forest_terminal_statement_v1.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1
+                (core.result.Result.Ok lane✝) ()
+          let cf1 ←
+            match r3 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val =>
+              if val ≠ a✝¹.output_lane then
+                ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+              else
+                let (r4, _) :=
+                  (core.result.Result.Err
+                      pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.AfterstateIndexMismatch,
+                    ⟨List.replicate (↑1520#usize) 0#u8, ⋯⟩)
+                do
+                let r5 ←
+                  AspisR1TerminalDecoder.core.result.Result.map_err
+                      validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1
+                      r4 ()
+                let cf2 ←
+                  match r5 with
+                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    | core.result.Result.Err e =>
+                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                match cf2 with
+                  | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) residual) =
+    ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+
+case h_2.isFalse
+a✝¹ : PoolV1PairForestTerminalCommonV1
+a✝ : pool_v1.payment_relation.PoolV1PrivateTransferPublicV1
+hm : ¬(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝¹ a✝)).master_account = zero
+hc : ¬(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝¹ a✝)).checkpoint_account = zero
+hs : ¬(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝¹ a✝)).selected_lane_account = zero
+lane : ¬8 ≤ ↑(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝¹ a✝)).output_lane
+cast :
+  core.convert.num.FromUsizeU8.from (common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝¹ a✝)).output_lane =
+    Usize.ofNatCore ↑(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝¹ a✝)).output_lane ⋯
+small : ¬Usize.ofNatCore ↑(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝¹ a✝)).output_lane ⋯ ≥ 8#usize
+bytes : Std.Array U8 216#usize
+h✝⁶ : ¬a✝.pool ≠ a✝¹.master_account
+h✝⁵ : ¬a✝.deployment_domain ≠ a✝¹.lane_transition.live_snapshot.deployment_domain
+h✝⁴ : ¬a✝¹.lane_transition.live_snapshot.pool ≠ a✝¹.master_account
+h✝³ : ¬a✝.anchor_sequence ≠ a✝¹.checkpoint_sequence
+h✝² : ¬a✝.anchor_root ≠ a✝¹.historical_global_anchor
+h✝¹ :
+  a✝¹.lane_transition.live_snapshot.next_pair_index.checked_add 1#u64 ≠
+    some a✝¹.lane_transition.candidate_afterstate.next_pair_index
+x✝ : core.result.Result U8 pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1
+lane✝ : U8
+heq✝ : NFY_NBN_OutputLane.result a✝.nullifier = core.result.Result.Ok lane✝
+h✝ : ¬lane✝ ≠ a✝¹.output_lane
+⊢ (do
+      let r1 ←
+        AspisR1TerminalDecoder.core.result.Result.map_err
+            validate_pool_v1_pair_forest_terminal_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1
+            (core.result.Result.Ok bytes) ()
+      let cf ←
+        match r1 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let r3 ←
+            AspisR1TerminalDecoder.core.result.Result.map_err
+                validate_pool_v1_pair_forest_terminal_statement_v1.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1
+                (core.result.Result.Ok lane✝) ()
+          let cf1 ←
+            match r3 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val =>
+              if val ≠ a✝¹.output_lane then
+                ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+              else
+                let (r4, _) :=
+                  (core.result.Result.Err
+                      pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.AfterstateIndexMismatch,
+                    ⟨List.replicate (↑1520#usize) 0#u8, ⋯⟩)
+                do
+                let r5 ←
+                  AspisR1TerminalDecoder.core.result.Result.map_err
+                      validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1
+                      r4 ()
+                let cf2 ←
+                  match r5 with
+                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    | core.result.Result.Err e =>
+                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                match cf2 with
+                  | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) residual) =
+    ok
+      (core.result.Result.Err
+        (PoolV1PairForestTerminalFormatErrorV1.LaneTransition
+          pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.AfterstateIndexMismatch))
+
+case h_2.isTrue
+a✝¹ : PoolV1PairForestTerminalCommonV1
+a✝ : pool_v1.payment_relation.PoolV1PrivateTransferPublicV1
+hm : ¬(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝¹ a✝)).master_account = zero
+hc : ¬(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝¹ a✝)).checkpoint_account = zero
+hs : ¬(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝¹ a✝)).selected_lane_account = zero
+lane : ¬8 ≤ ↑(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝¹ a✝)).output_lane
+cast :
+  core.convert.num.FromUsizeU8.from (common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝¹ a✝)).output_lane =
+    Usize.ofNatCore ↑(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝¹ a✝)).output_lane ⋯
+small : ¬Usize.ofNatCore ↑(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝¹ a✝)).output_lane ⋯ ≥ 8#usize
+bytes : Std.Array U8 216#usize
+h✝⁶ : ¬a✝.pool ≠ a✝¹.master_account
+h✝⁵ : ¬a✝.deployment_domain ≠ a✝¹.lane_transition.live_snapshot.deployment_domain
+h✝⁴ : ¬a✝¹.lane_transition.live_snapshot.pool ≠ a✝¹.master_account
+h✝³ : ¬a✝.anchor_sequence ≠ a✝¹.checkpoint_sequence
+h✝² : ¬a✝.anchor_root ≠ a✝¹.historical_global_anchor
+h✝¹ :
+  ¬a✝¹.lane_transition.live_snapshot.next_pair_index.checked_add 1#u64 ≠
+      some a✝¹.lane_transition.candidate_afterstate.next_pair_index
+x✝ : core.result.Result U8 pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1
+lane✝ : U8
+heq✝ : NFY_NBN_OutputLane.result a✝.nullifier = core.result.Result.Ok lane✝
+h✝ : lane✝ ≠ a✝¹.output_lane
+⊢ (do
+      let r1 ←
+        AspisR1TerminalDecoder.core.result.Result.map_err
+            validate_pool_v1_pair_forest_terminal_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1
+            (core.result.Result.Ok bytes) ()
+      let cf ←
+        match r1 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let r3 ←
+            AspisR1TerminalDecoder.core.result.Result.map_err
+                validate_pool_v1_pair_forest_terminal_statement_v1.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1
+                (core.result.Result.Ok lane✝) ()
+          let cf1 ←
+            match r3 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val =>
+              if val ≠ a✝¹.output_lane then
+                ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+              else
+                let (r4, _) :=
+                  (NFY_NBN_LateTail.status a✝¹.lane_transition,
+                    NFY_NBN_LateTail.value a✝¹.lane_transition NFY_NBN_LateResult.header)
+                do
+                let r5 ←
+                  AspisR1TerminalDecoder.core.result.Result.map_err
+                      validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1
+                      r4 ()
+                let cf2 ←
+                  match r5 with
+                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    | core.result.Result.Err e =>
+                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                match cf2 with
+                  | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) residual) =
+    ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+
+case h_1
+a✝¹ : PoolV1PairForestTerminalCommonV1
+a✝ : pool_v1.payment_relation.PoolV1PrivateTransferPublicV1
+hm : ¬(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝¹ a✝)).master_account = zero
+hc : ¬(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝¹ a✝)).checkpoint_account = zero
+hs : ¬(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝¹ a✝)).selected_lane_account = zero
+lane : ¬8 ≤ ↑(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝¹ a✝)).output_lane
+cast :
+  core.convert.num.FromUsizeU8.from (common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝¹ a✝)).output_lane =
+    Usize.ofNatCore ↑(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝¹ a✝)).output_lane ⋯
+small : ¬Usize.ofNatCore ↑(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝¹ a✝)).output_lane ⋯ ≥ 8#usize
+bytes : Std.Array U8 216#usize
+h✝⁶ : ¬a✝.pool ≠ a✝¹.master_account
+h✝⁵ : ¬a✝.deployment_domain ≠ a✝¹.lane_transition.live_snapshot.deployment_domain
+h✝⁴ : ¬a✝¹.lane_transition.live_snapshot.pool ≠ a✝¹.master_account
+h✝³ : ¬a✝.anchor_sequence ≠ a✝¹.checkpoint_sequence
+h✝² : ¬a✝.anchor_root ≠ a✝¹.historical_global_anchor
+h✝¹ :
+  ¬a✝¹.lane_transition.live_snapshot.next_pair_index.checked_add 1#u64 ≠
+      some a✝¹.lane_transition.candidate_afterstate.next_pair_index
+x✝¹ : core.result.Result U8 pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1
+lane✝ : U8
+heq✝¹ : NFY_NBN_OutputLane.result a✝.nullifier = core.result.Result.Ok lane✝
+h✝ : ¬lane✝ ≠ a✝¹.output_lane
+x✝ : core.result.Result Unit pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1
+e✝ : pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1
+heq✝ : NFY_NBN_LateTail.status a✝¹.lane_transition = core.result.Result.Err e✝
+⊢ (do
+      let r1 ←
+        AspisR1TerminalDecoder.core.result.Result.map_err
+            validate_pool_v1_pair_forest_terminal_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1
+            (core.result.Result.Ok bytes) ()
+      let cf ←
+        match r1 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let r3 ←
+            AspisR1TerminalDecoder.core.result.Result.map_err
+                validate_pool_v1_pair_forest_terminal_statement_v1.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1
+                (core.result.Result.Ok lane✝) ()
+          let cf1 ←
+            match r3 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val =>
+              if val ≠ a✝¹.output_lane then
+                ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+              else
+                let (r4, _) :=
+                  (core.result.Result.Err e✝, NFY_NBN_LateTail.value a✝¹.lane_transition NFY_NBN_LateResult.header)
+                do
+                let r5 ←
+                  AspisR1TerminalDecoder.core.result.Result.map_err
+                      validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1
+                      r4 ()
+                let cf2 ←
+                  match r5 with
+                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    | core.result.Result.Err e =>
+                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                match cf2 with
+                  | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) residual) =
+    ok (core.result.Result.Err (PoolV1PairForestTerminalFormatErrorV1.LaneTransition e✝))
+
+case h_2
+a✝² : PoolV1PairForestTerminalCommonV1
+a✝¹ : pool_v1.payment_relation.PoolV1PrivateTransferPublicV1
+hm : ¬(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝² a✝¹)).master_account = zero
+hc : ¬(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝² a✝¹)).checkpoint_account = zero
+hs : ¬(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝² a✝¹)).selected_lane_account = zero
+lane : ¬8 ≤ ↑(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝² a✝¹)).output_lane
+cast :
+  core.convert.num.FromUsizeU8.from (common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝² a✝¹)).output_lane =
+    Usize.ofNatCore ↑(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝² a✝¹)).output_lane ⋯
+small : ¬Usize.ofNatCore ↑(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝² a✝¹)).output_lane ⋯ ≥ 8#usize
+bytes : Std.Array U8 216#usize
+h✝⁶ : ¬a✝¹.pool ≠ a✝².master_account
+h✝⁵ : ¬a✝¹.deployment_domain ≠ a✝².lane_transition.live_snapshot.deployment_domain
+h✝⁴ : ¬a✝².lane_transition.live_snapshot.pool ≠ a✝².master_account
+h✝³ : ¬a✝¹.anchor_sequence ≠ a✝².checkpoint_sequence
+h✝² : ¬a✝¹.anchor_root ≠ a✝².historical_global_anchor
+h✝¹ :
+  ¬a✝².lane_transition.live_snapshot.next_pair_index.checked_add 1#u64 ≠
+      some a✝².lane_transition.candidate_afterstate.next_pair_index
+x✝¹ : core.result.Result U8 pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1
+lane✝ : U8
+heq✝¹ : NFY_NBN_OutputLane.result a✝¹.nullifier = core.result.Result.Ok lane✝
+h✝ : ¬lane✝ ≠ a✝².output_lane
+x✝ : core.result.Result Unit pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1
+a✝ : Unit
+heq✝ : NFY_NBN_LateTail.status a✝².lane_transition = core.result.Result.Ok a✝
+⊢ (do
+      let r1 ←
+        AspisR1TerminalDecoder.core.result.Result.map_err
+            validate_pool_v1_pair_forest_terminal_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1
+            (core.result.Result.Ok bytes) ()
+      let cf ←
+        match r1 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let r3 ←
+            AspisR1TerminalDecoder.core.result.Result.map_err
+                validate_pool_v1_pair_forest_terminal_statement_v1.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1
+                (core.result.Result.Ok lane✝) ()
+          let cf1 ←
+            match r3 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val =>
+              if val ≠ a✝².output_lane then
+                ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+              else
+                let (r4, _) :=
+                  (core.result.Result.Ok a✝, NFY_NBN_LateTail.value a✝².lane_transition NFY_NBN_LateResult.header)
+                do
+                let r5 ←
+                  AspisR1TerminalDecoder.core.result.Result.map_err
+                      validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1
+                      r4 ()
+                let cf2 ←
+                  match r5 with
+                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    | core.result.Result.Err e =>
+                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                match cf2 with
+                  | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) residual) =
+    ok (core.result.Result.Ok ())
+NFY_generated/NFY_Part025.lean:417:31: error: Tactic `simp` failed with a nested error:
+(deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+'NFY_NBN_StatementResult.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NFY_NBN_BindingChecks.factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_BindingChecks.fields' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_StatementCut.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NFY_NBN_StatementCut.lower_substitution' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NFY_NBN_ValidatorSummary.payment_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_ValidatorSummary.chain_pure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_ValidatorSummary.tail_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_ValidatorSummary.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NFY_NBN_StatementDomains.payment_reached' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NFY_NBN_StatementDomains.bindings' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NFY_NBN_StatementDomains.lane_late' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NFY_NBN_StatementDomains.late_children' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NBD_TerminalProjection.parts.eq_2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_StatementDomains.lane_late' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NFY_NBN_StatementResult.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'_private.NFY_Part025.0.NFY_NBN_LateSummary.tail.match_1.eq_2' does not depend on any axioms
+'NFY_NBN_StatementResult.source._simp_16' depends on axioms: [propext]
+'NFY_NBN_StatementResult.result.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_OutputLane.result._proof_1' depends on axioms: [propext]
+'NBD_TerminalProjection.parts.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_LateSummary.tail._proof_1' depends on axioms: [propext]
+'NFY_NBN_FirstByteDependency.first_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_WordArrayEq.source._proof_2' depends on axioms: [propext]
+'NFY_NBN_WordArrayEq.list_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_OutputLane.result.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.NFY_Part025.0.NFY_NBN_LateSummary.tail.match_1.eq_1' does not depend on any axioms
+'_private.NFY_Part025.0.NFY_NBN_ValidatorSummary.tail.match_1.eq_2' does not depend on any axioms
+'_private.NFY_Part025.0.AspisR1TerminalDecoder.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1.match_1.eq_1' does not depend on any axioms
+'_private.NFY_Part025.0.AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.match_2.eq_1' does not depend on any axioms
+'_private.NFY_Part025.0.Aeneas.Std.core.result.Result.is_ok.match_1.eq_2' does not depend on any axioms
+'NFY_NBN_ArrayNe.bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_LateResult.header_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_StatementResult.payment._proof_1' depends on axioms: [propext]
+'_private.NFY_Part025.0.NFY_NBN_StatementResult.result.match_1.eq_2' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'NFY_NBN_FirstByteDependency.first._proof_1' depends on axioms: [propext]
+'NFY_NBN_StatementResult.suffix.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1TerminalDecoder.aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq.eq_1' does not depend on any axioms
+'_private.NFY_Part025.0.Aeneas.Std.core.result.Result.is_ok.match_1.eq_1' does not depend on any axioms
+'_private.NFY_Part025.0.NFY_NBN_LateSummary.tail.match_2.eq_1' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'_private.NFY_Part025.0.NFY_NBN_StatementResult.payment.match_1.eq_2' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'NFY_NBN_ValidatorSummary.tail_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBK_StatementPrefix.zero_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_ValidatorSummary.chain_pure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBK_StatementPrefix.lane_rejected._proof_3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_LateResult.zero._proof_1' depends on axioms: [propext]
+'NFY_NBK_StatementPrefix.lane_rejected._proof_2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_BindingChecks.fields' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.NFY_Part025.0.NFY_NBN_StatementResult.suffix.match_2.eq_2' does not depend on any axioms
+'NFY_NBN_LateResult.zero.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.NFY_Part025.0.NFY_NBN_EncoderSummary.after.match_1.eq_1' does not depend on any axioms
+'_private.NFY_Part025.0.NFY_NBN_LateTail.run.match_1.eq_2' does not depend on any axioms
+'NFY_NBN_StatementResult.source._proof_4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.NFY_Part025.0.AspisR1TerminalDecoder.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1.match_2.eq_2' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'_private.NFY_Part025.0.AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.match_1.eq_2' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'_private.NFY_Part025.0.List.anyM.match_1.eq_2' does not depend on any axioms
+'_private.NFY_Part025.0.NFY_NBN_EncoderSummary.after.match_1.eq_2' does not depend on any axioms
+'_private.NFY_Part025.0.NFY_NBN_LateTail.run.match_1.eq_1' does not depend on any axioms
+'NFY_NBN_LateResult.factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_StatementResult.payment.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_FirstByteDependency.first.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.NFY_Part025.0.NFY_NBN_StatementResult.suffix.match_1.eq_2' does not depend on any axioms
+'_private.NFY_Part025.0.NBD_TerminalProjection.common.match_1.eq_1' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'NFY_NBN_LateResult.header.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_LateSummary.run._proof_1' depends on axioms: [propext]
+'NFY_NBN_FirstByteDependency.lane_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_ArrayNe.words' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_LateSummary.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.NFY_Part025.0.NBD_TerminalProjection.common.match_1.eq_2' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'_private.NFY_Part025.0.NFY_NBN_StatementResult.suffix.match_1.eq_1' does not depend on any axioms
+'NFY_NBN_LateResult.zero._proof_2' depends on axioms: [propext]
+'NFY_NBK_StatementPrefix.lane_rejected._proof_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_LateResult.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.NFY_Part025.0.NFY_NBN_StatementResult.result.match_1.eq_1' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'NFY_NBN_LateSummary.tail_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NBD_TerminalProjection.common.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.NFY_Part025.0.NFY_NBN_LateTail.run.match_2.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.NFY_Part025.0.AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.common.match_1.eq_1' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'_private.NFY_Part025.0.AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.match_2.eq_2' does not depend on any axioms
+'NFY_NBN_StatementCut.lower_substitution' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NFY_NBN_OutputLane.Digest._proof_1' depends on axioms: [propext]
+'_private.NFY_Part025.0.NFY_NBN_ValidatorSummary.tail.match_1.eq_1' does not depend on any axioms
+'_private.NFY_Part025.0.AspisR1TerminalDecoder.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1.match_1.eq_2' does not depend on any axioms
+'NFY_NBN_LateResult.factor._proof_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NBD_TerminalProjection.common.eq_2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.NFY_Part025.0.NFY_NBN_LateTail.run.match_2.eq_2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBK_StatementPrefix.lane_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.NFY_Part025.0.AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.common.match_1.eq_2' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'NFY_NBN_FirstByteDependency.lane.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_StatementDomains.late_children' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NFY_NBN_StatementDomains.bindings' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NFY_NBN_OutputLane.first_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'core.result.Result.map_err.eq_1' does not depend on any axioms
+'_private.NFY_Part025.0.NFY_NBN_StatementResult.suffix.match_2.eq_1' does not depend on any axioms
+'NFY_NBN_LateSummary.tail._proof_2' depends on axioms: [propext]
+'_private.NFY_Part025.0.NFY_NBN_LateSummary.tail.match_2.eq_2' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'_private.NFY_Part025.0.NFY_NBN_StatementResult.payment.match_1.eq_1' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'NFY_NBN_WordArrayEq.source._proof_1' depends on axioms: [propext]
+'NFY_NBN_WordArrayEq.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_OutputLane.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_StatementResult.source._proof_2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_StatementResult.source._proof_3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.NFY_Part025.0.AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.match_3.eq_2' does not depend on any axioms
+'NFY_NBN_StatementResult.payment.eq_2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_OutputLane.first.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_ValidatorSummary.payment_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_StatementCut.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'_private.NFY_Part025.0.AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.match_3.eq_1' does not depend on any axioms
+'NFY_NBN_StatementDomains.payment_reached' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NFY_NBN_BindingChecks.factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFY_NBN_StatementResult.lateStatus.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.NFY_Part025.0.AspisR1TerminalDecoder.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1.match_2.eq_1' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'_private.NFY_Part025.0.List.anyM.match_1.eq_1' does not depend on any axioms
+'NFY_NBN_ValidatorSummary.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'_private.NFY_Part025.0.AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.match_1.eq_1' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

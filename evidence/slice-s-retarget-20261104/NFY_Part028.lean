@@ -1,755 +1,689 @@
 import Lean
 import NFY_Part027
-import NFY_Part005
-import NFY_Part026
-import NFY_Part025
+import RPz7_S6OuterEncoderContentsV1
+import RPz7_DrvC_Installation
+import NFY_Part006
+import RPz7_S6NativeAfterstateDecoderFactoredV1
 
--- BEGIN copied NBP_CommonTail1: lean/NBP_CommonTail1.lean
+-- BEGIN copied NBN_LateInvariant: lean/NBN_LateInvariant.lean
 set_option autoImplicit false
 noncomputable section
-namespace NFY_NBP_CommonTail1
-open Aeneas Aeneas.Std Result AspisR1TerminalDecoder
-abbrev C := pool_v1.payment_relation.CommonPublicV1
-abbrev K := pool_v1.historical_anchor.PoolV1TransitionKind
+namespace NFY_NBN_LateInvariant
+open Aeneas Aeneas.Std Result
+open AspisR1TerminalDecoder
+open NFY_NBN_StatementResult
 
-def run (output : Array U8 216#usize) (common : C) : Result (Array U8 216#usize) := do
-  let (s3, index_mut_back1) ← core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice Std.U8)) output { start := pool_v1.payment_relation.POOL_OFFSET, «end» := pool_v1.payment_relation.DEPLOYMENT_DOMAIN_OFFSET }
-  let s4 ← lift (Array.to_slice common.pool)
-  let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4
-  let output5 := index_mut_back1 s5
-  NFY_NBP_CommonTail2.run output5 common
-
-def expected (output : Array U8 216#usize) (common : C) : Array U8 216#usize :=
-  NFY_NBP_CommonTail2.expected (output.setSlice! 8 common.pool.val) common
-
-theorem result (output : Array U8 216#usize) (common : C) : run output common = ok (expected output common) := by
-  unfold run
-  simp only [pool_v1.payment_relation.POOL_OFFSET,pool_v1.payment_relation.DEPLOYMENT_DOMAIN_OFFSET,
-    pool_v1.payment_relation.ANCHOR_SEQUENCE_OFFSET,pool_v1.payment_relation.ANCHOR_ROOT_OFFSET,
-    pool_v1.payment_relation.NULLIFIER_OFFSET,pool_v1.payment_relation.ASSET_ID_OFFSET,
-    pool_v1.payment_relation.AMOUNT_OR_RESERVED_OFFSET,
-    pool_v1.payment_relation.POOL_V1_PAYMENT_STATEMENT_VERSION,
-    pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION,NFY_NBP_DigestEncode.result,NFY_NBG_Header.tag_result,
-    aspis_core.field.M31.to_le_bytes,lift,bind_tc_ok]
-  rw [NFY_NBP_ArrayIndex.index_mut output 8#usize 40#usize (by decide) (by decide)]
-  change (do
-    let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8
-      (NFY_NBP_ArrayIndex.slice output 8#usize 40#usize) common.pool.to_slice
-    _) = _
-  rw [NFY_NBP_ArrayIndex.copy_range output 8#usize 40#usize common.pool (by decide) (by decide) (by decide)]
-  simp only [bind_tc_ok]
-  rw [NFY_NBP_CommonTail2.result]
-  rfl
-#print axioms result
-end NFY_NBP_CommonTail1
--- END copied NBP_CommonTail1
--- BEGIN copied NBP_CommonTail0: lean/NBP_CommonTail0.lean
-set_option autoImplicit false
-noncomputable section
-namespace NFY_NBP_CommonTail0
-open Aeneas Aeneas.Std Result AspisR1TerminalDecoder
-abbrev C := pool_v1.payment_relation.CommonPublicV1
-abbrev K := pool_v1.historical_anchor.PoolV1TransitionKind
-
-def run (output : Array U8 216#usize) (magic : Array U8 4#usize) (kind : K) (common : C) : Result (Array U8 216#usize) := do
-  let (s, index_mut_back) ← core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice Std.U8)) output { «end» := 4#usize }
-  let s1 ← lift (Array.to_slice magic)
-  let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1
-  let output1 := index_mut_back s2
-  let output2 ← Array.update output1 4#usize pool_v1.payment_relation.POOL_V1_PAYMENT_STATEMENT_VERSION
-  let kind1 := read_discriminant kind
-  let i ← lift (UScalar.cast .U8 kind1)
-  let output3 ← Array.update output2 5#usize i
-  let output4 ← Array.update output3 6#usize pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION
-  NFY_NBP_CommonTail1.run output4 common
-
-def expected (output : Array U8 216#usize) (magic : Array U8 4#usize) (kind : K) (common : C) : Array U8 216#usize :=
-  let output := output.setSlice! 0 magic.val
-  let output := output.set 4#usize 1#u8
-  let output := output.set 5#usize (NFY_NBG_Header.tag kind)
-  let output := output.set 6#usize 1#u8
-  NFY_NBP_CommonTail1.expected output common
-
-theorem result (output : Array U8 216#usize) (magic : Array U8 4#usize) (kind : K) (common : C) : run output magic kind common = ok (expected output magic kind common) := by
-  unfold run
-  simp only [pool_v1.payment_relation.POOL_OFFSET,pool_v1.payment_relation.DEPLOYMENT_DOMAIN_OFFSET,
-    pool_v1.payment_relation.ANCHOR_SEQUENCE_OFFSET,pool_v1.payment_relation.ANCHOR_ROOT_OFFSET,
-    pool_v1.payment_relation.NULLIFIER_OFFSET,pool_v1.payment_relation.ASSET_ID_OFFSET,
-    pool_v1.payment_relation.AMOUNT_OR_RESERVED_OFFSET,
-    pool_v1.payment_relation.POOL_V1_PAYMENT_STATEMENT_VERSION,
-    pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION,NFY_NBP_DigestEncode.result,NFY_NBG_Header.tag_result,
-    aspis_core.field.M31.to_le_bytes,lift,bind_tc_ok]
-  rw [NFY_NBP_ArrayIndex.prefix_index output 4#usize (by decide)]
-  change (do
-    let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8
-      (NFY_NBP_ArrayIndex.slice output 0#usize 4#usize) magic.to_slice
-    _) = _
-  rw [NFY_NBP_ArrayIndex.copy_range output 0#usize 4#usize magic (by decide) (by decide) (by decide)]
-  simp only [bind_tc_ok]
-  rw [NFY_NBP_Store.update _ 4#usize 1#u8 (by decide),bind_tc_ok]
-  rw [NFY_NBP_Store.update _ 5#usize (NFY_NBG_Header.tag kind) (by decide),bind_tc_ok]
-  rw [NFY_NBP_Store.update _ 6#usize 1#u8 (by decide),bind_tc_ok]
-  rw [NFY_NBP_CommonTail1.result]
-  rfl
-#print axioms result
-end NFY_NBP_CommonTail0
--- END copied NBP_CommonTail0
--- BEGIN copied NBP_CommonBytes: lean/NBP_CommonBytes.lean
-set_option autoImplicit false
-noncomputable section
-namespace NFY_NBP_CommonBytes
-open Aeneas Aeneas.Std Result AspisR1TerminalDecoder
-abbrev C := pool_v1.payment_relation.CommonPublicV1
-abbrev K := pool_v1.historical_anchor.PoolV1TransitionKind
-abbrev encoded := NFY_NBP_CommonTail0.expected
-
-theorem association (output : Array U8 216#usize) (magic : Array U8 4#usize)
-    (kind : K) (c : C) :
-    pool_v1.payment_relation.encode_common output magic kind c =
-      NFY_NBP_CommonTail0.run output magic kind c := by
-  unfold pool_v1.payment_relation.encode_common
-  unfold NFY_NBP_CommonTail0.run NFY_NBP_CommonTail1.run NFY_NBP_CommonTail2.run NFY_NBP_CommonTail3.run NFY_NBP_CommonTail4.run NFY_NBP_CommonTail5.run NFY_NBP_CommonTail6.run
-  rfl
-theorem result (output : Array U8 216#usize) (magic : Array U8 4#usize)
-    (kind : K) (c : C) :
-    pool_v1.payment_relation.encode_common output magic kind c = ok (encoded output magic kind c) := by
-  rw [association]
-  exact NFY_NBP_CommonTail0.result output magic kind c
-#print axioms association
-#print axioms result
-end NFY_NBP_CommonBytes
--- END copied NBP_CommonBytes
--- BEGIN copied NBG_PaymentValidators: lean/NBG_PaymentValidators.lean
-set_option autoImplicit false
-noncomputable section
-namespace NFY_NBG_PaymentValidators
-open Aeneas Aeneas.Std Result AspisR1TerminalDecoder
-open NFY_NBG_PaymentChecks
-abbrev T := pool_v1.payment_relation.PoolV1PrivateTransferPublicV1
-abbrev W := pool_v1.payment_relation.PoolV1WithdrawalPublicV1
-
-def tc (p : T) : C :=
-  { pool := p.pool
-    deployment_domain := p.deployment_domain
-    anchor_sequence := p.anchor_sequence
-    anchor_root := p.anchor_root
-    nullifier := p.nullifier
-    asset_id := p.asset_id }
-def wc (p : W) : C :=
-  { pool := p.pool
-    deployment_domain := p.deployment_domain
-    anchor_sequence := p.anchor_sequence
-    anchor_root := p.anchor_root
-    nullifier := p.nullifier
-    asset_id := p.asset_id }
-
-def transfer (p : T) : core.result.Result Unit E :=
-  match common (tc p) with
-  | .Err e => .Err e
-  | .Ok () => if !canonical p.recipient_commitment || !canonical p.change_commitment
-      then .Err .NonCanonicalDigest else .Ok ()
-
-theorem transfer_result (p : T) :
-    pool_v1.payment_relation.validate_pool_v1_private_transfer_public_v1 p =
-      ok (transfer p) := by
-  have projected : pool_v1.payment_relation.transfer_common p = ok (tc p) :=
-    NBG_Atomic.transfer_projection p
-  unfold pool_v1.payment_relation.validate_pool_v1_private_transfer_public_v1
-  rw [projected,bind_tc_ok,common_result,bind_tc_ok]
-  cases h : common (tc p) with
-  | Err e => simp [transfer,h,core.result.Result.Insts.CoreOpsTry.branch,
-      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
-      core.convert.FromSame]
-  | Ok value => cases value; simp [transfer,h,canonical_result,
-      core.result.Result.Insts.CoreOpsTry.branch]
-                repeat' split
-                all_goals simp_all
-
-theorem value_limit : spend.VALUE_LIMIT = ok 1073741824#u32 := by
-  unfold spend.VALUE_LIMIT
-  rfl
-
-def withdrawal (p : W) : core.result.Result Unit E :=
-  match common (wc p) with
-  | .Err e => .Err e
-  | .Ok () => if p.amount.val = 0 ∨ p.amount.val >= 1073741824
-      then .Err .InvalidWithdrawalAmount
-      else if zero p.destination_token_account then .Err .InvalidDestination
-      else if !canonical p.change_commitment then .Err .NonCanonicalDigest
-      else .Ok ()
-
-theorem withdrawal_result (p : W) :
-    pool_v1.payment_relation.validate_pool_v1_withdrawal_public_v1 p =
-      ok (withdrawal p) := by
-  have projected : pool_v1.payment_relation.withdrawal_common p = ok (wc p) :=
-    NBG_Atomic.withdrawal_projection p
-  unfold pool_v1.payment_relation.validate_pool_v1_withdrawal_public_v1
-  rw [projected,bind_tc_ok,common_result,bind_tc_ok]
-  cases h : common (wc p) with
-  | Err e => simp [withdrawal,h,core.result.Result.Insts.CoreOpsTry.branch,
-      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
-      core.convert.FromSame]
-  | Ok value => cases value; simp [withdrawal,h,canonical_result,zero_result,value_limit,
-      core.result.Result.Insts.CoreOpsTry.branch]
-                repeat' split
-                all_goals simp_all <;> scalar_tac
-
-#print axioms transfer_result
-#print axioms value_limit
-#print axioms withdrawal_result
-end NFY_NBG_PaymentValidators
--- END copied NBG_PaymentValidators
--- BEGIN copied NBP_PaymentModel: lean/NBP_PaymentModel.lean
-set_option autoImplicit false
-noncomputable section
-namespace NFY_NBP_PaymentModel
-open Aeneas Aeneas.Std Result AspisR1TerminalDecoder
-abbrev T := pool_v1.payment_relation.PoolV1PrivateTransferPublicV1
-abbrev W := pool_v1.payment_relation.PoolV1WithdrawalPublicV1
-abbrev C := pool_v1.payment_relation.CommonPublicV1
-abbrev E := pool_v1.payment_relation.PoolV1PaymentStatementFormatError
-
-def transfer_bytes (p : T) : Array U8 216#usize :=
-  let o := NFY_NBP_CommonBytes.encoded (Array.repeat 216#usize 0#u8)
-    pool_v1.payment_relation.POOL_V1_PRIVATE_TRANSFER_STATEMENT_MAGIC .PrivateTransfer
-    (NFY_NBG_PaymentValidators.tc p)
-  let o := o.setSlice! 152 (AspisR1.S2K.DigestBytes.bytes p.recipient_commitment).val
-  o.setSlice! 184 (AspisR1.S2K.DigestBytes.bytes p.change_commitment).val
-
-def withdrawal_bytes (p : W) : Array U8 216#usize :=
-  let o := NFY_NBP_CommonBytes.encoded (Array.repeat 216#usize 0#u8)
-    pool_v1.payment_relation.POOL_V1_WITHDRAWAL_STATEMENT_MAGIC .Withdrawal
-    (NFY_NBG_PaymentValidators.wc p)
-  let o := o.setSlice! 148 (core.num.U32.to_le_bytes p.amount).val
-  let o := o.setSlice! 152 p.destination_token_account.val
-  o.setSlice! 184 (AspisR1.S2K.DigestBytes.bytes p.change_commitment).val
-
-def transfer_encoded (p : T) : core.result.Result (Array U8 216#usize) E :=
-  match NFY_NBG_PaymentValidators.transfer p with
-  | .Err e => .Err e | .Ok () => .Ok (transfer_bytes p)
-def withdrawal_encoded (p : W) : core.result.Result (Array U8 216#usize) E :=
-  match NFY_NBG_PaymentValidators.withdrawal p with
-  | .Err e => .Err e | .Ok () => .Ok (withdrawal_bytes p)
-
-def transfer_public (c : C) (r z : Array U32 8#usize) : T :=
-  ⟨c.pool,c.deployment_domain,c.anchor_sequence,c.anchor_root,c.nullifier,c.asset_id,r,z⟩
-def withdrawal_public (c : C) (b : Array U8 216#usize) (z : Array U32 8#usize) : W :=
-  ⟨c.pool,c.deployment_domain,c.anchor_sequence,c.anchor_root,c.nullifier,c.asset_id,
-    core.num.U32.from_le_bytes (NBP_Read.chunk b 148 (by decide)),
-    NBP_Read.chunk b 152 (by decide),z⟩
-
-def transfer_decoded (b : Array U8 216#usize) : core.result.Result T E :=
-  match NFY_NBG_Header.expected b pool_v1.payment_relation.POOL_V1_PRIVATE_TRANSFER_STATEMENT_MAGIC .PrivateTransfer with
-  | .Err e => .Err e
-  | .Ok () =>
-    if (b.val.drop 148).take 4 ≠ List.replicate 4 0#u8 then .Err .NonZeroReserved else
-    match NFY_NBP_CommonDecode.decoded b with
-    | .Err e => .Err e
-    | .Ok c =>
-      match NFY_NBP_DigestDecode.decoded (NBP_Read.chunk b 152 (by decide)) with
-      | .Err _ => .Err .NonCanonicalDigest
-      | .Ok r =>
-        match NFY_NBP_DigestDecode.decoded (NBP_Read.chunk b 184 (by decide)) with
-        | .Err _ => .Err .NonCanonicalDigest
-        | .Ok z =>
-          let p := transfer_public c r z
-          match NFY_NBG_PaymentValidators.transfer p with
-          | .Err e => .Err e | .Ok () => .Ok p
-
-def withdrawal_decoded (b : Array U8 216#usize) : core.result.Result W E :=
-  match NFY_NBG_Header.expected b pool_v1.payment_relation.POOL_V1_WITHDRAWAL_STATEMENT_MAGIC .Withdrawal with
-  | .Err e => .Err e
-  | .Ok () =>
-    match NFY_NBP_CommonDecode.decoded b with
-    | .Err e => .Err e
-    | .Ok c =>
-      match NFY_NBP_DigestDecode.decoded (NBP_Read.chunk b 184 (by decide)) with
-      | .Err _ => .Err .NonCanonicalDigest
-      | .Ok z =>
-        let p := withdrawal_public c b z
-        match NFY_NBG_PaymentValidators.withdrawal p with
-        | .Err e => .Err e | .Ok () => .Ok p
-end NFY_NBP_PaymentModel
--- END copied NBP_PaymentModel
--- BEGIN copied NBP_TransferEncode: lean/NBP_TransferEncode.lean
-set_option autoImplicit false
-noncomputable section
-namespace NFY_NBP_TransferEncode
-open Aeneas Aeneas.Std Result AspisR1TerminalDecoder NFY_NBP_PaymentModel
-
-theorem result (p : T) : pool_v1.payment_relation.encode_pool_v1_private_transfer_public_v1 p = ok (transfer_encoded p) := by
-  simp only [pool_v1.payment_relation.encode_pool_v1_private_transfer_public_v1,NFY_NBG_PaymentValidators.transfer_result,
-    transfer_encoded,bind_tc_ok]
-  cases h : NFY_NBG_PaymentValidators.transfer p with
-  | Err e =>
-    simp [h,core.result.Result.Insts.CoreOpsTry.branch,
-      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
-      core.convert.FromSame]
+theorem value_length (s : NFY_NBN_LateTail.Statement) (output : Slice U8) :
+    (NFY_NBN_LateTail.value s output).length = output.length := by
+  unfold NFY_NBN_LateTail.value
+  cases NFY_NBH_LiveValidator.result s.live_snapshot with
+  | Err e => rfl
   | Ok u =>
-    cases u
-    simp only [h,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
-    have projected : pool_v1.payment_relation.transfer_common p = ok (NFY_NBG_PaymentValidators.tc p) := NBG_Atomic.transfer_projection p
-    rw [projected]
-    simp only [bind_tc_ok,Array.to_slice,UScalar.ofNatCore_val_eq]
-    rw [NFY_NBP_CommonBytes.result]
-    simp only [bind_tc_ok,NFY_NBP_DigestEncode.result,lift,
-      pool_v1.payment_relation.FIRST_OUTPUT_OR_DESTINATION_OFFSET,
-      pool_v1.payment_relation.SECOND_OUTPUT_OFFSET,
-      pool_v1.payment_relation.AMOUNT_OR_RESERVED_OFFSET]
-    unfold transfer_bytes
-    generalize h0 : NFY_NBP_CommonBytes.encoded (Array.repeat 216#usize 0#u8) pool_v1.payment_relation.POOL_V1_PRIVATE_TRANSFER_STATEMENT_MAGIC .PrivateTransfer (NFY_NBG_PaymentValidators.tc p) = o0
-    rw [NFY_NBP_ArrayIndex.index_mut o0 152#usize 184#usize (by decide) (by decide)]
-    change (do let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 (NFY_NBP_ArrayIndex.slice o0 152#usize 184#usize) (AspisR1.S2K.DigestBytes.bytes p.recipient_commitment).to_slice; _) = _
-    rw [NFY_NBP_ArrayIndex.copy_range o0 152#usize 184#usize (AspisR1.S2K.DigestBytes.bytes p.recipient_commitment) (by decide) (by decide) (by decide)]
-    simp only [bind_tc_ok,Array.to_slice,UScalar.ofNatCore_val_eq]
-    generalize h1 : o0.setSlice! 152 (AspisR1.S2K.DigestBytes.bytes p.recipient_commitment).val = o1
-    rw [NFY_NBP_ArrayIndex.suffix_index o1 184#usize (by decide)]
-    change (do let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 (NFY_NBP_ArrayIndex.slice o1 184#usize 216#usize) (AspisR1.S2K.DigestBytes.bytes p.change_commitment).to_slice; _) = _
-    rw [NFY_NBP_ArrayIndex.copy_range o1 184#usize 216#usize (AspisR1.S2K.DigestBytes.bytes p.change_commitment) (by decide) (by decide) (by decide)]
-    simp only [bind_tc_ok,Array.to_slice,UScalar.ofNatCore_val_eq]
-    try rfl
-#print axioms result
-end NFY_NBP_TransferEncode
--- END copied NBP_TransferEncode
--- BEGIN copied NBP_WithdrawalEncode: lean/NBP_WithdrawalEncode.lean
+    cases NFY_NBH_Validators.afterResult s.candidate_afterstate <;>
+      simp only [Slice.length,Slice.setSlice!,List.length_setSlice!]
+
+/-- All 1520-byte caller pre-states; exact SAME successful bytes and length. -/
+theorem ready (s : NFY_NBN_LateTail.Statement)
+    (valid : lateStatus s = .Ok ()) (output : Slice U8) (size : output.length = 1520) :
+    pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1 s output =
+      ok (.Ok (),NFY_NBN_LateTail.value s NFY_NBN_LateResult.header) := by
+  rw [NFY_NBN_LateResult.source,if_neg (not_not.mpr size)]
+  unfold lateStatus at valid
+  split at valid
+  · cases valid
+  · rename_i index
+    rw [if_neg index]
+    rw [valid]
+
+theorem statement_ready (s : Statement)
+    (valid : pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1 s = ok (.Ok ()))
+    (output : Slice U8) (size : output.length = 1520) :
+    pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1 (common s).lane_transition output =
+      ok (.Ok (),NFY_NBN_LateTail.value (common s).lane_transition NFY_NBN_LateResult.header) ∧
+    (NFY_NBN_LateTail.value (common s).lane_transition NFY_NBN_LateResult.header).length = 1520 := by
+  exact ⟨ready _ (NFY_NBN_StatementDomains.lane_late s valid).2 output size,
+    (value_length _ _).trans NFY_NBN_LateResult.header_length⟩
+
+#print axioms value_length
+#print axioms ready
+#print axioms statement_ready
+end NFY_NBN_LateInvariant
+-- END copied NBN_LateInvariant
+-- BEGIN copied NBN_EncoderDomains: lean/NBN_EncoderDomains.lean
 set_option autoImplicit false
 noncomputable section
-namespace NFY_NBP_WithdrawalEncode
-open Aeneas Aeneas.Std Result AspisR1TerminalDecoder NFY_NBP_PaymentModel
+namespace NFY_NBN_EncoderDomains
+open Aeneas Aeneas.Std Result
+open AspisR1TerminalDecoder NFY_NBN_StatementResult
+open AspisS6OuterNativeOps AspisS6OuterCarrierBridge
+open pool_v1.pair_forest_terminal
 
-theorem result (p : W) : pool_v1.payment_relation.encode_pool_v1_withdrawal_public_v1 p = ok (withdrawal_encoded p) := by
-  simp only [pool_v1.payment_relation.encode_pool_v1_withdrawal_public_v1,NFY_NBG_PaymentValidators.withdrawal_result,
-    withdrawal_encoded,bind_tc_ok]
-  cases h : NFY_NBG_PaymentValidators.withdrawal p with
-  | Err e =>
-    simp [h,core.result.Result.Insts.CoreOpsTry.branch,
-      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
-      core.convert.FromSame]
-  | Ok u =>
-    cases u
-    simp only [h,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
-    have projected : pool_v1.payment_relation.withdrawal_common p = ok (NFY_NBG_PaymentValidators.wc p) := NBG_Atomic.withdrawal_projection p
-    rw [projected]
-    simp only [bind_tc_ok,Array.to_slice,UScalar.ofNatCore_val_eq]
-    rw [NFY_NBP_CommonBytes.result]
-    simp only [bind_tc_ok,NFY_NBP_DigestEncode.result,lift,
-      pool_v1.payment_relation.FIRST_OUTPUT_OR_DESTINATION_OFFSET,
-      pool_v1.payment_relation.SECOND_OUTPUT_OFFSET,
-      pool_v1.payment_relation.AMOUNT_OR_RESERVED_OFFSET]
-    unfold withdrawal_bytes
-    generalize h0 : NFY_NBP_CommonBytes.encoded (Array.repeat 216#usize 0#u8) pool_v1.payment_relation.POOL_V1_WITHDRAWAL_STATEMENT_MAGIC .Withdrawal (NFY_NBG_PaymentValidators.wc p) = o0
-    rw [NFY_NBP_ArrayIndex.index_mut o0 148#usize 152#usize (by decide) (by decide)]
-    change (do let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 (NFY_NBP_ArrayIndex.slice o0 148#usize 152#usize) (core.num.U32.to_le_bytes p.amount).to_slice; _) = _
-    rw [NFY_NBP_ArrayIndex.copy_range o0 148#usize 152#usize (core.num.U32.to_le_bytes p.amount) (by decide) (by decide) (by decide)]
-    simp only [bind_tc_ok,Array.to_slice,UScalar.ofNatCore_val_eq]
-    generalize h1 : o0.setSlice! 148 (core.num.U32.to_le_bytes p.amount).val = o1
-    rw [NFY_NBP_ArrayIndex.index_mut o1 152#usize 184#usize (by decide) (by decide)]
-    change (do let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 (NFY_NBP_ArrayIndex.slice o1 152#usize 184#usize) p.destination_token_account.to_slice; _) = _
-    rw [NFY_NBP_ArrayIndex.copy_range o1 152#usize 184#usize p.destination_token_account (by decide) (by decide) (by decide)]
-    simp only [bind_tc_ok,Array.to_slice,UScalar.ofNatCore_val_eq]
-    generalize h2 : o1.setSlice! 152 p.destination_token_account.val = o2
-    rw [NFY_NBP_ArrayIndex.suffix_index o2 184#usize (by decide)]
-    change (do let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 (NFY_NBP_ArrayIndex.slice o2 184#usize 216#usize) (AspisR1.S2K.DigestBytes.bytes p.change_commitment).to_slice; _) = _
-    rw [NFY_NBP_ArrayIndex.copy_range o2 184#usize 216#usize (AspisR1.S2K.DigestBytes.bytes p.change_commitment) (by decide) (by decide) (by decide)]
-    simp only [bind_tc_ok,Array.to_slice,UScalar.ofNatCore_val_eq]
-    try rfl
-#print axioms result
-end NFY_NBP_WithdrawalEncode
--- END copied NBP_WithdrawalEncode
--- BEGIN copied NED_CodecComposition: evidence/slice-s-compose-20261029/NED_CodecComposition.lean
-set_option autoImplicit false
-noncomputable section
-namespace NFY_NED_CodecComposition
-open Aeneas Aeneas.Std Result AspisR1TerminalDecoder
+theorem late (s : Statement)
+    (valid : validate_pool_v1_pair_forest_terminal_statement_v1 s = ok (.Ok ())) :
+    AspisS6OuterEncodeSuccess.late_ready
+      (fromPoolV1PairLatePublicStatementV1 (common s).lane_transition) := by
+  intro output size
+  obtain ⟨run,len⟩ := NFY_NBN_LateInvariant.statement_ready s valid output size
+  refine ⟨NFY_NBN_LateTail.value (common s).lane_transition NFY_NBN_LateResult.header,?_,len⟩
+  rw [late_call,run]
+  rfl
 
-/-- Total raw law; hence also valid at every canonical digest call site. -/
-theorem digest_raw : NFY_NBN_DigestResultDependency.NBN_Dep_DigestEncodeRaw
-    atomic_statement.encode_digest_canonical := NFY_NBP_DigestEncode.result
+theorem transfer (c : PoolV1PairForestTerminalCommonV1)
+    (p : pool_v1.payment_relation.PoolV1PrivateTransferPublicV1)
+    (valid : validate_pool_v1_pair_forest_terminal_statement_v1 (.PrivateTransfer c p) = ok (.Ok ())) :
+    ∃ bytes, nativeOps.transfer (fromPoolV1PrivateTransferPublicV1 p) = ok (.Ok bytes) := by
+  obtain ⟨bytes,run,_⟩ := NFY_NBN_StatementDomains.payment_reached (.PrivateTransfer c p) valid
+  change pool_v1.payment_relation.encode_pool_v1_private_transfer_public_v1 p = ok (.Ok bytes) at run
+  refine ⟨bytes,?_⟩
+  rw [transfer_call,run]
+  rfl
 
-theorem digest_canonical : NFY_NBN_DigestResultDependency.NBN_Dep_DigestEncodeCanonical
-    atomic_statement.encode_digest_canonical := fun d _ => digest_raw d
+theorem withdrawal (c : PoolV1PairForestTerminalCommonV1)
+    (p : pool_v1.payment_relation.PoolV1WithdrawalPublicV1)
+    (valid : validate_pool_v1_pair_forest_terminal_statement_v1 (.Withdrawal c p) = ok (.Ok ())) :
+    ∃ bytes, nativeOps.withdrawal (fromPoolV1WithdrawalPublicV1 p) = ok (.Ok bytes) := by
+  obtain ⟨bytes,run,_⟩ := NFY_NBN_StatementDomains.payment_reached (.Withdrawal c p) valid
+  change pool_v1.payment_relation.encode_pool_v1_withdrawal_public_v1 p = ok (.Ok bytes) at run
+  refine ⟨bytes,?_⟩
+  rw [withdrawal_call,run]
+  rfl
 
-/-- The safe payment reference returns the exact emitted Result on every
-    typed payment, including rejection; no payment acceptance is assumed. -/
-theorem transfer_law : NFY_NBN_ValidatorSummary.NBN_Dep_TransferEncode
-    (fun p => ok (NFY_NBP_PaymentModel.transfer_encoded p)) :=
-  fun p => (NFY_NBP_TransferEncode.result p).symm
+theorem validator (s : Statement)
+    (valid : validate_pool_v1_pair_forest_terminal_statement_v1 s = ok (.Ok ())) :
+    nativeOps.validate (fromPoolV1PairForestTerminalStatementV1 s) = ok (.Ok ()) := by
+  rw [validate_call,valid]
+  rfl
 
-theorem withdrawal_law : NFY_NBN_ValidatorSummary.NBN_Dep_WithdrawalEncode
-    (fun p => ok (NFY_NBP_PaymentModel.withdrawal_encoded p)) :=
-  fun p => (NFY_NBP_WithdrawalEncode.result p).symm
-
-/-- Fully instantiated emitted validator composition; no inner codec premise. -/
-theorem validator (s : NFY_NBN_StatementResult.Statement) :
-    NFY_NBN_ValidatorSummary.run atomic_statement.encode_digest_canonical
-      (fun p => ok (NFY_NBP_PaymentModel.transfer_encoded p))
-      (fun p => ok (NFY_NBP_PaymentModel.withdrawal_encoded p)) s =
-    pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1 s :=
-  NFY_NBN_ValidatorSummary.source _ _ _ digest_canonical transfer_law withdrawal_law s
-
-/-- Fully instantiated emitted encoder composition; exact bytes/error Result. -/
-theorem encoder (s : NFY_NBN_StatementResult.Statement) :
-    NFY_NBN_StatementEncoderSummary.run atomic_statement.encode_digest_canonical
-      (fun p => ok (NFY_NBP_PaymentModel.transfer_encoded p))
-      (fun p => ok (NFY_NBP_PaymentModel.withdrawal_encoded p)) s =
-    NFY_NBN_StatementEncoderSummary.observe (AspisS6OuterNativeInstalled.encode s) :=
-  NFY_NBN_StatementEncoderSummary.source _ _ _ digest_raw transfer_law withdrawal_law s
-
-#print axioms digest_raw
-#print axioms digest_canonical
-#print axioms transfer_law
-#print axioms withdrawal_law
+#print axioms late
+#print axioms transfer
+#print axioms withdrawal
 #print axioms validator
-#print axioms encoder
-end NFY_NED_CodecComposition
--- END copied NED_CodecComposition
--- BEGIN copied NBN_CallbackObstruction: lean/NBN_CallbackObstruction.lean
+end NFY_NBN_EncoderDomains
+-- END copied NBN_EncoderDomains
+-- BEGIN copied NBN_EncoderBytes: lean/NBN_EncoderBytes.lean
 set_option autoImplicit false
-namespace NFY_NBN_CallbackObstruction
+noncomputable section
+namespace NFY_NBN_EncoderBytes
 open Aeneas Aeneas.Std Result
+open AspisR1TerminalDecoder NFY_NBN_StatementResult
+open AspisS6OuterNativeOps AspisS6OuterCarrierBridge
+open pool_v1.pair_forest_terminal
+
+def tag : Statement → U8
+  | .PrivateTransfer _ _ => 1#u8
+  | .Withdrawal _ _ => 2#u8
+
+def commonBytes (s : Statement) : List U8 :=
+  AspisS6OuterByteLayout.common_prefix (fromPoolV1PairForestTerminalCommonV1 (common s)) (tag s)
+
+def bytes (s : Statement) (pay : Array U8 216#usize) : Array U8 1880#usize :=
+  ⟨(commonBytes s ++ (NFY_NBN_LateTail.value (common s).lane_transition NFY_NBN_LateResult.header).val) ++ pay.val, by
+    have p := AspisS6OuterByteLayout.common_length (fromPoolV1PairForestTerminalCommonV1 (common s)) (tag s)
+    have l := (NFY_NBN_LateInvariant.value_length (common s).lane_transition NFY_NBN_LateResult.header).trans NFY_NBN_LateResult.header_length
+    have q := pay.property
+    change pay.val.length = 216 at q
+    change (NFY_NBN_LateTail.value (common s).lane_transition NFY_NBN_LateResult.header).val.length = 1520 at l
+    change (commonBytes s).length = 144 at p
+    simp only [List.length_append,p,l,q]
+    rfl⟩
+
+theorem length (s : Statement) (pay : Array U8 216#usize) : (bytes s pay).val.length = 1880 :=
+  (bytes s pay).property
+
+#print axioms length
+end NFY_NBN_EncoderBytes
+-- END copied NBN_EncoderBytes
+-- BEGIN copied NBN_EncoderContents: lean/NBN_EncoderContents.lean
+set_option autoImplicit false
+set_option linter.unusedSimpArgs false
+noncomputable section
+namespace NFY_NBN_EncoderContents
+open Aeneas Aeneas.Std Result
+open AspisR1TerminalDecoder NFY_NBN_StatementResult
+open AspisS6OuterNativeOps AspisS6OuterCarrierBridge
+open pool_v1.pair_forest_terminal
+
+theorem private_contents (c : PoolV1PairForestTerminalCommonV1)
+    (p : pool_v1.payment_relation.PoolV1PrivateTransferPublicV1)
+    (valid : validate_pool_v1_pair_forest_terminal_statement_v1 (.PrivateTransfer c p) = ok (.Ok ())) :
+    ∃ pay : Array U8 216#usize,
+      payment (.PrivateTransfer c p) = ok (.Ok pay) ∧
+      AspisS6OuterNativeInstalled.encode (.PrivateTransfer c p) =
+        ok (.Ok (NFY_NBN_EncoderBytes.bytes (.PrivateTransfer c p) pay)) := by
+  have good := AspisS6OuterEncoderContents.private_contents
+    (fromPoolV1PairForestTerminalCommonV1 c) (fromPoolV1PrivateTransferPublicV1 p)
+    (NFY_NBN_EncoderDomains.validator (.PrivateTransfer c p) valid) (NFY_NBN_EncoderDomains.late (.PrivateTransfer c p) valid)
+    (NFY_NBN_EncoderDomains.transfer c p valid)
+  obtain ⟨r,run,encoded,initial,updated,pay,success,size,len,late_run,pay_run,layout⟩ := WP.spec_imp_exists good
+  cases success
+  have late_call := AspisS6OuterNativeOps.late_call c.lane_transition initial
+  have ready := (NFY_NBN_LateInvariant.statement_ready (.PrivateTransfer c p) valid initial size).1
+  change pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1 c.lane_transition initial =
+    ok (.Ok (),NFY_NBN_LateTail.value c.lane_transition NFY_NBN_LateResult.header) at ready
+  change nativeOps.late (fromPoolV1PairLatePublicStatementV1 c.lane_transition) initial = ok (.Ok (),updated) at late_run
+  rw [ready] at late_call
+  rw [late_call] at late_run
+  simp only [resultMap,rustMapError] at late_run
+  have same : NFY_NBN_LateTail.value c.lane_transition NFY_NBN_LateResult.header = updated :=
+    congrArg Prod.snd (Result.ok.inj late_run)
+  have pay_call := AspisS6OuterNativeOps.transfer_return p
+  rw [pay_run] at pay_call
+  change ok (.Ok pay) = pool_v1.payment_relation.encode_pool_v1_private_transfer_public_v1 p at pay_call
+  have bytes_equal : encoded = NFY_NBN_EncoderBytes.bytes (.PrivateTransfer c p) pay := by
+    apply Subtype.ext
+    rw [layout,← same]
+    rfl
+  refine ⟨pay,pay_call.symm,?_⟩
+  unfold AspisS6OuterNativeInstalled.encode
+  change resultMap _ (AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.encode_pool_v1_pair_forest_terminal_statement_v1 nativeOps
+    (.PrivateTransfer (fromPoolV1PairForestTerminalCommonV1 c) (fromPoolV1PrivateTransferPublicV1 p))) = _
+  rw [run,bytes_equal]
+  rfl
+
+theorem withdrawal_contents (c : PoolV1PairForestTerminalCommonV1)
+    (p : pool_v1.payment_relation.PoolV1WithdrawalPublicV1)
+    (valid : validate_pool_v1_pair_forest_terminal_statement_v1 (.Withdrawal c p) = ok (.Ok ())) :
+    ∃ pay : Array U8 216#usize,
+      payment (.Withdrawal c p) = ok (.Ok pay) ∧
+      AspisS6OuterNativeInstalled.encode (.Withdrawal c p) =
+        ok (.Ok (NFY_NBN_EncoderBytes.bytes (.Withdrawal c p) pay)) := by
+  have good := AspisS6OuterEncoderContents.withdrawal_contents
+    (fromPoolV1PairForestTerminalCommonV1 c) (fromPoolV1WithdrawalPublicV1 p)
+    (NFY_NBN_EncoderDomains.validator (.Withdrawal c p) valid) (NFY_NBN_EncoderDomains.late (.Withdrawal c p) valid)
+    (NFY_NBN_EncoderDomains.withdrawal c p valid)
+  obtain ⟨r,run,encoded,initial,updated,pay,success,size,len,late_run,pay_run,layout⟩ := WP.spec_imp_exists good
+  cases success
+  have late_call := AspisS6OuterNativeOps.late_call c.lane_transition initial
+  have ready := (NFY_NBN_LateInvariant.statement_ready (.Withdrawal c p) valid initial size).1
+  change pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1 c.lane_transition initial =
+    ok (.Ok (),NFY_NBN_LateTail.value c.lane_transition NFY_NBN_LateResult.header) at ready
+  change nativeOps.late (fromPoolV1PairLatePublicStatementV1 c.lane_transition) initial = ok (.Ok (),updated) at late_run
+  rw [ready] at late_call
+  rw [late_call] at late_run
+  simp only [resultMap,rustMapError] at late_run
+  have same : NFY_NBN_LateTail.value c.lane_transition NFY_NBN_LateResult.header = updated :=
+    congrArg Prod.snd (Result.ok.inj late_run)
+  have pay_call := AspisS6OuterNativeOps.withdrawal_return p
+  rw [pay_run] at pay_call
+  change ok (.Ok pay) = pool_v1.payment_relation.encode_pool_v1_withdrawal_public_v1 p at pay_call
+  have bytes_equal : encoded = NFY_NBN_EncoderBytes.bytes (.Withdrawal c p) pay := by
+    apply Subtype.ext
+    rw [layout,← same]
+    rfl
+  refine ⟨pay,pay_call.symm,?_⟩
+  unfold AspisS6OuterNativeInstalled.encode
+  change resultMap _ (AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.encode_pool_v1_pair_forest_terminal_statement_v1 nativeOps
+    (.Withdrawal (fromPoolV1PairForestTerminalCommonV1 c) (fromPoolV1WithdrawalPublicV1 p))) = _
+  rw [run,bytes_equal]
+  rfl
+
+#print axioms private_contents
+#print axioms withdrawal_contents
+end NFY_NBN_EncoderContents
+-- END copied NBN_EncoderContents
+-- BEGIN copied NBN_EncoderRejection: lean/NBN_EncoderRejection.lean
+set_option autoImplicit false
+noncomputable section
+namespace NFY_NBN_EncoderRejection
+open Aeneas Aeneas.Std Result
+open AspisR1TerminalDecoder NFY_NBN_StatementResult
+open AspisS6OuterNativeOps AspisS6OuterCarrierBridge
+open pool_v1.pair_forest_terminal
+
+theorem source (s : Statement) (e : NFY_NBN_StatementResult.Error)
+    (reject : validate_pool_v1_pair_forest_terminal_statement_v1 s = ok (.Err e)) :
+    AspisS6OuterNativeInstalled.encode s = ok (.Err e) := by
+  have v : nativeOps.validate (fromPoolV1PairForestTerminalStatementV1 s) =
+      ok (.Err (fromPoolV1PairForestTerminalFormatErrorV1 e)) := by
+    rw [validate_call,reject]
+    rfl
+  unfold AspisS6OuterNativeInstalled.encode
+    AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.encode_pool_v1_pair_forest_terminal_statement_v1
+  rw [v]
+  simp only [bind_tc_ok,core.result.Result.Insts.CoreOpsTry.branch]
+  simp [resultMap,rustMapError,
+    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+    core.convert.FromSame.from,to_fromPoolV1PairForestTerminalFormatErrorV1]
+
+#print axioms source
+end NFY_NBN_EncoderRejection
+-- END copied NBN_EncoderRejection
+-- BEGIN copied NBN_EncoderResult: lean/NBN_EncoderResult.lean
+set_option autoImplicit false
+noncomputable section
+namespace NFY_NBN_EncoderResult
+open Aeneas Aeneas.Std Result
+open AspisR1TerminalDecoder NFY_NBN_StatementResult
+open pool_v1.pair_forest_terminal
+
+def result (s : Statement) : Result (core.result.Result (Array U8 1880#usize) NFY_NBN_StatementResult.Error) := do
+  let validated ← NFY_NBN_StatementResult.result s
+  match validated with
+  | .Err e => ok (.Err e)
+  | .Ok _ =>
+    let pay ← payment s
+    match pay with
+    | .Err e => ok (.Err (.Payment e))
+    | .Ok bytes => ok (.Ok (NFY_NBN_EncoderBytes.bytes s bytes))
+
+theorem source (s : Statement) : AspisS6OuterNativeInstalled.encode s = result s := by
+  obtain ⟨v,valid⟩ := AspisS6NativeForestTotal.validate_total s
+  have modeled : NFY_NBN_StatementResult.result s = ok v := by rw [← NFY_NBN_StatementResult.source];exact valid
+  cases v with
+  | Err e =>
+    rw [NFY_NBN_EncoderRejection.source s e valid]
+    simp only [result,modeled,bind_tc_ok]
+  | Ok unit =>
+    cases unit
+    have contents : ∃ pay, payment s = ok (.Ok pay) ∧
+        AspisS6OuterNativeInstalled.encode s = ok (.Ok (NFY_NBN_EncoderBytes.bytes s pay)) := by
+      cases s with
+      | PrivateTransfer c p => exact NFY_NBN_EncoderContents.private_contents c p valid
+      | Withdrawal c p => exact NFY_NBN_EncoderContents.withdrawal_contents c p valid
+    obtain ⟨pay,payment_run,encoded⟩ := contents
+    rw [encoded]
+    simp only [result,modeled,bind_tc_ok,payment_run]
+
+#print axioms source
+end NFY_NBN_EncoderResult
+-- END copied NBN_EncoderResult
+-- BEGIN copied NBK_DeployedCallbackSelection: lean/NBK_DeployedCallbackSelection.lean
+set_option autoImplicit false
+noncomputable section
+namespace NFY_NBK_DeployedCallbackSelection
 open AspisR1
 
-/-- Selection alone cannot determine the frozen getter's value. -/
-theorem registry_unconstrained {F E : Type} (c : DrvC_Installation.Configuration F E)
-    (r : AdapterRw.aspis_statement.pool_v1.verifier_registry.VerifierRegistryV1) :
-    ∃ cFalse cTrue : DrvC_Installation.Configuration F E,
-      (DrvC_Installation.sdk cFalse).op25 r = ok false ∧
-      (DrvC_Installation.sdk cTrue).op25 r = ok true := by
-  exact ⟨{c with adapter := {c.adapter with op25 := fun _ => ok false}},
-    {c with adapter := {c.adapter with op25 := fun _ => ok true}},rfl,rfl⟩
+/-- The coherent installed SDK retains these slots from its input adapter.
+This is a selection audit, not a native association or an installation. -/
+theorem registry {F E : Type} (c : DrvC_Installation.Configuration F E) :
+    (DrvC_Installation.sdk c).op25 = c.adapter.op25 ∧
+    (DrvC_Installation.sdk c).op26 = c.adapter.op26 ∧
+    (DrvC_Installation.sdk c).op27 = c.adapter.op27 ∧
+    (DrvC_Installation.sdk c).op28 = c.adapter.op28 ∧
+    (DrvC_Installation.sdk c).op29 = c.adapter.op29 ∧
+    (DrvC_Installation.sdk c).op30 = c.adapter.op30 ∧
+    (DrvC_Installation.sdk c).op31 = c.adapter.op31 ∧
+    (DrvC_Installation.sdk c).op32 = c.adapter.op32 ∧
+    (DrvC_Installation.sdk c).op33 = c.adapter.op33 ∧
+    (DrvC_Installation.sdk c).op34 = c.adapter.op34 :=
+  ⟨rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl⟩
 
-/-- No universally quantified adapter can be given a fixed op25 law from selection. -/
-theorem no_fixed_registry_law {F E : Type} (c : DrvC_Installation.Configuration F E)
-    (r : AdapterRw.aspis_statement.pool_v1.verifier_registry.VerifierRegistryV1)
-    (expected : Bool) :
-    ¬ (∀ d : DrvC_Installation.Configuration F E,
-      (DrvC_Installation.sdk d).op25 r = ok expected) := by
-  intro h
-  obtain ⟨cf,ct,hf,ht⟩ := registry_unconstrained c r
-  have ef : false = expected := Result.ok.inj (hf.symm.trans (h cf))
-  have et : true = expected := Result.ok.inj (ht.symm.trans (h ct))
-  cases ef.trans et.symm
+theorem policy_accounts {F E : Type} (c : DrvC_Installation.Configuration F E) :
+    (DrvC_Installation.sdk c).op15 = c.adapter.op15 ∧
+    (DrvC_Installation.sdk c).op48 = c.adapter.op48 ∧
+    (DrvC_Installation.sdk c).op49 = c.adapter.op49 := ⟨rfl,rfl,rfl⟩
 
-#print axioms registry_unconstrained
-#print axioms no_fixed_registry_law
-end NFY_NBN_CallbackObstruction
--- END copied NBN_CallbackObstruction
--- BEGIN copied NBN_AccountCallbackObstruction: lean/NBN_AccountCallbackObstruction.lean
+#print axioms registry
+#print axioms policy_accounts
+end NFY_NBK_DeployedCallbackSelection
+-- END copied NBK_DeployedCallbackSelection
+-- BEGIN copied NBN_InstalledEncoder: lean/NBN_InstalledEncoder.lean
 set_option autoImplicit false
-namespace NFY_NBN_AccountCallbackObstruction
+noncomputable section
+namespace NFY_NBN_InstalledEncoder
 open Aeneas Aeneas.Std Result
 open AspisR1
-abbrev PE := AdapterRw.solana_program_error.ProgramError
+open AspisS6OuterNativeOps AspisS6CurrentAdapterCarrier
 
-theorem master_unconstrained {F E : Type} (c : DrvC_Installation.Configuration F E)
-    (input : Slice U8)
-    (m : AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1) :
-    ∃ reject accept : DrvC_Installation.Configuration F E,
-      (DrvC_Installation.sdk reject).op48 input = ok (.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData) ∧
-      (DrvC_Installation.sdk accept).op48 input = ok (.Ok m) := by
-  exact ⟨{c with adapter := {c.adapter with op48 := fun _ => ok (.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)}},
-    {c with adapter := {c.adapter with op48 := fun _ => ok (.Ok m)}},rfl,rfl⟩
+theorem source {F E : Type} (c : DrvC_Installation.Configuration F E)
+    (s : AspisS6CurrentCodecInstallation.Statement) :
+    (DrvC_Installation.sdk c).op22 s =
+      resultMap (rustMapError fromPoolV1PairForestTerminalFormatErrorV1)
+        (NFY_NBN_EncoderResult.result (toPoolV1PairForestTerminalStatementV1 s)) := by
+  change AspisS6CurrentCodecInstallation.encode s = _
+  unfold AspisS6CurrentCodecInstallation.encode
+  rw [NFY_NBN_EncoderResult.source]
 
-theorem checkpoint_unconstrained {F E : Type} (c : DrvC_Installation.Configuration F E)
-    (input : Slice U8)
-    (m : AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestCheckpointV1) :
-    ∃ reject accept : DrvC_Installation.Configuration F E,
-      (DrvC_Installation.sdk reject).op49 input = ok (.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData) ∧
-      (DrvC_Installation.sdk accept).op49 input = ok (.Ok m) := by
-  exact ⟨{c with adapter := {c.adapter with op49 := fun _ => ok (.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)}},
-    {c with adapter := {c.adapter with op49 := fun _ => ok (.Ok m)}},rfl,rfl⟩
-
-theorem request_unconstrained {F E : Type} (c : DrvC_Installation.Configuration F E)
-    (input : Slice U8)
-    (m : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalRequestV1) :
-    ∃ reject accept : DrvC_Installation.Configuration F E,
-      (DrvC_Installation.sdk reject).op23 input =
-        ok (.Err .WrongLength) ∧
-      (DrvC_Installation.sdk accept).op23 input = ok (.Ok m) := by
-  exact ⟨{c with adapter := {c.adapter with op23 := fun _ => ok (.Err .WrongLength)}},
-    {c with adapter := {c.adapter with op23 := fun _ => ok (.Ok m)}},rfl,rfl⟩
-
-#print axioms master_unconstrained
-#print axioms checkpoint_unconstrained
-#print axioms request_unconstrained
-end NFY_NBN_AccountCallbackObstruction
--- END copied NBN_AccountCallbackObstruction
--- BEGIN copied NBN_U04: lean/NBN_U04.lean
+#print axioms source
+end NFY_NBN_InstalledEncoder
+-- END copied NBN_InstalledEncoder
+-- BEGIN copied NBN_StatementEncoderSummary: lean/NBN_StatementEncoderSummary.lean
 set_option autoImplicit false
 noncomputable section
-namespace NFY_NBN_U04
-open Aeneas Aeneas.Std Result AspisR1TerminalDecoder
-
-theorem conditional_helpers (enc : NFY_NBN_DigestResultDependency.Encode)
-    (NBN_Dep_DigestEncodeRaw : NFY_NBN_DigestResultDependency.NBN_Dep_DigestEncodeRaw enc) :
-    (∀ d, NFY_NBN_FirstByteDependency.first enc d = pool_v1.pair_forest_accounts.first_canonical_byte d) ∧
-    (∀ d, NFY_NBN_FirstByteDependency.lane enc d = pool_v1.pair_forest_accounts.pool_v1_pair_forest_output_lane_v1 d) :=
-  ⟨NFY_NBN_FirstByteDependency.first_source enc NBN_Dep_DigestEncodeRaw,
-    NFY_NBN_FirstByteDependency.lane_source enc (fun d _ => NBN_Dep_DigestEncodeRaw d)⟩
-
-#print axioms conditional_helpers
-end NFY_NBN_U04
--- END copied NBN_U04
--- BEGIN copied NED_SubtreeComposition: evidence/slice-s-compose-20261029/NED_SubtreeComposition.lean
-set_option autoImplicit false
-noncomputable section
-namespace NFY_NED_SubtreeComposition
-open Aeneas Aeneas.Std Result AspisR1TerminalDecoder
-
-theorem digest_decode : NFY_NBN_AfterDecodeTypes.NBN_Dep_DigestDecode
-    (fun b => ok (NFY_NBP_DigestDecode.decoded b)) :=
-  fun b => (NFY_NBP_DigestDecode.result b).symm
-
-theorem after_encode (a : NFY_NBH_Validators.Afterstate) :
-    NFY_NBN_EncoderSummary.after atomic_statement.encode_digest_canonical a =
-    pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1 a :=
-  NFY_NBN_EncoderSummary.after_source _ NFY_NED_CodecComposition.digest_canonical a
-
-theorem live_encode (s : NFY_NBH_LiveValidator.Snapshot) (out : Slice U8) :
-    NFY_NBN_EncoderSummary.live atomic_statement.encode_digest_canonical s out =
-    pool_v1.pair_tree_profile.encode_pool_v1_pair_live_snapshot_v1 s out :=
-  NFY_NBN_EncoderSummary.live_source _ NFY_NED_CodecComposition.digest_canonical s out
-
-theorem late_encode (s : NFY_NBN_LateSummary.Statement) (out : Slice U8) :
-    NFY_NBN_LateSummary.run atomic_statement.encode_digest_canonical s out =
-    pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1 s out :=
-  NFY_NBN_LateSummary.source _ NFY_NED_CodecComposition.digest_canonical s out
-
-theorem after_decode (bytes : Slice U8) :
-    NFY_NBN_AfterstateDecoderDependency.run (fun b => ok (NFY_NBP_DigestDecode.decoded b)) bytes =
-    pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1 bytes :=
-  NFY_NBN_AfterstateDecoderDependency.source _ digest_decode bytes
-
-theorem first_byte (d : Array U32 8#usize) :
-    NFY_NBN_FirstByteDependency.first atomic_statement.encode_digest_canonical d =
-    pool_v1.pair_forest_accounts.first_canonical_byte d :=
-  NFY_NBN_FirstByteDependency.first_source _ NFY_NED_CodecComposition.digest_raw d
-
-theorem output_lane (d : Array U32 8#usize) :
-    NFY_NBN_FirstByteDependency.lane atomic_statement.encode_digest_canonical d =
-    pool_v1.pair_forest_accounts.pool_v1_pair_forest_output_lane_v1 d :=
-  NFY_NBN_FirstByteDependency.lane_source _ NFY_NED_CodecComposition.digest_canonical d
-
-#print axioms digest_decode
-#print axioms after_encode
-#print axioms live_encode
-#print axioms late_encode
-#print axioms after_decode
-#print axioms first_byte
-#print axioms output_lane
-end NFY_NED_SubtreeComposition
--- END copied NED_SubtreeComposition
--- BEGIN copied NED_ValidatorTrace: evidence/slice-s-compose-20261029/NED_ValidatorTrace.lean
-set_option autoImplicit false
-noncomputable section
-namespace NFY_NED_ValidatorTrace
-open Aeneas Aeneas.Std Result AspisR1TerminalDecoder NFY_NBN_StatementResult
+namespace NFY_NBN_StatementEncoderSummary
+open Aeneas Aeneas.Std Result
+open AspisR1TerminalDecoder NFY_NBN_StatementResult NFY_NBN_ValidatorSummary
 attribute [local instance] Classical.propDecidable
-abbrev E := NFY_NBN_StatementResult.Error
-abbrev R := Result (core.result.Result Unit E)
-inductive Call where
-  | payment (statement : Statement)
-  | lane (nullifier : Array U32 8#usize)
-  | late (argument : NFY_NBN_LateSummary.Statement) (output : Slice U8)
+abbrev Raw := NFY_NBN_DigestResultDependency.NBN_Dep_DigestEncodeRaw
+abbrev BytesResult := Result (core.result.Result (List U8) NFY_NBN_StatementResult.Error)
 
-def enc := atomic_statement.encode_digest_canonical
-def transfer (p : NFY_NBN_ValidatorSummary.Transfer) := ok (NFY_NBP_PaymentModel.transfer_encoded p)
-def withdrawal (p : NFY_NBN_ValidatorSummary.Withdrawal) := ok (NFY_NBP_PaymentModel.withdrawal_encoded p)
-def payment (s : Statement) := NFY_NBN_ValidatorSummary.paymentWith transfer withdrawal s
+def prefixBytes (s : Statement) (anchor : Array U8 32#usize) : List U8 :=
+  let c := AspisS6OuterCarrierBridge.fromPoolV1PairForestTerminalCommonV1 (common s)
+  AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.val ++
+    [AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION,
+     NFY_NBN_EncoderBytes.tag s,
+     AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION,c.output_lane] ++
+    c.master_account.val ++ c.checkpoint_account.val ++ c.selected_lane_account.val ++
+    (core.num.U64.to_le_bytes c.checkpoint_sequence).val ++ anchor.val
 
-def tail (s : Statement) : R × List Call :=
-  let d := (parts s).2.2.2.2.1
-  match NFY_NBN_FirstByteDependency.lane enc d with
-  | .fail e => (.fail e,[.lane d])
-  | .div => (.div,[.lane d])
-  | .ok (.Err e) => (ok (.Err (.Account e)),[.lane d])
-  | .ok (.Ok l) =>
-    if l ≠ (common s).output_lane then (ok (.Err .OutputLaneMismatch),[.lane d])
-    else
-      let arg := (common s).lane_transition
-      let out := NFY_NBN_LateResult.zero
-      let r : R := do
-        let (status,_) ← NFY_NBN_LateSummary.run enc arg out
-        match status with
-        | .Err e => ok (.Err (.LaneTransition e))
-        | .Ok _ => ok (.Ok ())
-      (r,[.lane d,.late arg out])
+theorem prefix_source (s : Statement) :
+    prefixBytes s (AspisR1.S2K.DigestBytes.bytes (common s).historical_global_anchor) = NFY_NBN_EncoderBytes.commonBytes s := by
+  unfold prefixBytes NFY_NBN_EncoderBytes.commonBytes AspisS6OuterByteLayout.common_prefix
+  rw [AspisS6NativeAfterstateEncoderReuse.native_digest_bytes]
+  rfl
 
-def bindings (s : Statement) : R × List Call :=
-  if (parts s).1 ≠ (common s).master_account then (ok (.Err .MasterBindingMismatch),[])
-  else if (parts s).2.1 ≠ (common s).lane_transition.live_snapshot.deployment_domain then (ok (.Err .DeploymentBindingMismatch),[])
-  else if (common s).lane_transition.live_snapshot.pool ≠ (common s).master_account then (ok (.Err .MasterBindingMismatch),[])
-  else if (parts s).2.2.1 ≠ (common s).checkpoint_sequence then (ok (.Err .CheckpointBindingMismatch),[])
-  else if (parts s).2.2.2.1 ≠ (common s).historical_global_anchor then (ok (.Err .HistoricalAnchorMismatch),[])
-  else tail s
+def observe (r : Result (core.result.Result (Array U8 1880#usize) NFY_NBN_StatementResult.Error)) : BytesResult := do
+  let r ← r
+  match r with
+  | .Err e => ok (.Err e)
+  | .Ok a => ok (.Ok a.val)
 
-def run (s : Statement) : R × List Call :=
-  if (common s).master_account = zero ∨ (common s).checkpoint_account = zero ∨
-      (common s).selected_lane_account = zero then (ok (.Err .NonZeroBinding),[])
-  else if 8 ≤ (common s).output_lane.val then (ok (.Err .InvalidOutputLane),[])
-  else match payment s with
-    | .fail e => (.fail e,[.payment s])
-    | .div => (.div,[.payment s])
-    | .ok (.Err e) => (ok (.Err (.Payment e)),[.payment s])
-    | .ok (.Ok _) => ((bindings s).1,.payment s :: (bindings s).2)
+def run (enc : Encode) (t : Transfer → PaymentResult) (w : Withdrawal → PaymentResult) (s : Statement) : BytesResult := do
+  let valid ← NFY_NBN_ValidatorSummary.run enc t w s
+  match valid with
+  | .Err e => ok (.Err e)
+  | .Ok _ =>
+    let anchor ← enc (common s).historical_global_anchor
+    let (status,late) ← NFY_NBN_LateSummary.run enc (common s).lane_transition NFY_NBN_LateResult.zero
+    match status with
+    | .Err e => ok (.Err (.LaneTransition e))
+    | .Ok _ =>
+      let pay ← paymentWith t w s
+      match pay with
+      | .Err e => ok (.Err (.Payment e))
+      | .Ok a => ok (.Ok ((prefixBytes s anchor ++ late.val) ++ a.val))
 
-theorem tail_erases (s : Statement) : (tail s).1 = NFY_NBN_ValidatorSummary.tail enc s := by
-  unfold tail NFY_NBN_ValidatorSummary.tail
-  dsimp only
-  cases h : NFY_NBN_FirstByteDependency.lane enc (parts s).2.2.2.2.1 with
-  | fail e => simp only [h,bind_tc_fail]
-  | div => simp only [h,bind_tc_div]
-  | ok r =>
-    cases r with
-    | Err e => simp only [h,bind_tc_ok]
-    | Ok l =>
-      simp only [h,bind_tc_ok]
-      split <;> rfl
-
-theorem bindings_erases (s : Statement) :
-    (bindings s).1 = NFY_NBN_ValidatorSummary.chain (common s) (parts s) (NFY_NBN_ValidatorSummary.tail enc s) := by
-  unfold bindings NFY_NBN_ValidatorSummary.chain
-  repeat' first | split | rfl | exact tail_erases s
-
-theorem erases (s : Statement) : (run s).1 =
-    pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1 s := by
-  rw [← NFY_NED_CodecComposition.validator s]
-  change (run s).1 = NFY_NBN_ValidatorSummary.run enc transfer withdrawal s
-  unfold run NFY_NBN_ValidatorSummary.run
-  split
-  · rfl
-  · split
-    · rfl
-    · unfold payment
-      cases h : NFY_NBN_ValidatorSummary.paymentWith transfer withdrawal s with
-      | fail e => simp only [h,bind_tc_fail]
-      | div => simp only [h,bind_tc_div]
-      | ok r =>
-        cases r with
-        | Err e => simp only [h,bind_tc_ok]
-        | Ok bytes =>
-          simp only [h,bind_tc_ok]
-          exact bindings_erases s
-
-/-- Every logged lane uses this statement's exact nullifier projection. -/
-theorem lane_same (s : Statement) (d : Array U32 8#usize)
-    (reached : Call.lane d ∈ (run s).2) : d = (parts s).2.2.2.2.1 := by
-  unfold run at reached
-  split at reached
-  · cases reached
-  · split at reached
-    · cases reached
-    · cases h : payment s with
-      | fail e => simp only [h,List.mem_singleton] at reached; cases reached
-      | div => simp only [h,List.mem_singleton] at reached; cases reached
-      | ok r => cases r with
-        | Err e => simp only [h,List.mem_singleton] at reached; cases reached
-        | Ok bytes =>
-          simp only [h,List.mem_cons] at reached
-          rcases reached with bad | reached
-          · cases bad
-          · unfold bindings at reached
-            repeat' first | split at reached | cases reached
-            unfold tail at reached
-            cases h : NFY_NBN_FirstByteDependency.lane enc (parts s).2.2.2.2.1 with
-            | fail e => simpa only [h,List.mem_singleton,Call.lane.injEq] using reached
-            | div => simpa only [h,List.mem_singleton,Call.lane.injEq] using reached
-            | ok r => cases r with
-              | Err e => simpa only [h,List.mem_singleton,Call.lane.injEq] using reached
-              | Ok l =>
-                simp only [h] at reached
-                split at reached
-                · simpa only [List.mem_singleton,Call.lane.injEq] using reached
-                · simp only [List.mem_cons,List.not_mem_nil,Call.lane.injEq,reduceCtorEq,or_false] at reached
-                  exact reached
-
-#print axioms tail_erases
-#print axioms bindings_erases
-#print axioms erases
-#print axioms lane_same
-end NFY_NED_ValidatorTrace
--- END copied NED_ValidatorTrace
--- BEGIN copied NED_ValidatorCallDomains: evidence/slice-s-compose-20261029/NED_ValidatorCallDomains.lean
-set_option autoImplicit false
-noncomputable section
-namespace NFY_NED_ValidatorCallDomains
-open Aeneas Aeneas.Std Result AspisR1TerminalDecoder NFY_NBN_StatementResult
-open NFY_NED_ValidatorTrace
-
-def TailShape (s : Statement) (xs : List Call) : Prop :=
-  xs = [.lane (parts s).2.2.2.2.1] ∨
-  xs = [.lane (parts s).2.2.2.2.1,.late (common s).lane_transition NFY_NBN_LateResult.zero]
-
-def Shape (s : Statement) (xs : List Call) : Prop :=
-  xs = [] ∨ xs = [.payment s] ∨
-  xs = [.payment s,.lane (parts s).2.2.2.2.1] ∨
-  xs = [.payment s,.lane (parts s).2.2.2.2.1,.late (common s).lane_transition NFY_NBN_LateResult.zero]
-
-theorem tail_shape (s : Statement) : TailShape s (tail s).2 := by
-  unfold tail
-  dsimp only
-  cases h : NFY_NBN_FirstByteDependency.lane enc (parts s).2.2.2.2.1 with
-  | fail e => simp only [h]; exact Or.inl rfl
-  | div => simp only [h]; exact Or.inl rfl
-  | ok r => cases r with
-    | Err e => simp only [h]; exact Or.inl rfl
-    | Ok l =>
-      simp only [h]
-      split
-      · exact Or.inl rfl
-      · exact Or.inr rfl
-
-theorem bindings_shape (s : Statement) :
-    (bindings s).2 = [] ∨ TailShape s (bindings s).2 := by
-  unfold bindings
-  repeat' first | split | exact Or.inl rfl | exact Or.inr (tail_shape s)
-
-theorem shape (s : Statement) : Shape s (run s).2 := by
-  unfold run
-  split
-  · exact Or.inl rfl
-  · split
-    · exact Or.inl rfl
-    · cases h : NFY_NED_ValidatorTrace.payment s with
-      | fail e => simp only [h]; exact Or.inr (Or.inl rfl)
-      | div => simp only [h]; exact Or.inr (Or.inl rfl)
-      | ok r => cases r with
-        | Err e => simp only [h]; exact Or.inr (Or.inl rfl)
-        | Ok bytes =>
-          simp only [h]
-          rcases bindings_shape s with none | one | two
-          · rw [none]; exact Or.inr (Or.inl rfl)
-          · rw [one]; exact Or.inr (Or.inr (Or.inl rfl))
-          · rw [two]; exact Or.inr (Or.inr (Or.inr rfl))
-
-/-- A logged late call has the SAME full record and fixed local output width.
-The whole root need not accept: an error returned by that call is retained. -/
-theorem late_domain (s : Statement) (arg : NFY_NBN_LateSummary.Statement) (out : Slice U8)
-    (reached : Call.late arg out ∈ (run s).2) :
-    arg = (common s).lane_transition ∧ out = NFY_NBN_LateResult.zero ∧ out.length = 1520 := by
-  rcases shape s with none | one | two | three
-  · simp only [none,List.not_mem_nil] at reached
-  · simp only [one,List.mem_singleton,reduceCtorEq] at reached
-  · simp only [two,List.mem_cons,List.not_mem_nil,reduceCtorEq,or_self] at reached
-  · simp only [three,List.mem_cons,List.not_mem_nil,reduceCtorEq,false_or,or_false,Call.late.injEq] at reached
-    obtain ⟨rfl,rfl⟩ := reached
-    refine ⟨rfl,rfl,?_⟩
-    simp only [NFY_NBN_LateResult.zero,Slice.length,Array.to_slice,Array.repeat_val,List.length_replicate]
+theorem source (enc : Encode) (t : Transfer → PaymentResult) (w : Withdrawal → PaymentResult)
+    (hd : Raw enc) (ht : NBN_Dep_TransferEncode t) (hw : NBN_Dep_WithdrawalEncode w) (s : Statement) :
+    run enc t w s = observe (AspisS6OuterNativeInstalled.encode s) := by
+  have hc : NFY_NBN_DigestResultDependency.NBN_Dep_DigestEncodeCanonical enc := fun d _ => hd d
+  obtain ⟨v,hv⟩ := AspisS6NativeForestTotal.validate_total s
+  have validation := NFY_NBN_ValidatorSummary.source enc t w hc ht hw s
+  rw [hv] at validation
+  cases v with
+  | Err e =>
+    rw [NFY_NBN_EncoderRejection.source s e hv]
+    simp only [run,validation,observe,bind_tc_ok]
+  | Ok u =>
+    cases u
+    obtain ⟨pay,hpay,_⟩ := NFY_NBN_StatementDomains.payment_reached s hv
+    have late := (NFY_NBN_LateInvariant.statement_ready s hv NFY_NBN_LateResult.zero (by
+      simp only [NFY_NBN_LateResult.zero,Slice.length,Array.to_slice,Array.repeat_val,List.length_replicate];rfl)).1
+    have contents : AspisS6OuterNativeInstalled.encode s = ok (.Ok (NFY_NBN_EncoderBytes.bytes s pay)) := by
+      rw [NFY_NBN_EncoderResult.source]
+      simp only [NFY_NBN_EncoderResult.result,← NFY_NBN_StatementResult.source,hv,hpay,bind_tc_ok]
+    simp only [run,validation,bind_tc_ok]
+    rw [hd _,NFY_NBN_LateSummary.source enc hc,late]
+    simp only [bind_tc_ok]
+    rw [payment_source t w ht hw s,hpay]
+    simp only [bind_tc_ok]
+    rw [prefix_source,contents]
     rfl
 
-theorem payment_same (s : Statement) (arg : Statement)
-    (reached : Call.payment arg ∈ (run s).2) : arg = s := by
-  rcases shape s with none | one | two | three <;>
-    simp_all only [List.mem_cons,List.not_mem_nil,
-      reduceCtorEq,false_or,or_false,Call.payment.injEq]
+#print axioms prefix_source
+#print axioms source
+end NFY_NBN_StatementEncoderSummary
+-- END copied NBN_StatementEncoderSummary
+-- BEGIN copied NBN_AfterDecodeTypes: lean/NBN_AfterDecodeTypes.lean
+set_option autoImplicit false
+noncomputable section
+namespace NFY_NBN_AfterDecodeTypes
+open Aeneas Aeneas.Std Result AspisR1TerminalDecoder
+abbrev Digest := Array U32 8#usize
+abbrev Decode := Array U8 32#usize → Result (core.result.Result Digest atomic_statement.AtomicStatementError)
+def NBN_Dep_DigestDecode (decode : Decode) : Prop :=
+  ∀ bytes, decode bytes = atomic_statement.decode_digest_canonical bytes
+end NFY_NBN_AfterDecodeTypes
+-- END copied NBN_AfterDecodeTypes
+-- BEGIN copied NBN_AfterDecode16: lean/NBN_AfterDecode16.lean
+set_option autoImplicit false
+noncomputable section
+namespace NFY_NBN_AfterDecode16
+open Aeneas Aeneas.Std Result ControlFlow Error
+open AspisR1TerminalDecoder pool_v1.pair_terminal NFY_NBN_AfterDecodeTypes
 
-#print axioms tail_shape
-#print axioms bindings_shape
-#print axioms shape
-#print axioms late_domain
-#print axioms payment_same
-end NFY_NED_ValidatorCallDomains
--- END copied NED_ValidatorCallDomains
+def run (decode : Decode) (bytes : Slice U8) (val1 val3 val5 val7 val9 val11 val13 val15 val17 val19 val21 val23 val25 val27 val29 val31 val33 : Array aspis_core.field.M31 8#usize) : Result (core.result.Result PoolV1PairVerifiedAfterstateV1 PoolV1PairVerifierTransportErrorV1) := do
+  let s19 ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 560#usize, «end» := 592#usize }
+  let r51 ← pool_v1.pair_terminal.exact 32#usize s19
+  let cf34 ← core.result.Result.Insts.CoreOpsTry.branch r51
+  match cf34 with
+  | core.ops.control_flow.ControlFlow.Continue val34 =>
+    let r52 ← decode val34
+    let r53 ← AspisR1TerminalDecoder.core.result.Result.map_err pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure_17.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairVerifierTransportErrorV1 r52 ()
+    let cf35 ← core.result.Result.Insts.CoreOpsTry.branch r53
+    match cf35 with
+    | core.ops.control_flow.ControlFlow.Continue val35 =>
+      let s20 ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 592#usize, «end» := 624#usize }
+      let r54 ← pool_v1.pair_terminal.exact 32#usize s20
+      let cf36 ← core.result.Result.Insts.CoreOpsTry.branch r54
+      match cf36 with
+      | core.ops.control_flow.ControlFlow.Continue val36 =>
+        let r55 ← decode val36
+        let r56 ← AspisR1TerminalDecoder.core.result.Result.map_err pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure_18.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairVerifierTransportErrorV1 r55 ()
+        let cf37 ← core.result.Result.Insts.CoreOpsTry.branch r56
+        match cf37 with
+        | core.ops.control_flow.ControlFlow.Continue val37 =>
+          let s21 ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 624#usize, «end» := 656#usize }
+          let r57 ← pool_v1.pair_terminal.exact 32#usize s21
+          let cf38 ← core.result.Result.Insts.CoreOpsTry.branch r57
+          match cf38 with
+          | core.ops.control_flow.ControlFlow.Continue val38 =>
+            let r58 ← decode val38
+            let r59 ← AspisR1TerminalDecoder.core.result.Result.map_err pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure_19.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairVerifierTransportErrorV1 r58 ()
+            let cf39 ← core.result.Result.Insts.CoreOpsTry.branch r59
+            match cf39 with
+            | core.ops.control_flow.ControlFlow.Continue val39 =>
+              let s22 ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 656#usize, «end» := 688#usize }
+              let r60 ← pool_v1.pair_terminal.exact 32#usize s22
+              let cf40 ← core.result.Result.Insts.CoreOpsTry.branch r60
+              match cf40 with
+              | core.ops.control_flow.ControlFlow.Continue val40 =>
+                let r61 ← decode val40
+                let r62 ← AspisR1TerminalDecoder.core.result.Result.map_err pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure_20.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairVerifierTransportErrorV1 r61 ()
+                let cf41 ← core.result.Result.Insts.CoreOpsTry.branch r62
+                match cf41 with
+                | core.ops.control_flow.ControlFlow.Continue val41 =>
+                  let s23 ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 8#usize, «end» := 16#usize }
+                  let r63 ← pool_v1.pair_terminal.exact 8#usize s23
+                  let cf42 ← core.result.Result.Insts.CoreOpsTry.branch r63
+                  match cf42 with
+                  | core.ops.control_flow.ControlFlow.Continue val42 =>
+                    let i6 ← lift (core.num.U64.from_le_bytes val42)
+                    let r64 ← pool_v1.pair_terminal.validate_verified_afterstate { next_pair_index := i6, next_root := val1, next_frontier := (Array.make 20#usize [ val3, val5, val7, val9, val11, val13, val15, val17, val19, val21, val23, val25, val27, val29, val31, val33, val35, val37, val39, val41 ]) }
+                    let cf43 ← core.result.Result.Insts.CoreOpsTry.branch r64
+                    match cf43 with
+                    | core.ops.control_flow.ControlFlow.Continue _ => ok (core.result.Result.Ok { next_pair_index := i6, next_root := val1, next_frontier := (Array.make 20#usize [ val3, val5, val7, val9, val11, val13, val15, val17, val19, val21, val23, val25, val27, val29, val31, val33, val35, val37, val39, val41 ]) })
+                    | core.ops.control_flow.ControlFlow.Break residual => core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual
+                  | core.ops.control_flow.ControlFlow.Break residual => core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual
+                | core.ops.control_flow.ControlFlow.Break residual => core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual
+              | core.ops.control_flow.ControlFlow.Break residual => core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual
+            | core.ops.control_flow.ControlFlow.Break residual => core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual
+          | core.ops.control_flow.ControlFlow.Break residual => core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual
+        | core.ops.control_flow.ControlFlow.Break residual => core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual
+      | core.ops.control_flow.ControlFlow.Break residual => core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual
+    | core.ops.control_flow.ControlFlow.Break residual => core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual
+  | core.ops.control_flow.ControlFlow.Break residual => core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual
+
+theorem source (decode : Decode) (lower : NBN_Dep_DigestDecode decode)
+    (bytes : Slice U8) (val1 val3 val5 val7 val9 val11 val13 val15 val17 val19 val21 val23 val25 val27 val29 val31 val33 : Array aspis_core.field.M31 8#usize) :
+    run decode bytes val1 val3 val5 val7 val9 val11 val13 val15 val17 val19 val21 val23 val25 val27 val29 val31 val33 = AspisS6NativeAfterstateDecoderFactored.part_16 bytes val1 val3 val5 val7 val9 val11 val13 val15 val17 val19 val21 val23 val25 val27 val29 val31 val33 := by
+  have same : decode = atomic_statement.decode_digest_canonical := funext lower
+  unfold run
+  rw [same]
+  unfold AspisS6NativeAfterstateDecoderFactored.part_16
+  run_tac do
+    for _ in [:8] do
+      let g ← Lean.Elab.Tactic.getMainGoal
+      let t ← g.getType
+      let names := t.getUsedConstants.filter fun n =>
+        let s := n.toString
+        (s.startsWith "NFY_NBN_AfterDecode" || s.startsWith "AspisS6NativeAfterstateDecoderFactored.") &&
+        (s.splitOn ".").any (fun c => c.startsWith "match_")
+      if names.isEmpty then break
+      let ids := names.map Lean.mkIdent
+      Lean.Elab.Tactic.evalTactic (← `(tactic| unfold $[$ids:ident]*))
+  dsimp only
+  all_goals with_reducible rfl
+
+#print axioms source
+end NFY_NBN_AfterDecode16
+-- END copied NBN_AfterDecode16
+-- BEGIN copied NBN_AfterDecode12: lean/NBN_AfterDecode12.lean
+set_option autoImplicit false
+noncomputable section
+namespace NFY_NBN_AfterDecode12
+open Aeneas Aeneas.Std Result ControlFlow Error
+open AspisR1TerminalDecoder pool_v1.pair_terminal NFY_NBN_AfterDecodeTypes
+
+def run (decode : Decode) (bytes : Slice U8) (val1 val3 val5 val7 val9 val11 val13 val15 val17 val19 val21 val23 val25 : Array aspis_core.field.M31 8#usize) : Result (core.result.Result PoolV1PairVerifiedAfterstateV1 PoolV1PairVerifierTransportErrorV1) := do
+  let s15 ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 432#usize, «end» := 464#usize }
+  let r39 ← pool_v1.pair_terminal.exact 32#usize s15
+  let cf26 ← core.result.Result.Insts.CoreOpsTry.branch r39
+  match cf26 with
+  | core.ops.control_flow.ControlFlow.Continue val26 =>
+    let r40 ← decode val26
+    let r41 ← AspisR1TerminalDecoder.core.result.Result.map_err pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure_13.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairVerifierTransportErrorV1 r40 ()
+    let cf27 ← core.result.Result.Insts.CoreOpsTry.branch r41
+    match cf27 with
+    | core.ops.control_flow.ControlFlow.Continue val27 =>
+      let s16 ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 464#usize, «end» := 496#usize }
+      let r42 ← pool_v1.pair_terminal.exact 32#usize s16
+      let cf28 ← core.result.Result.Insts.CoreOpsTry.branch r42
+      match cf28 with
+      | core.ops.control_flow.ControlFlow.Continue val28 =>
+        let r43 ← decode val28
+        let r44 ← AspisR1TerminalDecoder.core.result.Result.map_err pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure_14.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairVerifierTransportErrorV1 r43 ()
+        let cf29 ← core.result.Result.Insts.CoreOpsTry.branch r44
+        match cf29 with
+        | core.ops.control_flow.ControlFlow.Continue val29 =>
+          let s17 ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 496#usize, «end» := 528#usize }
+          let r45 ← pool_v1.pair_terminal.exact 32#usize s17
+          let cf30 ← core.result.Result.Insts.CoreOpsTry.branch r45
+          match cf30 with
+          | core.ops.control_flow.ControlFlow.Continue val30 =>
+            let r46 ← decode val30
+            let r47 ← AspisR1TerminalDecoder.core.result.Result.map_err pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure_15.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairVerifierTransportErrorV1 r46 ()
+            let cf31 ← core.result.Result.Insts.CoreOpsTry.branch r47
+            match cf31 with
+            | core.ops.control_flow.ControlFlow.Continue val31 =>
+              let s18 ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 528#usize, «end» := 560#usize }
+              let r48 ← pool_v1.pair_terminal.exact 32#usize s18
+              let cf32 ← core.result.Result.Insts.CoreOpsTry.branch r48
+              match cf32 with
+              | core.ops.control_flow.ControlFlow.Continue val32 =>
+                let r49 ← decode val32
+                let r50 ← AspisR1TerminalDecoder.core.result.Result.map_err pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure_16.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairVerifierTransportErrorV1 r49 ()
+                let cf33 ← core.result.Result.Insts.CoreOpsTry.branch r50
+                match cf33 with
+                | core.ops.control_flow.ControlFlow.Continue val33 =>
+                  NFY_NBN_AfterDecode16.run decode bytes val1 val3 val5 val7 val9 val11 val13 val15 val17 val19 val21 val23 val25 val27 val29 val31 val33
+                | core.ops.control_flow.ControlFlow.Break residual => core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual
+              | core.ops.control_flow.ControlFlow.Break residual => core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual
+            | core.ops.control_flow.ControlFlow.Break residual => core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual
+          | core.ops.control_flow.ControlFlow.Break residual => core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual
+        | core.ops.control_flow.ControlFlow.Break residual => core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual
+      | core.ops.control_flow.ControlFlow.Break residual => core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual
+    | core.ops.control_flow.ControlFlow.Break residual => core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual
+  | core.ops.control_flow.ControlFlow.Break residual => core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual
+
+theorem source (decode : Decode) (lower : NBN_Dep_DigestDecode decode)
+    (bytes : Slice U8) (val1 val3 val5 val7 val9 val11 val13 val15 val17 val19 val21 val23 val25 : Array aspis_core.field.M31 8#usize) :
+    run decode bytes val1 val3 val5 val7 val9 val11 val13 val15 val17 val19 val21 val23 val25 = AspisS6NativeAfterstateDecoderFactored.part_12 bytes val1 val3 val5 val7 val9 val11 val13 val15 val17 val19 val21 val23 val25 := by
+  have same : decode = atomic_statement.decode_digest_canonical := funext lower
+  unfold run
+  simp only [NFY_NBN_AfterDecode16.source decode lower]
+  rw [same]
+  unfold AspisS6NativeAfterstateDecoderFactored.part_12
+  run_tac do
+    for _ in [:8] do
+      let g ← Lean.Elab.Tactic.getMainGoal
+      let t ← g.getType
+      let names := t.getUsedConstants.filter fun n =>
+        let s := n.toString
+        (s.startsWith "NFY_NBN_AfterDecode" || s.startsWith "AspisS6NativeAfterstateDecoderFactored.") &&
+        (s.splitOn ".").any (fun c => c.startsWith "match_")
+      if names.isEmpty then break
+      let ids := names.map Lean.mkIdent
+      Lean.Elab.Tactic.evalTactic (← `(tactic| unfold $[$ids:ident]*))
+  dsimp only
+  all_goals with_reducible rfl
+
+#print axioms source
+end NFY_NBN_AfterDecode12
+-- END copied NBN_AfterDecode12
+-- BEGIN copied NBN_AfterDecode08: lean/NBN_AfterDecode08.lean
+set_option autoImplicit false
+noncomputable section
+namespace NFY_NBN_AfterDecode08
+open Aeneas Aeneas.Std Result ControlFlow Error
+open AspisR1TerminalDecoder pool_v1.pair_terminal NFY_NBN_AfterDecodeTypes
+
+def run (decode : Decode) (bytes : Slice U8) (val1 val3 val5 val7 val9 val11 val13 val15 val17 : Array aspis_core.field.M31 8#usize) : Result (core.result.Result PoolV1PairVerifiedAfterstateV1 PoolV1PairVerifierTransportErrorV1) := do
+  let s11 ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 304#usize, «end» := 336#usize }
+  let r27 ← pool_v1.pair_terminal.exact 32#usize s11
+  let cf18 ← core.result.Result.Insts.CoreOpsTry.branch r27
+  match cf18 with
+  | core.ops.control_flow.ControlFlow.Continue val18 =>
+    let r28 ← decode val18
+    let r29 ← AspisR1TerminalDecoder.core.result.Result.map_err pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure_9.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairVerifierTransportErrorV1 r28 ()
+    let cf19 ← core.result.Result.Insts.CoreOpsTry.branch r29
+    match cf19 with
+    | core.ops.control_flow.ControlFlow.Continue val19 =>
+      let s12 ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 336#usize, «end» := 368#usize }
+      let r30 ← pool_v1.pair_terminal.exact 32#usize s12
+      let cf20 ← core.result.Result.Insts.CoreOpsTry.branch r30
+      match cf20 with
+      | core.ops.control_flow.ControlFlow.Continue val20 =>
+        let r31 ← decode val20
+        let r32 ← AspisR1TerminalDecoder.core.result.Result.map_err pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure_10.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairVerifierTransportErrorV1 r31 ()
+        let cf21 ← core.result.Result.Insts.CoreOpsTry.branch r32
+        match cf21 with
+        | core.ops.control_flow.ControlFlow.Continue val21 =>
+          let s13 ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 368#usize, «end» := 400#usize }
+          let r33 ← pool_v1.pair_terminal.exact 32#usize s13
+          let cf22 ← core.result.Result.Insts.CoreOpsTry.branch r33
+          match cf22 with
+          | core.ops.control_flow.ControlFlow.Continue val22 =>
+            let r34 ← decode val22
+            let r35 ← AspisR1TerminalDecoder.core.result.Result.map_err pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure_11.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairVerifierTransportErrorV1 r34 ()
+            let cf23 ← core.result.Result.Insts.CoreOpsTry.branch r35
+            match cf23 with
+            | core.ops.control_flow.ControlFlow.Continue val23 =>
+              let s14 ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 400#usize, «end» := 432#usize }
+              let r36 ← pool_v1.pair_terminal.exact 32#usize s14
+              let cf24 ← core.result.Result.Insts.CoreOpsTry.branch r36
+              match cf24 with
+              | core.ops.control_flow.ControlFlow.Continue val24 =>
+                let r37 ← decode val24
+                let r38 ← AspisR1TerminalDecoder.core.result.Result.map_err pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure_12.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairVerifierTransportErrorV1 r37 ()
+                let cf25 ← core.result.Result.Insts.CoreOpsTry.branch r38
+                match cf25 with
+                | core.ops.control_flow.ControlFlow.Continue val25 =>
+                  NFY_NBN_AfterDecode12.run decode bytes val1 val3 val5 val7 val9 val11 val13 val15 val17 val19 val21 val23 val25
+                | core.ops.control_flow.ControlFlow.Break residual => core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual
+              | core.ops.control_flow.ControlFlow.Break residual => core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual
+            | core.ops.control_flow.ControlFlow.Break residual => core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual
+          | core.ops.control_flow.ControlFlow.Break residual => core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual
+        | core.ops.control_flow.ControlFlow.Break residual => core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual
+      | core.ops.control_flow.ControlFlow.Break residual => core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual
+    | core.ops.control_flow.ControlFlow.Break residual => core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual
+  | core.ops.control_flow.ControlFlow.Break residual => core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual
+
+theorem source (decode : Decode) (lower : NBN_Dep_DigestDecode decode)
+    (bytes : Slice U8) (val1 val3 val5 val7 val9 val11 val13 val15 val17 : Array aspis_core.field.M31 8#usize) :
+    run decode bytes val1 val3 val5 val7 val9 val11 val13 val15 val17 = AspisS6NativeAfterstateDecoderFactored.part_8 bytes val1 val3 val5 val7 val9 val11 val13 val15 val17 := by
+  have same : decode = atomic_statement.decode_digest_canonical := funext lower
+  unfold run
+  simp only [NFY_NBN_AfterDecode12.source decode lower]
+  rw [same]
+  unfold AspisS6NativeAfterstateDecoderFactored.part_8
+  run_tac do
+    for _ in [:8] do
+      let g ← Lean.Elab.Tactic.getMainGoal
+      let t ← g.getType
+      let names := t.getUsedConstants.filter fun n =>
+        let s := n.toString
+        (s.startsWith "NFY_NBN_AfterDecode" || s.startsWith "AspisS6NativeAfterstateDecoderFactored.") &&
+        (s.splitOn ".").any (fun c => c.startsWith "match_")
+      if names.isEmpty then break
+      let ids := names.map Lean.mkIdent
+      Lean.Elab.Tactic.evalTactic (← `(tactic| unfold $[$ids:ident]*))
+  dsimp only
+  all_goals with_reducible rfl
+
+#print axioms source
+end NFY_NBN_AfterDecode08
+-- END copied NBN_AfterDecode08
 
 run_cmd do
  let env ← Lean.getEnv

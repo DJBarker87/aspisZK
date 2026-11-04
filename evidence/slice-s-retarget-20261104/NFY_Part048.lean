@@ -1,758 +1,555 @@
 import Lean
-import NFY_Part047
-import NFY_Part043
 import Aeneas
-import NFY_Part030
+import S2W_D189Wrappers
+import CPH_Program
+import NFY_Part047
+import AdapterRwModel
 
--- BEGIN copied NDM_CohortGate: evidence/native-front4b-20261028/NDM_CohortGate.lean
+-- BEGIN copied JHb_DataRequest: lean/JHb_DataRequest.lean
 set_option autoImplicit false
-namespace NFY_NDM_CohortGate
-open Aeneas Aeneas.Std Result
-abbrev RawOptionEq (i : core.cmp.PartialEq U64 U64) := AspisR1AdapterReconstruct.core.option.Option.Insts.CoreCmpPartialEqOption i
-abbrev RawFieldEq := AspisR1AdapterReconstruct.aspis_core.field.M31.Insts.CoreCmpPartialEqM31
-
-theorem option_reference (live next : U64) :
- (do let o ← lift (U64.checked_add live 1#u64)
-     core.cmp.PartialEq.ne.trait_default (RawOptionEq core.cmp.PartialEqU64) o (some next)) =
- (do let accepted ← NDM_GateRef.next_gate_ref live next
-     ok (!accepted)) := by
- unfold NDM_GateRef.next_gate_ref
- cases call : U64.checked_add live 1#u64 <;>
-  simp [lift,core.cmp.PartialEq.ne.trait_default,core.cmp.PartialEq.ne.default,
-   RawOptionEq,AspisR1AdapterReconstruct.core.option.Option.Insts.CoreCmpPartialEqOption,
-   AspisR1AdapterReconstruct.core.option.Option.Insts.CoreCmpPartialEqOption.eq,
-   core.cmp.PartialEqU64,liftFun2,core.cmp.impls.PartialEqU64.eq,
-   AspisR1AdapterReconstruct.optionDiscriminantInst,
-   AspisR1AdapterReconstruct.optionDiscriminant,read_discriminant]
-
-theorem field_reference (x y : U32) :
- core.cmp.PartialEq.ne.trait_default RawFieldEq x y=ok (decide (x≠y)) := by
- by_cases h : x=y
- · subst y
-   simp [core.cmp.PartialEq.ne.trait_default,core.cmp.PartialEq.ne.default,
-    RawFieldEq,AspisR1AdapterReconstruct.aspis_core.field.M31.Insts.CoreCmpPartialEqM31,
-    AspisR1AdapterReconstruct.aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq]
- · simp [core.cmp.PartialEq.ne.trait_default,core.cmp.PartialEq.ne.default,
-    RawFieldEq,AspisR1AdapterReconstruct.aspis_core.field.M31.Insts.CoreCmpPartialEqM31,
-    AspisR1AdapterReconstruct.aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq,h]
-
-theorem option_natural (live next : U64) :
- (do let o ← lift (U64.checked_add live 1#u64)
-     core.cmp.PartialEq.ne.trait_default (RawOptionEq core.cmp.PartialEqU64) o (some next)) =
- ok (!(decide (live.val+1=next.val))) := by
- rw [option_reference live next,NFY_NDM_GateTotal.reference]
- rfl
-
-#print axioms option_reference
-#print axioms field_reference
-#print axioms option_natural
-end NFY_NDM_CohortGate
--- END copied NDM_CohortGate
--- BEGIN copied NDM_CohortConstructors: evidence/native-front4b-20261028/NDM_CohortConstructors.lean
-set_option autoImplicit false
-namespace NFY_NDM_CohortConstructors
-open Aeneas Aeneas.Std Result
-open AspisR1AdapterReconstruct
-open aspis_statement.pool_v1
-abbrev Statement := pair_forest_terminal.PoolV1PairForestTerminalStatementV1
-abbrev Common := pair_forest_terminal.PoolV1PairForestTerminalCommonV1
-abbrev Validation := core.result.Result Unit pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1
-
-def wrap (s : Statement) (r : Validation) : core.result.Result Statement solana_program_error.ProgramError :=
- match r with | .Ok _=>.Ok s | .Err _=>.Err .InvalidInstructionData
-
-/-- The exact emitted constructor, including uniform error erasure, against
- the SAME actual emitted validator call. No native opaque validator is discharged. -/
-theorem transfer (c : Common) (p : payment_relation.PoolV1PrivateTransferPublicV1)
- (reply : Validation)
- (sameCall : pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1
-  (.PrivateTransfer c p)=ok reply) :
- r1_pool_adapter.transfer_statement_box c p=ok (wrap (.PrivateTransfer c p) reply) := by
- unfold r1_pool_adapter.transfer_statement_box
- rw [sameCall]
- cases reply <;> rfl
-
-theorem withdrawal (c : Common) (p : payment_relation.PoolV1WithdrawalPublicV1)
- (reply : Validation)
- (sameCall : pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1
-  (.Withdrawal c p)=ok reply) :
- r1_pool_adapter.withdrawal_statement_box c p=ok (wrap (.Withdrawal c p) reply) := by
- unfold r1_pool_adapter.withdrawal_statement_box
- rw [sameCall]
- cases reply <;> rfl
-
-#print axioms transfer
-#print axioms withdrawal
-end NFY_NDM_CohortConstructors
--- END copied NDM_CohortConstructors
--- BEGIN copied NDM_CohortReconstruction: evidence/native-front4b-20261028/NDM_CohortReconstruction.lean
-set_option autoImplicit false
-namespace NFY_NDM_CohortReconstruction
-open Aeneas Aeneas.Std Result
-open AspisR1AdapterReconstruct
-open aspis_statement.pool_v1
-abbrev Request := pair_forest_terminal.PoolV1PairForestTerminalRequestV1
-abbrev Auth := r1_pool_adapter.AuthenticatedAsq8Accounts
-abbrev Candidate := pair_terminal.PoolV1PairVerifiedAfterstateV1
-
-def requested (request : Request) : U32 := match request.public with
- | .PrivateTransfer p=>p.asset_id
- | .Withdrawal p=>p.asset_id
-
-def finish (request : Request) (a : Auth) (c : Candidate) := do
- let common ← r1_pool_adapter.asq8_common a c
- match request.public with
- | .PrivateTransfer p=>r1_pool_adapter.transfer_statement_box common p
- | .Withdrawal p=>r1_pool_adapter.withdrawal_statement_box common p
-
-def direct (request : Request) (a : Auth) (c : Candidate) :=
- if a.live_snapshot.next_pair_index.val+1=c.next_pair_index.val then
-  if a.master.identity.asset_id=requested request then finish request a c
-  else ok (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData)
- else ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
-
-theorem word_cond {T : Type} (x y : U32) (a b : T) :
- (if x.val=y.val then a else b)=(if x=y then a else b) := by
- have eqv : x.val=y.val ↔ x=y := ⟨UScalar.eq_of_val_eq,congrArg (fun z : U32=>z.val)⟩
- by_cases h : x=y <;> simp_all
-
-/-- Actual emitted reconstruction control with actual emitted constructors,
- valid for every input. This is model-only; K082 gives no native gate credit. -/
-theorem control (request : Request) (a : Auth) (c : Candidate) :
- r1_pool_adapter.reconstruct_asq8_statement request a c=direct request a c := by
- have gate := NFY_NDM_CohortGate.option_natural a.live_snapshot.next_pair_index c.next_pair_index
- simp only [lift,bind_tc_ok] at gate
- unfold r1_pool_adapter.reconstruct_asq8_statement
- simp only [lift,bind_tc_ok]
- rw [gate]
- simp only [bind_tc_ok]
- cases request with
- | mk profile release program payment=>
-  cases payment <;>
-   by_cases step : a.live_snapshot.next_pair_index.val+1=c.next_pair_index.val <;>
-   simp [direct,finish,requested,step,NFY_NDM_CohortGate.field_reference] <;>
-   exact word_cond _ _ _ _
-
-#print axioms word_cond
-#print axioms control
-end NFY_NDM_CohortReconstruction
--- END copied NDM_CohortReconstruction
--- BEGIN copied NEU_ReconstructCore: evidence/slice-s-compose7-20261103/NEU_ReconstructCore.lean
-set_option autoImplicit false
-noncomputable section
-namespace NFY_NEU_ReconstructCore
-open Aeneas Aeneas.Std Result
-open AspisR1AdapterReconstruct aspis_statement.pool_v1
-abbrev Request := pair_forest_terminal.PoolV1PairForestTerminalRequestV1
-abbrev Auth := r1_pool_adapter.AuthenticatedAsq8Accounts
-abbrev Candidate := pair_terminal.PoolV1PairVerifiedAfterstateV1
-abbrev Common := pair_forest_terminal.PoolV1PairForestTerminalCommonV1
-
-def common (a : Auth) (c : Candidate) : Common :=
-  { master_account := a.master_account, checkpoint_account := a.checkpoint_account,
-    selected_lane_account := a.selected_lane_account, output_lane := a.selected_lane.lane_id,
-    checkpoint_sequence := a.checkpoint.checkpoint_sequence,
-    historical_global_anchor := a.checkpoint.global_root,
-    lane_transition := {live_snapshot := a.live_snapshot, candidate_afterstate := c} }
-
-theorem common_result (a : Auth) (c : Candidate) :
-    r1_pool_adapter.asq8_common a c = ok (common a c) := rfl
-
-def run {State : Type} (request : Request) (a : Auth) (c : Candidate) (state : State) :=
-  if a.live_snapshot.next_pair_index.val+1=c.next_pair_index.val then
-    if a.master.identity.asset_id=NFY_NDM_CohortReconstruction.requested request then
-      match request.public with
-      | .PrivateTransfer p => NFY_NEU_BoxModel.run (.PrivateTransfer (common a c) p) state
-      | .Withdrawal p => NFY_NEU_BoxModel.run (.Withdrawal (common a c) p) state
-    else (ok (.Err solana_program_error.ProgramError.InvalidInstructionData),state,[])
-  else (ok (.Err solana_program_error.ProgramError.InvalidAccountData),state,[])
-
-def trace (request : Request) (a : Auth) (c : Candidate) :=
-  if a.live_snapshot.next_pair_index.val+1=c.next_pair_index.val then
-    if a.master.identity.asset_id=NFY_NDM_CohortReconstruction.requested request then
-      match request.public with
-      | .PrivateTransfer p => (NFY_NED_ValidatorTrace.run
-          (NFY_NED_ReconstructCarriers.fromRaw (.PrivateTransfer (common a c) p))).2
-      | .Withdrawal p => (NFY_NED_ValidatorTrace.run
-          (NFY_NED_ReconstructCarriers.fromRaw (.Withdrawal (common a c) p))).2
-    else []
-  else []
-
-/-- Model composition at the exact source calls. Constructor child hypotheses
-are discharged by NFY_NEU_BoxModel; native auth/common/Box associations remain
-separate certificate obligations, never premises hidden in this theorem. -/
-theorem result_state_effects {State : Type} (request : Request) (a : Auth)
-    (c : Candidate) (state : State) :
-    run request a c state =
-      (r1_pool_adapter.reconstruct_asq8_statement request a c,state,trace request a c) := by
-  rw [NFY_NDM_CohortReconstruction.control]
-  unfold run trace NFY_NDM_CohortReconstruction.direct
-  by_cases gate : a.live_snapshot.next_pair_index.val+1=c.next_pair_index.val
-  · simp only [if_pos gate]
-    by_cases asset : a.master.identity.asset_id=NFY_NDM_CohortReconstruction.requested request
-    · simp only [if_pos asset]
-      unfold NFY_NDM_CohortReconstruction.finish
-      rw [common_result,bind_tc_ok]
-      cases h : request.public with
-      | PrivateTransfer p => exact NFY_NEU_BoxModel.transfer_result_state_effects (common a c) p state
-      | Withdrawal p => exact NFY_NEU_BoxModel.withdrawal_result_state_effects (common a c) p state
-    · simp only [if_neg asset]
-  · simp only [if_neg gate]
-
-#print axioms common_result
-#print axioms result_state_effects
-end NFY_NEU_ReconstructCore
--- END copied NEU_ReconstructCore
--- BEGIN copied NDM_SnapshotRef.Types: evidence/native-front4b-20261028/NDM_SnapshotRef/Types.lean
--- THIS FILE WAS AUTOMATICALLY GENERATED BY AENEAS
--- [ndg_reference]: type definitions
-open Aeneas Aeneas.Std Result ControlFlow Error
-set_option linter.dupNamespace false
-set_option linter.hashCommand false
-set_option linter.unusedVariables false
-
-/- You can set the `maxHeartbeats` value with the `-max-heartbeats` CLI option -/
-set_option maxHeartbeats 1000000
-
-/- You can set the `maxRecDepth` value with the `-max-recdepth` CLI option -/
-set_option maxRecDepth 2048
-
-namespace NDM_SnapshotRef
-
-end NDM_SnapshotRef
--- END copied NDM_SnapshotRef.Types
--- BEGIN copied NDM_SnapshotRef.Funs: evidence/native-front4b-20261028/NDM_SnapshotRef/Funs.lean
--- THIS FILE WAS AUTOMATICALLY GENERATED BY AENEAS
--- [ndg_reference]: function definitions
-open Aeneas Aeneas.Std Result ControlFlow Error
-set_option linter.dupNamespace false
-set_option linter.hashCommand false
-set_option linter.unusedVariables false
-
-/- You can set the `maxHeartbeats` value with the `-max-heartbeats` CLI option -/
-set_option maxHeartbeats 1000000
-
-/- You can set the `maxRecDepth` value with the `-max-recdepth` CLI option -/
-set_option maxRecDepth 2048
-
-namespace NDM_SnapshotRef
-
-/-- [ndg_reference::snapshot_select_ref]:
-    Source: 'src/lib.rs', lines 8:0-8:107
-    Visibility: public -/
-def snapshot_select_ref
-  (length : Std.Usize) (limit1 : Std.Usize) (limit2 : Std.Usize) :
-  Result Bool
-  := do
-  if length = limit1
-  then ok true
-  else ok (length = limit2)
-
-/-- [ndg_reference::snapshot_value_ref]:
-    Source: 'src/lib.rs', lines 9:0-11:1
-    Visibility: public -/
-def snapshot_value_ref
-  {K : Type} {B : Type} (metadata : (K × K × Bool × Bool × Bool))
-  (length : Std.Usize) (admitted : Bool) (bytes : B) :
-  Result ((K × K × Bool × Bool × Bool) × Std.Usize × (Option B))
-  := do
-  if admitted
-  then ok (metadata, length, some bytes)
-  else ok (metadata, length, none)
-
-/-- [ndg_reference::failed_snapshot_ref]:
-    Source: 'src/lib.rs', lines 12:0-12:66
-    Visibility: public -/
-def failed_snapshot_ref
-  (T : Type) {E : Type} (error : E) : Result (core.result.Result T E) := do
-  ok (core.result.Result.Err error)
-
-/-- [ndg_reference::validation_ref]:
-    Source: 'src/lib.rs', lines 13:0-15:1
-    Visibility: public -/
-def validation_ref
-  {C : Type} {P : Type} (common : C) (public1 : P) (valid : Bool) :
-  Result (core.result.Result (C × P) Std.U8)
-  := do
-  if valid
-  then ok (core.result.Result.Ok (common, public1))
-  else ok (core.result.Result.Err 0#u8)
-
-end NDM_SnapshotRef
--- END copied NDM_SnapshotRef.Funs
--- BEGIN copied NDM_StatementReference: evidence/native-front4b-20261028/NDM_StatementReference.lean
-set_option autoImplicit false
-namespace NFY_NDM_StatementReference
-open Aeneas Aeneas.Std Result AdapterRw
-open aspis_statement.pool_v1
-abbrev Statement := pair_forest_terminal.PoolV1PairForestTerminalStatementV1
-abbrev Common := NFY_NDM_CommonCarrier.Common
-abbrev Transfer := payment_relation.PoolV1PrivateTransferPublicV1
-abbrev Withdrawal := payment_relation.PoolV1WithdrawalPublicV1
-abbrev Validation := core.result.Result Unit pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1
-
-def accepted (reply : Validation) : Bool := match reply with | .Ok _=>true | .Err _=>false
-
-def lift {C P : Type} (build : C → P → Statement)
- (reply : core.result.Result (C × P) U8) : core.result.Result Statement solana_program_error.ProgramError :=
- match reply with | .Ok (c,p)=>.Ok (build c p) | .Err _=>.Err .InvalidInstructionData
-
-def reference {C P : Type} (build : C → P → Statement) (c : C) (p : P) (valid : Bool) := do
- let reply ← NDM_SnapshotRef.validation_ref c p valid
- ok (lift build reply)
-
-def call (ops : Ops) (statement : Statement) : Result
- (core.result.Result Statement solana_program_error.ProgramError) := do
- let reply ← ops.op21 statement
- ok (match reply with | .Ok _=>.Ok statement | .Err _=>.Err .InvalidInstructionData)
-
-/-- Same constructed statement and SAME validator reply. The native callback
- association and its installed semantic interpretation remain separate obligations. -/
-theorem transfer (ops : Ops) (c : Common) (p : Transfer) (reply : Validation)
- (sameCall : ops.op21 (.PrivateTransfer c p)=ok reply) :
- call ops (.PrivateTransfer c p) = reference (fun c p => (.PrivateTransfer c p : Statement)) c p (accepted reply) := by
- unfold call
- rw [sameCall]
- cases reply <;> rfl
-
-theorem withdrawal (ops : Ops) (c : Common) (p : Withdrawal) (reply : Validation)
- (sameCall : ops.op21 (.Withdrawal c p)=ok reply) :
- call ops (.Withdrawal c p) = reference (fun c p => (.Withdrawal c p : Statement)) c p (accepted reply) := by
- unfold call
- rw [sameCall]
- cases reply <;> rfl
-
-/-- Error payloads are discarded uniformly, not only for a fixture error variant. -/
-theorem error_payload (ops : Ops) (statement : Statement)
- (error : pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
- (sameCall : ops.op21 statement=ok (.Err error)) :
- call ops statement=ok (.Err .InvalidInstructionData) := by
- unfold call
- rw [sameCall]
- rfl
-
-#print axioms transfer
-#print axioms withdrawal
-#print axioms error_payload
-end NFY_NDM_StatementReference
--- END copied NDM_StatementReference
--- BEGIN copied NDM_CohortStatement: evidence/native-front4b-20261028/NDM_CohortStatement.lean
-set_option autoImplicit false
-namespace NFY_NDM_CohortStatement
-open Aeneas Aeneas.Std Result
-open AspisR1.JHf_Carrier
-abbrev RawStatement := NFY_NDM_CohortConstructors.Statement
-abbrev RawReply := core.result.Result RawStatement AspisR1AdapterReconstruct.solana_program_error.ProgramError
-abbrev Reply := core.result.Result NFY_NDM_StatementReference.Statement AdapterRw.solana_program_error.ProgramError
-
-def transport (r : RawReply) : Reply := match r with
- | .Ok s=>.Ok (fromPoolV1PairForestTerminalStatementV1 s)
- | .Err e=>.Err (AspisR1.NFY_JHf_ProgramErrorCarrier.fromRaw e)
-
-def accepted (r : NFY_NDM_CohortConstructors.Validation) : Bool :=
- match r with | .Ok _=>true | .Err _=>false
-
-/-- Extracted safe reference to actual cohort constructor on the SAME actual
- validator invocation. The native validator abstraction remains OPEN. -/
-theorem transfer (c : NFY_NDM_StatementReference.Common) (p : NFY_NDM_StatementReference.Transfer)
- (reply : NFY_NDM_CohortConstructors.Validation)
- (sameCall : AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1
-  (.PrivateTransfer (toPoolV1PairForestTerminalCommonV1 c) (toPoolV1PrivateTransferPublicV1 p))=ok reply) :
- (do let r ← AspisR1AdapterReconstruct.r1_pool_adapter.transfer_statement_box
-       (toPoolV1PairForestTerminalCommonV1 c) (toPoolV1PrivateTransferPublicV1 p)
-     ok (transport r))=
- NFY_NDM_StatementReference.reference (fun c p=>(.PrivateTransfer c p : NFY_NDM_StatementReference.Statement)) c p (accepted reply) := by
- rw [NFY_NDM_CohortConstructors.transfer _ _ reply sameCall]
- cases reply <;> rfl
-
-theorem withdrawal (c : NFY_NDM_StatementReference.Common) (p : NFY_NDM_StatementReference.Withdrawal)
- (reply : NFY_NDM_CohortConstructors.Validation)
- (sameCall : AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1
-  (.Withdrawal (toPoolV1PairForestTerminalCommonV1 c) (toPoolV1WithdrawalPublicV1 p))=ok reply) :
- (do let r ← AspisR1AdapterReconstruct.r1_pool_adapter.withdrawal_statement_box
-       (toPoolV1PairForestTerminalCommonV1 c) (toPoolV1WithdrawalPublicV1 p)
-     ok (transport r))=
- NFY_NDM_StatementReference.reference (fun c p=>(.Withdrawal c p : NFY_NDM_StatementReference.Statement)) c p (accepted reply) := by
- rw [NFY_NDM_CohortConstructors.withdrawal _ _ reply sameCall]
- cases reply <;> rfl
-
-#print axioms transfer
-#print axioms withdrawal
-end NFY_NDM_CohortStatement
--- END copied NDM_CohortStatement
--- BEGIN copied NDM_AdoptedReconstruction: evidence/native-front4b-20261028/NDM_AdoptedReconstruction.lean
-set_option autoImplicit false
-namespace NFY_NDM_AdoptedReconstruction
-open Aeneas Aeneas.Std Result AdapterRw
-open AspisR1.JHf_Carrier
-
-/-- Control normalization of the existing op52 source selection, including
- its actual carrier/error conversion. No replacement dictionary is installed. -/
-theorem selected (request : aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalRequestV1)
- (a : r1_pool_adapter.AuthenticatedAsq8Accounts) (c : NFY_NDM_CommonCarrier.Candidate) :
- AspisR1.NFY_JHf_ReconstructionSlot.source request a c =
- (do let raw ← NFY_NDM_CohortReconstruction.direct (toRequest request)
-       (toAuthenticatedAsq8Accounts a) (toPoolV1PairVerifiedAfterstateV1 c)
-     ok (NFY_NDM_CohortStatement.transport raw)) := by
- unfold AspisR1.NFY_JHf_ReconstructionSlot.source
- rw [NFY_NDM_CohortReconstruction.control]
- cases call : NFY_NDM_CohortReconstruction.direct (toRequest request)
-  (toAuthenticatedAsq8Accounts a) (toPoolV1PairVerifiedAfterstateV1 c) with
- | fail e=>rfl
- | div=>rfl
- | ok reply=>cases reply <;> rfl
-
-#print axioms selected
-end NFY_NDM_AdoptedReconstruction
--- END copied NDM_AdoptedReconstruction
--- BEGIN copied NEU_ReconstructAdopted: evidence/slice-s-compose7-20261103/NEU_ReconstructAdopted.lean
-set_option autoImplicit false
-noncomputable section
-namespace NFY_NEU_ReconstructAdopted
-open Aeneas Aeneas.Std Result AdapterRw
-open AspisR1.JHf_Carrier
-abbrev Request := aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalRequestV1
-abbrev Auth := r1_pool_adapter.AuthenticatedAsq8Accounts
-abbrev Candidate := NFY_NDM_CommonCarrier.Candidate
-
-def run {State : Type} (request : Request) (a : Auth) (c : Candidate) (state : State) :=
-  let observed := NFY_NEU_ReconstructCore.run (toRequest request)
-    (toAuthenticatedAsq8Accounts a) (toPoolV1PairVerifiedAfterstateV1 c) state
-  ((do let reply ← observed.1; ok (NFY_NDM_CohortStatement.transport reply)),observed.2.1,observed.2.2)
-
-/-- Exact selected op52 source, full Result, external state and ordered child
-trace. All constructor validator hypotheses are discharged in the model.
-This needs the separate native certificates to become a composed root. -/
-theorem result_state_effects {State : Type} (request : Request) (a : Auth)
-    (c : Candidate) (state : State) :
-    run request a c state =
-    (AspisR1.NFY_JHf_ReconstructionSlot.source request a c,state,
-      NFY_NEU_ReconstructCore.trace (toRequest request) (toAuthenticatedAsq8Accounts a)
-        (toPoolV1PairVerifiedAfterstateV1 c)) := by
-  unfold run
-  rw [NFY_NEU_ReconstructCore.result_state_effects]
-  dsimp only
-  unfold AspisR1.NFY_JHf_ReconstructionSlot.source
-  cases call : AspisR1AdapterReconstruct.r1_pool_adapter.reconstruct_asq8_statement
-    (toRequest request) (toAuthenticatedAsq8Accounts a) (toPoolV1PairVerifiedAfterstateV1 c) with
-  | fail e => rfl
-  | div => rfl
-  | ok reply => cases reply <;> rfl
-
-#print axioms result_state_effects
-end NFY_NEU_ReconstructAdopted
--- END copied NEU_ReconstructAdopted
--- BEGIN copied NEU_CallDomains: evidence/slice-s-compose7-20261103/NEU_CallDomains.lean
-set_option autoImplicit false
-noncomputable section
-namespace NFY_NEU_CallDomains
-open Aeneas Aeneas.Std Result
-open AspisR1AdapterReconstruct aspis_statement.pool_v1
-open NFY_NEU_ReconstructCore
-inductive Call where
-  | common : Auth → Candidate → Call
-  | transfer : Common → payment_relation.PoolV1PrivateTransferPublicV1 → Call
-  | withdrawal : Common → payment_relation.PoolV1WithdrawalPublicV1 → Call
-
-def calls (request : Request) (a : Auth) (c : Candidate) : List Call :=
-  if a.live_snapshot.next_pair_index.val+1=c.next_pair_index.val then
-    if a.master.identity.asset_id=NFY_NDM_CohortReconstruction.requested request then
-      .common a c :: (match request.public with
-        | .PrivateTransfer p => [.transfer (common a c) p]
-        | .Withdrawal p => [.withdrawal (common a c) p])
-    else []
-  else []
-
-theorem reached_domains (request : Request) (a : Auth) (c : Candidate) :
-    (∀ a' c', Call.common a' c' ∈ calls request a c → a'=a ∧ c'=c) ∧
-    (∀ d p, Call.transfer d p ∈ calls request a c →
-      d=common a c ∧ request.public=.PrivateTransfer p) ∧
-    (∀ d p, Call.withdrawal d p ∈ calls request a c →
-      d=common a c ∧ request.public=.Withdrawal p) := by
-  unfold calls
-  split
-  · split
-    · cases h : request.public <;> simp [h]
-    · simp
-  · simp
-
-theorem common_packet (a : Auth) (c : Candidate) :
-    NFY_NED_ReconstructCarriers.toRawCommon
-      (NFY_NED_ReconstructCarriers.fromRawCommon (common a c)) = common a c :=
-  NFY_NED_RawCarrierInverses.common _
-
-theorem transfer_packet (c : Common) (p : payment_relation.PoolV1PrivateTransferPublicV1) :
-    NFY_NED_ReconstructCarriers.toRaw
-      (NFY_NED_ReconstructCarriers.fromRaw (.PrivateTransfer c p)) = .PrivateTransfer c p :=
-  NFY_NED_RawCarrierInverses.statement _
-
-theorem withdrawal_packet (c : Common) (p : payment_relation.PoolV1WithdrawalPublicV1) :
-    NFY_NED_ReconstructCarriers.toRaw
-      (NFY_NED_ReconstructCarriers.fromRaw (.Withdrawal c p)) = .Withdrawal c p :=
-  NFY_NED_RawCarrierInverses.statement _
-
-def ReplyRange (s : NFY_NEU_BoxModel.Statement)
-    (r : core.result.Result NFY_NEU_BoxModel.Statement NFY_NEU_BoxModel.ProgramError) : Prop :=
-  r=.Ok s ∨ r=.Err .InvalidInstructionData
-
-theorem transfer_reply_range (c : Common) (p : payment_relation.PoolV1PrivateTransferPublicV1) :
-    ∃ r, r1_pool_adapter.transfer_statement_box c p=ok r ∧ ReplyRange (.PrivateTransfer c p) r := by
-  refine ⟨NFY_NEU_BoxModel.wrap _ (NFY_NEU_BoxModel.status _),NFY_NEU_BoxModel.transfer c p,?_⟩
-  cases NFY_NEU_BoxModel.status (.PrivateTransfer c p) <;> simp only [NFY_NEU_BoxModel.wrap,ReplyRange,or_true,true_or]
-
-theorem withdrawal_reply_range (c : Common) (p : payment_relation.PoolV1WithdrawalPublicV1) :
-    ∃ r, r1_pool_adapter.withdrawal_statement_box c p=ok r ∧ ReplyRange (.Withdrawal c p) r := by
-  refine ⟨NFY_NEU_BoxModel.wrap _ (NFY_NEU_BoxModel.status _),NFY_NEU_BoxModel.withdrawal c p,?_⟩
-  cases NFY_NEU_BoxModel.status (.Withdrawal c p) <;> simp only [NFY_NEU_BoxModel.wrap,ReplyRange,or_true,true_or]
-
-#print axioms reached_domains
-#print axioms common_packet
-#print axioms transfer_packet
-#print axioms withdrawal_packet
-#print axioms transfer_reply_range
-#print axioms withdrawal_reply_range
-end NFY_NEU_CallDomains
--- END copied NEU_CallDomains
--- BEGIN copied NEU_PublicProjections: evidence/slice-s-compose7-20261103/NEU_PublicProjections.lean
-set_option autoImplicit false
-namespace NFY_NEU_PublicProjections
+namespace AspisR1.NFY_JHb_DataRequest
 open Aeneas Aeneas.Std
-open AspisR1AdapterReconstruct.aspis_statement.pool_v1.payment_relation
-abbrev Transfer := PoolV1PrivateTransferPublicV1
-abbrev Withdrawal := PoolV1WithdrawalPublicV1
-
-def get {α : Type} {n : Usize} (a : Array α n) (i : Fin n.val) : α :=
-  a.val[i.val]'(by rw [a.property]; exact i.isLt)
-
-def transfer (p : Transfer) (slot : Fin 8) (i : Fin 8) (j : Fin 32) : Nat :=
-  match slot.val with
-  | 0 => (get p.pool j).val
-  | 1 => (get p.deployment_domain j).val
-  | 2 => p.anchor_sequence.val
-  | 3 => (get p.anchor_root i).val
-  | 4 => (get p.nullifier i).val
-  | 5 => p.asset_id.val
-  | 6 => (get p.change_commitment i).val
-  | _ => (get p.recipient_commitment i).val
-
-def withdrawal (p : Withdrawal) (slot : Fin 9) (i : Fin 8) (j : Fin 32) : Nat :=
-  match slot.val with
-  | 0 => (get p.pool j).val
-  | 1 => (get p.deployment_domain j).val
-  | 2 => p.anchor_sequence.val
-  | 3 => (get p.anchor_root i).val
-  | 4 => (get p.nullifier i).val
-  | 5 => p.asset_id.val
-  | 6 => (get p.change_commitment i).val
-  | 7 => p.amount.val
-  | _ => (get p.destination_token_account j).val
-
-/-- Arbitrary native scalar/byte/word observation identifies the ENTIRE public
-record; no unobserved array positions are zeroed or assumed equal. -/
-theorem transfer_ext (p q : Transfer)
-    (point : ∀ slot i j, transfer p slot i j=transfer q slot i j) : p=q := by
-  have pool : p.pool=q.pool := by
-    apply NFY_NED_WindowExtensionality.array_ext
-    intro j
-    apply UScalar.eq_of_val_eq
-    exact point ⟨0,by decide⟩ ⟨0,by decide⟩ j
-  have deployment : p.deployment_domain=q.deployment_domain := by
-    apply NFY_NED_WindowExtensionality.array_ext
-    intro j
-    apply UScalar.eq_of_val_eq
-    exact point ⟨1,by decide⟩ ⟨0,by decide⟩ j
-  have sequence : p.anchor_sequence=q.anchor_sequence := by
-    apply UScalar.eq_of_val_eq
-    exact point ⟨2,by decide⟩ ⟨0,by decide⟩ ⟨0,by decide⟩
-  have anchor : p.anchor_root=q.anchor_root := by
-    apply NFY_NED_WindowExtensionality.array_ext
-    intro i
-    apply UScalar.eq_of_val_eq
-    exact point ⟨3,by decide⟩ i ⟨0,by decide⟩
-  have nullifier : p.nullifier=q.nullifier := by
-    apply NFY_NED_WindowExtensionality.array_ext
-    intro i
-    apply UScalar.eq_of_val_eq
-    exact point ⟨4,by decide⟩ i ⟨0,by decide⟩
-  have asset : p.asset_id=q.asset_id := by
-    apply UScalar.eq_of_val_eq
-    exact point ⟨5,by decide⟩ ⟨0,by decide⟩ ⟨0,by decide⟩
-  have change : p.change_commitment=q.change_commitment := by
-    apply NFY_NED_WindowExtensionality.array_ext
-    intro i
-    apply UScalar.eq_of_val_eq
-    exact point ⟨6,by decide⟩ i ⟨0,by decide⟩
-  have recipient : p.recipient_commitment=q.recipient_commitment := by
-    apply NFY_NED_WindowExtensionality.array_ext
-    intro i
-    apply UScalar.eq_of_val_eq
-    exact point ⟨7,by decide⟩ i ⟨0,by decide⟩
-  cases p; cases q
-  congr 1 <;> assumption
-
-theorem withdrawal_ext (p q : Withdrawal)
-    (point : ∀ slot i j, withdrawal p slot i j=withdrawal q slot i j) : p=q := by
-  have pool : p.pool=q.pool := by
-    apply NFY_NED_WindowExtensionality.array_ext
-    intro j
-    apply UScalar.eq_of_val_eq
-    exact point ⟨0,by decide⟩ ⟨0,by decide⟩ j
-  have deployment : p.deployment_domain=q.deployment_domain := by
-    apply NFY_NED_WindowExtensionality.array_ext
-    intro j
-    apply UScalar.eq_of_val_eq
-    exact point ⟨1,by decide⟩ ⟨0,by decide⟩ j
-  have sequence : p.anchor_sequence=q.anchor_sequence := by
-    apply UScalar.eq_of_val_eq
-    exact point ⟨2,by decide⟩ ⟨0,by decide⟩ ⟨0,by decide⟩
-  have anchor : p.anchor_root=q.anchor_root := by
-    apply NFY_NED_WindowExtensionality.array_ext
-    intro i
-    apply UScalar.eq_of_val_eq
-    exact point ⟨3,by decide⟩ i ⟨0,by decide⟩
-  have nullifier : p.nullifier=q.nullifier := by
-    apply NFY_NED_WindowExtensionality.array_ext
-    intro i
-    apply UScalar.eq_of_val_eq
-    exact point ⟨4,by decide⟩ i ⟨0,by decide⟩
-  have asset : p.asset_id=q.asset_id := by
-    apply UScalar.eq_of_val_eq
-    exact point ⟨5,by decide⟩ ⟨0,by decide⟩ ⟨0,by decide⟩
-  have change : p.change_commitment=q.change_commitment := by
-    apply NFY_NED_WindowExtensionality.array_ext
-    intro i
-    apply UScalar.eq_of_val_eq
-    exact point ⟨6,by decide⟩ i ⟨0,by decide⟩
-  have amount : p.amount=q.amount := by
-    apply UScalar.eq_of_val_eq
-    exact point ⟨7,by decide⟩ ⟨0,by decide⟩ ⟨0,by decide⟩
-  have destination : p.destination_token_account=q.destination_token_account := by
-    apply NFY_NED_WindowExtensionality.array_ext
-    intro j
-    apply UScalar.eq_of_val_eq
-    exact point ⟨8,by decide⟩ ⟨0,by decide⟩ j
-  cases p; cases q
-  congr 1 <;> assumption
-
-#print axioms transfer_ext
-#print axioms withdrawal_ext
-end NFY_NEU_PublicProjections
--- END copied NEU_PublicProjections
--- BEGIN copied NEU_CommonProjections: evidence/slice-s-compose7-20261103/NEU_CommonProjections.lean
+def c00 : List U8 := [65#u8,83#u8,81#u8,56#u8,1#u8,1#u8,1#u8,0#u8,87#u8,148#u8,115#u8,19#u8,210#u8,50#u8,100#u8,26#u8,216#u8,21#u8,125#u8,102#u8,191#u8,175#u8,250#u8,177#u8,30#u8,76#u8,58#u8,153#u8,51#u8,29#u8,24#u8,244#u8]
+theorem c00_length : c00.length=32 := by simp only [c00,List.length_cons,List.length_nil,List.length_replicate]
+#print axioms c00_length
+def c01 : List U8 := [75#u8,250#u8,202#u8,182#u8,137#u8,151#u8,55#u8,211#u8,226#u8,148#u8,175#u8,188#u8,20#u8,239#u8,106#u8,254#u8,118#u8,184#u8,71#u8,222#u8,244#u8,68#u8,82#u8,248#u8,76#u8,195#u8,114#u8,128#u8,100#u8,101#u8,118#u8,7#u8]
+theorem c01_length : c01.length=32 := by simp only [c01,List.length_cons,List.length_nil,List.length_replicate]
+#print axioms c01_length
+def c02 : List U8 := [181#u8,68#u8,165#u8,57#u8,202#u8,155#u8,50#u8,58#u8,65#u8,65#u8,65#u8,65#u8,65#u8,65#u8,65#u8,65#u8,65#u8,65#u8,65#u8,65#u8,65#u8,65#u8,65#u8,65#u8,65#u8,65#u8,65#u8,65#u8,65#u8,65#u8,65#u8,65#u8]
+theorem c02_length : c02.length=32 := by simp only [c02,List.length_cons,List.length_nil,List.length_replicate]
+#print axioms c02_length
+def c03 : List U8 := [65#u8,65#u8,65#u8,65#u8,65#u8,65#u8,65#u8,65#u8,65#u8,83#u8,67#u8,80#u8,1#u8,1#u8,1#u8,0#u8,34#u8,8#u8,198#u8,55#u8,61#u8,211#u8,19#u8,178#u8,242#u8,118#u8,165#u8,45#u8,20#u8,254#u8,147#u8,25#u8]
+theorem c03_length : c03.length=32 := by simp only [c03,List.length_cons,List.length_nil,List.length_replicate]
+#print axioms c03_length
+def c04 : List U8 := [55#u8,157#u8,211#u8,124#u8,152#u8,170#u8,59#u8,88#u8,182#u8,77#u8,252#u8,152#u8,45#u8,26#u8,82#u8,63#u8,5#u8,5#u8,5#u8,5#u8,5#u8,5#u8,5#u8,5#u8,5#u8,5#u8,5#u8,5#u8,5#u8,5#u8,5#u8,5#u8]
+theorem c04_length : c04.length=32 := by simp only [c04,List.length_cons,List.length_nil,List.length_replicate]
+#print axioms c04_length
+def c05 : List U8 := [5#u8,5#u8,5#u8,5#u8,5#u8,5#u8,5#u8,5#u8,5#u8,5#u8,5#u8,5#u8,5#u8,5#u8,5#u8,5#u8,42#u8,0#u8,0#u8,0#u8,0#u8,0#u8,0#u8,0#u8,85#u8,246#u8,62#u8,4#u8,159#u8,80#u8,117#u8,33#u8]
+theorem c05_length : c05.length=32 := by simp only [c05,List.length_cons,List.length_nil,List.length_replicate]
+#print axioms c05_length
+def c06 : List U8 := [221#u8,239#u8,128#u8,120#u8,216#u8,131#u8,141#u8,49#u8,99#u8,239#u8,102#u8,35#u8,253#u8,148#u8,147#u8,6#u8,128#u8,120#u8,67#u8,103#u8,86#u8,177#u8,157#u8,56#u8,219#u8,27#u8,130#u8,0#u8,76#u8,144#u8,137#u8,6#u8]
+theorem c06_length : c06.length=32 := by simp only [c06,List.length_cons,List.length_nil,List.length_replicate]
+#print axioms c06_length
+def c07 : List U8 := [20#u8,96#u8,178#u8,97#u8,164#u8,37#u8,6#u8,0#u8,128#u8,143#u8,218#u8,112#u8,162#u8,164#u8,176#u8,20#u8,25#u8,186#u8,192#u8,19#u8,209#u8,175#u8,110#u8,117#u8,77#u8,0#u8,0#u8,0#u8,0#u8,0#u8,0#u8,0#u8]
+theorem c07_length : c07.length=32 := by simp only [c07,List.length_cons,List.length_nil,List.length_replicate]
+#print axioms c07_length
+def c08 : List U8 := [38#u8,95#u8,6#u8,86#u8,21#u8,144#u8,64#u8,23#u8,144#u8,38#u8,14#u8,44#u8,19#u8,44#u8,204#u8,114#u8,34#u8,164#u8,10#u8,25#u8,49#u8,167#u8,186#u8,47#u8,31#u8,240#u8,152#u8,56#u8,72#u8,124#u8,118#u8,4#u8]
+theorem c08_length : c08.length=32 := by simp only [c08,List.length_cons,List.length_nil,List.length_replicate]
+#print axioms c08_length
+def c09 : List U8 := [35#u8,21#u8,136#u8,6#u8,65#u8,19#u8,78#u8,120#u8,113#u8,38#u8,13#u8,70#u8,250#u8,49#u8,224#u8,32#u8,8#u8,134#u8,48#u8,23#u8,1#u8,83#u8,145#u8,33#u8,35#u8,192#u8,81#u8,85#u8,205#u8,25#u8,236#u8,20#u8]
+theorem c09_length : c09.length=32 := by simp only [c09,List.length_cons,List.length_nil,List.length_replicate]
+#print axioms c09_length
+def bytes : List U8 := c00 ++ c01 ++ c02 ++ c03 ++ c04 ++ c05 ++ c06 ++ c07 ++ c08 ++ c09
+theorem length : bytes.length=320 := by
+  simp only [bytes,List.length_append,c00_length,c01_length,c02_length,c03_length,c04_length,c05_length,c06_length,c07_length,c08_length,c09_length]
+#print axioms length
+def value : Slice U8 := ⟨bytes,by rw [length];scalar_tac⟩
+end AspisR1.NFY_JHb_DataRequest
+-- END copied JHb_DataRequest
+-- BEGIN copied JGx_SdkContinuation: lean/JGx_SdkContinuation.lean
 set_option autoImplicit false
-namespace NFY_NEU_CommonProjections
+noncomputable section
+namespace AspisR1.NFY_JGx_SdkContinuation
+open Aeneas Aeneas.Std Result
+open _root_.AdapterRw
+
+def afterValidation (ops : Ops) (accounts : S2W_ExtractionBoundary.Accounts)
+    (validated : r1_pool_adapter.ValidatedAsqa) : Result (core.result.Result Unit solana_program_error.ProgramError) := do
+  let oa ← Slice.index_usize accounts 0#usize
+  let r1 ← (r1_pool_adapter.owned.OwnedAccount.data ops) oa
+  let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+  match cf1 with
+  | core.ops.control_flow.ControlFlow.Continue val1 =>
+    let oa1 ← Slice.index_usize accounts 6#usize
+    let r2 ← (r1_pool_adapter.owned.OwnedAccount.data ops) oa1
+    let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+    match cf2 with
+    | core.ops.control_flow.ControlFlow.Continue val2 =>
+      let proof_start ←
+        (aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops)
+      let o1 ← lift (Usize.checked_add proof_start validated.proof_length)
+      let r3 ←
+        core.option.Option.ok_or o1
+          solana_program_error.ProgramError.InvalidAccountData
+      let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r3
+      match cf3 with
+      | core.ops.control_flow.ControlFlow.Continue val3 =>
+        let i1 := Slice.len val1
+        if i1 != val3
+        then
+          ok (core.result.Result.Err
+            solana_program_error.ProgramError.InvalidAccountData)
+        else
+          let r4 ←
+            ops.op22
+              validated.statement
+          let r5 ←
+            core.result.Result.map_err
+              r1_pool_adapter.owned.stage2_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError
+              r4 ()
+          let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r5
+          match cf4 with
+          | core.ops.control_flow.ControlFlow.Continue val4 =>
+            let s1 ← lift (Array.to_slice val4)
+            let i2 := Slice.len s1
+            let i3 ←
+              (aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES ops)
+            if i2 != i3
+            then
+              ok (core.result.Result.Err
+                solana_program_error.ProgramError.InvalidInstructionData)
+            else
+              let s2 ← lift (Array.to_slice val4)
+              let s3 ←
+                core.slice.index.Slice.index
+                  (core.slice.index.SliceIndexRangeUsizeSlice Std.U8)
+                  val1 { start := proof_start, «end» := val3 }
+              let o2 ← (observer ops)
+              let r6 ←
+                ops.op11
+                  (SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) s2 s3 val2
+                  () o2
+              let r7 ←
+                core.result.Result.map_err (BuiltinFnOnce
+                  aspis_r1_cost_probe.verifier.Error
+                  solana_program_error.ProgramError) r6 (ops.op44)
+              let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r7
+              match cf5 with
+              | core.ops.control_flow.ControlFlow.Continue _ =>
+                ops.op53 validated.statement
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  Unit (core.convert.FromSame
+                  solana_program_error.ProgramError) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              Unit (core.convert.FromSame
+              solana_program_error.ProgramError) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          Unit (core.convert.FromSame solana_program_error.ProgramError)
+          residual
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+        Unit (core.convert.FromSame solana_program_error.ProgramError)
+        residual
+  | core.ops.control_flow.ControlFlow.Break residual =>
+    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+      Unit (core.convert.FromSame solana_program_error.ProgramError)
+      residual
+
+#print axioms afterValidation
+end AspisR1.NFY_JGx_SdkContinuation
+end
+-- END copied JGx_SdkContinuation
+-- BEGIN copied JGx_SdkAfterValidationEq: lean/JGx_SdkAfterValidationEq.lean
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.NFY_JGx_SdkAfterValidationEq
+open Aeneas Aeneas.Std Result
+open _root_.AdapterRw
+
+theorem source (ops : Ops) (program : solana_pubkey.Pubkey)
+    (accounts : S2W_ExtractionBoundary.Accounts) (data : Slice U8)
+    (slot : S2W_ExtractionBoundary.Slot)
+    (validated : r1_pool_adapter.ValidatedAsqa)
+    (count : Slice.len accounts=7#usize)
+    (magic : (do
+      let o ← core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) data {«end»:=4#usize}
+      let s ← core.array.Array.index (core.ops.index.IndexSlice
+        ((core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice ops) U8))
+        aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC ()
+      core.cmp.PartialEq.ne.trait_default ((core.option.Option.Insts.CoreCmpPartialEqOption ops)
+        (core.cmp.PartialEqShared (Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8))) o (some s))=ok false)
+    (validation : r1_pool_adapter.owned.validate_asq8 ops program accounts data slot=ok (.Ok validated)) :
+    r1_pool_adapter.owned.stage2_owned ops program accounts data slot=
+      NFY_JGx_SdkContinuation.afterValidation ops accounts validated := by
+  unfold r1_pool_adapter.owned.stage2_owned
+  rw [count]
+  simp only [show (7#usize !=7#usize)=false from by decide,Bool.false_eq_true,ite_false]
+  obtain ⟨o,read,rest⟩ := AdapterRw.Cuts.bind_success _ _ _ magic
+  obtain ⟨s,index,neq⟩ := AdapterRw.Cuts.bind_success _ _ _ rest
+  rw [read,bind_tc_ok,index,bind_tc_ok,neq,bind_tc_ok]
+  simp only [Bool.false_eq_true,ite_false]
+  rw [validation,bind_tc_ok]
+  simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
+  rfl
+#print axioms source
+end AspisR1.NFY_JGx_SdkAfterValidationEq
+end
+-- END copied JGx_SdkAfterValidationEq
+-- BEGIN copied JGx_MagicGate: lean/JGx_MagicGate.lean
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.NFY_JGx_MagicGate
+open Aeneas Aeneas.Std Result
+open _root_.AdapterRw
+
+def value (ops : Ops) (data : Slice U8) : Result Bool := do
+  let o ← core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) data {«end»:=4#usize}
+  let s ← core.array.Array.index (core.ops.index.IndexSlice
+    ((core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice ops) U8))
+    aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC ()
+  core.cmp.PartialEq.ne.trait_default ((core.option.Option.Insts.CoreCmpPartialEqOption ops)
+    (core.cmp.PartialEqShared (Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8))) o (some s)
+
+theorem source (ops : Ops) (data : Slice U8) (selected : Option (Slice U8)) (magic : Slice U8)
+    (read : core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) data {«end»:=4#usize}=ok selected)
+    (array : core.array.Array.index (core.ops.index.IndexSlice
+      ((core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice ops) U8))
+      aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC ()=ok magic)
+    (compare : core.cmp.PartialEq.ne.trait_default ((core.option.Option.Insts.CoreCmpPartialEqOption ops)
+      (core.cmp.PartialEqShared (Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8))) selected (some magic)=ok false) :
+    value ops data=ok false := by
+  unfold value
+  rw [read,bind_tc_ok,array,bind_tc_ok,compare]
+#print axioms source
+end AspisR1.NFY_JGx_MagicGate
+end
+-- END copied JGx_MagicGate
+-- BEGIN copied JGx_RequestBytes: lean/JGx_RequestBytes.lean
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.NFY_JGx_RequestBytes
+open Aeneas Aeneas.Std Result
+
+def magic : Slice U8 := ⟨[65#u8,83#u8,81#u8,56#u8],by simp;scalar_tac⟩
+def value (payload : Array U8 316#usize) : Slice U8 :=
+  ⟨magic.val++payload.val,by simp only [List.length_append,magic,List.length_cons,List.length_nil,payload.property];scalar_tac⟩
+
+theorem length (payload : Array U8 316#usize) : Slice.len (value payload)=320#usize := by
+  apply UScalar.eq_of_val_eq
+  change (magic.val++payload.val).length=320
+  rw [List.length_append,payload.property]
+  rfl
+#print axioms length
+
+theorem first (payload : Array U8 316#usize) :
+    (value payload).val.take 4=magic.val := by
+  change (magic.val++payload.val).take 4=magic.val
+  have size : magic.val.length=4 := rfl
+  have h : (magic.val++payload.val).take magic.val.length=magic.val := List.take_left
+  simpa only [size] using h
+#print axioms first
+end AspisR1.NFY_JGx_RequestBytes
+end
+-- END copied JGx_RequestBytes
+-- BEGIN copied JGx_RequestRead: lean/JGx_RequestRead.lean
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.NFY_JGx_RequestRead
+open Aeneas Aeneas.Std Result
+
+#print core.slice.index.SliceIndexRangeToUsizeSlice.get
+theorem source (payload : Array U8 316#usize) :
+    core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+      (NFY_JGx_RequestBytes.value payload) {«end»:=4#usize}=ok (some NFY_JGx_RequestBytes.magic) := by
+  unfold core.slice.Slice.get
+  simp only [core.slice.index.SliceIndexRangeToUsizeSlice]
+  unfold core.slice.index.SliceIndexRangeToUsizeSlice.get
+  have hlen : (NFY_JGx_RequestBytes.value payload).length=320 := congrArg UScalar.val (NFY_JGx_RequestBytes.length payload)
+  rw [if_pos (by change 4≤(NFY_JGx_RequestBytes.value payload).length;rw [hlen];decide)]
+  apply congrArg ok
+  apply congrArg some
+  apply Subtype.ext
+  exact NFY_JGx_RequestBytes.first payload
+
+#print axioms source
+end AspisR1.NFY_JGx_RequestRead
+end
+-- END copied JGx_RequestRead
+-- BEGIN copied JGx_MagicStd: lean/JGx_MagicStd.lean
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.NFY_JGx_MagicStd
+open Aeneas Aeneas.Std Result
+
+def optionEq {T : Type} (cmp : core.cmp.PartialEq T T) (left right : Option T) : Result Bool :=
+  match left,right with
+  | none,none=>ok true
+  | some x,some y=>cmp.eq x y
+  | _,_=>ok false
+
+def install (ops : AdapterRw.Ops) : AdapterRw.Ops :=
+  {ops with op2:=optionEq,op4:=fun _ input=>ok input}
+
+theorem source (ops : AdapterRw.Ops) (payload : Array U8 316#usize) :
+    NFY_JGx_MagicGate.value (install ops) (NFY_JGx_RequestBytes.value payload)=ok false := by
+  unfold NFY_JGx_MagicGate.value
+  rw [NFY_JGx_RequestRead.source,bind_tc_ok]
+  unfold AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC
+  rfl
+#print axioms source
+end AspisR1.NFY_JGx_MagicStd
+end
+-- END copied JGx_MagicStd
+-- BEGIN copied JHb_RequestCarrier: lean/JHb_RequestCarrier.lean
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.NFY_JHb_RequestCarrier
+open Aeneas Aeneas.Std Result
+
+def payload : Array U8 316#usize := ⟨NFY_JHb_DataRequest.bytes.drop 4,by
+  rw [List.length_drop,NFY_JHb_DataRequest.length]
+  rfl⟩
+
+theorem same : NFY_JGx_RequestBytes.value payload=NFY_JHb_DataRequest.value := by
+  apply Subtype.ext
+  change NFY_JGx_RequestBytes.magic.val ++ NFY_JHb_DataRequest.bytes.drop 4=NFY_JHb_DataRequest.bytes
+  have header : NFY_JHb_DataRequest.bytes.take 4=NFY_JGx_RequestBytes.magic.val := rfl
+  rw [← header]
+  exact List.take_append_drop 4 NFY_JHb_DataRequest.bytes
+#print axioms same
+
+theorem magic (base : AdapterRw.Ops) :
+    NFY_JGx_MagicGate.value (NFY_JGx_MagicStd.install base) NFY_JHb_DataRequest.value=ok false := by
+  rw [← same]
+  exact NFY_JGx_MagicStd.source base payload
+#print axioms magic
+
+theorem length : Slice.len NFY_JHb_DataRequest.value=320#usize := by
+  rw [← same]
+  exact NFY_JGx_RequestBytes.length payload
+#print axioms length
+end AspisR1.NFY_JHb_RequestCarrier
+end
+-- END copied JHb_RequestCarrier
+-- BEGIN copied JHb_Programs: lean/JHb_Programs.lean
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.NFY_JHb_Programs
 open Aeneas Aeneas.Std
-open NFY_NEU_PublicProjections (get)
-abbrev Common := AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+/-- Default frozen source slot, r1_pool_adapter.rs AUDIT_POOL_PROGRAM fallback.
+IDa leaves this slot in missing.adapter; this is an explicit fixture choice. -/
+def pool : S2W_ExtractionBoundary.Program := Array.repeat 32#usize 65#u8
+def registry : S2W_ExtractionBoundary.Program := Array.repeat 32#usize 68#u8
+def foreign : S2W_ExtractionBoundary.Program := Array.repeat 32#usize 85#u8
 
-def value (c : Common) (slot : Fin 15) (i : Fin 8) (j : Fin 32) (k : Fin 20) : Nat :=
-  match slot.val with
-  | 0 => (get c.master_account j).val
-  | 1 => (get c.checkpoint_account j).val
-  | 2 => (get c.selected_lane_account j).val
-  | 3 => c.output_lane.val
-  | 4 => c.checkpoint_sequence.val
-  | 5 => (get c.historical_global_anchor i).val
-  | 6 => (get c.lane_transition.live_snapshot.pool j).val
-  | 7 => (get c.lane_transition.live_snapshot.deployment_domain j).val
-  | 8 => c.lane_transition.live_snapshot.sequence.val
-  | 9 => c.lane_transition.live_snapshot.next_pair_index.val
-  | 10 => (get c.lane_transition.live_snapshot.current_root i).val
-  | 11 => (get (get c.lane_transition.live_snapshot.frontier k) i).val
-  | 12 => c.lane_transition.candidate_afterstate.next_pair_index.val
-  | 13 => (get c.lane_transition.candidate_afterstate.next_root i).val
-  | _ => (get (get c.lane_transition.candidate_afterstate.next_frontier k) i).val
+theorem pool_ne_verifier : pool ≠ CPH_Program.verifier := by
+  intro h
+  have hd := congrArg (fun k : S2W_ExtractionBoundary.Program => k.val[0]?) h
+  change some (65#u8) = some (95#u8) at hd
+  exact (by decide : (65#u8) ≠ 95#u8) (Option.some.inj hd)
+#print axioms pool_ne_verifier
+end AspisR1.NFY_JHb_Programs
+end
+-- END copied JHb_Programs
+-- BEGIN copied JHb_RequestBindings: lean/JHb_RequestBindings.lean
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.NFY_JHb_RequestBindings
+open Aeneas Aeneas.Std Result
 
-/-- One arbitrary field/byte/word/frontier projection identifies the complete
-nested common record. No unread positions are fixed to fixture values. -/
-theorem common_ext (c d : Common)
-    (point : ∀ slot i j k, value c slot i j k=value d slot i j k) : c=d := by
-  have h0 : c.master_account=d.master_account := by
-    apply NFY_NED_WindowExtensionality.array_ext
-    intro j
-    apply UScalar.eq_of_val_eq
-    exact point ⟨0,by decide⟩ ⟨0,by decide⟩ j ⟨0,by decide⟩
-  have h1 : c.checkpoint_account=d.checkpoint_account := by
-    apply NFY_NED_WindowExtensionality.array_ext
-    intro j
-    apply UScalar.eq_of_val_eq
-    exact point ⟨1,by decide⟩ ⟨0,by decide⟩ j ⟨0,by decide⟩
-  have h2 : c.selected_lane_account=d.selected_lane_account := by
-    apply NFY_NED_WindowExtensionality.array_ext
-    intro j
-    apply UScalar.eq_of_val_eq
-    exact point ⟨2,by decide⟩ ⟨0,by decide⟩ j ⟨0,by decide⟩
-  have h3 : c.output_lane=d.output_lane := by
-    apply UScalar.eq_of_val_eq
-    exact point ⟨3,by decide⟩ ⟨0,by decide⟩ ⟨0,by decide⟩ ⟨0,by decide⟩
-  have h4 : c.checkpoint_sequence=d.checkpoint_sequence := by
-    apply UScalar.eq_of_val_eq
-    exact point ⟨4,by decide⟩ ⟨0,by decide⟩ ⟨0,by decide⟩ ⟨0,by decide⟩
-  have h5 : c.historical_global_anchor=d.historical_global_anchor := by
-    apply NFY_NED_WindowExtensionality.array_ext
-    intro i
-    apply UScalar.eq_of_val_eq
-    exact point ⟨5,by decide⟩ i ⟨0,by decide⟩ ⟨0,by decide⟩
-  have h6 : c.lane_transition.live_snapshot.pool=d.lane_transition.live_snapshot.pool := by
-    apply NFY_NED_WindowExtensionality.array_ext
-    intro j
-    apply UScalar.eq_of_val_eq
-    exact point ⟨6,by decide⟩ ⟨0,by decide⟩ j ⟨0,by decide⟩
-  have h7 : c.lane_transition.live_snapshot.deployment_domain=d.lane_transition.live_snapshot.deployment_domain := by
-    apply NFY_NED_WindowExtensionality.array_ext
-    intro j
-    apply UScalar.eq_of_val_eq
-    exact point ⟨7,by decide⟩ ⟨0,by decide⟩ j ⟨0,by decide⟩
-  have h8 : c.lane_transition.live_snapshot.sequence=d.lane_transition.live_snapshot.sequence := by
-    apply UScalar.eq_of_val_eq
-    exact point ⟨8,by decide⟩ ⟨0,by decide⟩ ⟨0,by decide⟩ ⟨0,by decide⟩
-  have h9 : c.lane_transition.live_snapshot.next_pair_index=d.lane_transition.live_snapshot.next_pair_index := by
-    apply UScalar.eq_of_val_eq
-    exact point ⟨9,by decide⟩ ⟨0,by decide⟩ ⟨0,by decide⟩ ⟨0,by decide⟩
-  have h10 : c.lane_transition.live_snapshot.current_root=d.lane_transition.live_snapshot.current_root := by
-    apply NFY_NED_WindowExtensionality.array_ext
-    intro i
-    apply UScalar.eq_of_val_eq
-    exact point ⟨10,by decide⟩ i ⟨0,by decide⟩ ⟨0,by decide⟩
-  have h11 : c.lane_transition.live_snapshot.frontier=d.lane_transition.live_snapshot.frontier := by
-    apply NFY_NED_WindowExtensionality.array_ext
-    intro k
-    apply NFY_NED_WindowExtensionality.array_ext
-    intro i
-    apply UScalar.eq_of_val_eq
-    exact point ⟨11,by decide⟩ i ⟨0,by decide⟩ k
-  have h12 : c.lane_transition.candidate_afterstate.next_pair_index=d.lane_transition.candidate_afterstate.next_pair_index := by
-    apply UScalar.eq_of_val_eq
-    exact point ⟨12,by decide⟩ ⟨0,by decide⟩ ⟨0,by decide⟩ ⟨0,by decide⟩
-  have h13 : c.lane_transition.candidate_afterstate.next_root=d.lane_transition.candidate_afterstate.next_root := by
-    apply NFY_NED_WindowExtensionality.array_ext
-    intro i
-    apply UScalar.eq_of_val_eq
-    exact point ⟨13,by decide⟩ i ⟨0,by decide⟩ ⟨0,by decide⟩
-  have h14 : c.lane_transition.candidate_afterstate.next_frontier=d.lane_transition.candidate_afterstate.next_frontier := by
-    apply NFY_NED_WindowExtensionality.array_ext
-    intro k
-    apply NFY_NED_WindowExtensionality.array_ext
-    intro i
-    apply UScalar.eq_of_val_eq
-    exact point ⟨14,by decide⟩ i ⟨0,by decide⟩ k
-  cases c with
-  | mk m0 ch0 sl0 l0 seq0 an0 lt0 =>
-    cases lt0 with
-    | mk live0 candidate0 =>
-      cases live0
-      cases candidate0
-      cases d with
-      | mk m1 ch1 sl1 l1 seq1 an1 lt1 =>
-        cases lt1 with
-        | mk live1 candidate1 =>
-          cases live1
-          cases candidate1
-          simp_all only
+theorem profile : (NFY_JHb_DataRequest.bytes.drop 8).take 32=AdapterRw.r1_pool_adapter.PROFILE_BINDING.val := by
+  unfold AdapterRw.r1_pool_adapter.PROFILE_BINDING
+  rfl
+#print axioms profile
 
-#print axioms common_ext
-end NFY_NEU_CommonProjections
--- END copied NEU_CommonProjections
+theorem release : (NFY_JHb_DataRequest.bytes.drop 40).take 32=AdapterRw.r1_pool_adapter.RELEASE_BINDING.val := by
+  unfold AdapterRw.r1_pool_adapter.RELEASE_BINDING
+  rfl
+#print axioms release
+
+theorem pool : (NFY_JHb_DataRequest.bytes.drop 72).take 32=NFY_JHb_Programs.pool.val := by rfl
+#print axioms pool
+
+theorem header : NFY_JHb_DataRequest.bytes.take 8=[65#u8,83#u8,81#u8,56#u8,1#u8,1#u8,1#u8,0#u8] := by rfl
+#print axioms header
+end AspisR1.NFY_JHb_RequestBindings
+end
+-- END copied JHb_RequestBindings
+-- BEGIN copied JHd_RequestValue: lean/JHd_RequestValue.lean
+set_option autoImplicit false
+namespace AspisR1.NFY_JHd_RequestValue
+open Aeneas Aeneas.Std Result
+open AspisR20Request pool_v1.pair_forest_terminal
+
+def value : PoolV1PairForestTerminalRequestV1 :=
+  ⟨AdapterRw.r1_pool_adapter.PROFILE_BINDING,AdapterRw.r1_pool_adapter.RELEASE_BINDING,
+    NFY_JHb_Programs.pool,.PrivateTransfer NFY_JHd_RequestPayment.value⟩
+
+theorem profile_nonzero : core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8
+    value.verifier_profile (Array.repeat 32#usize 0#u8)=ok false := by
+  unfold value AdapterRw.r1_pool_adapter.PROFILE_BINDING
+  rfl
+#print axioms profile_nonzero
+
+theorem release_nonzero : core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8
+    value.verifier_release (Array.repeat 32#usize 0#u8)=ok false := by
+  unfold value AdapterRw.r1_pool_adapter.RELEASE_BINDING
+  rfl
+#print axioms release_nonzero
+
+theorem pool_nonzero : core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8
+    value.pool_program (Array.repeat 32#usize 0#u8)=ok false := by rfl
+#print axioms pool_nonzero
+end AspisR1.NFY_JHd_RequestValue
+-- END copied JHd_RequestValue
+-- BEGIN copied JHd_RequestCarrier: lean/JHd_RequestCarrier.lean
+set_option autoImplicit false
+namespace AspisR1.NFY_JHd_RequestCarrier
+open Aeneas Aeneas.Std Result
+
+def mapPoolV1PaymentStatementFormatError (e : AspisR20Request.pool_v1.payment_relation.PoolV1PaymentStatementFormatError) : AdapterRw.aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError :=
+  match e with
+  | .WrongLength=>.WrongLength
+  | .WrongMagic=>.WrongMagic
+  | .WrongVersion=>.WrongVersion
+  | .WrongTransitionKind=>.WrongTransitionKind
+  | .WrongDigestEncoding=>.WrongDigestEncoding
+  | .NonZeroReserved=>.NonZeroReserved
+  | .ZeroRequiredBinding=>.ZeroRequiredBinding
+  | .InvalidAnchorSequence=>.InvalidAnchorSequence
+  | .NonCanonicalDigest=>.NonCanonicalDigest
+  | .NonCanonicalAssetId=>.NonCanonicalAssetId
+  | .InvalidWithdrawalAmount=>.InvalidWithdrawalAmount
+  | .InvalidDestination=>.InvalidDestination
+  | .InvalidEnvelope=>.InvalidEnvelope
+  | .EnvelopeMismatch=>.EnvelopeMismatch
+#print axioms mapPoolV1PaymentStatementFormatError
+
+def mapPoolV1TreeError (e : AspisR20Request.pool_v1.incremental_merkle.PoolV1TreeError) : AdapterRw.aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError :=
+  match e with
+  | .TreeFull=>.TreeFull
+  | .InsufficientCapacity=>.InsufficientCapacity
+  | .IndexOutOfRange=>.IndexOutOfRange
+  | .RootMismatch=>.RootMismatch
+  | .NonCanonicalFrontier=>.NonCanonicalFrontier
+  | .WrongLength=>.WrongLength
+  | .WrongMagic=>.WrongMagic
+  | .WrongVersion=>.WrongVersion
+  | .WrongDepth=>.WrongDepth
+  | .WrongTreeHash=>.WrongTreeHash
+  | .WrongDigestEncoding=>.WrongDigestEncoding
+  | .NonCanonicalDigest=>.NonCanonicalDigest
+  | .NonZeroReserved=>.NonZeroReserved
+#print axioms mapPoolV1TreeError
+
+def mapPoolV1PairForestAccountErrorV1 (e : AspisR20Request.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1) : AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1 :=
+  match e with
+  | .WrongLength=>.WrongLength
+  | .WrongMagic=>.WrongMagic
+  | .WrongVersion=>.WrongVersion
+  | .WrongLaneCount=>.WrongLaneCount
+  | .WrongDigestEncoding=>.WrongDigestEncoding
+  | .WrongDepth=>.WrongDepth
+  | .WrongFormatBinding=>.WrongFormatBinding
+  | .NonZeroReserved=>.NonZeroReserved
+  | .ZeroRequiredBinding=>.ZeroRequiredBinding
+  | .InvalidBoolean=>.InvalidBoolean
+  | .InvalidMasterState=>.InvalidMasterState
+  | .InvalidLane=>.InvalidLane
+  | .LaneMasterMismatch=>.LaneMasterMismatch
+  | .LaneOrderMismatch=>.LaneOrderMismatch
+  | .LaneSequenceDecreased=>.LaneSequenceDecreased
+  | .DuplicateCheckpoint=>.DuplicateCheckpoint
+  | .CheckpointSequenceOverflow=>.CheckpointSequenceOverflow
+  | .NonCanonicalDigest=>.NonCanonicalDigest
+  | .Identity=>.Identity
+  | .Policy=>.Policy
+  | .Tree x=>.Tree (mapPoolV1TreeError x)
+#print axioms mapPoolV1PairForestAccountErrorV1
+
+def mapPoolV1PairLiveSnapshotErrorV1 (e : AspisR20Request.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1) : AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1 :=
+  match e with
+  | .WrongLength=>.WrongLength
+  | .WrongMagic=>.WrongMagic
+  | .WrongVersion=>.WrongVersion
+  | .WrongFormatBinding=>.WrongFormatBinding
+  | .NonZeroReserved=>.NonZeroReserved
+  | .ZeroRequiredBinding=>.ZeroRequiredBinding
+  | .SequenceIndexMismatch=>.SequenceIndexMismatch
+  | .TreeFull=>.TreeFull
+  | .NonCanonicalDigest=>.NonCanonicalDigest
+#print axioms mapPoolV1PairLiveSnapshotErrorV1
+
+def mapPoolV1PairVerifierTransportErrorV1 (e : AspisR20Request.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) : AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1 :=
+  match e with
+  | .WrongLength=>.WrongLength
+  | .WrongMagic=>.WrongMagic
+  | .WrongVersion=>.WrongVersion
+  | .WrongStatementVersion=>.WrongStatementVersion
+  | .WrongDigestEncoding=>.WrongDigestEncoding
+  | .InvalidTransitionKind=>.InvalidTransitionKind
+  | .WrongSuccessCode=>.WrongSuccessCode
+  | .WrongPairFormat=>.WrongPairFormat
+  | .ZeroRequiredBinding=>.ZeroRequiredBinding
+  | .InvalidProofBodyLength=>.InvalidProofBodyLength
+  | .InvalidStatementPayloadLength=>.InvalidStatementPayloadLength
+  | .InvalidLiveSnapshotPayloadLength=>.InvalidLiveSnapshotPayloadLength
+  | .NonCanonicalOutputPair=>.NonCanonicalOutputPair
+  | .InvalidAfterstateIndex=>.InvalidAfterstateIndex
+  | .NonCanonicalAfterstate=>.NonCanonicalAfterstate
+#print axioms mapPoolV1PairVerifierTransportErrorV1
+
+def mapPoolV1PairLatePublicStatementErrorV1 (e : AspisR20Request.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1) : AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1 :=
+  match e with
+  | .WrongLength=>.WrongLength
+  | .WrongMagic=>.WrongMagic
+  | .WrongVersion=>.WrongVersion
+  | .WrongItemCount=>.WrongItemCount
+  | .WrongHeaderLength=>.WrongHeaderLength
+  | .WrongSnapshotLength=>.WrongSnapshotLength
+  | .WrongAfterstateLength=>.WrongAfterstateLength
+  | .WrongTotalLength=>.WrongTotalLength
+  | .NonZeroReserved=>.NonZeroReserved
+  | .Snapshot x=>.Snapshot (mapPoolV1PairLiveSnapshotErrorV1 x)
+  | .Afterstate x=>.Afterstate (mapPoolV1PairVerifierTransportErrorV1 x)
+  | .AfterstateIndexMismatch=>.AfterstateIndexMismatch
+#print axioms mapPoolV1PairLatePublicStatementErrorV1
+
+def mapPoolV1PairForestTerminalFormatErrorV1 (e : AspisR20Request.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1 :=
+  match e with
+  | .WrongLength=>.WrongLength
+  | .WrongMagic=>.WrongMagic
+  | .WrongVersion=>.WrongVersion
+  | .WrongDigestEncoding=>.WrongDigestEncoding
+  | .InvalidTransitionKind=>.InvalidTransitionKind
+  | .InvalidOutputLane=>.InvalidOutputLane
+  | .NonZeroBinding=>.NonZeroBinding
+  | .NonCanonicalDigest=>.NonCanonicalDigest
+  | .OutputLaneMismatch=>.OutputLaneMismatch
+  | .MasterBindingMismatch=>.MasterBindingMismatch
+  | .DeploymentBindingMismatch=>.DeploymentBindingMismatch
+  | .HistoricalAnchorMismatch=>.HistoricalAnchorMismatch
+  | .CheckpointBindingMismatch=>.CheckpointBindingMismatch
+  | .SelectedLaneBindingMismatch=>.SelectedLaneBindingMismatch
+  | .LiveSnapshotMismatch=>.LiveSnapshotMismatch
+  | .CandidateAfterstateMismatch=>.CandidateAfterstateMismatch
+  | .ResultBindingMismatch=>.ResultBindingMismatch
+  | .WithdrawalDestinationMismatch=>.WithdrawalDestinationMismatch
+  | .Payment x=>.Payment (mapPoolV1PaymentStatementFormatError x)
+  | .LaneTransition x=>.LaneTransition (mapPoolV1PairLatePublicStatementErrorV1 x)
+  | .Afterstate x=>.Afterstate (mapPoolV1PairVerifierTransportErrorV1 x)
+  | .Account x=>.Account (mapPoolV1PairForestAccountErrorV1 x)
+#print axioms mapPoolV1PairForestTerminalFormatErrorV1
+
+def privateTransfer (p : AspisR20Request.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1) : AdapterRw.aspis_statement.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1 :=
+  ⟨p.pool,p.deployment_domain,p.anchor_sequence,p.anchor_root,p.nullifier,p.asset_id,p.recipient_commitment,p.change_commitment⟩
+
+def withdrawal (p : AspisR20Request.pool_v1.payment_relation.PoolV1WithdrawalPublicV1) : AdapterRw.aspis_statement.pool_v1.payment_relation.PoolV1WithdrawalPublicV1 :=
+  ⟨p.pool,p.deployment_domain,p.anchor_sequence,p.anchor_root,p.nullifier,p.asset_id,p.amount,p.destination_token_account,p.change_commitment⟩
+
+def payment (p : AspisR20Request.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalPaymentV1) :
+    AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalPaymentV1 :=
+  match p with
+  | .PrivateTransfer p=>.PrivateTransfer (privateTransfer p)
+  | .Withdrawal p=>.Withdrawal (withdrawal p)
+
+def request (p : AspisR20Request.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalRequestV1) :
+    AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalRequestV1 :=
+  ⟨p.verifier_profile,p.verifier_release,p.pool_program,payment p.«public»⟩
+
+def actual := request NFY_JHd_RequestValue.value
+
+theorem profile : actual.verifier_profile=AdapterRw.r1_pool_adapter.PROFILE_BINDING := rfl
+theorem release : actual.verifier_release=AdapterRw.r1_pool_adapter.RELEASE_BINDING := rfl
+theorem pool : actual.pool_program=NFY_JHb_Programs.pool := rfl
+#print axioms profile
+#print axioms release
+#print axioms pool
+end AspisR1.NFY_JHd_RequestCarrier
+-- END copied JHd_RequestCarrier
 
 run_cmd do
  let env ← Lean.getEnv

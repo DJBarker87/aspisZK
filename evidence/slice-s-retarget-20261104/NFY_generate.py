@@ -7,6 +7,8 @@ admitted={r['module'] for r in map(json.loads,(P/'NFX_LOADED_scan.jsonl').read_t
 reuse=json.loads((E/'NFY_CANONICAL_REUSE.json').read_text())
 N=json.loads((E.parent/'slice-q-phase-20261104/NFN_RETARGET_PROVENANCE.json').read_text());S=json.loads((E.parent/'slice-q-accum-20261104/NFS_RETARGET_PROVENANCE.json').read_text())
 reuse.update(N['module_owner']);reuse.update(S['owner']);rename=dict(S['namespace_map'])
+independent=['JHb_S2K_ResultBytes','NDM_Reference.Types','NDM_Reference.Funs','NDM_GateRef.Types','NDM_GateRef.Funs','NDM_SnapshotRef.Types','NDM_SnapshotRef.Funs']
+reuse.update({n:n for n in independent})
 # These imports bring no used declaration into the retained bodies. The
 # replacement owners provide every referenced carrier/function/lemma.
 overrides={'NEE_M31SerializerDomain':['AspisR1AdapterReconstruct.Funs'],'NCA_SerializerWindow':['LPi_EWriter','KMX_CopyMeaning']}
@@ -29,6 +31,30 @@ for n in order:
  if current and (lines+size>750 or n in ['NEE_M31SerializerDomain','LPi_EWriter','NBG_WriterPorts','NCA_SerializerWindow','NFD_WideSerialization'] or current[-1] in ['NEE_M31SerializerDomain','NFD_WideSerialization']):groups.append(current);current=[];lines=0
  current.append(n);lines+=size
 if current:groups.append(current)
+# L029 heartbeat failure: isolate the terminal validator declaration.
+split=[]
+for ns in groups:
+ if 'NBN_StatementResult' in ns:
+  j=ns.index('NBN_StatementResult');split += [xs for xs in [ns[:j],[ns[j]],ns[j+1:]] if xs]
+ else:split.append(ns)
+groups=split
+# Attribute registration must finish in an imported module before use.
+split=[]
+for ns in groups:
+ if 'JHd_Discriminant' in ns:
+  j=ns.index('JHd_Discriminant')+1;split += [xs for xs in [ns[:j],ns[j:]] if xs]
+ else:split.append(ns)
+groups=split
+# L052: isolate the two failing request declarations before replay.
+for cut in ['JHd_RequestCommon','JHd_RequestPayload','JHf_RawStatementDomainGuard']:
+ split=[]
+ for ns in groups:
+  if cut in ns:
+   j=ns.index(cut);split += [xs for xs in [ns[:j],[ns[j]],ns[j+1:]] if xs]
+  else:split.append(ns)
+ groups=split
+groups=[[n for n in ns if n not in independent] for ns in json.loads((E/'NFY_LAYOUT.json').read_text())]
+assert all(groups)
 owner={n:f'NFY_Part{i:03}' for i,ns in enumerate(groups) for n in ns};owner.update(reuse)
 records=[]
 def emit(n,t):
@@ -39,14 +65,20 @@ for i,names in enumerate(groups):
  module=f'NFY_Part{i:03}';imports=['Lean'];bodies=[]
  for n in names:
   r=G[n];src=r['source'];body='\n'.join(l for l in src.splitlines() if not l.startswith('import '))+'\n';text=pattern.sub(lambda m:rename[m.group()],body)
-  if n=='NBP_CommonDecode':text=text.replace('core.result.Result.map_err','AspisR1TerminalDecoder.core.result.Result.map_err')
+  qualify = ('open AspisR1TerminalDecoder' in body or 'Result AspisR1TerminalDecoder' in body) and 'core.result.Result.map_err' in body
+  text=text.replace('"NBN_AfterDecode"','"NFY_NBN_AfterDecode"')
+  if qualify:text=re.sub(r'(?<![A-Za-z0-9_.])core.result.Result.map_err', 'AspisR1TerminalDecoder.core.result.Result.map_err',text)
+  request_qualify='open AspisR20Request' in body and 'core.result.Result.map_err' in body
+  if request_qualify:text=re.sub(r'(?<![A-Za-z0-9_.])core.result.Result.map_err', 'AspisR20Request.core.result.Result.map_err',text)
+  adapter_qualify=('open AspisR1AdapterReconstruct' in body or 'Result AspisR1AdapterReconstruct' in body) and 'core.result.Result.map_err' in body
+  if adapter_qualify:text=re.sub(r'(?<![A-Za-z0-9_.])core.result.Result.map_err','AspisR1AdapterReconstruct.core.result.Result.map_err',text)
   for d in overrides.get(n,r['imports']):
    d=owner.get(d,d)
    if d!=module and d not in imports:imports.append(d)
   bodies.append(f'-- BEGIN copied {n}: {r["path"]}\n'+text+f'-- END copied {n}\n')
   # Exact before/after statements, including definitions and proof text, retained
   # in source graph and transformed body. No hypothesis is removed.
-  records.append(dict(source_module=n,source_path=r['path'],source_sha256=hashlib.sha256(src.encode()).hexdigest(),source_line_range=[1,len(src.splitlines())],target_module=module,original_body_sha256=hashlib.sha256(body.encode()).hexdigest(),transformed_body_sha256=hashlib.sha256(text.encode()).hexdigest(),imports_before=r['imports'],imports_after=[owner.get(d,d) for d in overrides.get(n,r['imports'])],changes=['imports','qualified proof namespace names']+(['fully qualify emitted decoder map_err owner'] if n=='NBP_CommonDecode' else []),before_body=body,after_body=text))
+  records.append(dict(source_module=n,source_path=r['path'],source_sha256=hashlib.sha256(src.encode()).hexdigest(),source_line_range=[1,len(src.splitlines())],target_module=module,original_body_sha256=hashlib.sha256(body.encode()).hexdigest(),transformed_body_sha256=hashlib.sha256(text.encode()).hexdigest(),imports_before=r['imports'],imports_after=[owner.get(d,d) for d in overrides.get(n,r['imports'])],changes=['imports','qualified proof namespace names']+(['fully qualify emitted decoder map_err owner'] if qualify or request_qualify or adapter_qualify else [])+(['retarget meta-tactic qualified-name prefix'] if '"NBN_AfterDecode"' in body else []),before_body=body,after_body=text))
  audit='''\nrun_cmd do
  let env ← Lean.getEnv
  env.constants.toList.forM fun (n, ci) => do
@@ -54,5 +86,5 @@ for i,names in enumerate(groups):
    Lean.Elab.Command.elabCommand (← `(command| #print axioms $(Lean.mkIdent n)))
 '''
  emit(module+'.lean',''.join('import '+d+'\n' for d in imports)+'\n'+''.join(bodies)+audit)
-emit('NFY_PROVENANCE.json',json.dumps(dict(order=order,groups=groups,module_owner=owner,namespace_map=rename,import_overrides=overrides,files=records),indent=1)+'\n')
+emit('NFY_PROVENANCE.json',json.dumps(dict(order=order,groups=groups,module_owner=owner,namespace_map=rename,import_overrides=overrides,independent_emitted_reuse=independent,files=records),indent=1)+'\n')
 print(json.dumps(dict(copies=len(order),parts=len(groups),lines=sum(len(G[n]['source'].splitlines()) for n in order),first=groups[:7])))
