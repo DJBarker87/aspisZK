@@ -1,0 +1,69 @@
+--- NFF_Driver.lean
++++ NFN_ProofDriver.lean
+@@ -64,34 +64,25 @@
+   let mode := args.headD "small"
+   let (modules, roots) :=
+     if mode == "proof0" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_BaseMultiply.product_bound, `AspisR1.NFF_LoggedOuterLoop.replay, `AspisR1.NFF_RawLog.same_log])
++      (#[`NFN_COMBINED_IMPORT], #[`NFN_NFB_GeometryComposed.result_state_effects, `NFN_NFB_GeometryComposed.accepted_physical, `NFN_NFB_GeometryInstall.standard])
+     else if mode == "proof1" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_BaseMultiply.word_product, `AspisR1.NFF_LoggedOuterStep.active, `AspisR1.NFF_RawLog.replay])
++      (#[`NFN_COMBINED_IMPORT], #[`NFN_NFB_GeometryInstall.step, `NFN_NFB_GeometryInstall.loop, `NFN_NEW_GeometryComplete.complete])
+     else if mode == "proof2" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_BaseMultiply.source, `AspisR1.NFF_LoggedOuterStep.stopped, `AspisR1.NFF_RawTypedLog.canonical])
++      (#[`NFN_COMBINED_IMPORT], #[`NFN_PhaseTransport.legacy_roundtrip, `NFN_PhaseTransport.owner_roundtrip, `NFN_PhaseTransport.observer_none])
+     else if mode == "proof3" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_Cell.replay, `AspisR1.NFF_LoggedPush.private_replay, `AspisR1.NFF_RawTypedLog.operands])
++      (#[`NFN_COMBINED_IMPORT], #[`NFN_PhaseTransport.observer_some, `NFN_ReserveOwner.error_owner, `AspisR1.NFG_ProductOk.result])
+     else if mode == "proof4" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_Cell.primitive_reply, `AspisR1.NFF_LoggedPush.public_replay, `AspisR1.NFF_RawTypedLog.replay])
++      (#[`NFN_COMBINED_IMPORT], #[`AspisR1.NFG_PushRoot.private_result, `AspisR1.NFG_PushRoot.public_result, `AspisR1.NFG_PushRoot.private_domains])
+     else if mode == "proof5" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_CoreReduction.same, `AspisR1.NFF_LoggedRaw.replay, `AspisR1.NFF_ReadDomains.canonical])
++      (#[`NFN_COMBINED_IMPORT], #[`AspisR1.NFG_SmallEffects.neg, `AspisR1.NFG_SmallEffects.zero, `NFG_InverseZeroDomain.unique])
+     else if mode == "proof6" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_CoreReduction.source, `AspisR1.NFF_LoggedRaw.headline, `AspisR1.NFF_ReadDomains.selected])
+-    else if mode == "proof7" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_FullOne.replay, `AspisR1.NFF_LoggedStep.update_replay, `AspisR1.NFF_QueryProduct.emitted])
+-    else if mode == "proof8" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_FullWrapper.replay, `AspisR1.NFF_LoggedStep.active, `AspisR1.RPx_Deployed.deployed])
+-    else if mode == "proof9" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_FullWrapper.headline, `AspisR1.NFF_LoggedTail.replay, `AspisR1.NFE_DotBridge.one])
+-    else if mode == "proof10" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_LoggedEight.cell_replay, `AspisR1.NFF_LoggedWrapper.replay, `AspisR1.NFE_WrapperBridge.four])
+-    else if mode == "proof11" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_LoggedEight.replay, `AspisR1.NFF_LoggedWrapper.headline, `AspisR1.NFF_LoggedDomains.one])
+-    else if mode == "proof12" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_LoggedLoop.replay, `AspisR1.NFF_ProductCall.replay, `AspisR1.NFF_LoggedDomains.four])
+-    else if mode == "proof13" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_LoggedOne.replay, `AspisR1.NFF_RawLog.natural])
+-    else if mode == "scan" then (#[`NFF_CombinedFinal], #[])
++      (#[`NFN_COMBINED_IMPORT], #[`NFG_InversePanic.zero, `AspisR1.RPx_Deployed.deployed])
++    else if mode == "queryproof0" then
++      (#[`NFN_QueryModel], #[`NFN_QueryModel.root, `NFN_QueryModel.geometry_then_query, `NFN_QueryModel.result_state_effects])
++    else if mode == "queryproof1" then
++      (#[`NFN_QueryModel], #[`NFN_QueryModel.progress, `NFN_QueryModel.fuel22_budget])
++    else if mode == "queryscan" then (#[`NFN_QueryModel], #[])
++    else if mode == "scan" then (#[`NFN_COMBINED_IMPORT], #[])
+     else if mode == "fixtures" then
+       (#[`NEP_Planted, `NEP_Mutations],
+        #[`NEP_Planted.matcher, `NEP_Planted.viaPrivate, `NEP_Planted.proof,
+@@ -100,14 +91,14 @@
+     else (#[], #[])
+   let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
+     {} (loadExts := true) (level := .private)
+-  if mode == "scan" then
++  if mode == "scan" || mode == "queryscan" then
+     let mut expected : Std.HashMap String (Array String) := {}
+-    for line in ← IO.FS.lines "NFF_EXPECTED_IMPORTS.jsonl" do
++    for line in ← IO.FS.lines (if mode == "queryscan" then "NFN_QUERY_EXPECTED_IMPORTS.jsonl" else "NFN_EXPECTED_IMPORTS.jsonl") do
+       let j ← IO.ofExcept (Json.parse line)
+       expected := expected.insert (← IO.ofExcept (j.getObjValAs? String "module"))
+         (← IO.ofExcept (j.getObjValAs? (Array String) "imports"))
+-    let failed ← NER.loadedScan env "NFF_LOADED_scan.jsonl" expected
+-    IO.println (if failed then "NFF_SCAN_FAILED" else "NFF_SCAN_ZERO_DANGLING")
++    let failed ← NER.loadedScan env (if mode == "queryscan" then "NFN_QUERY_LOADED_scan.jsonl" else "NFN_LOADED_scan.jsonl") expected
++    IO.println (if failed then "NFN_SCAN_FAILED" else "NFN_SCAN_ZERO_DANGLING")
+     return if failed then 1 else 0
+   let ctx : Command.Context := {
+     fileName := "NEP_Driver"

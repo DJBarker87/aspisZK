@@ -1,0 +1,4 @@
+import AspisR1PublicPreparation.Types
+import CurrentCompactFirstCompositionV1
+#print AspisR1PublicPreparation.verifier.Phase
+#print AspisR1PublicPreparation.FirstCaller.Phase

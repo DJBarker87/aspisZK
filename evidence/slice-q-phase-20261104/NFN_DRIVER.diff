@@ -1,0 +1,134 @@
+--- NFF_Driver.lean
++++ NFN_Driver.lean
+@@ -24,21 +24,52 @@
+   if !result.contains x then result := result.push x
+  return result
+ def importsMatch (actual expected : Array String) : Bool := canonicalImports actual == expected
++/-- Serialized module tables also carry reproducible theorem-cache entries.
++Compare their complete declaration shape; theorem proofs are irrelevant only
++when their types, levels and mutual metadata agree structurally. -/
++def quotTag : QuotKind → Nat
++ | .type => 0 | .ctor => 1 | .lift => 2 | .ind => 3
++def sameDeclaration (a b : ConstantInfo) : Bool :=
++ match a,b with
++ | .axiomInfo x,.axiomInfo y => x == y
++ | .defnInfo x,.defnInfo y => x == y
++ | .thmInfo x,.thmInfo y => x.toConstantVal == y.toConstantVal && x.all == y.all
++ | .opaqueInfo x,.opaqueInfo y => x == y
++ | .ctorInfo x,.ctorInfo y => x == y
++ | .recInfo x,.recInfo y => x == y
++ | .quotInfo x,.quotInfo y => x.toConstantVal == y.toConstantVal && quotTag x.kind == quotTag y.kind
++ | .inductInfo x,.inductInfo y =>
++   x.toConstantVal == y.toConstantVal && x.numParams == y.numParams &&
++   x.numIndices == y.numIndices && x.all == y.all && x.ctors == y.ctors &&
++   x.numNested == y.numNested && x.isRec == y.isRec && x.isUnsafe == y.isUnsafe &&
++   x.isReflexive == y.isReflexive
++ | _,_ => false
+ /-- Inspect each module's own declarations against the checked private environment. -/
+ def loadedScan (env : Environment) (output : System.FilePath)
+     (expected : Std.HashMap String (Array String)) : IO Bool := do
+  let env := env.setExporting false
+  let out ← IO.FS.Handle.mk output .write
+  let mut failed := false
++ let mut owners : Std.HashMap Name Name := {}
+  for h : idx in [0:env.header.moduleNames.size] do
+   let n := env.header.moduleNames[idx]
+   let data := env.header.moduleData[idx]!
+   let mut dangling : Array Json := #[]
++  let mut duplicateOwners : Array Json := #[]
++  let mut cachedReplicas : Array Json := #[]
+   let mut edges := 0
+   for declared in data.constants do
+    let some c := env.checked.get.find? declared.name | do
+     dangling := dangling.push (Json.mkObj [("parent",toJson declared.name.toString),("missing",toJson declared.name.toString),("phase",toJson "own_declaration")])
+     continue
++   if let some prior := owners[declared.name]? then
++    let row := Json.mkObj [("name",toJson declared.name.toString),("previous",toJson prior.toString),("current",toJson n.toString),
++      ("proof_identical",toJson (declared.value? true == c.value? true))]
++    if sameDeclaration declared c then cachedReplicas := cachedReplicas.push row
++    else duplicateOwners := duplicateOwners.push row
++   else if !sameDeclaration declared c then
++    duplicateOwners := duplicateOwners.push (Json.mkObj [("name",toJson declared.name.toString),("current",toJson n.toString),("reason",toJson "serialized declaration differs from selected owner")])
++   owners := owners.insert declared.name n
+    let refs := referenceNames c
+    for dep in refs do
+     edges := edges + 1
+@@ -49,9 +80,9 @@
+   let importMatch := match expected[n.toString]? with
+    | some baseline => imports == baseline
+    | none => false
+-  if !dangling.isEmpty || !importMatch then failed := true
++  if !dangling.isEmpty || !duplicateOwners.isEmpty || !importMatch then failed := true
+   out.putStrLn (Json.mkObj [("module",toJson n.toString), ("imports",toJson imports),
+-   ("loader_imports",toJson loaderImports), ("imports_match",toJson importMatch), ("dangling",toJson dangling),
++   ("loader_imports",toJson loaderImports), ("imports_match",toJson importMatch), ("dangling",toJson dangling), ("duplicate_owners",toJson duplicateOwners), ("cached_replicas",toJson cachedReplicas),
+    ("declarations",toJson data.constants.size), ("edges",toJson edges)]).compress
+  return failed
+ end NER
+@@ -64,34 +95,25 @@
+   let mode := args.headD "small"
+   let (modules, roots) :=
+     if mode == "proof0" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_BaseMultiply.product_bound, `AspisR1.NFF_LoggedOuterLoop.replay, `AspisR1.NFF_RawLog.same_log])
++      (#[`NFN_COMBINED_IMPORT], #[`NFN_NFB_GeometryComposed.result_state_effects, `NFN_NFB_GeometryComposed.accepted_physical, `NFN_NFB_GeometryInstall.standard])
+     else if mode == "proof1" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_BaseMultiply.word_product, `AspisR1.NFF_LoggedOuterStep.active, `AspisR1.NFF_RawLog.replay])
++      (#[`NFN_COMBINED_IMPORT], #[`NFN_NFB_GeometryInstall.step, `NFN_NFB_GeometryInstall.loop, `NFN_NEW_GeometryComplete.complete])
+     else if mode == "proof2" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_BaseMultiply.source, `AspisR1.NFF_LoggedOuterStep.stopped, `AspisR1.NFF_RawTypedLog.canonical])
++      (#[`NFN_COMBINED_IMPORT], #[`NFN_PhaseTransport.legacy_roundtrip, `NFN_PhaseTransport.owner_roundtrip, `NFN_PhaseTransport.observer_none])
+     else if mode == "proof3" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_Cell.replay, `AspisR1.NFF_LoggedPush.private_replay, `AspisR1.NFF_RawTypedLog.operands])
++      (#[`NFN_COMBINED_IMPORT], #[`NFN_PhaseTransport.observer_some, `NFN_ReserveOwner.error_owner, `AspisR1.NFG_ProductOk.result])
+     else if mode == "proof4" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_Cell.primitive_reply, `AspisR1.NFF_LoggedPush.public_replay, `AspisR1.NFF_RawTypedLog.replay])
++      (#[`NFN_COMBINED_IMPORT], #[`AspisR1.NFG_PushRoot.private_result, `AspisR1.NFG_PushRoot.public_result, `AspisR1.NFG_PushRoot.private_domains])
+     else if mode == "proof5" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_CoreReduction.same, `AspisR1.NFF_LoggedRaw.replay, `AspisR1.NFF_ReadDomains.canonical])
++      (#[`NFN_COMBINED_IMPORT], #[`AspisR1.NFG_SmallEffects.neg, `AspisR1.NFG_SmallEffects.zero, `NFG_InverseZeroDomain.unique])
+     else if mode == "proof6" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_CoreReduction.source, `AspisR1.NFF_LoggedRaw.headline, `AspisR1.NFF_ReadDomains.selected])
+-    else if mode == "proof7" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_FullOne.replay, `AspisR1.NFF_LoggedStep.update_replay, `AspisR1.NFF_QueryProduct.emitted])
+-    else if mode == "proof8" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_FullWrapper.replay, `AspisR1.NFF_LoggedStep.active, `AspisR1.RPx_Deployed.deployed])
+-    else if mode == "proof9" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_FullWrapper.headline, `AspisR1.NFF_LoggedTail.replay, `AspisR1.NFE_DotBridge.one])
+-    else if mode == "proof10" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_LoggedEight.cell_replay, `AspisR1.NFF_LoggedWrapper.replay, `AspisR1.NFE_WrapperBridge.four])
+-    else if mode == "proof11" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_LoggedEight.replay, `AspisR1.NFF_LoggedWrapper.headline, `AspisR1.NFF_LoggedDomains.one])
+-    else if mode == "proof12" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_LoggedLoop.replay, `AspisR1.NFF_ProductCall.replay, `AspisR1.NFF_LoggedDomains.four])
+-    else if mode == "proof13" then
+-      (#[`NFF_CombinedFinal], #[`AspisR1.NFF_LoggedOne.replay, `AspisR1.NFF_RawLog.natural])
+-    else if mode == "scan" then (#[`NFF_CombinedFinal], #[])
++      (#[`NFN_COMBINED_IMPORT], #[`NFG_InversePanic.zero, `AspisR1.RPx_Deployed.deployed])
++    else if mode == "queryproof0" then
++      (#[`NFN_QueryModel], #[`NFN_QueryModel.root, `NFN_QueryModel.geometry_then_query, `NFN_QueryModel.result_state_effects])
++    else if mode == "queryproof1" then
++      (#[`NFN_QueryModel], #[`NFN_QueryModel.progress, `NFN_QueryModel.fuel22_budget])
++    else if mode == "queryscan" then (#[`NFN_QueryModel], #[])
++    else if mode == "scan" then (#[`NFN_COMBINED_IMPORT], #[])
+     else if mode == "fixtures" then
+       (#[`NEP_Planted, `NEP_Mutations],
+        #[`NEP_Planted.matcher, `NEP_Planted.viaPrivate, `NEP_Planted.proof,
+@@ -100,14 +122,14 @@
+     else (#[], #[])
+   let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
+     {} (loadExts := true) (level := .private)
+-  if mode == "scan" then
++  if mode == "scan" || mode == "queryscan" then
+     let mut expected : Std.HashMap String (Array String) := {}
+-    for line in ← IO.FS.lines "NFF_EXPECTED_IMPORTS.jsonl" do
++    for line in ← IO.FS.lines (if mode == "queryscan" then "NFN_QUERY_EXPECTED_IMPORTS.jsonl" else "NFN_EXPECTED_IMPORTS.jsonl") do
+       let j ← IO.ofExcept (Json.parse line)
+       expected := expected.insert (← IO.ofExcept (j.getObjValAs? String "module"))
+         (← IO.ofExcept (j.getObjValAs? (Array String) "imports"))
+-    let failed ← NER.loadedScan env "NFF_LOADED_scan.jsonl" expected
+-    IO.println (if failed then "NFF_SCAN_FAILED" else "NFF_SCAN_ZERO_DANGLING")
++    let failed ← NER.loadedScan env (if mode == "queryscan" then "NFN_QUERY_LOADED_scan.jsonl" else "NFN_LOADED_scan.jsonl") expected
++    IO.println (if failed then "NFN_SCAN_FAILED" else "NFN_SCAN_ZERO_DANGLING")
+     return if failed then 1 else 0
+   let ctx : Command.Context := {
+     fileName := "NEP_Driver"
