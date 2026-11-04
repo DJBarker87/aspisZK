@@ -50,6 +50,10 @@ theorem step_view (fixed : {X : Type} → Op X → Result X)
   | loop body s =>
     simp only [step,view,configDenote,kontDenote,denote]
     conv => rhs; rw [Aeneas.Std.loop.eq_def]
+    cases denote fixed (body s) with
+    | ok cf => cases cf <;> rfl
+    | fail e => rfl
+    | div => rfl
   | call op =>
     cases h : fixed op with
     | ok a => simpa only [step,handler,h,configDenote,denote] using resumed_view fixed k a
