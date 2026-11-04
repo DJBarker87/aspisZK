@@ -1,0 +1,4 @@
+import Mathlib.NumberTheory.LegendreSymbol.Basic
+#check ZMod.mod_four_ne_three_of_sq_eq_neg_one
+#check ZMod.exists_sq_eq_neg_one_iff
+#print axioms ZMod.mod_four_ne_three_of_sq_eq_neg_one

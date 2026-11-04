@@ -1,0 +1,17 @@
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../NFG_small_refs.rs"));
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+// NFG_bad_cm_contract / NFG_bad_zero_contract invert the original method's ensures.
+#[kani::proof_for_contract(CM31::neg)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn cm_neg_contract(){let a:u32=kani::any();let b:u32=kani::any();kani::assume(a<NFG_P && b<NFG_P);let _=CM31{a:M31(a),b:M31(b)}.neg();}
+#[kani::proof_for_contract(QM31::is_zero)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn qm_zero_contract(){let x=QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}};let _=x.is_zero();}
+#[kani::proof]
+fn private_range_step(){
+ let j:usize=kani::any();kani::assume(j<=4);let mut iter=j..4;let returned=iter.next();
+ if j<4 {assert_eq!(returned,Some(if cfg!(NFG_bad_range){j^1}else{j}));assert_eq!(iter.start,j+1);}
+ else {assert_eq!(returned,None);assert_eq!(iter.start,j);}
+ assert_eq!(iter.end,4);
+}
+#[path="NFG_chain.rs"] mod NFG_chain;

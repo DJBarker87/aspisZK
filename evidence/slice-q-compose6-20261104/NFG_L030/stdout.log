@@ -1,0 +1,9 @@
+def Aeneas.Std.Str : Type :=
+Aeneas.Std.Slice Aeneas.Std.U8
+def Aeneas.Std.core.option.Option.expect : {T : Type} → Option T → Aeneas.Std.Str → Aeneas.Std.Result T :=
+fun {T} x _msg => Aeneas.Std.Result.ofOption x Aeneas.Std.Error.panic
+def NFG_InverseRef.field.QM31.inv : NFG_InverseRef.field.QM31 → Aeneas.Std.Result NFG_InverseRef.field.QM31 :=
+fun self => do
+  let o ← self.try_inv
+  Aeneas.Std.core.option.Option.expect o
+      (Aeneas.Std.toStr "cannot invert zero in QM31" NFG_InverseRef.field.QM31.inv._proof_1)

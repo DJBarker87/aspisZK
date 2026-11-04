@@ -1,0 +1,134 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+type R=Result<(Accumulator,BatchedWeights),Error>;
+enum Step { Done(R), Continue(R) }
+struct Oracle { error:Option<Error>, rhs:E,power:K,next:usize,terms:usize,
+ row:usize,raw:[u64;4],called:bool,seen:[usize;9] }
+impl Oracle {
+ fn call(&mut self,proof:&[u8],p:&Prepared,mut a:Accumulator,g:&[E;29],geometry:&QueryGeometry,mut pending:BatchedWeights)->R {
+  assert!(!self.called);self.called=true;
+  self.seen=[proof.as_ptr() as usize,proof.len(),p as *const _ as usize,g as *const _ as usize,
+   geometry as *const _ as usize,a.next,a.weights.as_ptr() as usize,pending.raw.as_ptr() as usize,pending.terms];
+  #[cfg(NFG_bad_argument)] {self.seen[5]^=1;}
+  if let Some(error)=self.error {return Err(error);}
+  a.rhs=self.rhs;a.power=self.power;a.next=self.next;pending.terms=self.terms;// One observed coordinate; whole returned-carrier frame lift remains OPEN.
+  pending.raw[self.row]=self.raw;
+  Ok((a,pending))
+ }
+}
+// Exact source match-body, replacing only returns by Step and the reached child by its local oracle.
+fn NFG_step(proof:&[u8],p:&Prepared,g:&[E;29],geometry:&QueryGeometry,end:usize,state:R,oracle:&mut Oracle)->Step {
+ match state {
+  Err(error) => Step::Done(Err(error)),
+  Ok((a, pending)) => {
+   if a.next >= end {return Step::Done(Ok((a, pending)));}
+   let state=oracle.call(proof,p,a,g,geometry,pending);
+   Step::Continue(state)
+  }
+ }
+}
+fn m()->M31 {let v:u32=kani::any();kani::assume(v<2147483647);M31(v)}
+fn k()->K {K{c0:aspis_core::field::CM31{a:m(),b:m()},c1:aspis_core::field::CM31{a:m(),b:m()}}}
+fn e()->E {let v:[u32;8]=kani::any();for w in v {kani::assume(w<2147483647);} E::from_limbs(v).unwrap()}
+fn error()->Error {let i:u8=kani::any();kani::assume(i<8);match i {0=>Error::Parse,1=>Error::Semantic,2=>Error::Transcript,3=>Error::Relation,4=>Error::Merkle,5=>Error::Query,6=>Error::Checkpoint,_=>Error::Allocation}}
+fn prepared()->Prepared {Prepared{variant:Variant::S2,roots:kani::any(),gamma:e(),kappa:e(),alpha:[e(),e()],rho:k(),queries:kani::any(),semantic_alpha:core::array::from_fn(|_|k()),z:[SecureCirclePoint{x:k(),y:k()},SecureCirclePoint{x:k(),y:k()}],claim:e(),state:kani::any()}}
+fn case(mode:u8) {
+ let end:usize=kani::any();kani::assume(end==10 || end==22);let start=if end==10 {0}else{10};
+ let p=prepared();let g:[E;29]=core::array::from_fn(|_|e());
+ let proof=[0u8;57607]; // Opaque readonly context: contents are never read by this loop residual.
+ let mut inverses=Vec::with_capacity(end-start);let mut line_z=Vec::with_capacity(end-start);
+ for _ in start..end {inverses.push([m(),m(),m(),m(),m()]);line_z.push(m());}
+ let geometry=QueryGeometry{start,inverses,line_z};
+ let mut weights=Vec::with_capacity(64);let mut raw=Vec::with_capacity(64);
+ for _ in 0..64 {weights.push(k());raw.push(kani::any::<[u64;4]>());}
+ let next:usize=kani::any();kani::assume(start<=next && next<=end);
+ if mode==1 {kani::assume(next>=end);} if mode>=2 {kani::assume(next<end);}
+ let a=Accumulator{weights,rhs:e(),power:k(),next};let b=BatchedWeights{raw,terms:kani::any()};
+ let row:usize=kani::any();kani::assume(row<64);let oldw=a.weights[row];let oldraw=b.raw[row];let oldrhs=a.rhs;let oldpower=a.power;let oldterms=b.terms;
+ let expected=[proof.as_ptr() as usize,proof.len(),&p as *const _ as usize,&g as *const _ as usize,&geometry as *const _ as usize,next,a.weights.as_ptr() as usize,b.raw.as_ptr() as usize,b.terms];
+ let ep=if mode==2 {Some(error())}else{None};let initial_error=error();
+ let mut oracle=Oracle{error:ep,rhs:e(),power:k(),next:kani::any(),terms:kani::any(),row,raw:kani::any(),called:false,seen:[0;9]};
+ let state=if mode==0 {Err(initial_error)}else{Ok((a,b))};
+ let out=NFG_step(&proof,&p,&g,&geometry,end,state,&mut oracle);
+
+ match out {
+  Step::Done(Err(e))=>{
+ #[cfg(NFG_bad_error)] assert_ne!(e,initial_error);
+ assert_eq!(mode,0);assert_eq!(e,initial_error);assert!(!oracle.called);}
+  Step::Done(Ok((mut a,b)))=>{
+ #[cfg(NFG_bad_stop)] {a.next^=1;}
+assert_eq!(mode,1);assert!(!oracle.called);assert_eq!(a.next,next);assert_eq!(a.rhs,oldrhs);assert_eq!(a.power,oldpower);assert_eq!(a.weights.as_ptr() as usize,expected[6]);assert_eq!(a.weights.len(),64);assert_eq!(a.weights[row],oldw);assert_eq!(b.raw.as_ptr() as usize,expected[7]);assert_eq!(b.raw.len(),64);assert_eq!(b.raw[row],oldraw);assert_eq!(b.terms,oldterms);}
+  Step::Continue(reply)=>{
+   assert!(mode>=2);assert!(oracle.called);
+   let lane:usize=kani::any();kani::assume(lane<9);assert_eq!(oracle.seen[lane],expected[lane]);
+   match reply {
+    Err(e)=>{assert_eq!(mode,2);assert_eq!(Some(e),ep);}
+    Ok((mut a,b))=>{
+     assert_eq!(mode,3);
+     #[cfg(NFG_bad_reply)] {a.next^=1;}
+     assert_eq!(a.next,oracle.next);assert_eq!(a.rhs,oracle.rhs);assert_eq!(a.power,oracle.power);assert_eq!(a.weights[row],oldw);assert_eq!(a.weights.len(),64);assert_eq!(a.weights.as_ptr() as usize,expected[6]);assert_eq!(b.raw[row],oracle.raw);assert_eq!(b.raw.len(),64);assert_eq!(b.raw.as_ptr() as usize,expected[7]);assert_eq!(b.terms,oracle.terms);
+    }
+   }
+  }
+ }
+}
+// Isolated physical window: all unread context is opaque, no whole-buffer setup.
+fn window_case(mode:u8){
+ let p=Prepared{variant:Variant::S2,roots:[[0;32];2],gamma:E::ZERO,kappa:E::ZERO,alpha:[E::ZERO;2],rho:K::ZERO,queries:[0;22],semantic_alpha:[K::ZERO;10],z:[SecureCirclePoint{x:K::ZERO,y:K::ZERO};2],claim:E::ZERO,state:[0;32]};
+ let g=[E::ZERO;29];let proof=[0u8;57607];
+ let end:usize=kani::any();kani::assume(end==10 || end==22);let start=if end==10 {0}else{10};
+ let mut inverses=Vec::with_capacity(end-start);let mut line_z=Vec::with_capacity(end-start);
+ for _ in start..end {inverses.push([M31(0);5]);line_z.push(M31(0));}
+ let geometry=QueryGeometry{start,inverses,line_z};
+ let mut weights=Vec::with_capacity(64);let mut raw=Vec::with_capacity(64);
+ for _ in 0..64 {weights.push(K::ZERO);raw.push([0u64;4]);}
+ let row:usize=kani::any();kani::assume(row<64);let oldw=k();let oldraw:[u64;4]=kani::any();weights[row]=oldw;raw[row]=oldraw;
+ let next:usize=kani::any();kani::assume(start<=next && next<=end);
+ if mode==1 {kani::assume(next>=end);} else {kani::assume(next<end);}
+ let a=Accumulator{weights,rhs:e(),power:k(),next};let b=BatchedWeights{raw,terms:kani::any()};
+ let oldrhs=a.rhs;let oldpower=a.power;let oldterms=b.terms;
+ let expected=[proof.as_ptr() as usize,proof.len(),&p as *const _ as usize,&g as *const _ as usize,&geometry as *const _ as usize,next,a.weights.as_ptr() as usize,b.raw.as_ptr() as usize,b.terms];
+ let ep=if mode==2 {Some(error())}else{None};
+ let mut oracle=Oracle{error:ep,rhs:e(),power:k(),next:kani::any(),terms:kani::any(),row,raw:kani::any(),called:false,seen:[0;9]};
+ let out=NFG_step(&proof,&p,&g,&geometry,end,Ok((a,b)),&mut oracle);
+ match out {
+  Step::Done(Ok((mut a,b)))=>{
+   assert_eq!(mode,1);assert!(!oracle.called);
+   #[cfg(NFG_bad_stop)] {a.next^=1;}
+   assert_eq!(a.next,next);assert_eq!(a.rhs,oldrhs);assert_eq!(a.power,oldpower);assert_eq!(a.weights[row],oldw);assert_eq!(a.weights.as_ptr() as usize,expected[6]);assert_eq!(a.weights.len(),64);assert_eq!(b.raw[row],oldraw);assert_eq!(b.raw.as_ptr() as usize,expected[7]);assert_eq!(b.raw.len(),64);assert_eq!(b.terms,oldterms);
+  }
+  Step::Continue(reply)=>{
+   assert!(mode>=2);assert!(oracle.called);
+   let lane:usize=kani::any();kani::assume(lane<9);assert_eq!(oracle.seen[lane],expected[lane]);
+   match reply {
+    Err(actual)=>{assert_eq!(mode,2);assert_eq!(Some(actual),ep);}
+    Ok((mut a,b))=>{
+     assert_eq!(mode,3);
+     #[cfg(NFG_bad_reply)] {a.next^=1;}
+     assert_eq!(a.next,oracle.next);assert_eq!(a.rhs,oracle.rhs);assert_eq!(a.power,oracle.power);assert_eq!(a.weights[row],oldw);assert_eq!(a.weights.as_ptr() as usize,expected[6]);assert_eq!(a.weights.len(),64);assert_eq!(b.raw[row],oracle.raw);assert_eq!(b.raw.as_ptr() as usize,expected[7]);assert_eq!(b.raw.len(),64);assert_eq!(b.terms,oracle.terms);
+    }
+   }
+  }
+  _=>assert!(false)
+ }
+}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn initial_err(){
+ let p=Prepared{variant:Variant::S2,roots:[[0;32];2],gamma:E::ZERO,kappa:E::ZERO,alpha:[E::ZERO;2],rho:K::ZERO,queries:[0;22],semantic_alpha:[K::ZERO;10],z:[SecureCirclePoint{x:K::ZERO,y:K::ZERO};2],claim:E::ZERO,state:[0;32]};
+ let g=[E::ZERO;29];let geometry=QueryGeometry{start:0,inverses:Vec::new(),line_z:Vec::new()};
+ let mut oracle=Oracle{error:None,rhs:E::ZERO,power:K::ZERO,next:0,terms:0,row:0,raw:[0;4],called:false,seen:[0;9]};
+ let expected=error();let end:usize=kani::any();let out=NFG_step(&[],&p,&g,&geometry,end,Err(expected),&mut oracle);
+ match out {Step::Done(Err(actual))=>{
+ #[cfg(NFG_bad_error)] assert_ne!(actual,expected);
+ assert_eq!(actual,expected);assert!(!oracle.called);},_=>assert!(false)}
+}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn stopped_ok(){window_case(1)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn child_err(){window_case(2)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn child_ok(){window_case(3)}

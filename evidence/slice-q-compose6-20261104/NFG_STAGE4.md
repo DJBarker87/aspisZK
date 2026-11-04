@@ -1,0 +1,11 @@
+# Stage 4 scalar contracts and reference extraction
+
+K019/K021 verify the actual frozen QM31::is_zero and CM31::neg functions with proof_for_contract against the safe Rust references in NFG_small_refs.rs.txt. K020/K022 invert the SAME original ensures and fail. The former uses all four raw words; the latter uses exactly two canonical words. They execute CM31::is_zero/M31::is_zero and M31::neg directly. No multiplication body or function-pointer stub is involved. Empty modifies is checked. Pure Bool/record interfaces need no additional shape controls under ruling (t); no stub_verified is used.
+
+K024/K025 are exact-configuration KMX pointer controls and pass/fail respectively. K023 requested a nonexistent harness name (missing KMX_checks namespace); it has no proof credit. K019..025 use unchanged frozen lock/graph, offline optimized compilation and capped scopes. NFG_small_checks.py binds archived native inputs, same-reference extraction, exact frozen source after removing cfg(kani)-only additions, controls, and caps.
+
+E004 extracts exactly the reference file with the pinned NCO Charon/Aeneas, overflow checks and a separate wrapper lock. The frozen native Cargo.lock is unchanged. L052/L053 compile its generated modules; L054 is an excluded failed draft; L055 proves full partial-Result word/CM-neg and all-raw QM-zero association to AspisR72Sampler with only standard axioms. L063 imports these associations, inverse cuts, and RPx_Deployed.deployed coherently; all printed axioms are standard.
+
+L056..058 refresh tail objects after ResultCongr changed; L059..061 refresh inverse cuts after the generated panic literal normalization; L062 refreshes NegAssociation's ResultCongr dependency. The E004 collection client initially recopied the host's raw E003 Funs over the normalized local file. Recursive dependency checks rejected it before any launch. The exact committed normalized source was restored and the collection script now restricts output to its own namespace. The rejected preflights did not consume a Lean run. These are evidence repairs, not unchanged regression reruns.
+
+No row is promoted in this checkpoint. Native/model root recipes and additive validation remain the next stage. Shipped source is unchanged; only scratch cfg(kani) instrumentation appears in NFG_SMALL.patch. No ELF rebuild is triggered. No push.

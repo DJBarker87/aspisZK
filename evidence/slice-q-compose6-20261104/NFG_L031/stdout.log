@@ -1,0 +1,12 @@
+NFG_InverseRef/Funs.lean:315:70: error: Tactic `decide` failed for proposition
+  "cannot invert zero in QM31".toByteArray.size ≤ U32.max
+because its `Decidable` instance
+  "cannot invert zero in QM31".toByteArray.size.decLe U32.max
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `instDecidableOr`, `Bool.decEq`, `Nat.decLe`, and `Nat.decLt`, reduction got stuck at the `Decidable` instance
+  match "cannot invert zero in QM31".toByteArray.size.ble U32.max, true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
