@@ -2,14 +2,14 @@
 from pathlib import Path
 import subprocess,os,json,hashlib,tomllib,sys
 B=Path(__file__).resolve().parent;S=B/'NFZ_src';cargo='/home/dombarker/.cargo/bin/cargo'
-# NFZ_B004 own-runner repair: bound rustc/LLVM thread discovery within TasksMax=64.
-os.sched_setaffinity(0, sorted(os.sched_getaffinity(0))[:4])
-os.environ['RUSTFLAGS']='-Ccodegen-units=1 -Zthreads=1'
+# Part 3: one discovered CPU, Cargo job, codegen unit, and jobserver slot.
+os.sched_setaffinity(0, sorted(os.sched_getaffinity(0))[:1])
+os.environ['RUSTFLAGS']='-C codegen-units=1'
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 pins=json.loads((B/'NFZ_SOURCE_PINS.json').read_text());expected=pins['files']['Cargo.lock']
 assert all(sha(S/p)==h for p,h in pins['files'].items())
 features='pool-adapter,private-leaf-salts';manifest=str(S/'programs/r1-cost-probe/Cargo.toml')
-cmd=[cargo,'+nightly-2026-09-17','metadata','--manifest-path',manifest,'--locked','--offline','--format-version','1','--features',features]
+cmd=[cargo,'+1.94.1','metadata','--manifest-path',manifest,'--locked','--offline','--format-version','1','--features',features]
 r=subprocess.run(cmd,capture_output=True,text=True);(B/'NFZ_METADATA.stderr').write_text(r.stderr);assert r.returncode==0,r.stderr
 m=json.loads(next(l for l in r.stdout.splitlines() if l.startswith('{')));(B/'NFZ_METADATA.json').write_text(json.dumps(m,indent=1))
 lock=tomllib.loads((S/'Cargo.lock').read_text());key=lambda p:(p['name'],p['version'],p.get('source'));f={key(p):p for p in lock['package']};a={key(p):p for p in m['packages']};nodes={p['id']:p for p in m['resolve']['nodes']};pkgs={p['id']:p for p in m['packages']};errors=[]
@@ -30,10 +30,21 @@ check=dict(command=cmd,graph_matches_frozen=not(set(a)-set(f)) and not((set(f)-s
 (B/'NFZ_GRAPH_CHECK.json').write_text(json.dumps(check,indent=1));assert check['graph_matches_frozen'],check
 assert sha(S/'Cargo.lock')==expected
 for tool in ['rustc','cargo']:
- r=subprocess.run(['/home/dombarker/.cargo/bin/'+tool,'+nightly-2026-09-17','-Vv'],capture_output=True,text=True);(B/('NFZ_'+tool+'_VERSION.txt')).write_text(r.stdout+r.stderr);assert r.returncode==0
-cmd=[cargo,'+nightly-2026-09-17','check','--manifest-path',manifest,'--locked','--offline','--features',features,'--lib','-j','4','--target-dir',str(B/'NFZ_target')]
-(B/'NFZ_BUILD_COMMAND.json').write_text(json.dumps(cmd));rc=subprocess.run(cmd,cwd=S).returncode
-assert all(sha(S/p)==h for p,h in pins['files'].items()), 'frozen source changed during check'
-(B/'NFZ_LOCK_CHECK.json').write_text(json.dumps(dict(before=expected,after=sha(S/'Cargo.lock'),unchanged=sha(S/'Cargo.lock')==expected)))
-assert sha(S/'Cargo.lock')==expected
-sys.exit(rc)
+ r=subprocess.run(['/home/dombarker/.cargo/bin/'+tool,'+1.94.1','-Vv'],capture_output=True,text=True);(B/('NFZ_'+tool+'_VERSION.txt')).write_text(r.stdout+r.stderr);assert r.returncode==0
+# Both caller crates, each selected explicitly; no unpretty/nightly diagnostics.
+commands=[]
+for package,selected in [('aspis-r1-cost-probe','private-leaf-salts,optimized-terminal,program-build'),('aspis-r1-cost-probe-program','pool-adapter,private-leaf-salts')]:
+ cmd=[cargo,'+1.94.1','rustc','--manifest-path',manifest,'-p',package,'--locked','--offline','--features',selected,'--lib','-j1','--target-dir',str(B/'NFZ_target'),'--','--emit=mir','-C','codegen-units=1']
+ commands.append(cmd)
+(B/'NFZ_BUILD_COMMAND.json').write_text(json.dumps(commands,indent=1))
+try:
+ for cmd in commands:
+  subprocess.run(cmd,cwd=S,check=True)
+finally:
+ assert all(sha(S/p)==h for p,h in pins['files'].items()), 'frozen source changed during check'
+ (B/'NFZ_LOCK_CHECK.json').write_text(json.dumps(dict(before=expected,after=sha(S/'Cargo.lock'),unchanged=sha(S/'Cargo.lock')==expected)))
+ assert sha(S/'Cargo.lock')==expected
+for p in (B/'NFZ_target').rglob('*.mir'):
+ if p.name.startswith(('aspis_r1_cost_probe-','aspis_r1_cost_probe_program-')):
+  (B/('NFZ_'+p.name)).write_bytes(p.read_bytes())
+assert list(B.glob('NFZ_aspis_r1_cost_probe-*.mir')) and list(B.glob('NFZ_aspis_r1_cost_probe_program-*.mir'))

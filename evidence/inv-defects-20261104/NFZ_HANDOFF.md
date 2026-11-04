@@ -1,3 +1,7 @@
+# NFZ part-3 handoff (in progress)
+
+Lead allocates B005 then B006, one at a time, as the final two scopes. B005 runner now uses pinned stable 1.94.1, cargo rustc --emit=mir for both callers, CARGO_BUILD_JOBS=1, -j1, RUSTFLAGS=-C codegen-units=1, a one-token jobserver and one-CPU affinity. The cgroup thread monitor records peak aggregate tasks. Local NFZ_preflight.py dry-collects all 495 payload files and recursive literal includes byte-for-byte against frozen Git before admission, with check=True. B006 is conditional on B005 success; an own-script B005 failure requires STOP and preserves B006 unused. No edge/status credit yet.
+
 # NFZ part-2 handoff
 
 **INCOMPLETE — both requested entry repairs remain unreviewed.** Branch codex/cx-inv-defects-20261104. No push. Frozen Rust 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387. Part-1 commits were merged separately; NFZ_B001 and failed inputs remain intact.

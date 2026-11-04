@@ -9,10 +9,10 @@ def ssh(code,data=None):
   if k==10:raise RuntimeError('persistent prelaunch transport failure')
   time.sleep(60)
 attempt=sys.argv[1] if len(sys.argv)>1 else None
-assert attempt in ['NFZ_B002','NFZ_B003','NFZ_B004'], 'part 2 permits only new attempt IDs'
+assert attempt in ['NFZ_B005','NFZ_B006'], 'part 3 permits only B005/B006'
 assert not (E/attempt/'receipt.json').exists(), 'attempt retained: never resubmit'
 # Fail closed locally before requesting admission or launching.
-subprocess.run([sys.executable,'-B',str(E/'NFZ_prepare.py')],check=True)
+subprocess.run([sys.executable,'-B',str(E/'NFZ_preflight.py')],check=True)
 for k in range(11):
  r=ssh('python3',f'''from pathlib import Path
 import subprocess,sys
@@ -31,10 +31,10 @@ print(p.read_text() if p.exists() else 'MISSING');sys.exit(r.returncode)
   if k==10:raise RuntimeError('Admission exhausted')
   print('Reservation refused; waiting',flush=True);time.sleep(180);continue
  raise RuntimeError(r.stdout+r.stderr)
-files={p.name:p.read_text() for p in [E/'NFZ_check.py',E/'NFZ_rustc.py',E/'NFZ_SOURCE_PINS.json']}
+files={p.name:p.read_text() for p in [E/n for n in ['NFZ_check.py','NFZ_rustc.py','NFZ_scope.py','NFZ_SOURCE_PINS.json','NFZ_PAYLOAD_PREFLIGHT.json']]}
 payload=json.loads(lzma.decompress((E/'NFZ_FROZEN_SOURCE.json.xz').read_bytes()))
 binary=json.loads(lzma.decompress((E/'NFZ_FROZEN_BINARY.json.xz').read_bytes()))
-cfg=dict(attempt=attempt,kind='rust-typecheck',module=('independent frozen deployed MIR opt-level 0 vs 1 and typed HIR' if attempt=='NFZ_B003' else 'frozen deployed verifier MIR and typed HIR'),sources=['NFZ_check.py','NFZ_rustc.py','NFZ_SOURCE_PINS.json'],command=['python3','NFZ_check.py'],env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_NET_OFFLINE='true',CARGO_INCREMENTAL='0',CARGO_PROFILE_DEV_DEBUG='0',RUSTC_WRAPPER=B+'/NFZ_rustc.py'),timeout=600,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),frozen_revision='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387',source_tree_dirty=True,expected_time='debug type-check compilation and MIR/typed-HIR diagnostic emission; no arithmetic gate, Kani, extraction or ELF')
+cfg=dict(attempt=attempt,kind='rust-typecheck',module=('independent frozen deployed MIR opt-level 0 vs 1 and typed HIR' if attempt=='NFZ_B003' else 'frozen deployed two-caller stable MIR emission'),sources=list(files),command=['python3','-B','NFZ_scope.py'],env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_NET_OFFLINE='true',CARGO_INCREMENTAL='0',CARGO_BUILD_JOBS='1',RUSTFLAGS='-C codegen-units=1',MAKEFLAGS='-j1',CARGO_MAKEFLAGS='-j1',CARGO_PROFILE_DEV_DEBUG='0',RUSTC_WRAPPER=B+'/NFZ_rustc.py'),timeout=600,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),frozen_revision='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387',source_tree_dirty=True,expected_time='debug type-check compilation and MIR/typed-HIR diagnostic emission; no arithmetic gate, Kani, extraction or ELF')
 files[f'{attempt}.json']=json.dumps(cfg)
 r=ssh('python3',f'''from pathlib import Path
 import json,os,base64
@@ -55,7 +55,10 @@ if r.returncode==255:
  print('Submitted; recovering read-only, no resubmission',flush=True);time.sleep(60)
 r=ssh('python3',f'''from pathlib import Path
 import json,lzma,base64,hashlib
-b=Path({B!r});paths=[p for p in b.glob('NFZ_*') if p.is_file()]+list((b/'{attempt}').rglob('*'))
+b=Path({B!r});paths=[p for p in b.glob('NFZ_*') if p.is_file() and p.name not in ['NFZ_aspis_core.mir','NFZ_aspis_core.mir0','NFZ_aspis_core.hir','NFZ_aspis_statement.mir']]+list((b/'{attempt}').rglob('*'))
+receipt=b/'{attempt}'/'receipt.json'
+if receipt.exists() and (b/'NFZ_THREADS.json').exists():
+ q=json.loads(receipt.read_text());q['thread_measurement']=json.loads((b/'NFZ_THREADS.json').read_text());receipt.write_text(json.dumps(q,indent=2)+'\\n')
 out={{}}
 for p in paths:
  if not p.is_file():continue
