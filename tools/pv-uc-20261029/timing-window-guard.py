@@ -10,9 +10,9 @@ RUN='pv-uc-timing'
 class Hold(RuntimeError):pass
 
 def scope_identifier(unit, limits):
-    m=re.fullmatch(r'pv-uc-(native901[01][0-9])\.scope',unit)
+    m=re.fullmatch(r'pv-uc-(native9112[0-5])\.scope',unit)
     expected={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}
-    if not m or limits!=expected:raise Hold('timing must run in its authorized 6G/8G/swap0/Tasks64 native901xx scope')
+    if not m or limits!=expected:raise Hold('timing must run in its authorized 6G/8G/swap0/Tasks64 native91120–native91125 scope')
     return m[1]
 
 def marker_guard(marker=MARKER, now=None, require_live=False):

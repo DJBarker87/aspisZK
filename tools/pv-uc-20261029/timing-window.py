@@ -1,4 +1,4 @@
-"""Prepared only: D561 paired timing in a lead-arranged pv-uc-timing window."""
+"""Prepared only: D586 final client paired timing in a lead-arranged pv-uc-timing window."""
 from pathlib import Path
 import hashlib,json,os,statistics,subprocess,time,importlib.util,signal
 H=Path('/home/dombarker/project-offloads/codex-pv-uc-20261029');CONTROL=H.parent/'codex-pv-c474-20261029'
@@ -42,6 +42,7 @@ def thermal():
  return d
 assert hashlib.sha256(B['baseline'].read_bytes()).hexdigest()=='30d883a8d97f12c315898aaf9170eb7a542b5e935881f089506fd4601ddb6a20'
 expected=json.loads((H/'final-gates/ready/build.json').read_text())['binaries']['user_client']['sha256']
+assert expected=='fc8808eb454f3156dba550140398cc3a74af4c88ee5b3491d2d04d33ee904558'
 assert hashlib.sha256(B['draft'].read_bytes()).hexdigest()==expected
 pins={k:dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size) for k,p in B.items()};write(O/'binary-pins.json',pins)
 # Requests were produced by the existing actual-client/SBF fixture gate.
@@ -67,15 +68,20 @@ try:
      # Fresh fixture-only public nonce labels per pair, same in both experiments.
      # No private key/account exists for these labels; all ledgers are retained.
      q['proof_accounts']=[public_key(f'PV-UC D561 {scope_id} pair {i} {f} attempt {j}') for j in range(8)]
-     rfd=None
+     rfd=None; output_read=None; output_write=None
      if side=='draft':
       q.pop('note');q.update(lane_leaf_sets=fixtures['lane_leaf_sets'],withdrawal_amount=250)
       rfd,wfd=os.pipe();os.write(wfd,bytes.fromhex(fixtures['records'][0 if f=='transfer' else 1]));os.close(wfd);q['wallet_bytes_fd']=rfd
+      output_read,output_write=os.pipe();q['wallet_output_fd']=output_write
      result_input=json.dumps(q)
      t=time.monotonic()
-     try:r=invoke(['taskset','--cpu-list','0-21',str(B[side])],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,pass_fds=() if rfd is None else (rfd,))
+     try:r=invoke(['taskset','--cpu-list','0-21',str(B[side])],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,pass_fds=() if rfd is None else (rfd,output_write))
      finally:
-      if rfd is not None:os.close(rfd)
+      if rfd is not None:os.close(rfd);os.close(output_write)
+      if output_read is not None:
+       custody=os.read(output_read,213);os.close(output_read)
+     if output_read is not None:
+      assert custody==bytes.fromhex(fixtures['records'][0 if f=='transfer' else 1]), 'custody record mismatch'
      wall=time.monotonic()-t
      assert r.returncode==0 and not r.stderr,(r.returncode,r.stderr)
      v=json.loads(r.stdout);assert v['attempts']==1,(f,side,v['attempts'])

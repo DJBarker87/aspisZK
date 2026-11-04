@@ -94,8 +94,8 @@ class Tests(unittest.TestCase):
   self.assertEqual(len(spawned),1);self.assertIsNotNone(spawned[0].poll())
   self.assertIsNotNone(m.failure)
  def test_short_lived_scope_event_survives_empty_inventory(self):
-  events=g.ScopeEvents(own_unit='pv-uc-native90115.scope')
-  events.feed_unit('pv-uc-native90115.scope');events.feed_unit('background.service')
+  events=g.ScopeEvents(own_unit='pv-uc-native91120.scope')
+  events.feed_unit('pv-uc-native91120.scope');events.feed_unit('background.service')
   self.assertFalse(events.history)
   events.feed_unit('foreign-transient.scope')
   m=g.Monitor(probe=lambda:{'foreign_capped_scopes':[]});m.events=events
@@ -117,10 +117,32 @@ class Tests(unittest.TestCase):
   finally:g.ScopeEvents=original
  def test_scope_id_and_caps(self):
   limits={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}
-  self.assertEqual(g.scope_identifier('pv-uc-native90115.scope',limits),'native90115')
-  for name in ['pv-uc-native75115.scope','pv-uc-native90120.scope','session-1.scope']:
+  self.assertEqual(g.scope_identifier('pv-uc-native91120.scope',limits),'native91120')
+  for name in ['pv-uc-native90115.scope','pv-uc-native91119.scope','pv-uc-native75115.scope','pv-uc-native91126.scope','session-1.scope']:
    with self.assertRaises(g.Hold):g.scope_identifier(name,limits)
   for key in limits:
    bad=dict(limits);bad[key]='max'
-   with self.assertRaises(g.Hold):g.scope_identifier('pv-uc-native90115.scope',bad)
+   with self.assertRaises(g.Hold):g.scope_identifier('pv-uc-native91120.scope',bad)
+ def test_final_client_pipe_wiring(self):
+  # Execute only the request/FD setup and cleanup with a synthetic caller.
+  # No client, runner main body, scope, fixture secret, or timing is executed.
+  import ast,os,subprocess,time
+  from types import SimpleNamespace
+  tree=ast.parse(Path(__file__).with_name('timing-window.py').read_text())
+  loop=next(n for n in ast.walk(tree) if isinstance(n,ast.For) and isinstance(n.target,ast.Name) and n.target.id=='side')
+  start=next(i for i,n in enumerate(loop.body) if isinstance(n,ast.Assign) and isinstance(n.targets[0],ast.Name) and n.targets[0].id=='rfd')
+  end=next(i for i,n in enumerate(loop.body) if isinstance(n,ast.Assign) and isinstance(n.targets[0],ast.Name) and n.targets[0].id=='wall')
+  block=ast.Module(body=loop.body[start:end],type_ignores=[])
+  record=bytes(range(212));seen=[]
+  def invoke(command,**kwargs):
+   fds=kwargs['pass_fds'];self.assertEqual(len(fds),2)
+   self.assertNotEqual(os.fstat(fds[0]).st_ino,os.fstat(fds[1]).st_ino)
+   self.assertEqual(os.read(fds[0],213),record)
+   os.write(fds[1],record);seen.extend(fds)
+   return SimpleNamespace(returncode=0,stdout='{}',stderr='')
+  scope=dict(os=os,json=json,subprocess=subprocess,time=time,side='draft',q={'note':{}},fixtures={'lane_leaf_sets':[], 'records':[record.hex(),record.hex()]},f='transfer',B={'draft':'synthetic-unused'},invoke=invoke)
+  exec(compile(block,'<offline pipe wiring only>','exec'),scope)
+  self.assertEqual(scope['custody'],record)
+  for fd in [*seen,scope['output_read']]:
+   with self.assertRaises(OSError):os.fstat(fd)
 if __name__=='__main__':unittest.main(verbosity=2)
