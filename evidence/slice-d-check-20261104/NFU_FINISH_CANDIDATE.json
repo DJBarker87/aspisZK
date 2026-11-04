@@ -1,0 +1,17 @@
+{
+ "status": "OPEN; native caller-G candidate only",
+ "frozen_function": "crates/aspis-r1-cost-probe/src/verifier.rs::finish_query_dot",
+ "frozen_source_sha256": "8c872d42bdaa245cc540be6b26d17108a5cb40754b8befb79e147f5843b1f756",
+ "frozen_body": "fn finish_query_dot(final_message:&[u8],weights:&[K])->Result<E,Error> {\n    let mut dot=crate::fast_pairing::EbyKDot::new();\n    let mut j=0;\n    while j<weights.len() {dot.push(field(final_message,j),weights[j]).map_err(|_|Error::Parse)?;j+=1;}\n    Ok(dot.finish())\n}",
+ "frozen_body_sha256": "2ad796d7ca1ce8a7248e10c03b9056c21adfdfb999dfbef4660a3953ee995441",
+ "callee_domain": "NFG public push: canonical E input, arbitrary raw scalar/count and old fields, valid unique receiver; source E decoder receives a SAME canonical32-byte window; no field products here",
+ "callee_provenance": "evidence/slice-q-mul9-20261104/NFM_peer_inputs/NFG_CERTIFICATES.json",
+ "candidate_changes": "One iteration only; local-record oracle on the ACTUAL typed EbyKDot replaces the push call, with full unconstrained reply and nine-word mutation. recorded_field/recorded_weight are ghost capture around the actual field/read. Typed field-by-field make/read helpers preserve the actual frozen struct; copied-step/source-loop and canonical model association remain OPEN.",
+ "remaining": [
+  "actual typed Dot/source-erasure/ABI association",
+  "canonical NFG model transport without old FIo imports",
+  "full finite-loop induction/new/finish/abort-prefix composition",
+  "caller domain and final aggregate bounds"
+ ],
+ "progress_credit": 0
+}

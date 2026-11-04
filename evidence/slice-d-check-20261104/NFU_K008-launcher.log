@@ -1,0 +1,60 @@
+{"attempt": "NFU_K008", "exit_status": 1, "wall_seconds": 2.9073942399118096, "peak_rss_kib": "310840", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+n
+...
+ 95 |         pub fn dot<const N:usize>(left:[Self;N],right:[Self;N])->Self {
+    |                ^^^
+...
+104 |         #[inline(always)] pub fn neg(self)->Self {Self::ZERO.sub(self)}
+    |                                  ^^^
+105 |         #[inline(always)] pub fn square(self)->Self {self.mul(self)}
+    |                                  ^^^^^^
+
+warning: module `NFU_wire` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/r1_wire.rs:856:5
+    |
+856 | mod NFU_wire;
+    |     ^^^^^^^^ help: convert the identifier to snake case: `nfu_wire`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: module `NFU_compact` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/compact.rs:205:5
+    |
+205 | mod NFU_compact;
+    |     ^^^^^^^^^^^ help: convert the identifier to snake case: `nfu_compact`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.52s
+Checking harness compact::NFU_compact::check_one...
+
+VERIFICATION RESULT:
+ ** 1 of 276 failed (3 unreachable)
+Failed Checks: assertion failed: (result == if valid { Ok(()) } else { Err(CodecError::NonCanonical) }) !=
+    cfg!(NFU_invert)
+ File: "crates/aspis-r1-cost-probe/src/NFU_compact.rs", line 3, in compact::NFU_compact::check_one
+
+VERIFICATION:- FAILED
+Verification Time: 0.7369085s
+
+Manual Harness Summary:
+Verification failed for - compact::NFU_compact::check_one
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r304f45a2d566464783a0aa6f895d009e.scope; invocation ID: e984ebcae70f483d8a4d88bb4b5e4bd3

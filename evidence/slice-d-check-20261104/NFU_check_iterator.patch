@@ -1,0 +1,10 @@
+--- a/crates/aspis-r1-cost-probe/src/NFU_compact.rs
++++ b/crates/aspis-r1-cost-probe/src/NFU_compact.rs
+@@ -24,3 +24,7 @@
+ fn copy16(){let source:[u8;16]=kani::any();let mut out:[u8;16]=kani::any();out.copy_from_slice(&source);let j:usize=kani::any();kani::assume(j<16);assert!((out[j]==source[j]) != cfg!(NFU_invert));}
+ #[kani::proof] #[kani::unwind(2)]
+ fn expand_reject(){let source:[u8;1856]=kani::any();let mut out:[u8;3712]=kani::any();let n:usize=kani::any();let m:usize=kani::any();kani::assume(n<=1856&&m<=3712);kani::assume(n%16!=0||m!=2*n);let j:usize=kani::any();kani::assume(j<3712);let old=out[j];let r=expand_values(&source[..n],&mut out[..m]);assert!((r==Err(CodecError::Length)&&out[j]==old) != cfg!(NFU_invert));}
++
++// Arbitrary iterator pre-state; no prior decoding or whole-buffer loop.
++#[kani::proof] #[kani::unwind(3)]
++fn check_iterator(){let b:[u8;464]=kani::any();let i:usize=kani::any();kani::assume(i<=29);let mut it=b[16*i..].chunks_exact(16);let mut exact=it.len()==29-i&&it.remainder().is_empty();match it.next(){None=>{exact&=i==29&&it.len()==0;},Some(c)=>{exact&=i<29&&c.len()==16&&core::ptr::eq(c.as_ptr(),b[16*i..].as_ptr())&&it.len()==29-(i+1);match it.next(){None=>exact&=i+1==29,Some(next)=>exact&=i+1<29&&core::ptr::eq(next.as_ptr(),b[16*(i+1)..].as_ptr())};}}assert!(exact != cfg!(NFU_invert));}

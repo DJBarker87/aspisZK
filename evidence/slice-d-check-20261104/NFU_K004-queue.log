@@ -1,0 +1,120 @@
+{"attempt": "NFU_K004", "exit_status": 1, "wall_seconds": 2.2614525470416993, "peak_rss_kib": "301540", "swaps": "0", "print_axioms": "N/A: kani"}
+c/candidate.rs:239:43
+    |
+239 | fn query_loop(proof: &[u8], p: &Prepared, mut a: Accumulator, g: &[E; 29], obs: Observer, geometry: &QueryGeometry, pending: Batche...
+    |                                           ----^
+    |                                           |
+    |                                           help: remove this `mut`
+
+warning: constant `MASK` is never used
+ --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:6:11
+  |
+6 |     const MASK:u64=0x7fff_ffff_7fff_ffff;
+  |           ^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `ONES` is never used
+ --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:7:11
+  |
+7 |     const ONES:u64=0x0000_0001_0000_0001;
+  |           ^^^^
+
+warning: function `add` is never used
+  --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:15:37
+   |
+15 |     #[inline(always)] pub(crate) fn add(a:u32,b:u32)->u32 {
+   |                                     ^^^
+
+warning: function `pair` is never used
+  --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:18:26
+   |
+18 |     #[inline(always)] fn pair(a:u32,b:u32)->u64 {u64::from(a)|(u64::from(b)<<32)}
+   |                          ^^^^
+
+warning: function `reduce_pair` is never used
+  --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:19:26
+   |
+19 |     #[inline(always)] fn reduce_pair(s:u64)->u64 {
+   |                          ^^^^^^^^^^^
+
+warning: multiple associated items are never used
+  --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:23:19
+   |
+22 |     impl Q {
+   |     ------ associated items in this implementation
+23 |         pub const ZERO:Self=Self([0;4]);pub const ONE:Self=Self([1,0,0,0]);
+   |                   ^^^^                            ^^^
+...
+28 |         pub fn from_m31(x:u32)->Option<Self>{if x<P{Some(Self([x,0,0,0]))}else{None}}
+   |                ^^^^^^^^
+...
+37 |         #[inline(always)] pub fn add(self,rhs:Self)->Self {
+   |                                  ^^^
+...
+42 |         #[inline(always)] pub fn sub(self,rhs:Self)->Self {
+   |                                  ^^^
+...
+47 |         #[inline(always)] pub fn half(self)->Self {
+   |                                  ^^^^
+...
+51 |         pub fn half_pow(self,n:u8)->Option<Self>{
+   |                ^^^^^^^^
+...
+57 |         #[inline(always)] pub fn mul_m31(self,rhs:u32)->Option<Self>{
+   |                                  ^^^^^^^
+...
+64 |         #[inline(always)] pub fn mul(self,rhs:Self)->Self {
+   |                                  ^^^
+
+warning: associated items `dot`, `neg`, and `square` are never used
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:95:16
+    |
+ 80 |     impl Q {
+    |     ------ associated items in this implementation
+...
+ 95 |         pub fn dot<const N:usize>(left:[Self;N],right:[Self;N])->Self {
+    |                ^^^
+...
+104 |         #[inline(always)] pub fn neg(self)->Self {Self::ZERO.sub(self)}
+    |                                  ^^^
+105 |         #[inline(always)] pub fn square(self)->Self {self.mul(self)}
+    |                                  ^^^^^^
+
+warning: module `NFU_wire` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/r1_wire.rs:856:5
+    |
+856 | mod NFU_wire;
+    |     ^^^^^^^^ help: convert the identifier to snake case: `nfu_wire`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: module `NFU_compact` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/compact.rs:205:5
+    |
+205 | mod NFU_compact;
+    |     ^^^^^^^^^^^ help: convert the identifier to snake case: `nfu_compact`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.45s
+Checking harness r1_wire::NFU_wire::framed_identity...
+
+VERIFICATION RESULT:
+ ** 1 of 23 failed
+Failed Checks: assertion failed: (result.as_ptr() == input.as_ptr() && result.len() == input.len()) !=
+    cfg!(NFU_invert)
+ File: "crates/aspis-r1-cost-probe/src/NFU_wire.rs", line 6, in r1_wire::NFU_wire::framed_identity
+
+VERIFICATION:- FAILED
+Verification Time: 0.20949472s
+
+Manual Harness Summary:
+Verification failed for - r1_wire::NFU_wire::framed_identity
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+

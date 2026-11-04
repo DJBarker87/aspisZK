@@ -1,0 +1,11 @@
+--- a/crates/aspis-r1-cost-probe/src/NFU_verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/NFU_verifier.rs
+@@ -20,7 +20,7 @@
+  let mut dot=crate::fast_pairing::NFU_helpers::make(before);let mut index=j;let result=source_step(&bytes,&weights,&mut dot,&mut index,&mut log);let final_state=crate::fast_pairing::NFU_helpers::read(&dot);
+  let good=match group{
+  0=>if reply{matches!(result,Ok(()))}else{matches!(result,Err(Error::Parse))},
+- 1=>index==if reply{j+1}else{j},2=>log.calls==1,3=>log.before==before,4=>final_state==after,
++ 1=>index==if reply{j+1}else{j},2=>log.calls==1,3=>(log.before[0]==before[0] && log.before[1]==before[1] && log.before[2]==before[2] && log.before[3]==before[3] && log.before[4]==before[4] && log.before[5]==before[5] && log.before[6]==before[6] && log.before[7]==before[7] && log.before[8]==before[8]),4=>(final_state[0]==after[0] && final_state[1]==after[1] && final_state[2]==after[2] && final_state[3]==after[3] && final_state[4]==after[4] && final_state[5]==after[5] && final_state[6]==after[6] && final_state[7]==after[7] && final_state[8]==after[8]),
+  5=>log.value[..4]==value[..4],6=>log.value[4..]==value[4..],7=>log.scalar==scalar,
+  8=>log.value.iter().all(|x|*x<0x7fffffff),9=>log.order==3,
+  10=>log.field_ptr==bytes.as_ptr().wrapping_add(32*j),11=>log.field_len==32,

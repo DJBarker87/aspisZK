@@ -1,0 +1,33 @@
+--- a/crates/aspis-r1-cost-probe/src/NFU_wire.rs
++++ b/crates/aspis-r1-cost-probe/src/NFU_wire.rs
+@@ -50,6 +50,15 @@
+ #[kani::proof] #[kani::unwind(35)]
+ #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+ #[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(validate_record_fields,unreachable_validation)]
+ fn parse_bad_header(){let mut b:[u8;3717]=kani::any();let row:u8=kani::any();kani::assume(row<27);let (tag,size)=row_shape(row).unwrap();b[0]=tag;kani::assume(u32::from_le_bytes([b[1],b[2],b[3],b[4]]) as usize!=size);assert!(matches!(parse_record(row,&b[..5+size]),Err(Error::Length{row:r}) if r==row) != cfg!(NFU_invert));}
+ #[kani::proof] #[kani::unwind(2)]
+ fn parse_at_short(){let b:[u8;13831]=kani::any();let row:u8=kani::any();kani::assume(row<27);let n:usize=kani::any();let offset:usize=kani::any();kani::assume(n<=13831&&offset<=13831);let length=5+row_shape(row).unwrap().1;kani::assume(offset+length>n);assert!(matches!(parse_record_at(&b[..n],row,offset),Err(Error::Length{row:r}) if r==row) != cfg!(NFU_invert));}
++
++fn unreachable_validation(_:u8,_:&[u8])->Result<(),Error>{assert!(false,"header guard must not call validation");Ok(())}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn prefix_record(){let b:[u8;3717]=kani::any();let records:[&[u8];27]=core::array::from_fn(|_|{let start:usize=kani::any();let len:usize=kani::any();kani::assume(start<=3717&&len<=3717-start);&b[start..start+len]});let p=Prefix{c1_root:[0;32],records};let row:u8=kani::any();let r=p.record(row);let exact=if row>=27{matches!(r,Err(Error::InvalidRow))}else{match r{Ok(s)=>core::ptr::eq(s.as_ptr(),records[row as usize].as_ptr())&&s.len()==records[row as usize].len(),Err(_)=>false}};assert!(exact != cfg!(NFU_invert));}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn prefix_validated(){let b:[u8;3717]=kani::any();let records:[&[u8];27]=core::array::from_fn(|_|{let start:usize=kani::any();let len:usize=kani::any();kani::assume(start<=3717&&len<=3717-start);&b[start..start+len]});let p=Prefix{c1_root:[0;32],records};let row:u8=kani::any();let r=p.validated_record(row);let exact=if row>=27{matches!(r,Err(Error::InvalidRow))}else{match r{Ok(s)=>s.row==row&&core::ptr::eq(s.framed.as_ptr(),records[row as usize].as_ptr())&&s.framed.len()==records[row as usize].len(),Err(_)=>false}};assert!(exact != cfg!(NFU_invert));}
+--- a/programs/r1-cost-probe/src/NFU_owned.rs
++++ b/programs/r1-cost-probe/src/NFU_owned.rs
+@@ -15,3 +15,12 @@
+ fn stage2_empty(){let b:[u8;4]=kani::any();let n:usize=kani::any();kani::assume(n<=4);assert!(matches!(stage2(&Pubkey::new_from_array([0;32]),&[],&b[..n]),Err(ProgramError::InvalidInstructionData)) != cfg!(NFU_invert));}
+ #[kani::proof] #[kani::unwind(3)]
+ fn stage2_owned_empty(){let b:[u8;4]=kani::any();let n:usize=kani::any();kani::assume(n<=4);assert!(matches!(stage2_owned(&Pubkey::new_from_array([0;32]),&[],&b[..n],Ok(kani::any())),Err(ProgramError::InvalidInstructionData)) != cfg!(NFU_invert));}
++
++// Source-shaped one iteration, retaining the original byte read and tail update.
++fn zero_cut(mut remaining:&[u8])->(u8,&[u8],ProgramResult){
++ if remaining.is_empty(){return(0,remaining,Ok(()));}
++ if remaining[0]!=0{return(1,remaining,Err(ProgramError::AccountAlreadyInitialized));}
++ remaining=&remaining[1..];(2,remaining,Ok(()))
++}
++#[kani::proof] #[kani::unwind(3)]
++fn zero_full_step(){let b:[u8;4096]=kani::any();let start:usize=kani::any();let n:usize=kani::any();kani::assume(start<=4096&&n<=4096-start);let view=&b[start..start+n];let j:usize=kani::any();kani::assume(j<4096);let before=b[j];let(tag,rest,result)=zero_cut(view);let want=if n==0{0}else if b[start]!=0{1}else{2};let shift=if want==2{1}else{0};let exact=tag==want&&rest.len()==n-shift&&core::ptr::eq(rest.as_ptr(),view.as_ptr().wrapping_add(shift))&&b[j]==before&&if want==1{matches!(result,Err(ProgramError::AccountAlreadyInitialized))}else{matches!(result,Ok(()))};assert!(exact != cfg!(NFU_invert));}

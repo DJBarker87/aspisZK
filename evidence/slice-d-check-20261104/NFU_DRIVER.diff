@@ -1,0 +1,29 @@
+--- a/NFQ_ProofDriver.lean
++++ b/NFU_ProofDriver.lean
+@@ -64,9 +64,7 @@
+   let mode := args.headD "small"
+   let (modules, roots) :=
+     if mode == "proof0" then
+-      (#[`NFQ_COMBINED_IMPORT], #[`NFQ_RowShape.reference, `NFQ_RowShape.prefix_reference, `NFQ_RowShape.compact_reference])
+-    else if mode == "proof1" then
+-      (#[`NFQ_COMBINED_IMPORT], #[`NFQ_Transport.folds_reference, `NFQ_Transport.final_len_reference, `NFQ_Transport.checkpoint_size_reference])
++      (#[`NFU_COMBINED_IMPORT], #[`NFU_RecordGetters.row, `NFU_RecordGetters.framed, `NFU_RecordGetters.parser_row, `NFU_RecordGetters.parser_framed, `NFU_RecordGetters.same_token])
+     else if mode == "fixtures" then
+       (#[`NEP_Planted, `NEP_Mutations],
+        #[`NEP_Planted.matcher, `NEP_Planted.viaPrivate, `NEP_Planted.proof,
+@@ -77,12 +75,12 @@
+     {} (loadExts := true) (level := .private)
+   if mode == "scan" || mode == "queryscan" then
+     let mut expected : Std.HashMap String (Array String) := {}
+-    for line in ← IO.FS.lines (if mode == "queryscan" then "NFQ_QUERY_EXPECTED_IMPORTS.jsonl" else "NFQ_EXPECTED_IMPORTS.jsonl") do
++    for line in ← IO.FS.lines (if mode == "queryscan" then "NFU_QUERY_EXPECTED_IMPORTS.jsonl" else "NFU_EXPECTED_IMPORTS.jsonl") do
+       let j ← IO.ofExcept (Json.parse line)
+       expected := expected.insert (← IO.ofExcept (j.getObjValAs? String "module"))
+         (← IO.ofExcept (j.getObjValAs? (Array String) "imports"))
+-    let failed ← NER.loadedScan env (if mode == "queryscan" then "NFQ_QUERY_LOADED_scan.jsonl" else "NFQ_LOADED_scan.jsonl") expected
+-    IO.println (if failed then "NFQ_SCAN_FAILED" else "NFQ_SCAN_ZERO_DANGLING")
++    let failed ← NER.loadedScan env (if mode == "queryscan" then "NFU_QUERY_LOADED_scan.jsonl" else "NFU_LOADED_scan.jsonl") expected
++    IO.println (if failed then "NFU_SCAN_FAILED" else "NFU_SCAN_ZERO_DANGLING")
+     return if failed then 1 else 0
+   let ctx : Command.Context := {
+     fileName := "NEP_Driver"

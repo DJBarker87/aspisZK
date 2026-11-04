@@ -1,0 +1,436 @@
+{
+ "schema_version": 1,
+ "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "new_composed_functions": 11,
+ "new_composed_rows": 14,
+ "driver_root_status": "OPEN",
+ "functions": [
+  {
+   "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::ValidatedRecord<'a>::row",
+   "rows": [
+    "TX1:149"
+   ],
+   "status": "CLOSED",
+   "form": "ruling (y)/(y') hybrid",
+   "domain": "All u8 row values; SAME valid typed framed slice length 0..3717; no token-validation or canonicality precondition",
+   "native_positive": "NFU_K012",
+   "matched_control": "NFU_K013",
+   "lean_root": "NFU_RecordGetters.row",
+   "model_association": "Actual emitted PublicPreparation getter; NFU_RecordGetters parser getter and same_token laws preserve both original fields",
+   "axioms": [
+    "propext"
+   ],
+   "frame": "No mutation, allocation, cleanup, callback, digest, oracle or protocol event; row contract empty modifies; framed returns exact same typed pointer and length from immutable borrow",
+   "KMX": "Not needed: asserted scalar/provenance/length properties depend on no reached copy builtin",
+   "inner_hypotheses_remaining": []
+  },
+  {
+   "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::ValidatedRecord<'a>::framed",
+   "rows": [
+    "TX1:148"
+   ],
+   "status": "CLOSED",
+   "form": "ruling (y)/(y') hybrid",
+   "domain": "All u8 row values; SAME valid typed framed slice length 0..3717; arbitrary start/content; complete borrowed return identity",
+   "native_positive": "NFU_K003",
+   "matched_control": "NFU_K004",
+   "lean_root": "NFU_RecordGetters.framed",
+   "model_association": "Actual emitted PublicPreparation getter; NFU_RecordGetters parser getter and same_token laws preserve both original fields",
+   "axioms": [
+    "propext"
+   ],
+   "frame": "No mutation, allocation, cleanup, callback, digest, oracle or protocol event; row contract empty modifies; framed returns exact same typed pointer and length from immutable borrow",
+   "KMX": "Not needed: asserted scalar/provenance/length properties depend on no reached copy builtin",
+   "inner_hypotheses_remaining": []
+  },
+  {
+   "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::key",
+   "rows": [
+    "TX1:337",
+    "TX2:231"
+   ],
+   "status": "CLOSED",
+   "form": "ruling (y)/(y') hybrid; one-iteration induction where needed",
+   "domain": "All valid borrowed account keys; complete SAME typed Pubkey borrow; other fields unread",
+   "native_positive": "NFU_K016",
+   "matched_control": "NFU_K017",
+   "additional_pairs": [],
+   "copy_pairs": [],
+   "lean_root": "NFU_AdapterGetters.key",
+   "model_association": "Exact emitted source helper plus NFU field-irrelevance/domain laws on the SAME input",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "internal_edges": [],
+   "frame": "Read-only input/account frame, complete Result and SAME returned borrowed carrier; no allocation, cleanup, callback, digest/oracle/protocol event",
+   "KMX": null,
+   "inner_hypotheses_remaining": []
+  },
+  {
+   "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::owner",
+   "rows": [
+    "TX1:338",
+    "TX2:232"
+   ],
+   "status": "CLOSED",
+   "form": "ruling (y)/(y') hybrid; one-iteration induction where needed",
+   "domain": "All valid borrowed owner keys; complete SAME typed Pubkey borrow; other fields unread",
+   "native_positive": "NFU_K018",
+   "matched_control": "NFU_K019",
+   "additional_pairs": [],
+   "copy_pairs": [],
+   "lean_root": "NFU_AdapterGetters.owner",
+   "model_association": "Exact emitted source helper plus NFU field-irrelevance/domain laws on the SAME input",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "internal_edges": [],
+   "frame": "Read-only input/account frame, complete Result and SAME returned borrowed carrier; no allocation, cleanup, callback, digest/oracle/protocol event",
+   "KMX": null,
+   "inner_hypotheses_remaining": []
+  },
+  {
+   "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_readonly_buffer",
+   "rows": [
+    "TX1:340",
+    "TX2:237"
+   ],
+   "status": "CLOSED",
+   "form": "ruling (y)/(y') hybrid; one-iteration induction where needed",
+   "domain": "All three metadata flags; all unread keys/owner/deferred-error/buffer fields; complete ProgramResult",
+   "native_positive": "NFU_K022",
+   "matched_control": "NFU_K023",
+   "additional_pairs": [],
+   "copy_pairs": [],
+   "lean_root": "NFU_AdapterGetters.readonly",
+   "model_association": "Exact emitted source helper plus NFU field-irrelevance/domain laws on the SAME input",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "internal_edges": [
+    {
+     "edge": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_readonly_buffer -> programs/r1-cost-probe/src/r1_pool_adapter.rs::readonly_buffer_meta_ok",
+     "status": "CLOSED",
+     "certificate": {
+      "native": "NFU_K022",
+      "lean_root": "NFU_AdapterGetters.readonly",
+      "domain_proof": "The frozen caller forwards exactly its original three Bool fields, each in NFQ readonly_buffer_meta_ok universal Bool domain. NFU_AdapterGetters.readonly/frame instantiate the CLOSED NFQ callee; real body executes natively.",
+      "callee_packets": [
+       "evidence/slice-d-define-20261104/NFQ_CERTIFICATES.json"
+      ],
+      "selected_callee_claims": [
+       "NFQ::programs/r1-cost-probe/src/r1_pool_adapter.rs::readonly_buffer_meta_ok"
+      ],
+      "selected_callee_rows": [
+       "TX1:334",
+       "TX2:222"
+      ],
+      "historical_inventory_packets_not_selected": [
+       "evidence/native-front4-20261028/NDG_K013/receipt.json",
+       "evidence/native-front4-20261028/NDG_K014/receipt.json",
+       "evidence/native-front4-20261028/NDG_L003/receipt.json"
+      ]
+     }
+    }
+   ],
+   "frame": "Read-only input/account frame, complete Result and SAME returned borrowed carrier; no allocation, cleanup, callback, digest/oracle/protocol event",
+   "KMX": null,
+   "inner_hypotheses_remaining": []
+  },
+  {
+   "function": "crates/aspis-r1-cost-probe/src/compact.rs::check_values",
+   "rows": [
+    "TX1:096"
+   ],
+   "status": "CLOSED",
+   "form": "ruling (y)/(y') hybrid; one-iteration induction where needed",
+   "domain": "SAME 464-byte adopted y1 window; arbitrary bytes and every rejected prefix; no canonicality premise",
+   "native_positive": "NFU_K032",
+   "matched_control": "NFU_K033",
+   "additional_pairs": [
+    [
+     30,
+     31
+    ]
+   ],
+   "copy_pairs": [
+    [
+     40,
+     41
+    ]
+   ],
+   "lean_root": "NFU_CompactLeaves.check_result",
+   "model_association": "Retained CLOSED LPl opaque leaf, private namespace only; complete first-error source-order Scan.Trace and exact scalar/error ports; native callback+iterator association",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "internal_edges": [
+    {
+     "edge": "crates/aspis-r1-cost-probe/src/compact.rs::check_values -> crates/aspis-core/src/field.rs::QM31::from_le_bytes",
+     "status": "CLOSED",
+     "certificate": {
+      "native": "NFU_K032",
+      "lean_root": "NFU_CompactLeaves.check_result",
+      "domain_proof": "Actual chunks_exact16 iterator K030 selects SAME 16-byte y1 window; arbitrary bytes accepted by QM31 decoder packet. NFU_Retarget.LPl.Check.window/chunk_eq/stage and native K032 preserve decoder Result on that exact window, including rejection; no product/canonical-input restriction.",
+      "callee_packets": [
+       "evidence/slice-d-define-20261104/NFQ_COMPOSED_LEDGER.json.xz"
+      ],
+      "selected_callee_claims": [
+       "NET::crates/aspis-core/src/field.rs::QM31::from_le_bytes"
+      ],
+      "selected_callee_rows": [
+       "TX1:026",
+       "TX2:019"
+      ],
+      "historical_inventory_packets_not_selected": [
+       "evidence/slice-q-compose3-20261102/NET_K017/receipt.json",
+       "evidence/slice-q-compose3-20261102/NET_K018/receipt.json",
+       "evidence/slice-q-compose3-20261102/NET_K022/receipt.json",
+       "evidence/slice-q-compose3-20261102/NET_K023/receipt.json",
+       "evidence/slice-q-compose3-20261102/NET_K024/receipt.json"
+      ]
+     }
+    }
+   ],
+   "frame": "Read-only input/account frame, complete Result and SAME returned borrowed carrier; no allocation, cleanup, callback, digest/oracle/protocol event",
+   "KMX": "Exact adopted patch bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67; listed matched copy controls",
+   "inner_hypotheses_remaining": []
+  },
+  {
+   "function": "crates/aspis-r1-cost-probe/src/compact.rs::expand_values",
+   "rows": [
+    "TX1:099"
+   ],
+   "status": "CLOSED",
+   "form": "ruling (y)/(y') hybrid; one-iteration induction where needed",
+   "domain": "All input lengths0..1856/output lengths0..3712, arbitrary values, SAME unique borrowed output; complete guards and one-window/frame induction",
+   "native_positive": "NFU_K026",
+   "matched_control": "NFU_K027",
+   "additional_pairs": [
+    [
+     28,
+     29
+    ],
+    [
+     38,
+     39
+    ]
+   ],
+   "copy_pairs": [
+    [
+     24,
+     25
+    ]
+   ],
+   "lean_root": "NFU_CompactLeaves.expand_result",
+   "model_association": "Retained CLOSED LPn opaque leaf, private namespace only; exact type/constructor value ports; complete byte Result/frame/trace",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "internal_edges": [],
+   "frame": "Complete SAME mutable output; all guard errors unchanged; one exact KMX low16 write/high16 fill with arbitrary point frame, full source zip iterator; NFU_Retarget.LPn.Expand local_global/write_of_observations/NativeTrace/native_result and length_error compose all windows, including empty",
+   "KMX": "Exact adopted patch bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67; listed matched copy controls",
+   "inner_hypotheses_remaining": []
+  },
+  {
+   "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::validate_record_fields",
+   "rows": [
+    "TX1:154"
+   ],
+   "status": "CLOSED",
+   "form": "ruling (y)/(y') hybrid; one-iteration induction where needed",
+   "domain": "Every row u8, payload length0..3712, arbitrary canonical/noncanonical bytes, ignored tails, exact first-error usize index",
+   "native_positive": "NFU_K034",
+   "matched_control": "NFU_K035",
+   "additional_pairs": [
+    [
+     36,
+     37
+    ]
+   ],
+   "copy_pairs": [
+    [
+     40,
+     41
+    ]
+   ],
+   "lean_root": "NFU_CompactLeaves.validate_result",
+   "model_association": "Retained CLOSED LPl opaque leaf, private namespace only; complete first-error source-order Scan.Trace and exact scalar/error ports; native callback+iterator association",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "internal_edges": [
+    {
+     "edge": "crates/aspis-r1-cost-probe/src/r1_wire.rs::validate_record_fields -> crates/aspis-core/src/field/wide_exact.rs::WideExact::c1",
+     "status": "CLOSED",
+     "certificate": {
+      "native": "NFU_K034",
+      "lean_root": "NFU_CompactLeaves.validate_result",
+      "domain_proof": "K036 actual enumeration establishes SAME32-byte window and current i<116; K034 is the verbatim source callback on arbitrary row/current i. WideExact decoder packet covers every32-byte array; its returned eight-limb record lies in NFQ c1 getter all-raw-limb domain. NFU_Retarget.LPl.Validate.window/native_result/error_bound preserve exact first error and usize port.",
+      "callee_packets": [
+       "evidence/slice-d-define-20261104/NFQ_CERTIFICATES.json"
+      ],
+      "selected_callee_claims": [
+       "NFQ::crates/aspis-core/src/field/wide_exact.rs::WideExact::c1"
+      ],
+      "selected_callee_rows": [
+       "TX2:030"
+      ],
+      "historical_inventory_packets_not_selected": [
+       "evidence/native-tx2c-20261027/NBG_K031/receipt.json"
+      ]
+     }
+    },
+    {
+     "edge": "crates/aspis-r1-cost-probe/src/r1_wire.rs::validate_record_fields -> crates/aspis-core/src/field/wide_exact.rs::WideExact::from_le_bytes",
+     "status": "CLOSED",
+     "certificate": {
+      "native": "NFU_K034",
+      "lean_root": "NFU_CompactLeaves.validate_result",
+      "domain_proof": "K036 actual enumeration establishes SAME32-byte window and current i<116; K034 is the verbatim source callback on arbitrary row/current i. WideExact decoder packet covers every32-byte array; its returned eight-limb record lies in NFQ c1 getter all-raw-limb domain. NFU_Retarget.LPl.Validate.window/native_result/error_bound preserve exact first error and usize port.",
+      "callee_packets": [
+       "evidence/slice-d-define-20261104/NFQ_COMPOSED_LEDGER.json.xz"
+      ],
+      "selected_callee_claims": [
+       "NET::crates/aspis-core/src/field/wide_exact.rs::WideExact::from_le_bytes"
+      ],
+      "selected_callee_rows": [
+       "TX1:048",
+       "TX2:031"
+      ],
+      "historical_inventory_packets_not_selected": [
+       "evidence/slice-q-compose3-20261102/NET_K025/receipt.json",
+       "evidence/slice-q-compose3-20261102/NET_K026/receipt.json",
+       "evidence/slice-q-compose3-20261102/NET_K027/receipt.json",
+       "evidence/slice-q-compose3-20261102/NET_K028/receipt.json",
+       "evidence/slice-q-compose3-20261102/NET_K029/receipt.json",
+       "evidence/slice-q-compose3-20261102/NET_K030/receipt.json",
+       "evidence/slice-q-compose3-20261102/NET_K031/receipt.json"
+      ]
+     }
+    }
+   ],
+   "frame": "Read-only input/account frame, complete Result and SAME returned borrowed carrier; no allocation, cleanup, callback, digest/oracle/protocol event",
+   "KMX": "Exact adopted patch bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67; listed matched copy controls",
+   "inner_hypotheses_remaining": []
+  },
+  {
+   "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::Prefix<'a>::record",
+   "rows": [
+    "TX1:140"
+   ],
+   "status": "CLOSED",
+   "form": "ruling (y)/(y') hybrid; one-iteration induction where needed",
+   "domain": "Every row u8 and 27 valid framed slices of length0..3717; SAME selected immutable typed slice, every InvalidRow; c1 root unread",
+   "native_positive": "NFU_K064",
+   "matched_control": "NFU_K065",
+   "additional_pairs": [],
+   "copy_pairs": [
+    [
+     64,
+     65
+    ]
+   ],
+   "lean_root": "NFU_PrefixRecords.record",
+   "model_association": "Exact emitted source helper plus NFU field-irrelevance/domain laws on the SAME input",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "internal_edges": [],
+   "frame": "Read-only input/account frame, complete Result and SAME returned borrowed carrier; no allocation, cleanup, callback, digest/oracle/protocol event",
+   "KMX": "Exact adopted patch bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67; listed matched copy controls",
+   "inner_hypotheses_remaining": []
+  },
+  {
+   "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::Prefix<'a>::validated_record",
+   "rows": [
+    "TX1:141"
+   ],
+   "status": "CLOSED",
+   "form": "ruling (y)/(y') hybrid; one-iteration induction where needed",
+   "domain": "SAME Prefix/row domain as record; exact row and SAME selected slice or unchanged error; no new token-validity claim",
+   "native_positive": "NFU_K066",
+   "matched_control": "NFU_K067",
+   "additional_pairs": [],
+   "copy_pairs": [
+    [
+     66,
+     67
+    ]
+   ],
+   "lean_root": "NFU_PrefixRecords.validated_record",
+   "model_association": "Exact emitted source helper plus NFU field-irrelevance/domain laws on the SAME input",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "internal_edges": [
+    {
+     "edge": "crates/aspis-r1-cost-probe/src/r1_wire.rs::Prefix<'a>::validated_record -> crates/aspis-r1-cost-probe/src/r1_wire.rs::Prefix<'a>::record",
+     "status": "CLOSED",
+     "certificate": {
+      "native": "NFU_K066",
+      "lean_root": "NFU_PrefixRecords.validated_record",
+      "domain_proof": "The exact SAME Prefix and row are forwarded to record, with no prior change. Its domain is identical; NFU_PrefixRecords.validated_record substitutes that SAME reply and preserves every error and both token fields. No independently chosen token or accepted output is assumed.",
+      "callee_packets": [
+       "evidence/slice-d-check-20261104/NFU_CERTIFICATES.json"
+      ],
+      "selected_callee_claims": [
+       "NFU::crates/aspis-r1-cost-probe/src/r1_wire.rs::Prefix<'a>::record"
+      ],
+      "selected_callee_rows": [
+       "TX1:140"
+      ],
+      "historical_inventory_packets_not_selected": [
+       "evidence/native-front3-20261028/NDF_K048/receipt.json",
+       "evidence/native-front3-20261028/NDF_K049/receipt.json",
+       "evidence/native-front3-20261028/NDF_L016/receipt.json"
+      ]
+     }
+    }
+   ],
+   "frame": "Read-only input/account frame, complete Result and SAME returned borrowed carrier; no allocation, cleanup, callback, digest/oracle/protocol event",
+   "KMX": "Exact adopted patch bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67; listed matched copy controls",
+   "inner_hypotheses_remaining": []
+  },
+  {
+   "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_zero",
+   "rows": [
+    "TX1:342"
+   ],
+   "status": "CLOSED",
+   "form": "ruling (y)/(y') hybrid; one-iteration induction where needed",
+   "domain": "SAME valid immutable allocation, length0..4096, all bytes and every arbitrary tail pre-state, all rejected prefixes; no accepted/all-zero premise",
+   "native_positive": "NFU_K068",
+   "matched_control": "NFU_K069",
+   "additional_pairs": [],
+   "copy_pairs": [],
+   "lean_root": "NFU_ZeroPort.source",
+   "model_association": "Invariant: current tail=original.drop i, ptr=base+i, remaining=length-i. NFU_ZeroPort.head/length/advance/index_advance associate both native cuts to NFQ_ZeroStep.zero_step/reject_step; empty tail is indexed-loop terminal. NFQ_ZeroReference.loop_reference is the full decreasing-remaining induction; NFQ_ZeroSource.source gives exact source/reference Result, including every rejected prefix. No final-output/accepted-run premise.",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "internal_edges": [],
+   "frame": "No source byte write or escape. K068 one cut covers all lengths/tail displacements within4096 and arbitrary observed frame byte, exact done/reject/next Result, SAME pointer and successor length; source literal while loop has no other effect",
+   "KMX": null,
+   "inner_hypotheses_remaining": []
+  }
+ ]
+}

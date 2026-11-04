@@ -1,0 +1,60 @@
+--- a/crates/aspis-r1-cost-probe/src/compact.rs
++++ b/crates/aspis-r1-cost-probe/src/compact.rs
+@@ -199,3 +199,7 @@
+         assert_eq!(check_values(&bad), Err(CodecError::NonCanonical));
+     }
+ }
++
++#[cfg(kani)]
++#[path="NFU_compact.rs"]
++mod NFU_compact;
+--- a/crates/aspis-r1-cost-probe/src/r1_wire.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_wire.rs
+@@ -120,7 +120,9 @@
+ }
+ 
+ impl<'a> ValidatedRecord<'a> {
+-    pub(crate) fn row(&self) -> u8 {
++    #[cfg_attr(kani,kani::modifies())]
++    #[cfg_attr(kani,kani::ensures(|r| (*r == self.row) != cfg!(NFU_invert)))]
++pub(crate) fn row(&self) -> u8 {
+         self.row
+     }
+ 
+@@ -848,3 +850,7 @@
+         finite(row,tail,value.wrapping_add(1),remaining.wrapping_sub(1))
+     }
+ }
++
++#[cfg(kani)]
++#[path="NFU_wire.rs"]
++mod NFU_wire;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NFU_wire.rs
+@@ -0,0 +1,8 @@
++use super::*;
++#[kani::proof_for_contract(ValidatedRecord::row)]
++fn row_contract(){let row:u8=kani::any();let r=ValidatedRecord{row,framed:&[]};let _=r.row();}
++// Borrowed-return association: same typed slice, no copy, allocation or mutation.
++#[kani::proof]
++fn framed_identity(){let bytes:[u8;3717]=kani::any();let start:usize=kani::any();let len:usize=kani::any();kani::assume(start<=3717&&len<=3717-start);let input=&bytes[start..start+len];let record=ValidatedRecord{row:kani::any(),framed:input};let result=record.framed();assert!((result.as_ptr()==input.as_ptr()&&result.len()==input.len()) != cfg!(NFU_invert));}
++#[kani::proof]
++fn payload_identity(){let bytes:[u8;3717]=kani::any();let len:usize=kani::any();kani::assume(5<=len&&len<=3717);let r=ValidatedRecord{row:kani::any(),framed:&bytes[..len]};let result=r.payload();assert!((result.as_ptr()==unsafe{bytes.as_ptr().add(5)}&&result.len()==len-5) != cfg!(NFU_invert));}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NFU_compact.rs
+@@ -0,0 +1,3 @@
++use super::*;
++#[kani::proof] #[kani::unwind(6)]
++fn check_one(){let c:[u8;16]=kani::any();let result=check_values(&c);let valid=(0..4).all(|i|u32::from_le_bytes([c[4*i],c[4*i+1],c[4*i+2],c[4*i+3]])<0x7fffffff);assert!((result==if valid{Ok(())}else{Err(CodecError::NonCanonical)}) != cfg!(NFU_invert));}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NFU_reference.rs
+@@ -0,0 +1 @@
++// NFU reserved sidecar; no executable harness yet.
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NFU_transport.rs
+@@ -0,0 +1 @@
++// NFU reserved sidecar; no executable harness yet.
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NFU_verifier.rs
+@@ -0,0 +1 @@
++// NFU reserved sidecar; no executable harness yet.
