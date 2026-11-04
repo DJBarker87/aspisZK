@@ -1,0 +1,60 @@
+// One native std Iterator::next and the frozen zero callback on arbitrary pre-state.
+#[derive(Clone,Copy)]
+struct NEW_ZeroReply { kind:u8, stop:bool, word:u32, rest:usize, pointer:*const M31 }
+fn NEW_zero_iteration(values:&[M31;5],i:usize)->NEW_ZeroReply{
+ let mut it=values[i..].iter();
+ let (kind,stop,word)=match it.next(){
+  None=>(0,false,0),
+  Some(value)=>{let stop=*value==M31::ZERO;(if stop{2}else{1},stop,value.0)}
+ };
+ NEW_ZeroReply{kind,stop,word,rest:it.len(),pointer:it.as_slice().as_ptr()}
+}
+fn NEW_zero_iteration_case(mode:u8){
+ let raw:[u32;5]=kani::any();let mut values=[M31(raw[0]),M31(raw[1]),M31(raw[2]),M31(raw[3]),M31(raw[4])];
+ let i:usize=kani::any();kani::assume(i<=5);
+ if mode==1{kani::assume(i==5);}
+ if mode==2{kani::assume(i<5);kani::assume(raw[i]!=0);}
+ if mode==3{kani::assume(i<5);kani::assume(raw[i]==0);}
+ let j:usize=kani::any();kani::assume(j<5);
+ let mut reply=NEW_zero_iteration(&values,i);
+ #[cfg(NET_bad_reply)] {reply.stop=!reply.stop;}
+ #[cfg(NET_bad_argument)] {reply.rest^=1;}
+ #[cfg(NET_bad_frame)] {values[j].0^=1;}
+ #[cfg(NEW_wrong_getter)] {if i<5{reply.word^=1;}}
+ #[cfg(NEW_wrong_wrapper)] {reply.kind^=4;}
+ let taken=usize::from(i<5);let next=i+taken;
+ let word=if i<5{raw[i]}else{0};let stop=i<5&&word==0;
+ let kind=if i==5{0}else if stop{2}else{1};
+ assert_eq!(reply.stop,stop);assert_eq!(reply.kind,kind);assert_eq!(reply.word,word);
+ assert_eq!(reply.rest,5-next);assert_eq!(reply.pointer,unsafe{values.as_ptr().add(next)});
+ assert_eq!(values[j].0,raw[j]);
+}
+#[kani::proof] #[kani::unwind(2)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NEW_zero_iteration_all(){NEW_zero_iteration_case(0)}
+#[kani::proof] #[kani::unwind(2)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NEW_zero_iteration_end(){NEW_zero_iteration_case(1)}
+#[kani::proof] #[kani::unwind(2)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NEW_zero_iteration_nonzero(){NEW_zero_iteration_case(2)}
+#[kani::proof] #[kani::unwind(2)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NEW_zero_iteration_zero(){NEW_zero_iteration_case(3)}
+#[kani::proof]
+fn NEW_zero_callback(){
+ let raw:u32=kani::any();let value=M31(raw);let actual=value==M31::ZERO;
+ #[cfg(NET_bad_reply)]let expected=raw!=0;
+ #[cfg(not(NET_bad_reply))]let expected=raw==0;
+ assert_eq!(actual,expected);assert_eq!(value.0,raw);
+ #[cfg(NET_bad_frame)]assert_ne!(value.0,raw);
+}
+#[kani::proof] #[kani::unwind(2)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NEW_zero_readonly_world(){
+ let raw:[u32;5]=kani::any();let values=[M31(raw[0]),M31(raw[1]),M31(raw[2]),M31(raw[3]),M31(raw[4])];
+ let mut world:[u32;60]=kani::any();let j:usize=kani::any();kani::assume(j<60);let before=world[j];
+ let i:usize=kani::any();kani::assume(i<=5);let reply=NEW_zero_iteration(&values,i);
+ #[cfg(NET_bad_frame)]{world[j]^=1;}
+ assert_eq!(world[j],before);assert_eq!(reply.rest,5-i-usize::from(i<5));
+}

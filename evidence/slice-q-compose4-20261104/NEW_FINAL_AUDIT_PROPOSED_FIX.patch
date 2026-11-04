@@ -1,0 +1,16 @@
+--- a/NEW_FinalAudit.lean
++++ b/NEW_FinalAudit.lean
+@@ -33,6 +33,13 @@
+     core.iter.traits.iterator.IteratorSliceIter,
+     NEW_GeometryActual.verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool,
+     zero_callback,bind_tc_ok,uncurry]
++  apply NEW_GeometryRawBody.bind_congr
++  rintro ⟨next,after⟩
++  cases next with
++  | none => rfl
++  | some value =>
++    simp only [uncurry]
++    split <;> rfl
+ 
+ /-- Whole partial Result transport reuses the identical body in the coherent
+ least-fixpoint loop. This does not unfold a buffer or assume termination. -/

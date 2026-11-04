@@ -28,4 +28,17 @@ class Gates(unittest.TestCase):
  def test_missing_loop(self):self.deny_certificate(lambda c:c[0]['parts'].remove('generic_square_loop'))
  def test_changed_body(self):self.deny_certificate(lambda c:c[0].update(frozen_body_sha256='0'*64))
  def test_new_trust(self):self.deny_certificate(lambda c:c[0]['top_hypotheses'].append('DesiredOutput'))
+ def peer_certificate(self):return next(c for c in self.certificates if c['id'].startswith('NEW-peer-accum:'))
+ def test_peer_missing_effects(self):
+  self.peer_certificate()['parts'].remove('ordered_effects')
+  with self.assertRaises(ValueError):v.validate(self.edges,self.certificates,replay=False)
+ def test_peer_unproved_domain(self):
+  self.peer_certificate()['remaining_inner_hypotheses'].append('caller domain assumed')
+  with self.assertRaises(ValueError):v.validate(self.edges,self.certificates,replay=False)
+ def test_peer_changed_revision(self):
+  self.peer_certificate()['import_provenance']['revision']='0'*40
+  with self.assertRaises(ValueError):v.validate(self.edges,self.certificates,replay=False)
+ def test_peer_missing_native_association(self):
+  self.peer_certificate()['original_certificate']['parts'].remove('native_association')
+  with self.assertRaises(ValueError):v.validate(self.edges,self.certificates,replay=False)
 if __name__=='__main__':unittest.main()
