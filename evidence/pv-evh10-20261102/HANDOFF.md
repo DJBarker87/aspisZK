@@ -1,3 +1,59 @@
+# D588 — L3 track separated; source projections remain incomplete
+
+Resume base `102cacae1c`, same worktree and branch `codex/pv-evh-20261029`.
+Read BLOCKER-D587.md and this handoff first; then the inherited prompt chain,
+pv-common.txt through l3-2, and the shared B5 task specification. No other
+branch was imported or merged. Current report: BLOCKER-D588.md.
+
+Step (1) delivered in commit `8038616040`: L3-RESIDUAL.md names exactly
+**ActualEntropyEntryPrefix source-to-machine carrier (V370/L3)**. The adjacent
+l3-residual-D588.json pins sixteen D581–D587 evidence records, including the
+adopted disassembly. Evidence remains binary-structural plus V370; D582 also
+uses its reference OS model. D583/D585 corrected offsets304/352 supersede
+D581's original arithmetic. No physical work continued after recording it.
+This residual is NOT a premise of the five source-level projections.
+
+Step (2) NOT delivered. No complete fault/pending-aware source world producer
+was constructed and no selector was changed. Existing native entry returns P,
+requires uniform entropy reply equality plus many supplied compatibility laws;
+allocator/callback/diagnostic computations use Q and remain uninstalled there.
+SaltsReserve selects the original reserve at one world, then runs the source
+loop under that dictionary. Abstract bind laws and projected arbitrary runs do
+not construct the original entry's operational interpretation. This remains a
+source construction frontier even allowing OWNER, op227, op257. It is not a
+physical-frame obstruction, an impossibility proof, or a shipped counterexample.
+
+BLOCKER-D588 gives the unchanged four binders/dictionary and invocation domain,
+all retained prefix/outcome requirements, the exact five D583 equations and
+next construction. The ONLY allowed conditional premises remain **OWNER**
+(heap ownership from pv-evhB5), **op227**, **op257**. No replacement OWNER, fourth
+source-adequacy premise, whole-helper Result/trace input, physical premise,
+success filter or T field was introduced. No waiting for another branch.
+
+Validation: check_source_projection_d588.py --check PASS, pinned source review
+and L3 evidence integrity only. It resolves ProverRwFullFuns from the recorded
+same-cohort source authority rather than choosing another tracked variant.
+Initial checker input traversal used the wrong nesting for that authority and
+failed with KeyError('revision'); corrected to its existing `source` record,
+then generated the certificate successfully. This was a local Python checker
+failure, not a Lean attempt/environment failure or formal proof finding.
+No Lean/native compile, host job, axioms audit, full manifest replay, runtime
+suite or unchanged full regression. Historical axioms remain SUMMARY-BASED.
+NEXT Lean90267 then91500–91596, audits91597–91599; native NEXTN91603. No IDs used.
+No pending process, owned host scope, infrastructure or shared-source changes.
+
+Stop follows the inherited D580 focus rule at the unconstructed SOURCE entry
+producer described in BLOCKER-D588, not resource/budget exhaustion. Next concrete
+work: lift the original callback/entropy/nonce/salt continuations into one source
+resource world at each reached opsNative, using existing components, retaining
+fault/pending/divergent prefixes; then install all five fields simultaneously.
+Premises/rows removed NONE. Target not yet established; T unchanged. OWNER,
+op227/op257, actual source execution/non-emptiness, V400 timing/resource laws,
+D520/U/D524, L1/L2 and separately the named V370/L3 residual remain. No frozen
+implementation, soundness, wallet/key/account/funds action.
+
+---
+
 # D587 — requested full-family instantiation remains unimplemented
 
 Resume base `7356208133e924f6caabb8e2136a370ee6f02035`, same worktree and
