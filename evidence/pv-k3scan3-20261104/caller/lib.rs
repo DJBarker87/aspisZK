@@ -1,3 +1,5 @@
+#![feature(allocator_api)]
+extern crate alloc;
 use aspis_core::field::{QM31,CM31,M31};
 mod host; mod reference;
 fn q()->QM31 {let x:[u32;4]=kani::any(); QM31{c0:CM31{a:M31(x[0]),b:M31(x[1])},c1:CM31{a:M31(x[2]),b:M31(x[3])}}}
