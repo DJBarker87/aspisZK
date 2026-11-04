@@ -1,0 +1,57 @@
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -3266,3 +3266,12 @@
+     let s = a + P - b;
+     M31(if s >= P { s - P } else { s })
+ }
++
++#[cfg(kani)]
++mod NET_inverse;
++#[cfg(kani)]
++mod NET_qinverse;
++#[cfg(kani)]
++mod NET_windows;
++#[cfg(kani)]
++mod NET_wide_windows;
+--- /dev/null
++++ b/crates/aspis-core/src/field/NET_wide_windows.rs
+@@ -0,0 +1,26 @@
++// Actual WideExact decoder on the same complete current 832-byte opening.
++use super::WideExact;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++mod NET_reference {include!("NET_window_reference.rs");}
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn NET_wide832(){
++ let mut raw:[u8;832]=kani::any();let i:usize=kani::any();kani::assume(i<4);
++ let j:usize=kani::any();kani::assume(j<832);let before=raw[j];let start=672+i*32;
++ let selected=&raw[start..start+32];let ptr=selected.as_ptr();
++ let actual=WideExact::from_le_bytes(selected).map(|x|x.to_limbs());let expected=NET_reference::wide(&raw[start..start+32]);
++ #[cfg(NET_bad_reply)] assert_ne!(actual,expected);
++ #[cfg(not(NET_bad_reply))] assert_eq!(actual,expected);
++ assert_eq!(selected.len(),32);assert_eq!(ptr,unsafe{raw.as_ptr().add(start)});
++ #[cfg(NET_bad_frame)] {raw[j]^=1;}
++ assert_eq!(raw[j],before);
++}
++#[kani::proof] #[kani::unwind(2)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NET_wide_wrong_lengths(){
++ let raw:[u8;57607]=kani::any();let n:usize=kani::any();kani::assume(n<=57607&&n!=32);
++ let actual=WideExact::from_le_bytes(&raw[..n]);
++ #[cfg(NET_bad_reply)] assert!(actual.is_some());
++ #[cfg(not(NET_bad_reply))] assert!(actual.is_none());
++}
+--- /dev/null
++++ b/crates/aspis-core/src/field/NET_window_reference.rs
+@@ -0,0 +1,10 @@
++// Independent safe parser references: scalar byte order is the std primitive.
++pub const P:u32=2147483647;
++pub fn word(b:&[u8],i:usize)->u32 {u32::from_le_bytes([b[i],b[i+1],b[i+2],b[i+3]])}
++pub fn complex(b:&[u8])->Option<[u32;2]> {let a=word(b,0);if a>=P{return None;}let c=word(b,4);if c>=P{return None;}Some([a,c])}
++pub fn quadratic(b:&[u8])->Option<[u32;4]> {let a=match complex(&b[0..8]){Some(x)=>x,None=>return None};let c=match complex(&b[8..16]){Some(x)=>x,None=>return None};Some([a[0],a[1],c[0],c[1]])}
++pub fn wide(b:&[u8])->Option<[u32;8]> {
++ if b.len()!=32{return None;}
++ let a=word(b,0);let c=word(b,4);let d=word(b,8);let e=word(b,12);let f=word(b,16);let g=word(b,20);let h=word(b,24);let k=word(b,28);
++ if a>=P||c>=P||d>=P||e>=P||f>=P||g>=P||h>=P||k>=P{None}else{Some([a,c,d,e,f,g,h,k])}
++}

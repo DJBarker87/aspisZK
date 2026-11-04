@@ -1,0 +1,37 @@
+// Complete native backing allocation; exact current four_dots_one windows.
+use super::{CM31,QM31};
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+mod NET_reference {include!("NET_window_reference.rs");}
+fn c_words(x:CM31)->[u32;2]{[x.a.0,x.b.0]}
+fn q_words(x:QM31)->[u32;4]{[x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0]}
+fn offset(slot:usize,tail:usize,first:bool)->usize{if first{slot*120+104}else{480+slot*32+tail*16}}
+#[kani::proof] #[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn NET_q608(){
+ let mut raw:[u8;608]=kani::any();let slot:usize=kani::any();let tail:usize=kani::any();let first:bool=kani::any();
+ kani::assume(slot<4);kani::assume(tail<2);let start=offset(slot,tail,first);
+ let j:usize=kani::any();kani::assume(j<608);let before=raw[j];
+ let native=&raw[start..start+16];let native_ptr=native.as_ptr();
+ let actual=QM31::from_le_bytes(native).map(q_words);let expected=NET_reference::quadratic(&raw[start..start+16]);
+ #[cfg(NET_bad_reply)] assert_ne!(actual,expected);
+ #[cfg(not(NET_bad_reply))] assert_eq!(actual,expected);
+ assert_eq!(native_ptr,unsafe{raw.as_ptr().add(start)});assert_eq!(native.len(),16);
+ #[cfg(NET_bad_frame)] {raw[j]^=1;}
+ assert_eq!(raw[j],before);
+}
+#[kani::proof] #[kani::unwind(18)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn NET_c608(){
+ let mut raw:[u8;608]=kani::any();let slot:usize=kani::any();let tail:usize=kani::any();let first:bool=kani::any();let half:usize=kani::any();
+ kani::assume(slot<4);kani::assume(tail<2);kani::assume(half<2);let start=offset(slot,tail,first)+half*8;
+ let j:usize=kani::any();kani::assume(j<608);let before=raw[j];
+ let native=&raw[start..start+8];let native_ptr=native.as_ptr();
+ let actual=CM31::from_le_bytes(native).map(c_words);let expected=NET_reference::complex(&raw[start..start+8]);
+ #[cfg(NET_bad_reply)] assert_ne!(actual,expected);
+ #[cfg(not(NET_bad_reply))] assert_eq!(actual,expected);
+ assert_eq!(native_ptr,unsafe{raw.as_ptr().add(start)});assert_eq!(native.len(),8);
+ #[cfg(NET_bad_frame)] {raw[j]^=1;}
+ assert_eq!(raw[j],before);
+}

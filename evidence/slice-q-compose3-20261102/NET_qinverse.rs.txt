@@ -1,0 +1,67 @@
+// Source-fission view of the actual frozen QM31 try_inv/inv expression tree.
+// All child replies are independent raw records; no field arithmetic is evaluated.
+use super::{CM31,M31,QM31};
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+#[derive(Clone,Copy)]
+struct NET_QEvent {tag:u8,a:CM31,b:CM31}
+struct NET_QLog{events:[NET_QEvent;9],reply:[[u32;2];9],zero:bool,next:usize}
+fn cm(r:[u32;2])->CM31{CM31{a:M31(r[0]),b:M31(r[1])}}
+impl NET_QLog{
+ fn zero(&mut self,x:QM31)->bool{let i=self.next;self.events[i]=NET_QEvent{tag:0,a:x.c0,b:x.c1};self.next+=1;self.zero}
+ fn call(&mut self,tag:u8,a:CM31,b:CM31)->CM31{let i=self.next;self.events[i]=NET_QEvent{tag,a,b};self.next+=1;cm(self.reply[i])}
+}
+fn NET_try_inv(x:QM31,log:&mut NET_QLog)->Option<QM31>{
+ if log.zero(x){return None;}
+ let a=log.call(1,x.c0,CM31::ZERO);
+ let b=log.call(1,x.c1,CM31::ZERO);
+ let r=log.call(2,b,CM31::ZERO);
+ let norm=log.call(3,a,r);
+ #[cfg(NET_bad_argument)] let norm=CM31::ZERO;
+ let inverse_norm=log.call(4,norm,CM31::ZERO);
+ let c0=log.call(5,x.c0,inverse_norm);
+ let neg=log.call(6,x.c1,CM31::ZERO);
+ let c1=log.call(5,neg,inverse_norm);
+ #[cfg(NET_bad_reply)] let c0=CM31{a:M31(c0.a.0^1),b:c0.b};
+ Some(QM31{c0,c1})
+}
+fn NET_inv(x:QM31,log:&mut NET_QLog)->QM31{NET_try_inv(x,log).expect("cannot invert zero in QM31")}
+fn init(reply:[[u32;2];9],zero:bool)->NET_QLog{
+ NET_QLog{events:[NET_QEvent{tag:255,a:CM31::ZERO,b:CM31::ZERO};9],reply,zero,next:0}
+}
+fn input()->QM31{QM31{c0:cm(kani::any()),c1:cm(kani::any())}}
+fn same(a:CM31,b:CM31){assert_eq!(a.a.0,b.a.0);assert_eq!(a.b.0,b.b.0);}
+#[kani::proof] #[kani::unwind(11)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NET_try_result_log_frame(){
+ let x=input();let reply:[[u32;2];9]=kani::any();let zero:bool=kani::any();let mut log=init(reply,zero);
+ let external:u64=kani::any();let mut after=external;
+ let out=NET_try_inv(x,&mut log);
+ #[cfg(NET_bad_frame)] {after^=1;}
+ assert_eq!(external,after);
+ assert_eq!(log.events[0].tag,0);same(log.events[0].a,x.c0);same(log.events[0].b,x.c1);
+ if zero{assert!(out.is_none());assert_eq!(log.next,1);}
+ else{
+  let out=out.unwrap();same(out.c0,cm(reply[6]));same(out.c1,cm(reply[8]));assert_eq!(log.next,9);
+  let expected=[NET_QEvent{tag:0,a:x.c0,b:x.c1},NET_QEvent{tag:1,a:x.c0,b:CM31::ZERO},
+  NET_QEvent{tag:1,a:x.c1,b:CM31::ZERO},NET_QEvent{tag:2,a:cm(reply[2]),b:CM31::ZERO},
+  NET_QEvent{tag:3,a:cm(reply[1]),b:cm(reply[3])},NET_QEvent{tag:4,a:cm(reply[4]),b:CM31::ZERO},
+  NET_QEvent{tag:5,a:x.c0,b:cm(reply[5])},NET_QEvent{tag:6,a:x.c1,b:CM31::ZERO},
+  NET_QEvent{tag:5,a:cm(reply[7]),b:cm(reply[5])}];
+  let i:usize=kani::any();kani::assume(i<9);assert_eq!(log.events[i].tag,expected[i].tag);
+  same(log.events[i].a,expected[i].a);same(log.events[i].b,expected[i].b);
+ }
+ let i:usize=kani::any();kani::assume(i<9);assert_eq!(log.reply[i][0],reply[i][0]);assert_eq!(log.reply[i][1],reply[i][1]);
+}
+#[kani::proof] #[kani::unwind(11)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NET_inv_success(){
+ let x=input();let r:[[u32;2];9]=kani::any();let mut log=init(r,false);let out=NET_inv(x,&mut log);
+ same(out.c0,cm(r[6]));same(out.c1,cm(r[8]));assert_eq!(log.next,9);
+}
+#[kani::proof] #[kani::should_panic] #[kani::unwind(11)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NET_inv_zero(){
+ let x=input();let r:[[u32;2];9]=kani::any();let mut log=init(r,true);
+ #[cfg(NET_bad_option)] {log.zero=false;}
+ let _=NET_inv(x,&mut log);
+}

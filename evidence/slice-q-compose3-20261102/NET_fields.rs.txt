@@ -1,0 +1,27 @@
+// Native weights::field on its actual query opening, including every rejection.
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+mod NET_reference{include!(concat!(env!("CARGO_MANIFEST_DIR"),"/src/NET_window_reference.rs"));}
+fn NET_allow_bad(_: &[u8])->Option<E>{Some(E::ZERO)}
+#[kani::proof] #[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn NET_field_valid(){
+ let mut raw:[u8;832]=kani::any();let i:usize=kani::any();kani::assume(i<4);
+ let j:usize=kani::any();kani::assume(j<832);let old=raw[j];let start=672+i*32;
+ let expected=NET_reference::wide(&raw[start..start+32]);kani::assume(expected.is_some());
+ let actual=crate::weights::field(&raw[672..800],i).to_limbs();let expected=expected.unwrap();
+ #[cfg(NET_bad_reply)] assert_ne!(actual,expected);
+ #[cfg(not(NET_bad_reply))] assert_eq!(actual,expected);
+ #[cfg(NET_bad_frame)] {raw[j]^=1;}
+ assert_eq!(raw[j],old);
+}
+#[kani::proof] #[kani::should_panic] #[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+#[cfg_attr(NET_bad_option,kani::stub(E::from_le_bytes,NET_allow_bad))]
+fn NET_field_rejected(){
+ let raw:[u8;832]=kani::any();let i:usize=kani::any();kani::assume(i<4);let start=672+i*32;
+ let expected=NET_reference::wide(&raw[start..start+32]);kani::assume(expected.is_none());
+ let _=crate::weights::field(&raw[672..800],i);
+}

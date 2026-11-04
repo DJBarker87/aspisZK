@@ -1,0 +1,70 @@
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -3266,3 +3266,6 @@
+     let s = a + P - b;
+     M31(if s >= P { s - P } else { s })
+ }
++
++#[cfg(kani)]
++mod NET_inverse;
+--- a/crates/aspis-core/src/lib.rs
++++ b/crates/aspis-core/src/lib.rs
+@@ -12,6 +12,7 @@
+ //! Stage 1 work and no soundness figure may be quoted from this code alone.
+ 
+ #![no_std]
++#![cfg_attr(kani,feature(allocator_api))]
+ 
+ extern crate alloc;
+ 
+--- /dev/null
++++ b/crates/aspis-core/src/field/NET_inverse.rs
+@@ -0,0 +1,48 @@
++// Scratch-only z(2) seven-call ANF, actual frozen CM31 carrier.
++// Each reply is unconstrained. No multiplication or function pointer is evaluated.
++use super::{CM31,M31};
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[derive(Clone,Copy)]
++struct NET_Event{tag:u8,a:u32,b:u32}
++struct NET_Log{events:[NET_Event;7],reply:[u32;7],next:usize}
++impl NET_Log{
++ fn call(&mut self,tag:u8,a:M31,b:M31)->M31{
++  let i=self.next;self.events[i]=NET_Event{tag,a:a.0,b:b.0};self.next+=1;M31(self.reply[i])
++ }
++}
++fn NET_fixed_backend(x:CM31,log:&mut NET_Log)->CM31{
++ let aa=log.call(0,x.a,x.a);
++ let bb=log.call(0,x.b,x.b);
++ let norm=log.call(1,aa,bb);
++ #[cfg(NET_bad_argument)] let norm=M31(norm.0^1);
++ let inv_norm=log.call(2,norm,M31(0));
++ let a=log.call(0,x.a,inv_norm);
++ let nb=log.call(3,x.b,M31(0));
++ let b=log.call(0,nb,inv_norm);
++ #[cfg(NET_bad_reply)] let a=M31(a.0^1);
++ CM31{a,b}
++}
++#[kani::proof] #[kani::unwind(9)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NET_cm_result_log_frame(){
++ let a:u32=kani::any();let b:u32=kani::any();let reply:[u32;7]=kani::any();
++ let mut log=NET_Log{events:[NET_Event{tag:255,a:0,b:0};7],reply,next:0};
++ let external:u64=kani::any();let mut after=external;
++ let out=NET_fixed_backend(CM31{a:M31(a),b:M31(b)},&mut log);
++ #[cfg(NET_bad_frame)] {after^=1;}
++ assert_eq!(after,external);assert_eq!(log.next,7);
++ let expected=[NET_Event{tag:0,a,b:a},NET_Event{tag:0,a:b,b},
++ NET_Event{tag:1,a:reply[0],b:reply[1]},NET_Event{tag:2,a:reply[2],b:0},
++ NET_Event{tag:0,a,b:reply[3]},NET_Event{tag:3,a:b,b:0},
++ NET_Event{tag:0,a:reply[5],b:reply[3]}];
++ let i:usize=kani::any();kani::assume(i<7);
++ assert_eq!(log.events[i].tag,expected[i].tag);
++ assert_eq!(log.events[i].a,expected[i].a);assert_eq!(log.events[i].b,expected[i].b);
++ assert_eq!(log.reply[i],reply[i]);assert_eq!(out.a.0,reply[4]);assert_eq!(out.b.0,reply[6]);
++}
++#[kani::proof] #[kani::unwind(18)]
++#[kani::stub(<[u32]>::copy_from_slice,KMX_copy_from_slice)]
++fn NET_copy_positive(){let src:[u32;16]=kani::any();let mut dst=[0;16];dst.copy_from_slice(&src);let i:usize=kani::any();kani::assume(i<16);assert_eq!(dst[i],src[i]);}
++#[kani::proof] #[kani::unwind(18)]
++#[kani::stub(<[u32]>::copy_from_slice,KMX_copy_from_slice)]
++fn NET_copy_negative(){let mut src=[0u32;16];src[15]=512;let mut dst=[0;16];dst.copy_from_slice(&src);assert_eq!(dst[15],0);}

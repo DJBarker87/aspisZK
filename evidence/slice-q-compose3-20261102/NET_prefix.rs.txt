@@ -1,0 +1,65 @@
+// One native prefix iteration; arbitrary valid prior Vec state, no field math.
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+#[derive(Clone,Copy)]
+struct NET_ProductLog{a:u32,b:u32,reply:u32}
+fn NET_product(a:M31,b:M31,reply:M31,log:&mut NET_ProductLog)->M31{
+ *log=NET_ProductLog{a:a.0,b:b.0,reply:reply.0};reply
+}
+fn NET_prefix_step(flat:&[M31],prefixes:&mut Vec<M31>,product:M31,index:usize,reply:M31,log:&mut NET_ProductLog)->(M31,usize){
+ let value=flat[index];
+ prefixes.push(product);
+ let product=NET_product(product,value,reply,log);
+ let index=index+1;
+ (product,index)
+}
+fn NET_prefix_case<const M:usize>(){
+ assert_eq!(core::mem::size_of::<M31>(),core::mem::size_of::<u32>());
+ assert_eq!(core::mem::align_of::<M31>(),core::mem::align_of::<u32>());
+ let input:[u32;M]=kani::any();let old:[u32;M]=kani::any();let i:usize=kani::any();kani::assume(i<M);
+ let flat=unsafe{core::slice::from_raw_parts(input.as_ptr().cast::<M31>(),M)};
+ let storage=Box::new([core::mem::MaybeUninit::<M31>::uninit();M]);
+ let p=Box::into_raw(storage) as *mut M31;
+ let mut initialized=0;
+ while initialized<i{unsafe{p.add(initialized).write(M31(old[initialized]));}initialized+=1;}
+ let mut prefixes=unsafe{Vec::from_raw_parts(p,i,M)};
+ let j:usize=kani::any();kani::assume(j<M);
+ assert_eq!(flat[j].0,input[j]);if j<i{assert_eq!(prefixes[j].0,old[j]);}
+ let product=M31(kani::any());let reply=M31(kani::any());let mut log=NET_ProductLog{a:0,b:0,reply:0};
+ let out=NET_prefix_step(flat,&mut prefixes,product,i,reply,&mut log);
+ #[cfg(NET_bad_reply)] {prefixes[i].0^=1;}
+ assert_eq!(out.0.0,reply.0);assert_eq!(out.1,i+1);assert_eq!(prefixes.len(),i+1);
+ assert_eq!(prefixes.capacity(),M);assert_eq!(prefixes.as_ptr(),p);
+ assert_eq!(prefixes[i].0,product.0);if j<i{assert_eq!(prefixes[j].0,old[j]);}
+ assert_eq!(flat[j].0,input[j]);assert_eq!(log.a,product.0);assert_eq!(log.b,input[i]);assert_eq!(log.reply,reply.0);
+}
+macro_rules! prefix{
+ ($name:ident,$m:literal)=>{
+ #[kani::proof] #[kani::unwind(112)]
+ #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+ #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
+ fn $name(){NET_prefix_case::<$m>()}
+ }
+}
+prefix!(NET_prefix_01,5);
+prefix!(NET_prefix_02,10);
+prefix!(NET_prefix_03,15);
+prefix!(NET_prefix_04,20);
+prefix!(NET_prefix_05,25);
+prefix!(NET_prefix_06,30);
+prefix!(NET_prefix_07,35);
+prefix!(NET_prefix_08,40);
+prefix!(NET_prefix_09,45);
+prefix!(NET_prefix_10,50);
+prefix!(NET_prefix_11,55);
+prefix!(NET_prefix_12,60);
+prefix!(NET_prefix_13,65);
+prefix!(NET_prefix_14,70);
+prefix!(NET_prefix_15,75);
+prefix!(NET_prefix_16,80);
+prefix!(NET_prefix_17,85);
+prefix!(NET_prefix_18,90);
+prefix!(NET_prefix_19,95);
+prefix!(NET_prefix_20,100);
+prefix!(NET_prefix_21,105);
+prefix!(NET_prefix_22,110);
