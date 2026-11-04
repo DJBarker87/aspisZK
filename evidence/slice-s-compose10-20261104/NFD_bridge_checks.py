@@ -48,7 +48,8 @@ def attempt(a,slot,mode):
  return True
 
 def request(c):
- n=c['native_certificate'];assert n['pairs']==[[f'NFD_K{3+2*i:03}',f'NFD_K{4+2*i:03}' if i!=11 else 'NFD_K034'] for i in range(14)]
+ n=c['native_certificate'];assert n['domain']=='all valid immutable slices; every raw byte and error path; no canonicality restriction'
+ assert n['pairs']==[[f'NFD_K{3+2*i:03}',f'NFD_K{4+2*i:03}' if i!=11 else 'NFD_K034'] for i in range(14)]
  for slot,pair in enumerate(n['pairs']):
   for a,mode in zip(pair,['positive','value']):attempt(a,slot,mode)
  assert n['controls']==['NFD_K033'];attempt('NFD_K033',0,'argument')
@@ -62,7 +63,7 @@ def request(c):
  assert c['reference_source']==request_reference()
  return True
 
-def check(c,base):
+def request_check(c,base):
  assert c['subject']==REQUEST and c['kind']=='root-composition'
  assert c['native_certificate']['function']==REQUEST and c['native_certificate']['complete'] is True
  assert c['hypotheses']==[REQUEST+'.PacketDomain',REQUEST+'.PhysicalInterpretation','RuntimePersistence','CompositionTrustOptionA']
@@ -92,6 +93,12 @@ def check(c,base):
  assert {ref['path'] for ref in c['support']}==paths
  return True
 
+def check(c,base):
+ if c['subject']==REQUEST:return request_check(c,base)
+ from NFD_common_checks import COMMON,check as common_check
+ if c['subject']==COMMON:return common_check(c,base)
+ return False
+
 def compose_additions(base,result,packet,api):
  by={}
  for r in result['rows']:by.setdefault(r['function'],[]).append(r)
@@ -102,7 +109,7 @@ def compose_additions(base,result,packet,api):
    r.update(bridge_status='CLOSED-CONDITIONAL',selected_claims=['NFD::'+f])
    r['claim_ids']=list(dict.fromkeys(r['claim_ids']+['NFD::'+f]))
    for name in [f+'.PacketDomain',f+'.PhysicalInterpretation']:
-    if name not in {h['name'] for h in r['named_hypotheses']}:r['named_hypotheses'].append(dict(name=name,statement='Root-owned full immutable slice / exact native-cohort typed carrier',discharged_by=c['id']+'::'+name))
+    if name not in {h['name'] for h in r['named_hypotheses']}:r['named_hypotheses'].append(dict(name=name,statement=(c['native_certificate'].get('domain','Root-owned full immutable slice / exact native-cohort typed carrier') if name.endswith('.PacketDomain') else 'Root-owned valid native/cohort typed carrier, ABI and approved library/allocator interpretation'),discharged_by=c['id']+'::'+name))
    for h in r['named_hypotheses']:h['discharged_by']=c['id']+'::'+h['name']
    for o in r['caller_domain_obligations']:
     if 'callee' in o:

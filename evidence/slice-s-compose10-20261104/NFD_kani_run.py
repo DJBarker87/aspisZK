@@ -114,7 +114,9 @@ b=Path({B!r});deleted=[]
 for p in (b/'NFD_tmp').rglob('*'):
  if p.is_file() and (p.name.startswith('external-sat') and p.suffix=='.cnf' or p.name.startswith('smt2_dec_problem')):
   deleted.append(dict(path=str(p),bytes=p.stat().st_size,sha256=hashlib.sha256(p.read_bytes()).hexdigest()));p.unlink()
-print(json.dumps(dict(attempt={a!r},deleted_solver_temps=deleted,scope='own NFD_tmp only; after native scope completion')))
+lock=hashlib.sha256((b/'NFD_src/Cargo.lock').read_bytes()).hexdigest()
+assert lock=='5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef','STOP recovered lock drift'
+print(json.dumps(dict(attempt={a!r},deleted_solver_temps=deleted,scope='own NFD_tmp only; after native scope completion',post_recovery_lock_sha256=lock,post_recovery_lock_unchanged=True)))
 '''
 clean=ssh('python3',cleanup_code);assert clean.returncode==0,clean.stderr
 (E/(a+'-temp-cleanup.json')).write_text(clean.stdout)

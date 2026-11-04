@@ -14,7 +14,10 @@ else:
  if shape=='limbs':
   code='let words:[u32;8]=kani::any();let x=aspis_core::field::NFD_access::make(words);let i:usize=kani::any();kani::assume(i<8);assert!(x.to_limbs()[i]==words[i]'+('^1' if mode=='value' else '')+');'
  else:
-  code='let mut bytes:[u8;32]=kani::any();let k:usize=kani::any();let j:usize=kani::any();let limb:u32=kani::any();kani::assume(k<8&&j<32);let old=bytes[j];let value=limb.to_le_bytes();{let mut chunks=bytes[4*k..].chunks_exact_mut(4);let mut values=core::iter::once(limb);let (chunk,limb)=chunks.next().zip(values.next()).unwrap();chunk.copy_from_slice(&limb.to_le_bytes());}let expected=if 4*k<=j&&j<4*k+4{value[j-4*k]}else{old};assert!(bytes[j]==expected'+('^1' if mode=='value' else '')+');'
+  code='let mut bytes:[u8;32]=kani::any();let words:[u32;8]=kani::any();let x=aspis_core::field::NFD_access::make(words);let k:usize=kani::any();let j:usize=kani::any();kani::assume(k<8&&j<32);let old=bytes[j];let value=words[k].to_le_bytes();{let mut iter=bytes.chunks_exact_mut(4).zip(x.to_limbs());let (chunk,limb)=iter.nth(k).unwrap();assert!(limb==words[k]&&chunk.len()==4);chunk.copy_from_slice(&limb.to_le_bytes());}let expected=if 4*k<=j&&j<4*k+4{value[j-4*k]}else{old};assert!(bytes[j]==expected'+('^1' if mode=='value' else '')+');'
+  if mode=='value':code=code.replace('let old=bytes[j];','kani::assume(4*k<=j&&j<4*k+4);let old=bytes[j];')
+  if mode=='frame':code=code.replace('let old=bytes[j];','kani::assume(j==(4*k+4)%32);let old=bytes[j];').replace('let expected=','bytes[(4*k+4)%32]^=1;let expected=')
+
  body=attrs+'fn raw(){'+code+'}\n';program(body,'NFD_raw')
  p='crates/aspis-core/src/field/wide_exact.rs';original=frozen(p)
  raw='''\n#[cfg(kani)]

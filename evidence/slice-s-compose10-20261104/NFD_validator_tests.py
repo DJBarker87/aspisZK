@@ -63,4 +63,27 @@ class CompleteRequest(unittest.TestCase):
  def test_extra_root_hypothesis_stays_open(self):
   c=self.mutated(lambda c:c['hypotheses'].append('child.PhysicalInterpretation'));self.stays_open(c)
 
+class CompleteCommon(unittest.TestCase):
+ @classmethod
+ def setUpClass(cls):
+  import NFD_common_checks as c
+  cls.f=c.COMMON;cls.packet=v.read(v.E/'NFD_LEDGER_DELTA.json');cls.cert=cls.packet['NFD_certificates'][cls.f]
+  cls.base=dict(rows=v.read(v.inherited.E/'NEY_CHECKED_ROWS.json'),frozen_revision=cls.cert['frozen_revision'],trust_rows=[])
+ def rejected(self,fn):
+  c=copy.deepcopy(self.cert);fn(c);c['semantic_review_sha256']=v.sha(json.dumps({k:w for k,w in c.items() if k!='semantic_review_sha256'},sort_keys=True).encode())
+  self.assertFalse(v.certificate(c,self.f,self.base))
+  out=v.compose(self.base,dict(inherits=self.packet['inherits'],NFD_certificates={self.f:c}))
+  self.assertTrue(all(r['composed_status']=='OPEN' for r in out['rows'] if r['function']==self.f))
+ def test_positive(self):self.assertTrue(v.certificate(self.cert,self.f,self.base))
+ def test_absent_stays_open(self):
+  out=v.compose(self.base,dict(inherits=self.packet['inherits'],NFD_certificates={}))
+  self.assertTrue(all(r['composed_status']=='OPEN' for r in out['rows'] if r['function']==self.f))
+ def test_missing_coordinate(self):self.rejected(lambda c:c['native_certificate']['pairs'].pop())
+ def test_wrong_coordinate(self):self.rejected(lambda c:c['native_certificate']['pairs'].__setitem__(0,c['native_certificate']['pairs'][1]))
+ def test_missing_allocation_control(self):self.rejected(lambda c:c['native_certificate'].__setitem__('controls',[]))
+ def test_narrowed_domain(self):self.rejected(lambda c:c['native_certificate'].__setitem__('domain','canonical only'))
+ def test_wrong_model_theorem(self):self.rejected(lambda c:c['domain_theorems'][0].__setitem__('name','NEU_ReconstructCore.result_state_effects'))
+ def test_missing_receipt(self):self.rejected(lambda c:c['support'].pop())
+ def test_hidden_child_assumption(self):self.rejected(lambda c:c['inner_hypotheses_remaining'].append('callee.PhysicalInterpretation'))
+
 if __name__=='__main__':unittest.main()
