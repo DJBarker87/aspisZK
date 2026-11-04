@@ -46,7 +46,9 @@ def nativeComponent (bytes : Slice U8) (a b : Usize) : Result (Option M) := do
 
 theorem convert_component (part : Slice U8) :
     (core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 part >>= decodeArray) =
-      (match (PV_RDCD4_TryArray194.into (T := U8) 4#usize part.val : Option (Array U8 4#usize)) with
+      (let converted : Option (Array U8 4#usize) :=
+         PV_RDCD4_TryArray194.into (T := U8) 4#usize part.val
+       match converted with
        | Option.none => ok (Option.none : Option M)
        | Option.some value => ok (PV_RDCD4_BytesSource.scalar value)) := by
   unfold core.array.TryFromArrayCopySlice.try_from PV_RDCD4_TryArray194.into
@@ -60,7 +62,9 @@ theorem component_binding (bytes : Slice U8) (a b : Usize) :
   calc
     _ = (do let part ← core.slice.index.Slice.index
               (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes {start:=a, «end»:=b}
-            match (PV_RDCD4_TryArray194.into (T := U8) 4#usize part.val : Option (Array U8 4#usize)) with
+            let converted : Option (Array U8 4#usize) :=
+              PV_RDCD4_TryArray194.into (T := U8) 4#usize part.val
+            match converted with
             | Option.none => ok (Option.none : Option M)
             | Option.some value => ok (PV_RDCD4_BytesSource.scalar value)) := by
       apply bind_congr
