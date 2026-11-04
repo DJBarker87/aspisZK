@@ -1,0 +1,61 @@
+{"attempt": "NFR_K001", "exit_status": 1, "wall_seconds": 135.18141842307523, "peak_rss_kib": "1805724", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling version_check v0.9.5
+   Compiling proc-macro2 v1.0.106
+   Compiling quote v1.0.46
+   Compiling unicode-ident v1.0.24
+   Compiling serde_core v1.0.228
+   Compiling syn v2.0.118
+   Compiling cfg-if v1.0.4
+   Compiling generic-array v0.14.7
+   Compiling typenum v1.20.1
+   Compiling libc v0.2.186
+   Compiling serde v1.0.228
+   Compiling zerocopy v0.8.52
+   Compiling serde_derive v1.0.228
+   Compiling subtle v2.6.1
+   Compiling autocfg v1.5.1
+   Compiling hashbrown v0.15.5
+   Compiling equivalent v1.0.2
+   Compiling indexmap v2.7.1
+   Compiling toml_datetime v0.6.11
+   Compiling toml_write v0.1.2
+   Compiling winnow v0.7.15
+   Compiling toml_e
+...
+^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> programs/aspis-pool/src/../../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 47.81s
+Checking harness pair_forest_dispatch::NFO_read::association...
+
+VERIFICATION RESULT:
+ ** 2 of 1384 failed (5 unreachable)
+Failed Checks: assertion failed: infos[self.meta].key.to_bytes() == self.keys[self.meta] &&
+    infos[7].key == &self.selected
+ File: "programs/aspis-pool/src/NFO_read.rs", line 7, in <pair_forest_dispatch::NFO_read::Runtime as pair_forest_dispatch::PairForestVerifierRuntimeV1>::invoke
+Failed Checks: assertion failed: instruction.accounts[self.meta].pubkey.to_bytes() == self.keys[self.meta] &&
+        !instruction.accounts[self.meta].is_signer &&
+    !instruction.accounts[self.meta].is_writable
+ File: "programs/aspis-pool/src/NFO_read.rs", line 7, in <pair_forest_dispatch::NFO_read::Runtime as pair_forest_dispatch::PairForestVerifierRuntimeV1>::invoke
+
+VERIFICATION:- FAILED
+Verification Time: 84.91493s
+
+Manual Harness Summary:
+Verification failed for - pair_forest_dispatch::NFO_read::association
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r0801bc5b251847b4a295456b7222b3c4.scope; invocation ID: a2023184d65b4c1ea55bf6740e2f71c0
