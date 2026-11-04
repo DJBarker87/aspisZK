@@ -1,68 +1,45 @@
-# NFZ remaining obligations after part 2
+# NFZ remaining obligations after part 3
 
-**INCOMPLETE. All three new scopes are terminal; no further launch is authorized.**
+**INCOMPLETE — mandatory STOP after NFZ_B005 own-script failure. NFZ_B006 unused.** The last allocation was two scopes; one was spent. The explicit conditional stop overrides whole-budget use and the usual own-script repair-and-continue rule. No further launch in this job.
 
-Next deliverable, only under newly allocated scope authority: run the compile-free-validated final payload through the frozen deployed debug Cargo check, MIR opt-level1 + typed HIR + independent MIR opt-level0. Retain four historical attempts. Use a new attempt ID and force diagnostic emission for each selected crate even when Cargo considers it fresh (for example replay recorded rustc arguments within that admitted scope). Compare caller callee identities, not just whole dump hashes. No cap increase or shipped-source edit is needed.
+B005 passed local payload validation and byte-identical dry collection of all495 files before admission. The library emitted stable MIR; the program build failed when libc's build script called the wrapper for a rustc probe. Cargo strips RUSTFLAGS in this environment; NFZ_rustc.py:7 raised `KeyError: 'RUSTFLAGS'`. Cargo program exit101 propagated to scope exit1. Full exact failure: NFZ_B005/stdout.log and NFZ_B005_FAILURE.md. Measured peak17 threads;25.118775121169165s;751856KiB;swap0. Frozen source/lock stayed unchanged.
 
-Then admit first_decoded→error and each reached trait/callback edge; add OPEN TX1/TX2 occurrences for missing functions and recurse; apply the named pinned overlay through NFZ_inventory.py. Extend its explicit new-row schema before applying a nonempty overlay: it deliberately refuses absent nodes. Recompute Q/S/D using NFZ_slice_build.py and emit before/after counts without changing historical composed statuses. Report the Q caller packet obligation to the lead, including the existing canonical-domain NFS embedding theorem. Independent core MIR alone is insufficient for these caller edges.
+## Corrected command, recorded only
 
-## All 39 candidate dispositions
+The wrapper must restore the flags it requires before checking them, including when called by a build-script version probe. Replace the failed environment lookup with this proposed code (retain affinity and one-job checks):
 
-Every row below remains an OPEN entry-reachability obligation. Core-resolved means only a typed callee identity inside a core function body. All other callers stopped before diagnostic emission. No absent function is asserted unreachable.
+```python
+flags = os.environ.get('RUSTFLAGS', '-C codegen-units=1')
+assert '-C codegen-units=1' in flags
+os.environ['RUSTFLAGS'] = flags
+# Cargo passes encoded flags to actual compilation; a nested build-script
+# probe can omit them. Enforce the bound at the rustc command as well.
+args += ['-C', 'codegen-units=1']
+```
 
-| Candidate | Source caller / line | Target | Body identity | Remaining authority |
-|---|---|---|---|---|
-| NFZ_C0001 | from_m31:90 | from_m31 | core MIR confirmed | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0002 | circle_sample:122 | circle_fallback_point | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0003 | queries:56 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0004 | queries:57 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0005 | queries:58 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0006 | queries:59 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0007 | queries:60 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0008 | queries:61 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0009 | queries:62 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0010 | queries:63 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0011 | queries:64 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0012 | queries:65 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0013 | queries:66 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0014 | queries:67 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0015 | queries:68 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0016 | queries:69 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0017 | queries:70 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0018 | queries:71 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0019 | queries:72 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0020 | queries:73 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0021 | queries:74 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0022 | queries:75 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0023 | queries:76 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0024 | queries:77 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0025 | accumulate_batched_with_node:285 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0026 | new:212 | unresolved method chain | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0027 | new:212 | unresolved method chain | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0028 | new:212 | unresolved method chain | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0029 | new:212 | unresolved method chain | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0030 | new:212 | unresolved method chain | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0031 | new:212 | unresolved method chain | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0032 | external_local_packed_raw:218 | extension_limbs | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0033 | first_decoded:50 | error | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0034 | process_r1_cost_probe_instruction:79 | error | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0035 | from_m31:59 | from_m31 | core MIR confirmed | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0036 | from_m31:59 | from_m31 | core MIR confirmed | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0037 | from_m31:73 | from_cm31 | core MIR confirmed | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0038 | from_m31:73 | from_m31 | core MIR confirmed | deployed entry/caller MIR and complete second-pass agreement |
-| NFZ_C0039 | from_m31:90 | from_m31 | core MIR confirmed | deployed entry/caller MIR and complete second-pass agreement |
+No wrapper replacement or compiler rerun was performed after the failure. If the lead commissions another job, its corrected program command inside its admitted one-CPU/one-token monitored scope is:
 
-## Other exact obligations
+```sh
+set -euo pipefail
+export CARGO_BUILD_JOBS=1 CARGO_NET_OFFLINE=true CARGO_INCREMENTAL=0
+export RUSTFLAGS='-C codegen-units=1'
+export RUSTC_WRAPPER=/home/dombarker/project-offloads/codex-cx-inv-defects-20261104/NFZ_rustc.py
+/home/dombarker/.cargo/bin/cargo +1.94.1 rustc \
+  --manifest-path /home/dombarker/project-offloads/codex-cx-inv-defects-20261104/NFZ_src/programs/r1-cost-probe/Cargo.toml \
+  -p aspis-r1-cost-probe-program --locked --offline \
+  --features pool-adapter,private-leaf-salts --lib -j1 \
+  --target-dir /home/dombarker/project-offloads/codex-cx-inv-defects-20261104/NFZ_target \
+  -- --emit=mir -C codegen-units=1
+```
 
-* TX2:046: identify WideExact reachable occurrence(s), or retain the row with compiler-backed REACHABILITY-EXCLUDED only if justified. Current row stays OPEN.
-* TX2:211: admit first_decoded's map_err(error) on compiler evidence; distinguish the source-cfg-disabled legacy callback and all other reachable error sites.
-* Missing M31/CM31/QM31 trait embedding rows: conditional callee bodies are known; transaction entry occurrence(s) still unknown. Distinguish inherent constructors and include the already known from_qm31 target.
-* Missing circle_fallback_point: confirm sampler closure binding and recurse through its frozen body when reached.
-* Q expansion: retain statuses; report the inventory/model naming and call-domain obligation for the accumulator and Transcript::queries. NFS's accumulation model already explicitly includes the embedding; NFM's dot packets do not claim it.
-* Existing NFX/raw-NDT to_le_bytes difference: lead provenance review remains unchanged.
+This is not permission to run it. Payload preflight/dry collection, source/lock pins, one-slot jobserver and admission remain prerequisites. B005 must never be resubmitted. Its own scratch target was removed after recovery; retained named cache was untouched.
 
-## Stop and budget accounting
+## Remaining members and claim boundary
 
-Kani0/0, extraction0/0, Lean0/5. There is no new Lean theorem or Lean-importing validator to compile, and no Lean-only item can supply missing rustc caller authority. All remaining members above require that evidence or subsequent reviewed producer work. Three new scopes out of three were spent: B002 failed in thread discovery, B004 in the missing include, B003 in the same missing include after a failed local payload-preparation step that my shell incorrectly ignored. These are retained own-script/input failures, not permission/infrastructure blockers or semantic counterexamples. Scope use is100%; no fourth launch or unchanged timeout/OOM rerun occurred. No Kani-dependent member exists in this bookkeeping task.
+Every candidate NFZ_C0001 through NFZ_C0039 remains pending entry/independent review, individually listed in NFZ_CANDIDATES.json with a part3 disposition. Six historical core body identities remain established; they do not supply complete entry reachability. C0003–C0024 are the22 Transcript::queries embeddings; C0025 is accumulate_batched_with_node; C0026–C0031 are Weights::new chains; C0032 is map(extension_limbs); C0033 is first_decoded→error; C0034 is the source-cfg-disabled legacy callback; C0002 is the sampler fallback; C0001/C0035–C0039 are embedding-chain sites. No classification was silently promoted from source discovery.
 
-Final payload repair passes exact frozen-Git and literal-include validation only. No Cargo success is claimed. NFZ_validate.py PASS means the blocked packet is internally consistent. The requested repair and L187 readiness are not established.
+TX2:046 and TX2:211 remain OPEN, outside slice membership; neither is REACHABILITY-EXCLUDED. Pending: complete two-caller compiler authority, independent authority,39-candidate review, new OPEN TX occurrences for reached missing functions (including transitive callees), reviewed pinned overlay, and regenerated repaired closures/counts. Baseline closure regeneration still yields585/587, zero admitted edges/new rows/status changes/CLOSED promotions. See NFZ_LEDGER_DELTA.json.
+
+The prospective Q caller finding remains unadmitted. NFS_NEV_AccumPacket.result_state_effects covers the complete modeled accumulation; NFS_NEV_AccumulateCallees.from_m31 explicitly identifies canonical embedding. NFM dot packets do not cover this embedding or Transcript::queries. Report confirmed edges to the lead against the caller Q row without changing its status; current partial evidence is not that completed report.
+
+Kani0/0, extraction0/0, Lean0/5. Each remaining member needs rustc entry/independent evidence or its reviewed inventory consequences; no Lean theorem or Lean-importing validator can supply that evidence. No theorem added; #print axioms N/A. Early stop at1/2 scopes is expressly required by the lead's conditional rule, not discretionary budget saving. D188/L187 and the100-bit per-attempt target remain unestablished by this job.

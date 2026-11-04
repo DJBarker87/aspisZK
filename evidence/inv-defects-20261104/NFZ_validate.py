@@ -1,4 +1,4 @@
-"""Validate terminal part-2 blocked packet; passing is not edge-repair credit."""
+"""Validate terminal part-3 blocked packet; passing is not edge-repair credit."""
 import pathlib,json,lzma,hashlib,importlib.util,sys,copy,base64,ast
 sys.dont_write_bytecode=True
 E=pathlib.Path(__file__).resolve().parent;R=E.parents[1]
@@ -21,13 +21,14 @@ assert sum(x['compiler_target_resolution']=='CONFIRMED_IN_CORE_BODY' for x in c[
 ind=J('NFZ_INDEPENDENT_CHECK.json');assert ind['core_second_MIR_agrees'] and not ind['compiler_independent_check_satisfied']
 for stem in ['NFZ_FROZEN_SOURCE.json','NFZ_FROZEN_BINARY.json','NFZ_aspis_core.mir','NFZ_aspis_core.mir0','NFZ_aspis_core.hir']:
  raw=lzma.open(E/(stem+'.xz')).read();assert sha(raw)==(E/(stem+'.sha256')).read_text().strip()
-for attempt,code in [('NFZ_B001',1),('NFZ_B002',101),('NFZ_B004',101),('NFZ_B003',101)]:
+for attempt,code in [('NFZ_B001',1),('NFZ_B002',101),('NFZ_B004',101),('NFZ_B003',101),('NFZ_B005',1)]:
  r=J(attempt+'/receipt.json');a=J(attempt+'-admission.json');assert a.get('allowed',a.get('reservation',{}).get('allowed')) is True
  assert r['exit_status']==code and int(r['swaps'])==0
  assert r['limits']=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}
  for p,h in r['source_hashes'].items():assert sha((E/attempt/'sources'/p).read_bytes())==h
 assert J('NFZ_GRAPH_CHECK.json')['graph_matches_frozen'];assert J('NFZ_LOCK_CHECK.json')['unchanged']
-assert J('NFZ_PAYLOAD_PREFLIGHT.json')['result'].startswith('PASS compile-free')
+assert J('NFZ_PAYLOAD_PREFLIGHT.json')['result']=='PASS'
+assert J('NFZ_PAYLOAD_PREFLIGHT.json')['local_dry_collection']['byte_identical']
 assert J('NFZ_PART2_SUMMARY.json')['scope_budget']==dict(authorized=3,used=3,remaining=0)
 # Check own scripts syntactically without executing any launch or producing pycache.
 for p in E.glob('NFZ_*.py'):ast.parse(p.read_text(),filename=str(p))
@@ -44,5 +45,10 @@ for method,gate,to in [('source',False,'programs/r1-cost-probe/src/lib.rs::error
 for p in E.rglob('*'):
  if p.is_file():assert p.stat().st_size<=20*1024*1024,p
 assert not list(E.rglob('__pycache__'))
-report=dict(result='PASS blocked-packet consistency only; requested inventory repair remains INCOMPLETE',coverage='585/587',admitted_edges=0,status_changes=0,new_rows=0,partial_core_resolutions=6,unresolved_entry_candidates=39,part2_scopes_used=3,Kani=0,Lean=0,extraction=0,tests=tests)
+r=J('NFZ_B005/receipt.json');assert r['thread_measurement']['measured_cgroup_threads_peak']==17<64
+assert r['env']['CARGO_BUILD_JOBS']=='1' and r['env']['RUSTFLAGS']=='-C codegen-units=1'
+assert J('NFZ_B005_FINAL_CHECK.json')['source_pins_after']
+assert not (E/'NFZ_B006/receipt.json').exists()
+assert J('NFZ_PART3_SUMMARY.json')['binding_stop'] is True
+report=dict(part3_scopes_used=1,part3_scope2='UNUSED_BINDING_STOP',measured_peak_threads=17,result='PASS blocked-packet consistency only; requested inventory repair remains INCOMPLETE',coverage='585/587',admitted_edges=0,status_changes=0,new_rows=0,partial_core_resolutions=6,unresolved_entry_candidates=39,part2_scopes_used=3,Kani=0,Lean=0,extraction=0,tests=tests)
 (E/'NFZ_VALIDATION.json').write_text(json.dumps(report,indent=1)+'\n');print(json.dumps(report))
