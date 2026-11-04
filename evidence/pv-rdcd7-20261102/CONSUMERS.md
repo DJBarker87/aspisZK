@@ -55,6 +55,7 @@ New consumers introduced by this correction (on this branch):
 | Consumer | Failure-kind dependence | Verification target |
 |---|---|---|
 | PV_RDCD5_ParserRange | Complete Result, literal panic; uses old helper's window only | binding on every Slice/Usize range |
+| PV_RDCD5_ParserComponent | Complete Result and literal panic; typed conversion/residual adapters | component_binding, residual_none, first_bind, second_bind |
 | PV_RDCD5_ParserTransport | Complete Result, every panic/None/Some; typed component/CM/QM transport | component_binding, complex, quartic |
 | PV_RDCD5_V197Restored | Complete Result and actual checked borrowed windows | parser_instance, native_window, input_frame, rdcd4_instance |
 | PV_RDCD5_V197ConsumerReplay | KIND: corrected empty-input equality; exact corrected replay proof | v197_corrected |
@@ -67,3 +68,7 @@ Historical `SliceRange194.index` retains its old model error tag. The parser no
 longer calls it. No universal native failure-kind credit is claimed for it;
 V236 uses bounded success windows. The corrected parser's faithful helper has
 a complete, proved Result binding.
+
+Session 3: user confirms sole writer and accepts continuation of the committed
+ParserComponent split. RESUME-SESSION3.json verifies all host receipts; no live
+scope or driver remains. 16 Lean and 2 native spent; 90716 unlaunched.
