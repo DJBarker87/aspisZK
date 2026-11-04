@@ -1,5 +1,13 @@
 # PV evhB allocator/callback context checkpoint
 
+## D580 resume stop
+
+Read `../../BLOCKER-evhB.md` and `resume-D580-blocker.json` before resuming.
+Inspection at b5854a3a17 found no reached native instance proving post-reserve
+metadata delivery from `Execution.buffer` to `runtime.metadata e.world v`.
+Stopped under the user's explicit blocker rule. No proof/source change or
+compile/native/Kani/host run; accounting below is unchanged (next91222,74 left).
+
 Continue ONLY `/Users/dominic/ZK/.worktrees/pv-evhB`, branch
 `codex/pv-evhB-20261103`, base `034dfee6ac`. New sources use `PV_EVHB_`;
 never edit/restage accepted PV_EVH or PV_EVHB sources. No push/delegation,
