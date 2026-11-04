@@ -99,6 +99,10 @@ def check(c,base):
  if c['subject']==COMMON:return common_check(c,base)
  from NFD_reconstruction_checks import F,check as reconstruct_check
  if c['subject']==F:return reconstruct_check(c,base)
+ from NFD_emit_checks import F as EMIT,check as emit_check
+ if c['subject']==EMIT:return emit_check(c,base)
+ from NFD_raw_checks import LIMBS,TAG,check as raw_check
+ if c['subject'] in [LIMBS,TAG]:return raw_check(c,base)
  return False
 
 def compose_additions(base,result,packet,api):

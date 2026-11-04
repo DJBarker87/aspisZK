@@ -113,4 +113,50 @@ class CompleteReconstruction(unittest.TestCase):
  def test_hidden_child(self):self.rejected(lambda c:c['inner_hypotheses_remaining'].append('asq8_common.PacketDomain'))
  def test_missing_receipt(self):self.rejected(lambda c:c['support'].pop())
 
+class CompleteEmitter(unittest.TestCase):
+ @classmethod
+ def setUpClass(cls):
+  import NFD_emit_checks as c
+  cls.f=c.F;cls.packet=v.read(v.E/'NFD_LEDGER_DELTA.json');cls.cert=cls.packet['NFD_certificates'][cls.f]
+  cls.base=dict(rows=v.read(v.inherited.E/'NEY_CHECKED_ROWS.json'),frozen_revision=cls.cert['frozen_revision'],trust_rows=[])
+ def rejected(self,fn):
+  packet=copy.deepcopy(self.packet);c=packet['NFD_certificates'][self.f];fn(c)
+  c['semantic_review_sha256']=v.sha(json.dumps({k:w for k,w in c.items() if k!='semantic_review_sha256'},sort_keys=True).encode())
+  out=v.compose(self.base,packet)
+  self.assertTrue(all(r['composed_status']=='OPEN' for r in out['rows'] if r['function']==self.f))
+ def test_positive(self):
+  out=v.compose(self.base,self.packet)
+  self.assertTrue(all(r['composed_status']=='CLOSED' for r in out['rows'] if r['function']==self.f))
+ def test_absent(self):
+  packet=copy.deepcopy(self.packet);packet['NFD_certificates'].pop(self.f)
+  out=v.compose(self.base,packet)
+  self.assertTrue(all(r['composed_status']=='OPEN' for r in out['rows'] if r['function']==self.f))
+ def test_missing_coordinate(self):self.rejected(lambda c:c['native_certificate']['pairs'].pop())
+ def test_wrong_coordinate(self):self.rejected(lambda c:c['native_certificate']['pairs'].__setitem__(0,c['native_certificate']['pairs'][1]))
+ def test_missing_continuation_control(self):self.rejected(lambda c:c['native_certificate']['continuation'].pop())
+ def test_missing_runtime_trust(self):self.rejected(lambda c:c['hypotheses'].remove('RuntimeReturnData'))
+ def test_hidden_callee(self):self.rejected(lambda c:c['inner_hypotheses_remaining'].append('encode_result.PacketDomain'))
+ def test_missing_edge(self):self.rejected(lambda c:c['edges'].pop())
+ def test_wrong_result_theorem(self):self.rejected(lambda c:c['domain_theorems'][0].__setitem__('name','NEY_EmitComposed.encoder_bridge'))
+
+class CompleteRaw(unittest.TestCase):
+ @classmethod
+ def setUpClass(cls):
+  import NFD_raw_checks as c
+  cls.functions=[c.LIMBS,c.TAG];cls.packet=v.read(v.E/'NFD_LEDGER_DELTA.json')
+  cls.base=dict(rows=v.read(v.inherited.E/'NEY_CHECKED_ROWS.json'),frozen_revision=c.REV if hasattr(c,'REV') else '4bb3b3f51e16b4525f1d10336e2b0bcbbd775387',trust_rows=[])
+ def mutate(self,fn):
+  for f in self.functions:
+   packet=copy.deepcopy(self.packet);cert=packet['NFD_certificates'][f];fn(cert)
+   cert['semantic_review_sha256']=v.sha(json.dumps({k:w for k,w in cert.items() if k!='semantic_review_sha256'},sort_keys=True).encode())
+   out=v.compose(self.base,packet)
+   self.assertTrue(all(r['composed_status']=='OPEN' for r in out['rows'] if r['function']==f))
+ def test_positive(self):
+  out=v.compose(self.base,self.packet)
+  self.assertTrue(all(r['composed_status']=='CLOSED' for r in out['rows'] if r['function'] in self.functions))
+ def test_missing_pair(self):self.mutate(lambda c:c['native_certificate']['pairs'].clear())
+ def test_narrowed_domain(self):self.mutate(lambda c:c['native_certificate'].__setitem__('domain','canonical only'))
+ def test_wrong_model(self):self.mutate(lambda c:c['domain_theorems'][0].__setitem__('name','NBG_WideCarriers.wide_add'))
+ def test_missing_receipt(self):self.mutate(lambda c:c['support'].pop())
+
 if __name__=='__main__':unittest.main()

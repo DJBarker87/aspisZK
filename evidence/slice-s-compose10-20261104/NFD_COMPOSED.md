@@ -1,8 +1,8 @@
 # NFD slice S composition checkpoint
 
-Validated: **89/97 rows,116/129 internal edges,5/7 roots CLOSED**. Baseline NEY86/97,110/129,3/7. Authority: NFD_REQUEST_VALIDATION.json, unchanged inherited NDT/NEX/NEY gates plus the additive NFD validator.38 mutation/admission tests pass. The seven-root target and deployed100-bit per-attempt target are not established.
+Validated: **94/97 rows,124/129 internal edges,6/7 roots CLOSED**. Baseline NEY86/97,110/129,3/7. Authority: NFD_REQUEST_VALIDATION.json, unchanged inherited NDT/NEX/NEY gates plus the additive NFD validator.47 previously completed mutation/admission tests pass; raw getter tests follow separately. The seven-root target and deployed100-bit per-attempt target are not established.
 
-Frozen Rust4bb3b3f51e16b4525f1d10336e2b0bcbbd775387; headline AspisR1.RPx_Deployed.deployed; frozen3,L154 parameter,D188 narrowed. The root qualifications are ONLY the root's own PacketDomain and PhysicalInterpretation, approved trust rows/RuntimePersistence and CompositionTrustOptionA. P6/D188 optionA is trust reclassification, not removal. No shipped source changed; no ELF rebuild triggered. RuntimeReturnData(ab) is ADDED trust but has zero newly CLOSED native uses here.
+Frozen Rust4bb3b3f51e16b4525f1d10336e2b0bcbbd775387; headline AspisR1.RPx_Deployed.deployed; frozen3,L154 parameter,D188 narrowed. The root qualifications are ONLY the root's own PacketDomain and PhysicalInterpretation, approved trust rows/RuntimePersistence and CompositionTrustOptionA. P6/D188 optionA is trust reclassification, not removal. No shipped source changed; no ELF rebuild triggered. RuntimeReturnData(ab) is ADDED trust and has one newly CLOSED native use here: emit_result.
 
 The native claims use ruling(y)'s hybrid form: a kernel MODEL theorem plus a checked frozen native/source/domain/carrier certificate. They are not kernel theorems directly over Rust source text. No callee PacketDomain or PhysicalInterpretation is retained as a root hypothesis in a CLOSED certificate.
 
@@ -92,7 +92,7 @@ Native/domain receipts and all explicit root qualifications remain in the pinned
 
 ## OPEN roots
 
-emit_result: the owned792-byte Ok return-to-send continuation remains unbound. NFD_K001 timed out despite a scalar-only oracle log; no controls were submitted after its timeout. The reviewed replacement splits discriminator/move/window/send instead of increasing limits. NEY_EmitComposed.result_state_effects is reused as the MODEL statement, with native emitter bridge still an explicit OPEN obligation. RuntimeReturnData(ab) remains ADDED trust; Pool readback is separate.
+emit_result: CLOSED; see its full statement below. K001 timeout remains excluded. Pool readback remains separate.
 
 reconstruct_asq8_statement: CLOSED; see the certificate below.
 
@@ -119,3 +119,24 @@ theorem result_state_effects {State : Type} (request : Request) (a : Auth)
 ```
 
 Axioms: [propext, Classical.choice, Quot.sound], NEU_L011, with raw model and reached-domain/carrier/range theorems in NEU_L010/L012. Root qualifications: its own PacketDomain/PhysicalInterpretation, RuntimePersistence, approved trust inventory and CompositionTrustOptionA. No (ab) use. NFD_RECONSTRUCT_TESTS.log records38 passing tests.
+
+## emit_result — CLOSED root
+
+The frozen native emitter constructs exactly the cohort result from every typed statement, passes the same statement/result to the binding validator, passes that SAME result to the encoder, maps every child error in order, checks the complete returned buffer length/magic, and emits exactly one ordered setReturnData event carrying all792 returned bytes on the successful branch. Other branches emit no return-data event. The external state follows the approved runtime return-data model, not an empty Unit effect.
+
+Native K111–126 cover every result coordinate with failing controls. K087–090 prove the full owned encoder reply/guard/send continuation with failing byte, ordering and argument controls. NFD_L035 proves complete output record extensionality and all eight coordinate alignments (standard three axioms). Every internal edge, including conservative method targets, is covered; no target is silently pruned. Reached encoder domain is DERIVED by NEY_EmitComposed.reached_encoder on the same binding success, with binding validator/result encoder already CLOSED.
+
+Full kernel MODEL statement (NEY_L041, reused unchanged):
+```lean
+theorem result_state_effects {A E : Type}
+    (state : AspisR1.S2I.ReturnData.State A E) (s : Statement) :
+    run validate_pool_v1_pair_forest_terminal_result_against_statement_v1 encode
+      (fun st bytes => ok (AspisR1.S2I.ReturnData.set st bytes)) state s =
+    AspisR1.JHb_Emit.source (fun st bytes => ok (AspisR1.S2I.ReturnData.set st bytes)) state s
+```
+
+Axioms: [propext, Classical.choice, Quot.sound]. Only root qualifications and approved trust remain, plus RuntimeReturnData under(ab), explicitly ADDED trust with one new CLOSED native use. Option A is reclassification. This does not prove the separate Pool immediate readback/program-id check. Nine additional emitter mutations pass in NFD_EMIT_TESTS.log.
+
+## Raw getters — CLOSED members
+
+WideExact::to_limbs now covers EVERY raw eight-u32 carrier, without canonicality. K127/128 use a safe actual-type raw constructor; NFD_RawCarriers.raw_roundtrip proves its surjectivity and limbs_result_state_effects binds the complete ordered array, state and empty effects. This resolves the NEY canonical-only finding. Variant::tag covers all three constructors, K129/130 and NFD_RawCarriers.tag_roundtrip/tag_result_state_effects. NFD_L036 audits all four theorems; axioms empty or the standard three. These four inventory rows are CLOSED.

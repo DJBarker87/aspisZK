@@ -1,0 +1,7 @@
+{
+ "shape": "limbs",
+ "mode": "value",
+ "source": "#[kani::proof]\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFD_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NFD_KMX::KMX_copy_from_slice)]\nfn raw(){let words:[u32;8]=kani::any();let x=aspis_core::field::NFD_access::make(words);let i:usize=kani::any();kani::assume(i<8);assert!(x.to_limbs()[i]==words[i]^1);}\n",
+ "domain": "all eight raw u32 words, no canonicality restriction",
+ "classification": "raw carrier native getter/one serialization iteration; physical carrier/model certificate required separately"
+}

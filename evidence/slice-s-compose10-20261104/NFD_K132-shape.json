@@ -1,0 +1,7 @@
+{
+ "shape": "bytes",
+ "mode": "value",
+ "source": "#[kani::proof]\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFD_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NFD_KMX::KMX_copy_from_slice)]\nfn raw(){let mut bytes:[u8;32]=kani::any();let words:[u32;8]=kani::any();let x=aspis_core::field::NFD_access::make(words);let k:usize=kani::any();let j:usize=kani::any();kani::assume(k<8&&j<32);kani::assume(4*k<=j&&j<4*k+4);let old=bytes[j];let value=words[k].to_le_bytes();{let mut iter=bytes.chunks_exact_mut(4).zip(x.to_limbs());let (chunk,limb)=iter.nth(k).unwrap();assert!(limb==words[k]&&chunk.len()==4);chunk.copy_from_slice(&limb.to_le_bytes());}let expected=if 4*k<=j&&j<4*k+4{value[j-4*k]}else{old};assert!(bytes[j]==expected^1);}\n",
+ "domain": "one arbitrary32-byte prestate and raw limb; one native iterator/copy body at k<8 with observed j<32",
+ "classification": "raw carrier native getter/one serialization iteration; physical carrier/model certificate required separately"
+}
