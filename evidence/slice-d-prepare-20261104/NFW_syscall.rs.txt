@@ -1,26 +1,31 @@
 use solana_program::hash::Hash;
 include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
 struct Log<'a>{reply:[u8;32],calls:usize,parts:Option<&'a[&'a[u8]]>}
-// Exact frozen expression. The call cut records the ACTUAL typed immutable
-// borrow, whose lifetime is the input lifetime. No buffer is read or written;
-// no reference or guard is fabricated from integers or bytes.
-fn syscall_cut<'a>(parts:&'a[&'a[u8]],log:&mut Log<'a>)->[u8;32]{
- let mut hashv=|xs:&'a[&'a[u8]]|{log.calls+=1;log.parts=Some(if cfg!(NFW_badarg){&xs[1..]}else{xs});Hash::new_from_array(log.reply)};
- hashv(parts).to_bytes()
-}
+// Frozen expression; only the runtime call is a local-record cut. The corrupt
+// argument control changes the actual call argument, not the recording code.
+fn syscall_cut<'a>(parts:&'a[&'a[u8]],log:&mut Log<'a>)->[u8;32]{let mut hashv=|xs:&'a[&'a[u8]]|{log.calls+=1;log.parts=Some(xs);Hash::new_from_array(log.reply)};hashv(if cfg!(NFW_badarg)&&!parts.is_empty(){&parts[1..]}else{parts}).to_bytes()}
 #[kani::proof] #[kani::unwind(35)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 fn syscall_bytes(){
- let mut data=[[0u8;57607];5];let chosen:usize=kani::any();let offset:usize=kani::any();let value:u8=kani::any();kani::assume(chosen<5&&offset<57607);data[chosen][offset]=value;let lengths:[usize;5]=kani::any();let mut i=0;while i<5{kani::assume(lengths[i]<=57607);i+=1;}
- let count:usize=kani::any();kani::assume(count>=1&&count<=5&&chosen<count);kani::assume(offset<lengths[chosen]);
- let parts:[&[u8];5]=[&data[0][..lengths[0]],&data[1][..lengths[1]],&data[2][..lengths[2]],&data[3][..lengths[3]],&data[4][..lengths[4]]];
- let input=&parts[..count];let mut log=Log{reply:kani::any(),calls:0,parts:None};
- let result=syscall_cut(input,&mut log);let word:usize=kani::any();kani::assume(word<32);
- assert_eq!(log.calls,1);assert!((result[word]==log.reply[word])!=cfg!(NFW_invert));
- assert!(core::ptr::eq(log.parts.unwrap(),input));assert_eq!(log.parts.unwrap()[chosen][offset],value);
+ // Symbolic zeroed allocations, one arbitrary byte per backing. No dense
+ // fixed 57,607-byte array is materialized. The KMX/borrow frame supplies the
+ // disjoint-memory value law; generic source/value association remains explicit.
+ let sizes:[usize;5]=kani::any();let positions:[usize;5]=kani::any();let values:[u8;5]=kani::any();let mut i=0;while i<5{kani::assume(sizes[i]<=u32::MAX as usize);if sizes[i]>0{kani::assume(positions[i]<sizes[i]);}i+=1;}
+ let mut d0=alloc::vec![0u8;sizes[0]];let mut d1=alloc::vec![0u8;sizes[1]];let mut d2=alloc::vec![0u8;sizes[2]];let mut d3=alloc::vec![0u8;sizes[3]];let mut d4=alloc::vec![0u8;sizes[4]];
+ if sizes[0]>0{d0[positions[0]]=values[0];}if sizes[1]>0{d1[positions[1]]=values[1];}if sizes[2]>0{d2[positions[2]]=values[2];}if sizes[3]>0{d3[positions[3]]=values[3];}if sizes[4]>0{d4[positions[4]]=values[4];}
+ let backing:[&[u8];5]=[&d0,&d1,&d2,&d3,&d4];let origin:[usize;5]=kani::any();let starts:[usize;5]=kani::any();let lengths:[usize;5]=kani::any();let mut i=0;while i<5{kani::assume(origin[i]<5);kani::assume(starts[i]<=sizes[origin[i]]);kani::assume(lengths[i]<=sizes[origin[i]]-starts[i]);i+=1;}
+ let parts:[&[u8];5]=[&backing[origin[0]][starts[0]..starts[0]+lengths[0]],&backing[origin[1]][starts[1]..starts[1]+lengths[1]],&backing[origin[2]][starts[2]..starts[2]+lengths[2]],&backing[origin[3]][starts[3]..starts[3]+lengths[3]],&backing[origin[4]][starts[4]..starts[4]+lengths[4]]];
+ let count:usize=if cfg!(NFW_badarg)||cfg!(NFW_invert){1}else{kani::any()};kani::assume(count<=5);let input=&parts[..count];let mut log=Log{reply:kani::any(),calls:0,parts:None};let result=syscall_cut(input,&mut log);let word:usize=if cfg!(NFW_invert){0}else{kani::any()};kani::assume(word<32);assert_eq!(log.calls,1);assert!((result[word]==log.reply[word])!=cfg!(NFW_invert));
+ let seen=log.parts.unwrap();let same=seen.len()==input.len()&&core::ptr::eq(seen,input);assert!(same);
+ if same&&count>0{let p:usize=kani::any();kani::assume(p<count);let at:usize=kani::any();let expected=if at<lengths[p]{if starts[p]+at==positions[origin[p]]{values[origin[p]]}else{0}}else{0};let actual=if at<seen[p].len(){seen[p][at]}else{0};assert_eq!(actual,expected);}
 }
+
 #[kani::proof] #[kani::unwind(35)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 fn copy_hash(){let src=Hash::new_from_array(kani::any());let mut dst=Hash::new_from_array(kani::any());unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};let word:usize=kani::any();kani::assume(word<32);assert!((dst.to_bytes()[word]==src.to_bytes()[word])!=cfg!(NFW_invert));}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn hash_value(){let reply:[u8;32]=kani::any();let value=Hash::new_from_array(reply).to_bytes();let word:usize=kani::any();kani::assume(word<32);assert!((value[word]==reply[word])!=cfg!(NFW_invert));}

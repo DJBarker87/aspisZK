@@ -12,7 +12,7 @@ fn semantic(hash:Hash)->crate::r1_semantic::Verified<Hash>{
  let c=crate::r1_wire::Challenges{lambda:any_q(),chi:any_q(),theta:any_q(),zc:qs(),mu:any_q(),eta:any_q()};
  crate::r1_semantic::Verified{roots:kani::any(),challenges:c,alpha:qs(),claims:Box::new([qs(),qs(),qs()]),extra:qs(),before_z1:qs(),state_before_z0:kani::any(),z:[SecureCirclePoint{x:any_q(),y:any_q()},SecureCirclePoint{x:any_q(),y:any_q()}],transcript:crate::r1_wire::NFW_wire::seed(hash,kani::any(),kani::any())}
 }
-struct Ops {empty_audit:bool,payload_audit:bool,expected:[u8;6],audit:bool,audit_word:usize,states:[[u8;32];7],scalars:[E;4],rho:K,queries:[u32;22],powers:[E;29],claim:E,q_error:bool,c_error:bool,error:Error,
+struct Ops {output_facet:usize,output_word:usize,output_index:usize,empty_audit:bool,payload_audit:bool,expected:[u8;6],audit:bool,audit_word:usize,states:[[u8;32];7],scalars:[E;4],rho:K,queries:[u32;22],powers:[E;29],claim:E,q_error:bool,c_error:bool,error:Error,
  calls:usize,sc:usize,rows:[u8;6],lens:[usize;6],ptrs:[usize;6],samples:[u8;6],positions:[usize;6],before:[[u8;32];7],before_hash:[u8;6],nonzero:[bool;4],hash:u8,variant:u8,seed:[u8;32],gamma:E,claim_sem:usize,claim_y1:usize,claim_len:usize,claim_inactive:E,claim_kappa:E,claim_g:E,slot:usize}
 struct OracleTranscript<'a>{state:[u8;32],hash:Hash,ops:&'a mut Ops}
 impl<'a> OracleTranscript<'a>{
@@ -41,18 +41,18 @@ fn new(sem:&crate::r1_semantic::Verified<Hash>,v:&View<'_>,hash:Hash,g:&mut[E;29
         // Reuse this caller-owned scratch array in tx1; it is never serialized.
         *g=power(gamma,t.ops);
         let claim=claim(sem,v.y1,v.inactive,g,kappa,t.ops)?;
-        Ok(Box::new(Prepared{variant:v.variant,roots:sem.roots,gamma,kappa,alpha,rho,queries,semantic_alpha:sem.alpha,z:sem.z,claim,state:t.state}))
+        let value=Prepared{variant:v.variant,roots:sem.roots,gamma,kappa,alpha,rho,queries,semantic_alpha:sem.alpha,z:sem.z,claim,state:t.state};let value=capture_prepared(value,sem,t.ops);Ok(Box::new(value))
     
 }
-fn ops(slot:usize)->Ops{Ops{empty_audit:false,payload_audit:false,expected:[0;6],audit:false,audit_word:0,states:kani::any(),scalars:es(),rho:any_q(),queries:kani::any(),powers:es(),claim:any_e(),q_error:kani::any(),c_error:kani::any(),error:error(kani::any()),calls:0,sc:0,rows:[0;6],lens:[0;6],ptrs:[0;6],samples:[0;6],positions:kani::any(),before:[[0;32];7],before_hash:[0;6],nonzero:[false;4],hash:0,variant:0,seed:[0;32],gamma:E::ZERO,claim_sem:0,claim_y1:0,claim_len:0,claim_inactive:E::ZERO,claim_kappa:E::ZERO,claim_g:E::ZERO,slot}}
-fn check(facet:usize){
+fn ops(slot:usize)->Ops{Ops{output_facet:5,output_word:0,output_index:0,empty_audit:false,payload_audit:false,expected:[0;6],audit:false,audit_word:0,states:kani::any(),scalars:es(),rho:any_q(),queries:kani::any(),powers:es(),claim:any_e(),q_error:kani::any(),c_error:kani::any(),error:error(kani::any()),calls:0,sc:0,rows:[0;6],lens:[0;6],ptrs:[0;6],samples:[0;6],positions:kani::any(),before:[[0;32];7],before_hash:[0;6],nonzero:[false;4],hash:0,variant:0,seed:[0;32],gamma:E::ZERO,claim_sem:0,claim_y1:0,claim_len:0,claim_inactive:E::ZERO,claim_kappa:E::ZERO,claim_g:E::ZERO,slot}}
+fn check(facet:usize){if cfg!(NFW_RETURN_BLOCK){return_block_check();return;}
  let hash=Hash(kani::any());let sem=semantic(hash);let semantic:[u8;13831]=kani::any();let y1:[u8;928]=kani::any();let round0:[u8;224]=kani::any();let root:[u8;32]=kani::any();let round1:[u8;224]=kani::any();let final_message:[u8;2048]=kani::any();
  let v=View{variant:Variant::S2,semantic:&semantic,y1:&y1,inactive:any_e(),round0:&round0,folded_root:Some(&root),round1:&round1,final_message:&final_message,query_bytes:&[]};
- let slot:usize=kani::any();let word:usize=kani::any();kani::assume(slot<29&&word<8);let mut g=es::<29>();let old=g[slot].to_limbs()[word];let mut o=ops(slot);if cfg!(NFW_invert){o.positions=[0;6];}o.audit=facet==16;o.empty_audit=facet==17&&cfg!(NFW_EMPTY_RHO);o.payload_audit=facet==17&&!cfg!(NFW_EMPTY_RHO);if facet==17&&!cfg!(NFW_EMPTY_RHO){let mut ei=0;while ei<6{let at=o.positions[ei];o.expected[ei]=match ei{0=>if at<928{y1[at]}else{0},1=>if at<32{v.inactive.to_le_bytes()[at]}else{0},2=>if at<224{round0[at]}else{0},3=>if at<32{root[at]}else if at<256{round1[at-32]}else{0},4=>if at<2048{final_message[at]}else{0},_=>0};ei+=1;}}o.audit_word=kani::any();kani::assume(o.audit_word<32);if cfg!(NFW_invert){kani::assume(o.q_error==(facet<5 && facet!=1 && facet!=2 && !(facet==3 && cfg!(NFW_call5)))&& !o.c_error&&word==0&&slot==0);}let result=new(&sem,&v,hash,&mut g,&mut o);
+ let slot:usize=kani::any();let word:usize=kani::any();kani::assume(slot<29&&word<8);let mut g=es::<29>();let old=g[slot].to_limbs()[word];let mut o=ops(slot);o.output_facet=if cfg!(NFW_CAPTURE_ALL){let f:usize=kani::any();kani::assume(f>=5&&f<=15);f}else{facet};o.output_word=word;o.output_index=if cfg!(NFW_invert){0}else{kani::any()};kani::assume(o.output_index<match o.output_facet{7|12=>2,8=>22,10=>64,11=>10,13=>32,_=>1});if cfg!(NFW_invert){o.positions=[0;6];}o.audit=facet==16;o.empty_audit=facet==17&&cfg!(NFW_EMPTY_RHO);o.payload_audit=facet==17&&!cfg!(NFW_EMPTY_RHO);if facet==17&&!cfg!(NFW_EMPTY_RHO){let mut ei=0;while ei<6{let at=o.positions[ei];o.expected[ei]=match ei{0=>if at<928{y1[at]}else{0},1=>if at<32{v.inactive.to_le_bytes()[at]}else{0},2=>if at<224{round0[at]}else{0},3=>if at<32{root[at]}else if at<256{round1[at-32]}else{0},4=>if at<2048{final_message[at]}else{0},_=>0};ei+=1;}}o.audit_word=kani::any();kani::assume(o.audit_word<32);if cfg!(NFW_invert){kani::assume(o.q_error==(facet<5 && facet!=1 && facet!=2 && !(facet==3 && cfg!(NFW_call5)))&& !o.c_error&&word==0&&slot==0);}let result=new(&sem,&v,hash,&mut g,&mut o);
  let good=if o.q_error {matches!(result,Err(e) if e==o.error)&&g[slot].to_limbs()[word]==old&&o.calls==6}
  else if o.c_error {matches!(result,Err(e) if e==o.error)&&g[slot].to_limbs()[word]==o.powers[slot].to_limbs()[word]&&o.calls==9}
  else {result.is_ok()&&o.calls==9};
- if facet==16||facet==17{return;}if facet==0{assert!(good!=cfg!(NFW_invert));return;}
+ if facet==16||facet==17||cfg!(NFW_CAPTURE_FIELDS){return;}if facet==0{assert!(good!=cfg!(NFW_invert));return;}
  if facet==1{if o.q_error{return;}}
  if facet==2{if o.q_error{return;}}
  if facet==1{assert!((o.gamma.to_limbs()[word]==o.scalars[0].to_limbs()[word])!=cfg!(NFW_invert));return;}
@@ -178,3 +178,41 @@ fn copy_folded_wrong(){let mut root=[0u8;32];root[31]=17;let mut tail=[0u8;224];
 #[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 #[kani::stub(alloc::vec::Vec::extend_from_slice,KMX_extend_from_slice)]
 fn copy_folded(){let root:[u8;32]=kani::any();let tail:[u8;224]=kani::any();let mut dst=Vec::with_capacity(256);dst.extend_from_slice(&root);dst.extend_from_slice(&tail);let at:usize=kani::any();kani::assume(at<256);let expected=if at<32{root[at]}else{tail[at-32]};assert_eq!(dst[at],expected);}
+
+fn capture_prepared(p:Prepared,sem:&crate::r1_semantic::Verified<Hash>,o:&mut Ops)->Prepared{
+ if cfg!(NFW_CAPTURE_FIELDS){let word=o.output_word;let i=o.output_index;
+ let value=match o.output_facet{
+ 5=>p.gamma.to_limbs()[word]==o.scalars[0].to_limbs()[word],
+ 6=>p.kappa.to_limbs()[word]==o.scalars[1].to_limbs()[word],
+ 7=>p.alpha[i].to_limbs()[word]==o.scalars[i+2].to_limbs()[word],
+ 8=>p.queries[i]==o.queries[i],9=>p.claim.to_limbs()[word]==o.claim.to_limbs()[word],
+ 10=>p.roots[i/32][i%32]==sem.roots[i/32][i%32],11=>p.semantic_alpha[i]==sem.alpha[i],
+ 12=>p.z[i]==sem.z[i],13=>p.state[i]==o.states[6][i],14=>p.rho==o.rho,_=>p.variant==Variant::S2};
+ assert!(value!=cfg!(NFW_invert));kani::assume(false);}
+ p
+}
+// Arbitrary valid prestate of the final frozen return expression. No opening
+// prefix, field multiplication, scratch-buffer loop, or independent output.
+fn return_block_source(sem:&crate::r1_semantic::Verified<Hash>,variant:Variant,gamma:E,kappa:E,alpha:[E;2],rho:K,queries:[u32;22],claim:E,state:[u8;32])->Box<Prepared>{
+ Box::new(Prepared{variant,roots:sem.roots,gamma,kappa,alpha,rho,queries,semantic_alpha:sem.alpha,z:sem.z,claim,state})
+}
+fn return_block_check(){
+ let sem=semantic(Hash(kani::any()));let v:u8=kani::any();let variant=match v%3{0=>Variant::S1,1=>Variant::S2,_=>Variant::D};let gamma=any_e();let kappa=any_e();let alpha=es::<2>();let rho=any_q();let queries:[u32;22]=kani::any();let claim=any_e();let state:[u8;32]=kani::any();
+ let word:usize=if cfg!(NFW_invert){0}else{kani::any()};kani::assume(word<8);let field:usize=if cfg!(NFW_invert){5}else{kani::any()};kani::assume(field>=5&&field<=15);let i:usize=if cfg!(NFW_invert){0}else{kani::any()};kani::assume(i<match field{7|12=>2,8=>22,10=>64,11=>10,13=>32,_=>1});
+ let p=return_block_source(&sem,variant,gamma,kappa,alpha,rho,queries,claim,state);
+ let good=match field{5=>p.gamma.to_limbs()[word]==gamma.to_limbs()[word],6=>p.kappa.to_limbs()[word]==kappa.to_limbs()[word],7=>p.alpha[i].to_limbs()[word]==alpha[i].to_limbs()[word],8=>p.queries[i]==queries[i],9=>p.claim.to_limbs()[word]==claim.to_limbs()[word],10=>p.roots[i/32][i%32]==sem.roots[i/32][i%32],11=>p.semantic_alpha[i]==sem.alpha[i],12=>p.z[i]==sem.z[i],13=>p.state[i]==state[i],14=>p.rho==rho,_=>p.variant==variant};assert!(good!=cfg!(NFW_invert));
+}
+// Validate the local cut adapter itself on an arbitrary caller-established
+// scalar index, so its replies are linked to the same declared slots.
+#[kani::proof] #[kani::unwind(258)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn scalar_reply_step(){let i:usize=if cfg!(NFW_invert){0}else{kani::any()};kani::assume(i<4);let mut o=ops(0);o.sc=i;let calls:usize=kani::any();kani::assume(calls<=10);o.calls=calls;let expected=o.scalars[i];let row:u8=kani::any();let nz:bool=kani::any();let reply={let mut t=OracleTranscript{state:kani::any(),hash:Hash(kani::any()),ops:&mut o};t.scalar(row,&[],nz)};assert!((reply==expected&&o.sc==i+1&&o.calls==calls+1&&o.rows[i]==row&&o.lens[i]==0&&o.nonzero[i]==nz)!=cfg!(NFW_invert));}
+
+// Exact data-independent final-fold tuple from the frozen opening prefix,
+// on an arbitrary valid prestate immediately before that block.
+#[kani::proof] #[kani::unwind(258)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+#[kani::stub(alloc::vec::Vec::extend_from_slice,KMX_extend_from_slice)]
+fn alpha_block(){let a:u8=kani::any();let variant=match a%3{0=>Variant::S1,1=>Variant::S2,_=>Variant::D};let root:[u8;32]=kani::any();let round1:[u8;224]=kani::any();let alpha0=any_e();let mut o=ops(0);o.sc=3;let expected=o.scalars[3];let (alpha,row)={let mut t=OracleTranscript{state:kani::any(),hash:Hash(kani::any()),ops:&mut o};if variant.folds()==2{let mut bytes=Vec::with_capacity(32+224);bytes.extend_from_slice(&root);bytes.extend_from_slice(&round1);([alpha0,t.scalar(30,&bytes,false)],31)}else{([alpha0,E::ZERO],30)}};let two=variant.folds()==2;let good=alpha[0]==alpha0&&alpha[1]==(if two{expected}else{E::ZERO})&&row==(if two{31}else{30})&&o.calls==(if two{1}else{0});assert!(good!=cfg!(NFW_invert));}

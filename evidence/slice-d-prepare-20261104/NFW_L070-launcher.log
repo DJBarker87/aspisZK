@@ -1,0 +1,39 @@
+{"attempt": "NFW_L070", "exit_status": 1, "wall_seconds": 4.653200356056914, "peak_rss_kib": "5658680", "swaps": "0", "print_axioms": []}
+INTEGRATION_TARGET AspisR1.NFW_PrepareQuery.tx1 : ∀ {H : Type}
+  (sampling : AspisR1PublicPreparation.PreparedModel.Boundaries) (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+  (sem : AspisR1PublicPreparation.r1_semantic.Verified H) (v : AspisR1PublicPreparation.verifier.View) (hash : H)
+  (out : AspisR1PublicPreparation.verifier.Prepared)
+  (scratch old : Aeneas.Std.Array AspisR1.NFW_PreparedPort.PE 29#usize),
+  AspisR1PublicPreparation.PreparedScratchModel.prepare
+        (AspisR1ClaimPreparedBridge.concreteBoundaries (AspisR1ClaimPreparedBridge.withCandidateSamplers sampling)) D
+        sem v hash old =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out, scratch) →
+   
+...
+QueryLoopDefs.run (AspisR1.NFS_QueryLoopRoot.child base proof p g geometry qPlace gPlace) 10#usize
+            10 (Aeneas.Std.core.result.Result.Ok (a, b)) =
+          AspisR1.Port3_NativeQueryBody.verifier.candidate.query_loop (AspisR1.NFS_QueryOps.installed base) proof p a g
+            none geometry b 10#usize
+OWNER AspisR1.NFS_QueryLoopRoot.tx1 := NFS_QueryLoopRoot
+INTEGRATION_TARGET AspisR1.NFS_QueryLoopRoot.tx2 : ∀ (base : AspisR1.Port3_NativeQueryBody.Ops)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (p : AspisR1Stage2.verifier.Prepared)
+  (a : AspisR1Stage2.verifier.Accumulator) (g : Aeneas.Std.Array AspisR1.NFP_QueryCuts.E 29#usize)
+  (geometry : AspisR1Stage2.verifier.QueryGeometry) (b : AspisR1Stage2.verifier.BatchedWeights) (qPlace gPlace : ℕ),
+  NEV_DotInputs.Canonical (AspisR1.FIp_DotsAdapter.toArray g) →
+    AspisR1.NFS_QueryInvariant.Domain p 10 22 a b →
+      ↑a.next = 10 →
+        AspisR1.NFG_QueryLoopDefs.run (AspisR1.NFS_QueryLoopRoot.child base proof p g geometry qPlace gPlace) 22#usize
+            12 (Aeneas.Std.core.result.Result.Ok (a, b)) =
+          AspisR1.Port3_NativeQueryBody.verifier.candidate.query_loop (AspisR1.NFS_QueryOps.installed base) proof p a g
+            none geometry b 22#usize
+OWNER AspisR1.NFS_QueryLoopRoot.tx2 := NFS_QueryLoopRoot
+NFW_generated/NFW_InterfaceTargets.lean:29:7: error: ill-formed syntax
+NFW_generated/NFW_InterfaceTargets.lean:25:18: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  OfNat MessageData 0
+numerals are polymorphic in Lean, but the numeral `0` cannot be used in a context where the expected type is
+  MessageData
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+
+Running as unit: run-r4d9d9b48a64b416ba6899e08c0c637bc.scope; invocation ID: 8e51df612d0d46029b66cfff7258aca7

@@ -1,0 +1,11 @@
+// Arbitrary valid prestate of the final frozen return expression. No opening
+// prefix, field multiplication, scratch-buffer loop, or independent output.
+fn return_block_source(sem:&crate::r1_semantic::Verified<Hash>,variant:Variant,gamma:E,kappa:E,alpha:[E;2],rho:K,queries:[u32;22],claim:E,state:[u8;32])->Box<Prepared>{
+ Box::new(Prepared{variant,roots:sem.roots,gamma,kappa,alpha,rho,queries,semantic_alpha:sem.alpha,z:sem.z,claim,state})
+}
+fn return_block_check(){
+ let sem=semantic(Hash(kani::any()));let v:u8=kani::any();let variant=match v%3{0=>Variant::S1,1=>Variant::S2,_=>Variant::D};let gamma=any_e();let kappa=any_e();let alpha=es::<2>();let rho=any_q();let queries:[u32;22]=kani::any();let claim=any_e();let state:[u8;32]=kani::any();
+ let word:usize=if cfg!(NFW_invert){0}else{kani::any()};kani::assume(word<8);let field:usize=if cfg!(NFW_invert){5}else{kani::any()};kani::assume(field>=5&&field<=15);let i:usize=if cfg!(NFW_invert){0}else{kani::any()};kani::assume(i<match field{7|12=>2,8=>22,10=>64,11=>10,13=>32,_=>1});
+ let p=return_block_source(&sem,variant,gamma,kappa,alpha,rho,queries,claim,state);
+ let good=match field{5=>p.gamma.to_limbs()[word]==gamma.to_limbs()[word],6=>p.kappa.to_limbs()[word]==kappa.to_limbs()[word],7=>p.alpha[i].to_limbs()[word]==alpha[i].to_limbs()[word],8=>p.queries[i]==queries[i],9=>p.claim.to_limbs()[word]==claim.to_limbs()[word],10=>p.roots[i/32][i%32]==sem.roots[i/32][i%32],11=>p.semantic_alpha[i]==sem.alpha[i],12=>p.z[i]==sem.z[i],13=>p.state[i]==state[i],14=>p.rho==rho,_=>p.variant==variant};assert!(good!=cfg!(NFW_invert));
+}

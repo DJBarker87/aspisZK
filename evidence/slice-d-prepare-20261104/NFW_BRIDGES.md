@@ -44,3 +44,28 @@ unrelated expected payloads constructed) timed out and is excluded; its review
 specifies the direct empty-rho entry observation under the original harness
 name. Any current/newer native result is provisional until the final evidence
 inventory classifies its exact receipt, assertion and callee domain.
+
+## Later native stages
+
+K061/K062 establish the isolated empty-rho call window after the rejected K060
+shape. K065/K066 validate the exact final record/Box expression on arbitrary
+pre-return locals after K063/K064 whole-prefix return projections timed out.
+K067/K068 validate the scalar-reply local cut; K069/K070 validate the native
+fold/alpha block. These remain parts of a constructor association, not a full
+constructor certificate.
+
+K078/K079/K080 check the copied frozen candidate.prepare control body with
+local-record cuts (positive, failing inversion, renamed positive). K081–K083 do
+likewise for verify_observed; K084–K086 for the tx1 prefix; K087–K089 for the
+symmetric tx2_common prefix. Every family passes/fails/passes under identical
+features and its recorded source. The prefixes stop at query_loop entry and
+never enter NFU finish/checkpoint work. Exact limitations and fixtures are
+spelled out in NFW_NATIVE_PARTIALS.md. The source-to-callee-model links are OPEN.
+
+The program digest expression has bounded32-byte part checks K071–K073 and
+symbolic sparse-window checks K075–K077, with actual argument-corruption and
+reply-inversion failures. Dense3717-byte K074 timed out; no repeated unchanged
+shape. Arbitrary sparse-window samples plus generic Lean frame laws do not by
+themselves discharge the full arbitrary-byte native correspondence. Digest
+values stay in the accepted runtime-H trust row. No row is admitted from this
+partial runtime evidence.

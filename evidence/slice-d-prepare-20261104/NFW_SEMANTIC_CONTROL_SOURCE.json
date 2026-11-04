@@ -1,0 +1,10 @@
+{
+ "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "original_body": "\n    let prefix = Prefix::parse(bytes)?;\n    mark(obs, 0);\n    let mut transcript = public_transcript(public, hash, prefix.c1_root)?;\n    let challenges = wire::begin(&prefix, &mut transcript)?;\n    mark(obs, 1);\n    verify_finish(public, prefix, transcript, challenges, obs)\n",
+ "local_record_body": "\n    let prefix = ops.parse(bytes)?;\n    ops.prefix_address=&prefix as *const _ as usize;\n    mark(obs, 0);\n    let mut transcript = ops.public_transcript(public, hash, prefix.c1_root)?;\n    ops.transcript_address=&transcript as *const _ as usize;\n    let challenges = ops.begin(&prefix, &mut transcript)?;\n    mark(obs, 1);\n    ops.finish(public, prefix, transcript, challenges, obs)\n",
+ "extra_ghosts": [
+  "prefix address bound immediately after the actual parsed-prefix binding",
+  "transcript address bound immediately after the actual public-transcript binding"
+ ],
+ "scope": "Complete caller failure-stage/control and selected arguments/reply projections; native typed-record semantic transport retained under P6/D188. Prefix record validity, full output carrier and byte/model lift remain OPEN; no row admission."
+}

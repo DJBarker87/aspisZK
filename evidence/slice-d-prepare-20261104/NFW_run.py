@@ -61,6 +61,9 @@ if kind=='kani':
  import os
  if os.environ.get('NFW_INVERT'):env['RUSTFLAGS']+=' --cfg NFW_invert'
  if os.environ.get('NFW_EMPTY_RHO'):env['RUSTFLAGS']+=' --cfg NFW_EMPTY_RHO'
+ if os.environ.get('NFW_CAPTURE_FIELDS'):env['RUSTFLAGS']+=' --cfg NFW_CAPTURE_FIELDS'
+ if os.environ.get('NFW_CAPTURE_ALL'):env['RUSTFLAGS']+=' --cfg NFW_CAPTURE_ALL'
+ if os.environ.get('NFW_RETURN_BLOCK'):env['RUSTFLAGS']+=' --cfg NFW_RETURN_BLOCK'
  if os.environ.get('NFW_BADARG'):env['RUSTFLAGS']+=' --cfg NFW_badarg'
  if os.environ.get('NFW_PART') is not None:
   part=int(os.environ['NFW_PART']);assert 0<=part<5;env['RUSTFLAGS']+=' --cfg NFW_part'+str(part)
@@ -78,13 +81,13 @@ elif kind=='extract':
  if target=='NFW_ScanReference':
   files={'NFW_scan_extract.py':(E/'NFW_scan_extract.py').read_text(),'NFW_src/programs/r1-cost-probe/src/NFW_scan_reference.rs':(E/'NFW_scan_reference.rs.txt').read_text(),'NFW_SOURCE_PINS.json':(E/'NFW_SOURCE_PINS.json').read_text()};sources=['NFW_scan_extract.py','NFW_src/programs/r1-cost-probe/src/NFW_scan_reference.rs'];command=['python3','NFW_scan_extract.py']
 elif kind=='dependency':
- assert target=='JHe_ZeroGate'
- n='NFW_dependencies/'+target+'.lean';files[n]=(E.parent.parent/'lean'/ (target+'.lean')).read_text();sources=[n]
+ assert target in ['JHe_ZeroGate','KMX_CopyMeaning']
+ n='NFW_dependencies/'+target+'.lean';files[n]=(E/'NFW_KMX_COPY_SOURCE.lean.txt').read_text() if target=='KMX_CopyMeaning' else (E.parent.parent/'lean'/ (target+'.lean')).read_text();sources=[n]
  command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NFW_dependencies','-o','NFW_objects/'+target+'.olean',n]
 elif kind=='lean':
  n='NFW_generated/'+target+'.lean';files[n]=(E/(target+'.lean')).read_text();sources=[n]
  command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NFW_generated','-o','NFW_objects/'+target+'.olean',n]
- if target in ['NFW_Driver','NFW_ProofDriver','NFW_Stage2Driver','NFA_WALKER','NFA_MemoryLimit']:command+=['-c','NFW_native/'+target+'.c']
+ if target in ['NFW_Driver','NFW_ProofDriver','NFW_Stage2Driver','NFW_FrameDriver','NFA_WALKER','NFA_MemoryLimit']:command+=['-c','NFW_native/'+target+'.c']
 elif kind=='linkaudit':
  sources=['NFW_native/'+target+'.c','NFW_native/NFA_WALKER.c','NFW_native/NFA_MemoryLimit.c']
  command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NFW_native/'+target,*sources]
@@ -92,6 +95,10 @@ elif kind=='auditbatch' and target=='NFW_Stage2Driver':
  files['NFW_stage2_audit_batch.py']=(E/'NFW_stage2_audit_batch.py').read_text()
  sources=['NFW_generated/NFW_Stage2Driver.lean','NFW_stage2_audit_batch.py','NFW_native/NFW_Stage2Driver.c','NFW_native/NFA_WALKER.c','NFW_native/NFA_MemoryLimit.c']
  command=['python3','NFW_stage2_audit_batch.py',a+'.json']
+elif kind=='auditbatch' and target=='NFW_FrameDriver':
+ files['NFW_frame_audit_batch.py']=(E/'NFW_frame_audit_batch.py').read_text()
+ sources=['NFW_generated/NFW_FrameDriver.lean','NFW_frame_audit_batch.py','NFW_native/NFW_FrameDriver.c','NFW_native/NFA_WALKER.c','NFW_native/NFA_MemoryLimit.c']
+ command=['python3','NFW_frame_audit_batch.py',a+'.json']
 elif kind=='auditbatch':
  files['NFW_final_audit_batch.py']=(E/'NFW_final_audit_batch.py').read_text()
  for n in ['NFA_WALKER.c','NFA_MemoryLimit.c']:files['NFW_native/'+n]=(E/'NFW_native'/n).read_text()
@@ -139,7 +146,7 @@ for root in roots:
    if Path(root,stem+suf).is_file():rels.add(stem+suf)
 for rel in sorted(rels):
  p=next(Path(root)/rel for root in roots if (Path(root)/rel).is_file());pins[str(p)]={{'path':str(p),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}}
-for module in (['NFW_STAGE2_IMPORT' if x['module']=='NFW_Stage2Driver' else 'NFW_COMBINED_IMPORT'] if x['kind']=='auditbatch' else [])+(['NEP_Planted','NEP_Mutations'] if x['module'] in ['NFW_Driver','NFW_ProofDriver','NFW_Stage2Driver','fixtures'] else [])+(['NFW_QueryModel'] if x['kind']=='auditbin' and x['module'].startswith('query') else [])+(['NFW_COMBINED_IMPORT'] if x['kind']=='auditbin' and (x['module'].startswith('proof') or x['module']=='scan') else [])+[n for line in (b/x['sources'][0]).read_text().splitlines() if line.startswith('import ') for n in line[7:].split() if n!='all'] if x['kind'] not in ['linkaudit','kani','extract'] else []:
+for module in (['NFW_FRAME_IMPORT' if x['module']=='NFW_FrameDriver' else 'NFW_STAGE2_IMPORT' if x['module']=='NFW_Stage2Driver' else 'NFW_COMBINED_IMPORT'] if x['kind']=='auditbatch' else [])+(['NEP_Planted','NEP_Mutations'] if x['module'] in ['NFW_Driver','NFW_ProofDriver','NFW_Stage2Driver','NFW_FrameDriver','fixtures'] else [])+(['NFW_QueryModel'] if x['kind']=='auditbin' and x['module'].startswith('query') else [])+(['NFW_COMBINED_IMPORT'] if x['kind']=='auditbin' and (x['module'].startswith('proof') or x['module']=='scan') else [])+[n for line in (b/x['sources'][0]).read_text().splitlines() if line.startswith('import ') for n in line[7:].split() if n!='all'] if x['kind'] not in ['linkaudit','kani','extract'] else []:
  rel=module.replace('.','/')+'.olean';p=next((Path(root)/rel for root in roots if (Path(root)/rel).is_file()),None)
  assert p is not None,module
  for z in [p,Path(str(p)+'.private'),Path(str(p)+'.server'),p.with_suffix('.ir')]:
@@ -157,7 +164,7 @@ if {kind!r}=='extract':
  elif {target!r}=='NFW_ScanReference':names+=['NFW_SCAN_EXTRACTION_PINS.json','NFW_scan_reference.llbc']+[str(p.relative_to(b)) for p in (b/'NFW_scan_extracted').rglob('*') if p.is_file()]
  else:names+=['NFW_EXTRACTION_PINS.json','NFW_reference.llbc']+[str(p.relative_to(b)) for p in (b/'NFW_extracted').rglob('*') if p.is_file()]
 names += [str(p.relative_to(b)) for p in b.glob('NEP_*_REACHABLE.txt')] if {kind!r}=='auditbatch' else [str(p.relative_to(b)) for p in b.glob('NEP_'+{target!r}+'_*_REACHABLE.txt')] if {kind!r}=='auditbin' else []
-if {kind!r}=='auditbatch':names += [str(p.relative_to(b)) for p in (b/('NFW_stage2_audit' if {target!r}=='NFW_Stage2Driver' else 'NFW_final_audit')).rglob('*') if p.is_file()]
+if {kind!r}=='auditbatch':names += [str(p.relative_to(b)) for p in (b/('NFW_frame_audit' if {target!r}=='NFW_FrameDriver' else 'NFW_stage2_audit' if {target!r}=='NFW_Stage2Driver' else 'NFW_final_audit')).rglob('*') if p.is_file()]
 if {target!r} in ['scan','queryscan']:names+=['NFW_QUERY_LOADED_scan.jsonl' if {target!r}=='queryscan' else 'NFW_LOADED_scan.jsonl']
 out={{n:(b/n).read_text() for n in names}}
 for name in ['NFW_Driver','NFW_ProofDriver','NFW_Stage2Driver']:

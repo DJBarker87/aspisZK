@@ -25,7 +25,27 @@ def native(i,expected):
  assert 'out[*i]=*p;' in code and '*i+=1;' in code and 'if *i==N {return true;}' in code and 'out:&mut [E;N]' in code
  return r
 
+def supportive_audits():
+ # Additive evidence checks only: these facts do not admit another row.
+ sets=[]
+ for directory,modes,expected in [('NFW_stage2_audit',[f'stage{i}' for i in range(8)],60),('NFW_frame_audit',['frame'],8)]:
+  assert J(directory+'/SUMMARY.json')['status']=='PASS'
+  N.fixtures(J(directory+'/fixtures.json')['results'])
+  roots={}
+  for mode in modes:
+   receipt=J(directory+'/'+mode+'.json');assert receipt['exit_status']==0 and int(receipt['swaps'])==0
+   for x in receipt['results']:
+    assert x['equal'] and set(x['walked_axioms'])==set(x['collect_axioms'])<=STANDARD
+    assert x['root'] not in roots;roots[x['root']]=x
+  assert len(roots)==expected
+  for module in {r.rsplit('.',1)[0].split('.')[-1] for r in roots}:
+   source=E/(module+'.lean');digest=sha(source.read_bytes())
+   assert any(x['exit_status']==0 and x['module']==module and digest in x['source_hashes'].values() for p in E.glob('NFW_L???/receipt.json') for x in [json.loads(p.read_text())]),module
+  sets.append(dict(directory=directory,roots=len(roots),standard_axioms_only=True,not_row_admission=True))
+ put('NFW_SUPPORT_AUDIT.json',dict(status='PASS',sets=sets,total_supportive_roots=68,no_new_row_credit=True))
+
 def build():
+ supportive_audits()
  for p,n in [(3,4),(5,6),(7,8),(25,26)]:
   assert native(p,0)['module']==native(n,1)['module']
  patch=R/'evidence/kani-mitig-20261028/KMX_copy_stubs.patch'
