@@ -68,3 +68,23 @@ Budget checkpoint before NFW_L069: powers remains the only newly CLOSED function
 Budget checkpoint before NFW_L070: powers remains the only newly CLOSED function (2 rows). Other native/model fragments remain OPEN pending complete producer/callee-domain and syscall association; see receipts and native queue results. No caps raised; no timeout shape replayed unchanged.
 
 Budget checkpoint before NFW_K090: powers remains the only newly CLOSED function (2 rows). Other native/model fragments remain OPEN pending complete producer/callee-domain and syscall association; see receipts and native queue results. No caps raised; no timeout shape replayed unchanged.
+
+Budget checkpoint before NFW_K091: powers remains the only newly CLOSED function (2 rows). Other native/model fragments remain OPEN pending complete producer/callee-domain and syscall association; see receipts and native queue results. No caps raised; no timeout shape replayed unchanged.
+
+Budget checkpoint before NFW_K092: powers remains the only newly CLOSED function (2 rows). Other native/model fragments remain OPEN pending complete producer/callee-domain and syscall association; see receipts and native queue results. No caps raised; no timeout shape replayed unchanged.
+
+Budget checkpoint before NFW_K093: powers remains the only newly CLOSED function (2 rows). Other native/model fragments remain OPEN pending complete producer/callee-domain and syscall association; see receipts and native queue results. No caps raised; no timeout shape replayed unchanged.
+
+Budget checkpoint before NFW_K094: powers remains the only newly CLOSED function (2 rows). Other native/model fragments remain OPEN pending complete producer/callee-domain and syscall association; see receipts and native queue results. No caps raised; no timeout shape replayed unchanged.
+
+Budget checkpoint before NFW_K095: powers remains the only newly CLOSED function (2 rows). Other native/model fragments remain OPEN pending complete producer/callee-domain and syscall association; see receipts and native queue results. No caps raised; no timeout shape replayed unchanged.
+
+Budget checkpoint before NFW_K096: powers remains the only newly CLOSED function (2 rows). Other native/model fragments remain OPEN pending complete producer/callee-domain and syscall association; see receipts and native queue results. No caps raised; no timeout shape replayed unchanged.
+
+Budget checkpoint before NFW_K097: powers remains the only newly CLOSED function (2 rows). Other native/model fragments remain OPEN pending complete producer/callee-domain and syscall association; see receipts and native queue results. No caps raised; no timeout shape replayed unchanged.
+
+Budget checkpoint before NFW_K098: powers remains the only newly CLOSED function (2 rows). Other native/model fragments remain OPEN pending complete producer/callee-domain and syscall association; see receipts and native queue results. No caps raised; no timeout shape replayed unchanged.
+
+Budget checkpoint before NFW_K099: powers remains the only newly CLOSED function (2 rows). Other native/model fragments remain OPEN pending complete producer/callee-domain and syscall association; see receipts and native queue results. No caps raised; no timeout shape replayed unchanged.
+
+Budget checkpoint before NFW_K100: powers remains the only newly CLOSED function (2 rows). Other native/model fragments remain OPEN pending complete producer/callee-domain and syscall association; see receipts and native queue results. No caps raised; no timeout shape replayed unchanged.

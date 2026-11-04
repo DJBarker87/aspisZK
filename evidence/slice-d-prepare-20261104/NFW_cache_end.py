@@ -11,9 +11,14 @@ import hashlib,json,shutil
 b=Path('/home/dombarker/project-offloads/codex-cx-slice-d-prepare-20261104')
 c=Path('/home/dombarker/project-offloads/codex-cx-slice-d-prepare-cache-20261104')/'NFW_exports_20261104'
 c.mkdir(exist_ok=True)
+allowed=set()
+for receipt in b.glob('NFW_L???/receipt.json'):
+ r=json.loads(receipt.read_text())
+ if r['exit_status']==0 and r['kind'] in ['lean','dependency']:
+  allowed.add(r['module'])
 rows=[]
 for p in sorted((b/'NFW_objects').rglob('*')):
- if p.is_file():
+ if p.is_file() and p.name.split('.')[0] in allowed:
   assert p.name.startswith(('NFW_','KMX_CopyMeaning')),str(p)
   q=c/p.relative_to(b/'NFW_objects');q.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(p,q)
   digest=lambda z:hashlib.sha256(z.read_bytes()).hexdigest()

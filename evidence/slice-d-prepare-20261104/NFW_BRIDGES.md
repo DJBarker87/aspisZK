@@ -69,3 +69,20 @@ shape. Arbitrary sparse-window samples plus generic Lean frame laws do not by
 themselves discharge the full arbitrary-byte native correspondence. Digest
 values stay in the accepted runtime-H trust row. No row is admitted from this
 partial runtime evidence.
+
+The all-WireError prepare family K090/K091/K092 passes/fails/passes with all
+11 constructors and arbitrary u8/usize payloads. K093–K100 independently validate
+QM31-array, circle-point-array, query-array and folded root/tail copy shapes
+with exact KMX payloads and failing controls. They are helper/fixture copy
+association facts, not additional shipped-function rows.
+
+L063/L064/L065 compile the unchanged KMX dependency and eight new memory/IO
+roots. L066–L068 import, compile the audit driver and audit these eight roots
+with all eight fixtures. Raw/collectAxioms agree with standard axioms only.
+The previous30 powers +60 producer/domain roots are reused:98 audited roots in
+total. L069/L070 metadata inspections failed and supply no proof credit.
+NFW_SUPPORT_AUDIT.json adds mandatory checks without changing NFQ/NFK admission.
+NFW_NATIVE_MATRIX.json and NFW_BUDGET.json distinguish all100 native attempt
+slots (including one prelaunch input failure),70 Lean/support slots and3
+extractions. Eleven native timeout shapes are excluded; none was replayed
+unchanged or given a larger timeout/cap. See each review for the replacement.
