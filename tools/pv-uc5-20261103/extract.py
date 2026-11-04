@@ -18,4 +18,19 @@ B=Path('/home/dombarker/project-offloads/codex-pv-cx-20261029/resume-ae1/pinned-
 O=H/'entry-extraction-uc5-final';O.mkdir(exist_ok=False)
 a=[str(B),'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','PV_UC_Entry','-dest',str(O),'-split-files','-emit-json',str(p)]
 r=subprocess.run(a)
-(O/'receipt.json').write_text(json.dumps(dict(charon_command=c,aeneas_command=a,llbc_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),outputs={q.name:hashlib.sha256(q.read_bytes()).hexdigest() for q in O.glob('*.lean')},exit=r.returncode),indent=2)+'\n');sys.exit(r.returncode)
+(O/'receipt.json').write_text(json.dumps(dict(charon_command=c,aeneas_command=a,llbc_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),outputs={q.name:hashlib.sha256(q.read_bytes()).hexdigest() for q in O.glob('*.lean')},exit=r.returncode),indent=2)+'\n');
+if r.returncode:sys.exit(r.returncode)
+
+# The alias check is inside an already opaque effect boundary. Reuse compiled
+# proofs only after checking actual regenerated computational output/signatures.
+import re
+old=H/'entry-extraction-uc5'
+checks={}
+for name in ['Types.lean','Funs.lean','TypesExternal_Template.lean','FunsExternal_Template.lean']:
+ a=(old/name).read_text();b=(O/name).read_text()
+ same=a==b
+ signatures=lambda s:re.findall(r'(?m)^axiom\s+(\S+)([\s\S]*?)(?=\n\n|\Z)',s)
+ semantic_same=same if name in ['Types.lean','Funs.lean'] else signatures(a)==signatures(b)
+ checks[name]=dict(old_sha256=hashlib.sha256(a.encode()).hexdigest(),new_sha256=hashlib.sha256(b.encode()).hexdigest(),byte_identical=same,computational_or_signature_identical=semantic_same)
+ assert semantic_same,(name,'changed proof input needs focused recompilation')
+(O/'reuse-binding.json').write_text(json.dumps(dict(status='PASS unchanged compiled proof inputs despite opaque native FD guard repair',checks=checks),indent=2)+'\n')
