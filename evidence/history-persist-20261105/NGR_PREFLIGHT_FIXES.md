@@ -1,0 +1,1 @@
+NGR_L002 prelaunch selected-object pinning found NGP_L159.olean missing from our LEAN_PATH. No compiler or scope launched. Added our copied NGP export directory to our own runner before the NGK/NGC export fallbacks; no validation weakened and no infrastructure edited. Same attempt number is reused only because no process was submitted.

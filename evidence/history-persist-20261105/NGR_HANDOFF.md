@@ -19,3 +19,11 @@ NGP reports five historical object variants relative to NGK. Preserve and resolv
 provenance rather than silently treating those bytes as the original NGK pins.
 Security target not yet established. Final hypotheses, attempts, trust rows and
 remaining work will be recorded here before completion.
+
+Focused stage: NGR_L010 compiles saved_to_loaded, standard three axioms.
+NGR_L001/006,004,005 establish data/load, KNE length and native write helpers.
+Excluded L003 (sourceBody qualification), L007 (notation projection), L008
+(invalid local reducibility attribute); no timeout or memory kill. No failed
+proof earns credit. L009 passed before explicit TX1 validity was retained.
+The named native result is a single wrapper return of the deterministic KNE
+output; no savedAtWrite or persisted_bytes premise. Combined audit pending.

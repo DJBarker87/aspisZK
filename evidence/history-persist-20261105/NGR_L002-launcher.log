@@ -1,0 +1,47 @@
+{"attempt": "NGR_L002", "exit_status": 0, "wall_seconds": 2.8072125369217247, "peak_rss_kib": "5830236", "swaps": "0", "print_axioms": []}
+alloc.vec.Vec : Type u_1 → Type u_1
+def Aeneas.Std.alloc.vec.Vec.{u} : Type u → Type (max 0 u) :=
+fun α => { l // l.length ≤ Usize.max }
+@AspisR1.CheckpointBytes5Effect.run : {A H : Type} →
+  AspisR1Stage2.aspis_core.digest.Digest32 H →
+    H → AspisR1.CheckpointBytes5Effect.Code A → AspisR1.CheckpointBytes5Effect.Port AspisR1.CheckpointBytes5Effect.Log A
+@AspisR1.S2W_D189Wrappers.first : {A : Type} →
+  AspisR1.S2W_ExtractionBoundary.First →
+    (AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+        ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)) →
+      AspisR1.S2W_D189Wrappers.Allocator A →
+        AspisR1.S2W_D189Entry.Entry →
+ 
+...
+tive program e.first data = Result.ok (core.result.Result.Ok saved) ∧
+          after =
+            AspisR1.S2W_WrapperLaws.writeBracket e.heap 2 0 0
+              (AspisR1.S2W_CommittedCheckpoint.source (AspisR1.S2W_ReturnedCheckpoint.nativeBytes saved))
+@AspisR1.S2Trust.Valid : {F : Type} → AspisR1.S2Trust.Heap F → Prop
+AspisR1.NGC_KNE_Writer.returned : (p : AspisR1.CheckpointBytes5Writer.Prepared) →
+  (a : AspisR1.CheckpointBytes5Writer.Accumulator) →
+    AspisR1.NGC_KNE_Caller.WriterDomain p a →
+      AspisR1.CheckpointBytes5Effect.Digest →
+        AspisR1.CheckpointBytes5Effect.Digest → AspisR1.CheckpointBytes5Effect.Digest → Slice U8
+AspisR1.CheckpointBytes5Effect.Code : Type → Type 1
+def AspisR1.CheckpointBytes5Effect.run : {A H : Type} →
+  AspisR1Stage2.aspis_core.digest.Digest32 H →
+    H →
+      AspisR1.CheckpointBytes5Effect.Code A →
+        AspisR1.CheckpointBytes5Effect.Port AspisR1.CheckpointBytes5Effect.Log A :=
+fun {A H} D hash x => AspisR1.CheckpointBytes5Effect.Code.brecOn x (AspisR1.CheckpointBytes5Effect.run._f D hash)
+def AspisR1.S2W_D189Entry.Entry.first : AspisR1.S2W_D189Entry.Entry → AspisR1.S2W_ExtractionBoundary.Accounts :=
+fun e => ⟨[e.snapshot 0 58295 58295, e.snapshot 1 1880 1880, e.snapshot 2 1768 1768], ⋯⟩
+structure AspisR1.S2W_D189Entry.Entry : Type
+number of parameters: 0
+fields:
+  AspisR1.S2W_D189Entry.Entry.handles : ℕ → ℕ × ℕ
+  AspisR1.S2W_D189Entry.Entry.records : ℕ → AspisR1.S2W_D189Entry.Record
+  AspisR1.S2W_D189Entry.Entry.buffers : ℕ → Slice U8
+  AspisR1.S2W_D189Entry.Entry.base : ℕ → ℕ
+  AspisR1.S2W_D189Entry.Entry.provenance : ℕ → ℕ
+constructor:
+  AspisR1.S2W_D189Entry.Entry.mk (handles : ℕ → ℕ × ℕ) (records : ℕ → AspisR1.S2W_D189Entry.Record)
+    (buffers : ℕ → Slice U8) (base provenance : ℕ → ℕ) : AspisR1.S2W_D189Entry.Entry
+
+Running as unit: run-ra9b4449741b0469a802f83ea7b4b5106.scope; invocation ID: e673301827c848c4955b1743747f6690
