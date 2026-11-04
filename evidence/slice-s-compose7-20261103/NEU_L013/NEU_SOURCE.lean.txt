@@ -1,0 +1,120 @@
+import NEU_CallDomains
+import NED_WindowExtensionality
+set_option autoImplicit false
+namespace NEU_PublicProjections
+open Aeneas Aeneas.Std
+open AspisR1AdapterReconstruct.aspis_statement.pool_v1.payment_relation
+abbrev Transfer := PoolV1PrivateTransferPublicV1
+abbrev Withdrawal := PoolV1WithdrawalPublicV1
+
+def get {α : Type} {n : Usize} (a : Array α n) (i : Fin n.val) : α :=
+  a.val[i.val]'(by rw [a.property]; exact i.isLt)
+
+def transfer (p : Transfer) (slot : Fin 8) (i : Fin 8) (j : Fin 32) : Nat :=
+  match slot.val with
+  | 0 => (get p.pool j).val
+  | 1 => (get p.deployment_domain j).val
+  | 2 => p.anchor_sequence.val
+  | 3 => (get p.anchor_root i).val
+  | 4 => (get p.nullifier i).val
+  | 5 => p.asset_id.val
+  | 6 => (get p.change_commitment i).val
+  | _ => (get p.recipient_commitment i).val
+
+def withdrawal (p : Withdrawal) (slot : Fin 9) (i : Fin 8) (j : Fin 32) : Nat :=
+  match slot.val with
+  | 0 => (get p.pool j).val
+  | 1 => (get p.deployment_domain j).val
+  | 2 => p.anchor_sequence.val
+  | 3 => (get p.anchor_root i).val
+  | 4 => (get p.nullifier i).val
+  | 5 => p.asset_id.val
+  | 6 => (get p.change_commitment i).val
+  | 7 => p.amount.val
+  | _ => (get p.destination_token_account j).val
+
+/-- Arbitrary native scalar/byte/word observation identifies the ENTIRE public
+record; no unobserved array positions are zeroed or assumed equal. -/
+theorem transfer_ext (p q : Transfer)
+    (point : ∀ slot i j, transfer p slot i j=transfer q slot i j) : p=q := by
+  have pool : p.pool=q.pool := by
+    apply NED_WindowExtensionality.array_ext
+    intro j
+    apply UScalar.eq_of_val_eq
+    exact point ⟨0,by decide⟩ ⟨0,by decide⟩ j
+  have deployment : p.deployment_domain=q.deployment_domain := by
+    apply NED_WindowExtensionality.array_ext
+    intro j
+    apply UScalar.eq_of_val_eq
+    exact point ⟨1,by decide⟩ ⟨0,by decide⟩ j
+  have sequence : p.anchor_sequence=q.anchor_sequence :=
+    UScalar.eq_of_val_eq (point ⟨2,by decide⟩ ⟨0,by decide⟩ ⟨0,by decide⟩)
+  have anchor : p.anchor_root=q.anchor_root := by
+    apply NED_WindowExtensionality.array_ext
+    intro i
+    apply UScalar.eq_of_val_eq
+    exact point ⟨3,by decide⟩ i ⟨0,by decide⟩
+  have nullifier : p.nullifier=q.nullifier := by
+    apply NED_WindowExtensionality.array_ext
+    intro i
+    apply UScalar.eq_of_val_eq
+    exact point ⟨4,by decide⟩ i ⟨0,by decide⟩
+  have asset : p.asset_id=q.asset_id :=
+    UScalar.eq_of_val_eq (point ⟨5,by decide⟩ ⟨0,by decide⟩ ⟨0,by decide⟩)
+  have change : p.change_commitment=q.change_commitment := by
+    apply NED_WindowExtensionality.array_ext
+    intro i
+    apply UScalar.eq_of_val_eq
+    exact point ⟨6,by decide⟩ i ⟨0,by decide⟩
+  have recipient : p.recipient_commitment=q.recipient_commitment := by
+    apply NED_WindowExtensionality.array_ext
+    intro i
+    apply UScalar.eq_of_val_eq
+    exact point ⟨7,by decide⟩ i ⟨0,by decide⟩
+  cases p; cases q
+  congr 1 <;> assumption
+
+theorem withdrawal_ext (p q : Withdrawal)
+    (point : ∀ slot i j, withdrawal p slot i j=withdrawal q slot i j) : p=q := by
+  have pool : p.pool=q.pool := by
+    apply NED_WindowExtensionality.array_ext
+    intro j
+    apply UScalar.eq_of_val_eq
+    exact point ⟨0,by decide⟩ ⟨0,by decide⟩ j
+  have deployment : p.deployment_domain=q.deployment_domain := by
+    apply NED_WindowExtensionality.array_ext
+    intro j
+    apply UScalar.eq_of_val_eq
+    exact point ⟨1,by decide⟩ ⟨0,by decide⟩ j
+  have sequence : p.anchor_sequence=q.anchor_sequence :=
+    UScalar.eq_of_val_eq (point ⟨2,by decide⟩ ⟨0,by decide⟩ ⟨0,by decide⟩)
+  have anchor : p.anchor_root=q.anchor_root := by
+    apply NED_WindowExtensionality.array_ext
+    intro i
+    apply UScalar.eq_of_val_eq
+    exact point ⟨3,by decide⟩ i ⟨0,by decide⟩
+  have nullifier : p.nullifier=q.nullifier := by
+    apply NED_WindowExtensionality.array_ext
+    intro i
+    apply UScalar.eq_of_val_eq
+    exact point ⟨4,by decide⟩ i ⟨0,by decide⟩
+  have asset : p.asset_id=q.asset_id :=
+    UScalar.eq_of_val_eq (point ⟨5,by decide⟩ ⟨0,by decide⟩ ⟨0,by decide⟩)
+  have change : p.change_commitment=q.change_commitment := by
+    apply NED_WindowExtensionality.array_ext
+    intro i
+    apply UScalar.eq_of_val_eq
+    exact point ⟨6,by decide⟩ i ⟨0,by decide⟩
+  have amount : p.amount=q.amount :=
+    UScalar.eq_of_val_eq (point ⟨7,by decide⟩ ⟨0,by decide⟩ ⟨0,by decide⟩)
+  have destination : p.destination_token_account=q.destination_token_account := by
+    apply NED_WindowExtensionality.array_ext
+    intro j
+    apply UScalar.eq_of_val_eq
+    exact point ⟨8,by decide⟩ ⟨0,by decide⟩ j
+  cases p; cases q
+  congr 1 <;> assumption
+
+#print axioms transfer_ext
+#print axioms withdrawal_ext
+end NEU_PublicProjections

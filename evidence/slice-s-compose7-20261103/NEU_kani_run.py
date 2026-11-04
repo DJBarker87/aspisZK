@@ -20,7 +20,12 @@ for retry in range(11):
 import subprocess,json,sys
 b=Path({B!r});p=b/{(a+'-barrier-'+str(retry)+'.log')!r}
 with p.open('w') as f:r=subprocess.run(['python3','/home/dombarker/project-offloads/codex-cx-s2h-20261023/S2H_reservation.py',str(b/{(a+'-reservation.json')!r})],stdout=f,stderr=subprocess.STDOUT)
-print(p.read_text());sys.exit(r.returncode)
+print(p.read_text())
+prior=b/'NEU_K118/receipt.json'
+if prior.exists():
+ info=json.loads(prior.read_text());cg=Path('/sys/fs/cgroup')/info['cgroup'].lstrip('/')
+ print(json.dumps(dict(own_previous_attempt='NEU_K118',cgroup_exists=cg.exists(),events=(cg/'cgroup.events').read_text() if cg.exists() else 'removed')))
+sys.exit(r.returncode)
 '''
  r=ssh('python3',code);(E/(a+f'-barrier-{retry}.log')).write_text(r.stdout+r.stderr)
  try:ad=next(json.loads(l) for l in r.stdout.splitlines() if l.startswith('{'))
@@ -85,7 +90,9 @@ pins={{str(p.relative_to(s)):hashlib.sha256(p.read_bytes()).hexdigest() for p in
 print((b/'NEU_RUST_SHA256.json').read_text())
 '''
 r=ssh('python3',code);(E/(a+'-upload.log')).write_text(r.stderr);assert r.returncode==0,r.stderr
-(E/'NEU_RUST_SHA256.json').write_text(r.stdout)
+manifest=r.stdout.removesuffix('\n')
+(E/'NEU_RUST_SHA256.json').write_text(manifest)
+(E/(a+'-RUST_SHA256.json')).write_text(manifest)
 (E/(a+'.json')).write_text(json.dumps(cfg,indent=1)+'\n')
 r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_run_host.py '+a+'.json',submitted=True)
 (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
@@ -97,7 +104,43 @@ print(json.dumps({{n:(b/n).read_text() for n in names if (b/n).exists()}}))
 r=ssh('python3',code);assert r.returncode==0,r.stderr;out=json.loads(r.stdout)
 for n,v in out.items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(v)
 assert a+'/receipt.json' in out,'submitted attempt unresolved; never resubmit'
+# Required disk hygiene after receipt recovery, with no live own solver.
+cleanup_code=f'''from pathlib import Path
+import json,hashlib
+b=Path({B!r});deleted=[]
+for p in (b/'NEU_tmp').rglob('*'):
+ if p.is_file() and (p.name.startswith('external-sat') and p.suffix=='.cnf' or p.name.startswith('smt2_dec_problem')):
+  deleted.append(dict(path=str(p),bytes=p.stat().st_size,sha256=hashlib.sha256(p.read_bytes()).hexdigest()));p.unlink()
+print(json.dumps(dict(attempt={a!r},deleted_solver_temps=deleted,scope='own NEU_tmp only; after native scope completion')))
+'''
+clean=ssh('python3',cleanup_code);assert clean.returncode==0,clean.stderr
+(E/(a+'-temp-cleanup.json')).write_text(clean.stdout)
+if not (E/'NEU_LAUNCHER_READ.py').exists():
+ r=ssh('python3',f"from pathlib import Path;print((Path({B!r})/'S2W_run_host.py').read_text(),end='')")
+ assert r.returncode==0,r.stderr
+ assert hashlib.sha256(r.stdout.encode()).hexdigest()=='61cf135a831640c1b6adfa433ac001a0d178046d436f1d94d1fd08b25f162101'
+ (E/'NEU_LAUNCHER_READ.py').write_text(r.stdout)
+
 rc=json.loads(out[a+'/receipt.json'])
+# Rule17: retain exact execution inputs from the unchanged launcher's snapshots.
+import lzma
+history=not (E/'NEU_SOURCE_HISTORY.json.xz').exists()
+source_code=f'''from pathlib import Path
+import json,hashlib
+b=Path({B!r});result={{}}
+folders=sorted(p for p in b.glob('NEU_K[0-9]*') if p.is_dir()) if {history!r} else [b/{a!r}]
+for p in folders:
+ if not (p/'receipt.json').exists():continue
+ r=json.loads((p/'receipt.json').read_text());sources={{n:(p/'sources'/n).read_text() for n in r['sources']}}
+ assert all(hashlib.sha256(v.encode()).hexdigest()==r['source_hashes'][n] for n,v in sources.items())
+ result[p.name]=sources
+print(json.dumps(result))
+'''
+r=ssh('python3',source_code);assert r.returncode==0,r.stderr
+snapshots=json.loads(r.stdout);assert a in snapshots
+assert all(hashlib.sha256(v.encode()).hexdigest()==rc['source_hashes'][n] for n,v in snapshots[a].items())
+name='NEU_SOURCE_HISTORY.json' if history else a+'-inputs.json'
+raw=r.stdout.encode();(E/(name+'.xz')).write_bytes(lzma.compress(raw,preset=6));(E/(name+'.sha256')).write_text(hashlib.sha256(raw).hexdigest()+'\n')
 entry={k:v for k,v in rc.items() if k!='deps_fingerprint'}
 entry['full_receipt']=dict(path=str(E/a/'receipt.json'),sha256=hashlib.sha256((E/a/'receipt.json').read_bytes()).hexdigest())
 with (E/'NEU_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(entry)+'\n')

@@ -6,11 +6,11 @@
  mod rw_tests;
 +
 +#[cfg(kani)]
-+#[path="NEU_box.rs"]
-+mod NEU_box;
++#[path="NEU_reconstruct.rs"]
++mod NEU_reconstruct;
 --- /dev/null
-+++ b/programs/r1-cost-probe/src/NEU_box.rs
-@@ -0,0 +1,39 @@
++++ b/programs/r1-cost-probe/src/NEU_reconstruct.rs
+@@ -0,0 +1,32 @@
 +use super::*;
 +use aspis_statement::pool_v1::*;
 +use aspis_statement::Digest;
@@ -31,25 +31,18 @@
 +
 +
 +fn any_error()->PoolV1PairForestTerminalFormatErrorV1{match kani::any::<u8>(){0=>PoolV1PairForestTerminalFormatErrorV1::WrongLength,1=>PoolV1PairForestTerminalFormatErrorV1::WrongMagic,2=>PoolV1PairForestTerminalFormatErrorV1::WrongVersion,3=>PoolV1PairForestTerminalFormatErrorV1::WrongDigestEncoding,4=>PoolV1PairForestTerminalFormatErrorV1::InvalidTransitionKind,5=>PoolV1PairForestTerminalFormatErrorV1::InvalidOutputLane,6=>PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding,7=>PoolV1PairForestTerminalFormatErrorV1::NonCanonicalDigest,8=>PoolV1PairForestTerminalFormatErrorV1::OutputLaneMismatch,9=>PoolV1PairForestTerminalFormatErrorV1::MasterBindingMismatch,10=>PoolV1PairForestTerminalFormatErrorV1::DeploymentBindingMismatch,11=>PoolV1PairForestTerminalFormatErrorV1::HistoricalAnchorMismatch,12=>PoolV1PairForestTerminalFormatErrorV1::CheckpointBindingMismatch,13=>PoolV1PairForestTerminalFormatErrorV1::SelectedLaneBindingMismatch,14=>PoolV1PairForestTerminalFormatErrorV1::LiveSnapshotMismatch,15=>PoolV1PairForestTerminalFormatErrorV1::CandidateAfterstateMismatch,16=>PoolV1PairForestTerminalFormatErrorV1::ResultBindingMismatch,17=>PoolV1PairForestTerminalFormatErrorV1::WithdrawalDestinationMismatch,18=>PoolV1PairForestTerminalFormatErrorV1::Payment(NEE_any_PoolV1PaymentStatementFormatError()),19=>PoolV1PairForestTerminalFormatErrorV1::LaneTransition(NEE_any_PoolV1PairLatePublicStatementErrorV1()),20=>PoolV1PairForestTerminalFormatErrorV1::Afterstate(NEE_any_PoolV1PairVerifierTransportErrorV1()),_=>PoolV1PairForestTerminalFormatErrorV1::Account(NEE_any_PoolV1PairForestAccountErrorV1())}}
-+
-+struct Frame<'a>{common:&'a PoolV1PairForestTerminalCommonV1,public:&'a aspis_statement::pool_v1::PoolV1WithdrawalPublicV1,reply:Result<(),PoolV1PairForestTerminalFormatErrorV1>,calls:u8,place:*const PoolV1PairForestTerminalStatementV1,i:usize,j:usize,k:usize}
-+fn validate(s:&PoolV1PairForestTerminalStatementV1,f:&mut Frame)->Result<(),PoolV1PairForestTerminalFormatErrorV1>{assert!(f.calls==0);f.calls=1;f.place=s;let i=f.i;let j=f.j;let k=f.k;match s{PoolV1PairForestTerminalStatementV1::Withdrawal{common,public}=>{assert!(common.master_account[j]==f.common.master_account[j]);assert!(common.checkpoint_account[j]==f.common.checkpoint_account[j]);assert!(common.selected_lane_account[j]==f.common.selected_lane_account[j]);assert!(common.output_lane==f.common.output_lane);assert!(common.checkpoint_sequence==f.common.checkpoint_sequence);assert!(common.historical_global_anchor[i].0==f.common.historical_global_anchor[i].0);assert!(common.lane_transition.live_snapshot.pool[j]==f.common.lane_transition.live_snapshot.pool[j]);assert!(common.lane_transition.live_snapshot.deployment_domain[j]==f.common.lane_transition.live_snapshot.deployment_domain[j]);assert!(common.lane_transition.live_snapshot.sequence==f.common.lane_transition.live_snapshot.sequence);assert!(common.lane_transition.live_snapshot.next_pair_index==f.common.lane_transition.live_snapshot.next_pair_index);assert!(common.lane_transition.live_snapshot.current_root[i].0==f.common.lane_transition.live_snapshot.current_root[i].0);assert!(common.lane_transition.live_snapshot.frontier[k][i].0==f.common.lane_transition.live_snapshot.frontier[k][i].0);assert!(common.lane_transition.candidate_afterstate.next_pair_index==f.common.lane_transition.candidate_afterstate.next_pair_index);assert!(common.lane_transition.candidate_afterstate.next_root[i].0==f.common.lane_transition.candidate_afterstate.next_root[i].0);assert!(common.lane_transition.candidate_afterstate.next_frontier[k][i].0==f.common.lane_transition.candidate_afterstate.next_frontier[k][i].0);assert!(public.pool[j]==f.public.pool[j]);assert!(public.deployment_domain[j]==f.public.deployment_domain[j]);assert!(public.anchor_sequence==f.public.anchor_sequence);assert!(public.anchor_root[i].0==f.public.anchor_root[i].0);assert!(public.nullifier[i].0==f.public.nullifier[i].0);assert!(public.asset_id.0==f.public.asset_id.0);assert!(public.change_commitment[i].0==f.public.change_commitment[i].0);assert!(public.amount==f.public.amount);assert!(public.destination_token_account[j]==f.public.destination_token_account[j]);},_=>assert!(false)};f.reply}
-+fn native(
-+    common: Box<PoolV1PairForestTerminalCommonV1>,
-+    public: aspis_statement::pool_v1::PoolV1WithdrawalPublicV1,
-+ f:&mut Frame) -> Result<Box<PoolV1PairForestTerminalStatementV1>, ProgramError> {
-+    let statement = Box::new(PoolV1PairForestTerminalStatementV1::Withdrawal {
-+        common: *common,
-+        public,
-+    });
-+    validate(&statement,f)
-+        .map_err(|_| ProgramError::InvalidInstructionData)?;
-+    Ok(statement)
-+}
++fn any_PoolIdentityV1()->PoolIdentityV1{PoolIdentityV1{pool:kani::any(),asset_mint:kani::any(),token_program:kani::any(),asset_id:M31(kani::any()),deployment_domain:kani::any()}}
++fn any_VerifierPolicyV1()->VerifierPolicyV1{VerifierPolicyV1{flags:kani::any(),registry_program:kani::any(),registry_authority:kani::any(),policy_binding:kani::any()}}
++fn any_PoolV1PairForestMasterV1()->PoolV1PairForestMasterV1{PoolV1PairForestMasterV1{bump:kani::any(),identity:any_PoolIdentityV1(),verifier_policy:any_VerifierPolicyV1(),initialized_lane_mask:kani::any(),has_checkpoint:kani::any(),next_checkpoint_sequence:kani::any(),last_checkpoint_lane_sequences:[kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any()]}}
++fn any_IncrementalMerkleTreeV1()->IncrementalMerkleTreeV1{IncrementalMerkleTreeV1{next_leaf_index:kani::any(),root:NEE_digest(),frontier:NEE_frontier()}}
++fn any_PoolV1PairForestCheckpointV1()->PoolV1PairForestCheckpointV1{PoolV1PairForestCheckpointV1{bump:kani::any(),master:kani::any(),deployment_domain:kani::any(),checkpoint_sequence:kani::any(),global_root:NEE_digest(),lane_sequences:[kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any()]}}
++fn any_PoolV1PairForestLaneStateV1()->PoolV1PairForestLaneStateV1{PoolV1PairForestLaneStateV1{bump:kani::any(),master:kani::any(),lane_id:kani::any(),tree:any_IncrementalMerkleTreeV1()}}
++fn auth()->AuthenticatedAsq8Accounts{AuthenticatedAsq8Accounts{master_account:kani::any(),checkpoint_account:kani::any(),selected_lane_account:kani::any(),master:Box::new(any_PoolV1PairForestMasterV1()),checkpoint:Box::new(any_PoolV1PairForestCheckpointV1()),selected_lane:Box::new(any_PoolV1PairForestLaneStateV1()),live_snapshot:Box::new(NEE_common().lane_transition.live_snapshot)}}
++fn request()->PoolV1PairForestTerminalRequestV1{let s=NEE_statement();let public=match s{PoolV1PairForestTerminalStatementV1::PrivateTransfer{public,..}=>PoolV1PairForestTerminalPaymentV1::PrivateTransfer(public),PoolV1PairForestTerminalStatementV1::Withdrawal{public,..}=>PoolV1PairForestTerminalPaymentV1::Withdrawal(public)};PoolV1PairForestTerminalRequestV1{verifier_profile:kani::any(),verifier_release:kani::any(),pool_program:kani::any(),public}}
 +#[kani::proof]
 +#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEU_KMX::KMX_copy_nonoverlapping)]
 +#[kani::stub(<[u8]>::copy_from_slice,crate::NEU_KMX::KMX_copy_from_slice)]
-+fn box_window(){let common=NEE_common();let s=NEE_statement();let public=match s{PoolV1PairForestTerminalStatementV1::Withdrawal{public,..}=>public,_=>{kani::assume(false);unreachable!()}};let i:usize=kani::any();let j:usize=kani::any();let k:usize=kani::any();kani::assume(i<8&&j<32&&k<20);let reply=if kani::any(){Ok(())}else{Err(any_error())};let mut f=Frame{common:&common,public:&public,reply,calls:0,place:core::ptr::null(),i,j,k};let actual=native(Box::new(common),public,&mut f);assert!(f.calls==1);match (actual,reply){(Ok(out),Ok(()))=>assert!(core::ptr::eq(out.as_ref(),f.place)),(Err(ProgramError::InvalidInstructionData),Err(_))=>(),_=>assert!(false)}}
++fn reconstruction_slice(){let a=auth();let c=NEE_common().lane_transition.candidate_afterstate;let i:usize=kani::any();let j:usize=kani::any();let k:usize=kani::any();let selector:usize=kani::any();kani::assume(i<8&&j<32&&k<20&&selector<15);let out=asq8_common(&a,&c);assert!((match selector{0=>out.master_account[j] as u64,1=>out.checkpoint_account[j] as u64,2=>out.selected_lane_account[j] as u64,3=>out.output_lane as u64,4=>out.checkpoint_sequence as u64,5=>out.historical_global_anchor[i].0 as u64,6=>out.lane_transition.live_snapshot.pool[j] as u64,7=>out.lane_transition.live_snapshot.deployment_domain[j] as u64,8=>out.lane_transition.live_snapshot.sequence as u64,9=>out.lane_transition.live_snapshot.next_pair_index as u64,10=>out.lane_transition.live_snapshot.current_root[i].0 as u64,11=>out.lane_transition.live_snapshot.frontier[k][i].0 as u64,12=>out.lane_transition.candidate_afterstate.next_pair_index as u64,13=>out.lane_transition.candidate_afterstate.next_root[i].0 as u64,14=>out.lane_transition.candidate_afterstate.next_frontier[k][i].0 as u64,_=>0})==(match selector{0=>a.master_account[j] as u64,1=>a.checkpoint_account[j] as u64,2=>a.selected_lane_account[j] as u64,3=>a.selected_lane.lane_id as u64,4=>a.checkpoint.checkpoint_sequence as u64,5=>a.checkpoint.global_root[i].0 as u64,6=>a.live_snapshot.pool[j] as u64,7=>a.live_snapshot.deployment_domain[j] as u64,8=>a.live_snapshot.sequence as u64,9=>a.live_snapshot.next_pair_index as u64,10=>a.live_snapshot.current_root[i].0 as u64,11=>a.live_snapshot.frontier[k][i].0 as u64,12=>c.next_pair_index as u64,13=>c.next_root[i].0 as u64,14=>c.next_frontier[k][i].0 as u64,_=>0}));}
 --- a/programs/r1-cost-probe/src/lib.rs
 +++ b/programs/r1-cost-probe/src/lib.rs
 @@ -1,3 +1,4 @@

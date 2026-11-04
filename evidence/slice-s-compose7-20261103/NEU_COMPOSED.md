@@ -120,3 +120,103 @@ oracle observes the exact constructed Statement and the returned success Box
 is the SAME validated allocation. All raw typed common/public values, including
 noncanonical values and all validation errors, are covered. No stub_verified,
 function pointer, writable static, field product or SHA implementation is used.
+
+K069 is excluded: combined withdrawal field-observation shape timed out under
+the unchanged90s/cgroup limits. The replacement splits the24 native field
+observations independently; it does not rename to change a verdict, raise a cap,
+retry the aggregate or strengthen data assumptions. Root/model facts are not
+used to turn that timeout into native credit.
+
+## Both Box-constructor members closed
+
+NEU_CONSTRUCTOR_VALIDATION.json records **70/97 composed rows CLOSED**, two
+more than the imported checkpoint; **2/7 roots remain CLOSED**. New rows:
+TX2:227 transfer_statement_box and TX2:228 withdrawal_statement_box. This is a
+partial slice result, not a release or100-bit soundness claim.
+
+The additional source-evidence layer first admits each COMPLETE new four-part
+native/model packet, then applies call-domain composition. The unchanged NDT
+and predecessor checks still run on the immutable original baseline. An OPEN
+baseline bridge is not erased by a model lemma or by composition alone:23/24
+native field windows, matching controls, exact frozen-body erasure, execution
+input snapshots, model/substitution theorems, typed carrier proofs, Box/Result
+frame and every outgoing external/callee qualification are independently
+required. The two new source claims and all changed derived fields are explicit
+in the overlay. The authoritative NDT_LEDGER.json is unchanged. Generic source,
+feature, lock, KMX, rule16, receipt and axiom gates are not relaxed.
+
+Each constructor preserves the full ProgramError Result, unchanged arbitrary
+external state and the SAME ordered validator child trace. All nested validator
+hypotheses are discharged by the already composed NEM validator and the raw
+carrier inverse. The child is invoked on the SAME newly constructed complete
+Statement; success returns the SAME validated Box. Native correspondence is the
+checked hybrid source certificate under ruling(y), with the component's own
+PacketDomain/PhysicalInterpretation and approved tool/runtime qualifications.
+At a parent call site, those qualifications still require an edge certificate;
+reconstruction is not promoted. Fresh allocation/cleanup and ABI interpretation
+are explicit physical qualifications, not an assumed enclosing function result.
+
+Full model statements (definitions/types in NEU_BoxModel.lean):
+
+```lean
+theorem transfer_result_state_effects {State : Type} (c : Common) (p : Transfer) (state : State) :
+    run (.PrivateTransfer c p) state =
+    (r1_pool_adapter.transfer_statement_box c p,state,
+      (NED_ValidatorTrace.run (NED_ReconstructCarriers.fromRaw (.PrivateTransfer c p))).2)
+
+theorem withdrawal_result_state_effects {State : Type} (c : Common) (p : Withdrawal) (state : State) :
+    run (.Withdrawal c p) state =
+    (r1_pool_adapter.withdrawal_statement_box c p,state,
+      (NED_ValidatorTrace.run (NED_ReconstructCarriers.fromRaw (.Withdrawal c p))).2)
+```
+
+No inner Prop hypothesis remains in these model statements. L009 audits both
+with `[propext, Classical.choice, Quot.sound]`. Native transfer pairs are
+K023/024 through K067/068; withdrawal pairs are K070/071 through K116/117.
+K069's aggregate timeout is never used. P6/D188 optionA is reclassification,
+not trust removal. Domain certificates and exact successful theorem snapshots
+are hash-bound in NEU_LEDGER_DELTA.json.xz and NEU_REVIEWED_CERTIFICATES.json.
+
+## Inherited closed-root statements
+
+The validator and encoder are imported without re-proving. Their original full
+statements, native/domain/frame evidence and qualifications are retained below.
+L001 reprints their standard axioms. No new kernel-only Rust or frozen-release
+replay claim is made.
+
+```lean
+theorem result_state_effects {State : Type} (s : Statement) (state : State) :
+    let observed := run pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1
+      NEM_PaymentReached.pay NEM_LateOracle.late atomic_statement.encode_digest_canonical s
+    (observed.1,state,observed.2) =
+      (NBN_StatementEncoderSummary.observe (AspisS6OuterNativeInstalled.encode s),
+       state,(NED_EncoderTrace.run s).2) := by
+  dsimp only
+  rw [substitution,NED_EncoderTrace.erases]
+```
+
+```lean
+theorem result_state_effects {State : Type} (s : Statement) (state : State) :
+    let observed := NEE_ValidatorOracle.run NEM_PaymentReached.pay NEM_LaneReached.lane
+      NEM_LateOracle.late s
+    (observed.1,state,observed.2) =
+      (pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1 s,
+       state,(NED_ValidatorTrace.run s).2) := by
+  have same := NEE_ReachedRootModel.result_and_effects NEM_PaymentReached.pay
+    NEM_LaneReached.lane NEM_LateOracle.late s
+    (fun a reached => NEM_PaymentReached.payment_reached NEM_LaneReached.lane
+      NEM_LateOracle.late s a reached)
+    (fun d reached => NEM_LaneReached.lane_reached NEM_LateOracle.late s d reached)
+    (fun a out reached => NEM_LateOracle.late_reached s a out reached)
+  rw [same]
+```
+
+NEU_CONSTRUCTOR_TESTS.log records nine passing tests. Refreshed-review-hash
+mutations reject missing/reordered field windows, a stronger input domain,
+wrong model theorem and missing failing control. Full-ledger mutations leave
+the row OPEN for a missing or wrong same-call domain certificate, missing
+physical certificate and missing Box boundary. Earlier baseline five tests and
+three compressed-input transport tests also passed. Cached source inputs remain
+keyed by both compressed bytes and uncompressed hash; all receipt source hashes
+are still checked. Source snapshots for every native execution are committed
+as hash-checked compressed text, including the pre-repair history.
