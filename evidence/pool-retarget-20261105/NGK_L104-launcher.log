@@ -1,0 +1,17 @@
+{"attempt": "NGK_L104", "exit_status": 0, "wall_seconds": 2.856542865978554, "peak_rss_kib": "5935612", "swaps": "0", "print_axioms": ["'NGK_NFO_PacketAccepted.accepted' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]", "'NGK_NFR_RawInverseFrames.frames' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]", "'NGK_NFV_Copy.bind_pair_finish' depends on axioms: [propext]"]}
+NGK_NFO_PacketAccepted.accepted : ∀ (bytes : List.{0} Aeneas.Std.U8) (value : NGK_NFO_PacketDecoder.Output),
+  @Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0} NGK_NFO_PacketDecoder.Output NGK_NFO_PacketDecoder.Error))
+      (NGK_NFO_PacketDecoder.run bytes)
+      (@Aeneas.Std.Result.ok.{0}
+        (Aeneas.Std.core.result.Result.{0, 0} NGK_NFO_PacketDecoder.Output NGK_NFO_PacketDecoder.Error)
+        (@Aeneas.Std.core.result.Result.Ok.{0, 0} NGK_NFO_PacketDecoder.Output NGK_NFO_PacketDecoder.Error value)) →
+    ∃ (width :
+      @Eq.{1} Nat (@List.length.{0} Aeneas.Std.U8 bytes)
+        (@OfNat.ofNat.{0} Nat (nat_lit 792) (instOfNatNat (nat_lit 792)))),
+     
+...
+Lean.Expr.app\n                                    (Lean.Expr.app\n                                      (Lean.Expr.app\n                                        (Lean.Expr.const `Bind.bind [Lean.Level.zero, Lean.Level.zero])\n                                        (Lean.Expr.const `Aeneas.Std.Result [Lean.Level.zero]))\n                                      (Lean.Expr.const `Aeneas.Std.instBindResult [Lean.Level.zero]))\n                                    (Lean.Expr.bvar 8))\n                                  (Lean.Expr.bvar 6))\n                                (Lean.Expr.app\n                                  (Lean.Expr.app (Lean.Expr.bvar 4) (Lean.Expr.bvar 1))\n                                  (Lean.Expr.bvar 0)))\n                              (Lean.Expr.lam\n                                `c\n                                (Lean.Expr.bvar 8)\n                                (Lean.Expr.app\n                                  (Lean.Expr.bvar 3)\n                                  (Lean.Expr.app\n                                    (Lean.Expr.app\n                                      (Lean.Expr.app (Lean.Expr.bvar 4) (Lean.Expr.bvar 2))\n                                      (Lean.Expr.bvar 1))\n                                    (Lean.Expr.bvar 0)))\n                                (Lean.BinderInfo.default)))\n                            (Lean.BinderInfo.default))\n                          (Lean.BinderInfo.default)))))\n                  (Lean.BinderInfo.default))\n                (Lean.BinderInfo.default))\n              (Lean.BinderInfo.default))\n            (Lean.BinderInfo.default))\n          (Lean.BinderInfo.implicit))\n        (Lean.BinderInfo.implicit))\n      (Lean.BinderInfo.implicit))\n    (Lean.BinderInfo.implicit))\n  (Lean.BinderInfo.implicit)"}
+
+Running as unit: run-re59e0e0be0e249b18d589699bb1fe232.scope; invocation ID: a84a96b2fafe4a9e9a66ee5deca8bedc

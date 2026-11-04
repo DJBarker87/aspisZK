@@ -1,7 +1,18 @@
 """Collect authoritative raw/fixture/coherence evidence; never promote Pool rows."""
 from pathlib import Path
-import json,hashlib,collections,re,sys
-E=Path(__file__).resolve().parent;J=lambda p:json.loads(p.read_text());H=lambda b:hashlib.sha256(b).hexdigest()
+import json,hashlib,collections,re,sys,lzma
+E=Path(__file__).resolve().parent;H=lambda b:hashlib.sha256(b).hexdigest()
+def raw(p):
+ if p.exists():return p.read_bytes()
+ data=lzma.decompress(Path(str(p)+'.xz').read_bytes());assert H(data)==Path(str(p)+'.sha256').read_text().strip();return data
+J=lambda p:json.loads(raw(p))
+def emit_associations(data):
+ p=E/'NGK_CERT_ASSOCIATIONS.json';b=(json.dumps(data,indent=1)+'\n').encode();h=H(b);q=Path(str(p)+'.xz');pin=Path(str(p)+'.sha256')
+ if len(b)>20000000:
+  if not (q.exists() and pin.exists() and pin.read_text().strip()==h):q.write_bytes(lzma.compress(b,preset=6));pin.write_text(h+'\n')
+  assert H(lzma.decompress(q.read_bytes()))==h;p.unlink(missing_ok=True)
+ else:p.write_bytes(b)
+
 manifest=J(E/'NGK_AUDIT_ROOTS.json');results=[]
 for i,group in enumerate(manifest['groups']):
  r=J(E/f'NGK_audit/batch{i}/proof{i}.json');assert r['exit_status']==0
@@ -26,12 +37,12 @@ if '--audit-only' in sys.argv:
 entries=[]
 for i in range(33):
  p=E/f'NGK_L{78+i:03}/stdout.log';rc=J(p.parent/'receipt.json');assert rc['exit_status']==0
- entries += [json.loads(l.split('NGK_CERT_ENTRY ',1)[1]) for l in p.read_text().splitlines() if 'NGK_CERT_ENTRY ' in l]
+ entries += [json.loads(l.split('NGK_CERT_ENTRY ',1)[1]) for l in raw(p).decode().splitlines() if 'NGK_CERT_ENTRY ' in l]
 statements=J(E/'NGK_STATEMENT_MANIFEST.json')['records']
 assert collections.Counter(e['name'] for e in entries)==collections.Counter(r['name'] for r in statements)
 for r in statements:
  e=next(e for e in entries if e['name']==r['name']);assert e['owner']=='NGK_'+r['source_module']
  assert r['name'] in manifest['roots']
-(E/'NGK_CERT_ASSOCIATIONS.json').write_text(json.dumps(dict(status='PASS',explicit_theorems=len(entries),entries=entries,all_standard_printed_axioms=True,all_raw_audited=True,source_inventory='NGK_CERTIFICATES.json'),indent=1)+'\n')
+emit_associations(dict(status='PASS',explicit_theorems=len(entries),entries=entries,all_standard_printed_axioms=True,all_raw_audited=True,source_inventory='NGK_CERTIFICATES.json'))
 (E/'NGK_LEDGER_DELTA.json').write_text(json.dumps(dict(status='HEADLINE-COHERENT POOL FOREST; NO ROW PROMOTION',basis='NDT semantics, NGJ 599 verifier rows unchanged; Pool consumer outside that basis',rows=[],composed_rows_added=0,closed_by_this_job=0,before=dict(Pool_production_association='OPEN',B='OPEN',D='OPEN'),after=dict(Pool_production_association='OPEN',B='OPEN',D='OPEN'),coherence_before=dict(joint_import='FAIL',dangling=650,import_baseline_failures=548),coherence_after=summary,assumptions_discharged=[],assumptions_added=[],assumptions_removed=[],trust='existing P6/D188 option-A semantic transport, SDK/std/allocator/ABI/compiler/Aeneas/source-to-ELF, RuntimePersistence, digest/H, RuntimeReturnData nonempty1..1024, RuntimeMemcmp and cryptographic assumptions retained; reclassification not removal',next='NGG committed B/D production-prefix certificates must receive the SAME canonical retarget before admission; no uncommitted sibling WIP imported'),indent=1)+'\n')
 print(len(results),'raw roots;',len(entries),'explicit theorem associations;',len(scan),'modules; no Pool rows promoted')

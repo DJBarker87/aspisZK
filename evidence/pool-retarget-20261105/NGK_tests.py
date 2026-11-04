@@ -1,7 +1,12 @@
 """Negative controls for the additive evidence gates, no theorem/native credit."""
 from pathlib import Path
-import json,copy,collections
-E=Path(__file__).resolve().parent;J=lambda n:json.loads((E/n).read_text())
+import json,copy,collections,lzma,hashlib
+E=Path(__file__).resolve().parent
+def J(n):
+ p=E/n
+ if p.exists():return json.loads(p.read_text())
+ raw=lzma.decompress(Path(str(p)+'.xz').read_bytes());assert hashlib.sha256(raw).hexdigest()==Path(str(p)+'.sha256').read_text().strip();return json.loads(raw)
+
 a=J('NGK_AUDIT.json');s=J('NGK_SCAN.json');d=J('NGK_LEDGER_DELTA.json');m=J('NGK_AUDIT_ROOTS.json');assoc=J('NGK_CERT_ASSOCIATIONS.json');sm=J('NGK_STATEMENT_MANIFEST.json')
 def check(a,s,d,assoc):
  assert a['standard_axioms_only'] and len(a['roots'])==a['root_count']==len(m['roots'])

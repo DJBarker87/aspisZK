@@ -1,0 +1,18 @@
+{"attempt": "NGK_L081", "exit_status": 0, "wall_seconds": 2.9338221771176904, "peak_rss_kib": "5929852", "swaps": "0", "print_axioms": ["'NGK_NFO_ReadModel.wrong_length' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]", "'NGK_NFR_AfterstateForwardHelpers.frontier_window' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]", "'NGK_NFR_ResultForwardHelpers.get5' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]", "'NGK_NFV_HelperModel.success' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]"]}
+@NGK_NFO_ReadModel.wrong_length : ∀ {Key : Type} [inst : DecidableEq.{1} Key] (selected : Key)
+  (bytes : NGK_NFO_ReadModel.Bytes)
+  (decode :
+    NGK_NFO_ReadModel.Bytes →
+      Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0} NGK_NFO_ReadModel.Output NGK_NFO_ReadModel.DecodeError)),
+  @Ne.{1} Nat (@List.length.{0} Aeneas.Std.U8 bytes) (@OfNat.ofNat.{0} Nat (nat_lit 792) (instOfNatNat (nat_lit 792))) →
+    @Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Prod.{0, 0} (Aeneas.Std.core.result.Result.{0, 0} NGK_NFO_ReadModel.Accepted NGK_NFO_ReadModel.Error)
+          (List.{0} NGK_NFO_ReadModel.Event)))
+      (@NGK_NFO_ReadModel.run Key inst selected
+        (@Aeneas.Std.core.r
+...
+onst `Aeneas.Std.core.result.Result [Lean.Level.zero, Lean.Level.zero])\n                        (Lean.Expr.const `NGK_NFV_HelperModel.Bytes []))\n                      (Lean.Expr.const `NGK_NFV_HelperModel.ProgramError [])))\n                  (Lean.Expr.app\n                    (Lean.Expr.const `List [Lean.Level.zero])\n                    (Lean.Expr.const `NGK_NFV_HelperModel.Call [])))\n                (Lean.Expr.app\n                  (Lean.Expr.app\n                    (Lean.Expr.app\n                      (Lean.Expr.const `Aeneas.Std.core.result.Result.Ok [Lean.Level.zero, Lean.Level.zero])\n                      (Lean.Expr.const `NGK_NFV_HelperModel.Bytes []))\n                    (Lean.Expr.const `NGK_NFV_HelperModel.ProgramError []))\n                  (Lean.Expr.bvar 1)))\n              (Lean.Expr.app\n                (Lean.Expr.app\n                  (Lean.Expr.app\n                    (Lean.Expr.const `List.cons [Lean.Level.zero])\n                    (Lean.Expr.const `NGK_NFV_HelperModel.Call []))\n                  (Lean.Expr.app (Lean.Expr.const `NGK_NFV_HelperModel.Call.encode []) (Lean.Expr.bvar 2)))\n                (Lean.Expr.app\n                  (Lean.Expr.app\n                    (Lean.Expr.app\n                      (Lean.Expr.const `List.cons [Lean.Level.zero])\n                      (Lean.Expr.const `NGK_NFV_HelperModel.Call []))\n                    (Lean.Expr.app (Lean.Expr.const `NGK_NFV_HelperModel.Call.allocate []) (Lean.Expr.bvar 1)))\n                  (Lean.Expr.app\n                    (Lean.Expr.const `List.nil [Lean.Level.zero])\n                    (Lean.Expr.const `NGK_NFV_HelperModel.Call [])))))))\n        (Lean.BinderInfo.default))\n      (Lean.BinderInfo.default))\n    (Lean.BinderInfo.default))\n  (Lean.BinderInfo.default)"}
+
+Running as unit: run-r21e54f89b98d468f8a5d534825a3bda4.scope; invocation ID: a00684f19d194c86823d46cc1767a007

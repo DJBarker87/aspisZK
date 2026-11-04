@@ -1,0 +1,18 @@
+{"attempt": "NGK_L080", "exit_status": 0, "wall_seconds": 2.929328974103555, "peak_rss_kib": "5918964", "swaps": "0", "print_axioms": ["'NGK_NFO_ReadModel.wrong_program' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]", "'NGK_NFR_AfterstateForwardHelpers.root_window' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]", "'NGK_NFR_ResultForwardHelpers.get4' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]", "'NGK_NFV_Envelope.pure_value' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]"]}
+@NGK_NFO_ReadModel.wrong_program : ∀ {Key : Type} [inst : DecidableEq.{1} Key] (selected program : Key)
+  (bytes : NGK_NFO_ReadModel.Bytes)
+  (decode :
+    NGK_NFO_ReadModel.Bytes →
+      Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0} NGK_NFO_ReadModel.Output NGK_NFO_ReadModel.DecodeError)),
+  @Ne.{1} Key program selected →
+    @Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Prod.{0, 0} (Aeneas.Std.core.result.Result.{0, 0} NGK_NFO_ReadModel.Accepted NGK_NFO_ReadModel.Error)
+          (List.{0} NGK_NFO_ReadModel.Event)))
+      (@NGK_NFO_ReadModel.run Key inst selected
+        (@Aeneas.Std.core.result.Result.Ok.{0, 0} Unit AdapterRw.solana_program_error.ProgramError Unit.un
+...
+              (Lean.Expr.app\n                      (Lean.Expr.app\n                        (Lean.Expr.app\n                          (Lean.Expr.const `Eq [Lean.Level.succ (Lean.Level.zero)])\n                          (Lean.Expr.const `Nat []))\n                        (Lean.Expr.app\n                          (Lean.Expr.app\n                            (Lean.Expr.const `List.length [Lean.Level.zero])\n                            (Lean.Expr.const `Aeneas.Std.U8 []))\n                          (Lean.Expr.bvar 0)))\n                      (Lean.Expr.app\n                        (Lean.Expr.app\n                          (Lean.Expr.const `Aeneas.Std.UScalar.val [])\n                          (Lean.Expr.const `Aeneas.Std.UScalarTy.Usize []))\n                        (Lean.Expr.app\n                          (Lean.Expr.app\n                            (Lean.Expr.const `Aeneas.Std.Usize.ofNat [])\n                            (Lean.Expr.app\n                              (Lean.Expr.app\n                                (Lean.Expr.app\n                                  (Lean.Expr.const `OfNat.ofNat [Lean.Level.zero])\n                                  (Lean.Expr.const `Nat []))\n                                (Lean.Expr.lit (Lean.Literal.natVal 216)))\n                              (Lean.Expr.app\n                                (Lean.Expr.const `instOfNatNat [])\n                                (Lean.Expr.lit (Lean.Literal.natVal 216)))))\n                          (Lean.Expr.const `NGK_NFV_Envelope.Payment._proof_1 []))))\n                    (Lean.BinderInfo.default)))\n                (Lean.Expr.bvar 0))))\n          (Lean.BinderInfo.default))\n        (Lean.BinderInfo.default))\n      (Lean.BinderInfo.default))\n    (Lean.BinderInfo.default))\n  (Lean.BinderInfo.default)"}
+
+Running as unit: run-r7cda8b3534924f43a76f950be6c075be.scope; invocation ID: edba33a2f40248d9b24c22ab0734b9ae

@@ -1,8 +1,6 @@
 # NGK remaining obligations
 
-The selected forest's final disposition is recorded by NGK_AUDIT.json,
-NGK_SCAN.json and NGK_CERT_ASSOCIATIONS.json. Until those gates are complete,
-this file is a scope statement, not an admission.
+All selected ownership families are retargeted: GuardBody/S2Sdk, Prepared/PrepQM, Phase, NED/NBN/NBK library and other canonical dependencies are reused read-only; all48 nonreused Pool modules compile. Combined raw audit, same-binary fixtures, full zero-defect scan and all119 explicit statement/owner associations PASS. **No family within the selected proof forest remains unretargeted.**
 
 No Pool consumer row becomes CLOSED by NGK. B and D remain OPEN under the exact
 NFV_REMAINING.md obligations, with no added/hidden output-equality premise:
@@ -26,7 +24,4 @@ NFV_REMAINING.md obligations, with no added/hidden output-equality premise:
   this ownership repair. Target not yet established.
 
 No Kani or extraction is authorized by this allocation (both budgets zero).
-This job's Lean-only work is complete only when all 48 proof copies, the combined
-import, complete raw roots, eight same-binary fixtures, full scan and explicit
-statement/owner associations pass. Family-by-family results are then listed in
-NGK_HANDOFF.md; no separate unretargeted family is silently waived.
+This job's Lean-only work is complete:110/110 attempts used. All gates listed above pass; no independent Lean-only retarget obligation remains. The remaining B/D obligations require native same-execution caller/domain evidence.

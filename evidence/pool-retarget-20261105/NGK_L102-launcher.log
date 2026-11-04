@@ -1,0 +1,18 @@
+{"attempt": "NGK_L102", "exit_status": 0, "wall_seconds": 3.2428111690096557, "peak_rss_kib": "5935624", "swaps": "0", "print_axioms": ["'NGK_NFO_DecodeReject.wrong_length' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]", "'NGK_NFR_ExtractedDecode.oracle' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]", "'NGK_NFV_Copy.suffix' depends on axioms: [propext, Quot.sound.{u}]"]}
+NGK_NFO_DecodeReject.wrong_length : ∀ (bytes : Aeneas.Std.Slice.{0} Aeneas.Std.U8),
+  @Ne.{1} Nat
+      (@List.length.{0} Aeneas.Std.U8
+        (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+          (fun l => @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max) bytes))
+      (@OfNat.ofNat.{0} Nat (nat_lit 792) (instOfNatNat (nat_lit 792))) →
+    @Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0}
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalResultV1
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1))
+      (NGK_NFO_RawDecode.decode bytes)
+      
+...
+                   (Lean.Expr.app\n                                  (Lean.Expr.const `Aeneas.Std.Result.ok [Lean.Level.zero])\n                                  (Lean.Expr.app\n                                    (Lean.Expr.app\n                                      (Lean.Expr.const `Aeneas.Std.Array [Lean.Level.zero])\n                                      (Lean.Expr.const `Aeneas.Std.U8 []))\n                                    (Lean.Expr.bvar 9)))\n                                (Lean.Expr.app (Lean.Expr.bvar 1) (Lean.Expr.bvar 0)))\n                              (Lean.BinderInfo.default)))\n                          (Lean.BinderInfo.default))\n                        (Lean.BinderInfo.default)))))\n                (Lean.Expr.app\n                  (Lean.Expr.app\n                    (Lean.Expr.const `Aeneas.Std.Result.ok [Lean.Level.zero])\n                    (Lean.Expr.app\n                      (Lean.Expr.app\n                        (Lean.Expr.const `Aeneas.Std.Array [Lean.Level.zero])\n                        (Lean.Expr.const `Aeneas.Std.U8 []))\n                      (Lean.Expr.bvar 6)))\n                  (Lean.Expr.app\n                    (Lean.Expr.app\n                      (Lean.Expr.app\n                        (Lean.Expr.app\n                          (Lean.Expr.app (Lean.Expr.const `NGK_NFV_Copy.write []) (Lean.Expr.bvar 6))\n                          (Lean.Expr.bvar 5))\n                        (Lean.Expr.bvar 4))\n                      (Lean.Expr.bvar 3))\n                    (Lean.Expr.bvar 2))))\n              (Lean.BinderInfo.default))\n            (Lean.BinderInfo.default))\n          (Lean.BinderInfo.default))\n        (Lean.BinderInfo.default))\n      (Lean.BinderInfo.default))\n    (Lean.BinderInfo.implicit))\n  (Lean.BinderInfo.implicit)"}
+
+Running as unit: run-r6f65dfee0d154cbf8ea1a57b187666d1.scope; invocation ID: c67697917c1e4bc3aa555863a714746b
