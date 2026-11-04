@@ -1,0 +1,9 @@
+import NFW_STAGE2_IMPORT
+set_option autoImplicit false
+#print AspisR1PublicPreparation.PreparedScratchModel.Boundaries
+#print AspisR1PublicPreparation.PreparedModel.Boundaries
+#print AspisR1PublicPreparation.verifier.Prepared
+#check AspisR1PublicPreparation.verifier.Prepared.new
+#print AspisR1ClaimPreparedBridge.concreteBoundaries
+#print AspisR1ClaimPreparedBridge.withCandidateSamplers
+#check AspisR1CurrentPreparedClaim.Concrete.source

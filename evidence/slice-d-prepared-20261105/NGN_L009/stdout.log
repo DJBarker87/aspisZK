@@ -1,0 +1,97 @@
+NGN_generated/NGN_EmittedEq.lean:31:11: error: `simp` made no progress
+NGN_generated/NGN_EmittedEq.lean:17:92: error: unsolved goals
+case isFalse
+B : PreparedScratchModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+v : verifier.View
+hash : H
+old : Std.Array aspis_core.field.WideExact 29#usize
+state : Std.Array U8 32#usize
+start : transcript.Transcript H
+gamma : aspis_core.field.WideExact
+t1 : transcript.Transcript H
+bytes : Std.Array U8 32#usize
+payload : Slice U8
+kappa : aspis_core.field.WideExact
+t2 : transcript.Transcript H
+alpha0 : aspis_core.field.WideExact
+t3 : transcript.Transcript H
+count : Usize
+h✝ : ¬count = 2#usize
+⊢ (do
+      let (r, t4) ← B.sampling.queries D t3 30#u8 v.final_message
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let i1 ← lift (U8.wrapping_add 30#u8 1#u8)
+          let s1 ← lift (Std.Array.empty U8).to_slice
+          let (rho, t5) ← PreparedModel.scalar_k B.sampling D t4 i1 s1
+          let g1 ← B.powers 29#usize gamma
+          let r1 ← B.claim D sem v.y1 v.inactive g1 kappa
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 =>
+              ok
+                (core.result.Result.Ok
+                    { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                      alpha := Array.make 2#usize [alpha0, aspis_core.field.WideExact.ZERO] ⋯, rho := rho,
+                      queries := val, semantic_alpha := sem.alpha, z := sem.z, claim := val1, state := t5.state },
+                  g1)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r2 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    (core.convert.FromSame verifier.Error) residual
+              ok (r2, g1)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                (core.convert.FromSame verifier.Error) residual
+          ok (r1, old)) =
+    do
+    let (r, t4) ← B.sampling.queries D t3 30#u8 v.final_message
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let i1 ← 30#u8 + 1#u8
+        let s1 ← lift (Std.Array.empty U8).to_slice
+        let (rho, t5) ← PreparedModel.scalar_k B.sampling D t4 i1 s1
+        let g1 ← B.powers 29#usize gamma
+        let r1 ← B.claim D sem v.y1 v.inactive g1 kappa
+        let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue val1 =>
+            ok
+              (core.result.Result.Ok
+                  { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                    alpha := Array.make 2#usize [alpha0, aspis_core.field.WideExact.ZERO] ⋯, rho := rho, queries := val,
+                    semantic_alpha := sem.alpha, z := sem.z, claim := val1, state := t5.state },
+                g1)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r2 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                  (core.convert.FromSame verifier.Error) residual
+            ok (r2, g1)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+              (core.convert.FromSame verifier.Error) residual
+        ok (r1, old)
+NGN_generated/NGN_EmittedEq.lean:31:33: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲u̲n̲c̲u̲r̲r̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGN_generated/NGN_EmittedEq.lean:31:47: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NGN_EmittedEq.folds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGN_EmittedEq.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NGN_EmittedEq.staged' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
