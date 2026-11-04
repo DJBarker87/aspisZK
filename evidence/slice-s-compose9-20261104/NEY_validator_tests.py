@@ -28,41 +28,75 @@ class CompleteCertificate(unittest.TestCase):
   cls.cert=p['NEY_certificates'][b.TERMINAL]
   rows=json.loads((v.E/'NEY_CHECKED_ROWS.json').read_text())
   # The check binds each exact inventory id; status fields are irrelevant here.
-  cls.base={'frozen_revision':cls.cert['frozen_revision'],'rows':rows}
+  cls.base={'frozen_revision':cls.cert['frozen_revision'],'rows':rows,'trust_rows':[]}
+ @classmethod
+ def open_base(cls):
+  base=copy.deepcopy(cls.base)
+  for row in base['rows']:
+   if row['function']==b.TERMINAL:
+    row.update(composed_status='OPEN',bridge_status='OPEN',selected_claims=[],named_hypotheses=[])
+    row['claim_ids']=[c for c in row['claim_ids'] if not c.startswith('NEY::')]
+    for ob in row['caller_domain_obligations']:ob.update(status='OPEN',discharged_by=None)
+  return base
+ def stays_open(self,c):
+  base=self.open_base();out=b.compose_additions(base,copy.deepcopy(base),{'NEY_certificates':{b.TERMINAL:c}},v)
+  self.assertTrue(all(r['composed_status']=='OPEN' for r in out['rows'] if r['function']==b.TERMINAL))
  def mutated(self,edit):
   c=copy.deepcopy(self.cert);edit(c)
   c['semantic_review_sha256']=v.sha(json.dumps({k:w for k,w in c.items() if k!='semantic_review_sha256'},sort_keys=True).encode())
   return c
  def test_complete_accepted(self):
   self.assertTrue(v.certificate(self.cert,b.TERMINAL,self.base))
+ def test_complete_promotes_actual_row(self):
+  base=self.open_base();out=b.compose_additions(base,copy.deepcopy(base),{'NEY_certificates':{b.TERMINAL:self.cert}},v)
+  self.assertTrue(all(r['composed_status']=='CLOSED' for r in out['rows'] if r['function']==b.TERMINAL))
+ def test_missing_geometry(self):
+  c=self.mutated(lambda c:c.__setitem__('geometry_theorems',[]))
+  self.assertFalse(v.certificate(c,b.TERMINAL,self.base));self.stays_open(c)
+ def test_missing_inner_name_discharge(self):
+  c=self.mutated(lambda c:next(iter(c['call_domain_certificates'].values())).__setitem__('inner_names_discharged',[]))
+  self.assertFalse(v.certificate(c,b.TERMINAL,self.base));self.stays_open(c)
+ def test_missing_selected_callee(self):
+  c=self.mutated(lambda c:next(iter(c['call_domain_certificates'].values())).__setitem__('selected_callee_claims',[]))
+  self.assertFalse(v.certificate(c,b.TERMINAL,self.base));self.stays_open(c)
  def test_missing_edge_stays_open(self):
   c=self.mutated(lambda c:c['edges'].pop())
   self.assertFalse(v.certificate(c,b.TERMINAL,self.base))
+  self.stays_open(c)
  def test_other_native_function_cannot_certify_caller(self):
   c=self.mutated(lambda c:c['native_certificate'].__setitem__('function',b.PUBLIC))
   self.assertFalse(v.certificate(c,b.TERMINAL,self.base))
+  self.stays_open(c)
  def test_missing_length_partition(self):
   c=self.mutated(lambda c:c['native_certificate'].__setitem__('length_partition',[]))
   self.assertFalse(v.certificate(c,b.TERMINAL,self.base))
+  self.stays_open(c)
  def test_wrong_inventory_obligation(self):
   c=self.mutated(lambda c:c['required_obligations'].__setitem__(0,'external:wrong'))
   self.assertFalse(v.certificate(c,b.TERMINAL,self.base))
+  self.stays_open(c)
  def test_missing_field_pair(self):
   c=self.mutated(lambda c:c['native_certificate']['pairs'].pop())
   self.assertFalse(v.certificate(c,b.TERMINAL,self.base))
+  self.stays_open(c)
  def test_wrong_field_certificate(self):
   c=self.mutated(lambda c:c['native_certificate']['pairs'].__setitem__(0,c['native_certificate']['pairs'][1]))
   self.assertFalse(v.certificate(c,b.TERMINAL,self.base))
+  self.stays_open(c)
  def test_inner_domain_cannot_hide(self):
   c=self.mutated(lambda c:c['inner_hypotheses_remaining'].append('callee.PacketDomain'))
   self.assertFalse(v.certificate(c,b.TERMINAL,self.base))
+  self.stays_open(c)
  def test_wrong_theorem(self):
   c=self.mutated(lambda c:c['domain_theorems'][0].__setitem__('name','NEX_PublicModel.result_state_effects'))
   self.assertFalse(v.certificate(c,b.TERMINAL,self.base))
+  self.stays_open(c)
  def test_same_arguments_required(self):
   c=self.mutated(lambda c:c.__setitem__('same_arguments',False))
   self.assertFalse(v.certificate(c,b.TERMINAL,self.base))
+  self.stays_open(c)
  def test_child_domain_not_root_hypothesis(self):
   c=self.mutated(lambda c:c['hypotheses'].append('callee.PacketDomain'))
   self.assertFalse(v.certificate(c,b.TERMINAL,self.base))
+  self.stays_open(c)
 if __name__=='__main__':unittest.main()

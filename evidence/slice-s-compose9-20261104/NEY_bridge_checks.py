@@ -80,6 +80,10 @@ def check(c,base):
  assert c['kind']==('root-composition' if f==PUBLIC else 'member-composition')
  family='terminal' if f==TERMINAL else 'public'
  assert n['complete'] is True and n['inner_hypotheses_remaining']==[]
+ expected_geometry=['NEY_TerminalGeometry.'+name for name in ['payment_offset','header_constants','kind_same','payment_window']] if family=='terminal' else []
+ assert [t['name'] for t in c['geometry_theorems']]==expected_geometry
+ import NED_validate
+ assert all(NED_validate.theorem(t) for t in c['geometry_theorems'])
  assert n['length_partition']==(['NEX_K130','NEX_K131'] if family=='terminal' else [])
  inherited_support=set()
  if family=='terminal':
