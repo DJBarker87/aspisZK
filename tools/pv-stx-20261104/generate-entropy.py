@@ -132,6 +132,8 @@ theorem entropyBody_erases (nonce : Array U8 32#usize) (limit retry : Usize) :
           · intro cf
             cases cf <;> simp only [bind_rule,call_rule,result_rule,pure_rule,if_rule,
               fixed,nonzero_erases,Aeneas.Std.bind_tc_ok]
+            all_goals simp only [Bind.bind,Aeneas.Std.bind]
+            all_goals repeat first | rfl | split
   · simp only [h,if_false,pure_rule]
 
 theorem entropyLoop_erases (nonce : Array U8 32#usize) (limit retry : Usize) :
