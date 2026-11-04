@@ -1,0 +1,39 @@
+def Aeneas.Std.core.slice.Slice.chunks_exact : {T : Type} → Slice T → Usize → Result (core.slice.iter.ChunksExact T) :=
+fun {T} s chunk_size =>
+  if hcs : ↑chunk_size > 0 then
+    let result := List.toChunksExact (↑chunk_size) hcs ↑s;
+    have sliceChunks :=
+      List.map
+        (fun x =>
+          match x with
+          | ⟨c, hc⟩ => ⟨c, ⋯⟩)
+        result.1.attach;
+    ok { chunks := sliceChunks, remainder := ⟨result.2, ⋯⟩ }
+  else fail Error.panic
+def Aeneas.Std.core.slice.iter.IteratorChunksExact.next : {T : Type} →
+  core.slice.iter.ChunksExact T → Result (Option (Slice T) × core.slice.iter.ChunksExact T) :=
+fun {T} self =>
+  match self.chunks with
+  | [] => ok (none, self)
+  | chunk :: chunks => ok (some chunk, { chunks := chunks, remainder := self.remainder })
+def Aeneas.Std.core.iter.adapters.enumerate.IteratorEnumerate.next : {I Item : Type} →
+  core.iter.traits.iterator.Iterator I Item →
+    core.iter.adapters.enumerate.Enumerate I →
+      Result (Option (Usize × Item) × core.iter.adapters.enumerate.Enumerate I) :=
+fun {I Item} IteratorInst self => do
+  let __x ← IteratorInst.next self.iter
+  match __x with
+    | (opt, iter') =>
+      match opt with
+      | none => ok (none, { iter := iter', count := self.count })
+      | some a => do
+        let count' ← self.count + 1#usize
+        ok (some (self.count, a), { iter := iter', count := count' })
+def Aeneas.Std.core.iter.traits.iterator.Iterator.enumerate.trait_default : {Self Item : Type} →
+  core.iter.traits.iterator.Iterator Self Item → Self → Result (core.iter.adapters.enumerate.Enumerate Self) :=
+fun {Self Item} _IteratorInst self => core.iter.traits.iterator.Iterator.enumerate.default self
+NGO_generated/NGO_IteratorInspect.lean:7:7: error(lean.unknownIdentifier): Unknown constant `core.slice.iter.mkChunksExact`
+List.getElem_set.{u_1} {α : Type u_1} {l : List α} {i j : ℕ} {a : α} (h : j < (l.set i a).length) :
+  (l.set i a)[j] = if i = j then a else l[j]
+Aeneas.Std.Array.set.{u} {α : Type u} {n : Usize} (v : Std.Array α n) (i : Usize) (x : α) : Std.Array α n
+NGO_generated/NGO_IteratorInspect.lean:10:7: error(lean.unknownIdentifier): Unknown constant `AspisR1PrefixAggregateParser.r1_wire.validate_record_fields_loop.body`

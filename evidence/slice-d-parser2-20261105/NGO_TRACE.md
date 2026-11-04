@@ -1,0 +1,7 @@
+# Finite decode trace construction
+
+NGO_L002 checks NGO_TraceTotal.exists_trace. For every original record, offset, N and fitting Domain, every range ending at N with start<=N, and every arbitrary typed output prestate, it constructs a finite NGD_DecodeTrace.Trace. Strong induction is on N-start; the native/emitted iterator next law either advances start by exactly one or stops at N. An Err constructor terminates immediately without a store or recursive suffix. An Ok constructor uses the library typed Array.update law and recurses on the strictly smaller remaining length. No supplied Trace, accepted result or canonicality hypothesis occurs.
+
+NGO_L003 checks NGO_DecodeTotal.ready. It constructs the zero-initialized trace and substitutes it into NGD_DecodeEntry.ready. The previous unconstructed Trace premise is removed. Checked arithmetic, original payload and get facts remain explicit entry premises; native chunks schedule, full native-Q association and adopted-caller transport remain OPEN. This is model support, zero composed rows.
+
+Both checks print exactly propext, Classical.choice, Quot.sound; no nonstandard axiom is admitted. Exact argv, source/hash/dependency/Aeneas pins, revision, exit, wall/RSS/swap and printed axioms are in the individual receipts and NGO_ATTEMPTS.jsonl. L004 is a failed API-discovery compile, excluded from proof credit. No timeout or memory kill occurred.

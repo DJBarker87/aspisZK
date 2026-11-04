@@ -1,0 +1,378 @@
+theorem Aeneas.Std.core.iter.range.IteratorRange.next_UScalar_some_spec : ∀ {ty : UScalarTy}
+  {cloneInst : core.clone.Clone (UScalar ty)} {partialOrdInst : core.cmp.PartialOrd (UScalar ty) (UScalar ty)},
+  (∀ (x : UScalar ty), cloneInst.clone x = ok x) →
+    (∀ (a b : UScalar ty), partialOrdInst.lt a b = ok (decide (↑a < ↑b))) →
+      ∀ (range : core.ops.range.Range (UScalar ty)),
+        ↑range.start < ↑range.end →
+          core.iter.range.IteratorRange.next (core.iter.range.UScalarStep ty cloneInst partialOrdInst) range ⦃
+            opt range' => opt = some range.start ∧ ↑range'.start = ↑range.start + 1 ∧ range'.end = range.end ⦄ :=
+fun {ty} {cloneInst} {partialOrdInst} h_clone h_lt range hlt =>
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg WP.spec
+          (Eq.trans
+            (Eq.trans
+              (congr
+                (congrArg Bind.bind
+                  (Eq.trans ((fun a b => h_lt a b) range.start range.end)
+                    (congrArg ok
+                      (Eq.trans (Decidable.decide.congr_simp (↑range.start < ↑range.end) True (eq_true hlt))
+                        (decide_true instDecidableTrue)))))
+                (funext fun cmp =>
+                  ite_congr (Eq.refl (cmp = true))
+                    (fun a =>
+                      Eq.trans
+                        (congrFun' (congrArg Bind.bind ((fun x => h_clone x) range.start)) fun range' => do
+                          let n ←
+                            if h : ↑range' + ↑1#usize ≤ UScalar.max ty then
+                                ok
+                                  (some
+                                    (UScalar.ofNatCore (↑range' + ↑1#usize)
+                                      (core.iter.range.UScalarStep.forward_checked._proof_7 range' 1#usize h)))
+                              else ok none
+                          match n with
+                            | none => fail Error.panic
+                            | some n => ok (some range', { start := n, «end» := range.end }))
+                        (bind_tc_ok range.start fun y => do
+                          let n ←
+                            if h : ↑y + ↑1#usize ≤ UScalar.max ty then
+                                ok
+                                  (some
+                                    (UScalar.ofNatCore (↑y + ↑1#usize)
+                                      (core.iter.range.UScalarStep.forward_checked._proof_7 y 1#usize h)))
+                              else ok none
+                          match n with
+                            | none => fail Error.panic
+                            | some n => ok (some y, { start := n, «end» := range.end })))
+                    fun a => Eq.refl (ok (none, range))))
+              (bind_tc_ok true fun y =>
+                if y = true then do
+                  let n ←
+                    if h : ↑range.start + ↑1#usize ≤ UScalar.max ty then
+                        ok
+                          (some
+                            (UScalar.ofNatCore (↑range.start + ↑1#usize)
+                              (core.iter.range.UScalarStep.forward_checked._proof_7 range.start 1#usize h)))
+                      else ok none
+                  match n with
+                    | none => fail Error.panic
+                    | some n => ok (some range.start, { start := n, «end» := range.end })
+                else ok (none, range)))
+            (ite_cond_eq_true
+              (do
+                let n ←
+                  if h : ↑range.start + ↑1#usize ≤ UScalar.max ty then
+                      ok
+                        (some
+                          (UScalar.ofNatCore (↑range.start + ↑1#usize)
+                            (core.iter.range.UScalarStep.forward_checked._proof_7 range.start 1#usize h)))
+                    else ok none
+                match n with
+                  | none => fail Error.panic
+                  | some n => ok (some range.start, { start := n, «end» := range.end }))
+              (ok (none, range)) (eq_self true))))
+        (WP.uncurry' fun opt range' =>
+          opt = some range.start ∧ ↑range'.start = ↑range.start + 1 ∧ range'.end = range.end)))
+    (have hfwd := core.iter.range.IteratorRange.next_UScalar_some_spec._proof_1_5 range hlt;
+    Eq.mpr
+      (id
+        (Eq.trans
+          (congrFun'
+            (congrArg WP.spec
+              (Eq.trans
+                (congrFun' (congrArg Bind.bind (dite_cond_eq_true (eq_true hfwd))) fun n =>
+                  match n with
+                  | none => fail Error.panic
+                  | some n => ok (some range.start, { start := n, «end» := range.end }))
+                (bind_tc_ok
+                  (some
+                    (UScalar.ofNatCore (↑range.start + ↑1#usize)
+                      (core.iter.range.UScalarStep.forward_checked._proof_7 range.start 1#usize
+                        (of_eq_true (eq_true hfwd)))))
+                  fun y =>
+                  match y with
+                  | none => fail Error.panic
+                  | some n => ok (some range.start, { start := n, «end» := range.end }))))
+            (WP.uncurry' fun opt range' =>
+              opt = some range.start ∧ ↑range'.start = ↑range.start + 1 ∧ range'.end = range.end))
+          (core.iter.range.IteratorRange.next_UScalar_some_spec._simp_1_6
+            (some range.start,
+              {
+                start :=
+                  UScalar.ofNatCore (↑range.start + ↑1#usize)
+                    (core.iter.range.UScalarStep.forward_checked._proof_7 range.start 1#usize
+                      (of_eq_true (eq_true hfwd))),
+                «end» := range.end }))))
+      (of_eq_true
+        (Eq.trans
+          (Eq.trans
+            (congrArg
+              (WP.uncurry' fun opt range' =>
+                opt = some range.start ∧ ↑range'.start = ↑range.start + 1 ∧ range'.end = range.end)
+              (congrArg (Prod.mk (some range.start))
+                (congrFun'
+                  (congrArg core.ops.range.Range.mk
+                    (UScalar.ofNatCore.congr_simp (↑range.start + ↑1#usize) (↑range.start + 1)
+                      (congrArg (HAdd.hAdd ↑range.start)
+                        (UScalar.ofNatCore_val_eq
+                          (UScalar.bound_suffices UScalarTy.Usize 1
+                            core.iter.adapters.enumerate.IteratorEnumerate.next._proof_1)))
+                      (core.iter.range.UScalarStep.forward_checked._proof_7 range.start 1#usize
+                        (of_eq_true (eq_true hfwd)))))
+                  range.end)))
+            (WP.uncurry'_pair (some range.start)
+              {
+                start :=
+                  UScalar.ofNatCore (↑range.start + 1)
+                    (congrArg (HAdd.hAdd ↑range.start)
+                        (UScalar.ofNatCore_val_eq
+                          (UScalar.bound_suffices UScalarTy.Usize 1
+                            core.iter.adapters.enumerate.IteratorEnumerate.next._proof_1)) ▸
+                      core.iter.range.UScalarStep.forward_checked._proof_7 range.start 1#usize
+                        (of_eq_true (eq_true hfwd))),
+                «end» := range.end }
+              fun opt range' => opt = some range.start ∧ ↑range'.start = ↑range.start + 1 ∧ range'.end = range.end))
+          (Eq.trans
+            (congr (congrArg And (eq_self (some range.start)))
+              (Eq.trans
+                (congr
+                  (congrArg And
+                    (Eq.trans
+                      (Eq.trans
+                        (congrFun'
+                          (congrArg Eq
+                            (UScalar.ofNatCore_val_eq
+                              (congrArg (HAdd.hAdd ↑range.start)
+                                  (UScalar.ofNatCore_val_eq
+                                    (UScalar.bound_suffices UScalarTy.Usize 1
+                                      core.iter.adapters.enumerate.IteratorEnumerate.next._proof_1)) ▸
+                                core.iter.range.UScalarStep.forward_checked._proof_7 range.start 1#usize
+                                  (of_eq_true (eq_true hfwd)))))
+                          (↑range.start + 1))
+                        Nat.add_left_cancel_iff._simp_1)
+                      (eq_self 1)))
+                  (eq_self range.end))
+                (and_self True)))
+            (and_self True)))))
+theorem Aeneas.Std.core.iter.range.IteratorRange.next_UScalar_none_spec : ∀ {ty : UScalarTy}
+  {cloneInst : core.clone.Clone (UScalar ty)} {partialOrdInst : core.cmp.PartialOrd (UScalar ty) (UScalar ty)},
+  (∀ (a b : UScalar ty), partialOrdInst.lt a b = ok (decide (↑a < ↑b))) →
+    ∀ (range : core.ops.range.Range (UScalar ty)),
+      ↑range.start ≥ ↑range.end →
+        core.iter.range.IteratorRange.next (core.iter.range.UScalarStep ty cloneInst partialOrdInst) range ⦃
+          opt range' => opt = none ∧ range' = range ⦄ :=
+fun {ty} {cloneInst} {partialOrdInst} h_lt range hge =>
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg WP.spec
+          (Eq.trans
+            (Eq.trans
+              (congr
+                (congrArg Bind.bind
+                  (Eq.trans ((fun a b => h_lt a b) range.start range.end)
+                    (congrArg ok
+                      (Eq.trans
+                        (Decidable.decide.congr_simp (↑range.start < ↑range.end) False
+                          (eq_false
+                            (have this := fun a =>
+                              core.iter.range.IteratorRange.next_UScalar_none_spec._proof_1_4 range hge a;
+                            this)))
+                        (decide_false instDecidableFalse)))))
+                (funext fun cmp =>
+                  ite_congr (Eq.refl (cmp = true))
+                    (fun a =>
+                      Eq.refl do
+                        let range' ← cloneInst.clone range.start
+                        let n ←
+                          if h : ↑range' + ↑1#usize ≤ UScalar.max ty then
+                              ok
+                                (some
+                                  (UScalar.ofNatCore (↑range' + ↑1#usize)
+                                    (core.iter.range.UScalarStep.forward_checked._proof_7 range' 1#usize h)))
+                            else ok none
+                        match n with
+                          | none => fail Error.panic
+                          | some n => ok (some range', { start := n, «end» := range.end }))
+                    fun a => Eq.refl (ok (none, range))))
+              (bind_tc_ok false fun y =>
+                if y = true then do
+                  let range' ← cloneInst.clone range.start
+                  let n ←
+                    if h : ↑range' + ↑1#usize ≤ UScalar.max ty then
+                        ok
+                          (some
+                            (UScalar.ofNatCore (↑range' + ↑1#usize)
+                              (core.iter.range.UScalarStep.forward_checked._proof_7 range' 1#usize h)))
+                      else ok none
+                  match n with
+                    | none => fail Error.panic
+                    | some n => ok (some range', { start := n, «end» := range.end })
+                else ok (none, range)))
+            (ite_cond_eq_false
+              (do
+                let range' ← cloneInst.clone range.start
+                let n ←
+                  if h : ↑range' + ↑1#usize ≤ UScalar.max ty then
+                      ok
+                        (some
+                          (UScalar.ofNatCore (↑range' + ↑1#usize)
+                            (core.iter.range.UScalarStep.forward_checked._proof_7 range' 1#usize h)))
+                    else ok none
+                match n with
+                  | none => fail Error.panic
+                  | some n => ok (some range', { start := n, «end» := range.end }))
+              (ok (none, range)) Bool.false_eq_true)))
+        (WP.uncurry' fun opt range' => opt = none ∧ range' = range)))
+    (of_eq_true
+      (Eq.trans (WP.spec_ok._simp_1 (none, range))
+        (Eq.trans (WP.uncurry'_pair none range fun opt range' => opt = none ∧ range' = range)
+          (Eq.trans (congr (congrArg And (eq_self none)) (eq_self range)) (and_self True)))))
+theorem Aeneas.Std.Array.update_spec.{u} : ∀ {α : Type u} {n : Usize} (v : Std.Array α n) (i : Usize) (x : α),
+  ↑i < v.length → v.update i x ⦃ nv => nv = v.set i x ⦄ :=
+fun {α} {n} v i x hbound =>
+  id
+    (Eq.mpr
+      (id
+        (congrFun'
+          (congrArg WP.spec
+            (congrArg
+              (fun x_1 =>
+                match x_1 with
+                | none => fail Error.arrayOutOfBounds
+                | some val => ok ⟨(↑v).set (↑i) x, Array.set._proof_1 v i x⟩)
+              (Array.getElem?_Usize_eq v i)))
+          fun nv => nv = ⟨(↑v).set (↑i) x, Array.set._proof_1 v i x⟩))
+      (Aeneas.Std.Array.index_usize.match_1.splitter✝
+        (fun x_1 =>
+          (↑v)[↑i]? = x_1 →
+            (match (↑v)[↑i]? with
+              | none => fail Error.arrayOutOfBounds
+              | some val => ok ⟨(↑v).set (↑i) x, Array.set._proof_1 v i x⟩) ⦃
+              nv => nv = ⟨(↑v).set (↑i) x, Array.set._proof_1 v i x⟩ ⦄)
+        (↑v)[↑i]?
+        (fun _ h =>
+          Eq.ndrec (motive := fun x_1 =>
+            (↑v)[↑i]? = x_1 →
+              (match x_1 with
+                | none => fail Error.arrayOutOfBounds
+                | some val => ok ⟨(↑v).set (↑i) x, Array.set._proof_1 v i x⟩) ⦃
+                nv => nv = ⟨(↑v).set (↑i) x, Array.set._proof_1 v i x⟩ ⦄)
+            (fun heq =>
+              id
+                (False.elim
+                  (Eq.mp
+                    (Eq.trans
+                      (congrFun'
+                        (congrArg Eq
+                          (getElem?_pos (↑v) (↑i)
+                            (of_eq_true
+                              (Eq.trans (congrArg (LT.lt ↑i) (List.Vector.length_val v))
+                                (eq_true (Eq.mp (congrArg (LT.lt ↑i) (List.Vector.length_val v)) hbound))))))
+                        none)
+                      (eq_false' fun h => False.elim (noConfusion_of_Nat Option.ctorIdx h)))
+                    heq)))
+            (Eq.symm h) (Eq.refl (↑v)[↑i]?))
+        (fun x_1 h =>
+          Eq.ndrec (motive := fun x_2 =>
+            (↑v)[↑i]? = x_2 →
+              (match x_2 with
+                | none => fail Error.arrayOutOfBounds
+                | some val => ok ⟨(↑v).set (↑i) x, Array.set._proof_1 v i x⟩) ⦃
+                nv => nv = ⟨(↑v).set (↑i) x, Array.set._proof_1 v i x⟩ ⦄)
+            (fun heq =>
+              id
+                (of_eq_true
+                  (Eq.trans (WP.spec_ok._simp_1 ⟨(↑v).set (↑i) x, Array.set._proof_1 v i x⟩)
+                    (eq_self ⟨(↑v).set (↑i) x, Array.set._proof_1 v i x⟩))))
+            (Eq.symm h) (Eq.refl (↑v)[↑i]?))
+        (Eq.refl (↑v)[↑i]?)))
+def Aeneas.Std.Array.update.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → α → Result (Std.Array α n) :=
+fun {α} {n} v i x =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some val => ok ⟨(↑v).set (↑i) x, ⋯⟩
+def AspisR1DecodeKFullV10.r1_wire.ValidatedRecord.decode_k : (N : Usize) →
+  AspisR1DecodeKFullV10.r1_wire.ValidatedRecord →
+    Usize →
+      Result
+        (core.result.Result (Std.Array AspisR1DecodeKFullV10.aspis_core.field.QM31 N)
+          AspisR1DecodeKFullV10.r1_wire.Error) :=
+fun N self offset_values =>
+  if self.row < 14#u8 then ok (core.result.Result.Err AspisR1DecodeKFullV10.r1_wire.Error.InvalidRow)
+  else do
+    let o ← lift (offset_values.checked_mul 32#usize)
+    let r ← AspisR1DecodeKFullV10.core.option.Option.ok_or o (AspisR1DecodeKFullV10.r1_wire.Error.Length self.row)
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let o1 ← lift (N.checked_mul 32#usize)
+        let r1 ← AspisR1DecodeKFullV10.core.option.Option.ok_or o1 (AspisR1DecodeKFullV10.r1_wire.Error.Length self.row)
+        let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue val1 => do
+            let o2 ← lift (val.checked_add val1)
+            let r2 ←
+              AspisR1DecodeKFullV10.core.option.Option.ok_or o2 (AspisR1DecodeKFullV10.r1_wire.Error.Length self.row)
+            let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+            match cf2 with
+              | core.ops.control_flow.ControlFlow.Continue val2 => do
+                let s ← self.payload
+                let o3 ←
+                  core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) s { start := val, «end» := val2 }
+                let r3 ←
+                  AspisR1DecodeKFullV10.core.option.Option.ok_or o3
+                      (AspisR1DecodeKFullV10.r1_wire.Error.Length self.row)
+                let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                match cf3 with
+                  | core.ops.control_flow.ControlFlow.Continue a =>
+                    have out := Array.repeat N AspisR1DecodeKFullV10.aspis_core.field.QM31.ZERO;
+                    do
+                    let (out1, pending_return) ←
+                      self.decode_k_loop { start := 0#usize, «end» := N } self.row offset_values val out
+                    match pending_return with
+                      | none => ok (core.result.Result.Ok out1)
+                      | some r4 => ok r4
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (Std.Array AspisR1DecodeKFullV10.aspis_core.field.QM31 N)
+                      (core.convert.FromSame AspisR1DecodeKFullV10.r1_wire.Error) residual
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (Std.Array AspisR1DecodeKFullV10.aspis_core.field.QM31 N)
+                  (core.convert.FromSame AspisR1DecodeKFullV10.r1_wire.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (Std.Array AspisR1DecodeKFullV10.aspis_core.field.QM31 N)
+              (core.convert.FromSame AspisR1DecodeKFullV10.r1_wire.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          (Std.Array AspisR1DecodeKFullV10.aspis_core.field.QM31 N)
+          (core.convert.FromSame AspisR1DecodeKFullV10.r1_wire.Error) residual
+def AspisR1PrefixAggregateParser.r1_wire.validate_record_fields : U8 →
+  Slice U8 → Result (core.result.Result Unit AspisR1PrefixAggregateParser.r1_wire.Error) :=
+fun row payload => do
+  let ce ← core.slice.Slice.chunks_exact payload 32#usize
+  let iter ←
+    core.iter.traits.iterator.Iterator.enumerate.trait_default (core.iter.traits.iterator.IteratorChunksExact U8) ce
+  AspisR1PrefixAggregateParser.r1_wire.validate_record_fields_loop iter row
+structure AspisR1PrefixAggregateParser.r1_wire.ValidatedRecord : Type
+number of parameters: 0
+fields:
+  AspisR1PrefixAggregateParser.r1_wire.ValidatedRecord.row : U8
+  AspisR1PrefixAggregateParser.r1_wire.ValidatedRecord.framed : Slice U8
+constructor:
+  AspisR1PrefixAggregateParser.r1_wire.ValidatedRecord.mk (row : U8) (framed : Slice U8) :
+    AspisR1PrefixAggregateParser.r1_wire.ValidatedRecord
+def NFU_Retarget.r1_wire.validate_record_fields : U8 →
+  Slice U8 → Result (core.result.Result Unit NFU_Retarget.LPl_Kit_Release.r1_wire.Error) :=
+fun row bytes =>
+  match
+    List.find? (fun i => !NFU_Retarget.LPl_Kit_Bytes.validChunk 8 true (List.take 32 (List.drop (32 * i) ↑bytes)))
+      (List.range ((↑bytes).length / 32)) with
+  | none => ok (core.result.Result.Ok ())
+  | some i =>
+    if h : i ≤ UScalar.cMax UScalarTy.Usize then
+      ok (core.result.Result.Err (NFU_Retarget.LPl_Kit_Release.r1_wire.Error.NonCanonical row (UScalar.ofNat i h)))
+    else fail Error.panic

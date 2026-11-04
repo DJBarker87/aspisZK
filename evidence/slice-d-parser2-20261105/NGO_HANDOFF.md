@@ -13,3 +13,5 @@ Own retained cache: /home/dombarker/project-offloads/codex-cx-slice-d-parser2-ca
 Retained trust: P6/D188 option A native semantic transport, std/allocator/SDK/ABI/compiler/Aeneas/source-to-ELF realization, RuntimePersistence, digest/H realization, accepted RuntimeReturnData(nonempty 1..1024), RuntimeMemcmp, existing cryptographic assumptions. No soundness metric, privacy or two-transaction change. Target not yet established.
 
 No key, wallet, account, balance, authority, live worktree or sibling candidate is modified. Inherited ELF pins (not rebuilt): default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4; devnet 63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299; Pool 121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548.
+
+Stage 1: NGO_TraceTotal.exists_trace and NGO_DecodeTotal.ready checked on host (L002/L003), standard axioms. Trace existence is now derived without a whole-result premise; native iterator/Q/caller joins remain open. L001 compatibility inspection passed; L004 API inspection failed and earns no proof credit. No new composed row.
