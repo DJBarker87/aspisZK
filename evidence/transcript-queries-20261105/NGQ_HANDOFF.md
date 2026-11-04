@@ -17,3 +17,13 @@ No native whole-query or sampler closure is claimed. Seed: 89 files, 11752608 by
 NGQ_CACHE_IMPORTS.json.xz records hashes. K004/K005 supply only QueryScan::finish
 native positive/control. K001–K003 failed before Kani on missing manifests;
 K006/K007 failed compilation on missing unchanged include files; inputs repaired.
+
+Stage 2 progress: all eight digest-pair cuts pass with inverse-assertion controls
+(K008–K023); the selected controls are now being strengthened to a corrupted
+reply byte. No physical row is closed by those fragments. L009 installs the
+concrete emitted embedding; L011 proves ordered-survivor, duplicate-consumption,
+nodup and all-equal-stream rejection laws by induction, standard axioms only.
+E001 consumes1/1 extraction: Charon succeeded; Aeneas failed at loop-context
+collapse. The raw LLBC is retained compressed by hash. NGQ_FAILING_STEP records
+this tool obstruction. Event reification and trace-composition modules are drafts
+until their individual compiler receipts and final audit exist.

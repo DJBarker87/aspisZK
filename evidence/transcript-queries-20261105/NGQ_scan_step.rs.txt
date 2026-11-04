@@ -1,0 +1,28 @@
+impl QueryScan {
+ fn NGQ_word_step(&mut self,candidate:u32)->bool {
+            if self.accepted_len == QUERY_COUNT || self.draws == QUERY_MAX_DRAWS {
+                return true;
+            }
+            self.draws += 1;
+            if !self.accepted[..self.accepted_len].contains(&candidate) {
+                self.accepted[self.accepted_len] = candidate;
+                self.accepted_len += 1;
+            }
+ false
+ }
+}
+#[kani::proof] #[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+fn NGQ_word_step() {
+ let accepted:[u32;22]=kani::any();let len:usize=kani::any();let draws:usize=kani::any();let x:u32=kani::any();
+ let j:usize=kani::any();kani::assume(len<=22 && draws<=64 && j<22);
+ let member=accepted[..len].contains(&x);
+ let mut s=QueryScan{accepted,accepted_len:len,draws};
+ let stop=s.NGQ_word_step(x);let halted=len==22 || draws==64;
+ let expected_len=if halted || member {len} else {len+1};
+ let expected_draws=if halted {draws} else {draws+1};
+ let expected_word=if !halted && !member && j==len {x} else {accepted[j]};
+ let correct=stop==halted && s.accepted_len==expected_len && s.draws==expected_draws && s.accepted[j]==expected_word;
+ #[cfg(not(NGQ_invert))] assert!(correct);
+ #[cfg(NGQ_invert)] assert!(!correct);
+}

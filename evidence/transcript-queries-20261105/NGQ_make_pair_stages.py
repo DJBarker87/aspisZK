@@ -39,7 +39,7 @@ fn NGQ_pair{k}() {{
   && a[p][j]==(if p=={k} {{replies[1][j]}} else {{advances[p][j]}})
   && final_state[j]==replies[1][j] && t.state[j]==state[j];
  #[cfg(not(NGQ_invert))] assert!(correct);
- #[cfg(NGQ_invert)] assert!(!correct);
+ #[cfg(NGQ_invert)] assert!(b[p][j]==(if p=={k} {{replies[0][j]^1}} else {{blocks[p][j]}}) && log.get()==(2,state[j],1,state[j],2) && a[p][j]==(if p=={k} {{replies[1][j]}} else {{advances[p][j]}}) && final_state[j]==replies[1][j]);
 }}
 '''
 (E/'NGQ_pairs_harness.rs.txt').write_text(s);(E/'NGQ_PAIR_CUTS.json').write_text(json.dumps(pins,indent=1)+'\n')

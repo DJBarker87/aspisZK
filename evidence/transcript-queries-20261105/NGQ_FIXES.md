@@ -18,3 +18,10 @@ L006/L007: numeral value normalization and rewrite transparency; no theorem was
 weakened. L008 normalizes the 22 tiny literal indices before named embed rewrites;
 all three roots compile with standard axioms. K006/K007 missing frozen source
 includes were added by recursively following quoted .rs paths; no body edited.
+L010: List.Nodup.concat returns the concat spelling; L011 adds only the named
+concat_eq_append rewrite. Six scan laws pass with standard axioms.
+K008–K023: all eight pair windows pass, all inverse assertions fail. These are
+retained support. Final ruling-(y) controls will corrupt one reply window, with
+same source/configuration positives, instead of merely inverting the predicate.
+Large repeated Cargo.lock/Cargo.toml snapshots were replaced by SHA references
+to the single compressed frozen-input corpus; launcher source hashes remain.

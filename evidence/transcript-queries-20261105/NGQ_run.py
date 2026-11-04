@@ -50,7 +50,7 @@ elif kind=='extract':
 elif kind=='kani':
  files['NGQ_gate.py']=(E/'NGQ_gate.py').read_text()
  files['NGQ_SOURCE_PINS.json']=(E/'NGQ_SOURCE_PINS.json').read_text()
- sources=['NGQ_gate.py','NGQ_SOURCE_PINS.json','NGQ_src/Cargo.lock','NGQ_src/Cargo.toml']+['NGQ_src/'+n for n in json.loads((E/'NGQ_SOURCE_PINS.json').read_text()) if n.endswith(('NGQ_harness.rs','NGQ_pairs.rs'))]
+ sources=['NGQ_gate.py','NGQ_SOURCE_PINS.json']+['NGQ_src/'+n for n in json.loads((E/'NGQ_SOURCE_PINS.json').read_text()) if n.endswith(('NGQ_harness.rs','NGQ_pairs.rs','NGQ_tail.rs','NGQ_absorb.rs'))]
  command=['python3','NGQ_gate.py',a+'.json']
 else:raise ValueError(kind)
 config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NGQ_tmp',LEAN_PATH=':'.join([B+'/NGQ_objects',C,C+'/NGK_exports_20261105',C+'/NGP_exports_20261105','/home/dombarker/project-offloads/codex-cx-pool-retarget-cache-20261104',W,W+'/objects',T+'/lib/lean'])),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')
