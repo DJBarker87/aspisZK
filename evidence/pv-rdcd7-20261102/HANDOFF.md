@@ -218,3 +218,13 @@ fixedNEP raw+summary audit,focused,one final manifest,report and own-cache clean
 cleanup.py is prepared but MUST NOT run until release gates pass; it removes
 only lean-objects/external-objects after complete compiler-cache inventory.
 Source and physical/runtime qualifications unchanged; noRESTORED claim yet.
+
+### Session 3 quiet-window wait
+
+90724 ParserErrors PASS (existing_empty,owned_empty,carrier_agreement all standard
+summary axioms).25/60Lean spent (17pass,8fail),2native,0Kani. Driver42057 ACTIVE
+waiting/retrying90725 rdcd4 ParserWindows; ID90725 UNSPENT. Latest admission
+refusal is QUIET WINDOW until2026-11-04T01:37:50Z, marker1793756270; observed
+00:57:06Z. Never edit/delete marker or bypass gate. Existing driver retries up
+to11checks with>=180s waits; if it exhausts before expiry, wait then resume SAME
+unlaunched90725. No task compiler is live. Quiet receipt retained separately.
