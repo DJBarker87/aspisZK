@@ -42,3 +42,22 @@ assumption. Candidate rows and owner choices are separated in PLAN/CANDIDATE_ROW
 `Mass_statement` is the exact existing numerical target, not proved here for a
 new physical runtime; the original per-attempt bound and collision accounting
 are unchanged.
+
+The full model-experiment statements, with every quantified dictionary,
+adversary/support/owner/word/query hypothesis, are recorded by their complete current source signatures in
+NGP_CONSUMER_SIGNATURES.txt (source hashes in NGP_INPUT_PINS.json): ARX_Join.accepted (raw/recovered OR collision),
+ARX_Domination.pointwise (physical-view failure mass ≤ model failure mass +
+indicator of that SAME recorder collision), ARX_Mass.bounded (lazyMean model
+mass plus F3T_Numeric.accountLoss Q) and ARX_Residual.numeric. These statements
+are the exact consumers of the per-code transport interface. The future
+physical-instance job must construct their SAME ARU_Support.At/NativeAssociation
+and bind ART_PhysicalView to the real observation; their already-proved model
+instances are not re-proved or counted as physical closure here.
+
+Loaded-name correction (L011): RPx_NativeTransport.PrefixBound,
+RPx_Transport.Claims and RPx_Duplicates.repeated are historical source
+interfaces NOT present in this combined import. Their exact historical
+statements explain accounting/prefix shapes above but are NOT current loaded
+certificate credit. The current checked sublemmas use RPx_AttemptPrefix and
+ARS_QueryTransport; the headline's current experiment consumers are ARX/ARW.
+This absence is retained as a finding, not repaired by importing old forests.

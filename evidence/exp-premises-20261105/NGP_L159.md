@@ -55,3 +55,11 @@ prepare/Prepared producers and source prefix; Pool B complete prefix/account
 admission; Pool D same-execution read/settlement association; final source/ELF
 realization. No unsupported private reconstruction or ownership equality is
 added. Pending runtime candidates are in NGP_CANDIDATE_ROWS.md; none assumed.
+
+Pool and verifier checkpoints are DISTINCT accounts. The seven deployed CPI
+metas are [proof, master, Pool checkpoint, lane, registry, entry, verifier CP],
+all readonly/nonsigner; infos adds the verifier program after verifier CP.
+NGK_NFV_Accounts proves this list law, not native privilege/account identity.
+Game b protects the verifier CP only. ASQ8 request320, reconstructed ASF8
+physical public1880, verifier CP1768, Pool checkpoint and ASR8 result792 must
+never be substituted for each other.
