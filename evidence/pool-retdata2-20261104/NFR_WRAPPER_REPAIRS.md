@@ -1,0 +1,1 @@
+Initial scratch restoration failed before any launch: missing old host payload, then naive placeholder replacement hit base64. Restored from committed NFO_FROZEN_INPUT.json.xz with exact uncompressed SHA256; no proof submitted. Retried K001 only after restoring all frozen source bytes. No validation weakened.
