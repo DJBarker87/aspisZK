@@ -77,3 +77,8 @@ The session-3 live-ref refresh (CONSUMERS-session3-refresh.json) covers 15
 additional revisions against the original census. All new model variants are
 on this task branch or its remote ref; no other advanced live ref adds a
 consumer. The exact grep results are retained in session3-census/.
+
+Final live-ref snapshot CONSUMERS-session3-final-refresh.json covers17 extra
+revisions against the original census; all45 new variants remain confined to
+this task branch/remote. No other live branch adds an owned-model consumer.
+CONSUMER-RECHECKS.json gives focused/projection/unchanged dispositions.
