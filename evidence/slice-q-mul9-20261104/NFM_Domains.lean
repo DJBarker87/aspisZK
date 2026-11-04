@@ -14,8 +14,7 @@ theorem limb_cap (limbs : Array U64 8#usize) (k : Fin 7)
   have h:=bound word member
   have cap:=Nat.mul_le_mul_right NFE_NFA_FoldLane.R (show k.val≤6 by omega)
   change word.val≤k.val*NFE_NFA_FoldLane.R at h
-  unfold NFE_NFA_FoldLane.R at h cap
-  omega
+  exact h.trans cap
 
 /-- The frozen reset supplies the native window precondition even in the
 short final window, which permits but does not require extra headroom. -/

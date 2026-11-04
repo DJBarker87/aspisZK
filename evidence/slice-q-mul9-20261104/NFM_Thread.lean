@@ -31,7 +31,6 @@ theorem body (oracle : NFF_LoggedEight.Oracle) (input : Input) (k : Fin 7) (limb
         ok (cont (NFA_Iterator.value ⟨k.val+1,by omega⟩,out))) := by
   rw [NFM_Control.body_at]
   simp only [window,bind_assoc_eq]
-  rfl
 
 theorem advance (oracle : NFF_LoggedEight.Oracle) (input : Input) (k : Fin 7)
     (fuel : Nat) (limbs : Limbs) :

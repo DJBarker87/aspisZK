@@ -19,7 +19,7 @@ def projected : Nat → Range → Result (List Nat)
       let rest ← projected fuel next
       ok (term.val::rest)
 
-theorem active (iter : Range) (inside : iter.start.val<iter.end.val) :
+theorem active (iter : Range) (inside : iter.start.val < iter.end.val) :
     ∃ next,core.iter.range.IteratorRange.next core.iter.range.StepUsize iter=
       ok (some iter.start,next) ∧ next.start.val=iter.start.val+1 ∧ next.end=iter.end := by
   obtain ⟨⟨item,next⟩,run,value,start,finish⟩:=WP.spec_imp_exists
