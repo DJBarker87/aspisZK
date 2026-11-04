@@ -1,0 +1,29 @@
+def Aeneas.Std.core.array.Array.index_mut : {T I Output : Type} →
+  {N : Usize} →
+    core.ops.index.IndexMut (Slice T) I Output → Std.Array T N → I → Result (Output × (Output → Std.Array T N)) :=
+fun {T I Output} {N} inst a i => do
+  let __x ← inst.index_mut a.to_slice i
+  match __x with
+    | (s, back) => ok (s, fun o => a.from_slice (back o))
+def Aeneas.Std.core.ops.index.IndexMutSlice : {T I Output : Type} →
+  core.slice.index.SliceIndex I (Slice T) Output → core.ops.index.IndexMut (Slice T) I Output :=
+fun {T I Output} inst =>
+  { indexInst := core.ops.index.IndexSlice inst, index_mut := core.slice.index.Slice.index_mut inst }
+@[reducible] def Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice : (T : Type) →
+  core.slice.index.SliceIndex (core.ops.range.Range Usize) (Slice T) (Slice T) :=
+fun T =>
+  { sealedInst := core.slice.index.private_slice_index.SealedRangeUsize,
+    get := core.slice.index.SliceIndexRangeUsizeSlice.get,
+    get_mut := core.slice.index.SliceIndexRangeUsizeSlice.get_mut,
+    get_unchecked := core.slice.index.SliceIndexRangeUsizeSlice.get_unchecked,
+    get_unchecked_mut := core.slice.index.SliceIndexRangeUsizeSlice.get_unchecked_mut,
+    index := core.slice.index.SliceIndexRangeUsizeSlice.index,
+    index_mut := core.slice.index.SliceIndexRangeUsizeSlice.index_mut }
+def Aeneas.Std.core.slice.Slice.copy_from_slice : {T : Type} →
+  core.marker.Copy T → Slice T → Slice T → Result (Slice T) :=
+fun {T} x s src => if s.len = src.len then ok src else fail Error.panic
+def Aeneas.Std.Array.update.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → α → Result (Std.Array α n) :=
+fun {α} {n} v i x =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some val => ok ⟨(↑v).set (↑i) x, ⋯⟩

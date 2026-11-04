@@ -1,0 +1,54 @@
+{"attempt": "NFV_B031", "exit_status": 1, "wall_seconds": 4.173337612999603, "peak_rss_kib": "5209840", "swaps": "0", "print_axioms": ["'NFV_Envelope.emitted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NFV_Envelope.header_value' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NFV_Envelope.pure_value' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NFV_B_generated/NFV_Envelope.lean:60:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  do
+    let (part, back) ←
+      core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8))
+          initial { «end» := 4#usize }
+    let copied ←
+      core.slice.Slice.copy_from_slice core.marker.CopyU8 part POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC.to_slice
+    headerStage profile release program kind payment (back copied)
+in the target expression
+  (do
+      let __x ←
+        core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8))
+            initial { «end» := 4#usize }
+  
+...
+«end» := 4#usize }
+      match __x with
+        | (part, back) => do
+          let copied ←
+            core.slice.Slice.copy_from_slice core.marker.CopyU8 part POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC.to_slice
+          headerStage profile release program kind payment (back copied)) =
+    ok (pure profile release program kind payment)
+
+profile release program : Bytes32
+kind : U8
+payment : Payment
+initial : Std.Array (UScalar UScalarTy.U8) 320#usize := Array.repeat 320#usize 0#u8
+⊢ (do
+      let __x ←
+        core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8))
+            initial { «end» := 4#usize }
+      match __x with
+        | (part, back) => do
+          let copied ←
+            core.slice.Slice.copy_from_slice core.marker.CopyU8 part POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC.to_slice
+          headerStage profile release program kind payment (back copied)) =
+    ok (pure profile release program kind payment)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (320 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'NFV_Envelope.emitted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NFV_Envelope.header_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFV_Envelope.pure_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r3f6ef9a7e1244f56b5c05294dc9aefae.scope; invocation ID: 0526e7fde99542288e55b693419e94aa

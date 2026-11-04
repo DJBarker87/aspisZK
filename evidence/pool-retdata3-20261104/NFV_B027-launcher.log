@@ -1,0 +1,49 @@
+{"attempt": "NFV_B027", "exit_status": 0, "wall_seconds": 2.5001083370298147, "peak_rss_kib": "5233332", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.core.array.Array.index_mut : {T I Output : Type} →
+  {N : Usize} →
+    core.ops.index.IndexMut (Slice T) I Output → Std.Array T N → I → Result (Output × (Output → Std.Array T N)) :=
+fun {T I Output} {N} inst a i => do
+  let __x ← inst.index_mut a.to_slice i
+  match __x with
+    | (s, back) => ok (s, fun o => a.from_slice (back o))
+def Aeneas.Std.core.ops.index.IndexMutSlice : {T I Output : Type} →
+  core.slice.index.SliceIndex I (Slice T) Output → core.ops.index.IndexMut (Slice T) I Output :=
+fun {T I Output} inst =>
+  { indexInst := core.ops.index.IndexSlice inst, index_mut := core.slice.index.Slice.index_mut inst }
+@[reducible] def Aeneas.Std.core.slice.index.SliceIndexRange
+...
+.SliceIndexRangeToUsizeSlice.index_mut : {T : Type} →
+  core.ops.range.RangeTo Usize → Slice T → Result (Slice T × (Slice T → Slice T)) :=
+fun {T} r s =>
+  if ↑r.end ≤ s.length then ok (⟨List.slice 0 ↑r.end ↑s, ⋯⟩, fun s' => ⟨(↑s).setSlice! 0 ↑s', ⋯⟩) else fail Error.panic
+def Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice.index_mut : {T : Type} →
+  core.ops.range.RangeFrom Usize → Slice T → Result (Slice T × (Slice T → Slice T)) :=
+fun {T} r s =>
+  if ↑r.start ≤ s.length then
+    have s1 := s.drop r.start;
+    ok (s1, fun s2 => ⟨(↑s).setSlice! ↑r.start ↑s2, ⋯⟩)
+  else fail Error.panic
+def Aeneas.Std.Array.from_slice.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Slice α → Std.Array α n :=
+fun {α} {n} a s => if h : (↑s).length = ↑n then ⟨↑s, ⋯⟩ else a
+def Aeneas.Std.Array.to_slice.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Slice α :=
+fun {α} {n} v => ⟨↑v, ⋯⟩
+def List.setSlice!.{u_1} : {α : Type u_1} → List α → ℕ → List α → List α :=
+fun {α} s i s' =>
+  have s0 := List.take i s;
+  have n := min s'.length (s.length - i);
+  have s1 := List.take n s';
+  have s2 := List.drop (i + n) s;
+  s0 ++ s1 ++ s2
+def List.slice.{u_1} : {α : Type u_1} → ℕ → ℕ → List α → List α :=
+fun {α} start end_ ls => List.take (end_ - start) (List.drop start ls)
+def Aeneas.Std.lift.{u} : {α : Type u} → α → Result α :=
+fun {α} x => ok x
+def Aeneas.Std.Array.repeat.{u} : {α : Type u} → (n : Usize) → α → Std.Array α n :=
+fun {α} n x => ⟨List.replicate (↑n) x, ⋯⟩
+def Aeneas.Std.Array.make.{u} : {α : Type u} →
+  (n : Usize) → (init : List α) → autoParam (init.length = ↑n) Array.make._auto_1 → Std.Array α n :=
+fun {α} n init hl => ⟨init, hl⟩
+def Aeneas.Std.UScalar.ofNatCore : {ty : UScalarTy} → (x : ℕ) → x < 2 ^ ty.numBits → UScalar ty :=
+fun {ty} x h => { toFin := ⟨x, h⟩ }#uscalar
+
+Running as unit: run-rf1a84d7acc0e4b5188fd413d3a7b8088.scope; invocation ID: 06403d1ce7394c22b9f1b759651f3517

@@ -1,0 +1,27 @@
+import NFD_RequestDomains
+set_option autoImplicit false
+namespace NFV_Copy
+open Aeneas Aeneas.Std Result
+
+def write {N M : Usize} (a : Array U8 N) (start : Usize) (src : Array U8 M) : Array U8 N :=
+  ⟨a.val.setSlice! start.val src.val, by simpa using a.property⟩
+
+/-- The native one-window copy has an exact standard-library value operation. -/
+theorem range {N M : Usize} (a : Array U8 N) (start stop : Usize) (src : Array U8 M)
+    (ordered : start ≤ stop) (bounded : stop.val ≤ N.val)
+    (width : stop.val - start.val = M.val) :
+    (do
+      let (part, back) ← core.array.Array.index_mut
+        (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+        a {start:=start, «end»:=stop}
+      let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 part src.to_slice
+      ok (back copied)) = ok (write a start src) := by
+  simp only [core.array.Array.index_mut,core.ops.index.IndexMutSlice,
+    core.slice.index.Slice.index_mut,core.slice.index.SliceIndexRangeUsizeSlice,
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut]
+  simp only [Array.to_slice,Slice.length,a.property,ordered,bounded,and_self,ite_true,bind_tc_ok]
+  simp [core.slice.Slice.copy_from_slice,Slice.len,Slice.length,Array.to_slice,
+    List.slice,List.length_take,List.length_drop,a.property,src.property,width,
+    Array.from_slice,write]
+#print axioms range
+end NFV_Copy

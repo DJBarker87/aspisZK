@@ -1,0 +1,21 @@
+import NFD_RequestDomains
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result
+#print core.array.Array.index_mut
+#print core.ops.index.IndexMutSlice
+#print core.slice.index.SliceIndexRangeUsizeSlice
+#print core.slice.Slice.copy_from_slice
+#print Array.update
+#print core.slice.index.Slice.index_mut
+#print core.slice.index.SliceIndexRangeUsizeSlice.index_mut
+#print core.slice.index.SliceIndexRangeUsizeSlice.get_mut
+#print core.slice.index.SliceIndexRangeToUsizeSlice.index_mut
+#print core.slice.index.SliceIndexRangeFromUsizeSlice.index_mut
+#print Array.from_slice
+#print Array.to_slice
+#print List.setSlice!
+#print List.slice
+#print lift
+#print Array.repeat
+#print Array.make
+#print UScalar.ofNatCore

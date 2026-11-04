@@ -1,0 +1,94 @@
+--- a/programs/aspis-pool/src/pair_forest_dispatch.rs
++++ b/programs/aspis-pool/src/pair_forest_dispatch.rs
+@@ -1180,3 +1180,7 @@
+ 
+     const _: () = assert!(POOL_V1_PAIR_TREE_DEPTH == 20);
+ }
++
++#[cfg(kani)]
++#[path="NFV_Request.rs"]
++mod NFV_Request;
+--- a/programs/aspis-pool/src/lib.rs
++++ b/programs/aspis-pool/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! Pool V1 authenticated state-transition kernel.
+ //!
+ //! The native entrypoint exposes exact V1 initialization, vault-backed
+@@ -145,3 +146,9 @@
+     plan_authenticated_verifier_dispatch_v1, AuthenticatedVerifierDispatchV1,
+     PlannedVerifierDispatchV1, VerifierDispatchClaimV1,
+ };
++
++#[cfg(kani)]
++extern crate alloc;
++#[cfg(kani)]
++#[path="../../../KMX_stubs.rs"]
++pub mod NFO_KMX;
+--- /dev/null
++++ b/programs/aspis-pool/src/NFV_Request.rs
+@@ -0,0 +1,64 @@
++use super::*;
++use aspis_statement::pool_v1::*;
++use aspis_core::field::M31;
++fn digest()->aspis_statement::Digest{core::array::from_fn(|_|M31(kani::any()))}
++fn any_PoolV1PrivateTransferPublicV1()->PoolV1PrivateTransferPublicV1{PoolV1PrivateTransferPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:digest(),nullifier:digest(),asset_id:M31(kani::any()),recipient_commitment:digest(),change_commitment:digest()}}
++fn any_PoolV1WithdrawalPublicV1()->PoolV1WithdrawalPublicV1{PoolV1WithdrawalPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:digest(),nullifier:digest(),asset_id:M31(kani::any()),amount:kani::any(),destination_token_account:kani::any(),change_commitment:digest()}}
++fn NFO_any_PoolV1PaymentStatementFormatError()->aspis_statement::pool_v1::PoolV1PaymentStatementFormatError { match kani::any::<u8>() {0=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::WrongLength,1=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::WrongMagic,2=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::WrongVersion,3=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::WrongTransitionKind,4=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::WrongDigestEncoding,5=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::NonZeroReserved,6=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::ZeroRequiredBinding,7=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::InvalidAnchorSequence,8=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::NonCanonicalDigest,9=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::NonCanonicalAssetId,10=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::InvalidWithdrawalAmount,11=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::InvalidDestination,12=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::InvalidEnvelope,_=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::EnvelopeMismatch} }
++fn native<T,W>(request:&PoolV1PairForestTerminalRequestV1,transfer:T,withdrawal:W)->Result<[u8;320],PoolV1PairForestTerminalFormatErrorV1>
++where T:FnOnce(&PoolV1PrivateTransferPublicV1)->Result<[u8;216],PoolV1PaymentStatementFormatError>,W:FnOnce(&PoolV1WithdrawalPublicV1)->Result<[u8;216],PoolV1PaymentStatementFormatError>{
++    if request.verifier_profile == [0u8; 32]
++        || request.verifier_release == [0u8; 32]
++        || request.pool_program == [0u8; 32]
++    {
++        return Err(PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding);
++    }
++    let payment = match request.public {
++        PoolV1PairForestTerminalPaymentV1::PrivateTransfer(public) => {
++            transfer(&public)
++        }
++        PoolV1PairForestTerminalPaymentV1::Withdrawal(public) => {
++            withdrawal(&public)
++        }
++    }
++    .map_err(PoolV1PairForestTerminalFormatErrorV1::Payment)?;
++    let mut output = [0u8; POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES];
++    output[..4].copy_from_slice(&POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC);
++    output[4] = POOL_V1_PAIR_FOREST_TERMINAL_VERSION;
++    output[5] = request.public.transition_kind() as u8;
++    output[6] = POOL_V1_DIGEST_ENCODING_VERSION;
++    output[8..40]
++        .copy_from_slice(&request.verifier_profile);
++    output[40..72]
++        .copy_from_slice(&request.verifier_release);
++    output[72..104]
++        .copy_from_slice(&request.pool_program);
++    output[104..].copy_from_slice(&payment);
++    Ok(output)
++}
++#[kani::proof]
++#[kani::unwind(321)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFO_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NFO_KMX::KMX_copy_from_slice)]
++#[kani::stub(alloc::alloc::realloc,crate::NFO_KMX::KMX_realloc)]
++fn association(){
++ let public=if kani::any(){PoolV1PairForestTerminalPaymentV1::PrivateTransfer(any_PoolV1PrivateTransferPublicV1())}else{PoolV1PairForestTerminalPaymentV1::Withdrawal(any_PoolV1WithdrawalPublicV1())};
++ let request=PoolV1PairForestTerminalRequestV1{verifier_profile:kani::any(),verifier_release:kani::any(),pool_program:kani::any(),public};
++ let expected_t=match public{PoolV1PairForestTerminalPaymentV1::PrivateTransfer(p)=>Some(p),_=>None};
++ let expected_w=match public{PoolV1PairForestTerminalPaymentV1::Withdrawal(p)=>Some(p),_=>None};
++ let kind=if expected_t.is_some(){1u8}else{2u8};
++ let child:Result<[u8;216],PoolV1PaymentStatementFormatError>=if kani::any(){Ok(kani::any())}else{Err(NFO_any_PoolV1PaymentStatementFormatError())};
++ let j:usize=kani::any();kani::assume(8<=j&&j<40);
++ let zero=request.verifier_profile==[0u8;32]||request.verifier_release==[0u8;32]||request.pool_program==[0u8;32];
++ let mut t_calls=0u8;let mut w_calls=0u8;
++ let mut actual=native(&request,|arg|{t_calls+=1;assert!(Some(*arg)==expected_t);child},|arg|{w_calls+=1;assert!(Some(*arg)==expected_w);child});
++ 
++ if zero{assert!(t_calls==0&&w_calls==0&&matches!(actual,Err(PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding)));}
++ else{
++  assert!(t_calls==if kind==1{1}else{0});assert!(w_calls==if kind==2{1}else{0});
++  match child{
++   Err(error)=>assert!(matches!(actual,Err(PoolV1PairForestTerminalFormatErrorV1::Payment(e)) if e==error)),
++   Ok(payment)=>{let bytes=actual.unwrap();let expected=request.verifier_profile[j-8];assert!(bytes[j]==expected);}
++  }
++ }
++}
