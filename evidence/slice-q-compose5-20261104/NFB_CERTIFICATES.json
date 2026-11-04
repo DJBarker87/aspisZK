@@ -1,0 +1,895 @@
+[
+ {
+  "external_obligations": {
+   "external:TX1:181:17": {
+    "call": {
+     "expression": "queries.len",
+     "inventory_rows": [],
+     "line": 149,
+     "resolution": "standard library/runtime or callback",
+     "targets": []
+    },
+    "law": [
+     "Array length22 and exact range guard",
+     "NFB_K015/016",
+     "NFB_RangeTrace.selected"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX1:181:18": {
+    "call": {
+     "expression": "Err",
+     "inventory_rows": [],
+     "line": 149,
+     "resolution": "constructor",
+     "targets": []
+    },
+    "law": [
+     "Exact Result constructor, all variants retained",
+     "NFB_K015/016;NFB_K017..026;NFB_K101..106",
+     "NFB_GeometryComposed.result_state_effects"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX1:181:19": {
+    "call": {
+     "expression": "Vec::with_capacity",
+     "inventory_rows": [],
+     "line": 150,
+     "resolution": "standard scalar/container operation",
+     "targets": []
+    },
+    "law": [
+     "Fresh uniquely owned successful allocation; approved Allocator/abort trust retained",
+     "NEW_K081..086;NFB_K047..054",
+     "NFB_ReturnedBuffers.initial_frame;NFB_TerminalAssociation.complete"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX1:181:20": {
+    "call": {
+     "expression": "Vec::with_capacity",
+     "inventory_rows": [],
+     "line": 151,
+     "resolution": "standard scalar/container operation",
+     "targets": []
+    },
+    "law": [
+     "Fresh uniquely owned successful allocation; approved Allocator/abort trust retained",
+     "NEW_K081..086;NFB_K047..054",
+     "NFB_ReturnedBuffers.initial_frame;NFB_TerminalAssociation.complete"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX1:181:21": {
+    "call": {
+     "expression": "domain::FibreIndex::new(u).map_err",
+     "inventory_rows": [],
+     "line": 154,
+     "resolution": "standard library/runtime or callback",
+     "targets": []
+    },
+    "law": [
+     "Same checked domain/error tag and ordering",
+     "NFB_K029..032",
+     "NFB_RowG.complete;NFB_RowIndex.indexPort"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX1:181:22": {
+    "call": {
+     "expression": "domain::FibreIndex::new(u/4*4).map_err",
+     "inventory_rows": [],
+     "line": 156,
+     "resolution": "standard library/runtime or callback",
+     "targets": []
+    },
+    "law": [
+     "Same checked domain/error tag and ordering",
+     "NFB_K029..032",
+     "NFB_RowG.complete;NFB_RowIndex.indexPort"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX1:181:23": {
+    "call": {
+     "expression": "domain::FibreIndex::new(u/4*4+3).map_err",
+     "inventory_rows": [],
+     "line": 157,
+     "resolution": "standard library/runtime or callback",
+     "targets": []
+    },
+    "law": [
+     "Same checked domain/error tag and ordering",
+     "NFB_K029..032",
+     "NFB_RowG.complete;NFB_RowIndex.indexPort"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX1:181:24": {
+    "call": {
+     "expression": "values.iter().any",
+     "inventory_rows": [],
+     "line": 160,
+     "resolution": "standard library/runtime or callback",
+     "targets": []
+    },
+    "law": [
+     "Same fixed5 slice, one iterator/callback step, finite early-stop induction and pinned std Iter::any",
+     "NFB_K002..009",
+     "NFB_ZeroScan.zero_loop;NFB_ZeroFinite.complete"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX1:181:25": {
+    "call": {
+     "expression": "values.iter",
+     "inventory_rows": [],
+     "line": 160,
+     "resolution": "standard library/runtime or callback",
+     "targets": []
+    },
+    "law": [
+     "Same fixed5 slice/cursor",
+     "NFB_K002..007",
+     "NFB_ZeroFinite.next_active"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX1:181:26": {
+    "call": {
+     "expression": "Err",
+     "inventory_rows": [],
+     "line": 160,
+     "resolution": "constructor",
+     "targets": []
+    },
+    "law": [
+     "Exact Result constructor, all variants retained",
+     "NFB_K015/016;NFB_K017..026;NFB_K101..106",
+     "NFB_GeometryComposed.result_state_effects"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX1:181:27": {
+    "call": {
+     "expression": "flat.extend_from_slice",
+     "inventory_rows": [],
+     "line": 161,
+     "resolution": "standard library/runtime or callback",
+     "targets": []
+    },
+    "law": [
+     "Reserve once, initialize new fixed5 window, preserve every arbitrary old live offset and allocation",
+     "NEW_K041..044;NEW_K071..074",
+     "NFB_GatherFrame.payloads;NFB_RootGather.complete"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX1:181:28": {
+    "call": {
+     "expression": "line_z_values.push",
+     "inventory_rows": [],
+     "line": 162,
+     "resolution": "standard library/runtime or callback",
+     "targets": []
+    },
+    "law": [
+     "Same Vec append and old windows, no capacity growth at k<N",
+     "NEW_K048..053",
+     "NFB_GatherFrame.payloads;NFB_TraceBounds.terminal_bound"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX1:181:29": {
+    "call": {
+     "expression": "flat.is_empty",
+     "inventory_rows": [],
+     "line": 164,
+     "resolution": "standard library/runtime or callback",
+     "targets": []
+    },
+    "law": [
+     "Metadata comparison; empty success unreachable in deployed nonempty successful range",
+     "NFB_K096/097;NEW_K081..086",
+     "NFB_AcceptedGather.complete;NFB_ReturnedBuffers.complete"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX1:181:30": {
+    "call": {
+     "expression": "Ok",
+     "inventory_rows": [],
+     "line": 164,
+     "resolution": "constructor",
+     "targets": []
+    },
+    "law": [
+     "Exact Result constructor, all variants retained",
+     "NFB_K015/016;NFB_K017..026;NFB_K101..106",
+     "NFB_GeometryComposed.result_state_effects"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX1:181:31": {
+    "call": {
+     "expression": "Vec::new",
+     "inventory_rows": [],
+     "line": 164,
+     "resolution": "standard scalar/container operation",
+     "targets": []
+    },
+    "law": [
+     "Empty constructor in branch unreachable for deployed successful nonempty range",
+     "NFB_K096/097",
+     "NFB_AcceptedGather.complete"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX1:181:32": {
+    "call": {
+     "expression": "Vec::with_capacity",
+     "inventory_rows": [],
+     "line": 169,
+     "resolution": "standard scalar/container operation",
+     "targets": []
+    },
+    "law": [
+     "Fresh uniquely owned successful allocation; approved Allocator/abort trust retained",
+     "NEW_K081..086;NFB_K047..054",
+     "NFB_ReturnedBuffers.initial_frame;NFB_TerminalAssociation.complete"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX1:181:33": {
+    "call": {
+     "expression": "flat.len",
+     "inventory_rows": [],
+     "line": 169,
+     "resolution": "standard library/runtime or callback",
+     "targets": []
+    },
+    "law": [
+     "SAME mutable payload length, derived count10/12 and size50/60",
+     "NEW_K048..053;NFB_K033..040;NFB_K080..085",
+     "NFB_TerminalAssociation.complete;NFB_GeometryComposed.accepted_physical"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX1:181:34": {
+    "call": {
+     "expression": "flat_inverse.resize",
+     "inventory_rows": [],
+     "line": 170,
+     "resolution": "standard library/runtime or callback",
+     "targets": []
+    },
+    "law": [
+     "One actual std append at arbitrary live pre-state, uninitialized spare and SetLenOnDrop, finite induction",
+     "NFB_K033..046",
+     "NFB_ResizeAssociation.complete;NFB_ResizeAssociation.payload"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX1:181:35": {
+    "call": {
+     "expression": "flat.len",
+     "inventory_rows": [],
+     "line": 170,
+     "resolution": "standard library/runtime or callback",
+     "targets": []
+    },
+    "law": [
+     "SAME mutable payload length, derived count10/12 and size50/60",
+     "NEW_K048..053;NFB_K033..040;NFB_K080..085",
+     "NFB_TerminalAssociation.complete;NFB_GeometryComposed.accepted_physical"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX1:181:36": {
+    "call": {
+     "expression": "(0..flat.len()).rev",
+     "inventory_rows": [],
+     "line": 171,
+     "resolution": "standard library/runtime or callback",
+     "targets": []
+    },
+    "law": [
+     "Actual reverse iterator, two ordered opaque products and SAME inverse write/frame",
+     "NEW_K045..047;NEW_K068..070",
+     "NFB_ReverseAssociation.complete;NFB_BackwardTransport.complete"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX1:181:37": {
+    "call": {
+     "expression": "flat.len",
+     "inventory_rows": [],
+     "line": 171,
+     "resolution": "standard library/runtime or callback",
+     "targets": []
+    },
+    "law": [
+     "SAME mutable payload length, derived count10/12 and size50/60",
+     "NEW_K048..053;NFB_K033..040;NFB_K080..085",
+     "NFB_TerminalAssociation.complete;NFB_GeometryComposed.accepted_physical"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX1:181:38": {
+    "call": {
+     "expression": "(0..line_z_values.len()).map(|i|core::array::from_fn(|j|flat_inverse[5*i+j])).collect",
+     "inventory_rows": [],
+     "line": 175,
+     "resolution": "standard library/runtime or callback",
+     "targets": []
+    },
+    "law": [
+     "TrustedLen Map<Range<usize>> fixed5 array records, guard-local store then publication",
+     "NFB_K072..085;NFB_K098..100",
+     "NFB_CollectorTrace.meaning;NFB_TerminalAssociation.complete"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX1:181:39": {
+    "call": {
+     "expression": "(0..line_z_values.len()).map",
+     "inventory_rows": [],
+     "line": 175,
+     "resolution": "standard library/runtime or callback",
+     "targets": []
+    },
+    "law": [
+     "Exact map capture, immutable inverse, ordered row cursor; std TrustedLen dispatch pinned",
+     "NEW_K060..063;NFB_K086..093",
+     "NFB_CollectAssociation.complete;Port4C_CollectLoop.list_total"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX1:181:40": {
+    "call": {
+     "expression": "line_z_values.len",
+     "inventory_rows": [],
+     "line": 175,
+     "resolution": "standard library/runtime or callback",
+     "targets": []
+    },
+    "law": [
+     "SAME mutable payload length, derived count10/12 and size50/60",
+     "NEW_K048..053;NFB_K033..040;NFB_K080..085",
+     "NFB_TerminalAssociation.complete;NFB_GeometryComposed.accepted_physical"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX1:181:41": {
+    "call": {
+     "expression": "core::array::from_fn",
+     "inventory_rows": [],
+     "line": 175,
+     "resolution": "standard library",
+     "targets": []
+    },
+    "law": [
+     "One exact Guard slot at arbitrary initialized prefix, all lanes, final initialized array transfer",
+     "NFB_K086..093;NFB_K098..100",
+     "NFB_CollectorTrace.meaning;NFB_CollectAssociation.array_complete"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX1:181:42": {
+    "call": {
+     "expression": "Ok",
+     "inventory_rows": [],
+     "line": 176,
+     "resolution": "constructor",
+     "targets": []
+    },
+    "law": [
+     "Exact Result constructor, all variants retained",
+     "NFB_K015/016;NFB_K017..026;NFB_K101..106",
+     "NFB_GeometryComposed.result_state_effects"
+    ],
+    "status": "CLOSED"
+   }
+  },
+  "inventory_obligations": [
+   {
+    "unit": "geometry",
+    "original_domain": "22 distinct query indices<262144; 0<=start<=end<=22, TX1 start0/end10; five nonzero denominators per query, flat length50. Prove nonzero product and indexed inverse vector association.",
+    "status": "CLOSED",
+    "discharge": "Stronger all-raw full Result association NEW_L079 and NFB_GeometryComposed; NFB_AcceptedGather and TerminalAssociation bind SAME vectors and reciprocal grouping. Rejections retained; distinctness is not needed by this correspondence. Canonical nonzero and reciprocal mathematical conclusion is NEW_GeometryComplete.accepted, not an inner precondition."
+   }
+  ],
+  "id": "NFB-geometry-root:TX1:181",
+  "row": "TX1:181",
+  "function": "crates/aspis-r1-cost-probe/src/verifier.rs::QueryGeometry::for_range",
+  "domain": "Valid original &[u32;22], deployed (0,10)/(10,22), valid shared child/table memory; standard successful allocations or approved abort interpretation",
+  "parts": [
+   "full_Result",
+   "persistent_state",
+   "semantic_effects",
+   "native_callsite_association",
+   "same_buffer_frames",
+   "finite_trace",
+   "child_domains",
+   "returned_ownership"
+  ],
+  "packet_sha256": "29e5e805541c1a564e14818ef2bdfacdd3559ca2a777d847961c6952c3edd908",
+  "frozen_body_sha256": "cecda71c277c78a80c9dedd96c0148a2907410736135eeef24f3c1c0ffeaf154",
+  "remaining_inner_hypotheses": [],
+  "top_hypotheses": [
+   "RootPacketDomain",
+   "RootPhysicalInterpretation",
+   "NativeContractSemanticTransport",
+   "Allocator"
+  ]
+ },
+ {
+  "external_obligations": {
+   "external:TX2:104:17": {
+    "call": {
+     "cfg": [],
+     "line": 149,
+     "name": "len",
+     "receiver": "queries",
+     "resolution": "standard/runtime/closure boundary",
+     "syntax": "queries.len",
+     "targets": []
+    },
+    "law": [
+     "Array length22 and exact range guard",
+     "NFB_K015/016",
+     "NFB_RangeTrace.selected"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX2:104:18": {
+    "call": {
+     "cfg": [],
+     "line": 149,
+     "name": "Err",
+     "resolution": "standard/runtime/closure boundary",
+     "syntax": "Err",
+     "targets": []
+    },
+    "law": [
+     "Exact Result constructor, all variants retained",
+     "NFB_K015/016;NFB_K017..026;NFB_K101..106",
+     "NFB_GeometryComposed.result_state_effects"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX2:104:19": {
+    "call": {
+     "cfg": [],
+     "line": 150,
+     "name": "with_capacity",
+     "resolution": "standard/runtime/closure boundary",
+     "syntax": "Vec::with_capacity",
+     "targets": []
+    },
+    "law": [
+     "Fresh uniquely owned successful allocation; approved Allocator/abort trust retained",
+     "NEW_K081..086;NFB_K047..054",
+     "NFB_ReturnedBuffers.initial_frame;NFB_TerminalAssociation.complete"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX2:104:20": {
+    "call": {
+     "cfg": [],
+     "line": 151,
+     "name": "with_capacity",
+     "resolution": "standard/runtime/closure boundary",
+     "syntax": "Vec::with_capacity",
+     "targets": []
+    },
+    "law": [
+     "Fresh uniquely owned successful allocation; approved Allocator/abort trust retained",
+     "NEW_K081..086;NFB_K047..054",
+     "NFB_ReturnedBuffers.initial_frame;NFB_TerminalAssociation.complete"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX2:104:21": {
+    "call": {
+     "cfg": [],
+     "line": 154,
+     "name": "map_err",
+     "receiver": "domain::FibreIndex::new(u)",
+     "resolution": "standard/runtime/closure boundary",
+     "syntax": "domain::FibreIndex::new(u).map_err",
+     "targets": []
+    },
+    "law": [
+     "Same checked domain/error tag and ordering",
+     "NFB_K029..032",
+     "NFB_RowG.complete;NFB_RowIndex.indexPort"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX2:104:22": {
+    "call": {
+     "cfg": [],
+     "line": 156,
+     "name": "map_err",
+     "receiver": "domain::FibreIndex::new(u/4*4)",
+     "resolution": "standard/runtime/closure boundary",
+     "syntax": "domain::FibreIndex::new(u/4*4).map_err",
+     "targets": []
+    },
+    "law": [
+     "Same checked domain/error tag and ordering",
+     "NFB_K029..032",
+     "NFB_RowG.complete;NFB_RowIndex.indexPort"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX2:104:23": {
+    "call": {
+     "cfg": [],
+     "line": 157,
+     "name": "map_err",
+     "receiver": "domain::FibreIndex::new(u/4*4+3)",
+     "resolution": "standard/runtime/closure boundary",
+     "syntax": "domain::FibreIndex::new(u/4*4+3).map_err",
+     "targets": []
+    },
+    "law": [
+     "Same checked domain/error tag and ordering",
+     "NFB_K029..032",
+     "NFB_RowG.complete;NFB_RowIndex.indexPort"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX2:104:24": {
+    "call": {
+     "cfg": [],
+     "line": 160,
+     "name": "any",
+     "receiver": "values.iter()",
+     "resolution": "standard/runtime/closure boundary",
+     "syntax": "values.iter().any",
+     "targets": []
+    },
+    "law": [
+     "Same fixed5 slice, one iterator/callback step, finite early-stop induction and pinned std Iter::any",
+     "NFB_K002..009",
+     "NFB_ZeroScan.zero_loop;NFB_ZeroFinite.complete"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX2:104:25": {
+    "call": {
+     "cfg": [],
+     "line": 160,
+     "name": "iter",
+     "receiver": "values",
+     "resolution": "standard/runtime/closure boundary",
+     "syntax": "values.iter",
+     "targets": []
+    },
+    "law": [
+     "Same fixed5 slice/cursor",
+     "NFB_K002..007",
+     "NFB_ZeroFinite.next_active"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX2:104:26": {
+    "call": {
+     "cfg": [],
+     "line": 160,
+     "name": "Err",
+     "resolution": "standard/runtime/closure boundary",
+     "syntax": "Err",
+     "targets": []
+    },
+    "law": [
+     "Exact Result constructor, all variants retained",
+     "NFB_K015/016;NFB_K017..026;NFB_K101..106",
+     "NFB_GeometryComposed.result_state_effects"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX2:104:27": {
+    "call": {
+     "cfg": [],
+     "line": 161,
+     "name": "extend_from_slice",
+     "receiver": "flat",
+     "resolution": "standard/runtime/closure boundary",
+     "syntax": "flat.extend_from_slice",
+     "targets": []
+    },
+    "law": [
+     "Reserve once, initialize new fixed5 window, preserve every arbitrary old live offset and allocation",
+     "NEW_K041..044;NEW_K071..074",
+     "NFB_GatherFrame.payloads;NFB_RootGather.complete"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX2:104:28": {
+    "call": {
+     "cfg": [],
+     "line": 162,
+     "name": "push",
+     "receiver": "line_z_values",
+     "resolution": "standard/runtime/closure boundary",
+     "syntax": "line_z_values.push",
+     "targets": []
+    },
+    "law": [
+     "Same Vec append and old windows, no capacity growth at k<N",
+     "NEW_K048..053",
+     "NFB_GatherFrame.payloads;NFB_TraceBounds.terminal_bound"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX2:104:29": {
+    "call": {
+     "cfg": [],
+     "line": 164,
+     "name": "is_empty",
+     "receiver": "flat",
+     "resolution": "standard/runtime/closure boundary",
+     "syntax": "flat.is_empty",
+     "targets": []
+    },
+    "law": [
+     "Metadata comparison; empty success unreachable in deployed nonempty successful range",
+     "NFB_K096/097;NEW_K081..086",
+     "NFB_AcceptedGather.complete;NFB_ReturnedBuffers.complete"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX2:104:30": {
+    "call": {
+     "cfg": [],
+     "line": 164,
+     "name": "Ok",
+     "resolution": "standard/runtime/closure boundary",
+     "syntax": "Ok",
+     "targets": []
+    },
+    "law": [
+     "Exact Result constructor, all variants retained",
+     "NFB_K015/016;NFB_K017..026;NFB_K101..106",
+     "NFB_GeometryComposed.result_state_effects"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX2:104:31": {
+    "call": {
+     "cfg": [],
+     "line": 164,
+     "name": "new",
+     "resolution": "standard/runtime/closure boundary",
+     "syntax": "Vec::new",
+     "targets": []
+    },
+    "law": [
+     "Empty constructor in branch unreachable for deployed successful nonempty range",
+     "NFB_K096/097",
+     "NFB_AcceptedGather.complete"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX2:104:32": {
+    "call": {
+     "cfg": [],
+     "line": 169,
+     "name": "with_capacity",
+     "resolution": "standard/runtime/closure boundary",
+     "syntax": "Vec::with_capacity",
+     "targets": []
+    },
+    "law": [
+     "Fresh uniquely owned successful allocation; approved Allocator/abort trust retained",
+     "NEW_K081..086;NFB_K047..054",
+     "NFB_ReturnedBuffers.initial_frame;NFB_TerminalAssociation.complete"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX2:104:33": {
+    "call": {
+     "cfg": [],
+     "line": 169,
+     "name": "len",
+     "receiver": "flat",
+     "resolution": "standard/runtime/closure boundary",
+     "syntax": "flat.len",
+     "targets": []
+    },
+    "law": [
+     "SAME mutable payload length, derived count10/12 and size50/60",
+     "NEW_K048..053;NFB_K033..040;NFB_K080..085",
+     "NFB_TerminalAssociation.complete;NFB_GeometryComposed.accepted_physical"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX2:104:34": {
+    "call": {
+     "cfg": [],
+     "line": 170,
+     "name": "resize",
+     "receiver": "flat_inverse",
+     "resolution": "standard/runtime/closure boundary",
+     "syntax": "flat_inverse.resize",
+     "targets": []
+    },
+    "law": [
+     "One actual std append at arbitrary live pre-state, uninitialized spare and SetLenOnDrop, finite induction",
+     "NFB_K033..046",
+     "NFB_ResizeAssociation.complete;NFB_ResizeAssociation.payload"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX2:104:35": {
+    "call": {
+     "cfg": [],
+     "line": 170,
+     "name": "len",
+     "receiver": "flat",
+     "resolution": "standard/runtime/closure boundary",
+     "syntax": "flat.len",
+     "targets": []
+    },
+    "law": [
+     "SAME mutable payload length, derived count10/12 and size50/60",
+     "NEW_K048..053;NFB_K033..040;NFB_K080..085",
+     "NFB_TerminalAssociation.complete;NFB_GeometryComposed.accepted_physical"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX2:104:36": {
+    "call": {
+     "cfg": [],
+     "line": 171,
+     "name": "rev",
+     "receiver": "(0..flat.len())",
+     "resolution": "standard/runtime/closure boundary",
+     "syntax": "(0..flat.len()).rev",
+     "targets": []
+    },
+    "law": [
+     "Actual reverse iterator, two ordered opaque products and SAME inverse write/frame",
+     "NEW_K045..047;NEW_K068..070",
+     "NFB_ReverseAssociation.complete;NFB_BackwardTransport.complete"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX2:104:37": {
+    "call": {
+     "cfg": [],
+     "line": 171,
+     "name": "len",
+     "receiver": "flat",
+     "resolution": "standard/runtime/closure boundary",
+     "syntax": "flat.len",
+     "targets": []
+    },
+    "law": [
+     "SAME mutable payload length, derived count10/12 and size50/60",
+     "NEW_K048..053;NFB_K033..040;NFB_K080..085",
+     "NFB_TerminalAssociation.complete;NFB_GeometryComposed.accepted_physical"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX2:104:38": {
+    "call": {
+     "cfg": [],
+     "line": 175,
+     "name": "collect",
+     "receiver": "(0..line_z_values.len()).map(|i|core::array::from_fn(|j|flat_inverse[5*i+j]))",
+     "resolution": "standard/runtime/closure boundary",
+     "syntax": "(0..line_z_values.len()).map(|i|core::array::from_fn(|j|flat_inverse[5*i+j])).collect",
+     "targets": []
+    },
+    "law": [
+     "TrustedLen Map<Range<usize>> fixed5 array records, guard-local store then publication",
+     "NFB_K072..085;NFB_K098..100",
+     "NFB_CollectorTrace.meaning;NFB_TerminalAssociation.complete"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX2:104:39": {
+    "call": {
+     "cfg": [],
+     "line": 175,
+     "name": "map",
+     "receiver": "(0..line_z_values.len())",
+     "resolution": "standard/runtime/closure boundary",
+     "syntax": "(0..line_z_values.len()).map",
+     "targets": []
+    },
+    "law": [
+     "Exact map capture, immutable inverse, ordered row cursor; std TrustedLen dispatch pinned",
+     "NEW_K060..063;NFB_K086..093",
+     "NFB_CollectAssociation.complete;Port4C_CollectLoop.list_total"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX2:104:40": {
+    "call": {
+     "cfg": [],
+     "line": 175,
+     "name": "len",
+     "receiver": "line_z_values",
+     "resolution": "standard/runtime/closure boundary",
+     "syntax": "line_z_values.len",
+     "targets": []
+    },
+    "law": [
+     "SAME mutable payload length, derived count10/12 and size50/60",
+     "NEW_K048..053;NFB_K033..040;NFB_K080..085",
+     "NFB_TerminalAssociation.complete;NFB_GeometryComposed.accepted_physical"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX2:104:41": {
+    "call": {
+     "cfg": [],
+     "line": 175,
+     "name": "from_fn",
+     "resolution": "standard/runtime/closure boundary",
+     "syntax": "core::array::from_fn",
+     "targets": []
+    },
+    "law": [
+     "One exact Guard slot at arbitrary initialized prefix, all lanes, final initialized array transfer",
+     "NFB_K086..093;NFB_K098..100",
+     "NFB_CollectorTrace.meaning;NFB_CollectAssociation.array_complete"
+    ],
+    "status": "CLOSED"
+   },
+   "external:TX2:104:42": {
+    "call": {
+     "cfg": [],
+     "line": 176,
+     "name": "Ok",
+     "resolution": "standard/runtime/closure boundary",
+     "syntax": "Ok",
+     "targets": []
+    },
+    "law": [
+     "Exact Result constructor, all variants retained",
+     "NFB_K015/016;NFB_K017..026;NFB_K101..106",
+     "NFB_GeometryComposed.result_state_effects"
+    ],
+    "status": "CLOSED"
+   }
+  },
+  "inventory_obligations": [
+   {
+    "unit": "U08",
+    "original_domain": "Query indices<2^18, range10..22; FibreIndex bounds; TABLE_A/B hash and index decomposition; all five x/y/z denominators nonzero; forward/backward inversion invariant with SAME vectors and start offsets.",
+    "status": "CLOSED",
+    "discharge": "Stronger all-raw full Result association NEW_L079 and NFB_GeometryComposed; NFB_AcceptedGather and TerminalAssociation bind SAME vectors and reciprocal grouping. Rejections retained; distinctness is not needed by this correspondence. Canonical nonzero and reciprocal mathematical conclusion is NEW_GeometryComplete.accepted, not an inner precondition."
+   }
+  ],
+  "id": "NFB-geometry-root:TX2:104",
+  "row": "TX2:104",
+  "function": "crates/aspis-r1-cost-probe/src/verifier.rs::QueryGeometry::for_range",
+  "domain": "Valid original &[u32;22], deployed (0,10)/(10,22), valid shared child/table memory; standard successful allocations or approved abort interpretation",
+  "parts": [
+   "full_Result",
+   "persistent_state",
+   "semantic_effects",
+   "native_callsite_association",
+   "same_buffer_frames",
+   "finite_trace",
+   "child_domains",
+   "returned_ownership"
+  ],
+  "packet_sha256": "29e5e805541c1a564e14818ef2bdfacdd3559ca2a777d847961c6952c3edd908",
+  "frozen_body_sha256": "cecda71c277c78a80c9dedd96c0148a2907410736135eeef24f3c1c0ffeaf154",
+  "remaining_inner_hypotheses": [],
+  "top_hypotheses": [
+   "RootPacketDomain",
+   "RootPhysicalInterpretation",
+   "NativeContractSemanticTransport",
+   "Allocator"
+  ]
+ }
+]

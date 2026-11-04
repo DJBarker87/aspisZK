@@ -65,4 +65,3 @@ theorem query_frame (flat prefixes : List U32) (suffix : U32) (count : Nat)
 #print axioms owned
 #print axioms query_frame
 end NFB_TerminalFrame
-end

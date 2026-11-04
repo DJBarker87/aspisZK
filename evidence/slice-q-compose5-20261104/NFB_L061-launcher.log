@@ -1,0 +1,49 @@
+{"attempt": "NFB_L061", "exit_status": 0, "wall_seconds": 2.182450879830867, "peak_rss_kib": "4938192", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.alloc.vec.Vec.resize : {T : Type} →
+  Aeneas.Std.core.clone.Clone T →
+    Aeneas.Std.alloc.vec.Vec T → Aeneas.Std.Usize → T → Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec T) :=
+fun {T} cloneInst v new_len value =>
+  if ↑new_len < v.length then Aeneas.Std.Result.ok ⟨(↑v).resize (↑new_len) value, ⋯⟩
+  else do
+    let value ← cloneInst.clone value
+    Aeneas.Std.Result.ok ⟨(↑v).resize (↑new_len) value, ⋯⟩
+theorem Aeneas.Std.alloc.vec.Vec.resize_spec : ∀ {T : Type} (cloneInst : Aeneas.Std.core.clone.Clone T)
+  (v : Aeneas.Std.alloc.vec.Vec T) (new_len : Aeneas.Std.Usize) (value : T),
+  cloneInst.clone value = Aeneas.Std.Result.ok value →
+    Aeneas.Std.WP.spec (Aeneas.Std.alloc.vec
+...
+ (Aeneas.Std.alloc.vec.Vec.resize cloneInst v new_len value) fun nv =>
+      ↑nv = (↑v).resize (↑new_len) value :=
+fun {T} cloneInst v new_len value hClone =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => Aeneas.Std.WP.spec _a fun nv => ↑nv = (↑v).resize (↑new_len) value)
+        (Aeneas.Std.alloc.vec.Vec.resize.eq_1 cloneInst v new_len value)))
+    (Decidable.casesOn ((↑new_len).decLt v.length)
+      (fun h =>
+        Eq.mpr (id (congrFun' (congrArg Aeneas.Std.WP.spec (if_neg h)) fun nv => ↑nv = (↑v).resize (↑new_len) value))
+          (of_eq_true
+            (Eq.trans
+              (Eq.trans
+                (congrFun'
+                  (congrArg Aeneas.Std.WP.spec
+                    (Eq.trans
+                      (congrFun' (congrArg bind hClone) fun value =>
+                        Aeneas.Std.Result.ok
+                          ⟨(↑v).resize (↑new_len) value, Aeneas.Std.alloc.vec.Vec.resize._proof_1 v new_len value⟩)
+                      (Aeneas.Std.bind_tc_ok value fun y =>
+                        Aeneas.Std.Result.ok
+                          ⟨(↑v).resize (↑new_len) y, Aeneas.Std.alloc.vec.Vec.resize._proof_1 v new_len y⟩)))
+                  fun nv => ↑nv = (↑v).resize (↑new_len) value)
+                (Aeneas.Std.WP.spec_ok._simp_1
+                  ⟨(↑v).resize (↑new_len) value, Aeneas.Std.alloc.vec.Vec.resize._proof_1 v new_len value⟩))
+              (eq_self ((↑v).resize (↑new_len) value)))))
+      fun h =>
+      Eq.mpr (id (congrFun' (congrArg Aeneas.Std.WP.spec (if_pos h)) fun nv => ↑nv = (↑v).resize (↑new_len) value))
+        (of_eq_true
+          (Eq.trans
+            (Aeneas.Std.WP.spec_ok._simp_1
+              ⟨(↑v).resize (↑new_len) value, Aeneas.Std.alloc.vec.Vec.resize._proof_1 v new_len value⟩)
+            (eq_self ((↑v).resize (↑new_len) value)))))
+
+Running as unit: run-rdd8bd58459df438e80ec319cc0ecfe7e.scope; invocation ID: e3f7f4f5661842bfb0f162aaed6487f5

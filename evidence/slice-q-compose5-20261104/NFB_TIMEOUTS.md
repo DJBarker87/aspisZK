@@ -29,3 +29,10 @@ uninitialized Box array. Guarded scalar writes initialize ONLY the live
 prefix. The frozen one-store body is unchanged. Unwind7 covers only fixed
 five-cell row moves / tiny guard primitives; the source loop still has ONE
 arbitrary iteration, never a whole collection. No time or memory cap changes.
+
+L065: kernel excessive memory at -M7000, RSS7168772KiB, exit1, swap0.
+The concrete dictionary rewrite followed by rfl expanded irrelevant operations
+while checking a backward body that mathematically depends ONLY on op9.
+Excluded. Replacement: prove generic body/loop congruence for an abstract Ops
+pair and one multiplication-field equality, then specialize by theorem
+application; no concrete dictionary reduction, no cap increase or unchanged rerun.
