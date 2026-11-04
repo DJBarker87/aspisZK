@@ -4,7 +4,7 @@ import collections, hashlib, json, lzma, pathlib
 E=pathlib.Path(__file__).resolve().parent;R=E.parents[1]
 def check(d,c):
  l=json.loads(lzma.open(R/'evidence/ledger6-20261104/NFK_LEDGER.json.xz').read())
- s=json.loads((R/'docs/research/100bit-spend-path-20261029/design/VERTICAL-SLICES-20261029.json').read_text()) if False else json.loads((R/'docs/research/100bit-spend-path-20261013/design/VERTICAL-SLICES-20261029.json').read_text())
+ s=json.loads((R/'docs/research/100bit-spend-path-20261013/design/VERTICAL-SLICES-20261029.json').read_text())
  ds=d['slices']['D']; by={r['row']:r for r in l['rows']}; qs=set(s['slices']['Q']['functions'])|set(s['slices']['S']['functions'])
  assert d['frozen_revision']==l['frozen_revision'];assert len(by)==587
  seen=set()
