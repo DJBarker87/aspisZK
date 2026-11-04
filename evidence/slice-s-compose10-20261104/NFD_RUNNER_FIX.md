@@ -1,0 +1,1 @@
+NFD_K002 compiled the program manifest while requesting a statement-crate harness; no verification matched. Use the inherited statement-manifest runner for statement helpers. Validation is unchanged; frozen graph, deployed statement features, lock hash, KMX pin and resource checks remain mandatory. NFD_K003 is the corrected invocation, not a timeout rerun.
