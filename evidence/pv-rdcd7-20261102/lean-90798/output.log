@@ -1,0 +1,21 @@
+R1Z.PV_RDCD5_V197Restored.parser_instance : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  R1Z.ProverRwSuccessParserSource.aspis_core.field.QM31.from_le_bytes bytes = R1Z.PV_RDCD5_V197.reference ↑bytes
+'R1Z.PV_RDCD5_V197Restored.parser_instance' depends on axioms: [propext, Classical.choice, Quot.sound]
+R1Z.PV_RDCD5_V197Restored.native_window : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (a b : Aeneas.Std.Usize),
+  ↑b = ↑a + 8 →
+    ↑b ≤ (↑bytes).length →
+      (do
+          let part ←
+            Aeneas.Std.core.slice.index.Slice.index
+                (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) bytes { start := a, «end» := b }
+          R1Z.ProverRwSuccessParserSource.aspis_core.field.CM31.from_le_bytes part) =
+        R1Z.PV_RDCD5_ParserFlat.cmAt ↑bytes ↑a
+'R1Z.PV_RDCD5_V197Restored.native_window' depends on axioms: [propext, Classical.choice, Quot.sound]
+R1Z.PV_RDCD5_V197Restored.input_frame : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  (do
+      let out ← R1Z.ProverRwSuccessParserSource.aspis_core.field.QM31.from_le_bytes bytes
+      Aeneas.Std.Result.ok (out, bytes)) =
+    do
+    let out ← R1Z.PV_RDCD5_V197.reference ↑bytes
+    Aeneas.Std.Result.ok (out, bytes)
+'R1Z.PV_RDCD5_V197Restored.input_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
