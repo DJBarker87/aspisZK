@@ -1,3 +1,7 @@
+## Part 2 in progress
+
+Lead authorized NFZ_B002 (corrected frozen type-check), NFZ_B003 (independent authority), and NFZ_B004 only for an own-script failure repair. NFZ_B001 and its failed inputs remain retained. Existing statuses will be preserved; reached missing functions get new OPEN occurrences. Q/S/D will be regenerated without the old exact-membership assertions.
+
 # NFZ inventory defect handoff
 
 **INCOMPLETE — both requested repairs remain unreviewed.** Branch

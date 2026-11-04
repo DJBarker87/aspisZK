@@ -17,7 +17,7 @@ for p in m['packages']:
    v=label.split(' ')
    if v[0]==q['name'] and (len(v)<2 or v[1]==q['version']) and (len(v)<3 or v[2].strip('()')==q.get('source')):ok=True
   if not ok:errors.append([key(p),key(q)])
-# Repair of NFZ_B001's own metadata validator; NOT rerun under this job.
+# Part 2 repair of NFZ_B001 metadata projection, authorized for NFZ_B002.
 # Cargo omits the disabled optional z4 root and its two local dependencies.
 # Match NFQ's frozen graph projection, with no extra or mismatched edge allowed.
 allowed_missing={('aspis-r1-cert-build','0.0.0',None),('aspis-r1-cert-check','0.0.0',None),('aspis-z4b-probe','0.1.0',None)}
@@ -30,6 +30,7 @@ for tool in ['rustc','cargo']:
  r=subprocess.run(['/home/dombarker/.cargo/bin/'+tool,'+nightly-2026-09-17','-Vv'],capture_output=True,text=True);(B/('NFZ_'+tool+'_VERSION.txt')).write_text(r.stdout+r.stderr);assert r.returncode==0
 cmd=[cargo,'+nightly-2026-09-17','check','--manifest-path',manifest,'--locked','--offline','--features',features,'--lib','-j','4','--target-dir',str(B/'NFZ_target')]
 (B/'NFZ_BUILD_COMMAND.json').write_text(json.dumps(cmd));rc=subprocess.run(cmd,cwd=S).returncode
+assert all(sha(S/p)==h for p,h in pins['files'].items()), 'frozen source changed during check'
 (B/'NFZ_LOCK_CHECK.json').write_text(json.dumps(dict(before=expected,after=sha(S/'Cargo.lock'),unchanged=sha(S/'Cargo.lock')==expected)))
 assert sha(S/'Cargo.lock')==expected
 sys.exit(rc)
