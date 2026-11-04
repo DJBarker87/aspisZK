@@ -92,3 +92,31 @@ NEQ_PaymentDomains facts are reused without reproof. No new composed row is
 claimed. The next independent member is the boxed constructor subtree needed
 by reconstruct_asq8_statement; the request's exact comparison/parent gaps remain
 visible rather than being supplied as a whole-root bridge hypothesis.
+
+## Constructor model and call-domain stage
+
+L009 compiles NEU_BoxModel: actual raw validator totality follows from the
+unchanged NEE_RawValidatorCohort law and inverse carrier. Both actual emitted
+Box constructors now have complete Result laws with no sameCall premise. Their
+run substitutes the SAME already composed NEM validator oracle, preserving its
+full Result, unchanged external state and ordered argument-bearing trace.
+L007/L008 are excluded own definitional-reduction failures; no sorry-containing
+failed target supplies credit.
+
+L010 composes the actual emitted reconstruction control from NDM with these
+constructor laws, including every index/asset rejection. L011 transports that
+model theorem to the existing selected JHf_ReconstructionSlot source/op52,
+without installing a replacement dictionary. L012 proves the reached common,
+transfer and withdrawal arguments, canonical carrier round trips, and exact
+constructor reply range. These domain/range facts have no Prop hypotheses.
+Every new top theorem prints only propext,Classical.choice,Quot.sound (or fewer).
+The exact snapshots, object/dependency hashes, wall/RSS/swap and revision are in
+the successful receipts. These are model/domain results pending the complete
+native common/constructor/caller certificates; they do not yet close a row.
+
+K023–068 finish all23 transfer-constructor field windows and matched controls.
+Every positive passes; every wrong-field control fails. The local full-Result
+oracle observes the exact constructed Statement and the returned success Box
+is the SAME validated allocation. All raw typed common/public values, including
+noncanonical values and all validation errors, are covered. No stub_verified,
+function pointer, writable static, field product or SHA implementation is used.
