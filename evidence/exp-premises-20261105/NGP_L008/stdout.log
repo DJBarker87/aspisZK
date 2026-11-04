@@ -1,0 +1,143 @@
+def AspisR1.CPR_DataPersistence.TwoTransactionLaw : {Tx Key : Type} →
+  (next : Tx → Tx → Prop) →
+    (ordinary : Tx → Key → Prop) →
+      (before tentative : Tx → Key → AspisR1.CPR_DataPersistence.Image) →
+        (success : Tx → Bool) → (loaded : Tx → Key → Option.{0} AspisV8R19.DuplexFrames.Bytes) → Prop :=
+fun {Tx Key : Type} (next : Tx → Tx → Prop) (ordinary : Tx → Key → Prop)
+    (before tentative : Tx → Key → AspisR1.CPR_DataPersistence.Image) (success : Tx → Bool)
+    (loaded : Tx → Key → Option.{0} AspisV8R19.DuplexFrames.Bytes) =>
+  ∀ (t u : Tx),
+    next t u →
+      ∀ (key : Key),
+        ordinary t key →
+          @Eq.{1} (Option.{0} AspisV8R19.DuplexFrames.Bytes) (loaded u key)
+            (AspisR1.CPR_DataPersistence.visible
+              (@ite.{1} AspisR1.CPR_DataPersistence.Image (@Eq.{1} Bool (success t) Bool.true)
+                (instDecidableEqBool (success t) Bool.true) (tentative t key) (before t key)))
+structure AspisR1.CPG_Projection.Observations (Tx A : Type) : Type
+number of parameters: 2
+fields:
+  AspisR1.CPG_Projection.Observations.bank : Tx → AspisR1.CPP_BankState.Bank
+  AspisR1.CPG_Projection.Observations.layout : Tx → AspisR1.Hist_RuntimeEntry.Layout
+  AspisR1.CPG_Projection.Observations.next : Tx → Tx → Prop
+  AspisR1.CPG_Projection.Observations.intervening : Tx → Tx → List.{0} Nat
+  AspisR1.CPG_Projection.Observations.parentReply : Tx → AspisR1.CPP_Atomic.Reply Unit
+  AspisR1.CPG_Projection.Observations.copied : Tx → Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8
+  AspisR1.CPG_Projection.Observations.actions : Tx → List.{0} (AspisR1.CPP_BankState.Action A)
+  AspisR1.CPG_Projection.Observations.parentTentative : Tx → AspisR1.CPP_BankState.Bank
+  AspisR1.CPG_Projection.Observations.physicalEvents : Tx → List.{0} AspisR1.S2X.AccountEvent
+constructor:
+  AspisR1.CPG_Projection.Observations.mk {Tx A : Type} (bank : Tx → AspisR1.CPP_BankState.Bank)
+    (layout : Tx → AspisR1.Hist_RuntimeEntry.Layout) (next : Tx → Tx → Prop) (intervening : Tx → Tx → List.{0} Nat)
+    (parentReply : Tx → AspisR1.CPP_Atomic.Reply Unit) (copied : Tx → Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+    (actions : Tx → List.{0} (AspisR1.CPP_BankState.Action A)) (parentTentative : Tx → AspisR1.CPP_BankState.Bank)
+    (physicalEvents : Tx → List.{0} AspisR1.S2X.AccountEvent) : AspisR1.CPG_Projection.Observations Tx A
+structure AspisR1.CPH_Game.DeployedPairExecution {Tx A : Type} (p : AspisR1.CPG_Projection.Observations Tx A) (t u : Tx)
+  (e1 e2 : AspisR1.S2W_D189Entry.Entry) (saved : Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+  (sourceActions : List.{0} (AspisR1.CPP_BankState.Action A)) (n1 : AspisR1.S2W_ExtractionBoundary.First)
+  (n2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (copy :
+    AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record) →
+      Nat → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (Nat → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (id : AspisR1.S2W_ExtractionBoundary.Program) : Prop
+number of parameters: 14
+fields:
+  AspisR1.CPH_Game.DeployedPairExecution.consecutive : And (@AspisR1.CPG_Projection.Observations.next Tx A p t u)
+      (And (@Eq.{1} AspisR1.S2W_D189Entry.Entry e1 (@AspisR1.CPG_Projection.entry Tx A p t))
+        (@Eq.{1} AspisR1.S2W_D189Entry.Entry e2 (@AspisR1.CPG_Projection.entry Tx A p u)))
+  AspisR1.CPH_Game.DeployedPairExecution.checkpoint : And
+      (@Eq.{1} Nat
+        (@Prod.fst.{0, 0} Nat Nat
+          (AspisR1.Hist_RuntimeEntry.Layout.handles (@AspisR1.CPG_Projection.Observations.layout Tx A p t)
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+        (@Prod.fst.{0, 0} Nat Nat
+          (AspisR1.Hist_RuntimeEntry.Layout.handles (@AspisR1.CPG_Projection.Observations.layout Tx A p u)
+            (@OfNat.ofNat.{0} Nat (nat_lit 6) (instOfNatNat (nat_lit 6))))))
+      (And
+        (@Eq.{1} AspisR1.Hist_Authority.Key
+          (AspisR1.CPS_PhysicalKey.key e1 (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+          (AspisR1.CPS_PhysicalKey.key e2 (@OfNat.ofNat.{0} Nat (nat_lit 6) (instOfNatNat (nat_lit 6)))))
+        (Not
+          (@Membership.mem.{0, 0} Nat (List.{0} Nat) (@List.instMembership.{0} Nat)
+            (@AspisR1.CPG_Projection.Observations.intervening Tx A p t u)
+            (@Prod.fst.{0, 0} Nat Nat
+              (AspisR1.Hist_RuntimeEntry.Layout.handles (@AspisR1.CPG_Projection.Observations.layout Tx A p t)
+                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))))))
+  AspisR1.CPH_Game.DeployedPairExecution.parent : @Eq.{1} Bool (@AspisR1.CPG_Projection.success Tx A p t) Bool.true
+  AspisR1.CPH_Game.DeployedPairExecution.recorded : And
+      (And
+        (@Eq.{1} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8) (@AspisR1.CPG_Projection.Observations.copied Tx A p t)
+          saved)
+        (And
+          (@Eq.{1} (List.{0} (AspisR1.CPP_BankState.Action A)) (@AspisR1.CPG_Projection.Observations.actions Tx A p t)
+            sourceActions)
+          (@AspisR1.CPG_RuntimeTrace.Executes A n1 n2 copy allocator id
+            (AspisR1.CPR_SourceBank.afterCopy
+              (AspisR1.CPG_Projection.cached (@AspisR1.CPG_Projection.Observations.bank Tx A p t))
+              (@Prod.fst.{0, 0} Nat Nat
+                (AspisR1.Hist_RuntimeEntry.Layout.handles (@AspisR1.CPG_Projection.Observations.layout Tx A p t)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+              saved)
+            sourceActions (@AspisR1.CPG_Projection.Observations.parentTentative Tx A p t)
+            (@AspisR1.CPG_Projection.Observations.physicalEvents Tx A p t))))
+      (@AspisR1.CPG_RuntimeTrace.Executes A n1 n2 copy allocator id
+        (AspisR1.CPG_Projection.cached (@AspisR1.CPG_Projection.Observations.bank Tx A p u))
+        (@AspisR1.CPG_Projection.Observations.actions Tx A p u)
+        (@AspisR1.CPG_Projection.Observations.parentTentative Tx A p u)
+        (@AspisR1.CPG_Projection.Observations.physicalEvents Tx A p u))
+constructor:
+  AspisR1.CPH_Game.DeployedPairExecution.mk {Tx A : Type} {p : AspisR1.CPG_Projection.Observations Tx A} {t u : Tx}
+    {e1 e2 : AspisR1.S2W_D189Entry.Entry} {saved : Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8}
+    {sourceActions : List.{0} (AspisR1.CPP_BankState.Action A)} {n1 : AspisR1.S2W_ExtractionBoundary.First}
+    {n2 : AspisR1.S2W_ExtractionBoundary.Second}
+    {copy :
+      AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record) →
+        Nat → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (Nat → AspisR1.S2W_D189Entry.Record)}
+    {allocator : AspisR1.S2W_D189Wrappers.Allocator A} {id : AspisR1.S2W_ExtractionBoundary.Program}
+    (consecutive :
+      And (@AspisR1.CPG_Projection.Observations.next Tx A p t u)
+        (And (@Eq.{1} AspisR1.S2W_D189Entry.Entry e1 (@AspisR1.CPG_Projection.entry Tx A p t))
+          (@Eq.{1} AspisR1.S2W_D189Entry.Entry e2 (@AspisR1.CPG_Projection.entry Tx A p u))))
+    (checkpoint :
+      And
+        (@Eq.{1} Nat
+          (@Prod.fst.{0, 0} Nat Nat
+            (AspisR1.Hist_RuntimeEntry.Layout.handles (@AspisR1.CPG_Projection.Observations.layout Tx A p t)
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+          (@Prod.fst.{0, 0} Nat Nat
+            (AspisR1.Hist_RuntimeEntry.Layout.handles (@AspisR1.CPG_Projection.Observations.layout Tx A p u)
+              (@OfNat.ofNat.{0} Nat (nat_lit 6) (instOfNatNat (nat_lit 6))))))
+        (And
+          (@Eq.{1} AspisR1.Hist_Authority.Key
+            (AspisR1.CPS_PhysicalKey.key e1 (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+            (AspisR1.CPS_PhysicalKey.key e2 (@OfNat.ofNat.{0} Nat (nat_lit 6) (instOfNatNat (nat_lit 6)))))
+          (Not
+            (@Membership.mem.{0, 0} Nat (List.{0} Nat) (@List.instMembership.{0} Nat)
+              (@AspisR1.CPG_Projection.Observations.intervening Tx A p t u)
+              (@Prod.fst.{0, 0} Nat Nat
+                (AspisR1.Hist_RuntimeEntry.Layout.handles (@AspisR1.CPG_Projection.Observations.layout Tx A p t)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))))))
+    (parent : @Eq.{1} Bool (@AspisR1.CPG_Projection.success Tx A p t) Bool.true)
+    (recorded :
+      And
+        (And
+          (@Eq.{1} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8) (@AspisR1.CPG_Projection.Observations.copied Tx A p t)
+            saved)
+          (And
+            (@Eq.{1} (List.{0} (AspisR1.CPP_BankState.Action A)) (@AspisR1.CPG_Projection.Observations.actions Tx A p t)
+              sourceActions)
+            (@AspisR1.CPG_RuntimeTrace.Executes A n1 n2 copy allocator id
+              (AspisR1.CPR_SourceBank.afterCopy
+                (AspisR1.CPG_Projection.cached (@AspisR1.CPG_Projection.Observations.bank Tx A p t))
+                (@Prod.fst.{0, 0} Nat Nat
+                  (AspisR1.Hist_RuntimeEntry.Layout.handles (@AspisR1.CPG_Projection.Observations.layout Tx A p t)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                saved)
+              sourceActions (@AspisR1.CPG_Projection.Observations.parentTentative Tx A p t)
+              (@AspisR1.CPG_Projection.Observations.physicalEvents Tx A p t))))
+        (@AspisR1.CPG_RuntimeTrace.Executes A n1 n2 copy allocator id
+          (AspisR1.CPG_Projection.cached (@AspisR1.CPG_Projection.Observations.bank Tx A p u))
+          (@AspisR1.CPG_Projection.Observations.actions Tx A p u)
+          (@AspisR1.CPG_Projection.Observations.parentTentative Tx A p u)
+          (@AspisR1.CPG_Projection.Observations.physicalEvents Tx A p u))) :
+    @AspisR1.CPH_Game.DeployedPairExecution Tx A p t u e1 e2 saved sourceActions n1 n2 copy allocator id

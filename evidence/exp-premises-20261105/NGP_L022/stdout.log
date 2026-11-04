@@ -1,0 +1,788 @@
+structure AspisR1.S2Trust.S2TrustedSdkBorrow {W F : Type} (L : AspisR1.S2Trust.Library W F) : Prop
+number of parameters: 3
+fields:
+  AspisR1.S2Trust.S2TrustedSdkBorrow.account_data_cell : ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+      @AspisR1.S2Trust.Library.related W F L w s →
+        @AspisR1.S2Trust.Valid F s →
+          ∀ (a b : Nat),
+            And
+              (@Eq.{1} Nat (@AspisR1.S2Trust.Library.accountData W F L w a)
+                (@Prod.fst.{0, 0} Nat Nat (@AspisR1.S2Trust.Heap.accounts F s a)))
+              (And
+                (@Eq.{1} Nat (@AspisR1.S2Trust.Library.accountLamports W F L w a)
+                  (@Prod.snd.{0, 0} Nat Nat (@AspisR1.S2Trust.Heap.accounts F s a)))
+                (And
+                  (@Eq.{1} Nat (@Prod.fst.{0, 0} Nat Nat (@AspisR1.S2Trust.Heap.accounts F s a))
+                      (@Prod.fst.{0, 0} Nat Nat (@AspisR1.S2Trust.Heap.accounts F s b)) →
+                    @Eq.{1} Nat (@AspisR1.S2Trust.Library.accountData W F L w a)
+                      (@AspisR1.S2Trust.Library.accountData W F L w b))
+                  (@Eq.{1} Bool (@AspisR1.S2Trust.Heap.ownerLive F s a) Bool.true →
+                    @Ne.{1} Nat (@AspisR1.S2Trust.Library.accountData W F L w a)
+                      (@AspisR1.S2Trust.Library.accountLamports W F L w a))))
+  AspisR1.S2Trust.S2TrustedSdkBorrow.cell_payload : ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+      @AspisR1.S2Trust.Library.related W F L w s →
+        @AspisR1.S2Trust.Valid F s →
+          ∀ (c : Nat),
+            @Eq.{1} AspisR1.S2Trust.Payload (@AspisR1.S2Trust.Library.cellPayload W F L w c)
+              (@AspisR1.S2Trust.Heap.payload F s c)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.cell_counter : ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+      @AspisR1.S2Trust.Library.related W F L w s →
+        @AspisR1.S2Trust.Valid F s →
+          ∀ (c : Nat),
+            And (@Eq.{1} Int (@AspisR1.S2Trust.Library.cellCounter W F L w c) (@AspisR1.S2Trust.Heap.counter F s c))
+              (∀ (t : Nat),
+                @Eq.{1} (Option.{0} AspisR1.S2Trust.Guard) (@AspisR1.S2Trust.Library.liveGuard W F L w t)
+                  (@AspisR1.S2Trust.lookup F s t))
+  AspisR1.S2Trust.S2TrustedSdkBorrow.shared_ok : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : Nat),
+      @AspisR1.S2Trust.Library.related W F L w s →
+        @AspisR1.S2Trust.Valid F s →
+          @AspisR1.S2Trust.Enabled F s (AspisR1.S2Trust.Op.shared a t o) →
+            @LE.le.{0} Int Int.instLEInt (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+                (@AspisR1.S2Trust.Heap.counter F s (@Prod.fst.{0, 0} Nat Nat (@AspisR1.S2Trust.Heap.accounts F s a))) →
+              @LT.lt.{0} Int Int.instLTInt
+                  (@AspisR1.S2Trust.Heap.counter F s (@Prod.fst.{0, 0} Nat Nat (@AspisR1.S2Trust.Heap.accounts F s a)))
+                  AspisR1.S2Trust.maxCounter →
+                @AspisR1.S2Trust.Matches W F L w (AspisR1.S2Trust.Op.shared a t o)
+                  (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap F) AspisR1.S2Trust.Reply
+                    (@AspisR1.S2Trust.acquire F s (@Prod.fst.{0, 0} Nat Nat (@AspisR1.S2Trust.Heap.accounts F s a)) t o
+                      AspisR1.S2Trust.Kind.shared)
+                    (AspisR1.S2Trust.Reply.guard t))
+  AspisR1.S2Trust.S2TrustedSdkBorrow.shared_err : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : Nat),
+      @AspisR1.S2Trust.Library.related W F L w s →
+        @AspisR1.S2Trust.Valid F s →
+          @AspisR1.S2Trust.Enabled F s (AspisR1.S2Trust.Op.shared a t o) →
+            Or
+                (@LT.lt.{0} Int Int.instLTInt
+                  (@AspisR1.S2Trust.Heap.counter F s (@Prod.fst.{0, 0} Nat Nat (@AspisR1.S2Trust.Heap.accounts F s a)))
+                  (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))))
+                (@Eq.{1} Int
+                  (@AspisR1.S2Trust.Heap.counter F s (@Prod.fst.{0, 0} Nat Nat (@AspisR1.S2Trust.Heap.accounts F s a)))
+                  AspisR1.S2Trust.maxCounter) →
+              @AspisR1.S2Trust.Matches W F L w (AspisR1.S2Trust.Op.shared a t o)
+                (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap F) AspisR1.S2Trust.Reply s AspisR1.S2Trust.Reply.borrowFailed)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.exclusive_ok : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : Nat),
+      @AspisR1.S2Trust.Library.related W F L w s →
+        @AspisR1.S2Trust.Valid F s →
+          @AspisR1.S2Trust.Enabled F s (AspisR1.S2Trust.Op.exclusive a t o) →
+            @Eq.{1} Int
+                (@AspisR1.S2Trust.Heap.counter F s (@Prod.fst.{0, 0} Nat Nat (@AspisR1.S2Trust.Heap.accounts F s a)))
+                (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))) →
+              @AspisR1.S2Trust.Matches W F L w (AspisR1.S2Trust.Op.exclusive a t o)
+                (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap F) AspisR1.S2Trust.Reply
+                  (@AspisR1.S2Trust.acquire F s (@Prod.fst.{0, 0} Nat Nat (@AspisR1.S2Trust.Heap.accounts F s a)) t o
+                    AspisR1.S2Trust.Kind.exclusive)
+                  (AspisR1.S2Trust.Reply.guard t))
+  AspisR1.S2Trust.S2TrustedSdkBorrow.exclusive_err : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : Nat),
+      @AspisR1.S2Trust.Library.related W F L w s →
+        @AspisR1.S2Trust.Valid F s →
+          @AspisR1.S2Trust.Enabled F s (AspisR1.S2Trust.Op.exclusive a t o) →
+            @Ne.{1} Int
+                (@AspisR1.S2Trust.Heap.counter F s (@Prod.fst.{0, 0} Nat Nat (@AspisR1.S2Trust.Heap.accounts F s a)))
+                (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))) →
+              @AspisR1.S2Trust.Matches W F L w (AspisR1.S2Trust.Op.exclusive a t o)
+                (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap F) AspisR1.S2Trust.Reply s AspisR1.S2Trust.Reply.borrowFailed)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.shared_deref : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : Nat)
+      (g : AspisR1.S2Trust.Guard),
+      @AspisR1.S2Trust.Library.related W F L w s →
+        @AspisR1.S2Trust.Valid F s →
+          @Eq.{1} (Option.{0} AspisR1.S2Trust.Guard) (@AspisR1.S2Trust.lookup F s t)
+              (@Option.some.{0} AspisR1.S2Trust.Guard g) →
+            @Eq.{1} AspisR1.S2Trust.Kind (AspisR1.S2Trust.Guard.kind g) AspisR1.S2Trust.Kind.shared →
+              @AspisR1.S2Trust.Matches W F L w (AspisR1.S2Trust.Op.deref t)
+                (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap F) AspisR1.S2Trust.Reply s
+                  (AspisR1.S2Trust.Reply.payload (@AspisR1.S2Trust.Heap.payload F s (AspisR1.S2Trust.Guard.cell g))))
+  AspisR1.S2Trust.S2TrustedSdkBorrow.exclusive_deref : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : Nat)
+      (g : AspisR1.S2Trust.Guard),
+      @AspisR1.S2Trust.Library.related W F L w s →
+        @AspisR1.S2Trust.Valid F s →
+          @Eq.{1} (Option.{0} AspisR1.S2Trust.Guard) (@AspisR1.S2Trust.lookup F s t)
+              (@Option.some.{0} AspisR1.S2Trust.Guard g) →
+            @Eq.{1} AspisR1.S2Trust.Kind (AspisR1.S2Trust.Guard.kind g) AspisR1.S2Trust.Kind.exclusive →
+              And
+                (@AspisR1.S2Trust.Matches W F L w (AspisR1.S2Trust.Op.deref t)
+                  (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap F) AspisR1.S2Trust.Reply s
+                    (AspisR1.S2Trust.Reply.payload (@AspisR1.S2Trust.Heap.payload F s (AspisR1.S2Trust.Guard.cell g)))))
+                (∀ (i : Nat) (v : UInt8),
+                  @LT.lt.{0} Nat instLTNat i
+                      (AspisR1.S2Trust.Descriptor.length
+                        (AspisR1.S2Trust.Payload.descriptor
+                          (@AspisR1.S2Trust.Heap.payload F s (AspisR1.S2Trust.Guard.cell g)))) →
+                    @AspisR1.S2Trust.Matches W F L w (AspisR1.S2Trust.Op.write t i v)
+                      (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap F) AspisR1.S2Trust.Reply
+                        (@AspisR1.S2Trust.writeAt F s g i v) AspisR1.S2Trust.Reply.unit))
+  AspisR1.S2Trust.S2TrustedSdkBorrow.guard_move : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t o : Nat),
+      @AspisR1.S2Trust.Library.related W F L w s →
+        @AspisR1.S2Trust.Valid F s →
+          @AspisR1.S2Trust.Enabled F s (AspisR1.S2Trust.Op.move t o) →
+            @AspisR1.S2Trust.Matches W F L w (AspisR1.S2Trust.Op.move t o)
+              (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap F) AspisR1.S2Trust.Reply (@AspisR1.S2Trust.relocate F s t o)
+                (AspisR1.S2Trust.Reply.guard t))
+  AspisR1.S2Trust.S2TrustedSdkBorrow.shared_drop : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : Nat)
+      (g : AspisR1.S2Trust.Guard),
+      @AspisR1.S2Trust.Library.related W F L w s →
+        @AspisR1.S2Trust.Valid F s →
+          @Eq.{1} (Option.{0} AspisR1.S2Trust.Guard) (@AspisR1.S2Trust.lookup F s t)
+              (@Option.some.{0} AspisR1.S2Trust.Guard g) →
+            @Eq.{1} AspisR1.S2Trust.Kind (AspisR1.S2Trust.Guard.kind g) AspisR1.S2Trust.Kind.shared →
+              @LT.lt.{0} Int Int.instLTInt (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+                  (@AspisR1.S2Trust.Heap.counter F s (AspisR1.S2Trust.Guard.cell g)) →
+                @AspisR1.S2Trust.Matches W F L w (AspisR1.S2Trust.Op.drop t)
+                  (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap F) AspisR1.S2Trust.Reply (@AspisR1.S2Trust.release F s g)
+                    AspisR1.S2Trust.Reply.unit)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.exclusive_drop : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : Nat)
+      (g : AspisR1.S2Trust.Guard),
+      @AspisR1.S2Trust.Library.related W F L w s →
+        @AspisR1.S2Trust.Valid F s →
+          @Eq.{1} (Option.{0} AspisR1.S2Trust.Guard) (@AspisR1.S2Trust.lookup F s t)
+              (@Option.some.{0} AspisR1.S2Trust.Guard g) →
+            @Eq.{1} AspisR1.S2Trust.Kind (AspisR1.S2Trust.Guard.kind g) AspisR1.S2Trust.Kind.exclusive →
+              @Eq.{1} Int (@AspisR1.S2Trust.Heap.counter F s (AspisR1.S2Trust.Guard.cell g))
+                  (@Neg.neg.{0} Int Int.instNegInt (@OfNat.ofNat.{0} Int (nat_lit 1) (@instOfNat (nat_lit 1)))) →
+                @AspisR1.S2Trust.Matches W F L w (AspisR1.S2Trust.Op.drop t)
+                  (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap F) AspisR1.S2Trust.Reply (@AspisR1.S2Trust.release F s g)
+                    AspisR1.S2Trust.Reply.unit)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.error_move_drop : ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+      @AspisR1.S2Trust.Library.related W F L w s →
+        @AspisR1.S2Trust.Valid F s →
+          @AspisR1.S2Trust.Matches W F L w AspisR1.S2Trust.Op.errorMoveDrop
+            (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap F) AspisR1.S2Trust.Reply s AspisR1.S2Trust.Reply.borrowFailed)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.borrow_frame : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (op : AspisR1.S2Trust.Op),
+      @AspisR1.S2Trust.Library.related W F L w s →
+        @AspisR1.S2Trust.Valid F s →
+          @AspisR1.S2Trust.Enabled F s op → @AspisR1.S2Trust.Matches W F L w op (@AspisR1.S2Trust.run F s op)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.guard_liveness : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : Nat)
+      (g : AspisR1.S2Trust.Guard),
+      @AspisR1.S2Trust.Library.related W F L w s →
+        @AspisR1.S2Trust.Valid F s →
+          @Eq.{1} (Option.{0} AspisR1.S2Trust.Guard) (@AspisR1.S2Trust.lookup F s t)
+              (@Option.some.{0} AspisR1.S2Trust.Guard g) →
+            And
+              (@Eq.{1} (Option.{0} AspisR1.S2Trust.Guard) (@AspisR1.S2Trust.Library.liveGuard W F L w t)
+                (@Option.some.{0} AspisR1.S2Trust.Guard g))
+              (And (@Eq.{1} Bool (@AspisR1.S2Trust.Library.allocated W F L w (AspisR1.S2Trust.Guard.cell g)) Bool.true)
+                (@Eq.{1} AspisR1.S2Trust.Descriptor
+                  (AspisR1.S2Trust.Payload.descriptor
+                    (@AspisR1.S2Trust.Library.cellPayload W F L w (AspisR1.S2Trust.Guard.cell g)))
+                  (AspisR1.S2Trust.Guard.descriptor g)))
+constructor:
+  AspisR1.S2Trust.S2TrustedSdkBorrow.mk {W F : Type} {L : AspisR1.S2Trust.Library W F}
+    (account_data_cell :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+        @AspisR1.S2Trust.Library.related W F L w s →
+          @AspisR1.S2Trust.Valid F s →
+            ∀ (a b : Nat),
+              And
+                (@Eq.{1} Nat (@AspisR1.S2Trust.Library.accountData W F L w a)
+                  (@Prod.fst.{0, 0} Nat Nat (@AspisR1.S2Trust.Heap.accounts F s a)))
+                (And
+                  (@Eq.{1} Nat (@AspisR1.S2Trust.Library.accountLamports W F L w a)
+                    (@Prod.snd.{0, 0} Nat Nat (@AspisR1.S2Trust.Heap.accounts F s a)))
+                  (And
+                    (@Eq.{1} Nat (@Prod.fst.{0, 0} Nat Nat (@AspisR1.S2Trust.Heap.accounts F s a))
+                        (@Prod.fst.{0, 0} Nat Nat (@AspisR1.S2Trust.Heap.accounts F s b)) →
+                      @Eq.{1} Nat (@AspisR1.S2Trust.Library.accountData W F L w a)
+                        (@AspisR1.S2Trust.Library.accountData W F L w b))
+                    (@Eq.{1} Bool (@AspisR1.S2Trust.Heap.ownerLive F s a) Bool.true →
+                      @Ne.{1} Nat (@AspisR1.S2Trust.Library.accountData W F L w a)
+                        (@AspisR1.S2Trust.Library.accountLamports W F L w a)))))
+    (cell_payload :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+        @AspisR1.S2Trust.Library.related W F L w s →
+          @AspisR1.S2Trust.Valid F s →
+            ∀ (c : Nat),
+              @Eq.{1} AspisR1.S2Trust.Payload (@AspisR1.S2Trust.Library.cellPayload W F L w c)
+                (@AspisR1.S2Trust.Heap.payload F s c))
+    (cell_counter :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+        @AspisR1.S2Trust.Library.related W F L w s →
+          @AspisR1.S2Trust.Valid F s →
+            ∀ (c : Nat),
+              And (@Eq.{1} Int (@AspisR1.S2Trust.Library.cellCounter W F L w c) (@AspisR1.S2Trust.Heap.counter F s c))
+                (∀ (t : Nat),
+                  @Eq.{1} (Option.{0} AspisR1.S2Trust.Guard) (@AspisR1.S2Trust.Library.liveGuard W F L w t)
+                    (@AspisR1.S2Trust.lookup F s t)))
+    (shared_ok :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : Nat),
+        @AspisR1.S2Trust.Library.related W F L w s →
+          @AspisR1.S2Trust.Valid F s →
+            @AspisR1.S2Trust.Enabled F s (AspisR1.S2Trust.Op.shared a t o) →
+              @LE.le.{0} Int Int.instLEInt (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+                  (@AspisR1.S2Trust.Heap.counter F s
+                    (@Prod.fst.{0, 0} Nat Nat (@AspisR1.S2Trust.Heap.accounts F s a))) →
+                @LT.lt.{0} Int Int.instLTInt
+                    (@AspisR1.S2Trust.Heap.counter F s
+                      (@Prod.fst.{0, 0} Nat Nat (@AspisR1.S2Trust.Heap.accounts F s a)))
+                    AspisR1.S2Trust.maxCounter →
+                  @AspisR1.S2Trust.Matches W F L w (AspisR1.S2Trust.Op.shared a t o)
+                    (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap F) AspisR1.S2Trust.Reply
+                      (@AspisR1.S2Trust.acquire F s (@Prod.fst.{0, 0} Nat Nat (@AspisR1.S2Trust.Heap.accounts F s a)) t
+                        o AspisR1.S2Trust.Kind.shared)
+                      (AspisR1.S2Trust.Reply.guard t)))
+    (shared_err :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : Nat),
+        @AspisR1.S2Trust.Library.related W F L w s →
+          @AspisR1.S2Trust.Valid F s →
+            @AspisR1.S2Trust.Enabled F s (AspisR1.S2Trust.Op.shared a t o) →
+              Or
+                  (@LT.lt.{0} Int Int.instLTInt
+                    (@AspisR1.S2Trust.Heap.counter F s
+                      (@Prod.fst.{0, 0} Nat Nat (@AspisR1.S2Trust.Heap.accounts F s a)))
+                    (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))))
+                  (@Eq.{1} Int
+                    (@AspisR1.S2Trust.Heap.counter F s
+                      (@Prod.fst.{0, 0} Nat Nat (@AspisR1.S2Trust.Heap.accounts F s a)))
+                    AspisR1.S2Trust.maxCounter) →
+                @AspisR1.S2Trust.Matches W F L w (AspisR1.S2Trust.Op.shared a t o)
+                  (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap F) AspisR1.S2Trust.Reply s AspisR1.S2Trust.Reply.borrowFailed))
+    (exclusive_ok :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : Nat),
+        @AspisR1.S2Trust.Library.related W F L w s →
+          @AspisR1.S2Trust.Valid F s →
+            @AspisR1.S2Trust.Enabled F s (AspisR1.S2Trust.Op.exclusive a t o) →
+              @Eq.{1} Int
+                  (@AspisR1.S2Trust.Heap.counter F s (@Prod.fst.{0, 0} Nat Nat (@AspisR1.S2Trust.Heap.accounts F s a)))
+                  (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))) →
+                @AspisR1.S2Trust.Matches W F L w (AspisR1.S2Trust.Op.exclusive a t o)
+                  (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap F) AspisR1.S2Trust.Reply
+                    (@AspisR1.S2Trust.acquire F s (@Prod.fst.{0, 0} Nat Nat (@AspisR1.S2Trust.Heap.accounts F s a)) t o
+                      AspisR1.S2Trust.Kind.exclusive)
+                    (AspisR1.S2Trust.Reply.guard t)))
+    (exclusive_err :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : Nat),
+        @AspisR1.S2Trust.Library.related W F L w s →
+          @AspisR1.S2Trust.Valid F s →
+            @AspisR1.S2Trust.Enabled F s (AspisR1.S2Trust.Op.exclusive a t o) →
+              @Ne.{1} Int
+                  (@AspisR1.S2Trust.Heap.counter F s (@Prod.fst.{0, 0} Nat Nat (@AspisR1.S2Trust.Heap.accounts F s a)))
+                  (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))) →
+                @AspisR1.S2Trust.Matches W F L w (AspisR1.S2Trust.Op.exclusive a t o)
+                  (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap F) AspisR1.S2Trust.Reply s AspisR1.S2Trust.Reply.borrowFailed))
+    (shared_deref :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : Nat) (g : AspisR1.S2Trust.Guard),
+        @AspisR1.S2Trust.Library.related W F L w s →
+          @AspisR1.S2Trust.Valid F s →
+            @Eq.{1} (Option.{0} AspisR1.S2Trust.Guard) (@AspisR1.S2Trust.lookup F s t)
+                (@Option.some.{0} AspisR1.S2Trust.Guard g) →
+              @Eq.{1} AspisR1.S2Trust.Kind (AspisR1.S2Trust.Guard.kind g) AspisR1.S2Trust.Kind.shared →
+                @AspisR1.S2Trust.Matches W F L w (AspisR1.S2Trust.Op.deref t)
+                  (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap F) AspisR1.S2Trust.Reply s
+                    (AspisR1.S2Trust.Reply.payload (@AspisR1.S2Trust.Heap.payload F s (AspisR1.S2Trust.Guard.cell g)))))
+    (exclusive_deref :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : Nat) (g : AspisR1.S2Trust.Guard),
+        @AspisR1.S2Trust.Library.related W F L w s →
+          @AspisR1.S2Trust.Valid F s →
+            @Eq.{1} (Option.{0} AspisR1.S2Trust.Guard) (@AspisR1.S2Trust.lookup F s t)
+                (@Option.some.{0} AspisR1.S2Trust.Guard g) →
+              @Eq.{1} AspisR1.S2Trust.Kind (AspisR1.S2Trust.Guard.kind g) AspisR1.S2Trust.Kind.exclusive →
+                And
+                  (@AspisR1.S2Trust.Matches W F L w (AspisR1.S2Trust.Op.deref t)
+                    (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap F) AspisR1.S2Trust.Reply s
+                      (AspisR1.S2Trust.Reply.payload
+                        (@AspisR1.S2Trust.Heap.payload F s (AspisR1.S2Trust.Guard.cell g)))))
+                  (∀ (i : Nat) (v : UInt8),
+                    @LT.lt.{0} Nat instLTNat i
+                        (AspisR1.S2Trust.Descriptor.length
+                          (AspisR1.S2Trust.Payload.descriptor
+                            (@AspisR1.S2Trust.Heap.payload F s (AspisR1.S2Trust.Guard.cell g)))) →
+                      @AspisR1.S2Trust.Matches W F L w (AspisR1.S2Trust.Op.write t i v)
+                        (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap F) AspisR1.S2Trust.Reply
+                          (@AspisR1.S2Trust.writeAt F s g i v) AspisR1.S2Trust.Reply.unit)))
+    (guard_move :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t o : Nat),
+        @AspisR1.S2Trust.Library.related W F L w s →
+          @AspisR1.S2Trust.Valid F s →
+            @AspisR1.S2Trust.Enabled F s (AspisR1.S2Trust.Op.move t o) →
+              @AspisR1.S2Trust.Matches W F L w (AspisR1.S2Trust.Op.move t o)
+                (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap F) AspisR1.S2Trust.Reply (@AspisR1.S2Trust.relocate F s t o)
+                  (AspisR1.S2Trust.Reply.guard t)))
+    (shared_drop :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : Nat) (g : AspisR1.S2Trust.Guard),
+        @AspisR1.S2Trust.Library.related W F L w s →
+          @AspisR1.S2Trust.Valid F s →
+            @Eq.{1} (Option.{0} AspisR1.S2Trust.Guard) (@AspisR1.S2Trust.lookup F s t)
+                (@Option.some.{0} AspisR1.S2Trust.Guard g) →
+              @Eq.{1} AspisR1.S2Trust.Kind (AspisR1.S2Trust.Guard.kind g) AspisR1.S2Trust.Kind.shared →
+                @LT.lt.{0} Int Int.instLTInt (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+                    (@AspisR1.S2Trust.Heap.counter F s (AspisR1.S2Trust.Guard.cell g)) →
+                  @AspisR1.S2Trust.Matches W F L w (AspisR1.S2Trust.Op.drop t)
+                    (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap F) AspisR1.S2Trust.Reply (@AspisR1.S2Trust.release F s g)
+                      AspisR1.S2Trust.Reply.unit))
+    (exclusive_drop :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : Nat) (g : AspisR1.S2Trust.Guard),
+        @AspisR1.S2Trust.Library.related W F L w s →
+          @AspisR1.S2Trust.Valid F s →
+            @Eq.{1} (Option.{0} AspisR1.S2Trust.Guard) (@AspisR1.S2Trust.lookup F s t)
+                (@Option.some.{0} AspisR1.S2Trust.Guard g) →
+              @Eq.{1} AspisR1.S2Trust.Kind (AspisR1.S2Trust.Guard.kind g) AspisR1.S2Trust.Kind.exclusive →
+                @Eq.{1} Int (@AspisR1.S2Trust.Heap.counter F s (AspisR1.S2Trust.Guard.cell g))
+                    (@Neg.neg.{0} Int Int.instNegInt (@OfNat.ofNat.{0} Int (nat_lit 1) (@instOfNat (nat_lit 1)))) →
+                  @AspisR1.S2Trust.Matches W F L w (AspisR1.S2Trust.Op.drop t)
+                    (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap F) AspisR1.S2Trust.Reply (@AspisR1.S2Trust.release F s g)
+                      AspisR1.S2Trust.Reply.unit))
+    (error_move_drop :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+        @AspisR1.S2Trust.Library.related W F L w s →
+          @AspisR1.S2Trust.Valid F s →
+            @AspisR1.S2Trust.Matches W F L w AspisR1.S2Trust.Op.errorMoveDrop
+              (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap F) AspisR1.S2Trust.Reply s AspisR1.S2Trust.Reply.borrowFailed))
+    (borrow_frame :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (op : AspisR1.S2Trust.Op),
+        @AspisR1.S2Trust.Library.related W F L w s →
+          @AspisR1.S2Trust.Valid F s →
+            @AspisR1.S2Trust.Enabled F s op → @AspisR1.S2Trust.Matches W F L w op (@AspisR1.S2Trust.run F s op))
+    (guard_liveness :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : Nat) (g : AspisR1.S2Trust.Guard),
+        @AspisR1.S2Trust.Library.related W F L w s →
+          @AspisR1.S2Trust.Valid F s →
+            @Eq.{1} (Option.{0} AspisR1.S2Trust.Guard) (@AspisR1.S2Trust.lookup F s t)
+                (@Option.some.{0} AspisR1.S2Trust.Guard g) →
+              And
+                (@Eq.{1} (Option.{0} AspisR1.S2Trust.Guard) (@AspisR1.S2Trust.Library.liveGuard W F L w t)
+                  (@Option.some.{0} AspisR1.S2Trust.Guard g))
+                (And
+                  (@Eq.{1} Bool (@AspisR1.S2Trust.Library.allocated W F L w (AspisR1.S2Trust.Guard.cell g)) Bool.true)
+                  (@Eq.{1} AspisR1.S2Trust.Descriptor
+                    (AspisR1.S2Trust.Payload.descriptor
+                      (@AspisR1.S2Trust.Library.cellPayload W F L w (AspisR1.S2Trust.Guard.cell g)))
+                    (AspisR1.S2Trust.Guard.descriptor g)))) :
+    @AspisR1.S2Trust.S2TrustedSdkBorrow W F L
+structure AspisR1.S2W_TrustedStd.TrustedStd {F : Type}
+  (copy : AspisR1.S2Trust.Heap F → Nat → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome F) : Prop
+number of parameters: 2
+fields:
+  AspisR1.S2W_TrustedStd.TrustedStd.slice_copy_from_slice : ∀ (s : AspisR1.S2Trust.Heap F) (dst : Nat)
+      (src : AspisR1.S2Trust.Payload),
+      @Eq.{1} (AspisR1.S2W_TrustedStd.Outcome F) (copy s dst src) (@AspisR1.S2W_TrustedStd.specification F s dst src)
+constructor:
+  AspisR1.S2W_TrustedStd.TrustedStd.mk {F : Type}
+    {copy : AspisR1.S2Trust.Heap F → Nat → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome F}
+    (slice_copy_from_slice :
+      ∀ (s : AspisR1.S2Trust.Heap F) (dst : Nat) (src : AspisR1.S2Trust.Payload),
+        @Eq.{1} (AspisR1.S2W_TrustedStd.Outcome F) (copy s dst src)
+          (@AspisR1.S2W_TrustedStd.specification F s dst src)) :
+    @AspisR1.S2W_TrustedStd.TrustedStd F copy
+structure AspisR1.ARU_Support.At {W A C Tx : Type} (L : AspisR1.S2Trust.Library W (Nat → AspisR1.S2W_D189Entry.Record))
+  (copy :
+    AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record) →
+      Nat → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (Nat → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (err : C) (r : AspisR1.NP6_StdModel.Reservation)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result.{0} AspisR1.SdkC_Source.Digest)
+  (a : AspisR1.SCE_Experiment.Adversary A) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) :
+  Type
+number of parameters: 15
+fields:
+  AspisR1.ARU_Support.At.entry : @AspisR1.ARS_Coverage.SupportedEntry W A C Tx L copy allocator c err r native1 native2
+      hashv a H
+  AspisR1.ARU_Support.At.firstAgrees : AspisR1.ARS_QueryTransport.Agrees H
+      (@Prod.snd.{0, 0}
+        (Aeneas.Std.Result.{0}
+          (Aeneas.Std.core.result.Result.{0, 0}
+            (Prod.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+              (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A))
+            AspisR1.AdapterRw.Cuts.PE))
+        AspisR1.SdkC_Source.Log
+        (@AspisR1.SdkC_Source.run hashv
+          (Aeneas.Std.core.result.Result.{0, 0}
+            (Prod.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+              (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A))
+            AspisR1.AdapterRw.Cuts.PE)
+          (@AspisR1.ARS_NativeAccount.firstSyntax A AspisR1.FIo_Install.W C
+            (@AspisR1.FIp_Install.configuration C err c r) hashv copy allocator AspisR1.CPH_Program.verifier
+            (@Prod.snd.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+              (AspisR1.GExq_AccountExperiment.FirstInputs A)
+              (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                (AspisR1.GExq_AccountExperiment.FirstInputs A) H (@AspisR1.SCE_Experiment.Adversary.first A a))))
+          (@List.nil.{0} AspisR1.SdkC_Source.Query)))
+  AspisR1.ARU_Support.At.secondAgrees : AspisR1.ARS_QueryTransport.Agrees H
+      (@Prod.snd.{0, 0}
+        (Aeneas.Std.Result.{0}
+          (Aeneas.Std.core.result.Result.{0, 0}
+            (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) AspisR1.AdapterRw.Cuts.PE))
+        AspisR1.SdkC_Source.Log
+        (@AspisR1.SdkC_Source.run hashv
+          (Aeneas.Std.core.result.Result.{0, 0}
+            (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) AspisR1.AdapterRw.Cuts.PE)
+          (@AspisR1.ARS_NativeAccount.secondSyntax A AspisR1.FIo_Install.W C
+            (@AspisR1.FIp_Install.configuration C err c r) hashv allocator AspisR1.CPH_Program.verifier
+            (@Prod.snd.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+              (AspisR1.GExq_AccountExperiment.SecondInputs A)
+              (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                (AspisR1.GExq_AccountExperiment.SecondInputs A) H
+                (@AspisR1.SCE_Experiment.Adversary.second A a
+                  (@Prod.snd.{0, 0}
+                    (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+                    (AspisR1.GExq_AccountExperiment.FirstInputs A)
+                    (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                      (AspisR1.GExq_AccountExperiment.FirstInputs A) H (@AspisR1.SCE_Experiment.Adversary.first A a)))
+                  (@AspisR1.ARS_Coverage.SupportedEntry.saved W A C Tx L copy allocator c err r native1 native2 hashv a
+                    H (@AspisR1.ARU_Support.At.entry W A C Tx L copy allocator c err r native1 native2 hashv a H self))
+                  (@AspisR1.ARS_Coverage.SupportedEntry.post1 W A C Tx L copy allocator c err r native1 native2 hashv a
+                    H (@AspisR1.ARU_Support.At.entry W A C Tx L copy allocator c err r native1 native2 hashv a H self))
+                  (@AspisR1.ARS_Coverage.SupportedEntry.final1 W A C Tx L copy allocator c err r native1 native2 hashv a
+                    H
+                    (@AspisR1.ARU_Support.At.entry W A C Tx L copy allocator c err r native1 native2 hashv a H
+                      self))))))
+          (@List.nil.{0} AspisR1.SdkC_Source.Query)))
+constructor:
+  AspisR1.ARU_Support.At.mk {W A C Tx : Type} {L : AspisR1.S2Trust.Library W (Nat → AspisR1.S2W_D189Entry.Record)}
+    {copy :
+      AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record) →
+        Nat → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (Nat → AspisR1.S2W_D189Entry.Record)}
+    {allocator : AspisR1.S2W_D189Wrappers.Allocator A}
+    {c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C} {err : C}
+    {r : AspisR1.NP6_StdModel.Reservation} {native1 : AspisR1.S2W_ExtractionBoundary.First}
+    {native2 : AspisR1.S2W_ExtractionBoundary.Second}
+    {hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result.{0} AspisR1.SdkC_Source.Digest}
+    {a : AspisR1.SCE_Experiment.Adversary A} {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    (entry : @AspisR1.ARS_Coverage.SupportedEntry W A C Tx L copy allocator c err r native1 native2 hashv a H)
+    (firstAgrees :
+      AspisR1.ARS_QueryTransport.Agrees H
+        (@Prod.snd.{0, 0}
+          (Aeneas.Std.Result.{0}
+            (Aeneas.Std.core.result.Result.{0, 0}
+              (Prod.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+                (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A))
+              AspisR1.AdapterRw.Cuts.PE))
+          AspisR1.SdkC_Source.Log
+          (@AspisR1.SdkC_Source.run hashv
+            (Aeneas.Std.core.result.Result.{0, 0}
+              (Prod.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+                (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A))
+              AspisR1.AdapterRw.Cuts.PE)
+            (@AspisR1.ARS_NativeAccount.firstSyntax A AspisR1.FIo_Install.W C
+              (@AspisR1.FIp_Install.configuration C err c r) hashv copy allocator AspisR1.CPH_Program.verifier
+              (@Prod.snd.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+                (AspisR1.GExq_AccountExperiment.FirstInputs A)
+                (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                  (AspisR1.GExq_AccountExperiment.FirstInputs A) H (@AspisR1.SCE_Experiment.Adversary.first A a))))
+            (@List.nil.{0} AspisR1.SdkC_Source.Query))))
+    (secondAgrees :
+      AspisR1.ARS_QueryTransport.Agrees H
+        (@Prod.snd.{0, 0}
+          (Aeneas.Std.Result.{0}
+            (Aeneas.Std.core.result.Result.{0, 0}
+              (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) AspisR1.AdapterRw.Cuts.PE))
+          AspisR1.SdkC_Source.Log
+          (@AspisR1.SdkC_Source.run hashv
+            (Aeneas.Std.core.result.Result.{0, 0}
+              (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) AspisR1.AdapterRw.Cuts.PE)
+            (@AspisR1.ARS_NativeAccount.secondSyntax A AspisR1.FIo_Install.W C
+              (@AspisR1.FIp_Install.configuration C err c r) hashv allocator AspisR1.CPH_Program.verifier
+              (@Prod.snd.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+                (AspisR1.GExq_AccountExperiment.SecondInputs A)
+                (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                  (AspisR1.GExq_AccountExperiment.SecondInputs A) H
+                  (@AspisR1.SCE_Experiment.Adversary.second A a
+                    (@Prod.snd.{0, 0}
+                      (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+                      (AspisR1.GExq_AccountExperiment.FirstInputs A)
+                      (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes
+                        AspisV8R19.SourceDuplexStep.State (AspisR1.GExq_AccountExperiment.FirstInputs A) H
+                        (@AspisR1.SCE_Experiment.Adversary.first A a)))
+                    (@AspisR1.ARS_Coverage.SupportedEntry.saved W A C Tx L copy allocator c err r native1 native2 hashv
+                      a H entry)
+                    (@AspisR1.ARS_Coverage.SupportedEntry.post1 W A C Tx L copy allocator c err r native1 native2 hashv
+                      a H entry)
+                    (@AspisR1.ARS_Coverage.SupportedEntry.final1 W A C Tx L copy allocator c err r native1 native2 hashv
+                      a H entry)))))
+            (@List.nil.{0} AspisR1.SdkC_Source.Query)))) :
+    @AspisR1.ARU_Support.At W A C Tx L copy allocator c err r native1 native2 hashv a H
+structure AspisR1.ARS_Coverage.SupportedEntry {W A C Tx : Type}
+  (L : AspisR1.S2Trust.Library W (Nat → AspisR1.S2W_D189Entry.Record))
+  (copy :
+    AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record) →
+      Nat → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (Nat → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (err : C) (r : AspisR1.NP6_StdModel.Reservation)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result.{0} AspisR1.SdkC_Source.Digest)
+  (a : AspisR1.SCE_Experiment.Adversary A) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) :
+  Type
+number of parameters: 15
+fields:
+  AspisR1.ARS_Coverage.SupportedEntry.saved : Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8
+  AspisR1.ARS_Coverage.SupportedEntry.post1 : AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)
+  AspisR1.ARS_Coverage.SupportedEntry.post2 : AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)
+  AspisR1.ARS_Coverage.SupportedEntry.final1 : A
+  AspisR1.ARS_Coverage.SupportedEntry.final2 : A
+  AspisR1.ARS_Coverage.SupportedEntry.w1 : W
+  AspisR1.ARS_Coverage.SupportedEntry.w2 : W
+  AspisR1.ARS_Coverage.SupportedEntry.admission1 : @AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission W L
+      (@AspisR1.GExq_AccountExperiment.FirstInputs.entry A
+        (@Prod.snd.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+          (AspisR1.GExq_AccountExperiment.FirstInputs A)
+          (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+            (AspisR1.GExq_AccountExperiment.FirstInputs A) H (@AspisR1.SCE_Experiment.Adversary.first A a))))
+      (@AspisR1.ARS_Coverage.SupportedEntry.w1 W A C Tx L copy allocator c err r native1 native2 hashv a H self)
+      (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))
+  AspisR1.ARS_Coverage.SupportedEntry.admission2 : @AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission W L
+      (@AspisR1.GExq_AccountExperiment.SecondInputs.entry A
+        (@Prod.snd.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+          (AspisR1.GExq_AccountExperiment.SecondInputs A)
+          (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+            (AspisR1.GExq_AccountExperiment.SecondInputs A) H
+            (@AspisR1.SCE_Experiment.Adversary.second A a
+              (@Prod.snd.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+                (AspisR1.GExq_AccountExperiment.FirstInputs A)
+                (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                  (AspisR1.GExq_AccountExperiment.FirstInputs A) H (@AspisR1.SCE_Experiment.Adversary.first A a)))
+              (@AspisR1.ARS_Coverage.SupportedEntry.saved W A C Tx L copy allocator c err r native1 native2 hashv a H
+                self)
+              (@AspisR1.ARS_Coverage.SupportedEntry.post1 W A C Tx L copy allocator c err r native1 native2 hashv a H
+                self)
+              (@AspisR1.ARS_Coverage.SupportedEntry.final1 W A C Tx L copy allocator c err r native1 native2 hashv a H
+                self)))))
+      (@AspisR1.ARS_Coverage.SupportedEntry.w2 W A C Tx L copy allocator c err r native1 native2 hashv a H self)
+      (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7)))
+  AspisR1.ARS_Coverage.SupportedEntry.accepted1 : @Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0}
+          (Prod.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+            (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A))
+          AspisR1.AdapterRw.Cuts.PE))
+      (@AspisR1.S2W_D189Wrappers.first A native1 copy allocator
+        (@AspisR1.GExq_AccountExperiment.FirstInputs.entry A
+          (@Prod.snd.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+            (AspisR1.GExq_AccountExperiment.FirstInputs A)
+            (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+              (AspisR1.GExq_AccountExperiment.FirstInputs A) H (@AspisR1.SCE_Experiment.Adversary.first A a))))
+        AspisR1.CPH_Program.verifier
+        (@AspisR1.GExq_AccountExperiment.FirstInputs.data A
+          (@Prod.snd.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+            (AspisR1.GExq_AccountExperiment.FirstInputs A)
+            (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+              (AspisR1.GExq_AccountExperiment.FirstInputs A) H (@AspisR1.SCE_Experiment.Adversary.first A a))))
+        (@AspisR1.GExq_AccountExperiment.FirstInputs.state A
+          (@Prod.snd.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+            (AspisR1.GExq_AccountExperiment.FirstInputs A)
+            (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+              (AspisR1.GExq_AccountExperiment.FirstInputs A) H (@AspisR1.SCE_Experiment.Adversary.first A a)))))
+      (@Aeneas.Std.Result.ok.{0}
+        (Aeneas.Std.core.result.Result.{0, 0}
+          (Prod.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+            (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A))
+          AspisR1.AdapterRw.Cuts.PE)
+        (@Aeneas.Std.core.result.Result.Ok.{0, 0}
+          (Prod.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+            (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A))
+          AspisR1.AdapterRw.Cuts.PE
+          (@Prod.mk.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+            (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A)
+            (@AspisR1.ARS_Coverage.SupportedEntry.saved W A C Tx L copy allocator c err r native1 native2 hashv a H
+              self)
+            (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A
+              (@AspisR1.ARS_Coverage.SupportedEntry.post1 W A C Tx L copy allocator c err r native1 native2 hashv a H
+                self)
+              (@AspisR1.ARS_Coverage.SupportedEntry.final1 W A C Tx L copy allocator c err r native1 native2 hashv a H
+                self)))))
+  AspisR1.ARS_Coverage.SupportedEntry.accepted2 : let j : AspisR1.GExq_AccountExperiment.SecondInputs A :=
+      @Prod.snd.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+        (AspisR1.GExq_AccountExperiment.SecondInputs A)
+        (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+          (AspisR1.GExq_AccountExperiment.SecondInputs A) H
+          (@AspisR1.SCE_Experiment.Adversary.second A a
+            (@Prod.snd.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+              (AspisR1.GExq_AccountExperiment.FirstInputs A)
+              (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                (AspisR1.GExq_AccountExperiment.FirstInputs A) H (@AspisR1.SCE_Experiment.Adversary.first A a)))
+            (@AspisR1.ARS_Coverage.SupportedEntry.saved W A C Tx L copy allocator c err r native1 native2 hashv a H
+              self)
+            (@AspisR1.ARS_Coverage.SupportedEntry.post1 W A C Tx L copy allocator c err r native1 native2 hashv a H
+              self)
+            (@AspisR1.ARS_Coverage.SupportedEntry.final1 W A C Tx L copy allocator c err r native1 native2 hashv a H
+              self)));
+    @Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0}
+          (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) AspisR1.AdapterRw.Cuts.PE))
+      (@AspisR1.S2W_D189Wrappers.second A native2 allocator (@AspisR1.GExq_AccountExperiment.SecondInputs.entry A j)
+        AspisR1.CPH_Program.verifier (@AspisR1.GExq_AccountExperiment.SecondInputs.data A j)
+        (@AspisR1.GExq_AccountExperiment.SecondInputs.slot A j)
+        (@AspisR1.GExq_AccountExperiment.SecondInputs.state A j))
+      (@Aeneas.Std.Result.ok.{0}
+        (Aeneas.Std.core.result.Result.{0, 0}
+          (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) AspisR1.AdapterRw.Cuts.PE)
+        (@Aeneas.Std.core.result.Result.Ok.{0, 0}
+          (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) AspisR1.AdapterRw.Cuts.PE
+          (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A
+            (@AspisR1.ARS_Coverage.SupportedEntry.post2 W A C Tx L copy allocator c err r native1 native2 hashv a H
+              self)
+            (@AspisR1.ARS_Coverage.SupportedEntry.final2 W A C Tx L copy allocator c err r native1 native2 hashv a H
+              self))))
+  AspisR1.ARS_Coverage.SupportedEntry.p : AspisR1.CPG_Projection.Observations Tx A
+  AspisR1.ARS_Coverage.SupportedEntry.t : Tx
+  AspisR1.ARS_Coverage.SupportedEntry.u : Tx
+  AspisR1.ARS_Coverage.SupportedEntry.actions : List.{0} (AspisR1.CPP_BankState.Action A)
+  AspisR1.ARS_Coverage.SupportedEntry.game : @AspisR1.CPH_Game.DeployedPairExecution Tx A
+      (@AspisR1.ARS_Coverage.SupportedEntry.p W A C Tx L copy allocator c err r native1 native2 hashv a H self)
+      (@AspisR1.ARS_Coverage.SupportedEntry.t W A C Tx L copy allocator c err r native1 native2 hashv a H self)
+      (@AspisR1.ARS_Coverage.SupportedEntry.u W A C Tx L copy allocator c err r native1 native2 hashv a H self)
+      (@AspisR1.GExq_AccountExperiment.FirstInputs.entry A
+        (@Prod.snd.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+          (AspisR1.GExq_AccountExperiment.FirstInputs A)
+          (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+            (AspisR1.GExq_AccountExperiment.FirstInputs A) H (@AspisR1.SCE_Experiment.Adversary.first A a))))
+      (@AspisR1.GExq_AccountExperiment.SecondInputs.entry A
+        (@Prod.snd.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+          (AspisR1.GExq_AccountExperiment.SecondInputs A)
+          (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+            (AspisR1.GExq_AccountExperiment.SecondInputs A) H
+            (@AspisR1.SCE_Experiment.Adversary.second A a
+              (@Prod.snd.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+                (AspisR1.GExq_AccountExperiment.FirstInputs A)
+                (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                  (AspisR1.GExq_AccountExperiment.FirstInputs A) H (@AspisR1.SCE_Experiment.Adversary.first A a)))
+              (@AspisR1.ARS_Coverage.SupportedEntry.saved W A C Tx L copy allocator c err r native1 native2 hashv a H
+                self)
+              (@AspisR1.ARS_Coverage.SupportedEntry.post1 W A C Tx L copy allocator c err r native1 native2 hashv a H
+                self)
+              (@AspisR1.ARS_Coverage.SupportedEntry.final1 W A C Tx L copy allocator c err r native1 native2 hashv a H
+                self)))))
+      (@AspisR1.ARS_Coverage.SupportedEntry.saved W A C Tx L copy allocator c err r native1 native2 hashv a H self)
+      (@AspisR1.ARS_Coverage.SupportedEntry.actions W A C Tx L copy allocator c err r native1 native2 hashv a H self)
+      native1 native2 copy allocator AspisR1.CPH_Program.verifier
+  AspisR1.ARS_Coverage.SupportedEntry.RuntimePersistence : @AspisR1.CPR_DataPersistence.TwoTransactionLaw Tx Nat
+      (@AspisR1.CPG_Projection.adjacent Tx A
+        (@AspisR1.ARS_Coverage.SupportedEntry.p W A C Tx L copy allocator c err r native1 native2 hashv a H self))
+      (@AspisR1.CPG_Projection.ordinary Tx A
+        (@AspisR1.ARS_Coverage.SupportedEntry.p W A C Tx L copy allocator c err r native1 native2 hashv a H self)
+        (AspisR1.Hist_Nonvacuity.key
+          (Aeneas.Std.U8.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) ⋯)))
+      (@AspisR1.CPG_Projection.before Tx A
+        (@AspisR1.ARS_Coverage.SupportedEntry.p W A C Tx L copy allocator c err r native1 native2 hashv a H self))
+      (@AspisR1.CPG_Projection.tentative Tx A
+        (@AspisR1.ARS_Coverage.SupportedEntry.p W A C Tx L copy allocator c err r native1 native2 hashv a H self))
+      (@AspisR1.CPG_Projection.success Tx A
+        (@AspisR1.ARS_Coverage.SupportedEntry.p W A C Tx L copy allocator c err r native1 native2 hashv a H self))
+      (@AspisR1.CPG_Projection.loaded Tx A
+        (@AspisR1.ARS_Coverage.SupportedEntry.p W A C Tx L copy allocator c err r native1 native2 hashv a H self))
+constructor:
+  AspisR1.ARS_Coverage.SupportedEntry.mk {W A C Tx : Type}
+    {L : AspisR1.S2Trust.Library W (Nat → AspisR1.S2W_D189Entry.Record)}
+    {copy :
+      AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record) →
+        Nat → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (Nat → AspisR1.S2W_D189Entry.Record)}
+    {allocator : AspisR1.S2W_D189Wrappers.Allocator A}
+    {c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C} {err : C}
+    {r : AspisR1.NP6_StdModel.Reservation} {native1 : AspisR1.S2W_ExtractionBoundary.First}
+    {native2 : AspisR1.S2W_ExtractionBoundary.Second}
+    {hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result.{0} AspisR1.SdkC_Source.Digest}
+    {a : AspisR1.SCE_Experiment.Adversary A} {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    (saved : Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+    (post1 post2 : AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) (final1 final2 : A) (w1 w2 : W)
+    (admission1 :
+      @AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission W L
+        (@AspisR1.GExq_AccountExperiment.FirstInputs.entry A
+          (@Prod.snd.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+            (AspisR1.GExq_AccountExperiment.FirstInputs A)
+            (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+              (AspisR1.GExq_AccountExperiment.FirstInputs A) H (@AspisR1.SCE_Experiment.Adversary.first A a))))
+        w1 (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))))
+    (admission2 :
+      @AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission W L
+        (@AspisR1.GExq_AccountExperiment.SecondInputs.entry A
+          (@Prod.snd.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+            (AspisR1.GExq_AccountExperiment.SecondInputs A)
+            (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+              (AspisR1.GExq_AccountExperiment.SecondInputs A) H
+              (@AspisR1.SCE_Experiment.Adversary.second A a
+                (@Prod.snd.{0, 0}
+                  (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+                  (AspisR1.GExq_AccountExperiment.FirstInputs A)
+                  (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                    (AspisR1.GExq_AccountExperiment.FirstInputs A) H (@AspisR1.SCE_Experiment.Adversary.first A a)))
+                saved post1 final1))))
+        w2 (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7))))
+    (accepted1 :
+      @Eq.{1}
+        (Aeneas.Std.Result.{0}
+          (Aeneas.Std.core.result.Result.{0, 0}
+            (Prod.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+              (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A))
+            AspisR1.AdapterRw.Cuts.PE))
+        (@AspisR1.S2W_D189Wrappers.first A native1 copy allocator
+          (@AspisR1.GExq_AccountExperiment.FirstInputs.entry A
+            (@Prod.snd.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+              (AspisR1.GExq_AccountExperiment.FirstInputs A)
+              (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                (AspisR1.GExq_AccountExperiment.FirstInputs A) H (@AspisR1.SCE_Experiment.Adversary.first A a))))
+          AspisR1.CPH_Program.verifier
+          (@AspisR1.GExq_AccountExperiment.FirstInputs.data A
+            (@Prod.snd.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+              (AspisR1.GExq_AccountExperiment.FirstInputs A)
+              (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                (AspisR1.GExq_AccountExperiment.FirstInputs A) H (@AspisR1.SCE_Experiment.Adversary.first A a))))
+          (@AspisR1.GExq_AccountExperiment.FirstInputs.state A
+            (@Prod.snd.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+              (AspisR1.GExq_AccountExperiment.FirstInputs A)
+              (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                (AspisR1.GExq_AccountExperiment.FirstInputs A) H (@AspisR1.SCE_Experiment.Adversary.first A a)))))
+        (@Aeneas.Std.Result.ok.{0}
+          (Aeneas.Std.core.result.Result.{0, 0}
+            (Prod.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+              (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A))
+            AspisR1.AdapterRw.Cuts.PE)
+          (@Aeneas.Std.core.result.Result.Ok.{0, 0}
+            (Prod.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+              (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A))
+            AspisR1.AdapterRw.Cuts.PE
+            (@Prod.mk.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+              (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) saved
+              (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A post1 final1)))))
+    (accepted2 :
+      let j : AspisR1.GExq_AccountExperiment.SecondInputs A :=
+        @Prod.snd.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+          (AspisR1.GExq_AccountExperiment.SecondInputs A)
+          (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+            (AspisR1.GExq_AccountExperiment.SecondInputs A) H
+            (@AspisR1.SCE_Experiment.Adversary.second A a
+              (@Prod.snd.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+                (AspisR1.GExq_AccountExperiment.FirstInputs A)
+                (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                  (AspisR1.GExq_AccountExperiment.FirstInputs A) H (@AspisR1.SCE_Experiment.Adversary.first A a)))
+              saved post1 final1));
+      @Eq.{1}
+        (Aeneas.Std.Result.{0}
+          (Aeneas.Std.core.result.Result.{0, 0}
+            (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) AspisR1.AdapterRw.Cuts.PE))
+        (@AspisR1.S2W_D189Wrappers.second A native2 allocator (@AspisR1.GExq_AccountExperiment.SecondInputs.entry A j)
+          AspisR1.CPH_Program.verifier (@AspisR1.GExq_AccountExperiment.SecondInputs.data A j)
+          (@AspisR1.GExq_AccountExperiment.SecondInputs.slot A j)
+          (@AspisR1.GExq_AccountExperiment.SecondInputs.state A j))
+        (@Aeneas.Std.Result.ok.{0}
+          (Aeneas.Std.core.result.Result.{0, 0}
+            (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) AspisR1.AdapterRw.Cuts.PE)
+          (@Aeneas.Std.core.result.Result.Ok.{0, 0}
+            (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) AspisR1.AdapterRw.Cuts.PE
+            (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A post2 final2))))
+    (p : AspisR1.CPG_Projection.Observations Tx A) (t u : Tx) (actions : List.{0} (AspisR1.CPP_BankState.Action A))
+    (game :
+      @AspisR1.CPH_Game.DeployedPairExecution Tx A p t u
+        (@AspisR1.GExq_AccountExperiment.FirstInputs.entry A
+          (@Prod.snd.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+            (AspisR1.GExq_AccountExperiment.FirstInputs A)
+            (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+              (AspisR1.GExq_AccountExperiment.FirstInputs A) H (@AspisR1.SCE_Experiment.Adversary.first A a))))
+        (@AspisR1.GExq_AccountExperiment.SecondInputs.entry A
+          (@Prod.snd.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+            (AspisR1.GExq_AccountExperiment.SecondInputs A)
+            (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+              (AspisR1.GExq_AccountExperiment.SecondInputs A) H
+              (@AspisR1.SCE_Experiment.Adversary.second A a
+                (@Prod.snd.{0, 0}
+                  (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+                  (AspisR1.GExq_AccountExperiment.FirstInputs A)
+                  (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                    (AspisR1.GExq_AccountExperiment.FirstInputs A) H (@AspisR1.SCE_Experiment.Adversary.first A a)))
+                saved post1 final1))))
+        saved actions native1 native2 copy allocator AspisR1.CPH_Program.verifier)
+    (RuntimePersistence :
+      @AspisR1.CPR_DataPersistence.TwoTransactionLaw Tx Nat (@AspisR1.CPG_Projection.adjacent Tx A p)
+        (@AspisR1.CPG_Projection.ordinary Tx A p
+          (AspisR1.Hist_Nonvacuity.key
+            (Aeneas.Std.U8.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) ⋯)))
+        (@AspisR1.CPG_Projection.before Tx A p) (@AspisR1.CPG_Projection.tentative Tx A p)
+        (@AspisR1.CPG_Projection.success Tx A p) (@AspisR1.CPG_Projection.loaded Tx A p)) :
+    @AspisR1.ARS_Coverage.SupportedEntry W A C Tx L copy allocator c err r native1 native2 hashv a H
