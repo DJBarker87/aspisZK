@@ -1,0 +1,17 @@
+{
+  "credit": "K93110",
+  "classification": "RESTORE",
+  "positive": "K93510",
+  "positive_verdict": "SUCCESSFUL; original positive passes (1 pass / 2 intended controls fail)",
+  "control": "K93510",
+  "control_verdict": "Both original controls FAIL at intended assertions (value XOR1 / frame XOR1)",
+  "location": "src/indexed.rs:42 and :44",
+  "source_sha256": "073fd146dc0eab518888d55f24bda3623e1abbad8d2ebcbc345af05fc91b6e49",
+  "reason": "The positive passes and both controls fail only their intended non-probe assertions. Value failure is result[lane] versus bits[lane]^1 at line 42; frame failure is framed[lane] versus expected^1 at line 44. Full raw traces and numbered terminal assignments are retained in control-assessment.json and trace-excerpt.json. Logical offsets stay in u128; physical destination offsets are only 0 or 1 in the frozen two-place projection. Thus these failures are the deliberate XOR mutations, not 48-bit aliasing. Recorded control states: line 44: index=144115188075855872ul, query=0ul, byte_index=2305843009213693952; line 42: index=144115188075855872ul, query=0ul, byte_index=2305843009213693952.",
+  "trace_excerpt": "host/K93510/control-assessment.json",
+  "full_trace": [
+    "host/K93510/cbmc-1807769.json.xz",
+    "host/K93510/cbmc-1807815.json.xz"
+  ],
+  "scope": "Segregated logical-offset/two-place projection only; original ptr.add/allocation/OWNER association stays OPEN."
+}

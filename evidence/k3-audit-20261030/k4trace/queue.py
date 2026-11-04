@@ -2,7 +2,7 @@
 from pathlib import Path
 import subprocess,json,time,sys
 E=Path(__file__).resolve().parent;H='/home/dombarker/project-offloads/codex-pv-k4trace-20261104'
-ids=[r for r in json.loads((E/'runs.json').read_text()) if r['id']!='K93512']
+ids=[r for r in json.loads((E/'runs.json').read_text()) if r['id']!='K93512' and (len(sys.argv)==1 or r['id'] in sys.argv[1:])]
 for row in ids:
  ident=row['id'];refusals=0
  while True:

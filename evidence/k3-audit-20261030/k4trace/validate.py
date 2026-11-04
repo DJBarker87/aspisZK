@@ -34,9 +34,12 @@ for run in runs:
   if hashlib.sha256(lzma.decompress(p.read_bytes())).hexdigest()!=x['symbols_raw_sha256']:issues.append(n+': symbol hash')
 starts.sort();gaps=[{'from':a[1],'to':b[1],'seconds':b[0]-a[0]}for a,b in zip(starts,starts[1:])]
 if any(x['seconds']<180 for x in gaps):issues.append('launch gap below 180')
+for p in E.rglob('*.sha256'):
+ text=p.read_text().split();q=Path(str(p).removesuffix('.sha256')+'.xz')
+ if q.exists() and hashlib.sha256(lzma.decompress(q.read_bytes())).hexdigest()!=text[0]:issues.append(str(p.relative_to(E))+': archive hash')
 large=[str(p.relative_to(E))for p in E.rglob('*') if p.is_file() and p.stat().st_size>20*1024*1024]
 if large:issues.append('over20MB: '+str(large))
-changed=subprocess.check_output(['git','diff','--name-only','670416be996','--']).decode().splitlines()
+changed=sorted(set(subprocess.check_output(['git','diff','--name-only','670416be996','--']).decode().splitlines()+subprocess.check_output(['git','ls-files','--others','--exclude-standard',str(E)]).decode().splitlines()))
 if any(not p.startswith('evidence/k3-audit-20261030/k4trace/') for p in changed):issues.append('path boundary')
 out={'status':'PASS' if not issues else 'FAIL','issues':issues,'planned_replays':len(runs),'received_replays':len(receipts),'launch_gaps':gaps,'peak_rss_kib':max([r['peak_rss_kib']for r in receipts.values()]or[0]),'sum_wall_seconds':sum(r['wall_seconds']for r in receipts.values()),'swap':0,'Lean':0,'axioms':'N/A: 0 Lean','path_changes':changed,'over20MB':large}
-(E/'validation.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(out,indent=2))
+(E/'validation.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps({k:v for k,v in out.items() if k!='path_changes'},indent=2))

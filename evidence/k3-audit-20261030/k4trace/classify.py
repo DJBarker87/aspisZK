@@ -1,10 +1,10 @@
 """Retain every non-probe failing property and selected trace assignments."""
 from pathlib import Path
-import json,sys
+import json,sys,lzma
 E=Path(__file__).resolve().parent
 for ident in sys.argv[1:]:
  D=E/'host'/ident
- docs=json.loads((D/'trace-summary.json').read_text());rows=[]
+ p=D/'trace-summary.json';docs=json.loads(p.read_bytes() if p.exists() else lzma.decompress(Path(str(p)+'.xz').read_bytes()));rows=[]
  for doc in docs:
   for f in doc['failed']:
    if f.get('sourceLocation',{}).get('propertyClass')=='reachability_check':continue

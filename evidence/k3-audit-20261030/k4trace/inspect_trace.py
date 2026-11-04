@@ -14,14 +14,17 @@ def documents(s):
 for n in sys.argv[1:]:
  D=E/'host'/n;p=D/'output.log';s=p.read_text() if p.exists() else lzma.decompress((D/'output.log.xz').read_bytes()).decode();out=[]
  docs=list(documents(s))
- for p in sorted(D.glob('cbmc-*.json')):
-  if p.name.endswith('-command.json'):continue
-  try:v=json.loads(p.read_text())
+ for p in sorted(D.glob('cbmc-*.json*')):
+  if '-command.json' in p.name or p.suffix=='.sha256':continue
+  try:v=json.loads(lzma.decompress(p.read_bytes()) if p.suffix=='.xz' else p.read_bytes())
   except ValueError:continue
   if isinstance(v,list):docs.append(v)
  for doc in docs:
   props=[p for x in doc for p in x.get('result',[])]
   failed=[p for p in props if p.get('status')=='FAILURE']
   out.append({'statuses':[x['cProverStatus'] for x in doc if 'cProverStatus'in x],'checks':len(props),'failed':failed})
- (D/'trace-summary.json').write_text(json.dumps(out,indent=2)+'\n')
- print(n,[(x['statuses'],x['checks'],[(f.get('property'),f.get('description'),len(f.get('trace',[]))) for f in x['failed']]) for x in out])
+ raw=(json.dumps(out,indent=2)+'\n').encode()
+ if len(raw)>1024*1024:
+  (D/'trace-summary.json.xz').write_bytes(lzma.compress(raw,preset=6));(D/'trace-summary.json.sha256').write_text(hashlib.sha256(raw).hexdigest()+'  trace-summary.json\n')
+ else:(D/'trace-summary.json').write_bytes(raw)
+ print(n,[(x['statuses'],x['checks'],[(f.get('property'),f.get('description'),len(f.get('trace',[]))) for f in x['failed'] if f.get('sourceLocation',{}).get('propertyClass')!='reachability_check']) for x in out])
