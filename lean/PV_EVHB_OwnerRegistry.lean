@@ -99,16 +99,17 @@ theorem finish_delivery {A S F : Type} (backendStep : Request → S → Option N
       (R1Z.PV_FXM_ReserveSelected.buffer v (metadata w v)) n w
     (metadata e.world v).address=e.buffer.address ∧
     (metadata e.world v).capacity=e.buffer.capacity := by
+  dsimp only [finish,step,R1Z.PV_FXM_ReserveSelected.buffer]
   cases reply : backendStep
       ⟨(metadata w v).address,(metadata w v).capacity,v.val.length+n,shape⟩
       w.allocator.backend with
   | mk answer backend =>
     cases answer with
     | none =>
-      simp [finish,step,R1Z.PV_FXM_ReserveSelected.buffer,reply,attempted,metadata,afterAnswer]
+      simp [attempted,metadata,afterAnswer]
     | some pointer =>
-      simp [finish,step,R1Z.PV_FXM_ReserveSelected.buffer,reply,attempted,succeeded,
-        metadata,afterAnswer,Nat.max_eq_left (Nat.le_add_right v.val.length n)]
+      simp [attempted,succeeded,metadata,afterAnswer,
+        Nat.max_eq_left (Nat.le_add_right v.val.length n)]
 
 theorem registered_header_delivery {A S F : Type} (backendStep : Request → S → Option Nat × S)
     (shape : Type → Shape) (encode : PV_EVHB_RawVecSource.ReserveError → alloc.collections.TryReserveError)

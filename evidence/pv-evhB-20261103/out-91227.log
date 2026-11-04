@@ -1,0 +1,1500 @@
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVHB_OwnerRegistry.lean:83:0: warning: automatically included section variable(s) unused in theorem `PV_EVHB_OwnerRegistry.source_metadata`:
+  [ExternalTypes]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [ExternalTypes] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVHB_OwnerRegistry.lean:107:11: error: unsolved goals
+case mk.none
+inst✝ : ExternalTypes
+A S F : Type
+backendStep : Request → S → Option ℕ × S
+shape : Shape
+w : World (State S) F
+v : alloc.vec.Vec A
+n : ℕ
+backend : S
+reply :
+  backendStep
+      { address := (metadata w v).address, oldCapacity := (metadata w v).capacity, newCapacity := (↑v).length + n,
+        shape := shape }
+      w.allocator.backend =
+    (none, backend)
+⊢ ((match
+                  (backendStep
+                      { address := (w.allocator.table w.allocator.current).address,
+                        oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                        newCapacity := (↑v).length + n, shape := shape }
+                      w.allocator.backend).1 with
+                | none =>
+                  {
+                    returned :=
+                      Except.error
+                        (Error.allocError { size := usize (((↑v).length + n) * shape.width), align := shape.align }),
+                    buffer :=
+                      { address := (w.allocator.table w.allocator.current).address,
+                        capacity := max (w.allocator.table w.allocator.current).capacity (↑v).length, values := ↑v,
+                        fits := ⋯ },
+                    world :=
+                      {
+                        allocator :=
+                          {
+                            backend :=
+                              (backendStep
+                                  { address := (w.allocator.table w.allocator.current).address,
+                                    oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                    newCapacity := (↑v).length + n, shape := shape }
+                                  w.allocator.backend).2,
+                            current := w.allocator.current,
+                            table := fun owner =>
+                              match
+                                (backendStep
+                                    { address := (w.allocator.table w.allocator.current).address,
+                                      oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                      newCapacity := (↑v).length + n, shape := shape }
+                                    w.allocator.backend).1 with
+                              | none => w.allocator.table owner
+                              | some pointer =>
+                                if owner = w.allocator.current then { address := pointer, capacity := (↑v).length + n }
+                                else w.allocator.table owner },
+                        allocCalls :=
+                          w.allocCalls +
+                            if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 1 else 0,
+                        reallocCalls :=
+                          w.reallocCalls +
+                            if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 0 else 1,
+                        deallocCalls := w.deallocCalls, successfulAlloc := w.successfulAlloc,
+                        successfulRealloc := w.successfulRealloc, drops := w.drops,
+                        history :=
+                          w.history ++
+                            [{
+                                request :=
+                                  { address := (w.allocator.table w.allocator.current).address,
+                                    oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                    newCapacity := (↑v).length + n, shape := shape },
+                                returnedAddress :=
+                                  (backendStep
+                                      { address := (w.allocator.table w.allocator.current).address,
+                                        oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                        newCapacity := (↑v).length + n, shape := shape }
+                                      w.allocator.backend).1 }],
+                        memory := w.memory, live := w.live, frame := w.frame } }
+                | some address =>
+                  { returned := Except.ok (),
+                    buffer := { address := address, capacity := (↑v).length + n, values := ↑v, fits := ⋯ },
+                    world :=
+                      succeeded
+                        { address := (w.allocator.table w.allocator.current).address,
+                          oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                          newCapacity := (↑v).length + n, shape := shape }
+                        address
+                        {
+                          allocator :=
+                            {
+                              backend :=
+                                (backendStep
+                                    { address := (w.allocator.table w.allocator.current).address,
+                                      oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                      newCapacity := (↑v).length + n, shape := shape }
+                                    w.allocator.backend).2,
+                              current := w.allocator.current,
+                              table := fun owner =>
+                                match
+                                  (backendStep
+                                      { address := (w.allocator.table w.allocator.current).address,
+                                        oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                        newCapacity := (↑v).length + n, shape := shape }
+                                      w.allocator.backend).1 with
+                                | none => w.allocator.table owner
+                                | some pointer =>
+                                  if owner = w.allocator.current then
+                                    { address := pointer, capacity := (↑v).length + n }
+                                  else w.allocator.table owner },
+                          allocCalls :=
+                            w.allocCalls +
+                              if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 1 else 0,
+                          reallocCalls :=
+                            w.reallocCalls +
+                              if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 0 else 1,
+                          deallocCalls := w.deallocCalls, successfulAlloc := w.successfulAlloc,
+                          successfulRealloc := w.successfulRealloc, drops := w.drops,
+                          history :=
+                            w.history ++
+                              [{
+                                  request :=
+                                    { address := (w.allocator.table w.allocator.current).address,
+                                      oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                      newCapacity := (↑v).length + n, shape := shape },
+                                  returnedAddress :=
+                                    (backendStep
+                                        { address := (w.allocator.table w.allocator.current).address,
+                                          oldCapacity :=
+                                            max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                          newCapacity := (↑v).length + n, shape := shape }
+                                        w.allocator.backend).1 }],
+                          memory := w.memory, live := w.live, frame := w.frame } }).world.allocator.table
+          (match
+                  (backendStep
+                      { address := (w.allocator.table w.allocator.current).address,
+                        oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                        newCapacity := (↑v).length + n, shape := shape }
+                      w.allocator.backend).1 with
+                | none =>
+                  {
+                    returned :=
+                      Except.error
+                        (Error.allocError { size := usize (((↑v).length + n) * shape.width), align := shape.align }),
+                    buffer :=
+                      { address := (w.allocator.table w.allocator.current).address,
+                        capacity := max (w.allocator.table w.allocator.current).capacity (↑v).length, values := ↑v,
+                        fits := ⋯ },
+                    world :=
+                      {
+                        allocator :=
+                          {
+                            backend :=
+                              (backendStep
+                                  { address := (w.allocator.table w.allocator.current).address,
+                                    oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                    newCapacity := (↑v).length + n, shape := shape }
+                                  w.allocator.backend).2,
+                            current := w.allocator.current,
+                            table := fun owner =>
+                              match
+                                (backendStep
+                                    { address := (w.allocator.table w.allocator.current).address,
+                                      oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                      newCapacity := (↑v).length + n, shape := shape }
+                                    w.allocator.backend).1 with
+                              | none => w.allocator.table owner
+                              | some pointer =>
+                                if owner = w.allocator.current then { address := pointer, capacity := (↑v).length + n }
+                                else w.allocator.table owner },
+                        allocCalls :=
+                          w.allocCalls +
+                            if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 1 else 0,
+                        reallocCalls :=
+                          w.reallocCalls +
+                            if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 0 else 1,
+                        deallocCalls := w.deallocCalls, successfulAlloc := w.successfulAlloc,
+                        successfulRealloc := w.successfulRealloc, drops := w.drops,
+                        history :=
+                          w.history ++
+                            [{
+                                request :=
+                                  { address := (w.allocator.table w.allocator.current).address,
+                                    oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                    newCapacity := (↑v).length + n, shape := shape },
+                                returnedAddress :=
+                                  (backendStep
+                                      { address := (w.allocator.table w.allocator.current).address,
+                                        oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                        newCapacity := (↑v).length + n, shape := shape }
+                                      w.allocator.backend).1 }],
+                        memory := w.memory, live := w.live, frame := w.frame } }
+                | some address =>
+                  { returned := Except.ok (),
+                    buffer := { address := address, capacity := (↑v).length + n, values := ↑v, fits := ⋯ },
+                    world :=
+                      succeeded
+                        { address := (w.allocator.table w.allocator.current).address,
+                          oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                          newCapacity := (↑v).length + n, shape := shape }
+                        address
+                        {
+                          allocator :=
+                            {
+                              backend :=
+                                (backendStep
+                                    { address := (w.allocator.table w.allocator.current).address,
+                                      oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                      newCapacity := (↑v).length + n, shape := shape }
+                                    w.allocator.backend).2,
+                              current := w.allocator.current,
+                              table := fun owner =>
+                                match
+                                  (backendStep
+                                      { address := (w.allocator.table w.allocator.current).address,
+                                        oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                        newCapacity := (↑v).length + n, shape := shape }
+                                      w.allocator.backend).1 with
+                                | none => w.allocator.table owner
+                                | some pointer =>
+                                  if owner = w.allocator.current then
+                                    { address := pointer, capacity := (↑v).length + n }
+                                  else w.allocator.table owner },
+                          allocCalls :=
+                            w.allocCalls +
+                              if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 1 else 0,
+                          reallocCalls :=
+                            w.reallocCalls +
+                              if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 0 else 1,
+                          deallocCalls := w.deallocCalls, successfulAlloc := w.successfulAlloc,
+                          successfulRealloc := w.successfulRealloc, drops := w.drops,
+                          history :=
+                            w.history ++
+                              [{
+                                  request :=
+                                    { address := (w.allocator.table w.allocator.current).address,
+                                      oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                      newCapacity := (↑v).length + n, shape := shape },
+                                  returnedAddress :=
+                                    (backendStep
+                                        { address := (w.allocator.table w.allocator.current).address,
+                                          oldCapacity :=
+                                            max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                          newCapacity := (↑v).length + n, shape := shape }
+                                        w.allocator.backend).1 }],
+                          memory := w.memory, live := w.live, frame := w.frame } }).world.allocator.current).address =
+      (match
+            (backendStep
+                { address := (w.allocator.table w.allocator.current).address,
+                  oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                  newCapacity := (↑v).length + n, shape := shape }
+                w.allocator.backend).1 with
+          | none =>
+            {
+              returned :=
+                Except.error
+                  (Error.allocError { size := usize (((↑v).length + n) * shape.width), align := shape.align }),
+              buffer :=
+                { address := (w.allocator.table w.allocator.current).address,
+                  capacity := max (w.allocator.table w.allocator.current).capacity (↑v).length, values := ↑v,
+                  fits := ⋯ },
+              world :=
+                {
+                  allocator :=
+                    {
+                      backend :=
+                        (backendStep
+                            { address := (w.allocator.table w.allocator.current).address,
+                              oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                              newCapacity := (↑v).length + n, shape := shape }
+                            w.allocator.backend).2,
+                      current := w.allocator.current,
+                      table := fun owner =>
+                        match
+                          (backendStep
+                              { address := (w.allocator.table w.allocator.current).address,
+                                oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                newCapacity := (↑v).length + n, shape := shape }
+                              w.allocator.backend).1 with
+                        | none => w.allocator.table owner
+                        | some pointer =>
+                          if owner = w.allocator.current then { address := pointer, capacity := (↑v).length + n }
+                          else w.allocator.table owner },
+                  allocCalls :=
+                    w.allocCalls + if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 1 else 0,
+                  reallocCalls :=
+                    w.reallocCalls + if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 0 else 1,
+                  deallocCalls := w.deallocCalls, successfulAlloc := w.successfulAlloc,
+                  successfulRealloc := w.successfulRealloc, drops := w.drops,
+                  history :=
+                    w.history ++
+                      [{
+                          request :=
+                            { address := (w.allocator.table w.allocator.current).address,
+                              oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                              newCapacity := (↑v).length + n, shape := shape },
+                          returnedAddress :=
+                            (backendStep
+                                { address := (w.allocator.table w.allocator.current).address,
+                                  oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                  newCapacity := (↑v).length + n, shape := shape }
+                                w.allocator.backend).1 }],
+                  memory := w.memory, live := w.live, frame := w.frame } }
+          | some address =>
+            { returned := Except.ok (),
+              buffer := { address := address, capacity := (↑v).length + n, values := ↑v, fits := ⋯ },
+              world :=
+                succeeded
+                  { address := (w.allocator.table w.allocator.current).address,
+                    oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                    newCapacity := (↑v).length + n, shape := shape }
+                  address
+                  {
+                    allocator :=
+                      {
+                        backend :=
+                          (backendStep
+                              { address := (w.allocator.table w.allocator.current).address,
+                                oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                newCapacity := (↑v).length + n, shape := shape }
+                              w.allocator.backend).2,
+                        current := w.allocator.current,
+                        table := fun owner =>
+                          match
+                            (backendStep
+                                { address := (w.allocator.table w.allocator.current).address,
+                                  oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                  newCapacity := (↑v).length + n, shape := shape }
+                                w.allocator.backend).1 with
+                          | none => w.allocator.table owner
+                          | some pointer =>
+                            if owner = w.allocator.current then { address := pointer, capacity := (↑v).length + n }
+                            else w.allocator.table owner },
+                    allocCalls :=
+                      w.allocCalls + if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 1 else 0,
+                    reallocCalls :=
+                      w.reallocCalls + if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 0 else 1,
+                    deallocCalls := w.deallocCalls, successfulAlloc := w.successfulAlloc,
+                    successfulRealloc := w.successfulRealloc, drops := w.drops,
+                    history :=
+                      w.history ++
+                        [{
+                            request :=
+                              { address := (w.allocator.table w.allocator.current).address,
+                                oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                newCapacity := (↑v).length + n, shape := shape },
+                            returnedAddress :=
+                              (backendStep
+                                  { address := (w.allocator.table w.allocator.current).address,
+                                    oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                    newCapacity := (↑v).length + n, shape := shape }
+                                  w.allocator.backend).1 }],
+                    memory := w.memory, live := w.live, frame := w.frame } }).buffer.address ∧
+    max
+        ((match
+                    (backendStep
+                        { address := (w.allocator.table w.allocator.current).address,
+                          oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                          newCapacity := (↑v).length + n, shape := shape }
+                        w.allocator.backend).1 with
+                  | none =>
+                    {
+                      returned :=
+                        Except.error
+                          (Error.allocError { size := usize (((↑v).length + n) * shape.width), align := shape.align }),
+                      buffer :=
+                        { address := (w.allocator.table w.allocator.current).address,
+                          capacity := max (w.allocator.table w.allocator.current).capacity (↑v).length, values := ↑v,
+                          fits := ⋯ },
+                      world :=
+                        {
+                          allocator :=
+                            {
+                              backend :=
+                                (backendStep
+                                    { address := (w.allocator.table w.allocator.current).address,
+                                      oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                      newCapacity := (↑v).length + n, shape := shape }
+                                    w.allocator.backend).2,
+                              current := w.allocator.current,
+                              table := fun owner =>
+                                match
+                                  (backendStep
+                                      { address := (w.allocator.table w.allocator.current).address,
+                                        oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                        newCapacity := (↑v).length + n, shape := shape }
+                                      w.allocator.backend).1 with
+                                | none => w.allocator.table owner
+                                | some pointer =>
+                                  if owner = w.allocator.current then
+                                    { address := pointer, capacity := (↑v).length + n }
+                                  else w.allocator.table owner },
+                          allocCalls :=
+                            w.allocCalls +
+                              if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 1 else 0,
+                          reallocCalls :=
+                            w.reallocCalls +
+                              if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 0 else 1,
+                          deallocCalls := w.deallocCalls, successfulAlloc := w.successfulAlloc,
+                          successfulRealloc := w.successfulRealloc, drops := w.drops,
+                          history :=
+                            w.history ++
+                              [{
+                                  request :=
+                                    { address := (w.allocator.table w.allocator.current).address,
+                                      oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                      newCapacity := (↑v).length + n, shape := shape },
+                                  returnedAddress :=
+                                    (backendStep
+                                        { address := (w.allocator.table w.allocator.current).address,
+                                          oldCapacity :=
+                                            max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                          newCapacity := (↑v).length + n, shape := shape }
+                                        w.allocator.backend).1 }],
+                          memory := w.memory, live := w.live, frame := w.frame } }
+                  | some address =>
+                    { returned := Except.ok (),
+                      buffer := { address := address, capacity := (↑v).length + n, values := ↑v, fits := ⋯ },
+                      world :=
+                        succeeded
+                          { address := (w.allocator.table w.allocator.current).address,
+                            oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                            newCapacity := (↑v).length + n, shape := shape }
+                          address
+                          {
+                            allocator :=
+                              {
+                                backend :=
+                                  (backendStep
+                                      { address := (w.allocator.table w.allocator.current).address,
+                                        oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                        newCapacity := (↑v).length + n, shape := shape }
+                                      w.allocator.backend).2,
+                                current := w.allocator.current,
+                                table := fun owner =>
+                                  match
+                                    (backendStep
+                                        { address := (w.allocator.table w.allocator.current).address,
+                                          oldCapacity :=
+                                            max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                          newCapacity := (↑v).length + n, shape := shape }
+                                        w.allocator.backend).1 with
+                                  | none => w.allocator.table owner
+                                  | some pointer =>
+                                    if owner = w.allocator.current then
+                                      { address := pointer, capacity := (↑v).length + n }
+                                    else w.allocator.table owner },
+                            allocCalls :=
+                              w.allocCalls +
+                                if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 1 else 0,
+                            reallocCalls :=
+                              w.reallocCalls +
+                                if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 0 else 1,
+                            deallocCalls := w.deallocCalls, successfulAlloc := w.successfulAlloc,
+                            successfulRealloc := w.successfulRealloc, drops := w.drops,
+                            history :=
+                              w.history ++
+                                [{
+                                    request :=
+                                      { address := (w.allocator.table w.allocator.current).address,
+                                        oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                        newCapacity := (↑v).length + n, shape := shape },
+                                    returnedAddress :=
+                                      (backendStep
+                                          { address := (w.allocator.table w.allocator.current).address,
+                                            oldCapacity :=
+                                              max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                            newCapacity := (↑v).length + n, shape := shape }
+                                          w.allocator.backend).1 }],
+                            memory := w.memory, live := w.live, frame := w.frame } }).world.allocator.table
+            (match
+                    (backendStep
+                        { address := (w.allocator.table w.allocator.current).address,
+                          oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                          newCapacity := (↑v).length + n, shape := shape }
+                        w.allocator.backend).1 with
+                  | none =>
+                    {
+                      returned :=
+                        Except.error
+                          (Error.allocError { size := usize (((↑v).length + n) * shape.width), align := shape.align }),
+                      buffer :=
+                        { address := (w.allocator.table w.allocator.current).address,
+                          capacity := max (w.allocator.table w.allocator.current).capacity (↑v).length, values := ↑v,
+                          fits := ⋯ },
+                      world :=
+                        {
+                          allocator :=
+                            {
+                              backend :=
+                                (backendStep
+                                    { address := (w.allocator.table w.allocator.current).address,
+                                      oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                      newCapacity := (↑v).length + n, shape := shape }
+                                    w.allocator.backend).2,
+                              current := w.allocator.current,
+                              table := fun owner =>
+                                match
+                                  (backendStep
+                                      { address := (w.allocator.table w.allocator.current).address,
+                                        oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                        newCapacity := (↑v).length + n, shape := shape }
+                                      w.allocator.backend).1 with
+                                | none => w.allocator.table owner
+                                | some pointer =>
+                                  if owner = w.allocator.current then
+                                    { address := pointer, capacity := (↑v).length + n }
+                                  else w.allocator.table owner },
+                          allocCalls :=
+                            w.allocCalls +
+                              if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 1 else 0,
+                          reallocCalls :=
+                            w.reallocCalls +
+                              if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 0 else 1,
+                          deallocCalls := w.deallocCalls, successfulAlloc := w.successfulAlloc,
+                          successfulRealloc := w.successfulRealloc, drops := w.drops,
+                          history :=
+                            w.history ++
+                              [{
+                                  request :=
+                                    { address := (w.allocator.table w.allocator.current).address,
+                                      oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                      newCapacity := (↑v).length + n, shape := shape },
+                                  returnedAddress :=
+                                    (backendStep
+                                        { address := (w.allocator.table w.allocator.current).address,
+                                          oldCapacity :=
+                                            max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                          newCapacity := (↑v).length + n, shape := shape }
+                                        w.allocator.backend).1 }],
+                          memory := w.memory, live := w.live, frame := w.frame } }
+                  | some address =>
+                    { returned := Except.ok (),
+                      buffer := { address := address, capacity := (↑v).length + n, values := ↑v, fits := ⋯ },
+                      world :=
+                        succeeded
+                          { address := (w.allocator.table w.allocator.current).address,
+                            oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                            newCapacity := (↑v).length + n, shape := shape }
+                          address
+                          {
+                            allocator :=
+                              {
+                                backend :=
+                                  (backendStep
+                                      { address := (w.allocator.table w.allocator.current).address,
+                                        oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                        newCapacity := (↑v).length + n, shape := shape }
+                                      w.allocator.backend).2,
+                                current := w.allocator.current,
+                                table := fun owner =>
+                                  match
+                                    (backendStep
+                                        { address := (w.allocator.table w.allocator.current).address,
+                                          oldCapacity :=
+                                            max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                          newCapacity := (↑v).length + n, shape := shape }
+                                        w.allocator.backend).1 with
+                                  | none => w.allocator.table owner
+                                  | some pointer =>
+                                    if owner = w.allocator.current then
+                                      { address := pointer, capacity := (↑v).length + n }
+                                    else w.allocator.table owner },
+                            allocCalls :=
+                              w.allocCalls +
+                                if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 1 else 0,
+                            reallocCalls :=
+                              w.reallocCalls +
+                                if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 0 else 1,
+                            deallocCalls := w.deallocCalls, successfulAlloc := w.successfulAlloc,
+                            successfulRealloc := w.successfulRealloc, drops := w.drops,
+                            history :=
+                              w.history ++
+                                [{
+                                    request :=
+                                      { address := (w.allocator.table w.allocator.current).address,
+                                        oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                        newCapacity := (↑v).length + n, shape := shape },
+                                    returnedAddress :=
+                                      (backendStep
+                                          { address := (w.allocator.table w.allocator.current).address,
+                                            oldCapacity :=
+                                              max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                            newCapacity := (↑v).length + n, shape := shape }
+                                          w.allocator.backend).1 }],
+                            memory := w.memory, live := w.live, frame := w.frame } }).world.allocator.current).capacity
+        (↑v).length =
+      (match
+            (backendStep
+                { address := (w.allocator.table w.allocator.current).address,
+                  oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                  newCapacity := (↑v).length + n, shape := shape }
+                w.allocator.backend).1 with
+          | none =>
+            {
+              returned :=
+                Except.error
+                  (Error.allocError { size := usize (((↑v).length + n) * shape.width), align := shape.align }),
+              buffer :=
+                { address := (w.allocator.table w.allocator.current).address,
+                  capacity := max (w.allocator.table w.allocator.current).capacity (↑v).length, values := ↑v,
+                  fits := ⋯ },
+              world :=
+                {
+                  allocator :=
+                    {
+                      backend :=
+                        (backendStep
+                            { address := (w.allocator.table w.allocator.current).address,
+                              oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                              newCapacity := (↑v).length + n, shape := shape }
+                            w.allocator.backend).2,
+                      current := w.allocator.current,
+                      table := fun owner =>
+                        match
+                          (backendStep
+                              { address := (w.allocator.table w.allocator.current).address,
+                                oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                newCapacity := (↑v).length + n, shape := shape }
+                              w.allocator.backend).1 with
+                        | none => w.allocator.table owner
+                        | some pointer =>
+                          if owner = w.allocator.current then { address := pointer, capacity := (↑v).length + n }
+                          else w.allocator.table owner },
+                  allocCalls :=
+                    w.allocCalls + if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 1 else 0,
+                  reallocCalls :=
+                    w.reallocCalls + if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 0 else 1,
+                  deallocCalls := w.deallocCalls, successfulAlloc := w.successfulAlloc,
+                  successfulRealloc := w.successfulRealloc, drops := w.drops,
+                  history :=
+                    w.history ++
+                      [{
+                          request :=
+                            { address := (w.allocator.table w.allocator.current).address,
+                              oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                              newCapacity := (↑v).length + n, shape := shape },
+                          returnedAddress :=
+                            (backendStep
+                                { address := (w.allocator.table w.allocator.current).address,
+                                  oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                  newCapacity := (↑v).length + n, shape := shape }
+                                w.allocator.backend).1 }],
+                  memory := w.memory, live := w.live, frame := w.frame } }
+          | some address =>
+            { returned := Except.ok (),
+              buffer := { address := address, capacity := (↑v).length + n, values := ↑v, fits := ⋯ },
+              world :=
+                succeeded
+                  { address := (w.allocator.table w.allocator.current).address,
+                    oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                    newCapacity := (↑v).length + n, shape := shape }
+                  address
+                  {
+                    allocator :=
+                      {
+                        backend :=
+                          (backendStep
+                              { address := (w.allocator.table w.allocator.current).address,
+                                oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                newCapacity := (↑v).length + n, shape := shape }
+                              w.allocator.backend).2,
+                        current := w.allocator.current,
+                        table := fun owner =>
+                          match
+                            (backendStep
+                                { address := (w.allocator.table w.allocator.current).address,
+                                  oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                  newCapacity := (↑v).length + n, shape := shape }
+                                w.allocator.backend).1 with
+                          | none => w.allocator.table owner
+                          | some pointer =>
+                            if owner = w.allocator.current then { address := pointer, capacity := (↑v).length + n }
+                            else w.allocator.table owner },
+                    allocCalls :=
+                      w.allocCalls + if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 1 else 0,
+                    reallocCalls :=
+                      w.reallocCalls + if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 0 else 1,
+                    deallocCalls := w.deallocCalls, successfulAlloc := w.successfulAlloc,
+                    successfulRealloc := w.successfulRealloc, drops := w.drops,
+                    history :=
+                      w.history ++
+                        [{
+                            request :=
+                              { address := (w.allocator.table w.allocator.current).address,
+                                oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                newCapacity := (↑v).length + n, shape := shape },
+                            returnedAddress :=
+                              (backendStep
+                                  { address := (w.allocator.table w.allocator.current).address,
+                                    oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                    newCapacity := (↑v).length + n, shape := shape }
+                                  w.allocator.backend).1 }],
+                    memory := w.memory, live := w.live, frame := w.frame } }).buffer.capacity
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVHB_OwnerRegistry.lean:109:19: error: unsolved goals
+case mk.some
+inst✝ : ExternalTypes
+A S F : Type
+backendStep : Request → S → Option ℕ × S
+shape : Shape
+w : World (State S) F
+v : alloc.vec.Vec A
+n : ℕ
+backend : S
+pointer : ℕ
+reply :
+  backendStep
+      { address := (metadata w v).address, oldCapacity := (metadata w v).capacity, newCapacity := (↑v).length + n,
+        shape := shape }
+      w.allocator.backend =
+    (some pointer, backend)
+⊢ ((match
+                  (backendStep
+                      { address := (w.allocator.table w.allocator.current).address,
+                        oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                        newCapacity := (↑v).length + n, shape := shape }
+                      w.allocator.backend).1 with
+                | none =>
+                  {
+                    returned :=
+                      Except.error
+                        (Error.allocError { size := usize (((↑v).length + n) * shape.width), align := shape.align }),
+                    buffer :=
+                      { address := (w.allocator.table w.allocator.current).address,
+                        capacity := max (w.allocator.table w.allocator.current).capacity (↑v).length, values := ↑v,
+                        fits := ⋯ },
+                    world :=
+                      {
+                        allocator :=
+                          {
+                            backend :=
+                              (backendStep
+                                  { address := (w.allocator.table w.allocator.current).address,
+                                    oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                    newCapacity := (↑v).length + n, shape := shape }
+                                  w.allocator.backend).2,
+                            current := w.allocator.current,
+                            table := fun owner =>
+                              match
+                                (backendStep
+                                    { address := (w.allocator.table w.allocator.current).address,
+                                      oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                      newCapacity := (↑v).length + n, shape := shape }
+                                    w.allocator.backend).1 with
+                              | none => w.allocator.table owner
+                              | some pointer =>
+                                if owner = w.allocator.current then { address := pointer, capacity := (↑v).length + n }
+                                else w.allocator.table owner },
+                        allocCalls :=
+                          w.allocCalls +
+                            if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 1 else 0,
+                        reallocCalls :=
+                          w.reallocCalls +
+                            if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 0 else 1,
+                        deallocCalls := w.deallocCalls, successfulAlloc := w.successfulAlloc,
+                        successfulRealloc := w.successfulRealloc, drops := w.drops,
+                        history :=
+                          w.history ++
+                            [{
+                                request :=
+                                  { address := (w.allocator.table w.allocator.current).address,
+                                    oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                    newCapacity := (↑v).length + n, shape := shape },
+                                returnedAddress :=
+                                  (backendStep
+                                      { address := (w.allocator.table w.allocator.current).address,
+                                        oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                        newCapacity := (↑v).length + n, shape := shape }
+                                      w.allocator.backend).1 }],
+                        memory := w.memory, live := w.live, frame := w.frame } }
+                | some address =>
+                  { returned := Except.ok (),
+                    buffer := { address := address, capacity := (↑v).length + n, values := ↑v, fits := ⋯ },
+                    world :=
+                      {
+                        allocator :=
+                          {
+                            backend :=
+                              (backendStep
+                                  { address := (w.allocator.table w.allocator.current).address,
+                                    oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                    newCapacity := (↑v).length + n, shape := shape }
+                                  w.allocator.backend).2,
+                            current := w.allocator.current,
+                            table := fun owner =>
+                              match
+                                (backendStep
+                                    { address := (w.allocator.table w.allocator.current).address,
+                                      oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                      newCapacity := (↑v).length + n, shape := shape }
+                                    w.allocator.backend).1 with
+                              | none => w.allocator.table owner
+                              | some pointer =>
+                                if owner = w.allocator.current then { address := pointer, capacity := (↑v).length + n }
+                                else w.allocator.table owner },
+                        allocCalls :=
+                          w.allocCalls +
+                            if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 1 else 0,
+                        reallocCalls :=
+                          w.reallocCalls +
+                            if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 0 else 1,
+                        deallocCalls := w.deallocCalls,
+                        successfulAlloc :=
+                          w.successfulAlloc +
+                            if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 1 else 0,
+                        successfulRealloc :=
+                          w.successfulRealloc +
+                            if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 0 else 1,
+                        drops := w.drops,
+                        history :=
+                          w.history ++
+                            [{
+                                request :=
+                                  { address := (w.allocator.table w.allocator.current).address,
+                                    oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                    newCapacity := (↑v).length + n, shape := shape },
+                                returnedAddress :=
+                                  (backendStep
+                                      { address := (w.allocator.table w.allocator.current).address,
+                                        oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                        newCapacity := (↑v).length + n, shape := shape }
+                                      w.allocator.backend).1 }],
+                        memory :=
+                          memoryAfter
+                            { address := (w.allocator.table w.allocator.current).address,
+                              oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                              newCapacity := (↑v).length + n, shape := shape }
+                            address w.memory,
+                        live := fun a =>
+                          decide (a = address) ||
+                            (decide ((w.allocator.table w.allocator.current).capacity = 0) && decide (↑v = []) ||
+                                !decide (a = (w.allocator.table w.allocator.current).address)) &&
+                              w.live a,
+                        frame := w.frame } }).world.allocator.table
+          (match
+                  (backendStep
+                      { address := (w.allocator.table w.allocator.current).address,
+                        oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                        newCapacity := (↑v).length + n, shape := shape }
+                      w.allocator.backend).1 with
+                | none =>
+                  {
+                    returned :=
+                      Except.error
+                        (Error.allocError { size := usize (((↑v).length + n) * shape.width), align := shape.align }),
+                    buffer :=
+                      { address := (w.allocator.table w.allocator.current).address,
+                        capacity := max (w.allocator.table w.allocator.current).capacity (↑v).length, values := ↑v,
+                        fits := ⋯ },
+                    world :=
+                      {
+                        allocator :=
+                          {
+                            backend :=
+                              (backendStep
+                                  { address := (w.allocator.table w.allocator.current).address,
+                                    oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                    newCapacity := (↑v).length + n, shape := shape }
+                                  w.allocator.backend).2,
+                            current := w.allocator.current,
+                            table := fun owner =>
+                              match
+                                (backendStep
+                                    { address := (w.allocator.table w.allocator.current).address,
+                                      oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                      newCapacity := (↑v).length + n, shape := shape }
+                                    w.allocator.backend).1 with
+                              | none => w.allocator.table owner
+                              | some pointer =>
+                                if owner = w.allocator.current then { address := pointer, capacity := (↑v).length + n }
+                                else w.allocator.table owner },
+                        allocCalls :=
+                          w.allocCalls +
+                            if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 1 else 0,
+                        reallocCalls :=
+                          w.reallocCalls +
+                            if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 0 else 1,
+                        deallocCalls := w.deallocCalls, successfulAlloc := w.successfulAlloc,
+                        successfulRealloc := w.successfulRealloc, drops := w.drops,
+                        history :=
+                          w.history ++
+                            [{
+                                request :=
+                                  { address := (w.allocator.table w.allocator.current).address,
+                                    oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                    newCapacity := (↑v).length + n, shape := shape },
+                                returnedAddress :=
+                                  (backendStep
+                                      { address := (w.allocator.table w.allocator.current).address,
+                                        oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                        newCapacity := (↑v).length + n, shape := shape }
+                                      w.allocator.backend).1 }],
+                        memory := w.memory, live := w.live, frame := w.frame } }
+                | some address =>
+                  { returned := Except.ok (),
+                    buffer := { address := address, capacity := (↑v).length + n, values := ↑v, fits := ⋯ },
+                    world :=
+                      {
+                        allocator :=
+                          {
+                            backend :=
+                              (backendStep
+                                  { address := (w.allocator.table w.allocator.current).address,
+                                    oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                    newCapacity := (↑v).length + n, shape := shape }
+                                  w.allocator.backend).2,
+                            current := w.allocator.current,
+                            table := fun owner =>
+                              match
+                                (backendStep
+                                    { address := (w.allocator.table w.allocator.current).address,
+                                      oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                      newCapacity := (↑v).length + n, shape := shape }
+                                    w.allocator.backend).1 with
+                              | none => w.allocator.table owner
+                              | some pointer =>
+                                if owner = w.allocator.current then { address := pointer, capacity := (↑v).length + n }
+                                else w.allocator.table owner },
+                        allocCalls :=
+                          w.allocCalls +
+                            if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 1 else 0,
+                        reallocCalls :=
+                          w.reallocCalls +
+                            if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 0 else 1,
+                        deallocCalls := w.deallocCalls,
+                        successfulAlloc :=
+                          w.successfulAlloc +
+                            if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 1 else 0,
+                        successfulRealloc :=
+                          w.successfulRealloc +
+                            if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 0 else 1,
+                        drops := w.drops,
+                        history :=
+                          w.history ++
+                            [{
+                                request :=
+                                  { address := (w.allocator.table w.allocator.current).address,
+                                    oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                    newCapacity := (↑v).length + n, shape := shape },
+                                returnedAddress :=
+                                  (backendStep
+                                      { address := (w.allocator.table w.allocator.current).address,
+                                        oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                        newCapacity := (↑v).length + n, shape := shape }
+                                      w.allocator.backend).1 }],
+                        memory :=
+                          memoryAfter
+                            { address := (w.allocator.table w.allocator.current).address,
+                              oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                              newCapacity := (↑v).length + n, shape := shape }
+                            address w.memory,
+                        live := fun a =>
+                          decide (a = address) ||
+                            (decide ((w.allocator.table w.allocator.current).capacity = 0) && decide (↑v = []) ||
+                                !decide (a = (w.allocator.table w.allocator.current).address)) &&
+                              w.live a,
+                        frame := w.frame } }).world.allocator.current).address =
+      (match
+            (backendStep
+                { address := (w.allocator.table w.allocator.current).address,
+                  oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                  newCapacity := (↑v).length + n, shape := shape }
+                w.allocator.backend).1 with
+          | none =>
+            {
+              returned :=
+                Except.error
+                  (Error.allocError { size := usize (((↑v).length + n) * shape.width), align := shape.align }),
+              buffer :=
+                { address := (w.allocator.table w.allocator.current).address,
+                  capacity := max (w.allocator.table w.allocator.current).capacity (↑v).length, values := ↑v,
+                  fits := ⋯ },
+              world :=
+                {
+                  allocator :=
+                    {
+                      backend :=
+                        (backendStep
+                            { address := (w.allocator.table w.allocator.current).address,
+                              oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                              newCapacity := (↑v).length + n, shape := shape }
+                            w.allocator.backend).2,
+                      current := w.allocator.current,
+                      table := fun owner =>
+                        match
+                          (backendStep
+                              { address := (w.allocator.table w.allocator.current).address,
+                                oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                newCapacity := (↑v).length + n, shape := shape }
+                              w.allocator.backend).1 with
+                        | none => w.allocator.table owner
+                        | some pointer =>
+                          if owner = w.allocator.current then { address := pointer, capacity := (↑v).length + n }
+                          else w.allocator.table owner },
+                  allocCalls :=
+                    w.allocCalls + if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 1 else 0,
+                  reallocCalls :=
+                    w.reallocCalls + if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 0 else 1,
+                  deallocCalls := w.deallocCalls, successfulAlloc := w.successfulAlloc,
+                  successfulRealloc := w.successfulRealloc, drops := w.drops,
+                  history :=
+                    w.history ++
+                      [{
+                          request :=
+                            { address := (w.allocator.table w.allocator.current).address,
+                              oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                              newCapacity := (↑v).length + n, shape := shape },
+                          returnedAddress :=
+                            (backendStep
+                                { address := (w.allocator.table w.allocator.current).address,
+                                  oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                  newCapacity := (↑v).length + n, shape := shape }
+                                w.allocator.backend).1 }],
+                  memory := w.memory, live := w.live, frame := w.frame } }
+          | some address =>
+            { returned := Except.ok (),
+              buffer := { address := address, capacity := (↑v).length + n, values := ↑v, fits := ⋯ },
+              world :=
+                {
+                  allocator :=
+                    {
+                      backend :=
+                        (backendStep
+                            { address := (w.allocator.table w.allocator.current).address,
+                              oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                              newCapacity := (↑v).length + n, shape := shape }
+                            w.allocator.backend).2,
+                      current := w.allocator.current,
+                      table := fun owner =>
+                        match
+                          (backendStep
+                              { address := (w.allocator.table w.allocator.current).address,
+                                oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                newCapacity := (↑v).length + n, shape := shape }
+                              w.allocator.backend).1 with
+                        | none => w.allocator.table owner
+                        | some pointer =>
+                          if owner = w.allocator.current then { address := pointer, capacity := (↑v).length + n }
+                          else w.allocator.table owner },
+                  allocCalls :=
+                    w.allocCalls + if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 1 else 0,
+                  reallocCalls :=
+                    w.reallocCalls + if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 0 else 1,
+                  deallocCalls := w.deallocCalls,
+                  successfulAlloc :=
+                    w.successfulAlloc + if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 1 else 0,
+                  successfulRealloc :=
+                    w.successfulRealloc +
+                      if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 0 else 1,
+                  drops := w.drops,
+                  history :=
+                    w.history ++
+                      [{
+                          request :=
+                            { address := (w.allocator.table w.allocator.current).address,
+                              oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                              newCapacity := (↑v).length + n, shape := shape },
+                          returnedAddress :=
+                            (backendStep
+                                { address := (w.allocator.table w.allocator.current).address,
+                                  oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                  newCapacity := (↑v).length + n, shape := shape }
+                                w.allocator.backend).1 }],
+                  memory :=
+                    memoryAfter
+                      { address := (w.allocator.table w.allocator.current).address,
+                        oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                        newCapacity := (↑v).length + n, shape := shape }
+                      address w.memory,
+                  live := fun a =>
+                    decide (a = address) ||
+                      (decide ((w.allocator.table w.allocator.current).capacity = 0) && decide (↑v = []) ||
+                          !decide (a = (w.allocator.table w.allocator.current).address)) &&
+                        w.live a,
+                  frame := w.frame } }).buffer.address ∧
+    max
+        ((match
+                    (backendStep
+                        { address := (w.allocator.table w.allocator.current).address,
+                          oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                          newCapacity := (↑v).length + n, shape := shape }
+                        w.allocator.backend).1 with
+                  | none =>
+                    {
+                      returned :=
+                        Except.error
+                          (Error.allocError { size := usize (((↑v).length + n) * shape.width), align := shape.align }),
+                      buffer :=
+                        { address := (w.allocator.table w.allocator.current).address,
+                          capacity := max (w.allocator.table w.allocator.current).capacity (↑v).length, values := ↑v,
+                          fits := ⋯ },
+                      world :=
+                        {
+                          allocator :=
+                            {
+                              backend :=
+                                (backendStep
+                                    { address := (w.allocator.table w.allocator.current).address,
+                                      oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                      newCapacity := (↑v).length + n, shape := shape }
+                                    w.allocator.backend).2,
+                              current := w.allocator.current,
+                              table := fun owner =>
+                                match
+                                  (backendStep
+                                      { address := (w.allocator.table w.allocator.current).address,
+                                        oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                        newCapacity := (↑v).length + n, shape := shape }
+                                      w.allocator.backend).1 with
+                                | none => w.allocator.table owner
+                                | some pointer =>
+                                  if owner = w.allocator.current then
+                                    { address := pointer, capacity := (↑v).length + n }
+                                  else w.allocator.table owner },
+                          allocCalls :=
+                            w.allocCalls +
+                              if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 1 else 0,
+                          reallocCalls :=
+                            w.reallocCalls +
+                              if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 0 else 1,
+                          deallocCalls := w.deallocCalls, successfulAlloc := w.successfulAlloc,
+                          successfulRealloc := w.successfulRealloc, drops := w.drops,
+                          history :=
+                            w.history ++
+                              [{
+                                  request :=
+                                    { address := (w.allocator.table w.allocator.current).address,
+                                      oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                      newCapacity := (↑v).length + n, shape := shape },
+                                  returnedAddress :=
+                                    (backendStep
+                                        { address := (w.allocator.table w.allocator.current).address,
+                                          oldCapacity :=
+                                            max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                          newCapacity := (↑v).length + n, shape := shape }
+                                        w.allocator.backend).1 }],
+                          memory := w.memory, live := w.live, frame := w.frame } }
+                  | some address =>
+                    { returned := Except.ok (),
+                      buffer := { address := address, capacity := (↑v).length + n, values := ↑v, fits := ⋯ },
+                      world :=
+                        {
+                          allocator :=
+                            {
+                              backend :=
+                                (backendStep
+                                    { address := (w.allocator.table w.allocator.current).address,
+                                      oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                      newCapacity := (↑v).length + n, shape := shape }
+                                    w.allocator.backend).2,
+                              current := w.allocator.current,
+                              table := fun owner =>
+                                match
+                                  (backendStep
+                                      { address := (w.allocator.table w.allocator.current).address,
+                                        oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                        newCapacity := (↑v).length + n, shape := shape }
+                                      w.allocator.backend).1 with
+                                | none => w.allocator.table owner
+                                | some pointer =>
+                                  if owner = w.allocator.current then
+                                    { address := pointer, capacity := (↑v).length + n }
+                                  else w.allocator.table owner },
+                          allocCalls :=
+                            w.allocCalls +
+                              if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 1 else 0,
+                          reallocCalls :=
+                            w.reallocCalls +
+                              if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 0 else 1,
+                          deallocCalls := w.deallocCalls,
+                          successfulAlloc :=
+                            w.successfulAlloc +
+                              if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 1 else 0,
+                          successfulRealloc :=
+                            w.successfulRealloc +
+                              if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 0 else 1,
+                          drops := w.drops,
+                          history :=
+                            w.history ++
+                              [{
+                                  request :=
+                                    { address := (w.allocator.table w.allocator.current).address,
+                                      oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                      newCapacity := (↑v).length + n, shape := shape },
+                                  returnedAddress :=
+                                    (backendStep
+                                        { address := (w.allocator.table w.allocator.current).address,
+                                          oldCapacity :=
+                                            max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                          newCapacity := (↑v).length + n, shape := shape }
+                                        w.allocator.backend).1 }],
+                          memory :=
+                            memoryAfter
+                              { address := (w.allocator.table w.allocator.current).address,
+                                oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                newCapacity := (↑v).length + n, shape := shape }
+                              address w.memory,
+                          live := fun a =>
+                            decide (a = address) ||
+                              (decide ((w.allocator.table w.allocator.current).capacity = 0) && decide (↑v = []) ||
+                                  !decide (a = (w.allocator.table w.allocator.current).address)) &&
+                                w.live a,
+                          frame := w.frame } }).world.allocator.table
+            (match
+                    (backendStep
+                        { address := (w.allocator.table w.allocator.current).address,
+                          oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                          newCapacity := (↑v).length + n, shape := shape }
+                        w.allocator.backend).1 with
+                  | none =>
+                    {
+                      returned :=
+                        Except.error
+                          (Error.allocError { size := usize (((↑v).length + n) * shape.width), align := shape.align }),
+                      buffer :=
+                        { address := (w.allocator.table w.allocator.current).address,
+                          capacity := max (w.allocator.table w.allocator.current).capacity (↑v).length, values := ↑v,
+                          fits := ⋯ },
+                      world :=
+                        {
+                          allocator :=
+                            {
+                              backend :=
+                                (backendStep
+                                    { address := (w.allocator.table w.allocator.current).address,
+                                      oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                      newCapacity := (↑v).length + n, shape := shape }
+                                    w.allocator.backend).2,
+                              current := w.allocator.current,
+                              table := fun owner =>
+                                match
+                                  (backendStep
+                                      { address := (w.allocator.table w.allocator.current).address,
+                                        oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                        newCapacity := (↑v).length + n, shape := shape }
+                                      w.allocator.backend).1 with
+                                | none => w.allocator.table owner
+                                | some pointer =>
+                                  if owner = w.allocator.current then
+                                    { address := pointer, capacity := (↑v).length + n }
+                                  else w.allocator.table owner },
+                          allocCalls :=
+                            w.allocCalls +
+                              if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 1 else 0,
+                          reallocCalls :=
+                            w.reallocCalls +
+                              if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 0 else 1,
+                          deallocCalls := w.deallocCalls, successfulAlloc := w.successfulAlloc,
+                          successfulRealloc := w.successfulRealloc, drops := w.drops,
+                          history :=
+                            w.history ++
+                              [{
+                                  request :=
+                                    { address := (w.allocator.table w.allocator.current).address,
+                                      oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                      newCapacity := (↑v).length + n, shape := shape },
+                                  returnedAddress :=
+                                    (backendStep
+                                        { address := (w.allocator.table w.allocator.current).address,
+                                          oldCapacity :=
+                                            max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                          newCapacity := (↑v).length + n, shape := shape }
+                                        w.allocator.backend).1 }],
+                          memory := w.memory, live := w.live, frame := w.frame } }
+                  | some address =>
+                    { returned := Except.ok (),
+                      buffer := { address := address, capacity := (↑v).length + n, values := ↑v, fits := ⋯ },
+                      world :=
+                        {
+                          allocator :=
+                            {
+                              backend :=
+                                (backendStep
+                                    { address := (w.allocator.table w.allocator.current).address,
+                                      oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                      newCapacity := (↑v).length + n, shape := shape }
+                                    w.allocator.backend).2,
+                              current := w.allocator.current,
+                              table := fun owner =>
+                                match
+                                  (backendStep
+                                      { address := (w.allocator.table w.allocator.current).address,
+                                        oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                        newCapacity := (↑v).length + n, shape := shape }
+                                      w.allocator.backend).1 with
+                                | none => w.allocator.table owner
+                                | some pointer =>
+                                  if owner = w.allocator.current then
+                                    { address := pointer, capacity := (↑v).length + n }
+                                  else w.allocator.table owner },
+                          allocCalls :=
+                            w.allocCalls +
+                              if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 1 else 0,
+                          reallocCalls :=
+                            w.reallocCalls +
+                              if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 0 else 1,
+                          deallocCalls := w.deallocCalls,
+                          successfulAlloc :=
+                            w.successfulAlloc +
+                              if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 1 else 0,
+                          successfulRealloc :=
+                            w.successfulRealloc +
+                              if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 0 else 1,
+                          drops := w.drops,
+                          history :=
+                            w.history ++
+                              [{
+                                  request :=
+                                    { address := (w.allocator.table w.allocator.current).address,
+                                      oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                      newCapacity := (↑v).length + n, shape := shape },
+                                  returnedAddress :=
+                                    (backendStep
+                                        { address := (w.allocator.table w.allocator.current).address,
+                                          oldCapacity :=
+                                            max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                          newCapacity := (↑v).length + n, shape := shape }
+                                        w.allocator.backend).1 }],
+                          memory :=
+                            memoryAfter
+                              { address := (w.allocator.table w.allocator.current).address,
+                                oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                newCapacity := (↑v).length + n, shape := shape }
+                              address w.memory,
+                          live := fun a =>
+                            decide (a = address) ||
+                              (decide ((w.allocator.table w.allocator.current).capacity = 0) && decide (↑v = []) ||
+                                  !decide (a = (w.allocator.table w.allocator.current).address)) &&
+                                w.live a,
+                          frame := w.frame } }).world.allocator.current).capacity
+        (↑v).length =
+      (match
+            (backendStep
+                { address := (w.allocator.table w.allocator.current).address,
+                  oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                  newCapacity := (↑v).length + n, shape := shape }
+                w.allocator.backend).1 with
+          | none =>
+            {
+              returned :=
+                Except.error
+                  (Error.allocError { size := usize (((↑v).length + n) * shape.width), align := shape.align }),
+              buffer :=
+                { address := (w.allocator.table w.allocator.current).address,
+                  capacity := max (w.allocator.table w.allocator.current).capacity (↑v).length, values := ↑v,
+                  fits := ⋯ },
+              world :=
+                {
+                  allocator :=
+                    {
+                      backend :=
+                        (backendStep
+                            { address := (w.allocator.table w.allocator.current).address,
+                              oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                              newCapacity := (↑v).length + n, shape := shape }
+                            w.allocator.backend).2,
+                      current := w.allocator.current,
+                      table := fun owner =>
+                        match
+                          (backendStep
+                              { address := (w.allocator.table w.allocator.current).address,
+                                oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                newCapacity := (↑v).length + n, shape := shape }
+                              w.allocator.backend).1 with
+                        | none => w.allocator.table owner
+                        | some pointer =>
+                          if owner = w.allocator.current then { address := pointer, capacity := (↑v).length + n }
+                          else w.allocator.table owner },
+                  allocCalls :=
+                    w.allocCalls + if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 1 else 0,
+                  reallocCalls :=
+                    w.reallocCalls + if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 0 else 1,
+                  deallocCalls := w.deallocCalls, successfulAlloc := w.successfulAlloc,
+                  successfulRealloc := w.successfulRealloc, drops := w.drops,
+                  history :=
+                    w.history ++
+                      [{
+                          request :=
+                            { address := (w.allocator.table w.allocator.current).address,
+                              oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                              newCapacity := (↑v).length + n, shape := shape },
+                          returnedAddress :=
+                            (backendStep
+                                { address := (w.allocator.table w.allocator.current).address,
+                                  oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                  newCapacity := (↑v).length + n, shape := shape }
+                                w.allocator.backend).1 }],
+                  memory := w.memory, live := w.live, frame := w.frame } }
+          | some address =>
+            { returned := Except.ok (),
+              buffer := { address := address, capacity := (↑v).length + n, values := ↑v, fits := ⋯ },
+              world :=
+                {
+                  allocator :=
+                    {
+                      backend :=
+                        (backendStep
+                            { address := (w.allocator.table w.allocator.current).address,
+                              oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                              newCapacity := (↑v).length + n, shape := shape }
+                            w.allocator.backend).2,
+                      current := w.allocator.current,
+                      table := fun owner =>
+                        match
+                          (backendStep
+                              { address := (w.allocator.table w.allocator.current).address,
+                                oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                newCapacity := (↑v).length + n, shape := shape }
+                              w.allocator.backend).1 with
+                        | none => w.allocator.table owner
+                        | some pointer =>
+                          if owner = w.allocator.current then { address := pointer, capacity := (↑v).length + n }
+                          else w.allocator.table owner },
+                  allocCalls :=
+                    w.allocCalls + if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 1 else 0,
+                  reallocCalls :=
+                    w.reallocCalls + if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 0 else 1,
+                  deallocCalls := w.deallocCalls,
+                  successfulAlloc :=
+                    w.successfulAlloc + if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 1 else 0,
+                  successfulRealloc :=
+                    w.successfulRealloc +
+                      if (w.allocator.table w.allocator.current).capacity = 0 ∧ ↑v = [] then 0 else 1,
+                  drops := w.drops,
+                  history :=
+                    w.history ++
+                      [{
+                          request :=
+                            { address := (w.allocator.table w.allocator.current).address,
+                              oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                              newCapacity := (↑v).length + n, shape := shape },
+                          returnedAddress :=
+                            (backendStep
+                                { address := (w.allocator.table w.allocator.current).address,
+                                  oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                                  newCapacity := (↑v).length + n, shape := shape }
+                                w.allocator.backend).1 }],
+                  memory :=
+                    memoryAfter
+                      { address := (w.allocator.table w.allocator.current).address,
+                        oldCapacity := max (w.allocator.table w.allocator.current).capacity (↑v).length,
+                        newCapacity := (↑v).length + n, shape := shape }
+                      address w.memory,
+                  live := fun a =>
+                    decide (a = address) ||
+                      (decide ((w.allocator.table w.allocator.current).capacity = 0) && decide (↑v = []) ||
+                          !decide (a = (w.allocator.table w.allocator.current).address)) &&
+                        w.live a,
+                  frame := w.frame } }).buffer.capacity
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVHB_OwnerRegistry.lean:108:58: warning: This simp argument is unused:
+  reply
+
+Hint: Omit it from the simp argument list.
+  simp [finish, ̲step, ̲R1Z.PV_FXM_ReserveSelected.buffer,r̵e̵p̵l̵y̵,̵ ̲attempted, ̲metadata, ̲afterAnswer]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVHB_OwnerRegistry.lean:110:58: warning: This simp argument is unused:
+  reply
+
+Hint: Omit it from the simp argument list.
+  simp [̵f̵i̵n̵i̵s̵h̵,̵s̵t̵e̵p̵,̵R̵1̵Z̵.̵P̵V̵_̵F̵X̵M̵_̵R̵e̵s̵e̵r̵v̵e̵S̵e̵l̵e̵c̵t̵e̵d̵.̵b̵u̵f̵f̵e̵r̵,̵r̵e̵p̵l̵y̵,̵a̵t̵t̵e̵m̵p̵t̵e̵d̵,̵s̵u̵c̵c̵e̵e̵d̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵m̵e̵t̵a̵d̵a̵t̵a̵,̵a̵f̵t̵e̵r̵A̵n̵s̵w̵e̵r̵,̵N̵a̵t̵.̵m̵a̵x̵_̵e̵q̵_̵l̵e̵f̵t̵[̲f̲i̲n̲i̲s̲h̲,̲ ̲s̲t̲e̲p̲,̲ ̲R̲1̲Z̲.̲P̲V̲_̲F̲X̲M̲_̲R̲e̲s̲e̲r̲v̲e̲S̲e̲l̲e̲c̲t̲e̲d̲.̲b̲u̲f̲f̲e̲r̲,̲ ̲a̲t̲t̲e̲m̲p̲t̲e̲d̲,̲ ̲s̲u̲c̲c̲e̲e̲d̲e̲d̲,̲ ̲m̲e̲t̲a̲d̲a̲t̲a̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲a̲f̲t̲e̲r̲A̲n̲s̲w̲e̲r̲,̲ ̲N̲a̲t̲.̲m̲a̲x̲_̲e̲q̲_̲l̲e̲f̲t̲ (Nat.le_add_right v.val.length n)]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVHB_OwnerRegistry.lean:111:29: warning: This simp argument is unused:
+  Nat.max_eq_left (Nat.le_add_right v.val.length n)
+
+Hint: Omit it from the simp argument list.
+  simp [̵f̵i̵n̵i̵s̵h̵,̵s̵t̵e̵p̵,̵R̵1̵Z̵.̵P̵V̵_̵F̵X̵M̵_̵R̵e̵s̵e̵r̵v̵e̵S̵e̵l̵e̵c̵t̵e̵d̵.̵b̵u̵f̵f̵e̵r̵,̵r̵e̵p̵l̵y̵,̵a̵t̵t̵e̵m̵p̵t̵e̵d̵,̵s̵u̵c̵c̵e̵e̵d̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵m̵e̵t̵a̵d̵a̵t̵a̵,̵a̵f̵t̵e̵r̵A̵n̵s̵w̵e̵r̵,̵N̵a̵t̵.̵m̵a̵x̵_̵e̵q̵_̵l̵e̵f̵t̵ ̵(̵N̵a̵t̵.̵l̵e̵_̵a̵d̵d̵_̵r̵i̵g̵h̵t̵ ̵v̵.̵v̵a̵l̵.̵l̵e̵n̵g̵t̵h̵ ̵n̵)̵]̵[̲f̲i̲n̲i̲s̲h̲,̲ ̲s̲t̲e̲p̲,̲ ̲R̲1̲Z̲.̲P̲V̲_̲F̲X̲M̲_̲R̲e̲s̲e̲r̲v̲e̲S̲e̲l̲e̲c̲t̲e̲d̲.̲b̲u̲f̲f̲e̲r̲,̲ ̲r̲e̲p̲l̲y̲,̲ ̲a̲t̲t̲e̲m̲p̲t̲e̲d̲,̲ ̲s̲u̲c̲c̲e̲e̲d̲e̲d̲,̲ ̲m̲e̲t̲a̲d̲a̲t̲a̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲a̲f̲t̲e̲r̲A̲n̲s̲w̲e̲r̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVHB_OwnerRegistry.lean:121:6: error: Function expected at
+  R1Z.PV_FXM_ReserveSelected.buffer v (metadata w v)
+but this term has type
+  Buffer A
+
+Note: Expected a function because this term is being applied to the argument
+  n.val
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVHB_OwnerRegistry.lean:122:35: error(lean.invalidField): Invalid field `buffer`: The environment does not contain `Function.buffer`, so it is not possible to project the field `buffer` from an expression
+  e
+of type
+  Buffer ?m.41 → ℕ → World (State S) ?m.43 → Execution ?m.41 (State S) ?m.43
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVHB_OwnerRegistry.lean:123:16: error(lean.invalidField): Invalid field `world`: The environment does not contain `Function.world`, so it is not possible to project the field `world` from an expression
+  e
+of type
+  Buffer ?m.41 → ℕ → World (State S) ?m.43 → Execution ?m.41 (State S) ?m.43
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVHB_OwnerRegistry.lean:123:36: error(lean.invalidField): Invalid field `buffer`: The environment does not contain `Function.buffer`, so it is not possible to project the field `buffer` from an expression
+  e
+of type
+  Buffer ?m.41 → ℕ → World (State S) ?m.43 → Execution ?m.41 (State S) ?m.43
+'PV_EVHB_OwnerRegistry.source_lookup' depends on axioms: [propext]
+'PV_EVHB_OwnerRegistry.source_install' depends on axioms: [propext]
+'PV_EVHB_OwnerRegistry.source_metadata' depends on axioms: [propext]
+'PV_EVHB_OwnerRegistry.finish_delivery' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_EVHB_OwnerRegistry.registered_header_delivery' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
