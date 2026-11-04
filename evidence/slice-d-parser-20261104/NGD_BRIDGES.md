@@ -39,5 +39,4 @@ failed with Aeneas marker collapse; retained emitted S1NativeCompactModelV1 is
 pinned as the replacement input, not a fabricated extraction success.
 
 Final combined replay is NGD_L067: all 67 audited roots (including headline)
-print only standard axioms. Final raw/scan receipts are recorded separately in
-NGD_AUDIT.json; until those finish, this paragraph grants no extra closure.
+print only standard axioms. Final raw audit L069 passes all 67 roots plus eight same-driver controls; final NFX scan L070 passes 12,751 modules with zero dangling/duplicate/import defects. NGD_AUDIT.json records exact metrics and revisions. Supporting results grant no additional composed row closure.

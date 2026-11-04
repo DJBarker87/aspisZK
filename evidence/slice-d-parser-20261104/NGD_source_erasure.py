@@ -29,7 +29,7 @@ def check(frozen,native):
  assert tokens(stmt)==tokens(body(native,'decode_source_step').removesuffix('Ok(())\n').strip().removesuffix('Ok(())').strip()),'decode assignment differs'
  return {'parse_record':parse,'parse_record_at':at,'decode_assignment':stmt}
 if __name__=='__main__':
- frozen=(E/'NGD_FROZEN_WIRE.rs.txt').read_text();native=json.loads((E/'NGD_NATIVE_INPUTS.json').read_text())['crates/aspis-r1-cost-probe/src/NGD_wire.rs']
+ frozen=(E/'NGD_FROZEN_WIRE.rs.txt').read_text();assert hashlib.sha256(frozen.encode()).hexdigest()==json.loads((E/'NGD_FROZEN_SOURCE_PINS.json').read_text())['crates/aspis-r1-cost-probe/src/r1_wire.rs'];native=json.loads((E/'NGD_NATIVE_INPUTS.json').read_text())['crates/aspis-r1-cost-probe/src/NGD_wire.rs']
  b=check(frozen,native);controls=[]
  for label,old,new in [('payload_window','let payload = &record[5..]','let payload = &record[6..]'),('forwarding_window','.get(offset..offset + length)','.get(0..offset + length)'),('decode_index','out[value]=QM31','out[0]=QM31')]:
   assert old in native,label
