@@ -48,6 +48,7 @@ elif kind=='lean':
  if target in ['NGN_Driver','NGN_ProofDriver','NGN_PoolProofDriver','NGN_PoolDriver']:command+=['-c','NGN_native/'+target+'.c']
 elif kind=='link':
  sources=['NGN_native/'+target+'.c','NGN_native/NFA_WALKER.c','NGN_native/NFA_MemoryLimit.c']
+ for n in ['NFA_WALKER.c','NFA_MemoryLimit.c']:files['NGN_native/'+n]=(E/'NGN_native'/n).read_text()
  command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NGN_native/'+target,*sources]
 elif kind=='audit':
  sources=['NGN_generated/NGN_ProofDriver.lean','NGN_generated/NGN_Driver.lean','NGN_batch.py','NGN_AUDIT_ROOTS.json','NGN_EXPECTED_IMPORTS.jsonl']+(['NGN_POOL_ROOTS.json'] if target.startswith('pool') else [])

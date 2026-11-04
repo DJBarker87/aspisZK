@@ -57,3 +57,14 @@ fn powers_assignment(){let gamma=any_e();let kappa=any_e();let saved_kappa=kappa
  *&mut g=power(gamma,&mut log,reply);
  assert!((g[i]==reply[i]&&log==gamma&&kappa==saved_kappa&&state==saved_state)!=cfg!(NGN_invert));
 }
+
+fn err(code:u8)->Error{match code%8{0=>Error::Parse,1=>Error::Semantic,2=>Error::Transcript,3=>Error::Relation,4=>Error::Merkle,5=>Error::Query,6=>Error::Checkpoint,_=>Error::Allocation}}
+struct QLog{row:u8,len:usize,at:usize,byte:u8,before:[u8;32],after:[u8;32],reply:Result<[u32;22],Error>,calls:usize}
+fn queries(t:&mut T,row:u8,payload:&[u8],log:&mut QLog)->Result<[u32;22],Error>{log.row=row;log.len=payload.len();log.byte=if log.at<payload.len(){payload[log.at]}else{0};log.before=t.state;log.calls+=1;t.state=log.after;log.reply}
+fn query_cut(t:&mut T,row:u8,final_message:&[u8],log:&mut QLog)->Result<[u32;22],Error>{let queries=queries(t,row,final_message,log)?;Ok(queries)}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn query_stage(){let mut t=T{state:kani::any(),hash:kani::any()};let before=t.state;let hash=t.hash;let state:[u8;32]=kani::any();let after=state;let fail:bool=kani::any();let error=err(kani::any());let qs:[u32;22]=kani::any();let reply=if fail{Err(error)}else{Ok(qs)};let mut l=QLog{row:kani::any(),len:kani::any(),at:kani::any(),byte:kani::any(),before:kani::any(),after,reply,calls:0};let payload:[u8;2048]=kani::any();let row:u8=kani::any();kani::assume(row==30||row==31);let at=l.at;let i:usize=kani::any();kani::assume(i<22);let gamma=any_e();let kappa=any_e();let saved=(gamma,kappa);let result=query_cut(&mut t,row,&payload,&mut l);
+ let value=match result{Err(e)=>fail&&e==error,Ok(out)=>!fail&&out[i]==qs[i]};let good=value&&l.row==row&&l.len==2048&&l.byte==(if at<2048{payload[at]}else{0})&&l.calls==1&&l.before==before&&t.state==after&&t.hash==hash&&saved==(gamma,kappa);assert!(good!=cfg!(NGN_invert));
+}

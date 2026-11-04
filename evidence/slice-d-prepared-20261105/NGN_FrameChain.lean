@@ -13,6 +13,7 @@ theorem gamma_kappa (B : PreparedScratchModel.Boundaries) {H : Type} (D : aspis_
  (child : PreparedModel.scalar B.sampling D start 27#u8 v.y1 true=ok (gamma,after)) :
  gammaCut B D v start=kappaCut B D v gamma after := by
  simp only [gammaCut,child,bind_tc_ok]
+ rfl
 
 theorem kappa_alpha (B : PreparedScratchModel.Boundaries) {H : Type} (D : aspis_core.Digest32 H)
  (v : verifier.View) (before after : transcript.Transcript H) (gamma kappa : PE)
@@ -21,12 +22,14 @@ theorem kappa_alpha (B : PreparedScratchModel.Boundaries) {H : Type} (D : aspis_
  (child : PreparedModel.scalar B.sampling D before 28#u8 (Array.to_slice bytes) false=ok (kappa,after)) :
  kappaCut B D v gamma before=alphaCut B D v gamma kappa after := by
  simp only [kappaCut,serialize,child,lift,bind_tc_ok]
+ rfl
 
 theorem alpha_fold (B : PreparedScratchModel.Boundaries) {H : Type} (D : aspis_core.Digest32 H)
  (v : verifier.View) (before after : transcript.Transcript H) (gamma kappa alpha0 : PE)
  (child : PreparedModel.scalar B.sampling D before 29#u8 v.round0 false=ok (alpha0,after)) :
  alphaCut B D v gamma kappa before=foldCut B D v gamma kappa alpha0 after := by
  simp only [alphaCut,child,bind_tc_ok]
+ rfl
 
 theorem query_rho (B : PreparedScratchModel.Boundaries) {H : Type} (D : aspis_core.Digest32 H)
  (sem : r1_semantic.Verified H) (v : verifier.View) (old : Scratch) (o : Opening H)
@@ -34,6 +37,7 @@ theorem query_rho (B : PreparedScratchModel.Boundaries) {H : Type} (D : aspis_co
  (child : B.sampling.queries D o.transcript o.row v.final_message=ok (.Ok queries,after)) :
  queryCut B D sem v old o=rhoCut B D sem v o queries after := by
  simp only [queryCut,child,bind_tc_ok,core.result.Result.Insts.CoreOpsTry.branch]
+ rfl
 
 theorem rho_powers (B : PreparedScratchModel.Boundaries) {H : Type} (D : aspis_core.Digest32 H)
  (sem : r1_semantic.Verified H) (v : verifier.View) (o : Opening H)

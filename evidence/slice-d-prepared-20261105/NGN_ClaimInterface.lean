@@ -1,0 +1,4 @@
+import NGJ_VERIFIER_IMPORT
+import LPt_PreparedClaim
+#check AspisR1.LPt_PreparedClaim.native_result
+#print axioms AspisR1.LPt_PreparedClaim.native_result

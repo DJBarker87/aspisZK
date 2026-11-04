@@ -1,0 +1,57 @@
+{"attempt": "NGN_L005", "exit_status": 1, "wall_seconds": 3.1951869858894497, "peak_rss_kib": "5819660", "swaps": "0", "print_axioms": ["'AspisR1.NGN_FrameChain.gamma_kappa' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NGN_FrameChain.kappa_alpha' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NGN_FrameChain.alpha_fold' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NGN_FrameChain.query_rho' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NGN_FrameChain.rho_powers' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NGN_FrameChain.powers_claim' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NGN_FrameChain.query_exit' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NGN_generated/NGN_FrameChain.lean:14:52: error: unsolved goals
+B : PreparedScratchModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+v : verifier.View
+start after : transcript.Transcript H
+gamma : PE
+child : PreparedModel.scalar B.sampling D start 27#u8 v.y1 true = ok (gamma, after)
+⊢ (let (gamma, t1) := (gamma, after)
+    kappaCut B D v gamma t1) =
+    kappaCut B D v gamma after
+NGN_generated/NGN_FrameChain.lean:22:65: error: unsolved goals
+B : PreparedScratchModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+v : verifier.View
+before after : transcript.Transcript H
+gamma kappa : PE
+bytes : Std.Array U8 32#usize
+serialize : B.sampling.toBytes v.inactive = ok bytes
+child : PreparedModel.sca
+...
+erated/NGN_FrameChain.lean:35:62: error: unsolved goals
+B : PreparedScratchModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+v : verifier.View
+old : Scratch
+o : Opening H
+queries : Std.Array U32 22#usize
+after : transcript.Transcript H
+child : B.sampling.queries D o.transcript o.row v.final_message = ok (core.result.Result.Ok queries, after)
+⊢ (let (r, after) := (core.result.Result.Ok queries, after)
+    do
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue queries => rhoCut B D sem v o queries after
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+              (core.convert.FromSame verifier.Error) residual
+        ok (r, old)) =
+    rhoCut B D sem v o queries after
+'AspisR1.NGN_FrameChain.gamma_kappa' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NGN_FrameChain.kappa_alpha' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NGN_FrameChain.alpha_fold' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NGN_FrameChain.query_rho' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NGN_FrameChain.rho_powers' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGN_FrameChain.powers_claim' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGN_FrameChain.query_exit' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r9670a81c25904488a28295b2224b8b9f.scope; invocation ID: bef27b649cbf40e8a21ef00abc297f65
