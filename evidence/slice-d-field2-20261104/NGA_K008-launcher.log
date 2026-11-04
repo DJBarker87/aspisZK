@@ -1,0 +1,49 @@
+{"attempt": "NGA_K008", "exit_status": 1, "wall_seconds": 6.827057655900717, "peak_rss_kib": "526332", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-d-field2-20261104/NGA_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, 
+...
+[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-slice-d-field2-20261104/NGA_src/crates/aspis-core/../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-slice-d-field2-20261104/NGA_src/crates/aspis-core/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.78s
+Checking harness field::NGA_outer::outer4...
+
+VERIFICATION RESULT:
+ ** 1 of 256 failed (8 unreachable)
+Failed Checks: assertion failed: out[i][j] == if cfg!(NGA_invert) { want ^ 1 } else { want }
+ File: "crates/aspis-core/src/NGA_outer.rs", line 26, in field::NGA_outer::check::<4>
+
+VERIFICATION:- FAILED
+Verification Time: 3.7478397s
+
+Manual Harness Summary:
+Verification failed for - field::NGA_outer::outer4
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r5ea41f0b43174be19a95fb35ac84e0cc.scope; invocation ID: 68b80f2772ac4240ae0e10d6e558404e
