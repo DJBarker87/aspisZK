@@ -20,3 +20,20 @@ replay. Exact attempts and source/object pins will be recorded here. Next:
 validate inventory/deltas and seed the smallest coherent retained closure.
 The 100-bit per-attempt target is not yet established; privacy and the
 two-transaction design remain unchanged. No push.
+
+Stage 1: all nine unchanged validators reproduced in an owned read/write
+sandbox (NFX/NGB/NFT/NFU/NFY/NGE/NGF/NGI/NFV). Historical NGF inventory
+compression is transparently hash-checked. C0032 now passes the NGB apply
+producer through NGJ_OVERLAY/EDGES, with compiler/AST corroboration and no
+new row. Preliminary reproduced count: 281/599 CLOSED, 0 QUALIFIED,
+318 OPEN. S97/97, Q2/2 roots; D43/345. The expected D47 does not reproduce:
+three old D credits move into Q and the two D deltas overlap at TX1:342.
+No closure is inferred from a duplicate promotion.
+
+Stage 2 underway: full aggregate L002 fails duplicate original/canonical
+Sdk GuardBody ownership; verifier-only L003 passes. This is an evidence
+composition finding, not a shipped-source bug. L009 finds zero dangling
+references and incompatible owners in the verifier closure, but four omitted
+nested source import baselines need the owned manifest correction. No slice
+is patched. The complete Pool join stays OPEN; exact diagnostics and fresh
+raw-root audits are pending. No trust row changed.
