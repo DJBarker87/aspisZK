@@ -1,0 +1,49 @@
+{"attempt": "NGH_K045", "exit_status": 1, "wall_seconds": 4.394426177954301, "peak_rss_kib": "520176", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-d-field3-20261105/NGH_src/crates/aspis-core)
+error[E0583]: file not found for module `NGH_cells`
+    --> crates/aspis-core/src/field.rs:3330:1
+     |
+3330 | mod NGH_cells;
+     | ^^^^^^^^^^^^^^
+     |
+     = help: to create the module `NGH_cells`, create file "crates/aspis-core/src/field/NGH_cells.rs" or "crates/aspis-core/src/field/NGH_cells/mod.rs"
+     = note: if there is a `mod NGH_cells` elsewhere in the crate already, import it with `use crate::...` instead
+
+warning: unexpected `cfg` condition name: `NGH_for_diagnostic`
+ --> crates/aspis-core/src/lib.rs:1:13
+  |
+1 | 
+...
+  unexpected_cfgs = { level = "warn", check-cfg = ['cfg(NFT_bad_argument)'] }
+  = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(NFT_bad_argument)");` to the top of the `build.rs`
+  = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `NFT_invert`
+  --> crates/aspis-core/src/NFT_cmr.rs:10:639
+   |
+10 | ....0==log.calls[1].reply&&got.b.0==log.calls[3].reply)!=cfg!(NFT_invert));}
+   |                                                               ^^^^^^^^^^
+   |
+   = help: consider using a Cargo feature instead
+   = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+            [lints.rust]
+            unexpected_cfgs = { level = "warn", check-cfg = ['cfg(NFT_invert)'] }
+   = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(NFT_invert)");` to the top of the `build.rs`
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: variable does not need to be mutable
+  --> crates/aspis-core/src/NFT_channels.rs:40:23
+   |
+40 | fn channel_step(){let mut sums:[[u64;3];3]=kani::any();for row in 0..3{for col in 0..3{kani::assume(sums[row][col]<3u64*(1u64<<62));}}
+   |                       ----^^^^
+   |                       |
+   |                       help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+For more information about this error, try `rustc --explain E0583`.
+error: could not compile `aspis-core` (lib) due to 1 previous error; 74 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 1 compilation errors.
+
+Running as unit: run-r5b8839aded14499faa0ce0a171327abe.scope; invocation ID: 77857034165a47ea898ec6de7891af6c
