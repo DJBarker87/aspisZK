@@ -1,0 +1,49 @@
+use super::*;
+pub(super) struct Log;
+impl Log {pub fn unused()->Self{Self}}
+pub(super) fn dots(_:&[u8],_:&[E;29],_:&mut Log)->[E;4]{[E::ZERO;4]}
+pub(super) fn consume(_:usize,_:usize,_:[E;4],_:&mut Log){}
+struct Frame {row:usize,lane:usize,seen_rhs:E,seen_power:K,seen_next:usize,seen_terms:usize,seen_raw:u64,seen_weight:K,seen_ptrs:[usize;3],calls:usize,
+ rhs:E,power:K,next:usize,terms:usize,raw:[[u64;4];64]}
+fn accumulate(p:&Prepared,a:&mut Accumulator,_:M31,_:E,b:&mut BatchedWeights,f:&mut Frame){
+ f.calls+=1;f.seen_rhs=a.rhs;f.seen_power=a.power;f.seen_next=a.next;f.seen_terms=b.terms;
+ f.seen_weight=a.weights[f.row];f.seen_raw=b.raw[f.row][f.lane];f.seen_ptrs=[p as *const _ as usize,a.weights.as_ptr() as usize,b.raw.as_ptr() as usize];
+ a.rhs=f.rhs;a.power=f.power;a.next=f.next;b.terms=f.terms;
+ for j in 0..64 {b.raw[j]=f.raw[j];}
+}
+// Same original tail, with only the named child replaced by a local oracle.
+fn NFP_finish(p:&Prepared,mut a:Accumulator,node:M31,folded:E,mut pending:BatchedWeights,obs:Observer,f:&mut Frame)->Result<(Accumulator,BatchedWeights),Error>{
+ let i=a.next;
+ accumulate(p,&mut a,node,folded,&mut pending,f);
+ mark(obs,Phase::Query(i));
+ Ok((a,pending))
+}
+fn k()->K{let w:[u32;4]=kani::any();K{c0:aspis_core::field::CM31{a:M31(w[0]),b:M31(w[1])},c1:aspis_core::field::CM31{a:M31(w[2]),b:M31(w[3])}}}
+fn e()->E{E::new(k(),k())}
+fn run(mode:u8){
+ let p=Prepared{variant:Variant::S2,roots:[[0;32];2],gamma:E::ZERO,kappa:E::ZERO,alpha:[E::ZERO;2],rho:K::ZERO,queries:[0;22],semantic_alpha:[K::ZERO;10],z:[SecureCirclePoint{x:K::ZERO,y:K::ZERO};2],claim:E::ZERO,state:[0;32]};
+ let mut weights=Vec::with_capacity(64);let mut raw=Vec::with_capacity(64);
+ for _ in 0..64 {weights.push(k());raw.push(kani::any::<[u64;4]>());}
+ let row:usize=kani::any();let lane:usize=kani::any();kani::assume(row<64 && lane<4);
+ let a=Accumulator{weights,rhs:e(),power:k(),next:kani::any()};let b=BatchedWeights{raw,terms:kani::any()};
+ let old_rhs=a.rhs;let old_power=a.power;let old_next=a.next;let old_terms=b.terms;let old_raw=b.raw[row][lane];let old_weight=a.weights[row];
+ let ptrs=[&p as *const _ as usize,a.weights.as_ptr() as usize,b.raw.as_ptr() as usize];
+ let mut f=Frame{row,lane,seen_rhs:E::ZERO,seen_power:K::ZERO,seen_next:0,seen_terms:0,seen_raw:0,seen_weight:K::ZERO,seen_ptrs:[0;3],calls:0,rhs:e(),power:k(),next:kani::any(),terms:kani::any(),raw:kani::any()};
+ let (a,b)=NFP_finish(&p,a,M31(0),E::ZERO,b,None,&mut f).unwrap();
+ assert_eq!(f.calls,1);assert_eq!(f.seen_rhs,old_rhs);assert_eq!(f.seen_power,old_power);assert_eq!(f.seen_next,old_next);assert_eq!(f.seen_terms,old_terms);assert_eq!(f.seen_raw,old_raw);assert_eq!(f.seen_weight,old_weight);assert_eq!(f.seen_ptrs,ptrs);
+ assert_eq!(a.rhs,f.rhs);assert_eq!(a.power,f.power);assert_eq!(a.next,f.next);assert_eq!(b.terms,f.terms);
+ assert_eq!(a.weights.len(),64);assert_eq!(b.raw.len(),64);assert_eq!(a.weights.as_ptr() as usize,ptrs[1]);assert_eq!(b.raw.as_ptr() as usize,ptrs[2]);assert_eq!(a.weights[row],old_weight);assert_eq!(b.raw[row][lane],f.raw[row][lane]);
+ if mode==1 {assert_ne!(a.next,f.next);}
+}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn frame_return(){run(0)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn frame_return_control(){run(1)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn frame_return_renamed(){run(0)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn frame_copy_control(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as_mut_ptr(),16)};assert_eq!(dst[15],0);}

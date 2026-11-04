@@ -1,0 +1,36 @@
+pub(super) fn consume(_:usize,_:usize,_:[E;4],_:&mut Log){}
+fn e()->E {let words:[u32;8]=kani::any();for w in words {kani::assume(w<2147483647);}E::from_limbs(words).unwrap()}
+fn m()->M31 {let x:u32=kani::any();kani::assume(x<2147483647);M31(x)}
+fn run(mode:u8){
+ let q:[u8;832]=kani::any();let i:usize=kani::any();kani::assume(i<22);
+ let p=Prepared{variant:Variant::S2,roots:[[0;32];2],gamma:E::ZERO,kappa:E::ZERO,alpha:[e(),e()],rho:K::ZERO,queries:[0;22],semantic_alpha:[K::ZERO;10],z:[SecureCirclePoint{x:K::ZERO,y:K::ZERO};2],claim:E::ZERO,state:[0;32]};
+ let u:u32=kani::any();let u=u as usize;
+ let a=Accumulator{weights:Vec::new(),rhs:E::ZERO,power:K::ZERO,next:i};let pending=BatchedWeights{raw:Vec::new(),terms:0};
+ let inverse:[M31;5]=core::array::from_fn(|_|m());let z=m();
+ let mut inverses=Vec::with_capacity(1);inverses.push(inverse);let mut line_z=Vec::with_capacity(1);line_z.push(z);
+ let geometry=QueryGeometry{start:i,inverses,line_z};
+ let mut l=Log{reply:core::array::from_fn(|_|e()),folded:e(),values:core::array::from_fn(|_|e()),line:e(),product:m(),out_rhs:e(),out_power:K::ZERO,next:kani::any(),out_terms:kani::any(),..Log::unused()};
+ let dots=l.reply;let rejected=l.folded!=l.values[u%4];
+ let out=NFP_after_dots(&q,&p,a,&geometry,pending,dots,u,None,&mut l);
+ let slot:usize=kani::any();kani::assume(slot<4);
+ assert_eq!(l.dots_in,dots);assert_eq!(l.alpha[0],p.alpha[0]);assert_eq!(l.inv[0],inverse);
+ assert_eq!(l.fields,4);assert_eq!(l.slots,[0,1,2,3]);assert_eq!(l.window,q.as_ptr() as usize+672);
+ assert_eq!(l.events[slot],(9,4*i+slot,dots[slot]));assert_eq!(l.events[4],(10,2*i,l.folded));
+ if rejected {assert!(matches!(out,Err(Error::Query)));assert_eq!(l.traces,5);assert!(!l.accum);if mode==1 {assert!(l.accum);}}
+ else {let (a,b)=out.unwrap();assert_eq!(l.alpha[1],p.alpha[1]);assert_eq!(l.inv[1],inverse);assert_eq!(l.factors,[z,z]);
+ assert_eq!(l.traces,6);assert_eq!(l.events[5],(10,2*i+1,l.line));assert!(l.accum);assert_eq!(l.pp,&p as *const _ as usize);assert_eq!(l.node,l.product.double().sub(M31::ONE));assert_eq!(l.value,l.line);
+ assert_eq!(a.rhs,l.out_rhs);assert_eq!(a.power,l.out_power);assert_eq!(a.next,l.next);assert_eq!(b.terms,l.out_terms);
+ if mode==1 {assert_ne!(a.next,l.next);}}
+}
+#[kani::proof] #[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn suffix_values(){run(0)}
+#[kani::proof] #[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn suffix_values_control(){run(1)}
+#[kani::proof] #[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn suffix_values_renamed(){run(0)}
+#[kani::proof] #[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn suffix_copy_control(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as_mut_ptr(),16)};assert_eq!(dst[15],0);}

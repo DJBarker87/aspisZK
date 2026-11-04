@@ -1,0 +1,29 @@
+NFP_generated/NFP_RejectionTrace.lean:32:17: error: Tactic `rfl` failed: The left-hand side
+  (NFP_TraceHead.run ops proof p a g).cuts ++
+    ((NFP_TraceFront.run ops p a geometry u q dots).cuts ++ (pure (core.result.Result.Err verifier.Error.Query)).cuts)
+is not definitionally equal to the right-hand side
+  (NFP_TraceHead.run ops proof p a g).cuts ++ (NFP_TraceFront.run ops p a geometry u q dots).cuts
+
+case right
+ops : Ops
+proof : Slice U8
+p : verifier.Prepared
+a : verifier.Accumulator
+g : Std.Array E 29#usize
+geometry : verifier.QueryGeometry
+pending : verifier.BatchedWeights
+u : Usize
+q : Slice U8
+dots : Dots
+inverse : Inverse
+folded : E
+values : Dots
+head : (NFP_TraceHead.run ops proof p a g).result = ok (u, q, dots)
+front : (NFP_TraceFront.run ops p a geometry u q dots).result = ok (inverse, folded, values, true)
+continuation : Usize × Slice U8 × Dots → M Out := ⋯
+⊢ (NFP_TraceHead.run ops proof p a g).cuts ++
+      ((NFP_TraceFront.run ops p a geometry u q dots).cuts ++
+        (pure (core.result.Result.Err verifier.Error.Query)).cuts) =
+    (NFP_TraceHead.run ops proof p a g).cuts ++ (NFP_TraceFront.run ops p a geometry u q dots).cuts
+'AspisR1.NFP_RejectionTrace.guard' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NFP_RejectionTrace.rejected_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
