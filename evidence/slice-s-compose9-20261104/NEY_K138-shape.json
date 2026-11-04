@@ -1,0 +1,8 @@
+{
+ "slot": 0,
+ "mode": "positive",
+ "frozen_body": "fn asq8_common(\n    authenticated: &AuthenticatedAsq8Accounts,\n    candidate_afterstate: &aspis_statement::pool_v1::PoolV1PairVerifiedAfterstateV1,\n) -> Box<PoolV1PairForestTerminalCommonV1> {\n    Box::new(PoolV1PairForestTerminalCommonV1 {\n        master_account: authenticated.master_account,\n        checkpoint_account: authenticated.checkpoint_account,\n        selected_lane_account: authenticated.selected_lane_account,\n        output_lane: authenticated.selected_lane.lane_id,\n        checkpoint_sequence: authenticated.checkpoint.checkpoint_sequence,\n        historical_global_anchor: authenticated.checkpoint.global_root,\n        lane_transition: PoolV1PairLatePublicStatementV1 {\n            live_snapshot: *authenticated.live_snapshot,\n            candidate_afterstate: *candidate_afterstate,\n        },\n    })\n}",
+ "frozen_expression": "authenticated.master_account",
+ "source": "struct A{master_account:[u8;32]}\n#[kani::proof]\nfn common_rhs(){let expected:[u8;32]=kani::any();let j:usize=kani::any();kani::assume(j<32);let authenticated=A{master_account:expected};let native=authenticated.master_account;assert!(native[j]==expected[j]);}\n",
+ "classification": "source-isolated exact RHS; projected typed input; SUPPORT ONLY, no whole native asq8_common or allocation/frame association"
+}

@@ -1,0 +1,9 @@
+{
+ "shape": "limbs",
+ "mode": "value",
+ "frozen_path": "crates/aspis-core/src/field/wide_exact.rs",
+ "frozen_body": "    pub const fn to_limbs(self) -> [u32; Self::LIMB_COUNT] {\n        [\n            self.c0.c0.a.0,\n            self.c0.c0.b.0,\n            self.c0.c1.a.0,\n            self.c0.c1.b.0,\n            self.c1.c0.a.0,\n            self.c1.c0.b.0,\n            self.c1.c1.a.0,\n            self.c1.c1.b.0,\n        ]\n    }",
+ "source": "use super::*;\n#[kani::proof]\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEY_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NEY_KMX::KMX_copy_from_slice)]\nfn scalar(){let limbs:[u32;8]=kani::any();kani::assume(limbs[0]<aspis_core::field::P&&limbs[1]<aspis_core::field::P&&limbs[2]<aspis_core::field::P&&limbs[3]<aspis_core::field::P&&limbs[4]<aspis_core::field::P&&limbs[5]<aspis_core::field::P&&limbs[6]<aspis_core::field::P&&limbs[7]<aspis_core::field::P);let value=aspis_core::field::WideExact::from_limbs(limbs).unwrap();let i:usize=kani::any();kani::assume(i<8);assert!(value.to_limbs()[i]==limbs[i]^1);}\n",
+ "domain": "all canonical eight-limb carriers and arbitrary observed limb; from_limbs is input construction, not a new slice callee bridge",
+ "classification": "actual frozen scalar/fixed-array call under deployed features; inherited model/domain/physical association still required for composition credit"
+}
