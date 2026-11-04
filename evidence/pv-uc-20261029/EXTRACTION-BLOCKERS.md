@@ -1,0 +1,11 @@
+# D561 extraction status and remaining blockers
+
+The actual client U32 shift-literal repairs resolve the decoder mismatch: Lean75006 PASS. Typed actual-source helpers preserve operands for opaque deterministic pure String/JSON boundaries. Recursive serde Value positivity and generic Formatter axiom exposure were removed from the final interface. See REPORT.md, RESUME-D561.md and PATCH-D561.diff; D543 blockers are archived separately.
+
+The final full entry COMPILES (75028–75033) with explicit 22 carrier and 104 operation parameters, not native instances. Computational body inverse-checks exclude namespace/import/binder-only adaptation. No library objects or emitted computational bodies were edited.
+
+**Standard-axioms gate FAIL:** raw audit75039 reaches 42 compiler-created `_native.decide` axioms in main. They arise from Aeneas toStr's default literal UTF8-size bound proofs. Full inventory is FORMAL-FAILURE-D561.json; validated graph, serialized/kernel inventory, collectAxioms and printed axioms agree. Seven component roots pass standard-only.75040's attempted explicit kernel bounds fail because literal utf8ByteSize does not kernel-reduce. No object/credit; zero Lean attempts remain. A symbolic UTF8/ASCII lemma or typed public selectors requires a new budget. Never accept these axioms or add T.
+
+Formatting requires no faithful TEXT contents under the current user's fmt-1(b). Six conditional congruence theorems show recomputation given shared pure String bindings and public argument equality; actual native associations remain obligations. The FD operand is public by source data flow before private reads. The elapsed-clock argument spans witness work (FMT-ELAPSED-ARG); selected retry/transcript outputs require existing laws (FMT-TRANSCRIPT-ARGS). wallet::retain directly writes the secret 212-byte record (FILE-RECOVERY-SECRET). The observer/private-sink boundary remains unproved, and the file is retained securely. No successful privacy statement follows from entry compilation or these local laws.
+
+Native I/O, failure/allocator behavior, real RunJoin, E1/E2, V370/V371 and whole-client L1/L2/L3 remain P obligations. No premise removed/added/weakened; T stays entropy_law, entropy_kernel, observation. Timing preparation is complete; execution is exclusively deferred to the lead in the named window.

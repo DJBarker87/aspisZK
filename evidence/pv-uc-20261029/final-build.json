@@ -1,0 +1,46 @@
+{
+  "toolchain": "rustc 1.94.1 (e408947bf 2026-03-25)\nbinary: rustc\ncommit-hash: e408947bfd200af42db322daf0fadfe7e26d3bd1\ncommit-date: 2026-03-25\nhost: x86_64-unknown-linux-gnu\nrelease: 1.94.1\nLLVM version: 21.1.8\n",
+  "command": [
+    "taskset",
+    "--cpu-list",
+    "0-3",
+    "cargo",
+    "+1.94.1",
+    "build",
+    "--profile",
+    "client",
+    "--locked",
+    "--offline",
+    "-j",
+    "4",
+    "--features",
+    "r1p-check,aspis-r1-cost-probe/ct-host-prover",
+    "--bin",
+    "user_client",
+    "--bin",
+    "user_fixture_inputs",
+    "--bin",
+    "devnet_spend"
+  ],
+  "environment": {
+    "RUSTFLAGS": "--cfg getrandom_backend=\"linux_raw\" --check-cfg=cfg(getrandom_backend,values(\"linux_raw\")) -C link-arg=-Wl,--threads=4",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-pv-uc-20261029/native-target"
+  },
+  "binaries": {
+    "user_client": {
+      "path": "/home/dombarker/project-offloads/codex-pv-uc-20261029/native-target/client/user_client",
+      "sha256": "9310ca5e3dcb3b2e8d7ac51312d6737aa465d2f8321fdaef6928114ffa38538e",
+      "bytes": 2029480
+    },
+    "devnet_spend": {
+      "path": "/home/dombarker/project-offloads/codex-pv-uc-20261029/native-target/client/devnet_spend",
+      "sha256": "6db76577e5f3331152bbcd6c22739ceea1e0413ed77cf34f10789f4d72488194",
+      "bytes": 2281544
+    },
+    "user_fixture_inputs": {
+      "path": "/home/dombarker/project-offloads/codex-pv-uc-20261029/native-target/client/user_fixture_inputs",
+      "sha256": "e0b1eda12fcb517596c541dfc535cf94b6d7a10a7d859a26a7c52db5bd934986",
+      "bytes": 524448
+    }
+  }
+}

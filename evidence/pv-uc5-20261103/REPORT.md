@@ -1,0 +1,62 @@
+# D577 continuation report — final alias-safe client gates
+
+Branch `codex/pv-uc-20261029`, continuation base `0e8a457c55`; production source fixed at `0e3df6e684`. Final optimized user_client SHA256 **`fc8808eb454f3156dba550140398cc3a74af4c88ee5b3491d2d04d33ee904558`**, 2,031,048 bytes. Privacy target not yet established. No timing experiment, RPC, deployment-wallet access, push, merge or key cleanup.
+
+## Gate results
+
+| Gate | Result and evidence |
+|---|---|
+| Actual changed-client extraction | PASS N91106 final-source regeneration; N91100 original pinned Charon/accepted ae1-2 Aeneas; entry-extraction-final/receipt.json + reuse-binding.json |
+| Optimized final production build | PASS N91108, Rust 1.94.1 client profile, locked/offline, deployed feature set; final-build.json |
+| Three release ELF identities | PASS N91108 retained-byte hashes against all three frozen pins; original fresh SBF builds N75137/38/39 reused |
+| Fixture source/executable identity | PASS, unchanged; executable SHA256 6db76577e5f3331152bbcd6c22739ceea1e0413ed77cf34f10789f4d72488194 |
+| Symbolic literal certificates | PASS Lean 91000–01, 42 distinct short-literal size/bound certificates, 68 call occurrences; no decide/native_decide |
+| Final entry compilation | PASS Lean 91002–06 and 91009; 22 carrier / 105 operation parameters remain explicit |
+| Conditional formatter congruence | PASS Lean 91011, six theorems ported to the final extraction without weakening hypotheses |
+| Full-private NEP raw audit | PASS Lean 91097–98: main 5,280 constants / 86,613 edges, decoder 2,224, six formatter roots complete; only standard axioms; nep/summary.json |
+| Non-dumpable startup/core limits | PASS N91109 successful final ELF hardening syscalls, final ELF core limits 0,0; identical initialize helper PR_GET_DUMPABLE 0; runtime-final/summary.json |
+| Forced panic/no core | PASS N91109, early and post-wallet-read final ELF SIGABRT, literal stderr, no core file |
+| Literal /proc status Dumpable field | UNAVAILABLE on Linux 6.8; status has CoreDumping 0, which is not asserted to establish non-dumpability; direct prctl/source/syscall evidence above |
+| Raw output FD discipline | PASS N91109 rejects stdio, input FD, regular file, read-only pipe, and stdout/stderr/input-pipe aliases; all 100 raw 212-byte custody records matched in pipe memory |
+| Final production 100-pair public differential | PASS N91110, 100/100 pairs, 200 real prover calls; differential/summary.json |
+| Complete raw-secret-field file/stdout/stderr search | PASS finite N91110, 500 outputs, 0 private-field matches; 103 public asset-word pattern matches retained; differential/secret-gate.json |
+| Timing | NOT RUN, lead-only named window; lead must bind its recipe to the final client SHA before execution |
+| Full privacy endpoint/deployment closure | NOT ESTABLISHED; no endpoint premise removed |
+
+## Client source and custody
+
+Only wallet.rs, diagnostics.rs and plan.rs change after the continuation base. Source hashes and scope checks are in source-scope.json; every launch also records its committed source inputs. No crates, programs, manifests, locks, fixture code, proof/statement encoding or TX1/TX2 instruction layout changed. The fixture SDK pin remains buildable. All three retained ELF identities match: default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4, devnet 63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299, pool 121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548.
+
+D575(A): initialize first calls PR_SET_DUMPABLE0 and setrlimit RLIMIT_CORE{0,0}, before allocating the panic hook, parsing public JSON or reading witness input. Failure emits a literal-only message and aborts before secrets. Panic=abort is retained. Linux 6.8 hides pointed-to syscall arguments from the tracer after dumpability is disabled, so the final ELF limit values are checked through /proc/pid/limits. Its /proc/pid/status lacks Dumpable; the helper reports PR_GET_DUMPABLE 0 using the identical diagnostics source. CoreDumping 0 alone receives no non-dumpability credit.
+
+D576(B): wallet::retain and the recovery-file writer are removed. Public wallet_output_fd must be >2, distinct from wallet_bytes_fd, valid O_WRONLY and a FIFO with device/inode identity distinct from all stdio and the input pipe. These checks precede witness reads. A duplicated owned descriptor returns the original fixed-width212-byte record through write_all at the former retention point. No framing, formatting or secret serialization to a file/stdout/stderr is introduced. The record carries every original input/change/recipient key, salt and value; the caller can derive change value using the returned record and public requested amount. DESIGN.md records all offsets and error semantics. Calling-wallet persistence is the authorized custody boundary, not a new trust item. Existing private corpora, recovery artifacts and keys remain retained and were not deleted or refunded.
+
+## Proof result and limits
+
+The unchanged accepted extractor regenerates actual client source before proof repair. Final-source regeneration N91106 confirms Types/Funs byte-identical and external signatures identical to those already audited; only external-template source-position comments differ. The compiled proofs and NEP audit are reused on that exact binding. parameterize.py mechanically inverts namespace/import/binder changes and proof-argument additions back to the raw computational emission. Every toStr literal receives a named certificate: its short character-list expansion proves byte size by kernel rfl, then the generic short_bound lemma uses n≤64 and U32.max_eq. No large-term decision procedure or library-object substitution is used. toStr is locally irreducible; pinned scalar maxima are already irreducible.
+
+NEP_Driver imports all module data at private level and treats any unresolved reachable constant as a hard error. The NEP walker is byte-identical to research evidence/axaudit2-20261102/NEP_WALKER.lean. Driver changes select this client's roots/output paths and reject every axiom outside propext, Classical.choice and Quot.sound. All eight roots are complete, and raw walks equal collectAxioms. #print axioms is labelled summary-based. Final main has zero native-decision axioms; the rejected historical main is not substituted or re-credited. All5673 external objects are checked against the unchanged h4 authority before each compile, with private source/object hashes recorded.
+
+This proves the literal bounds and removes the 42 rejected native axioms from the new parametric entry. It does not supply faithful native effect instances. The former retain operation is replaced by two raw-pipe operations, increasing external operation parameters104→105; those effects, startup and OS failures remain P obligations. Formatter hypotheses still require public argument equality and shared pure renderer binding. FMT-ELAPSED-ARG, FMT-TRANSCRIPT-ARGS, E1/E2, actual RunJoin, V370/V371, L1/L2/L3, allocation/thread/pipe failure-event witness independence and native observation remain open. Resource and thread failures stay stateful world answers under rdea-2, not fixed success callbacks. No T field was added: T remains entropy_law, entropy_kernel, observation. Endpoint/deployment premise statements are unchanged: removed=[], added=[], weakened=[].
+
+## Finite native evidence
+
+N91110 runs the actual final production user_client and unchanged fixture executable,50 transfer/50 withdrawal, fresh per-pair proof-account labels, semaphore3, real optimized prover execution. Public statement bytes and JSON/instructions must match exactly, with only pre-registered prove_wall_seconds and baseline mask_audit excluded. Random proof bytes are not compared, and no private proof-input file is captured. The raw custody record is compared in pipe memory only and never persisted by the harness. Historical1000/100 differentials are not rerun or credited to changed code.
+
+Every generated user file, stdout and stderr is searched for each complete raw private field and the full 212-byte record. The public asset identifier is also searched and every match is retained, including incidental matches of its4-byte pattern in proof bytes. This is finite exact-byte-search evidence, not universal noninterference, arbitrary-encoding absence or individual-byte disjointness. The baseline fixture's legacy private outputs remain on the host and are not final-client output evidence. No secret corpus is copied into this worktree.
+
+## Checked alias finding, failures, receipts and next work
+
+N91105 checks a material counterexample against the superseded 29f011ca binary: a distinct numeric FD > 2 duplicating stdout receives all 212 secret bytes. The harness checks those bytes only in memory and stores finding metadata, not secret bytes. The running old N91104 differential was stopped deliberately (authoritative exit143); its partial comparisons are retained but not counted as final. Source 0e3df6e684 rejects device/inode aliases before witness input. N91109 verifies stdout,stderr and input-pipe alias controls against final fc8808. N91107 was an uncharged reservation refusal; after full cooldown the same-ID directory guard refused reuse and N91108 performed the corrected build. The final differential has fresh labels/output paths and an independently bound new executable; this source correction justifies its replacement run.
+
+91007 was an uncharged resource refusal.91008 failed only on redundant local irreducibility attributes; changed source91009 passed.91010 entered the capped barrier scope but its admission scanner hit a disappearing unrelated session cgroup; Lean never started. After full 180s cooldown the same-ID retry was rejected by the existing-directory guard, then91011 compiled. N91102's harness assumed strace could decode setrlimit's memory after disabling dumps; changed harness N91103 uses proc limits and passes. All failures remain in receipts. The superseded N91104 progress elapsed field had an offset-variable shadowing bug; the final N91110 driver corrects it. No result from N91104 is counted as a final gate.
+
+Every launched job uses 6G high/8G max/swap 0/Tasks64; Lean-M7000, one own scope at a time. Per-attempt receipts supply exact command, exit, wall, peak RSS, swap, source revision and #print status. No unchanged full regression, package build, frozen release manifest or timing run is launched. This continuation is a focused client repair, not a formal release/deployment claim.
+
+N91110 finished PASS 100/100,200 fully executed prover calls (50 transfer/50 withdrawal), exit 0,wall 38:31.68,peak process RSS 605,684 KiB,aggregate cgroup peak 1,816,625,152 bytes,swap 0,no OOM/task-limit events. The scope is inactive. All100 custody records matched in memory; across 500 generated user files/stdout/stderr,zero complete raw private-field/full-record matches were found. The public asset-word pattern matched 103 times: 100 public statements and 3 incidental proof-byte matches,all preserved. No literal individual-byte-disjointness or arbitrary-encoding/noninterference claim is made. No raw private corpus was collected.
+
+Charged totals: normal Lean 10/97 (9PASS/1FAIL),audits 2/3 PASS,native 10/30 (8 exit0 including the checked counterexample,1 harness failure,1 intentional superseding stop). Uncharged refusals91007,91010,N91107 are preserved. N91104 stopped at 35 passing pairs,not added to the final 100. All final client source hashes match N91108's committed launch inputs. No active own job remains.
+
+Next formal deliverable: bind actual startup/raw-pipe/OS effects and world failure independence,then the existing RunJoin/E1/E2 and privacy endpoint obligations. No further unchanged regression is justified by this evidence-only completion.
+
+[gate-status.json](gate-status.json) is the machine-readable result. [PATCH-D577.diff](PATCH-D577.diff) is the three-file user-client patch. [COMMITS-D577.txt](COMMITS-D577.txt) records the local continuation commits through its stated snapshot.

@@ -1,0 +1,40 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--unit=pv-uc-native91102",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-uc-20261029/native91102/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-uc-20261029/native91102/time.log",
+    "python3",
+    "/home/dombarker/project-offloads/codex-pv-uc-20261029/runtime-gates.py"
+  ],
+  "exit": 1,
+  "transport_exit": 1,
+  "wall": "0:01.82",
+  "peak_rss_kib": "129808",
+  "swap": "0",
+  "source_revision": "352f6276e57a576f4cd0abed8440012677081330",
+  "expected_phase": "uc5-runtime",
+  "print_axioms": "N/A native/extraction; Lean results separately audited",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  }
+}

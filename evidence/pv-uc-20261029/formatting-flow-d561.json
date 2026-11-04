@@ -1,0 +1,299 @@
+{
+  "evidence_class": "Script-checked source anchors plus manual structural data-flow classification; not a whole-client Lean refinement",
+  "source_revision": "76b3c7796d4738baae48ea56d6de9be4b7e50049",
+  "sources": {
+    "tools/r1-cost-probe/src/bin/user_client.rs": "9e2ef26442c76edaf86b6a722962f2a611d92eae75efc30cd66c39cb431c6da1",
+    "tools/r1-cost-probe/src/bin/user_client/accounts.rs": "fd3647f7f38b5929216f998e2af96044c092c80488beba803c0f1f774e6740b7",
+    "tools/r1-cost-probe/src/bin/user_client/diagnostics.rs": "0400283215ac74d028098f954fa15909efe6717701b7a3725bae1a21008c198d",
+    "tools/r1-cost-probe/src/bin/user_client/membership.rs": "cb7371ef7ebff614d8131736f70cd2f3bce5d024f6b2228d97b9d1b0ffacab61",
+    "tools/r1-cost-probe/src/bin/user_client/plan.rs": "bf757b5710a8b2463937b2d0cd8776c0c447ada9dfed14246ef4aa93fbc308f8",
+    "tools/r1-cost-probe/src/bin/user_client/wallet.rs": "92d1719f0776e86dc1998909c3c1da95af8390852f712bc8fbf1f6649c5deaac"
+  },
+  "calls": [
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client.rs",
+      "line": 7,
+      "text": "use serde_json::Value;"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client.rs",
+      "line": 22,
+      "text": " let q:Value=parse_request(&s)?;"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client.rs",
+      "line": 23,
+      "text": " let rendered=render_json(&plan::run(&q)?);print_json(rendered);Ok(())"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client.rs",
+      "line": 26,
+      "text": "fn hex(b:&[u8])->String{let digits=b\"0123456789abcdef\";let mut out=Vec::with_capacity(2*b.len());let mut i=0;while i<b.len(){out.push(digits[(b[i]>>4u32) as usize]);out.push(digits[(b[i]&15) as usize]);i+=1;}String::from_utf8(out).unwrap()}"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client.rs",
+      "line": 45,
+      "text": "fn wallet_fd_path(fd:i32)->String{format!(\"/proc/self/fd/{fd}\")}"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client.rs",
+      "line": 46,
+      "text": "fn render_json(value:&Value)->String{format!(\"{}\",value)}"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client.rs",
+      "line": 47,
+      "text": "fn print_json(mut text:String){"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client.rs",
+      "line": 52,
+      "text": "fn json_string(value:String)->Value{Value::String(value)}"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client.rs",
+      "line": 53,
+      "text": "fn json_array(value:Vec<Value>)->Value{Value::Array(value)}"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client.rs",
+      "line": 54,
+      "text": "fn json_bool(value:bool)->Value{Value::Bool(value)}"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client.rs",
+      "line": 55,
+      "text": "fn json_number(value:serde_json::Number)->Value{Value::Number(value)}"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client.rs",
+      "line": 56,
+      "text": "fn json_object(value:serde_json::Map<String,Value>)->Value{Value::Object(value)}"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client.rs",
+      "line": 57,
+      "text": "fn json_into_array(value:Value)->Result<Vec<Value>>{match value{Value::Array(a)=>Ok(a),_=>Err(diagnostics::Error::new())}}"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client.rs",
+      "line": 72,
+      "text": "fn parse_request(text:&str)->Result<Value>{serde_json::from_str(text).map_err(err)}"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client.rs",
+      "line": 73,
+      "text": "fn pubkey_text(value:solana_program::pubkey::Pubkey)->String{value.to_string()}"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client/accounts.rs",
+      "line": 3,
+      "text": "use serde_json::Value;"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client/accounts.rs",
+      "line": 21,
+      "text": "            ensure!(crate::pubkey_text(key) == text && key != Pubkey::default(), \"noncanonical/zero proof account\");"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client/accounts.rs",
+      "line": 36,
+      "text": "        let proof = crate::json_array(crate::triple(crate::json_string(crate::pubkey_text(key)),crate::json_bool(false),crate::json_bool(false)));"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client/accounts.rs",
+      "line": 38,
+      "text": "        Ok(crate::json_array(crate::triple(proof,crate::json_array(crate::triple(crate::json_string(crate::pubkey_text(public)),crate::json_bool(false),crate::json_bool(false))),crate::json_array(crate::triple(crate::json_string(crate::pubkey_text(checkpoint)),crate::json_bool(false),crate::json_bool(true))))))"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client/membership.rs",
+      "line": 5,
+      "text": "use serde_json::Value;"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client/plan.rs",
+      "line": 4,
+      "text": "use serde_json::Value;"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client/plan.rs",
+      "line": 15,
+      "text": "fn meta(p:Pubkey,s:bool,w:bool)->Value{crate::json_array(crate::triple(crate::json_string(crate::pubkey_text(p)),crate::json_bool(s),crate::json_bool(w)))}"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client/plan.rs",
+      "line": 19,
+      "text": " let mut o=serde_json::Map::new();o.insert(\"program\".to_owned(),crate::json_string(crate::pubkey_text(p)));o.insert(\"accounts\".to_owned(),crate::json_array(a));o.insert(\"data\".to_owned(),crate::json_string(super::hex(d.as_ref())));crate::json_object(o)"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client/plan.rs",
+      "line": 21,
+      "text": "fn number(n:usize)->Value{crate::json_number(serde_json::Number::from(n as u64))}"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client/plan.rs",
+      "line": 85,
+      "text": " let mut out=serde_json::Map::new();"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client/plan.rs",
+      "line": 86,
+      "text": " out.insert(\"client_route\".to_owned(),crate::json_string(\"selected64-proof-account-v1\".to_owned()));"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client/plan.rs",
+      "line": 87,
+      "text": " out.insert(\"proof_account\".to_owned(),crate::json_string(crate::pubkey_text(proof_account)));"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client/plan.rs",
+      "line": 89,
+      "text": " out.insert(\"prove_wall_seconds\".to_owned(),crate::json_number(serde_json::Number::from_f64(started.elapsed().as_secs_f64()).unwrap()));"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client/plan.rs",
+      "line": 91,
+      "text": " out.insert(\"p_r1\".to_owned(),crate::json_bool(true));"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client/plan.rs",
+      "line": 95,
+      "text": " out.insert(\"marker\".to_owned(),crate::json_string(crate::pubkey_text(marker)));"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client/plan.rs",
+      "line": 96,
+      "text": " out.insert(\"output_lane\".to_owned(),crate::json_string(crate::pubkey_text(lanes[output_lane as usize])));"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client/plan.rs",
+      "line": 97,
+      "text": " out.insert(\"page\".to_owned(),crate::json_string(crate::pubkey_text(page)));"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client/plan.rs",
+      "line": 98,
+      "text": " out.insert(\"needs_zero_page\".to_owned(),crate::json_bool(lane.tree.next_leaf_index==0));"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client/plan.rs",
+      "line": 100,
+      "text": " out.insert(\"stage1\".to_owned(),ix(pk(q,\"verifier\"),crate::json_into_array(stage1_accounts)?,[3,10]));"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client/plan.rs",
+      "line": 101,
+      "text": " Ok(crate::json_object(out))"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client/wallet.rs",
+      "line": 6,
+      "text": "use serde_json::Value;"
+    },
+    {
+      "source": "tools/r1-cost-probe/src/bin/user_client/wallet.rs",
+      "line": 42,
+      "text": " let mut channel=crate::wallet_open_channel(crate::wallet_fd_path(fd))?;"
+    }
+  ],
+  "output_fields": [
+    {
+      "key": "client_route",
+      "expression": "crate::json_string(\"selected64-proof-account-v1\".to_owned())"
+    },
+    {
+      "key": "proof_account",
+      "expression": "crate::json_string(crate::pubkey_text(proof_account))"
+    },
+    {
+      "key": "attempt_index",
+      "expression": "number(attempt_index)"
+    },
+    {
+      "key": "prove_wall_seconds",
+      "expression": "crate::json_number(serde_json::Number::from_f64(started.elapsed().as_secs_f64()).unwrap())"
+    },
+    {
+      "key": "attempts",
+      "expression": "number(result.attempts)"
+    },
+    {
+      "key": "p_r1",
+      "expression": "crate::json_bool(true)"
+    },
+    {
+      "key": "proof_bytes",
+      "expression": "number(proof.len())"
+    },
+    {
+      "key": "proof_upload_count",
+      "expression": "number(proof.len().div_ceil(3763))"
+    },
+    {
+      "key": "statement_upload_count",
+      "expression": "number(1)"
+    },
+    {
+      "key": "marker",
+      "expression": "crate::json_string(crate::pubkey_text(marker))"
+    },
+    {
+      "key": "output_lane",
+      "expression": "crate::json_string(crate::pubkey_text(lanes[output_lane as usize]))"
+    },
+    {
+      "key": "page",
+      "expression": "crate::json_string(crate::pubkey_text(page))"
+    },
+    {
+      "key": "needs_zero_page",
+      "expression": "crate::json_bool(lane.tree.next_leaf_index==0)"
+    },
+    {
+      "key": "settle",
+      "expression": "ix(pool,a,data)"
+    },
+    {
+      "key": "stage1",
+      "expression": "ix(pk(q,\"verifier\"),crate::json_into_array(stage1_accounts)?,[3,10])"
+    }
+  ],
+  "findings": [
+    {
+      "id": "FMT-STDOUT-WRITER",
+      "call": "user_client::render_json(&plan::run(&q)?) -> String; print_json(String) raw write",
+      "status": "FORMATTING STAGE REPAIRED: render_json writes to String; byte emission is separate fallible I/O. Its prefix/failure/abort and changed allocation/write-grouping effects remain a native P obligation",
+      "source": "formatting-source-d561.json"
+    },
+    {
+      "id": "FMT-ELAPSED-ARG",
+      "call": "serde_json::Number::from_f64(started.elapsed().as_secs_f64())",
+      "status": "clock read spans wallet decode, witness-dependent membership selection, compilation and prover; not derived from public request; witness-independent honest-run law unproved",
+      "retained": "whole-client L1/L2/L3 and observation; no new T field"
+    },
+    {
+      "id": "FMT-TRANSCRIPT-ARGS",
+      "call": "stdout Value plus public-key ToString/number conversions selected by result.attempts",
+      "status": "pubkey_text(selected key/marker/lane/page), number(result.attempts/proof.len), hex(instruction data), statement/proof file serializers and render_json(out) consume prover/witness-derived protocol outputs. Their public/simulated status needs the existing E1/E2, retry and public-transcript laws; it is not proved by declaring printed data public or by renderer congruence."
+    },
+    {
+      "id": "FILE-RECOVERY-SECRET",
+      "call": "wallet::retain(dir,&secrets.record) -> file.write_all(record)",
+      "status": "DEFINITE SECRET ARGUMENT: identity binary serialization of the 212-byte wallet record. Not public or witness-independent. Retained mode-0600 file in mode-0700 directory; whether this private sink is excluded from observer-visible bytes is an unproved boundary. Never delete it to hide the finding."
+    }
+  ],
+  "discharged_local_laws": [
+    {
+      "call": "wallet format!(\"/proc/self/fd/{fd}\")",
+      "arguments": "fd is a projection/conversion solely of public q.wallet_bytes_fd, checked before any private record read",
+      "writer": "Rust String::fmt::Write push_str then Ok; allocation abort retained",
+      "model": "PV_UC_ReadyEntry.wallet_fd_path : I32 -> Result String is an explicit operation parameter; pure native String rendering, no text semantics or Unit carrier evidence",
+      "proof": "PV_UC_FinalPublicFormatting.extracted_fd_formatter_public"
+    }
+  ],
+  "limits": [
+    "Actual wallet_fd_path, pubkey_text, parse_request and render_json preserve their typed operands. Distinct effect records may read different private records; shared-formatter binding laws are explicit hypotheses. Their congruence proofs use no formatting contents or Unit carrier semantics; native association and publicness of the entire rendered Value remain explicit.",
+    "The final String-rendering entry has 22 carrier and 104 operation parameters; native association remains explicit for I/O, clock, prover and entropy as well as formatting.",
+    "No endpoint premise is removed. No field is added to the capped T list."
+  ]
+}

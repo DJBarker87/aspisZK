@@ -1,0 +1,50 @@
+{
+  "evidence_class": "Read-only deployed source inspection; not execution or formal native association",
+  "rows": [
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/string.rs",
+      "source_sha256": "4436d55804bbac0c1691a251042ff82e30b5eab0d4d0bebc20b016b60a0c07a7",
+      "first_line": 3344,
+      "last_line": 3381,
+      "text": "impl fmt::Write for String {\n    #[inline]\n    fn write_str(&mut self, s: &str) -> fmt::Result {\n        self.push_str(s);\n        Ok(())\n    }\n\n    #[inline]\n    fn write_char(&mut self, c: char) -> fmt::Result {\n        self.push(c);\n        Ok(())\n    }\n}\n\n/// An iterator over the [`char`]s of a string.\n///\n/// This struct is created by the [`into_chars`] method on [`String`].\n/// See its documentation for more.\n///\n/// [`char`]: prim@char\n/// [`into_chars`]: String::into_chars\n#[cfg_attr(not(no_global_oom_handling), derive(Clone))]\n#[must_use = \"iterators are lazy and do nothing unless consumed\"]\n#[unstable(feature = \"string_into_chars\", issue = \"133125\")]\npub struct IntoChars {\n    bytes: vec::IntoIter<u8>,\n}\n\n#[unstable(feature = \"string_into_chars\", issue = \"133125\")]\nimpl fmt::Debug for IntoChars {\n    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {\n        f.debug_tuple(\"IntoChars\").field(&self.as_str()).finish()\n    }\n}\n\nimpl IntoChars {\n    /// Views the underlying data as a subslice of the original data.\n    ///\n"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/fmt.rs",
+      "source_sha256": "1c4e8c95da13bb474845fb1e122f7cd3147db94b5225c56b93a922f7da9a6119",
+      "first_line": 644,
+      "last_line": 691,
+      "text": "pub fn format(args: Arguments<'_>) -> string::String {\n    fn format_inner(args: Arguments<'_>) -> string::String {\n        let capacity = args.estimated_capacity();\n        let mut output = string::String::with_capacity(capacity);\n        output\n            .write_fmt(args)\n            .expect(\"a formatting trait implementation returned an error when the underlying stream did not\");\n        output\n    }\n\n    args.as_str().map_or_else(|| format_inner(args), crate::borrow::ToOwned::to_owned)\n}\n"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/macros.rs",
+      "source_sha256": "490613d8c599b6a7d2b07573680ba37a84f863f3e55dd21f6a5327906a0796eb",
+      "first_line": 138,
+      "last_line": 159,
+      "text": "macro_rules! println {\n    () => {\n        $crate::print!(\"\\n\")\n    };\n    ($($arg:tt)*) => {{\n        $crate::io::_print($crate::format_args_nl!($($arg)*));\n    }};\n}\n\n/// Prints to the standard error.\n///\n/// Equivalent to the [`print!`] macro, except that output goes to\n/// [`io::stderr`] instead of [`io::stdout`]. See [`print!`] for\n/// example usage.\n///\n/// Use `eprint!` only for error and progress messages. Use `print!`\n/// instead for the primary output of your program.\n///\n/// [`io::stderr`]: crate::io::stderr\n/// [`io::stdout`]: crate::io::stdout\n///\n/// See the formatting documentation in [`std::fmt`](crate::fmt)\n"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/io/stdio.rs",
+      "source_sha256": "83a4386e70e8d7127213c24854ffb985beac0efac8b8617275db0cc16babe040",
+      "first_line": 1155,
+      "last_line": 1194,
+      "text": "fn print_to<T>(args: fmt::Arguments<'_>, global_s: fn() -> T, label: &str)\nwhere\n    T: Write,\n{\n    if print_to_buffer_if_capture_used(args) {\n        // Successfully wrote to capture buffer.\n        return;\n    }\n\n    if let Err(e) = global_s().write_fmt(args) {\n        panic!(\"failed printing to {label}: {e}\");\n    }\n}\n\nfn print_to_buffer_if_capture_used(args: fmt::Arguments<'_>) -> bool {\n    OUTPUT_CAPTURE_USED.load(Ordering::Relaxed)\n        && OUTPUT_CAPTURE.try_with(|s| {\n            // Note that we completely remove a local sink to write to in case\n            // our printing recursively panics/prints, so the recursive\n            // panic/print goes to the global sink instead of our local sink.\n            s.take().map(|w| {\n                let _ = w.lock().unwrap_or_else(|e| e.into_inner()).write_fmt(args);\n                s.set(Some(w));\n            })\n        }) == Ok(Some(()))\n}\n\n/// Used by impl Termination for Result to print error after `main` or a test\n/// has returned. Should avoid panicking, although we can't help it if one of\n/// the Display impls inside args decides to.\npub(crate) fn attempt_print_to_stderr(args: fmt::Arguments<'_>) {\n    if print_to_buffer_if_capture_used(args) {\n        return;\n    }\n\n    // Ignore error if the write fails, for example because stderr is already\n    // closed. There is not much point panicking at this point.\n    let _ = stderr().write_fmt(args);\n}\n\n"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/io/stdio.rs",
+      "source_sha256": "83a4386e70e8d7127213c24854ffb985beac0efac8b8617275db0cc16babe040",
+      "first_line": 1274,
+      "last_line": 1285,
+      "text": "pub fn _print(args: fmt::Arguments<'_>) {\n    print_to(args, stdout, \"stdout\");\n}\n\n#[unstable(\n    feature = \"print_internals\",\n    reason = \"implementation detail which may disappear or be replaced at any time\",\n    issue = \"none\"\n)]\n#[doc(hidden)]\n#[cfg(not(test))]\npub fn _eprint(args: fmt::Arguments<'_>) {\n"
+    },
+    {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_json-1.0.151/src/value/mod.rs",
+      "source_sha256": "6331d59ea362a74b6cd3d302d08114a63a73a384ff56fef737de29edea2f8d91",
+      "first_line": 222,
+      "last_line": 263,
+      "text": "    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {\n        struct WriterFormatter<'a, 'b: 'a> {\n            inner: &'a mut fmt::Formatter<'b>,\n        }\n\n        impl<'a, 'b> io::Write for WriterFormatter<'a, 'b> {\n            fn write(&mut self, buf: &[u8]) -> io::Result<usize> {\n                // Safety: the serializer below only emits valid utf8 when using\n                // the default formatter.\n                let s = unsafe { str::from_utf8_unchecked(buf) };\n                tri!(self.inner.write_str(s).map_err(io_error));\n                Ok(buf.len())\n            }\n\n            fn flush(&mut self) -> io::Result<()> {\n                Ok(())\n            }\n        }\n\n        fn io_error(_: fmt::Error) -> io::Error {\n            // Error value does not matter because Display impl just maps it\n            // back to fmt::Error.\n            io::Error::new(io::ErrorKind::Other, \"fmt error\")\n        }\n\n        let alternate = f.alternate();\n        let mut wr = WriterFormatter { inner: f };\n        if alternate {\n            // {:#}\n            super::ser::to_writer_pretty(&mut wr, self).map_err(|_| fmt::Error)\n        } else {\n            // {}\n            super::ser::to_writer(&mut wr, self).map_err(|_| fmt::Error)\n        }\n    }\n}\n\nfn parse_index(s: &str) -> Option<usize> {\n    if s.starts_with('+') || (s.starts_with('0') && s.len() != 1) {\n        return None;\n    }\n    s.parse().ok()\n"
+    }
+  ],
+  "inspection_script_sha256": "44aefcd56ed93b554524c024afa5d0dc60c6803acfbead58232590106730a8ef",
+  "source_revision": "7bf46576bba3a0fc8715d1c70903d737c64df035",
+  "exit": 0
+}

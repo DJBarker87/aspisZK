@@ -1,0 +1,123 @@
+"""Run one proof-work command with the standing admission and resource caps.
+
+This uses, without changing, the existing reservation/barrier tools.
+"""
+from pathlib import Path
+import hashlib, json, re, shlex, subprocess, sys, time, os
+R=Path(__file__).resolve().parents[2]
+E=R/'evidence/pv-uc-20261029'
+D='/home/dombarker/project-offloads/codex-pv-uc-20261029'
+H='dombarker@100.108.41.90'
+G='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy'
+name,phase,*cmd=sys.argv[1:]
+source_revision_at_launch=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip()
+for f in E.glob('**/admission-*.json'):
+ try:
+  a=json.loads(f.read_text())
+  if a.get('allowed') is False:
+   import datetime
+   deadline=datetime.datetime.fromisoformat(a['utc']).timestamp()+180
+   while time.time()<deadline: time.sleep(min(30,deadline-time.time()))
+ except (KeyError,ValueError): pass
+
+assert re.fullmatch(r'native901[01][0-9]',name) and cmd
+assert len(list(E.glob('native901*/receipt.json')))<20
+out=E/name
+assert not out.exists(), 'ID directory already exists: never reuse an ID; reconcile it first'
+out.mkdir()
+inputs={str(p.relative_to(R)):hashlib.sha256(p.read_bytes()).hexdigest() for p in (R/'tools/r1-cost-probe/src/bin').rglob('*.rs')}
+(out/'source-inputs.json').write_text(json.dumps(dict(revision=source_revision_at_launch,files=inputs,dirty=subprocess.check_output(['git','status','--porcelain'],cwd=R,text=True)),indent=2)+'\n')
+def ssh(c,retry=True):
+ for attempt in range(1,11):
+  q=subprocess.run(['ssh',H,c],text=True,capture_output=True)
+  if q.returncode!=255 or not retry:return q
+  with (out/'transport.jsonl').open('a') as f:
+   f.write(json.dumps(dict(command=c,exit=255,try_number=attempt,compiler_launch=False))+'\n')
+  if attempt<10:
+   print('SSH 255 before launch/read-only recovery; waiting 60s',flush=True);time.sleep(60)
+ return q
+timing = phase == 'd561-timing'
+if timing:
+ assert cmd == ['python3',D+'/timing-window.py']
+ # Inline the committed pure guard without writing host files before admission.
+ guard_source=(R/'tools/pv-uc-20261029/timing-window-guard.py').read_text()
+ assert subprocess.check_output(['git','show','HEAD:tools/pv-uc-20261029/timing-window-guard.py'],cwd=R,text=True)==guard_source
+ code=guard_source.split("if __name__=='__main__':",1)[0]+"\nx=check(require_live=True); print(json.dumps(x)); assert x['load'][0]<2.0\n"
+ auth='python3 -c '+shlex.quote(code)
+ q=ssh(auth)
+ (out/'timing-before-admission.json').write_text(q.stdout+q.stderr)
+ if q.returncode!=0:
+  import datetime
+  (out/'admission-before.json').write_text(json.dumps(dict(allowed=False,utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),error='named live window/quiet/load guard refused before admission; no capped scope or sample',scope_started=False),indent=2)+'\n')
+  print('TIMING NOT SUBMITTED: named live window/quiet/load check failed');sys.exit(78)
+else:
+ auth='true'
+r=ssh(f'mkdir -p {D}/{name} && '+auth+(' && export QUIET_WINDOW_OWNER=1' if timing else '')+f' && python3 {G}/reservation.py {D}/{name}/admission-before.json > {D}/{name}/reservation.log 2>&1')
+for f in ['admission-before.json','reservation.log']:
+ q=ssh(f'cat {D}/{name}/{f}');(out/f).write_text(q.stdout+q.stderr)
+ad=json.loads((out/'admission-before.json').read_text())
+if r.returncode!=0 or ad.get('allowed') is not True:
+ print('UNCHARGED REFUSAL',r.returncode,{k:ad.get(k) for k in ['utc','allowed','error','bounded_reserved_bytes','safe_limit_bytes']});sys.exit(78)
+prepared=json.loads((R/'tools/pv-uc-20261029/resume-stages.json').read_text())
+staging=[]
+for local in prepared.get(phase,[]):
+ raw=(R/local).read_bytes();assert subprocess.check_output(['git','show','HEAD:'+local],cwd=R)==raw
+ remote=D+'/src/'+local if local.startswith('tools/r1-cost-probe/') else D+'/'+Path(local).name
+ q=ssh('mkdir -p '+shlex.quote(str(Path(remote).parent)));assert q.returncode==0,q.stderr
+ for attempt in range(10):
+  q=subprocess.run(['scp',str(R/local),H+':'+remote],capture_output=True,text=True)
+  if q.returncode!=255:break
+  with (out/'transport.jsonl').open('a') as f:f.write(json.dumps(dict(stage='own committed input staging before native launch',exit=255,try_number=attempt+1))+'\n')
+  if attempt<9:time.sleep(60)
+ assert q.returncode==0,q.stderr
+ want=hashlib.sha256(raw).hexdigest();q=ssh('sha256sum '+shlex.quote(remote))
+ assert q.returncode==0 and q.stdout.split()[0]==want,q.stdout+q.stderr
+ staging.append(dict(source=local,host_path=remote,sha256=want))
+if staging:(out/'staged-inputs.json').write_text(json.dumps(staging,indent=2)+'\n')
+run=['systemd-run','--user','--scope','--unit=pv-uc-'+name,'-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',(D+'/window-barrier.py' if timing else G+'/barrier.py'),D+'/'+name+'/admission-barrier.json','/usr/bin/time','-v','-o',D+'/'+name+'/time.log',*cmd]
+admit=auth+(' && export QUIET_WINDOW_OWNER=1' if timing else '')+f' && python3 {G}/reservation.py {D}/{name}/admission-launch.json > {D}/{name}/reservation-launch.log 2>&1'
+check='python3 -c '+shlex.quote("import json; assert json.load(open("+repr(D+'/'+name+'/admission-launch.json')+"))['allowed'] is True")
+launch=admit+' && '+check+' && '+shlex.join(run)+f' > {D}/{name}/output.log 2>&1'
+if True:
+ # Long arithmetic gate: detach once, then one short read-only SSH at a time.
+ # A lost submission response never causes a second launch.
+ done=D+'/'+name+'/done-status.txt'
+ body=launch+'; result=$?; printf "%s\\n" "$result" > '+shlex.quote(done)
+ detached='nohup sh -c '+shlex.quote(body)+f' > {D}/{name}/detached.log 2>&1 < /dev/null &'
+ r=ssh(detached,retry=False)
+ if r.returncode not in (0,255):raise SystemExit(r.returncode)
+ while True:
+  q=ssh('if test -f '+shlex.quote(done)+'; then cat '+shlex.quote(done)+'; else tail -1 '+shlex.quote(D+'/'+name+'/output.log')+' 2>/dev/null; exit 1; fi')
+  if q.returncode==0:
+   r.returncode=int(q.stdout.strip());break
+  if q.returncode!=1:raise SystemExit(q.returncode)
+  print(q.stdout.strip() or 'Scope admitted; awaiting completion',flush=True)
+  time.sleep(10)
+else:
+ r=ssh(launch,retry=False)
+if r.returncode==255:
+ with (out/'transport.jsonl').open('a') as f:f.write(json.dumps(dict(stage='after scope submission; NOT resubmitted',exit=255))+'\n')
+ print('SSH 255 after scope submission; waiting 60s then collecting read-only',flush=True);time.sleep(60)
+for f in ['admission-launch.json','reservation-launch.log','admission-barrier.json','output.log','time.log']:
+ q=ssh(f'cat {D}/{name}/{f}');(out/f).write_text(q.stdout+q.stderr)
+launch=json.loads((out/'admission-launch.json').read_text())
+if launch.get('allowed') is not True:
+ print('UNCHARGED LAUNCH REFUSAL',launch.get('utc'));sys.exit(78)
+bar=json.loads((out/'admission-barrier.json').read_text())
+if bar.get('allowed') is not True:
+ print('UNCHARGED BARRIER REFUSAL',{k:bar.get(k) for k in ['utc','allowed','error','bounded_reserved_bytes','safe_limit_bytes']});sys.exit(78)
+tim=(out/'time.log').read_text()
+def field(s):
+ m=re.search(s+r':\s*(.+)',tim);return m[1] if m else None
+actual_exit=field('Exit status')
+# GNU time prints Exit status: 0 for a signal-terminated child. The remote
+# systemd/shell status remains authoritative in that case.
+actual_exit=r.returncode if r.returncode != 0 else int(actual_exit) if actual_exit is not None else 0
+receipt=dict(target=run,exit=actual_exit,transport_exit=r.returncode,wall=field(r'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\)'),peak_rss_kib=field(r'Maximum resident set size \(kbytes\)'),swap=field('Swaps'),source_revision=source_revision_at_launch,expected_phase=phase,print_axioms='N/A native/extraction; Lean results separately audited',limits=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64))
+(out/'receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
+# Full admission inventories stay on the host; retain decisions and a byte hash.
+for f in ['admission-before.json','admission-launch.json','admission-barrier.json']:
+ raw=(out/f).read_bytes();a=json.loads(raw)
+ (out/f).write_text(json.dumps(dict(sha256=hashlib.sha256(raw).hexdigest(),host_path=D+'/'+name+'/'+f,**{k:a.get(k) for k in ['allowed','utc','error','bounded_reserved_bytes','safe_limit_bytes']}),indent=2)+'\n')
+print((out/'output.log').read_text()[-5000:]);print(json.dumps(receipt))
+sys.exit(actual_exit)

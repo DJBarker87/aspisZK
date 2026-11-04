@@ -1,0 +1,82 @@
+//! Local diagnostics have no operand, source error or backtrace storage.
+use std::{backtrace::{Backtrace, BacktraceStatus}, fmt, io::Write};
+
+#[derive(Debug, Clone, Copy)]
+pub struct Error;
+impl fmt::Display for Error {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result { f.write_str("client operation failed") }
+}
+impl std::error::Error for Error {}
+pub type Result<T> = std::result::Result<T, Error>;
+pub fn err<T>(_: T) -> Error { Error }
+macro_rules! anyhow { ($message:literal) => { $crate::diagnostics::Error::new() }; }
+macro_rules! ensure { ($condition:expr, $message:literal) => { if !$condition { return Err(anyhow!($message)); } }; }
+pub(super) use {anyhow, ensure};
+impl Error { pub fn new() -> Self { Self } }
+
+// Public startup boundary: isolate the boxed dynamic std panic-hook API.
+fn install_literal_panic_hook() {
+    std::panic::set_hook(Box::new(|_| {
+        let _ = std::io::stderr().write_all(b"client panic\n");
+    }));
+}
+// Linux ABI: this binary is built for the pinned x86_64 Linux client target.
+#[cfg(target_os = "linux")]
+fn disable_dumps() {
+    #[repr(C)]
+    struct Limit { current: u64, maximum: u64 }
+    unsafe extern "C" {
+        fn prctl(option: i32, ...) -> i32;
+        fn setrlimit(resource: u32, limit: *const Limit) -> i32;
+    }
+    let zero = Limit { current: 0, maximum: 0 };
+    // No allocation, formatting, request parsing or witness read precedes this.
+    if unsafe { prctl(4, 0usize, 0usize, 0usize, 0usize) } != 0
+        || unsafe { setrlimit(4, &zero) } != 0 {
+        let _ = std::io::stderr().write_all(b"client startup failed\n");
+        std::process::abort();
+    }
+}
+pub fn initialize() {
+    #[cfg(target_os = "linux")]
+    disable_dumps();
+    install_literal_panic_hook();
+    // First operation before input, errors, workers or witness processing.
+    // Rust 1.94.1 caches this disabled state process-wide. Later environment
+    // changes cannot enable Backtrace::capture (also used by anyhow).
+    std::env::set_var("RUST_BACKTRACE", "0");
+    std::env::set_var("RUST_LIB_BACKTRACE", "0");
+    if !matches!(Backtrace::capture().status(), BacktraceStatus::Disabled) {
+        // Fail closed if an earlier constructor ever primes the std cache.
+        std::process::abort();
+    }
+}
+pub fn report(_: Error) {
+    let _ = std::io::stderr().write_all(b"client error\n");
+}
+
+// The default std allocation-error handler prints the requested layout size,
+// bypassing the panic hook. Never return null to that handler in this client.
+struct Allocator;
+#[global_allocator]
+static ALLOCATOR: Allocator = Allocator;
+unsafe impl std::alloc::GlobalAlloc for Allocator {
+    unsafe fn alloc(&self, layout: std::alloc::Layout) -> *mut u8 {
+        let p = std::alloc::System.alloc(layout);
+        if p.is_null() { std::process::abort(); }
+        p
+    }
+    unsafe fn alloc_zeroed(&self, layout: std::alloc::Layout) -> *mut u8 {
+        let p = std::alloc::System.alloc_zeroed(layout);
+        if p.is_null() { std::process::abort(); }
+        p
+    }
+    unsafe fn realloc(&self, p: *mut u8, layout: std::alloc::Layout, size: usize) -> *mut u8 {
+        let q = std::alloc::System.realloc(p, layout, size);
+        if q.is_null() { std::process::abort(); }
+        q
+    }
+    unsafe fn dealloc(&self, p: *mut u8, layout: std::alloc::Layout) {
+        std::alloc::System.dealloc(p, layout);
+    }
+}
