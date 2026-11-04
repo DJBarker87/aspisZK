@@ -1,0 +1,1 @@
+K93500 stopped in CLI validation before compilation: `--jobs requires --output-format=terse` (exit 2). The wrapper now omits the verification-worker count only when selecting raw CBMC JSON trace output; harness source, assertion, bound, solver, timeout and scope caps are unchanged. Fresh K93501 replaces this setup attempt. Original commands remain recorded.

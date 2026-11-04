@@ -28,7 +28,8 @@ for p in paths:add('stx/'+p,T,p)
 for n in ['K93109','K93110','K93111']:
  d=json.loads((E/f'original/{n}/command.json').read_text());cmd=d['command'];cmd=cmd[cmd.index('cargo'):];cmd[cmd.index('--manifest-path')+1]=J+'/sources/stx/tools/pv-stx-20261104/clone-certificate/Cargo.toml'
  rows.append({'credit':n,'original':n,'command':cmd,'cwd':J+'/sources/stx','negative':'included','timeout':540,'root':J+'/sources/stx','pins':{p[len('stx/'):]:d['sha256'] for p,d in provenance.items() if p.startswith('stx/')}})
-for i,r in enumerate(rows):r['id']='K'+str(93500+i)
+for i,r in enumerate(rows):r['id']='K'+str(93501+i)
+rows[0]['id']='K93512'
 (E/'source-payload.json.xz').write_bytes(lzma.compress(json.dumps(payload).encode()))
 (E/'source-provenance.json').write_text(json.dumps(provenance,indent=2)+'\n')
 (E/'runs.json').write_text(json.dumps(rows,indent=2)+'\n')

@@ -29,8 +29,10 @@ def inside(config,out):
  if not check(config,out):write(out/'STOP.json',{'reason':'source/tool mismatch before compiler'});return 66
  env=os.environ.copy();env.pop('QUIET_WINDOW_OWNER',None)
  env.update(PATH='/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin',CARGO_BUILD_JOBS='4',CARGO_NET_OFFLINE='true',CARGO_TARGET_DIR=str(ROOT/'target'),CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG_ASSERTIONS='false',CARGO_PROFILE_DEV_OVERFLOW_CHECKS='false',TMPDIR=str(ROOT/'tmp'))
- # Only evidence-output flags differ: no assertion, bounds, cap, solver or feature change.
- cmd=config['command'].copy();cmd[cmd.index('--output-format')+1]='old';cmd.insert(2,'--verbose');cmd+=['--trace','--json-ui']
+ # Same pinned driver as cargo-kani launches; the PATH tee retains CBMC bytes unchanged.
+ cmd=config['command'].copy();cmd.insert(2,'--verbose');cmd+=['--trace']
+ cmd=['/home/dombarker/.kani/kani-0.67.0/bin/kani-driver','kani',*cmd[2:]]
+ env.update(PATH=str(ROOT/'bin')+':/home/dombarker/.kani/kani-0.67.0/bin:'+env['PATH'],K4TRACE_OUT=str(out))
  manifest=cmd[cmd.index('--manifest-path')+1];md=['cargo','metadata','--manifest-path',manifest,'--format-version','1','--offline']
  if '--features' in cmd:md+=['--features',cmd[cmd.index('--features')+1]]
  r=subprocess.run(md,cwd=config['cwd'],env=env,capture_output=True);(out/'metadata.json').write_bytes(r.stdout);(out/'metadata.stderr').write_bytes(r.stderr)
@@ -38,24 +40,25 @@ def inside(config,out):
  start=time.time();write(out/'STARTED.json',{'epoch':start,'command':cmd,'config':config})
  with (out/'output.log').open('w') as f:r=subprocess.run(['/usr/bin/time','-v','-o',str(out/'time.log'),'timeout',str(config['timeout']),'taskset','--cpu-list','0-3',*cmd],cwd=config['cwd'],env=env,stdout=f,stderr=subprocess.STDOUT)
  wall=time.time()-start;records=[]
- filt=config['command'][config['command'].index('--harness')+1];exact='--exact' in config['command']
- for p in (ROOT/'target').rglob('*.kani-metadata.json'):
-  if p.stat().st_mtime<start-2:continue
-  d=json.loads(p.read_text())
-  for h in d.get('proof_harnesses',[]):
-   name=h.get('pretty_name','')
-   if (name!=filt if exact else filt not in name):continue
-   q=Path(h['goto_file']);rec={'harness':h,'metadata':str(p),'metadata_sha256':sha(p)}
-   if q.exists():
-    rec['goto_sha256']=sha(q)
-    raw=subprocess.run(['/home/dombarker/.kani/kani-0.67.0/bin/cbmc',str(q),'--show-symbol-table','--json-ui'],stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
-    dst='symbols-'+str(len(records))+'.json.xz';(out/dst).write_bytes(lzma.compress(raw.stdout));rec.update(symbols=dst,symbols_raw_sha256=hashlib.sha256(raw.stdout).hexdigest(),symbols_exit=raw.returncode)
+ # Tee command receipts identify the exact goto consumed, including cached builds.
+ command_files=list(out.glob('cbmc-*-command.json'))
+ # Recover the positive's cached symbol map in C044's next scope as well.
+ if config['id']=='K93502':command_files+=list((ROOT/'K93512').glob('cbmc-*-command.json'))
+ for command_file in command_files:
+  args=json.loads(command_file.read_text())['argv']
+  gotos=[Path(x) for x in args if x.endswith('.out') and Path(x).is_file()]
+  for q in gotos:
+   raw=subprocess.run(['/home/dombarker/.kani/kani-0.67.0/bin/cbmc',str(q),'--show-symbol-table','--json-ui'],stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+   dst='symbols-'+str(len(records))+'.json.xz';(out/dst).write_bytes(lzma.compress(raw.stdout))
+   rec={'command_receipt':str(command_file),'goto':str(q),'goto_sha256':sha(q),'symbols':dst,'symbols_raw_sha256':hashlib.sha256(raw.stdout).hexdigest(),'symbols_exit':raw.returncode}
    records.append(rec)
- # Retain Kani name maps, metadata and JSON result artifacts for every selected harness.
- for p in (ROOT/'target').rglob('*.json'):
-  if p.stat().st_mtime<start-2:continue
-  if any(s in p.name for s in ['pretty_name_map','kani-metadata','symtab','results']):
-   rel=str(p.relative_to(ROOT/'target')).replace('/','__');(out/(rel+'.xz')).write_bytes(lzma.compress(p.read_bytes()))
+   for p in [q.with_suffix('.pretty_name_map.json'),q.with_suffix('.type_map.json')]:
+    if p.exists():(out/(p.name+'.xz')).write_bytes(lzma.compress(p.read_bytes()))
+ # Metadata has source locations and monomorphisation names, even on a fresh-cache hit.
+ for p in (ROOT/'target').rglob('*.kani-metadata.json'):
+  d=json.loads(p.read_text())
+  if any(str(h.get('goto_file','')) in [x['goto'] for x in records] for h in d.get('proof_harnesses',[])):
+   (out/(p.name+'.xz')).write_bytes(lzma.compress(p.read_bytes()))
  write(out/'symbols-index.json',{'records':records,'inside_same_scope':True})
  txt=(out/'time.log').read_text();metric=lambda k:int(re.search(re.escape(k)+r':\s*(\d+)',txt)[1])
  receipt={'id':config['id'],'credit':config['credit'],'target':cmd,'original':config['original'],'exit_status':r.returncode,'wall_seconds':wall,'peak_rss_kib':metric('Maximum resident set size (kbytes)'),'swap':metric('Swaps'),'source_revision':'670416be996ba5a0e1c5fb6349a7db34f16714d0','source_pin_manifest':'identity.json','limits':limits,'cgroup_peak_bytes':(cg/'memory.peak').read_text().strip(),'cgroup_swap_peak_bytes':(cg/'memory.swap.peak').read_text().strip(),'print_axioms':'N/A: Kani, 0 Lean','profile':{'opt-level':3,'debug-assertions':False,'overflow-checks':False},'symbol_records':len(records),'cwd':config['cwd']}
