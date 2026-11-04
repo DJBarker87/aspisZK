@@ -7,7 +7,9 @@ variable {Op : Type → Type 1} {A B X Y : Type}
 variable (f : {T : Type} → Op T → Result T)
 theorem pure_rule (a : A) : denote f (pure a : Code Op A) = .ok a := rfl
 theorem bind_rule (c : Code Op A) (k : A → Code Op B) :
-    denote f (c >>= k) = Aeneas.Std.bind (denote f c) (fun a => denote f (k a)) := rfl
+    denote f (c >>= k) = (do let a ← denote f c; denote f (k a)) := by
+  change Aeneas.Std.bind (denote f c) (fun a => denote f (k a)) = _
+  cases denote f c <;> rfl
 theorem result_rule (r : Result A) : denote f (Code.result r) = r := rfl
 theorem call_rule (op : Op A) : denote f (Code.call op) = f op := rfl
 theorem if_rule (p : Prop) [Decidable p] (a b : Code Op A) :
