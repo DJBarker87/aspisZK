@@ -1,0 +1,8 @@
+{
+ "shape": "common",
+ "mode": "positive",
+ "frozen_body": "fn reconstruct_asq8_statement(\n    request: &PoolV1PairForestTerminalRequestV1,\n    authenticated: &AuthenticatedAsq8Accounts,\n    candidate_afterstate: &aspis_statement::pool_v1::PoolV1PairVerifiedAfterstateV1,\n) -> Result<Box<PoolV1PairForestTerminalStatementV1>, ProgramError> {\n    if authenticated.live_snapshot.next_pair_index.checked_add(1)\n        != Some(candidate_afterstate.next_pair_index)\n    {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    let requested_asset_id = match request.public {\n        PoolV1PairForestTerminalPaymentV1::PrivateTransfer(public) => public.asset_id,\n        PoolV1PairForestTerminalPaymentV1::Withdrawal(public) => public.asset_id,\n    };\n    if authenticated.master.identity.asset_id != requested_asset_id {\n        return Err(ProgramError::InvalidInstructionData);\n    }\n    let common = asq8_common(authenticated, candidate_afterstate);\n    match request.public {\n        PoolV1PairForestTerminalPaymentV1::PrivateTransfer(public) => {\n            transfer_statement_box(common, public)\n        }\n        PoolV1PairForestTerminalPaymentV1::Withdrawal(public) => {\n            withdrawal_statement_box(common, public)\n        }\n    }\n}",
+ "native": "actual frozen asq8_common executes unchanged",
+ "domain": "every typed Request/Auth/Candidate; all word values; valid owned Box carriers; arbitrary observed byte/word indices",
+ "classification": "real common body or source-isolated scalar prefix/finish; local records only; finish constructor reply range needs NEU_BoxModel plus complete native child certificates; no inherited NEC static credit"
+}

@@ -1,0 +1,49 @@
+NEU_generated/NEU_EmitModel.lean:52:84: error: unsolved goals
+A E : Type
+binding : Statement → Output → Result (core.result.Result Unit Error)
+encode : Output → Result (core.result.Result Bytes Error)
+bindingBridge : BindingBridge binding
+encoderBridge : EncoderBridge encode
+syscall : AspisR1.S2I.ReturnData.State A E → List U8 → Result (AspisR1.S2I.ReturnData.State A E)
+state : AspisR1.S2I.ReturnData.State A E
+s : Statement
+⊢ (do
+      let checked ← validate_pool_v1_pair_forest_terminal_result_against_statement_v1 s (derived s)
+      match checked with
+        | core.result.Result.Err a =>
+          ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+        | core.result.Result.Ok PUnit.unit => do
+          let encoded ← encode_pool_v1_pair_forest_terminal_result_v1 (derived s)
+          match encoded with
+            | core.result.Result.Err a =>
+              ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+            | core.result.Result.Ok bytes =>
+              if (↑bytes).length ≠ 792 then
+                ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+              else
+                if List.take 4 ↑bytes ≠ [65#u8, 83#u8, 82#u8, 56#u8] then
+                  ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+                else do
+                  let state' ← syscall state ↑bytes
+                  ok (core.result.Result.Ok state')) =
+    have result := AspisR1.S2K.ResultAdmission.value s;
+    do
+    let validated ← validate_pool_v1_pair_forest_terminal_result_against_statement_v1 s result
+    match validated with
+      | core.result.Result.Err a =>
+        ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+      | core.result.Result.Ok PUnit.unit => do
+        let encoded ← encode_pool_v1_pair_forest_terminal_result_v1 result
+        match encoded with
+          | core.result.Result.Err a =>
+            ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+          | core.result.Result.Ok bytes =>
+            if (↑bytes).length ≠ 792 then
+              ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+            else
+              if List.take 4 ↑bytes ≠ [65#u8, 83#u8, 82#u8, 56#u8] then
+                ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+              else do
+                let state' ← syscall state ↑bytes
+                ok (core.result.Result.Ok state')
+'NEU_EmitModel.result_state_effects' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

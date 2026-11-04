@@ -1,0 +1,10 @@
+{
+ "branch": "withdrawal",
+ "slot": 17,
+ "field": "public.anchor_sequence",
+ "mode": "positive",
+ "frozen_body": "fn withdrawal_statement_box(\n    common: Box<PoolV1PairForestTerminalCommonV1>,\n    public: aspis_statement::pool_v1::PoolV1WithdrawalPublicV1,\n) -> Result<Box<PoolV1PairForestTerminalStatementV1>, ProgramError> {\n    let statement = Box::new(PoolV1PairForestTerminalStatementV1::Withdrawal {\n        common: *common,\n        public,\n    });\n    validate_pool_v1_pair_forest_terminal_statement_v1(&statement)\n        .map_err(|_| ProgramError::InvalidInstructionData)?;\n    Ok(statement)\n}",
+ "native": "fn native(\n    common: Box<PoolV1PairForestTerminalCommonV1>,\n    public: aspis_statement::pool_v1::PoolV1WithdrawalPublicV1,\n f:&mut Frame) -> Result<Box<PoolV1PairForestTerminalStatementV1>, ProgramError> {\n    let statement = Box::new(PoolV1PairForestTerminalStatementV1::Withdrawal {\n        common: *common,\n        public,\n    });\n    validate(&statement,f)\n        .map_err(|_| ProgramError::InvalidInstructionData)?;\n    Ok(statement)\n}",
+ "domain": "every typed common/public pair, arbitrary full validation Result and one observed field index",
+ "classification": "ruling y local arbitrary full-Result child; same constructed Statement at validation and returned Box pointer; one value window only; other windows and model/allocator join required"
+}

@@ -1,0 +1,22 @@
+{
+ "mode": "positive",
+ "frozen_prefix": "fn reconstruct_asq8_statement(\n    request: &PoolV1PairForestTerminalRequestV1,\n    authenticated: &AuthenticatedAsq8Accounts,\n    candidate_afterstate: &aspis_statement::pool_v1::PoolV1PairVerifiedAfterstateV1,\n) -> Result<Box<PoolV1PairForestTerminalStatementV1>, ProgramError> {\n    if authenticated.live_snapshot.next_pair_index.checked_add(1)\n        != Some(candidate_afterstate.next_pair_index)\n    {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    let requested_asset_id = match request.public {\n        PoolV1PairForestTerminalPaymentV1::PrivateTransfer(public) => public.asset_id,\n        PoolV1PairForestTerminalPaymentV1::Withdrawal(public) => public.asset_id,\n    };\n    if authenticated.master.identity.asset_id != requested_asset_id {\n        return Err(ProgramError::InvalidInstructionData);\n    }\n",
+ "native": "fn prefix(\n    request: &RequestView,\n    authenticated: &AuthView,\n    candidate_afterstate: &CandidateView,\n) -> ProgramResult {\n    if authenticated.live_snapshot.next_pair_index.checked_add(1)\n        != Some(candidate_afterstate.next_pair_index)\n    {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    let requested_asset_id = match request.public {\n        PaymentView::PrivateTransfer(public) => public.asset_id,\n        PaymentView::Withdrawal(public) => public.asset_id,\n    };\n    if authenticated.master.identity.asset_id != requested_asset_id {\n        return Err(ProgramError::InvalidInstructionData);\n    }\n    Ok(())\n}\n",
+ "replacements": {
+  "fn reconstruct_asq8_statement(": "fn prefix(",
+  "PoolV1PairForestTerminalRequestV1": "RequestView",
+  "AuthenticatedAsq8Accounts": "AuthView",
+  "aspis_statement::pool_v1::PoolV1PairVerifiedAfterstateV1": "CandidateView",
+  "Result<Box<PoolV1PairForestTerminalStatementV1>, ProgramError>": "ProgramResult",
+  "PoolV1PairForestTerminalPaymentV1": "PaymentView"
+ },
+ "read_set": [
+  "authenticated.live_snapshot.next_pair_index",
+  "candidate_afterstate.next_pair_index",
+  "authenticated.master.identity.asset_id",
+  "request.public.variant",
+  "request.public.*.asset_id"
+ ],
+ "domain": "all u64 live/next, all u32 assets, both payment variants; no scalar precondition",
+ "classification": "exact prefix read-set projection; full input reconstruction/physical bridge is NOT claimed; unrelated fields need native noninterference association before root credit"
+}

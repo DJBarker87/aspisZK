@@ -1,0 +1,17 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
+@@ -1563,3 +1563,7 @@
+     Ok(*bytes)
+ }
+ 
++
++#[cfg(kani)]
++#[path="NEU_request.rs"]
++mod NEU_request;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEU_request.rs
+@@ -0,0 +1,4 @@
++use super::*;
++fn carrier(bytes:&[u8;320],j:usize){let child=&bytes[REQUEST_PAYMENT_OFFSET..];assert!(child.len()==216);assert!(core::ptr::eq(child.as_ptr(),bytes[104..].as_ptr()));assert!(child[j]==bytes[104+j] ^1);}
++#[kani::proof]
++fn request_slice(){let bytes:[u8;320]=kani::any();let j:usize=kani::any();kani::assume(j<216);carrier(&bytes,j);}

@@ -1,0 +1,59 @@
+import JHb_Emit
+set_option autoImplicit false
+noncomputable section
+namespace NEU_EmitModel
+open Aeneas Aeneas.Std Result
+open AspisR1TerminalDecoder pool_v1.pair_forest_terminal
+abbrev Statement := AspisR1.S2K.StatementAdmission.Statement
+abbrev Output := PoolV1PairForestTerminalResultV1
+abbrev Error := PoolV1PairForestTerminalFormatErrorV1
+abbrev ProgramError := AdapterRw.solana_program_error.ProgramError
+abbrev Bytes := Array U8 792#usize
+abbrev derived := AspisR1.S2K.ResultAdmission.value
+
+/-- One model execution with explicit full child Results and return-data state.
+No arbitrary reply is assumed successful. This is not an op53 instance. -/
+def run {A E : Type}
+    (binding : Statement → Output → Result (core.result.Result Unit Error))
+    (encode : Output → Result (core.result.Result Bytes Error))
+    (syscall : AspisR1.S2I.ReturnData.State A E → List U8 →
+      Result (AspisR1.S2I.ReturnData.State A E))
+    (state : AspisR1.S2I.ReturnData.State A E) (s : Statement) :
+    Result (core.result.Result (AspisR1.S2I.ReturnData.State A E) ProgramError) := do
+  let checked ← binding s (derived s)
+  match checked with
+  | .Err _ => ok (.Err .InvalidInstructionData)
+  | .Ok () =>
+    let encoded ← encode (derived s)
+    match encoded with
+    | .Err _ => ok (.Err .InvalidInstructionData)
+    | .Ok bytes =>
+      if bytes.val.length ≠ 792 then ok (.Err .InvalidInstructionData)
+      else if bytes.val.take 4 ≠ [65#u8,83#u8,82#u8,56#u8] then ok (.Err .InvalidInstructionData)
+      else do
+        let state' ← syscall state bytes.val
+        ok (.Ok state')
+
+/-- The exact inner domains required at these two call sites, rather than a
+uniform child bridge on unrelated records. They remain explicit hypotheses. -/
+def BindingBridge (binding : Statement → Output → Result (core.result.Result Unit Error)) : Prop :=
+  ∀ s, binding s (derived s) =
+    validate_pool_v1_pair_forest_terminal_result_against_statement_v1 s (derived s)
+def EncoderBridge (encode : Output → Result (core.result.Result Bytes Error)) : Prop :=
+  ∀ s, encode (derived s) = encode_pool_v1_pair_forest_terminal_result_v1 (derived s)
+
+theorem result_state_effects {A E : Type}
+    (binding : Statement → Output → Result (core.result.Result Unit Error))
+    (encode : Output → Result (core.result.Result Bytes Error))
+    (bindingBridge : BindingBridge binding) (encoderBridge : EncoderBridge encode)
+    (syscall : AspisR1.S2I.ReturnData.State A E → List U8 →
+      Result (AspisR1.S2I.ReturnData.State A E))
+    (state : AspisR1.S2I.ReturnData.State A E) (s : Statement) :
+    run binding encode syscall state s = AspisR1.JHb_Emit.source syscall state s := by
+  unfold run AspisR1.JHb_Emit.source
+  dsimp only
+  rw [bindingBridge s, encoderBridge s]
+  rfl
+
+#print axioms result_state_effects
+end NEU_EmitModel
