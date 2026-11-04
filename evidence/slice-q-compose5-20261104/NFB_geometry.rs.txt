@@ -536,3 +536,18 @@ fn NFB_error_tx1(){NFB_error_case::<10,50>()}
 #[kani::proof] #[kani::unwind(2)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NFB_error_tx2(){NFB_error_case::<12,60>()}
+
+// Scalar-only native arithmetic at the three reached tail positions. No
+// array/slice/Vec/record, allocation, oracle, function pointer or copy builtin.
+#[kani::proof]
+fn NFB_tail_offsets(){
+ let slot:usize=kani::any();let position:usize=kani::any();kani::assume(slot<4);kani::assume(position<3);
+ let start:usize;let stop:usize;let coefficient:usize;
+ if position==0{let base=slot*120;start=base+104;stop=base+120;coefficient=28;}
+ else{let stride=slot*32;let base=480+stride;let delta=(position-1)*16;start=base+delta;stop=start+16;coefficient=(position-1)+26;}
+ let mut observed=start;
+ #[cfg(NET_bad_argument)]{observed^=1;}
+ assert_eq!(observed,if position==0{slot*120+104}else{480+slot*32+(position-1)*16});
+ assert_eq!(stop-start,16);assert!(stop<=608);assert!(coefficient<29);
+ assert_eq!(coefficient,if position==0{28}else{25+position});
+}

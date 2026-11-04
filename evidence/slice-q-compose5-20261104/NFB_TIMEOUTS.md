@@ -36,3 +36,9 @@ while checking a backward body that mathematically depends ONLY on op9.
 Excluded. Replacement: prove generic body/loop congruence for an abstract Ops
 pair and one multiplication-field equality, then specialize by theorem
 application; no concrete dictionary reduction, no cap increase or unchanged rerun.
+
+L080: deterministic elaborator heartbeat timeout at whnf, exit1. The generic
+repeat/rfl traversal of a concrete three-push bind tree unfolded child code.
+Excluded. Replacement isolates product-pattern/projection equality as a
+small generic lemma and rewrites the bind representation, with no child
+unfolding or heartbeat increase. Original L079 unsolved goal is retained.
