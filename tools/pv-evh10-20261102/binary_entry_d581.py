@@ -10,7 +10,7 @@ functions=re.split(r'(?=^[0-9a-f]+ <[^\n]+>:$)',asm,flags=re.M)
 selected=[]
 for f in functions:
  header=f.splitlines()[0] if f else ''
- if any(t in header for t in ['prove_for_proof_accounts','prove_masked_retrying_with','prover::retry_attempt','StateOnlyAttemptSecrets::generate_for_mask_nonce','devnet_spend::main','as zeroize::Zeroize>::zeroize']):
+ if any(t in header for t in ['prove_for_proof_accounts','prove_masked_retrying_with','prover::retry_attempt','StateOnlyAttemptSecrets::generate_for_mask_nonce','devnet_spend::main','devnet_spend::plan::prove','as zeroize::Zeroize>::zeroize']):
   selected.append(dict(header=header,disassembly=f))
 rel=run('readelf','-rW',str(p))
 # All statically named call references to the selected entry/helper targets.
