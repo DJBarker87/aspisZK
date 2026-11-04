@@ -26,7 +26,6 @@ theorem project_installed_allocation {S F : Type} (owner : Nat) (w : NativeWorld
   dsimp only [project,fromSource,allocated,succeeded,attempted,install,store,afterAnswer]
   congr 1
   congr 1
-  exact tables
 
 #print axioms project_denial
 #print axioms project_installed_allocation
