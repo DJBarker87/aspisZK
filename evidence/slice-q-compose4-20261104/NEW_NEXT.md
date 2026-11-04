@@ -15,3 +15,8 @@ environment. Never repeat any failed timeout/memory shape.
 
 Peer 94245fb7496 (checked 02:52 UTC) has no new target closure; check again
 in 30–60 minutes. No root CLOSED yet; ledger remains 62/78,124Q,169/257.
+
+L062 dictionary green. L063 concrete monolithic context EXCLUDED (kernel
+memory and heartbeat limits); replacement is NEW_GeometryContextGeneric
+with abstract dictionaries, to compile as L064. No limits raised. Offline
+K043/K044 reserve12 pass/fail audited. K045..K050 serial replay active.

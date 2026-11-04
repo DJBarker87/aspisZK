@@ -97,3 +97,62 @@ K042's wrong capacity fails (48.357s, RSS2119776KiB, swap0). Twelve strict
 source mutations/invariants pass after this setup repair. No timeout or
 memory kill has occurred as of these receipts. No K-2 function-pointer shape
 is used or renamed. The offline-replay plan stops on any unexpected verdict.
+
+L062 closes the concrete dictionary equality with only standard axioms.
+L063 is EXCLUDED: kernel excessive-memory checks occurred while normalizing
+that large concrete record inside reverse/callback reflexivity, followed by
+an elaborator heartbeat timeout in the monolithic step. Its nonstandard
+failed audit names are not accepted and its object must not be imported.
+No cap, heartbeat or timeout is raised. NEW_GeometryContextGeneric instead
+isolates these structural laws over an abstract dictionary before any
+concrete instantiation. The unchanged failed shape will not be rerun.
+K043/K044 reserve12 pair passes the strict offline/graph/lock audit.
+
+Corrected offline K045..K074 re-establish both reverse sizes, line/row append,
+collector lanes, literal shift, no-flag KMX controls, and flat one-push pairs.
+K075 is NOT a negative control: the own plan incorrectly selected
+NET_bad_frame for NET_push_case, where that flag has no mutation. It passes
+the unchanged positive property and the replay stops on unexpected exit0.
+No failing-control credit is taken; K076 is omitted. Existing K071/K072
+and K073/K074 are the actual wrong-new-value matched pairs and include
+old-window frame assertions. Configuration-specific KMX pairs remain next.
+This is a runner-plan finding, not a renamed harness or changed verdict.
+
+L064/L065 step attempts reached default heartbeat limit; L066 removes the
+expensive reflexivity to inspect the remaining full body. L067 additionally
+isolates the three parameter-ignoring error callbacks before walking the
+body. No failed shape was rerun unchanged and no heartbeat cap was raised.
+
+L077 generic structural step, L078 concrete contextual step and L079 full
+adopted geometry root compile with standard axioms. L079 includes the full
+Result, unchanged persistent-state component, and nonempty accepted geometry
+canonical/nonzero/same-vector reciprocal/all-five-lane corollary. No inner
+child/domain/result assumption is used in the root equality. Geometry remains
+OPEN in the composed ledger until the native packet and validator are joined.
+The successful replacement focuses the actual multiply-double-one-sub block
+with a conversion, rather than normalizing the entire monadic body. Earlier
+metaprogramming attempts are retained only in failed receipts; the successful
+NEW_GeometryContextGeneric source uses ordinary conversion and named laws.
+
+NEW_K087 rejected-gather arbitrary double-buffer pre-state timed out at90s
+(exit1,93.812s wall,RSS6423884KiB,swap0). It is OPEN and will not be rerun
+unchanged. Replacement will partition the native pre-state k domain while
+retaining the original harness names and full property. Caps/time unchanged.
+Initial allocations K081..K086 pass with wrong capacity/alias controls.
+
+NEW_K097 lower-half rejection setup also timed out (95.696s,RSS6438904KiB,
+swap0); no larger timeout/cap or unchanged resubmission. The next replacement
+keeps the tested original any, but supplies an arbitrary witnessed zero lane
+in the precondition instead of executing a second any there. Every zero row
+has such a witness; all witnesses remain arbitrary. Original harness names,
+full heap-frame assertions, genuine uninitialized spare, and k partitions
+remain. NEW_K087 cleanup found no residual solver files under the owned
+TMPDIR and touched no shared /tmp entries. K097 cleanup follows serially.
+
+Peer577526934d full unchanged union revalidation passes. The earlier own
+wrapper failures were path relocation and tuple-versus-JSON-list comparison;
+checks remained unchanged. Python module copies keep a private resolved root;
+all writes are guarded against predecessor symlinks. NET's already-green
+unchanged replay is cached only after every capsule source/archive hash is
+rechecked. The committed package is a deduplicated10.2MB xz archive with
+uncompressed SHA and Git blob provenance; no live peer worktree was read.

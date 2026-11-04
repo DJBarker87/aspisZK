@@ -1,0 +1,59 @@
+--- a/crates/aspis-r1-cost-probe/src/verifier/NEW_geometry.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier/NEW_geometry.rs
+@@ -350,9 +350,55 @@
+ #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+ #[kani::stub(alloc::vec::Vec::<M31>::extend_from_slice,KMX_extend_from_slice)]
+ #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
+-fn NEW_reject_tx1(){NEW_reject_case::<10,50>()}
++fn NEW_reject_tx1(){
++ #[cfg(NEW_reject_k_00)] NEW_reject_fixed::<0>();
++ #[cfg(NEW_reject_k_01)] NEW_reject_fixed::<1>();
++ #[cfg(NEW_reject_k_02)] NEW_reject_fixed::<2>();
++ #[cfg(NEW_reject_k_03)] NEW_reject_fixed::<3>();
++ #[cfg(NEW_reject_k_04)] NEW_reject_fixed::<4>();
++ #[cfg(NEW_reject_k_05)] NEW_reject_fixed::<5>();
++ #[cfg(NEW_reject_k_06)] NEW_reject_fixed::<6>();
++ #[cfg(NEW_reject_k_07)] NEW_reject_fixed::<7>();
++ #[cfg(NEW_reject_k_08)] NEW_reject_fixed::<8>();
++ #[cfg(NEW_reject_k_09)] NEW_reject_fixed::<9>();
++ #[cfg(NEW_reject_k_10)] NEW_reject_fixed::<10>();
++ #[cfg(NEW_reject_k_11)] NEW_reject_fixed::<11>();
++ #[cfg(not(any(NEW_reject_k_00,NEW_reject_k_01,NEW_reject_k_02,NEW_reject_k_03,NEW_reject_k_04,NEW_reject_k_05,NEW_reject_k_06,NEW_reject_k_07,NEW_reject_k_08,NEW_reject_k_09,NEW_reject_k_10,NEW_reject_k_11)))] NEW_reject_case::<10,50>();
++}
+ #[kani::proof] #[kani::unwind(62)]
+ #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+ #[kani::stub(alloc::vec::Vec::<M31>::extend_from_slice,KMX_extend_from_slice)]
+ #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
+ fn NEW_reject_tx2(){NEW_reject_case::<12,60>()}
++
++// Finite-domain isolation: actual k is a compile-time constant; allocation
++// class remains arbitrary and spare memory is genuinely uninitialized.
++fn NEW_reject_fixed<const K:usize>(){
++ let tx1:bool=kani::any();kani::assume(!tx1 || K<10);kani::assume(K<12);
++ let n=if tx1{10}else{12};let m=5*n;
++ let raw:[u32;60]=kani::any();let old_lines:[u32;12]=kani::any();
++ let mut flat:Vec<M31>=Vec::with_capacity(m);let mut lines:Vec<M31>=Vec::with_capacity(n);
++ assert_eq!(flat.capacity(),m);assert_eq!(lines.capacity(),n);
++ let p=flat.as_mut_ptr();let lp=lines.as_mut_ptr();
++ let mut j=0;while j<5*K{unsafe{p.add(j).write(M31(raw[j]));}j+=1;}
++ let mut j=0;while j<K{unsafe{lp.add(j).write(M31(old_lines[j]));}j+=1;}
++ unsafe{flat.set_len(5*K);lines.set_len(K);}
++ let f:usize=kani::any();kani::assume(f<m);let l:usize=kani::any();kani::assume(l<n);
++ let values=row();let zero_lane:usize=kani::any();kani::assume(zero_lane<5);kani::assume(values[zero_lane].0==0);
++ let answer=NET_gather(&mut flat,&mut lines,values);
++ #[cfg(NET_bad_reply)] {assert_eq!(answer,Ok(()));}
++ #[cfg(not(NET_bad_reply))] {assert_eq!(answer,Err(Error::Query));}
++ assert_eq!(flat.len(),5*K);assert_eq!(lines.len(),K);
++ assert_eq!(flat.capacity(),m);assert_eq!(lines.capacity(),n);
++ assert_eq!(flat.as_ptr(),p);assert_eq!(lines.as_ptr(),lp);assert_ne!(p,lp);
++ if f<5*K{assert_eq!(flat[f].0,raw[f]);}
++ if l<K{assert_eq!(lines[l].0,old_lines[l]);}
++}
++#[kani::proof] #[kani::unwind(7)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NEW_zero_class(){
++ let values=row();let actual=values.iter().any(|x|*x==M31::ZERO);
++ let expected=values[0].0==0 || values[1].0==0 || values[2].0==0 || values[3].0==0 || values[4].0==0;
++ #[cfg(NET_bad_reply)] {assert_eq!(actual,!expected);}
++ #[cfg(not(NET_bad_reply))] {assert_eq!(actual,expected);}
++}

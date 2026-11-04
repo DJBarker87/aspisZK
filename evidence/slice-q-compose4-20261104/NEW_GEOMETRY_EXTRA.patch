@@ -1,0 +1,60 @@
+--- a/crates/aspis-r1-cost-probe/src/verifier/NEW_geometry.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier/NEW_geometry.rs
+@@ -300,3 +300,57 @@
+  #[cfg(NET_bad_reply)] {actual^=1;}
+  assert_eq!(actual,index>>9u32);
+ }
++// Initial physical carriers and the rejected gather branch on arbitrary live heaps.
++fn NEW_initial_case<const N:usize>(){
++ let start:usize=kani::any();let end:usize=kani::any();
++ kani::assume(start<=end && end<=22);kani::assume(end-start==N);
++ let lines:Vec<M31>=Vec::with_capacity(end-start);
++ let flat:Vec<M31>=Vec::with_capacity((end-start)*5);
++ #[cfg(NET_bad_reply)] {assert_eq!(flat.capacity(),5*N+1);}
++ #[cfg(not(NET_bad_reply))] {assert_eq!(flat.capacity(),5*N);}
++ assert_eq!(lines.capacity(),N);assert_eq!(flat.len(),0);assert_eq!(lines.len(),0);
++ #[cfg(NET_bad_argument)] {assert_eq!(flat.as_ptr(),lines.as_ptr());}
++ #[cfg(not(NET_bad_argument))] {assert_ne!(flat.as_ptr(),lines.as_ptr());}
++}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++fn NEW_initial_tx1(){NEW_initial_case::<10>()}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++fn NEW_initial_tx2(){NEW_initial_case::<12>()}
++
++fn NEW_reject_case<const N:usize,const M:usize>(){
++ assert_eq!(M,5*N);
++ let k:usize=kani::any();kani::assume(k<N);
++ let raw:[u32;M]=kani::any();let old_lines:[u32;N]=kani::any();
++ let p=Box::into_raw(Box::new([core::mem::MaybeUninit::<M31>::uninit();M])) as *mut M31;
++ let lp=Box::into_raw(Box::new([core::mem::MaybeUninit::<M31>::uninit();N])) as *mut M31;
++ let mut j=0;while j<5*k{unsafe{p.add(j).write(M31(raw[j]));}j+=1;}
++ let mut l=0;while l<k{unsafe{lp.add(l).write(M31(old_lines[l]));}l+=1;}
++ let mut flat=unsafe{Vec::from_raw_parts(p,5*k,M)};
++ let mut lines=unsafe{Vec::from_raw_parts(lp,k,N)};
++ let f:usize=kani::any();kani::assume(f<M);let l:usize=kani::any();kani::assume(l<N);
++ let values=row();kani::assume(values.iter().any(|x|*x==M31::ZERO));
++ let answer=NET_gather(&mut flat,&mut lines,values);
++ #[cfg(NET_bad_reply)] {assert_eq!(answer,Ok(()));}
++ #[cfg(not(NET_bad_reply))] {assert_eq!(answer,Err(Error::Query));}
++ #[cfg(NET_bad_frame)] {if f<5*k{flat[f].0^=1;}}
++ #[cfg(NET_bad_argument)] {if l<k{lines[l].0^=1;}}
++ assert_eq!(flat.len(),5*k);assert_eq!(lines.len(),k);
++ assert_eq!(flat.capacity(),M);assert_eq!(lines.capacity(),N);
++ assert_eq!(flat.as_ptr(),p);assert_eq!(lines.as_ptr(),lp);assert_ne!(p,lp);
++ if f<5*k{assert_eq!(flat[f].0,raw[f]);}
++ if l<k{assert_eq!(lines[l].0,old_lines[l]);}
++}
++#[kani::proof] #[kani::unwind(62)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(alloc::vec::Vec::<M31>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++fn NEW_reject_tx1(){NEW_reject_case::<10,50>()}
++#[kani::proof] #[kani::unwind(62)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(alloc::vec::Vec::<M31>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++fn NEW_reject_tx2(){NEW_reject_case::<12,60>()}

@@ -1,0 +1,11 @@
+--- a/crates/aspis-r1-cost-probe/src/verifier/NEW_geometry.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier/NEW_geometry.rs
+@@ -334,7 +334,7 @@
+  let mut flat=unsafe{Vec::from_raw_parts(p,5*k,M)};
+  let mut lines=unsafe{Vec::from_raw_parts(lp,k,N)};
+  let f:usize=kani::any();kani::assume(f<M);let l:usize=kani::any();kani::assume(l<N);
+- let values=row();kani::assume(values.iter().any(|x|*x==M31::ZERO));
++ let values=row();let zero_lane:usize=kani::any();kani::assume(zero_lane<5);kani::assume(values[zero_lane].0==0);
+  let answer=NET_gather(&mut flat,&mut lines,values);
+  #[cfg(NET_bad_reply)] {assert_eq!(answer,Ok(()));}
+  #[cfg(not(NET_bad_reply))] {assert_eq!(answer,Err(Error::Query));}

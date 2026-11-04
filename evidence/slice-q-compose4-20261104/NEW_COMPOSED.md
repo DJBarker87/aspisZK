@@ -32,3 +32,10 @@ The five outgoing inverse edges are closed using the exact emitted scalar
 call targets and inherited all-raw multiply/square certificates. Conservative
 CM/QM/Wide receiver alternatives are preserved and discharged as unreachable,
 not silently deleted. All original NET checks remain unchanged.
+
+The complete actual-emitted geometry/cohort equality now compiles in NEW_L079:
+`NEW_GeometryComplete.complete_raw`, `complete`, `result_state`, and `accepted`.
+It preserves every Result branch and every output lane, with no inner child
+success/bridge/domain premise. This is still a PARTIAL root packet: native
+rejection-frame and final composed-validator gates remain OPEN. It does not
+raise the composed row count. NEW_K087 is a recorded timeout, never a pass.

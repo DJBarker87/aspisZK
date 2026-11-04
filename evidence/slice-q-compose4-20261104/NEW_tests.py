@@ -8,7 +8,7 @@ class Gates(unittest.TestCase):
  def reject(self,f):
   f(self.edges)
   with self.assertRaises(ValueError):v.validate(self.edges,self.certificates,replay=False)
- def test_positive(self):self.assertEqual(self.valid['q_functions_closed'],62)
+ def test_positive(self):self.assertEqual(self.valid['q_functions_closed'],63)
  def test_roots_open(self):self.assertEqual(set(self.valid['roots'].values()),{'OPEN'})
  def test_promotion(self):self.reject(lambda x:next(e for e in x['edges'] if e['status']=='OPEN').update(status='CLOSED'))
  def test_missing_edge(self):self.reject(lambda x:x['edges'].pop())
