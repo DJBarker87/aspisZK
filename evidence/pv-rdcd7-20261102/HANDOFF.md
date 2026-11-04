@@ -167,3 +167,24 @@ refreshed live-ref census and complete checkpoint committed2ec7e0e75c.
 The source-resolution plan is stale after unexpected ParserComponent import
 changes. Refresh and stage it only after writer coordination, then compile
 ParserComponent before ParserTransport. No V197 restoration/release claim yet.
+
+## Session 3 active checkpoint
+
+User explicitly confirms ONLY writer. RESUME-SESSION3.json reconciles all host
+receipts, no inherited live scope. Accepted ParserComponent split; refreshed
+stage plan contains26 modules. 90716 and90717 failed elaboration (Option match
+metavariables;90716 also residual rfl). residual_none now checks without sorryAx
+at90717. Current source binds converted array locally before matching; not yet
+compiled. Driver exec13731 queues90718 through ParserComponent. Two pre-upload
+reservation refusals so far;90718 UNSPENT, waiting full180s and retrying same ID.
+Do not duplicate driver/scope. 18/60 Lean used (13pass,5fail),2/10native,0Kani.
+Next after90718 result: fix if needed, or compile transport then consumers.
+
+CONSUMERS-session3-refresh.json preserves15 extra live-ref revisions and44
+variants; all added model variants on this branch/remote, no new consumer on
+other branches. CONSUMERS.md includes ParserComponent. New association draft
+V197-ASSOCIATION.json is PENDING. source-proof-precheck.json is syntactic only.
+check-release derives current51 raw roots (old hardcoded47 label fixed).
+No restoration or release claim yet. Current sole writer made commits through
+2862e1a9bd; no merge/push. All original compiler/runtime/observer qualifications
+and unchanged endpoint/T boundaries remain.
