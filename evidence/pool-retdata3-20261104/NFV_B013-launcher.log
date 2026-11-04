@@ -1,0 +1,49 @@
+{"attempt": "NFV_B013", "exit_status": 0, "wall_seconds": 5.894680571043864, "peak_rss_kib": "5203968", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.core.array.Array.index_mut : {T I Output : Type} →
+  {N : Usize} →
+    core.ops.index.IndexMut (Slice T) I Output → Std.Array T N → I → Result (Output × (Output → Std.Array T N)) :=
+fun {T I Output} {N} inst a i => do
+  let __x ← inst.index_mut a.to_slice i
+  match __x with
+    | (s, back) => ok (s, fun o => a.from_slice (back o))
+def Aeneas.Std.core.ops.index.IndexMutSlice : {T I Output : Type} →
+  core.slice.index.SliceIndex I (Slice T) Output → core.ops.index.IndexMut (Slice T) I Output :=
+fun {T I Output} inst =>
+  { indexInst := core.ops.index.IndexSlice inst, index_mut := core.slice.index.Slice.index_mut inst }
+@[reducible] def Aeneas.Std.core.slice.index.SliceIndexRange
+...
+) :=
+fun {T I Output} inst s i => inst.index_mut i s
+def Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index_mut : {T : Type} →
+  core.ops.range.Range Usize → Slice T → Result (Slice T × (Slice T → Slice T)) :=
+fun {T} r s =>
+  if r.start ≤ r.end ∧ ↑r.end ≤ s.length then
+    ok (⟨List.slice ↑r.start ↑r.end ↑s, ⋯⟩, fun s' => ⟨(↑s).setSlice! ↑r.start ↑s', ⋯⟩)
+  else fail Error.panic
+def Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.get_mut : {T : Type} →
+  core.ops.range.Range Usize → Slice T → Result (Option (Slice T) × (Option (Slice T) → Slice T)) :=
+fun {T} r s =>
+  if r.start ≤ r.end ∧ ↑r.end ≤ s.length then
+    ok
+      (some ⟨List.slice ↑r.start ↑r.end ↑s, ⋯⟩, fun s' =>
+        match s' with
+        | none => s
+        | some s' => if h : s'.length = ↑r.end - ↑r.start then ⟨(↑s).setSlice! ↑r.start ↑s', ⋯⟩ else s)
+  else ok (none, fun x => s)
+def Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index_mut : {T : Type} →
+  core.ops.range.RangeTo Usize → Slice T → Result (Slice T × (Slice T → Slice T)) :=
+fun {T} r s =>
+  if ↑r.end ≤ s.length then ok (⟨List.slice 0 ↑r.end ↑s, ⋯⟩, fun s' => ⟨(↑s).setSlice! 0 ↑s', ⋯⟩) else fail Error.panic
+def Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice.index_mut : {T : Type} →
+  core.ops.range.RangeFrom Usize → Slice T → Result (Slice T × (Slice T → Slice T)) :=
+fun {T} r s =>
+  if ↑r.start ≤ s.length then
+    have s1 := s.drop r.start;
+    ok (s1, fun s2 => ⟨(↑s).setSlice! ↑r.start ↑s2, ⋯⟩)
+  else fail Error.panic
+def Aeneas.Std.Array.from_slice.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Slice α → Std.Array α n :=
+fun {α} {n} a s => if h : (↑s).length = ↑n then ⟨↑s, ⋯⟩ else a
+def Aeneas.Std.Array.to_slice.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Slice α :=
+fun {α} {n} v => ⟨↑v, ⋯⟩
+
+Running as unit: run-r4a0e1db585cc4089a2079be9c8340096.scope; invocation ID: 83a7eb4a593e4fe9a91b222cd3d89a09

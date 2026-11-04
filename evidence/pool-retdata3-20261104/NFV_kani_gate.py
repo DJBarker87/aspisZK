@@ -51,6 +51,34 @@ assert set(cfg['required_statement_features'])<=set(features),(features,cfg['req
 program_features=next(n['features'] for n in metadata['resolve']['nodes'] if packages[n['id']]['name']=='aspis-pool')
 assert {'r1-split-checkpoint','pair-forest-source-invariant-audit','pair-forest-source-result-invariant-audit'}<=set(program_features)
 assert 'no-entrypoint' not in program_features
-status=subprocess.run(cfg['native_command'],cwd=B).returncode if cfg['kind']=='kani' else 0
+# Track only temp files actually opened by descendants of THIS native command.
+# This lane-owned runner repair leaves the frozen-graph and Kani validation intact.
+import os,time
+status=0
+if cfg['kind']=='kani':
+ proc=subprocess.Popen(cfg['native_command'],cwd=B);owned_temps=set()
+ while proc.poll() is None:
+  parents={}
+  for q in Path('/proc').iterdir():
+   if not q.name.isdigit():continue
+   try:parents[int(q.name)]=int(next(l for l in (q/'status').read_text().splitlines() if l.startswith('PPid:')).split()[1])
+   except (OSError,StopIteration):pass
+  descendants={proc.pid};changed=True
+  while changed:
+   expanded=descendants|{pid for pid,parent in parents.items() if parent in descendants};changed=expanded!=descendants;descendants=expanded
+  for pid in descendants:
+   try:fds=list(Path(f'/proc/{pid}/fd').iterdir())
+   except OSError:continue
+   for fd in fds:
+    try:name=os.readlink(fd)
+    except OSError:continue
+    if name.startswith(('/tmp/external-sat','/tmp/smt2_dec_problem')) and not name.endswith(' (deleted)'):owned_temps.add(name)
+  time.sleep(0.5)
+ status=proc.returncode
+ removed=[]
+ for name in sorted(owned_temps):
+  p=Path(name)
+  if p.is_file() and p.stat().st_uid==os.getuid():removed.append(dict(path=name,size=p.stat().st_size));p.unlink()
+ (B/(a+'-temp-files.json')).write_text(json.dumps(dict(opened_by_own_descendants=sorted(owned_temps),removed=removed),indent=1)+'\n')
 last=sha(S/'Cargo.lock');(B/(a+'-lock-check.json')).write_text(json.dumps(dict(before=lock_hash,after=last,unchanged=last==lock_hash),indent=1)+'\n');assert last==lock_hash,'STOP Kani changed lock'
 sys.exit(status)

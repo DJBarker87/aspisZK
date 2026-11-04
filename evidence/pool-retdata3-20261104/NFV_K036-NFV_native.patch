@@ -1,0 +1,76 @@
+--- a/programs/aspis-pool/src/pair_forest_dispatch.rs
++++ b/programs/aspis-pool/src/pair_forest_dispatch.rs
+@@ -1180,3 +1180,7 @@
+ 
+     const _: () = assert!(POOL_V1_PAIR_TREE_DEPTH == 20);
+ }
++
++#[cfg(kani)]
++#[path="NFO_read.rs"]
++mod NFO_read;
+--- a/programs/aspis-pool/src/lib.rs
++++ b/programs/aspis-pool/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! Pool V1 authenticated state-transition kernel.
+ //!
+ //! The native entrypoint exposes exact V1 initialization, vault-backed
+@@ -145,3 +146,9 @@
+     plan_authenticated_verifier_dispatch_v1, AuthenticatedVerifierDispatchV1,
+     PlannedVerifierDispatchV1, VerifierDispatchClaimV1,
+ };
++
++#[cfg(kani)]
++extern crate alloc;
++#[cfg(kani)]
++#[path="../../../KMX_stubs.rs"]
++pub mod NFO_KMX;
+--- /dev/null
++++ b/programs/aspis-pool/src/NFO_read.rs
+@@ -0,0 +1,46 @@
++use super::*;
++fn decode_not_reached(_: &[u8])->Result<PoolV1PairForestTerminalResultV1,aspis_statement::pool_v1::PoolV1PairForestTerminalFormatErrorV1>{panic!("decoder must not be called for a wrong program")}
++struct Runtime{calls:u8,reply:Option<(Pubkey,Vec<u8>)>,returned:Option<(Pubkey,Vec<u8>)>,selected:Pubkey,request:*const u8,request_byte:u8,j:usize,keys:[[u8;32];7],meta:usize}
++impl PairForestVerifierRuntimeV1 for Runtime{
++ fn clear_return_data(&mut self){assert!(self.calls==0);self.calls=1;self.returned=None;}
++ fn invoke(&mut self,instruction:&Instruction,infos:&[AccountInfo<'_>])->ProgramResult{
++  assert!(self.calls==1&&instruction.program_id==self.selected&&instruction.accounts.len()==7&&infos.len()==8);assert!(instruction.data.len()==320&&core::ptr::eq(instruction.data.as_ptr(),self.request)&&instruction.data[self.j]==self.request_byte);assert!(infos[self.meta].key.to_bytes()[self.j%32]==(self.keys[self.meta][self.j%32]^1)&&infos[7].key==&self.selected);self.calls=2;self.returned=self.reply.take();Ok(())}
++ fn get_return_data(&mut self)->Option<(Pubkey,Vec<u8>)>{assert!(self.calls==2);self.calls=3;self.returned.take()}
++}
++#[kani::proof]
++#[kani::unwind(337)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFO_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NFO_KMX::KMX_copy_from_slice)]
++#[kani::stub(alloc::alloc::realloc,crate::NFO_KMX::KMX_realloc)]
++#[kani::stub(aspis_statement::pool_v1::decode_pool_v1_pair_forest_terminal_result_v1,decode_not_reached)]
++fn association(){
++ let selected=Pubkey::new_from_array(kani::any());let returned=Pubkey::new_from_array(kani::any());kani::assume(returned!=selected);
++ let base=selected.to_bytes();
++ let loader=match kani::any::<u8>()%3{0=>bpf_loader::id(),1=>bpf_loader_upgradeable::id(),_=>loader_v4::id()};let owner=Pubkey::new_from_array(kani::any());
++ let mut key0=base;key0[0]^=0;let key0=Pubkey::new_from_array(key0);let mut lam0:u64=kani::any();let mut data0=[];
++ let info0=AccountInfo::new(&key0,false,false,&mut lam0,&mut data0,&loader,true,kani::any());
++ let key1:[u8;32]=kani::any();let key1=Pubkey::new_from_array(key1);let mut lam1:u64=kani::any();let mut data1=[];
++ let info1=AccountInfo::new(&key1,false,false,&mut lam1,&mut data1,&owner,false,kani::any());
++ let key2:[u8;32]=kani::any();let key2=Pubkey::new_from_array(key2);let mut lam2:u64=kani::any();let mut data2=[];
++ let info2=AccountInfo::new(&key2,false,false,&mut lam2,&mut data2,&selected,false,kani::any());
++ let key3:[u8;32]=kani::any();let key3=Pubkey::new_from_array(key3);let mut lam3:u64=kani::any();let mut data3=[];
++ let info3=AccountInfo::new(&key3,kani::any(),kani::any(),&mut lam3,&mut data3,&owner,kani::any(),kani::any());
++ let key4:[u8;32]=kani::any();let key4=Pubkey::new_from_array(key4);let mut lam4:u64=kani::any();let mut data4=[];
++ let info4=AccountInfo::new(&key4,kani::any(),kani::any(),&mut lam4,&mut data4,&owner,kani::any(),kani::any());
++ let key5:[u8;32]=kani::any();let key5=Pubkey::new_from_array(key5);let mut lam5:u64=kani::any();let mut data5=[];
++ let info5=AccountInfo::new(&key5,kani::any(),kani::any(),&mut lam5,&mut data5,&owner,kani::any(),kani::any());
++ let key6:[u8;32]=kani::any();let key6=Pubkey::new_from_array(key6);let mut lam6:u64=kani::any();let mut data6=[];
++ let info6=AccountInfo::new(&key6,kani::any(),kani::any(),&mut lam6,&mut data6,&owner,kani::any(),kani::any());
++ let key7:[u8;32]=kani::any();let key7=Pubkey::new_from_array(key7);let mut lam7:u64=kani::any();let mut data7=[];
++ let info7=AccountInfo::new(&key7,kani::any(),kani::any(),&mut lam7,&mut data7,&owner,kani::any(),kani::any());
++
++ kani::assume(key1!=selected&&key2!=selected&&key2!=key1&&key2!=key3&&key2!=key4&&key2!=key5&&key2!=key6&&key2!=key7);
++ let raw:[u8;792]=kani::any();let boxed:Box<[u8]>=Box::new(raw);let bytes=boxed.into_vec();
++ let request:[u8;320]=kani::any();let boxed:Box<[u8]>=Box::new(request);
++ let request_ptr=boxed.as_ptr();let j:usize=kani::any();kani::assume(j<320);let request_byte=boxed[j];let meta:usize=0;let keys=[key1.to_bytes(),key3.to_bytes(),key4.to_bytes(),key5.to_bytes(),key6.to_bytes(),key7.to_bytes(),key2.to_bytes()];
++ let plan=PlannedPairForestDispatchV1{selected_verifier:selected,request_bytes:boxed.into_vec()};
++ let mut runtime=Runtime{calls:0,reply:Some((returned,bytes)),returned:None,selected,request:request_ptr,request_byte,j,keys,meta};
++ let actual=invoke_pair_forest_terminal_with_runtime_v1(plan,&info1,&info3,&info4,&info5,&[info6,info7],&info0,Some(&info2),&mut runtime);
++ assert!(runtime.calls==3);
++ assert!(matches!(actual,Err(e) if e==PoolV1ProgramError::InvalidVerifierReturnProgram.into()));
++}

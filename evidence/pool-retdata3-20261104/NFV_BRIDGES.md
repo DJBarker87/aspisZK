@@ -34,3 +34,14 @@ K060 is excluded (whole real encoder frontier loop; deliberately stopped).
 K066 is an own harness compile error, corrected in K067. Neither earns credit.
 K051's repr(C) carrier geometry is excluded even though its old diagnostic
 passed. No function-pointer/writable-static receipt is used here.
+
+Runner repair: B006 linking succeeded (exit0). Its post-run collector attempted
+to write imported absolute host C paths as local paths. The collector was
+repaired to retain those imported inputs by their existing pins; B006's receipt
+was recovered READ-ONLY and charged, without another link/compiler submission.
+Only the lane-owned collector changed; launcher/reservation/shim untouched.
+
+Account matrix/splits are now terminal and reviewed: BOTH account associations
+are CLOSED-BY-RECLASSIFICATION under(af)(3), with NFV_AF_CERTIFICATE.json as the
+precise evidence table. There is no native copied-prefix PASS. The retained
+std/allocator realization remains visible. Production admission remains B.

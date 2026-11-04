@@ -3,7 +3,7 @@ from pathlib import Path
 import subprocess,json,sys,time,hashlib,shlex,tomllib
 E=Path(__file__).resolve().parent;B='/home/dombarker/project-offloads/codex-cx-pool-retdata3-20261104';H='dombarker@100.108.41.90'
 a=sys.argv[1];harness=sys.argv[2] if len(sys.argv)>2 else 'pair_forest_dispatch::NFO_read::association';assert __import__('re').fullmatch(r'[A-Za-z_][A-Za-z_0-9:]++',harness);assert a.startswith('NFV_K') and 1<=int(a[5:])<=80
-assert not (E/a).exists() and not (E/'NFV_LEAN_ACTIVE.json').exists()
+assert not (E/a).exists() and not (E/'NFV_LEAN_ACTIVE.json').exists() and not (E/'NFV_B_LEAN_ACTIVE.json').exists()
 active=E/'NFV_ACTIVE.json';assert not active.exists();active.write_text(a)
 sha=lambda b:hashlib.sha256(b).hexdigest()
 def ssh(code,stdin=None,submitted=False):
@@ -62,7 +62,7 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
 code=f'''from pathlib import Path
 import json
-b=Path({B!r});names={[a+'/receipt.json',a+'/stdout.log',a+'/time.log',a+'-source-check.json',a+'-tools.json',a+'-metadata-pin.json',a+'-metadata.stderr',a+'-graph-check.json',a+'-lock-check.json',a+'-rule16-check.json']!r}
+b=Path({B!r});names={[a+'/receipt.json',a+'/stdout.log',a+'/time.log',a+'-source-check.json',a+'-tools.json',a+'-metadata-pin.json',a+'-metadata.stderr',a+'-graph-check.json',a+'-lock-check.json',a+'-rule16-check.json',a+'-temp-files.json']!r}
 out={{n:(b/n).read_text() for n in names if (b/n).exists()}}
 cleaned=[]
 if (b/{(a+'/receipt.json')!r}).exists():
@@ -72,8 +72,12 @@ if (b/{(a+'/receipt.json')!r}).exists():
  out[{(a+'-solver-cleanup.json')!r}]=json.dumps(dict(terminal_attempt={a!r},removed=cleaned))
 print(json.dumps(out))
 '''
-r=ssh('python3',code);assert r.returncode==0,r.stderr;out=json.loads(r.stdout)
-for n,s in out.items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
+for recovery_retry in range(11):
+ r=ssh('python3',code);assert r.returncode==0,r.stderr;out=json.loads(r.stdout)
+ for n,s in out.items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
+ if a+'/receipt.json' in out:break
+ with (E/'NFV_TRANSPORT.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,recovery_retry=recovery_retry,action='read-only wait for terminal receipt; never resubmit'))+'\n')
+ if recovery_retry<10:time.sleep(60)
 assert a+'/receipt.json' in out,'unresolved submitted attempt; never resubmit'
 rc=json.loads(out[a+'/receipt.json']);entry={k:v for k,v in rc.items() if k!='deps_fingerprint'}
 with (E/'NFV_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(entry)+'\n')

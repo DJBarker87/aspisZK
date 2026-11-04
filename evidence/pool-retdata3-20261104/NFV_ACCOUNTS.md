@@ -29,3 +29,27 @@ lowercase "CBMC timed out" diagnostic. Earlier generated campaign rows were
 recomputed from their immutable stdout. This changes reporting, not validation
 conditions or any native verdict. Allocator source excerpts are suppressed in
 runner summaries; full raw logs stay in evidence.
+
+## Terminal account disposition
+
+**AccountMeta: CLOSED-BY-RECLASSIFICATION under (af)(3).**
+**AccountInfo: CLOSED-BY-RECLASSIFICATION under (af)(3).**
+All24 full per-index positives/controls are terminal90s solver timeouts, not
+passes or failing-control certificates. Eight stricter byte-observation splits
+also time out (K003..007,K035..037). No shape was rerun unchanged after timeout.
+No copied-prefix native pass credit is claimed. NFV_AF_CERTIFICATE.json checks
+each immutable receipt and records the source of every fact.
+
+The native certificate is NFO_K057/K058 constructors; NFR_K004/K005 flags;
+NFR_K006/K007 lengths/appended metadata; and NFV_K008/K009 inserted Info key6.
+K010 proves host layouts34/48, K011 corrupt-size control fails. Standard-library
+push/insert preservation, including shifting the verifier-program element, is
+retained std/allocator realization trust under P6/D188 option A. This is a
+RECLASSIFICATION, never removal, and adds no trust row. The old K-1c classification
+is retained; no shipped Pool bug or new fidelity defect is claimed.
+
+The prescribed205 bound was tested and is incomplete because the SAME call also
+copies336 AccountInfo bytes. The complete reached bound337 is used throughout
+the per-index matrix. No solver-time/memory-cap increase was made. Fixtures'
+unobserved empty data/owner choices are not promoted into production admission;
+that full caller-state/domain association remains member B.

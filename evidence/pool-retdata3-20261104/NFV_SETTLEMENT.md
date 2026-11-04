@@ -26,3 +26,15 @@ frozen helper body byte-for-byte. The real encoder is not run in Kani there.
 The extracted emitted helper equality is reused from NFR_CHelperBridge.
 The native cut's production semantic-transport status remains explicit; a
 successful cut by itself is not a full-process association.
+
+Helper continuation: K061 PASS; K062 byte, K063 error, K064 input-place and
+K065 different-live-allocation controls all FAIL at the intended assertions,
+with neither timeout nor unwind failure. B003 proves success/error traces,
+value erasure to NFR_CHelper.terminal_ref and same-statement encoder-domain
+substitution. All use only propext/Classical.choice/Quot.sound.
+The helper call log is associated under ruling(y)'s P6/D188 semantic transport
+(RECLASSIFICATION, not removal). The allocation closure executes real Box::new;
+its local pointer log is checked, and no allocator implementation is invented.
+The proof does not establish the earlier process prefix or joint transaction
+reachability. C's source-cut consumption at the production cap=len792 is kept
+separate from B's obligation to instantiate the admitted full account context.

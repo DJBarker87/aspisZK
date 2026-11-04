@@ -29,3 +29,17 @@ metadata-forwarding evidence and earns no production-prefix closure. Calling
 this a complete admitted-account certificate would hide a stronger precondition.
 The full prefix still needs all original account data/borrow pre-states at each
 oracle call, request decode/encode association and layout-derived account windows.
+
+Small-function extraction E001: Charon succeeded; Aeneas exited2 after66.683s,
+533408KiB,swap0. Failure is `Unreachable`, InterpAbs.ml1955, merging abstraction
+contexts at the request payment match (reference src/lib.rs12:18..18:9).
+This is NOT a re-extraction of the forbidden process/HRTB spine and gives no
+native/model closure. The sole extraction allocation is consumed; no rerun.
+NFV_EXTRACTION_ARTIFACTS.json.xz preserves the427349-byte LLBC and pins once.
+The source Cargo.lock stayed frozen; the separate reference lock added only
+its intentional reference package. Every Kani graph/lock remains exactly frozen.
+
+Generic NFV_Copy range/prefix/suffix/update and continuation laws now compile;
+NFV_ListFrames supplies symbolic prefix/tail frame algebra. They are used to
+connect the EXISTING emitted request envelope without concrete-buffer reduction.
+These are model prerequisites, not a substitute for production caller domains.

@@ -31,7 +31,7 @@ print(p.read_text());sys.exit(r.returncode)
  if r.returncode==0 and ad.get('allowed') is True:break
  if (r.returncode==78 or ad.get('allowed') is False) and retry<10:time.sleep(180);continue
  raise SystemExit('STOP infrastructure admission')
-local=E/('NFO_ReadModel.lean' if mode=='extract' else moduleRel+'.lean')
+local=E/('NFV_reference.rs' if mode=='extract' else moduleRel+'.lean')
 imported=E/'NFO_imports'/(moduleRel+'.lean')
 source=local.read_text() if local.exists() else imported.read_text() if imported.exists() else json.loads((E/'NFO_UNCHANGED_BUILD_PLAN.json').read_text())['sources'][target]['source']
 # Dependency pinning resolves the exact LEAN_PATH order, including the Aeneas library.
@@ -75,13 +75,13 @@ if mode in ['fixtures','final']:command=['NFO_native/NFV_Driver',mode]
 if mode=='final':command=['NFO_native/NFV_Driver','final']
 if mode=='scan-link':command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','leanc','-O3','-rdynamic','-o','NFO_native/NFV_Coherence','NFO_native/NFV_Coherence.c','/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104/NFR_audit_native_20261104/NFR_MemoryLimit.c']
 if mode=='scan':command=['NFO_native/NFV_Coherence']
-if mode=='extract':command=['python3','NFO_extract.py']
+if mode=='extract':command=['python3','NFV_extract.py']
 cfg=dict(attempt=a,kind='lean' if mode=='lean' else mode,module=target,sources=['NFO_native/NFV_Coherence.c','/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104/NFR_audit_native_20261104/NFR_MemoryLimit.c'] if mode=='scan-link' else ['NFO_native/NFV_Driver.c','/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104/NFR_audit_native_20261104/NFR_WALKER.c','/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104/NFR_audit_native_20261104/NFR_MemoryLimit.c'] if mode=='link' else ['NFV_B_generated/'+moduleRel+'.lean'],command=command,env=dict(LEAN_SYSROOT='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0',PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',LEAN_PATH=B+'/NFV_B_objects:'+B+'/NFV_C_objects:/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104/NFR_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104/NFO_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104/NEY_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104/NEX_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104/NEQ_final_objects_20261103:/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104/NEM_final_objects_20261102:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects'),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint=pins)
 (E/a).mkdir();(E/a/'NFV_B_SOURCE.lean.txt').write_text(source)
 files={'NFV_B_generated/'+moduleRel+'.lean':source,a+'.json':json.dumps(cfg)}
 if mode=='extract':
- files.update({'NFO_extract.py':(E/'NFO_extract.py').read_text(),'NFO_ref/Cargo.toml':(E/'NFO_reference_Cargo.toml').read_text(),'NFO_ref/src/lib.rs':(E/'NFO_decode_ref.rs').read_text()})
- cfg['sources']=['NFO_extract.py','NFO_ref/Cargo.toml','NFO_ref/src/lib.rs'];files[a+'.json']=json.dumps(cfg)
+ files.update({'NFV_extract.py':(E/'NFV_extract.py').read_text(),'NFV_ref/Cargo.toml':(E/'NFV_reference_Cargo.toml').read_text(),'NFV_ref/src/lib.rs':(E/'NFV_reference.rs').read_text()})
+ cfg['sources']=['NFV_extract.py','NFV_ref/Cargo.toml','NFV_ref/src/lib.rs'];files[a+'.json']=json.dumps(cfg)
 code=f'''from pathlib import Path
 import json
 b=Path({B!r})
@@ -89,7 +89,7 @@ b=Path({B!r})
 (b/'NFO_native').mkdir(exist_ok=True)
 if {mode=='extract'!r}:
  import shutil
- (b/'NFO_ref').mkdir(exist_ok=True);shutil.copy2(b/'NFO_src/Cargo.lock',b/'NFO_ref/Cargo.lock')
+ (b/'NFV_ref').mkdir(exist_ok=True);shutil.copy2(b/'NFV_src/Cargo.lock',b/'NFV_ref/Cargo.lock')
 for n,s in json.loads({json.dumps(files)!r}).items():
  p=b/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
 '''
@@ -109,11 +109,15 @@ if mode in ['link','scan-link']:
  r=ssh('python3',f"from pathlib import Path;import json;b=Path({B!r});print(json.dumps({{n:(b/n).read_text() for n in ['NFO_native/NFV_Driver.c','/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104/NFR_audit_native_20261104/NFR_WALKER.c','/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104/NFR_audit_native_20261104/NFR_MemoryLimit.c','NFO_native/NFV_Coherence.c'] if (b/n).exists()}}))")
  assert r.returncode==0,r.stderr
  for n,s in json.loads(r.stdout).items():
+  if Path(n).is_absolute():continue # Imported C inputs are pinned/reused, never written at a local absolute path.
   p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
 rc=json.loads(out[a+'/receipt.json']);
 entry={k:v for k,v in rc.items() if k!='deps_fingerprint'}
 entry['full_receipt']=dict(path=str(E/a/'receipt.json'),sha256=hashlib.sha256((E/a/'receipt.json').read_bytes()).hexdigest())
 with (E/'NFV_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(entry)+'\n')
-active.unlink();print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}));print(out[a+'/stdout.log'][-2000:] if rc['exit_status'] else '')
+active.unlink();
+from NFV_checkpoint import checkpoint
+checkpoint()
+print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}));print(out[a+'/stdout.log'][-2000:] if rc['exit_status'] else '')
 
 sys.exit(rc["exit_status"])

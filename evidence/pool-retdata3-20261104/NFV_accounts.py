@@ -1,16 +1,18 @@
 from pathlib import Path
 import json,difflib,subprocess,sys
 E=Path(__file__).resolve().parent
-kind,index,control=sys.argv[1:4];index=int(index);assert kind in ['meta','info','meta-byte','info-byte'];assert 0<=index<6;assert control in ['positive','negative']
+kind,index,control=sys.argv[1:4];index=int(index);assert kind in ['meta','info','meta-byte','info-byte','info-appended'];assert 0<=index<7;assert control in ['positive','negative']
 base=json.loads((E.parent/'pool-retdata-20261104/NFO_K056-shape.json').read_text())['source'];s=base
 meta='assert!(instruction.accounts[self.meta].pubkey.to_bytes()==self.keys[self.meta]&&!instruction.accounts[self.meta].is_signer&&!instruction.accounts[self.meta].is_writable);'
 infos='assert!(infos[self.meta].key.to_bytes()==self.keys[self.meta]&&infos[7].key==&self.selected);'
 if kind.startswith('meta'):s=s.replace(infos,'')
 else:s=s.replace(meta,'')
 attrs='#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFO_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NFO_KMX::KMX_copy_from_slice)]\n'
-assert attrs in s;s=s.replace(attrs,attrs+'#[kani::stub(alloc::alloc::realloc,crate::NFO_KMX::KMX_realloc)]\n')
+assert attrs in s
+if kind!='info-appended':s=s.replace(attrs,attrs+'#[kani::stub(alloc::alloc::realloc,crate::NFO_KMX::KMX_realloc)]\n')
+else:s=s.replace('&&infos[7].key==&self.selected','')
 # AccountInfo target layout is separately recorded by the native layout probe.
-bound=337
+bound=34 if kind=='info-appended' else 337
 s=s.replace('#[kani::unwind(34)]',f'#[kani::unwind({bound})]').replace('let meta:usize=kani::any();kani::assume(meta<7);',f'let meta:usize={index};')
 if kind.endswith('-byte'):
  expr='instruction.accounts[self.meta].pubkey.to_bytes()' if kind.startswith('meta') else 'infos[self.meta].key.to_bytes()'
