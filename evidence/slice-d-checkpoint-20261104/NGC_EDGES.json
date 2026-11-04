@@ -1,34 +1,66 @@
-{
-  "new_closed_edges": [],
-  "observed_open_edges": [
-    {
-      "caller": "crates/aspis-core/src/field.rs::QM31::write_le_bytes",
-      "callee": "crates/aspis-core/src/field.rs::CM31::write_le_bytes",
-      "domain": "same mutable out[0..8], then out[8..16]; len(out)>=16"
-    },
-    {
-      "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::Accumulator::new",
-      "callee": "crates/aspis-core/src/r0/heap.rs::filled",
-      "domain": "n=final_len(v), value=QM31::ZERO; same returned Vec"
-    },
-    {
-      "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::checkpoint",
-      "callee": "programs/r1-cost-probe/src/lib.rs::SolanaDigest::digest",
-      "domain": "[proof], [public], then [checkpoint domain separator, same body1736] in that order"
-    }
-  ],
-  "slice_boundaries": [
-    {
-      "id": "NGC-B1",
-      "function": "crates/aspis-r1-cost-probe/src/verifier.rs::BatchedWeights::finish",
-      "reference": "NGC_DOMAIN.md",
-      "status": "OPEN"
-    },
-    {
-      "id": "NGC-B2",
-      "function": "crates/aspis-r1-cost-probe/src/candidate.rs::prepare",
-      "reference": "NGC_DOMAIN.md",
-      "status": "OPEN"
-    }
-  ]
-}
+[
+ {
+  "edge": "crates/aspis-r1-cost-probe/src/verifier.rs::Accumulator::new -> crates/aspis-core/src/r0/heap.rs::filled",
+  "status": "CLOSED",
+  "certificate": {
+   "native": [
+    "NGC_K004",
+    "NGC_K005",
+    "NGC_K006",
+    "NGC_K007",
+    "NGC_K094",
+    "NGC_K095"
+   ],
+   "lean_root": "AspisR1.NGC_Initialization.constructor",
+   "domain_proof": "Literal S2 final_len64, exact zeroK, full owned Result and allocation error; instantiated extracted filled law."
+  }
+ },
+ {
+  "edge": "crates/aspis-r1-cost-probe/src/verifier.rs::Accumulator::new -> crates/aspis-r1-cost-probe/src/transport.rs::Variant::final_len",
+  "status": "CLOSED",
+  "certificate": {
+   "native": [
+    "NGC_K004",
+    "NGC_K005",
+    "NGC_K006",
+    "NGC_K007",
+    "NGC_K094",
+    "NGC_K095"
+   ],
+   "lean_root": "AspisR1.NGC_Initialization.constructor",
+   "domain_proof": "Literal S2 matches closed pure Variant theorem returning64."
+  }
+ },
+ {
+  "edge": "crates/aspis-r1-cost-probe/src/verifier.rs::BatchedWeights::value -> crates/aspis-core/src/field.rs::M31::reduce_u64",
+  "status": "CLOSED",
+  "certificate": {
+   "native": [
+    "NGC_K014",
+    "NGC_K015",
+    "NGC_K018",
+    "NGC_K019"
+   ],
+   "lean_root": "AspisR1.NGC_ValueBridge.value",
+   "domain_proof": "Four actual same-row u64 values; closed reducer domain is all u64, no overflow-bound premise."
+  }
+ },
+ {
+  "edge": "crates/aspis-r1-cost-probe/src/verifier.rs::BatchedWeights::finish -> crates/aspis-r1-cost-probe/src/verifier.rs::BatchedWeights::value",
+  "status": "CLOSED",
+  "certificate": {
+   "native": [
+    "NGC_K012",
+    "NGC_K013",
+    "NGC_K014",
+    "NGC_K015",
+    "NGC_K016",
+    "NGC_K017",
+    "NGC_K018",
+    "NGC_K019"
+   ],
+   "lean_root": "AspisR1.NGC_FinishContents.contents",
+   "domain_proof": "Each enumerate index<64 from SAME mutable64 allocation; raw64 same object. Exact residue output and frame from NGC_ValueBridge.value."
+  }
+ }
+]

@@ -1,0 +1,45 @@
+{"attempt": "NGC_K084", "exit_status": 0, "wall_seconds": 3.575560029130429, "peak_rss_kib": "443968", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-d-checkpoint-20261104/NGC_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `ps
+...
+fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_correct`
+
+warning: function `KMX_to_vec_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-slice-d-checkpoint-20261104/NGC_src/programs/r1-cost-probe/../../KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-slice-d-checkpoint-20261104/NGC_src/programs/r1-cost-probe/../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-slice-d-checkpoint-20261104/NGC_src/programs/r1-cost-probe/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+    Finished `dev` profile [optimized] target(s) in 2.55s
+Checking harness NGC_digest::digest_copy_positive...
+
+VERIFICATION RESULT:
+ ** 0 of 5 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.07433164s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-rc3f58b51476843bc95d47d29246dedec.scope; invocation ID: 1cb5694589b94c4d822ebfeb93931efc

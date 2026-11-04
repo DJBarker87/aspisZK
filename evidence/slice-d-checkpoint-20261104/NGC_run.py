@@ -56,6 +56,9 @@ elif kind=='extract':
  files['NGC_extract.py']=(E/'NGC_extract.py').read_text()
  files['NGC_references.rs']=(E/'NGC_references.rs.txt').read_text()
  sources=['NGC_extract.py','NGC_references.rs'];command=['python3','NGC_extract.py',a+'.json']
+elif kind=='export':
+ files['NGC_export.py']=(E/'NGC_export.py').read_text()
+ sources=['NGC_export.py'];command=['python3','NGC_export.py']
 elif kind=='dependency':
  assert target=='JHe_ZeroGate'
  n='NGC_dependencies/'+target+'.lean';files[n]=(E.parent.parent/'lean'/ (target+'.lean')).read_text();sources=[n]
@@ -63,16 +66,24 @@ elif kind=='dependency':
 elif kind=='lean':
  n='NGC_generated/'+target+'.lean';files[n]=(E/(target+'.lean')).read_text();sources=[n]
  command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NGC_generated','-o','NGC_objects/'+target+'.olean',n]
- if target in ['NGC_WALKER','NGC_MemoryLimit','NGC_Driver','NGC_ProofDriver','NGC_Stage2Driver','NFA_WALKER','NFA_MemoryLimit']:command+=['-c','NGC_native/'+target+'.c']
+ if target in ['NGC_WALKER','NGC_MemoryLimit','NGC_Driver','NGC_ProofDriver','NGC_Stage2Driver','NGC_FinalDriver','NFA_WALKER','NFA_MemoryLimit']:command+=['-c','NGC_native/'+target+'.c']
 elif kind=='linkaudit':
  sources=['NGC_native/'+target+'.c','NGC_native/NGC_WALKER.c','NGC_native/NGC_MemoryLimit.c']
  command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NGC_native/'+target,*sources]
+elif kind=='auditbatch' and target=='NGC_FinalDriver':
+ files['NGC_prestate_audit_batch.py']=(E/'NGC_prestate_audit_batch.py').read_text()
+ files['NGC_EXPECTED_IMPORTS.jsonl']=(E/'NGC_EXPECTED_IMPORTS.jsonl').read_text()
+ sources=['NGC_generated/NGC_FinalDriver.lean','NGC_prestate_audit_batch.py','NGC_native/NGC_FinalDriver.c','NGC_native/NGC_WALKER.c','NGC_native/NGC_MemoryLimit.c']
+ command=['python3','NGC_prestate_audit_batch.py']
 elif kind=='auditbatch' and target=='NGC_Stage2Driver':
  files['NGC_stage2_audit_batch.py']=(E/'NGC_stage2_audit_batch.py').read_text()
  sources=['NGC_generated/NGC_Stage2Driver.lean','NGC_stage2_audit_batch.py','NGC_native/NGC_Stage2Driver.c','NGC_native/NGC_WALKER.c','NGC_native/NGC_MemoryLimit.c']
  command=['python3','NGC_stage2_audit_batch.py']
 elif kind=='auditbatch':
  files['NGC_final_audit_batch.py']=(E/'NGC_final_audit_batch.py').read_text()
+ files['NGC_EXPECTED_IMPORTS.jsonl']=(E/'NGC_EXPECTED_IMPORTS.jsonl').read_text()
+ import os
+ env['NGC_AUDIT_PART']=os.environ.get('NGC_AUDIT_PART','1')
  sources=['NGC_generated/NGC_ProofDriver.lean','NGC_final_audit_batch.py','NGC_native/NGC_ProofDriver.c','NGC_native/NGC_WALKER.c','NGC_native/NGC_MemoryLimit.c']
  command=['python3','NGC_final_audit_batch.py']
 elif kind=='auditbin':
@@ -116,7 +127,7 @@ for root in roots:
    if Path(root,stem+suf).is_file():rels.add(stem+suf)
 for rel in sorted(rels):
  p=next(Path(root)/rel for root in roots if (Path(root)/rel).is_file());pins[str(p)]={{'path':str(p),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}}
-for module in (['NGC_STAGE2_IMPORT' if x['module']=='NGC_Stage2Driver' else 'NGC_COMBINED_IMPORT'] if x['kind']=='auditbatch' else [])+(['NEP_Planted','NEP_Mutations'] if x['module'] in ['NGC_Driver','NGC_ProofDriver','NGC_Stage2Driver','fixtures'] else [])+(['NGC_QueryModel'] if x['kind']=='auditbin' and x['module'].startswith('query') else [])+(['NGC_COMBINED_IMPORT'] if x['kind']=='auditbin' and (x['module'].startswith('proof') or x['module']=='scan') else [])+[n for line in (b/x['sources'][0]).read_text().splitlines() if line.startswith('import ') for n in line[7:].split() if n!='all'] if x['kind'] not in ['linkaudit','kani','extract'] else []:
+for module in (['NGC_STAGE2_IMPORT' if x['module']=='NGC_Stage2Driver' else 'NGC_COMBINED_IMPORT'] if x['kind']=='auditbatch' else [])+(['NEP_Planted','NEP_Mutations'] if x['module'] in ['NGC_Driver','NGC_ProofDriver','NGC_Stage2Driver','NGC_FinalDriver','fixtures'] else [])+(['NGC_QueryModel'] if x['kind']=='auditbin' and x['module'].startswith('query') else [])+(['NGC_COMBINED_IMPORT'] if x['kind']=='auditbin' and (x['module'].startswith('proof') or x['module']=='scan') else [])+[n for line in (b/x['sources'][0]).read_text().splitlines() if line.startswith('import ') for n in line[7:].split() if n!='all'] if x['kind'] not in ['linkaudit','kani','extract','export'] else []:
  rel=module.replace('.','/')+'.olean';p=next((Path(root)/rel for root in roots if (Path(root)/rel).is_file()),None)
  assert p is not None,module
  for z in [p,Path(str(p)+'.private'),Path(str(p)+'.server'),p.with_suffix('.ir')]:
@@ -133,14 +144,21 @@ if {kind!r}=='extract':names += [a+'-extraction-pins.json',a+'.llbc']+[str(p.rel
 names += [str(p.relative_to(b)) for p in b.glob('NEP_*_REACHABLE.txt')] if {kind!r}=='auditbatch' else [str(p.relative_to(b)) for p in b.glob('NEP_'+{target!r}+'_*_REACHABLE.txt')] if {kind!r}=='auditbin' else []
 if {kind!r}=='auditbatch':names += [str(p.relative_to(b)) for p in (b/('NGC_stage2_audit' if {target!r}=='NGC_Stage2Driver' else 'NGC_final_audit')).rglob('*') if p.is_file()]
 if {target!r} in ['scan','queryscan']:names+=['NGC_QUERY_LOADED_scan.jsonl' if {target!r}=='queryscan' else 'NGC_LOADED_scan.jsonl']
-out={{n:(b/n).read_text() for n in names}}
-for name in ['NGC_Driver','NGC_ProofDriver','NGC_Stage2Driver']:
+import base64
+if {kind!r}=='export':names+=['NGC_EXPORT.json']
+out={{n:{{'NGC_binary_base64':base64.b64encode((b/n).read_bytes()).decode()}} if n.endswith('.xz') else (b/n).read_text() for n in names}}
+for name in ['NGC_Driver','NGC_ProofDriver','NGC_Stage2Driver','NGC_FinalDriver']:
  p=b/'NGC_native'/name
  if p.is_file():out[a+'/'+name+'_BINARY_PIN.json']=json.dumps(dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size))
 print(json.dumps(out))
 ''');assert r.returncode==0,r.stderr
 out=json.loads(r.stdout)
-for n,t in out.items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
+for n,t in out.items():
+ p=E/n;p.parent.mkdir(parents=True,exist_ok=True)
+ if isinstance(t,dict) and 'NGC_binary_base64' in t:
+  import base64
+  p.write_bytes(base64.b64decode(t['NGC_binary_base64']))
+ else:p.write_text(t)
 # Archive raw graphs immediately; keep their uncompressed hashes for replay.
 if kind in ['auditbin','auditbatch']:
  import lzma
