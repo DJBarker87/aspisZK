@@ -76,3 +76,15 @@ for label,r2,o2,f2 in [
 out.update(range_failure_dispatch=dict(path=lib['slice/index.rs']['path'],file_sha256=lib['slice/index.rs']['sha256'],body=fail_body,body_sha256=hashlib.sha256(fail_body.encode()).hexdigest(),binding='All four terminal arms invoke const_panic!, represented as fail.panic at the existing source/Result projection. Fixed parser ranges are ordered, so failed bounds reach the end>len arm. No arrayOutOfBounds constructor exists in this Rust dispatch.',fmt_qualification='No Aeneas.Std fmt value law is used. Panic diagnostics, writer state/errors, allocation, timing and abort/world observations remain physical-observer/runtime obligations; no always-Ok formatter claim.'),syntactic_negative_controls=controls)
 (E/'v197-source-bindings.json').write_text(json.dumps(out,indent=2)+'\n')
 print('Explicit terminal panic dispatch and three syntactic mutation controls checked.')
+
+# Pin the literal behind the canonicality branch as well as its symbolic name.
+assert 'pub const P: u32 = 0x7fff_ffff;' in field
+constant_models={}
+for module in ['PV_RDCD4_FieldSource','ProverRwDictionaryBytesSource']:
+ text=(L/(module+'.lean')).read_text()
+ assert 'def aspis_core.field.P : Std.U32 := 2147483647#u32' in text
+ constant_models[module]=dict(path=str((L/(module+'.lean')).relative_to(R)),sha256=hashlib.sha256(text.encode()).hexdigest(),literal=2147483647)
+assert int('7fffffff',16)==2147483647
+out['field_modulus_binding']=dict(source_literal='0x7fff_ffff',value=2147483647,source_file_sha256=out['application_sha256'],models=constant_models,qualification='Syntactic literal identity plus the checked scalar theorem; compiler/layout boundary retained')
+(E/'v197-source-bindings.json').write_text(json.dumps(out,indent=2)+'\n')
+print('Canonicality threshold source/model literals match.')
