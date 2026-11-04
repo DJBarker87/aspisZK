@@ -6,13 +6,15 @@ def reject(name,action):
  try:action()
  except (AssertionError,KeyError):results.append(dict(test=name,status='PASS_REJECTED'));return
  raise AssertionError('mutation admitted: '+name)
+x=copy.deepcopy(a);x['driver_source_sha256']='0'*64;reject('reject audit driver drift',lambda:own_checks(x))
+x=copy.deepcopy(a);x['ax2_conformance_sha256']='0'*64;reject('reject ax2 conformance drift',lambda:own_checks(x))
 for field in ['dangling','duplicate_owners','import_mismatches']:
  x=copy.deepcopy(a);x['incoherence_scan'][field]=1
  reject('reject '+field,lambda x=x:own_checks(x))
 x=copy.deepcopy(a);x['results']=[r for r in x['results'] if r['root']!='AspisR1.RPx_Deployed.deployed'];reject('reject missing headline raw walk',lambda:own_checks(x))
 x=copy.deepcopy(a);x['fixtures']=x['fixtures'][:-1];reject('reject missing fixture',lambda:own_checks(x))
 x=copy.deepcopy(a);x['results'][0]['walked_axioms']=['sorryAx'];reject('reject nonstandard axiom',lambda:own_checks(x))
-for name,mut in [('reject double counted source rows',lambda x:x.update(total_closed=x['total_closed']+2)),('reject query_loop promotion',lambda x:x['promotions'].append(dict(row='TX1:182',after='CLOSED'))),('reject hidden edge deletion',lambda x:x.update(edge_total=x['edge_total']-1)),('reject missing geometry row',lambda x:x['promotions'].pop())]:
+for name,mut in [('reject double counted source rows',lambda x:x.update(total_closed=x['total_closed']+2)),('reject query_loop promotion',lambda x:x['promotions'].append(dict(row='TX1:088',after='CLOSED'))),('reject hidden edge deletion',lambda x:x.update(edge_total=x['edge_total']-1)),('reject missing geometry row',lambda x:x['promotions'].pop())]:
  x=copy.deepcopy(d);mut(x)
  def eq():assert x==expected(old,a)
  reject(name,eq)

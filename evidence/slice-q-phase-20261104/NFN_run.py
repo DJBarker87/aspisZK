@@ -47,6 +47,10 @@ if kind=='lean':
 elif kind=='linkaudit':
  sources=['NFN_native/'+target+'.c','NFN_native/NFA_WALKER.c','NFN_native/NFA_MemoryLimit.c']
  command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NFN_native/'+target,*sources]
+elif kind=='auditbatch':
+ files['NFN_final_audit_batch.py']=(E/'NFN_final_audit_batch.py').read_text()
+ sources=['NFN_generated/NFN_ProofDriver.lean','NFN_final_audit_batch.py','NFN_native/NFN_ProofDriver.c','NFN_native/NFA_WALKER.c','NFN_native/NFA_MemoryLimit.c']
+ command=['python3','NFN_final_audit_batch.py']
 elif kind=='auditbin':
  sources=['NFN_generated/NFN_Driver.lean'];command=['NFN_native/NFN_Driver',target]
 else:raise ValueError(kind)
@@ -71,7 +75,7 @@ for root in roots:
    if Path(root,stem+suf).is_file():rels.add(stem+suf)
 for rel in sorted(rels):
  p=next(Path(root)/rel for root in roots if (Path(root)/rel).is_file());pins[str(p)]={{'path':str(p),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}}
-for module in (['NEP_Planted','NEP_Mutations'] if x['module'] in ['NFN_Driver','NFN_ProofDriver','fixtures'] else [])+(['NFN_QueryModel'] if x['kind']=='auditbin' and x['module'].startswith('query') else [])+(['NFN_COMBINED_IMPORT'] if x['kind']=='auditbin' and (x['module'].startswith('proof') or x['module']=='scan') else [])+[n for line in (b/x['sources'][0]).read_text().splitlines() if line.startswith('import ') for n in line[7:].split() if n!='all'] if x['kind']!='linkaudit' else []:
+for module in (['NFN_COMBINED_IMPORT','NFN_QueryModel'] if x['kind']=='auditbatch' else [])+(['NEP_Planted','NEP_Mutations'] if x['module'] in ['NFN_Driver','NFN_ProofDriver','fixtures'] else [])+(['NFN_QueryModel'] if x['kind']=='auditbin' and x['module'].startswith('query') else [])+(['NFN_COMBINED_IMPORT'] if x['kind']=='auditbin' and (x['module'].startswith('proof') or x['module']=='scan') else [])+[n for line in (b/x['sources'][0]).read_text().splitlines() if line.startswith('import ') for n in line[7:].split() if n!='all'] if x['kind']!='linkaudit' else []:
  rel=module.replace('.','/')+'.olean';p=next((Path(root)/rel for root in roots if (Path(root)/rel).is_file()),None)
  assert p is not None,module
  for z in [p,Path(str(p)+'.private'),Path(str(p)+'.server'),p.with_suffix('.ir')]:
@@ -83,7 +87,8 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
-names += [str(p.relative_to(b)) for p in b.glob('NEP_'+{target!r}+'_*_REACHABLE.txt')] if {kind!r}=='auditbin' else []
+names += [str(p.relative_to(b)) for p in b.glob('NEP_*_REACHABLE.txt')] if {kind!r}=='auditbatch' else [str(p.relative_to(b)) for p in b.glob('NEP_'+{target!r}+'_*_REACHABLE.txt')] if {kind!r}=='auditbin' else []
+if {kind!r}=='auditbatch':names += [str(p.relative_to(b)) for p in (b/'NFN_final_audit').rglob('*') if p.is_file()]
 if {target!r} in ['scan','queryscan']:names+=['NFN_QUERY_LOADED_scan.jsonl' if {target!r}=='queryscan' else 'NFN_LOADED_scan.jsonl']
 out={{n:(b/n).read_text() for n in names}}
 for name in ['NFN_Driver','NFN_ProofDriver']:
@@ -94,7 +99,7 @@ print(json.dumps(out))
 out=json.loads(r.stdout)
 for n,t in out.items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
 # Archive raw graphs immediately; keep their uncompressed hashes for replay.
-if kind=='auditbin':
+if kind in ['auditbin','auditbatch']:
  import lzma
  for name in out:
   if name.startswith('NEP_') and name.endswith('_REACHABLE.txt'):

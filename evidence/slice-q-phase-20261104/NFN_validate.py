@@ -13,8 +13,15 @@ def own_checks(audit=None):
  assert audit['standard_axioms_only'] and audit['raw_graphs_equal_collectAxioms'] and audit['zero_unresolved_constants']
  assert audit['headline']=='AspisR1.RPx_Deployed.deployed'
  assert audit['combined_source_sha256']==sha(E/'NFN_COMBINED_IMPORT.lean')
- assert audit['driver_source_sha256']==sha(E/'NFN_Driver.lean')
+ assert audit['driver_source_sha256']==sha(E/audit.get('driver_file','NFN_Driver.lean'))
  assert audit['walker_identity']==obj(E/'NFN_WALKER_IDENTITY.json')
+ conf=obj(E/'NFN_AX2_CONFORMANCE.json');assert conf['status']=='PASS' and conf['unchanged_pre_runtime_prefix'] and conf['unchanged_raw_audit_action']
+ assert audit['ax2_conformance_sha256']==sha(E/'NFN_AX2_CONFORMANCE.json')
+ assert conf['driver_sha256']==audit['driver_source_sha256']
+ assert conf['diff_sha256']==sha(E/conf['diff'])
+ final=obj(E/'NFN_L070/receipt.json');assert final['exit_status']==0
+ assert final['source_hashes']['NFN_generated/NFN_ProofDriver.lean']==conf['driver_sha256']
+ adm=obj(E/'NFN_L070-admission.json');assert adm['exit']==0 and adm['reservation']['allowed'] is True
  scan=audit['incoherence_scan'];assert all(scan[k]==0 for k in ['dangling','duplicate_owners','import_mismatches'])
  assert scan['output_sha256']==sha(E/'NFN_LOADED_scan.jsonl')
  for x in map(json.loads,(E/'NFN_LOADED_scan.jsonl').read_text().splitlines()):
@@ -43,7 +50,7 @@ def own_checks(audit=None):
  for line in (E/'NFN_ATTEMPTS.jsonl').read_text().splitlines():
   r=json.loads(line)
   if r['kind']=='lean':latest[r['module']]=r
- for m in ['NFN_PhaseTransport','NFN_ReserveOwner','NFN_ExtractedGeometry']+[f'NFN_GeometryPart{i:02}' for i in range(9)]+['NFN_COMBINED_IMPORT']:
+ for m in ['NFN_PhaseTransport','NFN_ReserveOwner','NFN_ExtractedGeometry']+[f'NFN_GeometryPart{i:02}' for i in range(9)]+['NFN_COMBINED_IMPORT','NFN_ProofDriver']:
   r=latest[m];assert r['exit_status']==0
   assert r['source_hashes']['NFN_generated/'+m+'.lean']==sha(E/(m+'.lean'))
   assert r['limits']=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}
@@ -52,7 +59,7 @@ def own_checks(audit=None):
  return audit
 
 def expected(old,audit):
- return dict(schema='NFN-additive-coherent-geometry-v1',baseline_validator_sha256=sha(O/'NFG_validate.py'),baseline_delta_sha256=sha(O/'NFG_LEDGER_DELTA.json'),
+ return dict(schema='NFN-additive-coherent-geometry-v1',validator_sha256=sha(E/'NFN_validate.py'),baseline_validator_sha256=sha(O/'NFG_validate.py'),baseline_delta_sha256=sha(O/'NFG_LEDGER_DELTA.json'),
   promotions=[dict(row=r,function=ROOT,before='QUALIFIED',after='CLOSED',model=['NFN_NFB_GeometryComposed.result_state_effects','NFN_NFB_GeometryComposed.accepted_physical'],native_packet_sha256=sha(E.parent/'slice-q-compose5-20261104/NFB_GEOMETRY_PACKET.json'),remaining_inner_hypotheses=[]) for r in ROWS],
   newly_coherent_closed=ROWS,newly_counted_source_rows=[],new_count=2,total_closed=old['total_closed'],q_functions_closed=old['q_functions_closed'],q_occurrences_closed=old['q_occurrences_closed'],edge_closed=old['edge_closed'],edge_total=old['edge_total'],
   explanation='The source-only NFB/NFG counts already include these two rows. This removes their joint-headline qualification; it does not count them twice or change an edge.',roots={**old['roots'],ROOT:'CLOSED'},
