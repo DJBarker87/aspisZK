@@ -43,3 +43,11 @@ Generic NFV_Copy range/prefix/suffix/update and continuation laws now compile;
 NFV_ListFrames supplies symbolic prefix/tail frame algebra. They are used to
 connect the EXISTING emitted request envelope without concrete-buffer reduction.
 These are model prerequisites, not a substitute for production caller domains.
+
+B032 completes NFV_Envelope.emitted, header_value and pure_value. The EXISTING
+emitted envelope returns exactly the symbolic five-window concatenation:
+ASQ8/version/kind/digest/reserved header8, profile32, release32, program32,
+payment216. Generic copy/frame lemmas avoid concrete-buffer normalization.
+All three print only standard axioms. Failed proof-development B028..031 are
+excluded and retained; the final module contains no admission or sorry.
+This closes a model-side request-byte prerequisite, not native prefix B.

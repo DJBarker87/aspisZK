@@ -19,27 +19,61 @@ def header (kind : U8) : Bytes :=
 def pure (profile release program : Bytes32) (kind : U8) (payment : Payment) : Bytes :=
   write (write (write (write (header kind) 8#usize profile) 40#usize release) 72#usize program) 104#usize payment
 
-/-- Connect the explicit native-copy value operations to the adopted emitted
-reference. No concrete 320-byte array is evaluated. -/
+def paymentStage (payment : Payment) (a : Bytes) : Result Bytes := do
+  let (part, back) ← core.array.Array.index_mut
+    (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeFromUsizeSlice U8)) a {start:=104#usize}
+  let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 part payment.to_slice
+  ok (back copied)
+def programStage (program : Bytes32) (payment : Payment) (a : Bytes) : Result Bytes := do
+  let (part, back) ← core.array.Array.index_mut
+    (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) a {start:=72#usize,«end»:=104#usize}
+  let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 part program.to_slice
+  paymentStage payment (back copied)
+def releaseStage (release program : Bytes32) (payment : Payment) (a : Bytes) : Result Bytes := do
+  let (part, back) ← core.array.Array.index_mut
+    (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) a {start:=40#usize,«end»:=72#usize}
+  let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 part release.to_slice
+  programStage program payment (back copied)
+def profileStage (profile release program : Bytes32) (payment : Payment) (a : Bytes) : Result Bytes := do
+  let (part, back) ← core.array.Array.index_mut
+    (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) a {start:=8#usize,«end»:=40#usize}
+  let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 part profile.to_slice
+  releaseStage release program payment (back copied)
+def headerStage (profile release program : Bytes32) (kind : U8) (payment : Payment) (a : Bytes) : Result Bytes := do
+  let a ← a.update 4#usize POOL_V1_PAIR_FOREST_TERMINAL_VERSION
+  let a ← a.update 5#usize kind
+  let a ← a.update 6#usize AspisR20Request.pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION
+  profileStage profile release program payment a
+
+/-- Compose the symbolic window laws with explicit continuations. -/
 theorem emitted (profile release program : Bytes32) (kind : U8) (payment : Payment) :
     asq8_reference_envelope profile release program kind payment =
       ok (pure profile release program kind payment) := by
   let initial := Array.repeat 320#usize 0#u8
-  let magic := write initial 0#usize POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC
-  let version := updateValue magic 4#usize POOL_V1_PAIR_FOREST_TERMINAL_VERSION
-  let tag := updateValue version 5#usize kind
-  let header := updateValue tag 6#usize AspisR20Request.pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION
   unfold asq8_reference_envelope
-  dsimp only
-  rw [prefix_then initial POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC (by decide)]
-  rw [update magic 4#usize POOL_V1_PAIR_FOREST_TERMINAL_VERSION (by decide),bind_tc_ok]
-  rw [update version 5#usize kind (by decide),bind_tc_ok]
-  rw [update tag 6#usize AspisR20Request.pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION (by decide),bind_tc_ok]
-  unfold REQUEST_PROFILE_OFFSET REQUEST_RELEASE_OFFSET REQUEST_POOL_PROGRAM_OFFSET REQUEST_PAYMENT_OFFSET
-  rw [range_then header 8#usize 40#usize profile (by decide) (by decide) (by decide)]
-  rw [range_then (write header 8#usize profile) 40#usize 72#usize release (by decide) (by decide) (by decide)]
-  rw [range_then (write (write header 8#usize profile) 40#usize release) 72#usize 104#usize program (by decide) (by decide) (by decide)]
-  rw [suffix (write (write (write header 8#usize profile) 40#usize release) 72#usize program) 104#usize payment (by decide) (by decide)]
+  simp only [lift,bind_tc_ok,REQUEST_PROFILE_OFFSET,REQUEST_RELEASE_OFFSET,REQUEST_POOL_PROGRAM_OFFSET,REQUEST_PAYMENT_OFFSET]
+  change (do
+    let (part,back) ← core.array.Array.index_mut
+      (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8)) initial {«end»:=4#usize}
+    let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 part POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC.to_slice
+    headerStage profile release program kind payment (back copied)) = _
+  erw [prefix_then initial POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC (by decide)
+      (headerStage profile release program kind payment)]
+  unfold headerStage
+  erw [update _ 4#usize _ (by decide),bind_tc_ok,
+    update _ 5#usize _ (by decide),bind_tc_ok,
+    update _ 6#usize _ (by decide),bind_tc_ok]
+  unfold profileStage
+  erw [range_then _ 8#usize 40#usize profile (by decide) (by decide) (by decide)
+    (releaseStage release program payment)]
+  unfold releaseStage
+  erw [range_then _ 40#usize 72#usize release (by decide) (by decide) (by decide)
+    (programStage program payment)]
+  unfold programStage
+  erw [range_then _ 72#usize 104#usize program (by decide) (by decide) (by decide)
+    (paymentStage payment)]
+  unfold paymentStage
+  erw [suffix _ 104#usize payment (by decide) (by decide)]
   rfl
 #print axioms emitted
 theorem header_value (kind : U8) :
@@ -48,13 +82,24 @@ theorem header_value (kind : U8) :
     POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC,POOL_V1_PAIR_FOREST_TERMINAL_VERSION,
     AspisR20Request.pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION]
   change ((((List.replicate 320 0#u8).setSlice! 0 [65#u8,83#u8,81#u8,56#u8]).set 4 1#u8).set 5 kind).set 6 1#u8 = _
-  rw [NFV_ListFrames.copy_next ([] : List U8) [65#u8,83#u8,81#u8,56#u8] 0#u8 320 (by decide)]
+  have first := NFV_ListFrames.copy_next ([] : List U8) [65#u8,83#u8,81#u8,56#u8] 0#u8 320 (by decide)
+  simp only [List.nil_append,List.length_nil] at first
+  rw [first]
   change ((([65#u8,83#u8,81#u8,56#u8] ++ List.replicate 316 0#u8).set 4 1#u8).set 5 kind).set 6 1#u8 = _
-  rw [List.replicate_succ, NFV_ListFrames.set_next [65#u8,83#u8,81#u8,56#u8]]
+  rw [List.replicate_succ]
+  have next4 := NFV_ListFrames.set_next [65#u8,83#u8,81#u8,56#u8] (List.replicate 315 0#u8) 0#u8 1#u8
+  simp only [List.length_cons,List.length_nil] at next4
+  rw [next4]
   change (([65#u8,83#u8,81#u8,56#u8,1#u8] ++ List.replicate 315 0#u8).set 5 kind).set 6 1#u8 = _
-  rw [List.replicate_succ, NFV_ListFrames.set_next [65#u8,83#u8,81#u8,56#u8,1#u8]]
+  rw [List.replicate_succ]
+  have next5 := NFV_ListFrames.set_next [65#u8,83#u8,81#u8,56#u8,1#u8] (List.replicate 314 0#u8) 0#u8 kind
+  simp only [List.length_cons,List.length_nil] at next5
+  rw [next5]
   change ([65#u8,83#u8,81#u8,56#u8,1#u8,kind] ++ List.replicate 314 0#u8).set 6 1#u8 = _
-  rw [List.replicate_succ, NFV_ListFrames.set_next [65#u8,83#u8,81#u8,56#u8,1#u8,kind]]
+  rw [List.replicate_succ]
+  have next6 := NFV_ListFrames.set_next [65#u8,83#u8,81#u8,56#u8,1#u8,kind] (List.replicate 313 0#u8) 0#u8 1#u8
+  simp only [List.length_cons,List.length_nil] at next6
+  rw [next6]
   rw [List.replicate_succ]
   rfl
 #print axioms header_value
