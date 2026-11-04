@@ -32,6 +32,14 @@ theorem pair_congr {A B C : Type} (r : Result (A × B))
   intro p
   cases p with | mk a b => exact same a b
 
+theorem bind_success {A B : Type} (r : Result A) (k : A → Result B) (out : B)
+    (accepted : (r >>= k) = ok out) : ∃ x, r = ok x ∧ k x = ok out := by
+  cases r with
+  | fail e => cases accepted
+  | div => cases accepted
+  | ok x => exact ⟨x,rfl,accepted⟩
+
+#print axioms bind_success
 #print axioms pair_congr
 #print axioms bind_congr
 #print axioms right
