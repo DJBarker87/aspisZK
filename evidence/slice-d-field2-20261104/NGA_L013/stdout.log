@@ -1,0 +1,31 @@
+NGA_generated/NGA_Step.lean:29:101: error: unexpected token 'let'; expected ')', ',' or ':'
+NGA_generated/NGA_Step.lean:25:5: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+NGA_generated/NGA_Step.lean:29:11: error: invalid `do` notation, expected type is not a monad application
+  Prop
+You can use the `do` notation in pure code by writing `Id.run do` instead of `do`, where `Id` is the identity monad.
+NGA_generated/NGA_Step.lean:17:104: error: unsolved goals
+case refine_2
+s : Sums
+left right : Cache
+c : Cell
+hl : ↑(NGA_Cell.get left c) < 2147483647
+hr : ↑(NGA_Cell.get right c) < 2147483647
+hs : ↑(NGA_Cell.get s c) ≤ 3 * (2147483647 - 1) ^ 2
+v : U64
+hv :
+  AspisR1PoseidonPreparedChannelGeneratedStep.generatedChannelUpdate (NGA_Cell.get left c) (NGA_Cell.get right c)
+      (NGA_Cell.get s c) =
+    ok v
+hval : ↑v = ↑(NGA_Cell.get s c) + ↑(NGA_Cell.get left c) * ↑(NGA_Cell.get right c)
+back : Std.Array U64 3#usize → Std.Array (Std.Array U64 3#usize) 3#usize
+hback : back = fun row => Std.Array.set s (uFin c.1) row
+hm : Array.index_mut_usize s (uFin c.1) = ok ((↑s)[↑(uFin c.1)], back)
+hrow' : (↑s)[↑(uFin c.1)] = at3 s c.1
+hu : (at3 s c.1).update (uFin c.2) v = ok ((at3 s c.1).set (uFin c.2) v)
+⊢ ∀ (d : Cell),
+    ↑(NGA_Cell.get (NGA_Cell.set s c v) d) =
+      ↑(NGA_Cell.get s d) + if d = c then ↑(NGA_Cell.get left c) * ↑(NGA_Cell.get right c) else 0
+'NGA_Step.bounded_get' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NGA_Step.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

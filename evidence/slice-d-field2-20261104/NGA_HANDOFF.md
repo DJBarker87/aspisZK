@@ -7,3 +7,7 @@ Plan: exact generic helper models and nine-cell/cache association; small-helper 
 Retained trust: P6/D188 option A transport, physical ABI/borrow and compiler/library/Aeneas/source-to-ELF, runtime persistence/return-data/memcmp and digest realization. Headline AspisR1.RPx_Deployed.deployed; L154 statement parameter, D188 narrowed. Target not yet established. No key action, push, deployment, source adoption or shipped-file change.
 
 Host work/cache are private NGA paths. One capped scope at a time; admission requires exit 0 and allowed:true. All proof attempts will record target/source/dependencies/revision/exit/wall/RSS/swap/axioms. Missing evidence is never promoted to closure.
+
+## Stage 1 checked support
+
+NGA_L003: NGA_Cache.prelude_source equates the exact cache prelude to the coherent prepared constructor. NGA_L006: full setter/frame and same-index read laws. NGA_L012: prepared-domain and nine cache canonical bounds. NGA_L016: actual checked row update, exact scalar product and sum with fourth-product pre-budget, arbitrary complementary-cell frame. NGA_L017: nine unique updates compose on the same full 3x3 array; each cell is unmodified before its turn. Every printed axiom list is standard. These are local support only; E001/E002 extraction failures still prevent claiming an emitted whole helper. All six rows remain OPEN.

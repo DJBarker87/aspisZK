@@ -1,0 +1,62 @@
+NGA_generated/NGA_Step.lean:25:5: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+NGA_generated/NGA_Step.lean:37:5: error: Type mismatch: After simplification, term
+  hv
+ has type
+  (do
+      let i2 ← UScalar.cast UScalarTy.U64 (NGA_Cell.get left c) * UScalar.cast UScalarTy.U64 (NGA_Cell.get right c)
+      NGA_Cell.get s c + i2) =
+    ok v
+but is expected to have type
+  (NGA_Cell.get s c).add p = ok v
+NGA_generated/NGA_Step.lean:40:45: error: Ambiguous term
+  set
+Possible interpretations:
+  NGA_Cell.set : Sums → Cell → U64 → Sums
+  
+  MonadStateOf.set : ?m.289 → ?m.290 PUnit.{?u.152 + 1}
+NGA_generated/NGA_Step.lean:28:1: error: unsolved goals
+case refine_1
+s : Sums
+left right : Cache
+c : Cell
+hl : ↑(NGA_Cell.get left c) < 2147483647
+hr : ↑(NGA_Cell.get right c) < 2147483647
+hs : ↑(NGA_Cell.get s c) ≤ 3 * (2147483647 - 1) ^ 2
+v : U64
+hv :
+  AspisR1PoseidonPreparedChannelGeneratedStep.generatedChannelUpdate (NGA_Cell.get left c) (NGA_Cell.get right c)
+      (NGA_Cell.get s c) =
+    ok v
+hval : ↑v = ↑(NGA_Cell.get s c) + ↑(NGA_Cell.get left c) * ↑(NGA_Cell.get right c)
+back : Std.Array U64 3#usize → Std.Array (Std.Array U64 3#usize) 3#usize
+hback : back = fun row => Std.Array.set s (uFin c.1) row
+hm : Array.index_mut_usize s (uFin c.1) = ok (at3 s c.1, back)
+hrow' : (↑s)[↑(uFin c.1)] = at3 s c.1
+hu : (at3 s c.1).update (uFin c.2) v = ok ((at3 s c.1).set (uFin c.2) v)
+p : U64
+hp : (UScalar.cast UScalarTy.U64 (NGA_Cell.get left c)).mul (UScalar.cast UScalarTy.U64 (NGA_Cell.get right c)) = ok p
+right✝ : ↑p = ↑(NGA_Cell.get left c) * ↑(NGA_Cell.get right c)
+hadd : (NGA_Cell.get s c).add p = ok v
+⊢ (let (r, b) := (at3 s c.1, fun row => Std.Array.set s (uFin c.1) row)
+    do
+    let r ← r.update (uFin c.2) v
+    ok (b r)) =
+    ok (NGA_Cell.set s c v)
+NGA_generated/NGA_Step.lean:40:36: warning: This simp argument is unused:
+  hu
+
+Hint: Omit it from the simp argument list.
+  simp only [hp, ̲hadd, ̲bind_tc_ok, ̲hm, ̲hu̵,̵h̵back, ̲set]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGA_generated/NGA_Step.lean:45:24: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NGA_Step.bounded_get' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NGA_Step.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
