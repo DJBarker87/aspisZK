@@ -44,7 +44,7 @@ macro_rules! gate{($name:ident,$n:expr)=>{#[kani::proof]#[kani::unwind(35)]#[kan
 '''
 for i in range(14):code+=f'gate!(finish_g{i:02},{i});\n'
 fast=subprocess.check_output(['git','show','4bb3b3f:'+C+'fast_pairing.rs'],text=True)
-fast=fast.replace('    //! Private canonical representation: validate at the boundary, preserve internally.\n','    //! Private canonical representation: validate at the boundary, preserve internally.\n #[cfg(kani)] pub(super) mod NFU_canonical { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/src/NFU_canonical.rs")); }\n',1)
+fast=fast.replace('    //! No public unchecked constructor. This does NOT change aspis_core::M31.\n','    //! No public unchecked constructor. This does NOT change aspis_core::M31.\n #[cfg(kani)] pub(super) mod NFU_canonical { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/src/NFU_canonical.rs")); }\n',1)
 fast+='\n#[cfg(kani)] #[path="NFU_fast_helpers.rs"] pub(crate) mod NFU_helpers;\n'
 canonical="""use super::Dot;
 pub(in crate::fast_pairing) fn read(dot:&Dot)->[u64;4]{dot.sums}

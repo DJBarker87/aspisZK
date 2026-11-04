@@ -186,7 +186,7 @@
 + let mut dot=crate::fast_pairing::NFU_helpers::make(before);let mut index=j;let result=source_step(&bytes,&weights,&mut dot,&mut index,&mut log);let final_state=crate::fast_pairing::NFU_helpers::read(&dot);
 + let good=match group{
 + 0=>if reply{matches!(result,Ok(()))}else{matches!(result,Err(Error::Parse))},
-+ 1=>index==if reply{j+1}else{j},2=>log.calls==1,3=>log.before==before,4=>final_state==after,
++ 1=>index==if reply{j+1}else{j},2=>log.calls==1,3=>(log.before[0]==before[0] && log.before[1]==before[1] && log.before[2]==before[2] && log.before[3]==before[3] && log.before[4]==before[4] && log.before[5]==before[5] && log.before[6]==before[6] && log.before[7]==before[7] && log.before[8]==before[8]),4=>(final_state[0]==after[0] && final_state[1]==after[1] && final_state[2]==after[2] && final_state[3]==after[3] && final_state[4]==after[4] && final_state[5]==after[5] && final_state[6]==after[6] && final_state[7]==after[7] && final_state[8]==after[8]),
 + 5=>log.value[..4]==value[..4],6=>log.value[4..]==value[4..],7=>log.scalar==scalar,
 + 8=>log.value.iter().all(|x|*x<0x7fffffff),9=>log.order==3,
 + 10=>log.field_ptr==bytes.as_ptr().wrapping_add(32*j),11=>log.field_len==32,
@@ -220,7 +220,7 @@
 +mod NFU_owned;
 --- /dev/null
 +++ b/programs/r1-cost-probe/src/NFU_owned.rs
-@@ -0,0 +1,26 @@
+@@ -0,0 +1,34 @@
 +use super::*;
 +fn account()->OwnedAccount{OwnedAccount{key:Pubkey::new_from_array([0;32]),owner:Pubkey::new_from_array([0;32]),is_signer:kani::any(),is_writable:kani::any(),executable:kani::any(),length:Ok(0),bytes:Err(ProgramError::AccountBorrowFailed)}}
 +#[kani::proof]
@@ -247,6 +247,14 @@
 +}
 +#[kani::proof] #[kani::unwind(3)]
 +fn zero_full_step(){let b:[u8;4096]=kani::any();let start:usize=kani::any();let n:usize=kani::any();kani::assume(start<=4096&&n<=4096-start);let view=&b[start..start+n];let j:usize=kani::any();kani::assume(j<4096);let before=b[j];let(tag,rest,result)=zero_cut(view);let want=if n==0{0}else if b[start]!=0{1}else{2};let shift=if want==2{1}else{0};let exact=tag==want&&rest.len()==n-shift&&core::ptr::eq(rest.as_ptr(),view.as_ptr().wrapping_add(shift))&&b[j]==before&&if want==1{matches!(result,Err(ProgramError::AccountAlreadyInitialized))}else{matches!(result,Ok(()))};assert!(exact != cfg!(NFU_invert));}
++
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn data_len_reply(){let mut a=core::mem::ManuallyDrop::new(account());let n:usize=kani::any();let tag:u8=kani::any();kani::assume(tag<3);a.length=if tag==0{Ok(n)}else if tag==1{Err(ProgramError::AccountBorrowFailed)}else{Err(ProgramError::InvalidAccountData)};let r=a.data_len();let exact=match tag{0=>matches!(r,Ok(v)if v==n),1=>matches!(r,Err(ProgramError::AccountBorrowFailed)),_=>matches!(r,Err(ProgramError::InvalidAccountData))};assert!(exact != cfg!(NFU_invert));}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn verifier_checkpoint_reply(){let owner:[u8;32]=kani::any();let program:[u8;32]=kani::any();let mut a=core::mem::ManuallyDrop::new(account());a.owner=Pubkey::new_from_array(owner);let writable:bool=kani::any();let n:usize=kani::any();let error:bool=kani::any();a.length=if error{Err(ProgramError::AccountBorrowFailed)}else{Ok(n)};let invalid=owner!=program||a.is_signer||a.executable||a.is_writable!=writable;let r=require_verifier_checkpoint(&a,&Pubkey::new_from_array(program),writable);let exact=if invalid{matches!(r,Err(ProgramError::InvalidAccountData))}else if error{matches!(r,Err(ProgramError::AccountBorrowFailed))}else if n!=1768{matches!(r,Err(ProgramError::InvalidAccountData))}else{matches!(r,Ok(()))};assert!(exact != cfg!(NFU_invert));}
 --- a/crates/aspis-r1-cost-probe/src/lib.rs
 +++ b/crates/aspis-r1-cost-probe/src/lib.rs
 @@ -1,3 +1,4 @@
@@ -266,14 +274,14 @@
 +mod NFU_verifier;
 --- a/crates/aspis-r1-cost-probe/src/fast_pairing.rs
 +++ b/crates/aspis-r1-cost-probe/src/fast_pairing.rs
-@@ -1,6 +1,7 @@
- //! Exact-field dot accumulator candidates; arithmetic-only equivalence code.
+@@ -2,6 +2,7 @@
  mod canonical {
      //! Private canonical representation: validate at the boundary, preserve internally.
-+ #[cfg(kani)] pub(super) mod NFU_canonical { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/src/NFU_canonical.rs")); }
      //! No public unchecked constructor. This does NOT change aspis_core::M31.
++ #[cfg(kani)] pub(super) mod NFU_canonical { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/src/NFU_canonical.rs")); }
      pub const P:u32=0x7fff_ffff;
      const MASK:u64=0x7fff_ffff_7fff_ffff;
+     const ONES:u64=0x0000_0001_0000_0001;
 @@ -222,3 +223,5 @@
          E::new(ac.add(bd.mul(E::U)), ad.add(bc))
      }
@@ -292,3 +300,10 @@
 +use super::*;
 +pub(crate) fn read(dot:&EbyKDot)->[u64;9]{let a=canonical::NFU_canonical::read(&dot.c0);let b=canonical::NFU_canonical::read(&dot.c1);[a[0],a[1],a[2],a[3],b[0],b[1],b[2],b[3],dot.count as u64]}
 +pub(crate) fn make(s:[u64;9])->EbyKDot{assert_eq!(usize::BITS,64);EbyKDot{c0:canonical::NFU_canonical::make([s[0],s[1],s[2],s[3]]),c1:canonical::NFU_canonical::make([s[4],s[5],s[6],s[7]]),count:s[8] as usize}}
+--- a/programs/r1-cost-probe/src/lib.rs
++++ b/programs/r1-cost-probe/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani,feature(allocator_api))]
+ //! UNPROVED R1 COST PROBE. Local measurement entrypoint only.
+ use aspis_r1_cost_probe::verifier::{self,Phase};
+ use aspis_statement::pool_v1::decode_pool_v1_pair_forest_terminal_statement_v1;

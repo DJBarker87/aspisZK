@@ -1,6 +1,6 @@
 # NFU Slice D bridges
 
-Work in progress. No new composed row is claimed until native, model, domain, ax2 and additive admission gates pass. Frozen sources remain unchanged.
+Final worker result: **11 new composed functions / 14 D rows**; Slice D is **35/343 CLOSED**, driver OPEN. Native, model, domain, ax2 and additive admission are required together. Frozen repository sources remain unchanged.
 
 ## Stage 1: immutable validated-record projections
 
@@ -33,3 +33,13 @@ The zero scan now has the missing generic physical association: K068/K069 cover 
 Validation repair: NFU_VALIDATOR_STEP_SOURCE originally recorded Python character positions as byte positions. UTF-8 offsets now use encoded prefix lengths, while preserving the exact body text/hash and old character range. The validator checks the exact frozen byte span; no check is relaxed and no prover rerun is needed.
 
 The reduced-error safe references E001..E003 are OPEN artifacts, excluded from closure pending exact carrier/substitution laws (NFU_REFERENCE_CARRIER_FINDING.md). Variant::tag is only a model port for an already CLOSED S callee. The typed finish-query one-step candidate remains OPEN until actual source-loop/model and final-state association is proved; a native fragment is never treated as caller closure.
+
+## Stage 4: remaining native packets, budget and final handoff
+
+All 100 Kani slots,60 Lean/support units and3 extraction units are accounted for. Actual scoped jobs are100 native,59 Lean/support and3 extraction; L047's prelaunch dependency omission is conservatively charged as the60th support unit, with no invented Lean measurement. NFU_RECEIPTS_CHECK.json verifies all admission/cap/source/feature/frozen-graph/unchanged-lock/zero-swap records and matched controls. L060 compiles the exact generated ParserG Types file; this is only a carrier preflight, no equality or closure theorem. No proof launch remains authorized under this budget.
+
+NFU_NATIVE_FRAGMENTS.json records13 independently controlled finish-query observations: full Result mapping, index, count, all nine pre/poststate words, eight value limbs, four scalar limbs, order and original field/weight pointer/length/index. All use an arbitrary typed receiver and unconstrained callee reply/mutation. These do not establish the original loop/model/initialization/finalization join, so finish_query_dot stays OPEN. K078 failed a builtin memcmp unwind assertion for nine-word array equality; nine explicit word equalities replace the shape in K079 onward, without changing names, domains, caps or unwind. K078 is excluded. K099/K100 cover only restricted data_len error tags; K051 is a checkpoint-metadata diagnostic without a negative control. Neither is composed credit.
+
+Final receipt-check repair: the worker started at f87d767e34e, which already adds the lead's Slice D document section. An initial comparison against its parent NFQ merge3e27f84037f reported that inherited document as outside-scope work. The check now proves the first worker commit's parent equals f87d767e34e, then requires EVERY worker-delta path to be in the NFU evidence directory. No document exemption or shipping-source change is admitted. Selected callee certificates are now explicit in each edge, with historical inventory receipts marked unselected; unchanged NFK checks still admit exactly14 new rows.
+
+NFU_CACHE_END.json hashes102 retained source/object exports, verifies copies into the own private cache, and records removal only of own Rust targets and compiled-object scratch. The cache was never deleted. Restore these exports into NFU_objects before using the receipt LEAN_PATH; all source/LLBC/audit binaries/receipts remain. NFU_HANDOFF.md and NFU_REMAINING.md/.json record every remaining context member and exact next domain/native/model/audit obligation, including potential Lean-only joins. No frozen-source, inventory, session-A/sibling, key/wallet or chain mutation occurred. No ELF rebuild trigger fired; pins are inherited, not newly reproduced. Root trust, privacy, two transactions and the100-bit per-attempt target are unchanged; target not yet established.
