@@ -15,9 +15,11 @@ theorem join (semantic y1 : List U8) (semWidth : semantic.length=13831)
  (yWidth : y1.length=928) :
  (semantic++y1).take 13831=semantic ∧ (semantic++y1).drop 13831=y1 ∧ (semantic++y1).length=14759 := by
  constructor
- · simpa only [←semWidth] using List.take_left semantic y1
+ · have h : (semantic++y1).take semantic.length=semantic := List.take_left
+   simpa only [semWidth] using h
  constructor
- · simpa only [←semWidth] using List.drop_left semantic y1
+ · have h : (semantic++y1).drop semantic.length=y1 := List.drop_left
+   simpa only [semWidth] using h
  · simp only [List.length_append,semWidth,yWidth]
 /-- Original proof input is immutable throughout all selected borrowed views. -/
 theorem selected (xs : List U8) (start width offset : Nat) (inside : offset<width)
