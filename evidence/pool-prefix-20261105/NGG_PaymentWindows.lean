@@ -6,7 +6,8 @@ namespace NGG_PaymentWindows
 theorem point (body : Array U8 320#usize) (suffix : List U8)
     (j : Nat) (bound : j < 216) :
     (((body.val ++ suffix).drop 104).take 216)[j]? = body.val[104+j]? := by
-  have inside : 104+j < body.val.length := by rw [body.property]; omega
+  have length : body.val.length=320 := body.property
+  have inside : 104+j < body.val.length := by omega
   have equal : (body.val ++ suffix)[104+j]? = body.val[104+j]? :=
     List.getElem?_append_left inside
   simpa [List.getElem?_take,List.getElem?_drop,bound,Nat.add_comm] using equal

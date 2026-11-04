@@ -1,0 +1,47 @@
+{"attempt": "NGG_K116", "exit_status": 1, "wall_seconds": 2.6958015551790595, "peak_rss_kib": "337360", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `decode_pool_v1_pair_forest_terminal_statement_v1` and `encode_pool_v1_pair_forest_terminal_request_v1`
+  --> programs/aspis-pool/src/pair_forest.rs:21:9
+   |
+21 |         decode_pool_v1_pair_forest_terminal_statement_v1, encode_pool_v1_pair_forest_checkpoint_v1,
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+22 |         encode_pool_v1_pair_forest_lane_state_v1, encode_pool_v1_pair_forest_master_v1,
+23 |         encode_pool_v1_pair_forest_terminal_request_v1,
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `encode_pool_v1_pair_forest_terminal_result_v1`
+  --> programs/aspis-pool/src/pair_forest_dispatch.rs:14:5
+   |
+14 |     encode_pool_v1_pair_forest_terminal_result_v1, PoolV1PairForestTerminalRequestV1,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0282]: type annotations needed
+ --> programs/aspis-pool/src/NGG_Marker.rs:8:86
+  |
+8 | let active:bool=kani::any();let byte:u8=kani::any();let mut calls=0u8;let predicate=|byte| *byte == 0;
+  |                                                                                      ^^^^  ----- type must be known at this point
+  |
+help: consider giving this closure parameter an explicit type
+  |
+8 | let active:bool=kani::any();let byte:u8=kani::any();let mut calls=0u8;let predicate=|byte: /* Type */| *byte == 0;
+  |                                                                                          ++++++++++++
+
+For more information about this error, try `rustc --explain E0282`.
+error: could not compile `aspis-pool` (lib) due to 1 previous error; 3 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 1 compilation errors.
+
+Running as unit: run-r6e50d8d792d443059ad0c4f0146fd061.scope; invocation ID: 32b702af25a4483795618271009a6a75

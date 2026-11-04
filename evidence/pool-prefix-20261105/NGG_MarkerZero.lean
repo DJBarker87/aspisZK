@@ -5,7 +5,9 @@ namespace NGG_MarkerZero
 /-- The emitted byte equality operation at the marker's native predicate. -/
 theorem predicate (byte : U8) :
     core.cmp.PartialEqU8.eq byte 0#u8 = ok (decide (byte.val=0)) := by
-  rfl
+  have h : byte = 0#u8 ↔ byte.val = 0 := ⟨fun h => congrArg UScalar.val h, fun h => UScalar.eq_of_val_eq h⟩
+  change ok (decide (byte = 0#u8)) = _
+  simp only [h]
 #print axioms predicate
 
 def scan : List U8 → Bool × Nat
@@ -24,10 +26,10 @@ theorem bound (bytes : List U8) : (scan bytes).2 ≤ bytes.length := by
   | cons b bs ih => by_cases h : b.val=0 <;> simp [scan,h] <;> omega
 #print axioms bound
 
-theorem abort (prefix suffix : List U8) (bad : U8)
-    (zeros : ∀ b ∈ prefix, b.val=0) (nonzero : bad.val≠0) :
-    (scan (prefix ++ bad::suffix)).2 = prefix.length+1 := by
-  induction prefix with
+theorem abort (pre suffix : List U8) (bad : U8)
+    (zeros : ∀ b ∈ pre, b.val=0) (nonzero : bad.val≠0) :
+    (scan (pre ++ bad::suffix)).2 = pre.length+1 := by
+  induction pre with
   | nil => simp [scan,nonzero]
   | cons b bs ih =>
     have first : b.val=0 := zeros b (by simp)

@@ -20,3 +20,7 @@ length-four skipped assertion; K003 is the matched failing corruption.
 Native contracts need exact modifies clauses and per-shape fidelity controls
 before stub_verified is used. No stub_verified is used here. No field product,
 SHA implementation, function-pointer comparison or writable static is used.
+
+The extraction covers safe metadata reference functions and the first-six-line decode/layout reference only. It is not an emitted production master/checkpoint/lane/marker/custody model. The production certificate required by (y), full child Results, SAME source arguments and exact modifies sets remains OPEN. See NGG_REMAINING.md member by member.
+
+B052 failed a missing headline object; B053, after private retained-object import, failed duplicate GuardBody declaration ownership between the headline canonical owner and the Pool's legacy owner. No combined headline axiom/audit success is claimed.

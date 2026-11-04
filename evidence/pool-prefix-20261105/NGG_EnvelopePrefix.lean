@@ -8,6 +8,6 @@ theorem asq8 (profile release program : Bytes32) (kind : U8) (payment : Payment)
     (pure profile release program kind payment).val.take 4 =
       [65#u8,83#u8,81#u8,56#u8] := by
   rw [pure_value]
-  simp only [headerBytes,List.append_assoc,List.take_succ_cons,List.take_zero]
+  rfl
 #print axioms asq8
 end NGG_EnvelopePrefix

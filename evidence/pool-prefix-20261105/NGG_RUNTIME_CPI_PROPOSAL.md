@@ -16,7 +16,7 @@ submit Instruction { program_id=P, accounts=ms, data=b } and infos. Require
 ms has exactly seven pairwise-distinct keys k[0..7), every meta is readonly
 and nonsigner, P is distinct from those keys, infos supplies those SAME bank
 accounts and the executable program account P, and runtime CPI/ABI admission
-succeeds. If that invocation reaches P's entrypoint, its program_id is P,
+succeeds. This invocation dispatches P's entrypoint; a normally returned invoke Ok requires that very entry execution to return Ok. At entry its program_id is P,
 its instruction_data is byte-for-byte b, and its seven account inputs, in that
 order, denote B's accounts k[i], with the SAME key/owner/data/lamports/
 executable/rent_epoch observations and is_signer=false, is_writable=false.

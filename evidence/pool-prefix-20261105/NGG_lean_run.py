@@ -2,7 +2,7 @@
 from pathlib import Path
 import subprocess,json,sys,time,hashlib,shlex,re
 E=Path(__file__).resolve().parent;B='/home/dombarker/project-offloads/codex-cx-pool-prefix-20261104';H='dombarker@100.108.41.90'
-a,target=sys.argv[1:3];mode=sys.argv[3] if len(sys.argv)>3 else 'lean';assert mode in ['lean','link','fixtures','final','scan-link','scan','extract'];assert (a.startswith('NGG_B') and 1<=int(a[5:])<=100) or (a.startswith('NGG_E') and 1<=int(a[5:])<=3)
+a,target=sys.argv[1:3];mode=sys.argv[3] if len(sys.argv)>3 else 'lean';assert mode in ['lean','link','fixtures','final','scan-link','scan','extract','manifest-link','manifest-run'];assert (a.startswith('NGG_B') and 1<=int(a[5:])<=100) or (a.startswith('NGG_E') and 1<=int(a[5:])<=3)
 prior=[json.loads(line) for line in (E/'NGG_ATTEMPTS.jsonl').read_text().splitlines()]
 assert sum(row['kind'] not in ['kani','extract'] for row in prior)<60 if mode!='extract' else sum(row['kind']=='extract' for row in prior)<2
 assert re.fullmatch(r'[A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*',target)
@@ -54,7 +54,7 @@ def visit(n):
  if q:
   for dep in re.findall(r'^(?:public )?import\\s+(?:all\\s+)?([\\w.]+)',q.read_text(),re.M):visit(dep)
 for n in re.findall(r'^(?:public )?import\\s+(?:all\\s+)?([\\w.]+)',{source!r},re.M):visit(n)
-for n in ({['NGG_COMBINED_IMPORT'] if mode in ['final','scan'] else ['NEP_Planted','NEP_Mutations'] if mode=='fixtures' else []!r}):visit(n)
+for n in ({json.loads((E/'NGG_LOCAL_ROOTS.json').read_text()) if mode in ['final','scan'] else ['NEP_Planted','NEP_Mutations'] if mode=='fixtures' else []!r}):visit(n)
 for canonical_library_object in [coherent/'objects/Aeneas.olean',*(coherent/'objects/Aeneas').rglob('*.olean')]:
  rel=canonical_library_object.relative_to(coherent/'objects')
  p=next((r/rel for r in roots if (r/rel).exists()),None)
@@ -63,23 +63,25 @@ for canonical_library_object in [coherent/'objects/Aeneas.olean',*(coherent/'obj
  for suffix in ['.private','.server','.ir']:
   companion=Path(str(p)+suffix) if suffix!='.ir' else p.with_suffix('.ir')
   if companion.exists():selected[str(companion)]=dict(path=str(companion),sha256=hashlib.sha256(companion.read_bytes()).hexdigest())
-if {mode in ['fixtures','final','scan']!r}:
- p=b/({'NFO_native/NGG_Coherence' if mode=='scan' else 'NFO_native/NGG_Driver'!r});selected[str(p)]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())
+if {mode in ['fixtures','final','scan','manifest-run']!r}:
+ p=b/({'NFO_native/NGG_Manifest' if mode=='manifest-run' else 'NFO_native/NGG_Coherence' if mode=='scan' else 'NFO_native/NGG_Driver'!r});selected[str(p)]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())
 print(json.dumps(dict(selected_objects=selected,missing=missing)))
 '''
 r=ssh('python3',code);assert r.returncode==0,r.stderr;pins=json.loads(r.stdout)
 (E/(a+'-pins.json')).write_text(json.dumps(pins,indent=1)+'\n')
 if pins['missing']:active.unlink();raise SystemExit('Missing unchanged dependencies: '+str(pins['missing']))
 command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NGG_B_generated','-o','NGG_B_objects/'+moduleRel+'.olean','NGG_B_generated/'+moduleRel+'.lean']
-if target in ['NFO_WALKER','NFO_MemoryLimit','NFO_Driver','NFO_Coherence','NGG_Driver','NGG_Coherence','NGG_WALKER','NGG_MemoryLimit']:
+if target in ['NFO_WALKER','NFO_MemoryLimit','NFO_Driver','NFO_Coherence','NGG_Driver','NGG_Coherence','NGG_WALKER','NGG_MemoryLimit','NGG_Manifest']:
  command[command.index('-o'):command.index('-o')]=['-c','NFO_native/'+moduleRel+'.c']
 if mode=='link':command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','leanc','-O3','-rdynamic','-o','NFO_native/NGG_Driver','NFO_native/NGG_Driver.c','/home/dombarker/project-offloads/codex-cx-pool-prefix-cache-20261104/NFR_audit_native_20261104/NFR_WALKER.c','/home/dombarker/project-offloads/codex-cx-pool-prefix-cache-20261104/NFR_audit_native_20261104/NFR_MemoryLimit.c']
 if mode in ['fixtures','final']:command=['NFO_native/NGG_Driver',mode]
 if mode=='final':command=['NFO_native/NGG_Driver','final']
 if mode=='scan-link':command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','leanc','-O3','-rdynamic','-o','NFO_native/NGG_Coherence','NFO_native/NGG_Coherence.c','/home/dombarker/project-offloads/codex-cx-pool-prefix-cache-20261104/NFR_audit_native_20261104/NFR_MemoryLimit.c']
 if mode=='scan':command=['NFO_native/NGG_Coherence']
+if mode=='manifest-link':command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','leanc','-O3','-rdynamic','-o','NFO_native/NGG_Manifest','NFO_native/NGG_Manifest.c','/home/dombarker/project-offloads/codex-cx-pool-prefix-cache-20261104/NFR_audit_native_20261104/NFR_MemoryLimit.c']
+if mode=='manifest-run':command=['NFO_native/NGG_Manifest']
 if mode=='extract':command=['python3','NGG_extract.py']
-cfg=dict(attempt=a,kind='lean' if mode=='lean' else mode,module=target,sources=['NFO_native/NGG_Coherence.c','/home/dombarker/project-offloads/codex-cx-pool-prefix-cache-20261104/NFR_audit_native_20261104/NFR_MemoryLimit.c'] if mode=='scan-link' else ['NFO_native/NGG_Driver.c','/home/dombarker/project-offloads/codex-cx-pool-prefix-cache-20261104/NFR_audit_native_20261104/NFR_WALKER.c','/home/dombarker/project-offloads/codex-cx-pool-prefix-cache-20261104/NFR_audit_native_20261104/NFR_MemoryLimit.c'] if mode=='link' else ['NGG_B_generated/'+moduleRel+'.lean'],command=command,env=dict(LEAN_SYSROOT='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0',PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',LEAN_PATH=B+'/NGG_B_objects:'+B+'/NGG_C_objects:/home/dombarker/project-offloads/codex-cx-pool-prefix-cache-20261104/NGG_headline:/home/dombarker/project-offloads/codex-cx-pool-prefix-cache-20261104/NFV_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-prefix-cache-20261104/NFR_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-prefix-cache-20261104/NFO_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-prefix-cache-20261104:/home/dombarker/project-offloads/codex-cx-pool-prefix-cache-20261104/NEY_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-prefix-cache-20261104/NEX_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-prefix-cache-20261104/NEQ_final_objects_20261103:/home/dombarker/project-offloads/codex-cx-pool-prefix-cache-20261104/NEM_final_objects_20261102:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects'),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint=pins)
+cfg=dict(attempt=a,kind='lean' if mode=='lean' else mode,module=target,sources=['NFO_native/NGG_Manifest.c','/home/dombarker/project-offloads/codex-cx-pool-prefix-cache-20261104/NFR_audit_native_20261104/NFR_MemoryLimit.c'] if mode=='manifest-link' else ['NFO_native/NGG_Coherence.c','/home/dombarker/project-offloads/codex-cx-pool-prefix-cache-20261104/NFR_audit_native_20261104/NFR_MemoryLimit.c'] if mode=='scan-link' else ['NFO_native/NGG_Driver.c','/home/dombarker/project-offloads/codex-cx-pool-prefix-cache-20261104/NFR_audit_native_20261104/NFR_WALKER.c','/home/dombarker/project-offloads/codex-cx-pool-prefix-cache-20261104/NFR_audit_native_20261104/NFR_MemoryLimit.c'] if mode=='link' else ['NGG_B_generated/'+moduleRel+'.lean'],command=command,env=dict(LEAN_SYSROOT='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0',PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',LEAN_PATH=B+'/NGG_B_objects:'+B+'/NGG_C_objects:/home/dombarker/project-offloads/codex-cx-pool-prefix-cache-20261104/NGG_headline:/home/dombarker/project-offloads/codex-cx-pool-prefix-cache-20261104/NFV_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-prefix-cache-20261104/NFR_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-prefix-cache-20261104/NFO_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-prefix-cache-20261104:/home/dombarker/project-offloads/codex-cx-pool-prefix-cache-20261104/NEY_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-prefix-cache-20261104/NEX_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-prefix-cache-20261104/NEQ_final_objects_20261103:/home/dombarker/project-offloads/codex-cx-pool-prefix-cache-20261104/NEM_final_objects_20261102:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects'),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint=pins)
 (E/a).mkdir();(E/a/'NGG_B_SOURCE.lean.txt').write_text(source)
 files={'NGG_B_generated/'+moduleRel+'.lean':source,a+'.json':json.dumps(cfg)}
 if mode=='extract':

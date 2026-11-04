@@ -4,6 +4,8 @@ import subprocess,difflib,json,sys,hashlib
 E=Path(__file__).resolve().parent;kind,mode=sys.argv[1:3];assert mode in ['positive','negative']
 rev='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387'
 read=lambda p:subprocess.check_output(['git','show',rev+':'+p],text=True)
+wide=kind=='count18'
+if wide:kind='count'
 parent='pair_forest' if kind in ['hints','count'] else 'processor' if kind in ['payer','token'] else 'pair_forest_dispatch'
 s='use super::*;\n'
 attrs='''#[kani::proof]
@@ -38,6 +40,9 @@ else:
  elif kind=='payer':body+='''let mut actual=require_payer_and_system_program(&a0,&a1);let expected=if !f[0]||!f[1]||f[2]||o0!=system_program::id(){Err(PoolV1ProgramError::InvalidPayer.into())}else if k1!=system_program::id()||o1!=native_loader::id()||!f[5]||f[3]||f[4]{Err(PoolV1ProgramError::InvalidSystemProgram.into())}else{Ok(())};CORRUPT assert!(actual==expected);'''
  elif kind=='token':body+='''let mut actual=require_token_program_account(&a0);let expected=if k0!=LEGACY_SPL_TOKEN_PROGRAM_ID||!f[2]||f[0]||f[1]||!(o0==bpf_loader::id()||o0==bpf_loader_upgradeable::id()||o0==loader_v4::id()){Err(PoolV1ProgramError::InvalidTokenProgram.into())}else{Ok(())};CORRUPT assert!(actual==expected);'''
  else:raise ValueError(kind)
+if wide:
+ body=body.replace('let all=[a0,a1,a2];',"let all:[AccountInfo<'_>;18]=core::array::from_fn(|_|a0.clone());").replace('kani::assume(n<=3);','kani::assume(n<=18);')
+ attrs=attrs.replace('unwind(325)','unwind(1025)')
 # Matched control corrupts observed Result/bool, never source names.
 corrupt='observed[0]^=1;' if kind=='hints' else 'actual=!actual;' if kind=='loader' else 'actual=if actual.is_ok(){Err(ProgramError::InvalidArgument)}else{Ok(k0)};' if kind=='transport' else 'actual=if actual.is_ok(){Err(ProgramError::InvalidArgument)}else{Ok(())};'
 s+=attrs+body.replace('CORRUPT',corrupt if mode=='negative' else '')+'\n}\n'
@@ -46,5 +51,5 @@ for path in ['programs/aspis-pool/src/'+parent+'.rs','programs/aspis-pool/src/li
  f=read(path);hook=f+'\n#[cfg(kani)]\n#[path="NGG_Leaf.rs"]\nmod NGG_Leaf;\n' if path.endswith(parent+'.rs') else '#![cfg_attr(kani, feature(allocator_api))]\n'+f+'\n#[cfg(kani)]\nextern crate alloc;\n#[cfg(kani)]\n#[path="../../../KMX_stubs.rs"]\npub mod NFO_KMX;\n'
  patch+=''.join(difflib.unified_diff(f.splitlines(True),hook.splitlines(True),fromfile='a/'+path,tofile='b/'+path))
 path='programs/aspis-pool/src/NGG_Leaf.rs';patch+='--- /dev/null\n+++ b/'+path+'\n@@ -0,0 +1,'+str(len(s.splitlines()))+' @@\n'+''.join('+'+l+'\n' for l in s.splitlines())
-(E/'NGG_native.patch').write_text(patch);(E/'NGG_CURRENT.json').write_text(json.dumps(dict(kind=kind,mode=mode,source=s,parent=parent,modifies=[],domain='all metadata values; data/lamports unused by leaf (source-footprint lifting remains model obligation); hints length <=324; count list length <=3',status='candidate; no composed credit'),indent=1)+'\n')
+(E/'NGG_native.patch').write_text(patch);(E/'NGG_CURRENT.json').write_text(json.dumps(dict(kind='count18' if wide else kind,mode=mode,source=s,parent=parent,modifies=[],domain=('count list length<=18; ' if wide else '')+'all metadata values; data/lamports unused by leaf (source-footprint lifting remains model obligation); hints length <=324; count list length <=3',status='candidate; no composed credit'),indent=1)+'\n')
 print(parent+'::NGG_Leaf::association')

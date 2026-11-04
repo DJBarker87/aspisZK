@@ -1,0 +1,7 @@
+{
+ "kind": "marker-metadata",
+ "mode": "positive",
+ "source": "use super::*;\n#[kani::proof]\n#[kani::unwind(209)]\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFO_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NFO_KMX::KMX_copy_from_slice)]\n#[kani::stub(alloc::alloc::realloc,crate::NFO_KMX::KMX_realloc)]\nfn association(){\nlet key=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());let program=Pubkey::new_from_array(kani::any());\n let mut lamports:u64=kani::any();let mut bytes:[u8;1]=kani::any();let flags:[bool;3]=kani::any();kani::assume(flags[0]||flags[1]||!flags[2]);\n let info=AccountInfo::new(&key,flags[1],flags[2],&mut lamports,&mut bytes,&owner,flags[0],kani::any());\n let mut actual=classify_nullifier_marker_account_v1(&program,&info);\nassert!(matches!(actual,Err(e) if e==PoolV1ProgramError::InvalidNullifierMarkerAccount.into()));\n}\n",
+ "domain": "invalid-metadata rejection branch only, fixture one-byte carrier; no zero-image/borrow/marker planning or production admission credit",
+ "production_credit": false
+}
