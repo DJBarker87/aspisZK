@@ -77,7 +77,7 @@ def equalityState (prior : Store) (left right : Nat) : Store :=
 
 theorem equality_value (prior : Store) (n : Nat) : equalityState prior n n 12 = .boolean true := by
   simp only [equalityState,equalityProgram,run,step,put,lengthValue,field,load,equal,
-    Nat.reduceEqDiff,ite_true,ite_false,decide_true]
+    Nat.reduceEqDiff,Bool.false_eq_true,ite_true,ite_false,decide_true]
 
 /-- Complete source prefix of qm31_pack_base4 up to its Le assertion.
 The bound parameter is later fixed to the ACTUAL source constant4. -/
@@ -103,7 +103,7 @@ certificates do not follow from an always-true condition evaluator. -/
 theorem equality_rejects (prior : Store) (left right : Nat) (different : left ≠ right) :
     condition (equalityState prior left right) 12 = false := by
   simp only [condition,equalityState,equalityProgram,run,step,put,lengthValue,field,load,equal,
-    Nat.reduceEqDiff,ite_true,ite_false]
+    Nat.reduceEqDiff,Bool.false_eq_true,ite_true,ite_false]
   rw [decide_eq_false different]
 
 theorem pack_rejects (prior : Store) (length bound : Nat) (large : bound < length) :
