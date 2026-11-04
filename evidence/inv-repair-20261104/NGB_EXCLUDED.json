@@ -1,0 +1,51 @@
+{
+ "root": "programs/r1-cost-probe/src/lib.rs::process_r1_cost_probe_instruction",
+ "candidates": [
+  {
+   "function": "crates/aspis-r1-cost-probe/src/verifier.rs::accumulate",
+   "disposition": "REACHABILITY-EXCLUDED",
+   "entry_path": null,
+   "program_MIR_references": 0,
+   "source_references": [],
+   "reason": "Only incoming library source chain is audit-only eight_way -> accumulate -> accumulate_with_node; neither appears in deployed program MIR or producer entry closure. Body presence in library MIR is not entry reachability."
+  },
+  {
+   "function": "crates/aspis-r1-cost-probe/src/verifier.rs::accumulate_with_node",
+   "disposition": "REACHABILITY-EXCLUDED",
+   "entry_path": null,
+   "program_MIR_references": 0,
+   "source_references": [
+    {
+     "caller": "crates/aspis-r1-cost-probe/src/eight_way.rs::query_with_geometry",
+     "line": 104,
+     "expression": "accumulate_with_node",
+     "text": "accumulate_with_node(p,a,node,folded,pending)"
+    },
+    {
+     "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::accumulate",
+     "line": 251,
+     "expression": "accumulate_with_node",
+     "text": "accumulate_with_node(p,a,node,value,None)"
+    }
+   ],
+   "reason": "Only incoming library source chain is audit-only eight_way -> accumulate -> accumulate_with_node; neither appears in deployed program MIR or producer entry closure. Body presence in library MIR is not entry reachability."
+  }
+ ],
+ "removed_rows": [],
+ "cfg_evidence": {
+  "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+  "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "lines": [
+   524,
+   525,
+   526,
+   527,
+   528
+  ],
+  "text": "#[cfg(feature=\"audit-eight-way\")] #[path=\"eight_way.rs\"] pub mod eight_way;"
+ },
+ "program_MIR": {
+  "path": "evidence/inv-defects-20261104/LEAD_B006/aspis_r1_cost_probe_program.mir.xz",
+  "sha256": "f93b0dfd49aa4a67cf2883c299ec72527ca7f33f0b5040f4ae4297121db77163"
+ }
+}
