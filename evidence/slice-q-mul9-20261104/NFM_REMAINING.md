@@ -1,6 +1,6 @@
 # Remaining obligations after the NFM budget
 
-Budget fully used:100/100 Kani,60/60 Lean/audit,0/5 extraction. Extraction is unnecessary for the adopted emitted-definition route and cannot replace missing native/caller associations. All Lean-only dot obligations were attempted and discharged; Kani exhaustion was not treated as a stop while those remained. No unused independent dot member is deferred.
+Native/Lean budgets exhausted:100/100 Kani,60/60 Lean/audit; extraction0/5. Extraction is unnecessary for the adopted emitted-definition route and cannot replace missing native/caller associations. All Lean-only dot obligations were attempted and discharged; Kani exhaustion was not treated as a stop while those remained. No unused independent dot member is deferred.
 
 | Member | Disposition and exact next obligation |
 |---|---|
