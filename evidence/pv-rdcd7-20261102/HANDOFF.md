@@ -188,3 +188,18 @@ check-release derives current51 raw roots (old hardcoded47 label fixed).
 No restoration or release claim yet. Current sole writer made commits through
 2862e1a9bd; no merge/push. All original compiler/runtime/observer qualifications
 and unchanged endpoint/T boundaries remain.
+
+### Session 3 continuation after component verification
+
+90718 failed only the implicit range continuation (conversion/residual pass).
+90719 ParserComponent PASS, complete eight queried lemmas, standard axioms only,
+wall3.25s RSS2470420KiB swap0. 90720 ParserTransport FAIL: ambiguous root vs own
+bind_congr; now all applications fully qualified, source changed/committed.
+21/60Lean spent (14pass,7fail);2/10native;0Kani. Driver exec51764 queues90721
+through ParserTransport; one pre-upload aggregate refusal,90721 unspent.
+ParserTransport's late continuation and Restored.native_window are explicit
+using the checked component helper. All source changes committed c818142230.
+op71-consumer-binding.json pins exact existing dictionary callback text and
+qualification; no whole dictionary compilation. After transport succeeds,
+refresh stage.py plan/source hashes before compiling through NEPAudit. Reserved
+90797/98/99 unspent. HANDOFF earlier driver13731/65601/19553 are FINISHED.
