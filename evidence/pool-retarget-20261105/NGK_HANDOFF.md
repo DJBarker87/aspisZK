@@ -1,0 +1,13 @@
+# NGK Pool canonical retarget handoff
+
+IN PROGRESS. Target not yet established. No Pool consumer row is closed by this job;
+B and D remain OPEN. Scope: canonical ownership/import retarget of all selected
+NFO/NFR/NFV proof modules and their nonreused closure, followed by combined
+headline/verifier/Pool raw audit, fixtures and full coherence scan.
+
+Branch codex/cx-pool-retarget-20261105. No push, Kani, extraction, shipped-source
+change or wallet/key operation. Budget 110 Lean/audit/link attempts. Own cache
+/home/dombarker/project-offloads/codex-cx-pool-retarget-cache-20261104 retained.
+Canonical predecessors are read-only. RuntimeReturnData (nonempty 1..1024) and
+RuntimeMemcmp remain accepted trust rows; P6/D188 transport is reclassification.
+No security metric, privacy or two-transaction contract change.
