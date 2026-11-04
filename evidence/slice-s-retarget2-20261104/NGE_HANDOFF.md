@@ -33,3 +33,5 @@ Frozen Rust remains 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387; NGE_TARGET.json an
 - Pool 121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548.
 
 All stage commits are local with plain messages. The next deliverable is chain B's exact remaining auxiliary replay followed by a new combined audit and complete certificate check; no root or security target beyond the measured delta is claimed.
+
+Final hygiene: NGE_HOST_END.json records verified removal of 48 owned compiled scratch files and 3,711 raw graph outputs. All compiled bytes remain in NGE exports/native exports; every raw graph has a committed xz/SHA256 backup pinned by NGE_RAW_BACKUPS.json. The cache, sources, logs, receipts and keys were retained. No own prover process remains. Restore the exported objects/native tools, or adjust paths to the exports, before replaying old workspace commands; the old B/NGE_objects and native executable paths were scratch. NGE_PACK.json verifies 120 receipt references to the single retained root/import input copies.
