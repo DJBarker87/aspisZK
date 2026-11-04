@@ -56,6 +56,30 @@ These are read-only inputs for stage 2; Global/System-to-V183 correspondence
 is not claimed. No native program, Kani, extraction or build was executed by
 the collection. The source package's relation to machine code remains V370.
 
+Stage-2 inspection notes (not proof credit): `Global` now dispatches through
+`const_eval_select` to its runtime helpers. Allocation size zero returns a
+dangling empty slice; positive size maps null to `AllocError`. Positive-size
+same-alignment growth uses `realloc`; changed alignment uses allocate, copy,
+then deallocate, and denial returns before copy/deallocate. RawVec's
+`finish_grow` preserves T's alignment, but that source invariant must be proved
+at the interpretation boundary rather than deleting the generic Global branch.
+
+On the adopted x86_64 Linux target, `System` uses `MIN_ALIGN=16`. Low-alignment
+alloc/realloc paths call libc malloc/realloc; larger alignment selects aligned
+allocation or `realloc_fallback`. The latter allocates first, copies
+`min(old_size,new_size)` and frees the old block only on success. Arbitrary A
+therefore needs those branches even if `[u8;32]` takes the simple path. Global
+allocator shim selection (`__rust_*` versus `__rdl_*`), libc/world answers and
+all nonreturning effects still require association. Absence of a project-local
+`#[global_allocator]` alone would not establish the dependency/link selection.
+
+V183's ordered history counts reserve allocation/growth macro requests. It
+does not by itself enumerate all lower-level allocation/copy/free/OS effects
+inside a System fallback. A returning projection may aggregate the former;
+the native interpreter must retain the latter in its world and event prefix.
+The existing modeled `memoryAfter` equality is not proof of actual libc heap
+adequacy or physical residue observations.
+
 ## Exact remaining stage-1 obligation
 
 For **every** reserve/push receiver reached from the ORIGINAL extracted entry,
