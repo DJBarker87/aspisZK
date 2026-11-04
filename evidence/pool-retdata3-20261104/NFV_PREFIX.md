@@ -51,3 +51,9 @@ payment216. Generic copy/frame lemmas avoid concrete-buffer normalization.
 All three print only standard axioms. Failed proof-development B028..031 are
 excluded and retained; the final module contains no admission or sorry.
 This closes a model-side request-byte prerequisite, not native prefix B.
+
+B035 proves five-window coverage and conditional replacement by the emitted
+envelope on the SAME returned array. B038 proves exact value erasure of the
+two FULL typed payment oracles to the adopted emitted request caller, including
+all error variants and early guard rejection. These are the model side of(y);
+no native window or payment PacketDomain is assumed discharged by these lemmas.

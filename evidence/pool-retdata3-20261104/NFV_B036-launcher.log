@@ -1,0 +1,46 @@
+{"attempt": "NFV_B036", "exit_status": 1, "wall_seconds": 2.834932755911723, "peak_rss_kib": "5242700", "swaps": "0", "print_axioms": ["'NFV_RequestOracle.erase' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NFV_RequestOracle.profile_rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+'NFV_RequestOracle.erase' depends on axioms: [propext, Classical.choice, Quot.sound]
+NFV_B_generated/NFV_RequestOracle.lean:105:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 request.verifier_profile (Array.repeat 32#usize 0#u8)
+in the target expression
+  (have a := Array.repeat 32#usize 0#u8;
+    do
+    let b ← core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 request.verifier_profile a
+    if b = true then
+        ok (core.result.Result.Err pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+      else
+        have a1 := Array.repeat 32#usize 0#u8;
+        do
+ 
+...
+olV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1
+                        r ()
+                  let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+                  match cf with
+                    | core.ops.control_flow.ControlFlow.Continue val => do
+                      let i ← 2#u8 + 0#u8
+                      let i1 ← lift (UScalar.cast UScalarTy.U8 i)
+                      let a3 ←
+                        pool_v1.pair_forest_terminal.asq8_reference_envelope request.verifier_profile
+                            request.verifier_release request.pool_program i1 val
+                      ok (core.result.Result.Ok a3)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (Std.Array U8 320#usize)
+                        (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+                        residual) =
+    ok (core.result.Result.Err pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (320 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'NFV_RequestOracle.profile_rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r2bc3b200760d4290ab6d227cc1de6a00.scope; invocation ID: 157d49a32775472c8f39e9a9284ba55d
