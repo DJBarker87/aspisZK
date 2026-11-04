@@ -2,13 +2,13 @@
 
 **Definition and inherited status only. Target not yet established.**
 
-Frozen Rust `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`. Baseline: NFK ledger (587 occurrences). D has **291 functions, 441 internal edges, 339 inventory rows**: {'OPEN': 339}.
+Frozen Rust `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`. Baseline: NFK ledger (587 occurrences). D has **295 functions, 448 internal edges, 343 inventory rows**: {'OPEN': 343}.
 
 ## Exact deployed roots
 
 Both transaction roots are `programs/r1-cost-probe/src/lib.rs::process_r1_cost_probe_instruction`. With deployed `pool-adapter`, TX1 instruction `[3,10]` or `[3,11]` dispatches through `pool_route::admitted`, `r1_pool_adapter::process`, `r1_pool_adapter_owned::stage1` / `stage1_owned`, and `lib.rs::first_decoded` to `candidate::tx1`. TX2 `ASQ8`-prefixed request data (not the disabled legacy `[4]` tag) dispatches through the same entry/adapter to `stage2` / `stage2_owned`, then `candidate::tx2_authenticated` / `tx2_common`. There is no separate deployed lib.rs second entry. `lib.rs::first` and direct `candidate::tx2` are in the disabled non-pool-adapter branch and absent from the frozen inventory.
 
-The function set is the union of per-transaction canonical closures minus the Q/S function sets. Q/S roots are opaque certification boundaries; their recorded descendants are used only to compute original inventory membership. No traversal through discovery mentions. Receiver-resolution overapproximations and recursive edges remain exactly as inventoried. Internal edges use the same sorted `caller -> callee` representation as VERTICAL-SLICES.
+The function set is the canonical UNION graph closure from the common deployed entry minus Q/S. This reproduces both original slices exactly (Q=78, S=61). The initial NFQ draft incorrectly used per-transaction closures, giving 291/441/339 and 581 covered rows; that draft is superseded. Q/S roots are opaque certification boundaries; their recorded descendants are used only to compute original inventory membership. No traversal through discovery mentions. Receiver-resolution overapproximations and recursive edges remain exactly as inventoried. Internal edges use the same sorted `caller -> callee` representation as VERTICAL-SLICES.
 
 ## Inherited evidence is not new closure
 

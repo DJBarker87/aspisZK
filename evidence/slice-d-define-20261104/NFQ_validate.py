@@ -7,14 +7,17 @@ def check(d,c):
  s=json.loads((R/'docs/research/100bit-spend-path-20261013/design/VERTICAL-SLICES-20261029.json').read_text())
  ds=d['slices']['D']; by={r['row']:r for r in l['rows']}; qs=set(s['slices']['Q']['functions'])|set(s['slices']['S']['functions'])
  assert d['frozen_revision']==l['frozen_revision'];assert len(by)==587
- seen=set()
- for tx in ['TX1','TX2']:
-  ix={r['function']:r for r in l['rows'] if r['transaction']==tx};visit=set(ds['roots']);todo=list(visit)
+ graph=collections.defaultdict(set)
+ for r in by.values():graph[r['function']].update(r['canonical_callees'])
+ def closure(roots):
+  visit=set(roots);todo=list(visit)
   while todo:
    f=todo.pop()
-   for callee in ix[f]['canonical_callees']:
-    if callee in ix and callee not in visit:visit.add(callee);todo.append(callee)
-  seen|=visit
+   for callee in graph[f]:
+    if callee in graph and callee not in visit:visit.add(callee);todo.append(callee)
+  return visit
+ for spec in s['slices'].values():assert closure(spec['roots'])==set(spec['functions'])
+ seen=closure(ds['roots'])
  expected=seen-qs;assert set(ds['functions'])==expected;assert not expected&qs
  assert set(ds['inventory_rows'])=={r['row'] for r in by.values() if r['function'] in expected}
  assert set(ds['internal_edges'])=={r['function']+' -> '+x for r in by.values() if r['function'] in expected for x in r['canonical_callees'] if x in expected}
@@ -28,6 +31,8 @@ def check(d,c):
    assert path[0] in ds['roots'] and path[-1]==r['function']
    ix={r['function']:r for r in by.values() if r['transaction']==row['transaction']}
    assert all(b in ix[a]['canonical_callees'] for a,b in zip(path,path[1:]))
+  gp=row['canonical_union_path']
+  if gp:assert gp[0] in ds['roots'] and gp[-1]==r['function'] and all(b in graph[a] for a,b in zip(gp,gp[1:]))
   if not membership:assert row['reason']
  for p,h in c['inputs'].items():assert hashlib.sha256((R/p).read_bytes()).hexdigest()==h
  return True

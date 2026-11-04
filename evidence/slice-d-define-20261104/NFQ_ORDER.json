@@ -14,6 +14,9 @@
       "crates/aspis-core/src/field.rs::CM31::square"
     ],
     [
+      "crates/aspis-core/src/field.rs::CM31::write_le_bytes"
+    ],
+    [
       "crates/aspis-core/src/field.rs::M31::neg"
     ],
     [
@@ -24,6 +27,9 @@
     ],
     [
       "crates/aspis-core/src/field.rs::QM31::from_cm31"
+    ],
+    [
+      "crates/aspis-core/src/field.rs::QM31::write_le_bytes"
     ],
     [
       "crates/aspis-core/src/field.rs::qm31_accumulate_product_channels"
@@ -51,6 +57,12 @@
     ],
     [
       "crates/aspis-core/src/field.rs::qm31_sum_products4"
+    ],
+    [
+      "crates/aspis-core/src/field/wide_exact.rs::WideExact::c0"
+    ],
+    [
+      "crates/aspis-core/src/field/wide_exact.rs::WideExact::c1"
     ],
     [
       "crates/aspis-core/src/field/wide_exact.rs::WideExact::neg"
@@ -1062,8 +1074,66 @@
       "first_five": false
     },
     {
-      "function": "crates/aspis-core/src/field.rs::M31::neg",
+      "function": "crates/aspis-core/src/field.rs::CM31::write_le_bytes",
       "component": 2,
+      "recursive_component": false,
+      "rows": [
+        "TX2:008"
+      ],
+      "callees": [
+        {
+          "function": "crates/aspis-core/src/field.rs::M31::to_le_bytes",
+          "scope": "opaque S",
+          "rows": [
+            "TX1:022",
+            "TX2:016"
+          ],
+          "baseline_status": {
+            "TX1:022": "CLOSED",
+            "TX2:016": "CLOSED"
+          },
+          "existing_packets": [
+            "evidence/slice-s-compose3-20261101/NEJ_K034/receipt.json",
+            "evidence/slice-s-compose3-20261101/NEJ_K035/receipt.json"
+          ]
+        },
+        {
+          "function": "crates/aspis-core/src/field/wide_exact.rs::WideExact::to_le_bytes",
+          "scope": "opaque S",
+          "rows": [
+            "TX1:058",
+            "TX2:039"
+          ],
+          "baseline_status": {
+            "TX1:058": "CLOSED",
+            "TX2:039": "CLOSED"
+          },
+          "existing_packets": [
+            "evidence/native-tx2c-20261027/NBG_K030/receipt.json",
+            "evidence/native-tx2c-20261027/NBG_K031/receipt.json"
+          ]
+        }
+      ],
+      "certificate_shape": [
+        "(y) frozen caller Result/state/ordered-effects oracle certificate; matched corrupt argument/reply control; child domain and modifies frame; Lean substitution equality; ax2 raw audit",
+        "Exact KMX patch and same-configuration failing copy control; arbitrary window/frame lift."
+      ],
+      "native_domain": [
+        {
+          "discharged_by": null,
+          "domain": "M31/QM31/WideExact limbs <P; preserve little-endian limb order, decoded Result and all range/overflow checks. Pair every translated multiplication replacement with a named emitted-ok Lean theorem; never multiplication in Kani. Derive canonical intermediates and inversion input nonzero.",
+          "status": "OPEN",
+          "unit": "U01"
+        }
+      ],
+      "existing_support": [
+        "evidence/native-tx2c-20261027/NBG_K010/receipt.json"
+      ],
+      "first_five": false
+    },
+    {
+      "function": "crates/aspis-core/src/field.rs::M31::neg",
+      "component": 3,
       "recursive_component": false,
       "rows": [
         "TX1:018"
@@ -1089,7 +1159,7 @@
     },
     {
       "function": "crates/aspis-core/src/field.rs::M31::reduce_u62",
-      "component": 3,
+      "component": 4,
       "recursive_component": false,
       "rows": [
         "TX1:019"
@@ -1139,7 +1209,7 @@
     },
     {
       "function": "crates/aspis-core/src/field.rs::PreparedQm31Multiplier::new",
-      "component": 4,
+      "component": 5,
       "recursive_component": false,
       "rows": [
         "TX1:023"
@@ -1359,7 +1429,7 @@
     },
     {
       "function": "crates/aspis-core/src/field.rs::QM31::from_cm31",
-      "component": 5,
+      "component": 6,
       "recursive_component": false,
       "rows": [
         "TX1:025",
@@ -1389,8 +1459,59 @@
       "first_five": false
     },
     {
+      "function": "crates/aspis-core/src/field.rs::QM31::write_le_bytes",
+      "component": 7,
+      "recursive_component": true,
+      "rows": [
+        "TX2:024"
+      ],
+      "callees": [
+        {
+          "function": "crates/aspis-core/src/field.rs::CM31::write_le_bytes",
+          "scope": "D SCC 2",
+          "rows": [
+            "TX2:008"
+          ],
+          "baseline_status": {
+            "TX2:008": "OPEN"
+          },
+          "existing_packets": [
+            "evidence/native-tx2c-20261027/NBG_K010/receipt.json"
+          ]
+        },
+        {
+          "function": "crates/aspis-core/src/field.rs::QM31::write_le_bytes",
+          "scope": "D SCC 7",
+          "rows": [
+            "TX2:024"
+          ],
+          "baseline_status": {
+            "TX2:024": "OPEN"
+          },
+          "existing_packets": [
+            "evidence/native-tx2c-20261027/NBG_K011/receipt.json"
+          ]
+        }
+      ],
+      "certificate_shape": [
+        "(y) frozen caller Result/state/ordered-effects oracle certificate; matched corrupt argument/reply control; child domain and modifies frame; Lean substitution equality; ax2 raw audit"
+      ],
+      "native_domain": [
+        {
+          "discharged_by": null,
+          "domain": "M31/QM31/WideExact limbs <P; preserve little-endian limb order, decoded Result and all range/overflow checks. Pair every translated multiplication replacement with a named emitted-ok Lean theorem; never multiplication in Kani. Derive canonical intermediates and inversion input nonzero.",
+          "status": "OPEN",
+          "unit": "U01"
+        }
+      ],
+      "existing_support": [
+        "evidence/native-tx2c-20261027/NBG_K011/receipt.json"
+      ],
+      "first_five": false
+    },
+    {
       "function": "crates/aspis-core/src/field.rs::qm31_accumulate_product_channels",
-      "component": 6,
+      "component": 8,
       "recursive_component": false,
       "rows": [
         "TX1:036"
@@ -1607,7 +1728,7 @@
     },
     {
       "function": "crates/aspis-core/src/field.rs::qm31_from_karatsuba_channel_sums",
-      "component": 7,
+      "component": 9,
       "recursive_component": false,
       "rows": [
         "TX1:037"
@@ -2093,7 +2214,7 @@
     },
     {
       "function": "crates/aspis-core/src/field.rs::qm31_m31_dot",
-      "component": 8,
+      "component": 10,
       "recursive_component": false,
       "rows": [
         "TX1:038"
@@ -2167,7 +2288,7 @@
     },
     {
       "function": "crates/aspis-core/src/field.rs::qm31_pack_base4",
-      "component": 9,
+      "component": 11,
       "recursive_component": false,
       "rows": [
         "TX1:039"
@@ -2241,7 +2362,7 @@
     },
     {
       "function": "crates/aspis-core/src/field.rs::qm31_sum_products_small",
-      "component": 10,
+      "component": 12,
       "recursive_component": false,
       "rows": [
         "TX1:044"
@@ -2249,7 +2370,7 @@
       "callees": [
         {
           "function": "crates/aspis-core/src/field.rs::qm31_accumulate_product_channels",
-          "scope": "D SCC 6",
+          "scope": "D SCC 8",
           "rows": [
             "TX1:036"
           ],
@@ -2260,7 +2381,7 @@
         },
         {
           "function": "crates/aspis-core/src/field.rs::qm31_from_karatsuba_channel_sums",
-          "scope": "D SCC 7",
+          "scope": "D SCC 9",
           "rows": [
             "TX1:037"
           ],
@@ -2291,7 +2412,7 @@
     },
     {
       "function": "crates/aspis-core/src/field.rs::qm31_sum_products2",
-      "component": 11,
+      "component": 13,
       "recursive_component": false,
       "rows": [
         "TX1:040"
@@ -2299,7 +2420,7 @@
       "callees": [
         {
           "function": "crates/aspis-core/src/field.rs::qm31_sum_products_small",
-          "scope": "D SCC 10",
+          "scope": "D SCC 12",
           "rows": [
             "TX1:044"
           ],
@@ -2325,7 +2446,7 @@
     },
     {
       "function": "crates/aspis-core/src/field.rs::qm31_sum_products3",
-      "component": 12,
+      "component": 14,
       "recursive_component": false,
       "rows": [
         "TX1:041"
@@ -2333,7 +2454,7 @@
       "callees": [
         {
           "function": "crates/aspis-core/src/field.rs::qm31_sum_products_small",
-          "scope": "D SCC 10",
+          "scope": "D SCC 12",
           "rows": [
             "TX1:044"
           ],
@@ -2359,7 +2480,7 @@
     },
     {
       "function": "crates/aspis-core/src/field.rs::qm31_sum_products3_prepared",
-      "component": 13,
+      "component": 15,
       "recursive_component": false,
       "rows": [
         "TX1:042"
@@ -2511,7 +2632,7 @@
         },
         {
           "function": "crates/aspis-core/src/field.rs::qm31_from_karatsuba_channel_sums",
-          "scope": "D SCC 7",
+          "scope": "D SCC 9",
           "rows": [
             "TX1:037"
           ],
@@ -2591,7 +2712,7 @@
     },
     {
       "function": "crates/aspis-core/src/field.rs::qm31_sum_products4",
-      "component": 14,
+      "component": 16,
       "recursive_component": false,
       "rows": [
         "TX1:043"
@@ -2599,7 +2720,7 @@
       "callees": [
         {
           "function": "crates/aspis-core/src/field.rs::qm31_sum_products_small",
-          "scope": "D SCC 10",
+          "scope": "D SCC 12",
           "rows": [
             "TX1:044"
           ],
@@ -2624,8 +2745,56 @@
       "first_five": false
     },
     {
+      "function": "crates/aspis-core/src/field/wide_exact.rs::WideExact::c0",
+      "component": 17,
+      "recursive_component": false,
+      "rows": [
+        "TX2:029"
+      ],
+      "callees": [],
+      "certificate_shape": [
+        "(y) frozen caller Result/state/ordered-effects oracle certificate; matched corrupt argument/reply control; child domain and modifies frame; Lean substitution equality; ax2 raw audit"
+      ],
+      "native_domain": [
+        {
+          "discharged_by": null,
+          "domain": "M31/QM31/WideExact limbs <P; preserve little-endian limb order, decoded Result and all range/overflow checks. Pair every translated multiplication replacement with a named emitted-ok Lean theorem; never multiplication in Kani. Derive canonical intermediates and inversion input nonzero.",
+          "status": "OPEN",
+          "unit": "U01"
+        }
+      ],
+      "existing_support": [
+        "evidence/native-tx2c-20261027/NBG_K031/receipt.json"
+      ],
+      "first_five": false
+    },
+    {
+      "function": "crates/aspis-core/src/field/wide_exact.rs::WideExact::c1",
+      "component": 18,
+      "recursive_component": false,
+      "rows": [
+        "TX2:030"
+      ],
+      "callees": [],
+      "certificate_shape": [
+        "(y) frozen caller Result/state/ordered-effects oracle certificate; matched corrupt argument/reply control; child domain and modifies frame; Lean substitution equality; ax2 raw audit"
+      ],
+      "native_domain": [
+        {
+          "discharged_by": null,
+          "domain": "M31/QM31/WideExact limbs <P; preserve little-endian limb order, decoded Result and all range/overflow checks. Pair every translated multiplication replacement with a named emitted-ok Lean theorem; never multiplication in Kani. Derive canonical intermediates and inversion input nonzero.",
+          "status": "OPEN",
+          "unit": "U01"
+        }
+      ],
+      "existing_support": [
+        "evidence/native-tx2c-20261027/NBG_K031/receipt.json"
+      ],
+      "first_five": false
+    },
+    {
       "function": "crates/aspis-core/src/field/wide_exact.rs::WideExact::neg",
-      "component": 15,
+      "component": 19,
       "recursive_component": true,
       "rows": [
         "TX1:054"
@@ -2633,7 +2802,7 @@
       "callees": [
         {
           "function": "crates/aspis-core/src/field/wide_exact.rs::WideExact::neg",
-          "scope": "D SCC 15",
+          "scope": "D SCC 19",
           "rows": [
             "TX1:054"
           ],
@@ -2659,7 +2828,7 @@
     },
     {
       "function": "crates/aspis-core/src/field/wide_exact.rs::WideExact::new",
-      "component": 16,
+      "component": 20,
       "recursive_component": false,
       "rows": [
         "TX1:055",
@@ -2737,7 +2906,7 @@
     },
     {
       "function": "crates/aspis-core/src/field/wide_exact.rs::WideExact::square",
-      "component": 17,
+      "component": 21,
       "recursive_component": true,
       "rows": [
         "TX1:056"
@@ -2852,7 +3021,7 @@
         },
         {
           "function": "crates/aspis-core/src/field/wide_exact.rs::WideExact::square",
-          "scope": "D SCC 17",
+          "scope": "D SCC 21",
           "rows": [
             "TX1:056"
           ],
@@ -2928,7 +3097,7 @@
     },
     {
       "function": "crates/aspis-core/src/r0/heap.rs::filled",
-      "component": 18,
+      "component": 22,
       "recursive_component": false,
       "rows": [
         "TX1:064",
@@ -2957,7 +3126,7 @@
     },
     {
       "function": "programs/r1-cost-probe/src/lib.rs::SolanaDigest::digest",
-      "component": 19,
+      "component": 23,
       "recursive_component": false,
       "rows": [
         "TX1:327",
@@ -2989,7 +3158,7 @@
     },
     {
       "function": "crates/aspis-core/src/r0/merkle.rs::parent_with_digest",
-      "component": 20,
+      "component": 24,
       "recursive_component": false,
       "rows": [
         "TX1:065"
@@ -2997,7 +3166,7 @@
       "callees": [
         {
           "function": "programs/r1-cost-probe/src/lib.rs::SolanaDigest::digest",
-          "scope": "D SCC 19",
+          "scope": "D SCC 23",
           "rows": [
             "TX1:327",
             "TX2:210"
@@ -3037,7 +3206,7 @@
     },
     {
       "function": "crates/aspis-core/src/r0_transcript.rs::QueryScan::finish",
-      "component": 21,
+      "component": 25,
       "recursive_component": false,
       "rows": [
         "TX1:066"
@@ -3059,7 +3228,7 @@
     },
     {
       "function": "crates/aspis-core/src/r0_transcript.rs::block_rank",
-      "component": 22,
+      "component": 26,
       "recursive_component": false,
       "rows": [
         "TX1:068"
@@ -3081,7 +3250,7 @@
     },
     {
       "function": "crates/aspis-core/src/r0_transcript.rs::query_words",
-      "component": 23,
+      "component": 27,
       "recursive_component": false,
       "rows": [
         "TX1:070"
@@ -3089,7 +3258,7 @@
       "callees": [
         {
           "function": "crates/aspis-core/src/r0_transcript.rs::block_rank",
-          "scope": "D SCC 22",
+          "scope": "D SCC 26",
           "rows": [
             "TX1:068"
           ],
@@ -3115,7 +3284,7 @@
     },
     {
       "function": "crates/aspis-core/src/r0_transcript.rs::QueryScan::scan",
-      "component": 24,
+      "component": 28,
       "recursive_component": false,
       "rows": [
         "TX1:067"
@@ -3123,7 +3292,7 @@
       "callees": [
         {
           "function": "crates/aspis-core/src/r0_transcript.rs::query_words",
-          "scope": "D SCC 23",
+          "scope": "D SCC 27",
           "rows": [
             "TX1:070"
           ],
@@ -3150,7 +3319,7 @@
     },
     {
       "function": "crates/aspis-statement/src/poseidon2.rs::apply_mat4_lazy",
-      "component": 25,
+      "component": 29,
       "recursive_component": false,
       "rows": [
         "TX1:302"
@@ -3158,7 +3327,7 @@
       "callees": [
         {
           "function": "crates/aspis-core/src/field.rs::M31::reduce_u62",
-          "scope": "D SCC 3",
+          "scope": "D SCC 4",
           "rows": [
             "TX1:019"
           ],
@@ -3188,7 +3357,7 @@
     },
     {
       "function": "crates/aspis-statement/src/poseidon2.rs::external_linear_lazy",
-      "component": 26,
+      "component": 30,
       "recursive_component": false,
       "rows": [
         "TX1:303"
@@ -3196,7 +3365,7 @@
       "callees": [
         {
           "function": "crates/aspis-core/src/field.rs::M31::reduce_u62",
-          "scope": "D SCC 3",
+          "scope": "D SCC 4",
           "rows": [
             "TX1:019"
           ],
@@ -3211,7 +3380,7 @@
         },
         {
           "function": "crates/aspis-statement/src/poseidon2.rs::apply_mat4_lazy",
-          "scope": "D SCC 25",
+          "scope": "D SCC 29",
           "rows": [
             "TX1:302"
           ],
@@ -3238,7 +3407,7 @@
     },
     {
       "function": "crates/aspis-statement/src/poseidon2.rs::internal_linear_lazy",
-      "component": 27,
+      "component": 31,
       "recursive_component": false,
       "rows": [
         "TX1:304"
@@ -3246,7 +3415,7 @@
       "callees": [
         {
           "function": "crates/aspis-core/src/field.rs::M31::reduce_u62",
-          "scope": "D SCC 3",
+          "scope": "D SCC 4",
           "rows": [
             "TX1:019"
           ],
@@ -3277,7 +3446,7 @@
     },
     {
       "function": "crates/aspis-statement/src/poseidon2.rs::pow5",
-      "component": 28,
+      "component": 32,
       "recursive_component": false,
       "rows": [
         "TX1:307"
@@ -3498,7 +3667,7 @@
     },
     {
       "function": "crates/aspis-statement/src/poseidon2.rs::permute_optimized_with_trace",
-      "component": 29,
+      "component": 33,
       "recursive_component": false,
       "rows": [
         "TX1:306"
@@ -3699,7 +3868,7 @@
         },
         {
           "function": "crates/aspis-statement/src/poseidon2.rs::external_linear_lazy",
-          "scope": "D SCC 26",
+          "scope": "D SCC 30",
           "rows": [
             "TX1:303"
           ],
@@ -3710,7 +3879,7 @@
         },
         {
           "function": "crates/aspis-statement/src/poseidon2.rs::internal_linear_lazy",
-          "scope": "D SCC 27",
+          "scope": "D SCC 31",
           "rows": [
             "TX1:304"
           ],
@@ -3721,7 +3890,7 @@
         },
         {
           "function": "crates/aspis-statement/src/poseidon2.rs::pow5",
-          "scope": "D SCC 28",
+          "scope": "D SCC 32",
           "rows": [
             "TX1:307"
           ],
@@ -3748,7 +3917,7 @@
     },
     {
       "function": "crates/aspis-statement/src/poseidon2.rs::merkle_node_compress_v3",
-      "component": 30,
+      "component": 34,
       "recursive_component": false,
       "rows": [
         "TX1:305"
@@ -3949,7 +4118,7 @@
         },
         {
           "function": "crates/aspis-statement/src/poseidon2.rs::permute_optimized_with_trace",
-          "scope": "D SCC 29",
+          "scope": "D SCC 33",
           "rows": [
             "TX1:306"
           ],
@@ -3977,7 +4146,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/format.rs::pool_v1_tree_parent",
-      "component": 31,
+      "component": 35,
       "recursive_component": false,
       "rows": [
         "TX1:201"
@@ -3985,7 +4154,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/poseidon2.rs::merkle_node_compress_v3",
-          "scope": "D SCC 30",
+          "scope": "D SCC 34",
           "rows": [
             "TX1:305"
           ],
@@ -4011,7 +4180,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/incremental_merkle.rs::pool_v1_empty_roots",
-      "component": 32,
+      "component": 36,
       "recursive_component": false,
       "rows": [
         "TX1:204"
@@ -4019,7 +4188,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/pool_v1/format.rs::pool_v1_tree_parent",
-          "scope": "D SCC 31",
+          "scope": "D SCC 35",
           "rows": [
             "TX1:201"
           ],
@@ -4046,7 +4215,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/incremental_merkle.rs::IncrementalMerkleTreeV1::empty",
-      "component": 33,
+      "component": 37,
       "recursive_component": false,
       "rows": [
         "TX1:203"
@@ -4054,7 +4223,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/pool_v1/incremental_merkle.rs::pool_v1_empty_roots",
-          "scope": "D SCC 32",
+          "scope": "D SCC 36",
           "rows": [
             "TX1:204"
           ],
@@ -4080,7 +4249,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/incremental_merkle.rs::IncrementalMerkleTreeV1::default",
-      "component": 34,
+      "component": 38,
       "recursive_component": false,
       "rows": [
         "TX1:202"
@@ -4088,7 +4257,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/pool_v1/incremental_merkle.rs::IncrementalMerkleTreeV1::empty",
-          "scope": "D SCC 33",
+          "scope": "D SCC 37",
           "rows": [
             "TX1:203"
           ],
@@ -4114,7 +4283,7 @@
     },
     {
       "function": "crates/aspis-core/src/r0_transcript.rs::queries_from_pairs",
-      "component": 35,
+      "component": 39,
       "recursive_component": false,
       "rows": [
         "TX1:069"
@@ -4122,7 +4291,7 @@
       "callees": [
         {
           "function": "crates/aspis-core/src/r0_transcript.rs::QueryScan::finish",
-          "scope": "D SCC 21",
+          "scope": "D SCC 25",
           "rows": [
             "TX1:066"
           ],
@@ -4133,7 +4302,7 @@
         },
         {
           "function": "crates/aspis-core/src/r0_transcript.rs::QueryScan::scan",
-          "scope": "D SCC 24",
+          "scope": "D SCC 28",
           "rows": [
             "TX1:067"
           ],
@@ -4144,7 +4313,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/incremental_merkle.rs::IncrementalMerkleTreeV1::default",
-          "scope": "D SCC 34",
+          "scope": "D SCC 38",
           "rows": [
             "TX1:202"
           ],
@@ -4171,7 +4340,7 @@
     },
     {
       "function": "crates/aspis-core/src/state_only_hiding.rs::cm31_mul_i",
-      "component": 36,
+      "component": 40,
       "recursive_component": false,
       "rows": [
         "TX1:071"
@@ -4221,7 +4390,7 @@
         },
         {
           "function": "crates/aspis-core/src/field.rs::M31::neg",
-          "scope": "D SCC 2",
+          "scope": "D SCC 3",
           "rows": [
             "TX1:018"
           ],
@@ -4247,7 +4416,7 @@
         },
         {
           "function": "crates/aspis-core/src/field/wide_exact.rs::WideExact::neg",
-          "scope": "D SCC 15",
+          "scope": "D SCC 19",
           "rows": [
             "TX1:054"
           ],
@@ -4273,7 +4442,7 @@
     },
     {
       "function": "crates/aspis-core/src/state_only_hiding.rs::cm31_mul_r",
-      "component": 37,
+      "component": 41,
       "recursive_component": false,
       "rows": [
         "TX1:072"
@@ -4815,7 +4984,7 @@
     },
     {
       "function": "crates/aspis-core/src/state_only_hiding.rs::mask_power_26",
-      "component": 38,
+      "component": 42,
       "recursive_component": false,
       "rows": [
         "TX1:073"
@@ -5045,7 +5214,7 @@
         },
         {
           "function": "crates/aspis-core/src/field/wide_exact.rs::WideExact::square",
-          "scope": "D SCC 17",
+          "scope": "D SCC 21",
           "rows": [
             "TX1:056"
           ],
@@ -5071,7 +5240,7 @@
     },
     {
       "function": "crates/aspis-core/src/state_only_hiding.rs::mul_tower_basis",
-      "component": 39,
+      "component": 43,
       "recursive_component": false,
       "rows": [
         "TX1:074"
@@ -5079,7 +5248,7 @@
       "callees": [
         {
           "function": "crates/aspis-core/src/state_only_hiding.rs::cm31_mul_i",
-          "scope": "D SCC 36",
+          "scope": "D SCC 40",
           "rows": [
             "TX1:071"
           ],
@@ -5090,7 +5259,7 @@
         },
         {
           "function": "crates/aspis-core/src/state_only_hiding.rs::cm31_mul_r",
-          "scope": "D SCC 37",
+          "scope": "D SCC 41",
           "rows": [
             "TX1:072"
           ],
@@ -5124,7 +5293,7 @@
     },
     {
       "function": "crates/aspis-core/src/state_only_hiding.rs::selected_mask_linears",
-      "component": 40,
+      "component": 44,
       "recursive_component": false,
       "rows": [
         "TX1:075"
@@ -5515,7 +5684,7 @@
     },
     {
       "function": "crates/aspis-core/src/state_only_hiding.rs::state_only_selected_mask_value",
-      "component": 41,
+      "component": 45,
       "recursive_component": false,
       "rows": [
         "TX1:076"
@@ -5700,7 +5869,7 @@
         },
         {
           "function": "crates/aspis-core/src/field.rs::PreparedQm31Multiplier::new",
-          "scope": "D SCC 4",
+          "scope": "D SCC 5",
           "rows": [
             "TX1:023"
           ],
@@ -5929,7 +6098,7 @@
         },
         {
           "function": "crates/aspis-core/src/state_only_hiding.rs::mask_power_26",
-          "scope": "D SCC 38",
+          "scope": "D SCC 42",
           "rows": [
             "TX1:073"
           ],
@@ -5940,7 +6109,7 @@
         },
         {
           "function": "crates/aspis-core/src/state_only_hiding.rs::mul_tower_basis",
-          "scope": "D SCC 39",
+          "scope": "D SCC 43",
           "rows": [
             "TX1:074"
           ],
@@ -5951,7 +6120,7 @@
         },
         {
           "function": "crates/aspis-core/src/state_only_hiding.rs::selected_mask_linears",
-          "scope": "D SCC 40",
+          "scope": "D SCC 44",
           "rows": [
             "TX1:075"
           ],
@@ -5978,7 +6147,7 @@
     },
     {
       "function": "crates/aspis-core/src/state_only_prefix.rs::state_only_statement_points",
-      "component": 42,
+      "component": 46,
       "recursive_component": false,
       "rows": [
         "TX2:048"
@@ -6586,7 +6755,7 @@
     },
     {
       "function": "crates/aspis-core/src/state_only_prefix.rs::r0::statement_points",
-      "component": 43,
+      "component": 47,
       "recursive_component": false,
       "rows": [
         "TX2:047"
@@ -6594,7 +6763,7 @@
       "callees": [
         {
           "function": "crates/aspis-core/src/state_only_prefix.rs::state_only_statement_points",
-          "scope": "D SCC 42",
+          "scope": "D SCC 46",
           "rows": [
             "TX2:048"
           ],
@@ -6620,7 +6789,7 @@
     },
     {
       "function": "crates/aspis-core/src/state_only_private_merkle.rs::private_leaf_hash_with_digest",
-      "component": 44,
+      "component": 48,
       "recursive_component": false,
       "rows": [
         "TX1:077",
@@ -6629,7 +6798,7 @@
       "callees": [
         {
           "function": "programs/r1-cost-probe/src/lib.rs::SolanaDigest::digest",
-          "scope": "D SCC 19",
+          "scope": "D SCC 23",
           "rows": [
             "TX1:327",
             "TX2:210"
@@ -6674,7 +6843,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/candidate.rs::batch_key_at",
-      "component": 45,
+      "component": 49,
       "recursive_component": false,
       "rows": [
         "TX1:078",
@@ -6709,7 +6878,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/candidate.rs::batch_keys",
-      "component": 46,
+      "component": 50,
       "recursive_component": false,
       "rows": [
         "TX1:079",
@@ -6758,7 +6927,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/candidate.rs::batch_leaf",
-      "component": 47,
+      "component": 51,
       "recursive_component": false,
       "rows": [
         "TX1:080",
@@ -6767,7 +6936,7 @@
       "callees": [
         {
           "function": "crates/aspis-core/src/state_only_private_merkle.rs::private_leaf_hash_with_digest",
-          "scope": "D SCC 44",
+          "scope": "D SCC 48",
           "rows": [
             "TX1:077",
             "TX2:049"
@@ -6810,7 +6979,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/candidate.rs::same_batch_index",
-      "component": 48,
+      "component": 52,
       "recursive_component": false,
       "rows": [
         "TX1:090",
@@ -6845,7 +7014,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/candidate.rs::same_batch_leaf",
-      "component": 49,
+      "component": 53,
       "recursive_component": false,
       "rows": [
         "TX1:091",
@@ -6882,7 +7051,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/compact.rs::slot_offset",
-      "component": 50,
+      "component": 54,
       "recursive_component": false,
       "rows": [
         "TX1:100",
@@ -6921,7 +7090,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/candidate.rs::slot",
-      "component": 51,
+      "component": 55,
       "recursive_component": false,
       "rows": [
         "TX1:092",
@@ -6930,7 +7099,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/compact.rs::slot_offset",
-          "scope": "D SCC 50",
+          "scope": "D SCC 54",
           "rows": [
             "TX1:100",
             "TX2:066"
@@ -6973,7 +7142,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/candidate.rs::sort_batch_keys",
-      "component": 52,
+      "component": 56,
       "recursive_component": false,
       "rows": [
         "TX1:093",
@@ -6982,7 +7151,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/candidate.rs::batch_key_at",
-          "scope": "D SCC 45",
+          "scope": "D SCC 49",
           "rows": [
             "TX1:078",
             "TX2:050"
@@ -7023,7 +7192,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::Arity::bits",
-      "component": 53,
+      "component": 57,
       "recursive_component": false,
       "rows": [
         "TX1:118",
@@ -7052,7 +7221,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::Arity::levels",
-      "component": 54,
+      "component": 58,
       "recursive_component": false,
       "rows": [
         "TX1:119",
@@ -7061,7 +7230,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::Arity::bits",
-          "scope": "D SCC 53",
+          "scope": "D SCC 57",
           "rows": [
             "TX1:118",
             "TX2:084"
@@ -7095,7 +7264,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::Arity::width",
-      "component": 55,
+      "component": 59,
       "recursive_component": false,
       "rows": [
         "TX1:120",
@@ -7104,7 +7273,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::Arity::bits",
-          "scope": "D SCC 53",
+          "scope": "D SCC 57",
           "rows": [
             "TX1:118",
             "TX2:084"
@@ -7138,7 +7307,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::index_at",
-      "component": 56,
+      "component": 60,
       "recursive_component": false,
       "rows": [
         "TX1:121",
@@ -7167,7 +7336,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::well_formed",
-      "component": 57,
+      "component": 61,
       "recursive_component": false,
       "rows": [
         "TX1:128",
@@ -7197,7 +7366,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::node_count",
-      "component": 58,
+      "component": 62,
       "recursive_component": false,
       "rows": [
         "TX1:122",
@@ -7206,7 +7375,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::Arity::bits",
-          "scope": "D SCC 53",
+          "scope": "D SCC 57",
           "rows": [
             "TX1:118",
             "TX2:084"
@@ -7219,7 +7388,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::Arity::levels",
-          "scope": "D SCC 54",
+          "scope": "D SCC 58",
           "rows": [
             "TX1:119",
             "TX2:085"
@@ -7232,7 +7401,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::Arity::width",
-          "scope": "D SCC 55",
+          "scope": "D SCC 59",
           "rows": [
             "TX1:120",
             "TX2:086"
@@ -7245,7 +7414,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::index_at",
-          "scope": "D SCC 56",
+          "scope": "D SCC 60",
           "rows": [
             "TX1:121",
             "TX2:087"
@@ -7258,7 +7427,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::well_formed",
-          "scope": "D SCC 57",
+          "scope": "D SCC 61",
           "rows": [
             "TX1:128",
             "TX2:094"
@@ -7294,7 +7463,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::occupied_binary_parent",
-      "component": 59,
+      "component": 63,
       "recursive_component": false,
       "rows": [
         "TX1:123",
@@ -7303,7 +7472,7 @@
       "callees": [
         {
           "function": "programs/r1-cost-probe/src/lib.rs::SolanaDigest::digest",
-          "scope": "D SCC 19",
+          "scope": "D SCC 23",
           "rows": [
             "TX1:327",
             "TX2:210"
@@ -7340,7 +7509,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::root_matches",
-      "component": 60,
+      "component": 64,
       "recursive_component": false,
       "rows": [
         "TX1:124",
@@ -7369,7 +7538,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::sibling_binary_parent",
-      "component": 61,
+      "component": 65,
       "recursive_component": false,
       "rows": [
         "TX1:125",
@@ -7378,7 +7547,7 @@
       "callees": [
         {
           "function": "programs/r1-cost-probe/src/lib.rs::SolanaDigest::digest",
-          "scope": "D SCC 19",
+          "scope": "D SCC 23",
           "rows": [
             "TX1:327",
             "TX2:210"
@@ -7415,7 +7584,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::value_at",
-      "component": 62,
+      "component": 66,
       "recursive_component": false,
       "rows": [
         "TX1:126",
@@ -7444,7 +7613,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::verify_in_place",
-      "component": 63,
+      "component": 67,
       "recursive_component": false,
       "rows": [
         "TX1:127",
@@ -7453,7 +7622,7 @@
       "callees": [
         {
           "function": "crates/aspis-core/src/r0/merkle.rs::parent_with_digest",
-          "scope": "D SCC 20",
+          "scope": "D SCC 24",
           "rows": [
             "TX1:065"
           ],
@@ -7473,7 +7642,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::Arity::bits",
-          "scope": "D SCC 53",
+          "scope": "D SCC 57",
           "rows": [
             "TX1:118",
             "TX2:084"
@@ -7486,7 +7655,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::Arity::levels",
-          "scope": "D SCC 54",
+          "scope": "D SCC 58",
           "rows": [
             "TX1:119",
             "TX2:085"
@@ -7499,7 +7668,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::index_at",
-          "scope": "D SCC 56",
+          "scope": "D SCC 60",
           "rows": [
             "TX1:121",
             "TX2:087"
@@ -7512,7 +7681,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::occupied_binary_parent",
-          "scope": "D SCC 59",
+          "scope": "D SCC 63",
           "rows": [
             "TX1:123",
             "TX2:089"
@@ -7525,7 +7694,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::root_matches",
-          "scope": "D SCC 60",
+          "scope": "D SCC 64",
           "rows": [
             "TX1:124",
             "TX2:090"
@@ -7538,7 +7707,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::sibling_binary_parent",
-          "scope": "D SCC 61",
+          "scope": "D SCC 65",
           "rows": [
             "TX1:125",
             "TX2:091"
@@ -7551,7 +7720,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::value_at",
-          "scope": "D SCC 62",
+          "scope": "D SCC 66",
           "rows": [
             "TX1:126",
             "TX2:092"
@@ -7564,7 +7733,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::well_formed",
-          "scope": "D SCC 57",
+          "scope": "D SCC 61",
           "rows": [
             "TX1:128",
             "TX2:094"
@@ -7601,7 +7770,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/candidate.rs::batch_tree",
-      "component": 64,
+      "component": 68,
       "recursive_component": false,
       "rows": [
         "TX1:083",
@@ -7610,7 +7779,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/candidate.rs::batch_key_at",
-          "scope": "D SCC 45",
+          "scope": "D SCC 49",
           "rows": [
             "TX1:078",
             "TX2:050"
@@ -7629,7 +7798,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/candidate.rs::batch_keys",
-          "scope": "D SCC 46",
+          "scope": "D SCC 50",
           "rows": [
             "TX1:079",
             "TX2:051"
@@ -7661,7 +7830,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/candidate.rs::batch_leaf",
-          "scope": "D SCC 47",
+          "scope": "D SCC 51",
           "rows": [
             "TX1:080",
             "TX2:052"
@@ -7690,7 +7859,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/candidate.rs::same_batch_index",
-          "scope": "D SCC 48",
+          "scope": "D SCC 52",
           "rows": [
             "TX1:090",
             "TX2:060"
@@ -7709,7 +7878,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/candidate.rs::same_batch_leaf",
-          "scope": "D SCC 49",
+          "scope": "D SCC 53",
           "rows": [
             "TX1:091",
             "TX2:061"
@@ -7730,7 +7899,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/candidate.rs::slot",
-          "scope": "D SCC 51",
+          "scope": "D SCC 55",
           "rows": [
             "TX1:092",
             "TX2:062"
@@ -7743,7 +7912,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/candidate.rs::sort_batch_keys",
-          "scope": "D SCC 52",
+          "scope": "D SCC 56",
           "rows": [
             "TX1:093",
             "TX2:063"
@@ -7756,7 +7925,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::node_count",
-          "scope": "D SCC 58",
+          "scope": "D SCC 62",
           "rows": [
             "TX1:122",
             "TX2:088"
@@ -7769,7 +7938,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::verify_in_place",
-          "scope": "D SCC 63",
+          "scope": "D SCC 67",
           "rows": [
             "TX1:127",
             "TX2:093"
@@ -7804,7 +7973,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/candidate.rs::batch_merkle_values",
-      "component": 65,
+      "component": 69,
       "recursive_component": false,
       "rows": [
         "TX1:082",
@@ -7813,7 +7982,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/candidate.rs::batch_tree",
-          "scope": "D SCC 64",
+          "scope": "D SCC 68",
           "rows": [
             "TX1:083",
             "TX2:055"
@@ -7847,7 +8016,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/candidate.rs::batch_merkle",
-      "component": 66,
+      "component": 70,
       "recursive_component": false,
       "rows": [
         "TX1:081",
@@ -7856,7 +8025,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/candidate.rs::batch_merkle_values",
-          "scope": "D SCC 65",
+          "scope": "D SCC 69",
           "rows": [
             "TX1:082",
             "TX2:054"
@@ -7890,7 +8059,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/compact.rs::check_values",
-      "component": 67,
+      "component": 71,
       "recursive_component": false,
       "rows": [
         "TX1:096"
@@ -7951,7 +8120,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/verifier.rs::echeck",
-      "component": 68,
+      "component": 72,
       "recursive_component": false,
       "rows": [
         "TX1:189"
@@ -7959,7 +8128,7 @@
       "callees": [
         {
           "function": "crates/aspis-core/src/field/wide_exact.rs::WideExact::c1",
-          "scope": "slice boundary",
+          "scope": "D SCC 18",
           "rows": [
             "TX2:030"
           ],
@@ -8029,7 +8198,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/candidate.rs::canonical_scan",
-      "component": 69,
+      "component": 73,
       "recursive_component": false,
       "rows": [
         "TX1:084"
@@ -8089,7 +8258,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/compact.rs::check_values",
-          "scope": "D SCC 67",
+          "scope": "D SCC 71",
           "rows": [
             "TX1:096"
           ],
@@ -8118,7 +8287,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/verifier.rs::echeck",
-          "scope": "D SCC 68",
+          "scope": "D SCC 72",
           "rows": [
             "TX1:189"
           ],
@@ -8165,7 +8334,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/candidate.rs::parse_shape",
-      "component": 70,
+      "component": 74,
       "recursive_component": false,
       "rows": [
         "TX1:086",
@@ -8211,7 +8380,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/candidate.rs::wide_view",
-      "component": 71,
+      "component": 75,
       "recursive_component": false,
       "rows": [
         "TX1:095"
@@ -8273,7 +8442,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/compact.rs::compact_row",
-      "component": 72,
+      "component": 76,
       "recursive_component": false,
       "rows": [
         "TX1:097"
@@ -8308,7 +8477,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/compact.rs::expand_values",
-      "component": 73,
+      "component": 77,
       "recursive_component": false,
       "rows": [
         "TX1:099"
@@ -8348,7 +8517,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::row_shape",
-      "component": 74,
+      "component": 78,
       "recursive_component": false,
       "rows": [
         "TX1:153"
@@ -8383,7 +8552,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/compact.rs::expand_semantic",
-      "component": 75,
+      "component": 79,
       "recursive_component": false,
       "rows": [
         "TX1:098"
@@ -8391,7 +8560,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/compact.rs::compact_row",
-          "scope": "D SCC 72",
+          "scope": "D SCC 76",
           "rows": [
             "TX1:097"
           ],
@@ -8415,7 +8584,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/compact.rs::expand_values",
-          "scope": "D SCC 73",
+          "scope": "D SCC 77",
           "rows": [
             "TX1:099"
           ],
@@ -8442,7 +8611,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::row_shape",
-          "scope": "D SCC 74",
+          "scope": "D SCC 78",
           "rows": [
             "TX1:153"
           ],
@@ -8483,7 +8652,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/r1_semantic.rs::mark",
-      "component": 76,
+      "component": 80,
       "recursive_component": false,
       "rows": [
         "TX1:130"
@@ -8506,7 +8675,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::SemanticTranscript<H>::new",
-      "component": 77,
+      "component": 81,
       "recursive_component": false,
       "rows": [
         "TX1:143"
@@ -8546,7 +8715,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/lib.rs::SolanaDigest::digest",
-          "scope": "D SCC 19",
+          "scope": "D SCC 23",
           "rows": [
             "TX1:327",
             "TX2:210"
@@ -8592,7 +8761,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::r0::Public<'a>::public_bytes::fields",
-      "component": 78,
+      "component": 82,
       "recursive_component": false,
       "rows": [
         "TX1:252"
@@ -8649,7 +8818,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::r0::Public<'a>::public_bytes::frontier",
-      "component": 79,
+      "component": 83,
       "recursive_component": false,
       "rows": [
         "TX1:253"
@@ -8657,7 +8826,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::r0::Public<'a>::public_bytes::fields",
-          "scope": "D SCC 78",
+          "scope": "D SCC 82",
           "rows": [
             "TX1:252"
           ],
@@ -8683,7 +8852,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::private_public",
-      "component": 80,
+      "component": 84,
       "recursive_component": false,
       "rows": [
         "TX1:249"
@@ -8711,7 +8880,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::withdrawal_public",
-      "component": 81,
+      "component": 85,
       "recursive_component": false,
       "rows": [
         "TX1:266"
@@ -8739,7 +8908,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::r0::Public<'a>::semantic",
-      "component": 82,
+      "component": 86,
       "recursive_component": false,
       "rows": [
         "TX1:255"
@@ -8747,7 +8916,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::private_public",
-          "scope": "D SCC 80",
+          "scope": "D SCC 84",
           "rows": [
             "TX1:249"
           ],
@@ -8764,7 +8933,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::withdrawal_public",
-          "scope": "D SCC 81",
+          "scope": "D SCC 85",
           "rows": [
             "TX1:266"
           ],
@@ -8796,7 +8965,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::r0::Public<'a>::public_bytes",
-      "component": 83,
+      "component": 87,
       "recursive_component": false,
       "rows": [
         "TX1:254"
@@ -8836,7 +9005,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::r0::Public<'a>::public_bytes::fields",
-          "scope": "D SCC 78",
+          "scope": "D SCC 82",
           "rows": [
             "TX1:252"
           ],
@@ -8847,7 +9016,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::r0::Public<'a>::public_bytes::frontier",
-          "scope": "D SCC 79",
+          "scope": "D SCC 83",
           "rows": [
             "TX1:253"
           ],
@@ -8858,7 +9027,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::r0::Public<'a>::semantic",
-          "scope": "D SCC 82",
+          "scope": "D SCC 86",
           "rows": [
             "TX1:255"
           ],
@@ -8886,7 +9055,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/r1_semantic.rs::public_transcript",
-      "component": 84,
+      "component": 88,
       "recursive_component": false,
       "rows": [
         "TX1:131"
@@ -8894,7 +9063,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::SemanticTranscript<H>::new",
-          "scope": "D SCC 77",
+          "scope": "D SCC 81",
           "rows": [
             "TX1:143"
           ],
@@ -8920,7 +9089,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::r0::Public<'a>::public_bytes",
-          "scope": "D SCC 83",
+          "scope": "D SCC 87",
           "rows": [
             "TX1:254"
           ],
@@ -8946,7 +9115,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::Prefix<'a>::record",
-      "component": 85,
+      "component": 89,
       "recursive_component": false,
       "rows": [
         "TX1:140"
@@ -8972,7 +9141,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::Prefix<'a>::validated_record",
-      "component": 86,
+      "component": 90,
       "recursive_component": false,
       "rows": [
         "TX1:141"
@@ -8980,7 +9149,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::Prefix<'a>::record",
-          "scope": "D SCC 85",
+          "scope": "D SCC 89",
           "rows": [
             "TX1:140"
           ],
@@ -9010,7 +9179,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::ValidatedRecord<'a>::decode_k",
-      "component": 87,
+      "component": 91,
       "recursive_component": false,
       "rows": [
         "TX1:147"
@@ -9073,7 +9242,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/r1_semantic.rs::claims",
-      "component": 88,
+      "component": 92,
       "recursive_component": false,
       "rows": [
         "TX1:129"
@@ -9274,7 +9443,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::Prefix<'a>::validated_record",
-          "scope": "D SCC 86",
+          "scope": "D SCC 90",
           "rows": [
             "TX1:141"
           ],
@@ -9285,7 +9454,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::ValidatedRecord<'a>::decode_k",
-          "scope": "D SCC 87",
+          "scope": "D SCC 91",
           "rows": [
             "TX1:147"
           ],
@@ -9332,7 +9501,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/r1_semantic.rs::semantic_boundary",
-      "component": 89,
+      "component": 93,
       "recursive_component": false,
       "rows": [
         "TX1:132"
@@ -9423,7 +9592,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/r1_semantic.rs::semantic_value",
-      "component": 90,
+      "component": 94,
       "recursive_component": false,
       "rows": [
         "TX1:135"
@@ -9838,7 +10007,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::SemanticTranscript<H>::sample_block_validated",
-      "component": 91,
+      "component": 95,
       "recursive_component": false,
       "rows": [
         "TX1:144"
@@ -9846,7 +10015,7 @@
       "callees": [
         {
           "function": "programs/r1-cost-probe/src/lib.rs::SolanaDigest::digest",
-          "scope": "D SCC 19",
+          "scope": "D SCC 23",
           "rows": [
             "TX1:327",
             "TX2:210"
@@ -9877,7 +10046,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::ValidatedRecord<'a>::framed",
-      "component": 92,
+      "component": 96,
       "recursive_component": false,
       "rows": [
         "TX1:148"
@@ -9903,7 +10072,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::ValidatedRecord<'a>::row",
-      "component": 93,
+      "component": 97,
       "recursive_component": false,
       "rows": [
         "TX1:149"
@@ -9933,7 +10102,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/sampler.rs::qm31_div_pass",
-      "component": 94,
+      "component": 98,
       "recursive_component": false,
       "rows": [
         "TX1:162"
@@ -9967,7 +10136,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/sampler.rs::qm31_digits",
-      "component": 95,
+      "component": 99,
       "recursive_component": false,
       "rows": [
         "TX1:161"
@@ -9975,7 +10144,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/sampler.rs::qm31_div_pass",
-          "scope": "D SCC 94",
+          "scope": "D SCC 98",
           "rows": [
             "TX1:162"
           ],
@@ -10013,7 +10182,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/sampler.rs::qm31_sample",
-      "component": 96,
+      "component": 100,
       "recursive_component": false,
       "rows": [
         "TX1:163"
@@ -10048,7 +10217,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/sampler.rs::qm31_digits",
-          "scope": "D SCC 95",
+          "scope": "D SCC 99",
           "rows": [
             "TX1:161"
           ],
@@ -10074,7 +10243,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::SemanticTranscript<H>::semantic_validated",
-      "component": 97,
+      "component": 101,
       "recursive_component": false,
       "rows": [
         "TX1:145"
@@ -10082,7 +10251,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::SemanticTranscript<H>::sample_block_validated",
-          "scope": "D SCC 91",
+          "scope": "D SCC 95",
           "rows": [
             "TX1:144"
           ],
@@ -10093,7 +10262,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::ValidatedRecord<'a>::framed",
-          "scope": "D SCC 92",
+          "scope": "D SCC 96",
           "rows": [
             "TX1:148"
           ],
@@ -10108,7 +10277,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::ValidatedRecord<'a>::row",
-          "scope": "D SCC 93",
+          "scope": "D SCC 97",
           "rows": [
             "TX1:149"
           ],
@@ -10127,7 +10296,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/sampler.rs::qm31_sample",
-          "scope": "D SCC 96",
+          "scope": "D SCC 100",
           "rows": [
             "TX1:163"
           ],
@@ -10153,7 +10322,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/r1_semantic.rs::semantic_round",
-      "component": 98,
+      "component": 102,
       "recursive_component": false,
       "rows": [
         "TX1:133"
@@ -10161,7 +10330,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_semantic.rs::semantic_boundary",
-          "scope": "D SCC 89",
+          "scope": "D SCC 93",
           "rows": [
             "TX1:132"
           ],
@@ -10190,7 +10359,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_semantic.rs::semantic_value",
-          "scope": "D SCC 90",
+          "scope": "D SCC 94",
           "rows": [
             "TX1:135"
           ],
@@ -10201,7 +10370,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::Prefix<'a>::validated_record",
-          "scope": "D SCC 86",
+          "scope": "D SCC 90",
           "rows": [
             "TX1:141"
           ],
@@ -10212,7 +10381,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::SemanticTranscript<H>::semantic_validated",
-          "scope": "D SCC 97",
+          "scope": "D SCC 101",
           "rows": [
             "TX1:145"
           ],
@@ -10223,7 +10392,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::ValidatedRecord<'a>::decode_k",
-          "scope": "D SCC 87",
+          "scope": "D SCC 91",
           "rows": [
             "TX1:147"
           ],
@@ -10269,7 +10438,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/r1_semantic.rs::semantic_rounds",
-      "component": 99,
+      "component": 103,
       "recursive_component": false,
       "rows": [
         "TX1:134"
@@ -10277,7 +10446,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_semantic.rs::semantic_round",
-          "scope": "D SCC 98",
+          "scope": "D SCC 102",
           "rows": [
             "TX1:133"
           ],
@@ -10288,7 +10457,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::Prefix<'a>::validated_record",
-          "scope": "D SCC 86",
+          "scope": "D SCC 90",
           "rows": [
             "TX1:141"
           ],
@@ -10299,7 +10468,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::ValidatedRecord<'a>::decode_k",
-          "scope": "D SCC 87",
+          "scope": "D SCC 91",
           "rows": [
             "TX1:147"
           ],
@@ -10345,7 +10514,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::Prefix<'a>::payload",
-      "component": 100,
+      "component": 104,
       "recursive_component": false,
       "rows": [
         "TX1:139"
@@ -10353,7 +10522,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::Prefix<'a>::record",
-          "scope": "D SCC 85",
+          "scope": "D SCC 89",
           "rows": [
             "TX1:140"
           ],
@@ -10383,7 +10552,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/sampler.rs::circle_sample",
-      "component": 101,
+      "component": 105,
       "recursive_component": false,
       "rows": [
         "TX1:156"
@@ -10391,7 +10560,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/sampler.rs::qm31_sample",
-          "scope": "D SCC 96",
+          "scope": "D SCC 100",
           "rows": [
             "TX1:163"
           ],
@@ -10435,7 +10604,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::SemanticTranscript<H>::circle_validated",
-      "component": 102,
+      "component": 106,
       "recursive_component": false,
       "rows": [
         "TX1:142"
@@ -10443,7 +10612,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::SemanticTranscript<H>::sample_block_validated",
-          "scope": "D SCC 91",
+          "scope": "D SCC 95",
           "rows": [
             "TX1:144"
           ],
@@ -10454,7 +10623,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::ValidatedRecord<'a>::framed",
-          "scope": "D SCC 92",
+          "scope": "D SCC 96",
           "rows": [
             "TX1:148"
           ],
@@ -10469,7 +10638,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::ValidatedRecord<'a>::row",
-          "scope": "D SCC 93",
+          "scope": "D SCC 97",
           "rows": [
             "TX1:149"
           ],
@@ -10488,7 +10657,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/sampler.rs::circle_sample",
-          "scope": "D SCC 101",
+          "scope": "D SCC 105",
           "rows": [
             "TX1:156"
           ],
@@ -10532,7 +10701,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::SemanticTranscript<H>::state",
-      "component": 103,
+      "component": 107,
       "recursive_component": false,
       "rows": [
         "TX1:146"
@@ -10562,7 +10731,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::Selectors::expand",
-      "component": 104,
+      "component": 108,
       "recursive_component": false,
       "rows": [
         "TX1:212"
@@ -10747,7 +10916,7 @@
         },
         {
           "function": "crates/aspis-core/src/field.rs::PreparedQm31Multiplier::new",
-          "scope": "D SCC 4",
+          "scope": "D SCC 5",
           "rows": [
             "TX1:023"
           ],
@@ -10992,7 +11161,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::Selectors::at_point",
-      "component": 105,
+      "component": 109,
       "recursive_component": false,
       "rows": [
         "TX1:210"
@@ -11000,7 +11169,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::Selectors::expand",
-          "scope": "D SCC 104",
+          "scope": "D SCC 108",
           "rows": [
             "TX1:212"
           ],
@@ -11026,7 +11195,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::Selectors::boxed_at_point",
-      "component": 106,
+      "component": 110,
       "recursive_component": false,
       "rows": [
         "TX1:211"
@@ -11034,7 +11203,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::Selectors::at_point",
-          "scope": "D SCC 105",
+          "scope": "D SCC 109",
           "rows": [
             "TX1:210"
           ],
@@ -11061,7 +11230,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::Selectors::active_mask_basis",
-      "component": 107,
+      "component": 111,
       "recursive_component": false,
       "rows": [
         "TX1:209"
@@ -11476,7 +11645,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::Selectors::active",
-      "component": 108,
+      "component": 112,
       "recursive_component": false,
       "rows": [
         "TX1:208"
@@ -11484,7 +11653,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::Selectors::active_mask_basis",
-          "scope": "D SCC 107",
+          "scope": "D SCC 111",
           "rows": [
             "TX1:209"
           ],
@@ -11510,7 +11679,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::selected_binary_weight",
-      "component": 109,
+      "component": 113,
       "recursive_component": false,
       "rows": [
         "TX1:226"
@@ -11532,7 +11701,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::accumulate_endpoint_selector_tensor_basis",
-      "component": 110,
+      "component": 114,
       "recursive_component": false,
       "rows": [
         "TX1:214"
@@ -11733,7 +11902,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::selected_binary_weight",
-          "scope": "D SCC 109",
+          "scope": "D SCC 113",
           "rows": [
             "TX1:226"
           ],
@@ -11759,7 +11928,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::copy_residual",
-      "component": 111,
+      "component": 115,
       "recursive_component": false,
       "rows": [
         "TX1:215"
@@ -12366,7 +12535,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::copy_tag_coordinate_dot",
-      "component": 112,
+      "component": 116,
       "recursive_component": false,
       "rows": [
         "TX1:216"
@@ -12633,7 +12802,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::copy_tag_coordinate_value",
-      "component": 113,
+      "component": 117,
       "recursive_component": false,
       "rows": [
         "TX1:217"
@@ -12641,7 +12810,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::copy_tag_coordinate_dot",
-          "scope": "D SCC 112",
+          "scope": "D SCC 116",
           "rows": [
             "TX1:216"
           ],
@@ -12667,7 +12836,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::finish_pattern_basis_values",
-      "component": 114,
+      "component": 118,
       "recursive_component": false,
       "rows": [
         "TX1:219"
@@ -13082,7 +13251,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::qm31_sum_products_up_to4",
-      "component": 115,
+      "component": 119,
       "recursive_component": false,
       "rows": [
         "TX1:225"
@@ -13230,7 +13399,7 @@
         },
         {
           "function": "crates/aspis-core/src/field.rs::qm31_sum_products2",
-          "scope": "D SCC 11",
+          "scope": "D SCC 13",
           "rows": [
             "TX1:040"
           ],
@@ -13241,7 +13410,7 @@
         },
         {
           "function": "crates/aspis-core/src/field.rs::qm31_sum_products3",
-          "scope": "D SCC 12",
+          "scope": "D SCC 14",
           "rows": [
             "TX1:041"
           ],
@@ -13252,7 +13421,7 @@
         },
         {
           "function": "crates/aspis-core/src/field.rs::qm31_sum_products4",
-          "scope": "D SCC 14",
+          "scope": "D SCC 16",
           "rows": [
             "TX1:043"
           ],
@@ -13336,7 +13505,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::finish_selector_tensor_basis",
-      "component": 116,
+      "component": 120,
       "recursive_component": false,
       "rows": [
         "TX1:220"
@@ -13735,7 +13904,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::copy_tag_coordinate_value",
-          "scope": "D SCC 113",
+          "scope": "D SCC 117",
           "rows": [
             "TX1:217"
           ],
@@ -13746,7 +13915,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::finish_pattern_basis_values",
-          "scope": "D SCC 114",
+          "scope": "D SCC 118",
           "rows": [
             "TX1:219"
           ],
@@ -13757,7 +13926,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::qm31_sum_products_up_to4",
-          "scope": "D SCC 115",
+          "scope": "D SCC 119",
           "rows": [
             "TX1:225"
           ],
@@ -13784,7 +13953,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::link_weight",
-      "component": 117,
+      "component": 121,
       "recursive_component": false,
       "rows": [
         "TX1:222"
@@ -13812,7 +13981,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::lift_m31",
-      "component": 118,
+      "component": 122,
       "recursive_component": false,
       "rows": [
         "TX1:221"
@@ -13835,7 +14004,7 @@
         },
         {
           "function": "crates/aspis-core/src/field.rs::QM31::from_cm31",
-          "scope": "D SCC 5",
+          "scope": "D SCC 6",
           "rows": [
             "TX1:025",
             "TX2:018"
@@ -13871,7 +14040,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::pattern_values_windowed",
-      "component": 119,
+      "component": 123,
       "recursive_component": false,
       "rows": [
         "TX1:224"
@@ -14463,7 +14632,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::lift_m31",
-          "scope": "D SCC 118",
+          "scope": "D SCC 122",
           "rows": [
             "TX1:221"
           ],
@@ -14496,7 +14665,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::pattern_values",
-      "component": 120,
+      "component": 124,
       "recursive_component": false,
       "rows": [
         "TX1:223"
@@ -14504,7 +14673,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::pattern_values_windowed",
-          "scope": "D SCC 119",
+          "scope": "D SCC 123",
           "rows": [
             "TX1:224"
           ],
@@ -14530,7 +14699,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::evaluate_with_selectors",
-      "component": 121,
+      "component": 125,
       "recursive_component": false,
       "rows": [
         "TX1:218"
@@ -14736,7 +14905,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::Selectors::active",
-          "scope": "D SCC 108",
+          "scope": "D SCC 112",
           "rows": [
             "TX1:208"
           ],
@@ -14747,7 +14916,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::accumulate_endpoint_selector_tensor_basis",
-          "scope": "D SCC 110",
+          "scope": "D SCC 114",
           "rows": [
             "TX1:214"
           ],
@@ -14758,7 +14927,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::copy_residual",
-          "scope": "D SCC 111",
+          "scope": "D SCC 115",
           "rows": [
             "TX1:215"
           ],
@@ -14769,7 +14938,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::finish_selector_tensor_basis",
-          "scope": "D SCC 116",
+          "scope": "D SCC 120",
           "rows": [
             "TX1:220"
           ],
@@ -14780,7 +14949,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::link_weight",
-          "scope": "D SCC 117",
+          "scope": "D SCC 121",
           "rows": [
             "TX1:222"
           ],
@@ -14797,7 +14966,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::pattern_values",
-          "scope": "D SCC 120",
+          "scope": "D SCC 124",
           "rows": [
             "TX1:223"
           ],
@@ -14824,7 +14993,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::copy_variant",
-      "component": 122,
+      "component": 126,
       "recursive_component": false,
       "rows": [
         "TX1:238"
@@ -14852,7 +15021,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::sum_high",
-      "component": 123,
+      "component": 127,
       "recursive_component": false,
       "rows": [
         "TX1:262"
@@ -15077,7 +15246,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::poseidon_selectors",
-      "component": 124,
+      "component": 128,
       "recursive_component": false,
       "rows": [
         "TX1:248"
@@ -15085,7 +15254,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::sum_high",
-          "scope": "D SCC 123",
+          "scope": "D SCC 127",
           "rows": [
             "TX1:262"
           ],
@@ -15118,7 +15287,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::selected_claim",
-      "component": 125,
+      "component": 129,
       "recursive_component": false,
       "rows": [
         "TX1:259"
@@ -15146,7 +15315,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::Selectors::row",
-      "component": 126,
+      "component": 130,
       "recursive_component": false,
       "rows": [
         "TX1:213"
@@ -15373,7 +15542,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::add_preweighted",
-      "component": 127,
+      "component": 131,
       "recursive_component": false,
       "rows": [
         "TX1:230"
@@ -15525,7 +15694,7 @@
         },
         {
           "function": "crates/aspis-core/src/field.rs::qm31_pack_base4",
-          "scope": "D SCC 9",
+          "scope": "D SCC 11",
           "rows": [
             "TX1:039"
           ],
@@ -15601,7 +15770,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::lift_m31",
-      "component": 128,
+      "component": 132,
       "recursive_component": false,
       "rows": [
         "TX1:243"
@@ -15624,7 +15793,7 @@
         },
         {
           "function": "crates/aspis-core/src/field.rs::QM31::from_cm31",
-          "scope": "D SCC 5",
+          "scope": "D SCC 6",
           "rows": [
             "TX1:025",
             "TX2:018"
@@ -15660,7 +15829,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::occupancy_lanes_factored",
-      "component": 129,
+      "component": 133,
       "recursive_component": false,
       "rows": [
         "TX1:244"
@@ -15940,7 +16109,7 @@
         },
         {
           "function": "crates/aspis-core/src/field.rs::PreparedQm31Multiplier::new",
-          "scope": "D SCC 4",
+          "scope": "D SCC 5",
           "rows": [
             "TX1:023"
           ],
@@ -16267,7 +16436,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::lift_m31",
-          "scope": "D SCC 128",
+          "scope": "D SCC 132",
           "rows": [
             "TX1:243"
           ],
@@ -16300,7 +16469,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::variant_expected_output",
-      "component": 130,
+      "component": 134,
       "recursive_component": false,
       "rows": [
         "TX1:265"
@@ -16328,7 +16497,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::add_occupancy_lanes",
-      "component": 131,
+      "component": 135,
       "recursive_component": false,
       "rows": [
         "TX1:228"
@@ -16336,7 +16505,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::Selectors::row",
-          "scope": "D SCC 126",
+          "scope": "D SCC 130",
           "rows": [
             "TX1:213"
           ],
@@ -16353,7 +16522,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::add_preweighted",
-          "scope": "D SCC 127",
+          "scope": "D SCC 131",
           "rows": [
             "TX1:230"
           ],
@@ -16364,7 +16533,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::occupancy_lanes_factored",
-          "scope": "D SCC 129",
+          "scope": "D SCC 133",
           "rows": [
             "TX1:244"
           ],
@@ -16375,7 +16544,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::variant_expected_output",
-          "scope": "D SCC 130",
+          "scope": "D SCC 134",
           "rows": [
             "TX1:265"
           ],
@@ -16407,7 +16576,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::path_lanes_factored",
-      "component": 132,
+      "component": 136,
       "recursive_component": false,
       "rows": [
         "TX1:247"
@@ -16592,7 +16761,7 @@
         },
         {
           "function": "crates/aspis-core/src/field.rs::PreparedQm31Multiplier::new",
-          "scope": "D SCC 4",
+          "scope": "D SCC 5",
           "rows": [
             "TX1:023"
           ],
@@ -16836,7 +17005,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::add_path_lanes",
-      "component": 133,
+      "component": 137,
       "recursive_component": false,
       "rows": [
         "TX1:229"
@@ -17235,7 +17404,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::add_preweighted",
-          "scope": "D SCC 127",
+          "scope": "D SCC 131",
           "rows": [
             "TX1:230"
           ],
@@ -17246,7 +17415,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::path_lanes_factored",
-          "scope": "D SCC 132",
+          "scope": "D SCC 136",
           "rows": [
             "TX1:247"
           ],
@@ -17257,7 +17426,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::sum_high",
-          "scope": "D SCC 123",
+          "scope": "D SCC 127",
           "rows": [
             "TX1:262"
           ],
@@ -17290,7 +17459,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::absorption_lanes_factored",
-      "component": 134,
+      "component": 138,
       "recursive_component": false,
       "rows": [
         "TX1:227"
@@ -17475,7 +17644,7 @@
         },
         {
           "function": "crates/aspis-core/src/field.rs::PreparedQm31Multiplier::new",
-          "scope": "D SCC 4",
+          "scope": "D SCC 5",
           "rows": [
             "TX1:023"
           ],
@@ -17719,7 +17888,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::initial_variant_selectors",
-      "component": 135,
+      "component": 139,
       "recursive_component": false,
       "rows": [
         "TX1:241"
@@ -17941,7 +18110,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::semantic_initial_and_absorption",
-      "component": 136,
+      "component": 140,
       "recursive_component": false,
       "rows": [
         "TX1:260"
@@ -18279,7 +18448,7 @@
         },
         {
           "function": "crates/aspis-core/src/field.rs::PreparedQm31Multiplier::new",
-          "scope": "D SCC 4",
+          "scope": "D SCC 5",
           "rows": [
             "TX1:023"
           ],
@@ -18722,7 +18891,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::absorption_lanes_factored",
-          "scope": "D SCC 134",
+          "scope": "D SCC 138",
           "rows": [
             "TX1:227"
           ],
@@ -18733,7 +18902,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::initial_variant_selectors",
-          "scope": "D SCC 135",
+          "scope": "D SCC 139",
           "rows": [
             "TX1:241"
           ],
@@ -18750,7 +18919,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::sum_high",
-          "scope": "D SCC 123",
+          "scope": "D SCC 127",
           "rows": [
             "TX1:262"
           ],
@@ -18783,7 +18952,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::add_schedule_lanes",
-      "component": 137,
+      "component": 141,
       "recursive_component": false,
       "rows": [
         "TX1:232"
@@ -18791,7 +18960,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::add_preweighted",
-          "scope": "D SCC 127",
+          "scope": "D SCC 131",
           "rows": [
             "TX1:230"
           ],
@@ -18802,7 +18971,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::semantic_initial_and_absorption",
-          "scope": "D SCC 136",
+          "scope": "D SCC 140",
           "rows": [
             "TX1:260"
           ],
@@ -18828,7 +18997,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::add_preweighted_shared_selector",
-      "component": 138,
+      "component": 142,
       "recursive_component": false,
       "rows": [
         "TX1:231"
@@ -19120,7 +19289,7 @@
         },
         {
           "function": "crates/aspis-core/src/field.rs::qm31_pack_base4",
-          "scope": "D SCC 9",
+          "scope": "D SCC 11",
           "rows": [
             "TX1:039"
           ],
@@ -19254,7 +19423,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::reconstruct_10",
-      "component": 139,
+      "component": 143,
       "recursive_component": false,
       "rows": [
         "TX1:257"
@@ -19478,7 +19647,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::add_value_lanes",
-      "component": 140,
+      "component": 144,
       "recursive_component": false,
       "rows": [
         "TX1:233"
@@ -20219,7 +20388,7 @@
         },
         {
           "function": "crates/aspis-core/src/field/wide_exact.rs::WideExact::square",
-          "scope": "D SCC 17",
+          "scope": "D SCC 21",
           "rows": [
             "TX1:056"
           ],
@@ -20279,7 +20448,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::Selectors::row",
-          "scope": "D SCC 126",
+          "scope": "D SCC 130",
           "rows": [
             "TX1:213"
           ],
@@ -20296,7 +20465,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::add_preweighted",
-          "scope": "D SCC 127",
+          "scope": "D SCC 131",
           "rows": [
             "TX1:230"
           ],
@@ -20307,7 +20476,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::add_preweighted_shared_selector",
-          "scope": "D SCC 138",
+          "scope": "D SCC 142",
           "rows": [
             "TX1:231"
           ],
@@ -20318,7 +20487,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::reconstruct_10",
-          "scope": "D SCC 139",
+          "scope": "D SCC 143",
           "rows": [
             "TX1:257"
           ],
@@ -20352,7 +20521,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::empty_root",
-      "component": 141,
+      "component": 145,
       "recursive_component": false,
       "rows": [
         "TX1:239"
@@ -20380,7 +20549,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::append_level_packed_selector_tensor",
-      "component": 142,
+      "component": 146,
       "recursive_component": false,
       "rows": [
         "TX1:234"
@@ -20660,7 +20829,7 @@
         },
         {
           "function": "crates/aspis-core/src/field.rs::PreparedQm31Multiplier::new",
-          "scope": "D SCC 4",
+          "scope": "D SCC 5",
           "rows": [
             "TX1:023"
           ],
@@ -20831,7 +21000,7 @@
         },
         {
           "function": "crates/aspis-core/src/field.rs::qm31_pack_base4",
-          "scope": "D SCC 9",
+          "scope": "D SCC 11",
           "rows": [
             "TX1:039"
           ],
@@ -20998,7 +21167,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::empty_root",
-          "scope": "D SCC 141",
+          "scope": "D SCC 145",
           "rows": [
             "TX1:239"
           ],
@@ -21015,7 +21184,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::lift_m31",
-          "scope": "D SCC 128",
+          "scope": "D SCC 132",
           "rows": [
             "TX1:243"
           ],
@@ -21047,7 +21216,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::append_levels_packed_selector_tensor",
-      "component": 143,
+      "component": 147,
       "recursive_component": false,
       "rows": [
         "TX1:235"
@@ -21248,7 +21417,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::append_level_packed_selector_tensor",
-          "scope": "D SCC 142",
+          "scope": "D SCC 146",
           "rows": [
             "TX1:234"
           ],
@@ -21275,7 +21444,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::bounded_append_carry",
-      "component": 144,
+      "component": 148,
       "recursive_component": false,
       "rows": [
         "TX1:236"
@@ -21304,7 +21473,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::left_digest_packed_selector_tensor",
-      "component": 145,
+      "component": 149,
       "recursive_component": false,
       "rows": [
         "TX1:242"
@@ -21489,7 +21658,7 @@
         },
         {
           "function": "crates/aspis-core/src/field.rs::PreparedQm31Multiplier::new",
-          "scope": "D SCC 4",
+          "scope": "D SCC 5",
           "rows": [
             "TX1:023"
           ],
@@ -21611,7 +21780,7 @@
         },
         {
           "function": "crates/aspis-core/src/field.rs::qm31_pack_base4",
-          "scope": "D SCC 9",
+          "scope": "D SCC 11",
           "rows": [
             "TX1:039"
           ],
@@ -21729,7 +21898,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::lift_m31",
-          "scope": "D SCC 128",
+          "scope": "D SCC 132",
           "rows": [
             "TX1:243"
           ],
@@ -21761,7 +21930,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::optional_carry_packed_selector_tensor",
-      "component": 146,
+      "component": 150,
       "recursive_component": false,
       "rows": [
         "TX1:245"
@@ -21946,7 +22115,7 @@
         },
         {
           "function": "crates/aspis-core/src/field.rs::PreparedQm31Multiplier::new",
-          "scope": "D SCC 4",
+          "scope": "D SCC 5",
           "rows": [
             "TX1:023"
           ],
@@ -22068,7 +22237,7 @@
         },
         {
           "function": "crates/aspis-core/src/field.rs::qm31_pack_base4",
-          "scope": "D SCC 9",
+          "scope": "D SCC 11",
           "rows": [
             "TX1:039"
           ],
@@ -22186,7 +22355,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::lift_m31",
-          "scope": "D SCC 128",
+          "scope": "D SCC 132",
           "rows": [
             "TX1:243"
           ],
@@ -22218,7 +22387,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::optional_recipient_packed_selector_tensor",
-      "component": 147,
+      "component": 151,
       "recursive_component": false,
       "rows": [
         "TX1:246"
@@ -22403,7 +22572,7 @@
         },
         {
           "function": "crates/aspis-core/src/field.rs::PreparedQm31Multiplier::new",
-          "scope": "D SCC 4",
+          "scope": "D SCC 5",
           "rows": [
             "TX1:023"
           ],
@@ -22525,7 +22694,7 @@
         },
         {
           "function": "crates/aspis-core/src/field.rs::qm31_pack_base4",
-          "scope": "D SCC 9",
+          "scope": "D SCC 11",
           "rows": [
             "TX1:039"
           ],
@@ -22643,7 +22812,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::lift_m31",
-          "scope": "D SCC 128",
+          "scope": "D SCC 132",
           "rows": [
             "TX1:243"
           ],
@@ -22676,7 +22845,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::public_digest_packed_selector_tensor",
-      "component": 148,
+      "component": 152,
       "recursive_component": false,
       "rows": [
         "TX1:251"
@@ -22861,7 +23030,7 @@
         },
         {
           "function": "crates/aspis-core/src/field.rs::PreparedQm31Multiplier::new",
-          "scope": "D SCC 4",
+          "scope": "D SCC 5",
           "rows": [
             "TX1:023"
           ],
@@ -23090,7 +23259,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::append_levels_packed_selector_tensor",
-          "scope": "D SCC 143",
+          "scope": "D SCC 147",
           "rows": [
             "TX1:235"
           ],
@@ -23101,7 +23270,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::bounded_append_carry",
-          "scope": "D SCC 144",
+          "scope": "D SCC 148",
           "rows": [
             "TX1:236"
           ],
@@ -23118,7 +23287,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::left_digest_packed_selector_tensor",
-          "scope": "D SCC 145",
+          "scope": "D SCC 149",
           "rows": [
             "TX1:242"
           ],
@@ -23129,7 +23298,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::optional_carry_packed_selector_tensor",
-          "scope": "D SCC 146",
+          "scope": "D SCC 150",
           "rows": [
             "TX1:245"
           ],
@@ -23140,7 +23309,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::optional_recipient_packed_selector_tensor",
-          "scope": "D SCC 147",
+          "scope": "D SCC 151",
           "rows": [
             "TX1:246"
           ],
@@ -23167,7 +23336,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::public_digest_packed",
-      "component": 149,
+      "component": 153,
       "recursive_component": false,
       "rows": [
         "TX1:250"
@@ -23175,7 +23344,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::public_digest_packed_selector_tensor",
-          "scope": "D SCC 148",
+          "scope": "D SCC 152",
           "rows": [
             "TX1:251"
           ],
@@ -23202,7 +23371,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::scalar_lanes",
-      "component": 150,
+      "component": 154,
       "recursive_component": false,
       "rows": [
         "TX1:258"
@@ -23424,7 +23593,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::semantic_packed",
-      "component": 151,
+      "component": 155,
       "recursive_component": false,
       "rows": [
         "TX1:261"
@@ -24016,7 +24185,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::Selectors::row",
-          "scope": "D SCC 126",
+          "scope": "D SCC 130",
           "rows": [
             "TX1:213"
           ],
@@ -24033,7 +24202,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::add_occupancy_lanes",
-          "scope": "D SCC 131",
+          "scope": "D SCC 135",
           "rows": [
             "TX1:228"
           ],
@@ -24044,7 +24213,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::add_path_lanes",
-          "scope": "D SCC 133",
+          "scope": "D SCC 137",
           "rows": [
             "TX1:229"
           ],
@@ -24055,7 +24224,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::add_preweighted",
-          "scope": "D SCC 127",
+          "scope": "D SCC 131",
           "rows": [
             "TX1:230"
           ],
@@ -24066,7 +24235,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::add_schedule_lanes",
-          "scope": "D SCC 137",
+          "scope": "D SCC 141",
           "rows": [
             "TX1:232"
           ],
@@ -24077,7 +24246,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::add_value_lanes",
-          "scope": "D SCC 140",
+          "scope": "D SCC 144",
           "rows": [
             "TX1:233"
           ],
@@ -24088,7 +24257,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::lift_m31",
-          "scope": "D SCC 128",
+          "scope": "D SCC 132",
           "rows": [
             "TX1:243"
           ],
@@ -24105,7 +24274,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::public_digest_packed",
-          "scope": "D SCC 149",
+          "scope": "D SCC 153",
           "rows": [
             "TX1:250"
           ],
@@ -24116,7 +24285,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::scalar_lanes",
-          "scope": "D SCC 150",
+          "scope": "D SCC 154",
           "rows": [
             "TX1:258"
           ],
@@ -24149,7 +24318,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::validate_transition",
-      "component": 152,
+      "component": 156,
       "recursive_component": false,
       "rows": [
         "TX1:264"
@@ -24157,7 +24326,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::bounded_append_carry",
-          "scope": "D SCC 144",
+          "scope": "D SCC 148",
           "rows": [
             "TX1:236"
           ],
@@ -24174,7 +24343,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::empty_root",
-          "scope": "D SCC 141",
+          "scope": "D SCC 145",
           "rows": [
             "TX1:239"
           ],
@@ -24207,7 +24376,7 @@
     },
     {
       "function": "crates/aspis-statement/src/state_only_poseidon.rs::extension_from_raw_limbs",
-      "component": 153,
+      "component": 157,
       "recursive_component": false,
       "rows": [
         "TX1:309"
@@ -24242,7 +24411,7 @@
         },
         {
           "function": "crates/aspis-core/src/field.rs::M31::reduce_u62",
-          "scope": "D SCC 3",
+          "scope": "D SCC 4",
           "rows": [
             "TX1:019"
           ],
@@ -24278,7 +24447,7 @@
     },
     {
       "function": "crates/aspis-statement/src/state_only_poseidon.rs::extension_limbs",
-      "component": 154,
+      "component": 158,
       "recursive_component": false,
       "rows": [
         "TX1:310"
@@ -24306,7 +24475,7 @@
     },
     {
       "function": "crates/aspis-statement/src/state_only_poseidon.rs::external_linear_lazy",
-      "component": 155,
+      "component": 159,
       "recursive_component": false,
       "rows": [
         "TX1:311"
@@ -24314,7 +24483,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/state_only_poseidon.rs::extension_from_raw_limbs",
-          "scope": "D SCC 153",
+          "scope": "D SCC 157",
           "rows": [
             "TX1:309"
           ],
@@ -24331,7 +24500,7 @@
         },
         {
           "function": "crates/aspis-statement/src/state_only_poseidon.rs::extension_limbs",
-          "scope": "D SCC 154",
+          "scope": "D SCC 158",
           "rows": [
             "TX1:310"
           ],
@@ -24364,7 +24533,7 @@
     },
     {
       "function": "crates/aspis-statement/src/state_only_poseidon.rs::pow5",
-      "component": 156,
+      "component": 160,
       "recursive_component": false,
       "rows": [
         "TX1:326"
@@ -24594,7 +24763,7 @@
         },
         {
           "function": "crates/aspis-core/src/field/wide_exact.rs::WideExact::square",
-          "scope": "D SCC 17",
+          "scope": "D SCC 21",
           "rows": [
             "TX1:056"
           ],
@@ -24620,7 +24789,7 @@
     },
     {
       "function": "crates/aspis-statement/src/state_only_poseidon.rs::full_round",
-      "component": 157,
+      "component": 161,
       "recursive_component": false,
       "rows": [
         "TX1:315"
@@ -24821,7 +24990,7 @@
         },
         {
           "function": "crates/aspis-statement/src/state_only_poseidon.rs::external_linear_lazy",
-          "scope": "D SCC 155",
+          "scope": "D SCC 159",
           "rows": [
             "TX1:311"
           ],
@@ -24832,7 +25001,7 @@
         },
         {
           "function": "crates/aspis-statement/src/state_only_poseidon.rs::pow5",
-          "scope": "D SCC 156",
+          "scope": "D SCC 160",
           "rows": [
             "TX1:326"
           ],
@@ -24859,7 +25028,7 @@
     },
     {
       "function": "crates/aspis-statement/src/state_only_poseidon.rs::external_local_packed_raw",
-      "component": 158,
+      "component": 162,
       "recursive_component": false,
       "rows": [
         "TX1:314"
@@ -24889,7 +25058,7 @@
     },
     {
       "function": "crates/aspis-statement/src/state_only_poseidon.rs::external_local_packed",
-      "component": 159,
+      "component": 163,
       "recursive_component": false,
       "rows": [
         "TX1:313"
@@ -24897,7 +25066,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/state_only_poseidon.rs::extension_from_raw_limbs",
-          "scope": "D SCC 153",
+          "scope": "D SCC 157",
           "rows": [
             "TX1:309"
           ],
@@ -24914,7 +25083,7 @@
         },
         {
           "function": "crates/aspis-statement/src/state_only_poseidon.rs::external_local_packed_raw",
-          "scope": "D SCC 158",
+          "scope": "D SCC 162",
           "rows": [
             "TX1:314"
           ],
@@ -24947,7 +25116,7 @@
     },
     {
       "function": "crates/aspis-statement/src/state_only_poseidon.rs::external_linear_packed",
-      "component": 160,
+      "component": 164,
       "recursive_component": false,
       "rows": [
         "TX1:312"
@@ -25148,7 +25317,7 @@
         },
         {
           "function": "crates/aspis-statement/src/state_only_poseidon.rs::external_local_packed",
-          "scope": "D SCC 159",
+          "scope": "D SCC 163",
           "rows": [
             "TX1:313"
           ],
@@ -25175,7 +25344,7 @@
     },
     {
       "function": "crates/aspis-statement/src/state_only_poseidon.rs::full_round_packed",
-      "component": 161,
+      "component": 165,
       "recursive_component": false,
       "rows": [
         "TX1:318"
@@ -25376,7 +25545,7 @@
         },
         {
           "function": "crates/aspis-statement/src/state_only_poseidon.rs::external_linear_packed",
-          "scope": "D SCC 160",
+          "scope": "D SCC 164",
           "rows": [
             "TX1:312"
           ],
@@ -25387,7 +25556,7 @@
         },
         {
           "function": "crates/aspis-statement/src/state_only_poseidon.rs::pow5",
-          "scope": "D SCC 156",
+          "scope": "D SCC 160",
           "rows": [
             "TX1:326"
           ],
@@ -25414,7 +25583,7 @@
     },
     {
       "function": "crates/aspis-statement/src/state_only_poseidon.rs::interpolate_three_constant_limb",
-      "component": 162,
+      "component": 166,
       "recursive_component": false,
       "rows": [
         "TX1:322"
@@ -25460,7 +25629,7 @@
     },
     {
       "function": "crates/aspis-statement/src/state_only_poseidon.rs::interpolate_three_constant_columns",
-      "component": 163,
+      "component": 167,
       "recursive_component": false,
       "rows": [
         "TX1:321"
@@ -25495,7 +25664,7 @@
         },
         {
           "function": "crates/aspis-statement/src/state_only_poseidon.rs::interpolate_three_constant_limb",
-          "scope": "D SCC 162",
+          "scope": "D SCC 166",
           "rows": [
             "TX1:322"
           ],
@@ -25522,7 +25691,7 @@
     },
     {
       "function": "crates/aspis-statement/src/state_only_poseidon.rs::interpolated_full_pair_packed",
-      "component": 164,
+      "component": 168,
       "recursive_component": false,
       "rows": [
         "TX1:323"
@@ -25530,7 +25699,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/state_only_poseidon.rs::full_round",
-          "scope": "D SCC 157",
+          "scope": "D SCC 161",
           "rows": [
             "TX1:315"
           ],
@@ -25541,7 +25710,7 @@
         },
         {
           "function": "crates/aspis-statement/src/state_only_poseidon.rs::full_round_packed",
-          "scope": "D SCC 161",
+          "scope": "D SCC 165",
           "rows": [
             "TX1:318"
           ],
@@ -25552,7 +25721,7 @@
         },
         {
           "function": "crates/aspis-statement/src/state_only_poseidon.rs::interpolate_three_constant_columns",
-          "scope": "D SCC 163",
+          "scope": "D SCC 167",
           "rows": [
             "TX1:321"
           ],
@@ -25578,7 +25747,7 @@
     },
     {
       "function": "crates/aspis-statement/src/state_only_poseidon.rs::internal_linear_lazy",
-      "component": 165,
+      "component": 169,
       "recursive_component": false,
       "rows": [
         "TX1:319"
@@ -25586,7 +25755,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/state_only_poseidon.rs::extension_from_raw_limbs",
-          "scope": "D SCC 153",
+          "scope": "D SCC 157",
           "rows": [
             "TX1:309"
           ],
@@ -25603,7 +25772,7 @@
         },
         {
           "function": "crates/aspis-statement/src/state_only_poseidon.rs::extension_limbs",
-          "scope": "D SCC 154",
+          "scope": "D SCC 158",
           "rows": [
             "TX1:310"
           ],
@@ -25636,7 +25805,7 @@
     },
     {
       "function": "crates/aspis-statement/src/state_only_poseidon.rs::internal_round",
-      "component": 166,
+      "component": 170,
       "recursive_component": false,
       "rows": [
         "TX1:320"
@@ -25837,7 +26006,7 @@
         },
         {
           "function": "crates/aspis-statement/src/state_only_poseidon.rs::internal_linear_lazy",
-          "scope": "D SCC 165",
+          "scope": "D SCC 169",
           "rows": [
             "TX1:319"
           ],
@@ -25848,7 +26017,7 @@
         },
         {
           "function": "crates/aspis-statement/src/state_only_poseidon.rs::pow5",
-          "scope": "D SCC 156",
+          "scope": "D SCC 160",
           "rows": [
             "TX1:326"
           ],
@@ -25874,7 +26043,7 @@
     },
     {
       "function": "crates/aspis-statement/src/state_only_poseidon.rs::interpolated_internal_pair",
-      "component": 167,
+      "component": 171,
       "recursive_component": false,
       "rows": [
         "TX1:324"
@@ -25882,7 +26051,7 @@
       "callees": [
         {
           "function": "crates/aspis-core/src/field.rs::qm31_m31_dot",
-          "scope": "D SCC 8",
+          "scope": "D SCC 10",
           "rows": [
             "TX1:038"
           ],
@@ -25893,7 +26062,7 @@
         },
         {
           "function": "crates/aspis-statement/src/state_only_poseidon.rs::internal_round",
-          "scope": "D SCC 166",
+          "scope": "D SCC 170",
           "rows": [
             "TX1:320"
           ],
@@ -25919,7 +26088,7 @@
     },
     {
       "function": "crates/aspis-statement/src/state_only_poseidon.rs::full_round_m31_constants",
-      "component": 168,
+      "component": 172,
       "recursive_component": false,
       "rows": [
         "TX1:316"
@@ -26120,7 +26289,7 @@
         },
         {
           "function": "crates/aspis-statement/src/state_only_poseidon.rs::external_linear_lazy",
-          "scope": "D SCC 155",
+          "scope": "D SCC 159",
           "rows": [
             "TX1:311"
           ],
@@ -26131,7 +26300,7 @@
         },
         {
           "function": "crates/aspis-statement/src/state_only_poseidon.rs::pow5",
-          "scope": "D SCC 156",
+          "scope": "D SCC 160",
           "rows": [
             "TX1:326"
           ],
@@ -26158,7 +26327,7 @@
     },
     {
       "function": "crates/aspis-statement/src/state_only_poseidon.rs::full_round_m31_constants_packed",
-      "component": 169,
+      "component": 173,
       "recursive_component": false,
       "rows": [
         "TX1:317"
@@ -26359,7 +26528,7 @@
         },
         {
           "function": "crates/aspis-statement/src/state_only_poseidon.rs::external_linear_packed",
-          "scope": "D SCC 160",
+          "scope": "D SCC 164",
           "rows": [
             "TX1:312"
           ],
@@ -26370,7 +26539,7 @@
         },
         {
           "function": "crates/aspis-statement/src/state_only_poseidon.rs::pow5",
-          "scope": "D SCC 156",
+          "scope": "D SCC 160",
           "rows": [
             "TX1:326"
           ],
@@ -26397,7 +26566,7 @@
     },
     {
       "function": "crates/aspis-statement/src/state_only_poseidon.rs::leading_pair_packed",
-      "component": 170,
+      "component": 174,
       "recursive_component": false,
       "rows": [
         "TX1:325"
@@ -26598,7 +26767,7 @@
         },
         {
           "function": "crates/aspis-statement/src/state_only_poseidon.rs::external_linear_lazy",
-          "scope": "D SCC 155",
+          "scope": "D SCC 159",
           "rows": [
             "TX1:311"
           ],
@@ -26609,7 +26778,7 @@
         },
         {
           "function": "crates/aspis-statement/src/state_only_poseidon.rs::full_round_m31_constants",
-          "scope": "D SCC 168",
+          "scope": "D SCC 172",
           "rows": [
             "TX1:316"
           ],
@@ -26620,7 +26789,7 @@
         },
         {
           "function": "crates/aspis-statement/src/state_only_poseidon.rs::full_round_m31_constants_packed",
-          "scope": "D SCC 169",
+          "scope": "D SCC 173",
           "rows": [
             "TX1:317"
           ],
@@ -26647,7 +26816,7 @@
     },
     {
       "function": "crates/aspis-statement/src/state_only_poseidon.rs::evaluate_state_only_poseidon_oracle_projected",
-      "component": 171,
+      "component": 175,
       "recursive_component": false,
       "rows": [
         "TX1:308"
@@ -26927,7 +27096,7 @@
         },
         {
           "function": "crates/aspis-core/src/field.rs::PreparedQm31Multiplier::new",
-          "scope": "D SCC 4",
+          "scope": "D SCC 5",
           "rows": [
             "TX1:023"
           ],
@@ -27098,7 +27267,7 @@
         },
         {
           "function": "crates/aspis-core/src/field.rs::qm31_pack_base4",
-          "scope": "D SCC 9",
+          "scope": "D SCC 11",
           "rows": [
             "TX1:039"
           ],
@@ -27109,7 +27278,7 @@
         },
         {
           "function": "crates/aspis-core/src/field.rs::qm31_sum_products3_prepared",
-          "scope": "D SCC 13",
+          "scope": "D SCC 15",
           "rows": [
             "TX1:042"
           ],
@@ -27276,7 +27445,7 @@
         },
         {
           "function": "crates/aspis-statement/src/state_only_poseidon.rs::interpolated_full_pair_packed",
-          "scope": "D SCC 164",
+          "scope": "D SCC 168",
           "rows": [
             "TX1:323"
           ],
@@ -27287,7 +27456,7 @@
         },
         {
           "function": "crates/aspis-statement/src/state_only_poseidon.rs::interpolated_internal_pair",
-          "scope": "D SCC 167",
+          "scope": "D SCC 171",
           "rows": [
             "TX1:324"
           ],
@@ -27298,7 +27467,7 @@
         },
         {
           "function": "crates/aspis-statement/src/state_only_poseidon.rs::leading_pair_packed",
-          "scope": "D SCC 170",
+          "scope": "D SCC 174",
           "rows": [
             "TX1:325"
           ],
@@ -27325,7 +27494,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::composition_parts",
-      "component": 172,
+      "component": 176,
       "recursive_component": false,
       "rows": [
         "TX1:237"
@@ -27510,7 +27679,7 @@
         },
         {
           "function": "crates/aspis-core/src/field.rs::PreparedQm31Multiplier::new",
-          "scope": "D SCC 4",
+          "scope": "D SCC 5",
           "rows": [
             "TX1:023"
           ],
@@ -27739,7 +27908,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::Selectors::boxed_at_point",
-          "scope": "D SCC 106",
+          "scope": "D SCC 110",
           "rows": [
             "TX1:211"
           ],
@@ -27750,7 +27919,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::evaluate_with_selectors",
-          "scope": "D SCC 121",
+          "scope": "D SCC 125",
           "rows": [
             "TX1:218"
           ],
@@ -27761,7 +27930,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::copy_variant",
-          "scope": "D SCC 122",
+          "scope": "D SCC 126",
           "rows": [
             "TX1:238"
           ],
@@ -27778,7 +27947,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::poseidon_selectors",
-          "scope": "D SCC 124",
+          "scope": "D SCC 128",
           "rows": [
             "TX1:248"
           ],
@@ -27789,7 +27958,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::selected_claim",
-          "scope": "D SCC 125",
+          "scope": "D SCC 129",
           "rows": [
             "TX1:259"
           ],
@@ -27806,7 +27975,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::semantic_packed",
-          "scope": "D SCC 151",
+          "scope": "D SCC 155",
           "rows": [
             "TX1:261"
           ],
@@ -27817,7 +27986,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::validate_transition",
-          "scope": "D SCC 152",
+          "scope": "D SCC 156",
           "rows": [
             "TX1:264"
           ],
@@ -27828,7 +27997,7 @@
         },
         {
           "function": "crates/aspis-statement/src/state_only_poseidon.rs::evaluate_state_only_poseidon_oracle_projected",
-          "scope": "D SCC 171",
+          "scope": "D SCC 175",
           "rows": [
             "TX1:308"
           ],
@@ -27855,7 +28024,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::equality_value",
-      "component": 173,
+      "component": 177,
       "recursive_component": false,
       "rows": [
         "TX1:240"
@@ -28175,7 +28344,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::terminal_parts",
-      "component": 174,
+      "component": 178,
       "recursive_component": false,
       "rows": [
         "TX1:263"
@@ -28623,7 +28792,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::composition_parts",
-          "scope": "D SCC 172",
+          "scope": "D SCC 176",
           "rows": [
             "TX1:237"
           ],
@@ -28634,7 +28803,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::equality_value",
-          "scope": "D SCC 173",
+          "scope": "D SCC 177",
           "rows": [
             "TX1:240"
           ],
@@ -28660,7 +28829,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::r0::Public<'a>::terminal_qm31",
-      "component": 175,
+      "component": 179,
       "recursive_component": false,
       "rows": [
         "TX1:256"
@@ -28668,7 +28837,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::r0::Public<'a>::semantic",
-          "scope": "D SCC 82",
+          "scope": "D SCC 86",
           "rows": [
             "TX1:255"
           ],
@@ -28679,7 +28848,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::terminal_parts",
-          "scope": "D SCC 174",
+          "scope": "D SCC 178",
           "rows": [
             "TX1:263"
           ],
@@ -28705,7 +28874,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/r1_semantic.rs::verify_finish",
-      "component": 176,
+      "component": 180,
       "recursive_component": false,
       "rows": [
         "TX1:136"
@@ -29104,7 +29273,7 @@
         },
         {
           "function": "crates/aspis-core/src/state_only_hiding.rs::state_only_selected_mask_value",
-          "scope": "D SCC 41",
+          "scope": "D SCC 45",
           "rows": [
             "TX1:076"
           ],
@@ -29115,7 +29284,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_semantic.rs::claims",
-          "scope": "D SCC 88",
+          "scope": "D SCC 92",
           "rows": [
             "TX1:129"
           ],
@@ -29126,7 +29295,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_semantic.rs::mark",
-          "scope": "D SCC 76",
+          "scope": "D SCC 80",
           "rows": [
             "TX1:130"
           ],
@@ -29137,7 +29306,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_semantic.rs::semantic_rounds",
-          "scope": "D SCC 99",
+          "scope": "D SCC 103",
           "rows": [
             "TX1:134"
           ],
@@ -29148,7 +29317,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::Prefix<'a>::payload",
-          "scope": "D SCC 100",
+          "scope": "D SCC 104",
           "rows": [
             "TX1:139"
           ],
@@ -29159,7 +29328,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::Prefix<'a>::validated_record",
-          "scope": "D SCC 86",
+          "scope": "D SCC 90",
           "rows": [
             "TX1:141"
           ],
@@ -29170,7 +29339,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::SemanticTranscript<H>::circle_validated",
-          "scope": "D SCC 102",
+          "scope": "D SCC 106",
           "rows": [
             "TX1:142"
           ],
@@ -29181,7 +29350,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::SemanticTranscript<H>::state",
-          "scope": "D SCC 103",
+          "scope": "D SCC 107",
           "rows": [
             "TX1:146"
           ],
@@ -29200,7 +29369,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::ValidatedRecord<'a>::decode_k",
-          "scope": "D SCC 87",
+          "scope": "D SCC 91",
           "rows": [
             "TX1:147"
           ],
@@ -29231,7 +29400,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::r0::Public<'a>::terminal_qm31",
-          "scope": "D SCC 175",
+          "scope": "D SCC 179",
           "rows": [
             "TX1:256"
           ],
@@ -29259,7 +29428,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::validate_record_fields",
-      "component": 177,
+      "component": 181,
       "recursive_component": false,
       "rows": [
         "TX1:154"
@@ -29267,7 +29436,7 @@
       "callees": [
         {
           "function": "crates/aspis-core/src/field/wide_exact.rs::WideExact::c1",
-          "scope": "slice boundary",
+          "scope": "D SCC 18",
           "rows": [
             "TX2:030"
           ],
@@ -29334,7 +29503,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::parse_record",
-      "component": 178,
+      "component": 182,
       "recursive_component": false,
       "rows": [
         "TX1:151"
@@ -29342,7 +29511,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::row_shape",
-          "scope": "D SCC 74",
+          "scope": "D SCC 78",
           "rows": [
             "TX1:153"
           ],
@@ -29366,7 +29535,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::validate_record_fields",
-          "scope": "D SCC 177",
+          "scope": "D SCC 181",
           "rows": [
             "TX1:154"
           ],
@@ -29409,7 +29578,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::parse_record_at",
-      "component": 179,
+      "component": 183,
       "recursive_component": false,
       "rows": [
         "TX1:152"
@@ -29417,7 +29586,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::parse_record",
-          "scope": "D SCC 178",
+          "scope": "D SCC 182",
           "rows": [
             "TX1:151"
           ],
@@ -29428,7 +29597,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::row_shape",
-          "scope": "D SCC 74",
+          "scope": "D SCC 78",
           "rows": [
             "TX1:153"
           ],
@@ -29467,7 +29636,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::Prefix<'a>::parse",
-      "component": 180,
+      "component": 184,
       "recursive_component": false,
       "rows": [
         "TX1:138"
@@ -29475,7 +29644,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::parse_record_at",
-          "scope": "D SCC 179",
+          "scope": "D SCC 183",
           "rows": [
             "TX1:152"
           ],
@@ -29501,7 +29670,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::begin",
-      "component": 181,
+      "component": 185,
       "recursive_component": false,
       "rows": [
         "TX1:150"
@@ -29509,7 +29678,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::Prefix<'a>::validated_record",
-          "scope": "D SCC 86",
+          "scope": "D SCC 90",
           "rows": [
             "TX1:141"
           ],
@@ -29520,7 +29689,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::SemanticTranscript<H>::semantic_validated",
-          "scope": "D SCC 97",
+          "scope": "D SCC 101",
           "rows": [
             "TX1:145"
           ],
@@ -29546,7 +29715,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/r1_semantic.rs::verify_observed",
-      "component": 182,
+      "component": 186,
       "recursive_component": false,
       "rows": [
         "TX1:137"
@@ -29554,7 +29723,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_semantic.rs::mark",
-          "scope": "D SCC 76",
+          "scope": "D SCC 80",
           "rows": [
             "TX1:130"
           ],
@@ -29565,7 +29734,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_semantic.rs::public_transcript",
-          "scope": "D SCC 84",
+          "scope": "D SCC 88",
           "rows": [
             "TX1:131"
           ],
@@ -29576,7 +29745,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_semantic.rs::verify_finish",
-          "scope": "D SCC 176",
+          "scope": "D SCC 180",
           "rows": [
             "TX1:136"
           ],
@@ -29587,7 +29756,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::Prefix<'a>::parse",
-          "scope": "D SCC 180",
+          "scope": "D SCC 184",
           "rows": [
             "TX1:138"
           ],
@@ -29598,7 +29767,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::begin",
-          "scope": "D SCC 181",
+          "scope": "D SCC 185",
           "rows": [
             "TX1:150"
           ],
@@ -29625,7 +29794,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/transcript.rs::Transcript<H>::new",
-      "component": 183,
+      "component": 187,
       "recursive_component": false,
       "rows": [
         "TX1:167"
@@ -29648,7 +29817,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/lib.rs::SolanaDigest::digest",
-          "scope": "D SCC 19",
+          "scope": "D SCC 23",
           "rows": [
             "TX1:327",
             "TX2:210"
@@ -29687,7 +29856,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/transcript.rs::Transcript<H>::absorb",
-      "component": 184,
+      "component": 188,
       "recursive_component": false,
       "rows": [
         "TX1:165"
@@ -29727,7 +29896,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/lib.rs::SolanaDigest::digest",
-          "scope": "D SCC 19",
+          "scope": "D SCC 23",
           "rows": [
             "TX1:327",
             "TX2:210"
@@ -29766,7 +29935,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/transcript.rs::Transcript<H>::queries",
-      "component": 185,
+      "component": 189,
       "recursive_component": false,
       "rows": [
         "TX1:168"
@@ -29774,7 +29943,7 @@
       "callees": [
         {
           "function": "crates/aspis-core/src/r0_transcript.rs::queries_from_pairs",
-          "scope": "D SCC 35",
+          "scope": "D SCC 39",
           "rows": [
             "TX1:069"
           ],
@@ -29800,7 +29969,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/transcript.rs::Transcript<H>::absorb",
-          "scope": "D SCC 184",
+          "scope": "D SCC 188",
           "rows": [
             "TX1:165"
           ],
@@ -29819,7 +29988,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/lib.rs::SolanaDigest::digest",
-          "scope": "D SCC 19",
+          "scope": "D SCC 23",
           "rows": [
             "TX1:327",
             "TX2:210"
@@ -29850,7 +30019,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/sampler.rs::add_small_base_p",
-      "component": 186,
+      "component": 190,
       "recursive_component": false,
       "rows": [
         "TX1:155"
@@ -29873,7 +30042,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/sampler.rs::decode8",
-      "component": 187,
+      "component": 191,
       "recursive_component": false,
       "rows": [
         "TX1:157"
@@ -29908,7 +30077,7 @@
         },
         {
           "function": "crates/aspis-core/src/field/wide_exact.rs::WideExact::new",
-          "scope": "D SCC 16",
+          "scope": "D SCC 20",
           "rows": [
             "TX1:055",
             "TX2:037"
@@ -29947,7 +30116,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/sampler.rs::low_base_p_digits",
-      "component": 188,
+      "component": 192,
       "recursive_component": false,
       "rows": [
         "TX1:159"
@@ -29989,7 +30158,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/sampler.rs::gamma_sample",
-      "component": 189,
+      "component": 193,
       "recursive_component": false,
       "rows": [
         "TX1:158"
@@ -29997,7 +30166,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/sampler.rs::add_small_base_p",
-          "scope": "D SCC 186",
+          "scope": "D SCC 190",
           "rows": [
             "TX1:155"
           ],
@@ -30008,7 +30177,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/sampler.rs::decode8",
-          "scope": "D SCC 187",
+          "scope": "D SCC 191",
           "rows": [
             "TX1:157"
           ],
@@ -30028,7 +30197,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/sampler.rs::low_base_p_digits",
-          "scope": "D SCC 188",
+          "scope": "D SCC 192",
           "rows": [
             "TX1:159"
           ],
@@ -30073,7 +30242,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/sampler.rs::ordinary_sample",
-      "component": 190,
+      "component": 194,
       "recursive_component": false,
       "rows": [
         "TX1:160"
@@ -30081,7 +30250,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/sampler.rs::decode8",
-          "scope": "D SCC 187",
+          "scope": "D SCC 191",
           "rows": [
             "TX1:157"
           ],
@@ -30101,7 +30270,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/sampler.rs::low_base_p_digits",
-          "scope": "D SCC 188",
+          "scope": "D SCC 192",
           "rows": [
             "TX1:159"
           ],
@@ -30146,7 +30315,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/transcript.rs::Transcript<H>::block",
-      "component": 191,
+      "component": 195,
       "recursive_component": false,
       "rows": [
         "TX1:166"
@@ -30154,7 +30323,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/transcript.rs::Transcript<H>::absorb",
-          "scope": "D SCC 184",
+          "scope": "D SCC 188",
           "rows": [
             "TX1:165"
           ],
@@ -30173,7 +30342,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/lib.rs::SolanaDigest::digest",
-          "scope": "D SCC 19",
+          "scope": "D SCC 23",
           "rows": [
             "TX1:327",
             "TX2:210"
@@ -30204,7 +30373,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/transcript.rs::Transcript<H>::scalar",
-      "component": 192,
+      "component": 196,
       "recursive_component": false,
       "rows": [
         "TX1:169"
@@ -30212,7 +30381,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/sampler.rs::gamma_sample",
-          "scope": "D SCC 189",
+          "scope": "D SCC 193",
           "rows": [
             "TX1:158"
           ],
@@ -30223,7 +30392,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/sampler.rs::ordinary_sample",
-          "scope": "D SCC 190",
+          "scope": "D SCC 194",
           "rows": [
             "TX1:160"
           ],
@@ -30249,7 +30418,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/transcript.rs::Transcript<H>::block",
-          "scope": "D SCC 191",
+          "scope": "D SCC 195",
           "rows": [
             "TX1:166"
           ],
@@ -30275,7 +30444,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/transcript.rs::Transcript<H>::scalar_k",
-      "component": 193,
+      "component": 197,
       "recursive_component": false,
       "rows": [
         "TX1:170"
@@ -30329,7 +30498,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/sampler.rs::qm31_sample",
-          "scope": "D SCC 96",
+          "scope": "D SCC 100",
           "rows": [
             "TX1:163"
           ],
@@ -30355,7 +30524,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/transcript.rs::Transcript<H>::block",
-          "scope": "D SCC 191",
+          "scope": "D SCC 195",
           "rows": [
             "TX1:166"
           ],
@@ -30381,7 +30550,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/transport.rs::Variant::folds",
-      "component": 194,
+      "component": 198,
       "recursive_component": false,
       "rows": [
         "TX1:172",
@@ -30412,7 +30581,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/weights.rs::powers",
-      "component": 195,
+      "component": 199,
       "recursive_component": false,
       "rows": [
         "TX1:197",
@@ -30646,7 +30815,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/verifier.rs::prepared_claim",
-      "component": 196,
+      "component": 200,
       "recursive_component": false,
       "rows": [
         "TX1:193"
@@ -30987,7 +31156,7 @@
         },
         {
           "function": "crates/aspis-core/src/field/wide_exact.rs::WideExact::c0",
-          "scope": "slice boundary",
+          "scope": "D SCC 17",
           "rows": [
             "TX2:029"
           ],
@@ -31142,7 +31311,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/weights.rs::powers",
-          "scope": "D SCC 195",
+          "scope": "D SCC 199",
           "rows": [
             "TX1:197",
             "TX2:138"
@@ -31196,7 +31365,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/verifier.rs::Prepared::new",
-      "component": 197,
+      "component": 201,
       "recursive_component": false,
       "rows": [
         "TX1:179"
@@ -31236,7 +31405,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::SemanticTranscript<H>::state",
-          "scope": "D SCC 103",
+          "scope": "D SCC 107",
           "rows": [
             "TX1:146"
           ],
@@ -31255,7 +31424,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/transcript.rs::Transcript<H>::new",
-          "scope": "D SCC 183",
+          "scope": "D SCC 187",
           "rows": [
             "TX1:167"
           ],
@@ -31274,7 +31443,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/transcript.rs::Transcript<H>::queries",
-          "scope": "D SCC 185",
+          "scope": "D SCC 189",
           "rows": [
             "TX1:168"
           ],
@@ -31285,7 +31454,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/transcript.rs::Transcript<H>::scalar",
-          "scope": "D SCC 192",
+          "scope": "D SCC 196",
           "rows": [
             "TX1:169"
           ],
@@ -31296,7 +31465,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/transcript.rs::Transcript<H>::scalar_k",
-          "scope": "D SCC 193",
+          "scope": "D SCC 197",
           "rows": [
             "TX1:170"
           ],
@@ -31307,7 +31476,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/transport.rs::Variant::folds",
-          "scope": "D SCC 194",
+          "scope": "D SCC 198",
           "rows": [
             "TX1:172",
             "TX2:097"
@@ -31322,7 +31491,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/verifier.rs::prepared_claim",
-          "scope": "D SCC 196",
+          "scope": "D SCC 200",
           "rows": [
             "TX1:193"
           ],
@@ -31353,7 +31522,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/weights.rs::powers",
-          "scope": "D SCC 195",
+          "scope": "D SCC 199",
           "rows": [
             "TX1:197",
             "TX2:138"
@@ -31388,7 +31557,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/candidate.rs::prepare",
-      "component": 198,
+      "component": 202,
       "recursive_component": false,
       "rows": [
         "TX1:087"
@@ -31396,7 +31565,7 @@
       "callees": [
         {
           "function": "crates/aspis-core/src/r0/heap.rs::filled",
-          "scope": "D SCC 18",
+          "scope": "D SCC 22",
           "rows": [
             "TX1:064",
             "TX2:045"
@@ -31409,7 +31578,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/candidate.rs::wide_view",
-          "scope": "D SCC 71",
+          "scope": "D SCC 75",
           "rows": [
             "TX1:095"
           ],
@@ -31438,7 +31607,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/compact.rs::expand_semantic",
-          "scope": "D SCC 75",
+          "scope": "D SCC 79",
           "rows": [
             "TX1:098"
           ],
@@ -31449,7 +31618,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/compact.rs::expand_values",
-          "scope": "D SCC 73",
+          "scope": "D SCC 77",
           "rows": [
             "TX1:099"
           ],
@@ -31476,7 +31645,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/r1_semantic.rs::verify_observed",
-          "scope": "D SCC 182",
+          "scope": "D SCC 186",
           "rows": [
             "TX1:137"
           ],
@@ -31487,7 +31656,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/verifier.rs::Prepared::new",
-          "scope": "D SCC 197",
+          "scope": "D SCC 201",
           "rows": [
             "TX1:179"
           ],
@@ -31527,7 +31696,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/transport.rs::Variant::final_len",
-      "component": 199,
+      "component": 203,
       "recursive_component": false,
       "rows": [
         "TX1:171",
@@ -31536,7 +31705,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/transport.rs::Variant::folds",
-          "scope": "D SCC 194",
+          "scope": "D SCC 198",
           "rows": [
             "TX1:172",
             "TX2:097"
@@ -31574,7 +31743,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/verifier.rs::Accumulator::new",
-      "component": 200,
+      "component": 204,
       "recursive_component": false,
       "rows": [
         "TX1:174"
@@ -31582,7 +31751,7 @@
       "callees": [
         {
           "function": "crates/aspis-core/src/r0/heap.rs::filled",
-          "scope": "D SCC 18",
+          "scope": "D SCC 22",
           "rows": [
             "TX1:064",
             "TX2:045"
@@ -31595,7 +31764,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/transport.rs::Variant::final_len",
-          "scope": "D SCC 199",
+          "scope": "D SCC 203",
           "rows": [
             "TX1:171",
             "TX2:096"
@@ -31625,7 +31794,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/verifier.rs::BatchedWeights::value",
-      "component": 201,
+      "component": 205,
       "recursive_component": false,
       "rows": [
         "TX1:178",
@@ -31680,7 +31849,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/verifier.rs::BatchedWeights::finish",
-      "component": 202,
+      "component": 206,
       "recursive_component": false,
       "rows": [
         "TX1:175",
@@ -31689,7 +31858,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/verifier.rs::BatchedWeights::value",
-          "scope": "D SCC 201",
+          "scope": "D SCC 205",
           "rows": [
             "TX1:178",
             "TX2:102"
@@ -31726,7 +31895,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/verifier.rs::BatchedWeights::new",
-      "component": 203,
+      "component": 207,
       "recursive_component": false,
       "rows": [
         "TX1:176",
@@ -31735,7 +31904,7 @@
       "callees": [
         {
           "function": "crates/aspis-core/src/r0/heap.rs::filled",
-          "scope": "D SCC 18",
+          "scope": "D SCC 22",
           "rows": [
             "TX1:064",
             "TX2:045"
@@ -31770,7 +31939,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/verifier.rs::checkpoint_size",
-      "component": 204,
+      "component": 208,
       "recursive_component": false,
       "rows": [
         "TX1:187",
@@ -31779,7 +31948,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/transport.rs::Variant::final_len",
-          "scope": "D SCC 199",
+          "scope": "D SCC 203",
           "rows": [
             "TX1:171",
             "TX2:096"
@@ -31817,7 +31986,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/verifier.rs::checkpoint",
-      "component": 205,
+      "component": 209,
       "recursive_component": false,
       "rows": [
         "TX1:186"
@@ -31825,7 +31994,7 @@
       "callees": [
         {
           "function": "crates/aspis-core/src/field.rs::CM31::write_le_bytes",
-          "scope": "slice boundary",
+          "scope": "D SCC 2",
           "rows": [
             "TX2:008"
           ],
@@ -31854,7 +32023,7 @@
         },
         {
           "function": "crates/aspis-core/src/field.rs::QM31::write_le_bytes",
-          "scope": "slice boundary",
+          "scope": "D SCC 7",
           "rows": [
             "TX2:024"
           ],
@@ -31898,7 +32067,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/verifier.rs::checkpoint_size",
-          "scope": "D SCC 204",
+          "scope": "D SCC 208",
           "rows": [
             "TX1:187",
             "TX2:112"
@@ -31913,7 +32082,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/lib.rs::SolanaDigest::digest",
-          "scope": "D SCC 19",
+          "scope": "D SCC 23",
           "rows": [
             "TX1:327",
             "TX2:210"
@@ -32034,7 +32203,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/candidate.rs::tx1",
-      "component": 206,
+      "component": 210,
       "recursive_component": false,
       "rows": [
         "TX1:094"
@@ -32042,7 +32211,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/candidate.rs::batch_merkle",
-          "scope": "D SCC 66",
+          "scope": "D SCC 70",
           "rows": [
             "TX1:081",
             "TX2:053"
@@ -32055,7 +32224,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/candidate.rs::canonical_scan",
-          "scope": "D SCC 69",
+          "scope": "D SCC 73",
           "rows": [
             "TX1:084"
           ],
@@ -32066,7 +32235,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/candidate.rs::parse_shape",
-          "scope": "D SCC 70",
+          "scope": "D SCC 74",
           "rows": [
             "TX1:086",
             "TX2:057"
@@ -32079,7 +32248,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/candidate.rs::prepare",
-          "scope": "D SCC 198",
+          "scope": "D SCC 202",
           "rows": [
             "TX1:087"
           ],
@@ -32103,7 +32272,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/verifier.rs::Accumulator::new",
-          "scope": "D SCC 200",
+          "scope": "D SCC 204",
           "rows": [
             "TX1:174"
           ],
@@ -32114,7 +32283,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/verifier.rs::BatchedWeights::finish",
-          "scope": "D SCC 202",
+          "scope": "D SCC 206",
           "rows": [
             "TX1:175",
             "TX2:099"
@@ -32127,7 +32296,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/verifier.rs::BatchedWeights::new",
-          "scope": "D SCC 203",
+          "scope": "D SCC 207",
           "rows": [
             "TX1:176",
             "TX2:100"
@@ -32153,7 +32322,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/verifier.rs::checkpoint",
-          "scope": "D SCC 205",
+          "scope": "D SCC 209",
           "rows": [
             "TX1:186"
           ],
@@ -32281,7 +32450,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/verifier.rs::finish_query_dot",
-      "component": 207,
+      "component": 211,
       "recursive_component": false,
       "rows": [
         "TX2:114"
@@ -32374,7 +32543,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/verifier.rs::polynomial",
-      "component": 208,
+      "component": 212,
       "recursive_component": false,
       "rows": [
         "TX2:119"
@@ -32810,7 +32979,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/verifier.rs::finish_relation_round",
-      "component": 209,
+      "component": 213,
       "recursive_component": false,
       "rows": [
         "TX2:116"
@@ -33200,7 +33369,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/verifier.rs::polynomial",
-          "scope": "D SCC 208",
+          "scope": "D SCC 212",
           "rows": [
             "TX2:119"
           ],
@@ -33247,7 +33416,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/weights.rs::Weights::box_from_parts",
-      "component": 210,
+      "component": 214,
       "recursive_component": false,
       "rows": [
         "TX2:127"
@@ -33270,7 +33439,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/weights.rs::double",
-      "component": 211,
+      "component": 215,
       "recursive_component": false,
       "rows": [
         "TX2:132"
@@ -33882,7 +34051,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/weights.rs::Weights::new",
-      "component": 212,
+      "component": 216,
       "recursive_component": false,
       "rows": [
         "TX2:128"
@@ -34281,7 +34450,7 @@
         },
         {
           "function": "crates/aspis-core/src/state_only_prefix.rs::r0::statement_points",
-          "scope": "D SCC 43",
+          "scope": "D SCC 47",
           "rows": [
             "TX2:047"
           ],
@@ -34292,7 +34461,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/weights.rs::Weights::box_from_parts",
-          "scope": "D SCC 210",
+          "scope": "D SCC 214",
           "rows": [
             "TX2:127"
           ],
@@ -34303,7 +34472,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/weights.rs::double",
-          "scope": "D SCC 211",
+          "scope": "D SCC 215",
           "rows": [
             "TX2:132"
           ],
@@ -34335,7 +34504,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/weights.rs::Weights::scalar_factor",
-      "component": 213,
+      "component": 217,
       "recursive_component": false,
       "rows": [
         "TX2:130"
@@ -34785,7 +34954,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/weights.rs::factored_s2_libra_weights",
-      "component": 214,
+      "component": 218,
       "recursive_component": false,
       "rows": [
         "TX2:133"
@@ -35430,7 +35599,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/weights.rs::Weights::scalar_factor",
-          "scope": "D SCC 213",
+          "scope": "D SCC 217",
           "rows": [
             "TX2:130"
           ],
@@ -35457,7 +35626,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/weights.rs::s2_grouped_inactive_pair",
-      "component": 215,
+      "component": 219,
       "recursive_component": false,
       "rows": [
         "TX2:142"
@@ -35893,7 +36062,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/weights.rs::grouped_inactive_pair",
-      "component": 216,
+      "component": 220,
       "recursive_component": false,
       "rows": [
         "TX2:135"
@@ -36313,7 +36482,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/weights.rs::s2_grouped_inactive_pair",
-          "scope": "D SCC 215",
+          "scope": "D SCC 219",
           "rows": [
             "TX2:142"
           ],
@@ -36340,7 +36509,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/weights.rs::Weights::tensor",
-      "component": 217,
+      "component": 221,
       "recursive_component": false,
       "rows": [
         "TX2:131"
@@ -36562,7 +36731,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/weights.rs::push_byte_products",
-      "component": 218,
+      "component": 222,
       "recursive_component": false,
       "rows": [
         "TX2:141"
@@ -36625,7 +36794,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/weights.rs::process_kind",
-      "component": 219,
+      "component": 223,
       "recursive_component": false,
       "rows": [
         "TX2:139"
@@ -36861,7 +37030,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/weights.rs::Weights::scalar_factor",
-          "scope": "D SCC 213",
+          "scope": "D SCC 217",
           "rows": [
             "TX2:130"
           ],
@@ -36872,7 +37041,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/weights.rs::Weights::tensor",
-          "scope": "D SCC 217",
+          "scope": "D SCC 221",
           "rows": [
             "TX2:131"
           ],
@@ -36883,7 +37052,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/weights.rs::push_byte_products",
-          "scope": "D SCC 218",
+          "scope": "D SCC 222",
           "rows": [
             "TX2:141"
           ],
@@ -36909,7 +37078,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/weights.rs::process_regular_kinds",
-      "component": 220,
+      "component": 224,
       "recursive_component": false,
       "rows": [
         "TX2:140"
@@ -36917,7 +37086,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/weights.rs::process_kind",
-          "scope": "D SCC 219",
+          "scope": "D SCC 223",
           "rows": [
             "TX2:139"
           ],
@@ -36943,7 +37112,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/weights.rs::high_dot",
-      "component": 221,
+      "component": 225,
       "recursive_component": false,
       "rows": [
         "TX2:136"
@@ -37015,7 +37184,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/weights.rs::shared_high",
-      "component": 222,
+      "component": 226,
       "recursive_component": false,
       "rows": [
         "TX2:143"
@@ -37221,7 +37390,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/weights.rs::Weights::scalar_factor",
-          "scope": "D SCC 213",
+          "scope": "D SCC 217",
           "rows": [
             "TX2:130"
           ],
@@ -37232,7 +37401,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/weights.rs::high_dot",
-          "scope": "D SCC 221",
+          "scope": "D SCC 225",
           "rows": [
             "TX2:136"
           ],
@@ -37258,7 +37427,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/weights.rs::partial_dot",
-      "component": 223,
+      "component": 227,
       "recursive_component": false,
       "rows": [
         "TX2:137"
@@ -37351,7 +37520,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/weights.rs::shared_partials",
-      "component": 224,
+      "component": 228,
       "recursive_component": false,
       "rows": [
         "TX2:144"
@@ -37359,7 +37528,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/weights.rs::partial_dot",
-          "scope": "D SCC 223",
+          "scope": "D SCC 227",
           "rows": [
             "TX2:137"
           ],
@@ -37386,7 +37555,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/weights.rs::shared_two_point_guard",
-      "component": 225,
+      "component": 229,
       "recursive_component": false,
       "rows": [
         "TX2:145"
@@ -37412,7 +37581,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/weights.rs::Weights::pair",
-      "component": 226,
+      "component": 230,
       "recursive_component": false,
       "rows": [
         "TX2:129"
@@ -38044,7 +38213,7 @@
         },
         {
           "function": "crates/aspis-core/src/r0/heap.rs::filled",
-          "scope": "D SCC 18",
+          "scope": "D SCC 22",
           "rows": [
             "TX1:064",
             "TX2:045"
@@ -38072,7 +38241,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/weights.rs::Weights::scalar_factor",
-          "scope": "D SCC 213",
+          "scope": "D SCC 217",
           "rows": [
             "TX2:130"
           ],
@@ -38083,7 +38252,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/weights.rs::factored_s2_libra_weights",
-          "scope": "D SCC 214",
+          "scope": "D SCC 218",
           "rows": [
             "TX2:133"
           ],
@@ -38115,7 +38284,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/weights.rs::grouped_inactive_pair",
-          "scope": "D SCC 216",
+          "scope": "D SCC 220",
           "rows": [
             "TX2:135"
           ],
@@ -38126,7 +38295,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/weights.rs::powers",
-          "scope": "D SCC 195",
+          "scope": "D SCC 199",
           "rows": [
             "TX1:197",
             "TX2:138"
@@ -38144,7 +38313,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/weights.rs::process_regular_kinds",
-          "scope": "D SCC 220",
+          "scope": "D SCC 224",
           "rows": [
             "TX2:140"
           ],
@@ -38155,7 +38324,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/weights.rs::shared_high",
-          "scope": "D SCC 222",
+          "scope": "D SCC 226",
           "rows": [
             "TX2:143"
           ],
@@ -38166,7 +38335,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/weights.rs::shared_partials",
-          "scope": "D SCC 224",
+          "scope": "D SCC 228",
           "rows": [
             "TX2:144"
           ],
@@ -38177,7 +38346,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/weights.rs::shared_two_point_guard",
-          "scope": "D SCC 225",
+          "scope": "D SCC 229",
           "rows": [
             "TX2:145"
           ],
@@ -38208,7 +38377,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/verifier.rs::finish_relation",
-      "component": 227,
+      "component": 231,
       "recursive_component": false,
       "rows": [
         "TX2:115"
@@ -38231,7 +38400,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/transport.rs::Variant::folds",
-          "scope": "D SCC 194",
+          "scope": "D SCC 198",
           "rows": [
             "TX1:172",
             "TX2:097"
@@ -38246,7 +38415,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/verifier.rs::finish_query_dot",
-          "scope": "D SCC 207",
+          "scope": "D SCC 211",
           "rows": [
             "TX2:114"
           ],
@@ -38257,7 +38426,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/verifier.rs::finish_relation_round",
-          "scope": "D SCC 209",
+          "scope": "D SCC 213",
           "rows": [
             "TX2:116"
           ],
@@ -38281,7 +38450,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/weights.rs::Weights::new",
-          "scope": "D SCC 212",
+          "scope": "D SCC 216",
           "rows": [
             "TX2:128"
           ],
@@ -38292,7 +38461,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/weights.rs::Weights::pair",
-          "scope": "D SCC 226",
+          "scope": "D SCC 230",
           "rows": [
             "TX2:129"
           ],
@@ -38319,7 +38488,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/verifier.rs::Reader<'a>::e",
-      "component": 228,
+      "component": 232,
       "recursive_component": false,
       "rows": [
         "TX2:105"
@@ -38365,7 +38534,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/verifier.rs::Reader<'a>::k",
-      "component": 229,
+      "component": 233,
       "recursive_component": false,
       "rows": [
         "TX2:106"
@@ -38409,7 +38578,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/verifier.rs::Reader<'a>::raw",
-      "component": 230,
+      "component": 234,
       "recursive_component": false,
       "rows": [
         "TX2:107"
@@ -38431,7 +38600,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/verifier.rs::read_checkpoint_semantic_alpha",
-      "component": 231,
+      "component": 235,
       "recursive_component": false,
       "rows": [
         "TX2:121"
@@ -38439,7 +38608,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/verifier.rs::Reader<'a>::k",
-          "scope": "D SCC 229",
+          "scope": "D SCC 233",
           "rows": [
             "TX2:106"
           ],
@@ -38467,7 +38636,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/verifier.rs::read_checkpoint_weights",
-      "component": 232,
+      "component": 236,
       "recursive_component": false,
       "rows": [
         "TX2:122"
@@ -38475,7 +38644,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/verifier.rs::Reader<'a>::k",
-          "scope": "D SCC 229",
+          "scope": "D SCC 233",
           "rows": [
             "TX2:106"
           ],
@@ -38504,7 +38673,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/verifier.rs::validate_checkpoint_queries",
-      "component": 233,
+      "component": 237,
       "recursive_component": false,
       "rows": [
         "TX2:126"
@@ -38527,7 +38696,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/verifier.rs::resume",
-      "component": 234,
+      "component": 238,
       "recursive_component": false,
       "rows": [
         "TX2:124"
@@ -38535,7 +38704,7 @@
       "callees": [
         {
           "function": "crates/aspis-core/src/r0/heap.rs::filled",
-          "scope": "D SCC 18",
+          "scope": "D SCC 22",
           "rows": [
             "TX1:064",
             "TX2:045"
@@ -38548,7 +38717,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/transport.rs::Variant::final_len",
-          "scope": "D SCC 199",
+          "scope": "D SCC 203",
           "rows": [
             "TX1:171",
             "TX2:096"
@@ -38578,7 +38747,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/verifier.rs::Reader<'a>::e",
-          "scope": "D SCC 228",
+          "scope": "D SCC 232",
           "rows": [
             "TX2:105"
           ],
@@ -38591,7 +38760,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/verifier.rs::Reader<'a>::k",
-          "scope": "D SCC 229",
+          "scope": "D SCC 233",
           "rows": [
             "TX2:106"
           ],
@@ -38604,7 +38773,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/verifier.rs::Reader<'a>::raw",
-          "scope": "D SCC 230",
+          "scope": "D SCC 234",
           "rows": [
             "TX2:107"
           ],
@@ -38615,7 +38784,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/verifier.rs::checkpoint_size",
-          "scope": "D SCC 204",
+          "scope": "D SCC 208",
           "rows": [
             "TX1:187",
             "TX2:112"
@@ -38630,7 +38799,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/verifier.rs::read_checkpoint_semantic_alpha",
-          "scope": "D SCC 231",
+          "scope": "D SCC 235",
           "rows": [
             "TX2:121"
           ],
@@ -38641,7 +38810,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/verifier.rs::read_checkpoint_weights",
-          "scope": "D SCC 232",
+          "scope": "D SCC 236",
           "rows": [
             "TX2:122"
           ],
@@ -38652,7 +38821,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/verifier.rs::validate_checkpoint_queries",
-          "scope": "D SCC 233",
+          "scope": "D SCC 237",
           "rows": [
             "TX2:126"
           ],
@@ -38681,7 +38850,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/candidate.rs::tx2_common",
-      "component": 235,
+      "component": 239,
       "recursive_component": false,
       "rows": [
         "TX2:065"
@@ -38710,7 +38879,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/candidate.rs::batch_merkle",
-          "scope": "D SCC 66",
+          "scope": "D SCC 70",
           "rows": [
             "TX1:081",
             "TX2:053"
@@ -38736,7 +38905,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/verifier.rs::BatchedWeights::finish",
-          "scope": "D SCC 202",
+          "scope": "D SCC 206",
           "rows": [
             "TX1:175",
             "TX2:099"
@@ -38749,7 +38918,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/verifier.rs::BatchedWeights::new",
-          "scope": "D SCC 203",
+          "scope": "D SCC 207",
           "rows": [
             "TX1:176",
             "TX2:100"
@@ -38775,7 +38944,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/verifier.rs::finish_relation",
-          "scope": "D SCC 227",
+          "scope": "D SCC 231",
           "rows": [
             "TX2:115"
           ],
@@ -38799,7 +38968,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/verifier.rs::resume",
-          "scope": "D SCC 234",
+          "scope": "D SCC 238",
           "rows": [
             "TX2:124"
           ],
@@ -38810,7 +38979,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/weights.rs::powers",
-          "scope": "D SCC 195",
+          "scope": "D SCC 199",
           "rows": [
             "TX1:197",
             "TX2:138"
@@ -38844,7 +39013,7 @@
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/candidate.rs::tx2_authenticated",
-      "component": 236,
+      "component": 240,
       "recursive_component": false,
       "rows": [
         "TX2:064"
@@ -38852,7 +39021,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/candidate.rs::parse_shape",
-          "scope": "D SCC 70",
+          "scope": "D SCC 74",
           "rows": [
             "TX1:086",
             "TX2:057"
@@ -38865,7 +39034,7 @@
         },
         {
           "function": "crates/aspis-r1-cost-probe/src/candidate.rs::tx2_common",
-          "scope": "D SCC 235",
+          "scope": "D SCC 239",
           "rows": [
             "TX2:065"
           ],
@@ -38905,7 +39074,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/format.rs::decode_pool_identity_v1",
-      "component": 237,
+      "component": 241,
       "recursive_component": false,
       "rows": [
         "TX2:149"
@@ -38927,7 +39096,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/format.rs::validate_verifier_policy_v1",
-      "component": 238,
+      "component": 242,
       "recursive_component": false,
       "rows": [
         "TX2:151"
@@ -38949,7 +39118,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/format.rs::decode_verifier_policy_v1",
-      "component": 239,
+      "component": 243,
       "recursive_component": false,
       "rows": [
         "TX2:150"
@@ -38957,7 +39126,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/pool_v1/format.rs::validate_verifier_policy_v1",
-          "scope": "D SCC 238",
+          "scope": "D SCC 242",
           "rows": [
             "TX2:151"
           ],
@@ -38983,7 +39152,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs::decode_pool_v1_pair_forest_checkpoint_v1",
-      "component": 240,
+      "component": 244,
       "recursive_component": false,
       "rows": [
         "TX2:152"
@@ -39025,7 +39194,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs::validate_master",
-      "component": 241,
+      "component": 245,
       "recursive_component": false,
       "rows": [
         "TX2:157"
@@ -39033,7 +39202,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/pool_v1/format.rs::validate_verifier_policy_v1",
-          "scope": "D SCC 238",
+          "scope": "D SCC 242",
           "rows": [
             "TX2:151"
           ],
@@ -39060,7 +39229,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs::decode_pool_v1_pair_forest_master_v1",
-      "component": 242,
+      "component": 246,
       "recursive_component": false,
       "rows": [
         "TX2:153"
@@ -39068,7 +39237,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/pool_v1/format.rs::decode_pool_identity_v1",
-          "scope": "D SCC 237",
+          "scope": "D SCC 241",
           "rows": [
             "TX2:149"
           ],
@@ -39079,7 +39248,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/format.rs::decode_verifier_policy_v1",
-          "scope": "D SCC 239",
+          "scope": "D SCC 243",
           "rows": [
             "TX2:150"
           ],
@@ -39090,7 +39259,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs::validate_master",
-          "scope": "D SCC 241",
+          "scope": "D SCC 245",
           "rows": [
             "TX2:157"
           ],
@@ -39117,7 +39286,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::PoolV1PairForestTerminalStatementV1::semantic_public",
-      "component": 243,
+      "component": 247,
       "recursive_component": false,
       "rows": [
         "TX1:268"
@@ -39145,7 +39314,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierEntryStatusV1::try_from",
-      "component": 244,
+      "component": 248,
       "recursive_component": false,
       "rows": [
         "TX2:192"
@@ -39167,7 +39336,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryEntryV1::has_no_retirement_slot",
-      "component": 245,
+      "component": 249,
       "recursive_component": false,
       "rows": [
         "TX2:193"
@@ -39189,7 +39358,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryEntryV2::has_no_retirement_slot",
-      "component": 246,
+      "component": 250,
       "recursive_component": false,
       "rows": [
         "TX2:195"
@@ -39211,7 +39380,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryEntryV1::is_active_at",
-      "component": 247,
+      "component": 251,
       "recursive_component": false,
       "rows": [
         "TX2:194"
@@ -39219,7 +39388,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryEntryV1::has_no_retirement_slot",
-          "scope": "D SCC 245",
+          "scope": "D SCC 249",
           "rows": [
             "TX2:193"
           ],
@@ -39230,7 +39399,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryEntryV2::has_no_retirement_slot",
-          "scope": "D SCC 246",
+          "scope": "D SCC 250",
           "rows": [
             "TX2:195"
           ],
@@ -39256,7 +39425,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryEntryV2::is_active_at",
-      "component": 248,
+      "component": 252,
       "recursive_component": false,
       "rows": [
         "TX2:196"
@@ -39264,7 +39433,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryEntryV1::has_no_retirement_slot",
-          "scope": "D SCC 245",
+          "scope": "D SCC 249",
           "rows": [
             "TX2:193"
           ],
@@ -39275,7 +39444,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryEntryV2::has_no_retirement_slot",
-          "scope": "D SCC 246",
+          "scope": "D SCC 250",
           "rows": [
             "TX2:195"
           ],
@@ -39301,7 +39470,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryV1::is_immutable",
-      "component": 249,
+      "component": 253,
       "recursive_component": false,
       "rows": [
         "TX2:197"
@@ -39323,7 +39492,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryV1::is_paused",
-      "component": 250,
+      "component": 254,
       "recursive_component": false,
       "rows": [
         "TX2:198"
@@ -39345,7 +39514,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryV2::is_immutable",
-      "component": 251,
+      "component": 255,
       "recursive_component": false,
       "rows": [
         "TX2:199"
@@ -39367,7 +39536,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryV2::is_paused",
-      "component": 252,
+      "component": 256,
       "recursive_component": false,
       "rows": [
         "TX2:200"
@@ -39389,7 +39558,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::required_binding_is_zero",
-      "component": 253,
+      "component": 257,
       "recursive_component": false,
       "rows": [
         "TX2:205"
@@ -39411,7 +39580,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::validate_verifier_registry_entry_v1",
-      "component": 254,
+      "component": 258,
       "recursive_component": false,
       "rows": [
         "TX2:206"
@@ -39419,7 +39588,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryEntryV1::has_no_retirement_slot",
-          "scope": "D SCC 245",
+          "scope": "D SCC 249",
           "rows": [
             "TX2:193"
           ],
@@ -39430,7 +39599,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryEntryV2::has_no_retirement_slot",
-          "scope": "D SCC 246",
+          "scope": "D SCC 250",
           "rows": [
             "TX2:195"
           ],
@@ -39441,7 +39610,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::required_binding_is_zero",
-          "scope": "D SCC 253",
+          "scope": "D SCC 257",
           "rows": [
             "TX2:205"
           ],
@@ -39467,7 +39636,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::decode_verifier_registry_entry_v1",
-      "component": 255,
+      "component": 259,
       "recursive_component": false,
       "rows": [
         "TX2:201"
@@ -39475,7 +39644,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierEntryStatusV1::try_from",
-          "scope": "D SCC 244",
+          "scope": "D SCC 248",
           "rows": [
             "TX2:192"
           ],
@@ -39486,7 +39655,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::validate_verifier_registry_entry_v1",
-          "scope": "D SCC 254",
+          "scope": "D SCC 258",
           "rows": [
             "TX2:206"
           ],
@@ -39512,7 +39681,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::validate_verifier_registry_entry_v2",
-      "component": 256,
+      "component": 260,
       "recursive_component": false,
       "rows": [
         "TX2:207"
@@ -39520,7 +39689,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryEntryV1::has_no_retirement_slot",
-          "scope": "D SCC 245",
+          "scope": "D SCC 249",
           "rows": [
             "TX2:193"
           ],
@@ -39531,7 +39700,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryEntryV2::has_no_retirement_slot",
-          "scope": "D SCC 246",
+          "scope": "D SCC 250",
           "rows": [
             "TX2:195"
           ],
@@ -39542,7 +39711,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::required_binding_is_zero",
-          "scope": "D SCC 253",
+          "scope": "D SCC 257",
           "rows": [
             "TX2:205"
           ],
@@ -39568,7 +39737,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::decode_verifier_registry_entry_v2",
-      "component": 257,
+      "component": 261,
       "recursive_component": false,
       "rows": [
         "TX2:202"
@@ -39576,7 +39745,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierEntryStatusV1::try_from",
-          "scope": "D SCC 244",
+          "scope": "D SCC 248",
           "rows": [
             "TX2:192"
           ],
@@ -39587,7 +39756,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::validate_verifier_registry_entry_v2",
-          "scope": "D SCC 256",
+          "scope": "D SCC 260",
           "rows": [
             "TX2:207"
           ],
@@ -39613,7 +39782,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::validate_verifier_registry_v1",
-      "component": 258,
+      "component": 262,
       "recursive_component": false,
       "rows": [
         "TX2:208"
@@ -39621,7 +39790,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryV1::is_immutable",
-          "scope": "D SCC 249",
+          "scope": "D SCC 253",
           "rows": [
             "TX2:197"
           ],
@@ -39632,7 +39801,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryV2::is_immutable",
-          "scope": "D SCC 251",
+          "scope": "D SCC 255",
           "rows": [
             "TX2:199"
           ],
@@ -39643,7 +39812,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::required_binding_is_zero",
-          "scope": "D SCC 253",
+          "scope": "D SCC 257",
           "rows": [
             "TX2:205"
           ],
@@ -39669,7 +39838,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::decode_verifier_registry_v1",
-      "component": 259,
+      "component": 263,
       "recursive_component": false,
       "rows": [
         "TX2:203"
@@ -39677,7 +39846,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::validate_verifier_registry_v1",
-          "scope": "D SCC 258",
+          "scope": "D SCC 262",
           "rows": [
             "TX2:208"
           ],
@@ -39703,7 +39872,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::validate_verifier_registry_v2",
-      "component": 260,
+      "component": 264,
       "recursive_component": false,
       "rows": [
         "TX2:209"
@@ -39711,7 +39880,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryV1::is_immutable",
-          "scope": "D SCC 249",
+          "scope": "D SCC 253",
           "rows": [
             "TX2:197"
           ],
@@ -39722,7 +39891,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryV2::is_immutable",
-          "scope": "D SCC 251",
+          "scope": "D SCC 255",
           "rows": [
             "TX2:199"
           ],
@@ -39733,7 +39902,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::required_binding_is_zero",
-          "scope": "D SCC 253",
+          "scope": "D SCC 257",
           "rows": [
             "TX2:205"
           ],
@@ -39759,7 +39928,7 @@
     },
     {
       "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::decode_verifier_registry_v2",
-      "component": 261,
+      "component": 265,
       "recursive_component": false,
       "rows": [
         "TX2:204"
@@ -39767,7 +39936,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::validate_verifier_registry_v2",
-          "scope": "D SCC 260",
+          "scope": "D SCC 264",
           "rows": [
             "TX2:209"
           ],
@@ -39793,7 +39962,7 @@
     },
     {
       "function": "programs/r1-cost-probe/src/lib.rs::observer",
-      "component": 262,
+      "component": 266,
       "recursive_component": false,
       "rows": [
         "TX1:329",
@@ -39823,7 +39992,7 @@
     },
     {
       "function": "programs/r1-cost-probe/src/lib.rs::first_decoded",
-      "component": 263,
+      "component": 267,
       "recursive_component": false,
       "rows": [
         "TX1:328"
@@ -39831,7 +40000,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/candidate.rs::tx1",
-          "scope": "D SCC 206",
+          "scope": "D SCC 210",
           "rows": [
             "TX1:094"
           ],
@@ -39842,7 +40011,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/lib.rs::observer",
-          "scope": "D SCC 262",
+          "scope": "D SCC 266",
           "rows": [
             "TX1:329",
             "TX2:212"
@@ -39871,7 +40040,7 @@
     },
     {
       "function": "programs/r1-cost-probe/src/pool_route.rs::admitted",
-      "component": 264,
+      "component": 268,
       "recursive_component": false,
       "rows": [
         "TX1:331",
@@ -39900,7 +40069,7 @@
     },
     {
       "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::snapshot",
-      "component": 265,
+      "component": 269,
       "recursive_component": false,
       "rows": [
         "TX1:343",
@@ -39930,7 +40099,7 @@
     },
     {
       "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data",
-      "component": 266,
+      "component": 270,
       "recursive_component": false,
       "rows": [
         "TX1:335",
@@ -39964,7 +40133,7 @@
     },
     {
       "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::key",
-      "component": 267,
+      "component": 271,
       "recursive_component": false,
       "rows": [
         "TX1:337",
@@ -39997,7 +40166,7 @@
     },
     {
       "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_distinct_accounts",
-      "component": 268,
+      "component": 272,
       "recursive_component": false,
       "rows": [
         "TX1:339",
@@ -40006,7 +40175,7 @@
       "callees": [
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::key",
-          "scope": "D SCC 267",
+          "scope": "D SCC 271",
           "rows": [
             "TX1:337",
             "TX2:231"
@@ -40045,7 +40214,7 @@
     },
     {
       "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::readonly_buffer_meta_ok",
-      "component": 269,
+      "component": 273,
       "recursive_component": false,
       "rows": [
         "TX1:334",
@@ -40078,7 +40247,7 @@
     },
     {
       "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_readonly_buffer",
-      "component": 270,
+      "component": 274,
       "recursive_component": false,
       "rows": [
         "TX1:340",
@@ -40087,7 +40256,7 @@
       "callees": [
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::readonly_buffer_meta_ok",
-          "scope": "D SCC 269",
+          "scope": "D SCC 273",
           "rows": [
             "TX1:334",
             "TX2:222"
@@ -40125,7 +40294,7 @@
     },
     {
       "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data_len",
-      "component": 271,
+      "component": 275,
       "recursive_component": false,
       "rows": [
         "TX1:336",
@@ -40159,7 +40328,7 @@
     },
     {
       "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::owner",
-      "component": 272,
+      "component": 276,
       "recursive_component": false,
       "rows": [
         "TX1:338",
@@ -40192,7 +40361,7 @@
     },
     {
       "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_verifier_checkpoint",
-      "component": 273,
+      "component": 277,
       "recursive_component": false,
       "rows": [
         "TX1:341",
@@ -40201,7 +40370,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/verifier.rs::checkpoint_size",
-          "scope": "D SCC 204",
+          "scope": "D SCC 208",
           "rows": [
             "TX1:187",
             "TX2:112"
@@ -40216,7 +40385,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data_len",
-          "scope": "D SCC 271",
+          "scope": "D SCC 275",
           "rows": [
             "TX1:336",
             "TX2:230"
@@ -40233,7 +40402,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::owner",
-          "scope": "D SCC 272",
+          "scope": "D SCC 276",
           "rows": [
             "TX1:338",
             "TX2:232"
@@ -40271,7 +40440,7 @@
     },
     {
       "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_zero",
-      "component": 274,
+      "component": 278,
       "recursive_component": false,
       "rows": [
         "TX1:342"
@@ -40307,7 +40476,7 @@
     },
     {
       "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage1_owned",
-      "component": 275,
+      "component": 279,
       "recursive_component": false,
       "rows": [
         "TX1:345"
@@ -40348,7 +40517,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::PoolV1PairForestTerminalStatementV1::semantic_public",
-          "scope": "D SCC 243",
+          "scope": "D SCC 247",
           "rows": [
             "TX1:268"
           ],
@@ -40422,7 +40591,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/lib.rs::first_decoded",
-          "scope": "D SCC 263",
+          "scope": "D SCC 267",
           "rows": [
             "TX1:328"
           ],
@@ -40444,7 +40613,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data",
-          "scope": "D SCC 266",
+          "scope": "D SCC 270",
           "rows": [
             "TX1:335",
             "TX2:229"
@@ -40461,7 +40630,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_distinct_accounts",
-          "scope": "D SCC 268",
+          "scope": "D SCC 272",
           "rows": [
             "TX1:339",
             "TX2:235"
@@ -40474,7 +40643,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_readonly_buffer",
-          "scope": "D SCC 270",
+          "scope": "D SCC 274",
           "rows": [
             "TX1:340",
             "TX2:237"
@@ -40487,7 +40656,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_verifier_checkpoint",
-          "scope": "D SCC 273",
+          "scope": "D SCC 277",
           "rows": [
             "TX1:341",
             "TX2:238"
@@ -40500,7 +40669,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_zero",
-          "scope": "D SCC 274",
+          "scope": "D SCC 278",
           "rows": [
             "TX1:342"
           ],
@@ -40539,7 +40708,7 @@
     },
     {
       "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage1",
-      "component": 276,
+      "component": 280,
       "recursive_component": false,
       "rows": [
         "TX1:344"
@@ -40547,7 +40716,7 @@
       "callees": [
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::snapshot",
-          "scope": "D SCC 265",
+          "scope": "D SCC 269",
           "rows": [
             "TX1:343",
             "TX2:239"
@@ -40560,7 +40729,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage1_owned",
-          "scope": "D SCC 275",
+          "scope": "D SCC 279",
           "rows": [
             "TX1:345"
           ],
@@ -40587,7 +40756,7 @@
     },
     {
       "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::pool_program_id",
-      "component": 277,
+      "component": 281,
       "recursive_component": false,
       "rows": [
         "TX2:220"
@@ -40613,7 +40782,7 @@
     },
     {
       "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::decode_checkpoint_box",
-      "component": 278,
+      "component": 282,
       "recursive_component": false,
       "rows": [
         "TX2:216"
@@ -40621,7 +40790,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs::decode_pool_v1_pair_forest_checkpoint_v1",
-          "scope": "D SCC 240",
+          "scope": "D SCC 244",
           "rows": [
             "TX2:152"
           ],
@@ -40648,7 +40817,7 @@
     },
     {
       "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::decode_lane_from_pool_release",
-      "component": 279,
+      "component": 283,
       "recursive_component": false,
       "rows": [
         "TX2:217"
@@ -40691,7 +40860,7 @@
     },
     {
       "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::decode_master_box",
-      "component": 280,
+      "component": 284,
       "recursive_component": false,
       "rows": [
         "TX2:218"
@@ -40699,7 +40868,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs::decode_pool_v1_pair_forest_master_v1",
-          "scope": "D SCC 242",
+          "scope": "D SCC 246",
           "rows": [
             "TX2:153"
           ],
@@ -40726,7 +40895,7 @@
     },
     {
       "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::registry_program_id",
-      "component": 281,
+      "component": 285,
       "recursive_component": false,
       "rows": [
         "TX2:225"
@@ -40752,7 +40921,7 @@
     },
     {
       "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::readonly_meta_ok",
-      "component": 282,
+      "component": 286,
       "recursive_component": false,
       "rows": [
         "TX2:223"
@@ -40778,7 +40947,7 @@
     },
     {
       "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_readonly_account",
-      "component": 283,
+      "component": 287,
       "recursive_component": false,
       "rows": [
         "TX2:236"
@@ -40786,7 +40955,7 @@
       "callees": [
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::readonly_meta_ok",
-          "scope": "D SCC 282",
+          "scope": "D SCC 286",
           "rows": [
             "TX2:223"
           ],
@@ -40801,7 +40970,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::owner",
-          "scope": "D SCC 272",
+          "scope": "D SCC 276",
           "rows": [
             "TX1:338",
             "TX2:232"
@@ -40833,7 +41002,7 @@
     },
     {
       "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::authenticate_invariant_release_registry",
-      "component": 284,
+      "component": 288,
       "recursive_component": false,
       "rows": [
         "TX2:234"
@@ -40841,7 +41010,7 @@
       "callees": [
         {
           "function": "crates/aspis-statement/src/pool_v1/format.rs::validate_verifier_policy_v1",
-          "scope": "D SCC 238",
+          "scope": "D SCC 242",
           "rows": [
             "TX2:151"
           ],
@@ -40852,7 +41021,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryEntryV1::is_active_at",
-          "scope": "D SCC 247",
+          "scope": "D SCC 251",
           "rows": [
             "TX2:194"
           ],
@@ -40863,7 +41032,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryEntryV2::is_active_at",
-          "scope": "D SCC 248",
+          "scope": "D SCC 252",
           "rows": [
             "TX2:196"
           ],
@@ -40874,7 +41043,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryV1::is_immutable",
-          "scope": "D SCC 249",
+          "scope": "D SCC 253",
           "rows": [
             "TX2:197"
           ],
@@ -40885,7 +41054,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryV1::is_paused",
-          "scope": "D SCC 250",
+          "scope": "D SCC 254",
           "rows": [
             "TX2:198"
           ],
@@ -40896,7 +41065,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryV2::is_immutable",
-          "scope": "D SCC 251",
+          "scope": "D SCC 255",
           "rows": [
             "TX2:199"
           ],
@@ -40907,7 +41076,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryV2::is_paused",
-          "scope": "D SCC 252",
+          "scope": "D SCC 256",
           "rows": [
             "TX2:200"
           ],
@@ -40918,7 +41087,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::decode_verifier_registry_entry_v1",
-          "scope": "D SCC 255",
+          "scope": "D SCC 259",
           "rows": [
             "TX2:201"
           ],
@@ -40929,7 +41098,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::decode_verifier_registry_entry_v2",
-          "scope": "D SCC 257",
+          "scope": "D SCC 261",
           "rows": [
             "TX2:202"
           ],
@@ -40940,7 +41109,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::decode_verifier_registry_v1",
-          "scope": "D SCC 259",
+          "scope": "D SCC 263",
           "rows": [
             "TX2:203"
           ],
@@ -40951,7 +41120,7 @@
         },
         {
           "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::decode_verifier_registry_v2",
-          "scope": "D SCC 261",
+          "scope": "D SCC 265",
           "rows": [
             "TX2:204"
           ],
@@ -40962,7 +41131,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::pool_program_id",
-          "scope": "D SCC 277",
+          "scope": "D SCC 281",
           "rows": [
             "TX2:220"
           ],
@@ -40977,7 +41146,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::registry_program_id",
-          "scope": "D SCC 281",
+          "scope": "D SCC 285",
           "rows": [
             "TX2:225"
           ],
@@ -40992,7 +41161,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data",
-          "scope": "D SCC 266",
+          "scope": "D SCC 270",
           "rows": [
             "TX1:335",
             "TX2:229"
@@ -41009,7 +41178,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::key",
-          "scope": "D SCC 267",
+          "scope": "D SCC 271",
           "rows": [
             "TX1:337",
             "TX2:231"
@@ -41026,7 +41195,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_readonly_account",
-          "scope": "D SCC 283",
+          "scope": "D SCC 287",
           "rows": [
             "TX2:236"
           ],
@@ -41053,7 +41222,7 @@
     },
     {
       "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::authenticate_asq8_accounts",
-      "component": 285,
+      "component": 289,
       "recursive_component": false,
       "rows": [
         "TX2:233"
@@ -41093,7 +41262,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::decode_checkpoint_box",
-          "scope": "D SCC 278",
+          "scope": "D SCC 282",
           "rows": [
             "TX2:216"
           ],
@@ -41104,7 +41273,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::decode_lane_from_pool_release",
-          "scope": "D SCC 279",
+          "scope": "D SCC 283",
           "rows": [
             "TX2:217"
           ],
@@ -41115,7 +41284,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::decode_master_box",
-          "scope": "D SCC 280",
+          "scope": "D SCC 284",
           "rows": [
             "TX2:218"
           ],
@@ -41126,7 +41295,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data",
-          "scope": "D SCC 266",
+          "scope": "D SCC 270",
           "rows": [
             "TX1:335",
             "TX2:229"
@@ -41143,7 +41312,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::key",
-          "scope": "D SCC 267",
+          "scope": "D SCC 271",
           "rows": [
             "TX1:337",
             "TX2:231"
@@ -41160,7 +41329,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::authenticate_invariant_release_registry",
-          "scope": "D SCC 284",
+          "scope": "D SCC 288",
           "rows": [
             "TX2:234"
           ],
@@ -41171,7 +41340,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_distinct_accounts",
-          "scope": "D SCC 268",
+          "scope": "D SCC 272",
           "rows": [
             "TX1:339",
             "TX2:235"
@@ -41184,7 +41353,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_readonly_account",
-          "scope": "D SCC 283",
+          "scope": "D SCC 287",
           "rows": [
             "TX2:236"
           ],
@@ -41195,7 +41364,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_readonly_buffer",
-          "scope": "D SCC 270",
+          "scope": "D SCC 274",
           "rows": [
             "TX1:340",
             "TX2:237"
@@ -41208,7 +41377,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_verifier_checkpoint",
-          "scope": "D SCC 273",
+          "scope": "D SCC 277",
           "rows": [
             "TX1:341",
             "TX2:238"
@@ -41237,7 +41406,7 @@
     },
     {
       "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::validate_asq8",
-      "component": 286,
+      "component": 290,
       "recursive_component": false,
       "rows": [
         "TX2:242"
@@ -41302,7 +41471,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::pool_program_id",
-          "scope": "D SCC 277",
+          "scope": "D SCC 281",
           "rows": [
             "TX2:220"
           ],
@@ -41339,7 +41508,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data",
-          "scope": "D SCC 266",
+          "scope": "D SCC 270",
           "rows": [
             "TX1:335",
             "TX2:229"
@@ -41356,7 +41525,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::authenticate_asq8_accounts",
-          "scope": "D SCC 285",
+          "scope": "D SCC 289",
           "rows": [
             "TX2:233"
           ],
@@ -41382,7 +41551,7 @@
     },
     {
       "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage2_owned",
-      "component": 287,
+      "component": 291,
       "recursive_component": false,
       "rows": [
         "TX2:241"
@@ -41390,7 +41559,7 @@
       "callees": [
         {
           "function": "crates/aspis-r1-cost-probe/src/candidate.rs::tx2_authenticated",
-          "scope": "D SCC 236",
+          "scope": "D SCC 240",
           "rows": [
             "TX2:064"
           ],
@@ -41456,7 +41625,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/lib.rs::observer",
-          "scope": "D SCC 262",
+          "scope": "D SCC 266",
           "rows": [
             "TX1:329",
             "TX2:212"
@@ -41480,7 +41649,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data",
-          "scope": "D SCC 266",
+          "scope": "D SCC 270",
           "rows": [
             "TX1:335",
             "TX2:229"
@@ -41497,7 +41666,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::validate_asq8",
-          "scope": "D SCC 286",
+          "scope": "D SCC 290",
           "rows": [
             "TX2:242"
           ],
@@ -41524,7 +41693,7 @@
     },
     {
       "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage2",
-      "component": 288,
+      "component": 292,
       "recursive_component": false,
       "rows": [
         "TX2:240"
@@ -41560,7 +41729,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::snapshot",
-          "scope": "D SCC 265",
+          "scope": "D SCC 269",
           "rows": [
             "TX1:343",
             "TX2:239"
@@ -41573,7 +41742,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage2_owned",
-          "scope": "D SCC 287",
+          "scope": "D SCC 291",
           "rows": [
             "TX2:241"
           ],
@@ -41599,7 +41768,7 @@
     },
     {
       "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::process",
-      "component": 289,
+      "component": 293,
       "recursive_component": false,
       "rows": [
         "TX1:333",
@@ -41608,7 +41777,7 @@
       "callees": [
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage1",
-          "scope": "D SCC 276",
+          "scope": "D SCC 280",
           "rows": [
             "TX1:344"
           ],
@@ -41619,7 +41788,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage2",
-          "scope": "D SCC 288",
+          "scope": "D SCC 292",
           "rows": [
             "TX2:240"
           ],
@@ -41651,7 +41820,7 @@
     },
     {
       "function": "programs/r1-cost-probe/src/lib.rs::process_r1_cost_probe_instruction",
-      "component": 290,
+      "component": 294,
       "recursive_component": false,
       "rows": [
         "TX1:330",
@@ -41660,7 +41829,7 @@
       "callees": [
         {
           "function": "programs/r1-cost-probe/src/pool_route.rs::admitted",
-          "scope": "D SCC 264",
+          "scope": "D SCC 268",
           "rows": [
             "TX1:331",
             "TX2:214"
@@ -41673,7 +41842,7 @@
         },
         {
           "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::process",
-          "scope": "D SCC 289",
+          "scope": "D SCC 293",
           "rows": [
             "TX1:333",
             "TX2:221"
