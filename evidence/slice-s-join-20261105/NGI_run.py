@@ -56,7 +56,7 @@ for n,t in files.items():
 (b/'NGI_native').mkdir(exist_ok=True);(b/'NGI_objects').mkdir(exist_ok=True);(b/'NGI_tmp').mkdir(exist_ok=True)
 for n in ['NFA_WALKER.c','NFA_MemoryLimit.c']:
  p=b/'NGI_native'/n
- if not p.exists():shutil.copy2(C+'/NGI_native_seed/'+n,p)
+ if not p.exists():shutil.copy2({C!r}+'/NGI_native_seed/'+n,p)
 x=json.loads((b/{(a+'.json')!r}).read_text());roots=x['env']['LEAN_PATH'].split(':');pins={{}}
 modules=['NFA_WALKER','NFA_MemoryLimit','NEP_Planted','NEP_Mutations']
 if x['kind']=='lean':modules += re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M)
