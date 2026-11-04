@@ -1,69 +1,23 @@
-# NFZ inventory defect handoff
+# NFZ part-2 handoff
 
-**INCOMPLETE — both requested repairs remain unreviewed.** Branch
-`codex/cx-inv-defects-20261104`. Frozen Rust:
-`4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`. No push.
+**INCOMPLETE — both requested entry repairs remain unreviewed.** Branch codex/cx-inv-defects-20261104. No push. Frozen Rust 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387. Part-1 commits were merged separately; NFZ_B001 and failed inputs remain intact.
 
-Exact established claim: frozen-source discovery and a blocked overlay,
-not compiler-certified reachability or a repaired release inventory.
-NFZ_RESOLUTION.md enumerates type/trait identities, source callers, both
-error callback sites and the whole-inventory scan. NFZ_CANDIDATES.json records
-39 unresolved candidate edges; four absent-function candidates are explicit.
-NFZ_INDEPENDENT_CHECK.json cross-checks AST discovery lexically; it is not the
-required independent MIR/ELF authority.
+Established: corrected frozen dependency projection passes; successful core typed HIR and two MIR flag sets confirm four embedding bodies and six candidate target identities. Not established: deployed caller reachability, callback admission, complete independent overlay authority or repaired inventory. NFZ_RESOLUTION.md and NFZ_CORE_MIR_REVIEW.json state the exact boundary.
 
-NFZ_EDGES.json contains no admitted edges. NFZ_OVERLAY.json pins the empty
-edge list, NFX baseline, original NDT inventories and producers. The prefix-owned
-NFZ_inventory.py applies it without changing any row or status. NFZ_slice_build.py
-copies NFQ's closure core and retains its original exact-Q/S assertions.
-NFZ_COVERAGE.md and NFZ_LEDGER_DELTA.json report **585/587**, D=295 functions /
-448 internal edges / 343 rows, zero new CLOSED rows. Both defects remain OPEN.
-No REACHABILITY-EXCLUDED claim is made.
+All THREE new scopes were used, one at a time with fresh admission, 6G high / 8G max / SwapMax=0 / TasksMax=64:
 
-For review only, three source-discovered edges would cover all 587 existing
-rows, but also expand Q's root closure by WideExact::from_m31. Four candidate
-new functions may enlarge the inventory further. Neither the hypothetical
-587/587 count nor the old fixed Q/S labels are a valid completed repair.
-The exact inherited NFX/raw-NDT to_le_bytes graph difference is separately
-recorded; NFZ introduces no removals.
+* NFZ_B002: exit101, 0.929s, 137104KiB, swap0. Compiler helper-thread EAGAIN. Own runner thread-discovery repair recorded.
+* NFZ_B004 spare: exit101, 25.055s, 771672KiB, swap0. Core diagnostics succeeded; frozen docs include omitted from payload.
+* NFZ_B003 independent: exit101, 11.727s, 545104KiB, swap0. Core MIR opt0/opt1 agree; statement still missing include. My local collector failed on a binary include, and my shell failed to stop before launch. Exact original inputs and failure retained in NFZ_B003/ and NFZ_B003_FAILURE.md.
 
-## What ran and what stopped
+The final collector handles binary inputs and transitive literal includes. NFZ_PAYLOAD_PREFLIGHT.json validates every byte against frozen Git objects without compilation. Host wrapper now invokes it with check=True before admission and refuses retained attempt IDs. This repair has NOT had another Cargo check; no further scope is authorized. Never resubmit B001/B002/B003/B004.
 
-NFZ_B001: reservation exit 0 and allowed=true; one scope, 6G high / 8G max /
-SwapMax=0 / TasksMax=64. It exited 1 in **my own overstrict cargo-metadata
-validator before compiler launch**. It rejected exactly the disabled optional
-local packages that NFQ already permits. No added dependency or edge mismatch
-was found. Original source, exact command, hashes, source revision, wall time,
-RSS, swaps and failure are in NFZ_B001/receipt.json, stdout.log and time.log.
-The recorded wall is about 0.439 s, maximum child RSS 96,568 KiB, swaps 0;
-#print axioms is N/A (no Lean theorem). Corrected NFZ_check.py was not rerun.
-NFZ_PREFLIGHT_DIAGNOSIS.json checks the retained metadata offline.
+NFZ_CANDIDATES.json retains all39 candidates: six core target identities resolved, zero entry-path resolutions. The three missing trait embeddings and fallback function remain explicit absent-row candidates; add OPEN TX occurrences if caller evidence reaches them, including transitive callees. No evidence supports excluding them.
 
-The ONE-scope budget is exhausted. Kani 0/0, extraction 0/0, Lean 0/5;
-zero Rust type-check builds actually began. No Lean-only obligation remains:
-all missing authority requires compiler resolution, so unused Lean slots cannot
-advance it. NFZ_REMAINING.md gives the member-by-member blockers and next run.
-No infrastructure repair, cap change, timeout, memory kill, ELF rebuild or
-shipped-source edit occurred. Lock hash is unchanged. Own target was never
-created. No compiled cache was imported or altered: no Lean lookup occurred,
-so there are no imported Aeneas/cache hashes to report. No wallet/key action.
+NFZ_EDGES.json remains empty; NFZ_OVERLAY.json is blocked. The producer regenerates Q/S from their roots and D as their complement. NFZ_SLICES.json, NFZ_COVERAGE.md and NFZ_LEDGER_DELTA.json report585/587, D295 functions/448 internal edges/343 rows. New rows0, status changes0, new CLOSED0, membership changes0. TX2:046 and TX2:211 remain OPEN. The inherited NFX/raw-NDT to_le_bytes difference stays disclosed, unchanged.
 
-## Reproduction and trust
+The prospective Q embedding obligation is documented without downgrading any row. Existing NFS_NEV_AccumPacket.result_state_effects models the complete accumulation; NFS_NEV_AccumulateCallees.from_m31 explicitly identifies the embedding on canonical m. NFM's dot packets do not claim it. Compiler caller evidence and lead review still must connect these facts to the repaired graph.
 
-`python3 -B evidence/inv-defects-20261104/NFZ_validate.py` checks the blocked
-packet, pins, complete row/status identity, reservation/failure receipt and
-five rejected boundary mutations. NFZ_prepare.py reconstructs all frozen
-source inputs from Git; NFZ_scan.py needs the exact parser versions documented
-in its source and the resolution report. Historical source-validator and
-prover/compiler receipts are reused only as documentary context; no unchanged
-full regression was repeated.
+Validation: NFZ_validate.py checks blocked-packet consistency, pins, preserved rows/statuses, all attempt sources/caps, core-independent evidence boundary and five rejected mutations. Its PASS is not task completion. Kani0/0, extraction0/0, Lean0/5; no Lean obligation can replace missing compiler authority. No new theorem, so #print axioms N/A. Source/lock pins before/after attempts retained; frozen lock unchanged. No unchanged full regression, ELF rebuild, shipped-file edit, infrastructure edit, session A worktree access, push, wallet/key operation or cache import occurred. No Aeneas/library object was loaded. Final read-only host verification found every submitted frozen input unchanged; the terminal own NFZ_target build directory was removed, while the named retained cache was untouched (NFZ_FINAL_HOST_CHECK.json).
 
-No security hypothesis or runtime trust row was discharged, added, removed
-or reclassified. D188 inventory/trace fidelity remains a review boundary.
-L154 remains a statement parameter; the headline is
-AspisR1.RPx_Deployed.deployed. The 100-bit PER-ATTEMPT release target remains
-not established. The task cannot claim L187 readiness.
-
-Only NFZ-prefixed files under evidence/inv-defects-20261104 are changed.
-Each completed stage is committed locally with plain messages. No file exceeds
-20 MB; raw payload/metadata/ledger transports use xz and uncompressed SHA256s.
+No security premise was discharged or trust item changed. D188 trace fidelity/L187 remain review boundaries. L154 remains a statement parameter; headline AspisR1.RPx_Deployed.deployed. The 100-bit PER-ATTEMPT target is not yet established. See NFZ_REMAINING.md for every candidate and the next deliverable.
