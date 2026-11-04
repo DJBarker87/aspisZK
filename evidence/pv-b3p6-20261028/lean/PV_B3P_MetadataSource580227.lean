@@ -72,10 +72,10 @@ def equalityProgram : List Instr :=
    .kill 11,.field 11 3 true,.kill 12,.kill 13,.load 13 10,.kill 14,.load 14 11,
    .equalMove 12 13 14]
 
-def equalityState (prior : Store) (n : Nat) : Store :=
-  run equalityProgram (put (put prior 1 (.slice n)) 2 (.slice n))
+def equalityState (prior : Store) (left right : Nat) : Store :=
+  run equalityProgram (put (put prior 1 (.slice left)) 2 (.slice right))
 
-theorem equality_value (prior : Store) (n : Nat) : equalityState prior n 12 = .boolean true := by
+theorem equality_value (prior : Store) (n : Nat) : equalityState prior n n 12 = .boolean true := by
   simp only [equalityState,equalityProgram,run,step,put,lengthValue,field,load,equal,
     Nat.reduceEqDiff,ite_true,ite_false,decide_true]
 
@@ -98,7 +98,21 @@ def condition (s : Store) (slot : Nat) : Bool :=
   | .boolean b => b
   | _ => false
 
-theorem equality_guard (prior : Store) (n : Nat) : condition (equalityState prior n) 12 = true := by
+/-- The SAME interpreter retains the rejected cases; equal-size and <=4
+certificates do not follow from an always-true condition evaluator. -/
+theorem equality_rejects (prior : Store) (left right : Nat) (different : left ≠ right) :
+    condition (equalityState prior left right) 12 = false := by
+  simp only [condition,equalityState,equalityProgram,run,step,put,lengthValue,field,load,equal,
+    Nat.reduceEqDiff,ite_true,ite_false]
+  rw [decide_eq_false different]
+
+theorem pack_rejects (prior : Store) (length bound : Nat) (large : bound < length) :
+    condition (packState prior length bound) 2 = false := by
+  simp only [condition,packState,packProgram,run,step,put,lengthValue,lessEqual,
+    Nat.reduceEqDiff,ite_true,ite_false]
+  rw [decide_eq_false (by omega : ¬length≤bound)]
+
+theorem equality_guard (prior : Store) (n : Nat) : condition (equalityState prior n n) 12 = true := by
   rw [condition,equality_value]
 
 theorem pack_guard (prior : Store) (length slack : Nat) :
@@ -106,9 +120,9 @@ theorem pack_guard (prior : Store) (length slack : Nat) :
   rw [condition,pack_value]
 
 theorem equality_certificate {α : Type} (prior : Store) (n : Nat) (normal first second : Result α) :
-    ¬ diagnostic (condition (equalityState prior n) 12 = true) ∧
-      branch (condition (equalityState prior n) 12 = true) normal first =
-        branch (condition (equalityState prior n) 12 = true) normal second :=
+    ¬ diagnostic (condition (equalityState prior n n) 12 = true) ∧
+      branch (condition (equalityState prior n n) 12 = true) normal first =
+        branch (condition (equalityState prior n n) 12 = true) normal second :=
   (assertion _ true normal first second).2 (equality_guard prior n)
 
 theorem pack_certificate {α : Type} (prior : Store) (length slack : Nat) (normal first second : Result α) :
@@ -118,6 +132,8 @@ theorem pack_certificate {α : Type} (prior : Store) (length slack : Nat) (norma
   (assertion _ true normal first second).2 (pack_guard prior length slack)
 #print axioms equality_value
 #print axioms pack_value
+#print axioms equality_rejects
+#print axioms pack_rejects
 #print axioms equality_guard
 #print axioms pack_guard
 #print axioms equality_certificate
