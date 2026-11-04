@@ -1,0 +1,61 @@
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -526,3 +526,6 @@
+ #[cfg(feature="audit-eight-way")]
+ #[path="eight_way.rs"]
+ pub mod eight_way;
++
++#[cfg(kani)]
++mod NET_fields;
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -1,5 +1,6 @@
+ //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
+ #![no_std]
++#![cfg_attr(kani,feature(allocator_api))]
+ extern crate alloc;
+ pub mod sampler;
+ pub mod semantic_wire;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/verifier/NET_fields.rs
+@@ -0,0 +1,27 @@
++// Native weights::field on its actual query opening, including every rejection.
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++mod NET_reference{include!(concat!(env!("CARGO_MANIFEST_DIR"),"/src/NET_window_reference.rs"));}
++fn NET_allow_bad(_: &[u8])->Option<E>{Some(E::ZERO)}
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn NET_field_valid(){
++ let mut raw:[u8;832]=kani::any();let i:usize=kani::any();kani::assume(i<4);
++ let j:usize=kani::any();kani::assume(j<832);let old=raw[j];let start=672+i*32;
++ let expected=NET_reference::wide(&raw[start..start+32]);kani::assume(expected.is_some());
++ let actual=crate::weights::field(&raw[672..800],i).to_limbs();let expected=expected.unwrap();
++ #[cfg(NET_bad_reply)] assert_ne!(actual,expected);
++ #[cfg(not(NET_bad_reply))] assert_eq!(actual,expected);
++ #[cfg(NET_bad_frame)] {raw[j]^=1;}
++ assert_eq!(raw[j],old);
++}
++#[kani::proof] #[kani::should_panic] #[kani::unwind(34)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[cfg_attr(NET_bad_option,kani::stub(E::from_le_bytes,NET_allow_bad))]
++fn NET_field_rejected(){
++ let raw:[u8;832]=kani::any();let i:usize=kani::any();kani::assume(i<4);let start=672+i*32;
++ let expected=NET_reference::wide(&raw[start..start+32]);kani::assume(expected.is_none());
++ let _=crate::weights::field(&raw[672..800],i);
++}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NET_window_reference.rs
+@@ -0,0 +1,10 @@
++// Independent safe parser references: scalar byte order is the std primitive.
++pub const P:u32=2147483647;
++pub fn word(b:&[u8],i:usize)->u32 {u32::from_le_bytes([b[i],b[i+1],b[i+2],b[i+3]])}
++pub fn complex(b:&[u8])->Option<[u32;2]> {let a=word(b,0);if a>=P{return None;}let c=word(b,4);if c>=P{return None;}Some([a,c])}
++pub fn quadratic(b:&[u8])->Option<[u32;4]> {let a=match complex(&b[0..8]){Some(x)=>x,None=>return None};let c=match complex(&b[8..16]){Some(x)=>x,None=>return None};Some([a[0],a[1],c[0],c[1]])}
++pub fn wide(b:&[u8])->Option<[u32;8]> {
++ if b.len()!=32{return None;}
++ let a=word(b,0);let c=word(b,4);let d=word(b,8);let e=word(b,12);let f=word(b,16);let g=word(b,20);let h=word(b,24);let k=word(b,28);
++ if a>=P||c>=P||d>=P||e>=P||f>=P||g>=P||h>=P||k>=P{None}else{Some([a,c,d,e,f,g,h,k])}
++}

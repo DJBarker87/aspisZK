@@ -1,6 +1,6 @@
 # NET Slice Q composition
 
-Current verified baseline: **54/78 functions, 108 occurrence rows, 124/257 edges; both roots OPEN.** No NET composed credit is asserted while prerequisite builds and native controls are pending. The requested 100-bit per-attempt result remains unestablished.
+Current verified result: **60/78 functions, 120 Slice-Q occurrence rows, 160/257 edges; both roots OPEN.** The detailed stages below distinguish composed credit from partial bridges. The requested 100-bit per-attempt result remains unestablished.
 
 Adopted z(2) permits only CM31::inv -> inv_with(M31::inv), with the same norm and seven ordered primitive calls. It does not close the M31::inv native association, the M31::neg boundary, or the QM chain. Rules 14 and 16 remain binding. Native contract semantic transport remains P6/D188 option A reclassification, never removal.
 
@@ -38,3 +38,38 @@ This is a hybrid certificate, not a single kernel theorem from Rust source.
 NET_window_certificates.py and the unchanged NEO validator plus added NET gates
 validate the result;18/18 mutation/invariant tests pass. No query root, inverse
 chain, full dot arithmetic, source-to-ELF or security headline is closed.
+
+## Wide decoder, current field window, and peer folds
+
+The validator closes TX1:048/TX2:031 (WideExact::from_le_bytes),
+TX1:196/TX2:134 (weights::field on its current query domain), and the four
+reviewed circle/line fold rows TX1:188/190 and TX2:113/117.
+
+For the Wide decoder, K025..031 establish the actual complete 832-byte
+opening's four physical 32-byte windows, eight limbs, all complementary
+length rejections through the caller's 57607-byte bound, unchanged backing,
+and matched corrupt-output/frame/copy controls. NET_WideModel's three audited
+theorems equate the whole nominal decoder Result, state and effects to the
+installed cohort, including the non-32-byte rejection.
+
+For weights::field, K032..038 establish the actual frozen function on the
+128-byte query subview of that same opening and every i<4, including the
+malformed decoder panic and its failing control. NET_FieldModel establishes
+the selected window, exact whole Result, and state/effect frame. No broader
+caller domain is promoted. NET_WIDE_ASSOCIATION.md records the source and
+physical-window joins. The exact KMX patch and matched controls apply.
+
+The peer fold imports come only from committed revision
+5d12713bd3d7b813a911201357b22e2ef2d5acfa. The unchanged peer composition
+validator was replayed on archived Git blobs; only four rows and thirty call
+edges were selected. Their whole-result theorems allow unrestricted inverse
+words and require the caller-established canonical data/alpha domains. The
+immutable committed recipes, source pins, capped receipts and standard-axiom
+audits are checked again by NET_peer_certificates.py. Twelve peer denial
+tests and eighteen full validator tests pass.
+
+The new total is 142/587 global occurrence rows. This does not establish
+query_loop, QueryGeometry::for_range, the inverse chain, source-to-ELF
+correspondence or the security headline. P6/D188 semantic transport remains
+explicit trust reclassification. Prefix native capacity cases are in flight
+and receive no composed credit at this stage.

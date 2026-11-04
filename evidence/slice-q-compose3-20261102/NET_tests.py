@@ -5,7 +5,7 @@ class Gates(unittest.TestCase):
  def reject(self,f):
   f(self.edges)
   with self.assertRaises(ValueError):v.validate(self.edges,self.certificates,replay=False)
- def test_positive(self):self.assertEqual(v.validate(replay=False)['q_functions_closed'],56)
+ def test_positive(self):self.assertEqual(v.validate(replay=False)['q_functions_closed'],60)
  def test_root_status(self):self.assertEqual(set(v.validate(replay=False)['roots'].values()),{'OPEN'})
  def test_missing_edge(self):self.reject(lambda x:x['edges'].pop())
  def test_duplicate_edge(self):self.reject(lambda x:x['edges'].__setitem__(1,copy.deepcopy(x['edges'][0])))

@@ -10,6 +10,16 @@ REF='2e0240558aeaf9b15337057bea3b93c190503d71b06dd80102bdf5894aa247f7'
 
 def inputs(a):return json.loads(lzma.decompress((E/(a+'_INPUTS.json.xz')).read_bytes()))
 
+def frozen_source(a,path):
+ data=inputs(a);name='NET_src/'+path
+ if name in data:return data[name].encode()
+ assert path.startswith(('crates/','programs/'))
+ raw=subprocess.check_output(['git','show','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:'+path],cwd=R)
+ pins=json.loads(data['NET_SOURCE_PINS.json'])
+ assert pins[path]==hashlib.sha256(raw).hexdigest(),'missing frozen dependency differs from Git'
+ assert not obj(E/(a+'-source-check.json'))['errors']
+ return raw
+
 def lean(a,names,own=True):
  p=(E if own else O)/a/'receipt.json';r=obj(p)
  assert r['exit_status']==0 and r['limits']==CAPS and int(r['swaps'])==0
