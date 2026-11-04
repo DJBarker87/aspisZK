@@ -9,3 +9,7 @@ NFA_L049: the separate NEV_ActualDotStep group hit the same import/interpreter m
 NFA_L065 excluded: resource API required explicit Lean.Shell import. L066 linked the prior L063 C artifact, so this binary is EXCLUDED (not executed), and will be replaced from a successful fresh source compile. Own script sequencing corrected; no host infrastructure changed.
 
 L067 excluded: Lean.Shell resource API is private in the Lean4 module system; requires import all Lean.Shell. L068 again linked the old C artifact and is excluded without execution. Dependent linking is now gated on the preceding compile result, not merely process completion.
+
+Peer replay own-view repairs: materialized missing tracked baseline validator directories using sparse-checkout add. Corrected GIT_WORK_TREE from realR to private validation root S so git ls-tree paths are rooted correctly; strict provenance checks unchanged. Final unchanged NEW_validate replay passes at revision75623b7b43c563b210f2f37d74182382569f7002; no writes to predecessors.
+
+NFA_K009 matched no harness because own selector omitted KMX_checks. Corrected selector K010/K011 gives required pass/fail; original failed selector preserved. No renamed proof or verdict-seeking source rename.

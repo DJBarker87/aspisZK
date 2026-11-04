@@ -6,8 +6,8 @@ jobs=[
 ('dots_cursor_remaining',None),('dots_cursor_remaining','NFA_wrong_cursor_remaining'),
 ('dots_selected_g_frame',None),('dots_selected_g_frame','NFA_wrong_selected_g'),
 ('dots_wrapper_window',None),('dots_wrapper_window','NFA_wrong_wrapper_window'),
-('NFA_copy::KMX_ptr_correct',None),('NFA_copy::KMX_ptr_wrong',None)]
-for i,(name,wrong) in enumerate(jobs,1):
+('NFA_copy::KMX_checks::KMX_ptr_correct',None),('NFA_copy::KMX_checks::KMX_ptr_wrong',None)]
+for i,(name,wrong) in enumerate(jobs[8:],10):
  a='NFA_K'+str(i).zfill(3);env={**os.environ}
  if wrong:env['NFA_RUST_CFG']=wrong
  harness=name if name.startswith('NFA_copy') else 'fast_pairing::canonical::NFA_dot_ctor::'+name
