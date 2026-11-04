@@ -52,6 +52,10 @@ def inherited():
 def build():
  pair(2,3);native(4,0);native(5,0);native(6,1);native(7,1);copy_pair(8,9)
  pair(11,12);native(13,1);copy_pair(14,15);pair(17,18)
+ pair(30,31);native(32,0);native(33,0);native(34,1);native(35,1);copy_pair(36,37)
+ for k in range(30,38):
+  r=J(E/f'NGH_K{k:03}'/'receipt.json');assert '-Cdebuginfo=2'in r['env']['RUSTFLAGS']
+  command=J(E/f'NGH_K{k:03}.json')['native_command'];assert ['-Z','loop-contracts']==command[-2:]
  inherited_result=inherited()
  result=dict(status='PASS',own_native_groups=['array shape fidelity','array copy','QM square local call-log','QM wrong-argument control','QM copy','one arbitrary accumulation cell reference contract'],inherited=inherited_result,KMX_patch_sha256=KMX,excluded=['NGH_K001 own missing harness error','NGH_K010 timeout: no credit, never rerun','NGH_K016 precondition evaluation ordering failure'],helper_level_contracts_closed=False,quarantined=[],suspended=[])
  (E/'NGH_NATIVE_VALIDATION.json').write_text(json.dumps(result,indent=1)+'\n');print(json.dumps(dict(status='PASS',inherited_pairs=len(inherited_result['pairs']))))
