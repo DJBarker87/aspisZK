@@ -1,0 +1,29 @@
+NFF_generated/NFF_ProductCall.lean:22:55: error: Tactic `decide` failed for proposition
+  NEG_DotDomain.B < UScalar.size UScalarTy.U64
+because its `Decidable` instance
+  NEG_DotDomain.B.decLt (UScalar.size UScalarTy.U64)
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, `Nat.decLe`, and `Nat.decLt`, reduction got stuck at the `Decidable` instance
+  match NEG_DotDomain.B.succ.ble (UScalar.size UScalarTy.U64), true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+NFF_generated/NFF_ProductCall.lean:24:57: error: Tactic `decide` failed for proposition
+  NEG_DotDomain.B ≤ UScalar.max UScalarTy.U64
+because its `Decidable` instance
+  NEG_DotDomain.B.decLe (UScalar.max UScalarTy.U64)
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, and `Nat.decLe`, reduction got stuck at the `Decidable` instance
+  match NEG_DotDomain.B.ble (UScalar.max UScalarTy.U64), true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+NFF_generated/NFF_ProductCall.lean:30:6: error: 'change' tactic failed, pattern
+  NEG_DotDomain.B < 2 ^ 64
+is not definitionally equal to target
+  NEG_DotDomain.B < UScalar.size UScalarTy.U64
+'AspisR1.NFF_ProductCall.replay' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

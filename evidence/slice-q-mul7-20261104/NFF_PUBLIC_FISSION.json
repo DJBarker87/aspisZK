@@ -1,0 +1,6 @@
+{
+  "original": "\n        if self.count >= MAX_TERMS { return Err(()); }\n        let [value_c0,value_c1] = canonical::Q::from_wide(value);\n        let scalar = checked_q(scalar)?;\n        self.c0.push(value_c0, scalar);\n        self.c1.push(value_c1, scalar);\n        self.count += 1;\n        Ok(())\n    ",
+  "abstracted": "\n        if receiver.count >= MAX_TERMS { return Err(()); }\n        let [value_c0,value_c1] = canonical::Q::from_wide(value);\n        let scalar = checked_q(scalar)?;\n        NFF_private_push(log,0,&mut receiver.c0,value_c0,scalar);\n        NFF_private_push(log,1,&mut receiver.c1,value_c1,scalar);\n        receiver.count += 1;\n        Ok(())\n    ",
+  "unchanged_checks": true,
+  "source": "4bb3b3f5:fast_pairing.rs::EbyKDot::push"
+}

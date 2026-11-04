@@ -1,0 +1,44 @@
+NFF_generated/NFF_LoggedPush.lean:47:98: error: unsolved goals
+oracle : NFF_ProductCall.Oracle
+law : NFF_ProductCall.Law oracle
+self : FIo_Native.fast_pairing.EbyKDot
+value : NEV_DotCarrier.NE
+scalar : NEV_DotCarrier.NQ
+⊢ (if self.count ≥ FIo_Native.fast_pairing.MAX_TERMS then ok (core.result.Result.Err (), self)
+    else do
+      let a ← FIo_Native.fast_pairing.canonical.Q.from_wide value
+      let value_c0 ← a.index_usize 0#usize
+      let value_c1 ← a.index_usize 1#usize
+      let r ← FIo_Native.fast_pairing.checked_q scalar
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let d ← self.c0.push value_c0 val
+          let d1 ← self.c1.push value_c1 val
+          let i ← lift (self.count.wrapping_add 1#usize)
+          ok (core.result.Result.Ok (), { c0 := d, c1 := d1, count := i })
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame Unit) residual
+          ok (r1, self)) =
+    if self.count ≥ FIo_Native.fast_pairing.MAX_TERMS then ok (core.result.Result.Err (), self)
+    else do
+      let a ← FIo_Native.fast_pairing.canonical.Q.from_wide value
+      let value_c0 ← a.index_usize 0#usize
+      let value_c1 ← a.index_usize 1#usize
+      let r ← FIo_Native.fast_pairing.checked_q scalar
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let d ← self.c0.push value_c0 val
+          let d1 ← self.c1.push value_c1 val
+          let i ← lift (self.count.wrapping_add 1#usize)
+          ok (core.result.Result.Ok (), { c0 := d, c1 := d1, count := i })
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame Unit) residual
+          ok (r1, self)
+'AspisR1.NFF_LoggedPush.private_replay' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NFF_LoggedPush.public_replay' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

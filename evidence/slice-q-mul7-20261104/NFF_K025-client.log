@@ -1,0 +1,21 @@
+{"attempt": "NFF_K025", "exit_status": 1, "wall_seconds": 4.091201192000881, "peak_rss_kib": "433084", "swaps": "0", "print_axioms": "N/A: kani"}
+e/src/transcript.rs:53:54
+   |
+53 |         advances[7]=self.hash.digest(&[&state,&[2]]);state=advances[7];
+   |                                                      ^^^^^^^^^^^^^^^^^
+   |
+   = help: maybe it is overwritten before being read?
+   = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/aspis-r1-cost-probe/src/candidate.rs:239:43
+    |
+239 | fn query_loop(proof: &[u8], p: &Prepared, mut a: Accumulator, g: &[E; 29], obs: Observer, geometry: &QueryGeometry, pending: Batche...
+    |                                           ----^
+    |                                           |
+    |                                           help: remove this `mut`
+
+For more information about this error, try `rustc --explain E0433`.
+error: could not compile `aspis-r1-cost-probe` (lib) due to 1 previous error; 18 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 1 compilation errors.
+
