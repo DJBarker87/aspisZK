@@ -92,3 +92,11 @@ its authorized ID/budget-only extension before the first 913xx launch. No host
 or launcher changes made. Next deliverable: the source-bound native adapter
 and the displayed handle-push equality, followed by whole-spine association;
 then actual installation and reached granting execution.
+
+## Continuation after entry 72737dd94f
+
+See ADAPTER-D579-resume.md and HANDOFF.md. A descriptor-reading model adapter
+and its complete-run erasure law now compile (79976/79978). This is NOT the
+native-source-bound theorem above: the native descriptor interpretation and
+its reached preservation remain unproved. The equation, binders and reached
+domain above remain unchanged. No reached native counterexample is claimed.
