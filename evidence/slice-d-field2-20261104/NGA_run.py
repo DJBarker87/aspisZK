@@ -74,6 +74,12 @@ elif kind=='auditbatch':
  files['NGA_final_audit_batch.py']=(E/'NGA_final_audit_batch.py').read_text()
  sources=['NGA_generated/NGA_ProofDriver.lean','NGA_final_audit_batch.py','NGA_native/NGA_ProofDriver.c','NGA_native/NFA_WALKER.c','NGA_native/NFA_MemoryLimit.c']
  command=['python3','NGA_final_audit_batch.py']
+elif kind=='review':
+ files['NGA_review_batch.py']=(E/'NGA_review_batch.py').read_text()
+ files['NGA_AUDIT_ROOTS.json']=(E/'NGA_AUDIT_ROOTS.json').read_text()
+ files['NGA_EXPECTED_IMPORTS.jsonl']=(E/'NGA_EXPECTED_IMPORTS.jsonl').read_text()
+ sources=['NGA_review_batch.py','NGA_AUDIT_ROOTS.json','NGA_EXPECTED_IMPORTS.jsonl','NGA_generated/NGA_Driver.lean','NGA_native/NGA_Driver.c','NGA_native/NFA_WALKER.c','NGA_native/NFA_MemoryLimit.c']
+ command=['python3','NGA_review_batch.py'];env['NGA_REVIEW_CONFIG']=a+'.json'
 elif kind=='auditbin':
  sources=['NGA_generated/NGA_Driver.lean'];command=['NGA_native/NGA_Driver',target]
 else:raise ValueError(kind)
@@ -121,7 +127,7 @@ for root in roots:
    if Path(root,stem+suf).is_file():rels.add(stem+suf)
 for rel in sorted(rels):
  p=next(Path(root)/rel for root in roots if (Path(root)/rel).is_file());pins[str(p)]={{'path':str(p),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}}
-for module in (['NGA_STAGE2_IMPORT' if x['module']=='NGA_Stage2Driver' else 'NGA_COMBINED_IMPORT'] if x['kind']=='auditbatch' else [])+(['NEP_Planted','NEP_Mutations'] if x['module'] in ['NGA_Driver','NGA_ProofDriver','NGA_Stage2Driver','fixtures'] else [])+(['NGA_QueryModel'] if x['kind']=='auditbin' and x['module'].startswith('query') else [])+(['NGA_COMBINED_IMPORT'] if x['kind']=='auditbin' and (x['module'].startswith('proof') or x['module']=='scan') else [])+[n for line in (b/x['sources'][0]).read_text().splitlines() if line.startswith('import ') for n in line[7:].split() if n!='all'] if x['kind'] not in ['linkaudit','kani','extract'] else []:
+for module in (['NGA_COMBINED_IMPORT','NGA_Driver','NFA_WALKER','NFA_MemoryLimit','NEP_Planted','NEP_Mutations'] if x['kind']=='review' else [])+(['NGA_STAGE2_IMPORT' if x['module']=='NGA_Stage2Driver' else 'NGA_COMBINED_IMPORT'] if x['kind']=='auditbatch' else [])+(['NEP_Planted','NEP_Mutations'] if x['module'] in ['NGA_Driver','NGA_ProofDriver','NGA_Stage2Driver','fixtures'] else [])+(['NGA_QueryModel'] if x['kind']=='auditbin' and x['module'].startswith('query') else [])+(['NGA_COMBINED_IMPORT'] if x['kind']=='auditbin' and (x['module'].startswith('proof') or x['module']=='scan') else [])+[n for line in ((b/x['sources'][0]).read_text().splitlines() if x['kind'] in ['lean','dependency'] else []) if line.startswith('import ') for n in line[7:].split() if n!='all'] if x['kind'] not in ['linkaudit','kani','extract'] else []:
  rel=module.replace('.','/')+'.olean';p=next((Path(root)/rel for root in roots if (Path(root)/rel).is_file()),None)
  assert p is not None,module
  for z in [p,Path(str(p)+'.private'),Path(str(p)+'.server'),p.with_suffix('.ir')]:
@@ -137,7 +143,8 @@ names += [str(p.relative_to(b)) for p in b.glob(a+'-graph*')]+[str(p.relative_to
 if {kind!r}=='extract':
  if {target!r}=='NGA_ScanReference':names+=['NGA_SCAN_EXTRACTION_PINS.json','NGA_scan_reference.llbc']+[str(p.relative_to(b)) for p in (b/'NGA_scan_extracted').rglob('*') if p.is_file()]
  else:names+=['NGA_EXTRACTION_PINS.json','NGA_reference.llbc']+[str(p.relative_to(b)) for p in (b/'NGA_extracted').rglob('*') if p.is_file()]
-names += [str(p.relative_to(b)) for p in b.glob('NEP_*_REACHABLE.txt')] if {kind!r}=='auditbatch' else [str(p.relative_to(b)) for p in b.glob('NEP_'+{target!r}+'_*_REACHABLE.txt')] if {kind!r}=='auditbin' else []
+names += [str(p.relative_to(b)) for p in b.glob('NEP_*_REACHABLE.txt')] if {kind!r} in ['auditbatch','review'] else [str(p.relative_to(b)) for p in b.glob('NEP_'+{target!r}+'_*_REACHABLE.txt')] if {kind!r}=='auditbin' else []
+if {kind!r}=='review':names += [str(p.relative_to(b)) for p in (b/'NGA_review').rglob('*') if p.is_file()]+['NGA_LOADED_scan.jsonl']
 if {kind!r}=='auditbatch':names += [str(p.relative_to(b)) for p in (b/('NGA_stage2_audit' if {target!r}=='NGA_Stage2Driver' else 'NGA_final_audit')).rglob('*') if p.is_file()]
 if {target!r} in ['scan','queryscan']:names+=['NGA_QUERY_LOADED_scan.jsonl' if {target!r}=='queryscan' else 'NGA_LOADED_scan.jsonl']
 out={{n:(b/n).read_text() for n in names}}
@@ -149,7 +156,7 @@ print(json.dumps(out))
 out=json.loads(r.stdout)
 for n,t in out.items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
 # Archive raw graphs immediately; keep their uncompressed hashes for replay.
-if kind in ['auditbin','auditbatch']:
+if kind in ['auditbin','auditbatch','review']:
  import lzma
  for name in out:
   if name.startswith('NEP_') and name.endswith('_REACHABLE.txt'):

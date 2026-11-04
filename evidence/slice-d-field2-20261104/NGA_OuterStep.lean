@@ -27,7 +27,8 @@ theorem source {n : Usize} (left right : Array Qm n) (s : Sums) (index : Usize)
  have cr := hr r (by rw [rval];exact List.getElem_mem _)
  obtain ⟨lc,rc,out,_,_,_,_,ho,_,_⟩ := NGA_Accumulate.source s l r cl cr budget
  have indexbound : index.val<4 := lt_of_lt_of_le active arity
- obtain ⟨next,hn,hvalue,_⟩ := WP.spec_imp_exists (@UScalar.add_spec .Usize index 1#usize (by scalar_tac))
+ obtain ⟨next,hn,hvalue⟩ := WP.spec_imp_exists (@UScalar.add_spec .Usize index 1#usize (by scalar_tac))
+ change UScalar.add index 1#usize=ok next at hn
  refine ⟨l,r,out,next,hlrun,hrrun,cl,cr,ho,?_,?_⟩
  · simpa only [UScalar.ofNatCore_val_eq] using hvalue
  · simp only [G,hlrun,hrrun,ho,hn,bind_tc_ok]
