@@ -1,0 +1,57 @@
+/home/dombarker/project-offloads/codex-pv-rdcd5-20261101/lean-sources/R1Z/PV_RDCD5_BufferSource.lean:78:4: error: unsolved goals
+case pos
+S : Type
+compress : S → List U8 → Result S
+state : S
+buffer input : List U8
+hb : buffer.length = 64
+hp : 0 < 64
+hn : ¬input.length < 64 - 0
+⊢ (do
+      let state ← PV_DL_CompressionTrace.run compress (PV_DL_BatchPlan.events input) state
+      ok
+          (state, PV_DL_UpdatePlan.write buffer 0 (PV_DL_BatchPlan.bulk input).2,
+            (PV_DL_BatchPlan.bulk input).2.length)) =
+    do
+    let state ←
+      PV_DL_CompressionTrace.run compress
+          ((if True then []
+            else [if True then buffer else PV_DL_UpdatePlan.write buffer 0 (List.take (64 - 0) input)]) ++
+            PV_DL_BatchPlan.events (List.drop (if True then 0 else 64 - 0) input))
+          state
+    ok
+        (state,
+          PV_DL_UpdatePlan.write (if True then buffer else PV_DL_UpdatePlan.write buffer 0 (List.take (64 - 0) input)) 0
+            (PV_DL_BatchPlan.bulk (List.drop (if True then 0 else 64 - 0) input)).2,
+          (PV_DL_BatchPlan.bulk (List.drop (if True then 0 else 64 - 0) input)).2.length)
+/home/dombarker/project-offloads/codex-pv-rdcd5-20261101/lean-sources/R1Z/PV_RDCD5_BufferSource.lean:81:64: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [̵f̵i̵n̵i̵s̵h̵R̵e̵f̵e̵r̵e̵n̵c̵e̵,̵P̵V̵_̵D̵L̵_̵U̵p̵d̵a̵t̵e̵P̵l̵a̵n̵.̵m̵o̵d̵e̵l̵,̵P̵V̵_̵D̵L̵_̵U̵p̵d̵a̵t̵e̵P̵l̵a̵n̵.̵v̵a̵l̵u̵e̵,̵[̲f̲i̲n̲i̲s̲h̲R̲e̲f̲e̲r̲e̲n̲c̲e̲,̲ ̲P̲V̲_̲D̲L̲_̲U̲p̲d̲a̲t̲e̲P̲l̲a̲n̲.̲m̲o̲d̲e̲l̲,̲ ̲P̲V̲_̲D̲L̲_̲U̲p̲d̲a̲t̲e̲P̲l̲a̲n̲.̲v̲a̲l̲u̲e̲,̲ if_neg h̵n̵,̵P̵V̵_̵D̵L̵_̵U̵p̵d̵a̵t̵e̵P̵l̵a̵n̵.̵f̵i̵r̵s̵t̵,̵P̵V̵_̵D̵L̵_̵U̵p̵d̵a̵t̵e̵P̵l̵a̵n̵.̵s̵t̵a̵r̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵z̵e̵r̵o̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵,̵P̵V̵_̵D̵L̵_̵B̵a̵t̵c̵h̵P̵l̵a̵n̵.̵r̵u̵n̵]̵h̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲P̲V̲_̲D̲L̲_̲U̲p̲d̲a̲t̲e̲P̲l̲a̲n̲.̲f̲i̲r̲s̲t̲,̲ ̲P̲V̲_̲D̲L̲_̲U̲p̲d̲a̲t̲e̲P̲l̲a̲n̲.̲s̲t̲a̲r̲t̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲z̲e̲r̲o̲,̲ ̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲P̲V̲_̲D̲L̲_̲B̲a̲t̲c̲h̲P̲l̲a̲n̲.̲r̲u̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdcd5-20261101/lean-sources/R1Z/PV_RDCD5_BufferSource.lean:82:8: warning: This simp argument is unused:
+  List.drop_zero
+
+Hint: Omit it from the simp argument list.
+  simp only [̵f̵i̵n̵i̵s̵h̵R̵e̵f̵e̵r̵e̵n̵c̵e̵,̵P̵V̵_̵D̵L̵_̵U̵p̵d̵a̵t̵e̵P̵l̵a̵n̵.̵m̵o̵d̵e̵l̵,̵P̵V̵_̵D̵L̵_̵U̵p̵d̵a̵t̵e̵P̵l̵a̵n̵.̵v̵a̵l̵u̵e̵,̵[̲f̲i̲n̲i̲s̲h̲R̲e̲f̲e̲r̲e̲n̲c̲e̲,̲ ̲P̲V̲_̲D̲L̲_̲U̲p̲d̲a̲t̲e̲P̲l̲a̲n̲.̲m̲o̲d̲e̲l̲,̲ ̲P̲V̲_̲D̲L̲_̲U̲p̲d̲a̲t̲e̲P̲l̲a̲n̲.̲v̲a̲l̲u̲e̲,̲ if_neg h̵n̵,̵P̵V̵_̵D̵L̵_̵U̵p̵d̵a̵t̵e̵P̵l̵a̵n̵.̵f̵i̵r̵s̵t̵,̵P̵V̵_̵D̵L̵_̵U̵p̵d̵a̵t̵e̵P̵l̵a̵n̵.̵s̵t̵a̵r̵t̵,̵i̵f̵_̵p̵o̵s̵h̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲P̲V̲_̲D̲L̲_̲U̲p̲d̲a̲t̲e̲P̲l̲a̲n̲.̲f̲i̲r̲s̲t̲,̲ ̲P̲V̲_̲D̲L̲_̲U̲p̲d̲a̲t̲e̲P̲l̲a̲n̲.̲s̲t̲a̲r̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲ rfl, L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵z̵e̵r̵o̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵,̵P̵V̵_̵D̵L̵_̵B̵a̵t̵c̵h̵P̵l̵a̵n̵.̵r̵u̵n̵]̵L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲P̲V̲_̲D̲L̲_̲B̲a̲t̲c̲h̲P̲l̲a̲n̲.̲r̲u̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdcd5-20261101/lean-sources/R1Z/PV_RDCD5_BufferSource.lean:82:23: warning: This simp argument is unused:
+  List.nil_append
+
+Hint: Omit it from the simp argument list.
+  simp only [̵f̵i̵n̵i̵s̵h̵R̵e̵f̵e̵r̵e̵n̵c̵e̵,̵P̵V̵_̵D̵L̵_̵U̵p̵d̵a̵t̵e̵P̵l̵a̵n̵.̵m̵o̵d̵e̵l̵,̵P̵V̵_̵D̵L̵_̵U̵p̵d̵a̵t̵e̵P̵l̵a̵n̵.̵v̵a̵l̵u̵e̵,̵[̲f̲i̲n̲i̲s̲h̲R̲e̲f̲e̲r̲e̲n̲c̲e̲,̲ ̲P̲V̲_̲D̲L̲_̲U̲p̲d̲a̲t̲e̲P̲l̲a̲n̲.̲m̲o̲d̲e̲l̲,̲ ̲P̲V̲_̲D̲L̲_̲U̲p̲d̲a̲t̲e̲P̲l̲a̲n̲.̲v̲a̲l̲u̲e̲,̲ if_neg h̵n̵,̵P̵V̵_̵D̵L̵_̵U̵p̵d̵a̵t̵e̵P̵l̵a̵n̵.̵f̵i̵r̵s̵t̵,̵P̵V̵_̵D̵L̵_̵U̵p̵d̵a̵t̵e̵P̵l̵a̵n̵.̵s̵t̵a̵r̵t̵,̵i̵f̵_̵p̵o̵s̵h̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲P̲V̲_̲D̲L̲_̲U̲p̲d̲a̲t̲e̲P̲l̲a̲n̲.̲f̲i̲r̲s̲t̲,̲ ̲P̲V̲_̲D̲L̲_̲U̲p̲d̲a̲t̲e̲P̲l̲a̲n̲.̲s̲t̲a̲r̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲ rfl, L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵z̵e̵r̵o̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵,̵P̵V̵_̵D̵L̵_̵B̵a̵t̵c̵h̵P̵l̵a̵n̵.̵r̵u̵n̵]̵L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲z̲e̲r̲o̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲P̲V̲_̲D̲L̲_̲B̲a̲t̲c̲h̲P̲l̲a̲n̲.̲r̲u̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RDCD5_BufferSource.cursor_transport' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RDCD5_BufferSource.finish_binding' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RDCD5_BufferSource.source_instance' depends on axioms: [propext, sorryAx, Quot.sound]

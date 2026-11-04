@@ -1,0 +1,70 @@
+/home/dombarker/project-offloads/codex-pv-meas-20261029/sources/PV_MEAS_Fuel.lean:51:4: error: Type mismatch: After simplification, term
+  integral_rat_mean (fun m => if ∃ i, ProverCommitFuelJoin22.bad old queries i m then 1 else 0) fun m =>
+    if h : ∃ i, ProverCommitFuelJoin22.bad old queries i m then
+      Eq.mpr (id (congrArg (LE.le 0) (if_pos h)))
+        (Mathlib.Meta.NormNum.isNat_le_true (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 0))
+          (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 1)) (Eq.refl true))
+    else
+      Eq.mpr (id (congrArg (LE.le 0) (if_neg h)))
+        (Mathlib.Meta.NormNum.isNat_le_true (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 0))
+          (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 0)) (Eq.refl true))
+ has type
+  ∫ₚ (m : (M × OracleAnswer) × ProverCommitFuelJoin22.Tape),
+      if ∃ i, ProverCommitFuelJoin22.bad old queries i m then 1
+      else 0 ∂↑(uniform ((M × OracleAnswer) × ProverCommitFuelJoin22.Tape)) =
+    ↑(mean fun m =>
+        @ite ℚ (∃ i, ProverCommitFuelJoin22.bad old queries i m)
+          (Nat.decidableExistsFin fun i => ProverCommitFuelJoin22.bad old queries i m) 1 0)
+but is expected to have type
+  ∫ₚ (m : (M × OracleAnswer) × ProverCommitFuelJoin22.Tape),
+      if ∃ i, ProverCommitFuelJoin22.bad old queries i m then 1
+      else 0 ∂↑(uniform ((M × OracleAnswer) × ProverCommitFuelJoin22.Tape)) =
+    ↑(mean fun s =>
+        @ite ℚ (∃ i, ProverCommitFuelJoin22.bad old queries i s)
+          (Classical.propDecidable ((fun m => ∃ i, ProverCommitFuelJoin22.bad old queries i m) s)) 1 0)
+/home/dombarker/project-offloads/codex-pv-meas-20261029/sources/PV_MEAS_Fuel.lean:54:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∫ₚ (m : (M × OracleAnswer) × ProverCommitFuelJoin22.Tape),
+    if ∃ i, ProverCommitFuelJoin22.bad old queries i m then 1
+    else 0 ∂↑(uniform ((M × OracleAnswer) × ProverCommitFuelJoin22.Tape))
+in the target expression
+  |∫ₚ (r : R), ↑(test (runtime r)) ∂↑μR - ↑(mean fun m => test (model m.1.1))| ≤
+    ∫ₚ (m : (M × OracleAnswer) × ProverCommitFuelJoin22.Tape),
+      if ∃ i, ProverCommitFuelJoin22.bad old queries i m then 1
+      else 0 ∂↑(uniform ((M × OracleAnswer) × ProverCommitFuelJoin22.Tape))
+
+R M V : Type
+inst✝⁸ : MeasurableSpace R
+inst✝⁷ : Fintype M
+inst✝⁶ : Nonempty M
+inst✝⁵ : MeasurableSpace M
+inst✝⁴ : MeasurableSingletonClass M
+inst✝³ : MeasurableSpace OracleAnswer
+inst✝² : MeasurableSingletonClass OracleAnswer
+inst✝¹ : MeasurableSpace ProverCommitFuelJoin22.Tape
+inst✝ : MeasurableSingletonClass ProverCommitFuelJoin22.Tape
+μR : ProbabilityMeasure R
+cp : PV_MEAS_Coupling.Coupling μR (uniform ((M × OracleAnswer) × ProverCommitFuelJoin22.Tape))
+runtime : R → V
+model : M → V
+old : Fin 8 → M → Prop
+queries : M → List ProverCommitSeedEvent19.Entry
+test : V → ℚ
+bounded : ∀ (v : V), 0 ≤ test v ∧ test v ≤ 1
+measurable_test : Measurable fun r => ↑(test (runtime r))
+agreement :
+  ∀ (s : cp.S), (¬∃ i, ProverCommitFuelJoin22.bad old queries i (cp.toM s)) → runtime (cp.toR s) = model (cp.toM s).1.1
+q : ℕ
+bound : ∀ (m : M), (queries m).length ≤ q
+ht :
+  |∫ₚ (r : R), ↑(test (runtime r)) ∂↑μR - ↑(mean fun m => test (model m.1.1))| ≤
+    ∫ₚ (m : (M × OracleAnswer) × ProverCommitFuelJoin22.Tape),
+      if ∃ i, ProverCommitFuelJoin22.bad old queries i m then 1
+      else 0 ∂↑(uniform ((M × OracleAnswer) × ProverCommitFuelJoin22.Tape))
+hm :
+  ∫ₚ (m : (M × OracleAnswer) × ProverCommitFuelJoin22.Tape),
+      if ∃ i, ProverCommitFuelJoin22.bad old queries i m then 1
+      else 0 ∂↑(uniform ((M × OracleAnswer) × ProverCommitFuelJoin22.Tape)) =
+    ↑(eventMass fun m => ∃ i, ProverCommitFuelJoin22.bad old queries i m)
+⊢ |∫ₚ (r : R), ↑(test (runtime r)) ∂↑μR - ↑(mean fun m => test (model m))| ≤
+    ↑((eventMass fun m => ∃ i, old i m) + ProverCommitSeedEvent19.budget q + ProverCommitFuelMass22.charge)
+'PV_MEAS_Fuel.test_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

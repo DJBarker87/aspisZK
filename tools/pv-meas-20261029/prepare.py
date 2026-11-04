@@ -1,0 +1,119 @@
+"""adopted by owner decision D502/D478. D502 adopted: Read-only source/cohort verification, followed by staging own committed source."""
+from pathlib import Path
+import json, hashlib, subprocess, shlex, sys
+E=Path('evidence/pv-meas2-20261029'); O=Path('evidence/pv-rj4idb-20261029')
+H='/home/dombarker/project-offloads/codex-pv-meas-20261029'
+rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
+sha=lambda b:hashlib.sha256(b).hexdigest()
+def tracked_json(p):
+ return json.loads(p.read_text() if p.exists() else subprocess.check_output(['git','show',rev+':'+str(p)],text=True))
+def tracked_glob(d,pattern):
+ import fnmatch
+ return [Path(p) for p in subprocess.check_output(['git','ls-tree','-r','--name-only',rev,str(d)],text=True).splitlines() if fnmatch.fnmatch(Path(p).name,pattern)]
+base=tracked_json(O/'source-resolution.json')['projects']
+checks={v['module']:v for v in tracked_json(O/'h6-result.json')['result']['checks']}
+records={}
+for f in sorted(tracked_glob(O,'modules-*.json')):
+ for v in tracked_json(f):
+  if v['accepted']: records[v['module']]=v
+plan=tracked_json(O/'build-plan.json')['modules']
+# One read-only git process preserves the same byte checks without spawning one
+# process per pinned source in this sparse worktree.
+git_batch=subprocess.Popen(['git','cat-file','--batch'],stdin=subprocess.PIPE,stdout=subprocess.PIPE)
+def source_bytes(revision,path):
+ git_batch.stdin.write((revision+':'+path+'\n').encode());git_batch.stdin.flush()
+ header=git_batch.stdout.readline().decode().split();assert len(header)==3,header
+ size=int(header[2]);data=git_batch.stdout.read(size);assert git_batch.stdout.read(1)==b'\n'
+ return data
+projects={}; edges=[]
+for m,v in base.items():
+ p=v['path']; selected=v['revision'] if 'runjoin' in v['authority'] else rev
+ b=source_bytes(selected,p)
+ assert sha(b)==v['source_sha256'],('authority changed',m)
+ projects[m]=dict(v,object_path=checks[m]['object_path'])
+for m,v in records.items():
+ p=plan[m]['path']; b=source_bytes(rev,p)
+ assert sha(b)==v['source_sha256'],('source changed',m)
+ projects[m]=dict(module=m,path=p,revision=rev,source_sha256=sha(b),object_sha256=v['object_sha256'],object_path='/home/dombarker/project-offloads/codex-pv-rj4idb-20261029'+'/objects/'+m.replace('.','/')+'.olean')
+ for d,r in v['dependencies'].items():edges.append(dict(module=m,dependency=d,sha256=r['sha256']))
+# Reuse successful own objects; never rebuild an unchanged predecessor.
+for q in tracked_glob(Path('evidence/pv-evhd-20261029'),'receipt-*.json') + tracked_glob(Path('evidence/pv-evh-20261029'),'receipt-*.json') + list(E.glob('receipt-731*.json')):
+ v=tracked_json(q)
+ if not v.get('accepted'): continue
+ m=v['target']; path='lean/'+m+'.lean'
+ b=source_bytes(rev,path)
+ if sha(b)!=v['source_sha256']: continue
+ obj=('/home/dombarker/project-offloads/codex-pv-evhd-20261029' if m.startswith('PV_EVHD_') else ('/home/dombarker/project-offloads/codex-pv-evh-20261029' if m.startswith('PV_EVH_') else H))+'/objects/'+m.replace('.','/')+'.olean'
+ r=subprocess.check_output(['ssh','dombarker@100.108.41.90','sha256sum '+obj],text=True)
+ assert r.split()[0]==v['object_sha256'],('own object changed',m)
+ projects[m]=dict(module=m,path=path,revision=rev,git_blob=subprocess.check_output(['git','rev-parse',rev+':'+path],text=True).strip(),source_sha256=sha(b),object_sha256=v['object_sha256'],object_path=obj)
+ prep=tracked_json(q.parent/('prepare-'+m+'.json'))['result']
+ for d in __import__('re').findall(r'^import (\S+)',b.decode(),__import__('re').M):
+  found=next(t for t in prep['project_checks'] if t['module']==d)
+  edges.append(dict(module=m,dependency=d,sha256=found['sha256']))
+git_batch.stdin.close();git_batch.wait()
+# h6 project edges for the inherited project cohort
+raw=subprocess.check_output(['git','show',rev+':evidence/pv-rj4id-20261029/inherited-reuse.json.xz'])
+import lzma
+reuse=json.loads(lzma.decompress(raw))
+own=json.loads(subprocess.check_output(['git','show',rev+':evidence/pv-rj4id-20261029/inherited-validation.json']))
+extra=json.loads(subprocess.check_output(['git','show',rev+':evidence/pv-rj4id-20261029/extra-records.json']))
+edges+=reuse['dependencies']+own['dependencies']
+edges += [dict(module=m,dependency=d,sha256=v['sha256']) for m,r in extra['records'].items() for d,v in r['dependencies'].items()]
+external=json.loads(subprocess.check_output(['git','show',rev+':evidence/pv-rj4id-20261029/external-authority.json']))
+# Only load the recorded import closure, not every object in a cache.
+module=sys.argv[1] if len(sys.argv)>1 else 'PV_MEAS_Average'
+assert module.startswith('PV_MEAS_')
+new=Path('lean/'+module+'.lean');b=new.read_bytes()
+assert subprocess.check_output(['git','show',rev+':'+str(new)])==b
+payload=dict(H=H,revision=rev,projects=projects,edges=edges,external=external,source=b.decode(),sha256=sha(b),module=module)
+code=r'''
+import pathlib,json,sys,hashlib,subprocess,re
+x=json.load(sys.stdin);p=pathlib.Path(x['H']);old=pathlib.Path('/home/dombarker/project-offloads/codex-pv-meas-20261029')
+env=json.load(open(old/'J.json')); roots=[p/'objects']+[pathlib.Path(q) for q in env['LEAN_PATH'].split(':')]
+assert subprocess.check_output([env['LEAN'],'--githash'],text=True).strip()==env['LEAN_GITHASH']=='8c9756b28d64dab099da31a4c09229a9e6a2ef35'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+ext=x['external'];print_type=type(ext).__name__
+if isinstance(ext,dict): ext=ext.get('objects',ext.get('modules',ext.get('entries',ext)))
+assert isinstance(ext,list),('manifest shape',print_type,list(ext)[:8])
+auth={v['module'].replace('/','.'):v for v in ext}
+addendum_path=p/'evidence/external-addendum-manifest.json'
+assert sha(addendum_path)==(p/'evidence/external-addendum-manifest.sha256').read_text().strip()
+addendum=json.load(open(addendum_path))
+plan=json.load(open(p/'evidence/lebegue-plan.json'))
+assert len(addendum['modules'])==addendum['required_count']==len(plan['required'])
+assert {v['target'] for v in addendum['modules']}==set(plan['required'])
+for v in addendum['modules']:
+ auth[v['target']]=dict(module=v['target'],object_sha256=v['object_sha256'])
+visited={};used=[]
+def resolve(m):
+ ns=m.split('.')[0];rel=m.replace('.','/')+'.olean'
+ q=next(q for q in roots if (q/ns).is_dir() or (q/rel).is_file())
+ out=q/rel;assert out.is_file(),('namespace shadowing',m,str(out));return out
+def visit(m):
+ if m in visited:return
+ q=resolve(m);digest=sha(q)
+ if m in x['projects']:
+  v=x['projects'][m];assert digest==v['object_sha256'],('object changed',m)
+  visited[m]=dict(module=m,path=str(q),sha256=digest,source=v)
+  es=[e for e in x['edges'] if e['module']==m]
+  for e in es:
+   d=e['dependency'];assert sha(resolve(d))==e.get('expected',e.get('sha256')),('cohort edge',m,d)
+   visit(d)
+ else:
+  v=auth[m];assert digest==v['object_sha256'],('external changed',m)
+  visited[m]=dict(module=m,path=str(q),sha256=digest,authority='coherent privacy external manifest')
+# External manifest audited in full, including transitive implicit Init imports.
+for m,v in auth.items():
+ q=resolve(m);assert sha(q)==v['object_sha256'],('external',m)
+ used.append(dict(module=m,path=str(q),sha256=v['object_sha256']))
+for m in re.findall(r'^import (\S+)',x['source'],re.M):visit(m)
+for n in ['sources','objects','evidence']:(p/n).mkdir(parents=True,exist_ok=True)
+(p/('sources/'+x['module']+'.lean')).write_text(x['source'])
+env['LEAN_PATH']=str(p/'objects')+':'+env['LEAN_PATH'];(p/'J.json').write_text(json.dumps(env))
+print(json.dumps(dict(project_checks=list(visited.values()),external_checks=used,toolchain=env['LEAN_GITHASH'],inherited_prefix=':'.join(str(q) for q in roots),LEAN_PATH=env['LEAN_PATH'],source_revision=x['revision'],source_sha256=x['sha256'],addendum_sha256=sha(addendum_path),shared_written=False)))
+'''
+r=subprocess.run(['ssh','dombarker@100.108.41.90','python3 -c '+shlex.quote(code)],input=json.dumps(payload),text=True,capture_output=True)
+(E/('prepare-'+module+'.json')).write_text(json.dumps(dict(exit=r.returncode,stderr=r.stderr,result=json.loads(r.stdout) if r.returncode==0 else r.stdout),indent=2)+'\n')
+assert r.returncode==0,r.stderr+r.stdout
+print('PASS verified and staged')

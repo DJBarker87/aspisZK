@@ -1,0 +1,33 @@
+/home/dombarker/project-offloads/codex-pv-rdcd3-20261028/rdcd4-20261029/lean-sources/R1Z/PV_RDCD4_ArrayMemory194.lean:25:17: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_RDCD4_Memory194.constPtrRead ?m.69
+in the target expression
+  (have idx := s.start;
+    have advanced := { data := s.data, start := s.start + 1, stop := s.stop };
+    do
+    let value ← PV_RDCD4_Memory194.constPtrRead { origin := origin, data := advanced.data, offset := idx }
+    ok (some value, advanced)) =
+    ok (PV_RDCD4_ArrayIter194.next s)
+
+case pos
+E : Type
+origin : ℕ
+s : PV_RDCD4_ArrayIter194.State E
+hv : PV_RDCD4_ArrayIter194.valid s
+ha : s.start < s.stop
+h : 0 < s.stop - s.start
+hb : s.start < s.data.length
+⊢ (have idx := s.start;
+    have advanced := { data := s.data, start := s.start + 1, stop := s.stop };
+    do
+    let value ← PV_RDCD4_Memory194.constPtrRead { origin := origin, data := advanced.data, offset := idx }
+    ok (some value, advanced)) =
+    ok (PV_RDCD4_ArrayIter194.next s)
+/home/dombarker/project-offloads/codex-pv-rdcd3-20261028/rdcd4-20261029/lean-sources/R1Z/PV_RDCD4_ArrayMemory194.lean:25:46: error: Application type mismatch: The argument
+  hb
+has type
+  s.start < s.data.length
+but is expected to have type
+  PV_RDCD4_Memory194.Pointer.offset ?m.69 < (PV_RDCD4_Memory194.Pointer.data ?m.69).length
+in the application
+  PV_RDCD4_Memory194.read_at ?m.69 hb
+'R1Z.PV_RDCD4_ArrayMemory194.binding' depends on axioms: [propext, sorryAx]

@@ -1,0 +1,287 @@
+theorem PV_SKWC_OWNM.satisfiable : ∃ pair,
+  R1Z.PV_OWNM_V239.PV_OWNM_Link_ActualInput PV_SKWC_OWNM.wirePoints pair.1 ∧
+    R1Z.PV_OWNM_V239.PV_OWNM_Link_ActualInput PV_SKWC_OWNM.wirePoints pair.2 ∧
+      R1Z.PV_OWNM_V239.PV_OWNM_Link_SourceDense PV_SKWC_OWNM.decode PV_SKWC_OWNM.zero PV_SKWC_OWNM.source222 ∧
+        R1Z.PV_OWNM_V239.PV_OWNM_Link_Transcript879 PV_SKWC_OWNM.reconstruct pair.1 ∧
+          R1Z.PV_OWNM_V239.PV_OWNM_Link_Transcript879 PV_SKWC_OWNM.reconstruct pair.2 ∧
+            R1Z.PV_OWNM_V239.PV_OWNM_Link_Transcript890 PV_SKWC_OWNM.reconstruct pair.1 ∧
+              R1Z.PV_OWNM_V239.PV_OWNM_Link_Transcript890 PV_SKWC_OWNM.reconstruct pair.2 ∧
+                R1Z.PV_OWNM_V239.PV_OWNM_Link_OwnedPublicPlan PV_SKWC_OWNM.decode PV_SKWC_OWNM.source222
+                    PV_SKWC_OWNM.wirePoints R1Z.PV_OWNI_Scanner.boolean PV_SKWC_OWNM.native PV_SKWC_OWNM.resource []
+                    pair.1 ∧
+                  R1Z.PV_OWNM_V239.PV_OWNM_Link_OwnedPublicPlan PV_SKWC_OWNM.decode PV_SKWC_OWNM.source222
+                      PV_SKWC_OWNM.wirePoints R1Z.PV_OWNI_Scanner.boolean PV_SKWC_OWNM.native PV_SKWC_OWNM.resource []
+                      pair.2 ∧
+                    pair.1.pubData = pair.2.pubData ∧
+                      pair.1.site = pair.2.site ∧
+                        List.map List.length pair.1.columns = List.map List.length pair.2.columns :=
+⋯
+'PV_SKWC_OWNM.satisfiable' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem PV_SKWC_OWNM.nondegenerate : ∀ (site : R1Z.PV_OWNM_V239.Site),
+  (PV_SKWC_OWNM.input site).point.length = 10 ∧
+    (PV_SKWC_OWNM.wirePoints (PV_SKWC_OWNM.input site).point).length = 3 ∧
+      List.map List.length (PV_SKWC_OWNM.input site).columns = [1024, 1024] :=
+⋯
+'PV_SKWC_OWNM.nondegenerate' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem PV_SKW_DIAG_FILE.satisfiable : ∃ x,
+  PV_DIAG10.PV_DIAG10_Link_Init x.state (PV_SKW_DIAG_FILE.project []) ∧
+    (PV_DIAG10.PV_DIAG10_Link_Step x.state List.append fun e => PV_SKW_DIAG_FILE.project [e]) ∧
+      PV_DIAG10.PV_DIAG10_Link_Readout x.actual x.state x.raw ∧ PV_DIAG10.PV_DIAG10_Link_EventOrder x.raw x.native :=
+⋯
+'PV_SKW_DIAG_FILE.satisfiable' depends on axioms: [propext]
+@[defeq] theorem PV_SKW_DIAG_FILE.nondegenerate : PV_SKW_DIAG_FILE.model.actual PV_SKW_DIAG_FILE.sample =
+  [PV_RJ4IDB.FileOp.write [1] [2] [2], PV_RJ4IDB.FileOp.write [3] [4] [4]] :=
+⋯
+'PV_SKW_DIAG_FILE.nondegenerate' depends on axioms: [propext]
+theorem PV_SKW_DIAG_JSON_STDOUT.satisfiable : ∃ x,
+  PV_DIAG10.PV_DIAG10_Link_Init x.state (PV_SKW_DIAG_JSON_STDOUT.project []) ∧
+    (PV_DIAG10.PV_DIAG10_Link_Step x.state (fun a b => (a.1 ++ b.1, a.2 ++ b.2)) fun e =>
+        PV_SKW_DIAG_JSON_STDOUT.project [e]) ∧
+      PV_DIAG10.PV_DIAG10_Link_Readout x.actual x.state x.raw ∧ PV_DIAG10.PV_DIAG10_Link_EventOrder x.raw x.native :=
+⋯
+'PV_SKW_DIAG_JSON_STDOUT.satisfiable' depends on axioms: [propext]
+@[defeq] theorem PV_SKW_DIAG_JSON_STDOUT.nondegenerate : PV_SKW_DIAG_JSON_STDOUT.model.actual
+    PV_SKW_DIAG_JSON_STDOUT.sample =
+  ([[123, 125]], [([10], [10])]) :=
+⋯
+'PV_SKW_DIAG_JSON_STDOUT.nondegenerate' depends on axioms: [propext]
+theorem PV_SKW_DIAG_ERROR_STDERR.satisfiable : ∃ x,
+  PV_DIAG10.PV_DIAG10_Link_Init x.state (PV_SKW_DIAG_ERROR_STDERR.project []) ∧
+    (PV_DIAG10.PV_DIAG10_Link_Step x.state (fun a b => (a.1 ++ b.1, a.2 ++ b.2)) fun e =>
+        PV_SKW_DIAG_ERROR_STDERR.project [e]) ∧
+      PV_DIAG10.PV_DIAG10_Link_Readout x.actual x.state x.raw ∧ PV_DIAG10.PV_DIAG10_Link_EventOrder x.raw x.native :=
+⋯
+'PV_SKW_DIAG_ERROR_STDERR.satisfiable' depends on axioms: [propext]
+@[defeq] theorem PV_SKW_DIAG_ERROR_STDERR.nondegenerate : PV_SKW_DIAG_ERROR_STDERR.model.actual
+    PV_SKW_DIAG_ERROR_STDERR.sample =
+  ([PV_DIAG2.Effect.returned PV_DIAG2.Error.Semantic], [PV_DIAG3.Event.requested 2 [69]]) :=
+⋯
+'PV_SKW_DIAG_ERROR_STDERR.nondegenerate' depends on axioms: [propext]
+theorem PV_SKW_L1.satisfiable : ∃ x,
+  PV_L1E_CountSkeleton.PV_L1E_Link_CountAcquisition x.actual x.sourceWorld ∧
+    PV_L1E_CountSkeleton.PV_L1E_Link_BodyWrapper x.sourceWorld x.bodyWorld ∧
+      PV_L1E_OriginalCountSkeleton.PV_L1E_Link_OriginalRetry x.bodyWorld (fun x => PV_SKW_L1.owner) (fun x => 0)
+          Prod.fst Prod.snd PV_SKW_L1.adapt ∧
+        PV_L1E_OriginalCountSkeleton.PV_L1E_Link_NativeD163 x.native (fun x => PV_SKW_L1.owner) (fun x => 0) Prod.fst
+          Prod.snd PV_SKW_L1.adapt :=
+⋯
+'PV_SKW_L1.satisfiable' depends on axioms: [propext]
+theorem PV_SKW_L1.nondegenerate : PV_SKW_L1.model.actual (2, 0) = ([2], [0]) ∧
+  (PV_SKW_L1.runAt (2, 0)).2 = 2 ∧ (PV_SKW_L1.model.native (2, 0)).terminal = PV_RJ4IDB.Terminal.success 2 :=
+⋯
+'PV_SKW_L1.nondegenerate' depends on axioms: [propext]
+'PV_SKW_DIAG_FILE.project_step' depends on axioms: [propext]
+'PV_SKW_DIAG_JSON_STDOUT.project_step' depends on axioms: [propext]
+'PV_SKW_DIAG_ERROR_STDERR.project_step' depends on axioms: [propext]
+theorem PV_SKW_L1.generic_satisfiable : ∃ x,
+  PV_L1E_CountSkeleton.PV_L1E_Link_CountAcquisition x.actual x.sourceWorld ∧
+    PV_L1E_CountSkeleton.PV_L1E_Link_BodyWrapper x.sourceWorld x.bodyWorld ∧
+      PV_L1E_CountSkeleton.PV_L1E_Link_RetryJoin x.bodyWorld x.originalWorld ∧
+        PV_L1E_CountSkeleton.PV_L1E_Link_NativeOriginal x.originalWorld x.native :=
+⋯
+'PV_SKW_L1.generic_satisfiable' depends on axioms: [propext]
+def R1Z.PV_OWNM_V239.PV_OWNM_Link_ActualInput : (List R1Z.PV_OWNM_V239.Q → List (List R1Z.PV_OWNM_V239.Q)) →
+  R1Z.PV_OWNM_V239.Input → Prop :=
+fun wirePoints i =>
+  i.point.length = 10 ∧
+    (∀ p ∈ wirePoints i.point, p.length = 10 ∧ ∀ q ∈ p, R1Z.PV_OWNM_V239.Canon q) ∧
+      ∀ c ∈ i.columns, ∀ q ∈ c, R1Z.PV_OWNM_V239.Canon q
+def R1Z.PV_OWNM_V239.PV_OWNM_Link_SourceDense : {K : Type} →
+  [Field K] →
+    (R1Z.PV_OWNM_V239.Q → K) →
+      R1Z.PV_OWNM_V239.Q →
+        (List R1Z.PV_OWNM_V239.Q → List R1Z.PV_OWNM_V239.Q → Aeneas.Std.Result (Option R1Z.PV_OWNM_V239.Q)) → Prop :=
+fun {K} [Field K] decode zero source222 =>
+  ∀ (p c : List R1Z.PV_OWNM_V239.Q),
+    p.length = 10 →
+      (∀ q ∈ p, R1Z.PV_OWNM_V239.Canon q) →
+        (∀ q ∈ c, R1Z.PV_OWNM_V239.Canon q) →
+          (do
+              let v ← source222 p c
+              Aeneas.Std.Result.ok (Option.map decode v)) =
+            Aeneas.Std.Result.ok (if c.length ≠ 1024 then none else some (R1Z.PV_OWNM_V239.dense decode zero p c))
+def R1Z.PV_OWNM_V239.PV_OWNM_Link_Transcript879 : (R1Z.PV_OWNM_V239.Public → List R1Z.PV_OWNM_V239.Q) →
+  R1Z.PV_OWNM_V239.Input → Prop :=
+fun reconstruct879 i => i.site = R1Z.PV_OWNM_V239.Site.callback879 → i.point = reconstruct879 i.pubData
+def R1Z.PV_OWNM_V239.PV_OWNM_Link_Transcript890 : (R1Z.PV_OWNM_V239.Public → List R1Z.PV_OWNM_V239.Q) →
+  R1Z.PV_OWNM_V239.Input → Prop :=
+fun reconstruct890 i => i.site = R1Z.PV_OWNM_V239.Site.final890 → i.point = reconstruct890 i.pubData
+def R1Z.PV_OWNM_V239.PV_OWNM_Link_OwnedPublicPlan : {K W : Type} →
+  (R1Z.PV_OWNM_V239.Q → K) →
+    (List R1Z.PV_OWNM_V239.Q → List R1Z.PV_OWNM_V239.Q → Aeneas.Std.Result (Option R1Z.PV_OWNM_V239.Q)) →
+      (List R1Z.PV_OWNM_V239.Q → List (List R1Z.PV_OWNM_V239.Q)) →
+        (R1Z.PV_OWNM_V239.Q → Bool) →
+          (R1Z.PV_OWNM_V239.Input → List R1Z.PV_OWNM_V239.Q → ℕ → R1Z.PV_OWNM_V239.Execution K W) →
+            (R1Z.PV_OWNM_V239.Input → List R1Z.PV_OWNM_V239.Q → ℕ → R1Z.PV_OWNM_V239.ResourceExit W) →
+              List Bool → R1Z.PV_OWNM_V239.Input → Prop :=
+fun {K W} decode source222 wirePoints isBoolean native resource failures i =>
+  (∀ p ∈ wirePoints i.point,
+      ∀ (lane : ℕ) (c : List R1Z.PV_OWNM_V239.Q),
+        i.columns[lane]? = some c →
+          native i p lane =
+            R1Z.PV_OWNM_V239.attach (resource i p lane) do
+              let v ← source222 p c
+              Aeneas.Std.Result.ok (Option.map decode v)) ∧
+    ∀ p ∈ wirePoints i.point,
+      ∀ (lane : ℕ) (c : List R1Z.PV_OWNM_V239.Q),
+        i.columns[lane]? = some c →
+          (R1Z.PV_OWNM_V239.attach (resource i p lane) do
+                let v ← source222 p c
+                Aeneas.Std.Result.ok (Option.map decode v)).trace =
+            R1Z.PV_OWNM_V239.plan isBoolean (R1Z.PV_OWNM_V239.calls wirePoints i) failures
+theorem PV_SKWC_OWNM.final_links : R1Z.PV_OWNM_V239.PV_OWNM_Link_ActualInput PV_SKWC_OWNM.wirePoints
+    (PV_SKWC_OWNM.input R1Z.PV_OWNM_V239.Site.final890) ∧
+  R1Z.PV_OWNM_V239.PV_OWNM_Link_Transcript879 PV_SKWC_OWNM.reconstruct
+      (PV_SKWC_OWNM.input R1Z.PV_OWNM_V239.Site.final890) ∧
+    R1Z.PV_OWNM_V239.PV_OWNM_Link_Transcript890 PV_SKWC_OWNM.reconstruct
+        (PV_SKWC_OWNM.input R1Z.PV_OWNM_V239.Site.final890) ∧
+      R1Z.PV_OWNM_V239.PV_OWNM_Link_OwnedPublicPlan PV_SKWC_OWNM.decode PV_SKWC_OWNM.source222 PV_SKWC_OWNM.wirePoints
+        R1Z.PV_OWNI_Scanner.boolean PV_SKWC_OWNM.native PV_SKWC_OWNM.resource []
+        (PV_SKWC_OWNM.input R1Z.PV_OWNM_V239.Site.final890) :=
+⋯
+'PV_SKWC_OWNM.final_links' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem PV_SKWC_OWNM.actual_input : ∀ (site : R1Z.PV_OWNM_V239.Site),
+  R1Z.PV_OWNM_V239.PV_OWNM_Link_ActualInput PV_SKWC_OWNM.wirePoints (PV_SKWC_OWNM.input site) :=
+⋯
+'PV_SKWC_OWNM.actual_input' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem PV_SKWC_OWNM.owned : ∀ (i : R1Z.PV_OWNM_V239.Input),
+  R1Z.PV_OWNM_V239.PV_OWNM_Link_OwnedPublicPlan PV_SKWC_OWNM.decode PV_SKWC_OWNM.source222 PV_SKWC_OWNM.wirePoints
+    R1Z.PV_OWNI_Scanner.boolean PV_SKWC_OWNM.native PV_SKWC_OWNM.resource [] i :=
+⋯
+'PV_SKWC_OWNM.owned' depends on axioms: [propext, Classical.choice, Quot.sound]
+@[reducible] def PV_SKW_DIAG_FILE.I : Type :=
+PV_RJ4IDB.NativeTrace ℕ
+structure PV_SKW_DIAG_FILE.Instance : Type
+number of parameters: 0
+fields:
+  PV_SKW_DIAG_FILE.Instance.actual : PV_SKW_DIAG_FILE.I → PV_SKW_DIAG_FILE.X
+  PV_SKW_DIAG_FILE.Instance.native : PV_SKW_DIAG_FILE.I → PV_RJ4IDB.NativeTrace ℕ
+  PV_SKW_DIAG_FILE.Instance.raw : PV_SKW_DIAG_FILE.I → List PV_RJ4IDB.NativeEvent
+  PV_SKW_DIAG_FILE.Instance.state : PV_SKW_DIAG_FILE.I → List PV_RJ4IDB.NativeEvent → PV_SKW_DIAG_FILE.X
+constructor:
+  PV_SKW_DIAG_FILE.Instance.mk (actual : PV_SKW_DIAG_FILE.I → PV_SKW_DIAG_FILE.X)
+    (native : PV_SKW_DIAG_FILE.I → PV_RJ4IDB.NativeTrace ℕ) (raw : PV_SKW_DIAG_FILE.I → List PV_RJ4IDB.NativeEvent)
+    (state : PV_SKW_DIAG_FILE.I → List PV_RJ4IDB.NativeEvent → PV_SKW_DIAG_FILE.X) : PV_SKW_DIAG_FILE.Instance
+def PV_SKW_DIAG_FILE.model : PV_SKW_DIAG_FILE.Instance :=
+{ actual := fun i => PV_SKW_DIAG_FILE.project i.events, native := id, raw := PV_RJ4IDB.NativeTrace.events,
+  state := fun x es => PV_SKW_DIAG_FILE.project es }
+@[reducible] def PV_SKW_DIAG_JSON_STDOUT.I : Type :=
+PV_RJ4IDB.NativeTrace ℕ
+structure PV_SKW_DIAG_JSON_STDOUT.Instance : Type
+number of parameters: 0
+fields:
+  PV_SKW_DIAG_JSON_STDOUT.Instance.actual : PV_SKW_DIAG_JSON_STDOUT.I → PV_SKW_DIAG_JSON_STDOUT.X
+  PV_SKW_DIAG_JSON_STDOUT.Instance.native : PV_SKW_DIAG_JSON_STDOUT.I → PV_RJ4IDB.NativeTrace ℕ
+  PV_SKW_DIAG_JSON_STDOUT.Instance.raw : PV_SKW_DIAG_JSON_STDOUT.I → List PV_RJ4IDB.NativeEvent
+  PV_SKW_DIAG_JSON_STDOUT.Instance.state : PV_SKW_DIAG_JSON_STDOUT.I →
+      List PV_RJ4IDB.NativeEvent → PV_SKW_DIAG_JSON_STDOUT.X
+constructor:
+  PV_SKW_DIAG_JSON_STDOUT.Instance.mk (actual : PV_SKW_DIAG_JSON_STDOUT.I → PV_SKW_DIAG_JSON_STDOUT.X)
+    (native : PV_SKW_DIAG_JSON_STDOUT.I → PV_RJ4IDB.NativeTrace ℕ)
+    (raw : PV_SKW_DIAG_JSON_STDOUT.I → List PV_RJ4IDB.NativeEvent)
+    (state : PV_SKW_DIAG_JSON_STDOUT.I → List PV_RJ4IDB.NativeEvent → PV_SKW_DIAG_JSON_STDOUT.X) :
+    PV_SKW_DIAG_JSON_STDOUT.Instance
+def PV_SKW_DIAG_JSON_STDOUT.model : PV_SKW_DIAG_JSON_STDOUT.Instance :=
+{ actual := fun i => PV_SKW_DIAG_JSON_STDOUT.project i.events, native := id, raw := PV_RJ4IDB.NativeTrace.events,
+  state := fun x es => PV_SKW_DIAG_JSON_STDOUT.project es }
+@[reducible] def PV_SKW_DIAG_ERROR_STDERR.I : Type :=
+PV_RJ4IDB.NativeTrace ℕ
+structure PV_SKW_DIAG_ERROR_STDERR.Instance : Type
+number of parameters: 0
+fields:
+  PV_SKW_DIAG_ERROR_STDERR.Instance.actual : PV_SKW_DIAG_ERROR_STDERR.I → PV_SKW_DIAG_ERROR_STDERR.X
+  PV_SKW_DIAG_ERROR_STDERR.Instance.native : PV_SKW_DIAG_ERROR_STDERR.I → PV_RJ4IDB.NativeTrace ℕ
+  PV_SKW_DIAG_ERROR_STDERR.Instance.raw : PV_SKW_DIAG_ERROR_STDERR.I → List PV_RJ4IDB.NativeEvent
+  PV_SKW_DIAG_ERROR_STDERR.Instance.state : PV_SKW_DIAG_ERROR_STDERR.I →
+      List PV_RJ4IDB.NativeEvent → PV_SKW_DIAG_ERROR_STDERR.X
+constructor:
+  PV_SKW_DIAG_ERROR_STDERR.Instance.mk (actual : PV_SKW_DIAG_ERROR_STDERR.I → PV_SKW_DIAG_ERROR_STDERR.X)
+    (native : PV_SKW_DIAG_ERROR_STDERR.I → PV_RJ4IDB.NativeTrace ℕ)
+    (raw : PV_SKW_DIAG_ERROR_STDERR.I → List PV_RJ4IDB.NativeEvent)
+    (state : PV_SKW_DIAG_ERROR_STDERR.I → List PV_RJ4IDB.NativeEvent → PV_SKW_DIAG_ERROR_STDERR.X) :
+    PV_SKW_DIAG_ERROR_STDERR.Instance
+def PV_SKW_DIAG_ERROR_STDERR.model : PV_SKW_DIAG_ERROR_STDERR.Instance :=
+{ actual := fun i => PV_SKW_DIAG_ERROR_STDERR.project i.events, native := id, raw := PV_RJ4IDB.NativeTrace.events,
+  state := fun x es => PV_SKW_DIAG_ERROR_STDERR.project es }
+@[reducible] def PV_SKW_L1.I : Type :=
+ℕ × ℕ
+structure PV_SKW_L1.Instance : Type
+number of parameters: 0
+fields:
+  PV_SKW_L1.Instance.actual : PV_SKW_L1.I → List ℕ × List ℕ
+  PV_SKW_L1.Instance.native : PV_SKW_L1.I → PV_RJ4IDB.NativeTrace ℕ
+  PV_SKW_L1.Instance.sourceWorld : PV_SKW_L1.I → PV_RJ4IDB.Trace ℕ
+  PV_SKW_L1.Instance.bodyWorld : PV_SKW_L1.I → PV_RJ4IDB.Trace ℕ
+  PV_SKW_L1.Instance.originalWorld : PV_SKW_L1.I → PV_RJ4IDB.Trace ℕ
+constructor:
+  PV_SKW_L1.Instance.mk (actual : PV_SKW_L1.I → List ℕ × List ℕ) (native : PV_SKW_L1.I → PV_RJ4IDB.NativeTrace ℕ)
+    (sourceWorld bodyWorld originalWorld : PV_SKW_L1.I → PV_RJ4IDB.Trace ℕ) : PV_SKW_L1.Instance
+def PV_SKW_L1.model : PV_SKW_L1.Instance :=
+{
+  actual := fun i =>
+    have t := PV_SKW_L1.adapt i (PV_SKW_L1.runAt i);
+    (PV_RJ4IDB.counts t.events, PV_RJ4IDB.rejections t.events),
+  native := fun i => PV_SKW_L1.encode (PV_SKW_L1.runAt i),
+  sourceWorld := fun i => PV_SKW_L1.adapt i (PV_SKW_L1.runAt i),
+  bodyWorld := fun i => PV_SKW_L1.adapt i (PV_SKW_L1.runAt i),
+  originalWorld := fun i => PV_SKW_L1.adapt i (PV_SKW_L1.runAt i) }
+def PV_DIAG10.PV_DIAG10_Link_Init : {I X : Type} → (I → List PV_RJ4IDB.NativeEvent → X) → X → Prop :=
+fun {I X} state zero => ∀ (i : I), state i [] = zero
+def PV_DIAG10.PV_DIAG10_Link_Step : {I X : Type} →
+  (I → List PV_RJ4IDB.NativeEvent → X) → (X → X → X) → (PV_RJ4IDB.NativeEvent → X) → Prop :=
+fun {I X} state join single =>
+  ∀ (i : I) (es : List PV_RJ4IDB.NativeEvent) (e : PV_RJ4IDB.NativeEvent),
+    state i (es ++ [e]) = join (state i es) (single e)
+def PV_DIAG10.PV_DIAG10_Link_Readout : {I X : Type} →
+  (I → X) → (I → List PV_RJ4IDB.NativeEvent → X) → (I → List PV_RJ4IDB.NativeEvent) → Prop :=
+fun {I X} actual state raw => ∀ (i : I), actual i = state i (raw i)
+def PV_DIAG10.PV_DIAG10_Link_EventOrder : {I A : Type} →
+  (I → List PV_RJ4IDB.NativeEvent) → (I → PV_RJ4IDB.NativeTrace A) → Prop :=
+fun {I A} raw native => ∀ (i : I), (native i).events = raw i
+def PV_L1E_CountSkeleton.PV_L1E_Link_CountAcquisition : {I A : Type} →
+  (I → List ℕ × List ℕ) → (I → PV_RJ4IDB.Trace A) → Prop :=
+fun {I A} actualCount sourceWorld =>
+  ∀ (i : I), actualCount i = (PV_RJ4IDB.counts (sourceWorld i).events, PV_RJ4IDB.rejections (sourceWorld i).events)
+def PV_L1E_CountSkeleton.PV_L1E_Link_BodyWrapper : {I A : Type} →
+  (I → PV_RJ4IDB.Trace A) → (I → PV_RJ4IDB.Trace A) → Prop :=
+fun {I A} sourceWorld bodyWorld => ∀ (i : I), sourceWorld i = bodyWorld i
+def PV_L1E_CountSkeleton.PV_L1E_Link_RetryJoin : {I A : Type} →
+  (I → PV_RJ4IDB.Trace A) → (I → PV_RJ4IDB.Trace A) → Prop :=
+fun {I A} bodyWorld originalWorld => ∀ (i : I), bodyWorld i = originalWorld i
+def PV_L1E_CountSkeleton.PV_L1E_Link_NativeOriginal : {I A : Type} →
+  (I → PV_RJ4IDB.Trace A) → (I → PV_RJ4IDB.NativeTrace A) → Prop :=
+fun {I A} originalWorld native => ∀ (i : I), originalWorld i = PV_RJ4IDB.modelTrace (native i)
+def PV_L1E_OriginalCountSkeleton.PV_L1E_Link_OriginalRetry : {I A S P : Type} →
+  (I → PV_RJ4IDB.Trace A) →
+    (I → R1Z.SideChannelL1AttemptRecord.Owner S P) →
+      (I → S) → (I → ℕ) → (I → ℕ) → (I → R1Z.SideChannelL1AttemptRecord.Run P × S → PV_RJ4IDB.Trace A) → Prop :=
+fun {I A S P} bodyWorld owner initial fuel index adapt =>
+  ∀ (i : I), bodyWorld i = adapt i (R1Z.SideChannelL1AttemptRecord.run (owner i) (fuel i) (index i) (initial i))
+def PV_L1E_OriginalCountSkeleton.PV_L1E_Link_NativeD163 : {I A S P : Type} →
+  (I → PV_RJ4IDB.NativeTrace A) →
+    (I → R1Z.SideChannelL1AttemptRecord.Owner S P) →
+      (I → S) → (I → ℕ) → (I → ℕ) → (I → R1Z.SideChannelL1AttemptRecord.Run P × S → PV_RJ4IDB.Trace A) → Prop :=
+fun {I A S P} native owner initial fuel index adapt =>
+  ∀ (i : I),
+    adapt i (R1Z.SideChannelL1AttemptRecord.run (owner i) (fuel i) (index i) (initial i)) =
+      PV_RJ4IDB.modelTrace (native i)
+def PV_SKWC_OWNM.input : R1Z.PV_OWNM_V239.Site → R1Z.PV_OWNM_V239.Input :=
+fun site =>
+  { pubData := { statement := [1], frames := [[2]], round := 1, sample := 2, assignment := 3 }, site := site,
+    point := PV_SKWC_OWNM.point, columns := PV_SKWC_OWNM.columns }
+def PV_SKWC_OWNM.point : List R1Z.PV_OWNM_V239.Q :=
+List.replicate 10 PV_SKWC_OWNM.one
+def PV_SKWC_OWNM.wirePoints : List R1Z.PV_OWNM_V239.Q → List (List R1Z.PV_OWNM_V239.Q) :=
+fun p => [p, p.reverse, p]
+def PV_SKWC_OWNM.columns : List (List R1Z.PV_OWNM_V239.Q) :=
+[List.replicate 1024 PV_SKWC_OWNM.one, List.replicate 1024 PV_SKWC_OWNM.zero]
+def PV_SKWC_OWNM.native : R1Z.PV_OWNM_V239.Input →
+  List R1Z.PV_OWNM_V239.Q → ℕ → R1Z.PV_OWNM_V239.Execution PV_SKWC_OWNM.K ℕ :=
+fun i p lane =>
+  R1Z.PV_OWNM_V239.attach (PV_SKWC_OWNM.resource i p lane) do
+    let v ← PV_SKWC_OWNM.source222 p (i.columns[lane]?.getD [])
+    Aeneas.Std.Result.ok (Option.map PV_SKWC_OWNM.decode v)
+def PV_SKWC_OWNM.resource : R1Z.PV_OWNM_V239.Input → List R1Z.PV_OWNM_V239.Q → ℕ → R1Z.PV_OWNM_V239.ResourceExit ℕ :=
+fun i x lane =>
+  R1Z.PV_OWNM_V239.ResourceExit.ready (lane + 1)
+    (R1Z.PV_OWNM_V239.plan R1Z.PV_OWNI_Scanner.boolean (R1Z.PV_OWNM_V239.calls PV_SKWC_OWNM.wirePoints i) [])

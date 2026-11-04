@@ -1,0 +1,396 @@
+structure PV_EVH_RuntimeBinding.OpenDeploymentInputs {CommitHandle Aux : Type}
+  (template : R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctBasis.K CommitHandle Aux)
+  (outputs :
+    R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+      R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux)
+  (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle) [ProverRwFull.ExternalTypes]
+  {Public Signal Env A R S N : Type} (T : Type) : Type
+number of parameters: 14
+fields:
+  PV_EVH_RuntimeBinding.OpenDeploymentInputs.completion_OPEN : PV_EVH_Interface.Completion Public Signal Env
+      (R0Z.FsStatement.ROMView R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat) A
+  PV_EVH_RuntimeBinding.OpenDeploymentInputs.publicInput_OPEN : Public
+  PV_EVH_RuntimeBinding.OpenDeploymentInputs.acquisition_OPEN : N → Env × R
+  PV_EVH_RuntimeBinding.OpenDeploymentInputs.native_OPEN : Env →
+      PV_EVH_Core.Observer Signal A →
+        (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).Instance → R → PV_RJ4IDB.NativeTrace A
+  PV_EVH_RuntimeBinding.OpenDeploymentInputs.signal_OPEN : Env →
+      PV_EVH_Core.Observer Signal A → (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).Instance → R → Signal
+  PV_EVH_RuntimeBinding.OpenDeploymentInputs.toNative_OPEN : Env →
+      PV_EVH_Core.Observer Signal A → (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).Instance → S → R
+  PV_EVH_RuntimeBinding.OpenDeploymentInputs.toModel_OPEN : Env →
+      PV_EVH_Core.Observer Signal A →
+        (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).Instance →
+          S →
+            ((R1Z.ProverCommitReencode16.experiment
+                    (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                        (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input) R1Z.PrivacyR1AcctBasis.basis outputs
+                        x).toWire
+                    (R1Z.PhaseProtocolInstanceBin.prover (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                        (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input) R1Z.PrivacyR1AcctBasis.basis outputs x
+                        (R1Z.PrivacyR1AcctModel.seed
+                          (R1Z.PhaseProtocolInstanceBin.wire
+                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                              (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input) R1Z.PrivacyR1AcctBasis.basis
+                              outputs x).toWire
+                          PV_EVH_RuntimeBinding.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                          R1Z.PhaseWireLog2Bin.opens)).toProver
+                    8 R1Z.PrivacyR1HeadlineWire2.eight_pos
+                    (R1Z.PredicateR1.P_R1 (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).transport
+                      R1Z.PrivacyR1AcctBasis.basis R1Z.PrivacyR1AcctBasis.packing_laws)
+                    (fun h' => R1Z.MaskImageVR1.VR1 h') R1Z.ProverCommitReencode16.encode).RealRand ×
+                R0Z.FsStatement.OracleAnswer) ×
+              R1Z.ProverCommitFuelJoin22.Tape
+  PV_EVH_RuntimeBinding.OpenDeploymentInputs.statementBytes_OPEN : Env ×
+        PV_EVH_Core.Observer Signal A × (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).Instance × R →
+      Option PV_RJ4IDB.Bytes
+  PV_EVH_RuntimeBinding.OpenDeploymentInputs.fileTrace_OPEN : Env ×
+        PV_EVH_Core.Observer Signal A × (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).Instance × R →
+      List PV_RJ4IDB.FileOp
+  PV_EVH_RuntimeBinding.OpenDeploymentInputs.jsonStdout_OPEN : Env ×
+        PV_EVH_Core.Observer Signal A × (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).Instance × R →
+      List PV_RJ4IDB.Bytes × List (PV_RJ4IDB.Bytes × PV_RJ4IDB.Bytes)
+  PV_EVH_RuntimeBinding.OpenDeploymentInputs.errorStderr_OPEN : Env ×
+        PV_EVH_Core.Observer Signal A × (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).Instance × R →
+      List PV_DIAG2.Effect × List PV_DIAG3.Event
+  PV_EVH_RuntimeBinding.OpenDeploymentInputs.countTrace_OPEN : Env ×
+        PV_EVH_Core.Observer Signal A × (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).Instance × R →
+      List ℕ × List ℕ
+  PV_EVH_RuntimeBinding.OpenDeploymentInputs.timeTrace_OPEN : Env ×
+        PV_EVH_Core.Observer Signal A × (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).Instance × R →
+      List PV_RJ4IDB.Bytes
+  PV_EVH_RuntimeBinding.OpenDeploymentInputs.oraclePrefix_OPEN : Env ×
+        PV_EVH_Core.Observer Signal A × (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).Instance × R →
+      List (PV_RJ4IDB.Bytes × PV_RJ4IDB.Bytes)
+  PV_EVH_RuntimeBinding.OpenDeploymentInputs.retained_OPEN : Env ×
+        PV_EVH_Core.Observer Signal A × (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).Instance × R →
+      List (PV_RJ4IDB.Bytes × PV_RJ4IDB.Bytes)
+  PV_EVH_RuntimeBinding.OpenDeploymentInputs.actualProgram_OPEN : PV_EVH_Core.Observer Signal A →
+      Env ×
+          R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat ×
+            List (R0Z.FsStatement.Bytes × R0Z.FsStatement.OracleAnswer) →
+        R1Z.GamesR1.OProg
+  PV_EVH_RuntimeBinding.OpenDeploymentInputs.terminal_OPEN : ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+      Aeneas.Std.Array (Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 29#usize) 3#usize →
+        Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 10#usize →
+          ProverRwFull.aspis_core.state_only_prefix.r0.Challenges →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result ProverRwFull.aspis_core.field.QM31
+                ProverRwFull.aspis_core.state_only_prefix.r0.Error)
+  PV_EVH_RuntimeBinding.OpenDeploymentInputs.semantic_OPEN : Env ×
+        PV_EVH_Core.Observer Signal A × (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).Instance × R →
+      ProverRwFull.host_semantic.SemanticOracle
+  PV_EVH_RuntimeBinding.OpenDeploymentInputs.point_OPEN : Env ×
+        PV_EVH_Core.Observer Signal A × (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).Instance × R →
+      Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 10#usize
+  PV_EVH_RuntimeBinding.OpenDeploymentInputs.invocation_OPEN : Env ×
+        PV_EVH_Core.Observer Signal A × (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).Instance × R →
+      R1Z.PV_RunJoin_NativePublication55.Input T
+constructor:
+  PV_EVH_RuntimeBinding.OpenDeploymentInputs.mk {CommitHandle Aux : Type}
+    {template : R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctBasis.K CommitHandle Aux}
+    {outputs :
+      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+        R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux}
+    {x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle} [ProverRwFull.ExternalTypes]
+    {Public Signal Env A R S N T : Type}
+    (completion_OPEN :
+      PV_EVH_Interface.Completion Public Signal Env
+        (R0Z.FsStatement.ROMView R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat) A)
+    (publicInput_OPEN : Public) (acquisition_OPEN : N → Env × R)
+    (native_OPEN :
+      Env →
+        PV_EVH_Core.Observer Signal A →
+          (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).Instance → R → PV_RJ4IDB.NativeTrace A)
+    (signal_OPEN :
+      Env →
+        PV_EVH_Core.Observer Signal A → (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).Instance → R → Signal)
+    (toNative_OPEN :
+      Env → PV_EVH_Core.Observer Signal A → (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).Instance → S → R)
+    (toModel_OPEN :
+      Env →
+        PV_EVH_Core.Observer Signal A →
+          (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).Instance →
+            S →
+              ((R1Z.ProverCommitReencode16.experiment
+                      (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                          ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                          (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input) R1Z.PrivacyR1AcctBasis.basis outputs
+                          x).toWire
+                      (R1Z.PhaseProtocolInstanceBin.prover
+                          (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                          ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                          (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input) R1Z.PrivacyR1AcctBasis.basis outputs
+                          x
+                          (R1Z.PrivacyR1AcctModel.seed
+                            (R1Z.PhaseProtocolInstanceBin.wire
+                                (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input) R1Z.PrivacyR1AcctBasis.basis
+                                outputs x).toWire
+                            PV_EVH_RuntimeBinding.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                            R1Z.PhaseWireLog2Bin.opens)).toProver
+                      8 R1Z.PrivacyR1HeadlineWire2.eight_pos
+                      (R1Z.PredicateR1.P_R1 (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).transport
+                        R1Z.PrivacyR1AcctBasis.basis R1Z.PrivacyR1AcctBasis.packing_laws)
+                      (fun h' => R1Z.MaskImageVR1.VR1 h') R1Z.ProverCommitReencode16.encode).RealRand ×
+                  R0Z.FsStatement.OracleAnswer) ×
+                R1Z.ProverCommitFuelJoin22.Tape)
+    (statementBytes_OPEN :
+      Env × PV_EVH_Core.Observer Signal A × (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).Instance × R →
+        Option PV_RJ4IDB.Bytes)
+    (fileTrace_OPEN :
+      Env × PV_EVH_Core.Observer Signal A × (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).Instance × R →
+        List PV_RJ4IDB.FileOp)
+    (jsonStdout_OPEN :
+      Env × PV_EVH_Core.Observer Signal A × (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).Instance × R →
+        List PV_RJ4IDB.Bytes × List (PV_RJ4IDB.Bytes × PV_RJ4IDB.Bytes))
+    (errorStderr_OPEN :
+      Env × PV_EVH_Core.Observer Signal A × (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).Instance × R →
+        List PV_DIAG2.Effect × List PV_DIAG3.Event)
+    (countTrace_OPEN :
+      Env × PV_EVH_Core.Observer Signal A × (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).Instance × R →
+        List ℕ × List ℕ)
+    (timeTrace_OPEN :
+      Env × PV_EVH_Core.Observer Signal A × (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).Instance × R →
+        List PV_RJ4IDB.Bytes)
+    (oraclePrefix_OPEN retained_OPEN :
+      Env × PV_EVH_Core.Observer Signal A × (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).Instance × R →
+        List (PV_RJ4IDB.Bytes × PV_RJ4IDB.Bytes))
+    (actualProgram_OPEN :
+      PV_EVH_Core.Observer Signal A →
+        Env ×
+            R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat ×
+              List (R0Z.FsStatement.Bytes × R0Z.FsStatement.OracleAnswer) →
+          R1Z.GamesR1.OProg)
+    (terminal_OPEN :
+      ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+        Aeneas.Std.Array (Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 29#usize) 3#usize →
+          Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 10#usize →
+            ProverRwFull.aspis_core.state_only_prefix.r0.Challenges →
+              Aeneas.Std.Result
+                (Aeneas.Std.core.result.Result ProverRwFull.aspis_core.field.QM31
+                  ProverRwFull.aspis_core.state_only_prefix.r0.Error))
+    (semantic_OPEN :
+      Env × PV_EVH_Core.Observer Signal A × (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).Instance × R →
+        ProverRwFull.host_semantic.SemanticOracle)
+    (point_OPEN :
+      Env × PV_EVH_Core.Observer Signal A × (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).Instance × R →
+        Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 10#usize)
+    (invocation_OPEN :
+      Env × PV_EVH_Core.Observer Signal A × (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).Instance × R →
+        R1Z.PV_RunJoin_NativePublication55.Input T) :
+    PV_EVH_RuntimeBinding.OpenDeploymentInputs template outputs x T
+def PV_EVH_RuntimeBinding.rtDeployed : {CommitHandle Aux : Type} →
+  (template : R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctBasis.K CommitHandle Aux) →
+    (outputs :
+        R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+          R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux) →
+      (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle) →
+        [inst : ProverRwFull.ExternalTypes] →
+          {Public Signal Env A R S N : Type} →
+            [ProverRwFull.ExternalFuns] →
+              {T : Type} →
+                PV_EVH_RuntimeBinding.OpenDeploymentInputs template outputs x T →
+                  ProverRwFull.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore T →
+                    R1Z.PrivacyR1HeadlineDeployedEvents.Runtime template outputs x :=
+fun {CommitHandle Aux} template outputs x [ProverRwFull.ExternalTypes] {Public Signal Env A R S N}
+    [ProverRwFull.ExternalFuns] {T} missing store =>
+  { completion := missing.completion_OPEN, publicInput := missing.publicInput_OPEN,
+    acquisition := missing.acquisition_OPEN, native := missing.native_OPEN, signal := missing.signal_OPEN,
+    toNative := missing.toNative_OPEN, toModel := missing.toModel_OPEN,
+    published := fun i =>
+      R1Z.PV_RunJoin_NativePublication55.published R1Z.PV_RunJoin_ActualRun.data R1Z.PV_RunJoin_ActualRun.plans store
+        (missing.invocation_OPEN i),
+    compact := fun i => R1Z.PV_RunJoin_NativePublication55.actual store (missing.invocation_OPEN i),
+    statementBytes := missing.statementBytes_OPEN, fileTrace := missing.fileTrace_OPEN,
+    jsonStdout := missing.jsonStdout_OPEN, errorStderr := missing.errorStderr_OPEN,
+    countTrace := missing.countTrace_OPEN, timeTrace := missing.timeTrace_OPEN,
+    oraclePrefix := missing.oraclePrefix_OPEN, retained := missing.retained_OPEN,
+    actualProgram := missing.actualProgram_OPEN, ops := inferInstance, terminal := missing.terminal_OPEN,
+    semantic := missing.semantic_OPEN, point := missing.point_OPEN }
+def PV_EVH_RuntimeBinding.LivePublication : {CommitHandle Aux : Type} →
+  (template : R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctBasis.K CommitHandle Aux) →
+    (outputs :
+        R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+          R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux) →
+      (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle) →
+        [inst : ProverRwFull.ExternalTypes] →
+          {Public Signal Env A R S N : Type} →
+            [ProverRwFull.ExternalFuns] →
+              {T : Type} →
+                PV_EVH_RuntimeBinding.OpenDeploymentInputs template outputs x T →
+                  ProverRwFull.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore T → Prop :=
+fun {CommitHandle Aux} template outputs x [ProverRwFull.ExternalTypes] {Public Signal Env A R S N}
+    [ProverRwFull.ExternalFuns] {T} missing store =>
+  ∃ i bytes publication,
+    (PV_EVH_RuntimeBinding.rtDeployed template outputs x missing store).compact i = some bytes ∧
+      (PV_EVH_RuntimeBinding.rtDeployed template outputs x missing store).published i = some publication
+@[reducible] def PV_EVH_RuntimeBinding.DeployedLinks : {CommitHandle Aux : Type} →
+  (template : R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctBasis.K CommitHandle Aux) →
+    (outputs :
+        R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+          R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux) →
+      (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle) →
+        [inst : ProverRwFull.ExternalTypes] →
+          {Public Signal Env A R S N : Type} →
+            [Fintype R] →
+              [Fintype S] →
+                [Fintype Env] →
+                  [Fintype N] →
+                    [ProverRwFull.ExternalFuns] →
+                      {T : Type} →
+                        PV_EVH_RuntimeBinding.OpenDeploymentInputs template outputs x T →
+                          ProverRwFull.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore T → Prop :=
+fun {CommitHandle Aux} template outputs x [ProverRwFull.ExternalTypes] {Public Signal Env A R S N} [Fintype R]
+    [Fintype S] [Fintype Env] [Fintype N] [ProverRwFull.ExternalFuns] {T} missing store =>
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links template outputs x
+    (PV_EVH_RuntimeBinding.rtDeployed template outputs x missing store)
+theorem PV_EVH_RuntimeBinding.privacy_headline_deployed_events_at : ∀ {CommitHandle Aux : Type}
+  (template : R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctBasis.K CommitHandle Aux)
+  (outputs :
+    R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+      R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux)
+  (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle) [inst : ProverRwFull.ExternalTypes]
+  {Public Signal Env A R S N : Type} [inst_1 : Fintype R] [Nonempty R] [inst_3 : Fintype S] [Nonempty S]
+  [inst_5 : Fintype Env] [Nonempty Env] [inst_7 : Fintype N] [Nonempty N] [inst_9 : ProverRwFull.ExternalFuns]
+  {T : Type} (missing : PV_EVH_RuntimeBinding.OpenDeploymentInputs template outputs x T)
+  (store : ProverRwFull.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore T),
+  PV_EVH_RuntimeBinding.DeployedLinks template outputs x missing store →
+    (∀ (adv : PV_EVH_Core.Observer Signal A) (w : (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).Instance),
+        (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).public w = x.1 →
+          |(R0Z.mean fun r =>
+                  R0Z.FsStatement.bit
+                    (adv.decide
+                      (R1Z.PrivacyR1HeadlineDeployedEvents.deployedReal template outputs x
+                        (PV_EVH_RuntimeBinding.rtDeployed template outputs x missing store) adv w r))) -
+                R0Z.mean fun r =>
+                  R0Z.FsStatement.bit
+                    (adv.decide
+                      (R1Z.PrivacyR1HeadlineDeployedEvents.deployedIdeal template outputs x
+                        (PV_EVH_RuntimeBinding.rtDeployed template outputs x missing store) adv r))| ≤
+            PV_EVH_Core.bound template outputs x) ∧
+      PV_EVH_Core.bound template outputs x ≤
+          1 / 2 ^ 109 + 1 / 2 ^ 137 + 1 / 2 ^ 454 +
+                R1Z.QueryScanFreshUnion.freshBudget
+                  (8 *
+                      R1Z.GamesR1PBin.n1
+                        (R1Z.PhaseProtocolInstanceBin.wire
+                            (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                            (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input) R1Z.PrivacyR1AcctBasis.basis
+                            outputs x).toWire
+                        (R1Z.PhaseProtocolInstanceBin.prover
+                            (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                            (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input) R1Z.PrivacyR1AcctBasis.basis
+                            outputs x
+                            (R1Z.PrivacyR1AcctModel.seed
+                              (R1Z.PhaseProtocolInstanceBin.wire
+                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                  (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input) R1Z.PrivacyR1AcctBasis.basis
+                                  outputs x).toWire
+                              PV_EVH_RuntimeBinding.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                              R1Z.PhaseWireLog2Bin.opens)).toProver +
+                    1) +
+              2 * R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) +
+            2 * R1Z.ProverCommitFuelMass22.charge ∧
+        PV_EVH_Core.bound template outputs x < 1 / 2 ^ 100 :=
+fun {CommitHandle Aux} template outputs x [ProverRwFull.ExternalTypes] {Public Signal Env A R S N} [Fintype R]
+    [Nonempty R] [Fintype S] [Nonempty S] [Fintype Env] [Nonempty Env] [Fintype N] [Nonempty N]
+    [ProverRwFull.ExternalFuns] {T} missing store links =>
+  R1Z.PrivacyR1HeadlineDeployedEvents.privacy_headline_deployed_events template outputs x
+    (PV_EVH_RuntimeBinding.rtDeployed template outputs x missing store) links
+structure R1Z.PrivacyR1HeadlineDeployedEvents.Links {CommitHandle Aux : Type}
+  (template : R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctBasis.K CommitHandle Aux)
+  (outputs :
+    R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+      R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux)
+  (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle) [ProverRwFull.ExternalTypes]
+  {Public Signal Env A R S N : Type} [Fintype R] [Fintype S] [Fintype Env] [Fintype N]
+  (rt : R1Z.PrivacyR1HeadlineDeployedEvents.Runtime template outputs x) : Prop
+number of parameters: 18
+fields:
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.RUNJOIN_PUBLISH_COMPACT : PV_RJ4IDB.OpenInputs.RUNJOIN_PUBLISH_COMPACT
+      rt.compact rt.published
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.RUNJOIN_STATEMENT_BYTES : PV_RJ4IDB.OpenInputs.RUNJOIN_STATEMENT_BYTES
+      rt.statementBytes rt.published
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.DIAG_FILE_TRACE : PV_RJ4IDB.OpenInputs.DIAG_FILE_TRACE rt.fileTrace
+      (R1Z.PrivacyR1HeadlineDeployedEvents.acquired template outputs x rt)
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.DIAG_JSON_STDOUT_TRACE : PV_RJ4IDB.OpenInputs.DIAG_JSON_STDOUT_TRACE
+      rt.jsonStdout (R1Z.PrivacyR1HeadlineDeployedEvents.acquired template outputs x rt)
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.DIAG_ERROR_STDERR_TRACE : PV_RJ4IDB.OpenInputs.DIAG_ERROR_STDERR_TRACE
+      rt.errorStderr (R1Z.PrivacyR1HeadlineDeployedEvents.acquired template outputs x rt)
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.L1_COUNT_TRACE : PV_RJ4IDB.OpenInputs.L1_COUNT_TRACE rt.countTrace
+      (R1Z.PrivacyR1HeadlineDeployedEvents.acquired template outputs x rt)
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.L1_TIME_TRACE : PV_RJ4IDB.OpenInputs.L1_TIME_TRACE rt.timeTrace
+      (R1Z.PrivacyR1HeadlineDeployedEvents.acquired template outputs x rt)
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.L1_ORACLE_PREFIX : PV_RJ4IDB.OpenInputs.L1_ORACLE_PREFIX rt.oraclePrefix
+      (R1Z.PrivacyR1HeadlineDeployedEvents.acquired template outputs x rt)
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.L1_RETAINED_SIDECHANNELS : PV_RJ4IDB.OpenInputs.L1_RETAINED_SIDECHANNELS
+      rt.retained (R1Z.PrivacyR1HeadlineDeployedEvents.acquired template outputs x rt)
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.coupling : R1Z.PrivacyR1HeadlineDeployedEvents.D163 template outputs x rt
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.context : R1Z.PrivacyR1HeadlineDeployedEvents.OrderedEventContext template
+      outputs x rt
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.timing : R1Z.PrivacyR1HeadlineDeployedEvents.D166 template outputs x rt
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.signal : R1Z.PrivacyR1HeadlineDeployedEvents.SignalAgreement template
+      outputs x rt
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.publicSignal : R1Z.PrivacyR1HeadlineDeployedEvents.V400 template outputs x
+      rt
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.environment : R1Z.PrivacyR1HeadlineDeployedEvents.PublicEnvironment template
+      outputs x rt
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.causal : R1Z.PrivacyR1HeadlineDeployedEvents.CausalPrefix template outputs x
+      rt
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.observer : R1Z.PrivacyR1HeadlineDeployedEvents.ObserverProgram template
+      outputs x rt
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.selectedCallback : R1Z.PrivacyR1HeadlineDeployedEvents.op227 template
+      outputs x rt
+constructor:
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.mk {CommitHandle Aux : Type}
+    {template : R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctBasis.K CommitHandle Aux}
+    {outputs :
+      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+        R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux}
+    {x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle} [ProverRwFull.ExternalTypes]
+    {Public Signal Env A R S N : Type} [Fintype R] [Fintype S] [Fintype Env] [Fintype N]
+    {rt : R1Z.PrivacyR1HeadlineDeployedEvents.Runtime template outputs x}
+    (RUNJOIN_PUBLISH_COMPACT : PV_RJ4IDB.OpenInputs.RUNJOIN_PUBLISH_COMPACT rt.compact rt.published)
+    (RUNJOIN_STATEMENT_BYTES : PV_RJ4IDB.OpenInputs.RUNJOIN_STATEMENT_BYTES rt.statementBytes rt.published)
+    (DIAG_FILE_TRACE :
+      PV_RJ4IDB.OpenInputs.DIAG_FILE_TRACE rt.fileTrace
+        (R1Z.PrivacyR1HeadlineDeployedEvents.acquired template outputs x rt))
+    (DIAG_JSON_STDOUT_TRACE :
+      PV_RJ4IDB.OpenInputs.DIAG_JSON_STDOUT_TRACE rt.jsonStdout
+        (R1Z.PrivacyR1HeadlineDeployedEvents.acquired template outputs x rt))
+    (DIAG_ERROR_STDERR_TRACE :
+      PV_RJ4IDB.OpenInputs.DIAG_ERROR_STDERR_TRACE rt.errorStderr
+        (R1Z.PrivacyR1HeadlineDeployedEvents.acquired template outputs x rt))
+    (L1_COUNT_TRACE :
+      PV_RJ4IDB.OpenInputs.L1_COUNT_TRACE rt.countTrace
+        (R1Z.PrivacyR1HeadlineDeployedEvents.acquired template outputs x rt))
+    (L1_TIME_TRACE :
+      PV_RJ4IDB.OpenInputs.L1_TIME_TRACE rt.timeTrace
+        (R1Z.PrivacyR1HeadlineDeployedEvents.acquired template outputs x rt))
+    (L1_ORACLE_PREFIX :
+      PV_RJ4IDB.OpenInputs.L1_ORACLE_PREFIX rt.oraclePrefix
+        (R1Z.PrivacyR1HeadlineDeployedEvents.acquired template outputs x rt))
+    (L1_RETAINED_SIDECHANNELS :
+      PV_RJ4IDB.OpenInputs.L1_RETAINED_SIDECHANNELS rt.retained
+        (R1Z.PrivacyR1HeadlineDeployedEvents.acquired template outputs x rt))
+    (coupling : R1Z.PrivacyR1HeadlineDeployedEvents.D163 template outputs x rt)
+    (context : R1Z.PrivacyR1HeadlineDeployedEvents.OrderedEventContext template outputs x rt)
+    (timing : R1Z.PrivacyR1HeadlineDeployedEvents.D166 template outputs x rt)
+    (signal : R1Z.PrivacyR1HeadlineDeployedEvents.SignalAgreement template outputs x rt)
+    (publicSignal : R1Z.PrivacyR1HeadlineDeployedEvents.V400 template outputs x rt)
+    (environment : R1Z.PrivacyR1HeadlineDeployedEvents.PublicEnvironment template outputs x rt)
+    (causal : R1Z.PrivacyR1HeadlineDeployedEvents.CausalPrefix template outputs x rt)
+    (observer : R1Z.PrivacyR1HeadlineDeployedEvents.ObserverProgram template outputs x rt)
+    (selectedCallback : R1Z.PrivacyR1HeadlineDeployedEvents.op227 template outputs x rt) :
+    R1Z.PrivacyR1HeadlineDeployedEvents.Links template outputs x rt
+'PV_EVH_RuntimeBinding.rtDeployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_EVH_RuntimeBinding.LivePublication' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_EVH_RuntimeBinding.privacy_headline_deployed_events_at' depends on axioms: [propext, Classical.choice, Quot.sound]

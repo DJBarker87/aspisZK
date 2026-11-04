@@ -1,0 +1,84 @@
+@PV_EVH_RuntimeBinding.privacy_headline_deployed_events_at : ∀ {CommitHandle Aux : Type}
+  (template : R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctBasis.K CommitHandle Aux)
+  (outputs :
+    R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+      R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux)
+  (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle) [inst : ProverRwFull.ExternalTypes]
+  {Public Signal Env A R S N : Type} [inst_1 : Fintype R] [Nonempty R] [inst_3 : Fintype S] [Nonempty S]
+  [inst_5 : Fintype Env] [Nonempty Env] [inst_7 : Fintype N] [Nonempty N] [inst_9 : ProverRwFull.ExternalFuns]
+  {T : Type} (missing : PV_EVH_RuntimeBinding.OpenDeploymentInputs template outputs x T)
+  (store : ProverRwFull.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore T),
+  PV_EVH_RuntimeBinding.DeployedLinks template outputs x missing store →
+    (∀ (adv : PV_EVH_Core.Observer Signal A) (w : (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).Instance),
+        (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input).public w = x.1 →
+          |(R0Z.mean fun r =>
+                  R0Z.FsStatement.bit
+                    (adv.decide
+                      (R1Z.PrivacyR1HeadlineDeployedEvents.deployedReal template outputs x
+                        (PV_EVH_RuntimeBinding.rtDeployed template outputs x missing store) adv w r))) -
+                R0Z.mean fun r =>
+                  R0Z.FsStatement.bit
+                    (adv.decide
+                      (R1Z.PrivacyR1HeadlineDeployedEvents.deployedIdeal template outputs x
+                        (PV_EVH_RuntimeBinding.rtDeployed template outputs x missing store) adv r))| ≤
+            PV_EVH_Core.bound template outputs x) ∧
+      PV_EVH_Core.bound template outputs x ≤
+          1 / 2 ^ 109 + 1 / 2 ^ 137 + 1 / 2 ^ 454 +
+                R1Z.QueryScanFreshUnion.freshBudget
+                  (8 *
+                      R1Z.GamesR1PBin.n1
+                        (R1Z.PhaseProtocolInstanceBin.wire
+                            (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                            (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input) R1Z.PrivacyR1AcctBasis.basis
+                            outputs x).toWire
+                        (R1Z.PhaseProtocolInstanceBin.prover
+                            (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                            (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input) R1Z.PrivacyR1AcctBasis.basis
+                            outputs x
+                            (R1Z.PrivacyR1AcctModel.seed
+                              (R1Z.PhaseProtocolInstanceBin.wire
+                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                  (R1Z.PhaseWireLog2Bin.honest PV_EVH_RuntimeBinding.input) R1Z.PrivacyR1AcctBasis.basis
+                                  outputs x).toWire
+                              PV_EVH_RuntimeBinding.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                              R1Z.PhaseWireLog2Bin.opens)).toProver +
+                    1) +
+              2 * R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) +
+            2 * R1Z.ProverCommitFuelMass22.charge ∧
+        PV_EVH_Core.bound template outputs x < 1 / 2 ^ 100
+@PV_EVH_RuntimeBinding.LivePublication : {CommitHandle Aux : Type} →
+  (template : R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctBasis.K CommitHandle Aux) →
+    (outputs :
+        R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+          R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux) →
+      (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle) →
+        [inst : ProverRwFull.ExternalTypes] →
+          {Public Signal Env A R S N : Type} →
+            [ProverRwFull.ExternalFuns] →
+              {T : Type} →
+                PV_EVH_RuntimeBinding.OpenDeploymentInputs template outputs x T →
+                  ProverRwFull.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore T → Prop
+@PV_EVH_OwnedLaws.causal_of_step : ∀ {E V L A : Type} (complete : E → V → List L → PV_RJ4IDB.NativeTrace A),
+  (∀ (e : E) (v : V) (history : List L) (answer : L),
+      (complete e v history).events <+: (complete e v (history ++ [answer])).events) →
+    PV_EVH_Residual.Link_CausalPrefix complete
+@PV_EVH_OwnedLaws.environment_of_equiv : ∀ {N E C : Type} [inst : Fintype N] [inst_1 : Fintype E] [inst_2 : Fintype C]
+  (actual : N → E × C) (split : N ≃ E × C),
+  (∀ (n : N), actual n = split n) → PV_EVH_Residual.Link_PublicEnvironment actual
+@PV_EVH_OwnedLaws.product_expectation : ∀ {N E C : Type} [inst : Fintype N] [inst_1 : Fintype E] [inst_2 : Fintype C]
+  (actual : N → E × C),
+  PV_EVH_Residual.Link_PublicEnvironment actual →
+    ∀ (test : E × C → ℚ), (R0Z.mean fun n => test (actual n)) = R0Z.mean fun e => R0Z.mean fun c => test (e, c)
+@PV_EVH_OwnedLaws.public_signal_of_factorization : ∀ {N E C W P Signal : Type} [inst : Fintype N] [inst_1 : Fintype E]
+  [inst_2 : Fintype C] (actual : N → E × C),
+  PV_EVH_Residual.Link_PublicEnvironment actual →
+    ∀ (pub : W → P) (p : P) (signal : W → N → Signal) (publicSignal : E → Signal),
+      (∀ (w : W), pub w = p → ∀ (n : N), signal w n = publicSignal (actual n).1) →
+        PV_EVH_Residual.Link_PublicSignal pub p signal fun pair => publicSignal pair.1
+@PV_EVH_OwnedLaws.no_unbounded_environment : ∀ {N : Type} [Fintype N] (read : N → ℕ),
+  (∀ (bound : ℕ), ∃ n, bound < read n) → False
+'PV_EVH_RuntimeBinding.privacy_headline_deployed_events_at' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_EVH_OwnedLaws.no_unbounded_environment' depends on axioms: [propext, Quot.sound]

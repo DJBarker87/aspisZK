@@ -1,0 +1,25 @@
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_Satisfiability.lean:129:14: error: unsolved goals
+CommitHandle Aux : Type
+template : R1Wire K CommitHandle Aux
+outputs : Statement K CommitHandle → Challenges K → Aux
+x : Statement K CommitHandle
+inst✝ : ExternalTypes
+ops : ExternalFuns
+sem : host_semantic.SemanticOracle
+pt : Std.Array aspis_core.field.QM31 10#usize
+e : Bool
+v : View K CommitHandle Aux R1Bat
+history suffix : List (FsStatement.Bytes × OracleAnswer)
+⊢ ((modelRuntime template outputs x ops sem pt).completion.complete
+        (modelRuntime template outputs x ops sem pt).publicInput
+        ((modelRuntime template outputs x ops sem pt).completion.signal
+          (modelRuntime template outputs x ops sem pt).publicInput e)
+        e { disclosed := v, observerOracle := history }).events =
+    ((modelRuntime template outputs x ops sem pt).completion.complete
+        (modelRuntime template outputs x ops sem pt).publicInput
+        ((modelRuntime template outputs x ops sem pt).completion.signal
+          (modelRuntime template outputs x ops sem pt).publicInput e)
+        e { disclosed := v, observerOracle := history ++ suffix }).events
+'PV_EVH_Satisfiability.all_links' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_EVH_Satisfiability.simultaneously_satisfiable' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_EVH_Satisfiability.exampleObserver' does not depend on any axioms

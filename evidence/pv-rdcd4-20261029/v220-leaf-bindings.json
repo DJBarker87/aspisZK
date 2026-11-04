@@ -1,0 +1,54 @@
+{
+  "records": [
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs",
+      "file_sha256": "ff30a284097cb163dbc983e3f1ebfe078e8150944689c61d9b61220eb9842465",
+      "body": "pub const fn wrapping_add(self, rhs: Self) -> Self {\n            intrinsics::wrapping_add(self, rhs)\n        }",
+      "expected": "pub const fn wrapping_add(self,rhs:Self)->Self{intrinsics::wrapping_add(self,rhs)}",
+      "token_sha256": "3906026c22951f7e4dddf164d9f03d8338bee637ea6047698973747f265a4bb1",
+      "law": "R1Z.PV_RDCD4_RangeAPI194.add_forward; U32 instantiated by the uint_impl macro; compiler intrinsic retained"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs",
+      "file_sha256": "ff30a284097cb163dbc983e3f1ebfe078e8150944689c61d9b61220eb9842465",
+      "body": "pub const fn wrapping_sub(self, rhs: Self) -> Self {\n            intrinsics::wrapping_sub(self, rhs)\n        }",
+      "expected": "pub const fn wrapping_sub(self,rhs:Self)->Self{intrinsics::wrapping_sub(self,rhs)}",
+      "token_sha256": "05b1e6f55d8575006cf0af41ca862b8e27dd695b67e12b09939daa38e7f0b658",
+      "law": "R1Z.PV_RDCD4_RangeAPI194.sub_forward; same operands and result; compiler intrinsic retained"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/range.rs",
+      "file_sha256": "bd15d082c9c6e76a1e5fa84ae4c1468f87948999f2132cc7980e4902fefa633f",
+      "body": "fn from(value: Range<T>) -> Self {\n        Self { start: value.start, end: value.end }\n    }",
+      "expected": "fn from(value:Range<T>)->Self{Self{start:value.start,end:value.end}}",
+      "token_sha256": "cd1b800863dd0b0d4f8b4238a1ec741c0bccba2deb8014f398642fb2b5b436ef",
+      "law": "R1Z.PV_RDCD4_RangeAPI194.constructor/fromRange; both endpoints copied without modification"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/range/iter.rs",
+      "file_sha256": "00f37635e94dd46af9d65b72081f216e395a929260efde273fcdf6978670f794",
+      "body": "fn into_iter(self) -> Self::IntoIter {\n        RangeIter(self.into())\n    }",
+      "expected": "fn into_iter(self)->Self::IntoIter{RangeIter(self.into())}",
+      "token_sha256": "c4b3553be2c3e849db4e8c70d03ec4e1c0dd8db1800a899b15eaeacb2be2ecd3",
+      "law": "R1Z.PV_RDCD4_RangeAPI194.constructor; Into forwards concrete From, then wrap the complete legacy range"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/range/iter.rs",
+      "file_sha256": "00f37635e94dd46af9d65b72081f216e395a929260efde273fcdf6978670f794",
+      "body": "fn next(&mut self) -> Option<A> {\n        self.0.next()\n    }",
+      "expected": "fn next(&mut self)->Option<A>{self.0.next()}",
+      "token_sha256": "19bcb4fbc689c06ded20d6b79305ac34369d8bcbfda4a82b2eb833afb18360de",
+      "law": "R1Z.PV_RDCD4_RangeAPI194.next_binding/active/exhausted; updated complete inner range retained"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/convert/mod.rs",
+      "file_sha256": "603b64e1beb380e4e138782358b07443b3416b1906c38647d2177480a8688d27",
+      "body": "fn into(self) -> U {\n        U::from(self)\n    }",
+      "expected": "fn into(self)->U{U::from(self)}",
+      "token_sha256": "ac8134f8876465f52bbd70a097aab40931e9ab467a4a5918800fb7e3e99caf34",
+      "law": "R1Z.PV_RDCD4_RangeAPI194.intoLegacy; instantiate From with exactly the endpoint-preserving range conversion"
+    }
+  ],
+  "classification": "own-1 structural wrapper bindings; no b3p6-1 or native binary claim",
+  "pending": "Fresh RangeAPI194 kernel receipt required"
+}
