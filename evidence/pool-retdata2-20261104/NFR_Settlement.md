@@ -57,5 +57,4 @@ and three settlement child pointers, under exact production cap=len792.
 NFD_EmitProjection.complete supplies existing mathematical extensionality;
 NFR_ModelJoin supplies model substitution on the same original statement.
 These remain source-cut certificates; whole-process admission/context and
-production helper transport are not discharged. Nine additional edge controls
-K062..070 are now being run, without repeating any positive.
+production helper transport are not discharged. Nine additional edge controls K062..070 all fail at their intended context/order/window/frame/place/output assertions. No positive was repeated.

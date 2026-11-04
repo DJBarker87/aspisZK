@@ -52,5 +52,30 @@ occurred. No push. Privacy, per-attempt soundness and two-transaction design
 were not changed. RuntimeReturnData is the approved nonempty1..1024 row (792
 here); native-contract transport remains P6/D188 reclassification, not removal.
 
+## Terminal budget disposition
+
+132/132 allocations charged:70/70 Kani,60/60 Lean,2/2 extraction. The first77
+attempts were inherited from the provider-stopped run and counted, never reset.
+B039 is conservatively charged despite own missing-input failure before a
+compiler process; no proof credit. All other terminal receipts are retained.
+Nine SAME-object observation packets pass; their9 controls and9 further
+context/window/frame/place/output controls fail as intended. No further
+Lean-only obligation is being stopped on Kani exhaustion.
+
+A: STOPPED UNISOLATED at the expressly requested final KMX comparison, no
+semantic verdict flip/no copy credit/no shipped bug. B: raw inverse, forward
+decoder acceptance, extraction association, same-value mathematical settlement
+composition and local runtime consistency proved/audited. C: scoped native
+read/getter/settlement observation bridge established; full production prefix/
+admission and production helper/native transport remain OPEN. These need
+native/source-erasure evidence, not another Lean wrapper. Joint reachable
+two-transaction non-vacuity, imported coherence and cold release replay remain
+OPEN. No composed NDT row or headline is promoted.
+
+NFR_FINAL_CHECK.json validates all70 frozen-graph/lock/source/rule16/native caps
+and all27 terminal split/control results. NFR_FINAL_HOST.json records final
+retained-cache and three ELF hash rechecks plus own rebuildable-scratch cleanup.
+Own cache retained; no shipped source edit, ELF rebuild, key operation or push.
+
 <!-- budget checkpoint -->
-Budget checkpoint: {"attempts": 125, "last_attempt": "NFR_K063", "ledger_sha256": "f8108d40f5ca4d25e1588d77ffdb1e3050dab3eb7896bd1328743db5743febd0", "remaining": {"extract": 0, "kani": 7, "lean": 0}, "used": {"extract": 2, "kani": 63, "lean": 60}}
+Budget checkpoint: {"attempts": 132, "last_attempt": "NFR_K070", "ledger_sha256": "1a64c30072a319736781ad438661c60fdfd9fd59af8940857839683646217115", "remaining": {"extract": 0, "kani": 0, "lean": 0}, "used": {"extract": 2, "kani": 70, "lean": 60}}

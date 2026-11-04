@@ -13,14 +13,14 @@ Disposition OPEN; no composed NDT row or deployed-headline closure is claimed.
 NFR_C_SPLIT_CAMPAIGN.jsonl indexes positive/control pairs: byte K013/K014;
 transition kind K015/K016; master K017/K018; selected lane K019/K020;
 output lane K021/K022; nullifier K023/K024; pair index K025/K026;
-root K027/K028; frontier K029/K061. Consult terminal receipts before credit.
+root K027/K028; frontier K029/K061. All18 terminal receipts match these expectations.
 All preserve the same native Authenticated object returned from the read cut,
 its actual getter, original module/function names, arbitrary coordinate
 observations, complete child Results and immutable saved data observations.
 They split observations only; no smaller mathematical reply domain is assumed.
 Existing NFD_EmitProjection.complete gives record extensionality. Native cuts
 plus model equations remain hybrid evidence, not a theorem about the enclosing
-process. Additional exact-context/window/place corruptions are K062..070.
+process. Additional exact-context/window/place corruptions K062..070 all fail at intended assertions.
 
 ## Proof and trust
 
