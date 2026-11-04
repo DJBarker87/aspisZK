@@ -14,3 +14,19 @@ mod equivalence17 {
 }
 
 #[path="array.rs"] mod array;
+
+mod shared_callee16;
+mod equivalence16 {
+ use super::*;
+ #[kani::proof] #[kani::unwind(128)]
+ fn shared_repeat16() {
+  let mut log=shared_callee16::Memo::new();
+  shared_callee16::roundtrip16(&mut log);
+  let a=q();let b=q();
+  let x=shared_callee16::mul(a,b,&mut log);
+  let y=shared_callee16::mul(a,b,&mut log);
+  check(x,y);
+  assert_eq!(log.used,1);assert_eq!(log.tag[0],0);
+  assert_eq!(log.left[0],a);assert_eq!(log.right[0],b);assert_eq!(log.output[0],x);
+ }
+}

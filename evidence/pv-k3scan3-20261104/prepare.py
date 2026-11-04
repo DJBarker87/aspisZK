@@ -38,7 +38,7 @@ for name,path in [('host','host_terminal_kani16.rs'),('reference','reference_ter
  t=git('4bc59099b98552f79d92d2a2ce289dab3faedbaa','tools/pv-b3p6-20261028/v244/'+path).decode();orig[name]=t;(E/(name+'.frozen.rs')).write_text(t)
 header='use aspis_core::field::{QM31,CM31,M31};\n#[derive(Clone,Copy)] struct Selectors {high:[QM31;64],low:[QM31;16]}\n'
 for name in ['host','reference']:
- (P/(name+'.rs')).write_text(header+body(orig[name],'sum_high')+'\npub '+body(orig[name],'sum')+'\n')
+ (P/(name+'.rs')).write_text(header+body(orig[name],'sum_high')+'\n'+body(orig[name],'sum')+'\n')
 # Original function names and original complete return carriers retained.
 (P/'lib.rs').write_text('''use aspis_core::field::{QM31,CM31,M31};
 mod host; mod reference;

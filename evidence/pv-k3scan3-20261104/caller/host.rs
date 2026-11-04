@@ -9,4 +9,4 @@ fn sum_high(selectors: &Selectors, ranges: &[core::ops::Range<usize>]) -> QM31 {
     }
     sum
 }
-pub pub fn sum(h:[QM31;64],l:[QM31;16],r:&[core::ops::Range<usize>])->QM31 { sum_high(&Selectors{high:h,low:l},r) }
+pub fn sum(h:[QM31;64],l:[QM31;16],r:&[core::ops::Range<usize>])->QM31 { sum_high(&Selectors{high:h,low:l},r) }
