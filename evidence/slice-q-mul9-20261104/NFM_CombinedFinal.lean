@@ -7,6 +7,8 @@ import NFM_Single
 import NFM_Domains
 import NFM_Span
 import NFM_Frames
+import NFM_CallDomains
+import NFM_ProductInstance
 
 #print axioms AspisR1.RPx_Deployed.deployed
 #print axioms AspisR1.NFM_Control.fixed_outer
@@ -19,3 +21,6 @@ import NFM_Frames
 #print axioms AspisR1.NFM_Single.domains
 #print axioms AspisR1.NFI_WrapperTrace.headline
 #print axioms AspisR1.NFI_WrapperDomains.reached
+
+#print axioms AspisR1.NFM_ProductInstance.installed
+#print axioms AspisR1.NFM_ProductInstance.wrapper

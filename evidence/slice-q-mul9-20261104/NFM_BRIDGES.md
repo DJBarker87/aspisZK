@@ -1,6 +1,6 @@
 # NFM slice-Q bridges
 
-Status at model checkpoint: native cut/model support established; final composed-row disposition awaits the complete validator and ax2 audit. The100-bit per-attempt target is not established.
+Final status: TX1:105/TX2:071 four_dots_one and TX1:104/TX2:070 four_dots are CLOSED on their explicit release packet domains. The additive NDT validator accepts four rows and12 new edges (199/257 edges in the inherited source ledger). query_values incoming and the100-bit per-attempt target remain OPEN.
 
 ## Exact execution association
 
@@ -18,8 +18,16 @@ Status at model checkpoint: native cut/model support established; final composed
 
 The wrapper uses its four actual slot calls0–3 on one608-byte prefix and one g29. NFI_K067–074 and K099/K100 are reused; an additional832-byte opening check covers the release caller allocation size. NFI_WrapperTrace.headline and NFI_WrapperDomains.reached supply the original partial-Result and domain composition. NFM_Domains.slots and NFM_Span discharge concrete bounds. The helper's native domain is the actual borrowed608-byte array, canonical SAME g argument, slot<4; the wrapper's release-domain opening is832 bytes. These are established by the respective actual callers, except the incoming query producer boundary, which is retained.
 
-The conservative inventory's three alternative final add receivers (M31/CM31/QM31) are not silently pruned. The exact emitted body NFE_NFA_SuffixFactor.body selects FIo_Native...WideExact.add, and native typed terminal validation is required before registering those alternatives as unreachable. The actual WideExact call uses the derived canonical head/tail domains. This is a typed same-body certificate, not source-name inference.
+The conservative inventory's three alternative final add receivers (M31/CM31/QM31) are not silently pruned. The exact emitted body NFE_NFA_SuffixFactor.body selects FIo_Native...WideExact.add, and NFM_K093/K094 validate the actual typed terminal before those alternatives are registered as unreachable. The actual WideExact call uses the derived canonical head/tail domains. This is a typed same-body certificate, not source-name inference.
 
 query_values' incoming edge is not promoted by pointer/length or a separately successful packet. The original proof -> opening -> prefix, original caller state/effects, SAME-g canonical producer and observer-interface admissibility remain explicit checks. Prepared::new/powers/prepare producers are out-of-slice. The existing query_values -> opening certificate is retained, not re-proved or expanded into whole native query credit. Rule14 still forbids Option<fn>-dependent credit; no new such harness is run.
 
 Native semantic transport is P6/D188 option-A reclassification, never removal. Frozen3, L154 as statement parameter, narrowed D188, SDK/std/copy/allocator/ABI/physical/source-to-ELF, RuntimePersistence and the existing cryptographic/privacy/two-transaction premises remain. No runtime digest is computed or assumed here (digest/error are op43/op44). No shipped file, release ELF, wallet/key or other worktree is changed. D510's final cold single-cohort release replay remains separate from focused cached validation.
+
+## Final evidence and exclusions
+
+NFM_ProductInstance.main_law/tail_law discharge the concrete U64 wrapping-product oracle laws; installed/wrapper instantiate the emitted Result model with no free product-law assumption. NFM_K099/K100 execute the final source-exact fold/head constructor with exact output and input frame. The supplemental conjoined full-window frame run K041 timed out at90s and earns no credit. Its replacement K044–092 uses one native iteration at an arbitrary reached term and six separately failing assertion facets per cut (left/right/order/sums/query frame/limb frame), composed by the already checked Lean sequence. Harness names were retained; no verdict was changed by renaming.
+
+NFM_AUDIT.json records the final cached combined import with AspisR1.RPx_Deployed.deployed:124 unique raw roots, all49 new top theorems, standard axioms only, eight planted/mutated walker controls, and raw reachability equal to collectAxioms. The separate incoherence scan covers12864 modules,661631 declarations,23529695 references, zero dangling names and zero import mismatches. Every run's exact target, status, time, peak RSS, swap, revision, source/dependency/library pins and print-axioms output is in NFM_ATTEMPTS.jsonl and its per-attempt receipt. No full cold release claim follows.
+
+NFG landed after this audit. NFM_PEER_INTAKE.json imports committed push-callee reference artifacts from4a3159e771cc13cdf34a40dec53d669c2eeebd88, checks all1724 manifest file hashes and15 proof source/receipt/axiom records, and retains its independently validated private/public push packets. These are existing callee evidence, not extra NFM closed rows or a new joint kernel replay. The NEW/NFB geometry forest is excluded; Phase retarget belongs to the lead's separate lane.

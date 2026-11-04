@@ -41,12 +41,12 @@ files={};sources=[]
 if kind=='lean':
  n='NFM_generated/'+target+'.lean';files[n]=(E/(target+'.lean')).read_text();sources=[n]
  command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NFM_generated','-o','NFM_objects/'+target+'.olean',n]
- if target in ['NFM_Driver','NFM_ProofDriver','NFA_WALKER','NFA_MemoryLimit']:command+=['-c','NFM_native/'+target+'.c']
+ if target in ['NFM_Driver','NFM_ProofDriver','NFM_Scanner','NFA_WALKER','NFA_MemoryLimit']:command+=['-c','NFM_native/'+target+'.c']
 elif kind=='linkaudit':
  sources=['NFM_native/'+target+'.c','NFM_native/NFA_WALKER.c','NFM_native/NFA_MemoryLimit.c']
  command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NFM_native/'+target,*sources]
 elif kind=='auditbin':
- sources=['NFM_generated/NFM_Driver.lean'];command=['NFM_native/NFM_Driver',target]
+ sources=['NFM_generated/'+('NFM_Scanner' if target=='scan' else 'NFM_Driver')+'.lean'];command=['NFM_native/'+('NFM_Scanner' if target=='scan' else 'NFM_Driver'),target]
 else:raise ValueError(kind)
 if target=='scan':
  files['NFM_EXPECTED_IMPORTS.jsonl']=(E/'NFM_EXPECTED_IMPORTS.jsonl').read_text();sources+=['NFM_EXPECTED_IMPORTS.jsonl']
@@ -83,7 +83,7 @@ b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if 
 names += [str(p.relative_to(b)) for p in b.glob('NEP_'+{target!r}+'_*_REACHABLE.txt')] if {kind!r}=='auditbin' else []
 if {target!r}=='scan':names+=['NFM_LOADED_scan.jsonl']
 out={{n:(b/n).read_text() for n in names}}
-for name in ['NFM_Driver','NFM_ProofDriver']:
+for name in ['NFM_Driver','NFM_ProofDriver','NFM_Scanner']:
  p=b/'NFM_native'/name
  if p.is_file():out[a+'/'+name+'_BINARY_PIN.json']=json.dumps(dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size))
 print(json.dumps(out))

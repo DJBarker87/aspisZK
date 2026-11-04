@@ -27,16 +27,22 @@ def check(payload):
   a=frozen.index('                let scalar');b=frozen.index('\n            }',a)
   assert tok(restored)==tok(frozen[a:b]),'window body drift'
   for cut in range(7):
-   w=body(s,f'window_{cut}');start=4*cut
-   assert tok(f'for term in {start}..core::cmp::min({start}+4,26){{ NFM_window_term(&q,&g,slot,term,term-{start},&mut sums,&mut log); }}')==tok(w[w.index('for term'):w.index('let mut expected')])
-   assert 'NFM_fold(sums,&mut limbs);' in w
+   w=body(s,f'window_{cut}');start=4*cut;end=min(start+4,26)
+   if 'NFM_split_frame' in s:
+    assert w.count('NFM_step(&q,&g,slot,term,&mut sums,&mut log);')==1,'split step drift'
+    assert f'{start}<=term && term<{end}' in w,'split position drift'
+    for clause in ['slot<4','lane<8','sums[j]<=3*NFM_BOUND','replies[j]<=NFM_BOUND','scalar<2147483647','assert_eq!(g[gi].to_limbs()[lane],coeff)','assert_eq!(q.as_ptr() as usize,qp)']:
+     assert clause in w,('missing split domain/frame',clause)
+   else:
+    assert tok(f'for term in {start}..core::cmp::min({start}+4,26){{ NFM_window_term(&q,&g,slot,term,term-{start},&mut sums,&mut log); }}')==tok(w[w.index('for term'):w.index('let mut expected')])
+    assert 'NFM_fold(sums,&mut limbs);' in w
  if 'fn NFM_read_or_abort(' in s:
   expected='''match M31::from_le_bytes(q[slot*120+term*4..slot*120+term*4+4].try_into().unwrap()){Some(s)=>Ok(s),None=>Err(term)}'''
   assert tok(body(s,'NFM_read_or_abort'))==tok(expected),'abort parser drift'
  return dict(control=True,window='fn NFM_window_term(' in s,abort='fn NFM_read_or_abort(' in s,sha256=hashlib.sha256(s.encode()).hexdigest())
 if __name__=='__main__':
  out=[]
- for name in ['NFM_CONTROL_PAYLOAD.json','NFM_WINDOW_PAYLOAD.json','NFM_REJECT_PAYLOAD.json','NFM_WRAPPER_PAYLOAD.json','NFM_STRICT_PAYLOAD.json']:
+ for name in ['NFM_CONTROL_PAYLOAD.json','NFM_WINDOW_PAYLOAD.json','NFM_REJECT_PAYLOAD.json','NFM_WRAPPER_PAYLOAD.json','NFM_STRICT_PAYLOAD.json','NFM_SPLIT_FRAME_PAYLOAD.json','NFM_FINAL_FRAME_PAYLOAD.json']:
   p=json.loads((E/name).read_text());r=check(p);mut=[]
   for before,after in [('(0..26).step_by(4)','(0..26).step_by(5)'),('NFM_record(log,start,term)','NFM_record(log,start,term+1)'),('coefficient[0], scalar.0','coefficient[1], scalar.0')]:
    q=copy.deepcopy(p);k='crates/aspis-r1-cost-probe/src/NFM_dots.rs'

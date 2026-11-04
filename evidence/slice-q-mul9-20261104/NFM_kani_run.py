@@ -10,6 +10,8 @@ C='/home/dombarker/project-offloads/codex-cx-slice-q-mul9-cache-20261104'
 W='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025'
 a,kind,target=sys.argv[1:];assert kind=='kani'
 assert a.startswith('NFM_K') and int(a[-3:]) <= 100
+if int(a[-3:])>=93 and (E/'NFM_QUEUE_REPLAN.json').exists() and os.environ.get('NFM_FINAL_QUEUE')!='1':
+    print('Own coordinator stopped before submission: replacement final evidence plan',flush=True);sys.exit(76)
 assert not (E/(a+'-launcher.log')).exists()
 def ssh(code, data=None, submitted=False):
     for retry in range(11):
