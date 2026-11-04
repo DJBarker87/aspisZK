@@ -18,7 +18,9 @@ unsafe def main (_args : List String) : IO UInt32 := do
     `PV_B3P_CaptureGuards587227,
     `PV_B3P_SharedScalarIndices587227,
     `PV_B3P_TrailingIndices587227,
-    `PV_B3P_PositiveRange587227]
+    `PV_B3P_PositiveRange587227,
+    `PV_B3P_KindEvents587227,
+    `PV_B3P_KindPanic587227]
   let roots := #[
     `PV_B3P_MinRangeEvents587227.sourceMin_le_right,
     `PV_B3P_MinRangeEvents587227.event_guard,
@@ -55,7 +57,12 @@ unsafe def main (_args : List String) : IO UInt32 := do
     `PV_B3P_SharedScalarIndices587227.certificate_1,
     `PV_B3P_TrailingIndices587227.certificate_30838,
     `PV_B3P_TrailingIndices587227.certificate_30843,
-    `PV_B3P_PositiveRange587227.certificate]
+    `PV_B3P_PositiveRange587227.certificate,
+    `PV_B3P_KindEvents587227.event_guard,
+    `PV_B3P_KindEvents587227.event_certificate,
+    `PV_B3P_KindPanic587227.certificate_68_7698,
+    `PV_B3P_KindPanic587227.certificate_68_7706,
+    `PV_B3P_KindPanic587227.certificate_250_21441]
   let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
     {} (loadExts := true) (level := .private)
   let ctx : Command.Context := {
