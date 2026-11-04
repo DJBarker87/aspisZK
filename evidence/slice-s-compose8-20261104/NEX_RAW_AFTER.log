@@ -1,0 +1,50 @@
+NEX_K061 afterdecode 0 value {"attempt": "NEX_K061", "exit_status": 1, "wall_seconds": 26.74221210204996, "peak_rss_kib": "1286384", "swaps": "0"}
+- caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.29s
+Checking harness pool_v1::pair_terminal::NEX_afterdecode::afterdecode...
+
+VERIFICATION RESULT:
+ ** 1 of 333 failed (1 unreachable)
+Failed Checks: assertion failed: s.next_pair_index ==
+    u64::from_le_bytes(f.bytes[8..16].try_into().unwrap()) ^ 1
+ File: "crates/aspis-statement/src/pool_v1/NEX_afterdecode.rs", line 24, in pool_v1::pair_terminal::NEX_afterdecode::validate
+
+VERIFICATION:- FAILED
+Verification Time: 23.67936s
+
+Manual Harness Summary:
+Verification failed for - pool_v1::pair_terminal::NEX_afterdecode::afterdecode
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+ 
+NEX_K062 afterdecode 1 positive {"attempt": "NEX_K062", "exit_status": 0, "wall_seconds": 38.31161444517784, "peak_rss_kib": "1416440", "swaps": "0"}
+X_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.33s
+Checking harness pool_v1::pair_terminal::NEX_afterdecode::afterdecode...
+
+VERIFICATION RESULT:
+ ** 0 of 353 failed (1 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 35.129368s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+ 

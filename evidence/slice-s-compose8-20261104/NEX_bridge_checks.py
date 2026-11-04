@@ -31,7 +31,7 @@ def check(c,ledger):
 fn exact_cut(){{let bytes:[u8;33]=kani::any();let len:usize=kani::any();let j:usize=kani::any();kani::assume(len<=33&&j<{width});let result=exact::<{width}>(&bytes[..len]);if len=={width}{{let out=result.unwrap();assert!(out[j]==bytes[j]{'' if positive else '^1'});}}else{{assert!(matches!(result,Err(PoolV1PairVerifierTransportErrorV1::WrongLength)));}}}}
 '''
    assert shape['source']==body
-   hook=f+'\n#[cfg(kani)]\nmod NEX_exact;\n'
+   hook=f+'\n#[cfg(kani)]\n#[path="NEX_exact.rs"]\nmod NEX_exact;\n'
    patch=''.join(difflib.unified_diff(f.splitlines(True),hook.splitlines(True),fromfile='a/'+path,tofile='b/'+path))+'--- /dev/null\n+++ b/crates/aspis-statement/src/pool_v1/NEX_exact.rs\n@@ -0,0 +1,'+str(len(body.splitlines()))+' @@\n'+''.join('+'+l+'\n' for l in body.splitlines())
    assert snapshots['NEX_native_contracts.patch']==patch
    files=[a+'/receipt.json',a+'/stdout.log',a+'.json',a+'-shape.json',a+'-admission.json',a+'-graph-check.json',a+'-lock-check.json',a+'-source-check.json',a+'-rule16-check.json',a+'-metadata-pin.json',a+'-NEX_native_contracts.patch',a+'-NEX_oracle.patch']

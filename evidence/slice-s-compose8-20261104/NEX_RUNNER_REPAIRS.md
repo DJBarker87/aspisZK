@@ -1,3 +1,5 @@
 Setup initially requested unused S2W_lean_host.py from predecessor; it does not exist. Removed this own-input mistake. No prover launched; reservation admitted. The existing S2W_run_host.py is the actual unchanged launcher and remains hash-pinned.
 
 NEX_L001 excluded: audit module referenced the encoder theorem without importing its module. Removed that unrelated reference, retained the successful printed predecessor axioms, and added targeted decoder-definition inspection; changed-source L002 passed. NEX_K001 excluded: an extra comma in the generated digest-oracle call caused a compile error; fixed the generator. K002 was the first common whole-field shape and timed out; K003 split to field0, passing with four matched controls. The frozen graph, features, KMX checks and resource limits were unchanged.
+
+K051 excluded own-input error: nested Rust mod resolution required an explicit #[path="NEX_exact.rs"] for the scratch sibling file. Added it to the exact/afterdecode/snapshotdecode generators and strict exact checker; no frozen body changed.

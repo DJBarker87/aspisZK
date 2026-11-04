@@ -41,6 +41,13 @@ def native(a,positive):
 def certificate(c,subject,ledger,reviewed):
  try:
   assert c and c['subject']==subject and c['frozen_revision']==ledger['frozen_revision']
+  function=c['native_certificate']['function']
+  rows=[r for r in ledger['rows'] if r['function']==function]
+  allowed={function}
+  for row in rows:
+   allowed.update(function+'::'+h['name'] for h in row['named_hypotheses'])
+   allowed.update(function+' -> '+o['callee'] if 'callee' in o else o['id'] for o in row['caller_domain_obligations'])
+  assert subject in allowed
   assert c['semantic_review_sha256']==reviewed[subject]==sha(json.dumps({k:v for k,v in c.items() if k!='semantic_review_sha256'},sort_keys=True).encode())
   assert c['inner_hypotheses_remaining']==[] and c['new_trust_rows']==[]
   assert c['trust_classification']=='P6/D188 option A reclassification'

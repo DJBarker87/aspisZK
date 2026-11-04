@@ -5,3 +5,5 @@ Inherited NEU test run: 24/25 passed; `NEU_transport_tests.Transport.test_identi
 NEX_L004/L005 are excluded elaboration failures in new symbolic range laws. The goals needed explicit length numerals and reduction of only small constant min/sub arithmetic; changed-source L006 passed with standard axioms. `sorryAx` appearing in failed elaboration audits is excluded, not admitted. No source contains sorry/admit/axiom/native_decide.
 
 NEX_K002 is excluded: outer timeout180s, cgroup memory peak6692216832 bytes, process time RSS100812KiB does not represent aggregate child memory. Replaced by separate returned-field windows K003 onward, with no cap or timeout increase. K003 passed and K004..007 detect corrupt value, different allocation, wrong child slice, and wrong reply.
+
+L017/L018 excluded: a freshly cloned, twenty-one-call emitted decoder continuation hit Lean recursion depth. No option was raised. L019/L020 reuse the already factored NED_SubtreeComposition and S6NativeSnapshotDecoderFactored laws, with standard axioms. The new wrappers add state/trace checks; they do not re-prove the old parser.

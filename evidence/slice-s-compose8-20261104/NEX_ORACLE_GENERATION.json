@@ -96,40 +96,14 @@
  },
  {
   "module": "NEX_AfterDecodeOracle",
-  "source": "docs/research/100bit-spend-path-20261013/lean/extracted-terminal-decoder-20261016/AspisR1TerminalDecoder/Funs.lean",
-  "source_function": "pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1",
-  "original_sha256": "3dccfded1529df2f058394f67777fd72fc0e008675a816fa527707398203e04c",
-  "children": [
-   [
-    "atomic_statement.decode_digest_canonical",
-    "digest",
-    "Array U8 32#usize \u2192 Result (core.result.Result (Array aspis_core.field.M31 8#usize) atomic_statement.AtomicStatementError)"
-   ],
-   [
-    "pool_v1.pair_terminal.validate_verified_afterstate",
-    "validate",
-    "pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 \u2192 Result (core.result.Result Unit pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1)"
-   ]
-  ],
-  "transformation": "exact emitted continuation, replace only reached child call heads with explicit full-Result callbacks; no body or branch order changes"
+  "reference": "NBN_AfterstateDecoderDependency.run (fun b => ok (NBP_DigestDecode.decoded b))",
+  "reused_law": "NED_SubtreeComposition.after_decode",
+  "reason": "reuse existing factored proof; no deep body normalization or cap change"
  },
  {
   "module": "NEX_SnapshotDecodeOracle",
-  "source": "docs/research/100bit-spend-path-20261013/lean/extracted-terminal-decoder-20261016/AspisR1TerminalDecoder/Funs.lean",
-  "source_function": "pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1",
-  "original_sha256": "fe22d5e8de3f11ff5c8a7a20c30fbb48500ff50fe7accd225a1ca607f5041562",
-  "children": [
-   [
-    "atomic_statement.decode_digest_canonical",
-    "digest",
-    "Array U8 32#usize \u2192 Result (core.result.Result (Array aspis_core.field.M31 8#usize) atomic_statement.AtomicStatementError)"
-   ],
-   [
-    "pool_v1.pair_tree_profile.validate_pool_v1_pair_live_snapshot_v1",
-    "validate",
-    "pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1 \u2192 Result (core.result.Result Unit pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1)"
-   ]
-  ],
-  "transformation": "exact emitted continuation, replace only reached child call heads with explicit full-Result callbacks; no body or branch order changes"
+  "reference": "AspisS6NativeSnapshotDecoderFactored.decode",
+  "reused_law": "AspisS6NativeSnapshotDecoderFactored.decode_source",
+  "reason": "reuse existing factored proof; no deep body normalization or cap change"
  }
 ]

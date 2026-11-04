@@ -1,16 +1,16 @@
---- a/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
-+++ b/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
-@@ -1563,3 +1563,7 @@
-     Ok(*bytes)
+--- a/crates/aspis-statement/src/pool_v1/pair_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_terminal.rs
+@@ -640,3 +640,7 @@
+         );
+     }
  }
- 
 +
 +#[cfg(kani)]
-+#[path="NEX_decoder.rs"]
-+mod NEX_decoder;
++#[path="NEX_afterdecode.rs"]
++mod NEX_afterdecode;
 --- /dev/null
-+++ b/crates/aspis-statement/src/pool_v1/NEX_decoder.rs
-@@ -0,0 +1,34 @@
++++ b/crates/aspis-statement/src/pool_v1/NEX_afterdecode.rs
+@@ -0,0 +1,103 @@
 +use super::*;
 +use crate::pool_v1::*;
 +use crate::Digest;
@@ -32,16 +32,85 @@
 +
 +fn any_error()->PoolV1PairForestTerminalFormatErrorV1{match kani::any::<u8>(){0=>PoolV1PairForestTerminalFormatErrorV1::WrongLength,1=>PoolV1PairForestTerminalFormatErrorV1::WrongMagic,2=>PoolV1PairForestTerminalFormatErrorV1::WrongVersion,3=>PoolV1PairForestTerminalFormatErrorV1::WrongDigestEncoding,4=>PoolV1PairForestTerminalFormatErrorV1::InvalidTransitionKind,5=>PoolV1PairForestTerminalFormatErrorV1::InvalidOutputLane,6=>PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding,7=>PoolV1PairForestTerminalFormatErrorV1::NonCanonicalDigest,8=>PoolV1PairForestTerminalFormatErrorV1::OutputLaneMismatch,9=>PoolV1PairForestTerminalFormatErrorV1::MasterBindingMismatch,10=>PoolV1PairForestTerminalFormatErrorV1::DeploymentBindingMismatch,11=>PoolV1PairForestTerminalFormatErrorV1::HistoricalAnchorMismatch,12=>PoolV1PairForestTerminalFormatErrorV1::CheckpointBindingMismatch,13=>PoolV1PairForestTerminalFormatErrorV1::SelectedLaneBindingMismatch,14=>PoolV1PairForestTerminalFormatErrorV1::LiveSnapshotMismatch,15=>PoolV1PairForestTerminalFormatErrorV1::CandidateAfterstateMismatch,16=>PoolV1PairForestTerminalFormatErrorV1::ResultBindingMismatch,17=>PoolV1PairForestTerminalFormatErrorV1::WithdrawalDestinationMismatch,18=>PoolV1PairForestTerminalFormatErrorV1::Payment(NEE_any_PoolV1PaymentStatementFormatError()),19=>PoolV1PairForestTerminalFormatErrorV1::LaneTransition(NEE_any_PoolV1PairLatePublicStatementErrorV1()),20=>PoolV1PairForestTerminalFormatErrorV1::Afterstate(NEE_any_PoolV1PairVerifierTransportErrorV1()),_=>PoolV1PairForestTerminalFormatErrorV1::Account(NEE_any_PoolV1PairForestAccountErrorV1())}}
 +
-+struct Frame<'a>{bytes:&'a [u8;1520],reply:Result<PoolV1PairLatePublicStatementV1,PoolV1PairLatePublicStatementErrorV1>,calls:u8,allocated:*const PoolV1PairLatePublicStatementV1}
-+fn child(bytes:&[u8],f:&mut Frame)->Result<Box<PoolV1PairLatePublicStatementV1>,PoolV1PairLatePublicStatementErrorV1>{assert!(f.calls==0&&bytes.len()==1520&&core::ptr::eq(bytes.as_ptr(),f.bytes.as_ptr()));f.calls=1;f.reply.map(|v|{let b=Box::new(v);f.allocated=&*b;b})}
-+
++struct Frame<'a>{bytes:&'a [u8;688],replies:&'a [Digest;21],fail_at:usize,reply:Result<(),PoolV1PairVerifierTransportErrorV1>,digests:usize,validations:u8,i:usize,k:usize,j:usize}
++fn digest(bytes:&[u8;32],f:&mut Frame)->Result<Digest,()>{let n=f.digests;assert!(n<21);assert!(bytes[f.j]==f.bytes[16+32*n+f.j]);f.digests+=1;if n==f.fail_at{Err(())}else{Ok(f.replies[n])}}
++fn validate(s:&PoolV1PairVerifiedAfterstateV1,f:&mut Frame)->Result<(),PoolV1PairVerifierTransportErrorV1>{assert!(f.digests==21&&f.validations==0);let i=f.i;let k=f.k;assert!(s.next_root[i].0 as u64==f.replies[0][i].0 as u64^1);f.validations=1;f.reply}
 +fn native(
-+    bytes: &[u8], f: &mut Frame,
-+) -> Result<Box<PoolV1PairLatePublicStatementV1>, PoolV1PairForestTerminalFormatErrorV1> {
-+    child(bytes,f)
-+        .map(|b|Box::new(*b)).map_err(PoolV1PairForestTerminalFormatErrorV1::LaneTransition)
++    bytes: &[u8], f:&mut Frame,
++) -> Result<PoolV1PairVerifiedAfterstateV1, PoolV1PairVerifierTransportErrorV1> {
++    if bytes.len() != POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES {
++        return Err(PoolV1PairVerifierTransportErrorV1::WrongLength);
++    }
++    if bytes[..4] != POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC[0..4] {
++        return Err(PoolV1PairVerifierTransportErrorV1::WrongMagic);
++    }
++    if bytes[4] != POOL_V1_PAIR_VERIFIER_TRANSPORT_VERSION {
++        return Err(PoolV1PairVerifierTransportErrorV1::WrongVersion);
++    }
++    if bytes[5] != super::super::POOL_V1_PAIR_TREE_STORAGE_FORMAT_VERSION {
++        return Err(PoolV1PairVerifierTransportErrorV1::WrongPairFormat);
++    }
++    if bytes[6] != POOL_V1_DIGEST_ENCODING_VERSION {
++        return Err(PoolV1PairVerifierTransportErrorV1::WrongDigestEncoding);
++    }
++    if bytes[7] != 1 {
++        return Err(PoolV1PairVerifierTransportErrorV1::WrongSuccessCode);
++    }
++    let next_root = digest(&exact(&bytes[16..48])?,f)
++        .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?;
++    let next_frontier = [
++        digest(&exact(&bytes[48..80])?,f)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        digest(&exact(&bytes[80..112])?,f)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        digest(&exact(&bytes[112..144])?,f)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        digest(&exact(&bytes[144..176])?,f)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        digest(&exact(&bytes[176..208])?,f)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        digest(&exact(&bytes[208..240])?,f)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        digest(&exact(&bytes[240..272])?,f)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        digest(&exact(&bytes[272..304])?,f)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        digest(&exact(&bytes[304..336])?,f)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        digest(&exact(&bytes[336..368])?,f)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        digest(&exact(&bytes[368..400])?,f)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        digest(&exact(&bytes[400..432])?,f)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        digest(&exact(&bytes[432..464])?,f)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        digest(&exact(&bytes[464..496])?,f)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        digest(&exact(&bytes[496..528])?,f)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        digest(&exact(&bytes[528..560])?,f)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        digest(&exact(&bytes[560..592])?,f)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        digest(&exact(&bytes[592..624])?,f)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        digest(&exact(&bytes[624..656])?,f)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        digest(&exact(&bytes[656..688])?,f)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++    ];
++    let afterstate = PoolV1PairVerifiedAfterstateV1 {
++        next_pair_index: u64::from_le_bytes(exact(&bytes[8..16])?),
++        next_root,
++        next_frontier,
++    };
++    validate(&afterstate,f)?;
++    Ok(afterstate)
 +}
 +#[kani::proof]
 +#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
 +#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
-+fn decoder(){let bytes:[u8;1520]=kani::any();let c=NEE_common();let reply=if kani::any(){Ok(c.lane_transition)}else{Err(NEE_any_PoolV1PairLatePublicStatementErrorV1())};let mut f=Frame{bytes:&bytes,reply,calls:0,allocated:core::ptr::null()};let i:usize=kani::any();let j:usize=kani::any();let k:usize=kani::any();let slot:usize=kani::any();kani::assume(i<8&&j<32&&k<20&&slot<9);let actual=native(&bytes,&mut f);assert!(f.calls==1);match (actual,reply){(Ok(out),Ok(expected))=>{assert!(core::ptr::eq(&*out,f.allocated));assert!((match slot{0=>out.live_snapshot.pool[j] as u64,1=>out.live_snapshot.deployment_domain[j] as u64,2=>out.live_snapshot.sequence as u64,3=>out.live_snapshot.next_pair_index as u64,4=>out.live_snapshot.current_root[i].0 as u64,5=>out.live_snapshot.frontier[k][i].0 as u64,6=>out.candidate_afterstate.next_pair_index as u64,7=>out.candidate_afterstate.next_root[i].0 as u64,8=>out.candidate_afterstate.next_frontier[k][i].0 as u64,_=>0})==(match slot{0=>expected.live_snapshot.pool[j] as u64,1=>expected.live_snapshot.deployment_domain[j] as u64,2=>expected.live_snapshot.sequence as u64,3=>expected.live_snapshot.next_pair_index as u64,4=>expected.live_snapshot.current_root[i].0 as u64,5=>expected.live_snapshot.frontier[k][i].0 as u64,6=>expected.candidate_afterstate.next_pair_index as u64,7=>expected.candidate_afterstate.next_root[i].0 as u64,8=>expected.candidate_afterstate.next_frontier[k][i].0 as u64,_=>0}));assert!(!core::ptr::eq((&*out) as *const _ as *const u8,bytes.as_ptr()));},(Err(PoolV1PairForestTerminalFormatErrorV1::LaneTransition(e)),Err(expected))=>assert!(e==expected),_=>assert!(false)}}
++fn afterdecode(){let bytes:[u8;688]=kani::any();let replies:[Digest;21]=core::array::from_fn(|_|NEE_digest());let fail_at:usize=kani::any();let i:usize=kani::any();let k:usize=kani::any();let j:usize=kani::any();kani::assume(fail_at<=21&&i<8&&k<20&&j<32);let reply=if kani::any(){Ok(())}else{Err(NEE_any_PoolV1PairVerifierTransportErrorV1())};let mut f=Frame{bytes:&bytes,replies:&replies,fail_at,reply,digests:0,validations:0,i,k,j};let result=native(&bytes,&mut f);
++let header=if bytes[0]!=65||bytes[1]!=83||bytes[2]!=74||bytes[3]!=65{Err(PoolV1PairVerifierTransportErrorV1::WrongMagic)}else if bytes[4]!=POOL_V1_PAIR_VERIFIER_TRANSPORT_VERSION{Err(PoolV1PairVerifierTransportErrorV1::WrongVersion)}else if bytes[5]!=super::super::POOL_V1_PAIR_TREE_STORAGE_FORMAT_VERSION{Err(PoolV1PairVerifierTransportErrorV1::WrongPairFormat)}else if bytes[6]!=POOL_V1_DIGEST_ENCODING_VERSION{Err(PoolV1PairVerifierTransportErrorV1::WrongDigestEncoding)}else if bytes[7]!=1{Err(PoolV1PairVerifierTransportErrorV1::WrongSuccessCode)}else{Ok(())};
++match header{Err(e)=>{assert!(f.digests==0&&f.validations==0);assert!(matches!(result,Err(x) if x==e));},Ok(())=>if fail_at<21{assert!(f.digests==fail_at+1&&f.validations==0);assert!(matches!(result,Err(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)));}else{assert!(f.digests==21&&f.validations==1);match (result,reply){(Ok(s),Ok(()))=>{assert!(s.next_root[i].0 as u64==f.replies[0][i].0 as u64^1);},(Err(x),Err(e))=>assert!(x==e),_=>assert!(false)}}}}

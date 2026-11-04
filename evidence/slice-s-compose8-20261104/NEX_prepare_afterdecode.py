@@ -6,6 +6,7 @@ subprocess.run([sys.executable,str(E/'NEX_prepare_window.py'),'1','positive'],ch
 p='crates/aspis-statement/src/pool_v1/pair_terminal.rs';f=frozen(p);name='decode_pool_v1_pair_verified_afterstate_v1';a=f.index('pub fn '+name+'(');z=f.index('\n}',a)+2;original=f[a:z]
 native=original.replace('pub fn '+name+'(','fn native(').replace('    bytes: &[u8],','    bytes: &[u8], f:&mut Frame,').replace('decode_digest_canonical(&exact(', 'digest(&exact(').replace('])?)','])?,f)').replace('validate_verified_afterstate(&afterstate)','validate(&afterstate,f)')
 # The scalar exact(&bytes[8..16]) is not a digest call.
+native=native.replace('super::POOL_V1_PAIR_TREE_STORAGE_FORMAT_VERSION','super::super::POOL_V1_PAIR_TREE_STORAGE_FORMAT_VERSION')
 native=native.replace('u64::from_le_bytes(exact(&bytes[8..16])?,f)','u64::from_le_bytes(exact(&bytes[8..16])?)')
 if mode=='argument':native=native.replace('exact(&bytes[16..48])','exact(&bytes[17..49])')
 if mode=='reply':native=native.replace('next_root,','next_root: [aspis_core::field::M31(0);8],',1)
@@ -28,5 +29,5 @@ match header{{Err(e)=>{{assert!(f.digests==0&&f.validations==0);assert!(matches!
 # Pin the exact deployed magic rather than using a fixture.
 import re
 magic=re.search(r'POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC[^=]*=\s*\*b"([^"]+)"',f).group(1).encode();body=body.replace('bytes[0]!=65||bytes[1]!=83||bytes[2]!=86||bytes[3]!=49','||'.join(f'bytes[{i}]!={v}' for i,v in enumerate(magic)))
-h=f+'\n#[cfg(kani)]\nmod NEX_afterdecode;\n';patch=''.join(difflib.unified_diff(f.splitlines(True),h.splitlines(True),fromfile='a/'+p,tofile='b/'+p))+'--- /dev/null\n+++ b/crates/aspis-statement/src/pool_v1/NEX_afterdecode.rs\n@@ -0,0 +1,'+str(len(body.splitlines()))+' @@\n'+''.join('+'+l+'\n' for l in body.splitlines());(E/'NEX_native_contracts.patch').write_text(patch)
+h=f+'\n#[cfg(kani)]\n#[path="NEX_afterdecode.rs"]\nmod NEX_afterdecode;\n';patch=''.join(difflib.unified_diff(f.splitlines(True),h.splitlines(True),fromfile='a/'+p,tofile='b/'+p))+'--- /dev/null\n+++ b/crates/aspis-statement/src/pool_v1/NEX_afterdecode.rs\n@@ -0,0 +1,'+str(len(body.splitlines()))+' @@\n'+''.join('+'+l+'\n' for l in body.splitlines());(E/'NEX_native_contracts.patch').write_text(patch)
 (E/'NEX_AFTERDECODE_CURRENT.json').write_text(json.dumps(dict(mode=mode,slot=slot,frozen_body=original,native=native,source=body,domain='all live688-byte slices; arbitrary complete digest values, earliest failure index 0..21, every validation Result/error, arbitrary indices',classification='ruling y exact frozen unrolled calls; no native loop, no multiplication; exact 8/32 actual bodies; full read/result/error/ordered local call log'),indent=1))

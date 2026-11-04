@@ -14,6 +14,29 @@ config.extend([
  ('atomic_statement.decode_digest_canonical','digest','Array U8 32#usize → Result (core.result.Result (Array aspis_core.field.M31 8#usize) atomic_statement.AtomicStatementError)'),
  ('pool_v1.pair_tree_profile.validate_pool_v1_pair_live_snapshot_v1','validate','pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1 → Result (core.result.Result Unit pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1)')])])
 for mod,name,children in config:
+ if mod in ['AfterDecodeOracle','SnapshotDecodeOracle']:
+  parent='NED_SubtreeComposition' if mod=='AfterDecodeOracle' else 'S6NativeSnapshotDecoderFactoredV1'
+  reference='NBN_AfterstateDecoderDependency.run (fun b => ok (NBP_DigestDecode.decoded b))' if mod=='AfterDecodeOracle' else 'AspisS6NativeSnapshotDecoderFactored.decode'
+  law='NED_SubtreeComposition.after_decode' if mod=='AfterDecodeOracle' else 'AspisS6NativeSnapshotDecoderFactored.decode_source'
+  out=f"""import {parent}
+set_option autoImplicit false
+noncomputable section
+namespace NEX_{mod}
+open Aeneas Aeneas.Std Result AspisR1TerminalDecoder
+/-- Reuse the existing factored model law; the excluded deep clone is not credit.
+Native oracle cuts, caller domains and physical frames are separate checks. -/
+abbrev run := {reference}
+theorem result_state_effects {{State : Type}} (bytes : Slice U8) (state : State) :
+    (run bytes,state,([] : List Unit)) =
+    ({name} bytes,state,[]) := by
+  exact congrArg (fun r => (r,state,([] : List Unit))) ({law} bytes)
+#print axioms result_state_effects
+#print axioms {law}
+end NEX_{mod}
+"""
+  (E/('NEX_'+mod+'.lean')).write_text(out)
+  records.append(dict(module='NEX_'+mod,reference=reference,reused_law=law,reason='reuse existing factored proof; no deep body normalization or cap change'))
+  continue
  start=s.index('def '+name+' (');end=s.find('\n/--',start)
  end_namespace=s.find('\nend ',start)
  if end<0 or (end_namespace>=0 and end_namespace<end):end=end_namespace
