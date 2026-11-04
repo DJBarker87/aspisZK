@@ -1,0 +1,129 @@
+/home/dombarker/project-offloads/codex-pv-stx-20261104/sources/PV_STX_Entropy.lean:205:86: error: unsolved goals
+case isTrue
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+bytes : Std.Array U8 32#usize
+combined : U8
+i : Usize
+h✝ : i < 32#usize
+⊢ (denote (fun {X} => fixed) do
+      let i1 ← Code.result (bytes.index_usize i)
+      let combined1 ← Code.result (lift (combined ||| i1))
+      let i2 ← Code.result (lift (i.wrapping_add 1#usize))
+      pure (cont (combined1, i2))) =
+    do
+    let i1 ← bytes.index_usize i
+    let combined1 ← lift (combined ||| i1)
+    let i2 ← lift (i.wrapping_add 1#usize)
+    Result.ok (cont (combined1, i2))
+
+case isFalse
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+bytes : Std.Array U8 32#usize
+combined : U8
+i : Usize
+h✝ : ¬i < 32#usize
+⊢ denote (fun {X} => fixed) (pure (done combined)) = Result.ok (done combined)
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+bytes : Std.Array U8 32#usize
+combined : U8
+i : Usize
+⊢ denote (fun {X} => fixed)
+      (if i < 32#usize then do
+        let i1 ← Code.result (bytes.index_usize i)
+        let combined1 ← Code.result (lift (combined ||| i1))
+        let i2 ← Code.result (lift (i.wrapping_add 1#usize))
+        pure (cont (combined1, i2))
+      else pure (done combined)) =
+    if i < 32#usize then do
+      let i1 ← bytes.index_usize i
+      let combined1 ← lift (combined ||| i1)
+      let i2 ← lift (i.wrapping_add 1#usize)
+      Result.ok (cont (combined1, i2))
+    else Result.ok (done combined)
+case isTrue
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+bytes : Std.Array U8 32#usize
+combined : U8
+i : Usize
+h✝ : i < 32#usize
+⊢ (denote (fun {X} => fixed) do
+      let i1 ← Code.result (bytes.index_usize i)
+      let combined1 ← Code.result (lift (combined ||| i1))
+      let i2 ← Code.result (lift (i.wrapping_add 1#usize))
+      pure (cont (combined1, i2))) =
+    do
+    let i1 ← bytes.index_usize i
+    let combined1 ← lift (combined ||| i1)
+    let i2 ← lift (i.wrapping_add 1#usize)
+    Result.ok (cont (combined1, i2))
+case isFalse
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+bytes : Std.Array U8 32#usize
+combined : U8
+i : Usize
+h✝ : ¬i < 32#usize
+⊢ denote (fun {X} => fixed) (pure (done combined)) = Result.ok (done combined)
+/home/dombarker/project-offloads/codex-pv-stx-20261104/sources/PV_STX_Entropy.lean:213:2: error: Tactic `rfl` failed: The left-hand side
+  denote (fun {X} => fixed) (nonzeroLoop bytes combined i)
+is not definitionally equal to the right-hand side
+  aspis_prover.state_only_entropy.entropy_nonzero32_loop bytes combined i
+
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+bytes : Std.Array U8 32#usize
+combined : U8
+i : Usize
+⊢ denote (fun {X} => fixed) (nonzeroLoop bytes combined i) =
+    aspis_prover.state_only_entropy.entropy_nonzero32_loop bytes combined i
+/home/dombarker/project-offloads/codex-pv-stx-20261104/sources/PV_STX_Entropy.lean:217:2: error: Tactic `rfl` failed: The left-hand side
+  denote (fun {X} => fixed) (nonzero bytes)
+is not definitionally equal to the right-hand side
+  aspis_prover.state_only_entropy.entropy_nonzero32 bytes
+
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+bytes : Std.Array U8 32#usize
+⊢ denote (fun {X} => fixed) (nonzero bytes) = aspis_prover.state_only_entropy.entropy_nonzero32 bytes
+/home/dombarker/project-offloads/codex-pv-stx-20261104/sources/PV_STX_Entropy.lean:222:2: error: Tactic `rfl` failed: The left-hand side
+  denote (fun {X} => fixed) (entropyBody nonce limit retry)
+is not definitionally equal to the right-hand side
+  aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop.body nonce limit retry
+
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+nonce : Std.Array U8 32#usize
+limit retry : Usize
+⊢ denote (fun {X} => fixed) (entropyBody nonce limit retry) =
+    aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop.body nonce limit retry
+/home/dombarker/project-offloads/codex-pv-stx-20261104/sources/PV_STX_Entropy.lean:227:2: error: Tactic `rfl` failed: The left-hand side
+  denote (fun {X} => fixed) (entropyLoop nonce limit retry)
+is not definitionally equal to the right-hand side
+  aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop nonce limit retry
+
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+nonce : Std.Array U8 32#usize
+limit retry : Usize
+⊢ denote (fun {X} => fixed) (entropyLoop nonce limit retry) =
+    aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop nonce limit retry
+/home/dombarker/project-offloads/codex-pv-stx-20261104/sources/PV_STX_Entropy.lean:232:2: error: Tactic `rfl` failed: The left-hand side
+  denote (fun {X} => fixed) (generate nonce)
+is not definitionally equal to the right-hand side
+  aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce nonce
+
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+nonce : Std.Array U8 32#usize
+⊢ denote (fun {X} => fixed) (generate nonce) =
+    aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce nonce
+'PV_STX_Entropy.nonzeroBody_erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_STX_Entropy.nonzeroLoop_erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_STX_Entropy.nonzero_erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_STX_Entropy.entropyBody_erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_STX_Entropy.entropyLoop_erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_STX_Entropy.generate_erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

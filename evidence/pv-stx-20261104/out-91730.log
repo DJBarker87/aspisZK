@@ -1,0 +1,72 @@
+/home/dombarker/project-offloads/codex-pv-stx-20261104/sources/PV_STX_AllocatorWorld.lean:75:55: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.54 = ?m.54
+but is expected to have type
+  (have reply := allocator w layout;
+        have post :=
+          {
+            base :=
+              have __src := w.base;
+              { entropyCursor := __src.entropyCursor, files := __src.files, oracleHistory := __src.oracleHistory,
+                attempts := __src.attempts, retries := __src.retries, allocations := w.base.allocations + 1,
+                clockReads := __src.clockReads },
+            heap := w.heap, nextIdentity := w.nextIdentity, handles := w.handles, allocator := reply.allocator,
+            errno := reply.errno, stackCursor := w.stackCursor, threadCursor := w.threadCursor };
+        match reply.answer with
+        | AllocationAnswer.denied =>
+          { answer := Answer.returned (Result.ok none), world := post,
+            events :=
+              [event encode (AllocationEvent.request layout),
+                event encode (AllocationEvent.denied layout reply.errno)] }
+        | AllocationAnswer.allocated address backing =>
+          have block :=
+            { identity := w.nextIdentity, address := address, layout := layout, bytes := backing, owner := owner };
+          { answer := Answer.returned (Result.ok (some block)),
+            world :=
+              { base := post.base, heap := block :: w.heap, nextIdentity := w.nextIdentity + 1, handles := post.handles,
+                allocator := post.allocator, errno := post.errno, stackCursor := post.stackCursor,
+                threadCursor := post.threadCursor },
+            events :=
+              [event encode (AllocationEvent.request layout),
+                event encode (AllocationEvent.allocated layout w.nextIdentity address reply.errno)] }).world.handles =
+    w.handles
+in the application
+  ⟨?m.52, rfl⟩
+/home/dombarker/project-offloads/codex-pv-stx-20261104/sources/PV_STX_AllocatorWorld.lean:75:55: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.54 = ?m.54
+but is expected to have type
+  (have reply := allocator w layout;
+        have post :=
+          {
+            base :=
+              have __src := w.base;
+              { entropyCursor := __src.entropyCursor, files := __src.files, oracleHistory := __src.oracleHistory,
+                attempts := __src.attempts, retries := __src.retries, allocations := w.base.allocations + 1,
+                clockReads := __src.clockReads },
+            heap := w.heap, nextIdentity := w.nextIdentity, handles := w.handles, allocator := reply.allocator,
+            errno := reply.errno, stackCursor := w.stackCursor, threadCursor := w.threadCursor };
+        match reply.answer with
+        | AllocationAnswer.denied =>
+          { answer := Answer.returned (Result.ok none), world := post,
+            events :=
+              [event encode (AllocationEvent.request layout),
+                event encode (AllocationEvent.denied layout reply.errno)] }
+        | AllocationAnswer.allocated address backing =>
+          have block :=
+            { identity := w.nextIdentity, address := address, layout := layout, bytes := backing, owner := owner };
+          { answer := Answer.returned (Result.ok (some block)),
+            world :=
+              { base := post.base, heap := block :: w.heap, nextIdentity := w.nextIdentity + 1, handles := post.handles,
+                allocator := post.allocator, errno := post.errno, stackCursor := post.stackCursor,
+                threadCursor := post.threadCursor },
+            events :=
+              [event encode (AllocationEvent.request layout),
+                event encode (AllocationEvent.allocated layout w.nextIdentity address reply.errno)] }).world.handles =
+    w.handles
+in the application
+  ⟨?m.52, rfl⟩
+'PV_STX_AllocatorWorld.denied_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_STX_AllocatorWorld.allocated_frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,31 @@
+/home/dombarker/project-offloads/codex-pv-stx-20261104/sources/PV_STX_EntropyEndings.lean:17:58: error: unsolved goals
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+W E : Type
+handler : Handler Request W E
+nonce : Std.Array U8 32#usize
+limit retry : Usize
+w : W
+stop : ¬retry < limit
+⊢ {
+      status :=
+        Status.running
+          {
+            carrier :=
+              core.result.Result aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
+                aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError,
+            code :=
+              Code.result
+                (Result.ok
+                  (core.result.Result.Err
+                    aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.RepeatedZeroBlock)),
+            kont := Kont.done },
+      world := w, events := [] } =
+    {
+      status :=
+        Status.returned
+          (Result.ok
+            (core.result.Result.Err aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.RepeatedZeroBlock)),
+      world := w, events := [] }
+'PV_STX_EntropyEndings.exhausted_suffix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_STX_EntropyEndings.exhausted_body' depends on axioms: [propext, Classical.choice, Quot.sound]

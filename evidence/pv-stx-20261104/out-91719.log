@@ -1,0 +1,97 @@
+/home/dombarker/project-offloads/codex-pv-stx-20261104/sources/PV_STX_Account.lean:42:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  denote (fun {X} => PV_STX_Entropy.fixed) (PV_STX_Map.map (fun {X} x => x) ?code)
+in the target expression
+  denote (fun {X} => fixed) (PV_STX_Map.map (fun {X} op => Request.entropy op) (PV_STX_Entropy.generate nonce)) =
+    aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce nonce
+
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+nonce : Std.Array U8 32#usize
+⊢ denote (fun {X} => fixed) (PV_STX_Map.map (fun {X} op => Request.entropy op) (PV_STX_Entropy.generate nonce)) =
+    aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce nonce
+/home/dombarker/project-offloads/codex-pv-stx-20261104/sources/PV_STX_Account.lean:50:2: error: Tactic `rfl` failed: The left-hand side
+  denote (fun {X} => fixed) do
+    let __x ← Code.call (Request.account inst capture i)
+    let r ← PV_STX_Map.map (fun {X} op => Request.entropy op) (PV_STX_Entropy.generate __x.1)
+    let r1 ← Code.call (Request.mapError inst r)
+    pure (r1, __x.2, fun c => c)
+is not definitionally equal to the right-hand side
+  RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError.call_mut
+    inst capture i
+
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+T : Type
+inst : AccountInst T
+capture : T
+i : Usize
+⊢ (denote (fun {X} => fixed) do
+      let __x ← Code.call (Request.account inst capture i)
+      let r ← PV_STX_Map.map (fun {X} op => Request.entropy op) (PV_STX_Entropy.generate __x.1)
+      let r1 ← Code.call (Request.mapError inst r)
+      pure (r1, __x.2, fun c => c)) =
+    RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError.call_mut
+      inst capture i
+/home/dombarker/project-offloads/codex-pv-stx-20261104/sources/PV_STX_Account.lean:49:13: warning: This simp argument is unused:
+  denote
+
+Hint: Omit it from the simp argument list.
+  simp only [̵d̵e̵n̵o̵t̵e̵,̵f̵i̵x̵e̵d̵,̵e̵n̵t̵r̵o̵p̵y̵_̵e̵r̵a̵s̵e̵s̵]̵[̲f̲i̲x̲e̲d̲,̲ ̲e̲n̲t̲r̲o̲p̲y̲_̲e̲r̲a̲s̲e̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-stx-20261104/sources/PV_STX_Account.lean:49:20: warning: This simp argument is unused:
+  fixed
+
+Hint: Omit it from the simp argument list.
+  simp only [̵d̵e̵n̵o̵t̵e̵,̵f̵i̵x̵e̵d̵,̵e̵n̵t̵r̵o̵p̵y̵_̵e̵r̵a̵s̵e̵s̵]̵[̲d̲e̲n̲o̲t̲e̲,̲ ̲e̲n̲t̲r̲o̲p̲y̲_̲e̲r̲a̲s̲e̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-stx-20261104/sources/PV_STX_Account.lean:49:26: warning: This simp argument is unused:
+  entropy_erases
+
+Hint: Omit it from the simp argument list.
+  simp only [̵d̵e̵n̵o̵t̵e̵,̵f̵i̵x̵e̵d̵,̵e̵n̵t̵r̵o̵p̵y̵_̵e̵r̵a̵s̵e̵s̵]̵[̲d̲e̲n̲o̲t̲e̲,̲ ̲f̲i̲x̲e̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-stx-20261104/sources/PV_STX_Account.lean:57:2: error: Tactic `rfl` failed: The left-hand side
+  denote (fun {X} => fixed) do
+    let __x ← callMut inst capture i
+    pure (__x.1, __x.2.2 __x.2.1)
+is not definitionally equal to the right-hand side
+  do
+    let (r, c1, back) ←
+      RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError.call_mut
+          inst capture i
+    Result.ok (r, back c1)
+
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+T : Type
+inst : AccountInst T
+capture : T
+i : Usize
+⊢ (denote (fun {X} => fixed) do
+      let __x ← callMut inst capture i
+      pure (__x.1, __x.2.2 __x.2.1)) =
+    do
+    let (r, c1, back) ←
+      RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError.call_mut
+          inst capture i
+    Result.ok (r, back c1)
+/home/dombarker/project-offloads/codex-pv-stx-20261104/sources/PV_STX_Account.lean:56:13: warning: This simp argument is unused:
+  denote
+
+Hint: Omit it from the simp argument list.
+  simp only [d̵e̵n̵o̵t̵e̵,̵callMut_erases]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-stx-20261104/sources/PV_STX_Account.lean:56:20: warning: This simp argument is unused:
+  callMut_erases
+
+Hint: Omit it from the simp argument list.
+  simp only [denote,̵c̵a̵l̵l̵M̵u̵t̵_̵e̵r̵a̵s̵e̵s̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_STX_Account.entropy_erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_STX_Account.callMut_erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_STX_Account.next_erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

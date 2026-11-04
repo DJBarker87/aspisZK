@@ -1,0 +1,77 @@
+{
+  "evidence_class": "own-1 structural adopted interleaved register-load binding; V370 retained",
+  "inputs": [
+    {
+      "path": "evidence/pv-evh10-20261102/entropy-layout-da36d6aa.txt",
+      "sha256": "6ec97892c7fb04ca02df8ebd2cc6680035fbeeac33d9959cfcb7a07ecae4c3c1"
+    },
+    {
+      "path": "lean/PV_EVH_ReturnRegisterLoads.lean",
+      "sha256": "44772065ee5914e0bedf051771a4ba4258c2411164862a35468f90b7b1a44615"
+    }
+  ],
+  "adopted_binary": {
+    "path": "/home/dombarker/project-offloads/codex-pv-c474-20261029/native-target/client/devnet_spend",
+    "sha256": "da36d6aa36f8566ffa2ce7276546941c745bcd6325613c5a98c5517328b7def0",
+    "executed": false
+  },
+  "loads": [
+    {
+      "pc": 1333597,
+      "register": 0,
+      "operand": "(%rsp)",
+      "precedingStores": 0,
+      "instruction": "14595d:\t66 0f 6f 04 24       \tmovdqa (%rsp),%xmm0"
+    },
+    {
+      "pc": 1333602,
+      "register": 1,
+      "operand": "0x10(%rsp)",
+      "precedingStores": 0,
+      "instruction": "145962:\t66 0f 6f 4c 24 10    \tmovdqa 0x10(%rsp),%xmm1"
+    },
+    {
+      "pc": 1333626,
+      "register": 2,
+      "operand": "(%r8)",
+      "precedingStores": 2,
+      "instruction": "14597a:\tf3 41 0f 6f 10       \tmovdqu (%r8),%xmm2"
+    },
+    {
+      "pc": 1333631,
+      "register": 3,
+      "operand": "0x10(%r8)",
+      "precedingStores": 2,
+      "instruction": "14597f:\tf3 41 0f 6f 58 10    \tmovdqu 0x10(%r8),%xmm3"
+    },
+    {
+      "pc": 1333655,
+      "register": 4,
+      "operand": "(%r14)",
+      "precedingStores": 4,
+      "instruction": "145997:\tf3 41 0f 6f 26       \tmovdqu (%r14),%xmm4"
+    },
+    {
+      "pc": 1333660,
+      "register": 5,
+      "operand": "0x10(%r14)",
+      "precedingStores": 4,
+      "instruction": "14599c:\t41 0f 10 6e 10       \tmovups 0x10(%r14),%xmm5"
+    }
+  ],
+  "ordered_return_stores": 13,
+  "checked": [
+    "The six 16-byte reloads occur before store counts 0,0,2,2,4,4, respectively. They are not hoisted to branch entry by this interpretation.",
+    "ReturnRegisterLoads.current_reload proves the current physical memory at EACH reload equals the entry-to-return snapshot for all sixteen lanes. Only existing named store-footprint laws and numeric interval separation are used.",
+    "Adopted original64 cleanup and return epilogue contain no XMM instruction. The six loaded vectors are not cleared there. This is structural artifact evidence, not a theorem that all other register/spill channels have been covered."
+  ],
+  "retained": [
+    "Actual reached FRAME-CALL/RAW-ABI/MOVE-COMPILER under V370, runtime FRAME-ENTRY and full KERNEL-WRITE instance.",
+    "Actual L3 observer and advancing native family installation, including all caller-saved registers, syscall clobbers, callee-saved registers, stack spills, inner/staging residues and caller continuation.",
+    "No NativeEvent is invented to expose a private snapshot, and no memory or register operation is claimed silent."
+  ],
+  "rows_removed": [],
+  "trust_fields_added": [],
+  "native_runs": 0,
+  "kani_runs": 0
+}

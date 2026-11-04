@@ -1,0 +1,123 @@
+/home/dombarker/project-offloads/codex-pv-stx-20261104/sources/PV_STX_Entropy.lean:244:10: error: unsolved goals
+case hk.Continue
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+nonce : Std.Array U8 32#usize
+limit retry : Usize
+h : retry < limit
+bytes : zeroize.Zeroizing (Std.Array U8 64#usize)
+s : Slice U8
+back : Slice U8 → zeroize.Zeroizing (Std.Array U8 64#usize)
+r : core.result.Result Unit getrandom.error.Error
+s1 : Slice U8
+a✝ : Unit
+⊢ (do
+      let a ←
+        zeroize.Zeroizing.new
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            (Array.repeat 32#usize 0#u8)
+      let a_1 ←
+        zeroize.Zeroizing.new
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            (Array.repeat 32#usize 0#u8)
+      let a ←
+        zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes)) a
+      let a_2 ← lift a.1.to_slice_mut
+      let a_3 ←
+        zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+            (Array.Insts.ZeroizeZeroize 64#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes)) (back s1)
+      let a_4 ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8)) a_3
+            { «end» := 32#usize }
+      let a_5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 a_2.1 a_4
+      let a_6 ←
+        zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes)) a_1
+      let a_7 ← lift a_6.1.to_slice_mut
+      let a_8 ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeFromUsizeSlice U8)) a_3
+            { start := 32#usize }
+      let a_9 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 a_7.1 a_8
+      let a_10 ←
+        zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            (a.2 (a_2.2 a_5))
+      let a_11 ← aspis_prover.state_only_entropy.entropy_nonzero32 a_10
+      if a_11 = true then do
+          let a_12 ←
+            zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+                (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                (a_6.2 (a_7.2 a_9))
+          let a_13 ← aspis_prover.state_only_entropy.entropy_nonzero32 a_12
+          if a_13 = true then
+              Result.ok
+                (done
+                  (core.result.Result.Ok
+                    { mask_nonce := nonce, field_mask_entropy := a.2 (a_2.2 a_5),
+                      leaf_salt_seed := a_6.2 (a_7.2 a_9) }))
+            else do
+              let a ← lift (retry.wrapping_add 1#usize)
+              Result.ok (cont a)
+        else do
+          let a ← lift (retry.wrapping_add 1#usize)
+          Result.ok (cont a)) =
+    do
+    let field_mask_entropy ←
+      zeroize.Zeroizing.new
+          (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+          (Array.repeat 32#usize 0#u8)
+    let leaf_salt_seed ←
+      zeroize.Zeroizing.new
+          (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+          (Array.repeat 32#usize 0#u8)
+    let (a3, deref_mut_back) ←
+      zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut
+          (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+          field_mask_entropy
+    let (s2, to_slice_mut_back) ← lift a3.to_slice_mut
+    let a4 ←
+      zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+          (Array.Insts.ZeroizeZeroize 64#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes)) (back s1)
+    let s3 ←
+      core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8)) a4
+          { «end» := 32#usize }
+    let s4 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s2 s3
+    let (a6, deref_mut_back1) ←
+      zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut
+          (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes)) leaf_salt_seed
+    let (s5, to_slice_mut_back1) ← lift a6.to_slice_mut
+    let s6 ←
+      core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeFromUsizeSlice U8)) a4
+          { start := 32#usize }
+    let s7 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s5 s6
+    let a8 ←
+      zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+          (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+          (deref_mut_back (to_slice_mut_back s4))
+    let b ← aspis_prover.state_only_entropy.entropy_nonzero32 a8
+    if b = true then do
+        let a9 ←
+          zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+              (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+              (deref_mut_back1 (to_slice_mut_back1 s7))
+        let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 a9
+        if b1 = true then
+            Result.ok
+              (done
+                (core.result.Result.Ok
+                  { mask_nonce := nonce, field_mask_entropy := deref_mut_back (to_slice_mut_back s4),
+                    leaf_salt_seed := deref_mut_back1 (to_slice_mut_back1 s7) }))
+          else do
+            let retry1 ← lift (retry.wrapping_add 1#usize)
+            Result.ok (cont retry1)
+      else do
+        let retry1 ← lift (retry.wrapping_add 1#usize)
+        Result.ok (cont retry1)
+'PV_STX_Entropy.erases_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_STX_Entropy.nonzeroBody_erases' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_STX_Entropy.nonzeroLoop_erases' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_STX_Entropy.nonzero_erases' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_STX_Entropy.entropyBody_erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_STX_Entropy.entropyLoop_erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_STX_Entropy.generate_erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

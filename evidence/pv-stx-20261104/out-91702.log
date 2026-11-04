@@ -1,0 +1,19 @@
+/home/dombarker/project-offloads/codex-pv-stx-20261104/sources/PV_STX_Fixed.lean:51:4: error: 'change' tactic failed, pattern
+  some
+      (kontDenote (fun {X} => fixed) k
+        (Std.bind (denote (fun {X} => fixed) (body s)) fun cf =>
+          match cf with
+          | ControlFlow.done a => Result.ok a
+          | ControlFlow.cont t => loop (fun t => denote (fun {X} => fixed) (body t)) t)) =
+    some (kontDenote (fun {X} => fixed) k (loop (fun t => denote (fun {X} => fixed) (body t)) s))
+is not definitionally equal to target
+  view (fun {X} => fixed)
+      (step (fun {X} => handler fun {X} => fixed) { carrier := X, code := Code.loop body s, kont := k } w).status =
+    some (configDenote (fun {X} => fixed) { carrier := X, code := Code.loop body s, kont := k })
+'PV_STX_Fixed.kont_fail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_STX_Fixed.kont_div' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_STX_Fixed.resumed_view' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_STX_Fixed.step_view' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_STX_Fixed.advance_view' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_STX_Fixed.run_view' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_STX_Fixed.returned_agrees' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
