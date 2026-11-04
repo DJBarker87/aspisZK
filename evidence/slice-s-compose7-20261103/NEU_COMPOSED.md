@@ -220,3 +220,29 @@ three compressed-input transport tests also passed. Cached source inputs remain
 keyed by both compressed bytes and uncompressed hash; all receipt source hashes
 are still checked. Source snapshots for every native execution are committed
 as hash-checked compressed text, including the pre-repair history.
+
+## Reconstruction native split and projection audit
+
+K118 (all common projections) and K119 (one arbitrary selector) both exit124
+at the unchanged180s outer cap without a native verdict. K120's safe in-place
+full typed Auth generator also exits124, after4.86s optimized compilation.
+Cgroup peaks are6,698,930,176,6,704,717,824 and6,754,430,976 bytes respectively;
+these are timeouts, not memory kills, and none earns native credit. The parent
+RSS alone misses children; use the cgroup peak in these receipts. Read-only
+scope/lock recovery shows the scope removed and frozen lock unchanged. The
+input generator overwrites EVERY scalar leaf independently; no byte transmute,
+zero-filled unread-field restriction or mutable static is used. Its initial
+missing constant-alias parser case was repaired before K120 launched and costs
+no Kani attempt. No timeout was repeated unchanged or with larger limits.
+
+L015 proves `NEU_CommonProjections.common_ext`: equality at every arbitrary
+15-way field selector, byte/limb/frontier index identifies the entire nested
+common record. Full statement is in the module/snapshot. Axioms are propext,
+Classical.choice,Quot.sound. This is the assembly lemma for a future successful
+native window campaign; it does not convert the three timeouts into closure.
+
+The next scalar guard view replaces only type names and retained read paths in
+the frozen prefix. It covers arbitrary u64 indices, all raw u32 assets and both
+payment variants. Its metadata explicitly leaves the full typed-input/native
+noninterference association OPEN. A source-projection support pair cannot be
+used as a whole-root bridge or a stronger PacketDomain.

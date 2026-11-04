@@ -15,7 +15,45 @@ for name,file in structs:
   v=nested.get(ty,'['+','.join(['kani::any()']*8)+']' if ty=='[u64; POOL_V1_PAIR_FOREST_LANE_COUNT]' else 'NEE_digest()' if ty=='Digest' else 'NEE_frontier()' if ty.startswith('[Digest;') else 'M31(kani::any())' if ty=='M31' else 'kani::any()')
   vals.append(key+':'+v)
  auth+='fn any_'+name+'()->'+name+'{'+name+'{'+','.join(vals)+'}}\n'
-auth+='fn auth()->AuthenticatedAsq8Accounts{AuthenticatedAsq8Accounts{master_account:kani::any(),checkpoint_account:kani::any(),selected_lane_account:kani::any(),master:Box::new(any_PoolV1PairForestMasterV1()),checkpoint:Box::new(any_PoolV1PairForestCheckpointV1()),selected_lane:Box::new(any_PoolV1PairForestLaneStateV1()),live_snapshot:Box::new(NEE_common().lane_transition.live_snapshot)}}\n'
+# Fully initialize valid typed boxes, then assign every scalar independently.
+# This avoids passing large symbolic aggregates through Box::new/copy stubs.
+definitions={}
+for typename,file in structs+[('PoolV1PairLiveSnapshotV1','pair_tree_profile.rs')]:
+ text=frozen('crates/aspis-statement/src/pool_v1/'+file);block=text.split('pub struct '+typename+' {',1)[1].split('\n}',1)[0]
+ definitions[typename]=re.findall(r'pub (\w+):\s*([^\n]+),',block)
+definitions['AuthenticatedAsq8Accounts']=[('master_account','[u8; 32]'),('checkpoint_account','[u8; 32]'),('selected_lane_account','[u8; 32]'),('master','Box<PoolV1PairForestMasterV1>'),('checkpoint','Box<PoolV1PairForestCheckpointV1>'),('selected_lane','Box<PoolV1PairForestLaneStateV1>'),('live_snapshot','Box<PoolV1PairLiveSnapshotV1>')]
+def array(ty):
+ m=re.fullmatch(r'\[(.+);\s*([^]]+)\]',ty)
+ if not m:return None
+ count={'POOL_V1_TREE_DEPTH':20,'POOL_V1_PAIR_TREE_DEPTH':20,'POOL_V1_PAIR_FOREST_LANE_COUNT':8}.get(m[2],int(m[2]) if m[2].isdigit() else None)
+ assert count is not None,ty
+ return m[1].strip(),count
+def initial(ty):
+ if ty.startswith('Box<'):return 'Box::new('+initial(ty[4:-1])+')'
+ if ty in definitions:return ty+'{'+','.join(n+':'+initial(t) for n,t in definitions[ty])+'}'
+ if ty=='Digest':return '[M31(0);8]'
+ if ty=='M31':return 'M31(0)'
+ if ty=='bool':return 'false'
+ if array(ty):
+  element,count=array(ty);return '['+initial(element)+';'+str(count)+']'
+ assert ty in ['u8','u32','u64','usize'],ty
+ return '0'
+writes=[]
+def initialize(path,ty):
+ if ty.startswith('Box<'):return initialize(path,ty[4:-1])
+ if ty in definitions:
+  for n,t in definitions[ty]:initialize(path+'.'+n,t)
+ elif ty=='Digest':
+  for i in range(8):initialize(path+'['+str(i)+']','M31')
+ elif array(ty):
+  element,count=array(ty)
+  for i in range(count):initialize(path+'['+str(i)+']',element)
+ else:
+  assert ty in ['u8','u32','u64','usize','bool','M31'],ty
+  writes.append((path,'M31(kani::any())' if ty=='M31' else 'kani::any()'))
+initialize('a','AuthenticatedAsq8Accounts');assert len({n for n,_ in writes})==len(writes)
+auth+='fn auth()->Box<AuthenticatedAsq8Accounts>{let mut a=Box::new('+initial('AuthenticatedAsq8Accounts')+');'+''.join(n+'='+v+';' for n,v in writes)+'a}\n'
+(E/'NEU_AUTH_INITIALIZATION.json').write_text(json.dumps(dict(method='safe typed initialization followed by one independent arbitrary assignment to EVERY scalar leaf',unread_cells_not_fixed=True,scalar_leaves=len(writes),writes=writes,unsafe=False),indent=1)+'\n')
 auth+='fn request()->PoolV1PairForestTerminalRequestV1{let s=NEE_statement();let public=match s{PoolV1PairForestTerminalStatementV1::PrivateTransfer{public,..}=>PoolV1PairForestTerminalPaymentV1::PrivateTransfer(public),PoolV1PairForestTerminalStatementV1::Withdrawal{public,..}=>PoolV1PairForestTerminalPaymentV1::Withdrawal(public)};PoolV1PairForestTerminalRequestV1{verifier_profile:kani::any(),verifier_release:kani::any(),pool_program:kani::any(),public}}\n'
 attrs='''#[kani::proof]
 #[kani::stub(core::ptr::copy_nonoverlapping,crate::NEU_KMX::KMX_copy_nonoverlapping)]

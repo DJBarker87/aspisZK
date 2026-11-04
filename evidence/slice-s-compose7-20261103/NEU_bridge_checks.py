@@ -4,7 +4,7 @@ Native support, full emitted Result/trace substitution and every call domain
 are separate requirements. A model theorem or a subset of windows is OPEN.
 """
 from pathlib import Path
-import hashlib,json,lzma,re,copy
+import hashlib,json,lzma,re,copy,difflib
 from functools import lru_cache
 P='programs/r1-cost-probe/src/r1_pool_adapter.rs::'
 FUNCTIONS=[P+n for n in ['asq8_common','transfer_statement_box','withdrawal_statement_box','reconstruct_asq8_statement']]
@@ -46,6 +46,11 @@ def native_pair(v,pair):
   assert not {'no-entrypoint','cu-profiling'}&features['aspis-r1-cost-probe-program']
   assert {'default','private-leaf-salts','optimized-terminal','program-build'}<=features['aspis-r1-cost-probe']
   source=snapshots['NEU_native_contracts.patch']
+  name=re.search(r'\+\+\+ b/programs/r1-cost-probe/src/(NEU_\w+)\.rs',source).group(1)
+  path='programs/r1-cost-probe/src/r1_pool_adapter.rs';frozen=v.frozen_source(path+'::hook')
+  changed=frozen+'\n#[cfg(kani)]\n#[path="'+name+'.rs"]\nmod '+name+';\n'
+  exact_hook=''.join(difflib.unified_diff(frozen.splitlines(True),changed.splitlines(True),fromfile='a/'+path,tofile='b/'+path))
+  assert source.startswith(exact_hook),'frozen parent changed beyond cfg(kani) hook'
   assert all(x in ['core::ptr::copy_nonoverlapping','<[u8]>::copy_from_slice'] for x in re.findall(r'kani::stub\(([^,]+),',source))
   assert not any(x in source for x in ['stub_verified','proof_for_contract','kani::requires','static mut','UnsafeCell','Cell<','Atomic'])
  return True
@@ -87,6 +92,8 @@ def addition(b,f,ledger,v,reviewed):
      fragment=source.split('+++ b/programs/r1-cost-probe/src/NEU_box.rs\n',1)[1].split('--- a/',1)[0]
      added='\n'.join(l[1:] for l in fragment.splitlines() if l.startswith('+'))+'\n'
      assert sha(added.split('\nstruct Frame',1)[0].encode())==HELPERS_SHA256
+     start=added.index('fn native(');end=added.index('\n}',start)+2
+     assert added[start:end]==m['native'],'metadata/caller source mismatch'
      assert re.findall(r'kani::assume\((.*?)\)',source)==['false','i<8&&j<32&&k<20']
      assert f'assert!({field}==f.{field}'+('^1' if mode=='negative' else '')+');' in source
      for text in ['f.place=s','f.reply','match (actual,reply)','core::ptr::eq(out.as_ref(),f.place)','(Err(ProgramError::InvalidInstructionData),Err(_))']:
