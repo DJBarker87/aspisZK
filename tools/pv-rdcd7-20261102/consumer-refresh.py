@@ -1,7 +1,7 @@
 """Read-only differential census for refs advanced since the original inventory."""
 from pathlib import Path
 import subprocess,json,hashlib,re,sys
-R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-rdcd7-20261102';label=sys.argv[1] if len(sys.argv)>1 else 'session2';assert re.fullmatch(r'session[0-9]+',label);out=E/(label+'-census');out.mkdir(exist_ok=True)
+R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-rdcd7-20261102';label=sys.argv[1] if len(sys.argv)>1 else 'session2';assert re.fullmatch(r'session[0-9]+(?:-final)?',label);out=E/(label+'-census');out.mkdir(exist_ok=True)
 def git(*a):return subprocess.check_output(['git',*a],cwd=R)
 s=git('for-each-ref','--format=%(refname) %(objectname)','refs/heads','refs/remotes').decode();(E/('REFS-'+label+'.txt')).write_text(s)
 refs=[l.split() for l in s.splitlines()]+[['HEAD',git('rev-parse','HEAD').decode().strip()]]
