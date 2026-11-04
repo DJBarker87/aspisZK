@@ -1,0 +1,16 @@
+--- NFA_Driver.lean
++++ NFC_Driver.lean
+@@ -9,7 +9,12 @@
+   enableInitializersExecution
+   let mode := args.headD "small"
+   let (modules, roots) :=
+-    if mode == "0" then
++    if mode == "fixtures" then
++      (#[`NEP_Planted, `NEP_Mutations],
++       #[`NEP_Planted.matcher, `NEP_Planted.viaPrivate, `NEP_Planted.proof,
++         `NEP_Planted.viaAux, `NEP_MutateMatch.matcher, `NEP_MutatePrivate.viaPrivate,
++         `NEP_MutateProof.proof, `NEP_MutateAux.viaAux])
++    else if mode == "0" then
+       (#[`NEV_PrefixAssembly], #[`NEV_PrefixAssembly.windows, `NEV_PrefixAssembly.active])
+     else if mode == "1" then
+       (#[`NEV_PrefixCapacity], #[`NEV_PrefixCapacity.representative, `NEV_PrefixCapacity.partition])
