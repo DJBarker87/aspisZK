@@ -1,0 +1,71 @@
+@[reducible] def AspisR1.F3T_Experiment.RunView : Type :=
+AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+  (Prod.{0, 0} AspisR1.F3_Model.Input Bool)
+@[reducible] def AspisR1.F3T_ByteCarrier.ByteProver : Type :=
+AspisR1.Port1_StoredCarrier.ByteProver
+def AspisR1.ARW_Induced.issued : {A : Type} →
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) →
+    (copy :
+        AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record) →
+          Nat → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (Nat → AspisR1.S2W_D189Entry.Record)) →
+      (allocator : AspisR1.S2W_D189Wrappers.Allocator A) →
+        (id : AspisR1.S2W_ExtractionBoundary.Program) →
+          (a : AspisR1.SCE_Experiment.Adversary A) →
+            (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+              List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State) :=
+fun {A : Type} (native1 : AspisR1.S2W_ExtractionBoundary.First)
+    (copy :
+      AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record) →
+        Nat → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (Nat → AspisR1.S2W_D189Entry.Record))
+    (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (id : AspisR1.S2W_ExtractionBoundary.Program)
+    (a : AspisR1.SCE_Experiment.Adversary A) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) =>
+  have i :
+    AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+      (AspisR1.GExq_AccountExperiment.FirstInputs A) :=
+    @AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+      (AspisR1.GExq_AccountExperiment.FirstInputs A) H (@AspisR1.SCE_Experiment.Adversary.first A a);
+  @HAppend.hAppend.{0, 0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+    (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+    (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+    (@instHAppendOfAppend.{0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+      (@List.instAppend.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)))
+    (@Prod.fst.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+      (AspisR1.GExq_AccountExperiment.FirstInputs A) i)
+    (@AspisR1.ARW_Induced.program.match_1.{1} A
+      (fun
+          (x :
+            Aeneas.Std.Result.{0}
+              (Aeneas.Std.core.result.Result.{0, 0}
+                (Prod.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+                  (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A))
+                AspisR1.AdapterRw.Cuts.PE)) =>
+        List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+      (@AspisR1.S2W_D189Wrappers.first A native1 copy allocator
+        (@AspisR1.GExq_AccountExperiment.FirstInputs.entry A
+          (@Prod.snd.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+            (AspisR1.GExq_AccountExperiment.FirstInputs A) i))
+        id
+        (@AspisR1.GExq_AccountExperiment.FirstInputs.data A
+          (@Prod.snd.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+            (AspisR1.GExq_AccountExperiment.FirstInputs A) i))
+        (@AspisR1.GExq_AccountExperiment.FirstInputs.state A
+          (@Prod.snd.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+            (AspisR1.GExq_AccountExperiment.FirstInputs A) i)))
+      (fun (saved : Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+          (post : AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) (final : A) =>
+        @Prod.fst.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+          (AspisR1.GExq_AccountExperiment.SecondInputs A)
+          (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+            (AspisR1.GExq_AccountExperiment.SecondInputs A) H
+            (@AspisR1.SCE_Experiment.Adversary.second A a
+              (@Prod.snd.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+                (AspisR1.GExq_AccountExperiment.FirstInputs A) i)
+              saved post final)))
+      fun
+        (x :
+          Aeneas.Std.Result.{0}
+            (Aeneas.Std.core.result.Result.{0, 0}
+              (Prod.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+                (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A))
+              AspisR1.AdapterRw.Cuts.PE)) =>
+      @List.nil.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))

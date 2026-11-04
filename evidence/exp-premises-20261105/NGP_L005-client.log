@@ -1,0 +1,56 @@
+{"attempt": "NGP_L005", "exit_status": 1, "wall_seconds": 3.6223633068148047, "peak_rss_kib": "5913224", "swaps": "0", "print_axioms": []}
+ed ops program accounts data slot)
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.digestSource : ∀ (self : AdapterRw.SolanaDigest)
+      (parts : Aeneas.Std.Slice.{0} (Aeneas.Std.Slice.{0} Aeneas.Std.U8)),
+      @Eq.{1}
+        (Aeneas.Std.Result.{0}
+          (Aeneas.Std.Array.{0} Aeneas.Std.U8
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32))) ⋯)))
+        (AdapterRw.Ops.op43 ops self parts) (AspisR1.S2W_DigestExtraction.digest hashv self parts)
+constructor:
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.mk {ops : AdapterRw.Ops}
+    {native1 : AspisR1.S2W_ExtractionBoundary.First} {native2 : AspisR1.S2W_ExtractionBoundary.Second}
+    {hashv : AspisR1.S2W_DigestExtraction.Parts → Aeneas.Std.Result.{0} AspisR1.S2W_DigestExtraction.Digest}
+    (stage1 :
+      ∀ (program : AspisR1.S2W_ExtractionBoundary.Program) (accounts : AspisR1.S2W_ExtractionBoundary.Accounts)
+        (data : Aeneas.Std.Slice.{0} Aeneas.Std.U8),
+        @Eq.{1}
+          (Aeneas.Std.Result.{0}
+            (Aeneas.Std.core.result.Result.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+              AspisR1.AdapterRw.Cuts.PE))
+          (native1 program accounts data) (AdapterRw.r1_pool_adapter.owned.stage1_owned ops program accounts data))
+    (stage2 :
+      ∀ (program : AspisR1.S2W_ExtractionBoundary.Program) (accounts : AspisR1.S2W_ExtractionBoundary.Accounts)
+        (data : Aeneas.Std.Slice.{0} Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot),
+        @Eq.{1} (Aeneas.Std.Result.{0} (Aeneas.Std.core.result.Result.{0, 0} Unit AspisR1.AdapterRw.Cuts.PE))
+          (native2 program accounts data slot)
+          (AdapterRw.r1_pool_adapter.owned.stage2_owned ops program accounts data slot))
+    (digestSource :
+      ∀ (self : AdapterRw.SolanaDigest) (parts : Aeneas.Std.Slice.{0} (Aeneas.Std.Slice.{0} Aeneas.Std.U8)),
+        @Eq.{1}
+          (Aeneas.Std.Result.{0}
+            (Aeneas.Std.Array.{0} Aeneas.Std.U8
+              (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32))) ⋯)))
+          (AdapterRw.Ops.op43 ops self parts) (AspisR1.S2W_DigestExtraction.digest hashv self parts)) :
+    AspisR1.S2W_DigestExtraction.AeneasExtraction ops native1 native2 hashv
+structure AspisR1.S2W_ExtractionBoundary.P1
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) : Prop
+number of parameters: 2
+fields:
+  AspisR1.S2W_ExtractionBoundary.P1.realization : AspisR1.S2Z.Oracle.P1Realization sha256 H
+constructor:
+  AspisR1.S2W_ExtractionBoundary.P1.mk {sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    (realization : AspisR1.S2Z.Oracle.P1Realization sha256 H) : AspisR1.S2W_ExtractionBoundary.P1 sha256 H
+structure AspisR1.S2W_ExtractionBoundary.RuntimeSyscall
+  (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result.{0} AspisR1.S2Z.Oracle.Digest)
+  (sha256 : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) : Prop
+number of parameters: 2
+fields:
+  AspisR1.S2W_ExtractionBoundary.RuntimeSyscall.returningValue : AspisR1.S2Z.Oracle.RuntimeSyscall hashv sha256
+constructor:
+  AspisR1.S2W_ExtractionBoundary.RuntimeSyscall.mk
+    {hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result.{0} AspisR1.S2Z.Oracle.Digest}
+    {sha256 : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    (returningValue : AspisR1.S2Z.Oracle.RuntimeSyscall hashv sha256) :
+    AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+

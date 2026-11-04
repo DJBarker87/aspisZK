@@ -1,0 +1,44 @@
+{"attempt": "NGP_L014", "exit_status": 0, "wall_seconds": 2.8531973399221897, "peak_rss_kib": "5929928", "swaps": "0", "print_axioms": []}
+theorem AspisR1.NFS_QueryLoopRoot.tx1 : ∀ (base : AspisR1.Port3_NativeQueryBody.Ops)
+  (proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8) (p : AspisR1Stage2.verifier.Prepared)
+  (a : AspisR1Stage2.verifier.Accumulator)
+  (g :
+    Aeneas.Std.Array.{0} AspisR1.NFP_QueryCuts.E
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 29) (instOfNatNat (nat_lit 29)))
+        (@of_decide_eq_true
+          (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 29) (instOfNatNat (nat_lit 29)))
+            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+          (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 29) (instOfNatNat (nat_lit 29)))
+            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.
+...
+isR1.NFP_TraceTypes.M
+          (@AspisR1.NFI_TraceResult.instMonadM AspisR1.NFP_TraceTypes.Event))
+        (Prod.{0, 0} AspisR1.NFP_TraceTypes.Inverse
+          (Prod.{0, 0} AspisR1.NFP_QueryCuts.E (Prod.{0, 0} AspisR1.NFP_QueryCuts.Dots Bool)))
+        AspisR1.NFP_QueryCuts.Out (AspisR1.NFP_TraceFront.run ops p a geometry u q dots)
+        fun
+          (__x :
+            Prod.{0, 0} AspisR1.NFP_TraceTypes.Inverse
+              (Prod.{0, 0} AspisR1.NFP_QueryCuts.E (Prod.{0, 0} AspisR1.NFP_QueryCuts.Dots Bool))) =>
+        AspisR1.NFS_QueryValuesPacket.run.match_1.{1}
+          (fun
+              (x :
+                Prod.{0, 0} AspisR1.NFP_TraceTypes.Inverse
+                  (Prod.{0, 0} AspisR1.NFP_QueryCuts.E (Prod.{0, 0} AspisR1.NFP_QueryCuts.Dots Bool))) =>
+            AspisR1.NFP_TraceTypes.M AspisR1.NFP_QueryCuts.Out)
+          __x
+          fun (inverse : AspisR1.NFP_TraceTypes.Inverse) (fst : AspisR1.NFP_QueryCuts.E)
+            (values : AspisR1.NFP_QueryCuts.Dots) (bad : Bool) =>
+          @ite.{1} (AspisR1.NFP_TraceTypes.M AspisR1.NFP_QueryCuts.Out) (@Eq.{1} Bool bad Bool.true)
+            (instDecidableEqBool bad Bool.true)
+            (@Pure.pure.{0, 0} AspisR1.NFP_TraceTypes.M
+              (@Applicative.toPure.{0, 0} AspisR1.NFP_TraceTypes.M
+                (@Monad.toApplicative.{0, 0} AspisR1.NFP_TraceTypes.M
+                  (@AspisR1.NFI_TraceResult.instMonadM AspisR1.NFP_TraceTypes.Event)))
+              AspisR1.NFP_QueryCuts.Out
+              (@Aeneas.Std.core.result.Result.Err.{0, 0}
+                (Prod.{0, 0} AspisR1Stage2.verifier.Accumulator AspisR1Stage2.verifier.BatchedWeights)
+                AspisR1Stage2.verifier.Error AspisR1Stage2.verifier.Error.Query))
+            (AspisR1.NFS_TraceBack.run base p a geometry pending inverse values)
+
+Running as unit: run-r24a8e7ce16824c5e87b37a42b42f902c.scope; invocation ID: 4dd373f201e04234bd5611542ae482ae

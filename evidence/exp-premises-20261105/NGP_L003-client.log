@@ -1,0 +1,51 @@
+{"attempt": "NGP_L003", "exit_status": 1, "wall_seconds": 2.5828234399668872, "peak_rss_kib": "5929976", "swaps": "0", "print_axioms": []}
+    (copy :
+      AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record) →
+        Nat → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (Nat → AspisR1.S2W_D189Entry.Record))
+    (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+    (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (err : C)
+    (r : AspisR1.NP6_StdModel.Reservation) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+    (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+    (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result.{0} AspisR1.SdkC_Source.Digest)
+    (a : AspisR1.SCE_Experiment.Adversary A) =>
+  @AspisV8R19.OracleProgramOps.bind AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+    (AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+      (AspisR1.GExq_AccountExperiment.Outcome A))
+    (Option.{0} AspisR1.F3T_Experiment.RunView)
+    (@AspisR1.OracleProgramRecording.record AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+      (AspisR1.GExq_AccountExperiment.Outcome A)
+      (@AspisR1.ART_PartialAccount.account A AspisR1.FIo_Install.W C (@AspisR1.FIp_Install.configuration C err c r)
+        hashv copy allocator AspisR1.CPH_Program.verifier a))
+    fun
+      (v :
+        AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+          (AspisR1.GExq_AccountExperiment.Outcome A)) =>
+    @AspisV8R19.MemoizedProgramLaw.Program.done AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+      (Option.{0} AspisR1.F3T_Experiment.RunView)
+      (@ite.{1} (Option.{0} AspisR1.F3T_Experiment.RunView)
+        (@AspisR1.ARX_AdmittedRuntime.permitted W A C Tx L copy allocator c err r native1 native2 hashv a v)
+        (Classical.propDecidable
+          (@AspisR1.ARX_AdmittedRuntime.permitted W A C Tx L copy allocator c err r native1 native2 hashv a v))
+        (@Option.some.{0} AspisR1.F3T_Experiment.RunView
+          (@Prod.mk.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+            (Prod.{0, 0} AspisR1.F3_Model.Input Bool)
+            (@Prod.fst.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+              (AspisR1.GExq_AccountExperiment.Outcome A) v)
+            (@Prod.mk.{0, 0} AspisR1.F3_Model.Input Bool
+              (AspisR1.F3T_Canon.canonInput
+                (@AspisR1.F3T_ByteCarrier.input AspisR1.FIo_Install.W C (@AspisR1.FIp_Install.configuration C err c r)
+                  (@AspisR1.SCE_Experiment.submitted A
+                    (@Prod.fst.{0, 0} (AspisR1.GExq_AccountExperiment.FirstInputs A)
+                      (Prod.{0, 0} (AspisR1.GExq_AccountExperiment.FirstReply A)
+                        (Option.{0}
+                          (Prod.{0, 0} (AspisR1.GExq_AccountExperiment.SecondInputs A)
+                            (AspisR1.GExq_AccountExperiment.SecondReply A))))
+                      (@Prod.snd.{0, 0}
+                        (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+                        (AspisR1.GExq_AccountExperiment.Outcome A) v)))))
+              (@AspisR1.SCE_Experiment.accepted A
+                (@Prod.snd.{0, 0}
+                  (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+                  (AspisR1.GExq_AccountExperiment.Outcome A) v)))))
+        (@Option.none.{0} AspisR1.F3T_Experiment.RunView))
+

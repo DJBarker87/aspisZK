@@ -1,0 +1,40 @@
+{"attempt": "NGP_L022", "exit_status": 0, "wall_seconds": 2.8750386477913707, "peak_rss_kib": "5933756", "swaps": "0", "print_axioms": []}
+structure AspisR1.S2Trust.S2TrustedSdkBorrow {W F : Type} (L : AspisR1.S2Trust.Library W F) : Prop
+number of parameters: 3
+fields:
+  AspisR1.S2Trust.S2TrustedSdkBorrow.account_data_cell : ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+      @AspisR1.S2Trust.Library.related W F L w s →
+        @AspisR1.S2Trust.Valid F s →
+          ∀ (a b : Nat),
+            And
+              (@Eq.{1} Nat (@AspisR1.S2Trust.Library.accountData W F L w a)
+                (@Prod.fst.{0, 0} Nat Nat (@AspisR1.S2Trust.Heap.accounts F s a)))
+              (And
+                (@Eq.{1} Nat (@AspisR1.S2Trust.Library.accountLamports W F L w a)
+                  (@Prod.snd.{0, 0} Nat Nat (@AspisR1.S2Trust.Heap.accounts F s a))
+...
+xFrames.Bytes AspisV8R19.SourceDuplexStep.State
+              (AspisR1.GExq_AccountExperiment.FirstInputs A) H (@AspisR1.SCE_Experiment.Adversary.first A a))))
+        (@AspisR1.GExq_AccountExperiment.SecondInputs.entry A
+          (@Prod.snd.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+            (AspisR1.GExq_AccountExperiment.SecondInputs A)
+            (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+              (AspisR1.GExq_AccountExperiment.SecondInputs A) H
+              (@AspisR1.SCE_Experiment.Adversary.second A a
+                (@Prod.snd.{0, 0}
+                  (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+                  (AspisR1.GExq_AccountExperiment.FirstInputs A)
+                  (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                    (AspisR1.GExq_AccountExperiment.FirstInputs A) H (@AspisR1.SCE_Experiment.Adversary.first A a)))
+                saved post1 final1))))
+        saved actions native1 native2 copy allocator AspisR1.CPH_Program.verifier)
+    (RuntimePersistence :
+      @AspisR1.CPR_DataPersistence.TwoTransactionLaw Tx Nat (@AspisR1.CPG_Projection.adjacent Tx A p)
+        (@AspisR1.CPG_Projection.ordinary Tx A p
+          (AspisR1.Hist_Nonvacuity.key
+            (Aeneas.Std.U8.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) ⋯)))
+        (@AspisR1.CPG_Projection.before Tx A p) (@AspisR1.CPG_Projection.tentative Tx A p)
+        (@AspisR1.CPG_Projection.success Tx A p) (@AspisR1.CPG_Projection.loaded Tx A p)) :
+    @AspisR1.ARS_Coverage.SupportedEntry W A C Tx L copy allocator c err r native1 native2 hashv a H
+
+Running as unit: run-rf1c4b3e032db40ed97f1537b1c405f9f.scope; invocation ID: 0df9f2611fe646bb8f0b3c25fc7315e4
