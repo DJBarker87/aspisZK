@@ -1,40 +1,68 @@
-# NFZ remaining obligations
+# NFZ remaining obligations after part 2
 
-**The requested compiler-backed repair is not complete.** No authoritative row
-was dropped or promoted. This report does not license L187 final replay.
+**INCOMPLETE. All three new scopes are terminal; no further launch is authorized.**
 
-| Member | Done | Exact outstanding obligation and why it cannot be closed here |
-|---|---|---|
-| TX2:046 identity | Frozen type/trait definitions and source callers enumerated; body hash retained | Deployed MIR must show exact called impls and TX2 entry reachability, including whether optimized no-op tracing erases calls. Source aliases alone are not the required authority. |
-| TX2:046 embedding children | M31/CM31/QM31 trait impls explicitly reported as absent-row candidates | Resolve reachability and transitive callees; add explicit TX1/TX2 occurrences for reached new functions. Do not quietly make the inventory stay at 587. |
-| TX2:046 exclusion alternative | Row retained OPEN | If compiler evidence excludes it, retain the row with REACHABILITY-EXCLUDED and the evidence. No such exclusion is established. |
-| TX2:211 | first_decoded callback and inactive legacy entry callback located | Deployed MIR must confirm the callback item and rejection edge; independent second MIR/symbol pass must agree. |
-| Other callbacks | Whole-inventory AST scan and candidate existing-row flags retained | Resolve extension_limbs map edge, circle_fallback_point fallback closure and every unresolved candidate; recursively enumerate new nodes. Source closure ownership is not a compiler reachability proof. |
-| Reviewed overlay | Empty SHA256-pinned overlay and additive producer exist | Admit only compiler-reviewed edges, through the producer; verify added domain obligations. Currently there are zero admitted edges. |
-| Slice membership | Original NFQ closure re-derived: 585/587 | Recompute Q as well as D: hypothetical new edge from accumulate_batched_with_node expands Q by WideExact::from_m31. Original exact-Q assertion would fail; membership and caller obligations need review. |
-| NFX count delta | All 587 statuses preserved exactly | Materialize repaired graph/new rows with OPEN obligations; reassess any newly discovered dependencies of CLOSED callers. Never infer new CLOSED status from membership. |
-| Independent authority | AST/lexical discovery cross-check agrees | Neither is MIR or an ELF symbol pass. Required independent compiler/symbol authority remains absent. |
-| Inherited graph delta | Exact two-occurrence to_le_bytes difference disclosed | Lead should identify historical downstream review provenance before asserting whole-graph re-derivation equality with raw NDT inventories; NFZ preserves NFX unchanged. |
+Next deliverable, only under newly allocated scope authority: run the compile-free-validated final payload through the frozen deployed debug Cargo check, MIR opt-level1 + typed HIR + independent MIR opt-level0. Retain four historical attempts. Use a new attempt ID and force diagnostic emission for each selected crate even when Cargo considers it fresh (for example replay recorded rustc arguments within that admitted scope). Compare caller callee identities, not just whole dump hashes. No cap increase or shipped-source edit is needed.
 
-## Budget and stop accounting
+Then admit first_decoded→error and each reached trait/callback edge; add OPEN TX1/TX2 occurrences for missing functions and recurse; apply the named pinned overlay through NFZ_inventory.py. Extend its explicit new-row schema before applying a nonempty overlay: it deliberately refuses absent nodes. Recompute Q/S/D using NFZ_slice_build.py and emit before/after counts without changing historical composed statuses. Report the Q caller packet obligation to the lead, including the existing canonical-domain NFS embedding theorem. Independent core MIR alone is insufficient for these caller edges.
 
-Kani 0/0, extraction 0/0, Lean 0/5; zero new Lean theorem or validator import
-requires a compile. Every remaining semantic obligation above needs compiler
-resolution or a reviewed inventory decision; using the five Lean slots would
-not supply the missing MIR or validate an invented edge.
+## All 39 candidate dispositions
 
-The explicit ONE capped scope is used (NFZ_B001). It was admitted and consumed
-by my own overly strict metadata preflight, before the authorized scratch debug
-build began. Exact refusal diagnosis and corrected own script are retained.
-No further scope is launched. This respects the literal job limit rather than
-silently treating an own-script failure as an additional authorized scope.
-No timeout or memory-killed shape was repeated. There are no Kani-dependent
-remaining obligations in this bookkeeping job; Kani remains prohibited.
+Every row below remains an OPEN entry-reachability obligation. Core-resolved means only a typed callee identity inside a core function body. All other callers stopped before diagnostic emission. No absent function is asserted unreachable.
 
-Next concrete deliverable: under a newly allocated compiler scope, run the
-corrected preflight and the frozen deployed-feature Cargo check with MIR and
-typed-HIR diagnostics; validate all frozen source/lock pins before and after.
-The existing NFZ_host.py deliberately refuses resubmission of NFZ_B001. A
-follow-up must use a new attempt identifier and preserve these failed inputs.
-Then review the candidate edges and explicit new rows, independently re-derive,
-and regenerate the Q/S/D closures and status-preserving ledger delta.
+| Candidate | Source caller / line | Target | Body identity | Remaining authority |
+|---|---|---|---|---|
+| NFZ_C0001 | from_m31:90 | from_m31 | core MIR confirmed | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0002 | circle_sample:122 | circle_fallback_point | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0003 | queries:56 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0004 | queries:57 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0005 | queries:58 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0006 | queries:59 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0007 | queries:60 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0008 | queries:61 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0009 | queries:62 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0010 | queries:63 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0011 | queries:64 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0012 | queries:65 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0013 | queries:66 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0014 | queries:67 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0015 | queries:68 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0016 | queries:69 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0017 | queries:70 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0018 | queries:71 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0019 | queries:72 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0020 | queries:73 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0021 | queries:74 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0022 | queries:75 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0023 | queries:76 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0024 | queries:77 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0025 | accumulate_batched_with_node:285 | from_m31 | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0026 | new:212 | unresolved method chain | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0027 | new:212 | unresolved method chain | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0028 | new:212 | unresolved method chain | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0029 | new:212 | unresolved method chain | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0030 | new:212 | unresolved method chain | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0031 | new:212 | unresolved method chain | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0032 | external_local_packed_raw:218 | extension_limbs | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0033 | first_decoded:50 | error | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0034 | process_r1_cost_probe_instruction:79 | error | source discovery only | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0035 | from_m31:59 | from_m31 | core MIR confirmed | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0036 | from_m31:59 | from_m31 | core MIR confirmed | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0037 | from_m31:73 | from_cm31 | core MIR confirmed | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0038 | from_m31:73 | from_m31 | core MIR confirmed | deployed entry/caller MIR and complete second-pass agreement |
+| NFZ_C0039 | from_m31:90 | from_m31 | core MIR confirmed | deployed entry/caller MIR and complete second-pass agreement |
+
+## Other exact obligations
+
+* TX2:046: identify WideExact reachable occurrence(s), or retain the row with compiler-backed REACHABILITY-EXCLUDED only if justified. Current row stays OPEN.
+* TX2:211: admit first_decoded's map_err(error) on compiler evidence; distinguish the source-cfg-disabled legacy callback and all other reachable error sites.
+* Missing M31/CM31/QM31 trait embedding rows: conditional callee bodies are known; transaction entry occurrence(s) still unknown. Distinguish inherent constructors and include the already known from_qm31 target.
+* Missing circle_fallback_point: confirm sampler closure binding and recurse through its frozen body when reached.
+* Q expansion: retain statuses; report the inventory/model naming and call-domain obligation for the accumulator and Transcript::queries. NFS's accumulation model already explicitly includes the embedding; NFM's dot packets do not claim it.
+* Existing NFX/raw-NDT to_le_bytes difference: lead provenance review remains unchanged.
+
+## Stop and budget accounting
+
+Kani0/0, extraction0/0, Lean0/5. There is no new Lean theorem or Lean-importing validator to compile, and no Lean-only item can supply missing rustc caller authority. All remaining members above require that evidence or subsequent reviewed producer work. Three new scopes out of three were spent: B002 failed in thread discovery, B004 in the missing include, B003 in the same missing include after a failed local payload-preparation step that my shell incorrectly ignored. These are retained own-script/input failures, not permission/infrastructure blockers or semantic counterexamples. Scope use is100%; no fourth launch or unchanged timeout/OOM rerun occurred. No Kani-dependent member exists in this bookkeeping task.
+
+Final payload repair passes exact frozen-Git and literal-include validation only. No Cargo success is claimed. NFZ_validate.py PASS means the blocked packet is internally consistent. The requested repair and L187 readiness are not established.
