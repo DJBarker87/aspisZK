@@ -77,3 +77,11 @@ Native support is progressing independently. Exact per-run logs are NFT_ATTEMPTS
 - Direct D callers (Prepared construction/users, prepare and Prepared::new arithmetic prefix): only proceed after their real field dependencies close; no S1/old-FIo forest is imported and no sibling source is edited. The full driver and unrelated callee boundaries remain OPEN.
 
 No early-stop waiver is used; remaining budget is being spent on those independent gates. These are exact outstanding obligations, not inferred failures of the security target.
+
+## Required low-budget checkpoint
+
+Kani is now **100/100**, extraction **3/3**; L046 is submitted, leaving **14 Lean/support slots**. All attempt identifiers are retained, including failures. No more native/extraction run is authorized by this job. This checkpoint is written before any further work.
+
+All remaining work is Lean-only composition, axioms audit and evidence validation. Native support for every assigned field family has been attempted: dot selected-window and typed7 copy, all sum2/3/4 wrappers and fixed2/3/4 controls, prepared27-control/cell/cache/copy, and wide-square four-site log/output control plus argument-corruption control. WIDE SQUARE remains OPEN until fully paired emitted value laws and whole coherent source/model association are proved; its native verdict is not admitted by itself. The other generic accumulation/small-sum members still require their exact coherent model and source-step association; they are not blocked on multiplication in Kani.
+
+The actual D dot parent is the seven-row internal-pair caller. Generic 5..80 control timed out; seven-term replacement is checked. Short-control K068 fails its two intended branch assertions; that controller diagnostic is recorded, not rerun. Generic/out-of-D dot lengths are unclaimed.

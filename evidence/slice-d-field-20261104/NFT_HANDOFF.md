@@ -17,3 +17,11 @@ All 73 Kani labels K001..K073 and 45 Lean/support labels L001..L045 are charged;
 Ready for the next raw audit, not yet new ledger credit: CM31 square opaque log and product laws; WideExact neg full safe-reference equality to coherent zero-minus; Karatsuba exact G substitution plus total canonical output and paired mul_r law; cm31_mul_r four-op opaque log with full scalar child laws; 4096-byte native require_zero step pointer/result/length/frame controls and symbolic ghost-padding/suffix/frame laws; pack0..3 native output/control checks on lengths0..4, general short-copy prefix and model graph/canonical pack law.
 
 Remaining active work: pack raw word law, zero source/physical join, dot native selected-window association, prepared-three-product native control/prelude/step association, and a final unchanged-walker ax2 audit plus additive validation. Each pending member remains OPEN until those gates pass.
+
+## Required low-budget checkpoint
+
+Kani is now **100/100**, extraction **3/3**; L046 is submitted, leaving **14 Lean/support slots**. All attempt identifiers are retained, including failures. No more native/extraction run is authorized by this job. This checkpoint is written before any further work.
+
+All remaining work is Lean-only composition, axioms audit and evidence validation. Native support for every assigned field family has been attempted: dot selected-window and typed7 copy, all sum2/3/4 wrappers and fixed2/3/4 controls, prepared27-control/cell/cache/copy, and wide-square four-site log/output control plus argument-corruption control. WIDE SQUARE remains OPEN until fully paired emitted value laws and whole coherent source/model association are proved; its native verdict is not admitted by itself. The other generic accumulation/small-sum members still require their exact coherent model and source-step association; they are not blocked on multiplication in Kani.
+
+The actual D dot parent is the seven-row internal-pair caller. Generic 5..80 control timed out; seven-term replacement is checked. Short-control K068 fails its two intended branch assertions; that controller diagnostic is recorded, not rerun. Generic/out-of-D dot lengths are unclaimed.

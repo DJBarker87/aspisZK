@@ -52,6 +52,7 @@ if kind=='kani':
  env.update(CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-Copt-level=3 -C link-arg=-Wl,--threads=1')
  import os
  if os.environ.get('NFT_INVERT'):env['RUSTFLAGS']+=' --cfg NFT_invert'
+ if os.environ.get('NFT_BADARG'):env['RUSTFLAGS']+=' --cfg NFT_bad_argument'
 elif kind=='extract':
  files['NFT_extract.py']=(E/'NFT_extract.py').read_text();files['NFT_src/crates/aspis-r1-cost-probe/src/NFT_reference.rs']=(E/'NFT_reference.rs.txt').read_text();sources=['NFT_extract.py','NFT_src/crates/aspis-r1-cost-probe/src/NFT_reference.rs'];command=['python3','NFT_extract.py']
  if target=='NFT_ScanReference':

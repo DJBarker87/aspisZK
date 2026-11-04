@@ -2,7 +2,7 @@
 from pathlib import Path
 import os,subprocess,json,hashlib
 E=Path(__file__).resolve().parent
-jobs=[(70,'field::NFT_dot::long_control',False,0),(73,'field::NFT_dot::long_control',True,1)]
+jobs=[(98, 'field::wide_exact::NFT_wide_square::square_log', False, 0), (99, 'field::wide_exact::NFT_wide_square::square_log', True, 1)]
 frozen={}
 for name in ['NFT_NATIVE_INPUTS.json','NFT_SOURCE_PINS.json']:
  raw=(E/name).read_bytes();path=E/'NFT_queued_inputs'/(hashlib.sha256(raw).hexdigest()+'.json');path.parent.mkdir(exist_ok=True)

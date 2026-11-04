@@ -1,0 +1,633 @@
+--- /dev/null
++++ b/crates/aspis-core/src/NFT_channels.rs
+@@ -0,0 +1,68 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn any_cm()->CM31{CM31{a:M31(kani::any()),b:M31(kani::any())}}
++fn any_q()->QM31{QM31{c0:any_cm(),c1:any_cm()}}
++fn canonical(v:QM31)->bool{v.c0.a.0<P&&v.c0.b.0<P&&v.c1.a.0<P&&v.c1.b.0<P}
++fn cache_prelude(left:QM31,right:QM31)->([[M31;3];3],[[M31;3];3]){
++    let left_sum = left.c0.add(left.c1);
++    let right_sum = right.c0.add(right.c1);
++    let left_components = [
++        [left.c0.a, left.c0.b, left.c0.a.add(left.c0.b)],
++        [left.c1.a, left.c1.b, left.c1.a.add(left.c1.b)],
++        [left_sum.a, left_sum.b, left_sum.a.add(left_sum.b)],
++    ];
++    let right_components = [
++        [right.c0.a, right.c0.b, right.c0.a.add(right.c0.b)],
++        [right.c1.a, right.c1.b, right.c1.a.add(right.c1.b)],
++        [right_sum.a, right_sum.b, right_sum.a.add(right_sum.b)],
++    ];
++
++(left_components,right_components)
++}
++// Pure cached-row reference reused from NFQ_core_more_prepare.py (prep_spec).
++fn add_word(a:u32,b:u32)->u32{let s=a+b;if s>=P{s-P}else{s}}
++fn cache_ref(v:QM31)->[[u32;3];3]{let a=v.c0.a.0;let b=v.c0.b.0;let c=v.c1.a.0;let d=v.c1.b.0;let ac=add_word(a,c);let bd=add_word(b,d);[[a,b,add_word(a,b)],[c,d,add_word(c,d)],[ac,bd,add_word(ac,bd)]]}
++#[kani::proof] #[kani::unwind(45)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn prelude(){let left=any_q();let right=any_q();kani::assume(canonical(left)&&canonical(right));let(l,r)=cache_prelude(left,right);let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<3&&j<3);assert!((l[i][j].0==cache_ref(left)[i][j]&&r[i][j].0==cache_ref(right)[i][j])!=cfg!(NFT_invert));assert!(l[i][j].0<P&&r[i][j].0<P);}
++struct Control{pairs:[(usize,usize);9],count:usize}
++fn control(log:&mut Control){for component in 0..3{for channel in 0..3{log.pairs[log.count]=(component,channel);log.count+=1;}}}
++#[kani::proof] #[kani::unwind(45)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn channel_control(){let mut log=Control{pairs:[(99,99);9],count:0};control(&mut log);let i:usize=kani::any();kani::assume(i<9);assert!(log.count==9);let expected=(i/3,i%3);assert!(log.pairs[i]==if cfg!(NFT_invert){(expected.0,expected.1+1)}else{expected});}
++struct ProductLog{a:u64,b:u64,reply:u64,count:u8}
++fn product(log:&mut ProductLog,a:u64,b:u64)->u64{log.a=a;log.b=b;log.count+=1;let r:u64=kani::any();kani::assume(r<1u64<<62);log.reply=r;r}
++fn channel_cut(mut sums:[[u64;3];3],left_components:[[M31;3];3],right_components:[[M31;3];3],component:usize,channel:usize,log:&mut ProductLog)->[[u64;3];3]{
++ sums[component][channel]+=product(log,left_components[component][channel].0 as u64,right_components[component][channel].0 as u64);sums
++}
++#[kani::proof] #[kani::unwind(45)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn channel_step(){let mut sums:[[u64;3];3]=kani::any();for row in 0..3{for col in 0..3{kani::assume(sums[row][col]<3u64*(1u64<<62));}}
++ let left=any_q();let right=any_q();kani::assume(canonical(left)&&canonical(right));let(l,r)=cache_prelude(left,right);
++ let component:usize=kani::any();let channel:usize=kani::any();let i:usize=kani::any();let j:usize=kani::any();kani::assume(component<3&&channel<3&&i<3&&j<3);
++ let old=sums[i][j];let selected=sums[component][channel];let mut log=ProductLog{a:0,b:0,reply:0,count:0};let got=channel_cut(sums,l,r,component,channel,&mut log);
++ assert!(log.count==1&&log.a==l[component][channel].0 as u64&&log.b==r[component][channel].0 as u64);assert!(log.a<P as u64&&log.b<P as u64);
++ let want=if i==component&&j==channel{selected+log.reply}else{old};assert!(got[i][j]==if cfg!(NFT_invert){want^1}else{want});
++}
++#[kani::proof] #[kani::unwind(45)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn cache_copy_positive(){let src:[[u32;3];3]=kani::any();let mut dst:[[u32;3];3]=kani::any();unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<3&&j<3);assert!(src[i][j]==dst[i][j]);}
++#[kani::proof] #[kani::unwind(45)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn cache_copy_negative(){let src:[[u32;3];3]=kani::any();let mut dst:[[u32;3];3]=kani::any();unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<3&&j<3);assert!(src[i][j]!=dst[i][j]);}
++
++#[kani::proof] #[kani::unwind(45)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn sums_copy_positive(){let src:[[u64;3];3]=kani::any();let mut dst:[[u64;3];3]=kani::any();unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<3&&j<3);assert!((dst[i][j]==src[i][j]));}
++
++#[kani::proof] #[kani::unwind(45)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn sums_copy_negative(){let src:[[u64;3];3]=kani::any();let mut dst:[[u64;3];3]=kani::any();unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<3&&j<3);assert!(!(dst[i][j]==src[i][j]));}
++
++#[kani::proof] #[kani::unwind(45)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn control_copy_positive(){let src:Control=Control{pairs:kani::any(),count:kani::any()};let mut dst:Control=Control{pairs:kani::any(),count:kani::any()};unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<9&&j<3);assert!((dst.pairs[i]==src.pairs[i]&&dst.count==src.count));}
++
++#[kani::proof] #[kani::unwind(45)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn control_copy_negative(){let src:Control=Control{pairs:kani::any(),count:kani::any()};let mut dst:Control=Control{pairs:kani::any(),count:kani::any()};unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<9&&j<3);assert!(!(dst.pairs[i]==src.pairs[i]&&dst.count==src.count));}
+--- /dev/null
++++ b/crates/aspis-core/src/NFT_cmr.rs
+@@ -0,0 +1,16 @@
++use super::*;
++use crate::field::{CM31,M31,P};
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[derive(Clone,Copy)] struct Call{kind:u8,a:u32,b:u32,reply:u32}
++struct Log{calls:[Call;4],count:usize}
++fn op(log:&mut Log,kind:u8,a:M31,b:M31)->M31{assert!(a.0<P&&b.0<P&&log.count<4);let reply:u32=kani::any();kani::assume(reply<P);log.calls[log.count]=Call{kind,a:a.0,b:if cfg!(NFT_bad_argument){b.0.wrapping_add(1)}else{b.0},reply};log.count+=1;M31(reply)}
++fn logged(value:CM31,log:&mut Log)->CM31{let aa=op(log,0,value.a,M31(0));let real=op(log,1,aa,value.b);let bb=op(log,2,value.b,M31(0));let imag=op(log,3,value.a,bb);CM31::new(real,imag)}
++#[kani::proof] #[kani::unwind(15)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn linear_log(){let value=CM31{a:M31(kani::any()),b:M31(kani::any())};kani::assume(value.a.0<P&&value.b.0<P);let mut log=Log{calls:[Call{kind:99,a:0,b:0,reply:0};4],count:0};let got=logged(value,&mut log);assert!(log.count==4);assert!(log.calls[0].kind==0&&log.calls[0].a==value.a.0&&log.calls[0].b==0);assert!(log.calls[1].kind==1&&log.calls[1].a==log.calls[0].reply&&log.calls[1].b==value.b.0);assert!(log.calls[2].kind==2&&log.calls[2].a==value.b.0&&log.calls[2].b==0);assert!(log.calls[3].kind==3&&log.calls[3].a==value.a.0&&log.calls[3].b==log.calls[2].reply);assert!((got.a.0==log.calls[1].reply&&got.b.0==log.calls[3].reply)!=cfg!(NFT_invert));}
++#[kani::proof] #[kani::unwind(15)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn log_copy_positive(){let src:Call=Call{kind:kani::any(),a:kani::any(),b:kani::any(),reply:kani::any()};let mut dst:Call=Call{kind:0,a:0,b:0,reply:0};unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};assert!(src.kind==dst.kind&&src.a==dst.a&&src.b==dst.b&&src.reply==dst.reply);}
++#[kani::proof] #[kani::unwind(15)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn log_copy_negative(){let src:Call=Call{kind:kani::any(),a:kani::any(),b:kani::any(),reply:kani::any()};let mut dst:Call=Call{kind:0,a:0,b:0,reply:0};unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};assert!(src.reply!=dst.reply);}
+--- /dev/null
++++ b/crates/aspis-core/src/NFT_dot.rs
+@@ -0,0 +1,46 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn any_cm()->CM31{CM31{a:M31(kani::any()),b:M31(kani::any())}}
++fn any_q()->QM31{QM31{c0:any_cm(),c1:any_cm()}}
++fn canonical(v:QM31)->bool{v.c0.a.0<P&&v.c0.b.0<P&&v.c1.a.0<P&&v.c1.b.0<P}
++struct Log{a:[u64;4],b:[u64;4],reply:[u64;4],count:usize}
++fn product(log:&mut Log,a:u64,b:u64)->u64{assert!(a<P as u64&&b<P as u64&&log.count<4);let r:u64=kani::any();kani::assume(r<1u64<<62);log.a[log.count]=a;log.b[log.count]=b;log.reply[log.count]=r;log.count+=1;r}
++fn term_cut(mut raw:[u64;4],weight:QM31,value:u64,log:&mut Log)->[u64;4]{
++ raw[0]+=product(log,u64::from(weight.c0.a.0),value);
++ raw[1]+=product(log,u64::from(weight.c0.b.0),value);
++ raw[2]+=product(log,u64::from(weight.c1.a.0),value);
++ raw[3]+=product(log,u64::from(weight.c1.b.0),value);raw
++}
++#[kani::proof] #[kani::unwind(20)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn term_step(){let raw:[u64;4]=kani::any();for i in 0..4{kani::assume(raw[i]<3u64*(1u64<<62));}let weight=any_q();let value:u32=kani::any();kani::assume(canonical(weight)&&value<P);let mut log=Log{a:[0;4],b:[0;4],reply:[0;4],count:0};let got=term_cut(raw,weight,value as u64,&mut log);let i:usize=kani::any();kani::assume(i<4);let a=match i{0=>weight.c0.a.0,1=>weight.c0.b.0,2=>weight.c1.a.0,_=>weight.c1.b.0};assert!(log.count==4&&log.a[i]==a as u64&&log.b[i]==value as u64);let want=raw[i]+log.reply[i];assert!(got[i]==if cfg!(NFT_invert){want^1}else{want});}
++fn fold_cut(mut sums:[u64;4],raw:[u64;4])->[u64;4]{for index in 0..4{sums[index]+=M31::reduce_u64(raw[index]).0 as u64;}sums}
++#[kani::proof] #[kani::unwind(20)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn fold_step(){let sums:[u64;4]=kani::any();let raw:[u64;4]=kani::any();for i in 0..4{kani::assume(sums[i]<=20u64*(P as u64));}let got=fold_cut(sums,raw);let i:usize=kani::any();kani::assume(i<4);let want=sums[i]+M31::reduce_u64(raw[i]).0 as u64;assert!(got[i]==if cfg!(NFT_invert){want^1}else{want});}
++#[kani::proof] #[kani::unwind(20)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn short_control(){let n:usize=kani::any();kani::assume(n<=4);let mut indices=[99usize;4];let mut index=0usize;while index<n{indices[index]=index;index+=1;}assert!(index==n);if n>0{let at:usize=kani::any();kani::assume(at<n);assert!(indices[at]==if cfg!(NFT_invert){at+1}else{at});}else{assert!(!cfg!(NFT_invert));}}
++struct Control{pairs:[(usize,usize);80],starts:[usize;20],terms:usize,cuts:usize,folds:usize}
++fn control(n:usize,log:&mut Control){for start in (0..n).step_by(4){log.starts[log.cuts]=start;log.cuts+=1;let end=core::cmp::min(start+4,n);for index in start..end{log.pairs[log.terms]=(start,index);log.terms+=1;}for _index in 0..4{log.folds+=1;}}}
++#[kani::proof] #[kani::unwind(110)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn long_control(){let n=7usize;let mut log=Control{pairs:[(99,99);80],starts:[99;20],terms:0,cuts:0,folds:0};control(n,&mut log);let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<n&&j<(n+3)/4);assert!(log.terms==n&&log.cuts==(n+3)/4&&log.folds==4*log.cuts);assert!(log.starts[j]==j*4);assert!(log.pairs[i]==if cfg!(NFT_invert){((i/4)*4,i+1)}else{((i/4)*4,i)});}
++#[kani::proof] #[kani::unwind(20)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn raw_copy_positive(){let src:[u64;4]=kani::any();let mut dst:[u64;4]=kani::any();unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};let i:usize=kani::any();kani::assume(i<4);assert!(src[i]==dst[i]);}
++#[kani::proof] #[kani::unwind(20)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn raw_copy_negative(){let src:[u64;4]=kani::any();let mut dst:[u64;4]=kani::any();unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};let i:usize=kani::any();kani::assume(i<4);assert!(src[i]!=dst[i]);}
++
++fn term_window(weights:&[QM31;7],values:&[M31;7],index:usize,raw:[u64;4],log:&mut Log)->[u64;4]{let value=values[index].0 as u64;let weight=weights[index];term_cut(raw,weight,value,log)}
++#[kani::proof] #[kani::unwind(45)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn window7(){let weights=[any_q(), any_q(), any_q(), any_q(), any_q(), any_q(), any_q()];let values=[M31(kani::any()), M31(kani::any()), M31(kani::any()), M31(kani::any()), M31(kani::any()), M31(kani::any()), M31(kani::any())];for j in 0..7{kani::assume(canonical(weights[j])&&values[j].0<P);}let index:usize=kani::any();let i:usize=kani::any();kani::assume(index<7&&i<4);let raw:[u64;4]=kani::any();for j in 0..4{kani::assume(raw[j]<3u64*(1u64<<62));}let mut log=Log{a:[0;4],b:[0;4],reply:[0;4],count:0};let out=term_window(&weights,&values,index,raw,&mut log);let weight=weights[index];let a=match i{0=>weight.c0.a.0,1=>weight.c0.b.0,2=>weight.c1.a.0,_=>weight.c1.b.0};assert!(weights.len()==values.len()&&weights.len()==7&&weights.len()>4);assert!(log.count==4&&log.a[i]==a as u64&&log.b[i]==values[index].0 as u64);let want=raw[i]+log.reply[i];assert!(out[i]==if cfg!(NFT_invert){want^1}else{want});}
++fn selected(q:QM31,i:usize)->u32{match i{0=>q.c0.a.0,1=>q.c0.b.0,2=>q.c1.a.0,_=>q.c1.b.0}}
++#[kani::proof] #[kani::unwind(45)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn copy7_positive(){let src=[any_q(), any_q(), any_q(), any_q(), any_q(), any_q(), any_q()];let mut dst=[QM31::ZERO;7];let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<7&&j<4);unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};assert!(selected(src[i],j)==selected(dst[i],j));}
++#[kani::proof] #[kani::unwind(45)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn copy7_negative(){let src=[any_q(), any_q(), any_q(), any_q(), any_q(), any_q(), any_q()];let mut dst=[QM31::ZERO;7];let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<7&&j<4);unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};assert!(selected(src[i],j)!=selected(dst[i],j));}
+--- /dev/null
++++ b/crates/aspis-core/src/NFT_field.rs
+@@ -0,0 +1,83 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn any_cm()->CM31{CM31{a:M31(kani::any()),b:M31(kani::any())}}
++fn any_q()->QM31{QM31{c0:any_cm(),c1:any_cm()}}
++pub(super) fn cm_bytes_matches(v:CM31,b:&[u8])->bool{
++ b[0]==v.a.0 as u8 && b[1]==(v.a.0>>8)as u8 && b[2]==(v.a.0>>16)as u8 && b[3]==(v.a.0>>24)as u8 &&
++ b[4]==v.b.0 as u8 && b[5]==(v.b.0>>8)as u8 && b[6]==(v.b.0>>16)as u8 && b[7]==(v.b.0>>24)as u8
++}
++pub(super) fn qm_bytes_matches(v:QM31,b:&[u8])->bool{cm_bytes_matches(v.c0,&b[0..8]) && cm_bytes_matches(v.c1,&b[8..16])}
++#[kani::proof_for_contract(CM31::write_le_bytes)]
++#[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn cm_write(){let v=any_cm();let mut b:[u8;8]=kani::any();v.write_le_bytes(&mut b);}
++#[kani::proof_for_contract(QM31::write_le_bytes)]
++#[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn qm_write(){let v=any_q();let mut b:[u8;16]=kani::any();v.write_le_bytes(&mut b);}
++#[kani::proof]
++#[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn copy8_positive(){let a:[u8;8]=kani::any();let mut b:[u8;8]=kani::any();b.copy_from_slice(&a);let i:usize=kani::any();kani::assume(i<8);assert!(b[i]==a[i]);}
++#[kani::proof]
++#[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn copy8_negative(){let a:[u8;8]=kani::any();let mut b:[u8;8]=kani::any();b.copy_from_slice(&a);let i:usize=kani::any();kani::assume(i<8);assert!(b[i]!=a[i]);}
++#[kani::proof]
++#[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn copy16_positive(){let a:[u8;16]=kani::any();let mut b:[u8;16]=kani::any();b.copy_from_slice(&a);let i:usize=kani::any();kani::assume(i<16);assert!(b[i]==a[i]);}
++#[kani::proof]
++#[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn copy16_negative(){let a:[u8;16]=kani::any();let mut b:[u8;16]=kani::any();b.copy_from_slice(&a);let i:usize=kani::any();kani::assume(i<16);assert!(b[i]!=a[i]);}
++
++// K005's whole mutable-slice contract timed out. These are direct, fixed-window
++// harnesses on the same frozen writer, with no proof_for_contract instrumentation.
++#[kani::proof]
++#[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn cm_word_window(){
++ let v=any_cm();let mut out:[u8;8]=kani::any();let at:usize=kani::any();kani::assume(at<8);
++ v.write_le_bytes(&mut out);
++ let word=if at<4{v.a.0}else{v.b.0};let expected=(word>>((at%4)*8))as u8;
++ assert!(out[at]==if cfg!(NFT_invert){expected^1}else{expected});
++}
++#[kani::proof]
++#[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn qm_word_window(){
++ let v=any_q();let mut out:[u8;16]=kani::any();let at:usize=kani::any();kani::assume(at<16);
++ v.write_le_bytes(&mut out);
++ let word=match at/4{0=>v.c0.a.0,1=>v.c0.b.0,2=>v.c1.a.0,_=>v.c1.b.0};let expected=(word>>((at%4)*8))as u8;
++ assert!(out[at]==if cfg!(NFT_invert){expected^1}else{expected});
++}
++
++#[kani::proof]
++#[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn cm_frame_window(){
++ let v=any_cm();let mut b:[u8;12]=kani::any();let at:usize=kani::any();kani::assume(at<12);
++ let old=b[at];v.write_le_bytes(&mut b[2..10]);
++ let expected=if at>=2&&at<10{let i=at-2;let w=if i<4{v.a.0}else{v.b.0};(w>>((i%4)*8))as u8}else{old};
++ assert!(b[at]==if cfg!(NFT_invert){expected^1}else{expected});
++}
++#[kani::proof]
++#[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn qm_frame_window(){
++ let v=any_q();let mut b:[u8;20]=kani::any();let at:usize=kani::any();kani::assume(at<20);
++ let old=b[at];v.write_le_bytes(&mut b[2..18]);
++ let expected=if at>=2&&at<18{let i=at-2;let w=match i/4{0=>v.c0.a.0,1=>v.c0.b.0,2=>v.c1.a.0,_=>v.c1.b.0};(w>>((i%4)*8))as u8}else{old};
++ assert!(b[at]==if cfg!(NFT_invert){expected^1}else{expected});
++}
+--- /dev/null
++++ b/crates/aspis-core/src/NFT_karatsuba.rs
+@@ -0,0 +1,26 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++struct Log{a:CM31,reply:CM31,count:u8}
++fn mul_r(log:&mut Log,value:CM31)->CM31{assert!(value.a.0<P&&value.b.0<P);log.a=value;log.count+=1;let a:u32=kani::any();let b:u32=kani::any();kani::assume(a<P&&b<P);let reply=CM31{a:M31(a),b:M31(b)};log.reply=reply;reply}
++fn reconstructed(c:[u64;3])->CM31{let a=M31::reduce_u64(c[0]);let b=M31::reduce_u64(c[1]);let t=M31::reduce_u64(c[2]);CM31{a:a.sub(b),b:t.sub(a).sub(b)}}
++fn from_logged(sums:[[u64;3];3],log:&mut Log)->QM31{
++    let reconstruct = |channels: [u64; 3]| {
++        let m0 = M31::reduce_u64(channels[0]);
++        let m1 = M31::reduce_u64(channels[1]);
++        let m2 = M31::reduce_u64(channels[2]);
++        CM31 {
++            a: m0.sub(m1),
++            b: m2.sub(m0).sub(m1),
++        }
++    };
++    let m0 = reconstruct(sums[0]);
++    let m1 = reconstruct(sums[1]);
++    let m2 = reconstruct(sums[2]);
++    QM31 {
++        c0: m0.add(mul_r(log,m1)),
++        c1: m2.sub(m0).sub(m1),
++    }
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn reconstruct_log(){let sums:[[u64;3];3]=kani::any();let mut log=Log{a:CM31::ZERO,reply:CM31::ZERO,count:0};let got=from_logged(sums,&mut log);let m0=reconstructed(sums[0]);let m1=reconstructed(sums[1]);let m2=reconstructed(sums[2]);assert!(log.count==1&&log.a==m1);let want=QM31{c0:m0.add(log.reply),c1:m2.sub(m0).sub(m1)};assert!((got==want)!=cfg!(NFT_invert));assert!(got.c0.a.0<P&&got.c0.b.0<P&&got.c1.a.0<P&&got.c1.b.0<P);}
+--- /dev/null
++++ b/crates/aspis-core/src/NFT_pack.rs
+@@ -0,0 +1,36 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn any_cm()->CM31{CM31{a:M31(kani::any()),b:M31(kani::any())}}
++fn any_q()->QM31{QM31{c0:any_cm(),c1:any_cm()}}
++fn canonical(v:QM31)->bool{v.c0.a.0<P&&v.c0.b.0<P&&v.c1.a.0<P&&v.c1.b.0<P}
++fn word(v:QM31,i:usize)->u32{match i{0=>v.c0.a.0,1=>v.c0.b.0,2=>v.c1.a.0,_=>v.c1.b.0}}
++fn reference(v:[QM31;4],n:usize)->[u64;4]{let v0=if n>0{v[0]}else{QM31::ZERO};let v1=if n>1{v[1]}else{QM31::ZERO};let v2=if n>2{v[2]}else{QM31::ZERO};let v3=if n>3{v[3]}else{QM31::ZERO};let p=P as u64;
++ let a=v0.c0.a.0 as u64+(p-v1.c0.b.0 as u64)+2*v2.c1.a.0 as u64+(p-v2.c1.b.0 as u64)+(p-v3.c1.a.0 as u64)+(2*p-2*v3.c1.b.0 as u64);
++ let b=v0.c0.b.0 as u64+v1.c0.a.0 as u64+v2.c1.a.0 as u64+2*v2.c1.b.0 as u64+2*v3.c1.a.0 as u64+(p-v3.c1.b.0 as u64);
++ let c=v0.c1.a.0 as u64+(p-v1.c1.b.0 as u64)+v2.c0.a.0 as u64+(p-v3.c0.b.0 as u64);
++ let d=v0.c1.b.0 as u64+v1.c1.a.0 as u64+v2.c0.b.0 as u64+v3.c0.a.0 as u64;[a,b,c,d]}
++fn checked<const LIMB:usize>(){let v=[any_q(),any_q(),any_q(),any_q()];for k in 0..4{kani::assume(canonical(v[k]));}let n:usize=kani::any();kani::assume(n<=4);let want=(reference(v,n)[LIMB]%(P as u64))as u32;let got=qm31_pack_base4(&v[..n]);assert!(word(got,LIMB)==if cfg!(NFT_invert){want^1}else{want});}
++#[kani::proof] #[kani::unwind(45)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[QM31]>::copy_from_slice,KMX_copy_from_slice)]
++fn pack0(){checked::<0>();}
++#[kani::proof] #[kani::unwind(45)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[QM31]>::copy_from_slice,KMX_copy_from_slice)]
++fn pack1(){checked::<1>();}
++#[kani::proof] #[kani::unwind(45)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[QM31]>::copy_from_slice,KMX_copy_from_slice)]
++fn pack2(){checked::<2>();}
++#[kani::proof] #[kani::unwind(45)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[QM31]>::copy_from_slice,KMX_copy_from_slice)]
++fn pack3(){checked::<3>();}
++#[kani::proof] #[kani::unwind(45)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[QM31]>::copy_from_slice,KMX_copy_from_slice)]
++fn copy4_positive(){let src=[any_q(),any_q(),any_q(),any_q()];let mut dst=[QM31::ZERO;4];unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<4&&j<4);assert!(word(src[i],j)==word(dst[i],j));}
++#[kani::proof] #[kani::unwind(45)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[QM31]>::copy_from_slice,KMX_copy_from_slice)]
++fn copy4_negative(){let src=[any_q(),any_q(),any_q(),any_q()];let mut dst=[QM31::ZERO;4];unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<4&&j<4);assert!(word(src[i],j)!=word(dst[i],j));}
+--- /dev/null
++++ b/crates/aspis-core/src/NFT_prepared.rs
+@@ -0,0 +1,43 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn any_cm()->CM31{CM31{a:M31(kani::any()),b:M31(kani::any())}}
++fn any_q()->QM31{QM31{c0:any_cm(),c1:any_cm()}}
++fn any_p()->PreparedQm31Multiplier{PreparedQm31Multiplier{components:[[M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any())]]}}
++fn canonical(v:QM31)->bool{v.c0.a.0<P&&v.c0.b.0<P&&v.c1.a.0<P&&v.c1.b.0<P}
++fn right_prelude(right:&[QM31;3],index:usize)->[[M31;3];3]{        let right_sum = right[index].c0.add(right[index].c1);
++        let right_components = [
++            [
++                right[index].c0.a,
++                right[index].c0.b,
++                right[index].c0.a.add(right[index].c0.b),
++            ],
++            [
++                right[index].c1.a,
++                right[index].c1.b,
++                right[index].c1.a.add(right[index].c1.b),
++            ],
++            [right_sum.a, right_sum.b, right_sum.a.add(right_sum.b)],
++        ];
++ right_components}
++fn add(a:u32,b:u32)->u32{let s=a+b;if s>=P{s-P}else{s}}
++fn cache(v:QM31)->[[u32;3];3]{let a=v.c0.a.0;let b=v.c0.b.0;let c=v.c1.a.0;let d=v.c1.b.0;let ac=add(a,c);let bd=add(b,d);[[a,b,add(a,b)],[c,d,add(c,d)],[ac,bd,add(ac,bd)]]}
++struct Control{triples:[(usize,usize,usize);27],count:usize}
++fn control(log:&mut Control){for index in 0..3{for component in 0..3{for channel in 0..3{log.triples[log.count]=(index,component,channel);log.count+=1;}}}}
++#[kani::proof] #[kani::unwind(45)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn control27(){let mut log=Control{triples:[(99,99,99);27],count:0};control(&mut log);let k:usize=kani::any();kani::assume(k<27);assert!(log.count==27);let want=(k/9,(k/3)%3,k%3);assert!(log.triples[k]==if cfg!(NFT_invert){(want.0,want.1,want.2+1)}else{want});}
++struct Log{index:usize,component:usize,channel:usize,a:u64,b:u64,reply:u64,count:usize}
++fn product(log:&mut Log,index:usize,component:usize,channel:usize,a:u64,b:u64)->u64{assert!(a<P as u64&&b<P as u64);let r:u64=kani::any();kani::assume(r<1u64<<62);log.index=index;log.component=component;log.channel=channel;log.a=a;log.b=b;log.reply=r;log.count+=1;r}
++fn cell_cut(mut sums:[[u64;3];3],left:&[PreparedQm31Multiplier;3],right_components:[[M31;3];3],index:usize,component:usize,channel:usize,log:&mut Log)->[[u64;3];3]{sums[component][channel]+=product(log,index,component,channel,left[index].components[component][channel].0 as u64,right_components[component][channel].0 as u64);sums}
++#[kani::proof] #[kani::unwind(45)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn cell_step(){let left=[any_p(),any_p(),any_p()];let right=[any_q(),any_q(),any_q()];for k in 0..3{kani::assume(canonical(right[k]));for c in 0..3{for j in 0..3{kani::assume(left[k].components[c][j].0<P);}}}let index:usize=kani::any();let component:usize=kani::any();let channel:usize=kani::any();let i:usize=kani::any();let j:usize=kani::any();kani::assume(index<3&&component<3&&channel<3&&i<3&&j<3);let sums:[[u64;3];3]=kani::any();for c in 0..3{for j in 0..3{kani::assume(sums[c][j]<3u64*(1u64<<62));}}let rc=right_prelude(&right,index);let mut log=Log{index:99,component:99,channel:99,a:0,b:0,reply:0,count:0};let got=cell_cut(sums,&left,rc,index,component,channel,&mut log);assert!(log.count==1&&log.index==index&&log.component==component&&log.channel==channel);assert!(log.a==left[index].components[component][channel].0 as u64&&log.b==rc[component][channel].0 as u64);let want=if i==component&&j==channel{sums[i][j]+log.reply}else{sums[i][j]};assert!(got[i][j]==if cfg!(NFT_invert){want^1}else{want});}
++#[kani::proof] #[kani::unwind(45)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn prelude(){let right=[any_q(),any_q(),any_q()];for k in 0..3{kani::assume(canonical(right[k]));}let index:usize=kani::any();let i:usize=kani::any();let j:usize=kani::any();kani::assume(index<3&&i<3&&j<3);let rc=right_prelude(&right,index);assert!((rc[i][j].0==cache(right[index])[i][j])!=cfg!(NFT_invert));assert!(rc[i][j].0<P);}
++#[kani::proof] #[kani::unwind(45)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn copy3_positive(){let src=[any_p(),any_p(),any_p()];let mut dst=[any_p(),any_p(),any_p()];let k:usize=kani::any();let i:usize=kani::any();let j:usize=kani::any();kani::assume(k<3&&i<3&&j<3);unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};assert!(src[k].components[i][j].0==dst[k].components[i][j].0);}
++#[kani::proof] #[kani::unwind(45)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn copy3_negative(){let src=[any_p(),any_p(),any_p()];let mut dst=[any_p(),any_p(),any_p()];let k:usize=kani::any();let i:usize=kani::any();let j:usize=kani::any();kani::assume(k<3&&i<3&&j<3);unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};assert!(src[k].components[i][j].0!=dst[k].components[i][j].0);}
+--- /dev/null
++++ b/crates/aspis-core/src/NFT_small.rs
+@@ -0,0 +1,36 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn any_cm()->CM31{CM31{a:M31(kani::any()),b:M31(kani::any())}}
++fn any_q()->QM31{QM31{c0:any_cm(),c1:any_cm()}}
++fn canonical(v:QM31)->bool{v.c0.a.0<P&&v.c0.b.0<P&&v.c1.a.0<P&&v.c1.b.0<P}
++struct Log<const N:usize>{left:[QM31;N],right:[QM31;N],reply:QM31,count:u8}
++fn child<const N:usize>(log:&mut Log<N>,left:[QM31;N],right:[QM31;N])->QM31{assert!(N>=2&&N<=4);for i in 0..N{assert!(canonical(left[i])&&canonical(right[i]));}log.left=left;log.right=right;log.count+=1;let r=any_q();kani::assume(canonical(r));log.reply=r;r}
++fn wrapper<const N:usize>(left:[QM31;N],right:[QM31;N],log:&mut Log<N>)->QM31{child(log,left,right)}
++fn check<const N:usize>(left:[QM31;N],right:[QM31;N]){for i in 0..N{kani::assume(canonical(left[i])&&canonical(right[i]));}let mut log=Log{left:[QM31::ZERO;N],right:[QM31::ZERO;N],reply:QM31::ZERO,count:0};let got=wrapper(left,right,&mut log);let i:usize=kani::any();kani::assume(i<N);assert!(log.count==1&&log.left[i]==left[i]&&log.right[i]==right[i]);assert!((got==log.reply)!=cfg!(NFT_invert));}
++struct Sequence{index:[usize;4],count:usize}
++fn control<const N:usize>(log:&mut Sequence){let mut index=0usize;while index<N{log.index[log.count]=index;log.count+=1;index+=1;}}
++fn check_control<const N:usize>(){let mut log=Sequence{index:[99;4],count:0};control::<N>(&mut log);assert!(log.count==N);let i:usize=kani::any();kani::assume(i<N);assert!(log.index[i]==if cfg!(NFT_invert){i+1}else{i});}
++
++#[kani::proof] #[kani::unwind(45)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn wrapper2(){check([any_q(), any_q()],[any_q(), any_q()]);}
++
++#[kani::proof] #[kani::unwind(45)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn control2(){check_control::<2>();}
++
++#[kani::proof] #[kani::unwind(45)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn wrapper3(){check([any_q(), any_q(), any_q()],[any_q(), any_q(), any_q()]);}
++
++#[kani::proof] #[kani::unwind(45)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn control3(){check_control::<3>();}
++
++#[kani::proof] #[kani::unwind(45)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn wrapper4(){check([any_q(), any_q(), any_q(), any_q()],[any_q(), any_q(), any_q(), any_q()]);}
++
++#[kani::proof] #[kani::unwind(45)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn control4(){check_control::<4>();}
+--- /dev/null
++++ b/crates/aspis-core/src/NFT_square.rs
+@@ -0,0 +1,34 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++struct Log{wide_args:(u64,u64),mul_args:(u32,u32),wide_reply:u64,mul_reply:u32,count:u8}
++fn product(log:&mut Log,a:u64,b:u64)->u64{assert!(log.count==0);log.count=1;log.wide_args=(a,b);let r:u64=kani::any();log.wide_reply=r;r}
++fn multiply(log:&mut Log,a:M31,b:M31)->M31{assert!(log.count==1);assert!(a.0<P&&b.0<P);log.count=2;log.mul_args=(a.0,b.0);let r:u32=kani::any();kani::assume(r<P);log.mul_reply=r;M31(r)}
++// Frozen CM31::square expression with ONLY the two multiplication sites
++// replaced by local-record opaque calls. The erasure map is committed.
++fn square_logged(value:CM31,log:&mut Log)->CM31{
++ CM31{
++ a:M31::reduce_u64(product(log,u64::from(value.a.0)+u64::from(value.b.0),u64::from(value.a.0)+u64::from(P)-u64::from(value.b.0))),
++ b:multiply(log,value.a,value.b).double(),
++ }
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn square_log(){
++ let a:u32=kani::any();let b:u32=kani::any();kani::assume(a<P&&b<P);
++ let value=CM31{a:M31(a),b:M31(b)};
++ let mut log=Log{wide_args:(0,0),mul_args:(0,0),wide_reply:0,mul_reply:0,count:0};
++ let got=square_logged(value,&mut log);
++ assert!(log.count==2);
++ assert!(log.wide_args==(a as u64+b as u64,a as u64+P as u64-b as u64));
++ assert!(log.mul_args==(a,b));
++ assert!(got.a.0==M31::reduce_u64(log.wide_reply).0);
++ let expected=M31(log.mul_reply).double().0;
++ assert!(got.b.0==if cfg!(NFT_invert){expected^1}else{expected});
++}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn copy_cm_positive(){let src=CM31{a:M31(kani::any()),b:M31(kani::any())};let mut dst=CM31::ZERO;unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};assert!(dst.a.0==src.a.0&&dst.b.0==src.b.0);}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn copy_cm_negative(){let src=CM31{a:M31(kani::any()),b:M31(kani::any())};let mut dst=CM31::ZERO;unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};assert!(dst.b.0!=src.b.0);}
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -421,7 +421,10 @@
+         Some(CM31 { a, b })
+     }
+ 
+-    pub fn write_le_bytes(self, out: &mut [u8]) {
++    #[cfg_attr(kani,kani::requires(out.len()==8))]
++#[cfg_attr(kani,kani::modifies(out))]
++#[cfg_attr(kani,kani::ensures(|_| NFT_field::cm_bytes_matches(self,out) != cfg!(NFT_invert)))]
++pub fn write_le_bytes(self, out: &mut [u8]) {
+         out[0..4].copy_from_slice(&self.a.to_le_bytes());
+         out[4..8].copy_from_slice(&self.b.to_le_bytes());
+     }
+@@ -1025,7 +1028,10 @@
+         Some(QM31 { c0, c1 })
+     }
+ 
+-    pub fn write_le_bytes(self, out: &mut [u8]) {
++    #[cfg_attr(kani,kani::requires(out.len()==16))]
++#[cfg_attr(kani,kani::modifies(out))]
++#[cfg_attr(kani,kani::ensures(|_| NFT_field::qm_bytes_matches(self,out) != cfg!(NFT_invert)))]
++pub fn write_le_bytes(self, out: &mut [u8]) {
+         self.c0.write_le_bytes(&mut out[0..8]);
+         self.c1.write_le_bytes(&mut out[8..16]);
+     }
+@@ -3266,3 +3272,35 @@
+     let s = a + P - b;
+     M31(if s >= P { s - P } else { s })
+ }
++
++#[cfg(kani)]
++#[path="NFT_field.rs"]
++mod NFT_field;
++
++#[cfg(kani)]
++#[path="NFT_square.rs"]
++mod NFT_square;
++
++#[cfg(kani)]
++#[path="NFT_channels.rs"]
++mod NFT_channels;
++
++#[cfg(kani)]
++#[path="NFT_karatsuba.rs"]
++mod NFT_karatsuba;
++
++#[cfg(kani)]
++#[path="NFT_pack.rs"]
++mod NFT_pack;
++
++#[cfg(kani)]
++#[path="NFT_dot.rs"]
++mod NFT_dot;
++
++#[cfg(kani)]
++#[path="NFT_small.rs"]
++mod NFT_small;
++
++#[cfg(kani)]
++#[path="NFT_prepared.rs"]
++mod NFT_prepared;
+--- /dev/null
++++ b/crates/aspis-core/src/field/NFT_wide.rs
+@@ -0,0 +1,29 @@
++use super::*;
++use crate::field::{CM31,M31,P};
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn any_cm()->CM31{CM31{a:M31(kani::any()),b:M31(kani::any())}}
++fn any_q()->QM31{QM31{c0:any_cm(),c1:any_cm()}}
++fn any_e()->WideExact{WideExact{c0:any_q(),c1:any_q()}}
++fn new_q(r:QM31,v:QM31)->bool{r.c0.a.0==v.c0.a.0%P && r.c0.b.0==v.c0.b.0%P && r.c1.a.0==v.c1.a.0%P && r.c1.b.0==v.c1.b.0%P}
++pub(super) fn new_matches(r:&WideExact,c0:QM31,c1:QM31)->bool{new_q(r.c0,c0) && new_q(r.c1,c1)}
++fn cq(v:QM31)->bool{v.c0.a.0<P && v.c0.b.0<P && v.c1.a.0<P && v.c1.b.0<P}
++pub(super) fn canonical(v:WideExact)->bool{cq(v.c0)&&cq(v.c1)}
++fn nw(x:u32)->u32{if x==0{0}else{P-x}}
++fn neg_q(r:QM31,v:QM31)->bool{r.c0.a.0==nw(v.c0.a.0)&&r.c0.b.0==nw(v.c0.b.0)&&r.c1.a.0==nw(v.c1.a.0)&&r.c1.b.0==nw(v.c1.b.0)}
++pub(super) fn neg_matches(r:&WideExact,v:WideExact)->bool{neg_q(r.c0,v.c0)&&neg_q(r.c1,v.c1)}
++#[kani::proof_for_contract(WideExact::new)]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn new_contract(){let _=WideExact::new(any_q(),any_q());}
++#[kani::proof_for_contract(WideExact::neg)]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn neg_contract(){let v=any_e();kani::assume(canonical(v));let _=v.neg();}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn copy_positive(){let src=any_e();let mut dst=any_e();unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};assert!(dst.c0.c0.a.0==src.c0.c0.a.0&&dst.c1.c1.b.0==src.c1.c1.b.0);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn copy_negative(){let src=any_e();let mut dst=any_e();unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};assert!(dst.c1.c1.b.0!=src.c1.c1.b.0);}
+--- /dev/null
++++ b/crates/aspis-core/src/field/NFT_wide_square.rs
+@@ -0,0 +1,15 @@
++use super::*;
++use crate::field::{CM31,M31,P};
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn any_cm()->CM31{CM31{a:M31(kani::any()),b:M31(kani::any())}}
++fn any_q()->QM31{QM31{c0:any_cm(),c1:any_cm()}}
++fn canonical(v:QM31)->bool{v.c0.a.0<P&&v.c0.b.0<P&&v.c1.a.0<P&&v.c1.b.0<P}
++#[derive(Clone,Copy)] struct Call{kind:u8,a:QM31,b:QM31,reply:QM31}
++struct Log{calls:[Call;4],count:usize}
++fn op(log:&mut Log,kind:u8,a:QM31,b:QM31)->QM31{assert!(canonical(a)&&canonical(b)&&log.count<4);let r=any_q();kani::assume(canonical(r));let mut observed=a;if cfg!(NFT_bad_argument)&&log.count==0{observed.c0.a.0^=1;}log.calls[log.count]=Call{kind,a:observed,b,reply:r};log.count+=1;r}
++// Frozen wide square with the four product/square/mul_u sites externalized;
++// let bindings preserve Rust's source evaluation order.
++fn logged(value:WideExact,log:&mut Log)->WideExact{let cross=op(log,0,value.c0,value.c1);let aa=op(log,1,value.c0,QM31::ZERO);let bb=op(log,2,value.c1,QM31::ZERO);let u=op(log,3,bb,QM31::ZERO);WideExact{c0:aa.add(u),c1:cross.add(cross)}}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn square_log(){let value=WideExact{c0:any_q(),c1:any_q()};kani::assume(canonical(value.c0)&&canonical(value.c1));let mut log=Log{calls:[Call{kind:99,a:QM31::ZERO,b:QM31::ZERO,reply:QM31::ZERO};4],count:0};let got=logged(value,&mut log);assert!(log.count==4);assert!(log.calls[0].kind==0&&log.calls[0].a==value.c0&&log.calls[0].b==value.c1);assert!(log.calls[1].kind==1&&log.calls[1].a==value.c0&&log.calls[1].b==QM31::ZERO);assert!(log.calls[2].kind==2&&log.calls[2].a==value.c1&&log.calls[2].b==QM31::ZERO);assert!(log.calls[3].kind==3&&log.calls[3].a==log.calls[2].reply&&log.calls[3].b==QM31::ZERO);let want=WideExact{c0:log.calls[1].reply.add(log.calls[3].reply),c1:log.calls[0].reply.add(log.calls[0].reply)};assert!((got==want)!=cfg!(NFT_invert));assert!(canonical(got.c0)&&canonical(got.c1));}
+--- a/crates/aspis-core/src/field/wide_exact.rs
++++ b/crates/aspis-core/src/field/wide_exact.rs
+@@ -52,7 +52,9 @@
+     };
+ 
+     /// Construct `c0 + c1*v`, reducing each raw M31 representative modulo P.
+-    pub fn new(c0: QM31, c1: QM31) -> Self {
++    #[cfg_attr(kani,kani::modifies())]
++#[cfg_attr(kani,kani::ensures(|r| NFT_wide::new_matches(r,c0,c1) != cfg!(NFT_invert)))]
++pub fn new(c0: QM31, c1: QM31) -> Self {
+         Self {
+             c0: canonical_qm31(c0),
+             c1: canonical_qm31(c1),
+@@ -98,7 +100,10 @@
+     }
+ 
+     #[inline(always)]
+-    pub fn neg(self) -> Self {
++    #[cfg_attr(kani,kani::requires(NFT_wide::canonical(self)))]
++#[cfg_attr(kani,kani::modifies())]
++#[cfg_attr(kani,kani::ensures(|r| NFT_wide::neg_matches(r,self) != cfg!(NFT_invert)))]
++pub fn neg(self) -> Self {
+         #[cfg(feature = "r0-op-count")]
+         let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::ENeg);
+         Self {
+@@ -626,3 +631,11 @@
+         assert_canonical(x.sub(x.neg()));
+     }
+ }
++
++#[cfg(kani)]
++#[path="NFT_wide.rs"]
++mod NFT_wide;
++
++#[cfg(kani)]
++#[path="NFT_wide_square.rs"]
++mod NFT_wide_square;
+--- a/crates/aspis-core/src/lib.rs
++++ b/crates/aspis-core/src/lib.rs
+@@ -11,6 +11,7 @@
+ //! fold consistency; the soundness delta to a stated proximity assumption is
+ //! Stage 1 work and no soundness figure may be quoted from this code alone.
+ 
++#![cfg_attr(kani,feature(allocator_api))]
+ #![no_std]
+ 
+ extern crate alloc;
+--- a/crates/aspis-core/src/state_only_hiding.rs
++++ b/crates/aspis-core/src/state_only_hiding.rs
+@@ -1214,3 +1214,7 @@
+         mask_value(&claims[0], alpha).add(WideExact::from_qm31(eta).mul(terminal))
+     }
+ }
++
++#[cfg(kani)]
++#[path="NFT_cmr.rs"]
++mod NFT_cmr;
+--- /dev/null
++++ b/programs/r1-cost-probe/src/NFT_zero.rs
+@@ -0,0 +1,29 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn zero_cut(mut remaining:&[u8])->(u8,&[u8],ProgramResult){
++ if !remaining.is_empty(){
++  if remaining[0]!=0{return (1,remaining,Err(ProgramError::AccountAlreadyInitialized));}
++  remaining=&remaining[1..];return (2,remaining,Ok(()));
++ }
++ (0,remaining,Ok(()))
++}
++#[kani::proof] #[kani::unwind(10)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn pointer4096(){let bytes:[u8;4096]=kani::any();let start:usize=kani::any();let end:usize=kani::any();kani::assume(start<=end&&end<=4096);let view=&bytes[start..end];let(tag,rest,_)=zero_cut(view);let shift=if tag==2{1}else{0};assert!((rest.as_ptr()==view.as_ptr().wrapping_add(shift))!=cfg!(NFT_invert));}
++#[kani::proof] #[kani::unwind(10)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn result4096(){let bytes:[u8;4096]=kani::any();let start:usize=kani::any();let end:usize=kani::any();kani::assume(start<=end&&end<=4096);let view=&bytes[start..end];let(tag,_,r)=zero_cut(view);let want=if start==end{0}else if bytes[start]!=0{1}else{2};let good=tag==want&&if tag==1{matches!(r,Err(ProgramError::AccountAlreadyInitialized))}else{r.is_ok()};assert!(good!=cfg!(NFT_invert));}
++#[kani::proof] #[kani::unwind(10)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn length4096(){let bytes:[u8;4096]=kani::any();let start:usize=kani::any();let end:usize=kani::any();kani::assume(start<=end&&end<=4096);let view=&bytes[start..end];let(tag,rest,_)=zero_cut(view);let shift=if tag==2{1}else{0};assert!((rest.len()==end-start-shift)!=cfg!(NFT_invert));}
++#[kani::proof] #[kani::unwind(10)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn frame4096(){let bytes:[u8;4096]=kani::any();let start:usize=kani::any();let end:usize=kani::any();let probe:usize=kani::any();kani::assume(start<=end&&end<=4096&&probe<4096);let before=bytes[probe];let _=zero_cut(&bytes[start..end]);assert!((bytes[probe]==before)!=cfg!(NFT_invert));}
++
++#[kani::proof] #[kani::unwind(10)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn copy4096_positive(){let src:[u8;4096]=kani::any();let mut dst:[u8;4096]=kani::any();let i:usize=kani::any();kani::assume(i<4096);unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};assert!(src[i]==dst[i]);}
++
++#[kani::proof] #[kani::unwind(10)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn copy4096_negative(){let src:[u8;4096]=kani::any();let mut dst:[u8;4096]=kani::any();let i:usize=kani::any();kani::assume(i<4096);unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};assert!(src[i]!=dst[i]);}
+--- a/programs/r1-cost-probe/src/lib.rs
++++ b/programs/r1-cost-probe/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani,feature(allocator_api))]
+ //! UNPROVED R1 COST PROBE. Local measurement entrypoint only.
+ use aspis_r1_cost_probe::verifier::{self,Phase};
+ use aspis_statement::pool_v1::decode_pool_v1_pair_forest_terminal_statement_v1;
+--- a/programs/r1-cost-probe/src/r1_pool_adapter_owned.rs
++++ b/programs/r1-cost-probe/src/r1_pool_adapter_owned.rs
+@@ -479,3 +479,7 @@
+     let current_slot = match Clock::get() { Ok(clock) => Ok(clock.slot), Err(error) => Err(error) };
+     stage2_owned(program_id, &owned, data, current_slot)
+ }
++
++#[cfg(kani)]
++#[path="NFT_zero.rs"]
++mod NFT_zero;

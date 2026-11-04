@@ -32,3 +32,15 @@ fn raw_copy_positive(){let src:[u64;4]=kani::any();let mut dst:[u64;4]=kani::any
 #[kani::proof] #[kani::unwind(20)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn raw_copy_negative(){let src:[u64;4]=kani::any();let mut dst:[u64;4]=kani::any();unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};let i:usize=kani::any();kani::assume(i<4);assert!(src[i]!=dst[i]);}
+
+fn term_window(weights:&[QM31;7],values:&[M31;7],index:usize,raw:[u64;4],log:&mut Log)->[u64;4]{let value=values[index].0 as u64;let weight=weights[index];term_cut(raw,weight,value,log)}
+#[kani::proof] #[kani::unwind(45)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn window7(){let weights=[any_q(), any_q(), any_q(), any_q(), any_q(), any_q(), any_q()];let values=[M31(kani::any()), M31(kani::any()), M31(kani::any()), M31(kani::any()), M31(kani::any()), M31(kani::any()), M31(kani::any())];for j in 0..7{kani::assume(canonical(weights[j])&&values[j].0<P);}let index:usize=kani::any();let i:usize=kani::any();kani::assume(index<7&&i<4);let raw:[u64;4]=kani::any();for j in 0..4{kani::assume(raw[j]<3u64*(1u64<<62));}let mut log=Log{a:[0;4],b:[0;4],reply:[0;4],count:0};let out=term_window(&weights,&values,index,raw,&mut log);let weight=weights[index];let a=match i{0=>weight.c0.a.0,1=>weight.c0.b.0,2=>weight.c1.a.0,_=>weight.c1.b.0};assert!(weights.len()==values.len()&&weights.len()==7&&weights.len()>4);assert!(log.count==4&&log.a[i]==a as u64&&log.b[i]==values[index].0 as u64);let want=raw[i]+log.reply[i];assert!(out[i]==if cfg!(NFT_invert){want^1}else{want});}
+fn selected(q:QM31,i:usize)->u32{match i{0=>q.c0.a.0,1=>q.c0.b.0,2=>q.c1.a.0,_=>q.c1.b.0}}
+#[kani::proof] #[kani::unwind(45)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn copy7_positive(){let src=[any_q(), any_q(), any_q(), any_q(), any_q(), any_q(), any_q()];let mut dst=[QM31::ZERO;7];let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<7&&j<4);unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};assert!(selected(src[i],j)==selected(dst[i],j));}
+#[kani::proof] #[kani::unwind(45)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn copy7_negative(){let src=[any_q(), any_q(), any_q(), any_q(), any_q(), any_q(), any_q()];let mut dst=[QM31::ZERO;7];let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<7&&j<4);unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};assert!(selected(src[i],j)!=selected(dst[i],j));}

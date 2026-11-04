@@ -7,6 +7,9 @@ open AspisR1.ExtractedMaskQmPackBase4SourceArithmetic
 open AspisR1.ExtractedMaskQmPackBase4Tail
 open AspisR1.ExtractedMaskQmPackBase4Fragments
 
+abbrev CurrentQM := AspisR1.ExtractedMaskQM31Exact.CurrentQM
+abbrev CurrentCanonicalQM := AspisR1.ExtractedMaskQM31Exact.CurrentCanonicalQM
+
 theorem tail (v : Fin 4 → CurrentQM) (hv : ∀ j, CurrentCanonicalQM (v j)) :
     ∃ out : CurrentQM, run v=ok out ∧ CurrentCanonicalQM out ∧
       out.c0.a.val=acc00 v%2147483647 ∧ out.c0.b.val=acc01 v%2147483647 ∧
