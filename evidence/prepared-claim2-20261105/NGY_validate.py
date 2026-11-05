@@ -29,7 +29,7 @@ def attempt(a,passed=True,corrupt=False):
   else:require('VERIFICATION:- SUCCESSFUL' in log,('native pass',a))
  elif r['kind']=='lean':
   for line in r['print_axioms']:
-   require('sorryAx' not in line and all(x.strip() in ['propext','Classical.choice','Quot.sound'] for x in re.findall(r'\[([^]]*)\]',line)[0].split(',')) if '[' in line else 'does not depend on any axioms' in line,('axioms',a,line))
+   require('sorryAx' not in line and all(re.sub(r'\.\{[^}]+\}$','',x.strip()) in ['propext','Classical.choice','Quot.sound'] for x in re.findall(r'\[([^]]*)\]',line)[0].split(',')) if '[' in line else 'does not depend on any axioms' in line,('axioms',a,line))
  return r
 
 def validate(final=False):
@@ -76,6 +76,13 @@ def validate(final=False):
   baseline={r['module']:r['imports'] for r in map(json.loads,text(E/'NGY_EXPECTED_IMPORTS.jsonl').splitlines())}
   scan=list(map(json.loads,text(E/audit['scan_data']).splitlines()))
   require(len(scan)>13000 and all(not r['dangling'] and not r['duplicate_owners'] and r['imports_match'] and r['imports']==baseline[r['module']] for r in scan),'full coherence scan')
+  owners=read(E/'NGY_STATEMENT_ROOTS.json')
+  entries=[json.loads(l.split('NGY_CERT_ENTRY ',1)[1]) for l in text(E/'NGY_L029/stdout.log').splitlines() if 'NGY_CERT_ENTRY ' in l]
+  require(len(entries)==len(owners) and {r['name'] for r in entries}==set(owners) and all(owners[r['name']]==r['owner'] and r['type'] for r in entries),'kernel type/owner entries')
+  require(set(roots)==set(owners)|{'AspisR1.NGU_PreparedClaim.packet','AspisR1.RPx_Deployed.deployed'},'source theorem root coverage')
+  fixture_pin=read(E/'NGY_L024/NGY_ProofDriver_BINARY_PIN.json')
+  final_pin=read(E/'NGY_L030/NGY_ProofDriver_BINARY_PIN.json')
+  require(fixture_pin==final_pin,'same compiled fixture/audit binary')
   for a in audit['final_attempts']:attempt(a)
   require(audit['raw_complete'] and audit['fixtures_pass'] and audit['scan_clean'],'complete audit')
   require(read(E/'NGY_CLOSED.json')['status']=='CLOSED under (ah)','closure')
