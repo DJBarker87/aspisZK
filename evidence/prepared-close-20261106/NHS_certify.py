@@ -7,6 +7,14 @@ sys.dont_write_bytecode=True
 E=Path(__file__).resolve().parent;R=E.parents[1]
 H=lambda b:hashlib.sha256(b).hexdigest()
 def J(p):return json.loads(Path(p).read_bytes())
+def archived(p):
+ p=Path(p)
+ if p.is_file():return p.read_bytes()
+ x=J(str(p)+'.REFERENCE.json')
+ assert x['stored_once']=='NHS_EXPECTED_IMPORTS.jsonl' and x['encoding']=='raw'
+ b=(E/x['stored_once']).read_bytes()
+ assert H(b)==x['sha256'] and len(b)==x['bytes']
+ return b
 def put(n,x):(E/n).write_text(json.dumps(x,indent=1)+'\n')
 def load(p):
  spec=importlib.util.spec_from_file_location('NHS_pinned_NFK',p);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
@@ -22,7 +30,7 @@ def receipt(a,status):
  r=J(E/a/'receipt.json');ad=J(E/(a+'-admission.json'))
  assert r['exit_status']==status and ad['exit']==0 and ad['reservation']['allowed']is True
  assert r['limits']==LIMITS and int(r['swaps'])==0
- for n,h in r['source_hashes'].items():assert H((E/a/'sources'/n).read_bytes())==h,(a,n)
+ for n,h in r['source_hashes'].items():assert H(archived(E/a/'sources'/n))==h,(a,n)
  return r
 def native_pair(n):
  rs=[]
