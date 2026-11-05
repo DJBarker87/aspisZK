@@ -5,7 +5,7 @@ E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90'
 B='/home/dombarker/project-offloads/codex-cx-prepared-close-20261106';C='/home/dombarker/project-offloads/codex-cx-slice-d-prepared-cache-20261104';W='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025';T='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0'
 if (E/'NHS_HOLD').exists():sys.exit(75)
 guard=E/'NHS_CLIENT_ACTIVE'; fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,str(os.getpid()).encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
-a,kind,target=sys.argv[1:];assert re.fullmatch('NHS_[LKE][0-9]{3}',a) and 1<=int(a[-3:])<=(0 if kind=='kani' else 2 if kind=='extract' else 90) and not (E/a).exists()
+a,kind,target=sys.argv[1:];assert re.fullmatch('NHS_[LKE][0-9]{3}',a) and 1<=int(a[-3:])<=(40 if kind=='kani' else 2 if kind=='extract' else 90) and not (E/a).exists()
 def ssh(code,data=None,submitted=False):
  for retry in range(11):
   r=subprocess.run(['ssh','-o','ControlMaster=no','-o','ConnectTimeout=15',H,code],input=data,capture_output=True,text=True)
@@ -40,9 +40,7 @@ elif kind=='extract':
  files['NHS_extract.py']=(E/'NHS_extract.py').read_text();sources=['NHS_extract.py'];command=['python3','NHS_extract.py',target]
 elif kind=='kani':
  files['NHS_gate.py']=(E/'NHS_gate.py').read_text()
- files['NHS_src/crates/aspis-r1-cost-probe/src/NHS_wide.rs']=(E/'NHS_wide.rs.txt').read_text()
- files['NHS_src/crates/aspis-r1-cost-probe/src/NHS_stages.rs']=(E/'NHS_stages.rs.txt').read_text()
- files['NHS_src/crates/aspis-r1-cost-probe/src/candidate.rs']=(E/'NHS_candidate.rs.txt').read_text()
+ files['NHS_src/crates/aspis-r1-cost-probe/src/NHS_pending.rs']=(E/'NHS_pending.rs.txt').read_text()
  files['NHS_SOURCE_PINS.json']=(E/'NHS_SOURCE_PINS.json').read_text()
  sources=list(files)
  command=['python3','NHS_gate.py',a+'.json']

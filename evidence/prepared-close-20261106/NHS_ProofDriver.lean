@@ -1,0 +1,103 @@
+import Lean
+import NFA_WALKER
+import NFA_MemoryLimit
+open Lean Elab Command
+/-- Standalone runtime avoids restoring a pre-initialization command environment. -/
+unsafe def main (args : List String) : IO UInt32 := do
+  NFA_MemoryLimit.set
+  initSearchPath (← findSysroot)
+  enableInitializersExecution
+  let mode := args.headD "small"
+  let (modules, roots) := if mode == "fixtures" then
+    (#[`NEP_Planted, `NEP_Mutations],
+     #[`NEP_Planted.matcher, `NEP_Planted.viaPrivate, `NEP_Planted.proof,
+       `NEP_Planted.viaAux, `NEP_MutateMatch.matcher, `NEP_MutatePrivate.viaPrivate,
+       `NEP_MutateProof.proof, `NEP_MutateAux.viaAux])
+    else (#[`NHS_COMBINED_IMPORT], #[`AspisR1.NHS_BindOn.reached,
+      `AspisR1.NHS_BorrowWindows.left,
+      `AspisR1.NHS_BorrowWindows.right,
+      `AspisR1.NHS_DriverModel.source,
+      `AspisR1.NHS_DriverSlots.prepare,
+      `AspisR1.NHS_DriverSlots.tx1,
+      `AspisR1.NHS_EmittedPrepare.prepare,
+      `AspisR1.NHS_EmittedTx1.tx1,
+      `AspisR1.NHS_HeapPacket.accepted,
+      `AspisR1.NHS_HeapPacket.rejected,
+      `AspisR1.NHS_OpeningPacket.Fold,
+      `AspisR1.NHS_OpeningPacket.Packet,
+      `AspisR1.NHS_OpeningPacket.fold_fields,
+      `AspisR1.NHS_OpeningPacket.fold_result,
+      `AspisR1.NHS_OpeningPacket.gamma_canonical,
+      `AspisR1.NHS_OpeningPacket.increment,
+      `AspisR1.NHS_OpeningPacket.kappa_canonical,
+      `AspisR1.NHS_OpeningPacket.result,
+      `AspisR1.NHS_Packets.installed,
+      `AspisR1.NHS_PrefixPacket.accepted,
+      `AspisR1.NHS_PrefixPacket.rejected,
+      `AspisR1.NHS_PrepareDomain.reached,
+      `AspisR1.NHS_PrepareEq.logical_add,
+      `AspisR1.NHS_PrepareEq.source,
+      `AspisR1.NHS_PrepareModel.buffers_children,
+      `AspisR1.NHS_PrepareModel.source,
+      `AspisR1.NHS_PrepareModel.source_constants,
+      `AspisR1.NHS_PrepareModel.target_constants,
+      `AspisR1.NHS_PrepareStages.buffers,
+      `AspisR1.NHS_PrepareStages.factor,
+      `AspisR1.NHS_PrepareStages.run,
+      `AspisR1.NHS_PreparedClaim.claim,
+      `AspisR1.NHS_PreparedFailures.query_div,
+      `AspisR1.NHS_PreparedFailures.query_fail,
+      `AspisR1.NHS_PreparedOpening.double,
+      `AspisR1.NHS_PreparedOpening.double_factor,
+      `AspisR1.NHS_PreparedOpening.prefix_result,
+      `AspisR1.NHS_PreparedOpening.single,
+      `AspisR1.NHS_PreparedRecompose.query_error,
+      `AspisR1.NHS_PreparedRecompose.source,
+      `AspisR1.NHS_PreparedScalars.alpha0,
+      `AspisR1.NHS_PreparedScalars.gamma,
+      `AspisR1.NHS_PreparedScalars.kappa,
+      `AspisR1.NHS_PreparedScalars.rho,
+      `AspisR1.NHS_PreparedScalars.rho_dictionary,
+      `AspisR1.NHS_PreparedScalars.scalar_dictionary,
+      `AspisR1.NHS_QueryDomain.dictionary,
+      `AspisR1.NHS_QueryDomain.emitted,
+      `AspisR1.NHS_QueryInterface.dictionary,
+      `AspisR1.NHS_QueryInterface.result,
+      `AspisR1.NHS_SplitPacket.sizes,
+      `AspisR1.NHS_Tx1Eq.source,
+      `AspisR1.NHS_Tx1Model.before_children,
+      `AspisR1.NHS_Tx1Model.before_prepare,
+      `AspisR1.NHS_Tx1Model.source,
+      `AspisR1.NHS_Tx1Stages.Context,
+      `AspisR1.NHS_Tx1Stages.beforeQuery,
+      `AspisR1.NHS_Tx1Stages.factor,
+      `AspisR1.NHS_Tx1Stages.run,
+      `AspisR1.NHS_ValuesPacket.accepted,
+      `AspisR1.NHS_ValuesPacket.length,
+      `AspisR1.RPx_Deployed.deployed])
+  let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
+    {} (loadExts := true) (level := .private)
+  let ctx : Command.Context := {
+    fileName := "NEP_Driver"
+    fileMap := FileMap.ofString ""
+    snap? := none
+    cancelTk? := none
+  }
+  let action : CommandElabM Bool := do
+    let mut failed := false
+    for root in roots do
+      try
+        elabCommand (← `(command| #print axioms $(mkIdent root)))
+        NEP.audit root ("NEP_" ++ mode ++ "_" ++ root.toString)
+      catch e =>
+        logError e.toMessageData
+        failed := true
+    return failed
+  let result ← ((action.run ctx).run (Command.mkState env)).toBaseIO
+  match result with
+  | .error e =>
+    IO.eprintln (← e.toMessageData.toString)
+    return 2
+  | .ok (failed, state) =>
+    for msg in state.messages.toList do IO.println (← msg.data.toString)
+    return if failed then 1 else 0

@@ -1,0 +1,68 @@
+NHS_generated/NHS_PendingTrace.lean:30:30: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  body weights raw index
+in the target expression
+  (match
+      match (raw, index) with
+      | (raw2, index1) => body weights raw2 index1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (raw2, index1) => body weights raw2 index1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok out
+
+case step
+weights : Slice aspis_core.field.QM31
+raw✝ out✝ : alloc.vec.Vec Row
+index✝ : Usize
+size : (↑weights).length = 64
+raw after out : alloc.vec.Vec Row
+index next : Usize
+w : aspis_core.field.QM31
+active : ↑index < 64
+rawsize : (↑raw).length = 64
+read : weights.index_usize index = ok w
+windows : NHS_PendingStep.Windows raw after index next w
+rest : Cuts weights after next out
+ih : run weights after next = ok out
+localStep : body weights raw index = ok (cont (after, next))
+⊢ (match
+      match (raw, index) with
+      | (raw2, index1) => body weights raw2 index1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (raw2, index1) => body weights raw2 index1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok out
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NHS_generated/NHS_PendingTrace.lean:26:35: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵o̵d̵y̵,̵i̵f̵_̵n̵e̵g̵ ̵i̵n̵a̵c̵t̵i̵v̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲b̲o̲d̲y̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲i̲n̲a̲c̲t̲i̲v̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NHS_PendingTrace.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
