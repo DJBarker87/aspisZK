@@ -7,3 +7,5 @@ NHP_ConstructorPackets.exact_arms is the model law for explicit Bool-coded Ok/Er
 Final inventory: no field multiplication stub, no SHA/value stub, no stub_verified, no writable static or function-pointer-dependent credit. Exact KMX bindings are explicitly installed in all copy-bearing new physical/window/loop cuts. K118/K119 are the strengthened short-frame configuration (new bindings, no unchanged passing-shape replay); K120 is a same-configuration aliased-frame corruption control paired to K096. NHP_NEGATIVE_CONTROLS.json records57 semantic failing controls.
 
 The loop/metadata cuts execute real native helpers or exact source iteration statements; they do not replace open caller/decoder/PDA/CPI packets by assumed replies. No unpaired callee stub is used to book a CLOSED row. Missing actual-loop/source-parent and ownership associations remain OPEN.
+
+KMX value-law source: evidence/kani-mitig-20261028/KMX_CopyMeaning.lean and the byte-identical pinned KMX_CopyMeaning payload in NHP_KMX_copy_stubs.patch. NHP_REUSED_INPUTS / compiled manifests retain the exact hashes. No new copy implementation was written.

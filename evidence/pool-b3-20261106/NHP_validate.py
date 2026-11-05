@@ -87,6 +87,20 @@ def validate(overrides=None):
  for a in ['NHP_K118','NHP_K119']:assert all(name in js(a+'-shape.json')['source'] for name in ['KMX_copy_nonoverlapping','KMX_copy_from_slice','KMX_realloc'])
  assert 'VERIFICATION:- FAILED' in raw('NHP_K120/stdout.log').decode() and 'Failed Checks:' in raw('NHP_K120/stdout.log').decode()
  for adoption in js('NHP_EXTRACTION_ADOPTION.json'):assert H((R/adoption['destination']).read_bytes())==H((R/adoption['source']).read_bytes())==adoption['sha256']
+ scopes=js('NHP_SCOPE_ADMISSION_AUDIT.json');assert scopes['attempts']==145 and scopes['all_exit_zero_allowed_true'] and not scopes['own_scope_overlaps']
+ stats=js('NHP_STATS.json');assert stats['used']==counts==dict(kani=120,lean=23,extraction=2) and stats['swaps']==0 and not stats['memory_kills']
+ controls=js('NHP_NEGATIVE_CONTROLS.json')['pairs'];assert len(controls)==57
+ for pair in controls:
+  assert 'VERIFICATION:- SUCCESSFUL' in raw(pair['positive']+'/stdout.log').decode()
+  assert 'VERIFICATION:- FAILED' in raw(pair['control']+'/stdout.log').decode()
+ closure=lzma.decompress(raw('NHP_CLOSURE_PINS.json.xz'));assert H(closure)==raw('NHP_CLOSURE_PINS.json.sha256').decode().strip()
+ closure=json.loads(closure);assert len(closure['selected_objects'])==30071
+ assert closure['LEAN_PATH']==js('NHP_L023.json')['env']['LEAN_PATH'].split(':')
+ assert any('/Aeneas/' in row['path'] or row['path'].endswith('/Aeneas.olean') for row in closure['selected_objects'])
+ exported=js('NHP_EXPORT.json');assert exported['exit']==0 and exported['admission']['allowed'] is True and len(exported['exports'])==19
+ assert any(row['sha256']==final['proof_driver_sha256'] for row in exported['exports'])
+ end=js('NHP_HOST_END.json');assert not end['active_owned_provers'] and end['cache_files_deleted']==0 and end['exports_retained']==19 and end['cache_bytes']<20_000_000_000
+ assert end['source_workspace_retained'] and not end['shipped_source_changed'] and not end['release_elf_rebuilt'] and not end['wallet_or_key_operations']
  assert subprocess.run(['git','diff','--quiet','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387','--','crates','programs','Cargo.lock'],cwd=R).returncode==0
  return dict(status='PASS',budget_used=counts,closed=2,verifier_rows=599,roots=19,final_roots=33)
 if __name__=='__main__':
