@@ -45,7 +45,7 @@ if kind=='kani':
 elif kind=='inspect':
  files['NHJ_rodata.py']=(E/'NHJ_rodata.py').read_text();sources=['NHJ_rodata.py'];command=['python3','NHJ_rodata.py'];cfg={}
 elif kind=='audit':
- for name in ['NHJ_audit.py','NHJ_AUDIT_ROOTS.json','NHJ_EXPECTED_IMPORTS.jsonl']:files[name]=(E/name).read_text()
+ for name in ['NHJ_audit.py','NHJ_AUDIT_ROOTS.json','NHJ_EXPECTED_IMPORTS.jsonl','NHJ_REUSED_AUDIT.json']:files[name]=(E/name).read_text()
  sources=list(files)+['NHJ_native/NHJ_ProofDriver.c','NHJ_native/NHJ_ScanDriver.c','NHJ_native/NFA_WALKER.c','NHJ_native/NFA_MemoryLimit.c'];command=['python3','NHJ_audit.py'];cfg={}
 else:
  n='NHJ_generated/'+target.replace('.','/')+'.lean';files[n]=(E/(target+'.lean')).read_text();sources=[n]
@@ -89,8 +89,8 @@ b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if 
 names += [str(p.relative_to(b)) for pat in ['-graph*','-source*','-lock*','-erasure*'] for p in b.glob(a+pat)]
 if {kind!r}=='inspect':names+=['NHJ_RODATA.json']
 if {kind!r}=='audit':
- names += [str(p.relative_to(b)) for p in (b/('NHJ_delta_audit' if {target!r}=='NHJ_delta_audit' else 'NHJ_audit')).rglob('*') if p.is_file()]
- names += [str(p.relative_to(b)) for p in b.glob('NEP_proof1_*_REACHABLE.txt' if {target!r}=='NHJ_delta_audit' else 'NEP_*_REACHABLE.txt')]
+ names += [str(p.relative_to(b)) for p in (b/{target!r}).rglob('*') if p.is_file()]
+ names += [str(p.relative_to(b)) for p in b.glob('NEP_proof1_*_REACHABLE.txt')]
  names += ['NHJ_LOADED_scan.jsonl']
 print(json.dumps({{n:(b/n).read_text() for n in names}}))
 ''');assert r.returncode==0,r.stderr

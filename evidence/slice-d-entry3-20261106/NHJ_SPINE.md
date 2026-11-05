@@ -28,3 +28,5 @@ Adjacent leaves: lib.rs::error TX1:NGB001/TX2:211 requires the exact formatted m
 
 
 Distance update: metadata and owned readonly are now callable packets on their documented domains. data/data_len/checkpoint/distinct/snapshot/logging/IDs/authentication and candidate boundaries still separate both TX1 and TX2 from a complete entry path. Root domain and PhysicalInterpretation remain obligations at the eventual entry root; no SameExecution or accepted-output premise introduced.
+
+Stage 2 distance update: data is a CLOSED leaf packet in both transactions. Its caller must still obtain the SAME snapshot allocation/bytes on NGL_StorageCases.Domain; snapshot is OPEN. TX1:343 stage1 therefore still needs three snapshot packets, owned-stage/candidate and SAME1768 write/cleanup. TX2:239/240 still needs seven snapshots, checkpoint/authentication/registry/PDA/ID and candidate packets, clock forwarding, exact empty-clear runtime row and checkpoint identity. The thirteen spine rows remain OPEN; no complete TX1/TX2 path.

@@ -28,3 +28,56 @@ fn readonly_corrupt_packet(a:&OwnedAccount,k:&Pubkey,l:&mut MetaLog)->bool{let r
 #[kani::proof_for_contract(readonly_corrupt_packet)] #[kani::unwind(35)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn readonly_logging_corrupt(){let a=account();let k=Pubkey::new_from_array(kani::any());let mut l=empty();let _=readonly_corrupt_packet(&a,&k,&mut l);}
+
+struct ErrorLog { count:u8,input:*const ProgramError,reply:bool }
+fn error_empty()->ErrorLog{ErrorLog{count:0,input:core::ptr::null(),reply:false}}
+fn error_oracle(e:&ProgramError,l:&mut ErrorLog)->ProgramError{
+ assert!(matches!(e,ProgramError::AccountBorrowFailed|ProgramError::InvalidAccountData));
+ l.count+=1;l.input=e;l.reply=kani::any();
+ if l.reply{ProgramError::AccountBorrowFailed}else{ProgramError::InvalidAccountData}
+}
+fn data_cut<'a>(a:&'a OwnedAccount,l:&mut ErrorLog)->Result<&'a[u8],ProgramError>{
+ match &a.bytes {Ok(bytes)=>Ok(bytes),Err(error)=>Err(error_oracle(error,l))}
+}
+fn data_association(a:&OwnedAccount,l:&ErrorLog,r:&Result<&[u8],ProgramError>)->bool{
+ match &a.bytes {
+  Ok(v)=>l.count==0&&match r{Ok(s)=>s.as_ptr()==v.as_ptr()&&s.len()==v.len(),_=>false},
+  Err(e)=>l.count==1&&l.input==e as *const ProgramError&&if l.reply{matches!(r,Err(ProgramError::AccountBorrowFailed))}else{matches!(r,Err(ProgramError::InvalidAccountData))}
+ }
+}
+#[kani::requires(l.count==0 && matches!(&a.bytes,Ok(_)|Err(ProgramError::AccountBorrowFailed)|Err(ProgramError::InvalidAccountData)))]
+#[kani::ensures(|r| *r)] #[kani::modifies(l)]
+fn data_packet(a:&OwnedAccount,l:&mut ErrorLog)->bool{let r=data_cut(a,l);data_association(a,l,&r)}
+#[kani::proof_for_contract(data_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn data_logging(){let mut a=account();let shape:u8=kani::any();kani::assume(shape<3);if shape==0{let n:usize=kani::any();kani::assume(n<=4);let mut v=kani::vec::exact_vec::<u8,4>();v.truncate(n);a.bytes=Ok(v);}else if shape==2{a.bytes=Err(ProgramError::InvalidAccountData);}let mut l=error_empty();let _=data_packet(&a,&mut l);}
+#[kani::requires(l.count==0 && matches!(&a.bytes,Ok(_)|Err(ProgramError::AccountBorrowFailed)|Err(ProgramError::InvalidAccountData)))]
+#[kani::ensures(|r| *r)] #[kani::modifies(l)]
+fn data_corrupt_packet(a:&OwnedAccount,l:&mut ErrorLog)->bool{let r=data_cut(a,l);if l.count==1{l.reply=!l.reply;}data_association(a,l,&r)}
+#[kani::proof_for_contract(data_corrupt_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn data_logging_corrupt(){let a=account();let mut l=error_empty();let _=data_corrupt_packet(&a,&mut l);}
+
+// Exact pinned core Result::clone match, with only Err payload clone cut.
+fn length_clone_cut(r:&Result<usize,ProgramError>,l:&mut ErrorLog)->Result<usize,ProgramError>{
+ match r {Ok(x)=>Ok(x.clone()),Err(x)=>Err(error_oracle(x,l))}
+}
+fn length_cut(a:&OwnedAccount,l:&mut ErrorLog)->Result<usize,ProgramError>{length_clone_cut(&a.length,l)}
+fn length_association(a:&OwnedAccount,l:&ErrorLog,r:&Result<usize,ProgramError>)->bool{
+ match &a.length {
+  Ok(n)=>l.count==0&&matches!(r,Ok(m) if m==n),
+  Err(e)=>l.count==1&&l.input==e as *const ProgramError&&if l.reply{matches!(r,Err(ProgramError::AccountBorrowFailed))}else{matches!(r,Err(ProgramError::InvalidAccountData))}
+ }
+}
+#[kani::requires(l.count==0 && matches!(&a.length,Ok(_)|Err(ProgramError::AccountBorrowFailed)|Err(ProgramError::InvalidAccountData)))]
+#[kani::ensures(|r| *r)] #[kani::modifies(l)]
+fn length_packet(a:&OwnedAccount,l:&mut ErrorLog)->bool{let r=length_cut(a,l);length_association(a,l,&r)}
+#[kani::proof_for_contract(length_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn length_logging(){let mut a=account();let shape:u8=kani::any();kani::assume(shape<3);a.length=if shape==0{Ok(kani::any())}else if shape==1{Err(ProgramError::AccountBorrowFailed)}else{Err(ProgramError::InvalidAccountData)};let mut l=error_empty();let _=length_packet(&a,&mut l);}
+#[kani::requires(l.count==0 && matches!(&a.length,Ok(_)|Err(ProgramError::AccountBorrowFailed)|Err(ProgramError::InvalidAccountData)))]
+#[kani::ensures(|r| *r)] #[kani::modifies(l)]
+fn length_corrupt_packet(a:&OwnedAccount,l:&mut ErrorLog)->bool{let r=length_cut(a,l);l.count=l.count.wrapping_add(1);length_association(a,l,&r)}
+#[kani::proof_for_contract(length_corrupt_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn length_logging_corrupt(){let mut a=account();let shape:bool=kani::any();a.length=if shape{Ok(kani::any())}else{Err(ProgramError::AccountBorrowFailed)};let mut l=error_empty();let _=length_corrupt_packet(&a,&mut l);}
