@@ -25,3 +25,27 @@ The general-capacity bridge retains pinned Std reserve/allocation/capacity/owner
 | semantic-value product_cut | NHG_Product.returns/canonical/natural (L032), generated_qm_mul_eq_probe and current_qm_mul_words; same canonical four-word operands | paired natural modular specification proved; native caller UNATTEMPTED, no credit |
 
 Products use the NFT/NGH opaque-call-log method: no multiplication expression is evaluated or proved in Kani; the exact natural tuple is substituted in Lean. No unpaired arithmetic stub is selected for an admitted row.
+
+
+## Stage 3 packet table
+
+| Cut | Exact paired law/domain | Native scope |
+|---|---|---|
+| fields frontier child | NHG_FieldSpec.source + FieldBounds.source; nonempty prior Vec, <=8 raw words and len+4*n<=1880 | K027/K028 one row/counter boundary |
+| root prefix children | Same fields packet; Native prefix checks routing only, not child state | K042/K043 |
+| root tail fields/frontier | Same fields packet or FrontierPackets.closed_packets; actual entry len<=815 | K045/K046 one stage, full arbitrary prefix/suffix |
+| public producer | ProducerPackets.source, both Public variants/all raw words; actual returned len<=1455 | K047/K048, exact ProducerError type |
+| constructor new | inherited NGX SemanticNew/NewTrace; SAME borrowed producer Vec/hash/root | K047/K048; digest remains P1/RuntimeSyscall |
+| begin semantic packet | inherited145, rows0..14 and SAME parsed Prefix frames5..3717 | retained K015/K021, BeginFrame/FrontComposition |
+
+The initialized-tail oracles expose only bytes that exact_vec initialized
+before truncating. u8 has no destructor; growth stays within that allocation.
+They are arbitrary child-output envelopes containing the exact child law,
+not copy implementations and not native child credit. General allocation
+metadata/ownership/cleanup stays in the retained Std interpretation; there is
+NO caller capacity1884 condition. KMX remains byte-identical and its actual
+copy window K007/K019 plus AppendFrame composes all prefix/suffix values.
+
+Future field-product oracle: Product.words/returns/canonical/natural proves
+the exact emitted QM31.mul natural quartet on canonical operands. Native
+semantic-value step is not yet attempted/admitted at this stage.

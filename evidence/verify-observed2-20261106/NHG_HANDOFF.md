@@ -26,3 +26,56 @@ Capacity qualification: K003's capacity1884 is a no-growth local witness, not a 
 Begin progress: K011/K012 complete-history shapes timed out and are excluded. K015 passes one arbitrary callee window with arbitrary incoming full state/cursor and arbitrary full child poststate; K021 forces a copied state-byte corruption and fails. Source-fission packet substitution modules Begin13/9/5/Begin compile and have passed the28-root raw audit, but the final frame/domain consumer is still in progress; row150 remains OPEN. No unchanged passing shape was rerun.
 
 The one E001 extraction fixed the opaque SemanticPublic inclusion and then failed at Aeneas loop-context collapse (Not_found, InterpReduceCollapse1991). No fresh emitted body admitted. Existing canonical bodies remain in use. Budget at stage2:21/80 Kani,28/90 Lean/support,1/1 extraction; work continues.
+
+
+## Stage 3 work in progress
+
+Stage 2 is committed as `6ff7634f515`; its four CLOSED rows remain the only
+new admitted rows until stage 3's joint/raw/coherence checks and additive
+validator pass. No root verification claim is made.
+
+Native K027/K028 passed/failed the single frontier callee-boundary stage.
+K029/K030 passed/failed the same-owned-public-Vec transcript carrier.
+K032–K039 are passing/matched-failing parent Std operation probes (fresh tag,
+arbitrary prefix tag, small growth, U64 little-endian); existing K007/K019
+supplies the generic realloc byte window. All frozen graph checks remain
+per-run and offline. K024–K026 timed out, then K031 reached outer180s before
+any CBMC verdict. None has credit; no unchanged timed-out shape was rerun.
+
+L037 frontier full raw/error envelope and L039 bounded packet transport are
+standard-axiom successes. L041 proves the SAME producer Vec and initial
+hash/cursor carrier. L042's attempted NBR import collided with the coherent
+RPz7 owner; it is excluded, and Std append now reuses the already loaded
+FieldsRefinement431.extend_u8. Corrected Std push and producer domain proofs
+are being compiled next; no failed object enters a combined import.
+
+Current host scratch remains the owned workspace and cache described above.
+The local NHG_CLIENT_ACTIVE guard denotes the serial client when present.
+Read receipts before launching; never resubmit a submitted attempt. Stage 3
+must finish the native prefix/copy cuts, domain proofs and audits before
+claiming public_bytes or public_transcript. Begin's incoming carrier and
+result/effect proofs exist, but begin itself is still OPEN pending producer
+composition and its joint audit. Finish and root remain OPEN.
+
+
+## Stage 3 final admission
+
+NHG_stage3_validate.py PASS: eight total NHG rows249,266,255,252,253,254,131,150.
+Combined L061 replays AspisR1.RPx_Deployed.deployed; L062–066 raw-walk53 new
+roots, preserving the prior28; L067 scans13541 modules exit0 with no dangling,
+duplicate owners or import mismatches. Peak scan7076720KiB, swap0.
+Stage2 checks remain byte-identical and sealed at6ff7634f515. New denial
+controls are additive. All other ledger rows and trust rows remain unchanged.
+
+Consumed budget:48 Kani,67 Lean/support,1 extraction. Continue with32 Kani
+and23 Lean/support remaining; do not stop here. Next: independent bottom-up
+finish members132 boundary,135 value and259 selected_claim, then dependent
+parents where all real callees are CLOSED. Query native association is NHB's
+committed-only boundary. Out-of-slice field inversions/circle helpers and the
+missing decode_k/payload carrier law must stay explicit. Root137 remains OPEN.
+
+The early K029/K030 carrier used the wrong nominal producer Error type; it is
+SUPPORT ONLY. K047/K048 corrects this to the exact statement Error before the
+constant map_err. No row was admitted from the earlier shape. Native parent
+K031 and three-call K044 timed out; source-associated staged cuts replace
+them and retain P6/D188/Std interpretation, never remove trust.

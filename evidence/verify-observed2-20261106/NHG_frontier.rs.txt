@@ -10,8 +10,13 @@ fn NHG_fields_cut(out:&mut alloc::vec::Vec<u8>,values:&[M31],log:&mut FrontierLo
  if j==log.window{
   log.seen=true;log.vec_place=out;log.row=values.as_ptr();log.value=values[log.word].0;log.before_len=out.len();log.before_byte=if log.observe<out.len(){out[log.observe]}else{0};
   let length:usize=kani::any();kani::assume(length>=out.len()&&length<=out.len()+32);
-  let mut reply=kani::vec::exact_vec::<u8,1884>();reply.truncate(length);
-  log.after_len=length;log.after_byte=if log.observe<length{reply[log.observe]}else{0};log.after_ptr=reply.as_ptr();*out=reply;
+  let delta=length-out.len();
+  if cfg!(NHG_invert){kani::assume(delta>0);kani::assume(log.observe>=out.len());kani::assume(log.observe<length);}
+  // Oracle storage: every capacity byte was initialized by exact_vec before truncate.
+  // u8 has no destructor; all newly exposed bytes remain initialized and arbitrary.
+  // No copy implementation is being replaced or proved by this oracle.
+  unsafe {out.set_len(length);}
+  log.after_len=length;log.after_byte=if log.observe<length{out[log.observe]}else{0};log.after_ptr=out.as_ptr();
   if log.fail{return Err(log.error)}
  }
  Ok(())
@@ -40,17 +45,22 @@ fn NHG_frontier_control(out:&mut alloc::vec::Vec<u8>,values:&[Digest;20],log:&mu
                 NHG_fields_cut(out, &values[19], log)?;
                 Ok(())
             }
+fn NHG_frontier_stage(out:&mut alloc::vec::Vec<u8>,values:&[Digest;20],row:usize,log:&mut FrontierLog)->Result<usize,Error>{
+ NHG_fields_cut(out,&values[row],log)?;
+ Ok(row+1)
+}
 #[kani::proof]#[kani::unwind(35)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn NHG_frontier_value(){
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
+fn NHG_frontier_single_stage(){
  let values:[Digest;20]=core::array::from_fn(|_|digest());let window:usize=kani::any();kani::assume(window<20);
  let n:usize=kani::any();kani::assume(n>=1&&n<=1240+32*window);
  let mut out=kani::vec::exact_vec::<u8,1884>();out.truncate(n);let place=&out as *const alloc::vec::Vec<u8>;
  let observe:usize=kani::any();kani::assume(observe<1880);let word:usize=kani::any();kani::assume(word<8);let old_byte=if observe<n{out[observe]}else{0};let fail:bool=kani::any();let error=any_error();
- let mut log=FrontierLog{window,calls:0,fail,error,observe,word,seen:false,vec_place:core::ptr::null(),row:core::ptr::null(),value:0,before_len:0,before_byte:0,after_len:0,after_byte:0,after_ptr:core::ptr::null()};
- let got=NHG_frontier_control(&mut out,&values,&mut log);assert!(log.seen);assert_eq!(log.calls,if fail{window+1}else{20});
+ let mut log=FrontierLog{window:0,calls:0,fail,error,observe,word,seen:false,vec_place:core::ptr::null(),row:core::ptr::null(),value:0,before_len:0,before_byte:0,after_len:0,after_byte:0,after_ptr:core::ptr::null()};
+ let got=NHG_frontier_stage(&mut out,&values,window,&mut log);assert!(log.seen);assert_eq!(log.calls,1);
  assert_eq!(log.vec_place,place);assert_eq!(log.row,values[window].as_ptr());assert_eq!(log.value,values[window][word].0);assert_eq!(log.before_len,n);if observe<n{assert_eq!(log.before_byte,old_byte);}
- assert_eq!(out.len(),log.after_len);assert_eq!(out.as_ptr(),log.after_ptr);assert_eq!(got,if fail{Err(error)}else{Ok(())});
+ assert_eq!(out.len(),log.after_len);assert_eq!(out.as_ptr(),log.after_ptr);assert_eq!(got,if fail{Err(error)}else{Ok(window+1)});
  if cfg!(NHG_invert){kani::assume(observe<out.len());}
  if observe<out.len(){assert_eq!(out[observe],log.after_byte^if cfg!(NHG_invert){1}else{0});}
 }

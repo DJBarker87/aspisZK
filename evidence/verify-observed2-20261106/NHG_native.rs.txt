@@ -45,3 +45,32 @@ fn NHG_realloc_window(){
  let got=unsafe{dst[k].assume_init()};
  assert_eq!(got,(if k==i{value}else{old})^if cfg!(NHG_invert){1}else{0});
 }
+
+// Std append leaf for all serializer tag bytes; arbitrary full prior buffer.
+#[kani::proof]#[kani::unwind(8)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
+fn NHG_std_push(){
+ let n:usize=kani::any();kani::assume(n<=1880);let mut out=kani::vec::exact_vec::<u8,1884>();out.truncate(n);let value:u8=kani::any();let j:usize=kani::any();kani::assume(j<n+1);let old=if j<n{out[j]}else{0};
+ if cfg!(NHG_invert){kani::assume(j==n);}
+ out.push(value);assert_eq!(out.len(),n+1);assert_eq!(out[j],(if j<n{old}else{value})^if cfg!(NHG_invert){1}else{0});
+}
+#[kani::proof]#[kani::unwind(8)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
+fn NHG_std_push_growth(){
+ let n:usize=kani::any();kani::assume(n<=4);let mut out=kani::vec::exact_vec::<u8,4>();out.truncate(n);let value:u8=kani::any();let j:usize=kani::any();kani::assume(j<n+1);let old=if j<n{out[j]}else{0};
+ if cfg!(NHG_invert){kani::assume(n==4&&j==n);}
+ out.push(value);assert_eq!(out.len(),n+1);assert_eq!(out[j],(if j<n{old}else{value})^if cfg!(NHG_invert){1}else{0});
+}
+#[kani::proof]#[kani::unwind(8)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
+fn NHG_std_push_new(){
+ let value:u8=kani::any();let mut out=Vec::new();out.push(value);assert_eq!(out.len(),1);assert_eq!(out[0],value^if cfg!(NHG_invert){1}else{0});
+}
+#[kani::proof]#[kani::unwind(8)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NHG_std_index64(){
+ let value:u64=kani::any();let i:usize=kani::any();kani::assume(i<8);let bytes=value.to_le_bytes();assert_eq!(bytes[i],(((value>>(8*i))&255)as u8)^if cfg!(NHG_invert){1}else{0});
+}

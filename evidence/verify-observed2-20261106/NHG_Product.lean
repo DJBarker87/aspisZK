@@ -1,4 +1,4 @@
-import NHG_COMBINED_IMPORT
+import NGX_COMBINED_IMPORT
 import ExtractedMaskQM31Mul
 set_option autoImplicit false
 open Aeneas Aeneas.Std Result
