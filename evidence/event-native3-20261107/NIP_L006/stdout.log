@@ -1,0 +1,24 @@
+theorem AspisR1.NIN_Observer.realizes : ∀ {W A C Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record))
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (base : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (err : C)
+  (r : AspisR1.NP6_StdModel.Reservation) (n1 : AspisR1.S2W_ExtractionBoundary.First)
+  (n2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (a : AspisR1.SCE_Experiment.Adversary A),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.DrvC_Installation.sdk (AspisR1.FIp_Install.configuration err base r)) n1 n2 hashv →
+    ∀ (physical : AspisR1.F3T_Runtime.Runtime),
+      AspisR1.NIN_Observer.OuterTrace copy allocator base err r hashv a physical →
+        AspisR1.NIN_Observer.AdmittedSupport L copy allocator base err r n1 n2 hashv a physical →
+          AspisR1.NIN_Observer.NestedEvents copy allocator base err r hashv a physical →
+            AspisR1.NIN_Observer.CanonicalInput copy allocator base err r hashv a physical →
+              AspisR1.NIN_Observer.LiteralFlag copy allocator base err r hashv a physical →
+                AspisR1.NHZ_EXPERIMENT.Realizes L copy allocator base err r n1 n2 hashv a physical :=
+fun {W A C Tx} L copy allocator base err r n1 n2 hashv a extraction physical outer admission nested canonical flag =>
+  AspisR1.NHZ_EXPERIMENT.realizes_from_fields L copy allocator base err r n1 n2 hashv a extraction physical outer
+    admission nested canonical flag
+'AspisR1.NIN_Observer.realizes' depends on axioms: [propext, Classical.choice, Quot.sound]
