@@ -1,0 +1,8 @@
+# NHJ stubs — stage 1
+
+| Stub | Model law | Domain and frame |
+|---|---|---|
+| meta_oracle | NHJ_ReadonlyPacket.metadata; NGL_MetaReferenceModel.source | SAME owner/expected live borrowed keys, three exact flags; one local log; arbitrary Bool reply constructs Ok unit or Err InvalidAccountData, the complete reachable carrier; no external mutation/effects. |
+| KMX ptr copy | retained KMX_CopyMeaning plus original NGL K080/K081 | Exact patch bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67; no custom stub; exact source hashes checked every run. |
+
+NHJ_K001 checks full reply and local arguments with modifies(log); NHJ_K002 flips logged signer and fails the same complete association assertion. Contract-interface route (t) is not used for the non-Arbitrary Result, per (ak). Existing NHD real-body/empty-frame mutants K049/051, K052/054 and NGL full-body controls are cited and hash-pinned, never rerun. The readonly cut changes only the callee expression and adds the explicit local record. It calls the actual owner getter. Unread key/length/bytes storage is framed by the original NGL eleven-shape complete native contract and unchanged frozen source; no capacity enlargement is inferred from the new logging harness. No field multiplication, hash body, writable static, function pointer, unsafe guard or custom copy oracle is used.
