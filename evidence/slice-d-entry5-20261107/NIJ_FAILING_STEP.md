@@ -15,3 +15,5 @@ NIJ_K022: whole error with native append/format/cleanup times out90s; excluded f
 NIJ_E002: smaller Debug-root Charon run exits101 (charon-driver exit2),109.81s,548608KiB,swap0; generic Code failed to compile, no LLBC. No certified root inventory or Aeneas rejection; do not infer(ah). Both extraction slots spent.
 
 NIJ_K039: actual error root still times out90s even with writer logging stub. The live residual is alloc::fmt::format control/return String association, distinct from now passing dispatch and append/growth. Other root label shapes are not launched. Continue independent authentication/zero-loop/model work; no lib::error closure.
+
+Evidence packer stopped on an unlisted .jsonl input after compressing earlier inputs but before writing its index. All bytes remained in SHA-addressed archives. Restored the index from immutable receipt source_hashes, verified every archive, and changed the OWN packer to persist/validate the entire index before removing any duplicate snapshot. Validation unchanged/stricter. No proof rerun required.
