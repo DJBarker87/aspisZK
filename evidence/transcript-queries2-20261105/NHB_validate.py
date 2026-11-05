@@ -22,14 +22,25 @@ for p in sorted(E.glob('NHB_K[0-9][0-9][0-9]/receipt.json')):
  graph=json.loads((E/(a+'-graph-check.json')).read_text());lock=json.loads((E/(a+'-lock-check.json')).read_text())
  assert graph['graph_matches_frozen'] and lock['unchanged'],a
  assert r['swaps']=='0',a
+ assert r['limits']=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'},a
+ ad=json.loads((E/(a+'-admission.json')).read_text());assert ad['exit']==0 and ad['reservation']['allowed'] is True,a
  if 'timed out' in raw or 'CBMC failed' in raw:verdict='TOOL_LIMIT'
  elif r['exit_status']==0 and 'VERIFICATION:- SUCCESSFUL' in raw:verdict='PASS'
- elif 'Failed Checks: |out| *out ==' in raw and re.search(r'\*\* 1 of \d+ failed',raw):verdict='MATCHED_ENSURES_FAILURE'
+ elif 'Failed Checks:' in raw and re.search(r'\*\* 1 of \d+ failed',raw) and 'unwinding assertion' not in raw:verdict='ASSERTION_FAILED'
  else:verdict='OTHER_FAILURE'
  results.append(dict(attempt=a,target=r['module'],verdict=verdict,receipt_sha256=sha(p)))
  if int(a[-3:])>=3:
   src=p.parent/'sources/NHB_src/crates/aspis-core/src/NHB_harness.rs'
   assert '#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]' in src.read_text(),a
+pairs=[(3,4),(5,6),(7,8),(9,10),(11,12),(13,14),(15,16),(20,21),(22,23),(24,25),(26,27),(30,31),(43,44),(46,47),(50,51),(53,54),(55,56)]
+for pos,neg in pairs:
+ a=f'NHB_K{pos:03d}';b=f'NHB_K{neg:03d}';rd={x['attempt']:x for x in results}
+ assert rd[a]['verdict']=='PASS' and rd[b]['verdict']=='ASSERTION_FAILED',(a,b)
+ cfg=[json.loads((E/(n+'.json')).read_text()) for n in [a,b]]
+ assert cfg[0]['native_command']==cfg[1]['native_command'],(a,b)
+ for n in [a,b]:
+  rr=json.loads((E/n/'receipt.json').read_text())
+  assert rr['exit_status'] not in [124,137],n
 for p in E.glob('NHB_L[0-9][0-9][0-9]/receipt.json'):
  r=json.loads(p.read_text())
  if r['exit_status']==0:

@@ -28,3 +28,11 @@ The physical producer of NGQ_Cuts.Trace is not supplied by constructing a
 model trace or choosing a successful output. Native complete local word/frame
 association and chronological physical cut assembly are still required.
 The final ledger delta must remain empty while that obligation is open.
+
+Final-stage additions: K043/K044 stopped word; K046/K047 low-length word
+composed from the closed local Bool contracts; K050/K051 exhausted block with
+no post-word stop test; K053/K054 opaque-call-log word (conditional membership
+value only). The length16 scalar-expected contract K055 has a matched failing
+K056 control. All source snapshots remain per attempt. Final native case
+coverage and all attempts are in NHB_MEMBERSHIP_CALLEES.json/NHB_RESULTS.json.
+No conditional/local edge is promoted to an NDT composed row.

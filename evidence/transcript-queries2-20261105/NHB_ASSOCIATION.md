@@ -33,3 +33,17 @@ assembly of the eight digest pairs and attempted prefix into NGQ_Cuts.Trace
 on THAT SAME invocation. The model traces above cannot establish this by
 choosing their own output or by existential model totality. No ledger closure,
 NGP_TRANSCRIPT.actual_queries producer or runtime-totality assumption follows.
+
+The remaining checked Lean adapters are NHB_Sampler (decode/full Result),
+NHB_Domains (word/block bounds), NHB_FullFrame (all22 observations determine
+array), NHB_Canonical (18-bit invariant for any Bool reply), NHB_OuterState
+(explicit carried state and advance selection), NHB_Reference (six scalar
+observations), NHB_Prefix (same active-prefix membership), NHB_Inactive (zero
+inactive cells), NHB_Observation (full frame and satisfiable ghost inputs), and
+NHB_DomainSplit (exhaustive domain partition, with a witness refuting a low-only
+caller restriction). NHB_COMBINED_IMPORT prints the headline plus40 roots.
+
+K053/K054 additionally check the full native word window conditional on an
+unconstrained membership Bool. Its exact call log records the SAME survivor
+prefix, candidate, post-increment draws and one membership call; no Bool value
+law is inferred. NHB_REMAINING.md specifies the outstanding physical edges.
