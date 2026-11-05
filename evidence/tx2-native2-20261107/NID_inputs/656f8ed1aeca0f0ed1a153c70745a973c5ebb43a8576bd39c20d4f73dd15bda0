@@ -1,0 +1,95 @@
+import NID_ResumeEmissionFuns
+open Aeneas Aeneas.Std Result
+open NID_ResumeEmission
+namespace NID_ResumePrefix
+variable (NID_call_0 : ∀ {T : Type} {U : Type} {N : Std.Usize} (cmpPartialEqInst : core.cmp.PartialEq
+  T U),
+(Slice T) → (Array U N) → Result Bool)
+
+variable (NID_call_1 : ∀ {T : Type} {U : Type} {N : Std.Usize} (cmpPartialEqInst : core.cmp.PartialEq
+  T U),
+(Slice T) → (Array U N) → Result Bool)
+
+variable (NID_call_2 : ∀ {T : Type} {E : Type} {F : Type} {O : Type} (opsfunctionFnOnceOTupleEFInst :
+  core.ops.function.FnOnce O E F),
+(core.result.Result T E) → O → Result (core.result.Result T F))
+
+variable (NID_call_3 : ∀ {T : Type} {F : Type} (opsfunctionFnMutFTupleSharedATBoolInst :
+  core.ops.function.FnMut F T Bool),
+(core.slice.iter.Iter T) → F → Result (Bool × (core.slice.iter.Iter T)))
+
+variable (NID_call_4 : (Slice Std.U8) → Result (Option aspis_core.field.wide_exact.WideExact))
+
+variable (NID_call_5 : aspis_core.field.QM31 → Result aspis_core.field.QM31)
+
+variable (NID_call_6 : Result aspis_core.field.QM31)
+
+variable (NID_call_7 : ∀ {T : Type} (coremarkerCopyInst : core.marker.Copy T),
+Std.Usize → T → Result (core.result.Result (alloc.vec.Vec T)
+    aspis_core.r0.Error))
+
+variable (NID_call_8 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H),
+(Slice Std.U8) → verifier.Prepared → (Array Std.U8 32#usize) →
+    Std.Usize → H → Result (core.result.Result Unit verifier.Error))
+
+variable (NID_call_9 : (Slice Std.U8) → verifier.Prepared → verifier.Accumulator → (Array
+    aspis_core.field.wide_exact.WideExact 29#usize) → (Option (verifier.Phase
+    → Result Unit)) → verifier.QueryGeometry → verifier.BatchedWeights
+    → Std.Usize → Result (core.result.Result (verifier.Accumulator ×
+    verifier.BatchedWeights) verifier.Error))
+
+variable (NID_call_10 : ∀ (N : Std.Usize),
+aspis_core.field.wide_exact.WideExact → Result (Array
+    aspis_core.field.wide_exact.WideExact N))
+
+variable (NID_call_11 : (Slice Std.U8) → Std.Usize → Result (core.result.Result ((Array
+    aspis_core.field.QM31 10#usize) × Std.Usize) verifier.Error))
+
+variable (NID_call_12 : (Slice Std.U8) → Std.Usize → (alloc.vec.Vec aspis_core.field.QM31) →
+    Result (core.result.Result ((alloc.vec.Vec aspis_core.field.QM31) ×
+    Std.Usize) verifier.Error))
+
+variable (NID_call_13 : (Array Std.U32 22#usize) → Result (core.result.Result Unit verifier.Error))
+
+variable (NID_call_14 : verifier.Reader → Result ((core.result.Result aspis_core.field.QM31
+    verifier.Error) × verifier.Reader))
+
+variable (NID_call_15 : verifier.Reader → Result ((core.result.Result
+    aspis_core.field.wide_exact.WideExact verifier.Error) × verifier.Reader))
+
+variable (NID_call_16 : ∀ (N : Std.Usize),
+verifier.Reader → Result ((Array Std.U8 N) × verifier.Reader))
+
+variable (NID_call_17 : transport.Variant → Result Std.Usize)
+
+variable (NID_call_18 : transport.Variant → Result Std.Usize)
+
+variable (NID_call_19 : transport.Variant → Result Std.U8)
+
+variable (NID_call_20 : verifier.View → verifier.Prepared → verifier.Accumulator → (Option
+    (verifier.Phase → Result Unit)) → Result (core.result.Result Unit
+    verifier.Error))
+
+variable (NID_call_21 : verifier.BatchedWeights → (Slice aspis_core.field.QM31) → Result (Slice
+    aspis_core.field.QM31))
+
+variable (NID_call_22 : (Slice aspis_core.field.QM31) → Result (core.result.Result
+    verifier.BatchedWeights verifier.Error))
+
+variable (NID_call_23 : (Array Std.U32 22#usize) → Std.Usize → Std.Usize → Result
+    (core.result.Result verifier.QueryGeometry verifier.Error))
+
+variable (NID_call_24 : (Option (verifier.Phase → Result Unit)) → verifier.Phase → Result Unit)
+
+
+theorem size_error {H : Type} (d : aspis_core.digest.Digest32 H)
+ (bytes proof public1 : Slice Std.U8) (v : transport.Variant) (hash : H)
+ (n : Std.Usize) (hs : NID_call_17 v = .ok n) (hne : Slice.len bytes ≠ n) :
+ verifier.resume NID_call_0 NID_call_1 NID_call_2 NID_call_3 NID_call_5 NID_call_6 NID_call_7 NID_call_11 NID_call_12 NID_call_13 NID_call_14 NID_call_15 NID_call_16 NID_call_17 NID_call_18 NID_call_19 d bytes proof public1 v hash =
+ .ok (.Err verifier.Error.Checkpoint) := by
+  unfold verifier.resume
+  simp only [hs, bind_ok]
+  simp only [bne_iff_ne, hne, if_true]
+
+#print axioms size_error
+end NID_ResumePrefix

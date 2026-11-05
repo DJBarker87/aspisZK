@@ -53,4 +53,7 @@ set_option pp.universes true
 #check @NID_KmxComposition.rows_spec
 #check @NID_KmxComposition.all64
 #check @NID_KmxComposition.selected
+#check @NID_ResumePrefix.size_error
+#check @NID_ResumeEmission.verifier.resume
+#check @NID_ResumeEmission.verifier.candidate.tx2_common
 #check @AspisR1.RPx_Deployed.deployed

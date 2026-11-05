@@ -48,7 +48,8 @@ elif kind=='export':
 elif kind=='metadata':
  files['NID_capture_graph.py']=(E/'NID_capture_graph.py').read_text();files['NID_EXPECTED_GRAPH_HASHES.json']=(E/'NID_EXPECTED_GRAPH_HASHES.json').read_text();sources=list(files);command=['python3','NID_capture_graph.py']
 elif kind=='extract':
- files['NID_extract.py']=(E/'NID_extract.py').read_text();sources=['NID_extract.py'];command=['python3','NID_extract.py']
+ for n in ['NID_extract.py','NID_NHR_stage.py','NID_EXTRACT_OPACITY.json','NID_EXTRACT_INPUT_PINS.json']:files[n]=(E/n).read_text()
+ sources=list(files);command=['python3','NID_extract.py']
 elif kind=='kani':
  files['NID_gate.py']=(E/'NID_gate.py').read_text()
  for n,t in json.loads((E/'NID_NATIVE_INPUTS.json').read_text()).items():files['NID_src/'+n]=t
@@ -68,7 +69,7 @@ elif kind=='audit':
  command=['python3','NID_batch.py',target]
 else:raise ValueError(kind)
 config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NID_tmp',LEAN_PATH=':'.join([B+'/NID_objects',C+'/NGI_exports_20261105',C+'/NFT_exports_20261104',C+'/NFU_exports_20261104',C+'/NFV_final_objects_20261104',C+'/NGE_exports_20261104',C+'/NGF_exports_20261104',C+'/NFY_exports_20261104',C+'/NFY_priority',W,W+'/objects',C+'/NID_d_fallback/NFQ_exports_20261104',C+'/NID_d_fallback',C+'/NID_pool_fallback/NFR_final_objects_20261104',C+'/NID_pool_fallback/NFO_final_objects_20261104',C+'/NID_pool_fallback',C+'/NID_pool_fallback/NEY_final_objects_20261104',C+'/NID_pool_fallback/NEX_final_objects_20261104',C+'/NID_pool_fallback/NEQ_final_objects_20261103',C+'/NID_pool_fallback/NEM_final_objects_20261102',C+'/NID_pool_fallback/NEU_final_objects_20261104',C,T+'/lib/lean'])),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')
-if kind=='extract':config['expected_time']='optimized dependency compilation then one Charon/Aeneas prepare extraction with opaque child boundaries'
+if kind=='extract':config['expected_time']='optimized dependency compilation, Charon tx2_common with resume transparent, then Aeneas; unchanged private NHR_stage.py'
 config['env']['LEAN_PATH']=':'.join(json.loads((E/'NID_PATHS.json').read_text()))
 if kind=='kani':
  config['native_command']=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NID_src/crates/aspis-r1-cost-probe/Cargo.toml','--target-dir',B+'/NID_target','--features','private-leaf-salts,optimized-terminal,program-build','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse']
@@ -120,10 +121,15 @@ if {kind!r}=='tools': names += ['NID_TOOL_PINS.json']
 if {kind!r}=='stage': names += ['NID_STAGE.json']
 if {kind!r}=='export': names += ['NID_EXPORT.json','NID_CLOSURE_PINS.json.sha256']
 if {kind!r}=='metadata': names += ['NID_FULL_GRAPH.json.sha256','NID_ALL_CRATE_FEATURES.json']
-if {kind!r}=='extract': names += ['NID_EXTRACTION_PINS.json']+([str(p.relative_to(b)) for p in (b/'NID_extracted').rglob('*') if p.is_file()])+(['NID_actual.llbc'] if (b/'NID_actual.llbc').exists() else [])
+if {kind!r}=='extract': names += ['NID_EXTRACTION_PINS.json','NID_EXTRACT_OUTPUTS.json.xz','NID_EXTRACT_OUTPUTS.json.sha256']
 if {kind!r}=='kani': names += [str(p.relative_to(b)) for p in b.glob(a+'-graph*')]+[str(p.relative_to(b)) for p in b.glob(a+'-source*')]+[str(p.relative_to(b)) for p in b.glob(a+'-lock*')]
 if {kind!r}=='audit':names += [str(p.relative_to(b)) for p in (b/'NID_audit'/{target!r}).rglob('*') if p.is_file()]+[str(p.relative_to(b)) for modepath in (b/'NID_audit'/{target!r}).glob('*.json') for row in json.loads(modepath.read_text()).get('results',[]) for p in [b/('NEP_'+modepath.stem+'_'+row['root']+'_REACHABLE.txt')] if p.exists()]+([n for n in ['NID_LOADED_scan.jsonl','NID_POOL_LOADED_scan.jsonl'] if (b/n).exists()])
-out={{n:(b/n).read_text() for n in names}}
+out={{}}
+for n in names:
+ if n.endswith('.xz'):
+  import base64
+  out[n+'.base64']=base64.b64encode((b/n).read_bytes()).decode()
+ else:out[n]=(b/n).read_text()
 if {kind!r}=='export':
  import base64
  out['NID_CLOSURE_PINS.json.xz.base64']=base64.b64encode((b/'NID_CLOSURE_PINS.json.xz').read_bytes()).decode()

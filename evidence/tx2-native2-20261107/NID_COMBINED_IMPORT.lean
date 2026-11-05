@@ -19,6 +19,9 @@ import NID_NCI_QueryInvariant
 import NID_ResumeQueries
 import NID_KOffsetCover
 import NID_KmxComposition
+import NID_ResumeEmissionTypes
+import NID_ResumeEmissionFuns
+import NID_ResumePrefix
 
 #check NID_ResumeCanonical.sourceK_canonical
 #print axioms NID_ResumeCanonical.sourceK_canonical
@@ -124,5 +127,11 @@ import NID_KmxComposition
 #print axioms NID_KmxComposition.all64
 #check NID_KmxComposition.selected
 #print axioms NID_KmxComposition.selected
+#check NID_ResumePrefix.size_error
+#print axioms NID_ResumePrefix.size_error
+#check NID_ResumeEmission.verifier.resume
+#print axioms NID_ResumeEmission.verifier.resume
+#check NID_ResumeEmission.verifier.candidate.tx2_common
+#print axioms NID_ResumeEmission.verifier.candidate.tx2_common
 #check AspisR1.RPx_Deployed.deployed
 #print axioms AspisR1.RPx_Deployed.deployed

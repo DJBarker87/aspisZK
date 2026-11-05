@@ -76,3 +76,23 @@ that the new raw-frame composition should explicitly use prescribed KMX value
 laws. NID_KmxComposition adds that source/proof link. Expanded combined import
 L049 and following audit are new-source evidence, not an unchanged full replay.
 Initial scan/child metrics/raw dumps are retained under NID_initial_audit.
+
+E001 succeeds: frozen resume becomes transparent under explicit pinned opaque
+callee boundaries. It is not a full resume certificate.
+L062 fails syntax-only interface elaboration: newly parameterized helpers need
+explicit transitive arguments. L064 fixes those applications and passes.
+The first L063 preparation stops before submission because the failed L062
+object does not exist. Original config/admission and exact diagnosis are in
+NID_prelaunch_L063; no scope or budget charge occurred. After all dependencies
+pass, the identifier's first actual scope is the final source audit.
+L065's prefix proof hits default recursion depth while simplifying the entire
+emitted continuation. L066 changes the proof to rewrite ONLY the first bind
+and conditional. No resource/recursion limit is raised. Generated heartbeat
+and recursion settings are then removed, preserving the stricter source gate;
+Types/Funs/Prefix pass L067–069 under defaults. Failed sorryAx diagnostic roots
+are unselected and are absent from the final standard-axiom audit.
+
+Final result: no complete op18/op5/op6/op19 or Prepared/View producer-history
+packet, and no final sibling NEW/pair/finish packet installed. Those are missing
+callee/caller/source laws, not successful-premise substitutions or real mismatch
+claims. All exact member residuals are in NID_REMAINING.md.

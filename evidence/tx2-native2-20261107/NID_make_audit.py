@@ -2,12 +2,12 @@
 from pathlib import Path
 import json,re,difflib
 E=Path(__file__).resolve().parent
-mods=['NID_ResumeCanonical','NID_ResumeFields','NID_ResumeCallerDomain','NID_ResumeQuery','NID_MerkleLeafPacket','NID_BoundedReaders','NID_ReadListTransport','NID_WeightReadsTransport','NID_ReadStepFrame','NID_WithKTransport','NID_SemanticTransport','NID_RawOffsetCover','NID_TailView','NID_FinishAlpha','NID_RawWindowFrame','NID_NCI_QueryInvariant','NID_ResumeQueries','NID_KOffsetCover','NID_KmxComposition']
+mods=['NID_ResumeCanonical','NID_ResumeFields','NID_ResumeCallerDomain','NID_ResumeQuery','NID_MerkleLeafPacket','NID_BoundedReaders','NID_ReadListTransport','NID_WeightReadsTransport','NID_ReadStepFrame','NID_WithKTransport','NID_SemanticTransport','NID_RawOffsetCover','NID_TailView','NID_FinishAlpha','NID_RawWindowFrame','NID_NCI_QueryInvariant','NID_ResumeQueries','NID_KOffsetCover','NID_KmxComposition','NID_ResumeEmissionTypes','NID_ResumeEmissionFuns','NID_ResumePrefix']
 (E/'NID_MODULES.json').write_text(json.dumps(mods,indent=2)+'\n');roots=[]
 for m in mods:
  s=(E/(m+'.lean')).read_text();ns=re.search(r'^namespace (\S+)',s,re.M)[1]
  roots += [ns+'.'+name for name in re.findall(r'^theorem (\w+)',s,re.M)]
-roots+=['AspisR1.RPx_Deployed.deployed']
+roots+=['NID_ResumeEmission.verifier.resume','NID_ResumeEmission.verifier.candidate.tx2_common','AspisR1.RPx_Deployed.deployed']
 combined='import NGK_COMBINED_IMPORT\nimport NHV_COMBINED_IMPORT\n'+''.join('import '+m+'\n' for m in mods)+'\n'+''.join('#check '+n+'\n#print axioms '+n+'\n' for n in roots)
 (E/'NID_COMBINED_IMPORT.lean').write_text(combined)
 groups=[roots[i:i+20] for i in range(0,len(roots),20)]

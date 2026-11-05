@@ -72,3 +72,24 @@ rather than treating pointwise equality alone as a physical copy certificate.
 The initial48-root audit is retained under NID_initial_audit; the changed
 combined import/root list receives a new same-binary audit/fixtures and scan.
 No native passing shape is rerun.
+
+Final extraction/Lean-only stage: E001 uses an unchanged private NHR_stage.py
+with changed opacity to expose the frozen resume body. Source/lock restored;
+only one extraction run. NID_ResumeEmissionTypes/Funs are namespace-retargeted,
+opaque functions are explicit parameters, dependent helper applications receive
+those same parameters. No template axiom is imported, no new limit override.
+NID_ResumePrefix.size_error (L069) proves the actual emitted first wrong-size
+rejection from the size callee reply and actual unequal input length. This is
+an error-prefix theorem, not the successful op18 correspondence. Final emission
+L068 has only standard axioms. Raw output is retained once in the compressed
+NID_EXTRACT_OUTPUTS payload with its uncompressed sha256; parameter mapping,
+source diffs and exact pins accompany it.
+
+Final coherent import L070, statement print L071, identical-binary eight
+fixtures L074 and raw-vs-collect audits L075–077 cover56 roots, including the
+headline and both newly emitted functions. L078 scans the changed cohort;
+L079/L080 retain and independently verify own exports. L063's FIRST scope is
+the final source audit, after a separate pre-launch dependency-fingerprint
+failure was archived (no previous submitted scope for that ID). All source
+modules match a successful focused receipt. No frozen full-release replay or
+ELF rebuild was run; no shipped source changed.

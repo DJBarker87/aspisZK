@@ -93,6 +93,26 @@ def validate(final=True):
   for n in ['NID_CACHE_VERIFICATION.json','NID_SOURCE_VERIFICATION.json']:assert json.loads((E/n).read_text())['status']=='PASS'
   assert 'CBMC timed out' in (E/'NID_K062/stdout.log').read_text()
   assert audit['walker_byte_identical'] is True
+  controls=json.loads((E/'NID_VALIDATOR_CONTROLS.json').read_text())
+  assert controls['status']=='PASS' and len(controls['negative_controls'])==9
+  assert all(x['rejected'] is True for x in controls['negative_controls'])
+  ep=json.loads((E/'NID_EXTRACTION_PINS.json').read_text())
+  assert ep['status']==0 and ep['source_restored'] is True and ep['shared_writes'] is False
+  assert ep['NHR_pins']['lock_before']==ep['NHR_pins']['lock_after']=='5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef'
+  assert ep['NHR_pins']['charon_exit']==ep['NHR_pins']['aeneas_exit']==0
+  assert sha(E/'NID_NHR_stage.py')==sha(ROOT/'evidence/extract-stage-20261106/NHR_stage.py')==ep['stager_sha256']
+  raw=lzma.decompress((E/'NID_EXTRACT_OUTPUTS.json.xz').read_bytes())
+  assert hashlib.sha256(raw).hexdigest()==ep['payload_sha256']==(E/'NID_EXTRACT_OUTPUTS.json.sha256').read_text().strip()
+  payload=json.loads(raw)
+  assert len(payload)==ep['payload_files']
+  for row in payload.values():
+   value=base64.b64decode(row['base64'],validate=True)
+   assert len(value)==row['bytes'] and hashlib.sha256(value).hexdigest()==row['sha256']
+  for mod in json.loads((E/'NID_MODULES.json').read_text())+['NID_COMBINED_IMPORT','NID_ProofDriver']:
+   candidates=[r for r in receipts if r['kind']=='lean' and r['module']==mod and r['exit_status']==0]
+   assert candidates,('missing focused success',mod)
+   assert any(sha(E/(mod+'.lean'))==r['source_hashes']['NID_generated/'+mod+'.lean'] for r in candidates),('source changed after focus',mod)
+  assert audit['root_count']==56 and len(expected)==56
  return dict(status='PASS' if final else 'PREFLIGHT_ONLY',counts=counts,receipts=len(receipts),promotions=0,baseline_checks='unchanged graph/resource/features plus stricter full frozen source pins; zero promotion while any slot open')
 if __name__=='__main__':
  final='--preflight' not in sys.argv;out=validate(final)
