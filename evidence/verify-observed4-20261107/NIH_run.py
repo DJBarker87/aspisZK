@@ -6,6 +6,8 @@ H='dombarker@100.108.41.90'
 B='/home/dombarker/project-offloads/codex-cx-verify-observed4-20261107'
 a=sys.argv[1]; assert re.fullmatch(r'NIH_[LKE][0-9]{3}',a)
 x=json.loads((E/(a+'.json')).read_text()); assert x['attempt']==a
+assert 1<=int(a[-3:])<=({'L':90,'K':100,'E':1}[a[4]])
+if x['command'][:2]==['python3','NIH_gate.py']:assert x['command'][2]==a+'.json','Stale gate configuration'
 assert not (E/a/'receipt.json').exists(), 'Never resubmit'
 guard=E/'NIH_CLIENT_ACTIVE';fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,str(os.getpid()).encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
 def ssh(code,data=None,submitted=False):
@@ -43,7 +45,7 @@ for n in ['S2W_run_host.py','lakefile.toml','lake-manifest.json','lean-toolchain
  if not (b/n).exists():shutil.copyfile(w/n,b/n)
 for n,t in json.loads({json.dumps(files)!r}).items():
  p=b/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
-for n in ['NIH_objects','NIH_generated','NIH_tmp']:(b/n).mkdir(exist_ok=True)
+for n in ['NIH_objects','NIH_generated','NIH_tmp','NIH_native']:(b/n).mkdir(exist_ok=True)
 p=b/{(a+'.json')!r};x=json.loads(p.read_text());roots=x.get('env',{{}}).get('LEAN_PATH','').split(':');rels=set();pins={{}}
 if x['kind']=='lean':
  for root in roots:

@@ -1,0 +1,41 @@
+{"attempt": "NIH_K009", "exit_status": 101, "wall_seconds": 14.628646206110716, "peak_rss_kib": "501880", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-verify-observed4-20261107/NIH_src/crates/aspis-core)
+warning: unexpected `cfg` condition name: `NHU_bad_i`
+   --> crates/aspis-core/src/state_only_hiding.rs:438:25
+    |
+438 | #[cfg_attr(all(kani,not(NHU_bad_i)), kani::ensures(|result| *result==NHU_native::NHU_ref_i(value)))]
+    |                         ^^^^^^^^^
+    |
+    = help: expected names are: `docsrs`, `feature`, `kani`, and `test` and 31 more
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+            
+...
+s line 124 column 9 function <[aspis_core::field::M31] as core::slice::cmp::SlicePartialEq<aspis_core::field::M31>>::equal thread 0
+Unwinding loop _RNvXs2_NtNtCsci0VKyKEi6N_4core5slice3cmpSNtNtCs3J3QIYe7q3r_10aspis_core5field3M31INtB5_14SlicePartialEqBD_E5equalCs37UJtixU7ll_15aspis_statement.0 iteration 8 file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/cmp.rs line 124 column 9 function <[aspis_core::field::M31] as core::slice::cmp::SlicePartialEq<aspis_core::field::M31>>::equal thread 0
+aborting path on assume(false) at file crates/aspis-statement/src/pool_v1/NHU_statement.rs line 19 column 1073 function pool_v1::pair_forest_semantic_terminal::NHU_native::NHU_transition_step thread 0
+aborting path on assume(false) at file crates/aspis-statement/src/pool_v1/NHU_statement.rs line 19 column 992 function pool_v1::pair_forest_semantic_terminal::NHU_native::NHU_transition_step thread 0
+Runtime Symex: 5.80418s
+size of program expression: 187945 steps
+slicing removed 114439 assignments
+Generated 21408 VCC(s), 1401 remaining after simplification
+Runtime Postprocess Equation: 0.229927s
+Passing problem to propositional reduction
+converting SSA
+Runtime Convert SSA: 1.63554s
+Running propositional reduction
+Post-processing
+Runtime Post-process: 0.0147653s
+Solving with CaDiCaL 2.0.0
+1488286 variables, 4714634 clauses
+SAT checker: instance is SATISFIABLE
+Runtime Solver: 0.194179s
+Runtime decision procedure: 1.86203s
+
+thread '<unnamed>' (2829199) panicked at kani-driver/src/cbmc_output_parser.rs:474:21:
+called `Result::unwrap()` on an `Err` value: Error("data did not match any variant of untagged enum ParserItem", line: 0, column: 0)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+Running as unit: run-r5df3c5870ba1486ba726abe8e6e6e365.scope; invocation ID: 19a0d0d32de44b40851c6f0f99d308a7
