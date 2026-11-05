@@ -4,8 +4,8 @@ import hashlib,re,shlex,sys,lzma
 sha=lambda b:hashlib.sha256(b).hexdigest()
 def run(a,kind,target,command=None,extra=None):
     assert a.startswith('NIV_L') and 1<=int(a[-3:])<=90 and not (E/a).exists()
-    env=json.loads((E.parent/'owner-dedupe-20261107/NIM_L027.json').read_text())['env']
-    env['LEAN_PATH']=B+'/NIV_objects:/home/dombarker/project-offloads/codex-cx-slice-d-entry-cache-20261104/NIV_seed_20261107:'+':'.join(p for p in env['LEAN_PATH'].split(':') if not p.endswith('/NIM_objects'))
+    env=json.loads((E.parent/'slice-d-entry6-20261107/NIS_L058.json').read_text())['env']
+    env['LEAN_PATH']=B+'/NIV_objects:/home/dombarker/project-offloads/codex-cx-slice-d-entry-cache-20261104/NIV_seed_20261107:'+':'.join(p for p in env['LEAN_PATH'].split(':') if not p.endswith('/NIS_objects'))
     env['TMPDIR']=B+'/NIV_tmp'
     files=dict(extra or {})
     if kind=='lean':
