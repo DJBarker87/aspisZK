@@ -1,0 +1,56 @@
+NHI_generated/NHI_FilledModel.lean:26:8: error: unsolved goals
+case Ok.unit
+T : Type
+copy : core.marker.Copy T
+n : Usize
+value : T
+cloned : copy.cloneInst.clone value = ok value
+⊢ ∃ a b,
+    FIo_Native.Allocation.reserve Global ⟨[], alloc.vec.Vec.new._proof_1⟩ n = ok (a, b) ∧
+      ∃ x,
+        (match a with
+            | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+            | core.result.Result.Err e => do
+              let t ←
+                FIo_Native.aspis_core.r0.heap.filled.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError.call_once
+                    copy () e
+              ok (core.result.Result.Err t)) =
+            ok x ∧
+          ∃ x_1,
+            (match x with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))) =
+                ok x_1 ∧
+              (match x_1 with
+                | core.ops.control_flow.ControlFlow.Continue a =>
+                  ok (core.result.Result.Ok ⟨List.take ↑n ↑b ++ List.replicate (↑n - (↑b).length) value, ⋯⟩)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec T)
+                    (core.convert.FromSame FIo_Native.aspis_core.r0.Error) residual) =
+                ok (core.result.Result.Ok ⟨List.replicate (↑n) value, ⋯⟩)
+NHI_generated/NHI_FilledModel.lean:28:50: warning: This simp argument is unused:
+  FIo_Install.allocation
+
+Hint: Omit it from the simp argument list.
+  simp only [FIo_Native.aspis_core.r0.heap.filled,F̵I̵o̵_̵I̵n̵s̵t̵a̵l̵l̵.̵a̵l̵l̵o̵c̵a̵t̵i̵o̵n̵,̵
+  ̵  ̵ ̵FIo_Native.alloc.vec.Vec.try_reserve_exact,
+  ̲ ̲ ̲ ̲ ̲alloc.vec.Vec.new,
+  ̵  ̵ ̵FIo_Native.core.result.Result.map_err, ̲bind_tc_ok,
+      ̲core.result.Result.Insts.CoreOpsTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NHI_generated/NHI_FilledModel.lean:30:41: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [FIo_Native.aspis_core.r0.heap.filled, ̲FIo_Install.allocation,
+      ̲FIo_Native.alloc.vec.Vec.try_reserve_exact, ̲alloc.vec.Vec.new,
+      ̲FIo_Native.core.result.Result.map_err,b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵  ̵ ̵core.result.Result.Insts.CoreOpsTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NHI_FilledModel.contents' depends on axioms: [propext, sorryAx, Quot.sound]
+'NHI_FilledModel.qm' depends on axioms: [propext, sorryAx, Quot.sound]
+'NHI_FilledModel.length' depends on axioms: [propext, Quot.sound]
+'NHI_FilledModel.selected' depends on axioms: [propext, Quot.sound]
+'NHI_FilledModel.canonical' depends on axioms: [propext, Quot.sound]

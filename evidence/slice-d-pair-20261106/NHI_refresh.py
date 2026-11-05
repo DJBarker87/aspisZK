@@ -7,6 +7,8 @@ for p in sorted(E.glob('NHI_*.lean')):
  roots += [p.stem+'.'+r for r in re.findall(r'^#print axioms (\w+)$',p.read_text(),re.M)]
 (E/'NHI_AUDIT_ROOTS.json').write_text(json.dumps(dict(groups=[roots]),indent=2)+'\n')
 cat={r['module']:r for l in (P/'NHE_EXPECTED_IMPORTS.jsonl').read_text().splitlines()for r in [json.loads(l)]}
+for line in (E.parent/'ledger9-20261105/NGZ_EXPECTED_IMPORTS.jsonl').read_text().splitlines():
+ row=json.loads(line);cat.setdefault(row['module'],row)
 for p in E.glob('NHI_*.lean'):
  imports=['Init']+[w for l in p.read_text().splitlines()if l.startswith('import ')for w in l[7:].split()if w!='all']
  cat[p.stem]=dict(module=p.stem,imports=list(dict.fromkeys(imports)),source_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),source_path=str(p))

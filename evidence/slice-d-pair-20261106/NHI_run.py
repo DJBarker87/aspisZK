@@ -33,7 +33,7 @@ p=b/{(a+'-reservation.json')!r}; print(p.read_text() if p.exists() else 'MISSING
  if (r.returncode==78 or ad.get('allowed') is False) and retry<10:
   print('reservation wait',flush=True);time.sleep(180);continue
  raise RuntimeError('STOP admission')
-paths=[B+'/NHI_objects',C+'/NHE_exports_20261106/objects',C+'/NGW_exports_20261105/objects',C+'/NGW_NGK_seed',C+'/NGM_exports_20261105',C,W,W+'/objects',T+'/lib/lean']
+paths=[B+'/NHI_objects',C+'/NHE_exports_20261106/objects',C+'/NGW_exports_20261105/objects',C+'/NGW_NGK_seed',C+'/NGM_exports_20261105',C,'/home/dombarker/project-offloads/codex-cx-ledger8-cache-20261104/NGZ_flat',W,W+'/objects',T+'/lib/lean']
 env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NHI_tmp',LEAN_PATH=':'.join(paths))
 files={};sources=[]
 assert target.startswith('NHI_') or kind in ['auditbin','kani','extract','dependency']
@@ -52,7 +52,7 @@ if kind=='kani':
   flag=os.environ.get('NHI_NATIVE_CFG','NHI_invert');assert flag in ['NHI_invert','NGM_invert'];env['RUSTFLAGS']+=' --cfg '+flag
 elif kind=='extract':
  files['NHI_extract.py']=(E/'NHI_extract.py').read_text()
- name={'NHI_TensorRef':'NHI_tensor_reference.rs.patch','NHI_GroupRef':'NHI_group_reference.rs.patch'}[target]
+ name={'NHI_FilledRef':'NHI_filled_reference.rs.patch','NHI_PartialIndexRef':'NHI_partial_index_reference.rs.patch','NHI_GroupTablesRef':'NHI_group_tables_reference.rs.patch'}[target]
  patch=(E/name).read_text()
  files['NHI_references.rs']=''.join(l[1:]for l in patch.splitlines(True)if l.startswith('+')and not l.startswith('+++'))
  sources=['NHI_extract.py','NHI_references.rs'];command=['python3','NHI_extract.py',a+'.json']
@@ -155,4 +155,7 @@ if kind in ['auditbin','auditbatch']:
 assert a+'/receipt.json' in out,'Missing receipt; no resubmit'
 rc=json.loads(out[a+'/receipt.json'])
 with (E/'NHI_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(rc)+'\n')
+if kind=='kani':
+ import runpy
+ runpy.run_path(str(E/'NHI_pack_inputs.py'))
 print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}));print('\n'.join(line for line in out[a+'/stdout.log'].splitlines() if 'error:' in line or 'depends on axioms:' in line or 'VERIFICATION:' in line or 'Verification Time:' in line));sys.exit(rc['exit_status'])
