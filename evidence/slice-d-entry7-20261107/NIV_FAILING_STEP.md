@@ -29,3 +29,5 @@ L019's normal/host metadata traversal still over-approximated six optional depen
 L020 passed the actual release-unit cache checks, then its tool startup probe used unsupported --version. Pinned Charon accepts --help, which now checks startup only; binary SHA256 remains the version authority. This is an own preflight CLI repair, not an extraction or repeated build.
 
 K060: no native verdict: retained predecessor data contract conflicts with an explicit stub (missing recursion contract closure). Remove that unused suffix stub; actual data body retained. No unchanged rerun, no credit.
+
+L014: own scalar-field binder used reserved token meta; renamed to scalarFields, same cut. L024 passed. L023: adjacent documentation comments caused a parser error; changed the explanatory preface to a regular comment without changing emitted body, L025 passed. L035/L036 passed the explicit raw-boundary profile and authentication abort cuts. These are source repairs, never renamings to change a native verdict. Failed Lean diagnostics (including incomplete proof placeholders) are retained as failures and are absent from the accepted combined object closure.
