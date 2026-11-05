@@ -1,0 +1,7 @@
+# Composition register
+
+TX1:179 remains OPEN while native installation and caller domains are checked.
+
+NHS_L002 proves NHS_QueryPacket.source: NHK_Invocation.producer is consumed on the SAME NHL opening transcript, its derived row30/31 and v.final_message. It retains NativeAssociation, the FULL Result/state equality and attempted chronological events. NHS_L003 proves NHS_PreparedPacket.source, substituting that result directly into NHL_PreparedRecompose.source; scalar S1-S4/S6, SAME powers29 and NGY/NGU S8 are actually invoked through NHL. The query return observation is local to this invocation, not a whole-constructor success premise. Primitive seed/digest/reduction/serialization and semantic/compact provenance remain explicit caller domains. This is a model composition result, not yet a CLOSED native driver.
+
+NGN S5's QLog.reply is Result<[u32;22],Error> and its after field is [u8;32]; NHK observation carries outer Aeneas Result of that pair and attempted events. The projection is result's returning pair; fail/div is a separate retained control prefix. NGN's arbitrary returning values/errors overapproximate the callee law; no stub shape rerun is needed solely for this projection. Native ownership/frame association and root-domain installation must still be reviewed before credit.
