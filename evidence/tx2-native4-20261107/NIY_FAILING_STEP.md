@@ -8,3 +8,5 @@ TX2:065 OPEN. Failed objects are excluded from acceptance and imports.
 - L011/L012: generic query continuation associativity stopped at tuple-pattern lets; explicit traversal L013 exposed the reduction point. L014's dsimp had no progress; L015 retained the same unresolved let after a transparency adjustment. No timeout or memory kill occurred and no failed object is accepted. L016 replaces rewriting inference with an explicit residual goal at each read/decode step.
 
 - L017/L018: query continuation rewrite could not infer the tuple-pattern lambda under Aeneas literal-type proofs. Replaced it by a fully instantiated Eq.trans with the named continuation; L020 passed. L016 had already proved the generic ordered continuation through explicit residual goals.
+
+- L051: weights port left reply abbreviation was not unfolded by simpa at the final theorem application. L052 explicitly unfolded NIL_StatePort.reply and passed with unchanged statement and standard axioms.

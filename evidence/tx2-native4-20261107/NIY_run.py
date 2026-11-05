@@ -5,7 +5,7 @@ E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90'
 B='/home/dombarker/project-offloads/codex-cx-tx2-native4-20261107';C='/home/dombarker/project-offloads/codex-cx-slice-d-prepared-cache-20261104';W='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025';T='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0'
 if (E/'NIY_HOLD').exists():sys.exit(75)
 guard=E/'NIY_CLIENT_ACTIVE'; fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,str(os.getpid()).encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
-a,kind,target=sys.argv[1:];assert re.fullmatch('NIY_[LKE][0-9]{3}',a) and 1<=int(a[-3:])<=(120 if kind=='kani' else 1 if kind=='extract' else 100) and not (E/a).exists()
+a,kind,target=sys.argv[1:];assert re.fullmatch('NIY_[LKE][0-9]{3}',a) and 1<=int(a[-3:])<=(100 if kind=='kani' else 1 if kind=='extract' else 100) and not (E/a).exists()
 def ssh(code,data=None,submitted=False):
  for retry in range(11):
   r=subprocess.run(['ssh','-o','ControlMaster=no','-o','ConnectTimeout=15',H,code],input=data,capture_output=True,text=True)
@@ -78,7 +78,7 @@ if kind=='extract':config['expected_time']='optimized dependency compilation, Ch
 config['env']['LEAN_PATH']=':'.join(json.loads((E/'NIY_PATHS.json').read_text()))
 if kind=='kani':
  config['native_command']=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NIY_src/crates/aspis-r1-cost-probe/Cargo.toml','--target-dir',B+'/NIY_target','--features','private-leaf-salts,optimized-terminal,program-build','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse']
- config['env'].update(CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-Copt-level=3 -C link-arg=-Wl,--threads=1'+(' --cfg NIL_invert' if os.environ.get('NIY_INVERT') else ''))
+ config['env'].update(CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-Copt-level=3 -C link-arg=-Wl,--threads=1'+(' --cfg NIL_invert --cfg NIY_invert' if os.environ.get('NIY_INVERT') else ''))
  if os.environ.get('NIY_BAD_DECODE_ARG'):config['env']['RUSTFLAGS']+=' --cfg NIY_bad_decode_arg'
  if os.environ.get('NIY_BAD_REPLY'):config['env']['RUSTFLAGS']+=' --cfg NIY_bad_reply'
  if os.environ.get('NIY_BAD_EXPAND'):config['env']['RUSTFLAGS']+=' --cfg NIY_bad_expand'

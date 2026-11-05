@@ -1,0 +1,329 @@
+import NIY_C_AfterAlpha1
+set_option autoImplicit false
+noncomputable section
+namespace NIY_C_AfterRho
+open Aeneas Aeneas.Std Result ControlFlow Error AspisR1Stage2
+
+def suffix (ops : ResumeOps)
+ (bytes : Slice U8) (v : transport.Variant) (end1 : Usize) (i4 : U8)
+ (state : Array U8 32#usize) (a3 : Array U8 32#usize) (a4 : Array U8 32#usize) (val : aspis_core.field.wide_exact.WideExact) (val1 : aspis_core.field.wide_exact.WideExact) (val2 : aspis_core.field.wide_exact.WideExact) (val3 : aspis_core.field.wide_exact.WideExact) (val4 : aspis_core.field.QM31) (r12 : verifier.Reader) :
+ Result (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error) := do
+ let (a5, r13) ← ops.raw 4#usize r12
+ let i8 ← lift (core.num.U32.from_le_bytes a5)
+ let (a6, r14) ← ops.raw 4#usize r13
+ let i9 ← lift (core.num.U32.from_le_bytes a6)
+ let (a7, r15) ← ops.raw 4#usize r14
+ let i10 ← lift (core.num.U32.from_le_bytes a7)
+ let (a8, r16) ← ops.raw 4#usize r15
+ let i11 ← lift (core.num.U32.from_le_bytes a8)
+ let (a9, r17) ← ops.raw 4#usize r16
+ let i12 ← lift (core.num.U32.from_le_bytes a9)
+ let (a10, r18) ←
+   ops.raw 4#usize r17
+ let i13 ← lift (core.num.U32.from_le_bytes a10)
+ let (a11, r19) ←
+   ops.raw 4#usize r18
+ let i14 ← lift (core.num.U32.from_le_bytes a11)
+ let (a12, r20) ←
+   ops.raw 4#usize r19
+ let i15 ← lift (core.num.U32.from_le_bytes a12)
+ let (a13, r21) ←
+   ops.raw 4#usize r20
+ let i16 ← lift (core.num.U32.from_le_bytes a13)
+ let (a14, r22) ←
+   ops.raw 4#usize r21
+ let i17 ← lift (core.num.U32.from_le_bytes a14)
+ let (a15, r23) ←
+   ops.raw 4#usize r22
+ let i18 ← lift (core.num.U32.from_le_bytes a15)
+ let (a16, r24) ←
+   ops.raw 4#usize r23
+ let i19 ← lift (core.num.U32.from_le_bytes a16)
+ let (a17, r25) ←
+   ops.raw 4#usize r24
+ let i20 ← lift (core.num.U32.from_le_bytes a17)
+ let (a18, r26) ←
+   ops.raw 4#usize r25
+ let i21 ← lift (core.num.U32.from_le_bytes a18)
+ let (a19, r27) ←
+   ops.raw 4#usize r26
+ let i22 ← lift (core.num.U32.from_le_bytes a19)
+ let (a20, r28) ←
+   ops.raw 4#usize r27
+ let i23 ← lift (core.num.U32.from_le_bytes a20)
+ let (a21, r29) ←
+   ops.raw 4#usize r28
+ let i24 ← lift (core.num.U32.from_le_bytes a21)
+ let (a22, r30) ←
+   ops.raw 4#usize r29
+ let i25 ← lift (core.num.U32.from_le_bytes a22)
+ let (a23, r31) ←
+   ops.raw 4#usize r30
+ let i26 ← lift (core.num.U32.from_le_bytes a23)
+ let (a24, r32) ←
+   ops.raw 4#usize r31
+ let i27 ← lift (core.num.U32.from_le_bytes a24)
+ let (a25, r33) ←
+   ops.raw 4#usize r32
+ let i28 ← lift (core.num.U32.from_le_bytes a25)
+ let (a26, r34) ←
+   ops.raw 4#usize r33
+ let i29 ← lift (core.num.U32.from_le_bytes a26)
+ let r35 ←
+   ops.validate
+     (Array.make 22#usize [
+       i8, i9, i10, i11, i12, i13, i14, i15, i16,
+       i17, i18, i19, i20, i21, i22, i23, i24,
+       i25, i26, i27, i28, i29
+       ])
+ let cf5 ←
+   core.result.Result.Insts.CoreOpsTry.branch r35
+ match cf5 with
+ | core.ops.control_flow.ControlFlow.Continue _ =>
+   let r36 ←
+     ops.readSemanticAlpha bytes
+       r34.«at»
+   let cf6 ←
+     core.result.Result.Insts.CoreOpsTry.branch
+       r36
+   match cf6 with
+   | core.ops.control_flow.ControlFlow.Continue
+     val5 =>
+     let (semantic_alpha, at1) := val5
+     let (r37, r38) ←
+       ops.readK
+         { r34 with «at» := at1 }
+     let cf7 ←
+       core.result.Result.Insts.CoreOpsTry.branch
+         r37
+     match cf7 with
+     | core.ops.control_flow.ControlFlow.Continue
+       val6 =>
+       let (r39, r40) ← ops.readK r38
+       let cf8 ←
+         core.result.Result.Insts.CoreOpsTry.branch
+           r39
+       match cf8 with
+       |
+         core.ops.control_flow.ControlFlow.Continue
+         val7 =>
+         let (r41, r42) ← ops.readK r40
+         let cf9 ←
+           core.result.Result.Insts.CoreOpsTry.branch
+             r41
+         match cf9 with
+         |
+           core.ops.control_flow.ControlFlow.Continue
+           val8 =>
+           let (r43, r44) ←
+             ops.readK r42
+           let cf10 ←
+             core.result.Result.Insts.CoreOpsTry.branch
+               r43
+           match cf10 with
+           |
+             core.ops.control_flow.ControlFlow.Continue
+             val9 =>
+             let (r45, r46) ←
+               ops.readE r44
+             let cf11 ←
+               core.result.Result.Insts.CoreOpsTry.branch
+                 r45
+             match cf11 with
+             |
+               core.ops.control_flow.ControlFlow.Continue
+               val10 =>
+               let (r47, r48) ←
+                 ops.readE r46
+               let cf12 ←
+                 core.result.Result.Insts.CoreOpsTry.branch
+                   r47
+               match cf12 with
+               |
+                 core.ops.control_flow.ControlFlow.Continue
+                 val11 =>
+                 let (r49, r50) ←
+                   ops.readK r48
+                 let cf13 ←
+                   core.result.Result.Insts.CoreOpsTry.branch
+                     r49
+                 match cf13 with
+                 |
+                   core.ops.control_flow.ControlFlow.Continue
+                   val12 =>
+                   let i30 ←
+                     ops.finalLen v
+                   let q ←
+                     ops.zeroK
+                   let r52 ← ops.filled i30 q
+                   let cf14 ←
+                     core.result.Result.Insts.CoreOpsTry.branch
+                       r52
+                   match cf14 with
+                   |
+                     core.ops.control_flow.ControlFlow.Continue
+                     val13 =>
+                     let r53 ←
+                       ops.readWeights
+                         bytes r50.«at» val13
+                     let cf15 ←
+                       core.result.Result.Insts.CoreOpsTry.branch
+                         r53
+                     match cf15 with
+                     |
+                       core.ops.control_flow.ControlFlow.Continue
+                       val14 =>
+                       let (weights, at2) := val14
+                       if at2 != end1
+                       then
+                         ok
+                           (core.result.Result.Err
+                           verifier.Error.Checkpoint)
+                       else
+                         let i31 ←
+                           lift (UScalar.cast
+                             .Usize i4)
+                         ok (core.result.Result.Ok
+                           ({
+                              variant := v,
+                              roots :=
+                                (Array.make
+                                   2#usize [
+                                  a3, a4
+                                  ]),
+                              gamma := val,
+                              kappa := val1,
+                              alpha :=
+                                (Array.make
+                                   2#usize [
+                                  val2, val3
+                                  ]),
+                              rho := val4,
+                              queries :=
+                                (Array.make
+                                   22#usize [
+                                  i8, i9, i10,
+                                  i11, i12, i13,
+                                  i14, i15, i16,
+                                  i17, i18, i19,
+                                  i20, i21, i22,
+                                  i23, i24, i25,
+                                  i26, i27, i28,
+                                  i29
+                                  ]),
+                              semantic_alpha,
+                              z :=
+                                (Array.make
+                                   2#usize [
+                                  {
+                                    x := val6,
+                                    y := val7
+                                  },
+                                  {
+                                    x := val8,
+                                    y := val9
+                                  }
+                                  ]),
+                              claim := val10,
+                              state
+                            },
+                           {
+                             weights,
+                             rhs := val11,
+                             power := val12,
+                             next := i31
+                           }))
+                     |
+                       core.ops.control_flow.ControlFlow.Break
+                       residual =>
+                       core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                         (verifier.Prepared ×
+                         verifier.Accumulator)
+                         (core.convert.FromSame
+                         verifier.Error) residual
+                   |
+                     core.ops.control_flow.ControlFlow.Break
+                     residual =>
+                     core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                       (verifier.Prepared ×
+                       verifier.Accumulator)
+                       (core.convert.FromSame
+                       verifier.Error) residual
+                 |
+                   core.ops.control_flow.ControlFlow.Break
+                   residual =>
+                   core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                     (verifier.Prepared ×
+                     verifier.Accumulator)
+                     (core.convert.FromSame
+                     verifier.Error) residual
+               |
+                 core.ops.control_flow.ControlFlow.Break
+                 residual =>
+                 core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                   (verifier.Prepared ×
+                   verifier.Accumulator)
+                   (core.convert.FromSame
+                   verifier.Error) residual
+             |
+               core.ops.control_flow.ControlFlow.Break
+               residual =>
+               core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                 (verifier.Prepared ×
+                 verifier.Accumulator)
+                 (core.convert.FromSame
+                 verifier.Error) residual
+           |
+             core.ops.control_flow.ControlFlow.Break
+             residual =>
+             core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+               (verifier.Prepared ×
+               verifier.Accumulator)
+               (core.convert.FromSame
+               verifier.Error) residual
+         | core.ops.control_flow.ControlFlow.Break
+           residual =>
+           core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+             (verifier.Prepared ×
+             verifier.Accumulator)
+             (core.convert.FromSame
+             verifier.Error) residual
+       | core.ops.control_flow.ControlFlow.Break
+         residual =>
+         core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+           (verifier.Prepared ×
+           verifier.Accumulator)
+           (core.convert.FromSame verifier.Error)
+           residual
+     | core.ops.control_flow.ControlFlow.Break
+       residual =>
+       core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+         (verifier.Prepared ×
+         verifier.Accumulator)
+         (core.convert.FromSame verifier.Error)
+         residual
+   | core.ops.control_flow.ControlFlow.Break
+     residual =>
+     core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+       (verifier.Prepared × verifier.Accumulator)
+       (core.convert.FromSame verifier.Error)
+       residual
+ | core.ops.control_flow.ControlFlow.Break
+   residual =>
+   core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+     (verifier.Prepared × verifier.Accumulator)
+     (core.convert.FromSame verifier.Error)
+     residual
+
+theorem source (ops : ResumeOps)
+ (bytes : Slice U8) (v : transport.Variant) (end1 : Usize) (i4 : U8)
+ (state : Array U8 32#usize) (a3 : Array U8 32#usize) (a4 : Array U8 32#usize) (val : aspis_core.field.wide_exact.WideExact) (val1 : aspis_core.field.wide_exact.WideExact) (val2 : aspis_core.field.wide_exact.WideExact) (val3 : aspis_core.field.wide_exact.WideExact) (r10 : verifier.Reader) :
+ NIY_C_AfterAlpha1.suffix ops bytes v end1 i4 state a3 a4 val val1 val2 val3 r10=
+ (do let (reply,out) ← ops.readK r10
+     NIL_TryTransport.cohort reply (fun x=>suffix ops bytes v end1 i4 state a3 a4 val val1 val2 val3 x out)) := by
+ unfold NIY_C_AfterAlpha1.suffix
+ apply NIL_ResultCases.bind_congr
+ rintro ⟨reply,out⟩
+ cases reply <;> rfl
+#print axioms source
+end NIY_C_AfterRho
