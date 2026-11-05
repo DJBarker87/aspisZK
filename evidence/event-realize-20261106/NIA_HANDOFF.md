@@ -11,3 +11,5 @@ Initial inspection: NHZ events_from_cuts is conditional on physical packet exist
 Retained hypotheses: op9 and full native parent ordering, physical observer fields, approved runtime trust rows and original L154 parameters. No row promotion expected.
 
 Validation, exact targets, source/dependency hashes, revision, exit/wall/RSS/swap and printed axioms will be recorded in NIA_ATTEMPTS.jsonl and per-attempt receipts. No ELF rebuild is triggered unless shipped source changes (none planned).
+
+Stage 1: NIA_L002 passes (8.31 s, 5,993,380 KiB, swap 0); six top theorems have standard axioms. This is structural interpreter algebra only; the native installation gap is explicit in NIA_FAILING_STEP.md. L001 launched no Lean process: missing IDb_Components object; owned input corrected by making the retained NFS base explicit, with no claim of native discharge.
