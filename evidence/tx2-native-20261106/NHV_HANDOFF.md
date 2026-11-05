@@ -17,3 +17,12 @@ Stage 1: NHV_L001 combined NHT/NGK/headline import passed, exit0, wall3.166291s,
 Stage2 in progress: exact frozen scratch+KMX staged (L002). K001 missing literal-path source and K002 own geometry type mismatch repaired and excluded. K003 simultaneous full-reply dynamic field projections timeout90s excluded; K004 isolates args/guard/ownership. The complete resume callee law is still NFU-owned OPEN. NHV_FAILING_STEP.md retains details.
 
 Stage3: powers native family K031/K032/K033 PASS/corruption FAIL/PASS; geometry argument/carrier family K034/K035/K036 likewise. L006 WindowFrame and L007 TailWindows prove exact generic list/window lengths/adjacency and successful slice values. L020 PendingPacket proves SAME emitted pending constructor (including allocation error) equals NFW_QueryResume.pending a on width64, from existing Port3 loop induction. L021 combines these with headline/NGK, standard axioms. No native producer packet or row is promoted solely from these conditional/model results. Native pending one-step/header/end checks are queued.
+
+Stage4: inactive owner conflict resolved by36 import-only replays L023–L058,
+then exact full-Option packet L059 and producer dictionary NHV_NativeOps L060.
+L061 combines inactive/pending/geometry/powers/query/flush MODEL slots with
+headline/NGK, standard axioms, leaving NFU resume/Merkle/NHM finish explicit.
+Native full-size resume K018/K019/K020 and actual pending full-Result tail
+K015/K016/K017 pass/control-fail/rename-pass. Native return field facets and
+finer query/flush call-entry/poststate cuts continue under the remaining budget.
+No composed row promoted. No source-to-model law inferred from the mock Hash.

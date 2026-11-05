@@ -1,3 +1,4 @@
+import NHV_NativeOps
 import NHT_COMBINED_IMPORT
 import NGK_COMBINED_IMPORT
 import NHV_TailWindows
@@ -14,3 +15,33 @@ import NHV_PendingPacket
 
 #check NHV_PendingPacket.source
 #print axioms NHV_PendingPacket.source
+
+-- Native pending cut NHV_K037; no whole-driver closure claim.
+#check NHT_PacketOps.query_source
+
+-- Native flush cut NHV_K043; no whole-driver closure claim.
+#check NHT_QueryTail.source
+
+-- Native inactive cut NHV_K046; no whole-driver closure claim.
+#check NHT_Offsets.inactive
+
+-- Native root cut NHV_K049; no whole-driver closure claim.
+#check NHT_Offsets.folded
+
+-- Native view cut NHV_K052; no whole-driver closure claim.
+#check NHT_TailView.source
+
+-- Native round0 cut NHV_K055; no whole-driver closure claim.
+#check NHT_RoundPacket.source
+
+-- Native round1 cut NHV_K058; no whole-driver closure claim.
+#check NHT_RoundOutput.canonical
+
+-- Native dot cut NHV_K061; no whole-driver closure claim.
+#check NHT_FinishPacket.source
+
+-- Native-ready producer dictionary, with resume/Merkle/NHM finish still explicit.
+#check NHV_NativeOps.source
+#check NHV_NativeOps.slots
+#print axioms NHV_NativeOps.source
+#print axioms NHV_InactivePacket.source

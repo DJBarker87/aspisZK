@@ -1,8 +1,1 @@
-import NHT_COMBINED_IMPORT
-import NGK_COMBINED_IMPORT
-#check AspisR1.RPx_Deployed.deployed
-#print axioms AspisR1.RPx_Deployed.deployed
-
--- Completed native powers family NHV_K031/032/033; canonical SAME gamma.
-#check NHT_PowersDomain.produced
-#print axioms AspisR1.NFW_PowersCohort.source
+../../../NHV_inputs/68dda4a5185f34cd9d6f3bcae60f91786521a5f030ab0126558c9dd3f5cd2496

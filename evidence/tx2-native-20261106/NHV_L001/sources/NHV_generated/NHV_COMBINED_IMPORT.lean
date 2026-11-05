@@ -1,4 +1,1 @@
-import NHT_COMBINED_IMPORT
-import NGK_COMBINED_IMPORT
-#check AspisR1.RPx_Deployed.deployed
-#print axioms AspisR1.RPx_Deployed.deployed
+../../../NHV_inputs/14114bb25747de41fd8808b001a24336f4e91204993a5a1aa48ab48215ef472b

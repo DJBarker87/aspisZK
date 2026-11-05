@@ -32,7 +32,9 @@ p=b/{(a+'-reservation.json')!r}; print(p.read_text() if p.exists() else 'MISSING
   print('reservation wait',flush=True);time.sleep(180);continue
  raise RuntimeError('STOP admission')
 files={};sources=[]
-if kind=='stage':
+if kind=='tools':
+ files['NHV_tools.py']=(E/'NHV_tools.py').read_text();sources=list(files);command=['python3','NHV_tools.py']
+elif kind=='stage':
  files['NHV_stage.py']=(E/'NHV_stage.py').read_text()
  files['NHV_KMX.patch']=Path('evidence/kani-mitig-20261028/KMX_copy_stubs.patch').read_text()
  sources=list(files);command=['python3','NHV_stage.py']
@@ -73,6 +75,8 @@ if kind=='kani':
  if os.environ.get('NHV_BAD_VIEW'):config['env']['RUSTFLAGS']+=' --cfg NHV_bad_view'
  if os.environ.get('NHV_BAD_ALLOC'):config['env']['RUSTFLAGS']+=' --cfg NHV_bad_alloc'
  if os.environ.get('NHV_BAD_BOX_VALUE'):config['env']['RUSTFLAGS']+=' --cfg NHV_bad_box_value'
+ if os.environ.get('NHV_CORRUPT_ARGUMENT') is not None:
+  z=os.environ['NHV_CORRUPT_ARGUMENT'];assert re.fullmatch('[0-9]',z);config['env']['RUSTFLAGS']+=' --cfg NHV_corrupt'+z
  config['expected_time']='optimized compilation then one native staged cut with local records; no field multiplication'
 files[a+'.json']=json.dumps(config)
 r=ssh('python3',f'''from pathlib import Path
@@ -105,6 +109,7 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
+if {kind!r}=='tools': names += ['NHV_TOOL_PINS.json']
 if {kind!r}=='stage': names += ['NHV_STAGE.json']
 if {kind!r}=='export': names += ['NHV_EXPORT.json','NHV_CLOSURE_PINS.json.sha256']
 if {kind!r}=='metadata': names += ['NHV_FULL_GRAPH.json.sha256','NHV_ALL_CRATE_FEATURES.json']

@@ -1,0 +1,51 @@
+{"attempt": "NHV_L017", "exit_status": 0, "wall_seconds": 3.4444518259260803, "peak_rss_kib": "5953608", "swaps": "0", "print_axioms": ["'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NFW_PowersCohort.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NHV_PendingPacket.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+: NBF_PowerStep.Canonical a.power)
+  (rho : NBF_PowerStep.Canonical p.rho) (start : ↑a.next = 10) (gamma : AspisR1.NFN_LPi_FieldValues.NE)
+  (canonicalGamma : AspisR1.NFN_LPi_FieldValues.canonE gamma)
+  (g : Aeneas.Std.Array AspisR1.NFN_LPi_FieldValues.NE 29#usize)
+  (powers : FIo_Native.weights.powers 29#usize gamma = Aeneas.Std.Result.ok g)
+  (geometry : AspisR1Stage2.verifier.QueryGeometry) (qPlace gPlace : ℕ)
+  (pending : AspisR1Stage2.verifier.BatchedWeights)
+  (returned :
+    NHT_PacketOps.query base qPlace gPlace proof p a (AspisR1.FIp_DotsAdapter.fromArray g) none geometry
+        (AspisR1.NFW_QueryResume.pending a) 22#usize =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (after, pending)))
+  (inactive : AspisR1Stage2.aspis_core.field.wide_exact.WideExact) (round0 folded round1 : Aeneas.Std.Usize)
+  (packet : NHT_QueryTail.Packet)
+  (NHM_finish :
+    ∀ (out : Aeneas.Std.Slice AspisR1Stage2.aspis_core.field.QM31),
+      AspisR1.Port3_FlushInstall.flush pending after.weights.deref = Aeneas.Std.Result.ok out →
+        AspisR1.NGM_FinishDomain.AccumulatorDomain
+            { weights := ⟨↑out, ⋯⟩, rhs := after.rhs, power := after.power, next := after.next } →
+          ∀ (v : VTop_Stages.verifier.View),
+            NHT_TailView.view (NHT_PacketOps.installed top base qPlace gPlace) proof p none inactive round0 folded
+                  round1 =
+                Aeneas.Std.Result.ok v →
+              top.op19 v p { weights := ⟨↑out, ⋯⟩, rhs := after.rhs, power := after.power, next := after.next } none =
+                packet v p { weights := ⟨↑out, ⋯⟩, rhs := after.rhs, power := after.power, next := after.next } none) :
+  ∃ out,
+    AspisR1.Port3_FlushInstall.flush pending after.weights.deref = Aeneas.Std.Result.ok out ∧
+      AspisR1.NGM_FinishDomain.AccumulatorDomain
+          { weights := ⟨↑out, ⋯⟩, rhs := after.rhs, power := after.power, next := after.next } ∧
+        NHQ_Tx2CommonModel.afterQuery (NHT_PacketOps.installed top base qPlace gPlace) proof p none inactive round0
+            folded round1 (Aeneas.Std.core.result.Result.Ok (after, pending)) =
+          do
+          let v ←
+            NHT_TailView.view (NHT_PacketOps.installed top base qPlace gPlace) proof p none inactive round0 folded
+                round1
+          packet v p { weights := ⟨↑out, ⋯⟩, rhs := after.rhs, power := after.power, next := after.next } none
+NHT_Offsets.inactive : NHT_Constants.compact.OFF_INACTIVE = Aeneas.Std.Result.ok 7495#usize
+NHT_Offsets.folded : NHT_Constants.compact.OFF_FOLDED_ROOT = Aeneas.Std.Result.ok 7751#usize
+NHT_TailView.source (ops : VTop_Stages.Ops) (proof : Aeneas.Std.Slice Aeneas.Std.U8) (p : VTop_Stages.verifier.Prepared)
+  (obs : Option (VTop_Stages.verifier.Phase → Aeneas.Std.Result Unit))
+  (inactive : VTop_Stages.aspis_core.field.wide_exact.WideExact) (round0 folded round1 : Aeneas.Std.Usize)
+  (a : VTop_Stages.verifier.Accumulator) :
+  NHT_TailCall.run ops proof p obs inactive round0 folded round1 a = do
+    let v ← NHT_TailView.view ops proof p obs inactive round0 folded round1
+    ops.op19 v p a obs
+NHT_RoundPacket.source (r : AspisR1.NP6_StdModel.Reservation) (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (alpha claim : NHT_RoundPacket.E) (i : Aeneas.Std.Usize)
+  (ca : AspisR1.LPi_FieldValues.canonE (AspisR1.FIo_Install.toE alpha)) (hi : ↑i < 2) :
+  NHT_RoundPacket.packet bytes alpha claim =
+    AspisR1Stage2.Stage2Finish.verifier.finishRelationRoundWithOps (AspisR1.IDa_Deployed.finish r) bytes alpha claim i
+

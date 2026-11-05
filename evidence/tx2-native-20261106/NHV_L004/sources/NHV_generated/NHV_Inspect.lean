@@ -1,11 +1,1 @@
-import NHT_TailView
-#print Aeneas.Std.core.slice.index.Slice.index
-#print Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice
-#print Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index
-#print Aeneas.Std.Array.to_slice
-#check List.take_drop
-#check List.length_take
-#check List.length_drop
-#check List.take_take
-#check List.drop_drop
-#check List.drop_take
+../../../NHV_inputs/0e6ec359efcd1770de4936aa91f117d502d5d735edc75539ce3b365c86273d8d

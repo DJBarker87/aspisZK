@@ -20,3 +20,28 @@ K010: geometry combined with dynamic Prepared/Accumulator snapshots timed out90s
 L005: adjacent-window proof applied the implicit-argument List.take_add theorem as a function. Corrected to its symmetric equality. This failed source is excluded, including its elaborator-generated sorryAx declaration; no authored admission or axiom is used.
 
 L008 and L010: own qualified-name errors (canonical allocation error owner is inferred by .Allocation; geometry root namespace has no AspisR1 prefix). Corrected names only; elaborator-generated sorryAx from L008 is excluded. No proved module was edited.
+
+K040: query argument/return probe with simultaneous dynamic Accumulator output
+projection timed out90s. Excluded. Next isolate call arguments, all Result arms
+and allocation/next/raw carrier identity, then one concrete output-field class
+per facet. No repeated whole-loop or timeout increase.
+
+Flush receiver review: K043–K045's fixture consumed pending by value in its
+logging stub, whereas the actual frozen pending.finish receiver is shared.
+Those passing checks remain local fixture evidence only; they cannot certify
+Drop/liveness at the native boundary. The replacement will borrow the SAME
+pending across the cut and additionally assert its post-cut raw/terms frame.
+This is a stricter receiver/footprint check, not a rerun for a better verdict.
+
+L022: inactive packet import collides at FIo_ReduceBounds.fold (canonical RPt_FIo_ReduceBounds already owns it). Excluded; exact conflict in NHV_INACTIVE_COHORT_FINDING.md. Investigating minimal private retarget; no silent alias or domain weakening.
+
+K008: stricter shared-receiver flush plus simultaneous dynamic pending and
+all-weight poststate projection timed out90s. Excluded. Split caller call-entry
+(shared pending/weights arguments), actual post-flush record reconstruction on
+an arbitrary poststate, and the CLOSED NGC callee modifies/value law. No
+whole-buffer mutation loop is repeated.
+
+K012: query with full57607 proof/geometry plus returned raw/Accumulator carrier
+still timed out90s. Excluded. Split call-entry operand association from the
+actual full-Result unpack and concrete field-class post-return facets. No
+whole native query loop or success premise is introduced.
