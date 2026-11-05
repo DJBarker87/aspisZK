@@ -1,0 +1,27 @@
+{"attempt": "NHL_E002", "exit_status": 0, "wall_seconds": 63.23121171700768, "peak_rss_kib": "539276", "swaps": "0", "print_axioms": "N/A: extract"}
+{"target": "tx1", "charon_sha256": "daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8", "aeneas_sha256": "c0cf4fccb0879db4ce342da991f6215732a19fc01345b9eec84e632f4673b958", "charon_command": ["/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon", "cargo", "--preset", "aeneas", "--mir", "built", "--sysroot", "default", "--include", "core::option::Option", "--include", "core::result::Result", "--include", "core::option::_::ok_or", "--start-from", "crate::verifier::candidate::tx1", "--opaque", "crate::verifier::_", "--opaque", "crate::r1_semantic::_", "--opaque", "crate::r1_wire::_", "--opaque", "aspis_core::field::_", "--opaque", "aspis_core::circ
+...
+cost-probe/src/fast_pairing.rs:95:16
+    |
+ 80 |     impl Q {
+    |     ------ associated items in this implementation
+...
+ 95 |         pub fn dot<const N:usize>(left:[Self;N],right:[Self;N])->Self {
+    |                ^^^
+...
+104 |         #[inline(always)] pub fn neg(self)->Self {Self::ZERO.sub(self)}
+    |                                  ^^^
+105 |         #[inline(always)] pub fn square(self)->Self {self.mul(self)}
+    |                                  ^^^^^^
+
+warning: `aspis-r1-cost-probe` (lib) generated 18 warnings (run `cargo fix --lib -p aspis-r1-cost-probe` to apply 3 suggestions)
+    Finished `release` profile [optimized] target(s) in 1m 02s
+["/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/aeneas-b59d5188-extended", "-sequential", "-no-progress-bar", "-abort-on-error", "-backend", "lean", "-namespace", "NHL_Actual", "-dest", "/home/dombarker/project-offloads/codex-cx-prepare-emit-20261106/NHL_extracted", "-subdir", "NHL_Actual", "-split-files", "/home/dombarker/project-offloads/codex-cx-prepare-emit-20261106/NHL_actual.llbc"]
+[[92mInfo[39m ] Imported: /home/dombarker/project-offloads/codex-cx-prepare-emit-20261106/NHL_actual.llbc
+[[92mInfo[39m ] Generated: /home/dombarker/project-offloads/codex-cx-prepare-emit-20261106/NHL_extracted/NHL_Actual/TypesExternal_Template.lean
+[[92mInfo[39m ] Generated: /home/dombarker/project-offloads/codex-cx-prepare-emit-20261106/NHL_extracted/NHL_Actual/Types.lean
+[[92mInfo[39m ] Generated: /home/dombarker/project-offloads/codex-cx-prepare-emit-20261106/NHL_extracted/NHL_Actual/FunsExternal_Template.lean
+[[92mInfo[39m ] Generated: /home/dombarker/project-offloads/codex-cx-prepare-emit-20261106/NHL_extracted/NHL_Actual/Funs.lean
+[[92mInfo[39m ] Total execution time: 0.468207 seconds
+
+Running as unit: run-ra408c35bf58f4bd684f6dcd3ca3e6951.scope; invocation ID: 2c4e9d0dc0e548f78a1a13a983ee5edc
