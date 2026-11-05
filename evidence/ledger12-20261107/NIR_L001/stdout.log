@@ -1,0 +1,80 @@
+AspisR1.NIN_Observer.canonical_from_initial {A C : Type}
+  (copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)) (allocator : Allocator A)
+  (base : DrvC_Installation.Configuration FIo_Install.W C) (err : C) (r : NP6_StdModel.Reservation)
+  (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest) (a : Adversary A) (physical : F3T_Runtime.Runtime)
+  (exported :
+    ∀ (H : Bytes → State) (run : F3T_Experiment.RunView),
+      (eval H physical).2 = some run →
+        run.2.1 =
+          F3T_Canon.canonInput
+            (F3T_ByteCarrier.input (FIp_Install.configuration err base r) (submitted (eval H a.first).2))) :
+  NIN_Observer.CanonicalInput copy allocator base err r hashv a physical
+AspisR1.NIN_Observer.stored_public {A C : Type}
+  (copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)) (allocator : Allocator A)
+  (base : DrvC_Installation.Configuration FIo_Install.W C) (err : C) (r : NP6_StdModel.Reservation)
+  (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest) (a : Adversary A) (H : Bytes → State) :
+  have input :=
+    F3T_Canon.canonInput
+      (F3T_ByteCarrier.input (FIp_Install.configuration err base r)
+        (submitted
+          (eval H
+                (ART_PartialAccount.account (FIp_Install.configuration err base r) hashv copy allocator
+                  CPH_Program.verifier a)).2.1));
+  input.stored =
+      List.drop 688
+        (MultiproofConeCanonical.bytesOf ↑((eval H a.first).2.entry.buffers ((eval H a.first).2.entry.handles 0).1)) ∧
+    input.physical.bytes =
+      MultiproofConeCanonical.bytesOf ↑((eval H a.first).2.entry.buffers ((eval H a.first).2.entry.handles 1).1)
+AspisR1.NIN_Observer.outer_from_coverage {A C : Type}
+  (copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)) (allocator : Allocator A)
+  (base : DrvC_Installation.Configuration FIo_Install.W C) (err : C) (r : NP6_StdModel.Reservation)
+  (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest) (a : Adversary A) (physical : F3T_Runtime.Runtime)
+  (native : (Bytes → State) → Bytes → State)
+  (coverage :
+    ∀ (H : Bytes → State),
+      ART_PartialAccount.Certificate (FIp_Install.configuration err base r) hashv copy allocator CPH_Program.verifier a
+        (native H) H)
+  (exported :
+    ∀ (H : Bytes → State),
+      (eval H physical).1 =
+        (ART_PartialAccount.represented (FIp_Install.configuration err base r) hashv copy allocator CPH_Program.verifier
+            a (native H) H).1) :
+  NIN_Observer.OuterTrace copy allocator base err r hashv a physical
+AspisR1.NIN_Observer.nested_from_outer {A C : Type}
+  (copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)) (allocator : Allocator A)
+  (base : DrvC_Installation.Configuration FIo_Install.W C) (err : C) (r : NP6_StdModel.Reservation)
+  (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest) (a : Adversary A) (physical : F3T_Runtime.Runtime)
+  (outer : NIN_Observer.OuterTrace copy allocator base err r hashv a physical)
+  (exported :
+    ∀ (H : Bytes → State) (run : F3T_Experiment.RunView),
+      (eval H physical).2 = some run → run.1 = (eval H physical).1) :
+  NIN_Observer.NestedEvents copy allocator base err r hashv a physical
+AspisR1.NIN_Observer.flag_from_results {A C : Type}
+  (copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)) (allocator : Allocator A)
+  (base : DrvC_Installation.Configuration FIo_Install.W C) (err : C) (r : NP6_StdModel.Reservation)
+  (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest) (a : Adversary A) (n1 : S2W_ExtractionBoundary.First)
+  (n2 : S2W_ExtractionBoundary.Second)
+  (extraction :
+    S2W_DigestExtraction.AeneasExtraction
+      (GExq_Caller.sdk (FIp_Install.configuration err base r).adapter (FIp_Install.configuration err base r).currentBase
+        (FIp_Install.configuration err base r).stageBase (FIp_Install.configuration err base r).finish
+        (FIp_Install.configuration err base r).reserved (FIp_Install.configuration err base r).query
+        (FIp_Install.configuration err base r).geometry (FIp_Install.configuration err base r).boundaries
+        (FIp_Install.configuration err base r).std)
+      n1 n2 hashv)
+  (physical : F3T_Runtime.Runtime) (native : (Bytes → State) → Bytes → State)
+  (coverage :
+    ∀ (H : Bytes → State),
+      ART_PartialAccount.Certificate (FIp_Install.configuration err base r) hashv copy allocator CPH_Program.verifier a
+        (native H) H)
+  (exported :
+    ∀ (H : Bytes → State) (run : F3T_Experiment.RunView),
+      (eval H physical).2 = some run →
+        run.2.2 = accepted (ARS_NativeOutcome.wrappers copy allocator CPH_Program.verifier a n1 n2 (native H))) :
+  NIN_Observer.LiteralFlag copy allocator base err r hashv a physical
+AspisR1.NIN_Observer.accepted_iff {A : Type} (out : GExq_AccountExperiment.Outcome A) :
+  accepted out = true ↔
+    (∃ first, out.2.1 = ok (core.result.Result.Ok first)) ∧
+      ∃ second reply, out.2.2 = some (second, ok (core.result.Result.Ok reply))
+'AspisR1.NIR_SameLawInstance.realizes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIR_SameLawInstance.permitted_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
