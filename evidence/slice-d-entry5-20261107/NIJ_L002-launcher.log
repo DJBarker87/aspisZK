@@ -1,0 +1,38 @@
+{"attempt": "NIJ_L002", "exit_status": 0, "wall_seconds": 6.0040071189869195, "peak_rss_kib": "5800584", "swaps": "0", "print_axioms": []}
+def AdapterRw.r1_pool_adapter.owned.require_zero : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AdapterRw.solana_program_error.ProgramError) :=
+fun bytes => do
+  let pending_return ← AdapterRw.r1_pool_adapter.owned.require_zero_loop bytes 0#usize
+  match pending_return with
+    | none => Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+    | some r => Aeneas.Std.Result.ok r
+def NCX_Reference.status : Aeneas.Std.U8 →
+  Aeneas.Std.Result
+    (Aeneas.Std.core.result.Result NCX_Reference.VerifierEntryStatusV1
+      NCX_Reference.PoolV1VerifierRegistryFormatError) :=
+fun v =>
+  match v with
+  | 0#8#uscalar => Aeneas.Std.Result.ok (Aeneas.Std.c
+...
+                                    AdapterRw.solana_program_error.ProgramError)
+                                                residual
+                                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            Unit
+                                            (Aeneas.Std.core.convert.FromSame
+                                              AdapterRw.solana_program_error.ProgramError)
+                                            residual
+                                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                      Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        Unit
+                                        (Aeneas.Std.core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                                        residual
+                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                              Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                Unit (Aeneas.Std.core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                                residual
+                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            Unit (Aeneas.Std.core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual
+
+Running as unit: run-rdfcf3aea83ef4d6597c1d5d72cac4293.scope; invocation ID: 07fb09cbc12641fabdefcf11846be2ef

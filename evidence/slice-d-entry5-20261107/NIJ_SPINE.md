@@ -1,6 +1,6 @@
 # NIJ entry spine — inherited baseline
 
-**14 new CLOSED rows /13 functions beyond NHJ; zero complete TX1/TX2 paths. Target not yet established.** NHY delta is additive against unchanged NHO599-row ledger (335 CLOSED/264 OPEN →349/250); NHJ14-row delta is retained separately, without duplicating credit. No security, privacy or custody theorem is promoted.
+**NIJ:1 newly CLOSED row/function (TX2:202); inherited NHY14 rows/13 functions and NHJ14 rows retained separately. Zero complete TX1/TX2 paths; target not established.** NHY delta is additive against unchanged NHO599-row ledger (335 CLOSED/264 OPEN →349/250); NHJ14-row delta is retained separately, without duplicating credit. No security, privacy or custody theorem is promoted.
 
 ## Entry roots and distance
 
@@ -62,3 +62,9 @@ CLOSED NHY rows: TX1:343, TX2:239,151,192,193,195,197,198,199,200,205,207,209,20
 One real1768-byte checkpoint iteration K114/115 is native-green; induction and parent association remain. Both owned stages have native prefix/span/tail support, but no parent certificate. Exact outgoing runtime pointer/length arguments and empty clear invocation are observed by K116/117; String production and empty-clear effect remain OPEN. Full remaining table is NHY_REMAINING.md.
 
 120 K slots and80 L slots consumed conservatively (69 compiles,10 audits,1 no-launch preflight);0/2 extractions because the mandatory stager has no helper/program roots.51 native passes,52 semantic failures (includes own corrected-reference and excluded-config findings),11 excluded timeouts,6 input/compile failures. Every matched control is checked; no timeout or cap was raised, no memory kill or swap. Peak RSS6,390,764KiB native and7,024,744KiB formal. Parent roots remain OPEN, as do both complete entry paths.
+
+## NIJ exact path distance after decoder stage
+
+TX1 still needs six OPEN spine rows:330 entry →333 process →344 SDK stage1 →345 stage1_owned →328 first_decoded →094 candidate tx1. TX2 still needs seven OPEN spine rows:213 entry →221 process →240 SDK stage2 →241 stage2_owned →064 tx2_authenticated →065 tx2_common →115 finish_relation. These are exact unresolved row counts on the pinned inherited ledger, not estimates of proof effort. Candidate implementation work is NIH_/NID_/NIG_/lead; NIJ only consumes exact NHL/NHT model boundaries.
+
+Shared side gaps remain: two error occurrences (one function), two authentication parents, V1 decoder/validator suffixes and active-at helpers. Current registry204 and current entry202 are CLOSED. Empty-clear trust distance is zero under(am); wrappers still owe their physical joins. New zero-loop induction is support for existing342, not new row credit. No complete path can be inferred from364/599 CLOSED rows.

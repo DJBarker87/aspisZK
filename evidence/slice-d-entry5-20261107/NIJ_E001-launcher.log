@@ -1,0 +1,53 @@
+{"attempt": "NIJ_E001", "exit_status": 124, "wall_seconds": 180.00304910703562, "peak_rss_kib": "19888", "swaps": "0", "print_axioms": "N/A: extract"}
+{"charon_command": ["/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon", "cargo", "--preset", "aeneas", "--mir", "built", "--sysroot", "default", "--include", "core::option::Option", "--include", "core::result::Result", "--include", "core::option::_::ok_or", "--start-from", "crate::error", "--dest-file", "/home/dombarker/project-offloads/codex-cx-slice-d-entry5-20261107/NIJ_extracted/error/error.llbc", "--", "--manifest-path", "/home/dombarker/project-offloads/codex-cx-extract-stage-20261106/NHR_workspace/programs/r1-cost-probe/Cargo.toml", "--locked", "--offline", "--release", "--lib", "--jobs", "1", "--features", "pool-adapter,private-leaf-salts"], "aeneas
+...
+be/src/fast_pairing.rs:19:26
+   |
+19 |     #[inline(always)] fn reduce_pair(s:u64)->u64 {
+   |                          ^^^^^^^^^^^
+
+warning: multiple associated items are never used
+  --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:23:19
+   |
+22 |     impl Q {
+   |     ------ associated items in this implementation
+23 |         pub const ZERO:Self=Self([0;4]);pub const ONE:Self=Self([1,0,0,0]);
+   |                   ^^^^                            ^^^
+...
+28 |         pub fn from_m31(x:u32)->Option<Self>{if x<P{Some(Self([x,0,0,0]))}else{None}}
+   |                ^^^^^^^^
+...
+37 |         #[inline(always)] pub fn add(self,rhs:Self)->Self {
+   |                                  ^^^
+...
+42 |         #[inline(always)] pub fn sub(self,rhs:Self)->Self {
+   |                                  ^^^
+...
+47 |         #[inline(always)] pub fn half(self)->Self {
+   |                                  ^^^^
+...
+51 |         pub fn half_pow(self,n:u8)->Option<Self>{
+   |                ^^^^^^^^
+...
+57 |         #[inline(always)] pub fn mul_m31(self,rhs:u32)->Option<Self>{
+   |                                  ^^^^^^^
+...
+64 |         #[inline(always)] pub fn mul(self,rhs:Self)->Self {
+   |                                  ^^^
+
+warning: associated items `dot`, `neg`, and `square` are never used
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:95:16
+    |
+ 80 |     impl Q {
+    |     ------ associated items in this implementation
+...
+ 95 |         pub fn dot<const N:usize>(left:[Self;N],right:[Self;N])->Self {
+    |                ^^^
+...
+104 |         #[inline(always)] pub fn neg(self)->Self {Self::ZERO.sub(self)}
+    |                                  ^^^
+105 |         #[inline(always)] pub fn square(self)->Self {self.mul(self)}
+    |                                  ^^^^^^
+
+
+Running as unit: run-r75aab2f608994023bac35b6709451ff9.scope; invocation ID: e4bf82fe35724afb849f12b9f4a73d12

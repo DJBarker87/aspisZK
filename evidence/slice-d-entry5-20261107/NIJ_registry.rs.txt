@@ -1,0 +1,44 @@
+use super::*;
+extern crate alloc;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+fn tag(s:VerifierEntryStatusV1)->u8{match s{VerifierEntryStatusV1::Pending=>0,VerifierEntryStatusV1::Active=>1,VerifierEntryStatusV1::Paused=>2,VerifierEntryStatusV1::Retired=>3}}
+fn observe(r:&VerifierRegistryEntryV2,f:u8,j:usize)->u8{match f{0=>r.pool[j],1=>r.verifier_program[j],2=>r.profile_binding[j],3=>r.release_binding[j],4=>r.loader_program[j],5=>r.programdata_address[j],6=>r.executable_hash[j],7=>r.expected_upgrade_authority[j],_=>r.policy_binding[j]}}
+fn producer(bytes:&[u8;320],field:u8,j:usize)->Result<(u8,u8,u8,u8,u64,u64,u8),PoolV1VerifierRegistryFormatError>{
+    let entry = VerifierRegistryEntryV2 {
+        status: VerifierEntryStatusV1::try_from(bytes[5])?,
+        statement_version: bytes[6],
+        bump: bytes[312],
+        pool: bytes[8..40].try_into().unwrap(),
+        verifier_program: bytes[40..72].try_into().unwrap(),
+        profile_binding: bytes[72..104].try_into().unwrap(),
+        release_binding: bytes[104..136].try_into().unwrap(),
+        loader_program: bytes[136..168].try_into().unwrap(),
+        programdata_address: bytes[168..200].try_into().unwrap(),
+        programdata_bump: bytes[313],
+        executable_hash: bytes[200..232].try_into().unwrap(),
+        expected_upgrade_authority: bytes[232..264].try_into().unwrap(),
+        activation_slot: u64::from_le_bytes(bytes[264..272].try_into().unwrap()),
+        retirement_slot: u64::from_le_bytes(bytes[272..280].try_into().unwrap()),
+        policy_binding: bytes[280..312].try_into().unwrap(),
+    };
+ Ok((tag(entry.status),entry.statement_version,entry.bump,entry.programdata_bump,entry.activation_slot,entry.retirement_slot,observe(&entry,field,j)))
+}
+fn word(bytes:&[u8;320],offset:usize)->u64{(bytes[offset] as u64)|((bytes[offset+1] as u64)<<8)|((bytes[offset+2] as u64)<<16)|((bytes[offset+3] as u64)<<24)|((bytes[offset+4] as u64)<<32)|((bytes[offset+5] as u64)<<40)|((bytes[offset+6] as u64)<<48)|((bytes[offset+7] as u64)<<56)}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn producer_check(){
+ let bytes:[u8;320]=kani::any();let field:u8=kani::any();let j:usize=kani::any();kani::assume(field<9);kani::assume(j<32);
+ let offset=match field{0=>8,1=>40,2=>72,3=>104,4=>136,5=>168,6=>200,7=>232,_=>280};
+ let result=producer(&bytes,field,j);
+ let good=match result{Err(e)=>bytes[5]>3&&matches!(e,PoolV1VerifierRegistryFormatError::InvalidStatus),Ok((status,version,bump,pdb,activation,retirement,byte))=>bytes[5]<4&&status==bytes[5]&&version==bytes[6]&&bump==bytes[312]&&pdb==bytes[313]&&activation==word(&bytes,264)&&retirement==word(&bytes,272)&&byte==bytes[offset+j]};
+ assert!(good);
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn producer_wrong(){
+ let bytes:[u8;320]=kani::any();let field:u8=kani::any();let j:usize=kani::any();kani::assume(field<9);kani::assume(j<32);
+ let offset=match field{0=>8,1=>40,2=>72,3=>104,4=>136,5=>168,6=>200,7=>232,_=>280};
+ let result=producer(&bytes,field,j);
+ let good=match result{Err(e)=>bytes[5]>3&&matches!(e,PoolV1VerifierRegistryFormatError::InvalidStatus),Ok((status,version,bump,pdb,activation,retirement,byte))=>bytes[5]<4&&status==bytes[5]&&version==bytes[6]&&bump==bytes[312]&&pdb==bytes[313]&&activation==word(&bytes,264)&&retirement==word(&bytes,272)&&byte==bytes[offset+j]};
+ assert!(!good);
+}

@@ -1,0 +1,49 @@
+{"attempt": "NIJ_L004", "exit_status": 1, "wall_seconds": 1.6017842220608145, "peak_rss_kib": "2614160", "swaps": "0", "print_axioms": ["'NIJ_EntryStatus.source' depends on axioms: [propext]", "'NIJ_EntryStatus.rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NIJ_generated/NIJ_EntryStatus.lean:30:79: error: unsolved goals
+b : Slice U8
+len : b.len = 320#usize
+magic : NCX_Reference.magic b NCX_Reference.POOL_V1_VERIFIER_ENTRY_V2_MAGIC = ok true
+version : b.index_usize 4#usize = ok 3#u8
+mode : b.index_usize 7#usize = ok 1#u8
+zeros : NCX_Reference.zero (NHY_SliceRead.segment b 314 6) = ok true
+st : U8
+read : b.index_usize 5#usize = ok st
+bad : value st = core.result.Result.Err NCX_Reference.PoolV1VerifierRegistryFormatError.InvalidStatus
+length : (↑b).length = 320
+reserved :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) b
+      { start := 314#usize, «end» := 320#usize } =
+    ok (NHY_SliceRead.segment b (↑314#usize) (
+...
+: (↑b).length = 320
+reserved :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) b
+      { start := 314#usize, «end» := 320#usize } =
+    ok (NHY_SliceRead.segment b (↑314#usize) (↑320#usize - ↑314#usize))
+status :
+  NCX_Reference.status st = ok (core.result.Result.Err NCX_Reference.PoolV1VerifierRegistryFormatError.InvalidStatus)
+⊢ ok
+      (core.result.Result.Err
+        (core.convert.FromSame.from NCX_Reference.PoolV1VerifierRegistryFormatError.InvalidStatus)) =
+    ok (core.result.Result.Err NCX_Reference.PoolV1VerifierRegistryFormatError.InvalidStatus)
+NIJ_generated/NIJ_EntryStatus.lean:43:2: warning: This simp argument is unused:
+  core.convert.FromSame
+
+Hint: Omit it from the simp argument list.
+  simp only [NCX_Reference.decode_verifier_registry_entry_v2,
+     ̲NCX_Reference.POOL_V1_VERIFIER_ENTRY_V2_BYTES, ̲NCX_Reference.POOL_V1_VERIFIER_ENTRY_V2_VERSION,
+     ̲NCX_Reference.POOL_V1_VERIFIER_DEPLOYMENT_MODE_IMMUTABLE_LOADER_V3,
+  ̵  ̵len, ̲magic, ̲version, ̲mode,
+  ̲ ̲ ̲ ̲reserved, ̲zeros, ̲read,s̵t̵a̵t̵u̵s̵,̵
+  ̵ s̲t̲a̲t̲u̲s̲,̲ show (320#usize != 320#usize) ̲= ̲false from rfl,
+     ̲show (3#u8 != 3#u8) ̲= ̲false from rfl, ̲show (1#u8 != 1#u8) ̲= ̲false from rfl,
+     ̲show (314#usize).val ̲= ̲314 from rfl, ̲show (320#usize).val ̲= ̲320 from rfl, ̲Nat.reduceSub,
+     ̲Bool.false_eq_true, ̲ite_false, ̲ite_true, ̲bind_tc_ok, ̲core.result.Result.Insts.CoreOpsTry.branch,
+     ̲core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,̵
+  ̵ ̵ ̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NIJ_EntryStatus.source' depends on axioms: [propext]
+'NIJ_EntryStatus.rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rbdf6e5b2a97b43f186e806f8e13695ba.scope; invocation ID: 3c66f39af4274c8d8d0f729c9a40c675
