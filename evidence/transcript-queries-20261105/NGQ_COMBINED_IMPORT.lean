@@ -1,7 +1,7 @@
 import NGK_COMBINED_IMPORT
 import NGQ_Concrete
 import NGQ_MaterializeChain
-import NGQ_EventBounds
+import NGQ_QueryBudget
 import NGQ_DigestBridge
 import NGQ_ByteFrames
 import NGQ_ScanLaws
@@ -73,3 +73,8 @@ set_option autoImplicit false
 #print axioms AspisR1.NGQ_MaterializeChain.run
 #print axioms AspisR1.NGQ_TRANSCRIPT.adopted_boundaries
 #print axioms AspisR1.NGQ_TRANSCRIPT.actual_queries
+#print axioms AspisR1.NGQ_QueryBudget.bind_bound
+#print axioms AspisR1.NGQ_QueryBudget.query_bound
+#print axioms AspisR1.NGQ_QueryBudget.attempts_at_most17
+#print axioms AspisR1.NGQ_ScanLaws.success_positions
+#print axioms AspisR1.NGQ_QueryFactor.pair_bind

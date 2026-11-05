@@ -34,7 +34,7 @@ fn NGQ_tail() {
   _=>false,
  };
  #[cfg(not(NGQ_invert))] assert!(correct);
- #[cfg(NGQ_invert)] {if good {assert!(out.unwrap()[i] == (q[i] ^ 1));}else{assert!(t.state[j] == (old[j] ^ 1));}}
+ #[cfg(NGQ_invert)] { if good { let result=out.unwrap(); assert!(result[i]==(q[i]^1)); } else {assert!(correct);} }
 }
 '''
 (E/'NGQ_tail_harness.rs.txt').write_text(s);(E/'NGQ_TAIL_CUT.json').write_text(json.dumps(dict(start=a,end=b,source_sha256=hashlib.sha256(original.encode()).hexdigest(),substitution=callee+' -> reply',cut_sha256=hashlib.sha256(body.encode()).hexdigest(),trace_arguments=22),indent=1)+'\n')

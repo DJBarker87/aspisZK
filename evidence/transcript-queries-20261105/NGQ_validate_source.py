@@ -23,6 +23,28 @@ for p in E.glob('*harness.rs.txt'):
  t=p.read_text();assert not re.search(r'\bstatic\b|Option\s*<\s*fn',t),p
 assert len(re.findall(r'crate::trace::value\(5,\d+,E::from_m31',src))==22
 assert re.findall(r'crate::trace::value\(5,(\d+),E::from_m31',src)==list(map(str,range(22)))
+# Add source-fission checks, retaining all earlier predecessor checks.
+core=fs['crates/aspis-core/src/r0_transcript.rs']
+cut=json.loads((E/'NGQ_SCAN_CUT.json').read_text());word=core[cut['start']:cut['end']]
+assert sha(word.encode())==cut['sha256']
+assert word in (E/'NGQ_core_harness.rs.txt').read_text()
+tail=json.loads((E/'NGQ_TAIL_CUT.json').read_text());native_tail=src[tail['start']:tail['end']]
+assert sha(native_tail.encode())==tail['source_sha256']
+tail_body=native_tail.replace('aspis_core::r0_transcript::queries_from_pairs(&blocks,&advances)','reply')
+assert sha(tail_body.encode())==tail['cut_sha256']
+assert tail_body in (E/'NGQ_tail_harness.rs.txt').read_text()
+assert [int(x) for x in re.findall(r'crate::trace::value\(5,(\d+),E::from_m31',tail_body)]==list(range(22))
+assert 'kani::assume(n<=8192)' in (E/'NGQ_absorb_harness.rs.txt').read_text().replace(' ','')
+release=json.loads((E/'NGQ_RELEASE_IDENTITY.json').read_text())
+assert release['all_equal'] and release['files_compared']==len(fs)
+assert {r['path']:r['sha256'] for r in release['files']}==pins
+# The combined theorem must disclose the native trace producer premise.
+concrete=(E/'NGQ_Concrete.lean').read_text()
+assert '(trace : NGQ_Cuts.Trace hashv' in concrete
+assert 'NGQ_Normalize.normalize (NGQ_Effects.code boundaries self row payload)' in concrete
+assert 'positions observed.result=positions' in concrete
+assert 'observed.attempted=(SdkC_Source.run hashv' in concrete
+assert not re.search(r'(?m)^\s*(axiom|opaque)\s|\bsorry\b|\badmit\b|native_decide',concrete)
 # Owned branch must not have changed any shipped source file.
 assert subprocess.check_output(['git','diff','--name-only','a84229ad238^','--','crates','programs'],text=True)==''
 print(json.dumps(dict(source_checks=True,pairs=8,ordered_trace_arguments=22,controls=controls),indent=1))

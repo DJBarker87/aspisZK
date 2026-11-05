@@ -10,6 +10,8 @@ for j,(verifier,target) in enumerate([(False,'r0_transcript::NGQ_harness::NGQ_qu
 for j,(verifier,target) in enumerate([(True,'transcript::NGQ_call::NGQ_decode_call'),(False,'r0_transcript::NGQ_iterator::NGQ_range_next')]):
  for invert in [False,True]:jobs.append((55+2*j+int(invert),verifier,invert,target))
 jobs=[(num+1 if num>=35 else num,v,i,t) for num,v,i,t in jobs]
+jobs=[(num,v,False,'r0_transcript::NGQ_harness::NGQ_word_branch_check') if num==45 else (num,v,i,t) for num,v,i,t in jobs]
+jobs.append((60,False,True,'r0_transcript::NGQ_harness::NGQ_word_branch_check'))
 for num,verifier,invert,target in jobs:
  a=f'NGQ_K{num:03}';env=dict(os.environ)
  if verifier:env['NGQ_VERIFIER']='1'
@@ -20,6 +22,6 @@ for num,verifier,invert,target in jobs:
  p=E/a/'receipt.json'
  if not p.exists():raise SystemExit(a+' NO RECEIPT; STOP')
  rc=json.loads(p.read_text());raw=(E/a/'stdout.log').read_text()
- verdict='SUCCESSFUL' if 'VERIFICATION:- SUCCESSFUL' in raw else 'FAILED' if 'VERIFICATION:- FAILED' in raw else 'OTHER'
+ verdict='OTHER' if any(x in raw for x in ['CBMC timed out','CBMC failed','unwinding assertion']) else 'SUCCESSFUL' if 'VERIFICATION:- SUCCESSFUL' in raw else 'FAILED' if 'VERIFICATION:- FAILED' in raw else 'OTHER'
  print(a,target,verdict,rc['wall_seconds'],rc['peak_rss_kib'],flush=True)
  if verdict!=('FAILED' if invert else 'SUCCESSFUL'):raise SystemExit('STOP unexpected verdict; isolate/split before retry')

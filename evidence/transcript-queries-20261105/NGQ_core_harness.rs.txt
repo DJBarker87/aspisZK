@@ -105,3 +105,29 @@ fn NGQ_default() {
  #[cfg(not(NGQ_invert))] assert!(correct);
  #[cfg(NGQ_invert)] assert!(s.accepted[j] == 1);
 }
+// Split K044: only the branch AFTER the membership callee; its association remains OPEN.
+impl QueryScan {
+ fn NGQ_word_branch(&mut self,candidate:u32,member:bool)->bool {
+            if self.accepted_len == QUERY_COUNT || self.draws == QUERY_MAX_DRAWS {
+                return true;
+            }
+            self.draws += 1;
+            if !member {
+                self.accepted[self.accepted_len] = candidate;
+                self.accepted_len += 1;
+            }
+ false
+ }
+}
+#[kani::proof] #[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+fn NGQ_word_branch_check() {
+ let accepted:[u32;22]=kani::any();let len:usize=kani::any();let draws:usize=kani::any();let x:u32=kani::any();
+ let j:usize=kani::any();let member:bool=kani::any();kani::assume(len<=22 && draws<=64 && j<22);
+ let mut s=QueryScan{accepted,accepted_len:len,draws};let stop=s.NGQ_word_branch(x,member);
+ let halted=len==22 || draws==64;let expected_len=if halted || member {len}else{len+1};
+ let expected_draws=if halted {draws}else{draws+1};let expected_word=if !halted && !member && j==len {x}else{accepted[j]};
+ let correct=stop==halted && s.accepted_len==expected_len && s.draws==expected_draws && s.accepted[j]==expected_word;
+ #[cfg(not(NGQ_invert))] assert!(correct);
+ #[cfg(NGQ_invert)] assert!(s.accepted[j] == (expected_word ^ 1));
+}
