@@ -23,7 +23,7 @@
 +#[cfg(kani)] #[path="NHV_native.rs"] mod NHV_native;
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NHV_native.rs
-@@ -0,0 +1,490 @@
+@@ -0,0 +1,520 @@
 +use super::*;
 +use crate::{KMX_copy_nonoverlapping,KMX_copy_from_slice};
 +use aspis_core::field::{M31,CM31};
@@ -472,10 +472,10 @@
 +#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 +fn query_output_field3_renamed(){query_output_field::<3>();}
 +fn bad_slot(default:usize)->usize{if cfg!(NHV_corrupt0){0}else if cfg!(NHV_corrupt1){1}else if cfg!(NHV_corrupt2){2}else if cfg!(NHV_corrupt3){3}else if cfg!(NHV_corrupt4){4}else if cfg!(NHV_corrupt5){5}else if cfg!(NHV_corrupt6){6}else if cfg!(NHV_corrupt7){7}else if cfg!(NHV_corrupt8){8}else if cfg!(NHV_corrupt9){9}else{default}}
-+struct QueryEntryLog{args:[usize;12],expected:[usize;12],rhs:E,power:K,weight:K,raw:u64,index:usize,limb:usize,calls:usize}
-+impl QueryEntryLog{fn query(&mut self,proof:&[u8],p:&Prepared,a:Accumulator,g:&[E;29],_:Observer,geometry:&QueryGeometry,pending:BatchedWeights,end:usize)->Result<(Accumulator,BatchedWeights),Error>{self.calls+=1;self.args=[proof.as_ptr() as usize,proof.len(),p as *const _ as usize,a.weights.as_ptr() as usize,a.weights.len(),g.as_ptr() as usize,geometry as *const _ as usize,pending.raw.as_ptr() as usize,pending.raw.len(),pending.terms,end,a.next];if cfg!(NHV_invert){self.args[bad_slot(10)]^=1;}assert_eq!(self.args,self.expected);assert!(self.calls==1&&a.rhs==self.rhs&&a.power==self.power&&a.weights[self.index]==self.weight&&pending.raw[self.index][self.limb]==self.raw);kani::assume(false);unreachable!()}}
-+fn query_entry_cut(proof:&[u8],p:&Prepared,a:Accumulator,g:&[E;29],geometry:&QueryGeometry,pending:BatchedWeights,ops:&mut QueryEntryLog)->Result<(Accumulator,BatchedWeights),Error>{let(a,pending)=ops.query(proof,p,a,g,None,geometry,pending,22)?;Ok((a,pending))}
-+fn query_entry_check(){let proof:[u8;57607]=kani::any();let p=prepared();let a=accumulator();let g:[E;29]=es();let geometry=QueryGeometry{start:10,inverses:Vec::from(core::array::from_fn::<[M31;5],12,_>(|_|core::array::from_fn(|_|M31(kani::any())))),line_z:Vec::from(core::array::from_fn::<M31,12,_>(|_|M31(kani::any())))};let pending=BatchedWeights{raw:Vec::from(kani::any::<[[u64;4];64]>()),terms:kani::any()};let(_,i,j)=selected();let mut log=QueryEntryLog{args:[0;12],expected:[proof.as_ptr() as usize,57607,&*p as *const _ as usize,a.weights.as_ptr() as usize,64,g.as_ptr() as usize,&geometry as *const _ as usize,pending.raw.as_ptr() as usize,64,pending.terms,22,a.next],rhs:a.rhs,power:a.power,weight:a.weights[i],raw:pending.raw[i][j%4],index:i,limb:j%4,calls:0};let _=query_entry_cut(&proof,&p,a,&g,&geometry,pending,&mut log);}
++struct QueryEntryLog<const C:usize>{args:[usize;12],expected:[usize;12],rhs:E,power:K,weight:K,raw:u64,index:usize,limb:usize,calls:usize}
++impl<const C:usize> QueryEntryLog<C>{fn query(&mut self,proof:&[u8],p:&Prepared,a:Accumulator,g:&[E;29],_:Observer,geometry:&QueryGeometry,pending:BatchedWeights,end:usize)->Result<(Accumulator,BatchedWeights),Error>{self.calls+=1;self.args=[proof.as_ptr() as usize,proof.len(),p as *const _ as usize,a.weights.as_ptr() as usize,a.weights.len(),g.as_ptr() as usize,geometry as *const _ as usize,pending.raw.as_ptr() as usize,pending.raw.len(),pending.terms,end,a.next];if C==0{if cfg!(NHV_invert){self.args[10]^=1;}assert_eq!(self.args,self.expected);}else if C==1{if cfg!(NHV_invert){self.rhs=if a.rhs==E::ZERO{E::ONE}else{E::ZERO};}assert!(a.rhs==self.rhs&&a.power==self.power);}else if C==2{if cfg!(NHV_invert){self.weight=if a.weights[self.index]==K::ZERO{K::ONE}else{K::ZERO};}assert!(a.weights[self.index]==self.weight);}else{if cfg!(NHV_invert){self.raw^=1;}assert!(pending.raw[self.index][self.limb]==self.raw);}assert!(self.calls==1);kani::assume(false);unreachable!()}}
++fn query_entry_cut<const C:usize>(proof:&[u8],p:&Prepared,a:Accumulator,g:&[E;29],geometry:&QueryGeometry,pending:BatchedWeights,ops:&mut QueryEntryLog<C>)->Result<(Accumulator,BatchedWeights),Error>{let(a,pending)=ops.query(proof,p,a,g,None,geometry,pending,22)?;Ok((a,pending))}
++fn query_entry_check<const C:usize>(){let proof:[u8;57607]=kani::any();let p=prepared();let a=accumulator();let g:[E;29]=es();let geometry=QueryGeometry{start:10,inverses:Vec::from(core::array::from_fn::<[M31;5],12,_>(|_|core::array::from_fn(|_|M31(kani::any())))),line_z:Vec::from(core::array::from_fn::<M31,12,_>(|_|M31(kani::any())))};let pending=BatchedWeights{raw:Vec::from(kani::any::<[[u64;4];64]>()),terms:kani::any()};let(_,i,j)=selected();let mut log:QueryEntryLog<C>=QueryEntryLog{args:[0;12],expected:[proof.as_ptr() as usize,57607,&*p as *const _ as usize,a.weights.as_ptr() as usize,64,g.as_ptr() as usize,&geometry as *const _ as usize,pending.raw.as_ptr() as usize,64,pending.terms,22,a.next],rhs:a.rhs,power:a.power,weight:a.weights[i],raw:pending.raw[i][j%4],index:i,limb:j%4,calls:0};let _=query_entry_cut(&proof,&p,a,&g,&geometry,pending,&mut log);}
 +struct FlushEntryLog{args:[usize;3],expected:[usize;3],weight:K,raw:u64,index:usize,limb:usize,calls:usize}
 +impl FlushEntryLog{fn flush(&mut self,pending:&BatchedWeights,weights:&mut[K]){self.calls+=1;self.args=[pending.raw.as_ptr() as usize,pending.terms,weights.as_ptr() as usize];if cfg!(NHV_invert){self.args[bad_slot(2)]^=1;}assert_eq!(self.args,self.expected);assert!(self.calls==1&&weights.len()==64&&pending.raw.len()==64&&weights[self.index]==self.weight&&pending.raw[self.index][self.limb]==self.raw);kani::assume(false);}}
 +fn flush_entry_cut(a:Accumulator,pending:&BatchedWeights,ops:&mut FlushEntryLog)->Accumulator{let Accumulator{mut weights,rhs,power,next}=a;ops.flush(pending,&mut weights);let a=Accumulator{weights,rhs,power,next};a}
@@ -488,12 +488,12 @@
 +#[kani::proof] #[kani::unwind(258)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
-+fn query_entry_slot(){query_entry_check();}
++fn query_entry_slot(){query_entry_check::<0>();}
 +
 +#[kani::proof] #[kani::unwind(258)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
-+fn query_entry_slot_renamed(){query_entry_check();}
++fn query_entry_slot_renamed(){query_entry_check::<0>();}
 +
 +#[kani::proof] #[kani::unwind(258)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
@@ -514,3 +514,33 @@
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 +fn flush_after_slot_renamed(){flush_after_check();}
++
++#[kani::proof] #[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn query_entry_rhs_slot(){query_entry_check::<1>();}
++
++#[kani::proof] #[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn query_entry_rhs_slot_renamed(){query_entry_check::<1>();}
++
++#[kani::proof] #[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn query_entry_weights_slot(){query_entry_check::<2>();}
++
++#[kani::proof] #[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn query_entry_weights_slot_renamed(){query_entry_check::<2>();}
++
++#[kani::proof] #[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn query_entry_raw_slot(){query_entry_check::<3>();}
++
++#[kani::proof] #[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn query_entry_raw_slot_renamed(){query_entry_check::<3>();}

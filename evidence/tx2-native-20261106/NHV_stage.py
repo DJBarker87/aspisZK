@@ -1,6 +1,7 @@
 """Stage pinned NHR transport into this job's scratch; no extraction performed."""
 from pathlib import Path
-import importlib.util,hashlib,json,subprocess
+import importlib.util,hashlib,json,subprocess,sys
+sys.dont_write_bytecode=True
 B=Path(__file__).resolve().parent
 P=B.parent/'codex-cx-extract-stage-20261106'
 spec=importlib.util.spec_from_file_location('NHR_stage',P/'NHR_stage.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)

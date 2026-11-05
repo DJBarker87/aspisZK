@@ -18977,7 +18977,46 @@
 {"module": "NHR_tx2_common.Funs", "imports": ["Init", "Aeneas", "NHR_tx2_common.Types"]}
 {"module": "NHR_tx2_authenticated.Types", "imports": ["Init", "Aeneas"]}
 {"module": "NHR_tx2_authenticated.Funs", "imports": ["Init", "Aeneas", "NHR_tx2_authenticated.Types"]}
+{"module": "NHV_NEO_WindowV2_Types", "imports": ["Init", "NHT_COMBINED_IMPORT", "Aeneas"]}
+{"module": "NHV_NEO_WindowV2_Funs", "imports": ["Init", "NHT_COMBINED_IMPORT", "Aeneas", "NHV_NEO_WindowV2_Types"]}
+{"module": "NHV_NEO_WindowFrame", "imports": ["Init", "NHT_COMBINED_IMPORT", "KMX_CopyMeaning", "Aeneas"]}
+{"module": "NHV_NEO_PrefixSlices", "imports": ["Init", "NHT_COMBINED_IMPORT", "NHV_NEO_WindowFrame", "R1CandidateFieldParsers"]}
+{"module": "NHV_NEO_ByteCuts", "imports": ["Init", "NHT_COMBINED_IMPORT", "NHV_NEO_PrefixSlices"]}
+{"module": "NHV_NEO_ComplexCells", "imports": ["Init", "NHT_COMBINED_IMPORT", "NHV_NEO_WindowV2_Funs", "NHV_NEO_ByteCuts"]}
+{"module": "NHV_NEO_ComplexReference", "imports": ["Init", "NHT_COMBINED_IMPORT", "NHV_NEO_ComplexCells"]}
+{"module": "NHV_NEO_WindowPrefix", "imports": ["Init", "NHT_COMBINED_IMPORT", "NHV_NEO_ComplexReference"]}
+{"module": "NHV_NEO_ComplexTotal", "imports": ["Init", "NHT_COMBINED_IMPORT", "NHV_NEO_WindowPrefix"]}
+{"module": "NHV_NEO_QuadraticCuts", "imports": ["Init", "NHT_COMBINED_IMPORT", "NHV_NEO_ComplexTotal"]}
+{"module": "NHV_NEO_FixedWindow", "imports": ["Init", "NHT_COMBINED_IMPORT", "NHV_NEO_QuadraticCuts"]}
+{"module": "NHV_NEO_QuadraticTotal", "imports": ["Init", "NHT_COMBINED_IMPORT", "NHV_NEO_FixedWindow", "NEB_PureFrame"]}
+{"module": "NHV_LPf_WideConstruction", "imports": ["Init", "NHT_COMBINED_IMPORT", "NGM_LPf_ReductionWord"]}
+{"module": "NHV_NBG_WideCarriers", "imports": ["Init", "NHT_COMBINED_IMPORT", "NGM_LPi_TowerValues", "NHV_LPf_WideConstruction", "AspisR1Post25Sampler.Funs"]}
+{"module": "NHV_NBG_WideBytes", "imports": ["Init", "NHT_COMBINED_IMPORT", "NHV_NBG_WideCarriers"]}
+{"module": "NHV_NEO_WideWord", "imports": ["Init", "NHT_COMBINED_IMPORT", "NHV_NEO_QuadraticTotal", "NHV_NBG_WideBytes"]}
+{"module": "NHV_NEO_ParserRef_Types", "imports": ["Init", "NHT_COMBINED_IMPORT", "Aeneas"]}
+{"module": "NHV_NEO_ParserRef_Funs", "imports": ["Init", "NHT_COMBINED_IMPORT", "Aeneas", "NHV_NEO_ParserRef_Types"]}
+{"module": "NHV_NEB_AdditiveRef_Types", "imports": ["Init", "NHT_COMBINED_IMPORT", "Aeneas"]}
+{"module": "NHV_NEB_AdditiveRef_Funs", "imports": ["Init", "NHT_COMBINED_IMPORT", "Aeneas", "NHV_NEB_AdditiveRef_Types"]}
+{"module": "NHV_LPi_MixedValues", "imports": ["Init", "NHT_COMBINED_IMPORT", "NGM_LPi_TowerValues"]}
+{"module": "NHV_NBG_FieldDischarge", "imports": ["Init", "NHT_COMBINED_IMPORT", "NHV_LPi_MixedValues", "NHV_NBG_WideCarriers"]}
+{"module": "NHV_NEB_FieldDomains", "imports": ["Init", "NHT_COMBINED_IMPORT", "NHV_NBG_FieldDischarge"]}
+{"module": "NHV_NEB_CMCalls", "imports": ["Init", "NHT_COMBINED_IMPORT", "NHV_NEB_FieldDomains"]}
+{"module": "NHV_NEB_BaseCallBounds", "imports": ["Init", "NHT_COMBINED_IMPORT", "NHV_NEB_CMCalls"]}
+{"module": "NHV_NEB_WordRefs", "imports": ["Init", "NHT_COMBINED_IMPORT", "NHV_NEB_AdditiveRef_Funs", "NHV_NEB_BaseCallBounds"]}
+{"module": "NHV_NEB_ArrayRefs", "imports": ["Init", "NHT_COMBINED_IMPORT", "NHV_NEB_WordRefs"]}
+{"module": "NHV_NEO_ParserShapes", "imports": ["Init", "NHT_COMBINED_IMPORT", "NHV_NEB_ArrayRefs", "NHV_NBG_WideCarriers", "NHV_NBG_WideBytes", "NBG_Atomic", "NEB_PureFrame"]}
+{"module": "NHV_NEO_ParserReference", "imports": ["Init", "NHT_COMBINED_IMPORT", "NHV_NEO_ParserRef_Funs", "NHV_NEO_ParserShapes"]}
+{"module": "NHV_NEO_ParserTotal", "imports": ["Init", "NHT_COMBINED_IMPORT", "NHV_NEO_ParserReference"]}
+{"module": "NHV_NEO_WideReference", "imports": ["Init", "NHT_COMBINED_IMPORT", "NHV_NEO_WideWord", "NHV_NEO_ParserTotal"]}
+{"module": "NHV_NEO_WideTotal", "imports": ["Init", "NHT_COMBINED_IMPORT", "NHV_NEO_WideReference"]}
+{"module": "NHV_NEO_FieldView", "imports": ["Init", "NHT_COMBINED_IMPORT", "NHV_NEO_WideTotal"]}
+{"module": "NHV_NEO_QModelBinding", "imports": ["Init", "NHT_COMBINED_IMPORT", "NHV_NEO_QuadraticTotal", "S8OwnedP6QMParserTransport"]}
+{"module": "NHV_NET_ParserComposed", "imports": ["Init", "NHT_COMBINED_IMPORT", "NHV_NEO_QModelBinding", "NEB_PureFrame"]}
+{"module": "NHV_NET_WideModel", "imports": ["Init", "NHT_COMBINED_IMPORT", "NHV_NEO_WideTotal", "NHV_NEO_FieldView", "NHV_NET_ParserComposed"]}
 {"module": "NHV_WindowFrame", "imports": ["Init", "NHT_TailView"]}
 {"module": "NHV_TailWindows", "imports": ["Init", "NHV_WindowFrame", "NHT_Offsets"]}
 {"module": "NHV_PendingPacket", "imports": ["Init", "NHT_PacketOps"]}
-{"module": "NHV_COMBINED_IMPORT", "imports": ["Init", "NHT_COMBINED_IMPORT", "NGK_COMBINED_IMPORT", "NHV_TailWindows", "NHV_PendingPacket"]}
+{"module": "NHV_InactivePacket", "imports": ["Init", "NHV_TailWindows", "NHV_NET_WideModel", "NHT_PacketOps"]}
+{"module": "NHV_NativeOps", "imports": ["Init", "NHV_InactivePacket", "NHV_PendingPacket"]}
+{"module": "NHV_ReleaseOps", "imports": ["Init", "NHV_NativeOps"]}
+{"module": "NHV_COMBINED_IMPORT", "imports": ["Init", "NHV_ReleaseOps", "NHV_NativeOps", "NHT_COMBINED_IMPORT", "NGK_COMBINED_IMPORT", "NHV_TailWindows", "NHV_PendingPacket"]}

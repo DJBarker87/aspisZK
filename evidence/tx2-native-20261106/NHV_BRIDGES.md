@@ -33,4 +33,13 @@ span/rewrite manifest is NHV_SOURCE_CUTS.json. Hash is a zero-size test carrier
 for the deployed digest handle at these cuts; no reached digest body runs.
 The generic/raw nominal transport qualification from NHT_RETARGET.json is
 retained. A copied caller snippet or a unit hash fixture alone is never a
-complete actual deployed-monopmorph certificate or Merkle bridge.
+complete actual deployed-monomorph certificate or Merkle bridge.
+
+## Final selection
+
+NHV_ReleaseOps.source is the final installed MODEL with None observer; its
+open_fields theorem exposes base.op18/op5/op19 unchanged. Raw127 and the
+13634-module scanner pass. Native K116 is NOT selected after K118 rename timeout.
+See final NHV_HANDOFF.md, NHV_SLOTS.md, NHV_NATIVE_MATRIX.json and
+NHV_REMAINING.md; early in-progress descriptions above confer no closure credit.
+No composed row or edge is newly admitted by NHV. NDT/NHO baseline unchanged.

@@ -45,3 +45,19 @@ K012: query with full57607 proof/geometry plus returned raw/Accumulator carrier
 still timed out90s. Excluded. Split call-entry operand association from the
 actual full-Result unpack and concrete field-class post-return facets. No
 whole native query loop or success premise is introduced.
+
+K023: combined query-entry metadata and owned rhs/power/weight/raw payloads
+still timed out90s; no continuation or whole-loop check ran. Excluded. Split
+into four facets of the SAME call (metadata; rhs/power; selected incoming
+weight; selected pending raw). Each facet keeps the same source call and must
+have its own corruption/rename pair. The earlier post-Result field facets
+proceed independently; they do not assume this missing argument association.
+
+K118: query_entry_raw_slot_renamed TIMEOUT90s, while SAME-source K116
+query_entry_raw_slot passed and K117's corruption control semantically failed.
+The required (ae) rename-stability condition is NOT satisfied. K116 is excluded
+from native slot installation (pending fidelity/resource explanation), not
+renamed or rerun to obtain a pass. No semantic counterexample or known false-PASS
+claim follows from a timeout. Raw incoming pending association at query entry
+remains OPEN; other metadata/rhs-power/weights facets passed their own pairs.
+120/120 native scopes exhausted. Continue all independent Lean/audit work.

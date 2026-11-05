@@ -32,7 +32,12 @@ p=b/{(a+'-reservation.json')!r}; print(p.read_text() if p.exists() else 'MISSING
   print('reservation wait',flush=True);time.sleep(180);continue
  raise RuntimeError('STOP admission')
 files={};sources=[]
-if kind=='tools':
+if kind=='sourcecheck':
+ for n in ['NHV_verify_sources.py','NHV_RETARGET_ANALYSIS.json','NHV_RETARGET_PROVENANCE.json','NHV_SOURCE_CUTS.json']:files[n]=(E/n).read_text()
+ sources=list(files);command=['python3','NHV_verify_sources.py']
+elif kind=='verify':
+ files['NHV_verify_exports.py']=(E/'NHV_verify_exports.py').read_text();sources=list(files);command=['python3','NHV_verify_exports.py']
+elif kind=='tools':
  files['NHV_tools.py']=(E/'NHV_tools.py').read_text();sources=list(files);command=['python3','NHV_tools.py']
 elif kind=='stage':
  files['NHV_stage.py']=(E/'NHV_stage.py').read_text()
@@ -109,6 +114,8 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
+if {kind!r}=='sourcecheck': names += ['NHV_SOURCE_VERIFICATION.json']
+if {kind!r}=='verify': names += ['NHV_CACHE_VERIFICATION.json']
 if {kind!r}=='tools': names += ['NHV_TOOL_PINS.json']
 if {kind!r}=='stage': names += ['NHV_STAGE.json']
 if {kind!r}=='export': names += ['NHV_EXPORT.json','NHV_CLOSURE_PINS.json.sha256']
@@ -117,6 +124,9 @@ if {kind!r}=='extract': names += ['NHV_EXTRACTION_PINS.json']+([str(p.relative_t
 if {kind!r}=='kani': names += [str(p.relative_to(b)) for p in b.glob(a+'-graph*')]+[str(p.relative_to(b)) for p in b.glob(a+'-source*')]+[str(p.relative_to(b)) for p in b.glob(a+'-lock*')]
 if {kind!r}=='audit':names += [str(p.relative_to(b)) for p in (b/'NHV_audit'/{target!r}).rglob('*') if p.is_file()]+[str(p.relative_to(b)) for modepath in (b/'NHV_audit'/{target!r}).glob('*.json') for row in json.loads(modepath.read_text()).get('results',[]) for p in [b/('NEP_'+modepath.stem+'_'+row['root']+'_REACHABLE.txt')] if p.exists()]+([n for n in ['NHV_LOADED_scan.jsonl','NHV_POOL_LOADED_scan.jsonl'] if (b/n).exists()])
 out={{n:(b/n).read_text() for n in names}}
+if {kind!r}=='export':
+ import base64
+ out['NHV_CLOSURE_PINS.json.xz.base64']=base64.b64encode((b/'NHV_CLOSURE_PINS.json.xz').read_bytes()).decode()
 for name in ['NHV_Driver','NHV_ProofDriver','NHV_PoolProofDriver','NHV_PoolDriver']:
  p=b/'NHV_native'/name
  if p.is_file():out[a+'/'+name+'_BINARY_PIN.json']=json.dumps(dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size))
@@ -124,7 +134,10 @@ print(json.dumps(out))
 ''');assert r.returncode==0,r.stderr
 for n,t in json.loads(r.stdout).items():
  p=E/n;p.parent.mkdir(parents=True,exist_ok=True)
- if n.startswith('NEP_') and n.endswith('_REACHABLE.txt'):
+ if n.endswith('.base64'):
+  import base64
+  (E/n.removesuffix('.base64')).write_bytes(base64.b64decode(t))
+ elif n.startswith('NEP_') and n.endswith('_REACHABLE.txt'):
   raw=t.encode();(E/('NHV_'+n+'.sha256')).write_text(hashlib.sha256(raw).hexdigest()+'\n');(E/('NHV_'+n+'.xz')).write_bytes(lzma.compress(raw,preset=6))
  else:p.write_text(t)
 assert (E/a/'receipt.json').exists(),'Missing receipt; never resubmit'

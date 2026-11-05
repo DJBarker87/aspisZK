@@ -1,3 +1,4 @@
+import NHV_ReleaseOps
 import NHV_NativeOps
 import NHT_COMBINED_IMPORT
 import NGK_COMBINED_IMPORT
@@ -45,3 +46,8 @@ import NHV_PendingPacket
 #check NHV_NativeOps.slots
 #print axioms NHV_NativeOps.source
 #print axioms NHV_InactivePacket.source
+
+-- Exact deployed None marker; NFU/Merkle/NHM remain the original base fields.
+#check NHV_ReleaseOps.source
+#check NHV_ReleaseOps.open_fields
+#print axioms NHV_ReleaseOps.source
