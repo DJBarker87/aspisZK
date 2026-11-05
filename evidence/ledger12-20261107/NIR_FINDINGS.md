@@ -1,0 +1,7 @@
+# Ledger12 findings
+
+NIR-F1 — TX2:045 is already CLOSED in the authoritative NIM basis. NII_LEDGER.composed_status is CLOSED, provider NGC, with its NGZ_certificate naming both TX1:064 and TX2:045. NIM changes only its explicit 28 entry rows, not this row. NIG's exact S2/64/QM31.ZERO packet is revalidated here as replacement evidence; its delta is not an additional occurrence. No 408 count is justified. NIR's pending ledger qualifies that one replacement until the complete raw gate finishes.
+
+NIR-F2 — The 599-row authoritative inventory is a verifier inventory. Pool production is outside it. The inherited outside599 ledger has three CLOSED helper rows; B and production D, NIB-P1..P4 and the 21-accessor borrow discipline remain source-realization obligations. NIK's census explicitly does not establish deployed monomorphized root reachability. An exact finite Pool production row distance is therefore not defined by this inventory. The physical report lists the actual rows and unnumbered obligations separately; no invented Pool row enters the 599 basis.
+
+Owner evidence — Old Q certificate names can disappear while their canonical retargeted declarations remain in the combined closure. NIR records the established NFN/NFS namespace maps and inspects those exact names separately. Full scanner closure includes their declarations even where predecessor raw-root selector lists only the enclosing theorem. This is inspection and explicit root coverage, not proof renaming or a new bridge.
