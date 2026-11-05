@@ -41,6 +41,8 @@ elif kind=='extract':
 elif kind=='kani':
  files['NHF_gate.py']=(E/'NHF_gate.py').read_text()
  files['NHF_src/crates/aspis-r1-cost-probe/src/NHF_wide.rs']=(E/'NHF_wide.rs.txt').read_text()
+ files['NHF_src/crates/aspis-r1-cost-probe/src/NHF_stages.rs']=(E/'NHF_stages.rs.txt').read_text()
+ files['NHF_src/crates/aspis-r1-cost-probe/src/candidate.rs']=(E/'NHF_candidate.rs.txt').read_text()
  files['NHF_SOURCE_PINS.json']=(E/'NHF_SOURCE_PINS.json').read_text()
  sources=list(files)
  command=['python3','NHF_gate.py',a+'.json']
@@ -62,6 +64,8 @@ config['env']['LEAN_PATH']=':'.join(json.loads((E/'NHF_PATHS.json').read_text())
 if kind=='kani':
  config['native_command']=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NHF_src/crates/aspis-r1-cost-probe/Cargo.toml','--target-dir',B+'/NHF_target','--features','private-leaf-salts,optimized-terminal,program-build','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse']
  config['env'].update(CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-Copt-level=3 -C link-arg=-Wl,--threads=1'+(' --cfg NHF_invert' if os.environ.get('NHF_INVERT') else ''))
+ if os.environ.get('NHF_BAD_STAGE'):config['env']['RUSTFLAGS']+=' --cfg NHF_bad_stage'
+ if os.environ.get('NHF_BAD_VIEW'):config['env']['RUSTFLAGS']+=' --cfg NHF_bad_view'
  if os.environ.get('NHF_BAD_ALLOC'):config['env']['RUSTFLAGS']+=' --cfg NHF_bad_alloc'
  if os.environ.get('NHF_BAD_BOX_VALUE'):config['env']['RUSTFLAGS']+=' --cfg NHF_bad_box_value'
  config['expected_time']='optimized compilation then one native staged cut with local records; no field multiplication'
@@ -74,7 +78,7 @@ for n,t in files.items():
 (b/'NHF_native').mkdir(exist_ok=True);(b/'NHF_objects').mkdir(exist_ok=True);(b/'NHF_tmp').mkdir(exist_ok=True)
 x=json.loads((b/{(a+'.json')!r}).read_text());roots=x['env']['LEAN_PATH'].split(':');pins={{}}
 modules=[]
-if x['kind']=='lean':modules += re.findall(r'^import ([\w.]+)',(b/x['sources'][0]).read_text(),re.M)
+if x['kind']=='lean':modules += re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M)
 elif x['kind']=='audit':modules += ['NHF_S_PACKET'] if x['module']=='inventory-s' else ['NHF_D_ONLY'] if x['module']=='inventory-d' else ['NHF_Q_ONLY'] if x['module']=='inventory-q' else ['NHF_POOL_LEGACY_IMPORT'] if {target!r}.startswith('pool') else ['NHF_COMBINED_IMPORT']
 rels=set()
 for root in roots:

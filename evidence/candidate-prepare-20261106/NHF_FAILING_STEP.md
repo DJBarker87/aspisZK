@@ -1,0 +1,7 @@
+# NHF failing steps
+
+NHF_K004: S3 wide_view leaf, direct actual decoder plus full57607-byte proof and all view projections. Solver timed out90s; exit1, wall92.46724052797072s, peak3909920KiB, swap0. No pass/credit, no unchanged replay. Replacement NHF_K005 splits exactly at the decoder boundary, uses a LOCAL reply/log, and proves full caller descriptor/selected-limb/Result association for every canonical Some reply and None. K006 corrupts the actual returned round0 start and fails at its pointer/length assertion. The closed byte-decoder packet must supply the same-input reply in Lean; canonicality alone is not enough.
+
+Earlier input/elaboration failures: K001 omitted verifier:: in the target name (no verification reached); L001 guessed two absent identifiers; L003 parser spacing; L005 lacks Decidable for partial Result equality; L007 broad simp exposed existential binds rather than evaluating scalar constants; L009/L010 record formatting; L011 left a definitionally equal goal requiring rfl. These attempts and their sorryAx diagnostics are excluded. Corrected focused compiles are separately receipted; no limit raised.
+
+Prepare S4: complete semantic verify_observed TX1:137 packet is OPEN in NGZ. S5: complete Prepared::new TX1:179 packet is OPEN; NGN_FAILING_STEP.md records missing native scalar/query/provenance packet laws. These are missing callee-law boundaries, not evidence of a frozen-function mismatch. Do not replace them with a success premise.

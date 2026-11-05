@@ -1,13 +1,3 @@
---- a/crates/aspis-r1-cost-probe/src/candidate.rs
-+++ b/crates/aspis-r1-cost-probe/src/candidate.rs
-@@ -338,3 +338,7 @@
-     mark(obs, Phase::Parsed);
-     tx2_common(public_bytes, proof, checkpoint, hash, obs)
- }
-+
-+#[cfg(kani)]
-+#[path="NHF_wide.rs"]
-+mod NHF_wide;
 --- a/crates/aspis-r1-cost-probe/src/lib.rs
 +++ b/crates/aspis-r1-cost-probe/src/lib.rs
 @@ -1,3 +1,4 @@
@@ -15,39 +5,128 @@
  //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
  #![no_std]
  extern crate alloc;
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -338,3 +338,10 @@
+     mark(obs, Phase::Parsed);
+     tx2_common(public_bytes, proof, checkpoint, hash, obs)
+ }
++
++#[cfg(kani)]
++#[path="NHF_wide.rs"]
++mod NHF_wide;
++#[cfg(kani)]
++#[path="NHF_stages.rs"]
++mod NHF_stages;
 --- /dev/null
-+++ b/crates/aspis-r1-cost-probe/src/NHF_wide.rs
-@@ -0,0 +1,41 @@
++++ b/crates/aspis-r1-cost-probe/src/NHF_stages.rs
+@@ -0,0 +1,62 @@
 +use super::*;
 +include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
-+// No callee stub: the frozen byte parser executes on arbitrary bytes.
-+fn wide_result() {
-+ let proof:[u8;57607]=kani::any();
-+ let semantic:[u8;13831]=kani::any(); let y1:[u8;928]=kani::any();
++struct HeapLog{failed:bool,calls:usize,returned:usize}
++impl HeapLog{
++ fn heap(&mut self,n:usize,value:u8)->Result<alloc::vec::Vec<u8>,aspis_core::r0::Error>{
++  self.calls+=1;assert!(n==14759&&value==0);
++  if self.failed {return Err(aspis_core::r0::Error::Allocation)}
++  let out=alloc::vec![0u8;n];self.returned=out.as_ptr() as usize;Ok(out)
++ }
++}
++fn heap_cut(log:&mut HeapLog)->Result<(),Error>{
++ let mut logical=log.heap(compact::LOGICAL_SEMANTIC+compact::LOGICAL_Y1,0u8).map_err(|_|Error::Allocation)?;
++ let (semantic,y1)=logical.split_at_mut(compact::LOGICAL_SEMANTIC-usize::from(cfg!(NHF_bad_stage)));
++ assert!(semantic.as_ptr() as usize==log.returned&&semantic.len()==13831);
++ assert!(y1.as_ptr() as usize==log.returned+13831&&y1.len()==928);
++ Ok(())
++}
++struct ExpansionLog{proof:usize,logical:usize,stage:bool,calls:usize,failed:bool,observe:usize,reply:u8}
++impl ExpansionLog{
++ fn expand(&mut self,input:&[u8],out:&mut[u8])->Result<(),compact::CodecError>{
++  self.calls+=1;
++  if !self.stage{assert!(input.as_ptr() as usize==self.proof+16&&input.len()==7015&&out.as_ptr() as usize==self.logical&&out.len()==13831);}
++  else{assert!(input.as_ptr() as usize==self.proof+7031&&input.len()==464&&out.as_ptr() as usize==self.logical+13831&&out.len()==928);}
++  // Arbitrary observed-cell projection of the CLOSED callee's full output.
++  // The caller itself never reads unobserved cells after this cut.
++  let base=if self.stage{13831}else{0};
++  if base<=self.observe&&self.observe<base+out.len(){out[self.observe-base]=self.reply;}
++  if self.failed{Err(compact::CodecError::Length)}else{Ok(())}
++ }
++}
++fn semantic_cut(proof:&[u8],logical:&mut[u8],log:&mut ExpansionLog)->Result<(),Error>{
++ let (semantic,_y1)=logical.split_at_mut(compact::LOGICAL_SEMANTIC);
++ log.expand(&proof[compact::OFF_SEMANTIC+usize::from(cfg!(NHF_bad_stage))..compact::OFF_Y1],semantic)?;
++ Ok(())
++}
++fn values_cut(proof:&[u8],logical:&mut[u8],log:&mut ExpansionLog)->Result<(),Error>{
++ let (_semantic,y1)=logical.split_at_mut(compact::LOGICAL_SEMANTIC);
++ log.expand(&proof[compact::OFF_Y1+usize::from(cfg!(NHF_bad_stage))..compact::OFF_INACTIVE],y1)?;
++ Ok(())
++}
++fn check_expand(stage:bool){
++ let proof:[u8;57607]=kani::any();let mut logical:[u8;14759]=kani::any();
++ let observe:usize=kani::any();kani::assume(observe<14759);let before=logical[observe];
++ let mut log=ExpansionLog{proof:proof.as_ptr() as usize,logical:logical.as_ptr() as usize,stage,calls:0,failed:kani::any(),observe,reply:kani::any()};
++ let result=if stage{values_cut(&proof,&mut logical,&mut log)}else{semantic_cut(&proof,&mut logical,&mut log)};
++ assert_eq!(log.calls,1);
++ assert!(match result{Ok(())=>!log.failed,Err(e)=>log.failed&&e==Error::Parse});
++ let inside=if stage{13831<=observe}else{observe<13831};
++ assert_eq!(logical[observe],if inside{log.reply}else{before});
++}
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn heap_split(){let mut log=HeapLog{failed:kani::any(),calls:0,returned:0};let result=heap_cut(&mut log);assert_eq!(log.calls,1);assert!(match result{Ok(())=>!log.failed,Err(e)=>log.failed&&e==Error::Allocation});}
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn semantic_stage(){check_expand(false)}
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn values_stage(){check_expand(true)}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NHF_wide.rs
+@@ -0,0 +1,52 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++struct DecodeLog {proof:usize,reply:Option<E>,calls:usize}
++impl DecodeLog {fn decode(&mut self,bytes:&[u8])->Option<E>{self.calls+=1;assert!(bytes.as_ptr() as usize==self.proof+7495&&bytes.len()==32);self.reply}}
++fn cut<'a>(proof:&'a[u8],semantic:&'a[u8],y1:&'a[u8],log:&mut DecodeLog)->Result<View<'a>,Error>
++{
++    Ok(View {
++        variant: Variant::S2,
++        semantic,
++        y1,
++        inactive: log.decode(&proof[compact::OFF_INACTIVE..compact::OFF_ROUND0]).ok_or(Error::Parse)?,
++        round0: &proof[compact::OFF_ROUND0+usize::from(cfg!(NHF_bad_view))..compact::OFF_FOLDED_ROOT],
++        folded_root: Some(proof[compact::OFF_FOLDED_ROOT..compact::OFF_ROUND1].try_into().unwrap()),
++        round1: &proof[compact::OFF_ROUND1..compact::OFF_FINAL],
++        final_message: &proof[compact::OFF_FINAL..compact::OFF_OPENINGS],
++        query_bytes: &[],
++    })
++}
++// The overapproximation accepts every CLOSED decoder reply. Lean supplies its
++// full byte/Option law on the SAME logged input; no decoder success is assumed.
++fn wide_result(){
++ let proof:[u8;57607]=kani::any();let semantic:[u8;13831]=kani::any();let y1:[u8;928]=kani::any();
++ let words:[u32;8]=kani::any();let mut i=0;while i<8{kani::assume(words[i]<2147483647);i+=1;}
++ let reply=if kani::any(){E::from_limbs(words)}else{None};
 + let slot:usize=kani::any();kani::assume(slot<8);
-+ let before:u8=kani::any();let unrelated=before;
-+ let out=wide_view(&proof,&semantic,&y1);
-+ let mut words=[0u32;8];let mut j=0;
-+ while j<8 {let at=7495+4*j;words[j]=u32::from_le_bytes([proof[at],proof[at+1],proof[at+2],proof[at+3]]);j+=1;}
-+ let canonical=words.iter().all(|x|*x<2147483647);
-+ let good=match out {
-+  Err(e)=>!canonical&&e==Error::Parse,
-+  Ok(v)=>{
-+   assert!(canonical);
-+   assert_eq!(v.inactive.to_limbs()[slot],words[slot]);
-+   assert!(v.variant==Variant::S2);
-+   assert!(core::ptr::eq(v.semantic.as_ptr(),semantic.as_ptr())&&v.semantic.len()==13831);
-+   assert!(core::ptr::eq(v.y1.as_ptr(),y1.as_ptr())&&v.y1.len()==928);
-+   assert!(core::ptr::eq(v.round0.as_ptr(),proof[7527..].as_ptr())&&v.round0.len()==224);
-+   assert!(core::ptr::eq(v.folded_root.unwrap().as_ptr(),proof[7751..].as_ptr()));
-+   assert!(core::ptr::eq(v.round1.as_ptr(),proof[7783..].as_ptr())&&v.round1.len()==224);
-+   assert!(core::ptr::eq(v.final_message.as_ptr(),proof[8007..].as_ptr())&&v.final_message.len()==2048);
-+   assert!(v.query_bytes.is_empty());true
-+  }
-+ };
-+ // This independent local is outside the modifies set.
-+ assert_eq!(unrelated,before);
-+ assert!(good != cfg!(NHF_invert));
++ let mut log=DecodeLog{proof:proof.as_ptr() as usize,reply,calls:0};
++ let result=cut(&proof,&semantic,&y1,&mut log);
++ assert_eq!(log.calls,1);
++ match (reply,result){
++ (None,Err(e))=>assert!(e==Error::Parse),
++ (Some(expected),Ok(v))=>{
++  assert_eq!(v.inactive.to_limbs()[slot],expected.to_limbs()[slot]);
++  assert!(v.variant==Variant::S2);
++  assert!(v.semantic.as_ptr()==semantic.as_ptr()&&v.semantic.len()==13831);
++  assert!(v.y1.as_ptr()==y1.as_ptr()&&v.y1.len()==928);
++  assert!(v.round0.as_ptr()==proof[7527..].as_ptr()&&v.round0.len()==224);
++  assert!(v.folded_root.unwrap().as_ptr()==proof[7751..].as_ptr());
++  assert!(v.round1.as_ptr()==proof[7783..].as_ptr()&&v.round1.len()==224);
++  assert!(v.final_message.as_ptr()==proof[8007..].as_ptr()&&v.final_message.len()==2048);
++  assert!(v.query_bytes.is_empty());
++ },_=>assert!(false),}
 +}
 +#[kani::proof] #[kani::unwind(34)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]

@@ -1,0 +1,7 @@
+{
+ "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "original": "{\n    Ok(View {\n        variant: Variant::S2,\n        semantic,\n        y1,\n        inactive: E::from_le_bytes(&proof[compact::OFF_INACTIVE..compact::OFF_ROUND0]).ok_or(Error::Parse)?,\n        round0: &proof[compact::OFF_ROUND0..compact::OFF_FOLDED_ROOT],\n        folded_root: Some(proof[compact::OFF_FOLDED_ROOT..compact::OFF_ROUND1].try_into().unwrap()),\n        round1: &proof[compact::OFF_ROUND1..compact::OFF_FINAL],\n        final_message: &proof[compact::OFF_FINAL..compact::OFF_OPENINGS],\n        query_bytes: &[],\n    })\n}",
+ "local_record": "{\n    Ok(View {\n        variant: Variant::S2,\n        semantic,\n        y1,\n        inactive: log.decode(&proof[compact::OFF_INACTIVE..compact::OFF_ROUND0]).ok_or(Error::Parse)?,\n        round0: &proof[compact::OFF_ROUND0+usize::from(cfg!(NHF_bad_view))..compact::OFF_FOLDED_ROOT],\n        folded_root: Some(proof[compact::OFF_FOLDED_ROOT..compact::OFF_ROUND1].try_into().unwrap()),\n        round1: &proof[compact::OFF_ROUND1..compact::OFF_FINAL],\n        final_message: &proof[compact::OFF_FINAL..compact::OFF_OPENINGS],\n        query_bytes: &[],\n    })\n}",
+ "replacement": "only E::from_le_bytes becomes local log.decode; cfg NHF_bad_view changes round0 start by one in matched control",
+ "remaining": "pair exact input reply to CLOSED byte decoder; proof/semantic/y1 input arrays arbitrary full values"
+}

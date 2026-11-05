@@ -13,3 +13,7 @@ No field-product stub and no function-contract substitution has been introduced.
 | S5 Prepared constructor | Missing complete TX1:179 packet; NGN_FAILING_STEP.md lists missing sampler/query/native provenance | OPEN, never assumed. |
 
 P6/D188 option-A semantic transport is retained as reclassification. It supplies no missing callee law. Any future stub must be paired here with a compiled theorem on the exact caller-established domain before admission.
+
+Decoder cut K005/K006: the reply is an overapproximation (None or arbitrary canonical Some); NHF_ViewDecoder.result supplies the full natural decodeWideLE value law on the SAME original32-byte input. NHF_ViewCut.source/reject/accepted provide exact emitted caller substitution. Byte-domain association and final leaf packet/audit are still pending; K005 alone is never a pass for the decoder value.
+
+Expansion cuts K009..012: local mutable record with original input/output descriptors, full Result and one arbitrary post-cell projection; no writable static. The caller performs no further content writes. The complete child poststate remains NGV_SemanticPacket.result / NGV_ExpandAssociation.result, not an inferred property of the projected stub. Heap K007/K008 uses NGC's standard-library/allocator realization for its owned zero Vec and actual split; no new allocator law is claimed.
