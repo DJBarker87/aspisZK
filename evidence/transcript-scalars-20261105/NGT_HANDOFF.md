@@ -67,6 +67,8 @@ produce the expected4 planted/4 mutation results in the same binary. Walker
 source is byte-identical to NEP, sha e93447db…; full driver diffs are committed.
 L048 scan: exit0,35.557914716s,7020788KiB,swap0, same revision;
 13,492 modules, zero dangling references/incompatible owners/import mismatches.
+The scanner classifies1,593 compatible cached replicas:1,560 identical proof terms
+and33 different proof terms with identical statements/levels/mutual metadata.
 The unchanged strict scanner's55 missing-baseline findings in L047 were repaired
 using pinned NGK/source inputs; the failed output is retained. All attempts have
 exact command/target/source/dependency hashes, revisions, exit/wall/RSS/swap and
