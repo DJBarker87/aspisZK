@@ -44,6 +44,27 @@ for n,t in files.items():
 p=b/'S2W_run_host.py'
 if not p.exists():shutil.copy2('/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/S2W_run_host.py',p)
 ''');assert r.returncode==0,r.stderr
+if cfg['kind']=='lean':
+ r=ssh('python3',f'''from pathlib import Path
+import json,re,hashlib,shutil
+b=Path({B!r});p=b/{(a+'.json')!r};x=json.loads(p.read_text());roots=x['env']['LEAN_PATH'].split(':')
+if '-o' in x['command']:(b/x['command'][x['command'].index('-o')+1]).parent.mkdir(parents=True,exist_ok=True)
+(b/'NHA_objects').mkdir(exist_ok=True);(b/'lakefile.lean').write_text('import Lake\\nopen Lake DSL\\npackage nha\\n')
+pins={{}};rels=set()
+for root in roots:
+ for stem in ['Aeneas','AeneasMeta']:
+  path=Path(root)/stem
+  if path.is_dir():rels.update(str(z.relative_to(root)) for z in path.rglob('*') if z.is_file() and str(z).endswith(('.olean','.olean.private','.olean.server','.ir')))
+  if Path(root,stem+'.olean').is_file():rels.add(stem+'.olean')
+for name in x['sources']:
+ if name.endswith('.lean'):
+  rels.update(m.replace('.','/')+'.olean' for m in re.findall(r'^import ([A-Za-z0-9_.]+)',(b/name).read_text(),re.M))
+for rel in sorted(rels):
+ z=next((Path(root)/rel for root in roots if (Path(root)/rel).is_file()),None);assert z is not None,rel
+ for q in [z,Path(str(z)+'.private'),Path(str(z)+'.server'),z.with_suffix('.ir')]:
+  if q.is_file():pins[str(q)]={{'path':str(q),'sha256':hashlib.sha256(q.read_bytes()).hexdigest()}}
+x['deps_fingerprint']={{'selected_objects':pins}};p.write_text(json.dumps(x,indent=2))
+''');assert r.returncode==0,r.stderr
 r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_run_host.py '+a+'.json',submitted=True)
 (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
 r=ssh('python3',f'''from pathlib import Path

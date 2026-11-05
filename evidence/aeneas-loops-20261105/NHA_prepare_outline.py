@@ -24,7 +24,7 @@ helper='''fn NHA_channels(mut sums:[[u64;3];3],left_components:[[crate::field::M
 fo=f.replace('fn qm31_accumulate_product_channels','pub fn NHA_outlined_field',1).replace(inner,'        sums = NHA_channels(sums,left_components,right_components,component);')
 fs+=helper+fo+'\n'
 # Copy helpers byte-for-byte, no alternate implementation. query_words invokes block_rank.
-qs='use crate::transcript::QuerySampleError;\nconst QUERY_COUNT:usize=22; const QUERY_BOUND:u32=1<<18; const QUERY_MAX_DRAWS:usize=64;\n'
+qs='use crate::transcript::QuerySampleError;\ntype Rank = [u32;8];\nconst QUERY_COUNT:usize=22; const QUERY_BOUND:u32=1<<18; const QUERY_MAX_DRAWS:usize=64;\n'
 qs+=cut(q,'block_rank')+'\n'+cut(q,'query_words')+'\n'
 start=q.index('#[derive(Default)]\nstruct QueryScan');end=q.index('\nimpl Transcript {',start);qs+=q[start:end]+'\n'
 qs+=qq.replace('pub fn queries_from_pairs','pub fn NHA_original_queries',1)+'\n'
@@ -68,7 +68,10 @@ paths=subprocess.check_output(['git','ls-tree','-r','--name-only',REV,'--','crat
 files={p:frozen(p) for p in paths if not p.endswith(('.png','.pdf','.xlsx','.bin','.gz','.zip'))}
 root=files['Cargo.toml'];a=root.index('members = [');b=root.index(']',a)+1
 root=root[:a]+'''members = ["crates/aspis-core","crates/aspis-statement","crates/aspis-r1-cost-probe","crates/aspis-prover"]'''+root[b:]
-files['Cargo.toml']=root
+files['Cargo.toml']=frozen('Cargo.toml')
+for member in ['programs','audit/poseidon-pair-probe/program','xtask','docs/research/v8-r0-zk-20261009/refine/writers','docs/research/v8-r0-zk-20261009/refine/blockwriters','docs/research/v8-r0-zk-20261009/refine/poseidon','docs/research/v8-r0-zk-20261009/refine/diffharness']:
+ for name in subprocess.check_output(['git','ls-tree','-r','--name-only',REV,'--',member],text=True).splitlines():
+  if name.endswith(('.rs','.toml','.lock')):files[name]=frozen(name)
 # Reconstruct optional path dependencies even when their features are disabled.
 import tomllib,posixpath
 while True:

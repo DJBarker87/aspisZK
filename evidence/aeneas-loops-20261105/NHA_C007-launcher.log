@@ -1,0 +1,49 @@
+{"attempt": "NHA_C007", "exit_status": 0, "wall_seconds": 84.54475429304875, "peak_rss_kib": "539024", "swaps": "0", "print_axioms": "N/A: charon"}
+["/home/dombarker/project-offloads/codex-cx-aeneas-loops-20261105/NHA_bin/charon", "cargo", "--preset", "aeneas", "--mir", "built", "--sysroot", "default", "--include", "core::option::Option", "--include", "core::result::Result", "--include", "core::option::_::ok_or", "--start-from", "crate::NHA_claim::NHA_fully_outlined_claim", "--opaque", "crate::transcript::_", "--opaque", "crate::weights::_", "--opaque", "crate::r1_semantic::_", "--opaque", "crate::r1_wire::_", "--opaque", "aspis_core::field::_", "--opaque", "aspis_core::circle::_", "--opaque", "crate::fast_pairing::_", "--opaque", "crate::trace::_", "--include", "crate::transcript::Transcript", "--include", "crate::r1_semantic::Verified
+...
+tes/aspis-r1-cost-probe/src/fast_pairing.rs:23:19
+   |
+22 |     impl Q {
+   |     ------ associated items in this implementation
+23 |         pub const ZERO:Self=Self([0;4]);pub const ONE:Self=Self([1,0,0,0]);
+   |                   ^^^^                            ^^^
+...
+28 |         pub fn from_m31(x:u32)->Option<Self>{if x<P{Some(Self([x,0,0,0]))}else{None}}
+   |                ^^^^^^^^
+...
+37 |         #[inline(always)] pub fn add(self,rhs:Self)->Self {
+   |                                  ^^^
+...
+42 |         #[inline(always)] pub fn sub(self,rhs:Self)->Self {
+   |                                  ^^^
+...
+47 |         #[inline(always)] pub fn half(self)->Self {
+   |                                  ^^^^
+...
+51 |         pub fn half_pow(self,n:u8)->Option<Self>{
+   |                ^^^^^^^^
+...
+57 |         #[inline(always)] pub fn mul_m31(self,rhs:u32)->Option<Self>{
+   |                                  ^^^^^^^
+...
+64 |         #[inline(always)] pub fn mul(self,rhs:Self)->Self {
+   |                                  ^^^
+
+warning: associated items `dot`, `neg`, and `square` are never used
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:95:16
+    |
+ 80 |     impl Q {
+    |     ------ associated items in this implementation
+...
+ 95 |         pub fn dot<const N:usize>(left:[Self;N],right:[Self;N])->Self {
+    |                ^^^
+...
+104 |         #[inline(always)] pub fn neg(self)->Self {Self::ZERO.sub(self)}
+    |                                  ^^^
+105 |         #[inline(always)] pub fn square(self)->Self {self.mul(self)}
+    |                                  ^^^^^^
+
+warning: `aspis-r1-cost-probe` (lib) generated 18 warnings (run `cargo fix --lib -p aspis-r1-cost-probe` to apply 3 suggestions)
+    Finished `release` profile [optimized] target(s) in 1m 24s
+
+Running as unit: run-r34e7fd8ecabd4c6da2c000c36dd38341.scope; invocation ID: f1ca32504ac94c318ca25a169714ef92
