@@ -37,7 +37,7 @@ paths=json.loads((E/'NIC_PATHS.json').read_text())
 env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NIC_tmp',LEAN_PATH=':'.join(paths))
 files={};sources=[]
 if kind=='kani':
- for n in ['NIC_gate.py','NIC_graph.py','NIC_build.py','NIC_native.rs.txt','NIC_opening.rs.txt','NIC_purity.rs.txt','NIC_transcript.rs.txt']:files[n]=(E/n).read_text()
+ for n in ['NIC_gate.py','NIC_graph.py','NIC_build.py','NIC_native.rs.txt','NIC_opening.rs.txt','NIC_purity.rs.txt','NIC_transcript.rs.txt','NIC_dots.rs.txt']:files[n]=(E/n).read_text()
  files['NIC_KMX.patch']=(E.parent/'kani-mitig-20261028/KMX_copy_stubs.patch').read_text();sources=list(files);command=['python3','NIC_gate.py',a+'.json',target]
  env.update(CARGO_NET_OFFLINE='true',CARGO_BUILD_JOBS='1',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-C link-arg=-Wl,--threads=1')
  native=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NIC_src/programs/r1-cost-probe/Cargo.toml','--target-dir',B+'/NIC_target','--lib','--features','pool-adapter,private-leaf-salts','-j','1','-Z','unstable-options','-Z','stubbing','--harness-timeout','90s','--exact','--harness','NIC_purity::'+target,'--output-format','terse']

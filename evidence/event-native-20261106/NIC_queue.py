@@ -9,4 +9,4 @@ for i,target in jobs:
  receipt=E/a/'receipt.json'
  if not receipt.exists():print(a,'PRELAUNCH ERROR',flush=True);break
  r=json.loads(receipt.read_text());print(a,target,r['exit_status'],r['wall_seconds'],flush=True)
- if r['exit_status'] in [124,137] or 'TIMEOUT' in (E/a/'stdout.log').read_text():print('review required',flush=True);break
+ if r['exit_status'] in [124,137] or 'timed out' in (E/a/'stdout.log').read_text().lower():print('review required',flush=True);break

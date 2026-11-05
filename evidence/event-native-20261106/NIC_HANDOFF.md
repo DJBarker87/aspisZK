@@ -12,3 +12,6 @@ Budget ceilings: 80 Kani, 60 Lean, zero extraction. One admitted capped scope at
 
 ## Initial evidence
 Read ruling (an) and NIA remaining/handoff/hypotheses. NIA model purity does not certify native purity; no success premise will replace it. New results, receipts, assumptions and blockers will be added here after validation. No native certificate or formal release claim yet.
+
+## Stage 2 delivered
+Scalar/scalar_k/query abort-prefix pairs K032–037 and typed Box boundary K046/047 pass with matched controls. Exact scopes and retained RuntimeSyscall/allocator transport are in NIC_ABORT_PREFIX.md. These are no-suffix boundaries, not new Rust Err arms or physical syscall totality. NIC_AbortPrefix's four top theorems compile with standard axioms. Native step-purity composition remains in progress; no row/headline promotion.

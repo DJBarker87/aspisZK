@@ -1,0 +1,58 @@
+{"attempt": "NIC_K039", "exit_status": 1, "wall_seconds": 1.9034704060759395, "peak_rss_kib": "246708", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+ld::QM31)->[u32;4] {[a.c0.a.0,a.c0.b.0,a.c1.a.0,a.c1.b.0]}
+    |    ^^^^^^
+
+warning: function `fromq` is never used
+   --> programs/r1-cost-probe/src/NIC_purity.rs:548:4
+    |
+548 | fn fromq(a:[u32;4])->aspis_core::field::QM31 {use aspis_core::field::{M31,CM31,QM31};QM31{c0:CM31{a:M31(a[0]),b:M31(a[1])},c1:CM31{...
+    |    ^^^^^
+
+warning: function `q_subtract_spec` is never used
+   --> programs/r1-cost-probe/src/NIC_purity.rs:549:4
+    |
+549 | fn q_subtract_spec(a:aspis_core::field::QM31,b:aspis_core::field::QM31)->aspis_core::field::QM31 {let a=qwords(a);let b=qwords(b);a...
+    |    ^^^^^^^^^^^^^^^
+
+warning: module `NIC_purity` should have a snake case name
+   --> programs/r1-cost-probe/src/lib.rs:173:18
+    |
+173 | #[cfg(kani)] mod NIC_purity { include!("NIC_purity.rs"); }
+    |                  ^^^^^^^^^^ help: convert the identifier to snake case: `nic_purity`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.66s
+Checking harness NIC_purity::wide_add_control...
+
+VERIFICATION RESULT:
+ ** 1 of 71 failed (3 unreachable)
+Failed Checks: "NIC forbidden digest"
+ File: "programs/r1-cost-probe/src/NIC_purity.rs", line 3, in <SolanaDigest as aspis_core::Digest32>::digest
+
+VERIFICATION:- FAILED
+Verification Time: 0.03933792s
+
+Manual Harness Summary:
+Verification failed for - NIC_purity::wide_add_control
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r77a6ea734c6947baa3a660b598c180b3.scope; invocation ID: 69529462722e4a9ebb32556837a309d2

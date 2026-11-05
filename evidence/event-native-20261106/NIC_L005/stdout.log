@@ -1,0 +1,109 @@
+def FIo_Native.aspis_core.field.wide_exact.WideExact.mul_m31 : FIo_Native.aspis_core.field.wide_exact.WideExact →
+  FIo_Native.aspis_core.field.M31 → Aeneas.Std.Result FIo_Native.aspis_core.field.wide_exact.WideExact :=
+fun self rhs => do
+  let i ← rhs % FIo_Native.aspis_core.field.P
+  let q ← self.c0.mul_m31 i
+  let q1 ← self.c1.mul_m31 i
+  Aeneas.Std.Result.ok { c0 := q, c1 := q1 }
+def FIo_Native.aspis_core.field.wide_exact.WideExact.mul_qm31 : FIo_Native.aspis_core.field.wide_exact.WideExact →
+  FIo_Native.aspis_core.field.QM31 → Aeneas.Std.Result FIo_Native.aspis_core.field.wide_exact.WideExact :=
+fun self rhs => do
+  let rhs1 ← FIo_Native.aspis_core.field.wide_exact.canonical_qm31 rhs
+  let q ← self.c0.mul rhs1
+  let q1 ← self.c1.mul rhs1
+  Aeneas.Std.Result.ok { c0 := q, c1 := q1 }
+def AspisR1.NFN_LPi_FieldValues.ew : AspisR1.NFN_LPi_FieldValues.NE → AspisR1.NFN_LPi_FieldValues.EW :=
+fun x => (AspisR1.NFN_LPi_FieldValues.qw x.c0, AspisR1.NFN_LPi_FieldValues.qw x.c1)
+def AspisR1.NFN_LPi_FieldValues.canonE : AspisR1.NFN_LPi_FieldValues.NE → Prop :=
+fun x => AspisR1.NFN_LPi_FieldValues.canonQ x.c0 ∧ AspisR1.NFN_LPi_FieldValues.canonQ x.c1
+def AspisR1.NFN_LPi_FieldValues.mulC : AspisR1.NFN_LPi_FieldValues.CW →
+  AspisR1.NFN_LPi_FieldValues.CW → AspisR1.NFN_LPi_FieldValues.CW :=
+fun a b => (AspisR1.NFN_LPi_CMProduct.realWord a.1 a.2 b.1 b.2, AspisR1.NFN_LPi_CMProduct.imagWord a.1 a.2 b.1 b.2)
+def AspisR1.NFN_LPi_FieldValues.mulQ : AspisR1.NFN_LPi_FieldValues.QW →
+  AspisR1.NFN_LPi_FieldValues.QW → AspisR1.NFN_LPi_FieldValues.QW :=
+fun a b =>
+  have ac := AspisR1.NFN_LPi_FieldValues.mulC a.1 b.1;
+  have bd := AspisR1.NFN_LPi_FieldValues.mulC a.2 b.2;
+  have cross :=
+    AspisR1.NFN_LPi_FieldValues.mulC (AspisR1.NFN_LPi_FieldValues.addC a.1 a.2)
+      (AspisR1.NFN_LPi_FieldValues.addC b.1 b.2);
+  (AspisR1.NFN_LPi_FieldValues.addC ac (AspisR1.NFN_LPi_FieldValues.byR bd),
+    AspisR1.NFN_LPi_FieldValues.subC (AspisR1.NFN_LPi_FieldValues.subC cross ac) bd)
+def AspisR1.NFN_LPi_FieldValues.mulE : AspisR1.NFN_LPi_FieldValues.EW →
+  AspisR1.NFN_LPi_FieldValues.EW → AspisR1.NFN_LPi_FieldValues.EW :=
+fun a b =>
+  have ac := AspisR1.NFN_LPi_FieldValues.mulQ a.1 b.1;
+  have bd := AspisR1.NFN_LPi_FieldValues.mulQ a.2 b.2;
+  have cross :=
+    AspisR1.NFN_LPi_FieldValues.mulQ (AspisR1.NFN_LPi_FieldValues.addQ a.1 a.2)
+      (AspisR1.NFN_LPi_FieldValues.addQ b.1 b.2);
+  (AspisR1.NFN_LPi_FieldValues.addQ ac (AspisR1.NFN_LPi_FieldValues.mulU bd),
+    AspisR1.NFN_LPi_FieldValues.subQ (AspisR1.NFN_LPi_FieldValues.subQ cross ac) bd)
+theorem NFS_NBG_FieldDischarge.wide_scale : ∀ (x : AspisR1.NFN_LPi_FieldValues.NE) (s : Aeneas.Std.U32),
+  ∃ z,
+    FIo_Native.aspis_core.field.wide_exact.WideExact.mul_m31 x s = Aeneas.Std.Result.ok z ∧
+      AspisR1.NFN_LPi_FieldValues.canonE z ∧
+        AspisR1.NFN_LPi_FieldValues.ew z =
+          (NFS_NBG_FieldDischarge.scaleQ (AspisR1.NFN_LPi_FieldValues.qw x.c0) (↑s % 2147483647),
+            NFS_NBG_FieldDischarge.scaleQ (AspisR1.NFN_LPi_FieldValues.qw x.c1) (↑s % 2147483647)) :=
+fun x s =>
+  let ⟨r, h✝⟩ := NFS_NBG_WideCarriers.remainder s
+  let ⟨hr, vr⟩ := h✝
+  let ⟨a, h✝¹⟩ := AspisR1.NFS_LPi_MixedValues.qm_m31 x.c0 r
+  let ⟨ha, right✝⟩ := h✝¹
+  let ⟨ca, va⟩ := right✝
+  let ⟨b, h✝²⟩ := AspisR1.NFS_LPi_MixedValues.qm_m31 x.c1 r
+  let ⟨hb, right✝¹⟩ := h✝²
+  let ⟨cb, vb⟩ := right✝¹
+  Exists.intro { c0 := a, c1 := b }
+    ⟨of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (Eq.trans
+                  (congrFun' (congrArg bind (Eq.trans (congrArg (HMod.hMod s) FIo_Native.aspis_core.field.P.eq_1) hr))
+                    fun i => do
+                    let q ← x.c0.mul_m31 i
+                    let q1 ← x.c1.mul_m31 i
+                    Aeneas.Std.Result.ok { c0 := q, c1 := q1 })
+                  (Aeneas.Std.bind_tc_ok r fun y => do
+                    let q ← x.c0.mul_m31 y
+                    let q1 ← x.c1.mul_m31 y
+                    Aeneas.Std.Result.ok { c0 := q, c1 := q1 }))
+                (Eq.trans
+                  (congr (congrArg bind ha)
+                    (funext fun q =>
+                      Eq.trans (congrFun' (congrArg bind hb) fun q1 => Aeneas.Std.Result.ok { c0 := q, c1 := q1 })
+                        (Aeneas.Std.bind_tc_ok b fun y => Aeneas.Std.Result.ok { c0 := q, c1 := y })))
+                  (Aeneas.Std.bind_tc_ok a fun y => Aeneas.Std.Result.ok { c0 := y, c1 := b }))))
+            (Aeneas.Std.Result.ok { c0 := a, c1 := b }))
+          (eq_self (Aeneas.Std.Result.ok { c0 := a, c1 := b }))),
+      ⟨⟨ca, cb⟩,
+        Prod.ext
+          (id
+            (Eq.mp
+              (congrArg (Eq ((↑a.c0.a, ↑a.c0.b), ↑a.c1.a, ↑a.c1.b))
+                (congr
+                  (congrArg Prod.mk
+                    (congr
+                      (congrArg Prod.mk
+                        (congrFun' (congrArg HMod.hMod (congrArg (HMul.hMul ↑x.c0.c0.a) vr)) 2147483647))
+                      (congrFun' (congrArg HMod.hMod (congrArg (HMul.hMul ↑x.c0.c0.b) vr)) 2147483647)))
+                  (congr
+                    (congrArg Prod.mk (congrFun' (congrArg HMod.hMod (congrArg (HMul.hMul ↑x.c0.c1.a) vr)) 2147483647))
+                    (congrFun' (congrArg HMod.hMod (congrArg (HMul.hMul ↑x.c0.c1.b) vr)) 2147483647))))
+              va))
+          (id
+            (Eq.mp
+              (congrArg (Eq ((↑b.c0.a, ↑b.c0.b), ↑b.c1.a, ↑b.c1.b))
+                (congr
+                  (congrArg Prod.mk
+                    (congr
+                      (congrArg Prod.mk
+                        (congrFun' (congrArg HMod.hMod (congrArg (HMul.hMul ↑x.c1.c0.a) vr)) 2147483647))
+                      (congrFun' (congrArg HMod.hMod (congrArg (HMul.hMul ↑x.c1.c0.b) vr)) 2147483647)))
+                  (congr
+                    (congrArg Prod.mk (congrFun' (congrArg HMod.hMod (congrArg (HMul.hMul ↑x.c1.c1.a) vr)) 2147483647))
+                    (congrFun' (congrArg HMod.hMod (congrArg (HMul.hMul ↑x.c1.c1.b) vr)) 2147483647))))
+              vb))⟩⟩
