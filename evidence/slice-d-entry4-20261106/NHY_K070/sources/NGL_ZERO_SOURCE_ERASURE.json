@@ -1,7 +1,0 @@
-{
- "frozen_body": "fn require_zero(mut remaining: &[u8]) -> ProgramResult {\n    while !remaining.is_empty() {\n        if remaining[0] != 0 { return Err(ProgramError::AccountAlreadyInitialized); }\n        remaining = &remaining[1..];\n    }\n    Ok(())\n}",
- "instrumented_body": "fn require_zero(mut remaining: &[u8]) -> ProgramResult {\n    while !remaining.is_empty() {\n        #[cfg(kani)] let NGL_before = (remaining.as_ptr(), remaining.len());\n        if remaining[0] != 0 { return Err(ProgramError::AccountAlreadyInitialized); }\n        remaining = &remaining[1..];\n        #[cfg(kani)] { NGL_owned::zero_frame(remaining.as_ptr(),remaining.len(),NGL_before.0,NGL_before.1); break; }\n    }\n    Ok(())\n}",
- "erasure": "Remove the two cfg(kani) statements; original frozen body is byte-identical",
- "native_domain": "arbitrary bytes[1768], 0<=start<=1768 and 0<=len<=1768-start, arbitrary suffix/window; at most ONE original loop iteration",
- "model_domain": "emitted indexed loop related by remaining=original.drop(index)"
-}

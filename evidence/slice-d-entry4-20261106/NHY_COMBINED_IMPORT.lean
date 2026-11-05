@@ -1,3 +1,12 @@
+import NHY_RegistryJoin
+import NHY_RegistryModel
+import NHY_RecordExt
+import NHY_ArrayExt
+import NHY_NaturalReads
+import NHY_EqualValue
+import NHY_EqualRun
+import NHY_EqualStep
+import NHY_PdaReplies
 import NHY_EntryHeader
 import NHY_RegistryHeader
 import NHY_WindowTransport
@@ -127,3 +136,40 @@ import NHY_ZeroBinding
 #print axioms NHY_EntryHeader.wrong_version
 #print axioms NHY_EntryHeader.wrong_mode
 #print axioms NHY_EntryHeader.reserved
+
+#print axioms NHY_PdaReplies.callback0
+#print axioms NHY_PdaReplies.result0
+#print axioms NHY_PdaReplies.callback1
+#print axioms NHY_PdaReplies.result1
+#print axioms NHY_PdaReplies.callback2
+#print axioms NHY_PdaReplies.result2
+#print axioms NHY_PdaReplies.callback3
+#print axioms NHY_PdaReplies.result3
+#print axioms NHY_PdaReplies.callback4
+#print axioms NHY_PdaReplies.result4
+#print axioms NHY_PdaReplies.callback5
+#print axioms NHY_PdaReplies.result5
+#print axioms NHY_PdaReplies.callback6
+#print axioms NHY_PdaReplies.result6
+#print axioms NHY_PdaReplies.callback7
+#print axioms NHY_PdaReplies.result7
+#print axioms NHY_PdaReplies.callback8
+#print axioms NHY_PdaReplies.result8
+#print axioms NHY_EqualStep.terminal
+#print axioms NHY_EqualStep.step
+#print axioms NHY_EqualRun.run
+#print axioms NHY_EqualValue.same_iff
+#print axioms NHY_EqualValue.value
+#print axioms NHY_NaturalReads.read_prefix
+#print axioms NHY_NaturalReads.magic
+#print axioms NHY_NaturalReads.zero
+#print axioms NHY_NaturalReads.read32
+#print axioms NHY_NaturalReads.word
+#print axioms NHY_ArrayExt.whole
+#print axioms NHY_RecordExt.registry_injective
+#print axioms NHY_RecordExt.entry_injective
+#print axioms NHY_RegistryModel.source
+
+#print axioms NHY_RegistryJoin.source
+#print axioms NHY_RegistryJoin.cohort
+#print axioms NHY_RegistryJoin.digest_error_frame

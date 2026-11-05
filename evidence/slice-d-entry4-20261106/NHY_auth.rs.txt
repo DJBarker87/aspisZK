@@ -813,3 +813,150 @@ fn pda_reply_wrong_packet(reply:Result<Pubkey,solana_program::pubkey::PubkeyErro
 #[kani::proof_for_contract(pda_reply_wrong_packet)] #[kani::unwind(35)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn pda_reply_wrong(){pda_reply_wrong_packet(NHY_pda_reply(),kani::any());}
+
+// NHY owned stage cuts
+fn NHY_any_verifier_error()->verifier::Error{let tag:u8=kani::any();kani::assume(tag<8);match tag{0=>verifier::Error::Parse,1=>verifier::Error::Semantic,2=>verifier::Error::Transcript,3=>verifier::Error::Relation,4=>verifier::Error::Merkle,5=>verifier::Error::Query,6=>verifier::Error::Checkpoint,_=>verifier::Error::Allocation}}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn stage2_tail_packet(reply:Result<(),verifier::Error>,emit_ok:bool)->bool{
+ let mut error_calls=0u8;let mut emit_calls=0u8;let mut observed=None;
+ let result=(||->ProgramResult{
+  reply.map_err(|e|{error_calls+=1;observed=Some(e);ProgramError::InvalidInstructionData})?;
+  emit_calls+=1;
+  if emit_ok{Ok(())}else{Err(ProgramError::InvalidInstructionData)}
+ })();
+ let expected=match reply{Ok(())=>emit_ok,Err(_)=>false};
+ let schedule=match reply{Ok(())=>error_calls==0&&emit_calls==1&&observed.is_none(),Err(e)=>error_calls==1&&emit_calls==0&&observed==Some(e)};
+ (schedule && result.is_ok()==expected && (result.is_ok()||result==Err(ProgramError::InvalidInstructionData)))
+}
+#[kani::proof_for_contract(stage2_tail_packet)] #[kani::unwind(2)]
+fn stage2_tail(){let reply=if kani::any(){Ok(())}else{Err(NHY_any_verifier_error())};stage2_tail_packet(reply,kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn stage2_tail_wrong_packet(reply:Result<(),verifier::Error>,emit_ok:bool)->bool{
+ let mut error_calls=0u8;let mut emit_calls=0u8;let mut observed=None;
+ let result=(||->ProgramResult{
+  reply.map_err(|e|{error_calls+=1;observed=Some(e);ProgramError::InvalidInstructionData})?;
+  emit_calls+=1;
+  if emit_ok{Ok(())}else{Err(ProgramError::InvalidInstructionData)}
+ })();
+ let expected=match reply{Ok(())=>emit_ok,Err(_)=>false};
+ let schedule=match reply{Ok(())=>error_calls==0&&emit_calls==1&&observed.is_none(),Err(e)=>error_calls==1&&emit_calls==0&&observed==Some(e)};
+ !(schedule && result.is_ok()==expected && (result.is_ok()||result==Err(ProgramError::InvalidInstructionData)))
+}
+#[kani::proof_for_contract(stage2_tail_wrong_packet)] #[kani::unwind(2)]
+fn stage2_tail_wrong(){let reply=if kani::any(){Ok(())}else{Err(NHY_any_verifier_error())};stage2_tail_wrong_packet(reply,kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn stage1_header_packet(bytes:&[u8;3],n:usize,account_len:usize)->bool{
+ kani::assume(n<=3);let data=&bytes[..n];
+ let result=if !(data == &[3, 10] || data == &[3, 11]) || account_len != 3 {false}else{true};
+ (result==(data.len()==2 && data[0]==3 && (data[1]==10 || data[1]==11) && account_len==3))
+}
+#[kani::proof_for_contract(stage1_header_packet)] #[kani::unwind(7)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn stage1_header(){stage1_header_packet(&kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn stage1_header_wrong_packet(bytes:&[u8;3],n:usize,account_len:usize)->bool{
+ kani::assume(n<=3);let data=&bytes[..n];
+ let result=if !(data == &[3, 10] || data == &[3, 11]) || account_len != 3 {false}else{true};
+ !(result==(data.len()==2 && data[0]==3 && (data[1]==10 || data[1]==11) && account_len==3))
+}
+#[kani::proof_for_contract(stage1_header_wrong_packet)] #[kani::unwind(7)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn stage1_header_wrong(){stage1_header_wrong_packet(&kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn stage2_header_packet(bytes:&[u8;5],n:usize,account_len:usize)->bool{
+ kani::assume(n<=5);let data=&bytes[..n];
+ let result=if account_len != 7 || data.get(..4) != Some(&POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC[..]) {false}else{true};
+ (result==(account_len==7 && data.len()>=4 && data[0]==65 && data[1]==83 && data[2]==81 && data[3]==56))
+}
+#[kani::proof_for_contract(stage2_header_packet)] #[kani::unwind(7)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn stage2_header(){stage2_header_packet(&kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn stage2_header_wrong_packet(bytes:&[u8;5],n:usize,account_len:usize)->bool{
+ kani::assume(n<=5);let data=&bytes[..n];
+ let result=if account_len != 7 || data.get(..4) != Some(&POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC[..]) {false}else{true};
+ !(result==(account_len==7 && data.len()>=4 && data[0]==65 && data[1]==83 && data[2]==81 && data[3]==56))
+}
+#[kani::proof_for_contract(stage2_header_wrong_packet)] #[kani::unwind(7)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn stage2_header_wrong(){stage2_header_wrong_packet(&kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn stage1_span_packet(data_len:usize,proof_length:usize)->bool{
+ let proof_start=POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES;
+ let outcome=(||->Result<(usize,usize),ProgramError>{
+  let proof_end=proof_start.checked_add(verifier::PROOF_BYTES).ok_or(ProgramError::InvalidAccountData)?;
+  if data_len!=proof_end{return Err(ProgramError::InvalidAccountData);}
+  Ok((proof_start,proof_end))
+ })();
+ let sum=(proof_start as u128)+(verifier::PROOF_BYTES as u128);
+ let good=match outcome{Ok((start,end))=>sum<=usize::MAX as u128 && data_len as u128==sum && start==proof_start && end as u128==sum,Err(ProgramError::InvalidAccountData)=>sum>usize::MAX as u128 || data_len as u128!=sum,_=>false};
+ good
+}
+
+#[kani::proof_for_contract(stage1_span_packet)] #[kani::unwind(2)]
+fn stage1_span(){stage1_span_packet(kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn stage1_span_wrong_packet(data_len:usize,proof_length:usize)->bool{
+ let proof_start=POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES;
+ let outcome=(||->Result<(usize,usize),ProgramError>{
+  let proof_end=proof_start.checked_add(verifier::PROOF_BYTES).ok_or(ProgramError::InvalidAccountData)?;
+  if data_len!=proof_end{return Err(ProgramError::InvalidAccountData);}
+  Ok((proof_start,proof_end))
+ })();
+ let sum=(proof_start as u128)+(verifier::PROOF_BYTES as u128);
+ let good=match outcome{Ok((start,end))=>sum<=usize::MAX as u128 && data_len as u128==sum && start==proof_start && end as u128==sum,Err(ProgramError::InvalidAccountData)=>sum>usize::MAX as u128 || data_len as u128!=sum,_=>false};
+ !good
+}
+
+#[kani::proof_for_contract(stage1_span_wrong_packet)] #[kani::unwind(2)]
+fn stage1_span_wrong(){stage1_span_wrong_packet(kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn stage2_span_packet(data_len:usize,proof_length:usize)->bool{
+ let proof_start=POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES;
+ let outcome=(||->Result<(usize,usize),ProgramError>{
+  let proof_end=proof_start.checked_add(proof_length).ok_or(ProgramError::InvalidAccountData)?;
+  if data_len!=proof_end{return Err(ProgramError::InvalidAccountData);}
+  Ok((proof_start,proof_end))
+ })();
+ let sum=(proof_start as u128)+(proof_length as u128);
+ let good=match outcome{Ok((start,end))=>sum<=usize::MAX as u128 && data_len as u128==sum && start==proof_start && end as u128==sum,Err(ProgramError::InvalidAccountData)=>sum>usize::MAX as u128 || data_len as u128!=sum,_=>false};
+ good
+}
+
+#[kani::proof_for_contract(stage2_span_packet)] #[kani::unwind(2)]
+fn stage2_span(){stage2_span_packet(kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn stage2_span_wrong_packet(data_len:usize,proof_length:usize)->bool{
+ let proof_start=POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES;
+ let outcome=(||->Result<(usize,usize),ProgramError>{
+  let proof_end=proof_start.checked_add(proof_length).ok_or(ProgramError::InvalidAccountData)?;
+  if data_len!=proof_end{return Err(ProgramError::InvalidAccountData);}
+  Ok((proof_start,proof_end))
+ })();
+ let sum=(proof_start as u128)+(proof_length as u128);
+ let good=match outcome{Ok((start,end))=>sum<=usize::MAX as u128 && data_len as u128==sum && start==proof_start && end as u128==sum,Err(ProgramError::InvalidAccountData)=>sum>usize::MAX as u128 || data_len as u128!=sum,_=>false};
+ !good
+}
+
+#[kani::proof_for_contract(stage2_span_wrong_packet)] #[kani::unwind(2)]
+fn stage2_span_wrong(){stage2_span_wrong_packet(kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn require_zero_step_packet(bytes:&[u8;2],n:usize)->bool{
+ kani::assume(n<=2);let remaining=&bytes[..n];
+ let (code,pointer,length)=if remaining.is_empty(){(0u8,remaining.as_ptr(),0usize)}else if remaining[0]!=0{(1,remaining.as_ptr(),remaining.len())}else{let next=&remaining[1..];(2,next.as_ptr(),next.len())};
+ let good=if n==0{code==0&&length==0}else if bytes[0]!=0{code==1&&pointer==remaining.as_ptr()&&length==n}else{code==2&&pointer==unsafe{remaining.as_ptr().add(1)}&&length==n-1};
+ good
+}
+#[kani::proof_for_contract(require_zero_step_packet)] #[kani::unwind(2)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn require_zero_step(){require_zero_step_packet(&kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn require_zero_step_wrong_packet(bytes:&[u8;2],n:usize)->bool{
+ kani::assume(n<=2);let remaining=&bytes[..n];
+ let (code,pointer,length)=if remaining.is_empty(){(0u8,remaining.as_ptr(),0usize)}else if remaining[0]!=0{(1,remaining.as_ptr(),remaining.len())}else{let next=&remaining[1..];(2,next.as_ptr(),next.len())};
+ let good=if n==0{code==0&&length==0}else if bytes[0]!=0{code==1&&pointer==remaining.as_ptr()&&length==n}else{code==2&&pointer==unsafe{remaining.as_ptr().add(1)}&&length==n-1};
+ !good
+}
+#[kani::proof_for_contract(require_zero_step_wrong_packet)] #[kani::unwind(2)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn require_zero_step_wrong(){require_zero_step_wrong_packet(&kani::any(),kani::any());}

@@ -1,6 +1,6 @@
 # NHY remaining obligations — ongoing
 
-No complete TX1 or TX2 entry path. NHY adds11 CLOSED rows/10 functions, with the inherited NHJ14-row delta separate. This is an intermediate checkpoint, not a budget stop.
+No complete TX1 or TX2 entry path. NHY adds14 CLOSED rows/13 functions, with the inherited NHJ14-row delta separate. This is an intermediate checkpoint, not a budget stop.
 
 | Member | Exact remaining obligation |
 |---|---|

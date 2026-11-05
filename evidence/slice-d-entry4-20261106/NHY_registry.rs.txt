@@ -415,3 +415,71 @@ fn entry_record_wrong_packet(input:&VerifierRegistryEntryV2,reply:Result<(),Pool
 #[kani::proof_for_contract(entry_record_wrong_packet)] #[kani::unwind(35)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn entry_record_wrong_check(){let input=NHY_any_entry();let reply=if kani::any(){Ok(())}else{Err(NHY_any_error())};entry_record_wrong_packet(&input,reply,kani::any(),kani::any());}
+
+// NHY record argument cuts
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn registry_args_packet(input:&VerifierRegistryV2,field:u8,j:usize)->bool{
+ kani::assume((field as usize)<7);kani::assume(j<32);
+ let registry = VerifierRegistryV2{flags:input.flags,bump:input.bump,pool:input.pool,authority:input.authority,policy_binding:input.policy_binding,generation:input.generation,minimum_activation_delay_slots:input.minimum_activation_delay_slots,registry_program:input.registry_program,loader_program:input.loader_program,programdata_address:input.programdata_address,programdata_bump:input.programdata_bump,executable_hash:input.executable_hash};
+ // A local immutable observation of the exact constructed validator argument.
+ let log=NHY_registry_byte(&registry,field,j);
+ log==NHY_registry_byte(input,field,j)
+ && registry.flags==input.flags
+ && registry.bump==input.bump
+ && registry.generation==input.generation
+ && registry.minimum_activation_delay_slots==input.minimum_activation_delay_slots
+ && registry.programdata_bump==input.programdata_bump
+}
+#[kani::proof_for_contract(registry_args_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn registry_args_check(){registry_args_packet(&NHY_any_registry(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn registry_args_wrong_packet(input:&VerifierRegistryV2,field:u8,j:usize)->bool{
+ kani::assume((field as usize)<7);kani::assume(j<32);
+ let registry = VerifierRegistryV2{flags:input.flags,bump:input.bump,pool:input.pool,authority:input.authority,policy_binding:input.policy_binding,generation:input.generation,minimum_activation_delay_slots:input.minimum_activation_delay_slots,registry_program:input.registry_program,loader_program:input.loader_program,programdata_address:input.programdata_address,programdata_bump:input.programdata_bump,executable_hash:input.executable_hash};
+ // A local immutable observation of the exact constructed validator argument.
+ let log=NHY_registry_byte(&registry,field,j)^1;
+ log==NHY_registry_byte(input,field,j)
+ && registry.flags==input.flags
+ && registry.bump==input.bump
+ && registry.generation==input.generation
+ && registry.minimum_activation_delay_slots==input.minimum_activation_delay_slots
+ && registry.programdata_bump==input.programdata_bump
+}
+#[kani::proof_for_contract(registry_args_wrong_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn registry_args_wrong_check(){registry_args_wrong_packet(&NHY_any_registry(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn entry_args_packet(input:&VerifierRegistryEntryV2,field:u8,j:usize)->bool{
+ kani::assume((field as usize)<9);kani::assume(j<32);
+ let entry = VerifierRegistryEntryV2{status:input.status,statement_version:input.statement_version,bump:input.bump,pool:input.pool,verifier_program:input.verifier_program,profile_binding:input.profile_binding,release_binding:input.release_binding,loader_program:input.loader_program,programdata_address:input.programdata_address,programdata_bump:input.programdata_bump,executable_hash:input.executable_hash,expected_upgrade_authority:input.expected_upgrade_authority,activation_slot:input.activation_slot,retirement_slot:input.retirement_slot,policy_binding:input.policy_binding};
+ // A local immutable observation of the exact constructed validator argument.
+ let log=NHY_entry_byte(&entry,field,j);
+ log==NHY_entry_byte(input,field,j)
+ && entry.status==input.status
+ && entry.statement_version==input.statement_version
+ && entry.bump==input.bump
+ && entry.programdata_bump==input.programdata_bump
+ && entry.activation_slot==input.activation_slot
+ && entry.retirement_slot==input.retirement_slot
+}
+#[kani::proof_for_contract(entry_args_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn entry_args_check(){entry_args_packet(&NHY_any_entry(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn entry_args_wrong_packet(input:&VerifierRegistryEntryV2,field:u8,j:usize)->bool{
+ kani::assume((field as usize)<9);kani::assume(j<32);
+ let entry = VerifierRegistryEntryV2{status:input.status,statement_version:input.statement_version,bump:input.bump,pool:input.pool,verifier_program:input.verifier_program,profile_binding:input.profile_binding,release_binding:input.release_binding,loader_program:input.loader_program,programdata_address:input.programdata_address,programdata_bump:input.programdata_bump,executable_hash:input.executable_hash,expected_upgrade_authority:input.expected_upgrade_authority,activation_slot:input.activation_slot,retirement_slot:input.retirement_slot,policy_binding:input.policy_binding};
+ // A local immutable observation of the exact constructed validator argument.
+ let log=NHY_entry_byte(&entry,field,j)^1;
+ log==NHY_entry_byte(input,field,j)
+ && entry.status==input.status
+ && entry.statement_version==input.statement_version
+ && entry.bump==input.bump
+ && entry.programdata_bump==input.programdata_bump
+ && entry.activation_slot==input.activation_slot
+ && entry.retirement_slot==input.retirement_slot
+}
+#[kani::proof_for_contract(entry_args_wrong_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn entry_args_wrong_check(){entry_args_wrong_packet(&NHY_any_entry(),kani::any(),kani::any());}

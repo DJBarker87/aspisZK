@@ -1,6 +1,6 @@
 # NHY entry spine — snapshot stage
 
-**13 new CLOSED rows /12 functions beyond NHJ; zero complete TX1/TX2 paths. Target not yet established.** NHY delta is additive against unchanged NHO599-row ledger (335 CLOSED/264 OPEN →348/251); NHJ14-row delta is retained separately, without duplicating credit. No security, privacy or custody theorem is promoted.
+**14 new CLOSED rows /13 functions beyond NHJ; zero complete TX1/TX2 paths. Target not yet established.** NHY delta is additive against unchanged NHO599-row ledger (335 CLOSED/264 OPEN →349/250); NHJ14-row delta is retained separately, without duplicating credit. No security, privacy or custody theorem is promoted.
 
 ## Entry roots and distance
 
@@ -48,3 +48,9 @@ Error callback progress: eight isolated native Debug label loggers pass, each ha
 Current-format decoder progress: original256/320-byte buffers transport to64/16-byte local windows at arbitrary legal offsets (K049..056); controls fail. Retained NCX validators are under revalidation, not yet admitted. Full native record construction, first-error suffix and same SDK call association remain OPEN. V1 models cannot use the current V2-only extraction as a stand-in.
 
 Validator stage: TX2:207 and209 are now CLOSED. Retained NCX_K004/005 and006/007 are reconstructed and revalidated by immutable patch/graph/lock/KMX hashes, no passing proof replay. Their safe-reference bodies match the exact E002 extracted bodies token for token after namespace qualification only. Full typed record and12-error ports are two-sided; native-domain laws L058 and combined L063/raw L064 pass. The actual decoder roots (201..204), both authentication parents and both owned-stage roots remain OPEN.
+
+## Current registry decoder closed
+
+TX2:204 decode_verifier_registry_v2 is CLOSED under(y)/(ai)/(ak), all input slice lengths and contents. No prefix/header/validation-success premise. Exact first-error K057/058, same ORIGINAL256-byte cast/word caller windows K049/050 and053/054, complete same-record validator argument logs K093/094, all Result/errors/returned fields K063/064, CLOSED validator209. All7 arrays,2 words and3 scalars are enumerated by NHY_registry_check.py; no64/16-byte restriction on original account. NHY_RecordExt turns arbitrary field/byte observations into full record equality. NHY_RegistryModel.source proves the universal natural parser, and NHY_RegistryJoin.source/cohort binds actual NCX_Install.op33 and preserves digest/error43/44. Final combined L079, raw/NFX L080 pass with standard axioms. The separate current entry decoder202 remains OPEN after K092 full Result carrier timeout; K095/096 argument-only cuts pass and do not close it.
+
+TX2 authentication distance is reduced by one complete decoder child. Both V1 decoders and current entry decoder, complete PDA/first-error composition and authentication parent still remain. Every actual PDA seed call site has a native argument/value/length/domain packet and matched failing control (K069..086); reply mapping K087/088 covers all SDK errors. These are syscall-argument/reply observations only, not a PDA-value or canonicality theorem.

@@ -44,3 +44,10 @@ NHY_K061 found a real mismatch in the OWN reference: legacy registry byte7 is re
 NHY_L059/L060 header branch proofs incorrectly rewrote a Bool != comparison into a proposition before using its Bool hypothesis; no credit. L061/L062 prove explicit bne_iff_ne Boolean equalities first, preserve scalar symbols and compile.
 
 PDA K065/066/067 own generated source failed on trailing comma, projected master/lane fields and moved non-Copy PubkeyError carrier, then a temporary expected Pubkey borrow. Repaired without weakening assertions. K068 full seed+reply carrier times out90s; no credit, no negative submitted, no identical site replay. K069 splits read-only seed argument logging from full Result reply transport and removes irrelevant five-key array.map copying. Each call uses only actual accessed projections, not an assumed authentication success.
+
+
+K092 entry full Result/record packet timed out90s. Do not submit its unchanged negative or repeat another whole-buffer/copy shape. Independent constructor-argument observations K095/096 pass; the owning Result/frame/first-error join remains OPEN.
+
+L069 used reserved Lean syntax prefix as an identifier; L070 fixed that and exposed distinct decidability instances and a slice projection. L072 exposed a self-expanding rewrite when a list equalled a replicate of its own length. L074 uses Boolean extensionality and exact projections, with no limit increase or numeral reduction, and passes. All earlier sorryAx diagnostics are failed and excluded.
+
+K103 stage1 span check against generic Result/ProgramError PartialEq timed out90s. K104 replaces only own validation expression with explicit constructor discrimination and scalar natural endpoint comparison, retaining original harness names and all overflow/length/error requirements. Stage2 receives the identical structural repair before its first attempt. This is not a retry of the timed-out interface or a renamed verdict.
