@@ -1,0 +1,38 @@
+from pathlib import Path
+E=Path(__file__).resolve().parent
+t='''use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+fn owned()->OwnedAccount{OwnedAccount{key:Pubkey::new_from_array(kani::any()),owner:Pubkey::new_from_array(kani::any()),is_signer:false,is_writable:false,executable:false,length:Ok(kani::any()),bytes:Err(ProgramError::InvalidAccountData)}}
+fn no_data(_: &OwnedAccount)->Result<&[u8],ProgramError>{panic!("no data after selected ASQ8 account guard")}
+fn no_distinct<const N:usize>(_: &[&OwnedAccount;N])->ProgramResult{panic!("no distinct-loop suffix after selected ASQ8 account guard")}
+fn no_pda(_: &[&[u8]],_: &Pubkey)->Result<Pubkey,solana_program::pubkey::PubkeyError>{panic!("no PDA/hash suffix after selected ASQ8 account guard")}
+fn corrupt_readonly(a:&mut OwnedAccount,owner:&Pubkey){let f:u8=kani::any();kani::assume(f<4);match f{0=>{let key=Pubkey::new_from_array(kani::any());kani::assume(key!=*owner);a.owner=key;},1=>a.is_signer=true,2=>a.is_writable=true,_=>a.executable=true}}
+fn check<const G:usize>(wrong:bool){
+ let verifier=Pubkey::new_from_array(kani::any());let pool=Pubkey::new_from_array(kani::any());
+ let mut a=[owned(),owned(),owned(),owned(),owned(),owned(),owned(),owned()];
+ a[6].owner=verifier;a[6].length=Ok(1768);
+ a[1].owner=pool;a[2].owner=pool;a[3].owner=pool;
+ let mut n=7;let mut expected=ProgramError::InvalidAccountData;
+ match G{
+ 0=>{n=kani::any();kani::assume(n<7);expected=ProgramError::NotEnoughAccountKeys;},
+ 1=>{n=8;expected=ProgramError::InvalidArgument;},
+ 2=>{let f:u8=kani::any();kani::assume(f<3);match f{0=>a[0].is_signer=true,1=>a[0].is_writable=true,_=>a[0].executable=true}},
+ 3=>{a[6].owner=Pubkey::new_from_array(kani::any());kani::assume(a[6].owner!=verifier);},
+ 4=>{if kani::any(){a[6].is_signer=true}else{a[6].executable=true}},
+ 5=>a[6].is_writable=true,
+ 6=>{a[6].length=Err(ProgramError::AccountBorrowFailed);a[6].bytes=Err(ProgramError::AccountBorrowFailed);expected=ProgramError::AccountBorrowFailed;},
+ 7=>{let length:usize=kani::any();kani::assume(length!=1768);a[6].length=Ok(length);},
+ 8=>corrupt_readonly(&mut a[1],&pool),9=>corrupt_readonly(&mut a[2],&pool),10=>corrupt_readonly(&mut a[3],&pool),
+ _=>unreachable!()
+ }
+ let a=core::mem::ManuallyDrop::new(a);
+ let result=authenticate_asq8_accounts(&verifier,&a[..n],&pool,kani::any(),kani::any());
+ let good=match result{Err(e)=>e==expected,Ok(_)=>false};
+ assert!(good!=wrong,"ordered ASQ8 account rejection prefix");
+}
+'''
+for g in range(11):
+ for wrong in [False,True]:
+  name='guard_'+str(g)+('_wrong' if wrong else '')
+  t+='#[kani::proof] #[kani::unwind(35)]\n#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]\n#[kani::stub(super::require_distinct_accounts::<7>,no_distinct)]\n#[kani::stub(Pubkey::create_program_address,no_pda)]\nfn '+name+'(){check::<'+str(g)+'>('+str(wrong).lower()+');}\n'
+p='programs/r1-cost-probe/src/NIV_accounts.rs';(E/'NIV_accounts.patch').write_text('--- /dev/null\n+++ b/'+p+'\n@@ -0,0 +1,'+str(len(t.splitlines()))+' @@\n'+''.join('+'+l for l in t.splitlines(True)))

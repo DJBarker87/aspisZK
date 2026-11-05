@@ -1,0 +1,79 @@
+--- retained/NIJ_stage.py
++++ NIV_stage.py
+@@ -120,10 +120,12 @@
+     assert roots==set(manifest['package_roots']), 'staged manifest closure differs'
+     return manifest
+ 
+-def validate(workspace, out, cargo):
++def validate(workspace, out, cargo, function=None):
+     manifest = stage(workspace)
+     expected = manifest['files']['Cargo.lock']['sha256']
+-    cmd = [cargo,'+1.94.1','metadata','--manifest-path',str(workspace/'crates/aspis-r1-cost-probe/Cargo.toml'),'--locked','--offline','--format-version','1','--features',FEATURES]
++    package = 'programs/r1-cost-probe' if function=='entry' else 'crates/aspis-r1-cost-probe'
++    features = 'pool-adapter,private-leaf-salts' if function=='entry' else FEATURES
++    cmd = [cargo,'+1.94.1','metadata','--manifest-path',str(workspace/package/'Cargo.toml'),'--locked','--offline','--format-version','1','--features',features]
+     r = subprocess.run(cmd,capture_output=True,text=True,env={**os.environ,'CARGO_NET_OFFLINE':'true'})
+     (out/'metadata.stderr').write_text(r.stderr); (out/'metadata.stdout').write_text(r.stdout)
+     assert sha((workspace/'Cargo.lock').read_bytes())==expected, 'STOP lock drift'
+@@ -149,25 +151,26 @@
+     return manifest
+ 
+ def options(args, workspace, out):
+-    selection = {'debug': ('crate::verifier::_::fmt', 'crates/aspis-r1-cost-probe', FEATURES, 'aspis_r1_cost_probe'), 'error': ('crate::error', 'programs/r1-cost-probe', 'pool-adapter,private-leaf-salts', 'aspis_r1_cost_probe_program')}
++    selection = {'entry': ('crate::process_r1_cost_probe_instruction', 'programs/r1-cost-probe', 'pool-adapter,private-leaf-salts', 'aspis_r1_cost_probe_program'), 'debug': ('crate::verifier::_::fmt', 'crates/aspis-r1-cost-probe', FEATURES, 'aspis_r1_cost_probe'), 'error': ('crate::error', 'programs/r1-cost-probe', 'pool-adapter,private-leaf-salts', 'aspis_r1_cost_probe_program')}
+     root, package, features, owner = selection.get(args.function, ('crate::verifier::candidate::'+args.function, 'crates/aspis-r1-cost-probe', FEATURES, 'aspis_r1_cost_probe'))
+     spec = json.loads(Path(args.opacity).read_text())
+     opacity = spec[args.function]
+     assert all(x['path'].startswith(('crate::','aspis_core::')) and x['why'] for x in opacity)
+     cmd = [str(TOOLROOT/'charon'),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--include','core::option::Option','--include','core::result::Result','--include','core::option::_::ok_or','--start-from',root]
+     for x in opacity: cmd += ['--opaque',x.get('selector',x['path'])]
++    if args.function=='entry':cmd += ['--opaque','solana_account_info::AccountInfo']
+     for ty in spec['include_types']: cmd += ['--include',ty]
+     llbc = out/(args.function+'.llbc')
+     cmd += ['--dest-file',str(llbc),'--','--manifest-path',str(workspace/package/'Cargo.toml'),'--locked','--offline','--release','--lib','--jobs','1','--features',features]
+-    aeneas = [str(TOOLROOT/'aeneas-b59d5188-extended'),'-diagnose-translation','-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','NIJ_'+args.function,'-dest',str(out/'raw'),'-subdir','NIJ_'+args.function,'-split-files',str(llbc)]
++    aeneas = [str(TOOLROOT/'aeneas-b59d5188-extended'),'-diagnose-translation','-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace',('NIV_'+args.function if args.function=='entry' else 'NIJ_'+args.function),'-dest',str(out/'raw'),'-subdir',('NIV_'+args.function if args.function=='entry' else 'NIJ_'+args.function),'-split-files',str(llbc)]
+     return dict(charon_command=cmd,aeneas_command=aeneas,opacity=opacity,root=root,root_owner=owner,root_package=package,root_features=features)
+ 
+ def extract(args, workspace, out):
+-    manifest = validate(workspace,out,args.cargo)
++    manifest = validate(workspace,out,args.cargo,args.function)
+     pins = options(args,workspace,out)
+     for name,h in PINS.items(): assert sha((TOOLROOT/name).read_bytes())==h
+     pins.update(frozen_revision=REV,tools=PINS,lock_before=sha((workspace/'Cargo.lock').read_bytes()),manifest_sha256=sha((E/'NHR_STAGING_MANIFEST.json').read_bytes()),candidate_sha256=sha((workspace/'crates/aspis-r1-cost-probe/src/candidate.rs').read_bytes()))
+-    env = dict(os.environ,RUSTUP_TOOLCHAIN='nightly-2026-09-17',CARGO_TARGET_DIR=str(E/'NHR_target'),CARGO_NET_OFFLINE='true',CARGO_BUILD_JOBS='1',RUSTFLAGS='-Zthreads=1 -C link-arg=-Wl,--threads=1',RAYON_NUM_THREADS='1')
++    env = dict(os.environ,RUSTUP_TOOLCHAIN='nightly-2026-09-17',CARGO_TARGET_DIR=str(E/'NIV_NHR_target'),CARGO_NET_OFFLINE='true',CARGO_BUILD_JOBS='1',RUSTFLAGS='-Zthreads=1 -C link-arg=-Wl,--threads=1',RAYON_NUM_THREADS='1')
+     write(out/'NHR_PINS.json',pins); print(json.dumps(pins),flush=True)
+     try:
+         r = subprocess.run(pins['charon_command'],cwd=workspace,env=env); pins['charon_exit']=r.returncode
+@@ -199,6 +202,12 @@
+                 assert all(f['body_kind'] in ('Opaque',['Opaque']) for f in hits), ('OWN INPUT: body not opaque',boundary,hits)
+                 matched.append(dict(boundary=boundary,matches=hits))
+             pins['validated_opacity']=matched
++            if args.function=='entry':
++                types=doc.get('translated',doc).get('type_decls',[])
++                hits=[t for t in types if t is not None and [p['Ident'][0] for p in t['item_meta']['name'] if 'Ident' in p]==['solana_account_info','AccountInfo']]
++                assert hits,'OWN INPUT: missing AccountInfo declaration'
++                assert all(t['kind']=='Opaque' or isinstance(t['kind'],dict) and set(t['kind'])=={'Opaque'} for t in hits),('AccountInfo not opaque',hits)
++                pins['validated_account_info_opacity']=hits
+             write(out/'NHR_PINS.json',pins)
+             r = subprocess.run(pins['aeneas_command'],cwd=E,env=env); pins['aeneas_exit']=r.returncode
+         pins['exit']=r.returncode
+@@ -215,7 +224,7 @@
+     modes=p.add_mutually_exclusive_group(required=True)
+     for name in ['export','check','extract','options']: modes.add_argument('--'+name,action='store_true')
+     p.add_argument('--workspace',type=Path,default=E/'NHR_workspace'); p.add_argument('--out',type=Path,default=E/'NHR_preflight')
+-    p.add_argument('--cargo',default='/home/dombarker/.cargo/bin/cargo'); p.add_argument('--function',choices=['prepare','tx1','tx2_authenticated','tx2_common','error','debug']); p.add_argument('--opacity',default=str(E/'NHR_OPACITY.json'))
++    p.add_argument('--cargo',default='/home/dombarker/.cargo/bin/cargo'); p.add_argument('--function',choices=['prepare','tx1','tx2_authenticated','tx2_common','error','debug','entry']); p.add_argument('--opacity',default=str(E/'NHR_OPACITY.json'))
+     a=p.parse_args()
+     if a.export: export(); return 0
+     a.workspace=a.workspace.resolve(); a.out=a.out.resolve(); a.out.mkdir(parents=True,exist_ok=True)
+@@ -223,7 +232,7 @@
+         rel = next(l.split(':',2)[2].strip().lstrip('/') for l in Path('/proc/self/cgroup').read_text().splitlines() if l.startswith('0:'))
+         group = Path('/sys/fs/cgroup')/rel
+         assert {n:(group/n).read_text().strip() for n in ('memory.high','memory.max','memory.swap.max','pids.max')} == {'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}, 'Run via the admitted capped launcher'
+-    if a.check: validate(a.workspace,a.out,a.cargo); return 0
++    if a.check: validate(a.workspace,a.out,a.cargo,a.function); return 0
+     assert a.function, '--function required'
+     if a.options: write(a.out/'NHR_OPTIONS.json',options(a,a.workspace,a.out)); return 0
+     return extract(a,a.workspace,a.out)

@@ -1,0 +1,48 @@
+{"attempt": "NIV_L005", "exit_status": 1, "wall_seconds": 4.918001671088859, "peak_rss_kib": "5931048", "swaps": "0", "print_axioms": ["'NIV_OwnedPrefixes.distinct_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NIV_OwnedPrefixes.proof_readonly_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NIV_generated/NIV_OwnedPrefixes.lean:27:91: error: unsolved goals
+ops : Ops
+program : solana_pubkey.Pubkey
+a b c : Account
+data : Slice U8
+e : PE
+ten : ops.op1 core.cmp.PartialEqU8 data (Array.make 2#usize [3#u8, 10#u8] ⋯) = ok true
+distinct :
+  r1_pool_adapter.owned.require_distinct_accounts ops (Array.make 3#usize [a, b, c] ⋯) = ok (core.result.Result.Err e)
+⊢ ∃ x,
+    Slice.index_usize ⟨[a, b, c], ⋯⟩ 0#usize = ok x ∧
+      ∃ x_1,
+        Slice.index_usize ⟨[a, b, c], ⋯⟩ 1#usize = ok x_1 ∧
+          ∃ x_2,
+            Slice.index_usize ⟨[a, b, c], ⋯⟩ 2#usize = ok x_2 ∧
+              ∃ x_3,
+                r1_pool_adapter.owned.require_distinct_accounts ops (Array.make 3#usize [x, x_1, x_2]
+...
+low.Break residual =>
+                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (alloc.vec.Vec U8) (core.convert.FromSame solana_program_error.ProgramError)
+                                    residual
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (alloc.vec.Vec U8) (core.convert.FromSame solana_program_error.ProgramError) residual
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (alloc.vec.Vec U8) (core.convert.FromSame solana_program_error.ProgramError) residual) =
+                        ok (core.result.Result.Err e)
+NIV_generated/NIV_OwnedPrefixes.lean:40:57: warning: This simp argument is unused:
+  distinct
+
+Hint: Omit it from the simp argument list.
+  simp [r1_pool_adapter.owned.stage1_owned, ̲ten, ̲accounts3,d̵i̵s̵t̵i̵n̵c̵t̵,̵ ̲readonly]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NIV_generated/NIV_OwnedPrefixes.lean:40:66: warning: This simp argument is unused:
+  readonly
+
+Hint: Omit it from the simp argument list.
+  simp [r1_pool_adapter.owned.stage1_owned, ̲ten, ̲accounts3, ̲distinct,̵r̵e̵a̵d̵o̵n̵l̵y̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NIV_OwnedPrefixes.distinct_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NIV_OwnedPrefixes.proof_readonly_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r2260920aae4a4b4797bd3d8f985726a6.scope; invocation ID: 182c160110c94c6f89b2323c6822c229

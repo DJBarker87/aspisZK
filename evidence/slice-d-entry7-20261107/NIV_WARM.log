@@ -1,0 +1,30 @@
+{"attempt": "NIV_L016", "module": "frozen_deployed_dependency_warm", "exit_status": 1, "wall_seconds": 0.7141527768690139, "peak_rss_kib": "170000", "swaps": "0"}
+Traceback (most recent call last):
+  File "/home/dombarker/project-offloads/codex-cx-slice-d-entry7-20261107/NIV_warm_host.py", line 22, in <module>
+    out=B/'NIV_warm';out.mkdir(exist_ok=True);stage.validate(S,out,'/home/dombarker/.cargo/bin/cargo','entry')
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dombarker/project-offloads/codex-cx-slice-d-entry7-20261107/NIV_stage.py", line 132, in validate
+    assert r.returncode==0, r.stderr
+           ^^^^^^^^^^^^^^^
+AssertionError: error: failed to run `rustc` to learn about target-specific information
+
+Caused by:
+  process didn't exit successfully: `/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/bin/rustc - --crate-name ___ --print=file-names -Zthreads=1 -C link-arg=-Wl,--threads=1 --crate-type bin --crate-type rlib --crate-type dylib --crate-type cdylib --crate-type staticlib --crate-type proc-macro --print=sysroot --print=split-debuginfo --print=crate-name --print=cfg -Wwarnings` (exit status: 1)
+  --- stderr
+  error: the option `Z` is only accepted on the nightly compiler
+
+  help: consider switching to a nightly toolchain: `rustup default nightly`
+
+  note: selecting a toolchain with `+toolchain` arguments require a rustup proxy; see <https://rust-lang.github.io/rustup/concepts/index.html>
+
+  note: for more information about Rust's stability policy, see <https://doc.rust-lang.org/book/appendix-07-nightly-rust.html#unstable-features>
+
+  error: 1 nightly option were parsed
+
+
+
+Traceback (most recent call last):
+  File "/Users/dominic/ZK/.worktrees/cx-slice-d-entry7/evidence/slice-d-entry7-20261107/NIV_warm.py", line 4, in <module>
+    r=run('NIV_L016','rust','frozen_deployed_dependency_warm',['python3','NIV_warm_host.py'],files,env);assert r['exit_status']==0
+                                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
