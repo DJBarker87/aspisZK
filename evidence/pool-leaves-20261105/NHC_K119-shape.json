@@ -1,0 +1,12 @@
+{
+ "kind": "unbounded physical span iterate",
+ "mode": "positive",
+ "source": "use super::*;\n#[kani::proof]\n#[kani::unwind(33)]\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFO_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NFO_KMX::KMX_copy_from_slice)]\n#[kani::stub(alloc::alloc::realloc,crate::NFO_KMX::KMX_realloc)]\nfn association(){\n let n:usize=kani::any();kani::assume(n>0&&n<=isize::MAX as usize);\n let layout=core::alloc::Layout::from_size_align(n,1).unwrap();\n let pointer=unsafe{alloc::alloc::alloc_zeroed(layout)};kani::assume(!pointer.is_null());\n {\n  let i:usize=kani::any();kani::assume(i<n);let byte:u8=kani::any();unsafe{pointer.add(i).write(byte);}\n  let whole=unsafe{core::slice::from_raw_parts(pointer,n)};\n  let suffix=&whole[i..];\nlet mut iter=suffix.iter();let mut observed=iter.next().map(|b|(*b,b as *const u8));let mut remaining=iter.as_slice().len();\nassert!(observed==Some((byte,pointer.wrapping_add(i) as *const u8)));assert!(remaining==n-i-1);assert!(iter.as_slice().as_ptr()==pointer.wrapping_add(i+1));\n }\n unsafe{alloc::alloc::dealloc(pointer,layout);}\n}\n",
+ "domain": "all returning valid dynamic allocations 1..isize::MAX, arbitrary selected offset and byte; other bytes initialized zero; NOT an arbitrary-tail-value certificate",
+ "modifies": [
+  "fresh private harness allocation",
+  "local iterator and records"
+ ],
+ "production_credit": false,
+ "remaining": "allocator/tool support, arbitrary-tail noninterference and caller physical interpretation"
+}

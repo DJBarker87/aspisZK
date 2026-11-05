@@ -1,0 +1,83 @@
+{
+  "attempt": "NHC_K106",
+  "kind": "kani",
+  "module": "vault::NHC_Vault::association",
+  "command": [
+    "python3",
+    "NHC_kani_gate.py",
+    "NHC_K106.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-pool-leaves-20261105/NHC_src/programs/aspis-pool/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-pool-leaves-20261105/NHC_target",
+    "--lib",
+    "--features",
+    "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "vault::NHC_Vault::association",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "NHC_native.patch",
+    "NHC_kani_gate.py",
+    "NHC_RUST_SHA256.json"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-pool-leaves-20261105/NHC_tmp"
+  },
+  "timeout": 180,
+  "source_revision": "841ee4e7af3a2277fd931f6e909e5d95f8307d81",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "frozen_input_sha256": "05b7f617777edd0bca70e1a745c08becc3241275cd0d13c7cedee21e9705dbcc",
+    "frozen_manifest_sha256": "7e18d8646fb2c49c457791c5f524ea0a112399c408e472cebcfdff263ae0dea0"
+  },
+  "program_features": "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit",
+  "program_manifest": "programs/aspis-pool/Cargo.toml",
+  "required_statement_features": [
+    "pool-v1-kernel"
+  ],
+  "expected_time": "optimized compile/cache reuse, then CBMC of actual custody parser mint_supply; no field multiplication, hash body, or arithmetic aggregation",
+  "copy_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+  "exit_status": 0,
+  "wall_seconds": 6.788453052984551,
+  "peak_rss_kib": "443276",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-ra693459537d0402f92faeca6f6239207.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "501571584",
+  "source_hashes": {
+    "NHC_native.patch": "7b4ff0732af962a4aea15aa04e89333c1438668d177a8b832799118b31792ee8",
+    "NHC_kani_gate.py": "17621fedf9c438870e6b10da0364f0100660d570c872dcffe7ef66c47a97d9cf",
+    "NHC_RUST_SHA256.json": "0c218223f9f0cf4d28de539e2b6721e001a70afe387fa5d0611ebd49a6ac92f6"
+  },
+  "print_axioms": "N/A: kani"
+}

@@ -1,0 +1,112 @@
+NHC_generated/NHC_HintsTotal.lean:27:62: error: unsolved goals
+s : Slice U8
+h : (↑s).length < 4
+hlt : ↑s.len < ↑4#usize
+⊢ Option.ofResult
+      (if (↑s).length < 4 then fail Error.integerOverflow
+      else ok (BitVec.ofNat System.Platform.numBits ((↑s).length - 4)#uscalar)) =
+    none
+NHC_generated/NHC_HintsTotal.lean:30:22: warning: This simp argument is unused:
+  hlt
+
+Hint: Omit it from the simp argument list.
+  simp [UScalar.sub,̵h̵l̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NHC_HintsTotal.short' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+NHC_generated/NHC_HintsTotal.lean:64:2: error: unsolved goals
+case refine_1
+s : Slice U8
+hlen : 4 ≤ (↑s).length
+n : UScalar UScalarTy.Usize
+hn : s.len - 4#usize = ok n
+hv : ↑n = ↑s.len - ↑4#usize ∧ ↑4#usize ≤ ↑s.len
+hv' : ↑n = (↑s).length - 4
+hsub : s.len.checked_sub 4#usize = some n
+body tail : Slice U8
+hsplit : core.slice.Slice.split_at s n = ok (body, tail)
+hb : body.length = ↑n
+htlen : tail.length = s.length - ↑n
+hbval : ↑body = List.take ↑n ↑s
+htval : ↑tail = List.drop ↑n ↑s
+htlen' : (↑tail).length = 4
+a b c d : U8
+ht : ↑tail = [a, b, c, d]
+v0 : U8
+h0 : tail.index_usize 0#usize = ok v0
+hv0 : v0 = (↑tail)[↑0#usize]
+v1 : U8
+h1 : tail.index_usize 1#usize = ok v1
+hv1 : v1 = (↑tail)[↑1#usize]
+v2 : U8
+h2 : tail.index_usize 2#usize = ok v2
+hv2 : v2 = (↑tail)[↑2#usize]
+v3 : U8
+h3 : tail.index_usize 3#usize = ok v3
+hv3 : v3 = (↑tail)[↑3#usize]
+hv0' : v0 = a
+hv1' : v1 = b
+hv2' : v2 = c
+hv3' : v3 = d
+hints : NHC_Hints.pair_forest.PoolV1PairForestTerminalBumpHintsV1 :=
+  { current_page := v0, next_page := v1, vault_authority := v2, vault_token_account := v3 }
+⊢ (let (body, hints) := (body, tail)
+    do
+    let i2 ← hints.index_usize 0#usize
+    let i3 ← hints.index_usize 1#usize
+    let i4 ← hints.index_usize 2#usize
+    let i5 ← hints.index_usize 3#usize
+    ok
+        (core.result.Result.Ok
+          (body, { current_page := i2, next_page := i3, vault_authority := i4, vault_token_account := i5 }))) =
+    ok (core.result.Result.Ok (body, hints))
+NHC_generated/NHC_HintsTotal.lean:67:56: warning: This simp argument is unused:
+  h0
+
+Hint: Omit it from the simp argument list.
+  simp only [NHC_Hints.pair_forest.split_pair_forest_terminal_bump_hints_v1,
+       ̵ ̵NHC_Hints.pair_forest.POOL_V1_PAIR_FOREST_TERMINAL_BUMP_HINT_BYTES,
+  ̵  ̵ ̵ ̵ ̵ ̵bind_tc_ok, ̲lift, ̲hsub,
+  ̲ ̲ ̲ ̲ ̲NHC_Hints.core.option.Option.ok_or,
+  ̵  ̵ ̵ ̵ ̵ ̵core.result.Result.Insts.CoreOpsTry.branch, ̲hsplit, ̲h0̵,̵h̵1, ̲h2,
+  ̲ ̲ ̲ ̲ ̲h3]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NHC_generated/NHC_HintsTotal.lean:67:59: warning: This simp argument is unused:
+  h1
+
+Hint: Omit it from the simp argument list.
+  simp only [NHC_Hints.pair_forest.split_pair_forest_terminal_bump_hints_v1,
+       ̵ ̵NHC_Hints.pair_forest.POOL_V1_PAIR_FOREST_TERMINAL_BUMP_HINT_BYTES,
+  ̵  ̵ ̵ ̵ ̵ ̵bind_tc_ok, ̲lift, ̲hsub,
+  ̲ ̲ ̲ ̲ ̲NHC_Hints.core.option.Option.ok_or,
+  ̵  ̵ ̵ ̵ ̵ ̵core.result.Result.Insts.CoreOpsTry.branch, ̲hsplit, ̲h0, ̲h1̵,̵h̵2,
+  ̲ ̲ ̲ ̲ ̲h3]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NHC_generated/NHC_HintsTotal.lean:67:62: warning: This simp argument is unused:
+  h2
+
+Hint: Omit it from the simp argument list.
+  simp only [NHC_Hints.pair_forest.split_pair_forest_terminal_bump_hints_v1,
+       ̵ ̵NHC_Hints.pair_forest.POOL_V1_PAIR_FOREST_TERMINAL_BUMP_HINT_BYTES,
+  ̵  ̵ ̵ ̵ ̵ ̵bind_tc_ok, ̲lift, ̲hsub,
+  ̲ ̲ ̲ ̲ ̲NHC_Hints.core.option.Option.ok_or,
+  ̵  ̵ ̵ ̵ ̵ ̵core.result.Result.Insts.CoreOpsTry.branch, ̲hsplit, ̲h0, ̲h1,
+  ̲ ̲ ̲ ̲ ̲h2̵,̵h̵3]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NHC_generated/NHC_HintsTotal.lean:67:65: warning: This simp argument is unused:
+  h3
+
+Hint: Omit it from the simp argument list.
+  simp only [NHC_Hints.pair_forest.split_pair_forest_terminal_bump_hints_v1,
+       ̵ ̵NHC_Hints.pair_forest.POOL_V1_PAIR_FOREST_TERMINAL_BUMP_HINT_BYTES,
+  ̵  ̵ ̵ ̵ ̵ ̵bind_tc_ok, ̲lift, ̲hsub,
+  ̲ ̲ ̲ ̲ ̲NHC_Hints.core.option.Option.ok_or,
+  ̵  ̵ ̵ ̵ ̵ ̵core.result.Result.Insts.CoreOpsTry.branch, ̲hsplit, ̲h0, ̲h1,
+  ̲ ̲ ̲ ̲ ̲h2,̵h̵3̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'_private.NHC_HintsTotal.0.NHC_HintsTotal.list_four' depends on axioms: [propext]
+'NHC_HintsTotal.split' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

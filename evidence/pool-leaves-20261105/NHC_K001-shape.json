@@ -1,0 +1,11 @@
+{
+ "kind": "marker one iteration",
+ "mode": "positive",
+ "source": "use super::*;\n#[kani::proof]\n#[kani::unwind(3)]\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFO_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NFO_KMX::KMX_copy_from_slice)]\n#[kani::stub(alloc::alloc::realloc,crate::NFO_KMX::KMX_realloc)]\nfn association(){\n let byte:u8=kani::any();let available:bool=kani::any();\n let index:usize=kani::any();let total:usize=kani::any();kani::assume(index<=total);kani::assume(available==(index<total));\n let one=[byte];let window=if available{&one[..]}else{&one[..0]};\n let mut calls=0usize;let mut observed=None;\n let mut it=window.iter();\n let mut result=it.all(|byte|{calls+=1;observed=Some(*byte);*byte == 0});\n \n assert!(result==(!available||byte==0));\n assert!(calls==usize::from(available));\n assert!(observed==if available{Some(byte)}else{None});\n assert!(it.as_slice().is_empty());\n let next=if available{index+1}else{index};\n assert!(next<=total);assert!(next==index+usize::from(available));\n}\n",
+ "domain": "index<=total, available iff index<total; arbitrary selected byte; one native Iterator::all step; unconsumed suffix/frame association remains to prove",
+ "modifies": [
+  "local iterator",
+  "local call record"
+ ],
+ "production_credit": false
+}

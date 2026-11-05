@@ -1,0 +1,9 @@
+{
+ "kind": "actual custody parser copt64_short",
+ "mode": "positive",
+ "source": "use super::*;\n#[kani::proof]\n#[kani::unwind(166)]\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFO_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NFO_KMX::KMX_copy_from_slice)]\n#[kani::stub(alloc::alloc::realloc,crate::NFO_KMX::KMX_realloc)]\nfn association(){\nlet mut raw:[u8;12]=kani::any();\nlet len:usize=kani::any();kani::assume(len<12);let r=parse_coption_u64(&raw[..len]);let mut observed=r;assert!(matches!(observed,Err(e) if e==ProgramError::Custom(0x4153_2015)));\n}\n",
+ "domain": "COption short rejection branch only, exact or short 12-byte window; no zero loop reached",
+ "modifies": [],
+ "production_credit": false,
+ "remaining": "complete None/zero-loop/model/physical caller domain and mutation frame"
+}

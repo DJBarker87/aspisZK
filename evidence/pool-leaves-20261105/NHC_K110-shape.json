@@ -1,0 +1,9 @@
+{
+ "kind": "actual custody parser token_mint",
+ "mode": "positive",
+ "source": "use super::*;\n#[kani::proof]\n#[kani::unwind(166)]\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFO_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NFO_KMX::KMX_copy_from_slice)]\n#[kani::stub(alloc::alloc::realloc,crate::NFO_KMX::KMX_realloc)]\nfn association(){\nlet mut raw:[u8;165]=kani::any();raw[72..76].copy_from_slice(&1u32.to_le_bytes());raw[108]=1;raw[109..113].copy_from_slice(&1u32.to_le_bytes());raw[129..133].copy_from_slice(&1u32.to_le_bytes());let r=parse_legacy_token_account_v1(&raw).unwrap();let j:usize=kani::any();kani::assume(j<32);let mut observed=r.mint.to_bytes()[j];assert!(observed==raw[0+j]);\n}\n",
+ "domain": "token parser exact 165-byte Some/Some/Some class, or bad-state/wrong-length rejection; None classes not covered; no zero loop",
+ "modifies": [],
+ "production_credit": false,
+ "remaining": "complete None/zero-loop/model/physical caller domain and mutation frame"
+}

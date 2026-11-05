@@ -1,0 +1,84 @@
+--- a/programs/aspis-pool/src/error.rs
++++ b/programs/aspis-pool/src/error.rs
+@@ -60,7 +60,14 @@
+ }
+ 
+ impl From<PoolV1ProgramError> for ProgramError {
++    #[cfg_attr(kani,kani::requires(true))]
++    #[cfg_attr(kani,kani::ensures(|r| *r == NHC_ErrorConversion::reference(error)))]
++    #[cfg_attr(kani,kani::modifies())]
+     fn from(error: PoolV1ProgramError) -> Self {
+         Self::Custom(error as u32)
+     }
+ }
++
++#[cfg(kani)]
++#[path="NHC_ErrorConversion.rs"]
++mod NHC_ErrorConversion;
+--- /dev/null
++++ b/programs/aspis-pool/src/NHC_ErrorConversion.rs
+@@ -0,0 +1,64 @@
++use super::*;
++pub(super) fn reference(error:PoolV1ProgramError)->ProgramError{match error{PoolV1ProgramError::InvalidAccountType=>ProgramError::Custom(0x4153_2001),PoolV1ProgramError::InvalidRootPageAddress=>ProgramError::Custom(0x4153_2002),PoolV1ProgramError::StateHistoryMismatch=>ProgramError::Custom(0x4153_2003),PoolV1ProgramError::TreeFull=>ProgramError::Custom(0x4153_2004),PoolV1ProgramError::InsufficientTreeCapacity=>ProgramError::Custom(0x4153_2005),PoolV1ProgramError::UnexpectedRootPage=>ProgramError::Custom(0x4153_2006),PoolV1ProgramError::NonCanonicalLeaf=>ProgramError::Custom(0x4153_2007),PoolV1ProgramError::ArithmeticOverflow=>ProgramError::Custom(0x4153_2008),PoolV1ProgramError::InvalidPoolStateAddress=>ProgramError::Custom(0x4153_2009),PoolV1ProgramError::InvalidVerifierRegistryAddress=>ProgramError::Custom(0x4153_200A),PoolV1ProgramError::InvalidVerifierEntryAddress=>ProgramError::Custom(0x4153_200B),PoolV1ProgramError::InvalidVerifierRegistry=>ProgramError::Custom(0x4153_200C),PoolV1ProgramError::InvalidVerifierEntry=>ProgramError::Custom(0x4153_200D),PoolV1ProgramError::VerifierRegistryPaused=>ProgramError::Custom(0x4153_200E),PoolV1ProgramError::VerifierEntryInactive=>ProgramError::Custom(0x4153_200F),PoolV1ProgramError::VerifierEntryNotActiveYet=>ProgramError::Custom(0x4153_2010),PoolV1ProgramError::VerifierEntryRetired=>ProgramError::Custom(0x4153_2011),PoolV1ProgramError::VerifierSelectionMismatch=>ProgramError::Custom(0x4153_2012),PoolV1ProgramError::InvalidTokenProgram=>ProgramError::Custom(0x4153_2013),PoolV1ProgramError::InvalidMint=>ProgramError::Custom(0x4153_2014),PoolV1ProgramError::InvalidTokenAccount=>ProgramError::Custom(0x4153_2015),PoolV1ProgramError::InvalidVaultAuthority=>ProgramError::Custom(0x4153_2016),PoolV1ProgramError::InvalidVaultTokenAddress=>ProgramError::Custom(0x4153_2017),PoolV1ProgramError::InvalidDepositAmount=>ProgramError::Custom(0x4153_2018),PoolV1ProgramError::InsufficientDepositFunds=>ProgramError::Custom(0x4153_2019),PoolV1ProgramError::UnsupportedTokenConfiguration=>ProgramError::Custom(0x4153_201A),PoolV1ProgramError::InvalidEncryptedNotePayload=>ProgramError::Custom(0x4153_201B),PoolV1ProgramError::TokenBalanceDeltaMismatch=>ProgramError::Custom(0x4153_201C),PoolV1ProgramError::InvalidSourceAuthority=>ProgramError::Custom(0x4153_201D),PoolV1ProgramError::InvalidHistoricalAnchorEnvelope=>ProgramError::Custom(0x4153_201E),PoolV1ProgramError::HistoricalAnchorIdentityMismatch=>ProgramError::Custom(0x4153_201F),PoolV1ProgramError::HistoricalAnchorSelectionMismatch=>ProgramError::Custom(0x4153_2020),PoolV1ProgramError::HistoricalAnchorInFuture=>ProgramError::Custom(0x4153_2021),PoolV1ProgramError::InvalidHistoricalAnchorPage=>ProgramError::Custom(0x4153_2022),PoolV1ProgramError::HistoricalAnchorRootMismatch=>ProgramError::Custom(0x4153_2023),PoolV1ProgramError::InvalidNullifierMarkerAddress=>ProgramError::Custom(0x4153_2024),PoolV1ProgramError::InvalidNullifierMarkerAccount=>ProgramError::Custom(0x4153_2025),PoolV1ProgramError::NullifierAlreadyConsumed=>ProgramError::Custom(0x4153_2026),PoolV1ProgramError::InvalidVerifierProgramAccount=>ProgramError::Custom(0x4153_2027),PoolV1ProgramError::InvalidVerifierProofAccount=>ProgramError::Custom(0x4153_2028),PoolV1ProgramError::VerifierProofBindingMismatch=>ProgramError::Custom(0x4153_2029),PoolV1ProgramError::InvalidVerifierDispatchEnvelope=>ProgramError::Custom(0x4153_202A),PoolV1ProgramError::VerifierDispatchIdentityMismatch=>ProgramError::Custom(0x4153_202B),PoolV1ProgramError::InvalidVerifierReturnProgram=>ProgramError::Custom(0x4153_202C),PoolV1ProgramError::InvalidVerifierReturnData=>ProgramError::Custom(0x4153_202D),PoolV1ProgramError::VerifierResultBindingMismatch=>ProgramError::Custom(0x4153_202E),PoolV1ProgramError::MissingVerifierReturnData=>ProgramError::Custom(0x4153_202F),PoolV1ProgramError::InvalidWithdrawalAmount=>ProgramError::Custom(0x4153_2030),PoolV1ProgramError::InsufficientVaultFunds=>ProgramError::Custom(0x4153_2031),PoolV1ProgramError::InvalidDestinationTokenAccount=>ProgramError::Custom(0x4153_2032),PoolV1ProgramError::InvalidSystemProgram=>ProgramError::Custom(0x4153_2033),PoolV1ProgramError::InvalidPayer=>ProgramError::Custom(0x4153_2034),PoolV1ProgramError::InvalidFreshAccount=>ProgramError::Custom(0x4153_2035),PoolV1ProgramError::CpiInvocationForbidden=>ProgramError::Custom(0x4153_2036)}}
++#[kani::proof_for_contract(<ProgramError as core::convert::From<PoolV1ProgramError>>::from)]
++#[kani::unwind(2)]
++fn association(){
++ let choice:u8=kani::any();kani::assume(choice<54);
++ let e=match choice{
++0=>PoolV1ProgramError::InvalidAccountType,
++1=>PoolV1ProgramError::InvalidRootPageAddress,
++2=>PoolV1ProgramError::StateHistoryMismatch,
++3=>PoolV1ProgramError::TreeFull,
++4=>PoolV1ProgramError::InsufficientTreeCapacity,
++5=>PoolV1ProgramError::UnexpectedRootPage,
++6=>PoolV1ProgramError::NonCanonicalLeaf,
++7=>PoolV1ProgramError::ArithmeticOverflow,
++8=>PoolV1ProgramError::InvalidPoolStateAddress,
++9=>PoolV1ProgramError::InvalidVerifierRegistryAddress,
++10=>PoolV1ProgramError::InvalidVerifierEntryAddress,
++11=>PoolV1ProgramError::InvalidVerifierRegistry,
++12=>PoolV1ProgramError::InvalidVerifierEntry,
++13=>PoolV1ProgramError::VerifierRegistryPaused,
++14=>PoolV1ProgramError::VerifierEntryInactive,
++15=>PoolV1ProgramError::VerifierEntryNotActiveYet,
++16=>PoolV1ProgramError::VerifierEntryRetired,
++17=>PoolV1ProgramError::VerifierSelectionMismatch,
++18=>PoolV1ProgramError::InvalidTokenProgram,
++19=>PoolV1ProgramError::InvalidMint,
++20=>PoolV1ProgramError::InvalidTokenAccount,
++21=>PoolV1ProgramError::InvalidVaultAuthority,
++22=>PoolV1ProgramError::InvalidVaultTokenAddress,
++23=>PoolV1ProgramError::InvalidDepositAmount,
++24=>PoolV1ProgramError::InsufficientDepositFunds,
++25=>PoolV1ProgramError::UnsupportedTokenConfiguration,
++26=>PoolV1ProgramError::InvalidEncryptedNotePayload,
++27=>PoolV1ProgramError::TokenBalanceDeltaMismatch,
++28=>PoolV1ProgramError::InvalidSourceAuthority,
++29=>PoolV1ProgramError::InvalidHistoricalAnchorEnvelope,
++30=>PoolV1ProgramError::HistoricalAnchorIdentityMismatch,
++31=>PoolV1ProgramError::HistoricalAnchorSelectionMismatch,
++32=>PoolV1ProgramError::HistoricalAnchorInFuture,
++33=>PoolV1ProgramError::InvalidHistoricalAnchorPage,
++34=>PoolV1ProgramError::HistoricalAnchorRootMismatch,
++35=>PoolV1ProgramError::InvalidNullifierMarkerAddress,
++36=>PoolV1ProgramError::InvalidNullifierMarkerAccount,
++37=>PoolV1ProgramError::NullifierAlreadyConsumed,
++38=>PoolV1ProgramError::InvalidVerifierProgramAccount,
++39=>PoolV1ProgramError::InvalidVerifierProofAccount,
++40=>PoolV1ProgramError::VerifierProofBindingMismatch,
++41=>PoolV1ProgramError::InvalidVerifierDispatchEnvelope,
++42=>PoolV1ProgramError::VerifierDispatchIdentityMismatch,
++43=>PoolV1ProgramError::InvalidVerifierReturnProgram,
++44=>PoolV1ProgramError::InvalidVerifierReturnData,
++45=>PoolV1ProgramError::VerifierResultBindingMismatch,
++46=>PoolV1ProgramError::MissingVerifierReturnData,
++47=>PoolV1ProgramError::InvalidWithdrawalAmount,
++48=>PoolV1ProgramError::InsufficientVaultFunds,
++49=>PoolV1ProgramError::InvalidDestinationTokenAccount,
++50=>PoolV1ProgramError::InvalidSystemProgram,
++51=>PoolV1ProgramError::InvalidPayer,
++52=>PoolV1ProgramError::InvalidFreshAccount,
++53=>PoolV1ProgramError::CpiInvocationForbidden,
++_=>unreachable!(),};
++let r=ProgramError::from(e);assert!(r==reference(e));
++}

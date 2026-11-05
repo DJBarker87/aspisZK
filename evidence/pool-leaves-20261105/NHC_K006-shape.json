@@ -1,0 +1,10 @@
+{
+ "kind": "actual supported_loader Bool contract",
+ "mode": "negative",
+ "source": "use super::*;\npub(super) fn reference(owner:&Pubkey)->bool {\n let bytes=owner.to_bytes();\n let r=bytes==bpf_loader::id().to_bytes()||bytes==bpf_loader_upgradeable::id().to_bytes()||bytes==loader_v4::id().to_bytes();\n !r\n}\n#[kani::proof_for_contract(super::supported_loader)]\n#[kani::unwind(33)]\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFO_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NFO_KMX::KMX_copy_from_slice)]\n#[kani::stub(alloc::alloc::realloc,crate::NFO_KMX::KMX_realloc)]\nfn association(){let owner=Pubkey::new_from_array(kani::any());let actual=supported_loader(&owner);assert!(actual==reference(&owner));}\n",
+ "domain": "every Pubkey owner (all 32-byte arrays); valid immutable Rust reference",
+ "modifies": [],
+ "lean_theorem": "NHC_NGG_Loader.result",
+ "production_credit": false,
+ "copy_negative": "same-source inverted reference in matched configuration"
+}

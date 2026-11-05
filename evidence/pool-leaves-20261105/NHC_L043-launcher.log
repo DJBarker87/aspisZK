@@ -1,0 +1,27 @@
+{"attempt": "NHC_L043", "exit_status": 0, "wall_seconds": 0.998253668891266, "peak_rss_kib": "2615216", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.Usize.checked_sub : Usize → Usize → Option Usize :=
+fun x y => core.num.checked_sub_UScalar x y
+def Aeneas.Std.core.num.checked_sub_UScalar : {ty : UScalarTy} → UScalar ty → UScalar ty → Option (UScalar ty) :=
+fun {ty} x y => Option.ofResult (x - y)
+def Aeneas.Std.UScalar.sub : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y => if ↑x < ↑y then fail Error.integerOverflow else ok (BitVec.ofNat ty.numBits (↑x - ↑y)#uscalar)
+def Aeneas.Std.Option.ofResult.{u} : {a : Type u} → Result a → Option a :=
+fun {a} x =>
+  match x with
+  | ok x => some x
+  | x => none
+
+...
+def Aeneas.Std.Usize.checked_sub : Usize → Usize → Option Usize :=
+fun x y => core.num.checked_sub_UScalar x y
+def Aeneas.Std.core.num.checked_sub_UScalar : {ty : UScalarTy} → UScalar ty → UScalar ty → Option (UScalar ty) :=
+fun {ty} x y => Option.ofResult (x - y)
+def Aeneas.Std.UScalar.sub : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y => if ↑x < ↑y then fail Error.integerOverflow else ok (BitVec.ofNat ty.numBits (↑x - ↑y)#uscalar)
+def Aeneas.Std.Option.ofResult.{u} : {a : Type u} → Result a → Option a :=
+fun {a} x =>
+  match x with
+  | ok x => some x
+  | x => none
+
+Running as unit: run-r6d6cf1116b964575b19c451c2a7da71f.scope; invocation ID: 72c9ba854d634abd8025b14e2d1ad8c3

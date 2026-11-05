@@ -3,6 +3,7 @@ from pathlib import Path
 import subprocess,json,sys,time,hashlib,shlex,lzma,re,os,atexit
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90'
 B='/home/dombarker/project-offloads/codex-cx-pool-leaves-20261105';C='/home/dombarker/project-offloads/codex-cx-pool-prefix-cache-20261104';W='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025';T='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0'
+if (E/'NHC_ACTIVE.json').exists():raise SystemExit('own native/extraction scope active')
 if (E/'NHC_HOLD').exists():sys.exit(75)
 guard=E/'NHC_CLIENT_ACTIVE'; fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,str(os.getpid()).encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
 a,kind,target=sys.argv[1:];assert re.fullmatch('NHC_L[0-9]{3}',a) and 1<=int(a[-3:])<=90 and not (E/a).exists()

@@ -14,4 +14,16 @@ import NHC_NGG_PaymentWindows
 import NHC_NGG_EnvelopePrefix
 import NHC_NGG_MarkerZero
 import NHC_NGG_ErrorImage
+import NHC_MarkerTrace
+import NHC_ErrorMove
+import NHC_PrefixDomains
+import NHC_ErrorConversion
+import NHC_HintsTotal
+import NHC_HintDecoderDomain
+import NHC_DecodeAccepted
+import NHC_CustodyWindows
+import NHC_MarkerAny
+import NHC_HintsTailFrame
 #print axioms AspisR1.RPx_Deployed.deployed
+#print axioms NHC_NGG_Loader.result
+#print axioms NHC_HintDecoderDomain.accepted_length
