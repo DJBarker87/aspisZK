@@ -14,6 +14,11 @@ def ssh(code,data=None,submitted=False):
   if submitted:raise RuntimeError('Submitted; recover read-only, never resubmit')
   if retry<10:time.sleep(60)
  raise RuntimeError('Transport exhausted')
+if kind=='kani':
+ generation=json.loads((E/'NGY_GENERATION.json').read_text())
+ if generation.get('fidelity'):assert hashlib.sha256((E/'NGY_fidelity.rs.txt').read_bytes()).hexdigest()==generation['fidelity_template_sha256'],'STOP stale fidelity generation'
+ for key,name in [('template_sha256','NGY_native.rs.txt'),('generator_sha256','NGY_generate.py'),('payload_sha256','NGY_PAYLOAD.json'),('pins_sha256','NGY_SOURCE_PINS.json')]:
+  assert hashlib.sha256((E/name).read_bytes()).hexdigest()==generation[key],('STOP stale generation',name)
 for retry in range(11):
  r=ssh('python3',f'''from pathlib import Path
 import subprocess,sys
@@ -45,6 +50,10 @@ elif kind=='kani':
  for n,t in payload.items():files['NGY_src/'+n]=t
  sources=list(files)
  command=['python3','NGY_gate.py',a+'.json']
+elif kind=='dep':
+ assert target=='NCI_KMXFrames'
+ n='NGY_dependencies/'+target+'.lean';files[n]=(E.parents[1]/'lean'/(target+'.lean')).read_text();sources=[n]
+ command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NGY_dependencies','-o','NGY_objects/'+target+'.olean',n]
 elif kind=='lean':
  n='NGY_generated/'+target+'.lean';files[n]=(E/(target+'.lean')).read_text();sources=[n]
  command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NGY_generated','-o','NGY_objects/'+target+'.olean',n]
@@ -58,7 +67,7 @@ elif kind=='audit':
  for n in sources:files[n]=(E/Path(n).name).read_text()
  command=['python3','NGY_batch.py',target]
 else:raise ValueError(kind)
-config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NGY_tmp',LEAN_PATH=':'.join(json.loads((E/'NGY_PATHS.json').read_text()))))
+config=dict(attempt=a,kind='lean' if kind=='dep' else kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NGY_tmp',LEAN_PATH=':'.join(json.loads((E/'NGY_PATHS.json').read_text()))))
 config['source_revision']=subprocess.check_output(['git','rev-parse','HEAD'],cwd=E,text=True).strip()
 config['source_tree_dirty']=bool(subprocess.check_output(['git','status','--porcelain'],cwd=E,text=True))
 config['frozen_revision']='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387'
@@ -68,6 +77,11 @@ if kind=='kani':
  if os.environ.get('NGY_RANGE'):
   assert os.environ['NGY_RANGE'] in ['lower','upper']
   config['env']['RUSTFLAGS']+=' --cfg NGY_'+os.environ['NGY_RANGE']
+ if os.environ.get('NGY_TILE'):
+  assert os.environ['NGY_TILE'] in list('01234567')
+  config['env']['RUSTFLAGS']+=' --cfg NGY_tile_'+os.environ['NGY_TILE']
+ if os.environ.get('NGY_FIELD_CORRUPT'):config['env']['RUSTFLAGS']+=' --cfg NGY_field_corrupt'
+ if os.environ.get('NGY_WEAK_FALSE'):config['env']['RUSTFLAGS']+=' --cfg NGY_weak_false'
  if os.environ.get('NGY_BAD_ALLOC'):config['env']['RUSTFLAGS']+=' --cfg NGY_bad_alloc'
  if os.environ.get('NGY_BAD_BOX_VALUE'):config['env']['RUSTFLAGS']+=' --cfg NGY_bad_box_value'
  config['expected_time']='optimized compilation then one native staged cut with local records; no field multiplication'

@@ -20,9 +20,17 @@ fn oracle(d:&mut EbyKDot,v:E,s:K,post:State,reply:bool,log:&mut Log)->Result<(),
  *d=carrier::from(post.sums,post.count);
  if reply{Ok(())}else{Err(())}
 }
+fn reference_word(bytes:&[u8],at:usize)->u32{u32::from_le_bytes([bytes[at],bytes[at+1],bytes[at+2],bytes[at+3]])}
+fn reference_scalar(bytes:&[u8],l:usize)->K{let at=32*l;q([reference_word(bytes,at),reference_word(bytes,at+4),reference_word(bytes,at+8),reference_word(bytes,at+12)])}
+// CLOSED pure field child, full eight-word natural spec; paired NGY_FieldSpec.source.
+fn field_spec(bytes:&[u8],l:usize)->E{
+ let w:[u32;8]=kani::any();
+ for j in 0..8{kani::assume(w[j]==reference_word(bytes,32*l+4*j));}
+ E::from_limbs(w).unwrap()
+}
 // Hand reference: selected operands + full poststate + Parse/continue/control/log.
 fn f_ref<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],g:&[E;29],point:usize,l:usize,pre:State,post:State,reply:bool)->Out{
- let scalar=if point<3{sem.claims[point][l]}else if point==3{sem.extra[l]}else if point==4{sem.before_z1[l]}else{field(y1,l).c0()};
+ let scalar=if point<3{sem.claims[point][l]}else if point==3{sem.extra[l]}else if point==4{sem.before_z1[l]}else{reference_scalar(y1,l)};
  Out{result:if reply{Ok(())}else{Err(Error::Parse)},parse:!reply,next:if reply{l+1}else{l},state:post,log:Log{value:g[l].to_limbs(),scalar:words(scalar),before:pre,after:post,reply,calls:1}}
 }
 fn domain(y1:&[u8],point:usize,l:usize)->bool{
@@ -49,11 +57,22 @@ fn sem()->crate::r1_semantic::Verified<Hash>{
 }
 macro_rules! harness {($name:ident,$point:expr)=>{
  #[kani::proof_for_contract(native)]#[kani::unwind(1000)]
+ #[kani::stub(crate::weights::field,field_spec)]
  #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
  #[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
  fn $name(){let sem=sem();let y1:[u8;928]=kani::any();
  let g:[E;29]=unsafe{core::mem::transmute(kani::any::<[u32;232]>())};
- let point:usize=$point;let l:usize=kani::any();kani::assume(domain(&y1,point,l));
+ let point:usize=$point;
+ #[cfg(not(any(NGY_tile_0,NGY_tile_1,NGY_tile_2,NGY_tile_3,NGY_tile_4,NGY_tile_5,NGY_tile_6,NGY_tile_7)))] let l:usize=kani::any();
+ #[cfg(NGY_tile_0)] let l:usize=0+(kani::any::<u8>()&3) as usize;
+ #[cfg(NGY_tile_1)] let l:usize=4+(kani::any::<u8>()&3) as usize;
+ #[cfg(NGY_tile_2)] let l:usize=8+(kani::any::<u8>()&3) as usize;
+ #[cfg(NGY_tile_3)] let l:usize=12+(kani::any::<u8>()&3) as usize;
+ #[cfg(NGY_tile_4)] let l:usize=16+(kani::any::<u8>()&3) as usize;
+ #[cfg(NGY_tile_5)] let l:usize=20+(kani::any::<u8>()&3) as usize;
+ #[cfg(NGY_tile_6)] let l:usize=24+(kani::any::<u8>()&3) as usize;
+ #[cfg(NGY_tile_7)] let l:usize=28+(kani::any::<u8>()&3) as usize;
+kani::assume(domain(&y1,point,l));
  #[cfg(NGY_lower)] kani::assume(l<15);
  #[cfg(NGY_upper)] kani::assume(l>=15);
  let pre=State{sums:kani::any(),count:kani::any()};let post=State{sums:kani::any(),count:kani::any()};let reply:bool=kani::any();
@@ -65,4 +84,40 @@ harness!(point_1,1);
 harness!(point_2,2);
 harness!(point_3,3);
 harness!(point_4,4);
-harness!(point_5,5);
+
+
+// Point5: both CLOSED children are logging oracles. No decoder is re-unwound.
+#[derive(Clone,Copy,Debug,PartialEq,Eq)]struct FieldLog{input:*const u8,len:usize,lane:usize,reply:[u32;8],calls:u8}
+#[derive(Clone,Copy,Debug,PartialEq,Eq)]struct Order{events:[u8;2],count:usize}
+#[derive(Clone,Copy,Debug,PartialEq,Eq)]struct Out5{out:Out,field:FieldLog,order:Order}
+fn field_oracle(bytes:&[u8],lane:usize,reply:E,log:&mut FieldLog,order:&mut Order)->E{
+ *log=FieldLog{input:bytes.as_ptr(),len:bytes.len(),lane,reply:reply.to_limbs(),calls:1};
+ #[cfg(NGY_field_corrupt)]{log.lane^=1;}
+ order.events[order.count]=0;order.count+=1;reply
+}
+fn dot_oracle5(d:&mut EbyKDot,v:E,s:K,post:State,reply:bool,log:&mut Log,order:&mut Order)->Result<(),()>{
+ order.events[order.count]=1;order.count+=1;oracle(d,v,s,post,reply,log)
+}
+fn f_ref5(y1:&[u8],g:&[E;29],l:usize,pre:State,post:State,push_reply:bool,field_reply:E)->Out5{
+ Out5{out:Out{result:if push_reply{Ok(())}else{Err(Error::Parse)},parse:!push_reply,next:if push_reply{l+1}else{l},state:post,log:Log{value:g[l].to_limbs(),scalar:words(field_reply.c0()),before:pre,after:post,reply:push_reply,calls:1}},field:FieldLog{input:y1.as_ptr(),len:y1.len(),lane:l,reply:field_reply.to_limbs(),calls:1},order:Order{events:[0,1],count:2}}
+}
+#[kani::requires(point==5 && l<29 && y1.len()==928)]
+#[kani::ensures(|r| *r==f_ref5(y1,g,l,pre,post,push_reply,field_reply))]
+#[kani::modifies()]
+fn native5<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],g:&[E;29],point:usize,l:usize,pre:State,post:State,push_reply:bool,field_reply:E)->Out5{
+ let mut dot=carrier::from(pre.sums,pre.count);let mut log=empty();
+ let mut field_log=FieldLog{input:core::ptr::null(),len:0,lane:0,reply:[0;8],calls:0};let mut order=Order{events:[0;2],count:0};
+ let result:Result<(),Error>=(||{
+// NGY_POINT5_FROZEN_CUT
+ Ok(())})();
+ Out5{out:Out{result,parse:matches!(result,Err(Error::Parse)),next:if result.is_ok(){l+1}else{l},state:state(&dot),log},field:field_log,order}
+}
+#[kani::proof_for_contract(native5)]#[kani::unwind(1000)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn point_5(){
+ let sem=sem();let y1:[u8;928]=kani::any();let g:[E;29]=unsafe{core::mem::transmute(kani::any::<[u32;232]>())};
+ let l:usize=kani::any();kani::assume(l<29);let pre=State{sums:kani::any(),count:kani::any()};let post=State{sums:kani::any(),count:kani::any()};
+ let field_reply:E=unsafe{core::mem::transmute(kani::any::<[u32;8]>())};let push_reply:bool=kani::any();
+ let _=native5(&sem,&y1,&g,5,l,pre,post,push_reply,field_reply);
+}

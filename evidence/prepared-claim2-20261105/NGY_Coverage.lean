@@ -22,6 +22,10 @@ theorem six {A : Type} (P : Nat → A → Prop)
 theorem lane_cases (lane : Nat) (h : lane<29) :
  lane<15 ∨ (15≤lane ∧ lane<29) := by omega
 
+theorem tiles (lane : Nat) (h : lane<29) :
+ lane/4<8 ∧ lane%4<4 ∧ 4*(lane/4)+lane%4=lane := by omega
+
+#print axioms tiles
 #print axioms lane_cases
 #print axioms point_cases
 #print axioms six

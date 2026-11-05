@@ -1,5 +1,5 @@
 from pathlib import Path
-import subprocess,json,hashlib,difflib
+import subprocess,json,hashlib,difflib,os
 E=Path(__file__).resolve().parent; rev='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387'
 files=['verifier.rs','fast_pairing.rs','r1_wire.rs','lib.rs']
 frozen={n:subprocess.check_output(['git','show',rev+':crates/aspis-r1-cost-probe/src/'+n],text=True) for n in files}
@@ -7,6 +7,9 @@ frozen={n:subprocess.check_output(['git','show',rev+':crates/aspis-r1-cost-probe
 s=frozen['verifier.rs'];lines=s.splitlines();cut='\n'.join(lines[58:60]);assert 'let scalar=match point' in cut and 'dot.push' in cut
 native=cut.replace('dot.push(g[l],scalar)','oracle(&mut dot,g[l],scalar,post,reply,&mut log)')
 rs=(E/'NGY_native.rs.txt').read_text().replace('// NGY_FROZEN_CUT',native)
+native5=cut.replace('field(y1,l)','field_oracle(y1,l,field_reply,&mut field_log,&mut order)').replace('dot.push(g[l],scalar)','dot_oracle5(&mut dot,g[l],scalar,post,push_reply,&mut log,&mut order)')
+rs=rs.replace('// NGY_POINT5_FROZEN_CUT',native5)
+if os.environ.get('NGY_WITH_FIDELITY'):rs+='\n'+(E/'NGY_fidelity.rs.txt').read_text()
 payload={'crates/aspis-r1-cost-probe/src/verifier.rs':s+'\n#[cfg(kani)]\n#[path="NGY_stages.rs"]\nmod NGY_stages;\n','crates/aspis-r1-cost-probe/src/NGY_stages.rs':rs}
 f=frozen['fast_pairing.rs'];f=f.replace('    pub struct Dot { sums:[u64;4] }','''    pub struct Dot { sums:[u64;4] }
     #[cfg(kani)] impl Dot {
@@ -25,7 +28,10 @@ w=frozen['r1_wire.rs']+'''
  use super::*;
  pub fn from<H:Digest32>(state:[u8;32],hash:H,next_row:u8)->SemanticTranscript<H>{SemanticTranscript{state,hash,next_row}}
 }
-''';payload['crates/aspis-r1-cost-probe/src/r1_wire.rs']=w
+'''
+if os.environ.get('NGY_WITH_FIDELITY'):
+ w=w.rstrip()[:-1]+' pub fn hash<H:Digest32>(t:&SemanticTranscript<H>)->&H{&t.hash}\n}\n'
+payload['crates/aspis-r1-cost-probe/src/r1_wire.rs']=w
 payload['crates/aspis-r1-cost-probe/src/lib.rs']='#![cfg_attr(kani, feature(allocator_api))]\n'+frozen['lib.rs']
 (E/'NGY_PAYLOAD.json').write_text(json.dumps(payload))
 patch=''
@@ -38,4 +44,6 @@ pins['crates/aspis-r1-cost-probe/src/lib.rs']=hashlib.sha256(subprocess.check_ou
 for n in list(pins):
  if n in payload:pins[n]=hashlib.sha256(payload[n].encode()).hexdigest()
 (E/'NGY_SOURCE_PINS.json').write_text(json.dumps(pins,indent=1)+'\n')
-(E/'NGY_CUT.json').write_text(json.dumps(dict(revision=rev,lines=[59,60],frozen_cut=cut,oracle_cut=native,frozen_verifier_sha256=hashlib.sha256(s.encode()).hexdigest(),patch_sha256=hashlib.sha256(patch.encode()).hexdigest()),indent=1)+'\n')
+(E/'NGY_CUT.json').write_text(json.dumps(dict(revision=rev,lines=[59,60],frozen_cut=cut,oracle_cut=native,point5_oracle_cut=native5,frozen_verifier_sha256=hashlib.sha256(s.encode()).hexdigest(),patch_sha256=hashlib.sha256(patch.encode()).hexdigest()),indent=1)+'\n')
+
+(E/'NGY_GENERATION.json').write_text(json.dumps(dict(template_sha256=hashlib.sha256((E/'NGY_native.rs.txt').read_bytes()).hexdigest(),generator_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),payload_sha256=hashlib.sha256((E/'NGY_PAYLOAD.json').read_bytes()).hexdigest(),pins_sha256=hashlib.sha256((E/'NGY_SOURCE_PINS.json').read_bytes()).hexdigest(),fidelity=bool(os.environ.get('NGY_WITH_FIDELITY')),fidelity_template_sha256=hashlib.sha256((E/'NGY_fidelity.rs.txt').read_bytes()).hexdigest() if os.environ.get('NGY_WITH_FIDELITY') else None),indent=1)+'\n')
