@@ -5,7 +5,7 @@ E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90'
 B='/home/dombarker/project-offloads/codex-cx-tx1-close-20261106';C='/home/dombarker/project-offloads/codex-cx-slice-d-prepared-cache-20261104';W='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025';T='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0'
 if (E/'NHW_HOLD').exists():sys.exit(75)
 guard=E/'NHW_CLIENT_ACTIVE'; fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,str(os.getpid()).encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
-a,kind,target=sys.argv[1:];assert kind in ['lean','link','audit','export','support','kani','repair'];assert re.fullmatch('NHW_[LKE][0-9]{3}',a) and 1<=int(a[-3:])<=(40 if kind=='kani' else 2 if kind=='extract' else 90) and not (E/a).exists()
+a,kind,target=sys.argv[1:];assert kind in ['lean','link','audit','export','support','kani','repair','reseed'];assert re.fullmatch('NHW_[LKE][0-9]{3}',a) and 1<=int(a[-3:])<=(40 if kind=='kani' else 2 if kind=='extract' else 90) and not (E/a).exists()
 def ssh(code,data=None,submitted=False):
  for retry in range(11):
   r=subprocess.run(['ssh','-o','ControlMaster=no','-o','ConnectTimeout=15',H,code],input=data,capture_output=True,text=True)
@@ -36,6 +36,8 @@ if kind=='export':
  files['NHW_export.py']=(E/'NHW_export.py').read_text();files['NHW_MODULES.json']=(E/'NHW_MODULES.json').read_text();sources=list(files);command=['python3','NHW_export.py']
 elif kind=='support':
  files['NHW_stage_native.py']=(E/'NHW_stage_native.py').read_text();files['NHW_KMX.patch']=(E/'NHW_KMX.patch').read_text();files['NHW_window.rs.txt']=(E/'NHW_window.rs.txt').read_text();sources=list(files);command=['python3','NHW_stage_native.py']
+elif kind=='reseed':
+ files['NHW_reseed.py']=(E/'NHW_reseed.py').read_text();files['NHW_NGR_NGS_EXPORTS.json']=(E/'NHW_NGR_NGS_EXPORTS.json').read_text();sources=list(files);command=['python3','NHW_reseed.py']
 elif kind=='repair':
  files['NHW_add_inputs.py']=(E/'NHW_add_inputs.py').read_text();files['NHW_FROZEN_ADDITIONS.json']=(E/'NHW_FROZEN_ADDITIONS.json').read_text();sources=list(files);command=['python3','NHW_add_inputs.py']
 elif kind=='metadata':
@@ -106,6 +108,7 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
+if {kind!r}=='reseed': names += ['NHW_PATHS.json','NHW_ADDITIONAL_SEED.json']
 if {kind!r}=='repair': names += ['NHW_SOURCE_PINS.json','NHW_INPUT_REPAIR.json']
 if {kind!r}=='support': names += ['NHW_SOURCE_PINS.json','NHW_NATIVE_SETUP.json','NHW_HARNESS.patch']
 if {kind!r}=='export': names += ['NHW_EXPORT.json','NHW_CLOSURE_PINS.json.sha256','NHW_RESTORE_PATHS.json','NHW_TOOLS.json']
