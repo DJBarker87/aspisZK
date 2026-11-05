@@ -1,0 +1,40 @@
+{"attempt": "NHS_L051", "exit_status": 0, "wall_seconds": 3.264519437914714, "peak_rss_kib": "5978212", "swaps": "0", "print_axioms": []}
+AspisR1.RPx_Deployed.deployed {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)) (sdk : AspisR1.S2Trust.S2TrustedSdkBorrow L)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (std : AspisR1.S2W_TrustedStd.TrustedStd copy) (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W)
+  (admission1 : AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3)
+  (admission2 : AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7)
+  (missing : AspisR1.IDa_Deployed.U
+...
+→ Prop
+number of parameters: 1
+constructors:
+AspisR1.NHS_PendingTrace.Cuts.done : ∀ {weights : Aeneas.Std.Slice AspisR1Stage2.aspis_core.field.QM31}
+  (raw : Aeneas.Std.alloc.vec.Vec AspisR1.Port3_NativePendingBody.Row) (index : Aeneas.Std.Usize),
+  ↑index = 64 → AspisR1.NHS_PendingTrace.Cuts weights raw index raw
+AspisR1.NHS_PendingTrace.Cuts.step : ∀ {weights : Aeneas.Std.Slice AspisR1Stage2.aspis_core.field.QM31}
+  (raw after out : Aeneas.Std.alloc.vec.Vec AspisR1.Port3_NativePendingBody.Row) (index next : Aeneas.Std.Usize)
+  (w : AspisR1Stage2.aspis_core.field.QM31),
+  ↑index < 64 →
+    (↑raw).length = 64 →
+      weights.index_usize index = Aeneas.Std.Result.ok w →
+        AspisR1.NHS_PendingStep.Windows raw after index next w →
+          AspisR1.NHS_PendingTrace.Cuts weights after next out → AspisR1.NHS_PendingTrace.Cuts weights raw index out
+def AspisR1.NGC_PreparationBoundary.NFW_Obligation : VTop_Stages.Ops → Prop :=
+fun ops =>
+  ∀ {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash)
+    (semantic : VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+    (proof : Aeneas.Std.Slice Aeneas.Std.U8) (hash : Hash)
+    (scratch : Aeneas.Std.Array VTop_Stages.aspis_core.field.wide_exact.WideExact 29#usize)
+    (p : AspisR1Stage2.verifier.Prepared)
+    (g : Aeneas.Std.Array VTop_Stages.aspis_core.field.wide_exact.WideExact 29#usize),
+    (∃ parsed, ops.op3 proof = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok parsed)) →
+      ops.op4 proof = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+        ops.op7 D semantic proof hash none scratch = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok p, g) →
+          AspisR1.NGC_PreparationBoundary.Fields p ∧ NEV_DotInputs.Canonical (AspisR1.FIp_DotsAdapter.toArray g)
+
+Running as unit: run-r85b435d56f24479a8dbaba2144e60a98.scope; invocation ID: 20493866bb6a466899a21745b3f768ae

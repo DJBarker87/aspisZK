@@ -5,6 +5,7 @@ noncomputable section
 namespace AspisR1.NHS_PrepareScratch
 open Aeneas Aeneas.Std Result
 open AspisR1CurrentCaller InstalledPreparation BorrowedClaimPrepared OriginalSerializerInstallation
+open AspisR1ClaimPreparedBridge
 /-- The returned scratch is the SAME mapped powers vector from that successful
 preparation, for every incoming scratch and every admitted digest carrier. -/
 theorem source (ops : Ops)

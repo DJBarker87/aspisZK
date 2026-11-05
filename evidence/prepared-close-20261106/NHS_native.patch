@@ -15,7 +15,7 @@
 +#[cfg(kani)] #[path="NHS_pending.rs"] mod NHS_pending;
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NHS_pending.rs
-@@ -0,0 +1,62 @@
+@@ -0,0 +1,69 @@
 +use super::*;
 +include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
 +// One literal iteration of frozen BatchedWeights::new. No loop is unrolled.
@@ -78,3 +78,10 @@
 + let good=!continued&&next==64&&raw[at]==before&&raw.as_ptr()==ptr&&raw.len()==64&&raw.capacity()==cap;
 + assert!(good!=cfg!(NHS_invert));
 +}
++// Literal field-projection cut of SemanticTranscript::state: the receiver's
++// actual state field is borrowed before this one fixed-array copy.
++fn state_projection(state:&[u8;32])->[u8;32]{*state}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn semantic_state(){let state:[u8;32]=kani::any();let at:usize=kani::any();kani::assume(at<32);let before=state[at];let out=state_projection(&state);assert!((out[at]==before&&state[at]==before)!=cfg!(NHS_invert));}
