@@ -1,0 +1,29 @@
+NHT_generated/NHT_Tx2AuthModel.lean:15:37: error: unsolved goals
+ops : Ops
+H : Type
+D : aspis_core.digest.Digest32 H
+pub proof checkpoint : Slice U8
+hash : H
+obs : Option (verifier.Phase → Result Unit)
+⊢ (do
+      let r ← (NHT_Tx2CommonModel.constants ops).op3 proof
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          (NHT_Tx2CommonModel.constants ops).op13 obs AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+          verifier.candidate.tx2_common (NHT_Tx2CommonModel.constants ops) D pub proof checkpoint hash obs
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame verifier.Error) residual) =
+    do
+    let r ← (NHT_Tx2CommonModel.constants ops).op3 proof
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        (NHT_Tx2CommonModel.constants ops).op13 obs AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+        verifier.candidate.tx2_common (NHT_Tx2CommonModel.constants ops) D pub proof checkpoint hash obs
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+          (core.convert.FromSame verifier.Error) residual
+'NHT_Tx2AuthModel.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NHT_Tx2AuthModel.retained_stages' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
