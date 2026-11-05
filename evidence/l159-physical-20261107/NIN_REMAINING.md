@@ -1,4 +1,4 @@
-# Remaining — stage 1
+# Remaining — final
 
 Target not yet established. No game, bound, trust or shipped source change.
 
@@ -43,8 +43,27 @@ Target not yet established. No game, bound, trust or shipped source change.
 12. Final source-to-ELF association, L187 coherent release replay and L188 audit
     remain lead obligations. No ELF rebuild trigger: shipped sources unchanged.
 
-Each of 3–11 needs a native producer/source association, potentially Kani or a
-pinned runtime proof outside this job's zero Kani / zero extraction allocation.
-They are not new security axioms. Continue all independent model/Lean work and
-validation before finalizing this list. Budget and final exact check status will
-be added after audits; no unchanged regression will be run to spend allowance.
+Every independent model obligation listed above has been attempted and its
+conditional join/field transport validated. Items 1/2 require owner scope or a
+pinned external runtime projection, which the current game does not encode.
+Items 3/4/5 require the same native argument/reference/source installation.
+Items 6/7 require missing Pool/parent native stage packets and actual register /
+heap / chronological cut associations. Items 8/9/10/11 require the actual physical
+observer/exporter program and its admission/input/result/log projections; no such
+producer is defined by the supplied packets. Item 12 is the release/ELF replay.
+None can be supplied by another wrapper around the currently available Lean
+hypotheses, choosing arbitrary witnesses, or re-auditing unchanged declarations.
+Each needs native source evidence, a pinned runtime realization or owner action
+outside this zero-Kani/zero-extraction model job. No additional independent
+Lean-only member remains.
+
+Validation finished: 34 actual Lean compilations plus26 capped support scopes,
+60 total allocated attempts; 0 Kani/0 extraction. This explicitly accounts for
+stopping below80% of the60 limit when counting ONLY compiler invocations rather
+than total allocations: every remaining member's non-Lean dependency is given
+above. No unchanged regression was used merely to spend the difference.
+
+Final combined import,7551 standard raw roots,8 fixtures,14787-module zero-defect
+NFX scan, export restoration and local six-mutation validator are complete.
+L053's known raw/summary disagreement remains exit1 under ruling(ab')(3).
+No release claim, row promotion, added axiom/trust or game/bound change.
