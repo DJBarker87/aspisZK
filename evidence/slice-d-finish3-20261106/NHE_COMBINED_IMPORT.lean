@@ -1,3 +1,4 @@
+import NHE_ScalarCell
 import NGW_COMBINED_IMPORT
 import NHE_Polynomial
 import NHE_RoundRef
@@ -15,3 +16,4 @@ set_option autoImplicit false
 #print axioms NHE_DotDeployed.cohort
 #print axioms NHE_DotDomain.step
 #print axioms NHE_ScalarProductLaw.product
+#print axioms NHE_ScalarCell.total

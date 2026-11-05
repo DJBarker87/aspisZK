@@ -6,7 +6,7 @@ B='/home/dombarker/project-offloads/codex-cx-slice-d-finish3-20261106'
 C='/home/dombarker/project-offloads/codex-cx-slice-d-finish-cache-20261104'
 W='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025'
 H='dombarker@100.108.41.90';T='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0'
-a,kind,target=sys.argv[1:];limit=100 if kind=='kani' else 3 if kind=='extract' else 80; assert a.startswith('NHE_') and 1<=int(a[-3:])<=limit
+a,kind,target=sys.argv[1:];limit=100 if kind=='kani' else 2 if kind=='extract' else 80; assert a.startswith('NHE_') and 1<=int(a[-3:])<=limit
 assert not (E/a).exists()
 def ssh(code,data=None,submitted=False):
  for retry in range(11):
@@ -52,7 +52,9 @@ if kind=='kani':
   flag=os.environ.get('NHE_NATIVE_CFG','NHE_invert');assert flag in ['NHE_invert','NGM_invert'];env['RUSTFLAGS']+=' --cfg '+flag
 elif kind=='extract':
  files['NHE_extract.py']=(E/'NHE_extract.py').read_text()
- files['NHE_references.rs']=(E/({'NHE_FactorRef':'NHE_factor_reference.rs.txt','NHE_DotRef':'NHE_dot_reference.rs.txt','NHE_HelperRef':'NHE_helper_reference.rs.txt','NHE_DoubleRef':'NHE_double_reference.rs.txt'}.get(target,'NHE_references.rs.txt'))).read_text()
+ name={'NHE_TensorRef':'NHE_tensor_reference.rs.patch','NHE_GroupRef':'NHE_group_reference.rs.patch'}[target]
+ patch=(E/name).read_text()
+ files['NHE_references.rs']=''.join(l[1:]for l in patch.splitlines(True)if l.startswith('+')and not l.startswith('+++'))
  sources=['NHE_extract.py','NHE_references.rs'];command=['python3','NHE_extract.py',a+'.json']
 elif kind=='dependency':
  assert target=='JHe_ZeroGate'

@@ -2,22 +2,83 @@
   "new_closed_edges": [
     {
       "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::polynomial",
-      "callee": "dependency WideExact.mul",
-      "domain": "SAME canonical accumulator/evaluation point, initial zero and add output preserved",
-      "lean": "NHE_HornerPort.adopted; NHE_WidePort.adopted"
+      "callee": "crates/aspis-core/src/field/wide_exact.rs::WideExact::mul",
+      "domain": "SAME canonical x and accumulator; initial ZERO, product/read/add canonicality propagated",
+      "lean": "NHE_HornerPort.adopted; NHE_WidePort.adopted",
+      "native": "NGM_K092/093; retained cell operands"
     },
     {
       "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::polynomial",
-      "callee": "dependency weights.field",
-      "domain": "SAME bytes and source index 6..0 <64; complete Result",
-      "lean": "NHE_FieldPort.adopted"
+      "callee": "crates/aspis-r1-cost-probe/src/weights.rs::field",
+      "domain": "SAME 224-byte canonical seven-window message and reverse index 6..0; call-site native window extension, no blanket widening of the inherited 128-byte Q field packet",
+      "lean": "NHE_FieldPort.adopted; NHE_FieldCanonical.success",
+      "native": "NGM_K094/095 actual native field/window/value"
     },
     {
       "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::polynomial",
-      "callee": "dependency WideExact.add",
-      "domain": "SAME canonical product and coefficient",
-      "lean": "NHE_FieldCanonical.success; NGW_PolynomialAdd.total; NGW_CurrentAddPort.adopted"
+      "callee": "crates/aspis-core/src/field/wide_exact.rs::WideExact::add",
+      "domain": "SAME canonical accumulator product and coefficient; exact extracted add reference",
+      "lean": "NGW_PolynomialAdd.observed/total; NHE_Polynomial.cell",
+      "native": "NGM_K088..091"
+    },
+    {
+      "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::finish_relation_round",
+      "callee": "crates/aspis-r1-cost-probe/src/weights.rs::field",
+      "domain": "SAME canonical 224-byte window at exact indices0/4",
+      "lean": "NHE_Round.cohort; NHE_FieldPort.adopted",
+      "native": "NGM_K098/099 actual field reads in Result pair"
+    },
+    {
+      "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::finish_relation_round",
+      "callee": "crates/aspis-core/src/field/wide_exact.rs::WideExact::add",
+      "domain": "SAME parsed canonical field0/field4",
+      "lean": "NGW_CurrentAddPort.adopted; NHE_Round.cohort",
+      "native": "NGM_K098/099"
+    },
+    {
+      "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::finish_relation_round",
+      "callee": "crates/aspis-core/src/field/wide_exact.rs::WideExact::mul_m31",
+      "domain": "SAME claim and exact QUARTER536870912; emitted total law, native caller claim canonical",
+      "lean": "NHE_ScalePort.quarter; AspisR1.NGM_RoundScale.total",
+      "native": "NGW_K095/096 exact args/count"
+    },
+    {
+      "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::finish_relation_round",
+      "callee": "crates/aspis-r1-cost-probe/src/verifier.rs::polynomial",
+      "domain": "SAME bytes/alpha; only reached after exact equality guard, no successful result assumed",
+      "lean": "NHE_Round.cohort; NHE_Polynomial.cohort",
+      "native": "NGW_K097/098 pointer/length/alpha/count"
+    },
+    {
+      "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::finish_query_dot",
+      "callee": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::new",
+      "domain": "No input domain; zero-state exact Q packet",
+      "lean": "NHE_DotState.new",
+      "native": "inherited CLOSED Q constructor"
+    },
+    {
+      "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::finish_query_dot",
+      "callee": "crates/aspis-r1-cost-probe/src/weights.rs::field",
+      "domain": "SAME2048-byte canonical message, reached index j<64; call-site extension via actual native read observations",
+      "lean": "NHE_DotRead.field; NHE_DotBody.step",
+      "native": "NGM_K055..082; read/window/value/order observations"
+    },
+    {
+      "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::finish_query_dot",
+      "callee": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::push",
+      "domain": "SAME native receiver, canonical field result and checked scalar, count=index<64; full reply/state map",
+      "lean": "NHE_PublicDot.cohort; NHE_PrivateDot.cohort; NHE_DotDomain.step",
+      "native": "inherited NFG public/private packets; NGM step observations; NGW typed getters"
+    },
+    {
+      "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::finish_query_dot",
+      "callee": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish",
+      "domain": "SAME final c0/c1 sums/count; Q finalizer accepts every U64 sum/count",
+      "lean": "NHE_DotFinish.native/cohort; NHE_Dot.cohort",
+      "native": "inherited CLOSED Q finalizer and constructor packets"
     }
   ],
-  "other_edges": "OPEN unless inherited CLOSED"
+  "inherited_graph": "../slice-d-finish-20261105/NGM_TAIL_GRAPH.json",
+  "status_semantics": "Only these call-site domains are established; no other edge promoted; NFW producer and pair edges remain OPEN",
+  "no_success_premise": true
 }

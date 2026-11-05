@@ -1,6 +1,6 @@
 # NHE TX2 acceptance tail
 
-Target AspisR1.RPx_Deployed.deployed remains not established. Step 0 native scan L001 exits 0 on all 13513 retained modules with zero defects. Inherited NGW four-row qualification is resolved. NHE adds TX2:119 polynomial and TX2:116 round CLOSED, with focused proofs, exact deployed dictionary, combined RPx replays, standard-only raw ax2, same-binary fixtures and zero-defect scans. Dot is now CLOSED on the canonical caller domain; finish_relation remains OPEN. Native and extraction passing shapes are reused by sha256, never rerun. Frozen release source/artifacts and trust remain unchanged apart from the explicit (ah) transcription reclassification.
+Target AspisR1.RPx_Deployed.deployed remains not established. Step 0 native scan L001 exits 0 on all 13513 retained modules with zero defects. Inherited NGW four-row qualification is resolved. NHE adds TX2:119 polynomial, TX2:116 round and TX2:114 dot CLOSED, with focused proofs, exact deployed dictionary, combined RPx replays, standard-only raw ax2, same-binary fixtures and zero-defect scans. Dot is now CLOSED on the canonical caller domain; finish_relation remains OPEN. Native and extraction passing shapes are reused by sha256, never rerun. NGZ ledger9 already closes powers and square; their reuse/domain edges in this private forest remain pending and no global status is downgraded. Frozen release source/artifacts and trust remain unchanged apart from the explicit (ah) transcription reclassification.
 
 ## TX2:115 finish_relation — OPEN
 
@@ -36,7 +36,7 @@ Inherited NGM/Q/NFQ packet and original domain/pins retained; not a new NHE clos
 
 ## TX2:116 finish_relation_round — CLOSED
 
-NHE_Round.cohort equals finishRelationRoundWithOps on IDa_Deployed.finish reservation, with canonical alpha, arbitrary bytes/claim, round<2. SAME-byte parser and polynomial; quarter law; exact Relation/error Result. L035 combined, L036 raw ax2, unchanged L023 fixture binary, L037 clean scan.
+NHE_Round.cohort equals finishRelationRoundWithOps on IDa_Deployed.finish reservation, as a model equality for canonical alpha, arbitrary bytes/claim, round<2. Native closure credit is limited to canonical alpha/claim and the 224-byte seven-window NGM_DOMAIN caller inputs. SAME-byte parser and polynomial; quarter law; exact Relation/error Result. L035 combined, L036 raw ax2, unchanged L023 fixture binary, L037 clean scan.
 
 ## TX2:001 add — CLOSED
 
@@ -68,7 +68,7 @@ Inherited NGM/Q/NFQ packet and original domain/pins retained; not a new NHE clos
 
 ## TX2:119 polynomial — CLOSED
 
-NHE_Polynomial.cohort; (ah), canonical x and arbitrary immutable bytes, complete Result. Native six retained pairs; extracted add reference and SAME field/multiplication/add ports; finite reverse-fold induction. L020 combined, L024 raw ax2, L023 fixtures, L027 scan. NHE_TRANSCRIPTION.md and NHE_POLYNOMIAL_VALIDATION.json.
+NHE_Polynomial.cohort; (ah), model equality on canonical x and arbitrary immutable bytes, complete Result. Native closure credit is limited to the canonical 224-byte seven-window NGM_DOMAIN caller inputs. Native six retained pairs; extracted add reference and SAME field/multiplication/add ports; finite reverse-fold induction. L020 combined, L024 raw ax2, L023 fixtures, L027 scan. NHE_TRANSCRIPTION.md and NHE_POLYNOMIAL_VALIDATION.json.
 
 ## TX2:004 mul — CLOSED
 
@@ -146,7 +146,7 @@ OPEN: retain member-specific obligations in NGW_REMAINING.md. Exact callee domai
 
 OPEN: retain member-specific obligations in NGW_REMAINING.md. Exact callee domains and source/native/reference/cohort association must close bottom-up; no unvalidated sibling credit. Independent Lean/domain work remains attemptable.
 
-## TX2:022 square — OPEN
+## TX2:022 square — inherited CLOSED; NHE call edge pending
 
 OPEN: retain member-specific obligations in NGW_REMAINING.md. Exact callee domains and source/native/reference/cohort association must close bottom-up; no unvalidated sibling credit. Independent Lean/domain work remains attemptable.
 
@@ -170,7 +170,7 @@ OPEN: retain member-specific obligations in NGW_REMAINING.md. Exact callee domai
 
 OPEN: retain member-specific obligations in NGW_REMAINING.md. Exact callee domains and source/native/reference/cohort association must close bottom-up; no unvalidated sibling credit. Independent Lean/domain work remains attemptable.
 
-## TX2:138 powers — OPEN
+## TX2:138 powers — inherited CLOSED; NHE call edge pending
 
 OPEN: retain member-specific obligations in NGW_REMAINING.md. Exact callee domains and source/native/reference/cohort association must close bottom-up; no unvalidated sibling credit. Independent Lean/domain work remains attemptable.
 
@@ -210,3 +210,5 @@ OPEN: retain member-specific obligations in NGW_REMAINING.md. Exact callee domai
 
 Inherited NGM/Q/NFQ packet and original domain/pins retained; not a new NHE closure or caller-domain promotion.
 
+
+Final support replay: L078 combined exit0; L079 raw ax2 exit0, all 59 roots equal with standard axioms only; L080 scan exit0 on 13543 modules with zero defects. All budgets exhausted. See NHE_REMAINING.md for every open member.

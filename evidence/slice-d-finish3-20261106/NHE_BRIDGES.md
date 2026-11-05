@@ -1,11 +1,15 @@
-# NHE bridge inventory (live)
+# NHE final bridge inventory
 
-Mandatory scanner: NHE_L001 exit0, full NGW forest (13513 modules), corrected four baselines, zero dangling references / incompatible owners / import mismatches. Four inherited NGW rows validated; no new NHE CLOSED row yet.
+Three new composed rows, with canonical native caller domains documented in NHE_CLOSED.json:
 
-New checked carrier laws: NHE_CMPort.sub/mul (L003); NHE_QMPort.by_r/sub/mul (L004); NHE_WidePort.mul_u/mul/adopted (L005); NHE_ParsePort.limbs (L008); NHE_BytePort.bytes (L010). Every printed axiom list is a subset of propext/Classical.choice/Quot.sound. Exact receipts retain source hashes, direct-object/Aeneas pins, argv, revision, wall, RSS, swap and caps. These are model-side association laws, not new Kani credit or composed row closure.
+| Row | Exact association | Closure evidence |
+| --- | --- | --- |
+| TX2:119 polynomial | NHE_Polynomial.cohort, complete Result reverse Horner fold; field/product/add same-value laws; (ah) transcription | L020 combined, L024 raw ax2, L027 scan; six retained native pairs pinned in NHE_POLYNOMIAL_VALIDATION.json |
+| TX2:116 finish_relation_round | NHE_Round.cohort at IDa_Deployed.finish reservation and NHE_RoundRef.observed; quarter, parser, polynomial and Relation/error transport | L035 combined, L036 raw ax2, L037 scan; retained pairs pinned in NHE_ROUND_VALIDATION.json |
+| TX2:114 finish_query_dot | NHE_DotDeployed.cohort = SAG_DotClosed.source; parser, nine-word/count, raw/private/public Q packets and finite complete Result loop | L072 combined, L073 raw ax2, L074 scan; retained observations pinned in NHE_DOT_VALIDATION.json |
 
-Native observations reused, never rerun: NGM K088..097 polynomial cell pairs; NGM K100 positive with NGW K034 matched reverse-fold control; NGM K098/K099 round Result pair; NGW K095..098 scale/polynomial exact argument captures; NGM K055..082 dot pairs; NGW K099/K100 typed accumulator getter pair. Their original domains and exclusions remain binding. Provenance hash index follows at final validation.
+Final combined L078, raw ax2 L079 (59 roots), and full coherence scan L080 all exit0. Same unchanged L023 eight-fixture proof-driver binary. Exact edges and domains: NHE_EDGES.json. No broader model theorem enlarges native caller credit.
 
-Round CLOSED: NHE_Round.cohort identifies the entire round with the exact deployed finish dictionary. No trace/equality callback hypothesis. NHE_RoundRef.observed associates the extracted safe reference with SAME words and the Relation code. NHE_ScalePort.quarter pairs the opaque scale observation with the retained total natural-value law. Canonical field reads, lhs add and polynomial domains are derived on SAME values. See L035/L036/L037 and NHE_ROUND_VALIDATION.json.
+Independent scalar_factor support is partial: 50 passing native observation/inverted-control pairs (K001–K100), paired canonical multiplication/quarter laws, and NHE_ScalarCell.total (L076). NHE_ScalarStep emitted association failed default recursion depth (L077), is excluded and retained as .unproved.lean.txt. No scalar_factor closure or composed row is counted.
 
-Dot CLOSED on canonical caller windows and weights: NHE_DotDeployed.cohort equals the adopted SAG source, including every Result/rejection prefix. Native credit is restricted to NGM_DOMAIN, even though model equality is broader. Native source-step evidence, exact typed ABI and per-call domains are NHE_DOT_VALIDATION.json, NHE_DotBody.step and NHE_DotDomain.step; constructor and finalizer ports consume inherited Q packets on the SAME states. Combined L072 / raw L073 / scan L074 all exit0.
+E001 tensor-window and E002 group-update extracted references are uncompiled exploratory support, no closure credit. finish_relation remains OPEN on the real pair cone and SAME NFW producer domains. No arbitrary successful child premise is introduced. Full member inventory: NHE_REMAINING.md. Headline AspisR1.RPx_Deployed.deployed remains NOT ESTABLISHED.
