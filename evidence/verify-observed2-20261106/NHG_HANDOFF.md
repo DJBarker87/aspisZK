@@ -16,3 +16,5 @@ Retained assumptions: P6/D188 option-A semantic transport (reclassification, not
 No shipped file changes; no ELF rebuild trigger. Inherited artifact pins only: default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4; devnet63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299; Pool121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548.
 
 Next: inspect canonical PublicPreparation/PublicSerializer bodies before spending the single extraction run. NGX E002 failed because SemanticPublic was opaque; no success serializer premise is allowed.
+
+Stage1 partial: L003/L005/L007 compile the complete serializer/transcript model equations and exact1455/1427-byte domain arithmetic; standard axioms only. K003/K004 no-growth and K005/K006 small-growth native pairs pass/fail as intended. K002 large-prefix setup timed out and is excluded. Full arbitrary-capacity/reallocation native association is still OPEN, so no row is admitted. The single E001 extraction is in progress with SemanticPublic explicitly included. Seed copies total467,843,516 bytes; NHG_SEED.json records every imported hash.
