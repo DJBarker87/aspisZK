@@ -1,0 +1,131 @@
+NHL_generated/NHL_PrepareStages.lean:10:3: error: unexpected token 'prefix'; expected identifier
+NHL_generated/NHL_PrepareStages.lean:12:5: error(lean.redundantMatchAlt): Redundant alternative: Any expression matching
+  core.ops.control_flow.ControlFlow.Break residual
+will match one of the preceding alternatives
+NHL_generated/NHL_PrepareStages.lean:12:5: error(lean.redundantMatchAlt): Redundant alternative: Any expression matching
+  core.ops.control_flow.ControlFlow.Break residual
+will match one of the preceding alternatives
+NHL_generated/NHL_PrepareStages.lean:58:16: error: Application type mismatch: The argument
+  residual
+has type
+  core.result.Result core.convert.Infallible compact.CodecError
+but is expected to have type
+  core.result.Result core.convert.Infallible verifier.Error
+in the application
+  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.View
+    (core.convert.FromSame verifier.Error) residual
+NHL_generated/NHL_PrepareStages.lean:59:15: error: Application type mismatch: The argument
+  (r7, [anonymous])
+has type
+  core.result.Result verifier.View verifier.Error ×
+    (Ops →
+      {H : Type} → aspis_core.digest.Digest32 H → Slice U8 → Result (core.result.Result verifier.View verifier.Error))
+of sort `Type 1` but is expected to have type
+  core.result.Result verifier.View verifier.Error
+of sort `Type` in the application
+  ok (r7, [anonymous])
+NHL_generated/NHL_PrepareStages.lean:63:67: error: Application type mismatch: The argument
+  residual
+has type
+  core.result.Result core.convert.Infallible compact.CodecError
+but is expected to have type
+  core.result.Result core.convert.Infallible verifier.Error
+in the application
+  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.View
+    (core.convert.FromSame verifier.Error) residual
+NHL_generated/NHL_PrepareStages.lean:64:13: error: Application type mismatch: The argument
+  (r5, [anonymous])
+has type
+  core.result.Result verifier.View verifier.Error ×
+    (Ops →
+      {H : Type} → aspis_core.digest.Digest32 H → Slice U8 → Result (core.result.Result verifier.View verifier.Error))
+of sort `Type 1` but is expected to have type
+  core.result.Result verifier.View verifier.Error
+of sort `Type` in the application
+  ok (r5, [anonymous])
+NHL_generated/NHL_PrepareStages.lean:103:8: error: unexpected token 'prefix'; expected identifier or term
+NHL_generated/NHL_PrepareStages.lean:103:15: error: unexpected identifier; expected ':'
+NHL_generated/NHL_PrepareStages.lean:115:89: error: unsolved goals
+ops : Ops
+H : Type
+D : aspis_core.digest.Digest32 H
+pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+proof : Slice U8
+hash : H
+obs : Option (verifier.Phase → Result Unit)
+g : Scratch
+⊢ (do
+      let i ← compact.LOGICAL_SEMANTIC ops
+      let i1 ← compact.LOGICAL_Y1
+      let i2 ← lift (i.wrapping_add i1)
+      let r ← ops.op1 core.marker.CopyU8 i2 0#u8
+      let r1 ←
+        AspisR1CurrentCaller.core.result.Result.map_err
+            (verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let (s, deref_mut_back) ← lift val.deref_mut
+          let ((semantic, y1), split_at_mut_back) ← core.slice.Slice.split_at_mut s i
+          let i3 ← compact.OFF_Y1 ops
+          let s1 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                { start := 16#usize, «end» := i3 }
+          let (r2, semantic1) ← ops.op10 s1 semantic
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let i4 ← compact.OFF_INACTIVE ops
+              let s2 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                    { start := i3, «end» := i4 }
+              let (r3, y11) ← ops.op11 s2 y1
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue a =>
+                  have s3 := split_at_mut_back (semantic1, y11);
+                  have val1 := deref_mut_back s3;
+                  do
+                  let s4 ← alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) val1 { «end» := i }
+                  let s5 ← alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) val1 { start := i }
+                  let r4 ← ops.op5 proof s4 s5
+                  let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue v => do
+                      let r5 ← ops.op9 D pub v.semantic hash obs
+                      let r6 ←
+                        AspisR1CurrentCaller.core.result.Result.map_err
+                            (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r5 ()
+                      let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                      match cf4 with
+                        | core.ops.control_flow.ControlFlow.Continue val2 => do
+                          verifier.mark obs verifier.Phase.Semantic
+                          ops.op8 D val2 v hash g
+                        | core.ops.control_flow.ControlFlow.Break residual => do
+                          let r7 ←
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                          ok (r7, g)
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r5 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                      ok (r5, g)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r4 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                        (verifier.Error.Insts.CoreConvertFromCodecError ops) residual
+                  ok (r4, g)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r3 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    (verifier.Error.Insts.CoreConvertFromCodecError ops) residual
+              ok (r3, g)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                (core.convert.FromSame verifier.Error) residual
+          ok (r2, g)) =
+    sorry
+NHL_generated/NHL_PrepareStages.lean:116:45: error: unexpected identifier; expected ':'
+'AspisR1.NHL_PrepareStages.factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
