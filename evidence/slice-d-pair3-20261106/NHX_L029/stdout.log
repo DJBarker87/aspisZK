@@ -1,0 +1,155 @@
+NHX_generated/NHX_ProcessKind.lean:11:3: warning: Variable name `alpha` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+NHX_generated/NHX_ProcessKind.lean:63:84: error: Tactic `rfl` failed: The left-hand side
+  ok (decide (transport.Variant.S2.read_discriminant = transport.Variant.D.read_discriminant))
+is not definitionally equal to the right-hand side
+  ok false
+
+inst✝ : Allocation
+w : weights.Weights
+kind : Usize
+alpha : Slice NE
+f : Slice U8
+folds n : Usize
+ap0 ap1 : Std.Array NE 4#usize
+scratch : alloc.vec.Vec NQ
+parts : Std.Array NE 7#usize
+s2 : w.variant = transport.Variant.S2
+⊢ ok (decide (transport.Variant.S2.read_discriminant = transport.Variant.D.read_discriminant)) = ok false
+NHX_generated/NHX_ProcessKind.lean:67:1: error: Tactic `rfl` failed: The left-hand side
+  do
+    let k ← if kind < 4#usize then ok (kind.wrapping_sub 1#usize) else ok (kind.wrapping_sub 2#usize)
+    let (s, deref_mut_back) ← lift scratch.deref_mut
+    let s1 ← w.tensor k folds s
+    let a ← w.factors.index_usize k
+    let a1 ← a.index_usize 0#usize
+    let scale ← weights.Weights.scalar_factor a1 ap0
+    let (scratch1, scale1) ←
+      if folds = 2#usize then do
+          let a2 ← a.index_usize 1#usize
+          let we ← weights.Weights.scalar_factor a2 ap1
+          let scale2 ← scale.mul we
+          ok (deref_mut_back s1, scale2)
+        else ok (deref_mut_back s1, scale)
+    let pair ← fast_pairing.EbyKDot.new
+    let (r, pair1) ← NHM_ByteProducts.reference f scratch1.deref pair n
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        let we ← pair1.finish
+        let we1 ← scale1.mul we
+        let parts1 ← parts.update kind we1
+        ok (core.result.Result.Ok (), scratch1, parts1)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame verifier.Error) residual
+        ok (r1, scratch1, parts)
+is not definitionally equal to the right-hand side
+  do
+    let k ← if kind < 4#usize then ok (kind.wrapping_sub 1#usize) else ok (kind.wrapping_sub 2#usize)
+    let (s, deref_mut_back) ← lift scratch.deref_mut
+    let s1 ← w.tensor k folds s
+    let a ← w.factors.index_usize k
+    let a1 ← a.index_usize 0#usize
+    let scale ← NHI_Scalar.reference a1 ap0
+    let (scratch1, scale1) ←
+      if folds = 2#usize then do
+          let a2 ← a.index_usize 1#usize
+          let we ← NHI_Scalar.reference a2 ap1
+          let scale2 ← aspis_core.field.wide_exact.WideExact.mul scale we
+          ok (deref_mut_back s1, scale2)
+        else ok (deref_mut_back s1, scale)
+    let pair ← fast_pairing.EbyKDot.new
+    let (r, pair1) ← NHM_ByteProducts.reference f scratch1.deref pair n
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        let we ← fast_pairing.EbyKDot.finish pair1
+        let we1 ← aspis_core.field.wide_exact.WideExact.mul scale1 we
+        let parts1 ← parts.update kind we1
+        ok (core.result.Result.Ok (), scratch1, parts1)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame verifier.Error) residual
+        ok (r1, scratch1, parts)
+
+inst✝ : Allocation
+w : weights.Weights
+kind : Usize
+alpha : Slice NE
+f : Slice U8
+folds n : Usize
+ap0 ap1 : Std.Array NE 4#usize
+scratch : alloc.vec.Vec NQ
+parts : Std.Array NE 7#usize
+s2 : w.variant = transport.Variant.S2
+cmp : transport.Variant.Insts.CoreCmpPartialEqVariant.eq w.variant transport.Variant.D = ok false
+⊢ (do
+      let k ← if kind < 4#usize then ok (kind.wrapping_sub 1#usize) else ok (kind.wrapping_sub 2#usize)
+      let (s, deref_mut_back) ← lift scratch.deref_mut
+      let s1 ← w.tensor k folds s
+      let a ← w.factors.index_usize k
+      let a1 ← a.index_usize 0#usize
+      let scale ← weights.Weights.scalar_factor a1 ap0
+      let (scratch1, scale1) ←
+        if folds = 2#usize then do
+            let a2 ← a.index_usize 1#usize
+            let we ← weights.Weights.scalar_factor a2 ap1
+            let scale2 ← scale.mul we
+            ok (deref_mut_back s1, scale2)
+          else ok (deref_mut_back s1, scale)
+      let pair ← fast_pairing.EbyKDot.new
+      let (r, pair1) ← NHM_ByteProducts.reference f scratch1.deref pair n
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let we ← pair1.finish
+          let we1 ← scale1.mul we
+          let parts1 ← parts.update kind we1
+          ok (core.result.Result.Ok (), scratch1, parts1)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame verifier.Error) residual
+          ok (r1, scratch1, parts)) =
+    do
+    let k ← if kind < 4#usize then ok (kind.wrapping_sub 1#usize) else ok (kind.wrapping_sub 2#usize)
+    let (s, deref_mut_back) ← lift scratch.deref_mut
+    let s1 ← w.tensor k folds s
+    let a ← w.factors.index_usize k
+    let a1 ← a.index_usize 0#usize
+    let scale ← NHI_Scalar.reference a1 ap0
+    let (scratch1, scale1) ←
+      if folds = 2#usize then do
+          let a2 ← a.index_usize 1#usize
+          let we ← NHI_Scalar.reference a2 ap1
+          let scale2 ← aspis_core.field.wide_exact.WideExact.mul scale we
+          ok (deref_mut_back s1, scale2)
+        else ok (deref_mut_back s1, scale)
+    let pair ← fast_pairing.EbyKDot.new
+    let (r, pair1) ← NHM_ByteProducts.reference f scratch1.deref pair n
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        let we ← fast_pairing.EbyKDot.finish pair1
+        let we1 ← aspis_core.field.wide_exact.WideExact.mul scale1 we
+        let parts1 ← parts.update kind we1
+        ok (core.result.Result.Ok (), scratch1, parts1)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame verifier.Error) residual
+        ok (r1, scratch1, parts)
+NHX_generated/NHX_ProcessKind.lean:66:52: warning: This simp argument is unused:
+  NHI_Scalar.cohort
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵f̵a̵l̵s̵e̵,̵N̵H̵I̵_̵S̵c̵a̵l̵a̵r̵.̵c̵o̵h̵o̵r̵t̵,̵N̵H̵M̵_̵B̵y̵t̵e̵P̵r̵o̵d̵u̵c̵t̵s̵.̵c̵o̵h̵o̵r̵t̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲t̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲N̲H̲M̲_̲B̲y̲t̲e̲P̲r̲o̲d̲u̲c̲t̲s̲.̲c̲o̲h̲o̲r̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NHX_ProcessKind.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

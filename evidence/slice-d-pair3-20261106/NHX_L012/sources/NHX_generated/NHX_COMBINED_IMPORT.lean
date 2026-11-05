@@ -1,0 +1,10 @@
+import NGK_COMBINED_IMPORT
+import NHM_COMBINED_IMPORT
+import NHX_FactoredTail
+import NHX_FieldResults
+import NHX_FilledPacket
+import NHX_GroupPacket
+import NHX_SharedPacket
+set_option autoImplicit false
+#check AspisR1.RPx_Deployed.deployed
+#print axioms AspisR1.RPx_Deployed.deployed

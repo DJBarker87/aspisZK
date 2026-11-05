@@ -1,0 +1,32 @@
+# NHX TX2 pair cone — final
+
+Headline AspisR1.RPx_Deployed.deployed NOT ESTABLISHED. Six new composed rows CLOSED on the explicit NHX_CLOSED.json domains; no premise retirement and no top-level pair/finish claim. All inherited NHM/NHI/NHE certificates and native domains retained, pinned and cited without rerun.
+
+| Member | Row | Final status | Exact established scope / distance |
+| --- | --- | --- | --- |
+| factored_s2_libra_weights | TX2:133 | CLOSED (new) | SAME canonical WideExact ap0[4],ap1[4]; SAME canonical QM31 extra[2]. Exact two sides0/1, producer order including unused q^4, full returned canonical array; no child-success premise. |
+| grouped_inactive_pair | TX2:135 | CLOSED (new) | Weights.variant S2; SAME immutable2048-byte message with64 canonical eight-word field windows; SAME canonical WideExact low[16]. Other weights fields unrestricted. Non-S2 or other message lengths are outside this packet; fallback remains stated. |
+| shared_partials | TX2:144 | CLOSED (new) | SAME immutable2048-byte message with64 canonical eight-word windows; SAME canonical QM31 common[16]. Source initializes zero output[4], calls sides0..3 or exact first-error prefix, complete Result and SAME returned canonical array. |
+| shared_high | TX2:143 | CLOSED (new) | SAME canonical WideExact partials[4], ap0[4], ap1[4]; SAME Factors w invariant (all5 rows/all5 digits canonical; source uses rows0 and2); arbitrary initial parts[7]. Exact full Result, source writes1 then3, all other slots unchanged; canonical output invariant requires canonical initial parts. |
+| process_kind | TX2:139 | CLOSED (new) | S2 ordinary branch; kind in1,2,3,5,6; folds2,n64; SAME canonical factor rows (Factors w), ap0[4],ap1[4]; SAME canonical2048-byte final message; exclusive SAME canonical length64 QM31 scratch Vec and canonical WideExact parts[7]. alpha is forwarded unchanged and unused in S2 ordinary branch. Full Error/Ok, exact selected-kind write and outside-kind frame. |
+| process_regular_kinds | TX2:140 | CLOSED (new) | Same process_kind S2/folds2/n64/factors/powers/message/exclusive canonical64 scratch/canonical7 parts domain. shared_two_point arbitrary Bool: false kinds1,2,3,5,6; true kinds2,5,6. SAME arguments, complete first Error/Ok, canonical state for each reached call and frame for all omitted kinds. Guard value is forwarded; equality with top pair guard is a parent obligation. |
+| filled | TX2:045 | OPEN | K005/K118 initialized-value/frame timeouts, excluded. Shape and actual single-cell support only; need initialized-prefix/frame native composition. |
+| pair | TX2:129 | OPEN | All six listed composite child packets qualify. Missing filled plus source-ordered ownership/initialization, SAME both-branch guard/common/low producers, parts0/4 accumulation, all errors/frames and native final SAME kappa/powers7 fold. Final emitted-fold source/invariant/total laws compile; common/low step invariants compile, full-loop proposals uncompiled. |
+| finish_relation | TX2:115 | OPEN | Needs CLOSED pair, actual Weights NEW/box ownership and SAME Prepared/View fields, then exact op3/op2 dictionary equations and full driver cuts. No NHM_new/NHM_pair exported. |
+| Weights::new/box_from_parts | TX2:128/127 | OPEN boundary | No constructor/ownership packet supplied by this pair-helper list. NHT_HYPOTHESES interface preserved; dot new/finish are distinct functions. |
+| scalar_factor | TX2:130 | INHERITED CLOSED | NHI_Scalar.cohort/total, SAME canonical Q[4]/E[4]. |
+| tensor | TX2:131 | INHERITED CLOSED | NHI_Tensor.cohort, folds2/n64, canonical selected rows and SAME exclusive scratch. |
+| s2_grouped_inactive_pair | TX2:142 | INHERITED CLOSED | NHM_GroupRoot.cohort/canonical; SAME canonical2048-byte message and low E[16]. |
+| push_byte_products | TX2:141 | INHERITED CLOSED | NHM_ByteProducts.cohort; n64, canonical2048-byte message,64 Q cells and actual new-zero dot. |
+| high_dot | TX2:136 | INHERITED CLOSED | NHM_HighDot.cohort; SAME canonical E[4]/Q[4], exact four-call/error prefix and finish. |
+| partial_dot | TX2:137 | INHERITED CLOSED | NHM_PartialDot.cohort; canonical2048-byte message, common Q[16], side<4. |
+| powers | TX2:138 | INHERITED CLOSED | Pinned NFW/NHI powers packet, including explicit N7 domain; SAME kappa edge NHX_Powers7Edge. |
+| QM31.square | TX2:022 | INHERITED CLOSED | NGH_QSquareRef/NHI producer packet; no native multiplication rerun. |
+| double | inherited | INHERITED CLOSED | Exact inherited NHI/NHE law and native domain retained. |
+| shared_two_point_guard | inherited | INHERITED CLOSED | Inherited guard packet; SAME result binding inside top pair remains OPEN. |
+
+Final current-source replay: NHX_L082 combined, NHX_L083 complete statements, NHX_L084 raw ax2 and unchanged NFX-method coherence scanner (legacy stdout marker NFN_SCAN_ZERO_DANGLING), all exit0. 301 roots; 13683 loaded modules; standard axioms only; dangling/owner/import mismatches0. Same proof-driver binary passed all eight fixtures in L017, reused without relinking or unchanged fixture replay. L084:56.2283s, peak7034356KiB, swap0, MemoryHigh6G/Max8G/Swap0/Tasks64, source09462feeb0b. Every focused result has exact command/exit/wall/RSS/swap/revision/object pins/#print axioms in its receipt; failed elaborations are excluded. This is a coherent cached focused replay, not a new full frozen release replay.
+
+Budgets120/120 Kani,80/80 Lean/link/audit,0/2 extraction. Existing pinned emitted references made new extraction unnecessary. NHX_REMAINING.md records every unclosed member and why no remaining native/formal run can be attempted in this job. NHX_BRIDGES.md and NHX_LPh_STUBS.md give composition and opaque-law associations; NHX_FAILING_STEP.md preserves all failing shapes. No unchanged timeout rerun, cap increase, native field product, function-pointer/quarantined credit or writable static. KMX exact patch and matched failing controls required.
+
+Trust retained/reclassified: P6/D188 optionA, Std/allocator/ABI/source-to-ELF, approved runtime persistence/digest/ReturnData(1..1024)/Memcmp/ClockSlotBinding and cryptographic assumptions. L154 statement parameter, digest/error slots43/44,100-bit PER-ATTEMPT/privacy/two-transaction design unchanged. No shipped changes; no ELF rebuild triggered, inherited three pins retained. No keys touched, push, sibling/live worktree edits or authoritative base-ledger rewrite. Own checked objects exported by SHA256 to NHX_EXPORT.json; cache retained.

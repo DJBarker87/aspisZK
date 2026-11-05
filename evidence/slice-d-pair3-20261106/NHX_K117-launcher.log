@@ -1,0 +1,45 @@
+{"attempt": "NHX_K117", "exit_status": 1, "wall_seconds": 3.4597109449096024, "peak_rss_kib": "441456", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-d-pair3-20261106/NHX_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `
+...
+n `KMX_to_vec_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-slice-d-pair3-20261106/NHX_src/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-slice-d-pair3-20261106/NHX_src/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-slice-d-pair3-20261106/NHX_src/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+    Finished `dev` profile [optimized] target(s) in 2.43s
+Checking harness weights::NHX_parents::regular_reply_step...
+
+VERIFICATION RESULT:
+ ** 1 of 79 failed
+Failed Checks: assertion failed: actual.map_err(code) == expected
+ File: "crates/aspis-r1-cost-probe/src/NHX_parents.rs", line 223, in weights::NHX_parents::regular_reply_step
+
+VERIFICATION:- FAILED
+Verification Time: 0.05165662s
+
+Manual Harness Summary:
+Verification failed for - weights::NHX_parents::regular_reply_step
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rcfcf5c5a53d34916a932094495117fc6.scope; invocation ID: 97efcde974b74350be3b04975900cd17

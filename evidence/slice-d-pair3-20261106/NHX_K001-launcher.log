@@ -1,0 +1,48 @@
+{"attempt": "NHX_K001", "exit_status": 1, "wall_seconds": 4.263415661873296, "peak_rss_kib": "505324", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-d-pair3-20261106/NHX_src/crates/aspis-core)
+error[E0252]: the name `Vec` is defined multiple times
+ --> /home/dombarker/project-offloads/codex-cx-slice-d-pair3-20261106/NHX_src/crates/aspis-core/../../KMX_stubs.rs:1:5
+  |
+1 | use alloc::vec::Vec;
+  |     ^^^^^^^^^^^^^^^ `Vec` reimported here
+  |
+ ::: crates/aspis-core/src/NHX_filled.rs:2:24
+  |
+2 | use alloc::{boxed::Box,vec::Vec};
+  |                        -------- previous import of the type `Vec` here
+  |
+  = note: `Vec` must be defined only once in the type namespace of this module
+
+warning: unexpected `cfg` condition
+...
+uration
+
+error[E0658]: use of unstable library feature `allocator_api`
+  --> /home/dombarker/project-offloads/codex-cx-slice-d-pair3-20261106/NHX_src/crates/aspis-core/../../KMX_stubs.rs:14:40
+   |
+14 | pub fn KMX_extend_from_slice<T: Copy,A:alloc::alloc::Allocator>(dst:&mut Vec<T,A>,src:&[T]){
+   |                                        ^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: see issue #32838 <https://github.com/rust-lang/rust/issues/32838> for more information
+   = help: add `#![feature(allocator_api)]` to the crate attributes to enable
+   = note: this compiler was built on 2025-11-20; consider upgrading it if it is out of date
+
+error[E0658]: use of unstable library feature `allocator_api`
+  --> /home/dombarker/project-offloads/codex-cx-slice-d-pair3-20261106/NHX_src/crates/aspis-core/../../KMX_stubs.rs:14:80
+   |
+14 | pub fn KMX_extend_from_slice<T: Copy,A:alloc::alloc::Allocator>(dst:&mut Vec<T,A>,src:&[T]){
+   |                                                                              --^
+   |                                                                              |
+   |                                                                              help: consider wrapping the inner types in tuple: `(T,A)`
+   |
+   = note: see issue #32838 <https://github.com/rust-lang/rust/issues/32838> for more information
+   = help: add `#![feature(allocator_api)]` to the crate attributes to enable
+   = note: this compiler was built on 2025-11-20; consider upgrading it if it is out of date
+
+Some errors have detailed explanations: E0252, E0658.
+For more information about an error, try `rustc --explain E0252`.
+error: could not compile `aspis-core` (lib) due to 3 previous errors; 17 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 3 compilation errors.
+
+Running as unit: run-r88507061ed204e1bab30239357d67abb.scope; invocation ID: c3ce09ebe953441c89513342d4c6a769

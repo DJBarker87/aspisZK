@@ -1,0 +1,8 @@
+struct KindReturn{count:usize,events:[u8;2],dot:KindDot,scale:E,finish:E,product:E,args:(E,E)}
+fn return_finish(dot:KindDot,l:&mut KindReturn)->E{l.events[l.count]=0;l.count+=1;l.dot=dot;l.finish}
+fn return_mul(a:E,b:E,l:&mut KindReturn)->E{l.events[l.count]=1;l.count+=1;l.args=(a,b);l.product}
+fn return_cut(kind:usize,scale:E,push:Result<(),Error>,dot:KindDot,parts:&mut[E;7],l:&mut KindReturn)->Result<(),Error>{push?;parts[kind]=return_mul(scale,return_finish(dot,l),l);Ok(())}
+#[kani::proof]#[kani::unwind(66)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn kind_return_window(){let kind:usize=kani::any();kani::assume(kind<7);let scale=anye();let ok:bool=kani::any();let error=err(kani::any());let push=if ok{Ok(())}else{Err(error)};let dot=KindDot{sums:kani::any(),count:kani::any()};let before=core::array::from_fn(|_|anye());let mut parts=before;let mut l=KindReturn{count:0,events:[255;2],dot:KindDot{sums:[0;8],count:0},scale,finish:anye(),product:anye(),args:(E::ZERO,E::ZERO)};let r=return_cut(kind,scale,push,dot,&mut parts,&mut l);let j:usize=kani::any();kani::assume(j<7);if cfg!(NHX_corrupt){parts[j]=E::ZERO;}
+ assert!(r.map_err(code)==if ok{Ok(())}else{Err(code(error))});assert!(l.count==if ok{2}else{0});assert!(!ok||(l.events==[0,1]&&l.dot==dot&&l.args==(scale,l.finish)));assert!(parts[j]==if ok&&j==kind{l.product}else{before[j]});}

@@ -1,0 +1,41 @@
+struct Tail{count:usize,tag:[u8;20],a:[E;20],b:[E;20],q:[K;20],r:[K;20],er:[E;20],qr:[K;20],fp:*const K,pp:*const E}
+fn tscalar(q:&[K;4],p:&[E;4],l:&mut Tail)->E{let i=l.count;l.tag[i]=0;l.fp=q.as_ptr();l.pp=p.as_ptr();l.count+=1;l.er[i]}
+fn top(a:E,b:E,q:K,r:K,tag:u8,l:&mut Tail)->E{let i=l.count;l.tag[i]=tag;l.a[i]=a;l.b[i]=b;l.q[i]=q;l.r[i]=r;l.count+=1;l.er[i]}
+fn tmix(a:E,q:K,l:&mut Tail)->E{top(a,E::ZERO,q,K::ZERO,1,l)}
+fn tquarter(a:E,l:&mut Tail)->E{top(a,E::ZERO,K::ZERO,K::ZERO,2,l)}
+fn tadd(a:E,b:E,l:&mut Tail)->E{top(a,b,K::ZERO,K::ZERO,3,l)}
+fn tmul(a:E,b:E,l:&mut Tail)->E{top(a,b,K::ZERO,K::ZERO,4,l)}
+fn tqmul(q:K,r:K,l:&mut Tail)->K{let i=l.count;l.tag[i]=5;l.q[i]=q;l.r[i]=r;l.count+=1;l.qr[i]}
+fn tail_cut(ap0:&[E;4],ap1:&[E;4],q:&[K;4],high:&[K;4],q4:K,q16:K,side:usize,weights:&mut [E;4],l:&mut Tail){
+ let low=tscalar(q,ap0,l);
+ let term0=tquarter(tmix(ap1[PERM[0]],high[0],l),l);
+ let term1=tquarter(tmix(ap1[PERM[1]],high[1],l),l);
+ let term2=tquarter(tmix(ap1[PERM[2]],high[2],l),l);
+ let term3=tquarter(tmix(ap1[PERM[3]],high[3],l),l);
+ let terms=[term0,term1,term2,term3];
+ let first2=tadd(terms[0],terms[1],l);let first3=tadd(first2,terms[2],l);let all=tadd(first3,terms[3],l);
+ if side==0{weights[0]=tmul(low,all,l);weights[1]=tmix(tmul(low,first3,l),q16,l);}
+ else{weights[1]=tadd(weights[1],tmul(low,tquarter(ap1[PERM[3]],l),l),l);weights[2]=tmix(tmul(low,all,l),q4,l);weights[3]=tmix(tmul(low,first2,l),tqmul(q16,q4,l),l);}
+}
+fn tail_check(g:usize){
+ let side:usize=kani::any();kani::assume(side<2);let ap0=core::array::from_fn(|_|anye());let ap1=core::array::from_fn(|_|anye());let q=core::array::from_fn(|_|anyk());let high=core::array::from_fn(|_|anyk());let q4=anyk();let q16=anyk();let before=core::array::from_fn(|_|anye());let mut weights=before;
+ let mut l=Tail{count:0,tag:[255;20],a:[E::ZERO;20],b:[E::ZERO;20],q:[K::ZERO;20],r:[K::ZERO;20],er:core::array::from_fn(|_|anye()),qr:core::array::from_fn(|_|anyk()),fp:core::ptr::null(),pp:core::ptr::null()};
+ tail_cut(&ap0,&ap1,&q,&high,q4,q16,side,&mut weights,&mut l);
+ let n=if side==0{15}else{20};let i:usize=kani::any();kani::assume(i<n);let j:usize=kani::any();kani::assume(j<4);
+ if cfg!(NHX_corrupt){match g{0=>l.tag[i]=255,1=>l.a[i]=E::ZERO,lq if lq==2=>l.q[i]=K::ZERO,3=>weights[j]=E::ZERO,_=>l.count+=1}}
+ let mut tag=[0,1,2,1,2,1,2,1,2,3,3,3,4,4,1,255,255,255,255,255];
+ let mut a=[E::ZERO,ap1[0],l.er[1],ap1[3],l.er[3],ap1[2],l.er[5],ap1[1],l.er[7],l.er[2],l.er[9],l.er[10],l.er[0],l.er[0],l.er[13],E::ZERO,E::ZERO,E::ZERO,E::ZERO,E::ZERO];
+ let mut b=[E::ZERO;20];b[9]=l.er[4];b[10]=l.er[6];b[11]=l.er[8];b[12]=l.er[11];b[13]=l.er[10];
+ let mut qs=[K::ZERO;20];qs[1]=high[0];qs[3]=high[1];qs[5]=high[2];qs[7]=high[3];qs[14]=q16;
+ let mut rs=[K::ZERO;20];
+ if side==1{tag[12]=2;tag[13]=4;tag[14]=3;tag[15]=4;tag[16]=1;tag[17]=4;tag[18]=5;tag[19]=1;
+ a[12]=ap1[1];b[12]=E::ZERO;a[13]=l.er[0];b[13]=l.er[12];a[14]=before[1];b[14]=l.er[13];qs[14]=K::ZERO;a[15]=l.er[0];b[15]=l.er[11];a[16]=l.er[15];qs[16]=q4;a[17]=l.er[0];b[17]=l.er[9];qs[18]=q16;rs[18]=q4;a[19]=l.er[17];qs[19]=l.qr[18];}
+ let expected=if side==0{match j{0=>l.er[12],1=>l.er[14],_=>before[j]}}else{match j{1=>l.er[14],2=>l.er[16],3=>l.er[19],_=>before[j]}};
+ let good=match g{0=>l.tag[i]==tag[i],1=>l.a[i]==a[i]&&l.b[i]==b[i],2=>l.q[i]==qs[i]&&l.r[i]==rs[i],3=>weights[j]==expected,_=>l.count==n&&l.fp==q.as_ptr()&&l.pp==ap0.as_ptr()};assert!(good);
+}
+struct TailControl{count:usize,sides:[usize;2],before:[[E;4];2],post:[[E;4];2]}
+fn tail_control_cut(l:&mut TailControl)->[E;4]{let mut weights=[E::ZERO;4];for side in 0..2{l.sides[l.count]=side;l.before[l.count]=weights;l.count+=1;weights=l.post[side];}weights}
+#[kani::proof]#[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn tail_order(){let mut l=TailControl{count:0,sides:[99;2],before:[[E::ZERO;4];2],post:core::array::from_fn(|_|core::array::from_fn(|_|anye()))};let out=tail_control_cut(&mut l);if cfg!(NHX_corrupt){l.sides[0]=99;}
+ let j:usize=kani::any();kani::assume(j<4);assert!(l.count==2&&l.sides==[0,1]&&l.before[0][j]==E::ZERO&&l.before[1][j]==l.post[0][j]&&out[j]==l.post[1][j]);}

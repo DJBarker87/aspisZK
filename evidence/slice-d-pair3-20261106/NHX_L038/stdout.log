@@ -1,0 +1,147 @@
+NHX_generated/NHX_HighReference.lean:70:1: error: Tactic `rfl` failed: The left-hand side
+  do
+    let r ← NHM_HighDot.reference partials (coeff0 w)
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let a2 ← Array.index_usize (row0 w) 0#usize
+        let we ← FIo_Native.weights.Weights.scalar_factor a2 ap0
+        let a3 ← Array.index_usize (row0 w) 1#usize
+        let we1 ← FIo_Native.weights.Weights.scalar_factor a3 ap1
+        let scale0 ← we.mul we1
+        let we2 ← scale0.mul val
+        let (_, index_mut_back) := (NHI_ScalarDomain.pick parts ↑1#usize ⋯, fun x => NHI_ArrayCells.put parts 1#usize x)
+          do
+          let r1 ← NHM_HighDot.reference partials (coeff2 w)
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let a6 ← Array.index_usize (row2 w) 0#usize
+              let we3 ← FIo_Native.weights.Weights.scalar_factor a6 ap0
+              let a7 ← Array.index_usize (row2 w) 1#usize
+              let we4 ← FIo_Native.weights.Weights.scalar_factor a7 ap1
+              let scale2 ← we3.mul we4
+              let we5 ← scale2.mul val1
+              ok (core.result.Result.Ok (), NHI_ArrayCells.put (index_mut_back we2) 3#usize we5)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r2 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame FIo_Native.verifier.Error) residual
+              ok (r2, index_mut_back we2)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame FIo_Native.verifier.Error) residual
+        ok (r1, parts)
+is not definitionally equal to the right-hand side
+  do
+    let r ← NHM_HighDot.reference partials (coeff0 w)
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let rr ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame FIo_Native.verifier.Error) residual
+        ok (rr, parts)
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let x ← Array.index_usize (row0 w) 0#usize
+        let x ← FIo_Native.weights.Weights.scalar_factor x ap0
+        let x_1 ← Array.index_usize (row0 w) 1#usize
+        let x_2 ← FIo_Native.weights.Weights.scalar_factor x_1 ap1
+        let a ← x.mul x_2
+        let v1 ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul a val
+        let r2 ← NHM_HighDot.reference partials (coeff2 w)
+        let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+        match cf2 with
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let rr ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                  (core.convert.FromSame FIo_Native.verifier.Error) residual
+            ok (rr, NHI_ArrayCells.put parts 1#usize v1)
+          | core.ops.control_flow.ControlFlow.Continue val2 => do
+            let x ← Array.index_usize (row2 w) 0#usize
+            let x ← FIo_Native.weights.Weights.scalar_factor x ap0
+            let x_3 ← Array.index_usize (row2 w) 1#usize
+            let x_4 ← FIo_Native.weights.Weights.scalar_factor x_3 ap1
+            let a2 ← x.mul x_4
+            let v3 ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul a2 val2
+            ok (core.result.Result.Ok (), NHI_ArrayCells.put (NHI_ArrayCells.put parts 1#usize v1) 3#usize v3)
+
+partials : Powers
+w : W
+ap0 ap1 : Powers
+parts : Parts
+ir0 : w.factors.index_usize 0#usize = ok (row0 w)
+ir2 : w.factors.index_usize 2#usize = ok (row2 w)
+ic0 : Array.index_usize (row0 w) 4#usize = ok (coeff0 w)
+ic2 : Array.index_usize (row2 w) 4#usize = ok (coeff2 w)
+⊢ (do
+      let r ← NHM_HighDot.reference partials (coeff0 w)
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let a2 ← Array.index_usize (row0 w) 0#usize
+          let we ← FIo_Native.weights.Weights.scalar_factor a2 ap0
+          let a3 ← Array.index_usize (row0 w) 1#usize
+          let we1 ← FIo_Native.weights.Weights.scalar_factor a3 ap1
+          let scale0 ← we.mul we1
+          let we2 ← scale0.mul val
+          let (_, index_mut_back) :=
+              (NHI_ScalarDomain.pick parts ↑1#usize ⋯, fun x => NHI_ArrayCells.put parts 1#usize x)
+            do
+            let r1 ← NHM_HighDot.reference partials (coeff2 w)
+            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue val1 => do
+                let a6 ← Array.index_usize (row2 w) 0#usize
+                let we3 ← FIo_Native.weights.Weights.scalar_factor a6 ap0
+                let a7 ← Array.index_usize (row2 w) 1#usize
+                let we4 ← FIo_Native.weights.Weights.scalar_factor a7 ap1
+                let scale2 ← we3.mul we4
+                let we5 ← scale2.mul val1
+                ok (core.result.Result.Ok (), NHI_ArrayCells.put (index_mut_back we2) 3#usize we5)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r2 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (core.convert.FromSame FIo_Native.verifier.Error) residual
+                ok (r2, index_mut_back we2)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame FIo_Native.verifier.Error) residual
+          ok (r1, parts)) =
+    do
+    let r ← NHM_HighDot.reference partials (coeff0 w)
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let rr ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame FIo_Native.verifier.Error) residual
+        ok (rr, parts)
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let x ← Array.index_usize (row0 w) 0#usize
+        let x ← FIo_Native.weights.Weights.scalar_factor x ap0
+        let x_1 ← Array.index_usize (row0 w) 1#usize
+        let x_2 ← FIo_Native.weights.Weights.scalar_factor x_1 ap1
+        let a ← x.mul x_2
+        let v1 ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul a val
+        let r2 ← NHM_HighDot.reference partials (coeff2 w)
+        let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+        match cf2 with
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let rr ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                  (core.convert.FromSame FIo_Native.verifier.Error) residual
+            ok (rr, NHI_ArrayCells.put parts 1#usize v1)
+          | core.ops.control_flow.ControlFlow.Continue val2 => do
+            let x ← Array.index_usize (row2 w) 0#usize
+            let x ← FIo_Native.weights.Weights.scalar_factor x ap0
+            let x_3 ← Array.index_usize (row2 w) 1#usize
+            let x_4 ← FIo_Native.weights.Weights.scalar_factor x_3 ap1
+            let a2 ← x.mul x_4
+            let v3 ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul a2 val2
+            ok (core.result.Result.Ok (), NHI_ArrayCells.put (NHI_ArrayCells.put parts 1#usize v1) 3#usize v3)
+'NHX_HighReference.scale_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NHX_HighReference.update3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NHX_HighReference.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

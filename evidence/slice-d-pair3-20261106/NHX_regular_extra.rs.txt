@@ -1,0 +1,7 @@
+#[kani::proof]#[kani::unwind(66)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[E]>::copy_from_slice,KMX_copy_from_slice)]
+fn regular_parts_word(){let mut src:[E;7]=core::array::from_fn(|_|anye());let mut dst:[E;7]=core::array::from_fn(|_|anye());dst.copy_from_slice(&src);let j:usize=kani::any();kani::assume(j<7);let word:usize=kani::any();kani::assume(word<8);if cfg!(NHX_corrupt){src[j]=E::ZERO;}assert!(dst[j].to_limbs()[word]==src[j].to_limbs()[word]);}
+fn regular_reply_source(child:Result<(),Error>)->Result<(),Error>{child?;Ok(())}
+#[kani::proof]#[kani::unwind(4)]
+fn regular_reply_step(){let child=if kani::any::<bool>(){Ok(())}else{Err(err(kani::any()))};let actual=regular_reply_source(child);let mut expected=child.map_err(code);if cfg!(NHX_corrupt){expected=match expected{Ok(())=>Err(0),Err(e)=>Err((e+1)%8)};}assert!(actual.map_err(code)==expected);}

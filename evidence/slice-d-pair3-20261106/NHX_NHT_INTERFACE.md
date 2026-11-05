@@ -1,0 +1,7 @@
+# Exact NEW / pair export distance
+
+NHT_HYPOTHESES.md and NHT_FinishRelationModel.PairLaw are authoritative. Required NEW is `ops.op3 p.variant p.semantic_alpha p.z = newPacket : Result (Result W Error)`, with full errors/nonreturn and SAME primitive fields. Required pair quantifies over SAME weights actually returned by that successful NEW, SAME alpha slice obtained by end2 index, SAME final_message and kappa, and asserts the full `ops.op2 weights alpha v.final_message p.kappa = pair weights alpha v.final_message p.kappa`. Pair success, equality to claim and acceptance are never premises.
+
+Neither interface is exported as a proved native dictionary equality here while the pair packet is OPEN. No generic equality parameter is relabelled discharge. NHX Group/Shared support is below pair, not an instantiation of ops.op2 or ops.op3.
+
+Additional NEW boundary: NDT's rows TX2:127 box_from_parts and TX2:128 Weights::new are OPEN in the original authoritative inventory. NHT still marks NEW open; the job's “new/finish packets” in process_kind refers to EbyKDot.new/finish, not a native Weights constructor certificate. This job's ordered pair-helper list does not supply a native Weights::new packet. The lead must bind an actually CLOSED constructor/ownership packet and its produced canonical factor invariant before the exact NEW interface can be claimed. Keep this explicit rather than substitute allocator availability or an independently selected W. No outside job worktree is modified.

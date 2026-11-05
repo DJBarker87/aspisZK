@@ -1,0 +1,27 @@
+NHX_generated/NHX_FinalLoop.lean:21:89: error: unsolved goals
+parts powers : Cells
+s : State
+⊢ (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize s.1
+      match o with
+        | none => ok (done s.2)
+        | some kind => do
+          let we ← Array.index_usize parts kind
+          let we1 ← Array.index_usize powers kind
+          let we2 ← we1.mul we
+          let sum1 ← FIo_Native.aspis_core.field.wide_exact.WideExact.add s.2 we2
+          ok (cont (iter1, sum1))) =
+    do
+    let (o, next) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize s.1
+    match o with
+      | none => ok (done s.2)
+      | some kind => do
+        let part ← Array.index_usize parts kind
+        let power ← Array.index_usize powers kind
+        let x ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul power part
+        let sum ← FIo_Native.aspis_core.field.wide_exact.WideExact.add s.2 x
+        ok (cont (next, sum))
+'NHX_FinalLoop.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NHX_FinalLoop.progress' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NHX_FinalLoop.decreases' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NHX_FinalLoop.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

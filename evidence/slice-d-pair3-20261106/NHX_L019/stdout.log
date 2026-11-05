@@ -1,0 +1,138 @@
+NHX_generated/NHX_FactoredCut.lean:52:16: error: unsolved goals
+ap0 ap1 : Cells
+low high : Std.Array NQ 4#usize
+ha : ∀ x ∈ ↑ap0, canonE x
+hb : ∀ x ∈ ↑ap1, canonE x
+hl : ∀ x ∈ ↑low, canonQ x
+hh : ∀ x ∈ ↑high, canonQ x
+s : NE
+a : FIo_Native.aspis_core.field.wide_exact.WideExact
+hs : NHI_ScalarFold.cells ap0 low 4 0#usize NHI_Scalar.zero = ok s
+cs : canonE s
+ha0 : FIo_Native.weights.Weights.scalar_factor low ap0 = ok a
+ca : canonE a
+hv : NGM_RoundScale.limbs a = List.map (fun word => word * 536870912 % 2147483647) (NGM_RoundScale.limbs s)
+t0 : NE
+h0 : NHM_FactoredTerm.term ap1 high 0#usize = ok t0
+c0 : canonE t0
+t1 : NE
+h1 : NHM_FactoredTerm.term ap1 high 1#usize = ok t1
+c1 : canonE t1
+t2 : NE
+h2 : NHM_FactoredTerm.term ap1 high 2#usize = ok t2
+c2 : canonE t2
+t3 : NE
+h3 : NHM_FactoredTerm.term ap1 high 3#usize = ok t3
+c3 : canonE t3
+b c d : NE
+hr : NHM_FactoredSums.run t0 t1 t2 t3 = ok (b, c, d)
+cb : canonE b
+cc : canonE c
+cd : canonE d
+⊢ (let (first2, first3, all) := (b, c, d)
+    ok (a, first2, first3, all)) =
+    ok (a, b, c, d)
+NHX_generated/NHX_FactoredCut.lean:58:83: error: unsolved goals
+ap0 ap1 : Cells
+side : Usize
+iter : Iter
+weights : Cells
+low high : Std.Array NQ 4#usize
+q4 q16 : NQ
+a1 : Array.index_usize ap1 1#usize = ok (NHI_ScalarDomain.pick ap1 ↑1#usize ⋯)
+p0 : FIo_Native.weights.PERM.index_usize 0#usize = ok 0#usize
+p1 : FIo_Native.weights.PERM.index_usize 1#usize = ok 3#usize
+p2 : FIo_Native.weights.PERM.index_usize 2#usize = ok 2#usize
+p3 : FIo_Native.weights.PERM.index_usize 3#usize = ok 1#usize
+⊢ (do
+      let low ← FIo_Native.weights.Weights.scalar_factor low ap0
+      let we ← Array.index_usize ap1 0#usize
+      let q5 ← high.index_usize 0#usize
+      let we1 ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul_qm31 we q5
+      let term0 ← we1.mul_m31 FIo_Native.weights.QUARTER
+      let we2 ← Array.index_usize ap1 3#usize
+      let q6 ← high.index_usize 1#usize
+      let we3 ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul_qm31 we2 q6
+      let term1 ← we3.mul_m31 FIo_Native.weights.QUARTER
+      let we4 ← Array.index_usize ap1 2#usize
+      let q7 ← high.index_usize 2#usize
+      let we5 ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul_qm31 we4 q7
+      let term2 ← we5.mul_m31 FIo_Native.weights.QUARTER
+      let q9 ← high.index_usize 3#usize
+      let we7 ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul_qm31 (NHI_ScalarDomain.pick ap1 ↑1#usize ⋯) q9
+      let term3 ← we7.mul_m31 FIo_Native.weights.QUARTER
+      let first2 ← term0.add term1
+      let first3 ← first2.add term2
+      let all ← first3.add term3
+      if side = 0#usize then do
+          let we12 ← low.mul all
+          let weights1 ← Array.update weights 0#usize we12
+          let we13 ← low.mul first3
+          let we14 ← we13.mul_qm31 q16
+          let a ← weights1.update 1#usize we14
+          ok (cont (iter, a))
+        else do
+          let we12 ← Array.index_usize weights 1#usize
+          let we14 ←
+            FIo_Native.aspis_core.field.wide_exact.WideExact.mul_m31 (NHI_ScalarDomain.pick ap1 ↑1#usize ⋯)
+                FIo_Native.weights.QUARTER
+          let we15 ← low.mul we14
+          let we16 ← FIo_Native.aspis_core.field.wide_exact.WideExact.add we12 we15
+          let weights1 ← Array.update weights 1#usize we16
+          let we17 ← low.mul all
+          let we18 ← we17.mul_qm31 q4
+          let weights2 ← weights1.update 2#usize we18
+          let we19 ← low.mul first2
+          let q10 ← FIo_Native.aspis_core.field.QM31.mul q16 q4
+          let we20 ← we19.mul_qm31 q10
+          let a ← weights2.update 3#usize we20
+          ok (cont (iter, a))) =
+    do
+    let x ← FIo_Native.weights.Weights.scalar_factor low ap0
+    let x_1 ← Array.index_usize ap1 0#usize
+    let x_2 ← high.index_usize 0#usize
+    let x_3 ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul_qm31 x_1 x_2
+    let x_4 ← x_3.mul_m31 FIo_Native.weights.QUARTER
+    let x_5 ← Array.index_usize ap1 3#usize
+    let x_6 ← high.index_usize 1#usize
+    let x_7 ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul_qm31 x_5 x_6
+    let x_8 ← x_7.mul_m31 FIo_Native.weights.QUARTER
+    let x_9 ← Array.index_usize ap1 2#usize
+    let x_10 ← high.index_usize 2#usize
+    let x_11 ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul_qm31 x_9 x_10
+    let x_12 ← x_11.mul_m31 FIo_Native.weights.QUARTER
+    let x_13 ← high.index_usize 3#usize
+    let x_14 ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul_qm31 (NHI_ScalarDomain.pick ap1 ↑1#usize ⋯) x_13
+    let x_15 ← x_14.mul_m31 FIo_Native.weights.QUARTER
+    let x_16 ← FIo_Native.aspis_core.field.wide_exact.WideExact.add x_4 x_8
+    let x_17 ← x_16.add x_12
+    let x_18 ← x_17.add x_15
+    let p ←
+      let (first2, first3, all) := (x_16, x_17, x_18)
+        ok (x, first2, first3, all)
+    let (low, first2, first3, all) := p
+      if side = 0#usize then do
+        let x ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul low all
+        let w ← Array.update weights 0#usize x
+        let y ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul low first3
+        let z ← y.mul_qm31 q16
+        let a ← w.update 1#usize z
+        ok (cont (iter, a))
+      else do
+        let old ← Array.index_usize weights 1#usize
+        let quarter ←
+          FIo_Native.aspis_core.field.wide_exact.WideExact.mul_m31 (NHI_ScalarDomain.pick ap1 1 suffix._proof_1)
+              FIo_Native.weights.QUARTER
+        let product ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul low quarter
+        let x ← FIo_Native.aspis_core.field.wide_exact.WideExact.add old product
+        let w ← Array.update weights 1#usize x
+        let y ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul low all
+        let z ← y.mul_qm31 q4
+        let w1 ← w.update 2#usize z
+        let a1 ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul low first2
+        let b ← FIo_Native.aspis_core.field.QM31.mul q16 q4
+        let c ← a1.mul_qm31 b
+        let a ← w1.update 3#usize c
+        ok (cont (iter, a))
+'NHX_FactoredCut.prefix_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NHX_FactoredCut.split' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

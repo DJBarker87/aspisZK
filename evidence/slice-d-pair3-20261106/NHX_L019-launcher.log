@@ -1,0 +1,60 @@
+{"attempt": "NHX_L019", "exit_status": 1, "wall_seconds": 3.400430758949369, "peak_rss_kib": "5834228", "swaps": "0", "print_axioms": ["'NHX_FactoredCut.prefix_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NHX_FactoredCut.split' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NHX_generated/NHX_FactoredCut.lean:52:16: error: unsolved goals
+ap0 ap1 : Cells
+low high : Std.Array NQ 4#usize
+ha : ∀ x ∈ ↑ap0, canonE x
+hb : ∀ x ∈ ↑ap1, canonE x
+hl : ∀ x ∈ ↑low, canonQ x
+hh : ∀ x ∈ ↑high, canonQ x
+s : NE
+a : FIo_Native.aspis_core.field.wide_exact.WideExact
+hs : NHI_ScalarFold.cells ap0 low 4 0#usize NHI_Scalar.zero = ok s
+cs : canonE s
+ha0 : FIo_Native.weights.Weights.scalar_factor low ap0 = ok a
+ca : canonE a
+hv : NGM_RoundScale.limbs a = List.map (fun word => word * 536870912 % 2147483647) (NGM_RoundScale.limbs s)
+t0 : NE
+h0 : NHM_FactoredTerm.term ap1 high 0#usize = ok t0
+c0 : canonE t0
+t1 : NE
+h1 : NHM_FactoredTerm.term ap1 high 1#usize = ok t1
+c1 : canonE t1
+t2 : NE
+
+...
+let x_14 ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul_qm31 (NHI_ScalarDomain.pick ap1 ↑1#usize ⋯) x_13
+    let x_15 ← x_14.mul_m31 FIo_Native.weights.QUARTER
+    let x_16 ← FIo_Native.aspis_core.field.wide_exact.WideExact.add x_4 x_8
+    let x_17 ← x_16.add x_12
+    let x_18 ← x_17.add x_15
+    let p ←
+      let (first2, first3, all) := (x_16, x_17, x_18)
+        ok (x, first2, first3, all)
+    let (low, first2, first3, all) := p
+      if side = 0#usize then do
+        let x ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul low all
+        let w ← Array.update weights 0#usize x
+        let y ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul low first3
+        let z ← y.mul_qm31 q16
+        let a ← w.update 1#usize z
+        ok (cont (iter, a))
+      else do
+        let old ← Array.index_usize weights 1#usize
+        let quarter ←
+          FIo_Native.aspis_core.field.wide_exact.WideExact.mul_m31 (NHI_ScalarDomain.pick ap1 1 suffix._proof_1)
+              FIo_Native.weights.QUARTER
+        let product ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul low quarter
+        let x ← FIo_Native.aspis_core.field.wide_exact.WideExact.add old product
+        let w ← Array.update weights 1#usize x
+        let y ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul low all
+        let z ← y.mul_qm31 q4
+        let w1 ← w.update 2#usize z
+        let a1 ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul low first2
+        let b ← FIo_Native.aspis_core.field.QM31.mul q16 q4
+        let c ← a1.mul_qm31 b
+        let a ← w1.update 3#usize c
+        ok (cont (iter, a))
+'NHX_FactoredCut.prefix_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NHX_FactoredCut.split' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-re5e5321663cb44cc929c1cc3e0c09d57.scope; invocation ID: 9fc8cb66bd5e49339ac583ada41d007f

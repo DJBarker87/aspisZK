@@ -1,0 +1,46 @@
+NHX_generated/NHX_FinalTotal.lean:23:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NHI_ForwardRange.next s.1
+in the target expression
+  (do
+      let (o, next) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize s.1
+      match o with
+        | none => ok (done s.2)
+        | some kind => do
+          let part ← Array.index_usize parts kind
+          let power ← Array.index_usize powers kind
+          let sum ← NHX_FinalFold.cell s.2 power part
+          ok (cont (next, sum))) =
+    ok (cont (next, sum))
+
+case refine_1
+parts powers : Cells
+hp : ∀ x ∈ ↑parts, canonE x
+hk : ∀ x ∈ ↑powers, canonE x
+s : State
+hs : ↑s.1.end = 7 ∧ ↑s.1.start ≤ 7 ∧ canonE s.2
+bound : ↑s.1.start < 7
+next : core.ops.range.Range (UScalar UScalarTy.Usize)
+hn : NHI_ForwardRange.next s.1 = ok (some s.1.start, next)
+hi : ↑next.start = ↑s.1.start + 1
+he : next.end = s.1.end
+bi : ↑s.1.start < ↑7#usize
+part : NE := NHI_ScalarDomain.pick parts (↑s.1.start) bi
+power : NE := NHI_ScalarDomain.pick powers (↑s.1.start) bi
+cp : canonE part
+ck : canonE power
+sum : NE
+hm : NHX_FinalFold.cell s.2 power part = ok sum
+cm : canonE sum
+⊢ (do
+      let (o, next) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize s.1
+      match o with
+        | none => ok (done s.2)
+        | some kind => do
+          let part ← Array.index_usize parts kind
+          let power ← Array.index_usize powers kind
+          let sum ← NHX_FinalFold.cell s.2 power part
+          ok (cont (next, sum))) =
+    ok (cont (next, sum))
+'NHX_FinalTotal.active' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NHX_FinalTotal.unroll' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NHX_FinalTotal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

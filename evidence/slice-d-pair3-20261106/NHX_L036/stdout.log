@@ -1,0 +1,115 @@
+NHX_generated/NHX_FactoredSuffix.lean:51:3: error: Tactic `rfl` failed: The left-hand side
+  do
+    let x ← FIo_Native.aspis_core.field.wide_exact.WideExact.add (NHI_ScalarDomain.pick weights ↑1#usize ⋯) p
+    let w ← Array.update weights 1#usize x
+    let w1 ← w.update 2#usize v2
+    let w1 ← w1.update 3#usize v3
+    ok (cont (iter, w1))
+is not definitionally equal to the right-hand side
+  ok (cont (iter, w2))
+
+case neg
+ap1 : Cells
+side : Usize
+iter : Iter
+weights : Cells
+q4 q16 : NQ
+a b c d : NE
+ha : canonE a
+hb : canonE b
+hc : canonE c
+hd : canonE d
+hw : ∀ x ∈ ↑weights, canonE x
+h4 : canonQ q4
+h16 : canonQ q16
+m0 : FIo_Native.aspis_core.field.wide_exact.WideExact
+hm0 : FIo_Native.aspis_core.field.wide_exact.WideExact.mul a d = ok m0
+cm0 : canonE m0
+right✝⁶ : ew m0 = mulE (ew a) (ew d)
+hside : ¬side = 0#usize
+old : NE := NHI_ScalarDomain.pick weights 1 ⋯
+cold : canonE (NHI_ScalarDomain.pick weights 1 ⋯)
+iold : Array.index_usize weights 1#usize = ok (NHI_ScalarDomain.pick weights ↑1#usize ⋯)
+last : NE := NHI_ScalarDomain.pick ap1 1 ⋯
+quarter : NGM_RoundScale.E
+hquarter : FIo_Native.aspis_core.field.wide_exact.WideExact.mul_m31 last 536870912#u32 = ok quarter
+cquarter : canonE quarter
+right✝⁵ :
+  NGM_RoundScale.limbs quarter = List.map (fun word => word * 536870912 % 2147483647) (NGM_RoundScale.limbs last)
+hquarter1 :
+  FIo_Native.aspis_core.field.wide_exact.WideExact.mul_m31 (NHI_ScalarDomain.pick ap1 1 ⋯) FIo_Native.weights.QUARTER =
+    ok quarter
+p : FIo_Native.aspis_core.field.wide_exact.WideExact
+hp : FIo_Native.aspis_core.field.wide_exact.WideExact.mul a quarter = ok p
+cp : canonE p
+right✝⁴ : ew p = mulE (ew a) (ew quarter)
+v1 : FIo_Native.aspis_core.field.wide_exact.WideExact
+hv1 : FIo_Native.aspis_core.field.wide_exact.WideExact.add (NHI_ScalarDomain.pick weights 1 ⋯) p = ok v1
+cv1 : canonE v1
+v2 : FIo_Native.aspis_core.field.wide_exact.WideExact
+hv2 : m0.mul_qm31 q4 = ok v2
+cv2 : canonE v2
+right✝³ : ew v2 = (mulQ (qw m0.c0) (qw q4), mulQ (qw m0.c1) (qw q4))
+m3 : FIo_Native.aspis_core.field.wide_exact.WideExact
+hm3 : FIo_Native.aspis_core.field.wide_exact.WideExact.mul a b = ok m3
+cm3 : canonE m3
+right✝² : ew m3 = mulE (ew a) (ew b)
+q : FIo_Native.aspis_core.field.QM31
+hq : FIo_Native.aspis_core.field.QM31.mul q16 q4 = ok q
+cq : canonQ q
+right✝¹ : qw q = mulQ (qw q16) (qw q4)
+v3 : FIo_Native.aspis_core.field.wide_exact.WideExact
+hv3 : m3.mul_qm31 q = ok v3
+cv3 : canonE v3
+right✝ : ew v3 = (mulQ (qw m3.c0) (qw q), mulQ (qw m3.c1) (qw q))
+w0 : Std.Array NE 4#usize := NHI_ArrayCells.put weights 1#usize v1
+w1 : Std.Array NE 4#usize := NHI_ArrayCells.put w0 2#usize v2
+w2 : Std.Array NE 4#usize := NHI_ArrayCells.put w1 3#usize v3
+u0 : Array.update weights 1#usize v1 = ok (NHI_ArrayCells.put weights 1#usize v1)
+u1 :
+  (NHI_ArrayCells.put weights 1#usize v1).update 2#usize v2 =
+    ok (NHI_ArrayCells.put (NHI_ArrayCells.put weights 1#usize v1) 2#usize v2)
+u2 :
+  (NHI_ArrayCells.put (NHI_ArrayCells.put weights 1#usize v1) 2#usize v2).update 3#usize v3 =
+    ok (NHI_ArrayCells.put (NHI_ArrayCells.put (NHI_ArrayCells.put weights 1#usize v1) 2#usize v2) 3#usize v3)
+c0 : ∀ x ∈ ↑w0, canonE x
+c1 : ∀ x ∈ ↑w1, canonE x
+⊢ (do
+      let x ← FIo_Native.aspis_core.field.wide_exact.WideExact.add (NHI_ScalarDomain.pick weights ↑1#usize ⋯) p
+      let w ← Array.update weights 1#usize x
+      let w1 ← w.update 2#usize v2
+      let w1 ← w1.update 3#usize v3
+      ok (cont (iter, w1))) =
+    ok (cont (iter, w2))
+NHX_generated/NHX_FactoredSuffix.lean:50:59: warning: This simp argument is unused:
+  hv1
+
+Hint: Omit it from the simp argument list.
+  simp only [hside, ̲ite_false, ̲iold, ̲bind_tc_ok, ̲hquarter1, ̲hp,h̵v̵1̵,̵ ̲u0, ̲hm0, ̲hv2, ̲u1, ̲hm3, ̲hq, ̲hv3, ̲u2]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NHX_generated/NHX_FactoredSuffix.lean:50:63: warning: This simp argument is unused:
+  u0
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵s̵i̵d̵e̵,̵i̵t̵e̵_̵f̵a̵l̵s̵e̵,̵i̵o̵l̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵q̵u̵a̵r̵t̵e̵r̵1̵,̵h̵p̵,̵h̵v̵1̵,̵u̵0̵,̵h̵m̵0̵,̵h̵v̵2̵,̵u̵1̵,̵h̵m̵3̵,̵h̵q̵,̵h̵v̵3̵,̵u̵2̵]̵[̲h̲s̲i̲d̲e̲,̲ ̲i̲t̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲i̲o̲l̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲q̲u̲a̲r̲t̲e̲r̲1̲,̲ ̲h̲p̲,̲ ̲h̲v̲1̲,̲ ̲h̲m̲0̲,̲ ̲h̲v̲2̲,̲ ̲u̲1̲,̲ ̲h̲m̲3̲,̲ ̲h̲q̲,̲ ̲h̲v̲3̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲u̲2̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NHX_generated/NHX_FactoredSuffix.lean:50:74: warning: This simp argument is unused:
+  u1
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵s̵i̵d̵e̵,̵i̵t̵e̵_̵f̵a̵l̵s̵e̵,̵i̵o̵l̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵q̵u̵a̵r̵t̵e̵r̵1̵,̵h̵p̵,̵h̵v̵1̵,̵u̵0̵,̵h̵m̵0̵,̵h̵v̵2̵,̵u̵1̵,̵h̵m̵3̵,̵h̵q̵,̵h̵v̵3̵,̵u̵2̵]̵[̲h̲s̲i̲d̲e̲,̲ ̲i̲t̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲i̲o̲l̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲q̲u̲a̲r̲t̲e̲r̲1̲,̲ ̲h̲p̲,̲ ̲h̲v̲1̲,̲ ̲u̲0̲,̲ ̲h̲m̲0̲,̲ ̲h̲v̲2̲,̲ ̲h̲m̲3̲,̲ ̲h̲q̲,̲ ̲h̲v̲3̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲u̲2̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NHX_generated/NHX_FactoredSuffix.lean:50:88: warning: This simp argument is unused:
+  u2
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵s̵i̵d̵e̵,̵i̵t̵e̵_̵f̵a̵l̵s̵e̵,̵i̵o̵l̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵q̵u̵a̵r̵t̵e̵r̵1̵,̵h̵p̵,̵h̵v̵1̵,̵u̵0̵,̵h̵m̵0̵,̵h̵v̵2̵,̵u̵1̵,̵h̵m̵3̵,̵h̵q̵,̵h̵v̵3̵,̵u̵2̵]̵[̲h̲s̲i̲d̲e̲,̲ ̲i̲t̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲i̲o̲l̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲q̲u̲a̲r̲t̲e̲r̲1̲,̲ ̲h̲p̲,̲ ̲h̲v̲1̲,̲ ̲u̲0̲,̲ ̲h̲m̲0̲,̲ ̲h̲v̲2̲,̲ ̲u̲1̲,̲ ̲h̲m̲3̲,̲ ̲h̲q̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲h̲v̲3̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NHX_FactoredSuffix.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

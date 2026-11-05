@@ -1,0 +1,25 @@
+struct RegControl{count:usize,kinds:[usize;5],stop:usize,error:Error}
+fn reg_child_control(kind:usize,l:&mut RegControl)->Result<(),Error>{let i=l.count;l.kinds[i]=kind;l.count+=1;if i==l.stop{Err(l.error)}else{Ok(())}}
+fn reg_control_cut(shared:bool,l:&mut RegControl)->Result<(),Error>{
+ if !shared{reg_child_control(1,l)?;}reg_child_control(2,l)?;if !shared{reg_child_control(3,l)?;}
+ reg_child_control(5,l)?;reg_child_control(6,l)?;Ok(())
+}
+fn regular_control(){let shared:bool=kani::any();let stop:usize=kani::any();kani::assume(stop<=5);let mut l=RegControl{count:0,kinds:[99;5],stop,error:err(kani::any())};let r=reg_control_cut(shared,&mut l);let total=if shared{3}else{5};let count=if stop<total{stop+1}else{total};let j:usize=kani::any();kani::assume(j<count);if cfg!(NHX_corrupt){l.kinds[j]=99;}
+ let expected=if shared{[2,5,6,99,99]}else{[1,2,3,5,6]};assert!(l.count==count&&l.kinds[j]==expected[j]);assert!(r.map_err(code)==if stop<total{Err(code(l.error))}else{Ok(())});}
+struct RegWindow{w:*const Weights,kind:usize,alpha:*const E,alen:usize,bytes:*const u8,len:usize,folds:usize,n:usize,ap0:*const E,ap1:*const E,vec:*const Vec<K>,scratch:*const K,width:usize,parts:*const E,calls:usize,postk:[K;64],poste:[E;7],ok:bool,error:Error}
+fn reg_child(w:&Weights,kind:usize,alpha:&[E],f:&[u8],folds:usize,n:usize,ap0:&[E;4],ap1:&[E;4],scratch:&mut Vec<K>,parts:&mut [E;7],l:&mut RegWindow)->Result<(),Error>{
+ l.calls+=1;l.w=w;l.kind=kind;l.alpha=alpha.as_ptr();l.alen=alpha.len();l.bytes=f.as_ptr();l.len=f.len();l.folds=folds;l.n=n;l.ap0=ap0.as_ptr();l.ap1=ap1.as_ptr();l.vec=scratch;l.scratch=scratch.as_ptr();l.width=scratch.len();l.parts=parts.as_ptr();
+ scratch.as_mut_slice().copy_from_slice(&l.postk);parts.copy_from_slice(&l.poste);if l.ok{Ok(())}else{Err(l.error)}
+}
+fn regular_check(g:usize){
+ let shared:bool=kani::any();let i:usize=kani::any();kani::assume(i<if shared{3}else{5});let kinds=if shared{[2usize,5,6,99,99]}else{[1usize,2,3,5,6]};let kind=kinds[i];
+ let w=anyweights();let f:[u8;2048]=kani::any();let alpha=[anye(),anye()];let ap0=core::array::from_fn(|_|anye());let ap1=core::array::from_fn(|_|anye());let before:[K;64]=core::array::from_fn(|_|anyk());let mut scratch=before.to_vec();let mut parts:[E;7]=core::array::from_fn(|_|anye());let vec=&scratch as *const Vec<K>;let ptr=scratch.as_ptr();let pptr=parts.as_ptr();
+ let mut l=RegWindow{w:core::ptr::null(),kind:99,alpha:core::ptr::null(),alen:0,bytes:core::ptr::null(),len:0,folds:0,n:0,ap0:core::ptr::null(),ap1:core::ptr::null(),vec:core::ptr::null(),scratch:core::ptr::null(),width:0,parts:core::ptr::null(),calls:0,postk:core::array::from_fn(|_|anyk()),poste:core::array::from_fn(|_|anye()),ok:kani::any(),error:err(kani::any())};
+ let r=reg_child(&w,kind,&alpha,&f,2,64,&ap0,&ap1,&mut scratch,&mut parts,&mut l);let j:usize=kani::any();kani::assume(j<7);let sj:usize=kani::any();kani::assume(sj<64);
+ if cfg!(NHX_corrupt){match g{1=>l.kind=99,2=>l.vec=core::ptr::null(),3=>l.ok=!l.ok,4=>l.poste[j]=E::ZERO,_=>l.postk[sj]=K::ZERO}}
+ let good=match g{
+ 1=>l.w==&w as *const Weights&&l.kind==kind&&l.alpha==alpha.as_ptr()&&l.alen==2&&l.bytes==f.as_ptr()&&l.len==2048&&l.folds==2&&l.n==64&&l.ap0==ap0.as_ptr()&&l.ap1==ap1.as_ptr()&&l.calls==1&&l.vec==vec&&l.scratch==ptr&&l.width==64&&l.parts==pptr&&scratch.as_ptr()==ptr&&scratch.len()==64,
+ 2=>l.calls==1&&l.vec==vec&&l.scratch==ptr&&l.width==64&&l.parts==pptr&&scratch.as_ptr()==ptr&&scratch.len()==64,
+ 3=>r.map_err(code)==if l.ok{Ok(())}else{Err(code(l.error))},
+ 4=>parts[j]==l.poste[j],_=>scratch[sj]==l.postk[sj]};assert!(good);
+}

@@ -1,0 +1,3 @@
+# Tensor slice adapter qualification
+
+The process-kind cut records a Vec-level scratch carrier; its ktensor logging replacement writes only `scratch.as_mut_slice()` and never changes Vec metadata. Frozen tensor actually accepts `&mut [K]`, reached through Vec DerefMut at the caller. Native prefix observations alone are not a typed slice-call packet. Qualification additionally needs the explicit SAME Vec-to-slice pointer/length/frame probe and Lean Vec deref/back-value law, under the retained Std trust. This is a named outstanding adapter obligation, never an independently selected scratch slice or silent new precondition. No process-kind row is closed until it is discharged. Do not rerun the already passing observation families unchanged; prove the adapter separately.

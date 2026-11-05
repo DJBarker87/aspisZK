@@ -1,0 +1,60 @@
+{"attempt": "NHX_L040", "exit_status": 1, "wall_seconds": 3.1454919918905944, "peak_rss_kib": "5797908", "swaps": "0", "print_axioms": ["'NHX_FinalLoop.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NHX_FinalLoop.progress' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NHX_FinalLoop.decreases' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NHX_FinalLoop.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NHX_generated/NHX_FinalLoop.lean:21:89: error: unsolved goals
+parts powers : Cells
+s : State
+⊢ (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize s.1
+      match o with
+        | none => ok (done s.2)
+        | some kind => do
+          let we ← Array.index_usize parts kind
+          let we1 ← Array.index_usize powers kind
+          let we2 ← we1.mul we
+          let sum1 ← FIo_Native.aspis_core.field.wide_exact.WideExact.add s.2 we2
+          ok (cont (iter1, sum1))) =
+    do
+    let (o, next) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize s.1
+    match o with
+      | none => ok (done s.2)
+      | some kind => do
+        let part ← Array.
+...
+     | some kind => do
+          let we ← Array.index_usize parts kind
+          let we1 ← Array.index_usize powers kind
+          let we2 ← we1.mul we
+          let sum1 ← FIo_Native.aspis_core.field.wide_exact.WideExact.add s.2 we2
+          ok (cont (iter1, sum1))) =
+    do
+    let (o, next) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize s.1
+    match o with
+      | none => ok (done s.2)
+      | some kind => do
+        let part ← Array.index_usize parts kind
+        let power ← Array.index_usize powers kind
+        let sum ←
+          do
+            let product ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul power part
+            FIo_Native.aspis_core.field.wide_exact.WideExact.add s.2 product
+        ok (cont (next, sum))
+NHX_generated/NHX_FinalLoop.lean:49:40: error: Application type mismatch: The argument
+  parts
+has type
+  Cells
+but is expected to have type
+  core.ops.range.Range Usize
+in the application
+  FIo_Native.weights.Weights.pair_loop17 parts
+NHX_generated/NHX_FinalLoop.lean:49:54: error: `start` is not a field of structure `Subtype`
+NHX_generated/NHX_FinalLoop.lean:49:69: error: `end` is not a field of structure `Subtype`
+NHX_generated/NHX_FinalLoop.lean:49:53: error: Fields missing: `val`, `property`
+
+Hint: Add missing fields:
+  ,̲ ̲v̲a̲l̲ ̲:̲=̲ ̲_̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲p̲r̲o̲p̲e̲r̲t̲y̲ ̲:̲=̲ ̲_̲
+'NHX_FinalLoop.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NHX_FinalLoop.progress' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NHX_FinalLoop.decreases' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NHX_FinalLoop.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r6eaab72ae1e147619f2cd4d789fa7b8d.scope; invocation ID: f30f6f8ce45148849a47ad9719f0e3f5

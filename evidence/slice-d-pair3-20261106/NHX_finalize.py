@@ -1,0 +1,35 @@
+"""Assemble only qualifications validated by the existing receipts and audits."""
+from pathlib import Path
+import json,hashlib
+E=Path(__file__).resolve().parent
+J=lambda n:json.loads((E/n).read_text())
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+def write(n,v):(E/n).write_text(json.dumps(v,indent=2)+'\n')
+native=J('NHX_NATIVE_VALIDATION.json');result=J('NHX_final_audit/RESULT.json')
+assert result['status']=='PASS'
+mods={p.stem:p for p in E.glob('NHX_*.lean')}
+receipts=[J(str(p.relative_to(E)))for p in sorted(E.glob('NHX_[KL][0-9][0-9][0-9]/receipt.json'))]
+latest={r['module']:r for r in receipts if r['kind']=='lean'and r['exit_status']==0}
+for m,p in mods.items():assert latest[m]['source_hashes']['NHX_generated/'+p.name]==sha(p)
+combined=latest['NHX_COMBINED_IMPORT']['attempt'];statements=latest['NHX_FINAL_STATEMENTS']['attempt'];audit=next(r['attempt']for r in reversed(receipts)if r['kind']=='auditbatch'and r['exit_status']==0)
+a=dict(result,combined=combined,statements=statements,raw_ax2=audit,scan=audit,fixture='NHX_L017',scope='focused coherent cached replay with NGK_COMBINED_IMPORT and AspisR1.RPx_Deployed.deployed; not a cold/full frozen release replay')
+write('NHX_AUDIT.json',a)
+rows=[
+(133,'factored_s2_libra_weights','NHX_FactoredPacket.source','SAME canonical WideExact ap0[4],ap1[4]; SAME canonical QM31 extra[2]. Exact two sides0/1, producer order including unused q^4, full returned canonical array; no child-success premise.',list(range(6,24))+[74,75]+list(range(77,87)),['NHM_FactoredPrefix.source','NHX_FactoredCut.split','NHX_FactoredSuffix.total']),
+(135,'grouped_inactive_pair','NHX_GroupPacket.source','Weights.variant S2; SAME immutable2048-byte message with64 canonical eight-word field windows; SAME canonical WideExact low[16]. Other weights fields unrestricted. Non-S2 or other message lengths are outside this packet; fallback remains stated.',list(range(44,52)),['NHM_GroupRoot.cohort','NHX_GroupPacket.output']),
+(144,'shared_partials','NHX_SharedPacket.source','SAME immutable2048-byte message with64 canonical eight-word windows; SAME canonical QM31 common[16]. Source initializes zero output[4], calls sides0..3 or exact first-error prefix, complete Result and SAME returned canonical array.',list(range(42,44))+list(range(52,60))+[87,88],['NHM_PartialDot.cohort','NHM_SharedPartialsDomain','NHM_SharedPartialResult']),
+(143,'shared_high','NHX_HighReference.source','SAME canonical WideExact partials[4], ap0[4], ap1[4]; SAME Factors w invariant (all5 rows/all5 digits canonical; source uses rows0 and2); arbitrary initial parts[7]. Exact full Result, source writes1 then3, all other slots unchanged; canonical output invariant requires canonical initial parts.',list(range(60,74)),['NHM_HighDot.cohort','NHX_HighDomain.scale','NHX_HighPost.post']),
+(139,'process_kind','NHX_ProcessReference.source','S2 ordinary branch; kind in1,2,3,5,6; folds2,n64; SAME canonical factor rows (Factors w), ap0[4],ap1[4]; SAME canonical2048-byte final message; exclusive SAME canonical length64 QM31 scratch Vec and canonical WideExact parts[7]. alpha is forwarded unchanged and unused in S2 ordinary branch. Full Error/Ok, exact selected-kind write and outside-kind frame.',list(range(89,101))+list(range(102,108)),['NHI_Tensor.cohort','NHI_Scalar.cohort','NHM_ByteProducts.cohort','NHX_ProcessPost.post','NHX_VecPort','NHX_KWordLift']),
+(140,'process_regular_kinds','NHX_RegularPost.source','Same process_kind S2/folds2/n64/factors/powers/message/exclusive canonical64 scratch/canonical7 parts domain. shared_two_point arbitrary Bool: false kinds1,2,3,5,6; true kinds2,5,6. SAME arguments, complete first Error/Ok, canonical state for each reached call and frame for all omitted kinds. Guard value is forwarded; equality with top pair guard is a parent obligation.',list(range(106,112))+list(range(114,118)),['NHM_RegularKinds.cohort','NHX_ProcessReference.source','NHX_ProcessPost.post','NHX_RegularFrame.source','NHX_EWordLift','NHX_KWordLift'])]
+functions=[]
+for row,name,root,domain,runs,laws in rows:
+ functions.append(dict(function='crates/aspis-r1-cost-probe/src/weights.rs::'+name,rows=[f'TX2:{row:03}'],status='CLOSED',form='(y) direct hybrid local-record source cuts, CLOSED child packets, pinned emitted Lean body and finite induction',domain=domain,lean_root=root,associated_laws=laws,native_attempts=[f'NHX_K{n:03}'for n in runs],inner_hypotheses_remaining=[],combined_replay=combined,ax2=audit,scan=audit,fixture='NHX_L017',source_association='NHX_SOURCE_ASSOCIATION.md',inherited_pins='NHX_REUSE_PINS.json',trust='P6/D188 optionA semantic transport and Std/allocator/ABI/source-to-ELF retained/reclassified'))
+write('NHX_CLOSED.json',dict(schema_version=1,frozen_revision='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387',new_composed_functions=6,new_composed_rows=6,functions=functions,driver_root_status='OPEN',finish_relation_status='OPEN',qualification='current-source combined, ax2 and NFX scan PASS; all domains explicit; not a premise retirement'))
+write('NHX_LEDGER_DELTA.json',dict(new_closed_rows=sorted(r for f in functions for r in f['rows']),new_count=6,no_other_status_change=True,not_a_premise_retirement=True,validator_checks_added_only=True,authoritative_base='evidence/native-ledger3-20261029/NDT_LEDGER.json',base_change=False,predecessor='NHM_CLOSED.json; imported read-only by SHA256',retained_open_rows=['TX2:045','TX2:129','TX2:115','TX2:127','TX2:128'],native_validator_sha256=sha(E/'NHX_native_validate.py'),validator_sha256=sha(E/'NHX_validate.py')))
+edges=[]
+for f in functions:
+ for law in f['associated_laws']:edges.append(dict(caller=f['function'],callee_packet=law,caller_domain=f['domain'],status='QUALIFIED on stated domain',source='NHX_SOURCE_ASSOCIATION.md'))
+for member,obligation in [('filled','native initialized-prefix/value/frame for actual64 QM31 cells; K005/K118 timeouts excluded'),('pair','source-ordered owning driver cuts, filled, SAME guard/common/low producers, parts0/4 accumulation, seven-part final SAME kappa/powers7 native fold'),('finish_relation','CLOSED pair plus actual Weights::new/box_from_parts ownership packet and SAME Prepared/View boundary, complete driver Error/frame association')]:edges.append(dict(caller=member,status='OPEN',obligation=obligation,no_success_premise=True))
+write('NHX_EDGES.json',dict(edges=edges,statement_interfaces='NHX_NHT_INTERFACE.md',headline='AspisR1.RPx_Deployed.deployed NOT ESTABLISHED'))
+write('NHX_BUDGET.json',dict(used={k:sum(r['kind']=='kani'if k=='Kani'else r['kind']=='extract'if k=='extraction'else r['kind']not in['kani','extract']for r in receipts)for k in['Kani','Lean','extraction']},limits=dict(Kani=120,Lean=80,extraction=2),extractions='Existing pinned emitted bodies reused; no new reference extraction needed. No passing shape/extraction replayed.',scope='Exact per-attempt time/RSS/swap/revision/command/object pins and axioms in receipt.json; failed elaborations have no credit.'))
+print('assembled6 qualified rows; pair and finish OPEN')
