@@ -53,8 +53,11 @@ for n,t in files.items():
  p=b/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
 (b/'NHC_objects'/{(target.replace('.','/'))!r}).parent.mkdir(parents=True,exist_ok=True)
 (b/'NHC_native').mkdir(exist_ok=True);(b/'NHC_objects').mkdir(exist_ok=True);(b/'NHC_tmp').mkdir(exist_ok=True)
+for name in ['NFA_WALKER.c','NFA_MemoryLimit.c']:
+ p=b/'NHC_native'/name
+ if not p.exists():shutil.copy2('/home/dombarker/project-offloads/codex-cx-ledger8-cache-20261104/NGJ_native_seed/'+name,p)
 x=json.loads((b/{(a+'.json')!r}).read_text());roots=x['env']['LEAN_PATH'].split(':');pins={{}}
-modules=[]
+modules=['NFA_WALKER','NFA_MemoryLimit','NEP_Planted','NEP_Mutations'] if x['kind']!='lean' or {target!r} in ['NHC_Driver','NHC_ProofDriver'] else []
 if x['kind']=='lean':modules += re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M)
 elif x['kind']=='audit':modules += ['NHC_COMBINED_IMPORT']
 rels=set()
