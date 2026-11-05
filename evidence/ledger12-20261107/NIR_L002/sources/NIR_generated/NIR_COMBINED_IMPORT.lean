@@ -1,0 +1,11 @@
+import NGK_COMBINED_IMPORT
+import NIM_COMBINED_IMPORT
+import NIM_NHJ_COMBINED_IMPORT
+import NIM_NHY_COMBINED_IMPORT
+import NIG_COMBINED_IMPORT
+import NIN_COMBINED_IMPORT
+import NIR_SameLawInstance
+#print axioms AspisR1.RPx_Deployed.deployed
+#print axioms AspisR1.NIN_NativeInstance.from_native
+#print axioms AspisR1.NIR_SameLawInstance.realizes
+#print axioms AspisR1.NIR_SameLawInstance.permitted_iff

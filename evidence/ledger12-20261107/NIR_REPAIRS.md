@@ -1,0 +1,7 @@
+# Own script repairs
+
+NIR_prepare.py initially assumed every root manifest had a roots key; NIG uses groups. Fixed the parser to include every group member. No proof was launched by the failed preparation step; L001 independently compiled the already-written new module. Validation is stricter: the union includes all 7645 predecessor and new roots. No shared infrastructure changed.
+
+NIR_L012/L013 preserve failed owner-inspection drafts (reserved local identifier; MetaM pretty-printer required liftTermElabM); L014 corrects both and records all 7645 owner/type entries. No unchanged failure rerun or limit increase. Two own ledger serializer errors (duplicate root keyword and absent optional historical fields) were corrected without a formal launch. A slow own Python string matcher was stopped and replaced with an indexed suffix lookup; validation unchanged. Initial batch coalescing failed its exact-root-coverage assertion before writing any manifest; corrected grouping preserves every root exactly once.
+
+Final wrapper repairs: NIR_finish_queue inspected a missing log when an intentional own HOLD returned75 before L040; corrected by removing HOLD and launching L040 once. The original L040 was never submitted. NIR_finalize initially looked for inherited native C in NIM_L032; corrected to committed NIM_L031. No audit rerun occurred. NIR's initial root-count comment has been superseded by7724 final required roots;79 canonical retarget roots were added, all audited exactly once in the remaining batches.
