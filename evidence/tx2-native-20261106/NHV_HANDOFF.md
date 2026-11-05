@@ -13,3 +13,5 @@ Retain all approved runtime, P6/D188 option-A, cryptographic/privacy and
  two-transaction trust rows. No change to the per-attempt security target.
 
 Stage 1: NHV_L001 combined NHT/NGK/headline import passed, exit0, wall3.166291s, peak5959532KiB, swap0; headline standard three axioms. This checks compatibility only, zero slot promotions. Seed36 files /3787008 bytes. Exact selected Aeneas objects are pinned in the receipt.
+
+Stage2 in progress: exact frozen scratch+KMX staged (L002). K001 missing literal-path source and K002 own geometry type mismatch repaired and excluded. K003 simultaneous full-reply dynamic field projections timeout90s excluded; K004 isolates args/guard/ownership. The complete resume callee law is still NFU-owned OPEN. NHV_FAILING_STEP.md retains details.

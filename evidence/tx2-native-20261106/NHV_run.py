@@ -32,7 +32,11 @@ p=b/{(a+'-reservation.json')!r}; print(p.read_text() if p.exists() else 'MISSING
   print('reservation wait',flush=True);time.sleep(180);continue
  raise RuntimeError('STOP admission')
 files={};sources=[]
-if kind=='export':
+if kind=='stage':
+ files['NHV_stage.py']=(E/'NHV_stage.py').read_text()
+ files['NHV_KMX.patch']=Path('evidence/kani-mitig-20261028/KMX_copy_stubs.patch').read_text()
+ sources=list(files);command=['python3','NHV_stage.py']
+elif kind=='export':
  files['NHV_export.py']=(E/'NHV_export.py').read_text();files['NHV_MODULES.json']=(E/'NHV_MODULES.json').read_text();sources=list(files);command=['python3','NHV_export.py']
 elif kind=='metadata':
  files['NHV_capture_graph.py']=(E/'NHV_capture_graph.py').read_text();files['NHV_EXPECTED_GRAPH_HASHES.json']=(E/'NHV_EXPECTED_GRAPH_HASHES.json').read_text();sources=list(files);command=['python3','NHV_capture_graph.py']
@@ -101,6 +105,7 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
+if {kind!r}=='stage': names += ['NHV_STAGE.json']
 if {kind!r}=='export': names += ['NHV_EXPORT.json','NHV_CLOSURE_PINS.json.sha256']
 if {kind!r}=='metadata': names += ['NHV_FULL_GRAPH.json.sha256','NHV_ALL_CRATE_FEATURES.json']
 if {kind!r}=='extract': names += ['NHV_EXTRACTION_PINS.json']+([str(p.relative_to(b)) for p in (b/'NHV_extracted').rglob('*') if p.is_file()])+(['NHV_actual.llbc'] if (b/'NHV_actual.llbc').exists() else [])
