@@ -1,3 +1,13 @@
+import NIJ_ReturnedWrite
+import NIJ_NativeSdkRelease
+import NIJ_NativeSdkCopy
+import NIJ_SdkCopyFields
+import NIJ_SdkCopyCanonical
+import NIJ_ExclusiveRelease
+import NIJ_ExclusiveEntry
+import NIJ_SdkWriteLoop
+import NIJ_SdkWriteFrame
+import NIJ_ActiveSlots
 import NIJ_StringCleanup
 import NIJ_ErrorJoin
 import NIJ_ArgumentMetadata
@@ -61,3 +71,40 @@ import NIJ_CheckpointZeroRun
 #print axioms NIJ_StringCleanup.inside
 #print axioms NIJ_StringCleanup.account_frame
 #print axioms NIJ_StringCleanup.growth_frame
+
+#print axioms AspisR1.RPx_Deployed.deployed
+#print axioms NIJ_ActiveSlots.op29_exact
+#print axioms NIJ_ActiveSlots.op30_exact
+#print axioms NIJ_ActiveSlots.selected
+#print axioms NIJ_ActiveSlots.digest_error_frame
+#print axioms NIJ_ActiveSlots.retirement_v1
+#print axioms NIJ_ActiveSlots.retirement_v2
+#print axioms NIJ_SdkWriteFrame.byte
+#print axioms NIJ_SdkWriteFrame.other_byte
+#print axioms NIJ_SdkWriteFrame.other_cell
+#print axioms NIJ_SdkWriteFrame.descriptor
+#print axioms NIJ_SdkWriteFrame.frame
+#print axioms NIJ_SdkWriteFrame.valid
+#print axioms NIJ_SdkWriteLoop.contents
+#print axioms NIJ_SdkWriteLoop.outside
+#print axioms NIJ_SdkWriteLoop.other_cell
+#print axioms NIJ_SdkWriteLoop.descriptor
+#print axioms NIJ_SdkWriteLoop.valid
+#print axioms NIJ_ExclusiveEntry.valid
+#print axioms NIJ_ExclusiveEntry.entry_valid
+#print axioms NIJ_ExclusiveEntry.counter
+#print axioms NIJ_ExclusiveEntry.found
+#print axioms NIJ_ExclusiveRelease.acquired
+#print axioms NIJ_ExclusiveRelease.write_commutes
+#print axioms NIJ_ExclusiveRelease.copied
+#print axioms NIJ_SdkCopyCanonical.unchanged
+#print axioms NIJ_SdkCopyCanonical.payload
+#print axioms NIJ_SdkCopyCanonical.source
+#print axioms NIJ_SdkCopyFields.guards
+#print axioms NIJ_SdkCopyFields.counter
+#print axioms NIJ_SdkCopyFields.lookup
+#print axioms NIJ_SdkCopyFields.ambient
+#print axioms NIJ_NativeSdkCopy.source
+#print axioms NIJ_NativeSdkCopy.canonical
+#print axioms NIJ_NativeSdkRelease.source
+#print axioms NIJ_ReturnedWrite.bytes

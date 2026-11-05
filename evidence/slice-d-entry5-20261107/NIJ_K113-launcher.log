@@ -1,0 +1,49 @@
+{"attempt": "NIJ_K113", "exit_status": 1, "wall_seconds": 9.70055579696782, "peak_rss_kib": "561420", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-slice-d-entry5-20261107/NIJ_src/programs/r1-cost-probe/../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-slice-d-entry5-20261107/NIJ_src/programs/r1-cost-probe/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 7.94s
+Checking harness r1_pool_adapter::owned::NIJ_entry::lifecycle_4_wrong...
+
+VERIFICATION RESULT:
+ ** 1 of 148 failed (3 unreachable)
+Failed Checks: assertion failed: !matches!(result,Err(ProgramError::InvalidInstructionData))
+ File: "programs/r1-cost-probe/src/NIJ_entry.rs", line 18, in r1_pool_adapter::owned::NIJ_entry::lifecycle_4_wrong
+
+VERIFICATION:- FAILED
+Verification Time: 0.20708041s
+
+Manual Harness Summary:
+Verification failed for - r1_pool_adapter::owned::NIJ_entry::lifecycle_4_wrong
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r1f6c3c3c389a4ef5b3d636df7f6f0a0d.scope; invocation ID: 5bd0693f48904ca4a6a725b4d09dd8b6

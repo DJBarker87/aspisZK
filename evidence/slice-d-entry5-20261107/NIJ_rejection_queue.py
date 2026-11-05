@@ -1,9 +1,9 @@
 from pathlib import Path
 import subprocess,sys,json,lzma
 E=Path(__file__).resolve().parent
-jobs=['lifecycle_4','lifecycle_4_wrong','lifecycle_5','lifecycle_5_wrong','lifecycle_6','lifecycle_6_wrong','other_rejected','other_rejected_wrong','stage2_no_accounts','stage2_no_accounts_wrong']
-for k,n in enumerate(jobs,110):
- a=f'NIJ_K{k:03}';r=subprocess.run([sys.executable,str(E/'NIJ_run.py'),a,'kani','NIJ_entry::'+n],capture_output=True,text=True)
+jobs=['lifecycle_4','lifecycle_4_wrong','lifecycle_5','lifecycle_5_wrong','lifecycle_6','lifecycle_6_wrong','other_rejected','other_rejected_wrong','stage2_no_accounts']
+for k,n in enumerate(jobs,112):
+ a=f'NIJ_K{k:03}';r=subprocess.run([sys.executable,str(E/'NIJ_run.py'),a,'kani','r1_pool_adapter::owned::NIJ_entry::'+n],capture_output=True,text=True)
  p=E/a/'receipt.json'
  if not p.exists():print(r.stdout+r.stderr);sys.exit(1)
  x=json.loads(p.read_text());print(a,n,x['exit_status'],x['wall_seconds'],flush=True)

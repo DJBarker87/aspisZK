@@ -12763,10 +12763,11 @@
 {"module": "NHY_ZeroLoop", "imports": ["Init", "NCX_Reference.Funs"]}
 {"module": "NHY_ZeroRun", "imports": ["Init", "NHY_ZeroStep"]}
 {"module": "NHY_ZeroStep", "imports": ["Init", "NHY_ZeroLoop"]}
+{"module": "NIJ_ActiveSlots", "imports": ["Init", "NGJ_VERIFIER_IMPORT", "NHY_RegistryPrimitives"]}
 {"module": "NIJ_ArgumentMetadata", "imports": ["Init", "NIJ_FormatterPackets"]}
 {"module": "NIJ_AuthGuardsV1", "imports": ["Init", "NIJ_GuardPrefix", "NHY_RegistryPrimitives"]}
 {"module": "NIJ_AuthGuardsV2", "imports": ["Init", "NIJ_GuardPrefix", "NHY_RegistryPrimitives"]}
-{"module": "NIJ_COMBINED_IMPORT", "imports": ["Init", "NIJ_StringCleanup", "NIJ_ErrorJoin", "NIJ_ArgumentMetadata", "NIJ_AuthGuardsV2", "NIJ_AuthGuardsV1", "NIJ_GuardPrefix", "NHY_COMBINED_IMPORT", "NGK_COMBINED_IMPORT", "NIJ_FormatterPackets", "NIJ_EntryStatus", "NIJ_EntryRecord", "NIJ_EntryModel", "NIJ_EntryJoin", "NIJ_CheckpointAdvance", "NIJ_CheckpointZeroStep", "NIJ_CheckpointZeroRun"]}
+{"module": "NIJ_COMBINED_IMPORT", "imports": ["Init", "NIJ_ReturnedWrite", "NIJ_NativeSdkRelease", "NIJ_NativeSdkCopy", "NIJ_SdkCopyFields", "NIJ_SdkCopyCanonical", "NIJ_ExclusiveRelease", "NIJ_ExclusiveEntry", "NIJ_SdkWriteLoop", "NIJ_SdkWriteFrame", "NIJ_ActiveSlots", "NIJ_StringCleanup", "NIJ_ErrorJoin", "NIJ_ArgumentMetadata", "NIJ_AuthGuardsV2", "NIJ_AuthGuardsV1", "NIJ_GuardPrefix", "NHY_COMBINED_IMPORT", "NGK_COMBINED_IMPORT", "NIJ_FormatterPackets", "NIJ_EntryStatus", "NIJ_EntryRecord", "NIJ_EntryModel", "NIJ_EntryJoin", "NIJ_CheckpointAdvance", "NIJ_CheckpointZeroStep", "NIJ_CheckpointZeroRun"]}
 {"module": "NIJ_CheckpointAdvance", "imports": ["Init", "NHY_ZeroStep"]}
 {"module": "NIJ_CheckpointZeroRun", "imports": ["Init", "NIJ_CheckpointZeroStep"]}
 {"module": "NIJ_CheckpointZeroStep", "imports": ["Init", "NIJ_CheckpointAdvance", "NGJ_VERIFIER_IMPORT"]}
@@ -12775,12 +12776,21 @@
 {"module": "NIJ_EntryRecord", "imports": ["Init", "NHY_NaturalReads", "NIJ_EntryStatus"]}
 {"module": "NIJ_EntryStatus", "imports": ["Init", "NHY_EntryHeader", "NHY_ParsedBodies"]}
 {"module": "NIJ_ErrorJoin", "imports": ["Init", "NIJ_ArgumentMetadata"]}
+{"module": "NIJ_ExclusiveEntry", "imports": ["Init", "NIJ_SdkWriteFrame", "NHY_SnapshotRoot"]}
+{"module": "NIJ_ExclusiveRelease", "imports": ["Init", "NIJ_ExclusiveEntry", "NIJ_SdkWriteLoop"]}
 {"module": "NIJ_FormatterPackets", "imports": ["Init", "NHY_ErrorFragments", "NHY_StringAppend"]}
 {"module": "NIJ_GuardPrefix", "imports": ["Init", "NHY_ErrorFragments"]}
 {"module": "NIJ_Inspect", "imports": ["Init", "NHY_COMBINED_IMPORT"]}
 {"module": "NIJ_InspectZero", "imports": ["Init", "NHY_COMBINED_IMPORT"]}
+{"module": "NIJ_NativeSdkCopy", "imports": ["Init", "NIJ_SdkCopyFields"]}
+{"module": "NIJ_NativeSdkRelease", "imports": ["Init", "NIJ_NativeSdkCopy", "NIJ_ExclusiveRelease"]}
 {"module": "NIJ_ProofDriver", "imports": ["Init", "Lean", "NFA_WALKER", "NFA_MemoryLimit"]}
+{"module": "NIJ_ReturnedWrite", "imports": ["Init", "NIJ_NativeSdkRelease", "S2W_ReturnedCheckpoint"]}
 {"module": "NIJ_ScanDriver", "imports": ["Init", "Lean", "NFA_WALKER", "NFA_MemoryLimit"]}
+{"module": "NIJ_SdkCopyCanonical", "imports": ["Init", "NIJ_SdkWriteLoop", "S2W_WrapperLaws"]}
+{"module": "NIJ_SdkCopyFields", "imports": ["Init", "NIJ_SdkCopyCanonical"]}
+{"module": "NIJ_SdkWriteFrame", "imports": ["Init", "NHJ_SdkBorrowPacket"]}
+{"module": "NIJ_SdkWriteLoop", "imports": ["Init", "NIJ_SdkWriteFrame"]}
 {"module": "NIJ_StringCleanup", "imports": ["Init", "NIJ_ErrorJoin"]}
 {"module": "NP6_StdModel", "imports": ["Init", "ClaimsUnrolledFinish"]}
 {"module": "OccupancyRangeTraversal", "imports": ["Init", "Aeneas.Std.RangeIter"]}

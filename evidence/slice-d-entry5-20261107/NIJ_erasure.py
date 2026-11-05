@@ -12,7 +12,7 @@ def erase(n,s,zero):
   while any(s.startswith(prefix) for prefix in prefixes):
    prefix=next(prefix for prefix in prefixes if s.startswith(prefix));s=s[len(prefix):]
  # Only our exact, known sidecar declarations are erased.
- for module in ['NIJ_registry','NIJ_error','NIJ_auth','NIJ_owned','NIJ_entry','NHY_registry','NHY_auth','NHY_snapshot','NHY_error','NHJ_ids','NHJ_owned','NHY_ids','NHY_owned','NHD_meta_calibration','NHD_prefix','NHD_ids','NHD_distinct','NHD_snapshot','NHD_error','NHD_calibration','NHD_owned','NGL_entry','NGL_adapter','NGL_owned']:
+ for module in ['NIJ_entry','NIJ_registry','NIJ_error','NIJ_auth','NIJ_owned','NHY_registry','NHY_auth','NHY_snapshot','NHY_error','NHJ_ids','NHJ_owned','NHY_ids','NHY_owned','NHD_meta_calibration','NHD_prefix','NHD_ids','NHD_distinct','NHD_snapshot','NHD_error','NHD_calibration','NHD_owned','NGL_entry','NGL_adapter','NGL_owned']:
   suffix='\n#[cfg(kani)]\n#[path="'+module+'.rs"]\nmod '+module+';\n'
   if s.endswith(suffix):s=s[:-len(suffix)]
  if n==P+'r1_pool_adapter_owned.rs' and zero['instrumented_body'] in s:

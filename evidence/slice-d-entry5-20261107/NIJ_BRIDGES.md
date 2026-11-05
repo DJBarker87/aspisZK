@@ -13,3 +13,11 @@ P6/D188 native semantic transport is option-A trust reclassification, not remova
 ## Error closure
 
 NIJ_ERROR_ASSOCIATION.json supersedes formatter OPEN status above. Both occurrences CLOSED under(y)/(al)/(ak)/(an). Actual whole source roots include real Debug/String formatting, growth, syscall bytes and Drop. Exact NoShortcut metadata alone is substituted, calibrated by retained NHY111/112 every Error on the fixed literal. NIJ109 proves a corrupt Some shortcut changes the actual syscall argument and fails. Per-label full roots70..86 and cleanup87..102 paired, Parse stability72. No String writer stub in the admitted whole roots. Natural message/table/full Result and cleanup account/growth frames compose in L029/L030; all standard axioms, same optimized walker controls and NFX exit0. Trust is retained option-A reclassification. No complete entry path or security claim.
+
+## Active predicates and SDK support
+
+NIJ_ACTIVE_ASSOCIATION.json reconstructs original NCF stage1 source, annotation and original0aa48e0ad2b gate to receipt hashes for K002/003 and K006/007. Actual whole-body contracts, no selected stub_verified, pure Bool shape; all record/u64 inputs, exact typed retirement child and excluded opposite-version alternative. Reused canonical NDO_NBX definitions and NCF proofs are minimally retargeted in NIJ_ActiveSlots; no new model or security theorem. Combined L050, raw/NFX L051.
+
+NIJ_NativeSdkRelease.source derives actual SDK operation history from SDK15 and canonical Entry.heap, including fresh exclusive acquisition, byte-write induction and drop restoration. NIJ_ReturnedWrite.bytes connects canonical computed copy to the SAME emitted returned Vec. Native wrapper/source/physical association remains OPEN, so these modules earn no additional row credit. L032 unknown guessed constant names were a diagnostic failure, not evidence that no canonical wrapper model exists.
+
+Final admission correction: the active predicates above are SUPPORT ONLY. NCF_K002 and NCF_K006 are K-3 SUSPENDED for STATIC_TOKEN under NEK_LEDGER_DELTA. Unchanged NFK denial is retained; no rows194/196 or auth parent closes. Source/feature/Lean equality cannot restore suspended native credit. NIJ_ACTIVE_REJECTED.json is authoritative for this attempted reuse.

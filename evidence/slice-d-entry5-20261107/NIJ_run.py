@@ -4,6 +4,22 @@ import subprocess,json,sys,time,hashlib,shlex,lzma,os
 E=Path(__file__).resolve().parent;P=E.parent/'slice-d-entry-20261105'
 B='/home/dombarker/project-offloads/codex-cx-slice-d-entry5-20261107';H='dombarker@100.108.41.90'
 a,kind,target=sys.argv[1:];archive_patterns=[f'NEP_{m}_*_REACHABLE.txt' for m in json.loads((E/'NIJ_AUDIT_PLAN.json').read_text()) if m.startswith('proof')] if kind=='audit' else []; assert kind in ['kani','lean','inspect','audit','extract'];assert a.startswith('NIJ_'+('K' if kind=='kani' else 'E' if kind=='extract' else 'L'));assert 1<=int(a[-3:])<=(120 if kind=='kani' else 2 if kind=='extract' else 90);assert not (E/a).exists()
+# Own validation: a new dependent target may consume only a focused green
+# direct NIJ import built from the exact current source, never a stale object.
+if kind=='lean':
+ current=E/(target+'.lean')
+ for line in current.read_text().splitlines():
+  if not line.startswith('import '):continue
+  for dep in line[7:].split():
+   if not dep.startswith('NIJ_'):continue
+   dp=E/(dep+'.lean');expected=hashlib.sha256(dp.read_bytes()).hexdigest()
+   passes=[]
+   for rp in E.glob('NIJ_L???/receipt.json'):
+    dr=json.loads(rp.read_text())
+    if dr['kind']=='lean' and dr['module']==dep and dr['exit_status']==0 and expected in dr['source_hashes'].values():passes.append(dr['attempt'])
+   if not passes:
+    (E/(a+'-dependency-preflight.json')).write_text(json.dumps(dict(launched=False,dependency=dep,current_source_sha256=expected,reason='No focused green compile for the current direct import')))
+    raise RuntimeError('Own dependency preflight: compile changed import first: '+dep)
 def ssh(code,data=None,submitted=False):
  for retry in range(11):
   r=subprocess.run(['ssh','-o','ControlMaster=no','-o','ConnectTimeout=15',H,code],input=data,capture_output=True,text=True)

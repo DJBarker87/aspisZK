@@ -1,0 +1,56 @@
+{"attempt": "NIJ_L041", "exit_status": 1, "wall_seconds": 4.063947562128305, "peak_rss_kib": "5883052", "swaps": "0", "print_axioms": ["'NIJ_NativeSdkRelease.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NIJ_generated/NIJ_NativeSdkRelease.lean:26:81: error: Tactic `rfl` failed: The left-hand side
+  0 + (e.heap.payload (e.heap.accounts a).1).descriptor.length
+is not definitionally equal to the right-hand side
+  (s.payload g.cell).descriptor.length
+
+W : Type
+L : Library W (ℕ → Record)
+sdk : S2TrustedSdkBorrow L
+e : Entry
+w : W
+a : ℕ
+src : Payload
+related : L.related w e.heap
+valid : Valid e.heap
+token owner : ℕ
+shared : Enabled e.heap (Op.shared a token owner)
+enabled : Enabled e.heap (Op.exclusive a token owner)
+s : Heap (ℕ → Record) := acquire e.heap (e.heap.accounts a).1 token owner Kind.exclusive
+g : Guard := NIJ_ExclusiveRelease.guard e.heap a token owner
+v : Valid s
+found : lookup s toke
+...
+NIJ_generated/NIJ_NativeSdkRelease.lean:26:81: error: Tactic `rfl` failed: The left-hand side
+  0 + (e.heap.payload (e.heap.accounts a).1).descriptor.length
+is not definitionally equal to the right-hand side
+  (s.payload g.cell).descriptor.length
+
+W : Type
+L : Library W (ℕ → Record)
+sdk : S2TrustedSdkBorrow L
+e : Entry
+w : W
+a : ℕ
+src : Payload
+related : L.related w e.heap
+valid : Valid e.heap
+token owner : ℕ
+shared : Enabled e.heap (Op.shared a token owner)
+enabled : Enabled e.heap (Op.exclusive a token owner)
+s : Heap (ℕ → Record) := acquire e.heap (e.heap.accounts a).1 token owner Kind.exclusive
+g : Guard := NIJ_ExclusiveRelease.guard e.heap a token owner
+v : Valid s
+found : lookup s token = some g
+acquired : W
+first :
+  L.run w (Op.exclusive a token owner) =
+    (acquired, (acquire e.heap (e.heap.accounts a).1 token owner Kind.exclusive, Reply.guard token).2)
+relA : L.related acquired (acquire e.heap (e.heap.accounts a).1 token owner Kind.exclusive, Reply.guard token).1
+read : W
+second : L.run acquired (Op.deref token) = (read, (s, Reply.payload (s.payload g.cell)).2)
+relR : L.related read (s, Reply.payload (s.payload g.cell)).1
+⊢ 0 + (e.heap.payload (e.heap.accounts a).1).descriptor.length ≤ (s.payload g.cell).descriptor.length
+'NIJ_NativeSdkRelease.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf2935ff028c04818b03016c27bf9c895.scope; invocation ID: ea10b55ae312445aac100677b4b8bdeb
