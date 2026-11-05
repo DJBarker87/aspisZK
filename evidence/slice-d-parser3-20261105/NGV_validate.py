@@ -13,6 +13,17 @@ if (E/'NGV_PACK.json').exists():
   data=lzma.decompress((E/entry['blob']).read_bytes())
   assert len(data)==entry['bytes'] and hashlib.sha256(data).hexdigest()==entry['sha256']
   assert J(E/(entry['original']+'.REFERENCE.json'))==entry
+# Every archived input, including failed attempts and generated audit C, is
+# byte-exact against the original measured launch receipt.
+for receipt_path in E.glob('NGV_*/receipt.json'):
+ receipt=J(receipt_path)
+ for name,expected in receipt['source_hashes'].items():
+  source=receipt_path.parent/'sources'/name
+  if source.exists():data=source.read_bytes()
+  else:
+   entry=J(Path(str(source)+'.REFERENCE.json'))
+   data=lzma.decompress((E/entry['blob']).read_bytes())
+  assert hashlib.sha256(data).hexdigest()==expected,str(source)
 base=R/'evidence/inv-repair-20261104/NGB_ADMITTED_LEDGER.json.xz'
 rows={r['row']:r for r in json.loads(lzma.decompress(base.read_bytes()))['rows']};assert len(rows)==599
 for p in J(E/'NGV_REUSED.json'):assert sha(R/p['path'])==p['sha256']
