@@ -1,0 +1,21 @@
+{
+  "kind": "frozen MIR one-edge barrier dominance certificate",
+  "mode": "positive",
+  "domain": "One arbitrary edge of the exact pinned frozen MIR graph; includes normal/error/unwind edges. No runtime inputs or transaction shapes.",
+  "source": "#[kani::stub(core::ptr::copy_nonoverlapping,crate::NIZ_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NIZ_KMX::KMX_copy_from_slice)]\n#[kani::stub(alloc::alloc::realloc,crate::NIZ_KMX::KMX_realloc)]\n#[kani::proof]\nfn certificate(){let edge:u16=kani::any();kani::assume(usize::from(edge)<51);let (safe_source,safe_target,barrier)=match edge{0=>(true,true,false),1=>(true,true,false),2=>(true,true,false),3=>(true,true,false),4=>(true,true,false),5=>(false,true,false),6=>(false,false,false),7=>(false,false,false),8=>(false,true,false),9=>(false,false,false),10=>(false,false,false),11=>(false,false,false),12=>(false,true,false),13=>(false,true,false),14=>(false,false,false),15=>(false,false,false),16=>(false,true,false),17=>(false,false,false),18=>(false,false,false),19=>(false,false,false),20=>(false,false,false),21=>(false,false,false),22=>(false,true,false),23=>(false,true,false),24=>(false,true,false),25=>(true,true,false),26=>(true,true,false),27=>(true,true,false),28=>(true,true,false),29=>(true,true,false),30=>(true,false,true),31=>(true,true,true),32=>(false,true,false),33=>(false,false,false),34=>(false,false,false),35=>(false,true,false),36=>(false,false,false),37=>(false,true,false),38=>(false,true,false),39=>(false,false,false),40=>(false,true,false),41=>(false,true,false),42=>(false,false,false),43=>(false,false,false),44=>(false,true,false),45=>(false,false,false),46=>(false,false,false),47=>(false,false,false),48=>(false,false,false),49=>(false,true,false),50=>(false,true,false),_=>{kani::assume(false);return;}};assert!(!safe_source||barrier||safe_target);}\n",
+  "modifies": [],
+  "production_credit": false,
+  "remaining": "This proves CFG barrier visitation only. Candidate counter stores still need SAME-cell/guard identity and returned-Ok branch association; no owner ScopeRun or CPI footprint is supplied.",
+  "expected_verdict": "PASS",
+  "member": "callback_prevalidated_deposit",
+  "native_args": [
+    "--unwind",
+    "3"
+  ],
+  "graph_sha256": "ae067ea3d562a942cc9ce80b9c0afef414a6c183ff24ddd9aea0db766d86ff21",
+  "barrier": 18,
+  "targets": [
+    26
+  ],
+  "control": null
+}

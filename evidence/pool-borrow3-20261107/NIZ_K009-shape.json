@@ -1,0 +1,20 @@
+{
+  "kind": "actual uniqueness comparison with fixed32 key-equality specification cut",
+  "mode": "positive",
+  "domain": "Arbitrary full keys and actual AccountInfo key carriers; byte comparison stub domain exactly valid 32-byte key references.",
+  "source": "fn NIZ_eq(left:&solana_program::pubkey::Pubkey,right:&solana_program::pubkey::Pubkey)->bool{let a:&[u8]=left.as_ref();let b:&[u8]=right.as_ref();a[0]==b[0] && a[1]==b[1] && a[2]==b[2] && a[3]==b[3] && a[4]==b[4] && a[5]==b[5] && a[6]==b[6] && a[7]==b[7] && a[8]==b[8] && a[9]==b[9] && a[10]==b[10] && a[11]==b[11] && a[12]==b[12] && a[13]==b[13] && a[14]==b[14] && a[15]==b[15] && a[16]==b[16] && a[17]==b[17] && a[18]==b[18] && a[19]==b[19] && a[20]==b[20] && a[21]==b[21] && a[22]==b[22] && a[23]==b[23] && a[24]==b[24] && a[25]==b[25] && a[26]==b[26] && a[27]==b[27] && a[28]==b[28] && a[29]==b[29] && a[30]==b[30] && a[31]==b[31]}\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NIZ_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NIZ_KMX::KMX_copy_from_slice)]\n#[kani::stub(alloc::alloc::realloc,crate::NIZ_KMX::KMX_realloc)]\n#[kani::stub(solana_program::pubkey::Pubkey::eq,NIZ_eq)]\n#[kani::proof]\nfn certificate(){use solana_program::{account_info::AccountInfo,pubkey::Pubkey,program_error::ProgramError};\nlet k0=Pubkey::new_from_array(kani::any()); let mut l0:u64=kani::any(); let mut d0=[kani::any::<u8>()]; let a0=AccountInfo::new(&k0,false,true,&mut l0,&mut d0,&k0,false,0);\nlet k1=Pubkey::new_from_array(kani::any()); let mut l1:u64=kani::any(); let mut d1=[kani::any::<u8>()]; let a1=AccountInfo::new(&k1,false,true,&mut l1,&mut d1,&k1,false,0);\nlet accounts=[a0,a1];let left=0usize;let right=1usize;let same=accounts[left].key==accounts[right].key;let result:Result<(),ProgramError>=(||->Result<(),ProgramError>{            if accounts[left].key == accounts[right].key {\n                return Err(ProgramError::InvalidArgument);\n            }\nOk(())})();assert!(result==if same{Err(ProgramError::InvalidArgument)}else{Ok(())});}\n",
+  "modifies": [],
+  "production_credit": false,
+  "remaining": "Equality-stub/host-loop source association and Lean pairing must close before native source credit; full caller prefix/callee scopes still OPEN.",
+  "expected_verdict": "PASS",
+  "member": "require_unique_accounts_comparison",
+  "native_args": [
+    "--unwind",
+    "34"
+  ],
+  "stub": {
+    "name": "NIZ_eq",
+    "domain": "all valid Pubkey references, exactly 32 readable bytes",
+    "status": "OPEN until native/loop association and paired theorem complete"
+  }
+}

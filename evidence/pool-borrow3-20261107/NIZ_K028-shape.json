@@ -1,0 +1,15 @@
+{
+  "kind": "source domain step questionmark",
+  "mode": "positive",
+  "domain": "Both and only the original uniqueness helper ProgramResult arms, explicit constructors; arbitrary pre-return reply, source ? dispatch and continuation marker.",
+  "source": "#[kani::stub(core::ptr::copy_nonoverlapping,crate::NIZ_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NIZ_KMX::KMX_copy_from_slice)]\n#[kani::stub(alloc::alloc::realloc,crate::NIZ_KMX::KMX_realloc)]\n#[kani::proof]\nfn certificate(){use solana_program::{entrypoint::ProgramResult,program_error::ProgramError};fn reached(reply:ProgramResult,seen:&mut bool)->ProgramResult{reply?;*seen=true;Ok(())}let ok:bool=kani::any();let reply=if ok{Ok(())}else{Err(ProgramError::InvalidArgument)};let mut seen=false;let result=reached(reply,&mut seen);assert!(seen==ok);assert!(result==if ok{Ok(())}else{Err(ProgramError::InvalidArgument)});}\n",
+  "modifies": [],
+  "production_credit": false,
+  "remaining": "Full parent source/callee/guard identity association remains separate; no owner ScopeRun supplied.",
+  "expected_verdict": "PASS",
+  "member": "questionmark",
+  "native_args": [
+    "--unwind",
+    "34"
+  ]
+}

@@ -19,3 +19,7 @@ L009: generic memcmp induction passed, key32 specialization failed because apply
 Controls queue own-parser rejection after K008: expected 1/28 checks, whereas adding the write adds checks and the correct exact result is 1/32, at the intended frame assertion. Corrected per-mode expected counts; retained original parser and receipt. No prover rerun or credit from exit status alone.
 
 L007 read-only diagnostic: executable .out loop listing succeeded; passing .symtab.out as an executable caused that child to exit -6. Both are retained, and no native credit is claimed from this diagnostic. A changed inspector must select executable .out only; this is an own-input issue, not host infrastructure.
+
+K027: own dispatch harness used a non-Copy ProgramResult after moving it into the ? stage, compiler E0382; no semantic credit. Repair reconstructs the expected unit/error arm from the existing selector, without introducing clone/copy or changing the property.
+
+L017: own model used reserved Lean keyword prefix as a definition name; rejected. Renamed only that new model definition to prefixRows (the theorem/root names and native harness names are unchanged); no failed compile credited.
