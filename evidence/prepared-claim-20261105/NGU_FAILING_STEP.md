@@ -27,3 +27,14 @@ Remaining native and producer boundaries are recorded as they are measured.
 Even a complete local packet cannot install semantic_finish, compact_check or
 expansion at NGN S8 without their SAME native producer/preservation association.
 No arbitrary successful child reply or model-only producer fact closes that gap.
+
+K029 was excluded before verification: an unrelated weighted-control helper
+passed usize to a u32 checker. The explicit cast is the only repair; K030/K031
+then check the same g-read/frame property. All remaining new native families
+pass with matched controls. No timeout or memory kill occurred.
+
+The exact unresolved ruling(y)(1)/(3) step is documented in NGU_HYBRID_GAPS.md.
+Seventeen fragment families and a canonical model theorem do not supply the
+missing full arbitrary-poststate oracle/caller G, its immutable frame and its
+argument/reply-corruption control. That is retained as an own-scope obligation,
+not attributed solely to sibling producer jobs or promoted to cryptographic trust.

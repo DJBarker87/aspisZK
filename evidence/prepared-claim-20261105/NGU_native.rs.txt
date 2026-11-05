@@ -103,3 +103,28 @@ kmx!(semantic_direct_carriers,{
  let expected=if point<=2{sem.claims[point][l]}else if point==3{sem.extra[l]}else{sem.before_z1[l]};
  let limb:usize=kani::any();kani::assume(limb<4);check(words(scalar)[limb],words(expected)[limb]);
 });
+
+kmx!(g_read_frame,{
+ // Every bit pattern is Rust-representation-valid: eight stored u32 fields.
+ let g:[E;29]=unsafe{core::mem::transmute(kani::any::<[u32;232]>())};
+ let l:usize=kani::any();kani::assume(l<29);let row:usize=kani::any();kani::assume(row<29);
+ let limb:usize=kani::any();kani::assume(limb<8);let before=g[row].to_limbs()[limb];
+ let selected=g[l];check(selected.to_limbs()[limb],g[l].to_limbs()[limb]);check(g[row].to_limbs()[limb],before);
+});
+kmx!(result_return,{
+ let claim=any_e();let limb:usize=kani::any();kani::assume(limb<8);let expected=claim.to_limbs()[limb];
+ crate::trace::value(14,7,claim);let result:Result<E,Error>=Ok(claim);
+ match result{Ok(value)=>check(value.to_limbs()[limb],expected),Err(_)=>assert!(false)}
+});
+kmx!(y1_two_window_frame,{
+ let bytes:[u8;64]=kani::any();let l:usize=kani::any();kani::assume(l<2);
+ for limb in 0..8{let at=32*l+4*limb;let word=u32::from_le_bytes([bytes[at],bytes[at+1],bytes[at+2],bytes[at+3]]);kani::assume(word<2147483647);}
+ let observe:usize=kani::any();kani::assume(observe<64);let before=bytes[observe];
+ let scalar=field(&bytes,l).c0();let limb:usize=kani::any();kani::assume(limb<4);let at=32*l+4*limb;
+ check(words(scalar)[limb],u32::from_le_bytes([bytes[at],bytes[at+1],bytes[at+2],bytes[at+3]]));check(bytes[observe] as u32,before as u32);
+});
+kmx!(weighted_control,{
+ let selected:usize=kani::any();kani::assume(selected<7);let mut count=0;let mut observed=0;
+ for i in 0..7{if count==selected{observed=i;}count+=1;}
+ check(count as u32,7);check(observed as u32,selected as u32);
+});

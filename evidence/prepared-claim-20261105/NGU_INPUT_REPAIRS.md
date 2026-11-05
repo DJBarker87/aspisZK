@@ -19,3 +19,9 @@ The launcher and admission infrastructure are unchanged. The own client now
 records source_revision, source_tree_dirty and frozen_revision. Earlier raw
 receipts keep their original bytes; NGU_REVISION_ASSOCIATION.json supplies the
 stage-boundary revision alongside exact snapshotted dirty-source hashes.
+
+Later native additions are unused by earlier harnesses. Every positive/control
+pair retains identical full native source bytes, hashes, graph and features;
+only the intentional XOR cfg differs. Earlier successful gates are not rerun
+merely because an unrelated helper was appended. Full reached-body and frozen
+library source identity, including all inputs, remains independently checked.
