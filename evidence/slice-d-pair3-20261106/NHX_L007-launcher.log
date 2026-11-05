@@ -1,0 +1,71 @@
+{"attempt": "NHX_L007", "exit_status": 1, "wall_seconds": 4.618709350004792, "peak_rss_kib": "5782792", "swaps": "0", "print_axioms": ["'NHX_FactoredTail.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NHX_generated/NHX_FactoredTail.lean:16:27: error: unsolved goals
+ap0 ap1 : Cells
+side : Usize
+iter : Iter
+weights : Cells
+low_powers high_powers : Std.Array NQ 4#usize
+q4 q16 : NQ
+ha : ∀ x ∈ ↑ap0, canonE x
+hb : ∀ x ∈ ↑ap1, canonE x
+hw : ∀ x ∈ ↑weights, canonE x
+hl : ∀ x ∈ ↑low_powers, canonQ x
+hh : ∀ x ∈ ↑high_powers, canonQ x
+hc4 : canonQ q4
+hc16 : canonQ q16
+sum : NE
+low : FIo_Native.aspis_core.field.wide_exact.WideExact
+hfold : NHI_ScalarFold.cells ap0 low_powers 4 0#usize NHI_Scalar.zero = ok sum
+cs : canonE sum
+hs : FIo_Native.weights.Weights.scalar_factor low_powers ap0 = ok low
+cl : canonE low
+hval : NGM_RoundScale.limbs low = List.map (fun word => word * 536870912 % 2147483647) (NGM_
+...
+with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      let we4 ←
+        match (↑ap1)[↑i2]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      let we5 ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul_qm31 we4 q2
+      let term2 ← we5.mul_m31 FIo_Native.weights.QUARTER
+      let i3 ←
+        match [0#usize, 3#usize, 2#usize, 1#usize][↑3#usize]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      let we6 ←
+        match (↑ap1)[↑i3]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      let we7 ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul_qm31 we6 q3
+      let term3 ← we7.mul_m31 FIo_Native.weights.QUARTER
+      let we8 ←
+        match [term0, term1, term2, term3][↑0#usize]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      let we9 ←
+        match [term0, term1, term2, term3][↑1#usize]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      let first2 ← we8.add we9
+      let we10 ←
+        match [term0, term1, term2, term3][↑2#usize]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      let first3 ← first2.add we10
+      let we11 ←
+        match [term0, term1, term2, term3][↑3#usize]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      let all ← first3.add we11
+      let we12 ← low.mul all
+      let weights1 ← Array.update weights 0#usize we12
+      let we13 ← low.mul first3
+      let we14 ← we13.mul_qm31 q16
+      let a ← weights1.update 1#usize we14
+      ok (cont (iter, a))) =
+    ok (cont (iter, w1))
+'NHX_FactoredTail.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-re3ef6899b2c14ba4babe13546bbc6ff2.scope; invocation ID: eef1ebd835c64fc19fd56c9ce3084d6b

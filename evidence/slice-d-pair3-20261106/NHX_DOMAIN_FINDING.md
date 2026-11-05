@@ -1,0 +1,3 @@
+# Native immutable-message domain qualification
+
+The first dispatch/partial observations K024–K041 used concrete zero2048-byte storage. Their cut bodies never inspect byte contents and the model laws quantify over arbitrary f, but that alone does not meet the requested arbitrary native prestate. These passes remain SUPPORT ONLY and do not close rows on arbitrary caller bytes. Replace storage with kani::any<[u8;2048]> and rerun the now-broader domain with matched corruption controls. This is a source/domain change, not an unchanged passing rerun. K042/K043 control-only trace has no message payload and remains reusable. No row was promoted before this review.

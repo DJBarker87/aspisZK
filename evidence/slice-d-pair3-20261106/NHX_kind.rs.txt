@@ -1,0 +1,32 @@
+#[derive(Clone,Copy,PartialEq,Eq)]struct KindDot{sums:[u64;8],count:usize}
+struct KindLog{events:[u8;8],count:usize,w:*const Weights,k:usize,folds:usize,tensor_ptr:*const K,tensor_len:usize,tensor_post:[K;64],factors:[*const K;2],powers:[*const E;2],scalars:[E;2],args:[(E,E);2],products:[E;2],bytes:*const u8,len:usize,scratch:*const K,width:usize,n:usize,push_before:KindDot,push_after:KindDot,finish_before:KindDot,finish:E,push_ok:bool,error:Error}
+fn kev(l:&mut KindLog,n:u8){l.events[l.count]=n;l.count+=1;}
+fn ktensor(w:&Weights,k:usize,folds:usize,scratch:&mut Vec<K>,l:&mut KindLog){kev(l,0);l.w=w;l.k=k;l.folds=folds;l.tensor_ptr=scratch.as_ptr();l.tensor_len=scratch.len();scratch.as_mut_slice().copy_from_slice(&l.tensor_post);}
+fn kscalar(f:&[K;4],p:&[E;4],i:usize,l:&mut KindLog)->E{kev(l,1+i as u8);l.factors[i]=f.as_ptr();l.powers[i]=p.as_ptr();l.scalars[i]}
+fn kproduct(a:E,b:E,i:usize,l:&mut KindLog)->E{kev(l,if i==0{3}else{7});l.args[i]=(a,b);l.products[i]}
+fn knew(l:&mut KindLog)->KindDot{kev(l,4);KindDot{sums:[0;8],count:0}}
+fn kpush(dot:&mut KindDot,f:&[u8],scratch:&[K],n:usize,l:&mut KindLog)->Result<(),Error>{kev(l,5);l.bytes=f.as_ptr();l.len=f.len();l.scratch=scratch.as_ptr();l.width=scratch.len();l.n=n;l.push_before=*dot;*dot=l.push_after;if l.push_ok{Ok(())}else{Err(l.error)}}
+fn kfinish(dot:KindDot,l:&mut KindLog)->E{kev(l,6);l.finish_before=dot;l.finish}
+fn kind_cut(w:&Weights,kind:usize,alpha:&[E],f:&[u8],folds:usize,n:usize,ap0:&[E;4],ap1:&[E;4],scratch:&mut Vec<K>,parts:&mut [E;7],l:&mut KindLog)->Result<(),Error>{
+ if w.variant==Variant::D&&kind<4{panic!("outside S2 packet");}else{
+ let k=if kind<4{kind-1}else{kind-2};ktensor(w,k,folds,scratch,l);
+ let mut scale=kscalar(&w.factors[k][0],ap0,0,l);
+ if folds==2{scale=kproduct(scale,kscalar(&w.factors[k][1],ap1,1,l),0,l);}
+ let mut pair=knew(l);kpush(&mut pair,f,scratch,n,l)?;parts[kind]=kproduct(scale,kfinish(pair,l),1,l);
+ }Ok(())
+}
+fn kind_check(g:usize){
+ let w=anyweights();let idx:usize=kani::any();kani::assume(idx<5);let kind=[1usize,2,3,5,6][idx];let k=if kind<4{kind-1}else{kind-2};let f:[u8;2048]=kani::any();let ap0=core::array::from_fn(|_|anye());let ap1=core::array::from_fn(|_|anye());let alpha=[anye(),anye()];let scratch_before:[K;64]=core::array::from_fn(|_|anyk());let mut scratch=scratch_before.to_vec();let before=core::array::from_fn(|_|anye());let mut parts=before;
+ let zero=KindDot{sums:[0;8],count:0};let mut l=KindLog{events:[255;8],count:0,w:core::ptr::null(),k:99,folds:0,tensor_ptr:core::ptr::null(),tensor_len:0,tensor_post:core::array::from_fn(|_|anyk()),factors:[core::ptr::null();2],powers:[core::ptr::null();2],scalars:[anye(),anye()],args:[(E::ZERO,E::ZERO);2],products:[anye(),anye()],bytes:core::ptr::null(),len:0,scratch:core::ptr::null(),width:0,n:0,push_before:zero,push_after:KindDot{sums:kani::any(),count:kani::any()},finish_before:zero,finish:anye(),push_ok:kani::any(),error:err(kani::any())};
+ let ptr=scratch.as_ptr();let r=kind_cut(&w,kind,&alpha,&f,2,64,&ap0,&ap1,&mut scratch,&mut parts,&mut l);let ok=l.push_ok;let j:usize=kani::any();kani::assume(j<7);let sj:usize=kani::any();kani::assume(sj<64);
+ if cfg!(NHX_corrupt){match g{0=>l.k=99,1=>l.factors[0]=core::ptr::null(),2=>l.args[0]=(E::ZERO,E::ZERO),3=>l.n=63,4=>l.push_ok=!l.push_ok,5=>l.finish_before.sums[0]^=1,6=>{parts[j]=E::ZERO;l.tensor_post[sj]=K::ZERO;},_=>l.events[0]=255}}
+ let good=match g{
+ 0=>l.w==&w as *const Weights&&l.k==k&&l.folds==2&&l.tensor_ptr==ptr&&l.tensor_len==64,
+ 1=>l.factors[0]==w.factors[k][0].as_ptr()&&l.factors[1]==w.factors[k][1].as_ptr()&&l.powers[0]==ap0.as_ptr()&&l.powers[1]==ap1.as_ptr(),
+ 2=>l.args[0]==(l.scalars[0],l.scalars[1]),
+ 3=>l.bytes==f.as_ptr()&&l.len==2048&&l.scratch==scratch.as_ptr()&&l.width==64&&l.n==64&&l.push_before==zero,
+ 4=>r.map_err(code)==if l.push_ok{Ok(())}else{Err(code(l.error))},
+ 5=>!ok||(l.finish_before==l.push_after&&l.args[1]==(l.products[0],l.finish)),
+ 6=>parts[j]==(if ok&&j==kind{l.products[1]}else{before[j]})&&scratch[sj]==l.tensor_post[sj],
+ _=>l.count==(if ok{8}else{6})&&l.events[0..6]==[0,1,2,3,4,5]&&(!ok||l.events[6..8]==[6,7])};assert!(good);
+}

@@ -27,7 +27,7 @@ fn dispatch_cut(weights:&Weights,f:&[u8],low:&[E;16],l:&mut Dispatch)->Option<E>
  if weights.variant==Variant::S2 && f.len()==64*32 {return Some(child(f,low,l));}None
 }
 fn dispatch_check(g:usize){
- let w=anyweights();let f:[u8;2048]=[0;2048];let low:[E;16]=core::array::from_fn(|_|anye());
+ let w=anyweights();let f:[u8;2048]=kani::any();let low:[E;16]=core::array::from_fn(|_|anye());
  let mut l=Dispatch{bytes:core::ptr::null(),len:0,low:core::ptr::null(),calls:0,out:anye()};
  let out=dispatch_cut(&w,&f,&low,&mut l);
  if cfg!(NHX_corrupt){match g{0=>l.bytes=l.bytes.wrapping_add(1),1=>l.low=l.low.wrapping_add(1),2=>l.calls+=1,_=>l.out=E::ZERO}}
@@ -42,7 +42,7 @@ fn partial_window(f:&[u8],common:&[K;16],s:usize,partials:&mut [E;4],l:&mut Part
  partials[s]=partial(f,common,s,l)?;Ok(())
 }
 fn partial_check(g:usize){
- let f=[0u8;2048];let common=core::array::from_fn(|_|anyk());let before=core::array::from_fn(|_|anye());let mut after=before;
+ let f:[u8;2048]=kani::any();let common=core::array::from_fn(|_|anyk());let before=core::array::from_fn(|_|anye());let mut after=before;
  let s:usize=kani::any();kani::assume(s<4);let j:usize=kani::any();kani::assume(j<4);
  let mut l=Partial{bytes:core::ptr::null(),len:0,common:core::ptr::null(),side:99,calls:0,out:reply()};
  let r=partial_window(&f,&common,s,&mut after,&mut l);
@@ -60,9 +60,11 @@ fn partial_control(){let stop:usize=kani::any();kani::assume(stop<=4);let mut l=
  let j:usize=kani::any();kani::assume(j<l.calls);
  assert!(l.calls==if stop<4{stop+1}else{4});assert!(l.sides[j]==j);assert!(r.is_ok()==(stop==4));}
 '''
-code=header+dispatch+partial+(E/'NHX_producers.rs.txt').read_text()
-for fam,count in [('producer',9),('dispatch',4),('partial',4)]:
- for g in range(count):code+=f'''#[kani::proof]#[kani::unwind(2050)]
+code=header+dispatch+partial+(E/'NHX_producers.rs.txt').read_text()+(E/'NHX_high.rs.txt').read_text()+(E/'NHX_tail.rs.txt').read_text()+(E/'NHX_kind.rs.txt').read_text()
+for fam,count in [('producer',9),('dispatch',4),('partial',4),('high',7),('tail',5),('kind',8)]:
+ for g in range(count):
+  extra='#[kani::stub(<[K]>::copy_from_slice,KMX_copy_from_slice)]\n#[kani::stub(<[K]>::to_vec,KMX_to_vec)]\n'if fam=='kind'else''
+  code+=f'''{extra}#[kani::proof]#[kani::unwind(2050)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 fn {fam}{g:02}(){{{fam}_check({g});}}\n'''

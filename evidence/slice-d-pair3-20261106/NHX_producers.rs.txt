@@ -18,3 +18,9 @@ fn producer_check(g:usize){
  else{l.count==8&&low==[K::ONE,replies[0],replies[1],replies[2]]&&high==[K::ONE,replies[4],replies[5],replies[6]]&&q4==replies[4]&&q16==replies[7]};
  assert!(good);
 }
+struct PartialReturn{count:usize,stop:usize,error:Error,posts:[E;4],initial:[E;4],sides:[usize;4]}
+fn partial_return_cut(l:&mut PartialReturn)->Result<[E;4],Error>{let mut partials=[E::ZERO;4];l.initial=partials;for s in 0..4{l.sides[l.count]=s;l.count+=1;partials[s]=if s==l.stop{Err(l.error)}else{Ok(l.posts[s])}?;}Ok(partials)}
+#[kani::proof]#[kani::unwind(66)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn partial_initial_return(){let stop:usize=kani::any();kani::assume(stop<=4);let mut l=PartialReturn{count:0,stop,error:err(kani::any()),posts:core::array::from_fn(|_|anye()),initial:[E::ONE;4],sides:[99;4]};let r=partial_return_cut(&mut l);let j:usize=kani::any();kani::assume(j<4);let i:usize=kani::any();kani::assume(i<l.count);if cfg!(NHX_corrupt){l.initial[0]=E::ONE;}
+ assert!(l.initial[j]==E::ZERO&&l.sides[i]==i&&l.count==(if stop<4{stop+1}else{4}));assert!(match r{Ok(v)=>stop==4&&v[j]==l.posts[j],Err(e)=>stop<4&&code(e)==code(l.error)});}

@@ -1,0 +1,1 @@
+NHX_FinalFold starts from the uncompiled NHM_FinalFold.unproved.lean.txt proposal. It receives new NHX focused compile/audit qualification before any use; no inherited credit is claimed. Powers7 native domain is explicitly present in NFW_CLOSED.json (N=4,7,29), reused by citation, never rerun.

@@ -1,0 +1,18 @@
+struct Regular{calls:usize,kinds:[usize;5],stop:usize,error:Error,scratch:[u32;5],parts:[u32;5],args:[usize;5]}
+fn kind_stub(kind:usize,scratch:&mut u32,parts:&mut u32,l:&mut Regular)->Result<(),Error>{let i=l.calls;l.calls+=1;l.kinds[i]=kind;l.args[i]=(*scratch as usize)<<32|*parts as usize;*scratch=l.scratch[i];*parts=l.parts[i];if i==l.stop{Err(l.error)}else{Ok(())}}
+fn regular_cut(shared:bool,scratch:&mut u32,parts:&mut u32,l:&mut Regular)->Result<(),Error>{
+ if !shared{kind_stub(1,scratch,parts,l)?;}
+ kind_stub(2,scratch,parts,l)?;
+ if !shared{kind_stub(3,scratch,parts,l)?;}
+ kind_stub(5,scratch,parts,l)?;
+ kind_stub(6,scratch,parts,l)?;Ok(())
+}
+fn regular_check(g:usize){
+ let shared:bool=kani::any();let stop:usize=kani::any();kani::assume(stop<=5);let before_s:u32=kani::any();let before_p:u32=kani::any();let mut s=before_s;let mut p=before_p;
+ let mut l=Regular{calls:0,kinds:[99;5],stop,error:err(kani::any()),scratch:kani::any(),parts:kani::any(),args:[0;5]};
+ let r=regular_cut(shared,&mut s,&mut p,&mut l);let total=if shared{3}else{5};let count=if stop<total{stop+1}else{total};let j:usize=kani::any();kani::assume(j<count);
+ if cfg!(NHX_corrupt){match g{0=>l.kinds[j]=99,1=>l.calls+=1,2=>l.args[j]^=1,3=>s^=1,4=>p^=1,_=>l.error=err((code(l.error)+1)%8)}}
+ let kinds=if shared{[2,5,6,99,99]}else{[1,2,3,5,6]};
+ let good=match g{0=>l.kinds[j]==kinds[j],1=>l.calls==count,2=>l.args[j]==if j==0{(before_s as usize)<<32|before_p as usize}else{(l.scratch[j-1]as usize)<<32|l.parts[j-1]as usize},3=>s==l.scratch[count-1],4=>p==l.parts[count-1],_=>r.map_err(code)==if stop<total{Err(code(l.error))}else{Ok(())}};
+ assert!(good);
+}

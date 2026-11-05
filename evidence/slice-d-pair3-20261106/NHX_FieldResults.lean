@@ -35,7 +35,7 @@ theorem add (x y z : NE) (hx : canonE x) (hy : canonE y)
 theorem quarter (x z : NE)
  (run : FIo_Native.aspis_core.field.wide_exact.WideExact.mul_m31 x FIo_Native.weights.QUARTER=ok z) : canonE z := by
  obtain ⟨out,ho,co,_⟩:=NGM_RoundScale.total x
- change FIo_Native.aspis_core.field.wide_exact.WideExact.mul_m31 x 536870912#u32=ok z at run
+ simp only [FIo_Native.weights.QUARTER] at run
  rw [run] at ho
  cases Result.ok.inj ho
  exact co

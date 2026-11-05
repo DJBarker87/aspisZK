@@ -1,0 +1,26 @@
+struct HighLog{events:[u8;5],count:usize,partials:*const E,coeffs:*const K,factors:[*const K;2],powers:[*const E;2],args:[(E,E);2],high:Result<E,Error>,scalars:[E;2],products:[E;2]}
+fn hev(l:&mut HighLog,n:u8){l.events[l.count]=n;l.count+=1;}
+fn high_call(p:&[E;4],q:&[K;4],l:&mut HighLog)->Result<E,Error>{hev(l,0);l.partials=p.as_ptr();l.coeffs=q.as_ptr();l.high}
+fn scalar_call(q:&[K;4],p:&[E;4],i:usize,l:&mut HighLog)->E{hev(l,1+i as u8);l.factors[i]=q.as_ptr();l.powers[i]=p.as_ptr();l.scalars[i]}
+fn emul(a:E,b:E,i:usize,l:&mut HighLog)->E{hev(l,3+i as u8);l.args[i]=(a,b);l.products[i]}
+fn high_stage(partials:&[E;4],w:&Weights,ap0:&[E;4],ap1:&[E;4],parts:&mut [E;7],row:usize,l:&mut HighLog)->Result<(),Error>{
+ let high=high_call(partials,&w.factors[row][4],l)?;
+ let scale=emul(scalar_call(&w.factors[row][0],ap0,0,l),scalar_call(&w.factors[row][1],ap1,1,l),0,l);
+ parts[row+1]=emul(scale,high,1,l);Ok(())
+}
+fn high_check(g:usize){
+ let row=if kani::any::<bool>(){0}else{2};let w=anyweights();let partials=core::array::from_fn(|_|anye());let ap0=core::array::from_fn(|_|anye());let ap1=core::array::from_fn(|_|anye());let before=core::array::from_fn(|_|anye());let mut parts=before;
+ let mut l=HighLog{events:[255;5],count:0,partials:core::ptr::null(),coeffs:core::ptr::null(),factors:[core::ptr::null();2],powers:[core::ptr::null();2],args:[(E::ZERO,E::ZERO);2],high:reply(),scalars:[anye(),anye()],products:[anye(),anye()]};
+ let r=high_stage(&partials,&w,&ap0,&ap1,&mut parts,row,&mut l);let ok=l.high.is_ok();
+ let j:usize=kani::any();kani::assume(j<7);
+ if cfg!(NHX_corrupt){match g{0=>l.partials=l.partials.wrapping_add(1),1=>l.count+=1,2=>l.factors[0]=core::ptr::null(),3=>l.args[0]=(E::ZERO,E::ZERO),4=>l.args[1]=(E::ZERO,E::ZERO),5=>parts[j]=E::ZERO,_=>l.events[0]=255}}
+ let good=match g{
+ 0=>l.partials==partials.as_ptr()&&l.coeffs==w.factors[row][4].as_ptr(),
+ 1=>l.count==(if ok{5}else{1})&&r.map_err(code)==l.high.map(|_|()).map_err(code),
+ 2=>!ok||(l.factors[0]==w.factors[row][0].as_ptr()&&l.factors[1]==w.factors[row][1].as_ptr()&&l.powers[0]==ap0.as_ptr()&&l.powers[1]==ap1.as_ptr()),
+ 3=>!ok||l.args[0]==(l.scalars[0],l.scalars[1]),
+ 4=>match l.high{Err(_)=>true,Ok(h)=>l.args[1]==(l.products[0],h)},
+ 5=>parts[j]==if ok&&j==row+1{l.products[1]}else{before[j]},
+ _=>l.events[0]==0&&(!ok||l.events==[0,1,2,3,4])};
+ assert!(good);
+}
