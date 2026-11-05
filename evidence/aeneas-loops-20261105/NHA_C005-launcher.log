@@ -1,0 +1,26 @@
+{"attempt": "NHA_C005", "exit_status": 101, "wall_seconds": 3.3123863730579615, "peak_rss_kib": "613740", "swaps": "0", "print_axioms": "N/A: charon"}
+["/home/dombarker/project-offloads/codex-cx-aeneas-loops-20261105/NHA_bin/charon", "cargo", "--preset", "aeneas", "--mir", "built", "--sysroot", "default", "--include", "core::option::Option", "--include", "core::result::Result", "--include", "core::option::_::ok_or", "--start-from", "crate::NHA_field::NHA_original_field", "--opaque", "crate::field::_", "--include", "crate::field::M31", "--include", "crate::field::CM31", "--include", "crate::field::QM31", "--dest-file", "/home/dombarker/project-offloads/codex-cx-aeneas-loops-20261105/NHA_inputs/field_actual.llbc", "--", "--manifest-path", "/home/dombarker/project-offloads/codex-cx-aeneas-loops-20261105/NHA_scratch/crates/aspis-core/Cargo.tom
+...
+onchain.rs:232:48
+    |
+232 |     #[cfg(all(feature = "r0-e4-reference", not(target_os = "solana")))]
+    |                                                ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/r0/onchain.rs:314:48
+    |
+314 |     #[cfg(all(feature = "r0-e4-reference", not(target_os = "solana")))]
+    |                                                ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+For more information about this error, try `rustc --explain E0425`.
+ERROR Code failed to compile
+warning: `aspis-core` (lib) generated 15 warnings
+error: could not compile `aspis-core` (lib) due to 1 previous error; 15 warnings emitted
+
+Running as unit: run-rdb85a92b39b446368aaad9ff0d85d787.scope; invocation ID: 442c6d47e397490f8c99e0fc878ebe20

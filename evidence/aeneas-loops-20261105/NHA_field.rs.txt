@@ -1,0 +1,55 @@
+use crate::field::QM31;
+pub fn NHA_original_field(
+    mut sums: [[u64; 3]; 3],
+    left: QM31,
+    right: QM31,
+) -> [[u64; 3]; 3] {
+    let left_sum = left.c0.add(left.c1);
+    let right_sum = right.c0.add(right.c1);
+    let left_components = [
+        [left.c0.a, left.c0.b, left.c0.a.add(left.c0.b)],
+        [left.c1.a, left.c1.b, left.c1.a.add(left.c1.b)],
+        [left_sum.a, left_sum.b, left_sum.a.add(left_sum.b)],
+    ];
+    let right_components = [
+        [right.c0.a, right.c0.b, right.c0.a.add(right.c0.b)],
+        [right.c1.a, right.c1.b, right.c1.a.add(right.c1.b)],
+        [right_sum.a, right_sum.b, right_sum.a.add(right_sum.b)],
+    ];
+    for component in 0..3 {
+        for channel in 0..3 {
+            sums[component][channel] += left_components[component][channel].0 as u64
+                * right_components[component][channel].0 as u64;
+        }
+    }
+    sums
+}
+fn NHA_channels(mut sums:[[u64;3];3],left_components:[[crate::field::M31;3];3],right_components:[[crate::field::M31;3];3],component:usize)->[[u64;3];3] {
+        for channel in 0..3 {
+            sums[component][channel] += left_components[component][channel].0 as u64
+                * right_components[component][channel].0 as u64;
+        }
+    sums
+}
+pub fn NHA_outlined_field(
+    mut sums: [[u64; 3]; 3],
+    left: QM31,
+    right: QM31,
+) -> [[u64; 3]; 3] {
+    let left_sum = left.c0.add(left.c1);
+    let right_sum = right.c0.add(right.c1);
+    let left_components = [
+        [left.c0.a, left.c0.b, left.c0.a.add(left.c0.b)],
+        [left.c1.a, left.c1.b, left.c1.a.add(left.c1.b)],
+        [left_sum.a, left_sum.b, left_sum.a.add(left_sum.b)],
+    ];
+    let right_components = [
+        [right.c0.a, right.c0.b, right.c0.a.add(right.c0.b)],
+        [right.c1.a, right.c1.b, right.c1.a.add(right.c1.b)],
+        [right_sum.a, right_sum.b, right_sum.a.add(right_sum.b)],
+    ];
+    for component in 0..3 {
+        sums = NHA_channels(sums,left_components,right_components,component);
+    }
+    sums
+}
