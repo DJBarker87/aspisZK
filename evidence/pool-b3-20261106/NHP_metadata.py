@@ -19,11 +19,15 @@ for j in range(3):
  setup+=f'''let k{j}=Pubkey::new_from_array(kani::any());let o{j}=Pubkey::new_from_array(kani::any());
 let mut l{j}:u64=kani::any();let mut d{j}:[u8;3]=kani::any();
 let s{j}:bool=kani::any();let w{j}:bool=kani::any();let e{j}:bool=kani::any();
-let a{j}=AccountInfo::new(&k{j},s{j},w{j},&mut l{j},&mut d{j},&o{j},e{j},kani::any());
+let mut a{j}=AccountInfo::new(&k{j},s{j},w{j},&mut l{j},&mut d{j},&o{j},e{j},kani::any());
 let m{j}=model::Account{{key:k{j}.to_bytes(),owner:o{j}.to_bytes(),signer:s{j},writable:w{j},executable:e{j}}};
 let before{j}=(**a{j}.lamports.borrow(),a{j}.data.borrow().to_vec());
 '''
 setup+='let p=Pubkey::new_from_array(kani::any());let selected=Pubkey::new_from_array(kani::any());let lane:u8=kani::any();\n'
+if case=='alias':
+ setup+='a1.data=a0.data.clone();a1.lamports=a0.lamports.clone();a2.data=a0.data.clone();a2.lamports=a0.lamports.clone();\n'
+ for j in [1,2]:setup+=f'let before{j}=(**a{j}.lamports.borrow(),a{j}.data.borrow().to_vec());\n'
+
 maperr='''let expected=r.map_err(|err|match err {
 model::Error::InvalidVerifierProgram=>crate::error::PoolV1ProgramError::InvalidVerifierProgramAccount.into(),
 model::Error::NotEnoughAccountKeys=>ProgramError::NotEnoughAccountKeys,
@@ -50,6 +54,19 @@ else:
  if case=='metadata':
   setup+=f'kani::assume({metadata});\n'
   expectation=f'if o0!=p {{ProgramError::IncorrectProgramId}} else {{ProgramError::InvalidAccountData}}'
+ elif case in ['ownerbusy','flagsbusy','signerbusy','ownershared','shared','invalidlane']:
+  if case in ['ownerbusy','ownershared']:
+   setup+='kani::assume(o0!=p);\n';expectation='ProgramError::IncorrectProgramId'
+  elif case=='flagsbusy':
+   setup+=f'kani::assume(o0==p&&(e0||w0!={writable}));\n';expectation='ProgramError::InvalidAccountData'
+  elif case=='signerbusy':
+   assert target!='lane';setup+='kani::assume(o0==p&&!e0&&!w0&&s0);\n';expectation='ProgramError::InvalidAccountData'
+  elif case=='shared':
+   assert target!='lane';setup+='kani::assume(o0==p&&!e0&&!w0&&!s0);\n';expectation='crate::error::PoolV1ProgramError::InvalidAccountType.into()'
+  else:
+   assert target=='lane';setup+='kani::assume(o0==p&&!e0&&w0&&lane>=8);\n';expectation='ProgramError::InvalidSeeds'
+  if case in ['ownershared','shared','invalidlane']:setup+='let held=a0.try_borrow_data().unwrap();\n'
+  else:setup+='let held=a0.try_borrow_mut_data().unwrap();let held_lamports=a0.try_borrow_mut_lamports().unwrap();\n'
  elif case=='signer':
   assert target!='lane';setup+='kani::assume(o0==p&&!e0&&!w0&&s0);\n';expectation='ProgramError::InvalidAccountData'
  elif case=='borrow':
@@ -60,7 +77,10 @@ else:
  else:raise AssertionError(case)
  call={'master':'super::decode_terminal_master_box_v1(&p,&a0)','checkpoint':'super::decode_terminal_checkpoint_box_v1(&p,&selected,&a0)','lane':'super::decode_terminal_lane_box_v1(&p,&selected,lane,&a0)'}[target]
  body=f'let expected:ProgramError={expectation};\nlet actual={call}.err();\n'
- if case=='borrow':body+='assert!(held.len()==3);drop(held);\n'
+ if case in ['borrow','ownerbusy','flagsbusy','signerbusy','ownershared','shared','invalidlane']:
+  body+='assert!(held.len()==3);drop(held);\n'
+  if case in ['ownerbusy','flagsbusy','signerbusy']:body+='assert!(**held_lamports==before0.0);drop(held_lamports);\n'
+  body+='assert!(a0.try_borrow_mut_data().is_ok());assert!(a0.try_borrow_mut_lamports().is_ok());\n'
  if mode=='negative':body+='assert!(actual==Some(ProgramError::InvalidArgument));\n'
  else:body+='assert!(actual==Some(expected));\n'
 if target in ['verifier','token','payer','transport']:

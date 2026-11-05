@@ -5,16 +5,16 @@ E=Path(__file__).resolve().parent;mode=sys.argv[1];assert mode in ['positive','n
 rev='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387';read=lambda p:subprocess.check_output(['git','show',rev+':'+p],text=True)
 reference='pub fn transaction_level(height:usize)->bool { height == 1 }\n'
 source='''use super::*;
-pub(super) fn reference(height:usize)->ProgramResult {
- let admitted=crate::NHP_reference::transaction_level(height);
- if ADMITTED {Ok(())}else{Err(PoolV1ProgramError::CpiInvocationForbidden.into())}
+pub(super) fn reference(height:usize,result:&ProgramResult)->bool {
+ let admitted=ADMITTED;
+ match result {Ok(())=>admitted,Err(ProgramError::Custom(code))=>!admitted&&*code==0x4153_2036,_=>false}
 }
 #[kani::proof_for_contract(super::require_transaction_level_invocation_v1)]
-fn association(){let height:usize=kani::any();let actual=super::require_transaction_level_invocation_v1(height);assert!(actual==reference(height));}
-'''.replace('ADMITTED','admitted' if mode=='positive' else '!admitted')
+fn association(){let height:usize=kani::any();let actual=super::require_transaction_level_invocation_v1(height);assert!(reference(height,&actual));}
+'''.replace('ADMITTED',('crate::NHP_reference::transaction_level(height)' if mode=='positive' else '!crate::NHP_reference::transaction_level(height)'))
 p='programs/aspis-pool/src/processor.rs';before=read(p)
 after=before.replace('#[cfg(any(target_os = "solana", test))]','#[cfg(any(target_os = "solana", test, kani))]')
-after=after.replace('fn require_transaction_level_invocation_v1(stack_height: usize)', '#[cfg_attr(kani, kani::ensures(|result| *result == NHP_Guard::reference(stack_height)))]\nfn require_transaction_level_invocation_v1(stack_height: usize)')
+after=after.replace('fn require_transaction_level_invocation_v1(stack_height: usize)', '#[cfg_attr(kani, kani::ensures(|result| NHP_Guard::reference(stack_height,result)))]\nfn require_transaction_level_invocation_v1(stack_height: usize)')
 after+='\n#[cfg(kani)]\nmod NHP_Guard {\n'+source+'}\n'
 patch=''.join(difflib.unified_diff(before.splitlines(True),after.splitlines(True),fromfile='a/'+p,tofile='b/'+p))
 p='programs/aspis-pool/src/lib.rs';before=read(p);after=before+'\n#[cfg(any(kani, NHP_extract))]\npub mod NHP_reference;\n'

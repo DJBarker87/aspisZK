@@ -12,3 +12,6 @@ Removed the actual splitter entirely, retaining allocation, selected-cell/suffix
 
 ## Item 2: NHP_K005 own snapshot typing
 Compiler E0507: snapshot tried to move an &mut u64 through Ref. Corrected to copy the u64 through double dereference. K006 then passed; K007 wrong-error control failed. This is an input repair, not a proof failure or resource-limit replay.
+
+## Item 1: NHP_K026 ProgramResult equality contract
+CBMC timed out at the unchanged 90-second limit (exit 1; wall 93.43s; peak RSS 479944 KiB; swaps 0). No credit and no same-shape rerun. Replacement K027 uses explicit constructor/Custom-code discrimination, eliminating derived ProgramError equality (including foreign String comparison) from the contract. Actual guard body, height domain and error are unchanged. This is an interface split under (ak); no timeout or cap increase.

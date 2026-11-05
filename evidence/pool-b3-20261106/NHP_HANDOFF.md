@@ -10,3 +10,5 @@ Budget: 120 Kani, 80 Lean, 2 extraction; initially zero used. At most one owned 
 NHC baseline: only supported_loader CLOSED. All remaining production obligations are retained. RuntimeCpiReadonlyEntry7 is pending and unused. No SameExecution or output-equality premise is admitted. Native semantic transport is reclassification under P6/D188; no security trust removed.
 
 Every terminal attempt will record target, argv, source/dependency/tool pins, exit, wall time, peak RSS, swap and axioms (N/A for native). Every new top Lean theorem prints axioms. Closures require combined headline replay, raw standard-axiom audit, clean NFX scan and additive Pool-only validator checks.
+
+Stage3: two helper rows CLOSED, B/D OPEN. See NHP_CLOSED.json, NHP_LEDGER_DELTA.json and NHP_AUDIT.json. Validation PASS at37 Kani/15 Lean/1 extraction. Current native source remains frozen; no rerun of a passing observation or unchanged timed-out shape. Prefix/account/runtime/borrow/other ProgramError obligations remain. Work continues within the remaining budget.
