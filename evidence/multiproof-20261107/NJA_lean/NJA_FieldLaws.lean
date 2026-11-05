@@ -1,6 +1,6 @@
-import JFv_RawExtractedSemanticCallOpsV20
+import RPu_JFv_RawExtractedSemanticCallOpsV20
 import ExtractedMaskReducer
-import RawPoseidonExtensionWords
+import RPv_RawPoseidonExtensionWords
 
 set_option autoImplicit false
 noncomputable section

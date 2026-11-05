@@ -25,3 +25,18 @@ fn NJA_occupied_log(){let values:[[u8;32];16]=kani::any();let i:usize=kani::any(
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::unwind(140)]
 fn NJA_sibling_log(){let values:[[u8;32];16]=kani::any();let sibling:[u8;32]=kani::any();let i:usize=kani::any();let k:usize=kani::any();let left:bool=kani::any();kani::assume(i<16&&k<32);let l=if left{values[i][k]}else{sibling[k]};let r=if left{sibling[k]}else{values[i][k]};let mut log=NJA_Log{calls:0,reply:kani::any(),k,left:l,right:r};if cfg!(NJA_bad_argument){log.left^=1;}let before=log.reply[k];let out=NJA_sibling(&mut log,SolanaDigest,&values,i,&sibling,left);assert_eq!(log.calls,1);assert_eq!(out[k],before);}
+#[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::unwind(140)]
+fn NJA_value_at(){let values:[[u8;32];16]=kani::any();let i:usize=kani::any();let k:usize=kani::any();kani::assume(i<16&&k<32);let mut out=aspis_r1_cost_probe::multiproof::NJA_value_at(&values,i);if cfg!(NJA_bad_argument){out[k]^=1;}assert_eq!(out[k],values[i][k]);}
+fn NJA_unreachable(_hash:&SolanaDigest,_parts:&[&[u8]])->[u8;32]{panic!("unexpected digest on rejected entry")}
+#[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<SolanaDigest as aspis_core::Digest32>::digest,NJA_unreachable)]
+#[kani::unwind(140)]
+fn NJA_verify_zero(){let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let root:[u8;32]=kani::any();let k:usize=kani::any();let j:usize=kani::any();kani::assume(k<16&&j<32);let before_i=idx[k];let before_v=val[k][j];let out=aspis_r1_cost_probe::multiproof::verify_in_place(SolanaDigest,aspis_r1_cost_probe::multiproof::Arity::Two,&root,&mut idx,&mut val,0,&[]);if cfg!(NJA_bad_argument){assert!(out)}else{assert!(!out);assert_eq!(idx[k],before_i);assert_eq!(val[k][j],before_v);}}
+#[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<SolanaDigest as aspis_core::Digest32>::digest,NJA_unreachable)]
+#[kani::unwind(140)]
+fn NJA_verify_large(){let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let root:[u8;32]=kani::any();let k:usize=kani::any();let j:usize=kani::any();kani::assume(k<16&&j<32);let before_i=idx[k];let before_v=val[k][j];let out=aspis_r1_cost_probe::multiproof::verify_in_place(SolanaDigest,aspis_r1_cost_probe::multiproof::Arity::Two,&root,&mut idx,&mut val,17,&[]);if cfg!(NJA_bad_argument){assert!(out)}else{assert!(!out);assert_eq!(idx[k],before_i);assert_eq!(val[k][j],before_v);}}

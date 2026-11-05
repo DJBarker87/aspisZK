@@ -1,0 +1,44 @@
+{"attempt": "NJA_K105", "exit_status": 1, "wall_seconds": 5.769528949167579, "peak_rss_kib": "414852", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+intentional, prefix it with an underscore: `_w`
+
+warning: unused variable: `v`
+   --> crates/aspis-statement/src/pool_v1/../../../../tools/r1-builder-reference/records.rs:358:16
+    |
+358 |     let (w, p, v, q) = arbitrary_records();
+    |                ^ help: if this is intentional, prefix it with an underscore: `_v`
+
+error[E0512]: cannot transmute between types of different sizes, or dependently-sized types
+   --> /home/dombarker/project-offloads/codex-cx-multiproof-20261107/NJA_workspace/crates/aspis-statement/../../NJA_poseidon.rs:217:351
+    |
+217 | ...assert_eq!(chunk.len(),4);let header:[usize;4]=unsafe{core::mem::transmute(iter)};let expected_iter=state[at+4..].chunks_exact_m...
+    |                                                          ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: source type: `core::slice::ChunksExactMut<'_, u32>` (320 bits)
+    = note: target type: `[usize; 4]` (256 bits)
+
+error[E0512]: cannot transmute between types of different sizes, or dependently-sized types
+   --> /home/dombarker/project-offloads/codex-cx-multiproof-20261107/NJA_workspace/crates/aspis-statement/../../NJA_poseidon.rs:217:461
+    |
+217 | .....].chunks_exact_mut(4);let expected:[usize;4]=unsafe{core::mem::transmute(expected_iter)};if cfg!(NJA_bad_argument){assert_eq!(...
+    |                                                          ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: source type: `core::slice::ChunksExactMut<'_, u32>` (320 bits)
+    = note: target type: `[usize; 4]` (256 bits)
+
+Some errors have detailed explanations: E0277, E0512.
+For more information about an error, try `rustc --explain E0277`.
+error: could not compile `aspis-statement` (lib) due to 13 previous errors; 111 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 13 compilation errors.
+
+Running as unit: run-ra75aedef88d049cb879030db4dcfa1aa.scope; invocation ID: 97f66aa3e018458986ca031fa0f0e6d3

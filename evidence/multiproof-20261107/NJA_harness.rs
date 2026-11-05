@@ -93,3 +93,5 @@ mod NJA_native {
     #[kani::proof]
     fn NJA_height_exit_control(){let d:u32=kani::any();kani::assume(d>=18);let mut it=d..18;assert!(it.next().is_some());}
 }
+#[cfg(kani)]
+pub fn NJA_value_at(values:&[[u8;32];MAX_BATCH],index:usize)->[u8;32]{value_at(values,index)}
