@@ -6,7 +6,7 @@ sys.dont_write_bytecode=True
 sys.path.insert(0,str(E))
 from NHP_frozen_identity import frozen,apply
 mode=sys.argv[1];kind=sys.argv[2]
-assert mode in ['positive','negative'] and kind in ['short','span']
+assert mode in ['positive','negative'] and kind in ['short','span','storage']
 base=dict(frozen());apply(base,(E/'NHP_KMX_copy_stubs.patch').read_text())
 if kind=='short':
  source='''use super::*;
@@ -48,6 +48,10 @@ fn association() {
 }
 '''
  domain='Valid returning allocations length 4..isize::MAX; arbitrary four hint bytes, arbitrary selected body offset/value; other body bytes zero. Single selected-cell physical span observation, not arbitrary whole-body credit.'
+if kind=='storage':
+ source=source.replace(' let (body,hints)=split_pair_forest_terminal_bump_hints_v1(input).unwrap();','').replace(' assert!(body.len()==split);assert!(body.as_ptr()==input.as_ptr());','')
+ source='\n'.join(l for l in source.split('\n') if 'hints.' not in l).replace('assert!(body[i]==byte);','')
+ domain='Pre-call dynamic allocation storage isolation, same unrestricted lengths as K003; splitter not reached. No production credit.'
 control=''
 if mode=='negative':
  if kind=='short':source=source.replace('matches!(result,Err(ProgramError::InvalidInstructionData))','matches!(result,Err(ProgramError::InvalidAccountData))')
