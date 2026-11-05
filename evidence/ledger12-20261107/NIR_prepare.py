@@ -62,8 +62,8 @@ for folder,prefix in [('l159-physical-20261107','NIN'),('slice-d-pair4-20261107'
  d=json.loads((E.parent/folder/f'{prefix}_AUDIT_ROOTS.json').read_text()); roots.update(d.get('roots',[r for group in d.get('groups',[]) for r in group]) if isinstance(d,dict)else d)
 roots.update(['AspisR1.NIR_SameLawInstance.realizes','AspisR1.NIR_SameLawInstance.permitted_iff']);roots=sorted(roots)
 # 32 batches permit exact full root coverage without any repeated unchanged audit.
-n=29
-(E/'NIR_AUDIT_ROOTS.json').write_text(json.dumps(dict(roots=roots,groups=[roots[i*len(roots)//32:((i+1)*len(roots)//32 if i<28 else len(roots))]for i in range(n)]),indent=1)+'\n')
+n=32
+(E/'NIR_AUDIT_ROOTS.json').write_text(json.dumps(dict(roots=roots,groups=[roots[i*len(roots)//n:(i+1)*len(roots)//n]for i in range(n)]),indent=1)+'\n')
 (E/'NIR_AUDIT_MODULES.json').write_text(json.dumps([['NIR_COMBINED_IMPORT']for _ in range(n)],indent=1)+'\n')
 b={}
 for folder,prefix in [('owner-dedupe-20261107','NIM'),('l159-physical-20261107','NIN'),('slice-d-pair4-20261107','NIG')]:
