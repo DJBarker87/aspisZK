@@ -1,3 +1,25 @@
+# Final bridge disposition
+
+14 new CLOSED rows /9 functions;317 CLOSED/282 OPEN. No entry root or complete TX1/TX2 path. NHJ_CLOSED.json and NHJ_LEDGER_DELTA.json are authoritative. Snapshot remains OPEN, and all support-only guards/copy/clock/registry facts remain local. Final combined L076 and raw/NFX L077 PASS with only standard axioms; NFX13,493 clean.
+
+## Route read-window composition
+
+TX1:331/TX2:214 close pool_route::admitted on all typed valid slices, unrestricted length. Exact frozen body uses slice-array equality for two bytes and starts_with for four. Pinned NativeRust53732d5e0 std code checks length before borrowing the2-byte array, and starts_with checks length>=4 before constructing the same-base prefix4. Descriptor arithmetic/constructors are classified scalar, not a new syscall law. Actual native2-byte and4-byte comparisons and every remaining short length are checked K082..087, with one exact failed ensure per matched mutation. No four-byte readability imposed at length2; no huge fabricated slice; no1232-byte bound. NHJ_RoutePacket proves revalidated emitted safe reference equals the actual adopted Hiq classifier for all slices; NHJ_RouteFrame proves arbitrary suffix frame and short rejection. Retained compiler/std/ABI/RuntimeMemcmp and P6/D188 option-A realization are explicitly USED as reclassification.
+
+E003 extraction provenance is revalidated in NHJ_ROUTE_REUSE.json against exact original Rust input, generation receipt and retained emitted output. Later E005 registry pins did not generate this function. Current physical native gates are new; old bounded NDH passes are not credit.
+
+## Snapshot non-closure
+
+Successful copy/allocation/cleanup support now has exact-capacity domain (K065/066), KMX real-byte value (K039/040), initialized full-copy/disjoint frame induction, header finalization (K041/042), all9 return frames (K015..032), and all actual stage-size producer domains (NHJ_EntryDomains). K075/076/077 proves SDK context/guard cleanup for arbitrary admitted size using only a calibrated unit/reference frame summary. The copied value never comes from that weak summary.
+
+However NHJ_SnapshotPacket.cohort_return supplies an Ok borrow buffer. Its independent bracket_all theorem also allows AccountBorrowFailed for legal blocked counters. Actual Entry.snapshot does not take a borrow result. Without an actual caller/root interpretation proving borrowability, these are not a full native-to-adopted-cohort packet. No output-equality or successful-borrow premise is installed; TX1:343/TX2:239 remain OPEN. All custom copy-cut receipts are quarantined as stated in NHJ_QUARANTINE.json.
+
+## Other new support
+
+K062/063 single-guard native packet includes null or live-key addresses and full reachable error variants; NHJ_GuardPacket supplies exact first-error model induction. K060/061 plus NHJ_RegistryHeader first5 guards is full for that prefix, not full registry authentication. K057/K059 plus NHJ_ClockPacket preserves full returned slot/error; RuntimeClockSlotBinding remains the VALUE trust row. Actual authentication/owned-stage/process child packets are still missing; see NHJ_REMAINING.md.
+
+## Retained stage evidence (history below)
+
 # NHJ bridges — stage 1
 
 TX2:223 CLOSED under (y)/(ak): actual frozen NGL_K037/038 with full key gate, NGL_MetaReferenceModel.source and NHJ_ReadonlyPacket.metadata; NHD_K049/051 exact real/frame controls. All five typed arguments; both reachable Result arms; empty effects/frame. Root domain and physical interpretation retained.

@@ -48,7 +48,7 @@ elif kind=='extract':
  files['NHJ_extract.py']=(E/'NHJ_extract.py').read_text();ref='NHJ_snapshot_ref.rs' if target=='NHJ_SnapshotReference' else 'NHJ_ids_ref.rs';files[ref]=(E/(ref+'.txt')).read_text()
  sources=list(files);command=['python3','NHJ_extract.py',a+'.json'];cfg={}
 elif kind=='inspect':
- files['NHJ_rodata.py']=(E/'NHJ_rodata.py').read_text();sources=['NHJ_rodata.py'];command=['python3','NHJ_rodata.py'];cfg={}
+ name='NHJ_host_finalize.py' if target=='NHJ_host_finalize' else 'NHJ_rodata.py';files[name]=(E/name).read_text();sources=[name];command=['python3',name];cfg={}
 elif kind=='audit':
  for name in ['NHJ_audit.py','NHJ_AUDIT_ROOTS.json','NHJ_EXPECTED_IMPORTS.jsonl','NHJ_REUSED_AUDIT.json']:files[name]=(E/name).read_text()
  sources=list(files)+['NHJ_native/NHJ_ProofDriver.c','NHJ_native/NHJ_ScanDriver.c','NHJ_native/NFA_WALKER.c','NHJ_native/NFA_MemoryLimit.c'];command=['python3','NHJ_audit.py'];cfg={}
@@ -56,7 +56,7 @@ else:
  n='NHJ_generated/'+target.replace('.','/')+'.lean';files[n]=(E/(target+'.lean')).read_text();sources=[n]
  T=env['LEAN_SYSROOT'];command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NHJ_generated','-o','NHJ_objects/'+target.replace('.','/')+'.olean',n];cfg={}
  if target in ['NHJ_ProofDriver','NHJ_ScanDriver']:command+=['-c','NHJ_native/'+target+'.c']
-cfg.update(attempt=a,kind=kind,module=target,sources=sources,command=command,env=env,timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={'selected_objects':{}},expected_time='optimized compilation then focused native contract; no field arithmetic' if kind=='kani' else 'raw kernel traversal and NFX source scan; existing optimized binaries reused' if kind=='audit' else 'read-only ELF slot inspection' if kind=='inspect' else 'focused Lean elaboration')
+cfg.update(attempt=a,kind=kind,module=target,sources=sources,command=command,env=env,timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={'selected_objects':{}},expected_time='optimized compilation then focused native contract; no field arithmetic' if kind=='kani' else 'raw kernel traversal and NFX source scan; existing optimized binaries reused' if kind=='audit' else 'private retained object export and disk inventory' if kind=='inspect' and target=='NHJ_host_finalize' else 'read-only ELF slot inspection' if kind=='inspect' else 'focused Lean elaboration')
 files[a+'.json']=json.dumps(cfg)
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
@@ -95,7 +95,7 @@ b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if 
 names += [str(p.relative_to(b)) for pat in ['-graph*','-source*','-lock*','-erasure*'] for p in b.glob(a+pat)]
 if {kind!r}=='extract':
  names += [str(p.relative_to(b)) for p in (b/'NHJ_extracted'/{target!r}).rglob('*') if p.is_file()]+[a+'-extraction-pins.json']+([a+'.llbc'] if (b/(a+'.llbc')).exists() else [])
-if {kind!r}=='inspect':names+=['NHJ_RODATA.json']
+if {kind!r}=='inspect':names+=['NHJ_HOST_FINAL.json','NHJ_CACHE_EXPORT.json'] if {target!r}=='NHJ_host_finalize' else ['NHJ_RODATA.json']
 if {kind!r}=='audit':
  names += [str(p.relative_to(b)) for p in (b/{target!r}).rglob('*') if p.is_file()]
  names += [str(p.relative_to(b)) for p in b.glob({archive_pattern!r})]

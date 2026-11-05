@@ -39,22 +39,26 @@ theorem first_error {E : Type} (missing : AspisR1.IDa_Deployed.Uninstalled E)
   unfold AdapterRw.r1_pool_adapter.owned.authenticate_invariant_release_registry
   simp only [key,poolId,registryId,mask,NGL_ArrayEquality.ne_value,bind_tc_ok,lift]
   by_cases h0 : pool = NHJ_IdPacket.pool devnet
-  · simp [h0,decide_true,Bool.not_true,Bool.false_eq_true,if_false,mask,bind_tc_ok,lift]
-    trace_state
+  · have d0 : decide (pool = NHJ_IdPacket.pool devnet) = true := by simp [h0]
+    simp only [d0,Bool.not_true,Bool.false_eq_true,if_false]
     by_cases h1 : master.verifier_policy.flags &&& 1#u8 = 0#u8
-    · trace_state
-      simp [h1,if_true]
-    · trace_state
-      simp [h1,if_false,registryId,bind_tc_ok,NGL_ArrayEquality.ne_value]
+    · simp only [h1,if_true]
+    · simp only [h1,if_false]
       by_cases h2 : master.verifier_policy.registry_program = NHJ_IdPacket.registry devnet
-      · simp [h2,decide_true,Bool.not_true,Bool.false_eq_true,if_false,NGL_ArrayEquality.ne_value,bind_tc_ok]
+      · have d2 : decide (master.verifier_policy.registry_program = NHJ_IdPacket.registry devnet) = true := by simp [h2]
+        simp only [d2,Bool.not_true,Bool.false_eq_true,if_false]
         by_cases h3 : master.verifier_policy.registry_authority = Array.repeat 32#usize 0#u8
-        · simp [h3,decide_true,Bool.not_true,Bool.false_eq_true,if_false,NGL_ArrayEquality.ne_value,bind_tc_ok]
+        · have d3 : decide (master.verifier_policy.registry_authority = Array.repeat 32#usize 0#u8) = true := by simp [h3]
+          simp only [d3,Bool.not_true,Bool.false_eq_true,if_false]
           have h4 : master.verifier_policy.policy_binding ≠ AdapterRw.r1_pool_adapter.AUDIT_POLICY_BINDING := by
-            simpa [Bad,h0,h1,h2,h3] using bad
-          simp [h4,decide_false,Bool.not_false,if_true]
-        · simp [h3,decide_false,Bool.not_false,if_true]
-      · simp [h2,decide_false,Bool.not_false,if_true]
-  · simp [h0,decide_false,Bool.not_false,if_true]
+            simpa only [Bad,h0,h1,h2,h3,ne_eq,not_true_eq_false,false_or] using bad
+          have d4 : decide (master.verifier_policy.policy_binding = AdapterRw.r1_pool_adapter.AUDIT_POLICY_BINDING) = false := by simp [h4]
+          simp only [d4,Bool.not_false,if_true]
+        · have d3 : decide (master.verifier_policy.registry_authority = Array.repeat 32#usize 0#u8) = false := by simp [h3]
+          simp only [d3,Bool.not_false,if_true]
+      · have d2 : decide (master.verifier_policy.registry_program = NHJ_IdPacket.registry devnet) = false := by simp [h2]
+        simp only [d2,Bool.not_false,if_true]
+  · have d0 : decide (pool = NHJ_IdPacket.pool devnet) = false := by simp [h0]
+    simp only [d0,Bool.not_false,if_true]
 #print axioms first_error
 end NHJ_RegistryHeader

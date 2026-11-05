@@ -1,0 +1,21 @@
+pub fn table_ref(v:(u32,u32))->(u32,u32){(v.0,v.1)}
+pub fn fibre_get_ref(v:usize)->usize{v}
+pub fn fibre_valid_ref(v:usize)->bool{v<262144}
+pub fn slot_ref(v:usize)->usize {match v {0=>28359,1=>33031,2=>37703,3=>41799,4=>47303,5=>52807,6=>57607,_=>0}}
+pub fn flag_ref(v:u8,mask:u8)->bool {v & mask != 0}
+pub fn retirement_ref(v:u64)->bool{v==u64::MAX}
+pub fn status_ref(v:u8)->Option<u8>{match v {0=>Some(0),1=>Some(1),2=>Some(2),3=>Some(3),_=>None}}
+pub fn admitted_ref(data:&[u8])->bool{(data.len()==2 && data[0]==3 && (data[1]==10 || data[1]==11)) || (data.len()>=4 && data[0]==65 && data[1]==83 && data[2]==81 && data[3]==56)}
+pub fn finish_ref(accepted:[u32;22],len:usize)->Result<[u32;22],(usize,usize)>{if len==22 {Ok(accepted)} else {Err((len,64))}}
+pub fn digit_ref(d:u32,add:u32)->(u32,u32){let n=u64::from(d)+u64::from(add);((n%2147483647) as u32,(n/2147483647) as u32)}
+pub fn pack8_ref(d:[u32;8])->[u32;8]{d}
+pub fn absorb_header_ref(row:u8,n:usize)->[u8;6]{let l=(n as u32).to_le_bytes();[0,160+row,l[0],l[1],l[2],l[3]]}
+
+pub fn eq22(a:&[u32;22],b:&[u32;22])->bool{a[0]==b[0] && a[1]==b[1] && a[2]==b[2] && a[3]==b[3] && a[4]==b[4] && a[5]==b[5] && a[6]==b[6] && a[7]==b[7] && a[8]==b[8] && a[9]==b[9] && a[10]==b[10] && a[11]==b[11] && a[12]==b[12] && a[13]==b[13] && a[14]==b[14] && a[15]==b[15] && a[16]==b[16] && a[17]==b[17] && a[18]==b[18] && a[19]==b[19] && a[20]==b[20] && a[21]==b[21]}
+pub fn qwrite_ref(mut a:[u32;8],q:u32,r:u64,j:usize)->([u32;8],u64,usize){a[j-1]=q;(a,r,j-1)}
+pub fn eq8(a:&[u32;8],b:&[u32;8])->bool{a[0]==b[0]&&a[1]==b[1]&&a[2]==b[2]&&a[3]==b[3]&&a[4]==b[4]&&a[5]==b[5]&&a[6]==b[6]&&a[7]==b[7]}
+
+pub fn base_add_ref(a:u32,b:u32)->u32 {let s=a+b;if s>=2147483647 {s-2147483647} else {s}}
+pub fn base_sub_ref(a:u32,b:u32)->u32 {let s=a+2147483647-b;if s>=2147483647 {s-2147483647} else {s}}
+pub fn cmr_ref(a:u32,b:u32)->(u32,u32){(base_sub_ref(base_add_ref(a,a),b),base_add_ref(a,base_add_ref(b,b)))}
+pub fn policy_ref(flags:u8,program_zero:bool,authority_zero:bool,binding_zero:bool)->u8{if flags & !3 !=0 {1} else if program_zero||binding_zero {2} else {let immutable=flags&1!=0;let deployment=flags&2!=0;if deployment&&!immutable {3} else if immutable!=authority_zero {3} else {0}}}

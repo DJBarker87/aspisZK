@@ -1,4 +1,4 @@
-# NHJ stubs — stage 1
+# NHJ stubs and exact domains
 
 | Stub | Model law | Domain and frame |
 |---|---|---|
@@ -9,7 +9,7 @@ NHJ_K001 checks full reply and local arguments with modifies(log); NHJ_K002 flip
 
 Stage 2: error_oracle replaces only the data getter's error.clone, logs the SAME borrowed ProgramError address and returns an arbitrary Bool-selected AccountBorrowFailed/InvalidAccountData. Both are reachable from snapshot; no Borsh/String case is omitted from the stated SnapshotError domain. Paired law: NHJ_DataPacket.exact_error plus NGL_CloneDomain.clone, native clone NHD_K014..017. data_cut leaves the successful Vec-to-slice borrow actual and unchanged. NHJ_K003 PASS/K004 corrupted reply FAIL, empty external modifies and local log only. The four-byte success input calibrates the logging cut; complete real-body capacity/value/frame coverage is the retained NGL eleven-shape matrix, not inferred from the calibration.
 
-The length clone cut is pending closure/audit. It splits NHD's failed whole-result shape at the pinned core Result::clone match and the actual canonical ProgramError clone; no trait stub registration or compiler fix is introduced. The exact external Rust source and pin are retained in NHJ_rust_result.rs.txt/NHJ_RUST_RESULT_PIN.json. This is a use of retained std/compiler/P6 realization, not a new trust row or a source-to-binary proof.
+Historical note: the length clone cut was pending at stage2; it is now CLOSED as detailed below. It splits NHD's failed whole-result shape at the pinned core Result::clone match and the actual canonical ProgramError clone; no trait stub registration or compiler fix is introduced. The exact external Rust source and pin are retained in NHJ_rust_result.rs.txt/NHJ_RUST_RESULT_PIN.json. This is a use of retained std/compiler/P6 realization, not a new trust row or a source-to-binary proof.
 
 Stage 3: length_clone_cut is the exact pinned core Result::clone match specialized to usize/ProgramError, replacing only the Err payload clone by error_oracle. usize.clone stays actual. K005 proves full Result, exact error argument/reply/count and empty external modifies; K006 count corruption FAIL. NHD_K014..017 and NGL_CloneDomain.clone discharge the exact two-constructor payload domain, and NHJ_LengthPacket.substitute associates the clone schedule to the emitted OwnedAccount.data_len. No unmodified timed-out whole-result shape or trait-stub ICE is retried. NHJ_certify.py pins/checks the Rust core source and exact frozen self.length.clone call.
 
@@ -22,8 +22,21 @@ Current support only (no parent or slice-row promotion):
 | after-copy ReturnLog move; no copy implementation | K015..032 positive/frame-negative pairs, all9 retained capacities | NGL_BorrowFrame.forwarded; SAME existing returned allocation, nonempty matching length; full bytes framed |
 | actual Vec allocation / actual KMX byte / actual set_len | K037/038; K039/040; K041/042 | NHJ_CopyPacket.initialized/contents/source_contents, NHD window induction, NHJ_StdCopy.to_vec_exact; initialized source, fresh valid disjoint allocation, bounds |
 | actual SDK guard across actual allocation/KMX window | K055/056 | NHJ_SdkBorrowPacket.returning_shared/rejected_shared and NHJ_SdkBracket; existing SDK trust, arbitrary valid related states, fresh typed token, legal counts; native context128 only, no full-snapshot credit |
-| guard_step local constructor/log | K053/054 nonnull-only; corrected nullable-domain K062 pending | NHJ_GuardPacket.decode_encode/first_error; stage<6; success or exact stage error (IAD; checkpoint also ABF; distinct InvalidArgument); current caller association OPEN |
+| guard_step local constructor/log | K053/054 nonnull-only; corrected nullable-domain K062 PASS/K063 receiver-corruption FAIL | NHJ_GuardPacket.decode_encode/first_error; stage<6; success or exact stage error (IAD; checkpoint also ABF; distinct InvalidArgument); current caller association OPEN |
 | fixed32 actual deployed ID getter | K048/049 and050/051; default NHD pairs retained | NHJ_IdPacket.extracted and NHJ_DeployedIds.pool_actual/registry_actual; exact pinned immutable rodata slots and actual RPx Uninstalled specialization |
 | after-clock match, no syscall stub | K057/K059; K058 excluded as clean control | NHJ_ClockPacket success/error_payload/unused_fields; pinned From<u64> constructor domain; same actual Slot payload, no clock VALUE assertion |
 
 Quarantine is binding: copy_oracle and dependent K011/012/013/014/033/035/036 are not native credit, irrespective of verdict. See NHJ_QUARANTINE.json. The exact KMX patch remains the only copy implementation/stub used for credit. No field multiplication, function-pointer-dependent pass or writable static is admitted. All complete row packets retain exact callee modifies sets and constructor domains; the listed pending cuts cannot stand in for missing parent laws.
+
+## Final native-support matrix (snapshot and authentication remain OPEN)
+
+| Summary / source cut | Native evidence and controls | Paired model/domain and exact limitation |
+|---|---|---|
+| copy_unit_frame via stub_verified, unit reply and &u8/&mutMaybeUninit<u8> | K067 real weak contract PASS; K068 real observation PASS; K069 unimplied observation FAIL; K070 inverted ensure FAIL; K071 modifies violation FAIL | Original exact KMX copy1 native law K039/040 and NHD_SnapshotWindows.byte/source_preserved, NHJ_CopyPacket initialized/contents. Weak Unit summary supplies only destination frame, **no copied value**. Unconstrained destination is allowed within modifies(dst). These controls calibrate exactly the unit/reference carrier, not Result. |
+| SDK context using that frame-only summary | K072/073/074 at58295 and K075/076/077 all sizes1..58295; omittedDrop and wrong source argument FAIL | NHJ_SdkBracket/NHJ_SdkBorrowPacket/NHJ_SdkDomains; SAME guarded byte selected into actual fresh spare capacity, metadata unchanged and guards restored. Copy VALUE is separately K039/040 + KMX induction; never inferred from weak summary. |
+| actual allocation exact-capacity strengthening | K065 PASS/K066 external write frame FAIL | Establishes cap==requested count; K037 cap>=count did not imply K041 cap<=58295. NHJ_EntryDomains.allocation_bounds derives the table bounds. Existing allocator abort/divergence interface retained. |
+| all-usize admission / complete rejected metadata constructor | K078/079, K080/081 | NHJ_SnapshotAssociation.source / NHJ_SnapshotEntry.source; all rejected lengths and key/owner/flag fields, no inner success assumption. |
+| registry initial5 guard continuation | K060/061 | NHJ_RegistryHeader.first_error actual emitted prefix, deployed IDs bound. Policy/decoder/PDA suffix is not supplied by a stub or assumed success. |
+| route classifier | K082/083 scalar descriptor+4-byte reads, K084/085 actual2-byte input, K086/087 actual0/1/3 inputs | No stub; NHJ_RoutePacket.extracted/associate and NHJ_RouteFrame.four_window/rejected_short. Complete source footprint and unbounded-length caller domain in NHJ_SOURCE_ASSOCIATION.json. |
+
+Snapshot's model Error path has only the generic reference association NHJ_SnapshotAssociation.source, not a matching actual Entry.snapshot result. bracket_all deliberately exposes rather than excludes legal blocked counters. Thus its support matrix may not be used as a CLOSED snapshot callee packet. No paired-theorem obligation is hidden as a native pass.

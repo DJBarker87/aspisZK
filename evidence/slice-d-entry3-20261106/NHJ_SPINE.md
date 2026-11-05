@@ -1,36 +1,37 @@
-# NHJ entry spine — stage 1
+# NHJ entry spine — final scoped result
 
-Two adjacent leaf rows CLOSED under (y)/(ak): TX2:223 readonly_meta_ok and TX2:236 require_readonly_account. No complete entry path. The thirteen entry-spine occurrences remain OPEN. Target not yet established.
+**14 new CLOSED rows /9 functions; zero complete TX1/TX2 paths. Target not yet established.** Authoritative input is the unchanged NGZ599-row ledger:303 CLOSED/296 OPEN; additive NHJ result317 CLOSED/282 OPEN. Snapshot is expressly OPEN. No security, privacy or custody theorem is promoted.
 
-## Retained NGL program-entry spine
-
-Statuses refer to pinned NGJ ledger8 plus this lane’s admitted delta; unimported parallel packets receive no credit here.
-
-All 13 baseline occurrences remain OPEN. Zero new composed rows; no accepted-spend vertical path is certified. Helper contract candidates are additionally blocked by the missing ruling (t) interface controls in NGL_FIDELITY_FINDING.md.
+## Entry roots and distance
 
 | Row | Function | Status | Owner / exact remaining obligation |
 |---|---|---|---|
-| TX1:330 | `programs/r1-cost-probe/src/lib.rs::process_r1_cost_probe_instruction` | OPEN | NGL_: Full original AccountInfo/data forwarding, route domain, child process certificate and model/native/effects composition. |
-| TX1:333 | `programs/r1-cost-probe/src/r1_pool_adapter.rs::process` | OPEN | NGL_: Admitted route eliminates lifecycle branches; exact stage1/stage2 arguments and all returned Results/effects; both child packets. |
-| TX1:344 | `programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage1` | OPEN | NGL_: All three snapshot packets, SDK mutable borrow, SAME checkpoint bytes, KMX one-window copy/frame and cleanup. |
-| TX1:345 | `programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage1_owned` | OPEN | NGL_: All account guards/data/canonical decode domains and proof-prefix validation, first_decoded, exact result/cleanup order. |
-| TX1:328 | `programs/r1-cost-probe/src/lib.rs::first_decoded` | OPEN | NGL_: SAME public/proof/split and deployed None observer; candidate tx1 packet plus error mapping/logging and full result/cleanup. |
+| TX1:330 | `programs/r1-cost-probe/src/lib.rs::process_r1_cost_probe_instruction` | OPEN | NHJ / lead: Full original AccountInfo/data forwarding, route domain, child process certificate and model/native/effects composition. |
+| TX1:333 | `programs/r1-cost-probe/src/r1_pool_adapter.rs::process` | OPEN | NHJ / lead: Route predicate now CLOSED for all lengths. Still needs exact stage schedule, lifecycle rejection and both child Results/effects packets. |
+| TX1:344 | `programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage1` | OPEN | NHJ / lead: Snapshot full cohort borrow-result association remains OPEN; three snapshot calls, SDK mutable write and SAME1768 checkpoint/cleanup, then CLOSED owned-stage packet. |
+| TX1:345 | `programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage1_owned` | OPEN | NHJ / lead: All account guards/data/canonical decode domains and proof-prefix validation, first_decoded, exact result/cleanup order. |
+| TX1:328 | `programs/r1-cost-probe/src/lib.rs::first_decoded` | OPEN | NHJ / lead: SAME public/proof/split and deployed None observer; candidate tx1 packet plus error mapping/logging and full result/cleanup. |
 | TX1:094 | `crates/aspis-r1-cost-probe/src/candidate.rs::tx1` | OPEN | NFW_: Candidate tx1 composed packet and exact public/proof/S2/split/prepared/query/checkpoint domains needed by first_decoded. |
-| TX2:213 | `programs/r1-cost-probe/src/lib.rs::process_r1_cost_probe_instruction` | OPEN | NGL_: Full original AccountInfo/data forwarding, ASQ8 route domain and child process certificate. |
-| TX2:221 | `programs/r1-cost-probe/src/r1_pool_adapter.rs::process` | OPEN | NGL_: ASQ8 first-byte disjointness, same input stage2 forwarding and exact Result/effects. |
-| TX2:240 | `programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage2` | OPEN | NGL_: Empty return-data clear, seven snapshot packets, clock syscall exact reply and stage2_owned forwarding/cleanup. |
-| TX2:241 | `programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage2_owned` | OPEN | NGL_: Full validate_asq8 authentication/data/statement provenance, SAME tx2 inputs, error callback and emit_result composition. |
+| TX2:213 | `programs/r1-cost-probe/src/lib.rs::process_r1_cost_probe_instruction` | OPEN | NHJ / lead: Full original AccountInfo/data forwarding, ASQ8 route domain and child process certificate. |
+| TX2:221 | `programs/r1-cost-probe/src/r1_pool_adapter.rs::process` | OPEN | NHJ / lead: Route predicate now CLOSED; ASQ8/stage2 schedule and exact child Result/effects packet remain. |
+| TX2:240 | `programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage2` | OPEN | NHJ / lead: Empty-clear trust still pending; seven snapshot cohort joins and stage2_owned missing. Clock reply/slot continuation is proved locally; syscall VALUE remains accepted runtime trust. |
+| TX2:241 | `programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage2_owned` | OPEN | NHJ / lead: Full validate_asq8 authentication/data/statement provenance, SAME tx2 inputs, error callback and emit_result composition. |
 | TX2:064 | `crates/aspis-r1-cost-probe/src/candidate.rs::tx2_authenticated` | OPEN | NFW_: Authenticated candidate packet; public/proof/checkpoint exact domains passed by stage2_owned. |
 | TX2:065 | `crates/aspis-r1-cost-probe/src/candidate.rs::tx2_common` | OPEN | NFW_: Common TX2 packet and all prepared/resume/query domains with None observer. |
 | TX2:115 | `crates/aspis-r1-cost-probe/src/verifier.rs::finish_relation` | OPEN | NFW_ / lead to confirm: Exact caller-established finish_relation input/invariant and composed relation checker; no accepted-run hypothesis. |
 
-Adjacent leaves: lib.rs::error TX1:NGB001/TX2:211 requires the exact formatted msg! bytes and constant ProgramError with frame; first retains terminal decoding and first_decoded forwarding. Snapshot, data, data_len, require_readonly_account, require_verifier_checkpoint, require_distinct_accounts and account decoders are NGL_ obligations. NGC_ owns checkpoint production; Pool association belongs to NGG_/NGK_. All named boundaries are obligations addressed to those jobs, not assumptions silently installed.
+## Adjacent helper packets
 
+| Member | Rows / status | Distance removed or retained |
+|---|---|---|
+| readonly_meta_ok / require_readonly_account | TX2:223/236 CLOSED | Exact metadata, constructor coverage and first-error local log |
+| OwnedAccount::data / data_len | TX1:335/336, TX2:229/230 CLOSED | SAME allocation or canonical deferred error; full Result clone transport |
+| require_verifier_checkpoint | TX1:341/TX2:238 CLOSED | Actual metadata prefix then CLOSED length packet and size1768 |
+| require_distinct_accounts | TX1:339/TX2:235 CLOSED | N3/N7 same key references, one native invariant step plus existing induction |
+| pool_program_id / registry_program_id | TX2:220/225 CLOSED | Named default/devnet rodata slots, actual RPx IDa/FIp pipeline specialization |
+| pool_route::admitted | TX1:331/TX2:214 CLOSED | All lengths, physical2/4-byte windows, complete unbounded emitted/cohort association |
+| snapshot | TX1:343/TX2:239 OPEN | Allocation/copy/header/SDK cleanup and producer domains proved; legal borrow-error path is not joined to actual Entry.snapshot |
+| lib.rs::error | TX1:NGB001/TX2:211 OPEN | Eight labels retained; full Debug formatter callback/native bytes/cleanup association quarantined or missing |
+| authenticate_asq8_accounts / authenticate_invariant_release_registry | OPEN | Nullable single-guard step and first5 registry guards proved; full decoder/PDA/first-error suffix packets missing |
 
-Distance update: metadata and owned readonly are now callable packets on their documented domains. data/data_len/checkpoint/distinct/snapshot/logging/IDs/authentication and candidate boundaries still separate both TX1 and TX2 from a complete entry path. Root domain and PhysicalInterpretation remain obligations at the eventual entry root; no SameExecution or accepted-output premise introduced.
-
-Stage 2 distance update: data is a CLOSED leaf packet in both transactions. Its caller must still obtain the SAME snapshot allocation/bytes on NGL_StorageCases.Domain; snapshot is OPEN. TX1:343 stage1 therefore still needs three snapshot packets, owned-stage/candidate and SAME1768 write/cleanup. TX2:239/240 still needs seven snapshots, checkpoint/authentication/registry/PDA/ID and candidate packets, clock forwarding, exact empty-clear runtime row and checkpoint identity. The thirteen spine rows remain OPEN; no complete TX1/TX2 path.
-
-Stage 3 distance update: length and checkpoint guards are CLOSED in both transactions. The first native admission chain can now consume metadata/readonly/data/length/checkpoint, on their SAME snapshot carriers. Remaining immediate leaf: distinct-account loop (N=7 then N=3 association); snapshot allocation/header/source/cleanup; exact error logging; deployed ID source-slot association. Authentication still needs full registry/decoder/PDA/first-error/cleanup prefixes. TX1 owned stage also needs first_decoded/candidate tx1; TX2 owned stage needs authenticated candidate and result emission packets. All thirteen entry-spine rows remain OPEN.
-
-Stage 4 distance update: the distinct guard is now CLOSED for TX1 N=3 and TX2 N=7, using one native iteration plus the existing induction. Thus the metadata/data/length/checkpoint/distinct helper barrier is removed. Snapshot, error logging and deployment-ID association remain immediate independent leaves. Authentication must still compose its full ordered prefix and registry/decoder/PDA checks, and owned stages retain real candidate/first_decoded boundaries. Thirteen entry-spine occurrences remain OPEN, with no complete TX1/TX2 entry path.
+first is reachability-excluded by C3-BIN; no work spent on it. first_decoded and candidate tx1/tx2 are real external boundary obligations, not assumed packets. Every root retains its actual argument/physical domain. No SameExecution wrapper, parent acceptance or output-equality premise is introduced. See NHJ_REMAINING.md for each member and the unused-budget review.

@@ -1,8 +1,8 @@
 {
  "schema_version": 1,
  "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
- "new_composed_functions": 8,
- "new_composed_rows": 12,
+ "new_composed_functions": 9,
+ "new_composed_rows": 14,
  "functions": [
   {
    "id": "NHJ::metadata",
@@ -243,6 +243,35 @@
     "core::hint::black_box identity on immutable referenced static"
    ],
    "semantic_review_sha256": "6bb64807a3440191bbe009fd41dfee61da72a91c87b43f2e1631b4671eb90bbf"
+  },
+  {
+   "id": "NHJ::route",
+   "subject": "programs/r1-cost-probe/src/pool_route.rs::admitted",
+   "route": "NCO/P6 fixed read-window and scalar descriptor classification",
+   "model_theorem": "NHJ_RoutePacket.associate",
+   "inner_hypotheses_remaining": [],
+   "root_domain": "All typed valid Rust slices; no upper bound on length, including above1232 and58295. len2 needs only two readable bytes; len>=4 uses borrowed prefix4, lengths0/1/3 reject without payload comparison. No supplied result or success premise.",
+   "native_passes": [
+    "NHJ_K082",
+    "NHJ_K084",
+    "NHJ_K086"
+   ],
+   "matched_controls": [
+    "NHJ_K083",
+    "NHJ_K085",
+    "NHJ_K087"
+   ],
+   "retained_interface_real_and_modifies": "K082/084/086 actual frozen predicate; empty modifies, K083/085/087 corrupt argument/invert ensures and fail. No historical bounded native pass reused.",
+   "source_association": "NHJ_SOURCE_ASSOCIATION.json exact frozen body and pinned Rust53732d5e0 starts_with/as_array/array equality/slice index/cmp implementation; metadata and checked pointer-length constructors classified scalar, fixed2/4 comparisons tested on actual buffers. Revalidated E003 emitted reference provenance in NHJ_ROUTE_REUSE.json, recompiled L070; NHJ_RoutePacket.extracted/associate full unbounded model; NHJ_RouteFrame.four_window/rejected_short full suffix frame.",
+   "combined": "NHJ_L076",
+   "audit": "NHJ_L077",
+   "trust_reclassification": "P6/D188 option A retained plus pinned std/compiler/ABI/source-to-ELF and existing RuntimeMemcmp realization; scalar/constructor classification explicit, not new runtime trust or a claim of kernel proof for Rust std.",
+   "effects": "Pure metadata and first2/4-byte reads, all suffix bytes framed, no copy, allocation, callback or ordered effects.",
+   "closed_children": [
+    "std starts_with: exact length4 prefix, scalar descriptor projection, fixed native comparison",
+    "slice-array equality: as_array<2> length check and fixed native comparison"
+   ],
+   "semantic_review_sha256": "128bca352e0f14115920435e0a70d9e7ca1322e3f3cf2c17784fd6045f72307f"
   }
  ],
  "driver_root_status": "OPEN"

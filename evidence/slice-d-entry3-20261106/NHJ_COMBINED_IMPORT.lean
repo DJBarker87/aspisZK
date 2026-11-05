@@ -1,3 +1,12 @@
+import NHJ_RouteFrame
+import NHJ_RoutePacket
+import NHJ_RouteReference
+import NHJ_SnapshotPacket
+import NHJ_SdkDomains
+import NHJ_EntryDomains
+import NHJ_SnapshotEntry
+import NHJ_ClockPacket
+import NHJ_RegistryHeader
 import NHJ_DeployedIds
 import NHJ_GuardPacket
 import NHJ_CopyPacket
@@ -62,3 +71,28 @@ import NHJ_DistinctPacket
 
 #print axioms NHJ_DeployedIds.pool_actual
 #print axioms NHJ_DeployedIds.registry_actual
+
+#print axioms NHJ_ClockPacket.success
+#print axioms NHJ_ClockPacket.error_payload
+#print axioms NHJ_ClockPacket.unused_fields
+#print axioms NHJ_RegistryHeader.first_error
+
+#print axioms NHJ_SnapshotEntry.len_iff
+#print axioms NHJ_SnapshotEntry.source
+#print axioms NHJ_EntryDomains.source_domain
+#print axioms NHJ_EntryDomains.first_table
+#print axioms NHJ_EntryDomains.second_table
+#print axioms NHJ_EntryDomains.allocation_bounds
+#print axioms NHJ_SdkDomains.member_bound
+#print axioms NHJ_SdkDomains.not_found
+#print axioms NHJ_SdkDomains.enabled_exists
+#print axioms NHJ_SdkDomains.counter_cases
+#print axioms NHJ_SnapshotPacket.cohort_return
+#print axioms NHJ_SnapshotPacket.caller_domains
+#print axioms NHJ_SnapshotPacket.bracket_all
+#print axioms NHJ_RoutePacket.cohort
+#print axioms NHJ_RoutePacket.extracted
+#print axioms NHJ_RoutePacket.associate
+#print axioms NHJ_RouteFrame.four_length
+#print axioms NHJ_RouteFrame.four_window
+#print axioms NHJ_RouteFrame.rejected_short

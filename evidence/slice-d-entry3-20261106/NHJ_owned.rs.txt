@@ -300,20 +300,38 @@ fn guard_wrong_packet(a:&OwnedAccount,k:*const Pubkey,stage:usize,l:&mut GuardSt
 fn guard_native_wrong(){let a=account();let k=Pubkey::new_from_array(kani::any());let stage:usize=kani::any();kani::assume(stage<6);let mut l=GuardStepLog{count:stage,receiver:core::ptr::null(),expected:core::ptr::null(),ok:kani::any(),borrow:kani::any()};guard_wrong_packet(&a,if kani::any(){core::ptr::null()}else{&k},stage,&mut l);}
 // Exact KMX one-byte window, real typed SDK guard held across real allocation.
 // This is not a to_vec replacement or a full snapshot certificate.
-fn sdk_real_window(leak:bool){
- let k=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());let mut coins:u64=kani::any();let coins0=coins;let mut bytes=kani::vec::exact_vec::<u8,128>();let index:usize=kani::any();kani::assume(index<128);let selected=bytes[index];let a=AccountInfo::new(&k,false,false,&mut coins,&mut bytes,&owner,false,0);
+fn sdk_real_window<const N:usize>(leak:bool){
+ let k=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());let mut coins:u64=kani::any();let coins0=coins;let mut bytes=kani::vec::exact_vec::<u8,N>();let index:usize=kani::any();kani::assume(index<N);let selected=bytes[index];let a=AccountInfo::new(&k,false,false,&mut coins,&mut bytes,&owner,false,0);
  let external:bool=kani::any();let held=if external{Some(a.try_borrow_data().unwrap())}else{None};
- let guard=a.try_borrow_data().unwrap();let mut dst=Vec::<core::mem::MaybeUninit<u8>>::with_capacity(128);unsafe{dst.set_len(128);core::ptr::copy_nonoverlapping(guard.as_ptr().add(index),dst.as_mut_ptr().add(index).cast::<u8>(),1);assert_eq!(dst[index].assume_init_read(),selected);}
+ let guard=a.try_borrow_data().unwrap();let mut dst=Vec::<core::mem::MaybeUninit<u8>>::with_capacity(N);unsafe{dst.set_len(N);core::ptr::copy_nonoverlapping(guard.as_ptr().add(index),dst.as_mut_ptr().add(index).cast::<u8>(),1);assert_eq!(dst[index].assume_init_read(),selected);}
  if leak{core::mem::forget(guard)}else{drop(guard)}
  assert_eq!(a.try_borrow_mut_data().is_ok(),!external);drop(held);assert!(a.try_borrow_mut_data().is_ok());assert_eq!(a.lamports(),coins0);
 }
 #[kani::proof] #[kani::unwind(35)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn sdk_real_copy_window(){sdk_real_window(false);}
+fn sdk_real_copy_window(){sdk_real_window::<128>(false);}
 #[kani::proof] #[kani::unwind(35)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn sdk_real_copy_window_wrong(){sdk_real_window(true);}
+fn sdk_real_copy_window_wrong(){sdk_real_window::<128>(true);}
 
+macro_rules! sdk_window_instance {
+ ($good:ident,$bad:ident,$n:expr)=>{
+ #[kani::proof] #[kani::unwind(35)]
+ #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+ fn $good(){sdk_real_window::<$n>(false);}
+ #[kani::proof] #[kani::unwind(35)]
+ #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+ fn $bad(){sdk_real_window::<$n>(true);}
+ }
+}
+sdk_window_instance!(sdk_window_58295,sdk_window_58295_wrong,58295);
+sdk_window_instance!(sdk_window_1768,sdk_window_1768_wrong,1768);
+sdk_window_instance!(sdk_window_1880,sdk_window_1880_wrong,1880);
+sdk_window_instance!(sdk_window_384,sdk_window_384_wrong,384);
+sdk_window_instance!(sdk_window_192,sdk_window_192_wrong,192);
+sdk_window_instance!(sdk_window_768,sdk_window_768_wrong,768);
+sdk_window_instance!(sdk_window_256,sdk_window_256_wrong,256);
+sdk_window_instance!(sdk_window_320,sdk_window_320_wrong,320);
 // Same after-Clock::get continuation as deployed stage2; no syscall value proof.
 fn clock_error(tag:u8,custom:u32)->ProgramError{match tag{
 0=>ProgramError::Custom(custom),
@@ -407,3 +425,139 @@ fn registry_header(){let p=Pubkey::new_from_array(kani::any());registry_header_p
 #[kani::proof_for_contract(registry_header_wrong_packet)] #[kani::unwind(35)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn registry_header_wrong(){let p=Pubkey::new_from_array(kani::any());registry_header_wrong_packet(&p,&registry_policy());}
+// Domain repair: finalize requires cap<=58295; cap>=n alone did not establish it.
+#[kani::requires(n>0&&n<=58295)] #[kani::ensures(|r|*r)] #[kani::modifies()]
+fn allocation_exact_packet(n:usize)->bool{let v=core::mem::ManuallyDrop::new(Vec::<u8>::with_capacity(n));v.len()==0&&v.capacity()==n}
+#[kani::proof_for_contract(allocation_exact_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn allocation_exact(){let n:usize=kani::any();kani::assume(n>0&&n<=58295);allocation_exact_packet(n);}
+#[kani::requires(n>0&&n<=58295)] #[kani::ensures(|r|*r)] #[kani::modifies()]
+fn allocation_exact_wrong_packet(n:usize,cell:&mut u8)->bool{let v=core::mem::ManuallyDrop::new(Vec::<u8>::with_capacity(n));*cell^=1;v.len()==0&&v.capacity()==n}
+#[kani::proof_for_contract(allocation_exact_wrong_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn allocation_exact_wrong(){let n:usize=kani::any();kani::assume(n>0&&n<=58295);let mut cell=kani::any();allocation_exact_wrong_packet(n,&mut cell);}
+// Unit/reference contract shape; frame-only summary is used only for context.
+// The independent exact byte value law remains K039/K040 and NHJ_CopyPacket.
+#[kani::ensures(|_|true)] #[kani::modifies(dst)]
+fn copy_unit_frame(src:&u8,dst:&mut core::mem::MaybeUninit<u8>){unsafe{core::ptr::copy_nonoverlapping(src,dst.as_mut_ptr(),1);}}
+#[kani::proof_for_contract(copy_unit_frame)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn copy_unit_real(){let src:u8=kani::any();let mut dst=if kani::any(){core::mem::MaybeUninit::new(kani::any())}else{core::mem::MaybeUninit::uninit()};copy_unit_frame(&src,&mut dst);}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn copy_unit_real_caller(){let src:u8=kani::any();let mut dst=core::mem::MaybeUninit::uninit();copy_unit_frame(&src,&mut dst);assert_eq!(unsafe{dst.assume_init_read()},src);}
+#[kani::proof] #[kani::unwind(35)] #[kani::stub_verified(copy_unit_frame)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn copy_unit_unimplied(){let src:u8=kani::any();let mut dst=core::mem::MaybeUninit::uninit();copy_unit_frame(&src,&mut dst);assert_eq!(unsafe{dst.assume_init_read()},src);}
+#[kani::ensures(|_|unsafe{dst.assume_init_read()!=*src})] #[kani::modifies(dst)]
+fn copy_unit_invert_packet(src:&u8,dst:&mut core::mem::MaybeUninit<u8>){unsafe{core::ptr::copy_nonoverlapping(src,dst.as_mut_ptr(),1);}}
+#[kani::proof_for_contract(copy_unit_invert_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn copy_unit_invert(){let src:u8=kani::any();let mut dst=core::mem::MaybeUninit::uninit();copy_unit_invert_packet(&src,&mut dst);}
+#[kani::ensures(|_|true)] #[kani::modifies(dst)]
+fn copy_unit_modifies_packet(src:&u8,dst:&mut core::mem::MaybeUninit<u8>,other:&mut u8){unsafe{core::ptr::copy_nonoverlapping(src,dst.as_mut_ptr(),1);}*other^=1;}
+#[kani::proof_for_contract(copy_unit_modifies_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn copy_unit_modifies(){let src:u8=kani::any();let mut dst=core::mem::MaybeUninit::uninit();let mut other=kani::any();copy_unit_modifies_packet(&src,&mut dst,&mut other);}
+// K064 replacement: context checks only; byte value is discharged separately.
+// The real Vec<u8> keeps len=0; its spare-capacity window is MaybeUninit<u8>.
+fn sdk_summary_window<const N:usize>(leak:bool,wrong_argument:bool){
+ let k=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());let mut coins:u64=kani::any();let coins0=coins;let mut bytes=kani::vec::exact_vec::<u8,N>();let index:usize=kani::any();kani::assume(index<N);let a=AccountInfo::new(&k,kani::any(),kani::any(),&mut coins,&mut bytes,&owner,kani::any(),kani::any());
+ let external:bool=kani::any();let held=if external{Some(a.try_borrow_data().unwrap())}else{None};
+ let guard=a.try_borrow_data().unwrap();let source=guard.as_ptr();let mut dst=Vec::<u8>::with_capacity(N);let destination=dst.as_mut_ptr();
+ let selected=if wrong_argument{if index+1<N{index+1}else{0}}else{index};
+ let src=&guard[selected];let output=&mut dst.spare_capacity_mut()[index];
+ assert_eq!(src as *const u8,source.wrapping_add(index));assert_eq!(output.as_mut_ptr(),destination.wrapping_add(index));
+ copy_unit_frame(src,output);
+ assert!(dst.len()==0&&dst.capacity()>=N);
+ if leak{core::mem::forget(guard)}else{drop(guard)}
+ assert_eq!(a.try_borrow_mut_data().is_ok(),!external);drop(held);assert!(a.try_borrow_mut_data().is_ok());assert_eq!(a.lamports(),coins0);
+}
+#[kani::proof] #[kani::unwind(35)] #[kani::stub_verified(copy_unit_frame)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn sdk_summary_max(){sdk_summary_window::<58295>(false,false);}
+#[kani::proof] #[kani::unwind(35)] #[kani::stub_verified(copy_unit_frame)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn sdk_summary_max_drop_wrong(){sdk_summary_window::<58295>(true,false);}
+#[kani::proof] #[kani::unwind(35)] #[kani::stub_verified(copy_unit_frame)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn sdk_summary_max_argument_wrong(){sdk_summary_window::<58295>(false,true);}
+
+fn sdk_summary_family(count:usize,leak:bool,wrong_argument:bool){
+ let k=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());let mut coins:u64=kani::any();let coins0=coins;let mut bytes=kani::vec::exact_vec::<u8,58295>();bytes.truncate(count);let index:usize=kani::any();kani::assume(index<count);let a=AccountInfo::new(&k,kani::any(),kani::any(),&mut coins,&mut bytes,&owner,kani::any(),kani::any());
+ let external:bool=kani::any();let held=if external{Some(a.try_borrow_data().unwrap())}else{None};
+ let guard=a.try_borrow_data().unwrap();let source=guard.as_ptr();let mut dst=Vec::<u8>::with_capacity(count);let destination=dst.as_mut_ptr();
+ let selected=if wrong_argument{if index+1<count{index+1}else{0}}else{index};
+ let src=&guard[selected];let output=&mut dst.spare_capacity_mut()[index];
+ assert_eq!(src as *const u8,source.wrapping_add(index));assert_eq!(output.as_mut_ptr(),destination.wrapping_add(index));
+ copy_unit_frame(src,output);
+ assert!(dst.len()==0&&dst.capacity()>=count);
+ if leak{core::mem::forget(guard)}else{drop(guard)}
+ assert_eq!(a.try_borrow_mut_data().is_ok(),!external);drop(held);assert!(a.try_borrow_mut_data().is_ok());assert_eq!(a.lamports(),coins0);
+}
+#[kani::proof] #[kani::unwind(35)] #[kani::stub_verified(copy_unit_frame)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn sdk_summary_all_lengths(){let count:usize=kani::any();kani::assume(count>0&&count<=58295);sdk_summary_family(count,false,false);}
+#[kani::proof] #[kani::unwind(35)] #[kani::stub_verified(copy_unit_frame)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn sdk_summary_all_lengths_drop_wrong(){let count:usize=kani::any();kani::assume(count>0&&count<=58295);sdk_summary_family(count,true,false);}
+#[kani::proof] #[kani::unwind(35)] #[kani::stub_verified(copy_unit_frame)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn sdk_summary_all_lengths_argument_wrong(){let count:usize=kani::any();kani::assume(count>0&&count<=58295);sdk_summary_family(count,false,true);}
+fn snapshot_selected(length:usize,length1:usize,length2:usize)->bool{length==length1||length==length2}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn snapshot_selected_packet(length:usize,length1:usize,length2:usize)->bool{let actual=snapshot_selected(length,length1,length2);let natural=(length as u128)==(length1 as u128)||(length as u128)==(length2 as u128);actual==natural}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn snapshot_selected_wrong_packet(length:usize,length1:usize,length2:usize)->bool{let actual=!snapshot_selected(length,length1,length2);let natural=(length as u128)==(length1 as u128)||(length as u128)==(length2 as u128);actual==natural}
+#[kani::proof_for_contract(snapshot_selected_packet)]
+fn snapshot_selected_words(){snapshot_selected_packet(kani::any(),kani::any(),kani::any());}
+#[kani::proof_for_contract(snapshot_selected_wrong_packet)]
+fn snapshot_selected_words_wrong(){snapshot_selected_wrong_packet(kani::any(),kani::any(),kani::any());}
+fn rejected_construct(k:&Pubkey,o:&Pubkey,s:bool,w:bool,e:bool,length:usize)->OwnedAccount{OwnedAccount{key:*k,owner:*o,is_signer:s,is_writable:w,executable:e,length:Ok(length),bytes:Err(ProgramError::InvalidAccountData)}}
+fn rejected_construct_matches(r:&OwnedAccount,k:&Pubkey,o:&Pubkey,s:bool,w:bool,e:bool,length:usize)->bool{r.key==*k&&r.owner==*o&&r.is_signer==s&&r.is_writable==w&&r.executable==e&&matches!(r.length,Ok(n)if n==length)&&matches!(r.bytes,Err(ProgramError::InvalidAccountData))}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn rejected_construct_packet(k:&Pubkey,o:&Pubkey,s:bool,w:bool,e:bool,length:usize)->bool{let r=core::mem::ManuallyDrop::new(rejected_construct(k,o,s,w,e,length));rejected_construct_matches(&r,k,o,s,w,e,length)}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn rejected_construct_wrong_packet(k:&Pubkey,o:&Pubkey,s:bool,w:bool,e:bool,length:usize)->bool{let mut r=core::mem::ManuallyDrop::new(rejected_construct(k,o,s,w,e,length));let mut key=r.key.to_bytes();key[0]^=1;r.key=Pubkey::new_from_array(key);rejected_construct_matches(&r,k,o,s,w,e,length)}
+#[kani::proof_for_contract(rejected_construct_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn rejected_construct_all_words(){let k=Pubkey::new_from_array(kani::any());let o=Pubkey::new_from_array(kani::any());rejected_construct_packet(&k,&o,kani::any(),kani::any(),kani::any(),kani::any());}
+#[kani::proof_for_contract(rejected_construct_wrong_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn rejected_construct_all_words_wrong(){let k=Pubkey::new_from_array(kani::any());let o=Pubkey::new_from_array(kani::any());rejected_construct_wrong_packet(&k,&o,kani::any(),kani::any(),kani::any(),kani::any());}
+// Unbounded descriptor length + one4-byte window; no fake large slice.
+// Frozen classifier runs on the exact read window in each length class.
+fn admitted_header(length:usize,window:&[u8;4])->bool{(length==2&&crate::pool_route::admitted(&window[..2]))||(length>=4&&crate::pool_route::admitted(&window[..]))}
+fn admitted_header_ref(length:usize,window:&[u8;4])->bool{((length as u128)==2&&window[0]==3&&(window[1]==10||window[1]==11))||((length as u128)>=4&&*window==*b"ASQ8")}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn admitted_header_packet(length:usize,window:&[u8;4])->bool{admitted_header(length,window)==admitted_header_ref(length,window)}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn admitted_header_wrong_packet(length:usize,window:&[u8;4])->bool{let mut changed=*window;changed[0]^=1;admitted_header(length,&changed)==admitted_header_ref(length,window)}
+#[kani::proof_for_contract(admitted_header_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn admitted_all_header_words(){let length:usize=kani::any();let window:[u8;4]=kani::any();admitted_header_packet(length,&window);}
+#[kani::proof_for_contract(admitted_header_wrong_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn admitted_all_header_words_wrong(){let length:usize=kani::any();let window:[u8;4]=kani::any();admitted_header_wrong_packet(length,&window);}
+// Byte-exact admitted_ref body from the pinned reused NCO reference.
+pub fn admitted_ref(data:&[u8])->bool{(data.len()==2 && data[0]==3 && (data[1]==10 || data[1]==11)) || (data.len()>=4 && data[0]==65 && data[1]==83 && data[2]==81 && data[3]==56)}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn route_two_packet(window:&[u8;2])->bool{crate::pool_route::admitted(&window[..])==admitted_ref(&window[..])}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn route_two_wrong_packet(window:&[u8;2])->bool{let mut changed=*window;changed[0]^=1;crate::pool_route::admitted(&changed[..])==admitted_ref(&window[..])}
+#[kani::proof_for_contract(route_two_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn route_physical_two(){let window:[u8;2]=kani::any();route_two_packet(&window);}
+#[kani::proof_for_contract(route_two_wrong_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn route_physical_two_wrong(){let window:[u8;2]=kani::any();route_two_wrong_packet(&window);}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn route_zero_packet(one:&[u8;1],three:&[u8;3])->bool{!crate::pool_route::admitted(&[])&&!crate::pool_route::admitted(&one[..])&&!crate::pool_route::admitted(&three[..])}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn route_zero_wrong_packet(one:&[u8;1],three:&[u8;3])->bool{crate::pool_route::admitted(&[])||crate::pool_route::admitted(&one[..])||crate::pool_route::admitted(&three[..])}
+#[kani::proof_for_contract(route_zero_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn route_physical_zero(){let one:[u8;1]=kani::any();let three:[u8;3]=kani::any();route_zero_packet(&one,&three);}
+#[kani::proof_for_contract(route_zero_wrong_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn route_physical_zero_wrong(){let one:[u8;1]=kani::any();let three:[u8;3]=kani::any();route_zero_wrong_packet(&one,&three);}
