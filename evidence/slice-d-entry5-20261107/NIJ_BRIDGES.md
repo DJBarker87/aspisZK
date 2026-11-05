@@ -1,0 +1,25 @@
+> FINAL ADMISSION: zero new CLOSED rows. Three earlier candidates are WITHHELD by NIJ_NATIVE_ISOLATION.json; all120 native commands used predecessor NHY_target. Active-at194/196 additionally fail unchanged K-3 suspended-receipt admission. Historical pass descriptions below describe source/model evidence only and do not grant current row credit. See NIJ_WITHHELD_ARTIFACTS.json and NIJ_CLOSED.json.
+
+# NIJ bridges — decoder stage
+
+TX2:202 decode_verifier_registry_entry_v2 CLOSED under(y)/(ai)/(ak): NIJ_ENTRY_ASSOCIATION.json. Every immutable valid source slice, all lengths/contents; no successful-header or validator premise. NIJ_K056/057 executes the complete exact frozen constructor on ORIGINAL320 bytes including the status call/first Err, observes every scalar and an arbitrary byte of every array. Retained header/window/argument/SSA Result packets are cited by SHA, never rerun. CLOSED status192 and validator207 have every u8/full typed-record domains. Source field/range/order checks and full Result/error/record ports join these SAME fields. NIJ_EntryModel.source proves all first errors; NIJ_EntryJoin.cohort selects NCX_Install.op34, preserves slots43/44.
+
+NIJ_L018 combines all new roots with NHY_COMBINED_IMPORT, NGK_COMBINED_IMPORT and AspisR1.RPx_Deployed.deployed. NIJ_L021 audits20 raw roots, eight fixtures/mutations and NFX scan: standard axioms, no dangling declarations/import-owner mismatch. The unchanged NFK predicates admit the new row with both inherited14-row deltas. Five denial controls include propagation from status192 and validator207. Ledger baseline is preserved; only202 changes. Combined counts:364 CLOSED/235 OPEN/599. No complete entry path.
+
+Formatter support: all8 deployed String writer dispatch instantiations pass with matched failures and Parse stability (K005..021). Actual String::push_str prefix+label/growth/drop pass K023..038; actual String Write::write_str returning arms/bytes/drop pass K040..055. K002/003/022/039 are excluded90s timeouts. These support packets do not certify alloc::fmt::format's returned String or the complete error root. No DebugLog calibration is promoted. NIJ_FormatterPackets gives log encoding, exact logical bytes and abort-prefix/cleanup laws, with cleanup purity only an explicit local child law, never parent success.
+
+NIJ_CheckpointZeroRun.value now proves the actual coherent emitted require_zero loop under cap1768 using symbolic induction, exact wrapping-add/index/suffix association and retained NHY_K114/115 original1768-byte native step. Existing TX1:342 was already CLOSED; this is support for stage1 composition, no duplicate ledger credit. A minimal arithmetic retarget cites FGm_UsizeNext.val after its historical object was unavailable. No large recurrence reduction.
+
+P6/D188 native semantic transport is option-A trust reclassification, not removal. No shipped source change, ELF reproduction, new runtime assumption or security conclusion.
+
+## Error closure
+
+NIJ_ERROR_ASSOCIATION.json supersedes formatter OPEN status above. Both occurrences CLOSED under(y)/(al)/(ak)/(an). Actual whole source roots include real Debug/String formatting, growth, syscall bytes and Drop. Exact NoShortcut metadata alone is substituted, calibrated by retained NHY111/112 every Error on the fixed literal. NIJ109 proves a corrupt Some shortcut changes the actual syscall argument and fails. Per-label full roots70..86 and cleanup87..102 paired, Parse stability72. No String writer stub in the admitted whole roots. Natural message/table/full Result and cleanup account/growth frames compose in L029/L030; all standard axioms, same optimized walker controls and NFX exit0. Trust is retained option-A reclassification. No complete entry path or security claim.
+
+## Active predicates and SDK support
+
+NIJ_ACTIVE_ASSOCIATION.json reconstructs original NCF stage1 source, annotation and original0aa48e0ad2b gate to receipt hashes for K002/003 and K006/007. Actual whole-body contracts, no selected stub_verified, pure Bool shape; all record/u64 inputs, exact typed retirement child and excluded opposite-version alternative. Reused canonical NDO_NBX definitions and NCF proofs are minimally retargeted in NIJ_ActiveSlots; no new model or security theorem. Combined L050, raw/NFX L051.
+
+NIJ_NativeSdkRelease.source derives actual SDK operation history from SDK15 and canonical Entry.heap, including fresh exclusive acquisition, byte-write induction and drop restoration. NIJ_ReturnedWrite.bytes connects canonical computed copy to the SAME emitted returned Vec. Native wrapper/source/physical association remains OPEN, so these modules earn no additional row credit. L032 unknown guessed constant names were a diagnostic failure, not evidence that no canonical wrapper model exists.
+
+Final admission correction: the active predicates above are SUPPORT ONLY. NCF_K002 and NCF_K006 are K-3 SUSPENDED for STATIC_TOKEN under NEK_LEDGER_DELTA. Unchanged NFK denial is retained; no rows194/196 or auth parent closes. Source/feature/Lean equality cannot restore suspended native credit. NIJ_ACTIVE_REJECTED.json is authoritative for this attempted reuse.

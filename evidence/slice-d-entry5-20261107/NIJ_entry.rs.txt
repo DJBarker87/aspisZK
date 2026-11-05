@@ -1,0 +1,81 @@
+use crate::*;
+fn child_unreachable(_: &Pubkey,_: &[AccountInfo<'_>],_: &[u8])->ProgramResult{assert!(false,"child unreachable on rejected entry prefix");Err(ProgramError::InvalidInstructionData)}
+fn clear_unreachable(_: &[u8]){assert!(false,"clear unreachable before stage2 header");}
+#[kani::proof] #[kani::unwind(8)]
+#[kani::stub(r1_pool_adapter::process,child_unreachable)]
+fn lifecycle_4(){
+ let mut bytes:[u8;4]=kani::any();bytes[0]=4;let len:usize=kani::any();kani::assume(1<=len&&len<=4);
+ let program=Pubkey::new_from_array(kani::any());let data=&bytes[..len];
+ let result=process_r1_cost_probe_instruction(&program,&[],data);
+ assert!(matches!(result,Err(ProgramError::InvalidInstructionData)));
+}
+#[kani::proof] #[kani::unwind(8)]
+#[kani::stub(r1_pool_adapter::process,child_unreachable)]
+fn lifecycle_4_wrong(){
+ let mut bytes:[u8;4]=kani::any();bytes[0]=4;let len:usize=kani::any();kani::assume(1<=len&&len<=4);
+ let program=Pubkey::new_from_array(kani::any());let data=&bytes[..len];
+ let result=process_r1_cost_probe_instruction(&program,&[],data);
+ assert!(!matches!(result,Err(ProgramError::InvalidInstructionData)));
+}
+#[kani::proof] #[kani::unwind(8)]
+#[kani::stub(r1_pool_adapter::process,child_unreachable)]
+fn lifecycle_5(){
+ let mut bytes:[u8;4]=kani::any();bytes[0]=5;let len:usize=kani::any();kani::assume(1<=len&&len<=4);
+ let program=Pubkey::new_from_array(kani::any());let data=&bytes[..len];
+ let result=process_r1_cost_probe_instruction(&program,&[],data);
+ assert!(matches!(result,Err(ProgramError::InvalidInstructionData)));
+}
+#[kani::proof] #[kani::unwind(8)]
+#[kani::stub(r1_pool_adapter::process,child_unreachable)]
+fn lifecycle_5_wrong(){
+ let mut bytes:[u8;4]=kani::any();bytes[0]=5;let len:usize=kani::any();kani::assume(1<=len&&len<=4);
+ let program=Pubkey::new_from_array(kani::any());let data=&bytes[..len];
+ let result=process_r1_cost_probe_instruction(&program,&[],data);
+ assert!(!matches!(result,Err(ProgramError::InvalidInstructionData)));
+}
+#[kani::proof] #[kani::unwind(8)]
+#[kani::stub(r1_pool_adapter::process,child_unreachable)]
+fn lifecycle_6(){
+ let mut bytes:[u8;4]=kani::any();bytes[0]=6;let len:usize=kani::any();kani::assume(1<=len&&len<=4);
+ let program=Pubkey::new_from_array(kani::any());let data=&bytes[..len];
+ let result=process_r1_cost_probe_instruction(&program,&[],data);
+ assert!(matches!(result,Err(ProgramError::InvalidInstructionData)));
+}
+#[kani::proof] #[kani::unwind(8)]
+#[kani::stub(r1_pool_adapter::process,child_unreachable)]
+fn lifecycle_6_wrong(){
+ let mut bytes:[u8;4]=kani::any();bytes[0]=6;let len:usize=kani::any();kani::assume(1<=len&&len<=4);
+ let program=Pubkey::new_from_array(kani::any());let data=&bytes[..len];
+ let result=process_r1_cost_probe_instruction(&program,&[],data);
+ assert!(!matches!(result,Err(ProgramError::InvalidInstructionData)));
+}
+#[kani::proof] #[kani::unwind(8)]
+#[kani::stub(r1_pool_adapter::process,child_unreachable)]
+fn other_rejected(){
+ let bytes:[u8;4]=kani::any();let len:usize=kani::any();kani::assume(len<=4);let data=&bytes[..len];
+ kani::assume(!pool_route::admitted(data));
+ let program=Pubkey::new_from_array(kani::any());let result=process_r1_cost_probe_instruction(&program,&[],data);
+ assert!(matches!(result,Err(ProgramError::InvalidInstructionData)));
+}
+#[kani::proof] #[kani::unwind(8)]
+#[kani::stub(r1_pool_adapter::process,child_unreachable)]
+fn other_rejected_wrong(){
+ let bytes:[u8;4]=kani::any();let len:usize=kani::any();kani::assume(len<=4);let data=&bytes[..len];
+ kani::assume(!pool_route::admitted(data));
+ let program=Pubkey::new_from_array(kani::any());let result=process_r1_cost_probe_instruction(&program,&[],data);
+ assert!(!matches!(result,Err(ProgramError::InvalidInstructionData)));
+}
+#[kani::proof] #[kani::unwind(8)]
+#[kani::stub(solana_program::program::set_return_data,clear_unreachable)]
+fn stage2_no_accounts(){
+ let bytes:[u8;4]=kani::any();let program=Pubkey::new_from_array(kani::any());
+ let result=super::stage2(&program,&[],&bytes);
+ assert!(matches!(result,Err(ProgramError::InvalidInstructionData)));
+}
+#[kani::proof] #[kani::unwind(8)]
+#[kani::stub(solana_program::program::set_return_data,clear_unreachable)]
+fn stage2_no_accounts_wrong(){
+ let bytes:[u8;4]=kani::any();let program=Pubkey::new_from_array(kani::any());
+ let result=super::stage2(&program,&[],&bytes);
+ assert!(!matches!(result,Err(ProgramError::InvalidInstructionData)));
+}

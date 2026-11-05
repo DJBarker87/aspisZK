@@ -1,0 +1,90 @@
+{
+ "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "source": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+ "source_sha256": "246d96b479ef552b485a51a2a3d4c4dbe1ff4ef9c0527b6f9a872f296b60576b",
+ "cuts": [
+  {
+   "name": "registry_v2",
+   "original_condition": "registry.pool != master_account.key().to_bytes()\n            || registry.authority != master.verifier_policy.registry_authority\n            || registry.policy_binding != master.verifier_policy.policy_binding\n            || registry.registry_program != registry_program.to_bytes()\n            || registry.loader_program != loader.to_bytes()\n            || registry.programdata_address != registry_programdata.to_bytes()\n            || !registry.is_immutable()\n            || registry.is_paused()",
+   "condition": "registry.pool != master_key.to_bytes()\n            || registry.authority != policy.registry_authority\n            || registry.policy_binding != policy.policy_binding\n            || registry.registry_program != registry_program.to_bytes()\n            || registry.loader_program != loader.to_bytes()\n            || registry.programdata_address != registry_programdata.to_bytes()\n            || !registry.is_immutable()\n            || registry.is_paused()",
+   "guards": [
+    "registry.pool != master_key.to_bytes()",
+    "registry.authority != policy.registry_authority",
+    "registry.policy_binding != policy.policy_binding",
+    "registry.registry_program != registry_program.to_bytes()",
+    "registry.loader_program != loader.to_bytes()",
+    "registry.programdata_address != registry_programdata.to_bytes()",
+    "!registry.is_immutable()",
+    "registry.is_paused()"
+   ],
+   "guard_count": 8,
+   "source_projection_replacements": {
+    "master_account.key()": "master_key",
+    "master.verifier_policy": "policy"
+   },
+   "status": "support only until entire decoder/PDA/authentication chain"
+  },
+  {
+   "name": "entry_v2",
+   "original_condition": "entry.pool != master_account.key().to_bytes()\n            || entry.policy_binding != AUDIT_POLICY_BINDING\n            || entry.verifier_program != verifier_program.to_bytes()\n            || entry.profile_binding != PROFILE_BINDING\n            || entry.release_binding != RELEASE_BINDING\n            || entry.statement_version != POOL_V1_PAIR_FOREST_TERMINAL_VERSION\n            || entry.loader_program != loader.to_bytes()\n            || entry.programdata_address != verifier_programdata.to_bytes()\n            || entry.expected_upgrade_authority != [0u8; 32]\n            || !entry.is_active_at(current_slot)",
+   "condition": "entry.pool != master_key.to_bytes()\n            || entry.policy_binding != AUDIT_POLICY_BINDING\n            || entry.verifier_program != verifier_program.to_bytes()\n            || entry.profile_binding != PROFILE_BINDING\n            || entry.release_binding != RELEASE_BINDING\n            || entry.statement_version != POOL_V1_PAIR_FOREST_TERMINAL_VERSION\n            || entry.loader_program != loader.to_bytes()\n            || entry.programdata_address != verifier_programdata.to_bytes()\n            || entry.expected_upgrade_authority != [0u8; 32]\n            || !entry.is_active_at(current_slot)",
+   "guards": [
+    "entry.pool != master_key.to_bytes()",
+    "entry.policy_binding != AUDIT_POLICY_BINDING",
+    "entry.verifier_program != verifier_program.to_bytes()",
+    "entry.profile_binding != PROFILE_BINDING",
+    "entry.release_binding != RELEASE_BINDING",
+    "entry.statement_version != POOL_V1_PAIR_FOREST_TERMINAL_VERSION",
+    "entry.loader_program != loader.to_bytes()",
+    "entry.programdata_address != verifier_programdata.to_bytes()",
+    "entry.expected_upgrade_authority != [0u8; 32]",
+    "!entry.is_active_at(current_slot)"
+   ],
+   "guard_count": 10,
+   "source_projection_replacements": {
+    "master_account.key()": "master_key",
+    "master.verifier_policy": "policy"
+   },
+   "status": "support only until entire decoder/PDA/authentication chain"
+  },
+  {
+   "name": "registry_v1",
+   "original_condition": "registry.pool != master_account.key().to_bytes()\n        || registry.authority != master.verifier_policy.registry_authority\n        || registry.policy_binding != master.verifier_policy.policy_binding\n        || !registry.is_immutable()\n        || registry.is_paused()",
+   "condition": "registry.pool != master_key.to_bytes()\n        || registry.authority != policy.registry_authority\n        || registry.policy_binding != policy.policy_binding\n        || !registry.is_immutable()\n        || registry.is_paused()",
+   "guards": [
+    "registry.pool != master_key.to_bytes()",
+    "registry.authority != policy.registry_authority",
+    "registry.policy_binding != policy.policy_binding",
+    "!registry.is_immutable()",
+    "registry.is_paused()"
+   ],
+   "guard_count": 5,
+   "source_projection_replacements": {
+    "master_account.key()": "master_key",
+    "master.verifier_policy": "policy"
+   },
+   "status": "support only until entire decoder/PDA/authentication chain"
+  },
+  {
+   "name": "entry_v1",
+   "original_condition": "entry.pool != master_account.key().to_bytes()\n        || entry.policy_binding != AUDIT_POLICY_BINDING\n        || entry.verifier_program != verifier_program.to_bytes()\n        || entry.profile_binding != PROFILE_BINDING\n        || entry.release_binding != RELEASE_BINDING\n        || entry.statement_version != POOL_V1_PAIR_FOREST_TERMINAL_VERSION\n        || !entry.is_active_at(current_slot)",
+   "condition": "entry.pool != master_key.to_bytes()\n        || entry.policy_binding != AUDIT_POLICY_BINDING\n        || entry.verifier_program != verifier_program.to_bytes()\n        || entry.profile_binding != PROFILE_BINDING\n        || entry.release_binding != RELEASE_BINDING\n        || entry.statement_version != POOL_V1_PAIR_FOREST_TERMINAL_VERSION\n        || !entry.is_active_at(current_slot)",
+   "guards": [
+    "entry.pool != master_key.to_bytes()",
+    "entry.policy_binding != AUDIT_POLICY_BINDING",
+    "entry.verifier_program != verifier_program.to_bytes()",
+    "entry.profile_binding != PROFILE_BINDING",
+    "entry.release_binding != RELEASE_BINDING",
+    "entry.statement_version != POOL_V1_PAIR_FOREST_TERMINAL_VERSION",
+    "!entry.is_active_at(current_slot)"
+   ],
+   "guard_count": 7,
+   "source_projection_replacements": {
+    "master_account.key()": "master_key",
+    "master.verifier_policy": "policy"
+   },
+   "status": "support only until entire decoder/PDA/authentication chain"
+  }
+ ],
+ "source_erasure": "Remove mark(log,i,guard) wrappers and project supplied master_key/policy back to source receivers; exact frozen comparison order. No branch restriction; every full typed record/status/slot and independent key admitted."
+}

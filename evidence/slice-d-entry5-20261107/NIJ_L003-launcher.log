@@ -1,0 +1,43 @@
+{"attempt": "NIJ_L003", "exit_status": 1, "wall_seconds": 1.5499884020537138, "peak_rss_kib": "2612284", "swaps": "0", "print_axioms": ["'NIJ_EntryStatus.source' depends on axioms: [sorryAx]", "'NIJ_EntryStatus.rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NIJ_generated/NIJ_EntryStatus.lean:19:11: error: Tactic `rfl` failed: The left-hand side
+  ok (core.result.Result.Err NCX_Reference.PoolV1VerifierRegistryFormatError.InvalidStatus)
+is not definitionally equal to the right-hand side
+  ok
+    (match v with
+    | 0#8#uscalar => core.result.Result.Ok NCX_Reference.VerifierEntryStatusV1.Pending
+    | 1#8#uscalar => core.result.Result.Ok NCX_Reference.VerifierEntryStatusV1.Active
+    | 2#8#uscalar => core.result.Result.Ok NCX_Reference.VerifierEntryStatusV1.Paused
+    | 3#8#uscalar => core.result.Result.Ok NCX_Reference.VerifierEntryStatusV1.Retired
+    | x => core.result.Result.Err NCX_Reference.PoolV1VerifierRegistryFormatError.InvalidStatus)
+
+c
+...
+=> core.result.Result.Ok NCX_Reference.VerifierEntryStatusV1.Paused
+      | 3#8#uscalar => core.result.Result.Ok NCX_Reference.VerifierEntryStatusV1.Retired
+      | x => core.result.Result.Err NCX_Reference.PoolV1VerifierRegistryFormatError.InvalidStatus)
+NIJ_generated/NIJ_EntryStatus.lean:42:2: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.core.result.Result.Insts.CoreOpsTry.from_residual`
+NIJ_generated/NIJ_EntryStatus.lean:30:79: error: unsolved goals
+b : Slice U8
+len : b.len = 320#usize
+magic : NCX_Reference.magic b NCX_Reference.POOL_V1_VERIFIER_ENTRY_V2_MAGIC = ok true
+version : b.index_usize 4#usize = ok 3#u8
+mode : b.index_usize 7#usize = ok 1#u8
+zeros : NCX_Reference.zero (NHY_SliceRead.segment b 314 6) = ok true
+st : U8
+read : b.index_usize 5#usize = ok st
+bad : value st = core.result.Result.Err NCX_Reference.PoolV1VerifierRegistryFormatError.InvalidStatus
+length : (↑b).length = 320
+reserved :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) b
+      { start := 314#usize, «end» := 320#usize } =
+    ok (NHY_SliceRead.segment b (↑314#usize) (↑320#usize - ↑314#usize))
+status :
+  NCX_Reference.status st = ok (core.result.Result.Err NCX_Reference.PoolV1VerifierRegistryFormatError.InvalidStatus)
+⊢ core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+      NCX_Reference.VerifierRegistryEntryV2 (core.convert.FromSame NCX_Reference.PoolV1VerifierRegistryFormatError)
+      (core.result.Result.Err NCX_Reference.PoolV1VerifierRegistryFormatError.InvalidStatus) =
+    ok (core.result.Result.Err NCX_Reference.PoolV1VerifierRegistryFormatError.InvalidStatus)
+'NIJ_EntryStatus.source' depends on axioms: [sorryAx]
+'NIJ_EntryStatus.rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rad0ba7fb93a14af987ab546c2e926eba.scope; invocation ID: 6056874179324a4a946c26d4d8421b37
