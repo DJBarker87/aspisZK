@@ -6,6 +6,7 @@ H='dombarker@100.108.41.90'
 B='/home/dombarker/project-offloads/codex-cx-verify-observed5-20261107'
 a=sys.argv[1]; assert re.fullmatch(r'NIX_[LKE][0-9]{3}',a)
 x=json.loads((E/(a+'.json')).read_text()); assert x['attempt']==a
+x.setdefault('env',{}).setdefault('CARGO_TARGET_DIR',B+'/NIX_target')
 assert 1<=int(a[-3:])<=({'L':100,'K':100,'E':1}[a[4]])
 if x['command'][:2]==['python3','NIX_gate.py']:assert x['command'][2]==a+'.json','Stale gate configuration'
 assert not (E/a/'receipt.json').exists(), 'Never resubmit'

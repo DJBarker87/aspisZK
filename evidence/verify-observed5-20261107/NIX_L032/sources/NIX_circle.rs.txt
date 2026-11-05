@@ -1,0 +1,99 @@
+#[cfg(kani)]
+mod NIX_circle {
+ use super::*;
+ fn q()->QM31 { let w:[u32;4]=kani::any(); QM31 {c0:CM31::new(crate::field::M31(w[0]),crate::field::M31(w[1])),c1:CM31::new(crate::field::M31(w[2]),crate::field::M31(w[3]))} }
+ fn point()->SecureCirclePoint { SecureCirclePoint{x:q(),y:q()} }
+ fn same(a:QM31,b:QM31)->bool {a.c0.a.0==b.c0.a.0 && a.c0.b.0==b.c0.b.0 && a.c1.a.0==b.c1.a.0 && a.c1.b.0==b.c1.b.0}
+ fn samepoint(a:SecureCirclePoint,b:SecureCirclePoint)->bool {same(a.x,b.x)&&same(a.y,b.y)}
+ fn reply()->Result<SecureCirclePoint,CirclePointError> {
+  let tag:u8=kani::any();kani::assume(tag<3);
+  match tag {0=>Ok(point()),1=>Err(CirclePointError::SingularParameter),_=>Err(CirclePointError::ParameterInCm31Subfield)}
+ }
+ struct Log {arg:QM31,calls:u8,frame:[u64;2],reply:Result<SecureCirclePoint,CirclePointError>}
+ fn oracle(parameter:QM31,log:&mut Log)->Result<SecureCirclePoint,CirclePointError>{log.arg=parameter;log.calls+=1;log.reply}
+ // Exact frozen secure_ood body, sole callee replaced by a local-record oracle.
+ fn step(parameter:QM31,log:&mut Log)->Result<SecureCirclePoint,CirclePointError>{
+  let point=oracle(parameter,log)?;
+  if parameter.c1==CM31::ZERO {return Err(CirclePointError::ParameterInCm31Subfield);}
+  Ok(point)
+ }
+ #[kani::proof] #[kani::unwind(9)]
+ #[kani::stub(core::ptr::copy_nonoverlapping, crate::NIX_kmx::KMX_copy_nonoverlapping)]
+ fn ood_dispatch(){
+  let parameter=q();let seed=q();let calls:u8=kani::any();kani::assume(calls<255);
+  let frame:[u64;2]=kani::any();let reply=reply();
+  let mut log=Log{arg:seed,calls,frame,reply};
+  let mut result=step(parameter,&mut log);
+  #[cfg(all(NIX_negative,NIX_case_args))] {log.calls=log.calls.wrapping_add(1);}
+  #[cfg(all(NIX_negative,NIX_case_frame))] {log.frame[0]^=1;}
+  #[cfg(all(NIX_negative,NIX_case_reply))] {result=match result {Ok(_)=>Err(CirclePointError::SingularParameter),Err(_)=>Ok(point())};}
+  #[cfg(NIX_case_args)] {assert!(same(log.arg,parameter));assert_eq!(log.calls,calls+1);}
+  #[cfg(NIX_case_frame)] {assert_eq!(log.frame[0],frame[0]);assert_eq!(log.frame[1],frame[1]);}
+  #[cfg(NIX_case_reply)] {match (reply,result) {
+   (Err(CirclePointError::SingularParameter),Err(CirclePointError::SingularParameter))=>{},
+   (Err(CirclePointError::ParameterInCm31Subfield),Err(CirclePointError::ParameterInCm31Subfield))=>{},
+   (Ok(want),Ok(got))=>{assert!(samepoint(got,want));assert!(parameter.c1.a.0!=0 || parameter.c1.b.0!=0);},
+   (Ok(_),Err(CirclePointError::ParameterInCm31Subfield))=>{assert_eq!(parameter.c1.a.0,0);assert_eq!(parameter.c1.b.0,0);},
+   _=>assert!(false)
+  }}
+ }
+
+ fn fallback_step(sample:usize,log:&mut Log)->SecureCirclePoint {
+  let parameter=crate::transcript::CIRCLE_FALLBACK_PARAMETERS[sample%2];
+  match oracle(parameter,log) {Ok(point)=>point,Err(_)=>SecureCirclePoint{x:QM31::ONE,y:QM31::ZERO}}
+ }
+ #[kani::proof] #[kani::unwind(9)]
+ #[kani::stub(core::ptr::copy_nonoverlapping, crate::NIX_kmx::KMX_copy_nonoverlapping)]
+ fn fallback_dispatch(){
+  let sample:usize=kani::any();let seed=q();let calls:u8=kani::any();kani::assume(calls<255);
+  let frame:[u64;2]=kani::any();let reply=reply();let mut log=Log{arg:seed,calls,frame,reply};
+  let mut result=fallback_step(sample,&mut log);
+  #[cfg(all(NIX_negative,NIX_case_args))] {log.calls=log.calls.wrapping_add(1);}
+  #[cfg(all(NIX_negative,NIX_case_frame))] {log.frame[0]^=1;}
+  #[cfg(all(NIX_negative,NIX_case_reply))] {result.x.c0.a.0^=1;}
+  #[cfg(NIX_case_args)] {let expected=if sample%2==0 {QM31{c0:CM31::ZERO,c1:CM31::ONE}}else{QM31{c0:CM31::ONE,c1:CM31::ONE}};assert!(same(log.arg,expected));assert_eq!(log.calls,calls+1);}
+  #[cfg(NIX_case_frame)] {assert_eq!(log.frame[0],frame[0]);assert_eq!(log.frame[1],frame[1]);}
+  #[cfg(NIX_case_reply)] {let expected=match reply{Ok(p)=>p,Err(_)=>SecureCirclePoint{x:QM31::ONE,y:QM31::ZERO}};assert!(samepoint(result,expected));}
+ }
+ fn canonical(v:QM31)->bool {v.c0.a.0<crate::field::P && v.c0.b.0<crate::field::P && v.c1.a.0<crate::field::P && v.c1.b.0<crate::field::P}
+ struct MapLog {args:[QM31;14],mask:u8,frame:[u64;2]}
+ fn unary(a:QM31,result:QM31,slot:usize,log:&mut MapLog)->QM31{log.args[2*slot]=a;log.mask|=1<<slot;result}
+ fn binary(a:QM31,b:QM31,result:QM31,slot:usize,log:&mut MapLog)->QM31{log.args[2*slot]=a;log.args[2*slot+1]=b;log.mask|=1<<slot;result}
+ fn inverse(a:QM31,result:Option<QM31>,log:&mut MapLog)->Option<QM31>{log.args[4]=a;log.mask|=4;result}
+ // Seven opaque call sites of the frozen rational map; no product is evaluated.
+ fn map_step(parameter:QM31,outputs:[QM31;7],inv:Option<QM31>,log:&mut MapLog)->Result<SecureCirclePoint,CirclePointError>{
+    let square = unary(parameter,outputs[0],0,log);
+    let inverse_denominator = inverse(binary(QM31::ONE,square,outputs[1],1,log),inv,log)
+        .ok_or(CirclePointError::SingularParameter)?;
+    Ok(SecureCirclePoint {
+        x: binary(binary(QM31::ONE,square,outputs[3],3,log),inverse_denominator,outputs[4],4,log),
+        y: binary(binary(parameter,parameter,outputs[5],5,log),inverse_denominator,outputs[6],6,log),
+    })
+ }
+ #[kani::proof] #[kani::unwind(9)]
+ #[kani::stub(core::ptr::copy_nonoverlapping, crate::NIX_kmx::KMX_copy_nonoverlapping)]
+ fn rational_map(){
+  let parameter=q();kani::assume(canonical(parameter));
+  let outputs:[QM31;7]=kani::any();
+  for o in outputs {kani::assume(canonical(o));}
+  let value=q();kani::assume(canonical(value));let inv=if kani::any(){Some(value)}else{None};
+  let before:[QM31;14]=[q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q()];let mask:u8=kani::any();let frame:[u64;2]=kani::any();let mut log=MapLog{args:before,mask,frame};
+  let mut result=map_step(parameter,outputs,inv,&mut log);
+  #[cfg(all(NIX_negative,NIX_case_reply))] {result=match result{Ok(_)=>Err(CirclePointError::SingularParameter),Err(_)=>Ok(point())};}
+  #[cfg(all(NIX_negative,NIX_case_domain))] {log.args[0].c0.a.0=crate::field::P;}
+  #[cfg(all(NIX_negative,NIX_case_args))] {log.args[0].c0.a.0^=1;}
+  #[cfg(all(NIX_negative,NIX_case_frame))] {log.frame[0]^=1;}
+  #[cfg(NIX_case_args)] {
+   assert!(same(log.args[0],parameter));assert!(same(log.args[2],QM31::ONE));assert!(same(log.args[3],outputs[0]));assert!(same(log.args[4],outputs[1]));
+   match inv {None=>{},Some(v)=>{assert!(same(log.args[6],QM31::ONE));assert!(same(log.args[7],outputs[0]));assert!(same(log.args[8],outputs[3]));assert!(same(log.args[9],v));assert!(same(log.args[10],parameter));assert!(same(log.args[11],parameter));assert!(same(log.args[12],outputs[5]));assert!(same(log.args[13],v));}}
+  }
+  #[cfg(NIX_case_frame)] {
+   assert_eq!(log.frame[0],frame[0]);assert_eq!(log.frame[1],frame[1]);assert!(same(log.args[1],before[1]));assert!(same(log.args[5],before[5]));
+   if inv.is_none(){let i:usize=kani::any();kani::assume(i>=6 && i<14);assert!(same(log.args[i],before[i]));assert_eq!(log.mask,mask|7);}else{assert_eq!(log.mask,mask|127);}
+  }
+  #[cfg(NIX_case_reply)] {match (inv,result){(None,Err(CirclePointError::SingularParameter))=>{},(Some(_),Ok(p))=>{assert!(same(p.x,outputs[4]));assert!(same(p.y,outputs[6]));},_=>assert!(false)}
+  }
+  #[cfg(NIX_case_domain)] {let i:usize=kani::any();kani::assume(i<14);if i!=1 && i!=5 && (inv.is_some() || i<6){assert!(canonical(log.args[i]));}
+  }
+ }
+}

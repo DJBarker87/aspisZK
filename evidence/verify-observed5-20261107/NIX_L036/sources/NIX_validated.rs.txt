@@ -1,0 +1,31 @@
+#[cfg(kani)]
+pub mod NIX_circle_validated {
+ use super::*;
+ struct Log{row:u8,ptr:*const u8,len:usize,next:u8,at:u8,calls:u8,sample_row:CircleRow,sample_block:[u8;32],frame:u64}
+ fn block<H:Digest32>(t:&mut SemanticTranscript<H>,row:u8,framed:&[u8],reply:Result<[u8;32],Error>,new_state:[u8;32],new_next:u8,log:&mut Log)->Result<[u8;32],Error>{
+  log.row=row;log.ptr=framed.as_ptr();log.len=framed.len();log.next=t.next_row;log.at=log.calls;log.calls+=1;t.state=new_state;t.next_row=new_next;reply
+ }
+ fn circle(block:&[u8;32],row:CircleRow,point:SecureCirclePoint,log:&mut Log)->SecureCirclePoint{log.sample_row=row;log.sample_block=*block;log.calls+=1;point}
+ fn step<H:Digest32>(t:&mut SemanticTranscript<H>,record:ValidatedRecord<'_>,reply:Result<[u8;32],Error>,new_state:[u8;32],new_next:u8,point:SecureCirclePoint,log:&mut Log)->Result<SecureCirclePoint,Error>{
+  let row=record.row();let circle_row=match row{25=>CircleRow::First,26=>CircleRow::Second,_=>return Err(Error::InvalidRow)};
+  Ok(circle(&block(t,row,record.framed(),reply,new_state,new_next,log)?,circle_row,point,log))
+ }
+ fn same(a:QM31,b:QM31)->bool{a.c0.a.0==b.c0.a.0&&a.c0.b.0==b.c0.b.0&&a.c1.a.0==b.c1.a.0&&a.c1.b.0==b.c1.b.0}
+ pub fn check<H:Digest32>(hash:H){
+  let bytes:[u8;3717]=kani::any();let len:usize=kani::any();kani::assume(len<=3717);let framed=&bytes[..len];
+  let row:u8=kani::any();let before_state:[u8;32]=kani::any();let before_next:u8=kani::any();
+  let new_state:[u8;32]=kani::any();let new_next:u8=kani::any();let sampled:[u8;32]=kani::any();
+  let expected:u8=kani::any();let actual:u8=kani::any();let success:bool=kani::any();let reply=if success{Ok(sampled)}else{Err(Error::RowOrder{expected,actual})};
+  let point=SecureCirclePoint{x:kani::any(),y:kani::any()};let calls:u8=kani::any();kani::assume(calls<254);let frame:u64=kani::any();
+  let old_sample:[u8;32]=kani::any();let mut log=Log{row:0,ptr:core::ptr::null(),len:0,next:0,at:0,calls,sample_row:CircleRow::First,sample_block:old_sample,frame};
+  let mut transcript=SemanticTranscript{state:before_state,hash,next_row:before_next};
+  let mut result=step(&mut transcript,ValidatedRecord{row,framed},reply,new_state,new_next,point,&mut log);
+  #[cfg(all(NIX_negative,NIX_case_args))] {log.row=row^1;}
+  #[cfg(all(NIX_negative,NIX_case_frame))] {log.frame^=1;}
+  #[cfg(all(NIX_negative,NIX_case_reply))] {result=match result{Ok(_)=>Err(Error::InvalidRow),Err(_)=>Ok(point)};}
+  let j:usize=kani::any();kani::assume(j<32);
+  #[cfg(NIX_case_args)] {if row==25||row==26{assert_eq!(log.row,row);assert_eq!(log.ptr,framed.as_ptr());assert_eq!(log.len,len);assert_eq!(log.next,before_next);assert_eq!(log.at,calls);if success{assert_eq!(log.sample_block[j],sampled[j]);match (row,log.sample_row){(25,CircleRow::First)|(26,CircleRow::Second)=>{},_=>assert!(false)}}}}
+  #[cfg(NIX_case_frame)] {assert_eq!(log.frame,frame);if row==25||row==26{assert_eq!(transcript.state[j],new_state[j]);assert_eq!(transcript.next_row,new_next);if !success{assert_eq!(log.sample_block[j],old_sample[j]);}assert_eq!(log.calls,calls+if success{2}else{1});}else{assert_eq!(transcript.state[j],before_state[j]);assert_eq!(transcript.next_row,before_next);assert_eq!(log.calls,calls);assert_eq!(log.sample_block[j],old_sample[j]);}}
+  #[cfg(NIX_case_reply)] {if row==25||row==26{match (success,result){(true,Ok(p))=>assert!(same(p.x,point.x)&&same(p.y,point.y)),(false,Err(Error::RowOrder{expected:e,actual:a}))=>{assert_eq!(e,expected);assert_eq!(a,actual);},_=>assert!(false)}}else{assert!(matches!(result,Err(Error::InvalidRow)));}}
+ }
+}

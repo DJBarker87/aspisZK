@@ -1,0 +1,61 @@
+{"attempt": "NIX_L023", "exit_status": 0, "wall_seconds": 6.62212244188413, "peak_rss_kib": "5992800", "swaps": "0", "print_axioms": []}
+.result.Result AspisR72Sampler.circle.SecureCirclePoint AspisR72Sampler.circle.CirclePointError) :=
+fun parameter1 => do
+  let square ← parameter1.square
+  let q ← AspisR72Sampler.field.QM31.ONE.add square
+  let o ← q.try_inv
+  let r ← AspisR72Sampler.core.option.Option.ok_or o AspisR72Sampler.circle.CirclePointError.SingularParameter
+  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+  match cf with
+    | core.ops.control_flow.ControlFlow.Continue val => do
+      let q1 ← AspisR72Sampler.field.QM31.ONE.sub square
+      let q2 ← q1.mul val
+      let q3 ← parameter1.add parameter1
+      let q4 ← q3.mul val
+      ok (core.result.Result.Ok { x := q2, y := q4 })
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+        AspisR72Sampler.circle.SecureCirclePoint (core.convert.FromSame AspisR72Sampler.circle.CirclePointError)
+        residual
+def AspisR72Sampler.circle.secure_ood_circle_point_from_parameter : AspisR72Sampler.field.QM31 →
+  Result (core.result.Result AspisR72Sampler.circle.SecureCirclePoint AspisR72Sampler.circle.CirclePointError) :=
+fun parameter1 => do
+  let r ← AspisR72Sampler.circle.secure_circle_point_from_parameter parameter1
+  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+  match cf with
+    | core.ops.control_flow.ControlFlow.Continue val => do
+      let b ← AspisR72Sampler.field.CM31.Insts.CoreCmpPartialEqCM31.eq parameter1.c1 AspisR72Sampler.field.CM31.ZERO
+      if b = true then ok (core.result.Result.Err AspisR72Sampler.circle.CirclePointError.ParameterInCm31Subfield)
+        else ok (core.result.Result.Ok val)
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+        AspisR72Sampler.circle.SecureCirclePoint (core.convert.FromSame AspisR72Sampler.circle.CirclePointError)
+        residual
+def transcript.circle_fallback_point : Usize → Result AspisR1CircleSampleWrapper.circle.SecureCirclePoint :=
+fun i => do
+  let p ← AspisR1CircleFallback.transcript.circle_fallback_point i
+  ok (fromFallbackPoint p)
+def AspisR1CircleFallback.transcript.circle_fallback_point : Usize →
+  Result AspisR1CircleFallback.circle.SecureCirclePoint :=
+fun sample => do
+  let i ← sample % 2#usize
+  let parameter1 ← AspisR1CircleFallback.transcript.CIRCLE_FALLBACK_PARAMETERS.index_usize i
+  let r ← AspisR1CircleFallback.circle.secure_ood_circle_point_from_parameter parameter1
+  match r with
+    | core.result.Result.Ok point => ok point
+    | core.result.Result.Err a =>
+      ok { x := AspisR1CircleFallback.field.QM31.ONE, y := AspisR1CircleFallback.field.QM31.ZERO }
+@[defeq] theorem AspisR1CircleSampleWrapper.RawCircleSampleEmittedWrapperLaw.secure_circle_eq_r72 : ∀
+  (q : AspisR1CircleSampleWrapper.field.QM31),
+  circle.secure_ood_circle_point_from_parameter q = do
+    let r ← AspisR72Sampler.circle.secure_ood_circle_point_from_parameter (toR72QM q)
+    match r with
+      | core.result.Result.Ok p => ok (core.result.Result.Ok (fromR72Point p))
+      | core.result.Result.Err e => ok (core.result.Result.Err (fromR72Error e)) :=
+fun q => rfl
+def AspisR1.NGX_PrefixGeometry.width : ℕ → ℕ :=
+fun row => 5 + NFU_PacketDomains.payloadSize row
+AspisR1.NGX_PrefixSource.source (bytes : Slice U8) :
+  AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes =
+    AspisR1.NGX_PrefixSource.computation AspisR1PrefixAggregateParser.r1_wire.parse_record_at bytes
+

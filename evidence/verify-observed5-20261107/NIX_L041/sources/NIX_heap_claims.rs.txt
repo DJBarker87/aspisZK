@@ -1,0 +1,98 @@
+#[cfg(kani)]
+mod NIX_claims_heap {
+ use super::*;use crate::field::QM31;
+ type Claims=[[QM31;29];3];
+ fn same(a:QM31,b:QM31)->bool {a.c0.a.0==b.c0.a.0 && a.c0.b.0==b.c0.b.0 && a.c1.a.0==b.c1.a.0 && a.c1.b.0==b.c1.b.0}
+ #[derive(Clone,Copy)] struct Deny;
+ unsafe impl alloc::alloc::Allocator for Deny {
+  fn allocate(&self,_:alloc::alloc::Layout)->Result<core::ptr::NonNull<[u8]>,alloc::alloc::AllocError>{Err(alloc::alloc::AllocError)}
+  unsafe fn deallocate(&self,_:core::ptr::NonNull<u8>,_:alloc::alloc::Layout){unreachable!("Deny has no live allocation")}
+ }
+ fn reserve<T,A:alloc::alloc::Allocator>(this:&mut Vec<T,A>,n:usize)->Result<(),alloc::collections::TryReserveError>{
+  assert_eq!(this.len(),0);assert_eq!(n,1);
+  if kani::any() {this.try_reserve(n)}else{Vec::<T,Deny>::new_in(Deny).try_reserve(n)}
+ }
+ #[kani::proof] #[kani::unwind(1500)]
+ #[kani::stub(core::ptr::copy_nonoverlapping, crate::NIX_kmx::KMX_copy_nonoverlapping)]
+ #[kani::stub(alloc::alloc::realloc, crate::NIX_kmx::KMX_realloc)]
+ #[kani::stub(Vec::<MaybeUninit<Claims>>::try_reserve_exact,reserve)]
+ fn row_window(){
+  let before:u64=kani::any();let frame=Box::new(before);
+  #[cfg(not(any(NIX_row0,NIX_row1,NIX_row2)))] let p:usize=kani::any();
+  #[cfg(NIX_row0)] let p:usize=0;
+  #[cfg(NIX_row1)] let p:usize=1;
+  #[cfg(NIX_row2)] let p:usize=2;
+  kani::assume(p<3);
+  let k:usize=kani::any();kani::assume(k<29);
+  let row:[QM31;29]=[kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any()];
+  match uninit::<Claims>() {
+   Err(e)=>{assert!(matches!(e,Error::Allocation));assert_eq!(*frame,before);},
+   Ok(mut out)=>unsafe{
+    let original=out.as_mut_ptr();
+    let dst=original.cast::<[QM31;29]>().add(p);
+    assert!(!core::ptr::eq(original.cast::<u8>(),(&*frame as *const u64).cast::<u8>()));
+    #[cfg(NIX_split)] let framed:QM31=kani::any();
+    #[cfg(NIX_split)] let other:usize={let i:usize=kani::any();kani::assume(i<3 && i!=p);i};
+    #[cfg(NIX_split)] let j:usize={let i:usize=kani::any();kani::assume(i<29);i};
+    #[cfg(NIX_split)] original.cast::<QM31>().add(29*other+j).write(framed);
+    #[cfg(NIX_rawwindow)] let limb:usize={let i:usize=kani::any();kani::assume(i<4);i};
+    #[cfg(NIX_rawwindow)] let other:usize={let i:usize=kani::any();kani::assume(i<3 && i!=p);i};
+    #[cfg(NIX_rawwindow)] let j:usize={let i:usize=kani::any();kani::assume(i<29);i};
+    #[cfg(NIX_rawwindow)] let framed:u32=kani::any();
+    #[cfg(all(NIX_rawwindow,not(NIX_window_value)))] original.cast::<u32>().add(4*(29*other+j)+limb).write(framed);
+    dst.write(row);
+    #[cfg(not(NIX_rawwindow))] let got=(*dst)[k];
+    #[cfg(all(NIX_case_reply,not(NIX_split)))] assert!(same(got,row[k]));
+    #[cfg(NIX_split)] {
+     #[cfg(NIX_limb0)] let word=|v:QM31|v.c0.a.0;
+     #[cfg(NIX_limb1)] let word=|v:QM31|v.c0.b.0;
+     #[cfg(NIX_limb2)] let word=|v:QM31|v.c1.a.0;
+     #[cfg(NIX_limb3)] let word=|v:QM31|v.c1.b.0;
+     assert_eq!(word(got),word(row[k]));
+     assert_eq!(word(original.cast::<QM31>().add(29*other+j).read()),word(framed));
+     #[cfg(NIX_negative)] assert_eq!(word(got),word(row[k])^1);
+    }
+    #[cfg(NIX_case_args)] {assert_eq!(dst.cast::<QM31>().add(k),original.cast::<QM31>().add(29*p+k));}
+    #[cfg(NIX_case_frame)] {assert_eq!(*frame,before);}
+    #[cfg(all(NIX_negative,not(NIX_split),not(NIX_rawwindow)))] assert!(!same(got,row[k]));
+    #[cfg(NIX_rawwindow)] {
+     assert_eq!(core::mem::size_of::<QM31>(),16);assert_eq!(core::mem::size_of::<Claims>(),1392);
+     assert_eq!(core::mem::align_of::<QM31>(),4);
+     #[cfg(not(NIX_window_frame))] {
+      let got=original.cast::<u32>().add(4*(29*p+k)+limb).read();
+      let want=row.as_ptr().cast::<u32>().add(4*k+limb).read();
+      assert_eq!(got,want);
+      #[cfg(NIX_negative)] assert_eq!(got,want^1);
+     }
+     #[cfg(not(NIX_window_value))] {
+      let got=original.cast::<u32>().add(4*(29*other+j)+limb).read();
+      assert_eq!(got,framed);
+      #[cfg(NIX_negative)] assert_eq!(got,framed^1);
+     }
+    }
+    drop(out);assert_eq!(*frame,before);
+   }
+  }
+ }
+
+ #[kani::proof] #[kani::unwind(18)]
+ #[kani::stub(core::ptr::copy_nonoverlapping, crate::NIX_kmx::KMX_copy_nonoverlapping)]
+ #[kani::stub(alloc::alloc::realloc, crate::NIX_kmx::KMX_realloc)]
+ #[kani::stub(Vec::<MaybeUninit<Claims>>::try_reserve_exact,reserve)]
+ fn allocation_cleanup(){
+  let before:u64=kani::any();let frame=Box::new(before);
+  match uninit::<Claims>() {
+   Err(e)=>{assert!(matches!(e,Error::Allocation));assert_eq!(*frame,before);},
+   Ok(mut out)=>{
+    let raw=out.as_mut_ptr();
+    #[cfg(NIX_case_args)] {assert!(!raw.is_null());assert!(!core::ptr::eq(raw.cast::<u8>(),(&*frame as *const u64).cast::<u8>()));}
+    #[cfg(NIX_case_frame)] assert_eq!(*frame,before);
+    #[cfg(all(NIX_negative,NIX_case_args))] assert!(raw.is_null());
+    #[cfg(all(NIX_negative,NIX_case_frame))] assert_eq!(*frame,before^1);
+    #[cfg(all(NIX_negative,NIX_case_cleanup))] core::mem::forget(out);
+    #[cfg(not(all(NIX_negative,NIX_case_cleanup)))] drop(out);
+    assert_eq!(*frame,before);
+   }
+  }
+ }
+}

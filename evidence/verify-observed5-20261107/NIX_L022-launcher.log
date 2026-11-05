@@ -1,0 +1,41 @@
+{"attempt": "NIX_L022", "exit_status": 1, "wall_seconds": 4.894214179133996, "peak_rss_kib": "5936700", "swaps": "0", "print_axioms": ["'AspisR1.NIX_PrefixFrames.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NIX_generated/NIX_PrefixFrames.lean:28:4: error: 'change' tactic failed, pattern
+  NIH_RustBind.next (parseAt bytes 0#u8 32#usize) ?m.228 = ok (core.result.Result.Ok parsedPrefix)
+is not definitionally equal to target
+  (match core.result.Result.Ok root with
+    | core.result.Result.Ok root => do
+      let r1 ← parseAt bytes 0#u8 32#usize
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue p =>
+          let (r0, offset) := p
+          do
+          let r2 ← parseAt bytes 1#u8 offset
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+          match cf1 with
+            | core.ops.control_flow.Con
+...
+sidual
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                r1_wire.Prefix (core.convert.FromSame r1_wire.Error) residual
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            r1_wire.Prefix (core.convert.FromSame r1_wire.Error) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Prefix
+                        (core.convert.FromSame r1_wire.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Prefix
+                    (core.convert.FromSame r1_wire.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Prefix
+                (core.convert.FromSame r1_wire.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Prefix
+            (core.convert.FromSame r1_wire.Error) residual
+    | core.result.Result.Err a => ok (core.result.Result.Err (r1_wire.Error.Length 0#u8))) =
+    ok (core.result.Result.Ok parsedPrefix)
+'AspisR1.NIX_PrefixFrames.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r7c61d620fe6f4e7da2a32590badf946d.scope; invocation ID: e35524f8d8e74bafba30e61a29d0ca62

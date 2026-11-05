@@ -17,3 +17,7 @@ NIX_E001 is the ONLY Charon launch. Charon emits the exact root with four opaque
 F2 scalar K002 PASS/K003 semantic FAIL. Claims row-window preflight K004–009 fails the reserve stub's generic arity; no native credit. L014 corrects it. F3 ood K010 PASS is preliminary; K011/K012 expose a comparison-unwinding issue (inspect exact checks before credit). L021 replaces frame equality with per-word assertions, adds exact KMX hooks and bounds the native 8-byte CM31 comparison; no timeout or cap is raised. New positive/control inputs are pinned per receipt. Map body instrumentation is independently reconstructed from frozen operation sites, with no field multiplication executed.
 
 No composed row or outside-slice packet is yet admitted. No new trust, shipped source, artifact, session-A worktree or sibling worktree changed. Default/devnet/Pool pins are inherited, not rebuilt. Target not yet established.
+
+## Stage 3: retained packet proofs
+
+DecodeFinish, RecordAtOrigin, PrefixFrames and aggregate SAME-parser framing pass L009/L015/L033/L039. Heap model prefix/abort and geometry laws pass L026/L047; native aggregate row write remains TOOL-BOUNDARY after K017/K043–046 timeouts on different isolated goals. F3 rational log, secure OOD, fallback and sampled-block domain laws pass L034/L046/L049/L050. No composed row admitted. F3 caller source checks are retained; missing unchanged frozen cfg(kani) support inputs are being pinned after compile failures. Target not established.

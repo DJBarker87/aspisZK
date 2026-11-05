@@ -1,0 +1,48 @@
+{
+  "attempt": "NIX_L053",
+  "kind": "setup",
+  "module": "Pin all remaining frozen external cfg(kani) paths before caller compilation",
+  "sources": [
+    "NIX_src/tools/r1-builder-reference/records.rs",
+    "NIX_src/tools/r1-builder-reference/records_reference.rs",
+    "NIX_src/tools/r1-builder-reference/poseidon.rs",
+    "NIX_src/tools/r1-builder-reference/nullifier.rs",
+    "NIX_SOURCE_PINS.json"
+  ],
+  "command": [
+    "python3",
+    "-c",
+    "import json,hashlib;from pathlib import Path;pins=json.loads(Path(\"NIX_SOURCE_PINS.json\").read_text());assert all(hashlib.sha256(Path(\"NIX_src\",n).read_bytes()).hexdigest()==h for n,h in pins.items());print(\"all scratch inputs pinned\")"
+  ],
+  "env": {
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-verify-observed5-20261107/NIX_target"
+  },
+  "timeout": 180,
+  "expected_time": "own caller input refresh only, erasure checked in following support target",
+  "collect": [],
+  "source_revision": "14c421c3891f6d130101cbe8ff651f08a6f3ecfa",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "selected_objects": {}
+  },
+  "exit_status": 0,
+  "wall_seconds": 0.03076250501908362,
+  "peak_rss_kib": "15664",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r328548778a3645d2904b6558dc9b05c1.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "13574144",
+  "source_hashes": {
+    "NIX_src/tools/r1-builder-reference/records.rs": "5f6930ba1ee1acc88aad70644844b3b031080ac92d08f7f033e9a4f1cd34edda",
+    "NIX_src/tools/r1-builder-reference/records_reference.rs": "84714d8b6accde5a6fdaa758677a31017f088504f522bda120d6403314e51619",
+    "NIX_src/tools/r1-builder-reference/poseidon.rs": "2cd673d4c99f8fb8296c57118e46f0eb6e1a0dd8dad6472409ad774d69efd327",
+    "NIX_src/tools/r1-builder-reference/nullifier.rs": "a9f6d69722c7dd8ccf426bd0ccd3f0e32ab104c23c7e58b538359e8368ee8a38",
+    "NIX_SOURCE_PINS.json": "076f76ba2fefb3be0d9442745bc2e4bd721a70364be47599adbc19521063ca54"
+  },
+  "print_axioms": "N/A: setup"
+}

@@ -1,7 +1,9 @@
-import NP6_Initialization
+import Aeneas
 set_option autoImplicit false
 namespace AspisR1.NIX_HeapFrames
-open NP6_Initialization
+/-- The native one-row store in NIX_claims_heap, transcribed as a finite update. -/
+def write {Row : Type} (state : Fin 3 → Option Row) (p : Fin 3) (row : Row) :
+ Fin 3 → Option Row := fun j=>if j=p then some row else state j
 /-- Arbitrary pre-state and decoder replies; no zero initialization assumption. -/
 def prefixRows {Row : Type} (before : Fin 3 → Option Row) (rows : Fin 3 → Row)
  (n : Nat) : Fin 3 → Option Row := fun j => if j.val<n then some (rows j) else before j
