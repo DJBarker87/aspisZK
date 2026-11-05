@@ -1,0 +1,35 @@
+--- NGH_Driver.lean
++++ NHH_Driver.lean
+@@ -99,27 +99,21 @@
+        #[`NEP_Planted.matcher, `NEP_Planted.viaPrivate, `NEP_Planted.proof,
+          `NEP_Planted.viaAux, `NEP_MutateMatch.matcher, `NEP_MutatePrivate.viaPrivate,
+          `NEP_MutateProof.proof, `NEP_MutateAux.viaAux])
+-    else if mode == "scan" then (#[`NGH_COMBINED_IMPORT], #[])
++    else if mode == "scan" then (#[`NHH_COMBINED_IMPORT], #[])
+     else if mode == "proof0" then
+-      (#[`NGH_COMBINED_IMPORT], #[`NGH_AccumulateRef.cells_eq, `NGH_AccumulateRef.model_eq, `NGH_AccumulateRef.cohort, `NGH_SmallRef.loop_eq, `NGH_SmallRef.model_eq])
++      (#[`NHH_COMBINED_IMPORT], #[`NHH_Embedding.base, `NHH_Embedding.inherent, `NHH_Embedding.complex, `NHH_Embedding.quadratic, `NHH_Embedding.wide])
+     else if mode == "proof1" then
+-      (#[`NGH_COMBINED_IMPORT], #[`NGH_SmallValue.cohort, `NGH_SmallValue.same_arrays, `NGH_QSquareRef.model_eq, `NGH_QSquareRef.cohort, `NGH_QSquareOps.square])
+-    else if mode == "proof2" then
+-      (#[`NGH_COMBINED_IMPORT], #[`NGH_QSquareOps.product, `NGH_QSquareOps.associate, `NGH_QSquareOps.source, `NGH_CMWords.sub_value, `NGH_CMWords.coordinates])
+-    else if mode == "proof3" then
+-      (#[`NGH_COMBINED_IMPORT], #[`NGH_CMWords.product, `NGH_CMWords.square, `NGH_WideBridge.same_square, `NGH_WideBridge.source, `NGH_WideBridge.cohort])
+-    else if mode == "proof4" then
+-      (#[`NGH_COMBINED_IMPORT], #[`NGH_CellComposition.one_eq, `NGH_CellComposition.nine, `NGH_OuterRef.step_eq, `NGH_OuterRef.source, `AspisR1.RPx_Deployed.deployed])
++      (#[`NHH_COMBINED_IMPORT], #[`NHH_Embedding.word_spec, `NHH_Embedding.canonical, `NHH_Embedding.same_canonical_word, `NHH_Embedding.accumulation, `AspisR1.RPx_Deployed.deployed])
+     else (#[], #[])
+   let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
+     {} (loadExts := true) (level := .private)
+   if mode == "scan" || mode == "queryscan" then
+     let mut expected : Std.HashMap String (Array String) := {}
+-    for line in ← IO.FS.lines (if mode == "queryscan" then "NFN_QUERY_EXPECTED_IMPORTS.jsonl" else "NGH_EXPECTED_IMPORTS.jsonl") do
++    for line in ← IO.FS.lines (if mode == "queryscan" then "NFN_QUERY_EXPECTED_IMPORTS.jsonl" else "NHH_EXPECTED_IMPORTS.jsonl") do
+       let j ← IO.ofExcept (Json.parse line)
+       expected := expected.insert (← IO.ofExcept (j.getObjValAs? String "module"))
+         (← IO.ofExcept (j.getObjValAs? (Array String) "imports"))
+-    let failed ← NER.loadedScan env (if mode == "queryscan" then "NFN_QUERY_LOADED_scan.jsonl" else "NGH_LOADED_scan.jsonl") expected
++    let failed ← NER.loadedScan env (if mode == "queryscan" then "NFN_QUERY_LOADED_scan.jsonl" else "NHH_LOADED_scan.jsonl") expected
+     IO.println (if failed then "NFN_SCAN_FAILED" else "NFN_SCAN_ZERO_DANGLING")
+     return if failed then 1 else 0
+   let ctx : Command.Context := {
