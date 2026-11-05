@@ -30,16 +30,11 @@ theorem source {A B H : Type} (f : A → B)
     | apply NIL_ResultCases.branch_congr
    rcases x with ⟨bad,rest⟩
    cases bad
-   · conv_lhs => arg 2; whnf
-     conv_rhs => whnf
-     repeat' first
+   · repeat' first
       | exact tail _ _
       | rfl
-      | rw [NIL_ResultCases.map_match]
-      | rw [outer_bind]
-      | rw [NIL_ResultCases.outer_ite]
-      | (apply NIL_ResultCases.match_congr; intro x)
-      | (apply NIL_ResultCases.bind_congr; intro x)
+      | (with_unfolding_all apply NIL_ResultCases.map_bind_congr; intro x)
+      | (with_unfolding_all rw [NIL_ResultCases.outer_ite])
       | apply NIL_ResultCases.branch_congr
    · rfl
  · have ne : (Slice.len bytes != 1768#usize)=true := by simpa only [bne_iff_ne] using same

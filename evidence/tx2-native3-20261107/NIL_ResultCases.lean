@@ -42,6 +42,13 @@ theorem match_congr {A B : Type} (m : Result A) (f g : A → Result B)
 #print axioms map_match
 #print axioms match_congr
 
+theorem map_bind_congr {A B C : Type} (f : B → C) (m : Result A)
+ (left : A → Result B) (right : A → Result C)
+ (h : ∀ x,outer f (left x)=right x) : outer f (do let x ← m;left x)=(do let x ← m;right x) := by
+ rw [NIL_ResultTransport.outer_bind]
+ exact bind_congr m _ _ h
+#print axioms map_bind_congr
+
 theorem checkpoint_error : error .Checkpoint=AspisR1Stage2.verifier.Error.Checkpoint := rfl
 #print axioms outer_ite
 #print axioms checkpoint_error

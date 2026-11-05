@@ -15,3 +15,5 @@ domain. L044 composes the exact packed-key opening with the same digest input,
 reply and native-model tree step, preserving all outer fail/div. None installs
 the full op18 or op5 parent. E-value families K003–020 qualify only their named
 facets and source offsets; no multiplication is executed.
+
+Stage update: K003–K020 qualify six local Reader.e selected-value facets; K021–K074 qualify 18 local frozen Merkle step facets, with corruption and rename controls. L050 establishes full prefix Result transport; L053 and L054 establish literal fresh/cohort prefix-tail decompositions. These are local associations; complete resume, tree induction and native parent installation remain OPEN.

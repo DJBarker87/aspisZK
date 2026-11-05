@@ -1,4 +1,5 @@
 import NIL_ResumeTailCut
+import NIL_SpineCongr
 set_option autoImplicit false
 noncomputable section
 namespace NIL_ResumeSplit
@@ -16,6 +17,14 @@ theorem source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest
  (bytes proof public1 : Slice U8) (v : Fresh.V) (hash : H) :
  NIL_FreshOps.resume reserved d bytes proof public1 v hash=
  NIL_ResumePrefixCut.fresh (NIL_FreshOps.digest d) bytes proof public1 v hash
- (tail reserved d bytes v) := by rfl
+ (tail reserved d bytes v) := by
+ unfold NIL_FreshOps.resume NID_ResumeEmission.verifier.resume
+ unfold NIL_ResumePrefixCut.fresh tail NIL_ResumeTailCut.tail
+ repeat' first
+  | (with_unfolding_all apply NIL_ResultCases.bind_congr; intro x)
+  | apply NIL_ResultCases.branch_congr
+  | (with_unfolding_all apply NIL_SpineCongr.prod; intro x y)
+  | rfl
+  | (cases x <;> rename_i x)
 #print axioms source
 end NIL_ResumeSplit
