@@ -31,7 +31,7 @@ theorem construct (proof logical : Slice U8)
    (select proof 16 7015) (select logical 0 13831) semInput semOutput
  obtain ⟨y1,yRun,_,yLength,_⟩ := NGV_ExpandAssociation.result
    (select proof 7031 464) (select logical 13831 928)
-   (by omega) (by rw [yInput];decide) (by rw [yInput,yOutput])
+   (by omega) (by rw [yInput]) (by rw [yInput,yOutput])
  have ySize : y1.val.length=928 := yLength.trans yOutput
  exact ⟨semantic,y1,semRun,yRun,semLength,ySize,
    NHF_Frame.logical_size _ _ semLength ySize,

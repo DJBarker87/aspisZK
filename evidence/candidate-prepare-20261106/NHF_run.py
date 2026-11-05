@@ -60,10 +60,14 @@ elif kind=='audit':
  command=['python3','NHF_batch.py',target]
 else:raise ValueError(kind)
 config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NHF_tmp',LEAN_PATH=':'.join([B+'/NHF_objects',C+'/NGI_exports_20261105',C+'/NFT_exports_20261104',C+'/NFU_exports_20261104',C+'/NFV_final_objects_20261104',C+'/NGE_exports_20261104',C+'/NGF_exports_20261104',C+'/NFY_exports_20261104',C+'/NFY_priority',W,W+'/objects',C+'/NHF_d_fallback/NFQ_exports_20261104',C+'/NHF_d_fallback',C+'/NHF_pool_fallback/NFR_final_objects_20261104',C+'/NHF_pool_fallback/NFO_final_objects_20261104',C+'/NHF_pool_fallback',C+'/NHF_pool_fallback/NEY_final_objects_20261104',C+'/NHF_pool_fallback/NEX_final_objects_20261104',C+'/NHF_pool_fallback/NEQ_final_objects_20261103',C+'/NHF_pool_fallback/NEM_final_objects_20261102',C+'/NHF_pool_fallback/NEU_final_objects_20261104',C,T+'/lib/lean'])),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')
+if kind=='extract':config['expected_time']='optimized dependency compilation then one Charon/Aeneas prepare extraction with opaque child boundaries'
 config['env']['LEAN_PATH']=':'.join(json.loads((E/'NHF_PATHS.json').read_text()))
 if kind=='kani':
  config['native_command']=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NHF_src/crates/aspis-r1-cost-probe/Cargo.toml','--target-dir',B+'/NHF_target','--features','private-leaf-salts,optimized-terminal,program-build','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse']
  config['env'].update(CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-Copt-level=3 -C link-arg=-Wl,--threads=1'+(' --cfg NHF_invert' if os.environ.get('NHF_INVERT') else ''))
+ if os.environ.get('NHF_BAD_DECODE_ARG'):config['env']['RUSTFLAGS']+=' --cfg NHF_bad_decode_arg'
+ if os.environ.get('NHF_BAD_REPLY'):config['env']['RUSTFLAGS']+=' --cfg NHF_bad_reply'
+ if os.environ.get('NHF_BAD_EXPAND'):config['env']['RUSTFLAGS']+=' --cfg NHF_bad_expand'
  if os.environ.get('NHF_BAD_STAGE'):config['env']['RUSTFLAGS']+=' --cfg NHF_bad_stage'
  if os.environ.get('NHF_BAD_VIEW'):config['env']['RUSTFLAGS']+=' --cfg NHF_bad_view'
  if os.environ.get('NHF_BAD_ALLOC'):config['env']['RUSTFLAGS']+=' --cfg NHF_bad_alloc'

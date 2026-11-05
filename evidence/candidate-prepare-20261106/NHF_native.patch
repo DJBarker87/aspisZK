@@ -20,83 +20,112 @@
 +mod NHF_stages;
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NHF_stages.rs
-@@ -0,0 +1,62 @@
+@@ -0,0 +1,80 @@
 +use super::*;
 +include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
-+struct HeapLog{failed:bool,calls:usize,returned:usize}
-+impl HeapLog{
-+ fn heap(&mut self,n:usize,value:u8)->Result<alloc::vec::Vec<u8>,aspis_core::r0::Error>{
-+  self.calls+=1;assert!(n==14759&&value==0);
-+  if self.failed {return Err(aspis_core::r0::Error::Allocation)}
-+  let out=alloc::vec![0u8;n];self.returned=out.as_ptr() as usize;Ok(out)
-+ }
++const MODE:usize=0;const ROW:usize=25;const SRC:usize=4685;const DST:usize=9181;
++const PAYLOAD:usize=3712;const STORED:usize=1856;
++const INPUT_START:usize=4701;const INPUT_WIDTH:usize=1861;
++const OUTPUT_START:usize=9181;const OUTPUT_WIDTH:usize=3717;
++#[repr(C)] struct ProofBacking{prefix:[u8;INPUT_START],window:[u8;INPUT_WIDTH],suffix:[u8;57607-INPUT_START-INPUT_WIDTH]}
++#[repr(C)] struct LogicalBacking{prefix:[u8;OUTPUT_START],window:[u8;OUTPUT_WIDTH],suffix:[u8;933],y1:[u8;928]}
++fn source_index(cell:usize)->Option<usize>{
++ if MODE==2 {return if cell%32<16{Some((cell/32)*16+cell%32)}else{None};}
++ if MODE==1 {return Some(cell);}
++ if cell<5{return Some(cell);}
++ let j=cell-5;
++ if ROW<14{return Some(5+j);}
++ if j%32<16{Some(5+(j/32)*16+j%32)}else{None}
 +}
-+fn heap_cut(log:&mut HeapLog)->Result<(),Error>{
-+ let mut logical=log.heap(compact::LOGICAL_SEMANTIC+compact::LOGICAL_Y1,0u8).map_err(|_|Error::Allocation)?;
-+ let (semantic,y1)=logical.split_at_mut(compact::LOGICAL_SEMANTIC-usize::from(cfg!(NHF_bad_stage)));
-+ assert!(semantic.as_ptr() as usize==log.returned&&semantic.len()==13831);
-+ assert!(y1.as_ptr() as usize==log.returned+13831&&y1.len()==928);
-+ Ok(())
-+}
-+struct ExpansionLog{proof:usize,logical:usize,stage:bool,calls:usize,failed:bool,observe:usize,reply:u8}
-+impl ExpansionLog{
++struct Log{proof:usize,logical:usize,calls:usize,cell:usize,reply:u8,source_byte:u8,source_pointer:usize,modified_start:usize,modified_length:usize,selected:usize}
++impl Log{
 + fn expand(&mut self,input:&[u8],out:&mut[u8])->Result<(),compact::CodecError>{
 +  self.calls+=1;
-+  if !self.stage{assert!(input.as_ptr() as usize==self.proof+16&&input.len()==7015&&out.as_ptr() as usize==self.logical&&out.len()==13831);}
-+  else{assert!(input.as_ptr() as usize==self.proof+7031&&input.len()==464&&out.as_ptr() as usize==self.logical+13831&&out.len()==928);}
-+  // Arbitrary observed-cell projection of the CLOSED callee's full output.
-+  // The caller itself never reads unobserved cells after this cut.
-+  let base=if self.stage{13831}else{0};
-+  if base<=self.observe&&self.observe<base+out.len(){out[self.observe-base]=self.reply;}
-+  if self.failed{Err(compact::CodecError::Length)}else{Ok(())}
++  if MODE==2{assert!(input.as_ptr() as usize==self.proof+7031&&input.len()==464&&out.as_ptr() as usize==self.logical+13831&&out.len()==928);}
++  else{assert!(input.as_ptr() as usize==self.proof+16&&input.len()==7015&&out.as_ptr() as usize==self.logical&&out.len()==13831);}
++  self.reply=match source_index(self.cell){
++   None=>0,
++   Some(relative)=>{let base=if MODE==0{SRC}else{0};
++    assert!(input.as_ptr() as usize+base+relative==self.source_pointer);
++    self.source_byte}
++  };
++  let selected=if MODE==2{self.cell}else{OUTPUT_START+self.cell};
++  self.modified_start=if MODE==2{13831}else{0};self.modified_length=out.len();self.selected=selected;
++  if cfg!(NHF_bad_expand){self.reply^=1;}
++  // Native cut records the CLOSED callee memory effect. It does not replay
++  // those physical writes. K009/K011 supply the separate caller frame;
++  // NGV packets supply the complete same-window byte update in Lean.
++  // Full closed-packet projection on these exact dimensions always succeeds.
++  Ok(())
 + }
 +}
-+fn semantic_cut(proof:&[u8],logical:&mut[u8],log:&mut ExpansionLog)->Result<(),Error>{
++fn semantic_cut(proof:&[u8],logical:&mut[u8],log:&mut Log)->Result<(),Error>{
 + let (semantic,_y1)=logical.split_at_mut(compact::LOGICAL_SEMANTIC);
 + log.expand(&proof[compact::OFF_SEMANTIC+usize::from(cfg!(NHF_bad_stage))..compact::OFF_Y1],semantic)?;
 + Ok(())
 +}
-+fn values_cut(proof:&[u8],logical:&mut[u8],log:&mut ExpansionLog)->Result<(),Error>{
++fn values_cut(proof:&[u8],logical:&mut[u8],log:&mut Log)->Result<(),Error>{
 + let (_semantic,y1)=logical.split_at_mut(compact::LOGICAL_SEMANTIC);
 + log.expand(&proof[compact::OFF_Y1+usize::from(cfg!(NHF_bad_stage))..compact::OFF_INACTIVE],y1)?;
 + Ok(())
 +}
-+fn check_expand(stage:bool){
-+ let proof:[u8;57607]=kani::any();let mut logical:[u8;14759]=kani::any();
-+ let observe:usize=kani::any();kani::assume(observe<14759);let before=logical[observe];
-+ let mut log=ExpansionLog{proof:proof.as_ptr() as usize,logical:logical.as_ptr() as usize,stage,calls:0,failed:kani::any(),observe,reply:kani::any()};
-+ let result=if stage{values_cut(&proof,&mut logical,&mut log)}else{semantic_cut(&proof,&mut logical,&mut log)};
-+ assert_eq!(log.calls,1);
-+ assert!(match result{Ok(())=>!log.failed,Err(e)=>log.failed&&e==Error::Parse});
-+ let inside=if stage{13831<=observe}else{observe<13831};
-+ assert_eq!(logical[observe],if inside{log.reply}else{before});
++fn check_window(){
++ let proof_backing=ProofBacking{prefix:kani::any(),window:kani::any(),suffix:kani::any()};
++ let mut logical_backing:[u8;14759]=kani::any();
++ assert_eq!(core::mem::size_of::<ProofBacking>(),57607);assert_eq!(core::mem::align_of::<ProofBacking>(),1);
++ assert_eq!(core::mem::offset_of!(ProofBacking,window),INPUT_START);
++
++ let proof=unsafe{core::slice::from_raw_parts((&proof_backing as *const ProofBacking).cast::<u8>(),57607)};
++ let logical=&mut logical_backing[..];
++ let cell:usize=kani::any();kani::assume(cell<OUTPUT_WIDTH);
++ let observe=OUTPUT_START+cell;
++ // Opposite-window arbitrary-prestate frame is separately K009/K011.
++ // This independent obligation checks the full natural selected-byte reply.
++ let source=if MODE==2{&proof[7031..7495]}else{&proof[16..7031]};
++ let local=source_index(cell).unwrap_or(0);
++ let source_byte=proof_backing.window[local];
++ let source_pointer=&proof_backing.window[local] as *const u8 as usize;
++ let wanted=if source_index(cell).is_some(){source_byte}else{0};
++ let mut log=Log{proof:proof.as_ptr() as usize,logical:logical.as_ptr() as usize,calls:0,cell,reply:0,source_byte,source_pointer,modified_start:0,modified_length:0,selected:0};
++ let result=if MODE==2{values_cut(proof,logical,&mut log)}else{semantic_cut(proof,logical,&mut log)};
++ assert!(result.is_ok());assert!(log.calls==1);assert!(log.reply==wanted);
++ assert!(log.reply==wanted);assert!(log.modified_start==(if MODE==2{13831}else{0}));assert!(log.modified_length==(if MODE==2{928}else{13831}));assert!(log.modified_start+log.selected==observe);
++ if MODE==0{kani::cover!(cell<5);if PAYLOAD>0{kani::cover!(cell>=5);}}
++ else{kani::cover!(cell==0);kani::cover!(cell+1==OUTPUT_WIDTH);}
 +}
 +#[kani::proof] #[kani::unwind(34)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
-+fn heap_split(){let mut log=HeapLog{failed:kani::any(),calls:0,returned:0};let result=heap_cut(&mut log);assert_eq!(log.calls,1);assert!(match result{Ok(())=>!log.failed,Err(e)=>log.failed&&e==Error::Allocation});}
++fn semantic_stage(){check_window()}
 +#[kani::proof] #[kani::unwind(34)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
-+fn semantic_stage(){check_expand(false)}
-+#[kani::proof] #[kani::unwind(34)]
-+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
-+fn values_stage(){check_expand(true)}
++fn values_stage(){check_window()}
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NHF_wide.rs
-@@ -0,0 +1,52 @@
+@@ -0,0 +1,82 @@
 +use super::*;
 +include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[repr(C)]
++struct ProofBacking{header:[u8;7495],inactive:[u8;32],suffix:[u8;50080]}
 +struct DecodeLog {proof:usize,reply:Option<E>,calls:usize}
-+impl DecodeLog {fn decode(&mut self,bytes:&[u8])->Option<E>{self.calls+=1;assert!(bytes.as_ptr() as usize==self.proof+7495&&bytes.len()==32);self.reply}}
++impl DecodeLog {fn decode(&mut self,bytes:&[u8])->Option<E>{self.calls+=1;assert!(bytes.as_ptr() as usize==self.proof+7495&&bytes.len()==32);
++ let mut canonical=true;let mut i=0;
++ while i<8{let at=4*i;let word=u32::from_le_bytes([bytes[at],bytes[at+1],bytes[at+2],bytes[at+3]]);canonical=canonical&&word<2147483647;i+=1;}
++ match self.reply{
++  None=>kani::assume(!canonical),
++  Some(value)=>{kani::assume(canonical);let limbs=value.to_limbs();let mut j=0;
++   while j<8{let at=4*j;let word=u32::from_le_bytes([bytes[at],bytes[at+1],bytes[at+2],bytes[at+3]]);kani::assume(limbs[j]==word);j+=1;}}
++ }
++ if cfg!(NHF_bad_reply){if let Some(value)=self.reply{let mut limbs=value.to_limbs();limbs[0]=if limbs[0]==0{1}else{0};return E::from_limbs(limbs);}}
++ self.reply}}
 +fn cut<'a>(proof:&'a[u8],semantic:&'a[u8],y1:&'a[u8],log:&mut DecodeLog)->Result<View<'a>,Error>
 +{
 +    Ok(View {
 +        variant: Variant::S2,
 +        semantic,
 +        y1,
-+        inactive: log.decode(&proof[compact::OFF_INACTIVE..compact::OFF_ROUND0]).ok_or(Error::Parse)?,
++        inactive: log.decode(&proof[compact::OFF_INACTIVE+usize::from(cfg!(NHF_bad_decode_arg))..compact::OFF_ROUND0]).ok_or(Error::Parse)?,
 +        round0: &proof[compact::OFF_ROUND0+usize::from(cfg!(NHF_bad_view))..compact::OFF_FOLDED_ROOT],
 +        folded_root: Some(proof[compact::OFF_FOLDED_ROOT..compact::OFF_ROUND1].try_into().unwrap()),
 +        round1: &proof[compact::OFF_ROUND1..compact::OFF_FINAL],
@@ -104,20 +133,27 @@
 +        query_bytes: &[],
 +    })
 +}
-+// The overapproximation accepts every CLOSED decoder reply. Lean supplies its
-+// full byte/Option law on the SAME logged input; no decoder success is assumed.
++// Full byte/Option packet constraints are enforced in DecodeLog::decode.
++// The same-input natural law is NHF_ViewDecoder.result; no success premise.
 +fn wide_result(){
-+ let proof:[u8;57607]=kani::any();let semantic:[u8;13831]=kani::any();let y1:[u8;928]=kani::any();
++ let backing=ProofBacking{header:kani::any(),inactive:kani::any(),suffix:kani::any()};
++ assert_eq!(core::mem::size_of::<ProofBacking>(),57607);
++ assert_eq!(core::mem::align_of::<ProofBacking>(),1);
++ assert_eq!(core::mem::offset_of!(ProofBacking,inactive),7495);
++ assert_eq!(core::mem::offset_of!(ProofBacking,suffix),7527);
++ let proof=unsafe{core::slice::from_raw_parts((&backing as *const ProofBacking).cast::<u8>(),57607)};
++ assert_eq!(proof.as_ptr() as usize+7495,backing.inactive.as_ptr() as usize);let semantic:[u8;13831]=kani::any();let y1:[u8;928]=kani::any();
 + let words:[u32;8]=kani::any();let mut i=0;while i<8{kani::assume(words[i]<2147483647);i+=1;}
 + let reply=if kani::any(){E::from_limbs(words)}else{None};
 + let slot:usize=kani::any();kani::assume(slot<8);
 + let mut log=DecodeLog{proof:proof.as_ptr() as usize,reply,calls:0};
-+ let result=cut(&proof,&semantic,&y1,&mut log);
++ let result=cut(proof,&semantic,&y1,&mut log);
++ kani::cover!(reply.is_some());kani::cover!(reply.is_none());
 + assert_eq!(log.calls,1);
 + match (reply,result){
 + (None,Err(e))=>assert!(e==Error::Parse),
 + (Some(expected),Ok(v))=>{
-+  assert_eq!(v.inactive.to_limbs()[slot],expected.to_limbs()[slot]);
++  assert!(v.inactive.to_limbs()[slot]==expected.to_limbs()[slot],"decoded reply identity");
 +  assert!(v.variant==Variant::S2);
 +  assert!(v.semantic.as_ptr()==semantic.as_ptr()&&v.semantic.len()==13831);
 +  assert!(v.y1.as_ptr()==y1.as_ptr()&&v.y1.len()==928);
@@ -138,3 +174,15 @@
 +#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 +#[kani::stub(<[u32]>::copy_from_slice,KMX_copy_from_slice)]
 +fn wide_copy(){let a:[u8;32]=kani::any();let mut b:[u8;32]=kani::any();b.copy_from_slice(&a);let i:usize=kani::any();kani::assume(i<32);assert!((b[i]==a[i])!=cfg!(NHF_invert));}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u32]>::copy_from_slice,KMX_copy_from_slice)]
++fn copy_e(){
++ let a:[u32;8]=kani::any();let b:[u32;8]=kani::any();let mut j=0;
++ while j<8{kani::assume(a[j]<2147483647&&b[j]<2147483647);j+=1;}
++ let src=E::from_limbs(a).unwrap();let mut dst=E::from_limbs(b).unwrap();
++ unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};
++ let limb:usize=kani::any();kani::assume(limb<8);
++ assert!((dst.to_limbs()[limb]==src.to_limbs()[limb])!=cfg!(NHF_invert));
++}
