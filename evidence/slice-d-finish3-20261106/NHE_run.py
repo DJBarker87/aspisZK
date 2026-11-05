@@ -40,9 +40,10 @@ assert target.startswith('NHE_') or kind in ['auditbin','kani','extract','depend
 
 if kind=='kani':
  files['NHE_gate.py']=(E/'NHE_gate.py').read_text()
- if (E/'NHE_NATIVE_INPUTS.json').exists():
-  for n,t in json.loads((E/'NHE_NATIVE_INPUTS.json').read_text()).items():files['NHE_src/'+n]=t
-  files['NHE_SOURCE_PINS.json']=(E/'NHE_SOURCE_PINS.json').read_text()
+ import runpy
+ prepared=runpy.run_path(str(E/'NHE_native_prepare.py'))
+ for n,t in prepared['inputs'].items():files['NHE_src/'+n]=t
+ files['NHE_SOURCE_PINS.json']=json.dumps(prepared['pins'])
  sources=['NHE_gate.py','NHE_SOURCE_PINS.json','NHE_src/Cargo.lock','NHE_src/Cargo.toml']+[n for n in files if n.startswith('NHE_src/')]
  command=['python3','NHE_gate.py',a+'.json']
  env.update(CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-Copt-level=3 -C link-arg=-Wl,--threads=1')

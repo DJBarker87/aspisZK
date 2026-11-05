@@ -1,0 +1,51 @@
+{"attempt": "NHE_L062", "exit_status": 1, "wall_seconds": 2.473578647011891, "peak_rss_kib": "5548892", "swaps": "0", "print_axioms": ["'NHE_Dot.finish' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NHE_Dot.cohort' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NHE_generated/NHE_Dot.lean:37:1: error: 'change' tactic failed, pattern
+  (FIo_FieldBridge.map result do
+      let p ← loop (body bytes weights) (initial, 0#usize)
+      match p.2 with
+        | some r => ok r
+        | none => do
+          let out ← FIo_Native.fast_pairing.EbyKDot.finish p.1
+          ok (core.result.Result.Ok out)) =
+    do
+    let p ←
+      AspisR1FinishRelationCurrent.verifier.finish_query_dot_loop ops bytes
+          (SAG_DotAdapter.mapSlice NHE_DotRead.finishQ weights) (NHE_DotState.toPush initial) 0#usize
+    match p.2 with
+      | some r => ok r
+      | none => do
+        let out ← AspisR1FinishDotSourceABI.finishFromPush p.1
+        ok (core.result.Result.Ok out)
+is
+...
+o_Native.fast_pairing.EbyKDot.finish dot
+          ok (core.result.Result.Ok out) with
+    | ok x => ok (result x)
+    | fail e => fail e
+    | div => div) =
+    do
+    let (dot1, pending_return) ←
+      AspisR1FinishRelationCurrent.verifier.finish_query_dot_loop
+          { eq := AspisR1CurrentWide.Proof.finishEq,
+            add := (AspisR1CurrentWide.Proof.finishConcreteField SAG_DotClosed.seed).add,
+            mulM31 := (AspisR1CurrentWide.Proof.finishConcreteField SAG_DotClosed.seed).mulM31,
+            quarter := (AspisR1CurrentWide.Proof.finishConcreteField SAG_DotClosed.seed).quarter,
+            newWeights := (AspisR1CurrentWide.Proof.finishConcreteField SAG_DotClosed.seed).newWeights,
+            pair := (AspisR1CurrentWide.Proof.finishConcreteField SAG_DotClosed.seed).pair,
+            field := (AspisR1CurrentWide.Proof.finishConcreteField SAG_DotClosed.seed).field,
+            newDot := ok (NHE_DotState.toPush initial),
+            pushDot := fun s v q =>
+              AspisR1EbyKPushDotBackend.pushWithDotBackend AspisR1EbyKPushDecodedProductUpdate.QRaw s
+                (AspisR1FinishDotConcreteOps.toPushWide v) (AspisR1FinishDotConcreteOps.toPushQM q),
+            finishDot := AspisR1FinishDotSourceABI.finishFromPush,
+            polynomial := (AspisR1CurrentWide.Proof.finishConcreteField SAG_DotClosed.seed).polynomial }
+          bytes (SAG_DotAdapter.mapSlice NHE_DotRead.finishQ weights) (NHE_DotState.toPush initial) 0#usize
+    match pending_return with
+      | none => do
+        let we ← AspisR1FinishDotSourceABI.finishFromPush dot1
+        ok (core.result.Result.Ok we)
+      | some r => ok r
+'NHE_Dot.finish' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NHE_Dot.cohort' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf814a310f2244e9a87a1bf7506f4de9b.scope; invocation ID: 828c3543d66749da8fdb479011ac6609

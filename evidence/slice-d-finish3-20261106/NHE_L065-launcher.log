@@ -1,0 +1,67 @@
+{"attempt": "NHE_L065", "exit_status": 1, "wall_seconds": 2.4324025551322848, "peak_rss_kib": "5549484", "swaps": "0", "print_axioms": ["'NHE_Dot.finish' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NHE_Dot.cohort' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NHE_generated/NHE_Dot.lean:50:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1FinishDotSourceABI.finishFromPush (NHE_DotState.toPush dot)
+in the target expression
+  (match
+      let (dot, pending) := (dot, none)
+      match pending with
+      | some r => ok r
+      | none => do
+        let out ← FIo_Native.fast_pairing.EbyKDot.finish dot
+        ok (core.result.Result.Ok out) with
+    | ok x => ok (result x)
+    | fail e => fail e
+    | div => div) =
+    let (dot1, pending_return) := (NHE_DotState.toPush dot, none)
+    match pending_return with
+    | none => do
+      let we ← AspisR1FinishDotSourceABI.finishFromPush dot1
+      ok (core.result.Result.Ok w
+...
+KDot.finish dot
+        ok (core.result.Result.Ok out) with
+    | ok x => ok (result x)
+    | fail e => fail e
+    | div => div) =
+    let (dot1, pending_return) := (NHE_DotState.toPush dot, none)
+    match pending_return with
+    | none => do
+      let we ← AspisR1FinishDotSourceABI.finishFromPush dot1
+      ok (core.result.Result.Ok we)
+    | some r => ok r
+
+case ok.none
+bytes : Slice U8
+weights : Slice NQ
+size : (↑weights).length ≤ 64
+initial : Dot :=
+  { c0 := { sums := Array.repeat 4#usize 0#u64 }, c1 := { sums := Array.repeat 4#usize 0#u64 }, count := 0#usize }
+hn : FIo_Native.fast_pairing.EbyKDot.new = ok initial
+hnew : FIo_FieldBridge.map NHE_DotState.toPush (ok initial) = AspisR1FinishDotConcreteOps.sourceNewDot
+hl :
+  FIo_FieldBridge.map rm (loop (body bytes weights) (initial, 0#usize)) =
+    AspisR1FinishRelationCurrent.verifier.finish_query_dot_loop ops bytes
+      (SAG_DotAdapter.mapSlice NHE_DotRead.finishQ weights) (NHE_DotState.toPush initial) 0#usize
+newSlot : ops.newDot = ok (NHE_DotState.toPush initial)
+dot : Dot
+run : loop (body bytes weights) (initial, 0#usize) = ok (dot, none)
+⊢ (match
+      let (dot, pending) := (dot, none)
+      match pending with
+      | some r => ok r
+      | none => do
+        let out ← FIo_Native.fast_pairing.EbyKDot.finish dot
+        ok (core.result.Result.Ok out) with
+    | ok x => ok (result x)
+    | fail e => fail e
+    | div => div) =
+    let (dot1, pending_return) := (NHE_DotState.toPush dot, none)
+    match pending_return with
+    | none => do
+      let we ← AspisR1FinishDotSourceABI.finishFromPush dot1
+      ok (core.result.Result.Ok we)
+    | some r => ok r
+'NHE_Dot.finish' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NHE_Dot.cohort' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r567de94ebd05440d9250fe84ddde60f8.scope; invocation ID: 2d220f724c194e1fbac9c74f21877921

@@ -1,0 +1,106 @@
+NHE_generated/NHE_DotBody.lean:51:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1CurrentWide.Proof.finishField bytes s.2
+in the target expression
+  (do
+      let v ← FIo_Native.weights.field bytes s.2
+      let v_1 ← weights.index_usize s.2
+      let v ← FIo_Native.fast_pairing.EbyKDot.push s.1 v v_1
+      FIo_FieldBridge.map (NHE_LoopMap.control sm rm)
+          (let (r, dot) := v
+          match r with
+          | core.result.Result.Err PUnit.unit =>
+            ok (done (dot, some (core.result.Result.Err AspisR1FinishRelationCurrent.verifier.Error.Parse)))
+          | core.result.Result.Ok PUnit.unit => do
+            let j ← s.2 + 1#usize
+            ok (cont (dot, j)))) =
+    do
+    let we ←
+      (AspisR1CurrentWide.Proof.finishCheckedArithmetic
+              { eq := SAG_DotClosed.seed.eq, add := SAG_DotClosed.seed.add, mulM31 := SAG_DotClosed.seed.mulM31,
+                quarter := SAG_DotClosed.seed.quarter, newWeights := SAG_DotClosed.seed.newWeights,
+                pair := SAG_DotClosed.seed.pair, field := AspisR1CurrentWide.Proof.finishField,
+                newDot := SAG_DotClosed.seed.newDot, pushDot := SAG_DotClosed.seed.pushDot,
+                finishDot := SAG_DotClosed.seed.finishDot, polynomial := SAG_DotClosed.seed.polynomial }).field
+          bytes s.2
+    let q ← (SAG_DotAdapter.mapSlice NHE_DotRead.finishQ weights).index_usize s.2
+    let (r, dot1) ←
+      AspisR1EbyKPushDotBackend.pushWithDotBackend AspisR1EbyKPushDecodedProductUpdate.QRaw (NHE_DotState.toPush s.1)
+          (AspisR1FinishDotConcreteOps.toPushWide we) (AspisR1FinishDotConcreteOps.toPushQM q)
+    let r1 ←
+      AspisR1FinishRelationCurrent.core.result.Result.map_err
+          AspisR1FinishRelationCurrent.verifier.finish_query_dot.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError r ()
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        let j1 ← s.2 + 1#usize
+        ok (cont (dot1, j1))
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let return_capture ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              AspisR1FinishRelationCurrent.aspis_core.field.WideExact
+              (core.convert.FromSame AspisR1FinishRelationCurrent.verifier.Error) residual
+        ok (done (dot1, some return_capture))
+
+case pos
+bytes : Slice U8
+weights : Slice NQ
+size : (↑weights).length ≤ 64
+s : State
+len : (SAG_DotAdapter.mapSlice NHE_DotRead.finishQ weights).len = weights.len
+active : s.2 < weights.len
+small : ↑s.2 < 64
+field :
+  FIo_FieldBridge.map NHE_DotRead.finishE (FIo_Native.weights.field bytes s.2) =
+    AspisR1CurrentWide.Proof.finishField bytes s.2
+weight :
+  FIo_FieldBridge.map NHE_DotRead.finishQ (weights.index_usize s.2) =
+    (SAG_DotAdapter.mapSlice NHE_DotRead.finishQ weights).index_usize s.2
+⊢ (do
+      let v ← FIo_Native.weights.field bytes s.2
+      let v_1 ← weights.index_usize s.2
+      let v ← FIo_Native.fast_pairing.EbyKDot.push s.1 v v_1
+      FIo_FieldBridge.map (NHE_LoopMap.control sm rm)
+          (let (r, dot) := v
+          match r with
+          | core.result.Result.Err PUnit.unit =>
+            ok (done (dot, some (core.result.Result.Err AspisR1FinishRelationCurrent.verifier.Error.Parse)))
+          | core.result.Result.Ok PUnit.unit => do
+            let j ← s.2 + 1#usize
+            ok (cont (dot, j)))) =
+    do
+    let we ←
+      (AspisR1CurrentWide.Proof.finishCheckedArithmetic
+              { eq := SAG_DotClosed.seed.eq, add := SAG_DotClosed.seed.add, mulM31 := SAG_DotClosed.seed.mulM31,
+                quarter := SAG_DotClosed.seed.quarter, newWeights := SAG_DotClosed.seed.newWeights,
+                pair := SAG_DotClosed.seed.pair, field := AspisR1CurrentWide.Proof.finishField,
+                newDot := SAG_DotClosed.seed.newDot, pushDot := SAG_DotClosed.seed.pushDot,
+                finishDot := SAG_DotClosed.seed.finishDot, polynomial := SAG_DotClosed.seed.polynomial }).field
+          bytes s.2
+    let q ← (SAG_DotAdapter.mapSlice NHE_DotRead.finishQ weights).index_usize s.2
+    let (r, dot1) ←
+      AspisR1EbyKPushDotBackend.pushWithDotBackend AspisR1EbyKPushDecodedProductUpdate.QRaw (NHE_DotState.toPush s.1)
+          (AspisR1FinishDotConcreteOps.toPushWide we) (AspisR1FinishDotConcreteOps.toPushQM q)
+    let r1 ←
+      AspisR1FinishRelationCurrent.core.result.Result.map_err
+          AspisR1FinishRelationCurrent.verifier.finish_query_dot.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError r ()
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        let j1 ← s.2 + 1#usize
+        ok (cont (dot1, j1))
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let return_capture ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              AspisR1FinishRelationCurrent.aspis_core.field.WideExact
+              (core.convert.FromSame AspisR1FinishRelationCurrent.verifier.Error) residual
+        ok (done (dot1, some return_capture))
+NHE_generated/NHE_DotBody.lean:78:1: error: unsolved goals
+case neg
+bytes : Slice U8
+weights : Slice NQ
+size : (↑weights).length ≤ 64
+s : State
+len : (SAG_DotAdapter.mapSlice NHE_DotRead.finishQ weights).len = weights.len
+active : ¬s.2 < weights.len
+⊢ ok (done (NHE_DotState.toPush s.1, Option.map result none)) = ok (done (NHE_DotState.toPush s.1, none))
+'NHE_DotBody.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
