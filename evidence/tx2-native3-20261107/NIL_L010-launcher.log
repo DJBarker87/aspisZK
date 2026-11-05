@@ -1,0 +1,56 @@
+{"attempt": "NIL_L010", "exit_status": 1, "wall_seconds": 4.612369281006977, "peak_rss_kib": "5934948", "swaps": "0", "print_axioms": ["'NIL_HeaderAny.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NIL_HeaderAny.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NIL_generated/NIL_HeaderAny.lean:27:7: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case succ.ok.some
+H : Type
+d : aspis_core.digest.Digest32 H
+n : ℕ
+ih :
+  ∀ (it : core.slice.iter.Iter U8),
+    anyLoop (verifier.resume.closure.Insts.CoreOpsFunctionFnMutTupleSharedU8Bool d) n it () =
+      CheckpointBytes4Ops.headerLoop n it
+it rest : core.slice.iter.Iter U8
+b : U8
+h : core.slice.iter.IteratorSliceIter.next it = ok (some b, rest)
+⊢ (let (value, rest) := (some b, rest)
+    match value with
+    | none => ok (false, rest)
+    | some x =>
+      let (b, f') := 
+...
+NIL_generated/NIL_HeaderAny.lean:27:7: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case succ.ok.some
+H : Type
+d : aspis_core.digest.Digest32 H
+n : ℕ
+ih :
+  ∀ (it : core.slice.iter.Iter U8),
+    anyLoop (verifier.resume.closure.Insts.CoreOpsFunctionFnMutTupleSharedU8Bool d) n it () =
+      CheckpointBytes4Ops.headerLoop n it
+it rest : core.slice.iter.Iter U8
+b : U8
+h : core.slice.iter.IteratorSliceIter.next it = ok (some b, rest)
+⊢ (let (value, rest) := (some b, rest)
+    match value with
+    | none => ok (false, rest)
+    | some x =>
+      let (b, f') := (x != 0#u8, ())
+      if b = true then ok (true, rest)
+      else
+        anyLoop
+          { FnOnceInst := verifier.resume.closure.Insts.CoreOpsFunctionFnOnceTupleSharedU8Bool d,
+            call_mut := verifier.resume.closure.Insts.CoreOpsFunctionFnMutTupleSharedU8Bool.call_mut d }
+          n rest f') =
+    let (value, rest) := (some b, rest)
+    match value with
+    | none => ok (false, rest)
+    | some b => if (b != 0#u8) = true then ok (true, rest) else CheckpointBytes4Ops.headerLoop n rest
+'NIL_HeaderAny.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NIL_HeaderAny.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r03225ec295414c6ab05b8d415cb58e5c.scope; invocation ID: 6129db1733b34aa9932e6b3d12e7b6fa
