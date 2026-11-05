@@ -1,0 +1,8 @@
+def Aeneas.Std.Usize.wrapping_sub : Aeneas.Std.Usize → Aeneas.Std.Usize → Aeneas.Std.Usize :=
+Aeneas.Std.UScalar.wrapping_sub
+Aeneas.Std.Usize.wrapping_sub_val_eq (x y : Aeneas.Std.Usize) :
+  ↑(x.wrapping_sub y) =
+    (↑x + (Aeneas.Std.UScalar.size Aeneas.Std.UScalarTy.Usize - ↑y)) %
+      Aeneas.Std.UScalar.size Aeneas.Std.UScalarTy.Usize
+Aeneas.Std.UScalar.wrapping_sub_val_eq {ty : Aeneas.Std.UScalarTy} (x y : Aeneas.Std.UScalar ty) :
+  ↑(x.wrapping_sub y) = (↑x + (Aeneas.Std.UScalar.size ty - ↑y)) % Aeneas.Std.UScalar.size ty

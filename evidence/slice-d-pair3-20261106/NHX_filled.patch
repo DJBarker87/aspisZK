@@ -1,9 +1,14 @@
 --- a/crates/aspis-core/src/lib.rs
 +++ b/crates/aspis-core/src/lib.rs
-@@ -14,1 +14,2 @@
+@@ -12,6 +12,7 @@
+ //! Stage 1 work and no soundness figure may be quoted from this code alone.
+ 
  #![no_std]
 +#![cfg_attr(kani,feature(allocator_api))]
-@@ -97,3 +97,5 @@
+ 
+ extern crate alloc;
+ 
+@@ -97,3 +98,5 @@
  
  #[cfg(feature = "r0-op-count")]
  pub mod r0_op_count;
@@ -11,7 +16,7 @@
 +#[cfg(kani)] #[path="NHX_filled.rs"] mod NHX_filled;
 --- /dev/null
 +++ b/crates/aspis-core/src/NHX_filled.rs
-@@ -0,0 +1,23 @@
+@@ -0,0 +1,47 @@
 +extern crate alloc;
 +use alloc::boxed::Box;
 +include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
@@ -35,3 +40,27 @@
 +#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 +fn $name(){exercise($g)}};}
 +gate!(write_shape,0);gate!(write_value,1);gate!(write_frame,2);
++use crate::field::{QM31 as NativeQ,CM31 as NativeC,M31 as NativeM};
++fn qraw(x:[u32;4])->NativeQ{NativeQ{c0:NativeC{a:NativeM(x[0]),b:NativeM(x[1])},c1:NativeC{a:NativeM(x[2]),b:NativeM(x[3])}}}
++fn qwords(x:NativeQ)->[u32;4]{[x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0]}
++#[kani::proof]#[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn zero64_window(){
++ let mut out=Vec::<NativeQ>::new();
++ if out.try_reserve_exact(64).is_err(){assert!(out.is_empty());return;}
++ let ptr=out.as_ptr();let cap=out.capacity();assert!(cap>=64);
++ let p:usize=kani::any();kani::assume(p<64);
++ let before:[NativeQ;64]=core::array::from_fn(|_|qraw(kani::any()));
++ for i in 0..64{if i<p{kani::assume(before[i]==NativeQ::ZERO);}}
++ unsafe{core::ptr::copy_nonoverlapping(before.as_ptr(),out.as_mut_ptr(),64);out.set_len(p);}
++ out.resize(p+1,NativeQ::ZERO.clone());
++ let k:usize=kani::any();kani::assume(k<p+1);let word:usize=kani::any();kani::assume(word<4);
++ if cfg!(NHX_corrupt){out[k]=qraw([1;4]);}
++ assert!(out.as_ptr()==ptr&&out.capacity()==cap&&out.len()==p+1);assert!(qwords(out[k])[word]==0);
++}
++
++#[kani::proof]#[kani::unwind(6)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn zero_one(){let mut out=Vec::<NativeQ>::new();if out.try_reserve_exact(1).is_err(){assert!(out.is_empty());return;}let ptr=out.as_ptr();let cap=out.capacity();out.resize(1,NativeQ::ZERO.clone());let word:usize=kani::any();kani::assume(word<4);if cfg!(NHX_corrupt){out[0]=qraw([1;4]);}assert!(out.as_ptr()==ptr&&out.capacity()==cap&&out.len()==1);assert!(qwords(out[0])[word]==0);}

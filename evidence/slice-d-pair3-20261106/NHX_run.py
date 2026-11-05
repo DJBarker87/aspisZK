@@ -34,7 +34,7 @@ p=b/{(a+'-reservation.json')!r}; print(p.read_text() if p.exists() else 'MISSING
  (E/(a+'-admission.json')).write_text(json.dumps(dict(exit=r.returncode,reservation=ad)))
  if r.returncode==0 and ad.get('allowed') is True:break
  if (r.returncode==78 or ad.get('allowed') is False) and retry<10:
-  print('reservation wait',flush=True);time.sleep(180);continue
+  print('reservation wait',flush=True);time.sleep(60);continue
  raise RuntimeError('STOP admission')
 paths=[B+'/NHX_objects',C+'/NHM_exports_20261106/objects',C+'/NHI_exports_20261106/objects',C+'/NHE_exports_20261106/objects',C+'/NGW_exports_20261105/objects',C+'/NGW_NGK_seed',C+'/NGM_exports_20261105',C,'/home/dombarker/project-offloads/codex-cx-ledger8-cache-20261104/NGZ_flat',W,W+'/objects',T+'/lib/lean']
 env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NHX_tmp',LEAN_PATH=':'.join(paths))
@@ -103,7 +103,7 @@ if kind=='kani' and os.environ.get('NHX_STATEMENT'):
  fs=[f for f in fs if f!='spend-dynamic-rate512'];cfg['root_package']='aspis-statement';cfg['metadata_features']=','.join('aspis-statement/'+f for f in fs)
  i=cfg['native_command'].index('--manifest-path');cfg['native_command'][i+1]=B+'/NHX_src/crates/aspis-statement/Cargo.toml'
  i=cfg['native_command'].index('--features');cfg['native_command'][i+1]=','.join(fs)
-cfg['expected_time']='optimized compilation then scalar contract; no field multiplication' if kind=='kani' else 'optimized Charon frontend, then Aeneas emission; no arithmetic gate' if kind=='extract' else cfg['expected_time']
+cfg['expected_time']='optimized compilation then named local-record proof/window; no native field multiplication' if kind=='kani' else 'optimized Charon frontend, then Aeneas emission; no arithmetic gate' if kind=='extract' else cfg['expected_time']
 files[a+'.json']=json.dumps(cfg)
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib

@@ -1,0 +1,107 @@
+NHX_generated/NHX_FinalTotal.lean:13:57: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  0 ≤ e ≤ 6
+  e - f ≥ 0
+where
+ e := ↑↑s.1.start
+ f := ↑↑s.1.end
+NHX_generated/NHX_FinalTotal.lean:21:1: error: unsolved goals
+case refine_1
+parts powers : Cells
+hp : ∀ x ∈ ↑parts, canonE x
+hk : ∀ x ∈ ↑powers, canonE x
+s : State
+hs : Inv s
+bound : ↑s.1.start < 7
+next : core.ops.range.Range (UScalar UScalarTy.Usize)
+hn : NHI_ForwardRange.next s.1 = ok (some s.1.start, next)
+hi : ↑next.start = ↑s.1.start + 1
+he : next.end = s.1.end
+bi : ↑s.1.start < ↑7#usize
+part : NE := NHI_ScalarDomain.pick parts (↑s.1.start) bi
+power : NE := NHI_ScalarDomain.pick powers (↑s.1.start) bi
+cp : canonE part
+ck : canonE power
+sum : NE
+hm : NHX_FinalFold.cell s.2 power part = ok sum
+cm : canonE sum
+⊢ (let (o, next) := (some s.1.start, next)
+    match o with
+    | none => ok (done s.2)
+    | some kind => do
+      let part ← Array.index_usize parts kind
+      let power ← Array.index_usize powers kind
+      let sum ← NHX_FinalFold.cell s.2 power part
+      ok (cont (next, sum))) =
+    ok (cont (next, sum))
+NHX_generated/NHX_FinalTotal.lean:24:3: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 8
+  f ≥ 0
+  1 ≤ e ≤ 7
+  e - f ≤ 0
+where
+ e := ↑↑next.start
+ f := ↑↑7#usize
+ g := ↑↑(next, sum).1.start
+NHX_generated/NHX_FinalTotal.lean:21:22: warning: This simp argument is unused:
+  NHI_ScalarDomain.index parts s.1.start bi
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵o̵d̵y̵,̵h̵n̵,̵N̵H̵I̵_̵S̵c̵a̵l̵a̵r̵D̵o̵m̵a̵i̵n̵.̵i̵n̵d̵e̵x̵ ̵p̵a̵r̵t̵s̵ ̵s̵.̵1̵.̵s̵t̵a̵r̵t̵ ̵b̵i̵,̵[̲b̲o̲d̲y̲,̲ ̲h̲n̲,̲ NHI_ScalarDomain.index powers s.1.start b̵i̵,̵h̵m̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵b̲i̲,̲ ̲h̲m̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NHX_generated/NHX_FinalTotal.lean:22:4: warning: This simp argument is unused:
+  NHI_ScalarDomain.index powers s.1.start bi
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵o̵d̵y̵,̵h̵n̵,̵N̵H̵I̵_̵S̵c̵a̵l̵a̵r̵D̵o̵m̵a̵i̵n̵.̵i̵n̵d̵e̵x̵ ̵p̵a̵r̵t̵s̵ ̵s̵.̵1̵.̵s̵t̵a̵r̵t̵ ̵b̵i̵,̵[̲b̲o̲d̲y̲,̲ ̲h̲n̲,̲ NHI_ScalarDomain.index p̵o̵w̵e̵r̵s̵p̲a̲r̲t̲s̲ s.1.start b̵i̵,̵h̵m̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵b̲i̲,̲ ̲h̲m̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NHX_generated/NHX_FinalTotal.lean:22:47: warning: This simp argument is unused:
+  hm
+
+Hint: Omit it from the simp argument list.
+  simp only [body, ̲hn, ̲NHI_ScalarDomain.index parts s.1.start bi,
+      ̵NHI_ScalarDomain.index powers s.1.start bi,h̵m̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NHX_generated/NHX_FinalTotal.lean:36:45: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 8
+  e ≥ 0
+  e ≥ 0
+where
+ e := ↑fuel
+ f := ↑↑s.1.end
+NHX_generated/NHX_FinalTotal.lean:37:15: error: unsolved goals
+parts powers : Cells
+hp : ∀ x ∈ ↑parts, canonE x
+hk : ∀ x ∈ ↑powers, canonE x
+fuel : ℕ
+ih :
+  ∀ (s : State),
+    Inv s → 7 - ↑s.1.start < fuel → ∃ out, NHI_CountedLoop.unroll (body parts powers) fuel s = ok out ∧ canonE out
+s : State
+hs : Inv s
+enough : 7 - ↑s.1.start < fuel + 1
+active : ¬↑s.1.start < 7
+stop : NHI_ForwardRange.next s.1 = ok (none, s.1)
+⊢ (do
+      let cf ←
+        let (o, next) := (none, s.1)
+          match o with
+          | none => ok (done s.2)
+          | some kind => do
+            let part ← Array.index_usize parts kind
+            let power ← Array.index_usize powers kind
+            let sum ← NHX_FinalFold.cell s.2 power part
+            ok (cont (next, sum))
+      match cf with
+        | done a => ok a
+        | cont next => NHI_CountedLoop.unroll (body parts powers) fuel next) =
+    ok s.2
+'NHX_FinalTotal.active' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NHX_FinalTotal.unroll' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NHX_FinalTotal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -15,7 +15,7 @@
 +#[cfg(kani)] #[path="NHX_parents.rs"] mod NHX_parents;
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NHX_parents.rs
-@@ -0,0 +1,338 @@
+@@ -0,0 +1,424 @@
 +use super::*;
 +include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
 +fn q(x:[u32;4])->K{K{c0:aspis_core::field::CM31{a:M31(x[0]),b:M31(x[1])},c1:aspis_core::field::CM31{a:M31(x[2]),b:M31(x[3])}}}
@@ -189,6 +189,56 @@
 + 6=>parts[j]==(if ok&&j==kind{l.products[1]}else{before[j]})&&scratch[sj]==l.tensor_post[sj],
 + _=>l.count==(if ok{8}else{6})&&l.events[0..6]==[0,1,2,3,4,5]&&(!ok||l.events[6..8]==[6,7])};assert!(good);
 +}
++struct KindReturn{count:usize,events:[u8;2],dot:KindDot,scale:E,finish:E,product:E,args:(E,E)}
++fn return_finish(dot:KindDot,l:&mut KindReturn)->E{l.events[l.count]=0;l.count+=1;l.dot=dot;l.finish}
++fn return_mul(a:E,b:E,l:&mut KindReturn)->E{l.events[l.count]=1;l.count+=1;l.args=(a,b);l.product}
++fn return_cut(kind:usize,scale:E,push:Result<(),Error>,dot:KindDot,parts:&mut[E;7],l:&mut KindReturn)->Result<(),Error>{push?;parts[kind]=return_mul(scale,return_finish(dot,l),l);Ok(())}
++#[kani::proof]#[kani::unwind(66)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn kind_return_window(){let kind:usize=kani::any();kani::assume(kind<7);let scale=anye();let ok:bool=kani::any();let error=err(kani::any());let push=if ok{Ok(())}else{Err(error)};let dot=KindDot{sums:kani::any(),count:kani::any()};let before=core::array::from_fn(|_|anye());let mut parts=before;let mut l=KindReturn{count:0,events:[255;2],dot:KindDot{sums:[0;8],count:0},scale,finish:anye(),product:anye(),args:(E::ZERO,E::ZERO)};let r=return_cut(kind,scale,push,dot,&mut parts,&mut l);let j:usize=kani::any();kani::assume(j<7);if cfg!(NHX_corrupt){parts[j]=E::ZERO;}
++ assert!(r.map_err(code)==if ok{Ok(())}else{Err(code(error))});assert!(l.count==if ok{2}else{0});assert!(!ok||(l.events==[0,1]&&l.dot==dot&&l.args==(scale,l.finish)));assert!(parts[j]==if ok&&j==kind{l.product}else{before[j]});}
++fn qwords(x:K)->[u32;4]{[x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0]}
++struct VecSlice{ptr:*const K,len:usize}
++fn slice_post(s:&mut[K],post:&[K;64],l:&mut VecSlice){l.ptr=s.as_ptr();l.len=s.len();s.copy_from_slice(post);}
++#[kani::proof]#[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[K]>::to_vec,KMX_to_vec)]
++#[kani::stub(<[K]>::copy_from_slice,KMX_copy_from_slice)]
++fn vec_slice_adapter(){let before:[K;64]=core::array::from_fn(|_|anyk());let mut post:[K;64]=core::array::from_fn(|_|anyk());let mut v=before.to_vec();let ptr=v.as_ptr();let cap=v.capacity();let j:usize=kani::any();kani::assume(j<64);let word:usize=kani::any();kani::assume(word<4);let mut l=VecSlice{ptr:core::ptr::null(),len:0};slice_post(&mut v,&post,&mut l);
++ if cfg!(NHX_corrupt){post[j]=K::ZERO;}
++ assert!(l.ptr==ptr&&l.len==64&&v.as_ptr()==ptr&&v.len()==64&&v.capacity()==cap);assert!(qwords(v[j])[word]==qwords(post[j])[word]);}
++struct RegControl{count:usize,kinds:[usize;5],stop:usize,error:Error}
++fn reg_child_control(kind:usize,l:&mut RegControl)->Result<(),Error>{let i=l.count;l.kinds[i]=kind;l.count+=1;if i==l.stop{Err(l.error)}else{Ok(())}}
++fn reg_control_cut(shared:bool,l:&mut RegControl)->Result<(),Error>{
++ if !shared{reg_child_control(1,l)?;}reg_child_control(2,l)?;if !shared{reg_child_control(3,l)?;}
++ reg_child_control(5,l)?;reg_child_control(6,l)?;Ok(())
++}
++fn regular_control(){let shared:bool=kani::any();let stop:usize=kani::any();kani::assume(stop<=5);let mut l=RegControl{count:0,kinds:[99;5],stop,error:err(kani::any())};let r=reg_control_cut(shared,&mut l);let total=if shared{3}else{5};let count=if stop<total{stop+1}else{total};let j:usize=kani::any();kani::assume(j<count);if cfg!(NHX_corrupt){l.kinds[j]=99;}
++ let expected=if shared{[2,5,6,99,99]}else{[1,2,3,5,6]};assert!(l.count==count&&l.kinds[j]==expected[j]);assert!(r.map_err(code)==if stop<total{Err(code(l.error))}else{Ok(())});}
++struct RegWindow{w:*const Weights,kind:usize,alpha:*const E,alen:usize,bytes:*const u8,len:usize,folds:usize,n:usize,ap0:*const E,ap1:*const E,vec:*const Vec<K>,scratch:*const K,width:usize,parts:*const E,calls:usize,postk:[K;64],poste:[E;7],ok:bool,error:Error}
++fn reg_child(w:&Weights,kind:usize,alpha:&[E],f:&[u8],folds:usize,n:usize,ap0:&[E;4],ap1:&[E;4],scratch:&mut Vec<K>,parts:&mut [E;7],l:&mut RegWindow)->Result<(),Error>{
++ l.calls+=1;l.w=w;l.kind=kind;l.alpha=alpha.as_ptr();l.alen=alpha.len();l.bytes=f.as_ptr();l.len=f.len();l.folds=folds;l.n=n;l.ap0=ap0.as_ptr();l.ap1=ap1.as_ptr();l.vec=scratch;l.scratch=scratch.as_ptr();l.width=scratch.len();l.parts=parts.as_ptr();
++ scratch.as_mut_slice().copy_from_slice(&l.postk);parts.copy_from_slice(&l.poste);if l.ok{Ok(())}else{Err(l.error)}
++}
++fn regular_check(g:usize){
++ let shared:bool=kani::any();let i:usize=kani::any();kani::assume(i<if shared{3}else{5});let kinds=if shared{[2usize,5,6,99,99]}else{[1usize,2,3,5,6]};let kind=kinds[i];
++ let w=anyweights();let f:[u8;2048]=kani::any();let alpha=[anye(),anye()];let ap0=core::array::from_fn(|_|anye());let ap1=core::array::from_fn(|_|anye());let before:[K;64]=core::array::from_fn(|_|anyk());let mut scratch=before.to_vec();let mut parts:[E;7]=core::array::from_fn(|_|anye());let vec=&scratch as *const Vec<K>;let ptr=scratch.as_ptr();let pptr=parts.as_ptr();
++ let mut l=RegWindow{w:core::ptr::null(),kind:99,alpha:core::ptr::null(),alen:0,bytes:core::ptr::null(),len:0,folds:0,n:0,ap0:core::ptr::null(),ap1:core::ptr::null(),vec:core::ptr::null(),scratch:core::ptr::null(),width:0,parts:core::ptr::null(),calls:0,postk:core::array::from_fn(|_|anyk()),poste:core::array::from_fn(|_|anye()),ok:kani::any(),error:err(kani::any())};
++ let r=reg_child(&w,kind,&alpha,&f,2,64,&ap0,&ap1,&mut scratch,&mut parts,&mut l);let j:usize=kani::any();kani::assume(j<7);let sj:usize=kani::any();kani::assume(sj<64);
++ if cfg!(NHX_corrupt){match g{1=>l.kind=99,2=>l.vec=core::ptr::null(),3=>l.ok=!l.ok,4=>l.poste[j]=E::ZERO,_=>l.postk[sj]=K::ZERO}}
++ let good=match g{
++ 1=>l.w==&w as *const Weights&&l.kind==kind&&l.alpha==alpha.as_ptr()&&l.alen==2&&l.bytes==f.as_ptr()&&l.len==2048&&l.folds==2&&l.n==64&&l.ap0==ap0.as_ptr()&&l.ap1==ap1.as_ptr()&&l.calls==1&&l.vec==vec&&l.scratch==ptr&&l.width==64&&l.parts==pptr&&scratch.as_ptr()==ptr&&scratch.len()==64,
++ 2=>l.calls==1&&l.vec==vec&&l.scratch==ptr&&l.width==64&&l.parts==pptr&&scratch.as_ptr()==ptr&&scratch.len()==64,
++ 3=>r.map_err(code)==if l.ok{Ok(())}else{Err(code(l.error))},
++ 4=>parts[j]==l.poste[j],_=>scratch[sj]==l.postk[sj]};assert!(good);
++}
++#[kani::proof]#[kani::unwind(66)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[E]>::copy_from_slice,KMX_copy_from_slice)]
++fn regular_parts_word(){let mut src:[E;7]=core::array::from_fn(|_|anye());let mut dst:[E;7]=core::array::from_fn(|_|anye());dst.copy_from_slice(&src);let j:usize=kani::any();kani::assume(j<7);let word:usize=kani::any();kani::assume(word<8);if cfg!(NHX_corrupt){src[j]=E::ZERO;}assert!(dst[j].to_limbs()[word]==src[j].to_limbs()[word]);}
++fn regular_reply_source(child:Result<(),Error>)->Result<(),Error>{child?;Ok(())}
++#[kani::proof]#[kani::unwind(4)]
++fn regular_reply_step(){let child=if kani::any::<bool>(){Ok(())}else{Err(err(kani::any()))};let actual=regular_reply_source(child);let mut expected=child.map_err(code);if cfg!(NHX_corrupt){expected=match expected{Ok(())=>Err(0),Err(e)=>Err((e+1)%8)};}assert!(actual.map_err(code)==expected);}
 +#[kani::proof]#[kani::unwind(2050)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
@@ -353,4 +403,40 @@
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 +fn kind07(){kind_check(7);}
++#[kani::stub(<[K]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[K]>::to_vec,KMX_to_vec)]
++#[kani::proof]#[kani::unwind(2050)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn regular00(){regular_control();}
++#[kani::stub(<[K]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[K]>::to_vec,KMX_to_vec)]
++#[kani::proof]#[kani::unwind(2050)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn regular01(){regular_check(1);}
++#[kani::stub(<[K]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[K]>::to_vec,KMX_to_vec)]
++#[kani::proof]#[kani::unwind(2050)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn regular02(){regular_check(2);}
++#[kani::stub(<[K]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[K]>::to_vec,KMX_to_vec)]
++#[kani::proof]#[kani::unwind(2050)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn regular03(){regular_check(3);}
++#[kani::stub(<[K]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[K]>::to_vec,KMX_to_vec)]
++#[kani::proof]#[kani::unwind(2050)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn regular04(){regular_check(4);}
++#[kani::stub(<[K]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[K]>::to_vec,KMX_to_vec)]
++#[kani::proof]#[kani::unwind(2050)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn regular05(){regular_check(5);}
 +#[kani::proof]#[kani::unwind(6)]fn partial_order(){partial_control();}

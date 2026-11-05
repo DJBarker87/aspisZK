@@ -1,0 +1,66 @@
+{"attempt": "NHX_L042", "exit_status": 1, "wall_seconds": 3.1117541738785803, "peak_rss_kib": "5773852", "swaps": "0", "print_axioms": ["'NHX_FactoredPacket.tail_total' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NHX_FactoredPacket.active' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NHX_FactoredPacket.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NHX_generated/NHX_FactoredPacket.lean:29:37: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  e ≥ 2
+  e - f ≤ -1
+where
+ e := ↑↑s.1.start
+ f := ↑↑s.1.end
+NHX_generated/NHX_FactoredPacket.lean:36:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  extra.index_usize side
+in the target expression
+  (let (o, next) := (some side, next)
+    match o with
+    | none => ok (done s.2)
+    | some side => do
+      let q ← extra.index_usize side
+      let (low, high, q4, q16) ← NHI_FactoredProducers.run q
+      tail ap0 ap1 side next s.2 low high q4 q16) =
+    ok (cont (next, out))
+
+ap0 ap1 : Cells
+extra : Std.Array NQ 2#usiz
+...
+ge.StepUsize s1.1
+is not definitionally equal to the right-hand side
+  ok (some 1#usize, { start := 2#usize, «end» := 2#usize })
+
+ap0 ap1 : Cells
+extra : Std.Array NQ 2#usize
+ha : ∀ x ∈ ↑ap0, canonE x
+hb : ∀ x ∈ ↑ap1, canonE x
+he : ∀ x ∈ ↑extra, canonQ x
+ci : ∀ x ∈ ↑initial.2, canonE x
+h0 : Inv initial
+n0 :
+  core.iter.range.IteratorRange.next core.iter.range.StepUsize initial.1 =
+    ok (some 0#usize, { start := 1#usize, «end» := 2#usize })
+a : Cells
+sa : body ap0 ap1 extra initial = ok (cont ({ start := 1#usize, «end» := 2#usize }, a))
+ca : ∀ x ∈ ↑a, canonE x
+s1 : State := ({ start := 1#usize, «end» := 2#usize }, a)
+h1 : Inv s1
+⊢ core.iter.range.IteratorRange.next core.iter.range.StepUsize s1.1 =
+    ok (some 1#usize, { start := 2#usize, «end» := 2#usize })
+NHX_generated/NHX_FactoredPacket.lean:82:14: error(lean.unknownIdentifier): Unknown identifier `reference`
+NHX_generated/NHX_FactoredPacket.lean:82:24: error(lean.unknownIdentifier): Unknown identifier `NHI_CountedLoop.unroll`
+NHX_generated/NHX_FactoredPacket.lean:78:14: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NHX_generated/NHX_FactoredPacket.lean:80:14: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NHX_FactoredPacket.tail_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NHX_FactoredPacket.active' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NHX_FactoredPacket.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r83b55c916f7a4a7a8125b7a90fcc0ec6.scope; invocation ID: 89e5c0acdbb8442082ca1faa0950ba90

@@ -38,7 +38,9 @@ for p in E.glob('NHX_*.lean'):
  assert not re.search(r'set_option\s+(maxRecDepth|maxHeartbeats)',text),p
  for name in re.findall(r'^theorem (\w+)\b',text,re.M):assert '#print axioms '+name in text,(p,name)
  for line in current[p.stem]['print_axioms']:
-  assert 'sorryAx'not in line and set(re.findall(r'\[([^]]*)\]',line)[-1].split(', '))<={'propext','Classical.choice','Quot.sound',''}
+  assert 'sorryAx'not in line
+  if 'does not depend on any axioms' not in line:
+   assert set(re.findall(r'\[([^]]*)\]',line)[-1].split(', '))<={'propext','Classical.choice','Quot.sound',''}
 closed=J(E/'NHX_CLOSED.json');delta=J(E/'NHX_LEDGER_DELTA.json');audit=J(E/'NHX_AUDIT.json');trust=J(E/'NHX_TRUST.json')
 raw=[json.loads(l[11:])for l in(E/audit['raw_ax2']/'stdout.log').read_text().splitlines()if l.startswith('NEP_RESULT ')]
 scan=[json.loads(l)for l in(E/'NHX_final_audit/NHX_LOADED_scan.jsonl').read_text().splitlines()]
@@ -47,7 +49,7 @@ catalog={r['module']:r['imports']for l in(E/'NHX_EXPECTED_IMPORTS.jsonl').read_t
 native=J(E/'NHX_NATIVE_VALIDATION.json')
 def gate(c,d,a,t,rr,ss,nn):
  assert c['driver_root_status']==c['finish_relation_status']=='OPEN'
- wanted={'TX2:135','TX2:144'}
+ wanted={'TX2:133','TX2:135','TX2:139','TX2:140','TX2:143','TX2:144'}
  assert c['new_composed_rows']==c['new_composed_functions']==len(wanted)
  assert {r for f in c['functions']for r in f['rows']}==wanted
  assert d['new_closed_rows']==sorted(wanted)and d['new_count']==len(wanted)
@@ -60,7 +62,10 @@ def gate(c,d,a,t,rr,ss,nn):
  assert len(ss)==a['modules']and all(not r['dangling']and not r['duplicate_owners']and r['imports_match']and r['imports']==catalog[r['module']]for r in ss)
  assert nn['status']=='PASS'and nn['arbitrary_message_qualified']and nn['kmx_negative_controls']==['NHX_K032','NHX_K033']
  assert nn['no_writable_static']and nn['no_function_pointer']and nn['source_erasure_validated']
- assert len(nn['pairs'])>=17
+ assert len(nn['pairs'])>=45
+ assert set(nn['qualified_rows'])==wanted
+ assert 'K112 positive with timed-out K113 control'in nn['excluded']
+ assert c['frozen_revision']=='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387'
  for f in c['functions']:
   assert f['status']=='CLOSED'and not f['inner_hypotheses_remaining']and f['domain']
   assert f['combined_replay']==a['combined']and f['ax2']==f['scan']==a['raw_ax2']

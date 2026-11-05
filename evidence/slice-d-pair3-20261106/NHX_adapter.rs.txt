@@ -1,0 +1,10 @@
+fn qwords(x:K)->[u32;4]{[x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0]}
+struct VecSlice{ptr:*const K,len:usize}
+fn slice_post(s:&mut[K],post:&[K;64],l:&mut VecSlice){l.ptr=s.as_ptr();l.len=s.len();s.copy_from_slice(post);}
+#[kani::proof]#[kani::unwind(258)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[K]>::to_vec,KMX_to_vec)]
+#[kani::stub(<[K]>::copy_from_slice,KMX_copy_from_slice)]
+fn vec_slice_adapter(){let before:[K;64]=core::array::from_fn(|_|anyk());let mut post:[K;64]=core::array::from_fn(|_|anyk());let mut v=before.to_vec();let ptr=v.as_ptr();let cap=v.capacity();let j:usize=kani::any();kani::assume(j<64);let word:usize=kani::any();kani::assume(word<4);let mut l=VecSlice{ptr:core::ptr::null(),len:0};slice_post(&mut v,&post,&mut l);
+ if cfg!(NHX_corrupt){post[j]=K::ZERO;}
+ assert!(l.ptr==ptr&&l.len==64&&v.as_ptr()==ptr&&v.len()==64&&v.capacity()==cap);assert!(qwords(v[j])[word]==qwords(post[j])[word]);}

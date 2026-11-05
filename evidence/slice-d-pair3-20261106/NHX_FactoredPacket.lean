@@ -1,3 +1,5 @@
+import NHI_CountedLoop
+import NHI_ForwardRange
 import NHX_FactoredSuffix
 import NHM_FactoredDomain
 set_option autoImplicit false
@@ -25,14 +27,19 @@ theorem active (ap0 ap1 : Cells) (extra : Array NQ 2#usize)
  (he : ∀ x∈extra.val,canonQ x) (s : State) (h : Inv s) (side : Usize) (next : Iter)
  (hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize s.1=ok (some side,next)) :
  ∃ out,body ap0 ap1 extra s=ok (.cont (next,out)) ∧ (∀ x∈out.val,canonE x) := by
+ obtain ⟨hend,hbound,hcanon⟩:=h
  obtain ⟨same,last,inc,more⟩:=NHI_RangeProgress.some_next s.1 next side hn
  have bound:side.val<2:=by rw [same];omega
  obtain ⟨q,low,high,q4,q16,hi,hp,cl,ch,c4,c16⟩:=NHM_FactoredDomain.producers extra he side bound
- obtain ⟨out,ho,co⟩:=tail_total ap0 ap1 side next s.2 low high q4 q16 ha hb h.2.2 cl ch c4 c16
+ obtain ⟨out,ho,co⟩:=tail_total ap0 ap1 side next s.2 low high q4 q16 ha hb hcanon cl ch c4 c16
  refine ⟨out,?_,co⟩
  unfold body
  rw [hn]
  simp only [bind_tc_ok]
+ change (do
+  let q ← Array.index_usize extra side
+  let (low,high,q4,q16) ← NHI_FactoredProducers.run q
+  tail ap0 ap1 side next s.2 low high q4 q16)=ok (.cont (next,out))
  rw [hi]
  simp only [bind_tc_ok]
  rw [hp]
@@ -57,17 +64,23 @@ theorem source (ap0 ap1 : Cells) (extra : Array NQ 2#usize)
   exact NHI_Scalar.zero_canonical
  have h0:Inv initial:=⟨rfl,by change (0:Nat)≤2;omega,ci⟩
  have n0:core.iter.range.IteratorRange.next core.iter.range.StepUsize initial.1=
-  ok (some 0#usize,{start:=1#usize,«end»:=2#usize}):=by rfl
+  ok (some 0#usize,{start:=1#usize,«end»:=2#usize}):=by
+  exact NHI_ForwardRange.exact_step initial.1 1#usize (by change (0:Nat)<2;omega) (by change (1:Nat)=0+1;rfl)
  obtain ⟨a,sa,ca⟩:=active ap0 ap1 extra ha hb he initial h0 0#usize _ n0
  let s1:State:=({start:=1#usize,«end»:=2#usize},a)
  have h1:Inv s1:=⟨rfl,by change (1:Nat)≤2;omega,ca⟩
  have n1:core.iter.range.IteratorRange.next core.iter.range.StepUsize s1.1=
-  ok (some 1#usize,{start:=2#usize,«end»:=2#usize}):=by rfl
+  ok (some 1#usize,{start:=2#usize,«end»:=2#usize}):=by
+  exact NHI_ForwardRange.exact_step s1.1 2#usize (by change (1:Nat)<2;omega) (by change (2:Nat)=1+1;rfl)
  obtain ⟨b,sb,cb⟩:=active ap0 ap1 extra ha hb he s1 h1 1#usize _ n1
  let s2:State:=({start:=2#usize,«end»:=2#usize},b)
  have stopped:body ap0 ap1 extra s2=ok (.done b):=by
   unfold body
+  have dn:core.iter.range.IteratorRange.next core.iter.range.StepUsize s2.1=ok (none,s2.1):=
+   NHI_ForwardRange.done s2.1 (by change (2:Nat)≤2;omega)
+  rw [dn]
   rfl
+ dsimp only [s1,s2] at sb stopped
  have bodies:(fun s:State=>FIo_Native.weights.factored_s2_libra_weights_loop.body ap0 ap1 extra s.1 s.2)=body ap0 ap1 extra:=
   funext (fun s=>NHM_FactoredPrefix.source ap0 ap1 extra s)
  refine ⟨b,?_,?_,cb⟩

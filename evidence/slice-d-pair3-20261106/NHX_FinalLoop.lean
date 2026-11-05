@@ -21,6 +21,10 @@ theorem step (parts powers : Cells) (s : State) :
  FIo_Native.weights.Weights.pair_loop17.body parts powers s.1 s.2=body parts powers s := by
  unfold FIo_Native.weights.Weights.pair_loop17.body body NHX_FinalFold.cell
  simp only [FIo_Native.trace.value,bind_tc_ok,bind_assoc_eq]
+ apply congrArg (fun f=>core.iter.range.IteratorRange.next core.iter.range.StepUsize s.1 >>= f)
+ funext it
+ rcases it with ⟨o,next⟩
+ cases o <;> rfl
 
 theorem progress (parts powers : Cells) (s t : State) (run : body parts powers s=ok (.cont t)) :
  t.1.end=s.1.end ∧ t.1.start.val=s.1.start.val+1 ∧ s.1.start.val<s.1.end.val := by

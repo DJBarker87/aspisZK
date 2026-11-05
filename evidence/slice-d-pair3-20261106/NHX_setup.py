@@ -24,7 +24,7 @@ for n in ['NHX_objects','NHX_generated','NHX_tmp','NHX_native']:(b/n).mkdir(exis
 
 shutil.copytree('/home/dombarker/project-offloads/codex-cx-slice-d-pair2-20261106/NHM_src',b/'NHX_src',dirs_exist_ok=True)
 for n,t in files.items():(b/n).write_text(t)
-(b/'NHX_SEED.json').write_text(json.dumps(dict(files=len(pins),bytes=sum(p['bytes']for p in pins),copies='two retained audit binaries only; export objects reused read-only',pins=pins),indent=2))
+(b/'NHX_SEED.json').write_text(json.dumps(dict(files=len(pins),bytes=sum(p['bytes']for p in pins),copies='retained export files hash-checked and reused read-only; no retained binary or object copied; own audit drivers built privately',pins=pins),indent=2))
 print('SETUP_OK')
 '''
 for retry in range(11):

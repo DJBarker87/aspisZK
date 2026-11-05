@@ -1,3 +1,4 @@
+import NHM_ArrayPreserve
 import NHX_HighReference
 set_option autoImplicit false
 namespace NHX_HighPost

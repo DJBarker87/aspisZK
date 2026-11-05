@@ -60,14 +60,15 @@ fn partial_control(){let stop:usize=kani::any();kani::assume(stop<=4);let mut l=
  let j:usize=kani::any();kani::assume(j<l.calls);
  assert!(l.calls==if stop<4{stop+1}else{4});assert!(l.sides[j]==j);assert!(r.is_ok()==(stop==4));}
 '''
-code=header+dispatch+partial+(E/'NHX_producers.rs.txt').read_text()+(E/'NHX_high.rs.txt').read_text()+(E/'NHX_tail.rs.txt').read_text()+(E/'NHX_kind.rs.txt').read_text()
-for fam,count in [('producer',9),('dispatch',4),('partial',4),('high',7),('tail',5),('kind',8)]:
+code=header+dispatch+partial+(E/'NHX_producers.rs.txt').read_text()+(E/'NHX_high.rs.txt').read_text()+(E/'NHX_tail.rs.txt').read_text()+(E/'NHX_kind.rs.txt').read_text()+(E/'NHX_return.rs.txt').read_text()+(E/'NHX_adapter.rs.txt').read_text()+(E/'NHX_regular.rs.txt').read_text()+(E/'NHX_regular_extra.rs.txt').read_text()
+for fam,count in [('producer',9),('dispatch',4),('partial',4),('high',7),('tail',5),('kind',8),('regular',6)]:
  for g in range(count):
-  extra='#[kani::stub(<[K]>::copy_from_slice,KMX_copy_from_slice)]\n#[kani::stub(<[K]>::to_vec,KMX_to_vec)]\n'if fam=='kind'else''
+  extra='#[kani::stub(<[K]>::copy_from_slice,KMX_copy_from_slice)]\n#[kani::stub(<[K]>::to_vec,KMX_to_vec)]\n'if fam in ['kind','regular']else''
   code+=f'''{extra}#[kani::proof]#[kani::unwind(2050)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 fn {fam}{g:02}(){{{fam}_check({g});}}\n'''
+code=code.replace('fn regular00(){regular_check(0);}','fn regular00(){regular_control();}')
 code+='''#[kani::proof]#[kani::unwind(6)]fn partial_order(){partial_control();}\n'''
 inputs={P+'lib.rs':'#![cfg_attr(kani,feature(allocator_api))]\n'+frozen(P+'lib.rs'),P+'weights.rs':weights+'\n#[cfg(kani)] #[path="NHX_parents.rs"] mod NHX_parents;\n',P+'NHX_parents.rs':code}
 patch=''

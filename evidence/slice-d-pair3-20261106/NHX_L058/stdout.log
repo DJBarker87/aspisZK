@@ -1,0 +1,60 @@
+NHX_generated/NHX_ProcessPost.lean:45:45: error: Application type mismatch: The argument
+  value
+has type
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible FIo_Native.verifier.Error) Unit
+but is expected to have type
+  NE
+in the application
+  NHM_DotFinishCanonical.source dot value
+NHX_generated/NHX_ProcessPost.lean:46:68: error: Application type mismatch: The argument
+  run
+has type
+  (match value with
+    | core.ops.control_flow.ControlFlow.Continue a => do
+      let value ← FIo_Native.fast_pairing.EbyKDot.finish dot
+      let product ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul scale value
+      let parts1 ← Array.update parts kind product
+      ok (core.result.Result.Ok (), (alloc.vec.Vec.deref_mut scratch).2 s, parts1)
+    | core.ops.control_flow.ControlFlow.Break residual => do
+      let reply ←
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame FIo_Native.verifier.Error) residual
+      ok (reply, (alloc.vec.Vec.deref_mut scratch).2 s, parts)) =
+    ok (reply, after, out)
+but is expected to have type
+  (do
+      let x ← ?m.336
+      ?m.337 x) =
+    ok ?m.338
+in the application
+  Port3_PushFrame.bind_success ?m.336 ?m.337 ?m.338 run
+NHX_generated/NHX_ProcessPost.lean:41:6: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+NHX_generated/NHX_ProcessPost.lean:36:3: warning: This simp argument is unused:
+  core.convert.FromSame
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.Insts.CoreOpsTry.branch,
+      ̲core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+  ̵  ̵ ̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵,̵lift,
+  ̲ ̲ ̲ ̲ ̲bind_tc_ok] at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NHX_generated/NHX_ProcessPost.lean:36:25: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.Insts.CoreOpsTry.branch,
+      ̲core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+      ̲core.convert.FromSame,l̵i̵f̵t̵,̵ ̲bind_tc_ok] at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NHX_generated/NHX_ProcessPost.lean:43:56: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.Insts.CoreOpsTry.branch,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵] at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NHX_ProcessPost.post' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

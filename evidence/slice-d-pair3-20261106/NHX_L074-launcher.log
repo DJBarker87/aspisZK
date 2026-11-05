@@ -1,0 +1,65 @@
+{"attempt": "NHX_L074", "exit_status": 1, "wall_seconds": 3.538328523049131, "peak_rss_kib": "5765048", "swaps": "0", "print_axioms": ["'NHX_FinalTotal.active' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NHX_FinalTotal.unroll' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NHX_FinalTotal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NHX_generated/NHX_FinalTotal.lean:22:1: error: unsolved goals
+case refine_1
+parts powers : Cells
+hp : ∀ x ∈ ↑parts, canonE x
+hk : ∀ x ∈ ↑powers, canonE x
+s : State
+hs : ↑s.1.end = 7 ∧ ↑s.1.start ≤ 7 ∧ canonE s.2
+bound : ↑s.1.start < 7
+next : core.ops.range.Range (UScalar UScalarTy.Usize)
+hn : NHI_ForwardRange.next s.1 = ok (some s.1.start, next)
+hi : ↑next.start = ↑s.1.start + 1
+he : next.end = s.1.end
+bi : ↑s.1.start < ↑7#usize
+part : NE := NHI_ScalarDomain.pick parts (↑s.1.start) bi
+power : NE := NHI_ScalarDomain.pick powers (↑s.1.start) bi
+cp : canonE part
+ck : canonE power
+sum : NE
+hm : NHX_FinalFold.cell s.2 power part = ok sum
+cm : canonE sum
+⊢ (do
+      let c ←
+        NHX_FinalFold.c
+...
+NHX_generated/NHX_FinalTotal.lean:22:1: error: unsolved goals
+case refine_1
+parts powers : Cells
+hp : ∀ x ∈ ↑parts, canonE x
+hk : ∀ x ∈ ↑powers, canonE x
+s : State
+hs : ↑s.1.end = 7 ∧ ↑s.1.start ≤ 7 ∧ canonE s.2
+bound : ↑s.1.start < 7
+next : core.ops.range.Range (UScalar UScalarTy.Usize)
+hn : NHI_ForwardRange.next s.1 = ok (some s.1.start, next)
+hi : ↑next.start = ↑s.1.start + 1
+he : next.end = s.1.end
+bi : ↑s.1.start < ↑7#usize
+part : NE := NHI_ScalarDomain.pick parts (↑s.1.start) bi
+power : NE := NHI_ScalarDomain.pick powers (↑s.1.start) bi
+cp : canonE part
+ck : canonE power
+sum : NE
+hm : NHX_FinalFold.cell s.2 power part = ok sum
+cm : canonE sum
+⊢ (do
+      let c ←
+        NHX_FinalFold.cell s.2 (NHI_ScalarDomain.pick powers (↑s.1.start) bi)
+            (NHI_ScalarDomain.pick parts (↑s.1.start) bi)
+      ok (cont (next, c))) =
+    ok (cont (next, sum))
+NHX_generated/NHX_FinalTotal.lean:27:58: warning: This simp argument is unused:
+  hm
+
+Hint: Omit it from the simp argument list.
+  simp only [NHI_ScalarDomain.index parts s.1.start bi,
+  ̵  ̵ ̵ ̵NHI_ScalarDomain.index powers s.1.start bi,
+  ̲ ̲ ̲ ̲ ̲ ̲bind_tc_ok,̵h̵m̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NHX_FinalTotal.active' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NHX_FinalTotal.unroll' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NHX_FinalTotal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r7d1d86c4b74940d7a61266bcb492f748.scope; invocation ID: e50287cc4fae46368e49f1ccb419245b
