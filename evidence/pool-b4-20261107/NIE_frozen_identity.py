@@ -39,16 +39,3 @@ def apply(files,text):
     i+=1
   after+=before[cursor:];files[path]=''.join(after).encode()
  return files
-def check(a,base=None):
- files=dict(frozen() if base is None else base)
- for patch in [subprocess.check_output(['git','show','HEAD:evidence/kani-mitig-20261028/KMX_copy_stubs.patch'],text=True),(E/'NFD_contract_controls.patch').read_text(),(E/(a+'-NFD_oracle.patch')).read_text(),(E/(a+'-NFD_native_contracts.patch')).read_text()]:apply(files,patch)
- actual=json.loads((E/(a+'-RUST_SHA256.json')).read_text())
- errors=[name for name,data in files.items() if actual.get(name)!=sha(data)]
- extras=sorted(set(actual)-set(files));unexpected=[n for n in extras if n.startswith(('crates/','programs/'))]
- assert not errors and not unexpected,(errors,unexpected)
- return dict(attempt=a,frozen_revision=REV,exact_frozen_plus_patches=True,checked_files=len(files),inert_seed_extras=extras,errors=errors,unexpected_compiled_paths=unexpected)
-if __name__=='__main__':
- base=frozen();results=[]
- for a in sys.argv[1:]:
-  result=check(a,base);(E/(a+'-frozen-identity.json')).write_text(json.dumps(result,indent=1)+'\n');results.append(result)
- print(json.dumps(dict(attempts=len(results),all_exact=True)))

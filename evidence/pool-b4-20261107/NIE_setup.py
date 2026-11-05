@@ -1,4 +1,5 @@
 """Prepare small owned host scratch from immutable retained inputs; no builds."""
+raise SystemExit('Historical bootstrap retained as evidence; use retained exports and current NIE runners. Do not regenerate validated scripts.')
 from pathlib import Path
 import subprocess,json,hashlib,time,lzma,sys,base64
 E=Path(__file__).resolve().parent;I=E.parent/'pool-b3-20261106'

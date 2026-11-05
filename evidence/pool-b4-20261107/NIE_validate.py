@@ -67,6 +67,10 @@ def main():
   try:packet_gate(p)
   except AssertionError:rejected.append(name)
  need(len(rejected)==len(mutations),'mutation controls')
+ for refpath in E.rglob('*.REFERENCE.json'):
+  ref=J(refpath)
+  if 'path' in ref and 'sha256' in ref:
+   target=E/ref['path'];need(target.is_file() and sha(target.read_bytes())==ref['sha256'],'deduplicated input reference')
  large=[str(p.relative_to(E)) for p in E.rglob('*') if p.is_file() and p.stat().st_size>20*1024*1024];need(not large,'rule12')
  result=dict(status='PASS',packet=packet,base_path=str(basepath.relative_to(REPO)),base_uncompressed_sha256=sha(read(basepath)),verifier_rows_sha256=sha(json.dumps(base['rows'],sort_keys=True).encode()),unchanged_verifier_rows=599,paired_observation_groups=[g for g in groups.values() if g['positive'] and g['negative']],unpaired_no_credit=unpaired,semantic_outcomes=semantic,mutations_rejected=rejected,new_composed_rows=0,budget_counts={k:packet[k] for k in ['kani','lean','extraction']},existing_NDT_NHO_validation='Immutable baseline status and invariants retained by hash; additive Pool checks only, no unchanged full regression rerun')
  (E/'NIE_VALIDATION.json').write_text(json.dumps(result,indent=2)+'\n')

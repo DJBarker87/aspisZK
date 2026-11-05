@@ -15,7 +15,7 @@ roots+=['AspisR1.RPx_Deployed.deployed']
 base=(I/'NHP_EXPECTED_IMPORTS.jsonl').read_text();names=set(json.loads(s)['module'] for s in base.splitlines());added=[]
 for p in E.glob('NIE_*.lean'):
  if p.stem.endswith('Driver'):continue
- imports=re.findall(r'^import\s+(\S+)',p.read_text(),re.M)
+ imports=['Init']+re.findall(r'^import\s+(\S+)',p.read_text(),re.M)
  if p.stem not in names:added.append(json.dumps(dict(module=p.stem,imports=imports)))
 (E/'NIE_EXPECTED_IMPORTS.jsonl').write_text(base.rstrip()+'\n'+'\n'.join(added)+'\n')
 (E/'NIE_AUDIT_ADAPTATION.json').write_text(json.dumps(dict(method='Retained NHP driver with module/root manifest names changed only; unchanged NFA_WALKER and memory wrapper imports',driver_inputs={str(I/('NHP_'+n)):hashlib.sha256((I/('NHP_'+n)).read_bytes()).hexdigest() for n in ['ProofDriver.lean','Driver.lean','batch.py']},raw_fixture_run_required=True,fixtures=8),indent=2)+'\n')

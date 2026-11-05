@@ -11,7 +11,7 @@ No new composed row CLOSED yet. The inherited NHP height guard, Pool error conve
 7. **Prefix spine OPEN.** Missing real callee packets above prevent (ai) composition through THAT invocation.
 8. **Return/helper OPEN.** Retain NGK/NFV conditional consumers and accepted RuntimeReturnData 1..1024. Same invocation/context/no-intervening-CPI/allocation/frame inputs are not derived.
 9. **Model join OPEN.** NIB-P1 register continuity and NIB-P2 actual validation dictionary remain native deliverables; model conclusions or a separately selected successful execution do not replace them.
-10. **Headline coherence PENDING for NIE.** NHP evidence retained; a fresh NIE co-import/ax2/scan is required before any new closure credit.
+10. **Headline coherence PASS.** L007 co-import, L012 fresh eight fixtures, L013 raw16-root standard audit and L014 clean13,482-module ownership/import scan. Coherence adds no production row.
 
 No trust removal or new runtime/security assumption. Frozen3, deployed headline RPx_Deployed.deployed, L154 statement parameter, narrowed D188, privacy and two-transaction design remain unchanged.
 
@@ -30,3 +30,5 @@ Stage-2 update: item2 now has new actual decoder/wrapper rejection cleanup and s
 7–9. No prefix-to-CPI, NIB-P1 same-emission continuity, NIB-P2 validation dictionary or same-statement model join is derived over the missing successful callee packets. RuntimeCpiReadonlyEntry7 remains UNUSED.
 
 Fifteen SDK-model facts compile and co-import with the deployed headline. Raw audit/scan is the next stage. No new composed row, runtime trust item, security assumption, shipped source, release artifact or metric is changed.
+
+Final validation: NIE_validate.py PASS;21 mutations rejected;599 verifier rows unchanged; all53 passing local observation groups have matched controls. Budget120 Kani/16 Lean-link-audit-housekeeping/2 extraction. Raw audit16 standard roots and scan0 defects. Export/cleanup receipts retain the cache and remove only owned rebuildable scratch. No new composed row, K086 production-domain exclusion or release result.

@@ -44,8 +44,12 @@ elif kind=='audit':
  sources=['NIE_generated/NIE_ProofDriver.lean','NIE_generated/NIE_Driver.lean','NIE_batch.py','NIE_AUDIT_ROOTS.json','NIE_EXPECTED_IMPORTS.jsonl']+(['NIE_POOL_ROOTS.json'] if target.startswith('pool') else [])
  for n in sources:files[n]=(E/Path(n).name).read_text()
  command=['python3','NIE_batch.py',target]
+elif kind=='export':
+ files['NIE_export.py']=(E/'NIE_export.py').read_text();sources=['NIE_export.py'];command=['python3','NIE_export.py']
+elif kind=='cleanup':
+ files['NIE_cleanup.py']=(E/'NIE_cleanup.py').read_text();sources=['NIE_cleanup.py'];command=['python3','NIE_cleanup.py']
 else:raise ValueError(kind)
-config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NIE_tmp',LEAN_PATH=':'.join([B+'/NIE_objects',C+'/NHP_exports_20261106',C+'/NHP_native_exports_20261106',C+'/NHC_exports_20261105',C+'/NHC_native_exports_20261105',C+'/NHC_seed',C,W,W+'/objects',T+'/lib/lean'])),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')
+config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NIE_tmp',LEAN_PATH=':'.join([B+'/NIE_objects',C+'/NIE_exports_20261107',C+'/NHP_exports_20261106',C+'/NHP_native_exports_20261106',C+'/NHC_exports_20261105',C+'/NHC_native_exports_20261105',C+'/NHC_seed',C,W,W+'/objects',T+'/lib/lean'])),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Read/hash and non-destructive cache export; no compiler' if kind in ['export','cleanup'] else 'Raw ax2 traversal / coherence scan')
 files[a+'.json']=json.dumps(config)
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib,re,shutil
