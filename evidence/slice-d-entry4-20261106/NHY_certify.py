@@ -46,7 +46,7 @@ for pos,neg in [('NHY_K005','NHY_K006'),('NHY_K008','NHY_K009')]:
  assert read(E/pos/'receipt.json')['exit_status']==0 and 'VERIFICATION:- SUCCESSFUL' in log(E,pos)
  s=log(E,neg);assert read(E/neg/'receipt.json')['exit_status']==1 and 'timed out' not in s and re.search(r'\*\* 1 of \d+ failed',s) and re.search(r'Failed Checks: \|r\|\s*\*r',s)
 for a in ['NHY_L001','NHY_L002','NHY_L009','NHY_L010']:assert read(E/a/'receipt.json')['exit_status']==0
-proofs=[read(E/'NHY_stage1_audit/proof0.json'),read(E/'NHY_stage3_audit/proof1.json')]+[read(E/f'NHY_stage4_audit/proof2.json')]+[read(E/f'NHY_stage5_audit/proof{i}.json') for i in [3,4,5]]+[read(E/f'NHY_stage6_audit/proof{i}.json') for i in [6,7,8]];fx=read(E/'NHY_stage1_audit/fixtures.json');scan=read(E/'NHY_stage6_audit/scan_summary.json')
+proofs=[read(E/'NHY_stage1_audit/proof0.json'),read(E/'NHY_stage3_audit/proof1.json')]+[read(E/f'NHY_stage4_audit/proof2.json')]+[read(E/f'NHY_stage5_audit/proof{i}.json') for i in [3,4,5]]+[read(E/f'NHY_stage6_audit/proof{i}.json') for i in [6,7,8]]+[read(E/f'NHY_stage7_audit/proof{i}.json') for i in [9,10]]+[read(E/'NHY_stage8_audit/proof11.json')];fx=read(E/'NHY_stage1_audit/fixtures.json');scan=read(E/'NHY_stage8_audit/scan_summary.json')
 assert fx['exit_status']==0 and len(fx['results'])==8 and all(r['equal'] for r in fx['results'])
 assert all(len(x['walked_axioms'])==1 for x in fx['results'][:4]) and all(not x['walked_axioms'] for x in fx['results'][4:])
 for pr in proofs:
@@ -108,6 +108,25 @@ for rid,label,pos,neg,theorem,domain,lean in helper_specs:
  n.certificate_checks(type('Support',(),{'support':lambda self,c:None})(),c)
  rows.append(r);certs[rid]=c;candidates[rid]=('NHY',r)
 
+# Current-format validators reuse native proofs without replay. Source body tokens
+# differ ONLY by crate qualification from the exact E002 extracted reference.
+subprocess.run([sys.executable,str(E/'NHY_revalidate_ncx.py')],check=True,capture_output=True)
+review=read(E/'NHY_NCX_REVALIDATION.json');assert review['status']=='PASS_NATIVE_REFERENCE_AND_RECONSTRUCTION'
+for rid,label,pos,neg,theorem in [('TX2:209','registry_v2_validator',4,5,'NHY_NCXValidators.registry_source'),('TX2:207','entry_v2_validator',6,7,'NHY_NCXValidators.entry_source')]:
+ c=dict(cert,id='NHY::'+label,subject=by[rid]['function'],route='NCO actual frozen function contract; retained NCX passing native and exact E002 emitted reference reused',model_theorem=theorem,root_domain='Every complete typed V2 record, arbitrary arrays, flags/status and all u64 values. NCX_Carrier two-sided record/status/error ports; NHY_NCXValidators native_*_domain proves no fixture restriction.',native_passes=[f'NCX_K{pos:03}'],matched_controls=[f'NCX_K{neg:03}'],callee_laws={'zero':'Full typed32 scan/equality join NHY_NCXValidators.zero_child / NHY_AllZeroBridge.source, native K046/047; every input is typed32', 'immutable/retirement':'Actual complete native body with no callee substitution; closed scalar same-field certificates, all flag/slot domains', 'error/record':'Complete 12-error constructor map and both record port roundtrips, NCX_Carrier and NHY_NCXValidators'},source_association='NHY_NCX_REVALIDATION.json reconstructs every native source hash and checks exact lexical equality of valid_*_ref body to the exact extracted E002 safe reference after erasing crate::NCX_reference:: qualification only. Full constructor/control/frame retained. No native pass rerun.',effects='Actual empty-modifies contract on shared-reference input; no writable static or callback; no stub_verified/callee oracle. Exact KMX patch plus matched same-configuration semantic failure.',combined='NHY_L063',audit=['NHY_L046','NHY_L064'],trust_reclassification='P6/D188 option-A transport retained, no new runtime row; no PDA fixture or RuntimeCpiReadonlyEntry7')
+ c.pop('semantic_review_sha256',None);c['semantic_review_sha256']=sha(json.dumps(c,sort_keys=True).encode())
+ r=copy.deepcopy(by[rid]);assert r['composed_status']=='OPEN' and not r['named_hypotheses']
+ r.update(composed_status='CLOSED',bridge_status='CLOSED-CONDITIONAL',selected_claims=[c['id']],active_support_receipts=[str((E.parent/'native-decref2-20261028'/f'NCX_K{k:03}'/'receipt.json').relative_to(R)) for k in [pos,neg]],open_transitive_dependencies=[],composed_reason='Actual full validator body on every typed record, exact extracted reference body and two-sided carrier; all native callee uses inline or paired typed-domain laws. No parser/decoder credit.')
+ for o in r['caller_domain_obligations']:
+  if 'callee' in o:
+   child=o['callee'].split('::')[-1];assert child in ['has_no_retirement_slot','is_immutable','required_binding_is_zero']
+   o.update(status='CLOSED',discharged_by=c['id']+': actual Rust receiver is V2; V1 conservative alias excluded by typed receiver. All other inputs shared record fields; typed32 / every flag / every u64 domain, no success hypothesis.')
+  else:
+   assert o['call']['name'] in ['Ok','Err'];o.update(status='CLOSED',discharged_by=c['id']+': full native Result contract and exact extracted error order with all constructor ports')
+ assert not n.row_checks(r,by[rid],c),(rid,n.row_checks(r,by[rid],c))
+ n.certificate_checks(type('Support',(),{'support':lambda self,c:None})(),c)
+ rows.append(r);certs[rid]=c;candidates[rid]=('NHY',r)
+
 n.certificate_checks(type('Support',(),{'support':lambda self,c:None})(),cert)
 tiny=copy.deepcopy(base);tiny['rows']=[copy.deepcopy(by[rid]) for rid in candidates]
 admitted=n.admit(tiny,candidates,certs,{'NHY':list(candidates)});assert all(r['composed_status']=='CLOSED' for r in admitted['rows'])
@@ -122,6 +141,6 @@ assert lzma.decompress(basepath.read_bytes())==data
 put('NHY_CLOSED.json',dict(schema_version=1,frozen_revision=base['frozen_revision'],new_composed_functions=len({c['id'] for c in certs.values()}),new_composed_rows=len(rows),functions=list({c['id']:c for c in certs.values()}.values()),driver_root_status='OPEN'))
 put('NHY_EDGES.json',dict(edges=[o for r in rows for o in r['caller_domain_obligations']],no_out_of_slice_credit=True))
 put('NHY_LEDGER_DELTA.json',dict(baseline=str(basepath.relative_to(R)),baseline_uncompressed_sha256=sha(data),new_closed_rows=list(candidates),rows=rows,no_other_status_change=True,validator_checks_added_only=True,unchanged_NFK_validator_sha256=pin,checks_added=['admission exit0 AND allowed:true, exact caps and source snapshots','per-run frozen graph, lock, offline, deployed features and exact KMX','both explicit SDK arms; canonical clone domain; no writable static/custom copy stub','same-entry SDK-derived root acquisition, all-length scalar dispatch, full Header/finish chain and caller table bounds','NGK/RPx combined, ax2 identical walker/eight fixtures/same binary/standard axioms; NFX zero defects','unchanged NFK row/certificate/admit checks; five denial mutations'],whole_ledger_counts_after=dict(total=599,CLOSED=335+len(rows),OPEN=264-len(rows)),baseline_preserved_byte_exactly=True,mutation_denials=5,trust_reclassification='Retained P6/D188 option A; nothing removed or newly adopted',inherited_NHJ_delta='Separate immutable14-row delta, not duplicated in NHY new rows'))
-put('NHY_AUDIT.json',dict(status='PASS_AX2_NFX',combined='NHY_L045',roots=[r for p in proofs for r in p['results']],fixtures=fx,scan=scan,walker_sha256=sha((P/'NGL_WALKER_SOURCE.lean.txt').read_bytes()),driver_diffs=['NHY_ProofDriver.diff','NHY_ScanDriver.diff'],scope='Focused coherent cached replay, not cold release manifest',standard_axioms_only=True))
+put('NHY_AUDIT.json',dict(status='PASS_AX2_NFX',combined='NHY_L063',roots=[r for p in proofs for r in p['results']],fixtures=fx,scan=scan,walker_sha256=sha((P/'NGL_WALKER_SOURCE.lean.txt').read_bytes()),driver_diffs=['NHY_ProofDriver.diff','NHY_ScanDriver.diff'],scope='Focused coherent cached replay, not cold release manifest',standard_axioms_only=True))
 put('NHY_LOCAL_VALIDATION.json',dict(target='NHY_certify snapshot two-row admission',exit_status=0,wall_seconds=time.monotonic()-start,peak_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss//(1024 if sys.platform=='darwin' else 1),swaps=resource.getrusage(resource.RUSAGE_SELF).ru_nswap,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_sha256=sha(Path(__file__).read_bytes()),print_axioms='N/A Python evidence validation; exact formal audits in NHY_AUDIT.json',new_closed_rows=len(rows)))
 print(json.dumps(dict(status='PASS',new_closed_rows=len(rows))))

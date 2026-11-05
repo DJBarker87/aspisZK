@@ -2,7 +2,7 @@ import NCX_Reference.Funs
 import NHY_SliceRead
 set_option autoImplicit false
 namespace NHY_ParsedBodies
-open Aeneas Aeneas.Std Result AspisR1
+open Aeneas Aeneas.Std Result WP
 
 def validation {A : Type} (v : A) : core.result.Result Unit NCX_Reference.PoolV1VerifierRegistryFormatError →
     core.result.Result A NCX_Reference.PoolV1VerifierRegistryFormatError

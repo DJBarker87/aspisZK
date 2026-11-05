@@ -1,6 +1,6 @@
 # NHY entry spine — snapshot stage
 
-**11 new CLOSED rows /10 functions beyond NHJ; zero complete TX1/TX2 paths. Target not yet established.** NHY delta is additive against unchanged NHO599-row ledger (335 CLOSED/264 OPEN →346/253); NHJ14-row delta is retained separately, without duplicating credit. No security, privacy or custody theorem is promoted.
+**13 new CLOSED rows /12 functions beyond NHJ; zero complete TX1/TX2 paths. Target not yet established.** NHY delta is additive against unchanged NHO599-row ledger (335 CLOSED/264 OPEN →348/251); NHJ14-row delta is retained separately, without duplicating credit. No security, privacy or custody theorem is promoted.
 
 ## Entry roots and distance
 
@@ -46,3 +46,5 @@ Nine authentication dependencies now CLOSED: TX2:151 policy validator;192 status
 Error callback progress: eight isolated native Debug label loggers pass, each has a semantic failing control; Parse has its rename stability pair. These prove label argument/count/length forwarding only. The allocated String implementation and native final msg! byte/cleanup join remain OPEN after K004/007/010 timeouts. NHY_ErrorFragments, NHY_StringAppend provide symbolic label/frame laws; no lib::error credit.
 
 Current-format decoder progress: original256/320-byte buffers transport to64/16-byte local windows at arbitrary legal offsets (K049..056); controls fail. Retained NCX validators are under revalidation, not yet admitted. Full native record construction, first-error suffix and same SDK call association remain OPEN. V1 models cannot use the current V2-only extraction as a stand-in.
+
+Validator stage: TX2:207 and209 are now CLOSED. Retained NCX_K004/005 and006/007 are reconstructed and revalidated by immutable patch/graph/lock/KMX hashes, no passing proof replay. Their safe-reference bodies match the exact E002 extracted bodies token for token after namespace qualification only. Full typed record and12-error ports are two-sided; native-domain laws L058 and combined L063/raw L064 pass. The actual decoder roots (201..204), both authentication parents and both owned-stage roots remain OPEN.

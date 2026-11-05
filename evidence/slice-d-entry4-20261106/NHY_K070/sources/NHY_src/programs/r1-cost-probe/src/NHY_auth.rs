@@ -1,0 +1,815 @@
+//! Registry policy dependency: actual frozen body, all typed inputs.
+use super::*;
+extern crate alloc;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+pub fn policy_ref(flags:u8,program_zero:bool,authority_zero:bool,binding_zero:bool)->u8{if flags & !3 !=0 {1} else if program_zero||binding_zero {2} else {let immutable=flags&1!=0;let deployment=flags&2!=0;if deployment&&!immutable {3} else if immutable!=authority_zero {3} else {0}}}
+
+fn policy_expected(p:&aspis_statement::pool_v1::VerifierPolicyV1)->Result<(),aspis_statement::pool_v1::PoolV1FormatError>{
+ use aspis_statement::pool_v1::PoolV1FormatError::*;
+ match policy_ref(p.flags,p.registry_program==[0;32],p.registry_authority==[0;32],p.policy_binding==[0;32]){0=>Ok(()),1=>Err(UnsupportedFlags),2=>Err(ZeroRequiredBinding),_=>Err(InvalidAuthorityMode)}
+}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn policy_packet(p:&aspis_statement::pool_v1::VerifierPolicyV1)->bool{
+ aspis_statement::pool_v1::validate_verifier_policy_v1(p)==policy_expected(p)
+}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn policy_wrong_packet(p:&aspis_statement::pool_v1::VerifierPolicyV1)->bool{
+ aspis_statement::pool_v1::validate_verifier_policy_v1(p)!=policy_expected(p)
+}
+macro_rules! policy_harness {($name:ident,$f:ident)=>{
+ #[kani::proof_for_contract($f)] #[kani::unwind(35)]
+ #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+ fn $name(){let p=aspis_statement::pool_v1::VerifierPolicyV1{flags:kani::any(),registry_program:kani::any(),registry_authority:kani::any(),policy_binding:kani::any()};$f(&p);}
+}}
+policy_harness!(policy,policy_packet);
+policy_harness!(policy_wrong,policy_wrong_packet);
+
+fn registry1()->aspis_statement::pool_v1::VerifierRegistryV1{aspis_statement::pool_v1::VerifierRegistryV1{flags:kani::any(),bump:kani::any(),pool:kani::any(),authority:kani::any(),policy_binding:kani::any(),generation:kani::any(),minimum_activation_delay_slots:kani::any()}}
+
+fn registry2()->aspis_statement::pool_v1::VerifierRegistryV2{aspis_statement::pool_v1::VerifierRegistryV2{flags:kani::any(),bump:kani::any(),pool:kani::any(),authority:kani::any(),policy_binding:kani::any(),generation:kani::any(),minimum_activation_delay_slots:kani::any(),registry_program:kani::any(),loader_program:kani::any(),programdata_address:kani::any(),programdata_bump:kani::any(),executable_hash:kani::any()}}
+
+fn entry1()->aspis_statement::pool_v1::VerifierRegistryEntryV1{aspis_statement::pool_v1::VerifierRegistryEntryV1{status:arbitrary_status(),statement_version:kani::any(),bump:kani::any(),pool:kani::any(),verifier_program:kani::any(),profile_binding:kani::any(),release_binding:kani::any(),activation_slot:kani::any(),retirement_slot:kani::any(),policy_binding:kani::any()}}
+
+fn entry2()->aspis_statement::pool_v1::VerifierRegistryEntryV2{aspis_statement::pool_v1::VerifierRegistryEntryV2{status:arbitrary_status(),statement_version:kani::any(),bump:kani::any(),pool:kani::any(),verifier_program:kani::any(),profile_binding:kani::any(),release_binding:kani::any(),loader_program:kani::any(),programdata_address:kani::any(),programdata_bump:kani::any(),executable_hash:kani::any(),expected_upgrade_authority:kani::any(),activation_slot:kani::any(),retirement_slot:kani::any(),policy_binding:kani::any()}}
+fn arbitrary_status()->aspis_statement::pool_v1::VerifierEntryStatusV1{use aspis_statement::pool_v1::VerifierEntryStatusV1::*;let tag:u8=kani::any();kani::assume(tag<4);match tag{0=>Pending,1=>Active,2=>Paused,_=>Retired}}
+fn flag_ref(v:u8,mask:u8)->bool{v&mask!=0}
+fn retirement_ref(v:u64)->bool{v==u64::MAX}
+fn status_ref(v:u8)->Option<u8>{match v{0=>Some(0),1=>Some(1),2=>Some(2),3=>Some(3),_=>None}}
+fn status_expected(v:u8)->Result<aspis_statement::pool_v1::VerifierEntryStatusV1,aspis_statement::pool_v1::PoolV1VerifierRegistryFormatError>{use aspis_statement::pool_v1::VerifierEntryStatusV1::*;match status_ref(v){Some(0)=>Ok(Pending),Some(1)=>Ok(Active),Some(2)=>Ok(Paused),Some(3)=>Ok(Retired),_=>Err(aspis_statement::pool_v1::PoolV1VerifierRegistryFormatError::InvalidStatus)}}
+
+#[kani::ensures(|out|*out)] #[kani::modifies()]
+fn immutable1_packet(r:&aspis_statement::pool_v1::VerifierRegistryV1)->bool{r.is_immutable()==flag_ref(r.flags,2)}
+#[kani::proof_for_contract(immutable1_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn immutable1(){immutable1_packet(&registry1());}
+
+#[kani::ensures(|out|*out)] #[kani::modifies()]
+fn immutable1_wrong_packet(r:&aspis_statement::pool_v1::VerifierRegistryV1)->bool{r.is_immutable()!=flag_ref(r.flags,2)}
+#[kani::proof_for_contract(immutable1_wrong_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn immutable1_wrong(){immutable1_wrong_packet(&registry1());}
+
+#[kani::ensures(|out|*out)] #[kani::modifies()]
+fn paused1_packet(r:&aspis_statement::pool_v1::VerifierRegistryV1)->bool{r.is_paused()==flag_ref(r.flags,1)}
+#[kani::proof_for_contract(paused1_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn paused1(){paused1_packet(&registry1());}
+
+#[kani::ensures(|out|*out)] #[kani::modifies()]
+fn paused1_wrong_packet(r:&aspis_statement::pool_v1::VerifierRegistryV1)->bool{r.is_paused()!=flag_ref(r.flags,1)}
+#[kani::proof_for_contract(paused1_wrong_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn paused1_wrong(){paused1_wrong_packet(&registry1());}
+
+#[kani::ensures(|out|*out)] #[kani::modifies()]
+fn immutable2_packet(r:&aspis_statement::pool_v1::VerifierRegistryV2)->bool{r.is_immutable()==flag_ref(r.flags,2)}
+#[kani::proof_for_contract(immutable2_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn immutable2(){immutable2_packet(&registry2());}
+
+#[kani::ensures(|out|*out)] #[kani::modifies()]
+fn immutable2_wrong_packet(r:&aspis_statement::pool_v1::VerifierRegistryV2)->bool{r.is_immutable()!=flag_ref(r.flags,2)}
+#[kani::proof_for_contract(immutable2_wrong_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn immutable2_wrong(){immutable2_wrong_packet(&registry2());}
+
+#[kani::ensures(|out|*out)] #[kani::modifies()]
+fn paused2_packet(r:&aspis_statement::pool_v1::VerifierRegistryV2)->bool{r.is_paused()==flag_ref(r.flags,1)}
+#[kani::proof_for_contract(paused2_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn paused2(){paused2_packet(&registry2());}
+
+#[kani::ensures(|out|*out)] #[kani::modifies()]
+fn paused2_wrong_packet(r:&aspis_statement::pool_v1::VerifierRegistryV2)->bool{r.is_paused()!=flag_ref(r.flags,1)}
+#[kani::proof_for_contract(paused2_wrong_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn paused2_wrong(){paused2_wrong_packet(&registry2());}
+
+#[kani::ensures(|out|*out)] #[kani::modifies()]
+fn retirement1_packet(r:&aspis_statement::pool_v1::VerifierRegistryEntryV1)->bool{r.has_no_retirement_slot()==retirement_ref(r.retirement_slot)}
+#[kani::proof_for_contract(retirement1_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn retirement1(){retirement1_packet(&entry1());}
+
+#[kani::ensures(|out|*out)] #[kani::modifies()]
+fn retirement1_wrong_packet(r:&aspis_statement::pool_v1::VerifierRegistryEntryV1)->bool{r.has_no_retirement_slot()!=retirement_ref(r.retirement_slot)}
+#[kani::proof_for_contract(retirement1_wrong_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn retirement1_wrong(){retirement1_wrong_packet(&entry1());}
+
+#[kani::ensures(|out|*out)] #[kani::modifies()]
+fn retirement2_packet(r:&aspis_statement::pool_v1::VerifierRegistryEntryV2)->bool{r.has_no_retirement_slot()==retirement_ref(r.retirement_slot)}
+#[kani::proof_for_contract(retirement2_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn retirement2(){retirement2_packet(&entry2());}
+
+#[kani::ensures(|out|*out)] #[kani::modifies()]
+fn retirement2_wrong_packet(r:&aspis_statement::pool_v1::VerifierRegistryEntryV2)->bool{r.has_no_retirement_slot()!=retirement_ref(r.retirement_slot)}
+#[kani::proof_for_contract(retirement2_wrong_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn retirement2_wrong(){retirement2_wrong_packet(&entry2());}
+
+#[kani::ensures(|out|*out)] #[kani::modifies()]
+fn status_packet(v:u8)->bool{aspis_statement::pool_v1::VerifierEntryStatusV1::try_from(v)==status_expected(v)}
+#[kani::proof_for_contract(status_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn status(){status_packet(kani::any());}
+
+#[kani::ensures(|out|*out)] #[kani::modifies()]
+fn status_wrong_packet(v:u8)->bool{aspis_statement::pool_v1::VerifierEntryStatusV1::try_from(v)!=status_expected(v)}
+#[kani::proof_for_contract(status_wrong_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn status_wrong(){status_wrong_packet(kani::any());}
+
+
+
+
+// NHY PDA cut
+struct NHY_KeyView{key:Pubkey} impl NHY_KeyView{fn key(&self)->&Pubkey{&self.key}}
+struct NHY_Bumps{bump:u8,programdata_bump:u8}
+struct NHY_Identity{asset_mint:[u8;32],bump:u8} struct NHY_Master{identity:NHY_Identity,bump:u8}
+struct NHY_Checkpoint{bump:u8,checkpoint_sequence:u64} struct NHY_Lane{bump:u8}
+struct NHY_PdaLog{calls:u8,seed_count:usize,seed_len:usize,seed_byte:u8,program_byte:u8}
+fn NHY_pda_oracle(seeds:&[&[u8]],program:&Pubkey,reply:Result<Pubkey,solana_program::pubkey::PubkeyError>,i:usize,j:usize,k:usize,log:&mut NHY_PdaLog)->Result<Pubkey,solana_program::pubkey::PubkeyError>{
+ log.calls+=1;log.seed_count=seeds.len();log.seed_len=seeds[i].len();log.seed_byte=seeds[i][j];log.program_byte=program.as_ref()[k];reply
+}
+fn NHY_pda_reply()->Result<Pubkey,solana_program::pubkey::PubkeyError>{use solana_program::pubkey::PubkeyError::*;let tag:u8=kani::any();kani::assume(tag<4);match tag{0=>Ok(Pubkey::new_from_array(kani::any())),1=>Err(MaxSeedLengthExceeded),2=>Err(InvalidSeeds),_=>Err(IllegalOwner)}}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn pda0_packet(keys:&[Pubkey;5],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,selected_lane:u8,reply:Result<Pubkey,solana_program::pubkey::PubkeyError>,i:usize,j:usize,k:usize)->bool{
+ let master_account=NHY_KeyView{key:keys[0]};let registry_program=keys[1];let loader=keys[2];let verifier_program=&keys[3];let pool_program=&keys[4];
+ let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};
+ let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=selected_lane;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[VERIFIER_REGISTRY_V2_SEED,keys[0].as_ref(),&[bump]];
+ kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ let expected_reply=match &reply{Ok(a)=>Some(a.as_ref()[k]),Err(_)=>None};
+ let result=NHY_pda_oracle(&[
+                VERIFIER_REGISTRY_V2_SEED,
+                master_account.key().as_ref(),
+                &[registry.bump],
+            ],
+            &registry_program,reply,i,j,k,&mut log).map_err(|_|ProgramError::InvalidAccountData);
+ let reply_ok=match (expected_reply,result){(Some(a),Ok(b))=>a==b.as_ref()[k],(None,Err(ProgramError::InvalidAccountData))=>true,_=>false};
+ log.calls==1 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==keys[1].as_ref()[k] && reply_ok
+}
+#[kani::proof_for_contract(pda0_packet)] #[kani::unwind(7)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn pda0(){let bytes:[[u8;32];5]=kani::any();let keys=bytes.map(Pubkey::new_from_array);pda0_packet(&keys,kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),NHY_pda_reply(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn pda0_wrong_packet(keys:&[Pubkey;5],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,selected_lane:u8,reply:Result<Pubkey,solana_program::pubkey::PubkeyError>,i:usize,j:usize,k:usize)->bool{
+ let master_account=NHY_KeyView{key:keys[0]};let registry_program=keys[1];let loader=keys[2];let verifier_program=&keys[3];let pool_program=&keys[4];
+ let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};
+ let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=selected_lane;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[VERIFIER_REGISTRY_V2_SEED,keys[0].as_ref(),&[bump]];
+ kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ let expected_reply=match &reply{Ok(a)=>Some(a.as_ref()[k]),Err(_)=>None};
+ let result=NHY_pda_oracle(&[
+                VERIFIER_REGISTRY_V2_SEED,
+                master_account.key().as_ref(),
+                &[registry.bump],
+            ],
+            &registry_program,reply,i,j,k,&mut log).map_err(|_|ProgramError::InvalidAccountData);
+ let reply_ok=match (expected_reply,result){(Some(a),Ok(b))=>a==b.as_ref()[k],(None,Err(ProgramError::InvalidAccountData))=>true,_=>false};
+ log.calls==2 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==keys[1].as_ref()[k] && reply_ok
+}
+#[kani::proof_for_contract(pda0_wrong_packet)] #[kani::unwind(7)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn pda0_wrong(){let bytes:[[u8;32];5]=kani::any();let keys=bytes.map(Pubkey::new_from_array);pda0_wrong_packet(&keys,kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),NHY_pda_reply(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn pda1_packet(keys:&[Pubkey;5],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,selected_lane:u8,reply:Result<Pubkey,solana_program::pubkey::PubkeyError>,i:usize,j:usize,k:usize)->bool{
+ let master_account=NHY_KeyView{key:keys[0]};let registry_program=keys[1];let loader=keys[2];let verifier_program=&keys[3];let pool_program=&keys[4];
+ let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};
+ let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=selected_lane;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[keys[1].as_ref(),&[programdata_bump]];
+ kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ let expected_reply=match &reply{Ok(a)=>Some(a.as_ref()[k]),Err(_)=>None};
+ let result=NHY_pda_oracle(&[registry_program.as_ref(), &[registry.programdata_bump]],
+            &loader,reply,i,j,k,&mut log).map_err(|_|ProgramError::InvalidAccountData);
+ let reply_ok=match (expected_reply,result){(Some(a),Ok(b))=>a==b.as_ref()[k],(None,Err(ProgramError::InvalidAccountData))=>true,_=>false};
+ log.calls==1 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==keys[2].as_ref()[k] && reply_ok
+}
+#[kani::proof_for_contract(pda1_packet)] #[kani::unwind(7)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn pda1(){let bytes:[[u8;32];5]=kani::any();let keys=bytes.map(Pubkey::new_from_array);pda1_packet(&keys,kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),NHY_pda_reply(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn pda1_wrong_packet(keys:&[Pubkey;5],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,selected_lane:u8,reply:Result<Pubkey,solana_program::pubkey::PubkeyError>,i:usize,j:usize,k:usize)->bool{
+ let master_account=NHY_KeyView{key:keys[0]};let registry_program=keys[1];let loader=keys[2];let verifier_program=&keys[3];let pool_program=&keys[4];
+ let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};
+ let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=selected_lane;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[keys[1].as_ref(),&[programdata_bump]];
+ kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ let expected_reply=match &reply{Ok(a)=>Some(a.as_ref()[k]),Err(_)=>None};
+ let result=NHY_pda_oracle(&[registry_program.as_ref(), &[registry.programdata_bump]],
+            &loader,reply,i,j,k,&mut log).map_err(|_|ProgramError::InvalidAccountData);
+ let reply_ok=match (expected_reply,result){(Some(a),Ok(b))=>a==b.as_ref()[k],(None,Err(ProgramError::InvalidAccountData))=>true,_=>false};
+ log.calls==2 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==keys[2].as_ref()[k] && reply_ok
+}
+#[kani::proof_for_contract(pda1_wrong_packet)] #[kani::unwind(7)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn pda1_wrong(){let bytes:[[u8;32];5]=kani::any();let keys=bytes.map(Pubkey::new_from_array);pda1_wrong_packet(&keys,kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),NHY_pda_reply(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn pda2_packet(keys:&[Pubkey;5],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,selected_lane:u8,reply:Result<Pubkey,solana_program::pubkey::PubkeyError>,i:usize,j:usize,k:usize)->bool{
+ let master_account=NHY_KeyView{key:keys[0]};let registry_program=keys[1];let loader=keys[2];let verifier_program=&keys[3];let pool_program=&keys[4];
+ let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};
+ let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=selected_lane;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[VERIFIER_ENTRY_V2_SEED,keys[0].as_ref(),&PROFILE_BINDING,&RELEASE_BINDING,&[bump]];
+ kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ let expected_reply=match &reply{Ok(a)=>Some(a.as_ref()[k]),Err(_)=>None};
+ let result=NHY_pda_oracle(&[
+                VERIFIER_ENTRY_V2_SEED,
+                master_account.key().as_ref(),
+                &PROFILE_BINDING,
+                &RELEASE_BINDING,
+                &[entry.bump],
+            ],
+            &registry_program,reply,i,j,k,&mut log).map_err(|_|ProgramError::InvalidAccountData);
+ let reply_ok=match (expected_reply,result){(Some(a),Ok(b))=>a==b.as_ref()[k],(None,Err(ProgramError::InvalidAccountData))=>true,_=>false};
+ log.calls==1 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==keys[1].as_ref()[k] && reply_ok
+}
+#[kani::proof_for_contract(pda2_packet)] #[kani::unwind(7)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn pda2(){let bytes:[[u8;32];5]=kani::any();let keys=bytes.map(Pubkey::new_from_array);pda2_packet(&keys,kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),NHY_pda_reply(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn pda2_wrong_packet(keys:&[Pubkey;5],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,selected_lane:u8,reply:Result<Pubkey,solana_program::pubkey::PubkeyError>,i:usize,j:usize,k:usize)->bool{
+ let master_account=NHY_KeyView{key:keys[0]};let registry_program=keys[1];let loader=keys[2];let verifier_program=&keys[3];let pool_program=&keys[4];
+ let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};
+ let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=selected_lane;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[VERIFIER_ENTRY_V2_SEED,keys[0].as_ref(),&PROFILE_BINDING,&RELEASE_BINDING,&[bump]];
+ kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ let expected_reply=match &reply{Ok(a)=>Some(a.as_ref()[k]),Err(_)=>None};
+ let result=NHY_pda_oracle(&[
+                VERIFIER_ENTRY_V2_SEED,
+                master_account.key().as_ref(),
+                &PROFILE_BINDING,
+                &RELEASE_BINDING,
+                &[entry.bump],
+            ],
+            &registry_program,reply,i,j,k,&mut log).map_err(|_|ProgramError::InvalidAccountData);
+ let reply_ok=match (expected_reply,result){(Some(a),Ok(b))=>a==b.as_ref()[k],(None,Err(ProgramError::InvalidAccountData))=>true,_=>false};
+ log.calls==2 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==keys[1].as_ref()[k] && reply_ok
+}
+#[kani::proof_for_contract(pda2_wrong_packet)] #[kani::unwind(7)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn pda2_wrong(){let bytes:[[u8;32];5]=kani::any();let keys=bytes.map(Pubkey::new_from_array);pda2_wrong_packet(&keys,kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),NHY_pda_reply(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn pda3_packet(keys:&[Pubkey;5],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,selected_lane:u8,reply:Result<Pubkey,solana_program::pubkey::PubkeyError>,i:usize,j:usize,k:usize)->bool{
+ let master_account=NHY_KeyView{key:keys[0]};let registry_program=keys[1];let loader=keys[2];let verifier_program=&keys[3];let pool_program=&keys[4];
+ let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};
+ let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=selected_lane;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[keys[3].as_ref(),&[programdata_bump]];
+ kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ let expected_reply=match &reply{Ok(a)=>Some(a.as_ref()[k]),Err(_)=>None};
+ let result=NHY_pda_oracle(&[verifier_program.as_ref(), &[entry.programdata_bump]],
+            &loader,reply,i,j,k,&mut log).map_err(|_|ProgramError::InvalidAccountData);
+ let reply_ok=match (expected_reply,result){(Some(a),Ok(b))=>a==b.as_ref()[k],(None,Err(ProgramError::InvalidAccountData))=>true,_=>false};
+ log.calls==1 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==keys[2].as_ref()[k] && reply_ok
+}
+#[kani::proof_for_contract(pda3_packet)] #[kani::unwind(7)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn pda3(){let bytes:[[u8;32];5]=kani::any();let keys=bytes.map(Pubkey::new_from_array);pda3_packet(&keys,kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),NHY_pda_reply(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn pda3_wrong_packet(keys:&[Pubkey;5],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,selected_lane:u8,reply:Result<Pubkey,solana_program::pubkey::PubkeyError>,i:usize,j:usize,k:usize)->bool{
+ let master_account=NHY_KeyView{key:keys[0]};let registry_program=keys[1];let loader=keys[2];let verifier_program=&keys[3];let pool_program=&keys[4];
+ let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};
+ let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=selected_lane;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[keys[3].as_ref(),&[programdata_bump]];
+ kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ let expected_reply=match &reply{Ok(a)=>Some(a.as_ref()[k]),Err(_)=>None};
+ let result=NHY_pda_oracle(&[verifier_program.as_ref(), &[entry.programdata_bump]],
+            &loader,reply,i,j,k,&mut log).map_err(|_|ProgramError::InvalidAccountData);
+ let reply_ok=match (expected_reply,result){(Some(a),Ok(b))=>a==b.as_ref()[k],(None,Err(ProgramError::InvalidAccountData))=>true,_=>false};
+ log.calls==2 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==keys[2].as_ref()[k] && reply_ok
+}
+#[kani::proof_for_contract(pda3_wrong_packet)] #[kani::unwind(7)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn pda3_wrong(){let bytes:[[u8;32];5]=kani::any();let keys=bytes.map(Pubkey::new_from_array);pda3_wrong_packet(&keys,kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),NHY_pda_reply(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn pda4_packet(keys:&[Pubkey;5],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,selected_lane:u8,reply:Result<Pubkey,solana_program::pubkey::PubkeyError>,i:usize,j:usize,k:usize)->bool{
+ let master_account=NHY_KeyView{key:keys[0]};let registry_program=keys[1];let loader=keys[2];let verifier_program=&keys[3];let pool_program=&keys[4];
+ let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};
+ let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=selected_lane;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[VERIFIER_REGISTRY_SEED,keys[0].as_ref(),&[bump]];
+ kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ let expected_reply=match &reply{Ok(a)=>Some(a.as_ref()[k]),Err(_)=>None};
+ let result=NHY_pda_oracle(&[
+            VERIFIER_REGISTRY_SEED,
+            master_account.key().as_ref(),
+            &[registry.bump],
+        ],
+        &registry_program,reply,i,j,k,&mut log).map_err(|_|ProgramError::InvalidAccountData);
+ let reply_ok=match (expected_reply,result){(Some(a),Ok(b))=>a==b.as_ref()[k],(None,Err(ProgramError::InvalidAccountData))=>true,_=>false};
+ log.calls==1 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==keys[1].as_ref()[k] && reply_ok
+}
+#[kani::proof_for_contract(pda4_packet)] #[kani::unwind(7)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn pda4(){let bytes:[[u8;32];5]=kani::any();let keys=bytes.map(Pubkey::new_from_array);pda4_packet(&keys,kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),NHY_pda_reply(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn pda4_wrong_packet(keys:&[Pubkey;5],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,selected_lane:u8,reply:Result<Pubkey,solana_program::pubkey::PubkeyError>,i:usize,j:usize,k:usize)->bool{
+ let master_account=NHY_KeyView{key:keys[0]};let registry_program=keys[1];let loader=keys[2];let verifier_program=&keys[3];let pool_program=&keys[4];
+ let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};
+ let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=selected_lane;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[VERIFIER_REGISTRY_SEED,keys[0].as_ref(),&[bump]];
+ kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ let expected_reply=match &reply{Ok(a)=>Some(a.as_ref()[k]),Err(_)=>None};
+ let result=NHY_pda_oracle(&[
+            VERIFIER_REGISTRY_SEED,
+            master_account.key().as_ref(),
+            &[registry.bump],
+        ],
+        &registry_program,reply,i,j,k,&mut log).map_err(|_|ProgramError::InvalidAccountData);
+ let reply_ok=match (expected_reply,result){(Some(a),Ok(b))=>a==b.as_ref()[k],(None,Err(ProgramError::InvalidAccountData))=>true,_=>false};
+ log.calls==2 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==keys[1].as_ref()[k] && reply_ok
+}
+#[kani::proof_for_contract(pda4_wrong_packet)] #[kani::unwind(7)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn pda4_wrong(){let bytes:[[u8;32];5]=kani::any();let keys=bytes.map(Pubkey::new_from_array);pda4_wrong_packet(&keys,kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),NHY_pda_reply(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn pda5_packet(keys:&[Pubkey;5],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,selected_lane:u8,reply:Result<Pubkey,solana_program::pubkey::PubkeyError>,i:usize,j:usize,k:usize)->bool{
+ let master_account=NHY_KeyView{key:keys[0]};let registry_program=keys[1];let loader=keys[2];let verifier_program=&keys[3];let pool_program=&keys[4];
+ let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};
+ let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=selected_lane;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[VERIFIER_ENTRY_SEED,keys[0].as_ref(),&PROFILE_BINDING,&RELEASE_BINDING,&[bump]];
+ kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ let expected_reply=match &reply{Ok(a)=>Some(a.as_ref()[k]),Err(_)=>None};
+ let result=NHY_pda_oracle(&[
+            VERIFIER_ENTRY_SEED,
+            master_account.key().as_ref(),
+            &PROFILE_BINDING,
+            &RELEASE_BINDING,
+            &[entry.bump],
+        ],
+        &registry_program,reply,i,j,k,&mut log).map_err(|_|ProgramError::InvalidAccountData);
+ let reply_ok=match (expected_reply,result){(Some(a),Ok(b))=>a==b.as_ref()[k],(None,Err(ProgramError::InvalidAccountData))=>true,_=>false};
+ log.calls==1 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==keys[1].as_ref()[k] && reply_ok
+}
+#[kani::proof_for_contract(pda5_packet)] #[kani::unwind(7)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn pda5(){let bytes:[[u8;32];5]=kani::any();let keys=bytes.map(Pubkey::new_from_array);pda5_packet(&keys,kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),NHY_pda_reply(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn pda5_wrong_packet(keys:&[Pubkey;5],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,selected_lane:u8,reply:Result<Pubkey,solana_program::pubkey::PubkeyError>,i:usize,j:usize,k:usize)->bool{
+ let master_account=NHY_KeyView{key:keys[0]};let registry_program=keys[1];let loader=keys[2];let verifier_program=&keys[3];let pool_program=&keys[4];
+ let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};
+ let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=selected_lane;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[VERIFIER_ENTRY_SEED,keys[0].as_ref(),&PROFILE_BINDING,&RELEASE_BINDING,&[bump]];
+ kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ let expected_reply=match &reply{Ok(a)=>Some(a.as_ref()[k]),Err(_)=>None};
+ let result=NHY_pda_oracle(&[
+            VERIFIER_ENTRY_SEED,
+            master_account.key().as_ref(),
+            &PROFILE_BINDING,
+            &RELEASE_BINDING,
+            &[entry.bump],
+        ],
+        &registry_program,reply,i,j,k,&mut log).map_err(|_|ProgramError::InvalidAccountData);
+ let reply_ok=match (expected_reply,result){(Some(a),Ok(b))=>a==b.as_ref()[k],(None,Err(ProgramError::InvalidAccountData))=>true,_=>false};
+ log.calls==2 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==keys[1].as_ref()[k] && reply_ok
+}
+#[kani::proof_for_contract(pda5_wrong_packet)] #[kani::unwind(7)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn pda5_wrong(){let bytes:[[u8;32];5]=kani::any();let keys=bytes.map(Pubkey::new_from_array);pda5_wrong_packet(&keys,kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),NHY_pda_reply(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn pda6_packet(keys:&[Pubkey;5],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,selected_lane:u8,reply:Result<Pubkey,solana_program::pubkey::PubkeyError>,i:usize,j:usize,k:usize)->bool{
+ let master_account=NHY_KeyView{key:keys[0]};let registry_program=keys[1];let loader=keys[2];let verifier_program=&keys[3];let pool_program=&keys[4];
+ let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};
+ let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=selected_lane;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[PAIR_FOREST_MASTER_SEED,asset_mint.as_slice(),&[bump]];
+ kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ let expected_reply=match &reply{Ok(a)=>Some(a.as_ref()[k]),Err(_)=>None};
+ let result=NHY_pda_oracle(&[
+                PAIR_FOREST_MASTER_SEED,
+                Pubkey::new_from_array(master.identity.asset_mint).as_ref(),
+                &[master.bump],
+            ],
+            pool_program,reply,i,j,k,&mut log).map_err(|_|ProgramError::InvalidAccountData);
+ let reply_ok=match (expected_reply,result){(Some(a),Ok(b))=>a==b.as_ref()[k],(None,Err(ProgramError::InvalidAccountData))=>true,_=>false};
+ log.calls==1 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==keys[4].as_ref()[k] && reply_ok
+}
+#[kani::proof_for_contract(pda6_packet)] #[kani::unwind(7)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn pda6(){let bytes:[[u8;32];5]=kani::any();let keys=bytes.map(Pubkey::new_from_array);pda6_packet(&keys,kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),NHY_pda_reply(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn pda6_wrong_packet(keys:&[Pubkey;5],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,selected_lane:u8,reply:Result<Pubkey,solana_program::pubkey::PubkeyError>,i:usize,j:usize,k:usize)->bool{
+ let master_account=NHY_KeyView{key:keys[0]};let registry_program=keys[1];let loader=keys[2];let verifier_program=&keys[3];let pool_program=&keys[4];
+ let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};
+ let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=selected_lane;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[PAIR_FOREST_MASTER_SEED,asset_mint.as_slice(),&[bump]];
+ kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ let expected_reply=match &reply{Ok(a)=>Some(a.as_ref()[k]),Err(_)=>None};
+ let result=NHY_pda_oracle(&[
+                PAIR_FOREST_MASTER_SEED,
+                Pubkey::new_from_array(master.identity.asset_mint).as_ref(),
+                &[master.bump],
+            ],
+            pool_program,reply,i,j,k,&mut log).map_err(|_|ProgramError::InvalidAccountData);
+ let reply_ok=match (expected_reply,result){(Some(a),Ok(b))=>a==b.as_ref()[k],(None,Err(ProgramError::InvalidAccountData))=>true,_=>false};
+ log.calls==2 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==keys[4].as_ref()[k] && reply_ok
+}
+#[kani::proof_for_contract(pda6_wrong_packet)] #[kani::unwind(7)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn pda6_wrong(){let bytes:[[u8;32];5]=kani::any();let keys=bytes.map(Pubkey::new_from_array);pda6_wrong_packet(&keys,kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),NHY_pda_reply(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn pda7_packet(keys:&[Pubkey;5],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,selected_lane:u8,reply:Result<Pubkey,solana_program::pubkey::PubkeyError>,i:usize,j:usize,k:usize)->bool{
+ let master_account=NHY_KeyView{key:keys[0]};let registry_program=keys[1];let loader=keys[2];let verifier_program=&keys[3];let pool_program=&keys[4];
+ let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};
+ let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=selected_lane;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[PAIR_FOREST_CHECKPOINT_SEED,keys[0].as_ref(),&checkpoint_sequence.to_le_bytes(),&[bump]];
+ kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ let expected_reply=match &reply{Ok(a)=>Some(a.as_ref()[k]),Err(_)=>None};
+ let result=NHY_pda_oracle(&[
+                PAIR_FOREST_CHECKPOINT_SEED,
+                master_account.key().as_ref(),
+                &checkpoint.checkpoint_sequence.to_le_bytes(),
+                &[checkpoint.bump],
+            ],
+            pool_program,reply,i,j,k,&mut log).map_err(|_|ProgramError::InvalidAccountData);
+ let reply_ok=match (expected_reply,result){(Some(a),Ok(b))=>a==b.as_ref()[k],(None,Err(ProgramError::InvalidAccountData))=>true,_=>false};
+ log.calls==1 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==keys[4].as_ref()[k] && reply_ok
+}
+#[kani::proof_for_contract(pda7_packet)] #[kani::unwind(7)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn pda7(){let bytes:[[u8;32];5]=kani::any();let keys=bytes.map(Pubkey::new_from_array);pda7_packet(&keys,kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),NHY_pda_reply(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn pda7_wrong_packet(keys:&[Pubkey;5],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,selected_lane:u8,reply:Result<Pubkey,solana_program::pubkey::PubkeyError>,i:usize,j:usize,k:usize)->bool{
+ let master_account=NHY_KeyView{key:keys[0]};let registry_program=keys[1];let loader=keys[2];let verifier_program=&keys[3];let pool_program=&keys[4];
+ let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};
+ let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=selected_lane;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[PAIR_FOREST_CHECKPOINT_SEED,keys[0].as_ref(),&checkpoint_sequence.to_le_bytes(),&[bump]];
+ kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ let expected_reply=match &reply{Ok(a)=>Some(a.as_ref()[k]),Err(_)=>None};
+ let result=NHY_pda_oracle(&[
+                PAIR_FOREST_CHECKPOINT_SEED,
+                master_account.key().as_ref(),
+                &checkpoint.checkpoint_sequence.to_le_bytes(),
+                &[checkpoint.bump],
+            ],
+            pool_program,reply,i,j,k,&mut log).map_err(|_|ProgramError::InvalidAccountData);
+ let reply_ok=match (expected_reply,result){(Some(a),Ok(b))=>a==b.as_ref()[k],(None,Err(ProgramError::InvalidAccountData))=>true,_=>false};
+ log.calls==2 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==keys[4].as_ref()[k] && reply_ok
+}
+#[kani::proof_for_contract(pda7_wrong_packet)] #[kani::unwind(7)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn pda7_wrong(){let bytes:[[u8;32];5]=kani::any();let keys=bytes.map(Pubkey::new_from_array);pda7_wrong_packet(&keys,kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),NHY_pda_reply(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn pda8_packet(keys:&[Pubkey;5],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,selected_lane:u8,reply:Result<Pubkey,solana_program::pubkey::PubkeyError>,i:usize,j:usize,k:usize)->bool{
+ let master_account=NHY_KeyView{key:keys[0]};let registry_program=keys[1];let loader=keys[2];let verifier_program=&keys[3];let pool_program=&keys[4];
+ let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};
+ let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=selected_lane;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[PAIR_FOREST_LANE_SEED,keys[0].as_ref(),&[output_lane],&[bump]];
+ kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ let expected_reply=match &reply{Ok(a)=>Some(a.as_ref()[k]),Err(_)=>None};
+ let result=NHY_pda_oracle(&[
+                PAIR_FOREST_LANE_SEED,
+                master_account.key().as_ref(),
+                &[output_lane],
+                &[selected_lane.bump],
+            ],
+            pool_program,reply,i,j,k,&mut log).map_err(|_|ProgramError::InvalidAccountData);
+ let reply_ok=match (expected_reply,result){(Some(a),Ok(b))=>a==b.as_ref()[k],(None,Err(ProgramError::InvalidAccountData))=>true,_=>false};
+ log.calls==1 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==keys[4].as_ref()[k] && reply_ok
+}
+#[kani::proof_for_contract(pda8_packet)] #[kani::unwind(7)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn pda8(){let bytes:[[u8;32];5]=kani::any();let keys=bytes.map(Pubkey::new_from_array);pda8_packet(&keys,kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),NHY_pda_reply(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn pda8_wrong_packet(keys:&[Pubkey;5],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,selected_lane:u8,reply:Result<Pubkey,solana_program::pubkey::PubkeyError>,i:usize,j:usize,k:usize)->bool{
+ let master_account=NHY_KeyView{key:keys[0]};let registry_program=keys[1];let loader=keys[2];let verifier_program=&keys[3];let pool_program=&keys[4];
+ let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};
+ let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=selected_lane;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[PAIR_FOREST_LANE_SEED,keys[0].as_ref(),&[output_lane],&[bump]];
+ kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ let expected_reply=match &reply{Ok(a)=>Some(a.as_ref()[k]),Err(_)=>None};
+ let result=NHY_pda_oracle(&[
+                PAIR_FOREST_LANE_SEED,
+                master_account.key().as_ref(),
+                &[output_lane],
+                &[selected_lane.bump],
+            ],
+            pool_program,reply,i,j,k,&mut log).map_err(|_|ProgramError::InvalidAccountData);
+ let reply_ok=match (expected_reply,result){(Some(a),Ok(b))=>a==b.as_ref()[k],(None,Err(ProgramError::InvalidAccountData))=>true,_=>false};
+ log.calls==2 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==keys[4].as_ref()[k] && reply_ok
+}
+#[kani::proof_for_contract(pda8_wrong_packet)] #[kani::unwind(7)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn pda8_wrong(){let bytes:[[u8;32];5]=kani::any();let keys=bytes.map(Pubkey::new_from_array);pda8_wrong_packet(&keys,kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),NHY_pda_reply(),kani::any(),kani::any(),kani::any());}
+
+// NHY split PDA
+fn NHY_seed_oracle(seeds:&[&[u8]],program:&Pubkey,i:usize,j:usize,k:usize,log:&mut NHY_PdaLog){log.calls+=1;log.seed_count=seeds.len();log.seed_len=seeds[i].len();log.seed_byte=seeds[i][j];log.program_byte=program.as_ref()[k];}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn seed0_packet(key:[u8;32],program_key:[u8;32],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,lane_id:u8,i:usize,j:usize,k:usize)->bool{
+ let master_account=NHY_KeyView{key:Pubkey::new_from_array(key)};let registry_program=Pubkey::new_from_array(program_key);let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=lane_id;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[VERIFIER_REGISTRY_V2_SEED,key.as_slice(),&[bump]];kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ NHY_seed_oracle(&[
+                VERIFIER_REGISTRY_V2_SEED,
+                master_account.key().as_ref(),
+                &[registry.bump],
+            ],
+            &registry_program,i,j,k,&mut log);
+ log.calls==1 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==program_key[k]
+}
+#[kani::proof_for_contract(seed0_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn seed0(){seed0_packet(kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn seed0_wrong_packet(key:[u8;32],program_key:[u8;32],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,lane_id:u8,i:usize,j:usize,k:usize)->bool{
+ let master_account=NHY_KeyView{key:Pubkey::new_from_array(key)};let registry_program=Pubkey::new_from_array(program_key);let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=lane_id;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[VERIFIER_REGISTRY_V2_SEED,key.as_slice(),&[bump]];kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ NHY_seed_oracle(&[
+                VERIFIER_REGISTRY_V2_SEED,
+                master_account.key().as_ref(),
+                &[registry.bump],
+            ],
+            &registry_program,i,j,k,&mut log);
+ log.calls==2 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==program_key[k]
+}
+#[kani::proof_for_contract(seed0_wrong_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn seed0_wrong(){seed0_wrong_packet(kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn seed1_packet(key:[u8;32],program_key:[u8;32],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,lane_id:u8,i:usize,j:usize,k:usize)->bool{
+ let registry_program=Pubkey::new_from_array(key);let loader=Pubkey::new_from_array(program_key);let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=lane_id;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[key.as_slice(),&[programdata_bump]];kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ NHY_seed_oracle(&[registry_program.as_ref(), &[registry.programdata_bump]],
+            &loader,i,j,k,&mut log);
+ log.calls==1 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==program_key[k]
+}
+#[kani::proof_for_contract(seed1_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn seed1(){seed1_packet(kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn seed1_wrong_packet(key:[u8;32],program_key:[u8;32],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,lane_id:u8,i:usize,j:usize,k:usize)->bool{
+ let registry_program=Pubkey::new_from_array(key);let loader=Pubkey::new_from_array(program_key);let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=lane_id;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[key.as_slice(),&[programdata_bump]];kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ NHY_seed_oracle(&[registry_program.as_ref(), &[registry.programdata_bump]],
+            &loader,i,j,k,&mut log);
+ log.calls==2 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==program_key[k]
+}
+#[kani::proof_for_contract(seed1_wrong_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn seed1_wrong(){seed1_wrong_packet(kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn seed2_packet(key:[u8;32],program_key:[u8;32],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,lane_id:u8,i:usize,j:usize,k:usize)->bool{
+ let master_account=NHY_KeyView{key:Pubkey::new_from_array(key)};let registry_program=Pubkey::new_from_array(program_key);let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=lane_id;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[VERIFIER_ENTRY_V2_SEED,key.as_slice(),&PROFILE_BINDING,&RELEASE_BINDING,&[bump]];kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ NHY_seed_oracle(&[
+                VERIFIER_ENTRY_V2_SEED,
+                master_account.key().as_ref(),
+                &PROFILE_BINDING,
+                &RELEASE_BINDING,
+                &[entry.bump],
+            ],
+            &registry_program,i,j,k,&mut log);
+ log.calls==1 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==program_key[k]
+}
+#[kani::proof_for_contract(seed2_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn seed2(){seed2_packet(kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn seed2_wrong_packet(key:[u8;32],program_key:[u8;32],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,lane_id:u8,i:usize,j:usize,k:usize)->bool{
+ let master_account=NHY_KeyView{key:Pubkey::new_from_array(key)};let registry_program=Pubkey::new_from_array(program_key);let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=lane_id;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[VERIFIER_ENTRY_V2_SEED,key.as_slice(),&PROFILE_BINDING,&RELEASE_BINDING,&[bump]];kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ NHY_seed_oracle(&[
+                VERIFIER_ENTRY_V2_SEED,
+                master_account.key().as_ref(),
+                &PROFILE_BINDING,
+                &RELEASE_BINDING,
+                &[entry.bump],
+            ],
+            &registry_program,i,j,k,&mut log);
+ log.calls==2 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==program_key[k]
+}
+#[kani::proof_for_contract(seed2_wrong_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn seed2_wrong(){seed2_wrong_packet(kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn seed3_packet(key:[u8;32],program_key:[u8;32],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,lane_id:u8,i:usize,j:usize,k:usize)->bool{
+ let verifier_key=Pubkey::new_from_array(key);let verifier_program=&verifier_key;let loader=Pubkey::new_from_array(program_key);let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=lane_id;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[key.as_slice(),&[programdata_bump]];kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ NHY_seed_oracle(&[verifier_program.as_ref(), &[entry.programdata_bump]],
+            &loader,i,j,k,&mut log);
+ log.calls==1 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==program_key[k]
+}
+#[kani::proof_for_contract(seed3_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn seed3(){seed3_packet(kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn seed3_wrong_packet(key:[u8;32],program_key:[u8;32],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,lane_id:u8,i:usize,j:usize,k:usize)->bool{
+ let verifier_key=Pubkey::new_from_array(key);let verifier_program=&verifier_key;let loader=Pubkey::new_from_array(program_key);let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=lane_id;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[key.as_slice(),&[programdata_bump]];kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ NHY_seed_oracle(&[verifier_program.as_ref(), &[entry.programdata_bump]],
+            &loader,i,j,k,&mut log);
+ log.calls==2 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==program_key[k]
+}
+#[kani::proof_for_contract(seed3_wrong_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn seed3_wrong(){seed3_wrong_packet(kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn seed4_packet(key:[u8;32],program_key:[u8;32],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,lane_id:u8,i:usize,j:usize,k:usize)->bool{
+ let master_account=NHY_KeyView{key:Pubkey::new_from_array(key)};let registry_program=Pubkey::new_from_array(program_key);let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=lane_id;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[VERIFIER_REGISTRY_SEED,key.as_slice(),&[bump]];kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ NHY_seed_oracle(&[
+            VERIFIER_REGISTRY_SEED,
+            master_account.key().as_ref(),
+            &[registry.bump],
+        ],
+        &registry_program,i,j,k,&mut log);
+ log.calls==1 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==program_key[k]
+}
+#[kani::proof_for_contract(seed4_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn seed4(){seed4_packet(kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn seed4_wrong_packet(key:[u8;32],program_key:[u8;32],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,lane_id:u8,i:usize,j:usize,k:usize)->bool{
+ let master_account=NHY_KeyView{key:Pubkey::new_from_array(key)};let registry_program=Pubkey::new_from_array(program_key);let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=lane_id;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[VERIFIER_REGISTRY_SEED,key.as_slice(),&[bump]];kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ NHY_seed_oracle(&[
+            VERIFIER_REGISTRY_SEED,
+            master_account.key().as_ref(),
+            &[registry.bump],
+        ],
+        &registry_program,i,j,k,&mut log);
+ log.calls==2 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==program_key[k]
+}
+#[kani::proof_for_contract(seed4_wrong_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn seed4_wrong(){seed4_wrong_packet(kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn seed5_packet(key:[u8;32],program_key:[u8;32],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,lane_id:u8,i:usize,j:usize,k:usize)->bool{
+ let master_account=NHY_KeyView{key:Pubkey::new_from_array(key)};let registry_program=Pubkey::new_from_array(program_key);let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=lane_id;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[VERIFIER_ENTRY_SEED,key.as_slice(),&PROFILE_BINDING,&RELEASE_BINDING,&[bump]];kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ NHY_seed_oracle(&[
+            VERIFIER_ENTRY_SEED,
+            master_account.key().as_ref(),
+            &PROFILE_BINDING,
+            &RELEASE_BINDING,
+            &[entry.bump],
+        ],
+        &registry_program,i,j,k,&mut log);
+ log.calls==1 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==program_key[k]
+}
+#[kani::proof_for_contract(seed5_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn seed5(){seed5_packet(kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn seed5_wrong_packet(key:[u8;32],program_key:[u8;32],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,lane_id:u8,i:usize,j:usize,k:usize)->bool{
+ let master_account=NHY_KeyView{key:Pubkey::new_from_array(key)};let registry_program=Pubkey::new_from_array(program_key);let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=lane_id;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[VERIFIER_ENTRY_SEED,key.as_slice(),&PROFILE_BINDING,&RELEASE_BINDING,&[bump]];kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ NHY_seed_oracle(&[
+            VERIFIER_ENTRY_SEED,
+            master_account.key().as_ref(),
+            &PROFILE_BINDING,
+            &RELEASE_BINDING,
+            &[entry.bump],
+        ],
+        &registry_program,i,j,k,&mut log);
+ log.calls==2 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==program_key[k]
+}
+#[kani::proof_for_contract(seed5_wrong_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn seed5_wrong(){seed5_wrong_packet(kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn seed6_packet(key:[u8;32],program_key:[u8;32],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,lane_id:u8,i:usize,j:usize,k:usize)->bool{
+ let pool_key=Pubkey::new_from_array(program_key);let pool_program=&pool_key;let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=lane_id;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[PAIR_FOREST_MASTER_SEED,asset_mint.as_slice(),&[bump]];kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ NHY_seed_oracle(&[
+                PAIR_FOREST_MASTER_SEED,
+                Pubkey::new_from_array(master.identity.asset_mint).as_ref(),
+                &[master.bump],
+            ],
+            pool_program,i,j,k,&mut log);
+ log.calls==1 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==program_key[k]
+}
+#[kani::proof_for_contract(seed6_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn seed6(){seed6_packet(kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn seed6_wrong_packet(key:[u8;32],program_key:[u8;32],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,lane_id:u8,i:usize,j:usize,k:usize)->bool{
+ let pool_key=Pubkey::new_from_array(program_key);let pool_program=&pool_key;let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=lane_id;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[PAIR_FOREST_MASTER_SEED,asset_mint.as_slice(),&[bump]];kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ NHY_seed_oracle(&[
+                PAIR_FOREST_MASTER_SEED,
+                Pubkey::new_from_array(master.identity.asset_mint).as_ref(),
+                &[master.bump],
+            ],
+            pool_program,i,j,k,&mut log);
+ log.calls==2 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==program_key[k]
+}
+#[kani::proof_for_contract(seed6_wrong_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn seed6_wrong(){seed6_wrong_packet(kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn seed7_packet(key:[u8;32],program_key:[u8;32],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,lane_id:u8,i:usize,j:usize,k:usize)->bool{
+ let master_account=NHY_KeyView{key:Pubkey::new_from_array(key)};let pool_key=Pubkey::new_from_array(program_key);let pool_program=&pool_key;let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=lane_id;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[PAIR_FOREST_CHECKPOINT_SEED,key.as_slice(),&checkpoint_sequence.to_le_bytes(),&[bump]];kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ NHY_seed_oracle(&[
+                PAIR_FOREST_CHECKPOINT_SEED,
+                master_account.key().as_ref(),
+                &checkpoint.checkpoint_sequence.to_le_bytes(),
+                &[checkpoint.bump],
+            ],
+            pool_program,i,j,k,&mut log);
+ log.calls==1 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==program_key[k]
+}
+#[kani::proof_for_contract(seed7_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn seed7(){seed7_packet(kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn seed7_wrong_packet(key:[u8;32],program_key:[u8;32],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,lane_id:u8,i:usize,j:usize,k:usize)->bool{
+ let master_account=NHY_KeyView{key:Pubkey::new_from_array(key)};let pool_key=Pubkey::new_from_array(program_key);let pool_program=&pool_key;let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=lane_id;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[PAIR_FOREST_CHECKPOINT_SEED,key.as_slice(),&checkpoint_sequence.to_le_bytes(),&[bump]];kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ NHY_seed_oracle(&[
+                PAIR_FOREST_CHECKPOINT_SEED,
+                master_account.key().as_ref(),
+                &checkpoint.checkpoint_sequence.to_le_bytes(),
+                &[checkpoint.bump],
+            ],
+            pool_program,i,j,k,&mut log);
+ log.calls==2 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==program_key[k]
+}
+#[kani::proof_for_contract(seed7_wrong_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn seed7_wrong(){seed7_wrong_packet(kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn seed8_packet(key:[u8;32],program_key:[u8;32],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,lane_id:u8,i:usize,j:usize,k:usize)->bool{
+ let master_account=NHY_KeyView{key:Pubkey::new_from_array(key)};let pool_key=Pubkey::new_from_array(program_key);let pool_program=&pool_key;let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=lane_id;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[PAIR_FOREST_LANE_SEED,key.as_slice(),&[lane_id],&[bump]];kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ NHY_seed_oracle(&[
+                PAIR_FOREST_LANE_SEED,
+                master_account.key().as_ref(),
+                &[output_lane],
+                &[selected_lane.bump],
+            ],
+            pool_program,i,j,k,&mut log);
+ log.calls==1 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==program_key[k]
+}
+#[kani::proof_for_contract(seed8_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn seed8(){seed8_packet(kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn seed8_wrong_packet(key:[u8;32],program_key:[u8;32],asset_mint:[u8;32],bump:u8,programdata_bump:u8,checkpoint_sequence:u64,lane_id:u8,i:usize,j:usize,k:usize)->bool{
+ let master_account=NHY_KeyView{key:Pubkey::new_from_array(key)};let pool_key=Pubkey::new_from_array(program_key);let pool_program=&pool_key;let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=lane_id;let selected_lane=NHY_Lane{bump};
+ let expected:&[&[u8]]=&[PAIR_FOREST_LANE_SEED,key.as_slice(),&[lane_id],&[bump]];kani::assume(i<expected.len());kani::assume(j<expected[i].len());kani::assume(k<32);
+ let mut log=NHY_PdaLog{calls:0,seed_count:0,seed_len:0,seed_byte:0,program_byte:0};
+ NHY_seed_oracle(&[
+                PAIR_FOREST_LANE_SEED,
+                master_account.key().as_ref(),
+                &[output_lane],
+                &[selected_lane.bump],
+            ],
+            pool_program,i,j,k,&mut log);
+ log.calls==2 && log.seed_count==expected.len() && log.seed_len==expected[i].len() && log.seed_len<=32 && expected.len()<=16 && log.seed_byte==expected[i][j] && log.program_byte==program_key[k]
+}
+#[kani::proof_for_contract(seed8_wrong_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn seed8_wrong(){seed8_wrong_packet(kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn pda_reply_packet(reply:Result<Pubkey,solana_program::pubkey::PubkeyError>,j:usize)->bool{
+ kani::assume(j<32);let expected=match &reply{Ok(k)=>Some(k.as_ref()[j]),Err(_)=>None};
+ let result=reply.map_err(|_|ProgramError::InvalidAccountData);
+ (match (expected,result){(Some(x),Ok(key))=>x==key.as_ref()[j],(None,Err(ProgramError::InvalidAccountData))=>true,_=>false})
+}
+#[kani::proof_for_contract(pda_reply_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn pda_reply(){pda_reply_packet(NHY_pda_reply(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn pda_reply_wrong_packet(reply:Result<Pubkey,solana_program::pubkey::PubkeyError>,j:usize)->bool{
+ kani::assume(j<32);let expected=match &reply{Ok(k)=>Some(k.as_ref()[j]),Err(_)=>None};
+ let result=reply.map_err(|_|ProgramError::InvalidAccountData);
+ !(match (expected,result){(Some(x),Ok(key))=>x==key.as_ref()[j],(None,Err(ProgramError::InvalidAccountData))=>true,_=>false})
+}
+#[kani::proof_for_contract(pda_reply_wrong_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn pda_reply_wrong(){pda_reply_wrong_packet(NHY_pda_reply(),kani::any());}

@@ -1,3 +1,10 @@
+import NHY_EntryHeader
+import NHY_RegistryHeader
+import NHY_WindowTransport
+import NHY_ParsedBodies
+import NHY_FieldRead
+import NHY_ExactArray
+import NHY_SliceRead
 import NHY_ZeroLoop
 import NHY_ZeroStep
 import NHY_ZeroRun
@@ -93,3 +100,30 @@ import NHY_ZeroBinding
 #print axioms NHY_NCXValidators.result_roundtrip
 #print axioms NHY_NCXValidators.inverse_result_roundtrip
 #print axioms NHY_NCXValidators.zero_child
+
+#print axioms NHY_SliceRead.length
+#print axioms NHY_SliceRead.read
+#print axioms NHY_ExactArray.cast
+#print axioms NHY_FieldRead.range
+#print axioms NHY_FieldRead.bytes32
+#print axioms NHY_FieldRead.word64
+#print axioms NHY_ParsedBodies.registry
+#print axioms NHY_ParsedBodies.entry
+#print axioms NHY_WindowTransport.bounds
+#print axioms NHY_WindowTransport.nested
+#print axioms NHY_WindowTransport.field
+#print axioms NHY_WindowTransport.array_domain
+#print axioms NHY_WindowTransport.word_domain
+
+#print axioms NHY_NCXValidators.native_registry_domain
+#print axioms NHY_NCXValidators.native_entry_domain
+#print axioms NHY_RegistryHeader.wrong_length
+#print axioms NHY_RegistryHeader.wrong_magic
+#print axioms NHY_RegistryHeader.wrong_version
+#print axioms NHY_RegistryHeader.wrong_mode
+#print axioms NHY_RegistryHeader.reserved
+#print axioms NHY_EntryHeader.wrong_length
+#print axioms NHY_EntryHeader.wrong_magic
+#print axioms NHY_EntryHeader.wrong_version
+#print axioms NHY_EntryHeader.wrong_mode
+#print axioms NHY_EntryHeader.reserved

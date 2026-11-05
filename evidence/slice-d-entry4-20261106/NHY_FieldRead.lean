@@ -3,7 +3,7 @@ import NHY_SliceRead
 import NHY_ExactArray
 set_option autoImplicit false
 namespace NHY_FieldRead
-open Aeneas Aeneas.Std Result AspisR1
+open Aeneas Aeneas.Std Result WP
 theorem range (b : Slice U8) (s : Usize) (n : Usize)
     (fit : s.val+n.val ≤ b.val.length) :
     ∃ stop : Usize, s+n=ok stop ∧ stop.val=s.val+n.val ∧

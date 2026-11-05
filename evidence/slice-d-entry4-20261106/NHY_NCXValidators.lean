@@ -55,6 +55,15 @@ validators. Native private helper K046/047 has this complete input domain. -/
 theorem zero_child (value : Array U8 32#usize) :
     NCX_Reference.required_binding_is_zero value = NHY_ZeroBinding.binding_ref value := NHY_AllZeroBridge.source value
 
+theorem native_registry_domain (r : VerifierRegistryV2) :
+    NCX_Carrier.registry (NCX_Carrier.from_registry r)=r := NCX_Carrier.registry_surjective r
+
+theorem native_entry_domain (r : VerifierRegistryEntryV2) :
+    NCX_Carrier.entry (NCX_Carrier.from_entry r)=r := NCX_Carrier.entry_surjective r
+
+#print axioms native_registry_domain
+#print axioms native_entry_domain
+
 #print axioms registry_source
 #print axioms entry_source
 #print axioms result_roundtrip
