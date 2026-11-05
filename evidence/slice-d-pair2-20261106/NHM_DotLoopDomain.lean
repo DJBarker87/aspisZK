@@ -34,15 +34,15 @@ theorem byte_step (f : Slice U8) (q : Slice NHM_DotPacket.NQ) (n : Nat)
 
 theorem high_all (p : Array NHM_DotPacket.NE 4#usize) (q : Array NHM_DotPacket.NQ 4#usize) :
  NHM_LoopDomain.all (NHM_HighDot.body p q) (Inv 4) 5 (initial 4#usize) :=
- NHM_LoopDomain.invariant _ _ (high_step p q) _ _ (initial_domain _)
+ NHM_LoopDomain.invariant _ _ (high_step p q) _ _ (initial_domain 4#usize)
 
 theorem partial_all (f : Slice U8) (q : Array NHM_DotPacket.NQ 16#usize) (offset : Usize) :
  NHM_LoopDomain.all (NHM_PartialDot.body f q offset) (Inv 16) 17 (initial 16#usize) :=
- NHM_LoopDomain.invariant _ _ (partial_step f q offset) _ _ (initial_domain _)
+ NHM_LoopDomain.invariant _ _ (partial_step f q offset) _ _ (initial_domain 16#usize)
 
 theorem byte_all (f : Slice U8) (q : Slice NHM_DotPacket.NQ) :
  NHM_LoopDomain.all (NHM_ByteProducts.body f q) (Inv 64) 65 (initial 64#usize) :=
- NHM_LoopDomain.invariant _ _ (byte_step f q 64) _ _ (initial_domain _)
+ NHM_LoopDomain.invariant _ _ (byte_step f q 64) _ _ (initial_domain 64#usize)
 
 #print axioms initial_domain
 #print axioms high_step

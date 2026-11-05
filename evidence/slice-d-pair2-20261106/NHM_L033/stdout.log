@@ -1,0 +1,107 @@
+NHM_generated/NHM_GroupWeight.lean:26:1: error: Tactic `rfl` failed: The left-hand side
+  do
+    let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize s.1
+    match o with
+      | none => ok (done s.2)
+      | some bit => do
+        let challenge ← low.index_usize bit
+        let i ← FIo_Native.weights.S2_INACTIVE_MASKS.index_usize group
+        let i1 ← 1#u16 <<< bit
+        if (i &&& i1 != 0#u16) = true then do
+            let weight1 ← FIo_Native.aspis_core.field.wide_exact.WideExact.add s.2 challenge
+            ok (cont (iter1, weight1))
+          else ok (cont (iter1, s.2))
+is not definitionally equal to the right-hand side
+  do
+    let (o, next) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize s.1
+    match o with
+      | none => ok (done s.2)
+      | some bit => do
+        let x ← low.index_usize bit
+        let x_1 ← FIo_Native.weights.S2_INACTIVE_MASKS.index_usize group
+        let x_2 ← 1#u16 <<< bit
+        let value ←
+          if (x_1 &&& x_2 != 0#u16) = true then FIo_Native.aspis_core.field.wide_exact.WideExact.add s.2 x else ok s.2
+        ok (cont (next, value))
+
+low : Std.Array NE 16#usize
+group : Usize
+s : State
+⊢ (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize s.1
+      match o with
+        | none => ok (done s.2)
+        | some bit => do
+          let challenge ← low.index_usize bit
+          let i ← FIo_Native.weights.S2_INACTIVE_MASKS.index_usize group
+          let i1 ← 1#u16 <<< bit
+          if (i &&& i1 != 0#u16) = true then do
+              let weight1 ← FIo_Native.aspis_core.field.wide_exact.WideExact.add s.2 challenge
+              ok (cont (iter1, weight1))
+            else ok (cont (iter1, s.2))) =
+    do
+    let (o, next) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize s.1
+    match o with
+      | none => ok (done s.2)
+      | some bit => do
+        let x ← low.index_usize bit
+        let x_1 ← FIo_Native.weights.S2_INACTIVE_MASKS.index_usize group
+        let x_2 ← 1#u16 <<< bit
+        let value ←
+          if (x_1 &&& x_2 != 0#u16) = true then FIo_Native.aspis_core.field.wide_exact.WideExact.add s.2 x else ok s.2
+        ok (cont (next, value))
+NHM_generated/NHM_GroupWeight.lean:35:1: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  (have bits := mask &&& shifted;
+    if (bits != 0#u16) = true then FIo_Native.aspis_core.field.wide_exact.WideExact.add before challenge
+    else ok before) =
+    ok out
+of `run`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+low : Std.Array NE 16#usize
+hl : ∀ x ∈ ↑low, canonE x
+group bit : Usize
+before out : NE
+hb : canonE before
+run✝² :
+  (do
+      let challenge ← low.index_usize bit
+      let mask ← FIo_Native.weights.S2_INACTIVE_MASKS.index_usize group
+      let shifted ← 1#u16 <<< bit
+      have bits : UScalar UScalarTy.U16 := mask &&& shifted
+      if (bits != 0#u16) = true then FIo_Native.aspis_core.field.wide_exact.WideExact.add before challenge
+        else ok before) =
+    ok out
+challenge : NE
+hc : low.index_usize bit = ok challenge
+run✝¹ :
+  (do
+      let mask ← FIo_Native.weights.S2_INACTIVE_MASKS.index_usize group
+      let shifted ← 1#u16 <<< bit
+      have bits : UScalar UScalarTy.U16 := mask &&& shifted
+      if (bits != 0#u16) = true then FIo_Native.aspis_core.field.wide_exact.WideExact.add before challenge
+        else ok before) =
+    ok out
+mask : U16
+hm : FIo_Native.weights.S2_INACTIVE_MASKS.index_usize group = ok mask
+run✝ :
+  (do
+      let shifted ← 1#u16 <<< bit
+      have bits : UScalar UScalarTy.U16 := mask &&& shifted
+      if (bits != 0#u16) = true then FIo_Native.aspis_core.field.wide_exact.WideExact.add before challenge
+        else ok before) =
+    ok out
+shifted : UScalar UScalarTy.U16
+hs : 1#u16 <<< bit = ok shifted
+run :
+  (have bits := mask &&& shifted;
+    if (bits != 0#u16) = true then FIo_Native.aspis_core.field.wide_exact.WideExact.add before challenge
+    else ok before) =
+    ok out
+⊢ canonE out
+'NHM_GroupWeight.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NHM_GroupWeight.canonical' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NHM_GroupWeight.progress' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NHM_GroupWeight.decreases' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NHM_GroupWeight.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

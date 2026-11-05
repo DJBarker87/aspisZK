@@ -52,7 +52,7 @@ if kind=='kani':
  env.update(CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-Copt-level=3 -C link-arg=-Wl,--threads=1')
  import os
  if os.environ.get('NHM_INVERT'):
-  flag=os.environ.get('NHM_NATIVE_CFG','NHM_invert');assert flag in ['NHM_invert','NGM_invert'];env['RUSTFLAGS']+=' --cfg '+flag
+  flag=os.environ.get('NHM_NATIVE_CFG','NHM_invert');assert flag in ['NHM_invert','NGM_invert','NHM_corrupt','NHM_mask_wrong'];env['RUSTFLAGS']+=' --cfg '+flag
 elif kind=='extract':
  files['NHM_extract.py']=(E/'NHM_extract.py').read_text()
  name={'NHM_WindowRef':'NHM_window_reference.rs.patch','NHM_ControlRef':'NHM_control_reference.rs.patch'}[target]
@@ -72,9 +72,9 @@ elif kind=='linkaudit':
  sources=['NHM_native/'+target+'.c','NHM_native/NFA_WALKER.c','NHM_native/NFA_MemoryLimit.c']
  command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NHM_native/'+target,*sources]
 elif kind=='auditbatch':
- for n in ['NHM_audit_batch.py','NHM_AUDIT_ROOTS.json','NHM_EXPECTED_IMPORTS.jsonl']:
+ for n in ['NHM_audit_batch.py','NHM_AUDIT_ROOTS.json','NHM_EXPECTED_IMPORTS.jsonl','NHM_AUDIT_PINS.json']:
   files[n]=(E/n).read_text()
- sources=['NHM_generated/NHM_ProofDriver.lean','NHM_generated/NHM_Driver.lean','NHM_audit_batch.py','NHM_AUDIT_ROOTS.json','NHM_EXPECTED_IMPORTS.jsonl','NHM_native/NHM_ProofDriver.c','NHM_native/NHM_Driver.c','NHM_native/NFA_WALKER.c','NHM_native/NFA_MemoryLimit.c']
+ sources=['NHM_generated/NHM_ProofDriver.lean','NHM_generated/NHM_Driver.lean','NHM_audit_batch.py','NHM_AUDIT_ROOTS.json','NHM_EXPECTED_IMPORTS.jsonl','NHM_AUDIT_PINS.json','NHM_native/NHM_ProofDriver.c','NHM_native/NHM_Driver.c','NHM_native/NFA_WALKER.c','NHM_native/NFA_MemoryLimit.c']
  command=['python3','NHM_audit_batch.py']
 elif kind=='auditbin':
  import os
@@ -161,4 +161,4 @@ with (E/'NHM_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(rc)+'\n')
 if kind=='kani':
  import runpy
  runpy.run_path(str(E/'NHM_pack_inputs.py'))
-print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}));print('\n'.join(line for line in out[a+'/stdout.log'].splitlines() if 'error:' in line or 'depends on axioms:' in line or 'VERIFICATION:' in line or 'Verification Time:' in line));sys.exit(rc['exit_status'])
+print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}));print('\n'.join(line for line in out[a+'/stdout.log'].splitlines() if ('error:' in line or 'VERIFICATION:' in line or 'Verification Time:' in line or ('depends on axioms:' in line and kind!='auditbatch') or 'FINAL_AUDIT' in line or 'SCAN_' in line)));sys.exit(rc['exit_status'])

@@ -28,20 +28,20 @@ theorem cohort (reservation : Reservation) (value : NQ) :
   simp only [NHI_FilledModel.result,FIo_FieldBridge.map,bind_tc_ok,reply,
    encode,NHI_FilledModel.vector,List.map_replicate]
 
-def initialize {T : Type} (value : T) : Nat→List T
+def cells {T : Type} (value : T) : Nat→List T
  | 0=>[]
- | n+1=>initialize value n ++ [value]
+ | n+1=>cells value n ++ [value]
 
 theorem initialization {T : Type} (value : T) (n : Nat) :
- initialize value n=List.replicate n value := by
+ cells value n=List.replicate n value := by
  induction n with
  | zero=>rfl
- | succ n ih=>rw [initialize,ih,NHM_FilledFrame.grow]
+ | succ n ih=>rw [cells,ih,NHM_FilledFrame.grow]
 
-/-- The same native window invariant supplies every initialized cell, and the
+/-- The same native window invariant supplies every cellsd cell, and the
 arbitrary-prefix frame theorem applies at every step of this induction. -/
 theorem selected {T : Type} (value : T) (n i : Nat) (bound : i<n) :
- (initialize value n)[i]?=some value := by
+ (cells value n)[i]?=some value := by
  rw [initialization]
  simp [bound]
 

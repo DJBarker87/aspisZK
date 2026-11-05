@@ -18,7 +18,7 @@ namespace NHM_ControlRef
     Source: 'src/lib.rs', lines 1:22-1:43
     Visibility: public -/
 @[discriminant isize]
-inductive Error where
-| Parse : Error
+inductive NHM_ControlError where
+| Parse : NHM_ControlError
 
 end NHM_ControlRef

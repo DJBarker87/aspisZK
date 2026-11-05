@@ -1,0 +1,35 @@
+import NHM_GroupAccum
+set_option autoImplicit false
+namespace NHM_FinalFold
+open Aeneas Aeneas.Std Result AspisR1 LPi_FieldValues
+
+/-- Operand order is power then part, as in frozen pair_loop17. -/
+def cell (sum power part : NE) : Result NE := do
+ let product ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul power part
+ FIo_Native.aspis_core.field.wide_exact.WideExact.add sum product
+
+theorem cell_total (sum power part : NE) (hs : canonE sum) (hp : canonE power) (hc : canonE part) :
+ ∃ out,cell sum power part=ok out ∧ canonE out := by
+ obtain ⟨product,hm,cm,_⟩:=LPi_TowerValues.wide_mul power part hp hc
+ obtain ⟨out,ha,ca⟩:=NGW_PolynomialAdd.total sum product hs cm
+ exact ⟨out,by simp only [cell,hm,ha,bind_tc_ok],ca⟩
+
+def fold : List (NE×NE)→NE→Result NE
+ | [],sum=>ok sum
+ | pair::rest,sum=>do let next ← cell sum pair.1 pair.2;fold rest next
+
+/-- Model support for the seven-part kappa fold. This does not establish the
+caller producer of SAME canonical powers7 or the native final fold. -/
+theorem total (pairs : List (NE×NE)) (hc : ∀ p∈pairs,canonE p.1 ∧ canonE p.2)
+ (sum : NE) (hs : canonE sum) : ∃ out,fold pairs sum=ok out ∧ canonE out := by
+ induction pairs generalizing sum with
+ | nil=>exact ⟨sum,rfl,hs⟩
+ | cons p rest ih=>
+  have cp:=hc p (by simp)
+  obtain ⟨next,hn,cn⟩:=cell_total sum p.1 p.2 hs cp.1 cp.2
+  obtain ⟨out,ho,co⟩:=ih (fun p hp=>hc p (by simp [hp])) next cn
+  exact ⟨out,by simp only [fold,hn,ho,bind_tc_ok],co⟩
+
+#print axioms cell_total
+#print axioms total
+end NHM_FinalFold

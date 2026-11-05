@@ -1,0 +1,38 @@
+{"attempt": "NHM_L079", "exit_status": 0, "wall_seconds": 3.2219035550951958, "peak_rss_kib": "5926456", "swaps": "0", "print_axioms": ["'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NHM_GroupRoot.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NHM_SharedPartials.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NHM_SharedHigh.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NHM_RegularKinds.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.RPx_Deployed.deployed {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)) (sdk : AspisR1.S2Trust.S2TrustedSdkBorrow L)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (std : AspisR1.S2W_TrustedStd.TrustedStd copy) (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W)
+  (admission1 : AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3)
+  (admission2 : AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7)
+  (missing : AspisR1.IDa_Deployed.U
+...
+lt.Result.Ok out))
+  (x : AspisR1.LPi_FieldValues.NE) : x ∈ ↑out → AspisR1.LPi_FieldValues.canonE x
+NHM_SharedHigh.cohort (partials : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 4#usize) (w : FIo_Native.weights.Weights)
+  (ap0 ap1 : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 4#usize)
+  (parts : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 7#usize) :
+  FIo_Native.weights.shared_high partials w ap0 ap1 parts = NHM_SharedHigh.reference partials w ap0 ap1 parts
+NHM_RegularKinds.cohort [FIo_Native.Allocation] (w : FIo_Native.weights.Weights) (shared : Bool)
+  (alpha : Aeneas.Std.Slice AspisR1.LPi_FieldValues.NE) (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (folds n : Aeneas.Std.Usize) (ap0 ap1 : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 4#usize)
+  (scratch : NHM_RegularKinds.Scratch) (parts : NHM_RegularKinds.Parts) :
+  FIo_Native.weights.process_regular_kinds w shared alpha f folds n ap0 ap1 scratch parts =
+    NHM_RegularKinds.reference w shared alpha f folds n ap0 ap1 scratch parts
+def NHM_RegularKinds.go : (Aeneas.Std.Usize →
+    NHM_RegularKinds.Scratch → NHM_RegularKinds.Parts → Aeneas.Std.Result NHM_RegularKinds.Reply) →
+  List Aeneas.Std.Usize →
+    NHM_RegularKinds.Scratch → NHM_RegularKinds.Parts → Aeneas.Std.Result NHM_RegularKinds.Reply :=
+fun child x x_1 x_2 =>
+  List.brecOn (motive := fun x =>
+    NHM_RegularKinds.Scratch → NHM_RegularKinds.Parts → Aeneas.Std.Result NHM_RegularKinds.Reply) x
+    (NHM_RegularKinds.go._f child) x_1 x_2
+'NHM_GroupRoot.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NHM_SharedPartials.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NHM_SharedHigh.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NHM_RegularKinds.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rad34884b8418473e963a54629b38b1a4.scope; invocation ID: 3ec8c729fc47467db1ce3404754027ac

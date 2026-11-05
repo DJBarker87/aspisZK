@@ -23,6 +23,7 @@ fn exercise(family:usize,g:usize){
  let bytes:[u8;2048]=kani::any();let x:[u32;8]=kani::any();let fail:bool=kani::any();let mut d=before;
  let mut l=Log{field_index:999,ptr:core::ptr::null(),len:0,field_value:x,left:[0;8],right:[0;4],before,after,fail,calls:0};
  let r=if family==0{partial_window(&bytes,&common,s,j,&mut d,&mut l)}else if family==1{byte_window(&bytes,&scratch,j,&mut d,&mut l)}else{high_window(&high,&coeffs,j,&mut d,&mut l)};
+ if cfg!(NHM_corrupt){l.left[0]^=1;}
  let good=match g{
  0=>l.left==if family==2{high[j]}else{x},
  1=>l.right==if family==2{coeffs[j]}else if family==1{scratch[j]}else{common[j]},

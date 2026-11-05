@@ -18,7 +18,7 @@ namespace NHM_WindowRef
     Source: 'src/lib.rs', lines 1:22-1:43
     Visibility: public -/
 @[discriminant isize]
-inductive Error where
-| Parse : Error
+inductive NHM_WindowError where
+| Parse : NHM_WindowError
 
 end NHM_WindowRef

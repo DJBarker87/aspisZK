@@ -21,11 +21,11 @@ namespace NHM_WindowRef
 def window_ref
   (left : Array Std.U32 8#usize) (right : Array Std.U32 4#usize)
   (after : Array Std.U64 8#usize) (count : Std.Usize) (reject : Bool) :
-  Result ((core.result.Result Unit Error) × (Array Std.U64 8#usize) ×
+  Result ((core.result.Result Unit NHM_WindowError) × (Array Std.U64 8#usize) ×
     Std.Usize × (Array Std.U32 8#usize) × (Array Std.U32 4#usize))
   := do
   if reject
-  then ok (core.result.Result.Err Error.Parse, after, count, left, right)
+  then ok (core.result.Result.Err NHM_WindowError.Parse, after, count, left, right)
   else ok (core.result.Result.Ok (), after, count, left, right)
 
 end NHM_WindowRef

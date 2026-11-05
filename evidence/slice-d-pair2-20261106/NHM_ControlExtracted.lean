@@ -23,7 +23,7 @@ def control_ref_loop.body
   (stop : Std.Usize) (iter : core.ops.range.Range Std.Usize)
   (calls : Std.Usize) :
   Result (ControlFlow ((core.ops.range.Range Std.Usize) × Std.Usize)
-    (Std.Usize × (Option ((core.result.Result Unit Error) × Std.Usize))))
+    (Std.Usize × (Option ((core.result.Result Unit NHM_ControlError) × Std.Usize))))
   := do
   let (o, iter1) ←
     core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
@@ -32,7 +32,7 @@ def control_ref_loop.body
   | some j =>
     let calls1 ← lift (Std.Usize.wrapping_add calls 1#usize)
     if j = stop
-    then ok (done (calls1, some (core.result.Result.Err Error.Parse, calls1)))
+    then ok (done (calls1, some (core.result.Result.Err NHM_ControlError.Parse, calls1)))
     else ok (cont (iter1, calls1))
 
 /-- [nfu_reference::control_ref]: loop 0:
@@ -42,7 +42,7 @@ def control_ref_loop.body
 def control_ref_loop
   (iter : core.ops.range.Range Std.Usize) (stop : Std.Usize)
   (calls : Std.Usize) :
-  Result (Std.Usize × (Option ((core.result.Result Unit Error) × Std.Usize)))
+  Result (Std.Usize × (Option ((core.result.Result Unit NHM_ControlError) × Std.Usize)))
   := do
   loop
     (fun (iter1, calls1) => control_ref_loop.body stop iter1 calls1)
@@ -53,7 +53,7 @@ def control_ref_loop
     Visibility: public -/
 def control_ref
   (n : Std.Usize) (stop : Std.Usize) :
-  Result ((core.result.Result Unit Error) × Std.Usize)
+  Result ((core.result.Result Unit NHM_ControlError) × Std.Usize)
   := do
   let (calls, pending_return) ←
     control_ref_loop { start := 0#usize, «end» := n } stop 0#usize

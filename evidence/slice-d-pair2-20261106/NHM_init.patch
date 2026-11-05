@@ -16,17 +16,19 @@
 +#[cfg(kani)] #[path="NHM_init.rs"] mod NHM_init;
 --- /dev/null
 +++ b/crates/aspis-core/src/NHM_init.rs
-@@ -0,0 +1,28 @@
+@@ -0,0 +1,36 @@
 +include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
 +fn exercise(g:usize){
-+ let value:[u32;4]=kani::any();let before=[value;64];
++ let value:[u32;4]=kani::any();
 + let p:usize=kani::any();kani::assume(p<64);let k:usize=kani::any();kani::assume(k<64);
-+ let mut out=before.to_vec();out.truncate(p);let allocated=out.as_ptr();
++ let mut out=Vec::with_capacity(64);out.resize(p,value);let allocated=out.as_ptr();
 + out.resize(p+1,value);let delivered=out;
 + let good=match g{
-+ 0=>delivered.as_ptr()==allocated&&delivered.as_ptr()!=before.as_ptr(),
-+ 1=>delivered.len()==p+1&&delivered[p]==value,
-+ _=>if k<p{delivered[k]==before[k]}else{true}};
++ 0=>delivered.as_ptr()==allocated,
++ 1=>delivered.len()==p+1&&delivered[p][0]==value[0],
++ 2=>if k<p{delivered[k][0]==value[0]}else{true},
++ 4|5|6=>delivered[p][g-3]==value[g-3],
++ _=>if k<p{delivered[k][g-6]==value[g-6]}else{true}};
 + assert!(if cfg!(NHM_invert){!good}else{good});
 +}
 +struct ReserveLog{fail:bool,n:usize,calls:usize,ptr:*const [u32;4]}
@@ -45,3 +47,9 @@
 +gate!(init00,0);
 +gate!(init01,1);
 +gate!(init02,2);
++gate!(init04,4);
++gate!(init05,5);
++gate!(init06,6);
++gate!(init07,7);
++gate!(init08,8);
++gate!(init09,9);

@@ -3,14 +3,16 @@ import subprocess,difflib
 E=Path(__file__).resolve().parent;C='crates/aspis-core/src/'
 code=r'''include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
 fn exercise(g:usize){
- let value:[u32;4]=kani::any();let before=[value;64];
+ let value:[u32;4]=kani::any();
  let p:usize=kani::any();kani::assume(p<64);let k:usize=kani::any();kani::assume(k<64);
- let mut out=before.to_vec();out.truncate(p);let allocated=out.as_ptr();
+ let mut out=Vec::with_capacity(64);out.resize(p,value);let allocated=out.as_ptr();
  out.resize(p+1,value);let delivered=out;
  let good=match g{
- 0=>delivered.as_ptr()==allocated&&delivered.as_ptr()!=before.as_ptr(),
- 1=>delivered.len()==p+1&&delivered[p]==value,
- _=>if k<p{delivered[k]==before[k]}else{true}};
+ 0=>delivered.as_ptr()==allocated,
+ 1=>delivered.len()==p+1&&delivered[p][0]==value[0],
+ 2=>if k<p{delivered[k][0]==value[0]}else{true},
+ 4|5|6=>delivered[p][g-3]==value[g-3],
+ _=>if k<p{delivered[k][g-6]==value[g-6]}else{true}};
  assert!(if cfg!(NHM_invert){!good}else{good});
 }
 struct ReserveLog{fail:bool,n:usize,calls:usize,ptr:*const [u32;4]}
@@ -26,7 +28,7 @@ macro_rules! gate{($name:ident,$n:expr)=>{#[kani::proof]#[kani::unwind(258)]
 #[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 #[kani::stub(<[[u32;4]]>::to_vec,KMX_to_vec)]
 fn $name(){exercise($n)}};}
-'''+''.join(f'gate!(init{i:02},{i});\n'for i in range(3))
+'''+''.join(f'gate!(init{i:02},{i});\n'for i in [0,1,2,4,5,6,7,8,9])
 inputs={C+'lib.rs':subprocess.check_output(['git','show','4bb3b3f:'+C+'lib.rs'],text=True).replace('#![no_std]','#![no_std]\n#![cfg_attr(kani,feature(allocator_api))]')+'\n#[cfg(kani)] #[path="NHM_init.rs"] mod NHM_init;\n',C+'NHM_init.rs':code}
 patch=''
 for n,t in inputs.items():
