@@ -1,0 +1,8 @@
+fn require_verifier_checkpoint(account: &OwnedAccount, program_id: &Pubkey, writable: bool) -> ProgramResult {
+    if account.owner() != program_id || account.is_signer || account.executable
+        || account.is_writable != writable
+        || account.data_len()? != verifier::checkpoint_size(Variant::S2) {
+        return Err(ProgramError::InvalidAccountData);
+    }
+    Ok(())
+}
