@@ -1,0 +1,20 @@
+--- NGN_batch.py
++++ NGT_batch.py
+@@ -1,12 +1,12 @@
+ """Each native child runs sequentially and has independent time/RSS/axiom receipt."""
+ from pathlib import Path
+ import subprocess,json,time,hashlib,re,sys
+-B=Path.cwd();mode=sys.argv[1];E=B/'NGN_audit'/mode;E.mkdir(parents=True,exist_ok=True)
+-if mode.startswith('inventory-'):jobs=[(mode,['NGN_native/NGN_InventoryDriver',mode.split('-')[1]])]
+-elif mode in ['poolfixtures','poolroots','poolscan']:jobs=[('scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0',['NGN_native/'+('NGN_PoolDriver' if mode=='poolscan' else 'NGN_PoolProofDriver'), 'scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0'])]
+-elif mode in ['fixtures','scan']:jobs=[(mode,['NGN_native/'+('NGN_Driver' if mode=='scan' else 'NGN_ProofDriver'),mode])]
++B=Path.cwd();mode=sys.argv[1];E=B/'NGT_audit'/mode;E.mkdir(parents=True,exist_ok=True)
++if mode.startswith('inventory-'):jobs=[(mode,['NGT_native/NGT_InventoryDriver',mode.split('-')[1]])]
++elif mode in ['poolfixtures','poolroots','poolscan']:jobs=[('scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0',['NGT_native/'+('NGT_PoolDriver' if mode=='poolscan' else 'NGT_PoolProofDriver'), 'scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0'])]
++elif mode in ['fixtures','scan']:jobs=[(mode,['NGT_native/'+('NGT_Driver' if mode=='scan' else 'NGT_ProofDriver'),mode])]
+ else:
+- batch=int(mode.removeprefix('batch'));groups=json.loads((B/'NGN_AUDIT_ROOTS.json').read_text())['groups'];jobs=[('proof'+str(i),['NGN_native/NGN_ProofDriver','proof'+str(i)]) for i in range(batch,min(batch+1,len(groups)))];assert jobs
++ batch=int(mode.removeprefix('batch'));groups=json.loads((B/'NGT_AUDIT_ROOTS.json').read_text())['groups'];jobs=[('proof'+str(i),['NGT_native/NGT_ProofDriver','proof'+str(i)]) for i in range(batch,min(batch+1,len(groups)))];assert jobs
+ for name,command in jobs:
+  start=time.monotonic()
+  with (E/(name+'.log')).open('w') as out:r=subprocess.run(['/usr/bin/time','-v','-o',str(E/(name+'.time')),*command],stdout=out,stderr=subprocess.STDOUT)

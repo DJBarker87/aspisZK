@@ -1,6 +1,6 @@
 # Transcript scalar stage map
 
-TX1:169/170 remain OPEN pending all native child laws and final audits.
+TX1:169/170 are CLOSED under ruling(y)/(ai); NGT_validate.py passes the native, child-law, model, frame and final audit gates.
 Frozen transcript.rs: absorb L14–16, block L17–22, scalar L23–27,
 scalar_k L31–34. Every cut shares the same original input state/hash/payload.
 
@@ -14,14 +14,14 @@ scalar_k L31–34. Every cut shares the same original input state/hash/payload.
    suffix, input hash preserved, state from stage3 retained; sampled result
    returned exactly (scalar_k's embedding affects only erased trace).
 
-Reuse candidates: NFW block native fragments (all arbitrary bytes <=2048),
+Revalidated reuse: NFW block native fragments (all arbitrary bytes <=2048),
 NGC CLOSED runtime descriptor-forwarding <=9 parts each <=57607, LPk low-base-P
 leaf with KNF static-form replacement, NBL sampler arithmetic/model laws.
-All reused credit must pass KMX/control/static/feature/source review first.
+All credited reuse passed KMX/control/static/feature/source review; see NGT_SOURCE_FIDELITY.json.
 No sparse zero-backed window is substituted for arbitrary bytes. The excluded
 dense runtime shapes are not replayed. NGQ owns query decoding and its stages.
 
 E001 failed manifest loading before extraction because the scratch lacked
 unchanged path dependencies. The sole extraction slot is conservatively consumed;
-the replacement under review is immutable prior actual-body emission plus exact
+the credited replacement is immutable prior actual-body emission plus exact
 frozen-body identity and deterministic canonical retarget, not a second run.

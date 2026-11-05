@@ -22,6 +22,14 @@ for p in [N/'NGC_EXPECTED_IMPORTS.jsonl']:
  if p.exists():
   for l in p.read_text().splitlines():
    r=json.loads(l);mods.setdefault(r['module'],r['imports'])
+# Missing evidence baseline from the newer NGK combined forest, plus six
+# unchanged arithmetic modules. Expectations come from pinned source/baselines,
+# never from the observed loader table being tested.
+for l in (E.parent/'pool-retarget-20261105/NGK_EXPECTED_IMPORTS.jsonl').read_text().splitlines():
+ r=json.loads(l);mods.setdefault(r['module'],r['imports'])
+for n,r in json.loads((E/'NGT_EXTRA_IMPORT_SOURCES.json').read_text()).items():
+ assert hashlib.sha256(r['source'].encode()).hexdigest()==r['sha256']
+ mods[n]=['Init']+re.findall(r'^import ([\w.]+)',r['source'],re.M)
 (E/'NGT_EXPECTED_IMPORTS.jsonl').write_text(''.join(json.dumps(dict(module=n,imports=i))+'\n' for n,i in sorted(mods.items())))
 roots={'AspisR1.RPx_Deployed.deployed'}
 for line in (E/'NGT_ATTEMPTS.jsonl').read_text().splitlines():
