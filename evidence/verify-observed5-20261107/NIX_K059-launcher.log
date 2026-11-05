@@ -1,0 +1,53 @@
+{"attempt": "NIX_K059", "exit_status": 1, "wall_seconds": 23.682004373986274, "peak_rss_kib": "1251624", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition name: `NIX_negative`
+   --> crates/aspis-core/src/circle.rs:151:13
+    |
+151 |   #[cfg(all(NIX_negative,NIX_case_args))] {log.calls=log.calls.wrapping_add(1);}
+    |             ^^^^^^^^^^^^
+    |
+    = help: expected names are: `docsrs`, `feature`, `kani`, and `test` and 31 more
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(NIX_negative)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(NIX_negative)");` to t
+...
+=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> crates/aspis-statement/src/../../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> crates/aspis-statement/src/../../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 5.19s
+Checking harness pool_v1::pair_forest_copy_terminal::NIX_residual::control...
+
+VERIFICATION RESULT:
+ ** 1 of 195 failed (1 unreachable)
+Failed Checks: assertion failed: same(result, o[16])
+ File: "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs", line 1573, in pool_v1::pair_forest_copy_terminal::NIX_residual::check
+
+VERIFICATION:- FAILED
+Verification Time: 16.570112s
+
+Manual Harness Summary:
+Verification failed for - pool_v1::pair_forest_copy_terminal::NIX_residual::control
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-raed40f680c1a42a58ec53b0db206a150.scope; invocation ID: ca72c6e9b6ed4f859e6d8203104fe28a

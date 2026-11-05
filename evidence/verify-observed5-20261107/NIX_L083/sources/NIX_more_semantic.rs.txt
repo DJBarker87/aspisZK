@@ -1,0 +1,22 @@
+
+#[cfg(kani)] mod NIX_more {
+ use super::*;
+
+ fn same(a:QM31,b:QM31)->bool{a.c0.a.0==b.c0.a.0&&a.c0.b.0==b.c0.b.0&&a.c1.a.0==b.c1.a.0&&a.c1.b.0==b.c1.b.0}
+ fn q()->QM31{kani::any()}
+
+ struct Log{lanes:[QM31;4],a:QM31,b:QM31,c:QM31,d:QM31,times:[u8;3],count:u8,frame:u64}
+ fn pack(lanes:&[QM31;4],out:QM31,l:&mut Log)->QM31{l.lanes=*lanes;l.times[0]=l.count;l.count+=1;out}
+ fn mul(a:QM31,b:QM31,out:QM31,l:&mut Log)->QM31{l.a=a;l.b=b;l.times[1]=l.count;l.count+=1;out}
+ fn add(a:QM31,b:QM31,out:QM31,l:&mut Log)->QM31{l.c=a;l.d=b;l.times[2]=l.count;l.count+=1;out}
+ fn step(packed:&mut[QM31;24],values:&[QM31;33],selector:QM31,group:usize,packreply:QM31,product:QM31,reply:QM31,l:&mut Log){let start=49;let lanes:[QM31;4]=core::array::from_fn(|slot|{let source=4*group+slot;if source>=start&&source<start+33{values[source-start]}else{QM31::ZERO}});packed[group]=add(packed[group],mul(selector,pack(&lanes,packreply,l),product,l),reply,l);}
+ fn check(negative:bool){let mut packed:[QM31;24]=kani::any();let values:[QM31;33]=kani::any();let selector=q();let group:usize=kani::any();kani::assume(group>=12&&group<=20);let i:usize=kani::any();kani::assume(i<24);let slot:usize=kani::any();kani::assume(slot<4);let old=packed[i];let selected=packed[group];let packreply=q();let product=q();let reply=q();let count:u8=kani::any();kani::assume(count<253);let frame:u64=kani::any();let mut l=Log{lanes:kani::any(),a:q(),b:q(),c:q(),d:q(),times:kani::any(),count,frame};step(&mut packed,&values,selector,group,packreply,product,reply,&mut l);if negative{l.frame^=1;}let source=4*group+slot;assert!(same(l.lanes[slot],if source>=49&&source<82{values[source-49]}else{QM31::ZERO}));assert!(same(l.a,selector)&&same(l.b,packreply)&&same(l.c,selected)&&same(l.d,product));assert_eq!(l.times[0],count);assert_eq!(l.times[1],count+1);assert_eq!(l.times[2],count+2);assert_eq!(l.count,count+3);assert_eq!(l.frame,frame);assert!(same(packed[i],if i==group{reply}else{old}));}
+ fn init(negative:bool){let first=49usize/4;let mut last=(49usize+33-1)/4;if negative{last+=1;}assert_eq!(first,12);assert_eq!(last,20);}
+ fn outer(negative:bool){let start:usize=kani::any();kani::assume(start>=12&&start<=20);let mut range=start..=20;let mut got=range.next();if negative{got=None;}assert_eq!(got,Some(start));assert_eq!(range.is_empty(),start==20);let (lo,hi)=range.into_inner();assert_eq!(lo,if start<20{start+1}else{20});assert_eq!(hi,20);}
+ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn shared_native(){check(false);}
+ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn shared_control(){check(true);}
+ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn shared_init_native(){init(false);}
+ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn shared_init_control(){init(true);}
+ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn shared_outer_native(){outer(false);}
+ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn shared_outer_control(){outer(true);}
+}

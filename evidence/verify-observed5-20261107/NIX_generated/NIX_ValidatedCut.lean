@@ -50,7 +50,8 @@ theorem source {H : Type} (B : FinishModel.Boundaries) (D : aspis_core.Digest32 
 /-- No sampler is called after a returned block error, for either valid row. -/
 theorem error_no_suffix {H : Type} (B C : FinishModel.Boundaries) (row : FinishModel.CircleRow)
  (self : r1_wire.SemanticTranscript H) (error : r1_wire.Error) :
- after B row self (.Err error)=after C row self (.Err error) := rfl
+ PreparedHashCode.run (after B row self (.Err error))=
+ PreparedHashCode.run (after C row self (.Err error)) := rfl
 
 /-- The two Rust match cases establish the sampler's complete row domain. -/
 theorem row_cases (row : U8) :

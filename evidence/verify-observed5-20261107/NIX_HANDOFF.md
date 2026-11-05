@@ -21,3 +21,13 @@ No composed row or outside-slice packet is yet admitted. No new trust, shipped s
 ## Stage 3: retained packet proofs
 
 DecodeFinish, RecordAtOrigin, PrefixFrames and aggregate SAME-parser framing pass L009/L015/L033/L039. Heap model prefix/abort and geometry laws pass L026/L047; native aggregate row write remains TOOL-BOUNDARY after K017/K043–046 timeouts on different isolated goals. F3 rational log, secure OOD, fallback and sampled-block domain laws pass L034/L046/L049/L050. No composed row admitted. F3 caller source checks are retained; missing unchanged frozen cfg(kani) support inputs are being pinned after compile failures. Target not established.
+
+## Stage 4: native packets and provenance
+
+F3 sampler K053/K048 and actual-program SolanaDigest dispatch K049/K050 pass their matched controls. OOD/fallback cached-reply frames pass K054–057. Rational map L034, OOD L049, fallback L046, sampler L050, typed sampler cut L059, typed dispatch L063 and SAME producer install L073 compile with standard axioms. Residual215 log and typed packet L060/L064 pair with K058/K059. The final combined/ax2/NFX gate remains pending.
+
+Round133 old constructor-heavy K060/K061/K069 shapes time out. K073/K074 arguments/frame and K075/K076 complete returning/error windows PASS their controls after replacing prefix construction with the CLOSED pure getter identity log. NIX_ProducerInstall.lookup/framed derive the SAME token, row and frame; the complete native/model cut chain still requires assembly. No changed shape is credited merely for passing Kani.
+
+Independent terminal boundary/one-iteration packets are retained in NIX_MORE_PLAN.json and NIX_PAIR_PLAN.json, with separate validation/time/RSS/lock/graph checks for EACH positive/control invocation. Thirteen stale-snapshot preflights were stopped by the source guard before Kani; repair restores the original expected hashes, never rebaselines them, and prohibits source uploads in native runners. The final thirteen scopes each contain one positive and its matched control. Total native proof invocations =100; total numbered K scopes=100 (13 earlier scopes were preflight-only). No native budget remains.
+
+NIM canonical owner exports (2,562,608 bytes) and only missing retained dependencies (21,145,888 bytes) are copied into the owned seed. Base forest with NGK/NIM/NIH/headline compiles L081; scan/axioms admission still pending. No trust row or security metric changed. Target not established.

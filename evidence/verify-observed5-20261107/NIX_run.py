@@ -10,6 +10,7 @@ x.setdefault('env',{}).setdefault('CARGO_TARGET_DIR',B+'/NIX_target')
 assert 1<=int(a[-3:])<=({'L':100,'K':100,'E':1}[a[4]])
 if x['command'][:2]==['python3','NIX_gate.py']:assert x['command'][2]==a+'.json','Stale gate configuration'
 assert not (E/a/'receipt.json').exists(), 'Never resubmit'
+if x['kind']=='kani':assert x['sources']==['NIX_gate.py','NIX_SOURCE_PINS.json','NIX_FROZEN_FILE_PINS.json'] or (x['command'][:2]==['python3','NIX_gate_pair.py'] and x['sources']==['NIX_gate.py','NIX_gate_pair.py','NIX_SOURCE_PINS.json','NIX_FROZEN_FILE_PINS.json']),'Native inputs must be installed in a prior capped scope; never upload source snapshots'
 guard=E/'NIX_CLIENT_ACTIVE';fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,str(os.getpid()).encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
 def ssh(code,data=None,submitted=False):
  for retry in range(11):

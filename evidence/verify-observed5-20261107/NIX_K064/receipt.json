@@ -1,0 +1,83 @@
+{
+  "attempt": "NIX_K064",
+  "kind": "kani",
+  "module": "NIX_kmx::KMX_checks::KMX_ptr_correct",
+  "sources": [
+    "NIX_gate.py",
+    "NIX_SOURCE_PINS.json",
+    "NIX_FROZEN_FILE_PINS.json"
+  ],
+  "command": [
+    "python3",
+    "NIX_gate.py",
+    "NIX_K064.json"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-verify-observed5-20261107/NIX_target",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-Copt-level=3 -C link-arg=-Wl,--threads=1 --cfg NIX_case_frame",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-verify-observed5-20261107/NIX_tmp"
+  },
+  "timeout": 180,
+  "expected_time": "Exact unchanged KMX ptr-copy fidelity control, in the same frozen root/feature graph as caller packets",
+  "root_package": "aspis-core",
+  "metadata_features": "aspis-core/r0",
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-verify-observed5-20261107/NIX_src/crates/aspis-core/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-verify-observed5-20261107/NIX_target",
+    "--features",
+    "r0",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "NIX_kmx::KMX_checks::KMX_ptr_correct",
+    "--output-format",
+    "terse"
+  ],
+  "collect": [
+    "NIX_K064-graph-check.json",
+    "NIX_K064-graph.stderr",
+    "NIX_K064-graph.json",
+    "NIX_K064-source-check.json",
+    "NIX_K064-lock-check.json"
+  ],
+  "source_revision": "27623f0f804dfb91bc8361e508fc45f8738c7520",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "selected_objects": {}
+  },
+  "exit_status": 0,
+  "wall_seconds": 8.241869546007365,
+  "peak_rss_kib": "684616",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r460ef83b7c7e43b89953d4b015f92f3a.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "796516352",
+  "source_hashes": {
+    "NIX_gate.py": "120a87cfe54729b8a33aed81b27e934671748e5d5de3b38c8172a5a3a45a1ae7",
+    "NIX_SOURCE_PINS.json": "e3e7ced1ae45bac227ef10108bf1a3b45332eb70896fc2f43da177c2f8526768",
+    "NIX_FROZEN_FILE_PINS.json": "49a45ea72856070b189abe346bb292d2ac508738bdbc4f66b2b4e5a6adfb51a4"
+  },
+  "print_axioms": "N/A: kani"
+}

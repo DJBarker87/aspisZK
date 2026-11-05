@@ -1,0 +1,38 @@
+[
+  [
+    "chi.sub(row.producer_values[0])",
+    "op(chi,row.producer_values[0],o[0],0,0,l)"
+  ],
+  [
+    "chi.sub(row.producer_values[1])",
+    "op(chi,row.producer_values[1],o[1],1,0,l)"
+  ],
+  [
+    "chi.sub(row.consumer_values[0])",
+    "op(chi,row.consumer_values[0],o[2],2,0,l)"
+  ],
+  [
+    "chi.sub(row.consumer_values[1])",
+    "op(chi,row.consumer_values[1],o[3],3,0,l)"
+  ],
+  [
+    "denominators[0].mul(denominators[1])",
+    "op(denominators[0],denominators[1],o[4],4,1,l)"
+  ],
+  [
+    "denominators[2].mul(denominators[3])",
+    "op(denominators[2],denominators[3],o[5],5,1,l)"
+  ],
+  [
+    "row.producer_weights[0]\n        .mul(denominators[1])\n        .add(row.producer_weights[1].mul(denominators[0]))",
+    "op(op(row.producer_weights[0],denominators[1],o[6],6,1,l),op(row.producer_weights[1],denominators[0],o[7],7,1,l),o[8],8,2,l)"
+  ],
+  [
+    "row.consumer_weights[0]\n        .mul(denominators[3])\n        .add(row.consumer_weights[1].mul(denominators[2]))",
+    "op(op(row.consumer_weights[0],denominators[3],o[9],9,1,l),op(row.consumer_weights[1],denominators[2],o[10],10,1,l),o[11],11,2,l)"
+  ],
+  [
+    "producer_denominator\n        .mul(helper.mul(consumer_denominator).add(consumer_numerator))\n        .sub(consumer_denominator.mul(producer_numerator))",
+    "op(op(producer_denominator,op(op(helper,consumer_denominator,o[12],12,1,l),consumer_numerator,o[13],13,2,l),o[14],14,1,l),op(consumer_denominator,producer_numerator,o[15],15,1,l),o[16],16,0,l)"
+  ]
+]

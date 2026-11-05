@@ -1,0 +1,642 @@
+--- a/crates/aspis-core/src/circle.rs
++++ b/crates/aspis-core/src/circle.rs
+@@ -118,3 +118,106 @@
+         assert_eq!(point.x.square().add(point.y.square()), QM31::ONE);
+     }
+ }
++
++#[cfg(kani)]
++mod NIX_circle {
++ use super::*;
++ fn q()->QM31 { let w:[u32;4]=kani::any(); QM31 {c0:CM31::new(crate::field::M31(w[0]),crate::field::M31(w[1])),c1:CM31::new(crate::field::M31(w[2]),crate::field::M31(w[3]))} }
++ fn point()->SecureCirclePoint { SecureCirclePoint{x:q(),y:q()} }
++ fn same(a:QM31,b:QM31)->bool {a.c0.a.0==b.c0.a.0 && a.c0.b.0==b.c0.b.0 && a.c1.a.0==b.c1.a.0 && a.c1.b.0==b.c1.b.0}
++ fn samepoint(a:SecureCirclePoint,b:SecureCirclePoint)->bool {same(a.x,b.x)&&same(a.y,b.y)}
++ fn samereply(a:Result<SecureCirclePoint,CirclePointError>,b:Result<SecureCirclePoint,CirclePointError>)->bool{
++  match(a,b){(Ok(p),Ok(q))=>samepoint(p,q),(Err(CirclePointError::SingularParameter),Err(CirclePointError::SingularParameter))|(Err(CirclePointError::ParameterInCm31Subfield),Err(CirclePointError::ParameterInCm31Subfield))=>true,_=>false}
++ }
++ fn reply()->Result<SecureCirclePoint,CirclePointError> {
++  let tag:u8=kani::any();kani::assume(tag<3);
++  match tag {0=>Ok(point()),1=>Err(CirclePointError::SingularParameter),_=>Err(CirclePointError::ParameterInCm31Subfield)}
++ }
++ struct Log {arg:QM31,calls:u8,frame:[u64;2],reply:Result<SecureCirclePoint,CirclePointError>}
++ fn oracle(parameter:QM31,log:&mut Log)->Result<SecureCirclePoint,CirclePointError>{log.arg=parameter;log.calls+=1;log.reply}
++ // Exact frozen secure_ood body, sole callee replaced by a local-record oracle.
++ fn step(parameter:QM31,log:&mut Log)->Result<SecureCirclePoint,CirclePointError>{
++  let point=oracle(parameter,log)?;
++  if parameter.c1==CM31::ZERO {return Err(CirclePointError::ParameterInCm31Subfield);}
++  Ok(point)
++ }
++ #[kani::proof] #[kani::unwind(9)]
++ #[kani::stub(core::ptr::copy_nonoverlapping, crate::NIX_kmx::KMX_copy_nonoverlapping)]
++ fn ood_dispatch(){
++  let parameter=q();let seed=q();let calls:u8=kani::any();kani::assume(calls<255);
++  let frame:[u64;2]=kani::any();let reply=reply();
++  let mut log=Log{arg:seed,calls,frame,reply};
++  let mut result=step(parameter,&mut log);
++  #[cfg(all(NIX_negative,NIX_case_args))] {log.calls=log.calls.wrapping_add(1);}
++  #[cfg(all(NIX_negative,NIX_case_frame))] {log.frame[0]^=1;}
++  #[cfg(all(NIX_negative,NIX_case_reply))] {result=match result {Ok(_)=>Err(CirclePointError::SingularParameter),Err(_)=>Ok(point())};}
++  #[cfg(NIX_case_args)] {assert!(same(log.arg,parameter));assert_eq!(log.calls,calls+1);}
++  #[cfg(NIX_case_frame)] {assert_eq!(log.frame[0],frame[0]);assert_eq!(log.frame[1],frame[1]);assert!(samereply(log.reply,reply));}
++  #[cfg(NIX_case_reply)] {match (reply,result) {
++   (Err(CirclePointError::SingularParameter),Err(CirclePointError::SingularParameter))=>{},
++   (Err(CirclePointError::ParameterInCm31Subfield),Err(CirclePointError::ParameterInCm31Subfield))=>{},
++   (Ok(want),Ok(got))=>{assert!(samepoint(got,want));assert!(parameter.c1.a.0!=0 || parameter.c1.b.0!=0);},
++   (Ok(_),Err(CirclePointError::ParameterInCm31Subfield))=>{assert_eq!(parameter.c1.a.0,0);assert_eq!(parameter.c1.b.0,0);},
++   _=>assert!(false)
++  }}
++ }
++
++ fn fallback_step(sample:usize,log:&mut Log)->SecureCirclePoint {
++  let parameter=crate::transcript::CIRCLE_FALLBACK_PARAMETERS[sample%2];
++  match oracle(parameter,log) {Ok(point)=>point,Err(_)=>SecureCirclePoint{x:QM31::ONE,y:QM31::ZERO}}
++ }
++ #[kani::proof] #[kani::unwind(9)]
++ #[kani::stub(core::ptr::copy_nonoverlapping, crate::NIX_kmx::KMX_copy_nonoverlapping)]
++ fn fallback_dispatch(){
++  let sample:usize=kani::any();let seed=q();let calls:u8=kani::any();kani::assume(calls<255);
++  let frame:[u64;2]=kani::any();let reply=reply();let mut log=Log{arg:seed,calls,frame,reply};
++  let mut result=fallback_step(sample,&mut log);
++  #[cfg(all(NIX_negative,NIX_case_args))] {log.calls=log.calls.wrapping_add(1);}
++  #[cfg(all(NIX_negative,NIX_case_frame))] {log.frame[0]^=1;}
++  #[cfg(all(NIX_negative,NIX_case_reply))] {result.x.c0.a.0^=1;}
++  #[cfg(NIX_case_args)] {let expected=if sample%2==0 {QM31{c0:CM31::ZERO,c1:CM31::ONE}}else{QM31{c0:CM31::ONE,c1:CM31::ONE}};assert!(same(log.arg,expected));assert_eq!(log.calls,calls+1);}
++  #[cfg(NIX_case_frame)] {assert_eq!(log.frame[0],frame[0]);assert_eq!(log.frame[1],frame[1]);assert!(samereply(log.reply,reply));}
++  #[cfg(NIX_case_reply)] {let expected=match reply{Ok(p)=>p,Err(_)=>SecureCirclePoint{x:QM31::ONE,y:QM31::ZERO}};assert!(samepoint(result,expected));}
++ }
++ fn canonical(v:QM31)->bool {v.c0.a.0<crate::field::P && v.c0.b.0<crate::field::P && v.c1.a.0<crate::field::P && v.c1.b.0<crate::field::P}
++ struct MapLog {args:[QM31;14],mask:u8,frame:[u64;2]}
++ fn unary(a:QM31,result:QM31,slot:usize,log:&mut MapLog)->QM31{log.args[2*slot]=a;log.mask|=1<<slot;result}
++ fn binary(a:QM31,b:QM31,result:QM31,slot:usize,log:&mut MapLog)->QM31{log.args[2*slot]=a;log.args[2*slot+1]=b;log.mask|=1<<slot;result}
++ fn inverse(a:QM31,result:Option<QM31>,log:&mut MapLog)->Option<QM31>{log.args[4]=a;log.mask|=4;result}
++ // Seven opaque call sites of the frozen rational map; no product is evaluated.
++ fn map_step(parameter:QM31,outputs:[QM31;7],inv:Option<QM31>,log:&mut MapLog)->Result<SecureCirclePoint,CirclePointError>{
++    let square = unary(parameter,outputs[0],0,log);
++    let inverse_denominator = inverse(binary(QM31::ONE,square,outputs[1],1,log),inv,log)
++        .ok_or(CirclePointError::SingularParameter)?;
++    Ok(SecureCirclePoint {
++        x: binary(binary(QM31::ONE,square,outputs[3],3,log),inverse_denominator,outputs[4],4,log),
++        y: binary(binary(parameter,parameter,outputs[5],5,log),inverse_denominator,outputs[6],6,log),
++    })
++ }
++ #[kani::proof] #[kani::unwind(9)]
++ #[kani::stub(core::ptr::copy_nonoverlapping, crate::NIX_kmx::KMX_copy_nonoverlapping)]
++ fn rational_map(){
++  let parameter=q();kani::assume(canonical(parameter));
++  let outputs:[QM31;7]=kani::any();
++  for o in outputs {kani::assume(canonical(o));}
++  let value=q();kani::assume(canonical(value));let inv=if kani::any(){Some(value)}else{None};
++  let before:[QM31;14]=[q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q()];let mask:u8=kani::any();let frame:[u64;2]=kani::any();let mut log=MapLog{args:before,mask,frame};
++  let mut result=map_step(parameter,outputs,inv,&mut log);
++  #[cfg(all(NIX_negative,NIX_case_reply))] {result=match result{Ok(_)=>Err(CirclePointError::SingularParameter),Err(_)=>Ok(point())};}
++  #[cfg(all(NIX_negative,NIX_case_domain))] {log.args[0].c0.a.0=crate::field::P;}
++  #[cfg(all(NIX_negative,NIX_case_args))] {log.args[0].c0.a.0^=1;}
++  #[cfg(all(NIX_negative,NIX_case_frame))] {log.frame[0]^=1;}
++  #[cfg(NIX_case_args)] {
++   assert!(same(log.args[0],parameter));assert!(same(log.args[2],QM31::ONE));assert!(same(log.args[3],outputs[0]));assert!(same(log.args[4],outputs[1]));
++   match inv {None=>{},Some(v)=>{assert!(same(log.args[6],QM31::ONE));assert!(same(log.args[7],outputs[0]));assert!(same(log.args[8],outputs[3]));assert!(same(log.args[9],v));assert!(same(log.args[10],parameter));assert!(same(log.args[11],parameter));assert!(same(log.args[12],outputs[5]));assert!(same(log.args[13],v));}}
++  }
++  #[cfg(NIX_case_frame)] {
++   assert_eq!(log.frame[0],frame[0]);assert_eq!(log.frame[1],frame[1]);assert!(same(log.args[1],before[1]));assert!(same(log.args[5],before[5]));
++   if inv.is_none(){let i:usize=kani::any();kani::assume(i>=6 && i<14);assert!(same(log.args[i],before[i]));assert_eq!(log.mask,mask|7);}else{assert_eq!(log.mask,mask|127);}
++  }
++  #[cfg(NIX_case_reply)] {match (inv,result){(None,Err(CirclePointError::SingularParameter))=>{},(Some(_),Ok(p))=>{assert!(same(p.x,outputs[4]));assert!(same(p.y,outputs[6]));},_=>assert!(false)}
++  }
++  #[cfg(NIX_case_domain)] {let i:usize=kani::any();kani::assume(i<14);if i!=1 && i!=5 && (inv.is_some() || i<6){assert!(canonical(log.args[i]));}
++  }
++ }
++}
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -20,6 +20,7 @@
+ 
+ /// M31 base field element, canonical representation in [0, P).
+ #[derive(Clone, Copy, PartialEq, Eq, Debug, Default)]
++#[cfg_attr(kani, derive(kani::Arbitrary))]
+ pub struct M31(pub u32);
+ 
+ /// 1/2 in M31 (P is odd, so (P+1)/2 = 2^30).
+@@ -252,6 +253,7 @@
+ 
+ /// CM31 = M31[i] / (i^2 + 1). Element a + b*i.
+ #[derive(Clone, Copy, PartialEq, Eq, Debug, Default)]
++#[cfg_attr(kani, derive(kani::Arbitrary))]
+ pub struct CM31 {
+     pub a: M31,
+     pub b: M31,
+@@ -429,6 +431,7 @@
+ 
+ /// QM31 = CM31[u] / (u^2 - (2 + i)). Element c0 + c1*u. (stwo parameterization)
+ #[derive(Clone, Copy, PartialEq, Eq, Debug, Default)]
++#[cfg_attr(kani, derive(kani::Arbitrary))]
+ pub struct QM31 {
+     pub c0: CM31,
+     pub c1: CM31,
+--- a/crates/aspis-core/src/lib.rs
++++ b/crates/aspis-core/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! aspis-core: shared no_std verifier core for the Aspis native WHIR-style
+ //! M31 PCS substrate (Stage 0).
+ //!
+@@ -97,3 +98,5 @@
+ 
+ #[cfg(feature = "r0-op-count")]
+ pub mod r0_op_count;
++
++#[cfg(kani)] #[path="../../../KMX_stubs.rs"] mod NIX_kmx;
+--- a/crates/aspis-core/src/r0/heap.rs
++++ b/crates/aspis-core/src/r0/heap.rs
+@@ -19,3 +19,129 @@
+     // Exactly one element, with the same layout and allocation alignment.
+     Ok(unsafe { Box::from_raw(ptr) })
+ }
++
++#[cfg(kani)]
++mod NIX_heap {
++ use super::*;
++ #[kani::proof] #[kani::unwind(3)]
++ #[kani::stub(core::ptr::copy_nonoverlapping, crate::NIX_kmx::KMX_copy_nonoverlapping)]
++ #[kani::stub(alloc::alloc::realloc, crate::NIX_kmx::KMX_realloc)]
++ fn initialization() {
++  let before: u32 = kani::any();
++  let frame=Box::new(before);
++  let reply=uninit::<u32>();
++  match reply {
++   Err(e) => { assert!(matches!(e, Error::Allocation)); assert_eq!(*frame,before); },
++   Ok(mut out) => {
++    let value:u32=kani::any();
++    assert!(!core::ptr::eq(out.as_ptr(), &*frame));
++    out.write(value);
++    let ready=unsafe {out.assume_init()};
++    assert_eq!(*ready,value);
++    assert_eq!(*frame,before);
++    #[cfg(NIX_negative)] assert_eq!(*ready,value.wrapping_add(1));
++    drop(ready);
++    assert_eq!(*frame,before);
++   }
++  }
++ }
++}
++
++#[cfg(kani)]
++mod NIX_claims_heap {
++ use super::*;use crate::field::QM31;
++ type Claims=[[QM31;29];3];
++ fn same(a:QM31,b:QM31)->bool {a.c0.a.0==b.c0.a.0 && a.c0.b.0==b.c0.b.0 && a.c1.a.0==b.c1.a.0 && a.c1.b.0==b.c1.b.0}
++ #[derive(Clone,Copy)] struct Deny;
++ unsafe impl alloc::alloc::Allocator for Deny {
++  fn allocate(&self,_:alloc::alloc::Layout)->Result<core::ptr::NonNull<[u8]>,alloc::alloc::AllocError>{Err(alloc::alloc::AllocError)}
++  unsafe fn deallocate(&self,_:core::ptr::NonNull<u8>,_:alloc::alloc::Layout){unreachable!("Deny has no live allocation")}
++ }
++ fn reserve<T,A:alloc::alloc::Allocator>(this:&mut Vec<T,A>,n:usize)->Result<(),alloc::collections::TryReserveError>{
++  assert_eq!(this.len(),0);assert_eq!(n,1);
++  if kani::any() {this.try_reserve(n)}else{Vec::<T,Deny>::new_in(Deny).try_reserve(n)}
++ }
++ #[kani::proof] #[kani::unwind(1500)]
++ #[kani::stub(core::ptr::copy_nonoverlapping, crate::NIX_kmx::KMX_copy_nonoverlapping)]
++ #[kani::stub(alloc::alloc::realloc, crate::NIX_kmx::KMX_realloc)]
++ #[kani::stub(Vec::<MaybeUninit<Claims>>::try_reserve_exact,reserve)]
++ fn row_window(){
++  let before:u64=kani::any();let frame=Box::new(before);
++  #[cfg(not(any(NIX_row0,NIX_row1,NIX_row2)))] let p:usize=kani::any();
++  #[cfg(NIX_row0)] let p:usize=0;
++  #[cfg(NIX_row1)] let p:usize=1;
++  #[cfg(NIX_row2)] let p:usize=2;
++  kani::assume(p<3);
++  let k:usize=kani::any();kani::assume(k<29);
++  let row:[QM31;29]=[kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any()];
++  match uninit::<Claims>() {
++   Err(e)=>{assert!(matches!(e,Error::Allocation));assert_eq!(*frame,before);},
++   Ok(mut out)=>unsafe{
++    let original=out.as_mut_ptr();
++    let dst=original.cast::<[QM31;29]>().add(p);
++    assert!(!core::ptr::eq(original.cast::<u8>(),(&*frame as *const u64).cast::<u8>()));
++    #[cfg(NIX_split)] let framed:QM31=kani::any();
++    #[cfg(NIX_split)] let other:usize={let i:usize=kani::any();kani::assume(i<3 && i!=p);i};
++    #[cfg(NIX_split)] let j:usize={let i:usize=kani::any();kani::assume(i<29);i};
++    #[cfg(NIX_split)] original.cast::<QM31>().add(29*other+j).write(framed);
++    #[cfg(NIX_rawwindow)] let limb:usize={let i:usize=kani::any();kani::assume(i<4);i};
++    #[cfg(NIX_rawwindow)] let other:usize={let i:usize=kani::any();kani::assume(i<3 && i!=p);i};
++    #[cfg(NIX_rawwindow)] let j:usize={let i:usize=kani::any();kani::assume(i<29);i};
++    #[cfg(NIX_rawwindow)] let framed:u32=kani::any();
++    #[cfg(all(NIX_rawwindow,not(NIX_window_value)))] original.cast::<u32>().add(4*(29*other+j)+limb).write(framed);
++    dst.write(row);
++    #[cfg(not(NIX_rawwindow))] let got=(*dst)[k];
++    #[cfg(all(NIX_case_reply,not(NIX_split)))] assert!(same(got,row[k]));
++    #[cfg(NIX_split)] {
++     #[cfg(NIX_limb0)] let word=|v:QM31|v.c0.a.0;
++     #[cfg(NIX_limb1)] let word=|v:QM31|v.c0.b.0;
++     #[cfg(NIX_limb2)] let word=|v:QM31|v.c1.a.0;
++     #[cfg(NIX_limb3)] let word=|v:QM31|v.c1.b.0;
++     assert_eq!(word(got),word(row[k]));
++     assert_eq!(word(original.cast::<QM31>().add(29*other+j).read()),word(framed));
++     #[cfg(NIX_negative)] assert_eq!(word(got),word(row[k])^1);
++    }
++    #[cfg(NIX_case_args)] {assert_eq!(dst.cast::<QM31>().add(k),original.cast::<QM31>().add(29*p+k));}
++    #[cfg(NIX_case_frame)] {assert_eq!(*frame,before);}
++    #[cfg(all(NIX_negative,not(NIX_split),not(NIX_rawwindow)))] assert!(!same(got,row[k]));
++    #[cfg(NIX_rawwindow)] {
++     assert_eq!(core::mem::size_of::<QM31>(),16);assert_eq!(core::mem::size_of::<Claims>(),1392);
++     assert_eq!(core::mem::align_of::<QM31>(),4);
++     #[cfg(not(NIX_window_frame))] {
++      let got=original.cast::<u32>().add(4*(29*p+k)+limb).read();
++      let want=row.as_ptr().cast::<u32>().add(4*k+limb).read();
++      assert_eq!(got,want);
++      #[cfg(NIX_negative)] assert_eq!(got,want^1);
++     }
++     #[cfg(not(NIX_window_value))] {
++      let got=original.cast::<u32>().add(4*(29*other+j)+limb).read();
++      assert_eq!(got,framed);
++      #[cfg(NIX_negative)] assert_eq!(got,framed^1);
++     }
++    }
++    drop(out);assert_eq!(*frame,before);
++   }
++  }
++ }
++
++ #[kani::proof] #[kani::unwind(18)]
++ #[kani::stub(core::ptr::copy_nonoverlapping, crate::NIX_kmx::KMX_copy_nonoverlapping)]
++ #[kani::stub(alloc::alloc::realloc, crate::NIX_kmx::KMX_realloc)]
++ #[kani::stub(Vec::<MaybeUninit<Claims>>::try_reserve_exact,reserve)]
++ fn allocation_cleanup(){
++  let before:u64=kani::any();let frame=Box::new(before);
++  match uninit::<Claims>() {
++   Err(e)=>{assert!(matches!(e,Error::Allocation));assert_eq!(*frame,before);},
++   Ok(mut out)=>{
++    let raw=out.as_mut_ptr();
++    #[cfg(NIX_case_args)] {assert!(!raw.is_null());assert!(!core::ptr::eq(raw.cast::<u8>(),(&*frame as *const u64).cast::<u8>()));}
++    #[cfg(NIX_case_frame)] assert_eq!(*frame,before);
++    #[cfg(all(NIX_negative,NIX_case_args))] assert!(raw.is_null());
++    #[cfg(all(NIX_negative,NIX_case_frame))] assert_eq!(*frame,before^1);
++    #[cfg(all(NIX_negative,NIX_case_cleanup))] core::mem::forget(out);
++    #[cfg(not(all(NIX_negative,NIX_case_cleanup)))] drop(out);
++    assert_eq!(*frame,before);
++   }
++  }
++ }
++}
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani,feature(allocator_api))]
+ //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
+ #![no_std]
+ extern crate alloc;
+@@ -44,3 +45,5 @@
+ compile_error!("`audit-eight-way` is audit-only: it is never combined with the prover (PREREG-PROOF-SIZE-2 item 4)");
+ #[cfg(all(feature="audit-eight-way",any(target_os="solana",feature="program-build")))]
+ compile_error!("`audit-eight-way` is audit-only: it is never built for a program (PREREG-PROOF-SIZE-2 item 4)");
++
++#[cfg(kani)] #[path="../../../KMX_stubs.rs"] mod NIX_kmx;
+--- a/crates/aspis-r1-cost-probe/src/r1_semantic.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_semantic.rs
+@@ -316,3 +316,55 @@
+     mark(obs, 1);
+     verify_finish(public, prefix, transcript, challenges, obs)
+ }
++
++#[cfg(kani)] pub mod NIX_round {
++ use super::*;use crate::r1_wire::ValidatedRecord;
++ fn same(a:QM31,b:QM31)->bool{a.c0.a.0==b.c0.a.0&&a.c0.b.0==b.c0.b.0&&a.c1.a.0==b.c1.a.0&&a.c1.b.0==b.c1.b.0}
++ struct Log{getter_prefix:[u64;2],getter_row:[u8;2],getter_count:usize,decode_row:u8,ptr:*const u8,len:usize,offset:usize,bp:QM31,vp:QM31,va:QM31,value_round:usize,semantic_row:u8,semantic_ptr:*const u8,semantic_len:usize,state:[u8;32],next:u8,times:[u8;4],count:u8,frame:u64}
++ fn get<'a>(prefix:u64,row:u8,framed:&'a[u8],l:&mut Log)->Result<ValidatedRecord<'a>,Error>{let i=l.getter_count;l.getter_prefix[i]=prefix;l.getter_row[i]=row;l.getter_count+=1;Ok(crate::r1_wire::NIX_round_constructor::record(row,framed))}
++ fn tick(i:usize,l:&mut Log){l.times[i]=l.count;l.count+=1;}
++ fn decode(record:ValidatedRecord<'_>,offset:usize,reply:Result<[QM31;28],Error>,l:&mut Log)->Result<[QM31;28],Error>{l.decode_row=record.row();l.ptr=record.framed().as_ptr();l.len=record.framed().len();l.offset=offset;tick(0,l);reply}
++ fn boundary(poly:&[QM31;28],reply:QM31,k:usize,l:&mut Log)->QM31{l.bp=poly[k];tick(1,l);reply}
++ fn semantic<H:Digest32>(t:&mut SemanticTranscript<H>,r:ValidatedRecord<'_>,reply:Result<QM31,Error>,state:[u8;32],next:u8,l:&mut Log)->Result<QM31,Error>{l.semantic_row=r.row();l.semantic_ptr=r.framed().as_ptr();l.semantic_len=r.framed().len();l.state=t.state();l.next=t.next_row();tick(2,l);crate::r1_wire::NIX_round_constructor::update(t,state,next);reply}
++ fn value(poly:&[QM31;28],alpha:&[QM31;10],round:usize,reply:QM31,k:usize,j:usize,l:&mut Log)->QM31{l.vp=poly[k];l.va=alpha[j];l.value_round=round;tick(3,l);reply}
++ fn step<H:Digest32>(prefix:u64,framed:&[u8],mut transcript:SemanticTranscript<H>,mut alpha:[QM31;10],mut running:QM31,round:usize,polyreply:Result<[QM31;28],Error>,boundaryreply:QM31,semreply:Result<QM31,Error>,newstate:[u8;32],newnext:u8,valuereply:QM31,k:usize,j:usize,log:&mut Log)->Result<(QM31,[QM31;10],SemanticTranscript<H>),Error>{
++        let row = 15 + round as u8;
++        let polynomial = decode(get(prefix,row,framed,log)?,0,polyreply,log)?;
++        let boundary = boundary(&polynomial,boundaryreply,k,log);
++        if boundary != running {
++            return Err(Error::Boundary { round });
++        }
++        alpha[round] = semantic(&mut transcript,get(prefix,row,framed,log)?,semreply,newstate,newnext,log)?;
++        let value = value(&polynomial,&alpha,round,valuereply,k,j,log);
++        #[cfg(feature = "prover")]
++        {
++            round_checks[round] = [running, boundary, value];
++        }
++        running = value;
++    Ok((running, alpha, transcript))
++ }
++ pub fn check<H:Digest32>(hash:H,negative:bool){
++  let bytes:[u8;3717]=kani::any();let len:usize=kani::any();kani::assume(len<=3717);let framed=&bytes[..len];let prefix:u64=kani::any();
++  let round:usize=kani::any();kani::assume(round<10);let row=15+round as u8;let k:usize=kani::any();kani::assume(k<28);let j:usize=kani::any();kani::assume(j<10);let z:usize=kani::any();kani::assume(z<32);
++  let alpha:[QM31;10]=kani::any();let running:QM31=kani::any();let poly:[QM31;28]=kani::any();let bd:QM31=kani::any();let challenge:QM31=kani::any();let value:QM31=kani::any();let decode_ok:bool=kani::any();let semantic_ok:bool=kani::any();let bad_value:usize=kani::any();kani::assume(bad_value<28);let e:u8=kani::any();let a:u8=kani::any();let tag:u8=kani::any();kani::assume(tag<2);
++  let polyreply=if decode_ok{Ok(poly)}else{Err(if tag==0{Error::Length{row}}else{Error::NonCanonical{row,value:bad_value}})};let semreply=if semantic_ok{Ok(challenge)}else{Err(Error::RowOrder{expected:e,actual:a})};
++  let state:[u8;32]=kani::any();let next:u8=kani::any();let newstate:[u8;32]=kani::any();let newnext:u8=kani::any();let count:u8=kani::any();kani::assume(count<252);let frame:u64=kani::any();let seed:QM31=kani::any();let times:[u8;4]=kani::any();let oldstate:[u8;32]=kani::any();
++  let mut l=Log{getter_prefix:[0;2],getter_row:[0;2],getter_count:0,decode_row:0,ptr:core::ptr::null(),len:0,offset:99,bp:seed,vp:seed,va:seed,value_round:99,semantic_row:0,semantic_ptr:core::ptr::null(),semantic_len:0,state:oldstate,next:0,times,count,frame};
++  let t=crate::r1_wire::NIX_round_constructor::transcript(hash,state,next);let mut out=step(prefix,framed,t,alpha,running,round,polyreply,bd,semreply,newstate,newnext,value,k,j,&mut l);
++  if negative {out=Err(Error::Terminal);}
++  let boundary_ok=same(bd,running);let has_semantic=decode_ok&&boundary_ok;let has_value=has_semantic&&semantic_ok;
++  #[cfg(NIX_round_args)] {if negative {l.ptr=core::ptr::null();l.frame^=1;}
++  assert_eq!(l.getter_prefix[0],prefix);assert_eq!(l.getter_row[0],row);assert_eq!(l.getter_count,if has_semantic{2}else{1});if has_semantic{assert_eq!(l.getter_prefix[1],prefix);assert_eq!(l.getter_row[1],row);}else{assert_eq!(l.getter_prefix[1],0);assert_eq!(l.getter_row[1],0);}
++
++  assert_eq!(l.decode_row,row);assert_eq!(l.ptr,framed.as_ptr());assert_eq!(l.len,len);assert_eq!(l.offset,0);assert_eq!(l.times[0],count);assert_eq!(l.frame,frame);
++
++  if decode_ok{assert!(same(l.bp,poly[k]));assert_eq!(l.times[1],count+1);}else{assert!(same(l.bp,seed));assert_eq!(l.times[1],times[1]);}
++  if has_semantic{assert_eq!(l.semantic_row,row);assert_eq!(l.semantic_ptr,framed.as_ptr());assert_eq!(l.semantic_len,len);assert_eq!(l.state[z],state[z]);assert_eq!(l.next,next);assert_eq!(l.times[2],count+2);}else{assert_eq!(l.semantic_row,0);assert!(l.semantic_ptr.is_null());assert_eq!(l.semantic_len,0);assert_eq!(l.state[z],oldstate[z]);assert_eq!(l.next,0);assert_eq!(l.times[2],times[2]);}
++  if has_value{assert!(same(l.vp,poly[k]));assert!(same(l.va,if j==round{challenge}else{alpha[j]}));assert_eq!(l.value_round,round);assert_eq!(l.times[3],count+3);}else{assert!(same(l.vp,seed)&&same(l.va,seed));assert_eq!(l.value_round,99);assert_eq!(l.times[3],times[3]);}
++  assert_eq!(l.count,count+if !decode_ok{1}else if !boundary_ok{2}else if !semantic_ok{3}else{4});
++  }
++  #[cfg(NIX_round_result)] {
++  match out{Ok((r,al,t))=>{assert!(has_value);assert!(same(r,value));assert!(same(al[j],if j==round{challenge}else{alpha[j]}));assert_eq!(t.state()[z],newstate[z]);assert_eq!(t.next_row(),newnext);},Err(err)=>{if !decode_ok{if tag==0{assert!(matches!(err,Error::Length{row:r} if r==row));}else{assert!(matches!(err,Error::NonCanonical{row:r,value:v} if r==row&&v==bad_value));}}else if !boundary_ok{assert!(matches!(err,Error::Boundary{round:r} if r==round));}else{assert!(!semantic_ok);assert!(matches!(err,Error::RowOrder{expected:x,actual:y} if x==e&&y==a));}}}
++  }
++ }
++}
+--- a/crates/aspis-r1-cost-probe/src/r1_wire.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_wire.rs
+@@ -848,3 +848,42 @@
+         finite(row,tail,value.wrapping_add(1),remaining.wrapping_sub(1))
+     }
+ }
++
++#[cfg(kani)]
++pub mod NIX_circle_validated {
++ use super::*;
++ struct Log{row:u8,ptr:*const u8,len:usize,state:[u8;32],next:u8,at:u8,calls:u8,sample_row:CircleRow,sample_block:[u8;32],frame:u64}
++ fn block<H:Digest32>(t:&mut SemanticTranscript<H>,row:u8,framed:&[u8],reply:Result<[u8;32],Error>,new_state:[u8;32],new_next:u8,log:&mut Log)->Result<[u8;32],Error>{
++  log.row=row;log.ptr=framed.as_ptr();log.len=framed.len();log.state=t.state;log.next=t.next_row;log.at=log.calls;log.calls+=1;t.state=new_state;t.next_row=new_next;reply
++ }
++ fn circle(block:&[u8;32],row:CircleRow,point:SecureCirclePoint,log:&mut Log)->SecureCirclePoint{log.sample_row=row;log.sample_block=*block;log.calls+=1;point}
++ fn step<H:Digest32>(t:&mut SemanticTranscript<H>,record:ValidatedRecord<'_>,reply:Result<[u8;32],Error>,new_state:[u8;32],new_next:u8,point:SecureCirclePoint,log:&mut Log)->Result<SecureCirclePoint,Error>{
++  let row=record.row();let circle_row=match row{25=>CircleRow::First,26=>CircleRow::Second,_=>return Err(Error::InvalidRow)};
++  Ok(circle(&block(t,row,record.framed(),reply,new_state,new_next,log)?,circle_row,point,log))
++ }
++ fn same(a:QM31,b:QM31)->bool{a.c0.a.0==b.c0.a.0&&a.c0.b.0==b.c0.b.0&&a.c1.a.0==b.c1.a.0&&a.c1.b.0==b.c1.b.0}
++ pub fn check<H:Digest32>(hash:H,negative:bool){
++  let bytes:[u8;3717]=kani::any();let len:usize=kani::any();kani::assume(len<=3717);let framed=&bytes[..len];
++  let row:u8=kani::any();let before_state:[u8;32]=kani::any();let before_next:u8=kani::any();
++  let new_state:[u8;32]=kani::any();let new_next:u8=kani::any();let sampled:[u8;32]=kani::any();
++  let expected:u8=kani::any();let actual:u8=kani::any();let success:bool=kani::any();let reply=if success{Ok(sampled)}else{Err(Error::RowOrder{expected,actual})};
++  let point=SecureCirclePoint{x:kani::any(),y:kani::any()};let calls:u8=kani::any();kani::assume(calls<254);let frame:u64=kani::any();
++  let old_sample:[u8;32]=kani::any();let old_state:[u8;32]=kani::any();let mut log=Log{row:0,ptr:core::ptr::null(),len:0,state:old_state,next:0,at:0,calls,sample_row:CircleRow::First,sample_block:old_sample,frame};
++  let mut transcript=SemanticTranscript{state:before_state,hash,next_row:before_next};
++  let mut result=step(&mut transcript,ValidatedRecord{row,framed},reply,new_state,new_next,point,&mut log);
++  if negative {result=match result{Ok(_)=>Err(Error::InvalidRow),Err(_)=>Ok(point)};}
++  let j:usize=kani::any();kani::assume(j<32);
++  {if row==25||row==26{assert_eq!(log.row,row);assert_eq!(log.ptr,framed.as_ptr());assert_eq!(log.len,len);assert_eq!(log.next,before_next);assert_eq!(log.state[j],before_state[j]);assert_eq!(log.at,calls);if success{assert_eq!(log.sample_block[j],sampled[j]);match (row,log.sample_row){(25,CircleRow::First)|(26,CircleRow::Second)=>{},_=>assert!(false)}}}}
++  {assert_eq!(log.frame,frame);if row==25||row==26{assert_eq!(transcript.state[j],new_state[j]);assert_eq!(transcript.next_row,new_next);if !success{assert_eq!(log.sample_block[j],old_sample[j]);assert!(matches!(log.sample_row,CircleRow::First));}assert_eq!(log.calls,calls+if success{2}else{1});}else{assert_eq!(transcript.state[j],before_state[j]);assert_eq!(transcript.next_row,before_next);assert_eq!(log.calls,calls);assert_eq!(log.sample_block[j],old_sample[j]);assert!(matches!(log.sample_row,CircleRow::First));assert_eq!(log.row,0);assert!(log.ptr.is_null());assert_eq!(log.len,0);assert_eq!(log.state[j],old_state[j]);assert_eq!(log.next,0);assert_eq!(log.at,0);}}
++  {if row==25||row==26{match (success,result){(true,Ok(p))=>assert!(same(p.x,point.x)&&same(p.y,point.y)),(false,Err(Error::RowOrder{expected:e,actual:a}))=>{assert_eq!(e,expected);assert_eq!(a,actual);},_=>assert!(false)}}else{assert!(matches!(result,Err(Error::InvalidRow)));}}
++ }
++}
++
++#[cfg(kani)] pub mod NIX_round_constructor {
++ pub fn record<'a>(row:u8,framed:&'a[u8])->super::ValidatedRecord<'a>{super::ValidatedRecord{row,framed}}
++
++ use super::*;
++ pub fn transcript<H:Digest32>(hash:H,state:[u8;32],next_row:u8)->SemanticTranscript<H>{SemanticTranscript{hash,state,next_row}}
++ pub fn update<H:Digest32>(t:&mut SemanticTranscript<H>,state:[u8;32],next_row:u8){t.state=state;t.next_row=next_row;}
++ pub fn prefix<'a>(c1_root:&'a[u8;32],records:[&'a[u8];27])->Prefix<'a>{Prefix{c1_root,records}}
++}
+--- a/crates/aspis-r1-cost-probe/src/sampler.rs
++++ b/crates/aspis-r1-cost-probe/src/sampler.rs
+@@ -228,3 +228,39 @@
+         }
+     }
+ }
++
++#[cfg(kani)]
++pub mod NIX_sampler {
++ use super::*;use aspis_core::{field::{QM31,CM31},circle::{SecureCirclePoint,CirclePointError}};
++ fn same(a:QM31,b:QM31)->bool {a.c0.a.0==b.c0.a.0 && a.c0.b.0==b.c0.b.0 && a.c1.a.0==b.c1.a.0 && a.c1.b.0==b.c1.b.0}
++ fn point()->SecureCirclePoint {SecureCirclePoint{x:kani::any(),y:kani::any()}}
++ fn canon(q:QM31)->bool{q.c0.a.0<aspis_core::field::P&&q.c0.b.0<aspis_core::field::P&&q.c1.a.0<aspis_core::field::P&&q.c1.b.0<aspis_core::field::P}
++ struct Log{block:*const u8,parameter:QM31,index:usize,count:u8,at:[u8;3],frame:u64}
++ fn sample(block:&[u8;32],q:QM31,log:&mut Log)->QM31{log.block=block.as_ptr();log.at[0]=log.count;log.count+=1;q}
++ fn map(q:QM31,reply:Result<SecureCirclePoint,CirclePointError>,log:&mut Log)->Result<SecureCirclePoint,CirclePointError>{log.parameter=q;log.at[1]=log.count;log.count+=1;reply}
++ fn fallback(index:usize,p:SecureCirclePoint,log:&mut Log)->SecureCirclePoint{log.index=index;log.at[2]=log.count;log.count+=1;p}
++ fn step(block:&[u8;32],row:CircleRow,q:QM31,mapped:Result<SecureCirclePoint,CirclePointError>,fb:SecureCirclePoint,log:&mut Log)->SecureCirclePoint{
++  map(sample(block,q,log),mapped,log).unwrap_or_else(|_| {
++   fallback(match row {CircleRow::First=>0,CircleRow::Second=>1},fb,log)
++  })
++ }
++ fn check(negative:bool){
++  let block:[u8;32]=kani::any();let row=if kani::any(){CircleRow::First}else{CircleRow::Second};
++  let q:QM31=kani::any();kani::assume(canon(q));let p=point();let fb=point();let tag:u8=kani::any();kani::assume(tag<3);
++  let mapped=match tag{0=>Ok(p),1=>Err(CirclePointError::SingularParameter),_=>Err(CirclePointError::ParameterInCm31Subfield)};
++  let count:u8=kani::any();kani::assume(count<253);let old_index:usize=kani::any();let at:[u8;3]=kani::any();let frame:u64=kani::any();
++  let mut log=Log{block:core::ptr::null(),parameter:kani::any(),index:old_index,count,at,frame};
++  let mut result=step(&block,row,q,mapped,fb,&mut log);
++  if negative {result.x.c0.a.0^=1;}
++  {assert_eq!(log.block,block.as_ptr());assert!(same(log.parameter,q));if tag!=0 {assert_eq!(log.index,match row{CircleRow::First=>0,CircleRow::Second=>1});}else{assert_eq!(log.index,old_index);}}
++  {assert_eq!(log.at[0],count);assert_eq!(log.at[1],count+1);if tag!=0{assert_eq!(log.at[2],count+2);assert_eq!(log.count,count+3);}else{assert_eq!(log.at[2],at[2]);assert_eq!(log.count,count+2);}}
++  {assert_eq!(log.frame,frame);}
++  {let expected=if tag==0{p}else{fb};assert!(same(result.x,expected.x)&&same(result.y,expected.y));}
++ }
++ #[kani::proof] #[kani::unwind(34)]
++ #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)]
++ pub fn caller(){check(false);}
++ #[kani::proof] #[kani::unwind(34)]
++ #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)]
++ pub fn caller_control(){check(true);}
++}
+--- a/crates/aspis-statement/src/lib.rs
++++ b/crates/aspis-statement/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! Aspis SpendV0 statement layer, built evaluator-first.
+ //!
+ //! This crate deliberately contains no proof system. It defines the exact
+@@ -207,3 +208,5 @@
+ 
+ #[cfg(feature = "r0")]
+ pub mod r0;
++
++#[cfg(kani)] #[path="../../../KMX_stubs.rs"] mod NIX_kmx;
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
+@@ -1541,3 +1541,130 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++mod NIX_residual {
++ use super::*;
++ fn q()->QM31 {kani::any()}
++ fn same(a:QM31,b:QM31)->bool {a.c0.a.0==b.c0.a.0&&a.c0.b.0==b.c0.b.0&&a.c1.a.0==b.c1.a.0&&a.c1.b.0==b.c1.b.0}
++ fn canonical(a:QM31)->bool {a.c0.a.0<aspis_core::field::P&&a.c0.b.0<aspis_core::field::P&&a.c1.a.0<aspis_core::field::P&&a.c1.b.0<aspis_core::field::P}
++ struct Log {args:[QM31;34],kind:[u8;17],at:[u8;17],count:u8,frame:u64}
++ fn op(a:QM31,b:QM31,value:QM31,i:usize,kind:u8,l:&mut Log)->QM31 {l.args[2*i]=a;l.args[2*i+1]=b;l.kind[i]=kind;l.at[i]=l.count;l.count+=1;value}
++ fn step(row:CopyRowExtension,helper:QM31,chi:QM31,o:[QM31;17],l:&mut Log)->QM31 {
++    let denominators = [
++        op(chi,row.producer_values[0],o[0],0,0,l),
++        op(chi,row.producer_values[1],o[1],1,0,l),
++        op(chi,row.consumer_values[0],o[2],2,0,l),
++        op(chi,row.consumer_values[1],o[3],3,0,l),
++    ];
++    let producer_denominator = op(denominators[0],denominators[1],o[4],4,1,l);
++    let consumer_denominator = op(denominators[2],denominators[3],o[5],5,1,l);
++    let producer_numerator = op(op(row.producer_weights[0],denominators[1],o[6],6,1,l),op(row.producer_weights[1],denominators[0],o[7],7,1,l),o[8],8,2,l);
++    let consumer_numerator = op(op(row.consumer_weights[0],denominators[3],o[9],9,1,l),op(row.consumer_weights[1],denominators[2],o[10],10,1,l),o[11],11,2,l);
++    op(op(producer_denominator,op(op(helper,consumer_denominator,o[12],12,1,l),consumer_numerator,o[13],13,2,l),o[14],14,1,l),op(consumer_denominator,producer_numerator,o[15],15,1,l),o[16],16,0,l)
++ }
++ fn check(negative:bool){
++  let row=CopyRowExtension{producer_values:[q(),q()],producer_weights:[q(),q()],consumer_values:[q(),q()],consumer_weights:[q(),q()]};let helper=q();let chi=q();
++  for a in [row.producer_values[0],row.producer_values[1],row.producer_weights[0],row.producer_weights[1],row.consumer_values[0],row.consumer_values[1],row.consumer_weights[0],row.consumer_weights[1],helper,chi]{kani::assume(canonical(a));}
++  let o=[q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q()];for a in o {kani::assume(canonical(a));}
++  let count:u8=kani::any();kani::assume(count<239);let frame:u64=kani::any();let mut l=Log{args:[q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q()],kind:kani::any(),at:kani::any(),count,frame};
++  let mut result=step(row,helper,chi,o,&mut l);if negative{result.c0.a.0^=1;}
++  let expected=[(chi,row.producer_values[0]),(chi,row.producer_values[1]),(chi,row.consumer_values[0]),(chi,row.consumer_values[1]),(o[0],o[1]),(o[2],o[3]),(row.producer_weights[0],o[1]),(row.producer_weights[1],o[0]),(o[6],o[7]),(row.consumer_weights[0],o[3]),(row.consumer_weights[1],o[2]),(o[9],o[10]),(helper,o[5]),(o[12],o[11]),(o[4],o[13]),(o[5],o[8]),(o[14],o[15])];
++  let i:usize=kani::any();kani::assume(i<17);assert!(same(l.args[2*i],expected[i].0)&&same(l.args[2*i+1],expected[i].1));assert!(canonical(l.args[2*i])&&canonical(l.args[2*i+1]));let kinds=[0u8,0,0,0,1,1,1,1,2,1,1,2,1,2,1,1,0];assert_eq!(l.kind[i],kinds[i]);assert_eq!(l.at[i],count+i as u8);assert_eq!(l.count,count+17);assert_eq!(l.frame,frame);assert!(same(result,o[16]));
++ }
++ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn native(){check(false);}
++ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn control(){check(true);}
++}
++
++#[cfg(kani)] mod NIX_active {
++ use super::*;
++ fn same(a:QM31,b:QM31)->bool{a.c0.a.0==b.c0.a.0&&a.c0.b.0==b.c0.b.0&&a.c1.a.0==b.c1.a.0&&a.c1.b.0==b.c1.b.0}
++ fn canon(a:QM31)->bool{a.c0.a.0<aspis_core::field::P&&a.c0.b.0<aspis_core::field::P&&a.c1.a.0<aspis_core::field::P&&a.c1.b.0<aspis_core::field::P}
++ struct Log{a:QM31,b:QM31,count:u8,frame:u64}
++ fn add(a:QM31,b:QM31,out:QM31,l:&mut Log)->QM31{l.a=a;l.b=b;l.count+=1;out}
++ fn step(high:&[QM31;64],sums:&mut[QM31;7],mut block:usize,out:QM31,l:&mut Log)->(usize,usize){
++  let mask=constants::ACTIVE_ROW_MASKS[block];
++  let coordinate=match mask{6144=>0,6145=>1,4097=>2,2048=>3,2049=>4,26214=>5,1749=>6,_=>unreachable!("generated Copy active mask outside frozen basis")};
++  sums[coordinate]=add(sums[coordinate],high[block],out,l);block+=1;(block,coordinate)
++ }
++ fn check(negative:bool){
++  let high:[QM31;64]=kani::any();let before:[QM31;7]=kani::any();let mut sums=before;let block:usize=kani::any();kani::assume(block<64);let out:QM31=kani::any();kani::assume(canon(out));let count:u8=kani::any();kani::assume(count<255);let frame:u64=kani::any();let mut l=Log{a:kani::any(),b:kani::any(),count,frame};
++  let (next,coordinate)=step(&high,&mut sums,block,out,&mut l);if negative{l.frame^=1;}
++  const MASKS:[u16;7]=[6144,6145,4097,2048,2049,26214,1749];assert!(coordinate<7);assert_eq!(MASKS[coordinate],constants::ACTIVE_ROW_MASKS[block]);assert_eq!(next,block+1);assert!(same(l.a,before[coordinate])&&same(l.b,high[block]));assert_eq!(l.count,count+1);assert_eq!(l.frame,frame);
++  let i:usize=kani::any();kani::assume(i<7);assert!(same(sums[i],if i==coordinate{out}else{before[i]}));
++ }
++ #[kani::proof] #[kani::unwind(66)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn native(){check(false);}
++ #[kani::proof] #[kani::unwind(66)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn control(){check(true);}
++}
++
++#[cfg(kani)] mod NIX_more {
++ use super::*;
++
++ fn same(a:QM31,b:QM31)->bool{a.c0.a.0==b.c0.a.0&&a.c0.b.0==b.c0.b.0&&a.c1.a.0==b.c1.a.0&&a.c1.b.0==b.c1.b.0}
++ fn q()->QM31{kani::any()}
++
++ struct PairLog{a:QM31,b:QM31,c:QM31,d:QM31,count:u8,frame:u64}
++ fn mul(a:QM31,b:QM31,out:QM31,l:&mut PairLog)->QM31{l.a=a;l.b=b;l.count+=1;out}
++ fn add(a:QM31,b:QM31,out:QM31,l:&mut PairLog)->QM31{l.c=a;l.d=b;l.count+=1;out}
++ fn pattern_step(values:&mut[QM31;4],pattern_selectors:&[QM31;26],patterns:&[QM31;14],group:usize,mut coordinate:usize,product:QM31,out:QM31,l:&mut PairLog)->usize{
++  let pattern=usize::from(COPY_PATTERN_COORDINATE_PATTERNS[coordinate]);
++  values[group]=add(values[group],mul(patterns[pattern],pattern_selectors[coordinate],product,l),out,l);
++  coordinate+=1;coordinate
++ }
++ fn pattern_check(negative:bool){
++  let mut values:[QM31;4]=kani::any();let selectors:[QM31;26]=kani::any();let patterns:[QM31;14]=kani::any();let group:usize=kani::any();kani::assume(group<4);let coordinate:usize=kani::any();kani::assume(coordinate>=COPY_PATTERN_GROUP_OFFSETS[group]&&coordinate<COPY_PATTERN_GROUP_OFFSETS[group+1]);let i:usize=kani::any();kani::assume(i<4);let before=values[i];let selected=values[group];let product=q();let out=q();let count:u8=kani::any();kani::assume(count<254);let frame:u64=kani::any();let mut l=PairLog{a:q(),b:q(),c:q(),d:q(),count,frame};
++  let next=pattern_step(&mut values,&selectors,&patterns,group,coordinate,product,out,&mut l);if negative{l.frame^=1;}
++  let pat=usize::from(COPY_PATTERN_COORDINATE_PATTERNS[coordinate]);assert!(pat<14);assert_eq!(next,coordinate+1);assert!(same(l.a,patterns[pat])&&same(l.b,selectors[coordinate])&&same(l.c,selected)&&same(l.d,product));assert_eq!(l.count,count+2);assert_eq!(l.frame,frame);assert!(same(values[i],if i==group{out}else{before}));
++ }
++ fn pattern_init(negative:bool){let mut values:[QM31;4]=kani::any();let i:usize=kani::any();kani::assume(i<4);let before=values[i];let group=0usize;let coordinate=COPY_PATTERN_GROUP_OFFSETS[group];if negative{values[i].c0.a.0^=1;}assert_eq!(group,0);assert_eq!(coordinate,0);assert!(same(values[i],before));}
++ fn pattern_outer(negative:bool){let values:[QM31;4]=kani::any();let i:usize=kani::any();kani::assume(i<4);let before=values[i];let mut group:usize=kani::any();kani::assume(group<4);let old=group;let coordinate=COPY_PATTERN_GROUP_OFFSETS[group+1];group+=1;if negative{group=old;}assert_eq!(group,old+1);assert!(group<=4);assert!(coordinate<=26);assert!(same(values[i],before));}
++ fn active_init(negative:bool){let mut sums=[QM31::ZERO;7];let sum=QM31::ZERO;let block=0usize;let coordinate=0usize;if negative{sums[0].c0.a.0=1;}let i:usize=kani::any();kani::assume(i<7);assert!(same(sums[i],QM31::ZERO));assert!(same(sum,QM31::ZERO));assert_eq!(block,0);assert_eq!(coordinate,0);}
++ fn active_exit(negative:bool){let sum=q();let mut out=sum;if negative{out.c0.a.0^=1;}assert!(same(out,sum));}
++ fn tag_geometry(negative:bool){let c:usize=kani::any();kani::assume(c<30);let mut start=usize::from(COPY_TAG_COORDINATE_OFFSETS[c]);let end=usize::from(COPY_TAG_COORDINATE_OFFSETS[c+1]);if negative{start=273;}assert!(start<=end&&end<=272);assert_eq!(COPY_TAG_COORDINATE_OFFSETS[0],0);assert_eq!(COPY_TAG_COORDINATE_OFFSETS[30],272);}
++ fn tag_terms(negative:bool){let i:usize=kani::any();kani::assume(i<272);let mut block=COPY_TAG_TERMS.0[i];let tag=COPY_TAG_TERMS.1[i];if negative{block=64;}assert!(block<64);assert!(tag<aspis_core::field::P);}
++ const B:u64=2147483646u64*2147483646u64;
++ fn raw_step(raw:&mut[u64;4],products:[u64;4],mut index:usize)->usize{raw[0]+=products[0];raw[1]+=products[1];raw[2]+=products[2];raw[3]+=products[3];index+=1;index}
++ fn raw_check(negative:bool){let mut raw:[u64;4]=kani::any();let products:[u64;4]=kani::any();let n:u64=kani::any();kani::assume(n<4);for v in raw{kani::assume(v<=n*B);}for p in products{kani::assume(p<=B);}let index:usize=kani::any();kani::assume(index<272);let i:usize=kani::any();kani::assume(i<4);let old=raw[i];let next=raw_step(&mut raw,products,index);if negative{raw[i]+=1;}assert_eq!(next,index+1);assert_eq!(raw[i],old+products[i]);assert!(raw[i]<=(n+1)*B);}
++ struct RedLog{raw:u64,a:M31,b:M31,count:u8,frame:u64}
++ fn reduce(x:u64,value:M31,l:&mut RedLog)->M31{l.raw=x;l.count+=1;value}
++ fn madd(a:M31,b:M31,value:M31,l:&mut RedLog)->M31{l.a=a;l.b=b;l.count+=1;value}
++ fn reduce_step(output:&mut[M31;4],raw:&[u64;4],mut limb:usize,reduced:M31,reply:M31,l:&mut RedLog)->usize{output[limb]=madd(output[limb],reduce(raw[limb],reduced,l),reply,l);limb+=1;limb}
++ fn reduce_check(negative:bool){let mut output:[M31;4]=kani::any();let raw:[u64;4]=kani::any();let limb:usize=kani::any();kani::assume(limb<4);let i:usize=kani::any();kani::assume(i<4);let old=output[i];let selected=output[limb];let reduced:M31=kani::any();let reply:M31=kani::any();kani::assume(selected.0<aspis_core::field::P&&reduced.0<aspis_core::field::P&&reply.0<aspis_core::field::P);let count:u8=kani::any();kani::assume(count<254);let frame:u64=kani::any();let mut l=RedLog{raw:kani::any(),a:kani::any(),b:kani::any(),count,frame};let next=reduce_step(&mut output,&raw,limb,reduced,reply,&mut l);if negative{l.frame^=1;}assert_eq!(l.raw,raw[limb]);assert_eq!(l.a.0,selected.0);assert_eq!(l.b.0,reduced.0);assert_eq!(l.count,count+2);assert_eq!(l.frame,frame);assert_eq!(next,limb+1);assert_eq!(output[i].0,if i==limb{reply.0}else{old.0});}
++ struct LowLog{args:[QM31;18],kinds:[u8;9],calls:usize,frame:u64}
++ fn op(a:QM31,b:QM31,kind:u8,o:&[QM31;9],l:&mut LowLog)->QM31{let i=l.calls;l.args[2*i]=a;l.args[2*i+1]=b;l.kinds[i]=kind;l.calls+=1;o[i]}
++ fn low_step(low:&[QM31;16],high:&[QM31;7],sum:QM31,mut coordinate:usize,o:&[QM31;9],l:&mut LowLog)->(usize,QM31){
++  let low_sum=match coordinate{
++  0=>op(low[11],low[12],0,o,l),
++1=>op(op(low[0],low[11],0,o,l),low[12],0,o,l),
++2=>op(low[0],low[12],0,o,l),
++3=>low[11],
++4=>op(low[0],low[11],0,o,l),
++5=>op(op(op(op(op(op(op(low[1],low[2],0,o,l),low[5],0,o,l),low[6],0,o,l),low[9],0,o,l),low[10],0,o,l),low[13],0,o,l),low[14],0,o,l),
++6=>op(op(op(op(op(op(low[0],low[2],0,o,l),low[4],0,o,l),low[6],0,o,l),low[7],0,o,l),low[9],0,o,l),low[10],0,o,l),
++  _=>unreachable!("coordinate outside frozen active-mask basis")};
++  let sum=op(sum,op(high[coordinate],low_sum,1,o,l),0,o,l);coordinate+=1;(coordinate,sum)
++ }
++ fn low_check(negative:bool){let low:[QM31;16]=kani::any();let high:[QM31;7]=kani::any();let sum=q();let c:usize=kani::any();kani::assume(c<7);let o:[QM31;9]=kani::any();let seed=q();let frame:u64=kani::any();let mut l=LowLog{args:[seed;18],kinds:[0;9],calls:0,frame};let (next,out)=low_step(&low,&high,sum,c,&o,&mut l);if negative{l.frame^=1;}let mut expected=[(seed,seed);9];let mut n=0usize;
++  match c {0=>{expected[0]=(low[11],low[12]);expected[1]=(high[0],o[0]);expected[2]=(sum,o[1]);n=3;},1=>{expected[0]=(low[0],low[11]);expected[1]=(o[0],low[12]);expected[2]=(high[1],o[1]);expected[3]=(sum,o[2]);n=4;},2=>{expected[0]=(low[0],low[12]);expected[1]=(high[2],o[0]);expected[2]=(sum,o[1]);n=3;},3=>{expected[0]=(high[3],low[11]);expected[1]=(sum,o[0]);n=2;},4=>{expected[0]=(low[0],low[11]);expected[1]=(high[4],o[0]);expected[2]=(sum,o[1]);n=3;},5=>{expected[0]=(low[1],low[2]);expected[1]=(o[0],low[5]);expected[2]=(o[1],low[6]);expected[3]=(o[2],low[9]);expected[4]=(o[3],low[10]);expected[5]=(o[4],low[13]);expected[6]=(o[5],low[14]);expected[7]=(high[5],o[6]);expected[8]=(sum,o[7]);n=9;},6=>{expected[0]=(low[0],low[2]);expected[1]=(o[0],low[4]);expected[2]=(o[1],low[6]);expected[3]=(o[2],low[7]);expected[4]=(o[3],low[9]);expected[5]=(o[4],low[10]);expected[6]=(high[6],o[5]);expected[7]=(sum,o[6]);n=8;}, _=>unreachable!()}
++  let i:usize=kani::any();kani::assume(i<18);assert_eq!(next,c+1);assert_eq!(l.calls,n);assert_eq!(l.frame,frame);if i<2*n{assert!(same(l.args[i],if i%2==0{expected[i/2].0}else{expected[i/2].1}));let j=i/2;assert_eq!(l.kinds[j],if j==n-2{1}else{0});}else{assert!(same(l.args[i],seed));}assert!(same(out,o[n-1]));}
++ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn pattern_native(){pattern_check(false);}
++ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn pattern_control(){pattern_check(true);}
++ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn pattern_init_native(){pattern_init(false);}
++ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn pattern_init_control(){pattern_init(true);}
++ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn pattern_outer_native(){pattern_outer(false);}
++ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn pattern_outer_control(){pattern_outer(true);}
++ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn active_init_native(){active_init(false);}
++ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn active_init_control(){active_init(true);}
++ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn active_exit_native(){active_exit(false);}
++ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn active_exit_control(){active_exit(true);}
++ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn tag_geometry_native(){tag_geometry(false);}
++ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn tag_geometry_control(){tag_geometry(true);}
++ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn tag_terms_native(){tag_terms(false);}
++ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn tag_terms_control(){tag_terms(true);}
++ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn raw_native(){raw_check(false);}
++ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn raw_control(){raw_check(true);}
++ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn reduce_native(){reduce_check(false);}
++ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn reduce_control(){reduce_check(true);}
++ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn low_native(){low_check(false);}
++ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn low_control(){low_check(true);}
++}
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
+@@ -2328,3 +2328,25 @@
+         }
+     }
+ }
++
++#[cfg(kani)] mod NIX_more {
++ use super::*;
++
++ fn same(a:QM31,b:QM31)->bool{a.c0.a.0==b.c0.a.0&&a.c0.b.0==b.c0.b.0&&a.c1.a.0==b.c1.a.0&&a.c1.b.0==b.c1.b.0}
++ fn q()->QM31{kani::any()}
++
++ struct Log{lanes:[QM31;4],a:QM31,b:QM31,c:QM31,d:QM31,times:[u8;3],count:u8,frame:u64}
++ fn pack(lanes:&[QM31;4],out:QM31,l:&mut Log)->QM31{l.lanes=*lanes;l.times[0]=l.count;l.count+=1;out}
++ fn mul(a:QM31,b:QM31,out:QM31,l:&mut Log)->QM31{l.a=a;l.b=b;l.times[1]=l.count;l.count+=1;out}
++ fn add(a:QM31,b:QM31,out:QM31,l:&mut Log)->QM31{l.c=a;l.d=b;l.times[2]=l.count;l.count+=1;out}
++ fn step(packed:&mut[QM31;24],values:&[QM31;33],selector:QM31,group:usize,packreply:QM31,product:QM31,reply:QM31,l:&mut Log){let start=49;let lanes:[QM31;4]=core::array::from_fn(|slot|{let source=4*group+slot;if source>=start&&source<start+33{values[source-start]}else{QM31::ZERO}});packed[group]=add(packed[group],mul(selector,pack(&lanes,packreply,l),product,l),reply,l);}
++ fn check(negative:bool){let mut packed:[QM31;24]=kani::any();let values:[QM31;33]=kani::any();let selector=q();let group:usize=kani::any();kani::assume(group>=12&&group<=20);let i:usize=kani::any();kani::assume(i<24);let slot:usize=kani::any();kani::assume(slot<4);let old=packed[i];let selected=packed[group];let packreply=q();let product=q();let reply=q();let count:u8=kani::any();kani::assume(count<253);let frame:u64=kani::any();let mut l=Log{lanes:kani::any(),a:q(),b:q(),c:q(),d:q(),times:kani::any(),count,frame};step(&mut packed,&values,selector,group,packreply,product,reply,&mut l);if negative{l.frame^=1;}let source=4*group+slot;assert!(same(l.lanes[slot],if source>=49&&source<82{values[source-49]}else{QM31::ZERO}));assert!(same(l.a,selector)&&same(l.b,packreply)&&same(l.c,selected)&&same(l.d,product));assert_eq!(l.times[0],count);assert_eq!(l.times[1],count+1);assert_eq!(l.times[2],count+2);assert_eq!(l.count,count+3);assert_eq!(l.frame,frame);assert!(same(packed[i],if i==group{reply}else{old}));}
++ fn init(negative:bool){let first=49usize/4;let mut last=(49usize+33-1)/4;if negative{last+=1;}assert_eq!(first,12);assert_eq!(last,20);}
++ fn outer(negative:bool){let start:usize=kani::any();kani::assume(start>=12&&start<=20);let mut range=start..=20;let mut got=range.next();if negative{got=None;}assert_eq!(got,Some(start));assert_eq!(range.is_empty(),start==20);let (lo,hi)=range.into_inner();assert_eq!(lo,if start<20{start+1}else{20});assert_eq!(hi,20);}
++ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn shared_native(){check(false);}
++ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn shared_control(){check(true);}
++ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn shared_init_native(){init(false);}
++ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn shared_init_control(){init(true);}
++ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn shared_outer_native(){outer(false);}
++ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn shared_outer_control(){outer(true);}
++}
+--- a/programs/r1-cost-probe/src/lib.rs
++++ b/programs/r1-cost-probe/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani,feature(allocator_api))]
+ //! UNPROVED R1 COST PROBE. Local measurement entrypoint only.
+ use aspis_r1_cost_probe::verifier::{self,Phase};
+ use aspis_statement::pool_v1::decode_pool_v1_pair_forest_terminal_statement_v1;
+@@ -168,3 +169,22 @@
+ #[cfg(all(test, feature="pool-adapter"))]
+ #[path="r1_pool_adapter_original.rs"]
+ mod r1_pool_adapter_original;
++
++#[cfg(kani)]
++mod NIX_validated_program {
++ use super::*;
++ #[kani::proof] #[kani::unwind(3720)]
++ #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)]
++ fn deployed_circle_dispatch(){aspis_r1_cost_probe::r1_wire::NIX_circle_validated::check(SolanaDigest,false);}
++ #[kani::proof] #[kani::unwind(3720)]
++ #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)]
++ fn deployed_circle_dispatch_control(){aspis_r1_cost_probe::r1_wire::NIX_circle_validated::check(SolanaDigest,true);}
++}
++
++#[cfg(kani)] extern crate alloc;
++#[cfg(kani)] #[path="../../../KMX_stubs.rs"] mod NIX_kmx;
++
++#[cfg(kani)] mod NIX_round_program {
++ #[kani::proof] #[kani::unwind(3720)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn native(){aspis_r1_cost_probe::r1_semantic::NIX_round::check(super::SolanaDigest,false);}
++ #[kani::proof] #[kani::unwind(3720)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn control(){aspis_r1_cost_probe::r1_semantic::NIX_round::check(super::SolanaDigest,true);}
++}
