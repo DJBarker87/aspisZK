@@ -98,7 +98,7 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
-if {kind!r}=='export': names += ['NGX_EXPORT.json','NGX_CLOSURE_PINS.json.sha256']
+if {kind!r}=='export': names += ['NGX_EXPORT.json','NGX_CLOSURE_PINS.json.sha256','NGX_CLOSURE_PINS.json']
 if {kind!r}=='metadata': names += ['NGX_FULL_GRAPH.json.sha256','NGX_ALL_CRATE_FEATURES.json']
 if {kind!r}=='extract': names += ['NGX_EXTRACTION_PINS.json']+([str(p.relative_to(b)) for p in (b/'NGX_extracted').rglob('*') if p.is_file()])+(['NGX_actual.llbc'] if (b/'NGX_actual.llbc').exists() else [])
 if {kind!r}=='kani': names += [str(p.relative_to(b)) for p in b.glob(a+'-graph*')]+[str(p.relative_to(b)) for p in b.glob(a+'-source*')]+[str(p.relative_to(b)) for p in b.glob(a+'-lock*')]

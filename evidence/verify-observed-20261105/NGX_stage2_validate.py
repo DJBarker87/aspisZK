@@ -11,7 +11,7 @@ def validate():
  assert raw['exit_status']==0 and all(x['equal'] and set(x['walked_axioms'])<=standard for x in raw['results'])
  assert {x['root'] for x in raw['results']}==set(read('NGX_AUDIT_ROOTS.json')['groups'][1])
  assert read('NGX_L044/receipt.json')['exit_status']==0 and read('NGX_L045/receipt.json')['exit_status']==0 and read('NGX_L046/receipt.json')['exit_status']==0
- scan=list(map(json.loads,(E/'NGX_LOADED_scan.jsonl').read_text().splitlines()));assert all(not r['dangling'] and not r['duplicate_owners'] and r['imports_match'] for r in scan)
+ scan=list(map(json.loads,lzma.decompress((E/'NGX_SCAN_STAGE2.jsonl.xz').read_bytes()).decode().splitlines()));assert all(not r['dangling'] and not r['duplicate_owners'] and r['imports_match'] for r in scan)
  # Unchanged compiled audit binary and walker: the stage1 eight fixtures apply
  # to exactly this binary, not a newly adapted or differently built driver.
  for name in ['NGX_ProofDriver','NGX_Driver']:
@@ -20,7 +20,7 @@ def validate():
  selected=read('NGX_STAGE2_TARGETS.json')|{'NGX_COMBINED_IMPORT':'NGX_L044'}
  for module,attempt in selected.items():
   r=read(attempt+'/receipt.json');assert r['exit_status']==0
-  assert sha((E/(module+'.lean')).read_bytes())==r['source_hashes']['NGX_generated/'+module+'.lean']
+  assert sha((E/('NGX_STAGE2_IMPORT.lean.txt' if module=='NGX_COMBINED_IMPORT' else module+'.lean')).read_bytes())==r['source_hashes']['NGX_generated/'+module+'.lean']
   assert all('sorryAx' not in line for line in r['print_axioms'])
  metadata=read('NGX_METADATA_MANIFEST.json');native=[]
  frozen_wire=subprocess.check_output(['git','show','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:crates/aspis-r1-cost-probe/src/r1_wire.rs'],cwd=R,text=True)
@@ -48,7 +48,7 @@ def validate():
  for filename,needle,replacement in [('NGX_PARSE_CUT.json','validate_record_fields(row, payload)?;','validate_cut(row, payload, log)?;'),('NGX_RECORD_AT_CUT.json','parse_record(row, framed)?;','record_cut(row, framed, log)?;')]:
   x=read(filename);original=x['original_body'];assert original in frozen_wire;body=original[original.index('{'):];assert body.replace(needle,replacement)==x['cut_body']
  assert all(r['normalized_body_equal'] for r in read('NGX_PREFIX_REUSED_CONTINUITY.json'))
- closed=read('NGX_CLOSED.json');ids={r for f in closed['functions'] for r in f['rows']};assert ids=={'TX1:139','TX1:143','TX1:144','TX1:146','TX1:151','TX1:152'}
+ closed=read('NGX_CLOSED_STAGE2.json');ids={r for f in closed['functions'] for r in f['rows']};assert ids=={'TX1:139','TX1:143','TX1:144','TX1:146','TX1:151','TX1:152'}
  assert all(not f['inner_hypotheses_remaining'] for f in closed['functions'])
  required={
  'TX1:146':('AspisR1.NGX_StateImpl.source',[5],[6],[]),

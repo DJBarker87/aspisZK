@@ -26,3 +26,17 @@ L033: an unnecessary explicit legacy S1 module import collided with the
 canonical Phase owner. L034 confirmed Code/run/sampleBlock/newTranscript are
 ALREADY present in NGK's coherent environment. Remove that legacy import and
 reuse those existing owners; do not duplicate or redefine them.
+
+K024: own input error: passed short harness name despite --exact. Kani rejected selection before CBMC. No verdict or credit; K025 uses the original fully qualified prefix_value name unchanged.
+
+K026: strict source preflight rejected the newly extended own harness because NGX_SOURCE_PINS still pinned the previous stage. No Kani process started. Pins regenerated from committed overlay inputs for K027; gate unchanged.
+
+L049/L052 diagnostic unknown names are excluded. L050 sampler draft accidentally resolved a different sampler namespace after the imported wrappers; L051 explicitly selects the adopted PublicPreparation owner and passes. L053 used unsupported namespace alias syntax; L054 spells both owners completely and passes. L055/L056 generic Code.bind proof required its fully qualified definition and explicit induction rewrite; L057 passes. Failed draft axioms (including sorryAx) are never imported.
+
+E001 extraction: Charon succeeded but left public_bytes as an external declaration. This is an incomplete body selection, not a proof of the producer. Excluded from credit. E002 adds explicit source includes to traverse the actual serializer and semantic public constructors, with unchanged frozen source and tools.
+
+E002 actual serializer extraction: Charon exit0; Aeneas exit2 at SemanticPublic (non-ADT/opaque type cannot be expanded). This is an incomplete own include selection, not evidence of a source/model mismatch or a host launcher fault. A future extraction must include SemanticPublic and the reached transition carriers explicitly. Both allocated extraction runs are consumed; neither E001 external axiom template nor E002 incomplete body is imported or credited. Frozen lock unchanged.
+
+L058: the error-continuation draft needed an explicit core.result.Result.Ok constructor type; L059 passes with standard axioms. L067/L068 inventory diagnostics used a tuple pattern that the loaded syntax rejected; L069 uses explicit entry projections and prints the actual canonical owners. Neither diagnostic is proof credit. Stage3 validator initially parsed NGT's pretty JSON as a single last line; own parser corrected to parse the entire JSON output, retaining all checks.
+
+Own cleanup script initially looked for client-created binary pins on the host. It stopped before deleting any scratch; the pins are now supplied from the local L065 receipt and checked against the retained binaries. No launcher/shared infrastructure was modified.

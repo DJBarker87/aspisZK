@@ -17,3 +17,11 @@ NGT_RuntimeDomain.same_descriptors/input_frame laws. Sparse payload fixture
 bytes alone are never asserted to realize a full digest request. Native bodies
 only forward these immutable descriptors; the full arbitrary-byte runtime
 forwarding obligation is the accepted NGC packet, not sparse-window inference.
+
+
+| Additional cut | Paired law / status | Domain / modifies |
+|---|---|---|
+| prefix_at_cut | CLOSED parse_record_at; PrefixSource.source / PrefixGeometry / PrefixCarrier | SAME live bytes<=57607, row0..26, exact derived offsets/widths; exact errors or original framed window/end; no input write or query. |
+| semantic_block_cut | CLOSED sample_block_validated; SampleTrace and SemanticDomain.total | SAME token row<=24, framed<=3717; RowOrder or SAME atomic digest-derived read/final replies and cursor; same hash. |
+| semantic_qm_cut | CLOSED qm31_sample; SamplerStages.sample / SamplerJoin.total, reused NGT_Reduction.K | SAME arbitrary block32, four SAME native remainder coordinates; canonicality is derived from the sampler, not an independent parent success premise. |
+| begin_semantic_cut | OPEN caller association; NOT admitted as an actual semantic state law | Native control support only: all15 arguments/errors/outputs/state transport. Actual states/events must still be instantiated from semantic packet; no arbitrary next state is credited. |

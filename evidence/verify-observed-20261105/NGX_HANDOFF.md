@@ -47,3 +47,71 @@ L048 factors the complete emitted Prefix.parse on every Result with27 explicit
 child calls. The full nonempty-window native producer probe is in progress;
 Prefix.parse is OPEN until its complete association, domain/frame chain and
 audit are admitted. No stop while budget remains; current counts in ATTEMPTS.
+
+
+FINAL STAGE3: eleven NGX rows CLOSED, exactly TX1:138/139/143/144/145/146/
+151/152/161/162/163. Combined L064, raw63 roots L065 and scan13515 modules L066
+PASS. Standard axioms only; raw/collectAxioms agree.13 admission mutations
+reject; all earlier admission checks are preserved against committed stage2
+snapshots. The additive ledger preserves588 other baseline rows. The 172-row
+cone has65 CLOSED total (11 NGX, inherited/external packets),107 OPEN including
+100 in D. Driver verify_observed remains OPEN; target not yet established.
+
+Budget used:30/100 Kani,70/70 Lean/support,2/2 extraction. Native allowance is
+not exhausted. Every remaining row needs a further Lean/model/induction/audit
+step or an out-of-slice packet; no Kani-only verdict can admit another NDT row.
+NGX_REMAINING.md lists the exact blocker and stop reason MEMBER BY MEMBER,
+including the stop below80% of native allocation. No theorem/root is assumed
+successful to create a certificate. The cap is never raised.
+
+Key next steps:
+- Public-byte fields/frontier/semantic/full serializer: L069 identifies BOTH
+  canonical existing PublicPreparation and PublicSerializer definitions. E001
+  selected only an external wrapper; E002 selected the body but left the
+  SemanticPublic carrier opaque and Aeneas exited2. Both are excluded from
+  credit. Fix include selection/types or use existing canonical definitions.
+- Begin: K029/K030 passes full15-call control and every arbitrary child Error;
+  exact frame/cursor arithmetic passes. Need actual emitted begin/begin5/
+  begin10 Code.run composition on the SAME tokens/digest blocks/challenges.
+- decode_k: actual private ValidatedRecord::payload is absent from NFQ slice
+  and inventory; lead must resolve this boundary before its helper is proved.
+- Finish/circle/terminal: proceed bottom-up from the exact OPEN callees in the
+  cone. Inversion/fallback cross D. No unrelated OPEN member blocks a leaf.
+
+L070 retains22 owned checked modules (3,041,928 bytes) at
+/home/dombarker/project-offloads/codex-cx-prepared-claim-cache-20261104/
+NGX_seed_20261105/NGX_exports_20261105. Full13515-module/30108-file resolved
+object closure is pinned in NGX_CLOSURE_PINS.json.xz; uncompressed SHA256
+f7647ce03236e5a1acae2f258d39408d1e670dab37156040d37a6ffb806e5226.
+The original seed176 files/25,871,488 bytes is unchanged. Cache never deleted.
+
+Extraction outputs (including the UNADMITTED axiom template) are raw evidence
+in NGX_EXTRACTION_OUTPUTS.tar.xz plus uncompressed tar SHA256. They are NOT on
+LEAN_PATH and NOT compiled/imported. E001/E002 commands, input wrapper source,
+LLBC and tool/lock pins are retained. No template axiom is accepted by ax2.
+
+Section6 freeze: revision4bb3b3f51e16b4525f1d10336e2b0bcbbd775387; deployed
+root features default/private-leaf-salts/optimized-terminal/program-build,
+resolved transitive features recorded before EVERY Kani; frozen lock unchanged
+5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef.
+Actual framed-wire shape root32 +27 records ends13831; semantic domain exactly
+38 bytes. NCO Charon daad69be… and Aeneas c0cf4fcc… /nightly2026-09-17 for
+extraction; Lean4.32.0, Kani0.67.0. Each receipt records exact target/command,
+source/dependency pins, status, wall, RSS, swap, scope limits and printed axioms.
+SInt2 cohort digest/error slots are op43/op44; headline RPx_Deployed.deployed.
+No shipped crates/programs bytes changed; ELF rebuild is not triggered and the
+three inherited release hashes remain default f8c0ec72…,devnet63ad3e9c…,
+Pool121f3e29…. Native semantic transport is P6/D188 option-A RECLASSIFICATION,
+never removal. P1/runtime H realization, runtime persistence/return data/memcmp/
+clock binding and every other approved realization/crypto trust item remain.
+No privacy, two-transaction design or100-bit PER-ATTEMPT metric changed.
+
+
+Final hygiene: NGX_CLEANUP.json confirms all formal jobs terminal, copies and
+checks the exact audited driver binaries in the retained own cache, removes
+ONLY B/NGX_target, B/NGX_extract_target and own temporary/compiled scratch, and
+replaces the own objects/native paths by aliases to retained cache copies.
+No cache or key is deleted;1,176,309,760 bytes of host scratch reclaimed.
+NGX_EXPORT and the full closure pins remain resolvable through those aliases.
+No file over20MB; generated extraction axiom templates are archived raw evidence
+only. No shipped source edits, no sibling/session-A changes, no push.

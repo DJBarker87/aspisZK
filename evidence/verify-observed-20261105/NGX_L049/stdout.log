@@ -1,0 +1,42 @@
+def AspisR1PublicPreparation.sampler.qm31_div_pass : Std.Array U32 8#usize → Result (Std.Array U32 8#usize × U32) :=
+fun rank => do
+  let (rank1, remainder) ← sampler.qm31_div_pass_loop rank 0#u64 8#usize
+  let i ← lift (UScalar.cast UScalarTy.U32 remainder)
+  ok (rank1, i)
+def AspisR1PublicPreparation.sampler.qm31_digits : Std.Array U8 32#usize → Result (Std.Array U32 4#usize) :=
+fun block =>
+  have rank := Array.repeat 8#usize 0#u32;
+  do
+  let rank1 ← sampler.qm31_digits_loop0 block rank 0#usize
+  have digits : Std.Array (UScalar UScalarTy.U32) 4#usize := Array.repeat 4#usize 0#u32
+  sampler.qm31_digits_loop1 rank1 digits 0#usize
+def AspisR1PublicPreparation.sampler.qm31_sample : Std.Array U8 32#usize → Result aspis_core.field.QM31 :=
+fun block => do
+  let digits ← sampler.qm31_digits block
+  let i ← digits.index_usize 0#usize
+  let i1 ← digits.index_usize 1#usize
+  let c ← aspis_core.field.CM31.new i i1
+  let i2 ← digits.index_usize 2#usize
+  let i3 ← digits.index_usize 3#usize
+  let c1 ← aspis_core.field.CM31.new i2 i3
+  ok { c0 := c, c1 := c1 }
+NGX_generated/NGX_SamplerInspect.lean:6:7: error(lean.unknownIdentifier): Unknown identifier `AspisR1.LPk_Induction.pass_join`
+NGX_generated/NGX_SamplerInspect.lean:7:7: error(lean.unknownIdentifier): Unknown identifier `AspisR1.NGT_NBA_Rho.four_digits`
+NGX_generated/NGX_SamplerInspect.lean:8:7: error(lean.unknownIdentifier): Unknown identifier `AspisR1.NGT_NBL_RhoConstruct.source`
+structure AspisR1PublicPreparation.r1_wire.Prefix : Type
+number of parameters: 0
+fields:
+  AspisR1PublicPreparation.r1_wire.Prefix.c1_root : Std.Array U8 32#usize
+  AspisR1PublicPreparation.r1_wire.Prefix.records : Std.Array (Slice U8) 27#usize
+constructor:
+  AspisR1PublicPreparation.r1_wire.Prefix.mk (c1_root : Std.Array U8 32#usize)
+    (records : Std.Array (Slice U8) 27#usize) : r1_wire.Prefix
+structure AspisR1PrefixAggregateParser.r1_wire.Prefix : Type
+number of parameters: 0
+fields:
+  AspisR1PrefixAggregateParser.r1_wire.Prefix.c1_root : Std.Array U8 32#usize
+  AspisR1PrefixAggregateParser.r1_wire.Prefix.records : Std.Array (Slice U8) 27#usize
+constructor:
+  AspisR1PrefixAggregateParser.r1_wire.Prefix.mk (c1_root : Std.Array U8 32#usize)
+    (records : Std.Array (Slice U8) 27#usize) : AspisR1PrefixAggregateParser.r1_wire.Prefix
+NGX_generated/NGX_SamplerInspect.lean:11:7: error(lean.unknownIdentifier): Unknown constant `AspisR1PublicPreparation.r1_wire.Prefix.parse`
