@@ -1,0 +1,54 @@
+{"attempt": "NIT_L134", "exit_status": 1, "wall_seconds": 3.084195206873119, "peak_rss_kib": "5909660", "swaps": "0", "print_axioms": ["'AspisR1.NIT_FinishLogWitness.exists_log' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NIT_generated/NIT_FinishLogWitness.lean:37:11: error: unsolved goals
+case Ok
+proof : Slice U8
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+input : NIG_FinishInput.Domain proof v p a
+round0 round1 alpha semanticAlpha z message owner weights : ℕ
+roundReplies : Fin 2 → Reply FE
+newError : Option verifier.Error
+pairReply dotReply : Reply FE
+cr : ∀ (side : Fin 2), replyCanonical (roundReplies side)
+cp : replyCanonical pairReply
+cd : replyCanonical dotReply
+base : FinishLog :=
+  { events := id, count := 0, round_reply := roundReplies, round_ptr := fun side => if side = 0 then round0 else round1,
+    round_len := fun x => 224, round_alpha := fun side => NIG_FinishAlpha.alpha p ↑
+...
+ : replyCanonical pairReply
+cd : replyCanonical dotReply
+base : FinishLog :=
+  { events := id, count := 0, round_reply := roundReplies, round_ptr := fun side => if side = 0 then round0 else round1,
+    round_len := fun x => 224, round_alpha := fun side => NIG_FinishAlpha.alpha p ↑side ⋯,
+    round_claim := fun side =>
+      if side = 0 then p.claim
+      else
+        match roundReplies 0 with
+        | core.result.Result.Ok value => value
+        | core.result.Result.Err a => p.claim,
+    new := { variant := p.variant, alpha := semanticAlpha, z := z, reply := none, error := newError, calls := 1 },
+    pair :=
+      { who := owner, alpha := alpha, alpha_len := 2, message := message, message_len := 2048, kappa := p.kappa,
+        reply := pairReply, calls := 1 },
+    dot_reply := dotReply, dot_f := message, dot_f_len := 2048, dot_weights := weights, dot_len := 64 }
+l : FinishLog :=
+  { events := base.events, count := (finishExpected a base).2, round_reply := base.round_reply,
+    round_ptr := base.round_ptr, round_len := base.round_len, round_alpha := base.round_alpha,
+    round_claim := base.round_claim, new := base.new, pair := base.pair, dot_reply := base.dot_reply,
+    dot_f := base.dot_f, dot_f_len := base.dot_f_len, dot_weights := base.dot_weights, dot_len := base.dot_len }
+s2 : p.variant = transport.Variant.S2
+claim : feCanonical p.claim
+kappa : feCanonical p.kappa
+alphas : alphaCanonical p
+r0 : (↑v.round0).length = 224
+r1 : (↑v.round1).length = 224
+size : (↑v.final_message).length = 2048
+reached : 2 ≤ l.count
+value : FE
+h : roundReplies 0 = core.result.Result.Ok value
+⊢ core.result.Result.Ok value = core.result.Result.Ok (if 1 = 0 then p.claim else value)
+'AspisR1.NIT_FinishLogWitness.exists_log' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf36dd9574d914baa9d4d20dc713e03fc.scope; invocation ID: be2ad84628b643eaa7675cf44b826205
