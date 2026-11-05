@@ -1,0 +1,40 @@
+{"attempt": "NIA_L010", "exit_status": 1, "wall_seconds": 4.618018741020933, "peak_rss_kib": "5960400", "swaps": "0", "print_axioms": ["'AspisR1.NIA_ScalarFailures.block_trace' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NIA_ScalarFailures.block_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NIA_ScalarFailures.scalar_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NIA_ScalarFailures.scalarK_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NIA_ScalarFailures.scalar_trace' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NIA_ScalarFailures.scalarK_trace' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NIA_ScalarFailures.frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NIA_generated/NIA_ScalarFailures.lean:52:1: error: Too many variable names provided at alternative `tag`: 2 provided, but 1 expected
+NIA_generated/NIA_ScalarFailures.lean:53:3: error: Invalid alternative name `fail`: Expected `refl`
+NIA_generated/NIA_ScalarFailures.lean:54:3: error: Invalid alternative name `div`: Expected `refl`
+NIA_generated/NIA_ScalarFailures.lean:52:17: error: Dependent elimination failed: Failed to solve equation
+  (match stop with
+    | Stop.fail e => fail e
+    | Stop.div => div) =
+    match UScalar.tryMkOpt UScalarTy.U8 (↑160#u8 + ↑row) with
+    | some x => ok x
+    | none => fail Error.integerOverflow
+NIA_generated/NIA_ScalarFailures.lean:55:1: error: Too many varia
+...
+> Code.done (out, x.2))
+    div [] ⟨rfl, rfl⟩
+ has type
+  @NHK_TraceBind.Trace hashv (aspis_core.field.QM31 × transcript.Transcript Unit)
+    (CheckpointBytes5Effect.bind (NHZ_DRIVER.scalarBlockCode before row payload) fun x =>
+      Code.step (AspisR1PublicPreparation.sampler.qm31_sample x.1) fun out =>
+        Code.step (lift (UScalar.cast UScalarTy.Usize row)) fun i =>
+          Code.step (B.fromQm out) fun embedded =>
+            Code.step (trace.value 4#u16 i embedded) fun x_1 => Code.done (out, x.2))
+    div events
+but is expected to have type
+  @NGQ_Cuts.Trace hashv (aspis_core.field.QM31 × transcript.Transcript Unit)
+    (CheckpointBytes5Effect.bind (NHZ_DRIVER.scalarBlockCode before row payload) fun x =>
+      Code.step (AspisR1PublicPreparation.sampler.qm31_sample x.1) fun out =>
+        Code.step (lift (UScalar.cast UScalarTy.Usize row)) fun i =>
+          Code.step (B.fromQm out) fun embedded =>
+            Code.step (trace.value 4#u16 i embedded) fun x_1 => Code.done (out, x.2))
+    Stop.div.result events
+'AspisR1.NIA_ScalarFailures.block_trace' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NIA_ScalarFailures.block_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NIA_ScalarFailures.scalar_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NIA_ScalarFailures.scalarK_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NIA_ScalarFailures.scalar_trace' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NIA_ScalarFailures.scalarK_trace' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NIA_ScalarFailures.frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r0123eb4bc3bc4c36861ccfa926030c78.scope; invocation ID: f39b18c9d8b942ffbd7aab92f6269006

@@ -1,0 +1,185 @@
+NIA_generated/NIA_ScalarFailures.lean:52:1: error: Too many variable names provided at alternative `tag`: 2 provided, but 1 expected
+NIA_generated/NIA_ScalarFailures.lean:53:3: error: Invalid alternative name `fail`: Expected `refl`
+NIA_generated/NIA_ScalarFailures.lean:54:3: error: Invalid alternative name `div`: Expected `refl`
+NIA_generated/NIA_ScalarFailures.lean:52:17: error: Dependent elimination failed: Failed to solve equation
+  (match stop with
+    | Stop.fail e => fail e
+    | Stop.div => div) =
+    match UScalar.tryMkOpt UScalarTy.U8 (↑160#u8 + ↑row) with
+    | some x => ok x
+    | none => fail Error.integerOverflow
+NIA_generated/NIA_ScalarFailures.lean:55:1: error: Too many variable names provided at alternative `absorb`: 4 provided, but 3 expected
+NIA_generated/NIA_ScalarFailures.lean:56:39: error: Application type mismatch: The argument
+  tagCall
+has type
+  hashv (NGT_NBA_Transcript.absorbParts before.state s payload) = stop.result
+but is expected to have type
+  160#u8 + row = ok ?m.99
+in the application
+  NGQ_Cuts.Trace.stepOk (160#u8 + row)
+    (fun tag =>
+      Code.read (NGT_NBA_Transcript.absorbParts before.state tag payload) fun absorbed =>
+        Code.read (NGT_NBA_Transcript.readParts absorbed 1#u8) fun value =>
+          Code.read (NGT_NBA_Transcript.readParts absorbed 2#u8) fun final =>
+            Code.done (value, { state := final, hash := before.hash }))
+    ?m.99 tagCall
+NIA_generated/NIA_ScalarFailures.lean:60:1: error: Too many variable names provided at alternative `read`: 6 provided, but 5 expected
+NIA_generated/NIA_ScalarFailures.lean:61:3: error: Tactic `apply` failed: could not unify the conclusion of `NGQ_Cuts.Trace.stepOk
+  (hashv (NGT_NBA_Transcript.absorbParts before.state s payload)) ?m.132 tag tagCall`
+  NGQ_Cuts.Trace ?m.128 (Code.step (hashv (NGT_NBA_Transcript.absorbParts before.state s payload)) ?m.132) ?out ?events
+with the goal
+  NGQ_Cuts.Trace hashv (NHZ_DRIVER.scalarBlockCode before row payload) stop.result
+    [{ parts := NGT_NBA_Transcript.absorbParts before.state s payload, returned := ok tag },
+      { parts := NGT_NBA_Transcript.readParts tag 1#u8, returned := stop.result }]
+
+Note: The full type of `NGQ_Cuts.Trace.stepOk (hashv (NGT_NBA_Transcript.absorbParts before.state s payload)) ?m.132 tag
+  tagCall` is
+  ∀ (out : Result ?m.129) (events : SdkC_Source.Log),
+    NGQ_Cuts.Trace ?m.128 (?m.132 tag) out events →
+      NGQ_Cuts.Trace ?m.128 (Code.step (hashv (NGT_NBA_Transcript.absorbParts before.state s payload)) ?m.132) out
+        events
+
+case read
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+before : transcript.Transcript Unit
+row : U8
+payload : Slice U8
+stop : Stop
+s : U8
+tag : SdkC_Source.Digest
+absorbed : 160#u8 + row = ok s
+tagCall : hashv (NGT_NBA_Transcript.absorbParts before.state s payload) = ok tag
+first : hashv (NGT_NBA_Transcript.readParts tag 1#u8) = stop.result
+⊢ NGQ_Cuts.Trace hashv (NHZ_DRIVER.scalarBlockCode before row payload) stop.result
+    [{ parts := NGT_NBA_Transcript.absorbParts before.state s payload, returned := ok tag },
+      { parts := NGT_NBA_Transcript.readParts tag 1#u8, returned := stop.result }]
+NIA_generated/NIA_ScalarFailures.lean:66:1: error: Too many variable names provided at alternative `advance`: 8 provided, but 7 expected
+NIA_generated/NIA_ScalarFailures.lean:67:3: error: Tactic `apply` failed: could not unify the conclusion of `NGQ_Cuts.Trace.stepOk
+  (hashv (NGT_NBA_Transcript.absorbParts before.state s payload)) ?m.164 tag tagCall`
+  NGQ_Cuts.Trace ?m.160 (Code.step (hashv (NGT_NBA_Transcript.absorbParts before.state s payload)) ?m.164) ?out ?events
+with the goal
+  NGQ_Cuts.Trace hashv (NHZ_DRIVER.scalarBlockCode before row payload) stop.result
+    [{ parts := NGT_NBA_Transcript.absorbParts before.state s payload, returned := ok tag },
+      { parts := NGT_NBA_Transcript.readParts tag 1#u8, returned := ok absorbed },
+      { parts := NGT_NBA_Transcript.readParts tag 2#u8, returned := stop.result }]
+
+Note: The full type of `NGQ_Cuts.Trace.stepOk (hashv (NGT_NBA_Transcript.absorbParts before.state s payload)) ?m.164 tag
+  tagCall` is
+  ∀ (out : Result ?m.161) (events : SdkC_Source.Log),
+    NGQ_Cuts.Trace ?m.160 (?m.164 tag) out events →
+      NGQ_Cuts.Trace ?m.160 (Code.step (hashv (NGT_NBA_Transcript.absorbParts before.state s payload)) ?m.164) out
+        events
+
+case advance
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+before : transcript.Transcript Unit
+row : U8
+payload : Slice U8
+stop : Stop
+s : U8
+tag absorbed : SdkC_Source.Digest
+value : 160#u8 + row = ok s
+tagCall : hashv (NGT_NBA_Transcript.absorbParts before.state s payload) = ok tag
+first : hashv (NGT_NBA_Transcript.readParts tag 1#u8) = ok absorbed
+second : hashv (NGT_NBA_Transcript.readParts tag 2#u8) = stop.result
+⊢ NGQ_Cuts.Trace hashv (NHZ_DRIVER.scalarBlockCode before row payload) stop.result
+    [{ parts := NGT_NBA_Transcript.absorbParts before.state s payload, returned := ok tag },
+      { parts := NGT_NBA_Transcript.readParts tag 1#u8, returned := ok absorbed },
+      { parts := NGT_NBA_Transcript.readParts tag 2#u8, returned := stop.result }]
+NIA_generated/NIA_ScalarFailures.lean:98:3: error: Type mismatch: After simplification, term
+  NHK_TraceBind.append (block_trace packet)
+    (fun x =>
+      Code.step (if mode = true then B.gamma x.1 else B.ordinary x.1) fun out =>
+        Code.step (lift (UScalar.cast UScalarTy.Usize row)) fun i =>
+          Code.step (trace.value 4#u16 i out) fun x_1 => Code.done (out, x.2))
+    (fail error✝) [] ⟨rfl, rfl⟩
+ has type
+  @NHK_TraceBind.Trace hashv (aspis_core.field.WideExact × transcript.Transcript Unit)
+    (CheckpointBytes5Effect.bind (NHZ_DRIVER.scalarBlockCode before row payload) fun x =>
+      Code.step (if mode = true then B.gamma x.1 else B.ordinary x.1) fun out =>
+        Code.step (lift (UScalar.cast UScalarTy.Usize row)) fun i =>
+          Code.step (trace.value 4#u16 i out) fun x_1 => Code.done (out, x.2))
+    (fail error✝) events
+but is expected to have type
+  @NGQ_Cuts.Trace hashv (aspis_core.field.WideExact × transcript.Transcript Unit)
+    (CheckpointBytes5Effect.bind (NHZ_DRIVER.scalarBlockCode before row payload) fun x =>
+      Code.step (if mode = true then B.gamma x.1 else B.ordinary x.1) fun out =>
+        Code.step (lift (UScalar.cast UScalarTy.Usize row)) fun i =>
+          Code.step (trace.value 4#u16 i out) fun x_1 => Code.done (out, x.2))
+    (Stop.fail error✝).result events
+NIA_generated/NIA_ScalarFailures.lean:98:3: error: Type mismatch: After simplification, term
+  NHK_TraceBind.append (block_trace packet)
+    (fun x =>
+      Code.step (if mode = true then B.gamma x.1 else B.ordinary x.1) fun out =>
+        Code.step (lift (UScalar.cast UScalarTy.Usize row)) fun i =>
+          Code.step (trace.value 4#u16 i out) fun x_1 => Code.done (out, x.2))
+    div [] ⟨rfl, rfl⟩
+ has type
+  @NHK_TraceBind.Trace hashv (aspis_core.field.WideExact × transcript.Transcript Unit)
+    (CheckpointBytes5Effect.bind (NHZ_DRIVER.scalarBlockCode before row payload) fun x =>
+      Code.step (if mode = true then B.gamma x.1 else B.ordinary x.1) fun out =>
+        Code.step (lift (UScalar.cast UScalarTy.Usize row)) fun i =>
+          Code.step (trace.value 4#u16 i out) fun x_1 => Code.done (out, x.2))
+    div events
+but is expected to have type
+  @NGQ_Cuts.Trace hashv (aspis_core.field.WideExact × transcript.Transcript Unit)
+    (CheckpointBytes5Effect.bind (NHZ_DRIVER.scalarBlockCode before row payload) fun x =>
+      Code.step (if mode = true then B.gamma x.1 else B.ordinary x.1) fun out =>
+        Code.step (lift (UScalar.cast UScalarTy.Usize row)) fun i =>
+          Code.step (trace.value 4#u16 i out) fun x_1 => Code.done (out, x.2))
+    Stop.div.result events
+NIA_generated/NIA_ScalarFailures.lean:106:3: error: Type mismatch: After simplification, term
+  NHK_TraceBind.append (block_trace packet)
+    (fun x =>
+      Code.step (AspisR1PublicPreparation.sampler.qm31_sample x.1) fun out =>
+        Code.step (lift (UScalar.cast UScalarTy.Usize row)) fun i =>
+          Code.step (B.fromQm out) fun embedded =>
+            Code.step (trace.value 4#u16 i embedded) fun x_1 => Code.done (out, x.2))
+    (fail error✝) [] ⟨rfl, rfl⟩
+ has type
+  @NHK_TraceBind.Trace hashv (aspis_core.field.QM31 × transcript.Transcript Unit)
+    (CheckpointBytes5Effect.bind (NHZ_DRIVER.scalarBlockCode before row payload) fun x =>
+      Code.step (AspisR1PublicPreparation.sampler.qm31_sample x.1) fun out =>
+        Code.step (lift (UScalar.cast UScalarTy.Usize row)) fun i =>
+          Code.step (B.fromQm out) fun embedded =>
+            Code.step (trace.value 4#u16 i embedded) fun x_1 => Code.done (out, x.2))
+    (fail error✝) events
+but is expected to have type
+  @NGQ_Cuts.Trace hashv (aspis_core.field.QM31 × transcript.Transcript Unit)
+    (CheckpointBytes5Effect.bind (NHZ_DRIVER.scalarBlockCode before row payload) fun x =>
+      Code.step (AspisR1PublicPreparation.sampler.qm31_sample x.1) fun out =>
+        Code.step (lift (UScalar.cast UScalarTy.Usize row)) fun i =>
+          Code.step (B.fromQm out) fun embedded =>
+            Code.step (trace.value 4#u16 i embedded) fun x_1 => Code.done (out, x.2))
+    (Stop.fail error✝).result events
+NIA_generated/NIA_ScalarFailures.lean:106:3: error: Type mismatch: After simplification, term
+  NHK_TraceBind.append (block_trace packet)
+    (fun x =>
+      Code.step (AspisR1PublicPreparation.sampler.qm31_sample x.1) fun out =>
+        Code.step (lift (UScalar.cast UScalarTy.Usize row)) fun i =>
+          Code.step (B.fromQm out) fun embedded =>
+            Code.step (trace.value 4#u16 i embedded) fun x_1 => Code.done (out, x.2))
+    div [] ⟨rfl, rfl⟩
+ has type
+  @NHK_TraceBind.Trace hashv (aspis_core.field.QM31 × transcript.Transcript Unit)
+    (CheckpointBytes5Effect.bind (NHZ_DRIVER.scalarBlockCode before row payload) fun x =>
+      Code.step (AspisR1PublicPreparation.sampler.qm31_sample x.1) fun out =>
+        Code.step (lift (UScalar.cast UScalarTy.Usize row)) fun i =>
+          Code.step (B.fromQm out) fun embedded =>
+            Code.step (trace.value 4#u16 i embedded) fun x_1 => Code.done (out, x.2))
+    div events
+but is expected to have type
+  @NGQ_Cuts.Trace hashv (aspis_core.field.QM31 × transcript.Transcript Unit)
+    (CheckpointBytes5Effect.bind (NHZ_DRIVER.scalarBlockCode before row payload) fun x =>
+      Code.step (AspisR1PublicPreparation.sampler.qm31_sample x.1) fun out =>
+        Code.step (lift (UScalar.cast UScalarTy.Usize row)) fun i =>
+          Code.step (B.fromQm out) fun embedded =>
+            Code.step (trace.value 4#u16 i embedded) fun x_1 => Code.done (out, x.2))
+    Stop.div.result events
+'AspisR1.NIA_ScalarFailures.block_trace' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NIA_ScalarFailures.block_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NIA_ScalarFailures.scalar_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NIA_ScalarFailures.scalarK_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NIA_ScalarFailures.scalar_trace' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NIA_ScalarFailures.scalarK_trace' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NIA_ScalarFailures.frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,43 @@
+{"attempt": "NIA_L018", "exit_status": 1, "wall_seconds": 5.026540690101683, "peak_rss_kib": "5954572", "swaps": "0", "print_axioms": ["'AspisR1.NIA_QueryPrefixes.opening_trace' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NIA_QueryPrefixes.query_trace' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NIA_QueryPrefixes.error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NIA_QueryPrefixes.fail' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NIA_QueryPrefixes.div' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NIA_generated/NIA_QueryPrefixes.lean:57:3: error: Type mismatch: After simplification, term
+  NHK_TraceBind.append child next (ok (core.result.Result.Err e, old)) [] stopped
+ has type
+  @NHK_TraceBind.Trace hashv Out
+    (CheckpointBytes5Effect.bind
+      (NGQ_Effects.code NGQ_TRANSCRIPT.boundaries packet.opening.transcript packet.opening.row v.final_message) fun x =>
+      Code.step (core.result.Result.Insts.CoreOpsTry.branch x.1) fun cf =>
+        match cf with
+        | core.ops.control_flow.ControlFlow.Continue queries => rhoCode sem v packet.opening queries x.2
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          Code.step
+            (core.result.Result.Insts.CoreOps
+...
+sTry.branch x.1) fun cf =>
+        match cf with
+        | core.ops.control_flow.ControlFlow.Continue queries => rhoCode sem v packet.opening queries x.2
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          Code.step
+            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+              (core.convert.FromSame verifier.Error) residual)
+            fun returned => Code.done (returned, old))
+    (ok (core.result.Result.Err e, old)) observed.attempted
+but is expected to have type
+  @NGQ_Cuts.Trace hashv Out
+    (CheckpointBytes5Effect.bind
+      (NGQ_Effects.code NGQ_TRANSCRIPT.boundaries packet.opening.transcript packet.opening.row v.final_message) fun x =>
+      Code.step (core.result.Result.Insts.CoreOpsTry.branch x.1) fun cf =>
+        match cf with
+        | core.ops.control_flow.ControlFlow.Continue queries => rhoCode sem v packet.opening queries x.2
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          Code.step
+            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+              (core.convert.FromSame verifier.Error) residual)
+            fun returned => Code.done (returned, old))
+    (ok (core.result.Result.Err e, old)) observed.attempted
+'AspisR1.NIA_QueryPrefixes.opening_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIA_QueryPrefixes.query_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIA_QueryPrefixes.error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NIA_QueryPrefixes.fail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIA_QueryPrefixes.div' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r0af950eaeee040268988bf2697496e59.scope; invocation ID: 74bac741c5ab4d48acb8af0a42f30efb

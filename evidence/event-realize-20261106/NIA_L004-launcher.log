@@ -1,0 +1,49 @@
+{"attempt": "NIA_L004", "exit_status": 1, "wall_seconds": 4.60425044503063, "peak_rss_kib": "5967932", "swaps": "0", "print_axioms": ["'AspisR1.NIA_ScalarEffects.evaluate_bind' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NIA_ScalarEffects.evaluate_lift' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NIA_ScalarEffects.complete' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NIA_ScalarEffects.block_evaluate' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NIA_ScalarEffects.scalar_evaluate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NIA_ScalarEffects.scalarK_evaluate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NIA_generated/NIA_ScalarEffects.lean:76:82: error: unsolved goals
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+B : PreparedModel.Boundaries
+before : transcript.Transcript Unit
+row : U8
+payload : Slice U8
+mode : Bool
+⊢ (do
+      let a ← transcript.Transcript.block (NGQ_Effects.dictionary hashv) before row payload
+      let b ← if mode = true then B.gamma a.1 else B.ordinary a.1
+      let b_1 ← lift (UScalar.cast UScalarTy.Usize row)
+      trace.value 4#u16 b_1 b
+      ok (b, a.2)) =
+    do
+    let (block, self1) ← transcript.Transcript.block (NGQ_Effects.dictionary hashv) before row payload
+    let out ← if mode = true then B.gamma block else B.ordinary block
+    let i ← lift (UScala
+...
+yload : Slice U8
+⊢ (do
+      let a ← transcript.Transcript.block (NGQ_Effects.dictionary hashv) before row payload
+      let b ← AspisR1PublicPreparation.sampler.qm31_sample a.1
+      let b_1 ← lift (UScalar.cast UScalarTy.Usize row)
+      let b_2 ← B.fromQm b
+      trace.value 4#u16 b_1 b_2
+      ok (b, a.2)) =
+    do
+    let (a, self1) ← transcript.Transcript.block (NGQ_Effects.dictionary hashv) before row payload
+    let out ← AspisR1PublicPreparation.sampler.qm31_sample a
+    let i ← lift (UScalar.cast UScalarTy.Usize row)
+    let we ← B.fromQm out
+    trace.value 4#u16 i we
+    ok (out, self1)
+NIA_generated/NIA_ScalarEffects.lean:84:38: warning: This simp argument is unused:
+  evaluate_lift
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵c̵a̵l̵a̵r̵K̵C̵o̵d̵e̵,̵e̵v̵a̵l̵u̵a̵t̵e̵_̵b̵i̵n̵d̵,̵e̵v̵a̵l̵u̵a̵t̵e̵_̵l̵i̵f̵t̵,̵b̵l̵o̵c̵k̵_̵e̵v̵a̵l̵u̵a̵t̵e̵,̵P̵r̵e̵p̵a̵r̵e̵d̵M̵o̵d̵e̵l̵.̵s̵c̵a̵l̵a̵r̵_̵k̵,̵e̵v̵a̵l̵u̵a̵t̵e̵]̵[̲s̲c̲a̲l̲a̲r̲K̲C̲o̲d̲e̲,̲ ̲e̲v̲a̲l̲u̲a̲t̲e̲_̲b̲i̲n̲d̲,̲ ̲b̲l̲o̲c̲k̲_̲e̲v̲a̲l̲u̲a̲t̲e̲,̲ ̲P̲r̲e̲p̲a̲r̲e̲d̲M̲o̲d̲e̲l̲.̲s̲c̲a̲l̲a̲r̲_̲k̲,̲ ̲e̲v̲a̲l̲u̲a̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NIA_ScalarEffects.evaluate_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIA_ScalarEffects.evaluate_lift' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIA_ScalarEffects.complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIA_ScalarEffects.block_evaluate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIA_ScalarEffects.scalar_evaluate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NIA_ScalarEffects.scalarK_evaluate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r77c5b86e95814db7ac2f5d817bcaf8a5.scope; invocation ID: ef521dc6658142fb8ab342c244a9c40b
