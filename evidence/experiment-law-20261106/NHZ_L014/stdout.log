@@ -1,0 +1,28 @@
+NHZ_generated/NHZ_Obstruction.lean:17:4: error: Tactic `rfl` failed: The left-hand side
+  (SdkC_Source.run (fun x => ok reply) (Code.done ()) []).1
+is not definitionally equal to the right-hand side
+  (SdkC_Source.run (fun x => ok reply) (Code.read parts fun x => Code.done ()) []).1
+
+case left
+parts : SdkC_Source.Parts
+reply : SdkC_Source.Digest
+⊢ (SdkC_Source.run (fun x => ok reply) (Code.done ()) []).1 =
+    (SdkC_Source.run (fun x => ok reply) (Code.read parts fun x => Code.done ()) []).1
+NHZ_generated/NHZ_Obstruction.lean:20:4: error: 'change' tactic failed, pattern
+  0 = 1
+is not definitionally equal to target
+  List.length (SdkC_Source.run (fun x => ok reply) (Code.done ()) []).2 =
+    List.length (SdkC_Source.run (fun x => ok reply) (Code.read parts fun x => Code.done ()) []).2
+NHZ_generated/NHZ_Obstruction.lean:30:52: error: Type mismatch
+  rfl
+has type
+  ?m.17 = ?m.17
+but is expected to have type
+  let hashv := fun x => ok reply;
+  let code := Code.read parts fun x => Code.read parts fun x => Code.done ();
+  List.length (SdkC_Source.run hashv code []).2 = 2
+'AspisR1.NHZ_DRIVER.result_equality_does_not_identify_events' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.NHZ_DRIVER.duplicate_read_is_charged' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
