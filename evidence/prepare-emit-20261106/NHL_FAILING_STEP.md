@@ -9,3 +9,6 @@
 * L021: own proof had two redundant rfl steps and needed one pair-let reduction after scalar30 substitution. Corrected source is queued separately.
 
 Failed drafts may print sorryAx as compiler recovery; they are excluded and never admitted. No extraction failure, memory kill, Kani run, cap increase, or shipped source edit occurred.
+* L024/L025: own tx1 prefix proof needed explicit parse/scan control cases and let-bound ZERO29 normalization; L027 passes.
+* L028: own multiline change-expression indentation parsed its Error branch incorrectly. L030 fixes it, then exposes rewrite transparency on a Vec back-function. L032 uses congruence; L033 adds the explicit RustResult error type and passes. No child theorem is patched or strengthened.
+* L023 passes the corrected L021 opening proof. L026 derives the complete opening packet, canonical gamma/kappa and safe next row with standard axioms.
