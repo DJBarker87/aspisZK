@@ -1,4 +1,4 @@
-"""NFX-owned serial client for unchanged S2W launcher; no shared tool edits."""
+"""NIB-owned serial client for unchanged S2W launcher; no shared tool edits."""
 from pathlib import Path
 import subprocess,json,sys,time,hashlib,shlex,lzma,re,os,atexit
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90'
@@ -56,7 +56,7 @@ for n in ['NFA_WALKER.c','NFA_MemoryLimit.c']:
  p=b/'NIB_native'/n
  if not p.exists():shutil.copy2('/home/dombarker/project-offloads/codex-cx-ledger8-cache-20261104/NGJ_native_seed/'+n,p)
 x=json.loads((b/{(a+'.json')!r}).read_text());roots=x['env']['LEAN_PATH'].split(':');pins={{}}
-modules=[]
+modules=['NFA_WALKER','NFA_MemoryLimit','NEP_Planted','NEP_Mutations']
 if x['kind']=='lean':modules += re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M)
 elif x['kind']=='audit':modules += ['NIB_COMBINED_IMPORT']
 rels=set()
