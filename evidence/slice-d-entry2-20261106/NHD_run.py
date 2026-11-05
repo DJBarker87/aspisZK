@@ -51,7 +51,7 @@ else:
  n='NHD_generated/'+target.replace('.','/')+'.lean';files[n]=(E/(target+'.lean')).read_text();sources=[n]
  T=env['LEAN_SYSROOT'];command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NHD_generated','-o','NHD_objects/'+target.replace('.','/')+'.olean',n];cfg={}
  if target in ['NHD_ProofDriver','NHD_ScanDriver']:command+=['-c','NHD_native/'+target+'.c']
-cfg.update(attempt=a,kind=kind,module=target,sources=sources,command=command,env=env,timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={'selected_objects':{}},expected_time='optimized compilation then focused native contract; no field arithmetic' if kind=='kani' else 'focused Lean elaboration')
+cfg.update(attempt=a,kind=kind,module=target,sources=sources,command=command,env=env,timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={'selected_objects':{}},expected_time='optimized compilation then focused native contract; no field arithmetic' if kind=='kani' else 'raw kernel traversal and NFX source scan; existing optimized binaries reused' if kind=='audit' else 'read-only ELF slot inspection' if kind=='inspect' else 'focused Lean elaboration')
 files[a+'.json']=json.dumps(cfg)
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
