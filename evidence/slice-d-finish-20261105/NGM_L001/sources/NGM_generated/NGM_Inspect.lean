@@ -1,8 +1,1 @@
-import NGJ_VERIFIER_IMPORT
-import Port3_NativeFinishBody
-import FIn_Polynomial
-set_option autoImplicit false
-#check AspisR1.Port3_NativeFinishBody.verifier.finish_relation
-#check AspisR1Stage2.Stage2Finish.verifier.finish_relation_round
-#check AspisR1Stage2.Stage2Finish.verifier.finish_query_dot
-#print axioms AspisR1.RPx_Deployed.deployed
+../../../NGM_INPUTS/9c36a83050713766746a63246a39c3276ca2dba091f7eaa9a74eca4aa1b9c29f

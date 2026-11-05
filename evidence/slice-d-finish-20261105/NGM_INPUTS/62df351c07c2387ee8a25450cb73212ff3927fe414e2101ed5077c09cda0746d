@@ -1,0 +1,7 @@
+import NGJ_VERIFIER_IMPORT
+import Port3_NativeFinishBody
+set_option autoImplicit false
+#check AspisR1.Port3_NativeFinishBody.verifier.finish_relation
+#check AspisR1Stage2.Stage2Finish.verifier.finishRelationRoundWithOps
+#check AspisR1Stage2.Stage2Finish.verifier.finishRelationWithOps
+#print axioms AspisR1.RPx_Deployed.deployed

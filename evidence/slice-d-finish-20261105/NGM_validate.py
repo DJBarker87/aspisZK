@@ -54,4 +54,43 @@ assert (E/'NGM_COMBINED_IMPORT.lean').read_text().startswith('import NGJ_VERIFIE
 for a in ['NGM_L003','NGM_L004','NGM_L005','NGM_L011','NGM_L012','NGM_L017','NGM_L018']:assert receipt(a)['exit_status']==0
 for p in E.rglob('*'):
  if p.is_file():assert p.stat().st_size<=20*1024*1024,str(p)
+# Final packet additions only: no baseline acceptance check is removed.
+if (E/'NGM_BUDGET.json').exists():
+ journal=[json.loads(line)for line in(E/'NGM_ATTEMPTS.jsonl').read_text().splitlines()]
+ expected={f'NGM_{kind}{number:03}'for kind,count in [('K',100),('L',70),('E',3)]for number in range(1,count+1)}
+ assert len(journal)==len(expected)==173 and {r['attempt']for r in journal}==expected
+ for a in sorted(expected):
+  r=receipt(a)
+  assert r['limits']=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}
+  assert int(r['peak_rss_kib'])*1024<8589934592
+  if a.startswith('NGM_K'):
+   g=read(a+'-graph-check.json');lock=read(a+'-lock-check.json')
+   assert g['graph_matches_frozen']and not g['new_package_tuples']and not g['edge_errors']
+   assert lock['unchanged']and lock['before']==lock['after']==g['lock_sha256']=='5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef'
+   assert r['env']['CARGO_NET_OFFLINE']=='true'and not read(a+'-source-check.json')['errors']
+   package=next(p for p in g['selected_closure']if p['name']=='aspis-r1-cost-probe')
+   assert {'default','private-leaf-salts','optimized-terminal','program-build'}<=set(package['features'])
+ budget=read('NGM_BUDGET.json');assert budget['used']==budget['limit']==dict(kani=100,lean_audit=70,extraction=3)
+ assert budget['kani']['excluded']==['NGM_K083','NGM_K086','NGM_K087']
+ pairs=[(i,i+1)for i in range(1,83,2)]+[(84,85)]+[(i,i+1)for i in range(88,100,2)]
+ for positive,negative in pairs:
+  for number,expected_exit in [(positive,0),(negative,1)]:
+   a=f'NGM_K{number:03}';raw=(E/a/'stdout.log').read_text();assert receipt(a)['exit_status']==expected_exit
+   assert ('VERIFICATION:- SUCCESSFUL'if expected_exit==0 else'VERIFICATION:- FAILED')in raw
+   assert not re.search(r'timed out|memory limit exceeded|SIGKILL',raw,re.I)
+  assert receipt(f'NGM_K{positive:03}')['module']==receipt(f'NGM_K{negative:03}')['module']
+ for a in budget['kani']['excluded']:assert 'timed out'in(E/a/'stdout.log').read_text()
+ all_raw=read('NGM_final_audit/proof0.json')['results']
+ for a in ['NGM_L055','NGM_L069']:
+  assert receipt(a)['exit_status']==0
+  all_raw += [json.loads(line[11:])for line in(E/a/'stdout.log').read_text().splitlines()if line.startswith('NEP_RESULT ')]
+ declared={n for group in read('NGM_AUDIT_ROOTS.json')['groups']for n in group}
+ assert {r['root']for r in all_raw}==declared and len(declared)==audit['unique_walked_roots']==109
+ assert all(r['equal']and set(r['walked_axioms'])==set(r['collect_axioms'])<={'propext','Classical.choice','Quot.sound'}for r in all_raw)
+ for item in read('NGM_INPUT_INDEX.json')['inputs']:
+  p=E/item['path'];target=E/item['stored'];assert p.is_symlink()and p.resolve()==target.resolve()
+  assert hashlib.sha256(p.read_bytes()).hexdigest()==item['sha256']
+ assert read('NGM_HELPER_ERASURE.json')['status'].startswith('PASS')and len(read('NGM_HELPER_ERASURE.json')['mutations'])==6
+ assert all(x['rejected']for x in read('NGM_HELPER_ERASURE.json')['mutations'])
+ assert len(read('NGM_REMAINING.json'))==24 and all(r['status']=='OPEN'for r in read('NGM_REMAINING.json'))
 print(json.dumps(dict(status='PASS',new_closed_rows=delta['new_closed_rows'],root_status=closed['driver_root_status'],raw_roots=audit['raw_roots'],modules=audit['modules'],scope='additive NGM delta; baseline immutable')))

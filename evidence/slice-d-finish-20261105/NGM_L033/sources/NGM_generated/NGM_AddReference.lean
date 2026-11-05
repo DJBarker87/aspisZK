@@ -1,14 +1,1 @@
-import NGM_DoubleRef.Funs
-import NGM_ResultLaws
-import AspisR1SelectedMaskProbe.Funs
-set_option autoImplicit false
-open Aeneas Aeneas.Std Result
-namespace NGM_AddReference
-open AspisR1SelectedMaskProbe
-
-theorem add_reference (x y : U32) :
-    NGM_DoubleRef.add_ref x y = field.M31.add x y := by
-  simp [NGM_DoubleRef.add_ref,field.M31.add,field.P]
-
-#print axioms add_reference
-end NGM_AddReference
+../../../NGM_INPUTS/7290053a34a3d58d6a56a1437b0d705143033c0183227628df21fff7ba5bb0b5

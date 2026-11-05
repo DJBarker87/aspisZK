@@ -1,9 +1,1 @@
-import Aeneas
-set_option autoImplicit false
-open Aeneas Aeneas.Std Result
-namespace NGM_ResultLaws
-@[simp] theorem bind_return {α : Type} (r : Result α) :
-    (do let x ← r; ok x) = r := by
-  cases r <;> rfl
-#print axioms bind_return
-end NGM_ResultLaws
+../../../NGM_INPUTS/824821d179420e93d2407c6a005207844487318faa2ede50c25d0e084504a9f7
