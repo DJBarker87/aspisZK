@@ -19,5 +19,4 @@ for section in patch.split('--- ')[1:]:
     assert lines[pos]==line[1:];pos+=1
    elif line.startswith('+'):out.append(line[1:])
   out.extend(lines[pos:]);inputs[name]=''.join(out)
-inputs['crates/aspis-r1-cost-probe/src/lib.rs']='#![cfg_attr(kani,feature(allocator_api))]\n'+inputs['crates/aspis-r1-cost-probe/src/lib.rs']
 pins={n:hashlib.sha256(t.encode()).hexdigest()for n,t in inputs.items()}
