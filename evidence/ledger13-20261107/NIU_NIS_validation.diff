@@ -1,0 +1,18 @@
+--- 
++++ 
+@@ -1,7 +1,7 @@
+ """Read-only certificate checks; writes only the final aggregate audit report."""
+ from pathlib import Path
+ import json,lzma,hashlib,re,subprocess
+-E=Path(__file__).resolve().parent
++E=Path('/Users/dominic/ZK/.worktrees/cx-ledger13/evidence/slice-d-entry6-20261107')
+ rd=lambda p:json.loads(p.read_text())
+ sha=lambda b:hashlib.sha256(b).hexdigest()
+ rows=[json.loads(l) for l in (E/'NIS_ATTEMPTS.jsonl').read_text().splitlines()]
+@@ -55,5 +55,5 @@
+ prior=rd(E/'NIS_AUDIT.json');fixtures=prior['fixtures'];assert len(fixtures)==8 and all(x['equal'] for x in fixtures)
+ for p in E.rglob('*'):
+  if p.is_file():assert p.stat().st_size<=20_000_000,(p,p.stat().st_size)
+-(E/'NIS_AUDIT.json').write_text(json.dumps(dict(status='PASS_FINAL_AX2_NFX_ISOLATION',raw_roots=roots,fixtures=fixtures,scan=dict(modules=len(loaded),dangling=0,incompatible_owners=0,import_mismatches=0),standard_axioms_only=True,canonical_owner_collision=False,combined='NIS_L058',raw=['NIS_L059','NIS_L062'],scan_receipt='NIS_L060',fixture_receipt='NIS_L030',native=dict(used=120,passes=55,matched_failing_controls=53,compiler_failures=12),lean_used=len(rows)-120,extraction_used=0,closed_rows=delta['new_closed_rows'],counts_after=delta['counts_after'],security_target_established=False,scope='Cached canonical closure; not a cold release or ELF replay; native incomplete probes excluded'),indent=1)+'\n')
++(Path('/Users/dominic/ZK/.worktrees/cx-ledger13/evidence/ledger13-20261107')/'NIU_NIS_REVALIDATION.json').write_text(json.dumps(dict(status='PASS_FINAL_AX2_NFX_ISOLATION',raw_roots=roots,fixtures=fixtures,scan=dict(modules=len(loaded),dangling=0,incompatible_owners=0,import_mismatches=0),standard_axioms_only=True,canonical_owner_collision=False,combined='NIS_L058',raw=['NIS_L059','NIS_L062'],scan_receipt='NIS_L060',fixture_receipt='NIS_L030',native=dict(used=120,passes=55,matched_failing_controls=53,compiler_failures=12),lean_used=len(rows)-120,extraction_used=0,closed_rows=delta['new_closed_rows'],counts_after=delta['counts_after'],security_target_established=False,scope='Cached canonical closure; not a cold release or ELF replay; native incomplete probes excluded'),indent=1)+'\n')
+ print(json.dumps(dict(status='PASS_FINAL',rows=5,roots=len(roots),modules=len(loaded),native=120,formal=len(rows)-120)))
