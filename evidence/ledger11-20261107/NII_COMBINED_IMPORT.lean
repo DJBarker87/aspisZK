@@ -1,0 +1,51 @@
+import NGK_COMBINED_IMPORT
+import NGC_COMBINED_IMPORT
+import NGN_COMBINED_IMPORT
+import NGO_COMBINED_IMPORT
+import NGV_COMBINED_IMPORT
+import NGM_COMBINED_IMPORT
+import NGT_COMBINED_IMPORT
+import NGU_COMBINED_IMPORT
+import NGH_COMBINED_IMPORT
+import NGD_COMBINED_IMPORT
+import NFW_COMBINED_IMPORT
+import NGP_COMBINED_IMPORT
+import NGR_COMBINED_IMPORT
+import NGS_COMBINED_IMPORT
+import NFW_STAGE2_IMPORT
+import NGW_COMBINED_IMPORT
+import NGY_COMBINED_IMPORT
+import NGX_COMBINED_IMPORT
+import NHE_COMBINED_IMPORT
+import NHF_COMBINED_IMPORT
+import NHI_COMBINED_IMPORT
+import NHH_COMBINED_IMPORT
+import NHC_COMBINED_IMPORT
+import NHK_COMBINED_IMPORT
+import NHN_COMBINED_IMPORT
+import NHG_COMBINED_IMPORT
+import NHS_COMBINED_IMPORT
+import NHM_COMBINED_IMPORT
+import NHJ_COMBINED_IMPORT
+import NHX_COMBINED_IMPORT
+import NHU_COMBINED_IMPORT
+import NHP_COMBINED_IMPORT
+import NHZ_COMBINED_IMPORT
+import NIB_COMBINED_IMPORT
+import NHW_COMBINED_IMPORT
+import NIF_COMBINED_IMPORT
+import NHT_COMBINED_IMPORT
+import NHV_COMBINED_IMPORT
+import NHL_COMBINED_IMPORT
+import NIA_COMBINED_IMPORT
+import NIC_COMBINED_IMPORT
+#print axioms AspisR1.RPx_Deployed.deployed
+#print axioms AspisR1.NGR_HISTORY.saved_to_loaded
+#print axioms AspisR1.NGS_CARRIERS.same_inputs_or_collision
+#print axioms AspisR1.NGP_OracleTransport.prefix_of_native
+#print axioms AspisR1.NGP_OracleTransport.exact_of_returns
+#print axioms AspisR1.NGP_TRANSCRIPT.actual_queries
+#print axioms AspisR1.NHZ_DRIVER.events_from_cuts
+#print axioms AspisR1.NHZ_EXPERIMENT.same_law
+#print axioms NIB_ReadToSettlement.read_to_settlement
+#print axioms AspisR1.NHW_WriterFromNative.under_retained_extraction

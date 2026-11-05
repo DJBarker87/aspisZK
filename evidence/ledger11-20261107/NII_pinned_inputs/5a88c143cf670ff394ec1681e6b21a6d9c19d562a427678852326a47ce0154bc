@@ -1,0 +1,15 @@
+fn snapshot(account: &AccountInfo<'_>, length1: usize, length2: usize) -> OwnedAccount {
+    let (length, bytes) = match account.try_borrow_data() {
+        Ok(data) => {
+            let length = data.len();
+            let bytes = if length == length1 || length == length2 {
+                Ok(data.to_vec())
+            } else { Err(ProgramError::InvalidAccountData) };
+            (Ok(length), bytes)
+        }
+        Err(error) => (Err(error.clone()), Err(error)),
+    };
+    OwnedAccount { key: *account.key, owner: *account.owner,
+        is_signer: account.is_signer, is_writable: account.is_writable,
+        executable: account.executable, length, bytes }
+}
