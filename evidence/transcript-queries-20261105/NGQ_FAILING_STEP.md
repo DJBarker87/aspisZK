@@ -15,3 +15,12 @@ interfaces. Where no actual emission exists, (ah) would require an actual-body
 reference contract with exact frame and control plus reviewed transcription;
 a handwritten model equality alone is not credit. All digest/constructor/event
 and Lean-only obligations continue independently. TX1:168 remains OPEN.
+
+K025: strengthened compound corrupted-reply control timed out at the unchanged
+180s outer launcher limit (Kani harness limit90s). Cgroup peak6555262976 bytes,
+swap0; scope subsequently vanished and owned TMPDIR was empty. Parent time RSS
+98460KiB is not the aggregate peak; the cgroup peak is authoritative here.
+No credit, no larger cap or timeout, no unchanged retry. Replacement: a single
+fixed byte0 of the same copied block reply, with the same native function/name
+and source cut, instead of the compound arbitrary-index corrupted frame.
+This is a tool limit, not a source/model schedule mismatch.

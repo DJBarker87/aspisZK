@@ -23,7 +23,7 @@ fn NGQ_word_step() {
  let expected_word=if !halted && !member && j==len {x} else {accepted[j]};
  let correct=stop==halted && s.accepted_len==expected_len && s.draws==expected_draws && s.accepted[j]==expected_word;
  #[cfg(not(NGQ_invert))] assert!(correct);
- #[cfg(NGQ_invert)] assert!(!correct);
+ #[cfg(NGQ_invert)] assert!(s.accepted[j] == (expected_word ^ 1));
 }
 '''
 (E/'NGQ_scan_step.rs.txt').write_text(s);(E/'NGQ_SCAN_CUT.json').write_text(json.dumps(dict(start=a,end=b,sha256=hashlib.sha256(body.encode()).hexdigest()),indent=1)+'\n')

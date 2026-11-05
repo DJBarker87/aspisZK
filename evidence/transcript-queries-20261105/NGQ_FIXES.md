@@ -25,3 +25,5 @@ retained support. Final ruling-(y) controls will corrupt one reply window, with
 same source/configuration positives, instead of merely inverting the predicate.
 Large repeated Cargo.lock/Cargo.toml snapshots were replaced by SHA references
 to the single compressed frozen-input corpus; launcher source hashes remain.
+
+K035: compilation stopped on duplicate NGQ_decode_call helper/harness name. Renamed the helper to NGQ_decode_cut (same body); no solver verdict existed. Pair5 resumes at K036 after this source repair. Dropped the planned array iterator pair to retain the 60-attempt maximum; range pair remains.

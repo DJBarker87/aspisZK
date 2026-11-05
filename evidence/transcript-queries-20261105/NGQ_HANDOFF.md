@@ -27,3 +27,5 @@ E001 consumes1/1 extraction: Charon succeeded; Aeneas failed at loop-context
 collapse. The raw LLBC is retained compressed by hash. NGQ_FAILING_STEP records
 this tool obstruction. Event reification and trace-composition modules are drafts
 until their individual compiler receipts and final audit exist.
+
+Stage3 model evidence: L014–L016 check effect reification, local chronological cut composition and unchanged L181 consumer; L019–L028 revalidate the coherent Query31 word/step/loop/driver proofs with NGQ-only module ownership. L034, L036–L043 check event bounds, emitted digest transport, arbitrary byte frames, canonical sampler totality/decoder installation, pure-step normalization and the explicit eight-pair chain. NGQ_TRANSCRIPT.actual_queries (L043) fixes the adopted boundaries and preserves the SAME input/state, ordered positions, full Result and attempted log. It explicitly still requires a chronological Source Trace producer; no native row closure follows merely from this compilation. All selected new top theorems print only standard axioms.

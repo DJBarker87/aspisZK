@@ -18,7 +18,7 @@
 +pub mod KMX_stubs;
 --- a/crates/aspis-core/src/r0_transcript.rs
 +++ b/crates/aspis-core/src/r0_transcript.rs
-@@ -319,3 +319,7 @@
+@@ -319,3 +319,11 @@
  
  #[cfg(test)]
  mod tests;
@@ -26,6 +26,10 @@
 +#[cfg(kani)]
 +#[path="NGQ_harness.rs"]
 +mod NGQ_harness;
++
++#[cfg(kani)]
++#[path="NGQ_iterator.rs"]
++mod NGQ_iterator;
 --- a/crates/aspis-r1-cost-probe/src/lib.rs
 +++ b/crates/aspis-r1-cost-probe/src/lib.rs
 @@ -1,4 +1,5 @@
@@ -44,7 +48,7 @@
 +pub mod KMX_stubs;
 --- a/crates/aspis-r1-cost-probe/src/transcript.rs
 +++ b/crates/aspis-r1-cost-probe/src/transcript.rs
-@@ -78,3 +78,7 @@
+@@ -78,3 +78,23 @@
          Ok(q)
      }
  }
@@ -52,6 +56,22 @@
 +#[cfg(kani)]
 +#[path="NGQ_pairs.rs"]
 +mod NGQ_pairs;
++
++#[cfg(kani)]
++#[path="NGQ_tail.rs"]
++mod NGQ_tail;
++
++#[cfg(kani)]
++#[path="NGQ_absorb.rs"]
++mod NGQ_absorb;
++
++#[cfg(kani)]
++#[path="NGQ_init.rs"]
++mod NGQ_init;
++
++#[cfg(kani)]
++#[path="NGQ_call.rs"]
++mod NGQ_call;
 --- a/KMX_stubs.rs
 +++ b/KMX_stubs.rs
 @@ -0,0 +1,76 @@
@@ -303,7 +323,7 @@
 +end KMX_CopyMeaning
 --- a/crates/aspis-core/src/NGQ_harness.rs
 +++ b/crates/aspis-core/src/NGQ_harness.rs
-@@ -0,0 +1,36 @@
+@@ -0,0 +1,107 @@
 +use super::*;
 +
 +#[kani::proof]
@@ -338,7 +358,78 @@
 +       | ((block[j+2] as u32)<<16) | ((block[j+3] as u32)<<24)) & 262143;
 +    let correct = out[k] == expected && out[k] < 262144;
 +    #[cfg(not(NGQ_invert))] assert!(correct);
-+    #[cfg(NGQ_invert)] assert!(!correct);
++    #[cfg(NGQ_invert)] assert!(out[k] == (expected ^ 1));
++}
++// NGQ generated one-word cut
++impl QueryScan {
++ fn NGQ_word_step(&mut self,candidate:u32)->bool {
++            if self.accepted_len == QUERY_COUNT || self.draws == QUERY_MAX_DRAWS {
++                return true;
++            }
++            self.draws += 1;
++            if !self.accepted[..self.accepted_len].contains(&candidate) {
++                self.accepted[self.accepted_len] = candidate;
++                self.accepted_len += 1;
++            }
++ false
++ }
++}
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++fn NGQ_word_step() {
++ let accepted:[u32;22]=kani::any();let len:usize=kani::any();let draws:usize=kani::any();let x:u32=kani::any();
++ let j:usize=kani::any();kani::assume(len<=22 && draws<=64 && j<22);
++ let member=accepted[..len].contains(&x);
++ let mut s=QueryScan{accepted,accepted_len:len,draws};
++ let stop=s.NGQ_word_step(x);let halted=len==22 || draws==64;
++ let expected_len=if halted || member {len} else {len+1};
++ let expected_draws=if halted {draws} else {draws+1};
++ let expected_word=if !halted && !member && j==len {x} else {accepted[j]};
++ let correct=stop==halted && s.accepted_len==expected_len && s.draws==expected_draws && s.accepted[j]==expected_word;
++ #[cfg(not(NGQ_invert))] assert!(correct);
++ #[cfg(NGQ_invert)] assert!(s.accepted[j] == (expected_word ^ 1));
++}
++// NGQ generated outer cut
++#[derive(Clone,Copy)]
++struct NGQ_ScanFields {accepted:[u32;22],len:usize,draws:usize}
++fn NGQ_scan_reply(scan:&mut QueryScan,block:&[u8;32],reply:NGQ_ScanFields,
++ stop:bool,j:usize,i:usize,log:&mut(u8,u32,usize,usize))->bool {
++ *log=(block[j],scan.accepted[i],scan.accepted_len,scan.draws);
++ scan.accepted=reply.accepted;scan.accepted_len=reply.len;scan.draws=reply.draws;
++ stop
++}
++fn NGQ_outer_step(blocks:&[[u8;32];8],advances:&[[u8;32];8],k:usize,
++ mut scan:QueryScan,prior_state:[u8;32],reply:NGQ_ScanFields,stop:bool,j:usize,i:usize)
++ ->(bool,QueryScan,[u8;32],(u8,u32,usize,usize)) {
++ let mut log=(0u8,0u32,0usize,0usize);let mut state=prior_state;
++ let halted=NGQ_scan_reply(&mut scan,&blocks[k],reply,stop,j,i,&mut log);
++ if halted {state=advances[k];}
++ (halted,scan,state,log)
++}
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++fn NGQ_outer_step_check() {
++ let blocks:[[u8;32];8]=kani::any();let advances:[[u8;32];8]=kani::any();
++ let k:usize=kani::any();let j:usize=kani::any();let i:usize=kani::any();kani::assume(k<8 && j<32 && i<22);
++ let before=NGQ_ScanFields{accepted:kani::any(),len:kani::any(),draws:kani::any()};
++ kani::assume(before.len<=22 && before.draws<=64);
++ let scan=QueryScan{accepted:before.accepted,accepted_len:before.len,draws:before.draws};
++ let reply=NGQ_ScanFields{accepted:kani::any(),len:kani::any(),draws:kani::any()};
++ let prior_state:[u8;32]=kani::any();let stop:bool=kani::any();
++ let (halt,after,state,log)=NGQ_outer_step(&blocks,&advances,k,scan,prior_state,reply,stop,j,i);
++ let correct=halt==stop && after.accepted[i]==reply.accepted[i] && after.accepted_len==reply.len && after.draws==reply.draws
++  && state[j]==(if stop {advances[k][j]}else{prior_state[j]})
++  && log==(blocks[k][j],before.accepted[i],before.len,before.draws);
++ #[cfg(not(NGQ_invert))] assert!(correct);
++ #[cfg(NGQ_invert)] assert!(after.accepted[i] == (reply.accepted[i] ^ 1));
++}
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++fn NGQ_default() {
++ let s=QueryScan::default();let j:usize=kani::any();kani::assume(j<22);
++ let correct=s.accepted[j]==0 && s.accepted_len==0 && s.draws==0;
++ #[cfg(not(NGQ_invert))] assert!(correct);
++ #[cfg(NGQ_invert)] assert!(s.accepted[j] == 1);
 +}
 --- a/crates/aspis-r1-cost-probe/src/NGQ_pairs.rs
 +++ b/crates/aspis-r1-cost-probe/src/NGQ_pairs.rs
@@ -413,7 +504,7 @@
 +  && a[p][j]==(if p==0 {replies[1][j]} else {advances[p][j]})
 +  && final_state[j]==replies[1][j] && t.state[j]==state[j];
 + #[cfg(not(NGQ_invert))] assert!(correct);
-+ #[cfg(NGQ_invert)] assert!(!correct);
++ #[cfg(NGQ_invert)] assert!(b[0][0]==(replies[0][0]^1));
 +}
 +#[kani::proof] #[kani::unwind(34)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
@@ -430,7 +521,7 @@
 +  && a[p][j]==(if p==1 {replies[1][j]} else {advances[p][j]})
 +  && final_state[j]==replies[1][j] && t.state[j]==state[j];
 + #[cfg(not(NGQ_invert))] assert!(correct);
-+ #[cfg(NGQ_invert)] assert!(!correct);
++ #[cfg(NGQ_invert)] assert!(b[1][0]==(replies[0][0]^1));
 +}
 +#[kani::proof] #[kani::unwind(34)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
@@ -447,7 +538,7 @@
 +  && a[p][j]==(if p==2 {replies[1][j]} else {advances[p][j]})
 +  && final_state[j]==replies[1][j] && t.state[j]==state[j];
 + #[cfg(not(NGQ_invert))] assert!(correct);
-+ #[cfg(NGQ_invert)] assert!(!correct);
++ #[cfg(NGQ_invert)] assert!(b[2][0]==(replies[0][0]^1));
 +}
 +#[kani::proof] #[kani::unwind(34)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
@@ -464,7 +555,7 @@
 +  && a[p][j]==(if p==3 {replies[1][j]} else {advances[p][j]})
 +  && final_state[j]==replies[1][j] && t.state[j]==state[j];
 + #[cfg(not(NGQ_invert))] assert!(correct);
-+ #[cfg(NGQ_invert)] assert!(!correct);
++ #[cfg(NGQ_invert)] assert!(b[3][0]==(replies[0][0]^1));
 +}
 +#[kani::proof] #[kani::unwind(34)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
@@ -481,7 +572,7 @@
 +  && a[p][j]==(if p==4 {replies[1][j]} else {advances[p][j]})
 +  && final_state[j]==replies[1][j] && t.state[j]==state[j];
 + #[cfg(not(NGQ_invert))] assert!(correct);
-+ #[cfg(NGQ_invert)] assert!(!correct);
++ #[cfg(NGQ_invert)] assert!(b[4][0]==(replies[0][0]^1));
 +}
 +#[kani::proof] #[kani::unwind(34)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
@@ -498,7 +589,7 @@
 +  && a[p][j]==(if p==5 {replies[1][j]} else {advances[p][j]})
 +  && final_state[j]==replies[1][j] && t.state[j]==state[j];
 + #[cfg(not(NGQ_invert))] assert!(correct);
-+ #[cfg(NGQ_invert)] assert!(!correct);
++ #[cfg(NGQ_invert)] assert!(b[5][0]==(replies[0][0]^1));
 +}
 +#[kani::proof] #[kani::unwind(34)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
@@ -515,7 +606,7 @@
 +  && a[p][j]==(if p==6 {replies[1][j]} else {advances[p][j]})
 +  && final_state[j]==replies[1][j] && t.state[j]==state[j];
 + #[cfg(not(NGQ_invert))] assert!(correct);
-+ #[cfg(NGQ_invert)] assert!(!correct);
++ #[cfg(NGQ_invert)] assert!(b[6][0]==(replies[0][0]^1));
 +}
 +#[kani::proof] #[kani::unwind(34)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
@@ -532,5 +623,176 @@
 +  && a[p][j]==(if p==7 {replies[1][j]} else {advances[p][j]})
 +  && final_state[j]==replies[1][j] && t.state[j]==state[j];
 + #[cfg(not(NGQ_invert))] assert!(correct);
-+ #[cfg(NGQ_invert)] assert!(!correct);
++ #[cfg(NGQ_invert)] assert!(b[7][0]==(replies[0][0]^1));
++}
+--- a/crates/aspis-r1-cost-probe/src/NGQ_tail.rs
++++ b/crates/aspis-r1-cost-probe/src/NGQ_tail.rs
+@@ -0,0 +1,56 @@
++use super::*;
++#[derive(Clone,Copy)] struct NGQ_NoDigest;
++impl aspis_core::Digest32 for NGQ_NoDigest {
++ fn digest(&self,_:&[&[u8]])->[u8;32] {panic!("unexpected digest in tail")}
++}
++impl<H:aspis_core::Digest32> Transcript<H> {
++ fn NGQ_tail(&mut self,reply:Result<([u32;22],[u8;32]),aspis_core::transcript::QuerySampleError>)->Result<[u32;22],crate::verifier::Error> {
++        let (q,state)=reply.map_err(|_|crate::verifier::Error::Transcript)?;
++        self.state=state;
++        { let u=q[0]; crate::trace::value(5,0,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[1]; crate::trace::value(5,1,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[2]; crate::trace::value(5,2,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[3]; crate::trace::value(5,3,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[4]; crate::trace::value(5,4,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[5]; crate::trace::value(5,5,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[6]; crate::trace::value(5,6,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[7]; crate::trace::value(5,7,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[8]; crate::trace::value(5,8,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[9]; crate::trace::value(5,9,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[10]; crate::trace::value(5,10,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[11]; crate::trace::value(5,11,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[12]; crate::trace::value(5,12,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[13]; crate::trace::value(5,13,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[14]; crate::trace::value(5,14,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[15]; crate::trace::value(5,15,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[16]; crate::trace::value(5,16,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[17]; crate::trace::value(5,17,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[18]; crate::trace::value(5,18,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[19]; crate::trace::value(5,19,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[20]; crate::trace::value(5,20,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[21]; crate::trace::value(5,21,E::from_m31(aspis_core::field::M31(u))); }
++        Ok(q)
++ }
++}
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++fn NGQ_tail() {
++ let old:[u8;32]=kani::any();let q:[u32;22]=kani::any();let selected:[u8;32]=kani::any();
++ let good:bool=kani::any();let tag:u8=kani::any();kani::assume(tag<3);
++ let error=match tag {
++  0=>aspis_core::transcript::QuerySampleError::BoundNotPowerOfTwo{bound:kani::any()},
++  1=>aspis_core::transcript::QuerySampleError::CountExceedsBound{count:kani::any(),bound:kani::any()},
++  _=>aspis_core::transcript::QuerySampleError::DrawLimitExhausted{accepted:kani::any(),max_draws:kani::any()},
++ };
++ let reply=if good {Ok((q,selected))}else{Err(error)};
++ let j:usize=kani::any();let i:usize=kani::any();kani::assume(j<32 && i<22);
++ let mut t=Transcript{state:old,hash:NGQ_NoDigest};
++ let out=t.NGQ_tail(reply);
++ let correct=match out {
++  Ok(result)=>good && result[i]==q[i] && t.state[j]==selected[j],
++  Err(crate::verifier::Error::Transcript)=>!good && t.state[j]==old[j],
++  _=>false,
++ };
++ #[cfg(not(NGQ_invert))] assert!(correct);
++ #[cfg(NGQ_invert)] { if good { let result=out.unwrap(); assert!(result[i]==(q[i]^1)); } else {assert!(correct);} }
++}
+--- a/crates/aspis-r1-cost-probe/src/NGQ_absorb.rs
++++ b/crates/aspis-r1-cost-probe/src/NGQ_absorb.rs
+@@ -0,0 +1,31 @@
++use super::*;
++use core::cell::Cell;
++#[derive(Clone,Copy)]
++struct NGQ_AbsorbOracle<'a> {
++ log:&'a Cell<(usize,u8,u8,u8,u8,bool,usize)>,reply:&'a [u8;32],
++ expected_payload:&'a [u8],j:usize,l:usize,
++}
++impl aspis_core::Digest32 for NGQ_AbsorbOracle<'_> {
++ fn digest(&self,parts:&[&[u8]])->[u8;32] {
++  assert_eq!(parts.len(),4);assert_eq!(parts[0].len(),32);
++  assert_eq!(parts[1].len(),2);assert_eq!(parts[2].len(),4);
++  self.log.set((1,parts[0][self.j],parts[1][0],parts[1][1],parts[2][self.l],
++    parts[3].as_ptr()==self.expected_payload.as_ptr(),parts[3].len()));
++  *self.reply
++ }
++}
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++fn NGQ_absorb() {
++ let state:[u8;32]=kani::any();let reply:[u8;32]=kani::any();
++ let bytes:[u8;8192]=kani::any();let n:usize=kani::any();kani::assume(n<=8192);
++ let row:u8=kani::any();kani::assume(row<=95);
++ let j:usize=kani::any();let l:usize=kani::any();kani::assume(j<32 && l<4);
++ let payload=&bytes[..n];let log=Cell::new((0usize,0u8,0u8,0u8,0u8,false,0usize));
++ let hash=NGQ_AbsorbOracle{log:&log,reply:&reply,expected_payload:payload,j,l};
++ let mut t=Transcript{state,hash};t.absorb(row,payload);
++ let expected=(1,state[j],0,160+row,((n as u32)>>(8*l)) as u8,true,n);
++ let correct=log.get()==expected && t.state[j]==reply[j];
++ #[cfg(not(NGQ_invert))] assert!(correct);
++ #[cfg(NGQ_invert)] assert!(t.state[j]==(reply[j]^1));
++}
+--- a/crates/aspis-r1-cost-probe/src/NGQ_init.rs
++++ b/crates/aspis-r1-cost-probe/src/NGQ_init.rs
+@@ -0,0 +1,20 @@
++use super::*;
++#[derive(Clone,Copy)] struct NGQ_NoHash;
++impl aspis_core::Digest32 for NGQ_NoHash {
++ fn digest(&self,_:&[&[u8]])->[u8;32] {panic!("unexpected digest in initialization")}
++}
++impl<H:aspis_core::Digest32> Transcript<H> {
++ fn NGQ_init(&self)->([[u8;32];8],[[u8;32];8],[u8;32]) {
++  let mut blocks=[[0;32];8];let mut advances=blocks; let mut state=self.state;
++  (blocks,advances,state)
++ }
++}
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++fn NGQ_init() {
++ let state:[u8;32]=kani::any();let t=Transcript{state,hash:NGQ_NoHash};
++ let p:usize=kani::any();let j:usize=kani::any();kani::assume(p<8 && j<32);
++ let (b,a,s)=t.NGQ_init();let correct=b[p][j]==0 && a[p][j]==0 && s[j]==state[j] && t.state[j]==state[j];
++ #[cfg(not(NGQ_invert))] assert!(correct);
++ #[cfg(NGQ_invert)] assert!(b[0][0]==1);
++}
+--- a/crates/aspis-r1-cost-probe/src/NGQ_call.rs
++++ b/crates/aspis-r1-cost-probe/src/NGQ_call.rs
+@@ -0,0 +1,29 @@
++use super::*;
++type NGQ_Reply=Result<([u32;22],[u8;32]),aspis_core::transcript::QuerySampleError>;
++fn NGQ_decode_oracle(blocks:&[[u8;32];8],advances:&[[u8;32];8],reply:NGQ_Reply,
++ p:usize,j:usize,log:&mut(u8,u8))->NGQ_Reply {
++ *log=(blocks[p][j],advances[p][j]);reply
++}
++fn NGQ_decode_cut(blocks:[[u8;32];8],advances:[[u8;32];8],reply:NGQ_Reply,
++ p:usize,j:usize,log:&mut(u8,u8))->NGQ_Reply {
++ NGQ_decode_oracle(&blocks,&advances,reply,p,j,log)
++}
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++fn NGQ_decode_call() {
++ let blocks:[[u8;32];8]=kani::any();let advances:[[u8;32];8]=kani::any();
++ let q:[u32;22]=kani::any();let selected:[u8;32]=kani::any();let good:bool=kani::any();
++ let tag:u8=kani::any();kani::assume(tag<3);
++ let error=match tag {
++  0=>aspis_core::transcript::QuerySampleError::BoundNotPowerOfTwo{bound:kani::any()},
++  1=>aspis_core::transcript::QuerySampleError::CountExceedsBound{count:kani::any(),bound:kani::any()},
++  _=>aspis_core::transcript::QuerySampleError::DrawLimitExhausted{accepted:kani::any(),max_draws:kani::any()},
++ };
++ let reply=if good {Ok((q,selected))}else{Err(error)};
++ let p:usize=kani::any();let j:usize=kani::any();let i:usize=kani::any();kani::assume(p<8 && j<32 && i<22);
++ let mut log=(0,0);let out=NGQ_decode_cut(blocks,advances,reply,p,j,&mut log);
++ let result=match out {Ok((a,s))=>good && a[i]==q[i] && s[j]==selected[j],Err(e)=>!good && e==error};
++ let correct=log==(blocks[p][j],advances[p][j]) && result;
++ #[cfg(not(NGQ_invert))] assert!(correct);
++ #[cfg(NGQ_invert)] assert!(log.0==advances[p][j]);
++}
+--- a/crates/aspis-core/src/NGQ_iterator.rs
++++ b/crates/aspis-core/src/NGQ_iterator.rs
+@@ -0,0 +1,20 @@
++#[kani::proof] #[kani::unwind(34)]
++fn NGQ_range_next() {
++ let start:usize=kani::any();kani::assume(start<=8);let mut iter=start..8;
++ let out=iter.next();let expected=if start<8 {Some(start)}else{None};
++ let next=if start<8 {start+1}else{start};
++ let correct=out==expected && iter.start==next && iter.end==8;
++ #[cfg(not(NGQ_invert))] assert!(correct);
++ #[cfg(NGQ_invert)] assert!(out==Some(9));
++}
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++fn NGQ_array_next() {
++ let words:[u32;8]=kani::any();let cursor:usize=kani::any();kani::assume(cursor<=8);
++ let mut iter=words.into_iter();if cursor>0 {let _=iter.nth(cursor-1);}
++ let out=iter.next();let expected=if cursor<8 {Some(words[cursor])}else{None};
++ let remaining=if cursor<8 {7-cursor}else{0};
++ let correct=out==expected && iter.len()==remaining;
++ #[cfg(not(NGQ_invert))] assert!(correct);
++ #[cfg(NGQ_invert)] {if cursor<8 {assert!(out==Some(words[cursor]^1));}else{assert!(out==Some(0));}}
 +}

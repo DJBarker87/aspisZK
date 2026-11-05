@@ -18,6 +18,12 @@ files['crates/aspis-r1-cost-probe/src/transcript.rs']+='\n#[cfg(kani)]\n#[path="
 files['crates/aspis-r1-cost-probe/src/NGQ_tail.rs']=(E/'NGQ_tail_harness.rs.txt').read_text()
 files['crates/aspis-r1-cost-probe/src/transcript.rs']+='\n#[cfg(kani)]\n#[path="NGQ_absorb.rs"]\nmod NGQ_absorb;\n'
 files['crates/aspis-r1-cost-probe/src/NGQ_absorb.rs']=(E/'NGQ_absorb_harness.rs.txt').read_text()
+files['crates/aspis-r1-cost-probe/src/transcript.rs']+='\n#[cfg(kani)]\n#[path="NGQ_init.rs"]\nmod NGQ_init;\n'
+files['crates/aspis-r1-cost-probe/src/NGQ_init.rs']=(E/'NGQ_init_harness.rs.txt').read_text()
+files['crates/aspis-r1-cost-probe/src/transcript.rs']+='\n#[cfg(kani)]\n#[path="NGQ_call.rs"]\nmod NGQ_call;\n'
+files['crates/aspis-r1-cost-probe/src/NGQ_call.rs']=(E/'NGQ_call_harness.rs.txt').read_text()
+files['crates/aspis-core/src/r0_transcript.rs']+='\n#[cfg(kani)]\n#[path="NGQ_iterator.rs"]\nmod NGQ_iterator;\n'
+files['crates/aspis-core/src/NGQ_iterator.rs']=(E/'NGQ_iterator_harness.rs.txt').read_text()
 raw=''.join(''.join(difflib.unified_diff(frozen.get(p,'').splitlines(True),t.splitlines(True),fromfile='a/'+p,tofile='b/'+p)) for p,t in files.items() if frozen.get(p)!=t)
 (E/'NGQ_HARNESSES.patch').write_text(raw)
 (E/'NGQ_SOURCE_PINS.json').write_text(json.dumps({p:hashlib.sha256(t.encode()).hexdigest() for p,t in files.items()},indent=1)+'\n')

@@ -118,6 +118,7 @@ theorem materialize_erasure (hashv : SdkC_Source.Parts → Result SdkC_Source.Di
       NGQ_QueryFactor.materialize (dictionary hashv) () state := by
   simp only [materializeCode,erase_bind,erase_lift,erase_read,erase_pure,
     NGQ_QueryFactor.materialize,dictionary,SdkC_Source.dictionary]
+  rfl
 
 def absorbCode (self : transcript.Transcript Unit) (row : U8) (payload : Slice U8) :
     Code (transcript.Transcript Unit) := do

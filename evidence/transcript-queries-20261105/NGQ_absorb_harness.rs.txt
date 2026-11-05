@@ -18,7 +18,7 @@ impl aspis_core::Digest32 for NGQ_AbsorbOracle<'_> {
 #[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
 fn NGQ_absorb() {
  let state:[u8;32]=kani::any();let reply:[u8;32]=kani::any();
- let bytes:[u8;2048]=kani::any();let n:usize=kani::any();kani::assume(n<=2048);
+ let bytes:[u8;8192]=kani::any();let n:usize=kani::any();kani::assume(n<=8192);
  let row:u8=kani::any();kani::assume(row<=95);
  let j:usize=kani::any();let l:usize=kani::any();kani::assume(j<32 && l<4);
  let payload=&bytes[..n];let log=Cell::new((0usize,0u8,0u8,0u8,0u8,false,0usize));

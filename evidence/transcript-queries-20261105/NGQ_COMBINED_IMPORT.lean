@@ -1,0 +1,75 @@
+import NGK_COMBINED_IMPORT
+import NGQ_Concrete
+import NGQ_MaterializeChain
+import NGQ_EventBounds
+import NGQ_DigestBridge
+import NGQ_ByteFrames
+import NGQ_ScanLaws
+set_option autoImplicit false
+#print axioms AspisR1.RPx_Deployed.deployed
+#print axioms AspisR1.NGQ_QueryFactor.distribute
+#print axioms AspisR1.NGQ_QueryJoin.bind_same
+#print axioms AspisR1.NGQ_QueryJoin.source
+#print axioms AspisR1.NGQ_TraceErase.read
+#print axioms AspisR1.NGQ_TraceErase.finish_success
+#print axioms AspisR1.NGQ_TraceErase.finish_rejected
+#print axioms AspisR1.NGQ_Embed.total
+#print axioms AspisR1.NGQ_Embed.finish
+#print axioms AspisR1.NGQ_ScanLaws.duplicates
+#print axioms AspisR1.NGQ_ScanLaws.zero_stream_rejects
+#print axioms AspisR1.NGQ_ScanLaws.keep_order
+#print axioms AspisR1.NGQ_ScanLaws.keep_nodup
+#print axioms AspisR1.NGQ_ScanLaws.scan_nodup
+#print axioms AspisR1.NGQ_Effects.materialize_erasure
+#print axioms AspisR1.NGQ_Effects.absorb_erasure
+#print axioms AspisR1.NGQ_Effects.tail_dictionary
+#print axioms AspisR1.NGQ_Effects.factor_tail
+#print axioms AspisR1.NGQ_Effects.model_result
+#print axioms AspisR1.NGQ_Cuts.run
+#print axioms AspisR1.NGQ_Cuts.association
+#print axioms AspisR1.NGQ_TRANSCRIPT.actual_queries_of_cuts
+#print axioms AspisR1.NGQ_TRANSCRIPT.prefix_of_cuts
+#print axioms AspisR1.NGQ_TRANSCRIPT.exact_of_cuts
+#print axioms AspisR1.NGQ_SamplerFromFn.loop_total
+#print axioms AspisR1.NGQ_SamplerFromFn.source
+#print axioms AspisR1.NGQ_SamplerArray8.read
+#print axioms AspisR1.NGQ_SamplerArray8.literal
+#print axioms AspisR1.NGQ_SamplerWords.map_stable
+#print axioms AspisR1.NGQ_SamplerWords.source
+#print axioms AspisR1.NGQ_SamplerStep.unique
+#print axioms AspisR1.NGQ_SamplerStep.update
+#print axioms AspisR1.NGQ_SamplerStep.fresh
+#print axioms AspisR1.NGQ_SamplerStep.val_mem
+#print axioms AspisR1.NGQ_SamplerStep.duplicate
+#print axioms AspisR1.NGQ_SamplerStep.valid
+#print axioms AspisR1.NGQ_SamplerTrace.source
+#print axioms AspisR1.NGQ_SamplerTrace.unique
+#print axioms AspisR1.NGQ_SamplerConstruct.construct
+#print axioms AspisR1.NGQ_SamplerDriver.source
+#print axioms AspisR1.NGQ_SamplerNative.source
+#print axioms AspisR1.NGQ_SamplerNative.construct
+#print axioms AspisR1.NGQ_Normalize.run
+#print axioms AspisR1.NGQ_EventBounds.pure_bound
+#print axioms AspisR1.NGQ_EventBounds.trace_bound
+#print axioms AspisR1.NGQ_EventBounds.absorb_bound
+#print axioms AspisR1.NGQ_EventBounds.materialize_bound
+#print axioms AspisR1.NGQ_DigestBridge.observed
+#print axioms AspisR1.NGQ_ByteFrames.bytes_ext
+#print axioms AspisR1.NGQ_ByteFrames.blocks_ext
+#print axioms AspisR1.NGQ_ByteFrames.set_block
+#print axioms AspisR1.NGQ_ByteFrames.write_from_windows
+#print axioms AspisR1.NGQ_ArrayStage.write
+#print axioms AspisR1.NGQ_ArrayStage.read_written
+#print axioms AspisR1.NGQ_ArrayStage.mutable
+#print axioms AspisR1.NGQ_ArrayStage.pair_result
+#print axioms AspisR1.NGQ_SamplerPacket.adopted_decoder
+#print axioms AspisR1.NGQ_SamplerPacket.initial_valid
+#print axioms AspisR1.NGQ_SamplerPacket.finish_total
+#print axioms AspisR1.NGQ_SamplerPacket.walk_total
+#print axioms AspisR1.NGQ_SamplerPacket.zip_bound
+#print axioms AspisR1.NGQ_SamplerPacket.total
+#print axioms AspisR1.NGQ_Normalize.ideal
+#print axioms AspisR1.NGQ_MaterializeChain.normalized
+#print axioms AspisR1.NGQ_MaterializeChain.run
+#print axioms AspisR1.NGQ_TRANSCRIPT.adopted_boundaries
+#print axioms AspisR1.NGQ_TRANSCRIPT.actual_queries
