@@ -14,3 +14,5 @@ No new composed row CLOSED yet. The inherited NHP height guard, Pool error conve
 10. **Headline coherence PENDING for NIE.** NHP evidence retained; a fresh NIE co-import/ax2/scan is required before any new closure credit.
 
 No trust removal or new runtime/security assumption. Frozen3, deployed headline RPx_Deployed.deployed, L154 statement parameter, narrowed D188, privacy and two-transaction design remain unchanged.
+
+Stage-2 update: item2 now has new actual decoder/wrapper rejection cleanup and selected-frame observations (K014..081), not a successful/PDA/full-heap packet. E002 supplies an actual staged lane-body translation failure; neither master nor lane has a completed native/reference contract. Fifteen SDK-model facts compile and coherently co-import (L007), but no new composed row closes. Item4 borrowability remains OPEN at all seven sites.

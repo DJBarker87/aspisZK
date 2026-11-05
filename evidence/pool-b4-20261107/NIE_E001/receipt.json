@@ -1,0 +1,112 @@
+{
+  "attempt": "NIE_E001",
+  "kind": "extract",
+  "module": "pair_forest::decode_master_account",
+  "command": [
+    "python3",
+    "NIE_extract.py",
+    "NIE_E001.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-pool-b4-20261107/NIE_src/programs/aspis-pool/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-pool-b4-20261107/NIE_target",
+    "--lib",
+    "--features",
+    "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "pair_forest::NIE_native::association",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "NIE_extract.py",
+    "NIE_kani_gate.py",
+    "NIE_RUST_SHA256.json",
+    "NIE_stage/NHR_stage.py",
+    "NIE_stage/NHR_STAGING_MANIFEST.json"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-pool-b4-20261107/NIE_tmp"
+  },
+  "timeout": 180,
+  "source_revision": "971802bee02b9f12fa8826ad75171508e1046dff",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "frozen_input_sha256": "05b7f617777edd0bca70e1a745c08becc3241275cd0d13c7cedee21e9705dbcc",
+    "frozen_manifest_sha256": "7e18d8646fb2c49c457791c5f524ea0a112399c408e472cebcfdff263ae0dea0",
+    "NHR_staging_inputs": {
+      "NHR_stage.py": {
+        "path": "/Users/dominic/ZK/.worktrees/cx-pool-b4/evidence/extract-stage-20261106/NHR_stage.py",
+        "sha256": "365cdfc836535c0d77f3aa26edfa6216812b935851d4f710a36a02e4c9bb1de6",
+        "bytes": 15311
+      },
+      "NHR_STAGING_MANIFEST.json": {
+        "path": "/Users/dominic/ZK/.worktrees/cx-pool-b4/evidence/extract-stage-20261106/NHR_STAGING_MANIFEST.json",
+        "sha256": "74a894c5ff7f4f3f3dda624b57891e6d7323fb2fa77c2b850d1c1ab4e3f18ad4",
+        "bytes": 174427
+      },
+      "NHR_FROZEN_PAYLOAD.json.xz": {
+        "path": "/Users/dominic/ZK/.worktrees/cx-pool-b4/evidence/extract-stage-20261106/NHR_FROZEN_PAYLOAD.json.xz",
+        "sha256": "58902e9cc80f328a57a4348d6470075505388ff034bcceb36a27d1f4c38118c8",
+        "bytes": 3138384
+      },
+      "NHR_FROZEN_PAYLOAD.json.sha256": {
+        "path": "/Users/dominic/ZK/.worktrees/cx-pool-b4/evidence/extract-stage-20261106/NHR_FROZEN_PAYLOAD.json.sha256",
+        "sha256": "89f8cf69f243878ff24cd659dc6b0269c013ff855af2902578a5e3a76bf9cb39",
+        "bytes": 65
+      }
+    }
+  },
+  "program_features": "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit",
+  "program_manifest": "programs/aspis-pool/Cargo.toml",
+  "required_statement_features": [
+    "pool-v1-kernel"
+  ],
+  "expected_time": "NHR exact frozen staging/metadata, optimized Charon compilation, then one named Pool body translation; no arithmetic elimination",
+  "copy_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+  "leaf_selector": "pair_forest::decode_master_account",
+  "extract_namespace": "NIE_MasterExtract",
+  "stager_sha256": "365cdfc836535c0d77f3aa26edfa6216812b935851d4f710a36a02e4c9bb1de6",
+  "exit_status": 124,
+  "wall_seconds": 180.00731105310842,
+  "peak_rss_kib": "113156",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r166fa713b07c4583bf379b7ad8412fc9.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "1463726080",
+  "source_hashes": {
+    "NIE_extract.py": "7e6cffca2c2350f6274d2afc7028c9721dfba7b6a7a616c0837b29b189b59c32",
+    "NIE_kani_gate.py": "c60465008ae1f1866d4aa67637069125a9fa620a43d5efb33dd6917aa0659711",
+    "NIE_RUST_SHA256.json": "091249ed24a37c940572da21b045d1f7501cf54426aad7b0a40c663b993e4c2f",
+    "NIE_stage/NHR_stage.py": "365cdfc836535c0d77f3aa26edfa6216812b935851d4f710a36a02e4c9bb1de6",
+    "NIE_stage/NHR_STAGING_MANIFEST.json": "74a894c5ff7f4f3f3dda624b57891e6d7323fb2fa77c2b850d1c1ab4e3f18ad4"
+  },
+  "print_axioms": "N/A: extract"
+}

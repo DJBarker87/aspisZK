@@ -1,0 +1,15 @@
+# NIE failing steps and outstanding source cuts
+
+No production row is claimed CLOSED.
+
+* **Step 1 / borrowability:** all seven frozen accessor callers remain OPEN. Missing fact: actual deployed prefix establishes same-cell shared acquisition room (no tracked/external exclusive borrow, and no saturated shared counter), including aliases and decoder/CPI cleanup. NHP K086 remains liveness-only, production reachability unproved. No inputs or transaction shapes are constructed for this gap. No abort-prefix replacement is adopted.
+* **Step 2 item 1 / arbitrary production dispatch/request:** the inherited NHP_K003/K004 storage representation failures precede the actual splitter. Their unrestricted shape is not rerun. NHC/NGG split/body/hints laws and NHP guard/short-input passes are retained by citation. The exact missing native obligation is actual arbitrary physical request ownership/cleanup and entry/rejection-effect association; a fresh model wrapper cannot supply it. Proceed to independent decoder prefixes.
+* **NIE_K001–K004 / native input:** four compiler/input rejections while restoring exact KMX root module, allocator import and feature bindings. Replacements keep KMX source/patch unchanged and are documented in NIE_PROCESS_NOTES.md. No native pass, timeout or memory-limit event is claimed for them.
+* **NIE_K005 / native copy window:** 12-step unwind did not cover the 32-byte key copy. Replacement K006 uses the exact 33 bound; no timeout/cap increase and no timed-out shape was retried. K006 passes with K007 matched failure.
+* **NIE_L001 / model elaboration:** redundant invalid shared-constructor simp field rejected. L002 removes it, with the statement unchanged, and passes with standard printed axioms. The failed receipt remains retained.
+
+Future translation/native failures are appended rather than replacing these records. Full raw diagnostics are stored in attempt directories, never reproduced in reports.
+
+* **NIE_E001 / extraction staging + optimized cold compilation:** exit124 at180.007s, peak113156KiB, swap0; no LLBC and no Aeneas output. The actual body was not rejected by Aeneas, so this is NOT eligibility evidence for (ah). Read-only recovery confirms frozen lock unchanged, no active owned process, and388693593 bytes of reusable extraction compilation cache. The extraction interrupted before finally could restore the own patch; source is still the exact frozen tree. E002 selects the different lane decoder and records phase pins before each subprocess; no unchanged master extraction is rerun.
+
+* **NIE_E002 / actual frozen lane decoder:** NHR full staging and Pool frozen/deployed graph preflight pass; Charon passes; Aeneas exits2. Full diagnostics and partial raw output remain uncompiled source evidence. This is the actual selected frozen body after complete staging, unlike E001's compilation timeout. Post-extraction audit checks690 expected files against frozen Git bytes plus exact pinned KMX and the restored own patch, with0 mismatches and unchanged lock. No completed (ah) native-reference contract or reviewed transcription is claimed.

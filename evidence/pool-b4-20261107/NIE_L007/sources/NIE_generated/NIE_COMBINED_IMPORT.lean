@@ -1,0 +1,22 @@
+import NHP_COMBINED_IMPORT
+import NIE_BorrowRelease
+import NIE_AccessorPrecondition
+import NIE_BorrowScopes
+#check AspisR1.RPx_Deployed.deployed
+#print axioms NIE_BorrowRelease.shared_counter_roundtrip
+#print axioms NIE_BorrowRelease.shared_frame
+#print axioms NIE_BorrowRelease.shared_room_roundtrip
+#print axioms NIE_BorrowRelease.alias_room
+#print axioms NIE_BorrowRelease.saturation_not_shared_room
+#print axioms AspisR1.RPx_Deployed.deployed
+
+#print axioms NIE_AccessorPrecondition.no_tracked_exclusive
+#print axioms NIE_AccessorPrecondition.no_external_exclusive
+#print axioms NIE_AccessorPrecondition.room_from_ledger
+#print axioms NIE_AccessorPrecondition.model_shared_returns
+#print axioms NIE_AccessorPrecondition.exclusive_counter_roundtrip
+#print axioms NIE_BorrowScopes.guards_roundtrip
+#print axioms NIE_BorrowScopes.shared_heap_roundtrip
+#print axioms NIE_BorrowScopes.exclusive_heap_roundtrip
+#print axioms NIE_BorrowScopes.valid_after_shared_scope
+#print axioms NIE_BorrowScopes.valid_after_exclusive_scope

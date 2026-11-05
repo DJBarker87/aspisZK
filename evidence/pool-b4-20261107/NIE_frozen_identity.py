@@ -8,7 +8,7 @@ E=Path(__file__).resolve().parent.parent/'pool-b3-20261106';REV='4bb3b3f51e16b45
 sha=lambda b:hashlib.sha256(b).hexdigest()
 @lru_cache(maxsize=1)
 def frozen():
- pins=json.loads((E/'NHP_RUST_SOURCE_PINS.json').read_text())['files']
+ pins=json.loads((E.parent/'extract-stage-20261106/NHR_STAGING_MANIFEST.json').read_text())['files']
  tree={line.split('\t',1)[1]:line.split()[2] for line in subprocess.check_output(['git','ls-tree','-r',REV],text=True).splitlines()}
  assert all(tree[n]==pin['git_blob'] for n,pin in pins.items())
  blobs=list(dict.fromkeys(p['git_blob'] for p in pins.values()))

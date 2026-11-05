@@ -1,0 +1,40 @@
+NIE_generated/NIE_AccessorPrecondition.lean:13:3: error: unknown tactic
+NIE_generated/NIE_AccessorPrecondition.lean:10:47: error: unsolved goals
+F : Type
+s : Heap F
+a : Nat
+valid : Valid s
+room : SharedRoom s a
+c : Nat := (s.accounts a).fst
+nonneg : 0 ≤ count s c Kind.exclusive
+⊢ count s (s.accounts a).fst Kind.exclusive = 0
+'NIE_AccessorPrecondition.no_tracked_exclusive' depends on axioms: [propext, sorryAx, Quot.sound]
+NIE_generated/NIE_AccessorPrecondition.lean:25:3: error: unknown tactic
+NIE_generated/NIE_AccessorPrecondition.lean:23:83: error: unsolved goals
+F : Type
+s : Heap F
+a : Nat
+valid : Valid s
+room : SharedRoom s a
+c : Nat := (s.accounts a).fst
+⊢ 0 ≤ s.external (s.accounts a).fst
+'NIE_AccessorPrecondition.no_external_exclusive' depends on axioms: [sorryAx]
+'NIE_AccessorPrecondition.room_from_ledger' depends on axioms: [propext, Quot.sound]
+NIE_generated/NIE_AccessorPrecondition.lean:52:82: error: unsolved goals
+F : Type
+s : Heap F
+a t o : Nat
+room : SharedRoom s a
+⊢ (if 0 ≤ s.counter (s.accounts a).fst ∧ s.counter (s.accounts a).fst < maxCounter then
+      (acquire s (s.accounts a).fst t o Kind.shared, Reply.guard t)
+    else (s, Reply.borrowFailed)) =
+    (acquire s (s.accounts a).fst t o Kind.shared, Reply.guard t)
+NIE_generated/NIE_AccessorPrecondition.lean:53:18: warning: This simp argument is unused:
+  if_pos room
+
+Hint: Omit it from the simp argument list.
+  simp only [run,̵ ̵i̵f̵_̵p̵o̵s̵ ̵r̵o̵o̵m̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NIE_AccessorPrecondition.model_shared_returns' depends on axioms: [sorryAx]
+'NIE_AccessorPrecondition.exclusive_counter_roundtrip' depends on axioms: [propext, Quot.sound]
