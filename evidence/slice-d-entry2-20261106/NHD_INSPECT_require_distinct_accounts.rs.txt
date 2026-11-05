@@ -1,0 +1,14 @@
+fn require_distinct_accounts<const N: usize>(accounts: &[&OwnedAccount; N]) -> ProgramResult {
+    let mut index = 0;
+    while index < N {
+        let mut previous = 0;
+        while previous < index {
+            if accounts[previous].key() == accounts[index].key() {
+                return Err(ProgramError::InvalidArgument);
+            }
+            previous += 1;
+        }
+        index += 1;
+    }
+    Ok(())
+}

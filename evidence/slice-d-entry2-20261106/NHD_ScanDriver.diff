@@ -1,0 +1,42 @@
+--- evidence/slice-d-entry-20261105/NGL_Driver.lean
++++ evidence/slice-d-entry2-20261106/NHD_ScanDriver.lean
+@@ -2,7 +2,7 @@
+ import NFA_WALKER
+ import NFA_MemoryLimit
+ open Lean Elab Command
+-namespace NER
++namespace NHD_NER
+ /-- Include recursor reduction rules and constant-name metadata, not only values. -/
+ def referenceNames (c : ConstantInfo) : Array Name := Id.run do
+  let mut refs := c.type.getUsedConstants ++ ((c.value? true).map Expr.getUsedConstants).getD #[]
+@@ -85,7 +85,7 @@
+    ("loader_imports",toJson loaderImports), ("imports_match",toJson importMatch), ("dangling",toJson dangling), ("duplicate_owners",toJson duplicateOwners), ("cached_replicas",toJson cachedReplicas),
+    ("declarations",toJson data.constants.size), ("edges",toJson edges)]).compress
+  return failed
+-end NER
++end NHD_NER
+ 
+ /-- Standalone runtime avoids restoring a pre-initialization command environment. -/
+ unsafe def main (args : List String) : IO UInt32 := do
+@@ -93,17 +93,17 @@
+   initSearchPath (← findSysroot)
+   enableInitializersExecution
+   let mode := args.headD "small"
+-  let (modules, roots) := if mode == "scan" then (#[`NGL_COMBINED_IMPORT], #[]) else (#[], #[])
++  let (modules, roots) := if mode == "scan" then (#[`NHD_COMBINED_IMPORT], #[]) else (#[], #[])
+   let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
+     {} (loadExts := true) (level := .private)
+   if mode == "scan" || mode == "queryscan" then
+     let mut expected : Std.HashMap String (Array String) := {}
+-    for line in ← IO.FS.lines (if mode == "queryscan" then "NGL_QUERY_EXPECTED_IMPORTS.jsonl" else "NGL_EXPECTED_IMPORTS.jsonl") do
++    for line in ← IO.FS.lines (if mode == "queryscan" then "NHD_QUERY_EXPECTED_IMPORTS.jsonl" else "NHD_EXPECTED_IMPORTS.jsonl") do
+       let j ← IO.ofExcept (Json.parse line)
+       expected := expected.insert (← IO.ofExcept (j.getObjValAs? String "module"))
+         (← IO.ofExcept (j.getObjValAs? (Array String) "imports"))
+-    let failed ← NER.loadedScan env (if mode == "queryscan" then "NGL_QUERY_LOADED_scan.jsonl" else "NGL_LOADED_scan.jsonl") expected
+-    IO.println (if failed then "NGL_SCAN_FAILED" else "NGL_SCAN_ZERO_DANGLING")
++    let failed ← NHD_NER.loadedScan env (if mode == "queryscan" then "NHD_QUERY_LOADED_scan.jsonl" else "NHD_LOADED_scan.jsonl") expected
++    IO.println (if failed then "NHD_SCAN_FAILED" else "NHD_SCAN_ZERO_DANGLING")
+     return if failed then 1 else 0
+   let ctx : Command.Context := {
+     fileName := "NEP_Driver"
