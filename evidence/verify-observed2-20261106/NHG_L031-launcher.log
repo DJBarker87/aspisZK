@@ -1,0 +1,40 @@
+{"attempt": "NHG_L031", "exit_status": 0, "wall_seconds": 3.4286364908330142, "peak_rss_kib": "5875688", "swaps": "0", "print_axioms": ["'AspisR1.NHG_BeginFrame.result' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NHG_BeginFrame.effects' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NHG_BeginFrame.composed' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def AspisR1PublicPreparation.r1_wire.Prefix.record : r1_wire.Prefix →
+  U8 → Result (core.result.Result (Slice U8) r1_wire.Error) :=
+fun self row =>
+  if row ≥ 27#u8 then ok (core.result.Result.Err r1_wire.Error.InvalidRow)
+  else do
+    let i ← lift (UScalar.cast UScalarTy.Usize row)
+    let s ← self.records.index_usize i
+    ok (core.result.Result.Ok s)
+def AspisR1PublicPreparation.r1_wire.Prefix.validated_record : r1_wire.Prefix →
+  U8 → Result (core.result.Result r1_wire.ValidatedRecord r1_wire.Error) :=
+fun self row => do
+  let r ← self.record row
+  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+  match cf with
+    | core.ops.control_flow.ControlFlow.Continue val => ok (core.resu
+...
+def AspisR1PublicPreparation.r1_wire.Prefix.record : r1_wire.Prefix →
+  U8 → Result (core.result.Result (Slice U8) r1_wire.Error) :=
+fun self row =>
+  if row ≥ 27#u8 then ok (core.result.Result.Err r1_wire.Error.InvalidRow)
+  else do
+    let i ← lift (UScalar.cast UScalarTy.Usize row)
+    let s ← self.records.index_usize i
+    ok (core.result.Result.Ok s)
+def AspisR1PublicPreparation.r1_wire.Prefix.validated_record : r1_wire.Prefix →
+  U8 → Result (core.result.Result r1_wire.ValidatedRecord r1_wire.Error) :=
+fun self row => do
+  let r ← self.record row
+  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+  match cf with
+    | core.ops.control_flow.ControlFlow.Continue val => ok (core.result.Result.Ok { row := row, framed := val })
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.ValidatedRecord
+        (core.convert.FromSame r1_wire.Error) residual
+'AspisR1.NHG_BeginFrame.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NHG_BeginFrame.effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NHG_BeginFrame.composed' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r01df325032184490b7ca189df1fbea45.scope; invocation ID: e679b1e6a5a3498f8916daa2b402c1a7

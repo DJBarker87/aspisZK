@@ -67,6 +67,11 @@ if kind=='kani':
  if os.environ.get('NHG_BAD_ALLOC'):config['env']['RUSTFLAGS']+=' --cfg NHG_bad_alloc'
  if os.environ.get('NHG_BAD_BOX_VALUE'):config['env']['RUSTFLAGS']+=' --cfg NHG_bad_box_value'
  config['expected_time']='optimized compilation then one native staged cut with local records; no field multiplication'
+if kind=='kani' and target.startswith('pool_v1::'):
+ config['root_package']='aspis-statement'
+ features=','.join(next(p['features'] for p in json.loads((E/'NHG_K003-graph-check.json').read_text())['selected_closure'] if p['name']=='aspis-statement'))
+ config['metadata_features']=','.join('aspis-statement/'+f for f in features.split(','))
+ ci=config['native_command'];ci[ci.index('--manifest-path')+1]=B+'/NHG_src/crates/aspis-statement/Cargo.toml';ci[ci.index('--features')+1]=features
 files[a+'.json']=json.dumps(config)
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib,re,shutil

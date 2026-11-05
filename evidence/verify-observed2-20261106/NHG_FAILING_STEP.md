@@ -11,3 +11,12 @@ The draft asserted structural Code equality even though source has extra lifted 
 
 ## NHG_K003 — split predecessor
 One native field iteration with an arbitrary initialized Vec of length n<=1880 and capacity1884, arbitrary selected prior byte, and arbitrary u32 word PASSES (55.64446209510788s,1287936KiB RSS,swap0). This is only the no-growth branch. Caller capacity is NOT assumed to satisfy it: reallocation remains a named obligation. No full producer admission follows from this pass.
+
+## NHG_E001 — extractor loop collapse
+SemanticPublic and its carriers were made visible. Charon succeeded; Aeneas exited2 with Not_found at InterpReduceCollapse.collapse_ctx_following_sequence (1991), reached through loop evaluation. No generated Lean body is admitted. Single extraction allowance1/1 used; retain LLBC and exact tool/source/lock pins. Existing canonical model bodies remain available.
+
+## NHG_K011 — complete begin pre-state log
+Exact fifteen-call control with arbitrary child post-cursors and full32-byte before-state logs timed out (exit1,99.59319115290418s wall,1565432KiB RSS,swap0). No counterexample or credit. Replacement splits the extra before-state observation to ONE arbitrary byte with a Lean array-extensional frame lift; existing full next-state control is reused from NGX, not rerun unchanged. No timeout/cap increase.
+
+## NHG_K012 — begin per-byte complete-history shape
+Replacing full before-state logs by a single observed byte still timed out (95.07911560195498s wall,1470112KiB RSS,swap0). No native credit or rerun. Next split: ONE arbitrary callee window on arbitrary incoming state, with the unchanged NGX control certificate for the overall call sequence and the Lean frame chain connecting windows.

@@ -9,3 +9,9 @@ No composed row admitted. NHG_CLOSED.json is empty; eleven NGX rows retained by 
 - K005/K006: arbitrary initialized prefix n<=4, capacity4, one word, including actual reserve/reallocation; positive and intended byte-corruption failure. SMALL-GROWTH SUPPORT ONLY. No large-prefix native credit.
 
 The missing producer native full-domain capacity/growth frame remains explicit. Model facts never substitute for that bridge. No trust row added or removed; P6/D188 option-A transport remains reclassification. P1/RuntimeSyscall digest=H unchanged.
+
+## Stage2 admission
+
+NHG_CLOSED.json and the additive validator now admit4 rows: both semantic constructors, Public::semantic, and public_bytes::fields. Full arbitrary transition data K013 replaces the earlier zero-transition probe. Strict K017/018/019/020 controls observe the newly copied byte / copied anchor limb and fail in the same pinned configuration. Four constructor/source roots preserve SAME fields and transition; FieldSpec.source/reject and CopyFrame.grow_append4 preserve complete status, initialized prefix and exact bytes. Capacity1884 is never imposed on a caller: pinned Std reserve/capacity/allocation/ownership/cleanup interpretation remains explicit, as in the approved NGC resize method.
+
+L018 combined; L025–027 raw28 roots standard/equal; L024 all8 fixtures; L028 scan13527 modules clean. Thirteen denial mutations pass. Old NGX validators, certificates, sources and receipts are sealed against1763 immutable tracked inputs, with checks added only. Root137, producer parents and begin remain OPEN.
