@@ -1,0 +1,42 @@
+{"attempt": "NIG_L060", "exit_status": 1, "wall_seconds": 3.695145714096725, "peak_rss_kib": "5821616", "swaps": "0", "print_axioms": ["'NIG_PairS2Body.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NIG_generated/NIG_PairS2Body.lean:107:1: error: Tactic `rfl` failed: The left-hand side
+  if (64#usize != 64#usize) = true then ok (core.result.Result.Err verifier.Error.Parse)
+  else do
+    let we ← (FIo_Install.toSlice p.alpha.to_slice).index_usize 0#usize
+    let ap0 ← weights.powers 4#usize we
+    let ap1 ←
+      if True then do
+          let we1 ← (FIo_Install.toSlice p.alpha.to_slice).index_usize 1#usize
+          weights.powers 4#usize we1
+        else ok (Array.repeat 4#usize aspis_core.field.wide_exact.WideExact.ONE)
+    let r ← aspis_core.r0.heap.filled aspis_core.field.QM31.Insts.CoreMarkerCopy 64#usize aspis_core.field.QM31.ZERO
+    match r with
+      | core.result.Result.Ok v =>
+...
+core.result.Result.Ok sum)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+            else do
+              let low1 ←
+                NIG_LowLoop.low_reference ap0 ap1 (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+              let we1 ← weights.grouped_inactive_pair w f low1
+              let a ← parts1.update 0#usize we1
+              let b ← transport.Variant.Insts.CoreCmpPartialEqVariant.eq w.variant transport.Variant.S2
+              let libra ←
+                if b = true then weights.factored_s2_libra_weights ap0 ap1 w.extra
+                  else weights.twofold_libra_weights low1 w.extra
+              let parts2 ← NIG_LibraLoop.reference f libra a
+              let k ← weights.powers 7#usize kappa
+              let sum ← NHX_FinalLoop.reference parts2 k
+              ok (core.result.Result.Ok sum)
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+      | core.result.Result.Err a => ok (core.result.Result.Err verifier.Error.Allocation)
+'NIG_PairS2Body.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r47ceb14569ef494584c0a20ea2dd81ee.scope; invocation ID: c39aec0ddd6b4f33af87c968ae6aa40e

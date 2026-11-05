@@ -1,0 +1,594 @@
+NIG_generated/NIG_PairCanonical.lean:77:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NIG_PairSuffix.dispatch w f ap0 ap1 kappa pp
+in the target expression
+  (let (rr, pp) := (core.result.Result.Ok PUnit.unit, pp)
+    do
+    let cf1 ←
+      match rr with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf1 with
+      | core.ops.control_flow.ControlFlow.Continue a => NIG_PairSuffix.dispatch w f ap0 ap1 kappa pp
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual NE
+          (core.convert.FromSame FIo_Native.verifier.Error) residual) =
+    ok (core.result.Result.Ok out)
+
+case Ok.Ok.unit.true.Ok.Ok.unit
+r : NP6_StdModel.Reservation
+w : W
+p : AspisR1Stage2.verifier.Prepared
+f : Slice U8
+kappa out : NE
+width : (↑f).length = 2048
+s2 : w.variant = FIo_Native.transport.Variant.S2
+hf : NHI_TensorOuterStep.Factors w
+he : NHI_CellCanon.array w.extra
+hk : canonE kappa
+halpha : ∀ x ∈ ↑(FIo_Install.toSlice p.alpha.to_slice), canonE x
+this : FIo_Native.Allocation := FIo_Install.allocation r
+run✝⁸ :
+  (do
+      let we ← (FIo_Install.toSlice p.alpha.to_slice).index_usize 0#usize
+      let ap0 ← FIo_Native.weights.powers 4#usize we
+      let ap1 ←
+        do
+          let we1 ← (FIo_Install.toSlice p.alpha.to_slice).index_usize 1#usize
+          FIo_Native.weights.powers 4#usize we1
+      let r ←
+        FIo_Native.aspis_core.r0.heap.filled FIo_Native.aspis_core.field.QM31.Insts.CoreMarkerCopy 64#usize
+            FIo_Native.aspis_core.field.QM31.ZERO
+      match r with
+        | core.result.Result.Ok v =>
+          have parts := Array.repeat 7#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO;
+          do
+          let shared_two_point ← FIo_Native.weights.shared_two_point_guard w 2#usize
+          let (r1, _, parts1) ←
+            FIo_Native.weights.process_regular_kinds w shared_two_point (FIo_Install.toSlice p.alpha.to_slice) f 2#usize
+                64#usize ap0 ap1 v parts
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue a =>
+              if shared_two_point = true then
+                have common := Array.repeat 16#usize FIo_Native.aspis_core.field.QM31.ZERO;
+                do
+                let (self1, common1) ← NIG_CommonLoop.common_reference w common
+                let r2 ← FIo_Native.weights.shared_partials f common1
+                let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue val => do
+                    let (r3, parts2) ← FIo_Native.weights.shared_high val self1 ap0 ap1 parts1
+                    let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                    match cf2 with
+                      | core.ops.control_flow.ControlFlow.Continue a =>
+                        have low := Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO;
+                        do
+                        let low1 ← NIG_LowLoop.low_reference ap0 ap1 low
+                        let we1 ← FIo_Native.weights.grouped_inactive_pair self1 f low1
+                        let a ← parts2.update 0#usize we1
+                        let b ←
+                          FIo_Native.transport.Variant.Insts.CoreCmpPartialEqVariant.eq self1.variant
+                              FIo_Native.transport.Variant.S2
+                        let libra ←
+                          if b = true then FIo_Native.weights.factored_s2_libra_weights ap0 ap1 self1.extra
+                            else FIo_Native.weights.twofold_libra_weights low1 self1.extra
+                        let parts3 ← NIG_LibraLoop.reference f libra a
+                        let k ← FIo_Native.weights.powers 7#usize kappa
+                        let sum ← NHX_FinalLoop.reference parts3 k
+                        ok (core.result.Result.Ok sum)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          FIo_Native.aspis_core.field.wide_exact.WideExact
+                          (core.convert.FromSame FIo_Native.verifier.Error) residual
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      FIo_Native.aspis_core.field.wide_exact.WideExact (core.convert.FromSame FIo_Native.verifier.Error)
+                      residual
+              else
+                have low := Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO;
+                do
+                let low1 ← NIG_LowLoop.low_reference ap0 ap1 low
+                let we1 ← FIo_Native.weights.grouped_inactive_pair w f low1
+                let a ← parts1.update 0#usize we1
+                let b ←
+                  FIo_Native.transport.Variant.Insts.CoreCmpPartialEqVariant.eq w.variant
+                      FIo_Native.transport.Variant.S2
+                let libra ←
+                  if b = true then FIo_Native.weights.factored_s2_libra_weights ap0 ap1 w.extra
+                    else FIo_Native.weights.twofold_libra_weights low1 w.extra
+                let parts2 ← NIG_LibraLoop.reference f libra a
+                let k ← FIo_Native.weights.powers 7#usize kappa
+                let sum ← NHX_FinalLoop.reference parts2 k
+                ok (core.result.Result.Ok sum)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                FIo_Native.aspis_core.field.wide_exact.WideExact (core.convert.FromSame FIo_Native.verifier.Error)
+                residual
+        | core.result.Result.Err a => ok (core.result.Result.Err FIo_Native.verifier.Error.Allocation)) =
+    ok (core.result.Result.Ok out)
+we : FIo_Native.aspis_core.field.wide_exact.WideExact
+hwe : (FIo_Install.toSlice p.alpha.to_slice).index_usize 0#usize = ok we
+run✝⁷ :
+  (do
+      let ap0 ← FIo_Native.weights.powers 4#usize we
+      let ap1 ←
+        do
+          let we1 ← (FIo_Install.toSlice p.alpha.to_slice).index_usize 1#usize
+          FIo_Native.weights.powers 4#usize we1
+      let r ←
+        FIo_Native.aspis_core.r0.heap.filled FIo_Native.aspis_core.field.QM31.Insts.CoreMarkerCopy 64#usize
+            FIo_Native.aspis_core.field.QM31.ZERO
+      match r with
+        | core.result.Result.Ok v =>
+          have parts := Array.repeat 7#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO;
+          do
+          let shared_two_point ← FIo_Native.weights.shared_two_point_guard w 2#usize
+          let (r1, _, parts1) ←
+            FIo_Native.weights.process_regular_kinds w shared_two_point (FIo_Install.toSlice p.alpha.to_slice) f 2#usize
+                64#usize ap0 ap1 v parts
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue a =>
+              if shared_two_point = true then
+                have common := Array.repeat 16#usize FIo_Native.aspis_core.field.QM31.ZERO;
+                do
+                let (self1, common1) ← NIG_CommonLoop.common_reference w common
+                let r2 ← FIo_Native.weights.shared_partials f common1
+                let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue val => do
+                    let (r3, parts2) ← FIo_Native.weights.shared_high val self1 ap0 ap1 parts1
+                    let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                    match cf2 with
+                      | core.ops.control_flow.ControlFlow.Continue a =>
+                        have low := Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO;
+                        do
+                        let low1 ← NIG_LowLoop.low_reference ap0 ap1 low
+                        let we1 ← FIo_Native.weights.grouped_inactive_pair self1 f low1
+                        let a ← parts2.update 0#usize we1
+                        let b ←
+                          FIo_Native.transport.Variant.Insts.CoreCmpPartialEqVariant.eq self1.variant
+                              FIo_Native.transport.Variant.S2
+                        let libra ←
+                          if b = true then FIo_Native.weights.factored_s2_libra_weights ap0 ap1 self1.extra
+                            else FIo_Native.weights.twofold_libra_weights low1 self1.extra
+                        let parts3 ← NIG_LibraLoop.reference f libra a
+                        let k ← FIo_Native.weights.powers 7#usize kappa
+                        let sum ← NHX_FinalLoop.reference parts3 k
+                        ok (core.result.Result.Ok sum)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          FIo_Native.aspis_core.field.wide_exact.WideExact
+                          (core.convert.FromSame FIo_Native.verifier.Error) residual
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      FIo_Native.aspis_core.field.wide_exact.WideExact (core.convert.FromSame FIo_Native.verifier.Error)
+                      residual
+              else
+                have low := Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO;
+                do
+                let low1 ← NIG_LowLoop.low_reference ap0 ap1 low
+                let we1 ← FIo_Native.weights.grouped_inactive_pair w f low1
+                let a ← parts1.update 0#usize we1
+                let b ←
+                  FIo_Native.transport.Variant.Insts.CoreCmpPartialEqVariant.eq w.variant
+                      FIo_Native.transport.Variant.S2
+                let libra ←
+                  if b = true then FIo_Native.weights.factored_s2_libra_weights ap0 ap1 w.extra
+                    else FIo_Native.weights.twofold_libra_weights low1 w.extra
+                let parts2 ← NIG_LibraLoop.reference f libra a
+                let k ← FIo_Native.weights.powers 7#usize kappa
+                let sum ← NHX_FinalLoop.reference parts2 k
+                ok (core.result.Result.Ok sum)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                FIo_Native.aspis_core.field.wide_exact.WideExact (core.convert.FromSame FIo_Native.verifier.Error)
+                residual
+        | core.result.Result.Err a => ok (core.result.Result.Err FIo_Native.verifier.Error.Allocation)) =
+    ok (core.result.Result.Ok out)
+cwe : canonE we
+ap0 : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize
+hap0 : FIo_Native.weights.powers 4#usize we = ok ap0
+run✝⁶ :
+  (do
+      let ap1 ←
+        do
+          let we1 ← (FIo_Install.toSlice p.alpha.to_slice).index_usize 1#usize
+          FIo_Native.weights.powers 4#usize we1
+      let r ←
+        FIo_Native.aspis_core.r0.heap.filled FIo_Native.aspis_core.field.QM31.Insts.CoreMarkerCopy 64#usize
+            FIo_Native.aspis_core.field.QM31.ZERO
+      match r with
+        | core.result.Result.Ok v =>
+          have parts := Array.repeat 7#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO;
+          do
+          let shared_two_point ← FIo_Native.weights.shared_two_point_guard w 2#usize
+          let (r1, _, parts1) ←
+            FIo_Native.weights.process_regular_kinds w shared_two_point (FIo_Install.toSlice p.alpha.to_slice) f 2#usize
+                64#usize ap0 ap1 v parts
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue a =>
+              if shared_two_point = true then
+                have common := Array.repeat 16#usize FIo_Native.aspis_core.field.QM31.ZERO;
+                do
+                let (self1, common1) ← NIG_CommonLoop.common_reference w common
+                let r2 ← FIo_Native.weights.shared_partials f common1
+                let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue val => do
+                    let (r3, parts2) ← FIo_Native.weights.shared_high val self1 ap0 ap1 parts1
+                    let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                    match cf2 with
+                      | core.ops.control_flow.ControlFlow.Continue a =>
+                        have low := Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO;
+                        do
+                        let low1 ← NIG_LowLoop.low_reference ap0 ap1 low
+                        let we1 ← FIo_Native.weights.grouped_inactive_pair self1 f low1
+                        let a ← parts2.update 0#usize we1
+                        let b ←
+                          FIo_Native.transport.Variant.Insts.CoreCmpPartialEqVariant.eq self1.variant
+                              FIo_Native.transport.Variant.S2
+                        let libra ←
+                          if b = true then FIo_Native.weights.factored_s2_libra_weights ap0 ap1 self1.extra
+                            else FIo_Native.weights.twofold_libra_weights low1 self1.extra
+                        let parts3 ← NIG_LibraLoop.reference f libra a
+                        let k ← FIo_Native.weights.powers 7#usize kappa
+                        let sum ← NHX_FinalLoop.reference parts3 k
+                        ok (core.result.Result.Ok sum)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          FIo_Native.aspis_core.field.wide_exact.WideExact
+                          (core.convert.FromSame FIo_Native.verifier.Error) residual
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      FIo_Native.aspis_core.field.wide_exact.WideExact (core.convert.FromSame FIo_Native.verifier.Error)
+                      residual
+              else
+                have low := Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO;
+                do
+                let low1 ← NIG_LowLoop.low_reference ap0 ap1 low
+                let we1 ← FIo_Native.weights.grouped_inactive_pair w f low1
+                let a ← parts1.update 0#usize we1
+                let b ←
+                  FIo_Native.transport.Variant.Insts.CoreCmpPartialEqVariant.eq w.variant
+                      FIo_Native.transport.Variant.S2
+                let libra ←
+                  if b = true then FIo_Native.weights.factored_s2_libra_weights ap0 ap1 w.extra
+                    else FIo_Native.weights.twofold_libra_weights low1 w.extra
+                let parts2 ← NIG_LibraLoop.reference f libra a
+                let k ← FIo_Native.weights.powers 7#usize kappa
+                let sum ← NHX_FinalLoop.reference parts2 k
+                ok (core.result.Result.Ok sum)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                FIo_Native.aspis_core.field.wide_exact.WideExact (core.convert.FromSame FIo_Native.verifier.Error)
+                residual
+        | core.result.Result.Err a => ok (core.result.Result.Err FIo_Native.verifier.Error.Allocation)) =
+    ok (core.result.Result.Ok out)
+ca0 : ∀ p ∈ ↑ap0, canonE p
+ap1 : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize
+hap1✝ :
+  (do
+      let we1 ← (FIo_Install.toSlice p.alpha.to_slice).index_usize 1#usize
+      FIo_Native.weights.powers 4#usize we1) =
+    ok ap1
+run✝⁵ :
+  (do
+      let r ←
+        FIo_Native.aspis_core.r0.heap.filled FIo_Native.aspis_core.field.QM31.Insts.CoreMarkerCopy 64#usize
+            FIo_Native.aspis_core.field.QM31.ZERO
+      match r with
+        | core.result.Result.Ok v =>
+          have parts := Array.repeat 7#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO;
+          do
+          let shared_two_point ← FIo_Native.weights.shared_two_point_guard w 2#usize
+          let (r1, _, parts1) ←
+            FIo_Native.weights.process_regular_kinds w shared_two_point (FIo_Install.toSlice p.alpha.to_slice) f 2#usize
+                64#usize ap0 ap1 v parts
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue a =>
+              if shared_two_point = true then
+                have common := Array.repeat 16#usize FIo_Native.aspis_core.field.QM31.ZERO;
+                do
+                let (self1, common1) ← NIG_CommonLoop.common_reference w common
+                let r2 ← FIo_Native.weights.shared_partials f common1
+                let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue val => do
+                    let (r3, parts2) ← FIo_Native.weights.shared_high val self1 ap0 ap1 parts1
+                    let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                    match cf2 with
+                      | core.ops.control_flow.ControlFlow.Continue a =>
+                        have low := Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO;
+                        do
+                        let low1 ← NIG_LowLoop.low_reference ap0 ap1 low
+                        let we1 ← FIo_Native.weights.grouped_inactive_pair self1 f low1
+                        let a ← parts2.update 0#usize we1
+                        let b ←
+                          FIo_Native.transport.Variant.Insts.CoreCmpPartialEqVariant.eq self1.variant
+                              FIo_Native.transport.Variant.S2
+                        let libra ←
+                          if b = true then FIo_Native.weights.factored_s2_libra_weights ap0 ap1 self1.extra
+                            else FIo_Native.weights.twofold_libra_weights low1 self1.extra
+                        let parts3 ← NIG_LibraLoop.reference f libra a
+                        let k ← FIo_Native.weights.powers 7#usize kappa
+                        let sum ← NHX_FinalLoop.reference parts3 k
+                        ok (core.result.Result.Ok sum)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          FIo_Native.aspis_core.field.wide_exact.WideExact
+                          (core.convert.FromSame FIo_Native.verifier.Error) residual
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      FIo_Native.aspis_core.field.wide_exact.WideExact (core.convert.FromSame FIo_Native.verifier.Error)
+                      residual
+              else
+                have low := Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO;
+                do
+                let low1 ← NIG_LowLoop.low_reference ap0 ap1 low
+                let we1 ← FIo_Native.weights.grouped_inactive_pair w f low1
+                let a ← parts1.update 0#usize we1
+                let b ←
+                  FIo_Native.transport.Variant.Insts.CoreCmpPartialEqVariant.eq w.variant
+                      FIo_Native.transport.Variant.S2
+                let libra ←
+                  if b = true then FIo_Native.weights.factored_s2_libra_weights ap0 ap1 w.extra
+                    else FIo_Native.weights.twofold_libra_weights low1 w.extra
+                let parts2 ← NIG_LibraLoop.reference f libra a
+                let k ← FIo_Native.weights.powers 7#usize kappa
+                let sum ← NHX_FinalLoop.reference parts2 k
+                ok (core.result.Result.Ok sum)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                FIo_Native.aspis_core.field.wide_exact.WideExact (core.convert.FromSame FIo_Native.verifier.Error)
+                residual
+        | core.result.Result.Err a => ok (core.result.Result.Err FIo_Native.verifier.Error.Allocation)) =
+    ok (core.result.Result.Ok out)
+we1 : FIo_Native.aspis_core.field.wide_exact.WideExact
+hwe1 : (FIo_Install.toSlice p.alpha.to_slice).index_usize 1#usize = ok we1
+hap1 : FIo_Native.weights.powers 4#usize we1 = ok ap1
+cwe1 : canonE we1
+ca1 : ∀ p ∈ ↑ap1, canonE p
+scratch : alloc.vec.Vec FIo_Native.aspis_core.field.QM31
+hallocated :
+  FIo_Native.aspis_core.r0.heap.filled FIo_Native.aspis_core.field.QM31.Insts.CoreMarkerCopy 64#usize
+      FIo_Native.aspis_core.field.QM31.ZERO =
+    ok (core.result.Result.Ok scratch)
+run✝⁴ :
+  (match core.result.Result.Ok scratch with
+    | core.result.Result.Ok v =>
+      have parts := Array.repeat 7#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO;
+      do
+      let shared_two_point ← FIo_Native.weights.shared_two_point_guard w 2#usize
+      let (r1, _, parts1) ←
+        FIo_Native.weights.process_regular_kinds w shared_two_point (FIo_Install.toSlice p.alpha.to_slice) f 2#usize
+            64#usize ap0 ap1 v parts
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a =>
+          if shared_two_point = true then
+            have common := Array.repeat 16#usize FIo_Native.aspis_core.field.QM31.ZERO;
+            do
+            let (self1, common1) ← NIG_CommonLoop.common_reference w common
+            let r2 ← FIo_Native.weights.shared_partials f common1
+            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let (r3, parts2) ← FIo_Native.weights.shared_high val self1 ap0 ap1 parts1
+                let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                match cf2 with
+                  | core.ops.control_flow.ControlFlow.Continue a =>
+                    have low := Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO;
+                    do
+                    let low1 ← NIG_LowLoop.low_reference ap0 ap1 low
+                    let we1 ← FIo_Native.weights.grouped_inactive_pair self1 f low1
+                    let a ← parts2.update 0#usize we1
+                    let b ←
+                      FIo_Native.transport.Variant.Insts.CoreCmpPartialEqVariant.eq self1.variant
+                          FIo_Native.transport.Variant.S2
+                    let libra ←
+                      if b = true then FIo_Native.weights.factored_s2_libra_weights ap0 ap1 self1.extra
+                        else FIo_Native.weights.twofold_libra_weights low1 self1.extra
+                    let parts3 ← NIG_LibraLoop.reference f libra a
+                    let k ← FIo_Native.weights.powers 7#usize kappa
+                    let sum ← NHX_FinalLoop.reference parts3 k
+                    ok (core.result.Result.Ok sum)
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      FIo_Native.aspis_core.field.wide_exact.WideExact (core.convert.FromSame FIo_Native.verifier.Error)
+                      residual
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  FIo_Native.aspis_core.field.wide_exact.WideExact (core.convert.FromSame FIo_Native.verifier.Error)
+                  residual
+          else
+            have low := Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO;
+            do
+            let low1 ← NIG_LowLoop.low_reference ap0 ap1 low
+            let we1 ← FIo_Native.weights.grouped_inactive_pair w f low1
+            let a ← parts1.update 0#usize we1
+            let b ←
+              FIo_Native.transport.Variant.Insts.CoreCmpPartialEqVariant.eq w.variant FIo_Native.transport.Variant.S2
+            let libra ←
+              if b = true then FIo_Native.weights.factored_s2_libra_weights ap0 ap1 w.extra
+                else FIo_Native.weights.twofold_libra_weights low1 w.extra
+            let parts2 ← NIG_LibraLoop.reference f libra a
+            let k ← FIo_Native.weights.powers 7#usize kappa
+            let sum ← NHX_FinalLoop.reference parts2 k
+            ok (core.result.Result.Ok sum)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            FIo_Native.aspis_core.field.wide_exact.WideExact (core.convert.FromSame FIo_Native.verifier.Error) residual
+    | core.result.Result.Err a => ok (core.result.Result.Err FIo_Native.verifier.Error.Allocation)) =
+    ok (core.result.Result.Ok out)
+init : NHX_RegularPost.Inv scratch initial
+after : alloc.vec.Vec FIo_Native.aspis_core.field.QM31
+parts : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize
+post : NHX_RegularPost.Inv after parts
+hshared : FIo_Native.weights.shared_two_point_guard w 2#usize = ok true
+run✝³ :
+  (do
+      let (r1, _, parts1) ←
+        FIo_Native.weights.process_regular_kinds w true (FIo_Install.toSlice p.alpha.to_slice) f 2#usize 64#usize ap0
+            ap1 scratch (Array.repeat 7#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO)
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a =>
+          if true = true then
+            have common := Array.repeat 16#usize FIo_Native.aspis_core.field.QM31.ZERO;
+            do
+            let (self1, common1) ← NIG_CommonLoop.common_reference w common
+            let r2 ← FIo_Native.weights.shared_partials f common1
+            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let (r3, parts2) ← FIo_Native.weights.shared_high val self1 ap0 ap1 parts1
+                let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                match cf2 with
+                  | core.ops.control_flow.ControlFlow.Continue a =>
+                    have low := Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO;
+                    do
+                    let low1 ← NIG_LowLoop.low_reference ap0 ap1 low
+                    let we1 ← FIo_Native.weights.grouped_inactive_pair self1 f low1
+                    let a ← parts2.update 0#usize we1
+                    let b ←
+                      FIo_Native.transport.Variant.Insts.CoreCmpPartialEqVariant.eq self1.variant
+                          FIo_Native.transport.Variant.S2
+                    let libra ←
+                      if b = true then FIo_Native.weights.factored_s2_libra_weights ap0 ap1 self1.extra
+                        else FIo_Native.weights.twofold_libra_weights low1 self1.extra
+                    let parts3 ← NIG_LibraLoop.reference f libra a
+                    let k ← FIo_Native.weights.powers 7#usize kappa
+                    let sum ← NHX_FinalLoop.reference parts3 k
+                    ok (core.result.Result.Ok sum)
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      FIo_Native.aspis_core.field.wide_exact.WideExact (core.convert.FromSame FIo_Native.verifier.Error)
+                      residual
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  FIo_Native.aspis_core.field.wide_exact.WideExact (core.convert.FromSame FIo_Native.verifier.Error)
+                  residual
+          else
+            have low := Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO;
+            do
+            let low1 ← NIG_LowLoop.low_reference ap0 ap1 low
+            let we1 ← FIo_Native.weights.grouped_inactive_pair w f low1
+            let a ← parts1.update 0#usize we1
+            let b ←
+              FIo_Native.transport.Variant.Insts.CoreCmpPartialEqVariant.eq w.variant FIo_Native.transport.Variant.S2
+            let libra ←
+              if b = true then FIo_Native.weights.factored_s2_libra_weights ap0 ap1 w.extra
+                else FIo_Native.weights.twofold_libra_weights low1 w.extra
+            let parts2 ← NIG_LibraLoop.reference f libra a
+            let k ← FIo_Native.weights.powers 7#usize kappa
+            let sum ← NHX_FinalLoop.reference parts2 k
+            ok (core.result.Result.Ok sum)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            FIo_Native.aspis_core.field.wide_exact.WideExact (core.convert.FromSame FIo_Native.verifier.Error)
+            residual) =
+    ok (core.result.Result.Ok out)
+hregular :
+  FIo_Native.weights.process_regular_kinds w true (FIo_Install.toSlice p.alpha.to_slice) f 2#usize 64#usize ap0 ap1
+      scratch (Array.repeat 7#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok (core.result.Result.Ok PUnit.unit, after, parts)
+run✝² :
+  (do
+      let (w1, common) ← NIG_CommonLoop.common_reference w (Array.repeat 16#usize NHX_FilledZero.zeroQ)
+      let partReply ← FIo_Native.weights.shared_partials f common
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch partReply
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue values => do
+          let (rr, pp) ← FIo_Native.weights.shared_high values w1 ap0 ap1 parts
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch rr
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => NIG_PairSuffix.dispatch w1 f ap0 ap1 kappa pp
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual NE
+                (core.convert.FromSame FIo_Native.verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual NE
+            (core.convert.FromSame FIo_Native.verifier.Error) residual) =
+    ok (core.result.Result.Ok out)
+common : NHX_CommonDomain.Cells
+commonCanon : NHI_CellCanon.array common
+hc : NIG_CommonLoop.common_reference w (Array.repeat 16#usize NHX_FilledZero.zeroQ) = ok (w, common)
+run✝¹ :
+  (let (w1, common) := (w, common)
+    do
+    let partReply ← FIo_Native.weights.shared_partials f common
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch partReply
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue values => do
+        let (rr, pp) ← FIo_Native.weights.shared_high values w1 ap0 ap1 parts
+        let cf1 ← core.result.Result.Insts.CoreOpsTry.branch rr
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue a => NIG_PairSuffix.dispatch w1 f ap0 ap1 kappa pp
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual NE
+              (core.convert.FromSame FIo_Native.verifier.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual NE
+          (core.convert.FromSame FIo_Native.verifier.Error) residual) =
+    ok (core.result.Result.Ok out)
+emitted :
+  FIo_Native.weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } w
+      (Array.repeat 16#usize NHX_FilledZero.zeroQ) =
+    ok (w, common)
+values : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize
+hpartial : FIo_Native.weights.shared_partials f common = ok (core.result.Result.Ok values)
+run✝ :
+  (do
+      let (rr, pp) ← FIo_Native.weights.shared_high values w ap0 ap1 parts
+      let cf1 ←
+        match rr with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue a => NIG_PairSuffix.dispatch w f ap0 ap1 kappa pp
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual NE
+            (core.convert.FromSame FIo_Native.verifier.Error) residual) =
+    ok (core.result.Result.Ok out)
+pp : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize
+ch : canon pp
+hh : FIo_Native.weights.shared_high values w ap0 ap1 parts = ok (core.result.Result.Ok PUnit.unit, pp)
+run :
+  (let (rr, pp) := (core.result.Result.Ok PUnit.unit, pp)
+    do
+    let cf1 ←
+      match rr with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf1 with
+      | core.ops.control_flow.ControlFlow.Continue a => NIG_PairSuffix.dispatch w f ap0 ap1 kappa pp
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual NE
+          (core.convert.FromSame FIo_Native.verifier.Error) residual) =
+    ok (core.result.Result.Ok out)
+⊢ canonE out
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (7 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NIG_generated/NIG_PairCanonical.lean:74:10: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+NIG_generated/NIG_PairCanonical.lean:41:57: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.Insts.CoreOpsTry.branch,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵] at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NIG_PairCanonical.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -51,7 +51,7 @@ assert 'out.try_reserve_exact(n).map_err(|_| Error::Allocation)?;'in frozen and'
 assert not re.search(r'\bstatic\s+(mut\s+)?\w+\s*:',(E/'NIG_filled.patch').read_text())
 assert 'Option<fn'not in(E/'NIG_filled.patch').read_text()
 pairs=[]
-for start,names in [(9,['common_lhs','common_rhs','common_count','common_frame']),(19,['low_lhs','low_rhs','low_order','low_scalar','low_scale','low_frame']),(31,['final_power','final_part','final_sum','final_product','final_order','final_result'])]:
+for start,names in [(9,['common_lhs','common_rhs','common_count','common_frame']),(19,['low_lhs','low_rhs','low_order','low_scalar','low_scale','low_frame']),(31,['final_power','final_part','final_sum','final_product','final_order','final_result']),(96,['libra_field_args','libra_coefficient','libra_weight','libra_old','libra_product','libra_frame']),(109,['same_guard_stage','initial_stage','pair_argument_edges','new_slot','pair_slot','finish_full_slot'])]:
  for i,name in enumerate(names):
   a,b=f'NIG_K{start+2*i:03}',f'NIG_K{start+2*i+1:03}'
   p,_=qualify(a,0);c,_=qualify(b,1)
@@ -59,6 +59,6 @@ for start,names in [(9,['common_lhs','common_rhs','common_count','common_frame']
   key='NIG_src/crates/aspis-r1-cost-probe/src/NIG_stages.rs';assert p['source_hashes'][key]==c['source_hashes'][key]
   pairs.append(dict(family=name,positive=a,control=b))
 for a in ['NIG_K017','NIG_K018']:qualify(a,1)
-out=dict(status='PASS',filled_windows=windows,covered_prefix_cell_pairs=len(coverage),filled_native_domain='n64 QM31 ZERO, SAME successful reserve, initialized zero prefix, arbitrary next cell and remaining spare uninitialized; allocator Err/abort retained',clone_pair=['NIG_K094','NIG_K095'],kmx_core_negative_controls=['NIG_K092','NIG_K093'],kmx_probe_negative_controls=['NIG_K017','NIG_K018'],kmx_patch_sha256=hashlib.sha256(patch.read_bytes()).hexdigest(),independent_pairs=pairs,no_native_field_products=True,no_writable_static=True,no_function_pointer=True,excluded=['NIG_K001 compile error','NIG_K002/K003/K004/K005/K008/K043 timeout'],support_only=['NIG_K006/K007 fixed63 zeroed backing'],qualified_rows=['TX2:045'],source_association='NIG_SOURCE_ASSOCIATION.md')
+out=dict(status='PASS',filled_windows=windows,covered_prefix_cell_pairs=len(coverage),filled_native_domain='n64 QM31 ZERO, SAME successful reserve, initialized zero prefix, arbitrary next cell and remaining spare uninitialized; allocator Err/abort retained',clone_pair=['NIG_K094','NIG_K095'],kmx_core_negative_controls=['NIG_K092','NIG_K093'],kmx_probe_negative_controls=['NIG_K017','NIG_K018'],kmx_patch_sha256=hashlib.sha256(patch.read_bytes()).hexdigest(),independent_pairs=pairs,no_native_field_products=True,no_writable_static=True,no_function_pointer=True,excluded=['NIG_K001 compile error','NIG_K002/K003/K004/K005/K008/K043/K108 timeout'],support_only=['NIG_K006/K007 fixed63 zeroed backing'],qualified_rows=['TX2:045'],source_association='NIG_SOURCE_ASSOCIATION.md')
 (E/'NIG_NATIVE_VALIDATION.json').write_text(json.dumps(out,indent=2)+'\n')
-print('PASS filled24 window pairs,2080 covered positions, clone/control and KMX;16 independent observation pairs')
+print('PASS filled24 window pairs,2080 covered positions, clone/control and KMX;28 independent observation pairs')

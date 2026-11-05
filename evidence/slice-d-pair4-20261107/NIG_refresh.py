@@ -21,6 +21,15 @@ for m in mods:
  roots += [ns.group(1)+'.'+n for n in re.findall(r'^theorem (\w+)\b',s,re.M)]
 roots=list(dict.fromkeys(roots));(E/'NIG_AUDIT_ROOTS.json').write_text(json.dumps(dict(groups=[roots]),indent=2)+'\n')
 catalog={x['module']:x for line in(P/'NHX_EXPECTED_IMPORTS.jsonl').read_text().splitlines()for x in[json.loads(line)]}
+# Extend inherited catalog only with newly imported, hash-pinned NHT/NHQ modules.
+import subprocess
+nht=subprocess.check_output(['git','show','HEAD:evidence/tx2-model2-20261106/NHT_EXPECTED_IMPORTS.jsonl'],text=True)
+seed=json.loads((E/'NIG_NHT_IMPORTED.json').read_text())
+for line in nht.splitlines():
+ row=json.loads(line)
+ if row['module'].startswith(('NHT_','NHQ_')):
+  if row['module'] in catalog:assert catalog[row['module']]==row
+  else:catalog[row['module']]=row
 for m in mods+['NIG_COMBINED_IMPORT']:
  s=(E/(m+'.lean')).read_text();imports=['Init']+[n for l in s.splitlines()if l.startswith('import ')for n in l[7:].split()if n!='all']
  catalog[m]=dict(module=m,imports=list(dict.fromkeys(imports)))

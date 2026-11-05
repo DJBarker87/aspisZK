@@ -1,0 +1,80 @@
+NIG_generated/NIG_PairShared.lean:42:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NIG_PairSuffix.dispatch w f ap0 ap1 kappa after
+in the target expression
+  (let (reply, after) := (core.result.Result.Ok u, after)
+    match reply with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok a => NIG_PairSuffix.dispatch w f ap0 ap1 kappa after) =
+    ok (core.result.Result.Ok out)
+
+case Ok.Ok
+inst✝ : FIo_Native.Allocation
+w : W
+f : Slice U8
+ap0 ap1 : Powers
+kappa : NE
+parts : Parts
+s2 : w.variant = FIo_Native.transport.Variant.S2
+width : (↑f).length = 2048
+hf : NHI_TensorOuterStep.Factors w
+ha : canon ap0
+hb : canon ap1
+he : NHI_CellCanon.array w.extra
+hk : canonE kappa
+hp : canon parts
+out : NE
+run✝² :
+  (do
+      let (w1, common) ← NIG_CommonLoop.common_reference w (Array.repeat 16#usize NHX_FilledZero.zeroQ)
+      let partials ← FIo_Native.weights.shared_partials f common
+      match partials with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok values => do
+          let (reply, after) ← FIo_Native.weights.shared_high values w1 ap0 ap1 parts
+          match reply with
+            | core.result.Result.Err e => ok (core.result.Result.Err e)
+            | core.result.Result.Ok a => NIG_PairSuffix.dispatch w1 f ap0 ap1 kappa after) =
+    ok (core.result.Result.Ok out)
+common : NHX_CommonDomain.Cells
+canonicalCommon : NHI_CellCanon.array common
+hc : NIG_CommonLoop.common_reference w (Array.repeat 16#usize NHX_FilledZero.zeroQ) = ok (w, common)
+run✝¹ :
+  (let (w1, common) := (w, common)
+    do
+    let partials ← FIo_Native.weights.shared_partials f common
+    match partials with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok values => do
+        let (reply, after) ← FIo_Native.weights.shared_high values w1 ap0 ap1 parts
+        match reply with
+          | core.result.Result.Err e => ok (core.result.Result.Err e)
+          | core.result.Result.Ok a => NIG_PairSuffix.dispatch w1 f ap0 ap1 kappa after) =
+    ok (core.result.Result.Ok out)
+emitted :
+  FIo_Native.weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } w
+      (Array.repeat 16#usize NHX_FilledZero.zeroQ) =
+    ok (w, common)
+values : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize
+hp0 : FIo_Native.weights.shared_partials f common = ok (core.result.Result.Ok values)
+run✝ :
+  (match core.result.Result.Ok values with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok values => do
+      let (reply, after) ← FIo_Native.weights.shared_high values w ap0 ap1 parts
+      match reply with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok a => NIG_PairSuffix.dispatch w f ap0 ap1 kappa after) =
+    ok (core.result.Result.Ok out)
+cp : canon values
+after : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize
+ch : canon after
+u : Unit
+hh : FIo_Native.weights.shared_high values w ap0 ap1 parts = ok (core.result.Result.Ok u, after)
+run :
+  (let (reply, after) := (core.result.Result.Ok u, after)
+    match reply with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok a => NIG_PairSuffix.dispatch w f ap0 ap1 kappa after) =
+    ok (core.result.Result.Ok out)
+⊢ canonE out
+'NIG_PairShared.canonical' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,48 @@
+{"attempt": "NIG_L070", "exit_status": 1, "wall_seconds": 3.8475245968438685, "peak_rss_kib": "5834352", "swaps": "0", "print_axioms": ["'NIG_PairCanonical.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NIG_generated/NIG_PairCanonical.lean:77:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NIG_PairSuffix.dispatch w f ap0 ap1 kappa pp
+in the target expression
+  (let (rr, pp) := (core.result.Result.Ok PUnit.unit, pp)
+    do
+    let cf1 ←
+      match rr with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf1 with
+      | core.ops.control_flow.ControlFlow.Continue a => NIG_PairSuffix.dispatch w f ap0 ap1 kappa pp
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.C
+...
+re.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf1 with
+      | core.ops.control_flow.ControlFlow.Continue a => NIG_PairSuffix.dispatch w f ap0 ap1 kappa pp
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual NE
+          (core.convert.FromSame FIo_Native.verifier.Error) residual) =
+    ok (core.result.Result.Ok out)
+⊢ canonE out
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (7 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NIG_generated/NIG_PairCanonical.lean:74:10: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+NIG_generated/NIG_PairCanonical.lean:41:57: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.Insts.CoreOpsTry.branch,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵] at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NIG_PairCanonical.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r089223d649ac4411b179a93a3f9a6ba5.scope; invocation ID: 17f57514a706465683b3d68c44e16199
