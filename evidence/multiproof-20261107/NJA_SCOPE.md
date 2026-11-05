@@ -4,7 +4,7 @@ Target not yet established. Baseline NIU: 432 CLOSED / 0 QUALIFIED / 167 OPEN; a
 
 ## Model owners and domains
 
-Multiproof: adopted binary cohort MultiproofConeRef.reference, consumed by MultiproofConeP6Frozen2Stage.sourceBatch / sequence and MultiproofConeP6Callbacks. Source scalar helpers have inlined consumers rather than named cohort helpers; exact association must be proved, not inferred from names. The eight-way-only value_at has no reached binary consumer (NDT rejection); unresolved domain/reachability finding. Poseidon: adopted AspisR1Stage2.aspis_statement.poseidon2 emission; exact selected object owner and trace function association remain to pin before credit. Do not substitute state_only_poseidon (QM31) for this M31 module.
+Multiproof: adopted binary cohort MultiproofConeRef.reference, consumed by MultiproofConeP6Frozen2Stage.sourceBatch / sequence and MultiproofConeP6Callbacks. Source scalar helpers have inlined consumers rather than named cohort helpers; exact association must be proved, not inferred from names. The eight-way-only value_at has no reached binary consumer (NDT rejection); unresolved domain/reachability finding. Poseidon: no corresponding body found in the inspected stage2 emission; exact adopted model owner and M31 trace association remain unresolved before credit. Do not substitute state_only_poseidon (QM31) for this M31 module.
 
 TX1/TX2 non-generic multiproof functions have identical frozen bodies and signatures. Digest parents/verify_in_place share generic source but require deployed SolanaDigest instance pinning before claiming identical monomorphization. Per-occurrence obligations differ: TX1 <=10 entries; TX2 <=12, same 16-cell buffers. Every occurrence remains separately checked.
 
@@ -144,7 +144,7 @@ Caller obligations: 6; exact clauses retained in the row snapshot. No clause dis
 
 Frozen body SHA256: `593f9015765e3d52eb07a324b690118f3a5c7755c4d82908bf44e7d0fa9ebd22`. Obligation hash: `b8a3bd6790982e445e6dd2131a4befc056400a1e6a45eb18c057a0c8992e20ed`.
 
-Model: AspisR1Stage2.aspis_statement.poseidon2 corresponding emitted body; selected owner OPEN.
+Model: M31 poseidon2 adopted consumer unresolved: inspected stage2 Funs has no matching definition; extraction selected none.
 
 Inventory domain: Canonical M31 inputs and exact fixed-width public/tree state; no reselected root or replacement public serialization.
 
@@ -156,7 +156,7 @@ Caller obligations: 1; exact clauses retained in the row snapshot. No clause dis
 
 Frozen body SHA256: `b5712d6cf182a1fbee7c6767db0b74a5ae1616bcb32aaf5ad4ee23cf09000e4f`. Obligation hash: `b4487e182cfac07c92c1af1197c623c00e663cf68932bb3f3002101c3865bbd3`.
 
-Model: AspisR1Stage2.aspis_statement.poseidon2 corresponding emitted body; selected owner OPEN.
+Model: M31 poseidon2 adopted consumer unresolved: inspected stage2 Funs has no matching definition; extraction selected none.
 
 Inventory domain: Canonical M31 inputs and exact fixed-width public/tree state; no reselected root or replacement public serialization.
 
@@ -168,7 +168,7 @@ Caller obligations: 8; exact clauses retained in the row snapshot. No clause dis
 
 Frozen body SHA256: `9a32cc3ce561c7abcf77fb1884e7a5e6ac64c73087eb6be2be06caef21c6d6a5`. Obligation hash: `979b2f846aaba38aa3470487be0e21140b6ddb842acac89ef0e847d8eba65e07`.
 
-Model: AspisR1Stage2.aspis_statement.poseidon2 corresponding emitted body; selected owner OPEN.
+Model: M31 poseidon2 adopted consumer unresolved: inspected stage2 Funs has no matching definition; extraction selected none.
 
 Inventory domain: Canonical M31 inputs and exact fixed-width public/tree state; no reselected root or replacement public serialization.
 
@@ -180,7 +180,7 @@ Caller obligations: 4; exact clauses retained in the row snapshot. No clause dis
 
 Frozen body SHA256: `476491f4cb87936f2538797bc45399703339d999858615dcae906fd9074a059b`. Obligation hash: `e361522da82418df59d88c502bed9260598aed125ca08dd719384ba1d4e09ff0`.
 
-Model: AspisR1Stage2.aspis_statement.poseidon2 corresponding emitted body; selected owner OPEN.
+Model: M31 poseidon2 adopted consumer unresolved: inspected stage2 Funs has no matching definition; extraction selected none.
 
 Inventory domain: Canonical M31 inputs and exact fixed-width public/tree state; no reselected root or replacement public serialization.
 
@@ -192,7 +192,7 @@ Caller obligations: 8; exact clauses retained in the row snapshot. No clause dis
 
 Frozen body SHA256: `bb51cc19d0611b8808c6ae0a7cb8100ce74a9f532ade5878177b602c9a16ab91`. Obligation hash: `95c786af78eb4db75f97a3e5fb890fd7dca4fe4936dcd32fae7a52dff268cb9e`.
 
-Model: AspisR1Stage2.aspis_statement.poseidon2 corresponding emitted body; selected owner OPEN.
+Model: M31 poseidon2 adopted consumer unresolved: inspected stage2 Funs has no matching definition; extraction selected none.
 
 Inventory domain: Canonical M31 inputs and exact fixed-width public/tree state; no reselected root or replacement public serialization.
 
@@ -204,7 +204,7 @@ Caller obligations: 22; exact clauses retained in the row snapshot. No clause di
 
 Frozen body SHA256: `2aa900ce6bde046971ed173f7a26cadcfadb9d86de5711854efb9c2c93f064e3`. Obligation hash: `c78e3e5325b2162f0003bc2cca9ddbbe2053cdee707ab253e94be45c3031312c`.
 
-Model: AspisR1Stage2.aspis_statement.poseidon2 corresponding emitted body; selected owner OPEN.
+Model: M31 poseidon2 adopted consumer unresolved: inspected stage2 Funs has no matching definition; extraction selected none.
 
 Inventory domain: Canonical M31 inputs and exact fixed-width public/tree state; no reselected root or replacement public serialization.
 
