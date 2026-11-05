@@ -1,6 +1,8 @@
 # NGL program-entry spine
 
-All 13 baseline occurrences are OPEN. No accepted-spend vertical path is yet certified.
+Statuses refer to pinned NGJ ledger8 plus this lane’s admitted delta; unimported parallel packets receive no credit here.
+
+All 13 baseline occurrences remain OPEN. Zero new composed rows; no accepted-spend vertical path is certified. Helper contract candidates are additionally blocked by the missing ruling (t) interface controls in NGL_FIDELITY_FINDING.md.
 
 | Row | Function | Status | Owner / exact remaining obligation |
 |---|---|---|---|

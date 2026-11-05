@@ -58,6 +58,12 @@ if kind=='kani':
  if os.environ.get('NGL_CAP') in ['1768','1880','384','192','768','128','256','320']:env['RUSTFLAGS']+=' --cfg NGL_cap_'+os.environ['NGL_CAP']
  if os.environ.get('NGL_DISTINCT_EXIT'):env['RUSTFLAGS']+=' --cfg NGL_distinct_exit'
  if os.environ.get('NGL_GUARD_FALSE'):env['RUSTFLAGS']+=' --cfg NGL_guard_false'
+elif kind=='deltaaudit':
+ files['NGL_delta_audit.py']=(E/'NGL_delta_audit.py').read_text();files['NGL_AUDIT_ROOTS.json']=(E/'NGL_AUDIT_ROOTS.json').read_text();sources=['NGL_delta_audit.py','NGL_AUDIT_ROOTS.json'];command=['python3','NGL_delta_audit.py']
+elif kind=='review':
+ files['NGL_review_gate.py']=(E/'NGL_review_gate.py').read_text();files['NGL_review_bundle.sha256']=(E/'NGL_review_bundle.sha256').read_text();sources=['NGL_review_gate.py','NGL_review_bundle.sha256'];command=['python3','NGL_review_gate.py',target.removeprefix('NGL_')]
+elif kind=='pins':
+ files['NGL_toolpins.py']=(E/'NGL_toolpins.py').read_text();sources=['NGL_toolpins.py'];command=['python3','NGL_toolpins.py']
 elif kind=='extract':
  files['NGL_extract.py']=(E/'NGL_extract.py').read_text()
  files['NGL_references.rs']=(E/'NGL_references.rs.txt').read_text()
@@ -126,7 +132,7 @@ for root in roots:
    if Path(root,stem+suf).is_file():rels.add(stem+suf)
 for rel in sorted(rels):
  p=next(Path(root)/rel for root in roots if (Path(root)/rel).is_file());pins[str(p)]={{'path':str(p),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}}
-for module in (['NGL_STAGE2_IMPORT' if x['module']=='NGL_Stage2Driver' else 'NGL_COMBINED_IMPORT'] if x['kind']=='auditbatch' else [])+(['NEP_Planted','NEP_Mutations'] if x['module'] in ['NGL_Driver','NGL_ProofDriver','NGL_Stage2Driver','fixtures'] else [])+(['NGL_QueryModel'] if x['kind']=='auditbin' and x['module'].startswith('query') else [])+(['NGL_COMBINED_IMPORT'] if x['kind']=='auditbin' and (x['module'].startswith('proof') or x['module']=='scan') else [])+[n for line in (b/x['sources'][0]).read_text().splitlines() if line.startswith('import ') for n in line[7:].split() if n!='all'] if x['kind'] not in ['linkaudit','kani','extract'] else []:
+for module in (['NGL_STAGE2_IMPORT' if x['module']=='NGL_Stage2Driver' else 'NGL_COMBINED_IMPORT'] if x['kind'] in ['auditbatch','deltaaudit'] else [])+(['NEP_Planted','NEP_Mutations'] if x['module'] in ['NGL_Driver','NGL_ProofDriver','NGL_Stage2Driver','fixtures'] else [])+(['NGL_QueryModel'] if x['kind']=='auditbin' and x['module'].startswith('query') else [])+(['NGL_COMBINED_IMPORT'] if x['kind']=='auditbin' and (x['module'].startswith('proof') or x['module']=='scan') else [])+[n for line in ((b/x['sources'][0]).read_text().splitlines() if str(x['sources'][0]).endswith('.lean') else []) if line.startswith('import ') for n in line[7:].split() if n!='all'] if x['kind'] not in ['linkaudit','kani','extract','pins','review'] else []:
  rel=module.replace('.','/')+'.olean';p=next((Path(root)/rel for root in roots if (Path(root)/rel).is_file()),None)
  assert p is not None,module
  for z in [p,Path(str(p)+'.private'),Path(str(p)+'.server'),p.with_suffix('.ir')]:
@@ -139,6 +145,15 @@ r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
 names += [str(p.relative_to(b)) for p in b.glob(a+'-graph*')]+[str(p.relative_to(b)) for p in b.glob(a+'-source*')]+[str(p.relative_to(b)) for p in b.glob(a+'-lock*')]+[str(p.relative_to(b)) for p in b.glob(a+'-erasure*')] if {kind!r}=='kani' else []
+if {kind!r}=='deltaaudit':
+ names += [str(p.relative_to(b)) for p in (b/'NGL_delta_audit').rglob('*') if p.is_file()]
+ names += [str(p.relative_to(b)) for p in b.glob('NEP_proof7_*_REACHABLE.txt')]
+if {kind!r}=='review':
+ names += [str(p.relative_to(b)) for p in (b/'NGL_review_results').glob('*.json')]
+ review=b/'NGL_review/evidence/slice-d-entry-20261105'
+ for name in ['NGL_NATIVE_REVIEW.json','NGL_AUDIT.json','NGL_SOURCE_REVIEW.json','NGL_CLOSED.json','NGL_CANDIDATES.json','NGL_LEDGER_DELTA.json','NGL_EXPORTS.json','NGL_RESOURCE_FINAL.json','NGL_VALIDATION_FINAL.json']:
+  if (review/name).exists():names += [str((review/name).relative_to(b))]
+if {kind!r}=='pins':names += ['NGL_TOOL_PINS.json']
 if {kind!r}=='extract':names += [a+'-extraction-pins.json',a+'.llbc']+[str(p.relative_to(b)) for p in (b/'NGL_extracted'/{target!r}).rglob('*') if p.is_file()]
 names += [str(p.relative_to(b)) for p in b.glob('NEP_*_REACHABLE.txt')] if {kind!r}=='auditbatch' else [str(p.relative_to(b)) for p in b.glob('NEP_'+{target!r}+'_*_REACHABLE.txt')] if {kind!r}=='auditbin' else []
 if {kind!r}=='auditbatch':names += [str(p.relative_to(b)) for p in (b/('NGL_stage2_audit' if {target!r}=='NGL_Stage2Driver' else 'NGL_final_audit')).rglob('*') if p.is_file()]
@@ -151,8 +166,11 @@ print(json.dumps(out))
 ''');assert r.returncode==0,r.stderr
 out=json.loads(r.stdout)
 for n,t in out.items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
+if kind=='review':
+ for n,t in out.items():
+  if n.startswith('NGL_review/evidence/slice-d-entry-20261105/'):(E/n.split('/')[-1]).write_text(t)
 # Archive raw graphs immediately; keep their uncompressed hashes for replay.
-if kind in ['auditbin','auditbatch']:
+if kind in ['auditbin','auditbatch','deltaaudit']:
  import lzma
  for name in out:
   if name.startswith('NEP_') and name.endswith('_REACHABLE.txt'):
