@@ -41,3 +41,11 @@ allocation-success premise is admitted.
 NHI scalar_factor/tensor are CLOSED only inside the pair cone and their exact
 canonical domains. tx2_common and finish_relation do not directly call them.
 Their composition belongs to NHM pair, not a fictitious direct driver edge.
+
+Final composed model roots: NHT_PacketOps.source/query_source,
+NHT_PacketAuth.source, NHT_QueryTail.source, NHT_FinishPacket.source and
+AspisR1.NHT_AuthCarriers.authenticated_saved_to_carriers. The full finish model
+now substitutes NEW as well as reached pair, derives next-claim canonicality and
+removes free dot width/slice-identity inputs using NGM's exact poststate. Error
+and Phase nominal ports preserve all constructors/payloads; release query law
+is stated at literal None. Native domains stay narrower than broad model laws.

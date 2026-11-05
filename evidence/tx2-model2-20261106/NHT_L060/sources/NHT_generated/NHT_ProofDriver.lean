@@ -1,0 +1,56 @@
+import Lean
+import NFA_WALKER
+import NFA_MemoryLimit
+open Lean Elab Command
+/-- Standalone runtime avoids restoring a pre-initialization command environment. -/
+unsafe def main (args : List String) : IO UInt32 := do
+  NFA_MemoryLimit.set
+  initSearchPath (← findSysroot)
+  enableInitializersExecution
+  let mode := args.headD "small"
+  let (modules, roots) := if mode == "fixtures" then
+    (#[`NEP_Planted, `NEP_Mutations],
+     #[`NEP_Planted.matcher, `NEP_Planted.viaPrivate, `NEP_Planted.proof,
+       `NEP_Planted.viaAux, `NEP_MutateMatch.matcher, `NEP_MutatePrivate.viaPrivate,
+       `NEP_MutateProof.proof, `NEP_MutateAux.viaAux])
+    else if mode == "proof0" then
+      (#[`NHT_COMBINED_IMPORT], #[`NHT_AdapterInstall.slot, `NHT_AdapterInstall.cohort_slot, `NHT_AdapterInstall.digest_error_frame, `NHT_AuthAccepted.common, `NHT_AuthAccepted.reader_result, `AspisR1.NHT_AuthCarriers.authenticated_saved_to_carriers, `NHT_BindAssoc.source, `NHT_BindOn.reached, `NHT_CommonCuts.resume, `NHT_CommonCuts.resume_error])
+    else if mode == "proof1" then
+      (#[`NHT_COMBINED_IMPORT], #[`NHT_CommonCuts.resume_fail, `NHT_CommonCuts.resume_div, `NHT_FinishCaller.source, `NHT_FinishChain.weights_frame, `NHT_FinishChain.round_tail, `NHT_FinishComplete.source, `NHT_FinishCompose.source, `NHT_FinishNewPacket.source, `NHT_FinishPacket.source, `NHT_FinishRelationModel.after_pair])
+    else if mode == "proof2" then
+      (#[`NHT_COMBINED_IMPORT], #[`NHT_FinishRelationModel.pair_frame, `NHT_FinishRelationModel.round_frame, `NHT_FinishRelationModel.source, `NHT_FinishRun.first_frame, `NHT_FinishRun.source, `NHT_OffsetArithmetic.sub_eq_ok, `NHT_Offsets.split, `NHT_Offsets.semantic, `NHT_Offsets.count, `NHT_Offsets.compact_semantic])
+    else if mode == "proof3" then
+      (#[`NHT_COMBINED_IMPORT], #[`NHT_Offsets.y1, `NHT_Offsets.inactive, `NHT_Offsets.round0, `NHT_Offsets.folded, `NHT_Offsets.round1, `NHT_Offsets.final, `NHT_Offsets.openings, `NHT_PacketAuth.source, `NHT_PacketOps.source, `NHT_PacketOps.powers_reply])
+    else if mode == "proof4" then
+      (#[`NHT_COMBINED_IMPORT], #[`NHT_PacketOps.query_source, `NHT_PhasePort.roundtrip, `NHT_PhasePort.back, `NHT_PhasePort.injective, `NHT_PhasePort.release, `NHT_PhasePort.callback, `NHT_PowersDomain.produced, `NHT_QueryPost.finish_domain, `NHT_QueryTail.source, `NHT_ResultPort.roundtrip])
+    else if mode == "proof5" then
+      (#[`NHT_COMBINED_IMPORT], #[`NHT_ResultPort.injective, `NHT_ResultPort.returned_error, `NHT_ResultPort.failure, `NHT_ResultPort.divergence, `NHT_ResultSuccess.source, `NHT_RoundOutput.canonical, `NHT_RoundPacket.source, `NHT_TailCall.after_query, `NHT_TailView.source, `NHT_TailView.finish_packet])
+    else if mode == "proof6" then
+      (#[`NHT_COMBINED_IMPORT], #[`NHT_Tx2AuthModel.source, `NHT_Tx2AuthModel.retained_stages, `NHT_Tx2CommonModel.source, `NHT_Tx2CommonModel.retained_stages, `AspisR1.RPx_Deployed.deployed])
+    else (#[], #[])
+  let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
+    {} (loadExts := true) (level := .private)
+  let ctx : Command.Context := {
+    fileName := "NEP_Driver"
+    fileMap := FileMap.ofString ""
+    snap? := none
+    cancelTk? := none
+  }
+  let action : CommandElabM Bool := do
+    let mut failed := false
+    for root in roots do
+      try
+        elabCommand (← `(command| #print axioms $(mkIdent root)))
+        NEP.audit root ("NEP_" ++ mode ++ "_" ++ root.toString)
+      catch e =>
+        logError e.toMessageData
+        failed := true
+    return failed
+  let result ← ((action.run ctx).run (Command.mkState env)).toBaseIO
+  match result with
+  | .error e =>
+    IO.eprintln (← e.toMessageData.toString)
+    return 2
+  | .ok (failed, state) =>
+    for msg in state.messages.toList do IO.println (← msg.data.toString)
+    return if failed then 1 else 0

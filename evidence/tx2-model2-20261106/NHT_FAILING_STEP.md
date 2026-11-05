@@ -36,3 +36,16 @@ All failed candidates and exact snapshots are retained in attempt directories.
   exposed sub_spec's conjunction postcondition; L049 fixes that exact signature.
   L050 proves all eleven source constants with standard axioms. No kernel
   normalization of a recurrence or large enumeration was attempted.
+
+- L052 combined import: NHI's retained NGH_QSquareRef object was outside the
+  earlier NHQ path list. Added NHI L091's pinned read-only NGZ_flat cache path;
+  L053 passes with the complete unchanged model source.
+- Own compile-free baseline merger: NHI's NGC_MemoryLimit entry captured the
+  `import all` keyword instead of `Lean.Shell`. Source is exactly
+  `module; import all Lean.Shell`; retained NHQ baseline has the correct module.
+  The repair is recorded in NHT_IMPORT_BASELINES.json and no host tool is edited.
+- One L064 client invocation arrived while the serial audit queue was active;
+  the owned O_EXCL guard refused before admission/upload/submission. Waited for
+  L057–L063 to finish, then L064 launched once and passed. No concurrent scope
+  or unchanged submitted replay occurred. Count this own prelaunch rejection
+  separately from the actual L064 scope.
