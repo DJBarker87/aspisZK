@@ -1,0 +1,37 @@
+{"attempt": "NGV_L037", "exit_status": 0, "wall_seconds": 19.687964425887913, "peak_rss_kib": "5999908", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index : {T : Type} →
+  core.ops.range.Range Usize → Slice T → Result (Slice T) :=
+fun {T} r s => if r.start ≤ r.end ∧ ↑r.end ≤ s.length then ok ⟨List.slice ↑r.start ↑r.end ↑s, ⋯⟩ else fail Error.panic
+def Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index_mut : {T : Type} →
+  core.ops.range.Range Usize → Slice T → Result (Slice T × (Slice T → Slice T)) :=
+fun {T} r s =>
+  if r.start ≤ r.end ∧ ↑r.end ≤ s.length then
+    ok (⟨List.slice ↑r.start ↑r.end ↑s, ⋯⟩, fun s' => ⟨(↑s).setSlice! ↑r.start ↑s', ⋯⟩)
+  else fail Error.panic
+def List.setSlice!.{u_1} : {α : Type u_1} → List α → ℕ → List α → List α :=
+fun {α} s i s' =>
+  have s
+...
+eneas.Std.Slice.setSlice!: {α : Type u} → Slice α → ℕ → List α → Slice α
+Vector.setSlice!: {α : Type u_1} → {n : ℕ} → Vector α n → ℕ → List α → Vector α n
+List.setSlice!_getElem?_middle: ∀ {α : Type u_1} (s s' : List α) (i j : ℕ),
+  i ≤ j ∧ j - i < s'.length ∧ j < s.length → (s.setSlice! i s')[j]? = s'[j - i]?
+Vector.getElem_setSlice!_suffix: ∀ {α : Type u_1} {n : ℕ} [Inhabited α] (s : Vector α n) (s' : List α) (i j : ℕ)
+  (h : i + s'.length ≤ j ∧ j < n), (s.setSlice! i s')[j] = s[j]
+List.setSlice!_getElem?_same: ∀ {α : Type u_1} (s s' : List α) (i j : ℕ),
+  j < i ∨ i + s'.length ≤ j → (s.setSlice! i s')[j]? = s[j]?
+Aeneas.Std.Array.setSlice!_getElem_middle: ∀ {α : Type u_1} {n : Usize} (s : Std.Array α n) (s' : List α) (i j : ℕ)
+  (h : i ≤ j ∧ j - i < s'.length ∧ j < s.length), (s.setSlice! i s')[j] = s'[j - i]
+Aeneas.Std.Array.setSlice!: {α : Type u} → {n : Usize} → Std.Array α n → ℕ → List α → Std.Array α n
+Array.length_setSlice!: ∀ {α : Type u_1} (s : _root_.Array α) (i : ℕ) (s' : List α), (s.setSlice! i s').size = s.size
+Array.getElem_setSlice!_middle: ∀ {α : Type u_1} (s : _root_.Array α) (s' : List α) (i j : ℕ)
+  (h : i ≤ j ∧ j - i < s'.length ∧ j < s.size), (s.setSlice! i s')[j] = s'[j - i]
+Aeneas.Std.alloc.vec.Vec.setSlice!: {α : Type u} → alloc.vec.Vec α → ℕ → List α → alloc.vec.Vec α
+Aeneas.Std.Slice.setSlice!_val: ∀ {α : Type u_1} (s : Slice α) (i : ℕ) (s' : List α),
+  ↑(s.setSlice! i s') = (↑s).setSlice! i s'
+Array.getElem!_setSlice!_prefix: ∀ {α : Type u_1} [inst : Inhabited α] (s : _root_.Array α) (s' : List α) (i j : ℕ),
+  j < i → (s.setSlice! i s')[j]! = s[j]!
+Array.getElem!_setSlice!_middle: ∀ {α : Type u_1} [inst : Inhabited α] (s : _root_.Array α) (s' : List α) (i j : ℕ),
+  i ≤ j ∧ j - i < s'.length ∧ j < s.size → (s.setSlice! i s')[j]! = s'[j - i]!
+
+Running as unit: run-r28f42de8d66545e096fc58c462a26ae3.scope; invocation ID: 1de6e8bf907648dbb3e45b590e0fa5bb

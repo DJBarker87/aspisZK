@@ -1,0 +1,80 @@
+NGV_generated/NGV_SemanticInitial.lean:15:70: error: Tactic `rfl` failed: The left-hand side
+  compact.COMPACT_SEMANTIC
+is not definitionally equal to the right-hand side
+  ok 7015#usize
+
+⊢ compact.COMPACT_SEMANTIC = ok 7015#usize
+NGV_generated/NGV_SemanticInitial.lean:16:71: error: Tactic `rfl` failed: The left-hand side
+  compact.LOGICAL_SEMANTIC
+is not definitionally equal to the right-hand side
+  ok 13831#usize
+
+⊢ compact.LOGICAL_SEMANTIC = ok 13831#usize
+NGV_generated/NGV_SemanticInitial.lean:17:49: error: Tactic `rfl` failed: The left-hand side
+  compact.SEMANTIC_ROWS
+is not definitionally equal to the right-hand side
+  27#u8
+
+⊢ compact.SEMANTIC_ROWS = 27#u8
+NGV_generated/NGV_SemanticInitial.lean:30:1: error: Tactic `rfl` failed: The left-hand side
+  do
+    let (s, index_mut_back) ←
+      core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeToUsizeSlice U8) out { «end» := 32#usize }
+    let s1 ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) input { «end» := 32#usize }
+    let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1
+    compact.expand_semantic_loop ops { start := 0#u8, «end» := 27#u8 } input (index_mut_back s2) 32#usize 32#usize
+is not definitionally equal to the right-hand side
+  do
+    let x ← core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeToUsizeSlice U8) out { «end» := 32#usize }
+    let first ←
+      let (header, back) := x
+        do
+        let source ←
+          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) input { «end» := 32#usize }
+        let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 header source
+        ok (back copied)
+    compact.expand_semantic_loop ops { start := 0#u8, «end» := 27#u8 } input first 32#usize 32#usize
+
+ops : Ops
+input out : Slice U8
+inputSize : (↑input).length = 7015
+outputSize : (↑out).length = 13831
+inputLen : input.len = 7015#usize
+outputLen : out.len = 13831#usize
+⊢ (do
+      let (s, index_mut_back) ←
+        core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeToUsizeSlice U8) out { «end» := 32#usize }
+      let s1 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) input { «end» := 32#usize }
+      let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1
+      compact.expand_semantic_loop ops { start := 0#u8, «end» := 27#u8 } input (index_mut_back s2) 32#usize 32#usize) =
+    do
+    let x ← core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeToUsizeSlice U8) out { «end» := 32#usize }
+    let first ←
+      let (header, back) := x
+        do
+        let source ←
+          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) input { «end» := 32#usize }
+        let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 header source
+        ok (back copied)
+    compact.expand_semantic_loop ops { start := 0#u8, «end» := 27#u8 } input first 32#usize 32#usize
+NGV_generated/NGV_SemanticInitial.lean:34:1: error: 'change' tactic failed, pattern
+  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) out
+        { start := 0#usize, «end» := 32#usize } >>=
+      ?m.31 =
+    ?m.33
+is not definitionally equal to target
+  (do
+      let (header, back) ←
+        core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeToUsizeSlice U8) out { «end» := 32#usize }
+      let source ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) input { «end» := 32#usize }
+      let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 header source
+      ok (back copied)) =
+    ok (initial input out)
+'NGV_SemanticInitial.compact_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NGV_SemanticInitial.logical_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NGV_SemanticInitial.rows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NGV_SemanticInitial.bind_assoc' does not depend on any axioms
+'NGV_SemanticInitial.emitted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NGV_SemanticInitial.copied' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

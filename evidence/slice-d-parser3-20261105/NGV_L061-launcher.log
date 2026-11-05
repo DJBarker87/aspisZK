@@ -1,0 +1,54 @@
+{"attempt": "NGV_L061", "exit_status": 1, "wall_seconds": 2.708756604930386, "peak_rss_kib": "5948520", "swaps": "0", "print_axioms": ["'NGV_SemanticTrace.construct' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NGV_SemanticTrace.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NGV_generated/NGV_SemanticTrace.lean:18:32: error: unexpected token '≤'; expected term
+NGV_generated/NGV_SemanticTrace.lean:45:15: error: unsolved goals
+case done
+input : Slice U8
+r : ℕ
+before✝ final before : Slice U8
+bound : 27 ≤ 27
+inputSize : (↑input).length = 7015
+outputSize : (↑before).length = 13831
+same : ↑27#u8 = 27
+sourceEq : NGV_Cursors.src 27 bound = input.len
+outputEq : NGV_Cursors.dst 27 bound = before.len
+stop :
+  core.iter.range.IteratorRange.next core.iter.range.StepU8 { start := 27#u8, «end» := 27#u8 } =
+    ok (none, { start := 27#u8, «end» := 27#u8 })
+⊢ (let (o, iter1) := (none, { start := 27#u8, «end» := 27#u8 })
+    match o with
+    | none => ok (ControlFlow.done (core.r
+...
+      (ControlFlow.cont
+        ({ start := next, «end» := 27#u8 }, after packet, NGV_Cursors.src (↑row + 1) ⋯, NGV_Cursors.dst (↑row + 1) ⋯))
+tail :
+  loop
+      (fun x =>
+        match x with
+        | (iter1, out1, src1, dst1) =>
+          compact.expand_semantic_loop.body AspisS1ValuesOwnedInstallation.nativeValues input iter1 out1 src1 dst1)
+      ({ start := next, «end» := 27#u8 }, after packet, NGV_Cursors.src (↑row + 1) ⋯, NGV_Cursors.dst (↑row + 1) ⋯) =
+    ok (core.result.Result.Ok (), final)
+⊢ loop
+      (fun x =>
+        match x with
+        | (iter1, out1, src1, dst1) =>
+          compact.expand_semantic_loop.body AspisS1ValuesOwnedInstallation.nativeValues input iter1 out1 src1 dst1)
+      ({ start := row, «end» := 27#u8 }, before, NGV_Cursors.src (↑row) bound, NGV_Cursors.dst (↑row) bound) =
+    ok (core.result.Result.Ok (), final)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (27 ≤ UScalar.cMax UScalarTy.U8)) true
+  in the application
+    id (Eq.refl true)
+NGV_generated/NGV_SemanticTrace.lean:65:6: error: invalid {...} notation, expected type is not known
+NGV_generated/NGV_SemanticTrace.lean:66:6: error: invalid {...} notation, expected type is not known
+'NGV_SemanticTrace.construct' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NGV_SemanticTrace.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rc1775fb50c5548c0b144d74e235b2b65.scope; invocation ID: c963ee281433491dade2dc364ccc0865

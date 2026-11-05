@@ -1,0 +1,128 @@
+NGV_generated/NGV_AtSubstitution.lean:18:1: error: Tactic `apply` failed: could not unify the conclusion of `NGV_Monad.bind_congr_on
+  (core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := finish })`
+  core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := finish } >>=
+      ?left =
+    core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := finish } >>=
+      ?right
+with the goal
+  (do
+      let (_, i) ← ofOption (some (tag, size)) Error.panic
+      let length ← 5#usize + i
+      let i1 ← offset + length
+      let o1 ←
+        core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := i1 }
+      let r ← core.option.Option.ok_or o1 (r1_wire.Error.Length row)
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ← left row val
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, i1))
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+                (core.convert.FromSame r1_wire.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+            (core.convert.FromSame r1_wire.Error) residual) =
+    do
+    let (_, i) ← ofOption (some (tag, size)) Error.panic
+    let length ← 5#usize + i
+    let i1 ← offset + length
+    let o1 ← core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := i1 }
+    let r ← core.option.Option.ok_or o1 (r1_wire.Error.Length row)
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let r1 ← right row val
+        let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, i1))
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+              (core.convert.FromSame r1_wire.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+          (core.convert.FromSame r1_wire.Error) residual
+
+Note: The full type of `NGV_Monad.bind_congr_on
+  (core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := finish })` is
+  ∀ (left right : Option (Slice U8) → Result ?m.35),
+    (∀ (x : Option (Slice U8)),
+        core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+              { start := offset, «end» := finish } =
+            ok x →
+          left x = right x) →
+      core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+            { start := offset, «end» := finish } >>=
+          left =
+        core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+            { start := offset, «end» := finish } >>=
+          right
+
+bytes : Slice U8
+row tag : U8
+offset size length finish : Usize
+left right : U8 → Slice U8 → Result (core.result.Result (Slice U8) r1_wire.Error)
+shape : r1_wire.row_shape row = ok (some (tag, size))
+lengthAdd : 5#usize + size = ok length
+endAdd : offset + length = ok finish
+law :
+  ∀ (framed : Slice U8),
+    core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := finish } =
+        ok (some framed) →
+      left row framed = right row framed
+⊢ (do
+      let (_, i) ← ofOption (some (tag, size)) Error.panic
+      let length ← 5#usize + i
+      let i1 ← offset + length
+      let o1 ←
+        core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := i1 }
+      let r ← core.option.Option.ok_or o1 (r1_wire.Error.Length row)
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ← left row val
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, i1))
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+                (core.convert.FromSame r1_wire.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+            (core.convert.FromSame r1_wire.Error) residual) =
+    do
+    let (_, i) ← ofOption (some (tag, size)) Error.panic
+    let length ← 5#usize + i
+    let i1 ← offset + length
+    let o1 ← core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := i1 }
+    let r ← core.option.Option.ok_or o1 (r1_wire.Error.Length row)
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let r1 ← right row val
+        let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, i1))
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+              (core.convert.FromSame r1_wire.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+          (core.convert.FromSame r1_wire.Error) residual
+NGV_generated/NGV_AtSubstitution.lean:17:55: warning: This simp argument is unused:
+  lengthAdd
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵h̵a̵p̵e̵,̵c̵o̵r̵e̵.̵o̵p̵t̵i̵o̵n̵.̵O̵p̵t̵i̵o̵n̵.̵u̵n̵w̵r̵a̵p̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵l̵e̵n̵g̵t̵h̵A̵d̵d̵,̵e̵n̵d̵A̵d̵d̵]̵[̲s̲h̲a̲p̲e̲,̲ ̲c̲o̲r̲e̲.̲o̲p̲t̲i̲o̲n̲.̲O̲p̲t̲i̲o̲n̲.̲u̲n̲w̲r̲a̲p̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲e̲n̲d̲A̲d̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGV_generated/NGV_AtSubstitution.lean:17:65: warning: This simp argument is unused:
+  endAdd
+
+Hint: Omit it from the simp argument list.
+  simp only [shape, ̲core.option.Option.unwrap, ̲bind_tc_ok, ̲lengthAdd,̵e̵n̵d̵A̵d̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NGV_AtSubstitution.congr' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

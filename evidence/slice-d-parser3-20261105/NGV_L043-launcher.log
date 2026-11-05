@@ -1,0 +1,49 @@
+{"attempt": "NGV_L043", "exit_status": 1, "wall_seconds": 2.482488073175773, "peak_rss_kib": "4408432", "swaps": "0", "print_axioms": ["'NGV_ByteWindow.select_length' depends on axioms: [propext, Quot.sound]", "'NGV_ByteWindow.write_length' depends on axioms: [propext, Quot.sound]", "'NGV_ByteWindow.read' depends on axioms: [propext, sorryAx, Quot.sound]", "'NGV_ByteWindow.read_mut' depends on axioms: [propext, sorryAx, Quot.sound]", "'NGV_ByteWindow.copy' depends on axioms: [propext, Quot.sound]"]}
+NGV_generated/NGV_ByteWindow.lean:22:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  dite (start ≤ finish ∧ ↑finish ≤ bytes.length) ?m.36 ?m.37
+in the target expression
+  (if start ≤ finish ∧ ↑finish ≤ bytes.length then ok ⟨List.slice ↑start ↑finish ↑bytes, ⋯⟩ else fail Error.panic) =
+    ok (select bytes (↑start) (↑finish - ↑start))
+
+bytes : Slice U8
+start finish : Usize
+fit : ↑start ≤ ↑finish ∧ ↑finish ≤ (↑bytes).length
+⊢ (if start ≤ finish ∧ ↑finish ≤ bytes.length then ok ⟨List.slice ↑start ↑finish ↑bytes, ⋯⟩ else fail Error.panic) =
+    ok (select bytes (↑start) (↑finish - ↑start))
+
+Note: The target expression is not type-correct under the `instances` trans
+...
+finish - ↑start), fun after => write bytes (↑start) after)
+
+bytes : Slice U8
+start finish : Usize
+fit : ↑start ≤ ↑finish ∧ ↑finish ≤ (↑bytes).length
+⊢ (if start ≤ finish ∧ ↑finish ≤ bytes.length then
+      ok (⟨List.slice ↑start ↑finish ↑bytes, ⋯⟩, fun s' => ⟨(↑bytes).setSlice! ↑start ↑s', ⋯⟩)
+    else fail Error.panic) =
+    ok (select bytes (↑start) (↑finish - ↑start), fun after => write bytes (↑start) after)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    bytes
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑bytes
+NGV_generated/NGV_ByteWindow.lean:29:45: warning: This simp argument is unused:
+  core.slice.index.SliceIndexRangeUsizeSlice
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵m̵u̵t̵,̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵,̵[̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲m̲u̲t̲,̲ core.slice.index.SliceIndexRangeUsizeSlice.index_mut]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NGV_ByteWindow.select_length' depends on axioms: [propext, Quot.sound]
+'NGV_ByteWindow.write_length' depends on axioms: [propext, Quot.sound]
+'NGV_ByteWindow.read' depends on axioms: [propext, sorryAx, Quot.sound]
+'NGV_ByteWindow.read_mut' depends on axioms: [propext, sorryAx, Quot.sound]
+'NGV_ByteWindow.copy' depends on axioms: [propext, Quot.sound]
+
+Running as unit: run-r192f89e626e04a7887b43bd0d157817a.scope; invocation ID: 0e175dbedcd84ec0a0c96631cec9c244

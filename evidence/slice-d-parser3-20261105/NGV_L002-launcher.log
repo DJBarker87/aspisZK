@@ -1,0 +1,45 @@
+{"attempt": "NGV_L002", "exit_status": 1, "wall_seconds": 2.7627017709892243, "peak_rss_kib": "5931600", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.Slice.index_usize.{u} : {α : Type u} → Slice α → Usize → Result α :=
+fun {α} v i =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some x => ok x
+@[reducible] def Aeneas.Std.Slice.len.{u} : {α : Type u} → Slice α → Usize :=
+fun {α} v => Usize.ofNatCore (↑v).length ⋯
+NGV_generated/NGV_Api.lean:5:7: error(lean.unknownIdentifier): Unknown constant `loop_eq`
+theorem Aeneas.Std.loop.spec.{u, v, w} : ∀ {α : Type u} {β : Type v} {γ : Type w} (measure : α → γ)
+  [wf : WellFoundedRelation γ] (inv : α → Prop) (post : β → Prop) (body : α → Result (ControlFlow α β)) (x : α),
+  (∀ (x : α),
+      inv x →
+        body x ⦃ r =>
+          match r with
+          | ControlFlow.do
+...
+true then ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Tag row))
+            else do
+              let i3 ← record1.index_usize 1#usize
+              let i4 ← record1.index_usize 2#usize
+              let i5 ← record1.index_usize 3#usize
+              let i6 ← record1.index_usize 4#usize
+              let i7 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i3, i4, i5, i6] ⋯))
+              let i8 ← lift (UScalar.cast UScalarTy.Usize i7)
+              if (i8 != size) = true then
+                  ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length row))
+                else do
+                  let payload ←
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) record1
+                        { start := 5#usize }
+                  if row ≥ 14#u8 then do
+                      let r1 ← AspisR1PrefixAggregateParser.r1_wire.validate_record_fields row payload
+                      let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                      match cf1 with
+                        | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok payload)
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+                            (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+                    else ok (core.result.Result.Ok payload)
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+        (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+
+Running as unit: run-r7b90e240d9214b15a43be63483f4a265.scope; invocation ID: cb78c62f5aee49d3a511b02db4c86dd9
