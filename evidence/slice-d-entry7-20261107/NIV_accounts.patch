@@ -1,6 +1,6 @@
 --- /dev/null
 +++ b/programs/r1-cost-probe/src/NIV_accounts.rs
-@@ -0,0 +1,162 @@
+@@ -0,0 +1,140 @@
 +use super::*;
 +include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
 +fn owned()->OwnedAccount{OwnedAccount{key:Pubkey::new_from_array(kani::any()),owner:Pubkey::new_from_array(kani::any()),is_signer:false,is_writable:false,executable:false,length:Ok(kani::any()),bytes:Err(ProgramError::InvalidAccountData)}}
@@ -33,133 +33,111 @@
 +}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(super::require_distinct_accounts::<7>,no_distinct)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn guard_0(){check::<0>(false);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(super::require_distinct_accounts::<7>,no_distinct)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn guard_0_wrong(){check::<0>(true);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(super::require_distinct_accounts::<7>,no_distinct)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn guard_1(){check::<1>(false);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(super::require_distinct_accounts::<7>,no_distinct)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn guard_1_wrong(){check::<1>(true);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(super::require_distinct_accounts::<7>,no_distinct)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn guard_2(){check::<2>(false);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(super::require_distinct_accounts::<7>,no_distinct)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn guard_2_wrong(){check::<2>(true);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(super::require_distinct_accounts::<7>,no_distinct)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn guard_3(){check::<3>(false);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(super::require_distinct_accounts::<7>,no_distinct)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn guard_3_wrong(){check::<3>(true);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(super::require_distinct_accounts::<7>,no_distinct)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn guard_4(){check::<4>(false);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(super::require_distinct_accounts::<7>,no_distinct)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn guard_4_wrong(){check::<4>(true);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(super::require_distinct_accounts::<7>,no_distinct)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn guard_5(){check::<5>(false);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(super::require_distinct_accounts::<7>,no_distinct)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn guard_5_wrong(){check::<5>(true);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(super::require_distinct_accounts::<7>,no_distinct)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn guard_6(){check::<6>(false);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(super::require_distinct_accounts::<7>,no_distinct)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn guard_6_wrong(){check::<6>(true);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(super::require_distinct_accounts::<7>,no_distinct)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn guard_7(){check::<7>(false);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(super::require_distinct_accounts::<7>,no_distinct)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn guard_7_wrong(){check::<7>(true);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(super::require_distinct_accounts::<7>,no_distinct)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn guard_8(){check::<8>(false);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(super::require_distinct_accounts::<7>,no_distinct)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn guard_8_wrong(){check::<8>(true);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(super::require_distinct_accounts::<7>,no_distinct)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn guard_9(){check::<9>(false);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(super::require_distinct_accounts::<7>,no_distinct)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn guard_9_wrong(){check::<9>(true);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(super::require_distinct_accounts::<7>,no_distinct)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn guard_10(){check::<10>(false);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(super::require_distinct_accounts::<7>,no_distinct)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn guard_10_wrong(){check::<10>(true);}

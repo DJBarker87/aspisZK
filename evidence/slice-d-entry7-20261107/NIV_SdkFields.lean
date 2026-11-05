@@ -21,13 +21,13 @@ This theorem cannot identify records or executions chosen independently. -/
 theorem classes (P : Nat → Prop)
     (key : ∀ f, f < 32 → P f)
     (owner : ∀ f, 32 ≤ f → f < 64 → P f)
-    (meta : ∀ f, 64 ≤ f → f < 76 → P f) : ∀ f, f < 76 → P f := by
+    (scalarFields : ∀ f, 64 ≤ f → f < 76 → P f) : ∀ f, f < 76 → P f := by
   intro f bound
   by_cases first : f < 32
   · exact key f first
   · by_cases second : f < 64
     · exact owner f (by omega) second
-    · exact meta f (by omega) bound
+    · exact scalarFields f (by omega) bound
 
 #print axioms index
 #print axioms value

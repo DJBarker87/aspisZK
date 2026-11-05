@@ -32,7 +32,7 @@
      llbc = out/(args.function+'.llbc')
      cmd += ['--dest-file',str(llbc),'--','--manifest-path',str(workspace/package/'Cargo.toml'),'--locked','--offline','--release','--lib','--jobs','1','--features',features]
 -    aeneas = [str(TOOLROOT/'aeneas-b59d5188-extended'),'-diagnose-translation','-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','NIJ_'+args.function,'-dest',str(out/'raw'),'-subdir','NIJ_'+args.function,'-split-files',str(llbc)]
-+    aeneas = [str(TOOLROOT/'aeneas-b59d5188-extended'),'-diagnose-translation','-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','NIV_'+args.function,'-dest',str(out/'raw'),'-subdir','NIV_'+args.function,'-split-files',str(llbc)]
++    aeneas = [str(TOOLROOT/'aeneas-b59d5188-extended'),'-diagnose-translation','-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace',('NIV_'+args.function if args.function=='entry' else 'NIJ_'+args.function),'-dest',str(out/'raw'),'-subdir',('NIV_'+args.function if args.function=='entry' else 'NIJ_'+args.function),'-split-files',str(llbc)]
      return dict(charon_command=cmd,aeneas_command=aeneas,opacity=opacity,root=root,root_owner=owner,root_package=package,root_features=features)
  
  def extract(args, workspace, out):
@@ -68,3 +68,12 @@
      a=p.parse_args()
      if a.export: export(); return 0
      a.workspace=a.workspace.resolve(); a.out=a.out.resolve(); a.out.mkdir(parents=True,exist_ok=True)
+@@ -223,7 +232,7 @@
+         rel = next(l.split(':',2)[2].strip().lstrip('/') for l in Path('/proc/self/cgroup').read_text().splitlines() if l.startswith('0:'))
+         group = Path('/sys/fs/cgroup')/rel
+         assert {n:(group/n).read_text().strip() for n in ('memory.high','memory.max','memory.swap.max','pids.max')} == {'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}, 'Run via the admitted capped launcher'
+-    if a.check: validate(a.workspace,a.out,a.cargo); return 0
++    if a.check: validate(a.workspace,a.out,a.cargo,a.function); return 0
+     assert a.function, '--function required'
+     if a.options: write(a.out/'NHR_OPTIONS.json',options(a,a.workspace,a.out)); return 0
+     return extract(a,a.workspace,a.out)

@@ -2,11 +2,14 @@
 from NIV_transport import *
 import hashlib,re,shlex,sys,lzma
 sha=lambda b:hashlib.sha256(b).hexdigest()
-def run(a,kind,target,command=None,extra=None):
+def run(a,kind,target,command=None,extra=None,env_extra=None):
     assert a.startswith('NIV_L') and 1<=int(a[-3:])<=90 and not (E/a).exists()
     env=json.loads((E.parent/'slice-d-entry6-20261107/NIS_L058.json').read_text())['env']
     env['LEAN_PATH']=B+'/NIV_objects:/home/dombarker/project-offloads/codex-cx-slice-d-entry-cache-20261104/NIV_seed_20261107:'+':'.join(p for p in env['LEAN_PATH'].split(':') if not p.endswith('/NIS_objects'))
     env['TMPDIR']=B+'/NIV_tmp'
+    env['CARGO_TARGET_DIR']=B+'/NIV_target'
+    env['CARGO_NET_OFFLINE']='true'
+    env.update(env_extra or {})
     files=dict(extra or {})
     if kind=='lean':
         text=(E/(target+'.lean')).read_text()
@@ -35,7 +38,7 @@ for n,t in files.items():
  if n.endswith('.lean'):
   for line in t.splitlines():
    if line.startswith('import '):rels.update(d.replace('.','/')+'.olean' for d in line[7:].split() if d!='all')
-if {kind!r}!='lean':rels.update(n+'.olean' for n in ['NIV_COMBINED_IMPORT','NFA_WALKER','NFA_MemoryLimit','NEP_Planted','NEP_Mutations'])
+if {kind!r} in ['audit','link','inspect']:rels.update(n+'.olean' for n in ['NIV_COMBINED_IMPORT','NFA_WALKER','NFA_MemoryLimit','NEP_Planted','NEP_Mutations'])
 for rel in sorted(rels):
  p=next((Path(root)/rel for root in roots if (Path(root)/rel).is_file()),None);assert p is not None,rel
  for z in [p,Path(str(p)+'.private'),Path(str(p)+'.server'),p.with_suffix('.ir')]:

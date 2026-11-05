@@ -1,6 +1,6 @@
 --- /dev/null
 +++ b/programs/r1-cost-probe/src/NIV_auth.rs
-@@ -0,0 +1,226 @@
+@@ -0,0 +1,186 @@
 +use super::*;
 +use aspis_statement::pool_v1::{PoolIdentityV1,VerifierPolicyV1};
 +include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
@@ -29,201 +29,161 @@
 +}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v1_0(){check::<false,0>(false);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v1_0_wrong(){check::<false,0>(true);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v1_1(){check::<false,1>(false);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v1_1_wrong(){check::<false,1>(true);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v1_2(){check::<false,2>(false);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v1_2_wrong(){check::<false,2>(true);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v1_3(){check::<false,3>(false);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v1_3_wrong(){check::<false,3>(true);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v1_4(){check::<false,4>(false);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v1_4_wrong(){check::<false,4>(true);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v1_5(){check::<false,5>(false);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v1_5_wrong(){check::<false,5>(true);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v1_6(){check::<false,6>(false);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v1_6_wrong(){check::<false,6>(true);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v1_7(){check::<false,7>(false);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v1_7_wrong(){check::<false,7>(true);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v1_8(){check::<false,8>(false);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v1_8_wrong(){check::<false,8>(true);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v1_9(){check::<false,9>(false);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v1_9_wrong(){check::<false,9>(true);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v2_0(){check::<true,0>(false);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v2_0_wrong(){check::<true,0>(true);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v2_1(){check::<true,1>(false);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v2_1_wrong(){check::<true,1>(true);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v2_2(){check::<true,2>(false);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v2_2_wrong(){check::<true,2>(true);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v2_3(){check::<true,3>(false);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v2_3_wrong(){check::<true,3>(true);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v2_4(){check::<true,4>(false);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v2_4_wrong(){check::<true,4>(true);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v2_5(){check::<true,5>(false);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v2_5_wrong(){check::<true,5>(true);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v2_6(){check::<true,6>(false);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v2_6_wrong(){check::<true,6>(true);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v2_7(){check::<true,7>(false);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v2_7_wrong(){check::<true,7>(true);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v2_8(){check::<true,8>(false);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v2_8_wrong(){check::<true,8>(true);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v2_9(){check::<true,9>(false);}
 +#[kani::proof] #[kani::unwind(35)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(super::OwnedAccount::data,no_data)]
 +#[kani::stub(Pubkey::create_program_address,no_pda)]
 +fn v2_9_wrong(){check::<true,9>(true);}

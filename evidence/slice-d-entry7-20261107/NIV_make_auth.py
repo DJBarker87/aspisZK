@@ -31,5 +31,5 @@ for v2 in [False,True]:
  for g in range(10):
   for wrong in [False,True]:
    name=('v2' if v2 else 'v1')+'_'+str(g)+('_wrong' if wrong else '')
-   t+='#[kani::proof] #[kani::unwind(35)]\n#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]\n#[kani::stub(super::OwnedAccount::data,no_data)]\n#[kani::stub(Pubkey::create_program_address,no_pda)]\nfn '+name+'(){check::<'+str(v2).lower()+','+str(g)+'>('+str(wrong).lower()+');}\n'
+   t+='#[kani::proof] #[kani::unwind(35)]\n#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]\n#[kani::stub(Pubkey::create_program_address,no_pda)]\nfn '+name+'(){check::<'+str(v2).lower()+','+str(g)+'>('+str(wrong).lower()+');}\n'
 p='programs/r1-cost-probe/src/NIV_auth.rs';(E/'NIV_auth.patch').write_text('--- /dev/null\n+++ b/'+p+'\n@@ -0,0 +1,'+str(len(t.splitlines()))+' @@\n'+''.join('+'+l for l in t.splitlines(True)))

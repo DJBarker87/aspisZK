@@ -37,5 +37,6 @@ for second,n in [(False,3),(True,7)]:
 kind=sys.argv[1] if len(sys.argv)>1 else 'key'
 if kind=='owner':t=t.replace('kani::assume(f<32)','kani::assume(32<=f&&f<64)').replace('assert!(f<32)','assert!(32<=f&&f<64)')
 elif kind=='meta':t=t.replace('kani::assume(f<32)','kani::assume(64<=f&&f<76)').replace('assert!(f<32)','assert!(64<=f&&f<76)')
+elif kind=='remaining':t=t.replace('kani::assume(f<32)','kani::assume(32<=f&&f<76)').replace('assert!(f<32)','assert!(32<=f&&f<76)')
 else:assert kind=='key'
 p='programs/r1-cost-probe/src/NIV_sdk.rs';(E/'NIV_sdk.patch').write_text('--- /dev/null\n+++ b/'+p+'\n@@ -0,0 +1,'+str(len(t.splitlines()))+' @@\n'+''.join('+'+l for l in t.splitlines(True)))

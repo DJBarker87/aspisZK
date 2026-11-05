@@ -1,0 +1,46 @@
+{"attempt": "NIV_L013", "exit_status": 0, "wall_seconds": 3.081891171867028, "peak_rss_kib": "6079480", "swaps": "0", "print_axioms": ["'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+inductive AdapterRw.solana_program_error.ProgramError : Type
+number of parameters: 0
+constructors:
+AdapterRw.solana_program_error.ProgramError.Custom : Aeneas.Std.U32 → AdapterRw.solana_program_error.ProgramError
+AdapterRw.solana_program_error.ProgramError.InvalidArgument : AdapterRw.solana_program_error.ProgramError
+AdapterRw.solana_program_error.ProgramError.InvalidInstructionData : AdapterRw.solana_program_error.ProgramError
+AdapterRw.solana_program_error.ProgramError.InvalidAccountData : AdapterRw.solana_program_error.ProgramError
+AdapterRw.solana_program_error.ProgramError.AccountDataTooSmall : AdapterRw.solana_program_error.ProgramError
+AdapterRw.solana_program_error.ProgramError.Insuf
+...
+ate Event × List (NGL_EntryRouting.Call Account) :=
+fun {Account State Event} children id accounts data state =>
+  match AspisR1.Hiq_ReleaseRoute.route data with
+  | AspisR1.Hiq_ReleaseRoute.Route.first =>
+    (children.first id accounts data state, [NGL_EntryRouting.Call.first id accounts data])
+  | AspisR1.Hiq_ReleaseRoute.Route.second =>
+    (children.second id accounts data state, [NGL_EntryRouting.Call.second id accounts data])
+  | AspisR1.Hiq_ReleaseRoute.Route.reject =>
+    ({
+        result :=
+          Aeneas.Std.Result.ok
+            (Aeneas.Std.core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+        state := state, effects := [] },
+      [])
+theorem AspisR1.NIS_SdkReads.three_then_exclusive : ∀ {W : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2Trust.S2TrustedSdkBorrow L →
+    ∀ (e : AspisR1.S2W_D189Entry.Entry) (w : W),
+      AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e w 3 →
+        ∃ next,
+          AspisR1.NIS_SdkReads.Reads L e w (List.range 3) next ∧
+            AspisR1.S2Trust.Matches L next (AspisR1.S2Trust.Op.exclusive 2 0 0)
+              (AspisR1.S2Trust.acquire e.heap (e.heap.accounts 2).1 0 0 AspisR1.S2Trust.Kind.exclusive,
+                AspisR1.S2Trust.Reply.guard 0) :=
+fun {W} L sdk e w admission =>
+  let ⟨next, h✝⟩ :=
+    AspisR1.NIS_SdkReads.sequence L sdk e 3 (List.range 3) (fun a member => List.mem_range.mp member) w admission
+  let ⟨reads, ready⟩ := h✝
+  Exists.intro next
+    ⟨reads,
+      AspisR1.NIS_AdmissionSdk.exclusive L sdk e next 3 2 0 0 ready
+        (Decidable.byContradiction fun a => AspisR1.NIS_SdkReads.three_then_exclusive._proof_1 a)⟩
+'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r4e1fe580f2234a4c99999d428767a5c9.scope; invocation ID: 18f59e0a41b344dbb6c7192cbe19eb87

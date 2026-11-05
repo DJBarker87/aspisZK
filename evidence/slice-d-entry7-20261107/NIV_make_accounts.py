@@ -34,5 +34,5 @@ fn check<const G:usize>(wrong:bool){
 for g in range(11):
  for wrong in [False,True]:
   name='guard_'+str(g)+('_wrong' if wrong else '')
-  t+='#[kani::proof] #[kani::unwind(35)]\n#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]\n#[kani::stub(super::OwnedAccount::data,no_data)]\n#[kani::stub(super::require_distinct_accounts::<7>,no_distinct)]\n#[kani::stub(Pubkey::create_program_address,no_pda)]\nfn '+name+'(){check::<'+str(g)+'>('+str(wrong).lower()+');}\n'
+  t+='#[kani::proof] #[kani::unwind(35)]\n#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]\n#[kani::stub(super::require_distinct_accounts::<7>,no_distinct)]\n#[kani::stub(Pubkey::create_program_address,no_pda)]\nfn '+name+'(){check::<'+str(g)+'>('+str(wrong).lower()+');}\n'
 p='programs/r1-cost-probe/src/NIV_accounts.rs';(E/'NIV_accounts.patch').write_text('--- /dev/null\n+++ b/'+p+'\n@@ -0,0 +1,'+str(len(t.splitlines()))+' @@\n'+''.join('+'+l for l in t.splitlines(True)))
