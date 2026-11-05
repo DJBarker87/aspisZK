@@ -1,0 +1,58 @@
+{"attempt": "NGM_L050", "exit_status": 1, "wall_seconds": 4.190526410005987, "peak_rss_kib": "2619596", "swaps": "0", "print_axioms": ["'NGM_ReferenceResult.first_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NGM_ReferenceResult.second_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NGM_ReferenceResult.weights_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NGM_ReferenceResult.pair_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NGM_ReferenceResult.pair_mismatch' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NGM_generated/NGM_ReferenceErrors.lean:37:78: error: unsolved goals
+two : Bool
+next : Usize
+rhs : Word
+error : U8
+round1 pair dot : core.result.Result Word U8
+weights : core.result.Result Unit U8
+⊢ (do
+      let _ ← lift (Usize.wrapping_add 0#usize 1#usize)
+      ok (core.result.Result.Err error)) =
+    ok (core.result.Result.Err error)
+NGM_generated/NGM_ReferenceErrors.lean:41:82: error: unsolved goals
+next : Usize
+rhs first : Word
+error : U8
+weights : core.result.Result Unit U8
+pair dot : core.result.Result Word U8
+⊢ (do
+      let x ← lift (Usize.wrapping_add 0#usize 1#usize)
+      let _ ←
+        match [0#u8, 255#u8, 255#u8, 255#u8, 255#u8, 255#u8, 255#u8][↑x]? with
+          | none => fa
+...
+a̵t̵e̵,̵A̵r̵r̵a̵y̵.̵r̵e̵p̵e̵a̵t̵,̵N̵G̵M̵_̵W̵o̵r̵d̵A̵r̵r̵a̵y̵E̵q̵u̵a̵l̵i̵t̵y̵.̵a̵r̵r̵a̵y̵s̵_̵n̵e̵]̵[̲p̲r̲o̲j̲e̲c̲t̲,̲ ̲f̲i̲n̲i̲s̲h̲_̲r̲e̲f̲,̲ ̲e̲v̲e̲n̲t̲,̲ ̲A̲r̲r̲a̲y̲.̲u̲p̲d̲a̲t̲e̲,̲ ̲A̲r̲r̲a̲y̲.̲r̲e̲p̲e̲a̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGM_generated/NGM_ReferenceErrors.lean:53:83: error: unsolved goals
+next : Usize
+rhs first claim pair : Word
+dot : core.result.Result Word U8
+different : pair ≠ claim
+⊢ (do
+      let x ← lift (Usize.wrapping_add 0#usize 1#usize)
+      let x_1 ←
+        match [0#u8, 255#u8, 255#u8, 255#u8, 255#u8, 255#u8, 255#u8][↑x]? with
+          | none => fail Error.arrayOutOfBounds
+          | some val => ok ⟨[0#u8, 255#u8, 255#u8, 255#u8, 255#u8, 255#u8, 255#u8].set (↑x) 1#u8, ⋯⟩
+      let x_2 ← lift (x.wrapping_add 1#usize)
+      let x_3 ←
+        match (↑x_1)[↑x_2]? with
+          | none => fail Error.arrayOutOfBounds
+          | some val => ok ⟨(↑x_1).set (↑x_2) 2#u8, ⋯⟩
+      let x_4 ← lift (x_2.wrapping_add 1#usize)
+      let _ ←
+        match (↑x_3)[↑x_4]? with
+          | none => fail Error.arrayOutOfBounds
+          | some val => ok ⟨(↑x_3).set (↑x_4) 3#u8, ⋯⟩
+      let _ ← lift (x_4.wrapping_add 1#usize)
+      ok (core.result.Result.Err 3#u8)) =
+    ok (core.result.Result.Err 3#u8)
+'NGM_ReferenceResult.first_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NGM_ReferenceResult.second_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NGM_ReferenceResult.weights_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NGM_ReferenceResult.pair_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NGM_ReferenceResult.pair_mismatch' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r98d235fd9f514d4398f237e413245991.scope; invocation ID: 98321e2e3e4840c691a6484f1a3f9c9a

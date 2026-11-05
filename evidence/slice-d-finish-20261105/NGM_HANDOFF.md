@@ -1,0 +1,11 @@
+# NGM final handoff
+
+Branch codex/cx-slice-d-finish-20261105; no push. **TX2 acceptance path not established.** CLOSED delta: TX2:132 double and TX2:145 shared_two_point_guard. All four tail rows and NFW caller boundary remain OPEN; see NGM_TX2_TAIL.md and NGM_REMAINING.md. Exact incoming predicate and producer obligations: NGM_DOMAIN.md. Source/cohort trust is retained hybrid P6/D188 option A, not a premise retirement.
+
+Budget fully used:100 Kani,70 Lean/audit,3 extraction. Native outcomes49 positive,48 matched negative,3 excluded timeouts (K083/K086/K087); K100 is an unpaired diagnostic. E003 fails Aeneas loop borrow-context collapse. Failed source/model candidates and logs are retained without credit; NGM_FINDINGS.md records replacements. All standard-axiom top theorems have #print axioms. No unchanged timeout/memory failure was retried and no cap/timeout raised.
+
+Final combined L068 passes beside the deployed headline; raw22 new roots L069,109 unique across batches; same compiled walker/driver passed8 fixtures; scan L07013417 modules,zero defects. Exact attempts include target/status/wall/RSS/swap/revision/axioms; NGM_AUDIT.json and NGM_AX2_PROVENANCE.json pin scope. Cached coherent verification only, not a new cold release replay.
+
+Host/cache: prefix-owned workspace and cache; original coherent seed7,586,865,704 bytes/29,968 files,hash-pinned in NGM_CACHE_IMPORTS.json.xz. Own compiled exports and final resource/source checks: NGM_RETENTION.json and NGM_HYGIENE.json. Retain the own cache. Every host proof/build scope admitted with exit0 AND allowed:true,6G/8G/no swap/64 tasks,one own scope at a time. Never touch shared infrastructure or sibling/session A worktrees.
+
+All harnesses live outside the repository in a frozen scratch tree; only patch, scripts, references and receipts are committed. Before each Kani run the offline resolved graph matches the frozen lock,afterward the lock hash is unchanged,and deployed features/KMX hashes are checked. The job changes no shipped source. ELF rebuild trigger did not fire; default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4,devnet63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299,Pool121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548 are inherited pins,not fresh rebuilds. No wallet/key action.
