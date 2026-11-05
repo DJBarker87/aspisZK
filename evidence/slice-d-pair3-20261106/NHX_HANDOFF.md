@@ -1,3 +1,11 @@
+# NHX final handoff
+
+Six new composed rows CLOSED: TX2:133,135,139,140,143,144. Exact domains and evidence: NHX_CLOSED.json / NHX_BRIDGES.md. filled045, pair129, finish115 and NEW127/128 remain OPEN; NHX_PAIR_CONE.md and NHX_REMAINING.md give the exact remaining obligations. No NHM_new or NHM_pair export. Headline AspisR1.RPx_Deployed.deployed NOT ESTABLISHED.
+
+Final L082/L083/L084 PASS: combined/full statement review/raw ax2/coherent NFX-method scan,301 roots,13683 modules, standard axioms only, zero dangling/owner/import mismatches. All15 validator mutations rejected; predecessor NHM gate executed byte-for-byte via AST.120 Kani/80 formal scopes used, no extraction needed because pinned emitted bodies reused. Own objects retained in NHX_EXPORT.json (36 modules,5549489 bytes). Snapshot fingerprints and per-scope resource/revision/axiom records are in each receipt. No passing predecessor replays or unchanged timeout retries.
+
+No shipped files changed, no ELF rebuild triggered, no push, no wallet/key actions. P6/D188 optionA, allocator/Std/ABI/source-to-ELF and approved runtime/cryptographic trust retained, no removal. Changes confined to NHX prefix and this evidence directory. The stage chronology below is historical and superseded by the final status above.
+
 # NHX initial handoff
 
 Active branch codex/cx-slice-d-pair3-20261106. Headline AspisR1.RPx_Deployed.deployed NOT ESTABLISHED. Pair TX2:129 and finish_relation TX2:115 OPEN. Inherited closure and exact domains: NHM_CLOSED.json, cited without rerun. Work order: filled, factored weights, grouped dispatch, shared partials/high, process kind/regular kinds, pair. NHT_HYPOTHESES.md is the exact NEW/pair export interface.

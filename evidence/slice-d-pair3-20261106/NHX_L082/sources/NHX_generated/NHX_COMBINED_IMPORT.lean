@@ -1,0 +1,37 @@
+import NGK_COMBINED_IMPORT
+import NHM_COMBINED_IMPORT
+import NHX_ArraySlots
+import NHX_CommonDomain
+import NHX_EWordLift
+import NHX_FactoredCut
+import NHX_FactoredPacket
+import NHX_FactoredSuffix
+import NHX_FactoredTail
+import NHX_FieldResults
+import NHX_FilledPacket
+import NHX_FilledZero
+import NHX_FinalDomain
+import NHX_FinalFold
+import NHX_FinalLoop
+import NHX_FinalTotal
+import NHX_GroupPacket
+import NHX_HighDomain
+import NHX_HighPost
+import NHX_HighReference
+import NHX_KWordLift
+import NHX_KindIndex
+import NHX_KindInspect
+import NHX_LowDomain
+import NHX_LowScale
+import NHX_Powers7Edge
+import NHX_ProcessKind
+import NHX_ProcessPorts
+import NHX_ProcessPost
+import NHX_ProcessReference
+import NHX_RegularFrame
+import NHX_RegularPost
+import NHX_SharedPacket
+import NHX_VecPort
+set_option autoImplicit false
+#check AspisR1.RPx_Deployed.deployed
+#print axioms AspisR1.RPx_Deployed.deployed
