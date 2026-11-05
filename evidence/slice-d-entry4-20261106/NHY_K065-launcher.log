@@ -1,0 +1,41 @@
+{"attempt": "NHY_K065", "exit_status": 1, "wall_seconds": 11.046673419885337, "peak_rss_kib": "603252", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+_packet` in this scope
+   --> programs/r1-cost-probe/src/NHY_auth.rs:479:94
+    |
+ 15 | #[kani::ensures(|r|*r)] #[kani::modifies()]
+    | ----------------------- similarly named function `policy_wrong_packet` defined here
+...
+479 | fn pda7_wrong(){let bytes:[[u8;32];5]=kani::any();let keys=bytes.map(Pubkey::new_from_array);pda7_wrong_packet(&keys,kani::any(),ka...
+    |                                                                                              ^^^^^^^^^^^^^^^^^ help: a function with a similar name exists: `policy_wrong_packet`
+
+error[E0425]: cannot find function `pda8_packet` in this scope
+   --> programs/r1-cost-probe/src/NHY_auth.rs:502:88
+    |
+502 | fn pda8(){let bytes:[[u8;32];5]=kani::any();let keys=bytes.map(Pubkey::new_from_array);pda8_packet(&keys,kani::any(),kani::any(),ka...
+    |                                                                                        ^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find function `pda8_wrong_packet` in this scope
+   --> programs/r1-cost-probe/src/NHY_auth.rs:525:94
+    |
+ 15 | #[kani::ensures(|r|*r)] #[kani::modifies()]
+    | ----------------------- similarly named function `policy_wrong_packet` defined here
+...
+525 | fn pda8_wrong(){let bytes:[[u8;32];5]=kani::any();let keys=bytes.map(Pubkey::new_from_array);pda8_wrong_packet(&keys,kani::any(),ka...
+    |                                                                                              ^^^^^^^^^^^^^^^^^ help: a function with a similar name exists: `policy_wrong_packet`
+
+For more information about this error, try `rustc --explain E0425`.
+error: could not compile `aspis-r1-cost-probe-program` (lib) due to 54 previous errors; 112 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 54 compilation errors.
+
+Running as unit: run-r8fd7c0447537458082892233ce5a883f.scope; invocation ID: 34896b5942fa44838893d3721dde7c6c

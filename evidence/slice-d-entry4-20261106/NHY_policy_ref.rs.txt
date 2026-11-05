@@ -1,0 +1,1 @@
+pub fn policy_ref(flags:u8,program_zero:bool,authority_zero:bool,binding_zero:bool)->u8{if flags & !3 !=0 {1} else if program_zero||binding_zero {2} else {let immutable=flags&1!=0;let deployment=flags&2!=0;if deployment&&!immutable {3} else if immutable!=authority_zero {3} else {0}}}

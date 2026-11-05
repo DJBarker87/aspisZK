@@ -1,0 +1,46 @@
+{"attempt": "NHY_K067", "exit_status": 1, "wall_seconds": 7.4043475419748574, "peak_rss_kib": "370724", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+auth.rs:490:98
+    |
+490 | ...der=keys[2];let verifier_program=&keys[3];let pool_program=&keys[4];
+    |                    ^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_verifier_program`
+
+warning: unused variable: `registry`
+   --> programs/r1-cost-probe/src/NHY_auth.rs:491:6
+    |
+491 |  let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identi...
+    |      ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_registry`
+
+warning: unused variable: `entry`
+   --> programs/r1-cost-probe/src/NHY_auth.rs:491:52
+    |
+491 |  let registry=NHY_Bumps{bump,programdata_bump};let entry=NHY_Bumps{bump,programdata_bump};let master=NHY_Master{identity:NHY_Identi...
+    |                                                    ^^^^^ help: if this is intentional, prefix it with an underscore: `_entry`
+
+warning: unused variable: `master`
+   --> programs/r1-cost-probe/src/NHY_auth.rs:491:95
+    |
+491 | ...ump,programdata_bump};let master=NHY_Master{identity:NHY_Identity{asset_mint,bump},bump};
+    |                              ^^^^^^ help: if this is intentional, prefix it with an underscore: `_master`
+
+warning: unused variable: `checkpoint`
+   --> programs/r1-cost-probe/src/NHY_auth.rs:492:6
+    |
+492 |  let checkpoint=NHY_Checkpoint{bump,checkpoint_sequence};let output_lane=selected_lane;let selected_lane=NHY_Lane{bump};
+    |      ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_checkpoint`
+
+For more information about this error, try `rustc --explain E0716`.
+error: could not compile `aspis-r1-cost-probe-program` (lib) due to 4 previous errors; 256 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 4 compilation errors.
+
+Running as unit: run-r05ebd94c3f414d0c9306122a089628e9.scope; invocation ID: 63486954a0a2475493164cb7d92a236a

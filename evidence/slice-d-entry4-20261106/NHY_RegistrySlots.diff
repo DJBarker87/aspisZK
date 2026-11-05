@@ -1,0 +1,50 @@
+--- evidence/native-front5-20261028/NDH_RegistrySlots.lean
++++ NHY_RegistrySlots.lean
+@@ -1,7 +1,7 @@
+-import NDH_Reference.Funs
+-import AdapterRwModel
++import NHY_RegistryReference
++import NGJ_VERIFIER_IMPORT
+ set_option autoImplicit false
+-namespace NDH_RegistrySlots
++namespace NHY_RegistrySlots
+ open Aeneas Aeneas.Std Result AdapterRw
+ open aspis_statement.pool_v1.verifier_registry
+ 
+@@ -9,22 +9,22 @@
+ No statement about the lead's installed dictionary is assumed or changed. -/
+ def install (base : Ops) : Ops :=
+   {base with
+-    op25 := fun r => NDH_Reference.flag_ref r.flags 1#u8
+-    op26 := fun r => NDH_Reference.flag_ref r.flags 2#u8
+-    op27 := fun r => NDH_Reference.flag_ref r.flags 1#u8
+-    op28 := fun r => NDH_Reference.flag_ref r.flags 2#u8}
++    op25 := fun r => NHY_RegistryReference.flag_ref r.flags 1#u8
++    op26 := fun r => NHY_RegistryReference.flag_ref r.flags 2#u8
++    op27 := fun r => NHY_RegistryReference.flag_ref r.flags 1#u8
++    op28 := fun r => NHY_RegistryReference.flag_ref r.flags 2#u8}
+ 
+ theorem immutable_v1 (base : Ops) (r : VerifierRegistryV1) :
+-    (install base).op26 r = NDH_Reference.flag_ref r.flags 2#u8 := rfl
++    (install base).op26 r = NHY_RegistryReference.flag_ref r.flags 2#u8 := rfl
+ 
+ theorem paused_v1 (base : Ops) (r : VerifierRegistryV1) :
+-    (install base).op25 r = NDH_Reference.flag_ref r.flags 1#u8 := rfl
++    (install base).op25 r = NHY_RegistryReference.flag_ref r.flags 1#u8 := rfl
+ 
+ theorem immutable_v2 (base : Ops) (r : VerifierRegistryV2) :
+-    (install base).op28 r = NDH_Reference.flag_ref r.flags 2#u8 := rfl
++    (install base).op28 r = NHY_RegistryReference.flag_ref r.flags 2#u8 := rfl
+ 
+ theorem paused_v2 (base : Ops) (r : VerifierRegistryV2) :
+-    (install base).op27 r = NDH_Reference.flag_ref r.flags 1#u8 := rfl
++    (install base).op27 r = NHY_RegistryReference.flag_ref r.flags 1#u8 := rfl
+ 
+ theorem digest_preserved (base : Ops) : (install base).op43 = base.op43 := rfl
+ 
+@@ -36,4 +36,4 @@
+ #print axioms paused_v2
+ #print axioms digest_preserved
+ #print axioms error_preserved
+-end NDH_RegistrySlots
++end NHY_RegistrySlots

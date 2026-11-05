@@ -1,0 +1,47 @@
+{"attempt": "NHY_L070", "exit_status": 1, "wall_seconds": 1.7110227490775287, "peak_rss_kib": "2630748", "swaps": "0", "print_axioms": ["'NHY_NaturalReads.read_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NHY_NaturalReads.magic' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NHY_NaturalReads.zero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NHY_NaturalReads.read32' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NHY_NaturalReads.word' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NHY_generated/NHY_NaturalReads.lean:32:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NCX_Reference.equal (NHY_SliceRead.segment b 0 4) ?m.53
+in the target expression
+  NCX_Reference.equal (NHY_SliceRead.segment b 0 ↑4#usize) m.to_slice = ok (decide (List.take 4 ↑b = ↑m))
+
+b : Slice U8
+m : Std.Array U8 4#usize
+fit : 4 ≤ (↑b).length
+cap : (↑(NHY_SliceRead.segment b 0 4)).length ≤ 768
+⊢ NCX_Reference.equal (NHY_SliceRead.segment b 0 ↑4#usize) m.to_slice = ok (decide (List.take 4 ↑b = ↑m))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semiredu
+...
+ad.segment b 0 ↑4#usize) m.to_slice = ok (decide (List.take 4 ↑b = ↑m))
+
+b : Slice U8
+m : Std.Array U8 4#usize
+fit : 4 ≤ (↑b).length
+cap : (↑(NHY_SliceRead.segment b 0 4)).length ≤ 768
+⊢ NCX_Reference.equal (NHY_SliceRead.segment b 0 ↑4#usize) m.to_slice = ok (decide (List.take 4 ↑b = ↑m))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NHY_generated/NHY_NaturalReads.lean:38:1: error: Tactic `rfl` failed: The left-hand side
+  ok (@decide (↑b = List.replicate (↑b).length 0#u8) (Classical.propDecidable (↑b = List.replicate (↑b).length 0#u8)))
+is not definitionally equal to the right-hand side
+  ok (@decide (↑b = List.replicate (↑b).length 0#u8) (instDecidableEqList (↑b) (List.replicate (↑b).length 0#u8)))
+
+b : Slice U8
+cap : (↑b).length ≤ 768
+⊢ ok (decide (↑b = List.replicate (↑b).length 0#u8)) = ok (decide (↑b = List.replicate (↑b).length 0#u8))
+'NHY_NaturalReads.read_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NHY_NaturalReads.magic' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NHY_NaturalReads.zero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NHY_NaturalReads.read32' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NHY_NaturalReads.word' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r017a4959da0945c6be9bd5168692f436.scope; invocation ID: 5b063e219c054a6b8e99601ee6251f68
