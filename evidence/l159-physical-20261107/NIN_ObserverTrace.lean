@@ -18,15 +18,15 @@ local notation "cfg" => FIp_Install.configuration err base r
 /-- Exact attempted-log transport through partial source coverage. The physical
 export and both chronological caller packets remain producer obligations.
 No syscall totality, sorting, deduplication or successful-only log is used. -/
-theorem outer_from_coverage (physical : F3T_Runtime.Runtime) (native : Bytes → State)
+theorem outer_from_coverage (physical : F3T_Runtime.Runtime) (native : (Bytes → State) → Bytes → State)
     (coverage : ∀ H, ART_PartialAccount.Certificate cfg hashv copy allocator
-      CPH_Program.verifier a native H)
+      CPH_Program.verifier a (native H) H)
     (exported : ∀ H, (eval H physical).1 = (ART_PartialAccount.represented cfg hashv
-      copy allocator CPH_Program.verifier a native H).1) :
+      copy allocator CPH_Program.verifier a (native H) H).1) :
     OuterTrace copy allocator base err r hashv a physical := by
   intro H
   exact (exported H).trans (congrArg Prod.fst
-    (ART_Coverage.execution cfg hashv copy allocator CPH_Program.verifier a native H (coverage H))).symm
+    (ART_Coverage.execution cfg hashv copy allocator CPH_Program.verifier a (native H) H (coverage H))).symm
 
 /-- If the nested exporter records the outer occurrence log, only item 1 is
 needed to establish item 3. Proving this exporter association remains OPEN. -/

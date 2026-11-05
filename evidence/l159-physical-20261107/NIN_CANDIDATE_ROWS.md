@@ -6,19 +6,20 @@ Ruling (aj)(2) classifies NGP-R2 as a D188 source/runtime association obligation
 NOT accepted runtime trust. `NIN_GameProjection.game_fields` proves the admitted
 game's internal association: SAME p/t/u/e1/e2, global checkpoint handle and public
 key, parent success and actual recorded action clauses. `bank_images` exposes
-before/tentative/loaded/success definitions. No extra row is needed for these.
+before/tentative/loaded/success definitions. No extra row is needed for these. external_status_independent proves a model p cannot constrain an unassociated external parent flag; this is logical independence, not a runtime counterexample.
 
 The game does not quantify an external bank implementation, actual event exporter,
 Pool invocation, return register or Solana context. It therefore cannot identify
 p with an independent external projection. Exact remaining predicate is
 `NIN_GameProjection.PhysicalRealization p actualNext actualBefore actualTentative
-actualSuccess actualLoaded actualActions actualEvents actualLayout`. It says:
+actualSuccess actualLoaded actualActions actualEvents actualLayout actualKey`. It says:
 
 * p.next iff actual bank-lineage adjacency;
 * before/tentative equal actual data/lamport images;
 * success equals actual final PARENT status;
 * loaded equals actual next-entry optional bytes;
-* ordered actions/events and account-object layout equal actual projections.
+* ordered actions/events and account-object layout equal actual projections;
+* CPS_PhysicalKey of each projected entry/slot equals the actual public key.
 
 Actual projection functions must come from a pinned D188/native producer; choosing
 them to be p's own projections is not evidence. This predicate is UNUSED by NIN

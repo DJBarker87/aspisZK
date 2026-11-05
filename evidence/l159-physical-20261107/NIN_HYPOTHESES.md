@@ -1,7 +1,11 @@
 # Exact NIN hypothesis inventory
 
-NIN_PhysicalInstance.physical_instance is a **PROVED-conditional model join**.
-Its universal binders are not a certificate that the physical driver produces
+NIN_NativeInstance.from_native is the deployed **PROVED-conditional model join**.
+It derives all prepared/accumulator/domain/digest witnesses from NHW and the
+SAME native accepted wrapper under retained extraction. No KNE output identity
+premise is needed there. NIN_PhysicalInstance.physical_instance is its generic
+conditional packet join.
+The universal binders are not a certificate that the physical driver produces
 those values. There is no existential Cuts input, independent chosen saved CP,
 carrier equality premise, physical Realization premise or alternate recorder.
 All successful/failed attempts and exact kernel signatures are retained.
@@ -20,7 +24,7 @@ All successful/failed attempts and exact kernel signatures are retained.
 | ordinary | RuntimePersistence's exact domain: same global CP key, nonsigner and non-system-owned. OPEN native entry/Pool producer; never inferred from numeric account index. |
 | RuntimePersistence | ACCEPTED data-only TwoTransactionLaw, unchanged. No lamport/owner/metadata/privilege retention inferred. |
 | std and SDK | ACCEPTED TrustedStd copy and S2TrustedSdkBorrow; valid1/valid2, L.related w2 e2.heap retained as exact runtime/native reference admissions. Source-to-runtime realization stays explicit. |
-| f/s/finish1 and proof/public Index/Read/range/length observations | CLOSED S/NGS packet domains; OPEN enclosing native parent observation and original byte snapshots. Both selected from SAME source. Does not certify arbitrary freely chosen cut records. |
+| f/s/finish1 and proof/public Index/Read/range/length observations | CLOSED S/NGS packet domains; OPEN enclosing native parent observation and original byte snapshots. Both selected from SAME source. Cuts.checkpointRead is literally s.checkpoint; NGR saved_to_loaded and NGS_CHECKPOINT.loaded_read derive its byte equality to the SAME saved CP. Does not certify arbitrary freely chosen cut records. |
 | validation/encoding/writerResult/checkpoint2Index/checkpoint2Read/readerResult | OPEN same-call native/source associations, consumed by CLOSED NGS saved_to_carriers. Returned public includes actual reconstruction; verifier CP1768, ASF8 public1880, ASQ8 request320, proof suffix57607 and ASR8 result792 remain distinct. Native/source child dictionary interpretation is retained. |
 | runtime/law | Explicit return-register projection and ACCEPTED nonempty1..1024 RuntimeReturnData. Never the empty-inclusive legacy row. No whole account-heap law. |
 | sameCpi/selectedProgram/noInterveningCpi | OPEN native Pool results. NIB-P1 includes no intervening set/clear and actual write-to-register projection, in addition to no intervening CPI. RuntimeReturnDataClear does not provide call provenance. |
@@ -37,7 +41,7 @@ all indexed by SAME a/configuration/H/source/physical observer. `realizes` only
 organizes their composition; bundling is not discharge.
 
 1. **OuterTrace.** outer_from_coverage proves transport from the actual exported
-   charged native chronology and ART_PartialAccount.Certificate for both phases.
+   charged native chronology and ART_PartialAccount.Certificate for both phases. The native execution is indexed by H; no one fixed native oracle is required to agree with every ROM world.
    The complete native driver/tree/order producer remains OPEN (NIC/NIF),
    including op9 and full abort prefixes. No returned-only readLog replacement.
 2. **AdmittedSupport.** Exact physical observer isSome iff Nonempty ARU_Support.At,

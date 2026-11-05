@@ -15,7 +15,8 @@ def PhysicalRealization {Tx A : Type} (p : CPG_Projection.Observations Tx A)
     (actualSuccess : Tx → Bool) (actualLoaded : Tx → Nat → Option Bytes)
     (actualActions : Tx → List (CPP_BankState.Action A))
     (actualEvents : Tx → List S2X.AccountEvent)
-    (actualLayout : Tx → Hist_RuntimeEntry.Layout) : Prop :=
+    (actualLayout : Tx → Hist_RuntimeEntry.Layout)
+    (actualKey : Tx → Nat → Hist_Authority.Key) : Prop :=
   (∀ t u, p.next t u ↔ actualNext t u) ∧
   (∀ t key, CPG_Projection.before p t key = actualBefore t key) ∧
   (∀ t key, CPG_Projection.tentative p t key = actualTentative t key) ∧
@@ -23,7 +24,8 @@ def PhysicalRealization {Tx A : Type} (p : CPG_Projection.Observations Tx A)
   (∀ t key, CPG_Projection.loaded p t key = actualLoaded t key) ∧
   (∀ t, p.actions t = actualActions t) ∧
   (∀ t, p.physicalEvents t = actualEvents t) ∧
-  (∀ t, p.layout t = actualLayout t)
+  (∀ t, p.layout t = actualLayout t) ∧
+  (∀ t slot, CPS_PhysicalKey.key (CPG_Projection.entry p t) slot = actualKey t slot)
 
 /-- The game itself provides the internal SAME-entry association, including
 public checkpoint key as well as global index. This supplies no external bank
@@ -49,6 +51,19 @@ theorem bank_images {Tx A : Type} (p : CPG_Projection.Observations Tx A) (t : Tx
     CPG_Projection.tentative p t key = CPR_DataPersistence.snapshot (p.parentTentative t) key ∧
     CPG_Projection.loaded p t key = CPR_DataPersistence.visible (CPG_Projection.before p t key) ∧
     CPG_Projection.success p t = CPS_ParentStatus.success (p.parentReply t) := ⟨rfl,rfl,rfl,rfl⟩
+/-- An unassociated external status can disagree with p even when every model
+projection is fixed. This is a logical independence witness, not a claim that
+Solana returns an inverted status. It cannot be repaired by choosing p twice. -/
+theorem external_status_independent {Tx A : Type}
+    (p : CPG_Projection.Observations Tx A) (t : Tx) :
+    ¬ PhysicalRealization p p.next (CPG_Projection.before p) (CPG_Projection.tentative p)
+      (fun u => !(CPG_Projection.success p u)) (CPG_Projection.loaded p)
+      p.actions p.physicalEvents p.layout
+      (fun u slot => CPS_PhysicalKey.key (CPG_Projection.entry p u) slot) := by
+  intro associated
+  have h := associated.2.2.2.1 t
+  cases status : CPG_Projection.success p t <;> simp only [status, Bool.not_false, Bool.not_true] at h <;> cases h
+#print axioms external_status_independent
 #print axioms game_fields
 #print axioms bank_images
 end AspisR1.NIN_GameProjection

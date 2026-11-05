@@ -21,14 +21,14 @@ theorem flag_from_results
     (extraction : S2W_DigestExtraction.AeneasExtraction
       (GExq_Caller.sdk (cfg).adapter (cfg).currentBase (cfg).stageBase (cfg).finish (cfg).reserved
         (cfg).query (cfg).geometry (cfg).boundaries (cfg).std) n1 n2 hashv)
-    (physical : F3T_Runtime.Runtime) (native : Bytes → State)
+    (physical : F3T_Runtime.Runtime) (native : (Bytes → State) → Bytes → State)
     (coverage : ∀ H, ART_PartialAccount.Certificate cfg hashv copy allocator
-      CPH_Program.verifier a native H)
+      CPH_Program.verifier a (native H) H)
     (exported : ∀ H run, (eval H physical).2 = some run → run.2.2 =
-      accepted (ARS_NativeOutcome.wrappers copy allocator CPH_Program.verifier a n1 n2 native)) :
+      accepted (ARS_NativeOutcome.wrappers copy allocator CPH_Program.verifier a n1 n2 (native H))) :
     LiteralFlag copy allocator base err r hashv a physical := by
   intro H run observed
-  rw [ART_Outcome.native cfg hashv copy allocator CPH_Program.verifier a native H
+  rw [ART_Outcome.native cfg hashv copy allocator CPH_Program.verifier a (native H) H
     (coverage H) n1 n2 extraction]
   exact exported H run observed
 

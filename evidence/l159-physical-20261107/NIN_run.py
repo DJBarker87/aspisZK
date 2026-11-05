@@ -38,6 +38,7 @@ if kind=='lean':
  if target in ['NIN_Driver','NIN_ProofDriver','NIN_PoolProofDriver','NIN_PoolDriver']:command+=['-c','NIN_native/'+target+'.c']
 elif kind=='link':
  sources=['NIN_native/'+target+'.c','NIN_native/NFA_WALKER.c','NIN_native/NFA_MemoryLimit.c']
+ for n in sources[1:]:files[n]=(E/n).read_text()
  command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NIN_native/'+target,*sources]
 elif kind=='audit':
  sources=['NIN_generated/NIN_ProofDriver.lean','NIN_generated/NIN_Driver.lean','NIN_batch.py','NIN_AUDIT_ROOTS.json','NIN_AUDIT_MODULES.json','NIN_EXPECTED_IMPORTS.jsonl']+(['NIN_POOL_ROOTS.json'] if target.startswith('pool') else [])

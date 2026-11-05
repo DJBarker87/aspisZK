@@ -3,6 +3,7 @@ import NIM_COMBINED_IMPORT
 import NIM_NHJ_COMBINED_IMPORT
 import NIM_NHY_COMBINED_IMPORT
 import NIN_PhysicalInstance
+import NIN_NativeInstance
 import NIN_ObserverFields
 import NIN_WriterProducer
 import NIN_GameProjection

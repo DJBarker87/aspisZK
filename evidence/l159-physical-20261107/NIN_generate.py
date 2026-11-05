@@ -14,7 +14,7 @@ sig+='''
     (sameVerifierEntry : verifierEntry emitInvocation =
       (((eval H source).2).2.2.get reached).1.entry) :
     (NGP_L159.L159_statement p t u
-      (NIN_Cuts.of_producers f s (((eval H source).2).2.2.get reached).1.entry
+      (NIN_Cuts.of_producers f s
         prepared accumulator domain hp hu hc s_1 authenticated)
       Q (eval H (Hiq_RecordedJoint.program source ARQ_Observer.project
         (ARQ_Observer.select cfg id)))) ∧
@@ -33,13 +33,18 @@ sig=sig.replace('(data1 : Slice U8) (state1 final1 : A)', '(final1 : A)')
 sig=re.sub(r'\bdata1\b', '((eval H source).2).1.data', sig)
 sig=re.sub(r'\bstate1\b', '((eval H source).2).1.state', sig)
 header=s[:s.index('/-- Direct NGR')].replace('import NGS_Carriers','import NIN_Cuts\nimport NIB_ReadToSettlement').replace('AspisR1.NGS_CARRIERS','AspisR1.NIN_PhysicalInstance')
-body='''  let cuts := NIN_Cuts.of_producers f s (((eval H source).2).2.2.get reached).1.entry
+body='''  let cuts := NIN_Cuts.of_producers f s
     prepared accumulator domain hp hu hc emittedStatement authenticated
-  have history : NGP_L159.History_statement p t u cuts := by
-    exact NGR_HISTORY.history_statement prepared accumulator domain hp hu hc p t u
+  obtain ⟨adjacent,keys,parent,copied,size,loaded,buffer,_,_,_⟩ :=
+    NGR_HISTORY.saved_to_loaded prepared accumulator domain hp hu hc p t u
       ((eval H source).2).1.entry (((eval H source).2).2.2.get reached).1.entry
       actions n1 n2 copy std allocator valid1 id system data1 state1 final1 post1
-      game native_writer_result protection ordinary RuntimePersistence L sdk w2 related2 valid2 cuts
+      game native_writer_result protection ordinary RuntimePersistence L sdk w2 related2 valid2
+  have checkpoint := NGS_CHECKPOINT.loaded_read (((eval H source).2).2.2.get reached).1.entry
+    ops s.checkpointAccount s.checkpoint (NGR_HISTORY.checkpoint prepared accumulator domain hp hu hc)
+    checkpoint2Index checkpoint2Read buffer
+  have history : NGP_L159.History_statement p t u cuts :=
+    ⟨adjacent,keys,parent,copied,size,loaded,checkpoint⟩
   have carriers := NGS_CARRIERS.saved_to_carriers base err r hashv copy allocator a H
     Q bound reached prepared accumulator domain hp hu hc p t u n1 n2 actions std valid1
     system data1 state1 final1 post1 game native_writer_result protection ordinary
@@ -50,7 +55,7 @@ body='''  let cuts := NIN_Cuts.of_producers f s (((eval H source).2).2.2.get rea
     context program selected readState state after emittedStatement sameCpi selectedProgram
     noInterveningCpi emitted authenticated events acceptedDecoder validate lane image checked advanced
   exact ⟨⟨history,NIN_Cuts.carrier_or_collision f s
-    (((eval H source).2).2.2.get reached).1.entry prepared accumulator domain hp hu hc
+    prepared accumulator domain hp hu hc
     emittedStatement authenticated Q _ carriers pool.2.2.2.2.1 pool.2.2.2.1⟩,
     (congrArg verifierEntry sameCpi).trans (sameVerifierEntry.trans game.consecutive.2.2)⟩
 
