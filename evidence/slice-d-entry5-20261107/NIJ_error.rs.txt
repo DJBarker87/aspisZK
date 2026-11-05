@@ -399,171 +399,171 @@ fn append_allocation_wrong(){
  let good=text.len()==expected.len()&&text.capacity()>=text.len()&&text.as_bytes()[j]==expected[j];
  drop(text);assert!(!good);
 }
-fn log_error_parse(message:&str){assert!(message.as_bytes()==[1u8,2]);}
+fn log_error_parse(message:&str){assert!(message=="r1:error:Parse");}
 #[kani::proof] #[kani::unwind(35)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
-#[kani::stub(<alloc::string::String as core::fmt::Write>::write_str,writer_parse)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
 #[kani::stub(solana_program::log::sol_log,log_error_parse)]
 fn error_parse(){
  let result=super::error(verifier::Error::Parse);
  assert!(matches!(result,ProgramError::InvalidInstructionData));
 }
-fn log_error_parse_wrong(message:&str){assert!(message.as_bytes()!=[1u8,2]);}
+fn log_error_parse_wrong(message:&str){assert!(message!="r1:error:Parse");}
 #[kani::proof] #[kani::unwind(35)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
-#[kani::stub(<alloc::string::String as core::fmt::Write>::write_str,writer_parse)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
 #[kani::stub(solana_program::log::sol_log,log_error_parse_wrong)]
 fn error_parse_wrong(){
  let result=super::error(verifier::Error::Parse);
  assert!(matches!(result,ProgramError::InvalidInstructionData));
 }
-fn log_error_parse_stability(message:&str){assert!(message.as_bytes()==[1u8,2]);}
+fn log_error_parse_stability(message:&str){assert!(message=="r1:error:Parse");}
 #[kani::proof] #[kani::unwind(35)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
-#[kani::stub(<alloc::string::String as core::fmt::Write>::write_str,writer_parse)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
 #[kani::stub(solana_program::log::sol_log,log_error_parse_stability)]
 fn error_parse_stability(){
  let result=super::error(verifier::Error::Parse);
  assert!(matches!(result,ProgramError::InvalidInstructionData));
 }
-fn log_error_semantic(message:&str){assert!(message.as_bytes()==[1u8,3]);}
+fn log_error_semantic(message:&str){assert!(message=="r1:error:Semantic");}
 #[kani::proof] #[kani::unwind(35)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
-#[kani::stub(<alloc::string::String as core::fmt::Write>::write_str,writer_semantic)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
 #[kani::stub(solana_program::log::sol_log,log_error_semantic)]
 fn error_semantic(){
  let result=super::error(verifier::Error::Semantic);
  assert!(matches!(result,ProgramError::InvalidInstructionData));
 }
-fn log_error_semantic_wrong(message:&str){assert!(message.as_bytes()!=[1u8,3]);}
+fn log_error_semantic_wrong(message:&str){assert!(message!="r1:error:Semantic");}
 #[kani::proof] #[kani::unwind(35)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
-#[kani::stub(<alloc::string::String as core::fmt::Write>::write_str,writer_semantic)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
 #[kani::stub(solana_program::log::sol_log,log_error_semantic_wrong)]
 fn error_semantic_wrong(){
  let result=super::error(verifier::Error::Semantic);
  assert!(matches!(result,ProgramError::InvalidInstructionData));
 }
-fn log_error_transcript(message:&str){assert!(message.as_bytes()==[1u8,4]);}
+fn log_error_transcript(message:&str){assert!(message=="r1:error:Transcript");}
 #[kani::proof] #[kani::unwind(35)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
-#[kani::stub(<alloc::string::String as core::fmt::Write>::write_str,writer_transcript)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
 #[kani::stub(solana_program::log::sol_log,log_error_transcript)]
 fn error_transcript(){
  let result=super::error(verifier::Error::Transcript);
  assert!(matches!(result,ProgramError::InvalidInstructionData));
 }
-fn log_error_transcript_wrong(message:&str){assert!(message.as_bytes()!=[1u8,4]);}
+fn log_error_transcript_wrong(message:&str){assert!(message!="r1:error:Transcript");}
 #[kani::proof] #[kani::unwind(35)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
-#[kani::stub(<alloc::string::String as core::fmt::Write>::write_str,writer_transcript)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
 #[kani::stub(solana_program::log::sol_log,log_error_transcript_wrong)]
 fn error_transcript_wrong(){
  let result=super::error(verifier::Error::Transcript);
  assert!(matches!(result,ProgramError::InvalidInstructionData));
 }
-fn log_error_relation(message:&str){assert!(message.as_bytes()==[1u8,5]);}
+fn log_error_relation(message:&str){assert!(message=="r1:error:Relation");}
 #[kani::proof] #[kani::unwind(35)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
-#[kani::stub(<alloc::string::String as core::fmt::Write>::write_str,writer_relation)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
 #[kani::stub(solana_program::log::sol_log,log_error_relation)]
 fn error_relation(){
  let result=super::error(verifier::Error::Relation);
  assert!(matches!(result,ProgramError::InvalidInstructionData));
 }
-fn log_error_relation_wrong(message:&str){assert!(message.as_bytes()!=[1u8,5]);}
+fn log_error_relation_wrong(message:&str){assert!(message!="r1:error:Relation");}
 #[kani::proof] #[kani::unwind(35)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
-#[kani::stub(<alloc::string::String as core::fmt::Write>::write_str,writer_relation)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
 #[kani::stub(solana_program::log::sol_log,log_error_relation_wrong)]
 fn error_relation_wrong(){
  let result=super::error(verifier::Error::Relation);
  assert!(matches!(result,ProgramError::InvalidInstructionData));
 }
-fn log_error_merkle(message:&str){assert!(message.as_bytes()==[1u8,6]);}
+fn log_error_merkle(message:&str){assert!(message=="r1:error:Merkle");}
 #[kani::proof] #[kani::unwind(35)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
-#[kani::stub(<alloc::string::String as core::fmt::Write>::write_str,writer_merkle)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
 #[kani::stub(solana_program::log::sol_log,log_error_merkle)]
 fn error_merkle(){
  let result=super::error(verifier::Error::Merkle);
  assert!(matches!(result,ProgramError::InvalidInstructionData));
 }
-fn log_error_merkle_wrong(message:&str){assert!(message.as_bytes()!=[1u8,6]);}
+fn log_error_merkle_wrong(message:&str){assert!(message!="r1:error:Merkle");}
 #[kani::proof] #[kani::unwind(35)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
-#[kani::stub(<alloc::string::String as core::fmt::Write>::write_str,writer_merkle)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
 #[kani::stub(solana_program::log::sol_log,log_error_merkle_wrong)]
 fn error_merkle_wrong(){
  let result=super::error(verifier::Error::Merkle);
  assert!(matches!(result,ProgramError::InvalidInstructionData));
 }
-fn log_error_query(message:&str){assert!(message.as_bytes()==[1u8,7]);}
+fn log_error_query(message:&str){assert!(message=="r1:error:Query");}
 #[kani::proof] #[kani::unwind(35)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
-#[kani::stub(<alloc::string::String as core::fmt::Write>::write_str,writer_query)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
 #[kani::stub(solana_program::log::sol_log,log_error_query)]
 fn error_query(){
  let result=super::error(verifier::Error::Query);
  assert!(matches!(result,ProgramError::InvalidInstructionData));
 }
-fn log_error_query_wrong(message:&str){assert!(message.as_bytes()!=[1u8,7]);}
+fn log_error_query_wrong(message:&str){assert!(message!="r1:error:Query");}
 #[kani::proof] #[kani::unwind(35)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
-#[kani::stub(<alloc::string::String as core::fmt::Write>::write_str,writer_query)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
 #[kani::stub(solana_program::log::sol_log,log_error_query_wrong)]
 fn error_query_wrong(){
  let result=super::error(verifier::Error::Query);
  assert!(matches!(result,ProgramError::InvalidInstructionData));
 }
-fn log_error_checkpoint(message:&str){assert!(message.as_bytes()==[1u8,8]);}
+fn log_error_checkpoint(message:&str){assert!(message=="r1:error:Checkpoint");}
 #[kani::proof] #[kani::unwind(35)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
-#[kani::stub(<alloc::string::String as core::fmt::Write>::write_str,writer_checkpoint)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
 #[kani::stub(solana_program::log::sol_log,log_error_checkpoint)]
 fn error_checkpoint(){
  let result=super::error(verifier::Error::Checkpoint);
  assert!(matches!(result,ProgramError::InvalidInstructionData));
 }
-fn log_error_checkpoint_wrong(message:&str){assert!(message.as_bytes()!=[1u8,8]);}
+fn log_error_checkpoint_wrong(message:&str){assert!(message!="r1:error:Checkpoint");}
 #[kani::proof] #[kani::unwind(35)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
-#[kani::stub(<alloc::string::String as core::fmt::Write>::write_str,writer_checkpoint)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
 #[kani::stub(solana_program::log::sol_log,log_error_checkpoint_wrong)]
 fn error_checkpoint_wrong(){
  let result=super::error(verifier::Error::Checkpoint);
  assert!(matches!(result,ProgramError::InvalidInstructionData));
 }
-fn log_error_allocation(message:&str){assert!(message.as_bytes()==[1u8,9]);}
+fn log_error_allocation(message:&str){assert!(message=="r1:error:Allocation");}
 #[kani::proof] #[kani::unwind(35)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
-#[kani::stub(<alloc::string::String as core::fmt::Write>::write_str,writer_allocation)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
 #[kani::stub(solana_program::log::sol_log,log_error_allocation)]
 fn error_allocation(){
  let result=super::error(verifier::Error::Allocation);
  assert!(matches!(result,ProgramError::InvalidInstructionData));
 }
-fn log_error_allocation_wrong(message:&str){assert!(message.as_bytes()!=[1u8,9]);}
+fn log_error_allocation_wrong(message:&str){assert!(message!="r1:error:Allocation");}
 #[kani::proof] #[kani::unwind(35)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
-#[kani::stub(<alloc::string::String as core::fmt::Write>::write_str,writer_allocation)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
 #[kani::stub(solana_program::log::sol_log,log_error_allocation_wrong)]
 fn error_allocation_wrong(){
  let result=super::error(verifier::Error::Allocation);
@@ -749,6 +749,7 @@ fn writer_allocation_body_wrong(){
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
 #[kani::stub(<alloc::string::String as core::fmt::Write>::write_str,writer_parse)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
 fn format_return_parse(){
  // Isolate format's RETURN carrier from the syscall and String Drop suffix.
  let text=core::mem::ManuallyDrop::new(format!("r1:error:{:?}",verifier::Error::Parse));
@@ -758,6 +759,7 @@ fn format_return_parse(){
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
 #[kani::stub(<alloc::string::String as core::fmt::Write>::write_str,writer_parse)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
 fn format_return_parse_wrong(){
  // Isolate format's RETURN carrier from the syscall and String Drop suffix.
  let text=core::mem::ManuallyDrop::new(format!("r1:error:{:?}",verifier::Error::Parse));
@@ -767,6 +769,7 @@ fn format_return_parse_wrong(){
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
 #[kani::stub(<alloc::string::String as core::fmt::Write>::write_str,writer_semantic)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
 fn format_return_semantic(){
  // Isolate format's RETURN carrier from the syscall and String Drop suffix.
  let text=core::mem::ManuallyDrop::new(format!("r1:error:{:?}",verifier::Error::Semantic));
@@ -776,6 +779,7 @@ fn format_return_semantic(){
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
 #[kani::stub(<alloc::string::String as core::fmt::Write>::write_str,writer_semantic)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
 fn format_return_semantic_wrong(){
  // Isolate format's RETURN carrier from the syscall and String Drop suffix.
  let text=core::mem::ManuallyDrop::new(format!("r1:error:{:?}",verifier::Error::Semantic));
@@ -785,6 +789,7 @@ fn format_return_semantic_wrong(){
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
 #[kani::stub(<alloc::string::String as core::fmt::Write>::write_str,writer_transcript)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
 fn format_return_transcript(){
  // Isolate format's RETURN carrier from the syscall and String Drop suffix.
  let text=core::mem::ManuallyDrop::new(format!("r1:error:{:?}",verifier::Error::Transcript));
@@ -794,6 +799,7 @@ fn format_return_transcript(){
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
 #[kani::stub(<alloc::string::String as core::fmt::Write>::write_str,writer_transcript)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
 fn format_return_transcript_wrong(){
  // Isolate format's RETURN carrier from the syscall and String Drop suffix.
  let text=core::mem::ManuallyDrop::new(format!("r1:error:{:?}",verifier::Error::Transcript));
@@ -803,6 +809,7 @@ fn format_return_transcript_wrong(){
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
 #[kani::stub(<alloc::string::String as core::fmt::Write>::write_str,writer_relation)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
 fn format_return_relation(){
  // Isolate format's RETURN carrier from the syscall and String Drop suffix.
  let text=core::mem::ManuallyDrop::new(format!("r1:error:{:?}",verifier::Error::Relation));
@@ -812,6 +819,7 @@ fn format_return_relation(){
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
 #[kani::stub(<alloc::string::String as core::fmt::Write>::write_str,writer_relation)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
 fn format_return_relation_wrong(){
  // Isolate format's RETURN carrier from the syscall and String Drop suffix.
  let text=core::mem::ManuallyDrop::new(format!("r1:error:{:?}",verifier::Error::Relation));
@@ -821,6 +829,7 @@ fn format_return_relation_wrong(){
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
 #[kani::stub(<alloc::string::String as core::fmt::Write>::write_str,writer_merkle)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
 fn format_return_merkle(){
  // Isolate format's RETURN carrier from the syscall and String Drop suffix.
  let text=core::mem::ManuallyDrop::new(format!("r1:error:{:?}",verifier::Error::Merkle));
@@ -830,6 +839,7 @@ fn format_return_merkle(){
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
 #[kani::stub(<alloc::string::String as core::fmt::Write>::write_str,writer_merkle)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
 fn format_return_merkle_wrong(){
  // Isolate format's RETURN carrier from the syscall and String Drop suffix.
  let text=core::mem::ManuallyDrop::new(format!("r1:error:{:?}",verifier::Error::Merkle));
@@ -839,6 +849,7 @@ fn format_return_merkle_wrong(){
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
 #[kani::stub(<alloc::string::String as core::fmt::Write>::write_str,writer_query)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
 fn format_return_query(){
  // Isolate format's RETURN carrier from the syscall and String Drop suffix.
  let text=core::mem::ManuallyDrop::new(format!("r1:error:{:?}",verifier::Error::Query));
@@ -848,6 +859,7 @@ fn format_return_query(){
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
 #[kani::stub(<alloc::string::String as core::fmt::Write>::write_str,writer_query)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
 fn format_return_query_wrong(){
  // Isolate format's RETURN carrier from the syscall and String Drop suffix.
  let text=core::mem::ManuallyDrop::new(format!("r1:error:{:?}",verifier::Error::Query));
@@ -857,6 +869,7 @@ fn format_return_query_wrong(){
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
 #[kani::stub(<alloc::string::String as core::fmt::Write>::write_str,writer_checkpoint)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
 fn format_return_checkpoint(){
  // Isolate format's RETURN carrier from the syscall and String Drop suffix.
  let text=core::mem::ManuallyDrop::new(format!("r1:error:{:?}",verifier::Error::Checkpoint));
@@ -866,6 +879,7 @@ fn format_return_checkpoint(){
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
 #[kani::stub(<alloc::string::String as core::fmt::Write>::write_str,writer_checkpoint)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
 fn format_return_checkpoint_wrong(){
  // Isolate format's RETURN carrier from the syscall and String Drop suffix.
  let text=core::mem::ManuallyDrop::new(format!("r1:error:{:?}",verifier::Error::Checkpoint));
@@ -875,6 +889,7 @@ fn format_return_checkpoint_wrong(){
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
 #[kani::stub(<alloc::string::String as core::fmt::Write>::write_str,writer_allocation)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
 fn format_return_allocation(){
  // Isolate format's RETURN carrier from the syscall and String Drop suffix.
  let text=core::mem::ManuallyDrop::new(format!("r1:error:{:?}",verifier::Error::Allocation));
@@ -884,8 +899,243 @@ fn format_return_allocation(){
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
 #[kani::stub(<alloc::string::String as core::fmt::Write>::write_str,writer_allocation)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
 fn format_return_allocation_wrong(){
  // Isolate format's RETURN carrier from the syscall and String Drop suffix.
  let text=core::mem::ManuallyDrop::new(format!("r1:error:{:?}",verifier::Error::Allocation));
  let good=text.as_bytes()==[1u8,9];assert!(!good);
 }
+
+fn arguments_as_str<'a>(_: &core::fmt::Arguments<'a>)->Option<&'static str> where 'a:'a {None}
+unsafe fn free_cleanup_parse(ptr:*mut u8,layout:alloc::alloc::Layout){
+ assert!(layout.align()==1);assert!(layout.size()==18||layout.size()==36);
+ let prefix=unsafe{core::slice::from_raw_parts(ptr,9)};assert!(prefix==b"r1:error:");
+ if layout.size()==18{let bytes=unsafe{core::slice::from_raw_parts(ptr,14)};assert!(bytes==b"r1:error:Parse");}
+ // Allocator effect is the retained deallocation primitive; this packet logs
+ // its exact pointer/layout/read-only contents and leaves the account frame.
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
+#[kani::stub(alloc::alloc::dealloc,free_cleanup_parse)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
+#[kani::stub(solana_program::log::sol_log,log_error_parse)]
+fn cleanup_parse(){let result=super::error(verifier::Error::Parse);assert!(matches!(result,ProgramError::InvalidInstructionData));}
+unsafe fn free_cleanup_parse_wrong(ptr:*mut u8,layout:alloc::alloc::Layout){
+ assert!(layout.align()==1);assert!(layout.size()==18||layout.size()==36);
+ let prefix=unsafe{core::slice::from_raw_parts(ptr,9)};assert!(prefix==b"r1:error:");
+ if layout.size()==18{let bytes=unsafe{core::slice::from_raw_parts(ptr,14)};assert!(bytes!=b"r1:error:Parse");}
+ // Allocator effect is the retained deallocation primitive; this packet logs
+ // its exact pointer/layout/read-only contents and leaves the account frame.
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
+#[kani::stub(alloc::alloc::dealloc,free_cleanup_parse_wrong)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
+#[kani::stub(solana_program::log::sol_log,log_error_parse)]
+fn cleanup_parse_wrong(){let result=super::error(verifier::Error::Parse);assert!(matches!(result,ProgramError::InvalidInstructionData));}
+unsafe fn free_cleanup_semantic(ptr:*mut u8,layout:alloc::alloc::Layout){
+ assert!(layout.align()==1);assert!(layout.size()==18||layout.size()==36);
+ let prefix=unsafe{core::slice::from_raw_parts(ptr,9)};assert!(prefix==b"r1:error:");
+ if layout.size()==18{let bytes=unsafe{core::slice::from_raw_parts(ptr,17)};assert!(bytes==b"r1:error:Semantic");}
+ // Allocator effect is the retained deallocation primitive; this packet logs
+ // its exact pointer/layout/read-only contents and leaves the account frame.
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
+#[kani::stub(alloc::alloc::dealloc,free_cleanup_semantic)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
+#[kani::stub(solana_program::log::sol_log,log_error_semantic)]
+fn cleanup_semantic(){let result=super::error(verifier::Error::Semantic);assert!(matches!(result,ProgramError::InvalidInstructionData));}
+unsafe fn free_cleanup_semantic_wrong(ptr:*mut u8,layout:alloc::alloc::Layout){
+ assert!(layout.align()==1);assert!(layout.size()==18||layout.size()==36);
+ let prefix=unsafe{core::slice::from_raw_parts(ptr,9)};assert!(prefix==b"r1:error:");
+ if layout.size()==18{let bytes=unsafe{core::slice::from_raw_parts(ptr,17)};assert!(bytes!=b"r1:error:Semantic");}
+ // Allocator effect is the retained deallocation primitive; this packet logs
+ // its exact pointer/layout/read-only contents and leaves the account frame.
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
+#[kani::stub(alloc::alloc::dealloc,free_cleanup_semantic_wrong)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
+#[kani::stub(solana_program::log::sol_log,log_error_semantic)]
+fn cleanup_semantic_wrong(){let result=super::error(verifier::Error::Semantic);assert!(matches!(result,ProgramError::InvalidInstructionData));}
+unsafe fn free_cleanup_transcript(ptr:*mut u8,layout:alloc::alloc::Layout){
+ assert!(layout.align()==1);assert!(layout.size()==18||layout.size()==36);
+ let prefix=unsafe{core::slice::from_raw_parts(ptr,9)};assert!(prefix==b"r1:error:");
+ if layout.size()==36{let bytes=unsafe{core::slice::from_raw_parts(ptr,19)};assert!(bytes==b"r1:error:Transcript");}
+ // Allocator effect is the retained deallocation primitive; this packet logs
+ // its exact pointer/layout/read-only contents and leaves the account frame.
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
+#[kani::stub(alloc::alloc::dealloc,free_cleanup_transcript)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
+#[kani::stub(solana_program::log::sol_log,log_error_transcript)]
+fn cleanup_transcript(){let result=super::error(verifier::Error::Transcript);assert!(matches!(result,ProgramError::InvalidInstructionData));}
+unsafe fn free_cleanup_transcript_wrong(ptr:*mut u8,layout:alloc::alloc::Layout){
+ assert!(layout.align()==1);assert!(layout.size()==18||layout.size()==36);
+ let prefix=unsafe{core::slice::from_raw_parts(ptr,9)};assert!(prefix==b"r1:error:");
+ if layout.size()==36{let bytes=unsafe{core::slice::from_raw_parts(ptr,19)};assert!(bytes!=b"r1:error:Transcript");}
+ // Allocator effect is the retained deallocation primitive; this packet logs
+ // its exact pointer/layout/read-only contents and leaves the account frame.
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
+#[kani::stub(alloc::alloc::dealloc,free_cleanup_transcript_wrong)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
+#[kani::stub(solana_program::log::sol_log,log_error_transcript)]
+fn cleanup_transcript_wrong(){let result=super::error(verifier::Error::Transcript);assert!(matches!(result,ProgramError::InvalidInstructionData));}
+unsafe fn free_cleanup_relation(ptr:*mut u8,layout:alloc::alloc::Layout){
+ assert!(layout.align()==1);assert!(layout.size()==18||layout.size()==36);
+ let prefix=unsafe{core::slice::from_raw_parts(ptr,9)};assert!(prefix==b"r1:error:");
+ if layout.size()==18{let bytes=unsafe{core::slice::from_raw_parts(ptr,17)};assert!(bytes==b"r1:error:Relation");}
+ // Allocator effect is the retained deallocation primitive; this packet logs
+ // its exact pointer/layout/read-only contents and leaves the account frame.
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
+#[kani::stub(alloc::alloc::dealloc,free_cleanup_relation)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
+#[kani::stub(solana_program::log::sol_log,log_error_relation)]
+fn cleanup_relation(){let result=super::error(verifier::Error::Relation);assert!(matches!(result,ProgramError::InvalidInstructionData));}
+unsafe fn free_cleanup_relation_wrong(ptr:*mut u8,layout:alloc::alloc::Layout){
+ assert!(layout.align()==1);assert!(layout.size()==18||layout.size()==36);
+ let prefix=unsafe{core::slice::from_raw_parts(ptr,9)};assert!(prefix==b"r1:error:");
+ if layout.size()==18{let bytes=unsafe{core::slice::from_raw_parts(ptr,17)};assert!(bytes!=b"r1:error:Relation");}
+ // Allocator effect is the retained deallocation primitive; this packet logs
+ // its exact pointer/layout/read-only contents and leaves the account frame.
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
+#[kani::stub(alloc::alloc::dealloc,free_cleanup_relation_wrong)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
+#[kani::stub(solana_program::log::sol_log,log_error_relation)]
+fn cleanup_relation_wrong(){let result=super::error(verifier::Error::Relation);assert!(matches!(result,ProgramError::InvalidInstructionData));}
+unsafe fn free_cleanup_merkle(ptr:*mut u8,layout:alloc::alloc::Layout){
+ assert!(layout.align()==1);assert!(layout.size()==18||layout.size()==36);
+ let prefix=unsafe{core::slice::from_raw_parts(ptr,9)};assert!(prefix==b"r1:error:");
+ if layout.size()==18{let bytes=unsafe{core::slice::from_raw_parts(ptr,15)};assert!(bytes==b"r1:error:Merkle");}
+ // Allocator effect is the retained deallocation primitive; this packet logs
+ // its exact pointer/layout/read-only contents and leaves the account frame.
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
+#[kani::stub(alloc::alloc::dealloc,free_cleanup_merkle)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
+#[kani::stub(solana_program::log::sol_log,log_error_merkle)]
+fn cleanup_merkle(){let result=super::error(verifier::Error::Merkle);assert!(matches!(result,ProgramError::InvalidInstructionData));}
+unsafe fn free_cleanup_merkle_wrong(ptr:*mut u8,layout:alloc::alloc::Layout){
+ assert!(layout.align()==1);assert!(layout.size()==18||layout.size()==36);
+ let prefix=unsafe{core::slice::from_raw_parts(ptr,9)};assert!(prefix==b"r1:error:");
+ if layout.size()==18{let bytes=unsafe{core::slice::from_raw_parts(ptr,15)};assert!(bytes!=b"r1:error:Merkle");}
+ // Allocator effect is the retained deallocation primitive; this packet logs
+ // its exact pointer/layout/read-only contents and leaves the account frame.
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
+#[kani::stub(alloc::alloc::dealloc,free_cleanup_merkle_wrong)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
+#[kani::stub(solana_program::log::sol_log,log_error_merkle)]
+fn cleanup_merkle_wrong(){let result=super::error(verifier::Error::Merkle);assert!(matches!(result,ProgramError::InvalidInstructionData));}
+unsafe fn free_cleanup_query(ptr:*mut u8,layout:alloc::alloc::Layout){
+ assert!(layout.align()==1);assert!(layout.size()==18||layout.size()==36);
+ let prefix=unsafe{core::slice::from_raw_parts(ptr,9)};assert!(prefix==b"r1:error:");
+ if layout.size()==18{let bytes=unsafe{core::slice::from_raw_parts(ptr,14)};assert!(bytes==b"r1:error:Query");}
+ // Allocator effect is the retained deallocation primitive; this packet logs
+ // its exact pointer/layout/read-only contents and leaves the account frame.
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
+#[kani::stub(alloc::alloc::dealloc,free_cleanup_query)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
+#[kani::stub(solana_program::log::sol_log,log_error_query)]
+fn cleanup_query(){let result=super::error(verifier::Error::Query);assert!(matches!(result,ProgramError::InvalidInstructionData));}
+unsafe fn free_cleanup_query_wrong(ptr:*mut u8,layout:alloc::alloc::Layout){
+ assert!(layout.align()==1);assert!(layout.size()==18||layout.size()==36);
+ let prefix=unsafe{core::slice::from_raw_parts(ptr,9)};assert!(prefix==b"r1:error:");
+ if layout.size()==18{let bytes=unsafe{core::slice::from_raw_parts(ptr,14)};assert!(bytes!=b"r1:error:Query");}
+ // Allocator effect is the retained deallocation primitive; this packet logs
+ // its exact pointer/layout/read-only contents and leaves the account frame.
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
+#[kani::stub(alloc::alloc::dealloc,free_cleanup_query_wrong)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
+#[kani::stub(solana_program::log::sol_log,log_error_query)]
+fn cleanup_query_wrong(){let result=super::error(verifier::Error::Query);assert!(matches!(result,ProgramError::InvalidInstructionData));}
+unsafe fn free_cleanup_checkpoint(ptr:*mut u8,layout:alloc::alloc::Layout){
+ assert!(layout.align()==1);assert!(layout.size()==18||layout.size()==36);
+ let prefix=unsafe{core::slice::from_raw_parts(ptr,9)};assert!(prefix==b"r1:error:");
+ if layout.size()==36{let bytes=unsafe{core::slice::from_raw_parts(ptr,19)};assert!(bytes==b"r1:error:Checkpoint");}
+ // Allocator effect is the retained deallocation primitive; this packet logs
+ // its exact pointer/layout/read-only contents and leaves the account frame.
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
+#[kani::stub(alloc::alloc::dealloc,free_cleanup_checkpoint)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
+#[kani::stub(solana_program::log::sol_log,log_error_checkpoint)]
+fn cleanup_checkpoint(){let result=super::error(verifier::Error::Checkpoint);assert!(matches!(result,ProgramError::InvalidInstructionData));}
+unsafe fn free_cleanup_checkpoint_wrong(ptr:*mut u8,layout:alloc::alloc::Layout){
+ assert!(layout.align()==1);assert!(layout.size()==18||layout.size()==36);
+ let prefix=unsafe{core::slice::from_raw_parts(ptr,9)};assert!(prefix==b"r1:error:");
+ if layout.size()==36{let bytes=unsafe{core::slice::from_raw_parts(ptr,19)};assert!(bytes!=b"r1:error:Checkpoint");}
+ // Allocator effect is the retained deallocation primitive; this packet logs
+ // its exact pointer/layout/read-only contents and leaves the account frame.
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
+#[kani::stub(alloc::alloc::dealloc,free_cleanup_checkpoint_wrong)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
+#[kani::stub(solana_program::log::sol_log,log_error_checkpoint)]
+fn cleanup_checkpoint_wrong(){let result=super::error(verifier::Error::Checkpoint);assert!(matches!(result,ProgramError::InvalidInstructionData));}
+unsafe fn free_cleanup_allocation(ptr:*mut u8,layout:alloc::alloc::Layout){
+ assert!(layout.align()==1);assert!(layout.size()==18||layout.size()==36);
+ let prefix=unsafe{core::slice::from_raw_parts(ptr,9)};assert!(prefix==b"r1:error:");
+ if layout.size()==36{let bytes=unsafe{core::slice::from_raw_parts(ptr,19)};assert!(bytes==b"r1:error:Allocation");}
+ // Allocator effect is the retained deallocation primitive; this packet logs
+ // its exact pointer/layout/read-only contents and leaves the account frame.
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
+#[kani::stub(alloc::alloc::dealloc,free_cleanup_allocation)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
+#[kani::stub(solana_program::log::sol_log,log_error_allocation)]
+fn cleanup_allocation(){let result=super::error(verifier::Error::Allocation);assert!(matches!(result,ProgramError::InvalidInstructionData));}
+unsafe fn free_cleanup_allocation_wrong(ptr:*mut u8,layout:alloc::alloc::Layout){
+ assert!(layout.align()==1);assert!(layout.size()==18||layout.size()==36);
+ let prefix=unsafe{core::slice::from_raw_parts(ptr,9)};assert!(prefix==b"r1:error:");
+ if layout.size()==36{let bytes=unsafe{core::slice::from_raw_parts(ptr,19)};assert!(bytes!=b"r1:error:Allocation");}
+ // Allocator effect is the retained deallocation primitive; this packet logs
+ // its exact pointer/layout/read-only contents and leaves the account frame.
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
+#[kani::stub(alloc::alloc::dealloc,free_cleanup_allocation_wrong)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str)]
+#[kani::stub(solana_program::log::sol_log,log_error_allocation)]
+fn cleanup_allocation_wrong(){let result=super::error(verifier::Error::Allocation);assert!(matches!(result,ProgramError::InvalidInstructionData));}
+
+fn arguments_as_str_wrong<'a>(_: &core::fmt::Arguments<'a>)->Option<&'static str> where 'a:'a {Some("corrupted")}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
+#[kani::stub(core::fmt::Arguments::as_str,arguments_as_str_wrong)]
+#[kani::stub(solana_program::log::sol_log,log_error_parse)]
+fn metadata_wrong(){let result=super::error(verifier::Error::Parse);assert!(matches!(result,ProgramError::InvalidInstructionData));}

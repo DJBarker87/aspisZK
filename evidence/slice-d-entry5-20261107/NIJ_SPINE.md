@@ -1,6 +1,6 @@
 # NIJ entry spine — inherited baseline
 
-**NIJ:1 newly CLOSED row/function (TX2:202); inherited NHY14 rows/13 functions and NHJ14 rows retained separately. Zero complete TX1/TX2 paths; target not established.** NHY delta is additive against unchanged NHO599-row ledger (335 CLOSED/264 OPEN →349/250); NHJ14-row delta is retained separately, without duplicating credit. No security, privacy or custody theorem is promoted.
+**NIJ:3 newly CLOSED rows/2 functions (TX2:202 and both error occurrences); inherited NHY14 rows/13 functions and NHJ14 rows retained separately. Zero complete TX1/TX2 paths; target not established.** NHY delta is additive against unchanged NHO599-row ledger (335 CLOSED/264 OPEN →349/250); NHJ14-row delta is retained separately, without duplicating credit. No security, privacy or custody theorem is promoted.
 
 ## Entry roots and distance
 
@@ -68,3 +68,7 @@ One real1768-byte checkpoint iteration K114/115 is native-green; induction and p
 TX1 still needs six OPEN spine rows:330 entry →333 process →344 SDK stage1 →345 stage1_owned →328 first_decoded →094 candidate tx1. TX2 still needs seven OPEN spine rows:213 entry →221 process →240 SDK stage2 →241 stage2_owned →064 tx2_authenticated →065 tx2_common →115 finish_relation. These are exact unresolved row counts on the pinned inherited ledger, not estimates of proof effort. Candidate implementation work is NIH_/NID_/NIG_/lead; NIJ only consumes exact NHL/NHT model boundaries.
 
 Shared side gaps remain: two error occurrences (one function), two authentication parents, V1 decoder/validator suffixes and active-at helpers. Current registry204 and current entry202 are CLOSED. Empty-clear trust distance is zero under(am); wrappers still owe their physical joins. New zero-loop induction is support for existing342, not new row credit. No complete path can be inferred from364/599 CLOSED rows.
+
+## Error-stage distance update
+
+lib::error now CLOSED at TX1:NGB001 and TX2:211; eight real String/Debug instantiations, exact runtime bytes and cleanup packets, no DebugLog promotion. Shared side-error distance is zero. Main path distances remain six OPEN TX1 rows and seven OPEN TX2 rows as listed above; neither authentication parent nor any owned/SDK/process/entry root is inferred CLOSED. Combined ledger366/599 CLOSED.

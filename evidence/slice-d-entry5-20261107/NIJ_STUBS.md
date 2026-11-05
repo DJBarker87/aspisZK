@@ -7,3 +7,11 @@
 | exact KMX_copy_nonoverlapping / KMX_realloc | retained KMX_CopyMeaning and NHY_StringAppend / snapshot frame laws | Exact patch bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67 applied. Matching negative fails in every credited native configuration. No custom copy stub. Decoder producer K056/057 uses exact KMX pointer copy, no semantic callee stub. |
 
 No field multiplication, writable static, Option<fn> value/comparison, stub_verified Result interface or unpaired field arithmetic. Closed decoder uses full explicit error constructors and existing status/validator laws. RuntimeReturnDataClear and RuntimeClockSlotBinding remain accepted by citation; RuntimeCpiReadonlyEntry7 is not used.
+
+## Admitted whole error roots
+
+`arguments_as_str<'a>` returns the explicit Std None constructor, domain ONLY the fixed literal plus one of8 Error values. Paired native real-value certificate NHY_K111/112; formal reference `NIJ_ArgumentMetadata.image`, theorems `capacity/as_str_none/choose`. No generic Arguments/std-body theorem is claimed. Native wrong-stub control NIJ_K109 returns Some(corrupted) and fails at the actual log argument. Every returning caller establishes this domain by its exact source literal and exhaustive Error constructors.
+
+`log_error_<label>` checks the exact real String bytes at sol_log and returns unit unchanged; paired NIJ_ErrorJoin.bytes/source/exhaustive/abort_prefix. Full actual writer roots70..86 matched per label; no writer stub selected there. Runtime logging/allocator abort interpretations remain existing trust, no value modeled.
+
+`free_cleanup_<label>` logs exact actual dealloc pointer/layout/live contents, with cap18 or36, align1. Native87..102 matched failures. Paired `NIJ_StringCleanup.outside/inside/account_frame/growth_frame` under the existing fresh private-allocation/deallocation primitive. These observers do not implement deallocation; actual Drop/dealloc also execute in the separate whole roots. No account/key argument or unreported account write.

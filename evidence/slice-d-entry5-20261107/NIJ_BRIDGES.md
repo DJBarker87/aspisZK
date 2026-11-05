@@ -9,3 +9,7 @@ Formatter support: all8 deployed String writer dispatch instantiations pass with
 NIJ_CheckpointZeroRun.value now proves the actual coherent emitted require_zero loop under cap1768 using symbolic induction, exact wrapping-add/index/suffix association and retained NHY_K114/115 original1768-byte native step. Existing TX1:342 was already CLOSED; this is support for stage1 composition, no duplicate ledger credit. A minimal arithmetic retarget cites FGm_UsizeNext.val after its historical object was unavailable. No large recurrence reduction.
 
 P6/D188 native semantic transport is option-A trust reclassification, not removal. No shipped source change, ELF reproduction, new runtime assumption or security conclusion.
+
+## Error closure
+
+NIJ_ERROR_ASSOCIATION.json supersedes formatter OPEN status above. Both occurrences CLOSED under(y)/(al)/(ak)/(an). Actual whole source roots include real Debug/String formatting, growth, syscall bytes and Drop. Exact NoShortcut metadata alone is substituted, calibrated by retained NHY111/112 every Error on the fixed literal. NIJ109 proves a corrupt Some shortcut changes the actual syscall argument and fails. Per-label full roots70..86 and cleanup87..102 paired, Parse stability72. No String writer stub in the admitted whole roots. Natural message/table/full Result and cleanup account/growth frames compose in L029/L030; all standard axioms, same optimized walker controls and NFX exit0. Trust is retained option-A reclassification. No complete entry path or security claim.

@@ -1,0 +1,238 @@
+use super::*;
+extern crate alloc;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+#[derive(Clone,Copy)]
+struct Log{count:u8,slots:[u8;16]}
+fn mark(log:&mut Log,index:u8,value:bool)->bool{log.slots[log.count as usize]=index;log.count+=1;value}
+fn registry1()->aspis_statement::pool_v1::VerifierRegistryV1{aspis_statement::pool_v1::VerifierRegistryV1{flags:kani::any(),bump:kani::any(),pool:kani::any(),authority:kani::any(),policy_binding:kani::any(),generation:kani::any(),minimum_activation_delay_slots:kani::any()}}
+fn registry2()->aspis_statement::pool_v1::VerifierRegistryV2{aspis_statement::pool_v1::VerifierRegistryV2{flags:kani::any(),bump:kani::any(),pool:kani::any(),authority:kani::any(),policy_binding:kani::any(),generation:kani::any(),minimum_activation_delay_slots:kani::any(),registry_program:kani::any(),loader_program:kani::any(),programdata_address:kani::any(),programdata_bump:kani::any(),executable_hash:kani::any()}}
+fn entry1()->aspis_statement::pool_v1::VerifierRegistryEntryV1{aspis_statement::pool_v1::VerifierRegistryEntryV1{status:arbitrary_status(),statement_version:kani::any(),bump:kani::any(),pool:kani::any(),verifier_program:kani::any(),profile_binding:kani::any(),release_binding:kani::any(),activation_slot:kani::any(),retirement_slot:kani::any(),policy_binding:kani::any()}}
+fn entry2()->aspis_statement::pool_v1::VerifierRegistryEntryV2{aspis_statement::pool_v1::VerifierRegistryEntryV2{status:arbitrary_status(),statement_version:kani::any(),bump:kani::any(),pool:kani::any(),verifier_program:kani::any(),profile_binding:kani::any(),release_binding:kani::any(),loader_program:kani::any(),programdata_address:kani::any(),programdata_bump:kani::any(),executable_hash:kani::any(),expected_upgrade_authority:kani::any(),activation_slot:kani::any(),retirement_slot:kani::any(),policy_binding:kani::any()}}
+fn arbitrary_status()->aspis_statement::pool_v1::VerifierEntryStatusV1{use aspis_statement::pool_v1::VerifierEntryStatusV1::*;let tag:u8=kani::any();kani::assume(tag<4);match tag{0=>Pending,1=>Active,2=>Paused,_=>Retired}}
+fn policy()->aspis_statement::pool_v1::VerifierPolicyV1{aspis_statement::pool_v1::VerifierPolicyV1{flags:kani::any(),registry_program:kani::any(),registry_authority:kani::any(),policy_binding:kani::any()}}
+fn registry_v2_packet(registry:&aspis_statement::pool_v1::VerifierRegistryV2,policy:&aspis_statement::pool_v1::VerifierPolicyV1,master_key:&Pubkey,registry_program:&Pubkey,loader:&Pubkey,registry_programdata:&Pubkey,verifier_program:&Pubkey,verifier_programdata:&Pubkey,current_slot:u64,j:usize){
+ kani::assume(j<16);
+ let mut log=Log{count:0,slots:[255;16]};
+ let result=(||->ProgramResult{if mark(&mut log,0,(registry.pool != master_key.to_bytes())) || mark(&mut log,1,(registry.authority != policy.registry_authority)) || mark(&mut log,2,(registry.policy_binding != policy.policy_binding)) || mark(&mut log,3,(registry.registry_program != registry_program.to_bytes())) || mark(&mut log,4,(registry.loader_program != loader.to_bytes())) || mark(&mut log,5,(registry.programdata_address != registry_programdata.to_bytes())) || mark(&mut log,6,(!registry.is_immutable())) || mark(&mut log,7,(registry.is_paused())) {return Err(ProgramError::InvalidAccountData);}Ok(())})();
+ let flags=[(registry.pool != master_key.to_bytes()),(registry.authority != policy.registry_authority),(registry.policy_binding != policy.policy_binding),(registry.registry_program != registry_program.to_bytes()),(registry.loader_program != loader.to_bytes()),(registry.programdata_address != registry_programdata.to_bytes()),(!registry.is_immutable()),(registry.is_paused())];
+ let first=if flags[0]{0}else{if flags[1]{1}else{if flags[2]{2}else{if flags[3]{3}else{if flags[4]{4}else{if flags[5]{5}else{if flags[6]{6}else{if flags[7]{7}else{8}}}}}}}};
+ let expected_count=if first==8{8}else{first+1};
+ let value=if first==8{matches!(result,Ok(()))}else{matches!(result,Err(ProgramError::InvalidAccountData))};
+ let good=value&&log.count as usize==expected_count&&log.slots[j]==if j<expected_count{j as u8}else{255};
+ assert!(good);
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn registry_v2(){registry_v2_packet(&registry2(),&policy(),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),kani::any(),kani::any());}
+fn registry_v2_wrong_packet(registry:&aspis_statement::pool_v1::VerifierRegistryV2,policy:&aspis_statement::pool_v1::VerifierPolicyV1,master_key:&Pubkey,registry_program:&Pubkey,loader:&Pubkey,registry_programdata:&Pubkey,verifier_program:&Pubkey,verifier_programdata:&Pubkey,current_slot:u64,j:usize){
+ kani::assume(j<16);
+ let mut log=Log{count:0,slots:[255;16]};
+ let result=(||->ProgramResult{if mark(&mut log,0,(registry.pool != master_key.to_bytes())) || mark(&mut log,1,(registry.authority != policy.registry_authority)) || mark(&mut log,2,(registry.policy_binding != policy.policy_binding)) || mark(&mut log,3,(registry.registry_program != registry_program.to_bytes())) || mark(&mut log,4,(registry.loader_program != loader.to_bytes())) || mark(&mut log,5,(registry.programdata_address != registry_programdata.to_bytes())) || mark(&mut log,6,(!registry.is_immutable())) || mark(&mut log,7,(registry.is_paused())) {return Err(ProgramError::InvalidAccountData);}Ok(())})();
+ let flags=[(registry.pool != master_key.to_bytes()),(registry.authority != policy.registry_authority),(registry.policy_binding != policy.policy_binding),(registry.registry_program != registry_program.to_bytes()),(registry.loader_program != loader.to_bytes()),(registry.programdata_address != registry_programdata.to_bytes()),(!registry.is_immutable()),(registry.is_paused())];
+ let first=if flags[0]{0}else{if flags[1]{1}else{if flags[2]{2}else{if flags[3]{3}else{if flags[4]{4}else{if flags[5]{5}else{if flags[6]{6}else{if flags[7]{7}else{8}}}}}}}};
+ let expected_count=if first==8{8}else{first+1};
+ let value=if first==8{matches!(result,Ok(()))}else{matches!(result,Err(ProgramError::InvalidAccountData))};
+ let good=value&&log.count as usize==expected_count&&log.slots[j]==if j<expected_count{j as u8}else{255};
+ assert!(!good);
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn registry_v2_wrong(){registry_v2_wrong_packet(&registry2(),&policy(),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),kani::any(),kani::any());}
+fn entry_v2_packet(entry:&aspis_statement::pool_v1::VerifierRegistryEntryV2,policy:&aspis_statement::pool_v1::VerifierPolicyV1,master_key:&Pubkey,registry_program:&Pubkey,loader:&Pubkey,registry_programdata:&Pubkey,verifier_program:&Pubkey,verifier_programdata:&Pubkey,current_slot:u64,j:usize){
+ kani::assume(j<16);
+ let mut log=Log{count:0,slots:[255;16]};
+ let result=(||->ProgramResult{if mark(&mut log,0,(entry.pool != master_key.to_bytes())) || mark(&mut log,1,(entry.policy_binding != AUDIT_POLICY_BINDING)) || mark(&mut log,2,(entry.verifier_program != verifier_program.to_bytes())) || mark(&mut log,3,(entry.profile_binding != PROFILE_BINDING)) || mark(&mut log,4,(entry.release_binding != RELEASE_BINDING)) || mark(&mut log,5,(entry.statement_version != POOL_V1_PAIR_FOREST_TERMINAL_VERSION)) || mark(&mut log,6,(entry.loader_program != loader.to_bytes())) || mark(&mut log,7,(entry.programdata_address != verifier_programdata.to_bytes())) || mark(&mut log,8,(entry.expected_upgrade_authority != [0u8; 32])) || mark(&mut log,9,(!entry.is_active_at(current_slot))) {return Err(ProgramError::InvalidAccountData);}Ok(())})();
+ let flags=[(entry.pool != master_key.to_bytes()),(entry.policy_binding != AUDIT_POLICY_BINDING),(entry.verifier_program != verifier_program.to_bytes()),(entry.profile_binding != PROFILE_BINDING),(entry.release_binding != RELEASE_BINDING),(entry.statement_version != POOL_V1_PAIR_FOREST_TERMINAL_VERSION),(entry.loader_program != loader.to_bytes()),(entry.programdata_address != verifier_programdata.to_bytes()),(entry.expected_upgrade_authority != [0u8; 32]),(!entry.is_active_at(current_slot))];
+ let first=if flags[0]{0}else{if flags[1]{1}else{if flags[2]{2}else{if flags[3]{3}else{if flags[4]{4}else{if flags[5]{5}else{if flags[6]{6}else{if flags[7]{7}else{if flags[8]{8}else{if flags[9]{9}else{10}}}}}}}}}};
+ let expected_count=if first==10{10}else{first+1};
+ let value=if first==10{matches!(result,Ok(()))}else{matches!(result,Err(ProgramError::InvalidAccountData))};
+ let good=value&&log.count as usize==expected_count&&log.slots[j]==if j<expected_count{j as u8}else{255};
+ assert!(good);
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn entry_v2(){entry_v2_packet(&entry2(),&policy(),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),kani::any(),kani::any());}
+fn entry_v2_wrong_packet(entry:&aspis_statement::pool_v1::VerifierRegistryEntryV2,policy:&aspis_statement::pool_v1::VerifierPolicyV1,master_key:&Pubkey,registry_program:&Pubkey,loader:&Pubkey,registry_programdata:&Pubkey,verifier_program:&Pubkey,verifier_programdata:&Pubkey,current_slot:u64,j:usize){
+ kani::assume(j<16);
+ let mut log=Log{count:0,slots:[255;16]};
+ let result=(||->ProgramResult{if mark(&mut log,0,(entry.pool != master_key.to_bytes())) || mark(&mut log,1,(entry.policy_binding != AUDIT_POLICY_BINDING)) || mark(&mut log,2,(entry.verifier_program != verifier_program.to_bytes())) || mark(&mut log,3,(entry.profile_binding != PROFILE_BINDING)) || mark(&mut log,4,(entry.release_binding != RELEASE_BINDING)) || mark(&mut log,5,(entry.statement_version != POOL_V1_PAIR_FOREST_TERMINAL_VERSION)) || mark(&mut log,6,(entry.loader_program != loader.to_bytes())) || mark(&mut log,7,(entry.programdata_address != verifier_programdata.to_bytes())) || mark(&mut log,8,(entry.expected_upgrade_authority != [0u8; 32])) || mark(&mut log,9,(!entry.is_active_at(current_slot))) {return Err(ProgramError::InvalidAccountData);}Ok(())})();
+ let flags=[(entry.pool != master_key.to_bytes()),(entry.policy_binding != AUDIT_POLICY_BINDING),(entry.verifier_program != verifier_program.to_bytes()),(entry.profile_binding != PROFILE_BINDING),(entry.release_binding != RELEASE_BINDING),(entry.statement_version != POOL_V1_PAIR_FOREST_TERMINAL_VERSION),(entry.loader_program != loader.to_bytes()),(entry.programdata_address != verifier_programdata.to_bytes()),(entry.expected_upgrade_authority != [0u8; 32]),(!entry.is_active_at(current_slot))];
+ let first=if flags[0]{0}else{if flags[1]{1}else{if flags[2]{2}else{if flags[3]{3}else{if flags[4]{4}else{if flags[5]{5}else{if flags[6]{6}else{if flags[7]{7}else{if flags[8]{8}else{if flags[9]{9}else{10}}}}}}}}}};
+ let expected_count=if first==10{10}else{first+1};
+ let value=if first==10{matches!(result,Ok(()))}else{matches!(result,Err(ProgramError::InvalidAccountData))};
+ let good=value&&log.count as usize==expected_count&&log.slots[j]==if j<expected_count{j as u8}else{255};
+ assert!(!good);
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn entry_v2_wrong(){entry_v2_wrong_packet(&entry2(),&policy(),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),kani::any(),kani::any());}
+fn registry_v1_packet(registry:&aspis_statement::pool_v1::VerifierRegistryV1,policy:&aspis_statement::pool_v1::VerifierPolicyV1,master_key:&Pubkey,registry_program:&Pubkey,loader:&Pubkey,registry_programdata:&Pubkey,verifier_program:&Pubkey,verifier_programdata:&Pubkey,current_slot:u64,j:usize){
+ kani::assume(j<16);
+ let mut log=Log{count:0,slots:[255;16]};
+ let result=(||->ProgramResult{if mark(&mut log,0,(registry.pool != master_key.to_bytes())) || mark(&mut log,1,(registry.authority != policy.registry_authority)) || mark(&mut log,2,(registry.policy_binding != policy.policy_binding)) || mark(&mut log,3,(!registry.is_immutable())) || mark(&mut log,4,(registry.is_paused())) {return Err(ProgramError::InvalidAccountData);}Ok(())})();
+ let flags=[(registry.pool != master_key.to_bytes()),(registry.authority != policy.registry_authority),(registry.policy_binding != policy.policy_binding),(!registry.is_immutable()),(registry.is_paused())];
+ let first=if flags[0]{0}else{if flags[1]{1}else{if flags[2]{2}else{if flags[3]{3}else{if flags[4]{4}else{5}}}}};
+ let expected_count=if first==5{5}else{first+1};
+ let value=if first==5{matches!(result,Ok(()))}else{matches!(result,Err(ProgramError::InvalidAccountData))};
+ let good=value&&log.count as usize==expected_count&&log.slots[j]==if j<expected_count{j as u8}else{255};
+ assert!(good);
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn registry_v1(){registry_v1_packet(&registry1(),&policy(),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),kani::any(),kani::any());}
+fn registry_v1_wrong_packet(registry:&aspis_statement::pool_v1::VerifierRegistryV1,policy:&aspis_statement::pool_v1::VerifierPolicyV1,master_key:&Pubkey,registry_program:&Pubkey,loader:&Pubkey,registry_programdata:&Pubkey,verifier_program:&Pubkey,verifier_programdata:&Pubkey,current_slot:u64,j:usize){
+ kani::assume(j<16);
+ let mut log=Log{count:0,slots:[255;16]};
+ let result=(||->ProgramResult{if mark(&mut log,0,(registry.pool != master_key.to_bytes())) || mark(&mut log,1,(registry.authority != policy.registry_authority)) || mark(&mut log,2,(registry.policy_binding != policy.policy_binding)) || mark(&mut log,3,(!registry.is_immutable())) || mark(&mut log,4,(registry.is_paused())) {return Err(ProgramError::InvalidAccountData);}Ok(())})();
+ let flags=[(registry.pool != master_key.to_bytes()),(registry.authority != policy.registry_authority),(registry.policy_binding != policy.policy_binding),(!registry.is_immutable()),(registry.is_paused())];
+ let first=if flags[0]{0}else{if flags[1]{1}else{if flags[2]{2}else{if flags[3]{3}else{if flags[4]{4}else{5}}}}};
+ let expected_count=if first==5{5}else{first+1};
+ let value=if first==5{matches!(result,Ok(()))}else{matches!(result,Err(ProgramError::InvalidAccountData))};
+ let good=value&&log.count as usize==expected_count&&log.slots[j]==if j<expected_count{j as u8}else{255};
+ assert!(!good);
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn registry_v1_wrong(){registry_v1_wrong_packet(&registry1(),&policy(),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),kani::any(),kani::any());}
+fn entry_v1_packet(entry:&aspis_statement::pool_v1::VerifierRegistryEntryV1,policy:&aspis_statement::pool_v1::VerifierPolicyV1,master_key:&Pubkey,registry_program:&Pubkey,loader:&Pubkey,registry_programdata:&Pubkey,verifier_program:&Pubkey,verifier_programdata:&Pubkey,current_slot:u64,j:usize){
+ kani::assume(j<16);
+ let mut log=Log{count:0,slots:[255;16]};
+ let result=(||->ProgramResult{if mark(&mut log,0,(entry.pool != master_key.to_bytes())) || mark(&mut log,1,(entry.policy_binding != AUDIT_POLICY_BINDING)) || mark(&mut log,2,(entry.verifier_program != verifier_program.to_bytes())) || mark(&mut log,3,(entry.profile_binding != PROFILE_BINDING)) || mark(&mut log,4,(entry.release_binding != RELEASE_BINDING)) || mark(&mut log,5,(entry.statement_version != POOL_V1_PAIR_FOREST_TERMINAL_VERSION)) || mark(&mut log,6,(!entry.is_active_at(current_slot))) {return Err(ProgramError::InvalidAccountData);}Ok(())})();
+ let flags=[(entry.pool != master_key.to_bytes()),(entry.policy_binding != AUDIT_POLICY_BINDING),(entry.verifier_program != verifier_program.to_bytes()),(entry.profile_binding != PROFILE_BINDING),(entry.release_binding != RELEASE_BINDING),(entry.statement_version != POOL_V1_PAIR_FOREST_TERMINAL_VERSION),(!entry.is_active_at(current_slot))];
+ let first=if flags[0]{0}else{if flags[1]{1}else{if flags[2]{2}else{if flags[3]{3}else{if flags[4]{4}else{if flags[5]{5}else{if flags[6]{6}else{7}}}}}}};
+ let expected_count=if first==7{7}else{first+1};
+ let value=if first==7{matches!(result,Ok(()))}else{matches!(result,Err(ProgramError::InvalidAccountData))};
+ let good=value&&log.count as usize==expected_count&&log.slots[j]==if j<expected_count{j as u8}else{255};
+ assert!(good);
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn entry_v1(){entry_v1_packet(&entry1(),&policy(),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),kani::any(),kani::any());}
+fn entry_v1_wrong_packet(entry:&aspis_statement::pool_v1::VerifierRegistryEntryV1,policy:&aspis_statement::pool_v1::VerifierPolicyV1,master_key:&Pubkey,registry_program:&Pubkey,loader:&Pubkey,registry_programdata:&Pubkey,verifier_program:&Pubkey,verifier_programdata:&Pubkey,current_slot:u64,j:usize){
+ kani::assume(j<16);
+ let mut log=Log{count:0,slots:[255;16]};
+ let result=(||->ProgramResult{if mark(&mut log,0,(entry.pool != master_key.to_bytes())) || mark(&mut log,1,(entry.policy_binding != AUDIT_POLICY_BINDING)) || mark(&mut log,2,(entry.verifier_program != verifier_program.to_bytes())) || mark(&mut log,3,(entry.profile_binding != PROFILE_BINDING)) || mark(&mut log,4,(entry.release_binding != RELEASE_BINDING)) || mark(&mut log,5,(entry.statement_version != POOL_V1_PAIR_FOREST_TERMINAL_VERSION)) || mark(&mut log,6,(!entry.is_active_at(current_slot))) {return Err(ProgramError::InvalidAccountData);}Ok(())})();
+ let flags=[(entry.pool != master_key.to_bytes()),(entry.policy_binding != AUDIT_POLICY_BINDING),(entry.verifier_program != verifier_program.to_bytes()),(entry.profile_binding != PROFILE_BINDING),(entry.release_binding != RELEASE_BINDING),(entry.statement_version != POOL_V1_PAIR_FOREST_TERMINAL_VERSION),(!entry.is_active_at(current_slot))];
+ let first=if flags[0]{0}else{if flags[1]{1}else{if flags[2]{2}else{if flags[3]{3}else{if flags[4]{4}else{if flags[5]{5}else{if flags[6]{6}else{7}}}}}}};
+ let expected_count=if first==7{7}else{first+1};
+ let value=if first==7{matches!(result,Ok(()))}else{matches!(result,Err(ProgramError::InvalidAccountData))};
+ let good=value&&log.count as usize==expected_count&&log.slots[j]==if j<expected_count{j as u8}else{255};
+ assert!(!good);
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn entry_v1_wrong(){entry_v1_wrong_packet(&entry1(),&policy(),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),&Pubkey::new_from_array(kani::any()),kani::any(),kani::any());}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn asq8_master(){
+ let first:bool=kani::any();let second:bool=kani::any();let tag:u8=kani::any();kani::assume(tag<4);
+ let expected=Pubkey::new_from_array(kani::any());let returned=Pubkey::new_from_array(kani::any());
+ use solana_program::pubkey::PubkeyError::*;
+ let reply=match tag{0=>Ok(returned),1=>Err(MaxSeedLengthExceeded),2=>Err(InvalidSeeds),_=>Err(IllegalOwner)};
+ let mut pda_calls=0u8;let mut observed_tag=255u8;
+ let result=(||->ProgramResult{
+  if first || second || {pda_calls+=1;observed_tag=tag;reply.map_err(|_|ProgramError::InvalidAccountData)? != expected}
+  {return Err(ProgramError::InvalidAccountData);}
+  Ok(())
+ })();
+ let expected_calls=if first||second{0}else{1};
+ let expected_ok=!first&&!second&&tag==0&&returned==expected;
+ let good=pda_calls==expected_calls&&observed_tag==if expected_calls==0{255}else{tag}
+  &&if expected_ok{matches!(result,Ok(()))}else{matches!(result,Err(ProgramError::InvalidAccountData))};
+ assert!(good);
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn asq8_master_wrong(){
+ let first:bool=kani::any();let second:bool=kani::any();let tag:u8=kani::any();kani::assume(tag<4);
+ let expected=Pubkey::new_from_array(kani::any());let returned=Pubkey::new_from_array(kani::any());
+ use solana_program::pubkey::PubkeyError::*;
+ let reply=match tag{0=>Ok(returned),1=>Err(MaxSeedLengthExceeded),2=>Err(InvalidSeeds),_=>Err(IllegalOwner)};
+ let mut pda_calls=0u8;let mut observed_tag=255u8;
+ let result=(||->ProgramResult{
+  if first || second || {pda_calls+=1;observed_tag=tag;reply.map_err(|_|ProgramError::InvalidAccountData)? != expected}
+  {return Err(ProgramError::InvalidAccountData);}
+  Ok(())
+ })();
+ let expected_calls=if first||second{0}else{1};
+ let expected_ok=!first&&!second&&tag==0&&returned==expected;
+ let good=pda_calls==expected_calls&&observed_tag==if expected_calls==0{255}else{tag}
+  &&if expected_ok{matches!(result,Ok(()))}else{matches!(result,Err(ProgramError::InvalidAccountData))};
+ assert!(!good);
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn asq8_checkpoint(){
+ let first:bool=kani::any();let second:bool=kani::any();let tag:u8=kani::any();kani::assume(tag<4);
+ let expected=Pubkey::new_from_array(kani::any());let returned=Pubkey::new_from_array(kani::any());
+ use solana_program::pubkey::PubkeyError::*;
+ let reply=match tag{0=>Ok(returned),1=>Err(MaxSeedLengthExceeded),2=>Err(InvalidSeeds),_=>Err(IllegalOwner)};
+ let mut pda_calls=0u8;let mut observed_tag=255u8;
+ let result=(||->ProgramResult{
+  if first || second || {pda_calls+=1;observed_tag=tag;reply.map_err(|_|ProgramError::InvalidAccountData)? != expected}
+  {return Err(ProgramError::InvalidAccountData);}
+  Ok(())
+ })();
+ let expected_calls=if first||second{0}else{1};
+ let expected_ok=!first&&!second&&tag==0&&returned==expected;
+ let good=pda_calls==expected_calls&&observed_tag==if expected_calls==0{255}else{tag}
+  &&if expected_ok{matches!(result,Ok(()))}else{matches!(result,Err(ProgramError::InvalidAccountData))};
+ assert!(good);
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn asq8_checkpoint_wrong(){
+ let first:bool=kani::any();let second:bool=kani::any();let tag:u8=kani::any();kani::assume(tag<4);
+ let expected=Pubkey::new_from_array(kani::any());let returned=Pubkey::new_from_array(kani::any());
+ use solana_program::pubkey::PubkeyError::*;
+ let reply=match tag{0=>Ok(returned),1=>Err(MaxSeedLengthExceeded),2=>Err(InvalidSeeds),_=>Err(IllegalOwner)};
+ let mut pda_calls=0u8;let mut observed_tag=255u8;
+ let result=(||->ProgramResult{
+  if first || second || {pda_calls+=1;observed_tag=tag;reply.map_err(|_|ProgramError::InvalidAccountData)? != expected}
+  {return Err(ProgramError::InvalidAccountData);}
+  Ok(())
+ })();
+ let expected_calls=if first||second{0}else{1};
+ let expected_ok=!first&&!second&&tag==0&&returned==expected;
+ let good=pda_calls==expected_calls&&observed_tag==if expected_calls==0{255}else{tag}
+  &&if expected_ok{matches!(result,Ok(()))}else{matches!(result,Err(ProgramError::InvalidAccountData))};
+ assert!(!good);
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn asq8_lane(){
+ let first:bool=kani::any();let second:bool=kani::any();let tag:u8=kani::any();kani::assume(tag<4);
+ let expected=Pubkey::new_from_array(kani::any());let returned=Pubkey::new_from_array(kani::any());
+ use solana_program::pubkey::PubkeyError::*;
+ let reply=match tag{0=>Ok(returned),1=>Err(MaxSeedLengthExceeded),2=>Err(InvalidSeeds),_=>Err(IllegalOwner)};
+ let mut pda_calls=0u8;let mut observed_tag=255u8;
+ let result=(||->ProgramResult{
+  if first || second || {pda_calls+=1;observed_tag=tag;reply.map_err(|_|ProgramError::InvalidAccountData)? != expected}
+  {return Err(ProgramError::InvalidAccountData);}
+  Ok(())
+ })();
+ let expected_calls=if first||second{0}else{1};
+ let expected_ok=!first&&!second&&tag==0&&returned==expected;
+ let good=pda_calls==expected_calls&&observed_tag==if expected_calls==0{255}else{tag}
+  &&if expected_ok{matches!(result,Ok(()))}else{matches!(result,Err(ProgramError::InvalidAccountData))};
+ assert!(good);
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn asq8_lane_wrong(){
+ let first:bool=kani::any();let second:bool=kani::any();let tag:u8=kani::any();kani::assume(tag<4);
+ let expected=Pubkey::new_from_array(kani::any());let returned=Pubkey::new_from_array(kani::any());
+ use solana_program::pubkey::PubkeyError::*;
+ let reply=match tag{0=>Ok(returned),1=>Err(MaxSeedLengthExceeded),2=>Err(InvalidSeeds),_=>Err(IllegalOwner)};
+ let mut pda_calls=0u8;let mut observed_tag=255u8;
+ let result=(||->ProgramResult{
+  if first || second || {pda_calls+=1;observed_tag=tag;reply.map_err(|_|ProgramError::InvalidAccountData)? != expected}
+  {return Err(ProgramError::InvalidAccountData);}
+  Ok(())
+ })();
+ let expected_calls=if first||second{0}else{1};
+ let expected_ok=!first&&!second&&tag==0&&returned==expected;
+ let good=pda_calls==expected_calls&&observed_tag==if expected_calls==0{255}else{tag}
+  &&if expected_ok{matches!(result,Ok(()))}else{matches!(result,Err(ProgramError::InvalidAccountData))};
+ assert!(!good);
+}
