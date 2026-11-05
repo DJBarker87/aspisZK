@@ -1,0 +1,37 @@
+--- a/crates/aspis-core/src/lib.rs
++++ b/crates/aspis-core/src/lib.rs
+@@ -14,1 +14,2 @@
+ #![no_std]
++#![cfg_attr(kani,feature(allocator_api))]
+@@ -97,3 +97,5 @@
+ 
+ #[cfg(feature = "r0-op-count")]
+ pub mod r0_op_count;
++
++#[cfg(kani)] #[path="NHX_filled.rs"] mod NHX_filled;
+--- /dev/null
++++ b/crates/aspis-core/src/NHX_filled.rs
+@@ -0,0 +1,23 @@
++extern crate alloc;
++use alloc::boxed::Box;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn exercise(g:usize){
++ let before:[[u32;4];64]=kani::any();let value:[u32;4]=kani::any();
++ let p:usize=kani::any();kani::assume(p<64);
++ let k:usize=kani::any();kani::assume(k<p+1);
++ let limb:usize=kani::any();kani::assume(limb<4);
++ let raw=Box::into_raw(Box::new(before)) as *mut [u32;4];
++ let mut out=unsafe{Vec::from_raw_parts(raw,p,64)};
++ out.resize(p+1,value);
++ let good=match g{
++ 0=>out.len()==p+1&&out.as_ptr()==raw&&out.capacity()==64,
++ 1=>out[p][limb]==value[limb],
++ _=>out[k][limb]==if k<p{before[k][limb]}else{value[limb]}
++ };
++ assert!(if cfg!(NHX_invert){!good}else{good});
++}
++macro_rules! gate{($name:ident,$g:expr)=>{#[kani::proof]#[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn $name(){exercise($g)}};}
++gate!(write_shape,0);gate!(write_value,1);gate!(write_frame,2);

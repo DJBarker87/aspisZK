@@ -1,0 +1,20 @@
+struct Producers{lhs:[K;8],rhs:[K;8],tag:[u8;8],replies:[K;8],count:usize}
+fn qm(a:K,b:K,l:&mut Producers)->K{let i=l.count;l.lhs[i]=a;l.rhs[i]=b;l.tag[i]=0;l.count+=1;l.replies[i]}
+fn qs(a:K,l:&mut Producers)->K{let i=l.count;l.lhs[i]=a;l.rhs[i]=a;l.tag[i]=1;l.count+=1;l.replies[i]}
+fn producer_cut(extra:K,l:&mut Producers)->([K;4],[K;4],K,K){
+ let q0=K::ONE;
+ let q1=qm(q0,extra,l);let q2=qm(q1,extra,l);let q3=qm(q2,extra,l);let _q4=qm(q3,extra,l);
+ let q=[q0,q1,q2,q3];let q4=qs(q[2],l);let q8=qs(q4,l);let q12=qm(q8,q4,l);let q16=qs(q8,l);
+ (q,[K::ONE,q4,q8,q12],q4,q16)
+}
+fn producer_check(g:usize){
+ let extra=anyk();let replies=core::array::from_fn(|_|anyk());
+ let mut l=Producers{lhs:[K::ZERO;8],rhs:[K::ZERO;8],tag:[255;8],replies,count:0};
+ let (low,high,q4,q16)=producer_cut(extra,&mut l);
+ if cfg!(NHX_corrupt){if g<8{l.lhs[g]=K::ZERO;l.rhs[g]=K::ZERO;l.tag[g]=255;}else{l.count+=1;}}
+ let a=[K::ONE,replies[0],replies[1],replies[2],replies[1],replies[4],replies[5],replies[5]];
+ let b=[extra,extra,extra,extra,replies[1],replies[4],replies[4],replies[5]];
+ let good=if g<8{l.lhs[g]==a[g]&&l.rhs[g]==b[g]&&l.tag[g]==if g==4||g==5||g==7{1}else{0}}
+ else{l.count==8&&low==[K::ONE,replies[0],replies[1],replies[2]]&&high==[K::ONE,replies[4],replies[5],replies[6]]&&q4==replies[4]&&q16==replies[7]};
+ assert!(good);
+}
