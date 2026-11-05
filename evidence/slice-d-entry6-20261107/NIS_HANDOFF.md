@@ -9,3 +9,5 @@ Stage2: canonical NIM import retarget of NIJ model modules, no duplicate declara
 Budget120 Kani /90 Lean /1 preflight-gated extraction. One capped scope at a time; fresh allowed:true AND exit0 admission;6G high/8G max/swap0/tasks64, Lean-M7000. No cap/timeout increase or unchanged timed-out/memory-killed replay. Own target only. New modules NIS_ only. Exact result/argv/revision/source/dependency pins/wall/RSS/swap/axioms recorded per attempt.
 
 No shipped source or key changes. Runtime/SDK/Std/allocator/compiler/P6/D188 tool trust retained and reclassified, never removed. Frozen3, deployed headline, L154,100-bit per-attempt soundness, privacy and two transactions unchanged. Commits local, no push.
+
+Stage1 completed:45 exact native configurations,22 positives/23 matched failing controls, every verdict reproduced. NIS_RERUN.json records immutable originals plus path relocation; NIS_validate_rerun.py validates semantic flags/env/source/graph/lock/admission/isolation. No new rows admitted until step2 gate. Seed6,537,304 bytes; NIJ export pins and NIM export hashes verified.
