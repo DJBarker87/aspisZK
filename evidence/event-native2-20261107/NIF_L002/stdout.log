@@ -1,0 +1,69 @@
+NIF_generated/NIF_Inspect.lean:4:7: error(lean.unknownIdentifier): Unknown constant `OraclePortCompactDraft.scan`
+NIF_generated/NIF_Inspect.lean:5:7: error(lean.unknownIdentifier): Unknown constant `OraclePortCompactDraft.canonical`
+def AspisR1.Port4B_Opening.opening : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Usize → Aeneas.Std.Result (Aeneas.Std.Slice Aeneas.Std.U8) :=
+fun proof i => do
+  let offset ← Aeneas.Std.lift (i.wrapping_mul 832#usize)
+  let start ← Aeneas.Std.lift (Aeneas.Std.Usize.wrapping_add 10055#usize offset)
+  let finish ← Aeneas.Std.lift (start.wrapping_add 832#usize)
+  Aeneas.Std.core.slice.index.Slice.index (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) proof
+      { start := start, «end» := finish }
+theorem AspisR1.Op4P_Install.scan_of_success : ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    AspisR1.Op4P_Install.sourceBody proof = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+      AspisR1.OraclePortCompactDraft.scan (AspisR1.MultiproofConeCanonical.bytesOf ↑proof) :=
+fun proof length success =>
+  Decidable.casesOn
+    (Classical.propDecidable (AspisR1.OraclePortCompactDraft.scan (AspisR1.MultiproofConeCanonical.bytesOf ↑proof)))
+    (fun h =>
+      let ⟨⟩ := Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+      Eq.mp
+        (congrFun'
+          (congrArg Eq
+            (Aeneas.Std.bind_tc_ok (Aeneas.Std.core.result.Result.Err Op4P_Extract.Op4P_reference.Error.Parse) fun y =>
+              match y with
+              | Aeneas.Std.core.result.Result.Ok PUnit.unit =>
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+              | Aeneas.Std.core.result.Result.Err Op4P_Extract.Op4P_reference.Error.Parse =>
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err AspisR1CurrentCaller.verifier.Error.Parse)))
+          (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())))
+        (Eq.mp
+          (congrFun'
+            (congrArg Eq
+              (congrFun' (congrArg bind (congrArg Aeneas.Std.Result.ok (if_neg h))) fun r =>
+                match r with
+                | Aeneas.Std.core.result.Result.Ok PUnit.unit =>
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+                | Aeneas.Std.core.result.Result.Err Op4P_Extract.Op4P_reference.Error.Parse =>
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err AspisR1CurrentCaller.verifier.Error.Parse)))
+            (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())))
+          (Eq.mp
+            (congrArg
+              (fun _a =>
+                (do
+                    let r ← _a
+                    match r with
+                      | Aeneas.Std.core.result.Result.Ok PUnit.unit =>
+                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+                      | Aeneas.Std.core.result.Result.Err Op4P_Extract.Op4P_reference.Error.Parse =>
+                        Aeneas.Std.Result.ok
+                          (Aeneas.Std.core.result.Result.Err AspisR1CurrentCaller.verifier.Error.Parse)) =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()))
+              (AspisR1.Op4P_Refinement.reference_total proof length))
+            (Eq.mp
+              (congrArg (fun _a => _a = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()))
+                (AspisR1.Op4P_Install.sourceBody.eq_1 proof))
+              success))))
+    fun h => h
+NIF_generated/NIF_Inspect.lean:8:7: error(lean.unknownIdentifier): Unknown constant `AspisR1.NHL_Tx1Frame.children`
+def FIo_Native.weights.field : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Usize → Aeneas.Std.Result FIo_Native.aspis_core.field.wide_exact.WideExact :=
+fun bytes i => do
+  let i1 ← Aeneas.Std.lift (i.wrapping_mul 32#usize)
+  let i2 ← Aeneas.Std.lift (i.wrapping_add 1#usize)
+  let i3 ← Aeneas.Std.lift (i2.wrapping_mul 32#usize)
+  let s ←
+    Aeneas.Std.core.slice.index.Slice.index (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) bytes
+        { start := i1, «end» := i3 }
+  let o ← FIo_Native.aspis_core.field.wide_exact.WideExact.from_le_bytes s
+  Aeneas.Std.core.option.Option.unwrap o

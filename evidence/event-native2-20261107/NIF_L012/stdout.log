@@ -1,0 +1,123 @@
+NIF_generated/NIF_FieldDomain.lean:35:53: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+bytes : Slice U8
+size : (↑bytes).length = 128
+checked : canonical (bytesOf ↑bytes)
+i : Usize
+inside : ↑i < 4
+start : Usize := i.wrapping_mul 32#usize
+finish : Usize := (i.wrapping_add 1#usize).wrapping_mul 32#usize
+⊢ ↑i * ↑32#usize < UScalar.size UScalarTy.Usize
+NIF_generated/NIF_FieldDomain.lean:36:2: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  0 ≤ e ≤ 3
+  32*e - f ≥ 1
+where
+ e := ↑↑i
+ f := ↑↑i * ↑↑32#usize
+NIF_generated/NIF_FieldDomain.lean:39:54: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+bytes : Slice U8
+size : (↑bytes).length = 128
+checked : canonical (bytesOf ↑bytes)
+i : Usize
+inside : ↑i < 4
+start : Usize := i.wrapping_mul 32#usize
+finish : Usize := (i.wrapping_add 1#usize).wrapping_mul 32#usize
+sv : ↑start = 32 * ↑i
+⊢ ↑i + ↑1#usize < UScalar.size UScalarTy.Usize
+NIF_generated/NIF_FieldDomain.lean:42:58: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+bytes : Slice U8
+size : (↑bytes).length = 128
+checked : canonical (bytesOf ↑bytes)
+i : Usize
+inside : ↑i < 4
+start : Usize := i.wrapping_mul 32#usize
+finish : Usize := (i.wrapping_add 1#usize).wrapping_mul 32#usize
+sv : ↑start = 32 * ↑i
+next : ↑(i.wrapping_add 1#usize) = ↑i + 1
+⊢ (↑i + 1) * ↑32#usize < UScalar.size UScalarTy.Usize
+NIF_generated/NIF_FieldDomain.lean:43:2: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  1 ≤ e ≤ 4
+  32*e - f ≥ 1
+where
+ e := ↑↑(i.wrapping_add 1#usize)
+ f := ↑(↑i + 1) * ↑↑32#usize
+NIF_generated/NIF_FieldDomain.lean:45:48: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  f ≥ 33
+  0 ≤ e ≤ 3
+  e ≥ 0
+  e ≥ -1
+  e ≤ 3
+where
+ e := ↑↑i
+ f := ↑↑32#usize
+NIF_generated/NIF_FieldDomain.lean:56:15: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FIo_Native.aspis_core.field.wide_exact.WideExact.from_le_bytes part.to_slice
+in the target expression
+  (do
+      let s ← ok part.to_slice
+      let o ← FIo_Native.aspis_core.field.wide_exact.WideExact.from_le_bytes s
+      core.option.Option.unwrap o) =
+    ok (NIF_WideBytes.decode part)
+
+bytes : Slice U8
+size : (↑bytes).length = 128
+checked : canonical (bytesOf ↑bytes)
+i : Usize
+inside : ↑i < 4
+start : Usize := i.wrapping_mul 32#usize
+finish : Usize := (i.wrapping_add 1#usize).wrapping_mul 32#usize
+sv : ↑start = 32 * ↑i
+fv : ↑finish = 32 * (↑i + 1)
+part : Std.Array U8 32#usize := ⟨List.take 32 (List.drop (32 * ↑i) ↑bytes), ⋯⟩
+hc : NIF_WideBytes.Canonical part
+read :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+      { start := start, «end» := finish } =
+    ok (MultiproofConeSlices.sub bytes start finish)
+same : MultiproofConeSlices.sub bytes start finish = part.to_slice
+⊢ (do
+      let s ← ok part.to_slice
+      let o ← FIo_Native.aspis_core.field.wide_exact.WideExact.from_le_bytes s
+      core.option.Option.unwrap o) =
+    ok (NIF_WideBytes.decode part)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NIF_generated/NIF_FieldDomain.lean:50:38: warning: This simp argument is unused:
+  List.slice
+
+Hint: Omit it from the simp argument list.
+  simp only [̵M̵u̵l̵t̵i̵p̵r̵o̵o̵f̵C̵o̵n̵e̵S̵l̵i̵c̵e̵s̵.̵s̵u̵b̵,̵L̵i̵s̵t̵.̵s̵l̵i̵c̵e̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵s̵v̵,̵f̵v̵,̵p̵a̵r̵t̵]̵[̲M̲u̲l̲t̲i̲p̲r̲o̲o̲f̲C̲o̲n̲e̲S̲l̲i̲c̲e̲s̲.̲s̲u̲b̲,̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲ ̲s̲v̲,̲ ̲f̲v̲,̲ ̲p̲a̲r̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NIF_FieldDomain.read_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NIF_FieldDomain.canonical_window' depends on axioms: [propext, Quot.sound]
+'AspisR1.NIF_FieldDomain.selected' depends on axioms: [propext, Classical.choice, Quot.sound]

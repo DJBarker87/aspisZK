@@ -1,0 +1,60 @@
+{"attempt": "NIF_L012", "exit_status": 1, "wall_seconds": 4.762663761852309, "peak_rss_kib": "5903644", "swaps": "0", "print_axioms": ["'AspisR1.NIF_FieldDomain.read_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NIF_FieldDomain.canonical_window' depends on axioms: [propext, Quot.sound]", "'AspisR1.NIF_FieldDomain.selected' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NIF_generated/NIF_FieldDomain.lean:35:53: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+bytes : Slice U8
+size : (↑bytes).length = 128
+checked : canonical (bytesOf ↑bytes)
+i : Usize
+inside : ↑i < 4
+start : Usize := i.wrapping_mul 32#usize
+finish : Usize := (i.wrapping_add 1#usize).wrapping_mul 32#usize
+⊢ ↑i * ↑32#usize < UScalar.size UScalarTy.Usize
+NIF_generated/NIF_FieldDomain.lean:36:2: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  0 ≤ e ≤ 3
+  32*e - f ≥ 1
+where
+ e := ↑↑i
+ f := ↑↑i * ↑↑32#usize
+NIF_generated/NIF_FieldDomain.lean:39:54: error: sc
+...
+2 * ↑i) ↑bytes), ⋯⟩
+hc : NIF_WideBytes.Canonical part
+read :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+      { start := start, «end» := finish } =
+    ok (MultiproofConeSlices.sub bytes start finish)
+same : MultiproofConeSlices.sub bytes start finish = part.to_slice
+⊢ (do
+      let s ← ok part.to_slice
+      let o ← FIo_Native.aspis_core.field.wide_exact.WideExact.from_le_bytes s
+      core.option.Option.unwrap o) =
+    ok (NIF_WideBytes.decode part)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NIF_generated/NIF_FieldDomain.lean:50:38: warning: This simp argument is unused:
+  List.slice
+
+Hint: Omit it from the simp argument list.
+  simp only [̵M̵u̵l̵t̵i̵p̵r̵o̵o̵f̵C̵o̵n̵e̵S̵l̵i̵c̵e̵s̵.̵s̵u̵b̵,̵L̵i̵s̵t̵.̵s̵l̵i̵c̵e̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵s̵v̵,̵f̵v̵,̵p̵a̵r̵t̵]̵[̲M̲u̲l̲t̲i̲p̲r̲o̲o̲f̲C̲o̲n̲e̲S̲l̲i̲c̲e̲s̲.̲s̲u̲b̲,̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲ ̲s̲v̲,̲ ̲f̲v̲,̲ ̲p̲a̲r̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NIF_FieldDomain.read_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NIF_FieldDomain.canonical_window' depends on axioms: [propext, Quot.sound]
+'AspisR1.NIF_FieldDomain.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r312bec9a53fa4ab68a7c11be2506139e.scope; invocation ID: 2fbe5e2cc4f34ce8bdc5370beffffa4f
