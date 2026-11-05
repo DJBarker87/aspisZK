@@ -26,6 +26,16 @@ RuntimeClockSlotBinding and ReviewedTranscription-prepared_claim are ADDED-LEAD,
 | POOL.prefix_to_cpi (B) | OPEN | native production association |
 | POOL.read_to_settlement (D) | OPEN | same-CPI settlement |
 
+## TOOL-BOUNDARY rows
+
+| Row | Function | Status |
+|---|---|---|
+| TX1:036 | crates/aspis-core/src/field.rs::qm31_accumulate_product_channels | OPEN |
+| TX1:040 | crates/aspis-core/src/field.rs::qm31_sum_products2 | OPEN |
+| TX1:041 | crates/aspis-core/src/field.rs::qm31_sum_products3 | OPEN |
+| TX1:043 | crates/aspis-core/src/field.rs::qm31_sum_products4 | OPEN |
+| TX1:044 | crates/aspis-core/src/field.rs::qm31_sum_products_small | OPEN |
+
 ## Verifier inventory
 
 | Row | Function | Status | Route/boundary | Provider |

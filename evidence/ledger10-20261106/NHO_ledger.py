@@ -26,6 +26,11 @@ def build():
   d=next((R/'evidence').glob('*/'+a+'_HANDOFF.md')).parent;p=d/(a+'_LEDGER_DELTA.json');x=J(p)
   ids=x.get('new_closed_rows',x.get('newly_closed',x.get('new_rows',[])))
   if isinstance(ids,int):ids=x['changed_rows']
+  mirror=E/'NHO_replay_outputs'/p.relative_to(R)
+  if mirror.is_file():
+   replay=J(mirror);replayids=replay.get('new_closed_rows',replay.get('newly_closed',replay.get('new_rows',[])))
+   if isinstance(replayids,int):replayids=replay['changed_rows']
+   assert set(ids)==set(replayids),(a,'regenerated delta differs')
   certpath=d/(a+'_CLOSED.json');cert=J(certpath);fs=cert.get('functions',[]);new=[]
   if a=='NGY':fs=[dict(cert,rows=cert['closed'])]
   if a=='NHF':fs=[dict(cert,rows=cert['rows'],function=cert['functions'][0],details=J(d/'NHF_CERTIFICATES.json'))]
@@ -66,5 +71,5 @@ def build():
  for n,v in [('all',coverage),*tx.items(),*slices.items()]:lines.append('| '+n+' | '+' | '.join(str(v[k])for k in ['total','CLOSED','QUALIFIED','OPEN'])+' |')
  lines+=['','The supplied deltas reproduce 335/599 CLOSED, ten above the approximate request estimate. 34 claimed occurrences minus two already CLOSED NGX overlaps produce32 new rows. NHO_COUNT_RECONCILIATION.json retains exact membership; no graph or source change. NGW credit requires NHE_L001 scanner rerun exit0.','', 'Routes are explicit per row: (y), (ad), (ae), (ah), (ai), (al), and reclassification. Pool A uses (af), outside599. NHH CM31::inv is a fixed M31::inv specialization; generic CM31::inv_with remains OPEN under the K-2 quarantine. TOOL-BOUNDARY TX1:036/040/041/043/044 remain OPEN.','', 'RuntimeClockSlotBinding and ReviewedTranscription-prepared_claim are ADDED-LEAD, the latter used by TX1:193 under (ah). RuntimeCpiReadonlyEntry7 is ADDED-PENDING-LEAD and UNUSED. RuntimeReturnData (nonempty1..1024) and RuntimeMemcmp remain ACCEPTED. P6/D188 option A is reclassification, never removal. L154 is a statement parameter; coherent digest/error op43/op44.','','## Pool consumer rows (outside599)','','| Row | Status | Route |','|---|---|---|','| Pool meta association A | CLOSED by reclassification | (af) |','| '+pool_rows[0]['row']+' | CLOSED | (y) |','| POOL.prefix_to_cpi (B) | OPEN | native production association |','| POOL.read_to_settlement (D) | OPEN | same-CPI settlement |','','## Verifier inventory','','| Row | Function | Status | Route/boundary | Provider |','|---|---|---|---|---|']
  lines+=['| '+r['row']+' | '+r['function']+' | '+r['composed_status']+' | '+str(r.get('NHO_boundary')or r['NHO_route']or'')+' | '+str(r['NHO_provider'])+' |'for r in out['rows']]
- (E/'NHO_LEDGER.md').write_text('\n'.join(lines)+'\n');print(json.dumps(dict(coverage=coverage,slices=slices,per_tx=tx)))
+ (E/'NHO_LEDGER.md').write_text(('\n'.join(lines)+'\n').replace('## Verifier inventory','## TOOL-BOUNDARY rows\n\n| Row | Function | Status |\n|---|---|---|\n| TX1:036 | crates/aspis-core/src/field.rs::qm31_accumulate_product_channels | OPEN |\n| TX1:040 | crates/aspis-core/src/field.rs::qm31_sum_products2 | OPEN |\n| TX1:041 | crates/aspis-core/src/field.rs::qm31_sum_products3 | OPEN |\n| TX1:043 | crates/aspis-core/src/field.rs::qm31_sum_products4 | OPEN |\n| TX1:044 | crates/aspis-core/src/field.rs::qm31_sum_products_small | OPEN |'+'\n\n## Verifier inventory'));print(json.dumps(dict(coverage=coverage,slices=slices,per_tx=tx)))
 if __name__=='__main__':build()

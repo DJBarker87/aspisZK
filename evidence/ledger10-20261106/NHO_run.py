@@ -89,7 +89,7 @@ print(json.dumps(out))
 for n,t in json.loads(r.stdout).items():
  p=E/n;p.parent.mkdir(parents=True,exist_ok=True)
  if n.startswith('NEP_') and n.endswith('_REACHABLE.txt'):
-  raw=t.encode();(E/('NHO_'+n+'.sha256')).write_text(hashlib.sha256(raw).hexdigest()+'\n');(E/('NHO_'+n+'.xz')).write_bytes(lzma.compress(raw,preset=6))
+  raw=t.encode();(E/('NHO_'+n+'.sha256')).write_text(hashlib.sha256(raw).hexdigest()+'\n');(E/('NHO_'+n+'.xz')).write_bytes(lzma.compress(raw,preset=6 if len(raw)>20_000_000 else 1))
  else:p.write_text(t)
 assert (E/a/'receipt.json').exists(),'Missing receipt; never resubmit'
 rc=json.loads((E/a/'receipt.json').read_text());entry={k:v for k,v in rc.items() if k!='deps_fingerprint'};entry['full_receipt']=a+'/receipt.json'
