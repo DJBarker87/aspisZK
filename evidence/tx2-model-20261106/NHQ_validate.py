@@ -6,7 +6,7 @@ sha=lambda b:hashlib.sha256(b).hexdigest()
 selected={'NHQ_Tx2CommonModel':'NHQ_L011','NHQ_Tx2AuthModel':'NHQ_L029','NHQ_FinishRelationModel':'NHQ_L021','NHQ_PacketPorts':'NHQ_L014','NHQ_RoundDomain':'NHQ_L020','NHQ_WeightPort':'NHQ_L025','NHQ_FinishPackets':'NHQ_L022','NHQ_FinishFrames':'NHQ_L026','NHQ_QueryFrame':'NHQ_L028','NHQ_COMBINED_IMPORT':'NHQ_L031'}
 std={'propext','Classical.choice','Quot.sound'}
 pack=json.loads((E/'NHQ_PACK.json').read_text())
-receipts=[json.loads(p.read_text()) for p in E.glob('NHQ_[LE]???/receipt.json')]
+receipts=[json.loads(p.read_text()) for p in sorted(E.glob('NHQ_[LE]???/receipt.json'))]
 for r in receipts:
  a=r['attempt'];ad=json.loads((E/(a+'-admission.json')).read_text())
  assert ad['exit']==0 and ad['reservation']['allowed'] is True,a
