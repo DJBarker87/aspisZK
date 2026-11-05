@@ -46,6 +46,7 @@ theorem step (w : W) (hf : NHI_TensorOuterStep.Factors w)
   s.1.start.val s.2 l after)
  (law : QMul l.lhs l.rhs l.reply) (last : s.1.end.val=16) :
  ∃ rest,NHX_CommonDomain.body w s=ok (.cont (rest,after)) ∧
+ core.iter.range.IteratorRange.next core.iter.range.StepUsize s.1=ok (some s.1.start,rest) ∧
  rest.end.val=16 ∧ rest.start.val=s.1.start.val+1 := by
  let rows := NHI_ScalarDomain.pick w.factors 0 (by decide)
  let row2 := NHI_ScalarDomain.pick rows 2 (by decide)
@@ -56,7 +57,7 @@ theorem step (w : W) (hf : NHI_TensorOuterStep.Factors w)
   (hf 0 (by decide) 3 (by decide)) s.2 after l cut law
  have lo := NIT_IndexLemmas.mask s.1.start
  have hi := NIT_IndexLemmas.shift s.1.start
- refine ⟨rest,?_,by rw [he];exact last,inc⟩
+ refine ⟨rest,?_,next,by rw [he];exact last,inc⟩
  simp only [NHX_CommonDomain.body,FIo_Native.weights.Weights.pair_loop1.body,next,bind_tc_ok]
  dsimp! only
  simp only [lift,bind_tc_ok]

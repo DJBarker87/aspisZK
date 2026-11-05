@@ -1,0 +1,41 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+fn q(x:[u32;4])->K{K{c0:aspis_core::field::CM31{a:M31(x[0]),b:M31(x[1])},c1:aspis_core::field::CM31{a:M31(x[2]),b:M31(x[3])}}}
+fn anyq()->K{q(kani::any())}
+fn qw(x:K)->[u32;4]{[x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0]}
+fn anye()->E{let v:[u32;8]=kani::any();for x in v{kani::assume(x<0x7fffffff);}E::from_limbs(v).unwrap()}
+struct Tail{who:*const Weights,bytes:*const u8,len:usize,low:*const E,low_len:usize,
+ ap0:*const E,ap1:*const E,extra:[K;2],group_reply:E,libra_reply:[E;4],events:[u8;2],count:usize}
+fn group(w:&Weights,f:&[u8],low:&[E;16],l:&mut Tail)->E{
+ l.who=w;l.bytes=f.as_ptr();l.len=f.len();l.low=low.as_ptr();l.low_len=low.len();
+ l.events[l.count]=0;l.count+=1;l.group_reply
+}
+fn factored(ap0:&[E;4],ap1:&[E;4],extra:[K;2],l:&mut Tail)->[E;4]{
+ l.ap0=ap0.as_ptr();l.ap1=ap1.as_ptr();l.extra=extra;
+ l.events[l.count]=1;l.count+=1;l.libra_reply
+}
+// weights.rs:315-316, exactly the S2 two-fold caller stage. No field arithmetic.
+fn grouped_to_libra(w:&Weights,f:&[u8],low:&[E;16],ap0:&[E;4],ap1:&[E;4],parts:&mut[E;7],l:&mut Tail)->[E;4]{
+ parts[0]=group(w,f,low,l);
+ if w.variant==Variant::S2{factored(ap0,ap1,w.extra,l)}else{panic!("outside S2 stage")}
+}
+// weights.rs:326, exact returned pair expression after the final loop.
+fn returned_pair(sum:E)->Result<E,Error>{Ok(sum)}
+#[kani::proof]#[kani::unwind(2050)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn tail_observation(){
+ let w=Weights{variant:Variant::S2,factors:core::array::from_fn(|_|core::array::from_fn(|_|core::array::from_fn(|_|anyq()))),points:core::array::from_fn(|_|core::array::from_fn(|_|anyq())),extra:[anyq(),anyq()]};
+ let f:[u8;2048]=kani::any();let low=core::array::from_fn(|_|anye());let ap0=core::array::from_fn(|_|anye());let ap1=core::array::from_fn(|_|anye());
+ let before=core::array::from_fn(|_|anye());let mut parts=before;
+ let mut l=Tail{who:core::ptr::null(),bytes:core::ptr::null(),len:0,low:core::ptr::null(),low_len:0,ap0:core::ptr::null(),ap1:core::ptr::null(),extra:[K::ZERO;2],group_reply:anye(),libra_reply:core::array::from_fn(|_|anye()),events:[99;2],count:0};
+ let libra=grouped_to_libra(&w,&f,&low,&ap0,&ap1,&mut parts,&mut l);
+ let sum=anye();let out=returned_pair(sum);
+ let slot:usize=kani::any();kani::assume(slot<7);let limb:usize=kani::any();kani::assume(limb<8);let side:usize=kani::any();kani::assume(side<4);
+ if cfg!(NIT_corrupt){l.group_reply=E::ZERO;l.extra[side&1]=K::ZERO;}
+ assert!(l.who==&w as *const Weights&&l.bytes==f.as_ptr()&&l.len==2048&&l.low==low.as_ptr()&&l.low_len==16);
+ assert!(l.ap0==ap0.as_ptr()&&l.ap1==ap1.as_ptr()&&qw(l.extra[side&1])[limb&3]==qw(w.extra[side&1])[limb&3]&&l.count==2&&l.events==[0,1]);
+ assert!(parts[slot].to_limbs()[limb]==if slot==0{l.group_reply}else{before[slot]}.to_limbs()[limb]);
+ assert!(libra[side].to_limbs()[limb]==l.libra_reply[side].to_limbs()[limb]);
+ assert!(out.map(|x|x.to_limbs()).map_err(|_|())==Ok(sum.to_limbs()));
+}

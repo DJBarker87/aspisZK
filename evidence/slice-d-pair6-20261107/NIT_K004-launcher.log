@@ -1,0 +1,48 @@
+{"attempt": "NIT_K004", "exit_status": 1, "wall_seconds": 61.61474410095252, "peak_rss_kib": "3462184", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-d-pair6-20261107/NIT_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `
+...
+);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-slice-d-pair6-20261107/NIT_src/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 2.19s
+Checking harness weights::NIT_tail::tail_observation...
+
+VERIFICATION RESULT:
+ ** 2 of 624 failed (1 unreachable)
+Failed Checks: assertion failed: parts[slot].to_limbs()[limb] ==
+    if slot == 0 { l.group_reply } else { before[slot] }.to_limbs()[limb]
+ File: "crates/aspis-r1-cost-probe/src/NIT_tail.rs", line 38, in weights::NIT_tail::tail_observation
+Failed Checks: assertion failed: l.ap0 == ap0.as_ptr() && l.ap1 == ap1.as_ptr() &&
+            qw(l.extra[side & 1])[limb & 3] == qw(w.extra[side & 1])[limb & 3]
+        && l.count == 2 && l.events == [0, 1]
+ File: "crates/aspis-r1-cost-probe/src/NIT_tail.rs", line 37, in weights::NIT_tail::tail_observation
+
+VERIFICATION:- FAILED
+Verification Time: 58.043213s
+
+Manual Harness Summary:
+Verification failed for - weights::NIT_tail::tail_observation
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r9b19b0f2116c45de8a7699caf3c2ace6.scope; invocation ID: e7705b89eac447e2a87b8049728fca74

@@ -1,0 +1,30 @@
+NIT_generated/NIT_LowChain.lean:16:80: error: unexpected identifier; expected '}'
+NIT_generated/NIT_LowChain.lean:16:16: error: Fields missing: `scale_b`, `base_a`, `base_b`, `tags`, `count`
+NIT_generated/NIT_LowChain.lean:10:69: error: unsolved goals
+ap0 ap1 : Powers
+h0 : canonical ap0
+h1 : canonical ap1
+i : Usize
+small : ↑i < 16
+before : LowCells
+hc : canonical before
+lhs : E := epick ap0 (perm (↑i % 4))
+rhs : E := epick ap1 (perm (↑i / 4))
+product : FIo_Native.aspis_core.field.wide_exact.WideExact
+run : FIo_Native.aspis_core.field.wide_exact.WideExact.mul lhs rhs = ok product
+cp : canonE product
+value : ew product = mulE (ew lhs) (ew rhs)
+scaled : NHX_LowScale.E
+scale : product.mul_m31 134217728#u32 = ok scaled
+cs : canonE scaled
+sv : NHX_LowScale.limbs scaled = List.map (fun word => word * 134217728 % 2147483647) (NHX_LowScale.limbs product)
+l : Low :=
+  { a := lhs, b := rhs, product := product, scale_a := product, scaled := scaled, scale_b := sorry, base_a := sorry,
+    base_b := sorry, tags := sorry, count := sorry }
+⊢ ∃ l after,
+    cutLow ap0 ap1 (↑i) before l after ∧
+      EMul l.a l.b l.product ∧ NIT_LowInterpretation.Scale l.scale_a l.scaled ∧ canonical after
+'AspisR1.NIT_LowChain.local_log' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NIT_LowChain.interpreted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIT_LowChain.trace_exists' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NIT_LowChain.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
