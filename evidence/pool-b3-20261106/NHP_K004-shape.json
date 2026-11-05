@@ -1,0 +1,12 @@
+{
+ "kind": "dispatch splitter storage",
+ "mode": "positive",
+ "source": "use super::*;\n#[kani::proof]\n#[kani::unwind(8)]\nfn association() {\n let n:usize=kani::any();kani::assume(n>=4&&n<=isize::MAX as usize);\n let layout=core::alloc::Layout::from_size_align(n,1).unwrap();\n let pointer=unsafe { alloc::alloc::alloc_zeroed(layout) };kani::assume(!pointer.is_null());\n let bytes:[u8;4]=kani::any();let split=n-4;\n let i:usize=kani::any();kani::assume(i<=split);\n let byte:u8=kani::any();if i<split {unsafe {pointer.add(i).write(byte);}}\n unsafe {pointer.add(split).write(bytes[0]);pointer.add(split+1).write(bytes[1]);pointer.add(split+2).write(bytes[2]);pointer.add(split+3).write(bytes[3]);}\n {\n let input=unsafe {core::slice::from_raw_parts(pointer,n)};\n\n\n if i<split {assert!(input[i]==byte);}\n assert!(input[split]==bytes[0]);assert!(input[split+1]==bytes[1]);assert!(input[split+2]==bytes[2]);assert!(input[split+3]==bytes[3]);\n \n }\n unsafe {alloc::alloc::dealloc(pointer,layout);}\n}\n",
+ "domain": "Pre-call dynamic allocation storage isolation, same unrestricted lengths as K003; splitter not reached. No production credit.",
+ "modifies": [
+  "local records",
+  "none"
+ ],
+ "production_credit": false,
+ "remaining": "processor/guard/discriminator and caller physical association; span family additionally arbitrary-tail frame"
+}

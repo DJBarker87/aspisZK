@@ -1,0 +1,11 @@
+{
+ "kind": "transaction-level guard",
+ "mode": "negative",
+ "source": "use super::*;\npub(super) fn reference(height:usize,result:&ProgramResult)->bool {\n let admitted=!crate::NHP_reference::transaction_level(height);\n match result {Ok(())=>admitted,Err(ProgramError::Custom(code))=>!admitted&&*code==0x4153_2036,_=>false}\n}\n#[kani::proof_for_contract(super::require_transaction_level_invocation_v1)]\nfn association(){let height:usize=kani::any();let actual=super::require_transaction_level_invocation_v1(height);assert!(reference(height,&actual));}\n",
+ "reference": "pub fn transaction_level(height:usize)->bool { height == 1 }\n",
+ "domain": "Every usize stack height; helper body byte-identical; cfg(kani) adds host availability only; does not prove production syscall height or process entry association",
+ "modifies": [],
+ "production_credit": false,
+ "remaining": "reference extraction/model law, combined replay/audit/scan; parent entry guard physical association",
+ "cfg_availability_change": true
+}

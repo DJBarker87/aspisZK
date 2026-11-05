@@ -1,0 +1,60 @@
+{"attempt": "NHP_K028", "exit_status": 0, "wall_seconds": 4.72966105886735, "peak_rss_kib": "339336", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+88 |     pub(crate) fn apply_authenticated_afterstate_from_program_invariant(
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+369 |     pub(crate) fn decode_from_program_invariant(
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: method `transition_kind` is never used
+  --> programs/aspis-pool/src/prepared_settlement.rs:88:19
+   |
+87 | impl AuthenticatedPreparedSettlementActionV1 {
+   | -------------------------------------------- method in this implementation
+88 |     pub(crate) fn transition_kind(self) -> PoolV1TransitionKind {
+   |                   ^^^^^^^^^^^^^^^
+
+warning: module `NHP_reference` should have a snake case name
+   --> programs/aspis-pool/src/lib.rs:150:9
+    |
+150 | pub mod NHP_reference;
+    |         ^^^^^^^^^^^^^ help: convert the identifier to snake case: `nhp_reference`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: module `NHP_Guard` should have a snake case name
+    --> programs/aspis-pool/src/processor.rs:3758:5
+     |
+3758 | mod NHP_Guard {
+     |     ^^^^^^^^^ help: convert the identifier to snake case: `nhp_guard`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.33s
+Checking harness processor::NHP_Guard::association...
+
+VERIFICATION RESULT:
+ ** 0 of 161 failed (2 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 2.1179357s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r939fda64b9aa43778b96fca92549f03e.scope; invocation ID: 51fddf755b794a36a3cbdb22a20df1c4

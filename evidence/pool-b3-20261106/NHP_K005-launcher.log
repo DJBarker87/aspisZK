@@ -1,0 +1,46 @@
+{"attempt": "NHP_K005", "exit_status": 1, "wall_seconds": 2.649046513950452, "peak_rss_kib": "336896", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+::Account{key:k0.to_bytes(),owner:o0.to_bytes(),signer:s0,writable:w0,executable:e0};
+     |     ^^ help: if this is intentional, prefix it with an underscore: `_m0`
+     |
+     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `m1`
+    --> programs/aspis-pool/src/pair_forest.rs:5833:5
+     |
+5833 | let m1=model::Account{key:k1.to_bytes(),owner:o1.to_bytes(),signer:s1,writable:w1,executable:e1};
+     |     ^^ help: if this is intentional, prefix it with an underscore: `_m1`
+
+warning: unused variable: `m2`
+    --> programs/aspis-pool/src/pair_forest.rs:5839:5
+     |
+5839 | let m2=model::Account{key:k2.to_bytes(),owner:o2.to_bytes(),signer:s2,writable:w2,executable:e2};
+     |     ^^ help: if this is intentional, prefix it with an underscore: `_m2`
+
+warning: unused variable: `selected`
+    --> programs/aspis-pool/src/pair_forest.rs:5841:47
+     |
+5841 | let p=Pubkey::new_from_array(kani::any());let selected=Pubkey::new_from_array(kani::any());let lane:u8=kani::any();
+     |                                               ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_selected`
+
+warning: unused variable: `lane`
+    --> programs/aspis-pool/src/pair_forest.rs:5841:96
+     |
+5841 | let p=Pubkey::new_from_array(kani::any());let selected=Pubkey::new_from_array(kani::any());let lane:u8=kani::any();
+     |                                                                                                ^^^^ help: if this is intentional, prefix it with an underscore: `_lane`
+
+For more information about this error, try `rustc --explain E0507`.
+error: could not compile `aspis-pool` (lib) due to 3 previous errors; 7 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 3 compilation errors.
+
+Running as unit: run-r99069ab2242140b7a7a6bb80048fbcf2.scope; invocation ID: 90d8105e54024d278c834d2c69cd7109

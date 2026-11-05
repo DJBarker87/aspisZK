@@ -1,0 +1,57 @@
+--- a/programs/aspis-pool/src/nullifier.rs
++++ b/programs/aspis-pool/src/nullifier.rs
+@@ -807,3 +807,37 @@
+         assert_eq!(zeroed, before);
+     }
+ }
++
++#[cfg(kani)]
++mod NHP_marker {
++use super::*;
++#[kani::proof]
++#[kani::unwind(33)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NHP_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NHP_KMX::KMX_copy_from_slice)]
++#[kani::stub(alloc::alloc::realloc,crate::NHP_KMX::KMX_realloc)]
++fn association(){
++ let key=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());let program=Pubkey::new_from_array(kani::any());
++ let signer:bool=kani::any();let writable:bool=kani::any();let executable:bool=kani::any();let mut lamports:u64=kani::any();let mut data:[u8;3]=kani::any();
++ let n:usize=3;
++ let a=AccountInfo::new(&key,signer,writable,&mut lamports,&mut data[..n],&owner,executable,kani::any());
++ let before=(**a.lamports.borrow(),a.data.borrow().to_vec());
++kani::assume(!executable&&!signer&&writable);
++kani::assume(owner==program);
++let held=a.try_borrow_mut_data().unwrap();let held_lamports=a.try_borrow_mut_lamports().unwrap();
++let result=super::classify_nullifier_marker_account_v1(&program,&a);
++let code:(u8,u64)=match result {
++ Ok(NullifierMarkerPreparationV1::CreateOrAllocateSystemOwned)=>(0,0),
++ Ok(NullifierMarkerPreparationV1::PopulateProgramOwnedZeroed)=>(1,0),
++ Err(ProgramError::Custom(value))=>(2,u64::from(value)),
++ Err(ProgramError::AccountBorrowFailed)=>(3,0),
++ _=>(4,0),
++};
++assert!(held.len()==n);drop(held);
++assert!(**held_lamports==before.0);drop(held_lamports);
++assert!(code==(3u8,0u64));
++assert!(**a.lamports.borrow()==before.0);assert!(*a.data.borrow()==before.1.as_slice());
++assert!(a.key==&key&&a.owner==&owner&&a.is_signer==signer&&a.is_writable==writable&&a.executable==executable);
++assert!(a.try_borrow_mut_data().is_ok());assert!(a.try_borrow_mut_lamports().is_ok());
++}
++}
+--- a/programs/aspis-pool/src/lib.rs
++++ b/programs/aspis-pool/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! Pool V1 authenticated state-transition kernel.
+ //!
+ //! The native entrypoint exposes exact V1 initialization, vault-backed
+@@ -145,3 +146,9 @@
+     plan_authenticated_verifier_dispatch_v1, AuthenticatedVerifierDispatchV1,
+     PlannedVerifierDispatchV1, VerifierDispatchClaimV1,
+ };
++
++#[cfg(kani)]
++extern crate alloc;
++#[cfg(kani)]
++#[path="../../../KMX_stubs.rs"]
++pub mod NHP_KMX;

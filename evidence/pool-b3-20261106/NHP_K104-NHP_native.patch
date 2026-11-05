@@ -1,0 +1,108 @@
+--- a/programs/aspis-pool/src/error.rs
++++ b/programs/aspis-pool/src/error.rs
+@@ -64,3 +64,52 @@
+         Self::Custom(error as u32)
+     }
+ }
++
++#[cfg(kani)]
++mod NHP_ErrorWord {
++use super::*;
++#[kani::proof]
++#[kani::unwind(33)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NHP_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NHP_KMX::KMX_copy_from_slice)]
++#[kani::stub(alloc::alloc::realloc,crate::NHP_KMX::KMX_realloc)]
++fn association(){
++ let word:u64=kani::any();
++ 
++ let returned=ProgramError::from(word);
++ let query:usize=kani::any();kani::assume(query<7);
++ let allocation=match &returned {ProgramError::BorshIoError(text)=>Some((text.as_ptr(),text.len(),text.as_bytes()[query])),_=>None};
++ let propagated=(||->Result<(),ProgramError>{Err::<(),ProgramError>(returned)?;Ok(())})();
++ let returned=propagated.err().unwrap();
++ let observed=match returned { ProgramError::Custom(value)=>(0u8,value),
++ProgramError::InvalidArgument=>(1u8,0u32),
++ProgramError::InvalidInstructionData=>(2u8,0u32),
++ProgramError::InvalidAccountData=>(3u8,0u32),
++ProgramError::AccountDataTooSmall=>(4u8,0u32),
++ProgramError::InsufficientFunds=>(5u8,0u32),
++ProgramError::IncorrectProgramId=>(6u8,0u32),
++ProgramError::MissingRequiredSignature=>(7u8,0u32),
++ProgramError::AccountAlreadyInitialized=>(8u8,0u32),
++ProgramError::UninitializedAccount=>(9u8,0u32),
++ProgramError::NotEnoughAccountKeys=>(10u8,0u32),
++ProgramError::AccountBorrowFailed=>(11u8,0u32),
++ProgramError::MaxSeedLengthExceeded=>(12u8,0u32),
++ProgramError::InvalidSeeds=>(13u8,0u32),
++ProgramError::BorshIoError(text)=>{let saved=allocation.unwrap();assert!(text.as_ptr()==saved.0);assert!(text.len()==saved.1);assert!(text.as_bytes()[query]==saved.2);let bytes=text.as_bytes();assert!(bytes.len()==7);let index:usize=kani::any();kani::assume(index<7);assert!(bytes[index]==b"Unknown"[index]);(14u8,0u32)},
++ProgramError::AccountNotRentExempt=>(15u8,0u32),
++ProgramError::UnsupportedSysvar=>(16u8,0u32),
++ProgramError::IllegalOwner=>(17u8,0u32),
++ProgramError::MaxAccountsDataAllocationsExceeded=>(18u8,0u32),
++ProgramError::InvalidRealloc=>(19u8,0u32),
++ProgramError::MaxInstructionTraceLengthExceeded=>(20u8,0u32),
++ProgramError::BuiltinProgramsMustConsumeComputeUnits=>(21u8,0u32),
++ProgramError::InvalidAccountOwner=>(22u8,0u32),
++ProgramError::ArithmeticOverflow=>(23u8,0u32),
++ProgramError::Immutable=>(24u8,0u32),
++ProgramError::IncorrectAuthority=>(25u8,0u32),
++ };
++ let mut expected=crate::NHP_error_reference::classify(word);
++ 
++ assert!(observed==expected);
++}
++}
+--- a/programs/aspis-pool/src/lib.rs
++++ b/programs/aspis-pool/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! Pool V1 authenticated state-transition kernel.
+ //!
+ //! The native entrypoint exposes exact V1 initialization, vault-backed
+@@ -145,3 +146,11 @@
+     plan_authenticated_verifier_dispatch_v1, AuthenticatedVerifierDispatchV1,
+     PlannedVerifierDispatchV1, VerifierDispatchClaimV1,
+ };
++
++#[cfg(kani)]
++extern crate alloc;
++#[cfg(kani)]
++#[path="../../../KMX_stubs.rs"]
++pub mod NHP_KMX;
++#[cfg(any(kani,NHP_extract))]
++pub mod NHP_error_reference;
+--- /dev/null
++++ b/programs/aspis-pool/src/NHP_error_reference.rs
+@@ -0,0 +1,31 @@
++pub fn classify(word:u64)->(u8,u32) {
++ match word {
++ 4294967296u64 => (0u8,0u32),
++ 8589934592u64 => (1u8,0u32),
++ 12884901888u64 => (2u8,0u32),
++ 17179869184u64 => (3u8,0u32),
++ 21474836480u64 => (4u8,0u32),
++ 25769803776u64 => (5u8,0u32),
++ 30064771072u64 => (6u8,0u32),
++ 34359738368u64 => (7u8,0u32),
++ 38654705664u64 => (8u8,0u32),
++ 42949672960u64 => (9u8,0u32),
++ 47244640256u64 => (10u8,0u32),
++ 51539607552u64 => (11u8,0u32),
++ 55834574848u64 => (12u8,0u32),
++ 60129542144u64 => (13u8,0u32),
++ 64424509440u64 => (14u8,0u32),
++ 68719476736u64 => (15u8,0u32),
++ 73014444032u64 => (16u8,0u32),
++ 77309411328u64 => (17u8,0u32),
++ 81604378624u64 => (18u8,0u32),
++ 85899345920u64 => (19u8,0u32),
++ 90194313216u64 => (20u8,0u32),
++ 94489280512u64 => (21u8,0u32),
++ 98784247808u64 => (22u8,0u32),
++ 103079215104u64 => (23u8,0u32),
++ 107374182400u64 => (24u8,0u32),
++ 111669149696u64 => (25u8,0u32),
++ _ => (0u8,word as u32),
++ }
++}

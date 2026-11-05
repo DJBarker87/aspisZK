@@ -1,0 +1,104 @@
+{
+  "prefix": "NHP_",
+  "basis": {
+    "path": "evidence/inv-repair-20261104/NGB_ADMITTED_LEDGER.json.xz",
+    "sha256": "01de8c9429d5a2ab14b6d11aa5d8ce3c27e6a9ef72d2489f17eb7293224d4280",
+    "rows": 599
+  },
+  "rows": [
+    {
+      "status": "CLOSED",
+      "bridge_status": "CLOSED",
+      "composed_status": "CLOSED",
+      "source_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+      "combined_replay": "NHP_L009",
+      "raw_audit": "NHP_L014",
+      "loaded_scan": "NHP_L015",
+      "modifies": [],
+      "named_hypotheses": [],
+      "caller_domain_obligations": [],
+      "open_transitive_dependencies": [],
+      "trust": "P6/D188 option-A native semantic transport RECLASSIFICATION; SDK/std/ABI/compiler/allocator/source-to-ELF realization retained",
+      "parent_prefix": "OPEN",
+      "row": "POOL.prefix_to_cpi::processor.require_transaction_level_invocation_v1",
+      "function": "programs/aspis-pool/src/processor.rs::require_transaction_level_invocation_v1",
+      "route": "(y), NCO extracted-reference, explicit Result constructor predicate; no stub_verified",
+      "domain": "Every usize height; exact Ok(()) iff height=1, otherwise Err(Custom(0x41532036)); no input, success or output premise",
+      "native_positive": "NHP_K028",
+      "matched_control": "NHP_K029",
+      "native_evidence_dir": "evidence/pool-b3-20261106",
+      "frozen_body": "fn require_transaction_level_invocation_v1(stack_height: usize) -> ProgramResult {\n    if stack_height != TRANSACTION_LEVEL_STACK_HEIGHT {\n        return Err(PoolV1ProgramError::CpiInvocationForbidden.into());\n    }\n    Ok(())\n}",
+      "frozen_body_sha256": "887c364940666f16b6a182d830356191ccf8bddfa14439d48bd7510c03ff5359",
+      "reference_source": "evidence/pool-b3-20261106/NHP_reference.rs",
+      "reference_sha256": "8a4296f514bb1ee5c6e821a1ee3b90dab08e041b95eb3e9a92640d66b385d9ca",
+      "reference_extraction": "NHP_E001",
+      "theorem": "NHP_StackLaw.exact_reply",
+      "paired_error_theorem": "NHP_StackLaw.forbidden_error",
+      "cfg_note": "cfg(kani) makes unchanged guard body/import available on host; native body byte-identical. No production syscall/entry association claimed",
+      "not_established": [
+        "process_instruction entry/rejection effects",
+        "actual syscall height binding",
+        "Pool B/D",
+        "100-bit per-attempt target"
+      ],
+      "selected_claims": [
+        "NHP_GUARD_CERTIFICATE.json"
+      ]
+    },
+    {
+      "status": "CLOSED",
+      "bridge_status": "CLOSED",
+      "composed_status": "CLOSED",
+      "source_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+      "combined_replay": "NHP_L009",
+      "raw_audit": "NHP_L014",
+      "loaded_scan": "NHP_L015",
+      "modifies": [],
+      "named_hypotheses": [],
+      "caller_domain_obligations": [],
+      "open_transitive_dependencies": [],
+      "trust": "P6/D188 option-A native semantic transport RECLASSIFICATION; SDK/std/ABI/compiler/allocator/source-to-ELF realization retained",
+      "parent_prefix": "OPEN",
+      "row": "POOL.prefix_to_cpi::error.convertPoolError",
+      "function": "programs/aspis-pool/src/error.rs::From<PoolV1ProgramError> for ProgramError::from",
+      "route": "(ak) RECLASSIFICATION of retained all54 native observations; constructor-coded packet, no foreign stub_verified",
+      "domain": "Every one of the54 valid PoolV1ProgramError constructors; exact ProgramError::Custom(source discriminant); no additional precondition",
+      "native_positive": "NHC_K078",
+      "matched_control": "NHC_K079",
+      "native_evidence_dir": "evidence/pool-leaves-20261105",
+      "theorem": "NHC_ErrorConversion.result",
+      "constructor_packet": "NHP_ConstructorPackets.exact_arms",
+      "native_reuse_manifest": "NHP_ERROR_REUSE.json",
+      "superseded_admission_gate": "ProgramError carrier shape/stub_verified calibration; replaced by (ak), not claimed proved",
+      "not_established": [
+        "arbitrary BorshIoError String FromSame native frame",
+        "all other ProgramError conversions",
+        "caller decoder/account frames",
+        "Pool B/D"
+      ],
+      "selected_claims": [
+        "NHP_POOL_ERROR_CERTIFICATE.json"
+      ]
+    }
+  ],
+  "composed_rows_added": 2,
+  "root_status": {
+    "POOL.prefix_to_cpi": "OPEN",
+    "POOL.read_to_settlement": "OPEN"
+  },
+  "validator_policy": "additive checks only; inherited NDT invariants unchanged",
+  "status": "Two composed Pool-consumer helper rows CLOSED; B/D OPEN",
+  "validator_checks_added": [
+    "unchanged historical NDT invariants",
+    "hash-pinned599-row basis",
+    "exit0 AND allowed:true admission and exact cgroup caps",
+    "compiled source snapshots content-addressed once",
+    "frozen graph/features/offline/lock pre-post checks",
+    "rule16 writable-static rejection and exact KMX pin",
+    "explicit positive/control correspondence",
+    "coherent raw33 roots and same-binary fixtures",
+    "zero-defect final scan",
+    "all resolved Aeneas/closure objects and verified exports",
+    "no own scope overlap/cache deletion/shipped diff"
+  ]
+}

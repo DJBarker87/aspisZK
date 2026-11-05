@@ -1,0 +1,44 @@
+{"attempt": "NHP_K003", "exit_status": 1, "wall_seconds": 10.064066894119605, "peak_rss_kib": "442256", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+t(s) in 1.61s
+Checking harness pair_forest::NHP_dispatch::association...
+
+VERIFICATION RESULT:
+ ** 9 of 212 failed (3 unreachable)
+Failed Checks: assertion failed: input[i] == byte
+ File: "programs/aspis-pool/src/pair_forest.rs", line 5815, in pair_forest::NHP_dispatch::association
+Failed Checks: assertion failed: body[i] == byte
+ File: "programs/aspis-pool/src/pair_forest.rs", line 5815, in pair_forest::NHP_dispatch::association
+Failed Checks: assertion failed: input[split + 3] == bytes[3]
+ File: "programs/aspis-pool/src/pair_forest.rs", line 5816, in pair_forest::NHP_dispatch::association
+Failed Checks: assertion failed: input[split + 2] == bytes[2]
+ File: "programs/aspis-pool/src/pair_forest.rs", line 5816, in pair_forest::NHP_dispatch::association
+Failed Checks: assertion failed: input[split + 1] == bytes[1]
+ File: "programs/aspis-pool/src/pair_forest.rs", line 5816, in pair_forest::NHP_dispatch::association
+Failed Checks: assertion failed: input[split] == bytes[0]
+ File: "programs/aspis-pool/src/pair_forest.rs", line 5816, in pair_forest::NHP_dispatch::association
+Failed Checks: assertion failed: hints.vault_token_account == bytes[3]
+ File: "programs/aspis-pool/src/pair_forest.rs", line 5814, in pair_forest::NHP_dispatch::association
+Failed Checks: assertion failed: hints.vault_authority == bytes[2]
+ File: "programs/aspis-pool/src/pair_forest.rs", line 5814, in pair_forest::NHP_dispatch::association
+Failed Checks: assertion failed: hints.next_page == bytes[1]
+ File: "programs/aspis-pool/src/pair_forest.rs", line 5813, in pair_forest::NHP_dispatch::association
+
+VERIFICATION:- FAILED
+Verification Time: 5.808035s
+
+Manual Harness Summary:
+Verification failed for - pair_forest::NHP_dispatch::association
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-re6f8f54d0b8a4d0ab997b18fbc7f60f7.scope; invocation ID: 15732fc062934fbc817ff9466358c69f

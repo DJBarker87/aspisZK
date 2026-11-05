@@ -1,0 +1,12 @@
+{
+ "kind": "short splitter explicit KMX bindings",
+ "mode": "negative",
+ "source": "use super::*;\n#[kani::proof]\n#[kani::unwind(8)]\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NHP_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NHP_KMX::KMX_copy_from_slice)]\n#[kani::stub(alloc::alloc::realloc,crate::NHP_KMX::KMX_realloc)]\nfn association() {\n let input:[u8;3]=kani::any();let n:usize=kani::any();kani::assume(n<4);\n let slice=&input[..n];let before=input;\n let result=split_pair_forest_terminal_bump_hints_v1(slice);\n assert!(matches!(result,Err(ProgramError::InvalidAccountData)));\n assert!(input==before);\n \n}\n",
+ "domain": "Every byte array of length 3 and every slice length 0..3; actual frozen splitter; exact error and input frame. No accounts or external effects are reachable.",
+ "modifies": [
+  "local records",
+  "none"
+ ],
+ "production_credit": false,
+ "remaining": "arbitrary full production entry/discriminator/rejection-prefix association; K001 error observation retained, frame re-established with explicit KMX binding"
+}

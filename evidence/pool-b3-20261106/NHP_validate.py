@@ -1,0 +1,107 @@
+"""Additive Pool-consumer validation; frozen 599 rows and historical rules preserved."""
+from pathlib import Path
+import sys,json,hashlib,lzma,re,subprocess
+sys.dont_write_bytecode=True
+E=Path(__file__).resolve().parent;R=E.parents[1];H=lambda b:hashlib.sha256(b).hexdigest()
+LOCK='5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef'
+KMX='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67'
+LIMITS={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}
+STANDARD={'propext','Classical.choice','Quot.sound'}
+def validate(overrides=None):
+ overrides=overrides or {}
+ def raw(n):return overrides.get(n,(E/n).read_bytes())
+ def js(n):return json.loads(raw(n))
+ import NHP_sparse_imports
+ sys.path.insert(0,str(E.parent/'native-ledger3-20261029'))
+ import NDT_validate
+ NDT_validate.validate_invariants(json.loads((E.parent/'native-ledger3-20261029/NDT_LEDGER.json').read_text()))
+ basis=E.parent/'inv-repair-20261104/NGB_ADMITTED_LEDGER.json.xz'
+ assert H(basis.read_bytes())=='01de8c9429d5a2ab14b6d11aa5d8ce3c27e6a9ef72d2489f17eb7293224d4280'
+ assert len(json.loads(lzma.decompress(basis.read_bytes()))['rows'])==599
+ attempts=[json.loads(l) for l in raw('NHP_ATTEMPTS.jsonl').decode().splitlines()];ids=[a['attempt'] for a in attempts];assert len(ids)==len(set(ids))
+ counts={k:sum(a.startswith('NHP_'+p) for a in ids) for k,p in [('kani','K'),('lean','L'),('extraction','E')]};assert all(counts[k]<=v for k,v in dict(kani=120,lean=80,extraction=2).items())
+ for a in ids:
+  rc=js(a+'/receipt.json');ad=js(a+'-admission.json');assert ad['exit']==0 and ad['reservation']['allowed'] is True,(a,'admission')
+  assert rc['limits']==LIMITS and int(rc['swaps'])==0 and float(rc['wall_seconds'])>=0 and int(rc['peak_rss_kib'])>0
+  assert rc['source_revision'] and rc['source_hashes'] and rc['command']
+  for name,h in rc['source_hashes'].items():
+   ref=js(a+'/sources/'+name+'.REFERENCE.json');payload=lzma.decompress(raw(ref['compressed']));assert H(payload)==h==ref['sha256'] and len(payload)==ref['bytes'],(a,name,'compiled input')
+  if a.startswith(('NHP_K','NHP_E')):
+   cfg=js(a+'.json');graph=js(a+'-graph-check.json');lock=js(a+'-lock-check.json');rule=js(a+'-rule16-check.json')
+   assert graph['graph_matches_frozen'] and graph['exact_LPm_graph'] and not graph['added'] and not graph['edge_errors']
+   assert lock==dict(before=LOCK,after=LOCK,unchanged=True)
+   assert rule['no_writable_static'] and not rule['violations']
+   assert cfg['env']['CARGO_NET_OFFLINE']=='true' and cfg['env']['CARGO_PROFILE_DEV_OPT_LEVEL']=='3' and cfg['copy_patch_sha256']==KMX
+   assert cfg['program_features']=='r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit'
+   assert js(a+'-metadata-pin.json')['features_all_crates']
+  if a.startswith('NHP_K'):
+   shape=js(a+'-shape.json');patch=raw(a+'-NHP_native.patch').decode()
+   added=''.join(line[1:] for line in patch.splitlines(True) if line.startswith('+') and not line.startswith('+++'))
+   assert shape['source'].strip() in added,(a,'shape/compiled patch')
+  if a.startswith('NHP_L') and rc['exit_status']==0:
+   for line in rc['print_axioms']:
+    assert 'sorryAx' not in line
+    if 'depends on axioms:' in line:
+     names=line.split('[',1)[1].rsplit(']',1)[0]
+     assert set(n.strip() for n in names.split(',') if n.strip())<=STANDARD,(a,'nonstandard axiom')
+ closed=js('NHP_CLOSED.json');delta=js('NHP_LEDGER_DELTA.json');assert len(closed['composed_rows'])==delta['composed_rows_added']==len(delta['rows'])==2
+ assert closed['production_association'] is False and closed['release_claim'] is False and closed['verifier_inventory_changed'] is False
+ assert delta['basis']['rows']==599 and delta['root_status']=={'POOL.prefix_to_cpi':'OPEN','POOL.read_to_settlement':'OPEN'}
+ for name in closed['certificates']:
+  cert=js(name);assert cert['status']==cert['bridge_status']==cert['composed_status']=='CLOSED'
+  assert cert['named_hypotheses']==cert['caller_domain_obligations']==cert['open_transitive_dependencies']==cert['modifies']==[]
+  assert cert in delta['rows'] and cert['row'] in closed['composed_rows']
+  assert cert['combined_replay']=='NHP_L009' and cert['raw_audit']=='NHP_L014' and cert['loaded_scan']=='NHP_L015'
+  base=R/cert['native_evidence_dir'];pos=cert['native_positive'];neg=cert['matched_control']
+  assert json.loads((base/pos/'receipt.json').read_text())['exit_status']==0 and 'VERIFICATION:- SUCCESSFUL' in (base/pos/'stdout.log').read_text()
+  assert json.loads((base/neg/'receipt.json').read_text())['exit_status']==1 and 'VERIFICATION:- FAILED' in (base/neg/'stdout.log').read_text()
+  assert 'CBMC timed out.' not in (base/neg/'stdout.log').read_text() and 'Failed Checks:' in (base/neg/'stdout.log').read_text()
+ guard=js('NHP_GUARD_CERTIFICATE.json');assert guard['native_positive']=='NHP_K028' and guard['matched_control']=='NHP_K029' and guard['theorem']=='NHP_StackLaw.exact_reply'
+ assert H((R/guard['reference_source']).read_bytes())==guard['reference_sha256']
+ assert H(guard['frozen_body'].encode())==guard['frozen_body_sha256']
+ frozen=subprocess.check_output(['git','show','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs'],cwd=R,text=True)
+ start=frozen.index('fn require_transaction_level_invocation_v1(');end=frozen.index('\n}',start)+2;assert frozen[start:end]==guard['frozen_body']
+ assert guard['domain']=='Every usize height; exact Ok(()) iff height=1, otherwise Err(Custom(0x41532036)); no input, success or output premise'
+ pins=js('NHP_E001_EXTRACTION_PINS.json');assert pins['charon_exit']==pins['aeneas_exit']==0
+ assert pins['source_lock_before']==pins['source_lock_after']==LOCK
+ for name in ['Types','Funs']:
+  source=raw('NHP_StackRef/'+name+'.lean');artifact=raw('NHP_E001_extracted/NHP_StackRef/'+name+'.lean.txt')
+  assert source==artifact
+  assert H(source)==pins['outputs']['NHP_E001_extracted/NHP_StackRef/'+name+'.lean']['sha256']
+
+ assert '#[kani::proof_for_contract(super::require_transaction_level_invocation_v1)]' in js('NHP_K028-shape.json')['source']
+ assert js('NHP_K028-shape.json')['source'].replace('let admitted=crate::','let admitted=!crate::')==js('NHP_K029-shape.json')['source']
+ error=js('NHP_POOL_ERROR_CERTIFICATE.json');assert error['native_positive']=='NHC_K078' and error['matched_control']=='NHC_K079' and error['theorem']=='NHC_ErrorConversion.result' and '(ak)' in error['route']
+ for row in js('NHP_ERROR_REUSE.json')['inputs']:assert H((R/row['path']).read_bytes())==row['sha256']
+ audit=js('NHP_AUDIT.json');assert audit['standard_only'] and audit['compiled_fixture_binary_identical'] and audit['roots']==19 and not audit['summary_disagreements']
+ for a in ['NHP_L009','NHP_L013','NHP_L014','NHP_L015']:assert js(a+'/receipt.json')['exit_status']==0
+ roots=js('NHP_audit/batch0/proof0.json')['results'];assert len(roots)==19 and all(x['equal'] and set(x['walked_axioms'])<=STANDARD for x in roots)
+ fx=js('NHP_audit/fixtures/fixtures.json')['results'];assert len(fx)==8
+ for i,x in enumerate(fx):assert x['equal'] and (len(x['walked_axioms'])==1 if i<4 else x['walked_axioms']==[])
+ for row in map(json.loads,raw('NHP_LOADED_scan.jsonl').decode().splitlines()):assert not row['dangling'] and not row['duplicate_owners'] and row['imports_match']
+ final=audit['final'];assert final['standard_only'] and final['same_fixture_binary'] and final['roots']==33
+ for a in ['NHP_L021','NHP_L022','NHP_L023']:assert js(a+'/receipt.json')['exit_status']==0
+ final_roots=js('NHP_audit/batch1/proof1.json')['results'];assert len(final_roots)==33 and all(x['equal'] and set(x['walked_axioms'])<=STANDARD for x in final_roots)
+ for a in ['NHP_L013','NHP_L022','NHP_L023']:assert js(a+'/NHP_ProofDriver_BINARY_PIN.json')['sha256']==final['proof_driver_sha256']
+ assert js('NHP_K118/receipt.json')['exit_status']==0 and 'VERIFICATION:- FAILED' in raw('NHP_K119/stdout.log').decode()
+ for a in ['NHP_K118','NHP_K119']:assert all(name in js(a+'-shape.json')['source'] for name in ['KMX_copy_nonoverlapping','KMX_copy_from_slice','KMX_realloc'])
+ assert 'VERIFICATION:- FAILED' in raw('NHP_K120/stdout.log').decode() and 'Failed Checks:' in raw('NHP_K120/stdout.log').decode()
+ for adoption in js('NHP_EXTRACTION_ADOPTION.json'):assert H((R/adoption['destination']).read_bytes())==H((R/adoption['source']).read_bytes())==adoption['sha256']
+ scopes=js('NHP_SCOPE_ADMISSION_AUDIT.json');assert scopes['attempts']==145 and scopes['all_exit_zero_allowed_true'] and not scopes['own_scope_overlaps']
+ stats=js('NHP_STATS.json');assert stats['used']==counts==dict(kani=120,lean=23,extraction=2) and stats['swaps']==0 and not stats['memory_kills']
+ controls=js('NHP_NEGATIVE_CONTROLS.json')['pairs'];assert len(controls)==57
+ for pair in controls:
+  assert 'VERIFICATION:- SUCCESSFUL' in raw(pair['positive']+'/stdout.log').decode()
+  assert 'VERIFICATION:- FAILED' in raw(pair['control']+'/stdout.log').decode()
+ closure=lzma.decompress(raw('NHP_CLOSURE_PINS.json.xz'));assert H(closure)==raw('NHP_CLOSURE_PINS.json.sha256').decode().strip()
+ closure=json.loads(closure);assert len(closure['selected_objects'])==30071
+ assert closure['LEAN_PATH']==js('NHP_L023.json')['env']['LEAN_PATH'].split(':')
+ assert any('/Aeneas/' in row['path'] or row['path'].endswith('/Aeneas.olean') for row in closure['selected_objects'])
+ exported=js('NHP_EXPORT.json');assert exported['exit']==0 and exported['admission']['allowed'] is True and len(exported['exports'])==19
+ assert any(row['sha256']==final['proof_driver_sha256'] for row in exported['exports'])
+ end=js('NHP_HOST_END.json');assert not end['active_owned_provers'] and end['cache_files_deleted']==0 and end['exports_retained']==19 and end['cache_bytes']<20_000_000_000
+ assert end['source_workspace_retained'] and not end['shipped_source_changed'] and not end['release_elf_rebuilt'] and not end['wallet_or_key_operations']
+ assert subprocess.run(['git','diff','--quiet','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387','--','crates','programs','Cargo.lock'],cwd=R).returncode==0
+ return dict(status='PASS',budget_used=counts,closed=2,verifier_rows=599,roots=19,final_roots=33)
+if __name__=='__main__':
+ out=validate();(E/'NHP_VALIDATION.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(out))

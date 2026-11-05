@@ -1,0 +1,12 @@
+{
+ "kind": "dispatch splitter span",
+ "mode": "positive",
+ "source": "use super::*;\n#[kani::proof]\n#[kani::unwind(8)]\nfn association() {\n let n:usize=kani::any();kani::assume(n>=4&&n<=isize::MAX as usize);\n let layout=core::alloc::Layout::from_size_align(n,1).unwrap();\n let pointer=unsafe { alloc::alloc::alloc_zeroed(layout) };kani::assume(!pointer.is_null());\n let bytes:[u8;4]=kani::any();let split=n-4;\n let i:usize=kani::any();kani::assume(i<=split);\n let byte:u8=kani::any();if i<split {unsafe {pointer.add(i).write(byte);}}\n unsafe {pointer.add(split).write(bytes[0]);pointer.add(split+1).write(bytes[1]);pointer.add(split+2).write(bytes[2]);pointer.add(split+3).write(bytes[3]);}\n {\n let input=unsafe {core::slice::from_raw_parts(pointer,n)};\n let (body,hints)=split_pair_forest_terminal_bump_hints_v1(input).unwrap();\n assert!(body.len()==split);assert!(body.as_ptr()==input.as_ptr());\n assert!(hints.current_page==bytes[0]);assert!(hints.next_page==bytes[1]);\n assert!(hints.vault_authority==bytes[2]);assert!(hints.vault_token_account==bytes[3]);\n if i<split {assert!(body[i]==byte);assert!(input[i]==byte);}\n assert!(input[split]==bytes[0]);assert!(input[split+1]==bytes[1]);assert!(input[split+2]==bytes[2]);assert!(input[split+3]==bytes[3]);\n \n }\n unsafe {alloc::alloc::dealloc(pointer,layout);}\n}\n",
+ "domain": "Valid returning allocations length 4..isize::MAX; arbitrary four hint bytes, arbitrary selected body offset/value; other body bytes zero. Single selected-cell physical span observation, not arbitrary whole-body credit.",
+ "modifies": [
+  "local records",
+  "private allocation only"
+ ],
+ "production_credit": false,
+ "remaining": "processor/guard/discriminator and caller physical association; span family additionally arbitrary-tail frame"
+}

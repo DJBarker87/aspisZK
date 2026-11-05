@@ -1,0 +1,11 @@
+{
+ "kind": "fixed caller-width iterator 32",
+ "mode": "positive",
+ "source": "use super::*;\n#[kani::proof]\n#[kani::unwind(34)]\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NHP_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NHP_KMX::KMX_copy_from_slice)]\n#[kani::stub(alloc::alloc::realloc,crate::NHP_KMX::KMX_realloc)]\nfn association(){\n let input:[u8;32]=kani::any();let begin:usize=kani::any();let end:usize=kani::any();kani::assume(begin<=end&&end<=32);\n let q:usize=kani::any();kani::assume(q<32);let before=input[q];\n let mut iter=input[begin..end].iter();let observed=iter.next().map(|b|(*b,b as *const u8));\n if begin<end {\n  assert!(observed==Some((input[begin],input.as_ptr().wrapping_add(begin))));\n  assert!(iter.as_slice().len()==end-begin-1);assert!(iter.as_slice().as_ptr()==input.as_ptr().wrapping_add(begin+1));\n } else {assert!(observed.is_none());assert!(iter.as_slice().len()==0);assert!(iter.as_slice().as_ptr()==input.as_ptr().wrapping_add(end));}\n assert!(input[q]==before);\n}\n",
+ "domain": "Every 32-byte backing array, every residual begin..end subwindow, every selected whole-array frame cell; exactly one native next() call",
+ "modifies": [
+  "private iterator pointer/length only"
+ ],
+ "production_credit": false,
+ "remaining": "actual all/any loop-state association, same AccountInfo/decoded request caller and borrowed-carrier domain; NHC trace/value/count induction reused"
+}
