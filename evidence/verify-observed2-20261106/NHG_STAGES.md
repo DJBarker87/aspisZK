@@ -69,3 +69,11 @@ all three actual frozen call sites use1 or2 literal ranges.
 K077–080 claims transport/write checks are SUPPORT ONLY. The decoder caller
 payload domain and full heap/emitted-body/error cleanup association remain
 OPEN. Kani80/80 and extraction1/1 are exhausted; continue remaining Lean work.
+
+
+## Final support stage
+
+L086 was an excluded local editing failure; corrected L087 proves five local
+claims/round bounds and generic KMX row frame. Joint L088, raw5 L089 and
+NFX13559 L090 pass. No claims129 or parent/root promotion. All proof budgets
+consumed; final export is file IO only, not a further prover invocation.

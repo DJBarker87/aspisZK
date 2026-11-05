@@ -103,3 +103,43 @@ Source/helper remaining boundaries and per-member OPEN reasons are in
 NHG_REMAINING.md. No sibling native query packet is assumed. Root137, finish136,
 round133/rounds134, claims129 and mark130 remain OPEN. Runtime trust,100-bit
 per-attempt target, privacy and two transactions are unchanged.
+
+
+## FINAL — all budgets consumed
+
+Proof budgets:80/80 Kani,90/90 Lean/support,1/1 extraction. Final joint L088,
+raw L089 (five new support roots), NFX L090 all exit0.112 total NHG roots,
+13559 loaded modules, standard axioms only. Final scan peak7019012KiB,
+swap0. `NHG_final_validate.py` PASS; final denial suite is additive.
+
+18 NHG rows remain CLOSED; no row is added after stage4. Claims129, mark130,
+round133, rounds134, finish136 and verify_observed137 remain OPEN. The final
+five proofs establish decode29 byte ranges, row-copy value frame, payload
+length and round widths; they DO NOT establish the private payload borrow
+bridge or full claims initialization/heap/source association. See per-member
+`NHG_REMAINING.json` / `.md` for exact needs and owner boundaries.
+
+Retained export: `/home/dombarker/project-offloads/codex-cx-prepared-claim-cache-20261104/NHG_exports_20261106`.
+457021496 bytes, including the unchanged audit binaries;
+30152 resolved object hashes (including Aeneas) are pinned in
+`NHG_FINAL_CLOSURE_PINS.json.xz` plus uncompressed SHA256. Cache was not deleted.
+`NHG_PATHS_RETAINED.json` gives scratch-first then retained-export resolution.
+To reuse the audit executables, use the retained `bin/` copies; the owned
+scratch objects/native binaries and Cargo targets were removed only after
+export hash verification. `NHG_CLEANUP.json` records paths/bytes and66.8GB free.
+All borrowed caches and every sibling/live/session-A worktree remain untouched.
+
+Export/cleanup were capped or small file-packaging IO with zero Lean/Rust/Kani/
+extraction invocations; they consume no additional proof budget. Packaging
+admission, transport, time and source are retained separately. No new native
+or proof command may run under the exhausted budget.
+
+Production source was not changed; no ELF rebuild trigger. Retained release
+hashes remain default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4,
+devnet63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299,
+Pool121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548.
+No trust row or100-bit PER-ATTEMPT/privacy/two-transaction requirement changed;
+P6/D188 and Std interpretation are retained/reclassified, never removed.
+No push.
+
+Final validation PASS after export/cleanup;52 total admission-denial controls (13+16+15+8) rejected their planted mutations. Export IO peak237532KiB, swap0, exit0,9.33s; no formal tool invocation. All large closure inputs are compressed with uncompressed SHA256.

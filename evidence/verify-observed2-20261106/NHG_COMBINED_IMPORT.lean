@@ -28,6 +28,7 @@ import NHG_FinishLeaves
 import NHG_SelectedClaim
 import NHG_AddWords
 import NHG_ExtraLeaves
+import NHG_ClaimsDomain
 #print axioms AspisR1.NHG_Serializer.restore_map
 #print axioms AspisR1.NHG_Serializer.source
 #print axioms AspisR1.NHG_Serializer.bytes
@@ -135,3 +136,8 @@ import NHG_ExtraLeaves
 #print axioms AspisR1.NHG_ExtraLeaves.sum_result
 #print axioms AspisR1.NHG_ExtraLeaves.factor_source
 #print axioms AspisR1.NHG_ExtraLeaves.equality_result
+#print axioms AspisR1.NHG_ClaimsDomain.requests
+#print axioms AspisR1.NHG_ClaimsDomain.row_copy
+#print axioms AspisR1.NHG_ClaimsDomain.payload_length
+#print axioms AspisR1.NHG_ClaimsDomain.round_width
+#print axioms AspisR1.NHG_ClaimsDomain.fixed_widths
