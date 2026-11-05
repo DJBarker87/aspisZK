@@ -11,3 +11,14 @@ One capped scope at a time; admission requires exit 0 and allowed:true; MemoryHi
 Retained trust: approved P6/D188 option A semantic transport, runtime/compiler/ABI/std/allocator/Aeneas/source-to-ELF and cryptographic rows. No trust removal or new assumption claimed. Inherited ELF pins only; no shipped source change triggers a rebuild. Target not yet established.
 
 Next concrete deliverable: membership domain native/control receipts and complete caller-domain coverage table; exact limits and source/object/revision/axiom fields retained per attempt. Native loop and Trace obligations remain open until checked.
+
+## Stage 1a
+
+11/70 Kani and4/70 Lean/support invocations. Length19 membership newly has a
+matched native/control pair; lengths11..15 timeout; lengths20/21 positives
+have timed-out controls and remain uncredited. Length17's old positive is
+retained, control shape must change. Native contiguous window splitting is
+now attempted, with smaller windows and their joint prefix law explicit.
+L002 window composition and L004 chronological bind pass with standard
+axioms; failed L001/L003 elaborations are retained and excluded. No full
+row/actual_queries producer is claimed. Frozen source trees match release.

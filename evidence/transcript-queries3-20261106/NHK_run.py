@@ -106,6 +106,15 @@ out={{n:(b/n).read_text() for n in names if (b/n).is_file()}}
 for name in ['NHK_Driver','NHK_ProofDriver','NHK_PoolProofDriver','NHK_PoolDriver']:
  p=b/'NHK_native'/name
  if p.is_file():out[a+'/'+name+'_BINARY_PIN.json']=json.dumps(dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size))
+if {kind!r}=='kani':
+ import shutil
+ tmp=b/'NHK_tmp';old=[]
+ for p in tmp.rglob('*'):
+  if p.is_file():old.append(dict(path=str(p.relative_to(b)),bytes=p.stat().st_size))
+ for p in list(tmp.iterdir()):
+  if p.is_dir():shutil.rmtree(p)
+  else:p.unlink()
+ out[a+'/NHK_TMP_CLEANUP.json']=json.dumps(dict(files=old,bytes=sum(p['bytes'] for p in old),scope_finished=True))
 print(json.dumps(out))
 ''');assert r.returncode==0,r.stderr
 for n,t in json.loads(r.stdout).items():
