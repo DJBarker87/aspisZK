@@ -1,111 +1,217 @@
-# NGW TX2 acceptance tail (live)
+# NGW TX2 acceptance tail
 
-**Target not established.** NGW closes TX2:047 and TX2:048 under (y); no acceptance-tail root closes. The statuses below preserve NGM; NGW native statement-point observations pass with matched controls, helper E001 extracts, and full statement-point reference/cohort composition and audit pass; polynomial is next.
+**Target not established.** Additive NDT delta: TX2:047/048/127/128 CLOSED; inherited NGM double/guard retained. All four acceptance-tail roots TX2:114/115/116/119 remain OPEN. The complete cone, not a four-row shortcut, is tracked below.
 
-**Inherited state.** Two supporting helper rows CLOSED relative to NGJ ledger8; all four acceptance-tail rows remain OPEN. NGM_DOMAIN.md states the exact caller predicate and its remaining NFW boundary. NGM_REMAINING.md gives member-by-member native versus Lean work.
+Final combined import NGW_L078 passes with AspisR1.RPx_Deployed.deployed via NGK/NGM. NGW_L079 raw ax2 accepts all 81 new roots with only propext/Classical.choice/Quot.sound; eight adversarial fixtures NGW_L034 use the identical audit binary. Final native scanner NGW_L080 returns exit 1 solely because the private catalog refresher omitted four generated-reference source baselines. Its COMPLETE 13,513-module traversal has zero dangling references or duplicate owners. NGW_SCAN_RECONCILIATION.json applies the unchanged NFX predicates to every retained row against corrected source imports, passes three metadata corruption checks, and preserves the original exit1. No second scanner exit0 or cold release replay is claimed.
+
+All 100 Kani, 80 Lean/audit, 3 extraction slots charged and consumed. Frozen release crates/programs unchanged; scratch-only harness patch, offline immutable frozen lock/graph checks, exact KMX mitigation and controls. P6/D188 option A, existing allocator and accepted runtime trust retained/reclassified; no headline premise retirement. NFW producer boundaries remain OPEN.
 
 ## TX2:115 finish_relation — OPEN
 
-Native full Result pair K084/085 passes, but general-domain event length/order and call/frame association remain OPEN after K083/K086/K087 timeouts. Extracted-reference complete Result/acceptance and source-body equality are separate checked laws; their SAME-call source/cohort interpretation, all Weights::new/pair/round/dot callee packets, and NFW Prepared/view producer domains are still needed.
+OPEN. No driver rerun. Complete polynomial/round/dot/pair packets and NFW Prepared/view producer domains remain missing; constructor is now CLOSED on its stated domain. NGM timed-out K083/K086/K087 excluded and never resubmitted unchanged. Only (ai) staged cuts after real callee closure; no successful child premise.
+
+## TX2:095 value — CLOSED
+
+Inherited CLOSED certificate and original domain/pins retained from NGM_TAIL_GRAPH.json; no new NGW credit or caller promotion.
+
+## TX2:097 folds — CLOSED
+
+Inherited CLOSED certificate and original domain/pins retained from NGM_TAIL_GRAPH.json; no new NGW credit or caller promotion.
 
 ## TX2:114 finish_query_dot — OPEN
 
-Fourteen one-iteration native observations and all matched corruptions pass K055..082. Typed projection and decoded-item partial-Result induction compile. Still need nine-word/count parser ABI association to those observations, canonical field-window/index propagation, exact new/finish Q-packet use, byte-source loop/error-prefix association, and equality to the adopted SAG dot function. No source/cohort loop closure is inferred from generic induction.
+OPEN. NGM fourteen step-observation pairs retained. E003 dot pack/unpack/push_result extracts; NGW K099/K100 actual typed Dot accumulator getters agree with nine-word/count reference, matched corruption fails. L075 NGW_DotCodec proves pack/unpack/count ABI roundtrips; L077 NGW_DotStep.pack_total/source proves exact complete Result/state/index/error transport to NGM_DotABI.stepResult. Still needs full canonical field-window/index propagation, exact CLOSED Q new/finish packet use, byte-source/error-prefix loop composition and adopted SAG association. Typed getters, no raw-layout or read/make cancellation credit.
+
+## TX2:072 finish — CLOSED
+
+Inherited CLOSED certificate and original domain/pins retained from NGM_TAIL_GRAPH.json; no new NGW credit or caller promotion.
+
+## TX2:073 new — CLOSED
+
+Inherited CLOSED certificate and original domain/pins retained from NGM_TAIL_GRAPH.json; no new NGW credit or caller promotion.
+
+## TX2:074 push — CLOSED
+
+Inherited CLOSED certificate and original domain/pins retained from NGM_TAIL_GRAPH.json; no new NGW credit or caller promotion.
+
+## TX2:134 field — CLOSED
+
+Inherited CLOSED certificate and original domain/pins retained from NGM_TAIL_GRAPH.json; no new NGW credit or caller promotion.
 
 ## TX2:116 finish_relation_round — OPEN
 
-K098/099 test the exact native Relation/Ok Result against a safe reference with full opaque scale/polynomial replies. NGM_RoundScale.total supplies the emitted quarter product value/canonicality. Missing native call/frame captures, field-window/source association, reference extraction/cohort association (E003 failed), and CLOSED polynomial composition on SAME arguments.
+OPEN. NGM K098/K099 full Result pair retained. NGW K095/096 scale and K097/098 conditional polynomial SAME argument/pointer/length/count captures pass/fail. E001 round_ref extracts; NGM_RoundScale.total retained. Still needs complete field-window/carrier association, reference/cohort transport and CLOSED polynomial on SAME bytes. Additional field/frame native observations only if current packet coverage proves insufficient.
+
+## TX2:001 add — CLOSED
+
+Inherited CLOSED certificate and original domain/pins retained from NGM_TAIL_GRAPH.json; no new NGW credit or caller promotion.
+
+## TX2:005 mul_m31 — CLOSED
+
+Inherited CLOSED certificate and original domain/pins retained from NGM_TAIL_GRAPH.json; no new NGW credit or caller promotion.
+
+## TX2:009 add — CLOSED
+
+Inherited CLOSED certificate and original domain/pins retained from NGM_TAIL_GRAPH.json; no new NGW credit or caller promotion.
+
+## TX2:017 add — CLOSED
+
+Inherited CLOSED certificate and original domain/pins retained from NGM_TAIL_GRAPH.json; no new NGW credit or caller promotion.
+
+## TX2:021 mul_m31 — CLOSED
+
+Inherited CLOSED certificate and original domain/pins retained from NGM_TAIL_GRAPH.json; no new NGW credit or caller promotion.
+
+## TX2:028 add — CLOSED
+
+Inherited CLOSED certificate and original domain/pins retained from NGM_TAIL_GRAPH.json; no new NGW credit or caller promotion.
+
+## TX2:035 mul_m31 — CLOSED
+
+Inherited CLOSED certificate and original domain/pins retained from NGM_TAIL_GRAPH.json; no new NGW credit or caller promotion.
 
 ## TX2:119 polynomial — OPEN
 
-K088..097 five single-iteration observation pairs pass; K100 reverse-fold control trace is an unpaired diagnostic. The emitted WideExact.mul natural value law exists; source-step erasure has mutation controls. Missing safe-reference extraction (E003 failed), emitted/reference coefficient-add association, seven-iteration source/model induction, domain/frame propagation and matched reverse-control corruption.
+OPEN. NGM K088..097 five pairs retained by hash, plus missing reverse-fold corruption NGW_K034 now fails. E001 fixed-array polynomial_step_ref extracts after diagnosing NGM_E003 mutable loop-borrow collapse. NGW_PolynomialAdd and NGW_Horner prove coefficient add/canonical natural Horner cell/induction. L076 NGW_CurrentAddPort.adopted closes the actual native-to-adopted add port. Still missing exact multiplication/byte-reader carrier ports, SAME-byte seven-step source/cohort association and domain/frame propagation. These include Lean-only obligations; no full-fold native rerun.
 
-## TX2:128 new — OPEN
+## TX2:004 mul — CLOSED
 
-Needs SAME canonical-use composition of the now-CLOSED double packet, plus still-OPEN statement_points/factor loops/boxed-record source/value/error/frame association; SAME canonical semantic-alpha/z producers are NFW boundaries.
+Inherited CLOSED certificate and original domain/pins retained from NGM_TAIL_GRAPH.json; no new NGW credit or caller promotion.
 
-## TX2:047 statement_points — CLOSED under (y)
+## TX2:013 mul — CLOSED
 
-NGW_PointsPacket.cohort, NGW_L028/L033/L035; exact wrapper argument/readonly identity and arbitrary full reply transported by K017..K024, with matched controls; SAME canonical alpha domain discharges the child edge to TX2:048. No parent promotion.
+Inherited CLOSED certificate and original domain/pins retained from NGM_TAIL_GRAPH.json; no new NGW credit or caller promotion.
 
-## TX2:048 state_only_statement_points — CLOSED under (y)
+## TX2:020 mul — CLOSED
 
-K001..K016 and K025..K030: exact source-ordered one-iteration value, product operands/reply, carry, array frame, reverse control, absorption, initialization and record return, all matched controls with exact KMX. E001 extracts the loop-free point reference; NGW_PointValue.observed associates it to emitted arithmetic; NGW_ProductLaw.total supplies the exact canonical natural product; NGW_StepModel.iteration and NGW_ReverseInduction.source prove complete loop association; NGW_PointsPacket.cohort derives full output and canonicality on SAME canonical ten-coordinate input. Combined RPx replay, all 34 new raw roots standard, eight fixtures, scan 13484 modules clean. P6/D188 transport retained.
+Inherited CLOSED certificate and original domain/pins retained from NGM_TAIL_GRAPH.json; no new NGW credit or caller promotion.
 
-## TX2:127 box_from_parts — OPEN
+## TX2:034 mul — CLOSED
 
-Needs native owned record move/allocation/error/frame and emitted constructor association; no allocation availability assumption.
+Inherited CLOSED certificate and original domain/pins retained from NGM_TAIL_GRAPH.json; no new NGW credit or caller promotion.
+
+## TX2:118 mark — CLOSED
+
+Inherited CLOSED certificate and original domain/pins retained from NGM_TAIL_GRAPH.json; no new NGW credit or caller promotion.
+
+## TX2:128 new — CLOSED
+
+CLOSED under (y) on SAME canonical ten-alpha/two-z-coordinate domain. Split scalar/row/window/order/count/carry/control observations K036..047,K049..078,K091..094 with matched controls. Full regular/circle loop induction and canonicality: NGW_FactorOuter.source, NGW_CircleOuter.source, NGW_NewModel.source; exact cohort interface NGW_NewInterface.cohort. E002 factor reference with NGW_FactorReference.factor; NGW_FieldPorts and KMX frame/disjointness laws. Uses CLOSED statement_points/double/box packets on proved domains. NFW semantic-alpha/z producers remain external boundary obligations for callers; no producer assumed closed. Final L078/L079 pass; L080 complete traversal statically reconciled as disclosed below.
+
+## TX2:007 sub — CLOSED
+
+Inherited CLOSED certificate and original domain/pins retained from NGM_TAIL_GRAPH.json; no new NGW credit or caller promotion.
+
+## TX2:015 sub — CLOSED
+
+Inherited CLOSED certificate and original domain/pins retained from NGM_TAIL_GRAPH.json; no new NGW credit or caller promotion.
+
+## TX2:023 sub — CLOSED
+
+Inherited CLOSED certificate and original domain/pins retained from NGM_TAIL_GRAPH.json; no new NGW credit or caller promotion.
+
+## TX2:038 sub — CLOSED
+
+Inherited CLOSED certificate and original domain/pins retained from NGM_TAIL_GRAPH.json; no new NGW credit or caller promotion.
+
+## TX2:047 statement_points — CLOSED
+
+CLOSED under (y). Exact wrapper argument/readonly identity and raw returned record, K017..024; SAME canonical alpha child domain. NGW_PointsPacket.cohort; stage1 combined L028, ax2 L033 and native scan L035 pass.
+
+## TX2:048 state_only_statement_points — CLOSED
+
+CLOSED under (y). Source-ordered native arbitrary-prestate step, carry/product operands/reply, row/frame, reverse control, absorption/init/return K001..016,K025..030 with controls. E001 loop-free reference and NGW_PointValue/StepModel/ReverseInduction/PointsPacket laws. Exact natural product NGW_ProductLaw.total. Stage1 combined/audit pass; no parent promotion.
+
+## TX2:127 box_from_parts — CLOSED
+
+CLOSED under (y)/(aa). K079/080 variant, K081/K090 factor value, K083/084 points, K085/086 extra, K087/088 same-allocation ownership; matched corrupt-value and distinct-live-allocation controls fail. K082/K089 timeouts excluded; negative-only smaller scalar corruption preserves the K081 positive body (validator checks exact normalization). NGW_BoxModel.source/native_shape; source erasure NGW_BOX_ERASURE.json. Existing allocator fresh-owned-block-or-abort trust retained; no allocation-availability premise.
 
 ## TX2:132 double — CLOSED
 
-NGM_DoubleProduct.cohort; K041..054; E002; canonical input. No caller or parent promotion.
+Inherited CLOSED certificate and original domain/pins retained from NGM_TAIL_GRAPH.json; no new NGW credit or caller promotion.
 
 ## TX2:129 pair — OPEN
 
-Needs tensor/guard/libra/grouped/scalar/dot helper packets, all source-ordered branches and exact caller-domain transport.
+OPEN. Complete source-ordered native local-record/cell observations and matched controls, reference/emitted/cohort association, SAME canonical callee-domain and frame/error composition are still needed. The actual callees in NGM_TAIL_GRAPH.json must close bottom-up. Lean-only association/domain work remains independently attemptable; this is not labeled Kani-only.
+
+## TX2:036 mul_qm31 — CLOSED
+
+Inherited CLOSED certificate and original domain/pins retained from NGM_TAIL_GRAPH.json; no new NGW credit or caller promotion.
 
 ## TX2:045 filled — OPEN
 
-Needs source-ordered native local-record/one-iteration packet with matched controls, exact emitted-model/reference association, and SAME caller/callee domain/frame composition. Its dependencies in NGM_TAIL_GRAPH.json are not assumed CLOSED.
+OPEN. Complete source-ordered native local-record/cell observations and matched controls, reference/emitted/cohort association, SAME canonical callee-domain and frame/error composition are still needed. The actual callees in NGM_TAIL_GRAPH.json must close bottom-up. Lean-only association/domain work remains independently attemptable; this is not labeled Kani-only.
 
 ## TX2:130 scalar_factor — OPEN
 
-Needs source-ordered native local-record/one-iteration packet with matched controls, exact emitted-model/reference association, and SAME caller/callee domain/frame composition. Its dependencies in NGM_TAIL_GRAPH.json are not assumed CLOSED.
+OPEN. Complete source-ordered native local-record/cell observations and matched controls, reference/emitted/cohort association, SAME canonical callee-domain and frame/error composition are still needed. The actual callees in NGM_TAIL_GRAPH.json must close bottom-up. Lean-only association/domain work remains independently attemptable; this is not labeled Kani-only.
 
 ## TX2:133 factored_s2_libra_weights — OPEN
 
-Needs source-ordered native local-record/one-iteration packet with matched controls, exact emitted-model/reference association, and SAME caller/callee domain/frame composition. Its dependencies in NGM_TAIL_GRAPH.json are not assumed CLOSED.
+OPEN. Complete source-ordered native local-record/cell observations and matched controls, reference/emitted/cohort association, SAME canonical callee-domain and frame/error composition are still needed. The actual callees in NGM_TAIL_GRAPH.json must close bottom-up. Lean-only association/domain work remains independently attemptable; this is not labeled Kani-only.
 
 ## TX2:022 square — OPEN
 
-Ledger8 OPEN; later committed NGH square packet must be imported read-only with source/cohort pins and revalidated on the SAME canonical receiver before this ledger row changes. No duplicated proof or unvalidated external credit.
+OPEN relative to the adopted ledger. Import the committed NGH square packet read-only with hashes and SAME canonical receiver, then coherent replay/domain validation. This is not automatically a Kani obligation; no duplicate proof or unvalidated external credit.
+
+## TX2:002 double — CLOSED
+
+Inherited CLOSED certificate and original domain/pins retained from NGM_TAIL_GRAPH.json; no new NGW credit or caller promotion.
+
+## TX2:010 double — CLOSED
+
+Inherited CLOSED certificate and original domain/pins retained from NGM_TAIL_GRAPH.json; no new NGW credit or caller promotion.
+
+## TX2:025 mul_by_r — CLOSED
+
+Inherited CLOSED certificate and original domain/pins retained from NGM_TAIL_GRAPH.json; no new NGW credit or caller promotion.
 
 ## TX2:135 grouped_inactive_pair — OPEN
 
-Needs source-ordered native local-record/one-iteration packet with matched controls, exact emitted-model/reference association, and SAME caller/callee domain/frame composition. Its dependencies in NGM_TAIL_GRAPH.json are not assumed CLOSED.
+OPEN. Complete source-ordered native local-record/cell observations and matched controls, reference/emitted/cohort association, SAME canonical callee-domain and frame/error composition are still needed. The actual callees in NGM_TAIL_GRAPH.json must close bottom-up. Lean-only association/domain work remains independently attemptable; this is not labeled Kani-only.
 
 ## TX2:142 s2_grouped_inactive_pair — OPEN
 
-Needs source-ordered native local-record/one-iteration packet with matched controls, exact emitted-model/reference association, and SAME caller/callee domain/frame composition. Its dependencies in NGM_TAIL_GRAPH.json are not assumed CLOSED.
+OPEN. Complete source-ordered native local-record/cell observations and matched controls, reference/emitted/cohort association, SAME canonical callee-domain and frame/error composition are still needed. The actual callees in NGM_TAIL_GRAPH.json must close bottom-up. Lean-only association/domain work remains independently attemptable; this is not labeled Kani-only.
 
 ## TX2:138 powers — OPEN
 
-NFW owns powers/caller preparation. Import only its committed CLOSED canonical packet with provenance, revalidate and prove SAME call domain; no sibling worktree access or duplicate candidate.
+OPEN boundary to NFW powers/preparation. Import committed CLOSED packet with provenance and establish SAME canonical call domain; no sibling candidate edits or duplicate proof.
 
 ## TX2:140 process_regular_kinds — OPEN
 
-Needs source-ordered native local-record/one-iteration packet with matched controls, exact emitted-model/reference association, and SAME caller/callee domain/frame composition. Its dependencies in NGM_TAIL_GRAPH.json are not assumed CLOSED.
+OPEN. Complete source-ordered native local-record/cell observations and matched controls, reference/emitted/cohort association, SAME canonical callee-domain and frame/error composition are still needed. The actual callees in NGM_TAIL_GRAPH.json must close bottom-up. Lean-only association/domain work remains independently attemptable; this is not labeled Kani-only.
 
 ## TX2:139 process_kind — OPEN
 
-Needs source-ordered native local-record/one-iteration packet with matched controls, exact emitted-model/reference association, and SAME caller/callee domain/frame composition. Its dependencies in NGM_TAIL_GRAPH.json are not assumed CLOSED.
+OPEN. Complete source-ordered native local-record/cell observations and matched controls, reference/emitted/cohort association, SAME canonical callee-domain and frame/error composition are still needed. The actual callees in NGM_TAIL_GRAPH.json must close bottom-up. Lean-only association/domain work remains independently attemptable; this is not labeled Kani-only.
 
 ## TX2:131 tensor — OPEN
 
-Needs source-ordered native local-record/one-iteration packet with matched controls, exact emitted-model/reference association, and SAME caller/callee domain/frame composition. Its dependencies in NGM_TAIL_GRAPH.json are not assumed CLOSED.
+OPEN. Complete source-ordered native local-record/cell observations and matched controls, reference/emitted/cohort association, SAME canonical callee-domain and frame/error composition are still needed. The actual callees in NGM_TAIL_GRAPH.json must close bottom-up. Lean-only association/domain work remains independently attemptable; this is not labeled Kani-only.
 
 ## TX2:141 push_byte_products — OPEN
 
-Needs source-ordered native local-record/one-iteration packet with matched controls, exact emitted-model/reference association, and SAME caller/callee domain/frame composition. Its dependencies in NGM_TAIL_GRAPH.json are not assumed CLOSED.
+OPEN. Complete source-ordered native local-record/cell observations and matched controls, reference/emitted/cohort association, SAME canonical callee-domain and frame/error composition are still needed. The actual callees in NGM_TAIL_GRAPH.json must close bottom-up. Lean-only association/domain work remains independently attemptable; this is not labeled Kani-only.
 
 ## TX2:143 shared_high — OPEN
 
-Needs source-ordered native local-record/one-iteration packet with matched controls, exact emitted-model/reference association, and SAME caller/callee domain/frame composition. Its dependencies in NGM_TAIL_GRAPH.json are not assumed CLOSED.
+OPEN. Complete source-ordered native local-record/cell observations and matched controls, reference/emitted/cohort association, SAME canonical callee-domain and frame/error composition are still needed. The actual callees in NGM_TAIL_GRAPH.json must close bottom-up. Lean-only association/domain work remains independently attemptable; this is not labeled Kani-only.
 
 ## TX2:136 high_dot — OPEN
 
-Needs source-ordered native local-record/one-iteration packet with matched controls, exact emitted-model/reference association, and SAME caller/callee domain/frame composition. Its dependencies in NGM_TAIL_GRAPH.json are not assumed CLOSED.
+OPEN. Complete source-ordered native local-record/cell observations and matched controls, reference/emitted/cohort association, SAME canonical callee-domain and frame/error composition are still needed. The actual callees in NGM_TAIL_GRAPH.json must close bottom-up. Lean-only association/domain work remains independently attemptable; this is not labeled Kani-only.
 
 ## TX2:144 shared_partials — OPEN
 
-Needs source-ordered native local-record/one-iteration packet with matched controls, exact emitted-model/reference association, and SAME caller/callee domain/frame composition. Its dependencies in NGM_TAIL_GRAPH.json are not assumed CLOSED.
+OPEN. Complete source-ordered native local-record/cell observations and matched controls, reference/emitted/cohort association, SAME canonical callee-domain and frame/error composition are still needed. The actual callees in NGM_TAIL_GRAPH.json must close bottom-up. Lean-only association/domain work remains independently attemptable; this is not labeled Kani-only.
 
 ## TX2:137 partial_dot — OPEN
 
-Needs source-ordered native local-record/one-iteration packet with matched controls, exact emitted-model/reference association, and SAME caller/callee domain/frame composition. Its dependencies in NGM_TAIL_GRAPH.json are not assumed CLOSED.
+OPEN. Complete source-ordered native local-record/cell observations and matched controls, reference/emitted/cohort association, SAME canonical callee-domain and frame/error composition are still needed. The actual callees in NGM_TAIL_GRAPH.json must close bottom-up. Lean-only association/domain work remains independently attemptable; this is not labeled Kani-only.
 
 ## TX2:145 shared_two_point_guard — CLOSED
 
-NGM_GuardRawModel.cohort; K001..004; arbitrary raw full record. No caller or parent promotion.
+Inherited CLOSED certificate and original domain/pins retained from NGM_TAIL_GRAPH.json; no new NGW credit or caller promotion.
 
-Inherited CLOSED callees and exact call graph: NGM_TAIL_GRAPH.json (Q/NFQ/NFM/NFS provenance retained). This delta does not reclassify sibling results or retire any headline premise. RuntimeReturnData/RuntimeMemcmp and P6/D188 option A remain accepted trust rows. Source association is the retained hybrid certificate, not a new monolithic Rust semantics theorem.
+Exact certificates/domains/native pairs: NGW_CLOSED.json. Actual child edges: NGW_EDGES.json plus immutable NGM_TAIL_GRAPH.json. Inherited large inputs are hash-pinned once in NGW_INPUTS/NGW_INPUT_INDEX.json and NGW_CACHE_IMPORTS.json.xz. All failure/timeout receipts retained.

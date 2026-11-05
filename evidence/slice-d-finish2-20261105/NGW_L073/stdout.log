@@ -1,0 +1,35 @@
+NGW_generated/NGW_DotCodec.lean:22:2: error: 'change' tactic failed, pattern
+  ↑c < 18446744073709551616
+is not definitionally equal to target
+  ↑c < UScalar.size UScalarTy.U64
+NGW_generated/NGW_DotCodec.lean:25:45: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑c % UScalar.size UScalarTy.U64
+in the target expression
+  ↑c % 2 ^ UScalarTy.U64.numBits % 2 ^ UScalarTy.Usize.numBits = ↑c
+
+c : Usize
+bound : ↑c ≤ 64
+size : 4096 ≤ UScalar.size UScalarTy.Usize
+wide : ↑c < UScalar.size UScalarTy.U64
+⊢ ↑c % 2 ^ UScalarTy.U64.numBits % 2 ^ UScalarTy.Usize.numBits = ↑c
+NGW_generated/NGW_DotCodec.lean:30:29: error: unsolved goals
+count : Usize
+a b c d e f g h : U64
+bound :
+  ↑{ c0 := { sums := Array.make 4#usize [a, b, c, d] ⋯ }, c1 := { sums := Array.make 4#usize [e, f, g, h] ⋯ },
+          count := count }.count ≤
+    64
+counts : UScalar.cast UScalarTy.Usize (UScalar.cast UScalarTy.U64 count) = count
+⊢ ∃ x, lift (UScalar.cast UScalarTy.U64 count) = ok x ∧ lift (UScalar.cast UScalarTy.Usize x) = ok count
+NGW_generated/NGW_DotCodec.lean:37:100: warning: This simp argument is unused:
+  counts
+
+Hint: Omit it from the simp argument list.
+  simp [NGW_DotRef.pack, ̲NGW_DotRef.unpack, ̲toRef, ̲fromRef, ̲NGM_DotABI.make, ̲Array.make,
+  ̲ ̲ ̲ ̲Array.index_usize,̵c̵o̵u̵n̵t̵s̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NGW_DotCodec.from_to' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NGW_DotCodec.to_from' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NGW_DotCodec.count_roundtrip' depends on axioms: [propext, sorryAx]
+'NGW_DotCodec.unpack_pack' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

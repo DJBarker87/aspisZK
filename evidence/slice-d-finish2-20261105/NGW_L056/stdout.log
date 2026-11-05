@@ -1,0 +1,71 @@
+NGW_generated/NGW_NewModel.lean:30:3: error: Tactic `rfl` failed: The left-hand side
+  do
+    let factors1 ←
+      FIn_WeightsExtract.weights_new_loop0 { start := 0#usize, «end» := 3#usize } points
+          (Array.repeat 5#usize (Array.repeat 5#usize (Array.repeat 4#usize FIn_WeightsExtract.field.QM31.ZERO)))
+    let factors2 ← FIn_WeightsExtract.weights_new_loop1 { start := 0#usize, «end» := 2#usize } z factors1
+    ok
+        (core.result.Result.Ok
+          { variant := variant, factors := factors2, points := points,
+            extra :=
+              Array.make 2#usize [NGM_GuardExact.pick alpha ↑8#usize ⋯, NGM_GuardExact.pick alpha ↑9#usize ⋯] ⋯ })
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Ok w)
+
+case refine_1
+variant : FIn_WeightsExtract.FInVariant
+alpha : Std.Array Q 10#usize
+z : Std.Array NGW_CircleInitial.Point 2#usize
+ha : Holds Canon alpha
+hz : Holds NGW_CircleInitial.CanonPoint z
+points : Std.Array (Std.Array Q 10#usize) 3#usize
+left✝¹ : NGW_PointsPacket.reference alpha = ok points
+left✝ : FIn_WeightsExtract.state_only_prefix.state_only_statement_points alpha = ok points
+pointRun : FIn_WeightsExtract.state_only_prefix.r0.statement_points alpha = ok points
+pointCanon : Holds (Holds Canon) points
+a8 : Q := NGM_GuardExact.pick alpha 8 ⋯
+a9 : Q := NGM_GuardExact.pick alpha 9 ⋯
+read8 : alpha.index_usize 8#usize = ok (NGM_GuardExact.pick alpha ↑8#usize ⋯)
+read9 : alpha.index_usize 9#usize = ok (NGM_GuardExact.pick alpha ↑9#usize ⋯)
+ca8 : Canon (NGM_GuardExact.pick alpha 8 ⋯)
+ca9 : Canon (NGM_GuardExact.pick alpha 9 ⋯)
+initial : Std.Array (Std.Array (Std.Array FIn_WeightsExtract.field.QM31 4#usize) 5#usize) 5#usize :=
+  Array.repeat 5#usize (Array.repeat 5#usize (Array.repeat 4#usize FIn_WeightsExtract.field.QM31.ZERO))
+ci : CanonFactors initial
+regular : Std.Array (Std.Array (Std.Array FIn_WeightsExtract.field.QM31 4#usize) 5#usize) 5#usize
+regularRun : FIn_WeightsExtract.weights_new_loop0 { start := 0#usize, «end» := 3#usize } points initial = ok regular
+regularCanon : CanonFactors regular
+factors : Std.Array (Std.Array (Std.Array FIn_WeightsExtract.field.QM31 4#usize) 5#usize) 5#usize
+circleRun : FIn_WeightsExtract.weights_new_loop1 { start := 0#usize, «end» := 2#usize } z regular = ok factors
+circleCanon : CanonFactors factors
+extra : Std.Array Q 2#usize := Array.make 2#usize [a8, a9] ⋯
+w : FIn_WeightsExtract.Weights := { variant := variant, factors := factors, points := points, extra := extra }
+⊢ (do
+      let factors1 ←
+        FIn_WeightsExtract.weights_new_loop0 { start := 0#usize, «end» := 3#usize } points
+            (Array.repeat 5#usize (Array.repeat 5#usize (Array.repeat 4#usize FIn_WeightsExtract.field.QM31.ZERO)))
+      let factors2 ← FIn_WeightsExtract.weights_new_loop1 { start := 0#usize, «end» := 2#usize } z factors1
+      ok
+          (core.result.Result.Ok
+            { variant := variant, factors := factors2, points := points,
+              extra :=
+                Array.make 2#usize [NGM_GuardExact.pick alpha ↑8#usize ⋯, NGM_GuardExact.pick alpha ↑9#usize ⋯] ⋯ })) =
+    ok (core.result.Result.Ok w)
+NGW_generated/NGW_NewModel.lean:32:3: error: `simp` made no progress
+NGW_generated/NGW_NewModel.lean:28:66: warning: This simp argument is unused:
+  regularRun
+
+Hint: Omit it from the simp argument list.
+  simp only [FIn_WeightsExtract.weights_new, ̲pointRun, ̲read8, ̲read9,r̵e̵g̵u̵l̵a̵r̵R̵u̵n̵,̵ ̲circleRun,
+      ̵ ̵FIn_WeightsExtract.Weights.box_from_parts, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGW_generated/NGW_NewModel.lean:28:77: warning: This simp argument is unused:
+  circleRun
+
+Hint: Omit it from the simp argument list.
+  simp only [FIn_WeightsExtract.weights_new, ̲pointRun, ̲read8, ̲read9, ̲regularRun,c̵i̵r̵c̵l̵e̵R̵u̵n̵,̵
+      ̵ ̵FIn_WeightsExtract.Weights.box_from_parts, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NGW_NewModel.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

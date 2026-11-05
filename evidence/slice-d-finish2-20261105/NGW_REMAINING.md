@@ -1,92 +1,83 @@
-# NGW remaining obligations (live)
+# NGW remaining obligations
 
-Target not established. New CLOSED rows TX2:047/048; inherited NGM double/guard remain CLOSED. All acceptance-tail roots remain OPEN.
+Budget exhausted (100/100 Kani, 80/80 Lean/audit, 3/3 extraction). Target not established. Member-specific open work follows; Lean-only work is not misclassified as a native blocker.
 
 ## TX2:115 finish_relation — OPEN
 
-Blocked by OPEN polynomial/round/dot/new/pair packets and NFW Prepared/view producers. K083/K086/K087 excluded timeouts unchanged. Staged cuts only once real callees close; no successful child premise.
+OPEN. No driver rerun. Complete polynomial/round/dot/pair packets and NFW Prepared/view producer domains remain missing; constructor is now CLOSED on its stated domain. NGM timed-out K083/K086/K087 excluded and never resubmitted unchanged. Only (ai) staged cuts after real callee closure; no successful child premise.
 
 ## TX2:114 finish_query_dot — OPEN
 
-NGM fourteen one-iteration native pairs retained. E003 dot pack/unpack/result reference now extracted. Still need nine-word/count ABI association, canonical field-window/index and CLOSED Q new/finish packet use, byte-loop/error-prefix/cohort association. Needs Lean; additional native observations only where ABI/frame coverage is missing.
+OPEN. NGM fourteen step-observation pairs retained. E003 dot pack/unpack/push_result extracts; NGW K099/K100 actual typed Dot accumulator getters agree with nine-word/count reference, matched corruption fails. L075 NGW_DotCodec proves pack/unpack/count ABI roundtrips; L077 NGW_DotStep.pack_total/source proves exact complete Result/state/index/error transport to NGM_DotABI.stepResult. Still needs full canonical field-window/index propagation, exact CLOSED Q new/finish packet use, byte-source/error-prefix loop composition and adopted SAG association. Typed getters, no raw-layout or read/make cancellation credit.
 
 ## TX2:116 finish_relation_round — OPEN
 
-K098/K099 inherited full Result pair retained. Need same scale/polynomial call/order/frame captures; E001 round reference extracted. Complete polynomial packet still OPEN. Needs native captures and Lean carrier/domain composition.
+OPEN. NGM K098/K099 full Result pair retained. NGW K095/096 scale and K097/098 conditional polynomial SAME argument/pointer/length/count captures pass/fail. E001 round_ref extracts; NGM_RoundScale.total retained. Still needs complete field-window/carrier association, reference/cohort transport and CLOSED polynomial on SAME bytes. Additional field/frame native observations only if current packet coverage proves insufficient.
 
 ## TX2:119 polynomial — OPEN
 
-E001 extraction, L036 coefficient-add association and L038 natural Horner induction pass; intended missing reverse corruption K034 fails. Complete byte-window/read and native-to-adopted carrier ports plus seven-step source/cohort association still OPEN. Needs Lean; uncovered observations may require native checks.
-
-## TX2:128 new — OPEN
-
-Statement-point child CLOSED. Split row, product/double argument, count/order and window/frame observations K036..K078 complete with controls, except original K035/K048 timeouts excluded and replaced. Full factor-loop/source/reference and boxed-record composition still OPEN. NFW SAME semantic alpha/z producers remain boundary obligations. Needs Lean and native Box packet.
-
-## TX2:127 box_from_parts — OPEN
-
-Need source/value/ownership/allocation/frame certificate under (aa), including corrupt-value and different-allocation controls. No allocation-availability premise.
+OPEN. NGM K088..097 five pairs retained by hash, plus missing reverse-fold corruption NGW_K034 now fails. E001 fixed-array polynomial_step_ref extracts after diagnosing NGM_E003 mutable loop-borrow collapse. NGW_PolynomialAdd and NGW_Horner prove coefficient add/canonical natural Horner cell/induction. L076 NGW_CurrentAddPort.adopted closes the actual native-to-adopted add port. Still missing exact multiplication/byte-reader carrier ports, SAME-byte seven-step source/cohort association and domain/frame propagation. These include Lean-only obligations; no full-fold native rerun.
 
 ## TX2:129 pair — OPEN
 
-Needs complete source-ordered native local-record/cell packet with controls, exact reference/emitted/cohort association, canonical caller-domain and frame/error propagation, then combined replay/scan/ax2. Its actual callees in NGM_TAIL_GRAPH.json remain required. Existing fragmentary receipts do not establish source/model closure.
+OPEN. Complete source-ordered native local-record/cell observations and matched controls, reference/emitted/cohort association, SAME canonical callee-domain and frame/error composition are still needed. The actual callees in NGM_TAIL_GRAPH.json must close bottom-up. Lean-only association/domain work remains independently attemptable; this is not labeled Kani-only.
 
 ## TX2:045 filled — OPEN
 
-Needs complete source-ordered native local-record/cell packet with controls, exact reference/emitted/cohort association, canonical caller-domain and frame/error propagation, then combined replay/scan/ax2. Its actual callees in NGM_TAIL_GRAPH.json remain required. Existing fragmentary receipts do not establish source/model closure.
+OPEN. Complete source-ordered native local-record/cell observations and matched controls, reference/emitted/cohort association, SAME canonical callee-domain and frame/error composition are still needed. The actual callees in NGM_TAIL_GRAPH.json must close bottom-up. Lean-only association/domain work remains independently attemptable; this is not labeled Kani-only.
 
 ## TX2:130 scalar_factor — OPEN
 
-Needs complete source-ordered native local-record/cell packet with controls, exact reference/emitted/cohort association, canonical caller-domain and frame/error propagation, then combined replay/scan/ax2. Its actual callees in NGM_TAIL_GRAPH.json remain required. Existing fragmentary receipts do not establish source/model closure.
+OPEN. Complete source-ordered native local-record/cell observations and matched controls, reference/emitted/cohort association, SAME canonical callee-domain and frame/error composition are still needed. The actual callees in NGM_TAIL_GRAPH.json must close bottom-up. Lean-only association/domain work remains independently attemptable; this is not labeled Kani-only.
 
 ## TX2:133 factored_s2_libra_weights — OPEN
 
-Needs complete source-ordered native local-record/cell packet with controls, exact reference/emitted/cohort association, canonical caller-domain and frame/error propagation, then combined replay/scan/ax2. Its actual callees in NGM_TAIL_GRAPH.json remain required. Existing fragmentary receipts do not establish source/model closure.
+OPEN. Complete source-ordered native local-record/cell observations and matched controls, reference/emitted/cohort association, SAME canonical callee-domain and frame/error composition are still needed. The actual callees in NGM_TAIL_GRAPH.json must close bottom-up. Lean-only association/domain work remains independently attemptable; this is not labeled Kani-only.
 
 ## TX2:022 square — OPEN
 
-Needs complete source-ordered native local-record/cell packet with controls, exact reference/emitted/cohort association, canonical caller-domain and frame/error propagation, then combined replay/scan/ax2. Its actual callees in NGM_TAIL_GRAPH.json remain required. Existing fragmentary receipts do not establish source/model closure.
+OPEN relative to the adopted ledger. Import the committed NGH square packet read-only with hashes and SAME canonical receiver, then coherent replay/domain validation. This is not automatically a Kani obligation; no duplicate proof or unvalidated external credit.
 
 ## TX2:135 grouped_inactive_pair — OPEN
 
-Needs complete source-ordered native local-record/cell packet with controls, exact reference/emitted/cohort association, canonical caller-domain and frame/error propagation, then combined replay/scan/ax2. Its actual callees in NGM_TAIL_GRAPH.json remain required. Existing fragmentary receipts do not establish source/model closure.
+OPEN. Complete source-ordered native local-record/cell observations and matched controls, reference/emitted/cohort association, SAME canonical callee-domain and frame/error composition are still needed. The actual callees in NGM_TAIL_GRAPH.json must close bottom-up. Lean-only association/domain work remains independently attemptable; this is not labeled Kani-only.
 
 ## TX2:142 s2_grouped_inactive_pair — OPEN
 
-Needs complete source-ordered native local-record/cell packet with controls, exact reference/emitted/cohort association, canonical caller-domain and frame/error propagation, then combined replay/scan/ax2. Its actual callees in NGM_TAIL_GRAPH.json remain required. Existing fragmentary receipts do not establish source/model closure.
+OPEN. Complete source-ordered native local-record/cell observations and matched controls, reference/emitted/cohort association, SAME canonical callee-domain and frame/error composition are still needed. The actual callees in NGM_TAIL_GRAPH.json must close bottom-up. Lean-only association/domain work remains independently attemptable; this is not labeled Kani-only.
 
 ## TX2:138 powers — OPEN
 
-Needs complete source-ordered native local-record/cell packet with controls, exact reference/emitted/cohort association, canonical caller-domain and frame/error propagation, then combined replay/scan/ax2. Its actual callees in NGM_TAIL_GRAPH.json remain required. Existing fragmentary receipts do not establish source/model closure.
+OPEN boundary to NFW powers/preparation. Import committed CLOSED packet with provenance and establish SAME canonical call domain; no sibling candidate edits or duplicate proof.
 
 ## TX2:140 process_regular_kinds — OPEN
 
-Needs complete source-ordered native local-record/cell packet with controls, exact reference/emitted/cohort association, canonical caller-domain and frame/error propagation, then combined replay/scan/ax2. Its actual callees in NGM_TAIL_GRAPH.json remain required. Existing fragmentary receipts do not establish source/model closure.
+OPEN. Complete source-ordered native local-record/cell observations and matched controls, reference/emitted/cohort association, SAME canonical callee-domain and frame/error composition are still needed. The actual callees in NGM_TAIL_GRAPH.json must close bottom-up. Lean-only association/domain work remains independently attemptable; this is not labeled Kani-only.
 
 ## TX2:139 process_kind — OPEN
 
-Needs complete source-ordered native local-record/cell packet with controls, exact reference/emitted/cohort association, canonical caller-domain and frame/error propagation, then combined replay/scan/ax2. Its actual callees in NGM_TAIL_GRAPH.json remain required. Existing fragmentary receipts do not establish source/model closure.
+OPEN. Complete source-ordered native local-record/cell observations and matched controls, reference/emitted/cohort association, SAME canonical callee-domain and frame/error composition are still needed. The actual callees in NGM_TAIL_GRAPH.json must close bottom-up. Lean-only association/domain work remains independently attemptable; this is not labeled Kani-only.
 
 ## TX2:131 tensor — OPEN
 
-Needs complete source-ordered native local-record/cell packet with controls, exact reference/emitted/cohort association, canonical caller-domain and frame/error propagation, then combined replay/scan/ax2. Its actual callees in NGM_TAIL_GRAPH.json remain required. Existing fragmentary receipts do not establish source/model closure.
+OPEN. Complete source-ordered native local-record/cell observations and matched controls, reference/emitted/cohort association, SAME canonical callee-domain and frame/error composition are still needed. The actual callees in NGM_TAIL_GRAPH.json must close bottom-up. Lean-only association/domain work remains independently attemptable; this is not labeled Kani-only.
 
 ## TX2:141 push_byte_products — OPEN
 
-Needs complete source-ordered native local-record/cell packet with controls, exact reference/emitted/cohort association, canonical caller-domain and frame/error propagation, then combined replay/scan/ax2. Its actual callees in NGM_TAIL_GRAPH.json remain required. Existing fragmentary receipts do not establish source/model closure.
+OPEN. Complete source-ordered native local-record/cell observations and matched controls, reference/emitted/cohort association, SAME canonical callee-domain and frame/error composition are still needed. The actual callees in NGM_TAIL_GRAPH.json must close bottom-up. Lean-only association/domain work remains independently attemptable; this is not labeled Kani-only.
 
 ## TX2:143 shared_high — OPEN
 
-Needs complete source-ordered native local-record/cell packet with controls, exact reference/emitted/cohort association, canonical caller-domain and frame/error propagation, then combined replay/scan/ax2. Its actual callees in NGM_TAIL_GRAPH.json remain required. Existing fragmentary receipts do not establish source/model closure.
+OPEN. Complete source-ordered native local-record/cell observations and matched controls, reference/emitted/cohort association, SAME canonical callee-domain and frame/error composition are still needed. The actual callees in NGM_TAIL_GRAPH.json must close bottom-up. Lean-only association/domain work remains independently attemptable; this is not labeled Kani-only.
 
 ## TX2:136 high_dot — OPEN
 
-Needs complete source-ordered native local-record/cell packet with controls, exact reference/emitted/cohort association, canonical caller-domain and frame/error propagation, then combined replay/scan/ax2. Its actual callees in NGM_TAIL_GRAPH.json remain required. Existing fragmentary receipts do not establish source/model closure.
+OPEN. Complete source-ordered native local-record/cell observations and matched controls, reference/emitted/cohort association, SAME canonical callee-domain and frame/error composition are still needed. The actual callees in NGM_TAIL_GRAPH.json must close bottom-up. Lean-only association/domain work remains independently attemptable; this is not labeled Kani-only.
 
 ## TX2:144 shared_partials — OPEN
 
-Needs complete source-ordered native local-record/cell packet with controls, exact reference/emitted/cohort association, canonical caller-domain and frame/error propagation, then combined replay/scan/ax2. Its actual callees in NGM_TAIL_GRAPH.json remain required. Existing fragmentary receipts do not establish source/model closure.
+OPEN. Complete source-ordered native local-record/cell observations and matched controls, reference/emitted/cohort association, SAME canonical callee-domain and frame/error composition are still needed. The actual callees in NGM_TAIL_GRAPH.json must close bottom-up. Lean-only association/domain work remains independently attemptable; this is not labeled Kani-only.
 
 ## TX2:137 partial_dot — OPEN
 
-Needs complete source-ordered native local-record/cell packet with controls, exact reference/emitted/cohort association, canonical caller-domain and frame/error propagation, then combined replay/scan/ax2. Its actual callees in NGM_TAIL_GRAPH.json remain required. Existing fragmentary receipts do not establish source/model closure.
-
+OPEN. Complete source-ordered native local-record/cell observations and matched controls, reference/emitted/cohort association, SAME canonical callee-domain and frame/error composition are still needed. The actual callees in NGM_TAIL_GRAPH.json must close bottom-up. Lean-only association/domain work remains independently attemptable; this is not labeled Kani-only.

@@ -23,6 +23,8 @@ theorem source (points : Array (Array Q 10#usize) 3#usize) (factors : Factors)
  let b := NGM_GuardExact.pick prow ib.val bounds.2
  have ra := NGM_GuardExact.index prow ia bounds.1
  have rb := NGM_GuardExact.index prow ib bounds.2
+ have readA : Array.index_usize prow (Usize.wrapping_sub 9#usize (Usize.wrapping_mul 2#usize t))=ok a := ra
+ have readB : Array.index_usize prow (Usize.wrapping_sub 8#usize (Usize.wrapping_mul 2#usize t))=ok b := rb
  have ca := canonical_pick Canon prow ia.val bounds.1 cp
  have cb := canonical_pick Canon prow ib.val bounds.2 cp
  obtain ⟨aa,bb,p0,p1,p2,p3,haa,_,hbb,_,h0,h1,h2,h3,_,canon⟩ := NGW_FactorRow.total a b ca cb
@@ -34,9 +36,14 @@ theorem source (points : Array (Array Q 10#usize) 3#usize) (factors : Factors)
  rw [advance]
  simp only [bind_tc_ok]
  dsimp! only
- simp only [ht,readp,ra,rb,haa,hbb,h0,h1,h2,h3,lift,bind_tc_ok]
- change (do let out ← NGW_FactorWrite.write factors k d row;ok (cont (rest,out)))=ok (cont (rest,out))
- rw [write]
+ simp only [ht,readp,readA,readB,haa,hbb,h0,h1,h2,h3,lift,bind_tc_ok]
+ unfold NGW_FactorWrite.write at write
+ obtain ⟨plane,mutable,tail⟩ := AspisR1.Port3_PushFrame.bind_success _ _ _ write
+ obtain ⟨next,update,tail⟩ := AspisR1.Port3_PushFrame.bind_success _ _ _ tail
+ rw [mutable,bind_tc_ok]
+ dsimp! only
+ rw [update,bind_tc_ok]
+ cases Result.ok.inj tail
  rfl
 
 #print axioms source

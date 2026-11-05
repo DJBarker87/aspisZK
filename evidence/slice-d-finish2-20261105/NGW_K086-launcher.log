@@ -1,0 +1,52 @@
+{"attempt": "NGW_K086", "exit_status": 1, "wall_seconds": 64.3750969429966, "peak_rss_kib": "4722144", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-d-finish2-20261105/NGW_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`,
+...
+}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-slice-d-finish2-20261105/NGW_src/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 2.59s
+Checking harness weights::NGW_new::box_g3...
+
+VERIFICATION RESULT:
+ ** 1 of 488 failed (50 unreachable)
+Failed Checks: assertion failed: match g {
+    0 => out.variant == v,
+    1 => words(out.factors[k][d][term])[limb] == words(f[k][d][term])[limb],
+    2 => words(out.points[p][i])[limb] == words(points[p][i])[limb],
+    3 => words(out.extra[j])[limb] == words(extra[j])[limb],
+    _ =>
+        (&*out as *const Weights) == log.allocated && log.calls == 1 &&
+                log.allocated.cast::<K>() != f.as_ptr().cast::<K>() &&
+            log.allocated.cast::<K>() != points.as_ptr().cast::<K>(),
+}
+ File: "crates/aspis-r1-cost-probe/src/NGW_new.rs", line 68, in weights::NGW_new::box_exercise
+
+VERIFICATION:- FAILED
+Verification Time: 60.318726s
+
+Manual Harness Summary:
+Verification failed for - weights::NGW_new::box_g3
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r5b40591ff3f14d43939cb74c355f75dc.scope; invocation ID: e809f86d38a548e09bd21e082e3d2955

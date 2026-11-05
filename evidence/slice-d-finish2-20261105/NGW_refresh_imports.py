@@ -4,7 +4,7 @@ E=Path(__file__).resolve().parent
 catalog_file=E/'NGW_EXPECTED_IMPORTS.jsonl'
 catalog={row['module']:row for line in catalog_file.read_text().splitlines()for row in[json.loads(line)]}
 sources=list(E.glob('NGW*.lean'))
-for directory in ['NGW_HelperRef']:
+for directory in ['NGW_HelperRef','NGW_FactorRef','NGW_DotRef']:
  if (E/directory).exists():sources+=list((E/directory).glob('*.lean'))
 for source in sources:
  text=source.read_text();assert not text.startswith('{'),source

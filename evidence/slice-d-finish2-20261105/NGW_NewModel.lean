@@ -15,6 +15,8 @@ theorem source (variant : FIn_WeightsExtract.FInVariant) (alpha : Array Q 10#usi
  let a9 := NGM_GuardExact.pick alpha 9 (by decide)
  have read8 := NGM_GuardExact.index alpha 8#usize (by decide)
  have read9 := NGM_GuardExact.index alpha 9#usize (by decide)
+ change Array.index_usize alpha 8#usize=ok a8 at read8
+ change Array.index_usize alpha 9#usize=ok a9 at read9
  have ca8 := canonical_pick Canon alpha 8 (by decide) ha
  have ca9 := canonical_pick Canon alpha 9 (by decide) ha
  let initial := Array.repeat 5#usize (Array.repeat 5#usize (Array.repeat 4#usize FIn_WeightsExtract.field.QM31.ZERO))
@@ -22,6 +24,7 @@ theorem source (variant : FIn_WeightsExtract.FInVariant) (alpha : Array Q 10#usi
    (repeated CanonRow 5#usize _ (repeated Canon 4#usize _ zero))
  obtain ⟨regular,regularRun,regularCanon⟩ := NGW_FactorOuter.source points initial 0#usize (by decide) pointCanon ci
  obtain ⟨factors,circleRun,circleCanon⟩ := NGW_CircleOuter.source z regular 0#usize (by decide) hz regularCanon
+ dsimp only [initial] at regularRun
  let extra := Array.make 2#usize [a8,a9]
  let w : FIn_WeightsExtract.Weights := ⟨variant,factors,points,extra⟩
  refine ⟨w,?_,circleCanon,pointCanon,?_⟩
@@ -29,7 +32,7 @@ theorem source (variant : FIn_WeightsExtract.FInVariant) (alpha : Array Q 10#usi
      FIn_WeightsExtract.Weights.box_from_parts,bind_tc_ok]
    rfl
  · intro q hq
-   simp only [extra,Array.make,List.mem_cons,List.not_mem_nil,or_false] at hq
+   simp only [w,extra,Array.make,List.mem_cons,List.not_mem_nil,or_false] at hq
    rcases hq with rfl|rfl
    · exact ca8
    · exact ca9

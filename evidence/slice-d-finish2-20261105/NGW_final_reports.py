@@ -1,0 +1,55 @@
+from pathlib import Path
+import json,hashlib
+E=Path(__file__).resolve().parent
+load=lambda n:json.loads((E/n).read_text())
+graph=load('../slice-d-finish-20261105/NGM_TAIL_GRAPH.json');closed={r for c in load('NGW_CLOSED.json')['functions']for r in c['rows']}
+updates={
+'TX2:047':'CLOSED under (y). Exact wrapper argument/readonly identity and raw returned record, K017..024; SAME canonical alpha child domain. NGW_PointsPacket.cohort; stage1 combined L028, ax2 L033 and native scan L035 pass.',
+'TX2:048':'CLOSED under (y). Source-ordered native arbitrary-prestate step, carry/product operands/reply, row/frame, reverse control, absorption/init/return K001..016,K025..030 with controls. E001 loop-free reference and NGW_PointValue/StepModel/ReverseInduction/PointsPacket laws. Exact natural product NGW_ProductLaw.total. Stage1 combined/audit pass; no parent promotion.',
+'TX2:127':'CLOSED under (y)/(aa). K079/080 variant, K081/K090 factor value, K083/084 points, K085/086 extra, K087/088 same-allocation ownership; matched corrupt-value and distinct-live-allocation controls fail. K082/K089 timeouts excluded; negative-only smaller scalar corruption preserves the K081 positive body (validator checks exact normalization). NGW_BoxModel.source/native_shape; source erasure NGW_BOX_ERASURE.json. Existing allocator fresh-owned-block-or-abort trust retained; no allocation-availability premise.',
+'TX2:128':'CLOSED under (y) on SAME canonical ten-alpha/two-z-coordinate domain. Split scalar/row/window/order/count/carry/control observations K036..047,K049..078,K091..094 with matched controls. Full regular/circle loop induction and canonicality: NGW_FactorOuter.source, NGW_CircleOuter.source, NGW_NewModel.source; exact cohort interface NGW_NewInterface.cohort. E002 factor reference with NGW_FactorReference.factor; NGW_FieldPorts and KMX frame/disjointness laws. Uses CLOSED statement_points/double/box packets on proved domains. NFW semantic-alpha/z producers remain external boundary obligations for callers; no producer assumed closed. Final L078/L079 pass; L080 complete traversal statically reconciled as disclosed below.',
+'TX2:119':'OPEN. NGM K088..097 five pairs retained by hash, plus missing reverse-fold corruption NGW_K034 now fails. E001 fixed-array polynomial_step_ref extracts after diagnosing NGM_E003 mutable loop-borrow collapse. NGW_PolynomialAdd and NGW_Horner prove coefficient add/canonical natural Horner cell/induction. L076 NGW_CurrentAddPort.adopted closes the actual native-to-adopted add port. Still missing exact multiplication/byte-reader carrier ports, SAME-byte seven-step source/cohort association and domain/frame propagation. These include Lean-only obligations; no full-fold native rerun.',
+'TX2:116':'OPEN. NGM K098/K099 full Result pair retained. NGW K095/096 scale and K097/098 conditional polynomial SAME argument/pointer/length/count captures pass/fail. E001 round_ref extracts; NGM_RoundScale.total retained. Still needs complete field-window/carrier association, reference/cohort transport and CLOSED polynomial on SAME bytes. Additional field/frame native observations only if current packet coverage proves insufficient.',
+'TX2:114':'OPEN. NGM fourteen step-observation pairs retained. E003 dot pack/unpack/push_result extracts; NGW K099/K100 actual typed Dot accumulator getters agree with nine-word/count reference, matched corruption fails. L075 NGW_DotCodec proves pack/unpack/count ABI roundtrips; L077 NGW_DotStep.pack_total/source proves exact complete Result/state/index/error transport to NGM_DotABI.stepResult. Still needs full canonical field-window/index propagation, exact CLOSED Q new/finish packet use, byte-source/error-prefix loop composition and adopted SAG association. Typed getters, no raw-layout or read/make cancellation credit.',
+'TX2:115':'OPEN. No driver rerun. Complete polynomial/round/dot/pair packets and NFW Prepared/view producer domains remain missing; constructor is now CLOSED on its stated domain. NGM timed-out K083/K086/K087 excluded and never resubmitted unchanged. Only (ai) staged cuts after real callee closure; no successful child premise.',
+'TX2:022':'OPEN relative to the adopted ledger. Import the committed NGH square packet read-only with hashes and SAME canonical receiver, then coherent replay/domain validation. This is not automatically a Kani obligation; no duplicate proof or unvalidated external credit.',
+'TX2:138':'OPEN boundary to NFW powers/preparation. Import committed CLOSED packet with provenance and establish SAME canonical call domain; no sibling candidate edits or duplicate proof.'}
+def fallback(r):
+ if r.get('ngm_status',r['status'])=='CLOSED':return 'Inherited CLOSED certificate and original domain/pins retained from NGM_TAIL_GRAPH.json; no new NGW credit or caller promotion.'
+ return 'OPEN. Complete source-ordered native local-record/cell observations and matched controls, reference/emitted/cohort association, SAME canonical callee-domain and frame/error composition are still needed. The actual callees in NGM_TAIL_GRAPH.json must close bottom-up. Lean-only association/domain work remains independently attemptable; this is not labeled Kani-only.'
+header='''# NGW TX2 acceptance tail
+
+**Target not established.** Additive NDT delta: TX2:047/048/127/128 CLOSED; inherited NGM double/guard retained. All four acceptance-tail roots TX2:114/115/116/119 remain OPEN. The complete cone, not a four-row shortcut, is tracked below.
+
+Final combined import NGW_L078 passes with AspisR1.RPx_Deployed.deployed via NGK/NGM. NGW_L079 raw ax2 accepts all 81 new roots with only propext/Classical.choice/Quot.sound; eight adversarial fixtures NGW_L034 use the identical audit binary. Final native scanner NGW_L080 returns exit 1 solely because the private catalog refresher omitted four generated-reference source baselines. Its COMPLETE 13,513-module traversal has zero dangling references or duplicate owners. NGW_SCAN_RECONCILIATION.json applies the unchanged NFX predicates to every retained row against corrected source imports, passes three metadata corruption checks, and preserves the original exit1. No second scanner exit0 or cold release replay is claimed.
+
+All 100 Kani, 80 Lean/audit, 3 extraction slots charged and consumed. Frozen release crates/programs unchanged; scratch-only harness patch, offline immutable frozen lock/graph checks, exact KMX mitigation and controls. P6/D188 option A, existing allocator and accepted runtime trust retained/reclassified; no headline premise retirement. NFW producer boundaries remain OPEN.
+
+'''
+s=header
+remaining='# NGW remaining obligations\n\nBudget exhausted (100/100 Kani, 80/80 Lean/audit, 3/3 extraction). Target not established. Member-specific open work follows; Lean-only work is not misclassified as a native blocker.\n\n'
+for r in graph:
+ status='CLOSED' if r['row']in closed else r.get('ngm_status',r['status'])
+ body=updates.get(r['row'],fallback(r));part=f"## {r['row']} {r['function'].split('::')[-1]} — {status}\n\n{body}\n\n";s+=part
+ if status=='OPEN':remaining+=part
+s+='Exact certificates/domains/native pairs: NGW_CLOSED.json. Actual child edges: NGW_EDGES.json plus immutable NGM_TAIL_GRAPH.json. Inherited large inputs are hash-pinned once in NGW_INPUTS/NGW_INPUT_INDEX.json and NGW_CACHE_IMPORTS.json.xz. All failure/timeout receipts retained.\n'
+(E/'NGW_TX2_TAIL.md').write_text(s);(E/'NGW_REMAINING.md').write_text(remaining)
+(E/'NGW_BRIDGES.md').write_text(header+''.join(f"{r}: {updates[r]}\n\n"for r in ['TX2:048','TX2:047','TX2:127','TX2:128','TX2:119','TX2:116','TX2:114','TX2:115']))
+# Freeze authoritative attempt outcomes; retain exact Section6 metrics in each receipt.
+rs=[load(str(p.relative_to(E)))for p in sorted(E.glob('NGW_[KLE][0-9][0-9][0-9]/receipt.json'))]
+summary=[{k:r.get(k)for k in ['attempt','kind','module','exit_status','wall_seconds','peak_rss_kib','swaps','source_revision','print_axioms']}for r in rs]
+(E/'NGW_RELEASE_RESULTS.json').write_text(json.dumps(dict(target='AspisR1.RPx_Deployed.deployed',established=False,focused_receipts=summary,receipt_fields='Each receipt additionally records command, caps/admission, source hashes and dependency fingerprints; dirty-source hashes supplement recorded git revision.'),indent=2)+'\n')
+(E/'NGW_FAILING_STEP.md').write_text('''# NGW failing steps and exclusions
+
+No failure supplies a success premise. Full metrics, exact commands, source hashes, revisions, dependency pins and axiom output are in each numbered receipt; NGW_RELEASE_RESULTS.json indexes them.
+
+- K031/K032: strict own source-preflight hash rejections before Kani (no native invocation/credit). K033: accidentally repeated inherited positive K100 after using NGW_invert instead of required NGM_invert. Disclosed duplicate, no new credit. Runner flag allowlist repaired; genuinely inverted K034 fails.
+- K035: 90s tool timeout on combined regular step; replaced by independent scalar operand/count/value packets K036..047. K048: 90s whole-array factor frame timeout; replaced by one-row/store-window K049..052 and Lean KMX frame/disjointness. No unchanged rerun or increased cap.
+- K082: 90s Box factor-corruption timeout. K089: outer 180s runner timeout, no verdict and no post-run lock receipt, excluded completely. Replacement K090 uses direct fixed scalar corruption; same original harness name, positive K081 body unchanged after cfg=false normalization. K090 fails (67.23s). K084 fails at 89.60s; it is a verdict, not a timeout.
+- Lean elaboration failures L002/003→004, L006→011, L012→015, L014/018/019→020, L023/025→026, L041/049→057/058, L043→059, L044/060/061→062, L050/063→067, L052→068/069, L056→070, L073→075, L074→076: imports/canonical wrappers, let/tuple/rewrite normalization, subtraction/usize bounds, range syntax/numerals, TAU/kind indexing and redundant rfl. Corrected changed proofs pass focused targets; no native/model mismatch found. Original failures retained.
+- NGM_E003 mutable loop borrow-collapse diagnosis preceded E001 loop-free fixed-array helper extraction; E001/E002/E003 all succeed in this job. No failed extraction shape retried unchanged.
+- L080: private catalog omitted FactorRef/DotRef Types/Funs baselines. Native traversal exit1 preserved; zero dangling/duplicate defects across all13513 modules. Fixed own refresher to include all three generated trees. NGW_SCAN_RECONCILIATION.json rechecks complete retained traversal using exact unchanged scanner predicate and source/retained-object hashes; three negative metadata checks. No further formal scope, audit binary run or fabricated scanner exit0.
+
+Missing callee laws, not successes: polynomial full SAME-byte carrier/multiplication/read association; round field-window/reference/cohort join plus polynomial; dot canonical window/index/Q/error-prefix/adopted-SAG join; finish_relation's pair and NFW producer boundaries. Full member-by-member distinction between Lean-only, native and imported-boundary work is NGW_REMAINING.md. All budget slots exhausted; no early stop.
+''')
+print('final reports assembled',len(rs),'receipts')

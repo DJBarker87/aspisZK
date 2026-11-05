@@ -1,15 +1,25 @@
-# NGW live handoff
+# NGW final handoff
 
-Branch codex/cx-slice-d-finish2-20261105. Target not established. Stage 0: rules and NGM tail handoff read; no new closure claimed.
+Branch codex/cx-slice-d-finish2-20261105. **AspisR1.RPx_Deployed.deployed not established.** NGW adds four CLOSED composed rows TX2:047/048 statement points, TX2:127 boxed-record constructor and TX2:128 Weights::new. Inherited NGM double/guard remain CLOSED. Acceptance roots TX2:114/115/116/119 remain OPEN; exact member-level work and domains are NGW_REMAINING.md and NGW_TX2_TAIL.md. No child success premise or producer boundary silently discharged.
 
-Budget: 100 Kani, 80 Lean/audit, 3 extraction. One own capped scope at a time (stricter local rule 6); admission requires exit 0 and allowed:true. All proof compilation on host, -M7000, 6G high / 8G max / swap 0 / 64 tasks. No timeout increase or unchanged timeout rerun.
+## Budget and execution
 
-Order: statement_points/state_only_statement_points; polynomial; Weights::new; round; dot; finish_relation. Dependencies are NGM_TAIL_GRAPH.json. NGM_INPUTS are reused by hash; NGW_INPUTS.json pins the first required reports. No passing NGM shape rerun. K083/K086/K087 excluded.
+All 100 Kani, 80 Lean/audit and 3 extraction slots charged/consumed, including strict-preflight failures and excluded attempts. NGW_BUDGET.json has no unused IDs. One own admitted capped scope at a time: admission exit0 AND allowed:true, MemoryHigh6G/MemoryMax8G/SwapMax0/TasksMax64, Lean -M7000, optimized/offline Rust. No cap/time increase, no unchanged timed-out shape rerun. NGW_ATTEMPTS.jsonl and numbered receipts preserve exact target, command, exit, wall time, peak RSS, swaps, revision, source hashes, dependency/Aeneas object pins and axiom output (AGENTS section6). NGW_RELEASE_RESULTS.json is the compact index. K033 duplicate inherited positive is disclosed and earns no credit; K089 lacks final lock check and earns no credit. All other admitted native checks record graph-before/lock-after. No native multiplication, Option<fn> credit, writable static oracle, uncapped heavy job or shipped source edits.
 
-Workspace planned: /home/dombarker/project-offloads/codex-cx-slice-d-finish2-20261105. Retained own cache: /home/dombarker/project-offloads/codex-cx-slice-d-finish-cache-20261104. Seed NGM exports and NGK coherent exports read-only; record actual selected hashes. Host disk initially 95%, 99GiB available: keep source and cache small.
+## Audit
 
-No shipped files, siblings, wallets or keys changed. No ELF rebuild trigger. P6/D188 option A and existing runtime trust retained. Every new closure needs matched controls, complete source/reference/cohort/domain/frame composition, RPx combined replay, scan and ax2. No success premise.
+Combined L078 exit0, wall3.9424s, peak5810320KiB, swap0. Raw ax2 L079 exit0, wall9.3996s, peak5791100KiB, swap0: 81 new roots, only standard propext/Classical.choice/Quot.sound. Eight fixtures L034 use the identical ProofDriver binary sha256 6ba6168eef448fae3d69014f3ffdea4f03a4a9b176c72898a7abb8289b1e29ee. Source revision 52600002612359d5102cf027e379010a74952f71 plus per-receipt exact dirty source hashes. NGW_AX2_PROVENANCE.json includes unchanged raw walker C and driver adaptation diffs.
 
-## Stage1 complete
+L080 native NFX traversal **exit1 preserved**, wall27.6284s, peak6999416KiB, swap0. All13513 modules were traversed, zero dangling refs/duplicate owners; private catalog lacked exactly four FactorRef/DotRef Types/Funs import baselines. Own refresher fixed without weakening the predicate. NGW_SCAN_RECONCILIATION.json checks every retained row against corrected source imports, same canonicalization, source-to-retained-export hashes, and three failing metadata corruptions. All rows now satisfy the unchanged predicate. No second scanner exit0 claimed; no formal scope after budget. Stage1 L035 was a clean native exit0 scan of13484 modules. This is focused coherent cached evidence, not a cold release replay.
 
-Two rows CLOSED: TX2:047/048. Native30, extraction1, Lean/audit35 attempts used. Exact certificate NGW_CLOSED.json; combined L028/ax2 L033/fixtures L034/scan L035 all pass (13484 modules). No root/parent promoted. Next: polynomial coefficient-add/reference and complete seven-step source/model association, reusing NGM native observations.
+## Retained host state
+
+Host dombarker@100.108.41.90; private workspace /home/dombarker/project-offloads/codex-cx-slice-d-finish2-20261105. Own cache /home/dombarker/project-offloads/codex-cx-slice-d-finish-cache-20261104 is retained, NEVER deleted. Seed selected30017 files/7597002976 bytes; copied30840072 bytes. Exact copied/imported hashes NGW_CACHE_IMPORTS.json.xz. Reused NGM/NGK exports and coherent SInt2 objects read-only; Aeneas object resolution pinned per receipt. Final export NGW_exports_20261105 inside own cache:108 files/460197994 bytes including retained objects, source snapshots and both audit binaries. NGW_EXPORT_MANIFEST.json sha256 3e1411bc18701cb2fe9a7f37422c17d92a9b0595bf26c22f3bc1a25e169aaabf. Add its `objects` directory FIRST to LEAN_PATH, then original runner's pinned seed paths. Do not use source snapshots as evidence of an unrecorded compile.
+
+Final host disk96%,79GiB available. Own NGW_tmp and NGW_src/target both empty (0bytes); no lingering own workspace process found. No shared cache/workspace cleanup and no keys created/deleted. Sources/harnesses remain outside release tree. NGW_INPUT_INDEX.json deduplicates repeated immutable snapshots by sha256; files over20MB prohibited and checked before commit; no __pycache__.
+
+## Trust, source and continuation
+
+Frozen crates/programs revision4bb3b3f51e16b4525f1d10336e2b0bcbbd775387 byte-identical. No shipped changes, so no ELF rebuild trigger; inherited hashes retained: default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4; devnet63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299; Pool121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548. No push. No sibling/session-A worktree touched.
+
+P6/D188 option-A semantic transport retained/reclassified, existing allocator and accepted RuntimePersistence/ReturnData/Memcmp/ClockSlotBinding retained; no trust removal or new trust item. Headline, L154 statement parameter and narrowed D188 unchanged. 100-bit per-attempt soundness/privacy/two-transaction design unchanged. Resume polynomial SAME-byte primitive/carrier association, round field-window join, dot canonical/Q/error-prefix join, then real pair/callee cone before finish_relation. NFW semantic-alpha/z and Prepared/view producers are boundary obligations, not assumptions of closure. Do not rerun retained passing shapes or excluded timed-out shapes unchanged.

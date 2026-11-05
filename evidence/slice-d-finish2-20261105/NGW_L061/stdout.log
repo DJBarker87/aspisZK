@@ -1,0 +1,85 @@
+NGW_generated/NGW_FactorCell.lean:43:24: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Array.update plane.1 d row
+in the target expression
+  (let (a2, index_mut_back) := plane
+    do
+    let a3 ← a2.update d (Array.make 4#usize [p0, p1, p2, p3] ⋯)
+    ok (cont (rest, index_mut_back a3))) =
+    ok (cont (rest, out))
+
+points : Std.Array (Std.Array Q 10#usize) 3#usize
+factors : Factors
+k d : Usize
+hk : ↑k < 3
+hd : ↑d < 5
+hp : Holds (Holds Canon) points
+hf : CanonFactors factors
+iter rest : NGW_ForwardRange.Range
+advance : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some d, rest)
+t : Usize
+ht : FIn_WeightsExtract.TAU.index_usize d = ok t
+bt : ↑t < 5
+bounds :
+  ↑(Usize.wrapping_sub 9#usize (Usize.wrapping_mul 2#usize t)) < 10 ∧
+    ↑(Usize.wrapping_sub 8#usize (Usize.wrapping_mul 2#usize t)) < 10
+ia : Usize := Usize.wrapping_sub 9#usize (Usize.wrapping_mul 2#usize t)
+ib : Usize := Usize.wrapping_sub 8#usize (Usize.wrapping_mul 2#usize t)
+prow : Std.Array Q 10#usize := NGM_GuardExact.pick points (↑k) hk
+readp : points.index_usize k = ok prow
+cp : Holds Canon (NGM_GuardExact.pick points (↑k) hk)
+a : Q := NGM_GuardExact.pick prow ↑ia ⋯
+b : Q := NGM_GuardExact.pick prow ↑ib ⋯
+ra : prow.index_usize ia = ok (NGM_GuardExact.pick prow ↑ia ⋯)
+rb : prow.index_usize ib = ok (NGM_GuardExact.pick prow ↑ib ⋯)
+readA : prow.index_usize (Usize.wrapping_sub 9#usize (Usize.wrapping_mul 2#usize t)) = ok a
+readB : prow.index_usize (Usize.wrapping_sub 8#usize (Usize.wrapping_mul 2#usize t)) = ok b
+ca : Canon (NGM_GuardExact.pick prow ↑ia ⋯)
+cb : Canon (NGM_GuardExact.pick prow ↑ib ⋯)
+aa bb p0 p1 p2 p3 : FIn_WeightsExtract.field.QM31
+haa : FIn_WeightsExtract.field.QM31.ONE.sub a = ok aa
+left✝² : Canon aa
+hbb : FIn_WeightsExtract.field.QM31.ONE.sub b = ok bb
+left✝¹ : Canon bb
+h0 : aa.mul bb = ok p0
+h1 : FIn_WeightsExtract.field.QM31.mul a bb = ok p1
+h2 : aa.mul b = ok p2
+h3 : FIn_WeightsExtract.field.QM31.mul a b = ok p3
+left✝ : NGW_FactorRow.source a b = ok (Array.make 4#usize [p0, p1, p2, p3] ⋯)
+canon : Holds Canon (Array.make 4#usize [p0, p1, p2, p3] ⋯)
+row : Std.Array FIn_WeightsExtract.field.QM31 4#usize := Array.make 4#usize [p0, p1, p2, p3] ⋯
+out : Factors
+write :
+  (do
+      let (plane, back) ← Array.index_mut_usize factors k
+      let out ← Array.update plane d row
+      ok (back out)) =
+    ok out
+co : CanonFactors out
+plane : Plane × (Plane → Std.Array Plane 5#usize)
+mutable : Array.index_mut_usize factors k = ok plane
+tail✝ :
+  (let (plane, back) := plane
+    do
+    let out ← Array.update plane d row
+    ok (back out)) =
+    ok out
+next : Std.Array Row 5#usize
+update : Array.update plane.1 d row = ok next
+tail : ok (plane.2 next) = ok out
+⊢ (let (a2, index_mut_back) := plane
+    do
+    let a3 ← a2.update d (Array.make 4#usize [p0, p1, p2, p3] ⋯)
+    ok (cont (rest, index_mut_back a3))) =
+    ok (cont (rest, out))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'NGW_FactorCell.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
