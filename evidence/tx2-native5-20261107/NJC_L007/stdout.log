@@ -1,0 +1,83 @@
+NJC_generated/NJC_ReaderResults.lean:29:11: error: Tactic `rfl` failed: The left-hand side
+  do
+    let q ← ok (some (kWords (word b.to_slice ⋯ 0) (word b.to_slice ⋯ 1) (word b.to_slice ⋯ 2) (word b.to_slice ⋯ 3)))
+    ok (CheckpointBytes3Reader.optionK q)
+is not definitionally equal to the right-hand side
+  ok
+    (have q := kWords (word b.to_slice ⋯ 0) (word b.to_slice ⋯ 1) (word b.to_slice ⋯ 2) (word b.to_slice ⋯ 3);
+    if Canonical q then core.result.Result.Ok (CheckpointBytes3Namespaces.fromK q)
+    else core.result.Result.Err verifier.Error.Checkpoint)
+
+case isTrue
+b : Std.Array U8 16#usize
+h✝¹ :
+  decode_k_spec b.to_slice =
+    ok (Option.map rawK (ExactLeafFieldCodec.decodeQM31 (MultiproofConeCanonical.bytesOf ↑b.to_slice)))
+h :
+  decode_k_spec b.to_slice =
+    ok
+      (if
+          Canonical
+            (kWords (word b.to_slice ⋯ 0) (word b.to_slice ⋯ 1) (word b.to_slice ⋯ 2) (word b.to_slice ⋯ 3)) then
+        some (kWords (word b.to_slice ⋯ 0) (word b.to_slice ⋯ 1) (word b.to_slice ⋯ 2) (word b.to_slice ⋯ 3))
+      else none)
+h✝ : Canonical (kWords (word b.to_slice ⋯ 0) (word b.to_slice ⋯ 1) (word b.to_slice ⋯ 2) (word b.to_slice ⋯ 3))
+⊢ (do
+      let q ← ok (some (kWords (word b.to_slice ⋯ 0) (word b.to_slice ⋯ 1) (word b.to_slice ⋯ 2) (word b.to_slice ⋯ 3)))
+      ok (CheckpointBytes3Reader.optionK q)) =
+    ok
+      (have q := kWords (word b.to_slice ⋯ 0) (word b.to_slice ⋯ 1) (word b.to_slice ⋯ 2) (word b.to_slice ⋯ 3);
+      if Canonical q then core.result.Result.Ok (CheckpointBytes3Namespaces.fromK q)
+      else core.result.Result.Err verifier.Error.Checkpoint)
+NJC_generated/NJC_ReaderResults.lean:29:11: error: Tactic `rfl` failed: The left-hand side
+  do
+    let q ← ok none
+    ok (CheckpointBytes3Reader.optionK q)
+is not definitionally equal to the right-hand side
+  ok
+    (have q := kWords (word b.to_slice ⋯ 0) (word b.to_slice ⋯ 1) (word b.to_slice ⋯ 2) (word b.to_slice ⋯ 3);
+    if Canonical q then core.result.Result.Ok (CheckpointBytes3Namespaces.fromK q)
+    else core.result.Result.Err verifier.Error.Checkpoint)
+
+case isFalse
+b : Std.Array U8 16#usize
+h✝¹ :
+  decode_k_spec b.to_slice =
+    ok (Option.map rawK (ExactLeafFieldCodec.decodeQM31 (MultiproofConeCanonical.bytesOf ↑b.to_slice)))
+h :
+  decode_k_spec b.to_slice =
+    ok
+      (if
+          Canonical
+            (kWords (word b.to_slice ⋯ 0) (word b.to_slice ⋯ 1) (word b.to_slice ⋯ 2) (word b.to_slice ⋯ 3)) then
+        some (kWords (word b.to_slice ⋯ 0) (word b.to_slice ⋯ 1) (word b.to_slice ⋯ 2) (word b.to_slice ⋯ 3))
+      else none)
+h✝ : ¬Canonical (kWords (word b.to_slice ⋯ 0) (word b.to_slice ⋯ 1) (word b.to_slice ⋯ 2) (word b.to_slice ⋯ 3))
+⊢ (do
+      let q ← ok none
+      ok (CheckpointBytes3Reader.optionK q)) =
+    ok
+      (have q := kWords (word b.to_slice ⋯ 0) (word b.to_slice ⋯ 1) (word b.to_slice ⋯ 2) (word b.to_slice ⋯ 3);
+      if Canonical q then core.result.Result.Ok (CheckpointBytes3Namespaces.fromK q)
+      else core.result.Result.Err verifier.Error.Checkpoint)
+NJC_generated/NJC_ReaderResults.lean:46:27: error(lean.invalidField): Invalid field `map`: The environment does not contain `Aeneas.Std.Result.map`, so it is not possible to project the field `map` from an expression
+  x
+of type
+  Result (core.result.Result AspisR1Stage2.aspis_core.field.QM31 verifier.Error)
+NJC_generated/NJC_ReaderResults.lean:46:1: error: Type mismatch
+  congrArg (fun x => ?m.79) h
+has type
+  (?m.80 do
+      let q ← ok (Option.map rawK (ExactLeafFieldCodec.decodeQM31 (MultiproofConeCanonical.bytesOf ↑b.to_slice)))
+      ok (CheckpointBytes3Reader.optionK q)) =
+    ?m.80 (ok (naturalK b))
+but is expected to have type
+  ok
+      (CheckpointBytes3Reader.optionK
+          (Option.map rawK (ExactLeafFieldCodec.decodeQM31 (MultiproofConeCanonical.bytesOf ↑b.to_slice))),
+        out) =
+    let (b, out) := (b, out)
+    ok (naturalK b, out)
+'NJC_ReaderResults.decodeK' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NJC_ReaderResults.k' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NJC_ReaderResults.boundedK' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
