@@ -1,0 +1,38 @@
+{"attempt": "NHQ_L023", "exit_status": 1, "wall_seconds": 3.2015152589883655, "peak_rss_kib": "5567592", "swaps": "0", "print_axioms": ["'NHQ_WeightPort.roundtrip' does not depend on any axioms", "'NHQ_WeightPort.width' depends on axioms: [propext]", "'NHQ_WeightPort.same' depends on axioms: [propext, sorryAx, Quot.sound]"]}
+NHQ_generated/NHQ_WeightPort.lean:24:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  fun q => NHE_DotRead.stageQ (native q)
+in the target expression
+  List.map (NHE_DotRead.stageQ ∘ native) ↑ws = ↑ws
+
+ws : Slice StageQ
+identity : (fun q => NHE_DotRead.stageQ (native q)) = id
+⊢ List.map (NHE_DotRead.stageQ ∘ native) ↑ws = ↑ws
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mism
+...
+NHQ_generated/NHQ_WeightPort.lean:24:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  fun q => NHE_DotRead.stageQ (native q)
+in the target expression
+  List.map (NHE_DotRead.stageQ ∘ native) ↑ws = ↑ws
+
+ws : Slice StageQ
+identity : (fun q => NHE_DotRead.stageQ (native q)) = id
+⊢ List.map (NHE_DotRead.stageQ ∘ native) ↑ws = ↑ws
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    ws
+  has type
+    Slice StageQ
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑ws
+'NHQ_WeightPort.roundtrip' does not depend on any axioms
+'NHQ_WeightPort.width' depends on axioms: [propext]
+'NHQ_WeightPort.same' depends on axioms: [propext, sorryAx, Quot.sound]
+
+Running as unit: run-re13723abc813434e91811bc17331b509.scope; invocation ID: e1ea0261f7dc4284971d05c8f1f7116a

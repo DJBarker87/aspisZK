@@ -1,0 +1,45 @@
+{"attempt": "NHQ_L015", "exit_status": 1, "wall_seconds": 3.034853144083172, "peak_rss_kib": "5612060", "swaps": "0", "print_axioms": ["'NHQ_FinishRelationModel.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NHQ_FinishRelationModel.pair_stage' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NHQ_FinishRelationModel.child_error' does not depend on any axioms", "'NHQ_FinishRelationModel.child_fail' does not depend on any axioms", "'NHQ_FinishRelationModel.child_div' does not depend on any axioms"]}
+NHQ_generated/NHQ_FinishRelationModel.lean:29:1: error: Tactic `rfl` failed: The left-hand side
+  do
+    let we ← p.alpha.index_usize 0#usize
+    let r ← ops.op5 v.round0 we p.claim 0#usize
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let i ← ops.op6 p.variant
+        if i = 2#usize then do
+            let we1 ← p.alpha.index_usize 1#usize
+            let r1 ← ops.op5 v.round1 we1 val 1#usize
+            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue val1 => do
+                let r2 ← ops.op3 p.vari
+...
+ps.op0 16#u16 1#usize value
+                    let different ← ops.ne value_2 value
+                    if different = true then ok (core.result.Result.Err verifier.Error.Relation)
+                      else do
+                        ops.op1 obs verifier.Phase.Relation
+                        let reply ← ops.op4 v.final_message a.weights.deref
+                        match reply with
+                          | core.result.Result.Ok value => do
+                            ops.op0 17#u16 0#usize value
+                            ops.op0 17#u16 1#usize a.rhs
+                            if (a.next != 22#usize) = true then ok (core.result.Result.Err verifier.Error.Query)
+                              else do
+                                let different ← ops.ne value a.rhs
+                                if different = true then ok (core.result.Result.Err verifier.Error.Query)
+                                  else do
+                                    ops.op1 obs verifier.Phase.Final
+                                    ok (core.result.Result.Ok ())
+                          | core.result.Result.Err error => ok (core.result.Result.Err error)
+                  | core.result.Result.Err error => ok (core.result.Result.Err error)
+              | core.result.Result.Err error => ok (core.result.Result.Err error)
+      | core.result.Result.Err error => ok (core.result.Result.Err error)
+'NHQ_FinishRelationModel.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NHQ_FinishRelationModel.pair_stage' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NHQ_FinishRelationModel.child_error' does not depend on any axioms
+'NHQ_FinishRelationModel.child_fail' does not depend on any axioms
+'NHQ_FinishRelationModel.child_div' does not depend on any axioms
+
+Running as unit: run-rd4d85a49aea543abbe408dbe12d2cdc6.scope; invocation ID: b8ca58c0d61b4a148abb211954b98e28

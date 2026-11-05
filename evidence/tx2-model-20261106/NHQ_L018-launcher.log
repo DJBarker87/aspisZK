@@ -1,0 +1,38 @@
+{"attempt": "NHQ_L018", "exit_status": 1, "wall_seconds": 2.123149170074612, "peak_rss_kib": "4385336", "swaps": "0", "print_axioms": []}
+NHQ_generated/NHQ_BindInspect.lean:3:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Result.bind`
+NHQ_generated/NHQ_BindInspect.lean:4:7: error(lean.unknownIdentifier): Unknown constant `bind_tc`
+Aeneas.Std.bind_assoc_eq.{u} {a b c : Type u} (e : Result a) (g : a → Result b) (h : b → Result c) :
+  e >>= g >>= h = e >>= fun x => g x >>= h
+Aeneas.Std.bind_tc_ok.{u_1} {α β : Type u_1} (x : α) (f : α → Result β) :
+  (do
+      let y ← ok x
+      f y) =
+    f x
+def AspisR1.NGM_FinishControl.bindChild : {A B : Type} →
+  Result (AspisR1.NGM_FinishControl.R A) →
+    (A → Result (AspisR1.NGM_FinishControl.R B)) → Result (AspisR1.NGM_FinishControl.R B) :=
+fun {A B} action next => do
+  le
+...
+NHQ_generated/NHQ_BindInspect.lean:3:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Result.bind`
+NHQ_generated/NHQ_BindInspect.lean:4:7: error(lean.unknownIdentifier): Unknown constant `bind_tc`
+Aeneas.Std.bind_assoc_eq.{u} {a b c : Type u} (e : Result a) (g : a → Result b) (h : b → Result c) :
+  e >>= g >>= h = e >>= fun x => g x >>= h
+Aeneas.Std.bind_tc_ok.{u_1} {α β : Type u_1} (x : α) (f : α → Result β) :
+  (do
+      let y ← ok x
+      f y) =
+    f x
+def AspisR1.NGM_FinishControl.bindChild : {A B : Type} →
+  Result (AspisR1.NGM_FinishControl.R A) →
+    (A → Result (AspisR1.NGM_FinishControl.R B)) → Result (AspisR1.NGM_FinishControl.R B) :=
+fun {A B} action next => do
+  let reply ← action
+  let cf ← core.result.Result.Insts.CoreOpsTry.branch reply
+  match cf with
+    | core.ops.control_flow.ControlFlow.Continue value => next value
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual B
+        (core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+
+Running as unit: run-r0b96c4e53cc44ec889f2f768aae90ec0.scope; invocation ID: a2844568128a431cb4e01a33081c2447
