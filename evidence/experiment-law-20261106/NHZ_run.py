@@ -47,8 +47,8 @@ elif kind=='audit':
  sources=['NHZ_generated/NHZ_ProofDriver.lean','NHZ_generated/NHZ_Driver.lean','NHZ_batch.py','NHZ_AUDIT_ROOTS.json','NHZ_EXPECTED_IMPORTS.jsonl']+(['NHZ_POOL_ROOTS.json'] if target.startswith('pool') else [])
  for n in sources:files[n]=(E/Path(n).name).read_text()
  command=['python3','NHZ_batch.py',target]
-elif kind=='export':
- sources=['NHZ_export.py'];files['NHZ_export.py']=(E/'NHZ_export.py').read_text();command=['python3','NHZ_export.py']
+elif kind in ['export','cleanup']:
+ script='NHZ_'+kind+'.py';sources=[script];files[script]=(E/script).read_text();command=['python3',script]
 else:raise ValueError(kind)
 config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NHZ_tmp',LEAN_PATH=':'.join(json.loads((E/'NHZ_PATHS.json').read_text()))),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')
 files[a+'.json']=json.dumps(config)
