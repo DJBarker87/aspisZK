@@ -1,0 +1,264 @@
+@AspisR1.NIN_NativeInstance.from_native : ∀ {A C : Type} (missing : AspisR1.IDa_Deployed.Uninstalled C) (err : C)
+  (r : AspisR1.NP6_StdModel.Reservation)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (a : AspisR1.SCE_Experiment.Adversary A)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) {Tx W : Type} (Q : ℕ),
+  AspisR1.ART_AdversaryWork.work (AspisR1.NHW_DeployedQuery.configuration missing err r) hashv copy allocator
+        AspisR1.CPH_Program.verifier a H ≤
+      Q →
+    ∀
+      (reached :
+        (AspisV8R19.MemoizedProgramLaw.eval H
+                    (AspisR1.ART_PartialAccount.account (AspisR1.NHW_DeployedQuery.configuration missing err r) hashv
+                      copy allocator AspisR1.CPH_Program.verifier a)).2.2.2.isSome =
+          true)
+      (p : AspisR1.CPG_Projection.Observations Tx A) (t u : Tx) (n1 : AspisR1.S2W_ExtractionBoundary.First)
+      (n2 : AspisR1.S2W_ExtractionBoundary.Second) (actions : List (AspisR1.CPP_BankState.Action A)),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        AspisR1.S2Trust.Valid
+            (AspisV8R19.MemoizedProgramLaw.eval H
+                      (AspisR1.ART_PartialAccount.account (AspisR1.NHW_DeployedQuery.configuration missing err r) hashv
+                        copy allocator AspisR1.CPH_Program.verifier a)).2.1.entry.heap →
+          ∀ (system : AspisR1.S2W_ExtractionBoundary.Program) (final1 : A)
+            (post1 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record))
+            (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+            AspisR1.S2W_DigestExtraction.AeneasExtraction
+                (AspisR1.DrvC_Installation.sdk (AspisR1.NHW_DeployedQuery.configuration missing err r)) n1 n2 hashv →
+              AspisR1.CPH_Game.DeployedPairExecution p t u
+                  (AspisV8R19.MemoizedProgramLaw.eval H
+                          (AspisR1.ART_PartialAccount.account (AspisR1.NHW_DeployedQuery.configuration missing err r)
+                            hashv copy allocator AspisR1.CPH_Program.verifier a)).2.1.entry
+                  ((AspisV8R19.MemoizedProgramLaw.eval H
+                                  (AspisR1.ART_PartialAccount.account
+                                    (AspisR1.NHW_DeployedQuery.configuration missing err r) hashv copy allocator
+                                    AspisR1.CPH_Program.verifier a)).2.2.2.get
+                        reached).1.entry
+                  saved actions n1 n2 copy allocator AspisR1.CPH_Program.verifier →
+                AspisR1.S2W_D189Wrappers.first n1 copy allocator
+                      (AspisV8R19.MemoizedProgramLaw.eval H
+                              (AspisR1.ART_PartialAccount.account
+                                (AspisR1.NHW_DeployedQuery.configuration missing err r) hashv copy allocator
+                                AspisR1.CPH_Program.verifier a)).2.1.entry
+                      AspisR1.CPH_Program.verifier
+                      (AspisV8R19.MemoizedProgramLaw.eval H
+                              (AspisR1.ART_PartialAccount.account
+                                (AspisR1.NHW_DeployedQuery.configuration missing err r) hashv copy allocator
+                                AspisR1.CPH_Program.verifier a)).2.1.data
+                      (AspisV8R19.MemoizedProgramLaw.eval H
+                              (AspisR1.ART_PartialAccount.account
+                                (AspisR1.NHW_DeployedQuery.configuration missing err r) hashv copy allocator
+                                AspisR1.CPH_Program.verifier a)).2.1.state =
+                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)) →
+                  AspisR1.CPH_Protection.Facts p t saved AspisR1.CPH_Program.verifier →
+                    AspisR1.CPG_Projection.ordinary p system t ((p.layout t).handles 2).1 →
+                      AspisR1.CPR_DataPersistence.TwoTransactionLaw (AspisR1.CPG_Projection.adjacent p)
+                          (AspisR1.CPG_Projection.ordinary p system) (AspisR1.CPG_Projection.before p)
+                          (AspisR1.CPG_Projection.tentative p) (AspisR1.CPG_Projection.success p)
+                          (AspisR1.CPG_Projection.loaded p) →
+                        ∀ (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)),
+                          AspisR1.S2Trust.S2TrustedSdkBorrow L →
+                            ∀ (w2 : W),
+                              L.related w2
+                                  ((AspisV8R19.MemoizedProgramLaw.eval H
+                                                    (AspisR1.ART_PartialAccount.account
+                                                      (AspisR1.NHW_DeployedQuery.configuration missing err r) hashv copy
+                                                      allocator AspisR1.CPH_Program.verifier a)).2.2.2.get
+                                          reached).1.entry.heap →
+                                AspisR1.S2Trust.Valid
+                                    ((AspisV8R19.MemoizedProgramLaw.eval H
+                                                      (AspisR1.ART_PartialAccount.account
+                                                        (AspisR1.NHW_DeployedQuery.configuration missing err r) hashv
+                                                        copy allocator AspisR1.CPH_Program.verifier a)).2.2.2.get
+                                            reached).1.entry.heap →
+                                  ∀ (f : AspisR1.S2W_NativeConsolidation.FirstCut)
+                                    (s : AspisR1.S2W_NativeConsolidation.SecondCut) (finish1 : Aeneas.Std.Usize),
+                                    Aeneas.Std.Slice.index_usize
+                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                    (AspisR1.ART_PartialAccount.account
+                                                      (AspisR1.NHW_DeployedQuery.configuration missing err r) hashv copy
+                                                      allocator AspisR1.CPH_Program.verifier a)).2.1.entry.first
+                                          0#usize =
+                                        Aeneas.Std.Result.ok f.proofAccount →
+                                      Aeneas.Std.Slice.index_usize
+                                            (AspisV8R19.MemoizedProgramLaw.eval H
+                                                      (AspisR1.ART_PartialAccount.account
+                                                        (AspisR1.NHW_DeployedQuery.configuration missing err r) hashv
+                                                        copy allocator AspisR1.CPH_Program.verifier a)).2.1.entry.first
+                                            1#usize =
+                                          Aeneas.Std.Result.ok f.publicAccount →
+                                        AdapterRw.r1_pool_adapter.owned.OwnedAccount.data
+                                              (AspisR1.SCH_IdealSdk.dictionary
+                                                (AspisR1.NHW_DeployedQuery.configuration missing err r) hashv H)
+                                              f.proofAccount =
+                                            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok f.raw) →
+                                          AdapterRw.r1_pool_adapter.owned.OwnedAccount.data
+                                                (AspisR1.SCH_IdealSdk.dictionary
+                                                  (AspisR1.NHW_DeployedQuery.configuration missing err r) hashv H)
+                                                f.publicAccount =
+                                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok f.pub) →
+                                            Aeneas.Std.core.slice.index.Slice.index
+                                                  (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8)
+                                                  f.raw { start := 688#usize, «end» := finish1 } =
+                                                Aeneas.Std.Result.ok f.proof →
+                                              (↑f.raw).length = ↑finish1 →
+                                                Aeneas.Std.Slice.index_usize
+                                                      ((⋯.get reached).1.entry.second
+                                                        AspisR1.S2W_D189Wrappers.secondSizes)
+                                                      0#usize =
+                                                    Aeneas.Std.Result.ok s.proofAccount →
+                                                  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data
+                                                        (AspisR1.SCH_IdealSdk.dictionary
+                                                          (AspisR1.NHW_DeployedQuery.configuration missing err r) hashv
+                                                          H)
+                                                        s.proofAccount =
+                                                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok s.raw) →
+                                                    Aeneas.Std.core.slice.index.Slice.index
+                                                          (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice
+                                                            Aeneas.Std.U8)
+                                                          s.raw { start := 688#usize, «end» := s.finish } =
+                                                        Aeneas.Std.Result.ok s.proof →
+                                                      (↑s.raw).length = ↑s.finish →
+                                                        ∀ (v : AdapterRw.r1_pool_adapter.ValidatedAsqa),
+                                                          ⋯ =
+                                                              Aeneas.Std.Result.ok
+                                                                (Aeneas.Std.core.result.Result.Ok v) →
+                                                            ⋯ → ⋯
+@AspisR1.NIN_PhysicalInstance.physical_instance : ∀ {A C : Type}
+  (base : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (err : C)
+  (r : AspisR1.NP6_StdModel.Reservation)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (a : AspisR1.SCE_Experiment.Adversary A)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) {Tx W : Type} (Q : ℕ),
+  AspisR1.ART_AdversaryWork.work (AspisR1.FIp_Install.configuration err base r) hashv copy allocator
+        AspisR1.CPH_Program.verifier a H ≤
+      Q →
+    ∀
+      (reached :
+        (AspisV8R19.MemoizedProgramLaw.eval H
+                    (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err base r) hashv copy
+                      allocator AspisR1.CPH_Program.verifier a)).2.2.2.isSome =
+          true)
+      (prepared : AspisR1.CheckpointBytes5Writer.Prepared) (accumulator : AspisR1.CheckpointBytes5Writer.Accumulator)
+      (domain : AspisR1.NGC_KNE_Caller.WriterDomain prepared accumulator)
+      (hp hu hc : AspisR1.CheckpointBytes5Effect.Digest) (p : AspisR1.CPG_Projection.Observations Tx A) (t u : Tx)
+      (n1 : AspisR1.S2W_ExtractionBoundary.First) (n2 : AspisR1.S2W_ExtractionBoundary.Second)
+      (actions : List (AspisR1.CPP_BankState.Action A)),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        AspisR1.S2Trust.Valid
+            (AspisV8R19.MemoizedProgramLaw.eval H
+                      (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err base r) hashv copy
+                        allocator AspisR1.CPH_Program.verifier a)).2.1.entry.heap →
+          ∀ (system : AspisR1.S2W_ExtractionBoundary.Program) (final1 : A)
+            (post1 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)),
+            AspisR1.CPH_Game.DeployedPairExecution p t u
+                (AspisV8R19.MemoizedProgramLaw.eval H
+                        (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err base r) hashv copy
+                          allocator AspisR1.CPH_Program.verifier a)).2.1.entry
+                ((AspisV8R19.MemoizedProgramLaw.eval H
+                                (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err base r) hashv
+                                  copy allocator AspisR1.CPH_Program.verifier a)).2.2.2.get
+                      reached).1.entry
+                (AspisR1.NGR_HISTORY.checkpoint prepared accumulator domain hp hu hc) actions n1 n2 copy allocator
+                AspisR1.CPH_Program.verifier →
+              AspisR1.S2W_D189Wrappers.first n1 copy allocator
+                    (AspisV8R19.MemoizedProgramLaw.eval H
+                            (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err base r) hashv
+                              copy allocator AspisR1.CPH_Program.verifier a)).2.1.entry
+                    AspisR1.CPH_Program.verifier
+                    (AspisV8R19.MemoizedProgramLaw.eval H
+                            (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err base r) hashv
+                              copy allocator AspisR1.CPH_Program.verifier a)).2.1.data
+                    (AspisV8R19.MemoizedProgramLaw.eval H
+                            (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err base r) hashv
+                              copy allocator AspisR1.CPH_Program.verifier a)).2.1.state =
+                  Aeneas.Std.Result.ok
+                    (Aeneas.Std.core.result.Result.Ok
+                      (AspisR1.NGR_HISTORY.checkpoint prepared accumulator domain hp hu hc, post1, final1)) →
+                AspisR1.CPH_Protection.Facts p t (AspisR1.NGR_HISTORY.checkpoint prepared accumulator domain hp hu hc)
+                    AspisR1.CPH_Program.verifier →
+                  AspisR1.CPG_Projection.ordinary p system t ((p.layout t).handles 2).1 →
+                    AspisR1.CPR_DataPersistence.TwoTransactionLaw (AspisR1.CPG_Projection.adjacent p)
+                        (AspisR1.CPG_Projection.ordinary p system) (AspisR1.CPG_Projection.before p)
+                        (AspisR1.CPG_Projection.tentative p) (AspisR1.CPG_Projection.success p)
+                        (AspisR1.CPG_Projection.loaded p) →
+                      ∀ (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)),
+                        AspisR1.S2Trust.S2TrustedSdkBorrow L →
+                          ∀ (w2 : W),
+                            L.related w2
+                                ((AspisV8R19.MemoizedProgramLaw.eval H
+                                                  (AspisR1.ART_PartialAccount.account
+                                                    (AspisR1.FIp_Install.configuration err base r) hashv copy allocator
+                                                    AspisR1.CPH_Program.verifier a)).2.2.2.get
+                                        reached).1.entry.heap →
+                              AspisR1.S2Trust.Valid
+                                  ((AspisV8R19.MemoizedProgramLaw.eval H
+                                                    (AspisR1.ART_PartialAccount.account
+                                                      (AspisR1.FIp_Install.configuration err base r) hashv copy
+                                                      allocator AspisR1.CPH_Program.verifier a)).2.2.2.get
+                                          reached).1.entry.heap →
+                                ∀ (f : AspisR1.S2W_NativeConsolidation.FirstCut)
+                                  (s : AspisR1.S2W_NativeConsolidation.SecondCut) (finish1 : Aeneas.Std.Usize),
+                                  Aeneas.Std.Slice.index_usize
+                                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                                  (AspisR1.ART_PartialAccount.account
+                                                    (AspisR1.FIp_Install.configuration err base r) hashv copy allocator
+                                                    AspisR1.CPH_Program.verifier a)).2.1.entry.first
+                                        0#usize =
+                                      Aeneas.Std.Result.ok f.proofAccount →
+                                    Aeneas.Std.Slice.index_usize
+                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                    (AspisR1.ART_PartialAccount.account
+                                                      (AspisR1.FIp_Install.configuration err base r) hashv copy
+                                                      allocator AspisR1.CPH_Program.verifier a)).2.1.entry.first
+                                          1#usize =
+                                        Aeneas.Std.Result.ok f.publicAccount →
+                                      AdapterRw.r1_pool_adapter.owned.OwnedAccount.data
+                                            (AspisR1.SCH_IdealSdk.dictionary
+                                              (AspisR1.FIp_Install.configuration err base r) hashv H)
+                                            f.proofAccount =
+                                          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok f.raw) →
+                                        AdapterRw.r1_pool_adapter.owned.OwnedAccount.data
+                                              (AspisR1.SCH_IdealSdk.dictionary
+                                                (AspisR1.FIp_Install.configuration err base r) hashv H)
+                                              f.publicAccount =
+                                            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok f.pub) →
+                                          Aeneas.Std.core.slice.index.Slice.index
+                                                (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8)
+                                                f.raw { start := 688#usize, «end» := finish1 } =
+                                              Aeneas.Std.Result.ok f.proof →
+                                            (↑f.raw).length = ↑finish1 →
+                                              Aeneas.Std.Slice.index_usize
+                                                    (⋯.entry.second AspisR1.S2W_D189Wrappers.secondSizes) 0#usize =
+                                                  Aeneas.Std.Result.ok s.proofAccount →
+                                                AdapterRw.r1_pool_adapter.owned.OwnedAccount.data
+                                                      (AspisR1.SCH_IdealSdk.dictionary
+                                                        (AspisR1.FIp_Install.configuration err base r) hashv H)
+                                                      s.proofAccount =
+                                                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok s.raw) →
+                                                  Aeneas.Std.core.slice.index.Slice.index
+                                                        (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice
+                                                          Aeneas.Std.U8)
+                                                        s.raw ⋯ =
+                                                      Aeneas.Std.Result.ok s.proof →
+                                                    (↑s.raw).length = ↑s.finish →
+                                                      ∀ (v : AdapterRw.r1_pool_adapter.ValidatedAsqa), ⋯
+@AspisR1.NIN_GameProjection.PhysicalRealization : {Tx A : Type} →
+  AspisR1.CPG_Projection.Observations Tx A →
+    (Tx → Tx → Prop) →
+      (Tx → ℕ → AspisR1.CPR_DataPersistence.Image) →
+        (Tx → ℕ → AspisR1.CPR_DataPersistence.Image) →
+          (Tx → Bool) →
+            (Tx → ℕ → Option AspisV8R19.DuplexFrames.Bytes) →
+              (Tx → List (AspisR1.CPP_BankState.Action A)) →
+                (Tx → List AspisR1.S2X.AccountEvent) →
+                  (Tx → AspisR1.Hist_RuntimeEntry.Layout) → (Tx → ℕ → AspisR1.Hist_Authority.Key) → Prop
+'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIN_NativeInstance.from_native' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIN_Observer.realizes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIN_GameProjection.external_status_independent' depends on axioms: [propext, Classical.choice, Quot.sound]

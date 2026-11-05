@@ -37,4 +37,6 @@ for p in (B/'NIN_objects').rglob('*.olean'):
    exports.append(dict(source=str(q),path=str(dest),sha256=sha,bytes=q.stat().st_size))
 (B/'NIN_EXPORT.json').write_text(json.dumps(dict(export=str(out),files=exports,logical_bytes=sum(x['bytes']for x in exports),cache_retained=str(C),closure_objects=len(rows),closure_bytes=sum(x['bytes']for x in rows),aeneas_files=sum(x['module']=='Aeneas'or x['module'].startswith('Aeneas.')or x['module'].startswith('AeneasMeta')for x in rows)),indent=1)+'\n')
 (B/'NIN_RESTORE_PATHS.json').write_text(json.dumps([str(out)]+[r for r in roots if r!=str(B/'NIN_objects')],indent=1)+'\n')
+toolroot=Path(config['env']['LEAN_SYSROOT'])
+(B/'NIN_TOOL_PINS.json').write_text(json.dumps({str(p):dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size)for p in [toolroot/'bin/lean',toolroot/'bin/lake',toolroot/'bin/leanc']},indent=1)+'\n')
 print(json.dumps(dict(closure_files=len(rows),variants=len(variants),export_files=len(exports),export_bytes=sum(x['bytes']for x in exports))))
