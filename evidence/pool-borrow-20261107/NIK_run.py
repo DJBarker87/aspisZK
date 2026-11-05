@@ -6,7 +6,7 @@ B='/home/dombarker/project-offloads/codex-cx-pool-borrow-20261107';C='/home/domb
 if (E/'NIK_ACTIVE.json').exists():raise SystemExit('own native/extraction scope active')
 if (E/'NIK_HOLD').exists():sys.exit(75)
 guard=E/'NIK_CLIENT_ACTIVE'; fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,str(os.getpid()).encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
-a,kind,target=sys.argv[1:];assert (re.fullmatch('NIK_L[0-9]{3}',a) and 1<=int(a[-3:])<=60) or a=='NIK_M001' and not (E/a).exists()
+a,kind,target=sys.argv[1:];assert (re.fullmatch('NIK_L[0-9]{3}',a) and 1<=int(a[-3:])<=60) or a in ['NIK_M001','NIK_E001'] and not (E/a).exists()
 def ssh(code,data=None,submitted=False):
  for retry in range(11):
   r=subprocess.run(['ssh','-o','ControlMaster=no','-o','ConnectTimeout=15',H,code],input=data,capture_output=True,text=True)
@@ -37,9 +37,13 @@ if kind=='lean':
  rel=target.replace('.','/');n='NIK_generated/'+rel+'.lean';files[n]=(E/(rel+'.lean')).read_text();sources=[n]
  command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NIK_generated','-o','NIK_objects/'+rel+'.olean',n]
  if target in ['NIK_Driver','NIK_ProofDriver','NIK_PoolProofDriver','NIK_PoolDriver']:command+=['-c','NIK_native/'+target+'.c']
+elif kind=='extract':
+ sources=['NIK_extract_host.py'];files['NIK_extract_host.py']=(E/'NIK_extract_host.py').read_text();command=['python3','NIK_extract_host.py']
 elif kind=='mir':
  sources=['NIK_mir_host.py'];files['NIK_mir_host.py']=(E/'NIK_mir_host.py').read_text();command=['python3','NIK_mir_host.py']
 elif kind=='link':
+ for wrapper in ['NFA_WALKER.c','NFA_MemoryLimit.c']:
+  files['NIK_native/'+wrapper]=(E.parent/'pool-b4-20261107/NIE_L011/sources/NIE_native'/wrapper).read_text()
  sources=['NIK_native/'+target+'.c','NIK_native/NFA_WALKER.c','NIK_native/NFA_MemoryLimit.c']
  command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NIK_native/'+target,*sources]
 elif kind=='audit':
