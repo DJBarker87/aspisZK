@@ -15,7 +15,7 @@ The supplied deltas reproduce 335/599 CLOSED, ten above the approximate request 
 
 Routes are explicit per row: (y), (ad), (ae), (ah), (ai), (al), and reclassification. Pool A uses (af), outside599. NHH CM31::inv is a fixed M31::inv specialization; generic CM31::inv_with remains OPEN under the K-2 quarantine. TOOL-BOUNDARY TX1:036/040/041/043/044 remain OPEN.
 
-RuntimeClockSlotBinding and ReviewedTranscription-prepared_claim are ADDED-LEAD, the latter used by TX1:193 under (ah). RuntimeCpiReadonlyEntry7 is ADDED-PENDING-LEAD and UNUSED. RuntimeReturnData (nonempty1..1024) and RuntimeMemcmp remain ACCEPTED. P6/D188 option A is reclassification, never removal. L154 is a statement parameter; coherent digest/error op43/op44.
+RuntimeClockSlotBinding and ReviewedTranscription-prepared_claim are ADDED-LEAD, the latter used by TX1:193 under (ah). RuntimeCpiReadonlyEntry7 is ADDED-PENDING-LEAD and UNUSED. RuntimeReturnData (nonempty1..1024) and RuntimeMemcmp remain ACCEPTED. ReviewedTranscription-polynomial explicitly records NHE TX2:119 under (ah) as retained RECLASSIFICATION. P6/D188 option A is reclassification, never removal. L154 is a statement parameter; coherent digest/error op43/op44.
 
 ## Pool consumer rows (outside599)
 

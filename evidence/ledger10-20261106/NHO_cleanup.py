@@ -10,6 +10,9 @@ for n in ['NHO_ProofDriver','NHO_Driver']:
 code='''from pathlib import Path
 import json,hashlib,subprocess,shutil
 b=Path(B);done=[]
+ps=subprocess.check_output(['ps','-eo','args'],text=True).splitlines()
+active=[line for line in ps if ('S2W_run_host.py NHO_'in line or (B+'/NHO_native/'in line and ('NHO_ProofDriver'in line or'NHO_Driver'in line)))]
+assert not active,active
 for f in files:
  p=Path(f['path']);assert p.is_relative_to(b)and p.is_file(),str(p)
  assert hashlib.sha256(p.read_bytes()).hexdigest()==f['sha256'],str(p)
@@ -18,7 +21,7 @@ for f in files:
  size=p.stat().st_size;p.unlink();done.append(dict(f,bytes=size))
 cache=Path('/home/dombarker/project-offloads/codex-cx-ledger8-cache-20261104')
 usage=shutil.disk_usage(b);du=subprocess.run(['du','-sk',str(cache)],capture_output=True,text=True)
-result=dict(removed=done,removed_bytes=sum(r['bytes']for r in done),cache_retained=str(cache),cache_deleted=False,keys_handled=False,du_cache_kib=du.stdout.strip(),disk_free_bytes=usage.free,all_source_evidence_retained=True)
+result=dict(removed=done,removed_bytes=sum(r['bytes']for r in done),cache_retained=str(cache),cache_deleted=False,keys_handled=False,du_cache_kib=du.stdout.strip(),disk_free_bytes=usage.free,all_source_evidence_retained=True,active_own_provers=active)
 (b/'NHO_HOST_END.json').write_text(json.dumps(result,indent=1));print(json.dumps({k:v for k,v in result.items()if k!='removed'}))
 '''
 r=subprocess.run(['ssh','-o','ControlMaster=no','-o','ConnectTimeout=15',H,'python3'],input='B='+repr(B)+'\nfiles='+repr(files)+'\n'+code,capture_output=True,text=True)

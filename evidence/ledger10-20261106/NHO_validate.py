@@ -30,6 +30,7 @@ def gate(l,a,s,t,c):
  trust={r['id']:r for r in t['rows']};assert trust['RuntimeClockSlotBinding']['status']=='ADDED-LEAD'
  assert trust['ReviewedTranscription-prepared_claim']['status']=='ADDED-LEAD'and trust['ReviewedTranscription-prepared_claim']['direct_closed_rows']==['TX1:193']
  assert trust['RuntimeCpiReadonlyEntry7']['status']=='ADDED-PENDING-LEAD'and not trust['RuntimeCpiReadonlyEntry7']['used']and not trust['RuntimeCpiReadonlyEntry7']['direct_closed_rows']
+ assert trust['ReviewedTranscription-polynomial']['status']=='RECLASSIFICATION'and trust['ReviewedTranscription-polynomial']['direct_closed_rows']==['TX2:119']
  assert t['no_trust_removed']
  return True
 if __name__=='__main__':

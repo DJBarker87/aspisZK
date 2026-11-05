@@ -23,3 +23,5 @@ NHC_REMAINING.md lists every remaining member and why its missing native/extract
 
 
 L187 cold release replay and L188 final trust/axiom/native/source-to-ELF audit remain OPEN. For the TX2 tail use NHI_PAIR_CONE.md and NHI_REMAINING.md; for prepare/TX1 use NHF_REMAINING.md and NHO_READONLY_NHL_HANDOFF.md; for adapter use NHD_SPINE.md. Kani/extraction work belongs to those separately budgeted owners.
+
+Ledger job disposition:40/40 Lean/audit slots exhausted,0 Kani/0 extraction authorized or run. All requested delta reproduction, CLOSED-forest composition, raw roots/fixtures, full scanner and statement/path reports are complete. Remaining security/native producer obligations belong to the named owners and are not closed by this audit.

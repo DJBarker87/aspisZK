@@ -21,7 +21,7 @@ All eight delta/Pool validators reproduce unchanged in a private read/write sand
 | DRIVER.events_from_cuts | proposed plan theorem | OPEN chronological source logs/Results/frames, including rejected prefixes |
 | EXPERIMENT.same_law | proposed plan theorem | OPEN adversary/event/carrier/weight and pointwise-domination transport |
 
-NHO_L004 prints each of the four exported plan names, and AspisR1.RPx_Deployed.deployed, with exactly `[propext, Classical.choice, Quot.sound]`. ORACLE's logical plan name is implemented by two lemmas; no theorem named partial_and_returning is invented. Full kernel statements and fresh axiom output are requested in NHO_L040. These theorems do not provide their native-observation hypotheses. L159/L181 are internalised by the induced prover, admitted runtime and model joins, not literal binders whose disappearance would establish physical realization. L154 is a statement parameter. Coherent digest/error slots are op43/op44.
+NHO_L004 prints each of the four exported plan names, and AspisR1.RPx_Deployed.deployed, with exactly `[propext, Classical.choice, Quot.sound]`. ORACLE's logical plan name is implemented by two lemmas; no theorem named partial_and_returning is invented. Full kernel statements and fresh axiom output are quoted in NHO_STATEMENTS.md from NHO_L040 (exit0). These theorems do not provide their native-observation hypotheses. L159/L181 are internalised by the induced prover, admitted runtime and model joins, not literal binders whose disappearance would establish physical realization. L154 is a statement parameter. Coherent digest/error slots are op43/op44.
 
 ## Current dependency paths and Pool
 
@@ -33,10 +33,18 @@ Pool consumer rows are outside the599 verifier occurrences. A remains (af) std/a
 
 ## Trust, routes and owner decisions
 
-Routes are explicit per occurrence: (y), (ad), (ae), (ah), (ai), (al), and reclassification; (af) applies to Pool A separately. Five field rows TX1:036/040/041/043/044 remain OPEN TOOL-BOUNDARY. Native semantic transport remains P6/D188 option-A RECLASSIFICATION, never removal. Reviewed polynomial fold transcription remains explicit within that retained transport. TX1:193 prepared_claim uses ADDED-LEAD ReviewedTranscription-prepared_claim under (ah), as an explicit trust item. No extraction proof is invented for a reviewed reference.
+Routes are explicit per occurrence: (y), (ad), (ae), (ah), (ai), (al), and reclassification; (af) applies to Pool A separately. Five field rows TX1:036/040/041/043/044 remain OPEN TOOL-BOUNDARY. Native semantic transport remains P6/D188 option-A RECLASSIFICATION, never removal. ReviewedTranscription-polynomial explicitly records the reviewed polynomial fold on TX2:119 under (ah) as retained RECLASSIFICATION within that transport. TX1:193 prepared_claim uses ADDED-LEAD ReviewedTranscription-prepared_claim under (ah), as an explicit trust item. No extraction proof is invented for a reviewed reference.
 
 SDK borrow/std/allocator/ABI/compiler/Aeneas/source-to-ELF, RuntimePersistence, digest/H realization and cryptographic assumptions remain. RuntimeReturnData (nonempty1..1024, ASR8=792) and RuntimeMemcmp are ACCEPTED. RuntimeClockSlotBinding is ADDED-LEAD: clockGet ctx = ok v implies v = bankSlot ctx for the SAME instruction context, with no success/monotonicity/epoch claim. RuntimeCpiReadonlyEntry7 is ADDED-PENDING-LEAD and UNUSED. NHO_TRUST_USED.json separates direct certificate use from retained realization; zero direct uses never means discharge.
 
 Ruling(aj)'s owner decision points remain: (a) confirm L159's physical reporting boundary—recommended route proves Pool B/D inside the same admitted game and covers settlement; the alternative reports a conditional external Pool association. Work continues on the recommended route. (b) If the physical transcript exporter reveals an adaptive-schedule reorder outside ARX/F3S, the owner chooses coupling under actual hypotheses or a frozen3 change. No uncovered reorder is silently accepted. The partial terminal policy retains failure/divergence, ideal suffixes and pointwise domination; no totality restriction or changed abort bound.
 
 L187, a cold coherent release replay, remains OPEN. L188, the final accepted trust/axioms/native realization/source-to-ELF audit, remains OPEN. Cached import coherence and local raw standard-axiom checks cannot replace either. No shipped source changed; default/devnet/Pool ELF hashes are inherited only, not rebuilt or rehashed here.
+
+## Completed third all-slices composition test
+
+NHO_L004 combines every selected CLOSED forest, canonical Pool, (ah) prepared_claim, NGP/NGR/NGS and RPx_Deployed.deployed. All6417 unique selected roots are raw-walked with standard axioms only. The eight planted/mutation fixtures pass in the SAME unchanged compiled proof binary. Full walker byte equality, compiled object pins and driver diffs are retained. NHO_L010 full scanner exits0 over14013 modules,697147 declarations and24757954 references, with zero dangling references, incompatible owners and import mismatches;1748 compatible cached replicas are disclosed. NHO_CONFLICTS.json records no owner conflict and no qualified row.
+
+Raw/summary discrepancy retained under C3-BIN(ab')(3): NHC_DecodeModel.decoder_error in NHO_L037. The raw set is {propext, Classical.choice, Quot.sound}; collectAxioms reports none. The affected audit exit1 remains recorded; it is NOT relabelled exit0. Raw standard-only authority is used exactly as admitted by (ab'), without a new axiom or forest patch.
+
+All40/40 slots are used: {'lean': 7, 'audit': 31, 'link': 2}. No Kani, extraction, new theorem, timeout, memory kill or cap increase. This is focused cached composition, not L187 or a deployed security theorem.
