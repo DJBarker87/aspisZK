@@ -78,7 +78,7 @@ for n,t in files.items():
 (b/'NGU_native').mkdir(exist_ok=True);(b/'NGU_objects').mkdir(exist_ok=True);(b/'NGU_tmp').mkdir(exist_ok=True)
 x=json.loads((b/{(a+'.json')!r}).read_text());roots=x['env']['LEAN_PATH'].split(':');pins={{}}
 modules=[]
-if x['kind']=='lean':modules += re.findall(r'^import ([\w.]+)',(b/x['sources'][0]).read_text(),re.M)
+if x['kind']=='lean':modules += re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M)
 elif x['kind']=='audit':modules += ['NGU_S_PACKET'] if x['module']=='inventory-s' else ['NGU_D_ONLY'] if x['module']=='inventory-d' else ['NGU_Q_ONLY'] if x['module']=='inventory-q' else ['NGU_POOL_LEGACY_IMPORT'] if {target!r}.startswith('pool') else ['NGU_COMBINED_IMPORT']
 rels=set()
 for root in roots:
@@ -115,7 +115,9 @@ for n,t in json.loads(r.stdout).items():
  p=E/n;p.parent.mkdir(parents=True,exist_ok=True)
  if n.startswith('NEP_') and n.endswith('_REACHABLE.txt'):
   raw=t.encode();(E/('NGU_'+n+'.sha256')).write_text(hashlib.sha256(raw).hexdigest()+'\n');(E/('NGU_'+n+'.xz')).write_bytes(lzma.compress(raw,preset=6))
- else:p.write_text(t)
+ else:
+  if n.startswith('NGU_extracted/') and n.endswith('.lean'):p=Path(str(p)+'.txt')
+  p.write_text(t)
 assert (E/a/'receipt.json').exists(),'Missing receipt; never resubmit'
 rc=json.loads((E/a/'receipt.json').read_text());entry={k:v for k,v in rc.items() if k!='deps_fingerprint'};entry['full_receipt']=a+'/receipt.json'
 with (E/'NGU_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(entry)+'\n')

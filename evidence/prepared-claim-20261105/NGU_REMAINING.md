@@ -36,3 +36,10 @@ fragments, not the deployed928-byte/lane<29 caller domain. Extending them to
 that caller requires the generic SAME physical selected-window/frame lift,
 using the CLOSED field/c0 child packets and the checked NGU byte-domain facts.
 No stronger bounded precondition is installed at the actual caller.
+
+The remaining extraction allocation is used for the actual frozen prepared_claim
+body with opaque callees and NCO pins. Raw emitted artifacts are unvalidated:
+no Lean allocations remain, they are excluded from the checked combined import
+and every closure claim. A successor must retarget the exact emitted definition
+onto canonical owners and prove its association, rather than treating successful
+extraction as a native or model correspondence theorem.

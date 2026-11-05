@@ -41,3 +41,8 @@ All40 native allocations are used (38 verification invocations, two own-input
 exclusions). No field product, whole-buffer native loop, timeout or memory-killed
 shape is rerun. Exhaustion does not stop the remaining Lean audit/statement/
 coherence/export work. No new row is CLOSED, and the100-bit target is not established.
+
+The remaining extraction allocation E001 is also used. Charon captures actual
+frozen prepared_claim LLBC, but Aeneas exits2 at a loop-context join with
+Not_found. No Lean is emitted or admitted, and the canonical model packet is
+unchanged. All40 Kani,80 Lean/support and1 extraction allocations are terminal.

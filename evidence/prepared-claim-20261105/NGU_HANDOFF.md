@@ -83,9 +83,9 @@ release manifest replay or a security/deployment conclusion.
 
 All stated allocations used:40 Kani (38 verification invocations, two own-input
 exclusions),80 Lean/support (48 Lean compilations,2 optimized links,29 audit
-scopes,1 export),0/1 extraction. No further independent Lean obligation was
+scopes,1 export),1/1 extraction. No further independent Lean obligation was
 abandoned at Kani exhaustion: raw/type/coherence/export work continued to L080.
-Wall sum644.898300s; peak7,044,268KiB RSS; swap0. Every scope is serial and admitted
+Wall sum732.764283s; peak7,044,268KiB RSS; swap0. Every scope is serial and admitted
 exit0 AND allowed:true, high6G/max8G/swap0/tasks64, Lean-M7000, Rust opt-level3.
 No timeout, memory kill or cap increase. Excluded elaboration/input/metadata
 attempts and their replacements are in NGU_FAILING_STEP.md. Exact target/command,
@@ -128,6 +128,13 @@ INHERITED ONLY, not rebuilt: default
 f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4;
 devnet63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299;
 Pool121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548.
+
+E001 additionally captures the actual frozen body as pinned LLBC (Charon exit0),
+but Aeneas exits2 with Not_found in collapse_ctx_following_sequence/loop joins.
+No Lean is emitted or admitted. The checked canonical packet is unchanged.
+NGU_EXTRACTION_STATUS.json and the full trace preserve the failure; no rerun.
+The temporary cfg wrapper is restored and own extraction target/tmp are removed
+only after all owned provers are terminal (NGU_HOST_END.json).
 
 Next deliverable: the native inner-point G/log/frame certificate described above,
 then install the peer-owned SAME producer observations at NGN S8. Import these

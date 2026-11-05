@@ -56,3 +56,14 @@ source mapping. L072 then hit the default recursion depth in one large do-block
 used only to serialize type receipts. The replacement splits every root into
 its own run_cmd; no depth/heartbeat option is raised. Previously successful
 statement batches retain exact bytes and are not replayed.
+
+E001 uses the remaining sole extraction allocation on the actual frozen
+prepared_claim body with opaque field/weights/Dot/trace callees. Charon exits0
+and captures LLBC SHA25637638246ca8fc6478a5d45b399b6d728d7305b015c86f91bfe2322dbdba08122.
+Pinned Aeneas exits2: Not_found in InterpReduceCollapse.collapse_ctx_following_sequence
+line1991 during loop join/fixed-point translation. No Lean files are emitted.
+This is an excluded extraction/tool failure, not a source counterexample or a
+checked semantic association. No unchanged rerun, limit increase or shared-tool
+repair occurs. The temporary cfg wrapper is restored and lock unchanged.
+Next extraction must isolate the inner iteration/local record, as the missing
+native G requires. The existing checked canonical model packet is unchanged.

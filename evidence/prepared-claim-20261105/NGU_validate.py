@@ -23,9 +23,10 @@ def require_delta(d):
 
 def validate():
  attempts=[json.loads(l) for l in text(E/'NGU_ATTEMPTS.jsonl').splitlines()]
- assert len({r['attempt'] for r in attempts})==120
+ assert len({r['attempt'] for r in attempts})==121
  assert sum(r['kind']=='kani' for r in attempts)==40
- assert sum(r['kind']!='kani' for r in attempts)==80
+ assert sum(r['kind'] not in ['kani','extract'] for r in attempts)==80
+ assert sum(r['kind']=='extract' for r in attempts)==1
  assoc={r['attempt']:r for r in read(E/'NGU_REVISION_ASSOCIATION.json')}
  for row in attempts:
   a=row['attempt'];r=read(E/a/'receipt.json');cfg=read(E/(a+'.json'))
@@ -60,6 +61,17 @@ def validate():
  manifest=read(E/'NGU_AUDIT_ROOTS.json');assert collections.Counter(r['root'] for r in roots)==collections.Counter(n for g in manifest['groups'] for n in g)
  assert read(E/'NGU_AUDIT.json')['checked_statement_owners']==366
  assert read(E/'NGU_WALKER_CONFORMANCE.json')['byte_identical']
+ fixture_pin=read(E/'NGU_L040/NGU_ProofDriver_BINARY_PIN.json')
+ for row in attempts:
+  if row['kind']=='audit' and row['exit_status']==0:
+   assert read(E/row['attempt']/'NGU_ProofDriver_BINARY_PIN.json')==fixture_pin
+ extraction=read(E/'NGU_EXTRACTION_STATUS.json');assert extraction['charon_exit']==0 and extraction['aeneas_exit']==2 and not extraction['admitted'] and not extraction['raw_lean_outputs']
+ assert extraction['lock_unchanged'] and not extraction['canonical_packet_changed']
+ assert read(E/'NGU_HOST_END.json')['source_wrapper_restored'] and read(E/'NGU_HOST_END.json')['no_active_owned_provers']
+ import lzma
+ closure=lzma.decompress(raw(E/'NGU_CLOSURE_PINS.json.xz'));assert hashlib.sha256(closure).hexdigest()==text(E/'NGU_CLOSURE_PINS.json.sha256').strip()
+ assert len(json.loads(closure)['selected_objects'])==30048
+
  assert read(E/'NGU_NATIVE_MATRIX.json')['matched_families']==17
  assert read(E/'NGU_CLOSED.json')['composed_status']=='OPEN'
  assert hashlib.sha256((E/'NGU_KMX.patch').read_bytes()).hexdigest()=='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67'
