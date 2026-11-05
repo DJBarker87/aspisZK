@@ -3,7 +3,7 @@ from pathlib import Path
 import subprocess,json,sys,time,hashlib,shlex,lzma,os
 E=Path(__file__).resolve().parent;P=E.parent/'slice-d-entry-20261105'
 B='/home/dombarker/project-offloads/codex-cx-slice-d-entry2-20261106';H='dombarker@100.108.41.90'
-a,kind,target=sys.argv[1:];assert kind in ['kani','lean'];assert a.startswith('NHD_'+('K' if kind=='kani' else 'L'));assert 1<=int(a[-3:])<=(120 if kind=='kani' else 60);assert not (E/a).exists()
+a,kind,target=sys.argv[1:];assert kind in ['kani','lean','inspect','audit'];assert a.startswith('NHD_'+('K' if kind=='kani' else 'L'));assert 1<=int(a[-3:])<=(120 if kind=='kani' else 60);assert not (E/a).exists()
 def ssh(code,data=None,submitted=False):
  for retry in range(11):
   r=subprocess.run(['ssh','-o','ControlMaster=no','-o','ConnectTimeout=15',H,code],input=data,capture_output=True,text=True)
@@ -29,7 +29,7 @@ print(p.read_text() if p.exists() else 'MISSING');sys.exit(r.returncode)
  if (r.returncode==78 or ad.get('allowed') is False) and retry<10:print('reservation wait',flush=True);time.sleep(180);continue
  raise RuntimeError('Infrastructure STOP: admission')
 old=json.loads((P/'NGL_K037.json').read_text());env=dict(old['env']);env['TMPDIR']=B+'/NHD_tmp'
-env['LEAN_PATH']=B+'/NHD_objects:'+env['LEAN_PATH'].replace('/home/dombarker/project-offloads/codex-cx-slice-d-entry-20261105/NGL_objects','/home/dombarker/project-offloads/codex-cx-slice-d-entry-cache-20261104/NGL_exports_20261105')
+env['LEAN_PATH']=B+'/NHD_objects:/home/dombarker/project-offloads/codex-cx-slice-d-entry-cache-20261104/NHD_NGK_exports_20261106:'+env['LEAN_PATH'].replace('/home/dombarker/project-offloads/codex-cx-slice-d-entry-20261105/NGL_objects','/home/dombarker/project-offloads/codex-cx-slice-d-entry-cache-20261104/NGL_exports_20261105')
 files={};sources=[]
 if kind=='kani':
  for n in ['NHD_gate.py','NHD_erasure.py','NHD_SOURCE_PINS.json']:files[n]=(E/n).read_text()
@@ -42,17 +42,29 @@ if kind=='kani':
  native[native.index('--manifest-path')+1]=B+'/NHD_src/programs/r1-cost-probe/Cargo.toml'
  native[native.index('--features')+1]='pool-adapter,private-leaf-salts'
  cfg=dict(native_command=native,root_package='aspis-r1-cost-probe-program')
+elif kind=='inspect':
+ files['NHD_rodata.py']=(E/'NHD_rodata.py').read_text();sources=['NHD_rodata.py'];command=['python3','NHD_rodata.py'];cfg={}
+elif kind=='audit':
+ for name in ['NHD_audit.py','NHD_AUDIT_ROOTS.json','NHD_EXPECTED_IMPORTS.jsonl','NHD_REUSED_AUDIT.json']:files[name]=(E/name).read_text()
+ sources=list(files)+['NHD_native/NHD_ProofDriver.c','NHD_native/NHD_ScanDriver.c','NHD_native/NFA_WALKER.c','NHD_native/NFA_MemoryLimit.c'];command=['python3','NHD_audit.py'];cfg={}
 else:
  n='NHD_generated/'+target.replace('.','/')+'.lean';files[n]=(E/(target+'.lean')).read_text();sources=[n]
  T=env['LEAN_SYSROOT'];command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NHD_generated','-o','NHD_objects/'+target.replace('.','/')+'.olean',n];cfg={}
+ if target in ['NHD_ProofDriver','NHD_ScanDriver']:command+=['-c','NHD_native/'+target+'.c']
 cfg.update(attempt=a,kind=kind,module=target,sources=sources,command=command,env=env,timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={'selected_objects':{}},expected_time='optimized compilation then focused native contract; no field arithmetic' if kind=='kani' else 'focused Lean elaboration')
 files[a+'.json']=json.dumps(cfg)
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});files=json.loads({json.dumps(files)!r})
+(b/'NHD_native').mkdir(exist_ok=True)
+if {kind!r}=='audit':
+ import shutil
+ for name in ['NFA_WALKER.c','NFA_MemoryLimit.c']:
+  q=b/'NHD_native'/name
+  if not q.exists():shutil.copy2(Path('/home/dombarker/project-offloads/codex-cx-slice-d-entry-20261105/NGL_native')/name,q)
 for n,t in files.items():p=b/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
 x=json.loads((b/{(a+'.json')!r}).read_text());roots=x['env']['LEAN_PATH'].split(':');pins={{}}
-if x['kind']=='lean':
+if x['kind'] in ['lean','audit']:
  rels=set()
  for root in roots:
   for stem in ['Aeneas','AeneasMeta']:
@@ -60,11 +72,13 @@ if x['kind']=='lean':
    if p.is_dir():rels.update(str(z.relative_to(root)) for z in p.rglob('*') if z.is_file() and any(str(z).endswith(s) for s in ['.olean','.olean.private','.olean.server','.ir']))
    for suf in ['.olean','.olean.private','.olean.server','.ir']:
     if Path(root,stem+suf).is_file():rels.add(stem+suf)
- for line in (b/x['sources'][0]).read_text().splitlines():
+ if x['kind']=='audit':rels.update(n.replace('.','/')+'.olean' for n in ['NHD_COMBINED_IMPORT','NFA_WALKER','NFA_MemoryLimit','NEP_Planted','NEP_Mutations'])
+ for line in ((b/x['sources'][0]).read_text().splitlines() if x['kind']=='lean' else []):
   if line.startswith('import '):rels.update(n.replace('.','/')+'.olean' for n in line[7:].split() if n!='all')
  for rel in sorted(rels):
   p=next((Path(root)/rel for root in roots if (Path(root)/rel).is_file()),None);assert p is not None,rel
-  pins[str(p)]={{'path':str(p),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}}
+  for z in [p,Path(str(p)+'.private'),Path(str(p)+'.server'),p.with_suffix('.ir')]:
+   if z.is_file():pins[str(z)]={{'path':str(z),'sha256':hashlib.sha256(z.read_bytes()).hexdigest()}}
  x['deps_fingerprint']['selected_objects']=pins;(b/{(a+'.json')!r}).write_text(json.dumps(x))
 ''');assert r.returncode==0,r.stderr
 r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_run_host.py '+a+'.json',submitted=True)
@@ -73,12 +87,17 @@ r=ssh('python3',f'''from pathlib import Path
 import json
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
 names += [str(p.relative_to(b)) for pat in ['-graph*','-source*','-lock*','-erasure*'] for p in b.glob(a+pat)]
+if {kind!r}=='inspect':names+=['NHD_RODATA.json']
+if {kind!r}=='audit':
+ names += [str(p.relative_to(b)) for p in (b/('NHD_delta_audit' if {target!r}=='NHD_delta_audit' else 'NHD_audit')).rglob('*') if p.is_file()]
+ names += [str(p.relative_to(b)) for p in b.glob('NEP_proof1_*_REACHABLE.txt' if {target!r}=='NHD_delta_audit' else 'NEP_*_REACHABLE.txt')]
+ names += ['NHD_LOADED_scan.jsonl']
 print(json.dumps({{n:(b/n).read_text() for n in names}}))
 ''');assert r.returncode==0,r.stderr
 out=json.loads(r.stdout)
 for n,t in out.items():
  p=E/n;p.parent.mkdir(parents=True,exist_ok=True);data=t.encode()
- if n.endswith('.log'):
+ if n.endswith('.log') or n.endswith('_REACHABLE.txt'):
   (E/(n+'.sha256')).write_text(hashlib.sha256(data).hexdigest()+'\n');(E/(n+'.xz')).write_bytes(lzma.compress(data))
  else:p.write_bytes(data)
 assert a+'/receipt.json' in out,'Missing receipt; do not resubmit'

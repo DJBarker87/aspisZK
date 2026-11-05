@@ -3,7 +3,21 @@ import json,hashlib,difflib,subprocess
 E=Path(__file__).resolve().parent;P=E.parent/'slice-d-entry-20261105';D='programs/r1-cost-probe/src/'
 x=json.loads((P/'NGL_NATIVE_INPUTS.json').read_text());base=dict(x)
 x[D+'lib.rs']+='\n#[cfg(kani)]\n#[path="NHD_calibration.rs"]\nmod NHD_calibration;\n'
+x[D+'lib.rs']+='\n#[cfg(kani)]\n#[path="NHD_error.rs"]\nmod NHD_error;\n'
+x[D+'NHD_error.rs']=(E/'NHD_error.rs.txt').read_text()
+x[D+'r1_pool_adapter.rs']+='\n#[cfg(kani)]\n#[path="NHD_ids.rs"]\nmod NHD_ids;\n'
+x[D+'NHD_ids.rs']=(E/'NHD_ids.rs.txt').read_text()
+x[D+'r1_pool_adapter.rs']+='\n#[cfg(kani)]\n#[path="NHD_meta_calibration.rs"]\nmod NHD_meta_calibration;\n'
+x[D+'NHD_meta_calibration.rs']=(E/'NHD_meta_calibration.rs.txt').read_text()
 x[D+'NHD_calibration.rs']=(E/'NHD_calibration.rs.txt').read_text()
+x[D+'r1_pool_adapter_owned.rs']+='\n#[cfg(kani)]\n#[path="NHD_owned.rs"]\nmod NHD_owned;\n'
+x[D+'r1_pool_adapter_owned.rs']+='\n#[cfg(kani)]\n#[path="NHD_snapshot.rs"]\nmod NHD_snapshot;\n'
+x[D+'NHD_snapshot.rs']=(E/'NHD_snapshot.rs.txt').read_text()
+x[D+'r1_pool_adapter_owned.rs']+='\n#[cfg(kani)]\n#[path="NHD_distinct.rs"]\nmod NHD_distinct;\n'
+x[D+'NHD_distinct.rs']=(E/'NHD_distinct.rs.txt').read_text()
+x[D+'r1_pool_adapter_owned.rs']+='\n#[cfg(kani)]\n#[path="NHD_prefix.rs"]\nmod NHD_prefix;\n'
+x[D+'NHD_prefix.rs']=(E/'NHD_prefix.rs.txt').read_text()
+x[D+'NHD_owned.rs']=(E/'NHD_owned.rs.txt').read_text()
 (E/'NHD_NATIVE_INPUTS.json').write_text(json.dumps(x,indent=1)+'\n')
 pins=json.loads((P/'NGL_SOURCE_PINS.json').read_text());pins.update({n:hashlib.sha256(t.encode()).hexdigest() for n,t in x.items()})
 (E/'NHD_SOURCE_PINS.json').write_text(json.dumps(pins,indent=1)+'\n')

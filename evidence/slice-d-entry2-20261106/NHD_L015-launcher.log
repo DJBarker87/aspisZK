@@ -1,0 +1,70 @@
+{"attempt": "NHD_L015", "exit_status": 1, "wall_seconds": 5.504349302034825, "peak_rss_kib": "5871048", "swaps": "0", "print_axioms": ["'NHD_DistinctAssociation.increment' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NHD_DistinctAssociation.associate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NHD_generated/NHD_DistinctAssociation.lean:18:19: error: Application type mismatch: The argument
+  some ?m.10
+has type
+  Option ?m.9
+but is expected to have type
+  Usize
+in the application
+  done (some ?m.10)
+NHD_generated/NHD_DistinctAssociation.lean:19:18: error: Application type mismatch: The argument
+  packet.2
+has type
+  Usize
+but is expected to have type
+  Option (core.result.Result Unit PE)
+in the application
+  cont packet.2
+NHD_generated/NHD_DistinctAssociation.lean:18:26: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Err` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `NFY_NEQ_CommonDecode.Err`
+  [apply]
+...
+pterRw.solana_program_error.ProgramError))
+in the application
+  ok (decode packet)
+NHD_generated/NHD_DistinctAssociation.lean:44:2: error: unsolved goals
+case pos
+N : Usize
+ops : AdapterRw.Ops
+a : Std.Array Account N
+index previous : Usize
+small : ↑N ≤ 7
+inIndex : ↑index < (↑a).length
+inPrevious : ↑previous < ↑index
+bound : ↑previous < 7
+same : (↑a)[↑previous].key = (↑a)[↑index].key
+⊢ ok sorry = ok (done (some (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidArgument)))
+NHD_generated/NHD_DistinctAssociation.lean:45:2: error: unsolved goals
+case neg
+N : Usize
+ops : AdapterRw.Ops
+a : Std.Array Account N
+index previous : Usize
+small : ↑N ≤ 7
+inIndex : ↑index < (↑a).length
+inPrevious : ↑previous < ↑index
+bound : ↑previous < 7
+same : ¬(↑a)[↑previous].key = (↑a)[↑index].key
+⊢ ok sorry = ok (cont (previous.wrapping_add 1#usize))
+NHD_generated/NHD_DistinctAssociation.lean:44:55: warning: This simp argument is unused:
+  decode
+
+Hint: Omit it from the simp argument list.
+  simp only [same, ̲decide_true, ̲cut, ̲if_true, ̲bind_tc_ok,̵d̵e̵c̵o̵d̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NHD_generated/NHD_DistinctAssociation.lean:46:17: warning: This simp argument is unused:
+  decode
+
+Hint: Omit it from the simp argument list.
+  simp only [same, ̲decide_false, ̲cut, ̲Bool.false_eq_true, ̲if_false, ̲increment previous bound,
+       ̵ ̵bind_tc_ok,̵d̵e̵c̵o̵d̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NHD_generated/NHD_DistinctAssociation.lean:44:55: warning: declaration uses `sorry`
+'NHD_DistinctAssociation.increment' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NHD_DistinctAssociation.associate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-ra06b766567de4765a221624285c31057.scope; invocation ID: b1a9128573394be38571b20dc262e67c
