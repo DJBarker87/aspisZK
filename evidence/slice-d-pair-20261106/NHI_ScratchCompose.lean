@@ -7,15 +7,16 @@ abbrev W := FIo_Native.weights.Weights
 abbrev Error := FIo_Native.aspis_core.r0.Error
 
 def run (reservation : Reservation) (w : W) (k : Usize) :
- Result (core.result.Result (Slice NQ) Error) := do
+ Result (core.result.Result (Slice NQ) Error) :=
  letI := FIo_Install.allocation reservation
- let r ← FIo_Native.aspis_core.r0.heap.filled FIo_Native.aspis_core.field.QM31.Insts.CoreMarkerCopy
-  64#usize NHI_ScratchDomain.zero
- match r with
- | .Err e => ok (.Err e)
- | .Ok v => do
-  let out ← FIo_Native.weights.Weights.tensor w k 2#usize v.deref
-  ok (.Ok out)
+ do
+  let r ← FIo_Native.aspis_core.r0.heap.filled FIo_Native.aspis_core.field.QM31.Insts.CoreMarkerCopy
+   64#usize NHI_ScratchDomain.zero
+  match r with
+  | .Err e => ok (.Err e)
+  | .Ok v => do
+   let out ← FIo_Native.weights.Weights.tensor w k 2#usize v.deref
+   ok (.Ok out)
 
 def expected (reservation : Reservation) (w : W) (k : Usize) (hk : k.val<5) :
  Result (core.result.Result (Slice NQ) Error) :=

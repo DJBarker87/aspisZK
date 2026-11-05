@@ -1,3 +1,0 @@
-pub const S2_INACTIVE_GROUPS:[u8;64]=[0,1,2,3,4,5,5,6,4,5,5,5,7,7,7,7,7,7,7,4,4,5,5,6,4,5,5,5,7,7,7,4,7,7,7,7,4,5,5,5,4,5,5,5,8,9,10,8,11,2,2,10,4,5,5,6,4,5,5,6,7,7,7,7];
-pub const S2_INACTIVE_MASKS:[u16;12]=[32769,49217,49280,16448,32767,16383,49151,65535,49152,57344,49216,33024];
-pub fn group_tables_ref(j:usize,group:usize)->(u8,u16){(S2_INACTIVE_GROUPS[j],S2_INACTIVE_MASKS[group])}

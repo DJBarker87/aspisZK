@@ -38,6 +38,7 @@ for group in range(59):
   assert '--locked'not in r['native_command']and r['native_command'][r['native_command'].index('--harness-timeout')+1]=='90s'
  sys.argv=['NHI_validate',names[0],'kani',f'weights::NHI_tensor::g{group:02d}']
  x=runpy.run_path(str(E/'NHI_native_prepare.py'));code=x['inputs']['crates/aspis-r1-cost-probe/src/NHI_tensor.rs']
+ assert hashlib.sha256(code.encode()).hexdigest()==receipts[0]['source_hashes']['NHI_src/crates/aspis-r1-cost-probe/src/NHI_tensor.rs'], 'compiled source version mismatch'
  assert not re.search(r'\bstatic\b|Option\s*<\s*fn\b|stub_verified|proof_for_contract',code)
  actual=body(code,'source_window')
  erased=re.sub(r'product\(x,row\[(\d)\],l\)',r'x.mul(self.factors[k][d][\1])',actual)

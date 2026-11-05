@@ -1,5 +1,6 @@
 import NHE_COMBINED_IMPORT
 import NHI_Scalar
+import NHI_ScratchCompose
 import NHI_GroupDispatch
 import NHI_ScratchDomain
 import NHI_KindDomain
@@ -39,3 +40,15 @@ set_option autoImplicit false
 #print axioms NHI_GroupDispatch.source
 #print axioms NHI_ScratchDomain.domain
 #print axioms NHI_KindDomain.selected
+
+-- Final complete statement audit, including definitions hidden by the root names.
+#check NHI_Scalar.cohort
+#check NHI_Scalar.total
+#check NHI_Tensor.cohort
+#print NHI_Tensor.Domain
+#print NHI_Tensor.reference
+#print NHI_Scalar.reference
+#print NHI_ScalarFold.cells
+#check NHI_TensorEncoding.window
+#check NHI_ScratchCompose.cohort
+#print axioms NHI_ScratchCompose.cohort

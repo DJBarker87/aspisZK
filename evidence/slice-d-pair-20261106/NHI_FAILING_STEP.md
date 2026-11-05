@@ -21,3 +21,5 @@
 - L081/L082: S2 dispatch requires exact wrapping 64*32 and exact Slice.len carrier, then deterministic Bool/if reduction; L083 proves these rather than dropping the fallback.
 
 No failure above is claimed to be a real source/model mismatch. All are own proof/input elaboration failures; the exact logs remain. No timed-out or memory-killed formal shape occurred. The optional unpaired K120 gets no native closure credit. Root pair/finish closure is still blocked by OPEN leaf/caller packets, not bridged by success premises.
+
+- L089: own model definition placed letI inside the do grammar incorrectly; L090 moves it outside do, preserving the exact allocation/tensor statement. It passes with standard axioms. L092 first invocation rejected the non-prefixed target before launch; corrected argument NHI_final under the unchanged strict guard, then final audit passes.
