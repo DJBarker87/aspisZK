@@ -1,0 +1,30 @@
+use crate::verifier::{Prepared,View,Accumulator};
+fn prepared()->Prepared{Prepared{variant:Variant::S2,roots:[[0;32];2],gamma:E::ZERO,kappa:anye(),alpha:[anye(),anye()],rho:K::ZERO,queries:[0;22],semantic_alpha:core::array::from_fn(|_|anyq()),z:core::array::from_fn(|_|aspis_core::circle::SecureCirclePoint{x:anyq(),y:anyq()}),claim:anye(),state:[0;32]}}
+fn owned_weights()->Box<Weights>{Box::new(Weights{variant:Variant::S2,factors:core::array::from_fn(|_|core::array::from_fn(|_|core::array::from_fn(|_|anyq()))),points:core::array::from_fn(|_|core::array::from_fn(|_|anyq())),extra:[anyq(),anyq()]})}
+struct NewPort{variant:Variant,alpha:*const K,z:*const aspis_core::circle::SecureCirclePoint,reply:Option<Box<Weights>>,error:Option<Error>,calls:usize}
+fn new_packet(variant:Variant,alpha:&[K;10],z:&[aspis_core::circle::SecureCirclePoint;2],l:&mut NewPort)->Result<Box<Weights>,Error>{l.variant=variant;l.alpha=alpha.as_ptr();l.z=z.as_ptr();l.calls+=1;match l.error{Some(e)=>Err(e),None=>Ok(l.reply.take().unwrap())}}
+fn new_cut(p:&Prepared,l:&mut NewPort)->Result<Box<Weights>,Error>{let weights=new_packet(p.variant,&p.semantic_alpha,&p.z,l)?;Ok(weights)}
+#[kani::proof]#[kani::unwind(2200)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn new_slot(){
+ let p=prepared();let reply=owned_weights();let owner=&*reply as *const Weights;let error=if kani::any(){Some(error(kani::any()))}else{None};
+ let mut l=NewPort{variant:Variant::D,alpha:core::ptr::null(),z:core::ptr::null(),reply:Some(reply),error,calls:0};
+ let out=new_cut(&p,&mut l);if cfg!(NIG_corrupt){l.alpha=l.alpha.wrapping_add(1);}
+ assert!(l.variant==p.variant&&l.alpha==p.semantic_alpha.as_ptr()&&l.z==p.z.as_ptr()&&l.calls==1);
+ match out{Ok(w)=>{assert!(error.is_none()&&l.reply.is_none()&&&*w as *const Weights==owner);},Err(e)=>{assert!(Some(error_code(e))==error.map(error_code)&&l.reply.is_some());}}
+}
+struct PairPort{who:*const Weights,alpha:*const E,alpha_len:usize,message:*const u8,message_len:usize,kappa:E,reply:Result<E,Error>,calls:usize}
+fn pair_packet(weights:&Weights,alpha:&[E],f:&[u8],kappa:E,l:&mut PairPort)->Result<E,Error>{l.who=weights;l.alpha=alpha.as_ptr();l.alpha_len=alpha.len();l.message=f.as_ptr();l.message_len=f.len();l.kappa=kappa;l.calls+=1;l.reply}
+fn pair_cut(weights:&Box<Weights>,p:&Prepared,v:&View<'_>,l:&mut PairPort)->Result<E,Error>{let pair=pair_packet(weights,&p.alpha[..2],v.final_message,p.kappa,l)?;Ok(pair)}
+fn encoded(r:Result<E,Error>)->Result<[u32;8],u8>{r.map(|x|x.to_limbs()).map_err(error_code)}
+#[kani::proof]#[kani::unwind(2200)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn pair_slot(){
+ let p=prepared();let weights=owned_weights();let owner=&*weights as *const Weights;let f:[u8;2048]=kani::any();let v=View{variant:Variant::S2,semantic:&[],y1:&[],inactive:E::ZERO,round0:&[],folded_root:None,round1:&[],final_message:&f,query_bytes:&[]};
+ let reply=if kani::any(){Ok(anye())}else{Err(error(kani::any()))};let mut l=PairPort{who:core::ptr::null(),alpha:core::ptr::null(),alpha_len:0,message:core::ptr::null(),message_len:0,kappa:E::ZERO,reply,calls:0};
+ let out=pair_cut(&weights,&p,&v,&mut l);let limb:usize=kani::any();kani::assume(limb<8);if cfg!(NIG_corrupt){l.message=l.message.wrapping_add(1);}
+ assert!(l.who==owner&&l.alpha==p.alpha.as_ptr()&&l.alpha_len==2&&l.message==f.as_ptr()&&l.message_len==2048&&l.kappa.to_limbs()[limb]==p.kappa.to_limbs()[limb]&&l.calls==1);
+ assert!(encoded(out)==encoded(reply));assert!(&*weights as *const Weights==owner);
+}

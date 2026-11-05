@@ -36,7 +36,7 @@ p=b/{(a+'-reservation.json')!r}; print(p.read_text() if p.exists() else 'MISSING
  if (r.returncode==78 or ad.get('allowed') is False) and retry<10:
   print('reservation wait',flush=True);time.sleep(60);continue
  raise RuntimeError('STOP admission')
-paths=[B+'/NIG_objects',C+'/NHX_exports_20261106/objects',C+'/NHM_exports_20261106/objects',C+'/NHI_exports_20261106/objects',C+'/NHE_exports_20261106/objects',C+'/NGW_exports_20261105/objects',C+'/NGW_NGK_seed',C+'/NGM_exports_20261105',C,'/home/dombarker/project-offloads/codex-cx-ledger8-cache-20261104/NGZ_flat',W,W+'/objects',T+'/lib/lean']
+paths=[B+'/NIG_objects',C+'/NIG_NHT_seed',C+'/NHX_exports_20261106/objects',C+'/NHM_exports_20261106/objects',C+'/NHI_exports_20261106/objects',C+'/NHE_exports_20261106/objects',C+'/NGW_exports_20261105/objects',C+'/NGW_NGK_seed',C+'/NGM_exports_20261105',C,'/home/dombarker/project-offloads/codex-cx-ledger8-cache-20261104/NGZ_flat',W,W+'/objects',T+'/lib/lean']
 env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NIG_tmp',LEAN_PATH=':'.join(paths))
 files={};sources=[]
 assert target.startswith('NIG_') or kind in ['auditbin','kani','extract','dependency']

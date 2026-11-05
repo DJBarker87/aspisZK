@@ -1,0 +1,22 @@
+struct PairEdges{who:*const Weights,shared:bool,folds:usize,n:usize,alpha:*const E,alpha_len:usize,message:*const u8,message_len:usize,scratch:*const K,scratch_len:usize,parts:*const E,p0:E,p1:E,regular_post:[E;7],common:*const K,common_value:K,partial_message:*const u8,partial_message_len:usize,partial_reply:[E;4],high_who:*const Weights,high_partial:E,high_p0:E,high_p1:E,high_parts:*const E}
+fn edge_regular(w:&Weights,shared:bool,alpha:&[E],f:&[u8],folds:usize,n:usize,ap0:&[E;4],ap1:&[E;4],scratch:&mut [K],parts:&mut [E;7],power:usize,l:&mut PairEdges){
+ l.who=w;l.shared=shared;l.folds=folds;l.n=n;l.alpha=alpha.as_ptr();l.alpha_len=alpha.len();l.message=f.as_ptr();l.message_len=f.len();l.scratch=scratch.as_ptr();l.scratch_len=scratch.len();l.parts=parts.as_ptr();l.p0=ap0[power];l.p1=ap1[power];
+ parts[2]=l.regular_post[2];parts[5]=l.regular_post[5];parts[6]=l.regular_post[6];if !shared{parts[1]=l.regular_post[1];parts[3]=l.regular_post[3];}
+}
+fn edge_partial(f:&[u8],common:&[K;16],i:usize,l:&mut PairEdges)->[E;4]{l.common=common.as_ptr();l.common_value=common[i];l.partial_message=f.as_ptr();l.partial_message_len=f.len();l.partial_reply}
+fn edge_high(partials:&[E;4],w:&Weights,ap0:&[E;4],ap1:&[E;4],parts:&mut [E;7],power:usize,l:&mut PairEdges){l.high_who=w;l.high_partial=partials[power];l.high_p0=ap0[power];l.high_p1=ap1[power];l.high_parts=parts.as_ptr();}
+#[kani::proof]#[kani::unwind(2200)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn pair_argument_edges(){
+ let w=Weights{variant:Variant::S2,factors:core::array::from_fn(|_|core::array::from_fn(|_|core::array::from_fn(|_|anyq()))),points:core::array::from_fn(|_|core::array::from_fn(|_|anyq())),extra:[anyq(),anyq()]};
+ let alpha:[E;2]=[anye(),anye()];let f:[u8;2048]=kani::any();let ap0=core::array::from_fn(|_|anye());let ap1=core::array::from_fn(|_|anye());let mut scratch:[K;64]=core::array::from_fn(|_|anyq());let mut parts:[E;7]=core::array::from_fn(|_|anye());let common:[K;16]=core::array::from_fn(|_|anyq());
+ let shared:bool=kani::any();let power:usize=kani::any();kani::assume(power<4);let i:usize=kani::any();kani::assume(i<16);let limb:usize=kani::any();kani::assume(limb<8);
+ let mut l=PairEdges{who:core::ptr::null(),shared:false,folds:0,n:0,alpha:core::ptr::null(),alpha_len:0,message:core::ptr::null(),message_len:0,scratch:core::ptr::null(),scratch_len:0,parts:core::ptr::null(),p0:E::ZERO,p1:E::ZERO,regular_post:core::array::from_fn(|_|anye()),common:core::ptr::null(),common_value:K::ZERO,partial_message:core::ptr::null(),partial_message_len:0,partial_reply:core::array::from_fn(|_|anye()),high_who:core::ptr::null(),high_partial:E::ZERO,high_p0:E::ZERO,high_p1:E::ZERO,high_parts:core::ptr::null()};
+ edge_regular(&w,shared,&alpha,&f,2,64,&ap0,&ap1,&mut scratch,&mut parts,power,&mut l);
+ if shared{let partials=edge_partial(&f,&common,i,&mut l);edge_high(&partials,&w,&ap0,&ap1,&mut parts,power,&mut l);}
+ if cfg!(NIG_corrupt){l.alpha=l.alpha.wrapping_add(1);}
+ assert!(l.who==&w as *const Weights&&l.shared==shared&&l.folds==2&&l.n==64&&l.alpha==alpha.as_ptr()&&l.alpha_len==2&&l.message==f.as_ptr()&&l.message_len==2048&&l.scratch==scratch.as_ptr()&&l.scratch_len==64&&l.parts==parts.as_ptr());
+ assert!(l.p0.to_limbs()[limb]==ap0[power].to_limbs()[limb]&&l.p1.to_limbs()[limb]==ap1[power].to_limbs()[limb]);
+ if shared{assert!(l.common==common.as_ptr()&&qw(l.common_value)[limb&3]==qw(common[i])[limb&3]&&l.partial_message==f.as_ptr()&&l.partial_message_len==2048&&l.high_who==&w as *const Weights&&l.high_parts==parts.as_ptr());assert!(l.high_partial.to_limbs()[limb]==l.partial_reply[power].to_limbs()[limb]&&l.high_p0.to_limbs()[limb]==ap0[power].to_limbs()[limb]&&l.high_p1.to_limbs()[limb]==ap1[power].to_limbs()[limb]);}
+}

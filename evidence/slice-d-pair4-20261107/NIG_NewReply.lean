@@ -2,6 +2,7 @@ import NIG_NewDomain
 set_option autoImplicit false
 namespace NIG_NewReply
 open Aeneas Aeneas.Std Result AspisR1 AspisR1Stage2
+open AspisR1Stage2.Stage2Finish
 open NGW_ConstructorArrays
 
 theorem inner (alpha:Array K 10#usize)
