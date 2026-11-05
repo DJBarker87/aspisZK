@@ -1,0 +1,20 @@
+import NHG_COMBINED_IMPORT
+import NDO_JFy_SelectorExpand
+import RPv_FJa_ExpansionMeaning
+set_option autoImplicit false
+noncomputable section
+open Aeneas Aeneas.Std Result
+namespace AspisR1.NHU_ExpandPacket
+open FIq_Native
+open FIv_NativeValue (Canon decode)
+
+theorem result (N : Usize) (coordinates : Slice field.QM31)
+ (size : N.val=2^coordinates.val.length) (canonical : ∀ x∈coordinates.val,Canon x) :
+ ∃ out,pool_v1.pair_forest_copy_terminal.Selectors.expand N coordinates=ok out ∧
+ FIw_ArrayValue.canonical out ∧ ∀ j : Fin N.val,
+ FIv_NativeArray.value out j.val=FJa_TensorMeaning.weight (coordinates.val.map decode) j.val := by
+ obtain ⟨out,call,canon⟩:=JFy_SelectorExpand.source N coordinates (by simpa only [Slice.length,size]) canonical
+ exact ⟨out,call,canon,fun j=>FJa_ExpansionMeaning.value N coordinates out canonical size call j⟩
+#print axioms result
+end AspisR1.NHU_ExpandPacket
+end

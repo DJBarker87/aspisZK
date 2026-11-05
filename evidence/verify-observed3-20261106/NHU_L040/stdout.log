@@ -1,0 +1,128 @@
+NHU_generated/NHU_TransitionStep.lean:43:34: error: Tactic `tauto` failed
+
+p : Public
+iter : R
+carry : Usize
+next : R → Result RR
+r : core.ops.range.Range (UScalar UScalarTy.Usize)
+level : UScalar UScalarTy.Usize
+same : level = carry
+small : ¬carry < 20#usize
+⊢ ¬level < carry
+NHU_generated/NHU_TransitionStep.lean:43:4: error: unsolved goals
+case neg.isTrue
+p : Public
+iter : R
+carry : Usize
+next : R → Result RR
+r : core.ops.range.Range (UScalar UScalarTy.Usize)
+level : UScalar UScalarTy.Usize
+same : level = carry
+small : ¬carry < 20#usize
+h✝ : level = carry ∧ carry < 20#usize
+⊢ (do
+      let x ← p.transition.live_snapshot.next_pair_index >>> level
+      let x ← lift (x &&& 1#u64)
+      let x ← if x = 0#u64 then empty_root level else p.transition.live_snapshot.frontier.index_usize level
+      let (iter2, expected) := (r, x)
+        do
+        let a ← p.transition.candidate_afterstate.next_frontier.index_usize level
+        let b ← core.array.equality.PartialEqArray.ne field.M31.Insts.CoreCmpPartialEqM31 a expected
+        if b = true then ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidAppendTransition)
+          else next iter2) =
+    next r
+
+case neg.isFalse
+p : Public
+iter : R
+carry : Usize
+next : R → Result RR
+r : core.ops.range.Range (UScalar UScalarTy.Usize)
+level : UScalar UScalarTy.Usize
+same : level = carry
+small : ¬carry < 20#usize
+h✝ : ¬(level = carry ∧ carry < 20#usize)
+⊢ (do
+      let x ← p.transition.live_snapshot.next_pair_index >>> level
+      let x ← lift (x &&& 1#u64)
+      let x ← if x = 0#u64 then empty_root level else p.transition.live_snapshot.frontier.index_usize level
+      let (iter2, expected) := (r, x)
+        do
+        let a ← p.transition.candidate_afterstate.next_frontier.index_usize level
+        let b ← core.array.equality.PartialEqArray.ne field.M31.Insts.CoreCmpPartialEqM31 a expected
+        if b = true then ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidAppendTransition)
+          else next iter2) =
+    do
+    let want ←
+      if level < carry then empty_root level
+        else do
+          let shifted ← p.transition.live_snapshot.next_pair_index >>> level
+          let bit ← lift (shifted &&& 1#u64)
+          if bit = 0#u64 then empty_root level else p.transition.live_snapshot.frontier.index_usize level
+    let got ← p.transition.candidate_afterstate.next_frontier.index_usize level
+    let bad ← core.array.equality.PartialEqArray.ne field.M31.Insts.CoreCmpPartialEqM31 got want
+    if bad = true then ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidAppendTransition)
+      else next r
+NHU_generated/NHU_TransitionStep.lean:46:31: error: Tactic `tauto` failed
+
+p : Public
+iter : R
+carry : Usize
+next : R → Result RR
+r : core.ops.range.Range (UScalar UScalarTy.Usize)
+level : UScalar UScalarTy.Usize
+same : ¬level = carry
+⊢ ¬level < carry
+NHU_generated/NHU_TransitionStep.lean:46:2: error: unsolved goals
+case neg.isTrue
+p : Public
+iter : R
+carry : Usize
+next : R → Result RR
+r : core.ops.range.Range (UScalar UScalarTy.Usize)
+level : UScalar UScalarTy.Usize
+same : ¬level = carry
+h✝ : level = carry ∧ carry < 20#usize
+⊢ (do
+      let x ← p.transition.live_snapshot.next_pair_index >>> level
+      let x ← lift (x &&& 1#u64)
+      let x ← if x = 0#u64 then empty_root level else p.transition.live_snapshot.frontier.index_usize level
+      let (iter2, expected) := (r, x)
+        do
+        let a ← p.transition.candidate_afterstate.next_frontier.index_usize level
+        let b ← core.array.equality.PartialEqArray.ne field.M31.Insts.CoreCmpPartialEqM31 a expected
+        if b = true then ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidAppendTransition)
+          else next iter2) =
+    next r
+
+case neg.isFalse
+p : Public
+iter : R
+carry : Usize
+next : R → Result RR
+r : core.ops.range.Range (UScalar UScalarTy.Usize)
+level : UScalar UScalarTy.Usize
+same : ¬level = carry
+h✝ : ¬(level = carry ∧ carry < 20#usize)
+⊢ (do
+      let x ← p.transition.live_snapshot.next_pair_index >>> level
+      let x ← lift (x &&& 1#u64)
+      let x ← if x = 0#u64 then empty_root level else p.transition.live_snapshot.frontier.index_usize level
+      let (iter2, expected) := (r, x)
+        do
+        let a ← p.transition.candidate_afterstate.next_frontier.index_usize level
+        let b ← core.array.equality.PartialEqArray.ne field.M31.Insts.CoreCmpPartialEqM31 a expected
+        if b = true then ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidAppendTransition)
+          else next iter2) =
+    do
+    let want ←
+      if level < carry then empty_root level
+        else do
+          let shifted ← p.transition.live_snapshot.next_pair_index >>> level
+          let bit ← lift (shifted &&& 1#u64)
+          if bit = 0#u64 then empty_root level else p.transition.live_snapshot.frontier.index_usize level
+    let got ← p.transition.candidate_afterstate.next_frontier.index_usize level
+    let bad ← core.array.equality.PartialEqArray.ne field.M31.Insts.CoreCmpPartialEqM31 got want
+    if bad = true then ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidAppendTransition)
+      else next r
+'AspisR1.NHU_TransitionStep.association' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

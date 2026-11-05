@@ -1,0 +1,28 @@
+import NHU_TransitionStep
+import ExtractedMaskForwardRange
+set_option autoImplicit false
+noncomputable section
+open Aeneas Aeneas.Std Result
+namespace AspisR1.NHU_TransitionRange
+open FIq_Native.pool_v1.pair_forest_semantic_terminal
+open NHU_TransitionCut
+
+theorem active (p : Public) (iter : R) (carry : Usize)
+ (inside : iter.start.val < iter.end.val) :
+ ∃ next,core.iter.range.IteratorRange.next core.iter.range.StepUsize iter=ok (some iter.start,next) ∧
+ next.start.val=iter.start.val+1 ∧ next.end=iter.end ∧
+ validate_transition_loop p iter carry=
+ NHU_TransitionStep.check p iter.start carry (validate_transition_loop p next carry) := by
+ obtain ⟨next,call,start,finish,_⟩:=ExtractedMaskForwardRange.next_step iter inside
+ refine ⟨next,call,start,finish,?_⟩
+ rw [NHU_TransitionCut.source,NHU_TransitionStep.association,call,bind_tc_ok]
+ rfl
+
+theorem done (p : Public) (carry : Usize) :
+ validate_transition_loop p ⟨20#usize,20#usize⟩ carry=ok (.Ok ()) := by
+ rw [validate_transition_loop.eq_def]
+ rfl
+#print axioms active
+#print axioms done
+end AspisR1.NHU_TransitionRange
+end

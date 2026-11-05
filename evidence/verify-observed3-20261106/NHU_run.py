@@ -1,4 +1,4 @@
-"""NFX-owned serial client for unchanged S2W launcher; no shared tool edits."""
+"""NHU-owned serial client for unchanged S2W launcher; no shared tool edits."""
 from pathlib import Path
 import subprocess,json,sys,time,hashlib,shlex,lzma,re,os,atexit
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90'
@@ -70,13 +70,18 @@ if kind=='kani' and os.environ.get('NHU_REUSE_INPUTS'):
  sources=list(files)
 config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NHU_tmp',LEAN_PATH=':'.join([B+'/NHU_objects',C+'/NGI_exports_20261105',C+'/NFT_exports_20261104',C+'/NFU_exports_20261104',C+'/NFV_final_objects_20261104',C+'/NGE_exports_20261104',C+'/NGF_exports_20261104',C+'/NFY_exports_20261104',C+'/NFY_priority',W,W+'/objects',C+'/NHU_d_fallback/NFQ_exports_20261104',C+'/NHU_d_fallback',C+'/NHU_pool_fallback/NFR_final_objects_20261104',C+'/NHU_pool_fallback/NFO_final_objects_20261104',C+'/NHU_pool_fallback',C+'/NHU_pool_fallback/NEY_final_objects_20261104',C+'/NHU_pool_fallback/NEX_final_objects_20261104',C+'/NHU_pool_fallback/NEQ_final_objects_20261103',C+'/NHU_pool_fallback/NEM_final_objects_20261102',C+'/NHU_pool_fallback/NEU_final_objects_20261104',C,T+'/lib/lean'])),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')
 config['env']['LEAN_PATH']=':'.join(json.loads((E/'NHU_PATHS.json').read_text()))
+if kind=='export':config['expected_time']='copy40 NHU objects and hash final selected coherent closure; no compilation or proof generation'
 if kind=='kani':
  config['native_command']=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NHU_src/crates/aspis-r1-cost-probe/Cargo.toml','--target-dir',B+'/NHU_target','--features','private-leaf-salts,optimized-terminal,program-build','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse']
  config['env'].update(CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-Copt-level=3 -C link-arg=-Wl,--threads=1'+(' --cfg NHU_invert' if os.environ.get('NHU_INVERT') else ''))
  if os.environ.get('NHU_BAD_CONTRACT'):
   tag=os.environ['NHU_BAD_CONTRACT'];assert tag in ['i','r','tower','lift'];config['env']['RUSTFLAGS']+=' --cfg NHU_bad_'+tag
+ if os.environ.get('NHU_STEP_CASE'):
+  tag=os.environ['NHU_STEP_CASE'];assert tag in ['empty','skip','fixed'];config['env']['RUSTFLAGS']+=' --cfg NHU_step_'+tag
  if os.environ.get('NHU_BAD_ALLOC'):config['env']['RUSTFLAGS']+=' --cfg NHU_bad_alloc'
  if os.environ.get('NHU_BAD_BOX_VALUE'):config['env']['RUSTFLAGS']+=' --cfg NHU_bad_box_value'
+ if os.environ.get('NHU_PLAYBACK'):
+  config['native_command']+=['-Z','concrete-playback','--concrete-playback','print'];ci=config['native_command'];ci[ci.index('--output-format')+1]='regular'
  config['expected_time']='optimized compilation then one native staged cut with local records; no field multiplication'
 if kind=='kani' and target.startswith('state_only_hiding::'):
  config['root_package']='aspis-core'

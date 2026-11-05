@@ -1,7 +1,1 @@
-fn NHU_power26_cut(value:QM31,log:&mut PowerLog)->QM31{
-    let x2 = square_cut(value, log);
-    let x4 = square_cut(x2, log);
-    let x8 = square_cut(x4, log);
-    let x16 = square_cut(x8, log);
-    { let x24 = multiply_cut(x16,x8,log); multiply_cut(x24,x2,log) }
-}
+../../../../../../NHU_INPUTS/sources/b58c1d68384c09015e76538ce99bd085cd50b4edf72a39b754d83c15f7ba74a3.txt

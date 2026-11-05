@@ -16,3 +16,17 @@ Retain NHG_STUBS.md and NGX_STUBS.md via NHU_RETAINED_PINS.json; none is widened
 | linears_cut | NHU_Linears.loop/result | SAME point10 borrowed array; every point canonical; no callback or runtime effect |
 
 The stubs use arbitrary canonical local-record replies to prove G for ALL such replies. Products are not evaluated or proved in Kani; packet substitution supplies their exact values in Lean under ruling(y). Native logs record exact arguments and only their declared local record is modified. Allocation, digest and callback effects are absent. No stub_verified or writable static is used. These opaque arithmetic cuts do not use function contracts. The separate small immutable helper/reference certificates use proof_for_contract with explicit empty modifies and matched inverted-ensures controls; they remain WIP until combined admission. Fields remain a P6/D188 option-A reclassification, never trust removal. Failed/helper-WIP receipts have no credit until their cumulative validator passes.
+
+Additional paired opaque cuts (all immutable source operands; modifications only to their LOCAL records):
+
+| Cut | Total emitted law / caller domain |
+|---|---|
+| pack_cut (N2/12/16/17 and shared33) | retained FIx_PreweightedPack.value + JFy_PreweightedGroup.source/FIw_PackTotal.source; SAME four canonical lanes, actual zero padding; NHU_PreweightedDomains and complete packet establish every group domain |
+| shared_cut | FIv_NativeValue.mul/JFy_FieldTotal.mul on SAME canonical selector and canonical pack reply; NHU_SharedPacking.factor is algebraic support only; optimized-helper emitted association remains OPEN |
+| sum_cut | NHG_ExtraLeaves.sum_result with SAME selectors and exact singleton range0..57; NHU_PoseidonSelectors.bounds/result establishes domain. Native packet is restricted to canonical high AND low, although the model lemma only needs high canonical |
+| pow_square / pow_mul | JFy_SquareTotal.source/JFy_FieldTotal.mul and retained JFv generated probe equalities; NHU_Pow5.source/result/domains supplies the SAME canonical chain |
+| raw_product | NHU_U64Product.result: emitted widened U32×U32 checked U64 multiplication returns exactly the natural product and <=4611686009837453316 when both words<P. Native uses only a bounded arbitrary reply, never multiplication |
+| raw_reduce | ExtractedMaskReducer.current_wrapper_mod through FIv_NativeArithmetic.m31_reduce, domain EVERY U64; NHU_InterpolationRaw.result derives actual sum and <=3*P2<2^64. NHU_Interpolation.source/result supplies exact SAME emitted Result |
+| expand_product | retained ExtractedMaskPreparedMul.current_prepared_correct/prepared_mul_exact and FIv_PreparedTotal; SAME actual Prepared::new(canonical coordinate) owner and canonical captured parent. Native N16/full-prefix and N64 split windows have matched controls; NHU_ExpandFrame composes prescribed KMX typed copy laws. Complete expansion parent remains OPEN on native outer-loop/caller association |
+
+No new native uses of `stub_verified`, runtime digest, observer, custom allocator or function-pointer value occur. K080 is an unpaired diagnostic TIMEOUT and receives no credit. K041/K042 failures and K044/K059/K080 timeouts are excluded. Source/copy probes and immutable-helper contracts are distinguished from parent admission in NHU_BRIDGES.md.

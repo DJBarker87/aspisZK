@@ -1,0 +1,12 @@
+import NHG_COMBINED_IMPORT
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result
+namespace AspisR1.NHU_Lift
+/-- Safe reference constructor uses the same two fixed CM31 records and no
+field arithmetic. This domain includes every raw u32. -/
+def reference (value : U32) : FIq_Native.field.QM31 :=
+ ⟨⟨value,0#u32⟩,⟨0#u32,0#u32⟩⟩
+theorem result (value : U32) :
+ FIq_Native.pool_v1.pair_forest_semantic_terminal.lift_m31 value=ok (reference value) := rfl
+#print axioms result
+end AspisR1.NHU_Lift

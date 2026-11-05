@@ -1,0 +1,9 @@
+from pathlib import Path
+import subprocess,json,hashlib
+E=Path(__file__).resolve().parent;R=E.parents[1];rev='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387';path='crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs';s=subprocess.check_output(['git','show',rev+':'+path],cwd=R).decode();a=s.index('            for index in (0..len).rev() {')+len('            for index in (0..len).rev() {');b=s.index('\n            }\n            len *= 2;',a);body=s[a:b];parts=body.splitlines();lines=[x for x in parts if x.strip()];assert len(lines)==4
+prefix='\n'.join(lines[:2]);left=lines[2];right=lines[3];assert 'let parent' in prefix and 'let right' in prefix and 'weights[2 * index]'in left and 'weights[2 * index + 1]'in right
+prefix=prefix.replace('prepared.mul(parent)','expand_product(prepared,parent,log)')
+(E/'NHU_expand_prefix_body.rs.txt').write_text('fn NHU_expand_prefix_cut(weights:&[QM31;64],prepared:&aspis_core::field::PreparedQm31Multiplier,iter:&mut core::iter::Rev<&mut core::ops::Range<usize>>,log:&mut ExpandLog)->Option<(usize,QM31,QM31)>{if let Some(index)=iter.next(){'+prefix+'\nSome((index,parent,right))}else{None}}\n')
+(E/'NHU_expand_left_body.rs.txt').write_text('fn NHU_expand_left_cut(weights:&mut [QM31;64],index:usize,parent:QM31,right:QM31){'+left+'\n}\n')
+(E/'NHU_expand_right_body.rs.txt').write_text('fn NHU_expand_right_cut(weights:&mut [QM31;64],index:usize,right:QM31){'+right+'\n}\n')
+(E/'NHU_EXPAND_SPLIT_ERASURE.json').write_text(json.dumps(dict(status='PASS',revision=rev,path=path,source_sha256=hashlib.sha256(s.encode()).hexdigest(),original_inner_sha256=hashlib.sha256(body.encode()).hexdigest(),source_lines=[hashlib.sha256(x.encode()).hexdigest() for x in lines],partition=['parent/prepared reply prefix','left write','right write'],association='NHU_ExpandFrame uses KMX typed copy windows and disjointness; prefix captured parent precedes both writes'),indent=1)+'\n')

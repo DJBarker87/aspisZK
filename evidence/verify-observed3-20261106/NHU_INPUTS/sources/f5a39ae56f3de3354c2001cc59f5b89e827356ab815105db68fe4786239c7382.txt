@@ -1,0 +1,38 @@
+import NHU_TransitionLoopTotal
+import NHU_TransitionHeaderPrelude
+import NDO_JFu_TransitionArithmetic
+set_option autoImplicit false
+noncomputable section
+open Aeneas Aeneas.Std Result
+namespace AspisR1.NHU_TransitionTotal
+open FIq_Native.pool_v1.pair_forest_semantic_terminal
+open NHU_TransitionCut
+
+theorem result (p : Public) : ∃ status,validate_transition p=ok status := by
+ unfold validate_transition
+ rw [NHU_TransitionHeaderPrelude.bytes,bind_tc_ok]
+ split
+ · exact ⟨.Err .InvalidAppendTransition,rfl⟩
+ · rw [NHU_TransitionHeaderPrelude.bytes,bind_tc_ok]
+   split
+   · exact ⟨.Err .InvalidAppendTransition,rfl⟩
+   · split
+     · exact ⟨.Err .InvalidAppendTransition,rfl⟩
+     · rw [JFu_TransitionArithmetic.capacity,bind_tc_ok]
+       split
+       · exact ⟨.Err .InvalidAppendTransition,rfl⟩
+       · simp only [lift,bind_tc_ok]
+         obtain ⟨choice,optionCall⟩:=NHU_TransitionHeaderPrelude.option
+          (U64.checked_add p.transition.live_snapshot.next_pair_index 1#u64)
+          (some p.transition.candidate_afterstate.next_pair_index)
+         rw [optionCall,bind_tc_ok]
+         cases choice with
+         | true=>exact ⟨.Err .InvalidAppendTransition,rfl⟩
+         | false=>
+          simp only [Bool.false_eq_true,ite_false]
+          obtain ⟨carry,carryCall,_,_⟩:=NHG_ExtraLeaves.carry_result p.transition.live_snapshot.next_pair_index
+          rw [carryCall,bind_tc_ok]
+          exact NHU_TransitionLoopTotal.start p carry
+#print axioms result
+end AspisR1.NHU_TransitionTotal
+end

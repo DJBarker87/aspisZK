@@ -1,0 +1,53 @@
+{"attempt": "NHU_K065", "exit_status": 0, "wall_seconds": 18.244063018122688, "peak_rss_kib": "1465708", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-verify-observed3-20261106/NHU_src/crates/aspis-core)
+warning: unexpected `cfg` condition name: `NHU_bad_i`
+   --> crates/aspis-core/src/state_only_hiding.rs:438:25
+    |
+438 | #[cfg_attr(all(kani,not(NHU_bad_i)), kani::ensures(|result| *result==NHU_native::NHU_ref_i(value)))]
+    |                         ^^^^^^^^^
+    |
+    = help: expected names are: `docsrs`, `feature`, `kani`, and `test` and 31 more
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+            
+...
+rence to mutable static
+   --> crates/aspis-statement/src/../../../tools/r1-builder-reference/poseidon.rs:131:20
+    |
+131 |         assert_eq!(ACTUAL_CALL, 4);
+    |                    ^^^^^^^^^^^ shared reference to mutable static
+    |
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: creating a shared reference to mutable static
+   --> crates/aspis-statement/src/../../../tools/r1-builder-reference/poseidon.rs:132:20
+    |
+132 |         assert_eq!(REFERENCE_CALL, 4);
+    |                    ^^^^^^^^^^^^^^ shared reference to mutable static
+    |
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 3.21s
+Checking harness pool_v1::pair_forest_semantic_terminal::NHU_native::NHU_transition_step...
+
+VERIFICATION RESULT:
+ ** 0 of 328 failed (18 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 13.369238s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r9bc1b5ea8f54462583c24b72d1ce890e.scope; invocation ID: 1a19ef6078764fa19c1641af1ad6b1c2

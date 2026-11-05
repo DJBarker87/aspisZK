@@ -1,0 +1,4 @@
+from pathlib import Path
+import subprocess,json,hashlib
+E=Path(__file__).resolve().parent;R=E.parents[1];rev='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387';p='crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs';s=subprocess.check_output(['git','show',rev+':'+p],cwd=R).decode();a=s.index('        let mut weights = [QM31::ZERO; N];');b=s.index('        for coordinate in coordinates {',a);body=s[a:b];assert len([l for l in body.splitlines() if l.strip()])==3
+(E/'NHU_expand_init_body.rs.txt').write_text('fn NHU_expand_init_cut<const N:usize>()->([QM31;N],usize){'+body+'(weights,len)}\n');(E/'NHU_EXPAND_INIT_ERASURE.json').write_text(json.dumps(dict(status='PASS',revision=rev,path=p,source_sha256=hashlib.sha256(s.encode()).hexdigest(),opening_sha256=hashlib.sha256(body.encode()).hexdigest(),method='exact frozen initialization; no protocol loop; one arbitrary observation covers all cells/limbs'),indent=1)+'\n')

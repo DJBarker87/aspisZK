@@ -1,6 +1,1 @@
-fn NHU_mask_opening_cut(point:&[QM31;10],log:&mut LinearsLog)->(QM31,QM31,[QM31;27]){
-    let (linear, explicit_linear) = linears_cut(point,log);
-    let mut coefficients = [QM31::ZERO; STATE_ONLY_HIDING_FACTOR_DEGREE + 1];
-
-(linear,explicit_linear,coefficients)
-}
+../../../../../../NHU_INPUTS/sources/32ab3e48e74dcf2bd4e8a9888520094b2dbfc7b1142ba1628007d6d0b181c205.txt
