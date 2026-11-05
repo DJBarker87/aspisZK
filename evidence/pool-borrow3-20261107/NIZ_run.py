@@ -107,8 +107,13 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
+if {kind!r}=='cleanup':names += ['NIZ_CLEANUP.json']
+if {kind!r}=='export':names += ['NIZ_EXPORT.json','NIZ_CLOSURE_PINS.json.sha256']
 if {kind!r}=='audit':names += [str(p.relative_to(b)) for p in (b/'NIZ_audit'/{target!r}).rglob('*') if p.is_file()]+[str(p.relative_to(b)) for modepath in (b/'NIZ_audit'/{target!r}).glob('*.json') for row in json.loads(modepath.read_text()).get('results',[]) for p in [b/('NEP_'+modepath.stem+'_'+row['root']+'_REACHABLE.txt')] if p.exists()]+([n for n in ['NIZ_LOADED_scan.jsonl','NIZ_POOL_LOADED_scan.jsonl'] if (b/n).exists()])
 out={{n:(b/n).read_text() for n in names}}
+if {kind!r}=='export':
+ import base64
+ out['NIZ_CLOSURE_PINS.json.xz']=base64.b64encode((b/'NIZ_CLOSURE_PINS.json.xz').read_bytes()).decode()
 for name in ['NIZ_Driver','NIZ_ProofDriver','NIZ_PoolProofDriver','NIZ_PoolDriver']:
  p=b/'NIZ_native'/name
  if p.is_file():out[a+'/'+name+'_BINARY_PIN.json']=json.dumps(dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size))
@@ -116,7 +121,10 @@ print(json.dumps(out))
 ''');assert r.returncode==0,r.stderr
 for n,t in json.loads(r.stdout).items():
  p=E/n;p.parent.mkdir(parents=True,exist_ok=True)
- if n.startswith('NEP_') and n.endswith('_REACHABLE.txt'):
+ if n=='NIZ_CLOSURE_PINS.json.xz':
+  import base64
+  p.write_bytes(base64.b64decode(t,validate=True))
+ elif n.startswith('NEP_') and n.endswith('_REACHABLE.txt'):
   raw=t.encode();(E/('NIZ_'+n+'.sha256')).write_text(hashlib.sha256(raw).hexdigest()+'\n');(E/('NIZ_'+n+'.xz')).write_bytes(lzma.compress(raw,preset=6))
  else:p.write_text(t)
 assert (E/a/'receipt.json').exists(),'Missing receipt; never resubmit'

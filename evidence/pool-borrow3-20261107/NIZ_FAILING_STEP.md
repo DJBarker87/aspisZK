@@ -23,3 +23,7 @@ L007 read-only diagnostic: executable .out loop listing succeeded; passing .symt
 K027: own dispatch harness used a non-Copy ProgramResult after moving it into the ? stage, compiler E0382; no semantic credit. Repair reconstructs the expected unit/error arm from the existing selector, without introducing clone/copy or changing the property.
 
 L017: own model used reserved Lean keyword prefix as a definition name; rejected. Renamed only that new model definition to prefixRows (the theorem/root names and native harness names are unchanged); no failed compile credited.
+
+Own evidence validator preflight required the literal under-80 while the report says below 80 percent. Repaired it to check the computed budget fraction, explicit disclosure and all 13 owner records; validation stays stricter. No prover rerun.
+
+Own result collector was extended only to retain compressed closure/export/cleanup files; shared launchers, reservations, shim and workspaces were unchanged.
