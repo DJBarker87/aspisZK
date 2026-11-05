@@ -8,6 +8,9 @@ import sys,subprocess,json,lzma,hashlib,importlib.abc,importlib.util,io,time,res
 sys.dont_write_bytecode=True
 E=Path(__file__).resolve().parent;R=E.parents[1];start=time.monotonic()
 tracked=subprocess.check_output(['git','ls-tree','-r','--name-only','HEAD'],cwd=R,text=True).splitlines();paths=set(tracked);used={};raw_open=Path.open;raw_exists=Path.exists;raw_isfile=Path.is_file
+prior_inputs={}
+for rp in E.glob('NGZ_REPLAY_*.json'):
+ prior_inputs.update(json.loads(rp.read_text()).get('sparse_inputs',{}))
 byname={}
 for p in tracked:
  if p.startswith('evidence/') and p.endswith('.py'):byname.setdefault(Path(p).name,[]).append(p)
@@ -16,6 +19,12 @@ def rel(p):
  except ValueError:return None
 def get(p):
  q=rel(p)
+ if q in used:
+  with raw_open(E/used[q]['snapshot'],'rb')as f:return f.read()
+ if q in prior_inputs:
+  x=prior_inputs[q]
+  with raw_open(E/x['snapshot'],'rb')as f:data=f.read()
+  assert hashlib.sha256(data).hexdigest()==x['sha256'];used[q]=x;return data
  if raw_isfile(p):
   with raw_open(p,'rb') as f:return f.read()
  assert q in paths,('untracked sparse read',q)
@@ -27,8 +36,8 @@ def get(p):
 def opened(p,mode='r',*a,**kw):
  if any(c in mode for c in 'wax+') and p.is_relative_to(R) and not p.is_relative_to(E):
   dest=E/'NGZ_replay_outputs'/p.relative_to(R);dest.parent.mkdir(parents=True,exist_ok=True);return raw_open(dest,mode,*a,**kw)
- if not raw_exists(p) and raw_isfile(Path(str(p)+'.xz')):
-  raw=lzma.decompress(Path(str(p)+'.xz').read_bytes());assert hashlib.sha256(raw).hexdigest()==Path(str(p)+'.sha256').read_text().strip()
+ if not raw_exists(p) and (raw_isfile(Path(str(p)+'.xz')) or rel(Path(str(p)+'.xz')) in paths):
+  raw=lzma.decompress(get(Path(str(p)+'.xz')));assert hashlib.sha256(raw).hexdigest()==get(Path(str(p)+'.sha256')).decode().strip()
   return io.BytesIO(raw) if 'b' in mode else io.StringIO(raw.decode())
  if raw_exists(p):return raw_open(p,mode,*a,**kw)
  if rel(p) in paths:

@@ -1,0 +1,38 @@
+{"attempt": "NGZ_L037", "exit_status": 0, "wall_seconds": 2.694311640923843, "peak_rss_kib": "5953364", "swaps": "0", "print_axioms": ["'NGK_NFR_ModelJoin.same_emitted_settlement' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]"]}
+@NGK_NFR_ModelJoin.same_emitted_settlement : ∀ {Context Key RuntimeState Accounts Other LaneImage : Type}
+  [inst : DecidableEq.{1} Key] (runtime : NGK_NFO_PoolReturnData.Runtime Context Key RuntimeState),
+  @NGK_NFR_PoolReturnData.RuntimeReturnData Context Key RuntimeState runtime →
+    ∀ (context : Context) (selected : Key) (state : AspisR1.S2I.ReturnData.State Accounts Other)
+      (s : NFY_NEU_EmitModel.Statement),
+      @Eq.{1}
+          (Aeneas.Std.Result.{0}
+            (Aeneas.Std.core.result.Result.{0, 0} Unit
+              AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1))
+          (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.valida
+...
+                     (Aeneas.Std.Usize.ofNat
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 792) (instOfNatNat (nat_lit 792))) ⋯)))
+                            (AspisR1.S2K.ResultPayload.bytes s) })
+                    (@Aeneas.Std.Result.ok.{0}
+                      (Prod.{0, 0}
+                        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} LaneImage NGK_NFR_CSettlement.Bytes)
+                          NGK_NFR_CSettlement.Error)
+                        (List.{0} NGK_NFR_CSettlement.Call))
+                      (@Prod.mk.{0, 0}
+                        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} LaneImage NGK_NFR_CSettlement.Bytes)
+                          NGK_NFR_CSettlement.Error)
+                        (List.{0} NGK_NFR_CSettlement.Call)
+                        (@Aeneas.Std.core.result.Result.Ok.{0, 0} (Prod.{0, 0} LaneImage NGK_NFR_CSettlement.Bytes)
+                          NGK_NFR_CSettlement.Error
+                          (@Prod.mk.{0, 0} LaneImage NGK_NFR_CSettlement.Bytes image
+                            (AspisR1.S2K.ResultPayload.bytes s)))
+                        (@List.cons.{0} NGK_NFR_CSettlement.Call
+                          (NGK_NFR_CSettlement.Call.validate (AspisR1.S2K.ResultAdmission.value s))
+                          (@List.cons.{0} NGK_NFR_CSettlement.Call
+                            (NGK_NFR_CSettlement.Call.lane (AspisR1.S2K.ResultAdmission.value s))
+                            (@List.cons.{0} NGK_NFR_CSettlement.Call
+                              (NGK_NFR_CSettlement.Call.encode (AspisR1.S2K.ResultAdmission.value s))
+                              (@List.nil.{0} NGK_NFR_CSettlement.Call))))))))
+'NGK_NFR_ModelJoin.same_emitted_settlement' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+
+Running as unit: run-ra371ac55b2b3440b94482a7aab112988.scope; invocation ID: c64718251a224015aabbf0c7f700d6c4

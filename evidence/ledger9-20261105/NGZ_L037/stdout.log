@@ -1,0 +1,132 @@
+@NGK_NFR_ModelJoin.same_emitted_settlement : ∀ {Context Key RuntimeState Accounts Other LaneImage : Type}
+  [inst : DecidableEq.{1} Key] (runtime : NGK_NFO_PoolReturnData.Runtime Context Key RuntimeState),
+  @NGK_NFR_PoolReturnData.RuntimeReturnData Context Key RuntimeState runtime →
+    ∀ (context : Context) (selected : Key) (state : AspisR1.S2I.ReturnData.State Accounts Other)
+      (s : NFY_NEU_EmitModel.Statement),
+      @Eq.{1}
+          (Aeneas.Std.Result.{0}
+            (Aeneas.Std.core.result.Result.{0, 0} Unit
+              AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1))
+          (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1 s)
+          (@Aeneas.Std.Result.ok.{0}
+            (Aeneas.Std.core.result.Result.{0, 0} Unit
+              AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+            (@Aeneas.Std.core.result.Result.Ok.{0, 0} Unit
+              AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1 Unit.unit)) →
+        ∀
+          (validate :
+            NGK_NFR_ModelJoin.Output →
+              Aeneas.Std.Result.{0} (Aeneas.Std.core.result.Result.{0, 0} Unit NGK_NFR_ModelJoin.PoolError))
+          (lane :
+            NGK_NFR_ModelJoin.Output →
+              Aeneas.Std.Result.{0} (Aeneas.Std.core.result.Result.{0, 0} LaneImage NGK_NFR_ModelJoin.PoolError))
+          (image : LaneImage),
+          @Eq.{1} (Aeneas.Std.Result.{0} (Aeneas.Std.core.result.Result.{0, 0} Unit NGK_NFR_ModelJoin.PoolError))
+              (validate (AspisR1.S2K.ResultAdmission.value s))
+              (@Aeneas.Std.Result.ok.{0} (Aeneas.Std.core.result.Result.{0, 0} Unit NGK_NFR_ModelJoin.PoolError)
+                (@Aeneas.Std.core.result.Result.Ok.{0, 0} Unit NGK_NFR_ModelJoin.PoolError Unit.unit)) →
+            @Eq.{1} (Aeneas.Std.Result.{0} (Aeneas.Std.core.result.Result.{0, 0} LaneImage NGK_NFR_ModelJoin.PoolError))
+                (lane (AspisR1.S2K.ResultAdmission.value s))
+                (@Aeneas.Std.Result.ok.{0} (Aeneas.Std.core.result.Result.{0, 0} LaneImage NGK_NFR_ModelJoin.PoolError)
+                  (@Aeneas.Std.core.result.Result.Ok.{0, 0} LaneImage NGK_NFR_ModelJoin.PoolError image)) →
+              And
+                (@Eq.{1}
+                  (Aeneas.Std.Result.{0}
+                    (Aeneas.Std.core.result.Result.{0, 0} (AspisR1.S2I.ReturnData.State Accounts Other)
+                      AdapterRw.solana_program_error.ProgramError))
+                  (@AspisR1.NFY_JHb_Emit.source Accounts Other
+                    (fun st bytes =>
+                      @Aeneas.Std.Result.ok.{0} (AspisR1.S2I.ReturnData.State Accounts Other)
+                        (@AspisR1.S2I.ReturnData.set Accounts Other st bytes))
+                    state s)
+                  (@Aeneas.Std.Result.ok.{0}
+                    (Aeneas.Std.core.result.Result.{0, 0} (AspisR1.S2I.ReturnData.State Accounts Other)
+                      AdapterRw.solana_program_error.ProgramError)
+                    (@Aeneas.Std.core.result.Result.Ok.{0, 0} (AspisR1.S2I.ReturnData.State Accounts Other)
+                      AdapterRw.solana_program_error.ProgramError
+                      (@AspisR1.S2I.ReturnData.set Accounts Other state
+                        (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+                          (fun l =>
+                            @Eq.{1} Nat (@List.length.{0} Aeneas.Std.U8 l)
+                              (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize
+                                (Aeneas.Std.Usize.ofNat
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 792) (instOfNatNat (nat_lit 792))) ⋯)))
+                          (AspisR1.S2K.ResultPayload.bytes s))))))
+                (And
+                  (@Eq.{1}
+                    (Aeneas.Std.Result.{0}
+                      (Prod.{0, 0}
+                        (Aeneas.Std.core.result.Result.{0, 0} NGK_NFO_ReadModel.Accepted NGK_NFO_ReadModel.Error)
+                        (List.{0} NGK_NFO_ReadModel.Event)))
+                    (@NGK_NFO_ReadModel.run Key inst selected
+                      (@Aeneas.Std.core.result.Result.Ok.{0, 0} Unit AdapterRw.solana_program_error.ProgramError
+                        Unit.unit)
+                      (@NGK_NFO_PoolReturnData.Runtime.read Context Key RuntimeState runtime context
+                        (@NGK_NFO_PoolReturnData.Runtime.write Context Key RuntimeState runtime context selected
+                          (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+                            (fun l =>
+                              @Eq.{1} Nat (@List.length.{0} Aeneas.Std.U8 l)
+                                (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize
+                                  (Aeneas.Std.Usize.ofNat
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 792) (instOfNatNat (nat_lit 792))) ⋯)))
+                            (AspisR1.S2K.ResultPayload.bytes s))))
+                      NGK_NFO_PacketDecoder.run)
+                    (@Aeneas.Std.Result.ok.{0}
+                      (Prod.{0, 0}
+                        (Aeneas.Std.core.result.Result.{0, 0} NGK_NFO_ReadModel.Accepted NGK_NFO_ReadModel.Error)
+                        (List.{0} NGK_NFO_ReadModel.Event))
+                      (@Prod.mk.{0, 0}
+                        (Aeneas.Std.core.result.Result.{0, 0} NGK_NFO_ReadModel.Accepted NGK_NFO_ReadModel.Error)
+                        (List.{0} NGK_NFO_ReadModel.Event)
+                        (@Aeneas.Std.core.result.Result.Ok.{0, 0} NGK_NFO_ReadModel.Accepted NGK_NFO_ReadModel.Error
+                          { value := AspisR1.S2K.ResultAdmission.value s,
+                            bytes :=
+                              @Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+                                (fun l =>
+                                  @Eq.{1} Nat (@List.length.{0} Aeneas.Std.U8 l)
+                                    (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize
+                                      (Aeneas.Std.Usize.ofNat
+                                        (@OfNat.ofNat.{0} Nat (nat_lit 792) (instOfNatNat (nat_lit 792))) ⋯)))
+                                (AspisR1.S2K.ResultPayload.bytes s) })
+                        (@List.cons.{0} NGK_NFO_ReadModel.Event NGK_NFO_ReadModel.Event.clear
+                          (@List.cons.{0} NGK_NFO_ReadModel.Event NGK_NFO_ReadModel.Event.invoke
+                            (@List.cons.{0} NGK_NFO_ReadModel.Event NGK_NFO_ReadModel.Event.read
+                              (@List.cons.{0} NGK_NFO_ReadModel.Event NGK_NFO_ReadModel.Event.decode
+                                (@List.nil.{0} NGK_NFO_ReadModel.Event))))))))
+                  (@Eq.{1}
+                    (Aeneas.Std.Result.{0}
+                      (Prod.{0, 0}
+                        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} LaneImage NGK_NFR_CSettlement.Bytes)
+                          NGK_NFR_CSettlement.Error)
+                        (List.{0} NGK_NFR_CSettlement.Call)))
+                    (@NGK_NFR_CSettlement.run LaneImage validate lane NFY_NEY_EmitComposed.encode
+                      { value := AspisR1.S2K.ResultAdmission.value s,
+                        bytes :=
+                          @Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+                            (fun l =>
+                              @Eq.{1} Nat (@List.length.{0} Aeneas.Std.U8 l)
+                                (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize
+                                  (Aeneas.Std.Usize.ofNat
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 792) (instOfNatNat (nat_lit 792))) ⋯)))
+                            (AspisR1.S2K.ResultPayload.bytes s) })
+                    (@Aeneas.Std.Result.ok.{0}
+                      (Prod.{0, 0}
+                        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} LaneImage NGK_NFR_CSettlement.Bytes)
+                          NGK_NFR_CSettlement.Error)
+                        (List.{0} NGK_NFR_CSettlement.Call))
+                      (@Prod.mk.{0, 0}
+                        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} LaneImage NGK_NFR_CSettlement.Bytes)
+                          NGK_NFR_CSettlement.Error)
+                        (List.{0} NGK_NFR_CSettlement.Call)
+                        (@Aeneas.Std.core.result.Result.Ok.{0, 0} (Prod.{0, 0} LaneImage NGK_NFR_CSettlement.Bytes)
+                          NGK_NFR_CSettlement.Error
+                          (@Prod.mk.{0, 0} LaneImage NGK_NFR_CSettlement.Bytes image
+                            (AspisR1.S2K.ResultPayload.bytes s)))
+                        (@List.cons.{0} NGK_NFR_CSettlement.Call
+                          (NGK_NFR_CSettlement.Call.validate (AspisR1.S2K.ResultAdmission.value s))
+                          (@List.cons.{0} NGK_NFR_CSettlement.Call
+                            (NGK_NFR_CSettlement.Call.lane (AspisR1.S2K.ResultAdmission.value s))
+                            (@List.cons.{0} NGK_NFR_CSettlement.Call
+                              (NGK_NFR_CSettlement.Call.encode (AspisR1.S2K.ResultAdmission.value s))
+                              (@List.nil.{0} NGK_NFR_CSettlement.Call))))))))
+'NGK_NFR_ModelJoin.same_emitted_settlement' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
