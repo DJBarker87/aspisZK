@@ -1,0 +1,12 @@
+import NHW_DeployedQuery
+set_option autoImplicit false
+#check AspisR1CurrentWide.Proof.qm_mul_total_exact
+#check AspisR1CurrentWide.Proof.qm_mul_total_canonical
+#check AspisR1CurrentWide.Proof.qm_mul_success
+#check ExtractedMaskQM31Exact.current_qm_mul_exact
+#check ExtractedMaskQM31Exact.current_qm_add_exact
+#check AspisR1CurrentWide.Proof.qm_add_total_canonical
+#check AspisR1CurrentWide.Proof.wide_add_total_exact
+#print NBO_FieldSemantics.power
+#print AspisR1.NFS_NEV_StageFields.canonical_q
+#print AspisR1CurrentWide.Proof.decodeQM

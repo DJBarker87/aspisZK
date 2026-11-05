@@ -1,0 +1,18 @@
+import NHW_DeployedQuery
+import NFS_NEV_StageWideFields
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.NHW_FieldTransport
+open Aeneas Aeneas.Std Result AspisR1Stage2 Port3_NativeQueryBody
+abbrev Q := aspis_core.field.QM31
+abbrev E := aspis_core.field.wide_exact.WideExact
+/-- Test the nominal transport at one symbolic scalar operation; no concrete
+field multiplication is reduced. -/
+theorem current_power (x y : Q) :
+ SAQ_Arithmetic.mulK x y=
+ (do let out ← FIo_Native.aspis_core.field.QM31.mul
+    (NFS_NEV_StageFields.nq x) (NFS_NEV_StageFields.nq y)
+     ;ok (NFS_NEV_StageFields.sq out)) := by
+ rfl
+#print axioms current_power
+end AspisR1.NHW_FieldTransport
