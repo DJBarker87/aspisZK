@@ -42,7 +42,7 @@ This cut carries only the selected native observation, not a callee equation. -/
 def cut (shared : Bool) (partsAddress : Nat) (i slot power : Nat)
  (l : Log) (afterScratch : Scratch) (afterParts : Parts) (out : Reply Unit) : Prop :=
  i<16 ∧ slot<7 ∧ power<4 ∧ canonical l.partsReply ∧ (enteredHigh shared l → canonical l.highPartsReply) ∧
- (∀ values,l.partialReply=.Ok values → canonical values) ∧
+ (enteredPartial shared l → ∀ values,l.partialReply=.Ok values → canonical values) ∧
  out=expected shared l ∧
  l.count=(if ¬enteredPartial shared l then 1 else if ¬enteredHigh shared l then 3 else 4) ∧
  l.events 0=0 ∧

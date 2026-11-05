@@ -21,5 +21,5 @@ assert all(r['equal']and set(r['walked_axioms'])<={'propext','Classical.choice',
 scan=[json.loads(l)for l in(B/'NIW_LOADED_scan.jsonl').read_text().splitlines()]
 assert all(not r['dangling']and not r['duplicate_owners']and r['imports_match']for r in scan)
 shutil.copy2(B/'NIW_LOADED_scan.jsonl',D/'NIW_LOADED_scan.jsonl')
-result=dict(status='PASS',commands=outputs,roots=len(raw),modules=len(scan),standard_only=True,dangling=0,incompatible_owners=0,import_mismatches=0,proof_driver_sha256=sha(proof),scanner_sha256=sha(scanner),walker_c_sha256=sha(B/'NIW_native/NFA_WALKER.c'),fixture_reuse='NIW_L139 eight fixtures; same unchanged proof-driver binary',serial=True)
+result=dict(status='PASS',commands=outputs,roots=len(raw),modules=len(scan),standard_only=True,dangling=0,incompatible_owners=0,import_mismatches=0,proof_driver_sha256=sha(proof),scanner_sha256=sha(scanner),walker_c_sha256=sha(B/'NIW_native/NFA_WALKER.c'),fixture_reuse='NIW_L027 eight fixtures; same unchanged proof-driver binary',serial=True)
 (D/'RESULT.json').write_text(json.dumps(result,indent=2)+'\n');print('NIW_FINAL_AUDIT '+json.dumps(result),flush=True)

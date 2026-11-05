@@ -1,9 +1,13 @@
 import NIW_AlignPair
 import NIW_AlignFrames
+import NIW_AlignScratch
+import NIW_AlignGuardNative
 import NIW_AlignCommon
 import NIW_AlignLow
 import NIW_AlignLibra
 import NIW_AlignFinal
+import NIW_AlignReturn
+import NIW_AlignDomains
 import NIT_AllocatorChain
 set_option autoImplicit false
 noncomputable section

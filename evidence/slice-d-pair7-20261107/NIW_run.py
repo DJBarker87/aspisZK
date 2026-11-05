@@ -8,7 +8,8 @@ W='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025'
 H='dombarker@100.108.41.90';T='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0'
 a,kind,target=sys.argv[1:];limit=10 if kind=='kani' else 0 if kind=='extract' else 160; assert a.startswith('NIW_') and int(a[-3:])>=1
 prefix='K' if kind=='kani' else 'E' if kind=='extract' else 'L'
-used=sum(1 for p in E.glob('NIW_'+prefix+'[0-9][0-9][0-9]/receipt.json'))
+records=[json.loads(line) for line in (E/'NIW_ATTEMPTS.jsonl').read_text().splitlines()] if (E/'NIW_ATTEMPTS.jsonl').exists() else []
+used=len({r['attempt'] for r in records if r['attempt'].startswith('NIW_'+prefix)})
 assert used<limit,('budget exhausted',prefix,used,limit)
 assert not (E/a).exists()
 def ssh(code,data=None,submitted=False):

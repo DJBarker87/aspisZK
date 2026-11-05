@@ -56,19 +56,20 @@ theorem toWeights_injective : Function.Injective FIo_Install.toWeights := by
 observations. Whole Weights construction K005 timed out; K006+ factors and
 rest windows use the SAME by-value Option<Box<Weights>> move. -/
 def cutPayload (before after : NewPort) (out : Reply (Ref FIo_Install.W)) : Prop :=
- ∃ child,before.reply=some child ∧ before.calls=0 ∧ after.calls=1 ∧
- (FIo_Install.toWeights child.value).variant=FIo_Native.transport.Variant.S2 ∧
+ before.calls=0 ∧ after.calls=1 ∧
  match out with
- | .Ok value=>before.error=none ∧ after.reply=none ∧ value.address=child.address ∧
+ | .Ok value=>∃ child,before.reply=some child ∧
+   (FIo_Install.toWeights child.value).variant=FIo_Native.transport.Variant.S2 ∧
+   before.error=none ∧ after.reply=none ∧ value.address=child.address ∧
    FIo_Install.toWeights value.value=FIo_Install.toWeights child.value
- | .Err e=>before.error=some e ∧ after.reply=some child
+ | .Err e=>before.error=some e
 
 /-- Actual native returned Box payload is the actual pre-call child payload,
 by the observed raw-field windows. The old address-only cut is insufficient. -/
 theorem returned (before after : NewPort) (out : Ref FIo_Install.W)
  (native : cutPayload before after (.Ok out)) :
  ∃ child,before.reply=some child ∧ out=child := by
- obtain ⟨child,reply,_,_,_,_,_,address,payload⟩ := native
+ obtain ⟨_,_,child,reply,_,_,_,address,payload⟩ := native
  have same := toWeights_injective payload
  refine ⟨child,reply,?_⟩
  cases out;cases child;cases address;cases same;rfl
