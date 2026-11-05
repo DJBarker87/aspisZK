@@ -17,15 +17,15 @@ fn high_window(partials:&[[u32;8];4],coeffs:&[[u32;4];4],j:usize,d:&mut Dot,l:&m
  match push(d,partials[j],coeffs[j],l){Ok(())=>{},Err(_)=>return Err(Error::Parse)}Ok(())
 }
 fn exercise(family:usize,g:usize){
- let common:[[u32;4];16]=kani::any();let high:[[u32;8];4]=kani::any();let coeffs:[[u32;4];4]=kani::any();
- let s:usize=kani::any();kani::assume(s<4);let j:usize=kani::any();kani::assume(j<if family==2{4}else{16});
+ let common:[[u32;4];16]=kani::any();let scratch:[[u32;4];64]=kani::any();let high:[[u32;8];4]=kani::any();let coeffs:[[u32;4];4]=kani::any();
+ let s:usize=kani::any();kani::assume(s<4);let j:usize=kani::any();kani::assume(j<if family==2{4}else if family==1{64}else{16});
  let before=Dot{words:kani::any(),count:kani::any()};let after=Dot{words:kani::any(),count:kani::any()};
  let bytes:[u8;2048]=kani::any();let x:[u32;8]=kani::any();let fail:bool=kani::any();let mut d=before;
  let mut l=Log{field_index:999,ptr:core::ptr::null(),len:0,field_value:x,left:[0;8],right:[0;4],before,after,fail,calls:0};
- let r=if family==0{partial_window(&bytes,&common,s,j,&mut d,&mut l)}else if family==1{byte_window(&bytes,&common,j,&mut d,&mut l)}else{high_window(&high,&coeffs,j,&mut d,&mut l)};
+ let r=if family==0{partial_window(&bytes,&common,s,j,&mut d,&mut l)}else if family==1{byte_window(&bytes,&scratch,j,&mut d,&mut l)}else{high_window(&high,&coeffs,j,&mut d,&mut l)};
  let good=match g{
  0=>l.left==if family==2{high[j]}else{x},
- 1=>l.right==if family==2{coeffs[j]}else{common[j]},
+ 1=>l.right==if family==2{coeffs[j]}else if family==1{scratch[j]}else{common[j]},
  2=>l.before==before,
  3=>d==after,
  4=>r.is_err()==fail,

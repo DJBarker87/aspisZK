@@ -55,7 +55,7 @@ if kind=='kani':
   flag=os.environ.get('NHM_NATIVE_CFG','NHM_invert');assert flag in ['NHM_invert','NGM_invert'];env['RUSTFLAGS']+=' --cfg '+flag
 elif kind=='extract':
  files['NHM_extract.py']=(E/'NHM_extract.py').read_text()
- name={'NHM_FilledRef':'NHM_filled_reference.rs.patch','NHM_PartialIndexRef':'NHM_partial_index_reference.rs.patch','NHM_GroupTablesRef':'NHM_group_tables_reference.rs.patch'}[target]
+ name={'NHM_WindowRef':'NHM_window_reference.rs.patch','NHM_ControlRef':'NHM_control_reference.rs.patch'}[target]
  patch=(E/name).read_text()
  files['NHM_references.rs']=''.join(l[1:]for l in patch.splitlines(True)if l.startswith('+')and not l.startswith('+++'))
  sources=['NHM_extract.py','NHM_references.rs'];command=['python3','NHM_extract.py',a+'.json']

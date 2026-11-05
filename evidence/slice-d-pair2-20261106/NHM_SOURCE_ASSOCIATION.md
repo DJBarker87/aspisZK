@@ -1,0 +1,11 @@
+# Native source cut association (in progress)
+
+Frozen source 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387. Scratch patch only; original shipped source unchanged. Native window certificates are source-cut caller certificates in the same form as NHI tensor, not direct field arithmetic contracts. No standalone whole-row credit until validator and Lean association pass.
+
+NHM_windows partial_window: weights.rs partial_dot loop body, field(f,16*s+j), common[j], dot.push, Ok/Err -> Error::Parse. Native representation for WideExact is eight raw u32 limbs; QM31 is four; dot is eight u64 sums and usize count, as retained NGM_DotABI/NGW_DotCodec. Call operands replaced by local-record logging functions. Arbitrary complete before/after dot state and both reachable child result arms are retained. Field log retains SAME slice pointer, length and exact index; immutable arbitrary2048-byte backing. Field reply unrestricted; child canonicality/semantics supplied by retained NHE parser/Q packets only when caller establishes its domain.
+
+high_window: weights.rs high_dot loop body, partials[j], coeffs[j], high.push, both reply arms and exact poststate. Native index j<4. byte_window: push_byte_products body, field(f,j), scratch[j], pair.push, both reply arms; current native window j<16 (broader caller n<=64 needs a widened window certificate or staged windows; no wider domain silently claimed).
+
+Explicit source stage erases no Result arm. Arrays are value encodings, not pointer provenance claims. No field product is computed, no writable static, no Option<fn>. KMX exact source applied; negative controls use identical harness names/configuration with NHM_invert. Failed initialization unwind K016 excluded. Every positive has a semantic failing assertion control; compiler/unwind failures never qualify controls.
+
+NHM_DotPacket.source substitutes the retained CLOSED public push packet, retaining exact nominal dot state through roundtrip. New/finish packets are NHE_DotState.new and NHE_DotFinish.native/cohort; no new arithmetic bridge is claimed. NHI counted-loop source/progress and partial index extraction are reused, not reproved. Final native control and SAME caller-domain transport are still pending.

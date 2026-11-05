@@ -2,7 +2,7 @@ from pathlib import Path
 import hashlib,subprocess,difflib,re,json,sys
 E=Path(__file__).resolve().parent
 target=sys.argv[3] if len(sys.argv)>3 else ''
-patch=(E/('NHM_windows.patch' if target.startswith('weights::NHM_windows') else 'NHM_filled.patch')).read_text();inputs={}
+patch=(E/('NHM_group.patch' if target.startswith('weights::NHM_group') else 'NHM_windows.patch' if target.startswith('weights::NHM_windows') else 'NHM_init.patch' if target.startswith('NHM_init') else 'NHM_filled.patch')).read_text();inputs={}
 for section in patch.split('--- ')[1:]:
  old,rest=section.split('\n+++ b/',1);name,body=rest.split('\n',1)
  if old=='/dev/null':inputs[name]=''.join(l[1:] for l in body.splitlines(True) if l.startswith('+'))

@@ -15,3 +15,11 @@ Filled actual frozen instantiations n=0,1,usize::MAX: six positive/matched faili
 NHM_FilledFrame.window/grow compile L004 with standard axioms only; L001–L003 failed drafts excluded. No admitted declaration contains sorry/axiom. Failed elaborations' sorryAx diagnostics are retained but excluded. K016 failed an unwinding assertion while constructing the arbitrary 2048-byte harness input; exact input-generation bound changed to2050, no timeout or cap increase. The native window queue runs serially and stops at any unexpected verdict. Own receipt packer was initially absent; recovered K001 receipt read-only, added packer, did not resubmit K001.
 
 Budget and closure status in this early handoff are superseded by NHM_ATTEMPTS.jsonl as attempts complete. All new rows remain OPEN pending full native/model and audit association.
+
+## Stage 2
+
+Partial window K017–K032 (8 matched pairs), high window K033–K044 (6 pairs), widened byte window K061–K076 (8 pairs) pass native source-erasure/frozen-graph validation in NHM_native_validate.py. K045–K060's narrower16-cell byte observations do not close the64-cell caller. Emitted/native-dot packet substitution NHM_DotPacket.source (L005), high counted model/reference equality (L007), partial (L008), byte (L009) compile with standard axioms. L006 failed draft replaced by explicit reflexivity and scalar projection of range equality. Array canonical read/bounds L011 pass; L010 failed draft excluded.
+
+Two reference extractions E001/E002 passed with exact NCO tool hashes. Their generated models are not yet compiled/associated, so extraction alone earns no composed rows. K077/K078 qualify pointer/ownership on an arbitrary prefix of an independently arbitrary64-cell prestate. K079 value/length timed out at90s, no credit; replacement uses the caller's SAME-value prefix invariant (see NHM_FAILING_STEP.md). L012/L013 canonical-finish drafts remain excluded; repair is unfolding the named modulus, without evaluating field multiplication.
+
+No new row is CLOSED until the remaining domains/control/reference/full audits pass. Current native/model statements and source qualification are NHM_SOURCE_ASSOCIATION.md. Native multiplication still never runs. Exact live budget use is NHM_ATTEMPTS.jsonl.
