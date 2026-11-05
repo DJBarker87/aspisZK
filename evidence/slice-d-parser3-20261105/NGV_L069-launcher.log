@@ -1,0 +1,68 @@
+{"attempt": "NGV_L069", "exit_status": 1, "wall_seconds": 3.228902871022001, "peak_rss_kib": "5950428", "swaps": "0", "print_axioms": ["'NGV_SemanticInitial.compact_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NGV_SemanticInitial.logical_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NGV_SemanticInitial.rows' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NGV_SemanticInitial.bind_assoc' does not depend on any axioms", "'NGV_SemanticInitial.emitted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NGV_SemanticInitial.copied' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NGV_generated/NGV_SemanticInitial.lean:17:1: error: Tactic `rfl` failed: The left-hand side
+  do
+    let i ←
+      do
+        let i ← 10#usize * 28#usize
+        let i1 ← 1#usize + i
+        let i2 ← 87#usize + 29#usize
+        let i3 ← i1 + i2
+        i3 + 29#usize
+    let i1 ← 16#usize * i
+    let i2 ←
+      do
+        let i ← 29#usize * 32#usize
+        12903#usize + i
+    i2 - i1
+is not definitionally equal to the right-hand side
+  ok 7015#usize
+
+⊢ (do
+      let i ←
+        do
+          let i ← 10#usize * 28#usize
+          let i1 ← 1#usize + i
+          let i2 ← 87#usize + 29#usize
+          let i3 ← i1 + i2
+          i3 + 29#usize
+      let i1 ← 16#usize * i
+      let i2 ←
+        do
+ 
+...
+` failed: Did not find an occurrence of the pattern
+  core.slice.Slice.copy_from_slice core.marker.CopyU8 (select out 0 32) (select input 0 32)
+in the target expression
+  (do
+      let copied ←
+        core.slice.Slice.copy_from_slice core.marker.CopyU8 (select out 0 ↑32#usize) (select input 0 ↑32#usize)
+      ok ((fun after => write out 0 after) copied)) =
+    ok (initial input out)
+
+input out : Slice U8
+inputSize : (↑input).length = 7015
+outputSize : (↑out).length = 13831
+⊢ (do
+      let copied ←
+        core.slice.Slice.copy_from_slice core.marker.CopyU8 (select out 0 ↑32#usize) (select input 0 ↑32#usize)
+      ok ((fun after => write out 0 after) copied)) =
+    ok (initial input out)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'NGV_SemanticInitial.compact_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NGV_SemanticInitial.logical_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NGV_SemanticInitial.rows' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NGV_SemanticInitial.bind_assoc' does not depend on any axioms
+'NGV_SemanticInitial.emitted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NGV_SemanticInitial.copied' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rb9e127802d5d43c2a14bf633619789b0.scope; invocation ID: 174b42a4b910457a8980985b8ab9a22f

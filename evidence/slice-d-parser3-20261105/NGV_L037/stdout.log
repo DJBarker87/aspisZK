@@ -1,0 +1,152 @@
+def Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index : {T : Type} →
+  core.ops.range.Range Usize → Slice T → Result (Slice T) :=
+fun {T} r s => if r.start ≤ r.end ∧ ↑r.end ≤ s.length then ok ⟨List.slice ↑r.start ↑r.end ↑s, ⋯⟩ else fail Error.panic
+def Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index_mut : {T : Type} →
+  core.ops.range.Range Usize → Slice T → Result (Slice T × (Slice T → Slice T)) :=
+fun {T} r s =>
+  if r.start ≤ r.end ∧ ↑r.end ≤ s.length then
+    ok (⟨List.slice ↑r.start ↑r.end ↑s, ⋯⟩, fun s' => ⟨(↑s).setSlice! ↑r.start ↑s', ⋯⟩)
+  else fail Error.panic
+def List.setSlice!.{u_1} : {α : Type u_1} → List α → ℕ → List α → List α :=
+fun {α} s i s' =>
+  have s0 := List.take i s;
+  have n := min s'.length (s.length - i);
+  have s1 := List.take n s';
+  have s2 := List.drop (i + n) s;
+  s0 ++ s1 ++ s2
+inductive NFU_Retarget.LPl_Kit_Release.compact.CodecError : Type
+number of parameters: 0
+constructors:
+NFU_Retarget.LPl_Kit_Release.compact.CodecError.Length : NFU_Retarget.LPl_Kit_Release.compact.CodecError
+NFU_Retarget.LPl_Kit_Release.compact.CodecError.NonZeroHigh : NFU_Retarget.LPl_Kit_Release.compact.CodecError
+NFU_Retarget.LPl_Kit_Release.compact.CodecError.NonCanonical : NFU_Retarget.LPl_Kit_Release.compact.CodecError
+inductive AspisR1CurrentCaller.compact.CodecError : Type
+number of parameters: 0
+constructors:
+AspisR1CurrentCaller.compact.CodecError.Length : AspisR1CurrentCaller.compact.CodecError
+AspisR1CurrentCaller.compact.CodecError.NonZeroHigh : AspisR1CurrentCaller.compact.CodecError
+AspisR1CurrentCaller.compact.CodecError.NonCanonical : AspisR1CurrentCaller.compact.CodecError
+theorem NFQ_RowShape.compact_reference : ∀ (row : U8),
+  NFQ_Reference.compact_row_ref row = AspisS1NativeCompact.compact.compact_row row :=
+fun row => id (NCO_ScalarBridge.compact_row row)
+List.setSlice!.eq_1: ∀ {α : Type u_1} (s : List α) (i : ℕ) (s' : List α),
+  s.setSlice! i s' =
+    List.take i s ++ List.take (min s'.length (s.length - i)) s' ++ List.drop (i + min s'.length (s.length - i)) s
+Vector.getElem!_setSlice!_same: ∀ {α : Type u_1} {n : ℕ} [inst : Inhabited α] (s : Vector α n) (s' : List α) (i j : ℕ),
+  j < i ∨ i + s'.length ≤ j → (s.setSlice! i s')[j]! = s[j]!
+Aeneas.Std.Array.setSlice!_getElem!_suffix: ∀ {α : Type u_1} {n : Usize} [inst : Inhabited α] (s : Std.Array α n)
+  (s' : List α) (i j : ℕ), i + s'.length ≤ j → (s.setSlice! i s')[j]! = s[j]!
+Aeneas.Std.Slice.setSlice!.eq_1: ∀ {α : Type u} (s : Slice α) (i : ℕ) (s' : List α),
+  s.setSlice! i s' = ⟨(↑s).setSlice! i s', ⋯⟩
+Aeneas.Std.Array.setSlice!_getElem!_middle: ∀ {α : Type u_1} {n : Usize} [inst : Inhabited α] (s : Std.Array α n)
+  (s' : List α) (i j : ℕ), i ≤ j ∧ j - i < s'.length ∧ j < s.length → (s.setSlice! i s')[j]! = s'[j - i]!
+Vector.getElem!_setSlice!_suffix: ∀ {α : Type u_1} {n : ℕ} [inst : Inhabited α] (s : Vector α n) (s' : List α)
+  (i j : ℕ), i + s'.length ≤ j → (s.setSlice! i s')[j]! = s[j]!
+Aeneas.Std.alloc.vec.Vec.setSlice!_length: ∀ {α : Type u} (s : alloc.vec.Vec α) (i : ℕ) (s' : List α),
+  (s.setSlice! i s').length = s.length
+Array.setSlice!: {α : Type u_1} → _root_.Array α → ℕ → List α → _root_.Array α
+List.setSlice!_getElem?_suffix: ∀ {α : Type u_1} (s s' : List α) (i j : ℕ),
+  i + s'.length ≤ j → (s.setSlice! i s')[j]? = s[j]?
+List.setSlice!_drop: ∀ {α : Type u_1} (l : List α) (i : ℕ), l.setSlice! i (List.drop i l) = l
+Aeneas.Std.alloc.vec.Vec.setSlice!_getElem!_suffix: ∀ {α : Type u_1} [inst : Inhabited α] (s : alloc.vec.Vec α)
+  (s' : List α) (i j : ℕ), i + s'.length ≤ j → (s.setSlice! i s')[j]! = s[j]!
+Vector.getElem_setSlice!_same: ∀ {α : Type u_1} {n : ℕ} [Inhabited α] (s : Vector α n) (s' : List α) (i j : ℕ)
+  (h : (j < i ∨ i + s'.length ≤ j) ∧ j < n), (s.setSlice! i s')[j] = s[j]
+Array.getElem_setSlice!_same: ∀ {α : Type u_1} (s : _root_.Array α) (s' : List α) (i j : ℕ)
+  (h : (j < i ∨ i + s'.length ≤ j) ∧ j < s.size), (s.setSlice! i s')[j] = s[j]
+List.setSlice!_getElem?_prefix: ∀ {α : Type u_1} (s s' : List α) (i j : ℕ), j < i → (s.setSlice! i s')[j]? = s[j]?
+Array.getElem!_setSlice!_suffix: ∀ {α : Type u_1} [inst : Inhabited α] (s : _root_.Array α) (s' : List α) (i j : ℕ),
+  i + s'.length ≤ j → (s.setSlice! i s')[j]! = s[j]!
+List.getElem_setSlice!_suffix: ∀ {α : Type u_1} (s s' : List α) (i j : ℕ) (h : i + s'.length ≤ j ∧ j < s.length),
+  (s.setSlice! i s')[j] = s[j]
+Vector.getElem!_setSlice!_middle: ∀ {α : Type u_1} {n : ℕ} [inst : Inhabited α] (s : Vector α n) (s' : List α)
+  (i j : ℕ), i ≤ j ∧ j - i < s'.length ∧ j < s.size → (s.setSlice! i s')[j]! = s'[j - i]!
+List.length_setSlice!: ∀ {α : Type u_1} (s : List α) (i : ℕ) (s' : List α), (s.setSlice! i s').length = s.length
+Aeneas.Std.alloc.vec.Vec.setSlice!_getElem_middle: ∀ {α : Type u_1} (s : alloc.vec.Vec α) (s' : List α) (i j : ℕ)
+  (h : i ≤ j ∧ j - i < s'.length ∧ j < s.length), (s.setSlice! i s')[j] = s'[j - i]
+Aeneas.Std.Array.setSlice!_getElem_prefix: ∀ {α : Type u_1} {n : Usize} (s : Std.Array α n) (s' : List α) (i j : ℕ)
+  (h : j < i ∧ j < s.length), (s.setSlice! i s')[j] = s[j]
+Array.getElem_setSlice!_prefix: ∀ {α : Type u_1} (s : _root_.Array α) (s' : List α) (i j : ℕ) (h : j < i ∧ j < s.size),
+  (s.setSlice! i s')[j] = s[j]
+List.getElem_setSlice!_middle: ∀ {α : Type u_1} (s s' : List α) (i j : ℕ)
+  (h : i ≤ j ∧ j - i < s'.length ∧ j < s.length), (s.setSlice! i s')[j] = s'[j - i]
+Aeneas.Std.Slice.setSlice!_getElem_middle: ∀ {α : Type u_1} (s : Slice α) (s' : List α) (i j : ℕ)
+  (h : i ≤ j ∧ j - i < s'.length ∧ j < s.length), (s.setSlice! i s')[j] = s'[j - i]
+Vector.setSlice!.eq_1: ∀ {α : Type u_1} {n : ℕ} (a : Vector α n) (i : ℕ) (s : List α),
+  a.setSlice! i s = Vector.mk (a.toArray.setSlice! i s) ⋯
+List.getElem!_setSlice!_same: ∀ {α : Type u_1} [inst : Inhabited α] (s s' : List α) (i j : ℕ),
+  j < i ∨ i + s'.length ≤ j → (s.setSlice! i s')[j]! = s[j]!
+List.getElem!_setSlice!_suffix: ∀ {α : Type u_1} [inst : Inhabited α] (s s' : List α) (i j : ℕ),
+  i + s'.length ≤ j → (s.setSlice! i s')[j]! = s[j]!
+Aeneas.Std.Array.setSlice!_getElem!_prefix: ∀ {α : Type u_1} {n : Usize} [inst : Inhabited α] (s : Std.Array α n)
+  (s' : List α) (i j : ℕ), j < i → (s.setSlice! i s')[j]! = s[j]!
+Array.getElem!_setSlice!_same: ∀ {α : Type u_1} [inst : Inhabited α] (s : _root_.Array α) (s' : List α) (i j : ℕ),
+  j < i ∨ i + s'.length ≤ j → (s.setSlice! i s')[j]! = s[j]!
+Aeneas.Std.Slice.setSlice!_getElem_suffix: ∀ {α : Type u_1} (s : Slice α) (s' : List α) (i j : ℕ)
+  (h : i + s'.length ≤ j ∧ j < s.length), (s.setSlice! i s')[j] = s[j]
+List.getElem_setSlice!_same: ∀ {α : Type u_1} (s s' : List α) (i j : ℕ)
+  (h : (j < i ∨ i + s'.length ≤ j) ∧ j < s.length), (s.setSlice! i s')[j] = s[j]
+Aeneas.Std.alloc.vec.Vec.setSlice!.eq_1: ∀ {α : Type u} (s : alloc.vec.Vec α) (i : ℕ) (s' : List α),
+  s.setSlice! i s' = ⟨(↑s).setSlice! i s', ⋯⟩
+List.getElem!_setSlice!_middle: ∀ {α : Type u_1} [inst : Inhabited α] (s s' : List α) (i j : ℕ),
+  i ≤ j ∧ j - i < s'.length ∧ j < s.length → (s.setSlice! i s')[j]! = s'[j - i]!
+Aeneas.Std.alloc.vec.Vec.setSlice!_getElem_suffix: ∀ {α : Type u_1} (s : alloc.vec.Vec α) (s' : List α) (i j : ℕ)
+  (h : i + s'.length ≤ j ∧ j < s.length), (s.setSlice! i s')[j] = s[j]
+Aeneas.Std.alloc.vec.Vec.setSlice!_getElem_prefix: ∀ {α : Type u_1} (s : alloc.vec.Vec α) (s' : List α) (i j : ℕ)
+  (h : j < i ∧ j < s.length), (s.setSlice! i s')[j] = s[j]
+List.getElem!_setSlice!_prefix: ∀ {α : Type u_1} [inst : Inhabited α] (s s' : List α) (i j : ℕ),
+  j < i → (s.setSlice! i s')[j]! = s[j]!
+Vector.getElem_setSlice!_middle: ∀ {α : Type u_1} {n : ℕ} [Inhabited α] (s : Vector α n) (s' : List α) (i j : ℕ)
+  (h : i ≤ j ∧ j - i < s'.length ∧ j < n), (s.setSlice! i s')[j] = s'[j - i]
+Aeneas.Std.Array.setSlice!_getElem_suffix: ∀ {α : Type u_1} {n : Usize} (s : Std.Array α n) (s' : List α) (i j : ℕ)
+  (h : i + s'.length ≤ j ∧ j < s.length), (s.setSlice! i s')[j] = s[j]
+Aeneas.Std.Array.setSlice!.eq_1: ∀ {α : Type u} {n : Usize} (s : Std.Array α n) (i : ℕ) (s' : List α),
+  s.setSlice! i s' = ⟨(↑s).setSlice! i s', ⋯⟩
+Vector.getElem_setSlice!_prefix: ∀ {α : Type u_1} {n : ℕ} [Inhabited α] (s : Vector α n) (s' : List α) (i j : ℕ)
+  (h : j < i ∧ j < s.size), (s.setSlice! i s')[j] = s[j]
+Aeneas.Std.Slice.setSlice!_getElem!_suffix: ∀ {α : Type u_1} [inst : Inhabited α] (s : Slice α) (s' : List α) (i j : ℕ),
+  i + s'.length ≤ j → (s.setSlice! i s')[j]! = s[j]!
+List.map_setSlice!: ∀ {α : Type u_1} {β : Type u_2} (s : List α) (i : ℕ) (s' : List α) (f : α → β),
+  List.map f (s.setSlice! i s') = (List.map f s).setSlice! i (List.map f s')
+Aeneas.Std.Slice.setSlice!_length: ∀ {α : Type u} (s : Slice α) (i : ℕ) (s' : List α),
+  (s.setSlice! i s').length = s.length
+Aeneas.Std.alloc.vec.Vec.setSlice!_getElem!_prefix: ∀ {α : Type u_1} [inst : Inhabited α] (s : alloc.vec.Vec α)
+  (s' : List α) (i j : ℕ), j < i → (s.setSlice! i s')[j]! = s[j]!
+Aeneas.Std.alloc.vec.Vec.setSlice!_getElem!_middle: ∀ {α : Type u_1} [inst : Inhabited α] (s : alloc.vec.Vec α)
+  (s' : List α) (i j : ℕ), i ≤ j ∧ j - i < s'.length ∧ j < s.length → (s.setSlice! i s')[j]! = s'[j - i]!
+List.setSlice!: {α : Type u_1} → List α → ℕ → List α → List α
+Array.getElem_setSlice!_suffix: ∀ {α : Type u_1} (s : _root_.Array α) (s' : List α) (i j : ℕ)
+  (h : i + s'.length ≤ j ∧ j < s.size), (s.setSlice! i s')[j] = s[j]
+Aeneas.Std.Slice.setSlice!_getElem_prefix: ∀ {α : Type u_1} (s : Slice α) (s' : List α) (i j : ℕ)
+  (h : j < i ∧ j < s.length), (s.setSlice! i s')[j] = s[j]
+Vector.getElem!_setSlice!_prefix: ∀ {α : Type u_1} {n : ℕ} [inst : Inhabited α] (s : Vector α n) (s' : List α)
+  (i j : ℕ), j < i → (s.setSlice! i s')[j]! = s[j]!
+Array.setSlice!.eq_1: ∀ {α : Type u_1} (a : _root_.Array α) (i : ℕ) (s : List α),
+  a.setSlice! i s = { toList := a.toList.setSlice! i s }
+Aeneas.Std.Slice.setSlice!_getElem!_prefix: ∀ {α : Type u_1} [inst : Inhabited α] (s : Slice α) (s' : List α) (i j : ℕ),
+  j < i → (s.setSlice! i s')[j]! = s[j]!
+Aeneas.Std.Slice.setSlice!_getElem!_middle: ∀ {α : Type u_1} [inst : Inhabited α] (s : Slice α) (s' : List α) (i j : ℕ),
+  i ≤ j ∧ j - i < s'.length ∧ j < s.length → (s.setSlice! i s')[j]! = s'[j - i]!
+List.getElem_setSlice!_prefix: ∀ {α : Type u_1} (s s' : List α) (i j : ℕ) (h : j < i ∧ j < s.length),
+  (s.setSlice! i s')[j] = s[j]
+Aeneas.Std.Slice.setSlice!: {α : Type u} → Slice α → ℕ → List α → Slice α
+Vector.setSlice!: {α : Type u_1} → {n : ℕ} → Vector α n → ℕ → List α → Vector α n
+List.setSlice!_getElem?_middle: ∀ {α : Type u_1} (s s' : List α) (i j : ℕ),
+  i ≤ j ∧ j - i < s'.length ∧ j < s.length → (s.setSlice! i s')[j]? = s'[j - i]?
+Vector.getElem_setSlice!_suffix: ∀ {α : Type u_1} {n : ℕ} [Inhabited α] (s : Vector α n) (s' : List α) (i j : ℕ)
+  (h : i + s'.length ≤ j ∧ j < n), (s.setSlice! i s')[j] = s[j]
+List.setSlice!_getElem?_same: ∀ {α : Type u_1} (s s' : List α) (i j : ℕ),
+  j < i ∨ i + s'.length ≤ j → (s.setSlice! i s')[j]? = s[j]?
+Aeneas.Std.Array.setSlice!_getElem_middle: ∀ {α : Type u_1} {n : Usize} (s : Std.Array α n) (s' : List α) (i j : ℕ)
+  (h : i ≤ j ∧ j - i < s'.length ∧ j < s.length), (s.setSlice! i s')[j] = s'[j - i]
+Aeneas.Std.Array.setSlice!: {α : Type u} → {n : Usize} → Std.Array α n → ℕ → List α → Std.Array α n
+Array.length_setSlice!: ∀ {α : Type u_1} (s : _root_.Array α) (i : ℕ) (s' : List α), (s.setSlice! i s').size = s.size
+Array.getElem_setSlice!_middle: ∀ {α : Type u_1} (s : _root_.Array α) (s' : List α) (i j : ℕ)
+  (h : i ≤ j ∧ j - i < s'.length ∧ j < s.size), (s.setSlice! i s')[j] = s'[j - i]
+Aeneas.Std.alloc.vec.Vec.setSlice!: {α : Type u} → alloc.vec.Vec α → ℕ → List α → alloc.vec.Vec α
+Aeneas.Std.Slice.setSlice!_val: ∀ {α : Type u_1} (s : Slice α) (i : ℕ) (s' : List α),
+  ↑(s.setSlice! i s') = (↑s).setSlice! i s'
+Array.getElem!_setSlice!_prefix: ∀ {α : Type u_1} [inst : Inhabited α] (s : _root_.Array α) (s' : List α) (i j : ℕ),
+  j < i → (s.setSlice! i s')[j]! = s[j]!
+Array.getElem!_setSlice!_middle: ∀ {α : Type u_1} [inst : Inhabited α] (s : _root_.Array α) (s' : List α) (i j : ℕ),
+  i ≤ j ∧ j - i < s'.length ∧ j < s.size → (s.setSlice! i s')[j]! = s'[j - i]!

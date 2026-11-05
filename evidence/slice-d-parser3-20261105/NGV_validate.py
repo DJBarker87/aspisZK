@@ -8,6 +8,11 @@ E=Path(__file__).resolve().parent;R=E.parents[1]
 J=lambda p:json.loads(p.read_text())
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 standard={'propext','Classical.choice','Quot.sound'}
+if (E/'NGV_PACK.json').exists():
+ for entry in J(E/'NGV_PACK.json')['entries']:
+  data=lzma.decompress((E/entry['blob']).read_bytes())
+  assert len(data)==entry['bytes'] and hashlib.sha256(data).hexdigest()==entry['sha256']
+  assert J(E/(entry['original']+'.REFERENCE.json'))==entry
 base=R/'evidence/inv-repair-20261104/NGB_ADMITTED_LEDGER.json.xz'
 rows={r['row']:r for r in json.loads(lzma.decompress(base.read_bytes()))['rows']};assert len(rows)==599
 for p in J(E/'NGV_REUSED.json'):assert sha(R/p['path'])==p['sha256']
@@ -52,7 +57,9 @@ def validate(c,d,es):
   assert f['function']==old['function'] and f['frozen_body_sha256']==old['frozen_body_sha256']
   assert f['status']=='CLOSED' and not f['inner_hypotheses_remaining'] and f['retained_root_interpretation']
   root,module=allowed[r];assert f['lean_root']==root and f['canonical_module']==module and root in raw
-  assert f['native_pairs'] and all(len(p)==2 for p in f['native_pairs'])
+  required={'TX1:151':[[45,46],[47,48],[49,50]],'TX1:152':[[55,56],[57,58]],
+   'TX1:098':[[59,60],[61,62]]+[[n,n+1]for n in range(64,92,2)]+[[92,93],[94,95]]}[r]
+  assert f['native_pairs']==[[f'NGD_K{n:03d}'for n in pair]for pair in required]
   actual=[e for e in es if e['row']==r]
   assert set(e['callee']for e in actual)==set(old['canonical_callees'])
   assert all(e['status']=='CLOSED'and e['proof']and e['citation']for e in actual)
@@ -66,6 +73,7 @@ for name,change in [
  ('wrong owner',lambda c,d,e:c['functions'][0].update(canonical_module='NGO_DecodePort')),
  ('missing control',lambda c,d,e:c['functions'][0].update(native_pairs=[])),
  ('wrong body',lambda c,d,e:c['functions'][0].update(frozen_body_sha256='0'*64)),
+ ('single missing native pair',lambda c,d,e:c['functions'][0]['native_pairs'].pop()),
  ('open edge',lambda c,d,e:next(x for x in e if x['row']==c['functions'][0]['rows'][0]).update(status='OPEN')),
  ('extra closure',lambda c,d,e:d['new_closed_rows'].append('TX1:147')),
  ('changed baseline',lambda c,d,e:d.update(baseline_sha256='0'*64))]:

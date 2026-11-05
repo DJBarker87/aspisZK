@@ -1,0 +1,47 @@
+{"attempt": "NGV_L053", "exit_status": 1, "wall_seconds": 2.7227116969879717, "peak_rss_kib": "5963880", "swaps": "0", "print_axioms": ["'NGV_SemanticLow.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NGV_generated/NGV_SemanticLow.lean:29:3: error: Type mismatch: After simplification, term
+  NGV_ByteWindow.read input src sourceEnd
+    ⟨Decidable.byContradiction fun a =>
+        result._proof_4 input before row src dst sourceEnd outputEnd size srcValue sizeValue sourceValue bounds stored
+          sourceWidth outputWidth a,
+      Decidable.byContradiction fun a =>
+        result._proof_5 input before row src dst sourceEnd outputEnd size inputSize srcValue sizeValue sourceValue
+          bounds stored a⟩
+ has type
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+      { start := src, «end» := sourceEnd } =
+    ok (select input (NGD_SemanticSchedule.src ↑r
+...
+GD_SemanticSchedule.dst ↑row + 5 + NFU_PacketDomains.payloadSize ↑row ≤ 13831 ∧
+      NGD_SemanticSchedule.stored ↑row ≤ 1856 ∧ NFU_PacketDomains.payloadSize ↑row ≤ 3712
+stored : NGD_SemanticSchedule.stored ↑row = NFU_PacketDomains.payloadSize ↑row
+middleSize : (↑(middle input before ↑row)).length = 13831
+sourceWidth : ↑sourceEnd - ↑src = NGD_SemanticSchedule.stored ↑row
+outputWidth : ↑outputEnd - ↑dst = NFU_PacketDomains.payloadSize ↑row
+sourceRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+      { start := src, «end» := sourceEnd } =
+    ok (source input ↑row)
+targetRead :
+  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (middle input before ↑row)
+      { start := dst, «end» := outputEnd } =
+    ok (target input before ↑row, fun x => write (middle input before ↑row) (↑dst) x)
+copyRun :
+  core.slice.Slice.copy_from_slice core.marker.CopyU8 (target input before ↑row) (source input ↑row) =
+    ok (source input ↑row)
+ordinary : compact.compact_row row = ok false
+⊢ (do
+      let outputEnd ← ok outputEnd
+      let (target, back) ←
+        core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (middle input before ↑row)
+            { start := dst, «end» := outputEnd }
+      let sourceEnd ← src + size
+      let source ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+            { start := src, «end» := sourceEnd }
+      let updated ← core.slice.Slice.copy_from_slice core.marker.CopyU8 target source
+      ok (ControlFlow.cont (iter, back updated, sourceEnd, outputEnd))) =
+    ok (ControlFlow.cont (iter, after packet, sourceEnd, outputEnd))
+'NGV_SemanticLow.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r5c353a1e1cc4425cbbef02501ff8311f.scope; invocation ID: 5f87172bcb5348cba8632fc65e4ec373

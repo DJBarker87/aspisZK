@@ -1,0 +1,19 @@
+NGV_generated/NGV_SemanticHigh.lean:50:1: error: 'change' tactic failed, pattern
+  src + half >>= ?m.296 = ?m.298
+is not definitionally equal to target
+  (let (reply, updated) := (core.result.Result.Ok (), packet.value)
+    do
+    let cf ←
+      match reply with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a =>
+        ok (ControlFlow.cont (iter, write (middle input before ↑row) (↑dst) updated, sourceEnd, outputEnd))
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame compact.CodecError) residual
+        ok (ControlFlow.done (r, write (middle input before ↑row) (↑dst) updated))) =
+    ok (ControlFlow.cont (iter, after packet, sourceEnd, outputEnd))
+'NGV_SemanticHigh.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

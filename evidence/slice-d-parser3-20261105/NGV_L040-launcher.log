@@ -1,0 +1,23 @@
+{"attempt": "NGV_L040", "exit_status": 0, "wall_seconds": 3.202225307933986, "peak_rss_kib": "5925468", "swaps": "0", "print_axioms": []}
+AspisS1ValuesOwnedExact.installed_exact (input output : Slice U8) (aligned : input.length % 16 = 0)
+  (shape : output.length = 2 * input.length) (doubling : 2 * input.length ≤ Usize.max) :
+  ∃ updated,
+    AspisS1ValuesOwnedInstallation.expandValues input output = ok (core.result.Result.Ok (), updated) ∧
+      updated.length = output.length ∧
+        ∀ j < updated.length, (↑updated)[j]? = if j % 32 < 16 then (↑input)[j / 32 * 16 + j % 32]? else some 0#u8
+AspisS1ValuesOwnedInstallation.nativeValues : AspisS1NativeCompact.Ops
+def NFU_Retarget.LPl_A.Expand.byte : List U8 → ℕ → U8 :=
+fun bs i => if i % 32 < 16 then bs[i / 32 * 16 + i % 32]?.getD 0#u8 else 0#u8
+
+...
+AspisS1ValuesOwnedExact.installed_exact (input output : Slice U8) (aligned : input.length % 16 = 0)
+  (shape : output.length = 2 * input.length) (doubling : 2 * input.length ≤ Usize.max) :
+  ∃ updated,
+    AspisS1ValuesOwnedInstallation.expandValues input output = ok (core.result.Result.Ok (), updated) ∧
+      updated.length = output.length ∧
+        ∀ j < updated.length, (↑updated)[j]? = if j % 32 < 16 then (↑input)[j / 32 * 16 + j % 32]? else some 0#u8
+AspisS1ValuesOwnedInstallation.nativeValues : AspisS1NativeCompact.Ops
+def NFU_Retarget.LPl_A.Expand.byte : List U8 → ℕ → U8 :=
+fun bs i => if i % 32 < 16 then bs[i / 32 * 16 + i % 32]?.getD 0#u8 else 0#u8
+
+Running as unit: run-r88a6407f7d404642b5f31031e0333c52.scope; invocation ID: 4d3b92f896f24a18b51eca88dd0c0b18

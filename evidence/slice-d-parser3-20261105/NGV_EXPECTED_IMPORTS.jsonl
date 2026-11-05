@@ -11964,16 +11964,36 @@
 {"module": "NGO_WordLaw", "imports": ["Init", "NGO_BitPack", "NGD_QDecodeLaw"]}
 {"module": "NGV_AtPacket", "imports": ["Init", "NGV_AtSubstitution", "NGO_AtDomain"]}
 {"module": "NGV_AtSubstitution", "imports": ["Init", "NGV_ParsePacket", "NGD_AtReference"]}
-{"module": "NGV_COMBINED_IMPORT", "imports": ["Init", "NGV_AtSubstitution", "NGV_AtPacket", "NGK_COMBINED_IMPORT", "NGO_COMBINED_IMPORT", "NGV_ParsePacket", "NGV_DecodeAfterParse", "NGV_Validator", "NGV_ValidatorLoop", "NGV_ValidatorStep", "NGV_ChunkCheck", "NGV_ChunkPredicate", "NGV_ChunkWords", "NGV_ChunkTail", "NGV_ValidatorTotal", "NGV_ParseSubstitution", "NGV_Payload", "NGV_Monad"]}
+{"module": "NGV_ByteWindow", "imports": ["Init", "NGV_Monad"]}
+{"module": "NGV_COMBINED_IMPORT", "imports": ["Init", "NGK_COMBINED_IMPORT", "NGO_COMBINED_IMPORT", "NGV_AtPacket", "NGV_AtSubstitution", "NGV_ByteWindow", "NGV_ChunkCheck", "NGV_ChunkPredicate", "NGV_ChunkTail", "NGV_ChunkWords", "NGV_Cursors", "NGV_DecodeAfterParse", "NGV_ExpandAssociation", "NGV_ExpandPacket", "NGV_Monad", "NGV_ParsePacket", "NGV_ParseSubstitution", "NGV_Payload", "NGV_PrefixWindow", "NGV_RowFrame", "NGV_RowPayload", "NGV_RowValues", "NGV_SemanticArithmetic", "NGV_SemanticCut", "NGV_SemanticDomains", "NGV_SemanticFrames", "NGV_SemanticHeader", "NGV_SemanticHigh", "NGV_SemanticInitial", "NGV_SemanticLow", "NGV_SemanticPacket", "NGV_SemanticStep", "NGV_SemanticTrace", "NGV_SemanticValues", "NGV_Validator", "NGV_ValidatorLoop", "NGV_ValidatorStep", "NGV_ValidatorTotal"]}
 {"module": "NGV_ChunkCheck", "imports": ["Init", "NGV_ChunkPredicate"]}
 {"module": "NGV_ChunkPredicate", "imports": ["Init", "NGV_ChunkWords"]}
 {"module": "NGV_ChunkTail", "imports": ["Init", "NGO_ChunksNativeStart"]}
 {"module": "NGV_ChunkWords", "imports": ["Init", "NGO_ValidatorCallback", "NGO_ValidatorWindows"]}
+{"module": "NGV_Cursors", "imports": ["Init", "NGV_SemanticArithmetic", "NGV_SemanticDomains"]}
 {"module": "NGV_DecodeAfterParse", "imports": ["Init", "NGO_CanonicalPort", "NGO_ParseDomain", "NGV_ParsePacket"]}
+{"module": "NGV_ExpandAssociation", "imports": ["Init", "NGV_ExpandPacket", "NGK_COMBINED_IMPORT"]}
+{"module": "NGV_ExpandPacket", "imports": ["Init", "NFU_CompactLeaves"]}
 {"module": "NGV_Monad", "imports": ["Init", "NGD_ParseReference"]}
 {"module": "NGV_ParsePacket", "imports": ["Init", "NGV_ParseSubstitution", "NGV_Payload", "NGV_ValidatorTotal"]}
 {"module": "NGV_ParseSubstitution", "imports": ["Init", "NGV_Validator", "NGV_Monad"]}
 {"module": "NGV_Payload", "imports": ["Init", "NGV_Monad"]}
+{"module": "NGV_PrefixWindow", "imports": ["Init", "NGV_ByteWindow"]}
+{"module": "NGV_RowFrame", "imports": ["Init", "NGV_RowPayload"]}
+{"module": "NGV_RowPayload", "imports": ["Init", "NGV_ByteWindow", "NGV_ExpandAssociation", "NGV_SemanticDomains"]}
+{"module": "NGV_RowValues", "imports": ["Init", "NGV_RowFrame"]}
+{"module": "NGV_SemanticArithmetic", "imports": ["Init", "NGV_Monad"]}
+{"module": "NGV_SemanticCut", "imports": ["Init", "NGV_RowPayload", "NGV_SemanticArithmetic"]}
+{"module": "NGV_SemanticDomains", "imports": ["Init", "NGD_RowPayload", "NFU_RowDomains"]}
+{"module": "NGV_SemanticFrames", "imports": ["Init", "NGV_SemanticTrace"]}
+{"module": "NGV_SemanticHeader", "imports": ["Init", "NGV_SemanticCut"]}
+{"module": "NGV_SemanticHigh", "imports": ["Init", "NGV_SemanticCut"]}
+{"module": "NGV_SemanticInitial", "imports": ["Init", "NGV_PrefixWindow", "NGV_RowPayload"]}
+{"module": "NGV_SemanticLow", "imports": ["Init", "NGV_SemanticCut"]}
+{"module": "NGV_SemanticPacket", "imports": ["Init", "NGV_SemanticInitial", "NGV_SemanticValues"]}
+{"module": "NGV_SemanticStep", "imports": ["Init", "NGV_SemanticHeader", "NGV_SemanticLow", "NGV_SemanticHigh", "NGV_Cursors"]}
+{"module": "NGV_SemanticTrace", "imports": ["Init", "NGV_SemanticStep", "NGV_RowFrame", "NCO_LoopSteps"]}
+{"module": "NGV_SemanticValues", "imports": ["Init", "NGV_SemanticFrames", "NGV_RowValues"]}
 {"module": "NGV_Validator", "imports": ["Init", "NGV_ValidatorLoop", "NGV_ChunkTail", "NGO_ValidatorErrors"]}
 {"module": "NGV_ValidatorLoop", "imports": ["Init", "NGV_ValidatorStep", "NGO_ScheduleState", "NFU_CompactLeaves", "NCO_LoopSteps"]}
 {"module": "NGV_ValidatorStep", "imports": ["Init", "NGV_ChunkCheck", "NGO_IteratorStep"]}
