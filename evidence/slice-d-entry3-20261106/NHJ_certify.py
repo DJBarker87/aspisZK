@@ -47,22 +47,51 @@ for a,exit in [('NHJ_K003',0),('NHJ_K004',1)]:
  assert J(E/a/'receipt.json')['exit_status']==exit
  assert ('VERIFICATION:- SUCCESSFUL' if exit==0 else 'VERIFICATION:- FAILED') in log(E,a)
 assert 'Failed Checks: |r| *r' in log(E,'NHJ_K004')
-rows=[];certificates={};candidates={} 
+stage3=J(E/'NHJ_stage3_audit/proof2.json');latestscan=J(E/'NHJ_stage3_audit/scan_summary.json')
+assert stage3['exit_status']==0 and len(stage3['results'])==4 and stage3['same_optimized_binary_sha256']==fixtures['same_optimized_binary_sha256']
+assert all(x['equal'] and set(x['walked_axioms'])==set(x['collect_axioms'])<={'propext','Classical.choice','Quot.sound'} for x in stage3['results'])
+assert latestscan['dangling']==latestscan['incompatible_owners']==latestscan['import_mismatches']==0
+for pos,neg in [('NHJ_K005','NHJ_K006'),('NHJ_K007','NHJ_K008')]:
+ assert J(E/pos/'receipt.json')['exit_status']==0 and 'VERIFICATION:- SUCCESSFUL' in log(E,pos)
+ assert J(E/neg/'receipt.json')['exit_status']==1 and 'VERIFICATION:- FAILED' in log(E,neg) and 'Failed Checks: |r| *r' in log(E,neg)
+std=(E/'NHJ_rust_result.rs.txt').read_text();pin=J(E/'NHJ_RUST_RESULT_PIN.json');assert sha(std.encode())==pin['sha256']
+assert 'match self {\n            Ok(x) => Ok(x.clone()),\n            Err(x) => Err(x.clone()),\n        }' in std
+assert 'fn data_len(&self) -> Result<usize, ProgramError> { self.length.clone() }' in frozen
+assert 'match r {Ok(x)=>Ok(x.clone()),Err(x)=>Err(error_oracle(x,l))}' in native
+assert 'length_clone_cut(&a.length,l)' in native
+# Mechanically erase only the named data_len oracle in the exact checkpoint cut.
+def body_of(text,name):
+ i=text.index('fn '+name+'(');i=text.index('{',i);depth=1;j=i+1
+ while depth:
+  depth+=(text[j]=='{')-(text[j]=='}');j+=1
+ return text[i+1:j-1]
+normalize=lambda s:re.sub(r'\s+','',s)
+assert normalize(body_of(native,'checkpoint_cut').replace('length_oracle(account,l)','account.data_len()'))==normalize(body_of(frozen,'require_verifier_checkpoint'))
+rows=[];certificates={};candidates={}
 for rid,label,law,passes,controls in [
  ('TX2:223','metadata','NHJ_ReadonlyPacket.metadata',['NGL_K037'],['NGL_K038']),
  ('TX2:236','readonly','NHJ_ReadonlyPacket.readonly',['NGL_K106','NHJ_K001'],['NGL_K107','NHJ_K002']),
  ('TX1:335','data','NHJ_DataPacket.substitute',['NGL_K064','NGL_K070','NGL_K076']+[f'NGL_K{k:03}' for k in range(90,106,2)]+['NHJ_K003'],['NGL_K065','NGL_K071','NGL_K077']+[f'NGL_K{k:03}' for k in range(91,106,2)]+['NHJ_K004']),
- ('TX2:229','data','NHJ_DataPacket.substitute',['NGL_K064','NGL_K070','NGL_K076']+[f'NGL_K{k:03}' for k in range(90,106,2)]+['NHJ_K003'],['NGL_K065','NGL_K071','NGL_K077']+[f'NGL_K{k:03}' for k in range(91,106,2)]+['NHJ_K004'])]:
+ ('TX2:229','data','NHJ_DataPacket.substitute',['NGL_K064','NGL_K070','NGL_K076']+[f'NGL_K{k:03}' for k in range(90,106,2)]+['NHJ_K003'],['NGL_K065','NGL_K071','NGL_K077']+[f'NGL_K{k:03}' for k in range(91,106,2)]+['NHJ_K004']),
+ ('TX1:336','length','NHJ_LengthPacket.substitute',['NHJ_K005'],['NHJ_K006']),
+ ('TX2:230','length','NHJ_LengthPacket.substitute',['NHJ_K005'],['NHJ_K006']),
+ ('TX1:341','checkpoint','NHJ_CheckpointPacket.substitute',['NHJ_K007'],['NHJ_K008']),
+ ('TX2:238','checkpoint','NHJ_CheckpointPacket.substitute',['NHJ_K007'],['NHJ_K008'])]:
  r=copy.deepcopy(by[rid]);subject=r['function']
  c=dict(id='NHJ::'+label,subject=subject,route='y/ak',model_theorem=law,inner_hypotheses_remaining=[],root_domain='Typed live keys; caller metadata; original eleven-shape readonly storage carrier. Root PacketDomain/PhysicalInterpretation retained; no success restriction.',native_passes=passes,matched_controls=controls,retained_interface_real_and_modifies='NHD_K049/051' if label=='metadata' else 'NHD_K052/054',source_association='NHJ_certify.py exact call expression',combined='NHJ_L004',audit='NHJ_L006',trust_reclassification='P6/D188 option A retained; never removal',effects='No state or ordered effects; local oracle log only')
  if label=='data':
   c.update(root_domain='NGL_StorageCases.Domain: borrowed-error or rejected-length or successful vector in nine retained capacities, same live original allocation; root PhysicalInterpretation retained. No supplied output equality.',native_clone='NHD_K014..017; NGL_CloneDomain.clone on SnapshotError',retained_interface_real_and_modifies='NHD_K055/057',combined='NHJ_L009',audit='NHJ_L010',source_association='Frozen data match; replace only error.clone by local error_oracle, full error reply forwarded; success SAME slice; NHJ_DataPacket.storage_domain derives both exact input error constructors')
+ if label=='length':
+  c.update(root_domain='NGL_LengthCarrier.domain a.length; all usize successes and both canonical error constructors; all unread fields framed. Callers from snapshot establish stronger sole-borrow error law via NHJ_LengthPacket.storage_domain.',native_clone='NHD_K014..017; NGL_CloneDomain.clone on SnapshotError',retained_interface_real_and_modifies='New K005 full Result/clone log and modifies(log); K006 fails',combined='NHJ_L014',audit='NHJ_L015',source_association='Frozen self.length.clone -> pinned core Result::clone -> exact match with error.clone replaced by error_oracle; primitive usize.clone remains actual. NHJ_RUST_RESULT_PIN.json; NHJ_certify.py checks exact source matches',trust_reclassification='P6/D188 option A and retained compiler/std realization explicitly USED; not removal, no added trust')
+ if label=='checkpoint':
+  c.update(root_domain='NGL_LengthCarrier.domain a.length; arbitrary owner/program/flags/writable, no successful-child premise. Metadata rejection emits zero child calls; otherwise EXACT same receiver/length field; arbitrary usize and both error replies.',retained_interface_real_and_modifies='New K007 full Result/log with modifies(log); K008 corrupts reply tag and fails',combined='NHJ_L014',audit='NHJ_L015',source_association='NHJ_certify.py byte-token compares exact frozen checkpoint body after erasing only length_oracle -> account.data_len(); owner getter/key comparison and CLOSED checkpoint_size(S2) remain actual',closed_children=['NHJ::length','OwnedAccount::owner','verifier::checkpoint_size'],effects='No external effects/mutation; metadata-first/length/size schedule; Err from length forwarded unchanged')
  c['semantic_review_sha256']=sha(json.dumps(c,sort_keys=True).encode());certificates[rid]=c
  r.update(composed_status='CLOSED',bridge_status='CLOSED-CONDITIONAL',selected_claims=['NHJ::'+label],active_support_receipts=[str((P if a.startswith('NGL') else E)/a/'receipt.json') for a in passes+controls],open_transitive_dependencies=[],composed_reason='Full native/model packet under y/ak, exact caller arguments and unchanged modifies frame; retained root domain and physical interpretation.')
  for h in r['named_hypotheses']:h['discharged_by']='NHJ '+label+' packet: comparison via full native key gate + NGL_ArrayEquality; root domain/interpretation retained explicitly'
  for o in r['caller_domain_obligations']:
   o.update(status='CLOSED',discharged_by=c['id'])
   if o.get('callee','').endswith('::readonly_meta_ok'):o['callee_claims']=['NHJ::metadata']
+  if o.get('callee','').endswith('::OwnedAccount::data_len'):o['callee_claims']=['NHJ::length']
  assert n.row_checks(r,by[rid],c)==[],(rid,n.row_checks(r,by[rid],c))
  rows.append(r);candidates[rid]=('NHJ',r)
 # Unchanged predicates on schema-complete selected rows plus already closed owner getter.
@@ -78,10 +107,10 @@ for rid in candidates:
 try:n.certificate_checks(type('Support',(),{'support':lambda self,c:None})(),{'inner_hypotheses_remaining':['stub without child law']})
 except ValueError:pass
 else:raise AssertionError('residual obligation admitted')
-put('NHJ_CLOSED.json',dict(schema_version=1,frozen_revision=base['frozen_revision'],new_composed_functions=3,new_composed_rows=4,functions=list(certificates.values()),driver_root_status='OPEN'))
+put('NHJ_CLOSED.json',dict(schema_version=1,frozen_revision=base['frozen_revision'],new_composed_functions=5,new_composed_rows=8,functions=list(certificates.values()),driver_root_status='OPEN'))
 put('NHJ_EDGES.json',dict(edges=[o for r in rows for o in r['caller_domain_obligations']],no_out_of_slice_credit=True))
-counts=collections.Counter(r['composed_status'] for r in base['rows']);counts['CLOSED']+=4;counts['OPEN']-=4
+counts=collections.Counter(r['composed_status'] for r in base['rows']);counts['CLOSED']+=8;counts['OPEN']-=8
 put('NHJ_LEDGER_DELTA.json',dict(baseline=str(baseline.relative_to(E.parents[1])),baseline_uncompressed_sha256=sha(data),new_closed_rows=list(candidates),rows=rows,no_other_status_change=True,validator_checks_added_only=True,unchanged_NFK_validator_sha256=J(P/'NGL_VALIDATOR_INPUT_PINS.json')['unchanged_NFK_validator']['sha256'],checks_added=['ruling ak exact constructor coverage; arbitrary Bool reply','exact local log argument and reply checks plus semantic negative','NGL/NHD evidence pins retained unchanged','combined NGK+RPx, raw ax2 and NFX exit0','unchanged NFK row and certificate gates on schema-complete subset; no baseline defaults'],whole_ledger_counts_after=dict(total=599,**counts),baseline_preserved_byte_exactly=True,mutation_denials=5,trust_reclassification='P6/D188 option A retained; no new trust'))
-put('NHJ_AUDIT.json',dict(status='PASS_AX2_NFX',combined='NHJ_L009',audit=['NHJ_L006','NHJ_L010'],roots=proof['results']+delta['results'],fixtures=fixtures,scan=latestscan,retained_checks=reused,scope='Focused cached objects; not a cold release replay',standard_axioms_only=True))
-put('NHJ_LOCAL_LEDGER_VALIDATION.json',dict(target='NHJ_certify: additive admission of metadata, readonly and borrowed data packets',exit_status=0,wall_seconds=time.monotonic()-start,peak_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss//(1024 if sys.platform=='darwin' else 1),swaps=resource.getrusage(resource.RUSAGE_SELF).ru_nswap,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_sha256=sha(Path(__file__).read_bytes()),print_axioms='N/A ordinary Python evidence validation; formal axiom lines in NHJ_AUDIT.json',result=dict(new_closed_rows=4,mutation_denials=9,ledger_counts=dict(counts))))
-print(json.dumps(dict(status='PASS',new_closed_rows=4,scan=latestscan)))
+put('NHJ_AUDIT.json',dict(status='PASS_AX2_NFX',combined='NHJ_L014',audit=['NHJ_L006','NHJ_L010','NHJ_L015'],roots=proof['results']+delta['results']+stage3['results'],fixtures=fixtures,scan=latestscan,retained_checks=reused,scope='Focused cached objects; not a cold release replay',standard_axioms_only=True))
+put('NHJ_LOCAL_LEDGER_VALIDATION.json',dict(target='NHJ_certify: additive admission of metadata, readonly and borrowed data packets',exit_status=0,wall_seconds=time.monotonic()-start,peak_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss//(1024 if sys.platform=='darwin' else 1),swaps=resource.getrusage(resource.RUSAGE_SELF).ru_nswap,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_sha256=sha(Path(__file__).read_bytes()),print_axioms='N/A ordinary Python evidence validation; formal axiom lines in NHJ_AUDIT.json',result=dict(new_closed_rows=8,mutation_denials=17,ledger_counts=dict(counts))))
+print(json.dumps(dict(status='PASS',new_closed_rows=8,scan=latestscan)))

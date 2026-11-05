@@ -3,7 +3,7 @@ from pathlib import Path
 import subprocess,json,sys,time,hashlib,shlex,lzma,os
 E=Path(__file__).resolve().parent;P=E.parent/'slice-d-entry-20261105'
 B='/home/dombarker/project-offloads/codex-cx-slice-d-entry3-20261106';H='dombarker@100.108.41.90'
-a,kind,target=sys.argv[1:];assert kind in ['kani','lean','inspect','audit'];assert a.startswith('NHJ_'+('K' if kind=='kani' else 'L'));assert 1<=int(a[-3:])<=(120 if kind=='kani' else 80);assert not (E/a).exists()
+a,kind,target=sys.argv[1:];archive_pattern=('NEP_proof'+str(int(target.split('stage')[1].split('_')[0])-1)+'_*_REACHABLE.txt') if kind=='audit' else ''; assert kind in ['kani','lean','inspect','audit'];assert a.startswith('NHJ_'+('K' if kind=='kani' else 'L'));assert 1<=int(a[-3:])<=(120 if kind=='kani' else 80);assert not (E/a).exists()
 def ssh(code,data=None,submitted=False):
  for retry in range(11):
   r=subprocess.run(['ssh','-o','ControlMaster=no','-o','ConnectTimeout=15',H,code],input=data,capture_output=True,text=True)
@@ -90,7 +90,7 @@ names += [str(p.relative_to(b)) for pat in ['-graph*','-source*','-lock*','-eras
 if {kind!r}=='inspect':names+=['NHJ_RODATA.json']
 if {kind!r}=='audit':
  names += [str(p.relative_to(b)) for p in (b/{target!r}).rglob('*') if p.is_file()]
- names += [str(p.relative_to(b)) for p in b.glob('NEP_proof1_*_REACHABLE.txt')]
+ names += [str(p.relative_to(b)) for p in b.glob({archive_pattern!r})]
  names += ['NHJ_LOADED_scan.jsonl']
 print(json.dumps({{n:(b/n).read_text() for n in names}}))
 ''');assert r.returncode==0,r.stderr

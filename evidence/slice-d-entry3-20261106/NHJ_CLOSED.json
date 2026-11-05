@@ -1,8 +1,8 @@
 {
  "schema_version": 1,
  "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
- "new_composed_functions": 3,
- "new_composed_rows": 4,
+ "new_composed_functions": 5,
+ "new_composed_rows": 8,
  "functions": [
   {
    "id": "NHJ::metadata",
@@ -135,6 +135,102 @@
    "effects": "No state or ordered effects; local oracle log only",
    "native_clone": "NHD_K014..017; NGL_CloneDomain.clone on SnapshotError",
    "semantic_review_sha256": "0154494af8ffb87c58608238d7ca3dc6b6798c0a5c8b1e06ca9bdbb157473d71"
+  },
+  {
+   "id": "NHJ::length",
+   "subject": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data_len",
+   "route": "y/ak",
+   "model_theorem": "NHJ_LengthPacket.substitute",
+   "inner_hypotheses_remaining": [],
+   "root_domain": "NGL_LengthCarrier.domain a.length; all usize successes and both canonical error constructors; all unread fields framed. Callers from snapshot establish stronger sole-borrow error law via NHJ_LengthPacket.storage_domain.",
+   "native_passes": [
+    "NHJ_K005"
+   ],
+   "matched_controls": [
+    "NHJ_K006"
+   ],
+   "retained_interface_real_and_modifies": "New K005 full Result/clone log and modifies(log); K006 fails",
+   "source_association": "Frozen self.length.clone -> pinned core Result::clone -> exact match with error.clone replaced by error_oracle; primitive usize.clone remains actual. NHJ_RUST_RESULT_PIN.json; NHJ_certify.py checks exact source matches",
+   "combined": "NHJ_L014",
+   "audit": "NHJ_L015",
+   "trust_reclassification": "P6/D188 option A and retained compiler/std realization explicitly USED; not removal, no added trust",
+   "effects": "No state or ordered effects; local oracle log only",
+   "native_clone": "NHD_K014..017; NGL_CloneDomain.clone on SnapshotError",
+   "semantic_review_sha256": "136a7f84fc31812684c086f7a52b59d2e9c9ff74bf2b5ce6ac52826401281223"
+  },
+  {
+   "id": "NHJ::length",
+   "subject": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data_len",
+   "route": "y/ak",
+   "model_theorem": "NHJ_LengthPacket.substitute",
+   "inner_hypotheses_remaining": [],
+   "root_domain": "NGL_LengthCarrier.domain a.length; all usize successes and both canonical error constructors; all unread fields framed. Callers from snapshot establish stronger sole-borrow error law via NHJ_LengthPacket.storage_domain.",
+   "native_passes": [
+    "NHJ_K005"
+   ],
+   "matched_controls": [
+    "NHJ_K006"
+   ],
+   "retained_interface_real_and_modifies": "New K005 full Result/clone log and modifies(log); K006 fails",
+   "source_association": "Frozen self.length.clone -> pinned core Result::clone -> exact match with error.clone replaced by error_oracle; primitive usize.clone remains actual. NHJ_RUST_RESULT_PIN.json; NHJ_certify.py checks exact source matches",
+   "combined": "NHJ_L014",
+   "audit": "NHJ_L015",
+   "trust_reclassification": "P6/D188 option A and retained compiler/std realization explicitly USED; not removal, no added trust",
+   "effects": "No state or ordered effects; local oracle log only",
+   "native_clone": "NHD_K014..017; NGL_CloneDomain.clone on SnapshotError",
+   "semantic_review_sha256": "136a7f84fc31812684c086f7a52b59d2e9c9ff74bf2b5ce6ac52826401281223"
+  },
+  {
+   "id": "NHJ::checkpoint",
+   "subject": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_verifier_checkpoint",
+   "route": "y/ak",
+   "model_theorem": "NHJ_CheckpointPacket.substitute",
+   "inner_hypotheses_remaining": [],
+   "root_domain": "NGL_LengthCarrier.domain a.length; arbitrary owner/program/flags/writable, no successful-child premise. Metadata rejection emits zero child calls; otherwise EXACT same receiver/length field; arbitrary usize and both error replies.",
+   "native_passes": [
+    "NHJ_K007"
+   ],
+   "matched_controls": [
+    "NHJ_K008"
+   ],
+   "retained_interface_real_and_modifies": "New K007 full Result/log with modifies(log); K008 corrupts reply tag and fails",
+   "source_association": "NHJ_certify.py byte-token compares exact frozen checkpoint body after erasing only length_oracle -> account.data_len(); owner getter/key comparison and CLOSED checkpoint_size(S2) remain actual",
+   "combined": "NHJ_L014",
+   "audit": "NHJ_L015",
+   "trust_reclassification": "P6/D188 option A retained; never removal",
+   "effects": "No external effects/mutation; metadata-first/length/size schedule; Err from length forwarded unchanged",
+   "closed_children": [
+    "NHJ::length",
+    "OwnedAccount::owner",
+    "verifier::checkpoint_size"
+   ],
+   "semantic_review_sha256": "bd1289aa24c132c91ee62bee1be6fce6f2f30593f5562f8ad2c418a633e62422"
+  },
+  {
+   "id": "NHJ::checkpoint",
+   "subject": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_verifier_checkpoint",
+   "route": "y/ak",
+   "model_theorem": "NHJ_CheckpointPacket.substitute",
+   "inner_hypotheses_remaining": [],
+   "root_domain": "NGL_LengthCarrier.domain a.length; arbitrary owner/program/flags/writable, no successful-child premise. Metadata rejection emits zero child calls; otherwise EXACT same receiver/length field; arbitrary usize and both error replies.",
+   "native_passes": [
+    "NHJ_K007"
+   ],
+   "matched_controls": [
+    "NHJ_K008"
+   ],
+   "retained_interface_real_and_modifies": "New K007 full Result/log with modifies(log); K008 corrupts reply tag and fails",
+   "source_association": "NHJ_certify.py byte-token compares exact frozen checkpoint body after erasing only length_oracle -> account.data_len(); owner getter/key comparison and CLOSED checkpoint_size(S2) remain actual",
+   "combined": "NHJ_L014",
+   "audit": "NHJ_L015",
+   "trust_reclassification": "P6/D188 option A retained; never removal",
+   "effects": "No external effects/mutation; metadata-first/length/size schedule; Err from length forwarded unchanged",
+   "closed_children": [
+    "NHJ::length",
+    "OwnedAccount::owner",
+    "verifier::checkpoint_size"
+   ],
+   "semantic_review_sha256": "bd1289aa24c132c91ee62bee1be6fce6f2f30593f5562f8ad2c418a633e62422"
   }
  ],
  "driver_root_status": "OPEN"

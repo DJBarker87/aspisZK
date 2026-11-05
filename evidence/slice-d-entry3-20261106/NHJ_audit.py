@@ -13,7 +13,8 @@ fixture=reuse['fixtures.json'];assert len(fixture['results'])==8 and fixture['ex
 assert all(x['equal'] for x in fixture['results']) and all(len(x['walked_axioms'])==1 for x in fixture['results'][:4]) and all(not x['walked_axioms'] for x in fixture['results'][4:])
 assert fixture['same_optimized_binary_sha256']==reuse['NHJ_ProofDriver_BINARY_PIN.json']['sha256']
 out=B/parent['module'];out.mkdir(exist_ok=False);rows=[]
-for name,cmd in [('proof1',['NHJ_native/NHJ_ProofDriver','proof1']),('scan',['NHJ_native/NHJ_ScanDriver','scan'])]:
+mode='proof'+str(int(parent['module'].split('stage')[1].split('_')[0])-1)
+for name,cmd in [(mode,['NHJ_native/NHJ_ProofDriver',mode]),('scan',['NHJ_native/NHJ_ScanDriver','scan'])]:
  start=time.monotonic();log=out/(name+'.log');tim=out/(name+'.time.log');before=hashlib.sha256((B/cmd[0]).read_bytes()).hexdigest()
  with log.open('w') as f:r=subprocess.run(['/usr/bin/time','-v','-o',str(tim),*cmd],stdout=f,stderr=subprocess.STDOUT)
  s=log.read_text();stats=tim.read_text()
@@ -23,9 +24,9 @@ for name,cmd in [('proof1',['NHJ_native/NHJ_ProofDriver','proof1']),('scan',['NH
  (out/(name+'.json')).write_text(json.dumps(row,indent=1)+'\n');rows.append(row)
  print(json.dumps(dict(target=name,exit=r.returncode,wall_seconds=row['wall_seconds'],peak_rss_kib=row['peak_rss_kib'],roots=len(row['results']))),flush=True)
  if r.returncode:sys.exit(r.returncode)
- if name=='proof1':assert len(row['results'])==3 and all(x['equal'] and set(x['walked_axioms'])==set(x['collect_axioms'])<={'propext','Classical.choice','Quot.sound'} for x in row['results'])
+ if name==mode:assert len(row['results'])==len(json.loads((B/'NHJ_AUDIT_ROOTS.json').read_text())['groups'][int(mode[5:])]) and all(x['equal'] and set(x['walked_axioms'])==set(x['collect_axioms'])<={'propext','Classical.choice','Quot.sound'} for x in row['results'])
  else:
   scan=[json.loads(l) for l in (B/'NHJ_LOADED_scan.jsonl').read_text().splitlines()]
   assert all(x['imports_match'] and not x['dangling'] and not x['duplicate_owners'] for x in scan)
   (out/'scan_summary.json').write_text(json.dumps(dict(modules=len(scan),dangling=0,incompatible_owners=0,import_mismatches=0),indent=1))
-(out/'SUMMARY.json').write_text(json.dumps(dict(status='PASS',commands=rows,unchanged_fixture_attempt='NHJ_L006',old_roots_reused=3,new_roots=3),indent=1)+'\n')
+(out/'SUMMARY.json').write_text(json.dumps(dict(status='PASS',commands=rows,unchanged_fixture_attempt='NHJ_L006',proof_group=mode),indent=1)+'\n')

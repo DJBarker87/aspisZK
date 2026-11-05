@@ -81,3 +81,38 @@ fn length_corrupt_packet(a:&OwnedAccount,l:&mut ErrorLog)->bool{let r=length_cut
 #[kani::proof_for_contract(length_corrupt_packet)] #[kani::unwind(35)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn length_logging_corrupt(){let mut a=account();let shape:bool=kani::any();a.length=if shape{Ok(kani::any())}else{Err(ProgramError::AccountBorrowFailed)};let mut l=error_empty();let _=length_corrupt_packet(&a,&mut l);}
+
+struct LengthLog{count:u8,account:*const OwnedAccount,input:*const Result<usize,ProgramError>,ok:bool,n:usize,borrow:bool}
+fn length_empty()->LengthLog{LengthLog{count:0,account:core::ptr::null(),input:core::ptr::null(),ok:false,n:0,borrow:false}}
+fn length_oracle(a:&OwnedAccount,l:&mut LengthLog)->Result<usize,ProgramError>{
+ assert!(matches!(&a.length,Ok(_)|Err(ProgramError::AccountBorrowFailed)|Err(ProgramError::InvalidAccountData)));
+ l.count+=1;l.account=a;l.input=&a.length;l.ok=kani::any();l.n=kani::any();l.borrow=kani::any();
+ if l.ok{Ok(l.n)}else if l.borrow{Err(ProgramError::AccountBorrowFailed)}else{Err(ProgramError::InvalidAccountData)}
+}
+fn checkpoint_cut(account:&OwnedAccount,program_id:&Pubkey,writable:bool,l:&mut LengthLog)->ProgramResult{
+ if account.owner()!=program_id || account.is_signer || account.executable
+  || account.is_writable!=writable
+  || length_oracle(account,l)?!=verifier::checkpoint_size(Variant::S2){return Err(ProgramError::InvalidAccountData);}
+ Ok(())
+}
+fn checkpoint_association(a:&OwnedAccount,p:&Pubkey,w:bool,l:&LengthLog,r:&ProgramResult)->bool{
+ if a.owner!=*p||a.is_signer||a.executable||a.is_writable!=w{
+  l.count==0&&matches!(r,Err(ProgramError::InvalidAccountData))
+ }else{
+  l.count==1&&l.account==a as *const OwnedAccount&&l.input==&a.length as *const Result<usize,ProgramError>&&
+  if !l.ok{if l.borrow{matches!(r,Err(ProgramError::AccountBorrowFailed))}else{matches!(r,Err(ProgramError::InvalidAccountData))}}
+  else if l.n!=1768{matches!(r,Err(ProgramError::InvalidAccountData))}else{r.is_ok()}
+ }
+}
+#[kani::requires(l.count==0 && matches!(&a.length,Ok(_)|Err(ProgramError::AccountBorrowFailed)|Err(ProgramError::InvalidAccountData)))]
+#[kani::ensures(|r| *r)] #[kani::modifies(l)]
+fn checkpoint_packet(a:&OwnedAccount,p:&Pubkey,w:bool,l:&mut LengthLog)->bool{let r=checkpoint_cut(a,p,w,l);checkpoint_association(a,p,w,l,&r)}
+#[kani::proof_for_contract(checkpoint_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn checkpoint_logging(){let mut a=account();let shape:u8=kani::any();kani::assume(shape<3);a.length=if shape==0{Ok(kani::any())}else if shape==1{Err(ProgramError::AccountBorrowFailed)}else{Err(ProgramError::InvalidAccountData)};let p=Pubkey::new_from_array(kani::any());let mut l=length_empty();let _=checkpoint_packet(&a,&p,kani::any(),&mut l);}
+#[kani::requires(l.count==0 && matches!(&a.length,Ok(_)|Err(ProgramError::AccountBorrowFailed)|Err(ProgramError::InvalidAccountData)))]
+#[kani::ensures(|r| *r)] #[kani::modifies(l)]
+fn checkpoint_corrupt_packet(a:&OwnedAccount,p:&Pubkey,w:bool,l:&mut LengthLog)->bool{let r=checkpoint_cut(a,p,w,l);if l.count==1{l.ok=!l.ok;}checkpoint_association(a,p,w,l,&r)}
+#[kani::proof_for_contract(checkpoint_corrupt_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn checkpoint_logging_corrupt(){let mut a=account();a.is_signer=false;a.executable=false;let w=a.is_writable;let mut l=length_empty();let _=checkpoint_corrupt_packet(&a,&a.owner,w,&mut l);}
