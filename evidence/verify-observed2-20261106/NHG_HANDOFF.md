@@ -79,3 +79,27 @@ SUPPORT ONLY. K047/K048 corrects this to the exact statement Error before the
 constant map_err. No row was admitted from the earlier shape. Native parent
 K031 and three-call K044 timed out; source-associated staged cuts replace
 them and retain P6/D188/Std interpretation, never remove trust.
+
+
+## Stage4 final admission
+
+NHG_stage4_validate.py PASS with18 total new NHG rows. Stage3 is committed as
+ed0fb939429 and sealed; its checks are unchanged. Native49–76 and their
+controls plus retained exact model/loop laws close10 further rows. Joint L081
+replays deployed; L082–084 raw26 additional roots, total107; L085 scans13558
+modules, peak7027972KiB, swap0, no mismatch/dangling/duplicate owners.
+
+All80 Kani attempts and the single extraction are consumed. Lean/support85
+of90 used. Next use only the five remaining Lean slots for claims/round local
+domains and row-copy value frame, final combined/axiom/coherence check and
+retained export. No additional Kani command is authorized by this budget.
+
+K077/K078 verifies one boxed claims row write/error and initialized observed
+cell frame; K079/K080 verifies exact typed record/offset/byte/array/error
+transport. They are SUPPORT ONLY;129 remains OPEN. Never treat its arbitrary
+decoder reply as a proved payload law or full initialization/heap bridge.
+
+Source/helper remaining boundaries and per-member OPEN reasons are in
+NHG_REMAINING.md. No sibling native query packet is assumed. Root137, finish136,
+round133/rounds134, claims129 and mark130 remain OPEN. Runtime trust,100-bit
+per-attempt target, privacy and two transactions are unchanged.

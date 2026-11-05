@@ -38,3 +38,25 @@ No conservative target was silently removed.
 
 No root137 certificate follows from this stage. Finish136 and its same-state
 callees still need composition, followed by the root's own staged association.
+
+
+## Stage4 composition and residuals
+
+The three semantic leaves and seven independent terminal leaves close on
+exact same carriers and stated domains. Finish and root stay OPEN. Existing
+SemanticBoundaryLoopV7 / SemanticValueLoopV1, JGa_Reconstruct / JFy_SumHigh
+and JGa_Equality inductions are reused from coherent objects. Missing loaded
+reconstruct/sum/equality modules were imported read-only under their NDO
+module names with rebased imports; no duplicate proof or shared-cache edit.
+
+The exact QM31 add word laws are AddWords.generated/nq_add; conditional native
+addition equals modulo by cases_mod. Multiplication uses Product.words for
+GenQ and AddWords.nq_mul for FIq, each proving an emitted ok result with the
+precise natural quartet and canonical reply. Native callers establish those
+input domains; no unpaired product stub counts as credit.
+
+Remaining round/rounds call-site decoder domains cannot be inferred merely
+from baseline row147 CLOSED. The private payload borrow has no new authorized
+inventory bridge here. Claims has native cell/argument support but no full
+129 certificate. Circle156, mask76 and other actual finish dependencies remain
+open/boundaries. Root137 cannot be promoted by the now-closed producer/begin.

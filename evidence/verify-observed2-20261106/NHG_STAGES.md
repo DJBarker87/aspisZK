@@ -45,3 +45,27 @@ public digest, preserving every chronological query and exact WireError.
 
 Timed-out K002,K011,K012,K022–K026,K031,K044 are excluded. K031 stopped at
 the outer limit before a verdict; it is not a passing native parent bridge.
+
+
+## Stage4 admitted
+
+Rows132 boundary,135 value,259 selected_claim,236 carry,239 empty_root,258
+scalar_lanes,241 initial_variant_selectors,257 reconstruct_10,262 sum_high
+and240 equality_value are admitted. Combined L081, raw26 L082–084 and
+NFX13558-module L085 all exit0; standard axioms only. Historical81 raw roots
+and every historical validation remain sealed; no old passing shape reruns.
+
+Boundary keeps coefficient0 twice. Value/equality products execute only as
+local call logs with Product.words / AddWords.nq_mul exact emitted return
+laws on canonical inputs. No field multiplication is proved or run in Kani.
+Native one-step canonicality and precise iterator/counter/operand frames
+compose through retained induction; reverse seeds and every copied limb have
+matched failing controls. Empty-root168 literal cells match frozen Rust and
+retained model; map identity uses existing induction. Scalar input asset is
+raw/unrestricted, while arithmetic operands are canonical. Sum_high includes
+both inner and outer native iterations, ranges of length<=2 and bounds<=64;
+all three actual frozen call sites use1 or2 literal ranges.
+
+K077–080 claims transport/write checks are SUPPORT ONLY. The decoder caller
+payload domain and full heap/emitted-body/error cleanup association remain
+OPEN. Kani80/80 and extraction1/1 are exhausted; continue remaining Lean work.

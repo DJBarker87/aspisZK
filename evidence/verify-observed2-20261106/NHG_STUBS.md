@@ -49,3 +49,33 @@ copy window K007/K019 plus AppendFrame composes all prefix/suffix values.
 Future field-product oracle: Product.words/returns/canonical/natural proves
 the exact emitted QM31.mul natural quartet on canonical operands. Native
 semantic-value step is not yet attempted/admitted at this stage.
+
+
+## Finish product oracle (LPh stub table extension)
+
+`NHG_steps::product_cut(a,b,log)` uses a local canonical arbitrary reply and
+records the exact operands/reply; no multiplication runs in Kani. The paired
+emitted-definition laws are `AspisR1.NHG_Product.words`, `.returns`, `.canonical`
+and `.natural` (L060, raw stage3 batch7). Domain: all four M31 coordinates
+of BOTH operands are canonical. The caller establishes this for the arbitrary
+accumulator and selected alpha entry; the product reply is canonical by the
+paired theorem. The native step proves its continuation for EVERY canonical
+reply, so its oracle envelope contains that exact natural quartet. The Lean
+loop invariant chooses the exact paired reply. This is the ruling-approved
+opaque-call-log product form, not a Kani field-multiplication claim.
+
+The full polynomial loop uses retained SemanticBoundaryLoopV7 and
+SemanticValueLoopV1 induction; source association must still be compiled and
+audited before row132/135 admission. Static method item QM31::add in fold is
+resolved to the direct native add step; no runtime fn-pointer value or
+Option<fn> is read or compared.
+
+The equality-factor/equality-loop native cuts use `NHG_semantic::mul_log`
+with a local two-entry call log and arbitrary canonical replies. The runtime
+operation is the same frozen QM31.mul paired with Product.words. In the FIq
+caller owner, the composed named laws FIv_NativeQM.mul and
+ExtractedMaskQM31Mul.current_qm_mul_words give the same natural quartet;
+NHG_AddWords.nq_mul packages that exact emitted return law. Its domain is
+NCanonical x/y. Kani checks each caller establishes canonical operands. No
+credit is admitted until this packaging and the caller model association are
+compiled/audited; no multiplication executes in the native probes.

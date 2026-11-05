@@ -24,6 +24,10 @@ import NHG_SnapshotViews
 import NHG_BeginFrame
 import NHG_Product
 import NHG_FrontComposition
+import NHG_FinishLeaves
+import NHG_SelectedClaim
+import NHG_AddWords
+import NHG_ExtraLeaves
 #print axioms AspisR1.NHG_Serializer.restore_map
 #print axioms AspisR1.NHG_Serializer.source
 #print axioms AspisR1.NHG_Serializer.bytes
@@ -105,3 +109,29 @@ import NHG_FrontComposition
 #print axioms AspisR1.NHG_Product.natural
 #print axioms AspisR1.NHG_FrontComposition.bind_congr
 #print axioms AspisR1.NHG_FrontComposition.staged
+#print axioms AspisR1.NHG_FinishLeaves.boundary_step
+#print axioms AspisR1.NHG_FinishLeaves.boundary_seed
+#print axioms AspisR1.NHG_FinishLeaves.boundary_result
+#print axioms AspisR1.NHG_FinishLeaves.value_step
+#print axioms AspisR1.NHG_FinishLeaves.value_seed
+#print axioms AspisR1.NHG_FinishLeaves.value_result
+#print axioms AspisR1.NHG_FinishLeaves.product_packet
+#print axioms AspisR1.NHG_FinishLeaves.value_packet_step
+#print axioms AspisR1.NHG_SelectedClaim.source
+#print axioms AspisR1.NHG_SelectedClaim.range
+#print axioms AspisR1.NHG_SelectedClaim.returned
+#print axioms AspisR1.NHG_AddWords.cases_mod
+#print axioms AspisR1.NHG_AddWords.generated
+#print axioms AspisR1.NHG_AddWords.nq_add
+#print axioms AspisR1.NHG_AddWords.nq_mul
+#print axioms AspisR1.NHG_ExtraLeaves.scalar_source
+#print axioms AspisR1.NHG_ExtraLeaves.carry_total
+#print axioms AspisR1.NHG_ExtraLeaves.carry_result
+#print axioms AspisR1.NHG_ExtraLeaves.empty_source
+#print axioms AspisR1.NHG_ExtraLeaves.scalar_total
+#print axioms AspisR1.NHG_ExtraLeaves.initial_source
+#print axioms AspisR1.NHG_ExtraLeaves.reconstruct_step
+#print axioms AspisR1.NHG_ExtraLeaves.reconstruct_result
+#print axioms AspisR1.NHG_ExtraLeaves.sum_result
+#print axioms AspisR1.NHG_ExtraLeaves.factor_source
+#print axioms AspisR1.NHG_ExtraLeaves.equality_result
