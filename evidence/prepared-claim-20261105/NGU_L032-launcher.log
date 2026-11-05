@@ -1,0 +1,46 @@
+{"attempt": "NGU_L032", "exit_status": 1, "wall_seconds": 3.409988702973351, "peak_rss_kib": "5839068", "swaps": "0", "print_axioms": ["'AspisR1.NGU_PreparedClaim.packet' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NGU_generated/NGU_PreparedClaim.lean:44:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1CurrentPreparedClaim.verifier.prepared_claim NGU_LPm_PointLoop.ops (toClaimDigest D) (toClaimSem sem) y1
+    (NGU_Powers.claim inactive) (arr NGU_Powers.claim g) (NGU_Powers.claim kappa)
+in the target expression
+  (do
+      let r ←
+        AspisR1CurrentPreparedClaim.verifier.prepared_claim
+            (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpdate.QRaw) (toClaimDigest D)
+            (toClaimSem sem) y1 (toClaimE (NFW_PowersCohort.toPublic inactive)) (arr NGU_Powers.claim g)
+            (toClaimE (NFW_PowersCohort.toPublic kappa))
+ 
+...
+am :
+  NGU_LPq_PreparedClaim.program (toClaimSem sem) y1 (arr NGU_Powers.claim g) inactive kappa = fun x =>
+    ok (core.result.Result.Ok (NGU_Powers.claim out))
+model :
+  AspisR1CurrentPreparedClaim.verifier.prepared_claim NGU_LPm_PointLoop.ops (toClaimDigest D) (toClaimSem sem) y1
+      (NGU_Powers.claim inactive) (arr NGU_Powers.claim g) (NGU_Powers.claim kappa) =
+    ok (core.result.Result.Ok (NGU_Powers.claim out))
+maps : mapArray toClaimE (NFW_PowersCohort.mapArray NFW_PowersCohort.toPublic g) = arr NGU_Powers.claim g
+⊢ (do
+      let r ←
+        AspisR1CurrentPreparedClaim.verifier.prepared_claim
+            (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpdate.QRaw) (toClaimDigest D)
+            (toClaimSem sem) y1 (toClaimE (NFW_PowersCohort.toPublic inactive)) (arr NGU_Powers.claim g)
+            (toClaimE (NFW_PowersCohort.toPublic kappa))
+      ok
+          (match r with
+          | core.result.Result.Ok x => core.result.Result.Ok (fromClaimE x)
+          | core.result.Result.Err e => core.result.Result.Err (fromClaimError e))) =
+    ok (core.result.Result.Ok (NFW_PowersCohort.toPublic out))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (29 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.NGU_PreparedClaim.packet' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rc5ac9f6471ce4a069954d763f4f0fdca.scope; invocation ID: 81d9ceda47544175afcea422f6691797

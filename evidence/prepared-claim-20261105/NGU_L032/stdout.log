@@ -1,0 +1,77 @@
+NGU_generated/NGU_PreparedClaim.lean:44:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1CurrentPreparedClaim.verifier.prepared_claim NGU_LPm_PointLoop.ops (toClaimDigest D) (toClaimSem sem) y1
+    (NGU_Powers.claim inactive) (arr NGU_Powers.claim g) (NGU_Powers.claim kappa)
+in the target expression
+  (do
+      let r ←
+        AspisR1CurrentPreparedClaim.verifier.prepared_claim
+            (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpdate.QRaw) (toClaimDigest D)
+            (toClaimSem sem) y1 (toClaimE (NFW_PowersCohort.toPublic inactive)) (arr NGU_Powers.claim g)
+            (toClaimE (NFW_PowersCohort.toPublic kappa))
+      ok
+          (match r with
+          | core.result.Result.Ok x => core.result.Result.Ok (fromClaimE x)
+          | core.result.Result.Err e => core.result.Result.Err (fromClaimError e))) =
+    ok (core.result.Result.Ok (NFW_PowersCohort.toPublic out))
+
+B : FinishModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+pub : pool_v1.pair_forest_semantic_terminal.r0.Public
+pre : r1_wire.Prefix
+beforeSemantic : r1_wire.SemanticTranscript H
+challenges : r1_wire.Challenges
+obs : Option (RPz7_PhaseIso.Phase → Result Unit)
+sem : r1_semantic.Verified H
+semantic_finish :
+  FinishModel.finish AspisS1ExtractedRoundChildren.children
+      { fromFn := @FinishModel.Boundaries.fromFn B, mask := B.mask, add := B.add, mul := B.mul, terminal := B.terminal,
+        circle := B.circle, unwrapRoot := B.unwrapRoot,
+        claims := ClaimsUnrolledFinish.claims (NP6_StdModel.calls (core.result.Result.Ok ())) }
+      D pub pre beforeSemantic challenges obs =
+    ok (core.result.Result.Ok sem)
+compact before y1 : Slice U8
+compact_length : (↑compact).length = 464
+before_length : (↑before).length = 928
+compact_check : NFU_Retarget.compact.check_values compact = ok (core.result.Result.Ok ())
+expansion : NFU_Retarget.LPn.Expand.NativeTrace (↑compact) (↑before) 29 ↑y1
+gamma inactive kappa : NE
+gamma_canonical : canonE gamma
+inactive_canonical : canonE inactive
+kappa_canonical : canonE kappa
+g : Std.Array NE 29#usize
+same_powers : FIo_Native.weights.powers 29#usize gamma = ok g
+out : NE
+trace : NGU_LPq_PreparedTrace.Trace (toClaimSem sem) y1 (arr NGU_Powers.claim g) inactive kappa out
+canonical : canonE out
+program :
+  NGU_LPq_PreparedClaim.program (toClaimSem sem) y1 (arr NGU_Powers.claim g) inactive kappa = fun x =>
+    ok (core.result.Result.Ok (NGU_Powers.claim out))
+model :
+  AspisR1CurrentPreparedClaim.verifier.prepared_claim NGU_LPm_PointLoop.ops (toClaimDigest D) (toClaimSem sem) y1
+      (NGU_Powers.claim inactive) (arr NGU_Powers.claim g) (NGU_Powers.claim kappa) =
+    ok (core.result.Result.Ok (NGU_Powers.claim out))
+maps : mapArray toClaimE (NFW_PowersCohort.mapArray NFW_PowersCohort.toPublic g) = arr NGU_Powers.claim g
+⊢ (do
+      let r ←
+        AspisR1CurrentPreparedClaim.verifier.prepared_claim
+            (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpdate.QRaw) (toClaimDigest D)
+            (toClaimSem sem) y1 (toClaimE (NFW_PowersCohort.toPublic inactive)) (arr NGU_Powers.claim g)
+            (toClaimE (NFW_PowersCohort.toPublic kappa))
+      ok
+          (match r with
+          | core.result.Result.Ok x => core.result.Result.Ok (fromClaimE x)
+          | core.result.Result.Err e => core.result.Result.Err (fromClaimError e))) =
+    ok (core.result.Result.Ok (NFW_PowersCohort.toPublic out))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (29 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.NGU_PreparedClaim.packet' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
