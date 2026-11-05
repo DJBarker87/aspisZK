@@ -4,6 +4,9 @@ import subprocess,json,sys,time,shlex,hashlib,lzma,base64
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90';B='/home/dombarker/project-offloads/codex-cx-extract-stage-20261106'
 a=sys.argv[1];cfg=json.loads((E/(a+'.json')).read_text());assert cfg['attempt']==a
 assert not (E/a).exists()
+cfg['configuration_source_revision']=cfg.get('source_revision')
+cfg['source_revision']=subprocess.check_output(['git','rev-parse','HEAD'],cwd=E,text=True).strip()
+cfg['source_tree_dirty']=bool(subprocess.check_output(['git','status','--porcelain'],cwd=E,text=True).strip())
 def ssh(code,data=None,submitted=False):
  for n in range(11):
   r=subprocess.run(['ssh','-o','ControlMaster=no','-o','ConnectTimeout=15',H,code],input=data,text=True,capture_output=True)
@@ -46,7 +49,7 @@ if cfg['kind']=='lean':
 import json,re,hashlib,shutil
 b=Path({B!r});p=b/{(a+'.json')!r};x=json.loads(p.read_text());roots=x['env']['LEAN_PATH'].split(':')
 if '-o' in x['command']:(b/x['command'][x['command'].index('-o')+1]).parent.mkdir(parents=True,exist_ok=True)
-(b/'NHR_objects').mkdir(exist_ok=True);(b/'lakefile.lean').write_text('import Lake\\nopen Lake DSL\\npackage nha\\n')
+(b/'NHR_objects').mkdir(exist_ok=True);(b/'lakefile.lean').write_text('import Lake\\nopen Lake DSL\\npackage nhr\\n')
 pins={{}};rels=set()
 for root in roots:
  for stem in ['Aeneas','AeneasMeta']:

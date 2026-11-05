@@ -218,6 +218,10 @@ def main():
     a=p.parse_args()
     if a.export: export(); return 0
     a.workspace=a.workspace.resolve(); a.out=a.out.resolve(); a.out.mkdir(parents=True,exist_ok=True)
+    if a.check or a.extract:
+        rel = next(l.split(':',2)[2].strip().lstrip('/') for l in Path('/proc/self/cgroup').read_text().splitlines() if l.startswith('0:'))
+        group = Path('/sys/fs/cgroup')/rel
+        assert {n:(group/n).read_text().strip() for n in ('memory.high','memory.max','memory.swap.max','pids.max')} == {'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}, 'Run via the admitted capped launcher'
     if a.check: validate(a.workspace,a.out,a.cargo); return 0
     assert a.function, '--function required'
     if a.options: write(a.out/'NHR_OPTIONS.json',options(a,a.workspace,a.out)); return 0

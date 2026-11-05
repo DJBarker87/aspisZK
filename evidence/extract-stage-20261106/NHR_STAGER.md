@@ -95,3 +95,10 @@ with NGK remains a separate required check.
 The host's --check now independently re-enumerates members and transitive path
 dependencies from the staged manifests and compares that closure with the
 exported manifest, before cargo metadata. E003 and later run this stricter check.
+
+The final stager also refuses host --check/--extract unless the actual cgroup
+limits match 6G/8G/0/64 exactly. Admission still belongs to the unchanged lead
+reservation script; this guard does not replace its allowed:true AND exit0 rule.
+The owned runner records actual invocation HEAD/dirty state separately from the
+configuration's inherited revision label (earlier receipts pin exact source
+snapshots and frozen Git revision, but their inherited label can predate launch).
