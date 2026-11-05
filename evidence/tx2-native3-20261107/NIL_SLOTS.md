@@ -1,13 +1,15 @@
-# NIL current slots
+# NIL slots
 
-TX2:065 OPEN; zero composed rows/edges promoted; target not yet established.
+TX2:065 **OPEN**. Zero composed rows or edges promoted. Local facets and conditional composition interfaces are not parent packets.
 
-| Member | Current result | Exact residual |
+| Member | Checked work | Exact residual |
 | --- | --- | --- |
-| (a) resume18 | Fresh/cohort full typed ports; header/semantic/weights/validation/allocation model transport; six actual E-reader value facets K003–020 with corruption failures and rename stability; NID raw/K primitives retained. | Complete actual resume source/callee/full-Result/effect association and SAME returned primitive domains; split prefix/tail proof in progress. |
-| (b) Merkle5 | Three NID leaf grammars retained; actual source-selected opening and local one-iteration Merkle native cuts underway. | Complete sorted-key producer and all callee domains, leaf/tree induction, padding/node_count/verify, SAME full op5 Result/effects. |
-| (c) tail7/7/64 | NID exact windows and primitive fields retained. | Actual native resume plus canonical_scan/history provenance of SAME proof windows; TX1:084 remains an external producer boundary. |
-| (d) query6 | NID four8-byte K118 replacement and symbolic KMX/all64 frame law retained; NHV pending model Result available. | SAME actual resume/powers/setup producer and query parent association; model constructor does not certify native source occurrence. |
-| (e) NHT instantiation / NIG | Committed NIG filled045 CLOSED on n64/QM31.ZERO; constructors127/128 inherited CLOSED. | Exact finish op3/op2 installation and pair129/finish115 remain OPEN at immutable NIG revision in NIL_SIBLING_STATUS.json. No complete NHT root hypothesis is installed. |
+| (a) resume18 | Literal fresh/cohort carriers and injective full Result ports; complete prefix transport; exact source prefix/tail decompositions; semantic/weights/validation/allocation reference ports; six actual E-reader value families with corruption/rename. Box allocation/payload/descriptor facet with two failing controls. | Fresh tail port and actual frozen primitive/caller installation, complete Result/errors/fail/div/effects, SAME returned width64/canonical fields/next/query invariant. NGV/NGO decoder provenance is upstream, not the resume Reader body. Native prefix public688 and header callback association remain explicit caller obligations. |
+| (b) Merkle5 | Three retained leaf grammars; SAME selected-opening Lean step; all18 local native tree-step facets; arbitrary key-build/sort steps; projected three-child parent routing with full8-error oracles and controls/rename. | Key/sort invariants and induction, all3 actual leaf reply/log grammar installations, node_count/padding/verify, tree induction and native/model step association, complete SAME op5 Result/effects. Child oracles are not CLOSED callee laws. |
+| (c) tail7/7/64 | Exact View/source windows; scanner fourth71-word region decomposes into7+64; explicit per-word predicate transport. | Actual native resume and canonical_scan/history producer on SAME proof; TX1:084 remains OPEN slice boundary. S/Q does not imply decoder canonicality. NHT Prepared/View tail hypothesis not installed. |
+| (d) query6 | Retained K118 four8-byte windows; NID KMX/frame/all64 law instantiated on SAME NFW.pending(ported a); exact model allocation Result. | Native query parent/source occurrence, SAME resume/powers/setup producers and all primitive callee domains. Window rename stability does not install the parent. |
+| (e) NHT/NIG | Original model interfaces retained. Committed NIG filled045 CLOSED on n64/QM31.ZERO; constructors127/128 inherited CLOSED. | Exact NEW finish installation and pair129/finish115 remain OPEN at pinned NIG revision. No complete original NHT root hypothesis installed. |
 
-No failure is bridged by an enclosing success premise, SameExecution wrapper or independent returned-state witness. Existing closed callees remain closed on their stated domains; local transports are not closure credit.
+`NIL_ResumeComposition.source` requires the exact tail law; it does not prove that law. `NIL_TailPort` and `NIL_SourceModel` failed and are excluded. No acceptance premise, SameExecution wrapper or unrelated returned-state witness repairs a failed association.
+
+Selected theorem/object provenance is in NIL_MODULES.json, NIL_REUSE.json, NIL_AUDIT.json and compressed closure pins. Native matrices distinguish qualified, partial, unattempted and failed shapes. Prefix header-reply facets without rename receive no credit.

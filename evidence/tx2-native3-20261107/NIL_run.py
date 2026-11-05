@@ -32,7 +32,12 @@ p=b/{(a+'-reservation.json')!r}; print(p.read_text() if p.exists() else 'MISSING
   print('reservation wait',flush=True);time.sleep(180);continue
  raise RuntimeError('STOP admission')
 files={};sources=[]
-if kind=='sourcecheck':
+if kind=='projection':
+ for n in ['NIL_projection_check.py','NIL_TREE_CUT.json','NIL_PREFIX_NATIVE_CUT.json','NIL_CTOR_CUT.json']:files[n]=(E/n).read_text()
+ sources=list(files);command=['python3','NIL_projection_check.py']
+elif kind=='retention':
+ files['NIL_retention.py']=(E/'NIL_retention.py').read_text();sources=list(files);command=['python3','NIL_retention.py']
+elif kind=='sourcecheck':
  for n in ['NIL_verify_sources.py','NIL_MODULES.json','NIL_SOURCE_PINS.json']:files[n]=(E/n).read_text()
  sources=list(files);command=['python3','NIL_verify_sources.py']
 elif kind=='verify':
@@ -115,6 +120,8 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
+if {kind!r}=='projection': names += ['NIL_PROJECTION_CHECK.json']
+if {kind!r}=='retention': names += ['NIL_RETENTION.json']
 if {kind!r}=='sourcecheck': names += ['NIL_SOURCE_VERIFICATION.json']
 if {kind!r}=='verify': names += ['NIL_CACHE_VERIFICATION.json']
 if {kind!r}=='tools': names += ['NIL_TOOL_PINS.json']

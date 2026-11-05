@@ -1,19 +1,19 @@
-# NIL bridge stages
+# NIL bridge inventory
 
-Stage 1: NIL_Carriers establishes literal fresh/cohort field, error and reader bijections. NIL_ResultTransport/NIL_ResultReverse preserve full Result, inner errors, fail/div, and array/Vec ports without changing lengths. NIL_StatePort transports the SAME Prepared/Accumulator pair injectively; every field is copied or mapped, including queries, weights, rhs/power and next. NIL_FreshOps gives explicit source-parameter instantiations and complete raw/K/E model ports.
+No new composed NDT row/edge closes. TX2:065 stays OPEN.
 
-Focused accepted receipts: L001, L006, L004 (after L006), L008, L009. Only propext/Classical.choice/Quot.sound. Failed L002/L003/L005 are excluded. Exact sources, dependencies, revision, exit, wall, peakRSS/swap and axiom lines are in per-attempt receipts and NIL_ATTEMPTS.jsonl. Stage1 is a transport prerequisite, zero composed rows CLOSED.
+| Work | Receipt / law | Scope |
+| --- | --- | --- |
+| Fresh carriers and Result ports | L001/004/006/008/016, NIL_ReplyCases L058 | Literal raw/K/E/Variant/all8 errors, readers and full Prepared/Accumulator; injective Ok/Err/fail/div transport. |
+| Reference resume primitives | L009/012/013/020 | Explicit opaque-parameter instantiations; header induction and semantic/weights/validation/allocation reference transport. Native call installation OPEN. |
+| Resume decomposition | L050/051–056 | Exact fresh/cohort prefixes and literal source splits; conditional whole composition needs the unresolved tail law. |
+| Reader outputs | K003–020; L048 | Six actual E value facets with corruption/rename; SAME decoded returned value/cursor/backing model laws. NID raw/K facets cited, not replayed. |
+| Merkle one step | K021–074; L044 | Arbitrary native loop pre-state, selected source opening, three trees × six facets; controls/rename. Full leaf/tree induction and actual op5 installation OPEN. |
+| Key and parent cuts | K075–080, K082–084 | One key-build/sort iteration and projected three-child parent routing. K081 full-array timeout excluded. Missing producer/child/frame composition prevents parent credit. |
+| Resume constructor | K085–088 | SAME Box allocation/payload and Vec descriptor move; variant and allocation replacement controls fail. Arbitrary-content move/frame association and actual caller install OPEN. |
+| Query pending | L046 | SAME ported accumulator, model full Result, four8-byte KMX composition/all64/frame. Native query6 parent OPEN. |
+| Tail layout/history interface | L047/059 | Exact7/7/64 and71=7+64 source windows; predicate transport does not certify native canonical_scan. |
 
-E001 failed before extraction (own dangling target directory), no fresh extraction result is claimed. NID's pinned emitted body is retained. Native K001/K002 compile errors are unselected and not corruption controls.
+Final prefix/header native statuses are in NIL_PREFIX_MATRIX.json and NIL_HEADER_MATRIX.json. Exact pins, deployed features, full frozen dependency graph, lock stability, KMX patch, resource receipts and semantic controls are retained per attempt. Every selected new theorem has a #print axioms result; 88 selected roots share the same hardened audit binary and eight passing fidelity fixtures.
 
-Stage 2: L013 proves the generic emitted header callback iteration equals the
-retained header model by induction, including terminal iterator state. L012
-transports semantic10/weights64 full Results without success assumptions.
-L020 maps allocation rejection and exact replicated content. L026 proves
-checked subtraction equals wrapping subtraction only on the derived no-underflow
-domain. L044 composes the exact packed-key opening with the same digest input,
-reply and native-model tree step, preserving all outer fail/div. None installs
-the full op18 or op5 parent. E-value families K003–020 qualify only their named
-facets and source offsets; no multiplication is executed.
-
-Stage update: K003–K020 qualify six local Reader.e selected-value facets; K021–K074 qualify 18 local frozen Merkle step facets, with corruption and rename controls. L050 establishes full prefix Result transport; L053 and L054 establish literal fresh/cohort prefix-tail decompositions. These are local associations; complete resume, tree induction and native parent installation remain OPEN.
+Large inputs are archived once by SHA256. NID/NHV/NHT and immutable sibling packets are read-only citations. Existing CLOSED packets retain their actual domains. P6/D188 option-A transport is trust reclassification, not trust removal. No field multiplication or SHA is proved in Kani.

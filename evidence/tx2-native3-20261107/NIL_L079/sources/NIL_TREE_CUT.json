@@ -1,0 +1,19 @@
+{
+  "frozen": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "path": "crates/aspis-r1-cost-probe/src/candidate.rs",
+  "source_sha256": "5164975df10f79e9810f9321b8130a9865eb9bb9b6b9de7011f4359ece98c794",
+  "fragment_sha256": "6370a6686ab057a5b100d64170d0685507f8d0d0cc49f7e1ab2c669a1195bd0e",
+  "fragment": "        let key = batch_key_at(&keys, key_position);\n        key_position += 1;\n        let index = (key >> 8) as u32;\n        let q = opening(proof, lo + (key & 0xff) as usize);\n        let leaf = batch_leaf(hash, tree, q);\n        if d > 0 && same_batch_index(idx, d - 1, index) {\n            if !same_batch_leaf(val, d - 1, leaf) {\n                return Err(Error::Merkle);\n            }\n            continue;\n        }\n        idx[d] = index;\n        val[d] = leaf;\n        d += 1;",
+  "changes": [
+    "leaf call to explicit LOCAL record oracle",
+    "one-iteration continue maps to cut return",
+    "key_position and d are mutable caller state parameters"
+  ],
+  "callees": [
+    "batch_key_at",
+    "opening",
+    "same_batch_index",
+    "same_batch_leaf"
+  ],
+  "missing": "Full sorted-key producer, tree induction, padding/node_count/verify and parent composition remain OPEN"
+}

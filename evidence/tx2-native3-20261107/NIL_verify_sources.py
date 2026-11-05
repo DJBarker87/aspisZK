@@ -13,7 +13,7 @@ for n,pin in manifest['files'].items():
  if n in ['crates/aspis-r1-cost-probe/src/candidate.rs','crates/aspis-r1-cost-probe/src/verifier.rs']:
   assert actual.startswith(original),('frozen body modified',n)
   suffix=actual[len(original):]
-  allowed={'candidate.rs':['tree','key','parent'],'verifier.rs':['reader','ctor','resume_prefix']}[Path(n).name]
+  allowed={'candidate.rs':['tree','key','parent'],'verifier.rs':['reader','ctor','resume_prefix','header']}[Path(n).name]
   for module in allowed:
    block=('#[cfg(kani)]\n#[path="NIL_'+module+'_native.rs"]\nmod NIL_'+module+'_native;').encode()
    assert suffix.count(block)<=1,('duplicate module',n,module)

@@ -15,7 +15,7 @@
 +#[cfg(kani)] include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
 --- a/crates/aspis-r1-cost-probe/src/verifier.rs
 +++ b/crates/aspis-r1-cost-probe/src/verifier.rs
-@@ -526,3 +526,15 @@
+@@ -526,3 +526,19 @@
  #[cfg(feature="audit-eight-way")]
  #[path="eight_way.rs"]
  pub mod eight_way;
@@ -31,6 +31,10 @@
 +#[cfg(kani)]
 +#[path="NIL_resume_prefix_native.rs"]
 +mod NIL_resume_prefix_native;
++
++#[cfg(kani)]
++#[path="NIL_header_native.rs"]
++mod NIL_header_native;
 --- a/crates/aspis-r1-cost-probe/src/NIL_reader_native.rs
 +++ b/crates/aspis-r1-cost-probe/src/NIL_reader_native.rs
 @@ -0,0 +1,64 @@
@@ -604,3 +608,19 @@
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 +fn prefix_facet13_renamed(){check::<13>();}
+--- a/crates/aspis-r1-cost-probe/src/NIL_header_native.rs
++++ b/crates/aspis-r1-cost-probe/src/NIL_header_native.rs
+@@ -0,0 +1,13 @@
++use super::*;
++use crate::{KMX_copy_nonoverlapping,KMX_copy_from_slice};
++fn check(){let bytes:[u8;5]=kani::any();let i:usize=kani::any();kani::assume(i<=5);let mut it=bytes[i..].iter();let next=it.next();let mut cursor=i+(if next.is_some(){1}else{0});let answer=next.map(|&b|b!=0);if cfg!(NIL_invert){cursor^=1;}assert_eq!(cursor,if i<5{i+1}else{i});assert_eq!(it.len(),5-cursor);assert_eq!(answer,if i<5{Some(bytes[i]!=0)}else{None});}
++#[kani::proof]
++#[kani::unwind(8)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn header_step(){check();}
++#[kani::proof]
++#[kani::unwind(8)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn header_step_renamed(){check();}

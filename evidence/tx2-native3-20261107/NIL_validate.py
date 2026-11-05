@@ -20,7 +20,8 @@ def validate(final=False):
  for pin in json.loads((E/'NIL_INPUT_PINS.json').read_text())['inputs']:assert sha(ROOT/pin['path'])==pin['sha256'],pin['path']
  assert sha(ROOT/'evidence/kani-mitig-20261028/KMX_copy_stubs.patch')=='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67'
  assert subprocess.run(['git','diff','--quiet','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387','HEAD','--','crates','programs'],cwd=ROOT).returncode==0
- for matrix in ['NIL_NATIVE_MATRIX.json','NIL_TREE_MATRIX.json','NIL_PREFIX_MATRIX.json','NIL_EXTRA_MATRIX.json']:
+ assert not subprocess.check_output(['git','status','--porcelain','--','crates','programs'],cwd=ROOT,text=True).strip(),'shipped working tree modified'
+ for matrix in ['NIL_NATIVE_MATRIX.json','NIL_TREE_MATRIX.json','NIL_PREFIX_MATRIX.json','NIL_EXTRA_MATRIX.json','NIL_HEADER_MATRIX.json']:
   if not (E/matrix).exists():continue
   for row in json.loads((E/matrix).read_text()):
    if not row.get('status','').startswith('qualified'):continue
