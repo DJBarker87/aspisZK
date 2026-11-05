@@ -73,7 +73,10 @@ unsafe def main (args : List String) : IO UInt32 := do
       let groups ← IO.ofExcept (manifest.getObjValAs? (Array (Array String)) "groups")
       let some idx := (mode.drop 5).toString.toNat? | throw (IO.userError "invalid proof mode")
       let some names := groups[idx]? | throw (IO.userError "proof group out of range")
-      pure (#[`NII_COMBINED_IMPORT], names.map String.toName)
+      let selected ← IO.ofExcept (Json.parse (← IO.FS.readFile "NII_AUDIT_MODULES.json"))
+      let selected ← IO.ofExcept (fromJson? selected : Except String (Array (Array String)))
+      let some modules := selected[idx]? | throw (IO.userError "module group out of range")
+      pure (modules.map String.toName, names.map String.toName)
   let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
     {} (loadExts := true) (level := .private)
   if mode == "scan" || mode == "queryscan" then

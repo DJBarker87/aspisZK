@@ -45,7 +45,7 @@ def build():
    if f.get('frozen_body_sha256'):assert r['frozen_body_sha256']==f['frozen_body_sha256']
    if r['composed_status']=='CLOSED':overlap.append(dict(row=rid,provider=a,existing=r.get('NHO_provider')));continue
    assert r['composed_status']=='OPEN'
-   route='(ah)'if a=='NHK'else'(al)'if a=='NHN'and rid=='TX1:006'else'(ai)'if a=='NHS'else'(ak)'if a=='NHJ'else'(ae)'if a=='NHU'and rid=='TX1:322'else'(y)'
+   route='(ah)'if a=='NHK'else'(al)'if a=='NHN'and rid=='TX1:006'else'(ai)'if a=='NHS'else'(ak)'if a=='NHJ'else'(ae) reclassification (z)(1)'if a=='NHU'and rid=='TX1:130'else'(y)'
    r.update(composed_status='CLOSED',NII_provider=a,NII_route=route,NII_certificate=dict(path=str(cp.relative_to(R)),sha256=H(cp.read_bytes()),delta=str(p.relative_to(R)),validator=rc['result']['unchanged_validator'],packet=f),NII_selected_roots=[f[k]for k in ['lean_root','model_root','outcome_root','model_theorem','export']if isinstance(f.get(k),str)])
    new.append(rid)
   delta.append(dict(prefix=a,path=str(p.relative_to(R)),sha256=H(p.read_bytes()),claimed_rows=rows,new_closed_rows=new,validator_receipt='NII_REPLAY_'+a+'.json',checks_removed=0))
@@ -53,11 +53,19 @@ def build():
  for r in out['rows']:
   r.setdefault('NII_provider',r.get('NHO_provider'));r.setdefault('NII_route',r.get('NHO_route'));r['NII_trust_used']=r.get('NHO_trust_used',[]).copy()
   if r['composed_status']=='CLOSED':r['NII_trust_used']=sorted(set(r['NII_trust_used'])|{'NativeContractSemanticTransport'})
+  if r['row']in ['TX1:179','TX1:186']:
+   r['NII_trust_used']=sorted(set(r['NII_trust_used'])|{'ReviewedTranscription-prepared_claim','ReviewedTranscription-queries_from_pairs'})
   if r['row']=='TX1:168':r['NII_trust_used']=sorted(set(r['NII_trust_used'])|{'ReviewedTranscription-queries_from_pairs'})
   if r['row']in ['TX1:036','TX1:040','TX1:041','TX1:043','TX1:044']:assert r['composed_status']=='OPEN';r['NII_boundary']='TOOL-BOUNDARY'
  for old,new in zip(before['rows'],out['rows']):
   assert all(old[k]==new[k]for k in ['row','canonical_callees','frozen_body_sha256','function','transaction'])
  coverage=counts(out['rows']);assert coverage==dict(total=599,CLOSED=393,QUALIFIED=0,OPEN=206),coverage
+ source_coverage=coverage.copy()
+ for r in out['rows']:
+  r['NII_source_validator_status']=r['composed_status']
+  if r['NII_provider']=='NHJ':
+   r['composed_status']='QUALIFIED';r['NII_qualification']='Full unmodified forest cannot co-import with canonical NFW ErrorReference owner: instDiscriminantVerifierErrorIsize; NII_L001/L002'
+ coverage=counts(out['rows']);assert coverage==dict(total=599,CLOSED=379,QUALIFIED=14,OPEN=206)
  spec=J('docs/research/100bit-spend-path-20261013/design/VERTICAL-SLICES-20261029.json')['slices'];g=collections.defaultdict(set)
  for r in out['rows']:g[r['function']].update(r['canonical_callees'])
  S=set(closure(g,spec['S']['roots']));Q=set(closure(g,spec['Q']['roots']));D=set(closure(g,['programs/r1-cost-probe/src/lib.rs::process_r1_cost_probe_instruction']))-S-Q
@@ -79,12 +87,12 @@ def build():
   d=next((R/'evidence').glob('*/'+a+'_HANDOFF.md')).parent;p=d/(a+'_LEDGER_DELTA.json');x=J(p)
   for key in ['newly_closed','row_promotions','ledger_mutations']:
    if key in x:assert not x[key],(a,key,'unexpected support-only promotion')
- out.update(coverage=dict(all_rows=coverage,**tx),NII_coverage=coverage,NII_per_tx=tx,NII_slices=slices,NII_deltas=delta,NII_headline='AspisR1.RPx_Deployed.deployed',NII_authority='NII fields and composed_status; NHO and prior fields are checkpoint history',NII_security_target_established=False,NII_cold_release_replay=False,NII_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),NII_pool_consumer_rows=pool,trust_rows=trust)
+ out.update(coverage=dict(all_rows=coverage,**tx),NII_coverage=coverage,NII_source_validator_coverage=source_coverage,NII_per_tx=tx,NII_slices=slices,NII_deltas=delta,NII_headline='AspisR1.RPx_Deployed.deployed',NII_authority='NII fields and composed_status; NHO and prior fields are checkpoint history',NII_security_target_established=False,NII_cold_release_replay=False,NII_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),NII_pool_consumer_rows=pool,trust_rows=trust)
  put('NII_LEDGER.json',out);put('NII_ROUTES.json',{r['row']:dict(function=r['function'],status=r['composed_status'],provider=r['NII_provider'],route=r['NII_route'],boundary=r.get('NII_boundary'),trust_used=r['NII_trust_used'])for r in out['rows']})
  put('NII_TRUST_USED.json',dict(rows=trust,route_inventory=['(y)','(ad)','(ae)','(af)','(ah)','(ai)','(ak)','(al)','reclassification'],use_semantics='direct_closed_rows is explicit packet use; use_sites includes transitive composition and OPEN realization sites; zero direct use is never a discharge',Pool_A='(af) RECLASSIFICATION outside599',Pool_B='OPEN production association; three helpers CLOSED',Pool_D='PROVED-conditional model theorem; production continuation OPEN',source_realization_obligations=['NIB-P1 return-register continuity','NIB-P2 actual validation dictionary','NIB-P3 actual lane dictionary','NIB-P4 production settlement continuation','NHY_/NHD_ source/entry candidates; not adopted trust'],no_trust_removed=True))
- put('NII_COUNT_RECONCILIATION.json',dict(prior=before['NHO_coverage'],current=coverage,deltas=delta,overlaps=overlap,added=sum(len(d['new_closed_rows'])for d in delta),graph_changes=[],requested_count_reproduced=True))
+ put('NII_COUNT_RECONCILIATION.json',dict(prior=before['NHO_coverage'],current=coverage,source_validator_coverage=source_coverage,qualified_rows=[r['row']for r in out['rows']if r['composed_status']=='QUALIFIED'],deltas=delta,overlaps=overlap,added=sum(len(d['new_closed_rows'])for d in delta),graph_changes=[],requested_count_reproduced=True))
  put('NII_VALIDATOR_PROVENANCE.json',validatorpins)
- lines=['# Ledger refresh 11','','**393 CLOSED / 0 QUALIFIED / 206 OPEN of 599. Target not yet established.**','','CLOSED means composed hybrid source/model credit on caller-established domains under retained trust; no headline premise is retired. The unchanged validators reproduce all58 additional occurrences, without overlap. NII_COUNT_RECONCILIATION.json pins exact row membership and provenance.','','| Scope | Total | CLOSED | QUALIFIED | OPEN |','|---|---:|---:|---:|---:|']
+ lines=['# Ledger refresh 11','','**379 CLOSED / 14 QUALIFIED / 206 OPEN of 599. Target not yet established.**','','CLOSED means composed hybrid source/model credit on caller-established domains under retained trust; no headline premise is retired. The unchanged validators reproduce393 source-validator CLOSED rows (58 additional occurrences, no overlap). The unmodified all-forest import fails on the NFW_ErrorReferenceTypes / NGL_MapReference.Types owner pair; all14 NHJ rows are QUALIFIED for headline coherence. No forest was patched or renamed. NII_COUNT_RECONCILIATION.json pins exact row membership and provenance.','','| Scope | Total | CLOSED | QUALIFIED | OPEN |','|---|---:|---:|---:|---:|']
  for k,v in [('all',coverage),*tx.items(),*slices.items()]:lines.append('| '+k+' | '+' | '.join(str(v[z])for z in ['total','CLOSED','QUALIFIED','OPEN'])+' |')
  lines+=['','Routes: (y), (ad), (ae), (af), (ah), (ai), (ak), (al), and P6/D188 option-A reclassification. CM31::inv_with covers ONLY the deployed M31::inv instantiation under (al). TOOL-BOUNDARY TX1:036/040/041/043/044 remain OPEN.','','## Pool consumer (outside599)','','| Row | Status | Route |','|---|---|---|','| Pool A meta association | CLOSED by reclassification | (af) |']
  for r in pool:lines.append('| '+r['row']+' | CLOSED | '+r.get('route','(y)')+' |')

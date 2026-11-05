@@ -1,4 +1,4 @@
-import NII_COMBINED_IMPORT
+import NII_DIAGNOSTIC_IMPORT
 set_option pp.fullNames true
 set_option pp.universes true
 set_option pp.explicit true

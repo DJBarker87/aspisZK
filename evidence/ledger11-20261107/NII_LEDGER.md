@@ -1,17 +1,17 @@
 # Ledger refresh 11
 
-**393 CLOSED / 0 QUALIFIED / 206 OPEN of 599. Target not yet established.**
+**379 CLOSED / 14 QUALIFIED / 206 OPEN of 599. Target not yet established.**
 
-CLOSED means composed hybrid source/model credit on caller-established domains under retained trust; no headline premise is retired. The unchanged validators reproduce all58 additional occurrences, without overlap. NII_COUNT_RECONCILIATION.json pins exact row membership and provenance.
+CLOSED means composed hybrid source/model credit on caller-established domains under retained trust; no headline premise is retired. The unchanged validators reproduce393 source-validator CLOSED rows (58 additional occurrences, no overlap). The unmodified all-forest import fails on the NFW_ErrorReferenceTypes / NGL_MapReference.Types owner pair; all14 NHJ rows are QUALIFIED for headline coherence. No forest was patched or renamed. NII_COUNT_RECONCILIATION.json pins exact row membership and provenance.
 
 | Scope | Total | CLOSED | QUALIFIED | OPEN |
 |---|---:|---:|---:|---:|
-| all | 599 | 393 | 0 | 206 |
-| TX1 | 353 | 221 | 0 | 132 |
-| TX2 | 246 | 172 | 0 | 74 |
+| all | 599 | 379 | 14 | 206 |
+| TX1 | 353 | 216 | 5 | 132 |
+| TX2 | 246 | 163 | 9 | 74 |
 | S | 97 | 97 | 0 | 0 |
 | Q | 161 | 161 | 0 | 0 |
-| D | 345 | 139 | 0 | 206 |
+| D | 345 | 125 | 14 | 206 |
 
 Routes: (y), (ad), (ae), (af), (ah), (ai), (ak), (al), and P6/D188 option-A reclassification. CM31::inv_with covers ONLY the deployed M31::inv instantiation under (al). TOOL-BOUNDARY TX1:036/040/041/043/044 remain OPEN.
 
@@ -161,7 +161,7 @@ K086 remains an abort/liveness finding on a valid exclusive-borrow prestate; pro
 | TX1:127 | crates/aspis-r1-cost-probe/src/multiproof.rs::verify_in_place | OPEN |  | inherited |
 | TX1:128 | crates/aspis-r1-cost-probe/src/multiproof.rs::well_formed | OPEN |  | inherited |
 | TX1:129 | crates/aspis-r1-cost-probe/src/r1_semantic.rs::claims | OPEN |  | inherited |
-| TX1:130 | crates/aspis-r1-cost-probe/src/r1_semantic.rs::mark | CLOSED | (y) | NHU |
+| TX1:130 | crates/aspis-r1-cost-probe/src/r1_semantic.rs::mark | CLOSED | (ae) reclassification (z)(1) | NHU |
 | TX1:131 | crates/aspis-r1-cost-probe/src/r1_semantic.rs::public_transcript | CLOSED | (y) | NHG |
 | TX1:132 | crates/aspis-r1-cost-probe/src/r1_semantic.rs::semantic_boundary | CLOSED | (y) | NHG |
 | TX1:133 | crates/aspis-r1-cost-probe/src/r1_semantic.rs::semantic_round | OPEN |  | inherited |
@@ -353,7 +353,7 @@ K086 remains an abort/liveness finding on a valid exclusive-borrow prestate; pro
 | TX1:319 | crates/aspis-statement/src/state_only_poseidon.rs::internal_linear_lazy | OPEN |  | inherited |
 | TX1:320 | crates/aspis-statement/src/state_only_poseidon.rs::internal_round | OPEN |  | inherited |
 | TX1:321 | crates/aspis-statement/src/state_only_poseidon.rs::interpolate_three_constant_columns | OPEN |  | inherited |
-| TX1:322 | crates/aspis-statement/src/state_only_poseidon.rs::interpolate_three_constant_limb | CLOSED | (ae) | NHU |
+| TX1:322 | crates/aspis-statement/src/state_only_poseidon.rs::interpolate_three_constant_limb | CLOSED | (y) | NHU |
 | TX1:323 | crates/aspis-statement/src/state_only_poseidon.rs::interpolated_full_pair_packed | OPEN |  | inherited |
 | TX1:324 | crates/aspis-statement/src/state_only_poseidon.rs::interpolated_internal_pair | OPEN |  | inherited |
 | TX1:325 | crates/aspis-statement/src/state_only_poseidon.rs::leading_pair_packed | OPEN |  | inherited |
@@ -362,17 +362,17 @@ K086 remains an abort/liveness finding on a valid exclusive-borrow prestate; pro
 | TX1:328 | programs/r1-cost-probe/src/lib.rs::first_decoded | OPEN |  | inherited |
 | TX1:329 | programs/r1-cost-probe/src/lib.rs::observer | OPEN |  | inherited |
 | TX1:330 | programs/r1-cost-probe/src/lib.rs::process_r1_cost_probe_instruction | OPEN |  | inherited |
-| TX1:331 | programs/r1-cost-probe/src/pool_route.rs::admitted | CLOSED | (ak) | NHJ |
+| TX1:331 | programs/r1-cost-probe/src/pool_route.rs::admitted | QUALIFIED | (ak) | NHJ |
 | TX1:332 | programs/r1-cost-probe/src/r1_pool_adapter.rs::decode_public_statement_box | CLOSED | (y) plain | NGI |
 | TX1:333 | programs/r1-cost-probe/src/r1_pool_adapter.rs::process | OPEN |  | inherited |
 | TX1:334 | programs/r1-cost-probe/src/r1_pool_adapter.rs::readonly_buffer_meta_ok | CLOSED | (y) plain | NFQ |
-| TX1:335 | programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data | CLOSED | (ak) | NHJ |
-| TX1:336 | programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data_len | CLOSED | (ak) | NHJ |
+| TX1:335 | programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data | QUALIFIED | (ak) | NHJ |
+| TX1:336 | programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data_len | QUALIFIED | (ak) | NHJ |
 | TX1:337 | programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::key | CLOSED | (y) | NFU |
 | TX1:338 | programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::owner | CLOSED | (y) | NFU |
-| TX1:339 | programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_distinct_accounts | CLOSED | (ak) | NHJ |
+| TX1:339 | programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_distinct_accounts | QUALIFIED | (ak) | NHJ |
 | TX1:340 | programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_readonly_buffer | CLOSED | (y) | NFU |
-| TX1:341 | programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_verifier_checkpoint | CLOSED | (ak) | NHJ |
+| TX1:341 | programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_verifier_checkpoint | QUALIFIED | (ak) | NHJ |
 | TX1:342 | programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_zero | CLOSED | (y) | NFU |
 | TX1:343 | programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::snapshot | OPEN |  | inherited |
 | TX1:344 | programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage1 | OPEN |  | inherited |
@@ -590,31 +590,31 @@ K086 remains an abort/liveness finding on a valid exclusive-borrow prestate; pro
 | TX2:211 | programs/r1-cost-probe/src/lib.rs::error | OPEN |  | inherited |
 | TX2:212 | programs/r1-cost-probe/src/lib.rs::observer | OPEN |  | inherited |
 | TX2:213 | programs/r1-cost-probe/src/lib.rs::process_r1_cost_probe_instruction | OPEN |  | inherited |
-| TX2:214 | programs/r1-cost-probe/src/pool_route.rs::admitted | CLOSED | (ak) | NHJ |
+| TX2:214 | programs/r1-cost-probe/src/pool_route.rs::admitted | QUALIFIED | (ak) | NHJ |
 | TX2:215 | programs/r1-cost-probe/src/r1_pool_adapter.rs::asq8_common | CLOSED | (y) plain | NFY |
 | TX2:216 | programs/r1-cost-probe/src/r1_pool_adapter.rs::decode_checkpoint_box | OPEN |  | inherited |
 | TX2:217 | programs/r1-cost-probe/src/r1_pool_adapter.rs::decode_lane_from_pool_release | OPEN |  | inherited |
 | TX2:218 | programs/r1-cost-probe/src/r1_pool_adapter.rs::decode_master_box | OPEN |  | inherited |
 | TX2:219 | programs/r1-cost-probe/src/r1_pool_adapter.rs::emit_result | CLOSED | (y) plain | NGI |
-| TX2:220 | programs/r1-cost-probe/src/r1_pool_adapter.rs::pool_program_id | CLOSED | (ak) | NHJ |
+| TX2:220 | programs/r1-cost-probe/src/r1_pool_adapter.rs::pool_program_id | QUALIFIED | (ak) | NHJ |
 | TX2:221 | programs/r1-cost-probe/src/r1_pool_adapter.rs::process | OPEN |  | inherited |
 | TX2:222 | programs/r1-cost-probe/src/r1_pool_adapter.rs::readonly_buffer_meta_ok | CLOSED | (y) plain | NFQ |
-| TX2:223 | programs/r1-cost-probe/src/r1_pool_adapter.rs::readonly_meta_ok | CLOSED | (ak) | NHJ |
+| TX2:223 | programs/r1-cost-probe/src/r1_pool_adapter.rs::readonly_meta_ok | QUALIFIED | (ak) | NHJ |
 | TX2:224 | programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement | CLOSED | (y) plain | NGE |
-| TX2:225 | programs/r1-cost-probe/src/r1_pool_adapter.rs::registry_program_id | CLOSED | (ak) | NHJ |
+| TX2:225 | programs/r1-cost-probe/src/r1_pool_adapter.rs::registry_program_id | QUALIFIED | (ak) | NHJ |
 | TX2:226 | programs/r1-cost-probe/src/r1_pool_adapter.rs::scan_proof_buffer | CLOSED | (y) plain | NGI |
 | TX2:227 | programs/r1-cost-probe/src/r1_pool_adapter.rs::transfer_statement_box | CLOSED | (y) plain | NGE |
 | TX2:228 | programs/r1-cost-probe/src/r1_pool_adapter.rs::withdrawal_statement_box | CLOSED | (y) plain | NGE |
-| TX2:229 | programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data | CLOSED | (ak) | NHJ |
-| TX2:230 | programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data_len | CLOSED | (ak) | NHJ |
+| TX2:229 | programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data | QUALIFIED | (ak) | NHJ |
+| TX2:230 | programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data_len | QUALIFIED | (ak) | NHJ |
 | TX2:231 | programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::key | CLOSED | (y) | NFU |
 | TX2:232 | programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::owner | CLOSED | (y) | NFU |
 | TX2:233 | programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::authenticate_asq8_accounts | OPEN |  | inherited |
 | TX2:234 | programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::authenticate_invariant_release_registry | OPEN |  | inherited |
-| TX2:235 | programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_distinct_accounts | CLOSED | (ak) | NHJ |
-| TX2:236 | programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_readonly_account | CLOSED | (ak) | NHJ |
+| TX2:235 | programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_distinct_accounts | QUALIFIED | (ak) | NHJ |
+| TX2:236 | programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_readonly_account | QUALIFIED | (ak) | NHJ |
 | TX2:237 | programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_readonly_buffer | CLOSED | (y) | NFU |
-| TX2:238 | programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_verifier_checkpoint | CLOSED | (ak) | NHJ |
+| TX2:238 | programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_verifier_checkpoint | QUALIFIED | (ak) | NHJ |
 | TX2:239 | programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::snapshot | OPEN |  | inherited |
 | TX2:240 | programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage2 | OPEN |  | inherited |
 | TX2:241 | programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage2_owned | OPEN |  | inherited |

@@ -40,7 +40,7 @@ elif kind=='link':
  sources=['NII_native/'+target+'.c','NII_native/NFA_WALKER.c','NII_native/NFA_MemoryLimit.c']
  command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NII_native/'+target,*sources]
 elif kind=='audit':
- sources=['NII_generated/NII_ProofDriver.lean','NII_generated/NII_Driver.lean','NII_batch.py','NII_AUDIT_ROOTS.json','NII_EXPECTED_IMPORTS.jsonl']+(['NII_POOL_ROOTS.json'] if target.startswith('pool') else [])
+ sources=['NII_generated/NII_ProofDriver.lean','NII_generated/NII_Driver.lean','NII_batch.py','NII_AUDIT_ROOTS.json','NII_AUDIT_MODULES.json','NII_EXPECTED_IMPORTS.jsonl']+(['NII_POOL_ROOTS.json'] if target.startswith('pool') else [])
  for n in sources:files[n]=(E/Path(n).name).read_text()
  command=['python3','NII_batch.py',target]
 else:raise ValueError(kind)
@@ -58,7 +58,7 @@ for n in ['NFA_WALKER.c','NFA_MemoryLimit.c']:
 x=json.loads((b/{(a+'.json')!r}).read_text());roots=x['env']['LEAN_PATH'].split(':');pins={{}}
 modules=['NFA_WALKER','NFA_MemoryLimit','NEP_Planted','NEP_Mutations']
 if x['kind']=='lean':modules += re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M)
-elif x['kind']=='audit':modules += ['NII_COMBINED_IMPORT']
+elif x['kind']=='audit':modules += ['NII_DIAGNOSTIC_IMPORT','NHJ_COMBINED_IMPORT']
 rels=set()
 for root in roots:
  for stem in ['Aeneas','AeneasMeta']:
