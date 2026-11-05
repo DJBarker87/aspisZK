@@ -4,6 +4,8 @@ E=Path(__file__).resolve().parent;P=E.parent/'slice-d-entry2-20261106';D='progra
 x=json.loads((P/'NHD_NATIVE_INPUTS.json').read_text())
 x[D+'r1_pool_adapter_owned.rs']+='\n#[cfg(kani)]\n#[path="NHJ_owned.rs"]\nmod NHJ_owned;\n'
 x[D+'NHJ_owned.rs']=(E/'NHJ_owned.rs.txt').read_text()
+x[D+'r1_pool_adapter.rs']+='\n#[cfg(kani)]\n#[path="NHJ_ids.rs"]\nmod NHJ_ids;\n'
+x[D+'NHJ_ids.rs']=(E/'NHJ_ids.rs.txt').read_text()
 (E/'NHJ_NATIVE_INPUTS.json').write_text(json.dumps(x,indent=1)+'\n')
 pins=json.loads((P/'NHD_SOURCE_PINS.json').read_text());pins.update({n:hashlib.sha256(t.encode()).hexdigest() for n,t in x.items()})
 (E/'NHJ_SOURCE_PINS.json').write_text(json.dumps(pins,indent=1)+'\n')

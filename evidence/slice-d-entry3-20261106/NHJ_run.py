@@ -3,7 +3,7 @@ from pathlib import Path
 import subprocess,json,sys,time,hashlib,shlex,lzma,os
 E=Path(__file__).resolve().parent;P=E.parent/'slice-d-entry-20261105'
 B='/home/dombarker/project-offloads/codex-cx-slice-d-entry3-20261106';H='dombarker@100.108.41.90'
-a,kind,target=sys.argv[1:];archive_pattern=('NEP_proof'+str(int(target.split('stage')[1].split('_')[0])-1)+'_*_REACHABLE.txt') if kind=='audit' else ''; assert kind in ['kani','lean','inspect','audit'];assert a.startswith('NHJ_'+('K' if kind=='kani' else 'L'));assert 1<=int(a[-3:])<=(120 if kind=='kani' else 80);assert not (E/a).exists()
+a,kind,target=sys.argv[1:];archive_pattern=('NEP_proof'+str(int(target.split('stage')[1].split('_')[0])-1)+'_*_REACHABLE.txt') if kind=='audit' else ''; assert kind in ['kani','lean','inspect','audit','extract'];assert a.startswith('NHJ_'+('K' if kind=='kani' else 'E' if kind=='extract' else 'L'));assert 1<=int(a[-3:])<=(120 if kind=='kani' else 2 if kind=='extract' else 80);assert not (E/a).exists()
 def ssh(code,data=None,submitted=False):
  for retry in range(11):
   r=subprocess.run(['ssh','-o','ControlMaster=no','-o','ConnectTimeout=15',H,code],input=data,capture_output=True,text=True)
@@ -26,11 +26,13 @@ print(p.read_text() if p.exists() else 'MISSING');sys.exit(r.returncode)
   raise RuntimeError('Infrastructure STOP: missing admission')
  (E/(a+'-admission.json')).write_text(json.dumps(dict(exit=r.returncode,reservation=ad)))
  if r.returncode==0 and ad.get('allowed') is True:break
- if (r.returncode==78 or ad.get('allowed') is False) and retry<10:print('reservation wait',flush=True);time.sleep(180);continue
+ if (r.returncode==78 or ad.get('allowed') is False) and retry<10:print('reservation wait',flush=True);time.sleep(60);continue
  raise RuntimeError('Infrastructure STOP: admission')
 old=json.loads((P/'NGL_K037.json').read_text());env=dict(old['env']);env['TMPDIR']=B+'/NHJ_tmp'
 env['LEAN_PATH']=B+'/NHJ_objects:/home/dombarker/project-offloads/codex-cx-slice-d-entry-cache-20261104/NHD_exports_20261106:/home/dombarker/project-offloads/codex-cx-slice-d-entry-cache-20261104/NHD_NGK_exports_20261106:'+env['LEAN_PATH'].replace('/home/dombarker/project-offloads/codex-cx-slice-d-entry-20261105/NGL_objects','/home/dombarker/project-offloads/codex-cx-slice-d-entry-cache-20261104/NGL_exports_20261105')
 files={};sources=[]
+if kind=='kani' and int(a[-3:])>=43:
+ env.update(json.loads((E/'NHJ_DEVNET_CONFIG.json').read_text()))
 if kind=='kani':
  for n in ['NHJ_gate.py','NHJ_erasure.py','NHJ_SOURCE_PINS.json']:files[n]=(E/n).read_text()
  for n in ['NGL_FROZEN_SOURCE_PINS.json','NGL_ZERO_SOURCE_ERASURE.json','NGL_CONTRACT_ANNOTATIONS.json']:files[n]=(P/n).read_text()
@@ -42,6 +44,9 @@ if kind=='kani':
  native[native.index('--manifest-path')+1]=B+'/NHJ_src/programs/r1-cost-probe/Cargo.toml'
  native[native.index('--features')+1]='pool-adapter,private-leaf-salts'
  cfg=dict(native_command=native,root_package='aspis-r1-cost-probe-program')
+elif kind=='extract':
+ files['NHJ_extract.py']=(E/'NHJ_extract.py').read_text();files['NHJ_snapshot_ref.rs']=(E/'NHJ_snapshot_ref.rs.txt').read_text()
+ sources=list(files);command=['python3','NHJ_extract.py',a+'.json'];cfg={}
 elif kind=='inspect':
  files['NHJ_rodata.py']=(E/'NHJ_rodata.py').read_text();sources=['NHJ_rodata.py'];command=['python3','NHJ_rodata.py'];cfg={}
 elif kind=='audit':
@@ -57,6 +62,7 @@ r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});files=json.loads({json.dumps(files)!r})
 (b/'NHJ_native').mkdir(exist_ok=True)
+if {kind!r}=='lean':(b/'NHJ_objects'/{target.replace('.','/')!r}).parent.mkdir(parents=True,exist_ok=True)
 if {kind!r}=='audit':
  import shutil
  for name in ['NFA_WALKER.c','NFA_MemoryLimit.c']:
@@ -87,6 +93,8 @@ r=ssh('python3',f'''from pathlib import Path
 import json
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
 names += [str(p.relative_to(b)) for pat in ['-graph*','-source*','-lock*','-erasure*'] for p in b.glob(a+pat)]
+if {kind!r}=='extract':
+ names += [str(p.relative_to(b)) for p in (b/'NHJ_extracted'/{target!r}).rglob('*') if p.is_file()]+[a+'-extraction-pins.json']+([a+'.llbc'] if (b/(a+'.llbc')).exists() else [])
 if {kind!r}=='inspect':names+=['NHJ_RODATA.json']
 if {kind!r}=='audit':
  names += [str(p.relative_to(b)) for p in (b/{target!r}).rglob('*') if p.is_file()]
@@ -97,7 +105,7 @@ print(json.dumps({{n:(b/n).read_text() for n in names}}))
 out=json.loads(r.stdout)
 for n,t in out.items():
  p=E/n;p.parent.mkdir(parents=True,exist_ok=True);data=t.encode()
- if n.endswith('.log') or n.endswith('_REACHABLE.txt'):
+ if n.endswith('.log') or n.endswith('_REACHABLE.txt') or n.endswith('.llbc'):
   (E/(n+'.sha256')).write_text(hashlib.sha256(data).hexdigest()+'\n');(E/(n+'.xz')).write_bytes(lzma.compress(data))
  else:p.write_bytes(data)
 assert a+'/receipt.json' in out,'Missing receipt; do not resubmit'

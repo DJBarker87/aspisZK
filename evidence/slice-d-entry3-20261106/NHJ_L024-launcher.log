@@ -1,0 +1,34 @@
+{"attempt": "NHJ_L024", "exit_status": 0, "wall_seconds": 3.390276802936569, "peak_rss_kib": "5877176", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.alloc.slice.Slice.to_vec : {T : Type} →
+  Aeneas.Std.core.clone.Clone T → Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec T) :=
+fun {T} cloneInst s => Aeneas.Std.Slice.clone cloneInst.clone s
+@[reducible] def Aeneas.Std.core.clone.CloneU8 : Aeneas.Std.core.clone.Clone Aeneas.Std.U8 :=
+{ clone := Aeneas.Std.liftFun1 Aeneas.Std.core.clone.impls.CloneU8.clone }
+def Aeneas.Std.Slice.clone : {T : Type} →
+  (T → Aeneas.Std.Result T) → Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.Slice T) :=
+fun {T} clone s => do
+  let s' ← Aeneas.Std.List.clone clone ↑s
+  Aeneas.Std.Result.ok ⟨↑s', ⋯⟩
+@[reducible] def Aeneas.Std.core.clone.impls.CloneU8.clone : Aeneas.Std.U8 →
+...
+def Aeneas.Std.alloc.slice.Slice.to_vec : {T : Type} →
+  Aeneas.Std.core.clone.Clone T → Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec T) :=
+fun {T} cloneInst s => Aeneas.Std.Slice.clone cloneInst.clone s
+@[reducible] def Aeneas.Std.core.clone.CloneU8 : Aeneas.Std.core.clone.Clone Aeneas.Std.U8 :=
+{ clone := Aeneas.Std.liftFun1 Aeneas.Std.core.clone.impls.CloneU8.clone }
+def Aeneas.Std.Slice.clone : {T : Type} →
+  (T → Aeneas.Std.Result T) → Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.Slice T) :=
+fun {T} clone s => do
+  let s' ← Aeneas.Std.List.clone clone ↑s
+  Aeneas.Std.Result.ok ⟨↑s', ⋯⟩
+@[reducible] def Aeneas.Std.core.clone.impls.CloneU8.clone : Aeneas.Std.U8 → Aeneas.Std.U8 :=
+fun x => x
+def Aeneas.Std.List.clone.{u_1} : {α : Type u_1} →
+  (α → Aeneas.Std.Result α) → (l : List α) → Aeneas.Std.Result { l' // l'.length = l.length } :=
+fun {α} clone l =>
+  match h : List.mapM clone l with
+  | Aeneas.Std.Result.ok v => Aeneas.Std.Result.ok ⟨v, ⋯⟩
+  | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+  | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+
+Running as unit: run-r20e43f7fb88d4bf59c97662293425b6c.scope; invocation ID: e5b62c75a5cc41a18fd681cbee004c4c

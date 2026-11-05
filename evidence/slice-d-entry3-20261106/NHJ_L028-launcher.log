@@ -1,0 +1,44 @@
+{"attempt": "NHJ_L028", "exit_status": 1, "wall_seconds": 3.619882735889405, "peak_rss_kib": "5874560", "swaps": "0", "print_axioms": ["'NHJ_StdCopy.map_bytes' depends on axioms: [sorryAx]", "'NHJ_StdCopy.to_vec_exact' depends on axioms: [propext, sorryAx, Quot.sound]", "'NHJ_StdCopy.length_law' depends on axioms: [propext, sorryAx, Quot.sound]"]}
+NHJ_generated/NHJ_StdCopy.lean:11:17: error: unsolved goals
+case cons
+x : U8
+xs : List U8
+ih : List.mapM (fun x => ok x) xs = ok xs
+⊢ (do
+      let __do_lift ← ok x
+      let __do_lift_1 ← ok xs
+      pure (__do_lift :: __do_lift_1)) =
+    ok (x :: xs)
+NHJ_generated/NHJ_StdCopy.lean:12:19: error: unexpected identifier; expected command
+NHJ_generated/NHJ_StdCopy.lean:18:2: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source o
+...
+NHJ_generated/NHJ_StdCopy.lean:11:17: error: unsolved goals
+case cons
+x : U8
+xs : List U8
+ih : List.mapM (fun x => ok x) xs = ok xs
+⊢ (do
+      let __do_lift ← ok x
+      let __do_lift_1 ← ok xs
+      pure (__do_lift :: __do_lift_1)) =
+    ok (x :: xs)
+NHJ_generated/NHJ_StdCopy.lean:12:19: error: unexpected identifier; expected command
+NHJ_generated/NHJ_StdCopy.lean:18:2: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    bytes
+  has type
+    Bytes
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑bytes
+'NHJ_StdCopy.map_bytes' depends on axioms: [sorryAx]
+'NHJ_StdCopy.to_vec_exact' depends on axioms: [propext, sorryAx, Quot.sound]
+'NHJ_StdCopy.length_law' depends on axioms: [propext, sorryAx, Quot.sound]
+
+Running as unit: run-r0847b53118ec46018a0d4c21fdeee2cf.scope; invocation ID: 3f80039d208a4cdfb3676f878ed36184

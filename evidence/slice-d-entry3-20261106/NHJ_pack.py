@@ -3,7 +3,7 @@ from pathlib import Path
 import json,lzma,hashlib,shutil,sys
 E=Path(__file__).resolve().parent;M=E/'NHJ_INPUTS.json';index=json.loads(M.read_text()) if M.exists() else dict(objects={},attempts={})
 sha=lambda b:hashlib.sha256(b).hexdigest();check='--check' in sys.argv
-for p in sorted(E.glob('NHJ_[KL]???/receipt.json')):
+for p in sorted(E.glob('NHJ_[KLE]???/receipt.json')):
  r=json.loads(p.read_text());a=r['attempt'];mapping=index['attempts'].setdefault(a,{})
  for n,h in r['source_hashes'].items():
   s=p.parent/'sources'/n

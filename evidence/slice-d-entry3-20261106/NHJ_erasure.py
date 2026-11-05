@@ -11,7 +11,7 @@ def erase(n,s,zero):
   prefix='#![cfg_attr(kani,feature(allocator_api))]\n'
   if s.startswith(prefix):s=s[len(prefix):]
  # Only our exact, known sidecar declarations are erased.
- for module in ['NHJ_owned','NHD_meta_calibration','NHD_prefix','NHD_ids','NHD_distinct','NHD_snapshot','NHD_error','NHD_calibration','NHD_owned','NGL_entry','NGL_adapter','NGL_owned']:
+ for module in ['NHJ_ids','NHJ_owned','NHD_meta_calibration','NHD_prefix','NHD_ids','NHD_distinct','NHD_snapshot','NHD_error','NHD_calibration','NHD_owned','NGL_entry','NGL_adapter','NGL_owned']:
   suffix='\n#[cfg(kani)]\n#[path="'+module+'.rs"]\nmod '+module+';\n'
   if s.endswith(suffix):s=s[:-len(suffix)]
  if n==P+'r1_pool_adapter_owned.rs' and zero['instrumented_body'] in s:
