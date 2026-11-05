@@ -1,4 +1,5 @@
 import NHZ_NativeAssociation
+import NFS_CallerDomains
 import NFS_QueryLoopRoot
 set_option autoImplicit false
 noncomputable section
@@ -19,7 +20,7 @@ def pureCall {A : Type} (r : Result A) : Code Unit := .step r (fun _ => .done ()
 installation. No digest-bearing constructor is introduced into this alphabet.
 The native interpretation of the pureCall boundary is audited separately. -/
 def eventCode (base : Ops) (e : Event) : Code Unit :=
- let ops := NFS_QueryOps.installed base
+ let ops := NFS_CallerDomains.ops base
  match e with
  | .opening proof i => pureCall (ops.op11 proof i)
  | .dots q g => pureCall (ops.op20 q g)
@@ -35,6 +36,13 @@ def eventCode (base : Ops) (e : Event) : Code Unit :=
  | .subtract a b => pureCall (ops.op6 a b)
  | .accumulate p a node value pending =>
      pureCall (verifier.accumulate_batched_with_node ops p a node value pending)
+
+/-- Use NFS's complete selection, so no arbitrary callback survives this
+model interpretation. Native effect provenance is still a separate claim. -/
+theorem event_seed_independent (first second : Ops) (event : Event) :
+ eventCode first event=eventCode second event := by
+ unfold eventCode
+ rw [NFS_CallerDomains.no_seed first second]
 
 theorem event_no_reads (base : Ops) (event : Event) : NoReads (eventCode base event) := by
  cases event <;> exact .step _ _ (fun _ => .done ())
@@ -84,6 +92,7 @@ theorem events_packet (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest)
  obtain ⟨out,t⟩ := no_reads_trace (events_no_reads base events) hashv
  exact ⟨out,.leaf t⟩
 
+#print axioms event_seed_independent
 #print axioms event_no_reads
 #print axioms no_reads_trace
 #print axioms no_reads_frame
