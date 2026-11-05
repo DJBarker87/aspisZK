@@ -1,0 +1,20 @@
+--- retained/NIE_batch.py
++++ NIK_batch.py
+@@ -1,12 +1,12 @@
+ """Each native child runs sequentially and has independent time/RSS/axiom receipt."""
+ from pathlib import Path
+ import subprocess,json,time,hashlib,re,sys
+-B=Path.cwd();mode=sys.argv[1];E=B/'NIE_audit'/mode;E.mkdir(parents=True,exist_ok=True)
+-if mode.startswith('inventory-'):jobs=[(mode,['NIE_native/NIE_InventoryDriver',mode.split('-')[1]])]
+-elif mode in ['poolfixtures','poolroots','poolscan']:jobs=[('scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0',['NIE_native/'+('NIE_PoolDriver' if mode=='poolscan' else 'NIE_PoolProofDriver'), 'scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0'])]
+-elif mode in ['fixtures','scan']:jobs=[(mode,['NIE_native/'+('NIE_Driver' if mode=='scan' else 'NIE_ProofDriver'),mode])]
++B=Path.cwd();mode=sys.argv[1];E=B/'NIK_audit'/mode;E.mkdir(parents=True,exist_ok=True)
++if mode.startswith('inventory-'):jobs=[(mode,['NIK_native/NIK_InventoryDriver',mode.split('-')[1]])]
++elif mode in ['poolfixtures','poolroots','poolscan']:jobs=[('scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0',['NIK_native/'+('NIK_PoolDriver' if mode=='poolscan' else 'NIK_PoolProofDriver'), 'scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0'])]
++elif mode in ['fixtures','scan']:jobs=[(mode,['NIK_native/'+('NIK_Driver' if mode=='scan' else 'NIK_ProofDriver'),mode])]
+ else:
+- batch=int(mode.removeprefix('batch'));groups=json.loads((B/'NIE_AUDIT_ROOTS.json').read_text())['groups'];jobs=[('proof'+str(i),['NIE_native/NIE_ProofDriver','proof'+str(i)]) for i in range(batch,min(batch+1,len(groups)))];assert jobs
++ batch=int(mode.removeprefix('batch'));groups=json.loads((B/'NIK_AUDIT_ROOTS.json').read_text())['groups'];jobs=[('proof'+str(i),['NIK_native/NIK_ProofDriver','proof'+str(i)]) for i in range(batch,min(batch+1,len(groups)))];assert jobs
+ for name,command in jobs:
+  start=time.monotonic()
+  with (E/(name+'.log')).open('w') as out:r=subprocess.run(['/usr/bin/time','-v','-o',str(E/(name+'.time')),*command],stdout=out,stderr=subprocess.STDOUT)
