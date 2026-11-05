@@ -12,10 +12,10 @@ def historical(old):
         files[name]=raw.decode()
     for name,h in json.loads((p/old/'receipt.json').read_text())['source_hashes'].items():assert sha(files[name].encode())==h
     return x,cfg,files
-def run(a,old):
+def run(a,old,prepared=None):
     assert a.startswith('NIS_K') and 1<=int(a[-3:])<=120
     assert not (E/a).exists()
-    x,original,files=historical(old)
+    x,original,files=historical(old) if prepared is None else prepared
     oldB=str(Path(x['native_command'][x['native_command'].index('--manifest-path')+1]).parents[3])
     # Explicit known workspace root, not guessed from crate nesting.
     oldB='/home/dombarker/project-offloads/'+('codex-cx-slice-d-entry5-20261107' if old.startswith('NIJ_') else 'codex-cx-slice-d-entry4-20261106')
@@ -67,10 +67,10 @@ print(json.dumps({{str(p.relative_to(b)):p.read_text() for p in paths}}))
         else:p.write_text(t)
     rc=json.loads(out[a+'/receipt.json'])
     with (E/'NIS_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(rc)+'\n')
-    expected=json.loads((E.parent/('slice-d-entry5-20261107' if old.startswith('NIJ_') else 'slice-d-entry4-20261106')/old/'receipt.json').read_text())['exit_status']
-    summary=dict(attempt=a,original=old,exit=rc['exit_status'],expected=expected,wall=rc['wall_seconds'],rss=rc['peak_rss_kib'],same_verdict=expected==rc['exit_status'])
+    expected=json.loads((E.parent/('slice-d-entry5-20261107' if old.startswith('NIJ_') else 'slice-d-entry4-20261106')/old/'receipt.json').read_text())['exit_status'] if prepared is None else None
+    summary=dict(attempt=a,original=old,exit=rc['exit_status'],expected=expected,wall=rc['wall_seconds'],rss=rc['peak_rss_kib'],same_verdict=expected==rc['exit_status'] if expected is not None else None)
     with (E/'NIS_RERUN_RESULTS.jsonl').open('a') as f:f.write(json.dumps(summary)+'\n')
     print(json.dumps(summary),flush=True)
-    if expected!=rc['exit_status']:raise RuntimeError('NIS-F1: historical verdict changed; preserve finding, do not reconcile')
+    if expected is not None and expected!=rc['exit_status']:raise RuntimeError('NIS-F1: historical verdict changed; preserve finding, do not reconcile')
     return rc
 if __name__=='__main__':run(*sys.argv[1:])
