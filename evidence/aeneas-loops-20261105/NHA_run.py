@@ -33,6 +33,9 @@ print(p.read_text() if p.exists() else 'MISSING');sys.exit(r.returncode)
 # Upload only owned configuration / source inputs, after admission.
 files={a+'.json':json.dumps(cfg)}
 for name in cfg.pop('upload',[]):files[name]=(E/name).read_text()
+if cfg.get('reconstruct_scratch'):
+ payload=subprocess.check_output([sys.executable,str(E/'NHA_prepare_outline.py')],text=True)
+ files.update({'NHA_scratch/'+k:v for k,v in json.loads(payload).items()})
 r=ssh('python3',f'''from pathlib import Path
 import json,shutil
 b=Path({B!r});files=json.loads({json.dumps(files)!r})

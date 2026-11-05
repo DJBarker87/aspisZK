@@ -1,0 +1,79 @@
+use crate::transcript::QuerySampleError;
+const QUERY_COUNT:usize=22; const QUERY_BOUND:u32=1<<18; const QUERY_MAX_DRAWS:usize=64;
+fn block_rank(block: &[u8; 32]) -> Rank {
+    core::array::from_fn(|i| {
+        let j = 4 * i;
+        u32::from_le_bytes([block[j], block[j + 1], block[j + 2], block[j + 3]])
+    })
+}
+fn query_words(block: &[u8; 32]) -> [u32; 8] {
+    block_rank(block).map(|word| word & (QUERY_BOUND - 1))
+}
+#[derive(Default)]
+struct QueryScan {
+    accepted: [u32; QUERY_COUNT],
+    accepted_len: usize,
+    draws: usize,
+}
+
+impl QueryScan {
+    /// Checks before each word, with no check after the last word. In
+    /// particular, success on word 8 is detected in the next block.
+    fn scan(&mut self, block: &[u8; 32]) -> bool {
+        for candidate in query_words(block) {
+            if self.accepted_len == QUERY_COUNT || self.draws == QUERY_MAX_DRAWS {
+                return true;
+            }
+            self.draws += 1;
+            if !self.accepted[..self.accepted_len].contains(&candidate) {
+                self.accepted[self.accepted_len] = candidate;
+                self.accepted_len += 1;
+            }
+        }
+        false
+    }
+
+    fn finish(self) -> Result<[u32; QUERY_COUNT], QuerySampleError> {
+        if self.accepted_len == QUERY_COUNT {
+            Ok(self.accepted)
+        } else {
+            Err(QuerySampleError::DrawLimitExhausted {
+                accepted: self.accepted_len,
+                max_draws: QUERY_MAX_DRAWS,
+            })
+        }
+    }
+}
+
+pub fn NHA_original_queries(
+    blocks: &[[u8; 32]; 8],
+    advances: &[[u8; 32]; 8],
+) -> Result<([u32; QUERY_COUNT], [u8; 32]), QuerySampleError> {
+    let mut scan = QueryScan::default();
+    let mut state = advances[7];
+    for k in 0..8 {
+        if scan.scan(&blocks[k]) {
+            state = advances[k];
+            break;
+        }
+    }
+    Ok((scan.finish()?, state))
+}
+fn NHA_blocks(mut scan:QueryScan,mut state:[u8;32],blocks:&[[u8;32];8],advances:&[[u8;32];8])->(QueryScan,[u8;32]) {
+    for k in 0..8 {
+        if scan.scan(&blocks[k]) {
+            state = advances[k];
+            break;
+        }
+    }
+    (scan,state)
+}
+pub fn NHA_outlined_queries(
+    blocks: &[[u8; 32]; 8],
+    advances: &[[u8; 32]; 8],
+) -> Result<([u32; QUERY_COUNT], [u8; 32]), QuerySampleError> {
+    let mut scan = QueryScan::default();
+    let mut state = advances[7];
+    (scan,state) = NHA_blocks(scan,state,blocks,advances);
+    Ok((scan.finish()?, state))
+}
