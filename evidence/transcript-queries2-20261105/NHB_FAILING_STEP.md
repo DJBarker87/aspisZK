@@ -11,3 +11,11 @@ CBMC timeout90s, scope exit1, wall97.627s, process peak6349216KiB, swap0.
 No credit and no unchanged retry. Replacement: length-specific contracts for
 all23 possible prefix lengths with a straight scalar reference disjunction.
 This is a tool limit, not a source/model schedule mismatch.
+
+L003: remaining symmetry side condition in reference_eq; corrected by deriving
+x!=y explicitly from y!=x. L004 accepts both NHB_Membership top theorems with
+standard axioms only. Failed L002/L003 outputs are retained and excluded.
+K002: length0 domain with variable slice bound also CBMC timeout90s (exit1,
+wall97.751s, process6402712KiB, swap0). Not retried unchanged. K003 replaces
+the bound by the domain's literal and installs the prescribed KMX copy stub
+annotation. This is a changed reduction shape, with no cap/time increase.
