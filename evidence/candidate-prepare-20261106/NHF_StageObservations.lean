@@ -3,7 +3,7 @@ set_option autoImplicit false
 noncomputable section
 namespace AspisR1.NHF_StageObservations
 open Aeneas Aeneas.Std Result NGV_ByteWindow
-/-- Relative scalar source window used by the native local-record cuts. -/
+/-- Relative scalar source window used by the native index-record cuts. -/
 def sourceIndex (r cell : Nat) : Option Nat :=
  if cell<5 then some cell else if r<14 then some cell else
  if (cell-5)%32<16 then some (5+(cell-5)/32*16+(cell-5)%32) else none
@@ -11,12 +11,12 @@ def sourceIndex (r cell : Nat) : Option Nat :=
 def rowByte (input : Slice U8) (r cell : Nat) : U8 :=
  match sourceIndex r cell with
  | none => 0#u8
- | some local => input.val[NGD_SemanticSchedule.src r+local]?.getD 0#u8
+ | some index => input.val[NGD_SemanticSchedule.src r+index]?.getD 0#u8
 
 /-- The selected byte index lies in the SAME framed source field. -/
-theorem source_domain (r cell local : Nat) (live : r<27)
+theorem source_domain (r cell index : Nat) (live : r<27)
  (cellBound : cell<5+NFU_PacketDomains.payloadSize r)
- (selected : sourceIndex r cell=some local) : local<5+NGD_SemanticSchedule.stored r := by
+ (selected : sourceIndex r cell=some index) : index<5+NGD_SemanticSchedule.stored r := by
  unfold sourceIndex at selected
  split at selected
  · cases selected
@@ -42,7 +42,6 @@ theorem payload (input : Slice U8) (r j : Nat) (live : r<27)
  simp only [if_neg atLeast,back]
  by_cases low:r<14
  · simp only [NGV_SemanticValues.payloadByte,if_pos low]
-   simp only [Option.some.injEq]
    congr 2 <;> omega
  · simp only [NGV_SemanticValues.payloadByte,if_neg low]
    unfold NFU_Retarget.LPl_A.Expand.byte
@@ -55,14 +54,14 @@ theorem payload (input : Slice U8) (r j : Nat) (live : r<27)
    · rfl
 /-- The caller's exact7015-byte original proof window supplies that scalar
 byte; it is never an independently selected buffer or an assumed output. -/
-theorem original_byte (proof : Slice U8) (r cell local : Nat)
- (live : r<27) (selected : sourceIndex r cell=some local)
+theorem original_byte (proof : Slice U8) (r cell index : Nat)
+ (live : r<27) (selected : sourceIndex r cell=some index)
  (cellBound : cell<5+NFU_PacketDomains.payloadSize r) :
  rowByte (select proof 16 7015) r cell =
- proof.val[16+NGD_SemanticSchedule.src r+local]?.getD 0#u8 := by
- have localBound:=source_domain r cell local live cellBound selected
+ proof.val[16+NGD_SemanticSchedule.src r+index]?.getD 0#u8 := by
+ have localBound:=source_domain r cell index live cellBound selected
  have bounds:=NGD_SemanticSchedule.windows r live
- have within : NGD_SemanticSchedule.src r+local<7015 := by omega
+ have within : NGD_SemanticSchedule.src r+index<7015 := by omega
  simp only [rowByte,selected,select,List.getElem?_take,if_pos within,List.getElem?_drop]
  congr 2 <;> omega
 

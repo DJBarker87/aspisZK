@@ -2,11 +2,11 @@ import NHF_SegmentedFrame
 set_option autoImplicit false
 namespace AspisR1.NHF_ScalarWindow
 open Aeneas Aeneas.Std
-/-- Physical field layout's value interpretation: one native typed u8 read
+/-- Physical body layout's value interpretation: one native typed u8 read
 from the SAME complete arbitrary proof. No sparse/zero outside bytes. -/
-theorem read (prefix field suffix : List U8) (i : Nat) (inside : i<field.length) :
- (prefix++field++suffix)[prefix.length+i]?=field[i]? := by
- have middle : ((prefix++field++suffix).drop prefix.length).take field.length=field := by
+theorem read (head body suffix : List U8) (i : Nat) (inside : i<body.length) :
+ (head++body++suffix)[head.length+i]?=body[i]? := by
+ have middle : ((head++body++suffix).drop head.length).take body.length=body := by
    rw [List.append_assoc,List.drop_left,List.take_left]
  have same:=congrArg (fun xs : List U8=>xs[i]?) middle
  simpa only [List.getElem?_take,if_pos inside,List.getElem?_drop] using same

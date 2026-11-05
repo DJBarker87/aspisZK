@@ -1,0 +1,13 @@
+{
+    Ok(View {
+        variant: Variant::S2,
+        semantic,
+        y1,
+        inactive: E::from_le_bytes(&proof[compact::OFF_INACTIVE..compact::OFF_ROUND0]).ok_or(Error::Parse)?,
+        round0: &proof[compact::OFF_ROUND0..compact::OFF_FOLDED_ROOT],
+        folded_root: Some(proof[compact::OFF_FOLDED_ROOT..compact::OFF_ROUND1].try_into().unwrap()),
+        round1: &proof[compact::OFF_ROUND1..compact::OFF_FINAL],
+        final_message: &proof[compact::OFF_FINAL..compact::OFF_OPENINGS],
+        query_bytes: &[],
+    })
+}
