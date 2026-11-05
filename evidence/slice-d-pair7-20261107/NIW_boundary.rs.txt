@@ -68,5 +68,8 @@ fn new_owner_boundary(){
  let mut l=NewLog{reply:Some(w),error:if kani::any(){Some(err(kani::any()))}else{None},calls:0};let mut out=new_boundary(&mut l);
  if cfg!(NIW_corrupt){match &mut out{Ok(w)=>{if kind==0{w.factors[row][digit%5][col]=K::ZERO;}else if kind==1{w.points[row%3][digit]=K::ZERO;}else{w.extra[col%2]=K::ZERO;}},Err(_)=>{let w=l.reply.as_mut().unwrap();if kind==0{w.factors[row][digit%5][col]=K::ZERO;}else if kind==1{w.points[row%3][digit]=K::ZERO;}else{w.extra[col%2]=K::ZERO;}}};}
  assert!(l.calls==1);
+ // K007's mutation-based control timed out; isolate only the selected payload
+ // postcondition, inverted, without rewriting the moved allocation.
+ if cfg!(NIW_mask_wrong){match out{Ok(w)=>assert!(payload(&w,kind,row,digit,col)[limb]!=expected[limb]),Err(_)=>assert!(payload(l.reply.as_ref().unwrap(),kind,row,digit,col)[limb]!=expected[limb])};return;}
  match out{Ok(w)=>{assert!(l.error.is_none()&&l.reply.is_none()&&&*w as *const Weights==owner&&w.variant==Variant::S2);assert!(payload(&w,kind,row,digit,col)[limb]==expected[limb]);},Err(e)=>{assert!(l.error.map(code)==Some(code(e)));let w=l.reply.as_ref().unwrap();assert!(&**w as *const Weights==owner&&w.variant==Variant::S2);assert!(payload(w,kind,row,digit,col)[limb]==expected[limb]);}}
 }
