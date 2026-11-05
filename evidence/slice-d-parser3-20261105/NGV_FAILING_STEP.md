@@ -10,3 +10,5 @@ L018: parser substitution using broad congr reached deterministic heartbeat exha
 L022: dependent match in validator totality required simp-only normalization before selecting the bounded error branch; L023 passes.
 
 Audit setup's first reservation was allowed:false (projected reservations >55 GiB). No copy or build launched on that refusal. The own setup wrapper was repaired to preserve refusal receipts and implement 3-minute wait/retry, with unchanged reservation validation; retry 1 admitted. This is contention, not an infrastructure bypass.
+
+L029/L031: parser-at child substitution needed explicit Option/tuple and addition cuts; local elaboration failures, no credit. L032/L033 exposed no-progress normalization tactics; L034 instead states the bind source explicitly and rewrites the two checked additions, then passes. L030 was an own-input preparation failure: attempted dependent upload could not resolve the not-yet-built NGV_AtSubstitution object. No compiler launched; reservation and transport records retained. It is conservatively charged one support slot, never presented as a solver result. L035 full packet passes.

@@ -28,8 +28,12 @@ for a in audit['attempts']:
  r=J(E/a/'receipt.json');ad=J(E/(a+'-admission.json'))
  assert r['exit_status']==0 and ad['exit']==0 and ad['reservation']['allowed'] is True
  assert r['limits']=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'} and int(r['swaps'])==0
+successes=[J(p) for p in E.glob('NGV_L*/receipt.json') if J(p)['kind']=='lean' and J(p)['exit_status']==0]
 for f in closed['functions']:
- for p in f['sources']:assert sha(E/p['path'])==p['sha256']
+ for p in f['sources']:
+  assert sha(E/p['path'])==p['sha256']
+  key='NGV_generated/'+p['path']
+  assert any(r['source_hashes'].get(key)==p['sha256'] for r in successes),p['path']
  for pair in f['native_pairs']:
   for n,verdict in zip(pair,['SUCCESSFUL','FAILED']):
    p=R/'evidence/slice-d-parser-20261104'/n

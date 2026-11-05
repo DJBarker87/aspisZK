@@ -1,3 +1,5 @@
+import NGV_AtSubstitution
+import NGV_AtPacket
 import NGK_COMBINED_IMPORT
 import NGO_COMBINED_IMPORT
 import NGV_ParsePacket
@@ -32,3 +34,5 @@ import NGV_Monad
 #print axioms NGV_Payload.selected
 #print axioms NGV_Monad.bind_congr
 #print axioms NGV_Monad.bind_congr_on
+#print axioms NGV_AtSubstitution.congr
+#print axioms NGV_AtPacket.result
