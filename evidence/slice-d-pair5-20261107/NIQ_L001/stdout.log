@@ -1,0 +1,396 @@
+List.getElem?_drop.{u_1} {α : Type u_1} {xs : List α} {i j : ℕ} : (List.drop i xs)[j]? = xs[i + j]?
+List.getElem?_take.{u_1} {α : Type u_1} {l : List α} {i j : ℕ} : (List.take i l)[j]? = if j < i then l[j]? else none
+List.getElem?_take_of_lt.{u_1} {α : Type u_1} {l : List α} {i j : ℕ} (h : i < j) : (List.take j l)[i]? = l[i]?
+List.getElem?_eq_getElem.{u_1} {α : Type u_1} {l : List α} {i : ℕ} (h : i < l.length) : l[i]? = some l[i]
+List.getElem?_eq_some_iff.{u_1} {α : Type u_1} {i : ℕ} {a : α} {l : List α} :
+  l[i]? = some a ↔ ∃ (h : i < l.length), l[i] = a
+List.getElem?_eq_getElem.{u_1} {α : Type u_1} {l : List α} {i : ℕ} (h : i < l.length) : l[i]? = some l[i]
+NIQ_generated/NIQ_Inspect.lean:10:7: error(lean.unknownIdentifier): Unknown constant `FIn_Primitives.field`
+def AspisR1CurrentWide.Proof.finishField : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Usize → Aeneas.Std.Result AspisR1CurrentWide.Proof.FinishE :=
+fun bytes i => do
+  let value ←
+    AspisR1WeightsFieldCurrent.weights.field AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes bytes i
+  Aeneas.Std.Result.ok (AspisR1CurrentWide.Proof.recordWideToFinish value)
+def NHT_FinishRun.run : {W : Type} →
+  AspisR1.Port3_NativeFinishBody.Ops W →
+    AspisR1Stage2.verifier.View →
+      AspisR1Stage2.verifier.Prepared →
+        AspisR1Stage2.verifier.Accumulator →
+          Option (AspisR1Stage2.verifier.Phase → Aeneas.Std.Result Unit) →
+            Aeneas.Std.Slice NHE_DotBody.NQ →
+              NHT_FinishChain.PairPacket W →
+                AspisR1.NGM_FinishControl.E →
+                  AspisR1.NGM_FinishControl.E → Aeneas.Std.Result (AspisR1.NGM_FinishControl.R Unit) :=
+fun {W} ops v p a obs ws pair alpha0 alpha1 => do
+  let reply ← NHT_RoundPacket.packet v.round0 alpha0 p.claim
+  NHT_FinishRun.afterFirst ops v p a obs ws pair alpha1 reply
+def NHT_FinishRelationModel.PairLaw : {W : Type} →
+  AspisR1.Port3_NativeFinishBody.Ops W →
+    AspisR1Stage2.verifier.View →
+      AspisR1Stage2.verifier.Prepared →
+        W →
+          Aeneas.Std.Slice AspisR1.NGM_FinishControl.E →
+            Aeneas.Std.Result (AspisR1.NGM_FinishControl.R AspisR1.NGM_FinishControl.E) → Prop :=
+fun {W} ops v p weights alpha packet => ops.op2 weights alpha v.final_message p.kappa = packet
+theorem NHE_FieldPort.adopted : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (i : Aeneas.Std.Usize),
+  ↑i < 64 →
+    AspisR1.FIo_FieldBridge.map AspisR1.FIo_Install.fromE (FIo_Native.weights.field bytes i) =
+      AspisR1.FIn_Primitives.field bytes i :=
+fun bytes i small =>
+  have cap :=
+    Eq.mpr (id (congrArg (fun _a => 4096 < _a) (Aeneas.Std.UScalar.size_def Aeneas.Std.UScalarTy.Usize)))
+      (NHE_FieldPort.adopted._proof_1 i);
+  have hm :=
+    AspisR1.FIo_ScalarBridge.mul i 32#usize
+      (id (Decidable.byContradiction fun a => NHE_FieldPort.adopted._proof_2 i small cap a));
+  have ha :=
+    AspisR1.FIo_ScalarBridge.add i 1#usize
+      (id (Decidable.byContradiction fun a => NHE_FieldPort.adopted._proof_3 i small cap a));
+  have av :=
+    Eq.mpr (id (congrArg (fun _a => _a = ↑i + 1) (Aeneas.Std.Usize.wrapping_add_val_eq i 1#usize)))
+      (Eq.mpr
+        (id
+          (congrArg (fun _a => _a = ↑i + 1)
+            (Nat.mod_eq_of_lt (id (Decidable.byContradiction fun a => NHE_FieldPort.adopted._proof_3 i small cap a)))))
+        (Eq.refl (↑i + ↑1#usize)));
+  have hf :=
+    AspisR1.FIo_ScalarBridge.mul (i.wrapping_add 1#usize) 32#usize
+      (id
+        (Eq.mpr (id (congrArg (fun _a => _a * 32 < Aeneas.Std.UScalar.size Aeneas.Std.UScalarTy.Usize) av))
+          (Decidable.byContradiction fun a => NHE_FieldPort.adopted._proof_4 i small cap av a)));
+  id
+    (id
+      (id
+        (id
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  (AspisR1.FIo_FieldBridge.map AspisR1.FIo_Install.fromE do
+                      let i1 ← Aeneas.Std.lift (i.wrapping_mul 32#usize)
+                      let i2 ← Aeneas.Std.lift (i.wrapping_add 1#usize)
+                      let i3 ← Aeneas.Std.lift (i2.wrapping_mul 32#usize)
+                      let s ←
+                        Aeneas.Std.core.slice.index.Slice.index
+                            (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) bytes
+                            { start := i1, «end» := i3 }
+                      let o ← FIo_Native.aspis_core.field.wide_exact.WideExact.from_le_bytes s
+                      Aeneas.Std.core.option.Option.unwrap o) =
+                    do
+                    let x ←
+                      do
+                        let value ←
+                          do
+                            let i1 ← _a
+                            let i2 ← i + 1#usize
+                            let i3 ← i2 * 32#usize
+                            let s ←
+                              Aeneas.Std.core.slice.index.Slice.index
+                                  (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) bytes
+                                  { start := i1, «end» := i3 }
+                            let o ← AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes s
+                            Aeneas.Std.core.option.Option.unwrap o
+                        Aeneas.Std.Result.ok (AspisR1CurrentWide.Proof.recordWideToFinish value)
+                    Aeneas.Std.Result.ok (AspisR1.SAG_DotAdapter.toStageE x))
+                hm))
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    (AspisR1.FIo_FieldBridge.map AspisR1.FIo_Install.fromE do
+                        let i1 ← Aeneas.Std.lift (i.wrapping_mul 32#usize)
+                        let i2 ← Aeneas.Std.lift (i.wrapping_add 1#usize)
+                        let i3 ← Aeneas.Std.lift (i2.wrapping_mul 32#usize)
+                        let s ←
+                          Aeneas.Std.core.slice.index.Slice.index
+                              (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) bytes
+                              { start := i1, «end» := i3 }
+                        let o ← FIo_Native.aspis_core.field.wide_exact.WideExact.from_le_bytes s
+                        Aeneas.Std.core.option.Option.unwrap o) =
+                      do
+                      let x ←
+                        do
+                          let value ←
+                            do
+                              let i1 ← Aeneas.Std.Result.ok (Aeneas.Std.UScalar.wrapping_mul i 32#usize)
+                              let i2 ← _a
+                              let i3 ← i2 * 32#usize
+                              let s ←
+                                Aeneas.Std.core.slice.index.Slice.index
+                                    (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) bytes
+                                    { start := i1, «end» := i3 }
+                              let o ← AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes s
+                              Aeneas.Std.core.option.Option.unwrap o
+                          Aeneas.Std.Result.ok (AspisR1CurrentWide.Proof.recordWideToFinish value)
+                      Aeneas.Std.Result.ok (AspisR1.SAG_DotAdapter.toStageE x))
+                  ha))
+              (Eq.mpr
+                (id
+                  (congr
+                    (congrArg Eq
+                      (congrArg (AspisR1.FIo_FieldBridge.map AspisR1.FIo_Install.fromE)
+                        (Eq.trans
+                          (congrArg (bind (Aeneas.Std.Result.ok (i.wrapping_mul 32#usize)))
+                            (funext fun i1 =>
+                              Eq.trans
+                                (congrArg (bind (Aeneas.Std.Result.ok (i.wrapping_add 1#usize)))
+                                  (funext fun i2 =>
+                                    Aeneas.Std.bind_tc_ok (i2.wrapping_mul 32#usize) fun y => do
+                                      let s ←
+                                        Aeneas.Std.core.slice.index.Slice.index
+                                            (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) bytes
+                                            { start := i1, «end» := y }
+                                      let o ← FIo_Native.aspis_core.field.wide_exact.WideExact.from_le_bytes s
+                                      Aeneas.Std.core.option.Option.unwrap o))
+                                (Aeneas.Std.bind_tc_ok (i.wrapping_add 1#usize) fun y => do
+                                  let s ←
+                                    Aeneas.Std.core.slice.index.Slice.index
+                                        (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) bytes
+                                        { start := i1, «end» := y.wrapping_mul 32#usize }
+                                  let o ← FIo_Native.aspis_core.field.wide_exact.WideExact.from_le_bytes s
+                                  Aeneas.Std.core.option.Option.unwrap o)))
+                          (Aeneas.Std.bind_tc_ok (i.wrapping_mul 32#usize) fun y => do
+                            let s ←
+                              Aeneas.Std.core.slice.index.Slice.index
+                                  (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) bytes
+                                  { start := y, «end» := (i.wrapping_add 1#usize).wrapping_mul 32#usize }
+                            let o ← FIo_Native.aspis_core.field.wide_exact.WideExact.from_le_bytes s
+                            Aeneas.Std.core.option.Option.unwrap o))))
+                    (congrFun'
+                      (congrArg bind
+                        (congrFun'
+                          (congrArg bind
+                            (Eq.trans
+                              (congrArg (bind (Aeneas.Std.Result.ok (Aeneas.Std.UScalar.wrapping_mul i 32#usize)))
+                                (funext fun i1 =>
+                                  Aeneas.Std.bind_tc_ok (Aeneas.Std.UScalar.wrapping_add i 1#usize) fun y => do
+                                    let i3 ← y * 32#usize
+                                    let s ←
+                                      Aeneas.Std.core.slice.index.Slice.index
+                                          (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) bytes
+                                          { start := i1, «end» := i3 }
+                                    let o ← AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes s
+                                    Aeneas.Std.core.option.Option.unwrap o))
+                              (Aeneas.Std.bind_tc_ok (Aeneas.Std.UScalar.wrapping_mul i 32#usize) fun y => do
+                                let i3 ← Aeneas.Std.UScalar.wrapping_add i 1#usize * 32#usize
+                                let s ←
+                                  Aeneas.Std.core.slice.index.Slice.index
+                                      (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) bytes
+                                      { start := y, «end» := i3 }
+                                let o ← AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes s
+                                Aeneas.Std.core.option.Option.unwrap o)))
+                          fun value => Aeneas.Std.Result.ok (AspisR1CurrentWide.Proof.recordWideToFinish value)))
+                      fun x => Aeneas.Std.Result.ok (AspisR1.SAG_DotAdapter.toStageE x))))
+                (id
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          (AspisR1.FIo_FieldBridge.map AspisR1.FIo_Install.fromE do
+                              let s ←
+                                Aeneas.Std.core.slice.index.Slice.index
+                                    (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) bytes
+                                    { start := Aeneas.Std.UScalar.wrapping_mul i 32#usize,
+                                      «end» := (Aeneas.Std.UScalar.wrapping_add i 1#usize).wrapping_mul 32#usize }
+                              let o ← FIo_Native.aspis_core.field.wide_exact.WideExact.from_le_bytes s
+                              Aeneas.Std.core.option.Option.unwrap o) =
+                            do
+                            let x ←
+                              do
+                                let value ←
+                                  do
+                                    let i3 ← _a
+                                    let s ←
+                                      Aeneas.Std.core.slice.index.Slice.index
+                                          (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) bytes
+                                          { start := Aeneas.Std.UScalar.wrapping_mul i 32#usize, «end» := i3 }
+                                    let o ← AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes s
+                                    Aeneas.Std.core.option.Option.unwrap o
+                                Aeneas.Std.Result.ok (AspisR1CurrentWide.Proof.recordWideToFinish value)
+                            Aeneas.Std.Result.ok (AspisR1.SAG_DotAdapter.toStageE x))
+                        hf))
+                    (Eq.mpr
+                      (id
+                        (congr
+                          (congrArg Eq
+                            (Eq.trans
+                              (AspisR1.FIo_FieldBridge.map_bind AspisR1.FIo_Install.fromE
+                                (Aeneas.Std.core.slice.index.Slice.index
+                                  (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) bytes
+                                  { start := Aeneas.Std.UScalar.wrapping_mul i 32#usize,
+                                    «end» := (Aeneas.Std.UScalar.wrapping_add i 1#usize).wrapping_mul 32#usize })
+                                fun v => do
+                                let o ← FIo_Native.aspis_core.field.wide_exact.WideExact.from_le_bytes v
+                                Aeneas.Std.core.option.Option.unwrap o)
+                              (congrArg
+                                (bind
+                                  (Aeneas.Std.core.slice.index.Slice.index
+                                    (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) bytes
+                                    { start := Aeneas.Std.UScalar.wrapping_mul i 32#usize,
+                                      «end» := (Aeneas.Std.UScalar.wrapping_add i 1#usize).wrapping_mul 32#usize }))
+                                (funext fun v =>
+                                  AspisR1.FIo_FieldBridge.map_bind AspisR1.FIo_Install.fromE
+                                    (FIo_Native.aspis_core.field.wide_exact.WideExact.from_le_bytes v)
+                                    Aeneas.Std.core.option.Option.unwrap))))
+                          (Eq.trans
+                            (Eq.trans
+                              (congrFun'
+                                (congrArg bind
+                                  (Eq.trans
+                                    (Eq.trans
+                                      (congrFun'
+                                        (congrArg bind
+                                          (Aeneas.Std.bind_tc_ok
+                                            ((Aeneas.Std.UScalar.wrapping_add i 1#usize).wrapping_mul 32#usize) fun y =>
+                                            do
+                                            let s ←
+                                              Aeneas.Std.core.slice.index.Slice.index
+                                                  (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8)
+                                                  bytes
+                                                  { start := Aeneas.Std.UScalar.wrapping_mul i 32#usize, «end» := y }
+                                            let o ← AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes s
+                                            Aeneas.Std.core.option.Option.unwrap o))
+                                        fun value =>
+                                        Aeneas.Std.Result.ok (AspisR1CurrentWide.Proof.recordWideToFinish value))
+                                      (Aeneas.Std.bind_assoc_eq
+                                        (Aeneas.Std.core.slice.index.Slice.index
+                                          (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) bytes
+                                          { start := Aeneas.Std.UScalar.wrapping_mul i 32#usize,
+                                            «end» :=
+                                              (Aeneas.Std.UScalar.wrapping_add i 1#usize).wrapping_mul 32#usize })
+                                        (fun s => do
+                                          let o ← AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes s
+                                          Aeneas.Std.core.option.Option.unwrap o)
+                                        fun value =>
+                                        Aeneas.Std.Result.ok (AspisR1CurrentWide.Proof.recordWideToFinish value)))
+                                    (congrArg
+                                      (bind
+                                        (Aeneas.Std.core.slice.index.Slice.index
+                                          (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) bytes
+                                          { start := Aeneas.Std.UScalar.wrapping_mul i 32#usize,
+                                            «end» :=
+                                              (Aeneas.Std.UScalar.wrapping_add i 1#usize).wrapping_mul 32#usize }))
+                                      (funext fun x =>
+                                        Aeneas.Std.bind_assoc_eq
+                                          (AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes x)
+                                          (fun o => Aeneas.Std.core.option.Option.unwrap o) fun value =>
+                                          Aeneas.Std.Result.ok (AspisR1CurrentWide.Proof.recordWideToFinish value)))))
+                                fun x => Aeneas.Std.Result.ok (AspisR1.SAG_DotAdapter.toStageE x))
+                              (Aeneas.Std.bind_assoc_eq
+                                (Aeneas.Std.core.slice.index.Slice.index
+                                  (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) bytes
+                                  { start := Aeneas.Std.UScalar.wrapping_mul i 32#usize,
+                                    «end» := (Aeneas.Std.UScalar.wrapping_add i 1#usize).wrapping_mul 32#usize })
+                                (fun x => do
+                                  let x ← AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes x
+                                  let value ← Aeneas.Std.core.option.Option.unwrap x
+                                  Aeneas.Std.Result.ok (AspisR1CurrentWide.Proof.recordWideToFinish value))
+                                fun x => Aeneas.Std.Result.ok (AspisR1.SAG_DotAdapter.toStageE x)))
+                            (congrArg
+                              (bind
+                                (Aeneas.Std.core.slice.index.Slice.index
+                                  (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) bytes
+                                  { start := Aeneas.Std.UScalar.wrapping_mul i 32#usize,
+                                    «end» := (Aeneas.Std.UScalar.wrapping_add i 1#usize).wrapping_mul 32#usize }))
+                              (funext fun x =>
+                                Eq.trans
+                                  (Aeneas.Std.bind_assoc_eq
+                                    (AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes x)
+                                    (fun x => do
+                                      let value ← Aeneas.Std.core.option.Option.unwrap x
+                                      Aeneas.Std.Result.ok (AspisR1CurrentWide.Proof.recordWideToFinish value))
+                                    fun x => Aeneas.Std.Result.ok (AspisR1.SAG_DotAdapter.toStageE x))
+                                  (congrArg (bind (AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes x))
+                                    (funext fun x =>
+                                      Eq.trans
+                                        (Aeneas.Std.bind_assoc_eq (Aeneas.Std.core.option.Option.unwrap x)
+                                          (fun value =>
+                                            Aeneas.Std.Result.ok (AspisR1CurrentWide.Proof.recordWideToFinish value))
+                                          fun x => Aeneas.Std.Result.ok (AspisR1.SAG_DotAdapter.toStageE x))
+                                        (congrArg (bind (Aeneas.Std.core.option.Option.unwrap x))
+                                          (funext fun x =>
+                                            Aeneas.Std.bind_tc_ok (AspisR1CurrentWide.Proof.recordWideToFinish x)
+                                              fun y => Aeneas.Std.Result.ok (AspisR1.SAG_DotAdapter.toStageE y))))))))))
+                      ((fun {m} [Bind m] {α β} a a_1 e_a =>
+                          Eq.rec (motive := fun a_2 e_a => ∀ (a_3 a_4 : α → m β), a_3 = a_4 → a >>= a_3 = a_2 >>= a_4)
+                            (fun a_2 a_3 e_a => e_a ▸ Eq.refl (a >>= a_2)) e_a)
+                        (Aeneas.Std.core.slice.index.Slice.index
+                          (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) bytes
+                          { start := Aeneas.Std.UScalar.wrapping_mul i 32#usize,
+                            «end» := (Aeneas.Std.UScalar.wrapping_add i 1#usize).wrapping_mul 32#usize })
+                        (Aeneas.Std.core.slice.index.Slice.index
+                          (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) bytes
+                          { start := Aeneas.Std.UScalar.wrapping_mul i 32#usize,
+                            «end» := (Aeneas.Std.UScalar.wrapping_add i 1#usize).wrapping_mul 32#usize })
+                        (Eq.refl
+                          (Aeneas.Std.core.slice.index.Slice.index
+                            (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) bytes
+                            { start := Aeneas.Std.UScalar.wrapping_mul i 32#usize,
+                              «end» := (Aeneas.Std.UScalar.wrapping_add i 1#usize).wrapping_mul 32#usize }))
+                        (fun v => do
+                          let v ← FIo_Native.aspis_core.field.wide_exact.WideExact.from_le_bytes v
+                          AspisR1.FIo_FieldBridge.map AspisR1.FIo_Install.fromE
+                              (Aeneas.Std.core.option.Option.unwrap v))
+                        (fun x => do
+                          let x ← AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes x
+                          let x ← Aeneas.Std.core.option.Option.unwrap x
+                          Aeneas.Std.Result.ok
+                              (AspisR1.SAG_DotAdapter.toStageE (AspisR1CurrentWide.Proof.recordWideToFinish x)))
+                        (funext fun selected =>
+                          Eq.mp
+                            (congrFun'
+                              (congrArg Eq
+                                (AspisR1.FIo_FieldBridge.map_bind AspisR1.FIo_Install.fromE
+                                  (FIo_Native.aspis_core.field.wide_exact.WideExact.from_le_bytes selected)
+                                  Aeneas.Std.core.option.Option.unwrap))
+                              do
+                              let o ← AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes selected
+                              let x ← Aeneas.Std.core.option.Option.unwrap o
+                              Aeneas.Std.Result.ok
+                                  (AspisR1.SAG_DotAdapter.toStageE (AspisR1CurrentWide.Proof.recordWideToFinish x)))
+                            (NHE_FieldPort.decoder selected))))))))))))
+theorem NHT_FinishCaller.source : ∀ {W : Type} (ops : AspisR1.Port3_NativeFinishBody.Ops W)
+  (r : AspisR1.NP6_StdModel.Reservation) (v : AspisR1Stage2.verifier.View) (p : AspisR1Stage2.verifier.Prepared)
+  (a : AspisR1Stage2.verifier.Accumulator) (obs : Option (AspisR1Stage2.verifier.Phase → Aeneas.Std.Result Unit))
+  (alpha0 alpha1 : AspisR1.NGM_FinishControl.E),
+  p.alpha.index_usize 0#usize = Aeneas.Std.Result.ok alpha0 →
+    p.alpha.index_usize 1#usize = Aeneas.Std.Result.ok alpha1 →
+      AspisR1.LPi_FieldValues.canonE (AspisR1.FIo_Install.toE alpha0) →
+        AspisR1.LPi_FieldValues.canonE (AspisR1.FIo_Install.toE alpha1) →
+          ops.op6 p.variant = Aeneas.Std.Result.ok 2#usize →
+            ops.op5 v.round0 alpha0 p.claim 0#usize =
+                AspisR1Stage2.Stage2Finish.verifier.finishRelationRoundWithOps (AspisR1.IDa_Deployed.finish r) v.round0
+                  alpha0 p.claim 0#usize →
+              (∀ (claim : AspisR1Stage2.Stage2Finish.E),
+                  AspisR1.LPi_FieldValues.canonE (AspisR1.FIo_Install.toE claim) →
+                    ops.op5 v.round1 alpha1 claim 1#usize =
+                      AspisR1Stage2.Stage2Finish.verifier.finishRelationRoundWithOps (AspisR1.IDa_Deployed.finish r)
+                        v.round1 alpha1 claim 1#usize) →
+                AspisR1.NGM_FinishDomain.AccumulatorDomain a →
+                  ops.op4 v.final_message a.weights.deref =
+                      AspisR1.SAG_DotClosed.source v.final_message a.weights.deref →
+                    ∀ (newPacket : Aeneas.Std.Result (AspisR1.NGM_FinishControl.R W)),
+                      ops.op3 p.variant p.semantic_alpha p.z = newPacket →
+                        ∀ (pair : NHT_FinishChain.PairPacket W),
+                          (∀ (weights : W),
+                              ops.op3 p.variant p.semantic_alpha p.z =
+                                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok weights) →
+                                ∀ (alpha : Aeneas.Std.Slice AspisR1.NGM_FinishControl.E),
+                                  Aeneas.Std.core.array.Array.index
+                                        (Aeneas.Std.core.ops.index.IndexSlice
+                                          (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice
+                                            AspisR1.NGM_FinishControl.E))
+                                        p.alpha { «end» := 2#usize } =
+                                      Aeneas.Std.Result.ok alpha →
+                                    NHT_FinishRelationModel.PairLaw ops v p weights alpha
+                                      (pair weights alpha v.final_message p.kappa)) →
+                            AspisR1.Port3_NativeFinishBody.verifier.finish_relation ops v p a obs =
+                              NHT_FinishRun.run (NHT_FinishNewPacket.installed ops newPacket) v p a obs
+                                (NHQ_WeightPort.weights a.weights.deref) pair alpha0 alpha1 :=
+fun {W} ops r v p a obs alpha0 alpha1 index0 index1 ca0 ca1 folds native_round0 native_round1 accumulator native_dot
+    newPacket NHM_new pair NHM_pair =>
+  NHT_FinishComplete.source ops r v p a obs alpha0 alpha1 index0 index1 ca0 ca1 folds native_round0
+    (fun claim returned => native_round1 claim (NHT_RoundOutput.canonical v.round0 alpha0 p.claim claim ca0 returned))
+    (NHQ_WeightPort.weights a.weights.deref) (NHQ_FinishFrames.dot_width a accumulator)
+    (Eq.symm (NHQ_WeightPort.same a.weights.deref)) native_dot newPacket NHM_new pair NHM_pair
