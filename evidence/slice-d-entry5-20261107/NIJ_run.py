@@ -54,6 +54,8 @@ if kind=='kani':
  sources=list(files)+['NIJ_src/Cargo.lock']
  command=['python3','NIJ_gate.py',a+'.json']
  native=list(old['native_command']);native=[s.replace('/home/dombarker/project-offloads/codex-cx-slice-d-entry-20261105',B).replace('/NGL_src/','/NIJ_src/').replace('/NGL_target','/NIJ_target') for s in native]
+ native[native.index('--target-dir')+1]=B+'/NIJ_target'
+ assert native[native.index('--target-dir')+1].startswith(B+'/NIJ_')
  native[native.index('--harness')+1]=target.removeprefix('statement:')
  native[native.index('--manifest-path')+1]=B+'/NIJ_src/programs/r1-cost-probe/Cargo.toml'
  native[native.index('--features')+1]='pool-adapter,private-leaf-salts'

@@ -1,3 +1,5 @@
+> FINAL ADMISSION: zero new CLOSED rows. Three earlier candidates are WITHHELD by NIJ_NATIVE_ISOLATION.json; all120 native commands used predecessor NHY_target. Active-at194/196 additionally fail unchanged K-3 suspended-receipt admission. Historical pass descriptions below describe source/model evidence only and do not grant current row credit. See NIJ_WITHHELD_ARTIFACTS.json and NIJ_CLOSED.json.
+
 # NIJ stubs and domains
 
 | Stub family | Lean law | Domain / status |

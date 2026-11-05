@@ -1,3 +1,5 @@
+> FINAL ADMISSION: zero new CLOSED rows. Three earlier candidates are WITHHELD by NIJ_NATIVE_ISOLATION.json; all120 native commands used predecessor NHY_target. Active-at194/196 additionally fail unchanged K-3 suspended-receipt admission. Historical pass descriptions below describe source/model evidence only and do not grant current row credit. See NIJ_WITHHELD_ARTIFACTS.json and NIJ_CLOSED.json.
+
 # NIJ bridges — decoder stage
 
 TX2:202 decode_verifier_registry_entry_v2 CLOSED under(y)/(ai)/(ak): NIJ_ENTRY_ASSOCIATION.json. Every immutable valid source slice, all lengths/contents; no successful-header or validator premise. NIJ_K056/057 executes the complete exact frozen constructor on ORIGINAL320 bytes including the status call/first Err, observes every scalar and an arbitrary byte of every array. Retained header/window/argument/SSA Result packets are cited by SHA, never rerun. CLOSED status192 and validator207 have every u8/full typed-record domains. Source field/range/order checks and full Result/error/record ports join these SAME fields. NIJ_EntryModel.source proves all first errors; NIJ_EntryJoin.cohort selects NCX_Install.op34, preserves slots43/44.

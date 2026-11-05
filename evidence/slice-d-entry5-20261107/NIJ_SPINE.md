@@ -1,6 +1,8 @@
 # NIJ final entry spine
 
-Three newly CLOSED rows / two functions, after immutable source association and combined ax2/NFX validation: current entry decoder TX2:202; lib::error TX1:NGB001/TX2:211. Retained NHJ14 and NHY14 are separate inherited credit. On unchanged NHO599, the composed total is366 CLOSED /233 OPEN. **Zero complete TX1 or TX2 entry paths.**
+**Zero new admitted CLOSED rows; zero complete TX1/TX2 entry paths.** Three source/model/axiom-validated candidates (TX2:202 and lib::error TX1:NGB001/TX2:211) are WITHHELD by the added native target-isolation gate. All120 native configurations inherited predecessor NHY_target rather than an NIJ-owned target. Preserve the evidence; lead isolation review is required before any credit. Historical candidate artifacts are retained in NIJ_WITHHELD_ARTIFACTS.json. The unchanged baseline plus separately inherited NHJ14/NHY14 remains363 CLOSED /236 OPEN on NHO599.
+
+Active-at194/196 also remain OPEN: original NCF positives are K-3 SUSPENDED, and unchanged NFK denies their reuse. Standard-only Lean/source checks do not restore suspended native credit.
 
 ## Exact remaining path distance
 
@@ -29,8 +31,8 @@ TX1 has six OPEN spine rows, TX2 seven, in the displayed call order. This is a r
 |---|---|
 | snapshot TX1:343/TX2:239 | Inherited CLOSED under(y)/(ak), both SDK arms, SAME computed entry heap. No replay of passing shape. Three/seven physical wrapper joins still required. |
 | current registry decoder204 | Inherited NHY CLOSED, full256-byte domain; exact fields/first-error/validator/caller windows retained. |
-| current entry decoder202 | NIJ CLOSED: actual original320-byte constructor/status first-error plus inherited window/validator packets, universal parser and actual NCX op34/cohort; slots43/44 preserved. |
-| lib::error TX1:NGB001/TX2:211 | NIJ CLOSED all8 deployed Error labels; actual whole String writer/grow/drop, exact syscall bytes, calibrated literal Args metadata, cleanup frame. DebugLog quarantined and all timed-out shapes excluded. Shared error distance zero. |
+| current entry decoder202 | WITHHELD native isolation; source/model candidate only: actual original320-byte constructor/status first-error plus inherited window/validator packets, universal parser and actual NCX op34/cohort; slots43/44 preserved. |
+| lib::error TX1:NGB001/TX2:211 | WITHHELD native isolation; candidate all8 deployed Error labels; actual whole String writer/grow/drop, exact syscall bytes, calibrated literal Args metadata, cleanup frame. DebugLog quarantined and all timed-out shapes excluded. Both error occurrences remain OPEN until isolation review. |
 | active-at194/196 | OPEN. Native credit denied by unchanged NFK because NCF_K002/006 are K-3 SUSPENDED (STATIC_TOKEN). Source/model checks passed but cannot restore credit. Uncredited support: immutable NCF actual whole-body Bool contracts and inverse controls, coherent existing canonical model, selected CLOSED retirement193/195, complete typed receiver/u64 domain. Historical default feature run admitted only by exact reached feature-independent source/type/constant parity; no new run claimed. |
 | other registry guards/status/policy validators | NHY151,192,193,195,197..200,205,207,209 CLOSED by citation and hashes; no duplicate credit. |
 | require_zero checkpoint342 | Already CLOSED baseline. NIJ adds symbolic actual-loop induction/usize next-step association; no new row credit. |
