@@ -1,20 +1,23 @@
-# NIG TX2 pair cone — stage3 checkpoint
+# NIG TX2 pair cone
 
-Headline AspisR1.RPx_Deployed.deployed NOT ESTABLISHED. One new composed row CLOSED; no premise retirement. Exact domains/certificates: NIG_CLOSED.json and NIG_BRIDGES.md.
+AspisR1.RPx_Deployed.deployed NOT ESTABLISHED. One new composed row CLOSED. Model exports do not promote native rows. Exact domains and unresolved edges: NIG_CLOSED.json / NIG_EDGES.json.
 
-| Member | Row | Current status | Exact distance |
+| Member | Row | Status | Exact distance |
 | --- | --- | --- | --- |
-| filled | TX2:045 | CLOSED new | n64/QM31.ZERO; actual reserve, arbitrary initialized zero prefix and next cell, untouched initialized cells, same ptr/cap/len; full allocator Error/Ok law.24 native window pairs plus actual clone and KMX controls; finite Lean coverage/induction. |
-| factored_s2_libra_weights | TX2:133 | INHERITED CLOSED | NHX exact canonical ap0/ap1 E4 and extra Q2 domains retained. |
-| grouped_inactive_pair | TX2:135 | INHERITED CLOSED | S2, SAME canonical2048-byte message, canonical low E16; fallback outside packet. |
-| shared_partials | TX2:144 | INHERITED CLOSED | SAME canonical message and common Q16; source zero-init/sides/first Error/full reply retained. |
-| shared_high | TX2:143 | INHERITED CLOSED | SAME canonical partials/powers/factors, writes1/3 and omitted-slot frame. |
-| process_kind | TX2:139 | INHERITED CLOSED | Ordinary S2 kinds1/2/3/5/6, folds2/n64, canonical Factors/powers/message/scratch/parts. |
-| process_regular_kinds | TX2:140 | INHERITED CLOSED | Both guard values and exact kinds/error/order/frames; parent SAME guard association still needed. |
-| scalar_factor / tensor | TX2:130/131 | INHERITED CLOSED | NHI exact canonical operand and exclusive scratch domains. |
-| grouped / push / high / partial / powers / square / double / guard | TX2:142/141/136/137/138/022 and inherited | INHERITED CLOSED | All NHM/NHI/NHE domains and native certificates retained by hash; no repeat. |
-| pair | TX2:129 | OPEN | Filled obstruction resolved. New native common/low/final windows, finite source and canonical poststate, BOTH emitted branch aliases compile. Libra model support compiles and native windows run. Missing SAME guard/ownership driver cuts and full source-ordered frame/callee-domain chain, exact SAME kappa/powers7/parts fold composition and NHM_pair export. |
-| Weights::new / box_from_parts | TX2:128/127 | INHERITED CLOSED (NGW) | Corrects NHX's absent-packet note. Existing native ownership and constructor packet reused; pair domain port/variant compiles. Actual finish op3 dictionary equation remains to bind, not a new allocator-success premise. |
-| finish_relation | TX2:115 | OPEN | Needs CLOSED pair and exact op3/op2 dictionary/source association, NHE round/dot full Results and error branches, same Prepared/View fields. Named primitive NIG_FinishInput.Domain compiles; caller producer remains NHV/NID obligation. |
+| filled | TX2:045 | CLOSED new | n64/QM31.ZERO; actual reserve, initialized-prefix element/frame, same ptr/cap/len, full allocator reply.24 window pairs, clone/KMX controls and Lean induction. |
+| factored_s2_libra_weights | TX2:133 | INHERITED CLOSED | NHX canonical ap0/ap1 E4, extra Q2; producer/order/result laws retained by hash. |
+| grouped_inactive_pair | TX2:135 | INHERITED CLOSED | S2, SAME canonical2048-byte message and low E16; fallback outside packet. |
+| process_kind | TX2:139 | INHERITED CLOSED | S2 kinds1/2/3/5/6, folds2/n64, canonical factors/powers/message/scratch/parts. |
+| process_regular_kinds | TX2:140 | INHERITED CLOSED | SAME Bool guard, order/first error and frames. NIG source prefix now supplies model invariants. |
+| shared_high | TX2:143 | INHERITED CLOSED | SAME partials/ap0/ap1/factors, writes1/3 and frame; canonical parts propagated by NIG. |
+| shared_partials | TX2:144 | INHERITED CLOSED | SAME message/common Q16, actual sides/zero initialization/error/full reply. |
+| scalar/tensor and other leaf packets | TX2:130/131/142/141/136/137/138/022 and retained | INHERITED CLOSED | NHI/NHM/NHE native domains and certificates reused, no passing replay. |
+| pair | TX2:129 | OPEN | All new producer/control observation families pass with failing controls. Full Result source reference, both guard arms, canonical/frame chain, SAME NEW domain and exact NHT NHM_pair model equation compile. Remaining: native staged-record semantic/encoding composition into that SAME complete packet, including raw byte-window domain transport. No output-success premise substitutes for it. |
+| Weights NEW / Box | TX2:128/127 | INHERITED CLOSED (NGW) | Corrects NHX absent-packet note. Native ownership certificates reused. SAME returned-owner domain, explicit NEW Result/Box observation and concrete op3 model equation now supplied. No new row count or trust removal. |
+| finish_relation | TX2:115 | OPEN | Complete native source control119/120 and full Result NHT equation compile, with actual op3/op2 and SAME fields. Depends on OPEN pair semantic composition and native record-to-NHT interpretation. NHV/NID must establish named primitive NIG_FinishInput.Domain at the caller. |
 
-Stage3 combined L023/raw ax2 and NFX-method scan L029 PASS; same audit binary eight fixtures L028 PASS.337 roots/13696 modules; standard axioms; zero dangling/owners/import mismatches. Resource receipt L029:46.6607s,7037576KiB peak,swap0,6G/8G/0/64. This is focused coherent cached replay, not a fresh frozen release build. Every receipt pins exact revision/target/command/object sources/admission and metrics. No shipped changes; inherited three ELF pins retained.
+Final L080 combined and L081 statements/#print axioms pass. L082 ax2/coherence pass:393 roots,13736 modules; standard only;0 dangling/owners/import mismatches. Same-binary fixtures L028 retained. Exact audit resource receipt:83.9753276s,7019540KiB peak,swap0,source revision4db60783364,6G/8G/0/64. Focused coherent cached replay, not a cold release rebuild.
+
+All120 Kani and80 formal slots used;0 extraction because emitted bodies already pinned. Kani exhaustion did not stop Lean work. Remaining formal-only association cannot run after the formal budget. L079 standalone allocation-error corollary is an excluded uncompiled draft. NIG_FAILING_STEP.md records every failed shape and replacements; native transcripts contain no timeout credit.
+
+100-bit PER-ATTEMPT, privacy, two-transaction design and all trust retained. No shipped changes or ELF rebuild; inherited default/devnet/Pool pins in NIG_TARGET.json. No push, key action, authoritative ledger edits or sibling/live worktree changes.

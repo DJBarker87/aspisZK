@@ -58,13 +58,14 @@ def gate(c,d,a,t,nn,rr,ss):
  assert nn['no_native_field_products']and nn['no_writable_static']and nn['no_function_pointer']
  assert len(rr)==len(roots)and {r['root']for r in rr}==set(roots)
  assert all(r['equal']and set(r['walked_axioms'])<={'propext','Classical.choice','Quot.sound'}for r in rr)
+ assert len(nn['independent_pairs'])==28 and len({p['family']for p in nn['independent_pairs']})==28
  assert len(ss)==a['modules']and all(not r['dangling']and not r['duplicate_owners']and r['imports_match']and r['imports']==catalog[r['module']]for r in ss)
  for f in c['functions']:
   assert f['status']=='CLOSED'and f['domain']and not f['inner_hypotheses_remaining']
   assert f['lean_root']in roots and f['combined_replay']==a['combined']and f['ax2']==f['scan']==a['raw_ax2']
  return True
 assert gate(closed,delta,audit,trust,native,raw,scan)
-mutations=[('close pair',0,lambda x:x.update(driver_root_status='CLOSED')),('hide callee premise',0,lambda x:x['functions'][0]['inner_hypotheses_remaining'].append('reserve success')),('change old status',1,lambda x:x.update(no_other_status_change=False)),('remove trust',3,lambda x:x['removed'].append('Std')),('miss window',4,lambda x:x['filled_windows'].pop()),('miss position',4,lambda x:x.update(covered_prefix_cell_pairs=2079)),('missing clone control',4,lambda x:x.update(clone_pair=[])),('missing KMX control',4,lambda x:x.update(kmx_core_negative_controls=[])),('native product',4,lambda x:x.update(no_native_field_products=False)),('writable static',4,lambda x:x.update(no_writable_static=False)),('nonstandard axiom',5,lambda x:x[0]['walked_axioms'].append('sorryAx')),('missing root',5,lambda x:x.pop()),('missing module',6,lambda x:x.pop()),('dangling',6,lambda x:x[0]['dangling'].append({'bad':True})),('wrong import',6,lambda x:x[0]['imports'].append('NIG_Invalid'))]
+mutations=[('close pair',0,lambda x:x.update(driver_root_status='CLOSED')),('hide callee premise',0,lambda x:x['functions'][0]['inner_hypotheses_remaining'].append('reserve success')),('change old status',1,lambda x:x.update(no_other_status_change=False)),('remove trust',3,lambda x:x['removed'].append('Std')),('miss window',4,lambda x:x['filled_windows'].pop()),('missing new native observation pair',4,lambda x:x['independent_pairs'].pop()),('miss position',4,lambda x:x.update(covered_prefix_cell_pairs=2079)),('missing clone control',4,lambda x:x.update(clone_pair=[])),('missing KMX control',4,lambda x:x.update(kmx_core_negative_controls=[])),('native product',4,lambda x:x.update(no_native_field_products=False)),('writable static',4,lambda x:x.update(no_writable_static=False)),('nonstandard axiom',5,lambda x:x[0]['walked_axioms'].append('sorryAx')),('missing root',5,lambda x:x.pop()),('missing module',6,lambda x:x.pop()),('dangling',6,lambda x:x[0]['dangling'].append({'bad':True})),('wrong import',6,lambda x:x[0]['imports'].append('NIG_Invalid'))]
 results=[]
 for label,i,mutate in mutations:
  args=copy.deepcopy([closed,delta,audit,trust,native,raw,scan]);mutate(args[i])
@@ -75,4 +76,7 @@ for p in E.rglob('*'):
  if p.is_file():assert p.stat().st_size<=20*1024*1024,p
 (E/'NIG_VALIDATOR_TESTS.json').write_text(json.dumps(dict(tests=results,all_rejected=True),indent=2)+'\n')
 (E/'NIG_VALIDATION.json').write_text(json.dumps(dict(status='PASS',counts=counts,predecessor_gate='unchanged NHX gate via AST',predecessor_sha256=sha(P/'NHX_validate.py'),new_checks_only=True,new_rows=1,roots=len(raw),modules=len(scan),mutations_rejected=len(results)),indent=2)+'\n')
-print('PASS additive validator; filled045 CLOSED; pair129/finish115 OPEN')
+edges=J(E/'NIG_EDGES.json');assert edges['new_closed_rows']==['TX2:045']and edges['model_exports_are_not_native_closure']
+assert closed['model_exports']['NHM_pair']=='NIG_PairExport.NHM_pair'and closed['model_exports']['NHM_finish']=='NIG_FinishPacket.NHM_finish'
+assert counts=={'K':120,'L':80,'E':0}
+print('PASS additive validator;120 native,80 formal; filled045 CLOSED; pair129/finish115 OPEN')
