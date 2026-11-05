@@ -1,0 +1,21 @@
+{
+  "kind": "deployed no-op before_persist instantiation under (al)",
+  "mode": "stability",
+  "domain": "Capture-free deployed closure at transition.rs:864; arbitrary observed byte for exact empty-footprint frame; no function pointer value or comparison.",
+  "source": "fn NIZ_invoke<F:FnOnce()->solana_program::entrypoint::ProgramResult>(f:F)->solana_program::entrypoint::ProgramResult{f()}\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NIZ_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NIZ_KMX::KMX_copy_from_slice)]\n#[kani::stub(alloc::alloc::realloc,crate::NIZ_KMX::KMX_realloc)]\n#[kani::proof]\nfn certificate_stability(){let mut observer:u8=kani::any();let before=observer;let result=NIZ_invoke(|| Ok(()));assert!(result.is_ok());assert!(observer==before);}\n",
+  "modifies": [],
+  "production_credit": false,
+  "remaining": "Must bind this callee footprint at actual transition wrapper call sites; no complete parent ScopeRun.",
+  "expected_verdict": "PASS",
+  "member": "noop_before_persist",
+  "native_args": [
+    "--unwind",
+    "2"
+  ],
+  "harness": "transition::NIZ_native::certificate_stability",
+  "source_literal_sha256": "2099755983e2c1df0bd996242ecefd1a455039d2ee19a4e2b8d9da6bc62f0472",
+  "source_file_sha256": "2675ff87332ea201360f0b9fda4641705e5320226198e45e53dc49e4b101ba3b",
+  "source_line": 864,
+  "rule_al": true,
+  "rename_stability": true
+}

@@ -1,0 +1,44 @@
+{"attempt": "NIZ_K002", "exit_status": 1, "wall_seconds": 2.4815103178843856, "peak_rss_kib": "341896", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+m_error::ProgramError}; struct NIZ_Selected<a>{key:&a Pubkey} let k0=Pubkey::new_from_array(kani::any());let k1=Pubk...
+     |                                              ------------                 ^ expected `:`
+     |                                              |
+     |                                              while parsing this struct
+
+error: expected `,`
+    --> programs/aspis-pool/src/processor.rs:3762:114
+     |
+3762 | fn certificate(){use solana_program::{pubkey::Pubkey,program_error::ProgramError}; struct NIZ_Selected<a>{key:&a Pubkey} let k0=Pu...
+     |                                                                                                                  ^^^^^^
+
+warning: unused imports: `decode_pool_v1_pair_forest_terminal_statement_v1` and `encode_pool_v1_pair_forest_terminal_request_v1`
+  --> programs/aspis-pool/src/pair_forest.rs:21:9
+   |
+21 |         decode_pool_v1_pair_forest_terminal_statement_v1, encode_pool_v1_pair_forest_checkpoint_v1,
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+22 |         encode_pool_v1_pair_forest_lane_state_v1, encode_pool_v1_pair_forest_master_v1,
+23 |         encode_pool_v1_pair_forest_terminal_request_v1,
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `encode_pool_v1_pair_forest_terminal_result_v1`
+  --> programs/aspis-pool/src/pair_forest_dispatch.rs:14:5
+   |
+14 |     encode_pool_v1_pair_forest_terminal_result_v1, PoolV1PairForestTerminalRequestV1,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: could not compile `aspis-pool` (lib) due to 3 previous errors; 2 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 3 compilation errors.
+
+Running as unit: run-rcf61e55917ce4777908dbf712cdcfd00.scope; invocation ID: a847fb3ee343462da58c81c6d844aae0

@@ -1,0 +1,85 @@
+{
+  "attempt": "NIZ_K003",
+  "kind": "kani",
+  "module": "processor::NIZ_native::certificate",
+  "command": [
+    "python3",
+    "NIZ_kani_gate.py",
+    "NIZ_K003.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-pool-borrow3-20261107/NIZ_src/programs/aspis-pool/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-pool-borrow3-20261107/NIZ_target",
+    "--lib",
+    "--features",
+    "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "processor::NIZ_native::certificate",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "NIZ_native.patch",
+    "NIZ_kani_gate.py",
+    "NIZ_RUST_SHA256.json"
+  ],
+  "env": {
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-pool-borrow3-20261107/NIZ_target",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-pool-borrow3-20261107/NIZ_tmp"
+  },
+  "timeout": 180,
+  "source_revision": "2fc27c566807e9934c9b5951d3e905964fb5e684",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "frozen_input_sha256": "05b7f617777edd0bca70e1a745c08becc3241275cd0d13c7cedee21e9705dbcc",
+    "frozen_manifest_sha256": "7e18d8646fb2c49c457791c5f524ea0a112399c408e472cebcfdff263ae0dea0",
+    "NHR_staging_manifest_sha256": "74a894c5ff7f4f3f3dda624b57891e6d7323fb2fa77c2b850d1c1ab4e3f18ad4"
+  },
+  "program_features": "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit",
+  "program_manifest": "programs/aspis-pool/Cargo.toml",
+  "required_statement_features": [
+    "pool-v1-kernel"
+  ],
+  "expected_time": "optimized compile/cache reuse, then CBMC of original uniqueness inner iteration with key-only receiver projection; no field multiplication, hash body, or arithmetic aggregation",
+  "copy_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+  "exit_status": 1,
+  "wall_seconds": 93.33864851412363,
+  "peak_rss_kib": "462480",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r505774ce538a4bd59f525ceced2fd094.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "702103552",
+  "source_hashes": {
+    "NIZ_native.patch": "bb606510d853f026babf9663d4c03299622a29877987a7def74401227db08a7d",
+    "NIZ_kani_gate.py": "b0f5e43672a92cd6734e9f671a6e6ed070499cfe3d6bb1679d1db006381005f4",
+    "NIZ_RUST_SHA256.json": "ca5e65a3bf093dfff41f1dba17f63175c86f357228c7646f69edc3a4590b9c38"
+  },
+  "print_axioms": "N/A: kani"
+}

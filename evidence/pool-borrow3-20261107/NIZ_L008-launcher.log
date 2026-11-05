@@ -1,0 +1,60 @@
+{"attempt": "NIZ_L008", "exit_status": 1, "wall_seconds": 0.3301801369525492, "peak_rss_kib": "755880", "swaps": "0", "print_axioms": ["'NIZ_Memcmp.zero_iff' depends on axioms: [propext, sorryAx, Quot.sound]", "'NIZ_Memcmp.key32_zero' depends on axioms: [sorryAx]"]}
+NIZ_generated/NIZ_Memcmp.lean:26:9: error: unknown tactic
+NIZ_generated/NIZ_Memcmp.lean:25:39: error: unsolved goals
+a b : Nat → Nat
+reply : Nat → Int
+n : Nat
+ih :
+  ∀ (offset : Nat),
+    (∀ (i : Nat), i < n → (reply (offset + i) = 0 ↔ a (offset + i) = b (offset + i))) →
+      (run reply offset n = 0 ↔ ∀ (i : Nat), i < n → a (offset + i) = b (offset + i))
+offset : Nat
+law : ∀ (i : Nat), i < n + 1 → (reply (offset + i) = 0 ↔ a (offset + i) = b (offset + i))
+nextLaw : ∀ (i : Nat), i < n → (reply (offset + 1 + i) = 0 ↔ a (offset + 1 + i) = b (offset + 1 + i))
+h : run reply offset (n + 1) = 0
+i : Nat
+hi : i < n + 1
+⊢ reply offset = 0
+NIZ_generated/NIZ_Memcmp.lean:24:4: error: unsolved goals
+case
+...
+ (offset + i) = 0 ↔ a (offset + i) = b (offset + i))) →
+      (run reply offset n = 0 ↔ ∀ (i : Nat), i < n → a (offset + i) = b (offset + i))
+offset : Nat
+law : ∀ (i : Nat), i < n + 1 → (reply (offset + i) = 0 ↔ a (offset + i) = b (offset + i))
+nextLaw : ∀ (i : Nat), i < n → (reply (offset + 1 + i) = 0 ↔ a (offset + 1 + i) = b (offset + 1 + i))
+h : run reply offset (n + 1) = 0
+i : Nat
+hi : i < n + 1
+first : reply offset = 0
+⊢ a (offset + i) = b (offset + i)
+NIZ_generated/NIZ_Memcmp.lean:18:14: error: unsolved goals
+case succ.mpr
+a b : Nat → Nat
+reply : Nat → Int
+n : Nat
+ih :
+  ∀ (offset : Nat),
+    (∀ (i : Nat), i < n → (reply (offset + i) = 0 ↔ a (offset + i) = b (offset + i))) →
+      (run reply offset n = 0 ↔ ∀ (i : Nat), i < n → a (offset + i) = b (offset + i))
+offset : Nat
+law : ∀ (i : Nat), i < n + 1 → (reply (offset + i) = 0 ↔ a (offset + i) = b (offset + i))
+nextLaw : ∀ (i : Nat), i < n → (reply (offset + 1 + i) = 0 ↔ a (offset + 1 + i) = b (offset + 1 + i))
+⊢ (∀ (i : Nat), i < n + 1 → a (offset + i) = b (offset + i)) → run reply offset (n + 1) = 0
+'NIZ_Memcmp.zero_iff' depends on axioms: [propext, sorryAx, Quot.sound]
+NIZ_generated/NIZ_Memcmp.lean:51:2: error: Tactic `apply` failed: could not unify the conclusion of `zero_iff a b reply 0 32`
+  run reply 0 32 = 0 ↔ ∀ (i : Nat), i < 32 → a (0 + i) = b (0 + i)
+with the goal
+  run reply 0 32 = 0 ↔ ∀ (i : Nat), i < 32 → a i = b i
+
+Note: The full type of `zero_iff a b reply 0 32` is
+  (∀ (i : Nat), i < 32 → (reply (0 + i) = 0 ↔ a (0 + i) = b (0 + i))) →
+    (run reply 0 32 = 0 ↔ ∀ (i : Nat), i < 32 → a (0 + i) = b (0 + i))
+
+a b : Nat → Nat
+reply : Nat → Int
+law : ∀ (i : Nat), i < 32 → (reply i = 0 ↔ a i = b i)
+⊢ run reply 0 32 = 0 ↔ ∀ (i : Nat), i < 32 → a i = b i
+'NIZ_Memcmp.key32_zero' depends on axioms: [sorryAx]
+
+Running as unit: run-r2c8372f0e65e4dd7990a839a27029b62.scope; invocation ID: 7adb8d8bdbcc4bef91c39ce6bda2f9c0

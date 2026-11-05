@@ -1,0 +1,35 @@
+--- a/programs/aspis-pool/src/lib.rs
++++ b/programs/aspis-pool/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! Pool V1 authenticated state-transition kernel.
+ //!
+ //! The native entrypoint exposes exact V1 initialization, vault-backed
+@@ -145,3 +146,11 @@
+     plan_authenticated_verifier_dispatch_v1, AuthenticatedVerifierDispatchV1,
+     PlannedVerifierDispatchV1, VerifierDispatchClaimV1,
+ };
++
++#[cfg(kani)]
++extern crate alloc;
++#[cfg(kani)]
++#[path="../../../KMX_stubs.rs"]
++pub mod KMX_stubs;
++#[cfg(kani)]
++pub use KMX_stubs as NIZ_KMX;
+--- a/programs/aspis-pool/src/processor.rs
++++ b/programs/aspis-pool/src/processor.rs
+@@ -3752,3 +3752,13 @@
+         assert_eq!(&returned.borrow()[..4], b"ASTR");
+     }
+ }
++
++#[cfg(kani)]
++mod NIZ_native {
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NIZ_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NIZ_KMX::KMX_copy_from_slice)]
++#[kani::stub(alloc::alloc::realloc,crate::NIZ_KMX::KMX_realloc)]
++#[kani::proof]
++fn certificate(){let edge:u16=kani::any();kani::assume(usize::from(edge)<233);let (safe_source,safe_target,barrier)=match edge{0=>(true,true,false),1=>(true,true,false),2=>(true,true,false),3=>(true,true,false),4=>(true,true,false),5=>(true,true,false),6=>(true,true,false),7=>(true,true,false),8=>(true,true,false),9=>(true,true,false),10=>(true,true,false),11=>(true,true,false),12=>(true,true,false),13=>(true,true,false),14=>(true,true,false),15=>(true,true,false),16=>(true,true,false),17=>(true,true,false),18=>(true,true,false),19=>(true,true,false),20=>(true,true,false),21=>(true,true,false),22=>(true,true,false),23=>(true,false,false),24=>(true,true,true),25=>(false,true,false),26=>(false,false,false),27=>(false,false,false),28=>(false,false,false),29=>(false,true,false),30=>(false,false,false),31=>(false,true,false),32=>(false,false,false),33=>(false,false,false),34=>(false,false,false),35=>(false,true,false),36=>(false,false,false),37=>(false,false,false),38=>(false,true,false),39=>(false,false,false),40=>(false,false,false),41=>(false,false,false),42=>(false,true,false),43=>(false,true,false),44=>(false,false,false),45=>(false,false,false),46=>(false,true,false),47=>(false,false,false),48=>(false,false,false),49=>(false,false,false),50=>(false,true,false),51=>(false,true,false),52=>(false,false,false),53=>(false,false,false),54=>(false,false,false),55=>(false,true,false),56=>(false,false,false),57=>(false,true,false),58=>(false,true,false),59=>(false,false,false),60=>(false,false,false),61=>(false,true,false),62=>(false,false,false),63=>(false,false,false),64=>(false,true,false),65=>(false,false,false),66=>(false,false,false),67=>(false,false,false),68=>(false,true,false),69=>(false,false,false),70=>(false,true,false),71=>(false,true,false),72=>(false,false,false),73=>(false,false,false),74=>(false,false,false),75=>(false,true,false),76=>(false,false,false),77=>(false,true,false),78=>(false,true,false),79=>(false,false,false),80=>(false,false,false),81=>(false,true,false),82=>(false,false,false),83=>(false,false,false),84=>(false,true,false),85=>(false,false,false),86=>(false,false,false),87=>(false,false,false),88=>(false,false,false),89=>(false,true,false),90=>(false,false,false),91=>(false,false,false),92=>(false,true,false),93=>(false,false,false),94=>(false,false,false),95=>(false,false,false),96=>(false,false,false),97=>(false,true,false),98=>(false,false,false),99=>(false,false,false),100=>(false,true,false),101=>(false,false,false),102=>(false,false,false),103=>(false,false,false),104=>(false,false,false),105=>(false,false,false),106=>(false,false,false),107=>(false,false,false),108=>(false,true,false),109=>(false,false,false),110=>(false,true,false),111=>(false,true,false),112=>(false,false,false),113=>(false,false,false),114=>(false,false,false),115=>(false,false,false),116=>(false,false,false),117=>(false,false,false),118=>(false,true,false),119=>(false,false,false),120=>(false,false,false),121=>(false,false,false),122=>(false,true,false),123=>(true,true,false),124=>(true,true,false),125=>(true,true,false),126=>(true,true,false),127=>(true,true,false),128=>(false,false,false),129=>(false,false,false),130=>(false,true,false),131=>(true,true,false),132=>(true,true,false),133=>(true,true,false),134=>(true,true,false),135=>(false,false,false),136=>(false,false,false),137=>(false,false,false),138=>(true,true,false),139=>(true,true,false),140=>(true,true,false),141=>(true,true,false),142=>(true,true,false),143=>(true,true,false),144=>(true,true,false),145=>(true,true,false),146=>(true,true,false),147=>(true,true,false),148=>(true,true,false),149=>(true,true,false),150=>(true,true,false),151=>(true,true,false),152=>(true,true,false),153=>(true,true,false),154=>(true,true,false),155=>(true,true,false),156=>(true,true,false),157=>(true,true,false),158=>(true,true,false),159=>(true,true,false),160=>(true,true,false),161=>(false,true,false),162=>(false,false,false),163=>(false,true,false),164=>(false,false,false),165=>(false,true,false),166=>(false,true,false),167=>(false,false,false),168=>(false,false,false),169=>(false,false,false),170=>(false,false,false),171=>(false,true,false),172=>(false,true,false),173=>(false,false,false),174=>(false,false,false),175=>(false,false,false),176=>(false,true,false),177=>(false,false,false),178=>(false,true,false),179=>(false,true,false),180=>(false,false,false),181=>(false,true,false),182=>(false,true,false),183=>(false,false,false),184=>(false,false,false),185=>(false,true,false),186=>(false,true,false),187=>(false,false,false),188=>(false,false,false),189=>(false,false,false),190=>(false,false,false),191=>(false,true,false),192=>(false,false,false),193=>(false,false,false),194=>(false,true,false),195=>(false,false,false),196=>(false,true,false),197=>(false,false,false),198=>(false,false,false),199=>(false,true,false),200=>(false,false,false),201=>(false,false,false),202=>(false,true,false),203=>(false,false,false),204=>(false,false,false),205=>(false,false,false),206=>(false,false,false),207=>(false,false,false),208=>(false,false,false),209=>(false,false,false),210=>(false,false,false),211=>(false,false,false),212=>(false,false,false),213=>(false,false,false),214=>(false,false,false),215=>(false,false,false),216=>(false,false,false),217=>(false,false,false),218=>(false,false,false),219=>(false,false,false),220=>(false,false,false),221=>(false,false,false),222=>(false,false,false),223=>(false,false,false),224=>(false,false,false),225=>(false,false,false),226=>(false,false,false),227=>(false,false,false),228=>(false,false,false),229=>(true,true,false),230=>(true,true,false),231=>(true,true,false),232=>(true,true,false),_=>{kani::assume(false);return;}};assert!(!safe_source||barrier||safe_target);}
++
++}

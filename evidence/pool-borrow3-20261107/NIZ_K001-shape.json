@@ -1,0 +1,12 @@
+{
+  "kind": "original uniqueness inner iteration",
+  "mode": "positive",
+  "domain": "Arbitrary selected account keys, exact native comparison and ProgramError; payload values unused.",
+  "source": "#[kani::stub(core::ptr::copy_nonoverlapping,crate::NIZ_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NIZ_KMX::KMX_copy_from_slice)]\n#[kani::stub(alloc::alloc::realloc,crate::NIZ_KMX::KMX_realloc)]\n#[kani::proof]\nfn certificate(){use solana_program::{account_info::AccountInfo,pubkey::Pubkey,program_error::ProgramError};\nlet k0=Pubkey::new_from_array(kani::any()); let mut l0:u64=kani::any(); let mut d0=[kani::any::<u8>()]; let a0=AccountInfo::new(&k0,false,true,&mut l0,&mut d0,&k0,false,0);\nlet k1=Pubkey::new_from_array(kani::any()); let mut l1:u64=kani::any(); let mut d1=[kani::any::<u8>()]; let a1=AccountInfo::new(&k1,false,true,&mut l1,&mut d1,&k1,false,0);\nlet accounts=[a0,a1]; let left=0usize;let right=1usize;let same=accounts[left].key==accounts[right].key;let result:Result<(),ProgramError>=(||->Result<(),ProgramError>{            if accounts[left].key == accounts[right].key {\n                return Err(ProgramError::InvalidArgument);\n            }\nOk(())})();assert!(result==if same{Err(ProgramError::InvalidArgument)}else{Ok(())});}\n",
+  "modifies": [],
+  "production_credit": false,
+  "remaining": "Loop/source association, same-state caller keys and dominance remain separate.",
+  "expected_verdict": "PASS",
+  "member": "require_unique_accounts",
+  "control": null
+}

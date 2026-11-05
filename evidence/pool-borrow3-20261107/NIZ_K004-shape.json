@@ -1,0 +1,15 @@
+{
+  "kind": "one actual host memcmp byte iteration",
+  "mode": "positive",
+  "domain": "Two arbitrary valid readable single-byte locations, arbitrary alias-free caller byte values; no allocation or SDK carrier.",
+  "source": "use core::ffi::{c_void,c_int}; unsafe extern \"C\" {fn memcmp(a:*const c_void,b:*const c_void,n:usize)->c_int;}\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NIZ_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NIZ_KMX::KMX_copy_from_slice)]\n#[kani::stub(alloc::alloc::realloc,crate::NIZ_KMX::KMX_realloc)]\n#[kani::proof]\nfn certificate(){let a:u8=kani::any();let b:u8=kani::any();let before_a=a;let before_b=b;let reply=unsafe{memcmp((&a as *const u8).cast(),(&b as *const u8).cast(),1)};assert!((reply==0)==(a==b));assert!(a==before_a);assert!(b==before_b);}\n",
+  "modifies": [],
+  "production_credit": false,
+  "remaining": "Host builtin step must be associated with the retained key-comparison GOTO loop; source/runtime/ELF associations remain separately scoped.",
+  "expected_verdict": "PASS",
+  "member": "host_memcmp_step",
+  "native_args": [
+    "--unwind",
+    "2"
+  ]
+}
