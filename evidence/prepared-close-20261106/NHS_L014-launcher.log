@@ -1,0 +1,45 @@
+{"attempt": "NHS_L014", "exit_status": 1, "wall_seconds": 3.2834053519181907, "peak_rss_kib": "5853612", "swaps": "0", "print_axioms": ["'AspisR1.NHS_FoldDomain.length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NHS_FoldDomain.bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NHS_generated/NHS_FoldDomain.lean:12:67: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+v : verifier.View
+tail : (↑v.round1).length = 224
+payload : Slice U8
+call :
+  (do
+      let capacity ← 32#usize + 224#usize
+      let root ← core.option.Option.unwrap v.folded_root
+      let payload ← lift root.to_slice
+      let b1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 capacity) payload
+      let b2 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 b1 v.round1
+      ok b2.deref) =
+    ok payload
+⊢ 32#usize + 224#usize = ok 256#usize
+'AspisR1.NHS_FoldDomain.length' dep
+...
+NHS_generated/NHS_FoldDomain.lean:12:67: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+v : verifier.View
+tail : (↑v.round1).length = 224
+payload : Slice U8
+call :
+  (do
+      let capacity ← 32#usize + 224#usize
+      let root ← core.option.Option.unwrap v.folded_root
+      let payload ← lift root.to_slice
+      let b1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 capacity) payload
+      let b2 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 b1 v.round1
+      ok b2.deref) =
+    ok payload
+⊢ 32#usize + 224#usize = ok 256#usize
+'AspisR1.NHS_FoldDomain.length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NHS_FoldDomain.bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r1a5b4349cdde49379811ecba3f01e5f4.scope; invocation ID: 899ee82b492742e389ce22f211c607cf

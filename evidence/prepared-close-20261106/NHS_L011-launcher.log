@@ -1,0 +1,44 @@
+{"attempt": "NHS_L011", "exit_status": 1, "wall_seconds": 3.673464898020029, "peak_rss_kib": "5981648", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.Slice.clone : {T : Type} →
+  (T → Aeneas.Std.Result T) → Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.Slice T) :=
+fun {T} clone s => do
+  let s' ← Aeneas.Std.List.clone clone ↑s
+  Aeneas.Std.Result.ok ⟨↑s', ⋯⟩
+def Aeneas.Std.List.clone.{u_1} : {α : Type u_1} →
+  (α → Aeneas.Std.Result α) → (l : List α) → Aeneas.Std.Result { l' // l'.length = l.length } :=
+fun {α} clone l =>
+  match h : List.mapM clone l with
+  | Aeneas.Std.Result.ok v => Aeneas.Std.Result.ok ⟨v, ⋯⟩
+  | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+  | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+NHS_generated/NHS_Inspect2.lean:5:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.allo
+...
+nonicalWide (AspisR1.CheckpointBytes3Namespaces.toE p.kappa))
+    (alpha :
+      ∀ (j : Fin 2),
+        AspisR1.OraclePortCkptAbi4Decode.CanonicalWide (↑(AspisR1.CheckpointBytes3Namespaces.toPrepared p).alpha)[↑j])
+    (rho : NBF_PowerStep.Canonical p.rho)
+    (semanticAlpha :
+      ∀ (j : Fin 10),
+        AspisR1.OraclePortCkptAbi4Decode.Canonical
+          (↑(AspisR1.CheckpointBytes3Namespaces.toPrepared p).semantic_alpha)[↑j])
+    (coordinates :
+      ∀ (j : Fin 4),
+        AspisR1.OraclePortCkptAbi4Decode.Canonical
+          (match ↑j with
+          | 0 => (↑(AspisR1.CheckpointBytes3Namespaces.toPrepared p).z)[0].x
+          | 1 => (↑(AspisR1.CheckpointBytes3Namespaces.toPrepared p).z)[0].y
+          | 2 => (↑(AspisR1.CheckpointBytes3Namespaces.toPrepared p).z)[1].x
+          | x => (↑(AspisR1.CheckpointBytes3Namespaces.toPrepared p).z)[1].y))
+    (claim : AspisR1.OraclePortCkptAbi4Decode.CanonicalWide (AspisR1.CheckpointBytes3Namespaces.toE p.claim)) :
+    AspisR1.NGC_PreparationBoundary.Fields p
+def AspisR1.CheckpointBytes3Namespaces.toE : AspisR1Stage2.aspis_core.field.wide_exact.WideExact →
+  OraclePortCkptAbi2Extracted.aspis_core.field.wide_exact.WideExact :=
+fun x => { c0 := AspisR1.CheckpointBytes3Namespaces.toK x.c0, c1 := AspisR1.CheckpointBytes3Namespaces.toK x.c1 }
+NHS_generated/NHS_Inspect2.lean:10:7: error(lean.unknownIdentifier): Unknown identifier `AspisR1PublicPreparation.QueriesModel.queries_success`
+AspisR1Query31Transcript.finish_success_iff (s : AspisR1Query31Transcript.aspis_core.r0_transcript.QueryScan)
+  (accepted : Aeneas.Std.Array Aeneas.Std.U32 22#usize) :
+  s.finish = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok accepted) ↔
+    s.accepted_len = AspisR1Query31Transcript.aspis_core.r0_transcript.QUERY_COUNT ∧ accepted = s.accepted
+
+Running as unit: run-r8790b730a9034ace948c0a0b3e2dbdc9.scope; invocation ID: f82382f177e449549cf72937d9a1228e

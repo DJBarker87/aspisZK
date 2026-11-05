@@ -1,0 +1,74 @@
+NHS_generated/NHS_PendingStep.lean:26:20: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (List.set ?m.73 ?m.74 ?m.75)[?m.74]?
+in the target expression
+  some (Port3_PendingInstall.row w) = (↑(raw.set index (Port3_PendingInstall.row w)))[↑index]?
+
+case pos
+raw after : alloc.vec.Vec Row
+index next : Usize
+w : aspis_core.field.QM31
+size : (↑raw).length = 64
+active : ↑index < 64
+windows : Windows raw after index next w
+bound : ↑index < 64
+⊢ some (Port3_PendingInstall.row w) = (↑(raw.set index (Port3_PendingInstall.row w)))[↑index]?
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    raw.set index (Port3_PendingInstall.row w)
+  has type
+    alloc.vec.Vec Row
+  but is expected to have type
+    { x // x.length ≤ Usize.max }
+  in the application
+    ↑(raw.set index (Port3_PendingInstall.row w))
+NHS_generated/NHS_PendingStep.lean:27:21: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (List.set ?m.84 ↑index ?m.90)[j]?
+in the target expression
+  (↑raw)[j]? = (↑(raw.set index (Port3_PendingInstall.row w)))[j]?
+
+case neg
+raw after : alloc.vec.Vec Row
+index next : Usize
+w : aspis_core.field.QM31
+size : (↑raw).length = 64
+active : ↑index < 64
+windows : Windows raw after index next w
+j : ℕ
+bound : j < 64
+same : ¬j = ↑index
+⊢ (↑raw)[j]? = (↑(raw.set index (Port3_PendingInstall.row w)))[j]?
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    raw
+  has type
+    alloc.vec.Vec Row
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑raw
+NHS_generated/NHS_PendingStep.lean:28:33: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  f ≥ 64
+  f - g ≤ -1
+  0 ≤ e ≤ 63
+where
+ e := ↑↑index
+ f := ↑j
+ g := ↑(↑after).length
+NHS_generated/NHS_PendingStep.lean:26:47: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  f ≥ 0
+  f - g ≥ 0
+  0 ≤ e ≤ 63
+where
+ e := ↑↑index
+ f := ↑?m.74
+ g := ↑(List.length ?m.73)
+'AspisR1.NHS_PendingStep.same_vec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NHS_PendingStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

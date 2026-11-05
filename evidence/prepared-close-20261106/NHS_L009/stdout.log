@@ -1,0 +1,53 @@
+def Aeneas.Std.alloc.vec.Vec.extend_from_slice : {T : Type} →
+  Aeneas.Std.core.clone.Clone T →
+    Aeneas.Std.alloc.vec.Vec T → Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec T) :=
+fun {T} cloneInst v s =>
+  if h : v.length + s.length ≤ Aeneas.Std.Usize.max then
+    match h' : Aeneas.Std.Slice.clone cloneInst.clone s with
+    | Aeneas.Std.Result.ok s' => Aeneas.Std.Result.ok ⟨↑v ++ ↑s', ⋯⟩
+    | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+    | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+  else Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+def Aeneas.Std.alloc.vec.Vec.with_capacity : (T : Type) → Aeneas.Std.Usize → Aeneas.Std.alloc.vec.Vec T :=
+fun T x => Aeneas.Std.alloc.vec.Vec.new T
+def Aeneas.Std.alloc.vec.Vec.deref : {T : Type} → Aeneas.Std.alloc.vec.Vec T → Aeneas.Std.Slice T :=
+fun {T} v => ⟨↑v, ⋯⟩
+structure AspisR1.NGC_KNE_Caller.WriterDomain (p : AspisR1.CheckpointBytes5Writer.Prepared)
+  (a : AspisR1.CheckpointBytes5Writer.Accumulator) : Prop
+number of parameters: 2
+fields:
+  AspisR1.NGC_KNE_Caller.WriterDomain.variant : p.variant =
+      OraclePortCkptAbi2Extracted.aspis_r1_cost_probe.transport.CheckpointAbi2Variant.S2
+  AspisR1.NGC_KNE_Caller.WriterDomain.size : (↑a.weights).length = 64
+  AspisR1.NGC_KNE_Caller.WriterDomain.queriesBound : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144
+  AspisR1.NGC_KNE_Caller.WriterDomain.canonical : AspisR1.CheckpointBytesBlocks.CanonicalFields
+      (AspisR1.CheckpointBytesBody.fields p a ⋯ ⋯)
+  AspisR1.NGC_KNE_Caller.WriterDomain.next : ↑a.next = 10
+constructor:
+  AspisR1.NGC_KNE_Caller.WriterDomain.mk {p : AspisR1.CheckpointBytes5Writer.Prepared}
+    {a : AspisR1.CheckpointBytes5Writer.Accumulator}
+    (variant : p.variant = OraclePortCkptAbi2Extracted.aspis_r1_cost_probe.transport.CheckpointAbi2Variant.S2)
+    (size : (↑a.weights).length = 64) (queriesBound : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144)
+    (canonical :
+      AspisR1.CheckpointBytesBlocks.CanonicalFields (AspisR1.CheckpointBytesBody.fields p a size queriesBound))
+    (next : ↑a.next = 10) : AspisR1.NGC_KNE_Caller.WriterDomain p a
+AspisR1ClaimPreparedBridge.prepared_candidate_alpha_pair {H : Type}
+  (sampling : AspisR1PublicPreparation.PreparedModel.Boundaries) (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+  (sem : AspisR1PublicPreparation.r1_semantic.Verified H) (v : AspisR1PublicPreparation.verifier.View) (hash : H)
+  (out : AspisR1PublicPreparation.verifier.Prepared)
+  (scratch scratchIn : Aeneas.Std.Array AspisR1ClaimPreparedBridge.PE 29#usize)
+  (h :
+    AspisR1PublicPreparation.PreparedScratchModel.prepare
+        (AspisR1ClaimPreparedBridge.concreteBoundaries (AspisR1ClaimPreparedBridge.withCandidateSamplers sampling)) D
+        sem v hash scratchIn =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out, scratch)) :
+  AspisR1ClaimPreparedBridge.CanonicalAlphaPair out
+AspisR1PublicPreparation.QueriesModel.queries (B : AspisR1PublicPreparation.QueriesModel.Boundaries) {H : Type}
+  (aspis_coreDigest32Inst : AspisR1PublicPreparation.aspis_core.Digest32 H)
+  (self : AspisR1PublicPreparation.transcript.Transcript H) (row : Aeneas.Std.U8)
+  (payload : Aeneas.Std.Slice Aeneas.Std.U8) :
+  Aeneas.Std.Result
+    (Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U32 22#usize) AspisR1PublicPreparation.verifier.Error ×
+      AspisR1PublicPreparation.transcript.Transcript H)
+NHS_generated/NHS_Inspect.lean:9:7: error(lean.unknownIdentifier): Unknown constant `CheckpointBytes3Namespaces.toE`
+NHS_generated/NHS_Inspect.lean:10:7: error(lean.unknownIdentifier): Unknown constant `AspisR1.NEV_DotInputs.Canonical`
