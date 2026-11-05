@@ -1,0 +1,4 @@
+import NGL_MapReference.Types
+set_option pp.all true
+#print instDiscriminantVerifierErrorIsize
+#print NGL_MapReference.VerifierError.read_discriminant

@@ -1,0 +1,4 @@
+import NFW_ErrorReferenceTypes
+set_option pp.all true
+#print instDiscriminantVerifierErrorIsize
+#print prefix NFW_ErrorReference
