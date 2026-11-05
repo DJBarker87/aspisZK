@@ -8,8 +8,9 @@ def erase(n,s,zero):
   for attr in json.loads(annotations.read_text()).values():
    if attr in s:s=s.replace(attr,"",1)
  if n in [P+'lib.rs','crates/aspis-statement/src/lib.rs']:
-  prefix='#![cfg_attr(kani,feature(allocator_api))]\n'
-  if s.startswith(prefix):s=s[len(prefix):]
+  prefixes=['#![cfg_attr(kani,feature(allocator_api))]\n','#![cfg_attr(kani,feature(fmt_internals))]\n']
+  while any(s.startswith(prefix) for prefix in prefixes):
+   prefix=next(prefix for prefix in prefixes if s.startswith(prefix));s=s[len(prefix):]
  # Only our exact, known sidecar declarations are erased.
  for module in ['NHY_registry','NHY_auth','NHY_snapshot','NHY_error','NHJ_ids','NHJ_owned','NHY_ids','NHY_owned','NHD_meta_calibration','NHD_prefix','NHD_ids','NHD_distinct','NHD_snapshot','NHD_error','NHD_calibration','NHD_owned','NGL_entry','NGL_adapter','NGL_owned']:
   suffix='\n#[cfg(kani)]\n#[path="'+module+'.rs"]\nmod '+module+';\n'

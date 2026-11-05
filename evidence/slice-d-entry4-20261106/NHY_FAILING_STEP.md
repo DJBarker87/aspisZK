@@ -51,3 +51,12 @@ K092 entry full Result/record packet timed out90s. Do not submit its unchanged n
 L069 used reserved Lean syntax prefix as an identifier; L070 fixed that and exposed distinct decidability instances and a slice projection. L072 exposed a self-expanding rewrite when a list equalled a replicate of its own length. L074 uses Boolean extensionality and exact projections, with no limit increase or numeral reduction, and passes. All earlier sorryAx diagnostics are failed and excluded.
 
 K103 stage1 span check against generic Result/ProgramError PartialEq timed out90s. K104 replaces only own validation expression with explicit constructor discrimination and scalar natural endpoint comparison, retaining original harness names and all overflow/length/error requirements. Stage2 receives the identical structural repair before its first attempt. This is not a retry of the timed-out interface or a renamed verdict.
+
+
+K108/109 replaces K092's full-input-record interface with the actual independent post-read SSA pre-state; all constructor/Result/field/error requirements retained, matched control fails. This is an interface split, not a rename-only verdict change. K104..107 explicit constructor span checks pass/fail as intended after excluding K103's generic PE equality timeout.
+
+K110 selected an incorrect namespace for an already-defined harness (Rust compile succeeds, harness not found). K111 selects existing NHY_error::format_capacity without any rename; capacity18/no as_str shortcut passes, K112 inverted control fails. Exact cfg(kani) fmt_internals feature exposes only this harness API; strict erasure strips that exact known attribute and allocator_api before frozen byte comparison. Native format metadata is not callback/String realization.
+
+K113 one actual append window with real prefix/capacity and ManuallyDrop still times out90s; K118 distinct Allocation growth case times out90s. Both excluded. No unchanged negative submitted, no larger timeout/cap, no new label repeats them. New interface must separate native String header/reserve/copy caller association and actual String vtable; Lean append value/frame laws alone are insufficient.
+
+Late source validation initially matched the word axiom inside an inspection comment. Own validator now lexes nested Lean comments/strings before checking declaration/proof tokens; no source or axiom acceptance relaxed, raw ax2 remains the authority.

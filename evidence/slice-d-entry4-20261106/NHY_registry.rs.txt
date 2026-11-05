@@ -483,3 +483,41 @@ fn entry_args_wrong_packet(input:&VerifierRegistryEntryV2,field:u8,j:usize)->boo
 #[kani::proof_for_contract(entry_args_wrong_packet)] #[kani::unwind(35)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn entry_args_wrong_check(){entry_args_wrong_packet(&NHY_any_entry(),kani::any(),kani::any());}
+
+// NHY entry SSA return
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn entry_ssa_packet(arrays:&[&[u8;32];9],status:VerifierEntryStatusV1,statement_version:u8,bump:u8,programdata_bump:u8,activation_slot:u64,retirement_slot:u64,reply:Result<(),PoolV1VerifierRegistryFormatError>,field:u8,j:usize)->bool{
+ kani::assume((field as usize)<9);kani::assume(j<32);
+ let entry=VerifierRegistryEntryV2{status:status,statement_version:statement_version,bump:bump,pool:*arrays[0],verifier_program:*arrays[1],profile_binding:*arrays[2],release_binding:*arrays[3],loader_program:*arrays[4],programdata_address:*arrays[5],programdata_bump:programdata_bump,executable_hash:*arrays[6],expected_upgrade_authority:*arrays[7],activation_slot:activation_slot,retirement_slot:retirement_slot,policy_binding:*arrays[8]};
+ let result=(||->Result<VerifierRegistryEntryV2,PoolV1VerifierRegistryFormatError>{reply?;Ok(entry)})();
+ let good=match (reply,&result){(Err(expected),Err(actual))=>expected==*actual,(Ok(()),Ok(value))=>NHY_entry_byte(value,field,j)==arrays[field as usize][j]
+ && value.status==status
+ && value.statement_version==statement_version
+ && value.bump==bump
+ && value.programdata_bump==programdata_bump
+ && value.activation_slot==activation_slot
+ && value.retirement_slot==retirement_slot
+,_=>false};
+ good
+}
+#[kani::proof_for_contract(entry_ssa_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn entry_ssa(){let arrays=[&kani::any::<[u8;32]>(),&kani::any::<[u8;32]>(),&kani::any::<[u8;32]>(),&kani::any::<[u8;32]>(),&kani::any::<[u8;32]>(),&kani::any::<[u8;32]>(),&kani::any::<[u8;32]>(),&kani::any::<[u8;32]>(),&kani::any::<[u8;32]>()];let reply=if kani::any(){Ok(())}else{Err(NHY_any_error())};entry_ssa_packet(&arrays,NHY_any_status(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),reply,kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn entry_ssa_wrong_packet(arrays:&[&[u8;32];9],status:VerifierEntryStatusV1,statement_version:u8,bump:u8,programdata_bump:u8,activation_slot:u64,retirement_slot:u64,reply:Result<(),PoolV1VerifierRegistryFormatError>,field:u8,j:usize)->bool{
+ kani::assume((field as usize)<9);kani::assume(j<32);
+ let entry=VerifierRegistryEntryV2{status:status,statement_version:statement_version,bump:bump,pool:*arrays[0],verifier_program:*arrays[1],profile_binding:*arrays[2],release_binding:*arrays[3],loader_program:*arrays[4],programdata_address:*arrays[5],programdata_bump:programdata_bump,executable_hash:*arrays[6],expected_upgrade_authority:*arrays[7],activation_slot:activation_slot,retirement_slot:retirement_slot,policy_binding:*arrays[8]};
+ let result=(||->Result<VerifierRegistryEntryV2,PoolV1VerifierRegistryFormatError>{reply?;Ok(entry)})();
+ let good=match (reply,&result){(Err(expected),Err(actual))=>expected==*actual,(Ok(()),Ok(value))=>NHY_entry_byte(value,field,j)==arrays[field as usize][j]
+ && value.status==status
+ && value.statement_version==statement_version
+ && value.bump==bump
+ && value.programdata_bump==programdata_bump
+ && value.activation_slot==activation_slot
+ && value.retirement_slot==retirement_slot
+,_=>false};
+ !good
+}
+#[kani::proof_for_contract(entry_ssa_wrong_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn entry_ssa_wrong(){let arrays=[&kani::any::<[u8;32]>(),&kani::any::<[u8;32]>(),&kani::any::<[u8;32]>(),&kani::any::<[u8;32]>(),&kani::any::<[u8;32]>(),&kani::any::<[u8;32]>(),&kani::any::<[u8;32]>(),&kani::any::<[u8;32]>(),&kani::any::<[u8;32]>()];let reply=if kani::any(){Ok(())}else{Err(NHY_any_error())};entry_ssa_wrong_packet(&arrays,NHY_any_status(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),reply,kani::any(),kani::any());}

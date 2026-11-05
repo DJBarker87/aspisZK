@@ -960,3 +960,98 @@ fn require_zero_step_wrong_packet(bytes:&[u8;2],n:usize)->bool{
 #[kani::proof_for_contract(require_zero_step_wrong_packet)] #[kani::unwind(2)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn require_zero_step_wrong(){require_zero_step_wrong_packet(&kani::any(),kani::any());}
+
+// NHY checkpoint zero iteration
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn checkpoint_zero_step_packet(bytes:&[u8;CHECKPOINT_TAIL_BYTES],off:usize,j:usize)->bool{
+ kani::assume(off<=CHECKPOINT_TAIL_BYTES);
+ let remaining=&bytes[off..];
+ let (code,pointer,length)=if remaining.is_empty(){(0u8,remaining.as_ptr(),0usize)}else if remaining[0]!=0{(1,remaining.as_ptr(),remaining.len())}else{let next=&remaining[1..];(2,next.as_ptr(),next.len())};
+ let good=if off==CHECKPOINT_TAIL_BYTES{code==0&&length==0}else if bytes[off]!=0{code==1&&pointer==remaining.as_ptr()&&length==CHECKPOINT_TAIL_BYTES-off}else{
+  let next=&remaining[1..];
+  let frame=if j<next.len(){next[j]==bytes[off+1+j]}else{true};
+  code==2&&pointer==next.as_ptr()&&length==CHECKPOINT_TAIL_BYTES-off-1&&frame
+ };
+ good
+}
+#[kani::proof_for_contract(checkpoint_zero_step_packet)] #[kani::unwind(2)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn checkpoint_zero_step(){checkpoint_zero_step_packet(&kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn checkpoint_zero_step_wrong_packet(bytes:&[u8;CHECKPOINT_TAIL_BYTES],off:usize,j:usize)->bool{
+ kani::assume(off<=CHECKPOINT_TAIL_BYTES);
+ let remaining=&bytes[off..];
+ let (code,pointer,length)=if remaining.is_empty(){(0u8,remaining.as_ptr(),0usize)}else if remaining[0]!=0{(1,remaining.as_ptr(),remaining.len())}else{let next=&remaining[1..];(2,next.as_ptr(),next.len())};
+ let good=if off==CHECKPOINT_TAIL_BYTES{code==0&&length==0}else if bytes[off]!=0{code==1&&pointer==remaining.as_ptr()&&length==CHECKPOINT_TAIL_BYTES-off}else{
+  let next=&remaining[1..];
+  let frame=if j<next.len(){next[j]==bytes[off+1+j]}else{true};
+  code==2&&pointer==next.as_ptr()&&length==CHECKPOINT_TAIL_BYTES-off-1&&frame
+ };
+ !good
+}
+#[kani::proof_for_contract(checkpoint_zero_step_wrong_packet)] #[kani::unwind(2)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn checkpoint_zero_step_wrong(){checkpoint_zero_step_wrong_packet(&kani::any(),kani::any(),kani::any());}
+
+// NHY runtime argument cuts
+struct NHY_RuntimeLog{kind:u8,ptr:*const u8,len:u64,byte:u8}
+fn NHY_runtime_oracle(kind:u8,ptr:*const u8,len:u64,j:usize,log:&mut NHY_RuntimeLog){log.kind=kind;log.ptr=ptr;log.len=len;log.byte=if (j as u64)<len{unsafe{ptr.add(j).read()}}else{0};}
+fn NHY_rendered_label(tag:u8)->&'static str{match tag{0=>"r1:error:Parse",1=>"r1:error:Semantic",2=>"r1:error:Transcript",3=>"r1:error:Relation",4=>"r1:error:Merkle",5=>"r1:error:Query",6=>"r1:error:Checkpoint",_=>"r1:error:Allocation"}}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn runtime_arguments_packet(clear:bool,tag:u8,j:usize)->bool{
+ kani::assume(tag<8);let mut log=NHY_RuntimeLog{kind:255,ptr:core::ptr::null(),len:0,byte:0};
+ let good=if clear{
+  let data:&[u8]=&[];
+  // Exact target_os=solana SDK pointer/length argument form. Effects pending.
+  NHY_runtime_oracle(0,data.as_ptr(),data.len() as u64,0,&mut log);
+  log.kind==0&&log.ptr==data.as_ptr()&&log.len==0
+ }else{
+  let message=NHY_rendered_label(tag);kani::assume(j<message.len());
+  // Post-format carrier only: actual String realization is an OPEN child.
+  NHY_runtime_oracle(1,message.as_ptr(),message.len() as u64,j,&mut log);
+  log.kind==1&&log.ptr==message.as_ptr()&&log.len==message.len() as u64&&log.byte==message.as_bytes()[j]
+ };
+ good
+}
+#[kani::proof_for_contract(runtime_arguments_packet)] #[kani::unwind(2)]
+fn runtime_arguments(){runtime_arguments_packet(kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn runtime_arguments_wrong_packet(clear:bool,tag:u8,j:usize)->bool{
+ kani::assume(tag<8);let mut log=NHY_RuntimeLog{kind:255,ptr:core::ptr::null(),len:0,byte:0};
+ let good=if clear{
+  let data:&[u8]=&[];
+  // Exact target_os=solana SDK pointer/length argument form. Effects pending.
+  NHY_runtime_oracle(0,data.as_ptr(),data.len() as u64,0,&mut log);
+  log.kind==0&&log.ptr==data.as_ptr()&&log.len==0
+ }else{
+  let message=NHY_rendered_label(tag);kani::assume(j<message.len());
+  // Post-format carrier only: actual String realization is an OPEN child.
+  NHY_runtime_oracle(1,message.as_ptr(),message.len() as u64,j,&mut log);
+  log.kind==1&&log.ptr==message.as_ptr()&&log.len==message.len() as u64&&log.byte==message.as_bytes()[j]
+ };
+ !good
+}
+#[kani::proof_for_contract(runtime_arguments_wrong_packet)] #[kani::unwind(2)]
+fn runtime_arguments_wrong(){runtime_arguments_wrong_packet(kani::any(),kani::any(),kani::any());}
+
+// NHY SDK outside-domain control
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn pda_overlong_packet(seed:&[u8;33])->bool{
+ let program=Pubkey::new_from_array([0;32]);
+ // The exact SDK rejects len33 before SHA/curve/syscall paths. No digest value modeled.
+ let result=Pubkey::create_program_address(&[&seed[..]],&program);
+ matches!(result,Err(solana_program::pubkey::PubkeyError::MaxSeedLengthExceeded))
+}
+#[kani::proof_for_contract(pda_overlong_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn pda_overlong(){pda_overlong_packet(&kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn pda_overlong_wrong_packet(seed:&[u8;33])->bool{
+ let program=Pubkey::new_from_array([0;32]);
+ // The exact SDK rejects len33 before SHA/curve/syscall paths. No digest value modeled.
+ let result=Pubkey::create_program_address(&[&seed[..]],&program);
+ !matches!(result,Err(solana_program::pubkey::PubkeyError::MaxSeedLengthExceeded))
+}
+#[kani::proof_for_contract(pda_overlong_wrong_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn pda_overlong_wrong(){pda_overlong_wrong_packet(&kani::any());}

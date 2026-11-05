@@ -380,3 +380,65 @@ fn callback_parse_stability_packet()->bool{
 #[kani::proof_for_contract(callback_parse_stability_packet)] #[kani::unwind(35)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn callback_parse_stability(){callback_parse_stability_packet();}
+
+// NHY formatter capacity
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn format_capacity_packet(e:verifier::Error)->bool{(format_args!("r1:error:{:?}",e).estimated_capacity()==18 && format_args!("r1:error:{:?}",e).as_str().is_none())}
+#[kani::proof_for_contract(format_capacity_packet)] #[kani::unwind(3)]
+fn format_capacity(){let tag:u8=kani::any();kani::assume(tag<8);let e=match tag{0=>verifier::Error::Parse,1=>verifier::Error::Semantic,2=>verifier::Error::Transcript,3=>verifier::Error::Relation,4=>verifier::Error::Merkle,5=>verifier::Error::Query,6=>verifier::Error::Checkpoint,_=>verifier::Error::Allocation};format_capacity_packet(e);}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn format_capacity_wrong_packet(e:verifier::Error)->bool{!(format_args!("r1:error:{:?}",e).estimated_capacity()==18 && format_args!("r1:error:{:?}",e).as_str().is_none())}
+#[kani::proof_for_contract(format_capacity_wrong_packet)] #[kani::unwind(3)]
+fn format_capacity_wrong(){let tag:u8=kani::any();kani::assume(tag<8);let e=match tag{0=>verifier::Error::Parse,1=>verifier::Error::Semantic,2=>verifier::Error::Transcript,3=>verifier::Error::Relation,4=>verifier::Error::Merkle,5=>verifier::Error::Query,6=>verifier::Error::Checkpoint,_=>verifier::Error::Allocation};format_capacity_wrong_packet(e);}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn string_window_packet(byte:u8,j:usize,k:usize)->bool{
+ kani::assume(byte<128);kani::assume(j<1);kani::assume(k<9);
+ let one=[byte];let mut text=core::mem::ManuallyDrop::new(String::with_capacity(18));
+ text.push_str("r1:error:");
+ // One actual copy window (window) or distinct capacity-growth branch (grow).
+ text.push_str(unsafe { core::str::from_utf8_unchecked(&one) });
+ let data=text.as_bytes();
+ (text.len()==9+1 && text.capacity()>=text.len() && data[k]==b"r1:error:"[k] && data[9]==byte)
+}
+#[kani::proof_for_contract(string_window_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn string_window(){string_window_packet(kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn string_window_wrong_packet(byte:u8,j:usize,k:usize)->bool{
+ kani::assume(byte<128);kani::assume(j<1);kani::assume(k<9);
+ let one=[byte];let mut text=core::mem::ManuallyDrop::new(String::with_capacity(18));
+ text.push_str("r1:error:");
+ // One actual copy window (window) or distinct capacity-growth branch (grow).
+ text.push_str(unsafe { core::str::from_utf8_unchecked(&one) });
+ let data=text.as_bytes();
+ !(text.len()==9+1 && text.capacity()>=text.len() && data[k]==b"r1:error:"[k] && data[9]==byte)
+}
+#[kani::proof_for_contract(string_window_wrong_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn string_window_wrong(){string_window_wrong_packet(kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn string_grow_packet(byte:u8,j:usize,k:usize)->bool{
+ kani::assume(byte<128);kani::assume(j<10);kani::assume(k<9);
+ let one=[byte];let mut text=core::mem::ManuallyDrop::new(String::with_capacity(18));
+ text.push_str("r1:error:");
+ // One actual copy window (window) or distinct capacity-growth branch (grow).
+ text.push_str("Allocation");
+ let data=text.as_bytes();
+ (text.len()==9+10 && text.capacity()>=text.len() && data[k]==b"r1:error:"[k] && data[9+j]==b"Allocation"[j])
+}
+#[kani::proof_for_contract(string_grow_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn string_grow(){string_grow_packet(kani::any(),kani::any(),kani::any());}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn string_grow_wrong_packet(byte:u8,j:usize,k:usize)->bool{
+ kani::assume(byte<128);kani::assume(j<10);kani::assume(k<9);
+ let one=[byte];let mut text=core::mem::ManuallyDrop::new(String::with_capacity(18));
+ text.push_str("r1:error:");
+ // One actual copy window (window) or distinct capacity-growth branch (grow).
+ text.push_str("Allocation");
+ let data=text.as_bytes();
+ !(text.len()==9+10 && text.capacity()>=text.len() && data[k]==b"r1:error:"[k] && data[9+j]==b"Allocation"[j])
+}
+#[kani::proof_for_contract(string_grow_wrong_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn string_grow_wrong(){string_grow_wrong_packet(kani::any(),kani::any(),kani::any());}
