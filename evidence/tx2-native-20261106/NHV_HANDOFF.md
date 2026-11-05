@@ -11,3 +11,5 @@ Resume is an OPEN NFU producer, not NGC flush. NHM NEW/pair/finish are named
 external obligations. Independent interfaces proceed without assuming these.
 Retain all approved runtime, P6/D188 option-A, cryptographic/privacy and
  two-transaction trust rows. No change to the per-attempt security target.
+
+Stage 1: NHV_L001 combined NHT/NGK/headline import passed, exit0, wall3.166291s, peak5959532KiB, swap0; headline standard three axioms. This checks compatibility only, zero slot promotions. Seed36 files /3787008 bytes. Exact selected Aeneas objects are pinned in the receipt.
