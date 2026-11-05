@@ -1,0 +1,11 @@
+{
+  "kind": "actual full-backing token parser flags/delegated amount and readonly frame",
+  "mode": "negative",
+  "domain": "Every 165-byte token backing with option tags exactly1 at72/109/129 and state1 at108; all other bytes unrestricted apart from those bytes; no None zero loop is executed. Every frame query0..164.",
+  "source": "use super::*;\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NIE_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NIE_KMX::KMX_copy_from_slice)]\n#[kani::stub(alloc::alloc::realloc,crate::NIE_KMX::KMX_realloc)]\n#[kani::proof]\n#[kani::unwind(166)]\nfn association() {\n let mut data:[u8;165]=kani::any();\n data[72..76].copy_from_slice(&1u32.to_le_bytes());\n data[109..113].copy_from_slice(&1u32.to_le_bytes());\n data[129..133].copy_from_slice(&1u32.to_le_bytes());\n data[108]=1;\n let query:usize=kani::any();kani::assume(query<165);\n let before=data[query];\n let expected=u64::from_le_bytes([data[121],data[122],data[123],data[124],data[125],data[126],data[127],data[128]]);\n let mut parsed=parse_legacy_token_account_v1(&data).unwrap();\n data[query] ^= 1;\n assert!(parsed.has_delegate);\n assert!(parsed.is_native);\n assert!(parsed.has_close_authority);\n assert!(parsed.delegated_amount==expected);\n assert!(data[query]==before);\n}\n",
+  "modifies": [],
+  "production_credit": false,
+  "remaining": "Full production custody parser/caller PacketDomains, None-case zero-loop association, child/CPI/balance/authority frames remain OPEN. Prior NHC field/Some observations are reused, not rerun as new claims.",
+  "control": "frame",
+  "reused": "NHC_K086..089, NHC_K110..115 and NHC_CustodyWindows by SHA citation; only flags/delegated/full readonly frame are new assertions"
+}

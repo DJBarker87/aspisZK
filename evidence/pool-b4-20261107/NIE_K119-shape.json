@@ -1,0 +1,10 @@
+{
+  "kind": "actual withdrawal physical-list arity rejection + source borrow/frame",
+  "mode": "positive",
+  "domain": "Every list length0..4 or6 in the selected cut, valid AccountInfo metadata and true data/lamport aliases, existing shared guard, arbitrary3 bytes and lamports. Arity rejects before uniqueness loop; no whole-buffer loop is run.",
+  "source": "use super::*;\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NIE_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NIE_KMX::KMX_copy_from_slice)]\n#[kani::stub(alloc::alloc::realloc,crate::NIE_KMX::KMX_realloc)]\n#[kani::proof]\n#[kani::unwind(289)]\nfn association() {\n assert!(core::mem::size_of::<AccountInfo>()==48);\n let mut data:[u8;3]=kani::any();let before=data;let mut balance:u64=kani::any();let old=balance;\n let key=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());\n let base=AccountInfo::new(&key,kani::any(),kani::any(),&mut balance,&mut data,&owner,kani::any(),kani::any());\n let accounts=[base.clone(),base.clone(),base.clone(),base.clone(),base.clone(),base.clone()];\n let len:usize=6;\n let shared=base.try_borrow_data().unwrap();\n let got=exact_five_withdrawal_accounts(&accounts[..len]);\n assert!(matches!(got,Err(ref e) if *e==ProgramError::InvalidArgument));drop(got);drop(shared);\n \n assert!(base.try_borrow_mut_data().is_ok());assert!(base.lamports()==old);let q:usize=kani::any();kani::assume(q<3);assert!(base.try_borrow_data().unwrap()[q]==before[q]);\n}\n",
+  "modifies": [],
+  "production_credit": false,
+  "remaining": "Admitted five-account uniqueness/selection and same-request custody/CPI frames remain OPEN.",
+  "large": true
+}

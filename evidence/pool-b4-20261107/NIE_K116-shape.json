@@ -1,0 +1,11 @@
+{
+  "kind": "actual exact-count helper on aliased live-exclusive carrier, arbitrary expected usize and frame",
+  "mode": "negative",
+  "domain": "Every expected usize, logical list length0..2, arbitrary AccountInfo metadata/key/owner/lamports/data on aliased physical cells with a valid existing exclusive data guard; helper reads only list length.",
+  "source": "use super::*;\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NIE_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NIE_KMX::KMX_copy_from_slice)]\n#[kani::stub(alloc::alloc::realloc,crate::NIE_KMX::KMX_realloc)]\n#[kani::proof]\n#[kani::unwind(33)]\nfn association() {\n let mut data:[u8;3]=kani::any();let before=data;let mut balance:u64=kani::any();let old=balance;\n let key=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());let sign:bool=kani::any();\n let mut account=AccountInfo::new(&key,sign,kani::any(),&mut balance,&mut data,&owner,kani::any(),kani::any());let alias=account.clone();\n let accounts=[account.clone(),alias.clone()];let len:usize=kani::any();kani::assume(len<=2);let expected:usize=kani::any();\n let guard=alias.try_borrow_mut_data().unwrap();\n let mut reply=require_exact_account_count(&accounts[..len],expected);\n drop(guard);\n account.is_signer=!account.is_signer;\n let correct=if len==expected {Ok(())}else if len<expected {Err(ProgramError::NotEnoughAccountKeys)}else{Err(ProgramError::InvalidArgument)};\n assert!(reply==correct);assert!(account.is_signer==sign);assert!(account.data.try_borrow_mut().is_ok());assert!(alias.lamports()==old);\n let q:usize=kani::any();kani::assume(q<3);assert!(alias.try_borrow_data().unwrap()[q]==before[q]);\n}\n",
+  "modifies": [],
+  "production_credit": false,
+  "remaining": "All production list cardinalities/physical layout and parent count PacketDomains remain OPEN; bounded physical list is not a production restriction.",
+  "control": "frame",
+  "reused_model": "NHC_NGG_Count.result"
+}

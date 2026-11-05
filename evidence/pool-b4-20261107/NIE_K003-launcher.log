@@ -1,0 +1,51 @@
+{"attempt": "NIE_K003", "exit_status": 1, "wall_seconds": 2.226694602984935, "peak_rss_kib": "337576", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+ed crate `alloc`
+  --> programs/aspis-pool/src/../../../KMX_stubs.rs:24:17
+   |
+24 |  let new_layout=alloc::alloc::Layout::from_size_align(new_size,layout.align()).unwrap();
+   |                 ^^^^^ use of unresolved module or unlinked crate `alloc`
+   |
+   = help: add `extern crate alloc` to use the `alloc` crate
+help: consider importing this struct
+   |
+ 1 + use core::alloc::Layout;
+   |
+help: if you import `Layout`, refer to it directly
+   |
+24 -  let new_layout=alloc::alloc::Layout::from_size_align(new_size,layout.align()).unwrap();
+24 +  let new_layout=Layout::from_size_align(new_size,layout.align()).unwrap();
+   |
+
+warning: unused imports: `decode_pool_v1_pair_forest_terminal_statement_v1` and `encode_pool_v1_pair_forest_terminal_request_v1`
+  --> programs/aspis-pool/src/pair_forest.rs:21:9
+   |
+21 |         decode_pool_v1_pair_forest_terminal_statement_v1, encode_pool_v1_pair_forest_checkpoint_v1,
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+22 |         encode_pool_v1_pair_forest_lane_state_v1, encode_pool_v1_pair_forest_master_v1,
+23 |         encode_pool_v1_pair_forest_terminal_request_v1,
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `encode_pool_v1_pair_forest_terminal_result_v1`
+  --> programs/aspis-pool/src/pair_forest_dispatch.rs:14:5
+   |
+14 |     encode_pool_v1_pair_forest_terminal_result_v1, PoolV1PairForestTerminalRequestV1,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+For more information about this error, try `rustc --explain E0433`.
+error: could not compile `aspis-pool` (lib) due to 6 previous errors; 2 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 6 compilation errors.
+
+Running as unit: run-rdc8ce88c30aa46099b5ba394da7e5e6b.scope; invocation ID: 0a83b014ece444d3ba6ca7ec072a3698

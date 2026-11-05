@@ -1,0 +1,12 @@
+{
+  "kind": "actual recheck -> classifier caller, borrowed alias cleanup case 0",
+  "mode": "positive",
+  "domain": "Canonical AccountInfo on arbitrary 0..3-byte logical backing; arbitrary keys/lamports/rent; System owner distinct from Pool; stated metadata branch; optional live shared alias. No existing exclusive guard.",
+  "source": "use super::*;\nuse solana_program::{account_info::AccountInfo,pubkey::Pubkey};\n#[kani::proof]\n#[kani::unwind(12)]\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NHP_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NHP_KMX::KMX_copy_from_slice)]\n#[kani::stub(alloc::alloc::realloc,crate::NHP_KMX::KMX_realloc)]\nfn association() {\n let mut data: [u8;3] = kani::any();\n let before=data;\n let mut lamports:u64=kani::any();\n let key=Pubkey::new_from_array(kani::any());\n let program=Pubkey::new_from_array(kani::any());\n let owner=solana_sdk_ids::system_program::id();\n kani::assume(program!=owner);\n let len:usize=kani::any();kani::assume(len<=3);\n let (exec,sign,write,system): (bool,bool,bool,bool)=(false,false,true,true);\n let account=AccountInfo::new(&key,sign,write,&mut lamports,&mut data[..len],&owner,exec,kani::any());\n let alias=account.clone();\n let shared=if kani::any() {Some(alias.try_borrow_data().unwrap())} else {None};\n let reply=recheck_pair_forest_nullifier_marker_v1(&program,&account);\n let expected_ok= !exec && !sign && write && system && len==0;\n assert!(matches!(reply,Ok(NullifierMarkerPreparationV1::CreateOrAllocateSystemOwned))==expected_ok);\n drop(shared);\n \n assert!(alias.try_borrow_mut_data().is_ok());\n let query:usize=kani::any();kani::assume(query<len);\n assert!(alias.try_borrow_data().unwrap()[query]==before[query]);\n}\n",
+  "modifies": [],
+  "production_credit": false,
+  "remaining": "Full arbitrary production heap/caller prefix and entry/CPI borrow-release association remain OPEN; bounded helper context is not production-domain exclusion of K086.",
+  "caller": "recheck_pair_forest_nullifier_marker_v1",
+  "case": 0,
+  "control": null
+}
