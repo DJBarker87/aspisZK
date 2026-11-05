@@ -32,7 +32,7 @@ for p in sorted(E.glob('NHB_K[0-9][0-9][0-9]/receipt.json')):
  if int(a[-3:])>=3:
   src=p.parent/'sources/NHB_src/crates/aspis-core/src/NHB_harness.rs'
   assert '#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]' in src.read_text(),a
-pairs=[(3,4),(5,6),(7,8),(9,10),(11,12),(13,14),(15,16),(20,21),(22,23),(24,25),(26,27),(30,31),(43,44),(46,47),(50,51),(53,54),(55,56)]
+pairs=[(3,4),(5,6),(7,8),(9,10),(11,12),(13,14),(15,16),(20,21),(22,23),(24,25),(26,27),(30,31),(43,44),(46,47),(50,51),(53,54),(55,56),(59,60)]
 for pos,neg in pairs:
  a=f'NHB_K{pos:03d}';b=f'NHB_K{neg:03d}';rd={x['attempt']:x for x in results}
  assert rd[a]['verdict']=='PASS' and rd[b]['verdict']=='ASSERTION_FAILED',(a,b)
@@ -43,7 +43,10 @@ for pos,neg in pairs:
   assert rr['exit_status'] not in [124,137],n
 for p in E.glob('NHB_L[0-9][0-9][0-9]/receipt.json'):
  r=json.loads(p.read_text())
- if r['exit_status']==0:
+ assert r['swaps']=='0'
+ assert r['limits']=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}
+ ad=json.loads((E/(r['attempt']+'-admission.json')).read_text());assert ad['exit']==0 and ad['reservation']['allowed'] is True
+ if r['exit_status']==0 and r['kind']=='lean':
   for line in r['print_axioms']:
    assert 'sorryAx' not in line and 'axioms: [' not in line or all(x.strip() in ['propext','Classical.choice','Quot.sound'] for x in line.split('axioms: [',1)[1].rstrip(']').split(',')),line
 if (E/'NHB_LEDGER_DELTA.json').exists():

@@ -74,3 +74,27 @@ and accepts the generic prefix adapter laws. L020 failed initial list-index and
 dependent-index rewrites; L021 uses a typed cell projection and accepts all
 inactive-zero laws. L022/L023 exposed only own field-abbreviation/proof-index
 elaboration errors in the observation adapter; failed roots remain excluded.
+
+## Final native limits and exact outstanding assertion
+
+K055/K056 establish local length16 membership; K059/K060 establish length18.
+K057 passes length17, but K058 times out its control: no credit is granted.
+The complete domain still lacks lengths11..15,17,19..21. Scalar/literal/
+canonical/inactive-zero and absent/present reductions and source-fused word
+reductions are retained in NHB_RESULTS.json; each tool-limit receipt is excluded.
+K053/K054 establish only the caller relation for an arbitrary membership Bool:
+`reply == coherent_contains(candidate, SAME active survivor prefix)` remains
+unproved on those missing domains. It is not a model/native schedule mismatch.
+The same-invocation Trace producer and actual_queries cannot be assembled
+without that value edge and the reviewed native loop/fission association.
+No timed-out shape was rerun unchanged; no limits were increased.
+
+## Loaded-object manifest correction
+
+L033's loaded scan reported zero dangling and duplicate-owner entries but
+failed exact import comparison for sixteen NHB modules: the expected manifest
+omitted Lean's implicit Init import. The owned source-derived manifest now
+includes Init for every non-prelude NHB module, without changing explicit
+imports or scanner checks. The old manifest, scan and receipt are retained;
+NHB_IMPORT_MANIFEST_REPAIR.json pins the before/after hashes. L034 tests this
+changed validation input only; no theorem/root or native replay is repeated.

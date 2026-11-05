@@ -25,7 +25,7 @@ NHB_Inactive and NHB_Domains. NHB_Prefix.member associates the SAME active
 survivor prefix. NHB_Observation.ghost_inputs establishes pre-observation
 availability, not desired poststate equality.
 
-K055/K056 and any later successful length-specialized contracts have an
+K055/K056 (length16) and K059/K060 (length18) have an
 expected Bool parameter uniquely constrained to the scalar prefix predicate;
 NHB_Membership.prefix_membership/NHB_Prefix.member give its model value law.
 They are local contracts, not used as a stub in a credited full-domain caller.

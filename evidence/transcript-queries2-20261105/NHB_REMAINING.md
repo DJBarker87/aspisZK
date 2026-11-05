@@ -4,7 +4,7 @@ TX1:168 is OPEN. No composed row is added. No `NGP_TRANSCRIPT.actual_queries`
 producer is exported; the shape required by NGP_L181 remains unsatisfied.
 
 1. Membership value on each continuing native pre-state. Checked complete
-   length domains 0..10 do not cover 11..21. The final native case table and
+   length domains 0..10,16,18 do not cover 11..15,17,19..21. The final native case table and
    matched controls are NHB_MEMBERSHIP_CALLEES.json. Canonical 18-bit words and
    inactive-zero cells are established by NHB_Canonical/NHB_Inactive, but do
    not remove the missing length cases (NHB_DomainSplit). Native timeouts are

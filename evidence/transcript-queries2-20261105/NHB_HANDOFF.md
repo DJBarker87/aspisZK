@@ -1,5 +1,39 @@
 # NHB sampler association handoff
 
+Current result: **TX1:168 OPEN; zero composed rows.** No actual_queries
+producer is exported. All60 Kani attempts are spent;28 focused Lean invocations
+and6 support/audit invocations consume34 of60 Lean/support slots. Zero extraction.
+The member-by-member remaining obligations and why spare Lean cannot discharge
+them are in NHB_REMAINING.md. No schedule mismatch is established.
+
+Checked local native windows: cursor K030/K031, stopped word K043/K044,
+low word K046/K047, block end K050/K051, conditional opaque-call-log word
+K053/K054. Membership lengths0..10,16,18 have matched controls; length17
+positive K057 is excluded because control K058 timed out. Missing lengths
+are11..15,17,19..21. No failed helper is used as a call-site stub.
+
+Forty new top theorems compose the model-side frame, invariants, word/block
+induction, source-order first-stop and full Result association. They load with
+AspisR1.RPx_Deployed.deployed in NHB_COMBINED_IMPORT. Raw closure audit and
+standard axiom checks cover all41 roots; fixture/scan status is authoritative
+in NHB_AUDIT.json. Exact target, command, revision, source/dependency hashes,
+exit, wall, RSS, swap, cap and printed axioms are per-attempt receipts and
+NHB_RESULTS.json. Retained object/export metadata is NHB_FINAL_HOST.json.
+
+Only this evidence directory changed; frozen shipped sources are untouched.
+ELF pins are inherited, not newly measured. No rebuild, push, key action,
+trust removal or sibling workspace edit occurred. Local Bool contract
+composition uses the owner-approved P6/D188 option-A trust reclassification.
+
+The Query31 snapshot matches5 frozen bodies byte for byte. The named v7 packet
+is absent from this branch; an immutable location was requested and remains
+unanswered. Do not treat source identity alone as extraction provenance.
+Use NHB_REUSE.json and NHB_CACHE_IMPORTS.json.xz for immutable NGQ/NGK reuse;
+never rerun their passing shapes or NGQ_K025/K044. Own cache is retained; the
+final export copies only owned small objects, retaining the audit binary once.
+
+## Historical stage notes
+
 Stage 0 in progress. TX1:168 OPEN; no composed-row credit claimed.
 Target: frozen 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387 Transcript::queries,
 through SAME-invocation chronological NGQ_Cuts.Trace, coherent Query31 interfaces,
@@ -76,3 +110,18 @@ domain partition, and that bounds do NOT imply the smaller checked domains.
 Thus no caller can be silently restricted to len<=10. New domains/cuts remain
 partial inputs; no complete native sampler association or root Trace producer
 is claimed. Full/middle/high value/frame attempts remain tool limits.
+
+## Final retention and audit status
+
+L030/L031 raw walks PASS for headline+40 roots; L032 eight mutation fixtures
+PASS; L034 loaded scan PASS after the retained L033 expected-Init-manifest
+repair. No scanner checks were weakened. Owned exports are17 objects /2357896
+bytes; the audit binary stays once in the owned host workspace. Only owned
+NHB_target/NHB_tmp were removed after receipts/source pins were recovered.
+The retained cache was not deleted. Frozen lock hash is unchanged.
+NHB_FINAL_HOST.json records disk, export hashes and final lock.
+
+All60 Kani and34 Lean/support slots were used. The26 unused Lean slots cannot
+prove the missing native-value/fission/physical-trace edges; each dependency
+is explained in NHB_REMAINING.md. No independent model obligation is left
+unattempted. No row closure, release result, or actual_queries claim is made.
