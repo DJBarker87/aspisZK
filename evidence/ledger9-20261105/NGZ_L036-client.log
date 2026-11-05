@@ -1,0 +1,54 @@
+{"attempt": "NGZ_L036", "exit_status": 0, "wall_seconds": 2.6461812120396644, "peak_rss_kib": "5953780", "swaps": "0", "print_axioms": ["'AspisR1.NGC_WriterDomain.from_query_loop' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]", "'AspisR1.NGC_CheckpointBridge.derived_packet' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]", "'AspisR1.NGC_PrestateBridge.from_initializers' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]"]}
+Std.Result.{0}
+            (Aeneas.Std.core.result.Result.{0, 0} AspisR1Stage2.verifier.BatchedWeights VTop_Stages.verifier.Error))
+          (AspisR1.Port3_NativePendingInstall.source reserveB
+            (@Aeneas.Std.alloc.vec.Vec.deref AspisR1Stage2.aspis_core.field.QM31 a.weights))
+          (@Aeneas.Std.Result.ok.{0}
+            (Aeneas.Std.core.result.Result.{0, 0} AspisR1Stage2.verifier.BatchedWeights VTop_Stages.verifier.Error)
+            (@Aeneas.Std.core.result.Result.Ok.{0, 0} AspisR1Stage2.verifier.BatchedWeights VTop_Stages.verifier.Error
+              b)) →
+        @Eq.{1}
+            (Aeneas.Std.Result.{0}
+              (Aeneas.Std.core.result.Result.{0, 0}
+                (Prod.{0, 0} AspisR1Stage2.verifier.Accumulator AspisR1Stage2.verifier.BatchedWeights)
+                AspisR1Stage2.verifier.Error))
+            (AspisR1.Port3_NativeQueryBody.verifier.candidate.query_loop (AspisR1.NFS_QueryOps.installed base) proof p a
+              g (@Option.none.{0} (AspisR1Stage2.verifier.Phase → Aeneas.Std.Result.{0} Unit)) geometry b
+              (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10))) ⋯))
+            (@Aeneas.Std.Result.ok.{0}
+              (Aeneas.Std.core.result.Result.{0, 0}
+                (Prod.{0, 0} AspisR1Stage2.verifier.Accumulator AspisR1Stage2.verifier.BatchedWeights)
+                AspisR1Stage2.verifier.Error)
+              (@Aeneas.Std.core.result.Result.Ok.{0, 0}
+                (Prod.{0, 0} AspisR1Stage2.verifier.Accumulator AspisR1Stage2.verifier.BatchedWeights)
+                AspisR1Stage2.verifier.Error
+                (@Prod.mk.{0, 0} AspisR1Stage2.verifier.Accumulator AspisR1Stage2.verifier.BatchedWeights after
+                  pending))) →
+          ∃ out,
+            And
+              (@Eq.{1} (Aeneas.Std.Result.{0} (Aeneas.Std.Slice.{0} AspisR1.Port3_FlushInstall.K))
+                (AspisR1.Port3_FlushInstall.flush pending
+                  (@Aeneas.Std.alloc.vec.Vec.deref AspisR1Stage2.aspis_core.field.QM31 after.weights))
+                (@Aeneas.Std.Result.ok.{0} (Aeneas.Std.Slice.{0} AspisR1Stage2.aspis_core.field.QM31) out))
+              (have written :=
+                {
+                  weights :=
+                    @Subtype.mk.{1} (List.{0} AspisR1Stage2.aspis_core.field.QM31)
+                      (fun l =>
+                        @LE.le.{0} Nat instLENat (@List.length.{0} AspisR1Stage2.aspis_core.field.QM31 l)
+                          Aeneas.Std.Usize.max)
+                      (@Subtype.val.{1} (List.{0} AspisR1Stage2.aspis_core.field.QM31)
+                        (fun l =>
+                          @LE.le.{0} Nat instLENat (@List.length.{0} AspisR1Stage2.aspis_core.field.QM31 l)
+                            Aeneas.Std.Usize.max)
+                        out)
+                      ⋯,
+                  rhs := after.rhs, power := after.power, next := after.next };
+              And
+                (AspisR1.NGC_KNE_Caller.WriterDomain (AspisR1.CheckpointBytes3Namespaces.toPrepared p)
+                  (AspisR1.CheckpointBytes3Namespaces.toAccumulator written))
+                (And (@Eq.{1} AspisR1Stage2.aspis_core.field.wide_exact.WideExact written.rhs after.rhs)
+                  (And (@Eq.{1} AspisR1Stage2.aspis_core.field.QM31 written.power after.power)
+                    (@Eq.{1} Aeneas.Std.Usize written.next after.next))))
+'AspisR1.NGC_PrestateBridge.from_initializers' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+

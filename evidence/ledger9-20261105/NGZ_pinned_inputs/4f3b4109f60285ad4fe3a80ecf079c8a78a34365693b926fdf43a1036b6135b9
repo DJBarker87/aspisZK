@@ -1,0 +1,83 @@
+{
+  "attempt": "NFV_K060",
+  "kind": "kani",
+  "module": "pair_forest::NFV_Helper::association",
+  "command": [
+    "python3",
+    "NFV_kani_gate.py",
+    "NFV_K060.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-pool-retdata3-20261104/NFV_src/programs/aspis-pool/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-pool-retdata3-20261104/NFV_target",
+    "--lib",
+    "--features",
+    "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "pair_forest::NFV_Helper::association",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "NFV_native.patch",
+    "NFV_kani_gate.py",
+    "NFV_RUST_SHA256.json"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-pool-retdata3-20261104/NFV_tmp"
+  },
+  "timeout": 180,
+  "source_revision": "7636204f1ef0ddccd99c658c96ec2a9fcfc1b4de",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "frozen_input_sha256": "05b7f617777edd0bca70e1a745c08becc3241275cd0d13c7cedee21e9705dbcc",
+    "frozen_manifest_sha256": "7e18d8646fb2c49c457791c5f524ea0a112399c408e472cebcfdff263ae0dea0"
+  },
+  "program_features": "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit",
+  "program_manifest": "programs/aspis-pool/Cargo.toml",
+  "required_statement_features": [
+    "pool-v1-kernel"
+  ],
+  "expected_time": "optimized dependency compilation then Pool CPI/readback local record forwarding; no field products or hash",
+  "copy_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+  "exit_status": 241,
+  "wall_seconds": 86.24267564690672,
+  "peak_rss_kib": "100300",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r49180caf7d6b4c62a716edf357cf8df0.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "1123676160",
+  "source_hashes": {
+    "NFV_native.patch": "94c4138974376c1d8d0a91c96ec9a51d4ce47f3d29d91e70aa3005225dbd1a9f",
+    "NFV_kani_gate.py": "c2b42873ce732648b2c5c503264accad3d368717a9f26780c15be4feb127d521",
+    "NFV_RUST_SHA256.json": "d638da2722a7314eb831c3df223235afed48bf4ab02ec868d4e8bbb1945bcd05"
+  },
+  "print_axioms": "N/A: kani"
+}
