@@ -92,6 +92,9 @@ objects; compressed manifest plus raw SHA256 committed. Export hash verification
 preceded removal of456,927,533 owned rebuildable bytes (NHT_HOST_END.json).
 Cache/seed and all peer workspaces retained. Repeated large inputs are stored
 once with lossless SHA references (NHT_PACK.json). No file over20MB or bytecode.
+Authored Lean/Python/Markdown whitespace checks pass. Raw generated C and receipt
+logs preserve original whitespace; whole-tree diff checks report those retained
+bytes (NHT_HYGIENE.json), which are not modified after validation.
 
 Entire crates/programs trees equal frozen4bb3b3f51e16b4525f1d10336e2b0bcbbd775387.
 No ELF rebuild trigger. INHERITED ONLY, not rebuilt here: default
