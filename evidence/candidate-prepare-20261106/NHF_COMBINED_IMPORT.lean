@@ -15,4 +15,6 @@ import NHF_Recombine
 import NHF_Overwrite
 import NHF_ScalarWindow
 import NHF_StageObservations
+import NHF_Prefix
+import NHF_HeapPrefix
 #print axioms AspisR1.RPx_Deployed.deployed

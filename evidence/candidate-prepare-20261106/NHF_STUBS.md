@@ -1,19 +1,15 @@
-# NHF substitutions and domains
+# Substitutions and exact domains
 
-No field-product stub and no function-contract substitution has been introduced.
+No field multiplication, function pointer, Option<fn>, proof_for_contract or stub_verified is used by any selected NHF gate. Ruling(t)'s extra contract-shape controls are consequently not invoked. No unpaired field stub exists.
 
-| Substitution | Named law / domain | Status |
+| Substitution | Compiled law and exact caller domain | Status |
 |---|---|---|
-| Exact KMX_copy_stubs.patch at its prescribed paths | KMX_CopyMeaning laws; NHF_K002 positive and NHF_K003 inverted assertion control at copy32 | Positive/control observed; body-identical copy source; frozen graph/offline/unchanged lock receipts retained. |
-| S0 heap boundary (planned local-record cut) | NGC_Initialization.heap_result, NGC_ReferenceValues.resize_empty / u8, n14759<=32768; same owned result, reservation outcome explicit | CLOSED callee available, not installed by NHF yet. |
-| S1 compact semantic boundary (planned) | NGV_SemanticPacket.result / SAME7015 input, SAME13831 output; original 27-row trace constructed | CLOSED callee available, not installed by NHF yet. |
-| S2 compact values boundary (planned) | NGV_ExpandAssociation.result / SAME464 input, SAME928 output, alignment16, bound1856 | CLOSED callee available, not installed by NHF yet. |
-| S3 WideExact byte decoder | NET/NFN closed Q packet TX1:048; UnrolledWideParserRefinement.source_refines/source_eq_half_parser on original32 bytes | Initial NHF native check executes actual decoder; no stub. |
-| S4 semantic verification | Missing complete TX1:137 packet | OPEN, never assumed. |
-| S5 Prepared constructor | Missing complete TX1:179 packet; NGN_FAILING_STEP.md lists missing sampler/query/native provenance | OPEN, never assumed. |
+| Prescribed KMX copy stubs | Exact KMX_copy_stubs.patch SHA256 bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67; original KMX value laws, NHF byte/record associations; valid disjoint source/destination for copies | K020/K021 copy32 and K088/K089 actual E-record positive/intended-failure pairs; no custom copy implementation |
+| Heap boundary local log | NGC complete heap::filled TX1:064, u8/n14759<=32768, effect-free clone, SAME reservation outcome and owned Vec; NHF_HeapPrefix.outcome/success_domain/rejection_frame invoke the identical filled_exact law | K007/K008 partial cut; complete callee supplied by NGC; no allocator-success assumption |
+| Semantic expansion local log | NGV_SemanticPacket.result, SAME original7015 bytes and actual13831 output; NHF_StageObservations.semantic/original_byte, NHF_ScalarWindow.read/represent | K009/K010 frame and K030..K085 prefix/row logging pairs; complete physical writes supplied by CLOSED callee, never inferred from a single post-byte |
+| Values expansion local log | NGV_ExpandAssociation.result; SAME original464 input, actual928 output, alignment16,464<=1856; NHF_Expansions/NHF_Overwrite/NHF_Prefix | K011/K012 frame and K086/K087 logging pair; actual Vec back-functions by NHF_Recombine |
+| WideExact::from_le_bytes local log | CLOSED NET TX1:048/TX2:031; NHF_ViewDecoder.result from UnrolledWideParserRefinement.source_refines; same original proof[7495..7527],32 bytes; all8 natural u32 words, Some exact limbs iff all<P, otherwise None | K018/K019, K022/K023, K025/K026 full-law cuts; callee domain derived from original proof57607. Both Some/None covered. No canonicality/success/desired-output premise |
+| Semantic verifier | Complete TX1:137 callee packet unavailable | OPEN; no stub admitted or assumed |
+| Prepared::new | Complete TX1:179 sampler/query/native provenance packet unavailable | OPEN; no stub admitted or assumed |
 
-P6/D188 option-A semantic transport is retained as reclassification. It supplies no missing callee law. Any future stub must be paired here with a compiled theorem on the exact caller-established domain before admission.
-
-Decoder cut K005/K006: the reply is an overapproximation (None or arbitrary canonical Some); NHF_ViewDecoder.result supplies the full natural decodeWideLE value law on the SAME original32-byte input. NHF_ViewCut.source/reject/accepted provide exact emitted caller substitution. Byte-domain association and final leaf packet/audit are still pending; K005 alone is never a pass for the decoder value.
-
-Expansion cuts K009..012: local mutable record with original input/output descriptors, full Result and one arbitrary post-cell projection; no writable static. The caller performs no further content writes. The complete child poststate remains NGV_SemanticPacket.result / NGV_ExpandAssociation.result, not an inferred property of the projected stub. Heap K007/K008 uses NGC's standard-library/allocator realization for its owned zero Vec and actual split; no new allocator law is claimed.
+K005/K006 were early overapproximating decoder cuts and are not selected for final leaf credit. K024's assertion-format failure is diagnostic only; K026's single failure maps to the explicit decoded-reply assertion at archived source line50. All timeout/unwinding/parent-limit shapes are excluded. Logging stubs change only local log records; their complete child content laws come from the named CLOSED packets. Native semantic transport remains retained P6/D188 trust, a reclassification rather than removal.

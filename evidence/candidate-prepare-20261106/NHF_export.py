@@ -9,14 +9,14 @@ def sha(p):
  with p.open('rb') as f:
   for block in iter(lambda:f.read(1048576),b''):h.update(block)
  return h.hexdigest()
-dst=C/'NHF_exports_20261106';dst.mkdir(exist_ok=True);exports=[]
+dst=C/'NHF_exports_final_20261106';dst.mkdir(exist_ok=True);exports=[]
 for p in sorted((B/'NHF_objects').iterdir()):
  if not p.is_file():continue
  q=dst/p.name
  if q.exists():assert sha(q)==sha(p),q
  else:shutil.copy2(p,q)
  exports.append(dict(source=str(p),path=str(q),sha256=sha(q),bytes=q.stat().st_size))
-cfg=json.loads((B/'NHF_L042.json').read_text());roots=cfg['env']['LEAN_PATH'].split(':')
+cfg=json.loads((B/'NHF_L049.json').read_text());roots=cfg['env']['LEAN_PATH'].split(':')
 mods=[json.loads(l)['module'] for l in (B/'NHF_LOADED_scan.jsonl').read_text().splitlines()]
 pins=[]
 for mod in mods:
