@@ -1,0 +1,150 @@
+NHE_generated/NHE_Round.lean:60:5: error: Tactic `rfl` failed: The left-hand side
+  ok (reply x✝)
+is not definitionally equal to the right-hand side
+  if decide (lhs ≠ rhs) = true then ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+  else do
+    let claim1 ← FIn_ExtractInstall.polynomial bytes (FIo_Install.fromE alpha)
+    ok (core.result.Result.Ok claim1)
+
+case h_1
+reservation : NP6_StdModel.Reservation
+bytes : Slice U8
+alpha claim : NE
+round : Usize
+ha : canonE alpha
+small : ↑round < 2
+idx : UScalar UScalarTy.Usize
+hm : 3#usize * round = ok idx
+h1 : idx + 1#usize = ok (Usize.wrapping_add idx 1#usize)
+h2 : idx + 2#usize = ok (Usize.wrapping_add idx 2#usize)
+f0 : FIo_FieldBridge.map FIo_Install.fromE (FIo_Native.weights.field bytes 0#usize) = FIn_Primitives.field bytes 0#usize
+f4 : FIo_FieldBridge.map FIo_Install.fromE (FIo_Native.weights.field bytes 4#usize) = FIn_Primitives.field bytes 4#usize
+c0 : FIo_Native.aspis_core.field.wide_exact.WideExact
+h0 : FIo_Native.weights.field bytes 0#usize = ok c0
+c4 : FIo_Native.aspis_core.field.wide_exact.WideExact
+h4 : FIo_Native.weights.field bytes 4#usize = ok c4
+cc0 : canonE c0
+cc4 : canonE c4
+lhs : FIo_Native.aspis_core.field.wide_exact.WideExact
+hl : c0.add c4 = ok lhs
+cl : canonE lhs
+add : FIo_FieldBridge.map FIo_Install.fromE (ok lhs) = FIn_Primitives.add (FIo_Install.fromE c0) (FIo_Install.fromE c4)
+rhs : NGM_RoundScale.E
+hr : FIo_Native.aspis_core.field.wide_exact.WideExact.mul_m31 claim 536870912#u32 = ok rhs
+left✝ : canonE rhs
+right✝ : NGM_RoundScale.limbs rhs = List.map (fun word => word * 536870912 % 2147483647) (NGM_RoundScale.limbs claim)
+scale : FIo_FieldBridge.map FIo_Install.fromE (ok rhs) = SAG_StageScale.mulM (FIo_Install.fromE claim) 536870912#u32
+eq : FIo_Install.fromE lhs ≠ FIo_Install.fromE rhs ↔ lhs ≠ rhs
+x✝¹ : Result (core.result.Result NE Error)
+x✝ : core.result.Result NE Error
+heq✝ :
+  (if lhs ≠ rhs then ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+    else do
+      let out ← NHE_Polynomial.source bytes alpha
+      ok (core.result.Result.Ok out)) =
+    ok x✝
+⊢ ok (reply x✝) =
+    if decide (lhs ≠ rhs) = true then ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+    else do
+      let claim1 ← FIn_ExtractInstall.polynomial bytes (FIo_Install.fromE alpha)
+      ok (core.result.Result.Ok claim1)
+NHE_generated/NHE_Round.lean:63:15: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FIo_FieldBridge.map ?f do
+    let v ← ?x
+    ?k v
+in the target expression
+  fail e✝ =
+    if decide (lhs ≠ rhs) = true then ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+    else do
+      let claim1 ← FIo_FieldBridge.map FIo_Install.fromE (NHE_Polynomial.source bytes alpha)
+      ok (core.result.Result.Ok claim1)
+
+case h_2
+reservation : NP6_StdModel.Reservation
+bytes : Slice U8
+alpha claim : NE
+round : Usize
+ha : canonE alpha
+small : ↑round < 2
+idx : UScalar UScalarTy.Usize
+hm : 3#usize * round = ok idx
+h1 : idx + 1#usize = ok (Usize.wrapping_add idx 1#usize)
+h2 : idx + 2#usize = ok (Usize.wrapping_add idx 2#usize)
+f0 : FIo_FieldBridge.map FIo_Install.fromE (FIo_Native.weights.field bytes 0#usize) = FIn_Primitives.field bytes 0#usize
+f4 : FIo_FieldBridge.map FIo_Install.fromE (FIo_Native.weights.field bytes 4#usize) = FIn_Primitives.field bytes 4#usize
+c0 : FIo_Native.aspis_core.field.wide_exact.WideExact
+h0 : FIo_Native.weights.field bytes 0#usize = ok c0
+c4 : FIo_Native.aspis_core.field.wide_exact.WideExact
+h4 : FIo_Native.weights.field bytes 4#usize = ok c4
+cc0 : canonE c0
+cc4 : canonE c4
+lhs : FIo_Native.aspis_core.field.wide_exact.WideExact
+hl : c0.add c4 = ok lhs
+cl : canonE lhs
+add : FIo_FieldBridge.map FIo_Install.fromE (ok lhs) = FIn_Primitives.add (FIo_Install.fromE c0) (FIo_Install.fromE c4)
+rhs : NGM_RoundScale.E
+hr : FIo_Native.aspis_core.field.wide_exact.WideExact.mul_m31 claim 536870912#u32 = ok rhs
+left✝ : canonE rhs
+right✝ : NGM_RoundScale.limbs rhs = List.map (fun word => word * 536870912 % 2147483647) (NGM_RoundScale.limbs claim)
+scale : FIo_FieldBridge.map FIo_Install.fromE (ok rhs) = SAG_StageScale.mulM (FIo_Install.fromE claim) 536870912#u32
+eq : FIo_Install.fromE lhs ≠ FIo_Install.fromE rhs ↔ lhs ≠ rhs
+x✝ : Result (core.result.Result NE Error)
+e✝ : Std.Error
+heq✝ :
+  (if lhs ≠ rhs then ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+    else do
+      let out ← NHE_Polynomial.source bytes alpha
+      ok (core.result.Result.Ok out)) =
+    fail e✝
+poly :
+  FIo_FieldBridge.map FIo_Install.fromE (NHE_Polynomial.source bytes alpha) =
+    FIn_Polynomial.polynomial bytes (FIo_Install.fromE alpha)
+⊢ fail e✝ =
+    if decide (lhs ≠ rhs) = true then ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+    else do
+      let claim1 ← FIo_FieldBridge.map FIo_Install.fromE (NHE_Polynomial.source bytes alpha)
+      ok (core.result.Result.Ok claim1)
+NHE_generated/NHE_Round.lean:47:10: error: unsolved goals
+case h_3
+reservation : NP6_StdModel.Reservation
+bytes : Slice U8
+alpha claim : NE
+round : Usize
+ha : canonE alpha
+small : ↑round < 2
+idx : UScalar UScalarTy.Usize
+hm : 3#usize * round = ok idx
+h1 : idx + 1#usize = ok (Usize.wrapping_add idx 1#usize)
+h2 : idx + 2#usize = ok (Usize.wrapping_add idx 2#usize)
+f0 : FIo_FieldBridge.map FIo_Install.fromE (FIo_Native.weights.field bytes 0#usize) = FIn_Primitives.field bytes 0#usize
+f4 : FIo_FieldBridge.map FIo_Install.fromE (FIo_Native.weights.field bytes 4#usize) = FIn_Primitives.field bytes 4#usize
+c0 : FIo_Native.aspis_core.field.wide_exact.WideExact
+h0 : FIo_Native.weights.field bytes 0#usize = ok c0
+c4 : FIo_Native.aspis_core.field.wide_exact.WideExact
+h4 : FIo_Native.weights.field bytes 4#usize = ok c4
+cc0 : canonE c0
+cc4 : canonE c4
+lhs : FIo_Native.aspis_core.field.wide_exact.WideExact
+hl : c0.add c4 = ok lhs
+cl : canonE lhs
+add : FIo_FieldBridge.map FIo_Install.fromE (ok lhs) = FIn_Primitives.add (FIo_Install.fromE c0) (FIo_Install.fromE c4)
+rhs : NGM_RoundScale.E
+hr : FIo_Native.aspis_core.field.wide_exact.WideExact.mul_m31 claim 536870912#u32 = ok rhs
+left✝ : canonE rhs
+right✝ : NGM_RoundScale.limbs rhs = List.map (fun word => word * 536870912 % 2147483647) (NGM_RoundScale.limbs claim)
+scale : FIo_FieldBridge.map FIo_Install.fromE (ok rhs) = SAG_StageScale.mulM (FIo_Install.fromE claim) 536870912#u32
+eq : FIo_Install.fromE lhs ≠ FIo_Install.fromE rhs ↔ lhs ≠ rhs
+x✝ : Result (core.result.Result NE Error)
+heq✝ :
+  (if lhs ≠ rhs then ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+    else do
+      let out ← NHE_Polynomial.source bytes alpha
+      ok (core.result.Result.Ok out)) =
+    div
+⊢ div =
+    if decide (lhs ≠ rhs) = true then ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+    else do
+      let claim1 ← FIn_ExtractInstall.polynomial bytes (FIo_Install.fromE alpha)
+      ok (core.result.Result.Ok claim1)
+'NHE_Round.from_injective' does not depend on any axioms
+'NHE_Round.cohort' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,21 @@
+NHE_generated/NHE_FieldPort.lean:43:1: error: Type mismatch
+  decoder selected
+has type
+  (FIo_FieldBridge.map FIo_Install.fromE do
+      let o ← FIo_Native.aspis_core.field.wide_exact.WideExact.from_le_bytes selected
+      core.option.Option.unwrap o) =
+    do
+    let o ← AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes selected
+    let x ← core.option.Option.unwrap o
+    ok (SAG_DotAdapter.toStageE (AspisR1CurrentWide.Proof.recordWideToFinish x))
+but is expected to have type
+  (do
+      let v ← FIo_Native.aspis_core.field.wide_exact.WideExact.from_le_bytes selected
+      FIo_FieldBridge.map FIo_Install.fromE (core.option.Option.unwrap v)) =
+    do
+    let x ← AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes selected
+    let x ← core.option.Option.unwrap x
+    ok (SAG_DotAdapter.toStageE (AspisR1CurrentWide.Proof.recordWideToFinish x))
+'NHE_FieldPort.unwrap' does not depend on any axioms
+'NHE_FieldPort.decoder' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NHE_FieldPort.adopted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

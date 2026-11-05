@@ -1,0 +1,105 @@
+NHE_generated/NHE_CMPort.lean:28:63: error: Tactic `decide` failed for proposition
+  4294967296 * 4294967296 ≤ UScalar.size UScalarTy.U64
+because its `Decidable` instance
+  (4294967296 * 4294967296).decLe (UScalar.size UScalarTy.U64)
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, and `Nat.decLe`, reduction got stuck at the `Decidable` instance
+  match (4294967296 * 4294967296).ble (UScalar.size UScalarTy.U64), true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+NHE_generated/NHE_CMPort.lean:38:143: error: Invalid `←` modifier: `LPi_CMProduct.sum` is a declaration name to be unfolded
+
+Hint: The simplifier cannot "refold" definitions by name. Use `rw` for this instead,
+                      or use the `←` simp modifier with an equational lemma for `LPi_CMProduct.sum`.
+NHE_generated/NHE_CMPort.lean:38:162: error: Invalid `←` modifier: `LPi_CMProduct.cross` is a declaration name to be unfolded
+
+Hint: The simplifier cannot "refold" definitions by name. Use `rw` for this instead,
+                      or use the `←` simp modifier with an equational lemma for `LPi_CMProduct.cross`.
+NHE_generated/NHE_CMPort.lean:16:84: error: unsolved goals
+x y : NC
+hx : canonC x
+hy : canonC y
+m0 : FIo_Native.aspis_core.field.M31
+h0 : x.a.mul y.a = ok m0
+left✝⁵ : ↑m0 = ↑x.a * ↑y.a % 2147483647
+c0 : ↑m0 < 2147483647
+m1 : FIo_Native.aspis_core.field.M31
+h1 : x.b.mul y.b = ok m1
+left✝⁴ : ↑m1 = ↑x.b * ↑y.b % 2147483647
+c1 : ↑m1 < 2147483647
+m2 : U32
+h2 : FIo_Native.aspis_core.field.reduce_u64 (LPi_CMProduct.cross x y) = ok m2
+left✝³ : ↑m2 = ↑(LPi_CMProduct.cross x y) % 2147483647
+c2 : ↑m2 < 2147483647
+hsum :
+  ∀ (z : NC), core.convert.num.FromU64U32.from z.a + core.convert.num.FromU64U32.from z.b = ok (LPi_CMProduct.sum z)
+hprod : LPi_CMProduct.sum x * LPi_CMProduct.sum y = ok (LPi_CMProduct.cross x y)
+a : FIo_Native.aspis_core.field.M31
+ha : m0.sub m1 = ok a
+left✝² : ↑a = (↑m0 + 2147483647 - ↑m1) % 2147483647
+ca : ↑a < 2147483647
+b : FIo_Native.aspis_core.field.M31
+hb : FIo_Native.aspis_core.field.M31.sub m2 m0 = ok b
+left✝¹ : ↑b = (↑m2 + 2147483647 - ↑m0) % 2147483647
+cb : ↑b < 2147483647
+c : FIo_Native.aspis_core.field.M31
+hc : b.sub m1 = ok c
+left✝ : ↑c = (↑b + 2147483647 - ↑m1) % 2147483647
+right✝ : ↑c < 2147483647
+h0' : AspisR1CurrentWide.field.M31.mul x.a y.a = ok m0
+h1' : AspisR1CurrentWide.field.M31.mul x.b y.b = ok m1
+h2' : AspisR1CurrentWide.field.reduce_u64 (LPi_CMProduct.cross x y) = ok m2
+ha' : AspisR1CurrentWide.field.M31.sub m0 m1 = ok a
+hb' : AspisR1CurrentWide.field.M31.sub m2 m0 = ok b
+hc' : AspisR1CurrentWide.field.M31.sub b m1 = ok c
+⊢ (do
+      let z ←
+        do
+          let m2 ←
+            do
+              let i ←
+                FIo_Native.aspis_core.field.reduce_u64
+                    (((core.convert.num.FromU64U32.from x.a).wrapping_add
+                          (core.convert.num.FromU64U32.from x.b)).wrapping_mul
+                      ((core.convert.num.FromU64U32.from y.a).wrapping_add (core.convert.num.FromU64U32.from y.b)))
+              ok i
+          let m3 ← m2.sub m0
+          let m4 ← m3.sub m1
+          ok { a := a, b := m4 }
+      ok { a := z.a, b := z.b }) =
+    ok { a := a, b := c }
+NHE_generated/NHE_CMPort.lean:38:266: warning: This simp argument is unused:
+  h2
+
+Hint: Omit it from the simp argument list.
+  simp only [FIo_Native.aspis_core.field.CM31.mul, ̲AspisR1CurrentWide.field.CM31.mul,
+  ̲ ̲ ̲ ̲FIo_FieldBridge.cm, ̲h0, ̲h1, ̲h0', ̲h1', ̲lift, ̲bind_tc_ok, ̲hsum, ̲hprod, ̲← ̲LPi_CMProduct.sum,
+  ̲ ̲ ̲ ̲← ̲LPi_CMProduct.cross, ̲FIo_Native.aspis_core.field.M31.reduce_u64,
+  ̲ ̲ ̲ ̲AspisR1CurrentWide.field.M31.reduce_u64, ̲h2,̵h̵2̵', ̲ha, ̲hb, ̲hc, ̲ha', ̲hb', ̲hc', ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NHE_generated/NHE_CMPort.lean:38:276: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp only [FIo_Native.aspis_core.field.CM31.mul, ̲AspisR1CurrentWide.field.CM31.mul,
+  ̲ ̲ ̲ ̲FIo_FieldBridge.cm, ̲h0, ̲h1, ̲h0', ̲h1', ̲lift, ̲bind_tc_ok, ̲hsum, ̲hprod, ̲← ̲LPi_CMProduct.sum,
+  ̲ ̲ ̲ ̲← ̲LPi_CMProduct.cross, ̲FIo_Native.aspis_core.field.M31.reduce_u64,
+  ̲ ̲ ̲ ̲AspisR1CurrentWide.field.M31.reduce_u64, ̲h2, ̲h2', ̲ha, ̲hb̵,̵h̵c, ̲ha', ̲hb', ̲hc', ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NHE_generated/NHE_CMPort.lean:38:279: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp only [FIo_Native.aspis_core.field.CM31.mul, ̲AspisR1CurrentWide.field.CM31.mul,
+  ̲ ̲ ̲ ̲FIo_FieldBridge.cm, ̲h0, ̲h1, ̲h0', ̲h1', ̲lift, ̲bind_tc_ok, ̲hsum, ̲hprod, ̲← ̲LPi_CMProduct.sum,
+  ̲ ̲ ̲ ̲← ̲LPi_CMProduct.cross, ̲FIo_Native.aspis_core.field.M31.reduce_u64,
+  ̲ ̲ ̲ ̲AspisR1CurrentWide.field.M31.reduce_u64, ̲h2, ̲h2', ̲ha, ̲hb, ̲hc̵,̵h̵a', ̲hb', ̲hc', ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NHE_CMPort.sub' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NHE_CMPort.mul' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

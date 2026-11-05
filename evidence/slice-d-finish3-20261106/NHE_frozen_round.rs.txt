@@ -1,0 +1,7 @@
+fn finish_relation_round(poly:&[u8],alpha:E,mut claim:E,round:usize)->Result<E,Error> {
+        let lhs=field(poly,0).add(field(poly,4));let rhs=claim.mul_m31(QUARTER);
+        crate::trace::value(15,3*round,lhs);crate::trace::value(15,3*round+1,rhs);
+        if lhs!=rhs {return Err(Error::Relation);}
+        claim=polynomial(poly,alpha);crate::trace::value(15,3*round+2,claim);
+    Ok(claim)
+}

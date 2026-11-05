@@ -1,0 +1,30 @@
+import NHE_CheckedScalar
+set_option autoImplicit false
+namespace NHE_PublicDot
+open Aeneas Aeneas.Std Result AspisR1
+abbrev Dot := NHE_DotState.Dot
+abbrev NE := FIo_Install.NE
+abbrev NQ := NHE_CheckedScalar.NQ
+
+def toWide (x : NE) : AspisR1EbyKPushDotBackend.PushWide :=
+ ⟨NHE_CheckedScalar.toPush x.c0,NHE_CheckedScalar.toPush x.c1⟩
+def reply (p : core.result.Result Unit Unit × Dot) := (p.1,NHE_DotState.toPush p.2)
+
+theorem cohort (d : Dot) (value : NE) (scalar : NQ) :
+ FIo_FieldBridge.map reply (FIo_Native.fast_pairing.EbyKDot.push d value scalar)=
+ AspisR1EbyKPushDotBackend.pushWithDotBackend AspisR1EbyKPushDecodedProductUpdate.QRaw
+  (NHE_DotState.toPush d) (toWide value) (NHE_CheckedScalar.toPush scalar) := by
+ rw [←NFG_PublicG.source]
+ unfold AspisR1EbyKPushDotBackend.pushWithDotBackend AspisR1EbyKPushConcreteCheckedQV1.pushWithConcreteCheckedQ AspisR1EbyKPushSourceConversionV1.pushWithSourceCheckedAdd AspisR1EbyKPushSourceConversionV1.pushWithSourceConversion AspisR1EbyKPushExplicitOpsV1.pushWithOps
+ simp only [AspisR1EbyKPushExplicitOpsV1.maxTerms,FIo_Native.fast_pairing.MAX_TERMS,NHE_DotState.toPush,NFG_PublicG.run,←NHE_CheckedScalar.checked]
+ by_cases count : d.count >= 4096#usize
+ · simp only [count,if_true,FIo_FieldBridge.map,reply,NHE_DotState.toPush]
+ · have cap : 8192<UScalar.size .Usize := by rw [UScalar.size_def];scalar_tac
+   have next := FIo_ScalarBridge.add d.count 1#usize (by have h : d.count.val<4096 := by scalar_tac;change d.count.val+1<UScalar.size .Usize;omega)
+   simp only [count,if_false,AspisR1EbyKPushWideToQ.fromWide_coordinates,AspisR1EbyKPushWideToQ.pairFromCoords,AspisR1EbyKPushWideToQ.qFromCoords,toWide,NHE_CheckedScalar.toPush,Array.index_usize,Array.make,bind_tc_ok,NHE_CheckedScalar.checked,NFG_PublicG.check_result]
+   split_ifs
+   all_goals simp_all only [bind_tc_ok,core.result.Result.Insts.CoreOpsTry.branch,core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,core.convert.FromSame,lift,FIo_FieldBridge.map_bind,←NHE_PrivateDot.cohort,bind_assoc_eq,next,NHE_PrivateDot.toPush,NFE_NFC_CalleeDomains.q]
+   all_goals try rfl
+
+#print axioms cohort
+end NHE_PublicDot
