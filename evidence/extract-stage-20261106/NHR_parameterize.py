@@ -9,6 +9,7 @@ raw=E/a.raw;dest=E/'NHR_lean'/('NHR_'+a.function);dest.mkdir(parents=True,exist_
 types=(raw/'Types.lean').read_text()
 # The global discriminant macro names ignore the namespace. Do not register duplicate metadata.
 adapted=re.sub(r'\bdiscriminant isize,?\s*','',types)
+adapted=re.sub(r'@\[\]\s*\n','',adapted)
 (dest/'Types.lean').write_text(adapted)
 extern=(raw/'FunsExternal_Template.lean').read_text()
 # A declaration extends to the next documentation block or end of file.

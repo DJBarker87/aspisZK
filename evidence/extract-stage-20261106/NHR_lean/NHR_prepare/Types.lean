@@ -198,7 +198,6 @@ inductive aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public where
 /-- [aspis_r1_cost_probe::verifier::Error]
     Source: 'crates/aspis-r1-cost-probe/src/verifier.rs', lines 20:0-27:38
     Visibility: public -/
-@[]
 inductive verifier.Error where
 | Parse : verifier.Error
 | Semantic : verifier.Error
@@ -212,7 +211,6 @@ inductive verifier.Error where
 /-- [aspis_r1_cost_probe::compact::CodecError]
     Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 72:0-76:1
     Visibility: public -/
-@[]
 inductive compact.CodecError where
 | Length : compact.CodecError
 | NonZeroHigh : compact.CodecError
@@ -221,7 +219,6 @@ inductive compact.CodecError where
 /-- [aspis_r1_cost_probe::transport::Variant]
     Source: 'crates/aspis-r1-cost-probe/src/transport.rs', lines 3:0-3:30
     Visibility: public -/
-@[]
 inductive transport.Variant where
 | S1 : transport.Variant
 | S2 : transport.Variant
@@ -282,7 +279,6 @@ structure r1_semantic.Verified (H : Type) where
 /-- [aspis_r1_cost_probe::verifier::Phase]
     Source: 'crates/aspis-r1-cost-probe/src/verifier.rs', lines 29:0-29:152
     Visibility: public -/
-@[]
 inductive verifier.Phase where
 | Parsed : verifier.Phase
 | Semantic : verifier.Phase
@@ -299,7 +295,6 @@ inductive verifier.Phase where
 /-- [aspis_r1_cost_probe::r1_wire::Error]
     Source: 'crates/aspis-r1-cost-probe/src/r1_wire.rs', lines 24:0-36:1
     Visibility: public -/
-@[]
 inductive r1_wire.Error where
 | Allocation : r1_wire.Error
 | RowOrder : Std.U8 → Std.U8 → r1_wire.Error

@@ -66,3 +66,32 @@ Own-input repair before P001: the initial exporter treated `[lib].path` as a
 crate dependency. The corrected traversal only interprets dependency/patch/
 replace path fields, including those nested in workspace/target tables. No host
 extraction or compile was consumed by that local failure.
+
+## Opaque-call compilation interface
+
+`NHR_parameterize.py FUNCTION --raw <relative-raw-output-directory>` creates
+NHR_lean/NHR_FUNCTION. It preserves raw emissions separately. Aeneas external
+axiom templates are NEVER compiled. Instead each external declaration's exact
+type becomes an explicit section parameter, and calls are renamed to that
+parameter in the emitted body. No callee implementation, success premise,
+axiom or handwritten substitute body is supplied. Successors must instantiate
+these parameters with their proven packets and establish nominal carrier/domain
+association; that is not done by this job.
+
+The Types compilation copy removes discriminant macro attributes to avoid
+Aeneas's globally named instance collisions in NGK (same adaptation as NHA).
+No types, constructors, control flow or function statements are removed. The
+full generated-to-compilation diffs and external-signature map are committed.
+Generated Aeneas heartbeat/depth settings are retained; none is added/raised.
+Each compiled driver prints its actual axioms. No theorem is introduced.
+
+NHR_L001/L002 compile prepare Types/Funs with the selected Aeneas objects pinned:
+exit0/0,2.272386/1.834017s,2659716/2647652KiB RSS,swap0. The parameterized prepare
+body prints exactly [propext, Classical.choice, Quot.sound]. Combined import
+with NGK remains a separate required check.
+
+## Post-first-preflight hardening
+
+The host's --check now independently re-enumerates members and transitive path
+dependencies from the staged manifests and compares that closure with the
+exported manifest, before cargo metadata. E003 and later run this stricter check.

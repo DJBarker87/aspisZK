@@ -1,0 +1,41 @@
+{"attempt": "NHR_E003", "exit_status": 1, "wall_seconds": 70.19319724710658, "peak_rss_kib": "539396", "swaps": "0", "print_axioms": "N/A: extract"}
+{"charon_command": ["/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon", "cargo", "--preset", "aeneas", "--mir", "built", "--sysroot", "default", "--include", "core::option::Option", "--include", "core::result::Result", "--include", "core::option::_::ok_or", "--start-from", "crate::verifier::candidate::tx1", "--opaque", "crate::verifier::candidate::parse_shape", "--opaque", "crate::verifier::mark", "--opaque", "crate::verifier::candidate::batch_merkle", "--opaque", "crate::verifier::candidate::query_loop", "--opaque", "crate::verifier::_::for_range", "--opaque", "crate::verifier::_::new", "--opaque", "crate::verifier::_::finish", "--opaque", "crate::verifier
+...
+self,n:u8)->Option<Self>{
+   |                ^^^^^^^^
+...
+57 |         #[inline(always)] pub fn mul_m31(self,rhs:u32)->Option<Self>{
+   |                                  ^^^^^^^
+...
+64 |         #[inline(always)] pub fn mul(self,rhs:Self)->Self {
+   |                                  ^^^
+
+warning: associated items `dot`, `neg`, and `square` are never used
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:95:16
+    |
+ 80 |     impl Q {
+    |     ------ associated items in this implementation
+...
+ 95 |         pub fn dot<const N:usize>(left:[Self;N],right:[Self;N])->Self {
+    |                ^^^
+...
+104 |         #[inline(always)] pub fn neg(self)->Self {Self::ZERO.sub(self)}
+    |                                  ^^^
+105 |         #[inline(always)] pub fn square(self)->Self {self.mul(self)}
+    |                                  ^^^^^^
+
+warning: `aspis-r1-cost-probe` (lib) generated 18 warnings (run `cargo fix --lib -p aspis-r1-cost-probe` to apply 3 suggestions)
+    Finished `release` profile [optimized] target(s) in 1m 09s
+Traceback (most recent call last):
+  File "/home/dombarker/project-offloads/codex-cx-extract-stage-20261106/NHR_stage.py", line 225, in <module>
+    if __name__=='__main__': sys.exit(main())
+                                      ^^^^^^
+  File "/home/dombarker/project-offloads/codex-cx-extract-stage-20261106/NHR_stage.py", line 224, in main
+    return extract(a,a.workspace,a.out)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dombarker/project-offloads/codex-cx-extract-stage-20261106/NHR_stage.py", line 197, in extract
+    assert hits, ('OWN INPUT: unmatched opacity',boundary)
+           ^^^^
+AssertionError: ('OWN INPUT: unmatched opacity', {'path': 'crate::verifier::candidate::checkpoint', 'why': 'Existing checkpoint writer packet.'})
+
+Running as unit: run-r30d043744cfa45a89788b83ea622e2bb.scope; invocation ID: d4c6fbec8ae342a49a328ec57f4222af

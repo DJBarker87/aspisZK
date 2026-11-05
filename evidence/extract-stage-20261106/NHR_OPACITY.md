@@ -5,12 +5,13 @@ callee is certified by making it opaque. In particular Prepared::new,
 verify_observed and finish pair/producer completeness remain successor
 obligations. Existing packet domains are not weakened.
 
-Inherent methods use Charon's documented NameMatcher grammar:
-`crate::verifier::{impl crate::verifier::Prepared}::new`.
+Logical inherent-method paths are recorded with the explicit impl component:
+`crate::verifier::{impl crate::verifier::Prepared}::new`. The actual selector
+uses `_` in that component because this pinned matcher does not implement it.
 NHF's `crate::verifier::Prepared::new` omitted the impl component and did not
 match. NHR retains the full LLBC declaration inventory (name, span, opacity,
-body kind and source-text hash) and refuses to start Aeneas if a non-root
-Aspis function body unexpectedly remains transparent. This checks actual
+body kind and source-text hash) and refuses to start Aeneas if a requested boundary is unmatched or any of its
+actual matches has a non-opaque body. This checks actual
 extraction boundaries instead of assuming command-line intent was respected.
 
 The generated types are included explicitly. The driver remains transparent;
@@ -30,3 +31,8 @@ are pinned: Prepared::new is Opaque at verifier.rs72–89. All seven prepare
 boundaries pass the inventory check. Synthetic closures, constants and error
 conversion remain emitted as part of the driver. E002 exits0 and emits Lean;
 this supersedes the initial unvalidated syntax advice above.
+
+E003 stopped before Aeneas because checkpoint lives in verifier, imported by
+candidate via use super::*, rather than candidate. E004 corrects only that
+selector. The same source inspection corrects resume for the pending TX2 run.
+No tool limit is claimed from E003.

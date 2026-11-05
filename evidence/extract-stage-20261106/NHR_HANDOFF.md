@@ -18,3 +18,9 @@ Prepare extraction: NHR_E002 PASS,63.035177s,539840KiB RSS,swap0. Raw output is
 NHR_emitted/prepare_v2/raw/NHR_prepare; exact command, tool/source/lock hashes
 and checked opacity spans are in its NHR_PINS.json. E001 is retained as an OWN
 collector/input failure, not a tool limit. No Aeneas failure occurred there.
+
+TX1 extraction: NHR_E004 PASS,65.926025s,536796KiB RSS,swap0. Raw output is
+NHR_emitted/tx1_v2/raw/NHR_tx1. All ten requested native boundaries are checked
+opaque against actual LLBC names/spans; the raw body includes its std operations.
+Prepare Types/Funs compile in L001/L002, standard axioms only; these are
+PARAMETRIC opaque-call bodies, not instantiated callee refinements.
