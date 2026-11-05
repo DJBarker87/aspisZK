@@ -24,6 +24,9 @@ def validate(packet=None):
  scan=[json.loads(l) for l in (E/'NHU_LOADED_scan.jsonl').read_text().splitlines()]
  assert len(scan)==13593 and all(not r['dangling'] and not r['duplicate_owners'] and r['imports_match'] for r in scan)
  assert read('NHU_L012/receipt.json')['exit_status']==0
+ assert read('NHU_DRIVER_REUSE.json')['status']=='PASS'
+ assert read('NHU_L021/receipt.json')['exit_status']==0
+ assert len(read('NHU_audit/fixtures/fixtures.json')['results'])==8
  assert not read('NHU_EDGES.json')['closed_edges']
  return dict(status='PASS',new_rows=['TX1:130'],inherited_NHG_rows=18,root137_closed=False,finish136_closed=False,prepare_op9_instantiated=False,raw_roots=6,scan_modules=len(scan),baseline='NHG_final_validate.validate read-only',checks_added_only=True,trust_added=[],trust_removed=[])
 if __name__=='__main__':

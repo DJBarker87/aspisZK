@@ -434,17 +434,29 @@ pub struct StateOnlyMaskFactors {
 }
 
 #[inline(always)]
+#[cfg_attr(kani, kani::requires(value.a.0<crate::field::P && value.b.0<crate::field::P))]
+#[cfg_attr(all(kani,not(NHU_bad_i)), kani::ensures(|result| *result==NHU_native::NHU_ref_i(value)))]
+#[cfg_attr(all(kani,NHU_bad_i), kani::ensures(|result| *result!=NHU_native::NHU_ref_i(value)))]
+#[cfg_attr(kani, kani::modifies())]
 fn cm31_mul_i(value: CM31) -> CM31 {
     CM31::new(value.b.neg(), value.a)
 }
 
 #[inline(always)]
+#[cfg_attr(kani, kani::requires(value.a.0<crate::field::P && value.b.0<crate::field::P))]
+#[cfg_attr(all(kani,not(NHU_bad_r)), kani::ensures(|result| *result==NHU_native::NHU_ref_r(value)))]
+#[cfg_attr(all(kani,NHU_bad_r), kani::ensures(|result| *result!=NHU_native::NHU_ref_r(value)))]
+#[cfg_attr(kani, kani::modifies())]
 fn cm31_mul_r(value: CM31) -> CM31 {
     CM31::new(value.a.double().sub(value.b), value.a.add(value.b.double()))
 }
 
 /// Multiply by one of `(1,i,u,iu)` without a generic QM31 product.
 #[inline(always)]
+#[cfg_attr(kani, kani::requires(coordinate<4 && value.c0.a.0<crate::field::P && value.c0.b.0<crate::field::P && value.c1.a.0<crate::field::P && value.c1.b.0<crate::field::P))]
+#[cfg_attr(all(kani,not(NHU_bad_tower)), kani::ensures(|result| *result==NHU_native::NHU_ref_tower(value,coordinate)))]
+#[cfg_attr(all(kani,NHU_bad_tower), kani::ensures(|result| *result!=NHU_native::NHU_ref_tower(value,coordinate)))]
+#[cfg_attr(kani, kani::modifies())]
 fn mul_tower_basis(value: QM31, coordinate: usize) -> QM31 {
     match coordinate {
         0 => value,

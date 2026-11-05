@@ -1,0 +1,81 @@
+{
+ "verify_observed": [
+  {
+   "path": "crate::r1_wire::{impl crate::r1_wire::Prefix}::parse",
+   "why": "NGX parse packet; all Result arms retained",
+   "selector": "crate::r1_wire::_::parse"
+  },
+  {
+   "path": "crate::r1_semantic::public_transcript",
+   "why": "NHG public producer/transcript packet"
+  },
+  {
+   "path": "crate::r1_wire::begin",
+   "why": "NHG begin packet"
+  },
+  {
+   "path": "crate::r1_semantic::semantic_rounds",
+   "why": "OPEN rounds packet boundary; not assumed closed"
+  },
+  {
+   "path": "crate::r1_semantic::claims",
+   "why": "OPEN claims packet boundary; not assumed closed"
+  },
+  {
+   "path": "aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::{impl Public}::terminal_qm31",
+   "why": "OPEN terminal packet boundary; not assumed closed",
+   "selector": "aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::_::terminal_qm31"
+  },
+  {
+   "path": "aspis_core::state_only_hiding::state_only_selected_mask_value",
+   "why": "NHU mask packet once admitted"
+  },
+  {
+   "path": "crate::r1_wire::{impl crate::r1_wire::Prefix}::validated_record",
+   "why": "retained getter packet, caller domains remain",
+   "selector": "crate::r1_wire::_::validated_record"
+  },
+  {
+   "path": "crate::r1_wire::{impl crate::r1_wire::ValidatedRecord}::decode_k",
+   "why": "OPEN caller payload domain, retain all errors",
+   "selector": "crate::r1_wire::_::decode_k"
+  },
+  {
+   "path": "crate::r1_wire::{impl crate::r1_wire::SemanticTranscript}::circle_validated",
+   "why": "OPEN circle packet boundary, not assumed closed",
+   "selector": "crate::r1_wire::_::circle_validated"
+  },
+  {
+   "path": "crate::r1_wire::{impl crate::r1_wire::Prefix}::payload",
+   "why": "NGX Prefix payload packet",
+   "selector": "crate::r1_wire::_::payload"
+  },
+  {
+   "path": "aspis_core::field::{impl QM31}::mul",
+   "why": "Lean-discharged product laws; never expand field multiplication",
+   "selector": "aspis_core::field::_::mul"
+  },
+  {
+   "path": "aspis_core::field::{impl QM31}::add",
+   "why": "closed field add laws",
+   "selector": "aspis_core::field::_::add"
+  },
+  {
+   "path": "core::array::from_fn",
+   "why": "retained Std fixed-array construction boundary"
+  }
+ ],
+ "include_types": [
+  "crate::r1_semantic::Verified",
+  "crate::r1_wire::Prefix",
+  "crate::r1_wire::ValidatedRecord",
+  "crate::r1_wire::SemanticTranscript",
+  "crate::r1_wire::Challenges",
+  "crate::r1_wire::Error",
+  "crate::verifier::Phase",
+  "aspis_core::field::M31",
+  "aspis_core::field::CM31",
+  "aspis_core::field::QM31",
+  "aspis_core::circle::SecureCirclePoint"
+ ]
+}
