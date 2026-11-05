@@ -1,0 +1,32 @@
+{"attempt": "NIX_L005", "exit_status": 1, "wall_seconds": 5.254015411017463, "peak_rss_kib": "5971008", "swaps": "0", "print_axioms": []}
+def NFQ_Reference.row_shape_ref : U8 → Result (Option (U8 × Usize)) :=
+fun row =>
+  match row with
+  | 0#8#uscalar => ok (some (0#u8, 0#usize))
+  | 1#8#uscalar => ok (some (0#u8, 0#usize))
+  | 2#8#uscalar => ok (some (1#u8, 32#usize))
+  | 14#8#uscalar => ok (some (3#u8, 32#usize))
+  | 25#8#uscalar => ok (some (4#u8, 3712#usize))
+  | 26#8#uscalar => ok (some (5#u8, 928#usize))
+  | x =>
+    if 3#u8 ≤ row then
+      if row ≤ 13#u8 then ok (some (0#u8, 0#usize))
+      else if 15#u8 ≤ row then if row ≤ 24#u8 then ok (some (2#u8, 896#usize)) else ok none else ok none
+    else if 15#u8 ≤ row then if row ≤ 24#u8 then ok (some (2#u8, 896#usize)) else ok none else ok none
+def NFU_PacketDomains.payloadSize : ℕ → ℕ :=
+fun row =>
+  if row = 2 ∨ row = 14 then 32
+  else if 15 ≤ row ∧ row ≤ 24 then 896 else if row = 25 then 3712 else if row = 26 then 928 else 0
+NIX_generated/NIX_Inspect.lean:5:7: error(lean.unknownIdentifier): Unknown constant `NGX_RecordAt.computation`
+NIX_generated/NIX_Inspect.lean:6:7: error(lean.unknownIdentifier): Unknown constant `AspisR1CircleSampleWrapper.circle.secure_circle_point_from_parameter`
+NIX_generated/NIX_Inspect.lean:7:7: error(lean.unknownIdentifier): Unknown constant `AspisR1CircleSampleWrapper.circle.secure_ood_circle_point_from_parameter`
+NIX_generated/NIX_Inspect.lean:8:7: error(lean.unknownIdentifier): Unknown constant `AspisR1CircleSampleWrapper.transcript.circle_fallback_point`
+def AspisR1CircleSampleWrapper.sampler.circle_sample : Std.Array U8 32#usize →
+  AspisR1CircleSampleWrapper.r0_transcript.CircleRow → Result AspisR1CircleSampleWrapper.circle.SecureCirclePoint :=
+fun block row => do
+  let q ← sampler.qm31_sample block
+  let r ← circle.secure_ood_circle_point_from_parameter q
+  core.result.Result.unwrap_or_else
+      AspisR1CircleSampleWrapper.sampler.circle_sample.closure.Insts.CoreOpsFunctionFnOnceTupleCirclePointErrorSecureCirclePoint
+      r row
+

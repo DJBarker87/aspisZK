@@ -1,0 +1,48 @@
+{"attempt": "NIX_K007", "exit_status": 1, "wall_seconds": 8.591651394963264, "peak_rss_kib": "578272", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-verify-observed5-20261107/NIX_src/crates/aspis-core)
+warning: unexpected `cfg` condition name: `NIX_case_args`
+   --> crates/aspis-core/src/circle.rs:147:9
+    |
+147 |   #[cfg(NIX_case_args)] {assert!(same(log.arg,parameter));assert_eq!(log.calls,calls+1);}
+    |         ^^^^^^^^^^^^^
+    |
+    = help: expected names are: `docsrs`, `feature`, `kani`, and `test` and 31 more
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "w
+...
+-> crates/aspis-core/src/../../../KMX_stubs.rs:64:4
+   |
+64 | fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_correct`
+
+warning: function `KMX_to_vec_wrong` should have a snake case name
+  --> crates/aspis-core/src/../../../KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> crates/aspis-core/src/../../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> crates/aspis-core/src/../../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+error: mismatch in the number of generic parameters: original function/method `alloc::vec::Vec::<T, A>::try_reserve_exact` takes 2 generic parameters(s), stub `r0::heap::NIX_claims_heap::reserve` takes 0
+  --> crates/aspis-core/src/r0/heap.rs:63:2
+   |
+63 |  fn row_window(){
+   |  ^^^^^^^^^^^^^^^
+
+error: could not compile `aspis-core` (lib) due to 1 previous error; 60 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 1 compilation errors.
+
+Running as unit: run-r7dd4a3dde3514b4f82d1b30f65388d54.scope; invocation ID: 4f2ea6704c01437e9b5ac8ca3c3d940f

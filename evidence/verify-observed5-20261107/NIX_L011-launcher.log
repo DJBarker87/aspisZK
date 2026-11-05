@@ -1,0 +1,38 @@
+{"attempt": "NIX_L011", "exit_status": 1, "wall_seconds": 6.3966235930565745, "peak_rss_kib": "5910468", "swaps": "0", "print_axioms": ["'AspisR1.NIX_PrefixFrames.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NIX_generated/NIX_PrefixFrames.lean:18:1: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  (have i := bytes.len;
+    if i < 32#usize then ok (core.result.Result.Err (r1_wire.Error.Length 0#u8))
+    else do
+      let s ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes { «end» := 32#usize }
+      let r ← core.array.TryFromSharedArraySlice.try_from 32#usize s
+      match r with
+        | core.result.Result.Ok root => do
+          let r1 ← parseAt bytes 0#u8 32#usize
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue p =>
+   
+...
+alResultInfallible.from_residual
+                                    r1_wire.Prefix (core.convert.FromSame r1_wire.Error) residual
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                r1_wire.Prefix (core.convert.FromSame r1_wire.Error) residual
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            r1_wire.Prefix (core.convert.FromSame r1_wire.Error) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Prefix
+                        (core.convert.FromSame r1_wire.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Prefix
+                    (core.convert.FromSame r1_wire.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Prefix
+                (core.convert.FromSame r1_wire.Error) residual
+        | core.result.Result.Err a => ok (core.result.Result.Err (r1_wire.Error.Length 0#u8))) =
+    ok (core.result.Result.Ok parsedPrefix)
+⊢ ∀ (i : Fin 27), (↑(FJb_TailCell.cell parsedPrefix.records i)).length = NGX_PrefixGeometry.width ↑i
+'AspisR1.NIX_PrefixFrames.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r52d82db67aa14aa59158e5da6ef1c31f.scope; invocation ID: b603f1b0b7da48e49685721f1b05b488

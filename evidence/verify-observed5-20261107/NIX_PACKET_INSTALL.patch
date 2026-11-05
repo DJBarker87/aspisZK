@@ -1,0 +1,112 @@
+--- a/crates/aspis-core/src/circle.rs
++++ b/crates/aspis-core/src/circle.rs
+@@ -118,3 +118,41 @@
+         assert_eq!(point.x.square().add(point.y.square()), QM31::ONE);
+     }
+ }
++
++#[cfg(kani)]
++mod NIX_circle {
++ use super::*;
++ fn q()->QM31 { let w:[u32;4]=kani::any(); QM31 {c0:CM31::new(crate::field::M31(w[0]),crate::field::M31(w[1])),c1:CM31::new(crate::field::M31(w[2]),crate::field::M31(w[3]))} }
++ fn point()->SecureCirclePoint { SecureCirclePoint{x:q(),y:q()} }
++ fn same(a:QM31,b:QM31)->bool {a.c0.a.0==b.c0.a.0 && a.c0.b.0==b.c0.b.0 && a.c1.a.0==b.c1.a.0 && a.c1.b.0==b.c1.b.0}
++ fn samepoint(a:SecureCirclePoint,b:SecureCirclePoint)->bool {same(a.x,b.x)&&same(a.y,b.y)}
++ fn reply()->Result<SecureCirclePoint,CirclePointError> {
++  let tag:u8=kani::any();kani::assume(tag<3);
++  match tag {0=>Ok(point()),1=>Err(CirclePointError::SingularParameter),_=>Err(CirclePointError::ParameterInCm31Subfield)}
++ }
++ struct Log {arg:QM31,calls:u8,frame:[u64;2],reply:Result<SecureCirclePoint,CirclePointError>}
++ fn oracle(parameter:QM31,log:&mut Log)->Result<SecureCirclePoint,CirclePointError>{log.arg=parameter;log.calls+=1;log.reply}
++ // Exact frozen secure_ood body, sole callee replaced by a local-record oracle.
++ fn step(parameter:QM31,log:&mut Log)->Result<SecureCirclePoint,CirclePointError>{
++  let point=oracle(parameter,log)?;
++  if parameter.c1==CM31::ZERO {return Err(CirclePointError::ParameterInCm31Subfield);}
++  Ok(point)
++ }
++ #[kani::proof] #[kani::unwind(2)]
++ fn ood_dispatch(){
++  let parameter=q();let seed=q();let calls:u8=kani::any();kani::assume(calls<255);
++  let frame:[u64;2]=kani::any();let reply=reply();
++  let mut log=Log{arg:seed,calls,frame,reply};
++  let result=step(parameter,&mut log);
++  #[cfg(NIX_case_args)] {assert!(same(log.arg,parameter));assert_eq!(log.calls,calls+1);}
++  #[cfg(NIX_case_frame)] {assert_eq!(log.frame,frame);}
++  #[cfg(NIX_case_reply)] {match (reply,result) {
++   (Err(CirclePointError::SingularParameter),Err(CirclePointError::SingularParameter))=>{},
++   (Err(CirclePointError::ParameterInCm31Subfield),Err(CirclePointError::ParameterInCm31Subfield))=>{},
++   (Ok(want),Ok(got))=>{assert!(samepoint(got,want));assert!(parameter.c1.a.0!=0 || parameter.c1.b.0!=0);},
++   (Ok(_),Err(CirclePointError::ParameterInCm31Subfield))=>{assert_eq!(parameter.c1.a.0,0);assert_eq!(parameter.c1.b.0,0);},
++   _=>assert!(false)
++  }}
++  #[cfg(NIX_negative)] assert!(same(log.arg,QM31::ONE) && !same(log.arg,parameter));
++ }
++}
+--- a/crates/aspis-core/src/r0/heap.rs
++++ b/crates/aspis-core/src/r0/heap.rs
+@@ -46,3 +46,39 @@
+   }
+  }
+ }
++
++#[cfg(kani)]
++mod NIX_claims_heap {
++ use super::*;use crate::field::QM31;
++ type Claims=[[QM31;29];3];
++ fn same(a:QM31,b:QM31)->bool {a.c0.a.0==b.c0.a.0 && a.c0.b.0==b.c0.b.0 && a.c1.a.0==b.c1.a.0 && a.c1.b.0==b.c1.b.0}
++ fn reserve(this:&mut Vec<MaybeUninit<Claims>>,n:usize)->Result<(),alloc::collections::TryReserveError>{
++  assert_eq!(this.len(),0);assert_eq!(n,1);
++  if kani::any() {this.try_reserve(n)}else{Vec::<u8>::new().try_reserve(usize::MAX)}
++ }
++ #[kani::proof] #[kani::unwind(1500)]
++ #[kani::stub(core::ptr::copy_nonoverlapping, crate::NIX_kmx::KMX_copy_nonoverlapping)]
++ #[kani::stub(alloc::alloc::realloc, crate::NIX_kmx::KMX_realloc)]
++ #[kani::stub(Vec::<MaybeUninit<Claims>>::try_reserve_exact,reserve)]
++ fn row_window(){
++  let before:u64=kani::any();let frame=Box::new(before);
++  let p:usize=kani::any();kani::assume(p<3);
++  let k:usize=kani::any();kani::assume(k<29);
++  let row:[QM31;29]=kani::any();
++  match uninit::<Claims>() {
++   Err(e)=>{assert!(matches!(e,Error::Allocation));assert_eq!(*frame,before);},
++   Ok(mut out)=>unsafe{
++    let original=out.as_mut_ptr();
++    let dst=original.cast::<[QM31;29]>().add(p);
++    assert!(!core::ptr::eq(original.cast::<u8>(),(&*frame as *const u64).cast::<u8>()));
++    dst.write(row);
++    let got=(*dst)[k];
++    #[cfg(NIX_case_reply)] assert!(same(got,row[k]));
++    #[cfg(NIX_case_args)] {assert_eq!(dst.cast::<QM31>().add(k),original.cast::<QM31>().add(29*p+k));}
++    #[cfg(NIX_case_frame)] {assert_eq!(*frame,before);}
++    #[cfg(NIX_negative)] assert!(!same(got,row[k]));
++    drop(out);assert_eq!(*frame,before);
++   }
++  }
++ }
++}
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -20,6 +20,7 @@
+ 
+ /// M31 base field element, canonical representation in [0, P).
+ #[derive(Clone, Copy, PartialEq, Eq, Debug, Default)]
++#[cfg_attr(kani, derive(kani::Arbitrary))]
+ pub struct M31(pub u32);
+ 
+ /// 1/2 in M31 (P is odd, so (P+1)/2 = 2^30).
+@@ -252,6 +253,7 @@
+ 
+ /// CM31 = M31[i] / (i^2 + 1). Element a + b*i.
+ #[derive(Clone, Copy, PartialEq, Eq, Debug, Default)]
++#[cfg_attr(kani, derive(kani::Arbitrary))]
+ pub struct CM31 {
+     pub a: M31,
+     pub b: M31,
+@@ -429,6 +431,7 @@
+ 
+ /// QM31 = CM31[u] / (u^2 - (2 + i)). Element c0 + c1*u. (stwo parameterization)
+ #[derive(Clone, Copy, PartialEq, Eq, Debug, Default)]
++#[cfg_attr(kani, derive(kani::Arbitrary))]
+ pub struct QM31 {
+     pub c0: CM31,
+     pub c1: CM31,
