@@ -20,7 +20,14 @@ theorem reads (unwrap : T2Nat_RawJoin.Unwrap)
      ((ExactLeafFieldCodec.decodeQM31 (MultiproofConeCanonical.bytesOf b.val)).map CheckpointBytes3KDecode.rawK) with
    | Err err => rfl
    | Ok x =>
-     dsimp only
+     change (do let tail ← Port5Q2_ReaderWeights.reads (T2Nat_ScalarJoin.readK unwrap) bytes n out.at
+                match tail with
+                | .Err e => ok (core.result.Result.Err e)
+                | .Ok (xs,last) => ok (core.result.Result.Ok (x::xs,last))) =
+            (do let tail ← Port5Q2_ReaderWeights.reads CheckpointBytes3Reader.readK bytes n out.at
+                match tail with
+                | .Err e => ok (core.result.Result.Err e)
+                | .Ok (xs,last) => ok (core.result.Result.Ok (x::xs,last)))
      rw [ih out.at (by simp only at cursor;rw [cursor];omega)]
 
 /-- Exact full current helper Result, including first decoder rejection and

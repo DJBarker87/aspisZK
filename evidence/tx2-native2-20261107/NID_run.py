@@ -33,7 +33,7 @@ p=b/{(a+'-reservation.json')!r}; print(p.read_text() if p.exists() else 'MISSING
  raise RuntimeError('STOP admission')
 files={};sources=[]
 if kind=='sourcecheck':
- for n in ['NID_verify_sources.py','NID_RETARGET_ANALYSIS.json','NID_RETARGET_PROVENANCE.json','NID_SOURCE_CUTS.json']:files[n]=(E/n).read_text()
+ for n in ['NID_verify_sources.py','NID_MODULES.json','NID_SOURCE_PINS.json']:files[n]=(E/n).read_text()
  sources=list(files);command=['python3','NID_verify_sources.py']
 elif kind=='verify':
  files['NID_verify_exports.py']=(E/'NID_verify_exports.py').read_text();sources=list(files);command=['python3','NID_verify_exports.py']

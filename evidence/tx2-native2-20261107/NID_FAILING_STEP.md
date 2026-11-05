@@ -33,3 +33,16 @@ with standard axioms. No shared objects or proved sources were overwritten.
 L013–017: incremental sequential-reader proof elaboration fixes (let-pattern
 normalization / explicit inner Result constructor types); failed elaborations
 and their sorryAx placeholders are excluded. Every submitted source is retained.
+
+K062: actual Reader.raw::<32> on arbitrary1768 backing / arbitrary valid offset
+TIMEOUT90s. No credit. K063 onward replaces this shape by seven disjoint offset
+partitions of width256, still arbitrary original1768 bytes and selected32-byte
+read. NID_RawOffsetCover.cover/unique proves complete coverage of all valid
+0..1736 starts; no buffer is fixed, narrowed or replaced. Neither the timeout nor
+its unlaunched control/rename shape is resubmitted unchanged. Caps unchanged.
+
+L023: offset variable used Lean's reserved `at` token; fixed to `offset`.
+L026: dependent alpha index needed an explicit actual Array length bound; L027
+adds that bound and passes. No theorem statement was weakened. L028 raw-row
+window composition passes. L018's initial reads transport needed explicit
+let-pattern normalization; L019 passes the corrected full Result statement.

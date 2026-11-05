@@ -475,3 +475,88 @@ fn query_raw_limb3_window(){raw_window::<3>();}
 #[kani::stub(core::ptr::copy_nonoverlapping, KMX_copy_nonoverlapping)]
 #[kani::stub(<[u8]>::copy_from_slice, KMX_copy_from_slice)]
 fn query_raw_limb3_window_renamed(){raw_window::<3>();}
+fn raw32_split_check<const B:usize>(){let bytes:[u8;1768]=kani::any();let at:usize=kani::any();kani::assume(at<=1736&&at>=256*B&&at<256*(B+1));let j:usize=kani::any();kani::assume(j<32);let mut r=Reader{bytes:&bytes,at};let out=r.raw::<32>();let mut observed=out[j];if cfg!(NID_invert){observed^=1;}assert!(observed==bytes[at+j]);}
+
+#[kani::proof]
+#[kani::unwind(10)]
+#[kani::stub(core::ptr::copy_nonoverlapping, KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice, KMX_copy_from_slice)]
+fn raw32_offset_partition0(){raw32_split_check::<0>();}
+
+#[kani::proof]
+#[kani::unwind(10)]
+#[kani::stub(core::ptr::copy_nonoverlapping, KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice, KMX_copy_from_slice)]
+fn raw32_offset_partition0_renamed(){raw32_split_check::<0>();}
+
+#[kani::proof]
+#[kani::unwind(10)]
+#[kani::stub(core::ptr::copy_nonoverlapping, KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice, KMX_copy_from_slice)]
+fn raw32_offset_partition1(){raw32_split_check::<1>();}
+
+#[kani::proof]
+#[kani::unwind(10)]
+#[kani::stub(core::ptr::copy_nonoverlapping, KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice, KMX_copy_from_slice)]
+fn raw32_offset_partition1_renamed(){raw32_split_check::<1>();}
+
+#[kani::proof]
+#[kani::unwind(10)]
+#[kani::stub(core::ptr::copy_nonoverlapping, KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice, KMX_copy_from_slice)]
+fn raw32_offset_partition2(){raw32_split_check::<2>();}
+
+#[kani::proof]
+#[kani::unwind(10)]
+#[kani::stub(core::ptr::copy_nonoverlapping, KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice, KMX_copy_from_slice)]
+fn raw32_offset_partition2_renamed(){raw32_split_check::<2>();}
+
+#[kani::proof]
+#[kani::unwind(10)]
+#[kani::stub(core::ptr::copy_nonoverlapping, KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice, KMX_copy_from_slice)]
+fn raw32_offset_partition3(){raw32_split_check::<3>();}
+
+#[kani::proof]
+#[kani::unwind(10)]
+#[kani::stub(core::ptr::copy_nonoverlapping, KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice, KMX_copy_from_slice)]
+fn raw32_offset_partition3_renamed(){raw32_split_check::<3>();}
+
+#[kani::proof]
+#[kani::unwind(10)]
+#[kani::stub(core::ptr::copy_nonoverlapping, KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice, KMX_copy_from_slice)]
+fn raw32_offset_partition4(){raw32_split_check::<4>();}
+
+#[kani::proof]
+#[kani::unwind(10)]
+#[kani::stub(core::ptr::copy_nonoverlapping, KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice, KMX_copy_from_slice)]
+fn raw32_offset_partition4_renamed(){raw32_split_check::<4>();}
+
+#[kani::proof]
+#[kani::unwind(10)]
+#[kani::stub(core::ptr::copy_nonoverlapping, KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice, KMX_copy_from_slice)]
+fn raw32_offset_partition5(){raw32_split_check::<5>();}
+
+#[kani::proof]
+#[kani::unwind(10)]
+#[kani::stub(core::ptr::copy_nonoverlapping, KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice, KMX_copy_from_slice)]
+fn raw32_offset_partition5_renamed(){raw32_split_check::<5>();}
+
+#[kani::proof]
+#[kani::unwind(10)]
+#[kani::stub(core::ptr::copy_nonoverlapping, KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice, KMX_copy_from_slice)]
+fn raw32_offset_partition6(){raw32_split_check::<6>();}
+
+#[kani::proof]
+#[kani::unwind(10)]
+#[kani::stub(core::ptr::copy_nonoverlapping, KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice, KMX_copy_from_slice)]
+fn raw32_offset_partition6_renamed(){raw32_split_check::<6>();}

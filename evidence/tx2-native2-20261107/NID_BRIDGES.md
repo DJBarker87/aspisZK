@@ -23,3 +23,22 @@ semantic corruption and stable rename. No SHA execution or digest-value claim.
 fail_no_suffix/div_no_suffix retain the abort-only boundary. This closes the
 local leaf-input gap, not the complete batch_merkle op5: packed keys, tree-loop,
 deduplication, verify_binary and their caller domains remain separate gates.
+
+Stage (c) producer/model results:
+NID_TailView.produced (L025) evaluates the ACTUAL tail View constructor on the
+SAME original proof under installed emitted offsets. fields/widths give exactly
+round0[7527..7751]224, round1[7783..8007]224, final[8007..10055]2048, S2 and None
+folded_root. No independent View or finish-success witness is supplied.
+NID_FinishAlpha.supplied/primitive (L027) derives actual indexed alpha0/alpha1
+and claim/kappa/semantic/z finish domains from SAME returned Prepared fields.
+Actual proof-window canonicality still needs the scan/history producer; these
+width/value facts do not imply canonical bytes or acceptance.
+
+Resume support strengthened: NID_ReadListTransport.source (L017) and
+NID_WeightReadsTransport.reads/weights/checkpoint (L019) are exact full Result
+transport on derived bounded sequential reads, including every Checkpoint
+rejection, cursor and deferred Vec backwrite. NID_ReadStepFrame.remaining (L020)
+derives successor bounds from the actual predecessor. NID_SemanticTransport
+sequence/source (L022) similarly covers all10 semantic reads, errors and exact
+source array/cursor. Native header/checksum/constructor and complete resume
+integration remain open; no model-only packet substitutes for those gates.
