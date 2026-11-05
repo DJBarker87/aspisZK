@@ -9,5 +9,7 @@ import NIV_SnapshotWrite
 import NIV_SdkFields
 import NIV_ExtractedForward
 import NIV_ForwardPacket
+import NIV_RawBoundary
+import NIV_AuthPrefixes
 
 #print axioms AspisR1.RPx_Deployed.deployed

@@ -4,7 +4,7 @@
 +use super::*;
 +include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
 +fn field(a:&OwnedAccount,f:u32)->u8{match f{0..=31=>a.key.to_bytes()[f as usize],32..=63=>a.owner.to_bytes()[(f-32)as usize],64=>a.is_signer as u8,65=>a.is_writable as u8,66=>a.executable as u8,67..=74=>match a.length{Ok(n)=>((n>>((f-67)*8))&255)as u8,_=>{assert!(false,"snapshot length exact returning SDK arm");0}},_=>{assert!(matches!(a.bytes,Err(ProgramError::InvalidAccountData)),"deferred malformed length error exact");1}}}
-+fn logged(a:&[OwnedAccount],port:usize)->ProgramError{let f:u32=kani::any();kani::assume(f<32);ProgramError::Custom((f<<8)|field(&a[port],f)as u32)}
++fn logged(a:&[OwnedAccount],port:usize)->ProgramError{let f:u32=kani::any();kani::assume(32<=f&&f<76);ProgramError::Custom((f<<8)|field(&a[port],f)as u32)}
 +fn clear(d: &[u8]){assert!(d.is_empty(),"same empty return-data clear argument");}
 +fn clock()->Result<Clock,ProgramError>{Ok(Clock{slot:kani::any(),epoch_start_timestamp:kani::any(),epoch:kani::any(),leader_schedule_epoch:kani::any(),unix_timestamp:kani::any()})}
 +fn check<const SECOND:bool,const PORT:usize>(wrong:bool){
@@ -26,7 +26,7 @@
 + let data=if SECOND{&[65,83,81,56][..]}else{&[3,10][..]};
 +
 + let result=if SECOND{stage2(&p,accounts,data)}else{stage1(&p,accounts,data)};
-+ match result{Err(ProgramError::Custom(code))=>{let f=code>>8;assert!(f<32);let a=&accounts[PORT];let expected=match f{0..=31=>a.key.to_bytes()[f as usize],32..=63=>a.owner.to_bytes()[(f-32)as usize],64=>a.is_signer as u8,65=>a.is_writable as u8,66=>a.executable as u8,67=>1,68..=74=>0,_=>1};assert!((code&255)==expected as u32,"same snapshot produced metadata,length,error at actual child");},_=>assert!(false,"logged error forwarded")}
++ match result{Err(ProgramError::Custom(code))=>{let f=code>>8;assert!(32<=f&&f<76);let a=&accounts[PORT];let expected=match f{0..=31=>a.key.to_bytes()[f as usize],32..=63=>a.owner.to_bytes()[(f-32)as usize],64=>a.is_signer as u8,65=>a.is_writable as u8,66=>a.executable as u8,67=>1,68..=74=>0,_=>1};assert!((code&255)==expected as u32,"same snapshot produced metadata,length,error at actual child");},_=>assert!(false,"logged error forwarded")}
 + // No account data or lamport payload write occurs on this child-Err branch.
 + let j:usize=kani::any();kani::assume(j<7);assert!(lamps[j]==before_lamps[j],"one arbitrary lamport word frame");
 +}

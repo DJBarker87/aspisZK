@@ -1,7 +1,7 @@
 from pathlib import Path
 import json,re,hashlib
 E=Path(__file__).resolve().parent;P=E.parent/'slice-d-entry6-20261107'
-mods=['NIV_ReplyCuts','NIV_SnapshotSequence','NIV_OwnedPrefixes','NIV_SnapshotDomain','NIV_FrameWindows','NIV_SnapshotWrite','NIV_SdkFields','NIV_ExtractedForward','NIV_ForwardPacket']
+mods=['NIV_ReplyCuts','NIV_SnapshotSequence','NIV_OwnedPrefixes','NIV_SnapshotDomain','NIV_FrameWindows','NIV_SnapshotWrite','NIV_SdkFields','NIV_ExtractedForward','NIV_ForwardPacket','NIV_RawBoundary','NIV_AuthPrefixes']
 (E/'NIV_COMBINED_IMPORT.lean').write_text('import NIS_COMBINED_IMPORT\nimport NGK_COMBINED_IMPORT\n'+''.join('import '+m+'\n' for m in mods)+'\n#print axioms AspisR1.RPx_Deployed.deployed\n')
 for m in ['ProofDriver','ScanDriver']:
  s=(P/('NIS_'+m+'.lean')).read_text().replace('NIS_','NIV_');(E/('NIV_'+m+'.lean')).write_text(s)

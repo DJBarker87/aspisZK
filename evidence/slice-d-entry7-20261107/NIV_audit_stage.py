@@ -21,4 +21,4 @@ print(json.dumps({{p.name:p.read_text() for p in paths if p.exists()}}))
   if n.endswith('.json'):p.write_text(t)
   else:p.with_name(p.name+'.xz').write_bytes(lzma.compress(t.encode()));p.with_name(p.name+'.sha256').write_text(sha(t.encode())+'\n')
  assert r['exit_status']==0
-print('PASS_COMBINED_RAW36_FIXTURES8_SCAN',flush=True)
+print('PASS_COMBINED_RAW41_FIXTURES8_SCAN',flush=True)
