@@ -1,0 +1,33 @@
+"""Additive receipt and open-obligation validator; never promotes local facts."""
+from pathlib import Path
+import json,hashlib,sys,re,lzma
+E=Path(__file__).resolve().parent;P=E.parent/'transcript-queries-20261105'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+corr=json.loads((E/'NHB_SOURCE_CORRESPONDENCE.json').read_text())
+assert all(x['equal'] and x['frozen']['sha256']==x['historical']['sha256'] for x in corr['functions'])
+assert sha(P/'NGQ_FROZEN_INPUTS.json.xz')==corr['frozen_inputs_sha256']
+assert all(sha(Path(p))==h for p,h in json.loads((E/'NHB_REUSE.json').read_text()).items())
+results=[]
+for p in sorted(E.glob('NHB_K[0-9][0-9][0-9]/receipt.json')):
+ r=json.loads(p.read_text());a=r['attempt'];raw=(p.parent/'stdout.log').read_text()
+ graph=json.loads((E/(a+'-graph-check.json')).read_text());lock=json.loads((E/(a+'-lock-check.json')).read_text())
+ assert graph['graph_matches_frozen'] and lock['unchanged'],a
+ assert r['swaps']=='0',a
+ if 'timed out' in raw or 'CBMC failed' in raw:verdict='TOOL_LIMIT'
+ elif r['exit_status']==0 and 'VERIFICATION:- SUCCESSFUL' in raw:verdict='PASS'
+ elif 'Failed Checks: |out| *out ==' in raw and re.search(r'\*\* 1 of \d+ failed',raw):verdict='MATCHED_ENSURES_FAILURE'
+ else:verdict='OTHER_FAILURE'
+ results.append(dict(attempt=a,target=r['module'],verdict=verdict,receipt_sha256=sha(p)))
+ if int(a[-3:])>=3:
+  src=p.parent/'sources/NHB_src/crates/aspis-core/src/NHB_harness.rs'
+  assert '#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]' in src.read_text(),a
+for p in E.glob('NHB_L[0-9][0-9][0-9]/receipt.json'):
+ r=json.loads(p.read_text())
+ if r['exit_status']==0:
+  for line in r['print_axioms']:
+   assert 'sorryAx' not in line and 'axioms: [' not in line or all(x.strip() in ['propext','Classical.choice','Quot.sound'] for x in line.split('axioms: [',1)[1].rstrip(']').split(',')),line
+if (E/'NHB_LEDGER_DELTA.json').exists():
+ d=json.loads((E/'NHB_LEDGER_DELTA.json').read_text())
+ assert d.get('newly_closed',[])==[], 'Physical producer not yet validated; no promotion authorized by this validator'
+(E/'NHB_NATIVE_RESULTS.json').write_text(json.dumps(dict(runs=results,composed_row_credit=False),indent=2)+'\n')
+print(json.dumps(dict(native_receipts=len(results),correspondence_functions=len(corr['functions']),status='PASS',physical_producer='OPEN')))
