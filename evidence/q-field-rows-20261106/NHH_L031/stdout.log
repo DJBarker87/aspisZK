@@ -1,0 +1,109 @@
+NHH_generated/NHH_QAll.lean:24:39: error: Tactic `rfl` failed: The left-hand side
+  do
+    let x_1 ← { c0 := { a := x.c0.a, b := x.c0.b }, c1 := { a := x.c1.a, b := x.c1.b } }.is_zero
+    let o ←
+      if x_1 = true then ok none
+        else do
+          let x_2 ← { a := x.c0.a, b := x.c0.b }.square
+          let x_3 ← { a := x.c1.a, b := x.c1.b }.square
+          let x_4 ← AspisR72Sampler.field.mul_by_r { a := x_3.a, b := x_3.b }
+          let x_5 ← { a := x_2.a, b := x_2.b }.sub { a := x_4.a, b := x_4.b }
+          let x_6 ← { a := x_5.a, b := x_5.b }.inv
+          let x_7 ← { a := x.c0.a, b := x.c0.b }.mul { a := x_6.a, b := x_6.b }
+          let x ← { a := x.c1.a, b := x.c1.b }.neg
+          let x ← { a := x.a, b := x.b }.mul { a := x_6.a, b := x_6.b }
+          ok (some { c0 := { a := x_7.a, b := x_7.b }, c1 := { a := x.a, b := x.b } })
+    ok (Option.map toSampler o)
+is not definitionally equal to the right-hand side
+  do
+    let b ← { c0 := { a := x.c0.a, b := x.c0.b }, c1 := { a := x.c1.a, b := x.c1.b } }.is_zero
+    if b = true then ok none
+      else do
+        let c ← { a := x.c0.a, b := x.c0.b }.square
+        let c1 ← { a := x.c1.a, b := x.c1.b }.square
+        let c2 ← AspisR72Sampler.field.mul_by_r c1
+        let norm ← c.sub c2
+        let inverse_norm ← norm.inv
+        let c3 ← { a := x.c0.a, b := x.c0.b }.mul inverse_norm
+        let c4 ← { a := x.c1.a, b := x.c1.b }.neg
+        let c5 ← c4.mul inverse_norm
+        ok (some { c0 := c3, c1 := c5 })
+
+x : Q
+⊢ (do
+      let x_1 ← { c0 := { a := x.c0.a, b := x.c0.b }, c1 := { a := x.c1.a, b := x.c1.b } }.is_zero
+      let o ←
+        if x_1 = true then ok none
+          else do
+            let x_2 ← { a := x.c0.a, b := x.c0.b }.square
+            let x_3 ← { a := x.c1.a, b := x.c1.b }.square
+            let x_4 ← AspisR72Sampler.field.mul_by_r { a := x_3.a, b := x_3.b }
+            let x_5 ← { a := x_2.a, b := x_2.b }.sub { a := x_4.a, b := x_4.b }
+            let x_6 ← { a := x_5.a, b := x_5.b }.inv
+            let x_7 ← { a := x.c0.a, b := x.c0.b }.mul { a := x_6.a, b := x_6.b }
+            let x ← { a := x.c1.a, b := x.c1.b }.neg
+            let x ← { a := x.a, b := x.b }.mul { a := x_6.a, b := x_6.b }
+            ok (some { c0 := { a := x_7.a, b := x_7.b }, c1 := { a := x.a, b := x.b } })
+      ok (Option.map toSampler o)) =
+    do
+    let b ← { c0 := { a := x.c0.a, b := x.c0.b }, c1 := { a := x.c1.a, b := x.c1.b } }.is_zero
+    if b = true then ok none
+      else do
+        let c ← { a := x.c0.a, b := x.c0.b }.square
+        let c1 ← { a := x.c1.a, b := x.c1.b }.square
+        let c2 ← AspisR72Sampler.field.mul_by_r c1
+        let norm ← c.sub c2
+        let inverse_norm ← norm.inv
+        let c3 ← { a := x.c0.a, b := x.c0.b }.mul inverse_norm
+        let c4 ← { a := x.c1.a, b := x.c1.b }.neg
+        let c5 ← c4.mul inverse_norm
+        ok (some { c0 := c3, c1 := c5 })
+NHH_generated/NHH_QAll.lean:22:48: warning: This simp argument is unused:
+  NHH_CMAll.to_from
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵F̵G̵_̵I̵n̵v̵e̵r̵s̵e̵R̵e̵f̵.̵f̵i̵e̵l̵d̵.̵Q̵M̵3̵1̵.̵t̵r̵y̵_̵i̵n̵v̵,̵A̵s̵p̵i̵s̵R̵7̵2̵S̵a̵m̵p̵l̵e̵r̵.̵f̵i̵e̵l̵d̵.̵Q̵M̵3̵1̵.̵t̵r̵y̵_̵i̵n̵v̵,̵
+  ̵ ̵ ̵N̵H̵H̵_̵Q̵I̵n̵v̵e̵r̵s̵e̵.̵t̵e̵s̵t̵_̵a̵s̵s̵o̵c̵i̵a̵t̵i̵o̵n̵,̵N̵H̵H̵_̵C̵M̵A̵l̵l̵.̵s̵q̵u̵a̵r̵e̵_̵r̵e̵s̵u̵l̵t̵,̵N̵H̵H̵_̵C̵M̵A̵l̵l̵.̵r̵o̵t̵a̵t̵e̵_̵r̵e̵s̵u̵l̵t̵,̵
+  ̵ ̵ ̵N̵H̵H̵_̵C̵M̵A̵l̵l̵.̵s̵u̵b̵_̵r̵e̵s̵u̵l̵t̵,̵N̵H̵H̵_̵C̵M̵A̵l̵l̵.̵i̵n̵v̵e̵r̵s̵e̵_̵r̵e̵s̵u̵l̵t̵,̵N̵H̵H̵_̵C̵M̵A̵l̵l̵.̵m̵u̵l̵_̵r̵e̵s̵u̵l̵t̵,̵
+  ̵ ̵ ̵N̵H̵H̵_̵C̵M̵A̵l̵l̵.̵n̵e̵g̵_̵r̵e̵s̵u̵l̵t̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵N̵H̵H̵_̵C̵M̵A̵l̵l̵.̵t̵o̵_̵f̵r̵o̵m̵,̵
+  ̵ ̵ ̵t̵o̵S̵a̵m̵p̵l̵e̵r̵,̵N̵H̵H̵_̵Q̵I̵n̵v̵e̵r̵s̵e̵.̵t̵o̵S̵a̵m̵p̵l̵e̵r̵,̵N̵H̵H̵_̵C̵M̵A̵l̵l̵.̵f̵r̵o̵m̵S̵a̵m̵p̵l̵e̵r̵,̵N̵H̵H̵_̵C̵M̵I̵n̵v̵e̵r̵s̵e̵.̵t̵o̵S̵a̵m̵p̵l̵e̵r̵,̵
+  ̵ ̵ ̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵s̵o̵m̵e̵,̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵n̵o̵n̵e̵]̵[̲N̲F̲G̲_̲I̲n̲v̲e̲r̲s̲e̲R̲e̲f̲.̲f̲i̲e̲l̲d̲.̲Q̲M̲3̲1̲.̲t̲r̲y̲_̲i̲n̲v̲,̲ ̲A̲s̲p̲i̲s̲R̲7̲2̲S̲a̲m̲p̲l̲e̲r̲.̲f̲i̲e̲l̲d̲.̲Q̲M̲3̲1̲.̲t̲r̲y̲_̲i̲n̲v̲,̲
+  ̲ ̲ ̲ ̲N̲H̲H̲_̲Q̲I̲n̲v̲e̲r̲s̲e̲.̲t̲e̲s̲t̲_̲a̲s̲s̲o̲c̲i̲a̲t̲i̲o̲n̲,̲ ̲N̲H̲H̲_̲C̲M̲A̲l̲l̲.̲s̲q̲u̲a̲r̲e̲_̲r̲e̲s̲u̲l̲t̲,̲ ̲N̲H̲H̲_̲C̲M̲A̲l̲l̲.̲r̲o̲t̲a̲t̲e̲_̲r̲e̲s̲u̲l̲t̲,̲
+  ̲ ̲ ̲ ̲N̲H̲H̲_̲C̲M̲A̲l̲l̲.̲s̲u̲b̲_̲r̲e̲s̲u̲l̲t̲,̲ ̲N̲H̲H̲_̲C̲M̲A̲l̲l̲.̲i̲n̲v̲e̲r̲s̲e̲_̲r̲e̲s̲u̲l̲t̲,̲ ̲N̲H̲H̲_̲C̲M̲A̲l̲l̲.̲m̲u̲l̲_̲r̲e̲s̲u̲l̲t̲,̲ ̲N̲H̲H̲_̲C̲M̲A̲l̲l̲.̲n̲e̲g̲_̲r̲e̲s̲u̲l̲t̲,̲
+  ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲t̲o̲S̲a̲m̲p̲l̲e̲r̲,̲ ̲N̲H̲H̲_̲Q̲I̲n̲v̲e̲r̲s̲e̲.̲t̲o̲S̲a̲m̲p̲l̲e̲r̲,̲ ̲N̲H̲H̲_̲C̲M̲A̲l̲l̲.̲f̲r̲o̲m̲S̲a̲m̲p̲l̲e̲r̲,̲
+  ̲ ̲ ̲ ̲N̲H̲H̲_̲C̲M̲I̲n̲v̲e̲r̲s̲e̲.̲t̲o̲S̲a̲m̲p̲l̲e̲r̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲m̲a̲p̲_̲s̲o̲m̲e̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲m̲a̲p̲_̲n̲o̲n̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NHH_generated/NHH_QAll.lean:24:2: warning: This simp argument is unused:
+  Option.map_some
+
+Hint: Omit it from the simp argument list.
+  simp only [NFG_InverseRef.field.QM31.try_inv, ̲AspisR72Sampler.field.QM31.try_inv,
+     ̲NHH_QInverse.test_association, ̲NHH_CMAll.square_result, ̲NHH_CMAll.rotate_result,
+     ̲NHH_CMAll.sub_result, ̲NHH_CMAll.inverse_result,N̵H̵H̵_̵C̵M̵A̵l̵l̵.̵m̵u̵l̵_̵r̵e̵s̵u̵l̵t̵,̵
+  ̵ N̲H̲H̲_̲C̲M̲A̲l̲l̲.̲m̲u̲l̲_̲r̲e̲s̲u̲l̲t̲,̲ NHH_CMAll.neg_result,
+  ̲ ̲ ̲ ̲bind_assoc_eq, ̲bind_tc_ok, ̲NHH_CMAll.to_from,
+  ̵  ̵toSampler, ̲NHH_QInverse.toSampler,
+  ̲ ̲ ̲ ̲NHH_CMAll.fromSampler, ̲NHH_CMInverse.toSampler,
+  ̵  ̵Option.map_s̵o̵m̵e̵,̵O̵p̵t̵i̵o̵n.̵m̵a̵p̵_̵n̵one]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NHH_generated/NHH_QAll.lean:24:18: warning: This simp argument is unused:
+  Option.map_none
+
+Hint: Omit it from the simp argument list.
+  simp only [NFG_InverseRef.field.QM31.try_inv, ̲AspisR72Sampler.field.QM31.try_inv,
+     ̲NHH_QInverse.test_association, ̲NHH_CMAll.square_result, ̲NHH_CMAll.rotate_result,
+     ̲NHH_CMAll.sub_result, ̲NHH_CMAll.inverse_result,N̵H̵H̵_̵C̵M̵A̵l̵l̵.̵m̵u̵l̵_̵r̵e̵s̵u̵l̵t̵,̵
+  ̵ N̲H̲H̲_̲C̲M̲A̲l̲l̲.̲m̲u̲l̲_̲r̲e̲s̲u̲l̲t̲,̲ NHH_CMAll.neg_result,
+  ̲ ̲ ̲ ̲bind_assoc_eq, ̲bind_tc_ok, ̲NHH_CMAll.to_from,
+  ̵  ̵toSampler, ̲NHH_QInverse.toSampler,
+  ̲ ̲ ̲ ̲NHH_CMAll.fromSampler, ̲NHH_CMInverse.toSampler,
+  ̵  ̵Option.map_some,̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵n̵o̵n̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NHH_QAll.from_to' does not depend on any axioms
+'NHH_QAll.to_from' does not depend on any axioms
+'NHH_QAll.try_association' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NHH_QAll.try_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NHH_QAll.inverse_association' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

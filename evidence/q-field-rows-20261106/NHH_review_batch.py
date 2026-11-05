@@ -5,9 +5,9 @@ from pathlib import Path
 import json,subprocess,time,re,os,hashlib,sys
 B=Path(__file__).resolve().parent;T='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0'
 parent=json.loads((B/os.environ['NHH_REVIEW_CONFIG']).read_text());roots=json.loads((B/'NHH_AUDIT_ROOTS.json').read_text())['roots']
-out=B/'NHH_review';out.mkdir(exist_ok=False)
+out=B/os.environ.get('NHH_REVIEW_OUTPUT','NHH_review');out.mkdir(exist_ok=False)
 cmds=[('link',[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NHH_native/NHH_Driver','NHH_native/NHH_Driver.c','NHH_native/NFA_WALKER.c','NHH_native/NFA_MemoryLimit.c'])]
-cmds += [(mode,['NHH_native/NHH_Driver',mode]) for mode in ['fixtures']+[f'proof{i}'for i in range((len(roots)+4)//5)]+['scan']]
+cmds += [(mode,['NHH_native/NHH_Driver',mode]) for mode in ['fixtures']+[f'proof{i}'for i in range((len(roots)+9)//10)]+['scan']]
 rows=[]
 for name,cmd in cmds:
  start=time.monotonic();log=out/(name+'.log');tim=out/(name+'.time.log')

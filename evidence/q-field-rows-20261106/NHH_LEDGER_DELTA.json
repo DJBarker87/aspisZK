@@ -12,20 +12,15 @@
   "TX2:NGB009",
   "TX2:046",
   "TX1:NGB003",
-  "TX2:NGB011"
+  "TX2:NGB011",
+  "TX1:005"
  ],
- "new_functions": 5,
+ "new_functions": 6,
  "validator_checks_added_only": true,
  "no_other_status_change": true,
  "retained_trust": true,
  "baseline_gate_sha256": "e8b718fb709d79539eb146c1f39bc2c5420dff2346921d213e72b3920a509829",
  "pending": [
-  {
-   "row": "TX1:005",
-   "function": "crates/aspis-core/src/field.rs::CM31::inv",
-   "status": "OPEN",
-   "reason": "Native/model/canonical caller composition remains incomplete; native fragment alone is not promoted"
-  },
   {
    "row": "TX1:006",
    "function": "crates/aspis-core/src/field.rs::CM31::inv_with",
@@ -49,6 +44,15 @@
    "function": "crates/aspis-core/src/field.rs::QM31::try_inv",
    "status": "OPEN",
    "reason": "Native/model/canonical caller composition remains incomplete; native fragment alone is not promoted"
+  }
+ ],
+ "contextual_specializations": [
+  {
+   "row": "TX1:005",
+   "callee_row": "TX1:006",
+   "callee_packet": "NHH_CMBridge.specialized_packet",
+   "generic_callee_status": "OPEN",
+   "rationale": "The frozen caller statically selects M31::inv; no arbitrary function-pointer semantic claim."
   }
  ]
 }

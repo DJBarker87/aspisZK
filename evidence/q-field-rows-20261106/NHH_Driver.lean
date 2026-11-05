@@ -101,9 +101,21 @@ unsafe def main (args : List String) : IO UInt32 := do
          `NEP_MutateProof.proof, `NEP_MutateAux.viaAux])
     else if mode == "scan" then (#[`NHH_COMBINED_IMPORT], #[])
     else if mode == "proof0" then
-      (#[`NHH_COMBINED_IMPORT], #[`NHH_Embedding.base, `NHH_Embedding.inherent, `NHH_Embedding.complex, `NHH_Embedding.quadratic, `NHH_Embedding.wide])
+      (#[`NHH_COMBINED_IMPORT], #[`NHH_Embedding.base, `NHH_Embedding.inherent, `NHH_Embedding.complex, `NHH_Embedding.quadratic, `NHH_Embedding.wide, `NHH_Embedding.word_spec, `NHH_Embedding.canonical, `NHH_Embedding.same_canonical_word, `NHH_Embedding.accumulation, `NHH_BaseOps.mul_probe])
     else if mode == "proof1" then
-      (#[`NHH_COMBINED_IMPORT], #[`NHH_Embedding.word_spec, `NHH_Embedding.canonical, `NHH_Embedding.same_canonical_word, `NHH_Embedding.accumulation, `AspisR1.RPx_Deployed.deployed])
+      (#[`NHH_COMBINED_IMPORT], #[`NHH_BaseOps.mul_native, `NHH_BaseOps.mul_value, `NHH_BaseOps.square_body, `NHH_BaseOps.square_chain, `NHH_BaseOps.inverse_chain, `NHH_ScalarDomain.add_probe, `NHH_ScalarDomain.addition, `NHH_ScalarDomain.inverse_probe, `NHH_ScalarDomain.inverse_total, `NHH_ScalarDomain.inverse_zero])
+    else if mode == "proof2" then
+      (#[`NHH_COMBINED_IMPORT], #[`NHH_ScalarDomain.norm, `NHH_EncodedScalar.multiply, `NHH_EncodedScalar.addition, `NHH_EncodedScalar.negation, `NHH_EncodedScalar.inverse, `NHH_CMInverse.roundtrip, `NHH_CMInverse.fixed, `NHH_CMInverse.zero, `NHH_CMInverse.encoded_association, `NHH_CMInverse.canonical_association])
+    else if mode == "proof3" then
+      (#[`NHH_COMBINED_IMPORT], #[`NHH_CMTrace.source, `NHH_CMTrace.encoded, `NHH_CMTrace.backend_domain, `NHH_CMSampler.narrow_roundtrip, `NHH_CMSampler.raw_product, `NHH_CMSampler.scalar_add, `NHH_CMSampler.scalar_sub, `NHH_CMSampler.scalar_neg, `NHH_CMSampler.scalar_reduce, `NHH_CMSampler.scalar_double])
+    else if mode == "proof4" then
+      (#[`NHH_COMBINED_IMPORT], #[`NHH_CMSampler.scalar_multiply, `NHH_CMSampler.add_association, `NHH_CMSampler.sub_association, `NHH_CMSampler.neg_association, `NHH_CMSampler.mul_association, `NHH_CMSampler.square_association, `NHH_CMSampler.rotate_association, `NHH_CMAlgebra.injective, `NHH_CMAlgebra.unmap, `NHH_CMAlgebra.addition])
+    else if mode == "proof5" then
+      (#[`NHH_COMBINED_IMPORT], #[`NHH_CMAlgebra.subtraction, `NHH_CMAlgebra.negation, `NHH_CMAlgebra.multiply, `NHH_CMAlgebra.square, `NHH_CMAlgebra.rotate, `NHH_CMBridge.decode_live, `NHH_CMBridge.encoded_canonical, `NHH_CMBridge.packet, `NHH_CMBridge.selected_backend, `NHH_CMBridge.specialized_packet])
+    else if mode == "proof6" then
+      (#[`NHH_COMBINED_IMPORT], #[`NHH_AllScalar.multiply, `NHH_AllScalar.body, `NHH_AllScalar.square, `NHH_AllScalar.inverse, `NHH_CMAll.from_to, `NHH_CMAll.to_from, `NHH_CMAll.pullback, `NHH_CMAll.inv_with, `NHH_CMAll.inverse_association, `NHH_CMAll.mul_association])
+    else if mode == "proof7" then
+      (#[`NHH_COMBINED_IMPORT], #[`NHH_CMAll.square_association, `NHH_CMAll.inverse_result, `NHH_CMAll.mul_result, `NHH_CMAll.square_result, `NHH_CMAll.sub_result, `NHH_CMAll.neg_result, `NHH_CMAll.rotate_result, `AspisR1.RPx_Deployed.deployed])
     else (#[], #[])
   let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
     {} (loadExts := true) (level := .private)

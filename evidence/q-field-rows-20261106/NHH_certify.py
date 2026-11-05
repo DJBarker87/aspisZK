@@ -12,7 +12,7 @@ old=runpy.run_path(str(R/'evidence/ledger9-20261105/NGZ_validate.py'))
 old['gate'](base,J(R/'evidence/ledger9-20261105/NGZ_AUDIT.json'),J(R/'evidence/ledger9-20261105/NGZ_SCAN.json'),J(R/'evidence/ledger9-20261105/NGZ_TRUST_USED.json'),J(R/'evidence/ledger9-20261105/NGZ_L003-admission.json'))
 review=E/'NHH_review';summary=J(review/'SUMMARY.json');assert summary['status']=='PASS'
 results=[x for r in summary['commands'] if r['target'].startswith('proof') for x in r['results']];fixtures=J(review/'fixtures.json')['results'];scan=J(review/'SCAN_SUMMARY.json')
-roots=J(E/'NHH_AUDIT_ROOTS.json')['roots'];assert {x['root'] for x in results}==set(roots)
+roots=J(E/'NHH_L007/sources/NHH_AUDIT_ROOTS.json')['roots'];assert {x['root'] for x in results}==set(roots)
 assert len(fixtures)==8 and all(x['equal'] for x in fixtures)
 assert all(set(x['walked_axioms'])<={'propext','Classical.choice','Quot.sound'} and x['equal'] for x in results)
 assert scan['dangling']==scan['incompatible_owners']==scan['import_mismatches']==0

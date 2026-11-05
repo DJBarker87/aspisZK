@@ -11,3 +11,11 @@ L004: focused model compile. L005: combined import of NHH_Embedding with NGK_COM
 NHH_certify.py executes the unchanged NGZ baseline gate before adding constructor checks. Ledger inventory/membership and all other statuses remain unchanged. No shipped file changed; historical ELF pins are retained, not reproduced.
 
 QM negation native K017/018 passes/fails as expected but remains OPEN: NDT's missing adopted endpoint/caller association is not filled by a local value check. Inverse work continues independently.
+
+## Fixed CM inverse stage
+
+TX1:005 is additionally CLOSED on the SAME canonical nonzero receiver. NHH_CMBridge.packet is complete returned-record/trace/domain/source/cohort association; NHH_CMAll.inverse_association preserves every all-raw partial Result, and NHH_CMAll.inv_with proves the arbitrary-backend model law without generic native credit. The edge uses only the source-selected M31::inv specialization, with NHH_CMBridge.specialized_packet and selected_backend. Generic TX1:006 stays OPEN under K-2.
+
+K021/022 native log/control and K023/024 exact KMX pair pass/fail as required, with frozen offline graph, deployed features and unchanged lock. L028 combines the actual model forest with NGK and headline; L029 compiles the admitted driver. L030 audits78 raw roots with the exact eight fixtures;13442-module scan has zero defects. Exit0,116.885381s,RSS7024564KiB,swap0. The driver/walker/scanner adaptation and full source/dependency pins are committed. NHH_certify_cm.py executes the unchanged NGZ gate and constructor gates before these additional checks; no check is removed.
+
+The conservative receiver alternatives documented in NHH_SOURCE_GRAPH_FINDING.md are not silently treated as real call dependencies. No generic callback verdict or security premise removal is claimed.
