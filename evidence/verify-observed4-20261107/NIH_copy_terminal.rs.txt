@@ -371,6 +371,9 @@ fn copy_residual(row: CopyRowExtension, helper: QM31, chi: QM31) -> QM31 {
 }
 
 #[inline(always)]
+#[cfg_attr(kani,kani::requires(link.weight_kind<=4 && link.weight_level<64))]
+#[cfg_attr(kani,kani::ensures(|result| (result.0 == NIH_native::NIH_link_ref(link.weight_kind,link.weight_level,append_index,variant==PoolV1PairForestCompiledVariantV1::Withdrawal)) != cfg!(NIH_invert)))]
+#[cfg_attr(kani,kani::modifies())]
 fn link_weight(
     link: CompiledPoolV1PairForestLink,
     append_index: u64,
@@ -808,6 +811,8 @@ fn finish_pattern_basis_values(
 
 #[cfg(any(test, feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit"))]
 #[inline(never)]
+#[cfg_attr(kani,kani::ensures(|result| (*result == NIH_native::NIH_selected_ref(high,weight)) != cfg!(NIH_invert)))]
+#[cfg_attr(kani,kani::modifies())]
 fn selected_binary_weight(high: QM31, weight: M31) -> QM31 {
     if weight.0 == 1 {
         high
