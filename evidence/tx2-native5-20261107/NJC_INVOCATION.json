@@ -1,0 +1,222 @@
+[
+  {
+    "site": "op18",
+    "row": "TX2:124",
+    "function": "crates/aspis-r1-cost-probe/src/verifier.rs::resume",
+    "arguments": "D, checkpoint, proof, public_bytes, S2, hash",
+    "status": "OPEN",
+    "roots": [],
+    "obligation": "NJC-M01: actual frozen resume full Result, returned Box/payload/ownership and prefix frame; NIY_ResumePort.source is reference transport only."
+  },
+  {
+    "site": "op17",
+    "row": "TX2:138",
+    "function": "crates/aspis-r1-cost-probe/src/weights.rs::powers",
+    "arguments": "29, SAME p.gamma",
+    "status": "CLOSED",
+    "roots": [
+      {
+        "obligation_statement_sha256": "b0537c26f8312cb34933e8a2cb99ab2da9f7e9ff96021cb1f40bf392d92d956f",
+        "owner_module": "NFW_LPi_PowersSource",
+        "root": "AspisR1.NFW_LPi_PowersSource.one_canonical"
+      },
+      {
+        "obligation_statement_sha256": "9d8c357bd5f094cd8408d69981d6d733fe58637d3ab9425da151825027108f4c",
+        "owner_module": "NFW_LPi_PowersValue",
+        "root": "AspisR1.NFW_LPi_PowersValue.loop"
+      },
+      {
+        "obligation_statement_sha256": "4fe83a883db8d8cabf1575f651b20d38640173a952dac7214bee69130fad3b40",
+        "owner_module": "NFW_LPi_TowerValues",
+        "root": "AspisR1.NFW_LPi_TowerValues.wide_mul"
+      },
+      {
+        "obligation_statement_sha256": "60669a5f6e65aa31445dfdd1a5b4cad3e7e637fabd5852e9b74ae6139a618161",
+        "owner_module": "NFW_PowersCohort",
+        "root": "AspisR1.NFW_PowersCohort.source"
+      }
+    ],
+    "obligation": "NFW_PowersCohort.source; caller derives canonE on SAME resumed gamma, then nominal-array map."
+  },
+  {
+    "site": "op13.1",
+    "row": "TX2:118",
+    "function": "crates/aspis-r1-cost-probe/src/verifier.rs::mark",
+    "arguments": "none, CheckpointRead",
+    "status": "CLOSED",
+    "roots": [
+      {
+        "obligation_statement_sha256": "671f5c02736987e098de2a0fe18b2e7c91c61481a560335e3eae6a6167befbd1",
+        "owner_module": "NFS_QueryLoopRoot",
+        "root": "AspisR1.NFS_QueryLoopRoot.root"
+      }
+    ],
+    "obligation": "release None only; NFS_QueryLoopRoot.root is a loop theorem, not the mark body; use exact emitted mark/None reduction, no K-2-dependent Kani credit."
+  },
+  {
+    "site": "op2",
+    "row": "TX2:031",
+    "function": "crates/aspis-core/src/field/wide_exact.rs::WideExact::from_le_bytes",
+    "arguments": "proof[7495..7527]",
+    "status": "CLOSED",
+    "roots": [
+      {
+        "obligation_statement_sha256": "fe4852a4760a1774e703d23ad300061aa34d533aa4431395791e16d7e2cd03bc",
+        "owner_module": "NHV_NEO_FieldView",
+        "root": "NEO_FieldView.addresses"
+      },
+      {
+        "obligation_statement_sha256": "0d6a77d928ff3fcebc325334f10ede6b963ca63aed6d11cc80bace58fbbbb95f",
+        "owner_module": "NHV_NEO_FieldView",
+        "root": "NEO_FieldView.result"
+      },
+      {
+        "obligation_statement_sha256": "450f426c13e0ed58a9a271ce525cace5c4ff9d00dea9535eb10e330ecaed7fda",
+        "owner_module": "NHV_NET_WideModel",
+        "root": "NET_WideModel.result"
+      },
+      {
+        "obligation_statement_sha256": "c54d8a3c1b549710a623d96cbc53e359a106778cfac1d2b6f86de18d389a93b4",
+        "owner_module": "NHV_NET_WideModel",
+        "root": "NET_WideModel.result_state_effects"
+      },
+      {
+        "obligation_statement_sha256": "dab57c30e6a3d6c420bcbb0043d747c2352624b41bc9b9d22edcecf6f3f4d387",
+        "owner_module": "NHV_NET_WideModel",
+        "root": "NET_WideModel.roundtrip"
+      }
+    ],
+    "obligation": "NET_WideModel.result / NHV_InactivePacket.source; complete Option + outer fail/div. Range domain from SAME proof length."
+  },
+  {
+    "site": "op5",
+    "row": "TX2:053",
+    "function": "crates/aspis-r1-cost-probe/src/candidate.rs::batch_merkle",
+    "arguments": "D, SAME proof, SAME p, proof[7751..7783] array32, 1, hash",
+    "status": "OPEN",
+    "roots": [],
+    "obligation": "NJC-M02: complete Merkle5 Result/effects, idx/val frame and abort-prefix; sibling NJA only after merge."
+  },
+  {
+    "site": "op13.2",
+    "row": "TX2:118",
+    "function": "crates/aspis-r1-cost-probe/src/verifier.rs::mark",
+    "arguments": "none, Merkle(10)",
+    "status": "CLOSED",
+    "roots": [
+      {
+        "obligation_statement_sha256": "671f5c02736987e098de2a0fe18b2e7c91c61481a560335e3eae6a6167befbd1",
+        "owner_module": "NFS_QueryLoopRoot",
+        "root": "AspisR1.NFS_QueryLoopRoot.root"
+      }
+    ],
+    "obligation": "same None law as op13.1; entered only after op5 Ok."
+  },
+  {
+    "site": "op11",
+    "row": "TX2:104",
+    "function": "crates/aspis-r1-cost-probe/src/verifier.rs::QueryGeometry::for_range",
+    "arguments": "SAME p.queries, SAME a.next (=10), 22",
+    "status": "CLOSED",
+    "roots": [
+      {
+        "obligation_statement_sha256": "f040f06ee6c301a490a8fe528ebc6056757288d6d0669adb813db2d604b0e182",
+        "owner_module": "NFN_GeometryPart08",
+        "root": "NFN_NFB_GeometryComposed.accepted_physical"
+      },
+      {
+        "obligation_statement_sha256": "e2b489bb918af6137ad2372e9b9b4310363088947991132cc9f7d0f9e5b30c60",
+        "owner_module": "NFN_GeometryPart08",
+        "root": "NFN_NFB_GeometryComposed.result_state_effects"
+      }
+    ],
+    "obligation": "NFN_NFB_GeometryComposed.result_state_effects; NHV_NativeOps.geometry_result forgets only a proven pure frame."
+  },
+  {
+    "site": "op10",
+    "row": "TX2:100",
+    "function": "crates/aspis-r1-cost-probe/src/verifier.rs::BatchedWeights::new",
+    "arguments": "SAME a.weights.deref",
+    "status": "OPEN",
+    "roots": [],
+    "obligation": "NJC-M03: actual native constructor occurrence and complete allocation/copy/frame association; NHV_PendingPacket.source is emitted/model packet, width64 must be derived."
+  },
+  {
+    "site": "op6",
+    "row": "TX2:058",
+    "function": "crates/aspis-r1-cost-probe/src/candidate.rs::query_loop",
+    "arguments": "SAME proof,p,a,g,none,geometry,pending,22",
+    "status": "CLOSED",
+    "roots": [
+      {
+        "obligation_statement_sha256": "1398929fa9f0d26ee0d265efbd350c489a9ef8f32fe19db38815f8ba41449851",
+        "owner_module": "NFG_QueryLoopSource",
+        "root": "AspisR1.NFG_QueryLoopSource.complete"
+      },
+      {
+        "obligation_statement_sha256": "1f0a997ab82eb73fe4d3a66267878b4a69e12319af3ca1a22c9cbb10a651ea82",
+        "owner_module": "NFP_LoopTerminals",
+        "root": "AspisR1.NFP_LoopTerminals.error"
+      },
+      {
+        "obligation_statement_sha256": "302356062ce71a9d9f8333b825f8bbfaf1712a9fd03fb45e895583aa3e72d8f9",
+        "owner_module": "NFP_QueryAdvance",
+        "root": "AspisR1.NFP_QueryAdvance.accepted"
+      },
+      {
+        "obligation_statement_sha256": "3435f319180a42abff9f5d7e0b6d2eddbd640e6dc52f5f4743a32b0bfaf90a80",
+        "owner_module": "NFP_Resume",
+        "root": "AspisR1.NFP_Resume.tx1"
+      },
+      {
+        "obligation_statement_sha256": "4fef5ff84faffb82ac90b6534249ad55ad7edef552043f2790c14ac389dc47a5",
+        "owner_module": "NFS_LoopTrace",
+        "root": "AspisR1.NFS_LoopTrace.source"
+      },
+      {
+        "obligation_statement_sha256": "b88d7854dbef35ae799d84b180083d8ce0df45ecb6d3884f92a5674004e57f31",
+        "owner_module": "NFS_LoopTraceDefs",
+        "root": "AspisR1.NFS_LoopTraceDefs.compare"
+      },
+      {
+        "obligation_statement_sha256": "cdc21cff6df54e40615f510e49f38cca14b55fed9e705eaa3d58bcb21e319820",
+        "owner_module": "NFS_PacketRoot",
+        "root": "AspisR1.NFS_PacketRoot.loop"
+      },
+      {
+        "obligation_statement_sha256": "7e8fe8ff34399b8c5421cdfd95967448e7f76020d5c53b7b79f5cbc6a6c6dae7",
+        "owner_module": "NFS_QueryInvariant",
+        "root": "AspisR1.NFS_QueryInvariant.active"
+      },
+      {
+        "obligation_statement_sha256": "a0a7fae071161b039b141e156fec95c01b6019ab48a05d7937fa9410db991675",
+        "owner_module": "NFS_QueryLoopRoot",
+        "root": "AspisR1.NFS_QueryLoopRoot.finite"
+      },
+      {
+        "obligation_statement_sha256": "5933f8e3c9bb1aa2d211a3214599718a36c0f8d8e586cf1437c0c7399d921e1d",
+        "owner_module": "NFS_QueryLoopRoot",
+        "root": "AspisR1.NFS_QueryLoopRoot.tx1"
+      }
+    ],
+    "obligation": "NFS_QueryLoopRoot.root + NHT_PacketOps.query_source; NJC-M04: SAME native query6 producer and full payload carrier (no address-implies-byte rule)."
+  },
+  {
+    "site": "op9",
+    "row": "TX2:099",
+    "function": "crates/aspis-r1-cost-probe/src/verifier.rs::BatchedWeights::finish",
+    "arguments": "SAME returned pending, SAME returned a1.weights mutable slice",
+    "status": "OPEN",
+    "roots": [],
+    "obligation": "NJC-M05: full native flush Result + complete mutable frame, then actual deref_mut_back reconstruction."
+  },
+  {
+    "site": "op19",
+    "row": "TX2:115",
+    "function": "crates/aspis-r1-cost-probe/src/verifier.rs::finish_relation",
+    "arguments": "S2 View, SAME p, post-flush accumulator, none",
+    "status": "OPEN",
+    "roots": [],
+    "obligation": "NJC-M06: SAME-call NIG_FinishInput.Domain; actual new/pair/finish complete installation; seven/seven/64 canonical windows from actual history."
+  }
+]
