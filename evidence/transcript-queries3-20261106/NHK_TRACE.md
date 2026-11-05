@@ -10,9 +10,9 @@ success. Rejection preserves all seventeen already-issued digest events.
 Stopped/diverging runtime calls retain their attempted chronological prefix;
 no suffix is deleted from the ideal experiment and totality is not assumed.
 
-NHK_TraceBind.append (pending compile) composes local edges and preserves
+NHK_TraceBind.append (L004) composes local edges and preserves
 fail/div termination. NHK_EventChain.pair_trace/producer/eight_producer
-(pending compile) takes each pair's exact local digest observations, threading
+(L005) takes each pair's exact local digest observations, threading
 advance replies into the next receiver and writing both array slots, and
 constructs the materializer Trace. It does not assume a whole-materializer
 Result/log equality, but physical extraction of its local cut fields is still
@@ -28,3 +28,10 @@ the SAME source-order chain. NHK_WindowLaws is not a physical-trace producer.
 
 No schedule mismatch is established. A mismatch, if found, is an owner item
 under (aj)(4)(b); it will not be silently repaired by changing frozen3.
+
+L009 supplies NHK_EffectJoin.returning_absorb / absorb_fail / absorb_div,
+with normalize_bind and pure-tail adapters. The constructor premises are
+the local absorb Trace, exact chronological pair observations and the local
+pure-tail edge. No complete queries Result/log equality is assumed. Physical
+origin and the sampler child value law still have to be supplied; this is
+not an NGP_TRANSCRIPT.actual_queries export.

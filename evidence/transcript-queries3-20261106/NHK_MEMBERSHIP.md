@@ -26,3 +26,27 @@ The native split campaign omits the now-complete length19 domain.
 L002 proves the same-prefix disjoint-window Bool composition and adapter;
 L004 proves chronological Trace bind composition. These are standard-axiom
 model support, not physical membership or Trace credit.
+
+## Complete value partition
+
+All continuing lengths0..21 now have matched native/control coverage.
+NHK_K018/019 length11; K020/021 length12; K022/023 length13; K024/025
+length14; K026/027 length15; K028/029 length17; K030/031 length20;
+K032/033 length21. Length19 uses K006/007. The complete table is
+NHK_MEMBERSHIP_CALLEES.json; NHB's passing cases are reused, not replayed.
+
+The changed direct shape initializes22 independent scalar words, borrows the
+array instead of capturing it in a contract snapshot, fixes the actual prefix
+start and splits the reference into prefix8 plus the remaining scalar window.
+It executes the ACTUAL full-prefix Std.contains. The assertion ranges over
+ALL raw u32 arrays/candidates, exceeding the canonical caller domain. KMX
+configuration, graph/lock, feature and matched-control checks remain exact.
+This is a native value observation, not a new stub_verified contract. Empty
+external modifies follows the immutable reference signature, checked absence
+of statics/unsafe harness mutation, and the unchanged pure Std call.
+
+L010's scalar_fold/split_windows identifies the flat, effect-free Boolean
+reference with the SAME NHB active-prefix membership predicate; L002 supplies
+both disjoint windows. No shorter prefix or model-only membership assertion
+replaces a native whole-prefix value check. The timed-out old shapes remain
+excluded and are not rerun unchanged. No multiplication or SHA is reached.

@@ -28,5 +28,6 @@ fn NHK_contains_contract() {
  assert!(result==expected);
 }
 '''.replace('WIDTH',str(width)).replace('LIMIT',str(limit)).replace('CANON',canon).replace('INACTIVE',inactive).replace('PRED',pred)
+s=s.replace('let a:[u32;22]=kani::any();', 'let a:[u32;22]=['+', '.join(['kani::any()']*22)+'];')
 (E/'NHK_constant_contains.rs.txt').write_text(s)
 (E/'NHK_CONSTANT_CONTAINS.json').write_text(json.dumps(dict(length=n,width=width,offset_max=limit,shape='direct borrowed observation, no function-contract saved-array snapshot',property='actual Std.contains window == scalar disjunction of SAME window',domain='canonical22, inactive zero after active length, x18',credit='full length only if width==length; smaller window requires native/cohort composition'),indent=2)+'\n')

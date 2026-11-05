@@ -35,7 +35,7 @@ for p in sorted(E.glob('NHK_[KL][0-9][0-9][0-9]/receipt.json')):
      assert set(x.strip() for x in line.split('axioms: [',1)[1].rstrip(']').split(','))<={'propext','Classical.choice','Quot.sound'},line
  results.append(dict(attempt=a,kind=r['kind'],target=r['module'],verdict=verdict,exit_status=r['exit_status'],wall_seconds=r['wall_seconds'],peak_rss_kib=r['peak_rss_kib'],swaps=r['swaps'],source_revision=r['source_revision'],receipt=str(p.relative_to(E)),receipt_sha256=sha(p),print_axioms=r['print_axioms']))
 rd={r['attempt']:r for r in results}
-for name in ['NHK_MEMBERSHIP_PROGRESS.json','NHK_SPLIT_PROGRESS.json','NHK_WINDOW_PROGRESS.json']:
+for name in ['NHK_MEMBERSHIP_PROGRESS.json','NHK_SPLIT_PROGRESS.json','NHK_WINDOW_PROGRESS.json','NHK_FIXED_PROGRESS.json']:
  if not (E/name).exists():continue
  for row in json.loads((E/name).read_text()):
   if not row['status'].startswith('CHECKED'):continue

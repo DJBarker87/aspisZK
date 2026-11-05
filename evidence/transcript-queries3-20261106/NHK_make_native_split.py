@@ -23,5 +23,6 @@ fn NHK_contains_contract() {
  assert!(result==(left || right));
 }
 '''.replace('CANON',canon).replace('LIMIT',str(22-n)).replace('CUT',str(cut)).replace('LEN',str(n))
+s=s.replace('let a:[u32;22]=kani::any();', 'let a:[u32;22]=['+', '.join(['kani::any()']*22)+'];')
 (E/'NHK_constant_contains.rs.txt').write_text(s)
 (E/'NHK_CONSTANT_CONTAINS.json').write_text(json.dumps(dict(length=n,cut=cut,offset_max=22-n,shape='native contiguous window composition with no saved-array snapshot',property='native full window == native prefix OR native suffix on SAME array',domain='canonical22 and x18; no inactive-zero restriction',remaining='scalar laws on both smaller native windows and Lean list frame/disjoint composition'),indent=2)+'\n')

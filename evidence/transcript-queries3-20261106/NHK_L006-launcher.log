@@ -1,0 +1,48 @@
+{"attempt": "NHK_L006", "exit_status": 1, "wall_seconds": 3.379434078000486, "peak_rss_kib": "5920144", "swaps": "0", "print_axioms": ["'AspisR1.NHK_EffectJoin.normalize_bind' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NHK_EffectJoin.normalized_append' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NHK_EffectJoin.pure_trace' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NHK_EffectJoin.returning_absorb' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NHK_EffectJoin.absorb_fail' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NHK_EffectJoin.absorb_div' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NHK_generated/NHK_EffectJoin.lean:74:44: error: Application type mismatch: The argument
+  pure_trace hashv ?m.135
+has type
+  Trace hashv (NGQ_Normalize.normalize (liftResult ?m.135)) ?m.135 []
+but is expected to have type
+  NHK_TraceBind.Continuation hashv (ok v) (fun a => NGQ_Normalize.normalize (?m.131 a)) ?m.132 []
+in the application
+  normalized_append materializer ?m.131 ?m.132 [] (pure_trace hashv ?m.135)
+NHK_generated/NHK_EffectJoin.lean:78:14: error: Type mismatch: After simplification, term
+  normalized_append materializer
+    (fun __x => liftResult (NGQ_QueryFactor.finishQuery B NGQ_Effects.dummy absorbed __x.1 __x.2)) (fail error) []
+    ⟨rfl, rfl⟩
+ has type
+  Trace hashv
+    (NGQ
+...
+ks, advances) =>
+            liftResult (NGQ_QueryFactor.finishQuery B NGQ_Effects.dummy absorbed blocks advances)))
+    (fail error) events
+but is expected to have type
+  @Trace hashv NGQ_Effects.Reply (NGQ_Normalize.normalize (NGQ_Effects.code B self row payload)) (fail error) events
+NHK_generated/NHK_EffectJoin.lean:104:2: error: Type mismatch: After simplification, term
+  normalized_append cuts
+    (fun absorbed => do
+      let __x ← NGQ_Effects.materializeCode absorbed.state
+      match __x with
+        | (blocks, advances) => liftResult (NGQ_QueryFactor.finishQuery B NGQ_Effects.dummy absorbed blocks advances))
+    div [] ⟨rfl, rfl⟩
+ has type
+  @Trace hashv NGQ_Effects.Reply
+    (NGQ_Normalize.normalize
+      (CheckpointBytes5Effect.bind (NGQ_Effects.absorbCode self row payload) fun absorbed => do
+        let __x ← NGQ_Effects.materializeCode absorbed.state
+        match __x with
+          | (blocks, advances) =>
+            liftResult (NGQ_QueryFactor.finishQuery B NGQ_Effects.dummy absorbed blocks advances)))
+    div events
+but is expected to have type
+  @Trace hashv NGQ_Effects.Reply (NGQ_Normalize.normalize (NGQ_Effects.code B self row payload)) div events
+'AspisR1.NHK_EffectJoin.normalize_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NHK_EffectJoin.normalized_append' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NHK_EffectJoin.pure_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NHK_EffectJoin.returning_absorb' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NHK_EffectJoin.absorb_fail' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NHK_EffectJoin.absorb_div' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r9855b962d0324fbf84ade686b63a2223.scope; invocation ID: 38e5ee4a7eb14c9285eadf6f51738e6f

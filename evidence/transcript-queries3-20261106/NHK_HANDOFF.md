@@ -22,3 +22,24 @@ now attempted, with smaller windows and their joint prefix law explicit.
 L002 window composition and L004 chronological bind pass with standard
 axioms; failed L001/L003 elaborations are retained and excluded. No full
 row/actual_queries producer is claimed. Frozen source trees match release.
+
+## Stage 1 complete / stage 2 local association
+
+All continuing membership lengths0..21 have native/control coverage, with
+no missing domain; NHK_MEMBERSHIP_CALLEES.json pins the exact pairs.
+New fixed-prefix K018..033 checks all raw u32 arrays/candidates; the reference
+is two scalar windows and actual full-prefix contains stays native. No old
+timeout or passing shape was rerun unchanged. K006/007 supplies length19.
+
+33/70 Kani and15/70 Lean/support invocations so far. L010 proves the scalar
+reference fold, L011 substitutes the membership law into the SAME logged
+poststate, L013 associates the native window records with the word loop and
+preserves caller domains, L014 associates the native block records/full
+sampler Result. L005/L009/L015 construct partial and returning chronological
+event components, including the exact four absorb descriptors. Standard
+axioms only in accepted modules; failures are retained and excluded.
+
+Next deliverable: assemble those local components on one invocation, export
+NGP_TRANSCRIPT.actual_queries with its explicit packet domain, then combined
+headline import/raw ax2/fixtures/scan and additive validator. Row stays OPEN
+until those gates pass. No scope, trust, source, metric or artifact change.
