@@ -1,0 +1,58 @@
+NGQ_generated/NGQ_SamplerPacket.lean:36:29: error: don't know how to synthesize placeholder for argument `snd`
+context:
+s : State
+advances : Blocks
+i : Usize
+hi : ↑i < 8
+read : Array.index_usize advances i = ok (↑advances)[↑i]
+full : s.accepted_len = 22#usize
+⊢ Std.Array U8 32#usize
+NGQ_generated/NGQ_SamplerPacket.lean:48:6: warning: This simp argument is unused:
+  core.convert.FromSame
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisR1Query31Transcript.finishAdvance,
+        AspisR1Query31Transcript.aspis_core.r0_transcript.QueryScan.finish,
+        AspisR1Query31Transcript.aspis_core.r0_transcript.QUERY_COUNT,
+        AspisR1Query31Transcript.aspis_core.r0_transcript.QUERY_MAX_DRAWS, ̲full, ̲if_false,
+        core.result.Result.Insts.CoreOpsTry.branch, ̲bind_tc_ok,
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGQ_generated/NGQ_SamplerPacket.lean:69:6: error: Type mismatch: After simplification, term
+  next
+ has type
+  @Eq (Result NGQ_SamplerDriver.Out)
+    (NGQ_SamplerDriver.walk (Query31ModelScanCall.modelScanFn Query31ConcreteWordsDriverChain.actualQueryWords) advances
+      fallback tail sf)
+    (ok out)
+but is expected to have type
+  @Eq (Result NGQ_SamplerDriver.Out)
+    (let (stop, next) := (false, sf)
+    if stop = true then AspisR1Query31Transcript.finishAdvance advances head.2 next
+    else
+      NGQ_SamplerDriver.walk (Query31ModelScanCall.modelScanFn Query31ConcreteWordsDriverChain.actualQueryWords)
+        advances fallback tail next)
+    (ok out)
+NGQ_generated/NGQ_SamplerPacket.lean:73:6: error: Type mismatch: After simplification, term
+  next
+ has type
+  @Eq
+    (Result
+      (core.result.Result (Std.Array U32 22#usize × Std.Array U8 32#usize)
+        AspisR1Query31Transcript.aspis_core.transcript.QuerySampleError))
+    (AspisR1Query31Transcript.finishAdvance advances head.2 sf) (ok out)
+but is expected to have type
+  @Eq (Result NGQ_SamplerDriver.Out)
+    (let (stop, next) := (true, sf)
+    if stop = true then AspisR1Query31Transcript.finishAdvance advances head.2 next
+    else
+      NGQ_SamplerDriver.walk (Query31ModelScanCall.modelScanFn Query31ConcreteWordsDriverChain.actualQueryWords)
+        advances fallback tail next)
+    (ok out)
+'AspisR1.NGQ_SamplerPacket.initial_valid' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGQ_SamplerPacket.finish_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NGQ_SamplerPacket.walk_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NGQ_SamplerPacket.zip_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGQ_SamplerPacket.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

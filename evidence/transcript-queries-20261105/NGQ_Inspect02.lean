@@ -1,0 +1,10 @@
+import NGK_COMBINED_IMPORT
+import NGP_L181
+#check @AspisR1.NBA_QueryJoin.source
+#check @AspisR1.NBA_QueryNative.construct
+#check @AspisR1.NBA_QueryDriver.source
+#check @Query31ConcreteWordsDriverChain.actualQueryWords
+#check @AspisS1M31Embedding.Total.embed
+#print AspisR1.NBA_Installed.actual
+#print AspisR1.NBA_QueryFactor.queriesFactored
+#print AspisR1.F3K_QueryScanCall.scan

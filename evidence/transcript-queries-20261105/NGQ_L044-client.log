@@ -1,0 +1,44 @@
+{"attempt": "NGQ_L044", "exit_status": 1, "wall_seconds": 3.461457276949659, "peak_rss_kib": "5914012", "swaps": "0", "print_axioms": ["'AspisR1.NGQ_QueryBudget.bind_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NGQ_QueryBudget.query_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NGQ_QueryBudget.attempts_at_most17' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NGQ_generated/NGQ_QueryBudget.lean:11:14: error: Type mismatch
+  each a
+has type
+  Budget (k a) n
+but is expected to have type
+  Budget (Code.done a >>= k) (0 + n)
+NGQ_generated/NGQ_QueryBudget.lean:15:42: error: Ambiguous term
+  bind
+Possible interpretations:
+  CheckpointBytes5Effect.bind (c b) k : Code B
+  
+  c b >>= k : Code B
+NGQ_generated/NGQ_QueryBudget.lean:22:2: error: Tactic `apply` failed: could not unify the conclusion of `bind_bound (absorb_bound self row payload)`
+  Budget (NGQ_Effects.absorbCode self row payload >>= ?k) (1 + ?m.10)
+with the goal
+  Budget
+    (do
+      let absorbed ← NGQ_Effects.absorbCode self row payload
+      let __x ← NGQ_Effects.materializeCode absorbed.state
+      match __x with
+        | (blocks, advances) => liftResult (NGQ_QueryFactor.finishQuery B NGQ_Effects.dummy absorbed blocks advances))
+    17
+
+Note: The full type of `bind_bound (absorb_bound self row payload)` is
+  ∀ (k : AspisR1PublicPreparation.transcript.Transcript Unit → Code ?m.7),
+    (∀ (a : AspisR1PublicPreparation.transcript.Transcript Unit), Budget (k a) ?m.10) →
+      Budget (NGQ_Effects.absorbCode self row payload >>= k) (1 + ?m.10)
+
+B : AspisR1PublicPreparation.QueriesModel.Boundaries
+self : AspisR1PublicPreparation.transcript.Transcript Unit
+row : U8
+payload : Slice U8
+⊢ Budget
+    (do
+      let absorbed ← NGQ_Effects.absorbCode self row payload
+      let __x ← NGQ_Effects.materializeCode absorbed.state
+      match __x with
+        | (blocks, advances) => liftResult (NGQ_QueryFactor.finishQuery B NGQ_Effects.dummy absorbed blocks advances))
+    17
+'AspisR1.NGQ_QueryBudget.bind_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NGQ_QueryBudget.query_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NGQ_QueryBudget.attempts_at_most17' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

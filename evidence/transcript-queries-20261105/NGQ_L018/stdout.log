@@ -1,0 +1,64 @@
+def Aeneas.Std.Array.index_mut_usize.{u} : {α : Type u} →
+  {n : Aeneas.Std.Usize} →
+    Aeneas.Std.Array α n → Aeneas.Std.Usize → Aeneas.Std.Result (α × (α → Aeneas.Std.Array α n)) :=
+fun {α} {n} v i => do
+  let x ← v.index_usize i
+  Aeneas.Std.Result.ok (x, v.set i)
+def Aeneas.Std.Array.update.{u} : {α : Type u} →
+  {n : Aeneas.Std.Usize} → Aeneas.Std.Array α n → Aeneas.Std.Usize → α → Aeneas.Std.Result (Aeneas.Std.Array α n) :=
+fun {α} {n} v i x =>
+  match v[i]? with
+  | none => Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds
+  | some val => Aeneas.Std.Result.ok ⟨(↑v).set (↑i) x, ⋯⟩
+def Aeneas.Std.Array.set.{u} : {α : Type u} →
+  {n : Aeneas.Std.Usize} → Aeneas.Std.Array α n → Aeneas.Std.Usize → α → Aeneas.Std.Array α n :=
+fun {α} {n} v i x => ⟨(↑v).set (↑i) x, ⋯⟩
+def Aeneas.Std.Array.index_usize.{u} : {α : Type u} →
+  {n : Aeneas.Std.Usize} → Aeneas.Std.Array α n → Aeneas.Std.Usize → Aeneas.Std.Result α :=
+fun {α} {n} v i =>
+  match v[i]? with
+  | none => Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds
+  | some x => Aeneas.Std.Result.ok x
+def AspisR1Query31Transcript.aspis_core.r0_transcript.QueryScan.finish : AspisR1Query31Transcript.aspis_core.r0_transcript.QueryScan →
+  Aeneas.Std.Result
+    (Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+      AspisR1Query31Transcript.aspis_core.transcript.QuerySampleError) :=
+fun self =>
+  if self.accepted_len = AspisR1Query31Transcript.aspis_core.r0_transcript.QUERY_COUNT then
+    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok self.accepted)
+  else
+    Aeneas.Std.Result.ok
+      (Aeneas.Std.core.result.Result.Err
+        (AspisR1Query31Transcript.aspis_core.transcript.QuerySampleError.DrawLimitExhausted self.accepted_len
+          AspisR1Query31Transcript.aspis_core.r0_transcript.QUERY_MAX_DRAWS))
+def AspisR1Query31Transcript.finishAdvance : Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 8#usize →
+  Aeneas.Std.Usize →
+    AspisR1Query31Transcript.aspis_core.r0_transcript.QueryScan →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result
+          (Aeneas.Std.Array Aeneas.Std.U32 22#usize × Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+          AspisR1Query31Transcript.aspis_core.transcript.QuerySampleError) :=
+fun advances index s => do
+  let r ← s.finish
+  let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r
+  match cf with
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val => do
+      let a ← advances.index_usize index
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (val, a))
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+      Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+        (Aeneas.Std.Array Aeneas.Std.U32 22#usize × Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+        (Aeneas.Std.core.convert.FromSame AspisR1Query31Transcript.aspis_core.transcript.QuerySampleError) residual
+structure AspisR1PublicPreparation.aspis_core.Digest32 (Self : Type) : Type
+number of parameters: 1
+fields:
+  AspisR1PublicPreparation.aspis_core.Digest32.coremarkerCopyInst : Aeneas.Std.core.marker.Copy Self
+  AspisR1PublicPreparation.aspis_core.Digest32.digest : Self →
+      Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+constructor:
+  AspisR1PublicPreparation.aspis_core.Digest32.mk {Self : Type} (coremarkerCopyInst : Aeneas.Std.core.marker.Copy Self)
+    (digest :
+      Self →
+        Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) →
+          Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)) :
+    AspisR1PublicPreparation.aspis_core.Digest32 Self

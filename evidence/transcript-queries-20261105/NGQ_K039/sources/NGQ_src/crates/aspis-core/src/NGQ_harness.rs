@@ -1,0 +1,107 @@
+use super::*;
+
+#[kani::proof]
+#[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+fn NGQ_finish() {
+    let accepted: [u32; 22] = kani::any();
+    let len: usize = kani::any();
+    let draws: usize = kani::any();
+    let k: usize = kani::any();
+    kani::assume(len <= 22 && draws <= 64 && k < 22);
+    let out = QueryScan { accepted, accepted_len: len, draws }.finish();
+    let correct = match out {
+        Ok(q) => len == 22 && q[k] == accepted[k],
+        Err(QuerySampleError::DrawLimitExhausted { accepted: n, max_draws }) =>
+            len != 22 && n == len && max_draws == 64,
+        _ => false,
+    };
+    #[cfg(not(NGQ_invert))] assert!(correct);
+    #[cfg(NGQ_invert)] assert!(!correct);
+}
+
+#[kani::proof]
+#[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+fn NGQ_query_words() {
+    let block: [u8;32] = kani::any();
+    let k: usize = kani::any(); kani::assume(k < 8);
+    let out = query_words(&block);
+    let j=4*k;
+    let expected = ((block[j] as u32) | ((block[j+1] as u32)<<8)
+       | ((block[j+2] as u32)<<16) | ((block[j+3] as u32)<<24)) & 262143;
+    let correct = out[k] == expected && out[k] < 262144;
+    #[cfg(not(NGQ_invert))] assert!(correct);
+    #[cfg(NGQ_invert)] assert!(out[k] == (expected ^ 1));
+}
+// NGQ generated one-word cut
+impl QueryScan {
+ fn NGQ_word_step(&mut self,candidate:u32)->bool {
+            if self.accepted_len == QUERY_COUNT || self.draws == QUERY_MAX_DRAWS {
+                return true;
+            }
+            self.draws += 1;
+            if !self.accepted[..self.accepted_len].contains(&candidate) {
+                self.accepted[self.accepted_len] = candidate;
+                self.accepted_len += 1;
+            }
+ false
+ }
+}
+#[kani::proof] #[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+fn NGQ_word_step() {
+ let accepted:[u32;22]=kani::any();let len:usize=kani::any();let draws:usize=kani::any();let x:u32=kani::any();
+ let j:usize=kani::any();kani::assume(len<=22 && draws<=64 && j<22);
+ let member=accepted[..len].contains(&x);
+ let mut s=QueryScan{accepted,accepted_len:len,draws};
+ let stop=s.NGQ_word_step(x);let halted=len==22 || draws==64;
+ let expected_len=if halted || member {len} else {len+1};
+ let expected_draws=if halted {draws} else {draws+1};
+ let expected_word=if !halted && !member && j==len {x} else {accepted[j]};
+ let correct=stop==halted && s.accepted_len==expected_len && s.draws==expected_draws && s.accepted[j]==expected_word;
+ #[cfg(not(NGQ_invert))] assert!(correct);
+ #[cfg(NGQ_invert)] assert!(s.accepted[j] == (expected_word ^ 1));
+}
+// NGQ generated outer cut
+#[derive(Clone,Copy)]
+struct NGQ_ScanFields {accepted:[u32;22],len:usize,draws:usize}
+fn NGQ_scan_reply(scan:&mut QueryScan,block:&[u8;32],reply:NGQ_ScanFields,
+ stop:bool,j:usize,i:usize,log:&mut(u8,u32,usize,usize))->bool {
+ *log=(block[j],scan.accepted[i],scan.accepted_len,scan.draws);
+ scan.accepted=reply.accepted;scan.accepted_len=reply.len;scan.draws=reply.draws;
+ stop
+}
+fn NGQ_outer_step(blocks:&[[u8;32];8],advances:&[[u8;32];8],k:usize,
+ mut scan:QueryScan,prior_state:[u8;32],reply:NGQ_ScanFields,stop:bool,j:usize,i:usize)
+ ->(bool,QueryScan,[u8;32],(u8,u32,usize,usize)) {
+ let mut log=(0u8,0u32,0usize,0usize);let mut state=prior_state;
+ let halted=NGQ_scan_reply(&mut scan,&blocks[k],reply,stop,j,i,&mut log);
+ if halted {state=advances[k];}
+ (halted,scan,state,log)
+}
+#[kani::proof] #[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+fn NGQ_outer_step_check() {
+ let blocks:[[u8;32];8]=kani::any();let advances:[[u8;32];8]=kani::any();
+ let k:usize=kani::any();let j:usize=kani::any();let i:usize=kani::any();kani::assume(k<8 && j<32 && i<22);
+ let before=NGQ_ScanFields{accepted:kani::any(),len:kani::any(),draws:kani::any()};
+ kani::assume(before.len<=22 && before.draws<=64);
+ let scan=QueryScan{accepted:before.accepted,accepted_len:before.len,draws:before.draws};
+ let reply=NGQ_ScanFields{accepted:kani::any(),len:kani::any(),draws:kani::any()};
+ let prior_state:[u8;32]=kani::any();let stop:bool=kani::any();
+ let (halt,after,state,log)=NGQ_outer_step(&blocks,&advances,k,scan,prior_state,reply,stop,j,i);
+ let correct=halt==stop && after.accepted[i]==reply.accepted[i] && after.accepted_len==reply.len && after.draws==reply.draws
+  && state[j]==(if stop {advances[k][j]}else{prior_state[j]})
+  && log==(blocks[k][j],before.accepted[i],before.len,before.draws);
+ #[cfg(not(NGQ_invert))] assert!(correct);
+ #[cfg(NGQ_invert)] assert!(after.accepted[i] == (reply.accepted[i] ^ 1));
+}
+#[kani::proof] #[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+fn NGQ_default() {
+ let s=QueryScan::default();let j:usize=kani::any();kani::assume(j<22);
+ let correct=s.accepted[j]==0 && s.accepted_len==0 && s.draws==0;
+ #[cfg(not(NGQ_invert))] assert!(correct);
+ #[cfg(NGQ_invert)] assert!(s.accepted[j] == 1);
+}
