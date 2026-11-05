@@ -45,7 +45,9 @@ Next: owner/module producers repair the actual forest ownership in a separately 
 
 Stage commits visible at report generation:
 ```
+25f11bb1af0 Audit ledger11 forests and preserve full composition conflict
 cc86613ae85 Reproduce ledger11 deltas and record composition owner conflict
 ce39e4ec642 Record ledger11 scope and validation plan
-c7709080ff6 Stream A NIF_: NIC-D1 canonicality PROVED on the scanned TX1 caller model (no reachable noncanonical input); 40 native purity pairs; fields effect interpreted; enclosing effect joins OPEN; 20-root audit with RPx
 ```
+
+Final packaging validation: NII_validate.py --final PASS, nine original validators unchanged, nine rejected evidence mutations; NII_ARTIFACTS.json PASS,7515 archive/SHA/source checks,68 packed source references,31324 closure files and all13 named outputs. Authored Python/Lean/docs pass git diff --check; inherited raw evidence whitespace is preserved by hash. All requested40 slots are terminal; no additional formal work authorized in this refresh.

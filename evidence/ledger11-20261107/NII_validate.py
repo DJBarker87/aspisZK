@@ -29,7 +29,10 @@ def ledger_check(x):
  assert x['NII_coverage']==dict(total=599,CLOSED=379,QUALIFIED=14,OPEN=206)
  assert x['NII_source_validator_coverage']==dict(total=599,CLOSED=393,QUALIFIED=0,OPEN=206)
  assert x['NII_headline']=='AspisR1.RPx_Deployed.deployed'and not x['NII_security_target_established']and not x['NII_cold_release_replay']
- t={t['id']:t for t in x['trust_rows']};assert t['RuntimeCpiReadonlyEntry7']['used']is False and not t['RuntimeCpiReadonlyEntry7']['direct_closed_rows']
+ t={t['id']:t for t in x['trust_rows']};oldtrust={t['id']:t for t in BASE['trust_rows']}
+ assert set(oldtrust)<=set(t)and all(t[n]['status']==v['status']for n,v in oldtrust.items())
+ assert not any(n.startswith(('NIB-P','NHY_','NHD_'))for n in t)
+ assert t['RuntimeCpiReadonlyEntry7']['used']is False and not t['RuntimeCpiReadonlyEntry7']['direct_closed_rows']
  for n in ['RuntimeClockSlotBinding','RuntimeReturnDataClear','ReviewedTranscription-prepared_claim','ReviewedTranscription-queries_from_pairs']:assert t[n]['status']=='ADDED-LEAD'and t[n]['use_sites']
  assert new['TX1:006']['NII_route']=='(al)'and new['TX1:006']['NII_certificate']['packet']['instantiations']==['M31::inv']
  assert new['TX1:130']['NII_route']=='(ae) reclassification (z)(1)'
