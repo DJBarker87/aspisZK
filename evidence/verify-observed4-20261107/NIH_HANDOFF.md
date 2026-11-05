@@ -19,3 +19,9 @@ No security metric, privacy condition, two-transaction design or trust row chang
 NIH_L007 proves decoder packet installation for the exact claims p*29 and round0..9 shapes on the SAME framed record, complete RustResult including errors; framing stays an explicit producer obligation. NIH_L009 proves the emitted copy-terminal lift constructor for every u32. All new top theorems print standard axioms only. These local facts do not yet close any parent or op9.
 
 Transition localization: K002 next-cursor PASS; K003 error-variant PASS; K004 rejection FAIL; K005 rejection remains FAIL in level<carry branch. No concrete source mismatch claimed. New supported prepare-root extraction was submitted exactly once as NIH_E001; recover its receipt, never resubmit.
+
+## Relaunch 1 recovery
+
+Recovered clean WIP commit777732c0f44. Prior charges: K001–036, L001–031 (14 actual Lean compilations plus17 setup/install/seed scopes), E001. L032 existed as an unsubmitted config: host had no receipt or launch directory, so its first submission was safe. L032 now proves SAME raw-output <2^62 on all canonical input arrays using retained NDN totality/value and symbolic output bounds (exit0,5.387s,6021628KiB,swap0; standard axioms). K031/032 matrix,033/034 scan,035/036 suffix are positive/failing-control pairs in local-record form, restoring only those cut certificates; no parent promotion yet.
+
+The only extraction slot is spent on E001's PATH input error. No emitted root/finish/rounds/claims driver is fabricated. Continue independent listed terminal children and caller domain laws, then audit and explicitly report parent boundaries.
