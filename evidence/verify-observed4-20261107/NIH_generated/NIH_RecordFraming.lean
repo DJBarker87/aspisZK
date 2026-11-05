@@ -30,10 +30,9 @@ theorem accepted (row : U8) (frame payload : Slice U8)
   by_cases wrong : (Slice.len frame != length)=true
   · simp only [if_pos wrong] at tail
     cases tail
-  · have equal : Slice.len frame=length := by simpa using wrong
+  · have equal : frame.val.length=length.val := by simpa using wrong
     refine ⟨tag,size,shapeCall,?_⟩
-    have same:=congrArg UScalar.val equal
-    simpa only [Slice.len_val,show (5#usize).val=5 from rfl] using same.trans value
+    simpa only [show (5#usize).val=5 from rfl] using equal.trans value
 #print axioms accepted
 end AspisR1.NIH_RecordFraming
 end

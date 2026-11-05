@@ -1,0 +1,189 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+fn words(q:QM31)->[u32;4]{extension_limbs(q)}
+fn q(w:[u32;4])->QM31{QM31{c0:CM31{a:M31(w[0]),b:M31(w[1])},c1:CM31{a:M31(w[2]),b:M31(w[3])}}}
+fn canonical()->QM31{let w:[u32;4]=kani::any();kani::assume(w[0]<P&&w[1]<P&&w[2]<P&&w[3]<P);q(w)}
+fn part()->[u64;4]{let w:[u64;4]=kani::any();kani::assume(w[0]<61*u64::from(P)&&w[1]<61*u64::from(P)&&w[2]<61*u64::from(P)&&w[3]<61*u64::from(P));w}
+fn fullsum()->[u64;4]{let w:[u64;4]=kani::any();kani::assume(w[0]<62*u64::from(P)&&w[1]<62*u64::from(P)&&w[2]<62*u64::from(P)&&w[3]<62*u64::from(P));w}
+fn NIH_acc_cut(mut part_sum:[u64;4],limbs:[u32;4],mut limb:usize)->([u64;4],usize){if limb<4{
+            part_sum[limb] += u64::from(limbs[limb]);
+            limb += 1;
+}(part_sum,limb)}
+fn NIH_full_cut(part_sum:[u64;4],old_zero:[u32;4],limb:usize)->u64{part_sum[limb] + u64::from(old_zero[limb])}
+fn NIH_zero_cut(state:&mut[QM31;16],part_sum:[u64;4],old_zero:[u32;4]){
+    state[0] = extension_from_raw_limbs(core::array::from_fn(|limb| {
+        part_sum[limb] + u64::from(P) - u64::from(old_zero[limb])
+    }));
+}
+fn NIH_lane_cut(state:&mut[QM31;16],full_sum:[u64;4],iter:&mut core::ops::Range<usize>){
+    const SHIFTS: [u8; 15] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 13, 14, 15, 16];
+    if let Some(lane)=iter.next() {
+        let limbs = extension_limbs(state[lane]);
+        state[lane] = extension_from_raw_limbs(core::array::from_fn(|limb| {
+            full_sum[limb] + (u64::from(limbs[limb]) << SHIFTS[lane - 1])
+        }));
+    }
+}
+#[kani::proof]#[kani::unwind(20)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NIH_internal_acc(){let before=part();let limbs=words(canonical());let i:usize=kani::any();kani::assume(i<=4);let (after,next)=NIH_acc_cut(before,limbs,i);let j:usize=kani::any();kani::assume(j<4);assert_eq!(next,if i<4{i+1}else{i});let expected=if j==i{before[j]+u64::from(limbs[j])}else{before[j]};assert_eq!(after[j],expected ^ if cfg!(NIH_invert){1}else{0});assert!(after[j]<62*u64::from(P));}
+#[kani::proof]#[kani::unwind(20)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NIH_internal_full(){let part_sum=part();let old_zero=words(canonical());let j:usize=kani::any();kani::assume(j<4);let out=NIH_full_cut(part_sum,old_zero,j);assert_eq!(out,part_sum[j]+u64::from(old_zero[j]) ^ if cfg!(NIH_invert){1}else{0});assert!(out<62*u64::from(P));}
+#[kani::proof]#[kani::unwind(20)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NIH_internal_zero(){let mut state:[QM31;16]=core::array::from_fn(|_|q(kani::any()));let before=state;let part_sum=part();let old_zero=words(canonical());NIH_zero_cut(&mut state,part_sum,old_zero);let j:usize=kani::any();let k:usize=kani::any();kani::assume(j<16&&k<4);let raw=part_sum[k]+u64::from(P)-u64::from(old_zero[k]);assert!(raw<4611686018427387904);let expected=if j==0{(raw%u64::from(P)) as u32}else{words(before[j])[k]};assert_eq!(words(state[j])[k],expected ^ if cfg!(NIH_invert){1}else{0});}
+#[kani::proof]#[kani::unwind(20)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NIH_internal_lane(){let mut state:[QM31;16]=core::array::from_fn(|_|canonical());let before=state;let full=fullsum();let start:usize=kani::any();kani::assume(start>=1&&start<=16);let mut iter=start..16;NIH_lane_cut(&mut state,full,&mut iter);let j:usize=kani::any();let k:usize=kani::any();kani::assume(j<16&&k<4);let shifts=[0u8,1,2,3,4,5,6,7,8,10,12,13,14,15,16];let expected=if start<16&&j==start{let raw=full[k]+(u64::from(words(before[start])[k])<<shifts[start-1]);assert!(raw<4611686018427387904);(raw%u64::from(P)) as u32}else{words(before[j])[k]};assert_eq!(iter.start,if start<16{start+1}else{16});assert_eq!(iter.end,16);assert_eq!(words(state[j])[k],expected ^ if cfg!(NIH_invert){1}else{0});}
+
+struct NIH_GroupLog{input:[[u32;4];4],reply:QM31,calls:usize}
+fn NIH_local_reply(input:[QM31;4],log:&mut NIH_GroupLog)->QM31{log.input=input.map(words);log.calls+=1;log.reply}
+fn NIH_group_cut(state:&[QM31;16],mut local_packed:[QM31;4],mut group:usize,log:&mut NIH_GroupLog)->([QM31;4],usize){if group<4{
+        let start = 4 * group;
+        let input = [
+            state[start],
+            state[start + 1],
+            state[start + 2],
+            state[start + 3],
+        ];
+        local_packed[group] = NIH_local_reply(input,log);
+        group += 1;
+}(local_packed,group)}
+fn NIH_sum_cut(local_packed:[QM31;4])->QM31{QM31::ZERO
+        .add(local_packed[0])
+        .add(local_packed[1])
+        .add(local_packed[2])
+        .add(local_packed[3])}
+fn NIH_map_cut(value:QM31,sum:QM31)->QM31{value.add(sum)}
+#[kani::proof]#[kani::unwind(20)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NIH_packed_group(){let state:[QM31;16]=core::array::from_fn(|_|canonical());let before:[QM31;4]=core::array::from_fn(|_|q(kani::any()));let reply=canonical();let group:usize=kani::any();kani::assume(group<=4);let mut log=NIH_GroupLog{input:kani::any(),reply,calls:0};let (out,next)=NIH_group_cut(&state,before,group,&mut log);let j:usize=kani::any();let k:usize=kani::any();let r:usize=kani::any();kani::assume(j<4&&k<4&&r<4);assert_eq!(next,if group<4{group+1}else{4});assert_eq!(log.calls,if group<4{1}else{0});if group<4{assert_eq!(log.input[r][k],words(state[4*group+r])[k]);}assert_eq!(words(out[j])[k],words(if j==group{reply}else{before[j]})[k] ^ if cfg!(NIH_invert){1}else{0});assert_eq!(words(log.reply)[k],words(reply)[k]);}
+#[kani::proof]#[kani::unwind(20)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NIH_packed_sum(){let values:[QM31;4]=core::array::from_fn(|_|canonical());let out=words(NIH_sum_cut(values));let k:usize=kani::any();kani::assume(k<4);let total=u64::from(words(values[0])[k])+u64::from(words(values[1])[k])+u64::from(words(values[2])[k])+u64::from(words(values[3])[k]);assert_eq!(out[k],(total%u64::from(P)) as u32 ^ if cfg!(NIH_invert){1}else{0});}
+#[kani::proof]#[kani::unwind(20)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NIH_packed_map(){let value=canonical();let sum=canonical();let out=words(NIH_map_cut(value,sum));let k:usize=kani::any();kani::assume(k<4);let expected=((u64::from(words(value)[k])+u64::from(words(sum)[k]))%u64::from(P)) as u32;assert_eq!(out[k],expected ^ if cfg!(NIH_invert){1}else{0});}
+
+struct NIH_PowerLog{input:[u32;4],reply:QM31,calls:usize}
+fn NIH_power_reply(value:QM31,log:&mut NIH_PowerLog)->QM31{log.input=words(value);log.calls+=1;log.reply}
+fn NIH_internal_prefix(mut state:[QM31;16],constant:QM31,log:&mut NIH_PowerLog)->[QM31;16]{
+    state[0] = NIH_power_reply(state[0].add(constant),log);
+ state
+}
+struct NIH_InternalLog{input:[QM31;16],reply:[QM31;16],calls:usize}
+fn NIH_internal_reply(state:&mut[QM31;16],log:&mut NIH_InternalLog){log.input=*state;log.calls+=1;*state=log.reply;}
+fn NIH_internal_tail(mut state:[QM31;16],log:&mut NIH_InternalLog)->[QM31;16]{
+    NIH_internal_reply(&mut state,log);
+    state
+}
+#[kani::proof]#[kani::unwind(20)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NIH_round_prefix(){let before:[QM31;16]=core::array::from_fn(|_|canonical());let constant=canonical();let reply=canonical();let mut log=NIH_PowerLog{input:kani::any(),reply,calls:0};let after=NIH_internal_prefix(before,constant,&mut log);let j:usize=kani::any();let k:usize=kani::any();kani::assume(j<16&&k<4);assert_eq!(log.calls,1);assert_eq!(log.input[k],((u64::from(words(before[0])[k])+u64::from(words(constant)[k]))%u64::from(P)) as u32);assert_eq!(words(after[j])[k],words(if j==0{reply}else{before[j]})[k] ^ if cfg!(NIH_invert){1}else{0});assert_eq!(words(log.reply)[k],words(reply)[k]);}
+#[kani::proof]#[kani::unwind(20)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NIH_round_tail(){let before:[QM31;16]=core::array::from_fn(|_|q(kani::any()));let reply:[QM31;16]=core::array::from_fn(|_|q(kani::any()));let mut log=NIH_InternalLog{input:core::array::from_fn(|_|q(kani::any())),reply,calls:0};let after=NIH_internal_tail(before,&mut log);let j:usize=kani::any();let k:usize=kani::any();kani::assume(j<16&&k<4);assert_eq!(log.calls,1);assert_eq!(words(log.input[j])[k],words(before[j])[k]);assert_eq!(words(log.reply[j])[k],words(reply[j])[k]);assert_eq!(words(after[j])[k],words(reply[j])[k] ^ if cfg!(NIH_invert){1}else{0});}
+
+fn NIH_matrix_cell(input:[[u32;4];4],output:usize,limb:usize)->u64{
+                let a = u64::from(input[0][limb]);
+                let b = u64::from(input[1][limb]);
+                let c = u64::from(input[2][limb]);
+                let d = u64::from(input[3][limb]);
+                match output {
+                    0 => 2 * a + 3 * b + c + d,
+                    1 => a + 2 * b + 3 * c + d,
+                    2 => a + b + 2 * c + 3 * d,
+                    3 => 3 * a + b + c + 2 * d,
+                    _ => unreachable!(),
+                }
+}
+fn NIH_matrix_row(state:&mut[QM31;16],start:usize,input:[[u32;4];4],mut output:usize)->usize{if output<4{
+            let raw = core::array::from_fn(|limb| {
+                let a = u64::from(input[0][limb]);
+                let b = u64::from(input[1][limb]);
+                let c = u64::from(input[2][limb]);
+                let d = u64::from(input[3][limb]);
+                match output {
+                    0 => 2 * a + 3 * b + c + d,
+                    1 => a + 2 * b + 3 * c + d,
+                    2 => a + b + 2 * c + 3 * d,
+                    3 => 3 * a + b + c + 2 * d,
+                    _ => unreachable!(),
+                }
+            });
+            state[start + output] = extension_from_raw_limbs(raw);
+            output += 1;
+}output}
+struct NIH_MatrixLog{input:[[u32;4];4],start:usize,reply:[QM31;4],calls:usize}
+fn NIH_matrix_rows(state:&mut[QM31;16],start:usize,input:[[u32;4];4],log:&mut NIH_MatrixLog){log.input=input;log.start=start;log.calls+=1;state[start]=log.reply[0];state[start+1]=log.reply[1];state[start+2]=log.reply[2];state[start+3]=log.reply[3];}
+fn NIH_matrix_group(state:&mut[QM31;16],mut group:usize,log:&mut NIH_MatrixLog)->usize{if group<4{
+        let start = 4 * group;
+        let input = [
+            state[start],
+            state[start + 1],
+            state[start + 2],
+            state[start + 3],
+        ];
+        let input = input.map(extension_limbs);
+        NIH_matrix_rows(state,start,input,log);
+        group += 1;
+}group}
+fn NIH_column_sum(state:&[QM31;16],column:usize,limb:usize)->u64{
+            u64::from(extension_limbs(state[column])[limb])
+                + u64::from(extension_limbs(state[4 + column])[limb])
+                + u64::from(extension_limbs(state[8 + column])[limb])
+                + u64::from(extension_limbs(state[12 + column])[limb])
+}
+fn NIH_external_tail(state:&mut[QM31;16],sums:[[u64;4];4],mut index:usize)->usize{if index<POSEIDON2_WIDTH{
+        let limbs = extension_limbs(state[index]);
+        state[index] = extension_from_raw_limbs(core::array::from_fn(|limb| {
+            u64::from(limbs[limb]) + sums[index & 3][limb]
+        }));
+        index += 1;
+}index}
+#[kani::proof]#[kani::unwind(20)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NIH_lazy_matrix(){let input:[QM31;4]=core::array::from_fn(|_|canonical());let raw=input.map(words);let row:usize=kani::any();let j:usize=kani::any();kani::assume(row<4&&j<4);let out=NIH_matrix_cell(raw,row,j);let a=u64::from(raw[0][j]);let b=u64::from(raw[1][j]);let c=u64::from(raw[2][j]);let d=u64::from(raw[3][j]);let expected=match row{0=>2*a+3*b+c+d,1=>a+2*b+3*c+d,2=>a+b+2*c+3*d,3=>3*a+b+c+2*d,_=>unreachable!()};assert_eq!(out,expected ^ if cfg!(NIH_invert){1}else{0});assert!(out<7*u64::from(P));}
+#[kani::proof]#[kani::unwind(20)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NIH_lazy_row(){let mut state:[QM31;16]=core::array::from_fn(|_|q(kani::any()));let before=state;let input:[QM31;4]=core::array::from_fn(|_|canonical());let raw=input.map(words);let group:usize=kani::any();let output:usize=kani::any();kani::assume(group<4&&output<=4);let next=NIH_matrix_row(&mut state,4*group,raw,output);let j:usize=kani::any();let k:usize=kani::any();kani::assume(j<16&&k<4);let expected=if output<4&&j==4*group+output{let x=NIH_matrix_cell(raw,output,k);(x%u64::from(P)) as u32}else{words(before[j])[k]};assert_eq!(next,if output<4{output+1}else{4});assert_eq!(words(state[j])[k],expected ^ if cfg!(NIH_invert){1}else{0});}
+#[kani::proof]#[kani::unwind(20)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NIH_lazy_group(){let mut state:[QM31;16]=core::array::from_fn(|_|canonical());let before=state;let reply:[QM31;4]=core::array::from_fn(|_|canonical());let group:usize=kani::any();kani::assume(group<=4);let mut log=NIH_MatrixLog{input:kani::any(),start:kani::any(),reply,calls:0};let next=NIH_matrix_group(&mut state,group,&mut log);let j:usize=kani::any();let k:usize=kani::any();let r:usize=kani::any();kani::assume(j<16&&k<4&&r<4);assert_eq!(next,if group<4{group+1}else{4});assert_eq!(log.calls,if group<4{1}else{0});if group<4{assert_eq!(log.start,4*group);assert_eq!(log.input[r][k],words(before[4*group+r])[k]);}let expected=if group<4&&j>=4*group&&j<4*group+4{words(reply[j-4*group])[k]}else{words(before[j])[k]};assert_eq!(words(state[j])[k],expected ^ if cfg!(NIH_invert){1}else{0});}
+#[kani::proof]#[kani::unwind(20)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NIH_lazy_sum(){let state:[QM31;16]=core::array::from_fn(|_|canonical());let column:usize=kani::any();let limb:usize=kani::any();kani::assume(column<4&&limb<4);let out=NIH_column_sum(&state,column,limb);let expected=u64::from(words(state[column])[limb])+u64::from(words(state[4+column])[limb])+u64::from(words(state[8+column])[limb])+u64::from(words(state[12+column])[limb]);assert_eq!(out,expected ^ if cfg!(NIH_invert){1}else{0});assert!(out<4*u64::from(P));}
+#[kani::proof]#[kani::unwind(20)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NIH_lazy_tail(){let mut state:[QM31;16]=core::array::from_fn(|_|canonical());let before=state;let sums:[[u64;4];4]=core::array::from_fn(|_|core::array::from_fn(|_|{let w:u64=kani::any();kani::assume(w<(1u64<<34));w}));let index:usize=kani::any();kani::assume(index<=16);let next=NIH_external_tail(&mut state,sums,index);let j:usize=kani::any();let k:usize=kani::any();kani::assume(j<16&&k<4);let expected=if index<16&&j==index{((u64::from(words(before[index])[k])+sums[index&3][k])%u64::from(P)) as u32}else{words(before[j])[k]};assert_eq!(next,if index<16{index+1}else{16});assert_eq!(words(state[j])[k],expected ^ if cfg!(NIH_invert){1}else{0});}
+
+fn NIH_qm_lane(state:&mut[QM31;16],constants:&[QM31;16],iter:&mut core::ops::Range<usize>,log:&mut NIH_PowerLog){if let Some(lane)=iter.next(){
+        state[lane] = NIH_power_reply(state[lane].add(constants[lane]),log);
+}}
+fn NIH_m31_lane(state:&mut[QM31;16],constants:&[u32;16],iter:&mut core::ops::Range<usize>,log:&mut NIH_PowerLog){if let Some(lane)=iter.next(){
+        state[lane].c0.a = state[lane].c0.a.add(M31(constants[lane]));
+        state[lane] = NIH_power_reply(state[lane],log);
+}}
+fn NIH_full_prefix_window(m31:bool){let mut state:[QM31;16]=core::array::from_fn(|_|canonical());let before=state;let constants:[QM31;16]=core::array::from_fn(|_|canonical());let base:[u32;16]=core::array::from_fn(|_|{let w:u32=kani::any();kani::assume(w<P);w});let start:usize=kani::any();kani::assume(start<=16);let mut iter=start..16;let reply=canonical();let mut log=NIH_PowerLog{input:kani::any(),reply,calls:0};if m31{NIH_m31_lane(&mut state,&base,&mut iter,&mut log);}else{NIH_qm_lane(&mut state,&constants,&mut iter,&mut log);}let j:usize=kani::any();let k:usize=kani::any();kani::assume(j<16&&k<4);assert_eq!(iter.start,if start<16{start+1}else{16});assert_eq!(iter.end,16);assert_eq!(log.calls,if start<16{1}else{0});if start<16{let expected=if m31&&k!=0{words(before[start])[k]}else{((u64::from(words(before[start])[k])+u64::from(if m31{base[start]}else{words(constants[start])[k]}))%u64::from(P)) as u32};assert_eq!(log.input[k],expected);}assert_eq!(words(state[j])[k],words(if start<16&&j==start{reply}else{before[j]})[k] ^ if cfg!(NIH_invert){1}else{0});assert_eq!(words(log.reply)[k],words(reply)[k]);}
+fn NIH_lazy_round_tail(mut state:[QM31;16],log:&mut NIH_InternalLog)->[QM31;16]{
+    NIH_internal_reply(&mut state,log);
+    state
+}
+struct NIH_PackedTailLog{input:[QM31;16],reply:[QM31;4],calls:usize}
+fn NIH_external_packed_reply(state:[QM31;16],log:&mut NIH_PackedTailLog)->[QM31;4]{log.input=state;log.calls+=1;log.reply}
+fn NIH_packed_round_tail(state:[QM31;16],log:&mut NIH_PackedTailLog)->[QM31;4]{
+    NIH_external_packed_reply(state,log)
+}
+#[kani::proof]#[kani::unwind(20)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NIH_full_qm_prefix(){NIH_full_prefix_window(false);}
+#[kani::proof]#[kani::unwind(20)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NIH_full_m31_prefix(){NIH_full_prefix_window(true);}
+#[kani::proof]#[kani::unwind(20)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NIH_full_lazy_tail(){let before:[QM31;16]=core::array::from_fn(|_|q(kani::any()));let reply:[QM31;16]=core::array::from_fn(|_|q(kani::any()));let mut log=NIH_InternalLog{input:core::array::from_fn(|_|q(kani::any())),reply,calls:0};let out=NIH_lazy_round_tail(before,&mut log);let j:usize=kani::any();let k:usize=kani::any();kani::assume(j<16&&k<4);assert_eq!(log.calls,1);assert_eq!(words(log.input[j])[k],words(before[j])[k]);assert_eq!(words(out[j])[k],words(reply[j])[k] ^ if cfg!(NIH_invert){1}else{0});assert_eq!(words(log.reply[j])[k],words(reply[j])[k]);}
+#[kani::proof]#[kani::unwind(20)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NIH_full_packed_tail(){let before:[QM31;16]=core::array::from_fn(|_|q(kani::any()));let reply:[QM31;4]=core::array::from_fn(|_|q(kani::any()));let mut log=NIH_PackedTailLog{input:core::array::from_fn(|_|q(kani::any())),reply,calls:0};let out=NIH_packed_round_tail(before,&mut log);let j:usize=kani::any();let k:usize=kani::any();let r:usize=kani::any();kani::assume(j<16&&k<4&&r<4);assert_eq!(log.calls,1);assert_eq!(words(log.input[j])[k],words(before[j])[k]);assert_eq!(words(out[r])[k],words(reply[r])[k] ^ if cfg!(NIH_invert){1}else{0});assert_eq!(words(log.reply[r])[k],words(reply[r])[k]);}

@@ -128,3 +128,18 @@ fn NIH_atpoint(){NIH_atpoint_window(false);}
 #[kani::proof]#[kani::unwind(81)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NIH_boxed_atpoint(){NIH_atpoint_window(true);}
+
+fn NIH_outer_done<const N:usize>(){
+ let mut weights:[QM31;N]=core::array::from_fn(|_|NIH_q(kani::any()));let before=weights;
+ let coordinates:[QM31;0]=[];let mut iter=coordinates.iter();let len:usize=kani::any();
+ let mut log=NIH_OuterLog{coordinate:kani::any(),prepared:PreparedQm31Multiplier::new(QM31::ZERO),prepare_calls:0,inner_calls:0,len:kani::any(),reply:core::array::from_fn(|_|NIH_q(kani::any()))};
+ let oldcoord=log.coordinate;let oldlen=log.len;let reply=log.reply;
+ let afterlen=NIH_outer_cut(&mut weights,&mut iter,len,&mut log);
+ let j:usize=kani::any();let k:usize=kani::any();kani::assume(j<N&&k<4);
+ assert_eq!(afterlen,len ^ if cfg!(NIH_invert){1}else{0});assert_eq!(iter.as_slice().len(),0);
+ assert_eq!(log.prepare_calls,0);assert_eq!(log.inner_calls,0);assert_eq!(log.len,oldlen);assert_eq!(log.coordinate[k],oldcoord[k]);
+ assert_eq!(NIH_words(weights[j])[k],NIH_words(before[j])[k]);assert_eq!(NIH_words(log.reply[j])[k],NIH_words(reply[j])[k]);
+}
+#[kani::proof]#[kani::unwind(81)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NIH_outer_exhausted(){if kani::any::<bool>(){NIH_outer_done::<16>();}else{NIH_outer_done::<64>();}}

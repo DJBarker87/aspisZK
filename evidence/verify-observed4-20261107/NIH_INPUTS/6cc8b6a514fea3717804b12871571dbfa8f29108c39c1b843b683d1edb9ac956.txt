@@ -1,0 +1,12 @@
+{
+  "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "path": "crates/aspis-statement/src/state_only_poseidon.rs",
+  "original": "        let limbs = extension_limbs(state[lane]);\n        let mut limb = 0usize;\n        while limb < 4 {\n            part_sum[limb] += u64::from(limbs[limb]);\n            limb += 1;\n        }\n        lane += 1;",
+  "cut": "        let limbs = extension_limbs(state[lane]);\n        let mut limb = 0usize;\n        NIH_acc_reply(part_sum,limbs,&mut limb,log);\n        lane += 1;",
+  "inner": "        while limb < 4 {\n            part_sum[limb] += u64::from(limbs[limb]);\n            limb += 1;\n        }",
+  "reverse_erasure": true,
+  "domain": "1<=lane<=16, canonical immutable state; raw part/reply arbitrary; model inner packet supplies 61P bounds on the SAME before/reply",
+  "inner_packet": "K055/056 one raw limb iteration plus original JGj_InternalAccLimbs/AccState induction; start0/exhausted4",
+  "modifies": "local part_sum from logged inner reply, lane scalar, local log only; input state immutable",
+  "reason": "explicit native outer-loop association in addition to the inner limb and tail-lane certificates"
+}

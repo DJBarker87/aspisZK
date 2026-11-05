@@ -1,0 +1,18 @@
+{
+  "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "path": "crates/aspis-statement/src/state_only_poseidon.rs",
+  "original": "fn leading_pair_packed(\n    openings: &StateOnlyPoseidonOpenings,\n) -> [QM31; STATE_ONLY_POSEIDON_PACKED_LANES] {\n    let mut state = openings.z;\n    for lane in 0..RATE {\n        state[lane] = state[lane].add(openings.xor12_z[lane]);\n    }\n    external_linear_lazy(&mut state);\n    full_round_m31_constants_packed(\n        full_round_m31_constants(state, EXTERNAL_INITIAL[0]),\n        EXTERNAL_INITIAL[1],\n    )\n}",
+  "absorb": "        state[lane] = state[lane].add(openings.xor12_z[lane]);",
+  "absorb_cut": "        state[lane] = state[lane].add(xor[lane]);",
+  "linear_call": "external_linear_lazy(&mut state);",
+  "full_call": "full_round_m31_constants(state, EXTERNAL_INITIAL[0])",
+  "tail": "full_round_m31_constants_packed(\n        full_round_m31_constants(state, EXTERNAL_INITIAL[0]),\n        EXTERNAL_INITIAL[1],\n    )",
+  "reverse_erasure": true,
+  "call_substitution": {
+    "external_linear_lazy": "NIH_lead_linear",
+    "full_round_m31_constants": "NIH_lead_full",
+    "full_round_m31_constants_packed": "NIH_lead_packed"
+  },
+  "domains": "SAME canonical z/xor12_z; actual RATE8 one-iteration range; exact read-only frozen EXTERNAL_INITIAL rows0/1; all packet replies derived by completed layer/round packets",
+  "modifies": "local state selected lane in absorb; local log inputs/constants/counter; final returns SAME logged reply unchanged; immutable openings and constant table"
+}
