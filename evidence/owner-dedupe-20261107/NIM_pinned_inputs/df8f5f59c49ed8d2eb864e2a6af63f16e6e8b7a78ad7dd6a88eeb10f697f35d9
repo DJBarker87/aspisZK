@@ -1,0 +1,91 @@
+// Pure owned-record return, borrowed Verified/slice/fixed-array input fidelity.
+impl kani::Arbitrary for State{fn any()->Self{Self{sums:kani::any(),count:kani::any()}}}
+impl kani::Arbitrary for Log{fn any()->Self{Self{value:kani::any(),scalar:kani::any(),before:kani::any(),after:kani::any(),reply:kani::any(),calls:kani::any()}}}
+impl kani::Arbitrary for Out{fn any()->Self{
+ let error=match kani::any::<u8>()%8{0=>Error::Parse,1=>Error::Semantic,2=>Error::Transcript,3=>Error::Relation,4=>Error::Merkle,5=>Error::Query,6=>Error::Checkpoint,_=>Error::Allocation};
+ Self{result:if kani::any(){Ok(())}else{Err(error)},parse:kani::any(),next:kani::any(),state:kani::any(),log:kani::any()}
+}}
+#[kani::requires(domain(y1,point,l))]
+#[kani::ensures(|r| *r!=f_ref(sem,y1,g,point,l,pre,post,reply))]
+#[kani::modifies()]
+fn inverted<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],g:&[E;29],point:usize,l:usize,pre:State,post:State,reply:bool)->Out{f_ref(sem,y1,g,point,l,pre,post,reply)}
+#[kani::requires(domain(y1,point,l))]
+#[kani::ensures(|_| !cfg!(NGY_weak_false))]
+#[kani::modifies()]
+fn weak<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],g:&[E;29],point:usize,l:usize,pre:State,post:State,reply:bool)->Out{f_ref(sem,y1,g,point,l,pre,post,reply)}
+macro_rules! fidelity_inputs{($sem:ident,$y:ident,$g:ident,$pre:ident,$post:ident,$reply:ident)=>{
+ let $sem=sem();let $y:[u8;928]=kani::any();let $g:[E;29]=unsafe{core::mem::transmute(kani::any::<[u32;232]>())};let $pre:State=kani::any();let $post:State=kani::any();let $reply:bool=kani::any();
+}}
+macro_rules! fidelity_copy{($name:ident,$body:block)=>{
+ #[kani::proof]#[kani::unwind(1000)]
+ #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+ #[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]fn $name()$body
+}}
+#[kani::proof_for_contract(inverted)]#[kani::unwind(1000)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn shape_inverted(){fidelity_inputs!(s,y,g,pre,post,reply);let _=inverted(&s,&y,&g,0,0,pre,post,reply);}
+#[kani::proof_for_contract(weak)]#[kani::unwind(1000)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn shape_weak_contract(){fidelity_inputs!(s,y,g,pre,post,reply);let _=weak(&s,&y,&g,0,0,pre,post,reply);}
+fidelity_copy!(shape_real,{fidelity_inputs!(s,y,g,pre,post,reply);let r=weak(&s,&y,&g,0,0,pre,post,reply);assert_eq!(r.log.calls,1);});
+#[kani::proof]#[kani::unwind(1000)]#[kani::stub_verified(weak)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn shape_unimplied(){fidelity_inputs!(s,y,g,pre,post,reply);let r=weak(&s,&y,&g,0,0,pre,post,reply);assert_eq!(r.log.calls,1);}
+#[derive(Clone,Copy)]struct HashCell<'a>(&'a core::cell::Cell<u64>);
+impl<'a> Digest32 for HashCell<'a>{fn digest(&self,_:&[&[u8]])->[u8;32]{[0;32]}}
+#[kani::requires(domain(y1,point,l))]
+#[kani::ensures(|r| *r==f_ref(sem,y1,g,point,l,pre,post,reply))]
+#[kani::modifies()]
+fn violates(sem:&crate::r1_semantic::Verified<HashCell<'_>>,y1:&[u8],g:&[E;29],point:usize,l:usize,pre:State,post:State,reply:bool)->Out{
+ let hash=crate::r1_wire::NGY_carrier::hash(&sem.transcript);hash.0.set(hash.0.get()^1);
+ f_ref(sem,y1,g,point,l,pre,post,reply)
+}
+#[kani::proof_for_contract(violates)]#[kani::unwind(1000)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn shape_modifies(){fidelity_inputs!(s,y,g,pre,post,reply);
+ let cell=core::cell::Cell::new(kani::any());
+ let s=crate::r1_semantic::Verified{roots:s.roots,challenges:s.challenges,alpha:s.alpha,claims:s.claims,extra:s.extra,before_z1:s.before_z1,state_before_z0:s.state_before_z0,z:s.z,transcript:crate::r1_wire::NGY_carrier::from(kani::any(),HashCell(&cell),kani::any())};
+ let _=violates(&s,&y,&g,0,0,pre,post,reply);
+}
+
+impl kani::Arbitrary for FieldLog{fn any()->Self{Self{input:kani::any::<usize>() as *const u8,len:kani::any(),lane:kani::any(),reply:kani::any(),calls:kani::any()}}}
+impl kani::Arbitrary for Order{fn any()->Self{Self{events:kani::any(),count:kani::any()}}}
+impl kani::Arbitrary for Out5{fn any()->Self{Self{out:kani::any(),field:kani::any(),order:kani::any()}}}
+#[kani::requires(point==5 && l<29 && y1.len()==928)]
+#[kani::ensures(|r| *r!=f_ref5(y1,g,l,pre,post,reply,field))]
+#[kani::modifies()]
+fn inverted5<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],g:&[E;29],point:usize,l:usize,pre:State,post:State,reply:bool,field:E)->Out5{f_ref5(y1,g,l,pre,post,reply,field)}
+#[kani::requires(point==5 && l<29 && y1.len()==928)]
+#[kani::ensures(|_| !cfg!(NGY_weak_false))]
+#[kani::modifies()]
+fn weak5<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],g:&[E;29],point:usize,l:usize,pre:State,post:State,reply:bool,field:E)->Out5{f_ref5(y1,g,l,pre,post,reply,field)}
+#[kani::proof_for_contract(inverted5)]#[kani::unwind(1000)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn shape5_inverted(){fidelity_inputs!(s,y,g,pre,post,reply);let field:E=unsafe{core::mem::transmute(kani::any::<[u32;8]>())};let _=inverted5(&s,&y,&g,5,0,pre,post,reply,field);}
+#[kani::proof_for_contract(weak5)]#[kani::unwind(1000)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn shape5_weak_contract(){fidelity_inputs!(s,y,g,pre,post,reply);let field:E=unsafe{core::mem::transmute(kani::any::<[u32;8]>())};let _=weak5(&s,&y,&g,5,0,pre,post,reply,field);}
+fidelity_copy!(shape5_real,{fidelity_inputs!(s,y,g,pre,post,reply);let field:E=unsafe{core::mem::transmute(kani::any::<[u32;8]>())};let r=weak5(&s,&y,&g,5,0,pre,post,reply,field);assert_eq!(r.field.calls,1);});
+#[kani::proof]#[kani::unwind(1000)]#[kani::stub_verified(weak5)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn shape5_unimplied(){fidelity_inputs!(s,y,g,pre,post,reply);let field:E=unsafe{core::mem::transmute(kani::any::<[u32;8]>())};let r=weak5(&s,&y,&g,5,0,pre,post,reply,field);assert_eq!(r.field.calls,1);}
+#[kani::requires(point==5 && l<29 && y1.len()==928)]
+#[kani::ensures(|r| *r==f_ref5(y1,g,l,pre,post,reply,field))]
+#[kani::modifies()]
+fn violates5(sem:&crate::r1_semantic::Verified<HashCell<'_>>,y1:&[u8],g:&[E;29],point:usize,l:usize,pre:State,post:State,reply:bool,field:E)->Out5{
+ let hash=crate::r1_wire::NGY_carrier::hash(&sem.transcript);hash.0.set(hash.0.get()^1);f_ref5(y1,g,l,pre,post,reply,field)
+}
+#[kani::proof_for_contract(violates5)]#[kani::unwind(1000)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn shape5_modifies(){fidelity_inputs!(s,y,g,pre,post,reply);
+ let cell=core::cell::Cell::new(kani::any());let s=crate::r1_semantic::Verified{roots:s.roots,challenges:s.challenges,alpha:s.alpha,claims:s.claims,extra:s.extra,before_z1:s.before_z1,state_before_z0:s.state_before_z0,z:s.z,transcript:crate::r1_wire::NGY_carrier::from(kani::any(),HashCell(&cell),kani::any())};
+ let field:E=unsafe{core::mem::transmute(kani::any::<[u32;8]>())};let _=violates5(&s,&y,&g,5,0,pre,post,reply,field);
+}
