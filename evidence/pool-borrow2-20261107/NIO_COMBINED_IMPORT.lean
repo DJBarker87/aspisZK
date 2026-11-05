@@ -1,0 +1,8 @@
+import NGK_COMBINED_IMPORT
+import NIE_COMBINED_IMPORT
+import NIK_COMBINED_IMPORT
+import NIO_Invariant
+#check AspisR1.RPx_Deployed.deployed
+#print axioms AspisR1.RPx_Deployed.deployed
+#print axioms NIO_Invariant.certified_scope_preserves_room
+#print axioms NIO_Invariant.cpi_preserves_held_counter

@@ -1,0 +1,66 @@
+{
+ "attempt": "NIO_K015",
+ "kind": "kani",
+ "module": "vault::NIO_native::certificate",
+ "command": [
+  "python3",
+  "NIO_kani_gate.py",
+  "NIO_K015.json"
+ ],
+ "native_command": [
+  "/home/dombarker/.cargo/bin/cargo-kani",
+  "kani",
+  "--manifest-path",
+  "/home/dombarker/project-offloads/codex-cx-pool-borrow2-20261107/NIO_src/programs/aspis-pool/Cargo.toml",
+  "--target-dir",
+  "/home/dombarker/project-offloads/codex-cx-pool-borrow2-20261107/NIO_target",
+  "--lib",
+  "--features",
+  "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit",
+  "-j",
+  "1",
+  "-Z",
+  "unstable-options",
+  "-Z",
+  "function-contracts",
+  "-Z",
+  "stubbing",
+  "--harness-timeout",
+  "90s",
+  "--exact",
+  "--harness",
+  "vault::NIO_native::certificate",
+  "--output-format",
+  "terse"
+ ],
+ "sources": [
+  "NIO_native.patch",
+  "NIO_kani_gate.py",
+  "NIO_RUST_SHA256.json"
+ ],
+ "env": {
+  "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+  "CARGO_BUILD_JOBS": "1",
+  "CARGO_NET_OFFLINE": "true",
+  "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+  "CARGO_PROFILE_DEV_DEBUG": "0",
+  "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+  "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+  "TMPDIR": "/home/dombarker/project-offloads/codex-cx-pool-borrow2-20261107/NIO_tmp"
+ },
+ "timeout": 180,
+ "source_revision": "fad686412bc7f853e42cf1f76e15e67262ab01a7",
+ "source_tree_dirty": true,
+ "deps_fingerprint": {
+  "frozen_input_sha256": "05b7f617777edd0bca70e1a745c08becc3241275cd0d13c7cedee21e9705dbcc",
+  "frozen_manifest_sha256": "7e18d8646fb2c49c457791c5f524ea0a112399c408e472cebcfdff263ae0dea0",
+  "NHR_staging_manifest_sha256": "74a894c5ff7f4f3f3dda624b57891e6d7323fb2fa77c2b850d1c1ab4e3f18ad4"
+ },
+ "program_features": "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit",
+ "program_manifest": "programs/aspis-pool/Cargo.toml",
+ "required_statement_features": [
+  "pool-v1-kernel"
+ ],
+ "expected_time": "optimized compile/cache reuse, then CBMC of actual CPI-info helper; no field multiplication, hash body, or arithmetic aggregation",
+ "copy_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67"
+}

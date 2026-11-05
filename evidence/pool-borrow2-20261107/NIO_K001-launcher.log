@@ -1,0 +1,57 @@
+{"attempt": "NIO_K001", "exit_status": 1, "wall_seconds": 51.32174587599002, "peak_rss_kib": "531704", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling version_check v0.9.5
+   Compiling proc-macro2 v1.0.106
+   Compiling unicode-ident v1.0.24
+   Compiling quote v1.0.46
+   Compiling serde_core v1.0.228
+   Compiling syn v2.0.118
+   Compiling cfg-if v1.0.4
+   Compiling generic-array v0.14.7
+   Compiling typenum v1.20.1
+   Compiling serde v1.0.228
+   Compiling zerocopy v0.8.52
+   Compiling libc v0.2.186
+   Compiling serde_derive v1.0.228
+   Compiling subtle v2.6.1
+   Compiling hashbrown v0.15.5
+   Compiling autocfg v1.5.1
+   Compiling equivalent v1.0.2
+   Compiling indexmap v2.7.1
+   Compiling toml_write v0.1.2
+   Compiling toml_datetime v0.6.11
+   Compiling winnow v0.7.15
+   Compiling toml_e
+...
+(std::rc::Rc::ptr_eq(&observed.lamports,&expected.lamports)); assert!(observed.key!=a5.key);
+685 + assert!(observed.key==expected.key); assert!(std::rc::Rc::ptr_eq(&observed.data,&expected.data)); assert!(Rc::ptr_eq(&observed.lamports,&expected.lamports)); assert!(observed.key!=a5.key);
+    |
+
+warning: unused imports: `decode_pool_v1_pair_forest_terminal_statement_v1` and `encode_pool_v1_pair_forest_terminal_request_v1`
+  --> programs/aspis-pool/src/pair_forest.rs:21:9
+   |
+21 |         decode_pool_v1_pair_forest_terminal_statement_v1, encode_pool_v1_pair_forest_checkpoint_v1,
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+22 |         encode_pool_v1_pair_forest_lane_state_v1, encode_pool_v1_pair_forest_master_v1,
+23 |         encode_pool_v1_pair_forest_terminal_request_v1,
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `encode_pool_v1_pair_forest_terminal_result_v1`
+  --> programs/aspis-pool/src/pair_forest_dispatch.rs:14:5
+   |
+14 |     encode_pool_v1_pair_forest_terminal_result_v1, PoolV1PairForestTerminalRequestV1,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `program_error::ProgramError`
+   --> programs/aspis-pool/src/vault.rs:674:80
+    |
+674 | fn certificate(){use solana_program::{account_info::AccountInfo,pubkey::Pubkey,program_error::ProgramError};
+    |                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+For more information about this error, try `rustc --explain E0433`.
+error: could not compile `aspis-pool` (lib) due to 2 previous errors; 3 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 2 compilation errors.
+
+Running as unit: run-r1240b61cdef241ed96a5469072189c70.scope; invocation ID: 7d5b11073d6f40d2bda28afc7530d427
