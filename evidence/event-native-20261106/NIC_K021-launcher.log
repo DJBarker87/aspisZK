@@ -1,0 +1,63 @@
+{"attempt": "NIC_K021", "exit_status": 1, "wall_seconds": 1.726076542865485, "peak_rss_kib": "234436", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+rt!(false,"NIC forbidden C...
+  |    ^^^^^^^^^^^^^^^^
+
+warning: function `forbidden_signed` is never used
+ --> programs/r1-cost-probe/src/NIC_purity.rs:8:4
+  |
+8 | fn forbidden_signed(_i:&solana_program::instruction::Instruction,_a:&[AccountInfo],_s:&[&[&[u8]]]) -> ProgramResult { assert!(false,"...
+  |    ^^^^^^^^^^^^^^^^
+
+warning: function `forbidden_log` is never used
+ --> programs/r1-cost-probe/src/NIC_purity.rs:9:4
+  |
+9 | fn forbidden_log(_s:&str) { assert!(false,"NIC forbidden log"); }
+  |    ^^^^^^^^^^^^^
+
+warning: function `forbidden_cu` is never used
+  --> programs/r1-cost-probe/src/NIC_purity.rs:10:4
+   |
+10 | fn forbidden_cu() { assert!(false,"NIC forbidden compute-unit log"); }
+   |    ^^^^^^^^^^^^
+
+warning: function `m31_product_spec` is never used
+   --> programs/r1-cost-probe/src/NIC_purity.rs:297:4
+    |
+297 | fn m31_product_spec(a:aspis_core::field::M31,b:aspis_core::field::M31)->aspis_core::field::M31 {
+    |    ^^^^^^^^^^^^^^^^
+
+warning: module `NIC_purity` should have a snake case name
+   --> programs/r1-cost-probe/src/lib.rs:172:18
+    |
+172 | #[cfg(kani)] mod NIC_purity { include!("NIC_purity.rs"); }
+    |                  ^^^^^^^^^^ help: convert the identifier to snake case: `nic_purity`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+    Finished `dev` profile [optimized] target(s) in 0.54s
+Checking harness NIC_purity::hash_frontier...
+
+VERIFICATION RESULT:
+ ** 1 of 1 failed
+Failed Checks: "NIC forbidden hashv"
+ File: "programs/r1-cost-probe/src/NIC_purity.rs", line 4, in solana_program::hash::hashv
+
+VERIFICATION:- FAILED
+Verification Time: 0.022534048s
+
+Manual Harness Summary:
+Verification failed for - NIC_purity::hash_frontier
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r90fdf04fbb5d4b099b72932076e00d1d.scope; invocation ID: 43ed7fa36a3645908287c52188896072

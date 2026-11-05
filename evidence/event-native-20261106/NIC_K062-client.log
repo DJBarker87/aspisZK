@@ -1,0 +1,38 @@
+{"attempt": "NIC_K062", "exit_status": 1, "wall_seconds": 93.21403357596137, "peak_rss_kib": "1597468", "swaps": "0", "print_axioms": "N/A: kani"}
+urity.rs:551:4
+    |
+551 | fn box_abort<T>(_value:T)->Box<T> {kani::assume(false);unreachable!()}
+    |    ^^^^^^^^^
+
+warning: function `raw_product_spec` is never used
+   --> programs/r1-cost-probe/src/NIC_purity.rs:562:4
+    |
+562 | fn raw_product_spec(a:u32,b:u32)->u64 {assert!(a<2147483647 && b<2147483647,"NIC raw product domain");let out:u64=kani::any();kani:...
+    |    ^^^^^^^^^^^^^^^^
+
+warning: module `NIC_purity` should have a snake case name
+   --> programs/r1-cost-probe/src/lib.rs:173:18
+    |
+173 | #[cfg(kani)] mod NIC_purity { include!("NIC_purity.rs"); }
+    |                  ^^^^^^^^^^ help: convert the identifier to snake case: `nic_purity`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.03s
+Checking harness NIC_purity::circle_pure...
+
+CBMC failed
+VERIFICATION:- FAILED
+CBMC timed out. You may want to rerun your proof with a larger timeout or use stubbing to reduce the size of the code the verifier reasons about.
+
+Manual Harness Summary:
+Verification failed for - NIC_purity::circle_pure
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+

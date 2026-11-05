@@ -1,0 +1,29 @@
+# NIC native event realization handoff
+
+Branch `codex/cx-event-native-20261106`. **PARTIAL; target not yet established. No row promotions.** All work is NIC-prefixed content inside evidence/event-native-20261106. No push, merge, shipped-file edit or sibling/session-A worktree change.
+
+## Delivered
+
+- Native scalar/scalar_k/query abort-prefix pairs K032–037 and typed Box<Prepared> pair K046/047 under ruling (an). The positive terminates at an abstract nonreturning syscall/allocator boundary; controls fail on later calls or downstream sampler/reduction/suffix sentinels. Arbitrary transcript state, row<96, payload len<=2048, every scalar stop0..2 and query stop0..16. Returning exact logs/bytes/value/ownership are reused from NGT/NHK/NHS/NGC/NGN, not replayed. RuntimeSyscall returningValue (no totality) and allocator semantics remain trusted. No Rust Err arm is invented.
+- Local native purity pairs for elementary event calls and one-step dot/accumulation windows, with exact frozen source-window checks and four mutation rejections. Full per-kind status is NIC_PURITY.md/NIC_CLOSED.json. Whole-circle/line attempts timed out and are excluded. The repaired scalar-limb reference form passes the isolated product K077 and accumulation tail K079 with controls. Multiplication is Lean-discharged, never natively proved in Kani.
+- NIC_PurityFrame, NIC_AbortPrefix and NIC_AllocatorPrefix: SAME-context model frames, attempted stopped read retention, no suffix, explicit erased-allocation partial boundary, scalar stopped packets, and both allocator fail/div arms (the latter added at L019).
+- NIC_FieldStubs: exact total natural-value laws for each relevant field stub. NIC_FoldDomains obtains total source cuts and intermediate canonicality without successful fold premises.
+- NIC_DriverPackets.tx1_from_packets re-instantiates NHZ_DRIVER.events_from_cuts with NIA's constructor model packet, retaining the exact parent-order identity and returned-value continuation. It is a conditional MODEL observation, not a physical TX1 witness.
+
+## Finding and remaining work
+
+**NIC-D1:** the canonical bytes assumed by the fields/dot-main windows are stronger than the full NFS_QueryValuesPacket domain, which quantifies over arbitrary proof bytes. Those windows do not close stopped/invalid-decoder executions. Native stopped-decoder prefixes or actual parent scan installation are required; no success premise or silent root restriction is introduced.
+
+Circle/line source-stage effect composition, dot private-tail/stopped-decoder orchestration and the accumulation source-to-effect join remain OPEN. NIC_REMAINING.md gives each of the twelve members' exact result/next deliverable and explains why the remaining producer obligations require new native assertions, not another model wrapper. NHU/NHW op9/native parent ordering and all five NHZ physical-observer fields remain external. No new hidden syscall or shipped-source mismatch was found.
+
+## Validation, budget and resources
+
+L020 final combined import with NGK_COMBINED_IMPORT and AspisR1.RPx_Deployed.deployed passes. Raw ax2 audit: 18 roots, only propext/Classical.choice/Quot.sound, all agree with collectAxioms. L014's 16 unchanged roots are reused with every underlying selected object byte-identical; L022 checks the two new allocator roots. The relinked audit binary is byte-identical (NIC_DRIVER_REUSE.json), so L013 fixture evidence is reused. L013: all eight planted/mutated fixtures pass. Walker is byte-identical to NEP; driver diff is committed. L023 final scan: 13,648 modules, zero dangling references, incompatible owners or import mismatches. L015's own expected-import manifest omitted implicit Init in six new modules; that input error is retained, corrected, and the changed scan alone is replayed. No unchanged regression rerun.
+
+All 80 native attempt slots used, including one own pre-cargo gate error; 12/60 Lean compilations (24 non-Kani support scopes total); 0/0 extraction. Total 104 capped scopes, 1,176.910348 s aggregate wall, peak RSS 7,106,432 KiB, swap0. Every scope admitted with exit0 AND allowed:true, serial, limits6G/8G/0/64; Lean -M7000. Four 90-second CBMC timeouts are retained/excluded and never retried unchanged. Rust profile is explicitly optimized. Receipts record exact command/target/status/time/RSS/swap/revision/source/dependency/tool/Aeneas hashes and printed axioms. Failed drafts are excluded from final objects and credit.
+
+NIC_finish.py validates receipts, caps, frozen graphs and lock hashes before/after, actual final source snapshots, axioms/fixtures/scan, native markers/controls, cache and no-promotion/size/hygiene. NIC_WINDOWS.json covers native source windows. See NIC_AUDIT.json and NIC_VALIDATION.json.
+
+Seed: 100 files, 13,780,480 bytes, imported hashes in NIC_CACHE_IMPORTS.json.xz. Own exports: 276,872 bytes across retained initial and final exports in retained cache `.../codex-cx-carriers-bind-cache-20261104/NIC_20261106/NIC_exports_final_20261106` (plus the unchanged initial export); restore paths committed. Selected closure: 30,241 files / 7,643,725,232 bytes, 240 Aeneas files, SHA 30fb7c19f93820a0ddb689386f253b68c3a7124c88069d3eefe61541f0911ae6. Only 1,292,749,102 bytes of own rebuildable target/native/object/temp outputs were removed after export verification; own cache and source scratch remain. No wallet/key was created, modified or removed.
+
+No ELF rebuild trigger fired. Inherited, not reproduced: default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4; devnet 63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299; Pool 121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548. Cached coherent development validation is not cold release replay. Headline remains RPx_Deployed.deployed, L154 a statement parameter, D188 narrowed, digest/error slots43/44. No trust item, security metric, 100-bit per-attempt target, privacy condition or two-transaction design changed.

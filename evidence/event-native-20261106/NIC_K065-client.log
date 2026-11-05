@@ -1,0 +1,40 @@
+{"attempt": "NIC_K065", "exit_status": 0, "wall_seconds": 2.511076058028266, "peak_rss_kib": "250192", "swaps": "0", "print_axioms": "N/A: kani"}
+s never used
+   --> programs/r1-cost-probe/src/NIC_purity.rs:770:4
+    |
+770 | fn q_product_spec(a:aspis_core::field::QM31,b:aspis_core::field::QM31)->aspis_core::field::QM31 {let a=qwords(a);let b=qwords(b);ka...
+    |    ^^^^^^^^^^^^^^
+
+warning: function `wide_q_spec` is never used
+   --> programs/r1-cost-probe/src/NIC_purity.rs:771:4
+    |
+771 | fn wide_q_spec(a:aspis_core::field::WideExact,b:aspis_core::field::QM31)->aspis_core::field::WideExact {let a=ewords(a);let b=qword...
+    |    ^^^^^^^^^^^
+
+warning: module `NIC_purity` should have a snake case name
+   --> programs/r1-cost-probe/src/lib.rs:173:18
+    |
+173 | #[cfg(kani)] mod NIC_purity { include!("NIC_purity.rs"); }
+    |                  ^^^^^^^^^^ help: convert the identifier to snake case: `nic_purity`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.85s
+Checking harness NIC_purity::pairing_raw_pure...
+
+VERIFICATION RESULT:
+ ** 0 of 78 failed (1 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.43159366s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+

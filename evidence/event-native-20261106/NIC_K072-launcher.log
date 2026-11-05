@@ -1,0 +1,59 @@
+{"attempt": "NIC_K072", "exit_status": 1, "wall_seconds": 2.8509142519906163, "peak_rss_kib": "238240", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+urity.rs:551:4
+    |
+551 | fn box_abort<T>(_value:T)->Box<T> {kani::assume(false);unreachable!()}
+    |    ^^^^^^^^^
+
+warning: function `raw_product_spec` is never used
+   --> programs/r1-cost-probe/src/NIC_purity.rs:562:4
+    |
+562 | fn raw_product_spec(a:u32,b:u32)->u64 {assert!(a<2147483647 && b<2147483647,"NIC raw product domain");let out:u64=kani::any();kani:...
+    |    ^^^^^^^^^^^^^^^^
+
+warning: function `q_product_spec` is never used
+   --> programs/r1-cost-probe/src/NIC_purity.rs:770:4
+    |
+770 | fn q_product_spec(a:aspis_core::field::QM31,b:aspis_core::field::QM31)->aspis_core::field::QM31 {let a=qwords(a);let b=qwords(b);ka...
+    |    ^^^^^^^^^^^^^^
+
+warning: function `wide_q_spec` is never used
+   --> programs/r1-cost-probe/src/NIC_purity.rs:771:4
+    |
+771 | fn wide_q_spec(a:aspis_core::field::WideExact,b:aspis_core::field::QM31)->aspis_core::field::WideExact {let a=ewords(a);let b=qword...
+    |    ^^^^^^^^^^^
+
+warning: module `NIC_purity` should have a snake case name
+   --> programs/r1-cost-probe/src/lib.rs:173:18
+    |
+173 | #[cfg(kani)] mod NIC_purity { include!("NIC_purity.rs"); }
+    |                  ^^^^^^^^^^ help: convert the identifier to snake case: `nic_purity`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+    Finished `dev` profile [optimized] target(s) in 1.16s
+Checking harness NIC_purity::decoder_control...
+
+VERIFICATION RESULT:
+ ** 1 of 1 failed
+Failed Checks: "NIC forbidden digest"
+ File: "programs/r1-cost-probe/src/NIC_purity.rs", line 3, in <SolanaDigest as aspis_core::Digest32>::digest
+
+VERIFICATION:- FAILED
+Verification Time: 0.0219553s
+
+Manual Harness Summary:
+Verification failed for - NIC_purity::decoder_control
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r83827f19cc834376947619e526eccd3c.scope; invocation ID: d99da38c10324cda9832d5e62fda6a0b

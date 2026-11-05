@@ -1,0 +1,55 @@
+{"attempt": "NIC_K035", "exit_status": 1, "wall_seconds": 3.2886509890668094, "peak_rss_kib": "352488", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nu
+...
+fromq(a:[u32;4])->aspis_core::field::QM31 {use aspis_core::field::{M31,CM31,QM31};QM31{c0:CM31{a:M31(a[0]),b:M31(a[1])},c1:CM31{...
+    |    ^^^^^
+
+warning: function `q_subtract_spec` is never used
+   --> programs/r1-cost-probe/src/NIC_purity.rs:549:4
+    |
+549 | fn q_subtract_spec(a:aspis_core::field::QM31,b:aspis_core::field::QM31)->aspis_core::field::QM31 {let a=qwords(a);let b=qwords(b);a...
+    |    ^^^^^^^^^^^^^^^
+
+warning: module `NIC_purity` should have a snake case name
+   --> programs/r1-cost-probe/src/lib.rs:173:18
+    |
+173 | #[cfg(kani)] mod NIC_purity { include!("NIC_purity.rs"); }
+    |                  ^^^^^^^^^^ help: convert the identifier to snake case: `nic_purity`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.02s
+Checking harness NIC_purity::scalar_k_abort_control...
+
+VERIFICATION RESULT:
+ ** 2 of 108 failed (1 unreachable)
+Failed Checks: "NIC later digest after abort"
+ File: "programs/r1-cost-probe/src/NIC_purity.rs", line 423, in <NIC_purity::AbortDigest<'_> as aspis_core::Digest32>::digest
+Failed Checks: "NIC sampler after abort"
+ File: "programs/r1-cost-probe/src/NIC_purity.rs", line 429, in aspis_r1_cost_probe::sampler::qm31_sample
+
+VERIFICATION:- FAILED
+Verification Time: 0.23993409s
+
+Manual Harness Summary:
+Verification failed for - NIC_purity::scalar_k_abort_control
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rb111ec55fe3f4163b0de60a374e1593f.scope; invocation ID: a3c1bcb2d3a84de38ed907b1ce77c2ed
