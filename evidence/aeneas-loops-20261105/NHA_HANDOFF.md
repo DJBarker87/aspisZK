@@ -1,12 +1,35 @@
-# NHA shared extractor investigation — in progress
+# NHA shared extractor investigation — final handoff
 
-Branch: codex/cx-aeneas-loops-20261105. Frozen Rust: 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387.
-No closure or security result is claimed. No shipped source changes, Kani, or patched-tool credit.
+Branch `codex/cx-aeneas-loops-20261105`. Frozen Rust `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`. **One outlined reference emits and compiles; no native bridge or composed row closes. Target not yet established.** All work stays in NHA evidence; no push or other worktree edits.
 
-Investigate retained NGA nested array loops, NGQ early-return sampler loop, and NGU borrowed-matrix selection loop using retained LLBC inputs, private tool files, serial admitted host scopes (6G high / 8G max / swap0 / tasks64). Budget: 12 Aeneas extraction attempts, 25 emission compile slots, 0 Kani. No launch yet.
+## Results
 
-Prior receipts use Charon daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8 and extended Aeneas c0cf4fccb0879db4ce342da991f6215732a19fc01345b9eec84e632f4673b958. Their exact provenance and the d860ac47 precedent must remain distinct.
+| Frozen function / shape | Pinned original route | Non-invasive/outlined route | Credit |
+|---|---|---|---|
+| qm31_accumulate_product_channels: nested loops, arrays of arrays | E007 independently confirms2731 marker assertion on byte-identical frozen body under renamed public scratch wrapper | E010, exact inner loop lifted, still2731 inside helper | No emission or native credit |
+| queries_from_pairs: bounded block loop, early break, Result finish | E002 confirms1991 missing abstraction mapping | E011 succeeds after separating block-loop state threading from fallible finish; L007 co-imports compiled body with NGK/headline | Reference emission/compilation only; frozen native link OPEN |
+| prepared_claim: nested loops, borrowed matrix selection and early Result return | E003 confirms1991 missing abstraction mapping | E012 still1991 after dot and weighted-sum fission; failure is now switch/join in outlined graph | No emission or native credit |
 
-Next: reproduce each retained LLBC, inspect documented options and source, test non-invasive options before considering a minimal proposal. Outlining changes control structure and needs ruling (ah) frozen-body reference-contract linkage; it cannot prove equality to a nonexistent original emission. Any tool patch is ADDED-PENDING-LEAD under D188 and earns no credited emission here.
+E001 additionally reproduces NGA's retained reference LLBC. **NHA-F1:** that retained LLBC targets accumulate/small, not the actual frozen field function. The job's provenance premise is corrected rather than silently repeated; E007 independently supplies the actual-body reproduction. NHA_BODY_IDENTITY.json checks all three preserved scratch-original bodies against the frozen cuts.
 
-Retained trust: pinned extraction/compiler/runtime and existing security contract; no assumptions discharged or removed. Headline remains AspisR1.RPx_Deployed.deployed, frozen3, L154 statement parameter, narrowed D188. Default/devnet/Pool ELF pins are inherited, not rebuilt. Target not yet established.
+Exact commands, source/dependency hashes, revision, features, exits, wall/RSS/swap, admissions and scope caps are in NHA_ATTEMPTS.jsonl and its full receipts. NHA_REPRO.md, NHA_OPTIONS.md and NHA_PATCH.md retain the diagnosis and failed routes. The twelve Aeneas runs use the SAME unmodified executable c0cf4fcc...; Charon is daad69be.... Help/version/source inspection is committed. The private b59d5188 extended source matches all38 historical changed-file hashes (tree3be6820e...). The older d860 patch dry-runs cleanly at offset242 but is NOT applied/tested/adopted. No minimal all-three fix was demonstrated, so no patch or patch regression is claimed.
+
+## Query successor recipe
+
+1. Reuse committed NHA_inputs/queries_outline.llbc, checked against NHA_C003-pins.json, or reconstruct the private frozen workspace with NHA_prepare_outline.py and the exact Charon command in that receipt. The original query body and QueryScan/helpers remain available beside the outlined copy. Final scratch Cargo.toml/Cargo.lock are exact frozen bytes; only NHA modules and two scratch module registrations are added. All Charon runs are offline, optimized, one compiler job; every lock before/after is unchanged.
+2. Use the exact unpatched Aeneas command from NHA_E011.json (namespace NHA_queries_outline, sequential Lean split output). Original-function LLBC failure is retained separately; do not claim the outline is byte-identical to it. Raw Funs.lean/Types.lean are in NHA_emitted/queries_from_pairs with NHA_PINS.json.
+3. Compile using NHA_lean/NHA_queries_outline: TypesExternal imports the existing Aeneas std iterator carrier; FunsExternal reuses existing std into_iter/next/map and aliases concrete AspisR1SelectedMaskProbe.core.array.from_fn. Raw generated external templates contain axiom placeholders and are UNCOMPILED evidence only. The compile copy of Types suppresses one unused discriminant attribute whose macro-generated global instance collides with ExtractedOpeningQueriesModel; exact one-line diff is NHA_GENERATED_ADAPTATION.diff. Types, constructors and function bodies are unchanged; raw emissions remain untouched. L005 retains the collision failure and L008/L009 rebuild its changed dependency.
+4. Replay smallest modules in order TypesExternal, Types, FunsExternal, Funs, then NHA_COMBINED_IMPORT, using the existing S2W launcher via the owned client: fresh reservation exit0 AND allowed:true, one scope, MemoryHigh6G/MemoryMax8G/Swap0/Tasks64; lake env lean -j1 -M7000 -DElab.async=false. Each compile receipt pins the actually resolved Aeneas library objects. NHA_L007 is the exact combined result: exit0,3.190129s,5936124KiB RSS,swap0. Query, block helper, scanner and AspisR1.RPx_Deployed.deployed print only propext/Classical.choice/Quot.sound. No new theorem was added.
+5. Only then pursue(ah): actual frozen native/reference contract with exact frame and matched failing control; one native iteration on arbitrary prestate plus Lean induction; reviewed reference/cohort association. There is no original emitted body to which a Lean equality could be claimed. This job supplies NONE of those native laws and consumes0 Kani.
+
+Own compiled exports are retained under `/home/dombarker/project-offloads/codex-cx-transcript-queries-cache-20261104/NHA_exports_20261105` (NHA_EXPORT.json). Put that root before the retained coherent NGK/SInt2 fallbacks listed in the compile receipts when restoring. Existing assigned cache seeds were reused; NHA_REUSED_CACHE_SEED.json records original NGQ copy-seed provenance, and each compile records imported object hashes. Never delete the cache. Owned Cargo target and object scratch were removed after export; private tool/source/LLBC receipts remain,121MB total (NHA_HOST_END.json), under10GB.
+
+## Budget, trust and next decision
+
+12/12 extraction attempts,15/25 compiler invocations (7 Charon,8 Lean),0 Kani; two prelaunch exclusions are separate. Peak process RSS5961120KiB; swap0. No timeout, memory kill, cap increase or unchanged timed-out rerun. NHA_REMAINING.md explains member by member why no additional eligible compile remains despite unused slots. Run `python3 evidence/aeneas-loops-20261105/NHA_validate.py` for the evidence validator.
+
+No assumption was discharged, removed or added. Existing std-operation models/runtime/compiler/Aeneas/P6/D188 trust remains; outlined-copy native correspondence and any reviewed transcription are OPEN, not crypto assumptions. A future tool change would be ADDED-PENDING-LEAD under narrowed D188. Frozen3 headline, L154 statement parameter,100-bit PER-ATTEMPT target, privacy and the two-transaction design remain unchanged. No theorem/row/status or trust inventory was promoted.
+
+NHA_SHIPPED_IDENTITY.json verifies entire crates/ and programs/ Git trees equal frozen4bb3b3f5. No ELF rebuild trigger. INHERITED ONLY: default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4; devnet63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299; Pool121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548. No keys created, deleted or modified.
+
+Next deliverable: owner/lead chooses a new changed-shape extraction allocation for field/claim or a reviewed Aeneas investigation using the cleanly applicable precedent. Query successors can proceed now through(ah), with the missing native contract explicitly retained.

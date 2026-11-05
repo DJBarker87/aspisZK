@@ -18,7 +18,7 @@ The two sites have different preconditions. A single swallowed exception or weak
 
 The host patch is copied read-only under NHA_source_inspection/NHA_PRECEDENT_aeneas-d860ac47-preserve-distinct-loop-input-abstractions.patch. It filters direct fixed-input/fixed-input merge pairs when projecting a join, preserving independent recursive backward interfaces. It changes neither the total mapping operation nor the loan-marker invariant directly. Its comments rely on collapse treating later absent synthetic merge outputs as no-ops. Porting this to a different extended source without a regression/fidelity argument would add tool trust.
 
-The requested `git grep d860ac47` admission entry was not found in this branch's docs/.../design tree. The found C3-BIN entry at lines3619ff adopts the XRa b59 extended functional pin; it is not an admission of the d860 patch for this pin. The older precedent is therefore inspected, not treated as automatically admitted. Applicability dry-run receipt: NHA_PRECEDENT_CHECK.json (to be completed after the serial extraction scopes).
+The requested `git grep d860ac47` admission entry was not found in this branch's docs/.../design tree. The found C3-BIN entry at lines3619ff adopts the XRa b59 extended functional pin; it is not an admission of the d860 patch for this pin. The older precedent is therefore inspected, not treated as automatically admitted. Applicability dry-run receipt: NHA_PRECEDENT_CHECK.json. The hunk DOES apply cleanly at line1805 (offset242); patch --dry-run exits0. It was not applied, built, or extraction-tested. Textual applicability does not establish that it fixes these shapes or preserves emitted semantics.
 
 ## Adoption gate for a successor
 
