@@ -1,0 +1,77 @@
+--- /dev/null
++++ b/programs/r1-cost-probe/src/NIS_forward.rs
+@@ -0,0 +1,74 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn word(p:&Pubkey,a:&[AccountInfo<'_>],d:&[u8],i:u32)->usize{match i{0=>p as *const Pubkey as usize,1=>a.as_ptr() as usize,2=>a.len(),3=>d.as_ptr() as usize,_=>d.len()}}
++fn log_child(p:&Pubkey,a:&[AccountInfo<'_>],d:&[u8])->ProgramResult{let i:u32=kani::any();kani::assume(i<40);let v=((word(p,a,d,i/8)>>((i%8)*8))&255)as u32;Err(ProgramError::Custom((i<<8)|v))}
++fn log_wrong_child(p:&Pubkey,a:&[AccountInfo<'_>],d:&[u8])->ProgramResult{match log_child(p,a,d){Err(ProgramError::Custom(code))=>Err(ProgramError::Custom(code^1)),_=>unreachable!()}}
++fn forbidden(_: &Pubkey,_:&[AccountInfo<'_>],_:&[u8])->ProgramResult{assert!(false,"unselected child");Err(ProgramError::InvalidInstructionData)}
++fn check<const PROCESS:bool,const SECOND:bool>(wrong:bool){
++ let p=Pubkey::new_from_array(kani::any());
++ let keys=[Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any())];
++ let owners=[Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any())];
++ let mut lamps:[u64;7]=kani::any();let [l0,l1,l2,l3,l4,l5,l6]=&mut lamps;
++ let mut buffers:[[u8;1];7]=kani::any();let [b0,b1,b2,b3,b4,b5,b6]=&mut buffers;
++ let a=core::mem::ManuallyDrop::new([
++ AccountInfo::new(&keys[0],kani::any(),kani::any(),l0,b0,&owners[0],kani::any(),kani::any()),
++ AccountInfo::new(&keys[1],kani::any(),kani::any(),l1,b1,&owners[1],kani::any(),kani::any()),
++ AccountInfo::new(&keys[2],kani::any(),kani::any(),l2,b2,&owners[2],kani::any(),kani::any()),
++ AccountInfo::new(&keys[3],kani::any(),kani::any(),l3,b3,&owners[3],kani::any(),kani::any()),
++ AccountInfo::new(&keys[4],kani::any(),kani::any(),l4,b4,&owners[4],kani::any(),kani::any()),
++ AccountInfo::new(&keys[5],kani::any(),kani::any(),l5,b5,&owners[5],kani::any(),kani::any()),
++ AccountInfo::new(&keys[6],kani::any(),kani::any(),l6,b6,&owners[6],kani::any(),kani::any()),
++ ]);
++ let count=if SECOND{7}else{3};let accounts=&a[..count];
++ let first=[3,if kani::any(){10}else{11}];let second=[65,83,81,56];let data=if SECOND{&second[..]}else{&first[..]};
++ let result=if PROCESS{crate::r1_pool_adapter::process(&p,accounts,data)}else{crate::process_r1_cost_probe_instruction(&p,accounts,data)};
++ match result {Err(ProgramError::Custom(code))=>{let i=code>>8;assert!(i<40);let expected=((word(&p,accounts,data,i/8)>>((i%8)*8))&255)as u32;assert!(((code&255)==expected)!=wrong);},_=>assert!(false,"explicit logged result returned unchanged")}
++}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(crate::r1_pool_adapter::process,log_child)]
++fn entry3(){check::<false,false>(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(crate::r1_pool_adapter::process,log_wrong_child)]
++fn entry3_wrong(){check::<false,false>(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(crate::r1_pool_adapter::process,log_child)]
++fn entry7(){check::<false,true>(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(crate::r1_pool_adapter::process,log_wrong_child)]
++fn entry7_wrong(){check::<false,true>(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::stage1,log_child)]
++#[kani::stub(super::stage2,forbidden)]
++#[kani::stub(crate::r1_pool_adapter::lifecycle_init,forbidden)]
++#[kani::stub(crate::r1_pool_adapter::lifecycle_write,forbidden)]
++#[kani::stub(crate::r1_pool_adapter::lifecycle_finalize,forbidden)]
++fn process3(){check::<true,false>(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::stage1,log_wrong_child)]
++#[kani::stub(super::stage2,forbidden)]
++#[kani::stub(crate::r1_pool_adapter::lifecycle_init,forbidden)]
++#[kani::stub(crate::r1_pool_adapter::lifecycle_write,forbidden)]
++#[kani::stub(crate::r1_pool_adapter::lifecycle_finalize,forbidden)]
++fn process3_wrong(){check::<true,false>(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::stage1,forbidden)]
++#[kani::stub(super::stage2,log_child)]
++#[kani::stub(crate::r1_pool_adapter::lifecycle_init,forbidden)]
++#[kani::stub(crate::r1_pool_adapter::lifecycle_write,forbidden)]
++#[kani::stub(crate::r1_pool_adapter::lifecycle_finalize,forbidden)]
++fn process7(){check::<true,true>(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::stage1,forbidden)]
++#[kani::stub(super::stage2,log_wrong_child)]
++#[kani::stub(crate::r1_pool_adapter::lifecycle_init,forbidden)]
++#[kani::stub(crate::r1_pool_adapter::lifecycle_write,forbidden)]
++#[kani::stub(crate::r1_pool_adapter::lifecycle_finalize,forbidden)]
++fn process7_wrong(){check::<true,true>(false);}

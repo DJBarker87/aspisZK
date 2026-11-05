@@ -1,0 +1,143 @@
+--- /dev/null
++++ b/programs/r1-cost-probe/src/NIS_prefix.rs
+@@ -0,0 +1,140 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn owned()->OwnedAccount{OwnedAccount{key:Pubkey::new_from_array(kani::any()),owner:Pubkey::new_from_array(kani::any()),is_signer:kani::any(),is_writable:kani::any(),executable:kani::any(),length:if kani::any(){Ok(kani::any())}else{Err(ProgramError::Custom(kani::any()))},bytes:Err(ProgramError::Custom(kani::any()))}}
++fn no_decode(_: &[u8])->Result<Box<PoolV1PairForestTerminalStatementV1>,ProgramError>{panic!("decoder unreachable on selected rejection prefix")}
++fn no_snapshot(_: &AccountInfo<'_>,_:usize,_:usize)->OwnedAccount{panic!("snapshot unreachable on invalid header")}
++fn no_clear(_: &[u8]){panic!("return-data clear unreachable on invalid header")}
++fn no_validate(_: &Pubkey,_:&[OwnedAccount],_:&[u8],_:Result<u64,ProgramError>)->Result<ValidatedAsqa,ProgramError>{panic!("validate_asq8 unreachable on invalid header")}
++fn distinct3<const N:usize>(a:&[&OwnedAccount;N])->ProgramResult{kani::assume(N==3);if a[0].key()==a[1].key()||a[0].key()==a[2].key()||a[1].key()==a[2].key(){Err(ProgramError::InvalidArgument)}else{Ok(())}}
++fn owned_header<const SECOND:bool>(wrong:bool){
++ let p=Pubkey::new_from_array(kani::any());let a=[owned(),owned(),owned(),owned(),owned(),owned(),owned()];
++ let count:usize=kani::any();kani::assume(count<=7);let a=&a[..count];
++ let b:[u8;4]=kani::any();let n:usize=kani::any();kani::assume(n<=4);let d=&b[..n];
++ let valid=if SECOND{count==7&&n>=4&&d[..4]==[65,83,81,56]}else{count==3&&n==2&&d[0]==3&&(d[1]==10||d[1]==11)};kani::assume(!valid);
++ let good=if SECOND{let slot=if kani::any(){Ok(kani::any())}else{Err(ProgramError::Custom(kani::any()))};matches!(super::stage2_owned(&p,a,d,slot),Err(ProgramError::InvalidInstructionData))}else{matches!(super::stage1_owned(&p,a,d),Err(ProgramError::InvalidInstructionData))};
++ assert!(good!=wrong);
++}
++fn wrapper_header<const SECOND:bool>(wrong:bool){
++ let p=Pubkey::new_from_array(kani::any());
++ let keys=[Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any())];
++ let owners=[Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any())];
++ let mut lamps:[u64;7]=kani::any();let [l0,l1,l2,l3,l4,l5,l6]=&mut lamps;
++ let mut buffers:[[u8;1];7]=kani::any();let [b0,b1,b2,b3,b4,b5,b6]=&mut buffers;
++ let a=core::mem::ManuallyDrop::new([
++ AccountInfo::new(&keys[0],kani::any(),kani::any(),l0,b0,&owners[0],kani::any(),kani::any()),
++ AccountInfo::new(&keys[1],kani::any(),kani::any(),l1,b1,&owners[1],kani::any(),kani::any()),
++ AccountInfo::new(&keys[2],kani::any(),kani::any(),l2,b2,&owners[2],kani::any(),kani::any()),
++ AccountInfo::new(&keys[3],kani::any(),kani::any(),l3,b3,&owners[3],kani::any(),kani::any()),
++ AccountInfo::new(&keys[4],kani::any(),kani::any(),l4,b4,&owners[4],kani::any(),kani::any()),
++ AccountInfo::new(&keys[5],kani::any(),kani::any(),l5,b5,&owners[5],kani::any(),kani::any()),
++ AccountInfo::new(&keys[6],kani::any(),kani::any(),l6,b6,&owners[6],kani::any(),kani::any()),
++ ]);
++
++ let count:usize=kani::any();kani::assume(count<=7);let accounts=&a[..count];
++ let b:[u8;4]=kani::any();let n:usize=kani::any();kani::assume(n<=4);let data=&b[..n];
++ let valid=if SECOND{count==7&&n>=4&&data[..4]==[65,83,81,56]}else{count==3&&n==2&&data[0]==3&&(data[1]==10||data[1]==11)};kani::assume(!valid);
++ let r=if SECOND{super::stage2(&p,accounts,data)}else{super::stage1(&p,accounts,data)};
++ assert!(matches!(r,Err(ProgramError::InvalidInstructionData))!=wrong);
++}
++fn owned_guard<const DUPLICATE:bool>(wrong:bool){
++ let p=Pubkey::new_from_array(kani::any());let mut a=[owned(),owned(),owned()];
++ if DUPLICATE{a[1].key=a[0].key;}else{kani::assume(a[0].key()!=a[1].key()&&a[0].key()!=a[2].key()&&a[1].key()!=a[2].key());a[0].is_signer=true;}
++ let d=[3,if kani::any(){10}else{11}];let r=super::stage1_owned(&p,&a,&d);
++ let good=if DUPLICATE{matches!(r,Err(ProgramError::InvalidArgument))}else{matches!(r,Err(ProgramError::InvalidAccountData))};assert!(good!=wrong);
++}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::require_distinct_accounts::<3>,distinct3)]
++#[kani::stub(crate::r1_pool_adapter::decode_public_statement_box,no_decode)]
++#[kani::stub(super::validate_asq8,no_validate)]
++#[kani::stub(super::snapshot,no_snapshot)]
++#[kani::stub(solana_program::program::set_return_data,no_clear)]
++fn owned1_header(){owned_header::<false>(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::require_distinct_accounts::<3>,distinct3)]
++#[kani::stub(crate::r1_pool_adapter::decode_public_statement_box,no_decode)]
++#[kani::stub(super::validate_asq8,no_validate)]
++#[kani::stub(super::snapshot,no_snapshot)]
++#[kani::stub(solana_program::program::set_return_data,no_clear)]
++fn owned1_header_wrong(){owned_header::<false>(true);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::require_distinct_accounts::<3>,distinct3)]
++#[kani::stub(crate::r1_pool_adapter::decode_public_statement_box,no_decode)]
++#[kani::stub(super::validate_asq8,no_validate)]
++#[kani::stub(super::snapshot,no_snapshot)]
++#[kani::stub(solana_program::program::set_return_data,no_clear)]
++fn owned2_header(){owned_header::<true>(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::require_distinct_accounts::<3>,distinct3)]
++#[kani::stub(crate::r1_pool_adapter::decode_public_statement_box,no_decode)]
++#[kani::stub(super::validate_asq8,no_validate)]
++#[kani::stub(super::snapshot,no_snapshot)]
++#[kani::stub(solana_program::program::set_return_data,no_clear)]
++fn owned2_header_wrong(){owned_header::<true>(true);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::require_distinct_accounts::<3>,distinct3)]
++#[kani::stub(crate::r1_pool_adapter::decode_public_statement_box,no_decode)]
++#[kani::stub(super::validate_asq8,no_validate)]
++#[kani::stub(super::snapshot,no_snapshot)]
++#[kani::stub(solana_program::program::set_return_data,no_clear)]
++fn wrapper1_header(){wrapper_header::<false>(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::require_distinct_accounts::<3>,distinct3)]
++#[kani::stub(crate::r1_pool_adapter::decode_public_statement_box,no_decode)]
++#[kani::stub(super::validate_asq8,no_validate)]
++#[kani::stub(super::snapshot,no_snapshot)]
++#[kani::stub(solana_program::program::set_return_data,no_clear)]
++fn wrapper1_header_wrong(){wrapper_header::<false>(true);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::require_distinct_accounts::<3>,distinct3)]
++#[kani::stub(crate::r1_pool_adapter::decode_public_statement_box,no_decode)]
++#[kani::stub(super::validate_asq8,no_validate)]
++#[kani::stub(super::snapshot,no_snapshot)]
++#[kani::stub(solana_program::program::set_return_data,no_clear)]
++fn wrapper2_header(){wrapper_header::<true>(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::require_distinct_accounts::<3>,distinct3)]
++#[kani::stub(crate::r1_pool_adapter::decode_public_statement_box,no_decode)]
++#[kani::stub(super::validate_asq8,no_validate)]
++#[kani::stub(super::snapshot,no_snapshot)]
++#[kani::stub(solana_program::program::set_return_data,no_clear)]
++fn wrapper2_header_wrong(){wrapper_header::<true>(true);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::require_distinct_accounts::<3>,distinct3)]
++#[kani::stub(crate::r1_pool_adapter::decode_public_statement_box,no_decode)]
++#[kani::stub(super::validate_asq8,no_validate)]
++#[kani::stub(super::snapshot,no_snapshot)]
++#[kani::stub(solana_program::program::set_return_data,no_clear)]
++fn owned1_duplicate(){owned_guard::<true>(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::require_distinct_accounts::<3>,distinct3)]
++#[kani::stub(crate::r1_pool_adapter::decode_public_statement_box,no_decode)]
++#[kani::stub(super::validate_asq8,no_validate)]
++#[kani::stub(super::snapshot,no_snapshot)]
++#[kani::stub(solana_program::program::set_return_data,no_clear)]
++fn owned1_duplicate_wrong(){owned_guard::<true>(true);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::require_distinct_accounts::<3>,distinct3)]
++#[kani::stub(crate::r1_pool_adapter::decode_public_statement_box,no_decode)]
++#[kani::stub(super::validate_asq8,no_validate)]
++#[kani::stub(super::snapshot,no_snapshot)]
++#[kani::stub(solana_program::program::set_return_data,no_clear)]
++fn owned1_readonly(){owned_guard::<false>(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::require_distinct_accounts::<3>,distinct3)]
++#[kani::stub(crate::r1_pool_adapter::decode_public_statement_box,no_decode)]
++#[kani::stub(super::validate_asq8,no_validate)]
++#[kani::stub(super::snapshot,no_snapshot)]
++#[kani::stub(solana_program::program::set_return_data,no_clear)]
++fn owned1_readonly_wrong(){owned_guard::<false>(true);}
