@@ -1,0 +1,19 @@
+{
+  "kind": "REFERENCE ONLY: explicit-counter scope candidate",
+  "mode": "positive",
+  "domain": "Arbitrary valid i64 counter classes, arbitrary aliases among guard cells; admitted shared room on framed-child/accessor cells. Source function association is not assumed.",
+  "source": "\nuse core::cell::Cell;\nuse solana_program::program_error::ProgramError;\nstruct NIO_Cell { counter:Cell<i64>, payload:Cell<u8> }\nstruct NIO_Guard<'a> { cell:&'a NIO_Cell }\nimpl Drop for NIO_Guard<'_> {\n fn drop(&mut self) {assert!(self.cell.counter.get()==-1);self.cell.counter.set(0);}\n}\nfn NIO_acquire(c:&NIO_Cell)->Result<NIO_Guard<'_>,ProgramError>{\n if c.counter.get()==0 {c.counter.set(-1);Ok(NIO_Guard{cell:c})}\n else {Err(ProgramError::AccountBorrowFailed)}\n}\nstruct NIO_Log { next:u8, fail:u8, code:u64 }\nfn NIO_payload(g:&NIO_Guard<'_>,l:&mut NIO_Log)->Result<(),ProgramError>{\n assert!(g.cell.counter.get()==-1);g.cell.payload.set(kani::any());\n let tag=l.next;l.next+=1;\n if l.fail==tag {Err(ProgramError::from(l.code))} else {Ok(())}\n}\nfn NIO_framed_child(c:&NIO_Cell,l:&mut NIO_Log)->Result<(),ProgramError>{\n let n=c.counter.get();assert!(n>=0 && n<i64::MAX);\n c.counter.set(n+1);c.payload.set(kani::any());c.counter.set(c.counter.get()-1);\n let tag=l.next;l.next+=1;\n if l.fail==tag {Err(ProgramError::from(l.code))} else {Ok(())}\n}\n\nfn NIO_reference(a:[&NIO_Cell;4],l:&mut NIO_Log)->Result<(),ProgramError>{\n{let temporary=NIO_acquire(a[0])?;NIO_payload(&temporary,l)?;}\n{let temporary=NIO_acquire(a[1])?;NIO_payload(&temporary,l)?;}\n{let temporary=NIO_acquire(a[2])?;NIO_payload(&temporary,l)?;}\nOk(())\n}\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NIO_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NIO_KMX::KMX_copy_from_slice)]\n#[kani::stub(alloc::alloc::realloc,crate::NIO_KMX::KMX_realloc)]\n#[kani::proof]\nfn certificate(){let n0:i64=kani::any();kani::assume(n0>=-1);let c0=NIO_Cell{counter:Cell::new(n0),payload:Cell::new(kani::any())};\nlet n1:i64=kani::any();kani::assume(n1>=-1);let c1=NIO_Cell{counter:Cell::new(n1),payload:Cell::new(kani::any())};\nlet n2:i64=kani::any();kani::assume(n2>=-1);let c2=NIO_Cell{counter:Cell::new(n2),payload:Cell::new(kani::any())};\nlet n3:i64=kani::any();kani::assume(n3>=-1);let c3=NIO_Cell{counter:Cell::new(n3),payload:Cell::new(kani::any())};\nkani::assume(n3>=0 && n3<i64::MAX);\nlet cells=[&c0,&c1,&c2];let m0:usize=kani::any();kani::assume(m0<3);let m1:usize=kani::any();kani::assume(m1<3);let m2:usize=kani::any();kani::assume(m2<3);\nlet mut log=NIO_Log{next:0,fail:kani::any(),code:kani::any()};let _result=NIO_reference([cells[m0],cells[m1],cells[m2],&c3],&mut log);\nassert!(c0.counter.get()==n0);\nassert!(c1.counter.get()==n1);\nassert!(c2.counter.get()==n2);\nassert!(c3.counter.get()==n3);\n}\n",
+  "modifies": [],
+  "production_credit": false,
+  "remaining": "Actual frozen-function/source-projection simulation, all reached child footprints and caller entry domains remain OPEN. These reference passes confer NO native source or Pool-consumer credit.",
+  "member": "programs/aspis-pool/src/pair_processor.rs::process_pair_private_transfer_with_verifier_v1",
+  "source_body_sha256": "d8e4488bf5a96136e7911d402415c107ffcd37b07f2239b3c146b134a868ab8c",
+  "expected_verdict": "PASS",
+  "interpretation": "S2TrustedSdkBorrow model candidate only",
+  "model_theorems": [
+    "NIO_Nested.cleanup_all_counters",
+    "NIO_Nested.retained_step",
+    "NIE_BorrowRelease.shared_counter_roundtrip"
+  ],
+  "certificate_status": "REFERENCE_ONLY_NOT_ACTUAL_NATIVE"
+}

@@ -47,15 +47,16 @@ elif kind=='link':
  sources=['NIO_native/'+target+'.c','NIO_native/NFA_WALKER.c','NIO_native/NFA_MemoryLimit.c']
  command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NIO_native/'+target,*sources]
 elif kind=='audit':
- sources=['NIO_generated/NIO_ProofDriver.lean','NIO_generated/NIO_Driver.lean','NIO_batch.py','NIO_AUDIT_ROOTS.json','NIO_EXPECTED_IMPORTS.jsonl']+(['NIO_POOL_ROOTS.json'] if target.startswith('pool') else [])
+ sources=['NIO_generated/NIO_ProofDriver.lean','NIO_generated/NIO_Driver.lean','NIO_batch.py','NIO_AUDIT_ROOTS.json']+(['NIO_POOL_ROOTS.json'] if target.startswith('pool') else [])
  for n in sources:files[n]=(E/Path(n).name).read_text()
+ files['NIO_EXPECTED_IMPORTS.jsonl']=(E/'NIO_EXPECTED_IMPORTS.jsonl').read_text()
  command=['python3','NIO_batch.py',target]
 elif kind=='export':
  files['NIO_export.py']=(E/'NIO_export.py').read_text();sources=['NIO_export.py'];command=['python3','NIO_export.py']
 elif kind=='cleanup':
  files['NIO_cleanup.py']=(E/'NIO_cleanup.py').read_text();sources=['NIO_cleanup.py'];command=['python3','NIO_cleanup.py']
 else:raise ValueError(kind)
-config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NIO_tmp',LEAN_PATH=':'.join([B+'/NIO_objects',C+'/NIK_exports_20261107',C+'/NIE_exports_20261107',C+'/NHP_exports_20261106',C+'/NHP_native_exports_20261106',C+'/NHC_exports_20261105',C+'/NHC_native_exports_20261105',C+'/NHC_seed',C,W,W+'/objects',T+'/lib/lean'])),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Read/hash and non-destructive cache export; no compiler' if kind in ['export','cleanup'] else 'Raw ax2 traversal / coherence scan')
+config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NIO_tmp',LEAN_PATH=':'.join([B+'/NIO_objects',C+'/NIK_exports_20261107',C+'/NIE_exports_20261107',C+'/NHP_exports_20261106',C+'/NHP_native_exports_20261106',C+'/NHC_exports_20261105',C+'/NHC_native_exports_20261105',C+'/NHC_seed',C,W,W+'/objects',T+'/lib/lean'])),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Optimized Rust compilation of the named uniqueness helper, then Charon/Aeneas translation' if kind=='extract' else 'Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Read/hash and non-destructive cache export; no compiler' if kind in ['export','cleanup'] else 'Raw ax2 traversal / coherence scan')
 files[a+'.json']=json.dumps(config)
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib,re,shutil
@@ -83,7 +84,7 @@ for rel in sorted(rels):
  assert p is not None,rel
  for z in [p,Path(str(p)+'.private'),Path(str(p)+'.server'),p.with_suffix('.ir')]:
   if z.is_file():pins[str(z)]={{'path':str(z),'sha256':hashlib.sha256(z.read_bytes()).hexdigest()}}
-x['deps_fingerprint']={{'selected_objects':pins,'cache_imports_manifest_sha256':hashlib.sha256((b/'NIO_CACHE_IMPORTS.json').read_bytes()).hexdigest()}}
+x['deps_fingerprint']={{'large_input_hashes':{{'NIO_EXPECTED_IMPORTS.jsonl':hashlib.sha256((b/'NIO_EXPECTED_IMPORTS.jsonl').read_bytes()).hexdigest()}} if x['kind']=='audit' else {{}},'selected_objects':pins,'cache_imports_manifest_sha256':hashlib.sha256((b/'NIO_CACHE_IMPORTS.json').read_bytes()).hexdigest()}}
 (b/{(a+'.json')!r}).write_text(json.dumps(x))
 ''');assert r.returncode==0,r.stderr
 r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_run_host.py '+a+'.json',submitted=True)

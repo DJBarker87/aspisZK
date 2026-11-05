@@ -3,10 +3,10 @@ set_option autoImplicit false
 namespace NIO_Cpi
 
 /-- Explicit physical interpretation obligation, not inferred from key inequality. -/
-def CellKeyCompatible (key cell : Nat → Nat) : Prop :=
+def CellKeyCompatible {Key : Type} (key : Nat → Key) (cell : Nat → Nat) : Prop :=
   ∀ a b, cell a = cell b → key a = key b
 
-theorem distinct_key_cells (key cell : Nat → Nat)
+theorem distinct_key_cells {Key : Type} (key : Nat → Key) (cell : Nat → Nat)
     (compatible : CellKeyCompatible key cell) (a b : Nat)
     (distinct : key a ≠ key b) : cell a ≠ cell b := by
   intro same
@@ -14,7 +14,7 @@ theorem distinct_key_cells (key cell : Nat → Nat)
 #print axioms distinct_key_cells
 
 /-- One uniqueness-loop step extends the checked prefix; no bounded-buffer replay. -/
-theorem uniqueness_step (key : Nat → Nat) (n : Nat)
+theorem uniqueness_step {Key : Type} (key : Nat → Key) (n : Nat)
     (prior : ∀ i j, i < n → j < n → i ≠ j → key i ≠ key j)
     (new : ∀ i, i < n → key i ≠ key n) :
     ∀ i j, i < n+1 → j < n+1 → i ≠ j → key i ≠ key j := by

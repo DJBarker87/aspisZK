@@ -5,7 +5,7 @@ E=Path(__file__).resolve().parent
 start=int(sys.argv[1]);jobs=json.loads(Path(sys.argv[2]).read_text())
 for k,job in enumerate(jobs,start):
  a=f'NIO_K{k:03d}';client=E/(a+'-client.log')
- prepared=subprocess.run([sys.executable,str(E/'NIO_native_prepare.py'),*map(str,job['prepare'])],capture_output=True,text=True)
+ prepared=subprocess.run([sys.executable,str(E/job.get('script','NIO_native_prepare.py')),*map(str,job['prepare'])],capture_output=True,text=True)
  if prepared.returncode:
   (E/(a+'-prepare-error.log')).write_text(prepared.stdout+prepared.stderr);raise SystemExit('Own preparation failed: '+a)
  with client.open('w') as f:r=subprocess.run([sys.executable,str(E/'NIO_kani_run.py'),a,job['harness']],stdout=f,stderr=subprocess.STDOUT)

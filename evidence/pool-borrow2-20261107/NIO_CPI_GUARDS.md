@@ -43,3 +43,11 @@ Actual source checks: transition.rs:735 before_persist; transition.rs:755..864 w
 OPEN: Actual reached caller layout/key-to-physical-cell relation; callee/CPI frame on that same state; native/meta list association; callback instantiation coverage where applicable.
 
 The three direct CPI layouts have disjoint account-index sets at source level after their actual uniqueness checks. This is not by itself physical-cell separation or a native certificate. The callback cannot be treated as a single zero-effect child: it includes deposit, withdrawal, and no-op instantiations; withdrawal may create the marker before its token CPI. A generic callback type is not a footprint law. No observed-error-arm classification is asserted without a native exact Result certificate.
+
+## Native campaign result and exact gap
+
+All four sites remain OPEN. K002..K021 give ten conditional helper windows with matched controls, but their exact-five validator is a projection stub whose actual uniqueness-loop packet is not closed. K026..K041 give eight unchanged constructor-literal windows with matched controls. These are local input facts, not a native call certificate at any of the four actual reached sites. Their harness payload buffers are small: helper cells contain one byte; constructor payload Vec has one opaque byte while production transfer payloads contain ten. A payload-independent/source-carrier bridge is still required; these restrictions are NOT adopted caller preconditions.
+
+Additionally prove token_accounts[4].key equals the invoked LEGACY_SPL_TOKEN_PROGRAM_ID after the actual token-program validator; the constant program ID is a separate invocation input from the four metas. Source key/cell consistency, checked-list bounds, successful uniqueness and key preservation through prior callees must hold on the same reached state. Bind generic R to the deployed SolanaPoolCpiRuntimeV1 and enumerate each deployed before_persist instantiation; an arbitrary runtime implementation or closure can retain account handles outside its arguments.
+
+No invocation stub has been certified here, and no runtime reply law is silently used. RuntimeCpiReadonlyEntry7 remains unused. The native retained-loop error job and a separate wrong-target control time out; neither is an observed production/CPI error arm.

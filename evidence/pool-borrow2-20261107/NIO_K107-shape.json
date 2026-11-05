@@ -1,0 +1,16 @@
+{
+  "kind": "actual retained-guard source iteration, isolated prefix size",
+  "mode": "positive",
+  "domain": "Exact valid typed prefix size 2, source capacity eight, separately retained master guard; arbitrary scalar metadata and payload bytes; target initially free. One original native body iteration; prefix is harness pre-state construction.",
+  "source": "use super::*;\nfn NIO_step<'b,'i>(lane_data:&mut alloc::vec::Vec<core::cell::RefMut<'b,&'i mut [u8]>>,lane:&'b AccountInfo<'i>)->ProgramResult{\nlane_data.push(lane.try_borrow_mut_data()?);\nOk(())}\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NIO_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NIO_KMX::KMX_copy_from_slice)]\n#[kani::stub(alloc::alloc::realloc,crate::NIO_KMX::KMX_realloc)]\n#[kani::proof]\nfn certificate(){use solana_program::{account_info::AccountInfo,pubkey::Pubkey,program_error::ProgramError};\nlet k0=Pubkey::new_from_array(kani::any()); let mut l0:u64=kani::any(); let mut d0=[kani::any::<u8>()]; let a0=AccountInfo::new(&k0,false,true,&mut l0,&mut d0,&k0,false,0);\nlet k1=Pubkey::new_from_array(kani::any()); let mut l1:u64=kani::any(); let mut d1=[kani::any::<u8>()]; let a1=AccountInfo::new(&k1,false,true,&mut l1,&mut d1,&k1,false,0);\nlet k2=Pubkey::new_from_array(kani::any()); let mut l2:u64=kani::any(); let mut d2=[kani::any::<u8>()]; let a2=AccountInfo::new(&k2,false,true,&mut l2,&mut d2,&k2,false,0);\nlet k3=Pubkey::new_from_array(kani::any()); let mut l3:u64=kani::any(); let mut d3=[kani::any::<u8>()]; let a3=AccountInfo::new(&k3,false,true,&mut l3,&mut d3,&k3,false,0);\nlet result=(||->ProgramResult{let _master_data=a3.try_borrow_mut_data()?;let mut lane_data=alloc::vec::Vec::with_capacity(8);\nlane_data.push(a0.try_borrow_mut_data()?);\nlane_data.push(a1.try_borrow_mut_data()?);\nNIO_step(&mut lane_data,&a2)?;assert!(lane_data.len()==3);\nassert!(a0.try_borrow_mut_data().is_err());\nassert!(a1.try_borrow_mut_data().is_err());\nassert!(a2.try_borrow_mut_data().is_err());\nassert!(a3.try_borrow_mut_data().is_err());\nOk(())})();assert!(result==Ok(()));\nassert!(a0.try_borrow_mut_data().is_ok());\nassert!(a1.try_borrow_mut_data().is_ok());\nassert!(a2.try_borrow_mut_data().is_ok());\nassert!(a3.try_borrow_mut_data().is_ok());\n}\n",
+  "modifies": [],
+  "production_credit": false,
+  "remaining": "Complete initializer prefix/domain, arbitrary failing target counter and full model/source graph association remain OPEN; no full function or Pool row claimed.",
+  "member": "process_pair_forest_initialize_with_runtime_v1",
+  "prefix_count": 2,
+  "target_iterations": 1,
+  "source_statement": "lane_data.push(lane.try_borrow_mut_data()?);",
+  "source_sha256": "d9589cfde4f9c74c022850ba624f359b6dc35efa211ce1b117042f6984d085e4",
+  "expected_verdict": "PASS",
+  "control": "Forget the actual newly acquired guard; subsequent counter-restoration assertion must fail."
+}

@@ -1,0 +1,11 @@
+# NIO stage 2 — native campaign complete; full certificates OPEN
+
+120/120 native runs: 53 PASS, 53 matched semantic FAIL controls, eight TIMEOUT and six own-input compiler rejections. No timeout/cap increase or unchanged timed-out replay. Each run has frozen graph/lock, all-crate feature, source, resource and tool receipts. No writable-static or function-pointer-dependent pass is claimed.
+
+The 53 passing checks comprise ten conditional actual info-helper windows, eight original meta-constructor windows, thirteen explicit-counter REFERENCE-ONLY scopes, ten minimized actual guard-context calibrations, four actual Option/Vec data-guard carrier calibrations, and eight fixed-prefix one-iteration source checks. Each has its matched semantic FAIL. All eight initializer prefix sizes 0..7 use the source capacity eight and one unchanged acquisition/push statement; pre-state construction is separate. Their forget-new-guard controls fail.
+
+The broad actual close caller, occupied-cell close prefix, instrumented checkpoint, one-copy checkpoint window, broad SDK return/move case, variable-prefix retained step and two error/argument-control attempts timed out. No credit to those attempts. Smaller successful guard-context and fixed-prefix jobs are distinct isolated shapes, not verdict changes obtained by renaming. Exact failing-step history is retained.
+
+No complete actual-source per-function certificate is claimed. Reference-only scopes cover symbolic counters/aliases and candidate payload/counter frames but lack the original-function simulation and complete callee packets. Minimal actual carrier checks cover free cells; they do not supply arbitrary incoming counters. Actual-source helper and constructor windows have additional small-payload restrictions that are not production caller domains. NIO_OPEN_SITES retains every remaining event and NIO_CPI_GUARDS every held boundary. No Pool-consumer row is promoted.
+
+Current independent Lean work: all-counter cleanup with alias rejection, child-abort cleanup, generic-key exclusions, exact KMX window frames and retained-guard induction. These are model support; final replay/axiom/coherence gates are next. No shipped Rust, key, protocol, trust row or release artifact changed.

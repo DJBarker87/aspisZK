@@ -1,0 +1,15 @@
+{
+  "kind": "minimal typed guard counter-context fidelity",
+  "mode": "negative",
+  "domain": "Locally owned initially free cells; safe native constructors; typed direct/Option/Vec guard moves; no payload dereference, byte-formatting, fabricated guard or writable static.",
+  "source": "#[kani::stub(core::ptr::copy_nonoverlapping,crate::NIO_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NIO_KMX::KMX_copy_from_slice)]\n#[kani::stub(alloc::alloc::realloc,crate::NIO_KMX::KMX_realloc)]\n#[kani::proof]\nfn certificate(){use core::cell::RefCell;\nlet mut d0=[kani::any::<u8>()];let mut d1=[kani::any::<u8>()];\nlet c0=RefCell::new(d0.as_mut_slice());let c1=RefCell::new(d1.as_mut_slice());\nlet result=c1.try_borrow_mut();\nlet guard=match result {Ok(g)=>g,Err(_)=>{assert!(false);return}};\nassert!(c0.try_borrow_mut().is_err());assert!(c1.try_borrow_mut().is_ok());drop(guard);assert!(c0.try_borrow_mut().is_ok());assert!(c1.try_borrow_mut().is_ok());\n}\n",
+  "modifies": [],
+  "production_credit": false,
+  "remaining": "Representation calibration only. Actual Pool caller/source association and arbitrary incoming counter relation remain OPEN.",
+  "container": "stack_slice",
+  "exclusive": true,
+  "carrier": 0,
+  "expected_verdict": "FAIL",
+  "control": "Native constructor obtains guard from the other live cell; counter-context assertion must fail.",
+  "native_credit": "LOCAL_FIDELITY_ONLY"
+}

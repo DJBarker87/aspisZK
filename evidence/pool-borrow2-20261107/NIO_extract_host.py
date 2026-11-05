@@ -29,7 +29,6 @@ try:
   cmd=[str(root/'aeneas-b59d5188-extended'),'-diagnose-translation','-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','NIO_UniqueExtract','-dest',str(O/'raw'),'-subdir','NIO_UniqueExtract','-split-files',str(O/'NIO_unique.llbc')]
   pins['aeneas_command']=cmd;save();r=subprocess.run(cmd,cwd=B,env=env);pins['aeneas_exit']=r.returncode
 finally:
- subprocess.run(['git','apply',str(B/'NIO_KMX_copy_stubs.patch')],cwd=S,check=True,capture_output=True)
- pins['lock_after']=hashlib.sha256((S/'Cargo.lock').read_bytes()).hexdigest();save();assert subprocess.run(['git','apply',str(B/'NIO_KMX_copy_stubs.patch')],cwd=S,check=True,capture_output=True)
- pins['lock_after']==pins['lock_before']
+ pins['mitigation_files_retained']={n:hashlib.sha256((S/n).read_bytes()).hexdigest() for n in ['KMX_stubs.rs','KMX_native.rs','KMX_CopyMeaning.lean']}
+ pins['lock_after']=hashlib.sha256((S/'Cargo.lock').read_bytes()).hexdigest();save();assert pins['lock_after']==pins['lock_before']
 sys.exit(r.returncode)

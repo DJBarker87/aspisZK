@@ -1,0 +1,18 @@
+{
+  "kind": "typed actual SDK guard-carrier fidelity",
+  "mode": "positive",
+  "domain": "Actual SDK data/lamport guard, shared/exclusive; valid locally owned shared counts 0..2 or one exclusive token; direct/Option/Vec move carriers.",
+  "source": "fn NIO_get<'b,'i>(a:&'b solana_program::account_info::AccountInfo<'i>,b:&'b solana_program::account_info::AccountInfo<'i>,c:&'b solana_program::account_info::AccountInfo<'i>)->Result<core::cell::Ref<'b,&'b mut [u8]>,solana_program::program_error::ProgramError>{\nlet result=a.try_borrow_data();\nresult\n}\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NIO_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NIO_KMX::KMX_copy_from_slice)]\n#[kani::stub(alloc::alloc::realloc,crate::NIO_KMX::KMX_realloc)]\n#[kani::proof]\nfn certificate(){use solana_program::{account_info::AccountInfo,pubkey::Pubkey,program_error::ProgramError};\nlet k0=Pubkey::new_from_array(kani::any()); let mut l0:u64=kani::any(); let mut d0=[kani::any::<u8>()]; let a0=AccountInfo::new(&k0,false,true,&mut l0,&mut d0,&k0,false,0);\nlet k1=Pubkey::new_from_array(kani::any()); let mut l1:u64=kani::any(); let mut d1=[kani::any::<u8>()]; let a1=AccountInfo::new(&k1,false,true,&mut l1,&mut d1,&k1,false,0);\nlet k2=Pubkey::new_from_array(kani::any()); let mut l2:u64=kani::any(); let mut d2=[kani::any::<u8>()]; let a2=AccountInfo::new(&k2,false,true,&mut l2,&mut d2,&k2,false,0);\nlet before=a0.try_borrow_data().unwrap()[0];let before_b=a1.try_borrow_data().unwrap()[0];let before_c=a2.try_borrow_data().unwrap()[0];let written:u8=kani::any();let n:u8=kani::any();kani::assume(n<4);\nlet h0=if n==1 || n==2 {Some(a0.try_borrow_data().unwrap())}else{None};let h1=if n==2 {Some(a0.try_borrow_data().unwrap())}else{None};let x=if n==3 {Some(a0.try_borrow_mut_data().unwrap())}else{None};\nlet initial=if n==3 {-1i64}else{n as i64};let mut model_counter=initial;let result=NIO_get(&a0,&a1,&a2);let expected_ok=n!=3;\nmatch result {Ok(mut g)=>{assert!(expected_ok);model_counter=initial+1;assert!(a0.try_borrow_mut_data().is_err());assert!(a1.try_borrow_mut_data().is_ok());assert!(a2.try_borrow_mut_data().is_ok());assert!(g[0]==before);drop(g);model_counter=model_counter-1;},Err(e)=>{assert!(!expected_ok);assert!(e==ProgramError::AccountBorrowFailed);}}\nassert!(model_counter==initial);assert!(a0.try_borrow_mut_data().is_ok()==(n==0));assert!(a1.try_borrow_mut_data().is_ok());assert!(a2.try_borrow_mut_data().is_ok());drop(h1);drop(h0);drop(x);assert!(a0.try_borrow_mut_data().is_ok());\nassert!(a0.try_borrow_data().unwrap()[0]==before);assert!(a1.try_borrow_data().unwrap()[0]==before_b);assert!(a2.try_borrow_data().unwrap()[0]==before_c);\n}\n",
+  "modifies": [],
+  "production_credit": false,
+  "remaining": "Finite carrier calibration only: actual Pool caller/source association and arbitrary numeric ambient counter remains OPEN. Lamport-wrapper implementation is not added to the data-only SDK trust item.",
+  "kind_index": 0,
+  "carrier_index": 0,
+  "expected_verdict": "PASS",
+  "native_credit": "LOCAL_SDK_FIDELITY_ONLY",
+  "model_theorems": [
+    "NIE_BorrowRelease.shared_counter_roundtrip",
+    "NIO_Nested.cleanup_all_counters"
+  ],
+  "control": "Safe constructor returns a guard on the wrong live account; no integer-word fabrication."
+}
