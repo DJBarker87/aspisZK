@@ -38,3 +38,21 @@ Seventeen fragment families and a canonical model theorem do not supply the
 missing full arbitrary-poststate oracle/caller G, its immutable frame and its
 argument/reply-corruption control. That is retained as an own-scope obligation,
 not attributed solely to sibling producer jobs or promoted to cryptographic trust.
+
+L067's first full scan reported11 missing import-baseline entries for reused
+NFW powers modules; dangling constants and incompatible owners were both zero.
+The complete failure artifact is retained under L067. NGU_baselines.py extends
+only the expected baseline using the independent committed NFW source inventory
+and its hashes, never candidate scan import lists. No scanner predicate or
+module owner is changed. The corrected-input scan is a new evidence attempt;
+the unchanged full raw axiom batches are not repeated.
+
+L071 rejected a statement audit's expected owner of generated auxiliary proofs:
+they belong to the module that first synthesizes them, not necessarily the
+namespace's original module. Expected auxiliary ownership is now derived from
+the first successful focused compile's current-module declaration audit,
+independently of the candidate scan. Explicit top theorem owners retain the
+source mapping. L072 then hit the default recursion depth in one large do-block
+used only to serialize type receipts. The replacement splits every root into
+its own run_cmd; no depth/heartbeat option is raised. Previously successful
+statement batches retain exact bytes and are not replayed.

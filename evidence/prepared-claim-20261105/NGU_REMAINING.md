@@ -29,3 +29,10 @@ actual argument/reply corruption control. The selected actual-carrier fixture
 also fixes unread fields; native frame/source association is required to extend
 it to every caller. These own-scope gaps remain in addition to producer origins.
 No whole-output equality is introduced to hide them.
+
+Domain finding NGU-D1: y1_window_read uses a32-byte slice at lane0;
+y1_two_window_frame uses64 bytes and lane<2. They are bounded read/frame
+fragments, not the deployed928-byte/lane<29 caller domain. Extending them to
+that caller requires the generic SAME physical selected-window/frame lift,
+using the CLOSED field/c0 child packets and the checked NGU byte-domain facts.
+No stronger bounded precondition is installed at the actual caller.

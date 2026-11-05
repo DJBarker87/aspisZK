@@ -1,5 +1,5 @@
 from pathlib import Path
-import subprocess,json,time
+import subprocess,json,time,lzma,hashlib
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90';B='/home/dombarker/project-offloads/codex-cx-prepared-claim-20261105'
 # Existing reservation client, copied unchanged from seed setup; no launch here.
 code='''from pathlib import Path
@@ -15,7 +15,12 @@ for retry in range(11):
  if r.returncode not in [78,255] or retry==10:raise SystemExit(r.returncode)
  time.sleep(60 if r.returncode==255 else 180)
 for local,name in [('NGU_frozen.tar.xz','NGU_frozen.tar.xz'),('NGU_KMX.patch','NGU_KMX.patch')]:
- data=(E/local).read_bytes()
+ if local=='NGU_frozen.tar.xz':
+  manifest=json.loads((E/'NGU_FROZEN_ARCHIVE.json').read_text())
+  archive=subprocess.check_output(['git','archive',manifest['revision'],*manifest['paths']])
+  assert len(archive)==manifest['bytes'] and hashlib.sha256(archive).hexdigest()==manifest['sha256']
+  data=lzma.compress(archive,preset=6)
+ else:data=(E/local).read_bytes()
  for retry in range(11):
   r=subprocess.run(['ssh','-o','ControlMaster=no','-o','ConnectTimeout=15',H,'cat > '+B+'/'+name],input=data,capture_output=True)
   if r.returncode==0:break

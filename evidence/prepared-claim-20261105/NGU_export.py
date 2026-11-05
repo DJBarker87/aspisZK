@@ -16,7 +16,7 @@ for mod in json.loads((B/'NGU_MODULES.json').read_text()):
  for z in [p,Path(str(p)+'.private'),Path(str(p)+'.server'),p.with_suffix('.ir')]:
   if z.is_file():pins.append(dict(module=mod,path=str(z),sha256=sha(z),bytes=z.stat().st_size))
 raw=json.dumps(dict(LEAN_PATH=roots,selected_objects=pins)).encode();(B/'NGU_CLOSURE_PINS.json.xz').write_bytes(lzma.compress(raw,preset=6));(B/'NGU_CLOSURE_PINS.json.sha256').write_text(hashlib.sha256(raw).hexdigest()+'\n')
-tool_paths=['/home/dombarker/.cargo/bin/cargo-kani','/home/dombarker/.cargo/bin/cargo','/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean','/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon','/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/aeneas-b59d5188-extended'];tools=[dict(path=p,resolved=str(Path(p).resolve()),sha256=sha(Path(p))) for p in tool_paths]
+tool_paths=['/home/dombarker/.cargo/bin/cargo-kani','/home/dombarker/.cargo/bin/cargo','/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean','/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/leanc'];tools=[dict(path=p,resolved=str(Path(p).resolve()),sha256=sha(Path(p))) for p in tool_paths]
 removed=[]
 for n in ['NGU_target','NGU_extract_target','NGU_native','NGU_objects','NGU_tmp']:
  p=B/n

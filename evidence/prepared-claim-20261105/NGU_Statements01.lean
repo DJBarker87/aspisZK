@@ -3,12 +3,6 @@ import NGU_COMBINED_IMPORT
 open Lean
 set_option pp.universes true
 set_option pp.explicit true
-#check @AspisR1.NGU_LPi_CheckedInputs.checked._proof_4
-#print axioms AspisR1.NGU_LPi_CheckedInputs.checked._proof_4
-#check @AspisR1.NGU_LPi_CheckedInputs.from_wide
-#print axioms AspisR1.NGU_LPi_CheckedInputs.from_wide
-#check @AspisR1.NGU_LPi_CheckedInputs.q._proof_1
-#print axioms AspisR1.NGU_LPi_CheckedInputs.q._proof_1
 #check @AspisR1.NGU_LPi_CheckedInputs.q._proof_2
 #print axioms AspisR1.NGU_LPi_CheckedInputs.q._proof_2
 #check @AspisR1.NGU_LPi_CheckedInputs.q.eq_1
@@ -65,30 +59,19 @@ set_option pp.explicit true
 #print axioms AspisR1.NGU_LPm_PublicFold.below46
 #check @AspisR1.NGU_LPm_PublicFold.below46._proof_1
 #print axioms AspisR1.NGU_LPm_PublicFold.below46._proof_1
+#check @AspisR1.NGU_LPm_PublicFold.dot_bound
+#print axioms AspisR1.NGU_LPm_PublicFold.dot_bound
+#check @AspisR1.NGU_LPm_PublicFold.fold.eq_1
+#print axioms AspisR1.NGU_LPm_PublicFold.fold.eq_1
+#check @AspisR1.NGU_LPm_PublicFold.fold.eq_2
+#print axioms AspisR1.NGU_LPm_PublicFold.fold.eq_2
+#check @AspisR1.NGU_LPm_PublicFold.fold.eq_def
+#print axioms AspisR1.NGU_LPm_PublicFold.fold.eq_def
+#check @AspisR1.NGU_LPm_PublicFold.step
+#print axioms AspisR1.NGU_LPm_PublicFold.step
 
 run_cmd do
  let env ← Lean.getEnv
- let n := `AspisR1.NGU_LPi_CheckedInputs.checked._proof_4
- let some idx := env.getModuleIdxFor? n | throwError "missing selected theorem owner"
- unless env.header.moduleNames[idx.toNat]! == `NGU_Part000 do throwError "wrong selected theorem owner"
- let some ci := env.find? n | throwError "missing theorem constant"
- unless ci.isTheorem do throwError "selected constant is not a theorem"
- let entry := Json.mkObj [("name",toJson n.toString),("owner",toJson env.header.moduleNames[idx.toNat]!.toString),("type",toJson (reprStr ci.type))]
- logInfo m!"NGU_CERT_ENTRY {entry.compress}"
- let n := `AspisR1.NGU_LPi_CheckedInputs.from_wide
- let some idx := env.getModuleIdxFor? n | throwError "missing selected theorem owner"
- unless env.header.moduleNames[idx.toNat]! == `NGU_Part000 do throwError "wrong selected theorem owner"
- let some ci := env.find? n | throwError "missing theorem constant"
- unless ci.isTheorem do throwError "selected constant is not a theorem"
- let entry := Json.mkObj [("name",toJson n.toString),("owner",toJson env.header.moduleNames[idx.toNat]!.toString),("type",toJson (reprStr ci.type))]
- logInfo m!"NGU_CERT_ENTRY {entry.compress}"
- let n := `AspisR1.NGU_LPi_CheckedInputs.q._proof_1
- let some idx := env.getModuleIdxFor? n | throwError "missing selected theorem owner"
- unless env.header.moduleNames[idx.toNat]! == `NGU_Part000 do throwError "wrong selected theorem owner"
- let some ci := env.find? n | throwError "missing theorem constant"
- unless ci.isTheorem do throwError "selected constant is not a theorem"
- let entry := Json.mkObj [("name",toJson n.toString),("owner",toJson env.header.moduleNames[idx.toNat]!.toString),("type",toJson (reprStr ci.type))]
- logInfo m!"NGU_CERT_ENTRY {entry.compress}"
  let n := `AspisR1.NGU_LPi_CheckedInputs.q._proof_2
  let some idx := env.getModuleIdxFor? n | throwError "missing selected theorem owner"
  unless env.header.moduleNames[idx.toNat]! == `NGU_Part000 do throwError "wrong selected theorem owner"
@@ -279,6 +262,41 @@ run_cmd do
  let entry := Json.mkObj [("name",toJson n.toString),("owner",toJson env.header.moduleNames[idx.toNat]!.toString),("type",toJson (reprStr ci.type))]
  logInfo m!"NGU_CERT_ENTRY {entry.compress}"
  let n := `AspisR1.NGU_LPm_PublicFold.below46._proof_1
+ let some idx := env.getModuleIdxFor? n | throwError "missing selected theorem owner"
+ unless env.header.moduleNames[idx.toNat]! == `NGU_Part003 do throwError "wrong selected theorem owner"
+ let some ci := env.find? n | throwError "missing theorem constant"
+ unless ci.isTheorem do throwError "selected constant is not a theorem"
+ let entry := Json.mkObj [("name",toJson n.toString),("owner",toJson env.header.moduleNames[idx.toNat]!.toString),("type",toJson (reprStr ci.type))]
+ logInfo m!"NGU_CERT_ENTRY {entry.compress}"
+ let n := `AspisR1.NGU_LPm_PublicFold.dot_bound
+ let some idx := env.getModuleIdxFor? n | throwError "missing selected theorem owner"
+ unless env.header.moduleNames[idx.toNat]! == `NGU_Part003 do throwError "wrong selected theorem owner"
+ let some ci := env.find? n | throwError "missing theorem constant"
+ unless ci.isTheorem do throwError "selected constant is not a theorem"
+ let entry := Json.mkObj [("name",toJson n.toString),("owner",toJson env.header.moduleNames[idx.toNat]!.toString),("type",toJson (reprStr ci.type))]
+ logInfo m!"NGU_CERT_ENTRY {entry.compress}"
+ let n := `AspisR1.NGU_LPm_PublicFold.fold.eq_1
+ let some idx := env.getModuleIdxFor? n | throwError "missing selected theorem owner"
+ unless env.header.moduleNames[idx.toNat]! == `NGU_Part003 do throwError "wrong selected theorem owner"
+ let some ci := env.find? n | throwError "missing theorem constant"
+ unless ci.isTheorem do throwError "selected constant is not a theorem"
+ let entry := Json.mkObj [("name",toJson n.toString),("owner",toJson env.header.moduleNames[idx.toNat]!.toString),("type",toJson (reprStr ci.type))]
+ logInfo m!"NGU_CERT_ENTRY {entry.compress}"
+ let n := `AspisR1.NGU_LPm_PublicFold.fold.eq_2
+ let some idx := env.getModuleIdxFor? n | throwError "missing selected theorem owner"
+ unless env.header.moduleNames[idx.toNat]! == `NGU_Part003 do throwError "wrong selected theorem owner"
+ let some ci := env.find? n | throwError "missing theorem constant"
+ unless ci.isTheorem do throwError "selected constant is not a theorem"
+ let entry := Json.mkObj [("name",toJson n.toString),("owner",toJson env.header.moduleNames[idx.toNat]!.toString),("type",toJson (reprStr ci.type))]
+ logInfo m!"NGU_CERT_ENTRY {entry.compress}"
+ let n := `AspisR1.NGU_LPm_PublicFold.fold.eq_def
+ let some idx := env.getModuleIdxFor? n | throwError "missing selected theorem owner"
+ unless env.header.moduleNames[idx.toNat]! == `NGU_Part003 do throwError "wrong selected theorem owner"
+ let some ci := env.find? n | throwError "missing theorem constant"
+ unless ci.isTheorem do throwError "selected constant is not a theorem"
+ let entry := Json.mkObj [("name",toJson n.toString),("owner",toJson env.header.moduleNames[idx.toNat]!.toString),("type",toJson (reprStr ci.type))]
+ logInfo m!"NGU_CERT_ENTRY {entry.compress}"
+ let n := `AspisR1.NGU_LPm_PublicFold.step
  let some idx := env.getModuleIdxFor? n | throwError "missing selected theorem owner"
  unless env.header.moduleNames[idx.toNat]! == `NGU_Part003 do throwError "wrong selected theorem owner"
  let some ci := env.find? n | throwError "missing theorem constant"
