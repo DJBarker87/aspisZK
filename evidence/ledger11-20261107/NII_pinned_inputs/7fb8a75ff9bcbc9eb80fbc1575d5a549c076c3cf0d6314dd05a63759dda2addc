@@ -1,0 +1,78 @@
+{
+ "baseline": "evidence/ledger8-20261105/NGJ_LEDGER.json.xz",
+ "new_closed_rows": [],
+ "rows": [],
+ "no_other_status_change": true,
+ "validator_checks_added_only": true,
+ "unchanged_NFK_validator_sha256": "6a7381ea25986a7556161f69ce999cacc72bca86bec07a0e3de6019a51a084a2",
+ "checks_added": [
+  "per-run frozen graph/lock/offline/features/source",
+  "same-profile exact KMX controls",
+  "exact focused source hashes",
+  "56-root raw ax2 and same-binary fixtures",
+  "NFX source coherence",
+  "non-Bool contract-interface fidelity (missing: DENY)"
+ ],
+ "mutation_tests": [
+  {
+   "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::readonly_meta_ok",
+   "denied": "missing shape-specific fidelity controls",
+   "inverted_ensures_available": "NGL_K038"
+  },
+  {
+   "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_readonly_account",
+   "denied": "missing shape-specific fidelity controls",
+   "inverted_ensures_available": "NGL_K107"
+  },
+  {
+   "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data",
+   "denied": "missing shape-specific fidelity controls",
+   "inverted_ensures_available": [
+    "NGL_K065",
+    "NGL_K071",
+    "NGL_K077",
+    "NGL_K091",
+    "NGL_K093",
+    "NGL_K095",
+    "NGL_K097",
+    "NGL_K099",
+    "NGL_K101",
+    "NGL_K103",
+    "NGL_K105"
+   ]
+  },
+  {
+   "mutation": "wrong frozen body",
+   "denied": true
+  },
+  {
+   "mutation": "residual inner hypothesis",
+   "denied": true
+  }
+ ],
+ "whole_ledger_counts_after": {
+  "total": 599,
+  "CLOSED": 281,
+  "OPEN": 318
+ },
+ "trust_reclassification": "P6/D188 option A retained; no trust removed or added",
+ "spine_closed": 0,
+ "spine_total": 13,
+ "baseline_preserved_byte_exactly": true,
+ "legacy_schema_incomplete_open_rows": [
+  "TX1:NGB001",
+  "TX1:NGB002",
+  "TX1:NGB003",
+  "TX1:NGB004",
+  "TX1:NGB005",
+  "TX1:NGB006",
+  "TX1:NGB007",
+  "TX1:NGB008",
+  "TX2:NGB009",
+  "TX2:NGB010",
+  "TX2:NGB011",
+  "TX2:NGB012"
+ ],
+ "admission_path": "all proposed candidates denied before NFK admission; no defaults added to incomplete rows; unchanged NFK denial checks and schema-complete OPEN no-promotion test executed",
+ "failed_bookkeeping_attempt": "NGL_L070 (retained); repaired locally without rerunning any proof"
+}
