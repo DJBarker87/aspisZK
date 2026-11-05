@@ -1,0 +1,50 @@
+import NHX_CommonDomain
+import NHX_LowDomain
+set_option autoImplicit false
+namespace NIG_CommonLoop
+open Aeneas Aeneas.Std Result ControlFlow AspisR1 LPi_FieldValues
+
+theorem common_progress (w:FIo_Native.weights.Weights) (s t:NHX_CommonDomain.State)
+ (run:NHX_CommonDomain.body w s=ok (.cont t)) :
+ t.1.end=s.1.end ∧ t.1.start.val=s.1.start.val+1 ∧ s.1.start.val<s.1.end.val := by
+ unfold NHX_CommonDomain.body FIo_Native.weights.Weights.pair_loop1.body at run
+ obtain ⟨⟨o,next⟩,hn,run⟩:=Port3_PushFrame.bind_success _ _ _ run
+ cases o with
+ | none=>cases run
+ | some j=>
+  obtain ⟨x0,h0,run⟩:=Port3_PushFrame.bind_success _ _ _ run
+  obtain ⟨x1,h1,run⟩:=Port3_PushFrame.bind_success _ _ _ run
+  obtain ⟨x2,h2,run⟩:=Port3_PushFrame.bind_success _ _ _ run
+  obtain ⟨x3,h3,run⟩:=Port3_PushFrame.bind_success _ _ _ run
+  obtain ⟨x4,h4,run⟩:=Port3_PushFrame.bind_success _ _ _ run
+  obtain ⟨x5,h5,run⟩:=Port3_PushFrame.bind_success _ _ _ run
+  obtain ⟨x6,h6,run⟩:=Port3_PushFrame.bind_success _ _ _ run
+  obtain ⟨x7,h7,run⟩:=Port3_PushFrame.bind_success _ _ _ run
+  obtain ⟨x8,h8,run⟩:=Port3_PushFrame.bind_success _ _ _ run
+  have same:=ControlFlow.cont.inj (Result.ok.inj run)
+  rw [←same]
+  exact (NHI_RangeProgress.some_next s.1 next j hn).2
+
+theorem common_decreases (w:FIo_Native.weights.Weights) (s t:NHX_CommonDomain.State)
+ (run:NHX_CommonDomain.body w s=ok (.cont t)) :
+ t.1.end.val-t.1.start.val<s.1.end.val-s.1.start.val := by
+ obtain ⟨last,inc,active⟩:=common_progress w s t run
+ have hv:=congrArg (fun x:Usize=>x.val) last
+ omega
+
+def common_reference (w:FIo_Native.weights.Weights) (cells:NHX_CommonDomain.Cells) : Result (FIo_Native.weights.Weights×NHX_CommonDomain.Cells) :=
+ NHI_CountedLoop.unroll (NHX_CommonDomain.body w) 17 ({start:=0#usize,«end»:=16#usize},cells)
+
+theorem common_source (w:FIo_Native.weights.Weights) (cells:NHX_CommonDomain.Cells) :
+ FIo_Native.weights.Weights.pair_loop1 {start:=0#usize,«end»:=16#usize} w cells=
+ common_reference w cells := by
+ unfold FIo_Native.weights.Weights.pair_loop1 common_reference
+ change loop (NHX_CommonDomain.body w) ({start:=0#usize,«end»:=16#usize},cells)=_
+ exact NHI_CountedLoop.agrees (NHX_CommonDomain.body w) (fun s=>s.1.end.val-s.1.start.val)
+  (common_decreases w) 17 _ (by change (16:Nat)-0<17;omega)
+
+
+#print axioms common_progress
+#print axioms common_decreases
+#print axioms common_source
+end NIG_CommonLoop

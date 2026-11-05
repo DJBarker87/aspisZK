@@ -1,0 +1,49 @@
+{"attempt": "NIG_K001", "exit_status": 1, "wall_seconds": 4.540100189857185, "peak_rss_kib": "504004", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-d-pair4-20261107/NIG_src/crates/aspis-core)
+error[E0252]: the name `Vec` is defined multiple times
+ --> /home/dombarker/project-offloads/codex-cx-slice-d-pair4-20261107/NIG_src/crates/aspis-core/../../KMX_stubs.rs:1:5
+  |
+1 | use alloc::vec::Vec;
+  |     ^^^^^^^^^^^^^^^ `Vec` reimported here
+  |
+ ::: crates/aspis-core/src/NIG_filled.rs:2:24
+  |
+2 | use alloc::{boxed::Box,vec::Vec};
+  |                        -------- previous import of the type `Vec` here
+  |
+  = note: `Vec` must be defined only once in the type namespace of this module
+
+warning: unexpected `cfg` condition
+...
+ding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_os, values("solana"))'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(target_os, values(\"solana\"))");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unused import: `alloc::vec::Vec`
+ --> /home/dombarker/project-offloads/codex-cx-slice-d-pair4-20261107/NIG_src/crates/aspis-core/../../KMX_stubs.rs:1:5
+  |
+1 | use alloc::vec::Vec;
+  |     ^^^^^^^^^^^^^^^
+
+warning: unexpected `cfg` condition name: `NIG_corrupt`
+  --> crates/aspis-core/src/NIG_filled.rs:16:10
+   |
+16 |  if cfg!(NIG_corrupt){out[if frame{k}else{p}]=q([words(if frame{old}else{value})[0]^1,words(if frame{old}else{value})[1]^1,words(if ...
+   |          ^^^^^^^^^^^
+   |
+   = help: expected names are: `docsrs`, `feature`, `kani`, and `test` and 31 more
+   = help: consider using a Cargo feature instead
+   = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+            [lints.rust]
+            unexpected_cfgs = { level = "warn", check-cfg = ['cfg(NIG_corrupt)'] }
+   = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(NIG_corrupt)");` to the top of the `build.rs`
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+For more information about this error, try `rustc --explain E0252`.
+error: could not compile `aspis-core` (lib) due to 1 previous error; 17 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 1 compilation errors.
+
+Running as unit: run-r0bd0c9cb286244cf9bcd0db45aad5216.scope; invocation ID: 9d7411f9cc714e85bd1e7bdb94c37555
