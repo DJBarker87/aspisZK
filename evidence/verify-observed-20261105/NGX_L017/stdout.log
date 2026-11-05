@@ -1,0 +1,158 @@
+def Aeneas.Std.core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from : Usize →
+  Result (core.result.Result U32 core.num.error.TryFromIntError) :=
+fun i => core.num.tryFromUScalar UScalarTy.U32 i
+def AspisR1PublicPreparation.r1_semantic.public_transcript : {H : Type} →
+  aspis_core.Digest32 H →
+    pool_v1.pair_forest_semantic_terminal.r0.Public →
+      H → Std.Array U8 32#usize → Result (core.result.Result (r1_wire.SemanticTranscript H) r1_wire.Error) :=
+fun {H} aspis_coreDigest32Inst public1 hash c1_root => do
+  let r ← public1.public_bytes
+  let r1 ←
+    AspisR1PublicPreparation.core.result.Result.map_err
+        (r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError aspis_coreDigest32Inst) r ()
+  let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+  match cf with
+    | core.ops.control_flow.ControlFlow.Continue val =>
+      have s := val.deref;
+      r1_wire.SemanticTranscript.new aspis_coreDigest32Inst hash s c1_root
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_wire.SemanticTranscript H)
+        (core.convert.FromSame r1_wire.Error) residual
+NGX_generated/NGX_NewShape.lean:5:6: error: unexpected token 'prefix'; expected 'axioms', 'eqns', 'equations', 'sig', 'sorries', 'tactic', identifier or string literal
+NGX_generated/NGX_NewShape.lean:5:13: error: unexpected identifier; expected ':'
+def AspisR1PublicPreparation.FinishModel.finish : RoundModel.Boundaries →
+  FinishModel.Boundaries →
+    {H : Type} →
+      aspis_core.Digest32 H →
+        pool_v1.pair_forest_semantic_terminal.r0.Public →
+          r1_wire.Prefix →
+            r1_wire.SemanticTranscript H →
+              r1_wire.Challenges →
+                Option (RPz7_PhaseIso.Phase → Result Unit) →
+                  Result (core.result.Result (r1_semantic.Verified H) r1_wire.Error) :=
+fun R B {H} aspis_coreDigest32Inst public1 prefix1 transcript challenges obs => do
+  let r ← RoundModel.rounds R aspis_coreDigest32Inst prefix1 transcript
+  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+  match cf with
+    | core.ops.control_flow.ControlFlow.Continue val =>
+      let (running, alpha, transcript1) := val
+      do
+      VerifyPrefix.mark obs 2#u8
+      let r1 ← B.claims prefix1
+      let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue val1 => do
+          let r2 ← B.terminal public1 val1 alpha challenges
+          let r3 ←
+            AspisR1PublicPreparation.core.result.Result.map_err (FinishModel.closureFn11 aspis_coreDigest32Inst) r2 ()
+          let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+          match cf2 with
+            | core.ops.control_flow.ControlFlow.Continue val2 => do
+              VerifyPrefix.mark obs 3#u8
+              let a ← B.fromFn 16#usize (FinishModel.closureFn9 aspis_coreDigest32Inst) val1
+              let a1 ← B.fromFn 10#usize (FinishModel.closureFn5 aspis_coreDigest32Inst) val1
+              let a2 ← val1.index_usize 0#usize
+              let q ← a2.index_usize 27#usize
+              let mask ← B.mask a a1 q alpha
+              let r4 ← prefix1.validated_record 25#u8
+              let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+              match cf3 with
+                | core.ops.control_flow.ControlFlow.Continue vr => do
+                  let r5 ← R.decode 29#usize vr 87#usize
+                  let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                  match cf4 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 => do
+                      let q1 ← B.mul challenges.eta val2
+                      let q2 ← B.add mask q1
+                      let q3 ← val3.index_usize 28#usize
+                      let masked_terminal ← B.add q2 q3
+                      let b ←
+                        core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 running
+                            masked_terminal
+                      if b = true then ok (core.result.Result.Err r1_wire.Error.Terminal)
+                        else do
+                          VerifyPrefix.mark obs 4#u8
+                          let state_before_z0 ← r1_wire.SemanticTranscript.impl.state aspis_coreDigest32Inst transcript1
+                          let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                          match cf5 with
+                            | core.ops.control_flow.ControlFlow.Continue vr1 => do
+                              let (r6, transcript2) ←
+                                FinishModel.circle_validated B aspis_coreDigest32Inst transcript1 vr1
+                              let cf6 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                              match cf6 with
+                                | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                  let r7 ← prefix1.validated_record 26#u8
+                                  let cf7 ← core.result.Result.Insts.CoreOpsTry.branch r7
+                                  match cf7 with
+                                    | core.ops.control_flow.ControlFlow.Continue vr2 => do
+                                      let r8 ← R.decode 29#usize vr2 0#usize
+                                      let cf8 ← core.result.Result.Insts.CoreOpsTry.branch r8
+                                      match cf8 with
+                                        | core.ops.control_flow.ControlFlow.Continue val5 => do
+                                          let cf9 ← core.result.Result.Insts.CoreOpsTry.branch r7
+                                          match cf9 with
+                                            | core.ops.control_flow.ControlFlow.Continue vr3 => do
+                                              let (r9, transcript3) ←
+                                                FinishModel.circle_validated B aspis_coreDigest32Inst transcript2 vr3
+                                              let cf10 ← core.result.Result.Insts.CoreOpsTry.branch r9
+                                              match cf10 with
+                                                | core.ops.control_flow.ControlFlow.Continue val6 => do
+                                                  VerifyPrefix.mark obs 5#u8
+                                                  let b1 ← FinishModel.pointEq val4 val6
+                                                  if b1 = true then
+                                                      ok (core.result.Result.Err r1_wire.Error.EqualCirclePoints)
+                                                    else do
+                                                      let r10 ← FinishModel.payload prefix1 2#u8
+                                                      let cf11 ← core.result.Result.Insts.CoreOpsTry.branch r10
+                                                      match cf11 with
+                                                        | core.ops.control_flow.ControlFlow.Continue val7 => do
+                                                          let r11 ←
+                                                            core.array.TryFromArrayCopySlice.try_from 32#usize
+                                                                core.marker.CopyU8 val7
+                                                          let a3 ← B.unwrapRoot r11
+                                                          ok
+                                                              (core.result.Result.Ok
+                                                                { roots := Array.make 2#usize [prefix1.c1_root, a3] ⋯,
+                                                                  challenges := challenges, alpha := alpha,
+                                                                  claims := val1, extra := val3, before_z1 := val5,
+                                                                  state_before_z0 := state_before_z0,
+                                                                  z := Array.make 2#usize [val4, val6] ⋯,
+                                                                  transcript := transcript3 })
+                                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                            (r1_semantic.Verified H)
+                                                            (core.convert.FromSame r1_wire.Error) residual
+                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error)
+                                                    residual
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified H)
+            (core.convert.FromSame r1_wire.Error) residual
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified H)
+        (core.convert.FromSame r1_wire.Error) residual

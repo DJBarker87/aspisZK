@@ -1,0 +1,99 @@
+NGX_generated/NGX_CodeTrace.lean:30:12: error: unsolved goals
+case ok.mk
+A H : Type
+D : aspis_core.Digest32 H
+hash : H
+parts : Slice (Slice U8)
+next : Std.Array U8 32#usize → Code A
+value : Std.Array U8 32#usize
+h : D.digest hash parts = ok value
+fst✝ : Log
+snd✝ : Result A
+tail : run (next value) = (fst✝, snd✝)
+⊢ run (Code.digest D hash parts Code.done >>= next) = (Event.digest D hash parts (ok value) :: fst✝, snd✝)
+NGX_generated/NGX_CodeTrace.lean:33:14: error: unsolved goals
+case fail
+A H : Type
+D : aspis_core.Digest32 H
+hash : H
+parts : Slice (Slice U8)
+next : Std.Array U8 32#usize → Code A
+error : Error
+h : D.digest hash parts = fail error
+⊢ run (Code.digest D hash parts Code.done >>= next) = ([Event.digest D hash parts (fail error)], fail error)
+NGX_generated/NGX_CodeTrace.lean:34:7: error: unsolved goals
+case div
+A H : Type
+D : aspis_core.Digest32 H
+hash : H
+parts : Slice (Slice U8)
+next : Std.Array U8 32#usize → Code A
+h : D.digest hash parts = div
+⊢ run (Code.digest D hash parts Code.done >>= next) = ([Event.digest D hash parts div], div)
+NGX_generated/NGX_CodeTrace.lean:32:22: warning: This simp argument is unused:
+  PreparedHashCode.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵f̵f̵e̵c̵t̵s̵,̵P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵b̵i̵n̵d̵,̵r̵u̵n̵,̵h̵,̵t̵a̵i̵l̵]̵[̲e̲f̲f̲e̲c̲t̲s̲,̲ ̲r̲u̲n̲,̲ ̲h̲,̲ ̲t̲a̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGX_generated/NGX_CodeTrace.lean:32:44: warning: This simp argument is unused:
+  run
+
+Hint: Omit it from the simp argument list.
+  simp only [effects, ̲PreparedHashCode.bind,r̵u̵n̵,̵ ̲h, ̲tail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGX_generated/NGX_CodeTrace.lean:32:48: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [effects, ̲PreparedHashCode.bind, ̲run,h̵,̵ ̲tail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGX_generated/NGX_CodeTrace.lean:33:36: warning: This simp argument is unused:
+  PreparedHashCode.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵f̵f̵e̵c̵t̵s̵,̵P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵b̵i̵n̵d̵,̵r̵u̵n̵,̵h̵]̵[̲e̲f̲f̲e̲c̲t̲s̲,̲ ̲r̲u̲n̲,̲ ̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGX_generated/NGX_CodeTrace.lean:33:58: warning: This simp argument is unused:
+  run
+
+Hint: Omit it from the simp argument list.
+  simp only [effects, ̲PreparedHashCode.bind,r̵u̵n̵,̵ ̲h]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGX_generated/NGX_CodeTrace.lean:33:62: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [effects, ̲PreparedHashCode.bind, ̲run,̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGX_generated/NGX_CodeTrace.lean:34:29: warning: This simp argument is unused:
+  PreparedHashCode.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵f̵f̵e̵c̵t̵s̵,̵P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵b̵i̵n̵d̵,̵r̵u̵n̵,̵h̵]̵[̲e̲f̲f̲e̲c̲t̲s̲,̲ ̲r̲u̲n̲,̲ ̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGX_generated/NGX_CodeTrace.lean:34:51: warning: This simp argument is unused:
+  run
+
+Hint: Omit it from the simp argument list.
+  simp only [effects, ̲PreparedHashCode.bind,r̵u̵n̵,̵ ̲h]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGX_generated/NGX_CodeTrace.lean:34:55: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [effects, ̲PreparedHashCode.bind, ̲run,̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NGX_CodeTrace.pure_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGX_CodeTrace.lift_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGX_CodeTrace.lift_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGX_CodeTrace.digest_bind' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

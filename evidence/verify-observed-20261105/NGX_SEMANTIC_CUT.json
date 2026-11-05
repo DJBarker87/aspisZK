@@ -1,0 +1,8 @@
+{
+ "original_body": "pub(crate) fn semantic_validated(\n        &mut self,\n        record: ValidatedRecord<'_>,\n    ) -> Result<QM31, Error> {\n        let row = record.row();\n        if row > 24 {\n            return Err(Error::InvalidRow);\n        }\n        Ok(qm31_sample(\n            &self.sample_block_validated(row, record.framed())?,\n        ))\n    }",
+ "cut_body": "{\n        let row = record.row();\n        if row > 24 {\n            return Err(Error::InvalidRow);\n        }\n        Ok(semantic_qm_cut(\n            &semantic_block_cut(t, row, record.framed(), log)?, log))\n    }",
+ "substitutions": [
+  "sample_block_validated -> exact-domain local-record packet cut",
+  "qm31_sample -> same-block local-record sampler packet cut"
+ ]
+}

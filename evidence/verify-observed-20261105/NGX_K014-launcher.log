@@ -1,0 +1,45 @@
+{"attempt": "NGX_K014", "exit_status": 1, "wall_seconds": 1.5432871759403497, "peak_rss_kib": "192036", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+| fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-verify-observed-20261105/NGX_src/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-verify-observed-20261105/NGX_src/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+    Finished `dev` profile [optimized] target(s) in 0.31s
+Checking harness r1_wire::NGX_wire::new_length_value...
+
+VERIFICATION RESULT:
+ ** 2 of 164 failed
+Failed Checks: assertion failed: (matches!(got,Err(Error::Public))) != cfg!(NGX_invert)
+ File: "crates/aspis-r1-cost-probe/src/NGX_wire.rs", line 76, in r1_wire::NGX_wire::new_length_value
+Failed Checks: assertion failed: (got == Ok(length as u32)) != cfg!(NGX_invert)
+ File: "crates/aspis-r1-cost-probe/src/NGX_wire.rs", line 77, in r1_wire::NGX_wire::new_length_value
+
+VERIFICATION:- FAILED
+Verification Time: 0.09748158s
+
+Manual Harness Summary:
+Verification failed for - r1_wire::NGX_wire::new_length_value
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r523562853d4149c8b1508524c9e7a3f6.scope; invocation ID: 0af188bab2494f0cb660a85acbe8e67e

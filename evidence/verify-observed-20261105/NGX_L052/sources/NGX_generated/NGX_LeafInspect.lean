@@ -1,0 +1,11 @@
+import NGX_SamplerJoin
+#print AspisR1PublicPreparation.S1SemanticCode.semanticValidated
+#print AspisR1PublicPreparation.S1SemanticCode.begin
+#print AspisR1PublicPreparation.r1_wire.SemanticTranscript.semantic_validated
+#print AspisR1PublicPreparation.r1_wire.SemanticTranscript.impl.semantic_validated
+#print AspisR1PublicPreparation.r1_wire.begin
+#check LPk_Induction.pass_join
+#check LPk_Induction.digits_join
+#check AspisR1.SamplerTransport.sample_total
+#check AspisR1.SamplerTransport.digits_total
+#print AspisR1PrefixAggregateParser.r1_wire.Error
