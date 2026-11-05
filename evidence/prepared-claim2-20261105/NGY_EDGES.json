@@ -1,0 +1,103 @@
+{
+ "row": "TX1:193",
+ "caller": "Prepared::new stage S8",
+ "arguments": [
+  "SAME sem",
+  "SAME y1",
+  "SAME inactive",
+  "SAME powers29 output g",
+  "SAME kappa"
+ ],
+ "edges": [
+  {
+   "callee": "powers7",
+   "model": "AspisR1.NGU_Powers.source",
+   "native": "NFW CLOSED powers packet; KNF static support",
+   "domain": "canonical kappa; N7",
+   "established": "kappa_canonical hypothesis, matching actual scalar call is caller boundary"
+  },
+  {
+   "callee": "EbyKDot::new",
+   "model": "AspisR1.NGU_LPm_PublicTwentyNine.source_new",
+   "native": "NGJ CLOSED Q child",
+   "domain": "all inputs; zero sums/count",
+   "established": "same freshly constructed zero state"
+  },
+  {
+   "callee": "EbyKDot::push",
+   "model": "AspisR1.NGU_LPm_PublicPort.source",
+   "native": "NGJ CLOSED NFG child",
+   "domain": "canonical value/scalar; count<29",
+   "established": "NGU_LPq_PointConstruct.loop derives per-step ReadDomain and Bounded invariant"
+  },
+  {
+   "callee": "EbyKDot::finish",
+   "model": "AspisR1.NGU_LPm_FinishPort.source",
+   "native": "NGJ CLOSED Q child",
+   "domain": "all raw u64 sum cells",
+   "established": "native state carrier; no extra bound"
+  },
+  {
+   "callee": "weights::field / WideExact::c0",
+   "model": "AspisR1.NGU_LPq_Decoder.claim_field / NGU_LPq_BytesTotal.source",
+   "native": "NGJ CLOSED Q/NFQ children plus new selected32 window",
+   "domain": "lane<29; same selected32 bytes; eight words<P",
+   "established": "NGU_LPt_ByteDomain.checked_expanded and NGU_LPq_SelectedDomain.selected_fields"
+  },
+  {
+   "callee": "WideExact::mul",
+   "model": "AspisR1.NGU_ClaimOps.multiply",
+   "native": "opaque operand cut; NO native multiplication",
+   "domain": "both eight-word inputs canonical",
+   "established": "NGU_WeightedStep.paired uses powers canonicality, parts canonical_set, canonical zero/next sum"
+  },
+  {
+   "callee": "WideExact::add",
+   "model": "AspisR1.NGU_ClaimOps.add",
+   "native": "new weighted_add_tail; actual E.add",
+   "domain": "canonical sum/product",
+   "established": "NGU_ClaimOps.multiply yields canonical product, weighted induction preserves sum"
+  },
+  {
+   "callee": "trace::value",
+   "model": "adopted trace.value erasure",
+   "native": "NGJ CLOSED child, deployed non-prover features",
+   "domain": "all arguments",
+   "established": "source tags14 and indices0..7; no observer-dependent assertion"
+  }
+ ],
+ "boundary_edges": [
+  {
+   "owner": "S/NFW",
+   "hypothesis": "semantic_finish on SAME actual sem, dictionary, public/prefix/transcript/challenges/observer",
+   "status": "OPEN native origin/preservation"
+  },
+  {
+   "owner": "NFU/NGO",
+   "hypothesis": "compact_check on SAME compact464",
+   "status": "OPEN native origin/preservation to this call",
+   "current_owner_note": "NFU / NGV SAME compact464 and29-row expansion to y1"
+  },
+  {
+   "owner": "NFU/NGO",
+   "hypothesis": "expansion NativeTrace of SAME compact/before928/y1, 29 rows",
+   "status": "OPEN native origin/preservation to this call",
+   "current_owner_note": "NFU / NGV SAME compact464 and29-row expansion to y1"
+  },
+  {
+   "owner": "NGN/NGT and view producer",
+   "hypothesis": "canonical gamma/inactive/kappa and SAME g native powers return on this execution",
+   "status": "caller installation; model powers domain derived, source scalar/view association remains caller-owned"
+  }
+ ],
+ "native_partition_status": "LOCAL FRAGMENTS CHECKED; complete arbitrary-prestate/native-oracle G and immutable-frame association OPEN (NGU_HYBRID_GAPS.md)",
+ "composed_status": "OPEN",
+ "prefix": "NGY",
+ "status": "OPEN",
+ "native_association": {
+  "owner": "NGY",
+  "status": "IN_PROGRESS",
+  "specification": "evidence/prepared-claim-20261105/NGU_HYBRID_GAPS.md",
+  "route": "(ah) reference contract for one frozen inner iteration, six-point coverage"
+ }
+}
