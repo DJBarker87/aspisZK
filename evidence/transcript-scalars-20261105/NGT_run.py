@@ -41,12 +41,13 @@ elif kind=='extract':
 elif kind=='kani':
  files['NGT_gate.py']=(E/'NGT_gate.py').read_text()
  files['NGT_SOURCE_PINS.json']=(E/'NGT_SOURCE_PINS.json').read_text()
+ files['NGT_FROZEN_FILE_PINS.json']=(E/'NGT_FROZEN_FILE_PINS.json').read_text()
  overlay=json.loads((E/'NGT_OVERLAY.json').read_text())
  for dest,src in overlay.items():files['NGT_src/'+dest]=(E/src).read_text()
  sources=list(files)
  command=['python3','NGT_gate.py',a+'.json']
 elif kind=='lean':
- n='NGT_generated/'+target+'.lean';files[n]=(E/(target+'.lean')).read_text();sources=[n]
+ n='NGT_generated/'+target+'.lean';files[n]=(E/(target+'.lean') if target.startswith('NGT_') else E/('NGT_PREREQ_'+target+'.lean.txt')).read_text();sources=[n]
  command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NGT_generated','-o','NGT_objects/'+target+'.olean',n]
  if target in ['NGT_Driver','NGT_ProofDriver','NGT_PoolProofDriver','NGT_PoolDriver']:command+=['-c','NGT_native/'+target+'.c']
 elif kind=='link':

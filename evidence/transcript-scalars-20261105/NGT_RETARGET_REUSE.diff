@@ -1,0 +1,565 @@
+--- lean/NBA_Installed.lean
++++ NGT_NBA_Installed.lean
+@@ -1,10 +1,10 @@
+-import CurrentPreparedInstalledMeaning
+-import S1OriginalSerializerInstallationV1
+-import CurrentCompactInstalledPreparationV1
+-import S1ClosedPreparationInstallationV1
++import RPz7_CurrentPreparedInstalledMeaning
++import RPz7_S1OriginalSerializerInstallationV1
++import RPz7_CurrentCompactInstalledPreparationV1
++import RPz7_S1ClosedPreparationInstallationV1
+ set_option autoImplicit false
+ noncomputable section
+-namespace AspisR1.NBA_Installed
++namespace AspisR1.NGT_NBA_Installed
+ open AspisR1CurrentCaller.InstalledPreparation AspisR1CurrentCaller.BorrowedClaimPrepared
+ open AspisR1CurrentCaller.OriginalSerializerInstallation AspisR1ClaimPreparedBridge
+ open AspisR1ClaimPreparedBridge.InstalledMeaning
+@@ -22,5 +22,5 @@
+ #print axioms powers_slot
+ #print axioms claim_slot
+ #print axioms serializer_slot
+-end AspisR1.NBA_Installed
++end AspisR1.NGT_NBA_Installed
+ end
+--- lean/NBA_Scalars.lean
++++ NGT_NBA_Scalars.lean
+@@ -1,7 +1,7 @@
+-import NBA_Installed
++import NGT_NBA_Installed
+ set_option autoImplicit false
+ noncomputable section
+-namespace AspisR1.NBA_Scalars
++namespace AspisR1.NGT_NBA_Scalars
+ open Aeneas Aeneas.Std Result AspisR1PublicPreparation AspisR1ClaimPreparedBridge
+ open AspisR1CurrentPreparedClaim.Concrete
+ open AspisR1ClaimPreparedBridge.InstalledMeaning
+@@ -12,12 +12,12 @@
+    (CurrentQueryRho.withConcreteQueries (withOriginalSerializer closedSampling)
+      AspisS1M31Embedding.Total.embed)
+ 
+-theorem sampling : NBA_Installed.actual.sampling=withCandidateSamplers base := rfl
++theorem sampling : NGT_NBA_Installed.actual.sampling=withCandidateSamplers base := rfl
+ 
+ /-- SAME producing scalar call; no gamma value/bounds are assumed. -/
+ theorem gamma {H : Type} (D : aspis_core.Digest32 H)
+     (before after : transcript.Transcript H) (row : U8) (payload : Slice U8) (out : PE)
+-    (call : PreparedModel.scalar NBA_Installed.actual.sampling D before row payload true=ok (out,after)) :
++    (call : PreparedModel.scalar NGT_NBA_Installed.actual.sampling D before row payload true=ok (out,after)) :
+     Canonical (toClaimE out) := by
+   rw [sampling] at call
+   exact scalar_candidate_gamma_canonical
+@@ -27,7 +27,7 @@
+ /-- Every ordinary scalar, including kappa and both fold challenges. -/
+ theorem ordinary {H : Type} (D : aspis_core.Digest32 H)
+     (before after : transcript.Transcript H) (row : U8) (payload : Slice U8) (out : PE)
+-    (call : PreparedModel.scalar NBA_Installed.actual.sampling D before row payload false=ok (out,after)) :
++    (call : PreparedModel.scalar NGT_NBA_Installed.actual.sampling D before row payload false=ok (out,after)) :
+     Canonical (toClaimE out) := by
+   rw [sampling] at call
+   exact scalar_candidate_samplers_false_canonical base D before after row payload out call
+@@ -35,5 +35,5 @@
+ #print axioms sampling
+ #print axioms gamma
+ #print axioms ordinary
+-end AspisR1.NBA_Scalars
++end AspisR1.NGT_NBA_Scalars
+ end
+--- lean/NBA_SamplerValues.lean
++++ NGT_NBA_SamplerValues.lean
+@@ -1,14 +1,14 @@
+-import NBA_Scalars
++import NGT_NBA_Scalars
+ import GammaCandidateTotalityV14
+ import IndexedCandidateOrdinaryRetainedBridgeV5
+ set_option autoImplicit false
+ noncomputable section
+-namespace AspisR1.NBA_SamplerValues
++namespace AspisR1.NGT_NBA_SamplerValues
+ open Aeneas Aeneas.Std Result AspisR1PublicPreparation AspisR1ClaimPreparedBridge
+ open AspisR1CurrentPreparedClaim.Concrete
+ 
+ theorem gamma (block : Array U8 32#usize) :
+-    ∃ out, NBA_Installed.actual.sampling.gamma block=ok out ∧
++    ∃ out, NGT_NBA_Installed.actual.sampling.gamma block=ok out ∧
+       Canonical (toClaimE out) ∧ GammaRankMeaning block out := by
+   obtain ⟨raw,call⟩ := AspisR1GammaCaller.DigitsModel.candidate_gamma_total block
+   have mapped : candidateGammaPublic block=ok (gammaToPublic raw) := by
+@@ -21,7 +21,7 @@
+ preserved by its public port; canonicality follows from that producing call. -/
+ theorem ordinary (block : Array U8 32#usize) :
+     ∃ raw, AspisR1Post25Sampler.sampler.ordinary_sample block=ok raw ∧
+-      NBA_Installed.actual.sampling.ordinary block=
++      NGT_NBA_Installed.actual.sampling.ordinary block=
+         ok (AspisR1Post25SamplerPreparedCarrier.candidateToPE raw) ∧
+       Canonical (toClaimE (AspisR1Post25SamplerPreparedCarrier.candidateToPE raw)) := by
+   obtain ⟨raw,call,rank⟩ :=
+@@ -38,9 +38,9 @@
+     (before after : transcript.Transcript H) (row : U8) (payload : Slice U8)
+     (block : Array U8 32#usize) (out : PE) (nonzero : Bool)
+     (call : transcript.Transcript.block D before row payload=ok (block,after))
+-    (sample : (if nonzero then NBA_Installed.actual.sampling.gamma block
+-      else NBA_Installed.actual.sampling.ordinary block)=ok out) :
+-    PreparedModel.scalar NBA_Installed.actual.sampling D before row payload nonzero=ok (out,after) := by
++    (sample : (if nonzero then NGT_NBA_Installed.actual.sampling.gamma block
++      else NGT_NBA_Installed.actual.sampling.ordinary block)=ok out) :
++    PreparedModel.scalar NGT_NBA_Installed.actual.sampling D before row payload nonzero=ok (out,after) := by
+   unfold PreparedModel.scalar
+   rw [call,bind_tc_ok]
+   simp only [Aeneas.Std.uncurry]
+@@ -50,5 +50,5 @@
+ #print axioms gamma
+ #print axioms ordinary
+ #print axioms scalar
+-end AspisR1.NBA_SamplerValues
++end AspisR1.NGT_NBA_SamplerValues
+ end
+--- lean/NBL_SamplerReplay.lean
++++ NGT_NBL_SamplerReplay.lean
+@@ -1,8 +1,8 @@
+ import NBL_AddNative
+-import NBA_SamplerValues
++import NGT_NBA_SamplerValues
+ set_option autoImplicit false
+ noncomputable section
+-namespace AspisR1.NBL_SamplerReplay
++namespace AspisR1.NGT_NBL_SamplerReplay
+ open Aeneas Aeneas.Std Result AspisR1PublicPreparation
+ open ExtractedIndexedAddSmallNatModelV1
+ open AspisR1GammaCaller.DigitsModel (low_candidate_refines candidateGammaHelpers)
+@@ -42,7 +42,7 @@
+ packing observation. No whole ordinary-sample equality is an input. -/
+ theorem ordinary (block : Bytes32) (digits q : Words) (tr : LowTrace block digits q)
+     (raw : Raw) (decode : AspisR1Post25Sampler.sampler.decode8 digits=ok raw) :
+-    NBA_Installed.actual.sampling.ordinary block=
++    NGT_NBA_Installed.actual.sampling.ordinary block=
+       ok (AspisR1Post25SamplerPreparedCarrier.candidateToPE raw) := by
+   have call := (low block digits q tr).1
+   change AspisR1Post25SamplerOrdinaryCallbackV2.candidateOrdinaryPublic block=_
+@@ -67,7 +67,7 @@
+     (first : NBA_AddCarry.Trace (values digits) n.val (values d1) c1.val)
+     (zero : c1=0#u32) (raw : GammaRaw)
+     (decode : candidateGammaHelpers.decode d1=ok raw) :
+-    NBA_Installed.actual.sampling.gamma block=ok (AspisR1ClaimPreparedBridge.gammaToPublic raw) := by
++    NGT_NBA_Installed.actual.sampling.gamma block=ok (AspisR1ClaimPreparedBridge.gammaToPublic raw) := by
+   obtain ⟨lc,canonical,qb⟩ := low block digits q tr
+   obtain ⟨inc,nb⟩ := increment (quotient q) n qb nv
+   have add := NBL_AddNative.source digits n canonical nb d1 c1 first
+@@ -88,7 +88,7 @@
+     (nonzero : c1≠0#u32)
+     (second : NBA_AddCarry.Trace (values d1) 1 (values d2) c2.val)
+     (raw : GammaRaw) (decode : candidateGammaHelpers.decode d2=ok raw) :
+-    NBA_Installed.actual.sampling.gamma block=ok (AspisR1ClaimPreparedBridge.gammaToPublic raw) := by
++    NGT_NBA_Installed.actual.sampling.gamma block=ok (AspisR1ClaimPreparedBridge.gammaToPublic raw) := by
+   obtain ⟨lc,canonical,qb⟩ := low block digits q tr
+   obtain ⟨inc,nb⟩ := increment (quotient q) n qb nv
+   have add := NBL_AddNative.source digits n canonical nb d1 c1 first
+@@ -109,5 +109,5 @@
+ #print axioms increment
+ #print axioms gamma_no_wrap
+ #print axioms gamma_wrap
+-end AspisR1.NBL_SamplerReplay
++end AspisR1.NGT_NBL_SamplerReplay
+ end
+--- lean/NBL_DecodeNative.lean
++++ NGT_NBL_DecodeNative.lean
+@@ -1,7 +1,7 @@
+-import NBL_SamplerReplay
++import NGT_NBL_SamplerReplay
+ import NBA_ArrayEight
+ set_option autoImplicit false
+-namespace AspisR1.NBL_DecodeNative
++namespace AspisR1.NGT_NBL_DecodeNative
+ open Aeneas Aeneas.Std Result
+ open AspisR1Post25Sampler
+ open ExtractedIndexedAddSmallNatModelV1
+@@ -54,4 +54,4 @@
+ #print axioms remainder
+ #print axioms canonical_qm
+ #print axioms source
+-end AspisR1.NBL_DecodeNative
++end AspisR1.NGT_NBL_DecodeNative
+--- lean/NBL_SamplerNative.lean
++++ NGT_NBL_SamplerNative.lean
+@@ -1,9 +1,9 @@
+-import NBL_DecodeNative
++import NGT_NBL_DecodeNative
+ set_option autoImplicit false
+ noncomputable section
+-namespace AspisR1.NBL_SamplerNative
++namespace AspisR1.NGT_NBL_SamplerNative
+ open Aeneas Aeneas.Std Result AspisR1PublicPreparation
+-open ExtractedIndexedAddSmallNatModelV1 NBL_SamplerReplay
++open ExtractedIndexedAddSmallNatModelV1 NGT_NBL_SamplerReplay
+ open AspisR1GammaCaller.DigitsModel (candidateGammaHelpers)
+ 
+ def gammaOfRaw (v : Raw) : GammaRaw :=
+@@ -11,38 +11,38 @@
+     ⟨⟨v.c1.c0.a,v.c1.c0.b⟩,⟨v.c1.c1.a,v.c1.c1.b⟩⟩⟩
+ 
+ theorem decode_gamma (d : Digits) (canonical : Canonical d) :
+-    candidateGammaHelpers.decode d=ok (gammaOfRaw (NBL_DecodeNative.pack d)) := by
++    candidateGammaHelpers.decode d=ok (gammaOfRaw (NGT_NBL_DecodeNative.pack d)) := by
+   change (do let raw ← AspisR1Post25Sampler.sampler.decode8 d;ok (gammaOfRaw raw))=_
+-  rw [NBL_DecodeNative.source d canonical,bind_tc_ok]
++  rw [NGT_NBL_DecodeNative.source d canonical,bind_tc_ok]
+ 
+ /-- Complete installed ordinary output on the SAME native division trace;
+ no decoder output or successful sampler equation is a premise. -/
+ theorem ordinary (block : Bytes32) (d q : Words) (tr : LowTrace block d q) :
+-    NBA_Installed.actual.sampling.ordinary block=
+-      ok (AspisR1Post25SamplerPreparedCarrier.candidateToPE (NBL_DecodeNative.pack d)) :=
+-  NBL_SamplerReplay.ordinary block d q tr _ (NBL_DecodeNative.source d (low block d q tr).2.1)
++    NGT_NBA_Installed.actual.sampling.ordinary block=
++      ok (AspisR1Post25SamplerPreparedCarrier.candidateToPE (NGT_NBL_DecodeNative.pack d)) :=
++  NGT_NBL_SamplerReplay.ordinary block d q tr _ (NGT_NBL_DecodeNative.source d (low block d q tr).2.1)
+ 
+ /-- Every arithmetic/decoder domain is derived from the same native trace. -/
+ theorem gamma_no_wrap (block : Bytes32) (d q d1 : Words) (n c1 : U32)
+     (tr : LowTrace block d q) (nv : n.val=(quotient q).val+1)
+     (first : NBA_AddCarry.Trace (values d) n.val (values d1) c1.val) (zero : c1=0#u32) :
+-    NBA_Installed.actual.sampling.gamma block=
+-      ok (AspisR1ClaimPreparedBridge.gammaToPublic (gammaOfRaw (NBL_DecodeNative.pack d1))) :=
+-  NBL_SamplerReplay.gamma_no_wrap block d q d1 n c1 tr nv first zero _
++    NGT_NBA_Installed.actual.sampling.gamma block=
++      ok (AspisR1ClaimPreparedBridge.gammaToPublic (gammaOfRaw (NGT_NBL_DecodeNative.pack d1))) :=
++  NGT_NBL_SamplerReplay.gamma_no_wrap block d q d1 n c1 tr nv first zero _
+     (decode_gamma d1 (NBL_AddNative.canonical d n d1 c1 first))
+ 
+ theorem gamma_wrap (block : Bytes32) (d q d1 d2 : Words) (n c1 c2 : U32)
+     (tr : LowTrace block d q) (nv : n.val=(quotient q).val+1)
+     (first : NBA_AddCarry.Trace (values d) n.val (values d1) c1.val) (nonzero : c1≠0#u32)
+     (second : NBA_AddCarry.Trace (values d1) 1 (values d2) c2.val) :
+-    NBA_Installed.actual.sampling.gamma block=
+-      ok (AspisR1ClaimPreparedBridge.gammaToPublic (gammaOfRaw (NBL_DecodeNative.pack d2))) :=
+-  NBL_SamplerReplay.gamma_wrap block d q d1 d2 n c1 c2 tr nv first nonzero second _
++    NGT_NBA_Installed.actual.sampling.gamma block=
++      ok (AspisR1ClaimPreparedBridge.gammaToPublic (gammaOfRaw (NGT_NBL_DecodeNative.pack d2))) :=
++  NGT_NBL_SamplerReplay.gamma_wrap block d q d1 d2 n c1 c2 tr nv first nonzero second _
+     (decode_gamma d2 (NBL_AddNative.canonical d1 1#u32 d2 c2 second))
+ 
+ #print axioms decode_gamma
+ #print axioms ordinary
+ #print axioms gamma_no_wrap
+ #print axioms gamma_wrap
+-end AspisR1.NBL_SamplerNative
++end AspisR1.NGT_NBL_SamplerNative
+ end
+--- lean/NBL_SamplerDebug.lean
++++ NGT_NBL_SamplerDebug.lean
+@@ -1,9 +1,9 @@
+-import NBL_SamplerNative
++import NGT_NBL_SamplerNative
+ import NBL_SecondCarry
+ set_option autoImplicit false
+-namespace AspisR1.NBL_SamplerDebug
++namespace AspisR1.NGT_NBL_SamplerDebug
+ open Aeneas Aeneas.Std Result
+-open ExtractedIndexedAddSmallNatModelV1 NBL_SamplerReplay
++open ExtractedIndexedAddSmallNatModelV1 NGT_NBL_SamplerReplay
+ open SamplerAddDigits
+ 
+ /-- Native gamma's wrapped_again debug assertion follows from the SAME low
+@@ -43,4 +43,4 @@
+   exact last.symm.trans zero
+ 
+ #print axioms source
+-end AspisR1.NBL_SamplerDebug
++end AspisR1.NGT_NBL_SamplerDebug
+--- lean/NBA_Transcript.lean
++++ NGT_NBA_Transcript.lean
+@@ -1,6 +1,6 @@
+-import NBA_Installed
++import NGT_NBA_Installed
+ set_option autoImplicit false
+-namespace AspisR1.NBA_Transcript
++namespace AspisR1.NGT_NBA_Transcript
+ open Aeneas Aeneas.Std Result AspisR1PublicPreparation
+ abbrev Bytes32 := Array U8 32#usize
+ 
+@@ -54,4 +54,4 @@
+ #print axioms seed
+ #print axioms absorb
+ #print axioms block
+-end AspisR1.NBA_Transcript
++end AspisR1.NGT_NBA_Transcript
+--- lean/NBL_BlockTrace.lean
++++ NGT_NBL_BlockTrace.lean
+@@ -1,8 +1,8 @@
+-import NBA_Transcript
+-import NBA_SamplerValues
++import NGT_NBA_Transcript
++import NGT_NBA_SamplerValues
+ set_option autoImplicit false
+ noncomputable section
+-namespace AspisR1.NBL_BlockTrace
++namespace AspisR1.NGT_NBL_BlockTrace
+ open Aeneas Aeneas.Std Result AspisR1PublicPreparation
+ abbrev Bytes32 := Array U8 32#usize
+ abbrev Log := List (Slice (Slice U8) × Bytes32)
+@@ -16,9 +16,9 @@
+   absorbed : Bytes32
+   value : Bytes32
+   final : Bytes32
+-  absorbCall : D.digest before.hash (NBA_Transcript.absorbParts before.state tag payload)=ok absorbed
+-  readCall : D.digest before.hash (NBA_Transcript.readParts absorbed 1#u8)=ok value
+-  advanceCall : D.digest before.hash (NBA_Transcript.readParts absorbed 2#u8)=ok final
++  absorbCall : D.digest before.hash (NGT_NBA_Transcript.absorbParts before.state tag payload)=ok absorbed
++  readCall : D.digest before.hash (NGT_NBA_Transcript.readParts absorbed 1#u8)=ok value
++  advanceCall : D.digest before.hash (NGT_NBA_Transcript.readParts absorbed 2#u8)=ok final
+ 
+ def Block.after {H : Type} {D : aspis_core.Digest32 H}
+     {before : transcript.Transcript H} {row : U8} {payload : Slice U8}
+@@ -27,15 +27,15 @@
+ def Block.log {H : Type} {D : aspis_core.Digest32 H}
+     {before : transcript.Transcript H} {row : U8} {payload : Slice U8}
+     (b : Block D before row payload) : Log :=
+-  [(NBA_Transcript.absorbParts before.state b.tag payload,b.absorbed),
+-   (NBA_Transcript.readParts b.absorbed 1#u8,b.value),
+-   (NBA_Transcript.readParts b.absorbed 2#u8,b.final)]
++  [(NGT_NBA_Transcript.absorbParts before.state b.tag payload,b.absorbed),
++   (NGT_NBA_Transcript.readParts b.absorbed 1#u8,b.value),
++   (NGT_NBA_Transcript.readParts b.absorbed 2#u8,b.final)]
+ 
+ theorem block_result {H : Type} (D : aspis_core.Digest32 H)
+     (before : transcript.Transcript H) (row : U8) (payload : Slice U8)
+     (b : Block D before row payload) :
+     transcript.Transcript.block D before row payload=ok (b.value,b.after) :=
+-  NBA_Transcript.block D before row b.tag payload b.absorbed b.value b.final
++  NGT_NBA_Transcript.block D before row b.tag payload b.absorbed b.value b.final
+     b.tagCall b.absorbCall b.readCall b.advanceCall
+ 
+ theorem block_log {H : Type} (D : aspis_core.Digest32 H)
+@@ -56,19 +56,19 @@
+     (before : transcript.Transcript H) (row : U8) (payload : Slice U8) (nonzero : Bool) where
+   block : Block D before row payload
+   value : aspis_core.field.WideExact
+-  sample : (if nonzero then NBA_Installed.actual.sampling.gamma block.value
+-    else NBA_Installed.actual.sampling.ordinary block.value)=ok value
++  sample : (if nonzero then NGT_NBA_Installed.actual.sampling.gamma block.value
++    else NGT_NBA_Installed.actual.sampling.ordinary block.value)=ok value
+ 
+ theorem scalar_result {H : Type} (D : aspis_core.Digest32 H)
+     (before : transcript.Transcript H) (row : U8) (payload : Slice U8) (nonzero : Bool)
+     (s : Scalar D before row payload nonzero) :
+-    PreparedModel.scalar NBA_Installed.actual.sampling D before row payload nonzero=
++    PreparedModel.scalar NGT_NBA_Installed.actual.sampling D before row payload nonzero=
+       ok (s.value,s.block.after) :=
+-  NBA_SamplerValues.scalar D before s.block.after row payload s.block.value s.value nonzero
++  NGT_NBA_SamplerValues.scalar D before s.block.after row payload s.block.value s.value nonzero
+     (block_result D before row payload s.block) s.sample
+ 
+ #print axioms block_result
+ #print axioms block_log
+ #print axioms scalar_result
+-end AspisR1.NBL_BlockTrace
++end AspisR1.NGT_NBL_BlockTrace
+ end
+--- lean/NBA_Rho.lean
++++ NGT_NBA_Rho.lean
+@@ -1,7 +1,7 @@
+-import NBA_Installed
++import NGT_NBA_Installed
+ import LPk_Induction
+ set_option autoImplicit false
+-namespace AspisR1.NBA_Rho
++namespace AspisR1.NGT_NBA_Rho
+ open Aeneas Aeneas.Std Result AspisR1PublicPreparation
+ open SamplerMachineBounds SamplerRepeatedPass SourceSamplerByteRank
+ 
+@@ -45,4 +45,4 @@
+ #print axioms coordinates_injective
+ #print axioms four_digits
+ #print axioms source
+-end AspisR1.NBA_Rho
++end AspisR1.NGT_NBA_Rho
+--- lean/NBL_CodeRunLaws.lean
++++ NGT_NBL_CodeRunLaws.lean
+@@ -1,6 +1,6 @@
+-import S1PreparedCompleteHashErasureV1
++import RPz7_S1PreparedCompleteHashErasureV1
+ set_option autoImplicit false
+-namespace AspisR1.NBL_CodeRunLaws
++namespace AspisR1.NGT_NBL_CodeRunLaws
+ open Aeneas Aeneas.Std Result AspisR1PublicPreparation PreparedHashCode
+ 
+ def chain {A B : Type} (left : Log×Result A) (k : A → Code B) : Log×Result B :=
+@@ -46,4 +46,4 @@
+ #print axioms lift_run
+ #print axioms pure_run
+ #print axioms digest_run
+-end AspisR1.NBL_CodeRunLaws
++end AspisR1.NGT_NBL_CodeRunLaws
+--- lean/NBL_HashReplay.lean
++++ NGT_NBL_HashReplay.lean
+@@ -1,51 +1,51 @@
+-import NBL_CodeRunLaws
+-import NBL_BlockTrace
++import NGT_NBL_CodeRunLaws
++import NGT_NBL_BlockTrace
+ set_option autoImplicit false
+-namespace AspisR1.NBL_HashReplay
+-open Aeneas Aeneas.Std Result AspisR1PublicPreparation PreparedHashCode NBL_CodeRunLaws
++namespace AspisR1.NGT_NBL_HashReplay
++open Aeneas Aeneas.Std Result AspisR1PublicPreparation PreparedHashCode NGT_NBL_CodeRunLaws
+ abbrev Bytes32 := Array U8 32#usize
+ 
+-def events {H : Type} (D : aspis_core.Digest32 H) (hash : H) (log : NBL_BlockTrace.Log) : Log :=
++def events {H : Type} (D : aspis_core.Digest32 H) (hash : H) (log : NGT_NBL_BlockTrace.Log) : Log :=
+   log.map (fun event => Event.digest D hash event.1 (ok event.2))
+ 
+ /-- Typed attempted-log replay of the actual existing hash-effects absorb. -/
+ theorem absorb {H : Type} (D : aspis_core.Digest32 H) (before : transcript.Transcript H)
+     (row tag : U8) (payload : Slice U8) (reply : Bytes32)
+     (tagCall : (160#u8+row : Result U8)=ok tag)
+-    (call : D.digest before.hash (NBA_Transcript.absorbParts before.state tag payload)=ok reply) :
++    (call : D.digest before.hash (NGT_NBA_Transcript.absorbParts before.state tag payload)=ok reply) :
+     run (PreparedHashEffects.absorb effects D before row payload)=
+-      ([Event.digest D before.hash (NBA_Transcript.absorbParts before.state tag payload) (ok reply)],
++      ([Event.digest D before.hash (NGT_NBA_Transcript.absorbParts before.state tag payload) (ok reply)],
+         ok ({before with state:=reply} : transcript.Transcript H)) := by
+   have call' := call
+-  simp only [NBA_Transcript.absorbParts] at call'
++  simp only [NGT_NBA_Transcript.absorbParts] at call'
+   simp only [PreparedHashEffects.absorb,bind_run,lift_run,pure_run,digest_run,
+-    chain,lift,tagCall,call',NBA_Transcript.absorbParts,List.nil_append,List.append_nil]
++    chain,lift,tagCall,call',NGT_NBA_Transcript.absorbParts,List.nil_append,List.append_nil]
+ 
+ /-- All three typed hash attempts and the returned state, on the SAME replies. -/
+ theorem block {H : Type} (D : aspis_core.Digest32 H) (before : transcript.Transcript H)
+-    (row : U8) (payload : Slice U8) (b : NBL_BlockTrace.Block D before row payload) :
++    (row : U8) (payload : Slice U8) (b : NGT_NBL_BlockTrace.Block D before row payload) :
+     run (PreparedHashEffects.block effects D before row payload)=
+       (events D before.hash b.log,ok (b.value,b.after)) := by
+   have first := absorb D before row b.tag payload b.absorbed b.tagCall b.absorbCall
+   have second := b.readCall
+   have third := b.advanceCall
+-  simp only [NBA_Transcript.readParts] at second third
++  simp only [NGT_NBA_Transcript.readParts] at second third
+   simp only [PreparedHashEffects.block,bind_run,first,chain,lift_run,pure_run,digest_run,
+-    lift,second,third,events,NBL_BlockTrace.Block.log,NBL_BlockTrace.Block.after,
+-    NBA_Transcript.readParts,List.map_cons,List.map_nil,List.cons_append,List.nil_append,List.append_nil]
++    lift,second,third,events,NGT_NBL_BlockTrace.Block.log,NGT_NBL_BlockTrace.Block.after,
++    NGT_NBA_Transcript.readParts,List.map_cons,List.map_nil,List.cons_append,List.nil_append,List.append_nil]
+ 
+ /-- Salted S2 seed event; no independently chosen starting transcript. -/
+ theorem seed {H : Type} (D : aspis_core.Digest32 H) (hash : H) (state reply : Bytes32)
+-    (call : D.digest hash (NBA_Transcript.seedParts state)=ok reply) :
++    (call : D.digest hash (NGT_NBA_Transcript.seedParts state)=ok reply) :
+     run (PreparedHashEffects.new effects D hash state .S2)=
+-      ([Event.digest D hash (NBA_Transcript.seedParts state) (ok reply)],
++      ([Event.digest D hash (NGT_NBA_Transcript.seedParts state) (ok reply)],
+         ok (⟨reply,hash⟩ : transcript.Transcript H)) := by
+   have call' := call
+-  simp only [NBA_Transcript.seedParts,NBA_Transcript.domain] at call'
++  simp only [NGT_NBA_Transcript.seedParts,NGT_NBA_Transcript.domain] at call'
+   simp only [PreparedHashEffects.new,transport.Variant.tag,bind_run,lift_run,pure_run,digest_run,
+-    chain,lift,call',NBA_Transcript.seedParts,NBA_Transcript.domain,List.nil_append,List.append_nil]
++    chain,lift,call',NGT_NBA_Transcript.seedParts,NGT_NBA_Transcript.domain,List.nil_append,List.append_nil]
+ 
+ #print axioms absorb
+ #print axioms block
+ #print axioms seed
+-end AspisR1.NBL_HashReplay
++end AspisR1.NGT_NBL_HashReplay
+--- lean/NBL_ScalarHashReplay.lean
++++ NGT_NBL_ScalarHashReplay.lean
+@@ -1,34 +1,34 @@
+-import NBL_HashReplay
+-import NBA_Rho
++import NGT_NBL_HashReplay
++import NGT_NBA_Rho
+ set_option autoImplicit false
+-namespace AspisR1.NBL_ScalarHashReplay
+-open Aeneas Aeneas.Std Result AspisR1PublicPreparation PreparedHashCode NBL_CodeRunLaws
++namespace AspisR1.NGT_NBL_ScalarHashReplay
++open Aeneas Aeneas.Std Result AspisR1PublicPreparation PreparedHashCode NGT_NBL_CodeRunLaws
+ 
+ theorem scalar {H : Type} (D : aspis_core.Digest32 H) (before : transcript.Transcript H)
+     (row : U8) (payload : Slice U8) (nonzero : Bool)
+-    (s : NBL_BlockTrace.Scalar D before row payload nonzero) :
+-    run (PreparedScalarEffects.scalar effects NBA_Installed.actual.sampling D before row payload nonzero)=
+-      (NBL_HashReplay.events D before.hash s.block.log,ok (s.value,s.block.after)) := by
++    (s : NGT_NBL_BlockTrace.Scalar D before row payload nonzero) :
++    run (PreparedScalarEffects.scalar effects NGT_NBA_Installed.actual.sampling D before row payload nonzero)=
++      (NGT_NBL_HashReplay.events D before.hash s.block.log,ok (s.value,s.block.after)) := by
+   have sampled := s.sample
+   cases nonzero <;> simp only [Bool.false_eq_true,↓reduceIte] at sampled ⊢
+-  all_goals simp only [PreparedScalarEffects.scalar,bind_run,NBL_HashReplay.block D before row payload s.block,
++  all_goals simp only [PreparedScalarEffects.scalar,bind_run,NGT_NBL_HashReplay.block D before row payload s.block,
+     chain,lift_run,pure_run,sampled,lift,Bool.false_eq_true,↓reduceIte,AspisR1PublicPreparation.trace.value,Aeneas.Std.uncurry,List.append_nil,List.nil_append]
+ 
+ /-- Full rho effect replay on its SAME four-pass native division trace. -/
+ theorem rho {H : Type} (D : aspis_core.Digest32 H) (before : transcript.Transcript H)
+-    (row : U8) (payload : Slice U8) (b : NBL_BlockTrace.Block D before row payload)
++    (row : U8) (payload : Slice U8) (b : NGT_NBL_BlockTrace.Block D before row payload)
+     (digits : List Nat) (last : List UInt32) (q : aspis_core.field.QM31)
+     (trace : LPk_Induction.Digits 4 (SamplerBytePass.digits b.value) digits last)
+-    (packed : NBA_Rho.coordinates q=digits) :
+-    run (PreparedScalarEffects.scalar_k effects NBA_Installed.actual.sampling D before row payload)=
+-      (NBL_HashReplay.events D before.hash b.log,ok (q,b.after)) := by
+-  have sample := NBA_Rho.source b.value digits last q trace packed
+-  have fromQm : NBA_Installed.actual.sampling.fromQm q=
++    (packed : NGT_NBA_Rho.coordinates q=digits) :
++    run (PreparedScalarEffects.scalar_k effects NGT_NBA_Installed.actual.sampling D before row payload)=
++      (NGT_NBL_HashReplay.events D before.hash b.log,ok (q,b.after)) := by
++  have sample := NGT_NBA_Rho.source b.value digits last q trace packed
++  have fromQm : NGT_NBA_Installed.actual.sampling.fromQm q=
+       ok (PreparedFromQmSourceBridge.fromQmEmbedding q) :=
+     PreparedFromQmSourceBridge.fromQmSource_success q
+-  simp only [PreparedScalarEffects.scalar_k,bind_run,NBL_HashReplay.block D before row payload b,
++  simp only [PreparedScalarEffects.scalar_k,bind_run,NGT_NBL_HashReplay.block D before row payload b,
+     chain,lift_run,pure_run,sample,fromQm,lift,AspisR1PublicPreparation.trace.value,Aeneas.Std.uncurry,List.append_nil,List.nil_append]
+ 
+ #print axioms scalar
+ #print axioms rho
+-end AspisR1.NBL_ScalarHashReplay
++end AspisR1.NGT_NBL_ScalarHashReplay
+--- lean/NBL_RhoConstruct.lean
++++ NGT_NBL_RhoConstruct.lean
+@@ -1,7 +1,7 @@
+ import NBL_PassConstruct
+-import NBA_Rho
++import NGT_NBA_Rho
+ set_option autoImplicit false
+-namespace AspisR1.NBL_RhoConstruct
++namespace AspisR1.NGT_NBL_RhoConstruct
+ open Aeneas Aeneas.Std Result AspisR1PublicPreparation
+ 
+ /-- No selected packed output is assumed: construct it and its SAME division
+@@ -9,13 +9,13 @@
+ theorem source (block : Array U8 32#usize) :
+     ∃ (digits : List Nat) (last : List UInt32) (q : aspis_core.field.QM31),
+       LPk_Induction.Digits 4 (SamplerBytePass.digits block) digits last ∧
+-      NBA_Rho.coordinates q=digits ∧
++      NGT_NBA_Rho.coordinates q=digits ∧
+       sampler.qm31_sample block=ok q := by
+   obtain ⟨digits,last,division⟩ := NBL_PassConstruct.digits 4 (SamplerBytePass.digits block)
+   obtain ⟨q,call,canonical,value⟩ := SamplerTransport.sample_total block
+-  have packed : NBA_Rho.coordinates q=digits :=
+-    value.trans (NBA_Rho.four_digits block digits last division).symm
++  have packed : NGT_NBA_Rho.coordinates q=digits :=
++    value.trans (NGT_NBA_Rho.four_digits block digits last division).symm
+   exact ⟨digits,last,q,division,packed,call⟩
+ 
+ #print axioms source
+-end AspisR1.NBL_RhoConstruct
++end AspisR1.NGT_NBL_RhoConstruct
+--- lean/NBL_InitTrace.lean
++++ NGT_NBL_InitTrace.lean
+@@ -1,6 +1,6 @@
+-import NBA_Rho
++import NGT_NBA_Rho
+ set_option autoImplicit false
+-namespace AspisR1.NBL_InitTrace
++namespace AspisR1.NGT_NBL_InitTrace
+ open Aeneas Aeneas.Std
+ abbrev Words (T : Type) := Array T 8#usize
+ 
+@@ -58,4 +58,4 @@
+ #print axioms processed
+ #print axioms source
+ #print axioms rho
+-end AspisR1.NBL_InitTrace
++end AspisR1.NGT_NBL_InitTrace
