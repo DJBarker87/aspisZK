@@ -90,6 +90,9 @@ if target in ['scan','queryscan']:
  files[name]=((E if own else E.parent/'slice-d-finish2-20261105')/name).read_text();sources+=[name]
 cfg=dict(attempt=a,own_audit=(kind=='auditbin' and own),kind=kind,module=target,sources=sources,command=command,env=env,timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={'selected_objects':{}},expected_time='Focused elaboration' if kind=='lean' else 'Optimized audit linker' if kind=='linkaudit' else 'Raw checked-kernel graph traversal')
 if kind=='kani':cfg['native_command']=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NIW_src/crates/aspis-r1-cost-probe/Cargo.toml','--target-dir',B+'/NIW_target','--features','private-leaf-salts,optimized-terminal,program-build','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse']
+if kind=='kani' and os.environ.get('NIW_OWNER_GROUP'):
+ assert os.environ['NIW_OWNER_GROUP'] in ['factors','rest']
+ env['RUSTFLAGS']+=' --cfg NIW_owner_'+os.environ['NIW_OWNER_GROUP']
 if kind=='kani' and os.environ.get('NIW_PROGRAM'):
  cfg['root_package']='aspis-r1-cost-probe-program'
  i=cfg['native_command'].index('--manifest-path');cfg['native_command'][i+1]=B+'/NIW_src/programs/r1-cost-probe/Cargo.toml'

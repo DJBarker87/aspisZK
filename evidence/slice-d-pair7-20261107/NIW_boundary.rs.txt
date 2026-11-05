@@ -1,0 +1,72 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+fn q(x:[u32;4])->K{K{c0:aspis_core::field::CM31{a:M31(x[0]),b:M31(x[1])},c1:aspis_core::field::CM31{a:M31(x[2]),b:M31(x[3])}}}
+fn qw(x:K)->[u32;4]{[x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0]}
+fn anye()->E{let v:[u32;8]=kani::any();for x in v{kani::assume(x<0x7fffffff);}E::from_limbs(v).unwrap()}
+fn err(i:u8)->Error{match i%8{0=>Error::Parse,1=>Error::Transcript,2=>Error::Semantic,3=>Error::Relation,4=>Error::Merkle,5=>Error::Query,6=>Error::Checkpoint,_=>Error::Allocation}}
+fn code(e:Error)->u8{match e{Error::Parse=>0,Error::Transcript=>1,Error::Semantic=>2,Error::Relation=>3,Error::Merkle=>4,Error::Query=>5,Error::Checkpoint=>6,Error::Allocation=>7}}
+fn unit()->Result<(),Error>{if kani::any(){Ok(())}else{Err(err(kani::any()))}}
+struct Log{regular:Result<(),Error>,partial:Result<[E;4],Error>,high:Result<(),Error>,
+ scratch:Option<Vec<K>>,parts:[E;7],common:[K;16],high_parts:[E;7],
+ events:[u8;4],count:usize,partial_common:K,high_before:E,high_partial:E,high_ptr:*const E}
+fn event(l:&mut Log,e:u8){l.events[l.count]=e;l.count+=1;}
+fn regular(scratch:&mut Vec<K>,parts:&mut[E;7],l:&mut Log)->Result<(),Error>{event(l,0);*scratch=l.scratch.take().unwrap();*parts=l.parts;l.regular}
+fn common(l:&mut Log)->[K;16]{event(l,1);l.common}
+fn partial(common:&[K;16],i:usize,l:&mut Log)->Result<[E;4],Error>{event(l,2);l.partial_common=common[i];l.partial}
+fn high(partials:&[E;4],parts:&mut[E;7],slot:usize,power:usize,l:&mut Log)->Result<(),Error>{event(l,3);l.high_ptr=parts.as_ptr();l.high_before=parts[slot];l.high_partial=partials[power];*parts=l.high_parts;l.high}
+// Frozen weights.rs:279-288; the common loop has its own CLOSED one-step/induction packet.
+// Each outlined callee is opaque here. In particular regular may return Err after writes.
+fn boundary(shared:bool,scratch:&mut Vec<K>,parts:&mut[E;7],i:usize,slot:usize,power:usize,l:&mut Log)->Result<(),Error>{
+ regular(scratch,parts,l)?;
+ if shared{let common=common(l);let partials=partial(&common,i,l)?;high(&partials,parts,slot,power,l)?;}
+ Ok(())
+}
+#[kani::proof]#[kani::unwind(2050)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn alignment_boundary(){
+ let shared:bool=kani::any();let i:usize=kani::any();kani::assume(i<16);let slot:usize=kani::any();kani::assume(slot<7);let power:usize=kani::any();kani::assume(power<4);let index:usize=kani::any();kani::assume(index<64);let limb:usize=kani::any();kani::assume(limb<8);
+ let mut scratch=Vec::with_capacity(64);let mut post=Vec::with_capacity(64);for _ in 0..64{scratch.push(q(kani::any()));post.push(q(kani::any()));}
+ let expected_q=qw(post[index]);let post_ptr=post.as_ptr();let mut parts=core::array::from_fn(|_|anye());let parts_ptr=parts.as_ptr();
+ let mut l=Log{regular:unit(),partial:if kani::any(){Ok(core::array::from_fn(|_|anye()))}else{Err(err(kani::any()))},high:unit(),scratch:Some(post),parts:core::array::from_fn(|_|anye()),common:core::array::from_fn(|_|q(kani::any())),high_parts:core::array::from_fn(|_|anye()),events:[99;4],count:0,partial_common:K::ZERO,high_before:E::ZERO,high_partial:E::ZERO,high_ptr:core::ptr::null()};
+ let out=boundary(shared,&mut scratch,&mut parts,i,slot,power,&mut l);
+ let entered_high=l.regular.is_ok()&&shared&&l.partial.is_ok();let entered_partial=l.regular.is_ok()&&shared;
+ let expected=if let Err(e)=l.regular{Err(code(e))}else if !shared{Ok(())}else if let Err(e)=l.partial{Err(code(e))}else{l.high.map_err(code)};
+ if cfg!(NIW_corrupt){l.high_before=E::ZERO;scratch[index]=K::ZERO;parts[slot]=E::ZERO;l.partial_common=K::ZERO;}
+ assert!(out.map_err(code)==expected&&l.count==if !entered_partial{1}else if !entered_high{3}else{4});
+ assert!(l.events[0]==0&&(!entered_partial||(l.events[1]==1&&l.events[2]==2))&&(!entered_high||l.events[3]==3));
+ assert!(scratch.len()==64&&scratch.as_ptr()==post_ptr&&qw(scratch[index])[limb&3]==expected_q[limb&3]&&l.scratch.is_none());
+ assert!(parts.as_ptr()==parts_ptr&&parts[slot].to_limbs()[limb]==if entered_high{l.high_parts[slot]}else{l.parts[slot]}.to_limbs()[limb]);
+ if entered_partial{assert!(qw(l.partial_common)[limb&3]==qw(l.common[i])[limb&3]);}
+ if entered_high{let values=l.partial.unwrap();assert!(l.high_ptr==parts_ptr&&l.high_before.to_limbs()[limb]==l.parts[slot].to_limbs()[limb]&&l.high_partial.to_limbs()[limb]==values[power].to_limbs()[limb]);}
+}
+
+// Frozen verifier.rs finish_relation NEW port, through the same by-value Box move.
+struct NewLog{reply:Option<Box<Weights>>,error:Option<Error>,calls:usize}
+fn new_packet(l:&mut NewLog)->Result<Box<Weights>,Error>{l.calls+=1;match l.error{Some(e)=>Err(e),None=>Ok(l.reply.take().unwrap())}}
+fn new_boundary(l:&mut NewLog)->Result<Box<Weights>,Error>{let weights=new_packet(l)?;Ok(weights)}
+fn payload(w:&Weights,kind:usize,row:usize,digit:usize,col:usize)->[u32;4]{match kind{0=>qw(w.factors[row][digit%5][col]),1=>qw(w.points[row%3][digit]),_=>qw(w.extra[col%2])}}
+#[kani::proof]#[kani::unwind(2050)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn new_owner_boundary(){
+ let kind:usize=kani::any();kani::assume(kind<3);let row:usize=kani::any();kani::assume(row<5);let digit:usize=kani::any();kani::assume(digit<10);let col:usize=kani::any();kani::assume(col<4);let limb:usize=kani::any();kani::assume(limb<4);
+ // Split the timed-out full-payload construction: initialize disjoint fields
+ // in an already allocated Box; the observed stage contains only the move.
+ // Every QM31 word is unrestricted; its representation contains only u32s.
+ let uninit=Box::<Weights>::new_uninit();let raw=Box::into_raw(uninit) as *mut Weights;
+ let w=unsafe{
+  core::ptr::addr_of_mut!((*raw).variant).write(Variant::S2);
+  core::ptr::addr_of_mut!((*raw).factors).write(core::mem::transmute::<[u32;400],[[[K;4];5];5]>(kani::any()));
+  core::ptr::addr_of_mut!((*raw).points).write(core::mem::transmute::<[u32;120],[[K;10];3]>(kani::any()));
+  core::ptr::addr_of_mut!((*raw).extra).write(core::mem::transmute::<[u32;8],[K;2]>(kani::any()));
+  Box::from_raw(raw)
+ };
+ if cfg!(NIW_owner_factors){kani::assume(kind==0);}else{kani::assume(kind>0);}
+
+ let owner=&*w as *const Weights;let expected=payload(&w,kind,row,digit,col);
+ let mut l=NewLog{reply:Some(w),error:if kani::any(){Some(err(kani::any()))}else{None},calls:0};let mut out=new_boundary(&mut l);
+ if cfg!(NIW_corrupt){match &mut out{Ok(w)=>{if kind==0{w.factors[row][digit%5][col]=K::ZERO;}else if kind==1{w.points[row%3][digit]=K::ZERO;}else{w.extra[col%2]=K::ZERO;}},Err(_)=>{let w=l.reply.as_mut().unwrap();if kind==0{w.factors[row][digit%5][col]=K::ZERO;}else if kind==1{w.points[row%3][digit]=K::ZERO;}else{w.extra[col%2]=K::ZERO;}}};}
+ assert!(l.calls==1);
+ match out{Ok(w)=>{assert!(l.error.is_none()&&l.reply.is_none()&&&*w as *const Weights==owner&&w.variant==Variant::S2);assert!(payload(&w,kind,row,digit,col)[limb]==expected[limb]);},Err(e)=>{assert!(l.error.map(code)==Some(code(e)));let w=l.reply.as_ref().unwrap();assert!(&**w as *const Weights==owner&&w.variant==Variant::S2);assert!(payload(w,kind,row,digit,col)[limb]==expected[limb]);}}
+}
