@@ -1,0 +1,6 @@
+import NGK_COMBINED_IMPORT
+import NGN_EmittedEq
+import NFW_Transcript
+#print axioms AspisR1.RPx_Deployed.deployed
+#check AspisR1PublicPreparation.transcript.Transcript.scalar
+#check AspisR1PublicPreparation.PreparedModel.scalar_k
