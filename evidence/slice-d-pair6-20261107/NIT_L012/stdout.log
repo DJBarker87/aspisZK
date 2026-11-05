@@ -1,0 +1,15 @@
+def Aeneas.Std.UScalar.and : {ty : UScalarTy} → UScalar ty → UScalar ty → UScalar ty :=
+fun {ty} x y => (x.bv &&& y.bv)#uscalar
+def Aeneas.Std.Usize.wrapping_shr : Usize → U32 → Usize :=
+fun x s => UScalar.wrapping_shr x s
+NIT_generated/NIT_IndexInspect.lean:5:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.and_val`
+Aeneas.Std.UScalar.val_and {ty : UScalarTy} (x y : UScalar ty) : ↑(x &&& y) = ↑x &&& ↑y
+NIT_generated/NIT_IndexInspect.lean:7:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Usize.wrapping_shr_val`
+Aeneas.Std.UScalar.rem_spec {ty : UScalarTy} (x : UScalar ty) {y : UScalar ty} (hzero : ↑y ≠ 0) :
+  x % y ⦃ z => ↑z = ↑x % ↑y ⦄
+NIT_generated/NIT_IndexInspect.lean:9:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.mod_spec`
+NIT_generated/NIT_IndexInspect.lean:10:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.rem_val`
+NIT_generated/NIT_IndexInspect.lean:11:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.ofNat_val`
+NIT_generated/NIT_IndexInspect.lean:12:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.val_ofNat`
+def Aeneas.Std.UScalar.rem : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y => if (↑y != 0) = true then Result.ok (x.bv.umod y.bv#uscalar) else Result.fail Error.divisionByZero

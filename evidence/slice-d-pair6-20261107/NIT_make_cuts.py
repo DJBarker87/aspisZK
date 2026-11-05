@@ -19,6 +19,11 @@ abbrev CommonCells := Array K 16#usize
 abbrev LowCells := Array E 16#usize
 abbrev FE := aspis_core.field.wide_exact.WideExact
 abbrev Reply (T : Type) := core.result.Result T verifier.Error
+
+def feCanonical (x : FE) : Prop := canonE (FIo_Install.toE x)
+def alphaCanonical (p : verifier.Prepared) : Prop := ∀ x∈p.alpha.val,feCanonical x
+def replyCanonical (r : Reply FE) : Prop :=
+ match r with | .Ok x=>feCanonical x | .Err _=>True
 /-- Pointer identities remain opaque addresses; equality of addresses alone is
 not asserted to imply equality of model payloads. A reference carries the SAME
 chosen decoded payload. Its native association is the retained P6/ABI boundary. -/
@@ -160,7 +165,9 @@ add('NewPort',225,236,'''structure NewPort where
 def cutNewPort (p : verifier.Prepared) (alpha z owner : Nat)
  (before after : NewPort) (out : Reply (Ref FIo_Install.W)) : Prop :=
  p.variant=transport.Variant.S2 ∧ before.calls=0 ∧
- before.reply.isSome=true ∧ after.variant=p.variant ∧ after.alpha=alpha ∧
+ (∃ w,before.reply=some w ∧ w.address=owner ∧
+  (FIo_Install.toWeights w.value).variant=FIo_Native.transport.Variant.S2) ∧
+ after.variant=p.variant ∧ after.alpha=alpha ∧
  after.z=z ∧ after.calls=1 ∧
  match out with
  | .Ok w => before.error=none ∧ after.reply=none ∧ w.address=owner
@@ -173,7 +180,8 @@ add('PairPort',238,250,'''structure PairPort where
 
 def cutPairPort (owner alpha message : Nat) (p : verifier.Prepared)
  (l : PairPort) (out : Reply FE) (afterOwner : Nat) : Prop :=
- p.variant=transport.Variant.S2 ∧ l.who=owner ∧ l.alpha=alpha ∧ l.alpha_len=2 ∧ l.message=message ∧
+ p.variant=transport.Variant.S2 ∧ alphaCanonical p ∧ feCanonical p.kappa ∧
+ replyCanonical l.reply ∧ l.who=owner ∧ l.alpha=alpha ∧ l.alpha_len=2 ∧ l.message=message ∧
  l.message_len=2048 ∧ l.kappa=p.kappa ∧ l.calls=1 ∧
  NIQ_ResultEncoding.returning out=NIQ_ResultEncoding.returning l.reply ∧
  afterOwner=owner''')
@@ -208,7 +216,9 @@ heap/content equality is inferred from the pointer observations. -/
 def cutFinishLog (v : verifier.View) (p : verifier.Prepared) (a : verifier.Accumulator)
  (round0 round1 alpha semanticAlpha z message owner weights : Nat)
  (l : FinishLog) (out : Reply Unit) : Prop :=
- p.variant=transport.Variant.S2 ∧ v.round0.val.length=224 ∧ v.round1.val.length=224 ∧
+ p.variant=transport.Variant.S2 ∧ feCanonical p.claim ∧ feCanonical p.kappa ∧
+ alphaCanonical p ∧ feCanonical a.rhs ∧ (∀ side,replyCanonical (l.round_reply side)) ∧
+ replyCanonical l.pair.reply ∧ replyCanonical l.dot_reply ∧ v.round0.val.length=224 ∧ v.round1.val.length=224 ∧
  v.final_message.val.length=2048 ∧ a.weights.val.length=64 ∧
  out=(finishExpected a l).1 ∧ l.count=(finishExpected a l).2 ∧
  (∀ event,event<l.count → l.events event=event) ∧

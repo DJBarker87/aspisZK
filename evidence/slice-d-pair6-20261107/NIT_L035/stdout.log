@@ -1,0 +1,72 @@
+NIT_generated/NIT_CommonInterpretation.lean:70:1: error: Type mismatch
+  cell.left
+has type
+  (do
+      let product ← FIo_Native.aspis_core.field.QM31.mul (kpick row2 (↑s.1.start % 4)) (kpick row3 (↑s.1.start / 4))
+      Array.update s.2 s.1.start product) =
+    ok after
+but is expected to have type
+  (do
+      let a1 ← (NHI_ScalarDomain.pick w.factors ↑0#usize ⋯).index_usize 2#usize
+      let q ← a1.index_usize (s.1.start &&& 3#usize)
+      let a2 ← (NHI_ScalarDomain.pick w.factors ↑0#usize ⋯).index_usize 3#usize
+      let q1 ← a2.index_usize (s.1.start.wrapping_shr 2#u32)
+      let q2 ← q.mul q1
+      let a3 ← Array.update s.2 s.1.start q2
+      ok (cont (rest, a3))) =
+    ok (cont (rest, after))
+w : W
+hf : NHI_TensorOuterStep.Factors w
+s : NHX_CommonDomain.State
+after : CommonCells
+l : Common
+cut :
+  cutCommon (NHI_ScalarDomain.pick (NHI_ScalarDomain.pick w.factors 0 ⋯) 2 ⋯)
+    (NHI_ScalarDomain.pick (NHI_ScalarDomain.pick w.factors 0 ⋯) 3 ⋯) (↑s.1.start) s.2 l after
+law : QMul l.lhs l.rhs l.reply
+last : ↑s.1.end = 16
+rows : Std.Array (Std.Array FIo_Native.aspis_core.field.QM31 4#usize) 5#usize := NHI_ScalarDomain.pick w.factors 0 ⋯
+row2 : Std.Array FIo_Native.aspis_core.field.QM31 4#usize := NHI_ScalarDomain.pick rows 2 ⋯
+row3 : Std.Array FIo_Native.aspis_core.field.QM31 4#usize := NHI_ScalarDomain.pick rows 3 ⋯
+small : ↑s.1.start < 16
+rest : core.ops.range.Range (UScalar UScalarTy.Usize)
+next : NHI_ForwardRange.next s.1 = ok (some s.1.start, rest)
+inc : ↑rest.start = ↑s.1.start + 1
+he : rest.end = s.1.end
+cell :
+  (do
+        let product ← FIo_Native.aspis_core.field.QM31.mul (kpick row2 (↑s.1.start % 4)) (kpick row3 (↑s.1.start / 4))
+        Array.update s.2 s.1.start product) =
+      ok after ∧
+    canonQ l.reply
+lo : ↑(s.1.start &&& 3#usize) = ↑s.1.start % 4
+hi : ↑(s.1.start.wrapping_shr 2#u32) = ↑s.1.start / 4
+⊢ (do
+      let a1 ← (NHI_ScalarDomain.pick w.factors ↑0#usize ⋯).index_usize 2#usize
+      let q ← a1.index_usize (s.1.start &&& 3#usize)
+      let a2 ← (NHI_ScalarDomain.pick w.factors ↑0#usize ⋯).index_usize 3#usize
+      let q1 ← a2.index_usize (s.1.start.wrapping_shr 2#u32)
+      let q2 ← q.mul q1
+      let a3 ← Array.update s.2 s.1.start q2
+      ok (cont (rest, a3))) =
+    ok (cont (rest, after))
+NIT_generated/NIT_CommonInterpretation.lean:64:2: warning: This simp argument is unused:
+  NHI_ScalarDomain.index rows 2#usize (by decide)
+
+Hint: Omit it from the simp argument list.
+  simp only [NHI_ScalarDomain.index w.factors 0#usize (by decide),
+     NHI_ScalarDomain.index rows 2̵#̵u̵s̵i̵z̵e̵3̲#̲u̲s̲i̲z̲e̲ (by decide), N̵H̵I̵_̵S̵c̵a̵l̵a̵r̵D̵o̵m̵a̵i̵n̵.̵i̵n̵d̵e̵x̵ ̵r̵o̵w̵s̵ ̵3̵#̵u̵s̵i̵z̵e̵ ̵(̵b̵y̵ ̵d̵e̵c̵i̵d̵e̵)̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NIT_generated/NIT_CommonInterpretation.lean:65:2: warning: This simp argument is unused:
+  NHI_ScalarDomain.index rows 3#usize (by decide)
+
+Hint: Omit it from the simp argument list.
+  simp only [NHI_ScalarDomain.index w.factors 0#usize (by decide),
+     NHI_ScalarDomain.index rows 2#usize (by decide), N̵H̵I̵_̵S̵c̵a̵l̵a̵r̵D̵o̵m̵a̵i̵n̵.̵i̵n̵d̵e̵x̵ ̵r̵o̵w̵s̵ ̵3̵#̵u̵s̵i̵z̵e̵ ̵(̵b̵y̵ ̵d̵e̵c̵i̵d̵e̵)̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NIT_CommonInterpretation.kpick_index' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIT_CommonInterpretation.kpick_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIT_CommonInterpretation.window' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIT_CommonInterpretation.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

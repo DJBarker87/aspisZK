@@ -1,0 +1,48 @@
+{"attempt": "NIT_L035", "exit_status": 1, "wall_seconds": 3.9150150869973004, "peak_rss_kib": "5920840", "swaps": "0", "print_axioms": ["'AspisR1.NIT_CommonInterpretation.kpick_index' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NIT_CommonInterpretation.kpick_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NIT_CommonInterpretation.window' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NIT_CommonInterpretation.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NIT_generated/NIT_CommonInterpretation.lean:70:1: error: Type mismatch
+  cell.left
+has type
+  (do
+      let product ← FIo_Native.aspis_core.field.QM31.mul (kpick row2 (↑s.1.start % 4)) (kpick row3 (↑s.1.start / 4))
+      Array.update s.2 s.1.start product) =
+    ok after
+but is expected to have type
+  (do
+      let a1 ← (NHI_ScalarDomain.pick w.factors ↑0#usize ⋯).index_usize 2#usize
+      let q ← a1.index_usize (s.1.start &&& 3#usize)
+      let a2 ← (NHI_ScalarDomain.pick w.factors ↑0#usize ⋯).index_usize 3#usize
+      let q1 ← a2.index_usize (s.1.start.wrapping_shr 2#u32)
+      let q2 ← q.mul q1
+      let a3 ← Array.update s.2 s.1.start q2
+      ok (cont (rest, a3))) =
+    ok (cont (rest, 
+...
+dex_usize (s.1.start &&& 3#usize)
+      let a2 ← (NHI_ScalarDomain.pick w.factors ↑0#usize ⋯).index_usize 3#usize
+      let q1 ← a2.index_usize (s.1.start.wrapping_shr 2#u32)
+      let q2 ← q.mul q1
+      let a3 ← Array.update s.2 s.1.start q2
+      ok (cont (rest, a3))) =
+    ok (cont (rest, after))
+NIT_generated/NIT_CommonInterpretation.lean:64:2: warning: This simp argument is unused:
+  NHI_ScalarDomain.index rows 2#usize (by decide)
+
+Hint: Omit it from the simp argument list.
+  simp only [NHI_ScalarDomain.index w.factors 0#usize (by decide),
+     NHI_ScalarDomain.index rows 2̵#̵u̵s̵i̵z̵e̵3̲#̲u̲s̲i̲z̲e̲ (by decide), N̵H̵I̵_̵S̵c̵a̵l̵a̵r̵D̵o̵m̵a̵i̵n̵.̵i̵n̵d̵e̵x̵ ̵r̵o̵w̵s̵ ̵3̵#̵u̵s̵i̵z̵e̵ ̵(̵b̵y̵ ̵d̵e̵c̵i̵d̵e̵)̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NIT_generated/NIT_CommonInterpretation.lean:65:2: warning: This simp argument is unused:
+  NHI_ScalarDomain.index rows 3#usize (by decide)
+
+Hint: Omit it from the simp argument list.
+  simp only [NHI_ScalarDomain.index w.factors 0#usize (by decide),
+     NHI_ScalarDomain.index rows 2#usize (by decide), N̵H̵I̵_̵S̵c̵a̵l̵a̵r̵D̵o̵m̵a̵i̵n̵.̵i̵n̵d̵e̵x̵ ̵r̵o̵w̵s̵ ̵3̵#̵u̵s̵i̵z̵e̵ ̵(̵b̵y̵ ̵d̵e̵c̵i̵d̵e̵)̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NIT_CommonInterpretation.kpick_index' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIT_CommonInterpretation.kpick_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIT_CommonInterpretation.window' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIT_CommonInterpretation.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r11419a51e7294ab39dacc0ce1fabd533.scope; invocation ID: 977c7978926d4dc49adae877eb65dc80
