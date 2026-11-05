@@ -44,7 +44,7 @@ elif kind=='compare':
  for n in sources:files[n]=(E/Path(n).name).read_text()
  command=['NIF_native/NIF_PinDriver']
 elif kind=='audit':
- sources=['NIF_generated/NIF_ProofDriver.lean','NIF_generated/NIF_Driver.lean','NIF_batch.py','NIF_AUDIT_ROOTS.json','NIF_EXPECTED_IMPORTS.jsonl']+(['NIF_POOL_ROOTS.json'] if target.startswith('pool') else [])
+ sources=['NIF_generated/NIF_ProofDriver.lean','NIF_batch.py','NIF_AUDIT_ROOTS.json','NIF_EXPECTED_IMPORTS.jsonl']+(['NIF_POOL_ROOTS.json'] if target.startswith('pool') else [])
  for n in sources:files[n]=(E/Path(n).name).read_text()
  command=['python3','NIF_batch.py',target]
 elif kind in ['export','cleanup']:

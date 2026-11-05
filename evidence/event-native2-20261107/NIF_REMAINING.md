@@ -1,0 +1,24 @@
+# Remaining obligations and budget disposition
+
+Target not yet established; no row promotions. All 80 Kani slots were used:40 positive windows PASS and40 matched controls FAIL. There were no native timeouts or memory kills.22/70 actual Lean compilations (including failed drafts), six capped support scopes and zero extraction were used. L019/L025 failed own input preflight before a compiler/process launch. No unchanged full regression was repeated.
+
+The job stops below80% of its Lean allowance because the independent Lean caller-domain, emitted-decoder, four-field induction and SAME-context interpretation obligations are complete, and the remaining physical producers need native information. Another conditional model wrapper would not provide it. The following is the member-by-member disposition; none is hidden as an added success premise.
+
+| Member | Delivered/reused | Exact remaining obligation; why the remaining Lean budget cannot discharge it alone |
+|---|---|---|
+| opening | NIC K013/014; NIF QueryEntry/EntryFields derive actual q on every bounded index | Native parent must install that SAME proof/index/backing and valid borrowed frame. No missing local numerical lemma. |
+| dots | NIC main/raw/fold/reduction windows; NIF K041-056 and K077-080 decoder, reduction, initialization, final-add and source-window bounds; NIF_DotDomains proves scan domains | Native EbyKDot::push count/checked_q/two private pushes and EbyKDot::finish, plus their SAME q/g/slot orchestration, still need an effect/call-site producer. Successful value induction is not that producer. Additional native one-step assertions/controls are needed. |
+| trace | NIC deployed no-prover certificate; NIF K067-070 actual accumulation trace/conversion windows | Parent occurrence/argument installation remains native. No independent algebra or model no-read law is missing. |
+| geometry | NIC one-row native projection; NFS_PacketRoot.geometry supplies bounds and canonical rows | Enclosing SAME Context and borrowed-return frame installation remains. Equal inverse values do not establish physical effect equality. |
+| circle | NIF K005-012 sums, K021-028 scales, K039/040 arbitrary-prestate Horner; exact frozen expression cover and NIC total same-site domains | The checked local source windows are not yet an enclosing native source-stage/effect association on the parent's actual alpha/dots/inverses. That missing native producer cannot be synthesized from an extra Lean value equality. Do not replay NIC whole-fold timeout shapes. |
+| fields | NIF K001/002 canonical 128 four-call purity; actual model callback range, decoder totality, from_fn induction and SAME Context proved; scanned entry-domain theorem | Selected-domain certificate delivered. Physical parent backing/callback installation remains part of the enclosing native effect join. Generic invalid NFS inputs are not silently restricted. No further decoder arithmetic lemma remains. |
+| line | NIF K013-020 differences/sum; K029-038 scales; K039/040 Horner; NIC total same-site domains | As circle: enclosing native source-stage/effect association and SAME parent carrier installation, rather than another symbolic recurrence proof. |
+| product | NIC K019/020 and total natural-value stub theorem | SAME selected operands at parent; multiplication is never a new Kani arithmetic goal. |
+| double | NIC K003/004 and emitted value law | SAME selected product/canonical domain at parent. No independent mathematical obligation. |
+| one | NIC K001/002 and literal constant | Native parent occurrence installation only. |
+| subtract | NIC K005/006 and value law | SAME doubled operand/constant at parent. No independent mathematical obligation. |
+| accumulate | NIC basis/node/row/flush/tail windows; NIF K057-076 initialization, one outer-basis step, arbitrary-index accessors, traces, count/index/flush orchestration | Native BatchedWeights::push Vec/row frame and the outer callback/control orchestration must be attached to the SAME source invariant/Context, then lifted by existing NFS loop/value/frame induction. The missing native association is not supplied by mark-log or Result equality. |
+
+Constructor abort/fail/div and allocator frames are reused from NIC/NIA by SHA; no independent Lean-only stop arm remains. The larger all-twelve-kind NFS physical effect join is OPEN, therefore the desired concrete TX1 events_from_cuts instance is also OPEN. The existing conditional NIC model driver and all five physical-observer fields keep exactly their prior status. NHU/NHW op9 and parent ordering remain external.
+
+Next deliverable: a native one-step private-dot push/finish effect producer and a native accumulation caller/frame producer, with local records and matched controls; assemble source/effect cuts on the exact parent Context. Do not use whole buffers, native multiplication, static logs, stronger root domains, a successful-child premise or a renamed timeout shape.
