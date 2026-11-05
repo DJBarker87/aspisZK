@@ -1,0 +1,710 @@
+NHU_generated/NHU_VerifyFrame.lean:44:17: error: Tactic `rfl` failed: The left-hand side
+  do
+    let r ← ok (core.result.Result.Ok pre)
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue p => do
+        VerifyPrefix.mark none 0#u8
+        let r1 ← r1_semantic.public_transcript D pub hash p.c1_root
+        let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let (r2, val1) ← r1_wire.begin D p val
+            let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+            match cf2 with
+              | core.ops.control_flow.ControlFlow.Continue val2 => do
+                VerifyPrefix.mark none 1#u8
+                (fun {H} => finish) D pub p val1 val2 none
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified H)
+              (core.convert.FromSame r1_wire.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified H)
+          (core.convert.FromSame r1_wire.Error) residual
+is not definitionally equal to the right-hand side
+  do
+    let status ← ok (core.result.Result.Ok pre)
+    match status with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok value =>
+        (fun pre => do
+            let status ← r1_semantic.public_transcript D pub hash pre.c1_root
+            match status with
+              | core.result.Result.Err e => ok (core.result.Result.Err e)
+              | core.result.Result.Ok value =>
+                (fun initial => do
+                    let (status, after) ← r1_wire.begin D pre initial
+                    match status with
+                      | core.result.Result.Err e => ok (core.result.Result.Err e)
+                      | core.result.Result.Ok value =>
+                        (fun challenges after => (fun {H} => finish) D pub pre after challenges none) value after)
+                  value)
+          value
+
+case ok.Ok.fail
+finish : VerifyPrefix.Finish
+H : Type
+D : aspis_core.Digest32 H
+pub : pool_v1.pair_forest_semantic_terminal.r0.Public
+bytes : Slice U8
+hash : H
+pre : r1_wire.Prefix
+parsed : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre)
+e : Error
+created : r1_semantic.public_transcript D pub hash pre.c1_root = fail e
+⊢ (do
+      let r ← ok (core.result.Result.Ok pre)
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue p => do
+          VerifyPrefix.mark none 0#u8
+          let r1 ← r1_semantic.public_transcript D pub hash p.c1_root
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let (r2, val1) ← r1_wire.begin D p val
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  VerifyPrefix.mark none 1#u8
+                  (fun {H} => finish) D pub p val1 val2 none
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified H)
+            (core.convert.FromSame r1_wire.Error) residual) =
+    do
+    let status ← ok (core.result.Result.Ok pre)
+    match status with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok value =>
+        (fun pre => do
+            let status ← r1_semantic.public_transcript D pub hash pre.c1_root
+            match status with
+              | core.result.Result.Err e => ok (core.result.Result.Err e)
+              | core.result.Result.Ok value =>
+                (fun initial => do
+                    let (status, after) ← r1_wire.begin D pre initial
+                    match status with
+                      | core.result.Result.Err e => ok (core.result.Result.Err e)
+                      | core.result.Result.Ok value =>
+                        (fun challenges after => (fun {H} => finish) D pub pre after challenges none) value after)
+                  value)
+          value
+NHU_generated/NHU_VerifyFrame.lean:45:14: error: Tactic `rfl` failed: The left-hand side
+  do
+    let r ← ok (core.result.Result.Ok pre)
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue p => do
+        VerifyPrefix.mark none 0#u8
+        let r1 ← r1_semantic.public_transcript D pub hash p.c1_root
+        let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let (r2, val1) ← r1_wire.begin D p val
+            let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+            match cf2 with
+              | core.ops.control_flow.ControlFlow.Continue val2 => do
+                VerifyPrefix.mark none 1#u8
+                (fun {H} => finish) D pub p val1 val2 none
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified H)
+              (core.convert.FromSame r1_wire.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified H)
+          (core.convert.FromSame r1_wire.Error) residual
+is not definitionally equal to the right-hand side
+  do
+    let status ← ok (core.result.Result.Ok pre)
+    match status with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok value =>
+        (fun pre => do
+            let status ← r1_semantic.public_transcript D pub hash pre.c1_root
+            match status with
+              | core.result.Result.Err e => ok (core.result.Result.Err e)
+              | core.result.Result.Ok value =>
+                (fun initial => do
+                    let (status, after) ← r1_wire.begin D pre initial
+                    match status with
+                      | core.result.Result.Err e => ok (core.result.Result.Err e)
+                      | core.result.Result.Ok value =>
+                        (fun challenges after => (fun {H} => finish) D pub pre after challenges none) value after)
+                  value)
+          value
+
+case ok.Ok.div
+finish : VerifyPrefix.Finish
+H : Type
+D : aspis_core.Digest32 H
+pub : pool_v1.pair_forest_semantic_terminal.r0.Public
+bytes : Slice U8
+hash : H
+pre : r1_wire.Prefix
+parsed : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre)
+created : r1_semantic.public_transcript D pub hash pre.c1_root = div
+⊢ (do
+      let r ← ok (core.result.Result.Ok pre)
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue p => do
+          VerifyPrefix.mark none 0#u8
+          let r1 ← r1_semantic.public_transcript D pub hash p.c1_root
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let (r2, val1) ← r1_wire.begin D p val
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  VerifyPrefix.mark none 1#u8
+                  (fun {H} => finish) D pub p val1 val2 none
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified H)
+            (core.convert.FromSame r1_wire.Error) residual) =
+    do
+    let status ← ok (core.result.Result.Ok pre)
+    match status with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok value =>
+        (fun pre => do
+            let status ← r1_semantic.public_transcript D pub hash pre.c1_root
+            match status with
+              | core.result.Result.Err e => ok (core.result.Result.Err e)
+              | core.result.Result.Ok value =>
+                (fun initial => do
+                    let (status, after) ← r1_wire.begin D pre initial
+                    match status with
+                      | core.result.Result.Err e => ok (core.result.Result.Err e)
+                      | core.result.Result.Ok value =>
+                        (fun challenges after => (fun {H} => finish) D pub pre after challenges none) value after)
+                  value)
+          value
+NHU_generated/NHU_VerifyFrame.lean:48:18: error: Tactic `rfl` failed: The left-hand side
+  do
+    let r ← ok (core.result.Result.Ok pre)
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue p => do
+        VerifyPrefix.mark none 0#u8
+        let r1 ← r1_semantic.public_transcript D pub hash p.c1_root
+        let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let (r2, val1) ← r1_wire.begin D p val
+            let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+            match cf2 with
+              | core.ops.control_flow.ControlFlow.Continue val2 => do
+                VerifyPrefix.mark none 1#u8
+                (fun {H} => finish) D pub p val1 val2 none
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified H)
+              (core.convert.FromSame r1_wire.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified H)
+          (core.convert.FromSame r1_wire.Error) residual
+is not definitionally equal to the right-hand side
+  do
+    let status ← ok (core.result.Result.Ok pre)
+    match status with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok value =>
+        (fun pre => do
+            let status ← r1_semantic.public_transcript D pub hash pre.c1_root
+            match status with
+              | core.result.Result.Err e => ok (core.result.Result.Err e)
+              | core.result.Result.Ok value =>
+                (fun initial => do
+                    let (status, after) ← r1_wire.begin D pre initial
+                    match status with
+                      | core.result.Result.Err e => ok (core.result.Result.Err e)
+                      | core.result.Result.Ok value =>
+                        (fun challenges after => (fun {H} => finish) D pub pre after challenges none) value after)
+                  value)
+          value
+
+case ok.Ok.ok.Err
+finish : VerifyPrefix.Finish
+H : Type
+D : aspis_core.Digest32 H
+pub : pool_v1.pair_forest_semantic_terminal.r0.Public
+bytes : Slice U8
+hash : H
+pre : r1_wire.Prefix
+parsed : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre)
+e : r1_wire.Error
+created : r1_semantic.public_transcript D pub hash pre.c1_root = ok (core.result.Result.Err e)
+⊢ (do
+      let r ← ok (core.result.Result.Ok pre)
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue p => do
+          VerifyPrefix.mark none 0#u8
+          let r1 ← r1_semantic.public_transcript D pub hash p.c1_root
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let (r2, val1) ← r1_wire.begin D p val
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  VerifyPrefix.mark none 1#u8
+                  (fun {H} => finish) D pub p val1 val2 none
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified H)
+            (core.convert.FromSame r1_wire.Error) residual) =
+    do
+    let status ← ok (core.result.Result.Ok pre)
+    match status with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok value =>
+        (fun pre => do
+            let status ← r1_semantic.public_transcript D pub hash pre.c1_root
+            match status with
+              | core.result.Result.Err e => ok (core.result.Result.Err e)
+              | core.result.Result.Ok value =>
+                (fun initial => do
+                    let (status, after) ← r1_wire.begin D pre initial
+                    match status with
+                      | core.result.Result.Err e => ok (core.result.Result.Err e)
+                      | core.result.Result.Ok value =>
+                        (fun challenges after => (fun {H} => finish) D pub pre after challenges none) value after)
+                  value)
+          value
+NHU_generated/NHU_VerifyFrame.lean:51:21: error: Tactic `rfl` failed: The left-hand side
+  do
+    let r ← ok (core.result.Result.Ok pre)
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue p => do
+        VerifyPrefix.mark none 0#u8
+        let r1 ← r1_semantic.public_transcript D pub hash p.c1_root
+        let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let (r2, val1) ← r1_wire.begin D p val
+            let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+            match cf2 with
+              | core.ops.control_flow.ControlFlow.Continue val2 => do
+                VerifyPrefix.mark none 1#u8
+                (fun {H} => finish) D pub p val1 val2 none
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified H)
+              (core.convert.FromSame r1_wire.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified H)
+          (core.convert.FromSame r1_wire.Error) residual
+is not definitionally equal to the right-hand side
+  do
+    let status ← ok (core.result.Result.Ok pre)
+    match status with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok value =>
+        (fun pre => do
+            let status ← r1_semantic.public_transcript D pub hash pre.c1_root
+            match status with
+              | core.result.Result.Err e => ok (core.result.Result.Err e)
+              | core.result.Result.Ok value =>
+                (fun initial => do
+                    let (status, after) ← r1_wire.begin D pre initial
+                    match status with
+                      | core.result.Result.Err e => ok (core.result.Result.Err e)
+                      | core.result.Result.Ok value =>
+                        (fun challenges after => (fun {H} => finish) D pub pre after challenges none) value after)
+                  value)
+          value
+
+case ok.Ok.ok.Ok.fail
+finish : VerifyPrefix.Finish
+H : Type
+D : aspis_core.Digest32 H
+pub : pool_v1.pair_forest_semantic_terminal.r0.Public
+bytes : Slice U8
+hash : H
+pre : r1_wire.Prefix
+parsed : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre)
+initial : r1_wire.SemanticTranscript H
+created : r1_semantic.public_transcript D pub hash pre.c1_root = ok (core.result.Result.Ok initial)
+e : Error
+begun : r1_wire.begin D pre initial = fail e
+⊢ (do
+      let r ← ok (core.result.Result.Ok pre)
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue p => do
+          VerifyPrefix.mark none 0#u8
+          let r1 ← r1_semantic.public_transcript D pub hash p.c1_root
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let (r2, val1) ← r1_wire.begin D p val
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  VerifyPrefix.mark none 1#u8
+                  (fun {H} => finish) D pub p val1 val2 none
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified H)
+            (core.convert.FromSame r1_wire.Error) residual) =
+    do
+    let status ← ok (core.result.Result.Ok pre)
+    match status with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok value =>
+        (fun pre => do
+            let status ← r1_semantic.public_transcript D pub hash pre.c1_root
+            match status with
+              | core.result.Result.Err e => ok (core.result.Result.Err e)
+              | core.result.Result.Ok value =>
+                (fun initial => do
+                    let (status, after) ← r1_wire.begin D pre initial
+                    match status with
+                      | core.result.Result.Err e => ok (core.result.Result.Err e)
+                      | core.result.Result.Ok value =>
+                        (fun challenges after => (fun {H} => finish) D pub pre after challenges none) value after)
+                  value)
+          value
+NHU_generated/NHU_VerifyFrame.lean:52:18: error: Tactic `rfl` failed: The left-hand side
+  do
+    let r ← ok (core.result.Result.Ok pre)
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue p => do
+        VerifyPrefix.mark none 0#u8
+        let r1 ← r1_semantic.public_transcript D pub hash p.c1_root
+        let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let (r2, val1) ← r1_wire.begin D p val
+            let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+            match cf2 with
+              | core.ops.control_flow.ControlFlow.Continue val2 => do
+                VerifyPrefix.mark none 1#u8
+                (fun {H} => finish) D pub p val1 val2 none
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified H)
+              (core.convert.FromSame r1_wire.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified H)
+          (core.convert.FromSame r1_wire.Error) residual
+is not definitionally equal to the right-hand side
+  do
+    let status ← ok (core.result.Result.Ok pre)
+    match status with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok value =>
+        (fun pre => do
+            let status ← r1_semantic.public_transcript D pub hash pre.c1_root
+            match status with
+              | core.result.Result.Err e => ok (core.result.Result.Err e)
+              | core.result.Result.Ok value =>
+                (fun initial => do
+                    let (status, after) ← r1_wire.begin D pre initial
+                    match status with
+                      | core.result.Result.Err e => ok (core.result.Result.Err e)
+                      | core.result.Result.Ok value =>
+                        (fun challenges after => (fun {H} => finish) D pub pre after challenges none) value after)
+                  value)
+          value
+
+case ok.Ok.ok.Ok.div
+finish : VerifyPrefix.Finish
+H : Type
+D : aspis_core.Digest32 H
+pub : pool_v1.pair_forest_semantic_terminal.r0.Public
+bytes : Slice U8
+hash : H
+pre : r1_wire.Prefix
+parsed : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre)
+initial : r1_wire.SemanticTranscript H
+created : r1_semantic.public_transcript D pub hash pre.c1_root = ok (core.result.Result.Ok initial)
+begun : r1_wire.begin D pre initial = div
+⊢ (do
+      let r ← ok (core.result.Result.Ok pre)
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue p => do
+          VerifyPrefix.mark none 0#u8
+          let r1 ← r1_semantic.public_transcript D pub hash p.c1_root
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let (r2, val1) ← r1_wire.begin D p val
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  VerifyPrefix.mark none 1#u8
+                  (fun {H} => finish) D pub p val1 val2 none
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified H)
+            (core.convert.FromSame r1_wire.Error) residual) =
+    do
+    let status ← ok (core.result.Result.Ok pre)
+    match status with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok value =>
+        (fun pre => do
+            let status ← r1_semantic.public_transcript D pub hash pre.c1_root
+            match status with
+              | core.result.Result.Err e => ok (core.result.Result.Err e)
+              | core.result.Result.Ok value =>
+                (fun initial => do
+                    let (status, after) ← r1_wire.begin D pre initial
+                    match status with
+                      | core.result.Result.Err e => ok (core.result.Result.Err e)
+                      | core.result.Result.Ok value =>
+                        (fun challenges after => (fun {H} => finish) D pub pre after challenges none) value after)
+                  value)
+          value
+NHU_generated/NHU_VerifyFrame.lean:53:72: error: Tactic `rfl` failed: The left-hand side
+  do
+    let r ← ok (core.result.Result.Ok pre)
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue p => do
+        VerifyPrefix.mark none 0#u8
+        let r1 ← r1_semantic.public_transcript D pub hash p.c1_root
+        let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let (r2, val1) ← r1_wire.begin D p val
+            let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+            match cf2 with
+              | core.ops.control_flow.ControlFlow.Continue val2 => do
+                VerifyPrefix.mark none 1#u8
+                (fun {H} => finish) D pub p val1 val2 none
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified H)
+              (core.convert.FromSame r1_wire.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified H)
+          (core.convert.FromSame r1_wire.Error) residual
+is not definitionally equal to the right-hand side
+  do
+    let status ← ok (core.result.Result.Ok pre)
+    match status with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok value =>
+        (fun pre => do
+            let status ← r1_semantic.public_transcript D pub hash pre.c1_root
+            match status with
+              | core.result.Result.Err e => ok (core.result.Result.Err e)
+              | core.result.Result.Ok value =>
+                (fun initial => do
+                    let (status, after) ← r1_wire.begin D pre initial
+                    match status with
+                      | core.result.Result.Err e => ok (core.result.Result.Err e)
+                      | core.result.Result.Ok value =>
+                        (fun challenges after => (fun {H} => finish) D pub pre after challenges none) value after)
+                  value)
+          value
+
+case ok.Ok.ok.Ok.ok.Ok
+finish : VerifyPrefix.Finish
+H : Type
+D : aspis_core.Digest32 H
+pub : pool_v1.pair_forest_semantic_terminal.r0.Public
+bytes : Slice U8
+hash : H
+pre : r1_wire.Prefix
+parsed : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre)
+initial : r1_wire.SemanticTranscript H
+created : r1_semantic.public_transcript D pub hash pre.c1_root = ok (core.result.Result.Ok initial)
+after : r1_wire.SemanticTranscript H
+a✝ : r1_wire.Challenges
+begun : r1_wire.begin D pre initial = ok (core.result.Result.Ok a✝, after)
+⊢ (do
+      let r ← ok (core.result.Result.Ok pre)
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue p => do
+          VerifyPrefix.mark none 0#u8
+          let r1 ← r1_semantic.public_transcript D pub hash p.c1_root
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let (r2, val1) ← r1_wire.begin D p val
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  VerifyPrefix.mark none 1#u8
+                  (fun {H} => finish) D pub p val1 val2 none
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified H)
+            (core.convert.FromSame r1_wire.Error) residual) =
+    do
+    let status ← ok (core.result.Result.Ok pre)
+    match status with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok value =>
+        (fun pre => do
+            let status ← r1_semantic.public_transcript D pub hash pre.c1_root
+            match status with
+              | core.result.Result.Err e => ok (core.result.Result.Err e)
+              | core.result.Result.Ok value =>
+                (fun initial => do
+                    let (status, after) ← r1_wire.begin D pre initial
+                    match status with
+                      | core.result.Result.Err e => ok (core.result.Result.Err e)
+                      | core.result.Result.Ok value =>
+                        (fun challenges after => (fun {H} => finish) D pub pre after challenges none) value after)
+                  value)
+          value
+NHU_generated/NHU_VerifyFrame.lean:53:72: error: Tactic `rfl` failed: The left-hand side
+  do
+    let r ← ok (core.result.Result.Ok pre)
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue p => do
+        VerifyPrefix.mark none 0#u8
+        let r1 ← r1_semantic.public_transcript D pub hash p.c1_root
+        let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let (r2, val1) ← r1_wire.begin D p val
+            let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+            match cf2 with
+              | core.ops.control_flow.ControlFlow.Continue val2 => do
+                VerifyPrefix.mark none 1#u8
+                (fun {H} => finish) D pub p val1 val2 none
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified H)
+              (core.convert.FromSame r1_wire.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified H)
+          (core.convert.FromSame r1_wire.Error) residual
+is not definitionally equal to the right-hand side
+  do
+    let status ← ok (core.result.Result.Ok pre)
+    match status with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok value =>
+        (fun pre => do
+            let status ← r1_semantic.public_transcript D pub hash pre.c1_root
+            match status with
+              | core.result.Result.Err e => ok (core.result.Result.Err e)
+              | core.result.Result.Ok value =>
+                (fun initial => do
+                    let (status, after) ← r1_wire.begin D pre initial
+                    match status with
+                      | core.result.Result.Err e => ok (core.result.Result.Err e)
+                      | core.result.Result.Ok value =>
+                        (fun challenges after => (fun {H} => finish) D pub pre after challenges none) value after)
+                  value)
+          value
+
+case ok.Ok.ok.Ok.ok.Err
+finish : VerifyPrefix.Finish
+H : Type
+D : aspis_core.Digest32 H
+pub : pool_v1.pair_forest_semantic_terminal.r0.Public
+bytes : Slice U8
+hash : H
+pre : r1_wire.Prefix
+parsed : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre)
+initial : r1_wire.SemanticTranscript H
+created : r1_semantic.public_transcript D pub hash pre.c1_root = ok (core.result.Result.Ok initial)
+after : r1_wire.SemanticTranscript H
+a✝ : r1_wire.Error
+begun : r1_wire.begin D pre initial = ok (core.result.Result.Err a✝, after)
+⊢ (do
+      let r ← ok (core.result.Result.Ok pre)
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue p => do
+          VerifyPrefix.mark none 0#u8
+          let r1 ← r1_semantic.public_transcript D pub hash p.c1_root
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let (r2, val1) ← r1_wire.begin D p val
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  VerifyPrefix.mark none 1#u8
+                  (fun {H} => finish) D pub p val1 val2 none
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified H)
+            (core.convert.FromSame r1_wire.Error) residual) =
+    do
+    let status ← ok (core.result.Result.Ok pre)
+    match status with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok value =>
+        (fun pre => do
+            let status ← r1_semantic.public_transcript D pub hash pre.c1_root
+            match status with
+              | core.result.Result.Err e => ok (core.result.Result.Err e)
+              | core.result.Result.Ok value =>
+                (fun initial => do
+                    let (status, after) ← r1_wire.begin D pre initial
+                    match status with
+                      | core.result.Result.Err e => ok (core.result.Result.Err e)
+                      | core.result.Result.Ok value =>
+                        (fun challenges after => (fun {H} => finish) D pub pre after challenges none) value after)
+                  value)
+          value
+'AspisR1.NHU_VerifyFrame.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NHU_VerifyFrame.parse_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

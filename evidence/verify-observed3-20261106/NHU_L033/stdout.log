@@ -1,0 +1,15 @@
+def AspisR1.ExtractedMaskTowerBasis.basisWords : AspisR1.ExtractedMaskTowerBasis.WordQM →
+  ℕ → AspisR1.ExtractedMaskTowerBasis.WordQM :=
+fun x coordinate =>
+  match coordinate with
+  | 0 => x
+  | 1 => (AspisR1.ExtractedMaskTowerBasis.iWords x.1, AspisR1.ExtractedMaskTowerBasis.iWords x.2)
+  | 2 => (AspisR1.ExtractedMaskQM31Mul.rWords x.2, x.1)
+  | 3 =>
+    (AspisR1.ExtractedMaskTowerBasis.iWords (AspisR1.ExtractedMaskQM31Mul.rWords x.2),
+      AspisR1.ExtractedMaskTowerBasis.iWords x.1)
+  | x_1 => x
+def AspisR1.ExtractedMaskTowerAdd.wordsQM : AspisR1SelectedMaskProbe.field.QM31 → (ℕ × ℕ) × ℕ × ℕ :=
+fun x => (AspisR1.ExtractedMaskTowerAdd.wordsCM x.c0, AspisR1.ExtractedMaskTowerAdd.wordsCM x.c1)
+def AspisR1.ExtractedMaskTowerAdd.CanonicalQM : AspisR1SelectedMaskProbe.field.QM31 → Prop :=
+fun x => AspisR1.ExtractedMaskTowerAdd.CanonicalCM x.c0 ∧ AspisR1.ExtractedMaskTowerAdd.CanonicalCM x.c1

@@ -1,0 +1,50 @@
+{
+ "status": "PASS",
+ "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "source_path": "crates/aspis-core/src/state_only_hiding.rs",
+ "source_sha256": "cc1039531cfe07518542d386668e9572e3eacf5127e8ec441c32bec20d116cd2",
+ "cuts": [
+  {
+   "stage": "coeff0",
+   "sha256": "6458240ee787c4b6e6611209630c89d1ad9f28178146297992fa85605219657b",
+   "replacements": []
+  },
+  {
+   "stage": "coeff1",
+   "sha256": "070fbc15548cfb9ba2fe1e0e62d0d6ab266df6f643af4198195545337becd363",
+   "replacements": []
+  },
+  {
+   "stage": "horner",
+   "sha256": "0741c8e730c262e4a178ca85c1ce7125a13085a2b0bd352a10db1fefc8b00b19",
+   "replacements": [
+    [
+     "prepared_linear.mul(shared)",
+     "prepared_cut(prepared_linear,shared,log)"
+    ]
+   ]
+  },
+  {
+   "stage": "tail",
+   "sha256": "095b143288fb016e68004529f992b573b304a01e94d6c11f1af3d2df311e0f7f",
+   "replacements": [
+    [
+     "QM31::ONE\n            .add(mask_power_26(explicit_linear))\n            .mul(explicit_g)",
+     "multiply_tail(QM31::ONE.add(power_tail(explicit_linear,log)),explicit_g,log)"
+    ]
+   ]
+  }
+ ],
+ "root_body_sha256": "184cdadbad1ee93898a9387abfa015a22e3e48181bf6b638133796575a225133",
+ "opening_sha256": "57521fdfdd70aff040386c0fc5ac1e8151545103f1021f0123194cf11e8818a9",
+ "opening_erased_sha256": "57521fdfdd70aff040386c0fc5ac1e8151545103f1021f0123194cf11e8818a9",
+ "setup_sha256": "ce3dc9bc8965c6a90100c3b3e1fa5d9949a34a3139e17ecc4e6b92f8e0ede361",
+ "root_sequence": [
+  "opening",
+  "coeff0 loop(16)",
+  "coeff1 loop(10)",
+  "setup",
+  "horner loop(26)",
+  "tail"
+ ]
+}

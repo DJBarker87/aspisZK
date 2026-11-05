@@ -1,0 +1,31 @@
+{
+ "status": "PASS",
+ "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "source_path": "crates/aspis-core/src/state_only_hiding.rs",
+ "source_sha256": "cc1039531cfe07518542d386668e9572e3eacf5127e8ec441c32bec20d116cd2",
+ "body_sha256": "9baa29a0b5c999df8fb6f78802caa39cf213a793c2ee5fe8a900d66948a50f68",
+ "erased_sha256": "9baa29a0b5c999df8fb6f78802caa39cf213a793c2ee5fe8a900d66948a50f68",
+ "replacements": [
+  [
+   "value.square()",
+   "square_cut(value, log)"
+  ],
+  [
+   "x2.square()",
+   "square_cut(x2, log)"
+  ],
+  [
+   "x4.square()",
+   "square_cut(x4, log)"
+  ],
+  [
+   "x8.square()",
+   "square_cut(x8, log)"
+  ],
+  [
+   "x16.mul(x8).mul(x2)",
+   "{ let x24 = multiply_cut(x16,x8,log); multiply_cut(x24,x2,log) }"
+  ]
+ ],
+ "copy": "No caller code or arithmetic result assertion is inserted into the source cut; domain assertions/log updates belong only to callees"
+}

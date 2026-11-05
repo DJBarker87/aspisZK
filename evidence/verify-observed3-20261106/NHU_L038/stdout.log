@@ -1,0 +1,205 @@
+NHU_generated/NHU_TransitionStep.lean:39:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if level = carry then ?m.101 else ?m.102
+in the target expression
+  (let (o, iter1) := (some level, r)
+    match o with
+    | none => ok (core.result.Result.Ok ())
+    | some level =>
+      if level = carry then
+        if carry < 20#usize then next iter1
+        else do
+          let (iter2, expected) ←
+            if level < carry then do
+                let expected1 ← empty_root level
+                ok (iter1, expected1)
+              else do
+                let i ← p.transition.live_snapshot.next_pair_index >>> level
+                let i1 ← lift (i &&& 1#u64)
+                let a ← if i1 = 0#u64 then empty_root level else p.transition.live_snapshot.frontier.index_usize level
+                ok (iter1, a)
+          let a ← p.transition.candidate_afterstate.next_frontier.index_usize level
+          let b ← core.array.equality.PartialEqArray.ne field.M31.Insts.CoreCmpPartialEqM31 a expected
+          if b = true then ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidAppendTransition)
+            else next iter2
+      else do
+        let (iter2, expected) ←
+          if level < carry then do
+              let expected1 ← empty_root level
+              ok (iter1, expected1)
+            else do
+              let i ← p.transition.live_snapshot.next_pair_index >>> level
+              let i1 ← lift (i &&& 1#u64)
+              let a ← if i1 = 0#u64 then empty_root level else p.transition.live_snapshot.frontier.index_usize level
+              ok (iter1, a)
+        let a ← p.transition.candidate_afterstate.next_frontier.index_usize level
+        let b ← core.array.equality.PartialEqArray.ne field.M31.Insts.CoreCmpPartialEqM31 a expected
+        if b = true then ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidAppendTransition)
+          else next iter2) =
+    let (o, r) := (some level, r)
+    match o with
+    | none => ok (core.result.Result.Ok ())
+    | some level =>
+      if level = carry ∧ carry < 20#usize then next r
+      else do
+        let want ← expected p level carry
+        let got ← p.transition.candidate_afterstate.next_frontier.index_usize level
+        let bad ← core.array.equality.PartialEqArray.ne field.M31.Insts.CoreCmpPartialEqM31 got want
+        if bad = true then ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidAppendTransition)
+          else next r
+
+case pos
+p : Public
+iter : R
+carry : Usize
+next : R → Result RR
+r : core.ops.range.Range (UScalar UScalarTy.Usize)
+level : UScalar UScalarTy.Usize
+same : level = carry
+⊢ (let (o, iter1) := (some level, r)
+    match o with
+    | none => ok (core.result.Result.Ok ())
+    | some level =>
+      if level = carry then
+        if carry < 20#usize then next iter1
+        else do
+          let (iter2, expected) ←
+            if level < carry then do
+                let expected1 ← empty_root level
+                ok (iter1, expected1)
+              else do
+                let i ← p.transition.live_snapshot.next_pair_index >>> level
+                let i1 ← lift (i &&& 1#u64)
+                let a ← if i1 = 0#u64 then empty_root level else p.transition.live_snapshot.frontier.index_usize level
+                ok (iter1, a)
+          let a ← p.transition.candidate_afterstate.next_frontier.index_usize level
+          let b ← core.array.equality.PartialEqArray.ne field.M31.Insts.CoreCmpPartialEqM31 a expected
+          if b = true then ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidAppendTransition)
+            else next iter2
+      else do
+        let (iter2, expected) ←
+          if level < carry then do
+              let expected1 ← empty_root level
+              ok (iter1, expected1)
+            else do
+              let i ← p.transition.live_snapshot.next_pair_index >>> level
+              let i1 ← lift (i &&& 1#u64)
+              let a ← if i1 = 0#u64 then empty_root level else p.transition.live_snapshot.frontier.index_usize level
+              ok (iter1, a)
+        let a ← p.transition.candidate_afterstate.next_frontier.index_usize level
+        let b ← core.array.equality.PartialEqArray.ne field.M31.Insts.CoreCmpPartialEqM31 a expected
+        if b = true then ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidAppendTransition)
+          else next iter2) =
+    let (o, r) := (some level, r)
+    match o with
+    | none => ok (core.result.Result.Ok ())
+    | some level =>
+      if level = carry ∧ carry < 20#usize then next r
+      else do
+        let want ← expected p level carry
+        let got ← p.transition.candidate_afterstate.next_frontier.index_usize level
+        let bad ← core.array.equality.PartialEqArray.ne field.M31.Insts.CoreCmpPartialEqM31 got want
+        if bad = true then ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidAppendTransition)
+          else next r
+NHU_generated/NHU_TransitionStep.lean:45:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if level = carry then ?m.106 else ?m.107
+in the target expression
+  (let (o, iter1) := (some level, r)
+    match o with
+    | none => ok (core.result.Result.Ok ())
+    | some level =>
+      if level = carry then
+        if carry < 20#usize then next iter1
+        else do
+          let (iter2, expected) ←
+            if level < carry then do
+                let expected1 ← empty_root level
+                ok (iter1, expected1)
+              else do
+                let i ← p.transition.live_snapshot.next_pair_index >>> level
+                let i1 ← lift (i &&& 1#u64)
+                let a ← if i1 = 0#u64 then empty_root level else p.transition.live_snapshot.frontier.index_usize level
+                ok (iter1, a)
+          let a ← p.transition.candidate_afterstate.next_frontier.index_usize level
+          let b ← core.array.equality.PartialEqArray.ne field.M31.Insts.CoreCmpPartialEqM31 a expected
+          if b = true then ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidAppendTransition)
+            else next iter2
+      else do
+        let (iter2, expected) ←
+          if level < carry then do
+              let expected1 ← empty_root level
+              ok (iter1, expected1)
+            else do
+              let i ← p.transition.live_snapshot.next_pair_index >>> level
+              let i1 ← lift (i &&& 1#u64)
+              let a ← if i1 = 0#u64 then empty_root level else p.transition.live_snapshot.frontier.index_usize level
+              ok (iter1, a)
+        let a ← p.transition.candidate_afterstate.next_frontier.index_usize level
+        let b ← core.array.equality.PartialEqArray.ne field.M31.Insts.CoreCmpPartialEqM31 a expected
+        if b = true then ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidAppendTransition)
+          else next iter2) =
+    let (o, r) := (some level, r)
+    match o with
+    | none => ok (core.result.Result.Ok ())
+    | some level =>
+      if level = carry ∧ carry < 20#usize then next r
+      else do
+        let want ← expected p level carry
+        let got ← p.transition.candidate_afterstate.next_frontier.index_usize level
+        let bad ← core.array.equality.PartialEqArray.ne field.M31.Insts.CoreCmpPartialEqM31 got want
+        if bad = true then ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidAppendTransition)
+          else next r
+
+case neg
+p : Public
+iter : R
+carry : Usize
+next : R → Result RR
+r : core.ops.range.Range (UScalar UScalarTy.Usize)
+level : UScalar UScalarTy.Usize
+same : ¬level = carry
+⊢ (let (o, iter1) := (some level, r)
+    match o with
+    | none => ok (core.result.Result.Ok ())
+    | some level =>
+      if level = carry then
+        if carry < 20#usize then next iter1
+        else do
+          let (iter2, expected) ←
+            if level < carry then do
+                let expected1 ← empty_root level
+                ok (iter1, expected1)
+              else do
+                let i ← p.transition.live_snapshot.next_pair_index >>> level
+                let i1 ← lift (i &&& 1#u64)
+                let a ← if i1 = 0#u64 then empty_root level else p.transition.live_snapshot.frontier.index_usize level
+                ok (iter1, a)
+          let a ← p.transition.candidate_afterstate.next_frontier.index_usize level
+          let b ← core.array.equality.PartialEqArray.ne field.M31.Insts.CoreCmpPartialEqM31 a expected
+          if b = true then ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidAppendTransition)
+            else next iter2
+      else do
+        let (iter2, expected) ←
+          if level < carry then do
+              let expected1 ← empty_root level
+              ok (iter1, expected1)
+            else do
+              let i ← p.transition.live_snapshot.next_pair_index >>> level
+              let i1 ← lift (i &&& 1#u64)
+              let a ← if i1 = 0#u64 then empty_root level else p.transition.live_snapshot.frontier.index_usize level
+              ok (iter1, a)
+        let a ← p.transition.candidate_afterstate.next_frontier.index_usize level
+        let b ← core.array.equality.PartialEqArray.ne field.M31.Insts.CoreCmpPartialEqM31 a expected
+        if b = true then ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidAppendTransition)
+          else next iter2) =
+    let (o, r) := (some level, r)
+    match o with
+    | none => ok (core.result.Result.Ok ())
+    | some level =>
+      if level = carry ∧ carry < 20#usize then next r
+      else do
+        let want ← expected p level carry
+        let got ← p.transition.candidate_afterstate.next_frontier.index_usize level
+        let bad ← core.array.equality.PartialEqArray.ne field.M31.Insts.CoreCmpPartialEqM31 got want
+        if bad = true then ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidAppendTransition)
+          else next r
+'AspisR1.NHU_TransitionStep.association' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

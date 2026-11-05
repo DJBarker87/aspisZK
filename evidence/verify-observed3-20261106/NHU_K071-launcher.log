@@ -1,0 +1,50 @@
+{"attempt": "NHU_K071", "exit_status": 1, "wall_seconds": 28.0868010930717, "peak_rss_kib": "1021296", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-verify-observed3-20261106/NHU_src/crates/aspis-core)
+warning: unexpected `cfg` condition name: `NHU_bad_i`
+   --> crates/aspis-core/src/state_only_hiding.rs:438:25
+    |
+438 | #[cfg_attr(all(kani,not(NHU_bad_i)), kani::ensures(|result| *result==NHU_native::NHU_ref_i(value)))]
+    |                         ^^^^^^^^^
+    |
+    = help: expected names are: `docsrs`, `feature`, `kani`, and `test` and 31 more
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+            
+...
+static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: creating a shared reference to mutable static
+   --> crates/aspis-statement/src/../../../tools/r1-builder-reference/poseidon.rs:132:20
+    |
+132 |         assert_eq!(REFERENCE_CALL, 4);
+    |                    ^^^^^^^^^^^^^^ shared reference to mutable static
+    |
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 4.37s
+Checking harness pool_v1::pair_forest_semantic_terminal::NHU_native::NHU_expand_prefix64...
+
+VERIFICATION RESULT:
+ ** 1 of 270 failed (3 unreachable)
+Failed Checks: assertion failed: out.is_some() == ((remaining > 0) ^ cfg!(NHU_invert))
+ File: "crates/aspis-statement/src/pool_v1/NHU_expand_split.rs", line 6, in pool_v1::pair_forest_semantic_terminal::NHU_native::NHU_expand_prefix64
+
+VERIFICATION:- FAILED
+Verification Time: 21.313812s
+
+Manual Harness Summary:
+Verification failed for - pool_v1::pair_forest_semantic_terminal::NHU_native::NHU_expand_prefix64
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-ra8023bc76ec7495a805e9733779655b8.scope; invocation ID: 9e0ec7ea47914c92943106135467effb

@@ -1,0 +1,23 @@
+import NHG_COMBINED_IMPORT
+import RPv_FJb_WideSum4
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result WP
+namespace AspisR1.NHU_U64Product
+abbrev P2 : Nat := 4611686009837453316
+abbrev wide := FJb_WideSum4.wide
+
+def product (a b : U32) : Result U64 := wide a * wide b
+
+theorem result (a b : U32) (ha : a.val<2147483647) (hb : b.val<2147483647) :
+ ∃ out,product a b=ok out ∧ out.val=a.val*b.val ∧ out.val≤P2 := by
+ have bound : a.val*b.val≤P2 := Nat.mul_le_mul (by omega) (by omega)
+ have spec : (wide a * wide b : Result U64) ⦃ out=>out.val=(wide a).val*(wide b).val ⦄ := by
+  apply UScalar.mul_spec
+  simp only [FJb_WideSum4.wide_val]
+  scalar_tac
+ obtain ⟨out,call,value⟩:=WP.spec_imp_exists spec
+ refine ⟨out,call,?_,?_⟩
+ · simpa only [FJb_WideSum4.wide_val] using value
+ · simpa only [value,FJb_WideSum4.wide_val] using bound
+#print axioms result
+end AspisR1.NHU_U64Product

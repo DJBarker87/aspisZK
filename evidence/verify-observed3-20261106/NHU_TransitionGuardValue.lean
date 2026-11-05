@@ -1,0 +1,32 @@
+import NHU_TransitionExpected
+import NHU_TransitionGuard
+import NHU_TransitionNe
+set_option autoImplicit false
+noncomputable section
+open Aeneas Aeneas.Std Result
+namespace AspisR1.NHU_TransitionGuardValue
+open NHU_TransitionCut NHU_TransitionStep NHU_TransitionGuard
+attribute [local instance] Classical.propDecidable
+
+theorem result (p : Public) (level carry : Usize) (inside : level.val<20) :
+ ∃ want got,expected p level carry=ok want ∧
+ Array.index_usize p.transition.candidate_afterstate.next_frontier level=ok got ∧
+ guard p level carry=ok (if level=carry ∧ carry<20#usize then .Ok ()
+ else if got=want then .Ok () else .Err .InvalidAppendTransition) := by
+ obtain ⟨want,call⟩:=NHU_TransitionExpected.result p level carry inside
+ have gotCall:=ExtractedMaskHornerStep.array_index_usize_ok p.transition.candidate_afterstate.next_frontier level inside
+ refine ⟨want,_,call,gotCall,?_⟩
+ unfold NHU_TransitionGuard.guard check
+ by_cases skip : level=carry ∧ carry<20#usize
+ · rw [if_pos skip,if_pos skip]
+ · rw [if_neg skip,if_neg skip,call,bind_tc_ok,gotCall,bind_tc_ok,NHU_TransitionNe.result,bind_tc_ok]
+   split <;> simp_all
+
+theorem total (p : Public) (level carry : Usize) (inside : level.val<20) :
+ ∃ status,guard p level carry=ok status := by
+ obtain ⟨want,got,_,_,call⟩:=result p level carry inside
+ exact ⟨_,call⟩
+#print axioms result
+#print axioms total
+end AspisR1.NHU_TransitionGuardValue
+end

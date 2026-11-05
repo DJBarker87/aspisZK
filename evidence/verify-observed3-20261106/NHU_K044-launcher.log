@@ -1,0 +1,64 @@
+{"attempt": "NHU_K044", "exit_status": 1, "wall_seconds": 97.28134693508036, "peak_rss_kib": "2818340", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-verify-observed3-20261106/NHU_src/crates/aspis-core)
+warning: unexpected `cfg` condition name: `NHU_bad_i`
+   --> crates/aspis-core/src/state_only_hiding.rs:438:25
+    |
+438 | #[cfg_attr(all(kani,not(NHU_bad_i)), kani::ensures(|result| *result==NHU_native::NHU_ref_i(value)))]
+    |                         ^^^^^^^^^
+    |
+    = help: expected names are: `docsrs`, `feature`, `kani`, and `test` and 31 more
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+            
+...
+ime Solver: 1.34666s
+Runtime decision procedure: 3.54086s
+Running propositional reduction
+Solving with CaDiCaL 2.0.0
+4091477 variables, 4831126 clauses
+SAT checker: instance is SATISFIABLE
+Runtime Solver: 0.404489s
+Runtime decision procedure: 0.502753s
+Running propositional reduction
+Solving with CaDiCaL 2.0.0
+4091478 variables, 4831127 clauses
+SAT checker: instance is SATISFIABLE
+Runtime Solver: 1.05533s
+Runtime decision procedure: 1.10357s
+Running propositional reduction
+Solving with CaDiCaL 2.0.0
+4091479 variables, 4831128 clauses
+SAT checker: instance is SATISFIABLE
+Runtime Solver: 1.04042s
+Runtime decision procedure: 1.06854s
+Running propositional reduction
+Solving with CaDiCaL 2.0.0
+4091480 variables, 4831129 clauses
+SAT checker: instance is SATISFIABLE
+Runtime Solver: 0.694864s
+Runtime decision procedure: 0.724179s
+Running propositional reduction
+Solving with CaDiCaL 2.0.0
+4091481 variables, 4831130 clauses
+SAT checker: instance is SATISFIABLE
+Runtime Solver: 0.661117s
+Runtime decision procedure: 0.690775s
+Running propositional reduction
+Solving with CaDiCaL 2.0.0
+4091482 variables, 4831131 clauses
+SAT checker: instance is UNSATISFIABLE
+Runtime Solver: 1.26618s
+Runtime decision procedure: 1.28975s
+
+CBMC failed
+VERIFICATION:- FAILED
+CBMC timed out. You may want to rerun your proof with a larger timeout or use stubbing to reduce the size of the code the verifier reasons about.
+
+The concrete playback feature did not generate unit tests, but there were failing harnesses. Please file a bug report at https://github.com/model-checking/kani/issues/new?labels=bug&template=bug_report.md
+Manual Harness Summary:
+Verification failed for - pool_v1::pair_forest_semantic_terminal::NHU_native::NHU_transition_step
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r72b4728e3bdd4e3b8766ac273aa98540.scope; invocation ID: f11e7ad25bbf4c8a934df6b8a94ba6f6

@@ -1,0 +1,21 @@
+# NHU admitted bridges and exclusions
+
+NHU_validate2.py passes the original stage1 validator unchanged through its immutable6a1680084dc snapshot, calls the inherited NHG validator read-only, then adds native/snapshot/lock/graph/feature/control/model/ax2/NFX/export checks. Twelve new denial mutations are rejected; prior denial/fixture checks remain. NHU_CLOSED.json is the admitted11-row packet, NHU_EDGES.json records10 internal SAME-domain associations. Root137, finish136 and prepare op9 remain OPEN.
+
+| Rows | Exact bridge evidence |
+|---|---|
+|071/074/243|Actual frozen immutable helper proof_for_contract/reference pairs031/032,035/036,037/038, empty modifies; NHU_MaskHelpers, NHU_Tower/RefWords/RefCase1/2/3/TowerPacket and NHU_Lift. cm_r033/034 supports the tower reference; row072 was already CLOSED and gets no double credit. Ordinary body checks are support only.|
+|073|Power26 source cut010/011 logs the exact four-square/two-product chain; NHU_Power.source/result/domains supplies complete emitted natural exponent and every canonical intermediate.|
+|075|Reverse-step012/013 and suffix014/015, with original ten-point seed/recurrence and scalar laws in NHU_Linears; complete emitted result, not one accepted fixture.|
+|076|Opening024/025 preserves SAME point and returned linears; coefficient016/017 and018/019, setup026/027, one Horner step020/021, final022/023. NHU_Mask.result/adopted and retained coefficient/Horner/linear inductions close all internal domains on canonical c1/mask/g/point; no finish caller instance is claimed.|
+|130|Deployed None source no-op reclassification permitted by(z)(1); NHU_Mark result/frame/effects, source identity/denials and retained NEF certificate. No native observer/fn-pointer pass.|
+|230|N2/12/16/17 source windows045–052, active/exhausted actual RangeInclusive state, full selected-cell/other-cell frame and exact lanes. NHU_Preweighted removes the old success premise using totality, with pointwise contribution, frames and caller intervals.|
+|248|Source-record055/056, exact SAME selectors/range0..57 and low16 copy; NHU_PoseidonSelectors bounds/source/result with CLOSED sum_high262. Native domain includes canonical high AND low.|
+|322|Opaque integer-product/reducer068/069 and Native bounded additions; NHU_U64Product, InterpolationRaw and Interpolation prove emitted casts/products/sum/modulo totality and exact values. No multiplication in Kani.|
+|326|Three-call060/061; NHU_Pow5 source/result/domains reuses emitted total square and product laws, exact exponent5.|
+
+All source fissions are generated from frozen4bb3b3f5 with reverse-erasure assertions and hashes. They are helper-stage native cuts. No hand-staged Lean root or fresh reference/root extraction is claimed. The current native graph/lock gate runs before EVERY attempt, offline, under deployed core/statement features; post-lock hashes remain frozen. Exact KMX patch and matched corruption controls are required by admission. Logs and oracle state are LOCAL records, no writable static and no function-pointer data.
+
+Support, not extra CLOSED rows: N33 shared packing053/054 + factoring algebra lacks optimized emitted/enclosing association; expansion N16 step057/058 and N64 prefix070/071,left072/073,right074/075,initialization076–079 + KMX frame/tensor packet still lack native OUTER association. Native transition header039/040 and empty/skip partitions062/063,065/066 do not replace the generic failed/timeout step. NHU_TransitionTotal proves total emitted execution for arbitrary typed public, with exact raw comparisons/guards/finite replay, but is not a native bridge. Claims ghost initialization/outcome laws do not interpret Box ownership, allocator or cleanup.
+
+Admission L075 imports directly on NGK_COMBINED_IMPORT with NHG/NHN and RPx; headline and all new top theorems have standard #print axioms. L076–082 raw-walk all79 new roots with collect equality; stage1's six roots are reused. Own calibration L021 matches all8 fixture outcomes. Final NFX L083 scans13832 modules, zero defects. L084 retains40 helper/combined modules (3103240 bytes) and hashes30425 selected objects; no full dependency rebuild. P6/D188 option-A remains RECLASSIFICATION, never trust removal. See NHU_TRUST.md.

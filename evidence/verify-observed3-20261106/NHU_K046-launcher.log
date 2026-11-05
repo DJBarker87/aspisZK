@@ -1,0 +1,49 @@
+{"attempt": "NHU_K046", "exit_status": 1, "wall_seconds": 28.35610438720323, "peak_rss_kib": "1752168", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-verify-observed3-20261106/NHU_src/crates/aspis-core)
+warning: unexpected `cfg` condition name: `NHU_bad_i`
+   --> crates/aspis-core/src/state_only_hiding.rs:438:25
+    |
+438 | #[cfg_attr(all(kani,not(NHU_bad_i)), kani::ensures(|result| *result==NHU_native::NHU_ref_i(value)))]
+    |                         ^^^^^^^^^
+    |
+    = help: expected names are: `docsrs`, `feature`, `kani`, and `test` and 31 more
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+            
+...
+d references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: creating a shared reference to mutable static
+   --> crates/aspis-statement/src/../../../tools/r1-builder-reference/poseidon.rs:132:20
+    |
+132 |         assert_eq!(REFERENCE_CALL, 4);
+    |                    ^^^^^^^^^^^^^^ shared reference to mutable static
+    |
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 2.59s
+Checking harness pool_v1::pair_forest_semantic_terminal::NHU_native::NHU_preweighted_2...
+
+VERIFICATION RESULT:
+ ** 1 of 537 failed (18 unreachable)
+Failed Checks: This is a placeholder message; Kani doesn't support message formatted at runtime
+ File: "/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panicking.rs", line 439, in core::panicking::assert_failed_inner
+
+VERIFICATION:- FAILED
+Verification Time: 23.795746s
+
+Manual Harness Summary:
+Verification failed for - pool_v1::pair_forest_semantic_terminal::NHU_native::NHU_preweighted_2
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rbf9914b90a14429b9f728d935977b93e.scope; invocation ID: 14327cff51174a61b7f70d0389fc9cbf
