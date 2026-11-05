@@ -1,0 +1,11 @@
+import NGK_COMBINED_IMPORT
+import NIG_COMBINED_IMPORT
+import NIQ_RawWindows
+import NIQ_AllocationError
+import NIQ_FieldDomains
+import NIQ_ResultEncoding
+import NIQ_PairComposition
+import NIQ_FinishComposition
+set_option autoImplicit false
+#check AspisR1.RPx_Deployed.deployed
+#print axioms AspisR1.RPx_Deployed.deployed

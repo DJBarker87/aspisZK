@@ -9,3 +9,5 @@ Budget: 40 Kani gap cuts, 100 Lean/link/audit, 0 extraction. No attempts launche
 Stage 1: exact cut inventory and record-domain matching. Stage 2: pair composition or explicit failed edge. Stage 3: finish composition or explicit failed edge. Stage 4: combined import/audit and ledger disposition. Commits follow each stage.
 
 Stage2: raw SAME-byte field domains and complete allocator rejection packet compile (L002–L006; standard axioms). New native gap matches: K002/003 allocation error, K005/006 SAME zero64 owner/frame, K007/008 powers7 prefix; K009 exact-KMX negative fails. No row promotion. The full native-record-to-packet interpretation is still OPEN; NIQ_CUTS documents exact missing imported record propositions.
+
+Stage3: L007 NIQ_FinishComposition compiles with standard axioms. All eight verifier errors have injective encoding; outer fail/div retained; exact model equation and first-round Err/fail/div prefixes proved. Full native-record interpretation remains OPEN for both rows; precise post/pre mismatch and absent exported carrier inventory in NIQ_OPEN_EDGE.md / NIQ_INTERFACE_INVENTORY.json. Combined/ax2/NFX audit in progress; no closure claim.
