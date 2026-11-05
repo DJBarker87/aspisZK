@@ -536,3 +536,43 @@ Every emitted source function is listed below. `no local exclusive acquisition` 
 - programs/aspis-pool/src/verifier_dispatch.rs::invoke_freshly_planned_verifier_v1: no local exclusive acquisition; shared=0; accessors=0; CPI=1.
 - programs/aspis-pool/src/verifier_dispatch.rs::dispatch_authenticated_verifier_readonly_with_runtime_v1: no local exclusive acquisition; shared=0; accessors=0; CPI=0.
 - programs/aspis-pool/src/verifier_dispatch.rs::dispatch_authenticated_verifier_readonly_v1: no local exclusive acquisition; shared=0; accessors=0; CPI=0.
+
+## Source uniqueness gates and physical-cell gap
+
+The Pool has its own require_unique_accounts and pair_processor::require_unique implementations. The CLOSED verifier require_distinct_accounts bridge is not silently attributed to these different bodies. Both Pool helpers compare Pubkeys and return InvalidArgument on a duplicate; they do not inspect or borrow the Rc cells. Native source-to-key-predicate packets for these Pool helpers and the runtime same-cell/key interpretation are not provided by this job.
+
+Exact selected lists and helper call sites are retained in NIK_ALIAS_CALLS.json. In particular:
+
+- programs/aspis-pool/src/pair_forest.rs::process_pair_forest_deposit_with_runtime_v1:1081 calls require_unique_accounts with `(accounts)`.
+
+- programs/aspis-pool/src/pair_forest.rs::plan_pair_forest_spend_layout_v1:1307 calls require_unique_accounts with `(accounts)`.
+
+- programs/aspis-pool/src/pair_forest.rs::process_pair_forest_initialize_with_runtime_v1:2002 calls require_unique_accounts with `(accounts)`.
+
+- programs/aspis-pool/src/pair_forest.rs::process_pair_forest_checkpoint_with_runtime_v1:2139 calls require_unique_accounts with `(accounts)`.
+
+- programs/aspis-pool/src/pair_forest_dispatch.rs::plan_pair_forest_terminal_dispatch_with_bytes_v1:196 calls require_checkpoint_distinct with `(         verifier_checkpoint,         master,         checkpoint,         lane,         registry_accounts,     )`.
+
+- programs/aspis-pool/src/pair_forest_dispatch.rs::invoke_pair_forest_terminal_with_runtime_v1:304 calls require_checkpoint_distinct with `(         verifier_checkpoint,         master,         checkpoint,         lane,         registry_accounts,     )`.
+
+- programs/aspis-pool/src/pair_processor.rs::process_pair_private_transfer_with_verifier_v1:321 calls require_unique with `(accounts)`.
+
+- programs/aspis-pool/src/pair_processor.rs::process_pair_withdrawal_with_verifier_v1:464 calls require_unique with `(accounts)`.
+
+- programs/aspis-pool/src/processor.rs::process_initialize_with_runtime_v1:641 calls require_unique_accounts with `(accounts)`.
+
+- programs/aspis-pool/src/processor.rs::process_deposit_with_runtime_v1:757 calls require_unique_accounts with `(accounts)`.
+
+- programs/aspis-pool/src/processor.rs::process_deposit_with_runtime_v1:783 calls require_unique_accounts with `(accounts)`.
+
+- programs/aspis-pool/src/processor.rs::process_prepare_settlement_with_runtime_v1:1209 calls require_unique_accounts with `(accounts)`.
+
+- programs/aspis-pool/src/processor.rs::process_cancel_prepared_settlement_with_runtime_v1:1505 calls require_unique_accounts with `(accounts)`.
+
+- programs/aspis-pool/src/processor.rs::process_settle_prepared_with_runtime_v1:1698 calls require_unique_accounts with `(accounts)`.
+
+- programs/aspis-pool/src/processor.rs::process_private_transfer_with_runtime_v1:2076 calls require_unique_accounts with `(accounts)`.
+
+- programs/aspis-pool/src/processor.rs::process_withdrawal_with_runtime_v1:2241 calls require_unique_accounts with `(accounts)`.
+
+The local guard-producing helpers close_program_account_v1, initialize_pool_accounts_v1, apply_authorized_append_after_checked_state_v1 and create_and_write_marker_v1 contain no local all-accounts uniqueness gate. They depend on their actual parents. A program-owned decode/length/owner check may exclude some aliases, but no full physical-cell implication is claimed without that successful same-prefix decoder packet.

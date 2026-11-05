@@ -28,7 +28,8 @@ for c in d['mir_calls']:
  if raw.startswith('<') and ' as ' in raw:
   # Trait-bound bodies are not silently instantiated from a matching name.
   status='SYMBOLIC_TRAIT_OR_FN';target=None
- elif len(cands)==1:status='RESOLVED_SOURCE_NAME';target=cands[0]['function']
+ elif len(cands)==1 and (qualified or ('::' not in simple and cands[0]['path'].endswith('/lib.rs'))):status='RESOLVED_SOURCE_NAME';target=cands[0]['function']
+ elif len(cands)==1:status='SOURCE_NAME_CANDIDATE';target=None
  elif cands:status='AMBIGUOUS';target=None
  elif raw.startswith(('move ','copy ','_')):status='INDIRECT';target=None
  else:status='EXTERNAL_OR_COMPILER';target=None
