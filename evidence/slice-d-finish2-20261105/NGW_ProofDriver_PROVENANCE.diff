@@ -1,0 +1,16 @@
+--- /Users/dominic/ZK/.worktrees/cx-slice-d-finish2/evidence/slice-d-finish-20261105/NGM_ProofDriver.lean
++++ /Users/dominic/ZK/.worktrees/cx-slice-d-finish2/evidence/slice-d-finish2-20261105/NGW_ProofDriver.lean
+@@ -69,11 +69,11 @@
+          `NEP_Planted.viaAux, `NEP_MutateMatch.matcher, `NEP_MutatePrivate.viaPrivate,
+          `NEP_MutateProof.proof, `NEP_MutateAux.viaAux])
+     else do
+-      let manifest ← IO.ofExcept (Json.parse (← IO.FS.readFile "NGM_AUDIT_ROOTS.json"))
++      let manifest ← IO.ofExcept (Json.parse (← IO.FS.readFile "NGW_AUDIT_ROOTS.json"))
+       let groups ← IO.ofExcept (manifest.getObjValAs? (Array (Array String)) "groups")
+       let some idx := (mode.drop 5).toString.toNat? | throw (IO.userError "invalid proof mode")
+       let some names := groups[idx]? | throw (IO.userError "proof group out of range")
+-      pure (#[`NGM_COMBINED_IMPORT], names.map String.toName)
++      pure (#[`NGW_COMBINED_IMPORT], names.map String.toName)
+   let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
+     {} (loadExts := true) (level := .private)
+   if mode == "scan" || mode == "queryscan" then

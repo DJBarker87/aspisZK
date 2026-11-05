@@ -1,0 +1,7 @@
+import NGK_COMBINED_IMPORT
+import NGM_COMBINED_IMPORT
+set_option autoImplicit false
+#print FIn_WeightsExtract.state_only_prefix.state_only_statement_points
+#print FIn_WeightsExtract.state_only_prefix.state_only_statement_points_loop.body
+#check AspisR1.RPx_Deployed.deployed
+#print axioms AspisR1.RPx_Deployed.deployed

@@ -1,0 +1,57 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+fn words(x:K)->[u32;4]{[x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0]}
+fn q(x:[u32;4])->K{K{c0:aspis_core::field::CM31{a:M31(x[0]),b:M31(x[1])},c1:aspis_core::field::CM31{a:M31(x[2]),b:M31(x[3])}}}
+fn anyq()->K{let w:[u32;4]=kani::any();for x in w{kani::assume(x<2147483647);}q(w)}
+type Factors=[[[K;4];5];5];
+fn arbitrary()->Factors{core::array::from_fn(|_|core::array::from_fn(|_|core::array::from_fn(|_|q(kani::any()))))}
+struct Products{replies:[K;4],left:[K;4],right:[K;4],calls:usize}
+fn product(a:K,b:K,log:&mut Products)->K{let i=log.calls;log.left[i]=a;log.right[i]=b;log.calls+=1;log.replies[i]}
+fn regular(points:&[[K;10];3],factors:&mut Factors,k:usize,d:usize,log:&mut Products){
+ let a=points[k][9-2*TAU[d]];let b=points[k][8-2*TAU[d]];
+ factors[k][d]=[product(K::ONE.sub(a),K::ONE.sub(b),log),product(a,K::ONE.sub(b),log),product(K::ONE.sub(a),b,log),product(a,b,log)];
+}
+
+fn row(a:K,b:K,log:&mut Products)->[K;4]{[product(K::ONE.sub(a),K::ONE.sub(b),log),product(a,K::ONE.sub(b),log),product(K::ONE.sub(a),b,log),product(a,b,log)]}
+fn regular_exercise(g:u8){let a=anyq();let b=anyq();let replies=core::array::from_fn(|_|anyq());let mut log=Products{replies,left:[K::ZERO;4],right:[K::ZERO;4],calls:0};let out=row(a,b,&mut log);let limb:usize=kani::any();kani::assume(limb<4);let term:usize=kani::any();kani::assume(term<4);let left=[K::ONE.sub(a),a,K::ONE.sub(a),a];let right=[K::ONE.sub(b),K::ONE.sub(b),b,b];
+ if cfg!(NGW_invert){match g{0..=3=>{let mut w=words(log.left[g as usize]);w[limb]^=1;log.left[g as usize]=q(w)},4=>log.calls+=1,_=>{let mut w=words(log.replies[term]);w[limb]^=1;log.replies[term]=q(w)}}}
+ assert!(match g{0..=3=>words(log.left[g as usize])[limb]==words(left[g as usize])[limb]&&words(log.right[g as usize])[limb]==words(right[g as usize])[limb],4=>log.calls==4,_=>words(out[term])[limb]==words(log.replies[term])[limb]});}
+fn frame(g:u8){let mut factors=arbitrary();let row:[K;4]=core::array::from_fn(|_|q(kani::any()));let k:usize=kani::any();kani::assume(k<5);let d:usize=kani::any();kani::assume(d<5);let kind:usize=kani::any();kani::assume(kind<5);let dim:usize=kani::any();kani::assume(dim<5);let term:usize=kani::any();kani::assume(term<4);let limb:usize=kani::any();kani::assume(limb<4);let old=words(factors[kind][dim][term])[limb];factors[k][d]=row;let mut expected=if kind==k&&dim==d{words(row[term])[limb]}else{old};if cfg!(NGW_invert){expected^=1;}assert!(words(factors[kind][dim][term])[limb]==expected);let _=g;}
+fn lookup(g:u8){let points=core::array::from_fn::<_,3,_>(|_|core::array::from_fn::<_,10,_>(|_|q(kani::any())));let k:usize=kani::any();kani::assume(k<3);let d:usize=kani::any();kani::assume(d<5);let limb:usize=kani::any();kani::assume(limb<4);let a=points[k][9-2*TAU[d]];let b=points[k][8-2*TAU[d]];let t=match d{0=>3,1=>4,2=>2,3=>0,_=>1};let mut expected=words(points[k][9-2*t])[limb];if cfg!(NGW_invert){expected^=1;}assert!(words(a)[limb]==expected&&words(b)[limb]==words(points[k][8-2*t])[limb]);let _=g;}
+
+struct CircleLog{products:Products,doubles:[K;2],double_args:[K;2],double_calls:usize,events:[u8;3],count:usize}
+fn cmul(a:K,b:K,log:&mut CircleLog)->K{log.events[log.count]=1;log.count+=1;product(a,b,&mut log.products)}
+fn dbl(x:K,log:&mut CircleLog)->K{let i=log.double_calls;log.double_args[i]=x;log.double_calls+=1;log.events[log.count]=0;log.count+=1;log.doubles[i]}
+fn circle(factors:&mut Factors,k:usize,d:usize,x:&mut K,log:&mut CircleLog){let y=dbl(*x,log);factors[3+k][d]=[K::ONE,*x,y,cmul(*x,y,log)];*x=dbl(y,log);}
+fn circle_exercise(g:u8){let term:usize=kani::any();kani::assume(term<4);let limb:usize=kani::any();kani::assume(limb<4);let mut a=anyq();let before=a;let y=anyq();let next=anyq();let p=anyq();let mut log=CircleLog{products:Products{replies:[p;4],left:[K::ZERO;4],right:[K::ZERO;4],calls:0},doubles:[y,next],double_args:[K::ZERO;2],double_calls:0,events:[9;3],count:0};let y=dbl(a,&mut log);let mut out=[K::ONE,a,y,cmul(a,y,&mut log)];a=dbl(y,&mut log);let expected=[K::ONE,before,y,p];let mut frame=words(expected[term])[limb];
+ if cfg!(NGW_invert){match g{0=>{let mut w=words(log.products.left[0]);w[limb]^=1;log.products.left[0]=q(w)},1..=2=>{let mut w=words(log.double_args[(g-1)as usize]);w[limb]^=1;log.double_args[(g-1)as usize]=q(w)},3=>{let mut w=words(out[term]);w[limb]^=1;out[term]=q(w)},4=>{let mut w=words(a);w[limb]^=1;a=q(w)},5=>frame^=1,6=>log.events[1]^=1,_=>log.double_calls+=1}}
+ assert!(match g{0=>words(log.products.left[0])[limb]==words(before)[limb]&&words(log.products.right[0])[limb]==words(y)[limb],1=>words(log.double_args[0])[limb]==words(before)[limb],2=>words(log.double_args[1])[limb]==words(y)[limb],3=>words(out[term])[limb]==words(expected[term])[limb],4=>words(a)[limb]==words(next)[limb],5=>words(out[term])[limb]==frame,6=>log.events==[0,1,0]&&log.count==3,_=>log.double_calls==2&&log.products.calls==1});}
+fn initial(factors:&mut Factors,k:usize,z:&[SecureCirclePoint;2],log:&mut CircleLog)->K{factors[3+k][0]=[K::ONE,z[k].y,z[k].x,cmul(z[k].x,z[k].y,log)];dbl(z[k].x,log)}
+fn initial_exercise(g:u8){let zx=anyq();let zy=anyq();let term:usize=kani::any();kani::assume(term<4);let limb:usize=kani::any();kani::assume(limb<4);let p=anyq();let next=anyq();let mut log=CircleLog{products:Products{replies:[p;4],left:[K::ZERO;4],right:[K::ZERO;4],calls:0},doubles:[next,K::ZERO],double_args:[K::ZERO;2],double_calls:0,events:[9;3],count:0};let mut out=[K::ONE,zy,zx,cmul(zx,zy,&mut log)];let x=dbl(zx,&mut log);let expected=[K::ONE,zy,zx,p];let mut frame=words(expected[term])[limb];
+ if cfg!(NGW_invert){match g{0=>{let mut w=words(out[term]);w[limb]^=1;out[term]=q(w)},1=>{let mut w=words(log.products.right[0]);w[limb]^=1;log.products.right[0]=q(w)},2=>frame^=1,3=>{let mut w=words(log.double_args[0]);w[limb]^=1;log.double_args[0]=q(w)},_=>log.events[0]^=1}}
+ assert!(match g{0=>words(out[term])[limb]==words(expected[term])[limb],1=>words(log.products.left[0])[limb]==words(zx)[limb]&&words(log.products.right[0])[limb]==words(zy)[limb],2=>words(out[term])[limb]==frame,3=>words(log.double_args[0])[limb]==words(zx)[limb]&&words(x)[limb]==words(next)[limb],_=>log.products.calls==1&&log.double_calls==1&&log.count==2&&log.events[0]==1&&log.events[1]==0});}
+fn controls(g:u8){let mut ks=[99usize;25];let mut ds=[99usize;25];let mut n=0;for k in 0..3{for d in 0..5{ks[n]=k;ds[n]=d;n+=1;}}for k in 0..2{ks[n]=3+k;ds[n]=0;n+=1;for d in 1..5{ks[n]=3+k;ds[n]=d;n+=1;}}let i:usize=kani::any();kani::assume(i<25);if cfg!(NGW_invert){ks[i]^=1;}assert!(n==25&&ks[i]==i/5&&ds[i]==i%5);let _=g;}
+macro_rules! gate{($n:ident,$f:ident,$g:expr)=>{#[kani::proof]#[kani::unwind(161)]#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]fn $n(){$f($g)}};}
+gate!(regular_g0,regular_exercise,0);
+gate!(regular_g1,regular_exercise,1);
+gate!(regular_g2,regular_exercise,2);
+gate!(regular_g3,regular_exercise,3);
+gate!(regular_g4,regular_exercise,4);
+gate!(regular_g5,regular_exercise,5);
+gate!(regular_g6,regular_exercise,6);
+gate!(circle_g0,circle_exercise,0);
+gate!(circle_g1,circle_exercise,1);
+gate!(circle_g2,circle_exercise,2);
+gate!(circle_g3,circle_exercise,3);
+gate!(circle_g4,circle_exercise,4);
+gate!(circle_g5,circle_exercise,5);
+gate!(circle_g6,circle_exercise,6);
+gate!(circle_g7,circle_exercise,7);
+gate!(initial_g0,initial_exercise,0);
+gate!(initial_g1,initial_exercise,1);
+gate!(initial_g2,initial_exercise,2);
+gate!(initial_g3,initial_exercise,3);
+gate!(initial_g4,initial_exercise,4);
+gate!(control,controls,0);
+gate!(write_frame,frame,0);
+gate!(point_lookup,lookup,0);

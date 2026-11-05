@@ -1,0 +1,27 @@
+NGW_generated/NGW_RefLinear.lean:17:51: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+x y : U32
+hx : ↑x < P
+hy : ↑y < P
+a : U32 := x.wrapping_add 2147483647#u32
+⊢ ↑x + ↑2147483647#u32 < UScalar.size UScalarTy.U32
+NGW_generated/NGW_RefLinear.lean:21:35: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 2147483647
+  c ≥ 0
+  c - d ≥ 1
+  b ≥ 0
+  b - c ≥ 1
+  b - d ≥ -2147483646
+where
+ b := ↑P
+ c := ↑↑y
+ d := ↑↑a
+'NGW_RefLinear.add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NGW_RefLinear.sub' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NGW_RefLinear.sub_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NGW_RefLinear.cell' depends on axioms: [propext, Classical.choice, Quot.sound]

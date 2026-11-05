@@ -1,0 +1,156 @@
+NGW_generated/NGW_ReverseInduction.lean:49:21: error: Tactic `rfl` failed: The left-hand side
+  match do
+    let (out, next) ← fail error
+    ok (cont (cursor j, out, next)) with
+  | ok r =>
+    match r with
+    | cont x =>
+      loop (fun x => FIn_WeightsExtract.state_only_prefix.state_only_statement_points_loop.body z x.1 x.2.1 x.2.2) x
+    | done x => ok x
+  | fail e => fail e
+  | div => div
+is not definitionally equal to the right-hand side
+  let (o, cursor) := (some j, cursor j)
+  match o with
+  | none => ok successor
+  | some i => do
+    let (out, product) ← NGW_StepModel.step z successor carry i
+    reference n cursor z out product
+
+case neg.fail
+z : Std.Array Q 10#usize
+n : ℕ
+ih :
+  ∀ (successor : Std.Array Q 10#usize) (carry : Q) (e : Usize),
+    ↑e ≤ n →
+      FIn_WeightsExtract.state_only_prefix.state_only_statement_points_loop (cursor e) z successor carry =
+        reference n (cursor e) z successor carry
+successor : Std.Array Q 10#usize
+carry : Q
+e : Usize
+bound : ↑e ≤ n + 1
+zero : ¬↑e = 0
+j : Usize
+decrease : ↑j + 1 = ↑e
+advance : next (cursor e) = ok (some j, cursor j)
+error : Error
+run : NGW_StepModel.step z successor carry j = fail error
+⊢ (match do
+      let (out, next) ← fail error
+      ok (cont (cursor j, out, next)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop (fun x => FIn_WeightsExtract.state_only_prefix.state_only_statement_points_loop.body z x.1 x.2.1 x.2.2) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    let (o, cursor) := (some j, cursor j)
+    match o with
+    | none => ok successor
+    | some i => do
+      let (out, product) ← NGW_StepModel.step z successor carry i
+      reference n cursor z out product
+NGW_generated/NGW_ReverseInduction.lean:50:14: error: Tactic `rfl` failed: The left-hand side
+  match do
+    let (out, next) ← div
+    ok (cont (cursor j, out, next)) with
+  | ok r =>
+    match r with
+    | cont x =>
+      loop (fun x => FIn_WeightsExtract.state_only_prefix.state_only_statement_points_loop.body z x.1 x.2.1 x.2.2) x
+    | done x => ok x
+  | fail e => fail e
+  | div => div
+is not definitionally equal to the right-hand side
+  let (o, cursor) := (some j, cursor j)
+  match o with
+  | none => ok successor
+  | some i => do
+    let (out, product) ← NGW_StepModel.step z successor carry i
+    reference n cursor z out product
+
+case neg.div
+z : Std.Array Q 10#usize
+n : ℕ
+ih :
+  ∀ (successor : Std.Array Q 10#usize) (carry : Q) (e : Usize),
+    ↑e ≤ n →
+      FIn_WeightsExtract.state_only_prefix.state_only_statement_points_loop (cursor e) z successor carry =
+        reference n (cursor e) z successor carry
+successor : Std.Array Q 10#usize
+carry : Q
+e : Usize
+bound : ↑e ≤ n + 1
+zero : ¬↑e = 0
+j : Usize
+decrease : ↑j + 1 = ↑e
+advance : next (cursor e) = ok (some j, cursor j)
+run : NGW_StepModel.step z successor carry j = div
+⊢ (match do
+      let (out, next) ← div
+      ok (cont (cursor j, out, next)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop (fun x => FIn_WeightsExtract.state_only_prefix.state_only_statement_points_loop.body z x.1 x.2.1 x.2.2) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    let (o, cursor) := (some j, cursor j)
+    match o with
+    | none => ok successor
+    | some i => do
+      let (out, product) ← NGW_StepModel.step z successor carry i
+      reference n cursor z out product
+NGW_generated/NGW_ReverseInduction.lean:54:7: error: Type mismatch
+  ih out product j (Decidable.byContradiction fun a => source._proof_8 n e bound j decrease a)
+has type
+  FIn_WeightsExtract.state_only_prefix.state_only_statement_points_loop (cursor j) z out product =
+    reference n (cursor j) z out product
+but is expected to have type
+  (match
+      let (out, next) := (out, product)
+      ok (cont (cursor j, out, next)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop (fun x => FIn_WeightsExtract.state_only_prefix.state_only_statement_points_loop.body z x.1 x.2.1 x.2.2) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    let (o, cursor) := (some j, cursor j)
+    match o with
+    | none => ok successor
+    | some i => do
+      let (out, product) ← NGW_StepModel.step z successor carry i
+      reference n cursor z out product
+NGW_generated/NGW_ReverseInduction.lean:40:70: warning: This simp argument is unused:
+  stop
+
+Hint: Omit it from the simp argument list.
+  simp only [FIn_WeightsExtract.state_only_prefix.state_only_statement_points_loop.body,
+         show
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+                 (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲(cursor 0̵#̵u̵s̵i̵z̵e̵)̵=̵0̲#̲u̲s̲i̲z̲e̲)̲ ̲=̲
+               ok (̵n̵o̵n̵e̵,̵c̵u̵r̵s̵o̵r̵(̲n̲o̲n̲e̲,̲ ̲c̲u̲r̲s̲o̲r̲ 0#usize)
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲from s̵t̵o̵p̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵r̵e̵f̵e̵r̵e̵n̵c̵e̵,̵n̵e̵x̵t̵,̵s̵t̵o̵p̵]̵s̲t̲o̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲r̲e̲f̲e̲r̲e̲n̲c̲e̲,̲ ̲n̲e̲x̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGW_generated/NGW_ReverseInduction.lean:47:16: warning: This simp argument is unused:
+  reference
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵f̵e̵r̵e̵n̵c̵e̵,̵a̵d̵v̵a̵n̵c̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]̵[̲a̲d̲v̲a̲n̲c̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGW_generated/NGW_ReverseInduction.lean:47:45: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵f̵e̵r̵e̵n̵c̵e̵,̵a̵d̵v̵a̵n̵c̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]̵[̲r̲e̲f̲e̲r̲e̲n̲c̲e̲,̲ ̲a̲d̲v̲a̲n̲c̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NGW_ReverseInduction.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

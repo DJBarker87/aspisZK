@@ -1,0 +1,52 @@
+{"attempt": "NGW_K094", "exit_status": 1, "wall_seconds": 17.912417840911075, "peak_rss_kib": "1169888", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-d-finish2-20261105/NGW_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`,
+...
+KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-slice-d-finish2-20261105/NGW_src/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 2.40s
+Checking harness weights::NGW_new::prefix_g1...
+
+VERIFICATION RESULT:
+ ** 1 of 213 failed (9 unreachable)
+Failed Checks: assertion failed: if g == 0 {
+    log.calls == 1 && log.ptr == alpha.as_ptr() &&
+        words(log.arg[i])[limb] == words(alpha[i])[limb]
+} else {
+    words(points[p][i])[limb] == words(reply[p][i])[limb] &&
+            words(extra[j])[limb] == words(alpha[8 + j])[limb] &&
+        words(factors[k][d][term])[limb] == 0
+}
+ File: "crates/aspis-r1-cost-probe/src/NGW_new.rs", line 80, in weights::NGW_new::prefix_exercise
+
+VERIFICATION:- FAILED
+Verification Time: 14.404603s
+
+Manual Harness Summary:
+Verification failed for - weights::NGW_new::prefix_g1
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-ra3b31a182a1845f186de4a9013a9cd2c.scope; invocation ID: 50a3f13e2f26426798fb00444fae7f29

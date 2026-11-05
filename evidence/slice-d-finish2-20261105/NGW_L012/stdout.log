@@ -1,0 +1,30 @@
+NGW_generated/NGW_StepModel.lean:22:85: error: unsolved goals
+z successor : Std.Array Q 10#usize
+carry : Q
+iter cursor : NGW_Reverse.Rev
+i : Usize
+advance :
+  core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+      (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) iter =
+    ok (some i, cursor)
+⊢ (let (o, iter1) := (some i, cursor)
+    match o with
+    | none => ok (done successor)
+    | some coordinate => do
+      let bit ← z.index_usize coordinate
+      let bit_and_carry ← bit.mul carry
+      let q ← bit.add carry
+      let q1 ← bit_and_carry.add bit_and_carry
+      let q2 ← q.sub q1
+      let a ← successor.update coordinate q2
+      ok (cont (iter1, a, bit_and_carry))) =
+    do
+    let x ← z.index_usize i
+    let x_1 ← FIn_WeightsExtract.field.QM31.mul x carry
+    let x ← FIn_WeightsExtract.field.QM31.add x carry
+    let x_2 ← x_1.add x_1
+    let x ← x.sub x_2
+    let x ← successor.update i x
+    let (out, next) := (x, x_1)
+      ok (cont (cursor, out, next))
+'NGW_StepModel.iteration' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

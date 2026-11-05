@@ -1,0 +1,57 @@
+{"attempt": "NGW_L043", "exit_status": 1, "wall_seconds": 2.9563097988720983, "peak_rss_kib": "4401188", "swaps": "0", "print_axioms": ["'NGW_FactorWrite.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NGW_generated/NGW_FactorWrite.lean:9:19: error: don't know how to synthesize implicit argument `n`
+  @Holds Q ?m.5 Canon
+context:
+⊢ Usize
+NGW_generated/NGW_FactorWrite.lean:9:7: error(lean.inferDefTypeFailed): Failed to infer type of definition `CanonRow`
+NGW_generated/NGW_FactorWrite.lean:10:27: error(lean.unknownIdentifier): Unknown identifier `CanonRow`
+NGW_generated/NGW_FactorWrite.lean:11:29: error(lean.unknownIdentifier): Unknown identifier `CanonPlane`
+NGW_generated/NGW_FactorWrite.lean:19:7: error(lean.unknownIdentifier): Unknown identifier `CanonFactors`
+
+Note: It is not possible to treat `CanonFactors` as an implicitly bound variable here because the `autoImplicit` option is set to
+...
+autoImplicit` option is set to `false`.
+NGW_generated/NGW_FactorWrite.lean:23:27: error(lean.unknownIdentifier): Unknown identifier `CanonPlane`
+NGW_generated/NGW_FactorWrite.lean:24:26: error(lean.unknownIdentifier): Unknown identifier `CanonRow`
+NGW_generated/NGW_FactorWrite.lean:26:26: error(lean.unknownIdentifier): Unknown identifier `CanonPlane`
+NGW_generated/NGW_FactorWrite.lean:29:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Array.update plane d row
+in the target expression
+  (let (plane, back) := (NGM_GuardExact.pick f (↑k) hk, fun v => put f (↑k) v)
+    do
+    let out ← Array.update plane d row
+    ok (back out)) =
+    ok out
+
+f : Factors
+k d : Usize
+row : Row
+hk : ↑k < 5
+hd : ↑d < 5
+hf : sorry
+hr : sorry
+plane : Plane := NGM_GuardExact.pick f (↑k) hk
+next : Std.Array Row 5#usize := put plane (↑d) row
+cp : sorry (NGM_GuardExact.pick f (↑k) hk)
+cn : Holds sorry (put plane (↑d) row)
+out : Std.Array Plane 5#usize := put f (↑k) next
+co : Holds sorry (put f (↑k) next)
+⊢ (let (plane, back) := (NGM_GuardExact.pick f (↑k) hk, fun v => put f (↑k) v)
+    do
+    let out ← Array.update plane d row
+    ok (back out)) =
+    ok out
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    hk
+  has type
+    @LT.lt ℕ instLTNat (↑k) 5
+  but is expected to have type
+    @LT.lt ℕ instLTNat ↑k ↑5#usize
+  in the application
+    NGM_GuardExact.pick f (↑k) hk
+'NGW_FactorWrite.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r6ea3d2fbb18a4750aa02d8fccbf39c59.scope; invocation ID: b9573fdd153c4d7da317714b36a78c06
