@@ -1,0 +1,100 @@
+{
+  "attempt": "NJA_K051",
+  "kind": "kani",
+  "module": "NJA_group_active",
+  "sources": [
+    "NJA_gate.py",
+    "NJA_stage.py",
+    "NJA_harness.rs",
+    "NJA_SUPPLEMENT.json",
+    "NJA_HARNESS_HISTORY.json",
+    "NJA_contract_overlay.py",
+    "NJA_contracts.rs",
+    "NJA_SOURCE_HISTORY.json"
+  ],
+  "upload": [
+    "NJA_gate.py",
+    "NJA_stage.py",
+    "NJA_harness.rs",
+    "NJA_SUPPLEMENT.json",
+    "NJA_HARNESS_HISTORY.json",
+    "NJA_contract_overlay.py",
+    "NJA_contracts.rs",
+    "NJA_SOURCE_HISTORY.json"
+  ],
+  "command": [
+    "python3",
+    "NJA_gate.py",
+    "NJA_K051.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-multiproof-20261107/NJA_workspace/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-multiproof-20261107/NJA_target",
+    "--features",
+    "private-leaf-salts,optimized-terminal,program-build",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "-Z",
+    "function-contracts",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "multiproof::NJA_native::NJA_group_active",
+    "--output-format",
+    "terse"
+  ],
+  "timeout": 180,
+  "source_revision": "466be44d2ce3e60cec6af787f4fbbf98baf98c83",
+  "expected_time": "One arbitrary-prestate count/height stage; source-cut association separate; no field arithmetic, no whole-buffer loop",
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-multiproof-20261107/NJA_target",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1"
+  },
+  "collect": [
+    "NJA_K051_validation/NHR_GRAPH_CHECK.json",
+    "NJA_K051_validation/NJA_INPUTS.json",
+    "NJA_K051_validation/NJA_harness.patch",
+    "NJA_K051_validation/NJA_LOCK.json"
+  ],
+  "configuration_source_revision": "",
+  "source_tree_dirty": true,
+  "exit_status": 0,
+  "wall_seconds": 6.567577364156023,
+  "peak_rss_kib": "486396",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rc559ae8e389a4d65b9c02f294d1dd560.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "648523776",
+  "source_hashes": {
+    "NJA_gate.py": "9e9e611d27cc5e430abaa9e879c994f42145abb19568fa6904ab794e00c07632",
+    "NJA_stage.py": "c6cb7468ab01775fb096ecb35ad4b4dc2323ed5c6c6f13062a680c76ba39be4b",
+    "NJA_harness.rs": "880c0b90e37328a752dd7a2b5c8f8ec7d8d6f393aa3e8c7b392c0aff06c625ac",
+    "NJA_SUPPLEMENT.json": "1d8b3b2bf561958174ce453f2706adeaae70885cbe73de33576b34683add84eb",
+    "NJA_HARNESS_HISTORY.json": "1e091fcaa84d77bcf1b80c3c784ffccaa21e743fff7a7b2e792a3039199c12f8",
+    "NJA_contract_overlay.py": "64551bc2841a95e0727b9a38eb4438ecb3004cf584e42813d4e1b12a245b820c",
+    "NJA_contracts.rs": "ca63002d710d4a5a16754099e2e5a1fdbe28dfdc0a9f0f91f07df578e397a934",
+    "NJA_SOURCE_HISTORY.json": "a58b043b73ca7b9e9f3396fe096dd1b360efb8b3dfc7103a3cf4cf834fbba272"
+  },
+  "deps_fingerprint": "Std from pinned Lean sysroot only",
+  "print_axioms": "N/A: kani"
+}

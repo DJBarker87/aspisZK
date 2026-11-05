@@ -3,6 +3,7 @@ from pathlib import Path
 import subprocess,json,sys,time,shlex,hashlib,lzma,base64
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90';B='/home/dombarker/project-offloads/codex-cx-multiproof-20261107'
 a=sys.argv[1];cfg=json.loads((E/(a+'.json')).read_text());assert cfg['attempt']==a
+assert not cfg.get('cancelled'),cfg.get('cancelled')
 assert not (E/a).exists()
 cfg['configuration_source_revision']=cfg.get('source_revision')
 cfg['source_revision']=subprocess.check_output(['git','rev-parse','HEAD'],cwd=E,text=True).strip()

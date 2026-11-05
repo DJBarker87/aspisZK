@@ -63,4 +63,33 @@ mod NJA_native {
     fn NJA_verify_invalid_control() {let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let n:usize=kani::any();kani::assume(n==0 || n>16);let root:[u8;32]=kani::any();let out=verify_in_place(NJA_Never,Arity::Two,&root,&mut idx,&mut val,n,&[]);assert!(out);}
     #[kani::proof]
     fn NJA_verify_invalid_frame_control() {let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let n:usize=kani::any();kani::assume(n==0 || n>16);let k:usize=kani::any();kani::assume(k<16);let x=idx[k];let root:[u8;32]=kani::any();let _=verify_in_place(NJA_Never,Arity::Two,&root,&mut idx,&mut val,n,&[]);assert_eq!(idx[k],x^1);}
+
+    fn NJA_group_once(arity:Arity,level:&[u32;16],n:usize,parent:u32,j:usize)->(bool,usize){
+      if j<n && index_at(level,j)>>arity.bits()==parent {(true,j+1)} else {(false,j)}
+    }
+    #[kani::proof]
+    fn NJA_group_active(){let level:[u32;16]=kani::any();let n:usize=kani::any();let j:usize=kani::any();kani::assume(j<n&&n<=16);let eight:bool=kani::any();let arity=if eight{Arity::Eight}else{Arity::Two};let parent=level[j]>>(if eight{3}else{1});assert_eq!(NJA_group_once(arity,&level,n,parent,j),(true,j+1));}
+    #[kani::proof]
+    fn NJA_group_active_control(){let level:[u32;16]=kani::any();let n:usize=kani::any();let j:usize=kani::any();kani::assume(j<n&&n<=16);let eight:bool=kani::any();let arity=if eight{Arity::Eight}else{Arity::Two};let parent=level[j]>>(if eight{3}else{1});assert_eq!(NJA_group_once(arity,&level,n,parent,j),(false,j));}
+    #[kani::proof]
+    fn NJA_group_bounds_exit(){let level:[u32;16]=kani::any();let n:usize=kani::any();let j:usize=kani::any();kani::assume(n<=16&&j>=n);let parent:u32=kani::any();assert_eq!(NJA_group_once(Arity::Two,&level,n,parent,j),(false,j));}
+    #[kani::proof]
+    fn NJA_group_bounds_exit_control(){let level:[u32;16]=kani::any();let n:usize=kani::any();let j:usize=kani::any();kani::assume(n<=16&&j>=n);let parent:u32=kani::any();assert!(NJA_group_once(Arity::Two,&level,n,parent,j).0);}
+    #[kani::proof]
+    fn NJA_group_parent_exit(){let level:[u32;16]=kani::any();let n:usize=kani::any();let j:usize=kani::any();let parent:u32=kani::any();kani::assume(j<n&&n<=16&&level[j]>>1!=parent);assert_eq!(NJA_group_once(Arity::Two,&level,n,parent,j),(false,j));}
+    #[kani::proof]
+    fn NJA_group_parent_exit_control(){let level:[u32;16]=kani::any();let n:usize=kani::any();let j:usize=kani::any();let parent:u32=kani::any();kani::assume(j<n&&n<=16&&level[j]>>1!=parent);assert!(NJA_group_once(Arity::Two,&level,n,parent,j).0);}
+    fn NJA_finish_group(level:&mut[u32;16],count:&mut usize,w:&mut usize,i:&mut usize,j:usize){let parent=index_at(level,*i)>>Arity::Two.bits();*count+=Arity::Two.width()-(j-*i);level[*w]=parent;*w+=1;*i=j;}
+    #[kani::proof]
+    fn NJA_finish_group_log(){let mut level:[u32;16]=kani::any();let mut count:usize=kani::any();let mut w:usize=kani::any();let mut i:usize=kani::any();let j:usize=kani::any();kani::assume(w<=i&&i<j&&j<=16&&j-i<=2&&count<=288);let old_i=i;let old_w=w;let old_count=count;let k:usize=kani::any();kani::assume(k<16);let before=level[k];let parent=level[i]>>1;NJA_finish_group(&mut level,&mut count,&mut w,&mut i,j);assert_eq!(i,j);assert_eq!(w,old_w+1);assert_eq!(count,old_count+2-(j-old_i));assert_eq!(level[k],if k==old_w{parent}else{before});}
+    #[kani::proof]
+    fn NJA_finish_group_log_control(){let mut level:[u32;16]=kani::any();let mut count:usize=kani::any();let mut w:usize=kani::any();let mut i:usize=kani::any();let j:usize=kani::any();kani::assume(w<=i&&i<j&&j<=16&&j-i<=2&&count<=288);let old_w=w;let parent=level[i]>>1;NJA_finish_group(&mut level,&mut count,&mut w,&mut i,j);level[old_w]^=1;assert_eq!(level[old_w],parent);}
+    #[kani::proof]
+    fn NJA_height_active(){let d:u32=kani::any();kani::assume(d<18);let mut it=d..18;assert_eq!(it.next(),Some(d));assert_eq!(it.start,d+1);assert_eq!(it.end,18);}
+    #[kani::proof]
+    fn NJA_height_active_control(){let d:u32=kani::any();kani::assume(d<18);let mut it=d..18;assert_eq!(it.next(),Some(d^1));}
+    #[kani::proof]
+    fn NJA_height_exit(){let d:u32=kani::any();kani::assume(d>=18);let mut it=d..18;assert_eq!(it.next(),None);assert_eq!(it.start,d);}
+    #[kani::proof]
+    fn NJA_height_exit_control(){let d:u32=kani::any();kani::assume(d>=18);let mut it=d..18;assert!(it.next().is_some());}
 }

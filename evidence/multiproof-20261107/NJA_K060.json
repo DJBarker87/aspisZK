@@ -1,0 +1,74 @@
+{
+  "attempt": "NJA_K060",
+  "kind": "kani",
+  "module": "NJA_height_active_control",
+  "sources": [
+    "NJA_gate.py",
+    "NJA_stage.py",
+    "NJA_harness.rs",
+    "NJA_SUPPLEMENT.json",
+    "NJA_HARNESS_HISTORY.json",
+    "NJA_contract_overlay.py",
+    "NJA_contracts.rs",
+    "NJA_SOURCE_HISTORY.json"
+  ],
+  "upload": [
+    "NJA_gate.py",
+    "NJA_stage.py",
+    "NJA_harness.rs",
+    "NJA_SUPPLEMENT.json",
+    "NJA_HARNESS_HISTORY.json",
+    "NJA_contract_overlay.py",
+    "NJA_contracts.rs",
+    "NJA_SOURCE_HISTORY.json"
+  ],
+  "command": [
+    "python3",
+    "NJA_gate.py",
+    "NJA_K060.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-multiproof-20261107/NJA_workspace/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-multiproof-20261107/NJA_target",
+    "--features",
+    "private-leaf-salts,optimized-terminal,program-build",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "-Z",
+    "function-contracts",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "multiproof::NJA_native::NJA_height_active_control",
+    "--output-format",
+    "terse"
+  ],
+  "timeout": 180,
+  "source_revision": "",
+  "expected_time": "One arbitrary-prestate count/height stage; source-cut association separate; no field arithmetic, no whole-buffer loop",
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-multiproof-20261107/NJA_target",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1"
+  },
+  "collect": [
+    "NJA_K060_validation/NHR_GRAPH_CHECK.json",
+    "NJA_K060_validation/NJA_INPUTS.json",
+    "NJA_K060_validation/NJA_harness.patch",
+    "NJA_K060_validation/NJA_LOCK.json"
+  ]
+}
