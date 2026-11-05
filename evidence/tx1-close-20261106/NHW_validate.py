@@ -12,7 +12,13 @@ def receipt(a,exit):
  r=J(E/a/'receipt.json');ad=J(E/(a+'-admission.json'))
  assert r['exit_status']==exit and r['limits']==LIMITS and int(r['swaps'])==0
  assert ad['exit']==0 and ad['reservation']['allowed']is True
- for n,h in r['source_hashes'].items():assert H((E/a/'sources'/n).read_bytes())==h,(a,n)
+ for n,h in r['source_hashes'].items():
+  p=E/a/'sources'/n
+  if p.is_file():raw=p.read_bytes()
+  else:
+   ref=J(str(p)+'.REFERENCE.json');raw=(E/ref['stored_once']).read_bytes()
+   assert len(raw)==ref['bytes'] and H(raw)==ref['sha256']
+  assert H(raw)==h,(a,n)
  return r
 
 def gates(delta,closed,audit):
@@ -36,7 +42,7 @@ def main():
  after=copy.deepcopy(before)
  assert after==before and sum(v=='CLOSED' for v in after.values())==delta['counts_after']['CLOSED']==337
  assert sum(v=='OPEN' for v in after.values())==262
- for a in ['NHW_L029','NHW_L030','NHW_L031','NHW_L039','NHW_L040','NHW_L041','NHW_L043','NHW_L044','NHW_L045','NHW_L046','NHW_L047','NHW_L048','NHW_L049','NHW_L050','NHW_L051','NHW_L052','NHW_L053','NHW_L054','NHW_L055','NHW_L056']:
+ for a in ['NHW_L029','NHW_L030','NHW_L031','NHW_L039','NHW_L040','NHW_L041','NHW_L043','NHW_L044','NHW_L045','NHW_L046','NHW_L047','NHW_L048','NHW_L049','NHW_L050','NHW_L051','NHW_L052','NHW_L053','NHW_L054','NHW_L055','NHW_L056','NHW_L057','NHW_L058']:
   r=receipt(a,0)
   assert 'sorryAx' not in str(r['print_axioms'])
  for a,status in [('NHW_K003',0),('NHW_K004',1)]:
