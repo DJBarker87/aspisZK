@@ -1,0 +1,47 @@
+NHW_generated/NHW_Accumulate.lean:29:1: error: Tactic `rfl` failed: The left-hand side
+  do
+    let rhs ← NBO_FieldSemantics.add a.rhs product
+    let power ← NBO_FieldSemantics.power a.power p.rho
+    ok
+        ({ weights := a.weights, rhs := rhs, power := power, next := a.next.wrapping_add 1#usize },
+          { raw := mid.raw, terms := mid.terms.wrapping_add 1#usize })
+is not definitionally equal to the right-hand side
+  do
+    let product ← (NFS_QueryOps.installed (model base)).op3 value a.power
+    let rhs ← (NFS_QueryOps.installed (model base)).op2 a.rhs product
+    (NFS_QueryOps.installed (model base)).op15 11#u16 a.next rhs
+    let power ← (NFS_QueryOps.installed (model base)).op9 a.power p.rho
+    ok
+        ({ weights := a.weights, rhs := rhs, power := power, next := a.next.wrapping_add 1#usize },
+          { raw := mid.raw, terms := mid.terms.wrapping_add 1#usize })
+
+base : Ops
+p : verifier.Prepared
+a : verifier.Accumulator
+node : U32
+value : aspis_core.field.wide_exact.WideExact
+b : verifier.BatchedWeights
+hv : NBO_TailDomain.WideCanonical value
+hr : NBO_TailDomain.WideCanonical a.rhs
+hp : NBF_PowerStep.Canonical a.power
+hq : NBF_PowerStep.Canonical p.rho
+mid : verifier.BatchedWeights
+a✝ : prefixRun (model base) a node b = ok mid
+product : Stage2E
+run : NBO_FieldSemantics.product value a.power = ok product
+canonical : NBO_TailDomain.WideCanonical product
+⊢ (do
+      let rhs ← NBO_FieldSemantics.add a.rhs product
+      let power ← NBO_FieldSemantics.power a.power p.rho
+      ok
+          ({ weights := a.weights, rhs := rhs, power := power, next := a.next.wrapping_add 1#usize },
+            { raw := mid.raw, terms := mid.terms.wrapping_add 1#usize })) =
+    do
+    let product ← (NFS_QueryOps.installed (model base)).op3 value a.power
+    let rhs ← (NFS_QueryOps.installed (model base)).op2 a.rhs product
+    (NFS_QueryOps.installed (model base)).op15 11#u16 a.next rhs
+    let power ← (NFS_QueryOps.installed (model base)).op9 a.power p.rho
+    ok
+        ({ weights := a.weights, rhs := rhs, power := power, next := a.next.wrapping_add 1#usize },
+          { raw := mid.raw, terms := mid.terms.wrapping_add 1#usize })
+'AspisR1.NHW_Accumulate.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
