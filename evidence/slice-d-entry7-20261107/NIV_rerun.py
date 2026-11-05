@@ -55,7 +55,7 @@ for n,t in files.items():
 import json,hashlib
 b=Path({B!r});a={a!r}
 paths=[p for p in (b/a).rglob('*') if p.is_file() and 'sources' not in p.relative_to(b/a).parts]
-paths += [p for pat in ['-graph*','-source*','-lock*','-erasure*','-isolation.json'] for p in b.glob(a+pat)]
+paths += [p for pat in ['-graph*','-source*','-lock*','-erasure*','-isolation.json','-tool-pin.json','-solver-cleanup.json'] for p in b.glob(a+pat)]
 rc=json.loads((b/a/'receipt.json').read_text())
 for n,h in rc['source_hashes'].items():assert hashlib.sha256((b/a/'sources'/n).read_bytes()).hexdigest()==h
 print(json.dumps({{str(p.relative_to(b)):p.read_text() for p in paths}}))

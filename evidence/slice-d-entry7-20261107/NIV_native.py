@@ -2,7 +2,7 @@
 from NIV_rerun import *
 def fresh(a,target,sidecars):
     x,original,files=historical('NIJ_K120')
-    files['NIJ_erasure.py']=files['NIJ_erasure.py'].replace("['NIJ_entry'","['NIV_sdk','NIV_prefix','NIV_v1','NIV_active','NIV_forward','NIV_auth','NIV_owned','NIJ_entry'")
+    files['NIJ_erasure.py']=files['NIJ_erasure.py'].replace("['NIJ_entry'","['NIV_accounts','NIV_sdk','NIV_prefix','NIV_v1','NIV_active','NIV_forward','NIV_auth','NIV_owned','NIJ_entry'")
     for parent,module,text in sidecars:
         suffix='\n#[cfg(kani)]\n#[path="'+module+'.rs"]\nmod '+module+';\n'
         key='NIJ_src/'+parent

@@ -1,0 +1,166 @@
+--- /dev/null
++++ b/programs/r1-cost-probe/src/NIV_sdk.rs
+@@ -0,0 +1,163 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn field(a:&OwnedAccount,f:u32)->u8{match f{0..=31=>a.key.to_bytes()[f as usize],32..=63=>a.owner.to_bytes()[(f-32)as usize],64=>a.is_signer as u8,65=>a.is_writable as u8,66=>a.executable as u8,67..=74=>match a.length{Ok(n)=>((n>>((f-67)*8))&255)as u8,_=>{assert!(false,"snapshot length exact returning SDK arm");0}},_=>{assert!(matches!(a.bytes,Err(ProgramError::InvalidAccountData)),"deferred malformed length error exact");1}}}
++fn logged(a:&[OwnedAccount],port:usize)->ProgramError{let f:u32=kani::any();kani::assume(f<76);ProgramError::Custom((f<<8)|field(&a[port],f)as u32)}
++fn clear(d: &[u8]){assert!(d.is_empty(),"same empty return-data clear argument");}
++fn clock()->Result<Clock,ProgramError>{Ok(Clock{slot:kani::any(),epoch_start_timestamp:kani::any(),epoch:kani::any(),leader_schedule_epoch:kani::any(),unix_timestamp:kani::any()})}
++fn check<const SECOND:bool,const PORT:usize>(wrong:bool){
++ let p=Pubkey::new_from_array(kani::any());
++ let keys=[Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any())];
++ let owners=[Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any())];
++ let mut lamps:[u64;7]=kani::any();let before_lamps=lamps;let [l0,l1,l2,l3,l4,l5,l6]=&mut lamps;
++ let mut buffers:[[u8;1];7]=kani::any();let [b0,b1,b2,b3,b4,b5,b6]=&mut buffers;
++ let mut a=core::mem::ManuallyDrop::new([
++ AccountInfo::new(&keys[0],kani::any(),kani::any(),l0,b0,&owners[0],kani::any(),kani::any()),
++ AccountInfo::new(&keys[1],kani::any(),kani::any(),l1,b1,&owners[1],kani::any(),kani::any()),
++ AccountInfo::new(&keys[2],kani::any(),kani::any(),l2,b2,&owners[2],kani::any(),kani::any()),
++ AccountInfo::new(&keys[3],kani::any(),kani::any(),l3,b3,&owners[3],kani::any(),kani::any()),
++ AccountInfo::new(&keys[4],kani::any(),kani::any(),l4,b4,&owners[4],kani::any(),kani::any()),
++ AccountInfo::new(&keys[5],kani::any(),kani::any(),l5,b5,&owners[5],kani::any(),kani::any()),
++ AccountInfo::new(&keys[6],kani::any(),kani::any(),l6,b6,&owners[6],kani::any(),kani::any()),
++ ]);
++ {let pick:usize=kani::any();kani::assume(pick<=1);if pick<1{a[1]=a[pick].clone();}}
++ {let pick:usize=kani::any();kani::assume(pick<=2);if pick<2{a[2]=a[pick].clone();}}
++ {let pick:usize=kani::any();kani::assume(pick<=3);if pick<3{a[3]=a[pick].clone();}}
++ {let pick:usize=kani::any();kani::assume(pick<=4);if pick<4{a[4]=a[pick].clone();}}
++ {let pick:usize=kani::any();kani::assume(pick<=5);if pick<5{a[5]=a[pick].clone();}}
++ {let pick:usize=kani::any();kani::assume(pick<=6);if pick<6{a[6]=a[pick].clone();}}
++ let count=if SECOND{7}else{3};let accounts=&a[..count];
++ let data=if SECOND{&[65,83,81,56][..]}else{&[3,10][..]};
++
++ let result=if SECOND{stage2(&p,accounts,data)}else{stage1(&p,accounts,data)};
++ match result{Err(ProgramError::Custom(code))=>{let f=code>>8;assert!(f<76);let a=&accounts[PORT];let expected=match f{0..=31=>a.key.to_bytes()[f as usize],32..=63=>a.owner.to_bytes()[(f-32)as usize],64=>a.is_signer as u8,65=>a.is_writable as u8,66=>a.executable as u8,67=>1,68..=74=>0,_=>1};assert!((code&255)==expected as u32,"same snapshot produced metadata,length,error at actual child");},_=>assert!(false,"logged error forwarded")}
++ // No account data or lamport payload write occurs on this child-Err branch.
++ assert!(lamps==before_lamps);
++}
++fn first0_log(_p: &Pubkey,a:&[OwnedAccount],_d:&[u8])->Result<Vec<u8>,ProgramError>{Err(logged(a,0))}
++fn first0_bad_log(_p: &Pubkey,a:&[OwnedAccount],_d:&[u8])->Result<Vec<u8>,ProgramError>{match first0_log(_p,a,_d){Err(ProgramError::Custom(code))=>Err(ProgramError::Custom(code^1)),x=>x}}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::stage1_owned,first0_log)]
++fn first0(){check::<false,0>(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::stage1_owned,first0_bad_log)]
++fn first0_wrong(){check::<false,0>(true);}
++fn first1_log(_p: &Pubkey,a:&[OwnedAccount],_d:&[u8])->Result<Vec<u8>,ProgramError>{Err(logged(a,1))}
++fn first1_bad_log(_p: &Pubkey,a:&[OwnedAccount],_d:&[u8])->Result<Vec<u8>,ProgramError>{match first1_log(_p,a,_d){Err(ProgramError::Custom(code))=>Err(ProgramError::Custom(code^1)),x=>x}}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::stage1_owned,first1_log)]
++fn first1(){check::<false,1>(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::stage1_owned,first1_bad_log)]
++fn first1_wrong(){check::<false,1>(true);}
++fn first2_log(_p: &Pubkey,a:&[OwnedAccount],_d:&[u8])->Result<Vec<u8>,ProgramError>{Err(logged(a,2))}
++fn first2_bad_log(_p: &Pubkey,a:&[OwnedAccount],_d:&[u8])->Result<Vec<u8>,ProgramError>{match first2_log(_p,a,_d){Err(ProgramError::Custom(code))=>Err(ProgramError::Custom(code^1)),x=>x}}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::stage1_owned,first2_log)]
++fn first2(){check::<false,2>(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::stage1_owned,first2_bad_log)]
++fn first2_wrong(){check::<false,2>(true);}
++fn second0_log(_p: &Pubkey,a:&[OwnedAccount],_d:&[u8],_slot:Result<u64,ProgramError>)->ProgramResult{Err(logged(a,0))}
++fn second0_bad_log(_p: &Pubkey,a:&[OwnedAccount],_d:&[u8],_slot:Result<u64,ProgramError>)->ProgramResult{match second0_log(_p,a,_d,_slot){Err(ProgramError::Custom(code))=>Err(ProgramError::Custom(code^1)),x=>x}}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::stage2_owned,second0_log)]
++#[kani::stub(solana_program::program::set_return_data,clear)]
++#[kani::stub(Clock::get,clock)]
++fn second0(){check::<true,0>(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::stage2_owned,second0_bad_log)]
++#[kani::stub(solana_program::program::set_return_data,clear)]
++#[kani::stub(Clock::get,clock)]
++fn second0_wrong(){check::<true,0>(true);}
++fn second1_log(_p: &Pubkey,a:&[OwnedAccount],_d:&[u8],_slot:Result<u64,ProgramError>)->ProgramResult{Err(logged(a,1))}
++fn second1_bad_log(_p: &Pubkey,a:&[OwnedAccount],_d:&[u8],_slot:Result<u64,ProgramError>)->ProgramResult{match second1_log(_p,a,_d,_slot){Err(ProgramError::Custom(code))=>Err(ProgramError::Custom(code^1)),x=>x}}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::stage2_owned,second1_log)]
++#[kani::stub(solana_program::program::set_return_data,clear)]
++#[kani::stub(Clock::get,clock)]
++fn second1(){check::<true,1>(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::stage2_owned,second1_bad_log)]
++#[kani::stub(solana_program::program::set_return_data,clear)]
++#[kani::stub(Clock::get,clock)]
++fn second1_wrong(){check::<true,1>(true);}
++fn second2_log(_p: &Pubkey,a:&[OwnedAccount],_d:&[u8],_slot:Result<u64,ProgramError>)->ProgramResult{Err(logged(a,2))}
++fn second2_bad_log(_p: &Pubkey,a:&[OwnedAccount],_d:&[u8],_slot:Result<u64,ProgramError>)->ProgramResult{match second2_log(_p,a,_d,_slot){Err(ProgramError::Custom(code))=>Err(ProgramError::Custom(code^1)),x=>x}}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::stage2_owned,second2_log)]
++#[kani::stub(solana_program::program::set_return_data,clear)]
++#[kani::stub(Clock::get,clock)]
++fn second2(){check::<true,2>(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::stage2_owned,second2_bad_log)]
++#[kani::stub(solana_program::program::set_return_data,clear)]
++#[kani::stub(Clock::get,clock)]
++fn second2_wrong(){check::<true,2>(true);}
++fn second3_log(_p: &Pubkey,a:&[OwnedAccount],_d:&[u8],_slot:Result<u64,ProgramError>)->ProgramResult{Err(logged(a,3))}
++fn second3_bad_log(_p: &Pubkey,a:&[OwnedAccount],_d:&[u8],_slot:Result<u64,ProgramError>)->ProgramResult{match second3_log(_p,a,_d,_slot){Err(ProgramError::Custom(code))=>Err(ProgramError::Custom(code^1)),x=>x}}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::stage2_owned,second3_log)]
++#[kani::stub(solana_program::program::set_return_data,clear)]
++#[kani::stub(Clock::get,clock)]
++fn second3(){check::<true,3>(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::stage2_owned,second3_bad_log)]
++#[kani::stub(solana_program::program::set_return_data,clear)]
++#[kani::stub(Clock::get,clock)]
++fn second3_wrong(){check::<true,3>(true);}
++fn second4_log(_p: &Pubkey,a:&[OwnedAccount],_d:&[u8],_slot:Result<u64,ProgramError>)->ProgramResult{Err(logged(a,4))}
++fn second4_bad_log(_p: &Pubkey,a:&[OwnedAccount],_d:&[u8],_slot:Result<u64,ProgramError>)->ProgramResult{match second4_log(_p,a,_d,_slot){Err(ProgramError::Custom(code))=>Err(ProgramError::Custom(code^1)),x=>x}}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::stage2_owned,second4_log)]
++#[kani::stub(solana_program::program::set_return_data,clear)]
++#[kani::stub(Clock::get,clock)]
++fn second4(){check::<true,4>(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::stage2_owned,second4_bad_log)]
++#[kani::stub(solana_program::program::set_return_data,clear)]
++#[kani::stub(Clock::get,clock)]
++fn second4_wrong(){check::<true,4>(true);}
++fn second5_log(_p: &Pubkey,a:&[OwnedAccount],_d:&[u8],_slot:Result<u64,ProgramError>)->ProgramResult{Err(logged(a,5))}
++fn second5_bad_log(_p: &Pubkey,a:&[OwnedAccount],_d:&[u8],_slot:Result<u64,ProgramError>)->ProgramResult{match second5_log(_p,a,_d,_slot){Err(ProgramError::Custom(code))=>Err(ProgramError::Custom(code^1)),x=>x}}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::stage2_owned,second5_log)]
++#[kani::stub(solana_program::program::set_return_data,clear)]
++#[kani::stub(Clock::get,clock)]
++fn second5(){check::<true,5>(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::stage2_owned,second5_bad_log)]
++#[kani::stub(solana_program::program::set_return_data,clear)]
++#[kani::stub(Clock::get,clock)]
++fn second5_wrong(){check::<true,5>(true);}
++fn second6_log(_p: &Pubkey,a:&[OwnedAccount],_d:&[u8],_slot:Result<u64,ProgramError>)->ProgramResult{Err(logged(a,6))}
++fn second6_bad_log(_p: &Pubkey,a:&[OwnedAccount],_d:&[u8],_slot:Result<u64,ProgramError>)->ProgramResult{match second6_log(_p,a,_d,_slot){Err(ProgramError::Custom(code))=>Err(ProgramError::Custom(code^1)),x=>x}}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::stage2_owned,second6_log)]
++#[kani::stub(solana_program::program::set_return_data,clear)]
++#[kani::stub(Clock::get,clock)]
++fn second6(){check::<true,6>(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::stage2_owned,second6_bad_log)]
++#[kani::stub(solana_program::program::set_return_data,clear)]
++#[kani::stub(Clock::get,clock)]
++fn second6_wrong(){check::<true,6>(true);}

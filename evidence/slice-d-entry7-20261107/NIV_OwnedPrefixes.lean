@@ -25,7 +25,14 @@ theorem distinct_error (ops : AdapterRw.Ops) (program : solana_pubkey.Pubkey)
     (distinct : r1_pool_adapter.owned.require_distinct_accounts ops
       (Array.make 3#usize [a,b,c]) = ok (.Err e)) :
     r1_pool_adapter.owned.stage1_owned ops program (accounts3 a b c) data = ok (.Err e) := by
-  simp [r1_pool_adapter.owned.stage1_owned,ten,accounts3,distinct]
+  have i0 : Slice.index_usize (accounts3 a b c) 0#usize = ok a := rfl
+  have i1 : Slice.index_usize (accounts3 a b c) 1#usize = ok b := rfl
+  have i2 : Slice.index_usize (accounts3 a b c) 2#usize = ok c := rfl
+  have count : (Slice.len (accounts3 a b c) != 3#usize) = false := rfl
+  unfold r1_pool_adapter.owned.stage1_owned
+  simp only [ten,bind_tc_ok,count,Bool.false_eq_true,ite_false,ite_true,i0,i1,i2,distinct,
+    core.result.Result.Insts.CoreOpsTry.branch]
+  rfl
 
 /-- Later native fields and arbitrary Vec/error payloads are not restricted
 by this source prefix law. It supplies no skipped decoder or allocator law. -/
@@ -37,7 +44,14 @@ theorem proof_readonly_error (ops : AdapterRw.Ops) (program : solana_pubkey.Pubk
       (Array.make 3#usize [a,b,c]) = ok (.Ok ()))
     (readonly : r1_pool_adapter.owned.require_readonly_buffer a = ok (.Err e)) :
     r1_pool_adapter.owned.stage1_owned ops program (accounts3 a b c) data = ok (.Err e) := by
-  simp [r1_pool_adapter.owned.stage1_owned,ten,accounts3,distinct,readonly]
+  have i0 : Slice.index_usize (accounts3 a b c) 0#usize = ok a := rfl
+  have i1 : Slice.index_usize (accounts3 a b c) 1#usize = ok b := rfl
+  have i2 : Slice.index_usize (accounts3 a b c) 2#usize = ok c := rfl
+  have count : (Slice.len (accounts3 a b c) != 3#usize) = false := rfl
+  unfold r1_pool_adapter.owned.stage1_owned
+  simp only [ten,bind_tc_ok,count,Bool.false_eq_true,ite_false,ite_true,i0,i1,i2,distinct,readonly,
+    core.result.Result.Insts.CoreOpsTry.branch]
+  rfl
 
 #print axioms distinct_error
 #print axioms proof_readonly_error
