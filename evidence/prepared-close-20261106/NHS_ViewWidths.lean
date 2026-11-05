@@ -17,11 +17,11 @@ theorem source (proof semantic y1 : Slice U8) (v : verifier.View)
  · rename_i wide decoded
    have same := core.result.Result.Ok.inj (Result.ok.inj view)
    subst v
-   change True ∧ y1.val.length=928 ∧
+   change transport.Variant.S2=transport.Variant.S2 ∧ y1.val.length=928 ∧
      (NGV_ByteWindow.select proof 7527 224).val.length=224 ∧
      (NGV_ByteWindow.select proof 7783 224).val.length=224 ∧
      (NGV_ByteWindow.select proof 8007 2048).val.length=2048
-   exact ⟨True.intro,ySize,NGV_ByteWindow.select_length proof 7527 224 (by omega),
+   exact ⟨rfl,ySize,NGV_ByteWindow.select_length proof 7527 224 (by omega),
      NGV_ByteWindow.select_length proof 7783 224 (by omega),
      NGV_ByteWindow.select_length proof 8007 2048 (by omega)⟩
 #print axioms source

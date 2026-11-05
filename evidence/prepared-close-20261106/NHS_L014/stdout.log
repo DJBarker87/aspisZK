@@ -1,0 +1,21 @@
+NHS_generated/NHS_FoldDomain.lean:12:67: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+v : verifier.View
+tail : (↑v.round1).length = 224
+payload : Slice U8
+call :
+  (do
+      let capacity ← 32#usize + 224#usize
+      let root ← core.option.Option.unwrap v.folded_root
+      let payload ← lift root.to_slice
+      let b1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 capacity) payload
+      let b2 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 b1 v.round1
+      ok b2.deref) =
+    ok payload
+⊢ 32#usize + 224#usize = ok 256#usize
+'AspisR1.NHS_FoldDomain.length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NHS_FoldDomain.bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
