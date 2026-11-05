@@ -1,0 +1,71 @@
+{"attempt": "NIF_K001", "exit_status": 0, "wall_seconds": 59.24342215410434, "peak_rss_kib": "533772", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling version_check v0.9.5
+   Compiling proc-macro2 v1.0.106
+   Compiling unicode-ident v1.0.24
+   Compiling quote v1.0.46
+   Compiling serde_core v1.0.228
+   Compiling syn v2.0.118
+   Compiling cfg-if v1.0.4
+   Compiling generic-array v0.14.7
+   Compiling typenum v1.20.1
+   Compiling serde v1.0.228
+   Compiling libc v0.2.186
+   Compiling zerocopy v0.8.52
+   Compiling serde_derive v1.0.228
+   Compiling subtle v2.6.1
+   Compiling autocfg v1.5.1
+   Compiling hashbrown v0.15.5
+   Compiling equivalent v1.0.2
+   Compiling indexmap v2.7.1
+   Compiling toml_datetime v0.6.11
+   Compiling toml_write v0.1.2
+   Compiling winnow v0.7.15
+   Compiling toml_e
+...
+on `raw_product_spec` is never used
+   --> programs/r1-cost-probe/src/NIF_purity.rs:562:4
+    |
+562 | fn raw_product_spec(a:u32,b:u32)->u64 {assert!(a<2147483647 && b<2147483647,"NIC raw product domain");let out:u64=kani::any();kani:...
+    |    ^^^^^^^^^^^^^^^^
+
+warning: function `q_product_spec` is never used
+   --> programs/r1-cost-probe/src/NIF_purity.rs:770:4
+    |
+770 | fn q_product_spec(a:aspis_core::field::QM31,b:aspis_core::field::QM31)->aspis_core::field::QM31 {let a=qwords(a);let b=qwords(b);ka...
+    |    ^^^^^^^^^^^^^^
+
+warning: function `wide_q_spec` is never used
+   --> programs/r1-cost-probe/src/NIF_purity.rs:771:4
+    |
+771 | fn wide_q_spec(a:aspis_core::field::WideExact,b:aspis_core::field::QM31)->aspis_core::field::WideExact {let a=ewords(a);let b=qword...
+    |    ^^^^^^^^^^^
+
+warning: module `NIF_purity` should have a snake case name
+   --> programs/r1-cost-probe/src/lib.rs:173:18
+    |
+173 | #[cfg(kani)] mod NIF_purity { include!("NIF_purity.rs"); }
+    |                  ^^^^^^^^^^ help: convert the identifier to snake case: `nif_purity`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 53.11s
+Checking harness NIF_purity::fields_all_pure...
+
+VERIFICATION RESULT:
+ ** 0 of 349 failed (1 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 4.2287803s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r277c32b1cbc94ab6ad6afc2275403d02.scope; invocation ID: 4f97247e04e34e59ac794e4d60893964

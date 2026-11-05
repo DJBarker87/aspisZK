@@ -1,0 +1,50 @@
+use super::*;
+pub fn one() { let _value=M31::ONE; }
+pub fn double() { let a:u32=kani::any();kani::assume(a<2147483647);let _value=M31(a).double(); }
+pub fn subtract() { let a:u32=kani::any();let b:u32=kani::any();kani::assume(a<2147483647 && b<2147483647);let _value=M31(a).sub(M31(b)); }
+pub fn trace() { let tag:u16=kani::any();let index:usize=kani::any();let bytes:[u8;32]=kani::any();if let Some(value)=E::from_le_bytes(&bytes) {crate::trace::value(tag,index,value);} }
+pub fn fields() { let bytes:[u8;128]=kani::any();let s:usize=kani::any();kani::assume(s<4);kani::assume(E::from_le_bytes(&bytes[s*32..s*32+32]).is_some());let _value=field(&bytes,s); }
+pub fn geometry() { let raw:[u32;5]=kani::any();let start:usize=kani::any();let mut inverses=Vec::new();inverses.push(raw.map(M31));let geometry=QueryGeometry{start,inverses,line_z:Vec::new()};let _value=*geometry.for_query(start); }
+
+fn any_e()->E {let words:[u32;8]=kani::any();kani::assume(words.iter().all(|x|*x<2147483647));E::from_limbs(words).unwrap()}
+pub fn circle() {let alpha=any_e();let values=[any_e(),any_e(),any_e(),any_e()];let inverse=kani::any::<[u32;5]>().map(M31);let _value=circle_fold_with_inverses(alpha,values,&inverse);}
+pub fn line() {let alpha=any_e();let values=[any_e(),any_e(),any_e(),any_e()];let inverse=kani::any::<[u32;5]>().map(M31);let _value=line_fold_with_inverses(alpha,values,&inverse);}
+
+pub fn wide_add() {let a=any_e();let b=any_e();let _value=a.add(b);}
+pub fn wide_subtract() {let a=any_e();let b=any_e();let _value=a.sub(b);}
+
+fn any_q()->K {let a:[u32;4]=kani::any();kani::assume(a.iter().all(|x|*x<2147483647));K{c0:aspis_core::field::CM31{a:M31(a[0]),b:M31(a[1])},c1:aspis_core::field::CM31{a:M31(a[2]),b:M31(a[3])}}}
+pub fn box_value()->Prepared {Prepared{variant:Variant::S2,roots:kani::any(),gamma:any_e(),kappa:any_e(),alpha:[any_e(),any_e()],rho:any_q(),queries:kani::any(),semantic_alpha:core::array::from_fn(|_|any_q()),z:[SecureCirclePoint{x:any_q(),y:any_q()},SecureCirclePoint{x:any_q(),y:any_q()}],claim:any_e(),state:kani::any()}}
+pub fn box_boundary(value:Prepared)->Box<Prepared> {Box::new(value)}
+
+pub fn raw_product(_a:u32,_b:u32)->u64 {unreachable!("NIC opaque raw field product must be stubbed")}
+pub fn basis_step() {let n:usize=kani::any();let j:usize=kani::any();kani::assume(n>0 && n<=128 && j<n);let raw:u32=kani::any();let node_raw:u32=kani::any();kani::assume(raw<2147483647 && node_raw<2147483647);let node=M31(node_raw);let mut basis=[M31::ZERO;256];basis[j]=M31(raw);basis[n+j]=basis[j].mul(node);}
+pub fn node_step() {let raw:u32=kani::any();kani::assume(raw<2147483647);let mut node=M31(raw);let mut n:usize=kani::any();kani::assume(n<=128);node=node.mul(node).double().sub(M31::ONE);n*=2;let _=(node,n);}
+pub fn row_step() {let mut row:[u64;4]=kani::any();let words:[u32;4]=kani::any();kani::assume(words.iter().all(|x|*x<2147483647));let power=K{c0:aspis_core::field::CM31{a:M31(words[0]),b:M31(words[1])},c1:aspis_core::field::CM31{a:M31(words[2]),b:M31(words[3])}};let scalar:u32=kani::any();kani::assume(scalar<2147483647);let basis=M31(scalar);let limbs=[power.c0.a.0,power.c0.b.0,power.c1.a.0,power.c1.b.0];let j:usize=kani::any();kani::assume(j<4);kani::assume(row[j]<=u64::MAX-4611686009837453316u64);let old=residue_limb_at(&row,j);let limb=power_limb_at(&limbs,j);row[j]=old+raw_product(limb,basis.0);}
+pub fn flush_step() {let mut cell:u64=kani::any();let limb=&mut cell;*limb=(*limb&0x7fff_ffff)+(*limb>>31);}
+pub fn reduction_step() {let limb:u64=kani::any();let _out=M31::reduce_u64(limb);}
+
+pub fn dot_fold_step() {let mut limbs:[u64;8]=kani::any();let sums:[u64;8]=kani::any();let j:usize=kani::any();kani::assume(j<8);kani::assume(limbs[j]<(1u64<<37));kani::assume(sums[j]<=4*4611686009837453316u64);limbs[j]+=(sums[j]&0x7fff_ffff)+(sums[j]>>31);}
+
+pub fn fold_atom() {let alpha=any_e();let value=any_e();let _value=alpha.mul(value);}
+pub fn pairing_raw_step() {let left:[u32;4]=kani::any();let right:[u32;4]=kani::any();kani::assume(left.iter().all(|x|*x<2147483647) && right.iter().all(|x|*x<2147483647));let _out={
+
+            let [a,b,c,d]=[u64::from(left[0]),u64::from(left[1]),u64::from(left[2]),u64::from(left[3])];
+            let [e,f,g,h]=[u64::from(right[0]),u64::from(right[1]),u64::from(right[2]),u64::from(right[3])];
+            const PP:u64=(2147483647u64)*(2147483647u64);
+            let partial=|x:u64|(x&2147483647u64).wrapping_add(x>>31u32);
+            let u=partial((raw_product(c as u32,g as u32)).wrapping_add(PP).wrapping_sub(raw_product(d as u32,h as u32)));
+            let v=partial((raw_product(c as u32,h as u32)).wrapping_add(raw_product(d as u32,g as u32)));
+            [(raw_product(a as u32,e as u32)).wrapping_add(PP).wrapping_sub(raw_product(b as u32,f as u32)).wrapping_add(2*u).wrapping_add(3*2147483647u64).wrapping_sub(v),
+             (raw_product(a as u32,f as u32)).wrapping_add(raw_product(b as u32,e as u32)).wrapping_add(u).wrapping_add(2*v),
+             (raw_product(a as u32,g as u32)).wrapping_add(raw_product(c as u32,e as u32)).wrapping_add(2*PP).wrapping_sub(raw_product(b as u32,h as u32)).wrapping_sub(raw_product(d as u32,f as u32)),
+             (raw_product(a as u32,h as u32)).wrapping_add(raw_product(b as u32,g as u32)).wrapping_add(raw_product(c as u32,f as u32)).wrapping_add(raw_product(d as u32,e as u32))]
+        
+};}
+pub fn pairing_fold_step() {let mut sums:[u64;4]=kani::any();let raw:[u64;4]=kani::any();let j:usize=kani::any();kani::assume(j<4);sums[j]=sums[j].wrapping_add((raw[j]&2147483647u64).wrapping_add(raw[j]>>31u32));}
+pub fn accum_tail_step() {let mut terms:usize=kani::any();let next:usize=kani::any();kani::assume(terms<12 && next<22);let mut a=Accumulator{weights:Vec::new(),rhs:any_e(),power:any_q(),next};let value=any_e();let rho=any_q();terms+=1;a.rhs=a.rhs.add(value.mul_qm31(a.power));crate::trace::value(11,a.next,a.rhs);a.power=a.power.mul(rho);a.next+=1;let _=terms;}
+pub fn decoder_step() {let raw:[u8;4]=kani::any();let _out=M31::from_le_bytes(raw);}
+pub fn q_subtract_step() {let a=any_q();let b=any_q();let _out=a.sub(b);}
+pub fn line_scale_step() {let alpha=any_e();let raw:u32=kani::any();let inverse=M31(raw);let half=M31(1073741824);let _out=alpha.mul_m31(half.mul(inverse));}
+
+pub fn fields_all() {let bytes:[u8;128]=kani::any();for s in 0..4 {for j in 0..8 {let o=s*32+j*4;let w=u32::from_le_bytes([bytes[o],bytes[o+1],bytes[o+2],bytes[o+3]]);kani::assume(w<2147483647);}}let _values:[E;4]=core::array::from_fn(|s|field(&bytes,s));}

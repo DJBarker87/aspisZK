@@ -1,0 +1,9 @@
+NIF_generated/NIF_Inspect.lean:4:7: error(lean.unknownIdentifier): Unknown constant `AspisR1.NFS_QueryLoopRoot.result`
+NIF_generated/NIF_Inspect.lean:5:7: error(lean.unknownIdentifier): Unknown constant `NHL_Tx1Model`
+NIF_generated/NIF_Inspect.lean:6:7: error(lean.unknownIdentifier): Unknown constant `NFU_Retarget.LPl_Kit_Bytes.scan`
+NIF_generated/NIF_Inspect.lean:7:7: error(lean.unknownIdentifier): Unknown constant `NFU_Retarget.LPl_Kit_Bytes.echeck`
+def NFU_Retarget.LPl_Kit_Bytes.validChunk : ℕ → Bool → List Aeneas.Std.U8 → Bool :=
+fun width highZero bs =>
+  (List.range width).all fun j =>
+    have n := NFU_Retarget.LPl_Kit_Bytes.le32 (List.take 4 (List.drop (4 * j) bs));
+    decide (n < 2147483647) && (!highZero || decide (j < 4 ∨ n = 0))
