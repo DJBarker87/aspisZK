@@ -1,0 +1,53 @@
+{"attempt": "NGW_L037", "exit_status": 0, "wall_seconds": 2.882924008881673, "peak_rss_kib": "5358744", "swaps": "0", "print_axioms": []}
+def AspisR1CurrentWide.field.CM31.mul : AspisR1CurrentWide.field.CM31 →
+  AspisR1CurrentWide.field.CM31 → Aeneas.Std.Result AspisR1CurrentWide.field.CM31 :=
+fun self rhs => do
+  let m0 ← self.a.mul rhs.a
+  let m1 ← self.b.mul rhs.b
+  have i : AspisR1CurrentWide.field.M31 := self.a
+  let i1 ← Aeneas.Std.lift (Aeneas.Std.core.convert.num.FromU64U32.from i)
+  have i2 : AspisR1CurrentWide.field.M31 := self.b
+  let i3 ← Aeneas.Std.lift (Aeneas.Std.core.convert.num.FromU64U32.from i2)
+  let i4 ← i1 + i3
+  have i5 : AspisR1CurrentWide.field.M31 := rhs.a
+  let i6 ← Aeneas.Std.lift (Aeneas.Std.core.convert.num.FromU64U32.from i5)
+  have i7 : AspisR1CurrentWide.field.M31 := rhs.b
+  let i8 ← Aeneas.Std
+...
++ i8
+  let i10 ← i4 * i9
+  let m2 ← AspisR1CurrentWide.field.M31.reduce_u64 i10
+  let m ← m0.sub m1
+  let m3 ← m2.sub m0
+  let m4 ← m3.sub m1
+  Aeneas.Std.Result.ok { a := m, b := m4 }
+def AspisR1CurrentWide.field.wide_exact.WideExact.mul : AspisR1CurrentWide.field.wide_exact.WideExact →
+  AspisR1CurrentWide.field.wide_exact.WideExact → Aeneas.Std.Result AspisR1CurrentWide.field.wide_exact.WideExact :=
+fun self rhs => do
+  let ac ← self.c0.mul rhs.c0
+  let bd ← self.c1.mul rhs.c1
+  let q ← self.c0.add self.c1
+  let q1 ← rhs.c0.add rhs.c1
+  let cross ← q.mul q1
+  let q2 ← AspisR1CurrentWide.field.wide_exact.mul_u bd
+  let q3 ← ac.add q2
+  let q4 ← cross.sub ac
+  let q5 ← q4.sub bd
+  Aeneas.Std.Result.ok { c0 := q3, c1 := q5 }
+AspisR1.FIo_WideMulValues.mul (x y z : AspisR1.FIo_FieldBridge.NE) (hx : AspisR1.FIo_WideValues.Canon x)
+  (hy : AspisR1.FIo_WideValues.Canon y)
+  (run : FIo_Native.aspis_core.field.wide_exact.WideExact.mul x y = Aeneas.Std.Result.ok z) :
+  AspisR1.FIo_WideValues.Canon z ∧
+    AspisR1CurrentWide.Proof.decodeWide (AspisR1.FIo_FieldBridge.wide z) =
+      AspisR1CurrentWide.Proof.decodeWide (AspisR1.FIo_FieldBridge.wide x) *
+        AspisR1CurrentWide.Proof.decodeWide (AspisR1.FIo_FieldBridge.wide y)
+AspisR1.FIo_FieldCanonical.field (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (i : Aeneas.Std.Usize)
+  (z : AspisR1.FIo_FieldBridge.NE) (run : FIo_Native.weights.field bytes i = Aeneas.Std.Result.ok z) :
+  AspisR1.FIo_WideValues.Canon z
+AspisR1.SAQ_RawWide.mul_exact (x y z : AspisR1CurrentWide.Proof.E)
+  (h : AspisR1CurrentWide.field.wide_exact.WideExact.mul x y = Aeneas.Std.Result.ok z) :
+  AspisR1CurrentWide.Proof.CanonicalWide z ∧
+    AspisR1CurrentWide.Proof.decodeWide z =
+      AspisR1CurrentWide.Proof.decodeWide x * AspisR1CurrentWide.Proof.decodeWide y
+
+Running as unit: run-r7642bd3b4fc749328d79c311d6526091.scope; invocation ID: 7a2101c8e4ef493aacc4a09529e80d98

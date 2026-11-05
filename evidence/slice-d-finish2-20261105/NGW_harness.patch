@@ -1,72 +1,409 @@
---- a/crates/aspis-core/src/lib.rs
-+++ b/crates/aspis-core/src/lib.rs
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
 @@ -1,3 +1,4 @@
 +#![cfg_attr(kani,feature(allocator_api))]
- //! aspis-core: shared no_std verifier core for the Aspis native WHIR-style
- //! M31 PCS substrate (Stage 0).
- //!
---- a/crates/aspis-core/src/state_only_prefix.rs
-+++ b/crates/aspis-core/src/state_only_prefix.rs
-@@ -1886,3 +1886,5 @@
-         })
+ //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
+ #![no_std]
+ extern crate alloc;
+--- a/crates/aspis-r1-cost-probe/src/weights.rs
++++ b/crates/aspis-r1-cost-probe/src/weights.rs
+@@ -133,6 +133,8 @@
+     weights
+ }
+ 
++#[cfg_attr(kani,kani::modifies())]
++#[cfg_attr(kani,kani::ensures(|r| NGM_weights::guard_raw_post(*r,w,folds)))]
+ fn shared_two_point_guard(w:&Weights,folds:usize)->bool {
+     w.variant==Variant::S2 && folds==2 && w.factors[0][2]==w.factors[2][2] && w.factors[0][3]==w.factors[2][3]
+  }
+@@ -397,3 +399,7 @@
+         }
      }
  }
 +
-+#[cfg(kani)] #[path="NGW_points.rs"] mod NGW_points;
++#[cfg(kani)] #[path="NGM_weights.rs"] mod NGM_weights;
++
++#[cfg(kani)] #[path="NGW_new.rs"] mod NGW_new;
 --- /dev/null
-+++ b/crates/aspis-core/src/NGW_points.rs
-@@ -0,0 +1,54 @@
++++ b/crates/aspis-r1-cost-probe/src/NGM_reference.rs
+@@ -0,0 +1,3 @@
++pub fn qeq_ref(a:[u32;4],b:[u32;4])->bool{a[0]==b[0]&&a[1]==b[1]&&a[2]==b[2]&&a[3]==b[3]}
++pub fn roweq_ref(a:[[u32;4];4],b:[[u32;4];4])->bool{qeq_ref(a[0],b[0])&&qeq_ref(a[1],b[1])&&qeq_ref(a[2],b[2])&&qeq_ref(a[3],b[3])}
++pub fn guard_raw_ref(variant:u8,folds:usize,a:[[u32;4];4],b:[[u32;4];4],c:[[u32;4];4],d:[[u32;4];4])->bool{variant==1&&folds==2&&roweq_ref(a,b)&&roweq_ref(c,d)}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NGM_weights.rs
+@@ -0,0 +1,36 @@
 +use super::*;
 +include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
-+fn words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
-+fn q(w:[u32;4])->QM31{QM31{c0:crate::field::CM31{a:crate::field::M31(w[0]),b:crate::field::M31(w[1])},c1:crate::field::CM31{a:crate::field::M31(w[2]),b:crate::field::M31(w[3])}}}
-+fn anyq()->QM31{let w:[u32;4]=kani::any();for a in w{kani::assume(a<2147483647);}q(w)}
-+fn add(x:u32,y:u32)->u32{let s=x+y;if s>=2147483647{s-2147483647}else{s}}
-+fn sub(x:u32,y:u32)->u32{if x>=y{x-y}else{x+2147483647-y}}
-+struct Log{reply:QM31,left:[u32;4],right:[u32;4],calls:usize}
-+fn product(bit:QM31,carry:QM31,log:&mut Log)->QM31{log.left=words(bit);log.right=words(carry);log.calls+=1;log.reply}
-+fn step(z:&[QM31;10],successor:&mut[QM31;10],carry:&mut QM31,coordinate:usize,log:&mut Log){
-+ let bit = z[coordinate];
-+ let bit_and_carry = product(bit,*carry,log);
-+ successor[coordinate] = bit.add(*carry).sub(bit_and_carry.add(bit_and_carry));
-+ *carry = bit_and_carry;
++mod reference { include!("NGM_reference.rs"); }
++fn qwords(x:K)->[u32;4]{[x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0]}
++fn fromq(x:[u32;4])->K{K{c0:aspis_core::field::CM31{a:M31(x[0]),b:M31(x[1])},c1:aspis_core::field::CM31{a:M31(x[2]),b:M31(x[3])}}}
++fn rawrow(a:&[K;4])->[[u32;4];4]{[qwords(a[0]),qwords(a[1]),qwords(a[2]),qwords(a[3])]}
++pub(super) fn guard_raw_post(r:bool,w:&Weights,folds:usize)->bool{
++ let variant=match w.variant{Variant::S1=>0,Variant::S2=>1,Variant::D=>2};
++ let reference=reference::guard_raw_ref(variant,folds,rawrow(&w.factors[0][2]),rawrow(&w.factors[2][2]),rawrow(&w.factors[0][3]),rawrow(&w.factors[2][3]));
++ let same=r==reference;if cfg!(NGM_invert){!same}else{same}
 +}
-+fn exercise(g:u8){let z=core::array::from_fn(|_|anyq());let mut s=core::array::from_fn(|_|anyq());let before=s;let mut carry=anyq();let old=carry;let p=anyq();let i:usize=kani::any();kani::assume(i<10);let j:usize=kani::any();kani::assume(j<4);let k:usize=kani::any();kani::assume(k<10);let mut log=Log{reply:p,left:[0;4],right:[0;4],calls:0};
-+ step(&z,&mut s,&mut carry,i,&mut log);
-+ let expected=sub(add(words(z[i])[j],words(old)[j]),add(words(p)[j],words(p)[j]));
-+ if cfg!(NGW_invert){match g{0=>{let mut w=words(s[i]);w[j]^=1;s[i]=q(w)},1=>log.left[j]^=1,2=>{let mut w=words(carry);w[j]^=1;carry=q(w)},3=>{let mut w=words(s[k]);w[j]^=1;s[k]=q(w)},_=>log.calls+=1}}
-+ assert!(match g{0=>words(s[i])[j]==expected,1=>log.left==words(z[i])&&log.right==words(old),2=>words(carry)==words(p),3=>words(s[k])[j]==if k==i{expected}else{words(before[k])[j]},_=>log.calls==1});
-+}
-+fn absorb(g:u8){let mut a=core::array::from_fn::<_,10,_>(|_|anyq());let old=a;let j:usize=kani::any();kani::assume(j<4);let k:usize=kani::any();kani::assume(k<10);
-+ a[7]=QM31::ONE.sub(a[7]);a[6]=QM31::ONE.sub(a[6]);
-+ if cfg!(NGW_invert){let mut w=words(a[k]);w[j]^=1;a[k]=q(w);}
-+ let one=if j==0{1}else{0};let expected=if k==7||k==6{sub(one,words(old[k])[j])}else{words(old[k])[j]};assert!(words(a[k])[j]==expected);let _=g;
-+}
-+fn control(){let z=[QM31::ZERO;10];let mut n=0;let mut trace=[0usize;10];for coordinate in (0..z.len()).rev(){trace[n]=coordinate;n+=1;}let j:usize=kani::any();kani::assume(j<10);if cfg!(NGW_invert){trace[j]^=1;}assert!(n==10&&trace[j]==9-j);}
-+fn copy_control(){let a:[u8;160]=kani::any();let mut b:[u8;160]=kani::any();b.copy_from_slice(&a);let i:usize=kani::any();kani::assume(i<160);if cfg!(NGW_invert){b[i]^=1;}assert!(a[i]==b[i]);}
-+macro_rules! gate{($n:ident,$f:ident,$g:expr)=>{#[kani::proof]#[kani::unwind(161)]#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]fn $n(){$f($g)}};}
-+gate!(step_g0,exercise,0);
-+gate!(step_g1,exercise,1);
-+gate!(step_g2,exercise,2);
-+gate!(step_g3,exercise,3);
-+gate!(step_g4,exercise,4);
-+gate!(absorption,absorb,0);
-+#[kani::proof]#[kani::unwind(161)]#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]fn control_gate(){control()}
-+#[kani::proof]#[kani::unwind(161)]#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]fn copy_control_gate(){copy_control()}
++#[kani::proof_for_contract(shared_two_point_guard)] #[kani::unwind(12)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn guard_raw_contract(){let w=Weights{variant:match kani::any::<u8>()%3{0=>Variant::S1,1=>Variant::S2,_=>Variant::D},
++ factors:core::array::from_fn(|_|core::array::from_fn(|_|core::array::from_fn(|_|fromq(kani::any())))),
++ points:core::array::from_fn(|_|core::array::from_fn(|_|fromq(kani::any()))),extra:core::array::from_fn(|_|fromq(kani::any()))};
++ shared_two_point_guard(&w,kani::any());}
++#[kani::proof] #[kani::unwind(65)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn copy_control(){let src:[u8;64]=kani::any();let mut dst:[u8;64]=kani::any();dst.copy_from_slice(&src);let i:usize=kani::any();kani::assume(i<64);assert!((dst[i]==src[i]) != cfg!(NGM_invert));}
 +
-+struct WrapperLog{reply:[[QM31;10];3],args:[QM31;10],ptr:*const QM31,calls:usize}
-+fn point_reply(alpha:&[QM31;10],log:&mut WrapperLog)->[[QM31;10];3]{log.args=*alpha;log.ptr=alpha.as_ptr();log.calls+=1;log.reply}
-+fn source_wrapper(alpha:&[QM31;10],log:&mut WrapperLog)->[[QM31;10];3]{point_reply(alpha,log)}
-+fn wrapper_exercise(g:u8){let alpha=core::array::from_fn(|_|anyq());let before=alpha;let reply=core::array::from_fn(|_|core::array::from_fn(|_|q(kani::any())));let mut log=WrapperLog{reply,args:[QM31::ZERO;10],ptr:core::ptr::null(),calls:0};let out=source_wrapper(&alpha,&mut log);let p:usize=kani::any();kani::assume(p<3);let i:usize=kani::any();kani::assume(i<10);let j:usize=kani::any();kani::assume(j<4);
-+ if cfg!(NGW_invert){match g{0=>{let mut w=words(log.reply[p][i]);w[j]^=1;log.reply[p][i]=q(w)},1=>{let mut w=words(log.args[i]);w[j]^=1;log.args[i]=q(w)},2=>log.ptr=log.ptr.wrapping_add(1),3=>log.calls+=1,_=>{}}}
-+ assert!(match g{0=>words(out[p][i])[j]==words(log.reply[p][i])[j],1=>words(log.args[i])[j]==words(alpha[i])[j],2=>log.ptr==alpha.as_ptr(),3=>log.calls==1,_=>words(alpha[i])[j]==words(before[i])[j]});}
-+fn return_points(z:&[QM31;10],successor:[QM31;10],absorption:[QM31;10])->[[QM31;10];3]{[*z,successor,absorption]}
-+fn return_exercise(g:u8){let z=core::array::from_fn(|_|q(kani::any()));let successor=core::array::from_fn(|_|q(kani::any()));let absorption=core::array::from_fn(|_|q(kani::any()));let out=return_points(&z,successor,absorption);let p:usize=kani::any();kani::assume(p<3);let i:usize=kani::any();kani::assume(i<10);let j:usize=kani::any();kani::assume(j<4);let mut expected=words(match p{0=>z[i],1=>successor[i],_=>absorption[i]})[j];if cfg!(NGW_invert){expected^=1;}assert!(words(out[p][i])[j]==expected);let _=g;}
-+fn init_exercise(g:u8){let z=core::array::from_fn::<_,10,_>(|_|q(kani::any()));let successor=z;let carry=QM31::ONE;let absorption=z;let i:usize=kani::any();kani::assume(i<10);let j:usize=kani::any();kani::assume(j<4);let mut expected=words(z[i])[j];if cfg!(NGW_invert){expected^=1;}assert!(if g==0{words(successor[i])[j]==expected}else{words(absorption[i])[j]==expected});assert!(words(carry)==[1,0,0,0]);}
-+gate!(wrapper_g0,wrapper_exercise,0);
-+gate!(wrapper_g1,wrapper_exercise,1);
-+gate!(wrapper_g2,wrapper_exercise,2);
-+gate!(wrapper_g3,wrapper_exercise,3);
-+gate!(return_frame,return_exercise,0);
-+gate!(init_successor,init_exercise,0);
-+gate!(init_absorption,init_exercise,1);
++mod double_reference{include!("NGM_double_reference.rs");}
++struct ProductLog{replies:[K;2],left:[K;2],right:[K;2],count:usize}
++fn opaque_product(x:K,y:K,log:&mut ProductLog)->K{let i=log.count;log.left[i]=x;log.right[i]=y;log.count+=1;log.replies[i]}
++fn source_double(x:K,log:&mut ProductLog)->K{opaque_product(x,x,log).add(opaque_product(x,x,log)).sub(K::ONE)}
++fn canonical_q()->K{let x:[u32;4]=kani::any();for word in x{kani::assume(word<0x7fffffff);}fromq(x)}
++fn exercise_double(group:u8){let x=canonical_q();let mut log=ProductLog{replies:[canonical_q(),canonical_q()],left:[K::ZERO;2],right:[K::ZERO;2],count:0};let expected=double_reference::double_observed_ref(qwords(log.replies[0]),qwords(log.replies[1]));let out=qwords(source_double(x,&mut log));let good=match group{0=>out[0]==expected[0],1=>out[1]==expected[1],2=>out[2]==expected[2],3=>out[3]==expected[3],4=>log.count==2,5=>log.left[0]==x&&log.right[0]==x,6=>log.left[1]==x&&log.right[1]==x,_=>false};assert!(good != cfg!(NGM_invert));}
++macro_rules! double_gate{($n:ident,$g:expr)=>{#[kani::proof]#[kani::unwind(17)]#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]fn $n(){exercise_double($g)}};}
++double_gate!(double_control_0,0);
++double_gate!(double_control_1,1);
++double_gate!(double_control_2,2);
++double_gate!(double_control_3,3);
++double_gate!(double_control_4,4);
++double_gate!(double_control_5,5);
++double_gate!(double_control_6,6);
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NGM_wire.rs
+@@ -0,0 +1 @@
++// Prefix-owned reserved sidecar.
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NGM_compact.rs
+@@ -0,0 +1 @@
++// Prefix-owned reserved sidecar.
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NGM_transport.rs
+@@ -0,0 +1 @@
++// Prefix-owned reserved sidecar.
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NGM_verifier.rs
+@@ -0,0 +1,74 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++mod reference {include!("NGM_control_reference.rs");}
++struct RoundArgs{ptr:*const u8,len:usize,alpha:E,claim:E,round:usize}
++struct PairArgs{weights:*const Weights,alpha:*const E,folds:usize,bytes:*const u8,len:usize,kappa:E}
++struct DotArgs{bytes:*const u8,len:usize,weights:*const K,width:usize}
++struct Log{r0:Result<E,Error>,r1:Result<E,Error>,new_error:Option<Error>,new_value:Option<Box<Weights>>,pair:Result<E,Error>,dot:Result<E,Error>,events:[u8;7],len:usize,rounds:[Option<RoundArgs>;2],new_args:Option<(Variant,*const K,*const SecureCirclePoint)>,new_ptr:*const Weights,pair_args:Option<PairArgs>,dot_args:Option<DotArgs>}
++fn event(log:&mut Log,n:u8){log.events[log.len]=n;log.len+=1;}
++fn round(poly:&[u8],alpha:E,claim:E,round:usize,log:&mut Log)->Result<E,Error>{event(log,round as u8);log.rounds[round]=Some(RoundArgs{ptr:poly.as_ptr(),len:poly.len(),alpha,claim,round});if round==0{log.r0}else{log.r1}}
++fn new_weights(variant:Variant,alpha:&[K;10],z:&[SecureCirclePoint;2],log:&mut Log)->Result<Box<Weights>,Error>{event(log,2);log.new_args=Some((variant,alpha.as_ptr(),z.as_ptr()));if let Some(e)=log.new_error{return Err(e);}let w=log.new_value.take().unwrap();log.new_ptr=&*w;Ok(w)}
++fn pair(w:&Weights,alpha:&[E],bytes:&[u8],kappa:E,log:&mut Log)->Result<E,Error>{event(log,3);log.pair_args=Some(PairArgs{weights:w,alpha:alpha.as_ptr(),folds:alpha.len(),bytes:bytes.as_ptr(),len:bytes.len(),kappa});log.pair}
++fn dot(bytes:&[u8],weights:&[K],log:&mut Log)->Result<E,Error>{event(log,5);log.dot_args=Some(DotArgs{bytes:bytes.as_ptr(),len:bytes.len(),weights:weights.as_ptr(),width:weights.len()});log.dot}
++fn observed_mark(obs:Observer,phase:Phase,log:&mut Log){event(log,if phase==Phase::Relation{4}else{6});super::mark(obs,phase);}
++fn q(x:[u32;4])->K{K{c0:aspis_core::field::CM31{a:M31(x[0]),b:M31(x[1])},c1:aspis_core::field::CM31{a:M31(x[2]),b:M31(x[3])}}}
++fn anyk()->K{let words:[u32;4]=kani::any();for x in words{kani::assume(x<0x7fffffff);}q(words)}
++fn anye()->E{let limbs:[u32;8]=kani::any();for x in limbs{kani::assume(x<0x7fffffff);}E::from_limbs(limbs).unwrap()}
++fn error(i:u8)->Error{match i%8{0=>Error::Parse,1=>Error::Semantic,2=>Error::Transcript,3=>Error::Relation,4=>Error::Merkle,5=>Error::Query,6=>Error::Checkpoint,_=>Error::Allocation}}
++fn code(e:Error)->u8{match e{Error::Parse=>0,Error::Semantic=>1,Error::Transcript=>2,Error::Relation=>3,Error::Merkle=>4,Error::Query=>5,Error::Checkpoint=>6,Error::Allocation=>7}}
++fn reply()->Result<E,Error>{if kani::any(){Ok(anye())}else{Err(error(kani::any()))}}
++fn encode(r:Result<E,Error>)->reference::Reply{r.map(|x|x.to_limbs()).map_err(code)}
++fn result(r:Result<(),Error>)->Result<(),u8>{r.map_err(code)}
++fn source_finish(v:&View<'_>,p:&Prepared,a:&Accumulator,obs:Observer,log:&mut Log)->Result<(),Error> {
++    let mut claim=p.claim;
++    claim=round(v.round0,p.alpha[0],claim,0,log)?;
++    if p.variant.folds()==2 {claim=round(v.round1,p.alpha[1],claim,1,log)?;}
++    let weights=new_weights(p.variant,&p.semantic_alpha,&p.z,log)?;
++    let pair=pair(&weights,&p.alpha[..p.variant.folds()],v.final_message,p.kappa,log)?;
++    crate::trace::value(16,0,pair);crate::trace::value(16,1,claim);
++    if pair!=claim {return Err(Error::Relation);}
++    observed_mark(obs,Phase::Relation,log);
++    let actual=dot(v.final_message,&a.weights,log)?;
++    crate::trace::value(17,0,actual);crate::trace::value(17,1,a.rhs);
++    if a.next!=22||actual!=a.rhs {return Err(Error::Query);}
++    observed_mark(obs,Phase::Final,log);Ok(())
++}
++fn canonical_message(bytes:&[u8],fields:usize){for i in 0..fields{for j in 0..8{let at=32*i+4*j;let word=u32::from_le_bytes([bytes[at],bytes[at+1],bytes[at+2],bytes[at+3]]);kani::assume(word<0x7fffffff);}}}
++fn exercise(group:u8){
++ let bytes:[u8;2528]=kani::any();
++ let p=Prepared{variant:Variant::S2,roots:kani::any(),gamma:anye(),kappa:anye(),alpha:[anye(),anye()],rho:anyk(),queries:kani::any(),semantic_alpha:core::array::from_fn(|_|anyk()),z:core::array::from_fn(|_|SecureCirclePoint{x:anyk(),y:anyk()}),claim:anye(),state:kani::any()};
++ let v=View{variant:p.variant,semantic:&[],y1:&[],inactive:anye(),round0:&bytes[..224],folded_root:None,round1:&bytes[256..480],final_message:&bytes[480..],query_bytes:&[]};
++ let weight_values:[K;64]=core::array::from_fn(|_|q(kani::any()));let a=Accumulator{weights:weight_values.to_vec(),rhs:anye(),power:anyk(),next:kani::any()};
++ let value=Weights{variant:p.variant,factors:core::array::from_fn(|_|core::array::from_fn(|_|core::array::from_fn(|_|anyk()))),points:core::array::from_fn(|_|core::array::from_fn(|_|anyk())),extra:[anyk(),anyk()]};
++ let mut log=Log{r0:reply(),r1:reply(),new_error:if kani::any(){Some(error(kani::any()))}else{None},new_value:Some(Box::new(value)),pair:reply(),dot:reply(),events:[255;7],len:0,rounds:[None,None],new_args:None,new_ptr:core::ptr::null(),pair_args:None,dot_args:None};
++ let mut expected=reference::finish_ref(p.variant.folds()==2,a.next,a.rhs.to_limbs(),reference::Replies{round0:if cfg!(NGM_invert)&&group==0{match encode(log.r0){Ok(_)=>Err(0),Err(e)=>Err(if e==0{1}else{0})}}else{encode(log.r0)},round1:encode(log.r1),weights:match log.new_error{Some(e)=>Err(code(e)),None=>Ok(())},pair:encode(log.pair),dot:encode(log.dot)});
++ let r=source_finish(&v,&p,&a,None,&mut log);
++ if cfg!(NGM_invert){match group{
++ 1=>expected.len=if expected.len==7{6}else{expected.len+1},
++ 2=>log.events[0]=255,
++ 3=>if let Some(x)=&mut log.rounds[0]{x.ptr=x.ptr.wrapping_add(1);},
++ 4=>if let Some(x)=&mut log.rounds[1]{x.ptr=x.ptr.wrapping_add(1);},
++ 5=>if let Some(x)=&mut log.new_args{x.1=x.1.wrapping_add(1);},
++ 6=>if let Some(x)=&mut log.pair_args{x.alpha=x.alpha.wrapping_add(1);},
++ 7=>if let Some(x)=&mut log.dot_args{x.weights=x.weights.wrapping_add(1);},_=>{}}}
++ let good=match group{
++ 0=>result(r)==expected.result,
++ 1=>log.len==expected.len,
++ 2=>{let i:usize=kani::any();kani::assume(i<7);log.events[i]==expected.events[i]},
++ 3=>match &log.rounds[0]{Some(x)=>x.ptr==v.round0.as_ptr()&&x.len==v.round0.len()&&x.alpha==p.alpha[0]&&x.claim==p.claim&&x.round==0,None=>false},
++ 4=>match &log.rounds[1]{Some(x)=>x.ptr==v.round1.as_ptr()&&x.len==v.round1.len()&&x.alpha==p.alpha[1]&&Some(x.claim)==log.r0.ok()&&x.round==1,None=>log.r0.is_err()||p.variant.folds()!=2},
++ 5=>match log.new_args{Some((variant,alpha,z))=>variant==p.variant&&alpha==p.semantic_alpha.as_ptr()&&z==p.z.as_ptr(),None=>true},
++ 6=>match &log.pair_args{Some(x)=>x.weights==log.new_ptr&&x.alpha==p.alpha.as_ptr()&&x.folds==p.variant.folds()&&x.bytes==v.final_message.as_ptr()&&x.len==v.final_message.len()&&x.kappa==p.kappa,None=>true},
++ 7=>match &log.dot_args{Some(x)=>x.bytes==v.final_message.as_ptr()&&x.len==v.final_message.len()&&x.weights==a.weights.as_ptr()&&x.width==64,None=>true},_=>false};
++ assert!(good);
++}
++macro_rules! gate{($n:ident,$g:expr)=>{#[kani::proof]#[kani::unwind(65)]#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]fn $n(){exercise($g)}};}
++gate!(finish_control_0,0);
++gate!(finish_control_1,1);
++gate!(finish_control_2,2);
++gate!(finish_control_3,3);
++gate!(finish_control_4,4);
++gate!(finish_control_5,5);
++gate!(finish_control_6,6);
++gate!(finish_control_7,7);
++gate!(finish_control_rename,0);
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -526,3 +526,8 @@
+ #[cfg(feature="audit-eight-way")]
+ #[path="eight_way.rs"]
+ pub mod eight_way;
++
++#[cfg(kani)] #[path="NGM_verifier.rs"] mod NGM_verifier;
++#[cfg(kani)] #[path="NGM_dot.rs"] mod NGM_dot;
++
++#[cfg(kani)] #[path="NGM_helpers.rs"] mod NGM_helpers;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NGM_control_reference.rs
+@@ -0,0 +1,18 @@
++pub type Word=[u32;8];
++pub type Reply=Result<Word,u8>;
++pub struct Replies {pub round0:Reply,pub round1:Reply,pub weights:Result<(),u8>,pub pair:Reply,pub dot:Reply}
++pub struct Observed {pub result:Result<(),u8>,pub events:[u8;7],pub len:usize}
++fn event(o:&mut Observed,tag:u8){o.events[o.len]=tag;o.len+=1;}
++pub fn finish_ref(two:bool,next:usize,rhs:Word,r:Replies)->Observed {
++ let mut o=Observed{result:Ok(()),events:[255;7],len:0};
++ event(&mut o,0);
++ let mut claim=match r.round0 {Ok(x)=>x,Err(e)=>{o.result=Err(e);return o;}};
++ if two {event(&mut o,1);claim=match r.round1 {Ok(x)=>x,Err(e)=>{o.result=Err(e);return o;}};}
++ event(&mut o,2);if let Err(e)=r.weights{o.result=Err(e);return o;}
++ event(&mut o,3);let pair=match r.pair{Ok(x)=>x,Err(e)=>{o.result=Err(e);return o;}};
++ if pair!=claim{o.result=Err(3);return o;}
++ event(&mut o,4);event(&mut o,5);
++ let actual=match r.dot{Ok(x)=>x,Err(e)=>{o.result=Err(e);return o;}};
++ if next!=22||actual!=rhs{o.result=Err(5);return o;}
++ event(&mut o,6);o
++}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NGM_double_reference.rs
+@@ -0,0 +1,3 @@
++pub fn add_ref(x:u32,y:u32)->u32 {let s=x+y;if s>=2147483647{s-2147483647}else{s}}
++pub fn sub_ref(x:u32,y:u32)->u32 {let s=x+2147483647-y;if s>=2147483647{s-2147483647}else{s}}
++pub fn double_observed_ref(p0:[u32;4],p1:[u32;4])->[u32;4]{[sub_ref(add_ref(p0[0],p1[0]),1),sub_ref(add_ref(p0[1],p1[1]),0),sub_ref(add_ref(p0[2],p1[2]),0),sub_ref(add_ref(p0[3],p1[3]),0)]}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NGM_dot.rs
+@@ -0,0 +1,46 @@
++// OPEN one-iteration oracle candidate; no claimed actual Dot ABI transport.
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++struct Log{reply:bool,after:[u64;9],before:[u64;9],value:[u32;8],scalar:[u32;4],calls:usize,order:u8,field_ptr:*const u8,field_len:usize,field_index:usize,weight_ptr:*const K,weight_index:usize}
++fn recorded_push(dot:&mut crate::fast_pairing::EbyKDot,value:E,scalar:K,log:&mut Log)->Result<(),()>{log.before=crate::fast_pairing::NGM_helpers::read(dot);log.value=value.to_limbs();log.scalar=[scalar.c0.a.0,scalar.c0.b.0,scalar.c1.a.0,scalar.c1.b.0];log.calls+=1;log.order=if log.order==2{3}else{255};*dot=crate::fast_pairing::NGM_helpers::make(log.after);if log.reply{Ok(())}else{Err(())}}
++fn recorded_field(bytes:&[u8],j:usize,log:&mut Log)->E{let selected=&bytes[32*j..32*(j+1)];log.field_ptr=selected.as_ptr();log.field_len=selected.len();log.field_index=j;log.order=1;field(bytes,j)}
++fn recorded_weight(weights:&[K],j:usize,log:&mut Log)->K{log.weight_ptr=&weights[j];log.weight_index=j;log.order=if log.order==1{2}else{255};weights[j]}
++fn source_step(final_message:&[u8],weights:&[K],dot:&mut crate::fast_pairing::EbyKDot,j:&mut usize,log:&mut Log)->Result<(),Error>{
++ let value=recorded_field(final_message,*j,log);
++ let scalar=recorded_weight(weights,*j,log);
++ recorded_push(dot,value,scalar,log).map_err(|_|Error::Parse)?;*j+=1;Ok(())
++}
++fn exercise(group:u8){
++ let mut bytes:[u8;2048]=kani::any();let j:usize=kani::any();kani::assume(j<64);
++ let value:[u32;8]=kani::any();for x in value{kani::assume(x<0x7fffffff);}
++ for i in 0..8{bytes[32*j+4*i..32*j+4*i+4].copy_from_slice(&value[i].to_le_bytes());}
++ let scalar:[u32;4]=kani::any();let mut weights=[K::ZERO;64];weights[j]=K{c0:aspis_core::field::CM31{a:M31(scalar[0]),b:M31(scalar[1])},c1:aspis_core::field::CM31{a:M31(scalar[2]),b:M31(scalar[3])}};
++ let before:[u64;9]=kani::any();let after:[u64;9]=kani::any();let reply:bool=kani::any();
++ let mut log=Log{reply,after,before:[0;9],value:[0;8],scalar:[0;4],calls:0,order:0,field_ptr:core::ptr::null(),field_len:0,field_index:0,weight_ptr:core::ptr::null(),weight_index:0};
++ let mut dot=crate::fast_pairing::NGM_helpers::make(before);let mut index=j;let result=source_step(&bytes,&weights,&mut dot,&mut index,&mut log);let mut final_state=crate::fast_pairing::NGM_helpers::read(&dot);
++ if cfg!(NGM_invert){match group{1=>index=index.wrapping_add(1),2=>log.calls+=1,3=>log.before[0]^=1,4=>final_state[0]^=1,5=>log.value[0]^=1,6=>log.value[4]^=1,7=>log.scalar[0]^=1,8=>log.value[0]=0x7fffffff,9=>log.order=255,10=>log.field_ptr=log.field_ptr.wrapping_add(1),11=>log.field_len=31,12=>log.field_index+=1,13=>log.weight_ptr=log.weight_ptr.wrapping_add(1),_=>{}}}
++ let expected_reply=if cfg!(NGM_invert)&&group==0{!reply}else{reply};
++ let good=match group{
++ 0=>if expected_reply{matches!(result,Ok(()))}else{matches!(result,Err(Error::Parse))},
++ 1=>index==if reply{j+1}else{j},2=>log.calls==1,3=>(log.before[0]==before[0] && log.before[1]==before[1] && log.before[2]==before[2] && log.before[3]==before[3] && log.before[4]==before[4] && log.before[5]==before[5] && log.before[6]==before[6] && log.before[7]==before[7] && log.before[8]==before[8]),4=>(final_state[0]==after[0] && final_state[1]==after[1] && final_state[2]==after[2] && final_state[3]==after[3] && final_state[4]==after[4] && final_state[5]==after[5] && final_state[6]==after[6] && final_state[7]==after[7] && final_state[8]==after[8]),
++ 5=>log.value[..4]==value[..4],6=>log.value[4..]==value[4..],7=>log.scalar==scalar,
++ 8=>log.value.iter().all(|x|*x<0x7fffffff),9=>log.order==3,
++ 10=>log.field_ptr==bytes.as_ptr().wrapping_add(32*j),11=>log.field_len==32,
++ 12=>log.field_index==j,13=>log.weight_ptr==weights.as_ptr().wrapping_add(j)&&log.weight_index==j,
++ _=>false};assert!(good);
++}
++macro_rules! gate{($name:ident,$n:expr)=>{#[kani::proof]#[kani::unwind(35)]#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]fn $name(){exercise($n)}};}
++gate!(finish_g00,0);
++gate!(finish_g01,1);
++gate!(finish_g02,2);
++gate!(finish_g03,3);
++gate!(finish_g04,4);
++gate!(finish_g05,5);
++gate!(finish_g06,6);
++gate!(finish_g07,7);
++gate!(finish_g08,8);
++gate!(finish_g09,9);
++gate!(finish_g10,10);
++gate!(finish_g11,11);
++gate!(finish_g12,12);
++gate!(finish_g13,13);
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NGM_canonical.rs
+@@ -0,0 +1,3 @@
++use super::Dot;
++pub(in crate::fast_pairing) fn read(dot:&Dot)->[u64;4]{dot.sums}
++pub(in crate::fast_pairing) fn make(sums:[u64;4])->Dot{Dot{sums}}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NGM_fast_helpers.rs
+@@ -0,0 +1,3 @@
++use super::*;
++pub(crate) fn read(dot:&EbyKDot)->[u64;9]{let a=canonical::NGM_canonical::read(&dot.c0);let b=canonical::NGM_canonical::read(&dot.c1);[a[0],a[1],a[2],a[3],b[0],b[1],b[2],b[3],dot.count as u64]}
++pub(crate) fn make(s:[u64;9])->EbyKDot{assert_eq!(usize::BITS,64);EbyKDot{c0:canonical::NGM_canonical::make([s[0],s[1],s[2],s[3]]),c1:canonical::NGM_canonical::make([s[4],s[5],s[6],s[7]]),count:s[8] as usize}}
+--- a/crates/aspis-r1-cost-probe/src/fast_pairing.rs
++++ b/crates/aspis-r1-cost-probe/src/fast_pairing.rs
+@@ -2,6 +2,7 @@
+ mod canonical {
+     //! Private canonical representation: validate at the boundary, preserve internally.
+     //! No public unchecked constructor. This does NOT change aspis_core::M31.
++ #[cfg(kani)] pub(super) mod NGM_canonical { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/src/NGM_canonical.rs")); }
+     pub const P:u32=0x7fff_ffff;
+     const MASK:u64=0x7fff_ffff_7fff_ffff;
+     const ONES:u64=0x0000_0001_0000_0001;
+@@ -222,3 +223,5 @@
+         E::new(ac.add(bd.mul(E::U)), ad.add(bc))
+     }
+ }
++
++#[cfg(kani)] #[path="NGM_fast_helpers.rs"] pub(crate) mod NGM_helpers;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NGM_helpers.rs
+@@ -0,0 +1,46 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++mod reference{include!("NGM_helper_reference.rs");}
++fn q(x:[u32;4])->K{K{c0:aspis_core::field::CM31{a:M31(x[0]),b:M31(x[1])},c1:aspis_core::field::CM31{a:M31(x[2]),b:M31(x[3])}}}
++fn wide(x:[u32;8])->E{E::new(q([x[0],x[1],x[2],x[3]]),q([x[4],x[5],x[6],x[7]]))}
++fn words()->[u32;8]{let out:[u32;8]=kani::any();for x in out{kani::assume(x<0x7fffffff);}out}
++fn encode(bytes:&mut[u8],offset:usize,value:[u32;8]){for j in 0..8{bytes[offset+4*j..offset+4*j+4].copy_from_slice(&value[j].to_le_bytes());}}
++struct PolyLog{reply:E,left:[u32;8],right:[u32;8],calls:usize,order:u8,ptr:*const u8,len:usize,index:usize,value:[u32;8]}
++fn product(a:E,x:E,log:&mut PolyLog)->E{log.left=a.to_limbs();log.right=x.to_limbs();log.calls+=1;log.order=1;log.reply}
++fn coefficient(bytes:&[u8],i:usize,log:&mut PolyLog)->E{let selected=&bytes[32*i..32*(i+1)];log.ptr=selected.as_ptr();log.len=selected.len();log.index=i;log.order=if log.order==1{2}else{255};let value=field(bytes,i);log.value=value.to_limbs();value}
++fn source_polynomial_step(bytes:&[u8],x:E,a:E,i:usize,log:&mut PolyLog)->E{product(a,x,log).add(coefficient(bytes,i,log))}
++fn poly_exercise(group:u8){
++ if group==5{let mut calls=0usize;let mut trace=[99usize;7];let _=(0..7).rev().fold(E::ZERO,|a,i|{trace[calls]=i;calls+=1;a});let i:usize=kani::any();kani::assume(i<7);if cfg!(NGM_invert){trace[i]^=1;}assert!(calls==7&&trace[i]==6-i);return;}
++ let a=words();let x=words();let p=words();let c=words();let i:usize=kani::any();kani::assume(i<7);let mut bytes:[u8;224]=kani::any();encode(&mut bytes,32*i,c);
++ let mut log=PolyLog{reply:wide(p),left:[0;8],right:[0;8],calls:0,order:0,ptr:core::ptr::null(),len:0,index:0,value:[0;8]};
++ let actual=source_polynomial_step(&bytes,wide(x),wide(a),i,&mut log).to_limbs();let mut expected=reference::polynomial_step_ref(p,c);
++ if cfg!(NGM_invert){match group{0=>expected[0]^=1,1=>expected[4]^=1,2=>log.left[0]^=1,3=>log.index=log.index.wrapping_add(1),4=>log.order=255,_=>{}}}
++ let good=match group{0=>(0..4).all(|j|actual[j]==expected[j]),1=>(4..8).all(|j|actual[j]==expected[j]),2=>log.left==a&&log.right==x,3=>log.ptr==bytes.as_ptr().wrapping_add(32*i)&&log.len==32&&log.index==i&&log.value==c,4=>log.order==2&&log.calls==1,_=>false};assert!(good);
++}
++struct RoundLog{scaled:E,polynomial:E,left:[u32;8],factor:u32,scale_calls:usize,poly_args:Option<(*const u8,usize,[u32;8])>,poly_calls:usize}
++fn scale(claim:E,factor:M31,log:&mut RoundLog)->E{log.left=claim.to_limbs();log.factor=factor.0;log.scale_calls+=1;log.scaled}
++fn polynomial_reply(bytes:&[u8],alpha:E,log:&mut RoundLog)->E{log.poly_args=Some((bytes.as_ptr(),bytes.len(),alpha.to_limbs()));log.poly_calls+=1;log.polynomial}
++fn source_round(poly:&[u8],alpha:E,mut claim:E,round:usize,log:&mut RoundLog)->Result<E,Error>{
++ let lhs=field(poly,0).add(field(poly,4));let rhs=scale(claim,QUARTER,log);
++ crate::trace::value(15,3*round,lhs);crate::trace::value(15,3*round+1,rhs);
++ if lhs!=rhs{return Err(Error::Relation);}
++ claim=polynomial_reply(poly,alpha,log);crate::trace::value(15,3*round+2,claim);Ok(claim)
++}
++fn round_exercise(group:u8){let values:[[u32;8];7]=core::array::from_fn(|_|words());let mut bytes=[0u8;224];for i in 0..7{encode(&mut bytes,32*i,values[i]);}
++ let alpha=words();let claim=words();let rhs=words();let out=words();let round:usize=kani::any();kani::assume(round<2);
++ let mut log=RoundLog{scaled:wide(rhs),polynomial:wide(out),left:[0;8],factor:0,scale_calls:0,poly_args:None,poly_calls:0};let actual=source_round(&bytes,wide(alpha),wide(claim),round,&mut log);
++ let lhs=reference::polynomial_step_ref(values[0],values[4]);let mut expected_rhs=rhs;
++ if cfg!(NGM_invert){match group{0=>expected_rhs[0]^=1,1=>log.factor=536870913,2=>if let Some(args)=&mut log.poly_args{args.0=args.0.wrapping_add(1);},_=>{}}}
++ let expected=reference::round_ref(lhs,expected_rhs,out);
++ let good=match group{0=>match(actual,expected){(Ok(a),Ok(b))=>a.to_limbs()==b,(Err(Error::Relation),Err(3))=>true,_=>false},1=>log.left==claim&&log.factor==536870912&&log.scale_calls==1,2=>log.poly_calls==if lhs==rhs{1}else{0}&&match log.poly_args{Some((ptr,len,a))=>ptr==bytes.as_ptr()&&len==224&&a==alpha,None=>lhs!=rhs},_=>false};assert!(good);
++}
++macro_rules! gate{($n:ident,$f:ident,$g:expr)=>{#[kani::proof]#[kani::unwind(65)]#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]fn $n(){$f($g)}};}
++gate!(poly_g0,poly_exercise,0);
++gate!(poly_g1,poly_exercise,1);
++gate!(poly_g2,poly_exercise,2);
++gate!(poly_g3,poly_exercise,3);
++gate!(poly_g4,poly_exercise,4);
++gate!(poly_g5,poly_exercise,5);
++gate!(round_g0,round_exercise,0);
++gate!(round_g1,round_exercise,1);
++gate!(round_g2,round_exercise,2);
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NGM_helper_reference.rs
+@@ -0,0 +1,6 @@
++pub fn add_ref(x:u32,y:u32)->u32{let sum=x+y;if sum>=2147483647{sum-2147483647}else{sum}}
++pub fn polynomial_step_ref(product:[u32;8],coefficient:[u32;8])->[u32;8]{let mut out=[0;8];let mut i=0;while i<8{out[i]=add_ref(product[i],coefficient[i]);i+=1;}out}
++pub fn dot_step_ref(updated:[u64;9],index:usize,accepted:bool)->Result<([u64;9],usize),u8>{if accepted{Ok((updated,index+1))}else{Err(0)}}
++pub fn round_ref(lhs:[u32;8],rhs:[u32;8],polynomial:[u32;8])->Result<[u32;8],u8>{if lhs!=rhs{Err(3)}else{Ok(polynomial)}}
++pub struct All{pub polynomial:[u32;8],pub dot:Result<([u64;9],usize),u8>,pub round:Result<[u32;8],u8>}
++pub fn all_refs(product:[u32;8],coefficient:[u32;8],updated:[u64;9],index:usize,accepted:bool,rhs:[u32;8],polynomial:[u32;8])->All{let lhs=polynomial_step_ref(product,coefficient);All{polynomial:lhs,dot:dot_step_ref(updated,index,accepted),round:round_ref(lhs,rhs,polynomial)}}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NGW_new.rs
+@@ -0,0 +1,73 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn words(x:K)->[u32;4]{[x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0]}
++fn q(x:[u32;4])->K{K{c0:aspis_core::field::CM31{a:M31(x[0]),b:M31(x[1])},c1:aspis_core::field::CM31{a:M31(x[2]),b:M31(x[3])}}}
++fn anyq()->K{let w:[u32;4]=kani::any();for x in w{kani::assume(x<2147483647);}q(w)}
++type Factors=[[[K;4];5];5];
++fn arbitrary()->Factors{core::array::from_fn(|_|core::array::from_fn(|_|core::array::from_fn(|_|q(kani::any()))))}
++struct Products{replies:[K;4],left:[K;4],right:[K;4],calls:usize}
++fn product(a:K,b:K,log:&mut Products)->K{let i=log.calls;log.left[i]=a;log.right[i]=b;log.calls+=1;log.replies[i]}
++fn regular(points:&[[K;10];3],factors:&mut Factors,k:usize,d:usize,log:&mut Products){
++ let a=points[k][9-2*TAU[d]];let b=points[k][8-2*TAU[d]];
++ factors[k][d]=[product(K::ONE.sub(a),K::ONE.sub(b),log),product(a,K::ONE.sub(b),log),product(K::ONE.sub(a),b,log),product(a,b,log)];
++}
++
++fn row(a:K,b:K,log:&mut Products)->[K;4]{[product(K::ONE.sub(a),K::ONE.sub(b),log),product(a,K::ONE.sub(b),log),product(K::ONE.sub(a),b,log),product(a,b,log)]}
++fn regular_exercise(g:u8){let a=anyq();let b=anyq();let replies=core::array::from_fn(|_|anyq());let mut log=Products{replies,left:[K::ZERO;4],right:[K::ZERO;4],calls:0};let out=row(a,b,&mut log);let limb:usize=kani::any();kani::assume(limb<4);let term:usize=kani::any();kani::assume(term<4);let left=[K::ONE.sub(a),a,K::ONE.sub(a),a];let right=[K::ONE.sub(b),K::ONE.sub(b),b,b];
++ if cfg!(NGW_invert){match g{0..=3=>{let mut w=words(log.left[g as usize]);w[limb]^=1;log.left[g as usize]=q(w)},4=>log.calls+=1,_=>{let mut w=words(log.replies[term]);w[limb]^=1;log.replies[term]=q(w)}}}
++ assert!(match g{0..=3=>words(log.left[g as usize])[limb]==words(left[g as usize])[limb]&&words(log.right[g as usize])[limb]==words(right[g as usize])[limb],4=>log.calls==4,_=>words(out[term])[limb]==words(log.replies[term])[limb]});}
++fn store(dst:&mut[K;4],row:[K;4]){*dst=row;}
++fn frame(g:u8){let mut dst=core::array::from_fn(|_|q(kani::any()));let row=core::array::from_fn(|_|q(kani::any()));store(&mut dst,row);let term:usize=kani::any();kani::assume(term<4);let limb:usize=kani::any();kani::assume(limb<4);let mut expected=words(row[term])[limb];if cfg!(NGW_invert){expected^=1;}assert!(words(dst[term])[limb]==expected);let _=g;}
++fn window(g:u8){let mut f=arbitrary();let k:usize=kani::any();kani::assume(k<5);let d:usize=kani::any();kani::assume(d<5);let base=f.as_mut_ptr().cast::<K>();let selected=&mut f[k][d];let mut ptr=selected.as_mut_ptr();let len=selected.len();if cfg!(NGW_invert){ptr=ptr.wrapping_add(1);}assert!(len==4&&ptr==base.wrapping_add((5*k+d)*4));let _=g;}
++fn lookup(g:u8){let points=core::array::from_fn::<_,3,_>(|_|core::array::from_fn::<_,10,_>(|_|q(kani::any())));let k:usize=kani::any();kani::assume(k<3);let d:usize=kani::any();kani::assume(d<5);let limb:usize=kani::any();kani::assume(limb<4);let a=points[k][9-2*TAU[d]];let b=points[k][8-2*TAU[d]];let t=match d{0=>3,1=>4,2=>2,3=>0,_=>1};let mut expected=words(points[k][9-2*t])[limb];if cfg!(NGW_invert){expected^=1;}assert!(words(a)[limb]==expected&&words(b)[limb]==words(points[k][8-2*t])[limb]);let _=g;}
++
++struct CircleLog{products:Products,doubles:[K;2],double_args:[K;2],double_calls:usize,events:[u8;3],count:usize}
++fn cmul(a:K,b:K,log:&mut CircleLog)->K{log.events[log.count]=1;log.count+=1;product(a,b,&mut log.products)}
++fn dbl(x:K,log:&mut CircleLog)->K{let i=log.double_calls;log.double_args[i]=x;log.double_calls+=1;log.events[log.count]=0;log.count+=1;log.doubles[i]}
++fn circle(factors:&mut Factors,k:usize,d:usize,x:&mut K,log:&mut CircleLog){let y=dbl(*x,log);factors[3+k][d]=[K::ONE,*x,y,cmul(*x,y,log)];*x=dbl(y,log);}
++fn circle_exercise(g:u8){let term:usize=kani::any();kani::assume(term<4);let limb:usize=kani::any();kani::assume(limb<4);let mut a=anyq();let before=a;let y=anyq();let next=anyq();let p=anyq();let mut log=CircleLog{products:Products{replies:[p;4],left:[K::ZERO;4],right:[K::ZERO;4],calls:0},doubles:[y,next],double_args:[K::ZERO;2],double_calls:0,events:[9;3],count:0};let y=dbl(a,&mut log);let mut out=[K::ONE,a,y,cmul(a,y,&mut log)];a=dbl(y,&mut log);let expected=[K::ONE,before,y,p];let mut frame=words(expected[term])[limb];
++ if cfg!(NGW_invert){match g{0=>{let mut w=words(log.products.left[0]);w[limb]^=1;log.products.left[0]=q(w)},1..=2=>{let mut w=words(log.double_args[(g-1)as usize]);w[limb]^=1;log.double_args[(g-1)as usize]=q(w)},3=>{let mut w=words(out[term]);w[limb]^=1;out[term]=q(w)},4=>{let mut w=words(a);w[limb]^=1;a=q(w)},5=>frame^=1,6=>log.events[1]^=1,_=>log.double_calls+=1}}
++ assert!(match g{0=>words(log.products.left[0])[limb]==words(before)[limb]&&words(log.products.right[0])[limb]==words(y)[limb],1=>words(log.double_args[0])[limb]==words(before)[limb],2=>words(log.double_args[1])[limb]==words(y)[limb],3=>words(out[term])[limb]==words(expected[term])[limb],4=>words(a)[limb]==words(next)[limb],5=>words(out[term])[limb]==frame,6=>log.events==[0,1,0]&&log.count==3,_=>log.double_calls==2&&log.products.calls==1});}
++fn initial(factors:&mut Factors,k:usize,z:&[SecureCirclePoint;2],log:&mut CircleLog)->K{factors[3+k][0]=[K::ONE,z[k].y,z[k].x,cmul(z[k].x,z[k].y,log)];dbl(z[k].x,log)}
++fn initial_exercise(g:u8){let zx=anyq();let zy=anyq();let term:usize=kani::any();kani::assume(term<4);let limb:usize=kani::any();kani::assume(limb<4);let p=anyq();let next=anyq();let mut log=CircleLog{products:Products{replies:[p;4],left:[K::ZERO;4],right:[K::ZERO;4],calls:0},doubles:[next,K::ZERO],double_args:[K::ZERO;2],double_calls:0,events:[9;3],count:0};let mut out=[K::ONE,zy,zx,cmul(zx,zy,&mut log)];let x=dbl(zx,&mut log);let expected=[K::ONE,zy,zx,p];let mut frame=words(expected[term])[limb];
++ if cfg!(NGW_invert){match g{0=>{let mut w=words(out[term]);w[limb]^=1;out[term]=q(w)},1=>{let mut w=words(log.products.right[0]);w[limb]^=1;log.products.right[0]=q(w)},2=>frame^=1,3=>{let mut w=words(log.double_args[0]);w[limb]^=1;log.double_args[0]=q(w)},_=>log.events[0]^=1}}
++ assert!(match g{0=>words(out[term])[limb]==words(expected[term])[limb],1=>words(log.products.left[0])[limb]==words(zx)[limb]&&words(log.products.right[0])[limb]==words(zy)[limb],2=>words(out[term])[limb]==frame,3=>words(log.double_args[0])[limb]==words(zx)[limb]&&words(x)[limb]==words(next)[limb],_=>log.products.calls==1&&log.double_calls==1&&log.count==2&&log.events[0]==1&&log.events[1]==0});}
++fn controls(g:u8){let mut ks=[99usize;25];let mut ds=[99usize;25];let mut n=0;for k in 0..3{for d in 0..5{ks[n]=k;ds[n]=d;n+=1;}}for k in 0..2{ks[n]=3+k;ds[n]=0;n+=1;for d in 1..5{ks[n]=3+k;ds[n]=d;n+=1;}}let i:usize=kani::any();kani::assume(i<25);if cfg!(NGW_invert){ks[i]^=1;}assert!(n==25&&ks[i]==i/5&&ds[i]==i%5);let _=g;}
++macro_rules! gate{($n:ident,$f:ident,$g:expr)=>{#[kani::proof]#[kani::unwind(161)]#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]fn $n(){$f($g)}};}
++gate!(regular_g0,regular_exercise,0);
++gate!(regular_g1,regular_exercise,1);
++gate!(regular_g2,regular_exercise,2);
++gate!(regular_g3,regular_exercise,3);
++gate!(regular_g4,regular_exercise,4);
++gate!(regular_g5,regular_exercise,5);
++gate!(regular_g6,regular_exercise,6);
++gate!(circle_g0,circle_exercise,0);
++gate!(circle_g1,circle_exercise,1);
++gate!(circle_g2,circle_exercise,2);
++gate!(circle_g3,circle_exercise,3);
++gate!(circle_g4,circle_exercise,4);
++gate!(circle_g5,circle_exercise,5);
++gate!(circle_g6,circle_exercise,6);
++gate!(circle_g7,circle_exercise,7);
++gate!(initial_g0,initial_exercise,0);
++gate!(initial_g1,initial_exercise,1);
++gate!(initial_g2,initial_exercise,2);
++gate!(initial_g3,initial_exercise,3);
++gate!(initial_g4,initial_exercise,4);
++gate!(control,controls,0);
++gate!(write_frame,frame,0);
++gate!(point_lookup,lookup,0);
++gate!(write_window,window,0);
++
++struct BoxLog{allocated:*const Weights,calls:usize}
++fn allocation(w:Weights,log:&mut BoxLog)->Box<Weights>{let out=Box::new(w);log.allocated=&*out;log.calls+=1;out}
++fn source_box(variant:Variant,factors:Factors,points:[[K;10];3],extra:[K;2],log:&mut BoxLog)->Box<Weights>{allocation(Weights{variant,factors,points,extra},log)}
++fn box_exercise(g:u8){let t:u8=kani::any();let v=match t%3{0=>Variant::S1,1=>Variant::S2,_=>Variant::D};let f=arbitrary();let points=core::array::from_fn(|_|core::array::from_fn(|_|q(kani::any())));let extra=core::array::from_fn(|_|q(kani::any()));let k:usize=kani::any();kani::assume(k<5);let d:usize=kani::any();kani::assume(d<5);let term:usize=kani::any();kani::assume(term<4);let p:usize=kani::any();kani::assume(p<3);let i:usize=kani::any();kani::assume(i<10);let j:usize=kani::any();kani::assume(j<2);let limb:usize=kani::any();kani::assume(limb<4);let mut log=BoxLog{allocated:core::ptr::null(),calls:0};
++ let mut out=if g==4{source_box(v,f,points,extra,&mut log)}else{Weights::box_from_parts(v,f,points,extra)};
++ if cfg!(NGW_invert){match g{0=>out.variant=if v==Variant::D{Variant::S2}else{Variant::D},1=>{let mut w=words(out.factors[k][d][term]);w[limb]^=1;out.factors[k][d][term]=q(w)},2=>{let mut w=words(out.points[p][i]);w[limb]^=1;out.points[p][i]=q(w)},3=>{let mut w=words(out.extra[j]);w[limb]^=1;out.extra[j]=q(w)},_=>{let different=Weights::box_from_parts(v,f,points,extra);assert!((&*different as *const Weights)==log.allocated);return;}}}
++ assert!(match g{0=>out.variant==v,1=>words(out.factors[k][d][term])[limb]==words(f[k][d][term])[limb],2=>words(out.points[p][i])[limb]==words(points[p][i])[limb],3=>words(out.extra[j])[limb]==words(extra[j])[limb],_=>(&*out as *const Weights)==log.allocated&&log.calls==1&&log.allocated.cast::<K>()!=f.as_ptr().cast::<K>()&&log.allocated.cast::<K>()!=points.as_ptr().cast::<K>()});}
++gate!(box_g0,box_exercise,0);
++gate!(box_g1,box_exercise,1);
++gate!(box_g2,box_exercise,2);
++gate!(box_g3,box_exercise,3);
++gate!(box_g4,box_exercise,4);

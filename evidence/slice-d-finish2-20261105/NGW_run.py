@@ -47,10 +47,11 @@ if kind=='kani':
  command=['python3','NGW_gate.py',a+'.json']
  env.update(CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-Copt-level=3 -C link-arg=-Wl,--threads=1')
  import os
- if os.environ.get('NGW_INVERT'):env['RUSTFLAGS']+=' --cfg NGW_invert'
+ if os.environ.get('NGW_INVERT'):
+  flag=os.environ.get('NGW_NATIVE_CFG','NGW_invert');assert flag in ['NGW_invert','NGM_invert'];env['RUSTFLAGS']+=' --cfg '+flag
 elif kind=='extract':
  files['NGW_extract.py']=(E/'NGW_extract.py').read_text()
- files['NGW_references.rs']=(E/('NGW_double_reference.rs.txt' if target=='NGW_DoubleRef' else 'NGW_helper_reference.rs.txt' if target=='NGW_HelperRef' else 'NGW_references.rs.txt')).read_text()
+ files['NGW_references.rs']=(E/({'NGW_FactorRef':'NGW_factor_reference.rs.txt','NGW_DotRef':'NGW_dot_reference.rs.txt','NGW_HelperRef':'NGW_helper_reference.rs.txt','NGW_DoubleRef':'NGW_double_reference.rs.txt'}.get(target,'NGW_references.rs.txt'))).read_text()
  sources=['NGW_extract.py','NGW_references.rs'];command=['python3','NGW_extract.py',a+'.json']
 elif kind=='dependency':
  assert target=='JHe_ZeroGate'

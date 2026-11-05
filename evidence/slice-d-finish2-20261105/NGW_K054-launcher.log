@@ -1,0 +1,49 @@
+{"attempt": "NGW_K054", "exit_status": 1, "wall_seconds": 16.24248147616163, "peak_rss_kib": "980060", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-d-finish2-20261105/NGW_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`,
+...
+er to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-slice-d-finish2-20261105/NGW_src/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-slice-d-finish2-20261105/NGW_src/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 2.43s
+Checking harness weights::NGW_new::point_lookup...
+
+VERIFICATION RESULT:
+ ** 1 of 159 failed (7 unreachable)
+Failed Checks: assertion failed: words(a)[limb] == expected &&
+    words(b)[limb] == words(points[k][8 - 2 * t])[limb]
+ File: "crates/aspis-r1-cost-probe/src/NGW_new.rs", line 22, in weights::NGW_new::lookup
+
+VERIFICATION:- FAILED
+Verification Time: 12.705836s
+
+Manual Harness Summary:
+Verification failed for - weights::NGW_new::point_lookup
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rbc0ae7659c394933bb4149df3b6c80ab.scope; invocation ID: 200d1a1ddd3747408c05a5ba2a2c85b2

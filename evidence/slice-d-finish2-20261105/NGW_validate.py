@@ -9,6 +9,12 @@ for p in sorted(E.glob('NGW_[KLE][0-9][0-9][0-9]/receipt.json')):
  for k in ['module','command','source_revision','source_hashes','deps_fingerprint','exit_status','wall_seconds','peak_rss_kib','print_axioms']:assert k in x,(a,k)
  ad=json.loads((E/(a+'-admission.json')).read_text());assert ad['exit']==0 and ad['reservation']['allowed'] is True,(a,'admission')
  if x['kind']=='kani':
+  sourcecheck=json.loads((E/(a+'-source-check.json')).read_text())
+  if sourcecheck['errors']:
+   assert a in ['NGW_K031','NGW_K032'] and x['exit_status']!=0
+   assert 'Checking harness' not in (E/a/'stdout.log').read_text()
+   checks.append(dict(attempt=a,outcome='EXCLUDED strict source preflight rejection; no Kani run'))
+   continue
   graph=json.loads((E/(a+'-graph-check.json')).read_text());lock=json.loads((E/(a+'-lock-check.json')).read_text());assert graph['graph_matches_frozen'] and lock['unchanged'],(a,'lock')
   assert x['env']['CARGO_NET_OFFLINE']=='true';assert '-Copt-level=3' in x['env']['RUSTFLAGS'];assert x['native_command'][x['native_command'].index('--harness-timeout')+1]=='90s'
   # Controls are expected failures; preserve all other failures without credit.
@@ -29,6 +35,7 @@ if p.exists():
    for a,rc in [(positive,0),(negative,1)]:
     x=json.loads((E/a/'receipt.json').read_text());assert x['exit_status']==rc
     log=(E/a/'stdout.log').read_text();assert ('VERIFICATION:- SUCCESSFUL' if rc==0 else 'VERIFICATION:- FAILED') in log
+    assert not re.search(r'timed out|memory limit exceeded|SIGKILL',log,re.I)
   assert row['lean_root'];assert row['combined_replay'];assert row['ax2'];assert row['scan']
 # Additive ledger check: inherited status/source rows remain immutable.
 base=json.loads(lzma.decompress((E.parent/'ledger8-20261105/NGJ_LEDGER.json.xz').read_bytes()))
