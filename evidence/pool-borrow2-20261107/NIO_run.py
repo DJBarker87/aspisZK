@@ -57,6 +57,14 @@ elif kind=='cleanup':
  files['NIO_cleanup.py']=(E/'NIO_cleanup.py').read_text();sources=['NIO_cleanup.py'];command=['python3','NIO_cleanup.py']
 else:raise ValueError(kind)
 config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NIO_tmp',LEAN_PATH=':'.join([B+'/NIO_objects',C+'/NIK_exports_20261107',C+'/NIE_exports_20261107',C+'/NHP_exports_20261106',C+'/NHP_native_exports_20261106',C+'/NHC_exports_20261105',C+'/NHC_native_exports_20261105',C+'/NHC_seed',C,W,W+'/objects',T+'/lib/lean'])),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Optimized Rust compilation of the named uniqueness helper, then Charon/Aeneas translation' if kind=='extract' else 'Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Read/hash and non-destructive cache export; no compiler' if kind in ['export','cleanup'] else 'Raw ax2 traversal / coherence scan')
+if kind=='lean':
+ def own_closure(module, seen):
+  p=E/(module.replace('.','/')+'.lean')
+  if not p.exists():return
+  for dep in re.findall(r'^import ([\w.]+)',p.read_text(),re.M):
+   if dep.startswith('NIO_') and dep not in seen:
+    seen.add(dep);own_closure(dep,seen)
+ selected=set();own_closure(target,selected);config['own_transitive_modules']=sorted(selected)
 files[a+'.json']=json.dumps(config)
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib,re,shutil
@@ -72,6 +80,7 @@ x=json.loads((b/{(a+'.json')!r}).read_text());roots=x['env']['LEAN_PATH'].split(
 modules=['NFA_WALKER','NFA_MemoryLimit','NEP_Planted','NEP_Mutations'] if x['kind']!='lean' or {target!r} in ['NIO_Driver','NIO_ProofDriver'] else []
 if x['kind']=='lean':modules += re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M)
 elif x['kind']=='audit':modules += ['NIO_COMBINED_IMPORT']
+modules += x.get('own_transitive_modules',[])
 rels=set()
 for root in roots:
  for stem in ['Aeneas','AeneasMeta']:
