@@ -1,0 +1,26 @@
+import NHU_COMBINED_IMPORT
+import NDO_JGj_InternalTotal
+import RPv_FJh_InternalLinearExact
+set_option autoImplicit false
+noncomputable section
+open Aeneas Aeneas.Std Result
+namespace AspisR1.NIH_InternalTotal
+open FIv_NativeArithmetic (NQ)
+/-- Full retained emitted internal layer and its SAME adopted value. The raw
+61P/62P invariants used by the native windows are derived by the existing induction. -/
+theorem result (s : Array NQ 16#usize) (canonical : FIw_ArrayValue.canonical s) :
+ ∃ out, FIq_Native.state_only_poseidon.internal_linear_lazy s=ok out ∧
+ FIw_ArrayValue.canonical out ∧
+ FIw_ArrayValue.decoded out=R0P.poseidonInternalLinear (FIw_ArrayValue.decoded s) := by
+ have cells : FJh_Base.CanonicalState s := by
+  intro i
+  exact canonical _ (List.getElem_mem _)
+ obtain ⟨out,run,canon,value⟩:=FJh_InternalLinearExact.source_success s cells
+ refine ⟨out,run,?_,?_⟩
+ · intro x member
+   obtain ⟨i,hi,rfl⟩:=List.getElem_of_mem member
+   exact canon ⟨i,by simpa only [out.property] using hi⟩
+ · exact funext value
+#print axioms result
+end AspisR1.NIH_InternalTotal
+end

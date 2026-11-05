@@ -1,4 +1,1 @@
-fn NHU_expand_init_cut<const N:usize>()->([QM31;N],usize){        let mut weights = [QM31::ZERO; N];
-        weights[0] = QM31::ONE;
-        let mut len = 1usize;
-(weights,len)}
+../../../../../../../NIH_INPUTS/1e1f3537f293b3193fc27791c555ac16f2119d060c1eca22e720d5b5e1557ff7.txt

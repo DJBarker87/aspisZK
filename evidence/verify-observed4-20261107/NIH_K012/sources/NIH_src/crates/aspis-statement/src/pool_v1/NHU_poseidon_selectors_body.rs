@@ -1,6 +1,1 @@
-fn NHU_poseidon_selectors_cut(selectors: &Selectors,log:&mut SumLog) -> StateOnlyPoseidonSelectors {
-    StateOnlyPoseidonSelectors {
-        block: sum_cut(selectors, &[0..57],log),
-        local: selectors.low,
-    }
-}
+../../../../../../../NIH_INPUTS/fd45712c303613b84510c6e5ae68f55c5bca3d96df311f1303f015f82fcddd7a.txt

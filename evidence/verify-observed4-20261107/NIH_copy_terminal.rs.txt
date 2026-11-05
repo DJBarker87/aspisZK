@@ -111,6 +111,8 @@ mod constants {
 }
 
 #[inline(always)]
+#[cfg_attr(kani,kani::ensures(|result| (*result == NIH_native::NIH_lift_ref(value)) != cfg!(NIH_invert)))]
+#[cfg_attr(kani,kani::modifies())]
 fn lift_m31(value: M31) -> QM31 {
     QM31::from_cm31(CM31::from_m31(value))
 }

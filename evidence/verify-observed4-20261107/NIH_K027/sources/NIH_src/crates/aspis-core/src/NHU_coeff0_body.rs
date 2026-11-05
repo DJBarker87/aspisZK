@@ -1,5 +1,1 @@
-fn NHU_coeff0_cut(c1:&[QM31;16],coefficients:&mut [QM31;27],column:usize)->usize{let mut iter=column..16;if let Some(column)=iter.next(){
-        coefficients[usize::from(FACTOR_EXPONENTS[column])] =
-            mul_tower_basis(c1[column], column & 3);
-    
-}iter.start}
+../../../../../../NIH_INPUTS/05482c3d487a5354a32c73dbbfb4be12c3692e9e0f4c9114aa80dc6e26c116a3.txt

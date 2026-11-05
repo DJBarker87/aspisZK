@@ -1,11 +1,1 @@
-"""Read the retained K009 GOTO, or diagnose one exact assertion. No native credit."""
-from pathlib import Path
-import hashlib,json,subprocess,sys
-B=Path(__file__).resolve().parent
-G=B/'NIH_target/kani/x86_64-unknown-linux-gnu/debug/deps/aspis_statement-1ffe68814b5e230e__RNvNtNtNtCs37UJtixU7ll_15aspis_statement7pool_v129pair_forest_semantic_terminal10NHU_native19NHU_transition_step.out'
-cb=Path('/home/dombarker/.kani/kani-0.67.0/bin/cbmc')
-args=['--show-properties'] if sys.argv[1]=='show' else ['--no-malloc-may-fail','--no-undefined-shift-check','--no-signed-overflow-check','--nan-check','--no-self-loops-to-assumptions','--no-pointer-primitive-check','--object-bits','16','--unwind','200','--sat-solver','cadical','--slice-formula','--trace','--stop-on-fail','--property',sys.argv[1]]
-
-if sys.argv[1]=='all':args=args[:-2]
-(B/(sys.argv[2]+'-goto-pin.json')).write_text(json.dumps(dict(path=str(G),sha256=hashlib.sha256(G.read_bytes()).hexdigest(),bytes=G.stat().st_size,cbmc_sha256=hashlib.sha256(cb.read_bytes()).hexdigest(),command=[str(cb),str(G),*args],credit='DIAGNOSTIC ONLY'),indent=2)+'\n')
-sys.exit(subprocess.run([str(cb),str(G),*args]).returncode)
+../../NIH_INPUTS/dfa4eccd7065f234fdde0167a9bf53414aa285596cc77873622d4a72e736eefa.txt

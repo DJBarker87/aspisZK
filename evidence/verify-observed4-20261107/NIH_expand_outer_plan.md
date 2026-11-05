@@ -1,0 +1,5 @@
+# Expansion outer association preflight
+
+The inner reverse-step is NHU K057/058(N16), K070–075(N64 prefix,left,right) with unchanged KMX and domain/frames; initialization K076–079. NHU_ExpandPacket.result and JFy_SelectorInner/Outer already prove total full emitted expansion and tensor values. NIH must not repeat those arithmetic proofs. The missing source association is native outer coordinate iteration, Prepared::new, inner-loop call placement, and doubling.
+
+Proposed one-iteration native fission: arbitrary current Slice::Iter and len under 2*len<=N (N16 or64); log coordinate and prepared owner, opaque inner-loop packet's argument and returned full array; preserve iterator suffix and multiply len by2 only in Some branch, preserve all state in None branch. An inner-loop logging substitution is only justified by composing the cited NHU reverse-step/frame/induction certificate on the SAME prepared owner and before-array; it is not an arbitrary reply premise in the final result. Exact reverse erasure to the frozen outer source is required. This plan alone is no closure.

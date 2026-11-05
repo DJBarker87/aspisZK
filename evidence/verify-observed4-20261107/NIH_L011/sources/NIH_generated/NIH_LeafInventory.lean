@@ -1,7 +1,1 @@
-import NHU_COMBINED_IMPORT
-set_option autoImplicit false
-#print FIq_Native.state_only_poseidon.extension_from_raw_limbs
-#print FIq_Native.state_only_poseidon.external_local_packed_raw
-#print FIq_Native.pool_v1.pair_forest_copy_terminal.selected_binary_weight
-#print FIq_Native.pool_v1.pair_forest_copy_terminal.lift_m31
-#print FIq_Native.pool_v1.pair_forest_semantic_terminal.empty_root
+../../../NIH_INPUTS/cf7c5e9eeca7022f4ca598b3dc8946d5491219b9379739d33cd65d45a81dbd46.txt

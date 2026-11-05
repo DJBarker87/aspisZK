@@ -1,0 +1,19 @@
+{
+  "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "path": "crates/aspis-statement/src/state_only_poseidon.rs",
+  "source_sha256": "4467d15c9d473cbd42caf33f21aa0192bed007b58ccaa4a61cb5691532cab7fe",
+  "acc": "            part_sum[limb] += u64::from(limbs[limb]);\n            limb += 1;",
+  "full": "part_sum[limb] + u64::from(old_zero[limb])",
+  "zero": "    state[0] = extension_from_raw_limbs(core::array::from_fn(|limb| {\n        part_sum[limb] + u64::from(P) - u64::from(old_zero[limb])\n    }));",
+  "lane": "    for lane in 1..POSEIDON2_WIDTH {\n        let limbs = extension_limbs(state[lane]);\n        state[lane] = extension_from_raw_limbs(core::array::from_fn(|limb| {\n            full_sum[limb] + (u64::from(limbs[limb]) << SHIFTS[lane - 1])\n        }));\n    }",
+  "cut": "    if let Some(lane)=iter.next() {\n        let limbs = extension_limbs(state[lane]);\n        state[lane] = extension_from_raw_limbs(core::array::from_fn(|limb| {\n            full_sum[limb] + (u64::from(limbs[limb]) << SHIFTS[lane - 1])\n        }));\n    }",
+  "shifts": "    const SHIFTS: [u8; 15] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 13, 14, 15, 16];",
+  "reverse_erasure": true,
+  "domains": {
+    "part": "all four words<61*P, exactly JGj_InternalPrepare.success",
+    "full": "all four words<62*P, exactly JGj_InternalPrepare.success",
+    "old": "four canonical U32",
+    "lane": "1<=start<=16; arbitrary canonical state; arbitrary selected frame index"
+  },
+  "modifies": "acc selected limb and cursor; zero only state0; lane only selected state cell and Range cursor; all borrowed input arrays immutable"
+}

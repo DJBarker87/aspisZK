@@ -1,3 +1,1 @@
-from pathlib import Path
-import json,hashlib
-B=Path(__file__).resolve().parent;S=B/'NIH_src';q='crates/aspis-statement/src/pool_v1/NIH_copy.rs';p=S/q;p.write_text((B/'NIH_copy.rs.txt').read_text());pins=json.loads((B/'NIH_SOURCE_PINS.json').read_text());pins[q]=hashlib.sha256(p.read_bytes()).hexdigest();(B/'NIH_SOURCE_PINS.json').write_text(json.dumps(pins,indent=2)+'\n')
+../../NIH_INPUTS/da77ecf62b87691c8659f4b07e8f99a5fdaea7627840c6ba3a4295b3265ea63e.txt

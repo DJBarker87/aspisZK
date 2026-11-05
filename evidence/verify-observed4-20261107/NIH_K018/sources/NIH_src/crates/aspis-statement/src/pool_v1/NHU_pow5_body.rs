@@ -1,4 +1,1 @@
-fn NHU_pow5_cut(value: QM31,log:&mut PowLog) -> QM31 {
-    let square = pow_square(value,log);
-    pow_mul(pow_square(square,log),value,log)
-}
+../../../../../../../NIH_INPUTS/33698ddab1fe89f87c5be3c2280e070c1ff214d64e9bceb9306cce43435e3a05.txt

@@ -1,0 +1,7 @@
+import NHU_COMBINED_IMPORT
+set_option autoImplicit false
+#print FIq_Native.state_only_poseidon.extension_from_raw_limbs
+#print FIq_Native.state_only_poseidon.external_local_packed_raw
+#print FIq_Native.pool_v1.pair_forest_copy_terminal.selected_binary_weight
+#print FIq_Native.pool_v1.pair_forest_copy_terminal.lift_m31
+#print FIq_Native.pool_v1.pair_forest_semantic_terminal.empty_root
