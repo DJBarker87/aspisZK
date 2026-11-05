@@ -1,0 +1,135 @@
+//! Exact private fixed32 zero-binding leaf.
+use super::*;
+extern crate alloc;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+fn binding_ref(value:&[u8;32])->bool{*value==[0u8;32]}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn binding_packet(value:&[u8;32])->bool{required_binding_is_zero(value)==binding_ref(value)}
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn binding_wrong_packet(value:&[u8;32])->bool{required_binding_is_zero(value)!=binding_ref(value)}
+#[kani::proof_for_contract(binding_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn binding(){binding_packet(&kani::any());}
+#[kani::proof_for_contract(binding_wrong_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn binding_wrong(){binding_wrong_packet(&kani::any());}
+
+// Original decoder caller cut: no fabricated large slice, all legal offsets.
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn registry_array_packet(bytes:&[u8;256],p:usize,j:usize)->bool{
+ kani::assume(p<=224);kani::assume(j<32);
+ let start=core::cmp::min(p,192);
+ let rel=p-start;
+ let window=&bytes[start..start+64];
+ let actual=&bytes[p..p+32];
+ let local=&window[rel..rel+32];
+ (rel<=32 && actual.len()==32 && window.len()==64 && actual.as_ptr()==local.as_ptr() && actual[j]==local[j])
+}
+#[kani::proof_for_contract(registry_array_packet)] #[kani::unwind(2)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn registry_array(){registry_array_packet(&kani::any(),kani::any(),kani::any());}
+
+// Original decoder caller cut: no fabricated large slice, all legal offsets.
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn registry_array_wrong_packet(bytes:&[u8;256],p:usize,j:usize)->bool{
+ kani::assume(p<=224);kani::assume(j<32);
+ let start=core::cmp::min(p,192);
+ let rel=p-start;
+ let window=&bytes[start..start+64];
+ let actual=&bytes[p..p+32];
+ let local=&window[rel..rel+32];
+ !(rel<=32 && actual.len()==32 && window.len()==64 && actual.as_ptr()==local.as_ptr() && actual[j]==local[j])
+}
+#[kani::proof_for_contract(registry_array_wrong_packet)] #[kani::unwind(2)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn registry_array_wrong(){registry_array_wrong_packet(&kani::any(),kani::any(),kani::any());}
+
+// Original decoder caller cut: no fabricated large slice, all legal offsets.
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn entry_array_packet(bytes:&[u8;320],p:usize,j:usize)->bool{
+ kani::assume(p<=288);kani::assume(j<32);
+ let start=core::cmp::min(p,256);
+ let rel=p-start;
+ let window=&bytes[start..start+64];
+ let actual=&bytes[p..p+32];
+ let local=&window[rel..rel+32];
+ (rel<=32 && actual.len()==32 && window.len()==64 && actual.as_ptr()==local.as_ptr() && actual[j]==local[j])
+}
+#[kani::proof_for_contract(entry_array_packet)] #[kani::unwind(2)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn entry_array(){entry_array_packet(&kani::any(),kani::any(),kani::any());}
+
+// Original decoder caller cut: no fabricated large slice, all legal offsets.
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn entry_array_wrong_packet(bytes:&[u8;320],p:usize,j:usize)->bool{
+ kani::assume(p<=288);kani::assume(j<32);
+ let start=core::cmp::min(p,256);
+ let rel=p-start;
+ let window=&bytes[start..start+64];
+ let actual=&bytes[p..p+32];
+ let local=&window[rel..rel+32];
+ !(rel<=32 && actual.len()==32 && window.len()==64 && actual.as_ptr()==local.as_ptr() && actual[j]==local[j])
+}
+#[kani::proof_for_contract(entry_array_wrong_packet)] #[kani::unwind(2)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn entry_array_wrong(){entry_array_wrong_packet(&kani::any(),kani::any(),kani::any());}
+
+// Original decoder caller cut: no fabricated large slice, all legal offsets.
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn registry_word_packet(bytes:&[u8;256],p:usize,j:usize)->bool{
+ kani::assume(p<=248);kani::assume(j<8);
+ let start=core::cmp::min(p,240);
+ let rel=p-start;
+ let window=&bytes[start..start+16];
+ let actual=&bytes[p..p+8];
+ let local=&window[rel..rel+8];
+ (rel<=8 && actual.len()==8 && window.len()==16 && actual.as_ptr()==local.as_ptr() && actual[j]==local[j])
+}
+#[kani::proof_for_contract(registry_word_packet)] #[kani::unwind(2)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn registry_word(){registry_word_packet(&kani::any(),kani::any(),kani::any());}
+
+// Original decoder caller cut: no fabricated large slice, all legal offsets.
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn registry_word_wrong_packet(bytes:&[u8;256],p:usize,j:usize)->bool{
+ kani::assume(p<=248);kani::assume(j<8);
+ let start=core::cmp::min(p,240);
+ let rel=p-start;
+ let window=&bytes[start..start+16];
+ let actual=&bytes[p..p+8];
+ let local=&window[rel..rel+8];
+ !(rel<=8 && actual.len()==8 && window.len()==16 && actual.as_ptr()==local.as_ptr() && actual[j]==local[j])
+}
+#[kani::proof_for_contract(registry_word_wrong_packet)] #[kani::unwind(2)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn registry_word_wrong(){registry_word_wrong_packet(&kani::any(),kani::any(),kani::any());}
+
+// Original decoder caller cut: no fabricated large slice, all legal offsets.
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn entry_word_packet(bytes:&[u8;320],p:usize,j:usize)->bool{
+ kani::assume(p<=312);kani::assume(j<8);
+ let start=core::cmp::min(p,304);
+ let rel=p-start;
+ let window=&bytes[start..start+16];
+ let actual=&bytes[p..p+8];
+ let local=&window[rel..rel+8];
+ (rel<=8 && actual.len()==8 && window.len()==16 && actual.as_ptr()==local.as_ptr() && actual[j]==local[j])
+}
+#[kani::proof_for_contract(entry_word_packet)] #[kani::unwind(2)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn entry_word(){entry_word_packet(&kani::any(),kani::any(),kani::any());}
+
+// Original decoder caller cut: no fabricated large slice, all legal offsets.
+#[kani::ensures(|r|*r)] #[kani::modifies()]
+fn entry_word_wrong_packet(bytes:&[u8;320],p:usize,j:usize)->bool{
+ kani::assume(p<=312);kani::assume(j<8);
+ let start=core::cmp::min(p,304);
+ let rel=p-start;
+ let window=&bytes[start..start+16];
+ let actual=&bytes[p..p+8];
+ let local=&window[rel..rel+8];
+ !(rel<=8 && actual.len()==8 && window.len()==16 && actual.as_ptr()==local.as_ptr() && actual[j]==local[j])
+}
+#[kani::proof_for_contract(entry_word_wrong_packet)] #[kani::unwind(2)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn entry_word_wrong(){entry_word_wrong_packet(&kani::any(),kani::any(),kani::any());}

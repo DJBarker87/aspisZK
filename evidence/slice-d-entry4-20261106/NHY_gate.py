@@ -17,7 +17,9 @@ erased=validate(S,json.loads((B/'NGL_FROZEN_SOURCE_PINS.json').read_text()),zero
 (B/(a+'-erasure-check.json')).write_text(json.dumps(erased,indent=1)+'\n')
 assert erased['passed'],erased['changed']
 features=x['metadata_features'] if 'metadata_features' in x else 'aspis-core/r0' if x.get('root_package')=='aspis-core' else 'aspis-r1-cost-probe-program/pool-adapter,aspis-r1-cost-probe-program/private-leaf-salts' if x.get('root_package')=='aspis-r1-cost-probe-program' else 'aspis-r1-cost-probe/optimized-terminal,aspis-r1-cost-probe/program-build'
-r=subprocess.run(['/home/dombarker/.cargo/bin/cargo','metadata','--locked','--offline','--format-version','1','--features',features],cwd=S,capture_output=True,text=True)
+meta=['/home/dombarker/.cargo/bin/cargo','metadata','--locked','--offline','--format-version','1','--features',features]
+if x.get('metadata_manifest'):meta+=['--manifest-path',x['metadata_manifest']]
+r=subprocess.run(meta,cwd=S,capture_output=True,text=True)
 (B/(a+'-graph.stderr')).write_text(r.stderr)
 assert r.returncode==0,r.stderr
 m=json.loads(next(l for l in r.stdout.splitlines() if l.startswith('{')))

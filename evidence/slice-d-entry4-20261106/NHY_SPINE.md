@@ -1,6 +1,6 @@
 # NHY entry spine — snapshot stage
 
-**2 new CLOSED rows /1 function beyond NHJ; zero complete TX1/TX2 paths. Target not yet established.** NHY delta is additive against unchanged NHO599-row ledger (335 CLOSED/264 OPEN →337/262); NHJ14-row delta is retained separately, without duplicating credit. No security, privacy or custody theorem is promoted.
+**11 new CLOSED rows /10 functions beyond NHJ; zero complete TX1/TX2 paths. Target not yet established.** NHY delta is additive against unchanged NHO599-row ledger (335 CLOSED/264 OPEN →346/253); NHJ14-row delta is retained separately, without duplicating credit. No security, privacy or custody theorem is promoted.
 
 ## Entry roots and distance
 
@@ -36,6 +36,13 @@
 
 first is reachability-excluded by C3-BIN; no work spent on it. first_decoded and candidate tx1/tx2 are real external boundary obligations, not assumed packets. Every root retains its actual argument/physical domain. No SameExecution wrapper, parent acceptance or output-equality premise is introduced. See NHJ_REMAINING.md for each member and the unused-budget review.
 
-## Distance after snapshot
+## Distance after registry helper stage
 
 TX1 still needs owned-stage exact statement/proof provenance, first_decoded error/candidate boundary, three snapshot physical-domain links and checkpoint write/cleanup, then process/entry routing. TX2 still needs full authentication, stage2_owned/candidate/emit/error packets, seven snapshot physical-domain links, empty clear and clock continuation, then process/entry routing. The leaf certificate does not supply a successful child or remove the actual caller provenance obligation.
+
+
+Nine authentication dependencies now CLOSED: TX2:151 policy validator;192 status conversion;193/195 no-retirement V1/V2;197/198 registry V1 immutable/paused;199/200 V2 immutable/paused;205 fixed32 zero binding. Complete typed input domains, including invalid flags/status bytes, are retained. Policy includes all three failure labels; no validation-success premise. K028/029,030..042/044,046/047; coherent source/pipeline models L025/027..029/034 and combined L045, raw/NFX L031/032/046. K043 is an excluded feature-mismatched negative, replaced by K044 under default features. Full decoder/native auth rows remain OPEN.
+
+Error callback progress: eight isolated native Debug label loggers pass, each has a semantic failing control; Parse has its rename stability pair. These prove label argument/count/length forwarding only. The allocated String implementation and native final msg! byte/cleanup join remain OPEN after K004/007/010 timeouts. NHY_ErrorFragments, NHY_StringAppend provide symbolic label/frame laws; no lib::error credit.
+
+Current-format decoder progress: original256/320-byte buffers transport to64/16-byte local windows at arbitrary legal offsets (K049..056); controls fail. Retained NCX validators are under revalidation, not yet admitted. Full native record construction, first-error suffix and same SDK call association remain OPEN. V1 models cannot use the current V2-only extraction as a stand-in.

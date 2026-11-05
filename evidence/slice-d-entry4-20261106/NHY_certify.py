@@ -1,4 +1,4 @@
-"""Additive two-row snapshot admission; unchanged NFK gates and stricter receipts."""
+"""Additive slice-D admission; unchanged NFK gates plus stricter receipts."""
 from pathlib import Path
 import json,lzma,hashlib,subprocess,re,copy,types,sys,time,resource
 sys.dont_write_bytecode=True
@@ -30,16 +30,23 @@ for r in receipts:
  assert int(r['swaps'])==0 and int(r['peak_rss_kib'])<8*1024*1024
  for n,h in r['source_hashes'].items():assert idx['attempts'][a][n]==h,(a,n)
  if r['kind']=='kani':
+  if a=='NHY_K048':
+   assert r['exit_status']==1 and read(E/(a+'-source-check.json'))['errors']==['crates/aspis-statement/src/pool_v1/NHY_registry.rs']
+   assert 'Traceback' in log(E,a) and not (E/(a+'-graph-check.json')).exists()
+   continue # own manifest failed before native submission; corrected source pins K049
   assert read(E/(a+'-graph-check.json'))['graph_matches_frozen']
   assert read(E/(a+'-erasure-check.json'))['passed'] and not read(E/(a+'-source-check.json'))['errors']
   lock=read(E/(a+'-lock-check.json'));assert lock['unchanged'] and lock['before']==lock['after']=='5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef'
   assert r['env']['CARGO_NET_OFFLINE']=='true' and r['env']['CARGO_PROFILE_DEV_OPT_LEVEL']=='3'
-  assert '--locked' not in r['native_command'] and 'pool-adapter,private-leaf-salts' in r['native_command']
+  assert '--locked' not in r['native_command']
+  cmd=r['native_command']; features=cmd[cmd.index('--features')+1]
+  if r.get('root_package')=='aspis-statement':assert features==','.join(read(E/'NHY_STATEMENT_FEATURES.json'))
+  else:assert 'pool-adapter' in features.split(',') and 'private-leaf-salts' in features.split(',')
 for pos,neg in [('NHY_K005','NHY_K006'),('NHY_K008','NHY_K009')]:
  assert read(E/pos/'receipt.json')['exit_status']==0 and 'VERIFICATION:- SUCCESSFUL' in log(E,pos)
  s=log(E,neg);assert read(E/neg/'receipt.json')['exit_status']==1 and 'timed out' not in s and re.search(r'\*\* 1 of \d+ failed',s) and re.search(r'Failed Checks: \|r\|\s*\*r',s)
 for a in ['NHY_L001','NHY_L002','NHY_L009','NHY_L010']:assert read(E/a/'receipt.json')['exit_status']==0
-proofs=[read(E/'NHY_stage1_audit/proof0.json'),read(E/'NHY_stage3_audit/proof1.json')];fx=read(E/'NHY_stage1_audit/fixtures.json');scan=read(E/'NHY_stage3_audit/scan_summary.json')
+proofs=[read(E/'NHY_stage1_audit/proof0.json'),read(E/'NHY_stage3_audit/proof1.json')]+[read(E/f'NHY_stage4_audit/proof2.json')]+[read(E/f'NHY_stage5_audit/proof{i}.json') for i in [3,4,5]]+[read(E/f'NHY_stage6_audit/proof{i}.json') for i in [6,7,8]];fx=read(E/'NHY_stage1_audit/fixtures.json');scan=read(E/'NHY_stage6_audit/scan_summary.json')
 assert fx['exit_status']==0 and len(fx['results'])==8 and all(r['equal'] for r in fx['results'])
 assert all(len(x['walked_axioms'])==1 for x in fx['results'][:4]) and all(not x['walked_axioms'] for x in fx['results'][4:])
 for pr in proofs:
@@ -67,19 +74,54 @@ for rid in ['TX1:343','TX2:239']:
   o.update(status='CLOSED',discharged_by='NHY::snapshot: '+reasons.get(expression,'Actual constructor arms/metadata K005/K006, generic Header/finish chain'))
  for h in r['named_hypotheses']:raise AssertionError('unexpected named hypothesis requires explicit review')
  assert not n.row_checks(r,by[rid],cert);rows.append(r);certs[rid]=cert;candidates[rid]=('NHY',r)
+# Each helper is a real dependency of this slice; no model-only credit.
+helper_specs=[
+ ('TX2:151','policy',28,29,'NHY_PolicyModel.actual_slot','All typed VerifierPolicyV1 fields; all flags/32-byte bindings; exact three error labels and success',25),
+ ('TX2:192','status',42,44,'NHY_RegistryPipeline.status','Every u8; all four status constructors and InvalidStatus retained',29),
+ ('TX2:193','retirement_v1',38,39,'NHY_RegistryPrimitives.retirement_v1','Every typed V1 entry, all four statuses and every u64 slot; no validation premise',27),
+ ('TX2:195','retirement_v2',40,41,'NHY_RegistryPrimitives.retirement_v2','Every typed V2 entry, all four statuses and every u64 slot; no validation premise',27),
+ ('TX2:197','immutable_v1',30,31,'NHY_RegistryPipeline.immutable_v1','Every typed V1 registry, arbitrary flags and all other fields',29),
+ ('TX2:198','paused_v1',32,33,'NHY_RegistryPipeline.paused_v1','Every typed V1 registry, arbitrary flags and all other fields',29),
+ ('TX2:199','immutable_v2',34,35,'NHY_RegistryPipeline.immutable_v2','Every typed V2 registry, arbitrary flags and all other fields',29),
+ ('TX2:200','paused_v2',36,37,'NHY_RegistryPipeline.paused_v2','Every typed V2 registry, arbitrary flags and all other fields',29),
+ ('TX2:205','zero_binding',46,47,'NHY_ZeroBinding.source','Every typed [u8;32]; natural equality with zero, no 688-byte RuntimeMemcmp specialization',34)]
+raw_roots={r['root'] if 'root' in r else r.get('name') for p in proofs for r in p['results']}
+# Driver schema stores exact root under declaration, if present.
+raw_roots |= {r.get('declaration') for p in proofs for r in p['results']}
+for rid,label,pos,neg,theorem,domain,lean in helper_specs:
+ pa,na=f'NHY_K{pos:03}',f'NHY_K{neg:03}'
+ assert read(E/pa/'receipt.json')['exit_status']==0 and 'VERIFICATION:- SUCCESSFUL' in log(E,pa)
+ ns=log(E,na);assert read(E/na/'receipt.json')['exit_status']==1 and re.search(r'\*\* 1 of \d+ failed',ns) and 'timed out' not in ns and 'Failed Checks:' in ns
+ # Require same feature configuration and exact harness/stub inputs for paired controls.
+ pr,nr=read(E/pa/'receipt.json'),read(E/na/'receipt.json')
+ pc,nc=pr['native_command'],nr['native_command'];assert pc[pc.index('--features')+1]==nc[nc.index('--features')+1]
+ assert read(E/f'NHY_L{lean:03}'/'receipt.json')['exit_status']==0
+ assert theorem in json.dumps([p['results'] for p in proofs]),theorem
+ c=dict(cert,id='NHY::'+label,subject=by[rid]['function'],route='NCO safe-reference native contract with complete typed input; retained extraction by SHA',model_theorem=theorem,root_domain=domain,native_passes=[pa],matched_controls=[na],callee_laws={'typed arithmetic/constructors':'native frozen body and safe reference full result; no stub_verified and no function pointer', 'copy':'exact KMX patch in both configurations, control fails in same features; no custom stub'},source_association='NHY_NATIVE_INPUTS.json and immutable source snapshots; NHY_POLICY_REUSE.json, NHY_REGISTRY_REUSE.json or NHY_ZERO_REUSE.json pin retained extraction. All typed record fields generated independently; exact Result constructor transport.',effects='Pure shared-reference/scalar input; local proof outputs only, empty modifies; no global logs or writable statics.',combined='NHY_L045',audit=['NHY_L031','NHY_L032','NHY_L046'],trust_reclassification='Retained P6/D188 option-A transport; Rust/std/compiler/ABI realization retained, no new runtime trust')
+ c.pop('semantic_review_sha256',None);c['semantic_review_sha256']=sha(json.dumps(c,sort_keys=True).encode())
+ r=copy.deepcopy(by[rid]);assert r['composed_status']=='OPEN' and not r['named_hypotheses']
+ r.update(composed_status='CLOSED',bridge_status='CLOSED-CONDITIONAL',selected_claims=[c['id']],active_support_receipts=[str((E/a/'receipt.json').relative_to(R)) for a in [pa,na]],open_transitive_dependencies=[],composed_reason='Full typed domain actual frozen native body against retained extracted reference and complete Result/record transport, paired semantic failure; no accepted-input premise.')
+ for o in r['caller_domain_obligations']:
+  assert o.get('call',{}).get('name') in ['Ok','Err'],o
+  o.update(status='CLOSED',discharged_by=c['id']+': actual native constructor in full-result contract; exact extracted constructor and all errors retained')
+ assert not n.row_checks(r,by[rid],c),(rid,n.row_checks(r,by[rid],c))
+ n.certificate_checks(type('Support',(),{'support':lambda self,c:None})(),c)
+ rows.append(r);certs[rid]=c;candidates[rid]=('NHY',r)
+
 n.certificate_checks(type('Support',(),{'support':lambda self,c:None})(),cert)
 tiny=copy.deepcopy(base);tiny['rows']=[copy.deepcopy(by[rid]) for rid in candidates]
 admitted=n.admit(tiny,candidates,certs,{'NHY':list(candidates)});assert all(r['composed_status']=='CLOSED' for r in admitted['rows'])
 for rid,r in ((r['row'],r) for r in rows):
  bad=copy.deepcopy(r);bad['frozen_body_sha256']='0'*64;assert 'candidate frozen identity mismatch' in n.row_checks(bad,by[rid],cert)
- bad=copy.deepcopy(r);bad['caller_domain_obligations'][0]['status']='OPEN';assert 'Open caller-domain obligation' in n.row_checks(bad,by[rid],cert)
+ if r['caller_domain_obligations']:
+  bad=copy.deepcopy(r);bad['caller_domain_obligations'][0]['status']='OPEN';assert 'Open caller-domain obligation' in n.row_checks(bad,by[rid],cert)
 try:n.certificate_checks(type('Support',(),{'support':lambda self,c:None})(),dict(inner_hypotheses_remaining=['unpaired SDK stub']))
 except ValueError:pass
 else:raise AssertionError('residual inner hypothesis accepted')
 assert lzma.decompress(basepath.read_bytes())==data
-put('NHY_CLOSED.json',dict(schema_version=1,frozen_revision=base['frozen_revision'],new_composed_functions=1,new_composed_rows=2,functions=[cert],driver_root_status='OPEN'))
+put('NHY_CLOSED.json',dict(schema_version=1,frozen_revision=base['frozen_revision'],new_composed_functions=len({c['id'] for c in certs.values()}),new_composed_rows=len(rows),functions=list({c['id']:c for c in certs.values()}.values()),driver_root_status='OPEN'))
 put('NHY_EDGES.json',dict(edges=[o for r in rows for o in r['caller_domain_obligations']],no_out_of_slice_credit=True))
-put('NHY_LEDGER_DELTA.json',dict(baseline=str(basepath.relative_to(R)),baseline_uncompressed_sha256=sha(data),new_closed_rows=list(candidates),rows=rows,no_other_status_change=True,validator_checks_added_only=True,unchanged_NFK_validator_sha256=pin,checks_added=['admission exit0 AND allowed:true, exact caps and source snapshots','per-run frozen graph, lock, offline, deployed features and exact KMX','both explicit SDK arms; canonical clone domain; no writable static/custom copy stub','same-entry SDK-derived root acquisition, all-length scalar dispatch, full Header/finish chain and caller table bounds','NGK/RPx combined, ax2 identical walker/eight fixtures/same binary/standard axioms; NFX zero defects','unchanged NFK row/certificate/admit checks; five denial mutations'],whole_ledger_counts_after=dict(total=599,CLOSED=337,OPEN=262),baseline_preserved_byte_exactly=True,mutation_denials=5,trust_reclassification='Retained P6/D188 option A; nothing removed or newly adopted',inherited_NHJ_delta='Separate immutable14-row delta, not duplicated in NHY new rows'))
-put('NHY_AUDIT.json',dict(status='PASS_AX2_NFX',combined='NHY_L010',roots=[r for p in proofs for r in p['results']],fixtures=fx,scan=scan,walker_sha256=sha((P/'NGL_WALKER_SOURCE.lean.txt').read_bytes()),driver_diffs=['NHY_ProofDriver.diff','NHY_ScanDriver.diff'],scope='Focused coherent cached replay, not cold release manifest',standard_axioms_only=True))
-put('NHY_LOCAL_VALIDATION.json',dict(target='NHY_certify snapshot two-row admission',exit_status=0,wall_seconds=time.monotonic()-start,peak_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss//(1024 if sys.platform=='darwin' else 1),swaps=resource.getrusage(resource.RUSAGE_SELF).ru_nswap,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_sha256=sha(Path(__file__).read_bytes()),print_axioms='N/A Python evidence validation; exact formal audits in NHY_AUDIT.json',new_closed_rows=2))
-print(json.dumps(dict(status='PASS',new_closed_rows=2)))
+put('NHY_LEDGER_DELTA.json',dict(baseline=str(basepath.relative_to(R)),baseline_uncompressed_sha256=sha(data),new_closed_rows=list(candidates),rows=rows,no_other_status_change=True,validator_checks_added_only=True,unchanged_NFK_validator_sha256=pin,checks_added=['admission exit0 AND allowed:true, exact caps and source snapshots','per-run frozen graph, lock, offline, deployed features and exact KMX','both explicit SDK arms; canonical clone domain; no writable static/custom copy stub','same-entry SDK-derived root acquisition, all-length scalar dispatch, full Header/finish chain and caller table bounds','NGK/RPx combined, ax2 identical walker/eight fixtures/same binary/standard axioms; NFX zero defects','unchanged NFK row/certificate/admit checks; five denial mutations'],whole_ledger_counts_after=dict(total=599,CLOSED=335+len(rows),OPEN=264-len(rows)),baseline_preserved_byte_exactly=True,mutation_denials=5,trust_reclassification='Retained P6/D188 option A; nothing removed or newly adopted',inherited_NHJ_delta='Separate immutable14-row delta, not duplicated in NHY new rows'))
+put('NHY_AUDIT.json',dict(status='PASS_AX2_NFX',combined='NHY_L045',roots=[r for p in proofs for r in p['results']],fixtures=fx,scan=scan,walker_sha256=sha((P/'NGL_WALKER_SOURCE.lean.txt').read_bytes()),driver_diffs=['NHY_ProofDriver.diff','NHY_ScanDriver.diff'],scope='Focused coherent cached replay, not cold release manifest',standard_axioms_only=True))
+put('NHY_LOCAL_VALIDATION.json',dict(target='NHY_certify snapshot two-row admission',exit_status=0,wall_seconds=time.monotonic()-start,peak_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss//(1024 if sys.platform=='darwin' else 1),swaps=resource.getrusage(resource.RUSAGE_SELF).ru_nswap,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_sha256=sha(Path(__file__).read_bytes()),print_axioms='N/A Python evidence validation; exact formal audits in NHY_AUDIT.json',new_closed_rows=len(rows)))
+print(json.dumps(dict(status='PASS',new_closed_rows=len(rows))))

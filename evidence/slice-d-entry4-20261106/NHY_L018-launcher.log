@@ -1,0 +1,36 @@
+{"attempt": "NHY_L018", "exit_status": 0, "wall_seconds": 3.9469003449194133, "peak_rss_kib": "5919596", "swaps": "0", "print_axioms": ["'AspisR1.NHL_Tx1Model.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NHT_Tx2AuthModel.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NHT_AdapterInstall.cohort_slot' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.NHL_Tx1Model.source (base expected : AspisR1CurrentCaller.Ops) {H : Type}
+  (first : AspisR1.NHL_EmittedTx1.Prepare H) (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H)
+  (pub : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (public_bytes proof : Aeneas.Std.Slice Aeneas.Std.U8) (k : Aeneas.Std.Usize) (hash : H)
+  (prepare :
+    ∀ (zero : AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact),
+      AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact.ZERO base = Aeneas.Std.Result.ok zero →
+        first D pub proof hash none (Aeneas.Std.Array.repeat 29#usize zero) =
+          AspisR1CurrentCaller.verifier.candidate.prepare (As
+...
+, next := a.next } proof
+                  public_bytes hash) :
+  AspisR1.NHL_EmittedTx1.tx1 base first D pub public_bytes proof k hash none =
+    AspisR1CurrentCaller.verifier.candidate.tx1 (AspisR1.NHL_Tx1Model.children base expected) D pub public_bytes proof k
+      hash none
+NHT_Tx2AuthModel.source (ops : VTop_Stages.Ops) {H : Type} (D : VTop_Stages.aspis_core.digest.Digest32 H)
+  (pub proof checkpoint : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H)
+  (obs : Option (VTop_Stages.verifier.Phase → Aeneas.Std.Result Unit)) :
+  NHT_EmittedAuth.tx2_authenticated (NHT_Tx2CommonModel.constants ops) D pub proof checkpoint hash obs =
+    VTop_Stages.verifier.candidate.tx2_authenticated (NHT_Tx2CommonModel.constants ops) D pub proof checkpoint hash obs
+NHT_AdapterInstall.slot (adapter : AdapterRw.Ops) (stage : VTop_Stages.Ops) :
+  @AdapterRw.Ops.op11 (NHT_AdapterInstall.install adapter stage) =
+    @NHT_EmittedAuth.tx2_authenticated (NHT_Tx2CommonModel.constants stage)
+NHT_AdapterInstall.cohort_slot (adapter : AdapterRw.Ops) (stage : VTop_Stages.Ops) :
+  @AdapterRw.Ops.op11 (NHT_AdapterInstall.install adapter stage) =
+    @VTop_Stages.verifier.candidate.tx2_authenticated (NHT_Tx2CommonModel.constants stage)
+NHT_AdapterInstall.digest_error_frame (adapter : AdapterRw.Ops) (stage : VTop_Stages.Ops) :
+  (NHT_AdapterInstall.install adapter stage).op43 = adapter.op43 ∧
+    (NHT_AdapterInstall.install adapter stage).op44 = adapter.op44
+'AspisR1.NHL_Tx1Model.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NHT_Tx2AuthModel.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NHT_AdapterInstall.cohort_slot' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rb6ee1079cb034d0f940b486d688c80a5.scope; invocation ID: faf960ed39c24c8ea36f6ec5990d58d5

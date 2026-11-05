@@ -23,8 +23,8 @@ for name,cmd in commands:
  if name=='fixtures':
   assert len(row['results'])==8 and all(x['equal'] for x in row['results'])
   assert all(len(x['walked_axioms'])==1 for x in row['results'][:4]) and all(not x['walked_axioms'] for x in row['results'][4:])
- elif name==mode:
-  assert len(row['results'])==len(json.loads((B/'NHY_AUDIT_ROOTS.json').read_text())['groups'][int(mode[5:])])
+ elif name.startswith('proof'):
+  assert len(row['results'])==len(json.loads((B/'NHY_AUDIT_ROOTS.json').read_text())['groups'][int(name[5:])])
   assert all(x['equal'] and set(x['walked_axioms'])==set(x['collect_axioms'])<={'propext','Classical.choice','Quot.sound'} for x in row['results'])
  elif name=='scan':
   scan=[json.loads(l) for l in (B/'NHY_LOADED_scan.jsonl').read_text().splitlines()]

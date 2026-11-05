@@ -3,7 +3,7 @@ from pathlib import Path
 import subprocess,json,sys,time,hashlib,shlex,lzma,os
 E=Path(__file__).resolve().parent;P=E.parent/'slice-d-entry-20261105'
 B='/home/dombarker/project-offloads/codex-cx-slice-d-entry4-20261106';H='dombarker@100.108.41.90'
-a,kind,target=sys.argv[1:];archive_pattern=('NEP_proof'+str(int(target.split('stage')[1].split('_')[0])-1)+'_*_REACHABLE.txt') if kind=='audit' else ''; assert kind in ['kani','lean','inspect','audit','extract'];assert a.startswith('NHY_'+('K' if kind=='kani' else 'E' if kind=='extract' else 'L'));assert 1<=int(a[-3:])<=(120 if kind=='kani' else 2 if kind=='extract' else 80);assert not (E/a).exists()
+a,kind,target=sys.argv[1:];archive_patterns=[f'NEP_{m}_*_REACHABLE.txt' for m in json.loads((E/'NHY_AUDIT_PLAN.json').read_text()) if m.startswith('proof')] if kind=='audit' else []; assert kind in ['kani','lean','inspect','audit','extract'];assert a.startswith('NHY_'+('K' if kind=='kani' else 'E' if kind=='extract' else 'L'));assert 1<=int(a[-3:])<=(120 if kind=='kani' else 2 if kind=='extract' else 80);assert not (E/a).exists()
 def ssh(code,data=None,submitted=False):
  for retry in range(11):
   r=subprocess.run(['ssh','-o','ControlMaster=no','-o','ConnectTimeout=15',H,code],input=data,capture_output=True,text=True)
@@ -30,9 +30,8 @@ print(p.read_text() if p.exists() else 'MISSING');sys.exit(r.returncode)
  raise RuntimeError('Infrastructure STOP: admission')
 old=json.loads((P/'NGL_K037.json').read_text());env=dict(old['env']);env['TMPDIR']=B+'/NHY_tmp'
 env['LEAN_PATH']=B+'/NHY_objects:/home/dombarker/project-offloads/codex-cx-slice-d-entry-cache-20261104/NHY_NHJ_seed:/home/dombarker/project-offloads/codex-cx-slice-d-entry-cache-20261104/NHD_exports_20261106:/home/dombarker/project-offloads/codex-cx-slice-d-entry-cache-20261104/NHD_NGK_exports_20261106:'+env['LEAN_PATH'].replace('/home/dombarker/project-offloads/codex-cx-slice-d-entry-20261105/NGL_objects','/home/dombarker/project-offloads/codex-cx-slice-d-entry-cache-20261104/NGL_exports_20261105')
+if (E/'NHY_EXTRA_LEAN_PATH.json').exists():env['LEAN_PATH']+=':'+':'.join(json.loads((E/'NHY_EXTRA_LEAN_PATH.json').read_text()))
 files={};sources=[]
-if kind=='kani' and int(a[-3:])>=43:
- env.update(json.loads((E/'NHY_DEVNET_CONFIG.json').read_text()))
 if kind=='kani':
  for n in ['NHY_gate.py','NHY_erasure.py','NHY_SOURCE_PINS.json']:files[n]=(E/n).read_text()
  for n in ['NGL_FROZEN_SOURCE_PINS.json','NGL_ZERO_SOURCE_ERASURE.json','NGL_CONTRACT_ANNOTATIONS.json']:files[n]=(P/n).read_text()
@@ -40,10 +39,14 @@ if kind=='kani':
  sources=list(files)+['NHY_src/Cargo.lock']
  command=['python3','NHY_gate.py',a+'.json']
  native=list(old['native_command']);native=[s.replace('/home/dombarker/project-offloads/codex-cx-slice-d-entry-20261105',B).replace('/NGL_src/','/NHY_src/').replace('/NGL_target','/NHY_target') for s in native]
- native[native.index('--harness')+1]=target
+ native[native.index('--harness')+1]=target.removeprefix('statement:')
  native[native.index('--manifest-path')+1]=B+'/NHY_src/programs/r1-cost-probe/Cargo.toml'
  native[native.index('--features')+1]='pool-adapter,private-leaf-salts'
  cfg=dict(native_command=native,root_package='aspis-r1-cost-probe-program')
+ if target.startswith('statement:'):
+  native[native.index('--manifest-path')+1]=B+'/NHY_src/crates/aspis-statement/Cargo.toml'
+  native[native.index('--features')+1]=','.join(json.loads((E/'NHY_STATEMENT_FEATURES.json').read_text()))
+  cfg.update(root_package='aspis-statement',metadata_manifest=native[native.index('--manifest-path')+1],metadata_features=native[native.index('--features')+1])
 elif kind=='extract':
  files['NHY_extract.py']=(E/'NHY_extract.py').read_text();ref='NHY_snapshot_ref.rs' if target=='NHY_SnapshotReference' else 'NHY_ids_ref.rs';files[ref]=(E/(ref+'.txt')).read_text()
  sources=list(files);command=['python3','NHY_extract.py',a+'.json'];cfg={}
@@ -98,7 +101,7 @@ if {kind!r}=='extract':
 if {kind!r}=='inspect':names+=['NHY_HOST_FINAL.json','NHY_CACHE_EXPORT.json'] if {target!r}=='NHY_host_finalize' else ['NHY_RODATA.json']
 if {kind!r}=='audit':
  names += [str(p.relative_to(b)) for p in (b/{target!r}).rglob('*') if p.is_file()]
- names += [str(p.relative_to(b)) for p in b.glob({archive_pattern!r})]
+ names += [str(p.relative_to(b)) for pat in {archive_patterns!r} for p in b.glob(pat)]
  names += ['NHY_LOADED_scan.jsonl']
 print(json.dumps({{n:(b/n).read_text() for n in names}}))
 ''');assert r.returncode==0,r.stderr
