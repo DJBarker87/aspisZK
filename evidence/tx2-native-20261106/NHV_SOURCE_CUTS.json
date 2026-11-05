@@ -1,0 +1,117 @@
+{
+  "frozen": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "source_file_sha256": "5164975df10f79e9810f9321b8130a9865eb9bb9b6b9de7011f4359ece98c794",
+  "cuts": [
+    {
+      "slot": "resume",
+      "original": "    let (p, a) = resume(checkpoint, proof, public_bytes, Variant::S2, hash)?;\n    if a.next != SPLIT {\n        return Err(Error::Checkpoint);\n    }\n",
+      "native_cut": "\n let (p,a)=ops.resume(checkpoint,proof,public_bytes,Variant::S2,hash)?;\n if a.next!=SPLIT {return Err(Error::Checkpoint);}\n Ok((p,a))\n",
+      "original_sha256": "9c21f74a066dec7791d54a0e06fa18f8ce3298123f484d14ce9768210a69d3e3",
+      "native_sha256": "df3f1081ca38571990a6670018308c8e7b48cef724e8efc35852691bc10a94cd",
+      "allowed_rewrites": [
+        "resume -> ops.resume",
+        "boundary continuation returns SAME (p,a)"
+      ],
+      "status": "manual source-cut association; no callee packet installation"
+    },
+    {
+      "slot": "powers",
+      "original": "    let g = powers::<29>(p.gamma);\n    mark(obs, Phase::CheckpointRead);\n",
+      "native_cut": "let g=ops.powers(p.gamma);mark(None,Phase::CheckpointRead);g",
+      "original_sha256": "e221833c8438056c3e442a5f1f4a1bd125aa831bac6014a043c912e9d53aeb92",
+      "native_sha256": "d0220c9f0e01608c17d3a6697a9c86c6c40c279055bee4b68e50d5eefccdc7d5",
+      "allowed_rewrites": [
+        "powers::<29> -> ops.powers",
+        "deployed obs=None",
+        "boundary continuation returns SAME g"
+      ],
+      "status": "manual source-cut association; no callee packet installation"
+    },
+    {
+      "slot": "inactive",
+      "original": "    let inactive = E::from_le_bytes(&proof[compact::OFF_INACTIVE..compact::OFF_ROUND0]).ok_or(Error::Parse)?;\n",
+      "native_cut": "let inactive=ops.decode(&proof[compact::OFF_INACTIVE..compact::OFF_ROUND0]).ok_or(Error::Parse)?;Ok(inactive)",
+      "original_sha256": "8363fcd5115d9238e9d5e7cb3088ed1217e548d843784f1117b7c574b045b435",
+      "native_sha256": "b05f23343ed8690454dddcc1d5bf9361351b8cc75b43624e9ed0d112e98591a5",
+      "allowed_rewrites": [
+        "E::from_le_bytes -> ops.decode",
+        "boundary continuation returns SAME inactive"
+      ],
+      "status": "manual source-cut association; no callee packet installation"
+    },
+    {
+      "slot": "root",
+      "original": "    let folded_root: [u8; 32] = proof[compact::OFF_FOLDED_ROOT..compact::OFF_ROUND1].try_into().unwrap();\n    batch_merkle(proof, &p, &folded_root, 1, hash)?;\n    mark(obs, Phase::Merkle(SPLIT));\n",
+      "native_cut": "let folded_root:[u8;32]=proof[compact::OFF_FOLDED_ROOT..compact::OFF_ROUND1].try_into().unwrap();ops.merkle(proof,p,&folded_root,1,Hash)?;mark(None,Phase::Merkle(SPLIT));Ok(())",
+      "original_sha256": "9453d956ead7ece2bec4ba3edb5dbc3d7e9451d828b4603baa95857c96929b5b",
+      "native_sha256": "801fbfa29adf903f7a5e5f08406dfc528635820159d3a9c08211c29c6ade3185",
+      "allowed_rewrites": [
+        "batch_merkle -> ops.merkle",
+        "deployed obs=None",
+        "boundary continuation returns unit"
+      ],
+      "status": "manual source-cut association; no callee packet installation"
+    },
+    {
+      "slot": "geometry",
+      "original": "    let geometry = QueryGeometry::for_range(&p.queries, a.next, 22)?;\n",
+      "native_cut": "let geometry=ops.geometry(&p.queries,a.next,22)?;Ok(geometry)",
+      "original_sha256": "c8e525d4a97d734f5bb2e4c3a7b71b659673d7e1bef3fbb9f5f4ea970bbdbf2b",
+      "native_sha256": "3003a42fffb8081058e5bbe4c2040a29e3a672c6a3bc08a2577eb48449f6241e",
+      "allowed_rewrites": [
+        "QueryGeometry::for_range -> ops.geometry",
+        "boundary continuation returns SAME geometry"
+      ],
+      "status": "manual source-cut association; no callee packet installation"
+    },
+    {
+      "slot": "pending",
+      "original": "    let pending = BatchedWeights::new(&a.weights)?;\n",
+      "native_cut": "let pending=ops.pending(&a.weights)?;Ok(pending)",
+      "original_sha256": "5c82f9a330ffffcdc9434452e848cb9afcb69d45143bb3e3faf8a30dd60f4169",
+      "native_sha256": "7e9e87fb69220202a0d61204227f6ff8cf76b66524b42fdee48af70c4f6acf5a",
+      "allowed_rewrites": [
+        "BatchedWeights::new -> ops.pending",
+        "boundary continuation returns SAME pending"
+      ],
+      "status": "manual source-cut association; no callee packet installation"
+    },
+    {
+      "slot": "query",
+      "original": "    let (a, pending) = query_loop(proof, &p, a, &g, obs, &geometry, pending, 22)?;\n",
+      "native_cut": "let (a,pending)=ops.query(proof,p,a,g,None,geometry,pending,22)?;Ok((a,pending))",
+      "original_sha256": "2b3603b53fd7ffdfab9c4cfc800d5f109b0cbae3a794dbc3301a9bdb95b3528d",
+      "native_sha256": "170cf8c25a0604a88e6238ab84b791f9ebe439c71043144b6eb8bc70019c5505",
+      "allowed_rewrites": [
+        "query_loop -> ops.query",
+        "deployed obs=None",
+        "boundary continuation returns SAME (a,pending)"
+      ],
+      "status": "manual source-cut association; no callee packet installation"
+    },
+    {
+      "slot": "flush",
+      "original": "    let Accumulator { mut weights, rhs, power, next } = a;\n    pending.finish(&mut weights);\n    let a = Accumulator { weights, rhs, power, next };\n",
+      "native_cut": "let Accumulator{mut weights,rhs,power,next}=a;ops.flush(pending,&mut weights);let a=Accumulator{weights,rhs,power,next};a",
+      "original_sha256": "8e0094ee19ed9545ef297587bce10acc303b7159f4d81b5ff513704389128051",
+      "native_sha256": "85a56366927453a2691000a2c73dc7cde1981a2c44c217dc10a9b79642a764d7",
+      "allowed_rewrites": [
+        "pending.finish -> ops.flush",
+        "boundary continuation returns SAME reconstructed a"
+      ],
+      "status": "manual source-cut association; no callee packet installation"
+    },
+    {
+      "slot": "view",
+      "original": "    let v = View {\n        variant: Variant::S2, semantic: &[], y1: &[], inactive,\n        round0: &proof[compact::OFF_ROUND0..compact::OFF_FOLDED_ROOT],\n        folded_root: None,\n        round1: &proof[compact::OFF_ROUND1..compact::OFF_FINAL],\n        final_message: &proof[compact::OFF_FINAL..compact::OFF_OPENINGS],\n        query_bytes: &[],\n    };\n    finish_relation(&v, &p, &a, obs)",
+      "native_cut": "let v=View{variant:Variant::S2,semantic:&[],y1:&[],inactive,round0:&proof[compact::OFF_ROUND0..compact::OFF_FOLDED_ROOT],folded_root:None,round1:&proof[compact::OFF_ROUND1..compact::OFF_FINAL],final_message:&proof[compact::OFF_FINAL..compact::OFF_OPENINGS],query_bytes:&[]};ops.finish(&v,p,a,None)",
+      "original_sha256": "e1bf5ffba45472bb3db1a15a4a44c53a0ed1732b0db66931a5c88e5df046fabb",
+      "native_sha256": "61f61fd340e361a361aa88a0694c11d8456b0b1ac5da3ed50832773a44221952",
+      "allowed_rewrites": [
+        "finish_relation -> ops.finish",
+        "deployed obs=None"
+      ],
+      "status": "manual source-cut association; no callee packet installation"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+def Aeneas.Std.core.slice.index.Slice.index : {T I Output : Type} →
+  Aeneas.Std.core.slice.index.SliceIndex I (Aeneas.Std.Slice T) Output →
+    Aeneas.Std.Slice T → I → Aeneas.Std.Result Output :=
+fun {T I Output} inst slice i => inst.index i slice
+@[reducible] def Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice : (T : Type) →
+  Aeneas.Std.core.slice.index.SliceIndex (Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize) (Aeneas.Std.Slice T)
+    (Aeneas.Std.Slice T) :=
+fun T =>
+  { sealedInst := Aeneas.Std.core.slice.index.private_slice_index.SealedRangeUsize,
+    get := Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.get,
+    get_mut := Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.get_mut,
+    get_unchecked := Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.get_unchecked,
+    get_unchecked_mut := Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.get_unchecked_mut,
+    index := Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index,
+    index_mut := Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index_mut }
+NHV_generated/NHV_Inspect.lean:4:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Slice.getSubslice`
+NHV_generated/NHV_Inspect.lean:5:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.core.array.Array.to_slice`
+List.take_drop.{u_1} {α : Type u_1} {i j : ℕ} {l : List α} :
+  List.take i (List.drop j l) = List.drop j (List.take (j + i) l)
+List.length_take.{u_1} {α : Type u_1} {i : ℕ} {l : List α} : (List.take i l).length = min i l.length
+List.length_drop.{u_1} {α : Type u_1} {i : ℕ} {l : List α} : (List.drop i l).length = l.length - i
+List.take_take.{u_1} {α : Type u_1} {i j : ℕ} {l : List α} : List.take i (List.take j l) = List.take (min i j) l
+List.drop_drop.{u_1} {α : Type u_1} {i j : ℕ} {l : List α} : List.drop i (List.drop j l) = List.drop (j + i) l
+List.drop_take.{u_1} {α : Type u_1} {i j : ℕ} {l : List α} :
+  List.drop i (List.take j l) = List.take (j - i) (List.drop i l)

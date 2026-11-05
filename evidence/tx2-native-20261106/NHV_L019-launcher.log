@@ -1,0 +1,43 @@
+{"attempt": "NHV_L019", "exit_status": 0, "wall_seconds": 3.404889794997871, "peak_rss_kib": "5954200", "swaps": "0", "print_axioms": ["'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NFW_PowersCohort.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NHV_PendingPacket.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.RPx_Deployed.deployed {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)) (sdk : AspisR1.S2Trust.S2TrustedSdkBorrow L)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (std : AspisR1.S2W_TrustedStd.TrustedStd copy) (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W)
+  (admission1 : AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3)
+  (admission2 : AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7)
+  (missing : AspisR1.IDa_Deployed.U
+...
+t.ok 2#usize)
+  (native_round0 :
+    ops.op5 v.round0 alpha0 p.claim 0#usize =
+      AspisR1Stage2.Stage2Finish.verifier.finishRelationRoundWithOps (AspisR1.IDa_Deployed.finish r) v.round0 alpha0
+        p.claim 0#usize)
+  (native_round1 :
+    ∀ (claim : AspisR1Stage2.Stage2Finish.E),
+      AspisR1.LPi_FieldValues.canonE (AspisR1.FIo_Install.toE claim) →
+        ops.op5 v.round1 alpha1 claim 1#usize =
+          AspisR1Stage2.Stage2Finish.verifier.finishRelationRoundWithOps (AspisR1.IDa_Deployed.finish r) v.round1 alpha1
+            claim 1#usize)
+  (accumulator : AspisR1.NGM_FinishDomain.AccumulatorDomain a)
+  (native_dot : ops.op4 v.final_message a.weights.deref = AspisR1.SAG_DotClosed.source v.final_message a.weights.deref)
+  (newPacket : Aeneas.Std.Result (AspisR1.NGM_FinishControl.R W))
+  (NHM_new : ops.op3 p.variant p.semantic_alpha p.z = newPacket) (pair : NHT_FinishChain.PairPacket W)
+  (NHM_pair :
+    ∀ (weights : W),
+      ops.op3 p.variant p.semantic_alpha p.z = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok weights) →
+        ∀ (alpha : Aeneas.Std.Slice AspisR1.NGM_FinishControl.E),
+          Aeneas.Std.core.array.Array.index
+                (Aeneas.Std.core.ops.index.IndexSlice
+                  (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice AspisR1.NGM_FinishControl.E))
+                p.alpha { «end» := 2#usize } =
+              Aeneas.Std.Result.ok alpha →
+            NHT_FinishRelationModel.PairLaw ops v p weights alpha (pair weights alpha v.final_message p.kappa)) :
+  NHT_ResultPort.action (AspisR1.Port3_NativeFinishBody.verifier.finish_relation ops v p a obs) =
+    NHT_ResultPort.action
+      (NHT_FinishRun.run (NHT_FinishNewPacket.installed ops newPacket) v p a obs
+        (NHQ_WeightPort.weights a.weights.deref) pair alpha0 alpha1)
+
+Running as unit: run-rd037d81abd4e4c54a002f52b33ee5205.scope; invocation ID: b1f47688ad0445ec9f73d450cf48b4b2

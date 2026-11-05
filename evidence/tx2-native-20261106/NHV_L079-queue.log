@@ -1,0 +1,52 @@
+{"attempt": "NHV_L079", "exit_status": 0, "wall_seconds": 3.876605530967936, "peak_rss_kib": "5959544", "swaps": "0", "print_axioms": ["'NHV_ReleaseOps.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+       packet v p { weights := ⟨↑out, ⋯⟩, rhs := after.rhs, power := after.power, next := after.next } none) :
+  ∃ out,
+    AspisR1.Port3_FlushInstall.flush pending after.weights.deref = Aeneas.Std.Result.ok out ∧
+      AspisR1.NGM_FinishDomain.AccumulatorDomain
+          { weights := ⟨↑out, ⋯⟩, rhs := after.rhs, power := after.power, next := after.next } ∧
+        NHQ_Tx2CommonModel.afterQuery (NHT_PacketOps.installed top base qPlace gPlace) proof p none inactive round0
+            folded round1 (Aeneas.Std.core.result.Result.Ok (after, pending)) =
+          do
+          let v ←
+            NHT_TailView.view (NHT_PacketOps.installed top base qPlace gPlace) proof p none inactive round0 folded
+                round1
+          packet v p { weights := ⟨↑out, ⋯⟩, rhs := after.rhs, power := after.power, next := after.next } none
+NHT_FinishPacket.source {W : Type} (ops : AspisR1.Port3_NativeFinishBody.Ops W) (r : AspisR1.NP6_StdModel.Reservation)
+  (v : AspisR1Stage2.verifier.View) (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+  (obs : Option (AspisR1Stage2.verifier.Phase → Aeneas.Std.Result Unit)) (alpha0 alpha1 : AspisR1.NGM_FinishControl.E)
+  (index0 : p.alpha.index_usize 0#usize = Aeneas.Std.Result.ok alpha0)
+  (index1 : p.alpha.index_usize 1#usize = Aeneas.Std.Result.ok alpha1)
+  (ca0 : AspisR1.LPi_FieldValues.canonE (AspisR1.FIo_Install.toE alpha0))
+  (ca1 : AspisR1.LPi_FieldValues.canonE (AspisR1.FIo_Install.toE alpha1))
+  (folds : ops.op6 p.variant = Aeneas.Std.Result.ok 2#usize)
+  (native_round0 :
+    ops.op5 v.round0 alpha0 p.claim 0#usize =
+      AspisR1Stage2.Stage2Finish.verifier.finishRelationRoundWithOps (AspisR1.IDa_Deployed.finish r) v.round0 alpha0
+        p.claim 0#usize)
+  (native_round1 :
+    ∀ (claim : AspisR1Stage2.Stage2Finish.E),
+      AspisR1.LPi_FieldValues.canonE (AspisR1.FIo_Install.toE claim) →
+        ops.op5 v.round1 alpha1 claim 1#usize =
+          AspisR1Stage2.Stage2Finish.verifier.finishRelationRoundWithOps (AspisR1.IDa_Deployed.finish r) v.round1 alpha1
+            claim 1#usize)
+  (accumulator : AspisR1.NGM_FinishDomain.AccumulatorDomain a)
+  (native_dot : ops.op4 v.final_message a.weights.deref = AspisR1.SAG_DotClosed.source v.final_message a.weights.deref)
+  (newPacket : Aeneas.Std.Result (AspisR1.NGM_FinishControl.R W))
+  (NHM_new : ops.op3 p.variant p.semantic_alpha p.z = newPacket) (pair : NHT_FinishChain.PairPacket W)
+  (NHM_pair :
+    ∀ (weights : W),
+      ops.op3 p.variant p.semantic_alpha p.z = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok weights) →
+        ∀ (alpha : Aeneas.Std.Slice AspisR1.NGM_FinishControl.E),
+          Aeneas.Std.core.array.Array.index
+                (Aeneas.Std.core.ops.index.IndexSlice
+                  (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice AspisR1.NGM_FinishControl.E))
+                p.alpha { «end» := 2#usize } =
+              Aeneas.Std.Result.ok alpha →
+            NHT_FinishRelationModel.PairLaw ops v p weights alpha (pair weights alpha v.final_message p.kappa)) :
+  NHT_ResultPort.action (AspisR1.Port3_NativeFinishBody.verifier.finish_relation ops v p a obs) =
+    NHT_ResultPort.action
+      (NHT_FinishRun.run (NHT_FinishNewPacket.installed ops newPacket) v p a obs
+        (NHQ_WeightPort.weights a.weights.deref) pair alpha0 alpha1)
+'NHV_ReleaseOps.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+

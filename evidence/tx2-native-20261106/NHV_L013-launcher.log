@@ -1,0 +1,40 @@
+{"attempt": "NHV_L013", "exit_status": 0, "wall_seconds": 3.852282765088603, "peak_rss_kib": "5951032", "swaps": "0", "print_axioms": ["'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NFW_PowersCohort.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NHV_PendingPacket.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.RPx_Deployed.deployed {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)) (sdk : AspisR1.S2Trust.S2TrustedSdkBorrow L)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (std : AspisR1.S2W_TrustedStd.TrustedStd copy) (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W)
+  (admission1 : AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3)
+  (admission2 : AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7)
+  (missing : AspisR1.IDa_Deployed.U
+...
+        (AspisR1.NFW_QueryResume.pending a) 22#usize =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (after, pending)))
+  (inactive : AspisR1Stage2.aspis_core.field.wide_exact.WideExact) (round0 folded round1 : Aeneas.Std.Usize)
+  (packet : NHT_QueryTail.Packet)
+  (NHM_finish :
+    ∀ (out : Aeneas.Std.Slice AspisR1Stage2.aspis_core.field.QM31),
+      AspisR1.Port3_FlushInstall.flush pending after.weights.deref = Aeneas.Std.Result.ok out →
+        AspisR1.NGM_FinishDomain.AccumulatorDomain
+            { weights := ⟨↑out, ⋯⟩, rhs := after.rhs, power := after.power, next := after.next } →
+          ∀ (v : VTop_Stages.verifier.View),
+            NHT_TailView.view (NHT_PacketOps.installed top base qPlace gPlace) proof p none inactive round0 folded
+                  round1 =
+                Aeneas.Std.Result.ok v →
+              top.op19 v p { weights := ⟨↑out, ⋯⟩, rhs := after.rhs, power := after.power, next := after.next } none =
+                packet v p { weights := ⟨↑out, ⋯⟩, rhs := after.rhs, power := after.power, next := after.next } none) :
+  ∃ out,
+    AspisR1.Port3_FlushInstall.flush pending after.weights.deref = Aeneas.Std.Result.ok out ∧
+      AspisR1.NGM_FinishDomain.AccumulatorDomain
+          { weights := ⟨↑out, ⋯⟩, rhs := after.rhs, power := after.power, next := after.next } ∧
+        NHQ_Tx2CommonModel.afterQuery (NHT_PacketOps.installed top base qPlace gPlace) proof p none inactive round0
+            folded round1 (Aeneas.Std.core.result.Result.Ok (after, pending)) =
+          do
+          let v ←
+            NHT_TailView.view (NHT_PacketOps.installed top base qPlace gPlace) proof p none inactive round0 folded
+                round1
+          packet v p { weights := ⟨↑out, ⋯⟩, rhs := after.rhs, power := after.power, next := after.next } none
+
+Running as unit: run-ref677747be84433b84008fa4ac3a05f6.scope; invocation ID: 6e7c68fd6936425ab30292270389f76c
