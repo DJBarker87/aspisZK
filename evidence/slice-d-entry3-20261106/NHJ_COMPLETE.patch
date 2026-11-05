@@ -1122,7 +1122,7 @@
 +fn data_modifies(){let a=data_good();let mut local:u8=kani::any();let _=data_frame_violation(&a,&mut local);}
 --- /dev/null
 +++ b/programs/r1-cost-probe/src/NHJ_owned.rs
-@@ -0,0 +1,430 @@
+@@ -0,0 +1,409 @@
 +//! Ruling (ak): explicit constructors; local records; empty external modifies.
 +use super::*;
 +extern crate alloc;
@@ -1263,91 +1263,6 @@
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +fn distinct_prefix_embedding_corrupt(){let a=core::mem::ManuallyDrop::new(core::array::from_fn::<_,3,_>(|_|{let b=account();core::mem::ManuallyDrop::into_inner(b)}));let i:usize=kani::any();let p:usize=kani::any();kani::assume(p<i&&i<3);let _=prefix_embedding_corrupt_packet(&a,i,p);}
 +
-+struct CopyLog{count:u8,src:*const u8,len:usize,out:*const u8,out_len:usize,out_cap:usize,index:usize,selected:u8}
-+fn copy_empty()->CopyLog{CopyLog{count:0,src:core::ptr::null(),len:0,out:core::ptr::null(),out_len:0,out_cap:0,index:0,selected:0}}
-+fn copy_oracle<const N:usize>(data:&[u8],l:&mut CopyLog)->Vec<u8>{
-+ l.count+=1;l.src=data.as_ptr();l.len=data.len();
-+ let result=kani::vec::exact_vec::<u8,N>();l.out=result.as_ptr();l.out_len=result.len();l.out_cap=result.capacity();l.selected=result[l.index];result
-+}
-+fn snapshot_cut<const N:usize>(account:&AccountInfo<'_>,length1:usize,length2:usize,l:&mut CopyLog)->OwnedAccount{
-+ let (length,bytes)=match account.try_borrow_data(){
-+  Ok(data)=>{let length=data.len();let bytes=if length==length1||length==length2{Ok(copy_oracle::<N>(&data,l))}else{Err(ProgramError::InvalidAccountData)};(Ok(length),bytes)}
-+  Err(error)=>(Err(error.clone()),Err(error)),
-+ };
-+ OwnedAccount{key:*account.key,owner:*account.owner,is_signer:account.is_signer,is_writable:account.is_writable,executable:account.executable,length,bytes}
-+}
-+#[kani::requires(l.count==0)]
-+#[kani::ensures(|r| *r)] #[kani::modifies(l,a.data.as_ref())]
-+fn snapshot_header_packet<const N:usize>(a:&AccountInfo<'_>,length1:usize,length2:usize,j:usize,l:&mut CopyLog)->bool{
-+ let available=a.try_borrow_mut_data().is_ok();
-+ let before=match a.try_borrow_data(){Ok(b)=>(Some(b.as_ptr()),b.len(),b.get(j).copied()),Err(_)=>(None,0,None)};
-+ let r=core::mem::ManuallyDrop::new(snapshot_cut::<N>(a,length1,length2,l));
-+ let meta=r.key==*a.key&&r.owner==*a.owner&&r.is_signer==a.is_signer&&r.is_writable==a.is_writable&&r.executable==a.executable;
-+ let result=match before.0{
-+  None=>l.count==0&&matches!(r.length,Err(ProgramError::AccountBorrowFailed))&&matches!(r.bytes,Err(ProgramError::AccountBorrowFailed)),
-+  Some(p)=>matches!(r.length,Ok(n) if n==before.1)&&if before.1==length1||before.1==length2{
-+   l.count==1&&l.src==p&&l.len==before.1&&match &r.bytes{Ok(v)=>v.as_ptr()==l.out&&v.len()==l.out_len&&v.capacity()==l.out_cap,_=>false}
-+  }else{l.count==0&&matches!(r.bytes,Err(ProgramError::InvalidAccountData))}
-+ };
-+ let frame=match a.try_borrow_data(){Ok(b)=>before.0==Some(b.as_ptr())&&before.1==b.len()&&before.2==b.get(j).copied(),Err(_)=>before.0.is_none()};
-+ let restored=a.try_borrow_mut_data().is_ok()==available;
-+ meta&&result&&frame&&restored
-+}
-+#[kani::proof_for_contract(snapshot_header_packet::<128>)] #[kani::unwind(35)]
-+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+fn snapshot_header_128(){let k=Pubkey::new_from_array(kani::any());let o=Pubkey::new_from_array(kani::any());let mut lamports:u64=kani::any();let mut b=kani::vec::exact_vec::<u8,128>();let a=AccountInfo::new(&k,kani::any(),kani::any(),&mut lamports,&mut b,&o,kani::any(),kani::any());let blocked:bool=kani::any();let held=if blocked{Some(a.try_borrow_mut_data().unwrap())}else{None};let l1:usize=kani::any();let l2:usize=kani::any();let j:usize=kani::any();kani::assume(j<128);let mut l=copy_empty();let _=snapshot_header_packet::<128>(&a,l1,l2,j,&mut l);drop(held);}
-+
-+// Exact admitted/rejected length branch after SDK has returned a live data guard.
-+fn borrowed_header_cut<const N:usize>(data:&[u8],key:&Pubkey,owner:&Pubkey,s:bool,w:bool,e:bool,length1:usize,length2:usize,l:&mut CopyLog)->OwnedAccount{
-+ let length=data.len();let bytes=if length==length1||length==length2{Ok(copy_oracle::<N>(data,l))}else{Err(ProgramError::InvalidAccountData)};
-+ OwnedAccount{key:*key,owner:*owner,is_signer:s,is_writable:w,executable:e,length:Ok(length),bytes}
-+}
-+fn header_association<const N:usize>(data:&[u8],k:&Pubkey,o:&Pubkey,s:bool,w:bool,e:bool,l1:usize,l2:usize,l:&CopyLog,r:&OwnedAccount)->bool{
-+ r.key==*k&&r.owner==*o&&r.is_signer==s&&r.is_writable==w&&r.executable==e&&matches!(r.length,Ok(n)if n==data.len())&&
-+ if data.len()==l1||data.len()==l2{
-+  l.count==1&&l.src==data.as_ptr()&&l.len==data.len()&&l.out!=data.as_ptr()&&
-+  match &r.bytes{Ok(v)=>v.as_ptr()==l.out&&v.len()==l.out_len&&v.capacity()==l.out_cap&&v[l.index]==l.selected,_=>false}
-+ }else{l.count==0&&matches!(r.bytes,Err(ProgramError::InvalidAccountData))}
-+}
-+#[kani::requires(data.len()==N && l.count==0 && l.index<N)]
-+#[kani::ensures(|r| *r)] #[kani::modifies(l)]
-+fn borrowed_header_packet<const N:usize>(data:&[u8],k:&Pubkey,o:&Pubkey,s:bool,w:bool,e:bool,l1:usize,l2:usize,l:&mut CopyLog)->bool{
-+ let r=core::mem::ManuallyDrop::new(borrowed_header_cut::<N>(data,k,o,s,w,e,l1,l2,l));
-+ header_association::<N>(data,k,o,s,w,e,l1,l2,l,&r)
-+}
-+#[kani::proof_for_contract(borrowed_header_packet::<128>)] #[kani::unwind(35)]
-+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+fn borrowed_header_128(){let k=Pubkey::new_from_array(kani::any());let o=Pubkey::new_from_array(kani::any());let b=kani::vec::exact_vec::<u8,128>();let j:usize=kani::any();kani::assume(j<128);let mut l=copy_empty();l.index=j;let _=borrowed_header_packet::<128>(&b,&k,&o,kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),&mut l);}
-+#[kani::requires(data.len()==N && l.count==0 && l.index<N)]
-+#[kani::ensures(|r| *r)] #[kani::modifies(l)]
-+fn borrowed_header_corrupt_packet<const N:usize>(data:&[u8],k:&Pubkey,o:&Pubkey,s:bool,w:bool,e:bool,l1:usize,l2:usize,l:&mut CopyLog)->bool{
-+ let mut r=core::mem::ManuallyDrop::new(borrowed_header_cut::<N>(data,k,o,s,w,e,l1,l2,l));
-+ if let Ok(v)=&mut r.bytes{v[l.index]^=1;}
-+ header_association::<N>(data,k,o,s,w,e,l1,l2,l,&r)
-+}
-+#[kani::proof_for_contract(borrowed_header_corrupt_packet::<128>)] #[kani::unwind(35)]
-+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+fn borrowed_header_128_corrupt(){let k=Pubkey::new_from_array(kani::any());let o=Pubkey::new_from_array(kani::any());let b=kani::vec::exact_vec::<u8,128>();let j:usize=kani::any();kani::assume(j<128);let mut l=copy_empty();l.index=j;let _=borrowed_header_corrupt_packet::<128>(&b,&k,&o,kani::any(),kani::any(),kani::any(),128,kani::any(),&mut l);}
-+
-+macro_rules! header_instance {
-+ ($pass:ident,$bad:ident,$n:expr)=>{
-+ #[kani::proof_for_contract(borrowed_header_packet::<$n>)] #[kani::unwind(35)]
-+ #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+ fn $pass(){let k=Pubkey::new_from_array(kani::any());let o=Pubkey::new_from_array(kani::any());let b=kani::vec::exact_vec::<u8,$n>();let j:usize=kani::any();kani::assume(j<$n);let mut l=copy_empty();l.index=j;let _=borrowed_header_packet::<$n>(&b,&k,&o,kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),&mut l);}
-+ #[kani::proof_for_contract(borrowed_header_corrupt_packet::<$n>)] #[kani::unwind(35)]
-+ #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+ fn $bad(){let k=Pubkey::new_from_array(kani::any());let o=Pubkey::new_from_array(kani::any());let b=kani::vec::exact_vec::<u8,$n>();let j:usize=kani::any();kani::assume(j<$n);let mut l=copy_empty();l.index=j;let _=borrowed_header_corrupt_packet::<$n>(&b,&k,&o,kani::any(),kani::any(),kani::any(),$n,kani::any(),&mut l);}
-+ }
-+}
-+header_instance!(borrowed_header_58295,borrowed_header_58295_corrupt,58295);
-+header_instance!(borrowed_header_1768,borrowed_header_1768_corrupt,1768);
-+header_instance!(borrowed_header_1880,borrowed_header_1880_corrupt,1880);
-+header_instance!(borrowed_header_384,borrowed_header_384_corrupt,384);
-+header_instance!(borrowed_header_192,borrowed_header_192_corrupt,192);
-+header_instance!(borrowed_header_768,borrowed_header_768_corrupt,768);
-+header_instance!(borrowed_header_256,borrowed_header_256_corrupt,256);
-+header_instance!(borrowed_header_320,borrowed_header_320_corrupt,320);
-+
 +// After-copy continuation: the child reply allocation already exists in pre-state.
 +// modifies(record) permits the record/header move, not writes to its separate buffer.
 +struct ReturnLog{reply:Vec<u8>,count:u8,src:*const u8,len:usize,out:*const u8,out_len:usize,out_cap:usize}
@@ -1391,70 +1306,6 @@
 +returned_instance!(returned_header_128,returned_header_128_corrupt,128);
 +returned_instance!(returned_header_256,returned_header_256_corrupt,256);
 +returned_instance!(returned_header_320,returned_header_320_corrupt,320);
-+
-+struct BracketLog{count:u8,src:*const u8,len:usize,reply:Option<Vec<u8>>}
-+fn bracket_body(a:&AccountInfo<'_>,l:&mut BracketLog,leak:bool)->bool{
-+ let before=a.try_borrow_mut_data().is_ok();
-+ let branch=match a.try_borrow_data(){
-+  Ok(data)=>{l.count+=1;l.src=data.as_ptr();l.len=data.len();let v=kani::vec::exact_vec::<u8,128>();let fresh=v.as_ptr()!=data.as_ptr();l.reply=Some(v);if leak{core::mem::forget(data);}fresh&&l.count==1}
-+  Err(e)=>l.count==0&&l.reply.is_none()&&matches!(e,ProgramError::AccountBorrowFailed),
-+ };
-+ branch&&(a.try_borrow_mut_data().is_ok()==before)
-+}
-+#[kani::requires(l.count==0 && l.reply.is_none())]
-+#[kani::ensures(|r| *r)] #[kani::modifies(l,a.data.as_ref())]
-+fn bracket_packet(a:&AccountInfo<'_>,l:&mut BracketLog)->bool{bracket_body(a,l,false)}
-+#[kani::proof_for_contract(bracket_packet)] #[kani::unwind(35)]
-+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+fn snapshot_bracket_alloc(){let k=Pubkey::new_from_array(kani::any());let o=Pubkey::new_from_array(kani::any());let mut lamports:u64=kani::any();let mut b=kani::vec::exact_vec::<u8,128>();let a=AccountInfo::new(&k,kani::any(),kani::any(),&mut lamports,&mut b,&o,kani::any(),kani::any());let blocked:bool=kani::any();let held=if blocked{Some(a.try_borrow_mut_data().unwrap())}else{None};let mut l=BracketLog{count:0,src:core::ptr::null(),len:0,reply:None};let _=bracket_packet(&a,&mut l);drop(held);}
-+#[kani::requires(l.count==0 && l.reply.is_none())]
-+#[kani::ensures(|r| *r)] #[kani::modifies(l,a.data.as_ref())]
-+fn bracket_corrupt_packet(a:&AccountInfo<'_>,l:&mut BracketLog)->bool{bracket_body(a,l,true)}
-+#[kani::proof_for_contract(bracket_corrupt_packet)] #[kani::unwind(35)]
-+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+fn snapshot_bracket_alloc_corrupt(){let k=Pubkey::new_from_array(kani::any());let o=Pubkey::new_from_array(kani::any());let mut lamports:u64=kani::any();let mut b=kani::vec::exact_vec::<u8,128>();let a=AccountInfo::new(&k,kani::any(),kani::any(),&mut lamports,&mut b,&o,kani::any(),kani::any());let mut l=BracketLog{count:0,src:core::ptr::null(),len:0,reply:None};let _=bracket_corrupt_packet(&a,&mut l);}
-+
-+struct DropLog{src:*const u8,len:usize,out:*const u8,out_len:usize,reply:Option<Vec<u8>>}
-+fn drop_guard_body(a:&AccountInfo<'_>,guard:core::cell::Ref<'_,&mut[u8]>,reply:Vec<u8>,was_free:bool,source:*const u8,l:&mut DropLog,leak:bool)->bool{
-+ l.src=guard.as_ptr();l.len=guard.len();l.out=reply.as_ptr();l.out_len=reply.len();
-+ let same=l.src==source&&l.len==128&&l.out!=l.src;
-+ if leak{core::mem::forget(guard);}else{drop(guard);}
-+ l.reply=Some(reply);
-+ same&&(a.try_borrow_mut_data().is_ok()==was_free)
-+}
-+#[kani::requires(l.reply.is_none())]
-+#[kani::ensures(|r| *r)] #[kani::modifies(l,a.data.as_ref())]
-+fn drop_guard_packet(a:&AccountInfo<'_>,guard:core::cell::Ref<'_,&mut[u8]>,reply:Vec<u8>,was_free:bool,source:*const u8,l:&mut DropLog)->bool{drop_guard_body(a,guard,reply,was_free,source,l,false)}
-+#[kani::proof_for_contract(drop_guard_packet)] #[kani::unwind(35)]
-+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+fn snapshot_drop_continuation(){let k=Pubkey::new_from_array(kani::any());let o=Pubkey::new_from_array(kani::any());let mut lamports:u64=kani::any();let mut b=kani::vec::exact_vec::<u8,128>();let source=b.as_ptr();let a=AccountInfo::new(&k,kani::any(),kani::any(),&mut lamports,&mut b,&o,kani::any(),kani::any());let external:bool=kani::any();let held=if external{Some(a.try_borrow_data().unwrap())}else{None};let was_free=a.try_borrow_mut_data().is_ok();let guard=a.try_borrow_data().unwrap();let reply=kani::vec::exact_vec::<u8,128>();let mut l=DropLog{src:core::ptr::null(),len:0,out:core::ptr::null(),out_len:0,reply:None};let _=drop_guard_packet(&a,guard,reply,was_free,source,&mut l);drop(held);}
-+#[kani::requires(l.reply.is_none())]
-+#[kani::ensures(|r| *r)] #[kani::modifies(l,a.data.as_ref())]
-+fn drop_guard_corrupt_packet(a:&AccountInfo<'_>,guard:core::cell::Ref<'_,&mut[u8]>,reply:Vec<u8>,was_free:bool,source:*const u8,l:&mut DropLog)->bool{drop_guard_body(a,guard,reply,was_free,source,l,true)}
-+#[kani::proof_for_contract(drop_guard_corrupt_packet)] #[kani::unwind(35)]
-+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+fn snapshot_drop_continuation_corrupt(){let k=Pubkey::new_from_array(kani::any());let o=Pubkey::new_from_array(kani::any());let mut lamports:u64=kani::any();let mut b=kani::vec::exact_vec::<u8,128>();let source=b.as_ptr();let a=AccountInfo::new(&k,kani::any(),kani::any(),&mut lamports,&mut b,&o,kani::any(),kani::any());let was_free=a.try_borrow_mut_data().is_ok();let guard=a.try_borrow_data().unwrap();let reply=kani::vec::exact_vec::<u8,128>();let mut l=DropLog{src:core::ptr::null(),len:0,out:core::ptr::null(),out_len:0,reply:None};let _=drop_guard_corrupt_packet(&a,guard,reply,was_free,source,&mut l);}
-+
-+fn snapshot_cut_leak<const N:usize>(account:&AccountInfo<'_>,length1:usize,length2:usize,l:&mut CopyLog)->OwnedAccount{
-+ let (length,bytes)=match account.try_borrow_data(){
-+  Ok(data)=>{let length=data.len();let bytes=if length==length1||length==length2{Ok(copy_oracle::<N>(&data,l))}else{Err(ProgramError::InvalidAccountData)};let pair=(Ok(length),bytes);core::mem::forget(data);pair}
-+  Err(error)=>(Err(error.clone()),Err(error)),
-+ };
-+ OwnedAccount{key:*account.key,owner:*account.owner,is_signer:account.is_signer,is_writable:account.is_writable,executable:account.executable,length,bytes}
-+}
-+fn plain_guard_context(leak:bool){
-+ let k=Pubkey::new_from_array(kani::any());let o=Pubkey::new_from_array(kani::any());let mut lamports:u64=kani::any();let old_lamports=lamports;let mut b=kani::vec::exact_vec::<u8,128>();let j:usize=kani::any();kani::assume(j<128);let original=b[j];let source=b.as_ptr();let s:bool=kani::any();let w:bool=kani::any();let e:bool=kani::any();let rent:u64=kani::any();let a=AccountInfo::new(&k,s,w,&mut lamports,&mut b,&o,e,rent);let mut l=copy_empty();l.index=j;
-+ let r=core::mem::ManuallyDrop::new(if leak{snapshot_cut_leak::<128>(&a,128,128,&mut l)}else{snapshot_cut::<128>(&a,128,128,&mut l)});
-+ assert!(r.key==k&&r.owner==o&&r.is_signer==s&&r.is_writable==w&&r.executable==e);assert!(matches!(r.length,Ok(128)));assert!(l.count==1&&l.src==source&&l.len==128);
-+ match &r.bytes{Ok(v)=>{assert!(v.as_ptr()==l.out&&v.len()==128&&v.capacity()==128);assert!(v[j]==l.selected);},Err(_)=>assert!(false)}
-+ let after=a.try_borrow_mut_data();assert!(after.is_ok());if let Ok(data)=after{assert!(data.len()==128&&data[j]==original);}assert!(a.rent_epoch==rent&&a.lamports()==old_lamports);
-+}
-+#[kani::proof] #[kani::unwind(35)]
-+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+fn snapshot_plain_context(){plain_guard_context(false);}
-+#[kani::proof] #[kani::unwind(35)]
-+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+fn snapshot_plain_context_corrupt(){plain_guard_context(true);}
 +
 +#[kani::requires(!src.is_empty() && src.len()<=58295)]
 +#[kani::ensures(|r| *r)] #[kani::modifies()]
@@ -1553,6 +1404,134 @@
 +#[kani::proof_for_contract(auth_corrupt5_packet)] #[kani::unwind(9)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +fn auth_corrupt5(){let a=core::mem::ManuallyDrop::new(core::array::from_fn::<_,7,_>(|_|core::mem::ManuallyDrop::into_inner(account())));let v=Pubkey::new_from_array(kani::any());let p=Pubkey::new_from_array(kani::any());let mut l=auth_empty();auth_corrupt5_packet(&a[..],&v,&p,&mut l);}
++// Replacement for K052: one staged call, arbitrary pre-state and stage invariant.
++struct GuardStepLog {count:usize,receiver:*const OwnedAccount,expected:*const Pubkey,ok:bool,borrow:bool}
++fn guard_step(a:&OwnedAccount,k:*const Pubkey,stage:usize,l:&mut GuardStepLog)->ProgramResult{
++ l.count+=1;l.receiver=a;l.expected=k;l.ok=kani::any();
++ if l.ok{Ok(())}else if stage==1 {l.borrow=kani::any();if l.borrow{Err(ProgramError::AccountBorrowFailed)}else{Err(ProgramError::InvalidAccountData)}}else if stage==5{Err(ProgramError::InvalidArgument)}else{Err(ProgramError::InvalidAccountData)}
++}
++fn guard_association(a:&OwnedAccount,k:*const Pubkey,stage:usize,l:&GuardStepLog,r:&ProgramResult)->bool{
++ l.count==stage+1&&l.receiver==a as *const OwnedAccount&&l.expected==k&&if l.ok{r.is_ok()}else if stage==1&&l.borrow{matches!(r,Err(ProgramError::AccountBorrowFailed))}else if stage==5{matches!(r,Err(ProgramError::InvalidArgument))}else{matches!(r,Err(ProgramError::InvalidAccountData))}
++}
++#[kani::requires(stage<6&&l.count==stage)] #[kani::ensures(|r|*r)] #[kani::modifies(l)]
++fn guard_packet(a:&OwnedAccount,k:*const Pubkey,stage:usize,l:&mut GuardStepLog)->bool{let r=guard_step(a,k,stage,l);guard_association(a,k,stage,l,&r)}
++#[kani::proof_for_contract(guard_packet)] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn guard_native_step(){let a=account();let k=Pubkey::new_from_array(kani::any());let stage:usize=kani::any();kani::assume(stage<6);let mut l=GuardStepLog{count:stage,receiver:core::ptr::null(),expected:core::ptr::null(),ok:kani::any(),borrow:kani::any()};guard_packet(&a,if kani::any(){core::ptr::null()}else{&k},stage,&mut l);}
++#[kani::requires(stage<6&&l.count==stage)] #[kani::ensures(|r|*r)] #[kani::modifies(l)]
++fn guard_wrong_packet(a:&OwnedAccount,k:*const Pubkey,stage:usize,l:&mut GuardStepLog)->bool{let r=guard_step(a,k,stage,l);l.receiver=core::ptr::null();guard_association(a,k,stage,l,&r)}
++#[kani::proof_for_contract(guard_wrong_packet)] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn guard_native_wrong(){let a=account();let k=Pubkey::new_from_array(kani::any());let stage:usize=kani::any();kani::assume(stage<6);let mut l=GuardStepLog{count:stage,receiver:core::ptr::null(),expected:core::ptr::null(),ok:kani::any(),borrow:kani::any()};guard_wrong_packet(&a,if kani::any(){core::ptr::null()}else{&k},stage,&mut l);}
++// Exact KMX one-byte window, real typed SDK guard held across real allocation.
++// This is not a to_vec replacement or a full snapshot certificate.
++fn sdk_real_window(leak:bool){
++ let k=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());let mut coins:u64=kani::any();let coins0=coins;let mut bytes=kani::vec::exact_vec::<u8,128>();let index:usize=kani::any();kani::assume(index<128);let selected=bytes[index];let a=AccountInfo::new(&k,false,false,&mut coins,&mut bytes,&owner,false,0);
++ let external:bool=kani::any();let held=if external{Some(a.try_borrow_data().unwrap())}else{None};
++ let guard=a.try_borrow_data().unwrap();let mut dst=Vec::<core::mem::MaybeUninit<u8>>::with_capacity(128);unsafe{dst.set_len(128);core::ptr::copy_nonoverlapping(guard.as_ptr().add(index),dst.as_mut_ptr().add(index).cast::<u8>(),1);assert_eq!(dst[index].assume_init_read(),selected);}
++ if leak{core::mem::forget(guard)}else{drop(guard)}
++ assert_eq!(a.try_borrow_mut_data().is_ok(),!external);drop(held);assert!(a.try_borrow_mut_data().is_ok());assert_eq!(a.lamports(),coins0);
++}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn sdk_real_copy_window(){sdk_real_window(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn sdk_real_copy_window_wrong(){sdk_real_window(true);}
++
++// Same after-Clock::get continuation as deployed stage2; no syscall value proof.
++fn clock_error(tag:u8,custom:u32)->ProgramError{match tag{
++0=>ProgramError::Custom(custom),
++1=>ProgramError::InvalidArgument,
++2=>ProgramError::InvalidInstructionData,
++3=>ProgramError::InvalidAccountData,
++4=>ProgramError::AccountDataTooSmall,
++5=>ProgramError::InsufficientFunds,
++6=>ProgramError::IncorrectProgramId,
++7=>ProgramError::MissingRequiredSignature,
++8=>ProgramError::AccountAlreadyInitialized,
++9=>ProgramError::UninitializedAccount,
++10=>ProgramError::NotEnoughAccountKeys,
++11=>ProgramError::AccountBorrowFailed,
++12=>ProgramError::MaxSeedLengthExceeded,
++13=>ProgramError::InvalidSeeds,
++14=>ProgramError::BorshIoError(alloc::string::String::from("Unknown")),
++15=>ProgramError::AccountNotRentExempt,
++16=>ProgramError::UnsupportedSysvar,
++17=>ProgramError::IllegalOwner,
++18=>ProgramError::MaxAccountsDataAllocationsExceeded,
++19=>ProgramError::InvalidRealloc,
++20=>ProgramError::MaxInstructionTraceLengthExceeded,
++21=>ProgramError::BuiltinProgramsMustConsumeComputeUnits,
++22=>ProgramError::InvalidAccountOwner,
++23=>ProgramError::ArithmeticOverflow,
++24=>ProgramError::Immutable,
++25=>ProgramError::IncorrectAuthority,
++_=>unreachable!()}}
++fn clock_error_descriptor(e:&ProgramError)->(u8,u32,*const u8,usize){match e{
++ProgramError::Custom(n)=>(0,*n,core::ptr::null(),0),
++ProgramError::InvalidArgument=>(1,0,core::ptr::null(),0),
++ProgramError::InvalidInstructionData=>(2,0,core::ptr::null(),0),
++ProgramError::InvalidAccountData=>(3,0,core::ptr::null(),0),
++ProgramError::AccountDataTooSmall=>(4,0,core::ptr::null(),0),
++ProgramError::InsufficientFunds=>(5,0,core::ptr::null(),0),
++ProgramError::IncorrectProgramId=>(6,0,core::ptr::null(),0),
++ProgramError::MissingRequiredSignature=>(7,0,core::ptr::null(),0),
++ProgramError::AccountAlreadyInitialized=>(8,0,core::ptr::null(),0),
++ProgramError::UninitializedAccount=>(9,0,core::ptr::null(),0),
++ProgramError::NotEnoughAccountKeys=>(10,0,core::ptr::null(),0),
++ProgramError::AccountBorrowFailed=>(11,0,core::ptr::null(),0),
++ProgramError::MaxSeedLengthExceeded=>(12,0,core::ptr::null(),0),
++ProgramError::InvalidSeeds=>(13,0,core::ptr::null(),0),
++ProgramError::BorshIoError(s)=>(14,0,s.as_ptr(),s.len()),
++ProgramError::AccountNotRentExempt=>(15,0,core::ptr::null(),0),
++ProgramError::UnsupportedSysvar=>(16,0,core::ptr::null(),0),
++ProgramError::IllegalOwner=>(17,0,core::ptr::null(),0),
++ProgramError::MaxAccountsDataAllocationsExceeded=>(18,0,core::ptr::null(),0),
++ProgramError::InvalidRealloc=>(19,0,core::ptr::null(),0),
++ProgramError::MaxInstructionTraceLengthExceeded=>(20,0,core::ptr::null(),0),
++ProgramError::BuiltinProgramsMustConsumeComputeUnits=>(21,0,core::ptr::null(),0),
++ProgramError::InvalidAccountOwner=>(22,0,core::ptr::null(),0),
++ProgramError::ArithmeticOverflow=>(23,0,core::ptr::null(),0),
++ProgramError::Immutable=>(24,0,core::ptr::null(),0),
++ProgramError::IncorrectAuthority=>(25,0,core::ptr::null(),0),
++}}
++fn clock_forward(input:Result<Clock,ProgramError>)->Result<u64,ProgramError>{match input{Ok(clock)=>Ok(clock.slot),Err(error)=>Err(error)}}
++#[kani::ensures(|r|*r)] #[kani::modifies()]
++fn clock_packet(input:Result<Clock,ProgramError>)->bool{
++ let before=match &input{Ok(c)=>(true,c.slot,(0,0,core::ptr::null(),0)),Err(e)=>(false,0,clock_error_descriptor(e))};
++ let r=core::mem::ManuallyDrop::new(clock_forward(input));match &*r{Ok(n)=>before.0&&*n==before.1,Err(e)=>!before.0&&clock_error_descriptor(e)==before.2}
++}
++#[kani::ensures(|r|*r)] #[kani::modifies()]
++fn clock_wrong_packet(input:Result<Clock,ProgramError>)->bool{
++ let before=match &input{Ok(c)=>(true,c.slot,(0,0,core::ptr::null(),0)),Err(e)=>(false,0,clock_error_descriptor(e))};
++ let mut r=core::mem::ManuallyDrop::new(clock_forward(input));match &mut *r{Ok(n)=>*n^=1,Err(e)=>{let old=core::mem::replace(e,ProgramError::InvalidSeeds);core::mem::forget(old);}};match &*r{Ok(n)=>before.0&&*n==before.1,Err(e)=>!before.0&&clock_error_descriptor(e)==before.2}
++}
++fn clock_input()->Result<Clock,ProgramError>{let ok:bool=kani::any();if ok{Ok(Clock{slot:kani::any(),epoch_start_timestamp:kani::any(),epoch:kani::any(),leader_schedule_epoch:kani::any(),unix_timestamp:kani::any()})}else{let tag:u8=kani::any();kani::assume(tag<26);Err(clock_error(tag,kani::any()))}}
++#[kani::proof_for_contract(clock_packet)] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn clock_exact_forward(){clock_packet(clock_input());}
++#[kani::proof_for_contract(clock_wrong_packet)] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn clock_corrupt_forward(){clock_wrong_packet(clock_input());}
++
++const NHJ_POOL_DEV:[u8;32]=[160,19,98,42,240,202,109,154,218,233,162,167,169,176,187,66,122,69,190,75,195,45,233,50,40,58,26,66,26,133,145,52];
++const NHJ_REGISTRY_DEV:[u8;32]=[131,9,163,201,153,45,35,222,189,104,139,224,185,96,72,135,226,88,106,68,10,156,60,72,82,28,53,49,227,146,232,171];
++fn registry_header_cut(pool_program:&Pubkey,policy:&aspis_statement::pool_v1::VerifierPolicyV1)->ProgramResult{
++ if pool_program.to_bytes()!=pool_program_id()||policy.flags&POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_REGISTRY==0||policy.registry_program!=registry_program_id()||policy.registry_authority!=[0u8;32]||policy.policy_binding!=AUDIT_POLICY_BINDING{return Err(ProgramError::InvalidAccountData);}Ok(())
++}
++fn registry_expected(pool:&Pubkey,policy:&aspis_statement::pool_v1::VerifierPolicyV1)->bool{pool.to_bytes()==NHJ_POOL_DEV&&policy.flags&POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_REGISTRY!=0&&policy.registry_program==NHJ_REGISTRY_DEV&&policy.registry_authority==[0;32]&&policy.policy_binding==[7;32]}
++#[kani::ensures(|r|*r)] #[kani::modifies()]
++fn registry_header_packet(pool:&Pubkey,policy:&aspis_statement::pool_v1::VerifierPolicyV1)->bool{let r=registry_header_cut(pool,policy);let expected=registry_expected(pool,policy);if expected{r.is_ok()}else{matches!(r,Err(ProgramError::InvalidAccountData))}}
++#[kani::ensures(|r|*r)] #[kani::modifies()]
++fn registry_header_wrong_packet(pool:&Pubkey,policy:&aspis_statement::pool_v1::VerifierPolicyV1)->bool{let r=registry_header_cut(pool,policy);let expected=registry_expected(pool,policy);if expected{matches!(r,Err(ProgramError::InvalidAccountData))}else{r.is_ok()}}
++fn registry_policy()->aspis_statement::pool_v1::VerifierPolicyV1{aspis_statement::pool_v1::VerifierPolicyV1{flags:kani::any(),registry_program:kani::any(),registry_authority:kani::any(),policy_binding:kani::any()}}
++#[kani::proof_for_contract(registry_header_packet)] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn registry_header(){let p=Pubkey::new_from_array(kani::any());registry_header_packet(&p,&registry_policy());}
++#[kani::proof_for_contract(registry_header_wrong_packet)] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn registry_header_wrong(){let p=Pubkey::new_from_array(kani::any());registry_header_wrong_packet(&p,&registry_policy());}
 --- /dev/null
 +++ b/programs/r1-cost-probe/src/NHJ_ids.rs
 @@ -0,0 +1,48 @@

@@ -45,7 +45,7 @@ if kind=='kani':
  native[native.index('--features')+1]='pool-adapter,private-leaf-salts'
  cfg=dict(native_command=native,root_package='aspis-r1-cost-probe-program')
 elif kind=='extract':
- files['NHJ_extract.py']=(E/'NHJ_extract.py').read_text();files['NHJ_snapshot_ref.rs']=(E/'NHJ_snapshot_ref.rs.txt').read_text()
+ files['NHJ_extract.py']=(E/'NHJ_extract.py').read_text();ref='NHJ_snapshot_ref.rs' if target=='NHJ_SnapshotReference' else 'NHJ_ids_ref.rs';files[ref]=(E/(ref+'.txt')).read_text()
  sources=list(files);command=['python3','NHJ_extract.py',a+'.json'];cfg={}
 elif kind=='inspect':
  files['NHJ_rodata.py']=(E/'NHJ_rodata.py').read_text();sources=['NHJ_rodata.py'];command=['python3','NHJ_rodata.py'];cfg={}

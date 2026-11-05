@@ -1,3 +1,8 @@
+import NHJ_DeployedIds
+import NHJ_GuardPacket
+import NHJ_CopyPacket
+import NHJ_SdkBorrowPacket
+import NHJ_IdPacket
 import NHJ_SdkValidity
 import NHJ_SdkBracket
 import NHJ_SnapshotAssociation
@@ -40,3 +45,20 @@ import NHJ_DistinctPacket
 #print axioms NHJ_SdkValidity.counter
 #print axioms NHJ_SdkValidity.acquired_valid
 #print axioms NHJ_SdkValidity.ambient_valid
+
+#print axioms NHJ_IdPacket.extracted
+#print axioms NHJ_IdPacket.pool_slot
+#print axioms NHJ_IdPacket.registry_slot
+#print axioms NHJ_IdPacket.digest_preserved
+#print axioms NHJ_IdPacket.error_preserved
+#print axioms NHJ_SdkBorrowPacket.returning_shared
+#print axioms NHJ_SdkBorrowPacket.rejected_shared
+#print axioms NHJ_CopyPacket.initialized
+#print axioms NHJ_CopyPacket.contents
+#print axioms NHJ_CopyPacket.source_contents
+#print axioms NHJ_GuardPacket.decode_encode
+#print axioms NHJ_GuardPacket.first_error
+#print axioms NHJ_GuardPacket.complete
+
+#print axioms NHJ_DeployedIds.pool_actual
+#print axioms NHJ_DeployedIds.registry_actual

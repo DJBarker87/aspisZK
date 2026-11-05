@@ -2,11 +2,11 @@
 from pathlib import Path
 import json,subprocess,os,sys,hashlib
 B=Path(__file__).resolve().parent;x=json.loads((B/sys.argv[1]).read_text());a=x['attempt'];target=x['module']
-roots={'NHJ_SnapshotReference':'crate::snapshot_ref'};assert target in roots
+roots={'NHJ_SnapshotReference':'crate::snapshot_ref','NHJ_IdReference':'crate::ids_ref'};assert target in roots
 C=Path('/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon');A=C.parent/'aeneas-b59d5188-extended';sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 assert sha(C)=='daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8'
 assert sha(A)=='c0cf4fccb0879db4ce342da991f6215732a19fc01345b9eec84e632f4673b958'
-S=B/'NHJ_ref';(S/'src').mkdir(parents=True,exist_ok=True);(S/'Cargo.toml').write_text('[package]\nname="nhj_snapshot_reference"\nversion="0.1.0"\nedition="2021"\n[workspace]\n');(S/'src/lib.rs').write_bytes((B/'NHJ_snapshot_ref.rs').read_bytes())
+S=B/'NHJ_ref';(S/'src').mkdir(parents=True,exist_ok=True);(S/'Cargo.toml').write_text('[package]\nname="nhj_snapshot_reference"\nversion="0.1.0"\nedition="2021"\n[workspace]\n');(S/'src/lib.rs').write_bytes((B/('NHJ_snapshot_ref.rs' if target=='NHJ_SnapshotReference' else 'NHJ_ids_ref.rs')).read_bytes())
 llbc=B/(a+'.llbc');dest=B/'NHJ_extracted'/target
 cmd=[str(C),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--include','core::option::Option','--include','core::result::Result','--include','core::option::_::ok_or','--start-from',roots[target],'--dest-file',str(llbc),'--','--manifest-path',str(S/'Cargo.toml'),'--offline','--release','--lib','--jobs','1']
 env=dict(os.environ,RUSTUP_TOOLCHAIN='nightly-2026-09-17',CARGO_TARGET_DIR=str(B/'NHJ_ref_target'),CARGO_NET_OFFLINE='true',CARGO_BUILD_JOBS='1',RUSTFLAGS='-Zthreads=1 -C link-arg=-Wl,--threads=1',RAYON_NUM_THREADS='1')

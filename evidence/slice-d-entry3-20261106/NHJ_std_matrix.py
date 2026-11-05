@@ -10,8 +10,5 @@ for a,h,expected,check in [('NHJ_K037','to_vec_alloc_header',0,'VERIFICATION:- S
  print(json.dumps(dict(attempt=a,expected=expected,exit=x['exit_status'],admitted=ok)),flush=True)
  if not ok:
   with (E/'NHJ_STD_MATRIX_FAILURES.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,exit=x['exit_status'],credited=False))+'\n')
-  if expected==0:
-   # Skip its paired control; move to the next independent primitive.
-   skip=a
- else:skip=None
+  raise RuntimeError('Review failed primitive before any dependent control; no resubmission')
  # All attempts are distinct; failures are retained, never retried.
