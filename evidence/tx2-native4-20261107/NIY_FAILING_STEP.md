@@ -19,3 +19,7 @@ TX2:065 OPEN. Failed objects are excluded from acceptance and imports.
 - K051: actual opening getter selected-byte test on arbitrary57607-byte proof timed out90s (wall93.624s, RSS2680356KiB, swap0). No credit; do not run its unchanged control or rename. Replacement separates descriptor/provenance observations from the byte-value projection obligation. Whole canonical_scan remains OPEN.
 
 L088 was rejected: omega treated a raw UScalar literal as an unconstrained natural. L089 explicitly simplifies the fixed 32-byte cursor before arithmetic; no recursion/heartbeat increase. L080 representation failure was replaced by BitVec value extensionality in L082.
+
+Own final validator repair: Kani terse formatting reports `core::panicking::assert_failed_inner`, rather than the literal word “assertion”. Require semantic VERIFICATION FAILED plus either assertion marker, nonzero exit, and exclude every timeout/memory verdict. This repairs parsing without relaxing the semantic failure requirement. Final cgroup values are checked exactly on every receipt.
+
+Own final validator repair: unattempted matrix `rename` entries initially contain function targets rather than attempt IDs. Treat entries absent from the receipt index as unattempted and uncredited; require all three actual receipts before qualification. No verdict is changed.

@@ -43,9 +43,9 @@ for row in matrix:
  ok=True
  for mode in ['positive','negative','rename']:
   a=row.get(mode)
-  if not a:ok=False;continue
+  if not a or a not in by:ok=False;continue
   r=by[a];raw=(E/a/'stdout.log').read_text();limit=any(s in raw.lower() for s in ['cbmc timed out','out of memory','excessive memory'])
-  good=(r['exit_status']!=0 and 'VERIFICATION:- FAILED' in raw and not limit and 'assertion' in raw.lower()) if mode=='negative' else (r['exit_status']==0 and 'VERIFICATION:- SUCCESSFUL' in raw)
+  good=(r['exit_status']!=0 and 'VERIFICATION:- FAILED' in raw and not limit and ('assertion' in raw.lower() or 'assert_failed' in raw)) if mode=='negative' else (r['exit_status']==0 and 'VERIFICATION:- SUCCESSFUL' in raw)
   ok=ok and good
  if ok:
   # Same actual source manifest and complete crate features across the three configurations.
@@ -76,6 +76,8 @@ scan=[json.loads(s) for s in (E/'NIY_LOADED_scan.jsonl').read_text().splitlines(
 assert scan and all(r['imports_match'] and not r['dangling'] and not r['duplicate_owners'] for r in scan)
 assert any(r['module']=='NIY_COMBINED_IMPORT' for r in scan)
 assert load('NIY_WALKER_PINS.json')['walker_byte_identical'] is True
+for a in ['NIY_L091','NIY_L092','NIY_L093','NIY_L094','NIY_L095','NIY_L096','NIY_L097','NIY_L098','NIY_L099']:
+ assert by[a]['exit_status']==0,a
 assert load('NIY_SOURCE_VERIFICATION.json')['status']=='PASS' and load('NIY_RETENTION.json')['status']=='PASS'
 assert len(ex)==1 and ex[0]['exit_status']==0 and load('NIY_EXTRACT_PINS.json')['source_restored'] and load('NIY_EXTRACT_PINS.json')['target_resolves']
 base_path=E.parent/'ledger12-20261107/NIR_LEDGER.json.xz';base=json.loads(lzma.decompress(base_path.read_bytes()));delta=load('NIY_LEDGER_DELTA.json');closed=load('NIY_CLOSED.json')

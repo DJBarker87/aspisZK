@@ -50,7 +50,6 @@ import NIY_Z1yReadPort
 import NIY_Z1xReadPort
 import NIY_Z0yReadPort
 import NIY_Z0xReadPort
-import NIY_NativeCuts
 import NIY_SemanticPort
 import NIY_ValidationPort
 import NIY_QueryTransport
@@ -68,6 +67,7 @@ import NIY_ScanCuts
 import NIY_ResumeFields
 import NIY_ReaderFrames
 import NIY_EarlyDomains
+import NIY_NativeCuts
 
 #check NIY_FirstRawCut.fresh_source
 #print axioms NIY_FirstRawCut.fresh_source
@@ -179,24 +179,6 @@ import NIY_EarlyDomains
 #print axioms NIY_Z0yReadPort.source
 #check NIY_Z0xReadPort.source
 #print axioms NIY_Z0xReadPort.source
-#check NIY_NativeCuts.firstByte
-#print axioms NIY_NativeCuts.firstByte
-#check NIY_NativeCuts.firstCursor
-#print axioms NIY_NativeCuts.firstCursor
-#check NIY_NativeCuts.eReply
-#print axioms NIY_NativeCuts.eReply
-#check NIY_NativeCuts.kReply
-#print axioms NIY_NativeCuts.kReply
-#check NIY_NativeCuts.eValue
-#print axioms NIY_NativeCuts.eValue
-#check NIY_NativeCuts.kValue
-#print axioms NIY_NativeCuts.kValue
-#check NIY_NativeCuts.descriptor
-#print axioms NIY_NativeCuts.descriptor
-#check NIY_NativeCuts.eCursor
-#print axioms NIY_NativeCuts.eCursor
-#check NIY_NativeCuts.kCursor
-#print axioms NIY_NativeCuts.kCursor
 #check NIY_SemanticPort.source
 #print axioms NIY_SemanticPort.source
 #check NIY_ValidationPort.source
@@ -245,6 +227,24 @@ import NIY_EarlyDomains
 #print axioms NIY_EarlyDomains.first3
 #check NIY_EarlyDomains.typed
 #print axioms NIY_EarlyDomains.typed
+#check NIY_NativeCuts.firstByte
+#print axioms NIY_NativeCuts.firstByte
+#check NIY_NativeCuts.firstCursor
+#print axioms NIY_NativeCuts.firstCursor
+#check NIY_NativeCuts.eReply
+#print axioms NIY_NativeCuts.eReply
+#check NIY_NativeCuts.kReply
+#print axioms NIY_NativeCuts.kReply
+#check NIY_NativeCuts.eValue
+#print axioms NIY_NativeCuts.eValue
+#check NIY_NativeCuts.kValue
+#print axioms NIY_NativeCuts.kValue
+#check NIY_NativeCuts.descriptor
+#print axioms NIY_NativeCuts.descriptor
+#check NIY_NativeCuts.eCursor
+#print axioms NIY_NativeCuts.eCursor
+#check NIY_NativeCuts.kCursor
+#print axioms NIY_NativeCuts.kCursor
 #check NIY_NativeFinalCuts.windowPre
 #print axioms NIY_NativeFinalCuts.windowPre
 #check NIY_NativeFinalCuts.windowCut
