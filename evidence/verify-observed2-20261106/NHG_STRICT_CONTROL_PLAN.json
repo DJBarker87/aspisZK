@@ -1,0 +1,47 @@
+[
+ {
+  "attempt": "NHG_K017",
+  "positive": "NHG_K003",
+  "path": "crates/aspis-r1-cost-probe/src/NHG_native.rs",
+  "positive_sha256": "04628d810da7b98b666963efe7be12f49c5d0a73023d5b1dc9aa2039d0da07fa",
+  "control_sha256": "c0597b07cd191cb8e78258b5cd2b241a6001ab72f3f1cda9b97a4088c4463e52",
+  "reason": "The negative is forced through canonical append, with a nonempty prior Vec and an observed newly written byte. The existing expected-byte XOR1 is the sole changed assertion. New guards are inactive in the positive configuration.",
+  "unchanged_positive_configuration": true
+ },
+ {
+  "attempt": "NHG_K018",
+  "positive": "NHG_K005",
+  "path": "crates/aspis-r1-cost-probe/src/NHG_native.rs",
+  "positive_sha256": "493357d1f9145488ae6ea8ed7c9cdd534b5b22bb00283136e62896414c664358",
+  "control_sha256": "b6068e64210fb1e43d96900d4ecbbc2330c8fee8210fdc26bbc26380e30e5589",
+  "reason": "The negative is forced through canonical append, with a nonempty prior Vec and an observed newly written byte. The existing expected-byte XOR1 is the sole changed assertion. New guards are inactive in the positive configuration.",
+  "unchanged_positive_configuration": true
+ },
+ {
+  "attempt": "NHG_K019",
+  "positive": "NHG_K007",
+  "path": "crates/aspis-r1-cost-probe/src/NHG_native.rs",
+  "positive_sha256": "98e0d0a114b3610467424610205f8ed7a951c7fad3e49e7c234d8e30ae09f0bd",
+  "control_sha256": "05c99131e88643d95fda6ff596008b9f1b78e0504f022854ed5581391b1a5dba",
+  "reason": "The negative observes the actually copied initialized byte (i=k), rather than an untouched frame byte. The new guard is inactive in the positive configuration.",
+  "unchanged_positive_configuration": true
+ },
+ {
+  "attempt": "NHG_K020",
+  "positive": "NHG_K013",
+  "path": "crates/aspis-statement/src/pool_v1/NHG_semantic.rs",
+  "positive_sha256": "230786a1e5d0ab321615d422cd6825e73b1f8b6b22076f8c0e04740a204f5cb9",
+  "control_sha256": "8e2d896232d734d4e9d3a14e89b1d054ca7dd96d2322a9fe5a1ac6d23c2aa54f",
+  "reason": "Corrupt exactly the expected copied anchor limb by XOR1. With invert=false, XOR0 and the tuple M31 PartialEq definition give exactly the original property; the actual callee and all inputs are unchanged.",
+  "unchanged_positive_configuration": true
+ },
+ {
+  "attempt": "NHG_K021",
+  "positive": "NHG_K015",
+  "path": "crates/aspis-r1-cost-probe/src/NHG_begin.rs",
+  "positive_sha256": "b8738d297355d05b100e3cb6681dae04ed56db4a1d7b6fe8b5d7f48e3ddf21ec",
+  "control_sha256": "d9c492153d750ac70d0c1ac171ad59f824c0298aa482a96f6d7feecfbc871e20",
+  "reason": "Corrupt exactly one observed child-produced state byte. The selected child always executes its state assignment before either return. With invert=false, XOR0 and b!=false=b give the original property; all native calls and inputs are unchanged.",
+  "unchanged_positive_configuration": true
+ }
+]

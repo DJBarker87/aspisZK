@@ -1,0 +1,12 @@
+@[irreducible] def Aeneas.Std.alloc.vec.Vec.push.{u} : {α : Type u} → alloc.vec.Vec α → α → Result (alloc.vec.Vec α) :=
+fun {α} v x =>
+  let nlen := (↑v).length + 1;
+  if h : (decide (nlen ≤ U32.max) || decide (nlen ≤ Usize.max)) = true then Result.ok ⟨(↑v).concat x, ⋯⟩
+  else Result.fail Error.maximumSizeExceeded
+def Aeneas.Std.alloc.vec.Vec.insert.{u} : {α : Type u} → alloc.vec.Vec α → Usize → α → Result (alloc.vec.Vec α) :=
+fun {α} v i x => if ↑i < v.length then Result.ok ⟨(↑v).set (↑i) x, ⋯⟩ else Result.fail Error.arrayOutOfBounds
+Aeneas.Std.alloc.vec.Vec.push_spec.{u} {α : Type u} (v : alloc.vec.Vec α) (x : α) (h : (↑v).length < Usize.max) :
+  v.push x ⦃ v1 => ↑v1 = ↑v ++ [x] ⦄
+NHG_generated/NHG_StdInventory.lean:6:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.alloc.vec.Vec.push_spec_mut`
+Aeneas.Std.alloc.vec.Vec.length.{u} {α : Type u} (v : alloc.vec.Vec α) : ℕ
+Aeneas.Std.Usize.max : ℕ

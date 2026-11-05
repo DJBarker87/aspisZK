@@ -1,0 +1,72 @@
+NHG_generated/NHG_Semantic.lean:9:80: error: unexpected identifier; expected '}'
+NHG_generated/NHG_Semantic.lean:16:75: error: unexpected identifier; expected '}'
+NHG_generated/NHG_Semantic.lean:23:46: error: Type mismatch
+  rfl
+has type
+  ?m.4 = ?m.4
+but is expected to have type
+  private_public p t = ok (transferValue p t)
+NHG_generated/NHG_Semantic.lean:21:8: error: Not a definitional equality: the left-hand side
+  private_public p t
+is not definitionally equal to the right-hand side
+  ok (transferValue p t)
+NHG_generated/NHG_Semantic.lean:27:51: error: Type mismatch
+  rfl
+has type
+  ?m.4 = ?m.4
+but is expected to have type
+  withdrawal_public p t = ok (withdrawalValue p t)
+NHG_generated/NHG_Semantic.lean:25:8: error: Not a definitional equality: the left-hand side
+  withdrawal_public p t
+is not definitionally equal to the right-hand side
+  ok (withdrawalValue p t)
+NHG_generated/NHG_Semantic.lean:34:13: error: Tactic `rfl` failed: The left-hand side
+  (r0.Public.Transfer a✝¹ a✝).semantic
+is not definitionally equal to the right-hand side
+  ok (value (r0.Public.Transfer a✝¹ a✝))
+
+case Transfer
+a✝¹ : pool_v1.payment_relation.PoolV1PrivateTransferPublicV1
+a✝ : pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1
+⊢ (r0.Public.Transfer a✝¹ a✝).semantic = ok (value (r0.Public.Transfer a✝¹ a✝))
+NHG_generated/NHG_Semantic.lean:34:13: error: Tactic `rfl` failed: The left-hand side
+  (r0.Public.Withdrawal a✝¹ a✝).semantic
+is not definitionally equal to the right-hand side
+  ok (value (r0.Public.Withdrawal a✝¹ a✝))
+
+case Withdrawal
+a✝¹ : pool_v1.payment_relation.PoolV1WithdrawalPublicV1
+a✝ : pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1
+⊢ (r0.Public.Withdrawal a✝¹ a✝).semantic = ok (value (r0.Public.Withdrawal a✝¹ a✝))
+NHG_generated/NHG_Semantic.lean:38:13: error: Tactic `rfl` failed: The left-hand side
+  (value (r0.Public.Transfer a✝¹ a✝)).transition
+is not definitionally equal to the right-hand side
+  match r0.Public.Transfer a✝¹ a✝ with
+  | r0.Public.Transfer a t => t
+  | r0.Public.Withdrawal a t => t
+
+case Transfer
+a✝¹ : pool_v1.payment_relation.PoolV1PrivateTransferPublicV1
+a✝ : pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1
+⊢ (value (r0.Public.Transfer a✝¹ a✝)).transition =
+    match r0.Public.Transfer a✝¹ a✝ with
+    | r0.Public.Transfer a t => t
+    | r0.Public.Withdrawal a t => t
+NHG_generated/NHG_Semantic.lean:38:13: error: Tactic `rfl` failed: The left-hand side
+  (value (r0.Public.Withdrawal a✝¹ a✝)).transition
+is not definitionally equal to the right-hand side
+  match r0.Public.Withdrawal a✝¹ a✝ with
+  | r0.Public.Transfer a t => t
+  | r0.Public.Withdrawal a t => t
+
+case Withdrawal
+a✝¹ : pool_v1.payment_relation.PoolV1WithdrawalPublicV1
+a✝ : pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1
+⊢ (value (r0.Public.Withdrawal a✝¹ a✝)).transition =
+    match r0.Public.Withdrawal a✝¹ a✝ with
+    | r0.Public.Transfer a t => t
+    | r0.Public.Withdrawal a t => t
+'AspisR1.NHG_Semantic.transfer' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NHG_Semantic.withdrawal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NHG_Semantic.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NHG_Semantic.transition' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

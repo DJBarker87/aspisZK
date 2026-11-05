@@ -1,0 +1,45 @@
+{"attempt": "NHG_L077", "exit_status": 1, "wall_seconds": 4.854422099888325, "peak_rss_kib": "5941636", "swaps": "0", "print_axioms": ["'AspisR1.NHG_ExtraLeaves.scalar_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NHG_ExtraLeaves.scalar_source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NHG_ExtraLeaves.carry_total' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NHG_ExtraLeaves.carry_result' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NHG_ExtraLeaves.empty_source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NHG_generated/NHG_ExtraLeaves.lean:72:19: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+NHG_generated/NHG_ExtraLeaves.lean:82:10: error: unsolved goals
+case Withdrawal.true
+input output transfer withdrawal : Q
+ho : NHG_AddWords.NCanonical output
+ht : NHG_AddWords.NCanonical transfer
+hw : NHG_AddWords.NCanonical withdrawal
+next : FIq_Native.field.QM31
+call : FIq_Native.field.QM31.add output withdrawal = ok next
+left✝ : NHG_AddWords.NCanonical next
+right✝ :
+  NHG_AddWords.Words (NHG_AddWords.toProbe next) =
+    (((↑(NHG_AddWords.toProbe output).c0.a + ↑(NHG_AddWords.toProbe withdrawal).c0.a) % 2147483647,
+        (↑(NH
+...
+ithdrawal).c0.a) % 2147483647,
+        (↑(NHG_AddWords.toProbe output).c0.b + ↑(NHG_AddWords.toProbe withdrawal).c0.b) % 2147483647),
+      (↑(NHG_AddWords.toProbe output).c1.a + ↑(NHG_AddWords.toProbe withdrawal).c1.a) % 2147483647,
+      (↑(NHG_AddWords.toProbe output).c1.b + ↑(NHG_AddWords.toProbe withdrawal).c1.b) % 2147483647)
+⊢ (if True then ok (Array.make 2#usize [input, next] ⋯) else ok (Array.make 2#usize [input, output] ⋯)) =
+    ok (Array.make 2#usize [input, next] ⋯)
+'AspisR1.NHG_ExtraLeaves.scalar_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NHG_ExtraLeaves.scalar_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NHG_ExtraLeaves.carry_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NHG_ExtraLeaves.carry_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NHG_ExtraLeaves.empty_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+def FIq_Native.pool_v1.pair_forest_semantic_terminal.initial_variant_selectors : FIq_Native.pool_v1.pair_forest_semantic_terminal.CompiledVariant →
+  FIq_Native.field.QM31 →
+    FIq_Native.field.QM31 →
+      FIq_Native.field.QM31 →
+        Result (FIq_Native.field.QM31 × FIq_Native.field.QM31 × FIq_Native.field.QM31 × FIq_Native.field.QM31) :=
+fun variant high27 high28 high29 =>
+  match variant with
+  | FIq_Native.pool_v1.pair_forest_semantic_terminal.CompiledVariant.PrivateTransfer => do
+    let q ← high27.add high28
+    ok (high27, FIq_Native.field.QM31.ZERO, q, high29)
+  | FIq_Native.pool_v1.pair_forest_semantic_terminal.CompiledVariant.Withdrawal => do
+    let q ← high27.add high28
+    let q1 ← q.add high29
+    ok (FIq_Native.field.QM31.ZERO, q1, FIq_Native.field.QM31.ZERO, FIq_Native.field.QM31.ZERO)
+
+Running as unit: run-rd75d2c4cc03642ba89cb0dd64539809f.scope; invocation ID: ff0997b7306f46d4af935c846914d3ad

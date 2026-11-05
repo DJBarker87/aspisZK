@@ -1,0 +1,11 @@
+{
+ "original": "pub fn public_transcript<H: Digest32>(\n    public: Public<'_>,\n    hash: H,\n    c1_root: &[u8; 32],\n) -> Result<SemanticTranscript<H>, Error> {\n    SemanticTranscript::new(\n        hash,\n        &public.public_bytes().map_err(|_| Error::Public)?,\n        c1_root,\n    )\n}\n",
+ "body": "\n    NHG_new_cut(\n        hash,\n        &NHG_producer_cut(public,log).map_err(|_| Error::Public)?,\n        c1_root,log,\n    )\n",
+ "source_sha256": "a24d411be89ded613250a12fedb21f3a31e73a8223776a2b2ffb3fd38e52b9d3",
+ "domain": "arbitrary Public references and fields; every producer or constructor Error; produced bytes length 0..1455; same owned Vec borrowed during constructor; oracle state/hash/cursor exact",
+ "obligations": [
+  "TX1 public_bytes closed",
+  "NGX SemanticTranscript::new closed",
+  "NHG_Lengths.returned"
+ ]
+}

@@ -1,0 +1,110 @@
+NHG_OWNER AspisR1PublicPreparation.verifier.View.semantic: AspisR1PublicPreparation.verifier.View →
+  Aeneas.Std.Slice Aeneas.Std.U8
+NHG_OWNER Aeneas.Std.core.slice.iter.Iter: Type → Type
+NHG_OWNER AspisR1PublicPreparation.S1SemanticCode.begin: {H : Type} →
+  AspisR1PublicPreparation.aspis_core.Digest32 H →
+    AspisR1PublicPreparation.r1_wire.Prefix →
+      AspisR1PublicPreparation.r1_wire.SemanticTranscript H →
+        AspisR1PublicPreparation.PreparedHashCode.Code
+          (Aeneas.Std.core.result.Result AspisR1PublicPreparation.r1_wire.Challenges
+              AspisR1PublicPreparation.r1_wire.Error ×
+            AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+NHG_OWNER AspisR1PublicPreparation.r1_semantic.public_transcript: {H : Type} →
+  AspisR1PublicPreparation.aspis_core.Digest32 H →
+    AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public →
+      H →
+        Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+          Aeneas.Std.Result
+            (Aeneas.Std.core.result.Result (AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+              AspisR1PublicPreparation.r1_wire.Error)
+NHG_OWNER AspisR1PublicPreparation.S1SemanticCode.begin5: {H : Type} →
+  AspisR1PublicPreparation.aspis_core.Digest32 H →
+    AspisR1PublicPreparation.r1_wire.Prefix →
+      AspisR1PublicPreparation.r1_wire.SemanticTranscript H →
+        AspisR1PublicPreparation.aspis_core.field.QM31 →
+          AspisR1PublicPreparation.aspis_core.field.QM31 →
+            AspisR1PublicPreparation.aspis_core.field.QM31 →
+              AspisR1PublicPreparation.aspis_core.field.QM31 →
+                (AspisR1PublicPreparation.aspis_core.field.QM31 →
+                    Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize) →
+                  AspisR1PublicPreparation.PreparedHashCode.Code
+                    (Aeneas.Std.core.result.Result AspisR1PublicPreparation.r1_wire.Challenges
+                        AspisR1PublicPreparation.r1_wire.Error ×
+                      AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+NHG_OWNER AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields_loop.body: Aeneas.Std.core.slice.iter.Iter
+    AspisR1PublicPreparation.aspis_core.field.M31 →
+  Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 →
+    Aeneas.Std.Result
+      (Aeneas.Std.ControlFlow
+        (Aeneas.Std.core.slice.iter.Iter AspisR1PublicPreparation.aspis_core.field.M31 ×
+          Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+        (Aeneas.Std.core.result.Result Unit AspisR1PublicPreparation.aspis_core.state_only_prefix.r0.Error ×
+          Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8))
+NHG_OWNER AspisR1PublicPreparation.SourceFull25.Call.semantic: ∀ {H : Type}
+  {D : AspisR1PublicPreparation.aspis_core.Digest32 H} {pre : AspisR1PublicPreparation.r1_wire.Prefix}
+  (self : AspisR1PublicPreparation.SourceFull25.Call D pre),
+  AspisR1PublicPreparation.r1_wire.SemanticTranscript.semantic_validated D self.before self.record =
+    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok self.q, self.after)
+NHG_OWNER AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public.semantic: AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public →
+  Aeneas.Std.Result AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.SemanticPublic
+NHG_OWNER AspisR1PublicPreparation.r1_wire.begin: {H : Type} →
+  AspisR1PublicPreparation.aspis_core.Digest32 H →
+    AspisR1PublicPreparation.r1_wire.Prefix →
+      AspisR1PublicPreparation.r1_wire.SemanticTranscript H →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result AspisR1PublicPreparation.r1_wire.Challenges
+              AspisR1PublicPreparation.r1_wire.Error ×
+            AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+NHG_OWNER AspisR1PublicPreparation.SerializerFields.Iter: Type
+def AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields_loop.body : Aeneas.Std.core.slice.iter.Iter
+    AspisR1PublicPreparation.aspis_core.field.M31 →
+  Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 →
+    Aeneas.Std.Result
+      (Aeneas.Std.ControlFlow
+        (Aeneas.Std.core.slice.iter.Iter AspisR1PublicPreparation.aspis_core.field.M31 ×
+          Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+        (Aeneas.Std.core.result.Result Unit AspisR1PublicPreparation.aspis_core.state_only_prefix.r0.Error ×
+          Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)) :=
+fun iter out => do
+  let (o, iter1) ← Aeneas.Std.core.slice.iter.IteratorSliceIter.next iter
+  match o with
+    | none => Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (Aeneas.Std.core.result.Result.Ok (), out))
+    | some value =>
+      if value ≥ AspisR1PublicPreparation.aspis_core.field.P then
+        Aeneas.Std.Result.ok
+          (Aeneas.Std.ControlFlow.done
+            (Aeneas.Std.core.result.Result.Err AspisR1PublicPreparation.aspis_core.state_only_prefix.r0.Error.Public,
+              out))
+      else do
+        let a ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.to_le_bytes value)
+        let s ← Aeneas.Std.lift a.to_slice
+        let out1 ← Aeneas.Std.alloc.vec.Vec.extend_from_slice Aeneas.Std.core.clone.CloneU8 out s
+        Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (iter1, out1))
+Aeneas.Std.alloc.vec.Vec.extend_from_slice {T : Type} (cloneInst : Aeneas.Std.core.clone.Clone T)
+  (v : Aeneas.Std.alloc.vec.Vec T) (s : Aeneas.Std.Slice T) : Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec T)
+Aeneas.Std.core.slice.iter.IteratorSliceIter.next {T : Type} (it : Aeneas.Std.core.slice.iter.Iter T) :
+  Aeneas.Std.Result (Option T × Aeneas.Std.core.slice.iter.Iter T)
+def AspisR1PublicPreparation.r1_semantic.public_transcript : {H : Type} →
+  AspisR1PublicPreparation.aspis_core.Digest32 H →
+    AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public →
+      H →
+        Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+          Aeneas.Std.Result
+            (Aeneas.Std.core.result.Result (AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+              AspisR1PublicPreparation.r1_wire.Error) :=
+fun {H} aspis_coreDigest32Inst public1 hash c1_root => do
+  let r ← public1.public_bytes
+  let r1 ←
+    AspisR1PublicPreparation.core.result.Result.map_err
+        (AspisR1PublicPreparation.r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+          aspis_coreDigest32Inst)
+        r ()
+  let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1
+  match cf with
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val =>
+      have s := val.deref;
+      AspisR1PublicPreparation.r1_wire.SemanticTranscript.new aspis_coreDigest32Inst hash s c1_root
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+      Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+        (AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+        (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual

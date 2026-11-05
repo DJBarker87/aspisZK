@@ -1,0 +1,82 @@
+{"attempt": "NHG_L035", "exit_status": 1, "wall_seconds": 3.8024724719580263, "peak_rss_kib": "5839912", "swaps": "0", "print_axioms": ["'AspisR1.NHG_FrontierFrame.envelope' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NHG_FrontierFrame.map_chain' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NHG_FrontierFrame.map_injective' depends on axioms: [propext]", "'AspisR1.NHG_FrontierFrame.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NHG_generated/NHG_FrontierFrame.lean:32:11: error: unsolved goals
+case cons.Err
+s : Slice U32
+ss : List (Slice U32)
+ih :
+  ∀ (out : ByteVec),
+    alloc.vec.Vec.length out + 4 * words ss ≤ Usize.max →
+      ∃ r,
+        chain ss out = ok r ∧
+          alloc.vec.Vec.length out ≤ alloc.vec.Vec.length r.2 ∧
+            alloc.vec.Vec.length r.2 ≤ alloc.vec.Vec.length out + 4 * words ss ∧ ∃ suffix, ↑r.2 = ↑out ++ suffix
+out : ByteVec
+cap : alloc.vec.Vec.length out + 4 * (s.length + words ss) ≤ Usize.max
+count : words (s :: ss) = s.length + words ss
+mid : alloc.vec.Vec U8
+suffix : List U8
+e : aspis_core.state_only_prefix.r0.Error
+call : NHG_FieldSpec.fields out s = ok (core.result.Result.Err e, mid
+...
+ u, mid).2.length
+ j := ↑mid.length
+NHG_generated/NHG_FrontierFrame.lean:37:21: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  k ≥ 0
+  j ≥ 0
+  j - k ≥ 0
+  i ≥ 0
+  h ≥ 0
+  g ≥ 0
+  g - h ≤ 0
+  4*g - j + k ≥ 0
+  f ≥ 0
+  f - 4*g + 4*h - i ≥ 0
+  f - i ≤ 0
+  f - j ≥ 1
+  e ≥ 0
+  e - f - 4*h ≥ 0
+where
+ e := ↑Usize.max
+ f := ↑(alloc.vec.Vec.length out)
+ g := ↑(words ss)
+ h := ↑(words (s :: ss))
+ i := ↑(core.result.Result.Ok u, mid).2.length
+ j := ↑(alloc.vec.Vec.length r.2)
+ k := ↑mid.length
+NHG_generated/NHG_FrontierFrame.lean:37:30: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  k ≥ 0
+  j ≥ 0
+  j - k ≥ 0
+  i ≥ 0
+  h ≥ 0
+  g ≥ 0
+  g - h ≤ 0
+  4*g - j + k ≥ 0
+  f ≥ 0
+  f - 4*g + 4*h - i ≥ 0
+  f - i ≤ 0
+  f + 4*h - j ≤ -1
+  e ≥ 0
+  e - f - 4*h ≥ 0
+where
+ e := ↑Usize.max
+ f := ↑(alloc.vec.Vec.length out)
+ g := ↑(words ss)
+ h := ↑(words (s :: ss))
+ i := ↑(core.result.Result.Ok u, mid).2.length
+ j := ↑(alloc.vec.Vec.length r.2)
+ k := ↑mid.length
+NHG_generated/NHG_FrontierFrame.lean:61:33: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+NHG_generated/NHG_FrontierFrame.lean:62:30: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+'AspisR1.NHG_FrontierFrame.envelope' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NHG_FrontierFrame.map_chain' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NHG_FrontierFrame.map_injective' depends on axioms: [propext]
+'AspisR1.NHG_FrontierFrame.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rc84c00a0e77646cfabb6a68398d1b10e.scope; invocation ID: b01aa200662d47579f09c498d527cd14

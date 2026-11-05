@@ -1,0 +1,56 @@
+{"attempt": "NHG_L004", "exit_status": 1, "wall_seconds": 3.7419565520249307, "peak_rss_kib": "5868968", "swaps": "0", "print_axioms": ["'AspisR1.NHG_PublicTranscript.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NHG_PublicTranscript.code' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NHG_generated/NHG_PublicTranscript.lean:45:13: error: Tactic `rfl` failed: The left-hand side
+  do
+    let r ← liftM (fail e)
+    let r1 ←
+      liftM
+          (AspisR1PublicPreparation.core.result.Result.map_err
+            (r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r ())
+    let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val =>
+        have s := val.deref;
+        S1SemanticCode.newTranscript D hash s root
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        liftM
+          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_r
+...
+t definitionally equal to the right-hand side
+  do
+    let produced ← liftM (ok (core.result.Result.Err a✝))
+    match produced with
+      | core.result.Result.Err a => pure (core.result.Result.Err r1_wire.Error.Public)
+      | core.result.Result.Ok bytes => S1SemanticCode.newTranscript D hash (alloc.vec.Vec.deref bytes) root
+
+case ok.Err
+H : Type
+D : aspis_core.Digest32 H
+p : Public
+hash : H
+root : Bytes32
+a✝ : aspis_core.state_only_prefix.r0.Error
+h : pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes p = ok (core.result.Result.Err a✝)
+⊢ (do
+      let r ← liftM (ok (core.result.Result.Err a✝))
+      let r1 ←
+        liftM
+            (AspisR1PublicPreparation.core.result.Result.map_err
+              (r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r ())
+      let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          have s := val.deref;
+          S1SemanticCode.newTranscript D hash s root
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (r1_wire.SemanticTranscript H) (core.convert.FromSame r1_wire.Error) residual)) =
+    do
+    let produced ← liftM (ok (core.result.Result.Err a✝))
+    match produced with
+      | core.result.Result.Err a => pure (core.result.Result.Err r1_wire.Error.Public)
+      | core.result.Result.Ok bytes => S1SemanticCode.newTranscript D hash (alloc.vec.Vec.deref bytes) root
+'AspisR1.NHG_PublicTranscript.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NHG_PublicTranscript.code' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-ra6c20eb4e4f8447191647572a7c66ae1.scope; invocation ID: 0327e76d01264ad0897d287244bcec74

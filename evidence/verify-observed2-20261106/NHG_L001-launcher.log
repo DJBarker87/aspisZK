@@ -1,0 +1,45 @@
+{"attempt": "NHG_L001", "exit_status": 0, "wall_seconds": 7.27713085594587, "peak_rss_kib": "5857708", "swaps": "0", "print_axioms": []}
+NHG_OWNER AspisR1PublicPreparation.verifier.View.semantic: AspisR1PublicPreparation.verifier.View →
+  Aeneas.Std.Slice Aeneas.Std.U8
+NHG_OWNER Aeneas.Std.core.slice.iter.Iter: Type → Type
+NHG_OWNER AspisR1PublicPreparation.S1SemanticCode.begin: {H : Type} →
+  AspisR1PublicPreparation.aspis_core.Digest32 H →
+    AspisR1PublicPreparation.r1_wire.Prefix →
+      AspisR1PublicPreparation.r1_wire.SemanticTranscript H →
+        AspisR1PublicPreparation.PreparedHashCode.Code
+          (Aeneas.Std.core.result.Result AspisR1PublicPreparation.r1_wire.Challenges
+              AspisR1PublicPreparation.r1_wire.Error ×
+            AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+NHG_OWNER AspisR1Publ
+...
+Result.ok (Aeneas.Std.ControlFlow.cont (iter1, out1))
+Aeneas.Std.alloc.vec.Vec.extend_from_slice {T : Type} (cloneInst : Aeneas.Std.core.clone.Clone T)
+  (v : Aeneas.Std.alloc.vec.Vec T) (s : Aeneas.Std.Slice T) : Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec T)
+Aeneas.Std.core.slice.iter.IteratorSliceIter.next {T : Type} (it : Aeneas.Std.core.slice.iter.Iter T) :
+  Aeneas.Std.Result (Option T × Aeneas.Std.core.slice.iter.Iter T)
+def AspisR1PublicPreparation.r1_semantic.public_transcript : {H : Type} →
+  AspisR1PublicPreparation.aspis_core.Digest32 H →
+    AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public →
+      H →
+        Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+          Aeneas.Std.Result
+            (Aeneas.Std.core.result.Result (AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+              AspisR1PublicPreparation.r1_wire.Error) :=
+fun {H} aspis_coreDigest32Inst public1 hash c1_root => do
+  let r ← public1.public_bytes
+  let r1 ←
+    AspisR1PublicPreparation.core.result.Result.map_err
+        (AspisR1PublicPreparation.r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+          aspis_coreDigest32Inst)
+        r ()
+  let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1
+  match cf with
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val =>
+      have s := val.deref;
+      AspisR1PublicPreparation.r1_wire.SemanticTranscript.new aspis_coreDigest32Inst hash s c1_root
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+      Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+        (AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+        (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual
+
+Running as unit: run-r5c693dcc1a864fb2b8c5bf4d4404d594.scope; invocation ID: 0005974205064c9a83bbd7bcac4ca432
