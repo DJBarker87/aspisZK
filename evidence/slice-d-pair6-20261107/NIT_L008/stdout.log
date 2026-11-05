@@ -1,0 +1,127 @@
+NIT_generated/NIT_PairComposition.lean:67:67: error: unsolved goals
+parts powers : Parts
+s : NHX_FinalLoop.State
+l : Final
+after : E
+cut : cutFinal parts powers (↑s.1.start) s.2 l after
+mulLaw : EMul l.mul_a l.mul_b l.product
+addLaw : EAdd l.add_a l.add_b l.reply
+last : ↑s.1.end = 7
+small : ↑s.1.start < 7
+rest : core.ops.range.Range (UScalar UScalarTy.Usize)
+hn : NHI_ForwardRange.next s.1 = ok (some s.1.start, rest)
+inc : ↑rest.start = ↑s.1.start + 1
+he : rest.end = s.1.end
+cell : NHX_FinalFold.cell s.2 (epick powers ↑s.1.start) (epick parts ↑s.1.start) = ok after ∧ canonE after
+⊢ (let (o, next) := (some s.1.start, rest)
+    match o with
+    | none => ok (done s.2)
+    | some kind => do
+      let part ← Array.index_usize parts kind
+      let power ← Array.index_usize powers kind
+      let sum ← NHX_FinalFold.cell s.2 power part
+      ok (cont (next, sum))) =
+    ok (cont (rest, after))
+NIT_generated/NIT_PairComposition.lean:72:45: warning: This simp argument is unused:
+  epick_index parts s.1.start small
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵H̵X̵_̵F̵i̵n̵a̵l̵L̵o̵o̵p̵.̵b̵o̵d̵y̵,̵h̵n̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵e̵p̵i̵c̵k̵_̵i̵n̵d̵e̵x̵ ̵p̵a̵r̵t̵s̵[̲N̲H̲X̲_̲F̲i̲n̲a̲l̲L̲o̲o̲p̲.̲b̲o̲d̲y̲,̲ ̲h̲n̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲e̲p̲i̲c̲k̲_̲i̲n̲d̲e̲x̲ ̲p̲o̲w̲e̲r̲s̲ s.1.start small, e̵p̵i̵c̵k̵_̵i̵n̵d̵e̵x̵ ̵p̵o̵w̵e̵r̵s̵ ̵s̵.̵1̵.̵s̵t̵a̵r̵t̵ ̵s̵m̵a̵l̵l̵,̵c̵e̵l̵l̵.̵1̵]̵c̲e̲l̲l̲.̲1̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NIT_generated/NIT_PairComposition.lean:73:2: warning: This simp argument is unused:
+  epick_index powers s.1.start small
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵H̵X̵_̵F̵i̵n̵a̵l̵L̵o̵o̵p̵.̵b̵o̵d̵y̵,̵h̵n̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵e̵p̵i̵c̵k̵_̵i̵n̵d̵e̵x̵[̲N̲H̲X̲_̲F̲i̲n̲a̲l̲L̲o̲o̲p̲.̲b̲o̲d̲y̲,̲ ̲h̲n̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲e̲p̲i̲c̲k̲_̲i̲n̲d̲e̲x̲ parts s.1.start small, e̵p̵i̵c̵k̵_̵i̵n̵d̵e̵x̵ ̵p̵o̵w̵e̵r̵s̵ ̵s̵.̵1̵.̵s̵t̵a̵r̵t̵ ̵s̵m̵a̵l̵l̵,̵c̵e̵l̵l̵.̵1̵]̵c̲e̲l̲l̲.̲1̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NIT_generated/NIT_PairComposition.lean:73:37: warning: This simp argument is unused:
+  cell.1
+
+Hint: Omit it from the simp argument list.
+  simp only [NHX_FinalLoop.body, ̲hn, ̲bind_tc_ok, ̲epick_index parts s.1.start small,
+     ̲epick_index powers s.1.start small,̵c̵e̵l̵l̵.̵1̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NIT_generated/NIT_PairComposition.lean:94:20: error: unsolved goals
+case done
+parts powers : Parts
+fuel✝ : ℕ
+s✝ : NHX_FinalLoop.State
+out : E
+fuel : ℕ
+s : NHX_FinalLoop.State
+stop : ↑s.1.end ≤ ↑s.1.start
+next : NHI_ForwardRange.next s.1 = ok (none, s.1)
+⊢ (do
+      let cf ←
+        let (o, next) := (none, s.1)
+          match o with
+          | none => ok (done s.2)
+          | some kind => do
+            let part ← Array.index_usize parts kind
+            let power ← Array.index_usize powers kind
+            let sum ← NHX_FinalFold.cell s.2 power part
+            ok (cont (next, sum))
+      match cf with
+        | done a => ok a
+        | cont next => NHI_CountedLoop.unroll (NHX_FinalLoop.body parts powers) fuel next) =
+    ok s.2
+NIT_generated/NIT_PairComposition.lean:99:76: error: unsolved goals
+parts powers : Parts
+fuel✝ : ℕ
+s✝ : NHX_FinalLoop.State
+out✝ : E
+fuel : ℕ
+s : NHX_FinalLoop.State
+out after : E
+l : Final
+cut : cutFinal parts powers (↑s.1.start) s.2 l after
+mulLaw : EMul l.mul_a l.mul_b l.product
+addLaw : EAdd l.add_a l.add_b l.reply
+rest : NHI_RangeProgress.Range
+next : core.iter.range.IteratorRange.next core.iter.range.StepUsize s.1 = ok (some s.1.start, rest)
+tail : FinalTrace parts powers fuel (rest, after) out
+ih : NHI_CountedLoop.unroll (NHX_FinalLoop.body parts powers) fuel (rest, after) = ok out
+cell : NHX_FinalFold.cell s.2 (epick powers ↑s.1.start) (epick parts ↑s.1.start) = ok after
+⊢ (let (o, next) := (some s.1.start, rest)
+    match o with
+    | none => ok (done s.2)
+    | some kind => do
+      let part ← Array.index_usize parts kind
+      let power ← Array.index_usize powers kind
+      let sum ← NHX_FinalFold.cell s.2 power part
+      ok (cont (next, sum))) =
+    ok (cont (rest, after))
+NIT_generated/NIT_PairComposition.lean:100:50: warning: This simp argument is unused:
+  epick_index parts s.1.start cut.1
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵H̵X̵_̵F̵i̵n̵a̵l̵L̵o̵o̵p̵.̵b̵o̵d̵y̵,̵n̵e̵x̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵e̵p̵i̵c̵k̵_̵i̵n̵d̵e̵x̵ ̵p̵a̵r̵t̵s̵[̲N̲H̲X̲_̲F̲i̲n̲a̲l̲L̲o̲o̲p̲.̲b̲o̲d̲y̲,̲ ̲n̲e̲x̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲e̲p̲i̲c̲k̲_̲i̲n̲d̲e̲x̲ ̲p̲o̲w̲e̲r̲s̲ s.1.start cut.1, e̵p̵i̵c̵k̵_̵i̵n̵d̵e̵x̵ ̵p̵o̵w̵e̵r̵s̵ ̵s̵.̵1̵.̵s̵t̵a̵r̵t̵ ̵c̵u̵t̵.̵1̵,̵c̵e̵l̵l̵]̵c̲e̲l̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NIT_generated/NIT_PairComposition.lean:101:5: warning: This simp argument is unused:
+  epick_index powers s.1.start cut.1
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵H̵X̵_̵F̵i̵n̵a̵l̵L̵o̵o̵p̵.̵b̵o̵d̵y̵,̵n̵e̵x̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵e̵p̵i̵c̵k̵_̵i̵n̵d̵e̵x̵[̲N̲H̲X̲_̲F̲i̲n̲a̲l̲L̲o̲o̲p̲.̲b̲o̲d̲y̲,̲ ̲n̲e̲x̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲e̲p̲i̲c̲k̲_̲i̲n̲d̲e̲x̲ parts s.1.start cut.1, e̵p̵i̵c̵k̵_̵i̵n̵d̵e̵x̵ ̵p̵o̵w̵e̵r̵s̵ ̵s̵.̵1̵.̵s̵t̵a̵r̵t̵ ̵c̵u̵t̵.̵1̵,̵c̵e̵l̵l̵]̵c̲e̲l̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NIT_generated/NIT_PairComposition.lean:101:40: warning: This simp argument is unused:
+  cell
+
+Hint: Omit it from the simp argument list.
+  simp only [NHX_FinalLoop.body, ̲next, ̲bind_tc_ok, ̲epick_index parts s.1.start cut.1,
+        ̲epick_index powers s.1.start cut.1,̵c̵e̵l̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NIT_PairComposition.common_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIT_PairComposition.low_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIT_PairComposition.libra_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIT_PairComposition.epick_index' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIT_PairComposition.epick_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIT_PairComposition.final_cell' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIT_PairComposition.final_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NIT_PairComposition.final_induction' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NIT_PairComposition.final_loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

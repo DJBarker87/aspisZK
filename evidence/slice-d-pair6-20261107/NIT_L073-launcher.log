@@ -1,0 +1,46 @@
+{"attempt": "NIT_L073", "exit_status": 1, "wall_seconds": 3.515421369113028, "peak_rss_kib": "5923012", "swaps": "0", "print_axioms": ["'AspisR1.NIT_PairControl.slice_index' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NIT_PairControl.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NIT_generated/NIT_PairControl.lean:105:7: error: Tactic `apply` failed: could not unify the conclusion of `@bind_ext`
+  ?x >>= ?f = ?x >>= ?g
+with the goal
+  (let (r1, _, parts1) := (core.result.Result.Ok u, rest, parts)
+    do
+    let cf ←
+      match r1 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a =>
+        if true = true then do
+          let (self1, common1) ←
+            NIG_CommonLoop.common_reference c.w.value (Array.repeat 16#usize FIo_Native.aspis_core.field
+...
+.grouped_inactive_pair w c.f.value low
+                let updated ← after.update 0#usize value
+                let isS2 ←
+                  FIo_Native.transport.Variant.Insts.CoreCmpPartialEqVariant.eq w.variant
+                      FIo_Native.transport.Variant.S2
+                let weights ←
+                  if isS2 = true then FIo_Native.weights.factored_s2_libra_weights c.ap0.value c.ap1.value w.extra
+                    else FIo_Native.weights.twofold_libra_weights low w.extra
+                let after ← NIG_LibraLoop.reference c.f.value weights updated
+                let powers ← FIo_Native.weights.powers 7#usize c.kappa
+                let sum ← NHX_FinalLoop.reference after powers
+                ok (core.result.Result.Ok sum)
+      else do
+        let low ← NIG_LowLoop.low_reference c.ap0.value c.ap1.value (Array.repeat 16#usize NHI_Scalar.zero)
+        let value ← FIo_Native.weights.grouped_inactive_pair c.w.value c.f.value low
+        let updated ← parts.update 0#usize value
+        let isS2 ←
+          FIo_Native.transport.Variant.Insts.CoreCmpPartialEqVariant.eq c.w.value.variant
+              FIo_Native.transport.Variant.S2
+        let weights ←
+          if isS2 = true then FIo_Native.weights.factored_s2_libra_weights c.ap0.value c.ap1.value c.w.value.extra
+            else FIo_Native.weights.twofold_libra_weights low c.w.value.extra
+        let after ← NIG_LibraLoop.reference c.f.value weights updated
+        let powers ← FIo_Native.weights.powers 7#usize c.kappa
+        let sum ← NHX_FinalLoop.reference after powers
+        ok (core.result.Result.Ok sum)
+'AspisR1.NIT_PairControl.slice_index' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIT_PairControl.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r08bee474f03f47189f1d718e8bc60ddc.scope; invocation ID: 4b190d28787b4d188d543543743f78ff

@@ -1,0 +1,6 @@
+Aeneas.Std.UScalar.wrapping_shr_bv_eq {ty : UScalarTy} (x : UScalar ty) (s : U32) :
+  (x.wrapping_shr s).bv = x.bv.ushiftRight (↑s % ty.numBits)
+BitVec.toNat_ushiftRight {n : ℕ} (x : BitVec n) (i : ℕ) : (x >>> i).toNat = x.toNat >>> i
+def Aeneas.Std.UScalar.wrapping_shr : {ty : UScalarTy} → UScalar ty → U32 → UScalar ty :=
+fun {ty} x s => x.bv.ushiftRight (↑s % ty.numBits)#uscalar
+'AspisR1.NIT_IndexLemmas.mask' depends on axioms: [propext, Classical.choice, Quot.sound]
