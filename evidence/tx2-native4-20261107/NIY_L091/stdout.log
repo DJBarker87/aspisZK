@@ -1,0 +1,1158 @@
+NIY_FirstRawCut.fresh_source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) :
+  NIL_ResumeSplit.tail reserved d bytes v end1 i4 = NIY_FirstRawCut.fresh reserved d bytes v end1 i4
+'NIY_FirstRawCut.fresh_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_FirstECut.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (r2 : NID_ResumeEmission.verifier.Reader) :
+  NIY_FirstRawCut.freshAfterRaw reserved d bytes v end1 i4 state a3 a4 r2 = do
+    let (reply, r4) ← NIL_FreshOps.readE r2
+    NIL_TryTransport.fresh reply fun gamma => NIY_FirstECut.afterGamma reserved d bytes v end1 i4 state a3 a4 gamma r4
+'NIY_FirstECut.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_RawTransport.raw {A B : Type} (f : A → B) (n : Aeneas.Std.Usize) (r : NIL_Carriers.Fresh.R)
+  (left : Aeneas.Std.Array Aeneas.Std.U8 n → NIL_Carriers.Fresh.R → Aeneas.Std.Result A)
+  (right : Aeneas.Std.Array Aeneas.Std.U8 n → NIL_Carriers.Cohort.R → Aeneas.Std.Result B)
+  (h :
+    ∀ (x : Aeneas.Std.Array Aeneas.Std.U8 n) (out : NIL_Carriers.Cohort.R),
+      NIL_Carriers.outer f (left x (NIL_Carriers.unReader out)) = right x out) :
+  (NIL_Carriers.outer f do
+      let (x, out) ← NIL_FreshOps.raw n r
+      left x out) =
+    do
+    let (x, out) ← AspisR1.CheckpointBytes3Reader.raw n (NIL_Carriers.reader r)
+    right x out
+'NIY_RawTransport.raw' depends on axioms: [propext, Quot.sound]
+NIY_RawTransport.first3 {A B : Type} (f : A → B) (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (left :
+    Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+      Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+        Aeneas.Std.Array Aeneas.Std.U8 32#usize → NIL_Carriers.Fresh.R → Aeneas.Std.Result A)
+  (right :
+    Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+      Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+        Aeneas.Std.Array Aeneas.Std.U8 32#usize → NIL_Carriers.Cohort.R → Aeneas.Std.Result B)
+  (h :
+    ∀ (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (out : NIL_Carriers.Cohort.R),
+      NIL_Carriers.outer f (left state a3 a4 (NIL_Carriers.unReader out)) = right state a3 a4 out) :
+  (NIL_Carriers.outer f do
+      let (state, r) ← NIL_FreshOps.raw 32#usize { bytes := bytes, «at» := 80#usize }
+      let (a3, r1) ← NIL_FreshOps.raw 32#usize r
+      let (a4, r2) ← NIL_FreshOps.raw 32#usize r1
+      left state a3 a4 r2) =
+    do
+    let (state, r) ← AspisR1.CheckpointBytes3Reader.raw 32#usize { bytes := bytes, «at» := 80#usize }
+    let (a3, r1) ← AspisR1.CheckpointBytes3Reader.raw 32#usize r
+    let (a4, r2) ← AspisR1.CheckpointBytes3Reader.raw 32#usize r1
+    right state a3 a4 r2
+'NIY_RawTransport.first3' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_AfterKappa.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact) (r4 : NID_ResumeEmission.verifier.Reader) :
+  NIY_FirstECut.afterGamma reserved d bytes v end1 i4 state a3 a4 val r4 = do
+    let (reply, out) ← NIL_FreshOps.readE r4
+    NIL_TryTransport.fresh reply fun x => NIY_AfterKappa.suffix reserved d bytes v end1 i4 state a3 a4 val x out
+'NIY_AfterKappa.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_CohortRawCut.source (ops : AspisR1Stage2.ResumeOps) (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : AspisR1Stage2.transport.Variant) (end1 : Aeneas.Std.Usize) (i4 : Aeneas.Std.U8) :
+  NIL_ResumeCohortTail.tail ops bytes v end1 i4 = NIY_CohortRawCut.first3 ops bytes v end1 i4
+'NIY_CohortRawCut.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_AfterAlpha0.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact) (r6 : NID_ResumeEmission.verifier.Reader) :
+  NIY_AfterKappa.suffix reserved d bytes v end1 i4 state a3 a4 val val1 r6 = do
+    let (reply, out) ← NIL_FreshOps.readE r6
+    NIL_TryTransport.fresh reply fun x => NIY_AfterAlpha0.suffix reserved d bytes v end1 i4 state a3 a4 val val1 x out
+'NIY_AfterAlpha0.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_AfterAlpha1.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact) (r8 : NID_ResumeEmission.verifier.Reader) :
+  NIY_AfterAlpha0.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 r8 = do
+    let (reply, out) ← NIL_FreshOps.readE r8
+    NIL_TryTransport.fresh reply fun x =>
+        NIY_AfterAlpha1.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 x out
+'NIY_AfterAlpha1.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_AfterRho.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact)
+  (r10 : NID_ResumeEmission.verifier.Reader) :
+  NIY_AfterAlpha1.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 r10 = do
+    let (reply, out) ← NIL_FreshOps.readK r10
+    NIL_TryTransport.fresh reply fun x =>
+        NIY_AfterRho.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 x out
+'NIY_AfterRho.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_QueryRead.assoc {A B C : Type} (m : Aeneas.Std.Result A) (f : A → Aeneas.Std.Result B)
+  (g : B → Aeneas.Std.Result C) :
+  (do
+      let y ←
+        do
+          let x ← m
+          f x
+      g y) =
+    do
+    let x ← m
+    let y ← f x
+    g y
+'NIY_QueryRead.assoc' does not depend on any axioms
+NIY_QueryRead.prod_bind {A B C D : Type} (p : A × B) (f : A → B → Aeneas.Std.Result C) (g : C → Aeneas.Std.Result D) :
+  (do
+      let y ←
+        match p with
+          | (a, b) => f a b
+      g y) =
+    match p with
+    | (a, b) => do
+      let y ← f a b
+      g y
+'NIY_QueryRead.prod_bind' does not depend on any axioms
+NIY_QueryRead.ok_bind {A B : Type} (x : A) (f : A → Aeneas.Std.Result B) :
+  (do
+      let y ← Aeneas.Std.Result.ok x
+      f y) =
+    f x
+'NIY_QueryRead.ok_bind' does not depend on any axioms
+NIY_QueryRead.continuation {R A : Type} (raw : R → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 4#usize × R))
+  (r12 : R) (next : Aeneas.Std.Array Aeneas.Std.U32 22#usize → R → Aeneas.Std.Result A) :
+  (do
+      let __x ← NIY_QueryRead.read22 raw r12
+      match __x with
+        | (queries, out) => next queries out) =
+    do
+    let (a5, r13) ← raw r12
+    let i8 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.from_le_bytes a5)
+    let (a6, r14) ← raw r13
+    let i9 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.from_le_bytes a6)
+    let (a7, r15) ← raw r14
+    let i10 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.from_le_bytes a7)
+    let (a8, r16) ← raw r15
+    let i11 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.from_le_bytes a8)
+    let (a9, r17) ← raw r16
+    let i12 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.from_le_bytes a9)
+    let (a10, r18) ← raw r17
+    let i13 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.from_le_bytes a10)
+    let (a11, r19) ← raw r18
+    let i14 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.from_le_bytes a11)
+    let (a12, r20) ← raw r19
+    let i15 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.from_le_bytes a12)
+    let (a13, r21) ← raw r20
+    let i16 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.from_le_bytes a13)
+    let (a14, r22) ← raw r21
+    let i17 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.from_le_bytes a14)
+    let (a15, r23) ← raw r22
+    let i18 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.from_le_bytes a15)
+    let (a16, r24) ← raw r23
+    let i19 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.from_le_bytes a16)
+    let (a17, r25) ← raw r24
+    let i20 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.from_le_bytes a17)
+    let (a18, r26) ← raw r25
+    let i21 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.from_le_bytes a18)
+    let (a19, r27) ← raw r26
+    let i22 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.from_le_bytes a19)
+    let (a20, r28) ← raw r27
+    let i23 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.from_le_bytes a20)
+    let (a21, r29) ← raw r28
+    let i24 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.from_le_bytes a21)
+    let (a22, r30) ← raw r29
+    let i25 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.from_le_bytes a22)
+    let (a23, r31) ← raw r30
+    let i26 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.from_le_bytes a23)
+    let (a24, r32) ← raw r31
+    let i27 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.from_le_bytes a24)
+    let (a25, r33) ← raw r32
+    let i28 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.from_le_bytes a25)
+    let (a26, r34) ← raw r33
+    let i29 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.from_le_bytes a26)
+    next
+        (Aeneas.Std.Array.make 22#usize
+          [i8, i9, i10, i11, i12, i13, i14, i15, i16, i17, i18, i19, i20, i21, i22, i23, i24, i25, i26, i27, i28, i29]
+          ⋯)
+        r34
+'NIY_QueryRead.continuation' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_QueryCut.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact)
+  (val4 : NID_ResumeEmission.aspis_core.field.QM31) (r12 : NID_ResumeEmission.verifier.Reader) :
+  NIY_AfterRho.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 r12 = do
+    let (queries, out) ← NIY_QueryRead.read22 (NIL_FreshOps.raw 4#usize) r12
+    NIY_QueryCut.afterQueries reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries out
+'NIY_QueryCut.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_ValidationCut.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact)
+  (val4 : NID_ResumeEmission.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (r34 : NID_ResumeEmission.verifier.Reader) :
+  NIY_QueryCut.afterQueries reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries r34 = do
+    let reply ← NIL_FreshOps.validate queries
+    NIL_TryTransport.fresh reply fun x =>
+        NIY_ValidationCut.afterValidation reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries r34
+'NIY_ValidationCut.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_SemanticCut.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact)
+  (val4 : NID_ResumeEmission.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (r34 : NID_ResumeEmission.verifier.Reader) :
+  NIY_ValidationCut.afterValidation reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries r34 = do
+    let reply ← NIL_FreshOps.semantic bytes r34.at
+    NIL_TryTransport.fresh reply fun x =>
+        match x with
+        | (semantic_alpha, at1) =>
+          NIY_SemanticCut.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha
+            { bytes := r34.bytes, «at» := at1 }
+'NIY_SemanticCut.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_AfterZ0x.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact)
+  (val4 : NID_ResumeEmission.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (semantic_alpha : Aeneas.Std.Array NID_ResumeEmission.aspis_core.field.QM31 10#usize)
+  (rSem : NID_ResumeEmission.verifier.Reader) :
+  NIY_SemanticCut.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha rSem = do
+    let (reply, out) ← NIL_FreshOps.readK rSem
+    NIL_TryTransport.fresh reply fun x =>
+        NIY_AfterZ0x.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha x out
+'NIY_AfterZ0x.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_AfterZ0y.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact)
+  (val4 : NID_ResumeEmission.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (semantic_alpha : Aeneas.Std.Array NID_ResumeEmission.aspis_core.field.QM31 10#usize)
+  (val6 : NID_ResumeEmission.aspis_core.field.QM31) (r38 : NID_ResumeEmission.verifier.Reader) :
+  NIY_AfterZ0x.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6 r38 =
+    do
+    let (reply, out) ← NIL_FreshOps.readK r38
+    NIL_TryTransport.fresh reply fun x =>
+        NIY_AfterZ0y.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6 x
+          out
+'NIY_AfterZ0y.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_AfterZ1x.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact)
+  (val4 : NID_ResumeEmission.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (semantic_alpha : Aeneas.Std.Array NID_ResumeEmission.aspis_core.field.QM31 10#usize)
+  (val6 val7 : NID_ResumeEmission.aspis_core.field.QM31) (r40 : NID_ResumeEmission.verifier.Reader) :
+  NIY_AfterZ0y.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6 val7
+      r40 =
+    do
+    let (reply, out) ← NIL_FreshOps.readK r40
+    NIL_TryTransport.fresh reply fun x =>
+        NIY_AfterZ1x.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6
+          val7 x out
+'NIY_AfterZ1x.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_AfterZ1y.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact)
+  (val4 : NID_ResumeEmission.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (semantic_alpha : Aeneas.Std.Array NID_ResumeEmission.aspis_core.field.QM31 10#usize)
+  (val6 val7 val8 : NID_ResumeEmission.aspis_core.field.QM31) (r42 : NID_ResumeEmission.verifier.Reader) :
+  NIY_AfterZ1x.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6 val7
+      val8 r42 =
+    do
+    let (reply, out) ← NIL_FreshOps.readK r42
+    NIL_TryTransport.fresh reply fun x =>
+        NIY_AfterZ1y.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6
+          val7 val8 x out
+'NIY_AfterZ1y.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_AfterClaim.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact)
+  (val4 : NID_ResumeEmission.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (semantic_alpha : Aeneas.Std.Array NID_ResumeEmission.aspis_core.field.QM31 10#usize)
+  (val6 val7 val8 val9 : NID_ResumeEmission.aspis_core.field.QM31) (r44 : NID_ResumeEmission.verifier.Reader) :
+  NIY_AfterZ1y.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6 val7
+      val8 val9 r44 =
+    do
+    let (reply, out) ← NIL_FreshOps.readE r44
+    NIL_TryTransport.fresh reply fun x =>
+        NIY_AfterClaim.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6
+          val7 val8 val9 x out
+'NIY_AfterClaim.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_AfterRhs.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact)
+  (val4 : NID_ResumeEmission.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (semantic_alpha : Aeneas.Std.Array NID_ResumeEmission.aspis_core.field.QM31 10#usize)
+  (val6 val7 val8 val9 : NID_ResumeEmission.aspis_core.field.QM31)
+  (val10 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact) (r46 : NID_ResumeEmission.verifier.Reader) :
+  NIY_AfterClaim.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6 val7
+      val8 val9 val10 r46 =
+    do
+    let (reply, out) ← NIL_FreshOps.readE r46
+    NIL_TryTransport.fresh reply fun x =>
+        NIY_AfterRhs.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6
+          val7 val8 val9 val10 x out
+'NIY_AfterRhs.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_AfterPower.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact)
+  (val4 : NID_ResumeEmission.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (semantic_alpha : Aeneas.Std.Array NID_ResumeEmission.aspis_core.field.QM31 10#usize)
+  (val6 val7 val8 val9 : NID_ResumeEmission.aspis_core.field.QM31)
+  (val10 val11 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact) (r48 : NID_ResumeEmission.verifier.Reader) :
+  NIY_AfterRhs.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6 val7
+      val8 val9 val10 val11 r48 =
+    do
+    let (reply, out) ← NIL_FreshOps.readK r48
+    NIL_TryTransport.fresh reply fun x =>
+        NIY_AfterPower.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6
+          val7 val8 val9 val10 val11 x out
+'NIY_AfterPower.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_AllocationCut.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact)
+  (val4 : NID_ResumeEmission.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (semantic_alpha : Aeneas.Std.Array NID_ResumeEmission.aspis_core.field.QM31 10#usize)
+  (val6 val7 val8 val9 : NID_ResumeEmission.aspis_core.field.QM31)
+  (val10 val11 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact)
+  (val12 : NID_ResumeEmission.aspis_core.field.QM31) (r50 : NID_ResumeEmission.verifier.Reader) :
+  NIY_AfterPower.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6 val7
+      val8 val9 val10 val11 val12 r50 =
+    do
+    let n ← AspisR1.CheckpointBytes4Ops.finalLen (NIL_Carriers.variant v)
+    let zero ←
+      Aeneas.Std.Result.ok (NIL_Carriers.unK { c0 := { a := 0#u32, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } })
+    let reply ←
+      NIL_FreshOps.filled reserved
+          (NID_ResumeEmission.aspis_core.field.QM31.Insts.CoreMarkerCopy fun x => Aeneas.Std.Result.ok x) n zero
+    let converted ←
+      NIL_FreshOps.mapError
+          (NID_ResumeEmission.verifier.resume.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+            (NIL_FreshOps.digest d))
+          reply ()
+    NIL_TryTransport.fresh converted fun weights =>
+        NIY_AllocationCut.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha
+          val6 val7 val8 val9 val10 val11 val12 weights r50
+'NIY_AllocationCut.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_FinalCut.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact)
+  (val4 : NID_ResumeEmission.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (semantic_alpha : Aeneas.Std.Array NID_ResumeEmission.aspis_core.field.QM31 10#usize)
+  (val6 val7 val8 val9 : NID_ResumeEmission.aspis_core.field.QM31)
+  (val10 val11 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact)
+  (val12 : NID_ResumeEmission.aspis_core.field.QM31)
+  (val13 : Aeneas.Std.alloc.vec.Vec NID_ResumeEmission.aspis_core.field.QM31)
+  (r50 : NID_ResumeEmission.verifier.Reader) :
+  NIY_AllocationCut.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6
+      val7 val8 val9 val10 val11 val12 val13 r50 =
+    do
+    let reply ← NIL_FreshOps.weights bytes r50.at val13
+    NIL_TryTransport.fresh reply fun x =>
+        match x with
+        | (weights, at2) =>
+          NIY_FinalCut.finish reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6
+            val7 val8 val9 val10 val11 val12 weights at2 r50
+'NIY_FinalCut.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_C_FirstECut.source (ops : AspisR1Stage2.ResumeOps) (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : AspisR1Stage2.transport.Variant) (end1 : Aeneas.Std.Usize) (i4 : Aeneas.Std.U8)
+  (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (r2 : AspisR1Stage2.verifier.Reader) :
+  NIY_CohortRawCut.afterRaw ops bytes v end1 i4 state a3 a4 r2 = do
+    let (reply, r4) ← ops.readE r2
+    NIL_TryTransport.cohort reply fun gamma => NIY_C_FirstECut.afterGamma ops bytes v end1 i4 state a3 a4 gamma r4
+'NIY_C_FirstECut.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_C_AfterKappa.source (ops : AspisR1Stage2.ResumeOps) (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : AspisR1Stage2.transport.Variant) (end1 : Aeneas.Std.Usize) (i4 : Aeneas.Std.U8)
+  (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (val : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+  (r4 : AspisR1Stage2.verifier.Reader) :
+  NIY_C_FirstECut.afterGamma ops bytes v end1 i4 state a3 a4 val r4 = do
+    let (reply, out) ← ops.readE r4
+    NIL_TryTransport.cohort reply fun x => NIY_C_AfterKappa.suffix ops bytes v end1 i4 state a3 a4 val x out
+'NIY_C_AfterKappa.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_C_AfterAlpha0.source (ops : AspisR1Stage2.ResumeOps) (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : AspisR1Stage2.transport.Variant) (end1 : Aeneas.Std.Usize) (i4 : Aeneas.Std.U8)
+  (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 : AspisR1Stage2.aspis_core.field.wide_exact.WideExact) (r6 : AspisR1Stage2.verifier.Reader) :
+  NIY_C_AfterKappa.suffix ops bytes v end1 i4 state a3 a4 val val1 r6 = do
+    let (reply, out) ← ops.readE r6
+    NIL_TryTransport.cohort reply fun x => NIY_C_AfterAlpha0.suffix ops bytes v end1 i4 state a3 a4 val val1 x out
+'NIY_C_AfterAlpha0.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_C_AfterAlpha1.source (ops : AspisR1Stage2.ResumeOps) (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : AspisR1Stage2.transport.Variant) (end1 : Aeneas.Std.Usize) (i4 : Aeneas.Std.U8)
+  (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 : AspisR1Stage2.aspis_core.field.wide_exact.WideExact) (r8 : AspisR1Stage2.verifier.Reader) :
+  NIY_C_AfterAlpha0.suffix ops bytes v end1 i4 state a3 a4 val val1 val2 r8 = do
+    let (reply, out) ← ops.readE r8
+    NIL_TryTransport.cohort reply fun x => NIY_C_AfterAlpha1.suffix ops bytes v end1 i4 state a3 a4 val val1 val2 x out
+'NIY_C_AfterAlpha1.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_C_AfterRho.source (ops : AspisR1Stage2.ResumeOps) (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : AspisR1Stage2.transport.Variant) (end1 : Aeneas.Std.Usize) (i4 : Aeneas.Std.U8)
+  (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : AspisR1Stage2.aspis_core.field.wide_exact.WideExact) (r10 : AspisR1Stage2.verifier.Reader) :
+  NIY_C_AfterAlpha1.suffix ops bytes v end1 i4 state a3 a4 val val1 val2 val3 r10 = do
+    let (reply, out) ← ops.readK r10
+    NIL_TryTransport.cohort reply fun x =>
+        NIY_C_AfterRho.suffix ops bytes v end1 i4 state a3 a4 val val1 val2 val3 x out
+'NIY_C_AfterRho.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_C_QueryCut.source (ops : AspisR1Stage2.ResumeOps) (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : AspisR1Stage2.transport.Variant) (end1 : Aeneas.Std.Usize) (i4 : Aeneas.Std.U8)
+  (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+  (val4 : AspisR1Stage2.aspis_core.field.QM31) (r12 : AspisR1Stage2.verifier.Reader) :
+  NIY_C_AfterRho.suffix ops bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 r12 = do
+    let (queries, out) ← NIY_QueryRead.read22 (ops.raw 4#usize) r12
+    NIY_C_QueryCut.afterQueries ops bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries out
+'NIY_C_QueryCut.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_C_ValidationCut.source (ops : AspisR1Stage2.ResumeOps) (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : AspisR1Stage2.transport.Variant) (end1 : Aeneas.Std.Usize) (i4 : Aeneas.Std.U8)
+  (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+  (val4 : AspisR1Stage2.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (r34 : AspisR1Stage2.verifier.Reader) :
+  NIY_C_QueryCut.afterQueries ops bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries r34 = do
+    let reply ← ops.validate queries
+    NIL_TryTransport.cohort reply fun x =>
+        NIY_C_ValidationCut.afterValidation ops bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries r34
+'NIY_C_ValidationCut.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_C_SemanticCut.source (ops : AspisR1Stage2.ResumeOps) (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : AspisR1Stage2.transport.Variant) (end1 : Aeneas.Std.Usize) (i4 : Aeneas.Std.U8)
+  (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+  (val4 : AspisR1Stage2.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (r34 : AspisR1Stage2.verifier.Reader) :
+  NIY_C_ValidationCut.afterValidation ops bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries r34 = do
+    let reply ← ops.readSemanticAlpha bytes r34.at
+    NIL_TryTransport.cohort reply fun x =>
+        match x with
+        | (semantic_alpha, at1) =>
+          NIY_C_SemanticCut.suffix ops bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha
+            { bytes := r34.bytes, «at» := at1 }
+'NIY_C_SemanticCut.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_C_AfterZ0x.source (ops : AspisR1Stage2.ResumeOps) (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : AspisR1Stage2.transport.Variant) (end1 : Aeneas.Std.Usize) (i4 : Aeneas.Std.U8)
+  (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+  (val4 : AspisR1Stage2.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (semantic_alpha : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.QM31 10#usize)
+  (rSem : AspisR1Stage2.verifier.Reader) :
+  NIY_C_SemanticCut.suffix ops bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha rSem = do
+    let (reply, out) ← ops.readK rSem
+    NIL_TryTransport.cohort reply fun x =>
+        NIY_C_AfterZ0x.suffix ops bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha x out
+'NIY_C_AfterZ0x.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_C_AfterZ0y.source (ops : AspisR1Stage2.ResumeOps) (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : AspisR1Stage2.transport.Variant) (end1 : Aeneas.Std.Usize) (i4 : Aeneas.Std.U8)
+  (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+  (val4 : AspisR1Stage2.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (semantic_alpha : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.QM31 10#usize)
+  (val6 : AspisR1Stage2.aspis_core.field.QM31) (r38 : AspisR1Stage2.verifier.Reader) :
+  NIY_C_AfterZ0x.suffix ops bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6 r38 = do
+    let (reply, out) ← ops.readK r38
+    NIL_TryTransport.cohort reply fun x =>
+        NIY_C_AfterZ0y.suffix ops bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6 x out
+'NIY_C_AfterZ0y.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_C_AfterZ1x.source (ops : AspisR1Stage2.ResumeOps) (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : AspisR1Stage2.transport.Variant) (end1 : Aeneas.Std.Usize) (i4 : Aeneas.Std.U8)
+  (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+  (val4 : AspisR1Stage2.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (semantic_alpha : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.QM31 10#usize)
+  (val6 val7 : AspisR1Stage2.aspis_core.field.QM31) (r40 : AspisR1Stage2.verifier.Reader) :
+  NIY_C_AfterZ0y.suffix ops bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6 val7 r40 =
+    do
+    let (reply, out) ← ops.readK r40
+    NIL_TryTransport.cohort reply fun x =>
+        NIY_C_AfterZ1x.suffix ops bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6 val7 x
+          out
+'NIY_C_AfterZ1x.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_C_AfterZ1y.source (ops : AspisR1Stage2.ResumeOps) (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : AspisR1Stage2.transport.Variant) (end1 : Aeneas.Std.Usize) (i4 : Aeneas.Std.U8)
+  (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+  (val4 : AspisR1Stage2.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (semantic_alpha : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.QM31 10#usize)
+  (val6 val7 val8 : AspisR1Stage2.aspis_core.field.QM31) (r42 : AspisR1Stage2.verifier.Reader) :
+  NIY_C_AfterZ1x.suffix ops bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6 val7 val8
+      r42 =
+    do
+    let (reply, out) ← ops.readK r42
+    NIL_TryTransport.cohort reply fun x =>
+        NIY_C_AfterZ1y.suffix ops bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6 val7
+          val8 x out
+'NIY_C_AfterZ1y.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_C_AfterClaim.source (ops : AspisR1Stage2.ResumeOps) (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : AspisR1Stage2.transport.Variant) (end1 : Aeneas.Std.Usize) (i4 : Aeneas.Std.U8)
+  (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+  (val4 : AspisR1Stage2.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (semantic_alpha : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.QM31 10#usize)
+  (val6 val7 val8 val9 : AspisR1Stage2.aspis_core.field.QM31) (r44 : AspisR1Stage2.verifier.Reader) :
+  NIY_C_AfterZ1y.suffix ops bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6 val7 val8
+      val9 r44 =
+    do
+    let (reply, out) ← ops.readE r44
+    NIL_TryTransport.cohort reply fun x =>
+        NIY_C_AfterClaim.suffix ops bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6 val7
+          val8 val9 x out
+'NIY_C_AfterClaim.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_C_AfterRhs.source (ops : AspisR1Stage2.ResumeOps) (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : AspisR1Stage2.transport.Variant) (end1 : Aeneas.Std.Usize) (i4 : Aeneas.Std.U8)
+  (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+  (val4 : AspisR1Stage2.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (semantic_alpha : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.QM31 10#usize)
+  (val6 val7 val8 val9 : AspisR1Stage2.aspis_core.field.QM31)
+  (val10 : AspisR1Stage2.aspis_core.field.wide_exact.WideExact) (r46 : AspisR1Stage2.verifier.Reader) :
+  NIY_C_AfterClaim.suffix ops bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6 val7 val8
+      val9 val10 r46 =
+    do
+    let (reply, out) ← ops.readE r46
+    NIL_TryTransport.cohort reply fun x =>
+        NIY_C_AfterRhs.suffix ops bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6 val7
+          val8 val9 val10 x out
+'NIY_C_AfterRhs.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_C_AfterPower.source (ops : AspisR1Stage2.ResumeOps) (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : AspisR1Stage2.transport.Variant) (end1 : Aeneas.Std.Usize) (i4 : Aeneas.Std.U8)
+  (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+  (val4 : AspisR1Stage2.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (semantic_alpha : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.QM31 10#usize)
+  (val6 val7 val8 val9 : AspisR1Stage2.aspis_core.field.QM31)
+  (val10 val11 : AspisR1Stage2.aspis_core.field.wide_exact.WideExact) (r48 : AspisR1Stage2.verifier.Reader) :
+  NIY_C_AfterRhs.suffix ops bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6 val7 val8
+      val9 val10 val11 r48 =
+    do
+    let (reply, out) ← ops.readK r48
+    NIL_TryTransport.cohort reply fun x =>
+        NIY_C_AfterPower.suffix ops bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6 val7
+          val8 val9 val10 val11 x out
+'NIY_C_AfterPower.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_C_AllocationCut.source (ops : AspisR1Stage2.ResumeOps) (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : AspisR1Stage2.transport.Variant) (end1 : Aeneas.Std.Usize) (i4 : Aeneas.Std.U8)
+  (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+  (val4 : AspisR1Stage2.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (semantic_alpha : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.QM31 10#usize)
+  (val6 val7 val8 val9 : AspisR1Stage2.aspis_core.field.QM31)
+  (val10 val11 : AspisR1Stage2.aspis_core.field.wide_exact.WideExact) (val12 : AspisR1Stage2.aspis_core.field.QM31)
+  (r50 : AspisR1Stage2.verifier.Reader) :
+  NIY_C_AfterPower.suffix ops bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6 val7 val8
+      val9 val10 val11 val12 r50 =
+    do
+    let n ← ops.finalLen v
+    let zero ← ops.zeroK
+    let converted ← ops.filled n zero
+    NIL_TryTransport.cohort converted fun weights =>
+        NIY_C_AllocationCut.suffix ops bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6
+          val7 val8 val9 val10 val11 val12 weights r50
+'NIY_C_AllocationCut.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_C_FinalCut.source (ops : AspisR1Stage2.ResumeOps) (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : AspisR1Stage2.transport.Variant) (end1 : Aeneas.Std.Usize) (i4 : Aeneas.Std.U8)
+  (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+  (val4 : AspisR1Stage2.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (semantic_alpha : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.QM31 10#usize)
+  (val6 val7 val8 val9 : AspisR1Stage2.aspis_core.field.QM31)
+  (val10 val11 : AspisR1Stage2.aspis_core.field.wide_exact.WideExact) (val12 : AspisR1Stage2.aspis_core.field.QM31)
+  (val13 : Aeneas.Std.alloc.vec.Vec AspisR1Stage2.aspis_core.field.QM31) (r50 : AspisR1Stage2.verifier.Reader) :
+  NIY_C_AllocationCut.suffix ops bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6 val7
+      val8 val9 val10 val11 val12 val13 r50 =
+    do
+    let reply ← ops.readWeights bytes r50.at val13
+    NIL_TryTransport.cohort reply fun x =>
+        match x with
+        | (weights, at2) =>
+          NIY_C_FinalCut.finish ops bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6 val7
+            val8 val9 val10 val11 val12 weights at2 r50
+'NIY_C_FinalCut.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_FinalPort.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact)
+  (val4 : NID_ResumeEmission.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (semantic_alpha : Aeneas.Std.Array NID_ResumeEmission.aspis_core.field.QM31 10#usize)
+  (val6 val7 val8 val9 : NID_ResumeEmission.aspis_core.field.QM31)
+  (val10 val11 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact)
+  (val12 : NID_ResumeEmission.aspis_core.field.QM31)
+  (weights : Aeneas.Std.alloc.vec.Vec NID_ResumeEmission.aspis_core.field.QM31) (at2 : Aeneas.Std.Usize)
+  (r50 : NID_ResumeEmission.verifier.Reader) :
+  NIL_StatePort.reply
+      (NIY_FinalCut.finish reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6
+        val7 val8 val9 val10 val11 val12 weights at2 r50) =
+    NIY_C_FinalCut.finish (AspisR1.CheckpointBytes4Ops.ops reserved) bytes (NIL_Carriers.variant v) end1 i4 state a3 a4
+      (NIL_Carriers.e val) (NIL_Carriers.e val1) (NIL_Carriers.e val2) (NIL_Carriers.e val3) (NIL_Carriers.k val4)
+      queries (NIL_Carriers.array NIL_Carriers.k semantic_alpha) (NIL_Carriers.k val6) (NIL_Carriers.k val7)
+      (NIL_Carriers.k val8) (NIL_Carriers.k val9) (NIL_Carriers.e val10) (NIL_Carriers.e val11) (NIL_Carriers.k val12)
+      (NIL_Carriers.vec NIL_Carriers.k weights) at2 (NIL_Carriers.reader r50)
+'NIY_FinalPort.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_SectionBind.sectionReply {A B C D : Type} (u : A → B) (f : C → D)
+  (m : Aeneas.Std.Result (Aeneas.Std.core.result.Result A NIL_Carriers.Cohort.Err))
+  (left : B → Aeneas.Std.Result (Aeneas.Std.core.result.Result C NIL_Carriers.Fresh.Err))
+  (right : A → Aeneas.Std.Result (Aeneas.Std.core.result.Result D NIL_Carriers.Cohort.Err))
+  (h : ∀ (x : A), NIL_Carriers.outer (NIL_Carriers.inner f) (left (u x)) = right x) :
+  (NIL_Carriers.outer (NIL_Carriers.inner f) do
+      let reply ← NIL_Carriers.outer (NIL_Carriers.unInner u) m
+      NIL_TryTransport.fresh reply left) =
+    do
+    let reply ← m
+    NIL_TryTransport.cohort reply right
+'NIY_SectionBind.sectionReply' does not depend on any axioms
+NIY_SectionBind.reverse_port {A B : Type} (f : A → B) (g : B → A) (law : ∀ (x : A), g (f x) = x)
+  (m : Aeneas.Std.Result A) (n : Aeneas.Std.Result B) (h : NIL_Carriers.outer f m = n) : m = NIL_Carriers.outer g n
+'NIY_SectionBind.reverse_port' depends on axioms: [propext]
+NIY_SectionBind.forwardReply {A B C D : Type} (f : A → B) (g : B → A) (out : C → D) (law : ∀ (x : A), g (f x) = x)
+  (m : Aeneas.Std.Result (Aeneas.Std.core.result.Result A NIL_Carriers.Fresh.Err))
+  (n : Aeneas.Std.Result (Aeneas.Std.core.result.Result B NIL_Carriers.Cohort.Err))
+  (port : NIL_Carriers.outer (NIL_Carriers.inner f) m = n)
+  (left : A → Aeneas.Std.Result (Aeneas.Std.core.result.Result C NIL_Carriers.Fresh.Err))
+  (right : B → Aeneas.Std.Result (Aeneas.Std.core.result.Result D NIL_Carriers.Cohort.Err))
+  (next : ∀ (x : B), NIL_Carriers.outer (NIL_Carriers.inner out) (left (g x)) = right x) :
+  (NIL_Carriers.outer (NIL_Carriers.inner out) do
+      let reply ← m
+      NIL_TryTransport.fresh reply left) =
+    do
+    let reply ← n
+    NIL_TryTransport.cohort reply right
+'NIY_SectionBind.forwardReply' depends on axioms: [propext]
+NIY_WeightsPort.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact)
+  (val4 : NID_ResumeEmission.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (semantic_alpha : Aeneas.Std.Array NID_ResumeEmission.aspis_core.field.QM31 10#usize)
+  (val6 val7 val8 val9 : NID_ResumeEmission.aspis_core.field.QM31)
+  (val10 val11 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact)
+  (val12 : NID_ResumeEmission.aspis_core.field.QM31)
+  (val13 : Aeneas.Std.alloc.vec.Vec NID_ResumeEmission.aspis_core.field.QM31)
+  (r50 : NID_ResumeEmission.verifier.Reader) :
+  NIL_StatePort.reply
+      (NIY_AllocationCut.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha
+        val6 val7 val8 val9 val10 val11 val12 val13 r50) =
+    NIY_C_AllocationCut.suffix (AspisR1.CheckpointBytes4Ops.ops reserved) bytes (NIL_Carriers.variant v) end1 i4 state
+      a3 a4 (NIL_Carriers.e val) (NIL_Carriers.e val1) (NIL_Carriers.e val2) (NIL_Carriers.e val3) (NIL_Carriers.k val4)
+      queries (NIL_Carriers.array NIL_Carriers.k semantic_alpha) (NIL_Carriers.k val6) (NIL_Carriers.k val7)
+      (NIL_Carriers.k val8) (NIL_Carriers.k val9) (NIL_Carriers.e val10) (NIL_Carriers.e val11) (NIL_Carriers.k val12)
+      (NIL_Carriers.vec NIL_Carriers.k val13) (NIL_Carriers.reader r50)
+'NIY_WeightsPort.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_AllocationPort.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact)
+  (val4 : NID_ResumeEmission.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (semantic_alpha : Aeneas.Std.Array NID_ResumeEmission.aspis_core.field.QM31 10#usize)
+  (val6 val7 val8 val9 : NID_ResumeEmission.aspis_core.field.QM31)
+  (val10 val11 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact)
+  (val12 : NID_ResumeEmission.aspis_core.field.QM31) (r50 : NID_ResumeEmission.verifier.Reader) :
+  NIL_StatePort.reply
+      (NIY_AfterPower.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6
+        val7 val8 val9 val10 val11 val12 r50) =
+    NIY_C_AfterPower.suffix (AspisR1.CheckpointBytes4Ops.ops reserved) bytes (NIL_Carriers.variant v) end1 i4 state a3
+      a4 (NIL_Carriers.e val) (NIL_Carriers.e val1) (NIL_Carriers.e val2) (NIL_Carriers.e val3) (NIL_Carriers.k val4)
+      queries (NIL_Carriers.array NIL_Carriers.k semantic_alpha) (NIL_Carriers.k val6) (NIL_Carriers.k val7)
+      (NIL_Carriers.k val8) (NIL_Carriers.k val9) (NIL_Carriers.e val10) (NIL_Carriers.e val11) (NIL_Carriers.k val12)
+      (NIL_Carriers.reader r50)
+'NIY_AllocationPort.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_PowerReadPort.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact)
+  (val4 : NID_ResumeEmission.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (semantic_alpha : Aeneas.Std.Array NID_ResumeEmission.aspis_core.field.QM31 10#usize)
+  (val6 val7 val8 val9 : NID_ResumeEmission.aspis_core.field.QM31)
+  (val10 val11 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact) (r48 : NID_ResumeEmission.verifier.Reader) :
+  NIL_StatePort.reply
+      (NIY_AfterRhs.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6
+        val7 val8 val9 val10 val11 r48) =
+    NIY_C_AfterRhs.suffix (AspisR1.CheckpointBytes4Ops.ops reserved) bytes (NIL_Carriers.variant v) end1 i4 state a3 a4
+      (NIL_Carriers.e val) (NIL_Carriers.e val1) (NIL_Carriers.e val2) (NIL_Carriers.e val3) (NIL_Carriers.k val4)
+      queries (NIL_Carriers.array NIL_Carriers.k semantic_alpha) (NIL_Carriers.k val6) (NIL_Carriers.k val7)
+      (NIL_Carriers.k val8) (NIL_Carriers.k val9) (NIL_Carriers.e val10) (NIL_Carriers.e val11)
+      (NIL_Carriers.reader r48)
+'NIY_PowerReadPort.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_RhsReadPort.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact)
+  (val4 : NID_ResumeEmission.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (semantic_alpha : Aeneas.Std.Array NID_ResumeEmission.aspis_core.field.QM31 10#usize)
+  (val6 val7 val8 val9 : NID_ResumeEmission.aspis_core.field.QM31)
+  (val10 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact) (r46 : NID_ResumeEmission.verifier.Reader) :
+  NIL_StatePort.reply
+      (NIY_AfterClaim.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6
+        val7 val8 val9 val10 r46) =
+    NIY_C_AfterClaim.suffix (AspisR1.CheckpointBytes4Ops.ops reserved) bytes (NIL_Carriers.variant v) end1 i4 state a3
+      a4 (NIL_Carriers.e val) (NIL_Carriers.e val1) (NIL_Carriers.e val2) (NIL_Carriers.e val3) (NIL_Carriers.k val4)
+      queries (NIL_Carriers.array NIL_Carriers.k semantic_alpha) (NIL_Carriers.k val6) (NIL_Carriers.k val7)
+      (NIL_Carriers.k val8) (NIL_Carriers.k val9) (NIL_Carriers.e val10) (NIL_Carriers.reader r46)
+'NIY_RhsReadPort.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_ClaimReadPort.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact)
+  (val4 : NID_ResumeEmission.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (semantic_alpha : Aeneas.Std.Array NID_ResumeEmission.aspis_core.field.QM31 10#usize)
+  (val6 val7 val8 val9 : NID_ResumeEmission.aspis_core.field.QM31) (r44 : NID_ResumeEmission.verifier.Reader) :
+  NIL_StatePort.reply
+      (NIY_AfterZ1y.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6
+        val7 val8 val9 r44) =
+    NIY_C_AfterZ1y.suffix (AspisR1.CheckpointBytes4Ops.ops reserved) bytes (NIL_Carriers.variant v) end1 i4 state a3 a4
+      (NIL_Carriers.e val) (NIL_Carriers.e val1) (NIL_Carriers.e val2) (NIL_Carriers.e val3) (NIL_Carriers.k val4)
+      queries (NIL_Carriers.array NIL_Carriers.k semantic_alpha) (NIL_Carriers.k val6) (NIL_Carriers.k val7)
+      (NIL_Carriers.k val8) (NIL_Carriers.k val9) (NIL_Carriers.reader r44)
+'NIY_ClaimReadPort.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_Z1yReadPort.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact)
+  (val4 : NID_ResumeEmission.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (semantic_alpha : Aeneas.Std.Array NID_ResumeEmission.aspis_core.field.QM31 10#usize)
+  (val6 val7 val8 : NID_ResumeEmission.aspis_core.field.QM31) (r42 : NID_ResumeEmission.verifier.Reader) :
+  NIL_StatePort.reply
+      (NIY_AfterZ1x.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6
+        val7 val8 r42) =
+    NIY_C_AfterZ1x.suffix (AspisR1.CheckpointBytes4Ops.ops reserved) bytes (NIL_Carriers.variant v) end1 i4 state a3 a4
+      (NIL_Carriers.e val) (NIL_Carriers.e val1) (NIL_Carriers.e val2) (NIL_Carriers.e val3) (NIL_Carriers.k val4)
+      queries (NIL_Carriers.array NIL_Carriers.k semantic_alpha) (NIL_Carriers.k val6) (NIL_Carriers.k val7)
+      (NIL_Carriers.k val8) (NIL_Carriers.reader r42)
+'NIY_Z1yReadPort.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_Z1xReadPort.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact)
+  (val4 : NID_ResumeEmission.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (semantic_alpha : Aeneas.Std.Array NID_ResumeEmission.aspis_core.field.QM31 10#usize)
+  (val6 val7 : NID_ResumeEmission.aspis_core.field.QM31) (r40 : NID_ResumeEmission.verifier.Reader) :
+  NIL_StatePort.reply
+      (NIY_AfterZ0y.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6
+        val7 r40) =
+    NIY_C_AfterZ0y.suffix (AspisR1.CheckpointBytes4Ops.ops reserved) bytes (NIL_Carriers.variant v) end1 i4 state a3 a4
+      (NIL_Carriers.e val) (NIL_Carriers.e val1) (NIL_Carriers.e val2) (NIL_Carriers.e val3) (NIL_Carriers.k val4)
+      queries (NIL_Carriers.array NIL_Carriers.k semantic_alpha) (NIL_Carriers.k val6) (NIL_Carriers.k val7)
+      (NIL_Carriers.reader r40)
+'NIY_Z1xReadPort.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_Z0yReadPort.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact)
+  (val4 : NID_ResumeEmission.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (semantic_alpha : Aeneas.Std.Array NID_ResumeEmission.aspis_core.field.QM31 10#usize)
+  (val6 : NID_ResumeEmission.aspis_core.field.QM31) (r38 : NID_ResumeEmission.verifier.Reader) :
+  NIL_StatePort.reply
+      (NIY_AfterZ0x.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6
+        r38) =
+    NIY_C_AfterZ0x.suffix (AspisR1.CheckpointBytes4Ops.ops reserved) bytes (NIL_Carriers.variant v) end1 i4 state a3 a4
+      (NIL_Carriers.e val) (NIL_Carriers.e val1) (NIL_Carriers.e val2) (NIL_Carriers.e val3) (NIL_Carriers.k val4)
+      queries (NIL_Carriers.array NIL_Carriers.k semantic_alpha) (NIL_Carriers.k val6) (NIL_Carriers.reader r38)
+'NIY_Z0yReadPort.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_Z0xReadPort.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact)
+  (val4 : NID_ResumeEmission.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (semantic_alpha : Aeneas.Std.Array NID_ResumeEmission.aspis_core.field.QM31 10#usize)
+  (rSem : NID_ResumeEmission.verifier.Reader) :
+  NIL_StatePort.reply
+      (NIY_SemanticCut.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha
+        rSem) =
+    NIY_C_SemanticCut.suffix (AspisR1.CheckpointBytes4Ops.ops reserved) bytes (NIL_Carriers.variant v) end1 i4 state a3
+      a4 (NIL_Carriers.e val) (NIL_Carriers.e val1) (NIL_Carriers.e val2) (NIL_Carriers.e val3) (NIL_Carriers.k val4)
+      queries (NIL_Carriers.array NIL_Carriers.k semantic_alpha) (NIL_Carriers.reader rSem)
+'NIY_Z0xReadPort.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_SemanticPort.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact)
+  (val4 : NID_ResumeEmission.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (r34 : NID_ResumeEmission.verifier.Reader) :
+  NIL_StatePort.reply
+      (NIY_ValidationCut.afterValidation reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries r34) =
+    NIY_C_ValidationCut.afterValidation (AspisR1.CheckpointBytes4Ops.ops reserved) bytes (NIL_Carriers.variant v) end1
+      i4 state a3 a4 (NIL_Carriers.e val) (NIL_Carriers.e val1) (NIL_Carriers.e val2) (NIL_Carriers.e val3)
+      (NIL_Carriers.k val4) queries (NIL_Carriers.reader r34)
+'NIY_SemanticPort.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_ValidationPort.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact)
+  (val4 : NID_ResumeEmission.aspis_core.field.QM31) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (r34 : NID_ResumeEmission.verifier.Reader) :
+  NIL_StatePort.reply
+      (NIY_QueryCut.afterQueries reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries r34) =
+    NIY_C_QueryCut.afterQueries (AspisR1.CheckpointBytes4Ops.ops reserved) bytes (NIL_Carriers.variant v) end1 i4 state
+      a3 a4 (NIL_Carriers.e val) (NIL_Carriers.e val1) (NIL_Carriers.e val2) (NIL_Carriers.e val3) (NIL_Carriers.k val4)
+      queries (NIL_Carriers.reader r34)
+'NIY_ValidationPort.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_QueryTransport.continuation {A B : Type} (f : A → B) (r12 : NIL_Carriers.Fresh.R)
+  (left : Aeneas.Std.Array Aeneas.Std.U32 22#usize → NIL_Carriers.Fresh.R → Aeneas.Std.Result A)
+  (right : Aeneas.Std.Array Aeneas.Std.U32 22#usize → NIL_Carriers.Cohort.R → Aeneas.Std.Result B)
+  (h :
+    ∀ (q : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (out : NIL_Carriers.Cohort.R),
+      NIL_Carriers.outer f (left q (NIL_Carriers.unReader out)) = right q out) :
+  (NIL_Carriers.outer f do
+      let (q, out) ← NIY_QueryRead.read22 (NIL_FreshOps.raw 4#usize) r12
+      left q out) =
+    do
+    let (q, out) ← NIY_QueryRead.read22 (AspisR1.CheckpointBytes3Reader.raw 4#usize) (NIL_Carriers.reader r12)
+    right q out
+'NIY_QueryTransport.continuation' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_QueryPort.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact)
+  (val4 : NID_ResumeEmission.aspis_core.field.QM31) (r12 : NID_ResumeEmission.verifier.Reader) :
+  NIL_StatePort.reply (NIY_AfterRho.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 r12) =
+    NIY_C_AfterRho.suffix (AspisR1.CheckpointBytes4Ops.ops reserved) bytes (NIL_Carriers.variant v) end1 i4 state a3 a4
+      (NIL_Carriers.e val) (NIL_Carriers.e val1) (NIL_Carriers.e val2) (NIL_Carriers.e val3) (NIL_Carriers.k val4)
+      (NIL_Carriers.reader r12)
+'NIY_QueryPort.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_RhoReadPort.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 val3 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact)
+  (r10 : NID_ResumeEmission.verifier.Reader) :
+  NIL_StatePort.reply (NIY_AfterAlpha1.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 r10) =
+    NIY_C_AfterAlpha1.suffix (AspisR1.CheckpointBytes4Ops.ops reserved) bytes (NIL_Carriers.variant v) end1 i4 state a3
+      a4 (NIL_Carriers.e val) (NIL_Carriers.e val1) (NIL_Carriers.e val2) (NIL_Carriers.e val3)
+      (NIL_Carriers.reader r10)
+'NIY_RhoReadPort.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_Alpha1ReadPort.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 val2 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact) (r8 : NID_ResumeEmission.verifier.Reader) :
+  NIL_StatePort.reply (NIY_AfterAlpha0.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 r8) =
+    NIY_C_AfterAlpha0.suffix (AspisR1.CheckpointBytes4Ops.ops reserved) bytes (NIL_Carriers.variant v) end1 i4 state a3
+      a4 (NIL_Carriers.e val) (NIL_Carriers.e val1) (NIL_Carriers.e val2) (NIL_Carriers.reader r8)
+'NIY_Alpha1ReadPort.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_Alpha0ReadPort.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val val1 : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact) (r6 : NID_ResumeEmission.verifier.Reader) :
+  NIL_StatePort.reply (NIY_AfterKappa.suffix reserved d bytes v end1 i4 state a3 a4 val val1 r6) =
+    NIY_C_AfterKappa.suffix (AspisR1.CheckpointBytes4Ops.ops reserved) bytes (NIL_Carriers.variant v) end1 i4 state a3
+      a4 (NIL_Carriers.e val) (NIL_Carriers.e val1) (NIL_Carriers.reader r6)
+'NIY_Alpha0ReadPort.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_KappaReadPort.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (val : NID_ResumeEmission.aspis_core.field.wide_exact.WideExact) (r4 : NID_ResumeEmission.verifier.Reader) :
+  NIL_StatePort.reply (NIY_FirstECut.afterGamma reserved d bytes v end1 i4 state a3 a4 val r4) =
+    NIY_C_FirstECut.afterGamma (AspisR1.CheckpointBytes4Ops.ops reserved) bytes (NIL_Carriers.variant v) end1 i4 state
+      a3 a4 (NIL_Carriers.e val) (NIL_Carriers.reader r4)
+'NIY_KappaReadPort.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_GammaReadPort.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (v : NID_ResumeEmission.transport.Variant) (end1 : Aeneas.Std.Usize)
+  (i4 : Aeneas.Std.U8) (state a3 a4 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (r2 : NID_ResumeEmission.verifier.Reader) :
+  NIL_StatePort.reply (NIY_FirstRawCut.freshAfterRaw reserved d bytes v end1 i4 state a3 a4 r2) =
+    NIY_CohortRawCut.afterRaw (AspisR1.CheckpointBytes4Ops.ops reserved) bytes (NIL_Carriers.variant v) end1 i4 state a3
+      a4 (NIL_Carriers.reader r2)
+'NIY_GammaReadPort.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_TailPort.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (end1 : Aeneas.Std.Usize) (next : Aeneas.Std.U8) :
+  NIL_StatePort.reply (NIL_ResumeSplit.tail reserved d bytes NID_ResumeEmission.transport.Variant.S2 end1 next) =
+    NIL_ResumeCohortTail.tail (AspisR1.CheckpointBytes4Ops.ops reserved) bytes AspisR1Stage2.transport.Variant.S2 end1
+      next
+'NIY_TailPort.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_ResumePort.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes proof public1 : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) :
+  NIL_StatePort.reply
+      (NIL_FreshOps.resume reserved d bytes proof public1 NID_ResumeEmission.transport.Variant.S2 hash) =
+    AspisR1Stage2.verifier.resumeWithOps (AspisR1.CheckpointBytes4Ops.ops reserved) d bytes proof public1
+      AspisR1Stage2.transport.Variant.S2 hash
+'NIY_ResumePort.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_WeightFrame.scalar_ext (x y : Aeneas.Std.U32) (h : ↑x = ↑y) : x = y
+'NIY_WeightFrame.scalar_ext' does not depend on any axioms
+NIY_WeightFrame.k_ext (x y : NIL_Carriers.Fresh.K)
+  (h : ∀ (j : Fin 4), NIY_NativeCuts.limbK x ↑j = NIY_NativeCuts.limbK y ↑j) : x = y
+'NIY_WeightFrame.k_ext' does not depend on any axioms
+NIY_WeightFrame.payload (before after : Aeneas.Std.alloc.vec.Vec NIL_Carriers.Fresh.K)
+  (before_size : (↑before).length = 64) (after_size : (↑after).length = 64)
+  (windows :
+    ∀ (i : Fin 64) (j : Fin 4),
+      NIY_NativeCuts.limbK (NIY_WeightFrame.cell before before_size i) ↑j =
+        NIY_NativeCuts.limbK (NIY_WeightFrame.cell after after_size i) ↑j) :
+  before = after
+'NIY_WeightFrame.payload' depends on axioms: [propext, Quot.sound]
+NIY_WeightFrame.capacity_prefix (capacity : ℕ → ℕ) (initial : capacity 0 = 64)
+  (step : ∀ i < 64, capacity (i + 1) = capacity i) (i : ℕ) : i ≤ 64 → capacity i = 64
+'NIY_WeightFrame.capacity_prefix' depends on axioms: [propext, Quot.sound]
+NIY_WeightFrame.capacity_to_final (resize read : ℕ → ℕ) (reserve : resize 0 = 64)
+  (resize_step : ∀ i < 64, resize (i + 1) = resize i) (same_producer : read 0 = resize 64)
+  (read_step : ∀ i < 64, read (i + 1) = read i) : read 64 = 64
+'NIY_WeightFrame.capacity_to_final' depends on axioms: [propext, Quot.sound]
+NIY_ScanCuts.step_ok (first rest : NIY_ScanCuts.Reply)
+  (run : NIY_ScanCuts.step first rest = Aeneas.Std.core.result.Result.Ok ()) :
+  first = Aeneas.Std.core.result.Result.Ok () ∧ rest = Aeneas.Std.core.result.Result.Ok ()
+'NIY_ScanCuts.step_ok' does not depend on any axioms
+NIY_ScanCuts.prefix_ok (reply : Fin 4 → NIY_ScanCuts.Reply) (tail : NIY_ScanCuts.Reply)
+  (run : NIY_ScanCuts.chain reply tail = Aeneas.Std.core.result.Result.Ok ()) :
+  reply ⟨0, ⋯⟩ = Aeneas.Std.core.result.Result.Ok () ∧
+    reply ⟨1, ⋯⟩ = Aeneas.Std.core.result.Result.Ok () ∧
+      reply ⟨2, ⋯⟩ = Aeneas.Std.core.result.Result.Ok () ∧
+        reply ⟨3, ⋯⟩ = Aeneas.Std.core.result.Result.Ok () ∧ tail = Aeneas.Std.core.result.Result.Ok ()
+'NIY_ScanCuts.prefix_ok' does not depend on any axioms
+NIY_ResumeFields.fields (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes proof public1 : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) (p : NIL_StatePort.F.P) (a : NIL_StatePort.F.A)
+  (run :
+    NIL_FreshOps.resume reserved d bytes proof public1 NID_ResumeEmission.transport.Variant.S2 hash =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a))) :
+  Nonempty
+    (AspisR1.OraclePortCkptAbiSourceFields.Fields (AspisR1.CheckpointBytes4Ops.ops reserved) bytes
+      AspisR1Stage2.transport.Variant.S2 (NIL_StatePort.prepared p) (NIL_StatePort.accumulator a))
+'NIY_ResumeFields.fields' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_ResumeFields.reservation (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes proof public1 : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) (p : NIL_StatePort.F.P) (a : NIL_StatePort.F.A)
+  (run :
+    NIL_FreshOps.resume reserved d bytes proof public1 NID_ResumeEmission.transport.Variant.S2 hash =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a))) :
+  reserved = true
+'NIY_ResumeFields.reservation' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_ReaderFrames.raw (n : Aeneas.Std.Usize) (r : AspisR1Stage2.verifier.Reader) (b : Aeneas.Std.Array Aeneas.Std.U8 n)
+  (out : AspisR1Stage2.verifier.Reader) (bound : ↑r.at + ↑n ≤ (↑r.bytes).length)
+  (call : AspisR1.CheckpointBytes3Reader.raw n r = Aeneas.Std.Result.ok (b, out)) :
+  ↑out.at = ↑r.at + ↑n ∧ out.bytes = r.bytes
+'NIY_ReaderFrames.raw' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_ReaderFrames.e (r out : AspisR1Stage2.verifier.Reader)
+  (value :
+    Aeneas.Std.core.result.Result AspisR1Stage2.aspis_core.field.wide_exact.WideExact AspisR1Stage2.verifier.Error)
+  (bound : ↑r.at + 32 ≤ (↑r.bytes).length)
+  (call : AspisR1.CheckpointBytes3Reader.readE r = Aeneas.Std.Result.ok (value, out)) :
+  ↑out.at = ↑r.at + 32 ∧ out.bytes = r.bytes
+'NIY_ReaderFrames.e' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_EarlyDomains.first3 (reserved : Bool) (ck : Aeneas.Std.Slice Aeneas.Std.U8) (p : AspisR1Stage2.verifier.Prepared)
+  (a : AspisR1Stage2.verifier.Accumulator)
+  (f :
+    AspisR1.OraclePortCkptAbiSourceFields.Fields (AspisR1.CheckpointBytes4Ops.ops reserved) ck
+      AspisR1Stage2.transport.Variant.S2 p a)
+  (length : (↑ck).length = 1768) :
+  ↑f.rState.at = 112 ∧
+    f.rState.bytes = ck ∧ ↑f.rRoot0.at = 144 ∧ f.rRoot0.bytes = ck ∧ ↑f.rRoot1.at = 176 ∧ f.rRoot1.bytes = ck
+'NIY_EarlyDomains.first3' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_EarlyDomains.typed (reserved : Bool) (ck : Aeneas.Std.Slice Aeneas.Std.U8) (p : AspisR1Stage2.verifier.Prepared)
+  (a : AspisR1Stage2.verifier.Accumulator)
+  (f :
+    AspisR1.OraclePortCkptAbiSourceFields.Fields (AspisR1.CheckpointBytes4Ops.ops reserved) ck
+      AspisR1Stage2.transport.Variant.S2 p a)
+  (length : (↑ck).length = 1768) :
+  ↑f.rGamma.at = 208 ∧
+    f.rGamma.bytes = ck ∧
+      ↑f.rKappa.at = 240 ∧
+        f.rKappa.bytes = ck ∧
+          ↑f.rAlpha0.at = 272 ∧
+            f.rAlpha0.bytes = ck ∧ ↑f.rAlpha1.at = 304 ∧ f.rAlpha1.bytes = ck ∧ ↑f.rRho.at = 320 ∧ f.rRho.bytes = ck
+'NIY_EarlyDomains.typed' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_NativeCuts.firstByte (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (offset : ℕ) (j : Fin 32) (observed : Aeneas.Std.U8) :
+  Prop
+'NIY_NativeCuts.firstByte' depends on axioms: [propext]
+NIY_NativeCuts.firstCursor (cursor : Aeneas.Std.Usize) : Prop
+'NIY_NativeCuts.firstCursor' does not depend on any axioms
+NIY_NativeCuts.eReply (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (offset : ℕ)
+  (reply : Aeneas.Std.core.result.Result NIL_Carriers.Fresh.E NIL_Carriers.Fresh.Err) : Prop
+'NIY_NativeCuts.eReply' depends on axioms: [propext]
+NIY_NativeCuts.kReply (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (offset : ℕ)
+  (reply : Aeneas.Std.core.result.Result NIL_Carriers.Fresh.K NIL_Carriers.Fresh.Err) : Prop
+'NIY_NativeCuts.kReply' depends on axioms: [propext]
+NIY_NativeCuts.eValue (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (offset : ℕ) (j : Fin 8)
+  (reply : Aeneas.Std.core.result.Result NIL_Carriers.Fresh.E NIL_Carriers.Fresh.Err) : Prop
+'NIY_NativeCuts.eValue' depends on axioms: [propext]
+NIY_NativeCuts.kValue (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (offset : ℕ) (j : Fin 4)
+  (reply : Aeneas.Std.core.result.Result NIL_Carriers.Fresh.K NIL_Carriers.Fresh.Err) : Prop
+'NIY_NativeCuts.kValue' depends on axioms: [propext]
+NIY_NativeCuts.descriptor (beforeAddress afterAddress length : ℕ) : Prop
+'NIY_NativeCuts.descriptor' does not depend on any axioms
+NIY_NativeCuts.eCursor (offset : ℕ) (cursor : Aeneas.Std.Usize) : Prop
+'NIY_NativeCuts.eCursor' does not depend on any axioms
+NIY_NativeCuts.kCursor (offset : ℕ) (cursor : Aeneas.Std.Usize) : Prop
+'NIY_NativeCuts.kCursor' does not depend on any axioms
+NIY_NativeFinalCuts.windowPre (p : NIL_StatePort.F.P) (a : NIL_StatePort.F.A) (d : NIY_NativeFinalCuts.Descriptor) :
+  Prop
+'NIY_NativeFinalCuts.windowPre' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_NativeFinalCuts.windowCut (before : NIL_StatePort.F.A) (d : NIY_NativeFinalCuts.Descriptor)
+  (end1 at2 : Aeneas.Std.Usize) (next : Aeneas.Std.U8) (allocated : ℕ) (i : Fin 64) (j : Fin 4)
+  (result : Aeneas.Std.core.result.Result NIY_NativeFinalCuts.Returned NIL_Carriers.Fresh.Err) : Prop
+'NIY_NativeFinalCuts.windowCut' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIY_NativeFinalCuts.reserveCut (success : Bool) (length capacity : ℕ) : Prop
+'NIY_NativeFinalCuts.reserveCut' does not depend on any axioms
+NIY_NativeFinalCuts.weightPre (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : Aeneas.Std.alloc.vec.Vec NIL_Carriers.Fresh.K) (d : NIY_NativeFinalCuts.Descriptor) (i : Fin 64)
+  (cursor : Aeneas.Std.Usize) : Prop
+'NIY_NativeFinalCuts.weightPre' depends on axioms: [propext]
+NIY_NativeFinalCuts.weightCut (before after : Aeneas.Std.alloc.vec.Vec NIL_Carriers.Fresh.K)
+  (d out : NIY_NativeFinalCuts.Descriptor) (i : Fin 64) (remaining : ℕ) (cursor : Aeneas.Std.Usize)
+  (reply : Aeneas.Std.core.result.Result NIL_Carriers.Fresh.K NIL_Carriers.Fresh.Err) : Prop
+'NIY_NativeFinalCuts.weightCut' depends on axioms: [propext]
+NIY_ScanCuts.prefixCut (expected : Fin 4 → ℕ) (received : Fin 4 → NIY_NativeFinalCuts.Descriptor)
+  (mode : Fin 4 → Option Bool) (reply : Fin 4 → NIY_ScanCuts.Reply) (tail returned : NIY_ScanCuts.Reply) (count : ℕ) :
+  Prop
+'NIY_ScanCuts.prefixCut' does not depend on any axioms
+NIY_ScanCuts.m31Cut (q : Aeneas.Std.Slice Aeneas.Std.U8) (s : Fin 4) (l : Fin 27) (current remaining : ℕ)
+  (returned : Option NIY_ScanCuts.Reply) : Prop
+'NIY_ScanCuts.m31Cut' depends on axioms: [propext]
+NIY_ScanCuts.openingCut (offset length expectedAddress returnedAddress : ℕ) : Prop
+'NIY_ScanCuts.openingCut' does not depend on any axioms
+AspisR1.RPx_Deployed.deployed {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)) (sdk : AspisR1.S2Trust.S2TrustedSdkBorrow L)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (std : AspisR1.S2W_TrustedStd.TrustedStd copy) (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W)
+  (admission1 : AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3)
+  (admission2 : AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7)
+  (missing : AspisR1.IDa_Deployed.Uninstalled CoreError) (indexError : CoreError)
+  (reservation : AspisR1.NP6_StdModel.Reservation) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+  (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest)
+  (extraction :
+    AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.DrvC_Installation.sdk
+        (AspisR1.FIp_Install.configuration indexError
+          (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation))
+      native1 native2 hashv)
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (p1 : AspisR1.S2W_ExtractionBoundary.P1 sha256 H)
+  (syscall : AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256) (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8)
+  (slot : AspisR1.S2W_ExtractionBoundary.Slot) (state1 state2 final1 final2 : A)
+  (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record))
+  (accepted1 :
+    AspisR1.S2W_D189Wrappers.first native1 copy allocator e1 AspisR1.CPH_Program.verifier data1 state1 =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)))
+  (accepted2 :
+    AspisR1.S2W_D189Wrappers.second native2 allocator e2 AspisR1.CPH_Program.verifier data2 slot state2 =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2)))
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (length : Aeneas.Std.U32)
+  (prior : AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Unit)
+  (words : AspisR1.CanonicalCutEnrichedTranscript.Words) (p : AspisR1.CPG_Projection.Observations Tx A) (t u : Tx)
+  (actions : List (AspisR1.CPP_BankState.Action A))
+  (game :
+    AspisR1.CPH_Game.DeployedPairExecution p t u e1 e2 saved actions native1 native2 copy allocator
+      AspisR1.CPH_Program.verifier)
+  (RuntimePersistence :
+    AspisR1.CPR_DataPersistence.TwoTransactionLaw (AspisR1.CPG_Projection.adjacent p)
+      (AspisR1.CPG_Projection.ordinary p (AspisR1.Hist_Nonvacuity.key 0#u8)) (AspisR1.CPG_Projection.before p)
+      (AspisR1.CPG_Projection.tentative p) (AspisR1.CPG_Projection.success p) (AspisR1.CPG_Projection.loaded p))
+  (D : AspisR1.LiteralByteProtocol.Decoder) (a : AspisR1.SCE_Experiment.Adversary A) (Q0 Q1 : ℕ)
+  (queries :
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisR1.ARW_Induced.issued native1 copy allocator AspisR1.CPH_Program.verifier a H).length ≤ Q0 + Q1) :
+  have P := AspisR1.ARW_Induced.program native1 copy allocator AspisR1.CPH_Program.verifier a;
+  have runtime :=
+    AspisR1.ARX_AdmittedRuntime.runtime L copy allocator
+      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) indexError reservation native1 native2
+      hashv a;
+  have select := fun x =>
+    AspisR1.P2P_NativeSelection.pair
+      (AspisR1.DrvC_Installation.sdk
+        (AspisR1.FIp_Install.configuration indexError
+          (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation))
+      AspisR1.CPH_Program.verifier e1 e2 data2 slot;
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary (AspisR1.P6C_Extension.dictionary hashv H) () H AspisR1.Op5T_P6.parent
+      AspisR1.Op5T_P6.parent AspisR1.Op5T_P6.parent AspisR1.MultiproofConeP6Batch.referenceLeaf ∧
+    AspisR1.DrvC_Implementation.driver
+          (AspisR1.FIp_Install.configuration indexError
+            (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation) =
+        AspisR1.DrvC_SourceEntry.source
+          (AspisR1.FIp_Install.configuration indexError
+            (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation)
+          hashv ∧
+      AspisR1.DrvC_Installation.sdk
+            (AspisR1.FIp_Install.configuration indexError
+              (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation) =
+          AspisR1.SdkD_PairBatches.dictionary
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).adapter
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).currentBase
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).stageBase
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).finish
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).reserved
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).query
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).geometry
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).boundaries
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).std ∧
+        AspisR1.FJv_DResult.Outcome L e1 e2 w1 w2
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).adapter
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).currentBase
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).reserved
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).query
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).geometry
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).stageBase
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).finish
+            (AspisR1.FIp_Install.boundaries
+              (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation).boundaries)
+            reservation AspisR1.CPH_Program.verifier data1 data2 slot saved post1 post2 H
+            (AspisR1.DrvC_Implementation.driver
+              (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation))
+            prior (p.physicalEvents t) hashv
+            (AspisR1.BinRawByteCollisionTargets.event AspisR1.SelectedTranscriptParams.params.iv (Q0 + Q1 + 2965)
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.Hiq_RecordedJoint.program
+                  (AspisR1.F3X_Account.program
+                    (AspisR1.FIp_Install.configuration indexError
+                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation)
+                    hashv P)
+                  AspisR1.F3X_Projection.project select))) ∧
+          (AspisR1.F3X_ModelClaims.Claims
+                (AspisR1.FIp_Install.configuration indexError
+                  (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation)
+                D P (Q0 + Q1) ∧
+              AspisR1.F3Y_SourceClaims.Claims
+                  (AspisR1.FIp_Install.configuration indexError
+                    (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation)
+                  D hashv P (Q0 + Q1) select ∧
+                AspisR1.F3Y_AccountMass.Claims
+                    (AspisR1.FIp_Install.configuration indexError
+                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation)
+                    hashv P (Q0 + Q1) select ∧
+                  AspisR1.F3T_RuntimeBound.failureModel runtime ≤ AspisR1.F3T_Numeric.total (Q0 + Q1) ∧
+                    (Q0 + Q1 ≤ AspisR1.F3U_RangeEdges.maxQueries →
+                        AspisR1.F3T_RuntimeBound.failureModel runtime ≤ (↑Q0 + ↑Q1 + 1) * (1 / 2 ^ 100)) ∧
+                      (Q0 + Q1 = 0 →
+                        AspisR1.F3U_Numeric.margin ≤ 1 / 2 ^ 100 - AspisR1.F3T_RuntimeBound.failureModel runtime ∧
+                          AspisR1.F3T_RuntimeBound.failureModel runtime < 1 / 2 ^ 100)) ∧
+            (native1 AspisR1.CPH_Program.verifier e1.first data1 =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) ∧
+                (↑saved).length = 1768 ∧
+                  AspisR1.S2W_EntryWriteHistory.payloadBytes AspisR1.S2W_ReturnedCheckpoint.encode
+                        (post1.payload (e1.heap.accounts 2).1) 1768 =
+                      AspisR1.MultiproofConeCanonical.bytesOf ↑saved ∧
+                    post1.ambient = e1.heap.ambient ∧
+                      post1.accounts = e1.heap.accounts ∧
+                        post1.counter = e1.heap.counter ∧
+                          ∀ (cell : ℕ), cell ≠ (e1.heap.accounts 2).1 → post1.payload cell = e1.heap.payload cell) ∧
+              AspisR1.Rc2_Events.Facts
+                  (AspisR1.FIp_Install.configuration indexError
+                    (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation)
+                  hashv native1 native2 copy allocator AspisR1.CPH_Program.verifier H saved ∧
+                AspisR1.CPH_Protection.Facts p t saved AspisR1.CPH_Program.verifier ∧
+                  AspisR1.CPH_Trace.Facts p t u saved native1 native2 copy allocator AspisR1.CPH_Program.verifier ∧
+                    AspisR1.CPH_Recorder.Facts
+                        (AspisR1.FIp_Install.configuration indexError
+                          (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation)
+                        hashv native1 native2 copy allocator AspisR1.CPH_Program.verifier H p t u saved ∧
+                      AspisR1.S6N_Installation.Facts
+                        (AspisR1.DrvC_Installation.sdk
+                          (AspisR1.FIp_Install.configuration indexError
+                            (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation))
+'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]

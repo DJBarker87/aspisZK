@@ -9,3 +9,5 @@ Native families and individual positive/corruption/rename receipts are in NIY_NA
 Every cut association in NIY_NativeCuts, NIY_NativeFinalCuts and NIY_ScanCuts is a reviewed native-record-to-model transcription under the existing P6/D188 optionA tool trust. Capacity64 and actual source occurrences must still be established at every caller. No function contracts/stub_verified, multiplication/SHA unwind, writable statics or Option<fn> credit are used.
 
 Final native budget: 100/100 attempts; 32 qualified new local families plus the retained header family qualified by NIY_K001. Matrix families without a full positive/control/rename triple: k616_0, k616_1, k696_0, k696_1. K100 alone is a positive and supplies no qualified-family credit. All graph/lock/feature/copy-patch/source checks are retained for every run; no composed NDT row is promoted.
+
+Final gate status: NIY_L091–L099 and NIY_VALIDATION.json PASS; 97 raw-audited roots, eight fixtures, 13,752-module zero-defect scan. Historical “pending/submitted” statements above are superseded by these receipts. TX2:065 remains OPEN, zero row/edge promotion.
