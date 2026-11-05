@@ -1,0 +1,5 @@
+# Extraction input failures
+
+E001: Charon cargo exits101 before translation: missing frozen docs/research/v8-r0-zk-20261009/refine/blockwriters/Cargo.toml. E002 after adding four frozen path-dependency directories: exits101 before translation: missing audit/poseidon-pair-probe/program/Cargo.toml, a frozen root-workspace member. Both are OWN INPUT failures, not Aeneas failures or proof counterexamples. Neither reaches Aeneas. Two extraction invocations consumed conservatively; no third launch. Exact commands, hashes, errors and resource receipts are NHQ_E001/ and NHQ_E002/. No LLBC or fresh emitted body exists. The opacity list is intended, NOT validated against an LLBC declaration inventory.
+
+Replacement: independent stage/model proofs over retained VTop_Model and NGM_FinishControl, labelled inherited model source rather than fresh frozen emission. Fresh emission-to-cohort association remains OPEN. Future extraction must assemble ALL root workspace members and path dependencies before launching Charon; do not repeat the incomplete archive.
