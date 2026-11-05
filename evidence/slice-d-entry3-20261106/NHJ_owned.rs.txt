@@ -116,3 +116,24 @@ fn checkpoint_corrupt_packet(a:&OwnedAccount,p:&Pubkey,w:bool,l:&mut LengthLog)-
 #[kani::proof_for_contract(checkpoint_corrupt_packet)] #[kani::unwind(35)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn checkpoint_logging_corrupt(){let mut a=account();a.is_signer=false;a.executable=false;let w=a.is_writable;let mut l=length_empty();let _=checkpoint_corrupt_packet(&a,&a.owner,w,&mut l);}
+
+#[kani::requires(previous<index && index<3)]
+#[kani::ensures(|r| *r)] #[kani::modifies()]
+fn prefix_embedding_packet(a:&[OwnedAccount;3],index:usize,previous:usize)->bool{
+ let original=[&a[0],&a[1],&a[2]];
+ let extended=[&a[0],&a[1],&a[2],&a[0],&a[0],&a[0],&a[0]];
+ core::ptr::eq(original[previous],extended[previous])&&core::ptr::eq(original[index],extended[index])
+}
+#[kani::proof_for_contract(prefix_embedding_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn distinct_prefix_embedding(){let a=core::mem::ManuallyDrop::new(core::array::from_fn::<_,3,_>(|_|{let b=account();core::mem::ManuallyDrop::into_inner(b)}));let i:usize=kani::any();let p:usize=kani::any();kani::assume(p<i&&i<3);let _=prefix_embedding_packet(&a,i,p);}
+#[kani::requires(previous<index && index<3)]
+#[kani::ensures(|r| *r)] #[kani::modifies()]
+fn prefix_embedding_corrupt_packet(a:&[OwnedAccount;3],index:usize,previous:usize)->bool{
+ let original=[&a[0],&a[1],&a[2]];
+ let extended=[&a[1],&a[1],&a[2],&a[0],&a[0],&a[0],&a[0]];
+ core::ptr::eq(original[previous],extended[previous])&&core::ptr::eq(original[index],extended[index])
+}
+#[kani::proof_for_contract(prefix_embedding_corrupt_packet)] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn distinct_prefix_embedding_corrupt(){let a=core::mem::ManuallyDrop::new(core::array::from_fn::<_,3,_>(|_|{let b=account();core::mem::ManuallyDrop::into_inner(b)}));let i:usize=kani::any();let p:usize=kani::any();kani::assume(p<i&&i<3);let _=prefix_embedding_corrupt_packet(&a,i,p);}
