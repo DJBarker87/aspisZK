@@ -1,0 +1,3 @@
+# Same-invocation trace and export stage
+
+L016 constructs NGQ_Cuts.Trace from the SAME local absorb/eight-pair/native-word/block/tail observations, including failed/diverging calls and sampler rejection. L018 exports AspisR1.NGP_TRANSCRIPT.actual_queries, cohort, prefix_transport and exact on the explicit packet domain. K034/035 provides the additional explicit native one-word G contract, exact modifies and matched failing control; L021 pairs its safe reference with G. L022 loads RPx and all41 new roots with standard printed axioms. Raw audit/fixtures/scan and final closure reports are recorded in the following audit stage. No security target, parent closure, new trust or shipped-source change is claimed by this source-stage commit.

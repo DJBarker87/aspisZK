@@ -1,0 +1,126 @@
+{
+  "root": "TX1:168",
+  "route": "ah",
+  "internal_edges": [
+    {
+      "edge": "queries -> initial arrays / QueryScan default",
+      "status": "CLOSED",
+      "native": [
+        "NGQ_K048/049",
+        "NGQ_K054/055"
+      ],
+      "model": [
+        "NGQ_SamplerPacket.initial_valid",
+        "NHB_Canonical.initial",
+        "NHB_Inactive.initial"
+      ],
+      "domain": "fresh local arrays/scan; arbitrary observation window covers zero array/counters"
+    },
+    {
+      "edge": "queries -> absorb",
+      "status": "CLOSED",
+      "native": [
+        "NGQ_K052",
+        "NGQ_K053"
+      ],
+      "model": [
+        "NHK_Absorb.normalized",
+        "NHK_Absorb.producer"
+      ],
+      "domain": "row<=95,payload<=8192,same input state/payload; exact4 descriptors"
+    },
+    {
+      "edge": "queries ->8 eager pairs",
+      "status": "CLOSED",
+      "native": [
+        "NGQ_K024/NGQ_K026",
+        "NGQ_K027/NGQ_K028",
+        "NGQ_K029/NGQ_K030",
+        "NGQ_K031/NGQ_K032",
+        "NGQ_K033/NGQ_K034",
+        "NGQ_K036/NGQ_K037",
+        "NGQ_K038/NGQ_K039",
+        "NGQ_K040/NGQ_K041"
+      ],
+      "model": [
+        "NHK_EventChain.eight_producer",
+        "NHK_EventChain.eight_partial"
+      ],
+      "domain": "same32-byte state, arbitrary32-byte replies, exact2 descriptors; source slots0..7"
+    },
+    {
+      "edge": "sampler -> membership",
+      "status": "CLOSED",
+      "certificate": "NHK_MEMBERSHIP_CALLEES.json",
+      "model": [
+        "NHK_ReferenceFold.split_windows",
+        "NHB_Membership.prefix_membership"
+      ],
+      "domain": "all continuing lengths0..21; canonical/inactive invariants for inherited16/18/19"
+    },
+    {
+      "edge": "sampler -> native word step",
+      "status": "CLOSED",
+      "native": [
+        "NHB_K030/031",
+        "NHB_K053/054",
+        "NHK_K034/035"
+      ],
+      "model": [
+        "NHK_WordReference.correspondence",
+        "NHK_WordAssociation.logged_post",
+        "NHK_NativeWords.association",
+        "NHK_NativeWords.domain_preserved"
+      ],
+      "domain": "arbitrary bounded prestate; same cursor/decoded candidate/survivor array/draw count; explicit modifies"
+    },
+    {
+      "edge": "sampler -> block step / finish",
+      "status": "CLOSED",
+      "native": [
+        "NGQ_K046/047",
+        "NGQ_K058/059",
+        "NGQ_K004/005",
+        "NHB_K050/051"
+      ],
+      "model": [
+        "NHK_NativeBlocks.association",
+        "NHK_NativeBlocks.sampler",
+        "NHB_OuterState.association"
+      ],
+      "domain": "same8 blocks/advances; full Result; no post-last-word stop; next advance selected"
+    },
+    {
+      "edge": "queries -> tail/trace arguments",
+      "status": "CLOSED",
+      "native": [
+        "NGQ_K050/051",
+        "NGQ_K056/057"
+      ],
+      "model": [
+        "NGQ_Embed.finish",
+        "NGQ_TraceErase.finish_rejected",
+        "NHK_Invocation.tail_source"
+      ],
+      "domain": "same sampler Result,22 evaluated total constructor arguments in position order; release trace unit"
+    },
+    {
+      "edge": "queries -> actual_queries / L181",
+      "status": "CLOSED",
+      "model": [
+        "NHK_Invocation.producer",
+        "NGP_TRANSCRIPT.actual_queries",
+        "NGP_TRANSCRIPT.prefix_transport",
+        "NGP_TRANSCRIPT.exact"
+      ],
+      "domain": "same invocation local cuts; partial attempts retained, exact only with ReturnsOnly/Agrees"
+    }
+  ],
+  "boundary_edges": [
+    {
+      "edge": "Prepared::new / caller -> queries",
+      "status": "CALLER PRODUCER",
+      "obligation": "derive same self/row/payload and Domain from caller; consume this packet on that invocation; no caller row closed here"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+NHK_generated/NHK_EffectJoin.lean:87:44: error: Application type mismatch: The argument
+  pure_trace hashv ?m.147
+has type
+  Trace hashv (NGQ_Normalize.normalize (liftResult ?m.147)) ?m.147 []
+but is expected to have type
+  NHK_TraceBind.Continuation hashv (ok (blocks, advances)) (fun a => NGQ_Normalize.normalize (?m.143 a)) ?m.144 []
+in the application
+  normalized_append materializer ?m.143 ?m.144 [] (pure_trace hashv ?m.147)
+NHK_generated/NHK_EffectJoin.lean:91:14: error: Type mismatch: After simplification, term
+  normalized_append materializer
+    (fun __x => liftResult (NGQ_QueryFactor.finishQuery B NGQ_Effects.dummy absorbed __x.1 __x.2)) (fail error) []
+    ⟨rfl, rfl⟩
+ has type
+  @Trace hashv NGQ_Effects.Reply
+    (NGQ_Normalize.normalize
+      (CheckpointBytes5Effect.bind (NGQ_Effects.materializeCode absorbed.state) fun __x =>
+        liftResult (NGQ_QueryFactor.finishQuery B NGQ_Effects.dummy absorbed __x.1 __x.2)))
+    (fail error) pairEvents
+but is expected to have type
+  @Trace hashv NGQ_Effects.Reply
+    (NGQ_Normalize.normalize do
+      let __x ← NGQ_Effects.materializeCode absorbed.state
+      liftResult (NGQ_QueryFactor.finishQuery B NGQ_Effects.dummy absorbed __x.1 __x.2))
+    (fail error) pairEvents
+NHK_generated/NHK_EffectJoin.lean:96:14: error: Type mismatch: After simplification, term
+  normalized_append materializer
+    (fun __x => liftResult (NGQ_QueryFactor.finishQuery B NGQ_Effects.dummy absorbed __x.1 __x.2)) div [] ⟨rfl, rfl⟩
+ has type
+  @Trace hashv NGQ_Effects.Reply
+    (NGQ_Normalize.normalize
+      (CheckpointBytes5Effect.bind (NGQ_Effects.materializeCode absorbed.state) fun __x =>
+        liftResult (NGQ_QueryFactor.finishQuery B NGQ_Effects.dummy absorbed __x.1 __x.2)))
+    div pairEvents
+but is expected to have type
+  @Trace hashv NGQ_Effects.Reply
+    (NGQ_Normalize.normalize do
+      let __x ← NGQ_Effects.materializeCode absorbed.state
+      liftResult (NGQ_QueryFactor.finishQuery B NGQ_Effects.dummy absorbed __x.1 __x.2))
+    div pairEvents
+'AspisR1.NHK_EffectJoin.code_shape' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NHK_EffectJoin.normalize_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NHK_EffectJoin.normalized_append' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NHK_EffectJoin.pure_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NHK_EffectJoin.returning_absorb' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NHK_EffectJoin.absorb_fail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NHK_EffectJoin.absorb_div' depends on axioms: [propext, Classical.choice, Quot.sound]
