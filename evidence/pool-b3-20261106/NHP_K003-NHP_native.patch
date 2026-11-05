@@ -1,0 +1,33 @@
+--- a/programs/aspis-pool/src/pair_forest.rs
++++ b/programs/aspis-pool/src/pair_forest.rs
+@@ -5792,3 +5792,30 @@
+         assert!(accounts[4].data.iter().any(|byte| *byte != 0));
+     }
+ }
++
++#[cfg(kani)]
++mod NHP_dispatch {
++use super::*;
++#[kani::proof]
++#[kani::unwind(8)]
++fn association() {
++ let n:usize=kani::any();kani::assume(n>=4&&n<=isize::MAX as usize);
++ let layout=core::alloc::Layout::from_size_align(n,1).unwrap();
++ let pointer=unsafe { alloc::alloc::alloc_zeroed(layout) };kani::assume(!pointer.is_null());
++ let bytes:[u8;4]=kani::any();let split=n-4;
++ let i:usize=kani::any();kani::assume(i<=split);
++ let byte:u8=kani::any();if i<split {unsafe {pointer.add(i).write(byte);}}
++ unsafe {pointer.add(split).write(bytes[0]);pointer.add(split+1).write(bytes[1]);pointer.add(split+2).write(bytes[2]);pointer.add(split+3).write(bytes[3]);}
++ {
++ let input=unsafe {core::slice::from_raw_parts(pointer,n)};
++ let (body,hints)=split_pair_forest_terminal_bump_hints_v1(input).unwrap();
++ assert!(body.len()==split);assert!(body.as_ptr()==input.as_ptr());
++ assert!(hints.current_page==bytes[0]);assert!(hints.next_page==bytes[1]);
++ assert!(hints.vault_authority==bytes[2]);assert!(hints.vault_token_account==bytes[3]);
++ if i<split {assert!(body[i]==byte);assert!(input[i]==byte);}
++ assert!(input[split]==bytes[0]);assert!(input[split+1]==bytes[1]);assert!(input[split+2]==bytes[2]);assert!(input[split+3]==bytes[3]);
++ 
++ }
++ unsafe {alloc::alloc::dealloc(pointer,layout);}
++}
++}
