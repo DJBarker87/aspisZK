@@ -1,0 +1,5 @@
+# NIG callee and arithmetic associations
+
+No arithmetic stub or contract credit yet. Retain NHX_LPh_STUBS.md, NHM_LPh_STUBS.md and NHI/NHE certificate domains; corresponding source hashes are NIG_REUSE_PINS.json. Every future native log must bind the SAME operands/replies to those laws. Multiplication is never executed in Kani. NIG_CommonLoop.common_source and NIG_LowLoop.low_source prove full emitted finite-loop identity; NHX_CommonDomain and NHX_LowDomain establish every reached multiplication/scale domain. These are model support, with native producer association still OPEN.
+
+Filled native windows have no field arithmetic. KMX_copy_nonoverlapping and KMX_copy_from_slice are the byte-identical exact patch replacements, sha256 bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67; model KMX_CopyMeaning and NHI/NHM/NHX initialized-prefix/frame laws retained. A new native copy-dependent claim needs its matched negative control in this configuration; no current positive native claim qualifies.
