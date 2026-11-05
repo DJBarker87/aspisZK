@@ -104,7 +104,7 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
-if {kind!r}=='export': names += ['NHL_EXPORT.json','NHL_CLOSURE_PINS.json.sha256']
+if {kind!r}=='export': names += ['NHL_EXPORT.json','NHL_CLOSURE_PINS.json.sha256','NHL_RESTORE_PATHS.json','NHL_TOOLS.json']
 if {kind!r}=='metadata': names += ['NHL_FULL_GRAPH.json.sha256','NHL_ALL_CRATE_FEATURES.json']
 if {kind!r}=='extract': names += ['NHL_EXTRACTION_PINS.json']+([str(p.relative_to(b)) for p in (b/'NHL_extracted').rglob('*') if p.is_file()])+(['NHL_actual.llbc'] if (b/'NHL_actual.llbc').exists() else [])
 if {kind!r}=='kani': names += [str(p.relative_to(b)) for p in b.glob(a+'-graph*')]+[str(p.relative_to(b)) for p in b.glob(a+'-source*')]+[str(p.relative_to(b)) for p in b.glob(a+'-lock*')]
@@ -120,6 +120,11 @@ for n,t in json.loads(r.stdout).items():
  if n.startswith('NEP_') and n.endswith('_REACHABLE.txt'):
   raw=t.encode();(E/('NHL_'+n+'.sha256')).write_text(hashlib.sha256(raw).hexdigest()+'\n');(E/('NHL_'+n+'.xz')).write_bytes(lzma.compress(raw,preset=6))
  else:p.write_text(t)
+if kind=='export':
+ r=ssh('python3',"from pathlib import Path\nimport base64\nprint(base64.b64encode(Path("+repr(B+'/NHL_CLOSURE_PINS.json.xz')+").read_bytes()).decode())\n")
+ assert r.returncode==0,r.stderr
+ import base64
+ (E/'NHL_CLOSURE_PINS.json.xz').write_bytes(base64.b64decode(r.stdout))
 assert (E/a/'receipt.json').exists(),'Missing receipt; never resubmit'
 rc=json.loads((E/a/'receipt.json').read_text());entry={k:v for k,v in rc.items() if k!='deps_fingerprint'};entry['full_receipt']=a+'/receipt.json'
 with (E/'NHL_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(entry)+'\n')

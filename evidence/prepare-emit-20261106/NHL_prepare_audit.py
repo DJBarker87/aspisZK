@@ -3,9 +3,22 @@ from pathlib import Path
 import json,hashlib,subprocess,difflib,re
 E=Path(__file__).resolve().parent;R=E.parent.parent
 P=R/'evidence/candidate-prepare-20261106'
-for n in ['Driver','ProofDriver']:
- s=(P/f'NHF_{n}.lean').read_text().replace('NHF_','NHL_')
- (E/f'NHL_{n}.lean').write_text(s)
+(E/'NHL_Driver.lean').write_text((P/'NHF_Driver.lean').read_text().replace('NHF_','NHL_'))
+# Strict ax2: start directly from NEP; change ONLY module/root lists and runtime setup.
+proof=(R/'evidence/axaudit2-20261102/NEP_Driver.lean').read_text()
+proof=proof.replace('import NEP_WALKER','import NFA_WALKER\nimport NFA_MemoryLimit')
+proof=proof.replace('  enableInitializersExecution','  NFA_MemoryLimit.set\n  initSearchPath (← findSysroot)\n  enableInitializersExecution')
+a=proof.index('  let (modules, roots) :=');b=proof.index('  let env ←',a)
+roots=json.loads((E/'NHL_AUDIT_ROOTS.json').read_text())['groups'][0]
+selector="""  let (modules, roots) := if mode == \"fixtures\" then
+    (#[`NEP_Planted, `NEP_Mutations],
+     #[`NEP_Planted.matcher, `NEP_Planted.viaPrivate, `NEP_Planted.proof,
+       `NEP_Planted.viaAux, `NEP_MutateMatch.matcher, `NEP_MutatePrivate.viaPrivate,
+       `NEP_MutateProof.proof, `NEP_MutateAux.viaAux])
+    else (#[`NHL_COMBINED_IMPORT], #["""+',\n      '.join('`'+n for n in roots)+'])\n'
+proof=proof[:a]+selector+proof[b:]
+(E/'NHL_ProofDriver.lean').write_text(proof)
+(E/'NHL_DRIVER_VS_NEP.diff').write_text(''.join(difflib.unified_diff((R/'evidence/axaudit2-20261102/NEP_Driver.lean').read_text().splitlines(True),proof.splitlines(True),fromfile='NEP_Driver.lean',tofile='NHL_ProofDriver.lean')))
 (E/'NHL_batch.py').write_text((P/'NHF_batch.py').read_text().replace('NHF_','NHL_'))
 (E/'NHL_native').mkdir(exist_ok=True)
 for n in ['NFA_WALKER.c','NFA_MemoryLimit.c']:

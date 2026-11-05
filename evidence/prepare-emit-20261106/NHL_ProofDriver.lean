@@ -2,89 +2,81 @@ import Lean
 import NFA_WALKER
 import NFA_MemoryLimit
 open Lean Elab Command
-namespace NER
-/-- Include recursor reduction rules and constant-name metadata, not only values. -/
-def referenceNames (c : ConstantInfo) : Array Name := Id.run do
- let mut refs := c.type.getUsedConstants ++ ((c.value? true).map Expr.getUsedConstants).getD #[]
- match c with
- | .defnInfo v => refs := refs ++ v.all.toArray
- | .thmInfo v => refs := refs ++ v.all.toArray
- | .opaqueInfo v => refs := refs ++ v.all.toArray
- | .inductInfo v => refs := refs ++ v.ctors.toArray ++ v.all.toArray
- | .ctorInfo v => refs := refs.push v.induct
- | .recInfo v =>
-  refs := refs ++ v.all.toArray
-  for rule in v.rules do refs := refs.push rule.ctor ++ rule.rhs.getUsedConstants
- | _ => pure ()
- return refs
-/-- Same stable first-occurrence projection as NER_ModuleTables.inspect. -/
-def canonicalImports (xs : Array String) : Array String := Id.run do
- let mut result := #[]
- for x in xs do
-  if !result.contains x then result := result.push x
- return result
-def importsMatch (actual expected : Array String) : Bool := canonicalImports actual == expected
-/-- Inspect each module's own declarations against the checked private environment. -/
-def loadedScan (env : Environment) (output : System.FilePath)
-    (expected : Std.HashMap String (Array String)) : IO Bool := do
- let env := env.setExporting false
- let out ← IO.FS.Handle.mk output .write
- let mut failed := false
- for h : idx in [0:env.header.moduleNames.size] do
-  let n := env.header.moduleNames[idx]
-  let data := env.header.moduleData[idx]!
-  let mut dangling : Array Json := #[]
-  let mut edges := 0
-  for declared in data.constants do
-   let some c := env.checked.get.find? declared.name | do
-    dangling := dangling.push (Json.mkObj [("parent",toJson declared.name.toString),("missing",toJson declared.name.toString),("phase",toJson "own_declaration")])
-    continue
-   let refs := referenceNames c
-   for dep in refs do
-    edges := edges + 1
-    if (env.checked.get.find? dep).isNone then
-     dangling := dangling.push (Json.mkObj [("parent",toJson c.name.toString),("missing",toJson dep.toString)])
-  let loaderImports := data.imports.map (fun i => i.module.toString)
-  let imports := canonicalImports loaderImports
-  let importMatch := match expected[n.toString]? with
-   | some baseline => imports == baseline
-   | none => false
-  if !dangling.isEmpty || !importMatch then failed := true
-  out.putStrLn (Json.mkObj [("module",toJson n.toString), ("imports",toJson imports),
-   ("loader_imports",toJson loaderImports), ("imports_match",toJson importMatch), ("dangling",toJson dangling),
-   ("declarations",toJson data.constants.size), ("edges",toJson edges)]).compress
- return failed
-end NER
-
 /-- Standalone runtime avoids restoring a pre-initialization command environment. -/
 unsafe def main (args : List String) : IO UInt32 := do
   NFA_MemoryLimit.set
   initSearchPath (← findSysroot)
   enableInitializersExecution
   let mode := args.headD "small"
-  let (modules, roots) ←
-    if mode == "fixtures" then
-      pure (#[`NEP_Planted, `NEP_Mutations],
-       #[`NEP_Planted.matcher, `NEP_Planted.viaPrivate, `NEP_Planted.proof,
-         `NEP_Planted.viaAux, `NEP_MutateMatch.matcher, `NEP_MutatePrivate.viaPrivate,
-         `NEP_MutateProof.proof, `NEP_MutateAux.viaAux])
-    else do
-      let manifest ← IO.ofExcept (Json.parse (← IO.FS.readFile "NHL_AUDIT_ROOTS.json"))
-      let groups ← IO.ofExcept (manifest.getObjValAs? (Array (Array String)) "groups")
-      let some idx := (mode.drop 5).toString.toNat? | throw (IO.userError "invalid proof mode")
-      let some names := groups[idx]? | throw (IO.userError "proof group out of range")
-      pure (#[`NHL_COMBINED_IMPORT], names.map String.toName)
+  let (modules, roots) := if mode == "fixtures" then
+    (#[`NEP_Planted, `NEP_Mutations],
+     #[`NEP_Planted.matcher, `NEP_Planted.viaPrivate, `NEP_Planted.proof,
+       `NEP_Planted.viaAux, `NEP_MutateMatch.matcher, `NEP_MutatePrivate.viaPrivate,
+       `NEP_MutateProof.proof, `NEP_MutateAux.viaAux])
+    else (#[`NHL_COMBINED_IMPORT], #[`AspisR1.NHL_BindOn.reached,
+      `AspisR1.NHL_BorrowWindows.left,
+      `AspisR1.NHL_BorrowWindows.right,
+      `AspisR1.NHL_DriverModel.source,
+      `AspisR1.NHL_DriverSlots.prepare,
+      `AspisR1.NHL_DriverSlots.tx1,
+      `AspisR1.NHL_EmittedPrepare.prepare,
+      `AspisR1.NHL_EmittedTx1.tx1,
+      `AspisR1.NHL_HeapPacket.accepted,
+      `AspisR1.NHL_HeapPacket.rejected,
+      `AspisR1.NHL_OpeningPacket.Fold,
+      `AspisR1.NHL_OpeningPacket.Packet,
+      `AspisR1.NHL_OpeningPacket.fold_fields,
+      `AspisR1.NHL_OpeningPacket.fold_result,
+      `AspisR1.NHL_OpeningPacket.gamma_canonical,
+      `AspisR1.NHL_OpeningPacket.increment,
+      `AspisR1.NHL_OpeningPacket.kappa_canonical,
+      `AspisR1.NHL_OpeningPacket.result,
+      `AspisR1.NHL_Packets.installed,
+      `AspisR1.NHL_PrefixPacket.accepted,
+      `AspisR1.NHL_PrefixPacket.rejected,
+      `AspisR1.NHL_PrepareDomain.reached,
+      `AspisR1.NHL_PrepareEq.logical_add,
+      `AspisR1.NHL_PrepareEq.source,
+      `AspisR1.NHL_PrepareModel.buffers_children,
+      `AspisR1.NHL_PrepareModel.source,
+      `AspisR1.NHL_PrepareModel.source_constants,
+      `AspisR1.NHL_PrepareModel.target_constants,
+      `AspisR1.NHL_PrepareStages.buffers,
+      `AspisR1.NHL_PrepareStages.factor,
+      `AspisR1.NHL_PrepareStages.run,
+      `AspisR1.NHL_PreparedClaim.claim,
+      `AspisR1.NHL_PreparedFailures.query_div,
+      `AspisR1.NHL_PreparedFailures.query_fail,
+      `AspisR1.NHL_PreparedOpening.double,
+      `AspisR1.NHL_PreparedOpening.double_factor,
+      `AspisR1.NHL_PreparedOpening.prefix_result,
+      `AspisR1.NHL_PreparedOpening.single,
+      `AspisR1.NHL_PreparedRecompose.query_error,
+      `AspisR1.NHL_PreparedRecompose.source,
+      `AspisR1.NHL_PreparedScalars.alpha0,
+      `AspisR1.NHL_PreparedScalars.gamma,
+      `AspisR1.NHL_PreparedScalars.kappa,
+      `AspisR1.NHL_PreparedScalars.rho,
+      `AspisR1.NHL_PreparedScalars.rho_dictionary,
+      `AspisR1.NHL_PreparedScalars.scalar_dictionary,
+      `AspisR1.NHL_QueryDomain.dictionary,
+      `AspisR1.NHL_QueryDomain.emitted,
+      `AspisR1.NHL_QueryInterface.dictionary,
+      `AspisR1.NHL_QueryInterface.result,
+      `AspisR1.NHL_SplitPacket.sizes,
+      `AspisR1.NHL_Tx1Eq.source,
+      `AspisR1.NHL_Tx1Model.before_children,
+      `AspisR1.NHL_Tx1Model.before_prepare,
+      `AspisR1.NHL_Tx1Model.source,
+      `AspisR1.NHL_Tx1Stages.Context,
+      `AspisR1.NHL_Tx1Stages.beforeQuery,
+      `AspisR1.NHL_Tx1Stages.factor,
+      `AspisR1.NHL_Tx1Stages.run,
+      `AspisR1.NHL_ValuesPacket.accepted,
+      `AspisR1.NHL_ValuesPacket.length,
+      `AspisR1.RPx_Deployed.deployed])
   let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
     {} (loadExts := true) (level := .private)
-  if mode == "scan" || mode == "queryscan" then
-    let mut expected : Std.HashMap String (Array String) := {}
-    for line in ← IO.FS.lines (if mode == "queryscan" then "NFN_QUERY_EXPECTED_IMPORTS.jsonl" else "NFN_EXPECTED_IMPORTS.jsonl") do
-      let j ← IO.ofExcept (Json.parse line)
-      expected := expected.insert (← IO.ofExcept (j.getObjValAs? String "module"))
-        (← IO.ofExcept (j.getObjValAs? (Array String) "imports"))
-    let failed ← NER.loadedScan env (if mode == "queryscan" then "NFN_QUERY_LOADED_scan.jsonl" else "NFN_LOADED_scan.jsonl") expected
-    IO.println (if failed then "NFN_SCAN_FAILED" else "NFN_SCAN_ZERO_DANGLING")
-    return if failed then 1 else 0
   let ctx : Command.Context := {
     fileName := "NEP_Driver"
     fileMap := FileMap.ofString ""
