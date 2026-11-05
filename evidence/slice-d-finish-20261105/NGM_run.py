@@ -52,7 +52,7 @@ if kind=='kani':
  if os.environ.get('NGM_INVERT'):env['RUSTFLAGS']+=' --cfg NGM_invert'
 elif kind=='extract':
  files['NGM_extract.py']=(E/'NGM_extract.py').read_text()
- files['NGM_references.rs']=(E/('NGM_double_reference.rs.txt' if target=='NGM_DoubleRef' else 'NGM_references.rs.txt')).read_text()
+ files['NGM_references.rs']=(E/('NGM_double_reference.rs.txt' if target=='NGM_DoubleRef' else 'NGM_helper_reference.rs.txt' if target=='NGM_HelperRef' else 'NGM_references.rs.txt')).read_text()
  sources=['NGM_extract.py','NGM_references.rs'];command=['python3','NGM_extract.py',a+'.json']
 elif kind=='dependency':
  assert target=='JHe_ZeroGate'

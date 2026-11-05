@@ -27,7 +27,9 @@ These are data/provenance obligations, not child-result assumptions. No allocati
 
 ## Native caller-control domain
 
-The control certificate uses the actual typed Prepared/View/Accumulator records; all three variants; arbitrary raw relevant field words, arbitrary next, 64 accumulated weights, 224-byte round windows and 2048-byte final window. Child calls return their full typed Result with arbitrary values and every eight deployed Error variants. Weights::new supplies an arbitrary full owned Weights record or any Error, without asserting success. Readonly inputs and the oracle's declared no-persistent-write frame are retained; allocator/Box physical interpretation remains P6/D188 option A. Profiling observer is the literal deployed None; no property observes/computes a function-pointer value. This native control domain is distinct from the field-callee domain above.
+The earlier K005..040 control scaffold fixed the accumulator weights at zero and used adjacent round windows; those checks are fragments, not a general caller-domain certificate. K083 replaced it with full canonical arbitrary weights and the exact S2 geometry but timed out. No native credit is assigned to K083.
+
+K084..099 isolate data-independent control from field validity: S2; all64 raw QM31 weights arbitrary; next/rhs/power/inactive and relevant Prepared fields varied; all2528 proof bytes unconstrained; round windows [0..224] and [256..480], final [480..2528]. The stronger raw message/weight domain avoids eagerly evaluating632+256 validity conditions that control does not read. Results remain pending until their individual receipts are checked. The reference replies still carry arbitrary canonical E values (E::new), every deployed Error, and the full owned Weights record. No successful child is assumed. The deployed observer is literal None. Field-callee validity and producer obligations remain separate and OPEN; a passing control fragment does not discharge them.
 
 ## Acceptance condition, without dropping errors
 
