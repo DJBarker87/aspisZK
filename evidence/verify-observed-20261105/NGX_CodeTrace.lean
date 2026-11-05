@@ -28,8 +28,6 @@ theorem digest_bind {A H : Type} (D : aspis_core.Digest32 H) (hash : H)
   | .div => ([Event.digest D hash parts .div],.div)) := by
  change run (Code.digest D hash parts next) = _
  cases h : D.digest hash parts <;> simp only [run,h]
- rename_i value
- cases run (next value) <;> rfl
 #print axioms pure_run
 #print axioms lift_run
 #print axioms lift_bind

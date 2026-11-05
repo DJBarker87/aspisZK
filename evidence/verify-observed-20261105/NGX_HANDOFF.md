@@ -36,3 +36,14 @@ Repeated2MB complete cargo metadata now lives ONCE by SHA256 in NGX_INPUTS/;
 NGX_METADATA_MANIFEST.json maps every original name to its hash-checked input.
 NGT_validate.py was re-run read-only and passes (NGX_NGT_REVALIDATION.json).
 All source files under crates/programs remain byte-identical to frozen4bb3b3f5.
+
+Stage2 ADMITTED: six rows TX1:139/143/144/146/151/152 CLOSED. L044 combined,
+L045 raw36 roots standard/equal, L046 clean13447-module scan, unchanged driver
+binary/eight fixtures, nine additional mutations rejected. Additive validator
+preserves593 other baseline rows. NGC digest external row327 reused, not claimed.
+
+Prefix producer next: L047 proves exact offsets/widths and13831 terminal length;
+L048 factors the complete emitted Prefix.parse on every Result with27 explicit
+child calls. The full nonempty-window native producer probe is in progress;
+Prefix.parse is OPEN until its complete association, domain/frame chain and
+audit are admitted. No stop while budget remains; current counts in ATTEMPTS.

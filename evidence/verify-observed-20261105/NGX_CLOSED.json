@@ -21,8 +21,154 @@
    "inner_hypotheses_remaining": [],
    "trust": "P6/D188 option-A semantic transport RECLASSIFICATION, retained ABI/compiler/library/Aeneas/source-to-ELF realization; no added trust",
    "KMX_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67"
+  },
+  {
+   "status": "CLOSED",
+   "form": "ruling (y) hybrid; full Result/state/ordered effects",
+   "inner_hypotheses_remaining": [],
+   "trust": "P6/D188 option-A semantic transport RECLASSIFICATION; valid borrow/ABI/compiler/library/Aeneas/source-to-ELF retained. Digest VALUE is retained P1/RuntimeSyscall; no added trust.",
+   "KMX_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+   "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::SemanticTranscript<H>::sample_block_validated",
+   "rows": [
+    "TX1:144"
+   ],
+   "domain": "SAME live transcript and immutable framed borrow; row<=26, framed length<=3717; arbitrary state32/cursor/hash and bytes. Returning digest on the accepted runtime domain. RowOrder rejects exactly, without mutation or digest.",
+   "native_positive": [
+    "NGX_K008"
+   ],
+   "matched_control": [
+    "NGX_K009"
+   ],
+   "lean_root": "AspisR1.NGX_SemanticDomain.total",
+   "ordered_effect_roots": [
+    "AspisR1.NGX_SampleTrace.rejected",
+    "AspisR1.NGX_SampleTrace.returned"
+   ],
+   "domain_roots": [
+    "AspisR1.NGX_SemanticSample.digest_domain",
+    "AspisR1.NGT_RuntimeDomain.read_domain"
+   ],
+   "internal_edges": [
+    "TX1:327"
+   ]
+  },
+  {
+   "status": "CLOSED",
+   "form": "ruling (y) hybrid; full Result/state/ordered effects",
+   "inner_hypotheses_remaining": [],
+   "trust": "P6/D188 option-A semantic transport RECLASSIFICATION; valid borrow/ABI/compiler/library/Aeneas/source-to-ELF retained. Digest VALUE is retained P1/RuntimeSyscall; no added trust.",
+   "KMX_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+   "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::SemanticTranscript<H>::new",
+   "rows": [
+    "TX1:143"
+   ],
+   "domain": "SAME live public/root borrows; public length<=57607 on the TX1 caller domain. Arbitrary public bytes and root32. Separate arbitrary-usize length gate proves exact Public rejection above u32::MAX; no caller success assumed.",
+   "native_positive": [
+    "NGX_K011",
+    "NGX_K013",
+    "NGX_K021"
+   ],
+   "matched_control": [
+    "NGX_K012",
+    "NGX_K014",
+    "NGX_K022"
+   ],
+   "lean_root": "AspisR1.NGX_SemanticNew.source",
+   "ordered_effect_roots": [
+    "AspisR1.NGX_NewTrace.returned",
+    "AspisR1.NGX_NewTrace.rejected"
+   ],
+   "domain_roots": [
+    "AspisR1.NGX_SemanticRuntime.domain_bytes",
+    "AspisR1.NGX_SemanticRuntime.seed_domain"
+   ],
+   "internal_edges": [
+    "TX1:327"
+   ],
+   "excluded_conservative_targets": "M31/WideExact to_le_bytes alternatives are not reached: the frozen length is explicitly u32, and the emitted operation is core.num.U32.to_le_bytes."
+  },
+  {
+   "status": "CLOSED",
+   "form": "ruling (y) hybrid; full Result/state/ordered effects",
+   "inner_hypotheses_remaining": [],
+   "trust": "P6/D188 option-A semantic transport RECLASSIFICATION; valid borrow/ABI/compiler/library/Aeneas/source-to-ELF retained. Digest VALUE is retained P1/RuntimeSyscall; no added trust.",
+   "KMX_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+   "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::Prefix<'a>::payload",
+   "rows": [
+    "TX1:139"
+   ],
+   "domain": "SAME live Prefix, 27 shared framed windows with lengths5..3717 in its retained <=17000-byte common backing and starts<=13000; arbitrary row u8, arbitrary bytes, overlap permitted. Every row>=27 is InvalidRow. Parser producer installation remains a caller edge.",
+   "native_positive": [
+    "NGX_K015"
+   ],
+   "matched_control": [
+    "NGX_K016"
+   ],
+   "lean_root": "AspisR1.NGX_Payload.source",
+   "value_root": "AspisR1.NGX_Payload.tail_total",
+   "ordered_effects": "none; pure checked slice selection",
+   "internal_edges": [
+    "TX1:140"
+   ]
+  },
+  {
+   "status": "CLOSED",
+   "form": "ruling (y) hybrid; full Result/state/ordered effects",
+   "inner_hypotheses_remaining": [],
+   "trust": "P6/D188 option-A semantic transport RECLASSIFICATION; valid borrow/ABI/compiler/library/Aeneas/source-to-ELF retained. Digest VALUE is retained P1/RuntimeSyscall; no added trust.",
+   "KMX_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+   "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::parse_record",
+   "rows": [
+    "TX1:151"
+   ],
+   "domain": "SAME live record length0..3717, any u8 row and arbitrary bytes. No canonicality assumption. Every framing/tag/length branch exact, and every full WireError payload from the field-validator boundary is preserved.",
+   "native_positive": [
+    "NGX_K017"
+   ],
+   "matched_control": [
+    "NGX_K018"
+   ],
+   "lean_root": "AspisR1.NGX_ParseRecord.source",
+   "domain_roots": [
+    "AspisR1.NGX_ParseRecord.validator_domain"
+   ],
+   "ordered_effects": "none; CLOSED field validator has no protocol/oracle event",
+   "internal_edges": [
+    "TX1:153",
+    "TX1:154"
+   ]
+  },
+  {
+   "status": "CLOSED",
+   "form": "ruling (y) hybrid; full Result/state/ordered effects",
+   "inner_hypotheses_remaining": [],
+   "trust": "P6/D188 option-A semantic transport RECLASSIFICATION; valid borrow/ABI/compiler/library/Aeneas/source-to-ELF retained. Digest VALUE is retained P1/RuntimeSyscall; no added trust.",
+   "KMX_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+   "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::parse_record_at",
+   "rows": [
+    "TX1:152"
+   ],
+   "domain": "SAME live shared bytes length<=57607; offset<=57607 and row<=26. Short window is exact Length{row} with no parser call; otherwise SAME framed window5..3717 and exact next offset; every child WireError payload propagates.",
+   "native_positive": [
+    "NGX_K019"
+   ],
+   "matched_control": [
+    "NGX_K020"
+   ],
+   "lean_root": "AspisR1.NGX_RecordAt.source",
+   "domain_roots": [
+    "AspisR1.NGX_RecordAt.frame_domain",
+    "AspisR1.NGX_RecordAt.end_bound"
+   ],
+   "ordered_effects": "none; pure parser child and slice selection",
+   "internal_edges": [
+    "TX1:151",
+    "TX1:153"
+   ]
   }
  ],
  "driver_root_status": "OPEN",
- "security_target_established": false
+ "security_target_established": false,
+ "new_composed_functions": 6,
+ "new_composed_rows": 6
 }

@@ -153,3 +153,74 @@ fn domain_value() {
  let expected:&[u8]=b"UNPROVED:R1:PRIVATE-SALTED:SEMANTIC:P3";let i:usize=kani::any();kani::assume(i<38);
  assert_eq!(DOMAIN.len(),38);assert!((DOMAIN[i]==expected[i])!=cfg!(NGX_invert));
 }
+
+struct PrefixLog {calls:usize,fail_at:usize,error:Error,rows:[u8;27],offsets:[usize;27],lengths:[usize;27]}
+fn prefix_at_cut<'a>(bytes:&'a[u8],row:u8,offset:usize,log:&mut PrefixLog)->Result<(&'a[u8],usize),Error> {
+ let call=log.calls;assert!(call<27);log.calls+=1;log.rows[call]=row;log.offsets[call]=offset;
+ assert!(row<=26&&offset<=57607&&bytes.len()<=57607);
+ let length=5+row_shape(row).unwrap().1;log.lengths[call]=length;let end=offset+length;
+ let frame=bytes.get(offset..end).ok_or(Error::Length{row})?;
+ if call==log.fail_at {Err(log.error)}else{Ok((frame,end))}
+}
+fn prefix_control<'a>(bytes:&'a[u8],log:&mut PrefixLog)->Result<Prefix<'a>,Error>
+{
+        if bytes.len() < 32 {
+            return Err(Error::Length { row: 0 });
+        }
+        let c1_root = match bytes[..32].try_into() {
+            Ok(root) => root,
+            Err(_) => return Err(Error::Length { row: 0 }),
+        };
+        let (r0, offset) = prefix_at_cut(bytes, 0, 32, log)?;
+        let (r1, offset) = prefix_at_cut(bytes, 1, offset, log)?;
+        let (r2, offset) = prefix_at_cut(bytes, 2, offset, log)?;
+        let (r3, offset) = prefix_at_cut(bytes, 3, offset, log)?;
+        let (r4, offset) = prefix_at_cut(bytes, 4, offset, log)?;
+        let (r5, offset) = prefix_at_cut(bytes, 5, offset, log)?;
+        let (r6, offset) = prefix_at_cut(bytes, 6, offset, log)?;
+        let (r7, offset) = prefix_at_cut(bytes, 7, offset, log)?;
+        let (r8, offset) = prefix_at_cut(bytes, 8, offset, log)?;
+        let (r9, offset) = prefix_at_cut(bytes, 9, offset, log)?;
+        let (r10, offset) = prefix_at_cut(bytes, 10, offset, log)?;
+        let (r11, offset) = prefix_at_cut(bytes, 11, offset, log)?;
+        let (r12, offset) = prefix_at_cut(bytes, 12, offset, log)?;
+        let (r13, offset) = prefix_at_cut(bytes, 13, offset, log)?;
+        let (r14, offset) = prefix_at_cut(bytes, 14, offset, log)?;
+        let (r15, offset) = prefix_at_cut(bytes, 15, offset, log)?;
+        let (r16, offset) = prefix_at_cut(bytes, 16, offset, log)?;
+        let (r17, offset) = prefix_at_cut(bytes, 17, offset, log)?;
+        let (r18, offset) = prefix_at_cut(bytes, 18, offset, log)?;
+        let (r19, offset) = prefix_at_cut(bytes, 19, offset, log)?;
+        let (r20, offset) = prefix_at_cut(bytes, 20, offset, log)?;
+        let (r21, offset) = prefix_at_cut(bytes, 21, offset, log)?;
+        let (r22, offset) = prefix_at_cut(bytes, 22, offset, log)?;
+        let (r23, offset) = prefix_at_cut(bytes, 23, offset, log)?;
+        let (r24, offset) = prefix_at_cut(bytes, 24, offset, log)?;
+        let (r25, offset) = prefix_at_cut(bytes, 25, offset, log)?;
+        let (r26, offset) = prefix_at_cut(bytes, 26, offset, log)?;
+        if offset != bytes.len() {
+            return Err(Error::TrailingBytes);
+        }
+        Ok(Prefix {
+            c1_root,
+            records: [
+                r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16, r17,
+                r18, r19, r20, r21, r22, r23, r24, r25, r26,
+            ],
+        })
+    }
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn prefix_value() {
+ let n:usize=kani::any();kani::assume(n<=57607);let bytes=alloc::vec![0u8;n];let fail_at:usize=kani::any();kani::assume(fail_at<=27);let error=any_error();
+ let starts:[usize;27]=[32,37,42,79,84,89,94,99,104,109,114,119,124,129,134,171,1072,1973,2874,3775,4676,5577,6478,7379,8280,9181,12898];let widths:[usize;27]=[5,5,37,5,5,5,5,5,5,5,5,5,5,5,37,901,901,901,901,901,901,901,901,901,901,3717,933];
+ let mut log=PrefixLog{calls:0,fail_at,error,rows:[255;27],offsets:[0;27],lengths:[0;27]};let out=prefix_control(&bytes,&mut log);
+ let mut stop=0usize;if n>=32 {while stop<27 {if starts[stop]+widths[stop]>n||stop==fail_at {break;}stop+=1;}}
+ let expected_calls=if n<32 {0}else if stop<27 {stop+1}else{27};assert_eq!(log.calls,expected_calls);
+ let k:usize=kani::any();kani::assume(k<27);
+ let correct=if n<32 {matches!(out,Err(Error::Length{row:0}))}
+ else if stop<27 {let expected=if starts[stop]+widths[stop]>n {Error::Length{row:stop as u8}}else{error};matches!(out,Err(e) if e==expected)}
+ else if n!=13831 {matches!(out,Err(Error::TrailingBytes))}
+ else {match out {Ok(prefix)=>prefix.c1_root.as_ptr()==bytes.as_ptr()&&prefix.records[k].as_ptr()==unsafe{bytes.as_ptr().add(starts[k])}&&prefix.records[k].len()==widths[k],Err(_)=>false}};
+ assert!(correct!=cfg!(NGX_invert));if k<log.calls {assert_eq!(log.rows[k],k as u8);assert_eq!(log.offsets[k],starts[k]);assert_eq!(log.lengths[k],widths[k]);}
+}

@@ -7,11 +7,11 @@ def read(n):return json.loads((E/n).read_text())
 def validate():
  standard={'propext','Classical.choice','Quot.sound'}
  roots=read('NGX_audit/batch0/proof0.json');fixtures=read('NGX_audit/fixtures/fixtures.json')
- assert roots['exit_status']==0 and {r['root'] for r in roots['results']}==set(read('NGX_AUDIT_ROOTS.json')['groups'][0])
+ assert roots['exit_status']==0 and {r['root'] for r in roots['results']}==set(read('NGX_L009/sources/NGX_AUDIT_ROOTS.json')['groups'][0])
  assert all(r['equal'] and set(r['walked_axioms'])<=standard for r in roots['results'])
  assert fixtures['exit_status']==0 and len(fixtures['results'])==8
  assert all(r['equal'] and (bool(r['walked_axioms']) if i<4 else not r['walked_axioms']) for i,r in enumerate(fixtures['results']))
- scan_path=E/'NGX_LOADED_scan.jsonl';raw=scan_path.read_bytes() if scan_path.exists() else lzma.decompress((E/'NGX_LOADED_scan.jsonl.xz').read_bytes())
+ raw=lzma.decompress((E/'NGX_SCAN_STAGE1.jsonl.xz').read_bytes());assert sha(raw)==(E/'NGX_SCAN_STAGE1.jsonl.sha256').read_text().strip()
  scan=[json.loads(l) for l in raw.splitlines()]
  assert all(r['imports_match'] and not r['dangling'] and not r['duplicate_owners'] for r in scan)
  assert read('NGX_L012/receipt.json')['exit_status']==0
@@ -31,12 +31,17 @@ def validate():
   for p,h in r['source_hashes'].items():assert sha((E/a/'sources'/p).read_bytes())==h
   source=(E/a/'sources/NGX_src/crates/aspis-r1-cost-probe/src/NGX_wire.rs').read_text();assert 'static mut' not in source and 'static ' not in source
  for a,n in [('NGX_L002','NGX_State'),('NGX_L004','NGX_StateImpl'),('NGX_L005','NGX_COMBINED_IMPORT')]:
-  r=read(a+'/receipt.json');assert r['exit_status']==0 and sha((E/(n+'.lean')).read_bytes())==r['source_hashes']['NGX_generated/'+n+'.lean']
+  r=read(a+'/receipt.json');assert r['exit_status']==0
+  path='NGX_generated/'+n+'.lean'
+  if n=='NGX_COMBINED_IMPORT':
+   previous=(E/a/'sources'/path).read_bytes();assert sha(previous)==r['source_hashes'][path]
+   old_imports=re.findall(rb'^import (.+)$',previous,re.M);current=(E/(n+'.lean')).read_bytes();assert all(b'import '+name+b'\n' in current for name in old_imports)
+  else:assert sha((E/(n+'.lean')).read_bytes())==r['source_hashes'][path]
  baseline=json.loads(lzma.decompress((R/'evidence/ledger8-20261105/NGJ_LEDGER.json.xz').read_bytes()));closed=read('NGX_CLOSED.json');new=copy.deepcopy(baseline)
- assert len(closed['functions'])==1 and closed['functions'][0]['rows']==['TX1:146']
+ state=[p for p in closed['functions'] if p['rows']==['TX1:146']];assert len(state)==1
  for r in new['rows']:
   if r['row']=='TX1:146':
-   assert r['composed_status']=='OPEN' and r['function']==closed['functions'][0]['function'];r['composed_status']='CLOSED';r['NGX_certificate']=closed['functions'][0]
+   assert r['composed_status']=='OPEN' and r['function']==state[0]['function'];r['composed_status']='CLOSED';r['NGX_certificate']=state[0]
  assert all(old==r for old,r in zip(baseline['rows'],new['rows']) if old['row']!='TX1:146')
  counts={k:sum(r['kind']==k for r in map(json.loads,(E/'NGX_ATTEMPTS.jsonl').read_text().splitlines())) for k in ['kani','extract']}
  attempts=list(map(json.loads,(E/'NGX_ATTEMPTS.jsonl').read_text().splitlines()));counts['lean_support']=sum(r['kind'] not in ['kani','extract'] for r in attempts)
