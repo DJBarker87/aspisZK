@@ -81,4 +81,10 @@ set_option pp.universes true
 #check @NIL_PortBind.source
 #check @NIL_PortBind.read
 #check @NIL_ResumeComposition.source
+#check @NIL_ReplyCases.ok_iff
+#check @NIL_ReplyCases.err_iff
+#check @NIL_ReplyCases.fail_iff
+#check @NIL_ReplyCases.div_iff
+#check @NIL_HistoryWindows.round0
+#check @NIL_HistoryWindows.round1_final
 #check @AspisR1.RPx_Deployed.deployed

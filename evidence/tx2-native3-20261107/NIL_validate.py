@@ -20,7 +20,7 @@ def validate(final=False):
  for pin in json.loads((E/'NIL_INPUT_PINS.json').read_text())['inputs']:assert sha(ROOT/pin['path'])==pin['sha256'],pin['path']
  assert sha(ROOT/'evidence/kani-mitig-20261028/KMX_copy_stubs.patch')=='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67'
  assert subprocess.run(['git','diff','--quiet','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387','HEAD','--','crates','programs'],cwd=ROOT).returncode==0
- for matrix in ['NIL_NATIVE_MATRIX.json','NIL_TREE_MATRIX.json','NIL_PREFIX_MATRIX.json']:
+ for matrix in ['NIL_NATIVE_MATRIX.json','NIL_TREE_MATRIX.json','NIL_PREFIX_MATRIX.json','NIL_EXTRA_MATRIX.json']:
   if not (E/matrix).exists():continue
   for row in json.loads((E/matrix).read_text()):
    if not row.get('status','').startswith('qualified'):continue
@@ -38,6 +38,16 @@ def validate(final=False):
     import runpy
     assert runpy.run_path(str(E/'NIL_control_erasure.py'))['x']['status']=='PASS'
    else:assert source_rows[0]==source_rows[1]==source_rows[2],row['family']
+ if (E/'NIL_CTOR_PLAN.json').exists():
+  row=json.loads((E/'NIL_CTOR_PLAN.json').read_text())
+  if row.get('status','').startswith('qualified'):
+   sources=[]
+   for mode,flag in [('positive',None),('control_value','NIL_bad_box_value'),('control_allocation','NIL_bad_alloc'),('rename_attempt',None)]:
+    r=json.loads((E/row[mode]/'receipt.json').read_text());out=(E/row[mode]/'stdout.log').read_text();sources.append(r['source_hashes'])
+    assert (' --cfg '+flag in r['env']['RUSTFLAGS']) if flag else not any(f in r['env']['RUSTFLAGS'] for f in ['NIL_bad_box_value','NIL_bad_alloc'])
+    if flag:assert r['exit_status']!=0 and 'VERIFICATION:- FAILED' in out and 'unwinding assertion' not in out.lower() and ('assertion' in out.lower() or 'core::panicking::assert_failed_inner' in out)
+    else:assert r['exit_status']==0 and 'VERIFICATION:- SUCCESSFUL' in out
+   assert sources[0]==sources[1]==sources[2]==sources[3]
  if final:
   assert json.loads((E/'NIL_CLOSED.json').read_text())['new_composed_rows']==0
   d=json.loads((E/'NIL_LEDGER_DELTA.json').read_text());assert d['row']=='TX2:065' and d['after']=='OPEN' and d['promotions']==[]

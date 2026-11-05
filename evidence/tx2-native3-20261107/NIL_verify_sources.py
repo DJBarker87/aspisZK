@@ -11,10 +11,15 @@ for n,pin in manifest['files'].items():
  original=base64.b64decode(frozen[n],validate=True);assert sha(original)==pin['sha256']
  actual=(S/n).read_bytes()
  if n in ['crates/aspis-r1-cost-probe/src/candidate.rs','crates/aspis-r1-cost-probe/src/verifier.rs']:
+  assert actual.startswith(original),('frozen body modified',n)
+  suffix=actual[len(original):]
   allowed={'candidate.rs':['tree','key','parent'],'verifier.rs':['reader','ctor','resume_prefix']}[Path(n).name]
   for module in allowed:
-   block=('\n#[cfg(kani)]\n#[path="NIL_'+module+'_native.rs"]\nmod NIL_'+module+'_native;\n').encode()
-   actual=actual.replace(block,b'')
+   block=('#[cfg(kani)]\n#[path="NIL_'+module+'_native.rs"]\nmod NIL_'+module+'_native;').encode()
+   assert suffix.count(block)<=1,('duplicate module',n,module)
+   suffix=suffix.replace(block,b'')
+  assert suffix.strip()==b'',('unapproved addition',n)
+  actual=original
  if n=='crates/aspis-r1-cost-probe/src/lib.rs':
   actual=actual.removesuffix(b'\n#[cfg(kani)] include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));\n')
   actual=actual.replace(b'\n#![cfg_attr(kani,feature(allocator_api))]',b'')

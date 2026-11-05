@@ -1,0 +1,12 @@
+{
+  "frozen": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+  "fragment": "    if bytes.len()!=checkpoint_size(v)||&bytes[..8]!=b\"R1P2CKP2\"||bytes[8]!=v.tag()||bytes[9]>22||bytes[10]!=1||bytes[11..16].iter().any(|&b|b!=0) {return Err(Error::Checkpoint);}\n    let end=bytes.len()-32;\n    if bytes[16..48]!=hash.digest(&[proof])||bytes[48..80]!=hash.digest(&[public])||bytes[end..]!=hash.digest(&[b\"UNPROVED:R1:checkpoint\",&bytes[..end]]) {return Err(Error::Checkpoint);}\n",
+  "fragment_sha256": "c64a51c7fa456ba88d4720d4ce8f4fc60f0add01ea822b235246158bb9e37489",
+  "changes": [
+    "header-any to LOCAL full Bool recording oracle",
+    "digest calls to LOCAL arbitrary reply/abort oracle",
+    "cut returns checksum end and SAME header next; original next bounds retained"
+  ],
+  "missing": "Complete header-any native iteration association, primitive reader/tail/Box continuation and caller public688 provenance remain OPEN"
+}

@@ -24,6 +24,8 @@ import NIL_ResumeSplit
 import NIL_CohortSplit
 import NIL_PortBind
 import NIL_ResumeComposition
+import NIL_ReplyCases
+import NIL_HistoryWindows
 
 #check NIL_Carriers.k_roundtrip
 #print axioms NIL_Carriers.k_roundtrip
@@ -187,5 +189,17 @@ import NIL_ResumeComposition
 #print axioms NIL_PortBind.read
 #check NIL_ResumeComposition.source
 #print axioms NIL_ResumeComposition.source
+#check NIL_ReplyCases.ok_iff
+#print axioms NIL_ReplyCases.ok_iff
+#check NIL_ReplyCases.err_iff
+#print axioms NIL_ReplyCases.err_iff
+#check NIL_ReplyCases.fail_iff
+#print axioms NIL_ReplyCases.fail_iff
+#check NIL_ReplyCases.div_iff
+#print axioms NIL_ReplyCases.div_iff
+#check NIL_HistoryWindows.round0
+#print axioms NIL_HistoryWindows.round0
+#check NIL_HistoryWindows.round1_final
+#print axioms NIL_HistoryWindows.round1_final
 #check AspisR1.RPx_Deployed.deployed
 #print axioms AspisR1.RPx_Deployed.deployed

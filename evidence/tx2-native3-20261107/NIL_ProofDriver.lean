@@ -22,7 +22,7 @@ unsafe def main (args : List String) : IO UInt32 := do
     else if mode == "proof3" then
       (#[`NIL_COMBINED_IMPORT], #[`NIL_ReadOutput.e, `NIL_ResultCases.outer_ok, `NIL_ResultCases.outer_fail, `NIL_ResultCases.outer_div, `NIL_ResultCases.inner_ok, `NIL_ResultCases.inner_err, `NIL_ResultCases.outer_ite, `NIL_ResultCases.outer_prodlet, `NIL_ResultCases.bind_congr, `NIL_ResultCases.branch_congr, `NIL_ResultCases.map_match, `NIL_ResultCases.match_congr, `NIL_ResultCases.map_bind_congr, `NIL_ResultCases.checkpoint_error, `NIL_ResumePrefixPort.source, `NIL_SpineCongr.prod, `NIL_ResumeSplit.source, `NIL_CohortSplit.source, `NIL_PortBind.source, `NIL_PortBind.read])
     else if mode == "proof4" then
-      (#[`NIL_COMBINED_IMPORT], #[`NIL_ResumeComposition.source, `AspisR1.RPx_Deployed.deployed])
+      (#[`NIL_COMBINED_IMPORT], #[`NIL_ResumeComposition.source, `NIL_ReplyCases.ok_iff, `NIL_ReplyCases.err_iff, `NIL_ReplyCases.fail_iff, `NIL_ReplyCases.div_iff, `NIL_HistoryWindows.round0, `NIL_HistoryWindows.round1_final, `AspisR1.RPx_Deployed.deployed])
     else (#[], #[])
   let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
     {} (loadExts := true) (level := .private)
