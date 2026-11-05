@@ -1,0 +1,88 @@
+--- emitted/Funs.lean
++++ canonical/Funs.lean
+@@ -25,42 +25,42 @@
+ def ProgramError.Insts.CoreCloneClone.clone
+   (self : ProgramError) : Result ProgramError := do
+   match self with
+-  | ProgramError.Custom __self_0 =>
++  | NGL_MetaReference.ProgramError.Custom __self_0 =>
+     let i ← lift (core.clone.impls.CloneU32.clone __self_0)
+-    ok (ProgramError.Custom i)
+-  | ProgramError.InvalidArgument => ok ProgramError.InvalidArgument
+-  | ProgramError.InvalidInstructionData =>
+-    ok ProgramError.InvalidInstructionData
+-  | ProgramError.InvalidAccountData => ok ProgramError.InvalidAccountData
+-  | ProgramError.AccountDataTooSmall => ok ProgramError.AccountDataTooSmall
+-  | ProgramError.InsufficientFunds => ok ProgramError.InsufficientFunds
+-  | ProgramError.IncorrectProgramId => ok ProgramError.IncorrectProgramId
+-  | ProgramError.MissingRequiredSignature =>
+-    ok ProgramError.MissingRequiredSignature
+-  | ProgramError.AccountAlreadyInitialized =>
+-    ok ProgramError.AccountAlreadyInitialized
+-  | ProgramError.UninitializedAccount => ok ProgramError.UninitializedAccount
+-  | ProgramError.NotEnoughAccountKeys => ok ProgramError.NotEnoughAccountKeys
+-  | ProgramError.AccountBorrowFailed => ok ProgramError.AccountBorrowFailed
+-  | ProgramError.MaxSeedLengthExceeded => ok ProgramError.MaxSeedLengthExceeded
+-  | ProgramError.InvalidSeeds => ok ProgramError.InvalidSeeds
+-  | ProgramError.BorshIoError __self_0 =>
++    ok (NGL_MetaReference.ProgramError.Custom i)
++  | NGL_MetaReference.ProgramError.InvalidArgument => ok NGL_MetaReference.ProgramError.InvalidArgument
++  | NGL_MetaReference.ProgramError.InvalidInstructionData =>
++    ok NGL_MetaReference.ProgramError.InvalidInstructionData
++  | NGL_MetaReference.ProgramError.InvalidAccountData => ok NGL_MetaReference.ProgramError.InvalidAccountData
++  | NGL_MetaReference.ProgramError.AccountDataTooSmall => ok NGL_MetaReference.ProgramError.AccountDataTooSmall
++  | NGL_MetaReference.ProgramError.InsufficientFunds => ok NGL_MetaReference.ProgramError.InsufficientFunds
++  | NGL_MetaReference.ProgramError.IncorrectProgramId => ok NGL_MetaReference.ProgramError.IncorrectProgramId
++  | NGL_MetaReference.ProgramError.MissingRequiredSignature =>
++    ok NGL_MetaReference.ProgramError.MissingRequiredSignature
++  | NGL_MetaReference.ProgramError.AccountAlreadyInitialized =>
++    ok NGL_MetaReference.ProgramError.AccountAlreadyInitialized
++  | NGL_MetaReference.ProgramError.UninitializedAccount => ok NGL_MetaReference.ProgramError.UninitializedAccount
++  | NGL_MetaReference.ProgramError.NotEnoughAccountKeys => ok NGL_MetaReference.ProgramError.NotEnoughAccountKeys
++  | NGL_MetaReference.ProgramError.AccountBorrowFailed => ok NGL_MetaReference.ProgramError.AccountBorrowFailed
++  | NGL_MetaReference.ProgramError.MaxSeedLengthExceeded => ok NGL_MetaReference.ProgramError.MaxSeedLengthExceeded
++  | NGL_MetaReference.ProgramError.InvalidSeeds => ok NGL_MetaReference.ProgramError.InvalidSeeds
++  | NGL_MetaReference.ProgramError.BorshIoError __self_0 =>
+     let s ← alloc.string.String.Insts.CoreCloneClone.clone __self_0
+-    ok (ProgramError.BorshIoError s)
+-  | ProgramError.AccountNotRentExempt => ok ProgramError.AccountNotRentExempt
+-  | ProgramError.UnsupportedSysvar => ok ProgramError.UnsupportedSysvar
+-  | ProgramError.IllegalOwner => ok ProgramError.IllegalOwner
+-  | ProgramError.MaxAccountsDataAllocationsExceeded =>
+-    ok ProgramError.MaxAccountsDataAllocationsExceeded
+-  | ProgramError.InvalidRealloc => ok ProgramError.InvalidRealloc
+-  | ProgramError.MaxInstructionTraceLengthExceeded =>
+-    ok ProgramError.MaxInstructionTraceLengthExceeded
+-  | ProgramError.BuiltinProgramsMustConsumeComputeUnits =>
+-    ok ProgramError.BuiltinProgramsMustConsumeComputeUnits
+-  | ProgramError.InvalidAccountOwner => ok ProgramError.InvalidAccountOwner
+-  | ProgramError.ArithmeticOverflow => ok ProgramError.ArithmeticOverflow
+-  | ProgramError.Immutable => ok ProgramError.Immutable
+-  | ProgramError.IncorrectAuthority => ok ProgramError.IncorrectAuthority
++    ok (NGL_MetaReference.ProgramError.BorshIoError s)
++  | NGL_MetaReference.ProgramError.AccountNotRentExempt => ok NGL_MetaReference.ProgramError.AccountNotRentExempt
++  | NGL_MetaReference.ProgramError.UnsupportedSysvar => ok NGL_MetaReference.ProgramError.UnsupportedSysvar
++  | NGL_MetaReference.ProgramError.IllegalOwner => ok NGL_MetaReference.ProgramError.IllegalOwner
++  | NGL_MetaReference.ProgramError.MaxAccountsDataAllocationsExceeded =>
++    ok NGL_MetaReference.ProgramError.MaxAccountsDataAllocationsExceeded
++  | NGL_MetaReference.ProgramError.InvalidRealloc => ok NGL_MetaReference.ProgramError.InvalidRealloc
++  | NGL_MetaReference.ProgramError.MaxInstructionTraceLengthExceeded =>
++    ok NGL_MetaReference.ProgramError.MaxInstructionTraceLengthExceeded
++  | NGL_MetaReference.ProgramError.BuiltinProgramsMustConsumeComputeUnits =>
++    ok NGL_MetaReference.ProgramError.BuiltinProgramsMustConsumeComputeUnits
++  | NGL_MetaReference.ProgramError.InvalidAccountOwner => ok NGL_MetaReference.ProgramError.InvalidAccountOwner
++  | NGL_MetaReference.ProgramError.ArithmeticOverflow => ok NGL_MetaReference.ProgramError.ArithmeticOverflow
++  | NGL_MetaReference.ProgramError.Immutable => ok NGL_MetaReference.ProgramError.Immutable
++  | NGL_MetaReference.ProgramError.IncorrectAuthority => ok NGL_MetaReference.ProgramError.IncorrectAuthority
+ 
+ /-- [nhj_snapshot_reference::snapshot_ref]:
+     Source: 'src/lib.rs', lines 4:0-10:1
+@@ -111,7 +111,7 @@
+             is_writable,
+             executable,
+             length := (core.result.Result.Ok length),
+-            bytes := (core.result.Result.Err ProgramError.InvalidAccountData)
++            bytes := (core.result.Result.Err NGL_MetaReference.ProgramError.InvalidAccountData)
+           }
+   | core.result.Result.Err error =>
+     let pe ← ProgramError.Insts.CoreCloneClone.clone error

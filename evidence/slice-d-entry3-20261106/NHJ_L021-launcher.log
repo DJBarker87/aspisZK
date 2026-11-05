@@ -1,0 +1,27 @@
+{"attempt": "NHJ_L021", "exit_status": 0, "wall_seconds": 3.510092704091221, "peak_rss_kib": "5876164", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.alloc.slice.Slice.to_vec : {T : Type} →
+  Aeneas.Std.core.clone.Clone T → Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec T) :=
+fun {T} cloneInst s => Aeneas.Std.Slice.clone cloneInst.clone s
+@[reducible] def Aeneas.Std.core.clone.CloneU8 : Aeneas.Std.core.clone.Clone Aeneas.Std.U8 :=
+{ clone := Aeneas.Std.liftFun1 Aeneas.Std.core.clone.impls.CloneU8.clone }
+def Aeneas.Std.Slice.clone : {T : Type} →
+  (T → Aeneas.Std.Result T) → Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.Slice T) :=
+fun {T} clone s => do
+  let s' ← Aeneas.Std.List.clone clone ↑s
+  Aeneas.Std.Result.ok ⟨↑s', ⋯⟩
+@[reducible] def Aeneas.Std.core.clone.impls.CloneU8.clone : Aeneas.Std.U8 →
+...
+def Aeneas.Std.alloc.slice.Slice.to_vec : {T : Type} →
+  Aeneas.Std.core.clone.Clone T → Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec T) :=
+fun {T} cloneInst s => Aeneas.Std.Slice.clone cloneInst.clone s
+@[reducible] def Aeneas.Std.core.clone.CloneU8 : Aeneas.Std.core.clone.Clone Aeneas.Std.U8 :=
+{ clone := Aeneas.Std.liftFun1 Aeneas.Std.core.clone.impls.CloneU8.clone }
+def Aeneas.Std.Slice.clone : {T : Type} →
+  (T → Aeneas.Std.Result T) → Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.Slice T) :=
+fun {T} clone s => do
+  let s' ← Aeneas.Std.List.clone clone ↑s
+  Aeneas.Std.Result.ok ⟨↑s', ⋯⟩
+@[reducible] def Aeneas.Std.core.clone.impls.CloneU8.clone : Aeneas.Std.U8 → Aeneas.Std.U8 :=
+fun x => x
+
+Running as unit: run-r4d9bdf74425849d48ebb1bde71256018.scope; invocation ID: 022ac580421141eba3a753c1d326ef48

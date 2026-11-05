@@ -1,0 +1,5 @@
+import NGK_COMBINED_IMPORT
+#print AdapterRw.Ops
+#check AdapterRw.r1_pool_adapter.pool_program_id
+#check AdapterRw.r1_pool_adapter.registry_program_id
+#print AdapterRw.r1_pool_adapter.owned.authenticate_invariant_release_registry
