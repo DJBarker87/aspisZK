@@ -8,7 +8,7 @@ struct State {sums:[u64;8],count:usize}
 #[derive(Clone,Copy,Debug,PartialEq,Eq)]
 struct Log {value:[u32;8],scalar:[u32;4],before:State,after:State,reply:bool,calls:u8}
 #[derive(Clone,Copy,Debug,PartialEq,Eq)]
-struct Out {parse:bool,next:usize,state:State,log:Log}
+struct Out {result:Result<(),Error>,parse:bool,next:usize,state:State,log:Log}
 fn state(d:&EbyKDot)->State{let (sums,count)=carrier::get(d);State{sums,count}}
 fn words(q:K)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
 fn q(w:[u32;4])->K{K{c0:CM31{a:M31(w[0]),b:M31(w[1])},c1:CM31{a:M31(w[2]),b:M31(w[3])}}}
@@ -23,7 +23,7 @@ fn oracle(d:&mut EbyKDot,v:E,s:K,post:State,reply:bool,log:&mut Log)->Result<(),
 // Hand reference: selected operands + full poststate + Parse/continue/control/log.
 fn f_ref<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],g:&[E;29],point:usize,l:usize,pre:State,post:State,reply:bool)->Out{
  let scalar=if point<3{sem.claims[point][l]}else if point==3{sem.extra[l]}else if point==4{sem.before_z1[l]}else{field(y1,l).c0()};
- Out{parse:!reply,next:if reply{l+1}else{l},state:post,log:Log{value:g[l].to_limbs(),scalar:words(scalar),before:pre,after:post,reply,calls:1}}
+ Out{result:if reply{Ok(())}else{Err(Error::Parse)},parse:!reply,next:if reply{l+1}else{l},state:post,log:Log{value:g[l].to_limbs(),scalar:words(scalar),before:pre,after:post,reply,calls:1}}
 }
 fn domain(y1:&[u8],point:usize,l:usize)->bool{
  if point>=6||l>=29||y1.len()!=928{return false}
@@ -38,7 +38,7 @@ fn native<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],g:&[E;29],po
  let result:Result<(),Error>=(||{
 // NGY_FROZEN_CUT
  Ok(())})();
- Out{parse:matches!(result,Err(Error::Parse)),next:if result.is_ok(){l+1}else{l},state:state(&dot),log}
+ Out{result,parse:matches!(result,Err(Error::Parse)),next:if result.is_ok(){l+1}else{l},state:state(&dot),log}
 }
 #[derive(Clone,Copy)]struct Hash(u64);
 impl Digest32 for Hash{fn digest(&self,_:&[&[u8]])->[u8;32]{[0;32]}}
@@ -54,6 +54,8 @@ macro_rules! harness {($name:ident,$point:expr)=>{
  fn $name(){let sem=sem();let y1:[u8;928]=kani::any();
  let g:[E;29]=unsafe{core::mem::transmute(kani::any::<[u32;232]>())};
  let point:usize=$point;let l:usize=kani::any();kani::assume(domain(&y1,point,l));
+ #[cfg(NGY_lower)] kani::assume(l<15);
+ #[cfg(NGY_upper)] kani::assume(l>=15);
  let pre=State{sums:kani::any(),count:kani::any()};let post=State{sums:kani::any(),count:kani::any()};let reply:bool=kani::any();
  let _=native(&sem,&y1,&g,point,l,pre,post,reply);
  }

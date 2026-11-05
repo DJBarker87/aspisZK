@@ -65,6 +65,9 @@ config['frozen_revision']='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387'
 if kind=='kani':
  config['native_command']=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NGY_src/crates/aspis-r1-cost-probe/Cargo.toml','--target-dir',B+'/NGY_target','--features','private-leaf-salts,optimized-terminal,program-build','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse']
  config['env'].update(CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-Copt-level=3 -C link-arg=-Wl,--threads=1'+(' --cfg NGY_corrupt' if os.environ.get('NGY_CORRUPT') else ''))
+ if os.environ.get('NGY_RANGE'):
+  assert os.environ['NGY_RANGE'] in ['lower','upper']
+  config['env']['RUSTFLAGS']+=' --cfg NGY_'+os.environ['NGY_RANGE']
  if os.environ.get('NGY_BAD_ALLOC'):config['env']['RUSTFLAGS']+=' --cfg NGY_bad_alloc'
  if os.environ.get('NGY_BAD_BOX_VALUE'):config['env']['RUSTFLAGS']+=' --cfg NGY_bad_box_value'
  config['expected_time']='optimized compilation then one native staged cut with local records; no field multiplication'
