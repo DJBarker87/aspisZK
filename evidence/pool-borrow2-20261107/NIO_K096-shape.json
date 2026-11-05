@@ -1,0 +1,15 @@
+{
+  "kind": "minimal typed guard counter-context fidelity",
+  "mode": "negative",
+  "domain": "Locally owned initially free cells; safe native constructors; typed direct/Option/Vec guard moves; no payload dereference, byte-formatting, fabricated guard or writable static.",
+  "source": "#[kani::stub(core::ptr::copy_nonoverlapping,crate::NIO_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NIO_KMX::KMX_copy_from_slice)]\n#[kani::stub(alloc::alloc::realloc,crate::NIO_KMX::KMX_realloc)]\n#[kani::proof]\nfn certificate(){use core::cell::RefCell;\nuse solana_program::{account_info::AccountInfo,pubkey::Pubkey,program_error::ProgramError};\nlet k0=Pubkey::new_from_array(kani::any()); let mut l0:u64=kani::any(); let mut d0=[kani::any::<u8>()]; let a0=AccountInfo::new(&k0,false,true,&mut l0,&mut d0,&k0,false,0);\nlet k1=Pubkey::new_from_array(kani::any()); let mut l1:u64=kani::any(); let mut d1=[kani::any::<u8>()]; let a1=AccountInfo::new(&k1,false,true,&mut l1,&mut d1,&k1,false,0);\nlet result=a1.try_borrow_data();\nlet guard=match result {Ok(g)=>g,Err(_)=>{assert!(false);return}};\nlet moved=Some(guard);let guard=match moved {Some(g)=>g,None=>{assert!(false);return}};\nassert!(a0.try_borrow_mut_data().is_err());assert!(a1.try_borrow_mut_data().is_ok());drop(guard);assert!(a0.try_borrow_mut_data().is_ok());assert!(a1.try_borrow_mut_data().is_ok());\n}\n",
+  "modifies": [],
+  "production_credit": false,
+  "remaining": "Representation calibration only. Actual Pool caller/source association and arbitrary incoming counter relation remain OPEN.",
+  "container": "sdk_data",
+  "exclusive": false,
+  "carrier": 1,
+  "expected_verdict": "FAIL",
+  "control": "Native constructor obtains guard from the other live cell; counter-context assertion must fail.",
+  "native_credit": "LOCAL_FIDELITY_ONLY"
+}

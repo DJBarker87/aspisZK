@@ -1,0 +1,14 @@
+{
+  "kind": "additional wrong-account argument control for K103",
+  "mode": "negative",
+  "domain": "Exact valid typed prefix size 0, source capacity eight, separately retained master guard; arbitrary scalar metadata and payload bytes; target initially free. One original native body iteration; prefix is harness pre-state construction.",
+  "source": "use super::*;\nfn NIO_step<'b,'i>(lane_data:&mut alloc::vec::Vec<core::cell::RefMut<'b,&'i mut [u8]>>,lane:&'b AccountInfo<'i>)->ProgramResult{\nlane_data.push(lane.try_borrow_mut_data()?);\nOk(())}\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NIO_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NIO_KMX::KMX_copy_from_slice)]\n#[kani::stub(alloc::alloc::realloc,crate::NIO_KMX::KMX_realloc)]\n#[kani::proof]\nfn certificate(){use solana_program::{account_info::AccountInfo,pubkey::Pubkey,program_error::ProgramError};\nlet k0=Pubkey::new_from_array(kani::any()); let mut l0:u64=kani::any(); let mut d0=[kani::any::<u8>()]; let a0=AccountInfo::new(&k0,false,true,&mut l0,&mut d0,&k0,false,0);\nlet k1=Pubkey::new_from_array(kani::any()); let mut l1:u64=kani::any(); let mut d1=[kani::any::<u8>()]; let a1=AccountInfo::new(&k1,false,true,&mut l1,&mut d1,&k1,false,0);\nlet result=(||->ProgramResult{let _master_data=a1.try_borrow_mut_data()?;let mut lane_data=alloc::vec::Vec::with_capacity(8);\nNIO_step(&mut lane_data,&a1)?;assert!(lane_data.len()==1);\nassert!(a0.try_borrow_mut_data().is_err());\nassert!(a1.try_borrow_mut_data().is_err());\nOk(())})();assert!(result==Ok(()));\nassert!(a0.try_borrow_mut_data().is_ok());\nassert!(a1.try_borrow_mut_data().is_ok());\n}\n",
+  "modifies": [],
+  "production_credit": false,
+  "remaining": "Control only, not production reachability or a passing caller certificate.",
+  "member": "process_pair_forest_initialize_with_runtime_v1",
+  "expected_verdict": "FAIL",
+  "matched_positive": "NIO_K103",
+  "first_control": "NIO_K104",
+  "source_corruption": "Pass the already-held master cell instead of the new lane cell; original one-iteration body unchanged."
+}

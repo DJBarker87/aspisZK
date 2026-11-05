@@ -1,0 +1,40 @@
+--- a/programs/aspis-pool/src/lib.rs
++++ b/programs/aspis-pool/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! Pool V1 authenticated state-transition kernel.
+ //!
+ //! The native entrypoint exposes exact V1 initialization, vault-backed
+@@ -145,3 +146,11 @@
+     plan_authenticated_verifier_dispatch_v1, AuthenticatedVerifierDispatchV1,
+     PlannedVerifierDispatchV1, VerifierDispatchClaimV1,
+ };
++
++#[cfg(kani)]
++extern crate alloc;
++#[cfg(kani)]
++#[path="../../../KMX_stubs.rs"]
++pub mod KMX_stubs;
++#[cfg(kani)]
++pub use KMX_stubs as NIO_KMX;
+--- a/programs/aspis-pool/src/processor.rs
++++ b/programs/aspis-pool/src/processor.rs
+@@ -3752,3 +3752,18 @@
+         assert_eq!(&returned.borrow()[..4], b"ASTR");
+     }
+ }
++
++#[cfg(kani)]
++mod NIO_native {
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NIO_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NIO_KMX::KMX_copy_from_slice)]
++#[kani::stub(alloc::alloc::realloc,crate::NIO_KMX::KMX_realloc)]
++#[kani::proof]
++fn certificate(){use core::cell::RefCell;
++let c0=RefCell::new(kani::any::<u64>());let c1=RefCell::new(kani::any::<u64>());
++let result=c0.try_borrow();
++let guard=match result {Ok(g)=>g,Err(_)=>{assert!(false);return}};
++assert!(c0.try_borrow_mut().is_err());assert!(c1.try_borrow_mut().is_ok());drop(guard);assert!(c0.try_borrow_mut().is_ok());assert!(c1.try_borrow_mut().is_ok());
++}
++
++}

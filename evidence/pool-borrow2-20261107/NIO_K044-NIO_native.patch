@@ -1,0 +1,155 @@
+--- a/programs/aspis-pool/src/lib.rs
++++ b/programs/aspis-pool/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! Pool V1 authenticated state-transition kernel.
+ //!
+ //! The native entrypoint exposes exact V1 initialization, vault-backed
+@@ -145,3 +146,11 @@
+     plan_authenticated_verifier_dispatch_v1, AuthenticatedVerifierDispatchV1,
+     PlannedVerifierDispatchV1, VerifierDispatchClaimV1,
+ };
++
++#[cfg(kani)]
++extern crate alloc;
++#[cfg(kani)]
++#[path="../../../KMX_stubs.rs"]
++pub mod KMX_stubs;
++#[cfg(kani)]
++pub use KMX_stubs as NIO_KMX;
+--- a/programs/aspis-pool/src/pair_forest.rs
++++ b/programs/aspis-pool/src/pair_forest.rs
+@@ -5792,3 +5792,133 @@
+         assert!(accounts[4].data.iter().any(|byte| *byte != 0));
+     }
+ }
++
++#[cfg(kani)]
++mod NIO_native {
++
++use super::*;
++struct NIO_Log {
++    next: u8, fail: u8, error: u64,
++    plan: Option<PlannedPairForestCheckpointAccountsV1>,
++    seen_master: bool, seen_checkpoint: bool, seen_lanes: usize,
++}
++impl NIO_Log {
++ fn step(&mut self, tag:u8)->ProgramResult {
++   assert!(self.next==tag);self.next+=1;
++   if self.fail==tag { Err(ProgramError::from(self.error)) } else {Ok(())}
++ }
++}
++fn NIO_call0(l:&mut NIO_Log,_data:&[u8])->ProgramResult {l.step(0)}
++fn NIO_call1(l:&mut NIO_Log,a:&[AccountInfo<'_>],n:usize)->ProgramResult {
++ assert!(a.len()==n);l.step(1)
++}
++fn NIO_call2(l:&mut NIO_Log,_a:&[AccountInfo<'_>])->ProgramResult {l.step(2)}
++fn NIO_call3(l:&mut NIO_Log,p:&AccountInfo<'_>,s:&AccountInfo<'_>)->ProgramResult {
++ assert!(p.rent_epoch==10);assert!(s.rent_epoch==11);l.step(3)
++}
++fn NIO_call4(l:&mut NIO_Log,_pid:&Pubkey,m:&AccountInfo<'_>,lanes:&[AccountInfo<'_>],c:&AccountInfo<'_>)->Result<PlannedPairForestCheckpointAccountsV1,ProgramError>{
++ l.seen_master=m.rent_epoch==0;l.seen_checkpoint=c.rent_epoch==9;l.seen_lanes=lanes.len();
++ assert!(l.seen_master && l.seen_checkpoint && l.seen_lanes==8);
++ l.step(4)?;Ok(l.plan.take().unwrap())
++}
++fn NIO_call5(l:&mut NIO_Log,c:&AccountInfo<'_>,_pid:&Pubkey,_key:&Pubkey,n:usize)->Result<FreshPdaPreparationV1,ProgramError>{
++ assert!(c.rent_epoch==9 && n==POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES);
++ l.step(5)?;Ok(FreshPdaPreparationV1::ProgramOwnedZeroed)
++}
++fn NIO_call6(l:&mut NIO_Log,c:&AccountInfo<'_>,_pid:&Pubkey,n:usize,_rent:&Rent)->ProgramResult{
++ assert!(c.rent_epoch==9 && n==POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES);l.step(6)
++}
++struct NIO_Runtime;
++impl PoolCpiRuntimeV1 for NIO_Runtime {
++ fn invoke<'i>(&mut self,_i:&solana_program::instruction::Instruction,_a:&[AccountInfo<'i>])->ProgramResult {assert!(false);Ok(())}
++ fn invoke_signed<'i>(&mut self,_i:&solana_program::instruction::Instruction,_a:&[AccountInfo<'i>],_s:&[&[&[u8]]])->ProgramResult {assert!(false);Ok(())}
++}
++
++pub(crate) fn NIO_checkpoint<'info, R: PoolCpiRuntimeV1>(
++    program_id: &Pubkey,
++    accounts: &[AccountInfo<'info>],
++    instruction_data: &[u8],
++    rent: &Rent,
++    runtime: &mut R,
++    nio_log: &mut NIO_Log,
++) -> ProgramResult {
++    NIO_call0(nio_log, instruction_data)?;
++    NIO_call1(nio_log, accounts, POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_COUNT)?;
++    NIO_call2(nio_log, accounts)?;
++    let master = &accounts[FOREST_MASTER_ACCOUNT_INDEX];
++    let lanes = &accounts[FOREST_FIRST_LANE_ACCOUNT_INDEX
++        ..FOREST_FIRST_LANE_ACCOUNT_INDEX + POOL_V1_PAIR_FOREST_LANE_COUNT];
++    let checkpoint = &accounts[FOREST_MINT_OR_CHECKPOINT_ACCOUNT_INDEX];
++    let payer = &accounts[FOREST_CHECKPOINT_PAYER_ACCOUNT_INDEX];
++    let system_program_account = &accounts[FOREST_CHECKPOINT_SYSTEM_ACCOUNT_INDEX];
++    NIO_call3(nio_log, payer, system_program_account)?;
++
++    let planned = NIO_call4(nio_log, program_id, master, lanes, checkpoint)?;
++    let preparation = NIO_call5(nio_log, 
++        checkpoint,
++        program_id,
++        &planned.checkpoint,
++        POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES,
++    )?;
++    if preparation == FreshPdaPreparationV1::CreateOrAllocateSystemOwned {
++        let checkpoint_state = decode_pool_v1_pair_forest_checkpoint_v1(&planned.checkpoint_image)
++            .map_err(|_| PoolV1ProgramError::StateHistoryMismatch)?;
++        let sequence_bytes = checkpoint_state.checkpoint_sequence.to_le_bytes();
++        let bump_bytes = [checkpoint_state.bump];
++        let seeds: &[&[u8]] = &[
++            POOL_V1_PAIR_FOREST_CHECKPOINT_SEED,
++            master.key.as_ref(),
++            &sequence_bytes,
++            &bump_bytes,
++        ];
++        create_or_allocate_pda(
++            runtime,
++            payer,
++            checkpoint,
++            system_program_account,
++            POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES,
++            program_id,
++            seeds,
++        )?;
++    }
++    NIO_call6(nio_log, 
++        checkpoint,
++        program_id,
++        POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES,
++        rent,
++    )?;
++
++    let mut master_data = master.try_borrow_mut_data()?;
++    let mut checkpoint_data = checkpoint.try_borrow_mut_data()?;
++    checkpoint_data.copy_from_slice(&planned.checkpoint_image);
++    master_data.copy_from_slice(&planned.next_master_image);
++    Ok(())
++}
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NIO_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NIO_KMX::KMX_copy_from_slice)]
++#[kani::stub(alloc::alloc::realloc,crate::NIO_KMX::KMX_realloc)]
++#[kani::proof]
++fn certificate(){let k0=Pubkey::new_from_array(kani::any());let mut balance0:u64=kani::any();let mut bytes0:[u8;384]=kani::any();let a0=AccountInfo::new(&k0,false,true,&mut balance0,&mut bytes0,&k0,false,0);
++let k1=Pubkey::new_from_array(kani::any());let mut balance1:u64=kani::any();let mut bytes1:[u8;1]=kani::any();let a1=AccountInfo::new(&k1,false,true,&mut balance1,&mut bytes1,&k1,false,1);
++let k2=Pubkey::new_from_array(kani::any());let mut balance2:u64=kani::any();let mut bytes2:[u8;1]=kani::any();let a2=AccountInfo::new(&k2,false,true,&mut balance2,&mut bytes2,&k2,false,2);
++let k3=Pubkey::new_from_array(kani::any());let mut balance3:u64=kani::any();let mut bytes3:[u8;1]=kani::any();let a3=AccountInfo::new(&k3,false,true,&mut balance3,&mut bytes3,&k3,false,3);
++let k4=Pubkey::new_from_array(kani::any());let mut balance4:u64=kani::any();let mut bytes4:[u8;1]=kani::any();let a4=AccountInfo::new(&k4,false,true,&mut balance4,&mut bytes4,&k4,false,4);
++let k5=Pubkey::new_from_array(kani::any());let mut balance5:u64=kani::any();let mut bytes5:[u8;1]=kani::any();let a5=AccountInfo::new(&k5,false,true,&mut balance5,&mut bytes5,&k5,false,5);
++let k6=Pubkey::new_from_array(kani::any());let mut balance6:u64=kani::any();let mut bytes6:[u8;1]=kani::any();let a6=AccountInfo::new(&k6,false,true,&mut balance6,&mut bytes6,&k6,false,6);
++let k7=Pubkey::new_from_array(kani::any());let mut balance7:u64=kani::any();let mut bytes7:[u8;1]=kani::any();let a7=AccountInfo::new(&k7,false,true,&mut balance7,&mut bytes7,&k7,false,7);
++let k8=Pubkey::new_from_array(kani::any());let mut balance8:u64=kani::any();let mut bytes8:[u8;1]=kani::any();let a8=AccountInfo::new(&k8,false,true,&mut balance8,&mut bytes8,&k8,false,8);
++let k9=Pubkey::new_from_array(kani::any());let mut balance9:u64=kani::any();let mut bytes9:[u8;192]=kani::any();let a9=AccountInfo::new(&k9,false,true,&mut balance9,&mut bytes9,&k9,false,9);
++let k10=Pubkey::new_from_array(kani::any());let mut balance10:u64=kani::any();let mut bytes10:[u8;1]=kani::any();let a10=AccountInfo::new(&k10,false,true,&mut balance10,&mut bytes10,&k10,false,10);
++let k11=Pubkey::new_from_array(kani::any());let mut balance11:u64=kani::any();let mut bytes11:[u8;1]=kani::any();let a11=AccountInfo::new(&k11,false,true,&mut balance11,&mut bytes11,&k11,false,11);
++let accounts=[a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11];
++let jm:usize=kani::any();kani::assume(jm<384);let jc:usize=kani::any();kani::assume(jc<192);
++let oldm=accounts[0].try_borrow_data().unwrap()[jm];let oldc=accounts[9].try_borrow_data().unwrap()[jc];
++let plan=PlannedPairForestCheckpointAccountsV1{master:Pubkey::new_from_array(kani::any()),checkpoint:Pubkey::new_from_array(kani::any()),lane_sequences:kani::any(),next_master_image:kani::any(),checkpoint_image:kani::any()};
++let wantm=plan.next_master_image[jm];let wantc=plan.checkpoint_image[jc];let fail:u8=kani::any();let error:u64=kani::any();let mut log=NIO_Log{next:0,fail,error,plan:Some(plan),seen_master:false,seen_checkpoint:false,seen_lanes:0};
++let result=NIO_checkpoint(&k0,&accounts,&[],&Rent::default(),&mut NIO_Runtime,&mut log);
++if fail<7 {assert!(result==Err(ProgramError::from(error)));assert!(log.next==fail+1);}else{assert!(log.next==7);assert!(result==Ok(()));}
++if fail>=7 {assert!(accounts[0].try_borrow_data().unwrap()[jm]==wantm);assert!(accounts[9].try_borrow_data().unwrap()[jc]==wantc);}else{assert!(accounts[0].try_borrow_data().unwrap()[jm]==oldm);assert!(accounts[9].try_borrow_data().unwrap()[jc]==oldc);}
++assert!(accounts[0].try_borrow_mut_data().is_ok());assert!(accounts[9].try_borrow_mut_data().is_ok());
++}
++
++}

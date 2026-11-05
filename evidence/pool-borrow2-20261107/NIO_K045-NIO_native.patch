@@ -1,0 +1,53 @@
+--- a/programs/aspis-pool/src/lib.rs
++++ b/programs/aspis-pool/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! Pool V1 authenticated state-transition kernel.
+ //!
+ //! The native entrypoint exposes exact V1 initialization, vault-backed
+@@ -145,3 +146,11 @@
+     plan_authenticated_verifier_dispatch_v1, AuthenticatedVerifierDispatchV1,
+     PlannedVerifierDispatchV1, VerifierDispatchClaimV1,
+ };
++
++#[cfg(kani)]
++extern crate alloc;
++#[cfg(kani)]
++#[path="../../../KMX_stubs.rs"]
++pub mod KMX_stubs;
++#[cfg(kani)]
++pub use KMX_stubs as NIO_KMX;
+--- a/programs/aspis-pool/src/pair_forest.rs
++++ b/programs/aspis-pool/src/pair_forest.rs
+@@ -5792,3 +5792,31 @@
+         assert!(accounts[4].data.iter().any(|byte| *byte != 0));
+     }
+ }
++
++#[cfg(kani)]
++mod NIO_native {
++use super::*;
++fn NIO_window(master:&AccountInfo<'_>,checkpoint:&AccountInfo<'_>,planned:&PlannedPairForestCheckpointAccountsV1,jm:usize,jc:usize)->ProgramResult{
++    let mut master_data = master.try_borrow_mut_data()?;
++    let mut checkpoint_data = checkpoint.try_borrow_mut_data()?;
++    checkpoint_data[jc..jc+1].copy_from_slice(&planned.checkpoint_image[jc..jc+1]);
++    master_data[jm..jm+1].copy_from_slice(&planned.next_master_image[jm..jm+1]);
++    Ok(())
++}
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NIO_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NIO_KMX::KMX_copy_from_slice)]
++#[kani::stub(alloc::alloc::realloc,crate::NIO_KMX::KMX_realloc)]
++#[kani::proof]
++fn certificate(){let k0=Pubkey::new_from_array(kani::any());let mut l0:u64=kani::any();let mut d0:[u8;384]=kani::any();let a0=AccountInfo::new(&k0,false,true,&mut l0,&mut d0,&k0,false,0);
++let k1=Pubkey::new_from_array(kani::any());let mut l1:u64=kani::any();let mut d1:[u8;192]=kani::any();let a1=AccountInfo::new(&k1,false,true,&mut l1,&mut d1,&k1,false,0);
++let jm:usize=kani::any();kani::assume(jm<384);let jc:usize=kani::any();kani::assume(jc<192);let km:usize=kani::any();kani::assume(km<384 && km!=jm);let kc:usize=kani::any();kani::assume(kc<192 && kc!=jc);
++let oldm=a0.try_borrow_data().unwrap()[jm];let oldc=a1.try_borrow_data().unwrap()[jc];let framem=a0.try_borrow_data().unwrap()[km];let framec=a1.try_borrow_data().unwrap()[kc];
++let plan=PlannedPairForestCheckpointAccountsV1{master:Pubkey::new_from_array(kani::any()),checkpoint:Pubkey::new_from_array(kani::any()),lane_sequences:kani::any(),next_master_image:kani::any(),checkpoint_image:kani::any()};
++let result=NIO_window(&a0,&a1,&plan,jm,jc);
++assert!(result==Ok(()));
++assert!(a0.try_borrow_data().unwrap()[jm]==plan.next_master_image[jm]);assert!(a1.try_borrow_data().unwrap()[jc]==plan.checkpoint_image[jc]);
++assert!(a0.try_borrow_data().unwrap()[km]==framem);assert!(a1.try_borrow_data().unwrap()[kc]==framec);
++assert!(a0.try_borrow_mut_data().is_ok());assert!(a1.try_borrow_mut_data().is_ok());
++}
++
++}

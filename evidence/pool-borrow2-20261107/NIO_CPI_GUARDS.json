@@ -1,0 +1,70 @@
+[
+  {
+    "function": "programs/aspis-pool/src/pair_forest.rs::process_pair_forest_deposit_with_runtime_v1",
+    "guard_cells": [
+      "data(accounts[1]): lane_data",
+      "data(accounts[2]) if fresh/same; data(accounts[3]) if rollover: page_data"
+    ],
+    "passed_accounts": "token_start + [1,0,3,2,4], token_start=3 or 4",
+    "source_checks": [
+      "pair_forest.rs:1080 exact count",
+      "pair_forest.rs:1081 require_unique_accounts(all accounts)",
+      "vault.rs:355 exact_transfer_account_infos_v1"
+    ],
+    "status": "OPEN",
+    "native_scope": "pending exact native cut certificates",
+    "unproved": "Actual reached caller layout/key-to-physical-cell relation; callee/CPI frame on that same state; native/meta list association; callback instantiation coverage where applicable."
+  },
+  {
+    "function": "programs/aspis-pool/src/pair_forest.rs::process_pair_forest_terminal_with_verifier_v1",
+    "guard_cells": [
+      "data(accounts[2]): lane_data",
+      "data(accounts[3]) if genesis/same; data(accounts[4]) if rollover: page_data",
+      "data(accounts[cursor]): marker_data, cursor=4 or 5"
+    ],
+    "passed_accounts": "token_start + [1,0,2,3,4], token_start=cursor+7",
+    "source_checks": [
+      "pair_forest.rs:1307 require_unique_accounts(all accounts)",
+      "pair_forest.rs:1285..1318 exact layout",
+      "vault.rs:570 exact_withdrawal_transfer_account_infos_v1"
+    ],
+    "status": "OPEN",
+    "native_scope": "pending exact native cut certificates",
+    "unproved": "Actual reached caller layout/key-to-physical-cell relation; callee/CPI frame on that same state; native/meta list association; callback instantiation coverage where applicable."
+  },
+  {
+    "function": "programs/aspis-pool/src/pair_processor.rs::process_pair_withdrawal_with_verifier_v1",
+    "guard_cells": [
+      "data(accounts[current_index or next_index]): history_data, selected index < marker_index",
+      "data(accounts[0]): pool_data",
+      "data(accounts[marker_index]): marker_data"
+    ],
+    "passed_accounts": "proof_index+1 + [1,0,2,3,4], proof_index=marker_index+4",
+    "source_checks": [
+      "pair_processor.rs:464 require_unique(all accounts)",
+      "pair_processor.rs:99..178 plan_layout",
+      "vault.rs:570 exact_withdrawal_transfer_account_infos_v1"
+    ],
+    "status": "OPEN",
+    "native_scope": "pending exact native cut certificates",
+    "unproved": "Actual reached caller layout/key-to-physical-cell relation; callee/CPI frame on that same state; native/meta list association; callback instantiation coverage where applicable."
+  },
+  {
+    "function": "programs/aspis-pool/src/transition.rs::apply_authorized_append_after_checked_state_v1",
+    "guard_cells": [
+      "data(pool_account): pool_data",
+      "data(current_page_account) if mutate_current: current_data",
+      "data(supplied_next_page) if present: next_data"
+    ],
+    "passed_accounts": "Callback-dependent: deposit transfer-info helper; withdrawal marker classifier/creation CPI, token CPI, delta validation, marker write; no-op private-transfer callback.",
+    "source_checks": [
+      "transition.rs:735 before_persist",
+      "transition.rs:755..864 wrappers forward callback",
+      "deposit.rs:163 and 202 require_disjoint_account_groups",
+      "processor.rs:2311..2361 withdrawal callback"
+    ],
+    "status": "OPEN",
+    "native_scope": "pending exact native cut certificates",
+    "unproved": "Actual reached caller layout/key-to-physical-cell relation; callee/CPI frame on that same state; native/meta list association; callback instantiation coverage where applicable."
+  }
+]
