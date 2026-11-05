@@ -1,0 +1,9 @@
+import NGQ_COMBINED_IMPORT
+set_option autoImplicit false
+#print Query31ExplicitScanBody.body
+#print Query31ExplicitListLoop.listNext
+#print Query31ConcreteWordsDriverChain.actualQueryWords
+#print Query31ModelScanCall.modelScanFn
+#check AspisR1.NGQ_SamplerDriver.source
+#check AspisR1.NGQ_SamplerPacket.adopted_decoder
+#check AspisR1.NGQ_TRANSCRIPT.actual_queries

@@ -1,0 +1,47 @@
+{"attempt": "NHB_L001", "exit_status": 1, "wall_seconds": 2.8635421849321574, "peak_rss_kib": "5933100", "swaps": "0", "print_axioms": []}
+def Query31ExplicitScanBody.body : {Iter : Type} →
+  Query31ExplicitScanBody.StdOps Iter →
+    Iter →
+      Query31ExplicitScanBody.CurrentScan →
+        Aeneas.Std.Result
+          (Aeneas.Std.ControlFlow (Iter × Query31ExplicitScanBody.CurrentScan)
+            (Query31ExplicitScanBody.CurrentScan × Option Bool)) :=
+fun {Iter} ops iter s => do
+  let __x ← ops.iterNext iter
+  match __x with
+    | (o, iter1) =>
+      match o with
+      | none => Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (s, some false))
+      | some candidate =>
+        if s.accepted_len = 22#usize then Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (s, none))
+        else
+          if s.draws = 64#usize then Aenea
+...
+.NGQ_SamplerDriver.Blocks) :
+  AspisR1Query31Transcript.queries_from_pairs_with_scan scan s blocks advances =
+    AspisR1.NGQ_SamplerDriver.walk scan advances 7#usize
+      ((↑blocks).zip [0#usize, 1#usize, 2#usize, 3#usize, 4#usize, 5#usize, 6#usize, 7#usize]) s
+AspisR1.NGQ_SamplerPacket.adopted_decoder (blocks advances : AspisR1.NGQ_SamplerPacket.Blocks) :
+  AspisR1.NGQ_SamplerPacket.decode blocks advances =
+    Query31ConcreteMaterializedSchedule.actualConcreteDecode AspisR1.NGQ_SamplerPacket.initial blocks advances
+AspisR1.NGQ_TRANSCRIPT.actual_queries (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (self : AspisR1PublicPreparation.transcript.Transcript Unit) (row : Aeneas.Std.U8)
+  (payload : Aeneas.Std.Slice Aeneas.Std.U8) (observed : AspisR1.NGP_L181.Observation AspisR1.NGQ_Effects.Reply)
+  (trace :
+    AspisR1.NGQ_Cuts.Trace hashv
+      (AspisR1.NGQ_Normalize.normalize (AspisR1.NGQ_Effects.code AspisR1.NGQ_TRANSCRIPT.boundaries self row payload))
+      observed.result observed.attempted) :
+  AspisR1.NGP_L181.NativeAssociation hashv (AspisR1.NGQ_Effects.code AspisR1.NGQ_TRANSCRIPT.boundaries self row payload)
+      observed ∧
+    observed.result =
+        AspisR1PublicPreparation.QueriesModel.queries AspisR1.NGQ_TRANSCRIPT.boundaries
+          (AspisR1.NGQ_Effects.dictionary hashv) self row payload ∧
+      AspisR1.NGQ_TRANSCRIPT.positions observed.result =
+          AspisR1.NGQ_TRANSCRIPT.positions
+            (AspisR1PublicPreparation.QueriesModel.queries AspisR1.NGQ_TRANSCRIPT.boundaries
+              (AspisR1.NGQ_Effects.dictionary hashv) self row payload) ∧
+        observed.attempted =
+          (AspisR1.SdkC_Source.run hashv (AspisR1.NGQ_Effects.code AspisR1.NGQ_TRANSCRIPT.boundaries self row payload)
+              []).2
+
+Running as unit: run-rc3b0e1ae3ce546f182008c6bbab43a0f.scope; invocation ID: ae150787bc244e7791688c248bea5607

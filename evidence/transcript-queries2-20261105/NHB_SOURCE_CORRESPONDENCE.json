@@ -1,0 +1,56 @@
+{
+  "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "historical_path": "docs/research/100bit-spend-path-20261013/lean-candidates/query31-axiom-free-scan-loop-20261020/source-snapshot/rust/crates/aspis-core/src/r0_transcript.rs",
+  "comparison_revision": "b803179448d15afd125ecce9723f8e6b8beb7f0f",
+  "functions": [
+    {
+      "needle": "pub fn queries_from_pairs(",
+      "frozen": {
+        "start_line": 305,
+        "end_line": 318,
+        "sha256": "ac5b3824b4d7f9d020fb5835ff91fad6e63133888b0ef0b56a5e9d4964f82e85",
+        "text": "pub fn queries_from_pairs(\n    blocks: &[[u8; 32]; 8],\n    advances: &[[u8; 32]; 8],\n) -> Result<([u32; QUERY_COUNT], [u8; 32]), QuerySampleError> {\n    let mut scan = QueryScan::default();\n    let mut state = advances[7];\n    for k in 0..8 {\n        if scan.scan(&blocks[k]) {\n            state = advances[k];\n            break;\n        }\n    }\n    Ok((scan.finish()?, state))\n}"
+      },
+      "historical": {
+        "start_line": 305,
+        "end_line": 318,
+        "sha256": "ac5b3824b4d7f9d020fb5835ff91fad6e63133888b0ef0b56a5e9d4964f82e85",
+        "text": "pub fn queries_from_pairs(\n    blocks: &[[u8; 32]; 8],\n    advances: &[[u8; 32]; 8],\n) -> Result<([u32; QUERY_COUNT], [u8; 32]), QuerySampleError> {\n    let mut scan = QueryScan::default();\n    let mut state = advances[7];\n    for k in 0..8 {\n        if scan.scan(&blocks[k]) {\n            state = advances[k];\n            break;\n        }\n    }\n    Ok((scan.finish()?, state))\n}"
+      },
+      "equal": true
+    },
+    {
+      "needle": "fn scan(",
+      "frozen": {
+        "start_line": 202,
+        "end_line": 214,
+        "sha256": "3cff726dab005f51aef48d32112547c7eadfb1a1c35cb93eeae0cbace3929dbd",
+        "text": "fn scan(&mut self, block: &[u8; 32]) -> bool {\n        for candidate in query_words(block) {\n            if self.accepted_len == QUERY_COUNT || self.draws == QUERY_MAX_DRAWS {\n                return true;\n            }\n            self.draws += 1;\n            if !self.accepted[..self.accepted_len].contains(&candidate) {\n                self.accepted[self.accepted_len] = candidate;\n                self.accepted_len += 1;\n            }\n        }\n        false\n    }"
+      },
+      "historical": {
+        "start_line": 202,
+        "end_line": 214,
+        "sha256": "3cff726dab005f51aef48d32112547c7eadfb1a1c35cb93eeae0cbace3929dbd",
+        "text": "fn scan(&mut self, block: &[u8; 32]) -> bool {\n        for candidate in query_words(block) {\n            if self.accepted_len == QUERY_COUNT || self.draws == QUERY_MAX_DRAWS {\n                return true;\n            }\n            self.draws += 1;\n            if !self.accepted[..self.accepted_len].contains(&candidate) {\n                self.accepted[self.accepted_len] = candidate;\n                self.accepted_len += 1;\n            }\n        }\n        false\n    }"
+      },
+      "equal": true
+    },
+    {
+      "needle": "fn finish(",
+      "frozen": {
+        "start_line": 216,
+        "end_line": 225,
+        "sha256": "3e9f01fa0579fab92dd6eafe5b73b439b9116b8d9094bda5b26e87fcb67c15da",
+        "text": "fn finish(self) -> Result<[u32; QUERY_COUNT], QuerySampleError> {\n        if self.accepted_len == QUERY_COUNT {\n            Ok(self.accepted)\n        } else {\n            Err(QuerySampleError::DrawLimitExhausted {\n                accepted: self.accepted_len,\n                max_draws: QUERY_MAX_DRAWS,\n            })\n        }\n    }"
+      },
+      "historical": {
+        "start_line": 216,
+        "end_line": 225,
+        "sha256": "3e9f01fa0579fab92dd6eafe5b73b439b9116b8d9094bda5b26e87fcb67c15da",
+        "text": "fn finish(self) -> Result<[u32; QUERY_COUNT], QuerySampleError> {\n        if self.accepted_len == QUERY_COUNT {\n            Ok(self.accepted)\n        } else {\n            Err(QuerySampleError::DrawLimitExhausted {\n                accepted: self.accepted_len,\n                max_draws: QUERY_MAX_DRAWS,\n            })\n        }\n    }"
+      },
+      "equal": true
+    }
+  ],
+  "frozen_inputs_sha256": "c17052b5e1f9bae9ee591007681e6abeb8facb4f72cbaed6b142fce0cc2faaa7"
+}
