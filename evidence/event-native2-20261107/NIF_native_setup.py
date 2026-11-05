@@ -11,7 +11,7 @@ seeds={
  'NGK_exports_20261105':'/home/dombarker/project-offloads/codex-cx-carriers-bind-cache-20261104/NGK_exports_20261105'}
 roots=[B+'/NIF_objects']+[C+'/'+k for k in seeds]+paths
 roots=list(dict.fromkeys(roots))
-(E/'NIF_PATHS.json').write_text(json.dumps(roots,indent=1)+'\n')
+# Native setup preserves the existing coherent Lean path selection.
 def ssh(code):
  for retry in range(11):
   r=subprocess.run(['ssh','-o','ControlMaster=no','-o','ConnectTimeout=15','dombarker@100.108.41.90','python3'],input=code,text=True,capture_output=True)
