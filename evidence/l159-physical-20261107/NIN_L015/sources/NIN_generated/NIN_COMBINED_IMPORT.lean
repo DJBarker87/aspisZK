@@ -1,0 +1,13 @@
+import NGK_COMBINED_IMPORT
+import NIM_COMBINED_IMPORT
+import NIM_NHJ_COMBINED_IMPORT
+import NIM_NHY_COMBINED_IMPORT
+import NIN_PhysicalInstance
+import NIN_ObserverFields
+import NIN_WriterProducer
+import NIN_GameProjection
+#print axioms AspisR1.RPx_Deployed.deployed
+#print axioms AspisR1.NIN_PhysicalInstance.physical_instance
+#print axioms AspisR1.NIN_Observer.realizes
+#print axioms AspisR1.NIN_WriterProducer.from_native
+#print axioms AspisR1.NIN_GameProjection.game_fields
