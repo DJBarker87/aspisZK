@@ -483,10 +483,10 @@
 +fn wide_product_spec(a:aspis_core::field::WideExact,b:aspis_core::field::WideExact)->aspis_core::field::WideExact {
 + let a=ewords(a);let b=ewords(b);kani::assume(a.iter().all(|x|*x<2147483647) && b.iter().all(|x|*x<2147483647));
 + let ac=qmul(qpart(a,0),qpart(b,0));let bd=qmul(qpart(a,4),qpart(b,4));let sa=core::array::from_fn(|i|addn(a[i],a[4+i]));let sb=core::array::from_fn(|i|addn(b[i],b[4+i]));let cross=qmul(sa,sb);let r=cr([bd[2],bd[3]]);let expected=[addn(ac[0],r[0]),addn(ac[1],r[1]),addn(ac[2],bd[0]),addn(ac[3],bd[1]),subn(subn(cross[0],ac[0]),bd[0]),subn(subn(cross[1],ac[1]),bd[1]),subn(subn(cross[2],ac[2]),bd[2]),subn(subn(cross[3],ac[3]),bd[3])];
-+ let out:[u32;8]=kani::any();kani::assume(out.iter().all(|x|*x<2147483647));kani::assume(out==expected);aspis_core::field::WideExact::from_limbs(out).unwrap()
++ let out:[u32;8]=kani::any();kani::assume(out.iter().all(|x|*x<2147483647));for i in 0..8 {kani::assume(out[i]==expected[i]);}aspis_core::field::WideExact::from_limbs(out).unwrap()
 +}
 +fn wide_scale_spec(a:aspis_core::field::WideExact,b:aspis_core::field::M31)->aspis_core::field::WideExact {
-+ let a=ewords(a);kani::assume(a.iter().all(|x|*x<2147483647));let expected=a.map(|x|muln(x,b.0%2147483647));let out:[u32;8]=kani::any();kani::assume(out.iter().all(|x|*x<2147483647));kani::assume(out==expected);aspis_core::field::WideExact::from_limbs(out).unwrap()
++ let a=ewords(a);kani::assume(a.iter().all(|x|*x<2147483647));let expected=a.map(|x|muln(x,b.0%2147483647));let out:[u32;8]=kani::any();kani::assume(out.iter().all(|x|*x<2147483647));for i in 0..8 {kani::assume(out[i]==expected[i]);}aspis_core::field::WideExact::from_limbs(out).unwrap()
 +}
 +
 +#[kani::proof]
@@ -635,8 +635,8 @@
 +fn queries_abort_control() {
 +let calls=Cell::new(0u8);let stopped=Cell::new(false);let stop:u8=kani::any();kani::assume(stop<17);let hash=AbortDigest{calls:&calls,stopped:&stopped,stop,continues:true};let state:[u8;32]=kani::any();let mut t=aspis_r1_cost_probe::transcript::NIC_transcript::from_state(hash,state);let row:u8=kani::any();kani::assume(row<96);let payload:[u8;2048]=kani::any();let len:usize=kani::any();kani::assume(len<=2048);let _out=t.queries(row,&payload[..len]);assert!(!stopped.get(),"NIC returning suffix after abort");}
 +
-+fn wide_add_spec(a:aspis_core::field::WideExact,b:aspis_core::field::WideExact)->aspis_core::field::WideExact {let a=ewords(a);let b=ewords(b);kani::assume(a.iter().all(|x|*x<2147483647) && b.iter().all(|x|*x<2147483647));let out:[u32;8]=kani::any();kani::assume(out.iter().all(|x|*x<2147483647));kani::assume(out==core::array::from_fn(|i|addn(a[i],b[i])));aspis_core::field::WideExact::from_limbs(out).unwrap()}
-+fn wide_subtract_spec(a:aspis_core::field::WideExact,b:aspis_core::field::WideExact)->aspis_core::field::WideExact {let a=ewords(a);let b=ewords(b);kani::assume(a.iter().all(|x|*x<2147483647) && b.iter().all(|x|*x<2147483647));let out:[u32;8]=kani::any();kani::assume(out.iter().all(|x|*x<2147483647));kani::assume(out==core::array::from_fn(|i|subn(a[i],b[i])));aspis_core::field::WideExact::from_limbs(out).unwrap()}
++fn wide_add_spec(a:aspis_core::field::WideExact,b:aspis_core::field::WideExact)->aspis_core::field::WideExact {let a=ewords(a);let b=ewords(b);kani::assume(a.iter().all(|x|*x<2147483647) && b.iter().all(|x|*x<2147483647));let out:[u32;8]=kani::any();kani::assume(out.iter().all(|x|*x<2147483647));for i in 0..8 {kani::assume(out[i]==addn(a[i],b[i]));}aspis_core::field::WideExact::from_limbs(out).unwrap()}
++fn wide_subtract_spec(a:aspis_core::field::WideExact,b:aspis_core::field::WideExact)->aspis_core::field::WideExact {let a=ewords(a);let b=ewords(b);kani::assume(a.iter().all(|x|*x<2147483647) && b.iter().all(|x|*x<2147483647));let out:[u32;8]=kani::any();kani::assume(out.iter().all(|x|*x<2147483647));for i in 0..8 {kani::assume(out[i]==subn(a[i],b[i]));}aspis_core::field::WideExact::from_limbs(out).unwrap()}
 +
 +#[kani::proof]
 +#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
@@ -692,7 +692,7 @@
 +
 +fn qwords(a:aspis_core::field::QM31)->[u32;4] {[a.c0.a.0,a.c0.b.0,a.c1.a.0,a.c1.b.0]}
 +fn fromq(a:[u32;4])->aspis_core::field::QM31 {use aspis_core::field::{M31,CM31,QM31};QM31{c0:CM31{a:M31(a[0]),b:M31(a[1])},c1:CM31{a:M31(a[2]),b:M31(a[3])}}}
-+fn q_subtract_spec(a:aspis_core::field::QM31,b:aspis_core::field::QM31)->aspis_core::field::QM31 {let a=qwords(a);let b=qwords(b);kani::assume(a.iter().all(|x|*x<2147483647) && b.iter().all(|x|*x<2147483647));let out:[u32;4]=kani::any();kani::assume(out.iter().all(|x|*x<2147483647));kani::assume(out==core::array::from_fn(|i|subn(a[i],b[i])));fromq(out)}
++fn q_subtract_spec(a:aspis_core::field::QM31,b:aspis_core::field::QM31)->aspis_core::field::QM31 {let a=qwords(a);let b=qwords(b);kani::assume(a.iter().all(|x|*x<2147483647) && b.iter().all(|x|*x<2147483647));let out:[u32;4]=kani::any();kani::assume(out.iter().all(|x|*x<2147483647));for i in 0..4 {kani::assume(out[i]==subn(a[i],b[i]));}fromq(out)}
 +
 +fn box_abort<T>(_value:T)->Box<T> {kani::assume(false);unreachable!()}
 +#[kani::proof]
@@ -913,8 +913,8 @@
 +#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
 +fn dot_fold_control() {let _=SolanaDigest.digest(&[b"NIC control"]);aspis_r1_cost_probe::verifier::NIC_native::dot_fold_step();}
 +
-+fn q_product_spec(a:aspis_core::field::QM31,b:aspis_core::field::QM31)->aspis_core::field::QM31 {let a=qwords(a);let b=qwords(b);kani::assume(a.iter().all(|x|*x<2147483647) && b.iter().all(|x|*x<2147483647));let out:[u32;4]=kani::any();kani::assume(out.iter().all(|x|*x<2147483647));kani::assume(out==qmul(a,b));fromq(out)}
-+fn wide_q_spec(a:aspis_core::field::WideExact,b:aspis_core::field::QM31)->aspis_core::field::WideExact {let a=ewords(a);let b=qwords(b);kani::assume(a.iter().all(|x|*x<2147483647) && b.iter().all(|x|*x<2147483647));let l=qmul(qpart(a,0),b);let h=qmul(qpart(a,4),b);let out:[u32;8]=kani::any();kani::assume(out.iter().all(|x|*x<2147483647));kani::assume(out==[l[0],l[1],l[2],l[3],h[0],h[1],h[2],h[3]]);aspis_core::field::WideExact::from_limbs(out).unwrap()}
++fn q_product_spec(a:aspis_core::field::QM31,b:aspis_core::field::QM31)->aspis_core::field::QM31 {let a=qwords(a);let b=qwords(b);kani::assume(a.iter().all(|x|*x<2147483647) && b.iter().all(|x|*x<2147483647));let out:[u32;4]=kani::any();kani::assume(out.iter().all(|x|*x<2147483647));let expected=qmul(a,b);for i in 0..4 {kani::assume(out[i]==expected[i]);}fromq(out)}
++fn wide_q_spec(a:aspis_core::field::WideExact,b:aspis_core::field::QM31)->aspis_core::field::WideExact {let a=ewords(a);let b=qwords(b);kani::assume(a.iter().all(|x|*x<2147483647) && b.iter().all(|x|*x<2147483647));let l=qmul(qpart(a,0),b);let h=qmul(qpart(a,4),b);let out:[u32;8]=kani::any();kani::assume(out.iter().all(|x|*x<2147483647));let expected=[l[0],l[1],l[2],l[3],h[0],h[1],h[2],h[3]];for i in 0..8 {kani::assume(out[i]==expected[i]);}aspis_core::field::WideExact::from_limbs(out).unwrap()}
 +
 +#[kani::proof]
 +#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]

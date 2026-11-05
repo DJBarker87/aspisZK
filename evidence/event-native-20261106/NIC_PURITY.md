@@ -1,22 +1,24 @@
-# Native purity progress
+# Native event purity certificates
 
-Target not yet established. Model interpretation is NIA_EventInterpretation, pinned in NIC_INPUT_PINS.json; NIC_PurityFrame.context_frame composes it on the SAME Context. Native certification is separate.
+PARTIAL. No full native event-kind closure or ledger promotion is inferred from a local window. NIA_EventInterpretation.eventCode represents all twelve selected callees; NIC_PurityFrame.context_frame proves the model interpretation/frame on the SAME Context. Native source-effect association is separate.
 
-| Event kind | Native evidence | Status / domain |
+| Kind | Current native scope/status | Evidence |
 |---|---|---|
-| one | K001/K002 | positive PASS / reachable-digest control FAIL; constant M31::ONE |
-| double | K003/K004 | PASS/FAIL; canonical arbitrary M31 |
-| subtract | K005/K006 | PASS/FAIL; two arbitrary canonical M31 |
-| trace | K007/K008 | PASS/FAIL; arbitrary tag/index and canonical E; deployed no-prover body |
-| opening | K013/K014 | PASS/FAIL; arbitrary proof bytes and i<22 |
-| geometry | K011/K012 | PASS/FAIL; one arbitrary row, arbitrary start; full-frame installation still requires accessor law |
-| fields | K015/K016 | PASS/FAIL; one selected output index<4 and canonical decoded E; loop-step refinement pending |
-| product | K019/K020 | PASS/FAIL; natural-spec stub, NFP_ProductLaw.emitted; every u32 pair |
-| circle | K028 | TIMEOUT; split fixed stages next; no credit |
-| line | pending | independent fixed-stage split planned |
-| dots | pending | one native window plus existing NFM induction required |
-| accumulate | pending | one native basis/row/tail step plus NFS induction required |
+| opening | LOCAL-PURITY valid fixed-length input; parent domain association retained | NIC_K013, NIC_K014 |
+| dots | PARTIAL: main/fold/raw-tail/fold-tail/reduction; stopped decoder and orchestration association OPEN | NIC_K048, NIC_K049, NIC_K050, NIC_K051, NIC_K065, NIC_K066, NIC_K067, NIC_K068, NIC_K060, NIC_K061 |
+| trace | LOCAL-PURITY on canonical E, arbitrary tag/index; deployed non-prover body | NIC_K007, NIC_K008 |
+| geometry | PARTIAL: arbitrary one-row projection; complete SAME Context/frame installation retained | NIC_K011, NIC_K012 |
+| circle | OPEN enclosing effect certificate; total SAME-site model domains proved; whole attempts excluded | NIC_K028, NIC_K042, NIC_K062, NIC_K077, NIC_K078 |
+| fields | PARTIAL: canonical output window and one-word decoder; NIC-D1 stopped-decoder boundary OPEN | NIC_K015, NIC_K016, NIC_K071, NIC_K072 |
+| line | OPEN enclosing effect certificate; total SAME-site model domains proved; whole attempt excluded | NIC_K044, NIC_K075, NIC_K076, NIC_K077, NIC_K078 |
+| product | LOCAL-PURITY under rule A, exact all-U32 natural product law | NIC_K019, NIC_K020 |
+| double | LOCAL-PURITY on canonical M31 | NIC_K003, NIC_K004 |
+| one | LOCAL-PURITY constant M31::ONE | NIC_K001, NIC_K002 |
+| subtract | LOCAL-PURITY on canonical M31 pair | NIC_K005, NIC_K006 |
+| accumulate | PARTIAL: basis/node/row/flush/tail steps; complete source-to-effect association OPEN | NIC_K052, NIC_K053, NIC_K054, NIC_K055, NIC_K056, NIC_K057, NIC_K058, NIC_K059, NIC_K079, NIC_K080 |
 
-K021–K027 are failing activation controls for hashv, return-data set/get, CPI invoke/invoke_signed, log and compute-unit log respectively; digest activation is checked in each paired control. All unreachability stubs assert false, no runtime effect is silently turned into a value. No writable static, function-pointer observer or verified-contract substitution is used.
+NIC_WINDOWS.json checks the exact frozen main/raw/basis/node windows and rejects four association mutations. NFS/NFM existing value/loop/control induction is reused by source hash, never re-proved by unrolling a whole buffer. Geometry's projection remains explicit. Fields/dots retain the DOMAIN FINDING NIC-D1: successful canonical decoder windows do not cover the full arbitrary-byte NFS packet. No success premise repairs that gap.
 
-K017 copy-positive PASS and K018 inverted copy control FAIL use the exact KMX patch and same program-root features. Earlier non-copy value properties are not replayed. Geometry/fields full caller installation is explicitly pending; no row is promoted.
+Every credited local positive has a failing reachable-digest control. K021–027 activate the other runtime-frontier stubs individually. No hidden syscall was found. The whole-fold attempts and own array-memcmp failures are retained and excluded. The final one-field and accumulation-tail checks use scalar-limb reference constraints; no unwind/time/resource limit is increased.
+
+All field-stub pairings and domains are in NIC_STUBS.md. No field multiplication is proved in Kani. No Option<fn> observation, writable static, verified-contract assumption or new copy stub is used. Native/model/std/compiler/ABI/allocator/source-to-ELF/P6 transport qualifications remain.

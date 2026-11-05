@@ -1,5 +1,7 @@
 import NGK_COMBINED_IMPORT
 import NIC_DriverPackets
+import NIC_FoldDomains
+import NIC_AllocatorPrefix
 #print axioms AspisR1.RPx_Deployed.deployed
 #print axioms AspisR1.NIC_PurityFrame.context_frame
 #print axioms AspisR1.NIC_PurityFrame.compose
@@ -14,3 +16,7 @@ import NIC_DriverPackets
 #print axioms AspisR1.NIC_FieldStubs.scale
 #print axioms AspisR1.NIC_DriverPackets.scalar_stop_cut
 #print axioms AspisR1.NIC_DriverPackets.tx1_from_packets
+#print axioms AspisR1.NIC_FoldDomains.circle
+#print axioms AspisR1.NIC_FoldDomains.line
+#print axioms AspisR1.NIC_AllocatorPrefix.fail
+#print axioms AspisR1.NIC_AllocatorPrefix.stopped

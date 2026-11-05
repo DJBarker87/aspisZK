@@ -1,0 +1,58 @@
+{"attempt": "NIC_K073", "exit_status": 0, "wall_seconds": 3.0431226429063827, "peak_rss_kib": "248168", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+ion `raw_product_spec` is never used
+   --> programs/r1-cost-probe/src/NIC_purity.rs:562:4
+    |
+562 | fn raw_product_spec(a:u32,b:u32)->u64 {assert!(a<2147483647 && b<2147483647,"NIC raw product domain");let out:u64=kani::any();kani:...
+    |    ^^^^^^^^^^^^^^^^
+
+warning: function `q_product_spec` is never used
+   --> programs/r1-cost-probe/src/NIC_purity.rs:770:4
+    |
+770 | fn q_product_spec(a:aspis_core::field::QM31,b:aspis_core::field::QM31)->aspis_core::field::QM31 {let a=qwords(a);let b=qwords(b);ka...
+    |    ^^^^^^^^^^^^^^
+
+warning: function `wide_q_spec` is never used
+   --> programs/r1-cost-probe/src/NIC_purity.rs:771:4
+    |
+771 | fn wide_q_spec(a:aspis_core::field::WideExact,b:aspis_core::field::QM31)->aspis_core::field::WideExact {let a=ewords(a);let b=qword...
+    |    ^^^^^^^^^^^
+
+warning: module `NIC_purity` should have a snake case name
+   --> programs/r1-cost-probe/src/lib.rs:173:18
+    |
+173 | #[cfg(kani)] mod NIC_purity { include!("NIC_purity.rs"); }
+    |                  ^^^^^^^^^^ help: convert the identifier to snake case: `nic_purity`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.12s
+Checking harness NIC_purity::q_subtract_pure...
+
+VERIFICATION RESULT:
+ ** 0 of 69 failed (1 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.23383826s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r03d87ec2298947ff851d4117b6f35c1a.scope; invocation ID: a82bbd6bbc904943a7465d7434ead35c
