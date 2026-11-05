@@ -56,6 +56,7 @@ RuntimePersistence remains accepted data-only trust. (ao)(3)(a) extraction stays
  (E/'NIU_PHYSICAL.md').write_text(intro)
  plan=(E.parent/'ledger12-20261107/NIR_PLAN_STATUS.md').read_text().replace('# NIR plan status','# NIU plan status').replace('NIR_PHYSICAL.md','NIU_PHYSICAL.md')
  plan=plan.replace('latest NIK census','NIK census / NIO support').replace('NIO in flight.','NIO support replayed; no production closure.').replace('NIO is in flight and receives no credit here.','NIO supports model/library/counter windows; zero full owners and four actual sites OPEN.').replace('NIQ pair/finish','NIT pair/finish support').replace('NIM canonical forest, NIJ entry adapter owner','NIM canonical forest plus NIS entry adapters').replace('NIH op9','NIH op9 OPEN; twenty terminal candidates admitted')
+ plan=plan.replace('NIN physical hypothesis producer joins remain; no native row promotion.','Actual native/Pool associations in(ao)(3)(b-d) remain; the five external exporter predicates are retired.').replace('exact outside599 helper rows below','exact outside599 helper rows in NIU_PHYSICAL.md').replace('NIR_TRUST_INVENTORY.json:', 'evidence/ledger12-20261107/NIR_TRUST_INVENTORY.json:').replace('Inventory copied byte-for-data from the NIM/NII basis; no new trust row.','Ledger trust rows remain byte-for-data from the NIM/NII basis; NIU adds no trust row. The lead Pool addition is documented below.')
  plan+='''
 
 ## Ledger13 changes and status lines
