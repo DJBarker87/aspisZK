@@ -19,15 +19,15 @@ for p in paths:
    if text[i]=='{':depth+=1
    elif text[i]=='}':depth-=1
    i+=1
-  functions.append(dict(path=p,name=m[1],line=text[:m.start()].count('\n')+1,end=text[:i].count('\n')+1,body=text[start:i]))
+  functions.append(dict(path=p,name=m[1],line=text[:m.start()].count('\n')+1,body_line=text[:start].count('\n')+1,end=text[:i].count('\n')+1,body=text[start:i]))
 rows=[]
 for f in functions:
  for m in re.finditer(r'\.data_is_empty\s*\(',f['body']):
-  line=f['line']+f['body'][:m.start()].count('\n')
+  line=f['body_line']+f['body'][:m.start()].count('\n')
   callers=[]
   for parent in functions:
    for c in re.finditer(r'\b'+re.escape(f['name'])+r'\s*(?:::<[^;]*?>)?\s*\(',parent['body']):
-    callers.append(dict(path=parent['path'],caller=parent['name'],line=parent['line']+parent['body'][:c.start()].count('\n')))
+    callers.append(dict(path=parent['path'],caller=parent['name'],line=parent['body_line']+parent['body'][:c.start()].count('\n')))
   rows.append(dict(path=f['path'],accessor_line=line,caller=f['name'],caller_line=f['line'],body_sha256=sha(f['body'].encode()),direct_callers=callers,status='OPEN',obligation='Derive no live exclusive guard on the same data cell from actual caller prefix, including aliases and preceding callee/CPI frames; native matched-control certificate plus model association required.',classification='liveness; no soundness claim'))
 assert len(rows)==7
 (E/'NIE_ACCESSORS.json').write_text(json.dumps(dict(frozen_revision=REV,method='conservative lexical direct-call inventory; imported aliases, cfg reachability and root association require separate review',accessors=rows,source_pins=pins),indent=2)+'\n')
