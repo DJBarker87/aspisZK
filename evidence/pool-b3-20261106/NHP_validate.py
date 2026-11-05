@@ -34,8 +34,16 @@ def validate(overrides=None):
    assert cfg['env']['CARGO_NET_OFFLINE']=='true' and cfg['env']['CARGO_PROFILE_DEV_OPT_LEVEL']=='3' and cfg['copy_patch_sha256']==KMX
    assert cfg['program_features']=='r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit'
    assert js(a+'-metadata-pin.json')['features_all_crates']
+  if a.startswith('NHP_K'):
+   shape=js(a+'-shape.json');patch=raw(a+'-NHP_native.patch').decode()
+   added=''.join(line[1:] for line in patch.splitlines(True) if line.startswith('+') and not line.startswith('+++'))
+   assert shape['source'].strip() in added,(a,'shape/compiled patch')
   if a.startswith('NHP_L') and rc['exit_status']==0:
-   assert all('sorryAx' not in line and ('depends on axioms' not in line or set(re.findall(r'\b(?:propext|Classical.choice|Quot.sound|sorryAx)\b',line))<=STANDARD) for line in rc['print_axioms'])
+   for line in rc['print_axioms']:
+    assert 'sorryAx' not in line
+    if 'depends on axioms:' in line:
+     names=line.split('[',1)[1].rsplit(']',1)[0]
+     assert set(n.strip() for n in names.split(',') if n.strip())<=STANDARD,(a,'nonstandard axiom')
  closed=js('NHP_CLOSED.json');delta=js('NHP_LEDGER_DELTA.json');assert len(closed['composed_rows'])==delta['composed_rows_added']==len(delta['rows'])==2
  assert closed['production_association'] is False and closed['release_claim'] is False and closed['verifier_inventory_changed'] is False
  assert delta['basis']['rows']==599 and delta['root_status']=={'POOL.prefix_to_cpi':'OPEN','POOL.read_to_settlement':'OPEN'}
@@ -51,6 +59,16 @@ def validate(overrides=None):
  guard=js('NHP_GUARD_CERTIFICATE.json');assert guard['native_positive']=='NHP_K028' and guard['matched_control']=='NHP_K029' and guard['theorem']=='NHP_StackLaw.exact_reply'
  assert H((R/guard['reference_source']).read_bytes())==guard['reference_sha256']
  assert H(guard['frozen_body'].encode())==guard['frozen_body_sha256']
+ frozen=subprocess.check_output(['git','show','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs'],cwd=R,text=True)
+ start=frozen.index('fn require_transaction_level_invocation_v1(');end=frozen.index('\n}',start)+2;assert frozen[start:end]==guard['frozen_body']
+ assert guard['domain']=='Every usize height; exact Ok(()) iff height=1, otherwise Err(Custom(0x41532036)); no input, success or output premise'
+ pins=js('NHP_E001_EXTRACTION_PINS.json');assert pins['charon_exit']==pins['aeneas_exit']==0
+ assert pins['source_lock_before']==pins['source_lock_after']==LOCK
+ for name in ['Types','Funs']:
+  source=raw('NHP_StackRef/'+name+'.lean');artifact=raw('NHP_E001_extracted/NHP_StackRef/'+name+'.lean.txt')
+  assert source==artifact
+  assert H(source)==pins['outputs']['NHP_E001_extracted/NHP_StackRef/'+name+'.lean']['sha256']
+
  assert '#[kani::proof_for_contract(super::require_transaction_level_invocation_v1)]' in js('NHP_K028-shape.json')['source']
  assert js('NHP_K028-shape.json')['source'].replace('let admitted=crate::','let admitted=!crate::')==js('NHP_K029-shape.json')['source']
  error=js('NHP_POOL_ERROR_CERTIFICATE.json');assert error['native_positive']=='NHC_K078' and error['matched_control']=='NHC_K079' and error['theorem']=='NHC_ErrorConversion.result' and '(ak)' in error['route']
@@ -61,7 +79,15 @@ def validate(overrides=None):
  fx=js('NHP_audit/fixtures/fixtures.json')['results'];assert len(fx)==8
  for i,x in enumerate(fx):assert x['equal'] and (len(x['walked_axioms'])==1 if i<4 else x['walked_axioms']==[])
  for row in map(json.loads,raw('NHP_LOADED_scan.jsonl').decode().splitlines()):assert not row['dangling'] and not row['duplicate_owners'] and row['imports_match']
+ final=audit['final'];assert final['standard_only'] and final['same_fixture_binary'] and final['roots']==33
+ for a in ['NHP_L021','NHP_L022','NHP_L023']:assert js(a+'/receipt.json')['exit_status']==0
+ final_roots=js('NHP_audit/batch1/proof1.json')['results'];assert len(final_roots)==33 and all(x['equal'] and set(x['walked_axioms'])<=STANDARD for x in final_roots)
+ for a in ['NHP_L013','NHP_L022','NHP_L023']:assert js(a+'/NHP_ProofDriver_BINARY_PIN.json')['sha256']==final['proof_driver_sha256']
+ assert js('NHP_K118/receipt.json')['exit_status']==0 and 'VERIFICATION:- FAILED' in raw('NHP_K119/stdout.log').decode()
+ for a in ['NHP_K118','NHP_K119']:assert all(name in js(a+'-shape.json')['source'] for name in ['KMX_copy_nonoverlapping','KMX_copy_from_slice','KMX_realloc'])
+ assert 'VERIFICATION:- FAILED' in raw('NHP_K120/stdout.log').decode() and 'Failed Checks:' in raw('NHP_K120/stdout.log').decode()
+ for adoption in js('NHP_EXTRACTION_ADOPTION.json'):assert H((R/adoption['destination']).read_bytes())==H((R/adoption['source']).read_bytes())==adoption['sha256']
  assert subprocess.run(['git','diff','--quiet','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387','--','crates','programs','Cargo.lock'],cwd=R).returncode==0
- return dict(status='PASS',budget_used=counts,closed=2,verifier_rows=599,roots=19)
+ return dict(status='PASS',budget_used=counts,closed=2,verifier_rows=599,roots=19,final_roots=33)
 if __name__=='__main__':
  out=validate();(E/'NHP_VALIDATION.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(out))

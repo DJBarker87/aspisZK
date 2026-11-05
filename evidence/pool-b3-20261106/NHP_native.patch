@@ -1,8 +1,8 @@
---- a/programs/aspis-pool/src/pair_forest_dispatch.rs
-+++ b/programs/aspis-pool/src/pair_forest_dispatch.rs
-@@ -1180,3 +1180,67 @@
- 
-     const _: () = assert!(POOL_V1_PAIR_TREE_DEPTH == 20);
+--- a/programs/aspis-pool/src/processor.rs
++++ b/programs/aspis-pool/src/processor.rs
+@@ -3752,3 +3752,74 @@
+         assert_eq!(&returned.borrow()[..4], b"ASTR");
+     }
  }
 +
 +#[cfg(kani)]
@@ -51,8 +51,14 @@
 +let m2=model::Account{key:k2.to_bytes(),owner:o2.to_bytes(),signer:s2,writable:w2,executable:e2};
 +let before2=(**a2.lamports.borrow(),a2.data.borrow().to_vec());
 +let p=Pubkey::new_from_array(kani::any());let selected=Pubkey::new_from_array(kani::any());let lane:u8=kani::any();
-+let present:bool=kani::any();let r=model::transport(&m0,&m1,if present {Some(&m2)}else{None});
-+let actual=super::proof_transport_verifier(&a0,&a1,if present {Some(&a2)}else{None}).map(|k|k.to_bytes());
++a1.data=a0.data.clone();a1.lamports=a0.lamports.clone();a2.data=a0.data.clone();a2.lamports=a0.lamports.clone();
++let before1=(**a1.lamports.borrow(),a1.data.borrow().to_vec());
++let before2=(**a2.lamports.borrow(),a2.data.borrow().to_vec());
++let cells0=(alloc::rc::Rc::as_ptr(&a0.data),alloc::rc::Rc::strong_count(&a0.data),alloc::rc::Rc::as_ptr(&a0.lamports),alloc::rc::Rc::strong_count(&a0.lamports));
++let cells1=(alloc::rc::Rc::as_ptr(&a1.data),alloc::rc::Rc::strong_count(&a1.data),alloc::rc::Rc::as_ptr(&a1.lamports),alloc::rc::Rc::strong_count(&a1.lamports));
++let cells2=(alloc::rc::Rc::as_ptr(&a2.data),alloc::rc::Rc::strong_count(&a2.data),alloc::rc::Rc::as_ptr(&a2.lamports),alloc::rc::Rc::strong_count(&a2.lamports));
++let r=model::payer(&m0,&m1,&solana_sdk_ids::system_program::id().to_bytes(),&solana_sdk_ids::native_loader::id().to_bytes());
++let actual=super::require_payer_and_system_program(&a0,&a1);
 +let expected=r.map_err(|err|match err {
 +model::Error::InvalidVerifierProgram=>crate::error::PoolV1ProgramError::InvalidVerifierProgramAccount.into(),
 +model::Error::NotEnoughAccountKeys=>ProgramError::NotEnoughAccountKeys,
@@ -62,10 +68,11 @@
 +model::Error::InvalidTokenProgram=>crate::error::PoolV1ProgramError::InvalidTokenProgram.into(),
 +model::Error::InvalidArgument=>ProgramError::InvalidArgument,
 +});
-+assert!(actual!=expected);
-+assert!(**a0.lamports.borrow()==before0.0);assert!(*a0.data.borrow()==before0.1.as_slice());assert!(a0.key==&k0&&a0.owner==&o0&&a0.is_signer==s0&&a0.is_writable==w0&&a0.executable==e0);
-+assert!(**a1.lamports.borrow()==before1.0);assert!(*a1.data.borrow()==before1.1.as_slice());assert!(a1.key==&k1&&a1.owner==&o1&&a1.is_signer==s1&&a1.is_writable==w1&&a1.executable==e1);
-+assert!(**a2.lamports.borrow()==before2.0);assert!(*a2.data.borrow()==before2.1.as_slice());assert!(a2.key==&k2&&a2.owner==&o2&&a2.is_signer==s2&&a2.is_writable==w2&&a2.executable==e2);
++assert!(actual==expected);
++a1.data.borrow_mut()[0]^=1;
++assert!((alloc::rc::Rc::as_ptr(&a0.data),alloc::rc::Rc::strong_count(&a0.data),alloc::rc::Rc::as_ptr(&a0.lamports),alloc::rc::Rc::strong_count(&a0.lamports))==cells0);assert!(**a0.lamports.borrow()==before0.0);assert!(*a0.data.borrow()==before0.1.as_slice());assert!(a0.key==&k0&&a0.owner==&o0&&a0.is_signer==s0&&a0.is_writable==w0&&a0.executable==e0);
++assert!((alloc::rc::Rc::as_ptr(&a1.data),alloc::rc::Rc::strong_count(&a1.data),alloc::rc::Rc::as_ptr(&a1.lamports),alloc::rc::Rc::strong_count(&a1.lamports))==cells1);assert!(**a1.lamports.borrow()==before1.0);assert!(*a1.data.borrow()==before1.1.as_slice());assert!(a1.key==&k1&&a1.owner==&o1&&a1.is_signer==s1&&a1.is_writable==w1&&a1.executable==e1);
++assert!((alloc::rc::Rc::as_ptr(&a2.data),alloc::rc::Rc::strong_count(&a2.data),alloc::rc::Rc::as_ptr(&a2.lamports),alloc::rc::Rc::strong_count(&a2.lamports))==cells2);assert!(**a2.lamports.borrow()==before2.0);assert!(*a2.data.borrow()==before2.1.as_slice());assert!(a2.key==&k2&&a2.owner==&o2&&a2.is_signer==s2&&a2.is_writable==w2&&a2.executable==e2);
 +}
 +}
 --- a/programs/aspis-pool/src/lib.rs

@@ -15,3 +15,17 @@ Compiler E0507: snapshot tried to move an &mut u64 through Ref. Corrected to cop
 
 ## Item 1: NHP_K026 ProgramResult equality contract
 CBMC timed out at the unchanged 90-second limit (exit 1; wall 93.43s; peak RSS 479944 KiB; swaps 0). No credit and no same-shape rerun. Replacement K027 uses explicit constructor/Custom-code discrimination, eliminating derived ProgramError equality (including foreign String comparison) from the contract. Actual guard body, height domain and error are unchanged. This is an interface split under (ak); no timeout or cap increase.
+
+## SDK reference model: NHP_L018 decoded_known
+Deterministic whnf heartbeat timeout at the nested-if decoder known-range proof (22.84s,5680312KiB). No cap/heartbeat increase and no unchanged rerun. The replacement uses a linear constructor match, preserving the exact26-class table. Failed dependent elaborations printed sorryAx and are explicitly excluded; only a successful replacement module may be imported/audited.
+
+## Marker system-owned empty, active exclusive data borrow: K086
+Actual classify_nullifier_marker_account_v1, valid Rust AccountInfo with System owner, empty data, valid privileges, program!=System, live RefMut data guard. Proposed Err(AccountBorrowFailed) result fails: the source uses data_is_empty(), which invokes infallible RefCell::borrow and panics on this prestate. This is a real mismatch with that proposed total Result specification, not a demonstrated production source bug. The caller must prove borrowability before the System-empty branch (and after any creation CPI), or model the abort prefix explicitly. Do not substitute try_borrow_data semantics or silently impose a zero-counter production premise. Exact failure and untouched source retained.
+
+K086 native failure diagnostic is the unsupported runtime-formatted panic-message check. Source inspection of the infallible borrow, plus the live RefMut prestate and that reached panic path, supports the mismatch; the Kani failure alone is not labelled a successful panic-semantics proof.
+
+## Additional input rejections retained
+K068: stale patch after a generator wildcard-parser failure; requested SDK harness absent, no semantic credit. K095: Rc frame probe used std in no_std code; fixed to alloc with identical/stronger checks, corrected K096 passes. No timeout or memory-killed shape was rerun unchanged.
+
+## Final remaining stage assertions
+See NHP_REMAINING.md: successful same-account decoder/PDA, actual all/any/source-parent, CPI modified ranges, same decoded-request payment and registry/meta associations are missing callee/native laws. They are OPEN, not passes. There is no evidence of a frozen-source storage bug from K003/K004. K086 is a mismatch in the proposed total Result specification on its stated prestate; production reachability remains open.

@@ -28,6 +28,8 @@ if case=='alias':
  setup+='a1.data=a0.data.clone();a1.lamports=a0.lamports.clone();a2.data=a0.data.clone();a2.lamports=a0.lamports.clone();\n'
  for j in [1,2]:setup+=f'let before{j}=(**a{j}.lamports.borrow(),a{j}.data.borrow().to_vec());\n'
 
+for j in range(3):
+ setup+=f'let cells{j}=(alloc::rc::Rc::as_ptr(&a{j}.data),alloc::rc::Rc::strong_count(&a{j}.data),alloc::rc::Rc::as_ptr(&a{j}.lamports),alloc::rc::Rc::strong_count(&a{j}.lamports));\n'
 maperr='''let expected=r.map_err(|err|match err {
 model::Error::InvalidVerifierProgram=>crate::error::PoolV1ProgramError::InvalidVerifierProgramAccount.into(),
 model::Error::NotEnoughAccountKeys=>ProgramError::NotEnoughAccountKeys,
@@ -45,6 +47,8 @@ elif target=='token':
  body=f'let r=model::token(&m0,&crate::vault::LEGACY_SPL_TOKEN_PROGRAM_ID.to_bytes(),&{loaders});\nlet actual=super::require_token_program_account(&a0);\n'+maperr
 elif target=='payer':
  body='let r=model::payer(&m0,&m1,&solana_sdk_ids::system_program::id().to_bytes(),&solana_sdk_ids::native_loader::id().to_bytes());\nlet actual=super::require_payer_and_system_program(&a0,&a1);\n'+maperr
+elif target=='program':
+ body='let wanted:bool=kani::any();let expected=if o0!=p {Err(ProgramError::IncorrectProgramId)}else if e0||w0!=wanted {Err(ProgramError::InvalidAccountData)}else{Ok(())};\nlet actual=crate::history::require_program_account(&a0,&p,wanted);\n'
 elif target=='transport':
  body='let present:bool=kani::any();let r=model::transport(&m0,&m1,if present {Some(&m2)}else{None});\nlet actual=super::proof_transport_verifier(&a0,&a1,if present {Some(&a2)}else{None}).map(|k|k.to_bytes());\n'+maperr
 else:
@@ -83,12 +87,12 @@ else:
   body+='assert!(a0.try_borrow_mut_data().is_ok());assert!(a0.try_borrow_mut_lamports().is_ok());\n'
  if mode=='negative':body+='assert!(actual==Some(ProgramError::InvalidArgument));\n'
  else:body+='assert!(actual==Some(expected));\n'
-if target in ['verifier','token','payer','transport']:
+if target in ['verifier','token','payer','transport','program']:
  if mode=='negative':body+='assert!(actual!=expected);\n'
  else:body+='assert!(actual==expected);\n'
 frame=''
 for j in range(3):
- frame+=f'assert!(**a{j}.lamports.borrow()==before{j}.0);assert!(*a{j}.data.borrow()==before{j}.1.as_slice());assert!(a{j}.key==&k{j}&&a{j}.owner==&o{j}&&a{j}.is_signer==s{j}&&a{j}.is_writable==w{j}&&a{j}.executable==e{j});\n'
+ frame+=f'assert!((alloc::rc::Rc::as_ptr(&a{j}.data),alloc::rc::Rc::strong_count(&a{j}.data),alloc::rc::Rc::as_ptr(&a{j}.lamports),alloc::rc::Rc::strong_count(&a{j}.lamports))==cells{j});assert!(**a{j}.lamports.borrow()==before{j}.0);assert!(*a{j}.data.borrow()==before{j}.1.as_slice());assert!(a{j}.key==&k{j}&&a{j}.owner==&o{j}&&a{j}.is_signer==s{j}&&a{j}.is_writable==w{j}&&a{j}.executable==e{j});\n'
 source=head+attrs+setup+body+frame+'}\n'
 patch=''
 for p in ['programs/aspis-pool/src/'+module+'.rs','programs/aspis-pool/src/lib.rs']:
