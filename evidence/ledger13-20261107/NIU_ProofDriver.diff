@@ -1,0 +1,16 @@
+--- NIR_ProofDriver
++++ NIU_ProofDriver
+@@ -69,11 +69,11 @@
+          `NEP_Planted.viaAux, `NEP_MutateMatch.matcher, `NEP_MutatePrivate.viaPrivate,
+          `NEP_MutateProof.proof, `NEP_MutateAux.viaAux])
+     else do
+-      let manifest ← IO.ofExcept (Json.parse (← IO.FS.readFile "NIR_AUDIT_ROOTS.json"))
++      let manifest ← IO.ofExcept (Json.parse (← IO.FS.readFile "NIU_AUDIT_ROOTS.json"))
+       let groups ← IO.ofExcept (manifest.getObjValAs? (Array (Array String)) "groups")
+       let some idx := (mode.drop 5).toString.toNat? | throw (IO.userError "invalid proof mode")
+       let some names := groups[idx]? | throw (IO.userError "proof group out of range")
+-      let selected ← IO.ofExcept (Json.parse (← IO.FS.readFile "NIR_AUDIT_MODULES.json"))
++      let selected ← IO.ofExcept (Json.parse (← IO.FS.readFile "NIU_AUDIT_MODULES.json"))
+       let selected ← IO.ofExcept (fromJson? selected : Except String (Array (Array String)))
+       let some modules := selected[idx]? | throw (IO.userError "module group out of range")
+       pure (modules.map String.toName, names.map String.toName)

@@ -1,0 +1,7 @@
+import NIR_COMBINED_IMPORT
+import NIS_COMBINED_IMPORT
+import NIH_COMBINED_IMPORT
+import NIT_COMBINED_IMPORT
+import NIL_COMBINED_IMPORT
+import NIO_COMBINED_IMPORT
+#print axioms AspisR1.RPx_Deployed.deployed
