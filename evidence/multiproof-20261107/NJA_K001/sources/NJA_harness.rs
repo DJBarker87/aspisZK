@@ -1,0 +1,20 @@
+#[cfg(kani)]
+mod NJA_native {
+    use super::*;
+    #[kani::proof]
+    fn NJA_bits() { let eight:bool=kani::any();let a=if eight{Arity::Eight}else{Arity::Two};assert_eq!(a.bits(),if eight{3}else{1}); }
+    #[kani::proof]
+    fn NJA_bits_control() { let eight:bool=kani::any();let a=if eight{Arity::Eight}else{Arity::Two};assert_eq!(a.bits(),if eight{1}else{3}); }
+    #[kani::proof]
+    fn NJA_width() { let eight:bool=kani::any();let a=if eight{Arity::Eight}else{Arity::Two};assert_eq!(a.width(),if eight{8}else{2}); }
+    #[kani::proof]
+    fn NJA_width_control() { let eight:bool=kani::any();let a=if eight{Arity::Eight}else{Arity::Two};assert_eq!(a.width(),if eight{2}else{8}); }
+    #[kani::proof]
+    fn NJA_levels() { let eight:bool=kani::any();let a=if eight{Arity::Eight}else{Arity::Two};assert_eq!(a.levels(),if eight{6}else{18}); }
+    #[kani::proof]
+    fn NJA_levels_control() { let eight:bool=kani::any();let a=if eight{Arity::Eight}else{Arity::Two};assert_eq!(a.levels(),if eight{18}else{6}); }
+    #[kani::proof]
+    fn NJA_index() {let a:[u32;16]=kani::any();let i:usize=kani::any();kani::assume(i<16);assert_eq!(index_at(&a,i),a[i]);}
+    #[kani::proof]
+    fn NJA_index_control() {let a:[u32;16]=kani::any();let i:usize=kani::any();kani::assume(i<16);assert_eq!(index_at(&a,i),a[i]^1);}
+}

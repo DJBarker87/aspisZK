@@ -1,0 +1,49 @@
+{"attempt": "NJA_K021", "exit_status": 1, "wall_seconds": 2.8136225258931518, "peak_rss_kib": "331444", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+id`
+
+warning: function `NJA_verify_invalid_control` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/multiproof.rs:420:8
+    |
+420 |     fn NJA_verify_invalid_control() {let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let n:usize=kani::any();...
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nja_verify_invalid_control`
+
+warning: function `NJA_verify_invalid_frame_control` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/multiproof.rs:422:8
+    |
+422 |     fn NJA_verify_invalid_frame_control() {let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let n:usize=kani::...
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nja_verify_invalid_frame_control`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.80s
+Checking harness multiproof::NJA_native::NJA_window_active_control...
+
+VERIFICATION RESULT:
+ ** 1 of 74 failed
+Failed Checks: This is a placeholder message; Kani doesn't support message formatted at runtime
+ File: "/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panicking.rs", line 439, in core::panicking::assert_failed_inner
+
+VERIFICATION:- FAILED
+Verification Time: 0.32883674s
+
+Manual Harness Summary:
+Verification failed for - multiproof::NJA_native::NJA_window_active_control
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r432452b35527434987ff64989d5adc3b.scope; invocation ID: cb55b4ef43bf4101a34f95165e3595e6

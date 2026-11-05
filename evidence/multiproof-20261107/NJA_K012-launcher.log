@@ -1,0 +1,52 @@
+{"attempt": "NJA_K012", "exit_status": 0, "wall_seconds": 4.198911327170208, "peak_rss_kib": "323292", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+ke case: `nja_count_empty`
+
+warning: function `NJA_count_empty_control` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/multiproof.rs:393:8
+    |
+393 |     fn NJA_count_empty_control() {let a:[u32;0]=[];let eight:bool=kani::any();let arity=if eight{Arity::Eight}else{Arity::Two};asse...
+    |        ^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nja_count_empty_control`
+
+warning: function `NJA_count_large` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/multiproof.rs:395:8
+    |
+395 |     fn NJA_count_large() {let a:[u32;17]=kani::any();let eight:bool=kani::any();let arity=if eight{Arity::Eight}else{Arity::Two};as...
+    |        ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nja_count_large`
+
+warning: function `NJA_count_large_control` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/multiproof.rs:397:8
+    |
+397 |     fn NJA_count_large_control() {let a:[u32;17]=kani::any();let eight:bool=kani::any();let arity=if eight{Arity::Eight}else{Arity:...
+    |        ^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nja_count_large_control`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.13s
+Checking harness multiproof::NJA_native::NJA_well_empty...
+
+VERIFICATION RESULT:
+ ** 0 of 178 failed (3 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.1026504s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-rc378377a30204cd89c7739dc7a7d22f8.scope; invocation ID: 5177130b8c534b1b8f1c0f098e1182b7
