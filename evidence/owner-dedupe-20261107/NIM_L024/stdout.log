@@ -1,0 +1,50 @@
+AspisR1.NHL_Tx1Model.source (base expected : AspisR1CurrentCaller.Ops) {H : Type}
+  (first : AspisR1.NHL_EmittedTx1.Prepare H) (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H)
+  (pub : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (public_bytes proof : Aeneas.Std.Slice Aeneas.Std.U8) (k : Aeneas.Std.Usize) (hash : H)
+  (prepare :
+    ∀ (zero : AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact),
+      AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact.ZERO base = Aeneas.Std.Result.ok zero →
+        first D pub proof hash none (Aeneas.Std.Array.repeat 29#usize zero) =
+          AspisR1CurrentCaller.verifier.candidate.prepare (AspisR1.NHL_Tx1Model.children base expected) D pub proof hash
+            none (Aeneas.Std.Array.repeat 29#usize zero))
+  (query_loop :
+    ∀ (c : AspisR1.NHL_Tx1Stages.Context),
+      AspisR1.NHL_Tx1Model.Reaches base expected D pub public_bytes proof k hash c →
+        base.op7 proof c.prepared c.accumulator c.scratch none c.geometry c.pending k =
+          expected.op7 proof c.prepared c.accumulator c.scratch none c.geometry c.pending k)
+  (checkpoint :
+    ∀ (c : AspisR1.NHL_Tx1Stages.Context) (a : AspisR1CurrentCaller.verifier.Accumulator)
+      (pending : AspisR1CurrentCaller.verifier.BatchedWeights),
+      AspisR1.NHL_Tx1Model.Reaches base expected D pub public_bytes proof k hash c →
+        expected.op7 proof c.prepared c.accumulator c.scratch none c.geometry c.pending k =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (a, pending)) →
+          ∀ (cells : Aeneas.Std.Slice AspisR1CurrentCaller.aspis_core.field.QM31),
+            base.op17 pending a.weights.deref_mut.1 = Aeneas.Std.Result.ok cells →
+              base.op16 D c.prepared
+                  { weights := a.weights.deref_mut.2 cells, rhs := a.rhs, power := a.power, next := a.next } proof
+                  public_bytes hash =
+                expected.op16 D c.prepared
+                  { weights := a.weights.deref_mut.2 cells, rhs := a.rhs, power := a.power, next := a.next } proof
+                  public_bytes hash) :
+  AspisR1.NHL_EmittedTx1.tx1 base first D pub public_bytes proof k hash none =
+    AspisR1CurrentCaller.verifier.candidate.tx1 (AspisR1.NHL_Tx1Model.children base expected) D pub public_bytes proof k
+      hash none
+NHT_Tx2AuthModel.source (ops : VTop_Stages.Ops) {H : Type} (D : VTop_Stages.aspis_core.digest.Digest32 H)
+  (pub proof checkpoint : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H)
+  (obs : Option (VTop_Stages.verifier.Phase → Aeneas.Std.Result Unit)) :
+  NHT_EmittedAuth.tx2_authenticated (NHT_Tx2CommonModel.constants ops) D pub proof checkpoint hash obs =
+    VTop_Stages.verifier.candidate.tx2_authenticated (NHT_Tx2CommonModel.constants ops) D pub proof checkpoint hash obs
+NHT_AdapterInstall.slot (adapter : AdapterRw.Ops) (stage : VTop_Stages.Ops) :
+  @AdapterRw.Ops.op11 (NHT_AdapterInstall.install adapter stage) =
+    @NHT_EmittedAuth.tx2_authenticated (NHT_Tx2CommonModel.constants stage)
+NHT_AdapterInstall.cohort_slot (adapter : AdapterRw.Ops) (stage : VTop_Stages.Ops) :
+  @AdapterRw.Ops.op11 (NHT_AdapterInstall.install adapter stage) =
+    @VTop_Stages.verifier.candidate.tx2_authenticated (NHT_Tx2CommonModel.constants stage)
+NHT_AdapterInstall.digest_error_frame (adapter : AdapterRw.Ops) (stage : VTop_Stages.Ops) :
+  (NHT_AdapterInstall.install adapter stage).op43 = adapter.op43 ∧
+    (NHT_AdapterInstall.install adapter stage).op44 = adapter.op44
+'AspisR1.NHL_Tx1Model.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NHT_Tx2AuthModel.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NHT_AdapterInstall.cohort_slot' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]

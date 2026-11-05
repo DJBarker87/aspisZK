@@ -1,0 +1,25 @@
+--- evidence/slice-d-entry-20261105/NGL_MapReferenceModel.lean
++++ NIM_NGL_MapReferenceModel.lean
+@@ -1,5 +1,5 @@
+-import NGL_MapReference.Funs
+-import NGL_ErrorCarrier
++import NIM_MapReference.Funs
++import NIM_NGL_ErrorCarrier
+ import NGL_FirstDecoded
+ set_option autoImplicit false
+ namespace NGL_MapReferenceModel
+@@ -7,12 +7,12 @@
+ abbrev E := AdapterRw.aspis_r1_cost_probe.verifier.Error
+ abbrev V := alloc.vec.Vec U8
+ 
+-def error : E → NGL_MapReference.VerifierError
++def error : E → NFW_ErrorReference.VerifierError
+   | .Parse => .Parse | .Semantic => .Semantic | .Transcript => .Transcript
+   | .Relation => .Relation | .Merkle => .Merkle | .Query => .Query
+   | .Checkpoint => .Checkpoint | .Allocation => .Allocation
+ 
+-def input : core.result.Result V E → core.result.Result V NGL_MapReference.VerifierError
++def input : core.result.Result V E → core.result.Result V NFW_ErrorReference.VerifierError
+   | .Ok v => .Ok v | .Err e => .Err (error e)
+ 
+ def output : core.result.Result V NGL_MapReference.ProgramError →
