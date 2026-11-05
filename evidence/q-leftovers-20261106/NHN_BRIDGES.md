@@ -1,0 +1,9 @@
+# NHN bridges
+
+No row is booked until the stage's combined replay, raw ax2 audit, NFX scan and additive validator pass. The deployed security target is not yet established.
+
+CM31::inv_with, TX1:006: the sole inventoried deployed family binds the original fn parameter to M31::inv under ruling (al). NHN_K001–004 are native positive/argument-control and rename-stability pairs. NHN_K005/006 are the exact KMX copy pair. Source-body erasure is byte-exact; no property is asserted about the pointer itself. NHH fixed native pairs and emitted model laws are reused by SHA-256 in NHN_REUSE.json. NHN_CMInstantiation.association preserves the all-raw partial Result at the selected backend; packet composes the SAME ordered native log and all child domains; outcomes covers zero assertionFailure. Generic batch backends remain outside this claim.
+
+QM31::neg, TX1:031: NHH_K055/056 native canonical whole-record execution and corruption control, NHH_QNeg.canonical_result and all existing field proofs are reused unchanged. NHN_QNegAssociation.association maps its exact four receiver limbs into AspisR1CurrentWide.field.QM31.sub zero; enclosing composes the two native QM31 receivers into the existing WideExact.sub zero endpoint of NFT_WideNeg.source. No new neg endpoint is invented. child_domains and packet prove both CM child domains, exact successful output, canonicality and SAME cohort Result. This resolves the former model endpoint association, without promoting the earlier standalone value theorem by itself.
+
+Immutable field records have no account/state mutations, runtime calls or ordered oracle events. The native-to-emitted same-source transport and standard/compiler/Aeneas/physical/source-to-ELF realization remain the existing option-A P6/D188 trust reclassification. No trust row is removed or added. Parent drivers still require their own input/physical and source associations; these local composed rows do not prove the headline.

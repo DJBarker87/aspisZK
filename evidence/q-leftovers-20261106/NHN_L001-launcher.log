@@ -1,0 +1,61 @@
+{"attempt": "NHN_L001", "exit_status": 0, "wall_seconds": 9.818230675999075, "peak_rss_kib": "5946064", "swaps": "0", "print_axioms": ["'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NHN_ENDPOINT FIn_WeightsExtract.field.QM31.sub
+NHN_ENDPOINT NFU_Retarget.LPl_Kit_Field.field.QM31.sub
+NHN_ENDPOINT NEI_LineFull.aspis_core.field.QM31.sub
+NHN_ENDPOINT FIq_Native.field.QM31.sub
+NHN_ENDPOINT AspisR1CurrentWide.field.QM31.sub
+NHN_ENDPOINT AspisR1CurrentWideMul.field.QM31.sub
+NHN_ENDPOINT AspisR72Sampler.field.QM31.sub
+NHN_ENDPOINT FIo_Native.aspis_core.field.QM31.sub
+NHN_ENDPOINT AspisR1SelectedMaskProbe.field.QM31.sub
+NHN_ENDPOINT NFG_CheckedFieldRef.field.QM31.neg
+NHN_ENDPOINT AspisR72Sampler.field.CM31.neg
+NHN_ENDPOINT AspisR66Field.field.CM31.neg
+NHN_ENDPOINT NFG_CheckedFieldRef.field.CM31.neg
+NHN_ENDPOINT NFG_InverseRef.field.CM31.neg
+structure AspisR72Sampler.field.QM31 :
+...
+Field.field.QM31.sub
+NHN_ENDPOINT NEI_LineFull.aspis_core.field.QM31.sub
+NHN_ENDPOINT FIq_Native.field.QM31.sub
+NHN_ENDPOINT AspisR1CurrentWide.field.QM31.sub
+NHN_ENDPOINT AspisR1CurrentWideMul.field.QM31.sub
+NHN_ENDPOINT AspisR72Sampler.field.QM31.sub
+NHN_ENDPOINT FIo_Native.aspis_core.field.QM31.sub
+NHN_ENDPOINT AspisR1SelectedMaskProbe.field.QM31.sub
+NHN_ENDPOINT NFG_CheckedFieldRef.field.QM31.neg
+NHN_ENDPOINT AspisR72Sampler.field.CM31.neg
+NHN_ENDPOINT AspisR66Field.field.CM31.neg
+NHN_ENDPOINT NFG_CheckedFieldRef.field.CM31.neg
+NHN_ENDPOINT NFG_InverseRef.field.CM31.neg
+structure AspisR72Sampler.field.QM31 : Type
+number of parameters: 0
+fields:
+  AspisR72Sampler.field.QM31.c0 : AspisR72Sampler.field.CM31
+  AspisR72Sampler.field.QM31.c1 : AspisR72Sampler.field.CM31
+constructor:
+  AspisR72Sampler.field.QM31.mk (c0 c1 : AspisR72Sampler.field.CM31) : AspisR72Sampler.field.QM31
+def AspisR72Sampler.field.QM31.sub : AspisR72Sampler.field.QM31 →
+  AspisR72Sampler.field.QM31 → Aeneas.Std.Result AspisR72Sampler.field.QM31 :=
+fun self rhs => do
+  let c ← self.c0.sub rhs.c0
+  let c1 ← self.c1.sub rhs.c1
+  Aeneas.Std.Result.ok { c0 := c, c1 := c1 }
+def AspisR72Sampler.field.QM31.try_inv : AspisR72Sampler.field.QM31 →
+  Aeneas.Std.Result (Option AspisR72Sampler.field.QM31) :=
+fun self => do
+  let b ← self.is_zero
+  if b = true then Aeneas.Std.Result.ok none
+    else do
+      let c ← self.c0.square
+      let c1 ← self.c1.square
+      let c2 ← AspisR72Sampler.field.mul_by_r c1
+      let norm ← c.sub c2
+      let inverse_norm ← norm.inv
+      let c3 ← self.c0.mul inverse_norm
+      let c4 ← self.c1.neg
+      let c5 ← c4.mul inverse_norm
+      Aeneas.Std.Result.ok (some { c0 := c3, c1 := c5 })
+'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rcd7f6d5dc16c48878048b7af4ccfb46d.scope; invocation ID: ca651a4990c04dfa9e54f766a107b8a6

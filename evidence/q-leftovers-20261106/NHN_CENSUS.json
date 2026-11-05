@@ -1,0 +1,57 @@
+[
+  {
+    "input": {
+      "path": "evidence/inv-defects-20261104/LEAD_B006/aspis_r1_cost_probe_program.mir.xz",
+      "sha256": "f93b0dfd49aa4a67cf2883c299ec72527ca7f33f0b5040f4ae4297121db77163",
+      "uncompressed_sha256": "c9bebf9eb6f708bc4c4d9de7533d578eddc536b1152fac8404bd1bcb2ac01cff"
+    },
+    "hits": []
+  },
+  {
+    "input": {
+      "path": "evidence/inv-defects-20261104/NFZ_B005_aspis_r1_cost_probe-2af8d844c3814c6b.mir.xz",
+      "sha256": "96ca62fe802529171ac002475277e13284b5ada2b4c7b072df7928dd4b6e78ec",
+      "uncompressed_sha256": "96da205b2db9889e5a48480137f7fd9df4fd5131b77882c2e0f14a248679e370"
+    },
+    "hits": []
+  },
+  {
+    "input": {
+      "path": "evidence/inv-defects-20261104/NFZ_aspis_core.mir.xz",
+      "sha256": "f2bf1e5deb761882513c69c7c0df866e6697645f2b22fe69efa1f8e992af71df",
+      "uncompressed_sha256": "4bbe499a0f590cc42c57d90ee5154aa38dae7c40769fa4a941106dfe9259cd87"
+    },
+    "hits": [
+      {
+        "line": 59767,
+        "function": "fn field::<impl at crates/aspis-core/src/field.rs:260:1: 260:10>::inv(_1: CM31) -> CM31 {",
+        "context": "    let mut _2: fn(field::M31) -> field::M31;\n\n    bb0: {\n        _2 = field::M31::inv as fn(field::M31) -> field::M31 (PointerCoercion(ReifyFnPointer(Safe), Implicit));\n        _0 = CM31::inv_with(copy _1, move _2) -> [return: bb1, unwind continue];\n    }\n"
+      },
+      {
+        "line": 78845,
+        "function": "fn cm31_batch_inverse(_1: &[CM31], _2: &mut [CM31]) -> () {",
+        "context": "        return;\n    }\n}\n\nfn cm31_batch_inverse(_1: &[CM31], _2: &mut [CM31]) -> () {\n    debug values => _1;\n    debug out => _2;"
+      },
+      {
+        "line": 78853,
+        "function": "fn cm31_batch_inverse(_1: &[CM31], _2: &mut [CM31]) -> () {",
+        "context": "    let mut _3: fn(field::M31) -> field::M31;\n\n    bb0: {\n        _3 = field::M31::inv as fn(field::M31) -> field::M31 (PointerCoercion(ReifyFnPointer(Safe), Implicit));\n        _0 = cm31_batch_inverse_with(copy _1, copy _2, move _3) -> [return: bb1, unwind continue];\n    }\n"
+      },
+      {
+        "line": 78861,
+        "function": "fn cm31_batch_inverse_with(_1: &[CM31], _2: &mut [CM31], _3: fn(M31) -> M31) -> () {",
+        "context": "        return;\n    }\n}\n\nfn cm31_batch_inverse_with(_1: &[CM31], _2: &mut [CM31], _3: fn(M31) -> M31) -> () {\n    debug values => _1;\n    debug out => _2;"
+      },
+      {
+        "line": 79026,
+        "function": "fn cm31_batch_inverse_with(_1: &[CM31], _2: &mut [CM31], _3: fn(M31) -> M31) -> () {",
+        "context": "    }\n\n    bb12: {\n        _37 = copy _19;\n        _36 = CM31::inv_with(move _37, copy _3) -> [return: bb15, unwind continue];\n    }\n"
+      },
+      {
+        "line": 250793,
+        "function": "fn verify_inner(_1: &[u8], _2: &[u8; 32], _3: Option<&EvaluationClaim>, _4: for<'a, 'b> fn(&'a [&'b [u8]]) -> [u8; 32], _5: Option<fn(TraceEvent)>, _6: VerificationMode) -> Result<(), VerifyError> {",
+        "context": "        _961 = <Vec<CM31> as DerefMut>::deref_mut(copy _962) -> [return: bb597, unwind: bb746];\n    }\n\n    bb597: {\n        _958 = cm31_batch_inverse_with(copy _959, copy _961, copy _932) -> [return: bb825, unwind: bb746];\n    }\n"
+      }
+    ]
+  }
+]

@@ -1,0 +1,376 @@
+Lead ruling (t): Kani function contracts are admitted for call-site association, on the pinned toolchain, with the same discipline as copies. Each proof_for_contract has a matched failing control, and each stub_verified caller proof has a matched failing control. Contracts never stand in for field multiplication (Lean-discharged stubs only) or for copies (KMX_ only). This is a method ruling inside the existing Kani trust row (as narrowed by amendment four), not a new trust item. Continuation NCF_ (native-u04d).
+
+Ruling (t), tightened to match Stream B's adoption: before a contract is relied on for an interface shape other than the pure Bool/record shapes of the NCC_ pilot (for example byte slices, Result-returning decoders, Box or allocation), the three fidelity controls (inverted ensures, unimplied caller assertion, modifies violation) are re-run for that shape and recorded. NCF_ was briefed before this tightening, so the lead applies it at NCF_'s review: credit resting on a contract over a new shape without its shape controls stays open.
+
+Ruling (t), tightened to match Stream B's adoption: before a contract is relied on for an interface shape other than the pure Bool/record shapes of the NCC_ pilot (for example byte slices, Result-returning decoders, Box or allocation), the three fidelity controls (inverted ensures, unimplied caller assertion, modifies violation) are re-run for that shape and recorded. NCF_ was briefed before this tightening, so the lead applies it at NCF_'s review: credit resting on a contract over a new shape without its shape controls stays open.
+
+### Lead ruling (y), 2026-10-29: assume-guarantee composition for non-scalar native interfaces
+
+Finding (NED_, slice S composition, budget exhausted, 0/97 rows): every root stopped at the same point. The caller was proved natively with ARBITRARY child replies (K034/K035: frozen validator control, Result and ordered call log under arbitrary cached replies). The worker held that each reply still needed "the selected callee bridge instantiated on the identical carrier and state" natively, and found no medium for Box, large-array, account or effect interfaces. Kani 0.67 stub_verified does not cover slice or Vec returns (ruling w). That is a missing composition principle, not a missing proof, and the shared obstruction is resolved here as a method decision under the 2026-10-28 delegation.
+
+Ruling (y): a call edge caller -> child with a non-scalar interface is DISCHARGED by assume-guarantee composition when all three of the following hold.
+(1) Caller certificate (Kani, frozen caller, deployed features, KMX copy stubs where copies are reached). Each call to child is replaced by an oracle that records its exact arguments, including borrowed windows and the pre-state of every account or buffer the child may touch, and returns an UNCONSTRAINED value of the child's full return type (Result including every error variant). The oracle applies an UNCONSTRAINED mutation, limited to the child's declared modifies set. The harness proves the caller's Result, final state and ordered effects equal an explicit function G(args, oracle log), and that every logged argument lies in the child's PacketDomain. A matched failing control is required: corrupt one reply or one argument, and the assertion must fail.
+(2) Child certificate: the child's existing bridge (four-part, CLOSED-CONDITIONAL in NDT_) gives reply = f_ref_child(args) and effects = declared effects on its PacketDomain. Its proof_for_contract must include a modifies clause covering exactly those effects; a missing frame is a finding, not a pass.
+(3) Lean certificate: G(args, log with each reply and mutation := the child model on the logged arguments) = the caller's cohort model, including Result, state and ordered effects.
+Substituting the child's real execution for the unconstrained oracle is the standard assume-guarantee step. Its soundness rests on Kani's handling of the oracle and modifies set. That is the native-contract semantic transport already classified under amendment five, option A, as P6/D188 tool trust. Each use is reported as reclassification, never removal, and no new trust row is added. Model-only equalities never substitute for (1) or (2).
+Loops (scan_proof_buffer) keep ruling B: one native iteration from an arbitrary pre-state, with the same oracle treatment for calls inside the body.
+
+Also binding from now on: finish ONE root end to end before spreading. Slice S starts with validate_pool_v1_pair_forest_terminal_statement_v1, whose subtree is fully bridged and whose K034/K035 already supply part (1).
+
+Ruling (y): a call edge caller -> child with a non-scalar interface is DISCHARGED by assume-guarantee composition when all three of the following hold.
+(1) Caller certificate (Kani, frozen caller, deployed features, KMX copy stubs where copies are reached). Each call to child is replaced by an oracle that records its exact arguments, including borrowed windows and the pre-state of every account or buffer the child may touch, and returns an UNCONSTRAINED value of the child's full return type (Result including every error variant). The oracle applies an UNCONSTRAINED mutation, limited to the child's declared modifies set. The harness proves the caller's Result, final state and ordered effects equal an explicit function G(args, oracle log), and that every logged argument lies in the child's PacketDomain. A matched failing control is required: corrupt one reply or one argument, and the assertion must fail.
+(2) Child certificate: the child's existing bridge (four-part, CLOSED-CONDITIONAL in NDT_) gives reply = f_ref_child(args) and effects = declared effects on its PacketDomain. Its proof_for_contract must include a modifies clause covering exactly those effects; a missing frame is a finding, not a pass.
+(3) Lean certificate: G(args, log with each reply and mutation := the child model on the logged arguments) = the caller's cohort model, including Result, state and ordered effects.
+Substituting the child's real execution for the unconstrained oracle is the standard assume-guarantee step. Its soundness rests on Kani's handling of the oracle and modifies set. That is the native-contract semantic transport already classified under amendment five, option A, as P6/D188 tool trust. Each use is reported as reclassification, never removal, and no new trust row is added. Model-only equalities never substitute for (1) or (2).
+Loops (scan_proof_buffer) keep ruling B: one native iteration from an arbitrary pre-state, with the same oracle treatment for calls inside the body.
+
+Also binding from now on: finish ONE root end to end before spreading. Slice S starts with validate_pool_v1_pair_forest_terminal_statement_v1, whose subtree is fully bridged and whose K034/K035 already supply part (1).
+
+Slices: NEE_ closed 6/97 slice-S composed rows under ruling (y) and rule 16 (transfer_common, withdrawal_common, digest_is_canonical in TX1 and TX2), with no suspended support. The validator root stays OPEN on the common-encoder frame. NEJ_ continues, required to split the frame. NEG_ established the inline-multiplication route: actual-body extraction (field types visible, callee methods opaque), the dropped-restoration scan, native/emitted differentials, and admissibility of the exact product abstraction. NEI_ continues to the arithmetic closures and slice-Q edges.
+Tooling incidents, recorded for the record: three relaunches on 2026-10-31 never ran, because a zsh `set --` loop passed every argument as one string. About 1.5 days were lost. macOS /tmp cleanup deleted lead tools, which now live in ~/aspis-lead-infra with a backup in evidence/lead-tools-20261031. The provider content filter stopped NEF_ and NEH_ twice; briefs now use neutral wording. A DNS outage killed one launch; codex-retry2.sh now resumes failed runs after network errors.
+Status: target not yet established. Obligation 2 (native extraction) is OPEN. Slice rows are reported only once their full support is cleared.
+
+### Lead ruling (y'), 2026-11-01: borrowed-return interfaces under ruling (y)
+
+NEJ_ (slice-s-compose3, merged) reached 14/97 slice-S composed rows CLOSED and proved the common-encoder write frame. The validator root is blocked because Kani 0.67 cannot generate Arbitrary<&Common> for stub_verified of a getter that returns a borrowed reference (NEE_K039). Ruling (y) does not depend on stub_verified. Clarification, binding:
+(1) For a child whose return type borrows from the caller's state, such as a getter returning &self.field, the caller certificate uses kani::stub (not stub_verified). The oracle's return value is fixed by the child's frame contract, not arbitrary: a reference to the place the child's contract designates (for a field getter, the actual field of the actual receiver), so the borrow's provenance and lifetime are preserved. Where the contract allows any value, the oracle returns a reference to a harness-owned arbitrary value of that type, with the same mutability, that does not alias anything the caller can see. The pointee may then be any value, and the reference is the only thing introduced.
+(2) Child certificate for a pure field getter: a source-level identity check (the frozen body is exactly `&self.f` or an equivalent projection, checked by a script with mutation tests), plus the extracted-body Lean identity. For any other borrowed-return child, use the child's four-part bridge with a contract stating which place is returned.
+(3) A matched failing control is required: the oracle returns a reference to a different field or place, and the caller assertion must fail.
+This is a clarification of ruling (y) (option A reclassification), not new trust.
+
+Lead grant, 2026-11-02: env-J IDs 90000-99999 go to Stream B when 70000-79999 runs out, under the D392 rules: pre-scanned 100-blocks, IDs consumed only on an actual compiler launch. No Stream A use of 9xxxx exists in C3-BIN or on the host. The range-only run-joint.sh edit (adding a 9[0-9]{4} alternative) gets a backup and its new sha recorded, and is sent to the lead before use. 28000-29999 remains reserved for the final replay.
+
+NEJ_ (slice-s-compose3, merged) reached 14/97 slice-S composed rows CLOSED and proved the common-encoder write frame. The validator root is blocked because Kani 0.67 cannot generate Arbitrary<&Common> for stub_verified of a getter that returns a borrowed reference (NEE_K039). Ruling (y) does not depend on stub_verified. Clarification, binding:
+(1) For a child whose return type borrows from the caller's state, such as a getter returning &self.field, the caller certificate uses kani::stub (not stub_verified). The oracle's return value is fixed by the child's frame contract, not arbitrary: a reference to the place the child's contract designates (for a field getter, the actual field of the actual receiver), so the borrow's provenance and lifetime are preserved. Where the contract allows any value, the oracle returns a reference to a harness-owned arbitrary value of that type, with the same mutability, that does not alias anything the caller can see. The pointee may then be any value, and the reference is the only thing introduced.
+(2) Child certificate for a pure field getter: a source-level identity check (the frozen body is exactly `&self.f` or an equivalent projection, checked by a script with mutation tests), plus the extracted-body Lean identity. For any other borrowed-return child, use the child's four-part bridge with a contract stating which place is returned.
+(3) A matched failing control is required: the oracle returns a reference to a different field or place, and the caller assertion must fail.
+This is a clarification of ruling (y) (option A reclassification), not new trust.
+
+Lead grant, 2026-11-02: env-J IDs 90000-99999 go to Stream B when 70000-79999 runs out, under the D392 rules: pre-scanned 100-blocks, IDs consumed only on an actual compiler launch. No Stream A use of 9xxxx exists in C3-BIN or on the host. The range-only run-joint.sh edit (adding a 9[0-9]{4} alternative) gets a backup and its new sha recorded, and is sent to the lead before use. 28000-29999 remains reserved for the final replay.
+
+This is a clarification of ruling (y) (option A reclassification), not new trust.
+
+Lead grant, 2026-11-02: env-J IDs 90000-99999 go to Stream B when 70000-79999 runs out, under the D392 rules: pre-scanned 100-blocks, IDs consumed only on an actual compiler launch. No Stream A use of 9xxxx exists in C3-BIN or on the host. The range-only run-joint.sh edit (adding a 9[0-9]{4} alternative) gets a backup and its new sha recorded, and is sent to the lead before use. 28000-29999 remains reserved for the final replay.
+
+### Lead addendum, 2026-11-02: NEN_ authoritative ledger; ruling (z) (observer specialization) adopted in part; rule 17
+
+NEN_ (evidence/ledger4-20261102, merged at 2ca410c825) is the authoritative ledger. 88/587 composed rows are CLOSED (slice Q 66, slice S 22; TX1 44, TX2 44; 44/434 unique functions). No slice-validator closure was rejected. The K-3 inventory stands at 143 RESTORED, 211 UNAFFECTED, 511 SUSPENDED and 221 OPEN. The lead re-ran NEN_validate.py and NEN_tests.py: both exit 0, and the composed counts are confirmed.
+
+Ruling (z), adopted in part from NEF_PROPOSED_RULING.md. (1) Adopted: the release-only observer specialization (NEF_ proposal item 2). For frozen 4bb3b3f5 under the deployed program feature graph, NEF_OBSERVER_CERTIFICATE pins the observer constructor (cfg-constant None), every forwarding use and both mark bodies. The lead re-ran NEF_OBSERVER_TESTS.py: positive true, 17 mutations rejected. A caller harness may replace each reached mark call with an oracle whose only admissible behaviour is to return unit and write nothing: no log, hash or runtime events; no rejection, panic or divergence. Phase arguments are still evaluated in their original order. The caller property must not depend on any function-pointer value. Rules 14 and 16 still apply. This is an option-A reclassification under ruling (y), not new trust. (2) Deferred: the fixed-backend CM31 inverse specialization (item 3). Its supporting reference inputs (NEF_*.rs.txt, NEF_SPECIALISATION_PAYLOAD.json) were excluded by the worker's own .gitignore and were never committed, so NEF_SPECIALISATION_TESTS.py cannot be re-run from the repository. The next slice-Q job must regenerate those inputs, commit them, and re-run the tests before item 3 is considered.
+New worker rule 17: never exclude evidence inputs from git (harness or reference sources, payloads, manifests). .gitignore may list only caches, locks, keys, transient state and build outputs. A scan of every evidence .gitignore found NEF_ to be the only violation.
+
+Ruling (z), adopted in part from NEF_PROPOSED_RULING.md. (1) Adopted: the release-only observer specialization (NEF_ proposal item 2). For frozen 4bb3b3f5 under the deployed program feature graph, NEF_OBSERVER_CERTIFICATE pins the observer constructor (cfg-constant None), every forwarding use and both mark bodies. The lead re-ran NEF_OBSERVER_TESTS.py: positive true, 17 mutations rejected. A caller harness may replace each reached mark call with an oracle whose only admissible behaviour is to return unit and write nothing: no log, hash or runtime events; no rejection, panic or divergence. Phase arguments are still evaluated in their original order. The caller property must not depend on any function-pointer value. Rules 14 and 16 still apply. This is an option-A reclassification under ruling (y), not new trust. (2) Deferred: the fixed-backend CM31 inverse specialization (item 3). Its supporting reference inputs (NEF_*.rs.txt, NEF_SPECIALISATION_PAYLOAD.json) were excluded by the worker's own .gitignore and were never committed, so NEF_SPECIALISATION_TESTS.py cannot be re-run from the repository. The next slice-Q job must regenerate those inputs, commit them, and re-run the tests before item 3 is considered.
+New worker rule 17: never exclude evidence inputs from git (harness or reference sources, payloads, manifests). .gitignore may list only caches, locks, keys, transient state and build outputs. A scan of every evidence .gitignore found NEF_ to be the only violation.
+
+NEM_ (evidence/slice-s-compose5-20261102) closed the first slice root, crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::validate_pool_v1_pair_forest_terminal_statement_v1 (both inventory rows), and brought slice S to 50/97 composed rows. What is proved, exactly. (a) The Lean MODEL theorem NEM_ValidatorComposed.result_state_effects states that the validator run with the three certified reached-child laws (payment, output lane, late) equals the cohort validator's Result, leaves state unchanged, and produces the cohort trace effects. It has no inner callee hypotheses, and its #print axioms is the standard three. #print axioms is summary-based (see the walker completeness addendum); this closure is small, and NEP_ will raw-walk it. (b) The native link is the ruling-(y) hybrid certificate: Kani caller certificates on the frozen validator under deployed features with local records and matched controls (NEE_K052/053, NEL_K006/007), the closed child certificates, and NEM_root_checks.py, which checks source erasure, complete Results, ordered effects and same child places. (c) Conditions remaining: the root's own PacketDomain and PhysicalInterpretation, P6/D188 transport (option A reclassification), and the approved runtime trust rows. This is a hybrid certificate, not a single kernel theorem from Rust source. Slice S remaining roots: encode_pool_v1_pair_forest_terminal_statement_v1, emit_result, decode_pool_v1_pair_forest_terminal_request_v1, reconstruct_asq8_statement, decode_public_statement_box, scan_proof_buffer. NEQ_ continues. Target not yet established.
+
+### Lead addendum, 2026-11-02: NEO_ merged; ruling (z)(2) CM31 fixed-backend specialization ADOPTED
+
+NEO_ (evidence/slice-q-compose2-20261102) brought slice Q to 54/78 functions and 124/257 edges, and reports 130/587 rows on its ledger copy. That copy does not yet include NEM_'s slice-S rows; the unified refresh will reconcile both. Both slice-Q roots remain OPEN. NEO_ reconstructed NEF_'s seventeen Rust text inputs from the committed NEF_REFERENCE_INPUTS.patch and regenerated the payload. The regenerated patch is byte-identical to the committed NEF_SPECIALISATION.patch. Everything is committed under rule 17. The lead replayed NEO_specialisation.py: 20 inputs restored, NEF_SPECIALISATION_TESTS.py positive true, 6 mutations rejected, exit 0. The replay's regenerated receipts were reverted, so the committed evidence is unchanged.
+
+Ruling (z)(2) is therefore ADOPTED, exactly as NEF_PROPOSED_RULING item 3 scopes it. On the direct edge CM31::inv -> CM31::inv_with(M31::inv), a caller harness may substitute the statically selected backend with a direct call at the identical norm, under the seven-operation opaque log. Field multiplication stays Lean-discharged, and Kani is never used for it. The generic batch-inverse backend and any other backend are excluded. M31::neg remains a slice-boundary callee. This is an option-A reclassification under ruling (y), not new trust. Rules 14, 16 and 17 apply.
+
+Ruling (z)(2) is therefore ADOPTED, exactly as NEF_PROPOSED_RULING item 3 scopes it. On the direct edge CM31::inv -> CM31::inv_with(M31::inv), a caller harness may substitute the statically selected backend with a direct call at the identical norm, under the seven-operation opaque log. Field multiplication stays Lean-discharged, and Kani is never used for it. The generic batch-inverse backend and any other backend are excluded. M31::neg remains a slice-boundary callee. This is an option-A reclassification under ruling (y), not new trust. Rules 14, 16 and 17 apply.
+
+NEQ_ (evidence/slice-s-compose6-20261102) closed encode_pool_v1_pair_forest_terminal_statement_v1, in the same hybrid ruling-(y) form as the validator (see NEQ_COMPOSED.md). Slice S now has 68/97 composed rows and 2/7 roots. Its final axioms audit uses standard axioms only (summary-based; the NEP_ walker will follow). It was merged as a squash because an intermediate worker commit held a 20.1 MB file (rule 12); the unsquashed history stays on codex/cx-slice-s-compose6-20261102. Remaining roots: emit_result, decode_pool_v1_pair_forest_terminal_request_v1, reconstruct_asq8_statement, decode_public_statement_box, scan_proof_buffer. Target not yet established.
+
+### Lead rulings (aa) and (ab), 2026-11-04: Box allocation in native certificates; set_return_data as an explicit runtime row (ADDED trust, reported to owner)
+
+NEU_ (merged at ecc226dfa67, slice S 72/97) stopped on two recurring interface questions across 20 remaining members.
+
+Ruling (aa), a clarification with no new trust. In a ruling-(y) caller or child certificate, a safe Box::new / Box allocation is discharged as follows. The allocator's returning behaviour is the existing Allocator item (AspisR1.S2W_D189Wrappers.Allocator, NAMED-IN-CONTRACT): a fresh, uniquely owned block, or abort, never a recoverable error. The native harness must prove (i) the value moved into the Box equals the model value, (ii) the returned Box is the one allocated in the same call (ownership transfer, no aliasing with any caller-visible place), and (iii) the error paths free or forget exactly what the frozen code does. Kani's own Box model is admitted for (i)-(iii), under rule 16 and with matched controls (corrupt the boxed value; return a different allocation). unsafe/MaybeUninit stays under the 2026-10-26 native Vec/Box ruling (b), the P6 route.
+
+Ruling (ab), which ADDS one runtime trust row. emit_result ends in solana_program::program::set_return_data(bytes), and the Pool reads it after the CPI with get_return_data (programs/aspis-pool/src/verifier_dispatch.rs:145, 380). No accepted item covers return-data semantics; RuntimeSyscall covers only hash returns. New row RuntimeReturnData: a set_return_data(b) by program P, followed by the caller's get_return_data() in the same instruction context with no intervening CPI, returns Some((P, b)) exactly, with b's length at most the runtime maximum. The native certificate must prove that the frozen code passes exactly the model bytes, at the model position in the ordered effect trace (the event is never erased to Unit), and that no other set_return_data follows. The Pool side must separately prove that it reads immediately after the CPI and checks the program id, per the comment at verifier_dispatch.rs:309. This is a platform-behaviour assumption of the same kind as RuntimeSyscall and RuntimePersistence. It is reported to the owner as an ADDITION, never as a removal, and it is listed in the trust inventory. The owner may reject it, in which case emit_result stays OPEN.
+
+Ruling (aa), a clarification with no new trust. In a ruling-(y) caller or child certificate, a safe Box::new / Box allocation is discharged as follows. The allocator's returning behaviour is the existing Allocator item (AspisR1.S2W_D189Wrappers.Allocator, NAMED-IN-CONTRACT): a fresh, uniquely owned block, or abort, never a recoverable error. The native harness must prove (i) the value moved into the Box equals the model value, (ii) the returned Box is the one allocated in the same call (ownership transfer, no aliasing with any caller-visible place), and (iii) the error paths free or forget exactly what the frozen code does. Kani's own Box model is admitted for (i)-(iii), under rule 16 and with matched controls (corrupt the boxed value; return a different allocation). unsafe/MaybeUninit stays under the 2026-10-26 native Vec/Box ruling (b), the P6 route.
+
+Ruling (ab), which ADDS one runtime trust row. emit_result ends in solana_program::program::set_return_data(bytes), and the Pool reads it after the CPI with get_return_data (programs/aspis-pool/src/verifier_dispatch.rs:145, 380). No accepted item covers return-data semantics; RuntimeSyscall covers only hash returns. New row RuntimeReturnData: a set_return_data(b) by program P, followed by the caller's get_return_data() in the same instruction context with no intervening CPI, returns Some((P, b)) exactly, with b's length at most the runtime maximum. The native certificate must prove that the frozen code passes exactly the model bytes, at the model position in the ordered effect trace (the event is never erased to Unit), and that no other set_return_data follows. The Pool side must separately prove that it reads immediately after the CPI and checks the program id, per the comment at verifier_dispatch.rs:309. This is a platform-behaviour assumption of the same kind as RuntimeSyscall and RuntimePersistence. It is reported to the owner as an ADDITION, never as a removal, and it is listed in the trust inventory. The owner may reject it, in which case emit_result stays OPEN.
+
+Ruling (ab), which ADDS one runtime trust row. emit_result ends in solana_program::program::set_return_data(bytes), and the Pool reads it after the CPI with get_return_data (programs/aspis-pool/src/verifier_dispatch.rs:145, 380). No accepted item covers return-data semantics; RuntimeSyscall covers only hash returns. New row RuntimeReturnData: a set_return_data(b) by program P, followed by the caller's get_return_data() in the same instruction context with no intervening CPI, returns Some((P, b)) exactly, with b's length at most the runtime maximum. The native certificate must prove that the frozen code passes exactly the model bytes, at the model position in the ordered effect trace (the event is never erased to Unit), and that no other set_return_data follows. The Pool side must separately prove that it reads immediately after the CPI and checks the program id, per the comment at verifier_dispatch.rs:309. This is a platform-behaviour assumption of the same kind as RuntimeSyscall and RuntimePersistence. It is reported to the owner as an ADDITION, never as a removal, and it is listed in the trust inventory. The owner may reject it, in which case emit_result stays OPEN.
+
+### Lead ruling (ax2), 2026-11-04: admitted audit-driver adaptations
+
+The hardened walker is the module NEP_WALKER (evidence/axaudit2-20261102). An audit run may use an adapted DRIVER only if: (1) the walker file is byte-identical to NEP_WALKER.lean, which must be checked and recorded; (2) the driver's changes are limited to the module and root lists and runtime setup that does not change the audit: a memory limit equal to the scope's -M cap, search-path initialisation, and compiled instead of interpreted execution; (3) the adapted driver, built the same way, is also run on NEP_'s eight planted fixtures and their mutations, and reproduces the expected results (each planted axiom reported; each mutation reports none; all equal to collectAxioms); (4) the full driver diff is committed with the audit. Stream B's evhc9/evhc10 adaptation meets the same terms.
+NFA_ (merged, evidence/slice-q-mul4-20261104): walker byte-identical (diff empty); driver changes are root lists, NFA_MemoryLimit.set (7000 MiB, equal to -M7000) and initSearchPath. Its NEV_ audit candidate covers 152 roots, standard axioms only, zero unresolved. Condition (3) has not yet been run, so NEV_'s 4 rows (batch_prefix_products, accumulate_batched_with_node) stay PENDING until the adapted driver passes the planted fixtures. The next slice-Q arithmetic job does that first.
+
+NEY_ (evidence/slice-s-compose9-20261104) closed programs/r1-cost-probe/src/r1_pool_adapter.rs::decode_public_statement_box, in the same hybrid ruling-(y) form (see NEY_COMPOSED.md), together with the terminal statement decoder, the binding result validator and the result encoder. Slice S: 86/97 rows, 110/129 edges, 3/7 roots. Its audit uses standard axioms (summary-based; the NEP walker will follow at the next refresh). Procedural note, recorded by the worker itself: three emission controls were submitted before the first timeout was reviewed. All of them timed out and earned no credit (K129-132 and K137 are excluded), so the result is unaffected. Remaining roots: emit_result, decode_pool_v1_pair_forest_terminal_request_v1, reconstruct_asq8_statement, scan_proof_buffer. Target not yet established.
+
+### Lead ruling (ac), 2026-11-04: sol_memcmp_ as an explicit runtime row (ADDED trust, reported to owner); slice S scanner
+
+NFH_ (evidence/slice-s-compose11-20261104, NFH_COMPARISON_FINDING.md) established that the 688-byte equality in scan_proof_buffer is not a Rust byte loop in the release artifacts. In both hash-checked verifier ELFs (default f8c0ec72..., devnet 63ad3e9c...) the compare at the two scanner-shaped sites (0x4ab60, 0x50e48; length guard 58295, size 688, tag at 696) calls the compiler-builtins memcmp wrapper at 0x1749d0, whose instruction 0x1749e8 relocates (R_SBF_64_32) to the undefined dynamic symbol sol_memcmp_. The syscall body is absent from the ELF; it lives in the validator runtime. No accepted item covers it: RuntimeSyscall covers hash returns only, RuntimeReturnData (ab) covers return data, PhysicalInterpretation and P6 option A do not cover an external body. A host Kani execution of core slice equality takes a different intrinsic path and certifies nothing about the deployed body. NFH_ correctly stopped at 6/50 Lean and 0/100 Kani: no in-slice budget can make the body visible.
+
+Ruling (ac), which ADDS one runtime trust row, RuntimeMemcmp, with exactly the narrow contract NFH_ proposed (RuntimeMemcmp688Zero): for the SAME two valid readable 688-byte ranges passed at this call (aliasing, arbitrary contents and alignment allowed), sol_memcmp_ returns normally, writes its supplied i32 output slot, and writes zero iff all 688 corresponding bytes are equal; it changes no input byte or other observable state and emits no protocol/oracle event. No sign, magnitude, ordering or timing property is assumed. If the runtime can abort on the caller-established domain (memory translation failure), that abort is a terminal, not a returned denial, and the native certificate must show the domain is the retained encoded-reply and header allocations of exactly 688 bytes. The native certificate must prove (i) the frozen code passes exactly those two SAME buffers and 688 in r1/r2/r3, (ii) the caller tests exactly the returned slot for zero, (iii) nothing else observes the slot, and (iv) NFH_ComparisonDomain's 688-only completion is used, never NFD_'s universal NativeEqualityAssociation verbatim. This is a platform-behaviour assumption of the same kind as RuntimeSyscall, RuntimePersistence and RuntimeReturnData. It is reported to the owner as an ADDITION, never a removal, and listed in the trust inventory; the owner may reject it, in which case scan_proof_buffer stays OPEN and slice S stays 6/7. The trust-reduction route stays open in parallel: an outside-slice packet pinning the deployed validator's sol_memcmp_ implementation, syscall registry entry and memory translation rules, proving its bounded iteration with NEU_EqualityLoop, would retire the row; it is not commissioned now.
+
+Ruling (ac), which ADDS one runtime trust row, RuntimeMemcmp, with exactly the narrow contract NFH_ proposed (RuntimeMemcmp688Zero): for the SAME two valid readable 688-byte ranges passed at this call (aliasing, arbitrary contents and alignment allowed), sol_memcmp_ returns normally, writes its supplied i32 output slot, and writes zero iff all 688 corresponding bytes are equal; it changes no input byte or other observable state and emits no protocol/oracle event. No sign, magnitude, ordering or timing property is assumed. If the runtime can abort on the caller-established domain (memory translation failure), that abort is a terminal, not a returned denial, and the native certificate must show the domain is the retained encoded-reply and header allocations of exactly 688 bytes. The native certificate must prove (i) the frozen code passes exactly those two SAME buffers and 688 in r1/r2/r3, (ii) the caller tests exactly the returned slot for zero, (iii) nothing else observes the slot, and (iv) NFH_ComparisonDomain's 688-only completion is used, never NFD_'s universal NativeEqualityAssociation verbatim. This is a platform-behaviour assumption of the same kind as RuntimeSyscall, RuntimePersistence and RuntimeReturnData. It is reported to the owner as an ADDITION, never a removal, and listed in the trust inventory; the owner may reject it, in which case scan_proof_buffer stays OPEN and slice S stays 6/7. The trust-reduction route stays open in parallel: an outside-slice packet pinning the deployed validator's sol_memcmp_ implementation, syscall registry entry and memory translation rules, proving its bounded iteration with NEU_EqualityLoop, would retire the row; it is not commissioned now.
+
+### Lead ruling (ad), 2026-11-04: data-independent loop control decomposition for native same-execution certificates (the dot-product obstruction)
+
+Two consecutive dot-product jobs, NFF_ (slice-q-mul7) and NFI_ (slice-q-mul8), closed zero rows on the same stated obstruction: a representation relation between the private running state of the Rust `StepBy<Range<usize>>` in four_dots_one and the model iterator NFA_Iterator.Iter, initialised and preserved on every reached native prestate, so that the 39 controlled per-window Kani certificates compose into one same-execution physical trace. Every whole-loop harness tried (NFC_K021, NFF_K030, NFI_K038) stopped at the 90 s solver limit, not on memory (peak 2 to 3.8 GiB). Per AGENTS section 7 the lead inspected the shared obstruction instead of commissioning a third wrapper.
+
+Finding. The loop control of four_dots_one is data-independent: `for start in (0..26).step_by(4)` and `for term in start..min(start+4, 26)` mention neither q, g nor slot. The outer iterator passes through exactly eight concrete states, already proved from the extraction in NFA_Iterator (initial, next, start, done, stopped: value 0 .. value 7, starts 0,4,...,24), and the inner range is concrete per outer step (28 term iterations in all). The only data dependence on control is the abort terminal of `.unwrap()` on a rejected scalar read, which ends the execution inside the window where it happens. Therefore no relation on private StepBy fields is needed: the physical control trace is a fixed finite sequence of cut points, and the state threaded between cuts is exactly `limbs` (eight u64), `sums` (eight u64, reset per outer step) and the position in that fixed sequence.
+
+Ruling (ad). Under ruling (y)'s hybrid form, a native same-execution certificate for a function whose loop control is proved data-independent from the extraction (as NFA_Iterator does here) may be composed from: (i) ONE loop-control harness that executes the actual frozen loop with every data-dependent body replaced by a recording stub (record (start, term) and the cut index; no arithmetic, no parsing) and asserts the exact concrete control sequence and cut count, with a matched failing control (e.g. one recorded pair perturbed); (ii) the per-window body harnesses at each concrete cut, on arbitrary prestate (q, g, slot in 0..4, limbs, sums), asserting the exact logged accesses, the stubbed product calls in source order (products stay Lean-discharged through NEG_ProductAbstraction), the folds, the exact poststate, and on the rejected-read branch the abort terminal with nothing further executed; (iii) a Lean theorem that threads (ii) along the sequence certified by (i), using NFA_Iterator's concrete states, to give the complete trace or the abort prefix. The stubbed-body harness in (i) certifies control flow only and is never cited for any value. Rule 16 local-record form, exact KMX patch and matched controls apply to every harness. The 90 s solver limit is NOT raised; the timed-out whole-loop shapes stay excluded. This ruling adds no trust: it restates what ruling (y) already permits when the control trace is a proved constant, and it applies to four_dots_one, four_dots and any other member whose control is proved data-independent in the same way; it must not be applied where control depends on data beyond an abort terminal.
+
+Ruling (ad). Under ruling (y)'s hybrid form, a native same-execution certificate for a function whose loop control is proved data-independent from the extraction (as NFA_Iterator does here) may be composed from: (i) ONE loop-control harness that executes the actual frozen loop with every data-dependent body replaced by a recording stub (record (start, term) and the cut index; no arithmetic, no parsing) and asserts the exact concrete control sequence and cut count, with a matched failing control (e.g. one recorded pair perturbed); (ii) the per-window body harnesses at each concrete cut, on arbitrary prestate (q, g, slot in 0..4, limbs, sums), asserting the exact logged accesses, the stubbed product calls in source order (products stay Lean-discharged through NEG_ProductAbstraction), the folds, the exact poststate, and on the rejected-read branch the abort terminal with nothing further executed; (iii) a Lean theorem that threads (ii) along the sequence certified by (i), using NFA_Iterator's concrete states, to give the complete trace or the abort prefix. The stubbed-body harness in (i) certifies control flow only and is never cited for any value. Rule 16 local-record form, exact KMX patch and matched controls apply to every harness. The 90 s solver limit is NOT raised; the timed-out whole-loop shapes stay excluded. This ruling adds no trust: it restates what ruling (y) already permits when the control trace is a proved constant, and it applies to four_dots_one, four_dots and any other member whose control is proved data-independent in the same way; it must not be applied where control depends on data beyond an abort terminal.
+
+delegation: RuntimeReturnData (ruling (ab)) and RuntimeMemcmp (ruling (ac)).
+Owner's words: "you can have solana runtime assumptions that seems
+reasonable". Consequence: slice S (7/7 roots, 97/97 rows) is CLOSED
+unconditionally with respect to (ab) and (ac); the rows move from
+ADDED-PENDING-OWNER to ACCEPTED in the trust inventory. Future runtime
+assumptions of the same class (documented Solana runtime/syscall behaviour,
+no cryptographic content) may be added by the lead under this decision and
+must still be recorded as trust rows and reported.
+
+## Lead ruling (ae), 2026-11-04: deployed-constant observer route at query_values / query_loop (narrowing of rule 14)
+
+Shared obstruction (AGENTS §7): NFM_ (evidence/slice-q-mul9-20261104, NFM_REMAINING.md) closed four_dots_one and four_dots but reports that every remaining slice Q edge into query_values (TX1:184-ish family; query_values -> four_dots, the field/trace/accumulate calls, and query_loop -> query_values) is blocked because the callers carry `obs: Observer = Option<fn(Phase)>` (crates/aspis-r1-cost-probe/src/verifier.rs:30) and rule 14 (finding K-2) quarantines any Kani pass whose property depends on an Option<fn>. NFG_ and NFF_ reported the same boundary. Inspection: (1) the deployed program root passes `observer()` (programs/r1-cost-probe/src/lib.rs:36), which is the literal constant `None` unless feature `cu-profiling` is enabled; the deployed feature set (rule 15: pool-adapter, private-leaf-salts) does not enable it, so in every deployed execution obs == None. (2) `mark(obs, p)` (verifier.rs:31) is `if let Some(f)=obs {f(p);}`: with obs == None it has no effect, and query_values/query_loop never otherwise read obs. (3) KNC_ established that K-2 manifests, in the tested contexts, as spurious FAILURES (over-approximation) and as name-sensitive verdicts; no false PASS was observed. (4) KNF_ already re-credited six quarantined leaf properties by a static route with no Option<fn> value used as an observation.
+
+Ruling. Rule 14 is narrowed, not lifted. The quarantine continues to apply to any Kani pass whose asserted property depends on the value of an Option<fn>, a function-pointer value or comparison, or on an observer being Some. It does NOT apply to a pass that satisfies all of: (a) the harness calls the actual frozen function with obs bound to the deployed constant `None` exactly as the deployed root binds it, under the deployed feature set (rule 15 receipts), and asserts nothing about obs; (b) the asserted property is the Result / state / ordered-effects association already used by the ruling (y) hybrid certificates; (c) a matched failing control in the same configuration; (d) ONE rename-stability pair per harness family: the same harness under a different harness/module name gives the same verdict (a verdict that changes under renaming is a finding to report, never a fix; the family earns no credit until explained); (e) the Lean side states the theorem for the model with the phase-observation effects erased, and NFM_/NFG_-style trace association proves the deployed trace is the None-observer trace. The Phase effects are not security-relevant events: they are a profiling hook that is compiled to nothing in the deployed artifacts, and the source-to-ELF realization row already covers the absence of the hook. No trust row is added or removed; this is a tool-fidelity scoping decision within the 2026-10-28 delegation (it changes no bound, metric, adversary, privacy or two-transaction property). Credit under (ae) is reported in the ledger as "CLOSED under (ae)" so it can be found if K-2 is later shown to have a false-PASS mode in this shape.
+
+Correction to ruling (ad): the prose said 28 term iterations; the frozen four_dots_one uses start..min(start+4,26), so widths are [4,4,4,4,4,4,2] and the control trace has 26 term iterations and 7 outer cuts (NFM_FINDINGS.md F1). NFM_ proved the 26-step sequence; the ruling's method is unchanged.
+
+Ruling. Rule 14 is narrowed, not lifted. The quarantine continues to apply to any Kani pass whose asserted property depends on the value of an Option<fn>, a function-pointer value or comparison, or on an observer being Some. It does NOT apply to a pass that satisfies all of: (a) the harness calls the actual frozen function with obs bound to the deployed constant `None` exactly as the deployed root binds it, under the deployed feature set (rule 15 receipts), and asserts nothing about obs; (b) the asserted property is the Result / state / ordered-effects association already used by the ruling (y) hybrid certificates; (c) a matched failing control in the same configuration; (d) ONE rename-stability pair per harness family: the same harness under a different harness/module name gives the same verdict (a verdict that changes under renaming is a finding to report, never a fix; the family earns no credit until explained); (e) the Lean side states the theorem for the model with the phase-observation effects erased, and NFM_/NFG_-style trace association proves the deployed trace is the None-observer trace. The Phase effects are not security-relevant events: they are a profiling hook that is compiled to nothing in the deployed artifacts, and the source-to-ELF realization row already covers the absence of the hook. No trust row is added or removed; this is a tool-fidelity scoping decision within the 2026-10-28 delegation (it changes no bound, metric, adversary, privacy or two-transaction property). Credit under (ae) is reported in the ledger as "CLOSED under (ae)" so it can be found if K-2 is later shown to have a false-PASS mode in this shape.
+
+Correction to ruling (ad): the prose said 28 term iterations; the frozen four_dots_one uses start..min(start+4,26), so widths are [4,4,4,4,4,4,2] and the control trace has 26 term iterations and 7 outer cuts (NFM_FINDINGS.md F1). NFM_ proved the 26-step sequence; the ruling's method is unchanged.
+
+Correction to ruling (ad): the prose said 28 term iterations; the frozen four_dots_one uses start..min(start+4,26), so widths are [4,4,4,4,4,4,2] and the control trace has 26 term iterations and 7 outer cuts (NFM_FINDINGS.md F1). NFM_ proved the 26-step sequence; the ruling's method is unchanged.
+
+## Lead ruling (ab'), 2026-11-04: scope clarification of RuntimeReturnData, and two corrections from NFO_
+
+NFO_ (evidence/pool-retdata-20261104, merged 62468fd672c; disposition OPEN, no row closed) inspected the frozen Pool ELF and the pinned solana-cpi 2.2.1 getter. Findings adopted: (1) the Pool-side consumer of the verifier's return data is programs/aspis-pool/src/pair_forest_dispatch.rs (792-byte ASR8 reply), not the legacy verifier_dispatch.rs path (384 bytes) that ruling (ab) cited; the ruling's citation is corrected, its content is unchanged. (2) The SDK getter returns None when the runtime reports length 0 and Some((program_id, bytes[..min(size,1024)])) otherwise; the ELF branches the same way. The RuntimeReturnData row is therefore SCOPED to nonempty replies: for 1 <= |b| <= 1024, a set_return_data(b) by P followed by the caller's get_return_data() in the same instruction context with no intervening CPI returns Some((P, b)) exactly. The empty case is not used by any Aspis path (the verifier always emits 792 bytes) and is excluded from the row rather than asserted. This narrows the trust row; it adds nothing. The owner's 2026-11-04 acceptance covers the narrowed row a fortiori. (3) Audit treatment: in NFO_'s five NFO_ReadModel gate roots the raw ax2 walk reports standard axioms that collectAxioms omits. The raw walk is authoritative (that is the purpose of the ax2 form); since every reported axiom is standard, the roots pass the axiom audit, and the collectAxioms disagreement is recorded as a tooling finding, not a failure of the proof. The 650 unresolved references in 15 imported legacy modules (session A's S1/FS2 forest) are an inherited coherence defect of that forest, to be classified by the slice D / final-replay work, not waived.
+Open after NFO_: K056 (account-meta / AccountInfo key association on the Pool CPI caller) FAILED and is unisolated; the raw ASR8 decoder accepted-inverse (Lean-only); the settlement caller bridge (pair_forest.rs ~1748/1772); the Vec-to-Box carrier association at the production getter domain. NFR_ continues these as independent members.
+
+NFO_ (evidence/pool-retdata-20261104, merged 62468fd672c; disposition OPEN, no row closed) inspected the frozen Pool ELF and the pinned solana-cpi 2.2.1 getter. Findings adopted: (1) the Pool-side consumer of the verifier's return data is programs/aspis-pool/src/pair_forest_dispatch.rs (792-byte ASR8 reply), not the legacy verifier_dispatch.rs path (384 bytes) that ruling (ab) cited; the ruling's citation is corrected, its content is unchanged. (2) The SDK getter returns None when the runtime reports length 0 and Some((program_id, bytes[..min(size,1024)])) otherwise; the ELF branches the same way. The RuntimeReturnData row is therefore SCOPED to nonempty replies: for 1 <= |b| <= 1024, a set_return_data(b) by P followed by the caller's get_return_data() in the same instruction context with no intervening CPI returns Some((P, b)) exactly. The empty case is not used by any Aspis path (the verifier always emits 792 bytes) and is excluded from the row rather than asserted. This narrows the trust row; it adds nothing. The owner's 2026-11-04 acceptance covers the narrowed row a fortiori. (3) Audit treatment: in NFO_'s five NFO_ReadModel gate roots the raw ax2 walk reports standard axioms that collectAxioms omits. The raw walk is authoritative (that is the purpose of the ax2 form); since every reported axiom is standard, the roots pass the axiom audit, and the collectAxioms disagreement is recorded as a tooling finding, not a failure of the proof. The 650 unresolved references in 15 imported legacy modules (session A's S1/FS2 forest) are an inherited coherence defect of that forest, to be classified by the slice D / final-replay work, not waived.
+Open after NFO_: K056 (account-meta / AccountInfo key association on the Pool CPI caller) FAILED and is unisolated; the raw ASR8 decoder accepted-inverse (Lean-only); the settlement caller bridge (pair_forest.rs ~1748/1772); the Vec-to-Box carrier association at the production getter domain. NFR_ continues these as independent members.
+
+## Lead ruling (af), 2026-11-04: classification of NFO_K056 / NFR_K008 and the route for the Pool CPI account-meta association
+
+Inspection (AGENTS §7, after two jobs stopped on it). The harness (NFR_K008-shape.json) lets Kani pick an index meta in 0..7 and asserts instruction.accounts[meta].pubkey == the key the Pool was given. The frozen Pool builds the account list as a vec! of six AccountMeta::new_readonly entries and then pushes a seventh (programs/aspis-pool/src/pair_forest_dispatch.rs:322-337). Results: with meta fixed to the pushed element (K006) the assertion PASSES and its corruption control FAILS; for the six pre-existing elements it FAILS (K001/K002/K003/K008) with no copy/realloc replacement; with the exact KMX realloc/copy stubs the positive and the control both TIME OUT at the 512-iteration unwind of the byte-copy loop (K011/K012). The constructor observations (K057/K058) and the flags (K004/K005) pass with controls. Classification: Kani 0.67's native model of the reallocation that Vec::push performs when capacity 6 is exceeded leaves the copied prefix under-determined, so the pre-existing entries compare unequal. This is the K-1 family (finding K-1, design/KANI-FIDELITY-FINDING-20261028.md) in the over-approximating direction: a spurious FAILURE on a reached copy builtin, the exact situation the KMX stubs exist for. It is not Pool behaviour: the pushed element, which exists only after the same reallocation, is correct, and the Pool source makes no other write. No shipped-bug claim; the item is recorded as K-1 instance K-1c.
+Route. (1) Per-index harnesses with meta concrete in 0..5 (six positives, six matched key-corruption controls), KMX realloc/copy stubs applied, unwind bound set to the exact copied length (six AccountMeta = 6 × 34 bytes = 204, plus one) rather than 512; original names; no cap or time increase. A timeout under this shape is split further by element, never rerun unchanged. (2) If (1) passes, the account-meta association is CLOSED in the ruling (y) hybrid form under the KANI COPY RULE. (3) If (1) cannot be made to fit the 90 s limit after splitting, the member is CLOSED-BY-RECLASSIFICATION: the property "Vec::push preserves earlier elements" is standard-library behaviour already inside the retained std/allocator realization trust rows (P6/D188 option A, owner 2026-10-28: reclassify, never remove); the native certificate then consists of the constructor observations K057/K058, the length-7 and appended-element facts (K006), and the flag facts (K004), and the row is labelled so. Either way nothing is added to the trust inventory. The AccountInfo key association is handled identically (same vec!/push shape). This is a tool-fidelity scoping decision within the delegation; it changes no bound, metric, adversary, privacy or two-transaction property.
+
+Route. (1) Per-index harnesses with meta concrete in 0..5 (six positives, six matched key-corruption controls), KMX realloc/copy stubs applied, unwind bound set to the exact copied length (six AccountMeta = 6 × 34 bytes = 204, plus one) rather than 512; original names; no cap or time increase. A timeout under this shape is split further by element, never rerun unchanged. (2) If (1) passes, the account-meta association is CLOSED in the ruling (y) hybrid form under the KANI COPY RULE. (3) If (1) cannot be made to fit the 90 s limit after splitting, the member is CLOSED-BY-RECLASSIFICATION: the property "Vec::push preserves earlier elements" is standard-library behaviour already inside the retained std/allocator realization trust rows (P6/D188 option A, owner 2026-10-28: reclassify, never remove); the native certificate then consists of the constructor observations K057/K058, the length-7 and appended-element facts (K006), and the flag facts (K004), and the row is labelled so. Either way nothing is added to the trust inventory. The AccountInfo key association is handled identically (same vec!/push shape). This is a tool-fidelity scoping decision within the delegation; it changes no bound, metric, adversary, privacy or two-transaction property.
+
+NFS_ (evidence/slice-q-accum-20261104) retargeted the 41 accumulation modules and seven fold proofs onto the canonical Phase owner with NFN_'s method, replayed them coherently with the headline, installed NFP_'s 38 native certificates (revalidated, not rerun) and NFM_'s dot packets into the query_values packet, and composed the query_loop root with one native iteration plus finite induction at fuels 10 (TX1) and 12 (TX2). Rows TX1:089/TX2:059 (query_values) and TX1:088/TX2:058 (query_loop) are CLOSED under ruling (ae), labelled so; 16 edges certified; 107 raw ax2 roots with standard axioms; 13,067-module scan clean. With NFN_'s for_range closure, slice Q is 2/2 roots and slice S is 7/7. Standing (unchanged in kind): these are hybrid ruling (y) certificates against cached coherent objects, not a cold release replay; P6/D188 option-A transport, the std/allocator/ABI/source-to-ELF realization rows, RuntimePersistence, RuntimeReturnData (nonempty), RuntimeMemcmp and the cryptographic assumptions are retained; Prepared/powers/prepare producers are explicit boundaries now owned by slice D. The headline composition requires slice D's roots, the Pool return-data join, L159/L181, a coherent final dependency replay (L187) and the final trust/axiom/artifact audit (L188). Target not yet established.
+
+defect class ruling (ab') classified for the Q geometry and accumulation forests (fixed by NFN_/NFS_).
+Under rule 3 of AGENTS.md (theorems that cannot coexist with the headline are not credit toward it), the
+S rows are QUALIFIED until retargeted. Their historical source-validator CLOSED records are retained.
+
+Lead decision (under the 2026-10-28 delegation): the S certificate forests are retargeted onto the canonical
+owners (AspisR1PublicPreparation.Types, RPz7 Prepared, the pinned canonical library variants in
+NFX_LEGACY_FAMILY_PINS.json) by the NFN_/NFS_ generator method: byte-identical theorem bodies, provenance
+JSON, no edit to session A files, no redefinition of a shared owner, exact transport lemmas where owners are
+not definitionally equal. Credit returns to CLOSED only when the retargeted forest passes the NFX_ combined
+import (with RPx, ax2 standard axioms, zero-defect scan). Job NFY_ starts it. The 7/7 S statement in the
+2026-11-04 slice-Q note is superseded by this one. Target not yet established.
+
+## Lead ruling (ag): inventory repaired to 599 rows; status of the Q callers; residual candidate (2026-11-04)
+
+Evidence: evidence/inv-defects-20261104 (NFZ_ parts 1-3, LEAD_B006 compiler run) and evidence/inv-repair-20261104
+(NGB_, merged 8db6327f5fe). Compiler authority is stable rustc 1.94.1 MIR of the frozen revision 4bb3b3f5 under
+the deployed feature set (pool-adapter, private-leaf-salts, no prover), cross-checked against the frozen source AST.
+
+1. The composed-row inventory is now 599 rows / 440 functions (NGB_LEDGER_DELTA.json): 17 reviewed edges added
+   through a pinned additive overlay, 12 new OPEN occurrences (TX1: lib.rs::error, WideExact/QM31/CM31/M31::from_m31,
+   circle_fallback_point and its two circle-point constructors; TX2: the from_m31 trait chain and circle chain).
+   Nothing removed; every prior status preserved; D u Q u S covers 599/599. This basis supersedes NFX_'s 587 for all
+   later ledgers. The honest count on this basis is 167 CLOSED (plus the NFT_/NFU_ deltas booked since, 26 rows),
+   89 QUALIFIED, 343 OPEN.
+2. accumulate and accumulate_with_node are REACHABILITY-EXCLUDED (NGB_EXCLUDED.json): their only incoming chain is
+   the audit-only eight_way feature; zero references in the deployed program MIR. They are recorded, not rows.
+3. Status of the callers that reach WideExact::from_m31 through the no-op trace argument.
+   TX1:182 / TX2:108 (accumulate_batched_with_node, CLOSED under NFS_) REMAIN CLOSED. Reason (NGB_Q_CALLEE_FINDING.md):
+   the model packet NFS_NEV_AccumPacket.result_state_effects is stated over the complete emitted body, which executes
+   CodeField.from_m31 before trace.value; the row-step proof NFS_NEV_RowStep.active uses the totality law
+   NFS_NEV_CtorResults.m31 (from_m31 word = ok (mValue word) for every raw U32), so nothing is erased silently and no
+   partiality is hidden. The callee's own source association is the separate OPEN row (TX2:046, TX1:NGB003), as for
+   any other callee. TX1:168 (Transcript::queries) is OPEN and unaffected.
+4. Residual: NFZ_C0032 (aspis-statement external_local_packed_raw -> extension_limbs callback) stays an explicit
+   unresolved candidate until a statement-crate MIR is retained; the lead runs that one step (LEAD_B007). Five inherited
+   TX2 occurrences have union membership without a transaction-specific path; disclosed in NGB_COVERAGE.json and to
+   be settled by the L187 replay's reachability check, not by deletion.
+Target not yet established.
+
+## Lead ruling (ah): reference-contract route for helpers Aeneas cannot extract (2026-11-05)
+
+Evidence: evidence/slice-d-field2-20261104 (NGA_: E001/E002 fail at Aeneas InterpBorrows.ml:2731 on the nested loop
+of qm31_accumulate_product_channels; all surrounding Lean support checked and audited with RPx). Where the emitted-body
+route of ruling (y) is unavailable because the extractor rejects the frozen function, a row may be certified by the
+existing route (iv): Kani proof_for_contract of the actual frozen function against a prefix-owned handwritten reference
+f_ref (ensures result == f_ref(args); exact modifies; matched failing control; deployed features; rule 15), field
+products stubbed under rule A with paired Lean laws, loops under rule B; the model side is a Lean transcription of f_ref
+with a recorded line-by-line correspondence. Such rows are labelled "CLOSED under (ah)" and the trust inventory
+records the hand transcription of f_ref as a reviewed-transcription item (reclassification, option A; nothing removed).
+Rule 5 of AGENTS.md: the failed extraction and the replacement are both recorded. Job NGH_ applies it to TX1:036/044/
+040/041/043/056. Target not yet established.
+
+route of ruling (y) is unavailable because the extractor rejects the frozen function, a row may be certified by the
+existing route (iv): Kani proof_for_contract of the actual frozen function against a prefix-owned handwritten reference
+f_ref (ensures result == f_ref(args); exact modifies; matched failing control; deployed features; rule 15), field
+products stubbed under rule A with paired Lean laws, loops under rule B; the model side is a Lean transcription of f_ref
+with a recorded line-by-line correspondence. Such rows are labelled "CLOSED under (ah)" and the trust inventory
+records the hand transcription of f_ref as a reviewed-transcription item (reclassification, option A; nothing removed).
+Rule 5 of AGENTS.md: the failed extraction and the replacement are both recorded. Job NGH_ applies it to TX1:036/044/
+040/041/043/056. Target not yet established.
+
+the nested loop (InterpBorrows.ml:2731); the ruling (ah) reference contract times out in CBMC for the whole function
+and for a single cell (raw u64 limb products are inside the cell, so rule A stubs do not remove them); outer-step
+contracts for the small helper time out likewise. No cap or timeout was raised; no shape rerun unchanged. All
+surrounding Lean support (cache/frame, invariants, induction, wrapper values, square equation) is proved and audited
+with RPx. The five rows stay OPEN, labelled TOOL-BOUNDARY in the next ledger, off the shortest spine paths; they
+reopen only with a new interface (Aeneas loop-shape fix, or a Lean bit-level proof of one cell against a native
+per-limb log). QM31::square (TX1:032/TX2:022) and WideExact::square (TX1:056) are CLOSED under (y) by NGH_.
+Target not yet established.
+
+## Lead ruling (ai): staged-cut composition for long driver functions (2026-11-05)
+
+Evidence: evidence/slice-d-prepare-20261104 (NFW_: 100 Kani / 70 Lean / 3 extraction, only powers CLOSED; the named
+shared obstruction is the complete native-to-model producer/callee association for Prepared::new, prepare,
+verify_observed, tx1 and tx2_common). Under AGENTS.md section 7 the lead fixes the interface rather than commissioning
+more fragments. A driver function whose callees are CLOSED packets is certified by: (1) stage cuts at callee
+boundaries, each a Kani local-record harness on an arbitrary pre-state under the stage invariant, callees replaced by
+logging stubs constrained to their Lean-discharged packet laws (rule A pattern generalised), asserting exact callee
+arguments, the stage post-state as a function of pre-state and logged results, and the exact modifies set, with a
+matched failing control; (2) a Lean frame chain proving each stage's asserted post-state satisfies the next stage's
+invariant on the same variables, with uncovered variables listed as the function's own precondition; (3) the emitted
+body with callee packets substituted, proved equal to the adopted model; (4) composition native cuts + frame chain +
+packets = emitted body = model, replayed in the combined import with RPx, ax2 standard axioms, scan clean. Rows closed
+this way are CLOSED under (y) with route tag (ai). A failing step is reported as tool limit, missing callee law or real
+mismatch; never bridged by a success premise. Job NGN_ applies it to Prepared::new (TX1:179) alone.
+Target not yet established.
+
+## Lead ruling (aj): composition plan adopted; RuntimeClockSlotBinding added; decision points for the owner (2026-11-05)
+
+Evidence: evidence/exp-premises-20261105 (NGP_, merged d13da3f4bdd): NGP_HEADLINE_PREMISES.md (complete binder
+inventory of AspisR1.RPx_Deployed.deployed as loaded in NGK_COMBINED_IMPORT; L159/L181 are not literal binders, they
+are internalised by the induced prover, admitted runtime and model joins, and their physical realization is the open
+`extraction`/driver/experiment association), NGP_L159.lean, NGP_L181.lean (statements compiled, no sorry; four
+supporting lemmas proved: prefix_of_native, exact_of_returns and two others), NGP_PLAN.md, NGP_CANDIDATE_ROWS.md.
+1. The ten-theorem plan in NGP_PLAN.md is adopted as the composition programme: TX1.writer_from_native,
+   HISTORY.saved_to_loaded, CARRIERS.same_inputs_or_collision, POOL.prefix_to_cpi, POOL.read_to_settlement,
+   L159.physical_instance, TRANSCRIPT.actual_queries, DRIVER.events_from_cuts, ORACLE.partial_and_returning (proved),
+   EXPERIMENT.same_law. Jobs are named after these theorems from here.
+2. NGP-R1 RuntimeClockSlotBinding (clockGet ctx = ok v -> v = bankSlot ctx, for the same instruction context; nothing
+   about success, monotonicity or epochs) is ADDED by the lead as a Solana runtime trust row under the owner's
+   2026-11-04 decision (same class as RuntimeReturnData/RuntimeMemcmp), status ADDED-LEAD-20261105, reported to the
+   owner; it is removed only if a pinned Clock sysvar realization is proved. NGP-R2 (physical observation realization)
+   is NOT a trust row: it is the D188 association obligation and stays OPEN.
+3. Partial terminal policy: the current partial route (fail/divergence permitted, ideal suffixes retained, pointwise
+   domination) is retained; no totality restriction, no change to the abort probability or the bound.
+4. OWNER DECISION POINTS (not taken by the lead; work continues on the recommended route meanwhile):
+   (a) Physical scope of L159: the recommended route proves Pool B/D into the same admitted game, so the headline
+   covers settlement; the alternative reports the headline conditional on the external Pool consumer association.
+   The lead continues on the recommended route; the owner confirms the reporting boundary.
+   (b) If the physical exporter (TRANSCRIPT.actual_queries) reveals an adaptive-schedule reorder not covered by
+   ARX/F3S, the choice between a coupling proof under actual hypotheses and a frozen3 change is the owner's.
+Target not yet established.
+
+## Lead note: ruling (ai) verdict on Prepared::new; the blocker is callee packets, not the recipe (2026-11-05)
+
+NGN_ (evidence/slice-d-prepared-20261105, merged 09410e8691c; 31/80 Kani, 33/70 Lean, 1/1 extraction): the staged-cut
+recipe holds on the model side: E001 extracts the actual frozen Prepared::new, L016 proves the emitted body equals the
+adopted constructor and the staged model (after replacing a heartbeat-limited direct comparison with small arithmetic
+laws and child-bind cuts, no limit raised), stage frames and domains are proved, Box ownership is checked natively with
+corrupt-value and different-allocation controls. TX1:179 stays OPEN because three callees have no complete packet:
+(1) Transcript::scalar / scalar_k (TX1:169/170; stages S1-S4): no native sampler law covering the deployed 928/2048-byte
+payloads, only <= 32-byte parts and sparse windows; (2) Transcript::queries (TX1:168; stage S5): NGQ_ in progress;
+(3) prepared_claim (TX1:193; stage S8): the KNF/LPt packet needs a canonical direct association; the legacy XRn kit
+route is forbidden. None is a solver timeout or a native/model mismatch. Decision: certify the callee rows first
+(NGT_ scalars, NGQ_ queries, then prepared_claim), then re-run the Prepared::new composition with the recipe unchanged.
+This is the expected shape of the remaining driver work: the drivers are blocked by their leaves, not by composition.
+Target not yet established.
+
+## Lead note: entry/adapter layer (NGL_); ruling (t) calibration ordered; `first` excluded (2026-11-06)
+
+evidence/slice-d-entry-20261105 (merged c4942b86300; 120 Kani / 70 Lean / 3 extraction): the program-entry and adapter
+bridges are built and audited with RPx (56 roots, scan clean) but no row was admitted, because the per-shape fidelity
+controls that ruling (t) requires before relying on a contract interface were never calibrated for the three non-Bool
+interface families the adapter uses (ProgramResult, Result<&[u8], ProgramError>, borrowed-slice Result)
+(NGL_FIDELITY_FINDING.md). This is a scheduling omission, not a weakening: NHD_ calibrates the three families once
+(real-body PASS, stub_verified FAIL on an unimplied assertion, modifies-violation FAIL; local old-state records, rule
+16) and then closes the adapter leaves. Lead ruling: programs/r1-cost-probe/src/lib.rs::first, the legacy non-selected
+entry, is REACHABILITY-EXCLUDED under the deployed pool-adapter feature (NGB_ candidate C0034: cfg-disabled body); it
+is recorded, not a row. All 13 spine rows remain OPEN (NGL_SPINE.md); the dependency order is adapter leaves ->
+stage1_owned/stage2_owned -> stage1/stage2 -> adapter process -> entry, with candidate tx1/tx2 and finish_relation
+owned by the driver jobs. Target not yet established.
+
+controls that ruling (t) requires before relying on a contract interface were never calibrated for the three non-Bool
+interface families the adapter uses (ProgramResult, Result<&[u8], ProgramError>, borrowed-slice Result)
+(NGL_FIDELITY_FINDING.md). This is a scheduling omission, not a weakening: NHD_ calibrates the three families once
+(real-body PASS, stub_verified FAIL on an unimplied assertion, modifies-violation FAIL; local old-state records, rule
+16) and then closes the adapter leaves. Lead ruling: programs/r1-cost-probe/src/lib.rs::first, the legacy non-selected
+entry, is REACHABILITY-EXCLUDED under the deployed pool-adapter feature (NGB_ candidate C0034: cfg-disabled body); it
+is recorded, not a row. All 13 spine rows remain OPEN (NGL_SPINE.md); the dependency order is adapter leaves ->
+stage1_owned/stage2_owned -> stage1/stage2 -> adapter process -> entry, with candidate tx1/tx2 and finish_relation
+owned by the driver jobs. Target not yet established.
+
+substitution and logged post-state induction in Lean; G-to-model by the reference contract of ruling (ah) with the
+transcription in NGY_TRANSCRIPTION.md. 38 roots standard axioms, 36 owner checks, eight fixtures, 13,470-module scan
+clean, 23 validator mutations rejected. TX1:193 is CLOSED under (ah); the trust inventory draft gains the
+ReviewedTranscription-prepared_claim item (reclassification, option A). Parent producer obligations stay with their
+owners (S/NFW_ semantic finish; NFU_/NGV_ compact check; NGN_/NGT_ scalar/view/powers29). With scalars (NGT_) and
+prepared_claim (NGY_) closed, Prepared::new (TX1:179) waits only on Transcript::queries (TX1:168, NHB_).
+Target not yet established.
+
+## Lead ruling (ak): callees with non-Arbitrary Result carriers use explicit-constructor logging stubs, not stub_verified (2026-11-06)
+
+Evidence: evidence/slice-d-entry2-20261106 (NHD_, merged): the ruling (t) calibration for the three adapter interface
+families (ProgramResult, Result<&[u8], ProgramError>, borrowed-slice Result) is unexecutable as specified: the
+stub_verified controls do not compile because those carriers have no kani::Arbitrary instance (K050/K053/K056,
+compiler rejection, correctly not counted as a semantic FAIL); the real-body PASS and modifies checks ran. Ruling:
+for a callee whose result carrier has no Arbitrary instance, the contract-interface route of ruling (t) is not used at
+all; the callee is replaced by an explicit-constructor logging stub in the ruling (y) local-record form: the stub logs
+the exact arguments, draws a Bool (and any payload words) from kani::any(), constructs the Result arm explicitly
+(Ok(...) / Err(<the exact error variant(s) the callee can return>)), applies an unconstrained post-state restricted to
+the callee's modifies set, and the matched control corrupts a logged argument or reply; the Lean side substitutes the
+callee's packet law for the logged reply, exactly as NGY_ did for the Dot child (reply: Bool encoding the two Result
+arms). A stub that omits a reachable error variant is a finding, not a pass. This is the same discipline as rule A/(ai)
+stubs; nothing is weakened: no caller assertion is implied by the stub. NHJ_ applies it to the adapter leaves.
+Target not yet established.
+
+Evidence: evidence/slice-d-entry2-20261106 (NHD_, merged): the ruling (t) calibration for the three adapter interface
+families (ProgramResult, Result<&[u8], ProgramError>, borrowed-slice Result) is unexecutable as specified: the
+stub_verified controls do not compile because those carriers have no kani::Arbitrary instance (K050/K053/K056,
+compiler rejection, correctly not counted as a semantic FAIL); the real-body PASS and modifies checks ran. Ruling:
+for a callee whose result carrier has no Arbitrary instance, the contract-interface route of ruling (t) is not used at
+all; the callee is replaced by an explicit-constructor logging stub in the ruling (y) local-record form: the stub logs
+the exact arguments, draws a Bool (and any payload words) from kani::any(), constructs the Result arm explicitly
+(Ok(...) / Err(<the exact error variant(s) the callee can return>)), applies an unconstrained post-state restricted to
+the callee's modifies set, and the matched control corrupts a logged argument or reply; the Lean side substitutes the
+callee's packet law for the logged reply, exactly as NGY_ did for the Dot child (reply: Bool encoding the two Result
+arms). A stub that omits a reachable error variant is a finding, not a pass. This is the same discipline as rule A/(ai)
+stubs; nothing is weakened: no caller assertion is implied by the stub. NHJ_ applies it to the adapter leaves.
+Target not yet established.
+
+for a callee whose result carrier has no Arbitrary instance, the contract-interface route of ruling (t) is not used at
+all; the callee is replaced by an explicit-constructor logging stub in the ruling (y) local-record form: the stub logs
+the exact arguments, draws a Bool (and any payload words) from kani::any(), constructs the Result arm explicitly
+(Ok(...) / Err(<the exact error variant(s) the callee can return>)), applies an unconstrained post-state restricted to
+the callee's modifies set, and the matched control corrupts a logged argument or reply; the Lean side substitutes the
+callee's packet law for the logged reply, exactly as NGY_ did for the Dot child (reply: Bool encoding the two Result
+arms). A stub that omits a reachable error variant is a finding, not a pass. This is the same discipline as rule A/(ai)
+stubs; nothing is weakened: no caller assertion is implied by the stub. NHJ_ applies it to the adapter leaves.
+Target not yet established.
+
+all; the callee is replaced by an explicit-constructor logging stub in the ruling (y) local-record form: the stub logs
+the exact arguments, draws a Bool (and any payload words) from kani::any(), constructs the Result arm explicitly
+(Ok(...) / Err(<the exact error variant(s) the callee can return>)), applies an unconstrained post-state restricted to
+the callee's modifies set, and the matched control corrupts a logged argument or reply; the Lean side substitutes the
+callee's packet law for the logged reply, exactly as NGY_ did for the Dot child (reply: Bool encoding the two Result
+arms). A stub that omits a reachable error variant is a finding, not a pass. This is the same discipline as rule A/(ai)
+stubs; nothing is weakened: no caller assertion is implied by the stub. NHJ_ applies it to the adapter leaves.
+Target not yet established.
+
+## Lead ruling (al): generic function-pointer parameters are certified per deployed instantiation (2026-11-06)
+
+Evidence: evidence/q-field-rows-20261106 (NHH_, merged): 12 of the 14 OPEN slice-Q field rows CLOSED (including the
+former inventory defect WideExact::from_m31 TX2:046 and the from_m31 trait chain added by NGB_); CM31::inv_with
+(TX1:006) stays OPEN because its function-pointer parameter falls under the K-2 quarantine of rule 14. Ruling, in the
+spirit of (ae): a function with a generic or fn-pointer parameter is certified once per deployed instantiation: the
+inventory/compiler evidence (NGB_ MIR census) enumerates the call sites and the constant each passes; the harness binds
+the parameter to that constant, asserts nothing about the pointer itself, carries a matched control and one
+rename-stability pair per instantiation family, and the Lean model theorem is stated for that instantiation; the row is
+CLOSED "under (al)" listing the instantiations covered, and an instantiation absent from the deployed cone is recorded,
+not assumed. QM31::neg (TX1:031) stays OPEN on a model-side endpoint association only. Target not yet established.
+

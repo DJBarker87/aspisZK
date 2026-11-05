@@ -1,0 +1,5 @@
+# Failed steps
+
+L002: association simp did not rewrite four scalar receivers because domain hypotheses retained reducible carrier projections; enclosing rewrite did not match the zero constructor syntactically. This is a missing proof normalization step, not a source mismatch or a tool limit. No credit from the failed module (which printed sorryAx on unfinished declarations). Replacement: explicit SAME coordinate domain conversions and explicit cohort zero expression, L003. No success premise or cap change.
+
+Inherited validation entry point: invoking NHH_validate.py as a program ran legacy report-generation helpers and rewrote NHH_CONSUMERS.md before encountering an absent sparse NGH_Driver. The only changed inherited file was restored byte-for-byte from HEAD; git diff confirms no inherited change. Replacement: call the unchanged NHH and NGZ gate functions read-only through runpy with __name__ != __main__, then add stricter NHN gates. This is a validation-wrapper issue, not a proof or baseline rejection.

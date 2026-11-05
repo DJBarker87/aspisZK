@@ -1,0 +1,14 @@
+# Remaining obligations and budget disposition
+
+Both assigned members are CLOSED under the existing conditional hybrid semantics. No assigned member remains to attempt.
+
+| Row | Result | Why no additional budget is needed |
+|---|---|---|
+| TX1:006 CM31::inv_with | CLOSED under (al), covering the deployed M31::inv instantiation only | The inventory/compiler census, actual constant-bound pointer call, argument-corruption control, rename-stability pair, exact KMX copy pair, complete emitted/cohort Result and zero/nonzero outcomes, child domains, combined replay, ax2 audit and NFX scan are complete. Other batch backends are explicitly absent from this deployed inventory and are not certified. An unchanged native replay would repeat a passing shape. |
+| TX1:031 QM31::neg | CLOSED under (y) | Existing pinned native/model evidence is reused; the missing four-coordinate association is now proved at the existing CurrentWide QM31.sub zero endpoint and both receiver positions of its WideExact consumer. Both CM child domains and canonical exact output are proved, with final combined/ax2/NFX evidence. Another native/value-law run would repeat an unchanged passing shape. |
+
+Usage:6/30 Kani,11/30 Lean/support,0/1 extraction. All11 support scopes include the failed L002 draft; all6 native scopes include matched negative controls. Unused budget is not exhaustion and is not converted into redundant replays. The complete member-by-member disposition above explains completion below80%: no remaining member or missing admitted obligation exists in this two-member assignment. No extraction is needed because the unchanged NHH and NFT emitted proofs are reused by hash. No timeout, memory kill, cap increase, unchanged killed/timed-out replay or admission refusal occurred.
+
+The enclosing driver/experiment/physical association, final coherent release replay and final artifact audit remain outside this assignment. RPx_Deployed.deployed's retained extraction/transport/runtime/compiler/cryptographic hypotheses are not removed. Native semantic transport remains option-A reclassification of P6/D188. RuntimePersistence, RuntimeReturnData(nonempty1..1024), RuntimeMemcmp and RuntimeClockSlotBinding remain accepted trust rows. The100-bit PER-ATTEMPT deployed target, privacy and two-transaction design are not weakened; the deployed security target is not yet established.
+
+All new/native checks use one admitted scope at a time: MemoryHigh6G,MemoryMax8G,MemorySwapMax0,TasksMax64; Lean-M7000 and optimized offline Rust. Max RSS7072440KiB; all swaps0. All scopes are terminal. Own host target/native/tmp scratch was removed only after the final terminal audit receipt; own seed/cache and small exported objects remain. No shared cache, other worktree, wallet/account key or shipped source was modified.
