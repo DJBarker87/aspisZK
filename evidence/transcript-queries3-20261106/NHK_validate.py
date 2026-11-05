@@ -47,5 +47,17 @@ for p in E.rglob('*'):
  if p.is_file():assert p.stat().st_size<=20*1024*1024,str(p)
 if (E/'NHK_LEDGER_DELTA.json').exists():
  d=json.loads((E/'NHK_LEDGER_DELTA.json').read_text());assert d.get('newly_closed',[])==[],'Physical producer not yet validated; no promotion authorized'
-(E/'NHK_RESULTS.json').write_text(json.dumps(dict(runs=results,counts={k:sum(r['kind']==k for r in results) for k in ['kani','lean','link','audit']},root='TX1:168',composed_rows_added=0),indent=2)+'\n')
-print(json.dumps(dict(status='PASS',receipts=len(results),physical_producer='OPEN',newly_closed=[])))
+closed=0
+if (E/'NHK_LEDGER_DELTA.json').exists():
+ d=json.loads((E/'NHK_LEDGER_DELTA.json').read_text())
+ if d.get('updates'):
+  from NHK_certificate import check
+  c=json.loads((E/'NHK_CLOSED.json').read_text());assert check(c)
+  assert d['certificate_sha256']==sha(E/'NHK_CLOSED.json')
+  assert d['changed_rows']==['TX1:168'] and d['unchanged_all_other_rows'] and d['new_closed_rows']==1
+  assert len(d['updates'])==1 and d['updates'][0]['row']=='TX1:168' and d['updates'][0]['before']=='OPEN' and d['updates'][0]['after']=='CLOSED under (ah)'
+  assert d['updates'][0]['root_domain_retained'] and d['updates'][0]['physical_interpretation_retained']
+  assert not d['new_trust'] and not d['security_target_established']
+  closed=1
+(E/'NHK_RESULTS.json').write_text(json.dumps(dict(runs=results,counts={k:sum(r['kind']==k for r in results) for k in ['kani','lean','link','audit']},root='TX1:168',composed_rows_added=closed),indent=2)+'\n')
+print(json.dumps(dict(status='PASS',receipts=len(results),physical_producer='CLOSED under (ah)' if closed else 'OPEN',changed_rows=['TX1:168'] if closed else [])))

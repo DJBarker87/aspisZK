@@ -1,6 +1,6 @@
 # Membership domains
 
-TX1:168 remains OPEN. Reuse NHB lengths0..10,16,18 and its length17 positive
+TX1:168 is CLOSED under(ah), with the complete membership partition below. Historical stage notes follow. Reuse NHB lengths0..10,16,18 and its length17 positive
 receipt by source and receipt hashes in NHK_REUSE.json. Length17 still needs a
 changed-shape matched control after NHB_K058's timeout. NHK_K001 length11 timed
 out and is excluded; remaining independent literal lengths proceed serially.

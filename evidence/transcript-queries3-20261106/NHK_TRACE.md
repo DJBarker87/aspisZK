@@ -1,7 +1,6 @@
 # Same-invocation trace register
 
-Status OPEN. NGP_TRANSCRIPT.actual_queries is not exported while the native
-sampler association remains incomplete. A standalone NGQ_Cuts.Trace obtained
+Status COMPLETE under the hybrid (ah) packet. NGP_TRANSCRIPT.actual_queries is exported by NHK_TRANSCRIPT.lean; its domain and local native cuts are explicit. A standalone NGQ_Cuts.Trace obtained
 by evaluating a model would not supply physical origin and is not credited.
 
 Native event order (NGQ_EVENTS.md, reused): absorb once, then eight eager
@@ -35,3 +34,30 @@ the local absorb Trace, exact chronological pair observations and the local
 pure-tail edge. No complete queries Result/log equality is assumed. Physical
 origin and the sampler child value law still have to be supplied; this is
 not an NGP_TRANSCRIPT.actual_queries export.
+
+## Final same-invocation producer
+
+NHK_Absorb.Cut records the actual4-descriptor call and its returned/fail/div
+edge. NHK_EventChain.PartialObservations threads each advance reply into the
+next receiver and the corresponding arrays; an unsuccessful call ends the
+chain at that attempted occurrence. NativeWords.Cuts contains the exact word
+windows and CLOSED membership replies; NativeBlocks.Cuts threads those same
+states/arrays and the selected advance. Invocation.Cuts composes these local
+records in frozen call order and constructs the observed result/log. It has
+no complete queries Result/log equality or prebuilt NGQ_Cuts.Trace premise.
+
+Invocation.producer derives the Trace, and NGP_TRANSCRIPT.actual_queries
+returns exactly NGP_L181.NativeAssociation on the fixed adopted boundaries.
+The raw module statements are NHK_Invocation.lean and NHK_TRANSCRIPT.lean.
+The physical cut-record existence is the rule-B/source-fission/native-G
+composition of the listed certificates under P6/D188; it is not advertised
+as a kernel theorem about SBF instructions. Caller installation of the packet
+is still a caller obligation, as for the other CLOSED hybrid leaves.
+
+The domain is explicit: safe frozen Rust carriers, row<=95,payload<=8192;
+private scan bounds/canonical/inactive invariants are derived from default and
+each local step. Named preparation query rows30/31 and payloads8192/2048 fit
+the packet; deriving those inputs and consuming it in the parent is outside
+this row. Exact transport is conditional on ReturnsOnly and Agrees; prefix
+transport uses retained P1/RuntimeSyscall. No digest totality, adaptive reorder,
+rejection-log erasure, privacy/metric change or new runtime trust is introduced.

@@ -1,6 +1,6 @@
 # Native loop association register
 
-Current status OPEN, pending the membership value domains. Native and model
+Current status COMPLETE under the hybrid (ah) packet. All membership domains and the native word/block association are checked. The initial decomposition below is retained for provenance; the final association section is authoritative. Native and model
 facts are distinct; no complete Rust result is inferred from source identity.
 
 The SAME state is QueryScan(accepted22, accepted_len, draws); its invariant is
@@ -23,7 +23,7 @@ precise length's certificate and domain are available. The stopped path calls
 no membership helper. Each continuing call has length<22/draws<64, not the
 stronger length<=10 domain. NHB_Canonical.decoded/frame_preserves and
 NHB_Inactive.frame_preserves provide the domain without assuming membership
-correctness or sampler success. Missing lengths stay explicitly open.
+correctness or sampler success. Every continuing length is now discharged by NHK_MEMBERSHIP_CALLEES.json.
 
 NHB_WordTrace.source, NHB_BlockTrace.block_source/walk_source and
 NHB_OuterState.association provide rule-B word/block induction, first stop and
@@ -36,3 +36,29 @@ Next deliverable: complete membership partition or a precise failed native
 window edge, then consume those SAME native cuts in the trace producer. No
 XRn join, success-only child, hidden whole-output equality, new trust row or
 schedule change is introduced.
+
+## Explicit native contract and final association
+
+NHK_K034 passes proof_for_contract(NHK_word_step) on the mechanically
+isolated frozen word body, with arbitrary bounded scan prestate, raw candidate,
+arbitrary membership reply and every observation window. NHK_K035 flips only
+the returned stop flag and fails the exact ensures, with identical source,
+KMX/graph/lock/features and limits. modifies(scan,log) covers exactly the mutable
+scan and fresh local observation record; the arbitrary window checks the whole
+scan frame. Pre-observation scalars are uniquely available (L021). No old-array
+snapshot, writable static or function-pointer property is used.
+
+L021 identifies the Rust NHK_word_ref with L011's G. L011.logged_post aligns
+the SAME native after-state, not a fresh model substitute. L013's induction
+retains actual cursor/final variables; L014 composes source-order blocks and
+full finish Result. The complete membership table discharges the opaque reply
+value at every call, with canonical/inactive domains established independently
+of correctness for inherited16/18/19. The cursor/native decode/outer cuts are
+reused by pinned source/receipt, never replayed.
+
+L016 assembles the chronological Invocation.Cuts into NGQ_Cuts.Trace; L018
+exports actual_queries/prefix_transport/exact. L022 combines all41 roots with
+RPx; L024–027 pass raw ax2,8 fixtures and the13,483-module zero-defect scan.
+No XRn join or new whole-output/accepted-run hypothesis is installed. The
+physical-to-source semantic step remains the approved P6/D188 option-A native
+contract transport, plus reviewed transcription under(ah); nothing is removed.

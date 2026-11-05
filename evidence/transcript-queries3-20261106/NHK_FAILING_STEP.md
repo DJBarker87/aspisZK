@@ -40,3 +40,9 @@ time out90s; no credit. Width1 K014/K015 has a matched pass/control. The next
 shape fixes the caller's actual prefix start, retains both reference windows
 and broadens inputs to all u32 arrays/candidates; there are no contract
 array snapshots, aggregate any return or arbitrary-offset pointer selectors.
+
+NHK_L012: native-word association/source were accepted but the domain
+corollary used the wrong validState namespace and lacked the explicit
+NHB_Canonical import. L013 corrects only those owned inputs and passes all
+three roots with standard axioms. NHK_L017 used reserved prefix as a
+theorem identifier; L018 uses prefix_transport. No failed receipt is credit.

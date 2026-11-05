@@ -58,7 +58,7 @@ if kind=='kani':
  config['env'].update(CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-Copt-level=3 -C link-arg=-Wl,--threads=1')
  config['root_package']='aspis-core'
  config['native_command']=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NHK_src/crates/aspis-core/Cargo.toml','--target-dir',B+'/NHK_target','--features','r0','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse']
- 
+
  if os.environ.get('NHK_INVERT'):config['env']['RUSTFLAGS']+=' --cfg NHK_invert'
  if os.environ.get('NHK_BYTE_INVERT'):config['env']['RUSTFLAGS']+=' --cfg NHK_reply_corrupt'
  if os.environ.get('NHK_VERIFIER'):

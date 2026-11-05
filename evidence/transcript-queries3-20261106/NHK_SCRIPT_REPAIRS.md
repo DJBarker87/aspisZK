@@ -38,3 +38,21 @@ recovered once. Next isolation fixes the physical window start to the caller's
 actual prefix start, eliminating arbitrary-offset pointer selection. The
 reference is still split into both contiguous windows; no domain is silently
 replaced by a short prefix and no timeout/cap is increased.
+
+Final validation adds the lead's existing updates/changed_rows delta schema
+checks, including a fully validated closure certificate, source hashes, all
+22 membership domains, explicit native G contract/control/modifies, complete
+partial schedule, exact export, raw ax2 roots, fixtures and zero-defect scan.
+Every earlier receipt/source/graph/lock/cap/axiom check remains. The unsupported
+newly_closed shortcut is still forbidden. Only reporting derives composed-row
+credit from the now-validated standard-schema update. No shared NDT validator
+or host infrastructure was edited.
+
+Read-only reuse validation initially expected every immutable input to be
+repeated in each attempt archive. Cargo.lock/Cargo.toml are intentionally
+stored once in NGQ_FROZEN_INPUTS.json.xz. The validator now resolves a missing
+snapshot ONLY through that committed frozen input, requiring its exact original
+receipt SHA256; all other hashes/verdict/graph/lock/cap checks are unchanged.
+All35 selected inherited native/control pairs pass without compiler replay.
+
+Final authored-source hygiene removes inherited trailing whitespace from the owned client only. No command, proof input, validation or archived receipt is changed; raw log/patch bytes remain exact.

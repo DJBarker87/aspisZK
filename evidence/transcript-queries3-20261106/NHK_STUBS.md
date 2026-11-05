@@ -26,3 +26,23 @@ are reused; no non-Arbitrary carrier is passed through stub_verified.
 No field multiplication stub exists, so there is no new field law to add to
 LPh_STUBS.md. Tool semantic transport, std/allocator/ABI/compiler/Aeneas and
 runtime realization trust is retained, not removed.
+
+## Final discharge table
+
+The native membership table now covers0..21 with no missing case. The old
+full/split/arbitrary-offset timeouts retain zero credit. New fixed-prefix
+checks execute full native contains, not a mathematical membership stub.
+
+NHK_member_logged in K034/035 returns the supplied arbitrary Bool, records
+exact candidate/prefix length/post-increment draws/prestate window and writes
+only the local log. The paired Lean law is NHK_WordAssociation.substitute
+with NHB_Membership.prefix_membership; native child value is supplied by the
+complete NHK_MEMBERSHIP_CALLEES table. Domain: len<22/draws<64 at membership,
+same canonical/inactive source prestate for16/18/19, masked candidate; all
+other length certificates cover all raw u32 inputs. Caller invariants come
+from NativeWords.domain_preserved, NHB_Canonical/NHB_Inactive and decode cuts.
+No stub lacking a child law is used. NHK_WordReference.correspondence pairs
+the explicit native G contract with the reviewed safe reference. Bool plus
+local record effects is the admitted interface; no new stub_verified family
+requires ruling(t) calibration. All35 inherited selected pairs revalidate
+without replay (NHK_REVALIDATED_REUSE.json).
