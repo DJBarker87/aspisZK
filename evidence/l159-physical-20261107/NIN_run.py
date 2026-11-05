@@ -40,18 +40,29 @@ elif kind=='link':
  sources=['NIN_native/'+target+'.c','NIN_native/NFA_WALKER.c','NIN_native/NFA_MemoryLimit.c']
  for n in sources[1:]:files[n]=(E/n).read_text()
  command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NIN_native/'+target,*sources]
+elif kind=='inspect':
+ sources=[target+'.py']
+ files[sources[0]]=(E/sources[0]).read_text()
+ if target=='NIN_export':
+  sources.append('NIN_READONLY_NIM_CLOSURE.json')
+  files[sources[1]]=lzma.decompress((E/'NIN_READONLY_NIM_CLOSURE.json.xz').read_bytes()).decode()
+ command=['python3',target+'.py']
 elif kind=='audit':
  sources=['NIN_generated/NIN_ProofDriver.lean','NIN_generated/NIN_Driver.lean','NIN_batch.py','NIN_AUDIT_ROOTS.json','NIN_AUDIT_MODULES.json','NIN_EXPECTED_IMPORTS.jsonl']+(['NIN_POOL_ROOTS.json'] if target.startswith('pool') else [])
  for n in sources:files[n]=(E/Path(n).name).read_text()
  command=['python3','NIN_batch.py',target]
 else:raise ValueError(kind)
-config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NIN_tmp',LEAN_PATH=':'.join([B+'/NIN_objects',C]+json.loads((E/'NIN_PATHS.json').read_text()))),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')
+config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NIN_tmp',LEAN_PATH=':'.join([B+'/NIN_objects',C]+json.loads((E/'NIN_PATHS.json').read_text()))),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Owned export / retention / cleanup' if kind=='inspect' else 'Raw ax2 traversal / coherence scan')
+if target=='NIN_RestoreImport':config['env']['LEAN_PATH']=':'.join(json.loads((E/'NIN_RESTORE_PATHS.json').read_text()))
 files[a+'.json']=json.dumps(config)
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib,re,shutil
 b=Path({B!r});files=json.loads({json.dumps(files)!r})
 for n,t in files.items():
  p=b/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
+if (b/'NIN_READONLY_NIM_CLOSURE.json').exists():
+ import lzma
+ (b/'NIN_READONLY_NIM_CLOSURE.json.xz').write_bytes(lzma.compress((b/'NIN_READONLY_NIM_CLOSURE.json').read_bytes()))
 (b/'NIN_native').mkdir(exist_ok=True);(b/'NIN_objects').mkdir(exist_ok=True);(b/'NIN_tmp').mkdir(exist_ok=True)
 (b/'NIN_objects'/{target.replace('.', '/')!r}).parent.mkdir(parents=True,exist_ok=True)
 for n in ['NFA_WALKER.c','NFA_MemoryLimit.c']:
@@ -60,7 +71,7 @@ for n in ['NFA_WALKER.c','NFA_MemoryLimit.c']:
 x=json.loads((b/{(a+'.json')!r}).read_text());roots=x['env']['LEAN_PATH'].split(':');pins={{}}
 modules=['NFA_WALKER','NFA_MemoryLimit','NEP_Planted','NEP_Mutations']
 if x['kind']=='lean':modules += re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M)
-elif x['kind']=='audit':modules += ['NIN_COMBINED_IMPORT']
+elif x['kind'] in ['audit','inspect']:modules += ['NIN_COMBINED_IMPORT']
 rels=set()
 for root in roots:
  for stem in ['Aeneas','AeneasMeta']:

@@ -41,7 +41,7 @@ all indexed by SAME a/configuration/H/source/physical observer. `realizes` only
 organizes their composition; bundling is not discharge.
 
 1. **OuterTrace.** outer_from_coverage proves transport from the actual exported
-   charged native chronology and ART_PartialAccount.Certificate for both phases. The native execution is indexed by H; no one fixed native oracle is required to agree with every ROM world.
+   charged native chronology and ART_PartialAccount.Certificate for both phases. The native execution is indexed by H; no one fixed native oracle is required to agree with every ROM world. IMPORTANT NIN-F2: the all-world coverage family remains a sufficient model criterion only, not a fact established for physical callers by RuntimeSyscall/P1. In particular fixed hashv agreement must not be inferred for arbitrary unrelated H, including outside-game worlds. No NIN closure claim relies on this criterion holding. The exact OuterTrace predicate remains the physical obligation; a producer may prove it directly.
    The complete native driver/tree/order producer remains OPEN (NIC/NIF),
    including op9 and full abort prefixes. No returned-only readLog replacement.
 2. **AdmittedSupport.** Exact physical observer isSome iff Nonempty ARU_Support.At,

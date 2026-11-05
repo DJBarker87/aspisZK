@@ -19,3 +19,9 @@ L029-L033 recheck the per-world native family repair: old all-H fixed-native
 coverage was too strong for general adaptive sources (finding NIN-F1); new
 native H is SAME H's native execution. Old statements retained, not credited as
 physical producer evidence. Raw audits run only after this repair.
+
+L053 raw audit: exit1, retained. All400 expected roots measured; only mismatch
+is inherited NHC_DecodeModel.decoder_error: raw [Classical.choice,Quot.sound,
+propext], collectAxioms []. Exactly the NIM_L039 finding. Ruling (ab')(3)
+makes standard raw results authoritative. No failed process called exit0,
+no audit code weakened, no root omitted and no unchanged rerun.

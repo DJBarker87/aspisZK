@@ -24,6 +24,11 @@ Target not yet established. No game, bound, trust or shipped source change.
    does not certify actual production callback identity or account writes.
 7. Outer trace: native parent code/order and both wrapper chronological cuts,
    including every earlier scalar/query event, op9, caller domains and frames.
+   NIN-F2: outer_from_coverage's all-H coverage family is not established by
+   physical callers; neither P1 for one world nor local purity gives it.
+   This is an optional sufficient model lemma, not an adopted stronger physical
+   domain. Producer must prove exact OuterTrace (including the existing
+   outside-game observer extension) or supply that criterion with justification.
    NIC/NIF local purity/domain proofs do not construct this full producer.
 8. Admission: exact observer isSome iff ARU_Support.At, including all outside-game
    none outcomes. No arbitrary physical observer can be derived from byte facts.
