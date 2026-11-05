@@ -1,0 +1,17 @@
+# NIZ certificate register
+
+Target not yet established. No complete source owner or Pool-consumer row is CLOSED.
+
+| Certificate | Validation | Limit |
+|---|---|---|
+| NIZ_LAYOUT seven theorems | L001 exit 0, standard axioms | Arithmetic/layout and entry-admission projections; no native-cut association. |
+| NIZ_Unique four theorems | L005 exit 0, standard axioms | Arbitrary-length nested-loop model; source helper/Result and reached caller association OPEN. L003/L004 are rejected elaboration attempts and excluded. |
+| NIZ_CallbackLayout five theorems | L006 exit 0, standard axioms | Every source cursor/current/rollover/mutate-current case; complete native callback footprint OPEN. |
+| Original uniqueness comparison | K001 TIMEOUT | Full selected SDK carrier, no credit. |
+| Key-only projection | K002 compiler rejection; repaired K003 TIMEOUT | No native credit and no full caller domain. |
+
+The retained K003 GOTO inspection L007 identifies builtin-library memcmp.0, not SDK borrow logic, as the remaining data comparison loop. NIZ replacement uses one actual host memcmp iteration and a Lean induction; it does not widen the 688-byte RuntimeMemcmp trust row to key32. This is a host-native tool/library proof boundary until its exact source/loop association is established.
+
+| Actual one-byte host memcmp | K004 PASS / K005 exact assertion FAIL | Arbitrary two bytes and unchanged inputs; no deployed syscall or full key/caller credit. |
+| Actual one-byte aliased window | K006 PASS / K007 zero-law FAIL / K008 observed-byte-frame FAIL | Arbitrary local offsets/aliasing in a three-byte carrier and arbitrary observed frame byte. Generic native/memory/source association remains required. |
+| NIZ_Memcmp two roots | L010 exit 0; standard axioms | Short-circuit induction and symbolic key32 specialization consume the SAME per-byte zero laws; no sign/magnitude claim or new runtime trust. |

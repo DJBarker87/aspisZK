@@ -1,0 +1,15 @@
+'NIZ_Memcmp.zero_iff' depends on axioms: [propext, Quot.sound]
+NIZ_generated/NIZ_Memcmp.lean:52:2: error: Tactic `apply` failed: could not unify the conclusion of `zero_iff a b reply 0 32`
+  run reply 0 32 = 0 ↔ ∀ (i : Nat), i < 32 → a (0 + i) = b (0 + i)
+with the goal
+  run reply 0 32 = 0 ↔ ∀ (i : Nat), i < 32 → a i = b i
+
+Note: The full type of `zero_iff a b reply 0 32` is
+  (∀ (i : Nat), i < 32 → (reply (0 + i) = 0 ↔ a (0 + i) = b (0 + i))) →
+    (run reply 0 32 = 0 ↔ ∀ (i : Nat), i < 32 → a (0 + i) = b (0 + i))
+
+a b : Nat → Nat
+reply : Nat → Int
+law : ∀ (i : Nat), i < 32 → (reply i = 0 ↔ a i = b i)
+⊢ run reply 0 32 = 0 ↔ ∀ (i : Nat), i < 32 → a i = b i
+'NIZ_Memcmp.key32_zero' depends on axioms: [sorryAx]

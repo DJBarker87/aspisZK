@@ -6,7 +6,7 @@ B='/home/dombarker/project-offloads/codex-cx-pool-borrow3-20261107';C='/home/dom
 if (E/'NIZ_ACTIVE.json').exists():raise SystemExit('own native/extraction scope active')
 if (E/'NIZ_HOLD').exists():sys.exit(75)
 guard=E/'NIZ_CLIENT_ACTIVE'; fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,str(os.getpid()).encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
-a,kind,target=sys.argv[1:];assert (re.fullmatch('NIZ_L[0-9]{3}',a) and 1<=int(a[-3:])<=60) or a in ['NIZ_M001','NIZ_E001'] and not (E/a).exists()
+a,kind,target=sys.argv[1:];assert not (E/a).exists(), 'Attempt already has receipts; never overwrite';assert (re.fullmatch('NIZ_L[0-9]{3}',a) and 1<=int(a[-3:])<=60) or a in ['NIZ_M001','NIZ_E001'] and not (E/a).exists()
 def ssh(code,data=None,submitted=False):
  for retry in range(11):
   r=subprocess.run(['ssh','-o','ControlMaster=no','-o','ConnectTimeout=15',H,code],input=data,capture_output=True,text=True)
@@ -33,7 +33,9 @@ p=b/{(a+'-reservation.json')!r}; print(p.read_text() if p.exists() else 'MISSING
   print('reservation wait',flush=True);time.sleep(180);continue
  raise RuntimeError('STOP admission')
 files={};sources=[]
-if kind=='stage':
+if kind=='diagnose':
+ sources=['NIZ_diagnose.py'];files[sources[0]]=(E/sources[0]).read_text();command=['python3','NIZ_diagnose.py']
+elif kind=='stage':
  sources=['NIZ_prepare_host.py','NIZ_INCLUDES.json','NIZ_KMX_copy_stubs.patch']
  for n in sources:files[n]=(E/n).read_text()
  command=['python3','NIZ_prepare_host.py']

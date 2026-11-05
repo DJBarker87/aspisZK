@@ -1,0 +1,15 @@
+{
+  "kind": "actual memcmp byte iteration on arbitrary aliased window and observed frame",
+  "mode": "negative",
+  "domain": "All bytes arbitrary; arbitrary left/right/observer positions in the local three-byte carrier; same or different pointers, no initialized-count restriction.",
+  "source": "use core::ffi::{c_void,c_int};unsafe extern \"C\"{fn memcmp(a:*const c_void,b:*const c_void,n:usize)->c_int;}\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NIZ_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NIZ_KMX::KMX_copy_from_slice)]\n#[kani::stub(alloc::alloc::realloc,crate::NIZ_KMX::KMX_realloc)]\n#[kani::proof]\nfn certificate(){let mut bytes=[kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>()];let left=usize::from(kani::any::<u8>());let right=usize::from(kani::any::<u8>());let observer=usize::from(kani::any::<u8>());kani::assume(left<3&&right<3&&observer<3);let a=bytes[left];let b=bytes[right];let frame=bytes[observer];let reply=unsafe{memcmp(bytes.as_ptr().add(left).cast(),bytes.as_ptr().add(right).cast(),1)};assert!((reply==0)!=(a==b));assert!(bytes[observer]==frame);}\n",
+  "modifies": [],
+  "production_credit": false,
+  "remaining": "Generic iteration/host-loop association, arbitrary-span framing and original key-field/caller association remain separately required.",
+  "expected_verdict": "FAIL",
+  "member": "host_memcmp_window",
+  "native_args": [
+    "--unwind",
+    "4"
+  ]
+}

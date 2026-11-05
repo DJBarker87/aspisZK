@@ -1,0 +1,38 @@
+--- a/programs/aspis-pool/src/lib.rs
++++ b/programs/aspis-pool/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! Pool V1 authenticated state-transition kernel.
+ //!
+ //! The native entrypoint exposes exact V1 initialization, vault-backed
+@@ -145,3 +146,11 @@
+     plan_authenticated_verifier_dispatch_v1, AuthenticatedVerifierDispatchV1,
+     PlannedVerifierDispatchV1, VerifierDispatchClaimV1,
+ };
++
++#[cfg(kani)]
++extern crate alloc;
++#[cfg(kani)]
++#[path="../../../KMX_stubs.rs"]
++pub mod KMX_stubs;
++#[cfg(kani)]
++pub use KMX_stubs as NIZ_KMX;
+--- a/programs/aspis-pool/src/processor.rs
++++ b/programs/aspis-pool/src/processor.rs
+@@ -3752,3 +3752,16 @@
+         assert_eq!(&returned.borrow()[..4], b"ASTR");
+     }
+ }
++
++#[cfg(kani)]
++mod NIZ_native {
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NIZ_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NIZ_KMX::KMX_copy_from_slice)]
++#[kani::stub(alloc::alloc::realloc,crate::NIZ_KMX::KMX_realloc)]
++#[kani::proof]
++fn certificate(){use solana_program::{pubkey::Pubkey,program_error::ProgramError}; struct NIZ_Selected<'a>{key:&'a Pubkey} let k0=Pubkey::new_from_array(kani::any());let k1=Pubkey::new_from_array(kani::any()); let accounts=[NIZ_Selected{key:&k0},NIZ_Selected{key:&k1}]; let left=0usize;let right=1usize;let same=accounts[left].key==accounts[right].key;let result:Result<(),ProgramError>=(||->Result<(),ProgramError>{            if accounts[left].key == accounts[right].key {
++                return Err(ProgramError::InvalidArgument);
++            }
++Ok(())})();assert!(result==if same{Err(ProgramError::InvalidArgument)}else{Ok(())});}
++
++}

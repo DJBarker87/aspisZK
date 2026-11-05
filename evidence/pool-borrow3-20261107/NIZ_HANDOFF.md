@@ -7,3 +7,7 @@ All four guard-across-CPI boundaries and all 13 exclusive-guard owners start OPE
 Budgets: 120 Kani, 60 Lean, zero extraction. No attempt launched yet. One capped scope at a time; no shipped-source or key operations. Inherited evidence is read-only. No push.
 
 Restore first from NIO retained export; pins and seed size will be recorded in NIZ_CACHE_IMPORTS.json. Next deliverable: NIZ_LAYOUT.lean and four-site native certificates under ruling (ap).
+
+## Stage 2 retained progress
+
+Layout/model roots: 18 (L001 seven, L005 four, L006 five, L010 two), standard axioms only. Native support: two single-byte host memcmp passes with three exact semantic failing controls (K004..K008). K001/K003 timed out, K002 was compiler-rejected. Neither source-owner nor Pool row is CLOSED. The timed-out key shape was isolated to builtin memcmp using L007; no unchanged replay or timeout/cap increase. Source/site/callback and whole caller certificates remain OPEN.

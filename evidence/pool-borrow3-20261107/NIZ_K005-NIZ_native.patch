@@ -1,0 +1,36 @@
+--- a/programs/aspis-pool/src/lib.rs
++++ b/programs/aspis-pool/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! Pool V1 authenticated state-transition kernel.
+ //!
+ //! The native entrypoint exposes exact V1 initialization, vault-backed
+@@ -145,3 +146,11 @@
+     plan_authenticated_verifier_dispatch_v1, AuthenticatedVerifierDispatchV1,
+     PlannedVerifierDispatchV1, VerifierDispatchClaimV1,
+ };
++
++#[cfg(kani)]
++extern crate alloc;
++#[cfg(kani)]
++#[path="../../../KMX_stubs.rs"]
++pub mod KMX_stubs;
++#[cfg(kani)]
++pub use KMX_stubs as NIZ_KMX;
+--- a/programs/aspis-pool/src/processor.rs
++++ b/programs/aspis-pool/src/processor.rs
+@@ -3752,3 +3752,14 @@
+         assert_eq!(&returned.borrow()[..4], b"ASTR");
+     }
+ }
++
++#[cfg(kani)]
++mod NIZ_native {
++use core::ffi::{c_void,c_int}; unsafe extern "C" {fn memcmp(a:*const c_void,b:*const c_void,n:usize)->c_int;}
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NIZ_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NIZ_KMX::KMX_copy_from_slice)]
++#[kani::stub(alloc::alloc::realloc,crate::NIZ_KMX::KMX_realloc)]
++#[kani::proof]
++fn certificate(){let a:u8=kani::any();let b:u8=kani::any();let before_a=a;let before_b=b;let reply=unsafe{memcmp((&a as *const u8).cast(),(&b as *const u8).cast(),1)};assert!((reply==0)!=(a==b));assert!(a==before_a);assert!(b==before_b);}
++
++}
