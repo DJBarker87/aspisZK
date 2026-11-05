@@ -1,0 +1,22 @@
+--- NHR_stage.py
++++ NHR_stage.py
+@@ -149,7 +149,9 @@
+     return manifest
+ 
+ def options(args, workspace, out):
+-    root = 'crate::verifier::candidate::'+args.function
++    root = {'verify_observed':'crate::r1_semantic::verify_observed',
++            'verify_finish':'crate::r1_semantic::verify_finish'}.get(
++                args.function, 'crate::verifier::candidate::'+args.function)
+     spec = json.loads(Path(args.opacity).read_text())
+     opacity = spec[args.function]
+     assert all(x['path'].startswith(('crate::','aspis_core::')) and x['why'] for x in opacity)
+@@ -214,7 +216,7 @@
+     modes=p.add_mutually_exclusive_group(required=True)
+     for name in ['export','check','extract','options']: modes.add_argument('--'+name,action='store_true')
+     p.add_argument('--workspace',type=Path,default=E/'NHR_workspace'); p.add_argument('--out',type=Path,default=E/'NHR_preflight')
+-    p.add_argument('--cargo',default='/home/dombarker/.cargo/bin/cargo'); p.add_argument('--function',choices=['prepare','tx1','tx2_authenticated','tx2_common']); p.add_argument('--opacity',default=str(E/'NHR_OPACITY.json'))
++    p.add_argument('--cargo',default='/home/dombarker/.cargo/bin/cargo'); p.add_argument('--function',choices=['prepare','tx1','tx2_authenticated','tx2_common','verify_observed','verify_finish']); p.add_argument('--opacity',default=str(E/'NHR_OPACITY.json'))
+     a=p.parse_args()
+     if a.export: export(); return 0
+     a.workspace=a.workspace.resolve(); a.out=a.out.resolve(); a.out.mkdir(parents=True,exist_ok=True)
