@@ -16,3 +16,17 @@ No new composed row CLOSED yet. The inherited NHP height guard, Pool error conve
 No trust removal or new runtime/security assumption. Frozen3, deployed headline RPx_Deployed.deployed, L154 statement parameter, narrowed D188, privacy and two-transaction design remain unchanged.
 
 Stage-2 update: item2 now has new actual decoder/wrapper rejection cleanup and selected-frame observations (K014..081), not a successful/PDA/full-heap packet. E002 supplies an actual staged lane-body translation failure; neither master nor lane has a completed native/reference contract. Fifteen SDK-model facts compile and coherently co-import (L007), but no new composed row closes. Item4 borrowability remains OPEN at all seven sites.
+
+## Native stage complete
+
+120/120 Kani:53 local PASS,61 semantic failing controls,5 compiler/input rejections,1 unwind rejection. No native timeout/memory kill. These are observations, not53 composed rows.
+
+1. New K112/K113 outline the exact post-entry-guard interval on unknown0..8-byte headers, log the empty clear argument/count and detect its corruption. Initial entry clear/height and all recognized routes/arbitrary full physical input remain OPEN.
+2. K014..081 provide actual master/checkpoint/lane rejected-prefix cleanup and selected frames, each with control. Successful full-image/PDA/heap/source-model packets remain OPEN. E002 is the staged actual lane-body Aeneas rejection; no completed (ah) contract/transcription.
+3. K100..105 fresh-PDA address/privilege/System branch cleanup, K114..116 exact-count/alias/frame and K117..120 wrong-arity withdrawal physical-list frames. No complete production list, uniqueness/layout or universal modifies certificate.
+4. K088..099 check real creation helpers' payer/system/foreign-owner rejection prefixes, local no-CPI assertions and alias byte/balance/borrow frames, with controls. Returning System CPI and post-CPI recheck/borrowability are OPEN. Seed/hash/address observations/laws remain reused by SHA; no new exact syscall packet.
+5. K082..087 check actual full165-byte all-Some parser flags, delegated amount and readonly byte frame with five corruption controls. NHC amount/mint/authority/Some laws are reused. All-None/source-loop association, full parser/cohort and actual custody child/CPI frames remain OPEN. The all-Some case is not a production precondition.
+6. Corrected K107..111 check selected-verifier metadata under nine data/lamport guard combinations, exact Rc identity/counts, rent/flags/key/owner, byte/balance and cleanup assertions with four controls. K106 no_std input rejection is retained. Authenticated registry/program selection and same-state seven metas remain OPEN.
+7–9. No prefix-to-CPI, NIB-P1 same-emission continuity, NIB-P2 validation dictionary or same-statement model join is derived over the missing successful callee packets. RuntimeCpiReadonlyEntry7 remains UNUSED.
+
+Fifteen SDK-model facts compile and co-import with the deployed headline. Raw audit/scan is the next stage. No new composed row, runtime trust item, security assumption, shipped source, release artifact or metric is changed.

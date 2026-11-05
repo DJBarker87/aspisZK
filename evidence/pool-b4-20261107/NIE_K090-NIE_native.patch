@@ -1,0 +1,66 @@
+--- a/programs/aspis-pool/src/lib.rs
++++ b/programs/aspis-pool/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! Pool V1 authenticated state-transition kernel.
+ //!
+ //! The native entrypoint exposes exact V1 initialization, vault-backed
+@@ -145,3 +146,11 @@
+     plan_authenticated_verifier_dispatch_v1, AuthenticatedVerifierDispatchV1,
+     PlannedVerifierDispatchV1, VerifierDispatchClaimV1,
+ };
++
++#[cfg(kani)]
++extern crate alloc;
++#[cfg(kani)]
++#[path="../../../KMX_stubs.rs"]
++pub mod KMX_stubs;
++#[cfg(kani)]
++pub use KMX_stubs as NIE_KMX;
+--- a/programs/aspis-pool/src/processor.rs
++++ b/programs/aspis-pool/src/processor.rs
+@@ -3752,3 +3752,44 @@
+         assert_eq!(&returned.borrow()[..4], b"ASTR");
+     }
+ }
++
++#[cfg(kani)]
++mod NIE_native {
++use super::*;
++struct RuntimeLog {calls:usize}
++impl PoolCpiRuntimeV1 for RuntimeLog {
++ fn invoke<'i>(&mut self,_:&Instruction,_:&[AccountInfo<'i>])->ProgramResult {self.calls+=1;assert!(false);Ok(())}
++ fn invoke_signed<'i>(&mut self,_:&Instruction,_:&[AccountInfo<'i>],_:&[&[&[u8]]])->ProgramResult {self.calls+=1;assert!(false);Ok(())}
++}
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NIE_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NIE_KMX::KMX_copy_from_slice)]
++#[kani::stub(alloc::alloc::realloc,crate::NIE_KMX::KMX_realloc)]
++#[kani::proof]
++#[kani::unwind(33)]
++fn association() {
++ let mut bytes:[u8;3]=kani::any();let before=bytes;
++ let mut balance:u64=kani::any();let old_balance=balance;
++ let program=Pubkey::new_from_array(kani::any());let payer_key=Pubkey::new_from_array(kani::any());let key=Pubkey::new_from_array(kani::any());
++ let mut payer_owner=Pubkey::new_from_array(kani::any());let account_owner=Pubkey::new_from_array(kani::any());
++ let mut system_key=Pubkey::new_from_array(kani::any());let mut system_owner=Pubkey::new_from_array(kani::any());
++ let system_id=system_program::id();let native_id=native_loader::id();
++ let mut payer_sign:bool=kani::any();let mut payer_write:bool=kani::any();let mut payer_exec:bool=kani::any();
++ let mut system_sign:bool=kani::any();let mut system_write:bool=kani::any();let mut system_exec:bool=kani::any();
++ payer_sign=true;payer_write=true;payer_exec=false;payer_owner=system_id;kani::assume(system_key!=system_id || system_owner!=native_id || !system_exec || system_sign || system_write);
++ let base=AccountInfo::new(&key,kani::any(),kani::any(),&mut balance,&mut bytes,&account_owner,kani::any(),kani::any());
++ let payer=AccountInfo {key:&payer_key,owner:&payer_owner,is_signer:payer_sign,is_writable:payer_write,executable:payer_exec,..base.clone()};
++ let system=AccountInfo {key:&system_key,owner:&system_owner,is_signer:system_sign,is_writable:system_write,executable:system_exec,..base.clone()};
++ let account=base.clone();
++ let shared=base.try_borrow_data().unwrap();
++ let mut runtime=RuntimeLog{calls:0};let exact_bytes:usize=kani::any();
++ let reply=create_or_allocate_pda_with_rent(&mut runtime,&payer,&account,&system,exact_bytes,&program,&[],&Rent::default());
++ assert!(reply==Err(ProgramError::Custom(PoolV1ProgramError::InvalidSystemProgram as u32)));
++ drop(shared);
++ 
++ assert!(runtime.calls==0);
++ assert!(base.try_borrow_mut_data().is_ok());
++ assert!(base.lamports()==old_balance);
++ let q:usize=kani::any();kani::assume(q<3);assert!(base.try_borrow_data().unwrap()[q]==before[q]);
++}
++
++}

@@ -5,9 +5,9 @@ from NIE_native_prepare import stage,attrs
 
 def prepare(control):
  assert control in ['none','reply','flag','borrow','rc','identity']
- mutation={'none':'','reply':'reply=if reply.is_ok(){Err(ProgramError::InvalidArgument)}else{Ok(())};','flag':'account.is_signer = !account.is_signer;','borrow':'let leaked=alias.try_borrow_data().unwrap();core::mem::forget(leaked);','rc':'let leaked=account.clone();core::mem::forget(leaked);','identity':'account.data=std::rc::Rc::new(std::cell::RefCell::new(&mut other[..]));'}[control]
+ mutation={'none':'','reply':'reply=if reply.is_ok(){Err(ProgramError::InvalidArgument)}else{Ok(())};','flag':'account.is_signer = !account.is_signer;','borrow':'let leaked=alias.try_borrow_data().unwrap();core::mem::forget(leaked);','rc':'let leaked=account.clone();core::mem::forget(leaked);','identity':'account.data=alloc::rc::Rc::new(core::cell::RefCell::new(&mut other[..]));'}[control]
  src='''use super::*;
-use std::rc::Rc;
+use alloc::rc::Rc;
 ATTR
 #[kani::proof]
 #[kani::unwind(33)]

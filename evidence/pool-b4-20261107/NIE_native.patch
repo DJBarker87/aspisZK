@@ -17,43 +17,46 @@
 +pub mod KMX_stubs;
 +#[cfg(kani)]
 +pub use KMX_stubs as NIE_KMX;
---- a/programs/aspis-pool/src/pair_forest.rs
-+++ b/programs/aspis-pool/src/pair_forest.rs
-@@ -5792,3 +5792,37 @@
-         assert!(accounts[4].data.iter().any(|byte| *byte != 0));
-     }
+--- a/programs/aspis-pool/src/pair_forest_dispatch.rs
++++ b/programs/aspis-pool/src/pair_forest_dispatch.rs
+@@ -1180,3 +1180,40 @@
+ 
+     const _: () = assert!(POOL_V1_PAIR_TREE_DEPTH == 20);
  }
 +
 +#[cfg(kani)]
 +mod NIE_native {
 +use super::*;
-+use solana_program::{account_info::AccountInfo,pubkey::Pubkey,program_error::ProgramError};
++use alloc::rc::Rc;
 +#[kani::stub(core::ptr::copy_nonoverlapping,crate::NIE_KMX::KMX_copy_nonoverlapping)]
 +#[kani::stub(<[u8]>::copy_from_slice,crate::NIE_KMX::KMX_copy_from_slice)]
 +#[kani::stub(alloc::alloc::realloc,crate::NIE_KMX::KMX_realloc)]
 +#[kani::proof]
 +#[kani::unwind(33)]
 +fn association() {
-+ let mut bytes:[u8;3]=kani::any();let before=bytes;
-+ let mut balance:u64=kani::any();let old_balance=balance;
-+ let key=Pubkey::new_from_array(kani::any());let program=Pubkey::new_from_array(kani::any());let master=Pubkey::new_from_array(kani::any());
-+ let mut owner=Pubkey::new_from_array(kani::any());
-+ let mut exec:bool=kani::any();let mut sign:bool=kani::any();let mut write:bool=kani::any();
-+ owner=program;exec=false;write=true;
-+ let len:usize=kani::any();kani::assume(len<=3);
-+ let lane:u8=kani::any();kani::assume(lane>=8);
-+ let account=AccountInfo::new(&key,sign,write,&mut balance,&mut bytes[..len],&owner,exec,kani::any());
-+ let alias=account.clone();
-+ let exclusive=if false {Some(alias.try_borrow_mut_data().unwrap())} else {None};
-+ let shared=if !false && kani::any() {Some(alias.try_borrow_data().unwrap())} else {None};
-+ let result=decode_lane_account_from_program_invariant_v1(&program,&master,lane,&account,true);
-+ assert!(matches!(result,Err(ref e) if *e==ProgramError::InvalidSeeds));
-+ drop(exclusive);drop(shared);
-+ let leaked=alias.try_borrow_data().unwrap();core::mem::forget(leaked);
-+ assert!(alias.try_borrow_mut_data().is_ok());
-+ assert!(alias.lamports()==old_balance);
-+ if len>0 {let q:usize=kani::any();kani::assume(q<len);assert!(alias.try_borrow_data().unwrap()[q]==before[q]);}
-+ assert!(account.key==&key && account.owner==&owner && account.is_signer==sign && account.is_writable==write && account.executable==exec);
++ let mut bytes:[u8;3]=kani::any();let before=bytes;let mut other:[u8;3]=kani::any();
++ let mut balance:u64=kani::any();let old=balance;
++ let key=Pubkey::new_from_array(kani::any());let selected=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());
++ let exec:bool=kani::any();let sign:bool=kani::any();let write:bool=kani::any();
++ let rent:u64=kani::any();
++ let mut account=AccountInfo::new(&key,sign,write,&mut balance,&mut bytes,&owner,exec,rent);let alias=account.clone();
++ let data_mode:u8=kani::any();kani::assume(data_mode<=2);let lamp_mode:u8=kani::any();kani::assume(lamp_mode<=2);
++ let d_shared=if data_mode==1{Some(alias.try_borrow_data().unwrap())}else{None};
++ let d_exclusive=if data_mode==2{Some(alias.try_borrow_mut_data().unwrap())}else{None};
++ let l_shared=if lamp_mode==1{Some(alias.try_borrow_lamports().unwrap())}else{None};
++ let l_exclusive=if lamp_mode==2{Some(alias.try_borrow_mut_lamports().unwrap())}else{None};
++ let dc=Rc::strong_count(&account.data);let lc=Rc::strong_count(&account.lamports);
++ let expected=key==selected && exec && !sign && !write && (owner==bpf_loader::id() || owner==bpf_loader_upgradeable::id() || owner==loader_v4::id());
++ let mut reply=require_verifier_program(&account,&selected);
++ drop(d_shared);drop(d_exclusive);drop(l_shared);drop(l_exclusive);
++ account.data=alloc::rc::Rc::new(core::cell::RefCell::new(&mut other[..]));
++ assert!(reply.is_ok()==expected);
++ assert!(matches!(reply,Ok(())) || reply==Err(PoolV1ProgramError::InvalidVerifierProgramAccount.into()));
++ assert!(account.is_signer==sign && account.is_writable==write && account.executable==exec && account.key==&key && account.owner==&owner && account.rent_epoch==rent);
++ assert!(Rc::ptr_eq(&account.data,&alias.data) && Rc::ptr_eq(&account.lamports,&alias.lamports));
++ assert!(Rc::strong_count(&account.data)==dc && Rc::strong_count(&account.lamports)==lc);
++ assert!(alias.try_borrow_mut_data().is_ok() && alias.try_borrow_mut_lamports().is_ok());
++ assert!(alias.lamports()==old);let q:usize=kani::any();kani::assume(q<3);assert!(alias.try_borrow_data().unwrap()[q]==before[q]);
 +}
 +
 +}

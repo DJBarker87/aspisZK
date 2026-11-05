@@ -1,0 +1,10 @@
+{
+  "kind": "actual fresh-PDA planning caller branch 2 alias cleanup/frame",
+  "mode": "positive",
+  "domain": "Arbitrary keys/flags/exact_bytes/lamports/rent, logical0..3 arbitrary bytes and optional existing shared alias; exact address/privilege-rejection or System branch; Pool distinct from System. No exclusive accessor input constructed.",
+  "source": "use super::*;\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NIE_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NIE_KMX::KMX_copy_from_slice)]\n#[kani::stub(alloc::alloc::realloc,crate::NIE_KMX::KMX_realloc)]\n#[kani::proof]\n#[kani::unwind(33)]\nfn association() {\n let mut bytes:[u8;3]=kani::any();let before=bytes;let mut balance:u64=kani::any();let old=balance;\n let key=Pubkey::new_from_array(kani::any());let mut expected=Pubkey::new_from_array(kani::any());let program=Pubkey::new_from_array(kani::any());let mut owner=Pubkey::new_from_array(kani::any());\n let mut exec:bool=kani::any();let mut sign:bool=kani::any();let mut write:bool=kani::any();\n expected=key;exec=false;sign=false;write=true;owner=solana_sdk_ids::system_program::id();kani::assume(program!=owner);\n let len:usize=kani::any();kani::assume(len<=3);let exact_bytes:usize=kani::any();\n let account=AccountInfo::new(&key,sign,write,&mut balance,&mut bytes[..len],&owner,exec,kani::any());let alias=account.clone();\n let shared=if kani::any(){Some(alias.try_borrow_data().unwrap())}else{None};\n let reply=plan_fresh_program_pda(&account,&program,&expected,exact_bytes);\n let ok=len==0;assert!(matches!(reply,Ok(FreshPdaPreparationV1::CreateOrAllocateSystemOwned))==ok);if !ok {assert!(reply==Err(ProgramError::Custom(PoolV1ProgramError::InvalidFreshAccount as u32)));}\n drop(shared);\n \n assert!(alias.try_borrow_mut_data().is_ok());assert!(alias.lamports()==old);\n if len>0 {let q:usize=kani::any();kani::assume(q<len);assert!(alias.try_borrow_data().unwrap()[q]==before[q]);}\n}\n",
+  "modifies": [],
+  "production_credit": false,
+  "remaining": "Production parent-to-accessor borrowability and full program-owned zero-scan/whole physical domain remain OPEN.",
+  "case": 2
+}

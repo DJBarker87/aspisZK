@@ -1,0 +1,62 @@
+--- a/programs/aspis-pool/src/lib.rs
++++ b/programs/aspis-pool/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! Pool V1 authenticated state-transition kernel.
+ //!
+ //! The native entrypoint exposes exact V1 initialization, vault-backed
+@@ -145,3 +146,11 @@
+     plan_authenticated_verifier_dispatch_v1, AuthenticatedVerifierDispatchV1,
+     PlannedVerifierDispatchV1, VerifierDispatchClaimV1,
+ };
++
++#[cfg(kani)]
++extern crate alloc;
++#[cfg(kani)]
++#[path="../../../KMX_stubs.rs"]
++pub mod KMX_stubs;
++#[cfg(kani)]
++pub use KMX_stubs as NIE_KMX;
+--- a/programs/aspis-pool/src/pair_forest_dispatch.rs
++++ b/programs/aspis-pool/src/pair_forest_dispatch.rs
+@@ -1180,3 +1180,40 @@
+ 
+     const _: () = assert!(POOL_V1_PAIR_TREE_DEPTH == 20);
+ }
++
++#[cfg(kani)]
++mod NIE_native {
++use super::*;
++use alloc::rc::Rc;
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NIE_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NIE_KMX::KMX_copy_from_slice)]
++#[kani::stub(alloc::alloc::realloc,crate::NIE_KMX::KMX_realloc)]
++#[kani::proof]
++#[kani::unwind(33)]
++fn association() {
++ let mut bytes:[u8;3]=kani::any();let before=bytes;let mut other:[u8;3]=kani::any();
++ let mut balance:u64=kani::any();let old=balance;
++ let key=Pubkey::new_from_array(kani::any());let selected=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());
++ let exec:bool=kani::any();let sign:bool=kani::any();let write:bool=kani::any();
++ let rent:u64=kani::any();
++ let mut account=AccountInfo::new(&key,sign,write,&mut balance,&mut bytes,&owner,exec,rent);let alias=account.clone();
++ let data_mode:u8=kani::any();kani::assume(data_mode<=2);let lamp_mode:u8=kani::any();kani::assume(lamp_mode<=2);
++ let d_shared=if data_mode==1{Some(alias.try_borrow_data().unwrap())}else{None};
++ let d_exclusive=if data_mode==2{Some(alias.try_borrow_mut_data().unwrap())}else{None};
++ let l_shared=if lamp_mode==1{Some(alias.try_borrow_lamports().unwrap())}else{None};
++ let l_exclusive=if lamp_mode==2{Some(alias.try_borrow_mut_lamports().unwrap())}else{None};
++ let dc=Rc::strong_count(&account.data);let lc=Rc::strong_count(&account.lamports);
++ let expected=key==selected && exec && !sign && !write && (owner==bpf_loader::id() || owner==bpf_loader_upgradeable::id() || owner==loader_v4::id());
++ let mut reply=require_verifier_program(&account,&selected);
++ drop(d_shared);drop(d_exclusive);drop(l_shared);drop(l_exclusive);
++ 
++ assert!(reply.is_ok()==expected);
++ assert!(matches!(reply,Ok(())) || reply==Err(PoolV1ProgramError::InvalidVerifierProgramAccount.into()));
++ assert!(account.is_signer==sign && account.is_writable==write && account.executable==exec && account.key==&key && account.owner==&owner && account.rent_epoch==rent);
++ assert!(Rc::ptr_eq(&account.data,&alias.data) && Rc::ptr_eq(&account.lamports,&alias.lamports));
++ assert!(Rc::strong_count(&account.data)==dc && Rc::strong_count(&account.lamports)==lc);
++ assert!(alias.try_borrow_mut_data().is_ok() && alias.try_borrow_mut_lamports().is_ok());
++ assert!(alias.lamports()==old);let q:usize=kani::any();kani::assume(q<3);assert!(alias.try_borrow_data().unwrap()[q]==before[q]);
++}
++
++}
