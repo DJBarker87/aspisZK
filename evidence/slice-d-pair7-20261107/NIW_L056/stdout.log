@@ -1,0 +1,35 @@
+NIW_generated/NIW_AlignPacket.lean:29:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FIo_Native.weights.Weights.pair ?m.64 (Array.to_slice ?m.65) f.value ?kappa
+in the target expression
+  FIo_Native.weights.Weights.pair c.w.value c.alpha.value.to_slice c.f.value c.kappa = out
+
+r : NP6_StdModel.Reservation
+w : Ref FIo_Install.W
+alpha : Ref (Std.Array FE 2#usize)
+f : Ref (Slice U8)
+kappa : FE
+ap0 ap1 : Ref Powers
+common low scratch parts : ℕ
+out : Result NR
+domain :
+  NIT_PairDomain.Domain (FIo_Install.toWeights w.value) (NFW_PowersCohort.mapArray FIo_Install.toE alpha.value) f.value
+    (FIo_Install.toE kappa)
+p0 : FIo_Native.weights.powers 4#usize (epick (NFW_PowersCohort.mapArray FIo_Install.toE alpha.value) 0) = ok ap0.value
+p1 : FIo_Native.weights.powers 4#usize (epick (NFW_PowersCohort.mapArray FIo_Install.toE alpha.value) 1) = ok ap1.value
+trace : NIT_AllocatorChain.Trace (NIT_PacketTransport.context w alpha f kappa ap0 ap1 common low scratch parts) r out
+c : Context := NIT_PacketTransport.context w alpha f kappa ap0 ap1 common low scratch parts
+run : NIT_PairControl.run c = out
+this : FIo_Native.Allocation := FIo_Install.allocation r
+⊢ FIo_Native.weights.Weights.pair c.w.value c.alpha.value.to_slice c.f.value c.kappa = out
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (2 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.NIW_AlignPacket.supplied' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
