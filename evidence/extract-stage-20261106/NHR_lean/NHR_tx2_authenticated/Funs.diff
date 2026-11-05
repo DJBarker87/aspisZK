@@ -1,0 +1,49 @@
+--- raw/Funs.lean
++++ compile/Funs.lean
+@@ -2,7 +2,6 @@
+ -- [aspis_r1_cost_probe]: function definitions
+ import Aeneas
+ import NHR_tx2_authenticated.Types
+-import NHR_tx2_authenticated.FunsExternal
+ open Aeneas Aeneas.Std Result ControlFlow Error
+ set_option linter.dupNamespace false
+ set_option linter.hashCommand false
+@@ -19,6 +18,17 @@
+ 
+ namespace NHR_tx2_authenticated
+ 
++-- Opaque callees are explicit parameters, never axioms.
++variable (NHR_call_0 : (Slice Std.U8) → Result (core.result.Result transport.Variant
++    verifier.Error))
++
++variable (NHR_call_1 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H),
++(Slice Std.U8) → (Slice Std.U8) → (Slice Std.U8) → H → (Option
++    (verifier.Phase → Result Unit)) → Result (core.result.Result Unit
++    verifier.Error))
++
++variable (NHR_call_2 : (Option (verifier.Phase → Result Unit)) → verifier.Phase → Result Unit)
++
+ /-- [aspis_r1_cost_probe::verifier::candidate::tx2_authenticated]:
+     Source: 'crates/aspis-r1-cost-probe/src/candidate.rs', lines 327:0-331:1
+     Visibility: public -/
+@@ -29,15 +39,17 @@
+   (obs : Option (verifier.Phase → Result Unit)) :
+   Result (core.result.Result Unit verifier.Error)
+   := do
+-  let r ← verifier.candidate.parse_shape proof
++  let r ← NHR_call_0 proof
+   let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+   match cf with
+   | core.ops.control_flow.ControlFlow.Continue _ =>
+-    verifier.mark obs verifier.Phase.Parsed
+-    verifier.candidate.tx2_common aspis_coredigestDigest32Inst public_bytes
++    NHR_call_2 obs verifier.Phase.Parsed
++    NHR_call_1 aspis_coredigestDigest32Inst public_bytes
+       proof checkpoint hash obs
+   | core.ops.control_flow.ControlFlow.Break residual =>
+     core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+       Unit (core.convert.FromSame verifier.Error) residual
+ 
+ end NHR_tx2_authenticated
++
++#print axioms NHR_tx2_authenticated.verifier.candidate.tx2_authenticated
