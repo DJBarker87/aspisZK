@@ -1,5 +1,5 @@
 from pathlib import Path
-import json,re,hashlib,subprocess
+import json,re,hashlib,subprocess,sys
 E=Path(__file__).resolve().parent;R=E.parents[1];H=lambda b:hashlib.sha256(b).hexdigest()
 mods=json.loads((E/'NIM_AFFECTED.json').read_text());mp={m:'NIM_'+m for m in mods}
 # Keep every nonshared owner name exactly; module identity changes do not rename declarations.
@@ -26,7 +26,9 @@ for m in mods:
   out=out.replace('NGL_MapReference.VerifierError','NFW_ErrorReference.VerifierError')
   if m.endswith('.Funs'):out=re.sub(r'\bVerifierError\b','NFW_ErrorReference.VerifierError',out)
  texts[m]=out
- q=E/(mp[m]+'.lean');q.write_text(out)
+ q=E/(mp[m]+'.lean')
+ if '--check' in sys.argv:assert q.read_text()==out, q
+ else:q.write_text(out)
  pro.append(dict(original_module=m,module=mp[m],source=str(p.relative_to(R)),source_sha256=H(s.encode()),source_lines=[1,len(s.splitlines())],output=q.name,sha256=H(out.encode()),changes='imports only' if out==re.sub(r'^import ([\w.]+)',lambda x:'import '+mp.get(x[1],x[1]),s,flags=re.M) else 'remove shared VerifierError owner; qualify uses to canonical NFW_ErrorReference.VerifierError; import retargets'))
 order=[]
 def visit(m):
@@ -35,6 +37,8 @@ def visit(m):
   if i in mp:visit(i)
  order.append(m)
 for m in mods:visit(m)
+if '--check' in sys.argv:
+ print('deterministic body/import check PASS');sys.exit(0)
 (E/'NIM_PROVENANCE.json').write_text(json.dumps(dict(revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),module_map=mp,order=[mp[m]for m in order],modules=pro,shared_inductive=dict(nfw_lines=[nfw[:a.start()].count('\n')+1,nfw[:a.end()].count('\n')],ngl_lines=[ngl[:b.start()].count('\n')+1,ngl[:b.end()].count('\n')],sha256=H(a[0].encode()),byte_identical=True)),indent=1)+'\n')
 s=(E.parent/'ledger11-20261107/NII_COMBINED_IMPORT.lean').read_text()
 s=re.sub(r'^import ([\w.]+)',lambda x:'import '+mp.get(x[1],x[1]),s,flags=re.M)
