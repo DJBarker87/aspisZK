@@ -2,7 +2,7 @@ from pathlib import Path
 import json,re,difflib,sys
 E=Path(__file__).resolve().parent;P=E.parent;stage=sys.argv[1]
 modules=['Embedding','BaseOps','ScalarDomain','EncodedScalar','CMInverse','CMTrace','CMSampler','CMAlgebra','CMBridge','AllScalar','CMAll']
-if stage=='q':modules+=['QInverse','QAll','QTrace','QBridge','QNeg']
+if stage=='q':modules+=['QInverse','QAll','QTrace','QBridge','QNeg','StubDomains','InverseOutcomes']
 roots=['NHH_'+m+'.'+name for m in modules for name in re.findall(r'^theorem (\w+)',(E/('NHH_'+m+'.lean')).read_text(),re.M)]+['AspisR1.RPx_Deployed.deployed']
 (E/'NHH_AUDIT_ROOTS.json').write_text(json.dumps(dict(roots=roots,stage=stage,group_size=10),indent=1)+'\n')
 (E/'NHH_COMBINED_IMPORT.lean').write_text('import NGK_COMBINED_IMPORT\n'+''.join('import NHH_'+m+'\n'for m in modules)+'#print axioms AspisR1.RPx_Deployed.deployed\n')

@@ -15,7 +15,7 @@
 +mod NHH_fields;
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NHH_fields.rs
-@@ -0,0 +1,161 @@
+@@ -0,0 +1,164 @@
 +#![allow(non_snake_case)]
 +use aspis_core::field::{M31,CM31,QM31,WideExact,P};
 +use aspis_core::r0::scalar::CodeField;
@@ -83,6 +83,7 @@
 + let input=CM31{a:M31(a),b:M31(b)};
 + let e=NHH_Event{kind:0,a:M31(0),b:M31(0),out:M31(0)};
 + let mut log=NHH_Log{events:[e;5],len:0};let out=NHH_fixed(&mut log,input);
++ if cfg!(NHH_bad_argument){log.events[0].a=if input.a.0==0{M31(1)}else{M31(0)};}
 + let n=log.events[0].out.add(log.events[1].out);let inv=log.events[2].out;
 + let property=log.len==5&&log.events[0].kind==0&&log.events[0].a==input.a&&log.events[0].b==input.a&&
 + log.events[1].kind==0&&log.events[1].a==input.b&&log.events[1].b==input.b&&
@@ -137,6 +138,7 @@
 + let input=QM31{c0:CM31{a:M31(a[0]),b:M31(a[1])},c1:CM31{a:M31(a[2]),b:M31(a[3])}};
 + let z=CM31::ZERO;let e=NHH_Cevent{kind:0,a:z,b:z,out:z};let mut log=NHH_Clog{events:[e;5],len:0};
 + let out=NHH_try(&mut log,input);
++ if cfg!(NHH_bad_argument)&&!input.is_zero(){log.events[0].a.a=if input.c0.a.0==0{M31(1)}else{M31(0)};}
 + let property=if input.is_zero(){log.len==0&&out.is_none()}else{
 + let aa=log.events[0].out;let bb=log.events[1].out;let inv=log.events[2].out;
 + log.len==5&&log.events[0].kind==0&&log.events[0].a==input.c0&&log.events[0].b==z&&
@@ -175,5 +177,6 @@
 + let a:[u32;4]=kani::any();kani::assume(a[0]<P&&a[1]<P&&a[2]<P&&a[3]<P&&(a[0]!=0||a[1]!=0||a[2]!=0||a[3]!=0));
 + let input=QM31{c0:CM31{a:M31(a[0]),b:M31(a[1])},c1:CM31{a:M31(a[2]),b:M31(a[3])}};
 + let mut log=None;let out=NHH_inv_wrapper(&mut log,input);
++ if cfg!(NHH_bad_argument){if let Some((seen,_))=log.as_mut(){seen.c0.a=if input.c0.a.0==0{M31(1)}else{M31(0)};}}
 + check(log==Some((input,out)));
 +}

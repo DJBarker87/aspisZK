@@ -115,7 +115,15 @@ unsafe def main (args : List String) : IO UInt32 := do
     else if mode == "proof6" then
       (#[`NHH_COMBINED_IMPORT], #[`NHH_AllScalar.multiply, `NHH_AllScalar.body, `NHH_AllScalar.square, `NHH_AllScalar.inverse, `NHH_CMAll.from_to, `NHH_CMAll.to_from, `NHH_CMAll.pullback, `NHH_CMAll.inv_with, `NHH_CMAll.inverse_association, `NHH_CMAll.mul_association])
     else if mode == "proof7" then
-      (#[`NHH_COMBINED_IMPORT], #[`NHH_CMAll.square_association, `NHH_CMAll.inverse_result, `NHH_CMAll.mul_result, `NHH_CMAll.square_result, `NHH_CMAll.sub_result, `NHH_CMAll.neg_result, `NHH_CMAll.rotate_result, `AspisR1.RPx_Deployed.deployed])
+      (#[`NHH_COMBINED_IMPORT], #[`NHH_CMAll.square_association, `NHH_CMAll.inverse_result, `NHH_CMAll.mul_result, `NHH_CMAll.square_result, `NHH_CMAll.sub_result, `NHH_CMAll.neg_result, `NHH_CMAll.rotate_result, `NHH_QInverse.roundtrip, `NHH_QInverse.canonical, `NHH_QInverse.test_association])
+    else if mode == "proof8" then
+      (#[`NHH_COMBINED_IMPORT], #[`NHH_QInverse.zero_test, `NHH_QInverse.try_nonzero, `NHH_QInverse.try_zero, `NHH_QInverse.inverse_nonzero, `NHH_QInverse.inverse_zero, `NHH_QInverse.try_association, `NHH_QInverse.canonical_try_association, `NHH_QAll.from_to, `NHH_QAll.to_from, `NHH_QAll.try_association])
+    else if mode == "proof9" then
+      (#[`NHH_COMBINED_IMPORT], #[`NHH_QAll.try_result, `NHH_QAll.inverse_association, `NHH_QTrace.source, `NHH_QTrace.encoded, `NHH_QTrace.zero, `NHH_QTrace.inverse_domain, `NHH_QBridge.decode_live, `NHH_QBridge.try_packet, `NHH_QBridge.inverse_packet, `NHH_QNeg.cm_result])
+    else if mode == "proof10" then
+      (#[`NHH_COMBINED_IMPORT], #[`NHH_QNeg.cm_encode, `NHH_QNeg.result, `NHH_QNeg.coordinates, `NHH_QNeg.q_injective, `NHH_QNeg.roundtrip, `NHH_QNeg.canonical_result, `NHH_StubDomains.scalar_canonical, `NHH_StubDomains.cm_log, `NHH_StubDomains.qm_log, `NHH_InverseOutcomes.zero_product])
+    else if mode == "proof11" then
+      (#[`NHH_COMBINED_IMPORT], #[`NHH_InverseOutcomes.complex, `NHH_InverseOutcomes.quadratic, `AspisR1.RPx_Deployed.deployed])
     else (#[], #[])
   let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
     {} (loadExts := true) (level := .private)

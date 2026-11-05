@@ -6,7 +6,7 @@
    "status": "CLOSED",
    "argument_domain": "SAME raw input for trait child; normalized result canonical for enclosing embedding; inherent from_cm31/from_qm31 domains established by total reduction",
    "proof": "NHH_Embedding.complex",
-   "native": "NHH_K009"
+   "native": "NHH_K047"
   },
   {
    "caller": "crates/aspis-core/src/r0/scalar.rs::CM31::from_m31",
@@ -14,7 +14,7 @@
    "status": "CLOSED",
    "argument_domain": "SAME raw input for trait child; normalized result canonical for enclosing embedding; inherent from_cm31/from_qm31 domains established by total reduction",
    "proof": "NHH_Embedding.complex",
-   "native": "NHH_K009"
+   "native": "NHH_K047"
   },
   {
    "caller": "crates/aspis-core/src/r0/scalar.rs::QM31::from_m31",
@@ -22,7 +22,7 @@
    "status": "CLOSED",
    "argument_domain": "SAME raw input for trait child; normalized result canonical for enclosing embedding; inherent from_cm31/from_qm31 domains established by total reduction",
    "proof": "NHH_Embedding.quadratic",
-   "native": "NHH_K011"
+   "native": "NHH_K049"
   },
   {
    "caller": "crates/aspis-core/src/r0/scalar.rs::QM31::from_m31",
@@ -30,7 +30,7 @@
    "status": "CLOSED",
    "argument_domain": "SAME raw input for trait child; normalized result canonical for enclosing embedding; inherent from_cm31/from_qm31 domains established by total reduction",
    "proof": "NHH_Embedding.quadratic",
-   "native": "NHH_K011"
+   "native": "NHH_K049"
   },
   {
    "caller": "crates/aspis-core/src/r0/scalar.rs::WideExact::from_m31",
@@ -38,7 +38,7 @@
    "status": "CLOSED",
    "argument_domain": "SAME raw input for trait child; normalized result canonical for enclosing embedding; inherent from_cm31/from_qm31 domains established by total reduction",
    "proof": "NHH_Embedding.wide",
-   "native": "NHH_K013"
+   "native": "NHH_K051"
   },
   {
    "caller": "crates/aspis-core/src/r0/scalar.rs::WideExact::from_m31",
@@ -46,7 +46,7 @@
    "status": "CLOSED",
    "argument_domain": "SAME raw input for trait child; normalized result canonical for enclosing embedding; inherent from_cm31/from_qm31 domains established by total reduction",
    "proof": "NHH_Embedding.wide",
-   "native": "NHH_K013"
+   "native": "NHH_K051"
   },
   {
    "caller": "crates/aspis-core/src/field.rs::CM31::inv",
@@ -55,10 +55,85 @@
    "scope": "fixed M31::inv instance only; generic row remains OPEN",
    "model_packet": "NHH_CMBridge.specialized_packet",
    "source_selection": "NHH_CMBridge.selected_backend",
-   "native": "NHH_K021",
+   "native": "NHH_K059",
    "caller_domain": "source literal inv_with(M31::inv); SAME canonical nonzero receiver",
    "no_generic_function_pointer_credit": true
+  },
+  {
+   "caller": "crates/aspis-core/src/field.rs::QM31::inv",
+   "callee": "crates/aspis-core/src/field.rs::QM31::try_inv",
+   "status": "CLOSED",
+   "argument_domain": "SAME canonical nonzero original receiver",
+   "proof": "NHH_QBridge.inverse_packet",
+   "native": "NHH_K063"
+  },
+  {
+   "caller": "crates/aspis-core/src/field.rs::QM31::try_inv",
+   "callee": "crates/aspis-core/src/field.rs::QM31::is_zero",
+   "status": "CLOSED",
+   "argument_domain": "SAME original canonical receiver, zero included",
+   "proof": "NHH_QInverse.test_association/zero_test",
+   "native": "NHH_K061"
+  },
+  {
+   "caller": "crates/aspis-core/src/field.rs::QM31::try_inv",
+   "callee": "crates/aspis-core/src/field.rs::mul_by_r",
+   "status": "CLOSED",
+   "argument_domain": "SAME canonical second square reply",
+   "proof": "NHH_CMAlgebra.rotate/NHH_QTrace.encoded",
+   "native": "NHH_K061"
+  },
+  {
+   "caller": "crates/aspis-core/src/field.rs::QM31::try_inv",
+   "callee": "crates/aspis-core/src/field.rs::QM31::inv",
+   "status": "EXCLUDED-TYPED-ALTERNATIVE",
+   "actual_source_callee": "crates/aspis-core/src/field.rs::CM31::inv",
+   "proof": "NHH_QAll.try_association",
+   "native": "NHH_K061",
+   "frozen_erasure": "NHH_QINVERSE_ERASURE.json",
+   "inventory_unchanged": true
+  },
+  {
+   "caller": "crates/aspis-core/src/field.rs::QM31::try_inv",
+   "callee": "crates/aspis-core/src/field.rs::QM31::mul",
+   "status": "EXCLUDED-TYPED-ALTERNATIVE",
+   "actual_source_callee": "crates/aspis-core/src/field.rs::CM31::mul",
+   "proof": "NHH_QAll.try_association",
+   "native": "NHH_K061",
+   "frozen_erasure": "NHH_QINVERSE_ERASURE.json",
+   "inventory_unchanged": true
+  },
+  {
+   "caller": "crates/aspis-core/src/field.rs::QM31::try_inv",
+   "callee": "crates/aspis-core/src/field.rs::QM31::neg",
+   "status": "EXCLUDED-TYPED-ALTERNATIVE",
+   "actual_source_callee": "crates/aspis-core/src/field.rs::CM31::neg",
+   "proof": "NHH_QAll.try_association",
+   "native": "NHH_K061",
+   "frozen_erasure": "NHH_QINVERSE_ERASURE.json",
+   "inventory_unchanged": true
+  },
+  {
+   "caller": "crates/aspis-core/src/field.rs::QM31::try_inv",
+   "callee": "crates/aspis-core/src/field.rs::QM31::square",
+   "status": "EXCLUDED-TYPED-ALTERNATIVE",
+   "actual_source_callee": "crates/aspis-core/src/field.rs::CM31::square",
+   "proof": "NHH_QAll.try_association",
+   "native": "NHH_K061",
+   "frozen_erasure": "NHH_QINVERSE_ERASURE.json",
+   "inventory_unchanged": true
+  },
+  {
+   "caller": "crates/aspis-core/src/field.rs::QM31::try_inv",
+   "callee": "crates/aspis-core/src/field.rs::QM31::sub",
+   "status": "EXCLUDED-TYPED-ALTERNATIVE",
+   "actual_source_callee": "crates/aspis-core/src/field.rs::CM31::sub",
+   "proof": "NHH_QAll.try_association",
+   "native": "NHH_K061",
+   "frozen_erasure": "NHH_QINVERSE_ERASURE.json",
+   "inventory_unchanged": true
   }
  ],
- "new_closed_edges": 7
+ "new_closed_edges": 10,
+ "typed_alternatives_excluded": 5
 }

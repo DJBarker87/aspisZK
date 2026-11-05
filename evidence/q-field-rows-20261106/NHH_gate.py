@@ -8,8 +8,12 @@ assert sha(S/'Cargo.lock')==frozen,'STOP frozen lock mismatch before Kani'
 kmx={'KMX_stubs.rs': 'ad8efb63d8ff791274c91eff9ccc5b9fb126f5a3ac7f27aa811ca11b8e25c138', 'KMX_native.rs': 'cf719c47b5c8c91dcc369984c01bd0b8531b25210e344c9fd06db21b30171880', 'KMX_CopyMeaning.lean': '2baec49a3446a3bbb2be6f992c97d0a6897534a1cd308db8746194dedf665f2b'}
 for n,h in kmx.items():assert sha(S/n)==h,('KMX exact patch mismatch',n)
 pins=json.loads((B/'NHH_SOURCE_PINS.json').read_text())
-errors=[n for n,h in pins.items() if sha(S/n)!=h]
-(B/(a+'-source-check.json')).write_text(json.dumps(dict(files=len(pins),errors=errors),indent=2)+'\n')
+release=json.loads((B/'NHH_FROZEN_RELEASE_PINS.json').read_text())
+assert release['revision']=='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387'
+assert set(release['allowed_overrides'])=={'crates/aspis-r1-cost-probe/src/lib.rs'}
+errors=[n for n,h in release['files'].items() if n not in release['allowed_overrides'] and (not(S/n).is_file() or sha(S/n)!=h)]
+errors += [n for n,h in pins.items() if not(S/n).is_file() or sha(S/n)!=h]
+(B/(a+'-source-check.json')).write_text(json.dumps(dict(files=len(pins),frozen_files=len(release['files']),frozen_pins_sha256=sha(B/'NHH_FROZEN_RELEASE_PINS.json'),errors=errors),indent=2)+'\n')
 assert not errors,errors
 features=x['metadata_features'] if 'metadata_features' in x else 'aspis-core/r0' if x.get('root_package')=='aspis-core' else 'aspis-r1-cost-probe-program/pool-adapter,aspis-r1-cost-probe-program/private-leaf-salts' if x.get('root_package')=='aspis-r1-cost-probe-program' else 'aspis-r1-cost-probe/optimized-terminal,aspis-r1-cost-probe/program-build'
 r=subprocess.run(['/home/dombarker/.cargo/bin/cargo','metadata','--locked','--offline','--format-version','1','--features',features],cwd=S,capture_output=True,text=True)

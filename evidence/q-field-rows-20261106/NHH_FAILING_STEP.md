@@ -16,3 +16,7 @@ No timeout, memory kill or cap increase occurred. No failed draft supplies a suc
 | QM31::neg | No existing adopted emitted endpoint/enclosing dictionary association | OPEN cohort association. K017/018 and the old two-CM-call model equation do not close it. No fresh stand-in or inventory pruning is adopted. |
 
 Matched negative controls are intentional semantic FAILs in otherwise identical configurations. K030 intentionally suppresses the deterministic zero panic and fails kani::should_panic. These controls are required evidence, not implementation bugs. The deployed 100-bit per-attempt target remains not established.
+
+Additional elaboration/input drafts: L031 was replaced by the full all-raw association at L032; L033 by the ordered source trace at L035; L034 was a charged prelaunch refusal, with no compiler launch. L036/L039 were replaced by the complete packet/model laws L037/L040. L045's zero encoding simplification was repaired in L046; its failed output is not audited as a theorem. These are separately retained drafts, not semantic counterexamples or timeout retries. The final successful replacements are all in L049's standard-axiom raw audit.
+
+Ruling (z)(2) was rechecked: it admits only the direct CM31::inv -> inv_with(M31::inv) specialization at the same norm under the opaque log. It explicitly excludes generic batch inversion and every other backend. It therefore supports TX1:005 but does not supply generic TX1:006 credit.

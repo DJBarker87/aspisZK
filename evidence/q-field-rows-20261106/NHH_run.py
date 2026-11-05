@@ -33,7 +33,7 @@ p=b/{(a+'-reservation.json')!r}; print(p.read_text() if p.exists() else 'MISSING
  if (r.returncode==78 or ad.get('allowed') is False) and retry<10:
   print('reservation wait',flush=True);time.sleep(180);continue
  raise RuntimeError('STOP admission')
-paths=[B+'/NHH_objects',C+'/NHH_seed_20261106/NGH',C+'/NHH_seed_20261106/NFS','/home/dombarker/project-offloads/codex-cx-slice-q-accum-cache-20261104/NEV_exports_20261104','/home/dombarker/project-offloads/codex-cx-slice-q-accum-cache-20261104/NFG_exports_20261104','/home/dombarker/project-offloads/codex-cx-slice-q-accum-cache-20261104/NFG_NFF_objects',C+'/NHH_seed_20261106/NGK', '/home/dombarker/project-offloads/codex-cx-pool-retarget-cache-20261104', C+'/NGA_exports_20261104',C+'/NGA_NFX_imports_20261104',C+'/NFT_exports_20261104',C+'/NFQ_exports_20261104',C+'/NFN_exports_20261104',C+'/NFM_exports_20261104', '/home/dombarker/project-offloads/codex-cx-ledger7-cache-20261104/NFX_priority',W,W+'/objects','/home/dombarker/project-offloads/codex-cx-ledger7-cache-20261104',T+'/lib/lean']
+paths=[B+'/NHH_objects',C+'/NHH_exports_20261106/objects',C+'/NHH_seed_20261106/NGH',C+'/NHH_seed_20261106/NFS','/home/dombarker/project-offloads/codex-cx-slice-q-accum-cache-20261104/NEV_exports_20261104','/home/dombarker/project-offloads/codex-cx-slice-q-accum-cache-20261104/NFG_exports_20261104','/home/dombarker/project-offloads/codex-cx-slice-q-accum-cache-20261104/NFG_NFF_objects',C+'/NHH_seed_20261106/NGK', '/home/dombarker/project-offloads/codex-cx-pool-retarget-cache-20261104', C+'/NGA_exports_20261104',C+'/NGA_NFX_imports_20261104',C+'/NFT_exports_20261104',C+'/NFQ_exports_20261104',C+'/NFN_exports_20261104',C+'/NFM_exports_20261104', '/home/dombarker/project-offloads/codex-cx-ledger7-cache-20261104/NFX_priority',W,W+'/objects','/home/dombarker/project-offloads/codex-cx-ledger7-cache-20261104',T+'/lib/lean']
 env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NHH_tmp',LEAN_PATH=':'.join(paths))
 if os.environ.get('NHH_REVIEW_OUTPUT'):env['NHH_REVIEW_OUTPUT']=os.environ['NHH_REVIEW_OUTPUT']
 files={};sources=[]
@@ -41,10 +41,11 @@ assert target.startswith('NHH_') or kind in ['auditbin','kani','extract','depend
 
 if kind=='kani':
  files['NHH_gate.py']=(E/'NHH_gate.py').read_text()
+ files['NHH_FROZEN_RELEASE_PINS.json']=(E/'NHH_FROZEN_RELEASE_PINS.json').read_text()
  if (E/'NHH_NATIVE_INPUTS.json').exists():
   for n,t in json.loads(Path(os.environ.get('NHH_INPUT_SET',str(E/'NHH_NATIVE_INPUTS.json'))).read_text()).items():files['NHH_src/'+n]=t
   files['NHH_SOURCE_PINS.json']=Path(os.environ.get('NHH_PIN_SET',str(E/'NHH_SOURCE_PINS.json'))).read_text()
- sources=['NHH_gate.py','NHH_SOURCE_PINS.json','NHH_src/Cargo.lock','NHH_src/Cargo.toml']
+ sources=['NHH_gate.py','NHH_FROZEN_RELEASE_PINS.json','NHH_SOURCE_PINS.json','NHH_src/Cargo.lock','NHH_src/Cargo.toml']
  sources += [n for n in files if n.startswith('NHH_src/')]
 
  command=['python3','NHH_gate.py',a+'.json']

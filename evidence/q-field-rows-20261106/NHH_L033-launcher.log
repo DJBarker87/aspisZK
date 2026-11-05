@@ -1,0 +1,66 @@
+{"attempt": "NHH_L033", "exit_status": 1, "wall_seconds": 6.757669402984902, "peak_rss_kib": "5412060", "swaps": "0", "print_axioms": ["'NHH_QTrace.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NHH_QTrace.encoded' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NHH_QTrace.zero' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NHH_QTrace.inverse_domain' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NHH_generated/NHH_QTrace.lean:38:70: error: unsolved goals
+case e_a.true
+x : Q
+⊢ (do
+      let out ←
+        if True then ok (none, [])
+          else do
+            let aa ← x.c0.square
+            let bb ← x.c1.square
+            let rotated ← NFG_InverseRef.field.mul_by_r bb
+            let norm ← aa.sub rotated
+            let inv ← norm.inv
+            let re ← x.c0.mul inv
+            let negative ← x.c1.neg
+            let im ← negative.mul inv
+            ok
+                (some { c0 := re, c1 := im },
+                  [Event.square x.c0 aa, Event.square x.c1 bb, Event.inverse norm inv, Event.product x.c0 inv re,
+                    Event.product negative inv im])
+      ok out.1) =
+...
+error: unsolved goals
+case e_a.true
+x : Q
+⊢ (do
+      let out ←
+        if True then ok (none, [])
+          else do
+            let aa ← x.c0.square
+            let bb ← x.c1.square
+            let rotated ← NFG_InverseRef.field.mul_by_r bb
+            let norm ← aa.sub rotated
+            let inv ← norm.inv
+            let re ← x.c0.mul inv
+            let negative ← x.c1.neg
+            let im ← negative.mul inv
+            ok
+                (some { c0 := re, c1 := im },
+                  [Event.square x.c0 aa, Event.square x.c1 bb, Event.inverse norm inv, Event.product x.c0 inv re,
+                    Event.product negative inv im])
+      ok out.1) =
+    if True then ok none
+    else do
+      let c ← x.c0.square
+      let c1 ← x.c1.square
+      let c2 ← NFG_InverseRef.field.mul_by_r c1
+      let norm ← c.sub c2
+      let inverse_norm ← norm.inv
+      let c3 ← x.c0.mul inverse_norm
+      let c4 ← x.c1.neg
+      let c5 ← c4.mul inverse_norm
+      ok (some { c0 := c3, c1 := c5 })
+NHH_generated/NHH_QTrace.lean:42:52: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NHH_QTrace.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NHH_QTrace.encoded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NHH_QTrace.zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NHH_QTrace.inverse_domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r36877667a374419ebe9d34b66bbb2d0f.scope; invocation ID: e42f9ee8a51c4fd2bf33b1d37a7c2433

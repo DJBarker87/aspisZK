@@ -21,7 +21,12 @@ theorem try_association (x : Q) :
   NHH_CMAll.sub_result,NHH_CMAll.inverse_result,NHH_CMAll.mul_result,
   NHH_CMAll.neg_result,bind_assoc_eq,bind_tc_ok,NHH_CMAll.to_from,
   toSampler,NHH_QInverse.toSampler,NHH_CMAll.fromSampler,NHH_CMInverse.toSampler,
-  Option.map_some,Option.map_none] <;> rfl
+  Option.map_some,Option.map_none]
+ congr 1
+ funext b
+ cases b <;> simp only [Bool.false_eq_true,if_false,if_pos rfl,bind_assoc_eq,bind_tc_ok,
+  Option.map_some,Option.map_none,NHH_QInverse.toSampler,NHH_CMInverse.toSampler,
+  NHH_CMAll.fromSampler] <;> rfl
 
 theorem try_result (x : Q) : NFG_InverseRef.field.QM31.try_inv x=
  (do let o ← AspisR72Sampler.field.QM31.try_inv (toSampler x);ok (o.map fromSampler)) := by
