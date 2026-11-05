@@ -2,7 +2,8 @@
 from pathlib import Path
 import subprocess,json,time,hashlib,re,sys
 B=Path.cwd();mode=sys.argv[1];E=B/'NGQ_audit'/mode;E.mkdir(parents=True,exist_ok=True)
-if mode.startswith('inventory-'):jobs=[(mode,['NGQ_native/NGQ_InventoryDriver',mode.split('-')[1]])]
+if mode=='finalnew':jobs=[('proof5',['NGQ_native/NGQ_ProofDriver','proof5']),('scan',['NGQ_native/NGQ_ProofDriver','scan'])]
+elif mode.startswith('inventory-'):jobs=[(mode,['NGQ_native/NGQ_InventoryDriver',mode.split('-')[1]])]
 elif mode in ['poolfixtures','poolroots','poolscan']:jobs=[('scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0',['NGQ_native/'+('NGQ_PoolDriver' if mode=='poolscan' else 'NGQ_PoolProofDriver'), 'scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0'])]
 elif mode in ['fixtures','scan']:jobs=[(mode,['NGQ_native/'+'NGQ_ProofDriver',mode])]
 else:

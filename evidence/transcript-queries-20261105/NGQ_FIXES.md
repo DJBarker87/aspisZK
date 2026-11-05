@@ -27,3 +27,9 @@ Large repeated Cargo.lock/Cargo.toml snapshots were replaced by SHA references
 to the single compressed frozen-input corpus; launcher source hashes remain.
 
 K035: compilation stopped on duplicate NGQ_decode_call helper/harness name. Renamed the helper to NGQ_decode_cut (same body); no solver verdict existed. Pair5 resumes at K036 after this source repair. Dropped the planned array iterator pair to retain the 60-attempt maximum; range pair remains.
+
+L044 query-wide budget draft: zero-addition and pair-let elaboration did not normalize through generic monadic notation; bind name also ambiguous. Qualified the literal effect bind and supplied the16 budget explicitly, with the exact pair-pattern continuation. No statement/domain change; recovery sorryAx is excluded. Replacement focused compile L055.
+
+L055 fixed the exact pair-pattern continuation; L056 reduced the remaining issue to read-case bind unfolding; L057 qualifies/unfolds the literal effect bind and passes. All earlier recovery sorryAx excluded. Generator repairs preserve later native cuts and add read-only --check modes; the final actual-QueryScan transcription supersedes the initial Fields-only outer prototype.
+
+L032 returning-event draft left pure nodes unreduced; L035 fixed Pure.pure, exposing a redundant omega after simp and a pure-suffix case requiring its explicit finish equation. L058 passes after those tactic-only repairs. It proves exactly16 post-absorb returning attempts and preservation of that full log for any pure decoder terminal, including rejection/failure/divergence. No physical trace premise is removed.

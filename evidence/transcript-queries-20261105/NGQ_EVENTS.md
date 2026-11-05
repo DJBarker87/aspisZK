@@ -25,3 +25,5 @@ association is constructed. We do not assume syscall totality or erase suffixes.
 
 No schedule mismatch has been established. Source inspection, model equality,
 and native same-execution association are recorded as distinct evidence.
+
+Final model checks: NGQ_QueryBudget.attempts_at_most17 includes all partial-call prefixes. NGQ_ReturningEvents.materialize_count gives exactly16 returning post-absorb attempts; pure_suffix_log and rejection_keeps16 preserve the entire already-attempted log for any pure decoder terminal, including rejection/failure/divergence. The returning-oracle premise is explicit, not a runtime-totality assumption. L058/L059 and the new-root-only L060 raw audit validate these laws.

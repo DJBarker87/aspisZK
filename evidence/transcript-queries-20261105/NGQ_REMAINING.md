@@ -36,3 +36,5 @@ All independent model factoring, ordered-survivor/rejection, constructor,
 sampler totality, array-frame, materialization-chain and event-budget work has
 been attempted. Remaining root work requires native/extraction evidence;
 repeating another generic equality in Lean would not remove the premise.
+
+Final allowance:60/60 native attempts,60/60 Lean/support charges (59 scoped receipts plus the conservatively charged L013 prelaunch failure),1/1 extraction. All independent Lean-only obligations above, the17-attempt bound and exact16-returning/pure-rejection log laws have been attempted and audited. Remaining members require physical native/extraction/callee association; no unattempted Lean-only obligation is being deferred because Kani is exhausted. No further job is authorized by this budget.

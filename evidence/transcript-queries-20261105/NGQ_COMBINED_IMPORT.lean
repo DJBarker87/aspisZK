@@ -1,3 +1,4 @@
+import NGQ_ReturningEvents
 import NGK_COMBINED_IMPORT
 import NGQ_Concrete
 import NGQ_MaterializeChain
@@ -78,3 +79,7 @@ set_option autoImplicit false
 #print axioms AspisR1.NGQ_QueryBudget.attempts_at_most17
 #print axioms AspisR1.NGQ_ScanLaws.success_positions
 #print axioms AspisR1.NGQ_QueryFactor.pair_bind
+#print axioms AspisR1.NGQ_ReturningEvents.chain_count
+#print axioms AspisR1.NGQ_ReturningEvents.materialize_count
+#print axioms AspisR1.NGQ_ReturningEvents.pure_suffix_log
+#print axioms AspisR1.NGQ_ReturningEvents.rejection_keeps16

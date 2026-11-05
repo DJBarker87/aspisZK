@@ -40,3 +40,5 @@ was renamed (same body) and later distinct IDs used; no semantic verdict was
 renamed or quarantined verdict bypassed. This is an own-harness compile repair.
 
 K044: CBMC timed out at90s (gate exit1,95.84s overall,4189140KiB process RSS, swap0); unchanged lock confirmed. No counterexample and no credit. Replacement K045/K060 split only the post-membership branch: an arbitrary Bool replies for the membership callee. The native slice-membership-to-model association remains OPEN, not assumed true or constrained by a stronger caller precondition. The original full-word control is skipped, never rerun unchanged. Own campaign verdict parsing now explicitly excludes timeout/CBMC failure/unwinding diagnostics from a matched failing-control verdict.
+
+K025 launcher timeout interrupted the immediate post-lock gate. The later K026 pre-gate and final read-only recovery confirm the frozen lock hash remains unchanged; K025 has no credit. NGQ_K025-post-timeout.json records the vanished scope/empty TMPDIR. No assertion about an unrecorded immediate post-check is made.

@@ -1,6 +1,7 @@
 """Factor one frozen QueryScan loop iteration, preserving native statements."""
 from pathlib import Path
-import json,lzma,re,hashlib
+import json,lzma,re,hashlib,sys
+check="--check" in sys.argv
 E=Path(__file__).resolve().parent;src=json.loads(lzma.decompress((E/'NGQ_FROZEN_INPUTS.json.xz').read_bytes()))['crates/aspis-core/src/r0_transcript.rs']
 a=src.index('            if self.accepted_len == QUERY_COUNT');b=src.index('\n        }\n        false',a);body=src[a:b]
 # self is the exact same &mut QueryScan receiver; the loop's candidate is input.
@@ -26,5 +27,11 @@ fn NGQ_word_step() {
  #[cfg(NGQ_invert)] assert!(s.accepted[j] == (expected_word ^ 1));
 }
 '''
-(E/'NGQ_scan_step.rs.txt').write_text(s);(E/'NGQ_SCAN_CUT.json').write_text(json.dumps(dict(start=a,end=b,sha256=hashlib.sha256(body.encode()).hexdigest()),indent=1)+'\n')
-p=E/'NGQ_core_harness.rs.txt';t=p.read_text();t=t.split('// NGQ generated one-word cut')[0];p.write_text(t+'// NGQ generated one-word cut\n'+s)
+p=E/'NGQ_core_harness.rs.txt';t=p.read_text();prefix,rest=t.split('// NGQ generated one-word cut\n',1)
+_,suffix=rest.split('// NGQ generated outer cut\n',1)
+new=prefix+'// NGQ generated one-word cut\n'+s+'// NGQ generated outer cut\n'+suffix
+if check:assert new==t
+else:
+ (E/'NGQ_scan_step.rs.txt').write_text(s)
+ (E/'NGQ_SCAN_CUT.json').write_text(json.dumps(dict(start=a,end=b,sha256=hashlib.sha256(body.encode()).hexdigest()),indent=1)+'\n')
+ p.write_text(new)

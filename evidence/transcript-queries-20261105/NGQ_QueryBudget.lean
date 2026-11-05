@@ -7,22 +7,23 @@ open Aeneas Aeneas.Std Result CheckpointBytes5Effect NGQ_EventBounds
 theorem bind_bound {A B : Type} {code : Code A} {m n : Nat}
     (bound : Budget code m) (k : A → Code B)
     (each : ∀ a, Budget (k a) n) : Budget (code >>= k) (m+n) := by
+  change Budget (CheckpointBytes5Effect.bind code k) (m+n)
   induction bound with
-  | done a => exact each a
+  | done a => simpa only [CheckpointBytes5Effect.bind,Nat.zero_add] using each a
   | step r c m children ih =>
     exact Budget.step r _ (m+n) (fun b => ih b)
   | read parts c m children ih =>
-    have h := Budget.read parts (fun b => bind (c b) k) (m+n) (fun b => ih b)
-    simpa only [Nat.add_assoc,Nat.add_comm,Nat.add_left_comm] using h
+    have h := Budget.read parts (fun b => CheckpointBytes5Effect.bind (c b) k) (m+n) (fun b => ih b)
+    simpa only [CheckpointBytes5Effect.bind,Nat.add_assoc,Nat.add_comm,Nat.add_left_comm] using h
 
 theorem query_bound (B : AspisR1PublicPreparation.QueriesModel.Boundaries)
     (self : AspisR1PublicPreparation.transcript.Transcript Unit)
     (row : U8) (payload : Slice U8) : Budget (NGQ_Effects.code B self row payload) 17 := by
   unfold NGQ_Effects.code
-  apply bind_bound (absorb_bound self row payload)
+  apply bind_bound (n:=16) (absorb_bound self row payload)
   intro absorbed
   have h := bind_bound (materialize_bound absorbed.state)
-    (fun pair => liftResult (NGQ_QueryFactor.finishQuery B NGQ_Effects.dummy absorbed pair.1 pair.2))
+    (fun pair => match pair with | (blocks,advances) => liftResult (NGQ_QueryFactor.finishQuery B NGQ_Effects.dummy absorbed blocks advances))
     (fun pair => pure_bound _)
   simpa only [Nat.add_zero] using h
 

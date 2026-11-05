@@ -1,4 +1,4 @@
-"""NFX-owned serial client for unchanged S2W launcher; no shared tool edits."""
+"""NGQ-owned serial client for unchanged S2W launcher; no shared tool edits."""
 from pathlib import Path
 import subprocess,json,sys,time,hashlib,shlex,lzma,re,os,atexit
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90'
