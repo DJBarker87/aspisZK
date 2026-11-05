@@ -1,0 +1,105 @@
+NIT_generated/NIT_SharedChain.lean:16:0: warning: automatically included section variable(s) unused in theorem `AspisR1.NIT_SharedChain.high_interpreted`:
+  [FIo_Native.Allocation]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [FIo_Native.Allocation] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+NIT_generated/NIT_SharedChain.lean:27:0: warning: automatically included section variable(s) unused in theorem `AspisR1.NIT_SharedChain.high_exists`:
+  [FIo_Native.Allocation]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [FIo_Native.Allocation] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+NIT_generated/NIT_SharedChain.lean:96:0: warning: automatically included section variable(s) unused in theorem `AspisR1.NIT_SharedChain.common_interpreted`:
+  [FIo_Native.Allocation]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [FIo_Native.Allocation] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+NIT_generated/NIT_SharedChain.lean:108:92: error: Tactic `rfl` failed: The left-hand side
+  let (w, common) := (owner, cells)
+  do
+  let reply ← FIo_Native.weights.shared_partials c.f.value common
+  afterPartial c { address := c.w.address, value := w } parts reply
+is not definitionally equal to the right-hand side
+  fail e
+
+case failed
+inst✝ : FIo_Native.Allocation
+c : Context
+parts : Parts
+domain : NIT_PairDomain.Domain c.w.value c.alpha.value c.f.value c.kappa
+owner : W
+cells : CommonCells
+e : Error
+common :
+  NIT_CommonChain.Trace c.w.value 17
+    ({ start := 0#usize, «end» := 16#usize }, Array.repeat 16#usize NHX_FilledZero.zeroQ) (owner, cells)
+call : FIo_Native.weights.shared_partials c.f.value cells = fail e
+⊢ (let (w, common) := (owner, cells)
+    do
+    let reply ← FIo_Native.weights.shared_partials c.f.value common
+    afterPartial c { address := c.w.address, value := w } parts reply) =
+    fail e
+NIT_generated/NIT_SharedChain.lean:110:92: error: Tactic `rfl` failed: The left-hand side
+  let (w, common) := (owner, cells)
+  do
+  let reply ← FIo_Native.weights.shared_partials c.f.value common
+  afterPartial c { address := c.w.address, value := w } parts reply
+is not definitionally equal to the right-hand side
+  div
+
+case diverged
+inst✝ : FIo_Native.Allocation
+c : Context
+parts : Parts
+domain : NIT_PairDomain.Domain c.w.value c.alpha.value c.f.value c.kappa
+owner : W
+cells : CommonCells
+common :
+  NIT_CommonChain.Trace c.w.value 17
+    ({ start := 0#usize, «end» := 16#usize }, Array.repeat 16#usize NHX_FilledZero.zeroQ) (owner, cells)
+call : FIo_Native.weights.shared_partials c.f.value cells = div
+⊢ (let (w, common) := (owner, cells)
+    do
+    let reply ← FIo_Native.weights.shared_partials c.f.value common
+    afterPartial c { address := c.w.address, value := w } parts reply) =
+    div
+NIT_generated/NIT_SharedChain.lean:118:2: error: Type mismatch
+  partial_interpreted c c.w parts reply out domain.s2
+    (NIT_PairDomain.message_size c.w.value c.alpha.value c.f.value c.kappa domain) domain.extra tail
+has type
+  afterPartial c c.w parts reply = out
+but is expected to have type
+  (let (w, common) := (c.w.value, cells)
+    do
+    let reply ← FIo_Native.weights.shared_partials c.f.value common
+    afterPartial c { address := c.w.address, value := w } parts reply) =
+    out
+NIT_generated/NIT_SharedChain.lean:108:75: warning: This simp argument is unused:
+  call
+
+Hint: Omit it from the simp argument list.
+  simp only [shared, ̲common_interpreted c domain.factors owner cells common,c̵a̵l̵l̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NIT_generated/NIT_SharedChain.lean:110:75: warning: This simp argument is unused:
+  call
+
+Hint: Omit it from the simp argument list.
+  simp only [shared, ̲common_interpreted c domain.factors owner cells common,c̵a̵l̵l̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NIT_generated/NIT_SharedChain.lean:117:23: warning: This simp argument is unused:
+  call
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵h̵a̵r̵e̵d̵,̵h̵c̵,̵c̵a̵l̵l̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲s̲h̲a̲r̲e̲d̲,̲ ̲h̲c̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NIT_SharedChain.high_interpreted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIT_SharedChain.high_exists' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIT_SharedChain.partial_interpreted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIT_SharedChain.partial_exists' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIT_SharedChain.common_interpreted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIT_SharedChain.shared_interpreted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

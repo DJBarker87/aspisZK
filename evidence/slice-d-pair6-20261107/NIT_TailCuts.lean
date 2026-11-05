@@ -30,24 +30,38 @@ Native assertions:
 ```
 The two source fragments are separated by the already certified loops; this
 cut does not claim those loops run or that the complete pair succeeds. -/
-def cut (w : Ref W) (f : Ref (Slice U8)) (low : Ref LowCells)
+def groupCut (w : Ref W) (f : Ref (Slice U8)) (low : Ref LowCells)
  (ap0 ap1 : Ref Powers) (before : Parts) (l : Tail) (after : Parts)
- (libra : Powers) (sum : E) (out : R) : Prop :=
+ (libra : Powers) : Prop :=
  w.value.variant=FIo_Native.transport.Variant.S2 ∧ f.value.val.length=2048 ∧
  canonical low.value ∧ canonical ap0.value ∧ canonical ap1.value ∧ canonical before ∧
- canonE l.group_reply ∧ canonical l.libra_reply ∧ canonE sum ∧
+ canonE l.group_reply ∧ canonical l.libra_reply ∧
  l.who=w.address ∧ l.bytes=f.address ∧ l.len=2048 ∧ l.low=low.address ∧ l.low_len=16 ∧
  l.ap0=ap0.address ∧ l.ap1=ap1.address ∧ l.extra=w.value.extra ∧ l.count=2 ∧ l.events=[0,1] ∧
  (∀ k,k<7 → epick after k=if k=0 then l.group_reply else epick before k) ∧
- libra=l.libra_reply ∧ out=.Ok sum
+ libra=l.libra_reply
+
+def returnCut (sum : E) (out : R) : Prop := canonE sum ∧ out=.Ok sum
+
+def cut (w : Ref W) (f : Ref (Slice U8)) (low : Ref LowCells)
+ (ap0 ap1 : Ref Powers) (before : Parts) (l : Tail) (after : Parts)
+ (libra : Powers) (sum : E) (out : R) : Prop :=
+ groupCut w f low ap0 ap1 before l after libra ∧ returnCut sum out
 
 /-- Exact assignment/frame extracted from the gap observation. -/
+theorem group_frame (w : Ref W) (f : Ref (Slice U8)) (low : Ref LowCells)
+ (ap0 ap1 : Ref Powers) (before : Parts) (l : Tail) (after : Parts)
+ (libra : Powers) (h : groupCut w f low ap0 ap1 before l after libra) :
+ after=NIT_ArrayFrames.put before 0 l.group_reply := by
+ rcases h with ⟨_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,frame,_⟩
+ exact NIT_ArrayFrames.update NHI_Scalar.zero before after 0 l.group_reply (by decide) frame
+
 theorem frame (w : Ref W) (f : Ref (Slice U8)) (low : Ref LowCells)
  (ap0 ap1 : Ref Powers) (before : Parts) (l : Tail) (after : Parts)
  (libra : Powers) (sum : E) (out : R) (h : cut w f low ap0 ap1 before l after libra sum out) :
- after=NIT_ArrayFrames.put before 0 l.group_reply := by
- rcases h with ⟨_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,frame,_,_⟩
- exact NIT_ArrayFrames.update NHI_Scalar.zero before after 0 l.group_reply (by decide) frame
+ after=NIT_ArrayFrames.put before 0 l.group_reply :=
+ group_frame w f low ap0 ap1 before l after libra h.1
 
+#print axioms group_frame
 #print axioms frame
 end AspisR1.NIT_TailCuts

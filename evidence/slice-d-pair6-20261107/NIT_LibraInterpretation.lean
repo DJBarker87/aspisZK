@@ -23,7 +23,10 @@ theorem window (f : Ref (Slice U8)) (libra : Powers) (j : Usize)
   exact NIT_LowInterpretation.update_model before 4#usize l.reply (by decide)
  refine ⟨?_,NHM_ArrayPreserve.canonical canonE before after 4#usize l.reply cb ca.2 update⟩
  simp only [NIG_LibraLoop.window,epick_index before 4#usize (by decide),fieldLaw,
-  epick_index libra j small,cm.1,ca.1,update,bind_tc_ok]
+  epick_index libra j small,cm.1,bind_tc_ok]
+ change (do let value ← FIo_Native.aspis_core.field.wide_exact.WideExact.add (epick before 4) l.product;Array.update before 4#usize value)=ok after
+ rw [ca.1]
+ exact update
 
 /-- Returning local logs are constructed from CLOSED callees; an aborting field
 call is handled by the separate prefix constructors, never encoded as Rust Err. -/

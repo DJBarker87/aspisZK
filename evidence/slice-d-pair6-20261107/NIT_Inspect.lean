@@ -1,4 +1,4 @@
-import NIT_PairComposition
+import NIT_PairSteps
 open Aeneas Aeneas.Std AspisR1
 #check Usize.ofNat
 #check UScalar.ofNat

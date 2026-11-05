@@ -1,4 +1,4 @@
-import NIT_PairComposition
+import NIT_PairSteps
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.NIT_FinalCompleteness

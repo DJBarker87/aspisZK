@@ -1,4 +1,4 @@
-import NIT_PairComposition
+import NIT_PairSteps
 set_option autoImplicit false
 namespace AspisR1.NIT_IndexLemmas
 open Aeneas Aeneas.Std Result

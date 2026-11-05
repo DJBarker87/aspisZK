@@ -1,0 +1,53 @@
+{"attempt": "NIT_L116", "exit_status": 1, "wall_seconds": 3.021271317033097, "peak_rss_kib": "5912688", "swaps": "0", "print_axioms": ["'AspisR1.NIT_PacketTransport.adapter' does not depend on any axioms", "'AspisR1.NIT_PacketTransport.packet' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NIT_generated/NIT_PacketTransport.lean:46:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FIo_Native.weights.Weights.pair c.w.value c.alpha.value.to_slice c.f.value c.kappa
+in the target expression
+  (do
+      let result ←
+        (FIo_Install.toWeights w.value).pair (FIo_Install.toSlice alpha.value.to_slice) f.value (FIo_Install.toE kappa)
+      match result with
+        | core.result.Result.Ok out => ok (core.result.Result.Ok (FIo_Install.fromE out))
+        | core.result.Result.Err e => ok (core.result.Result.Err (FIo_Install.error e))) =
+    NIT_ErrorTransport.full out
+
+r : NP6_StdModel.Reservation
+w : Ref FIo_Install.W
+alpha : Ref (Std.Array FE 2#usize)
+f 
+...
+appa)
+ap0 ap1 : Powers
+l : Initial
+cut : cutInitial (NFW_PowersCohort.mapArray FIo_Install.toE alpha.value) l ap0 ap1 initial
+p0 : FIo_Native.weights.powers 4#usize (epick (NFW_PowersCohort.mapArray FIo_Install.toE alpha.value) 0) = ok ap0
+p1 : FIo_Native.weights.powers 4#usize (epick (NFW_PowersCohort.mapArray FIo_Install.toE alpha.value) 1) = ok ap1
+c0 : canonical ap0
+c1 : canonical ap1
+c : Context :=
+  context w alpha f kappa { address := ap0Address, value := ap0 } { address := ap1Address, value := ap1 } common low
+    scratch parts
+out : Result NR
+trace : NIT_AllocatorChain.Trace c r out
+source : FIo_Native.weights.Weights.pair c.w.value c.alpha.value.to_slice c.f.value c.kappa = out
+⊢ (do
+      let result ←
+        (FIo_Install.toWeights w.value).pair (FIo_Install.toSlice alpha.value.to_slice) f.value (FIo_Install.toE kappa)
+      match result with
+        | core.result.Result.Ok out => ok (core.result.Result.Ok (FIo_Install.fromE out))
+        | core.result.Result.Err e => ok (core.result.Result.Err (FIo_Install.error e))) =
+    NIT_ErrorTransport.full out
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (2 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.NIT_PacketTransport.adapter' does not depend on any axioms
+'AspisR1.NIT_PacketTransport.packet' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rfec4d7bc363c486ba713c7f44e3f08ea.scope; invocation ID: f18c0ce836c44d8f9481502cd4ce9510

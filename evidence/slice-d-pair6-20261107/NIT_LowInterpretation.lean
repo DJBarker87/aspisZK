@@ -1,4 +1,4 @@
-import NIT_PairComposition
+import NIT_PairSteps
 set_option autoImplicit false
 namespace AspisR1.NIT_LowInterpretation
 open Aeneas Aeneas.Std Result LPi_FieldValues NIT_Cuts NIT_FieldInterpretation NIT_PairComposition
