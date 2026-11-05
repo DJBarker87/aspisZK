@@ -1,0 +1,52 @@
+--- a/programs/aspis-pool/src/pair_forest_dispatch.rs
++++ b/programs/aspis-pool/src/pair_forest_dispatch.rs
+@@ -67,6 +67,9 @@
+     request_bytes: Vec<u8>,
+ }
+ 
++#[cfg_attr(kani,kani::requires(true))]
++#[cfg_attr(kani,kani::ensures(|r| *r == NHC_Loader::reference(owner)))]
++#[cfg_attr(kani,kani::modifies())]
+ fn supported_loader(owner: &Pubkey) -> bool {
+     owner == &bpf_loader::id()
+         || owner == &bpf_loader_upgradeable::id()
+@@ -1180,3 +1183,7 @@
+ 
+     const _: () = assert!(POOL_V1_PAIR_TREE_DEPTH == 20);
+ }
++
++#[cfg(kani)]
++#[path="NHC_Loader.rs"]
++mod NHC_Loader;
+--- a/programs/aspis-pool/src/lib.rs
++++ b/programs/aspis-pool/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! Pool V1 authenticated state-transition kernel.
+ //!
+ //! The native entrypoint exposes exact V1 initialization, vault-backed
+@@ -145,3 +146,9 @@
+     plan_authenticated_verifier_dispatch_v1, AuthenticatedVerifierDispatchV1,
+     PlannedVerifierDispatchV1, VerifierDispatchClaimV1,
+ };
++
++#[cfg(kani)]
++extern crate alloc;
++#[cfg(kani)]
++#[path="../../../KMX_stubs.rs"]
++pub mod NFO_KMX;
+--- /dev/null
++++ b/programs/aspis-pool/src/NHC_Loader.rs
+@@ -0,0 +1,12 @@
++use super::*;
++pub(super) fn reference(owner:&Pubkey)->bool {
++ let bytes=owner.to_bytes();
++ let r=bytes==bpf_loader::id().to_bytes()||bytes==bpf_loader_upgradeable::id().to_bytes()||bytes==loader_v4::id().to_bytes();
++ r
++}
++#[kani::proof_for_contract(super::supported_loader)]
++#[kani::unwind(33)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFO_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NFO_KMX::KMX_copy_from_slice)]
++#[kani::stub(alloc::alloc::realloc,crate::NFO_KMX::KMX_realloc)]
++fn association(){let owner=Pubkey::new_from_array(kani::any());let actual=supported_loader(&owner);assert!(actual==reference(&owner));}

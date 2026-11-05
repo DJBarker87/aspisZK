@@ -1,0 +1,9 @@
+{
+ "kind": "actual custody parser copt64_some",
+ "mode": "positive",
+ "source": "use super::*;\n#[kani::proof]\n#[kani::unwind(166)]\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFO_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NFO_KMX::KMX_copy_from_slice)]\n#[kani::stub(alloc::alloc::realloc,crate::NFO_KMX::KMX_realloc)]\nfn association(){\nlet mut raw:[u8;12]=kani::any();\nraw[..4].copy_from_slice(&1u32.to_le_bytes());let r=parse_coption_u64(&raw).unwrap().unwrap();let mut observed=r;assert!(observed==u64::from_le_bytes(raw[4..12].try_into().unwrap()));\n}\n",
+ "domain": "exact 12-byte COption Some tag 1; every payload byte arbitrary; no zero loop reached",
+ "modifies": [],
+ "production_credit": false,
+ "remaining": "complete None/zero-loop/model/physical caller domain and mutation frame"
+}

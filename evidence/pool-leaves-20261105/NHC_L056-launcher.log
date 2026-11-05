@@ -1,0 +1,56 @@
+{"attempt": "NHC_L056", "exit_status": 1, "wall_seconds": 2.866309029981494, "peak_rss_kib": "5917888", "swaps": "0", "print_axioms": ["'NHC_DecodeAccepted.domains' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NHC_generated/NHC_DecodeAccepted.lean:33:10: error: don't know how to synthesize implicit argument `E`
+  @core.result.Result.Ok.inj
+    (AspisR1.NFY_JHd_RequestNative.Request × NHC_Hints.pair_forest.PoolV1PairForestTerminalBumpHintsV1) ?m.234
+    (r, hints') (request, hints)
+    (ok.inj
+      (Eq.mpr
+        (id
+          (Eq.trans (ok.injEq (core.result.Result.Ok (r, hints')) (core.result.Result.Ok (request, hints)))
+            (Eq.trans (core.result.Result.Ok.injEq (r, hints') (request, hints))
+              (Prod.mk.injEq r hints' request hints))))
+        (Eq.mp
+          (Eq.trans
+            (Eq.trans
+              (congrFun'
+                (congrArg Eq
+                  (congrArg ok
+...
+est, hints))
+    (Eq.mpr
+      (id
+        (Eq.trans (ok.injEq (core.result.Result.Ok (r, hints')) (core.result.Result.Ok (request, hints)))
+          (Eq.trans (core.result.Result.Ok.injEq (r, hints') (request, hints)) (Prod.mk.injEq r hints' request hints))))
+      (Eq.mp
+        (Eq.trans
+          (Eq.trans
+            (congrFun'
+              (congrArg Eq
+                (congrArg ok
+                  (ite_cond_eq_false
+                    (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.NotEnoughAccountKeys)
+                    (core.result.Result.Ok (r, hints')) (eq_false few))))
+              (ok (core.result.Result.Ok (request, hints))))
+            (ok.injEq (core.result.Result.Ok (r, hints')) (core.result.Result.Ok (request, hints))))
+          (Eq.trans (core.result.Result.Ok.injEq (r, hints') (request, hints)) (Prod.mk.injEq r hints' request hints)))
+        accepted))
+context:
+input : Slice U8
+count : ℕ
+request : NHC_DecodeModel.Request
+hints : NHC_DecodeModel.Hints
+width : (↑input).length = 324
+body : Slice U8
+hints' : NHC_Hints.pair_forest.PoolV1PairForestTerminalBumpHintsV1
+strip : NHC_Hints.pair_forest.split_pair_forest_terminal_bump_hints_v1 input = ok (core.result.Result.Ok (body, hints'))
+left✝ : ↑body = List.take ((↑input).length - 4) ↑input
+right✝ : ↑input = ↑body ++ [hints'.current_page, hints'.next_page, hints'.vault_authority, hints'.vault_token_account]
+r : AspisR1.NFY_JHd_RequestNative.Request
+hd : AspisR1.NFY_JHd_RequestNative.decode body = ok (core.result.Result.Ok r)
+accepted :
+  ok (NHC_DecodeModel.afterDecode (core.result.Result.Ok r) count hints') = ok (core.result.Result.Ok (request, hints))
+few : ¬count < 3
+⊢ Type ?u.70
+'NHC_DecodeAccepted.domains' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf2967ccd3f894620b754386fea90e3ab.scope; invocation ID: 9b9bc959df074f86aaf47f92aa80330f

@@ -1,0 +1,11 @@
+def Aeneas.Std.Usize.checked_sub : Usize → Usize → Option Usize :=
+fun x y => core.num.checked_sub_UScalar x y
+def Aeneas.Std.core.num.checked_sub_UScalar : {ty : UScalarTy} → UScalar ty → UScalar ty → Option (UScalar ty) :=
+fun {ty} x y => Option.ofResult (x - y)
+def Aeneas.Std.UScalar.sub : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y => if ↑x < ↑y then fail Error.integerOverflow else ok (BitVec.ofNat ty.numBits (↑x - ↑y)#uscalar)
+def Aeneas.Std.Option.ofResult.{u} : {a : Type u} → Result a → Option a :=
+fun {a} x =>
+  match x with
+  | ok x => some x
+  | x => none

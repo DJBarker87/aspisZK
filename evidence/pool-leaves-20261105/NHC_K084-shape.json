@@ -1,0 +1,9 @@
+{
+ "kind": "actual custody parser array32",
+ "mode": "positive",
+ "source": "use super::*;\n#[kani::proof]\n#[kani::unwind(166)]\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFO_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NFO_KMX::KMX_copy_from_slice)]\n#[kani::stub(alloc::alloc::realloc,crate::NFO_KMX::KMX_realloc)]\nfn association(){\nlet raw:[u8;32]=kani::any();let len:usize=kani::any();kani::assume(len<=32);let r=token_array::<32>(&raw[..len]);\nlet mut observed=r;if len!=32{assert!(observed==Err(ProgramError::Custom(0x4153_2015)));}else{let j:usize=kani::any();kani::assume(j<32);assert!(observed.unwrap()[j]==raw[j]);}\n\n}\n",
+ "domain": "array conversion with length 0..32; exact-length value and short rejection branches",
+ "modifies": [],
+ "production_credit": false,
+ "remaining": "complete None/zero-loop/model/physical caller domain and mutation frame"
+}

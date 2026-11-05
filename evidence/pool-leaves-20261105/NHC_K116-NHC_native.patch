@@ -1,0 +1,51 @@
+--- a/programs/aspis-pool/src/pair_forest.rs
++++ b/programs/aspis-pool/src/pair_forest.rs
+@@ -5792,3 +5792,7 @@
+         assert!(accounts[4].data.iter().any(|byte| *byte != 0));
+     }
+ }
++
++#[cfg(kani)]
++#[path="NHC_DynamicSpan.rs"]
++mod NHC_DynamicSpan;
+--- a/programs/aspis-pool/src/lib.rs
++++ b/programs/aspis-pool/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! Pool V1 authenticated state-transition kernel.
+ //!
+ //! The native entrypoint exposes exact V1 initialization, vault-backed
+@@ -145,3 +146,9 @@
+     plan_authenticated_verifier_dispatch_v1, AuthenticatedVerifierDispatchV1,
+     PlannedVerifierDispatchV1, VerifierDispatchClaimV1,
+ };
++
++#[cfg(kani)]
++extern crate alloc;
++#[cfg(kani)]
++#[path="../../../KMX_stubs.rs"]
++pub mod NFO_KMX;
+--- /dev/null
++++ b/programs/aspis-pool/src/NHC_DynamicSpan.rs
+@@ -0,0 +1,21 @@
++use super::*;
++#[kani::proof]
++#[kani::unwind(33)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFO_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NFO_KMX::KMX_copy_from_slice)]
++#[kani::stub(alloc::alloc::realloc,crate::NFO_KMX::KMX_realloc)]
++fn association(){
++ let n:usize=kani::any();kani::assume(n>0&&n<=isize::MAX as usize);
++ let layout=std::alloc::Layout::from_size_align(n,1).unwrap();
++ let pointer=unsafe{std::alloc::alloc_zeroed(layout)};kani::assume(!pointer.is_null());
++ {
++  let i:usize=kani::any();kani::assume(i<n);let byte:u8=kani::any();unsafe{pointer.add(i).write(byte);}
++  let whole=unsafe{core::slice::from_raw_parts(pointer,n)};
++  let suffix=&whole[i..];
++let mut calls=0;let mut observed=None;
++ let mut opaque=|arg:&[u8]|{calls+=1;observed=Some((arg.as_ptr(),arg.len()));Err::<(),ProgramError>(ProgramError::InvalidInstructionData)};
++ let result=opaque(suffix);
++assert!(calls==1);assert!(observed==Some((pointer.wrapping_add(i) as *const u8,n-i)));assert!(matches!(result,Err(ProgramError::InvalidInstructionData)));
++ }
++ unsafe{std::alloc::dealloc(pointer,layout);}
++}

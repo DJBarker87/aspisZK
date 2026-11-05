@@ -1,0 +1,57 @@
+{"attempt": "NHC_K079", "exit_status": 1, "wall_seconds": 3.155100575881079, "peak_rss_kib": "337152", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+ apply_authenticated_afterstate_from_program_invariant(
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+369 |     pub(crate) fn decode_from_program_invariant(
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: method `transition_kind` is never used
+  --> programs/aspis-pool/src/prepared_settlement.rs:88:19
+   |
+87 | impl AuthenticatedPreparedSettlementActionV1 {
+   | -------------------------------------------- method in this implementation
+88 |     pub(crate) fn transition_kind(self) -> PoolV1TransitionKind {
+   |                   ^^^^^^^^^^^^^^^
+
+warning: module `NHC_ErrorConversion` should have a snake case name
+  --> programs/aspis-pool/src/error.rs:70:5
+   |
+70 | mod NHC_ErrorConversion;
+   |     ^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nhc_error_conversion`
+   |
+   = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.23s
+Checking harness error::NHC_ErrorConversion::association...
+
+VERIFICATION RESULT:
+ ** 1 of 208 failed (4 unreachable)
+Failed Checks: assertion failed: r == reference(e)
+ File: "programs/aspis-pool/src/NHC_ErrorConversion.rs", line 63, in error::NHC_ErrorConversion::association
+
+VERIFICATION:- FAILED
+Verification Time: 0.6861866s
+
+Manual Harness Summary:
+Verification failed for - error::NHC_ErrorConversion::association
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r84979a4656e1432d876a205705fe668d.scope; invocation ID: c9bfb85b4de747e59336d4b44cba97ef

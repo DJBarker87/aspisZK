@@ -1,0 +1,39 @@
+--- a/programs/aspis-pool/src/vault.rs
++++ b/programs/aspis-pool/src/vault.rs
+@@ -664,3 +664,7 @@
+         .copy_from_slice(&amount.to_le_bytes());
+     Ok(())
+ }
++
++#[cfg(kani)]
++#[path="NHC_Vault.rs"]
++mod NHC_Vault;
+--- a/programs/aspis-pool/src/lib.rs
++++ b/programs/aspis-pool/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! Pool V1 authenticated state-transition kernel.
+ //!
+ //! The native entrypoint exposes exact V1 initialization, vault-backed
+@@ -145,3 +146,9 @@
+     plan_authenticated_verifier_dispatch_v1, AuthenticatedVerifierDispatchV1,
+     PlannedVerifierDispatchV1, VerifierDispatchClaimV1,
+ };
++
++#[cfg(kani)]
++extern crate alloc;
++#[cfg(kani)]
++#[path="../../../KMX_stubs.rs"]
++pub mod NFO_KMX;
+--- /dev/null
++++ b/programs/aspis-pool/src/NHC_Vault.rs
+@@ -0,0 +1,9 @@
++use super::*;
++#[kani::proof]
++#[kani::unwind(166)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFO_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NFO_KMX::KMX_copy_from_slice)]
++#[kani::stub(alloc::alloc::realloc,crate::NFO_KMX::KMX_realloc)]
++fn association(){
++let mut raw:[u8;165]=kani::any();raw[72..76].copy_from_slice(&1u32.to_le_bytes());raw[108]=1;raw[109..113].copy_from_slice(&1u32.to_le_bytes());raw[129..133].copy_from_slice(&1u32.to_le_bytes());let r=parse_legacy_token_account_v1(&raw).unwrap();let j:usize=kani::any();kani::assume(j<32);let mut observed=r.mint.to_bytes()[j];assert!(observed==raw[0+j]);
++}
