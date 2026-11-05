@@ -9,3 +9,5 @@ Budget: 100 Kani, 80 Lean/audit, 2 extraction maximum. One admitted capped scope
 Initial inspection: NGW retained export 108 files / 460197994 bytes; prior seed 30017 files / 7597002976 bytes. Use retained export objects first, with pinned prior paths. Host disk 96%, 78GiB available. Source base a52de2806ce65a73e9c4f3a2ca27aae8ff90ee12.
 
 Step 0 complete: NHE_L001 full retained scanner exit0, 13513 modules, zero dangling/incompatible owners/import mismatches; wall29.2750s, peak7003880KiB, swap0. Four inherited rows validated CLOSED; no new NHE row closed. Budget 1/80 Lean/audit, 0/100 Kani, 0/2 extraction.
+
+Stage 1 polynomial TX2:119 CLOSED under (ah): root NHE_Polynomial.cohort, combined L020, raw ax2 L024, same-binary fixtures L023, full scanner L027 exit0. Complete Result on arbitrary bytes/canonical x. No new Kani/extraction; six retained native pairs validated by NHE_polynomial_validate.py. Next: round scalar/field-window association. Budget 27/80 Lean/audit used.

@@ -1,0 +1,64 @@
+NHE_generated/NHE_FieldPort.lean:38:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  i.wrapping_add 1#usize * 32#usize
+in the target expression
+  (FIo_FieldBridge.map FIo_Install.fromE do
+      let s ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+            { start := i.wrapping_mul 32#usize, «end» := (i.wrapping_add 1#usize).wrapping_mul 32#usize }
+      let o ← FIo_Native.aspis_core.field.wide_exact.WideExact.from_le_bytes s
+      core.option.Option.unwrap o) =
+    do
+    let x ←
+      do
+        let value ←
+          do
+            let i3 ← UScalar.wrapping_add i 1#usize * 32#usize
+            let s ←
+              core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                  { start := UScalar.wrapping_mul i 32#usize, «end» := i3 }
+            let o ← AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes s
+            core.option.Option.unwrap o
+        ok (AspisR1CurrentWide.Proof.recordWideToFinish value)
+    ok (SAG_DotAdapter.toStageE x)
+
+bytes : Slice U8
+i : Usize
+small : ↑i < 64
+cap : 4096 < UScalar.size UScalarTy.Usize
+hm : i * 32#usize = ok (UScalar.wrapping_mul i 32#usize)
+ha : i + 1#usize = ok (UScalar.wrapping_add i 1#usize)
+av : ↑(i.wrapping_add 1#usize) = ↑i + 1
+hf : i.wrapping_add 1#usize * 32#usize = ok (UScalar.wrapping_mul (i.wrapping_add 1#usize) 32#usize)
+⊢ (FIo_FieldBridge.map FIo_Install.fromE do
+      let s ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+            { start := i.wrapping_mul 32#usize, «end» := (i.wrapping_add 1#usize).wrapping_mul 32#usize }
+      let o ← FIo_Native.aspis_core.field.wide_exact.WideExact.from_le_bytes s
+      core.option.Option.unwrap o) =
+    do
+    let x ←
+      do
+        let value ←
+          do
+            let i3 ← UScalar.wrapping_add i 1#usize * 32#usize
+            let s ←
+              core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                  { start := UScalar.wrapping_mul i 32#usize, «end» := i3 }
+            let o ← AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes s
+            core.option.Option.unwrap o
+        ok (AspisR1CurrentWide.Proof.recordWideToFinish value)
+    ok (SAG_DotAdapter.toStageE x)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'NHE_FieldPort.unwrap' does not depend on any axioms
+'NHE_FieldPort.decoder' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NHE_FieldPort.adopted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -62,6 +62,7 @@ elif kind=='lean':
  command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NHE_generated','-o','NHE_objects/'+target+'.olean',n]
  if target in ['NHE_Driver','NHE_ProofDriver','NHE_Stage2Driver','NFA_WALKER','NFA_MemoryLimit']:command+=['-c','NHE_native/'+target+'.c']
 elif kind=='linkaudit':
+ for n in ['NFA_WALKER','NFA_MemoryLimit']:files['NHE_native/'+n+'.c']=(E/('NHE_'+n+'.c.txt')).read_text()
  sources=['NHE_native/'+target+'.c','NHE_native/NFA_WALKER.c','NHE_native/NFA_MemoryLimit.c']
  command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NHE_native/'+target,*sources]
 elif kind=='auditbatch':
@@ -70,15 +71,18 @@ elif kind=='auditbatch':
  sources=['NHE_generated/NHE_ProofDriver.lean','NHE_generated/NHE_Driver.lean','NHE_audit_batch.py','NHE_AUDIT_ROOTS.json','NHE_EXPECTED_IMPORTS.jsonl','NHE_native/NHE_ProofDriver.c','NHE_native/NHE_Driver.c','NHE_native/NFA_WALKER.c','NHE_native/NFA_MemoryLimit.c']
  command=['python3','NHE_audit_batch.py']
 elif kind=='auditbin':
+ import os
+ own=os.environ.get('NHE_AUDIT')=='1'
  driver='NGW_ProofDriver' if target.startswith('proof') or target=='fixtures' else 'NGW_Driver'
- sources=['NHE_inputs/'+driver+'.lean'];files[sources[0]]=(E.parent/'slice-d-finish2-20261105'/(driver+'.lean')).read_text();command=['NHE_native/'+driver,target]
+ if own:driver=driver.replace('NGW_','NHE_')
+ sources=['NHE_inputs/'+driver+'.lean'];files[sources[0]]=((E if own else E.parent/'slice-d-finish2-20261105')/(driver+'.lean')).read_text();command=['NHE_native/'+driver,target]
  if target.startswith('proof'):
   files['NHE_AUDIT_ROOTS.json']=(E/'NHE_AUDIT_ROOTS.json').read_text();sources+=['NHE_AUDIT_ROOTS.json']
 else:raise ValueError(kind)
 if target in ['scan','queryscan']:
- name='NGW_EXPECTED_IMPORTS.jsonl'
- files[name]=(E.parent/'slice-d-finish2-20261105'/name).read_text();sources+=[name]
-cfg=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=env,timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={'selected_objects':{}},expected_time='Focused elaboration' if kind=='lean' else 'Optimized audit linker' if kind=='linkaudit' else 'Raw checked-kernel graph traversal')
+ name='NHE_EXPECTED_IMPORTS.jsonl' if own else 'NGW_EXPECTED_IMPORTS.jsonl'
+ files[name]=((E if own else E.parent/'slice-d-finish2-20261105')/name).read_text();sources+=[name]
+cfg=dict(attempt=a,own_audit=(kind=='auditbin' and own),kind=kind,module=target,sources=sources,command=command,env=env,timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={'selected_objects':{}},expected_time='Focused elaboration' if kind=='lean' else 'Optimized audit linker' if kind=='linkaudit' else 'Raw checked-kernel graph traversal')
 if kind=='kani':cfg['native_command']=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NHE_src/crates/aspis-r1-cost-probe/Cargo.toml','--target-dir',B+'/NHE_target','--features','private-leaf-salts,optimized-terminal,program-build','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse']
 if kind=='kani' and os.environ.get('NHE_PROGRAM'):
  cfg['root_package']='aspis-r1-cost-probe-program'
@@ -113,7 +117,7 @@ for root in roots:
    if Path(root,stem+suf).is_file():rels.add(stem+suf)
 for rel in sorted(rels):
  p=next(Path(root)/rel for root in roots if (Path(root)/rel).is_file());pins[str(p)]={{'path':str(p),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}}
-for module in (['NHE_COMBINED_IMPORT'] if x['kind']=='auditbatch' else [])+(['NEP_Planted','NEP_Mutations'] if x['module'] in ['NHE_Driver','NHE_ProofDriver','NHE_Stage2Driver','fixtures'] else [])+(['NHE_QueryModel'] if x['kind']=='auditbin' and x['module'].startswith('query') else [])+(['NGW_COMBINED_IMPORT'] if x['kind']=='auditbin' and (x['module'].startswith('proof') or x['module']=='scan') else [])+[n for line in (b/x['sources'][0]).read_text().splitlines() if line.startswith('import ') for n in line[7:].split() if n!='all'] if x['kind'] not in ['linkaudit','kani','extract'] else []:
+for module in (['NHE_COMBINED_IMPORT'] if x['kind']=='auditbatch' else [])+(['NEP_Planted','NEP_Mutations'] if x['module'] in ['NHE_Driver','NHE_ProofDriver','NHE_Stage2Driver','fixtures'] else [])+(['NHE_QueryModel'] if x['kind']=='auditbin' and x['module'].startswith('query') else [])+([('NHE_COMBINED_IMPORT' if x.get('own_audit') else 'NGW_COMBINED_IMPORT')] if x['kind']=='auditbin' and (x['module'].startswith('proof') or x['module']=='scan') else [])+[n for line in (b/x['sources'][0]).read_text().splitlines() if line.startswith('import ') for n in line[7:].split() if n!='all'] if x['kind'] not in ['linkaudit','kani','extract'] else []:
  rel=module.replace('.','/')+'.olean';p=next((Path(root)/rel for root in roots if (Path(root)/rel).is_file()),None)
  assert p is not None,module
  for z in [p,Path(str(p)+'.private'),Path(str(p)+'.server'),p.with_suffix('.ir')]:
@@ -129,9 +133,9 @@ names += [str(p.relative_to(b)) for p in b.glob(a+'-graph*')]+[str(p.relative_to
 if {kind!r}=='extract':names += [a+'-extraction-pins.json',a+'.llbc']+[str(p.relative_to(b)) for p in (b/'NHE_extracted'/{target!r}).rglob('*') if p.is_file()]
 names += [str(p.relative_to(b)) for p in b.glob('NEP_*_REACHABLE.txt')] if {kind!r}=='auditbatch' else [str(p.relative_to(b)) for p in b.glob('NEP_'+{target!r}+'_*_REACHABLE.txt')] if {kind!r}=='auditbin' else []
 if {kind!r}=='auditbatch':names += [str(p.relative_to(b)) for p in (b/'NHE_final_audit').rglob('*') if p.is_file()]
-if {target!r} in ['scan','queryscan']:names+=['NHE_QUERY_LOADED_scan.jsonl' if {target!r}=='queryscan' else 'NGW_LOADED_scan.jsonl']
+if {target!r} in ['scan','queryscan']:names+=['NHE_LOADED_scan.jsonl' if {kind!r}=='auditbin' and {cfg.get('own_audit')!r} else 'NGW_LOADED_scan.jsonl']
 out={{n:(b/n).read_text() for n in names}}
-for name in ['NGW_Driver','NGW_ProofDriver']:
+for name in ['NGW_Driver','NGW_ProofDriver','NHE_Driver','NHE_ProofDriver']:
  p=b/'NHE_native'/name
  if p.is_file():out[a+'/'+name+'_BINARY_PIN.json']=json.dumps(dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size))
 print(json.dumps(out))
