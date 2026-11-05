@@ -1,0 +1,63 @@
+--- a/crates/aspis-r1-cost-probe/src/weights.rs
++++ b/crates/aspis-r1-cost-probe/src/weights.rs
+@@ -397,3 +397,5 @@
+         }
+     }
+ }
++
++#[cfg(kani)] #[path="NIQ_gap_cuts.rs"] mod NIQ_gaps;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NIQ_gap_cuts.rs
+@@ -0,0 +1,52 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++use aspis_core::r0::Error as HeapError;
++fn heap_error(i:u8)->HeapError{match i%17{0=>HeapError::IndexOutOfRange,1=>HeapError::WrongLength,2=>HeapError::ZeroDenominator,3=>HeapError::Allocation,4=>HeapError::NonCanonical,5=>HeapError::WrongField,6=>HeapError::InvalidPoints,7=>HeapError::QuotientNotInImage,8=>HeapError::RankDeficient,9=>HeapError::Parse,10=>HeapError::Semantic,11=>HeapError::Schedule,12=>HeapError::Sampler,13=>HeapError::Commitment,14=>HeapError::Authentication,15=>HeapError::V1,_=>HeapError::V2}}
++// Exact match expression at weights.rs:273. The child is already CLOSED;
++// this cut checks only its full reply transport and failure remapping.
++fn allocation_cut(reply:Result<Vec<K>,HeapError>)->Result<Vec<K>,Error>{
++ let scratch=match reply{Ok(v)=>v,Err(_)=>return Err(Error::Allocation)};
++ Ok(scratch)
++}
++#[kani::proof]
++#[kani::unwind(4)]
++fn allocation_error(){
++ let e=heap_error(kani::any());let out=allocation_cut(Err(e));
++ let mut good=matches!(out,Err(Error::Allocation));
++ if cfg!(NIQ_corrupt){good=!good;}assert!(good);
++}
++#[kani::proof]
++#[kani::unwind(4)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn allocation_owner(){
++ // Exact zero64 caller allocation, with an arbitrary selected pre-state cell;
++ // no whole-buffer comparison and no iteration is certified by this cut.
++ let words:[u32;4]=kani::any();
++ let value=K{c0:aspis_core::field::CM31{a:M31(words[0]),b:M31(words[1])},c1:aspis_core::field::CM31{a:M31(words[2]),b:M31(words[3])}};
++ let index:usize=kani::any();kani::assume(index<64);
++ let mut before=Vec::<K>::with_capacity(64);unsafe{core::ptr::write_bytes(before.as_mut_ptr(),0,64);before.set_len(64);}before[index]=value;
++ let ptr=before.as_ptr();let cap=before.capacity();let out=allocation_cut(Ok(before)).unwrap();
++ let after=out[index];let limb:usize=kani::any();kani::assume(limb<4);let mut good=out.as_ptr()==ptr&&out.len()==64&&out.capacity()==cap&&[after.c0.a.0,after.c0.b.0,after.c1.a.0,after.c1.b.0][limb]==words[limb];
++ if cfg!(NIQ_corrupt){good=!good;}assert!(good);
++}
++fn anye()->E{let words:[u32;8]=kani::any();for word in words{kani::assume(word<0x7fffffff);}E::from_limbs(words).unwrap()}
++struct Tail{input:E,reply:[E;7],calls:usize}
++fn powers7(kappa:E,l:&mut Tail)->[E;7]{l.input=kappa;l.calls+=1;l.reply}
++fn tail_start(kappa:E,l:&mut Tail)->([E;7],E){let k=powers7(kappa,l);let sum=E::ZERO;(k,sum)}
++#[kani::proof]
++#[kani::unwind(66)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn tail_start_record(){
++ let kappa=anye();let mut l=Tail{input:E::ZERO,reply:core::array::from_fn(|_|anye()),calls:0};
++ let (powers,sum)=tail_start(kappa,&mut l);let i:usize=kani::any();kani::assume(i<7);let limb:usize=kani::any();kani::assume(limb<8);
++ let mut good=l.calls==1&&l.input.to_limbs()[limb]==kappa.to_limbs()[limb]&&powers[i].to_limbs()[limb]==l.reply[i].to_limbs()[limb]&&sum.to_limbs()[limb]==0;
++ if cfg!(NIQ_corrupt){good=!good;}assert!(good);
++}
++
++#[kani::proof]
++#[kani::unwind(4)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn kmx_negative(){let source:[u8;1]=[kani::any()];let mut target=[0u8;1];target.copy_from_slice(&source);assert!(target[0]!=source[0]);}

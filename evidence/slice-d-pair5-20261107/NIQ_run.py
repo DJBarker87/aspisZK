@@ -46,7 +46,7 @@ if kind=='kani':
  import runpy
  prepared=runpy.run_path(str(E/'NIQ_native_prepare.py'))
  for n,t in prepared['inputs'].items():files['NIQ_src/'+n]=t
- frozen=json.loads((E/'NIQ_FROZEN_PINS.json').read_text()); frozen.update(prepared['pins']); files['NIQ_SOURCE_PINS.json']=json.dumps(frozen)
+ frozen=json.loads((E.parent/'slice-d-pair4-20261107/NIG_FROZEN_PINS.json').read_text()); frozen.update(prepared['pins']); files['NIQ_SOURCE_PINS.json']=json.dumps(frozen)
  sources=['NIQ_gate.py','NIQ_SOURCE_PINS.json','NIQ_src/Cargo.lock','NIQ_src/Cargo.toml']+[n for n in files if n.startswith('NIQ_src/')]
  command=['python3','NIQ_gate.py',a+'.json']
  env.update(CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-Copt-level=3 -C link-arg=-Wl,--threads=1')
