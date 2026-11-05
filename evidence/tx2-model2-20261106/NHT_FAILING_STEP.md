@@ -19,3 +19,20 @@ No timeout, memory kill, cap increase, Kani or extraction attempt so far.
   absent predecessor object. No theorem/object from either failure is accepted.
 
 All failed candidates and exact snapshots are retained in attempt directories.
+
+- L021: an extra solved-goal bullet in finish composition. Removed; L022
+  passes. L029/L030 then narrow round1 to the SAME successful first reply;
+  this replaces a stronger universal native-cut premise before final selection.
+- L023: polymorphic adapter function equality needed explicit @ applications.
+  L024 passes; no native slot claim follows from model installation.
+- L025: query Error/Phase nominal carriers differ from VTop's Adapter owners.
+  Added injective total NHT_ResultPort and release-compatible NHT_PhasePort,
+  preserving every payload/error/fail/div; L027 passes mapped query installation.
+- L040: malformed multiline record in own tail definition. Repaired layout;
+  L041 passes the exact Vec writeback factorization.
+- L042/L043/L045: initial constant proofs did not unfold generated irreducible
+  names / could not reduce platform-dependent checked Usize operations. Replaced
+  by existing symbolic checked add/mul laws and a new checked-sub law. L048
+  exposed sub_spec's conjunction postcondition; L049 fixes that exact signature.
+  L050 proves all eleven source constants with standard axioms. No kernel
+  normalization of a recurrence or large enumeration was attempted.

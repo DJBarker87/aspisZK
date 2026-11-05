@@ -26,18 +26,19 @@ theorem first_frame (ops : Ops W) (v : verifier.View) (p : verifier.Prepared)
  (ws : Slice NHE_DotBody.NQ) (pair : PairPacket W) (alpha1 : E)
  (folds : ops.op6 p.variant=ok 2#usize)
  (index1 : Array.index_usize p.alpha 1#usize=ok alpha1)
- (round1 : ∀ claim, ops.op5 v.round1 alpha1 claim 1#usize=
+ (reply : R E)
+ (round1 : ∀ claim, reply=.Ok claim → ops.op5 v.round1 alpha1 claim 1#usize=
    NHT_RoundPacket.packet v.round1 alpha1 claim)
  (next : ∀ reply, afterRoundReply ops v p a obs 2#usize reply =
    afterRound ops v p a obs ws pair 2#usize reply)
- (reply : R E) :
+ :
  afterRound0 ops v p a obs reply = afterFirst ops v p a obs ws pair alpha1 reply := by
  cases reply with
  | Err e => rfl
  | Ok first =>
    unfold afterRound0 afterFirst
    simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,folds,index1,↓reduceIte]
-   rw [round1 first]
+   rw [round1 first rfl]
    apply NHT_BindOn.reached
    intro r _
    exact next r
@@ -54,7 +55,8 @@ theorem source (ops : Ops W) (v : verifier.View) (p : verifier.Prepared)
  (index0 : Array.index_usize p.alpha 0#usize=ok alpha0)
  (round0 : ops.op5 v.round0 alpha0 p.claim 0#usize =
    NHT_RoundPacket.packet v.round0 alpha0 p.claim)
- (first : ∀ reply, afterRound0 ops v p a obs reply=
+ (first : ∀ reply, NHT_RoundPacket.packet v.round0 alpha0 p.claim=ok reply →
+   afterRound0 ops v p a obs reply=
    afterFirst ops v p a obs ws pair alpha1 reply) :
  Port3_NativeFinishBody.verifier.finish_relation ops v p a obs =
  run ops v p a obs ws pair alpha0 alpha1 := by
@@ -62,8 +64,8 @@ theorem source (ops : Ops W) (v : verifier.View) (p : verifier.Prepared)
  unfold NHQ_FinishRelationModel.staged run
  rw [index0,bind_tc_ok,round0]
  apply NHT_BindOn.reached
- intro reply _
- exact first reply
+ intro reply returned
+ exact first reply returned
 #print axioms first_frame
 #print axioms source
 end NHT_FinishRun
