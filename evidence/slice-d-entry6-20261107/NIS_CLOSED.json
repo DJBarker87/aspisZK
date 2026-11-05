@@ -1,8 +1,8 @@
 {
  "schema_version": 1,
  "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
- "new_composed_functions": 2,
- "new_composed_rows": 3,
+ "new_composed_functions": 4,
+ "new_composed_rows": 5,
  "functions": [
   {
    "id": "NIS::decode_entry_v2",
@@ -112,7 +112,72 @@
    "canonical_owner": "NIM canonical forest; NFW_ErrorReference.VerifierError only; no original map owner imported",
    "prior_source_validator": "NIS_REPLAY_ENTRY.json / NIS_REPLAY_ERROR.json: unchanged NIJ validators, selected isolated native reads, original source snapshots byte-identical",
    "semantic_review_sha256": "5d243edede7477981492925a83dfa3c986d272b278b54d5c0218e0205a849836"
+  },
+  {
+   "id": "NIS::active_v1",
+   "subject": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryEntryV1::is_active_at",
+   "route": "y: NEW deployed native whole-body scalar packet, local state/no writable static; canonical cohort equality",
+   "model_theorem": "NIJ_ActiveSlots.op30_exact",
+   "root_domain": "Every valid typed V1 record, every u64 slot; exhaustive four status constructors; all other fields arbitrary. No successful status/slot/validator precondition.",
+   "inner_hypotheses_remaining": [],
+   "native_passes": [
+    "NIS_K046"
+   ],
+   "matched_controls": [
+    "NIS_K047"
+   ],
+   "callee_laws": [
+    "NHY::retirement_v1"
+   ],
+   "source_association": "NIS_active.patch directly invokes actual frozen is_active_at and has_no_retirement_slot. Full deployed features/offline graph/frozen lock/KMX/isolation checks. Pure no-cfg source and u64::MAX constant pinned. NIS_ActiveSlots is import-only retarget, natural four-status/U64 predicate and typed helper composition audited in same canonical/headline closure. Suspended NCF_K002/006 NEVER selected or restored.",
+   "effects": "Immutable typed shared reference and Bool; no allocation/account mutation/runtime syscall/function-pointer dispatch in reached actual method.",
+   "combined": "NIS_L025",
+   "audit": [
+    "NIS_L032 all79 raw roots standard",
+    "NIS_L033 NFX zero defects"
+   ],
+   "trust_reclassification": "Retained P6/D188 option-A/native/compiler/ABI trust; no new runtime item.",
+   "root_model": "AspisR1.RPx_Deployed.deployed; frozen3; L154 parameter",
+   "semantic_review_sha256": "cb147055c43786a181d8fa3b9fac45b26bc042dfeb2ee325c80cd697392c78b4"
+  },
+  {
+   "id": "NIS::active_v2",
+   "subject": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryEntryV2::is_active_at",
+   "route": "y: NEW deployed native whole-body scalar packet, local state/no writable static; canonical cohort equality",
+   "model_theorem": "NIJ_ActiveSlots.op29_exact",
+   "root_domain": "Every valid typed V2 record, every u64 slot; exhaustive four status constructors; all other fields arbitrary. No successful status/slot/validator precondition.",
+   "inner_hypotheses_remaining": [],
+   "native_passes": [
+    "NIS_K048"
+   ],
+   "matched_controls": [
+    "NIS_K049"
+   ],
+   "callee_laws": [
+    "NHY::retirement_v2"
+   ],
+   "source_association": "NIS_active.patch directly invokes actual frozen is_active_at and has_no_retirement_slot. Full deployed features/offline graph/frozen lock/KMX/isolation checks. Pure no-cfg source and u64::MAX constant pinned. NIS_ActiveSlots is import-only retarget, natural four-status/U64 predicate and typed helper composition audited in same canonical/headline closure. Suspended NCF_K002/006 NEVER selected or restored.",
+   "effects": "Immutable typed shared reference and Bool; no allocation/account mutation/runtime syscall/function-pointer dispatch in reached actual method.",
+   "combined": "NIS_L025",
+   "audit": [
+    "NIS_L032 all79 raw roots standard",
+    "NIS_L033 NFX zero defects"
+   ],
+   "trust_reclassification": "Retained P6/D188 option-A/native/compiler/ABI trust; no new runtime item.",
+   "root_model": "AspisR1.RPx_Deployed.deployed; frozen3; L154 parameter",
+   "semantic_review_sha256": "fc5268a65aeed4bcc7cac69ed6ac3d7aa935904c0f27b90d904070e2f372b2ee"
   }
  ],
- "driver_root_status": "OPEN"
+ "driver_root_status": "OPEN",
+ "final_gate": {
+  "combined": "NIS_L058",
+  "raw": [
+   "NIS_L059",
+   "NIS_L062"
+  ],
+  "nfx": "NIS_L060",
+  "audit": "NIS_AUDIT.json",
+  "standard_raw_roots": 138,
+  "modules": 14812
+ }
 }

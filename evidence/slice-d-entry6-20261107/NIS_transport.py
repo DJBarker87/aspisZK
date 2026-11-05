@@ -29,5 +29,5 @@ print(p.read_text() if p.exists() else 'MISSING');sys.exit(r.returncode)
             raise RuntimeError('Infrastructure STOP: missing admission')
         (E/(a+'-admission.json')).write_text(json.dumps(dict(exit=r.returncode,reservation=ad),indent=1)+'\n')
         if r.returncode==0 and ad.get('allowed') is True:return
-        if (r.returncode==78 or ad.get('allowed') is False) and retry<10:time.sleep(180);continue
+        if (r.returncode==78 or ad.get('allowed') is False) and retry<10:time.sleep(60);continue
         raise RuntimeError('Infrastructure STOP: admission')

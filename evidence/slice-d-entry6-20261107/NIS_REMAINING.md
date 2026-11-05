@@ -1,3 +1,24 @@
-# NIS_REMAINING
+# Remaining composed obligations
 
-Pending; no new closure claimed.
+Baseline NIM407/0/192; admitted five rows; final412/0/187. Zero complete entry paths. These are actual native/model association gaps; the new model theorems do not close them.
+
+| Member | Established support | Exact missing obligation / next deliverable |
+|---|---|---|
+| process_instruction → process | Native descriptor forwarding probes and model full-Result forwarding/abort prefixes | Complete (ak) packet over all original input lengths, live alias class, and every reachable child Result constructor. Existing Err(Custom)-only/bounded fixture probes are insufficient. |
+| process → stage1/stage2 | 3/7 dispatch probes and four rejection classes; headline admission applied | Same universal original-buffer/descriptor/full-reply packet and native wrapper port association. No RuntimeCpiReadonlyEntry7 may be added. |
+| stage1 wrapper | Three exact snapshot argument expressions; read/drop model sequence then exclusive enablement | Full SDK OwnedAccount argument/result, allocator cleanup and exclusive-write ABI association for deployed instantiation. Unit logging is not a producer certificate. |
+| stage2 wrapper | Seven exact expressions and model shared-read sequence | Same full SDK value/cleanup/write association, with actual aliases and full caller data domain. |
+| stage1_owned | Native header rejection; distinct3 model law; exact release-only NHL boundary with two-way Digest/Public/Error carriers | Native same-statement/public/proof-suffix split and full Result/cleanup staged association to first_decoded, plus every NHL child domain. Existing candidate port is model-only, never assumed adopted. |
+| stage2_owned | Native header rejection; emitted authenticated tail/observer None/error transport equal to NHT_Tx2AuthModel | Native authentication/encoding/candidate/emission same-SSA schedule and complete port association. Model equality supplies no missing native call cut. |
+| authenticate_asq8_accounts | V1 validator/bounded decoder Rust-reference packets | Full same-record/PDA/ordered-guard native packet and coherent emitted-reference/cohort slot law, including every caller-admitted length. |
+| authenticate_invariant_release_registry | Local V1 validator/decoder cuts, V2 CLOSED decoder202, fresh CLOSED active-at194/196 | Whole same-record V1/V2 branching/PDA/guard/first-error schedule and full caller domain. No inference from an opaque callback's selection. |
+| V1 rows TX2:201/203/206/208 | Four pass/control pairs against independent Rust refs | Decoder packets omit lengths256/320; require universal wrong-length cut or new native cases. Also require emitted reference and exact cohort/slot equality; no existing read-only NBN opaque adapter law supplies it. |
+| TX2:202 decode_verifier_registry_entry_v2 | CLOSED isolated original packets, unchanged validator, canonical import/raw audit | No remaining obligation for this row; not parent closure. |
+| TX1:NGB001 / TX2:211 lib::error | CLOSED full retained staged writer/metadata joins, isolated controls; additional Parse stability pass | No remaining obligation for these occurrences. No 90s timed-out K022/K039/K058 shape rerun. |
+| TX2:194 / TX2:196 active-at | CLOSED NEW native packets K046–049 and canonical model law | Suspended NCF packets remain suspended. No parent/authentication closure inferred. |
+
+All120 native slots used:55 semantic passes,53 matched semantic failing controls,12 own compile failures. No native slot remains to establish the missing actual Rust association packets. Lean-only work continued after native exhaustion: explicit carrier isomorphisms, exact NHL/NHT boundary laws, full error/abort transport, read/drop induction and final raw audit. No remaining independent Lean-only obligation was identified that could supply a missing native execution/SDK producer certificate; unused Lean slots are not filled with restatements. No sibling boundary or unrelated open member was used to hold this work.
+
+Extraction0/1: the binding preflight requires a warm private compiler cache demonstrably reaching Charon inside180s. All three candidate private NHR target paths were absent with zero release/deps objects. Launching NHR_stage.py would repeat NIJ's dependency-compilation failure shape, so extraction was not authorized by its prerequisite. NIS_EXTRACTION_PREFLIGHT.json records this. Next worker needs a privately warmed, pinned cache before the single extraction, then native whole-domain packets under a new allocated budget.
+
+No shared workspace/cache/launcher or sibling candidate was edited. Stopped horizontal candidates and sibling results were read-only, never credited without the stated gate. Retained P6/D188 option-A, SDK/runtime/compiler/allocator trust is reclassified, not removed. 100-bit per-attempt, privacy and two-transaction requirements remain unchanged; no security-target claim is made.

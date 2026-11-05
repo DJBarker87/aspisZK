@@ -1,0 +1,8 @@
+import NIM_NHY_COMBINED_IMPORT
+import NHL_Tx1Model
+#print AdapterRw.aspis_statement.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1
+#print AdapterRw.aspis_statement.pool_v1.payment_relation.PoolV1WithdrawalPublicV1
+#print AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1
+#print AspisR1CurrentCaller.aspis_statement.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1
+#print AspisR1CurrentCaller.aspis_statement.pool_v1.payment_relation.PoolV1WithdrawalPublicV1
+#print AspisR1CurrentCaller.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1

@@ -1,0 +1,21 @@
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NIS_active.rs
+@@ -0,0 +1,18 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn status()->VerifierEntryStatusV1{let n:u8=kani::any();kani::assume(n<4);match n{0=>VerifierEntryStatusV1::Pending,1=>VerifierEntryStatusV1::Active,2=>VerifierEntryStatusV1::Paused,_=>VerifierEntryStatusV1::Retired}}
++fn active_ref(status:VerifierEntryStatusV1,activation:u64,retirement:u64,slot:u64)->bool{matches!(status,VerifierEntryStatusV1::Active)&&activation<=slot&&(retirement==u64::MAX||slot<retirement)}
++fn record1()->VerifierRegistryEntryV1{VerifierRegistryEntryV1{status:status(),statement_version:kani::any(),bump:kani::any(),pool:kani::any(),verifier_program:kani::any(),profile_binding:kani::any(),release_binding:kani::any(),activation_slot:kani::any(),retirement_slot:kani::any(),policy_binding:kani::any()}}
++fn record2()->VerifierRegistryEntryV2{VerifierRegistryEntryV2{status:status(),statement_version:kani::any(),bump:kani::any(),pool:kani::any(),verifier_program:kani::any(),profile_binding:kani::any(),release_binding:kani::any(),loader_program:kani::any(),programdata_address:kani::any(),programdata_bump:kani::any(),executable_hash:kani::any(),expected_upgrade_authority:kani::any(),activation_slot:kani::any(),retirement_slot:kani::any(),policy_binding:kani::any()}}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn active1(){let r=record1();let slot:u64=kani::any();assert!(r.is_active_at(slot)==active_ref(r.status,r.activation_slot,r.retirement_slot,slot));}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn active1_wrong(){let r=record1();let slot:u64=kani::any();assert!(r.is_active_at(slot)!=active_ref(r.status,r.activation_slot,r.retirement_slot,slot));}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn active2(){let r=record2();let slot:u64=kani::any();assert!(r.is_active_at(slot)==active_ref(r.status,r.activation_slot,r.retirement_slot,slot));}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn active2_wrong(){let r=record2();let slot:u64=kani::any();assert!(r.is_active_at(slot)!=active_ref(r.status,r.activation_slot,r.retirement_slot,slot));}

@@ -17,6 +17,8 @@ for m in order:
     raw=paths[m].read_text()
     out=re.sub(r'^import ([\w.]+)',lambda x:'import '+mp.get(x[1],x[1]),raw,flags=re.M)
     if m=='NIJ_COMBINED_IMPORT':out='import NIM_COMBINED_IMPORT\nimport NIM_NHJ_COMBINED_IMPORT\n'+out
+    if m=='NIJ_COMBINED_IMPORT' and (E/'NIS_FINAL_IMPORTS.json').exists():
+        ls=out.splitlines(True);i=next(i for i,l in enumerate(ls) if not l.startswith('import '));out=''.join(ls[:i])+''.join('import '+x+'\n' for x in json.loads((E/'NIS_FINAL_IMPORTS.json').read_text()))+''.join(ls[i:])
     q=E/(mp[m]+'.lean')
     if '--check' in sys.argv:assert q.read_text()==out
     else:q.write_text(out)

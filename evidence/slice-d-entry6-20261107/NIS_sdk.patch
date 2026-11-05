@@ -1,0 +1,111 @@
+--- /dev/null
++++ b/programs/r1-cost-probe/src/NIS_sdk.rs
+@@ -0,0 +1,108 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[derive(Clone,Copy)]struct Log{n:usize,account:[usize;7],first:[usize;7],second:[usize;7]}
++fn record(a:&AccountInfo<'_>,first:usize,second:usize,log:&mut Log){let k=log.n;log.account[k]=a as *const AccountInfo<'_> as usize;log.first[k]=first;log.second[k]=second;log.n+=1;}
++fn first_cut(accounts:&[AccountInfo<'_>],log:&mut Log){let _owned=[
++ record(&accounts[0],POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES+verifier::PROOF_BYTES,POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES+verifier::PROOF_BYTES,log),
++ record(&accounts[1],POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES,POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES,log),
++ record(&accounts[2],CHECKPOINT_TAIL_BYTES,CHECKPOINT_TAIL_BYTES,log)];}
++fn second_cut(accounts:&[AccountInfo<'_>],log:&mut Log){let _owned=[
++ record(&accounts[0],POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES+verifier::PROOF_BYTES,POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES+verifier::PROOF_BYTES,log),
++ record(&accounts[1],POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES,POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES,log),
++ record(&accounts[2],POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES,POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES,log),
++ record(&accounts[3],POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES,POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES,log),
++ record(&accounts[4],POOL_V1_VERIFIER_REGISTRY_BYTES,POOL_V1_VERIFIER_REGISTRY_V2_BYTES,log),
++ record(&accounts[5],POOL_V1_VERIFIER_ENTRY_BYTES,POOL_V1_VERIFIER_ENTRY_V2_BYTES,log),
++ record(&accounts[6],CHECKPOINT_TAIL_BYTES,CHECKPOINT_TAIL_BYTES,log)];}
++fn check<const SECOND:bool,const PORT:usize>(wrong:bool){
++ let p=Pubkey::new_from_array(kani::any());
++ let keys=[Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any())];
++ let owners=[Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any()),Pubkey::new_from_array(kani::any())];
++ let mut lamps:[u64;7]=kani::any();let [l0,l1,l2,l3,l4,l5,l6]=&mut lamps;
++ let mut buffers:[[u8;1];7]=kani::any();let [b0,b1,b2,b3,b4,b5,b6]=&mut buffers;
++ let a=core::mem::ManuallyDrop::new([
++ AccountInfo::new(&keys[0],kani::any(),kani::any(),l0,b0,&owners[0],kani::any(),kani::any()),
++ AccountInfo::new(&keys[1],kani::any(),kani::any(),l1,b1,&owners[1],kani::any(),kani::any()),
++ AccountInfo::new(&keys[2],kani::any(),kani::any(),l2,b2,&owners[2],kani::any(),kani::any()),
++ AccountInfo::new(&keys[3],kani::any(),kani::any(),l3,b3,&owners[3],kani::any(),kani::any()),
++ AccountInfo::new(&keys[4],kani::any(),kani::any(),l4,b4,&owners[4],kani::any(),kani::any()),
++ AccountInfo::new(&keys[5],kani::any(),kani::any(),l5,b5,&owners[5],kani::any(),kani::any()),
++ AccountInfo::new(&keys[6],kani::any(),kani::any(),l6,b6,&owners[6],kani::any(),kani::any()),
++ ]);
++
++ let count=if SECOND{7}else{3};let accounts=&a[..count];
++ let base:usize=kani::any();kani::assume(base<=7-count);
++ let mut log=Log{n:base,account:kani::any(),first:kani::any(),second:kani::any()};let before=log;
++ if SECOND{second_cut(accounts,&mut log)}else{first_cut(accounts,&mut log)};
++ let (left,right)=if SECOND{match PORT{0=>(58295,58295),1=>(384,384),2=>(192,192),3=>(768,768),4=>(128,256),5=>(192,320),_=>(1768,1768)}}else{match PORT{0=>(58295,58295),1=>(1880,1880),_=>(1768,1768)}};
++ if wrong{log.first[base+PORT]^=1;}
++ assert!(log.n==base+count&&log.account[base+PORT]==&accounts[PORT] as *const AccountInfo<'_> as usize&&log.first[base+PORT]==left&&log.second[base+PORT]==right);
++ let j:usize=kani::any();kani::assume(j<7);
++ if j<base||j>=base+count{assert!(log.account[j]==before.account[j]&&log.first[j]==before.first[j]&&log.second[j]==before.second[j]);}
++}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn first0(){check::<false,0 >(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn first0_wrong(){check::<false,0 >(true);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn first1(){check::<false,1 >(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn first1_wrong(){check::<false,1 >(true);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn first2(){check::<false,2 >(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn first2_wrong(){check::<false,2 >(true);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn second0(){check::<true,0 >(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn second0_wrong(){check::<true,0 >(true);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn second1(){check::<true,1 >(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn second1_wrong(){check::<true,1 >(true);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn second2(){check::<true,2 >(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn second2_wrong(){check::<true,2 >(true);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn second3(){check::<true,3 >(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn second3_wrong(){check::<true,3 >(true);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn second4(){check::<true,4 >(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn second4_wrong(){check::<true,4 >(true);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn second5(){check::<true,5 >(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn second5_wrong(){check::<true,5 >(true);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn second6(){check::<true,6 >(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn second6_wrong(){check::<true,6 >(true);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn first0_stability(){check::<false,0>(false);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn second0_stability(){check::<true,0>(false);}
