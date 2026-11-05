@@ -1,0 +1,7 @@
+{
+ "original_body": "fn parse_record_at<'a>(\n    bytes: &'a [u8],\n    row: u8,\n    offset: usize,\n) -> Result<(&'a [u8], usize), Error> {\n    let length = 5 + row_shape(row).unwrap().1;\n    let framed = bytes\n        .get(offset..offset + length)\n        .ok_or(Error::Length { row })?;\n    parse_record(row, framed)?;\n    Ok((framed, offset + length))\n}",
+ "cut_body": "{\n    let length = 5 + row_shape(row).unwrap().1;\n    let framed = bytes\n        .get(offset..offset + length)\n        .ok_or(Error::Length { row })?;\n    record_cut(row, framed, log)?;\n    Ok((framed, offset + length))\n}",
+ "only_substitution": "parse_record(row,framed) -> record_cut(row,framed,log)",
+ "domain": "row<=26, byte length<=57607, offset<=57607; SAME live shared backing, all data arbitrary under descriptor identity/readonly frame",
+ "child_domain": "5<=framed.len<=3717 at actual offset; all11 child errors and arbitrary payloads transported"
+}

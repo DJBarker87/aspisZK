@@ -1,0 +1,53 @@
+{"attempt": "NGX_L014", "exit_status": 1, "wall_seconds": 3.630792475072667, "peak_rss_kib": "5940972", "swaps": "0", "print_axioms": ["'AspisR1.NGX_SemanticSample.rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NGX_SemanticSample.returned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NGX_SemanticSample.digest_domain' depends on axioms: [propext, Quot.sound]"]}
+NGX_generated/NGX_SemanticSample.lean:19:51: error: unsolved goals
+H : Type
+D : aspis_core.Digest32 H
+self : r1_wire.SemanticTranscript H
+row : U8
+framed : Slice U8
+different : row ≠ self.next_row
+⊢ (if row ≠ self.next_row then ok (core.result.Result.Err (r1_wire.Error.RowOrder self.next_row row), self)
+    else do
+      let s ← lift self.state.to_slice
+      let i ← 160#u8 + row
+      let s1 ← lift (Array.make 2#usize [0#u8, i] ⋯).to_slice
+      let s2 ← lift (Array.make 3#usize [s, s1, framed] ⋯).to_slice
+      let absorbed ← D.digest self.hash s2
+      let s3 ← lift absorbed.to_slice
+      let s4 ← lift (Array.make 1#usize [1#u8] r1_wire.SemanticTranscript.sample_block_validated._proof_4)
+...
+         [absorbed.to_slice,
+                  (Array.make 1#usize [1#u8] r1_wire.SemanticTranscript.sample_block_validated._proof_4).to_slice]
+                ⋯).to_slice
+      let a ←
+        D.digest self.hash
+            (Array.make 2#usize
+                [absorbed.to_slice,
+                  (Array.make 1#usize [2#u8] r1_wire.SemanticTranscript.sample_block_validated._proof_7).to_slice]
+                ⋯).to_slice
+      let i1 ← self.next_row + 1#u8
+      ok (core.result.Result.Ok block, { state := a, hash := self.hash, next_row := i1 })) =
+    ok (core.result.Result.Ok block, { state := final, hash := self.hash, next_row := next })
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NGX_generated/NGX_SemanticSample.lean:36:28: warning: This simp argument is unused:
+  htag
+
+Hint: Omit it from the simp argument list.
+  simp only [lift, ̲bind_tc_ok,h̵t̵ ̲ag̵,̵a̵bsorbParts, ̲readParts] at first second third ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NGX_SemanticSample.rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NGX_SemanticSample.returned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NGX_SemanticSample.digest_domain' depends on axioms: [propext, Quot.sound]
+
+Running as unit: run-r14a79b32403740078cdb216d63310fa0.scope; invocation ID: d0a42d1f935449ad8eac345df3b8787e

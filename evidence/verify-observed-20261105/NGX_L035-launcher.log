@@ -1,0 +1,50 @@
+{"attempt": "NGX_L035", "exit_status": 1, "wall_seconds": 4.323248918168247, "peak_rss_kib": "5916140", "swaps": "0", "print_axioms": ["'AspisR1.NGX_CodeTrace.pure_run' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NGX_CodeTrace.lift_run' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NGX_CodeTrace.lift_bind' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NGX_CodeTrace.digest_bind' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NGX_generated/NGX_CodeTrace.lean:28:59: error: Tactic `rfl` failed: The left-hand side
+  run (effects.digest D hash parts >>= next)
+is not definitionally equal to the right-hand side
+  match D.digest hash parts with
+  | ok value =>
+    let tail := run (next value);
+    (Event.digest D hash parts (ok value) :: tail.1, tail.2)
+  | fail error => ([Event.digest D hash parts (fail error)], fail error)
+  | div => ([Event.digest D hash parts div], div)
+
+A H : Type
+D : aspis_core.Digest32 H
+hash : H
+parts : Slice (Slice U8)
+next : Std.Array U8 32#usize → Code A
+⊢ run (effects.digest D hash parts >>= next) =
+    match D.digest hash parts with
+    | ok value =>
+      let tail := run (next value);
+    
+...
+NGX_generated/NGX_CodeTrace.lean:28:59: error: Tactic `rfl` failed: The left-hand side
+  run (effects.digest D hash parts >>= next)
+is not definitionally equal to the right-hand side
+  match D.digest hash parts with
+  | ok value =>
+    let tail := run (next value);
+    (Event.digest D hash parts (ok value) :: tail.1, tail.2)
+  | fail error => ([Event.digest D hash parts (fail error)], fail error)
+  | div => ([Event.digest D hash parts div], div)
+
+A H : Type
+D : aspis_core.Digest32 H
+hash : H
+parts : Slice (Slice U8)
+next : Std.Array U8 32#usize → Code A
+⊢ run (effects.digest D hash parts >>= next) =
+    match D.digest hash parts with
+    | ok value =>
+      let tail := run (next value);
+      (Event.digest D hash parts (ok value) :: tail.1, tail.2)
+    | fail error => ([Event.digest D hash parts (fail error)], fail error)
+    | div => ([Event.digest D hash parts div], div)
+'AspisR1.NGX_CodeTrace.pure_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGX_CodeTrace.lift_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGX_CodeTrace.lift_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGX_CodeTrace.digest_bind' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r1b355c1d8226471697ee95dae1f838bf.scope; invocation ID: 86de13b5e3cc4834b173ea00039e2a70

@@ -1,0 +1,124 @@
+NGX_generated/NGX_SemanticSample.lean:19:51: error: unsolved goals
+H : Type
+D : aspis_core.Digest32 H
+self : r1_wire.SemanticTranscript H
+row : U8
+framed : Slice U8
+different : row ≠ self.next_row
+⊢ (if row ≠ self.next_row then ok (core.result.Result.Err (r1_wire.Error.RowOrder self.next_row row), self)
+    else do
+      let s ← lift self.state.to_slice
+      let i ← 160#u8 + row
+      let s1 ← lift (Array.make 2#usize [0#u8, i] ⋯).to_slice
+      let s2 ← lift (Array.make 3#usize [s, s1, framed] ⋯).to_slice
+      let absorbed ← D.digest self.hash s2
+      let s3 ← lift absorbed.to_slice
+      let s4 ← lift (Array.make 1#usize [1#u8] r1_wire.SemanticTranscript.sample_block_validated._proof_4).to_slice
+      let s5 ← lift (Array.make 2#usize [s3, s4] ⋯).to_slice
+      let block ← D.digest self.hash s5
+      let s6 ← lift absorbed.to_slice
+      let s7 ← lift (Array.make 1#usize [2#u8] r1_wire.SemanticTranscript.sample_block_validated._proof_7).to_slice
+      let s8 ← lift (Array.make 2#usize [s6, s7] ⋯).to_slice
+      let a ← D.digest self.hash s8
+      let i1 ← self.next_row + 1#u8
+      ok (core.result.Result.Ok block, { state := a, hash := self.hash, next_row := i1 })) =
+    ok (core.result.Result.Err (r1_wire.Error.RowOrder self.next_row row), self)
+NGX_generated/NGX_SemanticSample.lean:21:24: warning: This simp argument is unused:
+  different
+
+Hint: Omit it from the simp argument list.
+  simp only [bne_iff_ne, d̵i̵f̵f̵e̵r̵e̵n̵t̵,̵ ̵if_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGX_generated/NGX_SemanticSample.lean:21:35: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [bne_iff_ne, different,̵ ̵i̵f̵_̵t̵r̵u̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGX_generated/NGX_SemanticSample.lean:37:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  D.digest self.hash
+    (Array.make 3#usize [self.state.to_slice, (Array.make 2#usize [0#u8, tag] ⋯).to_slice, framed] ⋯).to_slice
+in the target expression
+  (do
+      let i ← 160#u8 + self.next_row
+      let absorbed ←
+        D.digest self.hash
+            (Array.make 3#usize [self.state.to_slice, (Array.make 2#usize [0#u8, i] ⋯).to_slice, framed] ⋯).to_slice
+      let block ←
+        D.digest self.hash
+            (Array.make 2#usize
+                [absorbed.to_slice,
+                  (Array.make 1#usize [1#u8] r1_wire.SemanticTranscript.sample_block_validated._proof_4).to_slice]
+                ⋯).to_slice
+      let a ←
+        D.digest self.hash
+            (Array.make 2#usize
+                [absorbed.to_slice,
+                  (Array.make 1#usize [2#u8] r1_wire.SemanticTranscript.sample_block_validated._proof_7).to_slice]
+                ⋯).to_slice
+      let i1 ← self.next_row + 1#u8
+      ok (core.result.Result.Ok block, { state := a, hash := self.hash, next_row := i1 })) =
+    ok (core.result.Result.Ok block, { state := final, hash := self.hash, next_row := next })
+
+H : Type
+D : aspis_core.Digest32 H
+self : r1_wire.SemanticTranscript H
+row tag next : U8
+framed : Slice U8
+absorbed block final : Bytes32
+same : row = self.next_row
+htag : 160#u8 + row = ok tag
+hnext : self.next_row + 1#u8 = ok next
+first :
+  D.digest self.hash
+      (Array.make 3#usize [self.state.to_slice, (Array.make 2#usize [0#u8, tag] ⋯).to_slice, framed] ⋯).to_slice =
+    ok absorbed
+second :
+  D.digest self.hash (Array.make 2#usize [Array.to_slice absorbed, (Array.make 1#usize [1#u8] ⋯).to_slice] ⋯).to_slice =
+    ok block
+third :
+  D.digest self.hash (Array.make 2#usize [Array.to_slice absorbed, (Array.make 1#usize [2#u8] ⋯).to_slice] ⋯).to_slice =
+    ok final
+⊢ (do
+      let i ← 160#u8 + self.next_row
+      let absorbed ←
+        D.digest self.hash
+            (Array.make 3#usize [self.state.to_slice, (Array.make 2#usize [0#u8, i] ⋯).to_slice, framed] ⋯).to_slice
+      let block ←
+        D.digest self.hash
+            (Array.make 2#usize
+                [absorbed.to_slice,
+                  (Array.make 1#usize [1#u8] r1_wire.SemanticTranscript.sample_block_validated._proof_4).to_slice]
+                ⋯).to_slice
+      let a ←
+        D.digest self.hash
+            (Array.make 2#usize
+                [absorbed.to_slice,
+                  (Array.make 1#usize [2#u8] r1_wire.SemanticTranscript.sample_block_validated._proof_7).to_slice]
+                ⋯).to_slice
+      let i1 ← self.next_row + 1#u8
+      ok (core.result.Result.Ok block, { state := a, hash := self.hash, next_row := i1 })) =
+    ok (core.result.Result.Ok block, { state := final, hash := self.hash, next_row := next })
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NGX_generated/NGX_SemanticSample.lean:36:28: warning: This simp argument is unused:
+  htag
+
+Hint: Omit it from the simp argument list.
+  simp only [lift, ̲bind_tc_ok,h̵t̵ ̲ag̵,̵a̵bsorbParts, ̲readParts] at first second third ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NGX_SemanticSample.rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NGX_SemanticSample.returned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NGX_SemanticSample.digest_domain' depends on axioms: [propext, Quot.sound]

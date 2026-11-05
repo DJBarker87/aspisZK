@@ -16,3 +16,23 @@ Retained trust: P6/D188 option-A transport (reclassification), P1/runtime digest
 Release artifacts inherited only; no rebuild trigger because shipped source is unchanged: default f8c0ec72…, devnet 63ad3e9c…, Pool 121f3e29….
 
 Stage1 receipts: NGX_K005 positive/K006 intended failure; NGX_L004 emitted source law; L005 combined import; L008 fixtures; L009 raw audit; L012 scan. NGX_validate.py PASS preserves all598 other baseline rows. Host seed176 files/25,871,488 bytes in isolated NGX_seed_20261105 under the assigned retained cache. No cache deleted.
+
+Stage2a checkpoint (partial, not new row admission): native sample K008/K009,
+new K011/K012, length stage K013/K014, payload K015/K016, parse_record
+K017/K018 and record_at support K019/K020 have positive/intended-failure pairs.
+L015/L016 supply sample source/arithmetic/totality; L020 constructor full Result;
+L023 payload full Result/drop5; L029 parser full Result/validator domain;
+L032 proves the exact38 private-domain bytes and five-part runtime bounds.
+These are NOT yet additional CLOSED rows: canonical Code.run ordered-effects
+laws, combined replay/raw audit/scan and additive admission remain pending.
+Do not promote model erasure or sparse payload fixtures into full runtime credit.
+NGC's CLOSED descriptor/reply bridge plus the SAME memory-map frame must be used.
+
+L033's legacy import conflict was own input selection, not a host fault.
+L034 confirms canonical Code/run/sampleBlock/newTranscript already load via NGK.
+Reuse those owners; no new Code datatype or stand-in join is introduced.
+
+Repeated2MB complete cargo metadata now lives ONCE by SHA256 in NGX_INPUTS/;
+NGX_METADATA_MANIFEST.json maps every original name to its hash-checked input.
+NGT_validate.py was re-run read-only and passes (NGX_NGT_REVALIDATION.json).
+All source files under crates/programs remain byte-identical to frozen4bb3b3f5.

@@ -1,0 +1,37 @@
+{"attempt": "NGX_L018", "exit_status": 0, "wall_seconds": 4.574949729023501, "peak_rss_kib": "5939600", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.core.num.tryFromUScalar : {srcTy : UScalarTy} →
+  (tgtTy : UScalarTy) → UScalar srcTy → Result (core.result.Result (UScalar tgtTy) core.num.error.TryFromIntError) :=
+fun {srcTy} tgtTy i =>
+  if ↑i ≤ UScalar.max tgtTy then ok (core.result.Result.Ok (UScalar.cast tgtTy i)) else ok (core.result.Result.Err ())
+def AspisR1PublicPreparation.FinishModel.payload : r1_wire.Prefix →
+  U8 → Result (core.result.Result (Slice U8) r1_wire.Error) :=
+fun self row => do
+  let r ← self.record row
+  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+  match cf with
+    | core.ops.control_flow.ControlFlow.Continue val => do
+      let s ← core.slice.index.Slice.index (core.slice.index.SliceInde
+...
+          | core.ops.control_flow.ControlFlow.Break residual =>
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              AspisR1PrefixAggregateParser.r1_wire.Prefix
+                              (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          AspisR1PrefixAggregateParser.r1_wire.Prefix
+                          (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      AspisR1PrefixAggregateParser.r1_wire.Prefix
+                      (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  AspisR1PrefixAggregateParser.r1_wire.Prefix
+                  (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              AspisR1PrefixAggregateParser.r1_wire.Prefix
+              (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+      | core.result.Result.Err a => ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length 0#u8))
+
+Running as unit: run-rda4961e3eb07479a8a37ad708985f6ce.scope; invocation ID: f532647e958d451aaf1a17b99a2aad2b
