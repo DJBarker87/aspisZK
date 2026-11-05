@@ -1,0 +1,69 @@
+NHF_generated/NHF_ViewCut.lean:38:42: error: unsolved goals
+proof semantic y1 : Slice U8
+⊢ (do
+      let s ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+            { start := 7495#usize, «end» := 7527#usize }
+      let o ← viewFromBytes s
+      let r ← viewOptionOkOr o verifier.Error.Parse
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let s1 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                { start := 7527#usize, «end» := 7751#usize }
+          let s2 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                { start := 7751#usize, «end» := 7783#usize }
+          let r1 ← core.array.TryFromSharedArraySlice.try_from 32#usize s2
+          let a ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r1
+          let s3 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                { start := 7783#usize, «end» := 8007#usize }
+          let s4 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                { start := 8007#usize, «end» := 10055#usize }
+          let s5 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) proof { «end» := 0#usize }
+          ok
+              (core.result.Result.Ok
+                { variant := transport.Variant.S2, semantic := semantic, y1 := y1, inactive := val, round0 := s1,
+                  folded_root := some a, round1 := s3, final_message := s4, query_bytes := s5 })
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.View
+            (core.convert.FromSame verifier.Error) residual) =
+    do
+    let bytes ←
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+          { start := 7495#usize, «end» := 7527#usize }
+    let reply ← viewFromBytes bytes
+    let r ← viewOptionOkOr reply verifier.Error.Parse
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue value => do
+        let part0 ←
+          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+              { start := 7527#usize, «end» := 7751#usize }
+        let root ←
+          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+              { start := 7751#usize, «end» := 7783#usize }
+        let converted ← core.array.TryFromSharedArraySlice.try_from 32#usize root
+        let rootArray ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError converted
+        let part1 ←
+          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+              { start := 7783#usize, «end» := 8007#usize }
+        let message ←
+          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+              { start := 8007#usize, «end» := 10055#usize }
+        let emptyBytes ←
+          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) proof { «end» := 0#usize }
+        ok
+            (core.result.Result.Ok
+              { variant := transport.Variant.S2, semantic := semantic, y1 := y1, inactive := value, round0 := part0,
+                folded_root := some rootArray, round1 := part1, final_message := message, query_bytes := emptyBytes })
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.View
+          (core.convert.FromSame verifier.Error) residual
+'AspisR1.NHF_ViewCut.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NHF_ViewCut.reject' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NHF_ViewCut.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]

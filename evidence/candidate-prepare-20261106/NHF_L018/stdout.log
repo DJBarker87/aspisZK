@@ -1,0 +1,64 @@
+NHF_generated/NHF_ViewFinish.lean:29:41: warning: This simp argument is unused:
+  core.slice.index.SliceIndexRangeToUsizeSlice
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵T̵o̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵,̵[̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲ core.slice.index.SliceIndexRangeToUsizeSlice.index]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NHF_generated/NHF_ViewFinish.lean:42:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  core.array.TryFromSharedArraySlice.try_from 32#usize (select proof 7751 32)
+in the target expression
+  (do
+      let converted ←
+        core.array.TryFromSharedArraySlice.try_from 32#usize (select proof (↑7751#usize) (↑7783#usize - ↑7751#usize))
+      let rootArray ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError converted
+      let part1 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+            { start := 7783#usize, «end» := 8007#usize }
+      let message ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+            { start := 8007#usize, «end» := 10055#usize }
+      let emptyBytes ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) proof { «end» := 0#usize }
+      ok
+          (core.result.Result.Ok
+            { variant := transport.Variant.S2, semantic := semantic, y1 := y1, inactive := inactive,
+              round0 := select proof (↑7527#usize) (↑7751#usize - ↑7527#usize), folded_root := some rootArray,
+              round1 := part1, final_message := message, query_bytes := emptyBytes })) =
+    ok (core.result.Result.Ok (value proof semantic y1 inactive size))
+
+proof semantic y1 : Slice U8
+inactive : E
+size : 10055 ≤ (↑proof).length
+⊢ (do
+      let converted ←
+        core.array.TryFromSharedArraySlice.try_from 32#usize (select proof (↑7751#usize) (↑7783#usize - ↑7751#usize))
+      let rootArray ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError converted
+      let part1 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+            { start := 7783#usize, «end» := 8007#usize }
+      let message ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+            { start := 8007#usize, «end» := 10055#usize }
+      let emptyBytes ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) proof { «end» := 0#usize }
+      ok
+          (core.result.Result.Ok
+            { variant := transport.Variant.S2, semantic := semantic, y1 := y1, inactive := inactive,
+              round0 := select proof (↑7527#usize) (↑7751#usize - ↑7527#usize), folded_root := some rootArray,
+              round1 := part1, final_message := message, query_bytes := emptyBytes })) =
+    ok (core.result.Result.Ok (value proof semantic y1 inactive size))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (7751 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.NHF_ViewFinish.array_conversion' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NHF_ViewFinish.empty_read' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NHF_ViewFinish.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

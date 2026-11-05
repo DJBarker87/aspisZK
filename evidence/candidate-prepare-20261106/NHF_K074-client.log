@@ -1,0 +1,62 @@
+{"attempt": "NHF_K074", "exit_status": 0, "wall_seconds": 4.255658053094521, "peak_rss_kib": "321088", "swaps": "0", "print_axioms": "N/A: kani"}
+| fn KMX_clone_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];dst.clone_from_slice(&src);assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_clone_wrong`
+
+warning: function `KMX_extend_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-candidate-prepare-20261106/NHF_src/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:58:4
+   |
+58 | fn KMX_extend_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);let k:usize=kani...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_correct`
+
+warning: function `KMX_extend_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-candidate-prepare-20261106/NHF_src/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:61:4
+   |
+61 | fn KMX_extend_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);assert_eq!(ds...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_wrong`
+
+warning: function `KMX_to_vec_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-candidate-prepare-20261106/NHF_src/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:64:4
+   |
+64 | fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_correct`
+
+warning: function `KMX_to_vec_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-candidate-prepare-20261106/NHF_src/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-candidate-prepare-20261106/NHF_src/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-candidate-prepare-20261106/NHF_src/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.76s
+Checking harness verifier::candidate::NHF_stages::semantic_stage...
+
+VERIFICATION RESULT:
+ ** 0 of 150 failed (3 unreachable)
+
+ ** 2 of 2 cover properties satisfied
+
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 1.1928376s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
