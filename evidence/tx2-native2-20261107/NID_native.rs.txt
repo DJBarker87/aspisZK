@@ -429,49 +429,49 @@ fn echeck32_window(){echeck_window::<32>();}
 fn echeck32_window_renamed(){echeck_window::<32>();}
 
 #[kani::proof]
-#[kani::unwind(8)]
+#[kani::unwind(258)]
 #[kani::stub(core::ptr::copy_nonoverlapping, KMX_copy_nonoverlapping)]
 #[kani::stub(<[u8]>::copy_from_slice, KMX_copy_from_slice)]
 fn query_raw_limb0_window(){raw_window::<0>();}
 
 #[kani::proof]
-#[kani::unwind(8)]
+#[kani::unwind(258)]
 #[kani::stub(core::ptr::copy_nonoverlapping, KMX_copy_nonoverlapping)]
 #[kani::stub(<[u8]>::copy_from_slice, KMX_copy_from_slice)]
 fn query_raw_limb0_window_renamed(){raw_window::<0>();}
 
 #[kani::proof]
-#[kani::unwind(8)]
+#[kani::unwind(258)]
 #[kani::stub(core::ptr::copy_nonoverlapping, KMX_copy_nonoverlapping)]
 #[kani::stub(<[u8]>::copy_from_slice, KMX_copy_from_slice)]
 fn query_raw_limb1_window(){raw_window::<1>();}
 
 #[kani::proof]
-#[kani::unwind(8)]
+#[kani::unwind(258)]
 #[kani::stub(core::ptr::copy_nonoverlapping, KMX_copy_nonoverlapping)]
 #[kani::stub(<[u8]>::copy_from_slice, KMX_copy_from_slice)]
 fn query_raw_limb1_window_renamed(){raw_window::<1>();}
 
 #[kani::proof]
-#[kani::unwind(8)]
+#[kani::unwind(258)]
 #[kani::stub(core::ptr::copy_nonoverlapping, KMX_copy_nonoverlapping)]
 #[kani::stub(<[u8]>::copy_from_slice, KMX_copy_from_slice)]
 fn query_raw_limb2_window(){raw_window::<2>();}
 
 #[kani::proof]
-#[kani::unwind(8)]
+#[kani::unwind(258)]
 #[kani::stub(core::ptr::copy_nonoverlapping, KMX_copy_nonoverlapping)]
 #[kani::stub(<[u8]>::copy_from_slice, KMX_copy_from_slice)]
 fn query_raw_limb2_window_renamed(){raw_window::<2>();}
 
 #[kani::proof]
-#[kani::unwind(8)]
+#[kani::unwind(258)]
 #[kani::stub(core::ptr::copy_nonoverlapping, KMX_copy_nonoverlapping)]
 #[kani::stub(<[u8]>::copy_from_slice, KMX_copy_from_slice)]
 fn query_raw_limb3_window(){raw_window::<3>();}
 
 #[kani::proof]
-#[kani::unwind(8)]
+#[kani::unwind(258)]
 #[kani::stub(core::ptr::copy_nonoverlapping, KMX_copy_nonoverlapping)]
 #[kani::stub(<[u8]>::copy_from_slice, KMX_copy_from_slice)]
 fn query_raw_limb3_window_renamed(){raw_window::<3>();}
@@ -560,3 +560,52 @@ fn raw32_offset_partition6(){raw32_split_check::<6>();}
 #[kani::stub(core::ptr::copy_nonoverlapping, KMX_copy_nonoverlapping)]
 #[kani::stub(<[u8]>::copy_from_slice, KMX_copy_from_slice)]
 fn raw32_offset_partition6_renamed(){raw32_split_check::<6>();}
+fn resume_k_limb_check<const J:usize>(){let bytes:[u8;1768]=kani::any();let row:usize=kani::any();kani::assume(row<83);let at=if kani::any(){304}else{408+16*row};let mut r=Reader{bytes:&bytes,at};let result=r.k();if let Ok(q)=result{let mut observed=kw(q,J);if cfg!(NID_invert){observed^=1;}assert!(observed==word(&bytes,at+4*J));}}
+
+#[kani::proof]
+#[kani::unwind(10)]
+#[kani::stub(core::ptr::copy_nonoverlapping, KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice, KMX_copy_from_slice)]
+fn resume_k_limb0(){resume_k_limb_check::<0>();}
+
+#[kani::proof]
+#[kani::unwind(10)]
+#[kani::stub(core::ptr::copy_nonoverlapping, KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice, KMX_copy_from_slice)]
+fn resume_k_limb0_renamed(){resume_k_limb_check::<0>();}
+
+#[kani::proof]
+#[kani::unwind(10)]
+#[kani::stub(core::ptr::copy_nonoverlapping, KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice, KMX_copy_from_slice)]
+fn resume_k_limb1(){resume_k_limb_check::<1>();}
+
+#[kani::proof]
+#[kani::unwind(10)]
+#[kani::stub(core::ptr::copy_nonoverlapping, KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice, KMX_copy_from_slice)]
+fn resume_k_limb1_renamed(){resume_k_limb_check::<1>();}
+
+#[kani::proof]
+#[kani::unwind(10)]
+#[kani::stub(core::ptr::copy_nonoverlapping, KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice, KMX_copy_from_slice)]
+fn resume_k_limb2(){resume_k_limb_check::<2>();}
+
+#[kani::proof]
+#[kani::unwind(10)]
+#[kani::stub(core::ptr::copy_nonoverlapping, KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice, KMX_copy_from_slice)]
+fn resume_k_limb2_renamed(){resume_k_limb_check::<2>();}
+
+#[kani::proof]
+#[kani::unwind(10)]
+#[kani::stub(core::ptr::copy_nonoverlapping, KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice, KMX_copy_from_slice)]
+fn resume_k_limb3(){resume_k_limb_check::<3>();}
+
+#[kani::proof]
+#[kani::unwind(10)]
+#[kani::stub(core::ptr::copy_nonoverlapping, KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice, KMX_copy_from_slice)]
+fn resume_k_limb3_renamed(){resume_k_limb_check::<3>();}

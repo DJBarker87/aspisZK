@@ -23,3 +23,16 @@ NID_BoundedReaders.k/e upgrades the retained scalar EqOk to exact full Result
 ONLY with the caller's actual in-bounds read. NID_BoundedReaders.weight/semantic
 derive the bound from original checkpoint1768 and exact cursor712+16*i /408+16*i.
 No global EqOk-to-equality coercion is admitted.
+
+| Final window/copy operation | Named paired theorem | Exact domain / retained boundary |
+| --- | --- | --- |
+| RawWindowLog<J>.enter, J=0/1/2/3 | NID_RawWindowFrame.row/rows; NID_KmxComposition.copy_four_spec/copy_four_frame/rows_spec/all64/selected | Arbitrary SAME64-row raw vector, each4 u64, arbitrary row<64; one contiguous8-byte limb per native harness. K107–118. Four disjoint windows compose to KMX's indexed-copy value law and symbolic64-row induction. Native/source carrier association, valid pointers, non-overlap, allocation and ABI remain the existing caller/P6 domains. |
+| Actual Reader.raw16/raw32 | T2Nat_RawJoin.reference, NID_RawOffsetCover.cover/unique | SAME checkpoint1768, all valid source offsets;32-byte source coverage is seven partitions. K053–089. Full native source is frozen, not a replacement raw reader. |
+| Actual Reader.k | NID_BoundedReaders.k; CheckpointBytes3Reader.read_k_c5 | Full Result on all valid16-byte offsets K090–092; value facets on actual resume schedule K094–105. NID_KOffsetCover covers rho,10 semantic values,4 coordinates, power and64 weights. No claim for other native caller offset schedules. |
+| Actual Reader.e | NID_BoundedReaders.e; CheckpointBytes3Reader.read_e_c5 | Ordinary Result predicate K119/K120 on all valid32-byte offsets; complete native value/source/caller packet still belongs to resume integration. No Observer/fn pointer, no stub_verified. |
+
+The KMX source used by the value laws is byte-identical to the prescribed patch:
+NID_KMX_VALUE_PIN.json records both patch and extracted Lean source hashes. New
+copy composition is symbolic; no concrete256-cell recurrence is normalized.
+No multiplication stub, new cryptographic assumption or digest-value model is
+introduced. The complete actual op18/op5/op19 laws remain open.

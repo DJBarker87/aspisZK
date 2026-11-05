@@ -46,3 +46,33 @@ L026: dependent alpha index needed an explicit actual Array length bound; L027
 adds that bound and passes. No theorem statement was weakened. L028 raw-row
 window composition passes. L018's initial reads transport needed explicit
 let-pattern normalization; L019 passes the corrected full Result statement.
+
+K093: actual Reader.k selected value at arbitrary1768 offset / arbitrary limb
+TIMEOUT90s. No unchanged rerun. K094–105 replaces it by four fixed limb windows
+on the actual resume K-read schedule (rho304, or408+16*row with row<83).
+NID_KOffsetCover proves every semantic/coordinate/power/weight call-site offset
+is included and bounded. Result K090–092 already covers all valid offsets.
+This narrower native value domain is not claimed for other Reader.k callers.
+
+K106: insufficient unwind8 in Kani's fixture constructor for the arbitrary
+64-row raw array; failed core::array::try_from_fn_erased unwinding assertion,
+not the payload property and not a matched semantic control. Same harness names
+and assertions retained, fixture unwind corrected to258 (the retained NHV
+64-row constructor bound). K107–118 all pass/control-fail/rename-pass. No timeout
+or memory cap changed; K106 was neither timed out nor memory-killed.
+
+K119/K120: actual Reader.e's full inner Result classification on arbitrary
+checkpoint1768 and every valid32-byte offset passes with a matched literal
+Boolean corruption control. This ordinary Reader helper has no Observer or
+function-pointer parameter; no (ae)/(al) specialization is used or inferred.
+Its complete native value/caller association is still part of the resume gap.
+
+L047: KMX composition proof completed its all64 equality by rewriting; a trailing
+rfl produced "No goals to be solved". Removed that redundant tactic only; L048
+passes all five top theorems with standard axioms.
+
+Initial final audit L033–046 (48 roots) passed, but coverage review identified
+that the new raw-frame composition should explicitly use prescribed KMX value
+laws. NID_KmxComposition adds that source/proof link. Expanded combined import
+L049 and following audit are new-source evidence, not an unchanged full replay.
+Initial scan/child metrics/raw dumps are retained under NID_initial_audit.

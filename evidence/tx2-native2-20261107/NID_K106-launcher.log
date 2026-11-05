@@ -1,0 +1,42 @@
+{"attempt": "NID_K106", "exit_status": 1, "wall_seconds": 3.532937357900664, "peak_rss_kib": "345672", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+crates/aspis-r1-cost-probe/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.85s
+Checking harness verifier::candidate::NID_native::query_raw_limb0_window...
+
+VERIFICATION RESULT:
+ ** 1 of 310 failed (309 undetermined)
+Failed Checks: unwinding assertion loop 0
+ File: "/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs", line 897, in core::array::try_from_fn_erased::<[u64; 4], core::ops::try_trait::NeverShortCircuit<[u64; 4]>, {closure@core::array::try_from_trusted_iterator::next<core::ops::try_trait::NeverShortCircuit<[u64; 4]>, core::iter::Map<core::array::drain::Drain<'_, ()>, {closure@core::ops::try_trait::NeverShortCircuit<[u64; 4]>::wrap_mut_1<(), {closure@<[u64; 4] as kani::Arbitrary>::any_array<64>::{closure#0}}>::{closure#0}}>>::{closure#0}}>
+
+VERIFICATION:- FAILED
+[Kani] info: Verification output shows one or more unwinding failures.
+[Kani] tip: Consider increasing the unwinding value or disabling `--unwinding-assertions`.
+Verification Time: 0.39960027s
+
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NID_native::query_raw_limb0_window
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rd6dd27e03c3745008abe9ee80c013f35.scope; invocation ID: cdb000eef41045bdbc3e1772a565e71d

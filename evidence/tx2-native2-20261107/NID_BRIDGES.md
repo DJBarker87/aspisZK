@@ -42,3 +42,33 @@ derives successor bounds from the actual predecessor. NID_SemanticTransport
 sequence/source (L022) similarly covers all10 semantic reads, errors and exact
 source array/cursor. Native header/checksum/constructor and complete resume
 integration remain open; no model-only packet substitutes for those gates.
+
+Stage (d): the four one-word raw payload windows qualify separately in
+K107–118, with arbitrary64-row prestate, arbitrary row offset and full u64
+values. Each has its own semantic corruption failure and stable rename.
+NID_RawWindowFrame.row/rows (L028) composes all four windows into SAME raw-row
+and whole-list equality without fixing any other row. These replace NHV K118's
+large raw-payload context, which is never rerun. Existing NHV metadata/rhs-power/
+weights and output-family packets remain cited and are not replayed.
+The complete query slot still needs the SAME resumed caller domains and actual
+parent association, not an independent raw vector witness.
+
+Additional native actual helper inputs: raw16 K053–061; raw32 seven complete
+source-offset partitions K063–083 and cursor/frame K084–089; scalar16 Result
+K090–092 and actual-resume fixed-limb values K094–105; ordinary scalar32 Result
+K119/K120. No multiplication or SHA is evaluated. These are local native inputs,
+not extra NDT CLOSED rows. All original failures and source variants remain.
+
+NID_ResumeQueries.returned (L030) derives SAME returned query bounds and uniqueness
+from its executed validator. The missing unchanged NCI invariant source is
+privately replayed byte-identically as NID_NCI_QueryInvariant (L029), provenance
+in NID_REUSED_PROVENANCE.json; no duplicate authored proof or shared edit.
+
+Final copy-composition review adds NID_KmxComposition (L048): each four-window
+row has the exact prescribed KMX copy value/frame law, symbolic row induction
+composes all64 rows, and selected recovers every arbitrary source row/limb.
+Pointer/allocator/ABI validity remains explicit. This fills the copy-law link
+rather than treating pointwise equality alone as a physical copy certificate.
+The initial48-root audit is retained under NID_initial_audit; the changed
+combined import/root list receives a new same-binary audit/fixtures and scan.
+No native passing shape is rerun.

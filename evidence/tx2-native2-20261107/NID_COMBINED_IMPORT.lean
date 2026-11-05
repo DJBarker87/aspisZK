@@ -15,6 +15,10 @@ import NID_RawOffsetCover
 import NID_TailView
 import NID_FinishAlpha
 import NID_RawWindowFrame
+import NID_NCI_QueryInvariant
+import NID_ResumeQueries
+import NID_KOffsetCover
+import NID_KmxComposition
 
 #check NID_ResumeCanonical.sourceK_canonical
 #print axioms NID_ResumeCanonical.sourceK_canonical
@@ -88,5 +92,37 @@ import NID_RawWindowFrame
 #print axioms NID_RawWindowFrame.rows
 #check NID_RawWindowFrame.contiguous
 #print axioms NID_RawWindowFrame.contiguous
+#check AspisR1.NCI_QueryInvariant.accepted_head
+#print axioms AspisR1.NCI_QueryInvariant.accepted_head
+#check AspisR1.NCI_QueryInvariant.accepted_bounds
+#print axioms AspisR1.NCI_QueryInvariant.accepted_bounds
+#check AspisR1.NCI_QueryInvariant.accepted_fresh
+#print axioms AspisR1.NCI_QueryInvariant.accepted_fresh
+#check AspisR1.NCI_QueryInvariant.accepted_unique
+#print axioms AspisR1.NCI_QueryInvariant.accepted_unique
+#check NID_ResumeQueries.returned
+#print axioms NID_ResumeQueries.returned
+#check NID_KOffsetCover.rho
+#print axioms NID_KOffsetCover.rho
+#check NID_KOffsetCover.semantic
+#print axioms NID_KOffsetCover.semantic
+#check NID_KOffsetCover.coordinates
+#print axioms NID_KOffsetCover.coordinates
+#check NID_KOffsetCover.power
+#print axioms NID_KOffsetCover.power
+#check NID_KOffsetCover.weights
+#print axioms NID_KOffsetCover.weights
+#check NID_KOffsetCover.bounded
+#print axioms NID_KOffsetCover.bounded
+#check NID_KmxComposition.copy_four_spec
+#print axioms NID_KmxComposition.copy_four_spec
+#check NID_KmxComposition.copy_four_frame
+#print axioms NID_KmxComposition.copy_four_frame
+#check NID_KmxComposition.rows_spec
+#print axioms NID_KmxComposition.rows_spec
+#check NID_KmxComposition.all64
+#print axioms NID_KmxComposition.all64
+#check NID_KmxComposition.selected
+#print axioms NID_KmxComposition.selected
 #check AspisR1.RPx_Deployed.deployed
 #print axioms AspisR1.RPx_Deployed.deployed
