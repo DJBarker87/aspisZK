@@ -1,0 +1,192 @@
+{
+  "prepare": [
+    {
+      "path": "aspis_core::r0::heap::filled",
+      "why": "Existing allocation boundary; retains full Result and allocation trust."
+    },
+    {
+      "path": "crate::compact::expand_semantic",
+      "why": "Compact semantic-expansion packet boundary; caller/refinement remains successor work."
+    },
+    {
+      "path": "crate::compact::expand_values",
+      "why": "Compact value-expansion packet boundary."
+    },
+    {
+      "path": "crate::verifier::candidate::wide_view",
+      "why": "Existing candidate view packet and borrowed-return interface."
+    },
+    {
+      "path": "crate::r1_semantic::verify_observed",
+      "why": "Semantic verifier packet boundary; producer association remains explicitly OPEN."
+    },
+    {
+      "path": "crate::verifier::mark",
+      "why": "Deployed observer boundary; retained phase-erasure packet, no callback implementation expanded."
+    },
+    {
+      "path": "crate::verifier::{impl crate::verifier::Prepared}::new",
+      "why": "Prepared producer packet; inherent-impl spelling repairs NHF missed opacity. Packet completeness is OPEN. Pinned NameMatcher inherent impl matching is TODO/false; single-element wildcard selector validated against LLBC span.",
+      "selector": "crate::verifier::_::new"
+    }
+  ],
+  "tx1": [
+    {
+      "path": "crate::verifier::candidate::parse_shape",
+      "why": "Existing shape packet."
+    },
+    {
+      "path": "crate::verifier::mark",
+      "why": "Deployed observer boundary; retained phase-erasure packet, no callback implementation expanded."
+    },
+    {
+      "path": "crate::verifier::candidate::batch_merkle",
+      "why": "Existing batch packet."
+    },
+    {
+      "path": "crate::verifier::candidate::query_loop",
+      "why": "NFS query-loop packet; retain its domain."
+    },
+    {
+      "path": "crate::verifier::{impl crate::verifier::QueryGeometry}::for_range",
+      "why": "NFN geometry packet. Pinned NameMatcher inherent impl matching is TODO/false; single-element wildcard selector validated against LLBC span.",
+      "selector": "crate::verifier::_::for_range"
+    },
+    {
+      "path": "crate::verifier::{impl crate::verifier::BatchedWeights}::new",
+      "why": "Existing batched-weights constructor packet. Pinned NameMatcher inherent impl matching is TODO/false; single-element wildcard selector validated against LLBC span.",
+      "selector": "crate::verifier::_::new"
+    },
+    {
+      "path": "crate::verifier::{impl crate::verifier::BatchedWeights}::finish",
+      "why": "Existing batched-weights completion packet. Pinned NameMatcher inherent impl matching is TODO/false; single-element wildcard selector validated against LLBC span.",
+      "selector": "crate::verifier::_::finish"
+    },
+    {
+      "path": "crate::verifier::candidate::canonical_scan",
+      "why": "Existing canonical scanner packet."
+    },
+    {
+      "path": "crate::verifier::candidate::prepare",
+      "why": "Driver prepare emission is a separate attempt; no transitive inlining."
+    },
+    {
+      "path": "crate::verifier::{impl crate::verifier::Accumulator}::new",
+      "why": "Existing accumulator constructor packet. Pinned NameMatcher inherent impl matching is TODO/false; single-element wildcard selector validated against LLBC span.",
+      "selector": "crate::verifier::_::new"
+    },
+    {
+      "path": "crate::verifier::checkpoint",
+      "why": "Existing checkpoint writer packet."
+    }
+  ],
+  "tx2_authenticated": [
+    {
+      "path": "crate::verifier::candidate::parse_shape",
+      "why": "Existing shape packet."
+    },
+    {
+      "path": "crate::verifier::mark",
+      "why": "Deployed observer boundary; retained phase-erasure packet, no callback implementation expanded."
+    },
+    {
+      "path": "crate::verifier::candidate::tx2_common",
+      "why": "Separate driver emission; preserve direct call boundary."
+    }
+  ],
+  "tx2_common": [
+    {
+      "path": "crate::verifier::mark",
+      "why": "Deployed observer boundary; retained phase-erasure packet, no callback implementation expanded."
+    },
+    {
+      "path": "crate::verifier::candidate::batch_merkle",
+      "why": "Existing batch packet."
+    },
+    {
+      "path": "crate::verifier::candidate::query_loop",
+      "why": "NFS query-loop packet; retain its domain."
+    },
+    {
+      "path": "crate::verifier::{impl crate::verifier::QueryGeometry}::for_range",
+      "why": "NFN geometry packet. Pinned NameMatcher inherent impl matching is TODO/false; single-element wildcard selector validated against LLBC span.",
+      "selector": "crate::verifier::_::for_range"
+    },
+    {
+      "path": "crate::verifier::{impl crate::verifier::BatchedWeights}::new",
+      "why": "Existing batched-weights constructor packet. Pinned NameMatcher inherent impl matching is TODO/false; single-element wildcard selector validated against LLBC span.",
+      "selector": "crate::verifier::_::new"
+    },
+    {
+      "path": "crate::verifier::{impl crate::verifier::BatchedWeights}::finish",
+      "why": "Existing batched-weights completion packet. Pinned NameMatcher inherent impl matching is TODO/false; single-element wildcard selector validated against LLBC span.",
+      "selector": "crate::verifier::_::finish"
+    },
+    {
+      "path": "crate::weights::powers",
+      "why": "Existing powers packet; no arithmetic unfolded."
+    },
+    {
+      "path": "aspis_core::field::wide_exact::{impl aspis_core::field::wide_exact::WideExact}::from_le_bytes",
+      "why": "Existing canonical field decoder boundary. Pinned NameMatcher inherent impl matching is TODO/false; single-element wildcard selector validated against LLBC span.",
+      "selector": "aspis_core::field::wide_exact::_::from_le_bytes"
+    },
+    {
+      "path": "crate::verifier::finish_relation",
+      "why": "NHE/NHM finish packet boundary; pair producer obligation retained."
+    },
+    {
+      "path": "crate::verifier::checkpoint_size",
+      "why": "Resume control body visible; retain scalar/raw/query/section/allocation packet boundary with explicit caller domains."
+    },
+    {
+      "path": "crate::verifier::validate_checkpoint_queries",
+      "why": "Resume control body visible; retain scalar/raw/query/section/allocation packet boundary with explicit caller domains."
+    },
+    {
+      "path": "crate::verifier::read_checkpoint_semantic_alpha",
+      "why": "Resume control body visible; retain scalar/raw/query/section/allocation packet boundary with explicit caller domains."
+    },
+    {
+      "path": "crate::verifier::read_checkpoint_weights",
+      "why": "Resume control body visible; retain scalar/raw/query/section/allocation packet boundary with explicit caller domains."
+    },
+    {
+      "path": "aspis_core::r0::heap::filled",
+      "why": "Resume control body visible; retain scalar/raw/query/section/allocation packet boundary with explicit caller domains."
+    },
+    {
+      "path": "crate::transport::{impl Variant}::tag",
+      "why": "Resume control body visible; retain scalar/raw/query/section/allocation packet boundary with explicit caller domains.",
+      "selector": "crate::transport::_::tag"
+    },
+    {
+      "path": "crate::transport::{impl Variant}::final_len",
+      "why": "Resume control body visible; retain scalar/raw/query/section/allocation packet boundary with explicit caller domains.",
+      "selector": "crate::transport::_::final_len"
+    },
+    {
+      "path": "aspis_core::field::{impl aspis_core::field::QM31}::from_le_bytes",
+      "selector": "aspis_core::field::_::from_le_bytes",
+      "why": "Opaque scalar decoder is separately bridged; expose Reader k/e/raw only, no arithmetic."
+    }
+  ],
+  "include_types": [
+    "crate::verifier::Prepared",
+    "crate::verifier::Accumulator",
+    "crate::verifier::BatchedWeights",
+    "crate::verifier::View",
+    "crate::verifier::Error",
+    "crate::verifier::Variant",
+    "crate::verifier::Phase",
+    "crate::verifier::QueryGeometry",
+    "crate::r1_semantic::Verified",
+    "crate::r1_wire::SemanticTranscript",
+    "crate::r1_wire::Challenges",
+    "aspis_core::field::M31",
+    "aspis_core::field::CM31",
+    "aspis_core::field::QM31",
+    "aspis_core::field::wide_exact::WideExact",
+    "aspis_core::circle::SecureCirclePoint"
+  ]
+}

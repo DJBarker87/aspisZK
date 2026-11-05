@@ -1,0 +1,43 @@
+NIY_generated/NIY_RawTransport.lean:36:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  reader (unReader ?x)
+in the target expression
+  (outer f do
+      let (a3, r1) ← NIL_FreshOps.raw 32#usize (unReader r)
+      let (a4, r2) ← NIL_FreshOps.raw 32#usize r1
+      left state a3 a4 r2) =
+    do
+    let (a3, r1) ← CheckpointBytes3Reader.raw 32#usize r
+    let (a4, r2) ← CheckpointBytes3Reader.raw 32#usize r1
+    right state a3 a4 r2
+
+A B : Type
+f : A → B
+bytes : Slice U8
+left : Std.Array U8 32#usize → Std.Array U8 32#usize → Std.Array U8 32#usize → Fresh.R → Result A
+right : Std.Array U8 32#usize → Std.Array U8 32#usize → Std.Array U8 32#usize → Cohort.R → Result B
+h :
+  ∀ (state a3 a4 : Std.Array U8 32#usize) (out : Cohort.R),
+    outer f (left state a3 a4 (unReader out)) = right state a3 a4 out
+state : Std.Array U8 32#usize
+r : Cohort.R
+⊢ (outer f do
+      let (a3, r1) ← NIL_FreshOps.raw 32#usize (unReader r)
+      let (a4, r2) ← NIL_FreshOps.raw 32#usize r1
+      left state a3 a4 r2) =
+    do
+    let (a3, r1) ← CheckpointBytes3Reader.raw 32#usize r
+    let (a4, r2) ← CheckpointBytes3Reader.raw 32#usize r1
+    right state a3 a4 r2
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'NIY_RawTransport.raw' depends on axioms: [propext, Quot.sound]
+'NIY_RawTransport.first3' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

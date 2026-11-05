@@ -1,0 +1,29 @@
+# NIY final handoff
+
+TX2:065 is OPEN. The 100-bit per-attempt target is not yet established. Zero NDT rows and zero edges are promoted against the pinned NIR ledger12 baseline. Privacy, the two-transaction design, and the adopted frozen3 headline are unchanged. No trust row is added or removed; pending RuntimeCpiReadonlyEntry7 is not used.
+
+## Checked result
+
+`NIY_TailPort.source` proves the complete retained NID fresh-reference tail equals the adopted cohort tail, preserving the SAME reader/value carrier, explicit Result branches, ordered22-query assembly, exact semantic/weights/validation/allocation call occurrences, and Prepared/Accumulator model fields. `NIY_ResumePort.source` discharges the tail premise of `NIL_ResumeComposition.source`. This is reference-to-cohort transport, not actual frozen native op18/caller installation.
+
+`NIY_ResumeFields.fields/reservation` derive Fields and reservation from the SAME fresh returned pair. `NIY_ReaderFrames` and `NIY_EarlyDomains` prove early cursors/backing independently from executed model read facts. `NIY_WeightFrame` provides BitVec/scalar/K/payload extensionality and window/frame induction. Native cuts remain exact asserted facets with explicit domains, rather than complete native function claims.
+
+There are 32 qualified new local native families plus the retained header reply family qualified by NIY_K001's missing rename check. Every new family has a positive, semantic assertion-failing control and rename pass, with the frozen dependency graph, unchanged lock, deployed features, offline optimized compilation and exact supplied KMX patch. K035's arbitrary-weight constructor and K051's redundant opening-byte probe timed out; neither receives credit. Their altered window/descriptor shapes are separately identified, and the original names and failures are retained. The descriptor shape makes no byte-identity claim. K100 is positive-only; k616_0, k616_1, k696_0 and k696_1 remain unqualified. Deferred E664_C1/K712 families are identified separately. No Option<fn> or writable-static-dependent credit, field-product Kani proof, new field stub, or function-contract/stub_verified composition is used.
+
+## Gate and resource evidence
+
+Combined import NIY_L091 includes NGK_COMBINED_IMPORT, NID_COMBINED_IMPORT, NIL_COMBINED_IMPORT and AspisR1.RPx_Deployed.deployed. NIY_L096 passed all eight planted/mutation walker fixtures. NIY_L097 audited 97 roots: raw proof-body walking equals collectAxioms, using only propext, Classical.choice and Quot.sound. NIY_L098 scanned 13,752 modules with zero dangling references, duplicate owners or import mismatches. NIY_L099 verified selected source hashes, seed, frozen scratch sources/lock, tools, closure objects and retained exports. NIY_VALIDATION.json passes all receipt/control/source/cap/ledger checks. Failed source versions and their objects are excluded from the final selected-module list.
+
+Usage: 100/100 Kani, 99/100 Lean/support, 1/1 extraction. All host jobs have strict admission exit0/allowed:true, MemoryHigh6G, MemoryMax8G, MemorySwapMax0, TasksMax64, zero swaps; Lean uses -M7000. No timed-out shape is rerun unchanged, no cap/timeout is raised, no unchanged final regression is repeated. NIY_RELEASE_RESULTS.json indexes exact per-attempt target, exit, wall/RSS/swap, source revision/hash, dependencies and axioms; raw audit groups have independent timing receipts. The unused support slot is not an independent unattempted proof: all identified Lean-only work is done, and every remaining member requires a native producer/source/caller certificate, as NIY_REMAINING.md explains.
+
+## Retained inputs and next owner
+
+The predecessor seed was copied first, 5,929,736 bytes; NIY_SEED.json pins every imported original/copy. Own workspace: /home/dombarker/project-offloads/codex-cx-tx2-native4-20261107. Own CARGO_TARGET_DIR: that workspace's NIY_target, recorded in every native receipt. Own export: /home/dombarker/project-offloads/codex-cx-slice-d-prepared-cache-20261104/NIY_exports_20261107 (18,502,936 bytes); use the retained NIY_PATHS.json order and NIY_CLOSURE_PINS.json.xz, including pinned Aeneas objects/sidecars. All own caches are retained; final active formal-process list is empty. Final host free space: 36,117,057,536 bytes; do not duplicate the corpus/cache. No wallet/key/chain operation occurred.
+
+NIY_E001 is the one successful extraction, following NIY_L086 preflight and repair of an own dangling target symlink. The unchanged NHR stager is privately copied; frozen source/manifest bytes are restored and checked. Fresh outputs are compressed/pinned and are not silently substituted for the retained NID emission consumed by the proof.
+
+NIY_REMAINING.md lists native caller installation, query6 producer, reserve/resize/weight and Box/Vec ownership/frame association, public688/header callback, whole canonical_scan TX1:084, Merkle5 and retained NHT/NIG/NEW/pair/finish gaps member by member. The baseline already closes opening TX1:085/TX2:056 through NFN_NEO_TailReference.checked/opening; reuse that packet on its actual domain. No sibling or session A live worktree is modified.
+
+Only NIY evidence is changed. All research crates/programs remain byte-identical; scratch harnesses are retained as a patch plus complete sources/receipts. No shipped-file change triggers an ELF rebuild, and no fresh ELF build is claimed. Frozen default f8c0ec72…, devnet 63ad3e9c…, Pool 121f3e29… pins and section6 assessment remain in NIY_FREEZE.json. Commits are local on codex/cx-tx2-native4-20261107; nothing is pushed.
+
+Format-only check: git diff --check on the audit commit reports whitespace in six preserved generated-C snapshots and nine raw admission logs. NIY_FORMAT_CHECK.json records the exact diagnostics and command/exit; these hashed evidence bytes are deliberately retained. This is not a formal-gate failure or an authored Lean formatting issue.

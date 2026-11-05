@@ -1,0 +1,11 @@
+--- K051_selected_byte
++++ split_descriptor_only
+@@ -23,7 +23,7 @@
+ fn m31_step_check(){let q:[u8;832]=kani::any();let s:usize=kani::any();kani::assume(s<4);let l:usize=kani::any();kani::assume(l<=26);let mut range=l..26;let next=range.next();
+  match next{None=>{assert_eq!(l,26);assert_eq!(range.len(),0);},Some(current)=>{assert_eq!(current,l);assert_eq!(range.len(),25-l);let at=s*120+current*4;let actual=M31::from_le_bytes(q[at..at+4].try_into().unwrap()).ok_or(Error::Parse).map(|_|());let expected=u32::from_le_bytes([q[at],q[at+1],q[at+2],q[at+3]])<0x7fffffff;assert_eq!(actual.is_ok(),expected^cfg!(NIY_invert));if let Err(error)=actual{assert_eq!(error,Error::Parse);}}}
+ }
+-fn opening_check(){let proof:[u8;57607]=kani::any();let i:usize=kani::any();kani::assume(i<22);let j:usize=kani::any();kani::assume(j<832);let q=opening(&proof,i);let start=compact::OFF_OPENINGS+i*832;assert_eq!(compact::OFF_OPENINGS,10055);assert_eq!(q.len(),832);assert_eq!(q.as_ptr(),proof[start..start+832].as_ptr());assert_eq!(q[j],proof[start+j]^(if cfg!(NIY_invert){1}else{0}));}
++fn opening_check(){let proof:[u8;57607]=kani::any();let i:usize=kani::any();kani::assume(i<22);let j:usize=kani::any();kani::assume(j<832);let q=opening(&proof,i);let start=compact::OFF_OPENINGS+i*832;assert_eq!(compact::OFF_OPENINGS,10055);assert_eq!(q.len(),832);let observed=q.as_ptr() as usize^(if cfg!(NIY_invert){1}else{0});assert_eq!(observed,proof[start..start+832].as_ptr() as usize);}
+ #[kani::proof]
+ #[kani::unwind(36)]
+ #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
