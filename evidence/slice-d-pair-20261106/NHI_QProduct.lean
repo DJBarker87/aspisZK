@@ -25,6 +25,7 @@ theorem slice_at (s : Slice NQ) (i : Usize) (x : NQ) (run : Slice.index_usize s 
  · cases run
  · rename_i v read
    cases Result.ok.inj run
+   change s.val[i.val]?=some x at read
    simp only [sliceAt,read,Option.getD_some]
 
 theorem array_at {n : Usize} (a : Array NQ n) (i : Usize) (x : NQ) (run : Array.index_usize a i=ok x) :
@@ -34,6 +35,7 @@ theorem array_at {n : Usize} (a : Array NQ n) (i : Usize) (x : NQ) (run : Array.
  · cases run
  · rename_i v read
    cases Result.ok.inj run
+   change a.val[i.val]?=some x at read
    simp only [arrayAt,read,Option.getD_some]
 
 #print axioms spec

@@ -1,9 +1,10 @@
 from pathlib import Path
 import json,re,hashlib
 E=Path(__file__).resolve().parent;P=E.parent/'slice-d-finish3-20261106'
+compiled={r["module"] for p in E.glob("NHI_L[0-9][0-9][0-9]/receipt.json") for r in [json.loads(p.read_text())] if r["kind"]=="lean" and r["exit_status"]==0}
 roots=[]
 for p in sorted(E.glob('NHI_*.lean')):
- if p.stem in ['NHI_Driver','NHI_ProofDriver','NHI_COMBINED_IMPORT']:continue
+ if p.stem in ['NHI_Driver','NHI_ProofDriver','NHI_COMBINED_IMPORT'] or p.stem not in compiled:continue
  roots += [p.stem+'.'+r for r in re.findall(r'^#print axioms (\w+)$',p.read_text(),re.M)]
 (E/'NHI_AUDIT_ROOTS.json').write_text(json.dumps(dict(groups=[roots]),indent=2)+'\n')
 cat={r['module']:r for l in (P/'NHE_EXPECTED_IMPORTS.jsonl').read_text().splitlines()for r in [json.loads(l)]}

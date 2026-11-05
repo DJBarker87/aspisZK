@@ -1,0 +1,40 @@
+NHI_generated/NHI_GroupDispatch.lean:12:58: error: unsolved goals
+w : FIo_Native.weights.Weights
+bytes : Slice U8
+low : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 16#usize
+s2 : w.variant = FIo_Native.transport.Variant.S2
+size : (↑bytes).length = 2048
+⊢ (do
+      let i1 ← lift (Usize.wrapping_mul 64#usize 32#usize)
+      if bytes.len = i1 then FIo_Native.weights.s2_grouped_inactive_pair bytes low
+        else do
+          let i3 ← bytes.len / 32#usize
+          let (group_masks1, group_coefficients1, groups) ←
+            FIo_Native.weights.grouped_inactive_pair_loop0 { start := 0#usize, «end» := i3 }
+                FIo_Native.transport.Variant.S2 w.factors w.points w.extra bytes (Array.repeat 64#usize 0#u16)
+                (Array.repeat 64#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO) 0#usize
+          FIo_Native.weights.grouped_inactive_pair_loop1 { start := 0#usize, «end» := groups } low group_masks1
+              group_coefficients1 FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO) =
+    FIo_Native.weights.s2_grouped_inactive_pair bytes low
+NHI_generated/NHI_GroupDispatch.lean:16:7: warning: This simp argument is unused:
+  Slice.len_val
+
+Hint: Omit it from the simp argument list.
+  simp [̵S̵l̵i̵c̵e̵.̵l̵e̵n̵_̵v̵a̵l̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵s̵i̵z̵e̵]̵[̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲ ̲s̲i̲z̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NHI_generated/NHI_GroupDispatch.lean:16:21: warning: This simp argument is unused:
+  Slice.length
+
+Hint: Omit it from the simp argument list.
+  simp [̵S̵l̵i̵c̵e̵.̵l̵e̵n̵_̵v̵a̵l̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵s̵i̵z̵e̵]̵[̲S̲l̲i̲c̲e̲.̲l̲e̲n̲_̲v̲a̲l̲,̲ ̲s̲i̲z̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NHI_generated/NHI_GroupDispatch.lean:16:34: warning: This simp argument is unused:
+  size
+
+Hint: Omit it from the simp argument list.
+  simp [Slice.len_val, ̲Slice.length,̵s̵i̵z̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NHI_GroupDispatch.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

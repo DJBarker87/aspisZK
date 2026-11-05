@@ -1,0 +1,42 @@
+NHI_generated/NHI_GroupDispatch.lean:21:2: error: Type mismatch: After simplification, term
+  size
+ has type
+  @Eq ℕ (↑bytes).length 2048
+but is expected to have type
+  @Eq ℕ (↑bytes).length ↑2048#usize
+NHI_generated/NHI_GroupDispatch.lean:12:58: error: unsolved goals
+w : FIo_Native.weights.Weights
+bytes : Slice U8
+low : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 16#usize
+s2 : w.variant = FIo_Native.transport.Variant.S2
+size : (↑bytes).length = 2048
+cap : 4096 < UScalar.size UScalarTy.Usize
+product : Usize.wrapping_mul 64#usize 32#usize = 2048#usize
+message : bytes.len = 2048#usize
+⊢ (if decide True = true then
+      if True then FIo_Native.weights.s2_grouped_inactive_pair bytes low
+      else do
+        let i3 ← 2048#usize / 32#usize
+        let (group_masks1, group_coefficients1, groups) ←
+          FIo_Native.weights.grouped_inactive_pair_loop0 { start := 0#usize, «end» := i3 }
+              FIo_Native.transport.Variant.S2 w.factors w.points w.extra bytes (Array.repeat 64#usize 0#u16)
+              (Array.repeat 64#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO) 0#usize
+        FIo_Native.weights.grouped_inactive_pair_loop1 { start := 0#usize, «end» := groups } low group_masks1
+            group_coefficients1 FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO
+    else do
+      let i1 ← 2048#usize / 32#usize
+      let (group_masks1, group_coefficients1, groups) ←
+        FIo_Native.weights.grouped_inactive_pair_loop2 { start := 0#usize, «end» := i1 } FIo_Native.transport.Variant.S2
+            w.factors w.points w.extra bytes (Array.repeat 64#usize 0#u16)
+            (Array.repeat 64#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO) 0#usize
+      FIo_Native.weights.grouped_inactive_pair_loop3 { start := 0#usize, «end» := groups } low group_masks1
+          group_coefficients1 FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO) =
+    FIo_Native.weights.s2_grouped_inactive_pair bytes low
+NHI_generated/NHI_GroupDispatch.lean:25:44: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵r̵o̵d̵u̵c̵t̵,̵m̵e̵s̵s̵a̵g̵e̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵]̵[̲p̲r̲o̲d̲u̲c̲t̲,̲ ̲m̲e̲s̲s̲a̲g̲e̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NHI_GroupDispatch.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

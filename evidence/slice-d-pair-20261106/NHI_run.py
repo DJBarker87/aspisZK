@@ -6,7 +6,10 @@ B='/home/dombarker/project-offloads/codex-cx-slice-d-pair-20261106'
 C='/home/dombarker/project-offloads/codex-cx-slice-d-finish-cache-20261104'
 W='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025'
 H='dombarker@100.108.41.90';T='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0'
-a,kind,target=sys.argv[1:];limit=120 if kind=='kani' else 3 if kind=='extract' else 90; assert a.startswith('NHI_') and 1<=int(a[-3:])<=limit
+a,kind,target=sys.argv[1:];limit=120 if kind=='kani' else 3 if kind=='extract' else 90; assert a.startswith('NHI_') and int(a[-3:])>=1
+prefix='K' if kind=='kani' else 'E' if kind=='extract' else 'L'
+used=sum(1 for p in E.glob('NHI_'+prefix+'[0-9][0-9][0-9]/receipt.json'))
+assert used<limit,('budget exhausted',prefix,used,limit)
 assert not (E/a).exists()
 def ssh(code,data=None,submitted=False):
  for retry in range(11):

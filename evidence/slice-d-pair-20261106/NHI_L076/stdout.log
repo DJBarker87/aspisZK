@@ -1,0 +1,66 @@
+NHI_generated/NHI_TensorRefLaw.lean:29:2: error: 'change' tactic failed, pattern
+  ↑n % UScalar.size UScalarTy.Usize = ↑n
+is not definitionally equal to target
+  ↑1#usize * ↑n % UScalar.size UScalarTy.Usize = ↑n
+NHI_generated/NHI_TensorRefLaw.lean:53:1: error: Tactic `rfl` failed: The left-hand side
+  do
+    let output2 ← (NHI_ArrayCells.put out j (cell p 0)).update (j.wrapping_add n) (cell p 1)
+    let output3 ← output2.update (j.wrapping_add (Usize.wrapping_mul 2#usize n)) (cell p 2)
+    output3.update (j.wrapping_add (Usize.wrapping_mul 3#usize n)) (cell p 3)
+is not definitionally equal to the right-hand side
+  ok (place out p j n)
+
+out : Output
+p : Products
+j n : Usize
+hn : NHI_TensorDomains.Stage ↑n
+hj : ↑j < ↑n
+size : 4096 < UScalar.size UScalarTy.Usize
+ncap : ↑n < UScalar.size UScalarTy.Usize
+one : Usize.wrapping_mul 1#usize n = n
+off1 : ↑(j.wrapping_add n) = ↑j + ↑1#usize * ↑n ∧ ↑(j.wrapping_add n) < 64
+off2 : ↑(NHI_TensorOffsets.index j n 2#usize) = ↑j + ↑2#usize * ↑n ∧ ↑(NHI_TensorOffsets.index j n 2#usize) < 64
+off3 : ↑(NHI_TensorOffsets.index j n 3#usize) = ↑j + ↑3#usize * ↑n ∧ ↑(NHI_TensorOffsets.index j n 3#usize) < 64
+jb : ↑j < 64
+a : Std.Array Word 64#usize := NHI_ArrayCells.put out j (cell p 0)
+b : Std.Array Word 64#usize := NHI_ArrayCells.put a (j.wrapping_add n) (cell p 1)
+c : Std.Array Word 64#usize := NHI_ArrayCells.put b (NHI_TensorOffsets.index j n 2#usize) (cell p 2)
+u0 : Array.update out j (cell p 0) = ok (NHI_ArrayCells.put out j (cell p 0))
+u1 : a.update (j.wrapping_add n) (cell p 1) = ok (NHI_ArrayCells.put a (j.wrapping_add n) (cell p 1))
+u2 :
+  b.update (NHI_TensorOffsets.index j n 2#usize) (cell p 2) =
+    ok (NHI_ArrayCells.put b (NHI_TensorOffsets.index j n 2#usize) (cell p 2))
+u3 :
+  c.update (NHI_TensorOffsets.index j n 3#usize) (cell p 3) =
+    ok (NHI_ArrayCells.put c (NHI_TensorOffsets.index j n 3#usize) (cell p 3))
+r0 : Array.index_usize p 0#usize = ok (cell p 0)
+r1 : Array.index_usize p 1#usize = ok (cell p 1)
+r2 : Array.index_usize p 2#usize = ok (cell p 2)
+r3 : Array.index_usize p 3#usize = ok (cell p 3)
+⊢ (do
+      let output2 ← (NHI_ArrayCells.put out j (cell p 0)).update (j.wrapping_add n) (cell p 1)
+      let output3 ← output2.update (j.wrapping_add (Usize.wrapping_mul 2#usize n)) (cell p 2)
+      output3.update (j.wrapping_add (Usize.wrapping_mul 3#usize n)) (cell p 3)) =
+    ok (place out p j n)
+NHI_generated/NHI_TensorRefLaw.lean:52:43: warning: This simp argument is unused:
+  u1
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵0̵,̵r̵1̵,̵r̵2̵,̵r̵3̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵u̵0̵,̵u̵1̵,̵u̵2̵,̵u̵3̵]̵[̲r̲0̲,̲ ̲r̲1̲,̲ ̲r̲2̲,̲ ̲r̲3̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲u̲0̲,̲ ̲u̲2̲,̲ ̲u̲3̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NHI_generated/NHI_TensorRefLaw.lean:52:46: warning: This simp argument is unused:
+  u2
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵0̵,̵r̵1̵,̵r̵2̵,̵r̵3̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵u̵0̵,̵u̵1̵,̵u̵2̵,̵u̵3̵]̵[̲r̲0̲,̲ ̲r̲1̲,̲ ̲r̲2̲,̲ ̲r̲3̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲u̲0̲,̲ ̲u̲1̲,̲ ̲u̲3̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NHI_generated/NHI_TensorRefLaw.lean:52:49: warning: This simp argument is unused:
+  u3
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵0̵,̵r̵1̵,̵r̵2̵,̵r̵3̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵u̵0̵,̵u̵1̵,̵u̵2̵,̵u̵3̵]̵[̲r̲0̲,̲ ̲r̲1̲,̲ ̲r̲2̲,̲ ̲r̲3̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲u̲0̲,̲ ̲u̲1̲,̲ ̲u̲2̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NHI_TensorRefLaw.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
