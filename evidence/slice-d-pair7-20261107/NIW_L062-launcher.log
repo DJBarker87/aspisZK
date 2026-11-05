@@ -1,0 +1,43 @@
+{"attempt": "NIW_L062", "exit_status": 1, "wall_seconds": 3.97094853897579, "peak_rss_kib": "5975656", "swaps": "0", "print_axioms": ["'AspisR1.NIW_AlignRegularExecution.erase' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NIW_AlignRegularExecution.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NIW_generated/NIW_AlignRegularExecution.lean:44:4: error: Type mismatch: After simplification, term
+  ih after post
+ has type
+  @Eq (Result NHM_RegularKinds.Reply) (execute w alpha f ap0 ap1 ks after post).1
+    (NHM_RegularKinds.go (fun k s p => FIo_Native.weights.process_kind w k alpha f 2#usize 64#usize ap0 ap1 s p) ks
+      after post)
+but is expected to have type
+  @Eq (Result NHM_RegularKinds.Reply) (execute w alpha f ap0 ap1 ks after post).1
+    (let (r, scratch1, parts1) := (core.result.Result.Ok PUnit.unit, after, post)
+    do
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => o
+...
+NIW_generated/NIW_AlignRegularExecution.lean:44:4: error: Type mismatch: After simplification, term
+  ih after post
+ has type
+  @Eq (Result NHM_RegularKinds.Reply) (execute w alpha f ap0 ap1 ks after post).1
+    (NHM_RegularKinds.go (fun k s p => FIo_Native.weights.process_kind w k alpha f 2#usize 64#usize ap0 ap1 s p) ks
+      after post)
+but is expected to have type
+  @Eq (Result NHM_RegularKinds.Reply) (execute w alpha f ap0 ap1 ks after post).1
+    (let (r, scratch1, parts1) := (core.result.Result.Ok PUnit.unit, after, post)
+    do
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a =>
+        NHM_RegularKinds.go (fun k s p => FIo_Native.weights.process_kind w k alpha f 2#usize 64#usize ap0 ap1 s p) ks
+          scratch1 parts1
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame FIo_Native.verifier.Error) residual
+        ok (r1, scratch1, parts1))
+'AspisR1.NIW_AlignRegularExecution.erase' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NIW_AlignRegularExecution.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rc2e5fc9576a34f6390066d69738bd344.scope; invocation ID: 0b438cc621cf4082b80650fe0e4324dc
