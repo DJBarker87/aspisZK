@@ -28,7 +28,8 @@ theorem result (bytes frame : Slice U8) (row : U8) (offset finish : Usize)
  | Ok viewed=>
   simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok] at tail
   obtain ⟨payload,parsed,same⟩:=NIH_RustBind.continued
-    (r1_wire.parse_record row viewed) (fun _=>ok (.Ok (viewed,next))) (frame,finish) tail
+    (r1_wire.parse_record row viewed) (fun _=>ok (.Ok (viewed,next))) (frame,finish) (by
+      simpa only [NIH_RustBind.next,core.result.Result.Insts.CoreOpsTry.branch] using tail)
   have framed : viewed=frame := congrArg Prod.fst
     (core.result.Result.Ok.inj (Result.ok.inj same))
   subst frame

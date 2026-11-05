@@ -21,7 +21,8 @@ theorem shape_size (row tag : U8) (size : Usize)
    show (2#u8).val=2 from rfl,show (14#u8).val=14 from rfl,
    show (25#u8).val=25 from rfl,show (26#u8).val=26 from rfl]
  all_goals repeat' first | (solve | omega) | split
- all_goals scalar_tac
+ all_goals norm_num [UScalar.val] at *
+ all_goals omega
 /-- This SAME framed record's passed predecessor guard discharges the former
 framing input; the decoder may still return any exact WireError. -/
 theorem framed (record : MainRecord) (payload : Slice U8)

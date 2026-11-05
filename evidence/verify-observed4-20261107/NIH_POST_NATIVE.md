@@ -1,13 +1,3 @@
-# Post-native continuation checklist
+# Superseded checklist
 
-The final native queue is NIH_leading_queue.py, K095–100 (exhausted expansion Both N, internal accumulator outer, leading choice of one absorption iteration or complete fixed tail). Do not resubmit any recorded ID. Late queue K067–094 passed all pairs. L069 installed the FINAL source; L066 is the earlier snapshot, restored read-only from host.
-
-Pending focused Lean: L070 NIH_ExpandExit (spacing fix from L068). Then add NIH_DecodeFinish (actual extra87 / beforeZ1 and predecessor accepted-frame installation), and available residual model-only source laws. Do not spend native slots beyond100. Root/finish/claims/rounds/circle drivers remain unemitted after charged E001; no handwritten body.
-
-Audit infrastructure is owned and already retained locally: NIH_Driver.lean / NIH_ProofDriver.lean are byte-for-byte NHU drivers with NHU→NIH prefix substitutions (full diffs committed); NIH_WALKER_PINS.json checks exact NEP/NFA source identity and reused generated C source hashes; NIH_native/NFA*.c are symlinks to committed original C sources. Build the two drivers with config.write (produces .c), then fresh link attempts using lake env leanc -O3 -rdynamic with driver C + NFA_WALKER.c + NFA_MemoryLimit.c, all capped. Run own fixture calibration before new raw roots.
-
-NIH_EXPECTED_IMPORTS_BASE.jsonl inherits NHU and adds107 NDE/NDN committed source-import tables. NIH_IMPORTED_MODEL_SOURCES.json still needs the two Reference14 entries (use NDN_L055/056 sources, not missing front2 direct files; the latest repair code may have completed them—inspect). Add only successfully compiled NIH module imports and combined module before NFX scan. Runtime driver expects NIH_EXPECTED_IMPORTS.jsonl and emits NIH_LOADED_scan.jsonl. NIH_batch.py wraps fixtures/batchN/scan with per-child resource receipts. NIH_AUDIT_ROOTS.json and NIH_COMBINED_IMPORT.lean still need generating from successful current proof sources; include direct NGK + NHU imports and #print RPx deployed. Audit all new top theorem roots, not failed drafts or diagnostics.
-
-Candidate rows (pending admission): 210,211,212,213,221,222,226,264,309,311,312,313,314,315,316,317,318,319,320,325. Root domains and exact carrier / source correspondence must be validated before promotion. Native raw packing NDN historical static verdicts remain suspended; only new local-record K031–036 credited. decode147 is an imported NGO CLOSED row (NHU cone's old OPEN label is superseded), no double credit.
-
-Need final CLOSED/EDGES/LEDGER_DELTA with additive validator only; source/copy/graph/lock/feature/native-control receipts, full standard-axiom walk, combined import, clean NFX scan, export/pins and consumer paths. Retain own cache; remove own target scratch only at the end. Update member-by-member CONE/REMAINING and TX1_PATH, exact budget from ATTEMPTS.jsonl. Final commit after checks, no push.
+All post-native stages completed through L090; all budget slots consumed. See NIH_STAGES.md, NIH_VALIDATION.json and NIH_HANDOFF.md. Do not rerun recorded attempts. Failed drafts remain excluded; no parent/op9 closure.
