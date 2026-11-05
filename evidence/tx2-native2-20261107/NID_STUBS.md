@@ -14,3 +14,12 @@ failures do not count as failing semantic controls. Native cut results do not
 supply canonical decoder facts; NID_ResumeCanonical derives those on exact model
 codec values. Runtime syscall aborts have abort-prefix/no-suffix boundaries (an),
 not a fabricated Err arm.
+
+| Additional local record | Exact paired law and domain | Status |
+| --- | --- | --- |
+| LeafLog.digest, three private-leaf grammars | Port4B_LeafCode.code_exact/address, newly composed NID_MerkleLeafPacket.selected. SAME source-selected opening832; tree0 tag0x71/value0..480/salt608..640; tree1 tag0xf1/value480..608/salt640..672; folded tag0x72/value672..800/salt800..832; prefix0x10. Arbitrary32-byte reply, one local call, unchanged reply. | K017–052 positive/control/rename. Only digest bytes and byte-slice association; SHA VALUE remains Runtime H. Complete parent batch_tree/verify packet still OPEN. |
+
+NID_BoundedReaders.k/e upgrades the retained scalar EqOk to exact full Result
+ONLY with the caller's actual in-bounds read. NID_BoundedReaders.weight/semantic
+derive the bound from original checkpoint1768 and exact cursor712+16*i /408+16*i.
+No global EqOk-to-equality coercion is admitted.

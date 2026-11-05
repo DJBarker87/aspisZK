@@ -1,0 +1,65 @@
+NID_generated/NID_ReadListTransport.lean:24:9: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  readList (T2Nat_ScalarJoin.readK unwrap) n out
+in the target expression
+  (let (value, out) := (core.result.Result.Ok x, out)
+    match value with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok x => do
+      let rest ← readList (T2Nat_ScalarJoin.readK unwrap) n out
+      match rest with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok (xs, last) => ok (core.result.Result.Ok (x :: xs, last))) =
+    let (value, out) := (core.result.Result.Ok x, out)
+    match value with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok x => do
+      let rest ← readList CheckpointBytes3Reader.readK n out
+      match rest with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok (xs, last) => ok (core.result.Result.Ok (x :: xs, last))
+
+case succ.Ok
+unwrap : T2Nat_RawJoin.Unwrap
+unwrap_ok : ∀ (N : Usize) (b : Std.Array U8 N), unwrap N (core.result.Result.Ok b) = ok b
+n : ℕ
+ih :
+  ∀ (r : verifier.Reader),
+    ↑r.at + 16 * n ≤ (↑r.bytes).length →
+      readList (T2Nat_ScalarJoin.readK unwrap) n r = readList CheckpointBytes3Reader.readK n r
+r : verifier.Reader
+bound : ↑r.at + 16 * (n + 1) ≤ (↑r.bytes).length
+b : Std.Array U8 16#usize
+out : verifier.Reader
+left✝ : ↑b = List.take 16 (List.drop ↑r.at ↑r.bytes)
+cursor : ↑out.at = ↑r.at + 16
+backing : out.bytes = r.bytes
+run :
+  CheckpointBytes3Reader.readK r =
+    ok
+      (CheckpointBytes3Reader.optionK
+          (Option.map CheckpointBytes3KDecode.rawK
+            (ExactLeafFieldCodec.decodeQM31 (MultiproofConeCanonical.bytesOf ↑b))),
+        out)
+head : T2Nat_ScalarJoin.readK unwrap r = CheckpointBytes3Reader.readK r
+x : aspis_core.field.QM31
+value :
+  CheckpointBytes3Reader.optionK
+      (Option.map CheckpointBytes3KDecode.rawK (ExactLeafFieldCodec.decodeQM31 (MultiproofConeCanonical.bytesOf ↑b))) =
+    core.result.Result.Ok x
+⊢ (let (value, out) := (core.result.Result.Ok x, out)
+    match value with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok x => do
+      let rest ← readList (T2Nat_ScalarJoin.readK unwrap) n out
+      match rest with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok (xs, last) => ok (core.result.Result.Ok (x :: xs, last))) =
+    let (value, out) := (core.result.Result.Ok x, out)
+    match value with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok x => do
+      let rest ← readList CheckpointBytes3Reader.readK n out
+      match rest with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok (xs, last) => ok (core.result.Result.Ok (x :: xs, last))
+'NID_ReadListTransport.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
