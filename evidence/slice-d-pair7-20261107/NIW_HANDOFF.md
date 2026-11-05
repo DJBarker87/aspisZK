@@ -1,3 +1,17 @@
+# NIW continuation after ruling (aq)
+
+TX2:129 and TX2:115 remain OPEN; no ledger promotion. Target not yet established. The clarification is resolved YES. Per-child complete Result clauses are admissible only when discharged inside the positive root. Neither a clause nor a whole-result equality may remain a root premise.
+
+Continuation starts at NIW_L052 with 51/160 Lean and 10/10 Kani consumed; IDs and the retained host workspace are preserved. Current continuation source stages are NIW_STAGE_REGULAR.md, NIW_STAGE_FINISH.md and NIW_STAGE_INVOCATION.md. The regular and finish source interpreters now produce complete chronological child outcomes and prove their clauses internally, retaining complete mutable state and failure prefixes. This advances the source interpretation beyond the old model-to-log existence direction. It does not yet identify the supplied raw parent cut projections with those source streams.
+
+Current first edge: at the actual regular entered call of pair, instantiate the source invocation at the SAME decoded pre-Vec/initial Parts and prove the supplied native PairEdges/SameGuard/boundary streams are the parent's projections of it by site/arguments. Fold NIW_AlignRegularTrace using the actual source outcome; construct Shared/Partial/Allocator traces using the actual supplied remaining streams. NIW_AlignPacket.supplied exports that SAME complete Result; NIW_AlignPacketPort consumes it without selecting a packet witness. Finish's source stream uses the actual NEW owner and actual FIo_Install.pair Result. Its raw log projection remains to be joined after the pair edge.
+
+The source-interpreter theorems have no child-clause hypotheses. Conditional helpers (RegularStream.fold, RegularTrace, AlignPacket.supplied) are explicitly intermediate and forbidden as whole-native root statements. No successful-child hypothesis, PairEdges seed equality, address-implies-payload law, exporter, invocation-ID assumption or trust row is introduced. NIG_FinishInput.Domain remains the retained SAME-call NHV/NID hypothesis.
+
+The original pre-clarification handoff is preserved in commit 541464c1a55 and below as historical context; pending-clarification/old budget statements below are superseded by this continuation. All current attempt receipts remain authoritative.
+
+---
+
 # NIW native log alignment handoff
 
 **TX2:129 pair and TX2:115 finish remain OPEN. Zero ledger promotions. Target not yet established.**
