@@ -1,0 +1,53 @@
+{"attempt": "NGW_L018", "exit_status": 1, "wall_seconds": 1.9944927990436554, "peak_rss_kib": "4422312", "swaps": "0", "print_axioms": ["'NGW_ReverseInduction.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NGW_generated/NGW_ReverseInduction.lean:44:21: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FIn_WeightsExtract.state_only_prefix.state_only_statement_points_loop.body z (cursor e) successor carry
+in the target expression
+  (match
+      match (cursor e, successor, carry) with
+      | (iter1, successor1, carry1) =>
+        FIn_WeightsExtract.state_only_prefix.state_only_statement_points_loop.body z iter1 successor1 carry1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, successor1, carry1) =>
+              FIn_WeightsExtract.state_only_prefix.state_only_statement_points_loop.bo
+...
+ match x with
+            | (iter1, successor1, carry1) =>
+              FIn_WeightsExtract.state_only_prefix.state_only_statement_points_loop.body z iter1 successor1 carry1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    reference (n + 1) (cursor e) z successor carry
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (10 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NGW_generated/NGW_ReverseInduction.lean:40:70: warning: This simp argument is unused:
+  stop
+
+Hint: Omit it from the simp argument list.
+  simp only [FIn_WeightsExtract.state_only_prefix.state_only_statement_points_loop.body,
+         show
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+                 (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲(cursor 0̵#̵u̵s̵i̵z̵e̵)̵=̵0̲#̲u̲s̲i̲z̲e̲)̲ ̲=̲
+               ok (̵n̵o̵n̵e̵,̵c̵u̵r̵s̵o̵r̵(̲n̲o̲n̲e̲,̲ ̲c̲u̲r̲s̲o̲r̲ 0#usize)
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲from s̵t̵o̵p̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵r̵e̵f̵e̵r̵e̵n̵c̵e̵,̵n̵e̵x̵t̵,̵s̵t̵o̵p̵]̵s̲t̲o̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲r̲e̲f̲e̲r̲e̲n̲c̲e̲,̲ ̲n̲e̲x̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NGW_ReverseInduction.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r51616eff46db4a238d88eb94d4062f7e.scope; invocation ID: 3df9f182f4df4c98bb765072fabae596
