@@ -1,0 +1,49 @@
+NIL_generated/NIL_MerkleStep.lean:11:33: error: Ambiguous term
+  aspis_core.digest.Digest32
+Possible interpretations:
+  MultiproofConeRef.aspis_core.digest.Digest32 H : Type
+  
+  AspisR1Stage2.aspis_core.digest.Digest32 H : Type
+NIL_generated/NIL_MerkleStep.lean:32:71: error: unsolved goals
+H : Type
+D : sorry
+hash : H
+base : Port3_NativeBatchBody.Ops
+proof : Slice U8
+length : (↑proof).length = 57607
+root : Std.Array U8 32#usize
+tree position slot : Usize
+q : Fin 22 → Fin 262144
+original : ℕ
+member : original ∈ OraclePortSelectedDraft.batchPositions 1
+keys : Std.Array U64 16#usize
+s : reference.Scratch
+more : position < 12#usize
+keyRead : keys.index_usize position = ok (MultiproofConeSortOrder.packed q 1 (↑tree) original)
+before : Log
+packed :
+  ↑(decodedIndex (MultiproofConeSortOrder.packed q 1 (↑tree) original)) =
+      OraclePortSelectedDraft.index q (↑tree) original ∧
+    ↑(openingIndex 10#usize (MultiproofConeSortOrder.packed q 1 (↑tree) original)) = original
+bounds : (if 1 = 0 then 0 else 10) ≤ original ∧ original < 22
+view : Slice U8
+read :
+  Port4B_Opening.opening proof (openingIndex 10#usize (MultiproofConeSortOrder.packed q 1 (↑tree) original)) = ok view
+width : (↑view).length = 832
+left✝ :
+  MultiproofConeCanonical.bytesOf ↑view =
+    OraclePortCompactDraft.slice (MultiproofConeCanonical.bytesOf ↑proof)
+      (10055 + ↑(openingIndex 10#usize (MultiproofConeSortOrder.packed q 1 (↑tree) original)) * 832) 832
+leaf : erase sorry hash (Port4B_LeafCode.code tree view) = sorry.digest hash (Port4B_LeafCode.input tree view)
+events :
+  run sorry hash (Port4B_LeafCode.code tree view) before = do
+    let d ← sorry.digest hash (Port4B_LeafCode.input tree view)
+    ok (d, before ++ [(Port4B_LeafCode.input tree view, d)])
+⊢ Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+      (Port3_BatchStd.install (Port4B_LeafInstall.install base)) sorry proof root tree hash 10#usize 12#usize slot keys
+      s.idx s.val s.n position =
+    do
+    let leaf ← sorry
+    post s.idx s.val s.n (decodedIndex (MultiproofConeSortOrder.packed q 1 (↑tree) original)) leaf
+        (position.wrapping_add 1#usize)
+'NIL_MerkleStep.selected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

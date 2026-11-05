@@ -9,3 +9,11 @@ No composed row or edge is promoted. NID/NHV/NHT cuts are reused by SHA256, not 
 Budgets: 120 Kani, 80 Lean, one extraction via NHR_stage.py only. Host scopes: 6G high, 8G max, swap0, tasks64, Lean -M7000, optimized Rust; strict reservation exit0 AND allowed:true before upload/launch. One scope at a time. Own workspace codex-cx-tx2-native3-20261107; own cache retained. Host initial free space 52G (98% used), so reuse pinned objects and keep seed small.
 
 Current next deliverable: concrete resume callee transport and rejection-prefix laws against retained NID_ResumeEmission; exact gaps remain listed in NID_REMAINING.md. No native/Lean/extraction attempt submitted yet. Exact target, source/dependency/tool hashes, exit, wall, RSS, swaps and axioms will be recorded per submitted attempt. No keys or chain operations.
+
+Stage 2 checkpoint: all six actual E-reader value families qualify on the six
+resume offsets (K003–020), with paired corruption and stable rename; exact
+Result/cursor facets are retained from NID. Header iterator (L013), section
+ports (L012), allocation port (L020), generic checked/wrapping subtraction
+(L026), and actual same-opening Merkle step (L044) compile standard-only.
+Prefix/full-tail association remains OPEN; failed whole-body and prefix
+proofs are retained, not selected. New local-record tree controls continue.

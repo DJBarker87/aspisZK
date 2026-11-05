@@ -9,3 +9,13 @@ E001: exit101 before Charon/Aeneas started. Private extract wrapper created NHR_
 K001: compile failed because NHR package staging does not include the frozen #[path] builder-reference tools reached by deployed statement features. Added frozen tools by immutable Git reads, with unchanged per-file hashes; no graph/feature relaxation.
 
 K002: compile failed before verification because the harness used private WideExact fields. Corrected to the actual public c0()/c1() accessors, retaining names and assertions. Neither compilation failure is a semantic control.
+
+K004 semantic corruption failed at core::panicking::assert_failed_inner, 1/299 checks. Own queue parser originally required the literal word assertion and rejected that evidence. Parser repaired to recognize this exact native assert_eq failure location while still requiring FAILED, nonzero exit and no unwind assertion. K004 is read-only reclassified; never rerun.
+
+L010/L011: header iterator model proof let-pattern reduction; replaced by explicit typed conditional and induction in L013. L014/L015: Try residual indentation and underdetermined result carrier; fixed in L016. L017/L018: allocation result carrier and map_replicate implicit arguments; fixed in L020. L019 initial preparation had no scope because allocation object was absent (NIL_prelaunch_L019); only its final source-model scope was charged.
+
+L019 actual source-model attempt: recursion limit in whole-body normalization, no cap increase. Replaced by named prefix/tail cuts at first raw reader; L021 and L031 type-check those literal source subtrees. L037 direct full split rfl also reached recursion depth and is unselected; needs additional smaller source cut equalities, never a successful-resume premise.
+
+L023/L028/L030/L033/L034/L036/L038: prefix transport elaboration (map under Prop/Prod lets and scalar literal proof transparency); all unselected. Generic cases/subtraction transport are separately compiled. The prefix target is being isolated with explicit local bind/branch congruence and scalar proof transparency; no heartbeat/recursion limit changed.
+
+K021 first Merkle source one-iteration facet passed. Before its matched control, test-only controls were strengthened from negating the predicate to corrupting a recorded count, reply arm, d, index or leaf byte. Original names and source step remain; cfg(false) positive behavior is unchanged. K021 is retained, never rerun; its selected credit still requires the matching corruption and rename result.

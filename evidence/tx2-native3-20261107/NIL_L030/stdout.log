@@ -1,0 +1,198 @@
+NIL_generated/NIL_ResumePrefixPort.lean:20:1: error: unsolved goals
+case pos
+A B H : Type
+f : A → B
+d : AspisR1Stage2.aspis_core.digest.Digest32 H
+bytes proof public1 : Slice U8
+hash : H
+reserved : Bool
+left : Usize → U8 → Result (core.result.Result A Fresh.Err)
+right : Usize → U8 → Result (core.result.Result B Cohort.Err)
+tail : ∀ (end1 : Usize) (next : U8), outer (NIL_Carriers.inner f) (left end1 next) = right end1 next
+same : bytes.len = 1768#usize
+⊢ (do
+      let x ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes { «end» := 8#usize }
+      let x ←
+        CheckpointBytes4Ops.ne core.cmp.PartialEqU8 x
+            (Array.make 8#usize [82#u8, 49#u8, 80#u8, 50#u8, 67#u8, 75#u8, 80#u8, 50#u8]
+              NIL_ResumePrefixCut.fresh._proof_8)
+      if x = true then ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint)
+        else do
+          let x ← bytes.index_usize 8#usize
+          let x_1 ← CheckpointBytes4Ops.tag AspisR1Stage2.transport.Variant.S2
+          if (x != x_1) = true then ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint)
+            else do
+              let x ← bytes.index_usize 9#usize
+              if x > 22#u8 then ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint)
+                else do
+                  let x_2 ← bytes.index_usize 10#usize
+                  if (x_2 != 1#u8) = true then ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint)
+                    else do
+                      let x_3 ←
+                        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                            { start := 11#usize, «end» := 16#usize }
+                      let x_4 ← core.slice.Slice.iter x_3
+                      let x_5 ← CheckpointBytes4Ops.headerAny x_4
+                      outer (NIL_Carriers.inner f)
+                          (let (b1, _) := x_5
+                          if b1 = true then ok (core.result.Result.Err NID_ResumeEmission.verifier.Error.Checkpoint)
+                          else do
+                            let s2 ←
+                              core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                                  { start := 16#usize, «end» := 48#usize }
+                            let a ← d.digest hash (Array.make 1#usize [proof] ⋯).to_slice
+                            let b2 ← CheckpointBytes4Ops.ne core.cmp.PartialEqU8 s2 a
+                            if b2 = true then ok (core.result.Result.Err NID_ResumeEmission.verifier.Error.Checkpoint)
+                              else do
+                                let s4 ←
+                                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                                      { start := 48#usize, «end» := 80#usize }
+                                let a1 ← d.digest hash (Array.make 1#usize [public1] ⋯).to_slice
+                                let b3 ← CheckpointBytes4Ops.ne core.cmp.PartialEqU8 s4 a1
+                                if b3 = true then
+                                    ok (core.result.Result.Err NID_ResumeEmission.verifier.Error.Checkpoint)
+                                  else do
+                                    let s6 ←
+                                      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                                          bytes { start := Usize.wrapping_sub 1768#usize 32#usize }
+                                    let s8 ←
+                                      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                                          bytes { «end» := Usize.wrapping_sub 1768#usize 32#usize }
+                                    let a2 ←
+                                      d.digest hash
+                                          (Array.make 2#usize
+                                              [(Array.make 22#usize
+                                                    [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8,
+                                                      82#u8, 49#u8, 58#u8, 99#u8, 104#u8, 101#u8, 99#u8, 107#u8, 112#u8,
+                                                      111#u8, 105#u8, 110#u8, 116#u8]
+                                                    NIL_ResumePrefixCut.fresh._proof_37).to_slice,
+                                                s8]
+                                              ⋯).to_slice
+                                    let b4 ← CheckpointBytes4Ops.ne core.cmp.PartialEqU8 s6 a2
+                                    if b4 = true then
+                                        ok (core.result.Result.Err NID_ResumeEmission.verifier.Error.Checkpoint)
+                                      else left (Usize.wrapping_sub 1768#usize 32#usize) x)) =
+    do
+    let s ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes { «end» := 8#usize }
+    let b ←
+      CheckpointBytes4Ops.ne core.cmp.PartialEqU8 s
+          (Array.make 8#usize [82#u8, 49#u8, 80#u8, 50#u8, 67#u8, 75#u8, 80#u8, 50#u8]
+            NIL_ResumePrefixCut.fresh._proof_8)
+    if b = true then ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint)
+      else do
+        let i2 ← bytes.index_usize 8#usize
+        let i3 ← CheckpointBytes4Ops.tag AspisR1Stage2.transport.Variant.S2
+        if (i2 != i3) = true then ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint)
+          else do
+            let i4 ← bytes.index_usize 9#usize
+            if i4 > 22#u8 then ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint)
+              else do
+                let i5 ← bytes.index_usize 10#usize
+                if (i5 != 1#u8) = true then ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint)
+                  else do
+                    let s1 ←
+                      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                          { start := 11#usize, «end» := 16#usize }
+                    let i6 ← core.slice.Slice.iter s1
+                    let (b1, _) ← CheckpointBytes4Ops.headerAny i6
+                    if b1 = true then ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint)
+                      else do
+                        let s2 ←
+                          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                              { start := 16#usize, «end» := 48#usize }
+                        let a ← d.digest hash (Array.make 1#usize [proof] ⋯).to_slice
+                        let b2 ← CheckpointBytes4Ops.ne core.cmp.PartialEqU8 s2 a
+                        if b2 = true then ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint)
+                          else do
+                            let s4 ←
+                              core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                                  { start := 48#usize, «end» := 80#usize }
+                            let a1 ← d.digest hash (Array.make 1#usize [public1] ⋯).to_slice
+                            let b3 ← CheckpointBytes4Ops.ne core.cmp.PartialEqU8 s4 a1
+                            if b3 = true then ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint)
+                              else do
+                                let s6 ←
+                                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                                      { start := Usize.wrapping_sub 1768#usize 32#usize }
+                                let s8 ←
+                                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                                      { «end» := Usize.wrapping_sub 1768#usize 32#usize }
+                                let a2 ←
+                                  d.digest hash
+                                      (Array.make 2#usize
+                                          [(Array.make 22#usize
+                                                [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8,
+                                                  49#u8, 58#u8, 99#u8, 104#u8, 101#u8, 99#u8, 107#u8, 112#u8, 111#u8,
+                                                  105#u8, 110#u8, 116#u8]
+                                                NIL_ResumePrefixCut.fresh._proof_37).to_slice,
+                                            s8]
+                                          ⋯).to_slice
+                                let b4 ← CheckpointBytes4Ops.ne core.cmp.PartialEqU8 s6 a2
+                                if b4 = true then ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint)
+                                  else right (Usize.wrapping_sub 1768#usize 32#usize) i4
+NIL_generated/NIL_ResumePrefixPort.lean:22:25: warning: This simp argument is unused:
+  bind_outer
+
+Hint: Omit it from the simp argument list.
+  simp only [outer_bind,b̵i̵n̵d̵_̵ ̲outer,̵o̵u̵t̵e̵r̵_if, ̲NIL_ResultCases.outer_ite, ̲NIL_ResultCases.outer_prodlet,
+  ̲ ̲ ̲ ̲ ̲ ̲NIL_HeaderAny.source, ̲NIL_FreshOps.digest,
+       ̲NID_ResumeEmission.Slice.Insts.CoreCmpPartialEqArray, ̲AspisR1Stage2.slicePartialEq,
+       ̲core.cmp.impls.PartialEqShared.ne, ̲tail, ̲NIL_ResultCases.outer_ok, ̲NIL_ResultCases.inner_err,
+  ̲ ̲ ̲ ̲ ̲ ̲NIL_ResultCases.checkpoint_error,
+  ̵  ̵ ̵ ̵NIL_CursorSub.source 1768#usize 32#usize (by decide), ̲lift,
+  ̲ ̲ ̲ ̲ ̲ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NIL_generated/NIL_ResumePrefixPort.lean:22:36: warning: This simp argument is unused:
+  outer_if
+
+Hint: Omit it from the simp argument list.
+  simp only [outer_bind, ̲bind_outer,o̵u̵t̵e̵r̵_̵i̵f̵,̵ ̲NIL_ResultCases.outer_ite, ̲NIL_ResultCases.outer_prodlet,
+  ̲ ̲ ̲ ̲ ̲ ̲NIL_HeaderAny.source, ̲NIL_FreshOps.digest,
+       ̲NID_ResumeEmission.Slice.Insts.CoreCmpPartialEqArray, ̲AspisR1Stage2.slicePartialEq,
+       ̲core.cmp.impls.PartialEqShared.ne, ̲tail, ̲NIL_ResultCases.outer_ok, ̲NIL_ResultCases.inner_err,
+  ̲ ̲ ̲ ̲ ̲ ̲NIL_ResultCases.checkpoint_error,
+  ̵  ̵ ̵ ̵NIL_CursorSub.source 1768#usize 32#usize (by decide), ̲lift,
+  ̲ ̲ ̲ ̲ ̲ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NIL_generated/NIL_ResumePrefixPort.lean:22:71: warning: This simp argument is unused:
+  NIL_ResultCases.outer_prodlet
+
+Hint: Omit it from the simp argument list.
+  simp only [outer_bind, ̲bind_outer, ̲outer_if, ̲NIL_ResultCases.outer_ite, ̲NIL_R̵e̵s̵u̵l̵t̵C̵a̵s̵e̵s̵.̵o̵u̵t̵e̵r̵_̵p̵r̵o̵d̵l̵e̵t̵,̵N̵I̵L̵_̵HeaderAny.source,
+  ̲ ̲ ̲ ̲ ̲ ̲NIL_FreshOps.digest,
+  ̵  ̵ ̵ ̵NID_ResumeEmission.Slice.Insts.CoreCmpPartialEqArray,
+  ̲ ̲ ̲ ̲ ̲ ̲AspisR1Stage2.slicePartialEq,
+  ̵  ̵ ̵ ̵core.cmp.impls.PartialEqShared.ne, ̲tail,
+  ̲ ̲ ̲ ̲ ̲ ̲NIL_ResultCases.outer_ok, ̲NIL_ResultCases.inner_err, ̲NIL_ResultCases.checkpoint_error,
+       ̲NIL_CursorSub.source 1768#usize 32#usize (by decide), ̲lift, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NIL_generated/NIL_ResumePrefixPort.lean:23:4: warning: This simp argument is unused:
+  NID_ResumeEmission.Slice.Insts.CoreCmpPartialEqArray
+
+Hint: Omit it from the simp argument list.
+  simp only [̵o̵u̵t̵e̵r̵_̵b̵i̵n̵d̵,̵b̵i̵n̵d̵_̵o̵u̵t̵e̵r̵,̵o̵u̵t̵e̵r̵_̵i̵f̵,̵N̵I̵L̵_̵R̵e̵s̵u̵l̵t̵C̵a̵s̵e̵s̵.̵o̵u̵t̵e̵r̵_̵i̵t̵e̵,̵N̵I̵L̵_̵R̵e̵s̵u̵l̵t̵C̵a̵s̵e̵s̵.̵o̵u̵t̵e̵r̵_̵p̵r̵o̵d̵l̵e̵t̵,̵N̵I̵L̵_̵H̵e̵a̵d̵e̵r̵A̵n̵y̵.̵s̵o̵u̵r̵c̵e̵,̵N̵I̵L̵_̵F̵r̵e̵s̵h̵O̵p̵s̵.̵d̵i̵g̵e̵s̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵N̵I̵D̵_̵R̵e̵s̵u̵m̵e̵E̵m̵i̵s̵s̵i̵o̵n̵.̵S̵l̵i̵c̵e̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵C̵m̵p̵P̵a̵r̵t̵i̵a̵l̵E̵q̵A̵r̵r̵a̵y̵,̵A̵s̵p̵i̵s̵R̵1̵S̵t̵a̵g̵e̵2̵.̵s̵l̵i̵c̵e̵P̵a̵r̵t̵i̵a̵l̵E̵q̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵c̵m̵p̵.̵i̵m̵p̵l̵s̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵S̵h̵a̵r̵e̵d̵.̵n̵e̵,̵t̵a̵i̵l̵,̵N̵I̵L̵_̵R̵e̵s̵u̵l̵t̵C̵a̵s̵e̵s̵.̵o̵u̵t̵e̵r̵_̵o̵k̵,̵N̵I̵L̵_̵R̵e̵s̵u̵l̵t̵C̵a̵s̵e̵s̵.̵i̵n̵n̵e̵r̵_̵e̵r̵r̵,̵N̵I̵L̵_̵R̵e̵s̵u̵l̵t̵C̵a̵s̵e̵s̵.̵c̵h̵e̵c̵k̵p̵o̵i̵n̵t̵_̵e̵r̵r̵o̵r̵,̵[̲o̲u̲t̲e̲r̲_̲b̲i̲n̲d̲,̲ ̲b̲i̲n̲d̲_̲o̲u̲t̲e̲r̲,̲ ̲o̲u̲t̲e̲r̲_̲i̲f̲,̲ ̲N̲I̲L̲_̲R̲e̲s̲u̲l̲t̲C̲a̲s̲e̲s̲.̲o̲u̲t̲e̲r̲_̲i̲t̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲N̲I̲L̲_̲R̲e̲s̲u̲l̲t̲C̲a̲s̲e̲s̲.̲o̲u̲t̲e̲r̲_̲p̲r̲o̲d̲l̲e̲t̲,̲ ̲N̲I̲L̲_̲H̲e̲a̲d̲e̲r̲A̲n̲y̲.̲s̲o̲u̲r̲c̲e̲,̲ ̲N̲I̲L̲_̲F̲r̲e̲s̲h̲O̲p̲s̲.̲d̲i̲g̲e̲s̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲A̲s̲p̲i̲s̲R̲1̲S̲t̲a̲g̲e̲2̲.̲s̲l̲i̲c̲e̲P̲a̲r̲t̲i̲a̲l̲E̲q̲,̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲i̲m̲p̲l̲s̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲S̲h̲a̲r̲e̲d̲.̲n̲e̲,̲ ̲t̲a̲i̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲N̲I̲L̲_̲R̲e̲s̲u̲l̲t̲C̲a̲s̲e̲s̲.̲o̲u̲t̲e̲r̲_̲o̲k̲,̲ ̲N̲I̲L̲_̲R̲e̲s̲u̲l̲t̲C̲a̲s̲e̲s̲.̲i̲n̲n̲e̲r̲_̲e̲r̲r̲,̲ ̲N̲I̲L̲_̲R̲e̲s̲u̲l̲t̲C̲a̲s̲e̲s̲.̲c̲h̲e̲c̲k̲p̲o̲i̲n̲t̲_̲e̲r̲r̲o̲r̲,̲
+       NIL_CursorSub.source 1768#usize 32#usize (by d̵e̵c̵i̵d̵e̵)̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵d̲e̲c̲i̲d̲e̲)̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NIL_generated/NIL_ResumePrefixPort.lean:24:38: warning: This simp argument is unused:
+  tail
+
+Hint: Omit it from the simp argument list.
+  simp only [outer_bind, ̲bind_outer, ̲outer_if, ̲NIL_ResultCases.outer_ite,
+  ̲ ̲ ̲ ̲ ̲ ̲NIL_ResultCases.outer_prodlet, ̲NIL_HeaderAny.source, ̲NIL_FreshOps.digest,
+       ̲NID_ResumeEmission.Slice.Insts.CoreCmpPartialEqArray, ̲AspisR1Stage2.slicePartialEq,
+       ̲core.cmp.impls.PartialEqShared.ne,t̵a̵i̵l̵,̵ ̲NIL_ResultCases.outer_ok, ̲NIL_ResultCases.inner_err,
+  ̲ ̲ ̲ ̲ ̲ ̲NIL_ResultCases.checkpoint_error,
+  ̵  ̵ ̵ ̵NIL_CursorSub.source 1768#usize 32#usize (by decide), ̲lift,
+  ̲ ̲ ̲ ̲ ̲ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NIL_ResumePrefixPort.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
