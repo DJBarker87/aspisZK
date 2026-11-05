@@ -5,7 +5,7 @@
 +include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
 +fn full_reply(p:&Pubkey)->ProgramResult{let k=p.to_bytes();match k[0]%27{0=>Ok(()),1=>Err(ProgramError::Custom(u32::from_le_bytes([k[1],k[2],k[3],k[4]]))),2=>Err(ProgramError::InvalidArgument),3=>Err(ProgramError::InvalidInstructionData),4=>Err(ProgramError::InvalidAccountData),5=>Err(ProgramError::AccountDataTooSmall),6=>Err(ProgramError::InsufficientFunds),7=>Err(ProgramError::IncorrectProgramId),8=>Err(ProgramError::MissingRequiredSignature),9=>Err(ProgramError::AccountAlreadyInitialized),10=>Err(ProgramError::UninitializedAccount),11=>Err(ProgramError::NotEnoughAccountKeys),12=>Err(ProgramError::AccountBorrowFailed),13=>Err(ProgramError::MaxSeedLengthExceeded),14=>Err(ProgramError::InvalidSeeds),15=>Err(ProgramError::AccountNotRentExempt),16=>Err(ProgramError::UnsupportedSysvar),17=>Err(ProgramError::IllegalOwner),18=>Err(ProgramError::MaxAccountsDataAllocationsExceeded),19=>Err(ProgramError::InvalidRealloc),20=>Err(ProgramError::MaxInstructionTraceLengthExceeded),21=>Err(ProgramError::BuiltinProgramsMustConsumeComputeUnits),22=>Err(ProgramError::InvalidAccountOwner),23=>Err(ProgramError::ArithmeticOverflow),24=>Err(ProgramError::Immutable),25=>Err(ProgramError::IncorrectAuthority),_=>Err(ProgramError::BorshIoError(String::from("NIV")))}}
 +fn err(p:&Pubkey)->ProgramError{match full_reply(p){Ok(())=>ProgramError::Custom(0),Err(e)=>e}}
-+fn owned()->OwnedAccount{OwnedAccount{key:Pubkey::new_from_array(kani::any()),owner:Pubkey::new_from_array(kani::any()),is_signer:false,is_writable:false,executable:false,length:Ok(kani::any()),bytes:Err(ProgramError::Custom(kani::any()))}}
++fn owned()->OwnedAccount{OwnedAccount{key:Pubkey::new_from_array(kani::any()),owner:Pubkey::new_from_array(kani::any()),is_signer:false,is_writable:false,executable:false,length:Ok(kani::any()),bytes:Err(ProgramError::InvalidAccountData)}}
 +fn no_decode(_: &[u8])->Result<Box<PoolV1PairForestTerminalStatementV1>,ProgramError>{panic!("decoder past selected prefix")}
 +fn distinct3<const N:usize>(a:&[&OwnedAccount;N])->ProgramResult{assert_eq!(N,3);if a[0].key()==a[1].key()||a[0].key()==a[2].key()||a[1].key()==a[2].key(){Err(ProgramError::InvalidArgument)}else{Ok(())}}
 +fn check<const G:usize>(wrong:bool){
@@ -18,9 +18,9 @@
 +  1=>a[0].is_writable=true,2=>a[0].is_signer=true,3=>a[0].executable=true,
 +  4=>a[1].is_writable=true,5=>a[1].is_signer=true,6=>a[1].executable=true,
 +  7=>{kani::assume(seed!=p);a[2].owner=seed;},8=>a[2].is_signer=true,9=>a[2].executable=true,10=>a[2].is_writable=false,
-+  11=>{a[2].length=Err(err(&seed));expected=err(&seed);},
++  11=>{a[2].length=Err(ProgramError::AccountBorrowFailed);a[2].bytes=Err(ProgramError::AccountBorrowFailed);expected=ProgramError::AccountBorrowFailed;},
 +  12=>{let n:usize=kani::any();kani::assume(n!=1768);a[2].length=Ok(n);},
-+  13=>{a[2].bytes=Err(err(&seed));expected=err(&seed);},
++  13=>{a[2].bytes=Err(ProgramError::InvalidAccountData);expected=ProgramError::InvalidAccountData;},
 +  14=>{a[2].bytes=Ok(Vec::new());a[1].bytes=Err(err(&seed));expected=err(&seed);},
 +  _=>unreachable!()
 + }

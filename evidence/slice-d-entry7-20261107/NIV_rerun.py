@@ -46,7 +46,8 @@ def run(a,old,prepared=None):
 import json,lzma,base64
 b=Path({B!r});files=json.loads(lzma.decompress(base64.b64decode({payload!r})))
 for n,t in files.items():
- p=b/n;assert p.resolve().is_relative_to(b.resolve());p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
+ p=b/n;assert p.resolve().is_relative_to(b.resolve());p.parent.mkdir(parents=True,exist_ok=True)
+ if not p.exists() or p.read_text()!=t:p.write_text(t)
 ''');assert r.returncode==0,r.stderr
     r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_run_host.py '+a+'.json',submitted=True)
     (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)

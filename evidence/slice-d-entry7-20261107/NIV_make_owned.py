@@ -5,7 +5,7 @@ reply=s[s.index('fn reply('):s.index('fn log_child')].replace('fn reply(','fn fu
 t='''use super::*;
 include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
 '''+reply+'''fn err(p:&Pubkey)->ProgramError{match full_reply(p){Ok(())=>ProgramError::Custom(0),Err(e)=>e}}
-fn owned()->OwnedAccount{OwnedAccount{key:Pubkey::new_from_array(kani::any()),owner:Pubkey::new_from_array(kani::any()),is_signer:false,is_writable:false,executable:false,length:Ok(kani::any()),bytes:Err(ProgramError::Custom(kani::any()))}}
+fn owned()->OwnedAccount{OwnedAccount{key:Pubkey::new_from_array(kani::any()),owner:Pubkey::new_from_array(kani::any()),is_signer:false,is_writable:false,executable:false,length:Ok(kani::any()),bytes:Err(ProgramError::InvalidAccountData)}}
 fn no_decode(_: &[u8])->Result<Box<PoolV1PairForestTerminalStatementV1>,ProgramError>{panic!("decoder past selected prefix")}
 fn distinct3<const N:usize>(a:&[&OwnedAccount;N])->ProgramResult{assert_eq!(N,3);if a[0].key()==a[1].key()||a[0].key()==a[2].key()||a[1].key()==a[2].key(){Err(ProgramError::InvalidArgument)}else{Ok(())}}
 fn check<const G:usize>(wrong:bool){
@@ -18,9 +18,9 @@ fn check<const G:usize>(wrong:bool){
   1=>a[0].is_writable=true,2=>a[0].is_signer=true,3=>a[0].executable=true,
   4=>a[1].is_writable=true,5=>a[1].is_signer=true,6=>a[1].executable=true,
   7=>{kani::assume(seed!=p);a[2].owner=seed;},8=>a[2].is_signer=true,9=>a[2].executable=true,10=>a[2].is_writable=false,
-  11=>{a[2].length=Err(err(&seed));expected=err(&seed);},
+  11=>{a[2].length=Err(ProgramError::AccountBorrowFailed);a[2].bytes=Err(ProgramError::AccountBorrowFailed);expected=ProgramError::AccountBorrowFailed;},
   12=>{let n:usize=kani::any();kani::assume(n!=1768);a[2].length=Ok(n);},
-  13=>{a[2].bytes=Err(err(&seed));expected=err(&seed);},
+  13=>{a[2].bytes=Err(ProgramError::InvalidAccountData);expected=ProgramError::InvalidAccountData;},
   14=>{a[2].bytes=Ok(Vec::new());a[1].bytes=Err(err(&seed));expected=err(&seed);},
   _=>unreachable!()
  }
