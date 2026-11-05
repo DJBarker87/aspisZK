@@ -1,0 +1,50 @@
+{"attempt": "NIG_L058", "exit_status": 1, "wall_seconds": 3.4716926228720695, "peak_rss_kib": "5818272", "swaps": "0", "print_axioms": ["'NIG_PairS2Body.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NIG_generated/NIG_PairS2Body.lean:104:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  f.len / 32#usize
+in the target expression
+  (have i := f.len;
+    do
+    let n ← i / 32#usize
+    have folds : Usize := (FIo_Install.toSlice p.alpha.to_slice).len
+    let expected_n ← weights.Weights.pair_loop0 { start := 0#usize, «end» := folds } 1024#usize
+    if (n != expected_n) = true then ok (core.result.Result.Err verifier.Error.Parse)
+      else do
+        let we ← (FIo_Install.toSlice p.alpha.to_slice).index_usize 0#usize
+        let ap0 ← weights.powers 4#usize we
+        let ap1 ←
+          if folds = 2#usize then do
+              let we1 ← (FIo_Install.toSlice p.al
+...
+r.Error) residual
+            else
+              have low := Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO;
+              do
+              let low1 ← NIG_LowLoop.low_reference ap0 ap1 low
+              let we1 ← weights.grouped_inactive_pair w f low1
+              let a ← parts1.update 0#usize we1
+              let b ← transport.Variant.Insts.CoreCmpPartialEqVariant.eq w.variant transport.Variant.S2
+              let libra ←
+                if b = true then weights.factored_s2_libra_weights ap0 ap1 w.extra
+                  else weights.twofold_libra_weights low1 w.extra
+              let parts2 ← NIG_LibraLoop.reference f libra a
+              let k ← weights.powers 7#usize kappa
+              let sum ← NHX_FinalLoop.reference parts2 k
+              ok (core.result.Result.Ok sum)
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+      | core.result.Result.Err a => ok (core.result.Result.Err verifier.Error.Allocation)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (2 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'NIG_PairS2Body.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rdb4190d46970401db042d128dfad28cc.scope; invocation ID: 2b3b2a27ffad431cbcb85bcceefacf66

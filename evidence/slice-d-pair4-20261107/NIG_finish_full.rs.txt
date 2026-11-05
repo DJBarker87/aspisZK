@@ -1,0 +1,41 @@
+struct FinishLog{events:[u8;7],count:usize,round_reply:[Result<E,Error>;2],round_ptr:[*const u8;2],round_len:[usize;2],round_alpha:[E;2],round_claim:[E;2],new:NewPort,pair:PairPort,dot_reply:Result<E,Error>,dot_f:*const u8,dot_f_len:usize,dot_weights:*const K,dot_len:usize}
+fn finish_event(l:&mut FinishLog,tag:u8){l.events[l.count]=tag;l.count+=1;}
+fn round_packet(poly:&[u8],alpha:E,claim:E,round:usize,l:&mut FinishLog)->Result<E,Error>{l.round_ptr[round]=poly.as_ptr();l.round_len[round]=poly.len();l.round_alpha[round]=alpha;l.round_claim[round]=claim;finish_event(l,round as u8);l.round_reply[round]}
+fn dot_packet(f:&[u8],weights:&[K],l:&mut FinishLog)->Result<E,Error>{l.dot_f=f.as_ptr();l.dot_f_len=f.len();l.dot_weights=weights.as_ptr();l.dot_len=weights.len();finish_event(l,5);l.dot_reply}
+fn finish_cut(v:&View<'_>,p:&Prepared,a:&Accumulator,l:&mut FinishLog)->Result<(),Error>{
+ let mut claim=p.claim;claim=round_packet(v.round0,p.alpha[0],claim,0,l)?;
+ if p.variant.folds()==2{claim=round_packet(v.round1,p.alpha[1],claim,1,l)?;}
+ finish_event(l,2);let weights=new_packet(p.variant,&p.semantic_alpha,&p.z,&mut l.new)?;
+ finish_event(l,3);let pair=pair_packet(&weights,&p.alpha[..p.variant.folds()],v.final_message,p.kappa,&mut l.pair)?;
+ if pair!=claim{return Err(Error::Relation)}
+ finish_event(l,4);let actual=dot_packet(v.final_message,&a.weights,l)?;
+ if a.next!=22||actual!=a.rhs{return Err(Error::Query)}
+ finish_event(l,6);Ok(())
+}
+fn finish_expected(a:&Accumulator,l:&FinishLog)->(Result<(),u8>,usize){
+ if let Err(e)=l.round_reply[0]{return(Err(error_code(e)),1)}
+ let claim=match l.round_reply[1]{Ok(v)=>v,Err(e)=>return(Err(error_code(e)),2)};
+ if let Some(e)=l.new.error{return(Err(error_code(e)),3)}
+ let pair=match l.pair.reply{Ok(v)=>v,Err(e)=>return(Err(error_code(e)),4)};
+ if pair.to_limbs()!=claim.to_limbs(){return(Err(3),4)}
+ let actual=match l.dot_reply{Ok(v)=>v,Err(e)=>return(Err(error_code(e)),6)};
+ if a.next!=22||actual.to_limbs()!=a.rhs.to_limbs(){return(Err(5),6)}
+ (Ok(()),7)
+}
+#[kani::proof]#[kani::unwind(2600)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn finish_full_slot(){
+ let p=prepared();let proof:[u8;2528]=kani::any();let v=View{variant:Variant::S2,semantic:&[],y1:&[],inactive:anye(),round0:&proof[..224],folded_root:None,round1:&proof[256..480],final_message:&proof[480..],query_bytes:&[]};
+ let raw:[K;64]=core::array::from_fn(|_|anyq());let mut weights=Vec::with_capacity(64);for q in raw{weights.push(q);}
+ let a=Accumulator{weights,rhs:anye(),power:anyq(),next:kani::any()};let reply=owned_weights();let owner=&*reply as *const Weights;
+ let mut l=FinishLog{events:[99;7],count:0,round_reply:[if kani::any(){Ok(anye())}else{Err(error(kani::any()))},if kani::any(){Ok(anye())}else{Err(error(kani::any()))}],round_ptr:[core::ptr::null();2],round_len:[0;2],round_alpha:[E::ZERO;2],round_claim:[E::ZERO;2],new:NewPort{variant:Variant::D,alpha:core::ptr::null(),z:core::ptr::null(),reply:Some(reply),error:if kani::any(){Some(error(kani::any()))}else{None},calls:0},pair:PairPort{who:core::ptr::null(),alpha:core::ptr::null(),alpha_len:0,message:core::ptr::null(),message_len:0,kappa:E::ZERO,reply:if kani::any(){Ok(anye())}else{Err(error(kani::any()))},calls:0},dot_reply:if kani::any(){Ok(anye())}else{Err(error(kani::any()))},dot_f:core::ptr::null(),dot_f_len:0,dot_weights:core::ptr::null(),dot_len:0};
+ let out=finish_cut(&v,&p,&a,&mut l);let(expected,count)=finish_expected(&a,&l);let limb:usize=kani::any();kani::assume(limb<8);let event:usize=kani::any();kani::assume(event<count);
+ if cfg!(NIG_corrupt){l.round_ptr[0]=l.round_ptr[0].wrapping_add(1);}
+ assert!(out.map_err(error_code)==expected&&l.count==count&&usize::from(l.events[event])==event);
+ assert!(l.round_ptr[0]==v.round0.as_ptr()&&l.round_len[0]==224&&l.round_alpha[0].to_limbs()[limb]==p.alpha[0].to_limbs()[limb]&&l.round_claim[0].to_limbs()[limb]==p.claim.to_limbs()[limb]);
+ if count>=2{let claim=l.round_reply[0].unwrap();assert!(l.round_ptr[1]==v.round1.as_ptr()&&l.round_len[1]==224&&l.round_alpha[1].to_limbs()[limb]==p.alpha[1].to_limbs()[limb]&&l.round_claim[1].to_limbs()[limb]==claim.to_limbs()[limb]);}
+ if count>=3{assert!(l.new.calls==1&&l.new.variant==p.variant&&l.new.alpha==p.semantic_alpha.as_ptr()&&l.new.z==p.z.as_ptr());}
+ if count>=4{assert!(l.pair.calls==1&&l.pair.who==owner&&l.pair.alpha==p.alpha.as_ptr()&&l.pair.alpha_len==2&&l.pair.message==v.final_message.as_ptr()&&l.pair.message_len==2048&&l.pair.kappa.to_limbs()[limb]==p.kappa.to_limbs()[limb]);}
+ if count>=6{assert!(l.dot_f==v.final_message.as_ptr()&&l.dot_f_len==2048&&l.dot_weights==a.weights.as_ptr()&&l.dot_len==64);}
+}

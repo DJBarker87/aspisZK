@@ -1,0 +1,215 @@
+NIG_generated/NIG_AllocationError.lean:32:1: error: Tactic `rfl` failed: The left-hand side
+  do
+    let we ← (FIo_Install.toSlice p.alpha.to_slice).index_usize 0#usize
+    let ap0 ← FIo_Native.weights.powers 4#usize we
+    let ap1 ←
+      do
+        let we1 ← (FIo_Install.toSlice p.alpha.to_slice).index_usize 1#usize
+        FIo_Native.weights.powers 4#usize we1
+    let r ← NHI_FilledModel.result (core.result.Result.Err e) 64#usize FIo_Native.aspis_core.field.QM31.ZERO
+    match r with
+      | core.result.Result.Ok v_1 => do
+        let shared_two_point ← FIo_Native.weights.shared_two_point_guard w 2#usize
+        let (r1, _, parts1) ←
+          FIo_Native.weights.process_regular_kinds w shared_two_point (FIo_Install.toSlice p.alpha.to_slice)
+              v.final_message 2#usize 64#usize ap0 ap1 v_1
+              (Array.repeat 7#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO)
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue a =>
+            if shared_two_point = true then do
+              let (self1, common1) ←
+                NIG_CommonLoop.common_reference w (Array.repeat 16#usize FIo_Native.aspis_core.field.QM31.ZERO)
+              let r2 ← FIo_Native.weights.shared_partials v.final_message common1
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let (r3, parts2) ← FIo_Native.weights.shared_high val self1 ap0 ap1 parts1
+                  let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                  match cf2 with
+                    | core.ops.control_flow.ControlFlow.Continue a => do
+                      let low1 ←
+                        NIG_LowLoop.low_reference ap0 ap1
+                            (Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO)
+                      let we1 ← FIo_Native.weights.grouped_inactive_pair self1 v.final_message low1
+                      let a ← parts2.update 0#usize we1
+                      let b ←
+                        FIo_Native.transport.Variant.Insts.CoreCmpPartialEqVariant.eq self1.variant
+                            FIo_Native.transport.Variant.S2
+                      let libra ←
+                        if b = true then FIo_Native.weights.factored_s2_libra_weights ap0 ap1 self1.extra
+                          else FIo_Native.weights.twofold_libra_weights low1 self1.extra
+                      let parts3 ← NIG_LibraLoop.reference v.final_message libra a
+                      let k ← FIo_Native.weights.powers 7#usize (FIo_Install.toE p.kappa)
+                      let sum ← NHX_FinalLoop.reference parts3 k
+                      ok (core.result.Result.Ok sum)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        FIo_Native.aspis_core.field.wide_exact.WideExact
+                        (core.convert.FromSame FIo_Native.verifier.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    FIo_Native.aspis_core.field.wide_exact.WideExact (core.convert.FromSame FIo_Native.verifier.Error)
+                    residual
+            else do
+              let low1 ←
+                NIG_LowLoop.low_reference ap0 ap1
+                    (Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO)
+              let we1 ← FIo_Native.weights.grouped_inactive_pair w v.final_message low1
+              let a ← parts1.update 0#usize we1
+              let b ←
+                FIo_Native.transport.Variant.Insts.CoreCmpPartialEqVariant.eq w.variant FIo_Native.transport.Variant.S2
+              let libra ←
+                if b = true then FIo_Native.weights.factored_s2_libra_weights ap0 ap1 w.extra
+                  else FIo_Native.weights.twofold_libra_weights low1 w.extra
+              let parts3 ← NIG_LibraLoop.reference v.final_message libra a
+              let k ← FIo_Native.weights.powers 7#usize (FIo_Install.toE p.kappa)
+              let sum ← NHX_FinalLoop.reference parts3 k
+              ok (core.result.Result.Ok sum)
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              FIo_Native.aspis_core.field.wide_exact.WideExact (core.convert.FromSame FIo_Native.verifier.Error)
+              residual
+      | core.result.Result.Err a => ok (core.result.Result.Err FIo_Native.verifier.Error.Allocation)
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Err FIo_Native.verifier.Error.Allocation)
+
+proof : Slice U8
+v : AspisR1Stage2.verifier.View
+p : AspisR1Stage2.verifier.Prepared
+a : AspisR1Stage2.verifier.Accumulator
+domain : NIG_FinishInput.Domain proof v p a
+w : FIo_Native.weights.Weights
+e : NP6_StdModel.ReserveError
+this : FIo_Native.Allocation := FIo_Install.allocation (core.result.Result.Err e)
+alpha : Slice FIo_Install.NE := FIo_Install.toSlice p.alpha.to_slice
+len : (↑alpha).length = 2
+x : FIo_Install.NE := (↑alpha)[0]
+y : FIo_Install.NE := (↑alpha)[1]
+ix : alpha.index_usize 0#usize = ok x
+iy : alpha.index_usize 1#usize = ok y
+all : ∀ x ∈ ↑(FIo_Install.toSlice p.alpha.to_slice), canonE x
+cx : canonE x
+cy : canonE y
+ap0 : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize
+h0 : FIo_Native.weights.powers 4#usize x = ok ap0
+left✝¹ :
+  AspisR1ClaimPreparedBridge.powersPublic 4#usize (NFW_PowersCohort.toPublic x) =
+    ok (NFW_PowersCohort.mapArray NFW_PowersCohort.toPublic ap0)
+right✝¹ : ∀ z ∈ ↑ap0, NFN_LPi_FieldValues.canonE z
+ap1 : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize
+h1 : FIo_Native.weights.powers 4#usize y = ok ap1
+left✝ :
+  AspisR1ClaimPreparedBridge.powersPublic 4#usize (NFW_PowersCohort.toPublic y) =
+    ok (NFW_PowersCohort.mapArray NFW_PowersCohort.toPublic ap1)
+right✝ : ∀ z ∈ ↑ap1, NFN_LPi_FieldValues.canonE z
+⊢ (do
+      let we ← (FIo_Install.toSlice p.alpha.to_slice).index_usize 0#usize
+      let ap0 ← FIo_Native.weights.powers 4#usize we
+      let ap1 ←
+        do
+          let we1 ← (FIo_Install.toSlice p.alpha.to_slice).index_usize 1#usize
+          FIo_Native.weights.powers 4#usize we1
+      let r ← NHI_FilledModel.result (core.result.Result.Err e) 64#usize FIo_Native.aspis_core.field.QM31.ZERO
+      match r with
+        | core.result.Result.Ok v_1 => do
+          let shared_two_point ← FIo_Native.weights.shared_two_point_guard w 2#usize
+          let (r1, _, parts1) ←
+            FIo_Native.weights.process_regular_kinds w shared_two_point (FIo_Install.toSlice p.alpha.to_slice)
+                v.final_message 2#usize 64#usize ap0 ap1 v_1
+                (Array.repeat 7#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO)
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue a =>
+              if shared_two_point = true then do
+                let (self1, common1) ←
+                  NIG_CommonLoop.common_reference w (Array.repeat 16#usize FIo_Native.aspis_core.field.QM31.ZERO)
+                let r2 ← FIo_Native.weights.shared_partials v.final_message common1
+                let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue val => do
+                    let (r3, parts2) ← FIo_Native.weights.shared_high val self1 ap0 ap1 parts1
+                    let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                    match cf2 with
+                      | core.ops.control_flow.ControlFlow.Continue a => do
+                        let low1 ←
+                          NIG_LowLoop.low_reference ap0 ap1
+                              (Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO)
+                        let we1 ← FIo_Native.weights.grouped_inactive_pair self1 v.final_message low1
+                        let a ← parts2.update 0#usize we1
+                        let b ←
+                          FIo_Native.transport.Variant.Insts.CoreCmpPartialEqVariant.eq self1.variant
+                              FIo_Native.transport.Variant.S2
+                        let libra ←
+                          if b = true then FIo_Native.weights.factored_s2_libra_weights ap0 ap1 self1.extra
+                            else FIo_Native.weights.twofold_libra_weights low1 self1.extra
+                        let parts3 ← NIG_LibraLoop.reference v.final_message libra a
+                        let k ← FIo_Native.weights.powers 7#usize (FIo_Install.toE p.kappa)
+                        let sum ← NHX_FinalLoop.reference parts3 k
+                        ok (core.result.Result.Ok sum)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          FIo_Native.aspis_core.field.wide_exact.WideExact
+                          (core.convert.FromSame FIo_Native.verifier.Error) residual
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      FIo_Native.aspis_core.field.wide_exact.WideExact (core.convert.FromSame FIo_Native.verifier.Error)
+                      residual
+              else do
+                let low1 ←
+                  NIG_LowLoop.low_reference ap0 ap1
+                      (Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO)
+                let we1 ← FIo_Native.weights.grouped_inactive_pair w v.final_message low1
+                let a ← parts1.update 0#usize we1
+                let b ←
+                  FIo_Native.transport.Variant.Insts.CoreCmpPartialEqVariant.eq w.variant
+                      FIo_Native.transport.Variant.S2
+                let libra ←
+                  if b = true then FIo_Native.weights.factored_s2_libra_weights ap0 ap1 w.extra
+                    else FIo_Native.weights.twofold_libra_weights low1 w.extra
+                let parts3 ← NIG_LibraLoop.reference v.final_message libra a
+                let k ← FIo_Native.weights.powers 7#usize (FIo_Install.toE p.kappa)
+                let sum ← NHX_FinalLoop.reference parts3 k
+                ok (core.result.Result.Ok sum)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                FIo_Native.aspis_core.field.wide_exact.WideExact (core.convert.FromSame FIo_Native.verifier.Error)
+                residual
+        | core.result.Result.Err a => ok (core.result.Result.Err FIo_Native.verifier.Error.Allocation)) =
+    ok (core.result.Result.Err FIo_Native.verifier.Error.Allocation)
+NIG_generated/NIG_AllocationError.lean:30:12: warning: This simp argument is unused:
+  ix
+
+Hint: Omit it from the simp argument list.
+  simp only [ix̵,̵i̵y, ̲h0, ̲h1, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NIG_generated/NIG_AllocationError.lean:30:15: warning: This simp argument is unused:
+  iy
+
+Hint: Omit it from the simp argument list.
+  simp only [ix,i̵y̵,̵ ̲h0, ̲h1, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NIG_generated/NIG_AllocationError.lean:30:18: warning: This simp argument is unused:
+  h0
+
+Hint: Omit it from the simp argument list.
+  simp only [ix, ̲iy, ̲h0̵,̵h̵1, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NIG_generated/NIG_AllocationError.lean:30:21: warning: This simp argument is unused:
+  h1
+
+Hint: Omit it from the simp argument list.
+  simp only [ix, ̲iy, ̲h0,h̵1̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NIG_generated/NIG_AllocationError.lean:30:24: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵i̵x̵,̵i̵y̵,̵h̵0̵,̵h̵1̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲i̲x̲,̲ ̲i̲y̲,̲ ̲h̲0̲,̲ ̲h̲1̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NIG_AllocationError.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

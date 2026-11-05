@@ -1,0 +1,58 @@
+{"attempt": "NIG_L053", "exit_status": 1, "wall_seconds": 3.606558754108846, "peak_rss_kib": "5800352", "swaps": "0", "print_axioms": ["'NIG_PairInputs.alphas' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NIG_PairInputs.new_owner' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NIG_PairInputs.final_width' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NIG_generated/NIG_PairInputs.lean:8:7: error: unexpected token 'prefix'; expected identifier
+NIG_generated/NIG_PairInputs.lean:25:25: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑p.alpha).length
+in the target expression
+  i < (↑p.alpha.to_slice).length
+
+proof : Slice U8
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+h : NIG_FinishInput.Domain proof v p a
+y : Stage2Finish.E
+hy : y ∈ ↑p.alpha.to_slice
+hx : FIo_Install.toE y ∈ ↑(FIo_Install.toSlice p.alpha.to_slice)
+i : ℕ
+hi : i < (↑p.alpha.to_slice).length
+eq : (↑p.alpha.to_slice)[i] = y
+⊢ i < 2
+
+Note: The target expression is not type-correct under the `instances` transparency level, which ma
+...
+NIG_generated/NIG_PairInputs.lean:8:7: error: unexpected token 'prefix'; expected identifier
+NIG_generated/NIG_PairInputs.lean:25:25: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑p.alpha).length
+in the target expression
+  i < (↑p.alpha.to_slice).length
+
+proof : Slice U8
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+h : NIG_FinishInput.Domain proof v p a
+y : Stage2Finish.E
+hy : y ∈ ↑p.alpha.to_slice
+hx : FIo_Install.toE y ∈ ↑(FIo_Install.toSlice p.alpha.to_slice)
+i : ℕ
+hi : i < (↑p.alpha.to_slice).length
+eq : (↑p.alpha.to_slice)[i] = y
+⊢ i < 2
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (2 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NIG_generated/NIG_PairInputs.lean:41:7: error(lean.unknownIdentifier): Unknown constant `axioms`
+NIG_generated/NIG_PairInputs.lean:41:20: error: unexpected token '#print'; expected ':'
+'NIG_PairInputs.alphas' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NIG_PairInputs.new_owner' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NIG_PairInputs.final_width' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r8d04ed36f8e34423b29a35abf7568103.scope; invocation ID: 7b15a326c78a4450a447cc726b4da9ca

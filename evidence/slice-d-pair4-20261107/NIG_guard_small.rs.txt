@@ -1,0 +1,37 @@
+struct SameGuard{regular_arg:bool,regular:Result<(),Error>,partial:Result<(),Error>,high:Result<(),Error>,events:[u8;5],count:usize}
+fn same_event(l:&mut SameGuard,t:u8){l.events[l.count]=t;l.count+=1;}
+fn same_guard_cut(shared:bool,l:&mut SameGuard)->Result<(),Error>{
+ l.regular_arg=shared;same_event(l,0);l.regular?;
+ if shared{same_event(l,1);same_event(l,2);l.partial?;same_event(l,3);l.high?;}
+ same_event(l,4);Ok(())
+}
+#[kani::proof]#[kani::unwind(10)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn same_guard_stage(){
+ let shared:bool=kani::any();let mut l=SameGuard{regular_arg:false,regular:unit_reply(),partial:unit_reply(),high:unit_reply(),events:[99;5],count:0};
+ let out=same_guard_cut(shared,&mut l);
+ let expected=if let Err(e)=l.regular{Err(error_code(e))}else if shared{if let Err(e)=l.partial{Err(error_code(e))}else if let Err(e)=l.high{Err(error_code(e))}else{Ok(())}}else{Ok(())};
+ let count=if l.regular.is_err(){1}else if !shared{2}else if l.partial.is_err(){3}else if l.high.is_err(){4}else{5};
+ if cfg!(NIG_corrupt){l.regular_arg=!shared;}
+ assert!(l.regular_arg==shared);assert!(out.map_err(error_code)==expected);assert!(l.count==count);
+ assert!(l.events[0]==0);if shared&&l.regular.is_ok(){assert!(l.events[1]==1&&l.events[2]==2);if l.partial.is_ok(){assert!(l.events[3]==3);}}
+ if out.is_ok(){assert!(l.events[count-1]==4);}
+}
+struct Initial{inputs:[E;2],replies:[[E;4];2],calls:usize}
+fn initial_power(x:E,side:usize,l:&mut Initial)->[E;4]{l.inputs[side]=x;l.calls+=1;l.replies[side]}
+#[kani::proof]#[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn initial_stage(){
+ let alpha:[E;2]=[anye(),anye()];let folds=alpha.len();let n=2048usize/32;
+ let mut expected=1024usize;for _ in 0..folds{expected>>=2u32;}
+ let mut l=Initial{inputs:[E::ZERO;2],replies:core::array::from_fn(|_|core::array::from_fn(|_|anye())),calls:0};
+ let ap0=initial_power(alpha[0],0,&mut l);let ap1=initial_power(alpha[1],1,&mut l);
+ let mut parts=[E::ZERO;7];let slot:usize=kani::any();kani::assume(slot<7);let limb:usize=kani::any();kani::assume(limb<8);let power:usize=kani::any();kani::assume(power<4);
+ if cfg!(NIG_corrupt){parts[slot]=E::ONE;}
+ assert!(n==64&&expected==64&&folds==2&&l.calls==2);
+ assert!(l.inputs[0].to_limbs()[limb]==alpha[0].to_limbs()[limb]&&l.inputs[1].to_limbs()[limb]==alpha[1].to_limbs()[limb]);
+ assert!(ap0[power].to_limbs()[limb]==l.replies[0][power].to_limbs()[limb]&&ap1[power].to_limbs()[limb]==l.replies[1][power].to_limbs()[limb]);
+ assert!(parts[slot].to_limbs()[limb]==0);
+}

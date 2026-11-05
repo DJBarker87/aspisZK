@@ -1,0 +1,2025 @@
+NHI_ArrayCells.update {T : Type} {n : Aeneas.Std.Usize} (a : Aeneas.Std.Array T n) (i : Aeneas.Std.Usize) (x : T)
+  (hi : ↑i < ↑n) : a.update i x = Aeneas.Std.Result.ok (NHI_ArrayCells.put a i x)
+'NHI_ArrayCells.update' depends on axioms: [propext]
+NHI_ArrayCells.frame {T : Type} {n : Aeneas.Std.Usize} (a : Aeneas.Std.Array T n) (i : Aeneas.Std.Usize) (x : T) (j : ℕ)
+  (different : j ≠ ↑i) : (↑(NHI_ArrayCells.put a i x))[j]? = (↑a)[j]?
+'NHI_ArrayCells.frame' depends on axioms: [propext]
+NHI_ArrayCells.selected {T : Type} {n : Aeneas.Std.Usize} (a : Aeneas.Std.Array T n) (i : Aeneas.Std.Usize) (x : T)
+  (hi : ↑i < ↑n) : (↑(NHI_ArrayCells.put a i x))[↑i]? = some x
+'NHI_ArrayCells.selected' depends on axioms: [propext]
+NHI_ByteProductsLoop.progress (f : Aeneas.Std.Slice Aeneas.Std.U8) (scratch : Aeneas.Std.Slice NHI_ByteProductsLoop.NQ)
+  (s t : NHI_ByteProductsLoop.State)
+  (run : NHI_ByteProductsLoop.body f scratch s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  t.1.end = s.1.end ∧ ↑t.1.start = ↑s.1.start + 1 ∧ ↑t.2.count = ↑s.2.count + 1 ∧ ↑s.1.start < ↑s.1.end
+'NHI_ByteProductsLoop.progress' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_ByteProductsLoop.decreases (f : Aeneas.Std.Slice Aeneas.Std.U8) (scratch : Aeneas.Std.Slice NHI_ByteProductsLoop.NQ)
+  (s t : NHI_ByteProductsLoop.State)
+  (run : NHI_ByteProductsLoop.body f scratch s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  ↑t.1.end - ↑t.1.start < ↑s.1.end - ↑s.1.start
+'NHI_ByteProductsLoop.decreases' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_ByteProductsLoop.source (f : Aeneas.Std.Slice Aeneas.Std.U8) (scratch : Aeneas.Std.Slice NHI_ByteProductsLoop.NQ)
+  (pair : NHI_ByteProductsLoop.Dot) (n : Aeneas.Std.Usize) :
+  FIo_Native.weights.push_byte_products pair f scratch n =
+    NHI_CountedLoop.unroll (NHI_ByteProductsLoop.body f scratch) (↑n + 1) ({ start := 0#usize, «end» := n }, pair)
+'NHI_ByteProductsLoop.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_CellCanon.slice_read (s : Aeneas.Std.Slice AspisR1.LPi_FieldValues.NQ) (i : Aeneas.Std.Usize)
+  (x : AspisR1.LPi_FieldValues.NQ) (h : NHI_CellCanon.slice s) (run : s.index_usize i = Aeneas.Std.Result.ok x) :
+  AspisR1.LPi_FieldValues.canonQ x
+'NHI_CellCanon.slice_read' depends on axioms: [propext]
+NHI_CellCanon.array_read {n : Aeneas.Std.Usize} (a : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ n)
+  (i : Aeneas.Std.Usize) (x : AspisR1.LPi_FieldValues.NQ) (h : NHI_CellCanon.array a)
+  (run : a.index_usize i = Aeneas.Std.Result.ok x) : AspisR1.LPi_FieldValues.canonQ x
+'NHI_CellCanon.array_read' depends on axioms: [propext]
+NHI_CellCanon.list_set {α : Type} (P : α → Prop) (xs : List α) (i : ℕ) (v : α) (h : ∀ x ∈ xs, P x) (hv : P v) (x : α) :
+  x ∈ xs.set i v → P x
+'NHI_CellCanon.list_set' depends on axioms: [propext, Quot.sound]
+NHI_CellCanon.put (s : Aeneas.Std.Slice AspisR1.LPi_FieldValues.NQ) (i : ℕ) (v : AspisR1.LPi_FieldValues.NQ)
+  (h : NHI_CellCanon.slice s) (hv : AspisR1.LPi_FieldValues.canonQ v) : NHI_CellCanon.slice (NHI_SliceCells.put s i v)
+'NHI_CellCanon.put' depends on axioms: [propext, Quot.sound]
+NHI_CountedLoop.agrees {S A : Type} (body : S → Aeneas.Std.Result (Aeneas.Std.ControlFlow S A)) (rank : S → ℕ)
+  (decreases : ∀ (s next : S), body s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont next) → rank next < rank s)
+  (fuel : ℕ) (s : S) (enough : rank s < fuel) : Aeneas.Std.loop body s = NHI_CountedLoop.unroll body fuel s
+'NHI_CountedLoop.agrees' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_FactoredProducers.one_canonical : AspisR1.LPi_FieldValues.canonQ NHI_FactoredProducers.one
+'NHI_FactoredProducers.one_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_FactoredProducers.square (x : AspisR1.LPi_FieldValues.NQ) (hx : AspisR1.LPi_FieldValues.canonQ x) :
+  ∃ out, FIo_Native.aspis_core.field.QM31.square x = Aeneas.Std.Result.ok out ∧ AspisR1.LPi_FieldValues.canonQ out
+'NHI_FactoredProducers.square' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_FactoredProducers.total (q : AspisR1.LPi_FieldValues.NQ) (hq : AspisR1.LPi_FieldValues.canonQ q) :
+  ∃ low high q4 q16,
+    NHI_FactoredProducers.run q = Aeneas.Std.Result.ok (low, high, q4, q16) ∧
+      (∀ x ∈ ↑low, AspisR1.LPi_FieldValues.canonQ x) ∧
+        (∀ x ∈ ↑high, AspisR1.LPi_FieldValues.canonQ x) ∧
+          AspisR1.LPi_FieldValues.canonQ q4 ∧ AspisR1.LPi_FieldValues.canonQ q16
+'NHI_FactoredProducers.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_FilledBridge.clone (value : NHI_FilledBridge.Words) :
+  Aeneas.Std.core.array.CloneArray.clone Aeneas.Std.core.clone.CloneU32 value = Aeneas.Std.Result.ok value
+'NHI_FilledBridge.clone' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_FilledBridge.reference (reservation : AspisR1.NP6_StdModel.Reservation) (n : Aeneas.Std.Usize)
+  (value : NHI_FilledBridge.Words) :
+  NHI_FilledRef.filled_ref n value =
+    match reservation with
+    | Aeneas.Std.core.result.Result.Err a =>
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err NHI_FilledRef.Error.Allocation)
+    | Aeneas.Std.core.result.Result.Ok PUnit.unit =>
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (NHI_FilledModel.vector n value))
+'NHI_FilledBridge.reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_FilledModel.contents (reservation : AspisR1.NP6_StdModel.Reservation) {T : Type}
+  (copy : Aeneas.Std.core.marker.Copy T) (n : Aeneas.Std.Usize) (value : T)
+  (cloned : copy.cloneInst.clone value = Aeneas.Std.Result.ok value) :
+  FIo_Native.aspis_core.r0.heap.filled copy n value = NHI_FilledModel.result reservation n value
+'NHI_FilledModel.contents' depends on axioms: [propext, Quot.sound]
+NHI_FilledModel.qm (reservation : AspisR1.NP6_StdModel.Reservation) (n : Aeneas.Std.Usize)
+  (value : AspisR1.LPi_FieldValues.NQ) :
+  FIo_Native.aspis_core.r0.heap.filled FIo_Native.aspis_core.field.QM31.Insts.CoreMarkerCopy n value =
+    NHI_FilledModel.result reservation n value
+'NHI_FilledModel.qm' depends on axioms: [propext, Quot.sound]
+NHI_FilledModel.length {T : Type} (n : Aeneas.Std.Usize) (value : T) : (↑(NHI_FilledModel.vector n value)).length = ↑n
+'NHI_FilledModel.length' depends on axioms: [propext, Quot.sound]
+NHI_FilledModel.selected {T : Type} (n : Aeneas.Std.Usize) (value : T) (i : ℕ) (hi : i < ↑n) :
+  (↑(NHI_FilledModel.vector n value))[i]? = some value
+'NHI_FilledModel.selected' depends on axioms: [propext, Quot.sound]
+NHI_FilledModel.canonical (n : Aeneas.Std.Usize) (value : AspisR1.LPi_FieldValues.NQ)
+  (hc : AspisR1.LPi_FieldValues.canonQ value) (x : AspisR1.LPi_FieldValues.NQ) :
+  x ∈ ↑(NHI_FilledModel.vector n value) → AspisR1.LPi_FieldValues.canonQ x
+'NHI_FilledModel.canonical' depends on axioms: [propext, Quot.sound]
+NHI_ForwardRange.done (iter : NHI_ForwardRange.Range) (stop : ↑iter.end ≤ ↑iter.start) :
+  NHI_ForwardRange.next iter = Aeneas.Std.Result.ok (none, iter)
+'NHI_ForwardRange.done' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_ForwardRange.active (iter : NHI_ForwardRange.Range) (h : ↑iter.start < ↑iter.end) :
+  ∃ rest,
+    NHI_ForwardRange.next iter = Aeneas.Std.Result.ok (some iter.start, rest) ∧
+      ↑rest.start = ↑iter.start + 1 ∧ rest.end = iter.end
+'NHI_ForwardRange.active' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_ForwardRange.exact_step (iter : NHI_ForwardRange.Range) (nextStart : Aeneas.Std.Usize)
+  (active : ↑iter.start < ↑iter.end) (value : ↑nextStart = ↑iter.start + 1) :
+  NHI_ForwardRange.next iter = Aeneas.Std.Result.ok (some iter.start, { start := nextStart, «end» := iter.end })
+'NHI_ForwardRange.exact_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_GroupAlgebra.contraction {R : Type} [CommSemiring R] {n m : ℕ} (group : Fin n → Fin m) (a : Fin n → R)
+  (weight : Fin m → R) : ∑ k, (∑ j with group j = k, a j) * weight k = ∑ j, a j * weight (group j)
+'NHI_GroupAlgebra.contraction' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_GroupAlgebra.masks {R : Type} [CommSemiring R] {n m bits : ℕ} (group : Fin n → Fin m)
+  (mask : Fin m → Fin bits → Bool) (a : Fin n → R) (low : Fin bits → R) :
+  (∑ k, (∑ j with group j = k, a j) * ∑ b, if mask k b = true then low b else 0) =
+    ∑ j, ∑ b, if mask (group j) b = true then a j * low b else 0
+'NHI_GroupAlgebra.masks' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_GroupDispatch.source (w : FIo_Native.weights.Weights) (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (low : Aeneas.Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 16#usize)
+  (s2 : w.variant = FIo_Native.transport.Variant.S2) (size : (↑bytes).length = 2048) :
+  FIo_Native.weights.grouped_inactive_pair w bytes low = FIo_Native.weights.s2_grouped_inactive_pair bytes low
+'NHI_GroupDispatch.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_GroupTables.groups : NHI_GroupTablesRef.S2_INACTIVE_GROUPS = FIo_Native.weights.S2_INACTIVE_GROUPS
+'NHI_GroupTables.groups' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_GroupTables.masks : NHI_GroupTablesRef.S2_INACTIVE_MASKS = FIo_Native.weights.S2_INACTIVE_MASKS
+'NHI_GroupTables.masks' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_GroupTables.source (j group : Aeneas.Std.Usize) :
+  NHI_GroupTablesRef.group_tables_ref j group = do
+    let g ← FIo_Native.weights.S2_INACTIVE_GROUPS.index_usize j
+    let m ← FIo_Native.weights.S2_INACTIVE_MASKS.index_usize group
+    Aeneas.Std.Result.ok (g, m)
+'NHI_GroupTables.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_GroupTables.bounded_entries (g : Aeneas.Std.U8) : g ∈ ↑FIo_Native.weights.S2_INACTIVE_GROUPS → ↑g < 12
+'NHI_GroupTables.bounded_entries' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_GroupTables.selected_group (j : Aeneas.Std.Usize) (hj : ↑j < 64) :
+  ∃ g, FIo_Native.weights.S2_INACTIVE_GROUPS.index_usize j = Aeneas.Std.Result.ok g ∧ ↑g < 12
+'NHI_GroupTables.selected_group' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_HighDotLoop.progress (f : Aeneas.Std.Array NHI_HighDotLoop.NE 4#usize)
+  (scratch : Aeneas.Std.Array NHI_HighDotLoop.NQ 4#usize) (s t : NHI_HighDotLoop.State)
+  (run : NHI_HighDotLoop.body f scratch s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  t.1.end = s.1.end ∧ ↑t.1.start = ↑s.1.start + 1 ∧ ↑t.2.count = ↑s.2.count + 1 ∧ ↑s.1.start < ↑s.1.end
+'NHI_HighDotLoop.progress' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_HighDotLoop.decreases (f : Aeneas.Std.Array NHI_HighDotLoop.NE 4#usize)
+  (scratch : Aeneas.Std.Array NHI_HighDotLoop.NQ 4#usize) (s t : NHI_HighDotLoop.State)
+  (run : NHI_HighDotLoop.body f scratch s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  ↑t.1.end - ↑t.1.start < ↑s.1.end - ↑s.1.start
+'NHI_HighDotLoop.decreases' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_HighDotLoop.source (f : Aeneas.Std.Array NHI_HighDotLoop.NE 4#usize)
+  (scratch : Aeneas.Std.Array NHI_HighDotLoop.NQ 4#usize) :
+  FIo_Native.weights.high_dot f scratch = do
+    let pair ← FIo_Native.fast_pairing.EbyKDot.new
+    NHI_CountedLoop.unroll (NHI_HighDotLoop.body f scratch) 5 ({ start := 0#usize, «end» := 4#usize }, pair)
+'NHI_HighDotLoop.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_KindDomain.selected (kind : ℕ) (member : kind = 1 ∨ kind = 2 ∨ kind = 3 ∨ kind = 5 ∨ kind = 6) :
+  NHI_KindDomain.row kind < 5 ∧ kind < 7
+'NHI_KindDomain.selected' does not depend on any axioms
+NHI_KindDomain.slots :
+  NHI_KindDomain.row 1 = 0 ∧
+    NHI_KindDomain.row 2 = 1 ∧ NHI_KindDomain.row 3 = 2 ∧ NHI_KindDomain.row 5 = 3 ∧ NHI_KindDomain.row 6 = 4
+'NHI_KindDomain.slots' does not depend on any axioms
+NHI_PartialDotLoop.progress (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (scratch : Aeneas.Std.Array NHI_PartialDotLoop.NQ 16#usize) (offset : Aeneas.Std.Usize)
+  (s t : NHI_PartialDotLoop.State)
+  (run : NHI_PartialDotLoop.body f scratch offset s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  t.1.end = s.1.end ∧ ↑t.1.start = ↑s.1.start + 1 ∧ ↑t.2.count = ↑s.2.count + 1 ∧ ↑s.1.start < ↑s.1.end
+'NHI_PartialDotLoop.progress' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_PartialDotLoop.decreases (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (scratch : Aeneas.Std.Array NHI_PartialDotLoop.NQ 16#usize) (offset : Aeneas.Std.Usize)
+  (s t : NHI_PartialDotLoop.State)
+  (run : NHI_PartialDotLoop.body f scratch offset s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  ↑t.1.end - ↑t.1.start < ↑s.1.end - ↑s.1.start
+'NHI_PartialDotLoop.decreases' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_PartialDotLoop.source (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (scratch : Aeneas.Std.Array NHI_PartialDotLoop.NQ 16#usize) (offset : Aeneas.Std.Usize) :
+  FIo_Native.weights.partial_dot f scratch offset = do
+    let pair ← FIo_Native.fast_pairing.EbyKDot.new
+    NHI_CountedLoop.unroll (NHI_PartialDotLoop.body f scratch offset) 17 ({ start := 0#usize, «end» := 16#usize }, pair)
+'NHI_PartialDotLoop.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_PartialIndex.value (s j : Aeneas.Std.Usize) (hs : ↑s < 4) (hj : ↑j < 16) :
+  ↑(NHI_PartialIndex.index s j) = 16 * ↑s + ↑j ∧ ↑(NHI_PartialIndex.index s j) < 64
+'NHI_PartialIndex.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_PartialIndex.extracted (s j : Aeneas.Std.Usize) :
+  NHI_PartialIndexRef.partial_index_ref s j = Aeneas.Std.Result.ok (NHI_PartialIndex.index s j)
+'NHI_PartialIndex.extracted' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_PartialIndex.windows_disjoint (s t j k : ℕ) (hs : s < 4) (ht : t < 4) (hj : j < 16) (hk : k < 16)
+  (different : s ≠ t) : 16 * s + j ≠ 16 * t + k
+'NHI_PartialIndex.windows_disjoint' depends on axioms: [propext, Quot.sound]
+NHI_PowersEdge.scalar (alpha : AspisR1.LPi_FieldValues.NE) (ha : AspisR1.LPi_FieldValues.canonE alpha)
+  (f : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 4#usize) (hf : ∀ x ∈ ↑f, AspisR1.LPi_FieldValues.canonQ x) :
+  ∃ p out,
+    FIo_Native.weights.powers 4#usize alpha = Aeneas.Std.Result.ok p ∧
+      (∀ x ∈ ↑p, AspisR1.LPi_FieldValues.canonE x) ∧
+        FIo_Native.weights.Weights.scalar_factor f p = Aeneas.Std.Result.ok out ∧ AspisR1.LPi_FieldValues.canonE out
+'NHI_PowersEdge.scalar' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_QProduct.spec (x q : AspisR1.LPi_FieldValues.NQ) (hx : AspisR1.LPi_FieldValues.canonQ x)
+  (hq : AspisR1.LPi_FieldValues.canonQ q) :
+  FIo_Native.aspis_core.field.QM31.mul x q = Aeneas.Std.Result.ok (NHI_QProduct.mul x q) ∧
+    AspisR1.LPi_FieldValues.canonQ (NHI_QProduct.mul x q) ∧
+      AspisR1.LPi_FieldValues.qw (NHI_QProduct.mul x q) =
+        AspisR1.LPi_FieldValues.mulQ (AspisR1.LPi_FieldValues.qw x) (AspisR1.LPi_FieldValues.qw q)
+'NHI_QProduct.spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_QProduct.slice_at (s : Aeneas.Std.Slice AspisR1.LPi_FieldValues.NQ) (i : Aeneas.Std.Usize)
+  (x : AspisR1.LPi_FieldValues.NQ) (run : s.index_usize i = Aeneas.Std.Result.ok x) : NHI_QProduct.sliceAt s ↑i = x
+'NHI_QProduct.slice_at' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_QProduct.array_at {n : Aeneas.Std.Usize} (a : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ n) (i : Aeneas.Std.Usize)
+  (x : AspisR1.LPi_FieldValues.NQ) (run : a.index_usize i = Aeneas.Std.Result.ok x) : NHI_QProduct.arrayAt a ↑i = x
+'NHI_QProduct.array_at' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_RangeProgress.some_next (r r' : NHI_RangeProgress.Range) (i : Aeneas.Std.Usize)
+  (run :
+    Aeneas.Std.core.iter.range.IteratorRange.next Aeneas.Std.core.iter.range.StepUsize r =
+      Aeneas.Std.Result.ok (some i, r')) :
+  i = r.start ∧ r'.end = r.end ∧ ↑r'.start = ↑r.start + 1 ∧ ↑r.start < ↑r.end
+'NHI_RangeProgress.some_next' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_Reverse.stop :
+  NHI_Reverse.next (NHI_Reverse.cursor 0#usize) = Aeneas.Std.Result.ok (none, NHI_Reverse.cursor 0#usize)
+'NHI_Reverse.stop' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_Reverse.step (e : Aeneas.Std.Usize) (positive : 0 < ↑e) :
+  ∃ i, ↑i + 1 = ↑e ∧ NHI_Reverse.next (NHI_Reverse.cursor e) = Aeneas.Std.Result.ok (some i, NHI_Reverse.cursor i)
+'NHI_Reverse.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_Scalar.zero_canonical : AspisR1.LPi_FieldValues.canonE NHI_Scalar.zero
+'NHI_Scalar.zero_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_Scalar.four (p : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 4#usize)
+  (f : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 4#usize) (hp : ∀ x ∈ ↑p, AspisR1.LPi_FieldValues.canonE x)
+  (hf : ∀ x ∈ ↑f, AspisR1.LPi_FieldValues.canonQ x) :
+  ∃ sum,
+    FIo_Native.core.iter.traits.iterator.Iterator.fold.default NHI_ScalarFold.iterator NHI_ScalarFold.fnmut
+          { start := 0#usize, «end» := 4#usize } NHI_Scalar.zero (p, f) =
+        Aeneas.Std.Result.ok sum ∧
+      NHI_ScalarFold.cells p f 4 0#usize NHI_Scalar.zero = Aeneas.Std.Result.ok sum ∧ AspisR1.LPi_FieldValues.canonE sum
+'NHI_Scalar.four' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_Scalar.cohort (f : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 4#usize)
+  (p : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 4#usize) (hp : ∀ x ∈ ↑p, AspisR1.LPi_FieldValues.canonE x)
+  (hf : ∀ x ∈ ↑f, AspisR1.LPi_FieldValues.canonQ x) :
+  FIo_Native.weights.Weights.scalar_factor f p = NHI_Scalar.reference f p
+'NHI_Scalar.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_Scalar.total (f : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 4#usize)
+  (p : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 4#usize) (hp : ∀ x ∈ ↑p, AspisR1.LPi_FieldValues.canonE x)
+  (hf : ∀ x ∈ ↑f, AspisR1.LPi_FieldValues.canonQ x) :
+  ∃ sum out,
+    NHI_ScalarFold.cells p f 4 0#usize NHI_Scalar.zero = Aeneas.Std.Result.ok sum ∧
+      AspisR1.LPi_FieldValues.canonE sum ∧
+        FIo_Native.weights.Weights.scalar_factor f p = Aeneas.Std.Result.ok out ∧
+          AspisR1.LPi_FieldValues.canonE out ∧
+            AspisR1.NGM_RoundScale.limbs out =
+              List.map (fun word => word * 536870912 % 2147483647) (AspisR1.NGM_RoundScale.limbs sum)
+'NHI_Scalar.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_ScalarDomain.index {α : Type} {n : Aeneas.Std.Usize} (a : Aeneas.Std.Array α n) (i : Aeneas.Std.Usize)
+  (h : ↑i < ↑n) : a.index_usize i = Aeneas.Std.Result.ok (NHI_ScalarDomain.pick a (↑i) h)
+'NHI_ScalarDomain.index' depends on axioms: [propext]
+NHI_ScalarDomain.perm (s : Aeneas.Std.Usize) (h : ↑s < 4) :
+  ∃ i, FIo_Native.weights.PERM.index_usize s = Aeneas.Std.Result.ok i ∧ ↑i < 4
+'NHI_ScalarDomain.perm' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_ScalarDomain.canon_pick {α : Type} (P : α → Prop) {n : Aeneas.Std.Usize} (a : Aeneas.Std.Array α n)
+  (all : ∀ x ∈ ↑a, P x) (i : ℕ) (h : i < ↑n) : P (NHI_ScalarDomain.pick a i h)
+'NHI_ScalarDomain.canon_pick' depends on axioms: [propext]
+NHI_ScalarDomain.total (p : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 4#usize)
+  (f : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 4#usize) (hp : ∀ x ∈ ↑p, AspisR1.LPi_FieldValues.canonE x)
+  (hf : ∀ x ∈ ↑f, AspisR1.LPi_FieldValues.canonQ x) (v : AspisR1.LPi_FieldValues.NE)
+  (hv : AspisR1.LPi_FieldValues.canonE v) (s : Aeneas.Std.Usize) (hs : ↑s < 4) :
+  ∃ out,
+    FIo_Native.weights.Weights.scalar_factor.closure.Insts.CoreOpsFunctionFnMutPairWideExactUsizeWideExact.call_mut
+          (p, f) (v, s) =
+        Aeneas.Std.Result.ok (out, p, f) ∧
+      AspisR1.LPi_FieldValues.canonE out
+'NHI_ScalarDomain.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_ScalarFold.active (p : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 4#usize)
+  (f : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 4#usize) (hp : ∀ x ∈ ↑p, AspisR1.LPi_FieldValues.canonE x)
+  (hf : ∀ x ∈ ↑f, AspisR1.LPi_FieldValues.canonQ x) (v : AspisR1.LPi_FieldValues.NE)
+  (hv : AspisR1.LPi_FieldValues.canonE v) (iter : NHI_ScalarFold.Iter) (finish : ↑iter.end = 4)
+  (more : ↑iter.start < 4) :
+  ∃ rest out,
+    NHI_ScalarFold.body iter (p, f) v = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (rest, (p, f), out)) ∧
+      NHI_ScalarStep.step p f v iter.start = Aeneas.Std.Result.ok (out, p, f) ∧
+        ↑rest.start = ↑iter.start + 1 ∧ ↑rest.end = 4 ∧ AspisR1.LPi_FieldValues.canonE out
+'NHI_ScalarFold.active' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_ScalarFold.done (iter : NHI_ScalarFold.Iter) (v : AspisR1.LPi_FieldValues.NE) (c : NHI_ScalarFold.Closure)
+  (stop : ↑iter.end ≤ ↑iter.start) : NHI_ScalarFold.body iter c v = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done v)
+'NHI_ScalarFold.done' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_ScalarFold.finite (p : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 4#usize)
+  (f : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 4#usize) (hp : ∀ x ∈ ↑p, AspisR1.LPi_FieldValues.canonE x)
+  (hf : ∀ x ∈ ↑f, AspisR1.LPi_FieldValues.canonQ x) (fuel : ℕ) (iter : NHI_ScalarFold.Iter) (last : ↑iter.end = 4)
+  (remaining : fuel + ↑iter.start = 4) (v : AspisR1.LPi_FieldValues.NE) (hv : AspisR1.LPi_FieldValues.canonE v) :
+  ∃ out,
+    Aeneas.Std.loop (fun t => NHI_ScalarFold.body t.1 t.2.1 t.2.2) (iter, (p, f), v) = Aeneas.Std.Result.ok out ∧
+      NHI_ScalarFold.cells p f fuel iter.start v = Aeneas.Std.Result.ok out ∧ AspisR1.LPi_FieldValues.canonE out
+'NHI_ScalarFold.finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_ScalarStep.cell_bind (value : AspisR1.LPi_FieldValues.NE) (scalar : AspisR1.LPi_FieldValues.NQ)
+  (carry : AspisR1.LPi_FieldValues.NE)
+  (k :
+    AspisR1.LPi_FieldValues.NE →
+      Aeneas.Std.Result
+        (AspisR1.LPi_FieldValues.NE ×
+          Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 4#usize × Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 4#usize)) :
+  (do
+      let out ← NHE_ScalarCell.run value scalar carry
+      k out) =
+    do
+    let product ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul_qm31 value scalar
+    let out ← FIo_Native.aspis_core.field.wide_exact.WideExact.add carry product
+    k out
+'NHI_ScalarStep.cell_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_ScalarStep.emitted (p : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 4#usize)
+  (f : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 4#usize) (carry : AspisR1.LPi_FieldValues.NE)
+  (s : Aeneas.Std.Usize) :
+  NHI_ScalarStep.step p f carry s =
+    FIo_Native.weights.Weights.scalar_factor.closure.Insts.CoreOpsFunctionFnMutPairWideExactUsizeWideExact.call_mut
+      (p, f) (carry, s)
+'NHI_ScalarStep.emitted' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_ScalarStep.observed (p : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 4#usize)
+  (f : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 4#usize) (carry value : AspisR1.LPi_FieldValues.NE)
+  (scalar : AspisR1.LPi_FieldValues.NQ) (s index : Aeneas.Std.Usize)
+  (hi : FIo_Native.weights.PERM.index_usize s = Aeneas.Std.Result.ok index)
+  (hv : p.index_usize index = Aeneas.Std.Result.ok value) (hs : f.index_usize s = Aeneas.Std.Result.ok scalar)
+  (cv : AspisR1.LPi_FieldValues.canonE value) (cs : AspisR1.LPi_FieldValues.canonQ scalar)
+  (cc : AspisR1.LPi_FieldValues.canonE carry) :
+  ∃ out, NHI_ScalarStep.step p f carry s = Aeneas.Std.Result.ok (out, p, f) ∧ AspisR1.LPi_FieldValues.canonE out
+'NHI_ScalarStep.observed' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_ScratchCompose.cohort (reservation : AspisR1.NP6_StdModel.Reservation) (w : NHI_ScratchCompose.W)
+  (k : Aeneas.Std.Usize) (hk : ↑k < 5) (hf : NHI_Tensor.Domain w k hk) :
+  NHI_ScratchCompose.run reservation w k = NHI_ScratchCompose.expected reservation w k hk
+'NHI_ScratchCompose.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_ScratchDomain.zero_canonical : AspisR1.LPi_FieldValues.canonQ NHI_ScratchDomain.zero
+'NHI_ScratchDomain.zero_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_ScratchDomain.initialized (reservation : AspisR1.NP6_StdModel.Reservation) :
+  FIo_Native.aspis_core.r0.heap.filled FIo_Native.aspis_core.field.QM31.Insts.CoreMarkerCopy 64#usize
+      NHI_ScratchDomain.zero =
+    NHI_FilledModel.result reservation 64#usize NHI_ScratchDomain.zero
+'NHI_ScratchDomain.initialized' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_ScratchDomain.domain :
+  (↑(NHI_FilledModel.vector 64#usize NHI_ScratchDomain.zero)).length = 64 ∧
+    NHI_CellCanon.slice (NHI_FilledModel.vector 64#usize NHI_ScratchDomain.zero).deref
+'NHI_ScratchDomain.domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_SliceCells.read {α : Type} (s : Aeneas.Std.Slice α) (i : Aeneas.Std.Usize) (h : ↑i < (↑s).length) :
+  s.index_usize i = Aeneas.Std.Result.ok (NHI_SliceCells.pick s (↑i) h)
+'NHI_SliceCells.read' depends on axioms: [propext]
+NHI_SliceCells.update {α : Type} (s : Aeneas.Std.Slice α) (i : Aeneas.Std.Usize) (h : ↑i < (↑s).length) (x : α) :
+  s.update i x = Aeneas.Std.Result.ok (NHI_SliceCells.put s (↑i) x)
+'NHI_SliceCells.update' depends on axioms: [propext]
+NHI_SliceCells.length {α : Type} (s : Aeneas.Std.Slice α) (i : ℕ) (x : α) :
+  (↑(NHI_SliceCells.put s i x)).length = (↑s).length
+'NHI_SliceCells.length' depends on axioms: [propext]
+NHI_SliceCells.frame {α : Type} (s : Aeneas.Std.Slice α) (i j : ℕ) (x : α) (h : j ≠ i) :
+  (↑(NHI_SliceCells.put s i x))[j]? = (↑s)[j]?
+'NHI_SliceCells.frame' depends on axioms: [propext]
+NHI_SliceCells.selected {α : Type} (s : Aeneas.Std.Slice α) (i : ℕ) (x : α) (h : i < (↑s).length) :
+  (↑(NHI_SliceCells.put s i x))[i]? = some x
+'NHI_SliceCells.selected' depends on axioms: [propext]
+NHI_Tensor.cohort (w : NHI_Tensor.W) (k : Aeneas.Std.Usize) (hk : ↑k < 5) (hf : NHI_Tensor.Domain w k hk)
+  (input : Aeneas.Std.Slice AspisR1.LPi_FieldValues.NQ) (len : (↑input).length = 64) (ca : NHI_CellCanon.slice input) :
+  FIo_Native.weights.Weights.tensor w k 2#usize input = Aeneas.Std.Result.ok (NHI_Tensor.reference w k hk input) ∧
+    NHI_CellCanon.slice (NHI_Tensor.reference w k hk input) ∧ (↑(NHI_Tensor.reference w k hk input)).length = 64
+'NHI_Tensor.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_TensorCellTotal.source (w : FIo_Native.weights.Weights) (k d n j : Aeneas.Std.Usize) (hk : ↑k < 5) (hd : ↑d < 5)
+  (hn : NHI_TensorDomains.Stage ↑n) (hj : ↑j < ↑n) (input : Aeneas.Std.Slice AspisR1.LPi_FieldValues.NQ)
+  (len : (↑input).length = 64) (canonical : NHI_CellCanon.slice input)
+  (digitCanon : NHI_CellCanon.array (NHI_ScalarDomain.pick (NHI_ScalarDomain.pick w.factors (↑k) hk) (↑d) hd))
+  (iter cursor : NHI_TensorCellTotal.Rev)
+  (advance : NHI_TensorCellTotal.next iter = Aeneas.Std.Result.ok (some j, cursor)) :
+  ∃ out,
+    FIo_Native.weights.Weights.tensor_loop0_loop0.body w k n d iter input =
+        Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (cursor, out)) ∧
+      NHI_CellCanon.slice out ∧ (↑out).length = 64
+'NHI_TensorCellTotal.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_TensorDomains.positive (n : ℕ) (h : NHI_TensorDomains.Stage n) : 0 < n
+'NHI_TensorDomains.positive' depends on axioms: [propext, Quot.sound]
+NHI_TensorDomains.write_bounds (n j lane : ℕ) (hn : NHI_TensorDomains.Stage n) (hj : j < n) (hl : lane < 4) :
+  j + lane * n < 4 * n ∧ 4 * n ≤ 64
+'NHI_TensorDomains.write_bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_TensorDomains.unread_frame (n j old lane : ℕ) (hn : NHI_TensorDomains.Stage n) (hj : j < n) (ho : old < j)
+  (hl : lane < 4) : old ≠ j + lane * n
+'NHI_TensorDomains.unread_frame' depends on axioms: [propext, Quot.sound]
+NHI_TensorDomains.lanes_disjoint (n j a b : ℕ) (hn : NHI_TensorDomains.Stage n) (hj : j < n) (ha : a < 4) (hb : b < 4)
+  (different : a ≠ b) : j + a * n ≠ j + b * n
+'NHI_TensorDomains.lanes_disjoint' depends on axioms: [propext, Quot.sound]
+NHI_TensorDomains.writes_disjoint (n i j a b : ℕ) (hn : NHI_TensorDomains.Stage n) (hi : i < n) (hj : j < n)
+  (ha : a < 4) (hb : b < 4) (different : i ≠ j) : i + a * n ≠ j + b * n
+'NHI_TensorDomains.writes_disjoint' depends on axioms: [propext, Quot.sound]
+NHI_TensorDomains.final_width : 4 * (4 * (4 * 1)) = 64
+'NHI_TensorDomains.final_width' does not depend on any axioms
+NHI_TensorDomains.dot_caps : 64 < 4096 ∧ 16 < 4096 ∧ 4 < 4096
+'NHI_TensorDomains.dot_caps' does not depend on any axioms
+NHI_TensorEncoding.length (input : Aeneas.Std.Slice AspisR1.LPi_FieldValues.NQ) (j n : ℕ)
+  (row : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 4#usize) :
+  (↑(NHI_TensorExactCell.place input j n row)).length = (↑input).length
+'NHI_TensorEncoding.length' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_TensorEncoding.window (input : Aeneas.Std.Slice AspisR1.LPi_FieldValues.NQ)
+  (row : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 4#usize) (j n : Aeneas.Std.Usize) (size : (↑input).length = 64)
+  (hn : NHI_TensorDomains.Stage ↑n) (hj : ↑j < ↑n) :
+  NHE_TensorRef.tensor_ref (NHI_WordEncoding.array input size) j n (NHI_TensorEncoding.products input (↑j) row) =
+    Aeneas.Std.Result.ok (NHI_WordEncoding.array (NHI_TensorExactCell.place input (↑j) (↑n) row) ⋯)
+'NHI_TensorEncoding.window' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_TensorExactCell.source (w : FIo_Native.weights.Weights) (k d n j : Aeneas.Std.Usize) (hk : ↑k < 5) (hd : ↑d < 5)
+  (hn : NHI_TensorDomains.Stage ↑n) (hj : ↑j < ↑n) (input : Aeneas.Std.Slice AspisR1.LPi_FieldValues.NQ)
+  (len : (↑input).length = 64) (canonical : NHI_CellCanon.slice input)
+  (digitCanon : NHI_CellCanon.array (NHI_ScalarDomain.pick (NHI_ScalarDomain.pick w.factors (↑k) hk) (↑d) hd))
+  (iter cursor : NHI_TensorExactCell.Rev)
+  (advance : NHI_TensorExactCell.next iter = Aeneas.Std.Result.ok (some j, cursor)) :
+  ∃ out,
+    FIo_Native.weights.Weights.tensor_loop0_loop0.body w k n d iter input =
+        Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (cursor, out)) ∧
+      NHI_CellCanon.slice out ∧
+        (↑out).length = 64 ∧ out = NHI_TensorExactCell.place input (↑j) (↑n) (NHI_TensorExactCell.rowAt w k d hk hd)
+'NHI_TensorExactCell.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_TensorExactInner.finite (w : FIo_Native.weights.Weights) (k d n : Aeneas.Std.Usize) (hk : ↑k < 5) (hd : ↑d < 5)
+  (hn : NHI_TensorDomains.Stage ↑n) (digitCanon : NHI_CellCanon.array (NHI_TensorExactCell.rowAt w k d hk hd)) (m : ℕ)
+  (e : Aeneas.Std.Usize) (he : ↑e = m) (cap : ↑e ≤ ↑n) (input : Aeneas.Std.Slice AspisR1.LPi_FieldValues.NQ)
+  (len : (↑input).length = 64) (canonical : NHI_CellCanon.slice input) :
+  Aeneas.Std.loop (NHI_TensorExactInner.body w k n d) (NHI_Reverse.cursor e, input) =
+    Aeneas.Std.Result.ok (w, NHI_TensorExactInner.descend (NHI_TensorExactCell.rowAt w k d hk hd) (↑n) m input)
+'NHI_TensorExactInner.finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_TensorExactInner.source (w : FIo_Native.weights.Weights) (k d n : Aeneas.Std.Usize) (hk : ↑k < 5) (hd : ↑d < 5)
+  (hn : NHI_TensorDomains.Stage ↑n) (digitCanon : NHI_CellCanon.array (NHI_TensorExactCell.rowAt w k d hk hd))
+  (e : Aeneas.Std.Usize) (cap : ↑e ≤ ↑n) (input : Aeneas.Std.Slice AspisR1.LPi_FieldValues.NQ)
+  (len : (↑input).length = 64) (canonical : NHI_CellCanon.slice input) :
+  FIo_Native.weights.Weights.tensor_loop0_loop0 (NHI_Reverse.cursor e) w k input n d =
+    Aeneas.Std.Result.ok (w, NHI_TensorExactInner.descend (NHI_TensorExactCell.rowAt w k d hk hd) (↑n) (↑e) input)
+'NHI_TensorExactInner.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_TensorExactOuter.inner (w : NHI_TensorExactOuter.W) (k d n : Aeneas.Std.Usize) (hk : ↑k < 5) (hd : ↑d < 5)
+  (hn : NHI_TensorDomains.Stage ↑n) (hf : NHI_CellCanon.array (NHI_TensorExactCell.rowAt w k d hk hd))
+  (input : Aeneas.Std.Slice AspisR1.LPi_FieldValues.NQ) (len : (↑input).length = 64) (ca : NHI_CellCanon.slice input) :
+  FIo_Native.weights.Weights.tensor_loop0_loop0 (NHI_Reverse.cursor n) w k input n d =
+      Aeneas.Std.Result.ok (w, NHI_TensorExactOuter.expand w k d hk hd n input) ∧
+    NHI_CellCanon.slice (NHI_TensorExactOuter.expand w k d hk hd n input) ∧
+      (↑(NHI_TensorExactOuter.expand w k d hk hd n input)).length = 64
+'NHI_TensorExactOuter.inner' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_TensorExactOuter.active (w : NHI_TensorExactOuter.W) (k d next n : Aeneas.Std.Usize) (hk : ↑k < 5) (hd : ↑d < 5)
+  (advance : ↑next = ↑d + 1) (hn : NHI_TensorDomains.Stage ↑n)
+  (hf : NHI_CellCanon.array (NHI_TensorExactCell.rowAt w k d hk hd))
+  (input : Aeneas.Std.Slice AspisR1.LPi_FieldValues.NQ) (len : (↑input).length = 64) (ca : NHI_CellCanon.slice input) :
+  FIo_Native.weights.Weights.tensor_loop0.body k { start := d, «end» := 5#usize } w input n =
+      Aeneas.Std.Result.ok
+        (Aeneas.Std.ControlFlow.cont
+          ({ start := next, «end» := 5#usize }, w, NHI_TensorExactOuter.expand w k d hk hd n input,
+            n.wrapping_mul 4#usize)) ∧
+    NHI_CellCanon.slice (NHI_TensorExactOuter.expand w k d hk hd n input) ∧
+      (↑(NHI_TensorExactOuter.expand w k d hk hd n input)).length = 64
+'NHI_TensorExactOuter.active' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_TensorFrame.frame {R : Type} (n j i : ℕ) (r : Fin 4 → R) (out : ℕ → R) (h : ∀ (lane : Fin 4), i ≠ j + ↑lane * n) :
+  NHI_TensorFrame.place n j r out i = out i
+'NHI_TensorFrame.frame' depends on axioms: [propext]
+NHI_TensorFrame.selected {R : Type} (n j : ℕ) (r : Fin 4 → R) (out : ℕ → R) (hn : 0 < n) (lane : Fin 4) :
+  NHI_TensorFrame.place n j r out (j + ↑lane * n) = r lane
+'NHI_TensorFrame.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_TensorFrame.descend_frame {R : Type} (n : ℕ) (f : ℕ → R → Fin 4 → R) (m i : ℕ) (out : ℕ → R)
+  (h : ∀ j < m, ∀ (lane : Fin 4), i ≠ j + ↑lane * n) : NHI_TensorFrame.descend n f m out i = out i
+'NHI_TensorFrame.descend_frame' depends on axioms: [propext, Quot.sound]
+NHI_TensorFrame.descend_selected {R : Type} (n : ℕ) (hn : NHI_TensorDomains.Stage n) (f : ℕ → R → Fin 4 → R) (m : ℕ)
+  (hm : m ≤ n) (out : ℕ → R) (j : ℕ) (hj : j < m) (lane : Fin 4) :
+  NHI_TensorFrame.descend n f m out (j + ↑lane * n) = f j (out j) lane
+'NHI_TensorFrame.descend_selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_TensorInnerTotal.source (w : FIo_Native.weights.Weights) (k d n : Aeneas.Std.Usize) (hk : ↑k < 5) (hd : ↑d < 5)
+  (hn : NHI_TensorDomains.Stage ↑n)
+  (digitCanon : NHI_CellCanon.array (NHI_ScalarDomain.pick (NHI_ScalarDomain.pick w.factors (↑k) hk) (↑d) hd))
+  (e : Aeneas.Std.Usize) (he : ↑e ≤ ↑n) (input : Aeneas.Std.Slice AspisR1.LPi_FieldValues.NQ)
+  (len : (↑input).length = 64) (canonical : NHI_CellCanon.slice input) :
+  ∃ out,
+    FIo_Native.weights.Weights.tensor_loop0_loop0 (NHI_Reverse.cursor e) w k input n d = Aeneas.Std.Result.ok (w, out) ∧
+      NHI_CellCanon.slice out ∧ (↑out).length = 64
+'NHI_TensorInnerTotal.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_TensorOffsets.value (n j lane : Aeneas.Std.Usize) (hn : NHI_TensorDomains.Stage ↑n) (hj : ↑j < ↑n)
+  (hl : ↑lane < 4) : ↑(NHI_TensorOffsets.index j n lane) = ↑j + ↑lane * ↑n ∧ ↑(NHI_TensorOffsets.index j n lane) < 64
+'NHI_TensorOffsets.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_TensorOuterStep.active (w : NHI_TensorOuterStep.W) (k n : Aeneas.Std.Usize) (hk : ↑k < 5)
+  (hf : NHI_TensorOuterStep.Factors w) (iter : NHI_TensorOuterStep.Iter) (he : ↑iter.end = 5)
+  (stage : NHI_TensorOuterStep.Stage ↑iter.start ↑n) (more : ↑iter.start < 5)
+  (input : Aeneas.Std.Slice AspisR1.LPi_FieldValues.NQ) (len : (↑input).length = 64) (ca : NHI_CellCanon.slice input) :
+  ∃ rest out next,
+    NHI_TensorOuterStep.body k iter w input n =
+        Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (rest, w, out, next)) ∧
+      ↑rest.start = ↑iter.start + 1 ∧
+        ↑rest.end = 5 ∧ NHI_TensorOuterStep.Stage ↑rest.start ↑next ∧ NHI_CellCanon.slice out ∧ (↑out).length = 64
+'NHI_TensorOuterStep.active' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_TensorOuterStep.done (w : NHI_TensorOuterStep.W) (k n : Aeneas.Std.Usize) (iter : NHI_TensorOuterStep.Iter)
+  (stop : ↑iter.end ≤ ↑iter.start) (input : Aeneas.Std.Slice AspisR1.LPi_FieldValues.NQ) :
+  NHI_TensorOuterStep.body k iter w input n = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done input)
+'NHI_TensorOuterStep.done' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_TensorRefLaw.source (out : NHI_TensorRefLaw.Output) (p : NHI_TensorRefLaw.Products) (j n : Aeneas.Std.Usize)
+  (hn : NHI_TensorDomains.Stage ↑n) (hj : ↑j < ↑n) :
+  NHE_TensorRef.tensor_ref out j n p = Aeneas.Std.Result.ok (NHI_TensorRefLaw.place out p j n)
+'NHI_TensorRefLaw.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_TensorSeed.source (w : FIo_Native.weights.Weights) (k : Aeneas.Std.Usize) (hk : ↑k < 5)
+  (hf : NHI_TensorTotal.Factors w) (input : Aeneas.Std.Slice AspisR1.LPi_FieldValues.NQ) (len : (↑input).length = 64)
+  (ca : NHI_CellCanon.slice input) :
+  ∃ out, w.tensor k 2#usize input = Aeneas.Std.Result.ok out ∧ NHI_CellCanon.slice out ∧ (↑out).length = 64
+'NHI_TensorSeed.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_TensorTotal.outer (w : NHI_TensorTotal.W) (k : Aeneas.Std.Usize) (hk : ↑k < 5) (hf : NHI_TensorTotal.Factors w)
+  (input : Aeneas.Std.Slice AspisR1.LPi_FieldValues.NQ) (len : (↑input).length = 64) (ca : NHI_CellCanon.slice input) :
+  ∃ out,
+    FIo_Native.weights.Weights.tensor_loop0 { start := 2#usize, «end» := 5#usize } w k input 1#usize =
+        Aeneas.Std.Result.ok out ∧
+      NHI_CellCanon.slice out ∧ (↑out).length = 64
+'NHI_TensorTotal.outer' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_WordEncoding.roundtrip (q : AspisR1.LPi_FieldValues.NQ) : NHI_WordEncoding.record (NHI_WordEncoding.words q) = q
+'NHI_WordEncoding.roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_WordEncoding.injective : Function.Injective NHI_WordEncoding.words
+'NHI_WordEncoding.injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHI_WordEncoding.put (s : Aeneas.Std.Slice AspisR1.LPi_FieldValues.NQ) (i : ℕ) (x : AspisR1.LPi_FieldValues.NQ) :
+  NHI_WordEncoding.encode (NHI_SliceCells.put s i x) =
+    NHI_SliceCells.put (NHI_WordEncoding.encode s) i (NHI_WordEncoding.words x)
+'NHI_WordEncoding.put' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_ArrayCanon.read {T : Type} {n : Aeneas.Std.Usize} (P : T → Prop) (a : Aeneas.Std.Array T n) (i : Aeneas.Std.Usize)
+  (x : T) (domain : ∀ y ∈ ↑a, P y) (run : a.index_usize i = Aeneas.Std.Result.ok x) : P x
+'NHM_ArrayCanon.read' depends on axioms: [propext]
+NHM_ArrayCanon.bounds {T : Type} {n : Aeneas.Std.Usize} (a : Aeneas.Std.Array T n) (i : Aeneas.Std.Usize) (x : T)
+  (run : a.index_usize i = Aeneas.Std.Result.ok x) : ↑i < ↑n
+'NHM_ArrayCanon.bounds' depends on axioms: [propext, Quot.sound]
+NHM_ArrayPreserve.canonical {T : Type} {n : Aeneas.Std.Usize} (P : T → Prop) (a b : Aeneas.Std.Array T n)
+  (i : Aeneas.Std.Usize) (value : T) (before : ∀ x ∈ ↑a, P x) (hv : P value)
+  (run : a.update i value = Aeneas.Std.Result.ok b) (x : T) : x ∈ ↑b → P x
+'NHM_ArrayPreserve.canonical' depends on axioms: [propext, Quot.sound]
+NHM_ArrayPreserve.frame {T : Type} {n : Aeneas.Std.Usize} (a b : Aeneas.Std.Array T n) (i : Aeneas.Std.Usize)
+  (value : T) (run : a.update i value = Aeneas.Std.Result.ok b) (j : ℕ) (different : j ≠ ↑i) : (↑b)[j]? = (↑a)[j]?
+'NHM_ArrayPreserve.frame' depends on axioms: [propext]
+NHM_ByteProducts.step (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (scratch : Aeneas.Std.Slice NHM_ByteProducts.NQ)
+  (s : NHM_ByteProducts.State) : NHI_ByteProductsLoop.body bytes scratch s = NHM_ByteProducts.body bytes scratch s
+'NHM_ByteProducts.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_ByteProducts.cohort (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (scratch : Aeneas.Std.Slice NHM_ByteProducts.NQ)
+  (initial : NHM_ByteProducts.Dot) (n : Aeneas.Std.Usize) :
+  FIo_Native.weights.push_byte_products initial bytes scratch n = NHM_ByteProducts.reference bytes scratch initial n
+'NHM_ByteProducts.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_ByteProducts.invariant (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (scratch : Aeneas.Std.Slice NHM_ByteProducts.NQ)
+  (s t : NHM_ByteProducts.State) (same : ↑s.2.count = ↑s.1.start) (n : ℕ) (last : ↑s.1.end = n)
+  (run : NHM_ByteProducts.body bytes scratch s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  ↑t.2.count = ↑t.1.start ∧ ↑t.1.end = n ∧ ↑t.2.count ≤ n
+'NHM_ByteProducts.invariant' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_ControlLoop.progress (stop : Aeneas.Std.Usize) (s t : NHM_ControlLoop.State)
+  (run : NHM_ControlLoop.body stop s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  t.1.end = s.1.end ∧ ↑t.1.start = ↑s.1.start + 1 ∧ ↑s.1.start < ↑s.1.end
+'NHM_ControlLoop.progress' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_ControlLoop.decreases (stop : Aeneas.Std.Usize) (s t : NHM_ControlLoop.State)
+  (run : NHM_ControlLoop.body stop s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  ↑t.1.end - ↑t.1.start < ↑s.1.end - ↑s.1.start
+'NHM_ControlLoop.decreases' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_ControlLoop.source (n stop : Aeneas.Std.Usize) :
+  NHM_ControlRef.control_ref n stop = NHM_ControlLoop.reference n stop
+'NHM_ControlLoop.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_DotCallDomain.index (n : ℕ) (s : NHM_DotCallDomain.State) (h : NHM_DotLoopDomain.Inv n s) (j : Aeneas.Std.Usize)
+  (next : NHI_RangeProgress.Range)
+  (run :
+    Aeneas.Std.core.iter.range.IteratorRange.next Aeneas.Std.core.iter.range.StepUsize s.1 =
+      Aeneas.Std.Result.ok (some j, next)) :
+  ↑j < n ∧ ↑s.2.count ≤ n
+'NHM_DotCallDomain.index' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_DotCallDomain.high (p : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 4#usize)
+  (q : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 4#usize) (hp : ∀ x ∈ ↑p, AspisR1.LPi_FieldValues.canonE x)
+  (hq : ∀ x ∈ ↑q, AspisR1.LPi_FieldValues.canonQ x) (s : NHM_DotCallDomain.State) (h : NHM_DotLoopDomain.Inv 4 s)
+  (j : Aeneas.Std.Usize) (next : NHI_RangeProgress.Range)
+  (iter :
+    Aeneas.Std.core.iter.range.IteratorRange.next Aeneas.Std.core.iter.range.StepUsize s.1 =
+      Aeneas.Std.Result.ok (some j, next))
+  (x : AspisR1.LPi_FieldValues.NE) (k : AspisR1.LPi_FieldValues.NQ) (readx : p.index_usize j = Aeneas.Std.Result.ok x)
+  (readq : q.index_usize j = Aeneas.Std.Result.ok k) :
+  ↑j < 4 ∧ ↑s.2.count < 4096 ∧ AspisR1.LPi_FieldValues.canonE x ∧ AspisR1.LPi_FieldValues.canonQ k
+'NHM_DotCallDomain.high' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_DotCallDomain.partial_call (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (q : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 16#usize) (hq : ∀ x ∈ ↑q, AspisR1.LPi_FieldValues.canonQ x)
+  (offset : Aeneas.Std.Usize) (side : ↑offset < 4) (s : NHM_DotCallDomain.State) (h : NHM_DotLoopDomain.Inv 16 s)
+  (j : Aeneas.Std.Usize) (next : NHI_RangeProgress.Range)
+  (iter :
+    Aeneas.Std.core.iter.range.IteratorRange.next Aeneas.Std.core.iter.range.StepUsize s.1 =
+      Aeneas.Std.Result.ok (some j, next))
+  (x : AspisR1.LPi_FieldValues.NE) (k : AspisR1.LPi_FieldValues.NQ)
+  (readx : FIo_Native.weights.field f (NHI_PartialIndex.index offset j) = Aeneas.Std.Result.ok x)
+  (readq : q.index_usize j = Aeneas.Std.Result.ok k) :
+  ↑(NHI_PartialIndex.index offset j) = 16 * ↑offset + ↑j ∧
+    ↑(NHI_PartialIndex.index offset j) < 64 ∧
+      ↑s.2.count < 4096 ∧ AspisR1.LPi_FieldValues.canonE x ∧ AspisR1.LPi_FieldValues.canonQ k
+'NHM_DotCallDomain.partial_call' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_DotCallDomain.byte (f : Aeneas.Std.Slice Aeneas.Std.U8) (q : Aeneas.Std.Slice AspisR1.LPi_FieldValues.NQ)
+  (hq : NHI_CellCanon.slice q) (s : NHM_DotCallDomain.State) (h : NHM_DotLoopDomain.Inv 64 s) (j : Aeneas.Std.Usize)
+  (next : NHI_RangeProgress.Range)
+  (iter :
+    Aeneas.Std.core.iter.range.IteratorRange.next Aeneas.Std.core.iter.range.StepUsize s.1 =
+      Aeneas.Std.Result.ok (some j, next))
+  (x : AspisR1.LPi_FieldValues.NE) (k : AspisR1.LPi_FieldValues.NQ)
+  (readx : FIo_Native.weights.field f j = Aeneas.Std.Result.ok x) (readq : q.index_usize j = Aeneas.Std.Result.ok k) :
+  ↑j < 64 ∧ ↑s.2.count < 4096 ∧ AspisR1.LPi_FieldValues.canonE x ∧ AspisR1.LPi_FieldValues.canonQ k
+'NHM_DotCallDomain.byte' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_DotFinishCanonical.words (a b c d e f g h : Aeneas.Std.U64) :
+  AspisR1.LPi_FieldValues.canonE
+    (NEI_WideConstruction.value (NHE_DotFinish.word a) (NHE_DotFinish.word b) (NHE_DotFinish.word c)
+      (NHE_DotFinish.word d) (NHE_DotFinish.word e) (NHE_DotFinish.word f) (NHE_DotFinish.word g)
+      (NHE_DotFinish.word h))
+'NHM_DotFinishCanonical.words' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_DotFinishCanonical.source (before : NHM_DotPacket.Dot) (out : AspisR1.LPi_FieldValues.NE)
+  (run : FIo_Native.fast_pairing.EbyKDot.finish before = Aeneas.Std.Result.ok out) : AspisR1.LPi_FieldValues.canonE out
+'NHM_DotFinishCanonical.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_DotInitial.source : FIo_Native.fast_pairing.EbyKDot.new = Aeneas.Std.Result.ok NHM_DotInitial.zero
+'NHM_DotInitial.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_DotInitial.count : ↑NHM_DotInitial.zero.count = 0
+'NHM_DotInitial.count' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_DotLoopDomain.initial_domain (n : Aeneas.Std.Usize) : NHM_DotLoopDomain.Inv (↑n) (NHM_DotLoopDomain.initial n)
+'NHM_DotLoopDomain.initial_domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_DotLoopDomain.high_step (p : Aeneas.Std.Array NHM_DotPacket.NE 4#usize)
+  (q : Aeneas.Std.Array NHM_DotPacket.NQ 4#usize) (s t : NHM_DotLoopDomain.State) (h : NHM_DotLoopDomain.Inv 4 s)
+  (run : NHM_HighDot.body p q s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) : NHM_DotLoopDomain.Inv 4 t
+'NHM_DotLoopDomain.high_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_DotLoopDomain.partial_step (f : Aeneas.Std.Slice Aeneas.Std.U8) (q : Aeneas.Std.Array NHM_DotPacket.NQ 16#usize)
+  (offset : Aeneas.Std.Usize) (s t : NHM_DotLoopDomain.State) (h : NHM_DotLoopDomain.Inv 16 s)
+  (run : NHM_PartialDot.body f q offset s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  NHM_DotLoopDomain.Inv 16 t
+'NHM_DotLoopDomain.partial_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_DotLoopDomain.byte_step (f : Aeneas.Std.Slice Aeneas.Std.U8) (q : Aeneas.Std.Slice NHM_DotPacket.NQ) (n : ℕ)
+  (s t : NHM_DotLoopDomain.State) (h : NHM_DotLoopDomain.Inv n s)
+  (run : NHM_ByteProducts.body f q s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) : NHM_DotLoopDomain.Inv n t
+'NHM_DotLoopDomain.byte_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_DotLoopDomain.high_all (p : Aeneas.Std.Array NHM_DotPacket.NE 4#usize)
+  (q : Aeneas.Std.Array NHM_DotPacket.NQ 4#usize) :
+  NHM_LoopDomain.all (NHM_HighDot.body p q) (NHM_DotLoopDomain.Inv 4) 5 (NHM_DotLoopDomain.initial 4#usize)
+'NHM_DotLoopDomain.high_all' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_DotLoopDomain.partial_all (f : Aeneas.Std.Slice Aeneas.Std.U8) (q : Aeneas.Std.Array NHM_DotPacket.NQ 16#usize)
+  (offset : Aeneas.Std.Usize) :
+  NHM_LoopDomain.all (NHM_PartialDot.body f q offset) (NHM_DotLoopDomain.Inv 16) 17 (NHM_DotLoopDomain.initial 16#usize)
+'NHM_DotLoopDomain.partial_all' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_DotLoopDomain.byte_all (f : Aeneas.Std.Slice Aeneas.Std.U8) (q : Aeneas.Std.Slice NHM_DotPacket.NQ) :
+  NHM_LoopDomain.all (NHM_ByteProducts.body f q) (NHM_DotLoopDomain.Inv 64) 65 (NHM_DotLoopDomain.initial 64#usize)
+'NHM_DotLoopDomain.byte_all' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_DotPacket.reply_back (p : Aeneas.Std.core.result.Result Unit Unit × NHM_DotPacket.Dot) :
+  NHM_DotPacket.back (NHE_PublicDot.reply p) = p
+'NHM_DotPacket.reply_back' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_DotPacket.source (d : NHM_DotPacket.Dot) (x : NHM_DotPacket.NE) (q : NHM_DotPacket.NQ) :
+  FIo_Native.fast_pairing.EbyKDot.push d x q = NHM_DotPacket.push d x q
+'NHM_DotPacket.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_DotPacket.count (d after : NHM_DotPacket.Dot) (x : NHM_DotPacket.NE) (q : NHM_DotPacket.NQ)
+  (run : NHM_DotPacket.push d x q = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), after)) :
+  ↑after.count = ↑d.count + 1
+'NHM_DotPacket.count' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_DotResult.high_terminal (p : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 4#usize)
+  (q : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 4#usize) (s : NHM_HighDot.State) (x : AspisR1.LPi_FieldValues.NE)
+  (run :
+    NHM_HighDot.body p q s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (Aeneas.Std.core.result.Result.Ok x))) :
+  AspisR1.LPi_FieldValues.canonE x
+'NHM_DotResult.high_terminal' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_DotResult.partial_terminal (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (q : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 16#usize) (offset : Aeneas.Std.Usize) (s : NHM_PartialDot.State)
+  (x : AspisR1.LPi_FieldValues.NE)
+  (run :
+    NHM_PartialDot.body f q offset s =
+      Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (Aeneas.Std.core.result.Result.Ok x))) :
+  AspisR1.LPi_FieldValues.canonE x
+'NHM_DotResult.partial_terminal' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_DotResult.high (p : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 4#usize)
+  (q : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 4#usize) (x : AspisR1.LPi_FieldValues.NE)
+  (run : FIo_Native.weights.high_dot p q = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok x)) :
+  AspisR1.LPi_FieldValues.canonE x
+'NHM_DotResult.high' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_DotResult.partial_result (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (q : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 16#usize) (offset : Aeneas.Std.Usize)
+  (x : AspisR1.LPi_FieldValues.NE)
+  (run : FIo_Native.weights.partial_dot f q offset = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok x)) :
+  AspisR1.LPi_FieldValues.canonE x
+'NHM_DotResult.partial_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_EEncoding.roundtrip (x : NHM_EEncoding.NE) : NHM_EEncoding.record (AspisR1.NGM_RawWords.nativeWords x) = x
+'NHM_EEncoding.roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_EEncoding.array_roundtrip {n : Aeneas.Std.Usize} (a : Aeneas.Std.Array NHM_EEncoding.NE n) :
+  NHM_EEncoding.decode (NHM_EEncoding.encode a) = a
+'NHM_EEncoding.array_roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_EEncoding.injective {n : Aeneas.Std.Usize} : Function.Injective NHM_EEncoding.encode
+'NHM_EEncoding.injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_EEncoding.put {n : Aeneas.Std.Usize} (a : Aeneas.Std.Array NHM_EEncoding.NE n) (i : Aeneas.Std.Usize)
+  (x : NHM_EEncoding.NE) :
+  NHM_EEncoding.encode (NHI_ArrayCells.put a i x) =
+    NHI_ArrayCells.put (NHM_EEncoding.encode a) i (AspisR1.NGM_RawWords.nativeWords x)
+'NHM_EEncoding.put' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_FactoredDomain.producers (extra : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 2#usize)
+  (hc : ∀ q ∈ ↑extra, AspisR1.LPi_FieldValues.canonQ q) (side : Aeneas.Std.Usize) (hs : ↑side < 2) :
+  ∃ q low high q4 q16,
+    extra.index_usize side = Aeneas.Std.Result.ok q ∧
+      NHI_FactoredProducers.run q = Aeneas.Std.Result.ok (low, high, q4, q16) ∧
+        (∀ x ∈ ↑low, AspisR1.LPi_FieldValues.canonQ x) ∧
+          (∀ x ∈ ↑high, AspisR1.LPi_FieldValues.canonQ x) ∧
+            AspisR1.LPi_FieldValues.canonQ q4 ∧ AspisR1.LPi_FieldValues.canonQ q16
+'NHM_FactoredDomain.producers' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_FactoredDomain.low_scalar (powers : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 4#usize)
+  (hp : ∀ x ∈ ↑powers, AspisR1.LPi_FieldValues.canonE x) (q : AspisR1.LPi_FieldValues.NQ)
+  (hq : AspisR1.LPi_FieldValues.canonQ q) :
+  ∃ low high q4 q16 scalar,
+    NHI_FactoredProducers.run q = Aeneas.Std.Result.ok (low, high, q4, q16) ∧
+      FIo_Native.weights.Weights.scalar_factor low powers = Aeneas.Std.Result.ok scalar ∧
+        AspisR1.LPi_FieldValues.canonE scalar ∧
+          (∀ x ∈ ↑high, AspisR1.LPi_FieldValues.canonQ x) ∧
+            AspisR1.LPi_FieldValues.canonQ q4 ∧ AspisR1.LPi_FieldValues.canonQ q16
+'NHM_FactoredDomain.low_scalar' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_FactoredFrames.first_frame (a : NHM_FactoredFrames.Cells) (x y : AspisR1.LPi_FieldValues.NE) (i : ℕ) (h0 : i ≠ 0)
+  (h1 : i ≠ 1) : (↑(NHM_FactoredFrames.first a x y))[i]? = (↑a)[i]?
+'NHM_FactoredFrames.first_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_FactoredFrames.second_frame (a : NHM_FactoredFrames.Cells) (x y z : AspisR1.LPi_FieldValues.NE) (i : ℕ) (h1 : i ≠ 1)
+  (h2 : i ≠ 2) (h3 : i ≠ 3) : (↑(NHM_FactoredFrames.second a x y z))[i]? = (↑a)[i]?
+'NHM_FactoredFrames.second_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_FactoredFrames.combined (a : NHM_FactoredFrames.Cells) (a0 a1 b1 b2 b3 : AspisR1.LPi_FieldValues.NE) :
+  (↑(NHM_FactoredFrames.second (NHM_FactoredFrames.first a a0 a1) b1 b2 b3))[0]? = some a0
+'NHM_FactoredFrames.combined' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_FactoredPrefix.pick_two (q0 q1 q2 q3 : AspisR1.LPi_FieldValues.NQ) :
+  (Aeneas.Std.Array.make 4#usize [q0, q1, q2, q3] ⋯).index_usize 2#usize = Aeneas.Std.Result.ok q2
+'NHM_FactoredPrefix.pick_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_FactoredPrefix.source (ap0 ap1 : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 4#usize)
+  (extra : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 2#usize) (s : NHM_FactoredPrefix.State) :
+  FIo_Native.weights.factored_s2_libra_weights_loop.body ap0 ap1 extra s.1 s.2 = NHM_FactoredPrefix.body ap0 ap1 extra s
+'NHM_FactoredPrefix.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_FactoredSums.total (a b c d : AspisR1.LPi_FieldValues.NE) (ha : AspisR1.LPi_FieldValues.canonE a)
+  (hb : AspisR1.LPi_FieldValues.canonE b) (hc : AspisR1.LPi_FieldValues.canonE c)
+  (hd : AspisR1.LPi_FieldValues.canonE d) :
+  ∃ first2 first3 all,
+    NHM_FactoredSums.run a b c d = Aeneas.Std.Result.ok (first2, first3, all) ∧
+      AspisR1.LPi_FieldValues.canonE first2 ∧ AspisR1.LPi_FieldValues.canonE first3 ∧ AspisR1.LPi_FieldValues.canonE all
+'NHM_FactoredSums.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_FactoredTerm.total (powers : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 4#usize)
+  (factors : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 4#usize) (hp : ∀ x ∈ ↑powers, AspisR1.LPi_FieldValues.canonE x)
+  (hf : ∀ x ∈ ↑factors, AspisR1.LPi_FieldValues.canonQ x) (s : Aeneas.Std.Usize) (small : ↑s < 4) :
+  ∃ out, NHM_FactoredTerm.term powers factors s = Aeneas.Std.Result.ok out ∧ AspisR1.LPi_FieldValues.canonE out
+'NHM_FactoredTerm.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_Filled64.cohort (reservation : AspisR1.NP6_StdModel.Reservation) (value : AspisR1.LPi_FieldValues.NQ) :
+  AspisR1.FIo_FieldBridge.map NHM_Filled64.reply
+      (FIo_Native.aspis_core.r0.heap.filled FIo_Native.aspis_core.field.QM31.Insts.CoreMarkerCopy 64#usize value) =
+    NHI_FilledRef.filled_ref 64#usize (NHI_WordEncoding.words value)
+'NHM_Filled64.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_Filled64.initialization {T : Type} (value : T) (n : ℕ) : NHM_Filled64.cells value n = List.replicate n value
+'NHM_Filled64.initialization' does not depend on any axioms
+NHM_Filled64.selected {T : Type} (value : T) (n i : ℕ) (bound : i < n) : (NHM_Filled64.cells value n)[i]? = some value
+'NHM_Filled64.selected' depends on axioms: [propext]
+NHM_FilledFrame.window {T : Type} (xs : List T) (value : T) (i : ℕ) :
+  (xs ++ [value])[i]? = if i < xs.length then xs[i]? else if i = xs.length then some value else none
+'NHM_FilledFrame.window' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_FilledFrame.grow {T : Type} (n : ℕ) (value : T) : List.replicate (n + 1) value = List.replicate n value ++ [value]
+'NHM_FilledFrame.grow' does not depend on any axioms
+NHM_GroupAccum.step (low : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 16#usize) (cells : NHM_GroupAccum.Cells)
+  (s : NHM_GroupAccum.State) :
+  FIo_Native.weights.s2_grouped_inactive_pair_loop1.body low cells s.1 s.2 = NHM_GroupAccum.body low cells s
+'NHM_GroupAccum.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupAccum.canonical (cells : NHM_GroupAccum.Cells) (hc : ∀ x ∈ ↑cells, AspisR1.LPi_FieldValues.canonE x)
+  (group : Aeneas.Std.Usize) (weight pair out : AspisR1.LPi_FieldValues.NE) (hw : AspisR1.LPi_FieldValues.canonE weight)
+  (hp : AspisR1.LPi_FieldValues.canonE pair)
+  (run : NHM_GroupAccum.window cells group weight pair = Aeneas.Std.Result.ok out) : AspisR1.LPi_FieldValues.canonE out
+'NHM_GroupAccum.canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupAccum.progress (low : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 16#usize) (cells : NHM_GroupAccum.Cells)
+  (s t : NHM_GroupAccum.State)
+  (run : NHM_GroupAccum.body low cells s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  t.1.end = s.1.end ∧ ↑t.1.start = ↑s.1.start + 1 ∧ ↑s.1.start < ↑s.1.end
+'NHM_GroupAccum.progress' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupAccum.decreases (low : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 16#usize) (cells : NHM_GroupAccum.Cells)
+  (s t : NHM_GroupAccum.State)
+  (run : NHM_GroupAccum.body low cells s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  ↑t.1.end - ↑t.1.start < ↑s.1.end - ↑s.1.start
+'NHM_GroupAccum.decreases' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupAccum.source (low : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 16#usize) (cells : NHM_GroupAccum.Cells)
+  (pair : AspisR1.LPi_FieldValues.NE) :
+  FIo_Native.weights.s2_grouped_inactive_pair_loop1 { start := 0#usize, «end» := 12#usize } low cells pair =
+    NHM_GroupAccum.reference low cells pair
+'NHM_GroupAccum.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupAccumDomain.preserves (low : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 16#usize)
+  (hl : ∀ x ∈ ↑low, AspisR1.LPi_FieldValues.canonE x) (cells : NHM_GroupAccum.Cells)
+  (hc : ∀ x ∈ ↑cells, AspisR1.LPi_FieldValues.canonE x) (s t : NHM_GroupAccum.State)
+  (hp : AspisR1.LPi_FieldValues.canonE s.2)
+  (run : NHM_GroupAccum.body low cells s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  AspisR1.LPi_FieldValues.canonE t.2
+'NHM_GroupAccumDomain.preserves' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupAccumDomain.terminal (low : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 16#usize)
+  (cells : NHM_GroupAccum.Cells) (s : NHM_GroupAccum.State) (out : AspisR1.LPi_FieldValues.NE)
+  (hc : AspisR1.LPi_FieldValues.canonE s.2)
+  (run : NHM_GroupAccum.body low cells s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done out)) :
+  AspisR1.LPi_FieldValues.canonE out
+'NHM_GroupAccumDomain.terminal' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupAccumDomain.result (low : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 16#usize)
+  (hl : ∀ x ∈ ↑low, AspisR1.LPi_FieldValues.canonE x) (cells : NHM_GroupAccum.Cells)
+  (hc : ∀ x ∈ ↑cells, AspisR1.LPi_FieldValues.canonE x) (before out : AspisR1.LPi_FieldValues.NE)
+  (hp : AspisR1.LPi_FieldValues.canonE before)
+  (run : NHM_GroupAccum.reference low cells before = Aeneas.Std.Result.ok out) : AspisR1.LPi_FieldValues.canonE out
+'NHM_GroupAccumDomain.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupCoefficient.step (f : Aeneas.Std.Slice Aeneas.Std.U8) (s : NHM_GroupCoefficient.State) :
+  FIo_Native.weights.s2_grouped_inactive_pair_loop0.body f s.1 s.2 = NHM_GroupCoefficient.body f s
+'NHM_GroupCoefficient.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupCoefficient.canonical (f : Aeneas.Std.Slice Aeneas.Std.U8) (j : Aeneas.Std.Usize)
+  (cells out : NHM_GroupCoefficient.Cells) (small : ↑j < 64) (before : ∀ x ∈ ↑cells, AspisR1.LPi_FieldValues.canonE x)
+  (run : NHM_GroupCoefficient.window f j cells = Aeneas.Std.Result.ok out) (x : AspisR1.LPi_FieldValues.NE) :
+  x ∈ ↑out → AspisR1.LPi_FieldValues.canonE x
+'NHM_GroupCoefficient.canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupCoefficient.progress (f : Aeneas.Std.Slice Aeneas.Std.U8) (s t : NHM_GroupCoefficient.State)
+  (run : NHM_GroupCoefficient.body f s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  t.1.end = s.1.end ∧ ↑t.1.start = ↑s.1.start + 1 ∧ ↑s.1.start < ↑s.1.end
+'NHM_GroupCoefficient.progress' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupCoefficient.decreases (f : Aeneas.Std.Slice Aeneas.Std.U8) (s t : NHM_GroupCoefficient.State)
+  (run : NHM_GroupCoefficient.body f s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  ↑t.1.end - ↑t.1.start < ↑s.1.end - ↑s.1.start
+'NHM_GroupCoefficient.decreases' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupCoefficient.source (f : Aeneas.Std.Slice Aeneas.Std.U8) (cells : NHM_GroupCoefficient.Cells) :
+  FIo_Native.weights.s2_grouped_inactive_pair_loop0 { start := 0#usize, «end» := 64#usize } f cells =
+    NHI_CountedLoop.unroll (NHM_GroupCoefficient.body f) 65 ({ start := 0#usize, «end» := 64#usize }, cells)
+'NHM_GroupCoefficient.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupCoefficientDomain.preserves (f : Aeneas.Std.Slice Aeneas.Std.U8) (s t : NHM_GroupCoefficient.State)
+  (h : NHM_GroupCoefficientDomain.Inv s)
+  (run : NHM_GroupCoefficient.body f s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  NHM_GroupCoefficientDomain.Inv t
+'NHM_GroupCoefficientDomain.preserves' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupCoefficientDomain.terminal (f : Aeneas.Std.Slice Aeneas.Std.U8) (s : NHM_GroupCoefficient.State)
+  (out : NHM_GroupCoefficient.Cells) (h : NHM_GroupCoefficientDomain.Inv s)
+  (run : NHM_GroupCoefficient.body f s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done out))
+  (x : AspisR1.LPi_FieldValues.NE) : x ∈ ↑out → AspisR1.LPi_FieldValues.canonE x
+'NHM_GroupCoefficientDomain.terminal' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupCoefficientDomain.result (f : Aeneas.Std.Slice Aeneas.Std.U8) (before out : NHM_GroupCoefficient.Cells)
+  (hc : ∀ x ∈ ↑before, AspisR1.LPi_FieldValues.canonE x)
+  (run :
+    FIo_Native.weights.s2_grouped_inactive_pair_loop0 { start := 0#usize, «end» := 64#usize } f before =
+      Aeneas.Std.Result.ok out)
+  (x : AspisR1.LPi_FieldValues.NE) : x ∈ ↑out → AspisR1.LPi_FieldValues.canonE x
+'NHM_GroupCoefficientDomain.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupDispatch.source (w : FIo_Native.weights.Weights) (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (low : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 16#usize) (s2 : w.variant = FIo_Native.transport.Variant.S2)
+  (size : (↑f).length = 2048) : FIo_Native.weights.grouped_inactive_pair w f low = NHM_GroupRoot.reference f low
+'NHM_GroupDispatch.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupDomains.reached (n : ℕ) (iter next : NHI_RangeProgress.Range) (j : Aeneas.Std.Usize) (last : ↑iter.end = n)
+  (run :
+    Aeneas.Std.core.iter.range.IteratorRange.next Aeneas.Std.core.iter.range.StepUsize iter =
+      Aeneas.Std.Result.ok (some j, next)) :
+  ↑j < n
+'NHM_GroupDomains.reached' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupDomains.group (j : Aeneas.Std.Usize) (g : Aeneas.Std.U8)
+  (read : FIo_Native.weights.S2_INACTIVE_GROUPS.index_usize j = Aeneas.Std.Result.ok g) :
+  ↑g < 12 ∧ ↑(Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.Usize g) = ↑g
+'NHM_GroupDomains.group' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupDomains.coefficient_args (f : Aeneas.Std.Slice Aeneas.Std.U8) (j : Aeneas.Std.Usize) (small : ↑j < 64)
+  (cells : NHM_GroupCoefficient.Cells) (cc : ∀ x ∈ ↑cells, AspisR1.LPi_FieldValues.canonE x) (g : Aeneas.Std.U8)
+  (before value : AspisR1.LPi_FieldValues.NE)
+  (hg : FIo_Native.weights.S2_INACTIVE_GROUPS.index_usize j = Aeneas.Std.Result.ok g)
+  (hb :
+    Aeneas.Std.Array.index_usize cells (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.Usize g) =
+      Aeneas.Std.Result.ok before)
+  (hv : FIo_Native.weights.field f j = Aeneas.Std.Result.ok value) :
+  ↑(Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.Usize g) < 12 ∧
+    AspisR1.LPi_FieldValues.canonE before ∧ AspisR1.LPi_FieldValues.canonE value
+'NHM_GroupDomains.coefficient_args' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupDomains.coefficient_all (f : Aeneas.Std.Slice Aeneas.Std.U8) :
+  NHM_LoopDomain.all (NHM_GroupCoefficient.body f) NHM_GroupCoefficientDomain.Inv 65
+    ({ start := 0#usize, «end» := 64#usize }, NHM_GroupRoot.initial)
+'NHM_GroupDomains.coefficient_all' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupDomains.weight_preserves (low : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 16#usize)
+  (hl : ∀ x ∈ ↑low, AspisR1.LPi_FieldValues.canonE x) (g : Aeneas.Std.Usize) (s t : NHM_GroupWeight.State)
+  (h : NHM_GroupDomains.WeightInv s)
+  (run : NHM_GroupWeight.body low g s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  NHM_GroupDomains.WeightInv t
+'NHM_GroupDomains.weight_preserves' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupDomains.weight_all (low : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 16#usize)
+  (hl : ∀ x ∈ ↑low, AspisR1.LPi_FieldValues.canonE x) (g : Aeneas.Std.Usize) :
+  NHM_LoopDomain.all (NHM_GroupWeight.body low g) NHM_GroupDomains.WeightInv 17
+    ({ start := 0#usize, «end» := 16#usize }, NHI_Scalar.zero)
+'NHM_GroupDomains.weight_all' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupDomains.accum_preserves (low : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 16#usize)
+  (hl : ∀ x ∈ ↑low, AspisR1.LPi_FieldValues.canonE x) (cells : NHM_GroupCoefficient.Cells)
+  (hc : ∀ x ∈ ↑cells, AspisR1.LPi_FieldValues.canonE x) (s t : NHM_GroupAccum.State) (h : NHM_GroupDomains.AccumInv s)
+  (run : NHM_GroupAccum.body low cells s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  NHM_GroupDomains.AccumInv t
+'NHM_GroupDomains.accum_preserves' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupDomains.accum_all (low : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 16#usize)
+  (hl : ∀ x ∈ ↑low, AspisR1.LPi_FieldValues.canonE x) (cells : NHM_GroupCoefficient.Cells)
+  (hc : ∀ x ∈ ↑cells, AspisR1.LPi_FieldValues.canonE x) :
+  NHM_LoopDomain.all (NHM_GroupAccum.body low cells) NHM_GroupDomains.AccumInv 13
+    ({ start := 0#usize, «end» := 12#usize }, NHI_Scalar.zero)
+'NHM_GroupDomains.accum_all' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupEncoding.reference (cells : Aeneas.Std.Array AspisR1.FIo_Install.NE 12#usize) (group : Aeneas.Std.Usize)
+  (value : AspisR1.FIo_Install.NE) :
+  AspisR1.FIo_FieldBridge.map NHM_EEncoding.encode (cells.update group value) =
+    NHE_GroupRef.group_ref (NHM_EEncoding.encode cells) group (AspisR1.NGM_RawWords.nativeWords value)
+'NHM_GroupEncoding.reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupRoot.initial_canonical (x : AspisR1.LPi_FieldValues.NE) :
+  x ∈ ↑NHM_GroupRoot.initial → AspisR1.LPi_FieldValues.canonE x
+'NHM_GroupRoot.initial_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupRoot.cohort (f : Aeneas.Std.Slice Aeneas.Std.U8) (low : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 16#usize) :
+  FIo_Native.weights.s2_grouped_inactive_pair f low = NHM_GroupRoot.reference f low
+'NHM_GroupRoot.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupRoot.canonical (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (low : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 16#usize) (hl : ∀ x ∈ ↑low, AspisR1.LPi_FieldValues.canonE x)
+  (out : AspisR1.LPi_FieldValues.NE)
+  (run : FIo_Native.weights.s2_grouped_inactive_pair f low = Aeneas.Std.Result.ok out) :
+  AspisR1.LPi_FieldValues.canonE out
+'NHM_GroupRoot.canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupWeight.bind_if {A B : Type} (c : Prop) [Decidable c] (yes no : Aeneas.Std.Result A)
+  (k : A → Aeneas.Std.Result B) : (if c then yes else no) >>= k = if c then yes >>= k else no >>= k
+'NHM_GroupWeight.bind_if' does not depend on any axioms
+NHM_GroupWeight.step (low : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 16#usize) (group : Aeneas.Std.Usize)
+  (s : NHM_GroupWeight.State) :
+  FIo_Native.weights.s2_grouped_inactive_pair_loop1_loop0.body low group s.1 s.2 = NHM_GroupWeight.body low group s
+'NHM_GroupWeight.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupWeight.canonical (low : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 16#usize)
+  (hl : ∀ x ∈ ↑low, AspisR1.LPi_FieldValues.canonE x) (group bit : Aeneas.Std.Usize)
+  (before out : AspisR1.LPi_FieldValues.NE) (hb : AspisR1.LPi_FieldValues.canonE before)
+  (run : NHM_GroupWeight.window low group bit before = Aeneas.Std.Result.ok out) : AspisR1.LPi_FieldValues.canonE out
+'NHM_GroupWeight.canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupWeight.progress (low : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 16#usize) (group : Aeneas.Std.Usize)
+  (s t : NHM_GroupWeight.State)
+  (run : NHM_GroupWeight.body low group s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  t.1.end = s.1.end ∧ ↑t.1.start = ↑s.1.start + 1 ∧ ↑s.1.start < ↑s.1.end
+'NHM_GroupWeight.progress' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupWeight.decreases (low : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 16#usize) (group : Aeneas.Std.Usize)
+  (s t : NHM_GroupWeight.State)
+  (run : NHM_GroupWeight.body low group s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  ↑t.1.end - ↑t.1.start < ↑s.1.end - ↑s.1.start
+'NHM_GroupWeight.decreases' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupWeight.source (low : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 16#usize) (group : Aeneas.Std.Usize)
+  (weight : AspisR1.LPi_FieldValues.NE) :
+  FIo_Native.weights.s2_grouped_inactive_pair_loop1_loop0 { start := 0#usize, «end» := 16#usize } low group weight =
+    NHM_GroupWeight.reference low group weight
+'NHM_GroupWeight.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupWeightDomain.preserves (low : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 16#usize)
+  (hl : ∀ x ∈ ↑low, AspisR1.LPi_FieldValues.canonE x) (group : Aeneas.Std.Usize) (s t : NHM_GroupWeight.State)
+  (hc : AspisR1.LPi_FieldValues.canonE s.2)
+  (run : NHM_GroupWeight.body low group s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  AspisR1.LPi_FieldValues.canonE t.2
+'NHM_GroupWeightDomain.preserves' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupWeightDomain.terminal (low : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 16#usize) (group : Aeneas.Std.Usize)
+  (s : NHM_GroupWeight.State) (out : AspisR1.LPi_FieldValues.NE) (hc : AspisR1.LPi_FieldValues.canonE s.2)
+  (run : NHM_GroupWeight.body low group s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done out)) :
+  AspisR1.LPi_FieldValues.canonE out
+'NHM_GroupWeightDomain.terminal' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_GroupWeightDomain.result (low : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 16#usize)
+  (hl : ∀ x ∈ ↑low, AspisR1.LPi_FieldValues.canonE x) (group : Aeneas.Std.Usize)
+  (before out : AspisR1.LPi_FieldValues.NE) (hc : AspisR1.LPi_FieldValues.canonE before)
+  (run : NHM_GroupWeight.reference low group before = Aeneas.Std.Result.ok out) : AspisR1.LPi_FieldValues.canonE out
+'NHM_GroupWeightDomain.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_HighDot.step (partials : Aeneas.Std.Array NHM_HighDot.NE 4#usize) (coeffs : Aeneas.Std.Array NHM_HighDot.NQ 4#usize)
+  (s : NHM_HighDot.State) : NHI_HighDotLoop.body partials coeffs s = NHM_HighDot.body partials coeffs s
+'NHM_HighDot.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_HighDot.cohort (partials : Aeneas.Std.Array NHM_HighDot.NE 4#usize)
+  (coeffs : Aeneas.Std.Array NHM_HighDot.NQ 4#usize) :
+  FIo_Native.weights.high_dot partials coeffs = NHM_HighDot.reference partials coeffs
+'NHM_HighDot.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_HighDot.invariant (partials : Aeneas.Std.Array NHM_HighDot.NE 4#usize)
+  (coeffs : Aeneas.Std.Array NHM_HighDot.NQ 4#usize) (s t : NHM_HighDot.State) (same : ↑s.2.count = ↑s.1.start)
+  (last : ↑s.1.end = 4)
+  (run : NHM_HighDot.body partials coeffs s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  ↑t.2.count = ↑t.1.start ∧ ↑t.1.end = 4 ∧ ↑t.2.count ≤ 4
+'NHM_HighDot.invariant' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_LoopDomain.invariant {S A : Type} (body : S → Aeneas.Std.Result (Aeneas.Std.ControlFlow S A)) (P : S → Prop)
+  (preserves : ∀ (s t : S), P s → body s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t) → P t) (fuel : ℕ)
+  (s : S) (initial : P s) : NHM_LoopDomain.all body P fuel s
+'NHM_LoopDomain.invariant' depends on axioms: [propext]
+NHM_PartialDot.step (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (common : Aeneas.Std.Array NHM_PartialDot.NQ 16#usize)
+  (offset : Aeneas.Std.Usize) (s : NHM_PartialDot.State) :
+  NHI_PartialDotLoop.body bytes common offset s = NHM_PartialDot.body bytes common offset s
+'NHM_PartialDot.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_PartialDot.cohort (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (common : Aeneas.Std.Array NHM_PartialDot.NQ 16#usize)
+  (offset : Aeneas.Std.Usize) :
+  FIo_Native.weights.partial_dot bytes common offset = NHM_PartialDot.reference bytes common offset
+'NHM_PartialDot.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_PartialDot.invariant (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (common : Aeneas.Std.Array NHM_PartialDot.NQ 16#usize)
+  (offset : Aeneas.Std.Usize) (s t : NHM_PartialDot.State) (same : ↑s.2.count = ↑s.1.start) (last : ↑s.1.end = 16)
+  (run : NHM_PartialDot.body bytes common offset s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  ↑t.2.count = ↑t.1.start ∧ ↑t.1.end = 16 ∧ ↑t.2.count ≤ 16
+'NHM_PartialDot.invariant' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_RegularDomain.membership (shared : Bool) (k : Aeneas.Std.Usize) (member : k ∈ NHM_RegularKinds.kinds shared) :
+  ↑k = 1 ∨ ↑k = 2 ∨ ↑k = 3 ∨ ↑k = 5 ∨ ↑k = 6
+'NHM_RegularDomain.membership' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_RegularDomain.child_domain (shared : Bool) (k : Aeneas.Std.Usize) (member : k ∈ NHM_RegularKinds.kinds shared) :
+  NHI_KindDomain.row ↑k < 5 ∧ ↑k < 7
+'NHM_RegularDomain.child_domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_RegularKinds.cohort [FIo_Native.Allocation] (w : FIo_Native.weights.Weights) (shared : Bool)
+  (alpha : Aeneas.Std.Slice AspisR1.LPi_FieldValues.NE) (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (folds n : Aeneas.Std.Usize) (ap0 ap1 : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 4#usize)
+  (scratch : NHM_RegularKinds.Scratch) (parts : NHM_RegularKinds.Parts) :
+  FIo_Native.weights.process_regular_kinds w shared alpha f folds n ap0 ap1 scratch parts =
+    NHM_RegularKinds.reference w shared alpha f folds n ap0 ap1 scratch parts
+'NHM_RegularKinds.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_RegularKinds.first_error [FIo_Native.Allocation]
+  (child :
+    Aeneas.Std.Usize → NHM_RegularKinds.Scratch → NHM_RegularKinds.Parts → Aeneas.Std.Result NHM_RegularKinds.Reply)
+  (k : Aeneas.Std.Usize) (rest : List Aeneas.Std.Usize) (scratch scratch1 : NHM_RegularKinds.Scratch)
+  (parts parts1 : NHM_RegularKinds.Parts) (e : FIo_Native.verifier.Error)
+  (run : child k scratch parts = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err e, scratch1, parts1)) :
+  NHM_RegularKinds.go child (k :: rest) scratch parts =
+    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err e, scratch1, parts1)
+'NHM_RegularKinds.first_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_RegularKinds.after_ok [FIo_Native.Allocation]
+  (child :
+    Aeneas.Std.Usize → NHM_RegularKinds.Scratch → NHM_RegularKinds.Parts → Aeneas.Std.Result NHM_RegularKinds.Reply)
+  (k : Aeneas.Std.Usize) (rest : List Aeneas.Std.Usize) (scratch scratch1 : NHM_RegularKinds.Scratch)
+  (parts parts1 : NHM_RegularKinds.Parts)
+  (run : child k scratch parts = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), scratch1, parts1)) :
+  NHM_RegularKinds.go child (k :: rest) scratch parts = NHM_RegularKinds.go child rest scratch1 parts1
+'NHM_RegularKinds.after_ok' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_ResultInvariant.terminal {S A : Type} (body : S → Aeneas.Std.Result (Aeneas.Std.ControlFlow S A)) (P : A → Prop)
+  (law : ∀ (s : S) (a : A), body s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done a) → P a) (fuel : ℕ) (s : S)
+  (a : A) (run : NHI_CountedLoop.unroll body fuel s = Aeneas.Std.Result.ok a) : P a
+'NHM_ResultInvariant.terminal' depends on axioms: [propext]
+NHM_ResultInvariant.stateful {S A : Type} (body : S → Aeneas.Std.Result (Aeneas.Std.ControlFlow S A)) (P : S → Prop)
+  (Q : A → Prop) (preserve : ∀ (s t : S), P s → body s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t) → P t)
+  (finish : ∀ (s : S) (a : A), P s → body s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done a) → Q a) (fuel : ℕ)
+  (s : S) (a : A) (initial : P s) (run : NHI_CountedLoop.unroll body fuel s = Aeneas.Std.Result.ok a) : Q a
+'NHM_ResultInvariant.stateful' depends on axioms: [propext]
+NHM_SharedHigh.cohort (partials : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 4#usize) (w : FIo_Native.weights.Weights)
+  (ap0 ap1 : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 4#usize)
+  (parts : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 7#usize) :
+  FIo_Native.weights.shared_high partials w ap0 ap1 parts = NHM_SharedHigh.reference partials w ap0 ap1 parts
+'NHM_SharedHigh.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_SharedPartialResult.terminal (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (q : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 16#usize) (s : NHM_SharedPartials.State)
+  (r : NHM_SharedPartials.Reply) (h : NHM_SharedPartialsDomain.Inv s)
+  (run : NHM_SharedPartials.body f q s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done r)) :
+  NHM_SharedPartialResult.canonicalResult r
+'NHM_SharedPartialResult.terminal' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_SharedPartialResult.source (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (q : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 16#usize) (out : NHM_SharedPartials.Cells)
+  (run : FIo_Native.weights.shared_partials f q = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out))
+  (x : AspisR1.LPi_FieldValues.NE) : x ∈ ↑out → AspisR1.LPi_FieldValues.canonE x
+'NHM_SharedPartialResult.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_SharedPartials.step (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (common : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 16#usize) (s : NHM_SharedPartials.State) :
+  FIo_Native.weights.shared_partials_loop.body f common s.1 s.2 = NHM_SharedPartials.body f common s
+'NHM_SharedPartials.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_SharedPartials.progress (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (common : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 16#usize) (s t : NHM_SharedPartials.State)
+  (run : NHM_SharedPartials.body f common s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  t.1.end = s.1.end ∧ ↑t.1.start = ↑s.1.start + 1 ∧ ↑s.1.start < ↑s.1.end
+'NHM_SharedPartials.progress' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_SharedPartials.decreases (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (common : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 16#usize) (s t : NHM_SharedPartials.State)
+  (run : NHM_SharedPartials.body f common s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  ↑t.1.end - ↑t.1.start < ↑s.1.end - ↑s.1.start
+'NHM_SharedPartials.decreases' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_SharedPartials.cohort (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (common : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 16#usize) :
+  FIo_Native.weights.shared_partials f common = NHM_SharedPartials.reference f common
+'NHM_SharedPartials.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_SharedPartialsDomain.preserves (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (common : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 16#usize) (s t : NHM_SharedPartials.State)
+  (h : NHM_SharedPartialsDomain.Inv s)
+  (run : NHM_SharedPartials.body f common s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  NHM_SharedPartialsDomain.Inv t
+'NHM_SharedPartialsDomain.preserves' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_SharedPartialsDomain.side_domain (s : NHM_SharedPartials.State) (h : NHM_SharedPartialsDomain.Inv s)
+  (side : Aeneas.Std.Usize) (next : NHI_RangeProgress.Range)
+  (run :
+    Aeneas.Std.core.iter.range.IteratorRange.next Aeneas.Std.core.iter.range.StepUsize s.1 =
+      Aeneas.Std.Result.ok (some side, next)) :
+  ↑side < 4
+'NHM_SharedPartialsDomain.side_domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_SharedPartialsDomain.all_calls (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (common : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 16#usize) :
+  NHM_LoopDomain.all (NHM_SharedPartials.body f common) NHM_SharedPartialsDomain.Inv 5
+    ({ start := 0#usize, «end» := 4#usize }, Aeneas.Std.Array.repeat 4#usize NHI_Scalar.zero)
+'NHM_SharedPartialsDomain.all_calls' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_WindowBridge.roundtrip (d : NHM_WindowBridge.Dot) : NHM_WindowBridge.record (NHM_WindowBridge.words d) d.count = d
+'NHM_WindowBridge.roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_WindowBridge.injective (a b : NHM_WindowBridge.Dot)
+  (same : (NHM_WindowBridge.words a, a.count) = (NHM_WindowBridge.words b, b.count)) : a = b
+'NHM_WindowBridge.injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHM_WindowBridge.source (x : NHM_DotPacket.NE) (q : NHM_DotPacket.NQ) (after : NHM_WindowBridge.Dot)
+  (r : Aeneas.Std.core.result.Result Unit Unit) :
+  NHM_WindowRef.window_ref (AspisR1.NGM_RawWords.nativeWords x) (NHI_WordEncoding.words q)
+      (NHM_WindowBridge.words after) after.count (NHM_WindowBridge.rejected r) =
+    Aeneas.Std.Result.ok
+      (NHM_WindowBridge.reply r, NHM_WindowBridge.words after, after.count, AspisR1.NGM_RawWords.nativeWords x,
+        NHI_WordEncoding.words q)
+'NHM_WindowBridge.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_ArraySlots.set_put {T : Type} {n : Aeneas.Std.Usize} (a : Aeneas.Std.Array T n) (i : Aeneas.Std.Usize) (x : T) :
+  a.set i x = NHI_ArrayCells.put a i x
+'NHX_ArraySlots.set_put' depends on axioms: [propext]
+NHX_ArraySlots.mutable_slot {T : Type} {n : Aeneas.Std.Usize} (a : Aeneas.Std.Array T n) (i : Aeneas.Std.Usize)
+  (bound : ↑i < ↑n) :
+  a.index_mut_usize i = Aeneas.Std.Result.ok (NHI_ScalarDomain.pick a (↑i) bound, fun x => NHI_ArrayCells.put a i x)
+'NHX_ArraySlots.mutable_slot' depends on axioms: [propext]
+NHX_CommonDomain.row2 (w : NHX_CommonDomain.W) (hf : NHI_TensorOuterStep.Factors w)
+  (a : Aeneas.Std.Array (Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 4#usize) 5#usize)
+  (b : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 4#usize)
+  (ha : w.factors.index_usize 0#usize = Aeneas.Std.Result.ok a) (hb : a.index_usize 2#usize = Aeneas.Std.Result.ok b) :
+  NHI_CellCanon.array b
+'NHX_CommonDomain.row2' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_CommonDomain.row3 (w : NHX_CommonDomain.W) (hf : NHI_TensorOuterStep.Factors w)
+  (a : Aeneas.Std.Array (Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 4#usize) 5#usize)
+  (b : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 4#usize)
+  (ha : w.factors.index_usize 0#usize = Aeneas.Std.Result.ok a) (hb : a.index_usize 3#usize = Aeneas.Std.Result.ok b) :
+  NHI_CellCanon.array b
+'NHX_CommonDomain.row3' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_CommonDomain.preserves (w : NHX_CommonDomain.W) (hf : NHI_TensorOuterStep.Factors w) (s t : NHX_CommonDomain.State)
+  (hs : NHI_CellCanon.array s.2)
+  (run : NHX_CommonDomain.body w s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) : NHI_CellCanon.array t.2
+'NHX_CommonDomain.preserves' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_CommonDomain.all_calls (w : NHX_CommonDomain.W) (hf : NHI_TensorOuterStep.Factors w) (s : NHX_CommonDomain.State)
+  (hs : NHI_CellCanon.array s.2) : NHM_LoopDomain.all (NHX_CommonDomain.body w) (fun s => NHI_CellCanon.array s.2) 17 s
+'NHX_CommonDomain.all_calls' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_EWordLift.cell (a b : AspisR1.LPi_FieldValues.NE)
+  (words : ∀ i < 8, (↑(AspisR1.NGM_RawWords.nativeWords a))[i]? = (↑(AspisR1.NGM_RawWords.nativeWords b))[i]?) : a = b
+'NHX_EWordLift.cell' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_EWordLift.array {n : Aeneas.Std.Usize} (a b : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE n)
+  (words :
+    ∀ (i : ℕ) (ha : i < (↑a).length) (hb : i < (↑b).length),
+      ∀ j < 8, (↑(AspisR1.NGM_RawWords.nativeWords (↑a)[i]))[j]? = (↑(AspisR1.NGM_RawWords.nativeWords (↑b)[i]))[j]?) :
+  a = b
+'NHX_EWordLift.array' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FactoredCut.prefix_total (ap0 ap1 : NHM_FactoredPrefix.Cells)
+  (low high : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 4#usize) (ha : ∀ x ∈ ↑ap0, AspisR1.LPi_FieldValues.canonE x)
+  (hb : ∀ x ∈ ↑ap1, AspisR1.LPi_FieldValues.canonE x) (hl : ∀ x ∈ ↑low, AspisR1.LPi_FieldValues.canonQ x)
+  (hh : ∀ x ∈ ↑high, AspisR1.LPi_FieldValues.canonQ x) :
+  ∃ a b c d,
+    NHX_FactoredCut.prefix_run ap0 ap1 low high = Aeneas.Std.Result.ok (a, b, c, d) ∧
+      AspisR1.LPi_FieldValues.canonE a ∧
+        AspisR1.LPi_FieldValues.canonE b ∧ AspisR1.LPi_FieldValues.canonE c ∧ AspisR1.LPi_FieldValues.canonE d
+'NHX_FactoredCut.prefix_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FactoredCut.split (ap0 ap1 : NHM_FactoredPrefix.Cells) (side : Aeneas.Std.Usize) (iter : NHM_FactoredPrefix.Iter)
+  (weights : NHM_FactoredPrefix.Cells) (low high : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 4#usize)
+  (q4 q16 : AspisR1.LPi_FieldValues.NQ) :
+  NHM_FactoredPrefix.tail ap0 ap1 side iter weights low high q4 q16 = do
+    let p ← NHX_FactoredCut.prefix_run ap0 ap1 low high
+    NHX_FactoredCut.suffix ap1 side iter weights q4 q16 p
+'NHX_FactoredCut.split' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FactoredPacket.tail_total (ap0 ap1 : NHM_FactoredPrefix.Cells) (side : Aeneas.Std.Usize)
+  (iter : NHM_FactoredPrefix.Iter) (weights : NHM_FactoredPrefix.Cells)
+  (low high : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 4#usize) (q4 q16 : AspisR1.LPi_FieldValues.NQ)
+  (ha : ∀ x ∈ ↑ap0, AspisR1.LPi_FieldValues.canonE x) (hb : ∀ x ∈ ↑ap1, AspisR1.LPi_FieldValues.canonE x)
+  (hw : ∀ x ∈ ↑weights, AspisR1.LPi_FieldValues.canonE x) (hl : ∀ x ∈ ↑low, AspisR1.LPi_FieldValues.canonQ x)
+  (hh : ∀ x ∈ ↑high, AspisR1.LPi_FieldValues.canonQ x) (h4 : AspisR1.LPi_FieldValues.canonQ q4)
+  (h16 : AspisR1.LPi_FieldValues.canonQ q16) :
+  ∃ out,
+    NHM_FactoredPrefix.tail ap0 ap1 side iter weights low high q4 q16 =
+        Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (iter, out)) ∧
+      ∀ x ∈ ↑out, AspisR1.LPi_FieldValues.canonE x
+'NHX_FactoredPacket.tail_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FactoredPacket.active (ap0 ap1 : NHM_FactoredPrefix.Cells)
+  (extra : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 2#usize) (ha : ∀ x ∈ ↑ap0, AspisR1.LPi_FieldValues.canonE x)
+  (hb : ∀ x ∈ ↑ap1, AspisR1.LPi_FieldValues.canonE x) (he : ∀ x ∈ ↑extra, AspisR1.LPi_FieldValues.canonQ x)
+  (s : NHM_FactoredPrefix.State) (h : NHX_FactoredPacket.Inv s) (side : Aeneas.Std.Usize)
+  (next : NHM_FactoredPrefix.Iter)
+  (hn :
+    Aeneas.Std.core.iter.range.IteratorRange.next Aeneas.Std.core.iter.range.StepUsize s.1 =
+      Aeneas.Std.Result.ok (some side, next)) :
+  ∃ out,
+    NHM_FactoredPrefix.body ap0 ap1 extra s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (next, out)) ∧
+      ∀ x ∈ ↑out, AspisR1.LPi_FieldValues.canonE x
+'NHX_FactoredPacket.active' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FactoredPacket.source (ap0 ap1 : NHM_FactoredPrefix.Cells)
+  (extra : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 2#usize) (ha : ∀ x ∈ ↑ap0, AspisR1.LPi_FieldValues.canonE x)
+  (hb : ∀ x ∈ ↑ap1, AspisR1.LPi_FieldValues.canonE x) (he : ∀ x ∈ ↑extra, AspisR1.LPi_FieldValues.canonQ x) :
+  ∃ out,
+    FIo_Native.weights.factored_s2_libra_weights ap0 ap1 extra = Aeneas.Std.Result.ok out ∧
+      NHX_FactoredPacket.reference ap0 ap1 extra = Aeneas.Std.Result.ok out ∧
+        ∀ x ∈ ↑out, AspisR1.LPi_FieldValues.canonE x
+'NHX_FactoredPacket.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FactoredSuffix.total (ap1 : NHM_FactoredPrefix.Cells) (side : Aeneas.Std.Usize) (iter : NHM_FactoredPrefix.Iter)
+  (weights : NHM_FactoredPrefix.Cells) (q4 q16 : AspisR1.LPi_FieldValues.NQ) (a b c d : AspisR1.LPi_FieldValues.NE)
+  (ha : AspisR1.LPi_FieldValues.canonE a) (hb : AspisR1.LPi_FieldValues.canonE b)
+  (hc : AspisR1.LPi_FieldValues.canonE c) (hd : AspisR1.LPi_FieldValues.canonE d)
+  (hw : ∀ x ∈ ↑weights, AspisR1.LPi_FieldValues.canonE x) (h4 : AspisR1.LPi_FieldValues.canonQ q4)
+  (h16 : AspisR1.LPi_FieldValues.canonQ q16) :
+  ∃ out,
+    NHX_FactoredCut.suffix ap1 side iter weights q4 q16 (a, b, c, d) =
+        Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (iter, out)) ∧
+      ∀ x ∈ ↑out, AspisR1.LPi_FieldValues.canonE x
+'NHX_FactoredSuffix.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FactoredTail.get0 {T : Type} (a b c d : T) :
+  (Aeneas.Std.Array.make 4#usize [a, b, c, d] ⋯).index_usize 0#usize = Aeneas.Std.Result.ok a
+'NHX_FactoredTail.get0' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FactoredTail.get1 {T : Type} (a b c d : T) :
+  (Aeneas.Std.Array.make 4#usize [a, b, c, d] ⋯).index_usize 1#usize = Aeneas.Std.Result.ok b
+'NHX_FactoredTail.get1' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FactoredTail.get2 {T : Type} (a b c d : T) :
+  (Aeneas.Std.Array.make 4#usize [a, b, c, d] ⋯).index_usize 2#usize = Aeneas.Std.Result.ok c
+'NHX_FactoredTail.get2' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FactoredTail.get3 {T : Type} (a b c d : T) :
+  (Aeneas.Std.Array.make 4#usize [a, b, c, d] ⋯).index_usize 3#usize = Aeneas.Std.Result.ok d
+'NHX_FactoredTail.get3' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FactoredTail.total (ap0 ap1 : NHM_FactoredPrefix.Cells) (side : Aeneas.Std.Usize) (iter : NHM_FactoredPrefix.Iter)
+  (weights : NHM_FactoredPrefix.Cells) (low_powers high_powers : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 4#usize)
+  (q4 q16 : AspisR1.LPi_FieldValues.NQ) (ha : ∀ x ∈ ↑ap0, AspisR1.LPi_FieldValues.canonE x)
+  (hb : ∀ x ∈ ↑ap1, AspisR1.LPi_FieldValues.canonE x) (hw : ∀ x ∈ ↑weights, AspisR1.LPi_FieldValues.canonE x)
+  (hl : ∀ x ∈ ↑low_powers, AspisR1.LPi_FieldValues.canonQ x) (hh : ∀ x ∈ ↑high_powers, AspisR1.LPi_FieldValues.canonQ x)
+  (hc4 : AspisR1.LPi_FieldValues.canonQ q4) (hc16 : AspisR1.LPi_FieldValues.canonQ q16) (side_zero : side = 0#usize) :
+  ∃ out,
+    NHM_FactoredPrefix.tail ap0 ap1 side iter weights low_powers high_powers q4 q16 =
+        Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (iter, out)) ∧
+      ∀ x ∈ ↑out, AspisR1.LPi_FieldValues.canonE x
+'NHX_FactoredTail.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FieldResults.wide_mul (x y z : AspisR1.LPi_FieldValues.NE) (hx : AspisR1.LPi_FieldValues.canonE x)
+  (hy : AspisR1.LPi_FieldValues.canonE y)
+  (run : FIo_Native.aspis_core.field.wide_exact.WideExact.mul x y = Aeneas.Std.Result.ok z) :
+  AspisR1.LPi_FieldValues.canonE z
+'NHX_FieldResults.wide_mul' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FieldResults.qm_mul (x y z : AspisR1.LPi_FieldValues.NQ) (hx : AspisR1.LPi_FieldValues.canonQ x)
+  (hy : AspisR1.LPi_FieldValues.canonQ y) (run : FIo_Native.aspis_core.field.QM31.mul x y = Aeneas.Std.Result.ok z) :
+  AspisR1.LPi_FieldValues.canonQ z
+'NHX_FieldResults.qm_mul' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FieldResults.mixed (x : AspisR1.LPi_FieldValues.NE) (q : AspisR1.LPi_FieldValues.NQ)
+  (z : AspisR1.LPi_FieldValues.NE) (hx : AspisR1.LPi_FieldValues.canonE x) (hq : AspisR1.LPi_FieldValues.canonQ q)
+  (run : FIo_Native.aspis_core.field.wide_exact.WideExact.mul_qm31 x q = Aeneas.Std.Result.ok z) :
+  AspisR1.LPi_FieldValues.canonE z
+'NHX_FieldResults.mixed' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FieldResults.add (x y z : AspisR1.LPi_FieldValues.NE) (hx : AspisR1.LPi_FieldValues.canonE x)
+  (hy : AspisR1.LPi_FieldValues.canonE y)
+  (run : FIo_Native.aspis_core.field.wide_exact.WideExact.add x y = Aeneas.Std.Result.ok z) :
+  AspisR1.LPi_FieldValues.canonE z
+'NHX_FieldResults.add' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FieldResults.quarter (x z : AspisR1.LPi_FieldValues.NE)
+  (run :
+    FIo_Native.aspis_core.field.wide_exact.WideExact.mul_m31 x FIo_Native.weights.QUARTER = Aeneas.Std.Result.ok z) :
+  AspisR1.LPi_FieldValues.canonE z
+'NHX_FieldResults.quarter' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FilledPacket.initialized {T : Type} (xs : List T) (value : T) :
+  (NHX_FilledPacket.window xs value)[xs.length]? = some value
+'NHX_FilledPacket.initialized' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FilledPacket.frame {T : Type} (xs : List T) (value : T) (i : ℕ) (inside : i < xs.length) :
+  (NHX_FilledPacket.window xs value)[i]? = xs[i]?
+'NHX_FilledPacket.frame' depends on axioms: [propext]
+NHX_FilledPacket.source (reservation : AspisR1.NP6_StdModel.Reservation) (value : AspisR1.LPi_FieldValues.NQ) :
+  AspisR1.FIo_FieldBridge.map NHM_Filled64.reply
+      (FIo_Native.aspis_core.r0.heap.filled FIo_Native.aspis_core.field.QM31.Insts.CoreMarkerCopy 64#usize value) =
+    NHI_FilledRef.filled_ref 64#usize (NHI_WordEncoding.words value)
+'NHX_FilledPacket.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FilledZero.zero_canonical : AspisR1.LPi_FieldValues.canonQ NHX_FilledZero.zeroQ
+'NHX_FilledZero.zero_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FilledZero.prefix_domain (n : ℕ) (q : FIo_Native.aspis_core.field.QM31) :
+  q ∈ NHM_Filled64.cells NHX_FilledZero.zeroQ n → q = NHX_FilledZero.zeroQ ∧ AspisR1.LPi_FieldValues.canonQ q
+'NHX_FilledZero.prefix_domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FilledZero.preserves (before : List AspisR1.LPi_FieldValues.NQ) (h : ∀ q ∈ before, q = NHX_FilledZero.zeroQ)
+  (q : AspisR1.LPi_FieldValues.NQ) : q ∈ NHX_FilledPacket.window before NHX_FilledZero.zeroQ → q = NHX_FilledZero.zeroQ
+'NHX_FilledZero.preserves' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FilledZero.source (reservation : AspisR1.NP6_StdModel.Reservation) :
+  AspisR1.FIo_FieldBridge.map NHM_Filled64.reply
+      (FIo_Native.aspis_core.r0.heap.filled FIo_Native.aspis_core.field.QM31.Insts.CoreMarkerCopy 64#usize
+        NHX_FilledZero.zeroQ) =
+    NHI_FilledRef.filled_ref 64#usize (NHI_WordEncoding.words NHX_FilledZero.zeroQ)
+'NHX_FilledZero.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FinalDomain.preserves (parts powers : NHX_FinalLoop.Cells) (hp : ∀ x ∈ ↑parts, AspisR1.LPi_FieldValues.canonE x)
+  (hk : ∀ x ∈ ↑powers, AspisR1.LPi_FieldValues.canonE x) (s t : NHX_FinalLoop.State)
+  (hs : AspisR1.LPi_FieldValues.canonE s.2)
+  (run : NHX_FinalLoop.body parts powers s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  AspisR1.LPi_FieldValues.canonE t.2
+'NHX_FinalDomain.preserves' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FinalDomain.all_calls (parts powers : NHX_FinalLoop.Cells) (hp : ∀ x ∈ ↑parts, AspisR1.LPi_FieldValues.canonE x)
+  (hk : ∀ x ∈ ↑powers, AspisR1.LPi_FieldValues.canonE x) :
+  NHM_LoopDomain.all (NHX_FinalLoop.body parts powers) (fun s => AspisR1.LPi_FieldValues.canonE s.2) 8
+    ({ start := 0#usize, «end» := 7#usize }, NHI_Scalar.zero)
+'NHX_FinalDomain.all_calls' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FinalDomain.from_kappa (parts : NHX_FinalLoop.Cells) (hp : ∀ x ∈ ↑parts, AspisR1.LPi_FieldValues.canonE x)
+  (kappa : AspisR1.LPi_FieldValues.NE) (hc : AspisR1.LPi_FieldValues.canonE kappa) :
+  ∃ powers,
+    FIo_Native.weights.powers 7#usize kappa = Aeneas.Std.Result.ok powers ∧
+      NHM_LoopDomain.all (NHX_FinalLoop.body parts powers) (fun s => AspisR1.LPi_FieldValues.canonE s.2) 8
+        ({ start := 0#usize, «end» := 7#usize }, NHI_Scalar.zero)
+'NHX_FinalDomain.from_kappa' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FinalFold.cell_total (sum power part : AspisR1.LPi_FieldValues.NE) (hs : AspisR1.LPi_FieldValues.canonE sum)
+  (hp : AspisR1.LPi_FieldValues.canonE power) (hc : AspisR1.LPi_FieldValues.canonE part) :
+  ∃ out, NHX_FinalFold.cell sum power part = Aeneas.Std.Result.ok out ∧ AspisR1.LPi_FieldValues.canonE out
+'NHX_FinalFold.cell_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FinalFold.total (pairs : List (AspisR1.LPi_FieldValues.NE × AspisR1.LPi_FieldValues.NE))
+  (hc : ∀ p ∈ pairs, AspisR1.LPi_FieldValues.canonE p.1 ∧ AspisR1.LPi_FieldValues.canonE p.2)
+  (sum : AspisR1.LPi_FieldValues.NE) (hs : AspisR1.LPi_FieldValues.canonE sum) :
+  ∃ out, NHX_FinalFold.fold pairs sum = Aeneas.Std.Result.ok out ∧ AspisR1.LPi_FieldValues.canonE out
+'NHX_FinalFold.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FinalLoop.step (parts powers : NHX_FinalLoop.Cells) (s : NHX_FinalLoop.State) :
+  FIo_Native.weights.Weights.pair_loop17.body parts powers s.1 s.2 = NHX_FinalLoop.body parts powers s
+'NHX_FinalLoop.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FinalLoop.progress (parts powers : NHX_FinalLoop.Cells) (s t : NHX_FinalLoop.State)
+  (run : NHX_FinalLoop.body parts powers s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  t.1.end = s.1.end ∧ ↑t.1.start = ↑s.1.start + 1 ∧ ↑s.1.start < ↑s.1.end
+'NHX_FinalLoop.progress' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FinalLoop.decreases (parts powers : NHX_FinalLoop.Cells) (s t : NHX_FinalLoop.State)
+  (run : NHX_FinalLoop.body parts powers s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  ↑t.1.end - ↑t.1.start < ↑s.1.end - ↑s.1.start
+'NHX_FinalLoop.decreases' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FinalLoop.source (parts powers : NHX_FinalLoop.Cells) :
+  FIo_Native.weights.Weights.pair_loop17 { start := 0#usize, «end» := 7#usize } parts powers NHI_Scalar.zero =
+    NHX_FinalLoop.reference parts powers
+'NHX_FinalLoop.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FinalTotal.active (parts powers : NHX_FinalLoop.Cells) (hp : ∀ x ∈ ↑parts, AspisR1.LPi_FieldValues.canonE x)
+  (hk : ∀ x ∈ ↑powers, AspisR1.LPi_FieldValues.canonE x) (s : NHX_FinalLoop.State) (hs : NHX_FinalTotal.Inv s)
+  (bound : ↑s.1.start < 7) :
+  ∃ t,
+    NHX_FinalLoop.body parts powers s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t) ∧
+      NHX_FinalTotal.Inv t ∧ ↑t.1.start = ↑s.1.start + 1
+'NHX_FinalTotal.active' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FinalTotal.unroll (parts powers : NHX_FinalLoop.Cells) (hp : ∀ x ∈ ↑parts, AspisR1.LPi_FieldValues.canonE x)
+  (hk : ∀ x ∈ ↑powers, AspisR1.LPi_FieldValues.canonE x) (fuel : ℕ) (s : NHX_FinalLoop.State)
+  (hs : NHX_FinalTotal.Inv s) (enough : 7 - ↑s.1.start < fuel) :
+  ∃ out,
+    NHI_CountedLoop.unroll (NHX_FinalLoop.body parts powers) fuel s = Aeneas.Std.Result.ok out ∧
+      AspisR1.LPi_FieldValues.canonE out
+'NHX_FinalTotal.unroll' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_FinalTotal.source (parts powers : NHX_FinalLoop.Cells) (hp : ∀ x ∈ ↑parts, AspisR1.LPi_FieldValues.canonE x)
+  (hk : ∀ x ∈ ↑powers, AspisR1.LPi_FieldValues.canonE x) :
+  ∃ out,
+    FIo_Native.weights.Weights.pair_loop17 { start := 0#usize, «end» := 7#usize } parts powers NHI_Scalar.zero =
+        Aeneas.Std.Result.ok out ∧
+      AspisR1.LPi_FieldValues.canonE out
+'NHX_FinalTotal.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_GroupPacket.source (w : FIo_Native.weights.Weights) (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (low : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 16#usize) (s2 : w.variant = FIo_Native.transport.Variant.S2)
+  (size : (↑f).length = 2048) : FIo_Native.weights.grouped_inactive_pair w f low = NHM_GroupRoot.reference f low
+'NHX_GroupPacket.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_GroupPacket.output (w : FIo_Native.weights.Weights) (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (low : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 16#usize) (s2 : w.variant = FIo_Native.transport.Variant.S2)
+  (size : (↑f).length = 2048) (hl : ∀ x ∈ ↑low, AspisR1.LPi_FieldValues.canonE x) (out : AspisR1.LPi_FieldValues.NE)
+  (run : FIo_Native.weights.grouped_inactive_pair w f low = Aeneas.Std.Result.ok out) :
+  AspisR1.LPi_FieldValues.canonE out
+'NHX_GroupPacket.output' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_HighDomain.row (w : NHX_HighDomain.W) (hf : NHX_HighDomain.Factors w) (k : Aeneas.Std.Usize) (hk : ↑k < 5) :
+  have r := NHI_ScalarDomain.pick w.factors (↑k) hk;
+  w.factors.index_usize k = Aeneas.Std.Result.ok r ∧
+    ∀ (d : ℕ) (hd : d < 5), NHI_CellCanon.array (NHI_ScalarDomain.pick r d hd)
+'NHX_HighDomain.row' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_HighDomain.scale (r : NHX_HighDomain.Row) (ap0 ap1 : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 4#usize)
+  (hr : ∀ (d : ℕ) (hd : d < 5), NHI_CellCanon.array (NHI_ScalarDomain.pick r d hd))
+  (ha : ∀ x ∈ ↑ap0, AspisR1.LPi_FieldValues.canonE x) (hb : ∀ x ∈ ↑ap1, AspisR1.LPi_FieldValues.canonE x) :
+  ∃ q0 q1 a b out,
+    Aeneas.Std.Array.index_usize r 0#usize = Aeneas.Std.Result.ok q0 ∧
+      Aeneas.Std.Array.index_usize r 1#usize = Aeneas.Std.Result.ok q1 ∧
+        FIo_Native.weights.Weights.scalar_factor q0 ap0 = Aeneas.Std.Result.ok a ∧
+          AspisR1.LPi_FieldValues.canonE a ∧
+            FIo_Native.weights.Weights.scalar_factor q1 ap1 = Aeneas.Std.Result.ok b ∧
+              AspisR1.LPi_FieldValues.canonE b ∧ a.mul b = Aeneas.Std.Result.ok out ∧ AspisR1.LPi_FieldValues.canonE out
+'NHX_HighDomain.scale' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_HighDomain.high_reply (partials : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 4#usize)
+  (coeffs : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 4#usize) (x : AspisR1.LPi_FieldValues.NE)
+  (run : NHM_HighDot.reference partials coeffs = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok x)) :
+  AspisR1.LPi_FieldValues.canonE x
+'NHX_HighDomain.high_reply' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_HighPost.put_canonical (parts : NHX_HighReference.Parts) (i : Aeneas.Std.Usize) (small : ↑i < 7)
+  (x : AspisR1.LPi_FieldValues.NE) (hp : NHX_HighPost.Canon parts) (hx : AspisR1.LPi_FieldValues.canonE x) :
+  NHX_HighPost.Canon (NHI_ArrayCells.put parts i x)
+'NHX_HighPost.put_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_HighPost.first_frame (parts : NHX_HighReference.Parts) (x : AspisR1.LPi_FieldValues.NE) :
+  NHX_HighPost.Frame parts (NHI_ArrayCells.put parts 1#usize x)
+'NHX_HighPost.first_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_HighPost.second_frame (parts : NHX_HighReference.Parts) (x y : AspisR1.LPi_FieldValues.NE) :
+  NHX_HighPost.Frame parts (NHI_ArrayCells.put (NHI_ArrayCells.put parts 1#usize x) 3#usize y)
+'NHX_HighPost.second_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_HighPost.post (partials : NHX_HighReference.Powers) (w : NHX_HighReference.W) (ap0 ap1 : NHX_HighReference.Powers)
+  (parts after : NHX_HighReference.Parts) (hf : NHX_HighDomain.Factors w)
+  (ha : ∀ x ∈ ↑ap0, AspisR1.LPi_FieldValues.canonE x) (hb : ∀ x ∈ ↑ap1, AspisR1.LPi_FieldValues.canonE x)
+  (hp : NHX_HighPost.Canon parts) (reply : NHX_HighReference.Reply)
+  (run : NHX_HighReference.reference partials w ap0 ap1 parts = Aeneas.Std.Result.ok (reply, after)) :
+  NHX_HighPost.Canon after ∧ NHX_HighPost.Frame parts after
+'NHX_HighPost.post' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_HighReference.scale_total (row : NHX_HighReference.Row) (ap0 ap1 : NHX_HighReference.Powers)
+  (hr : ∀ (d : ℕ) (hd : d < 5), NHI_CellCanon.array (NHI_ScalarDomain.pick row d hd))
+  (ha : ∀ x ∈ ↑ap0, AspisR1.LPi_FieldValues.canonE x) (hb : ∀ x ∈ ↑ap1, AspisR1.LPi_FieldValues.canonE x) :
+  ∃ out, NHX_HighReference.scale row ap0 ap1 = Aeneas.Std.Result.ok out ∧ AspisR1.LPi_FieldValues.canonE out
+'NHX_HighReference.scale_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_HighReference.bind_ext {A B : Type} (m : Aeneas.Std.Result A) (f g : A → Aeneas.Std.Result B)
+  (same : ∀ (x : A), f x = g x) : m >>= f = m >>= g
+'NHX_HighReference.bind_ext' depends on axioms: [Quot.sound]
+NHX_HighReference.update3 (parts : NHX_HighReference.Parts) (x : AspisR1.LPi_FieldValues.NE) :
+  Aeneas.Std.Array.update parts 3#usize x = Aeneas.Std.Result.ok (NHI_ArrayCells.put parts 3#usize x)
+'NHX_HighReference.update3' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_HighReference.source (partials : NHX_HighReference.Powers) (w : NHX_HighReference.W)
+  (ap0 ap1 : NHX_HighReference.Powers) (parts : NHX_HighReference.Parts) :
+  FIo_Native.weights.shared_high partials w ap0 ap1 parts = NHX_HighReference.reference partials w ap0 ap1 parts
+'NHX_HighReference.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_KWordLift.cell (a b : AspisR1.LPi_FieldValues.NQ)
+  (words : ∀ i < 4, (↑(NHI_WordEncoding.words a))[i]? = (↑(NHI_WordEncoding.words b))[i]?) : a = b
+'NHX_KWordLift.cell' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_KWordLift.vector (a b : Aeneas.Std.Slice AspisR1.LPi_FieldValues.NQ) (la : (↑a).length = 64) (lb : (↑b).length = 64)
+  (words :
+    ∀ (i : ℕ) (ha : i < (↑a).length) (hb : i < (↑b).length),
+      ∀ j < 4, (↑(NHI_WordEncoding.words (↑a)[i]))[j]? = (↑(NHI_WordEncoding.words (↑b)[i]))[j]?) :
+  a = b
+'NHX_KWordLift.vector' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_KindIndex.value (kind : Aeneas.Std.Usize) (member : ↑kind = 1 ∨ ↑kind = 2 ∨ ↑kind = 3 ∨ ↑kind = 5 ∨ ↑kind = 6) :
+  ↑(NHX_KindIndex.native kind) = NHI_KindDomain.row ↑kind
+'NHX_KindIndex.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_KindIndex.selected (kind : Aeneas.Std.Usize) (member : ↑kind = 1 ∨ ↑kind = 2 ∨ ↑kind = 3 ∨ ↑kind = 5 ∨ ↑kind = 6) :
+  ↑(NHX_KindIndex.native kind) < 5 ∧ ↑kind < 7
+'NHX_KindIndex.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_KindIndex.source (kind : Aeneas.Std.Usize) :
+  (if kind < 4#usize then Aeneas.Std.Result.ok (kind.wrapping_sub 1#usize)
+    else Aeneas.Std.Result.ok (kind.wrapping_sub 2#usize)) =
+    Aeneas.Std.Result.ok (NHX_KindIndex.native kind)
+'NHX_KindIndex.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_LowDomain.preserves (ap0 ap1 : NHX_LowDomain.Powers) (ha : ∀ x ∈ ↑ap0, AspisR1.LPi_FieldValues.canonE x)
+  (hb : ∀ x ∈ ↑ap1, AspisR1.LPi_FieldValues.canonE x) (s t : NHX_LowDomain.State)
+  (hs : ∀ x ∈ ↑s.2, AspisR1.LPi_FieldValues.canonE x)
+  (run : NHX_LowDomain.body ap0 ap1 s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t))
+  (x : AspisR1.LPi_FieldValues.NE) : x ∈ ↑t.2 → AspisR1.LPi_FieldValues.canonE x
+'NHX_LowDomain.preserves' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_LowDomain.all_calls (ap0 ap1 : NHX_LowDomain.Powers) (ha : ∀ x ∈ ↑ap0, AspisR1.LPi_FieldValues.canonE x)
+  (hb : ∀ x ∈ ↑ap1, AspisR1.LPi_FieldValues.canonE x) (s : NHX_LowDomain.State)
+  (hs : ∀ x ∈ ↑s.2, AspisR1.LPi_FieldValues.canonE x) :
+  NHM_LoopDomain.all (NHX_LowDomain.body ap0 ap1) (fun s => ∀ x ∈ ↑s.2, AspisR1.LPi_FieldValues.canonE x) 17 s
+'NHX_LowDomain.all_calls' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_LowScale.square : FIo_Native.weights.QUARTER.mul FIo_Native.weights.QUARTER = Aeneas.Std.Result.ok 134217728#u32
+'NHX_LowScale.square' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_LowScale.total (x : NHX_LowScale.E) :
+  ∃ out,
+    FIo_Native.aspis_core.field.wide_exact.WideExact.mul_m31 x 134217728#u32 = Aeneas.Std.Result.ok out ∧
+      AspisR1.LPi_FieldValues.canonE out ∧
+        NHX_LowScale.limbs out = List.map (fun word => word * 134217728 % 2147483647) (NHX_LowScale.limbs x)
+'NHX_LowScale.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_Powers7Edge.source (kappa : AspisR1.LPi_FieldValues.NE) (hk : AspisR1.LPi_FieldValues.canonE kappa) :
+  ∃ powers,
+    FIo_Native.weights.powers 7#usize kappa = Aeneas.Std.Result.ok powers ∧
+      ∀ x ∈ ↑powers, AspisR1.LPi_FieldValues.canonE x
+'NHX_Powers7Edge.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_ProcessKind.source [FIo_Native.Allocation] (w : FIo_Native.weights.Weights) (kind : Aeneas.Std.Usize)
+  (alpha : Aeneas.Std.Slice AspisR1.LPi_FieldValues.NE) (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (folds n : Aeneas.Std.Usize) (ap0 ap1 : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 4#usize)
+  (scratch : Aeneas.Std.alloc.vec.Vec AspisR1.LPi_FieldValues.NQ)
+  (parts : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 7#usize) (s2 : w.variant = FIo_Native.transport.Variant.S2) :
+  FIo_Native.weights.process_kind w kind alpha f folds n ap0 ap1 scratch parts =
+    NHX_ProcessKind.reference w kind alpha f folds n ap0 ap1 scratch parts
+'NHX_ProcessKind.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_ProcessPorts.tensor_domain (w : NHX_ProcessPorts.W) (k : Aeneas.Std.Usize) (hk : ↑k < 5)
+  (hf : NHI_TensorOuterStep.Factors w) : NHI_Tensor.Domain w k hk
+'NHX_ProcessPorts.tensor_domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_ProcessPorts.tensor (w : NHX_ProcessPorts.W) (k : Aeneas.Std.Usize) (hk : ↑k < 5)
+  (hf : NHI_TensorOuterStep.Factors w) (v : NHX_VecPort.Vec) (len : (↑(Aeneas.Std.alloc.vec.Vec.deref v)).length = 64)
+  (ca : NHI_CellCanon.slice (Aeneas.Std.alloc.vec.Vec.deref v)) :
+  ∃ out,
+    FIo_Native.weights.Weights.tensor w k 2#usize (Aeneas.Std.alloc.vec.Vec.deref_mut v).1 = Aeneas.Std.Result.ok out ∧
+      NHI_CellCanon.slice ((Aeneas.Std.alloc.vec.Vec.deref_mut v).2 out).deref ∧
+        (↑((Aeneas.Std.alloc.vec.Vec.deref_mut v).2 out).deref).length = 64
+'NHX_ProcessPorts.tensor' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_ProcessPorts.scale (w : NHX_ProcessPorts.W) (k : Aeneas.Std.Usize) (hk : ↑k < 5)
+  (hf : NHI_TensorOuterStep.Factors w) (ap0 ap1 : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 4#usize)
+  (ha : ∀ x ∈ ↑ap0, AspisR1.LPi_FieldValues.canonE x) (hb : ∀ x ∈ ↑ap1, AspisR1.LPi_FieldValues.canonE x) :
+  ∃ row q0 q1 a b out,
+    w.factors.index_usize k = Aeneas.Std.Result.ok row ∧
+      row.index_usize 0#usize = Aeneas.Std.Result.ok q0 ∧
+        row.index_usize 1#usize = Aeneas.Std.Result.ok q1 ∧
+          FIo_Native.weights.Weights.scalar_factor q0 ap0 = Aeneas.Std.Result.ok a ∧
+            AspisR1.LPi_FieldValues.canonE a ∧
+              FIo_Native.weights.Weights.scalar_factor q1 ap1 = Aeneas.Std.Result.ok b ∧
+                AspisR1.LPi_FieldValues.canonE b ∧
+                  a.mul b = Aeneas.Std.Result.ok out ∧ AspisR1.LPi_FieldValues.canonE out
+'NHX_ProcessPorts.scale' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_ProcessPost.post [FIo_Native.Allocation] (w : FIo_Native.weights.Weights) (kind : Aeneas.Std.Usize)
+  (f : Aeneas.Std.Slice Aeneas.Std.U8) (ap0 ap1 : NHX_ProcessReference.Powers)
+  (scratch after : NHX_ProcessReference.Vec) (parts out : NHX_ProcessReference.Parts)
+  (reply : NHX_ProcessReference.Reply) (member : ↑kind = 1 ∨ ↑kind = 2 ∨ ↑kind = 3 ∨ ↑kind = 5 ∨ ↑kind = 6)
+  (hf : NHI_TensorOuterStep.Factors w) (ha : ∀ x ∈ ↑ap0, AspisR1.LPi_FieldValues.canonE x)
+  (hb : ∀ x ∈ ↑ap1, AspisR1.LPi_FieldValues.canonE x)
+  (hs : NHI_CellCanon.slice (Aeneas.Std.alloc.vec.Vec.deref scratch))
+  (len : (↑(Aeneas.Std.alloc.vec.Vec.deref scratch)).length = 64) (hp : NHX_ProcessPost.PartsCanon parts)
+  (run : NHX_ProcessReference.reference w kind f ap0 ap1 scratch parts = Aeneas.Std.Result.ok (reply, after, out)) :
+  NHI_CellCanon.slice (Aeneas.Std.alloc.vec.Vec.deref after) ∧
+    (↑(Aeneas.Std.alloc.vec.Vec.deref after)).length = 64 ∧
+      NHX_ProcessPost.PartsCanon out ∧ ∀ (j : ℕ), j ≠ ↑kind → (↑out)[j]? = (↑parts)[j]?
+'NHX_ProcessPost.post' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_ProcessReference.source [FIo_Native.Allocation] (w : FIo_Native.weights.Weights) (kind : Aeneas.Std.Usize)
+  (alpha : Aeneas.Std.Slice AspisR1.LPi_FieldValues.NE) (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (ap0 ap1 : NHX_ProcessReference.Powers) (scratch : NHX_ProcessReference.Vec) (parts : NHX_ProcessReference.Parts)
+  (s2 : w.variant = FIo_Native.transport.Variant.S2) :
+  FIo_Native.weights.process_kind w kind alpha f 2#usize 64#usize ap0 ap1 scratch parts =
+    NHX_ProcessReference.reference w kind f ap0 ap1 scratch parts
+'NHX_ProcessReference.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_RegularFrame.go [FIo_Native.Allocation] (w : FIo_Native.weights.Weights)
+  (alpha : Aeneas.Std.Slice AspisR1.LPi_FieldValues.NE) (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (ap0 ap1 : NHX_RegularFrame.Powers) (s2 : w.variant = FIo_Native.transport.Variant.S2)
+  (hf : NHI_TensorOuterStep.Factors w) (ha : ∀ x ∈ ↑ap0, AspisR1.LPi_FieldValues.canonE x)
+  (hb : ∀ x ∈ ↑ap1, AspisR1.LPi_FieldValues.canonE x) (ks : List Aeneas.Std.Usize)
+  (valid : ∀ k ∈ ks, NHX_RegularPost.Valid k) (before after : NHX_RegularFrame.Vec) (parts out : NHX_RegularFrame.Parts)
+  (reply : NHX_RegularFrame.Reply) (initial : NHX_RegularPost.Inv before parts) (j : ℕ) (outside : ∀ k ∈ ks, j ≠ ↑k)
+  (run :
+    NHM_RegularKinds.go (fun k s p => FIo_Native.weights.process_kind w k alpha f 2#usize 64#usize ap0 ap1 s p) ks
+        before parts =
+      Aeneas.Std.Result.ok (reply, after, out)) :
+  (↑out)[j]? = (↑parts)[j]?
+'NHX_RegularFrame.go' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_RegularFrame.source [FIo_Native.Allocation] (w : FIo_Native.weights.Weights) (shared : Bool)
+  (alpha : Aeneas.Std.Slice AspisR1.LPi_FieldValues.NE) (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (ap0 ap1 : NHX_RegularFrame.Powers) (s2 : w.variant = FIo_Native.transport.Variant.S2)
+  (hf : NHI_TensorOuterStep.Factors w) (ha : ∀ x ∈ ↑ap0, AspisR1.LPi_FieldValues.canonE x)
+  (hb : ∀ x ∈ ↑ap1, AspisR1.LPi_FieldValues.canonE x) (before after : NHX_RegularFrame.Vec)
+  (parts out : NHX_RegularFrame.Parts) (reply : NHX_RegularFrame.Reply) (initial : NHX_RegularPost.Inv before parts)
+  (j : ℕ) (outside : ∀ k ∈ NHM_RegularKinds.kinds shared, j ≠ ↑k)
+  (run :
+    FIo_Native.weights.process_regular_kinds w shared alpha f 2#usize 64#usize ap0 ap1 before parts =
+      Aeneas.Std.Result.ok (reply, after, out)) :
+  (↑out)[j]? = (↑parts)[j]?
+'NHX_RegularFrame.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_RegularPost.go [FIo_Native.Allocation] (w : FIo_Native.weights.Weights)
+  (alpha : Aeneas.Std.Slice AspisR1.LPi_FieldValues.NE) (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (ap0 ap1 : NHX_RegularPost.Powers) (s2 : w.variant = FIo_Native.transport.Variant.S2)
+  (hf : NHI_TensorOuterStep.Factors w) (ha : ∀ x ∈ ↑ap0, AspisR1.LPi_FieldValues.canonE x)
+  (hb : ∀ x ∈ ↑ap1, AspisR1.LPi_FieldValues.canonE x) (ks : List Aeneas.Std.Usize)
+  (valid : ∀ k ∈ ks, NHX_RegularPost.Valid k) (before after : NHX_RegularPost.Vec) (parts out : NHX_RegularPost.Parts)
+  (reply : NHX_RegularPost.Reply) (initial : NHX_RegularPost.Inv before parts)
+  (run :
+    NHM_RegularKinds.go (fun k s p => FIo_Native.weights.process_kind w k alpha f 2#usize 64#usize ap0 ap1 s p) ks
+        before parts =
+      Aeneas.Std.Result.ok (reply, after, out)) :
+  NHX_RegularPost.Inv after out
+'NHX_RegularPost.go' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_RegularPost.source [FIo_Native.Allocation] (w : FIo_Native.weights.Weights) (shared : Bool)
+  (alpha : Aeneas.Std.Slice AspisR1.LPi_FieldValues.NE) (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (ap0 ap1 : NHX_RegularPost.Powers) (s2 : w.variant = FIo_Native.transport.Variant.S2)
+  (hf : NHI_TensorOuterStep.Factors w) (ha : ∀ x ∈ ↑ap0, AspisR1.LPi_FieldValues.canonE x)
+  (hb : ∀ x ∈ ↑ap1, AspisR1.LPi_FieldValues.canonE x) (before after : NHX_RegularPost.Vec)
+  (parts out : NHX_RegularPost.Parts) (reply : NHX_RegularPost.Reply) (initial : NHX_RegularPost.Inv before parts)
+  (run :
+    FIo_Native.weights.process_regular_kinds w shared alpha f 2#usize 64#usize ap0 ap1 before parts =
+      Aeneas.Std.Result.ok (reply, after, out)) :
+  NHX_RegularPost.Inv after out
+'NHX_RegularPost.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_SharedPacket.call_domain (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (common : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 16#usize) (s : NHM_SharedPartials.State)
+  (h : NHM_SharedPartialsDomain.Inv s) (side : Aeneas.Std.Usize) (next : NHI_RangeProgress.Range)
+  (run :
+    Aeneas.Std.core.iter.range.IteratorRange.next Aeneas.Std.core.iter.range.StepUsize s.1 =
+      Aeneas.Std.Result.ok (some side, next)) :
+  ↑side < 4 ∧ f = f ∧ common = common
+'NHX_SharedPacket.call_domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_SharedPacket.source (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (common : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 16#usize) :
+  FIo_Native.weights.shared_partials f common = NHM_SharedPartials.reference f common
+'NHX_SharedPacket.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_SharedPacket.write_frame (before after : NHM_SharedPartials.Cells) (side : Aeneas.Std.Usize)
+  (value : AspisR1.LPi_FieldValues.NE) (run : Aeneas.Std.Array.update before side value = Aeneas.Std.Result.ok after)
+  (j : ℕ) (different : j ≠ ↑side) : (↑after)[j]? = (↑before)[j]?
+'NHX_SharedPacket.write_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+NHX_VecPort.borrow_value (v : NHX_VecPort.Vec) :
+  ↑(Aeneas.Std.alloc.vec.Vec.deref_mut v).1 = ↑(Aeneas.Std.alloc.vec.Vec.deref v)
+'NHX_VecPort.borrow_value' depends on axioms: [propext]
+NHX_VecPort.back_value (v : NHX_VecPort.Vec) (s : Aeneas.Std.Slice AspisR1.LPi_FieldValues.NQ) :
+  ↑((Aeneas.Std.alloc.vec.Vec.deref_mut v).2 s).deref = ↑s
+'NHX_VecPort.back_value' depends on axioms: [propext]
+NHX_VecPort.back_canonical (v : NHX_VecPort.Vec) (s : Aeneas.Std.Slice AspisR1.LPi_FieldValues.NQ)
+  (hs : NHI_CellCanon.slice s) : NHI_CellCanon.slice ((Aeneas.Std.alloc.vec.Vec.deref_mut v).2 s).deref
+'NHX_VecPort.back_canonical' depends on axioms: [propext, Quot.sound]
+NHX_VecPort.back_length (v : NHX_VecPort.Vec) (s : Aeneas.Std.Slice AspisR1.LPi_FieldValues.NQ)
+  (hs : (↑s).length = 64) : (↑((Aeneas.Std.alloc.vec.Vec.deref_mut v).2 s).deref).length = 64
+'NHX_VecPort.back_length' depends on axioms: [propext]
+NIG_BothBranches.low_step (ap0 ap1 : NHX_LowDomain.Powers) (s : NHX_LowDomain.State) :
+  FIo_Native.weights.Weights.pair_loop7.body ap0 ap1 s.1 s.2 =
+    FIo_Native.weights.Weights.pair_loop15.body ap0 ap1 s.1 s.2
+'NIG_BothBranches.low_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_BothBranches.low (ap0 ap1 : NHX_LowDomain.Powers) (s : NHX_LowDomain.State) :
+  FIo_Native.weights.Weights.pair_loop7 s.1 ap0 ap1 s.2 = FIo_Native.weights.Weights.pair_loop15 s.1 ap0 ap1 s.2
+'NIG_BothBranches.low' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_BothBranches.libra_step (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (libra : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 4#usize)
+  (iter : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize)
+  (parts : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 7#usize) :
+  FIo_Native.weights.Weights.pair_loop8.body f libra iter parts =
+    FIo_Native.weights.Weights.pair_loop16.body f libra iter parts
+'NIG_BothBranches.libra_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_BothBranches.libra (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (libra : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 4#usize)
+  (iter : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize)
+  (parts : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 7#usize) :
+  FIo_Native.weights.Weights.pair_loop8 iter f parts libra = FIo_Native.weights.Weights.pair_loop16 iter f parts libra
+'NIG_BothBranches.libra' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_BothBranches.final_step (parts powers : NHX_FinalLoop.Cells) (s : NHX_FinalLoop.State) :
+  FIo_Native.weights.Weights.pair_loop9.body parts powers s.1 s.2 =
+    FIo_Native.weights.Weights.pair_loop17.body parts powers s.1 s.2
+'NIG_BothBranches.final_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_BothBranches.final (parts powers : NHX_FinalLoop.Cells) (s : NHX_FinalLoop.State) :
+  FIo_Native.weights.Weights.pair_loop9 s.1 parts powers s.2 =
+    FIo_Native.weights.Weights.pair_loop17 s.1 parts powers s.2
+'NIG_BothBranches.final' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_CommonLoop.common_progress (w : FIo_Native.weights.Weights) (s t : NHX_CommonDomain.State)
+  (run : NHX_CommonDomain.body w s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  t.1.end = s.1.end ∧ ↑t.1.start = ↑s.1.start + 1 ∧ ↑s.1.start < ↑s.1.end
+'NIG_CommonLoop.common_progress' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_CommonLoop.common_decreases (w : FIo_Native.weights.Weights) (s t : NHX_CommonDomain.State)
+  (run : NHX_CommonDomain.body w s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  ↑t.1.end - ↑t.1.start < ↑s.1.end - ↑s.1.start
+'NIG_CommonLoop.common_decreases' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_CommonLoop.common_source (w : FIo_Native.weights.Weights) (cells : NHX_CommonDomain.Cells) :
+  FIo_Native.weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } w cells =
+    NIG_CommonLoop.common_reference w cells
+'NIG_CommonLoop.common_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_CommonPost.done (w : NHX_CommonDomain.W) (s : NHX_CommonDomain.State)
+  (out : NHX_CommonDomain.W × NHX_CommonDomain.Cells) (hs : NHI_CellCanon.array s.2)
+  (run : NHX_CommonDomain.body w s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done out)) :
+  out.1 = w ∧ NHI_CellCanon.array out.2
+'NIG_CommonPost.done' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_CommonPost.source (w : NHX_CommonDomain.W) (hf : NHI_TensorOuterStep.Factors w) (cells : NHX_CommonDomain.Cells)
+  (hc : NHI_CellCanon.array cells) (out : NHX_CommonDomain.W × NHX_CommonDomain.Cells)
+  (run :
+    FIo_Native.weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } w cells = Aeneas.Std.Result.ok out) :
+  out.1 = w ∧ NHI_CellCanon.array out.2
+'NIG_CommonPost.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_FilledCoverage.covered (p k : ℕ) (hp : p < 64) (hk : k ≤ p) :
+  ∃ b w, b % 4 = 0 ∧ b < 64 ∧ b ≤ p ∧ p < b + 4 ∧ (w = 0 ∨ w = 32) ∧ w ≤ k ∧ k < w + 32 ∧ w ≤ b + 3
+'NIG_FilledCoverage.covered' depends on axioms: [propext, Quot.sound]
+NIG_FilledCoverage.extend_prefix (p : ℕ) :
+  NHM_Filled64.cells NHX_FilledZero.zeroQ (p + 1) =
+    NHX_FilledPacket.window (NHM_Filled64.cells NHX_FilledZero.zeroQ p) NHX_FilledZero.zeroQ
+'NIG_FilledCoverage.extend_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_FilledCoverage.source (reservation : AspisR1.NP6_StdModel.Reservation) :
+  AspisR1.FIo_FieldBridge.map NHM_Filled64.reply
+      (FIo_Native.aspis_core.r0.heap.filled FIo_Native.aspis_core.field.QM31.Insts.CoreMarkerCopy 64#usize
+        NHX_FilledZero.zeroQ) =
+    NHI_FilledRef.filled_ref 64#usize (NHI_WordEncoding.words NHX_FilledZero.zeroQ)
+'NIG_FilledCoverage.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_FinishAlpha.canonical (x : NIG_FinishAlpha.E) (h : NBO_TailDomain.WideCanonical x) :
+  AspisR1.LPi_FieldValues.canonE (AspisR1.FIo_Install.toE x)
+'NIG_FinishAlpha.canonical' depends on axioms: [propext, Quot.sound]
+NIG_FinishAlpha.selected (proof : Aeneas.Std.Slice Aeneas.Std.U8) (v : AspisR1Stage2.verifier.View)
+  (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+  (domain : NIG_FinishInput.Domain proof v p a) (i : Aeneas.Std.Usize) (h : ↑i < 2) :
+  p.alpha.index_usize i = Aeneas.Std.Result.ok (NIG_FinishAlpha.alpha p (↑i) h) ∧
+    AspisR1.LPi_FieldValues.canonE (AspisR1.FIo_Install.toE (NIG_FinishAlpha.alpha p (↑i) h))
+'NIG_FinishAlpha.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_FinishConcrete.NHM_finish (r : AspisR1.NP6_StdModel.Reservation) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : AspisR1Stage2.verifier.View) (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+  (domain : NIG_FinishInput.Domain proof v p a) (alpha0 alpha1 : NIG_FinishConcrete.E)
+  (index0 : p.alpha.index_usize 0#usize = Aeneas.Std.Result.ok alpha0)
+  (index1 : p.alpha.index_usize 1#usize = Aeneas.Std.Result.ok alpha1)
+  (ca0 : AspisR1.LPi_FieldValues.canonE (AspisR1.FIo_Install.toE alpha0))
+  (ca1 : AspisR1.LPi_FieldValues.canonE (AspisR1.FIo_Install.toE alpha1)) :
+  AspisR1.Port3_NativeFinishBody.verifier.finish_relation (NIG_Slots.installed r) v p a none =
+    NHT_FinishRun.run
+      (NHT_FinishNewPacket.installed (NIG_Slots.installed r)
+        (AspisR1.FIn_WeightsInstall.newWeights p.variant p.semantic_alpha p.z))
+      v p a none (NHQ_WeightPort.weights a.weights.deref) (AspisR1.FIo_Install.pair r) alpha0 alpha1
+'NIG_FinishConcrete.NHM_finish' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_FinishExport.NHM_finish (r : AspisR1.NP6_StdModel.Reservation) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : AspisR1Stage2.verifier.View) (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+  (domain : NIG_FinishInput.Domain proof v p a) :
+  AspisR1.Port3_NativeFinishBody.verifier.finish_relation (NIG_Slots.installed r) v p a none =
+    NHT_FinishRun.run
+      (NHT_FinishNewPacket.installed (NIG_Slots.installed r)
+        (AspisR1.FIn_WeightsInstall.newWeights p.variant p.semantic_alpha p.z))
+      v p a none (NHQ_WeightPort.weights a.weights.deref) (AspisR1.FIo_Install.pair r) (NIG_FinishAlpha.alpha p 0 ⋯)
+      (NIG_FinishAlpha.alpha p 1 ⋯)
+'NIG_FinishExport.NHM_finish' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_FinishExport.NHM_new (r : AspisR1.NP6_StdModel.Reservation) (p : AspisR1Stage2.verifier.Prepared) :
+  (NIG_Slots.installed r).op3 p.variant p.semantic_alpha p.z =
+    AspisR1.FIn_WeightsInstall.newWeights p.variant p.semantic_alpha p.z
+'NIG_FinishExport.NHM_new' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_FinishExport.NHM_pair (r : AspisR1.NP6_StdModel.Reservation) (p : AspisR1Stage2.verifier.Prepared)
+  (v : AspisR1Stage2.verifier.View) (w : NIG_Slots.W) :
+  (NIG_Slots.installed r).op3 p.variant p.semantic_alpha p.z =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok w) →
+    ∀ (alpha : Aeneas.Std.Slice AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+      Aeneas.Std.core.array.Array.index
+            (Aeneas.Std.core.ops.index.IndexSlice
+              (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice
+                AspisR1Stage2.aspis_core.field.wide_exact.WideExact))
+            p.alpha { «end» := 2#usize } =
+          Aeneas.Std.Result.ok alpha →
+        NHT_FinishRelationModel.PairLaw (NIG_Slots.installed r) v p w alpha
+          (AspisR1.FIo_Install.pair r w alpha v.final_message p.kappa)
+'NIG_FinishExport.NHM_pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_FinishInput.new_inputs (proof : Aeneas.Std.Slice Aeneas.Std.U8) (v : AspisR1Stage2.verifier.View)
+  (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+  (h : NIG_FinishInput.Domain proof v p a) :
+  NGW_ConstructorArrays.Holds NGW_NewInterface.CanonK p.semantic_alpha ∧
+    NGW_ConstructorArrays.Holds (fun point => NGW_NewInterface.CanonK point.x ∧ NGW_NewInterface.CanonK point.y) p.z
+'NIG_FinishInput.new_inputs' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_FinishPacket.NHM_finish (r : AspisR1.NP6_StdModel.Reservation) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : AspisR1Stage2.verifier.View) (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+  (domain : NIG_FinishInput.Domain proof v p a) :
+  AspisR1.Port3_NativeFinishBody.verifier.finish_relation (NIG_Slots.installed r) v p a none =
+    NHT_FinishRun.run
+      (NHT_FinishNewPacket.installed (NIG_Slots.installed r)
+        (AspisR1.FIn_WeightsInstall.newWeights p.variant p.semantic_alpha p.z))
+      v p a none (NHQ_WeightPort.weights a.weights.deref) (NIG_PairExport.packet r) (NIG_FinishAlpha.alpha p 0 ⋯)
+      (NIG_FinishAlpha.alpha p 1 ⋯)
+'NIG_FinishPacket.NHM_finish' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_Geometry.shift1024 : Aeneas.Std.Usize.wrapping_shr 1024#usize 2#u32 = 256#usize
+'NIG_Geometry.shift1024' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_Geometry.shift256 : Aeneas.Std.Usize.wrapping_shr 256#usize 2#u32 = 64#usize
+'NIG_Geometry.shift256' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_Geometry.expected :
+  FIo_Native.weights.Weights.pair_loop0 { start := 0#usize, «end» := 2#usize } 1024#usize =
+    Aeneas.Std.Result.ok 64#usize
+'NIG_Geometry.expected' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_Indices.shift_two (j : Aeneas.Std.Usize) : ↑(j.wrapping_shr 2#u32) = ↑j / 4
+'NIG_Indices.shift_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_Indices.common (j : Aeneas.Std.Usize) (hj : ↑j < 16) :
+  ↑(j &&& 3#usize) = ↑j % 4 ∧ ↑(j.wrapping_shr 2#u32) = ↑j / 4 ∧ ↑(j &&& 3#usize) < 4 ∧ ↑(j.wrapping_shr 2#u32) < 4
+'NIG_Indices.common' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_Indices.low (j : Aeneas.Std.Usize) (hj : ↑j < 16) :
+  ∃ lo hi,
+    j % 4#usize = Aeneas.Std.Result.ok lo ∧
+      j / 4#usize = Aeneas.Std.Result.ok hi ∧ ↑lo = ↑j % 4 ∧ ↑hi = ↑j / 4 ∧ ↑lo < 4 ∧ ↑hi < 4
+'NIG_Indices.low' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_LibraDomain.preserves (f : Aeneas.Std.Slice Aeneas.Std.U8) (libra : NIG_LibraLoop.Libra)
+  (hl : ∀ x ∈ ↑libra, AspisR1.LPi_FieldValues.canonE x) (s t : NIG_LibraLoop.State) (hs : NIG_LibraDomain.Inv s)
+  (run : NIG_LibraLoop.body f libra s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) : NIG_LibraDomain.Inv t
+'NIG_LibraDomain.preserves' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_LibraDomain.done (f : Aeneas.Std.Slice Aeneas.Std.U8) (libra : NIG_LibraLoop.Libra) (s : NIG_LibraLoop.State)
+  (out : NIG_LibraLoop.Cells) (hs : NIG_LibraDomain.Inv s)
+  (run : NIG_LibraLoop.body f libra s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done out))
+  (x : AspisR1.LPi_FieldValues.NE) : x ∈ ↑out → AspisR1.LPi_FieldValues.canonE x
+'NIG_LibraDomain.done' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_LibraDomain.all_calls (f : Aeneas.Std.Slice Aeneas.Std.U8) (libra : NIG_LibraLoop.Libra)
+  (hl : ∀ x ∈ ↑libra, AspisR1.LPi_FieldValues.canonE x) (parts : NIG_LibraLoop.Cells)
+  (hp : ∀ x ∈ ↑parts, AspisR1.LPi_FieldValues.canonE x) :
+  NHM_LoopDomain.all (NIG_LibraLoop.body f libra) NIG_LibraDomain.Inv 5 ({ start := 0#usize, «end» := 4#usize }, parts)
+'NIG_LibraDomain.all_calls' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_LibraDomain.source (f : Aeneas.Std.Slice Aeneas.Std.U8) (libra : NIG_LibraLoop.Libra)
+  (hl : ∀ x ∈ ↑libra, AspisR1.LPi_FieldValues.canonE x) (parts out : NIG_LibraLoop.Cells)
+  (hp : ∀ x ∈ ↑parts, AspisR1.LPi_FieldValues.canonE x)
+  (run :
+    FIo_Native.weights.Weights.pair_loop16 { start := 0#usize, «end» := 4#usize } f parts libra =
+      Aeneas.Std.Result.ok out)
+  (x : AspisR1.LPi_FieldValues.NE) : x ∈ ↑out → AspisR1.LPi_FieldValues.canonE x
+'NIG_LibraDomain.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_LibraLoop.step (f : Aeneas.Std.Slice Aeneas.Std.U8) (libra : NIG_LibraLoop.Libra) (s : NIG_LibraLoop.State) :
+  FIo_Native.weights.Weights.pair_loop16.body f libra s.1 s.2 = NIG_LibraLoop.body f libra s
+'NIG_LibraLoop.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_LibraLoop.progress (f : Aeneas.Std.Slice Aeneas.Std.U8) (libra : NIG_LibraLoop.Libra) (s t : NIG_LibraLoop.State)
+  (run : NIG_LibraLoop.body f libra s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  t.1.end = s.1.end ∧ ↑t.1.start = ↑s.1.start + 1 ∧ ↑s.1.start < ↑s.1.end
+'NIG_LibraLoop.progress' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_LibraLoop.decreases (f : Aeneas.Std.Slice Aeneas.Std.U8) (libra : NIG_LibraLoop.Libra) (s t : NIG_LibraLoop.State)
+  (run : NIG_LibraLoop.body f libra s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  ↑t.1.end - ↑t.1.start < ↑s.1.end - ↑s.1.start
+'NIG_LibraLoop.decreases' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_LibraLoop.source (f : Aeneas.Std.Slice Aeneas.Std.U8) (libra : NIG_LibraLoop.Libra) (parts : NIG_LibraLoop.Cells) :
+  FIo_Native.weights.Weights.pair_loop16 { start := 0#usize, «end» := 4#usize } f parts libra =
+    NIG_LibraLoop.reference f libra parts
+'NIG_LibraLoop.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_LibraWindow.canonical (f : Aeneas.Std.Slice Aeneas.Std.U8) (libra : NIG_LibraLoop.Libra) (j : Aeneas.Std.Usize)
+  (parts out : NIG_LibraLoop.Cells) (small : ↑j < 4) (hl : ∀ x ∈ ↑libra, AspisR1.LPi_FieldValues.canonE x)
+  (hp : ∀ x ∈ ↑parts, AspisR1.LPi_FieldValues.canonE x)
+  (run : NIG_LibraLoop.window f libra j parts = Aeneas.Std.Result.ok out) (x : AspisR1.LPi_FieldValues.NE) :
+  x ∈ ↑out → AspisR1.LPi_FieldValues.canonE x
+'NIG_LibraWindow.canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_LibraWindow.frame (f : Aeneas.Std.Slice Aeneas.Std.U8) (libra : NIG_LibraLoop.Libra) (j : Aeneas.Std.Usize)
+  (parts out : NIG_LibraLoop.Cells) (run : NIG_LibraLoop.window f libra j parts = Aeneas.Std.Result.ok out) (i : ℕ)
+  (different : i ≠ 4) : (↑out)[i]? = (↑parts)[i]?
+'NIG_LibraWindow.frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_LoopPost.post {S A : Type} (body : S → Aeneas.Std.Result (Aeneas.Std.ControlFlow S A)) (P : S → Prop) (Q : A → Prop)
+  (keep : ∀ (s t : S), P s → body s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t) → P t)
+  (done : ∀ (s : S) (a : A), P s → body s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done a) → Q a) (fuel : ℕ)
+  (s : S) (a : A) (hs : P s) (run : NHI_CountedLoop.unroll body fuel s = Aeneas.Std.Result.ok a) : Q a
+'NIG_LoopPost.post' depends on axioms: [propext]
+NIG_LowLoop.low_progress (ap0 ap1 : NHX_LowDomain.Powers) (s t : NHX_LowDomain.State)
+  (run : NHX_LowDomain.body ap0 ap1 s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  t.1.end = s.1.end ∧ ↑t.1.start = ↑s.1.start + 1 ∧ ↑s.1.start < ↑s.1.end
+'NIG_LowLoop.low_progress' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_LowLoop.low_decreases (ap0 ap1 : NHX_LowDomain.Powers) (s t : NHX_LowDomain.State)
+  (run : NHX_LowDomain.body ap0 ap1 s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont t)) :
+  ↑t.1.end - ↑t.1.start < ↑s.1.end - ↑s.1.start
+'NIG_LowLoop.low_decreases' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_LowLoop.low_source (ap0 ap1 : NHX_LowDomain.Powers) (cells : NHX_LowDomain.Cells) :
+  FIo_Native.weights.Weights.pair_loop15 { start := 0#usize, «end» := 16#usize } ap0 ap1 cells =
+    NIG_LowLoop.low_reference ap0 ap1 cells
+'NIG_LowLoop.low_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_LowPost.done (ap0 ap1 : NHX_LowDomain.Powers) (s : NHX_LowDomain.State) (out : NHX_LowDomain.Cells)
+  (hs : ∀ x ∈ ↑s.2, AspisR1.LPi_FieldValues.canonE x)
+  (run : NHX_LowDomain.body ap0 ap1 s = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done out))
+  (x : AspisR1.LPi_FieldValues.NE) : x ∈ ↑out → AspisR1.LPi_FieldValues.canonE x
+'NIG_LowPost.done' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_LowPost.source (ap0 ap1 : NHX_LowDomain.Powers) (ha : ∀ x ∈ ↑ap0, AspisR1.LPi_FieldValues.canonE x)
+  (hb : ∀ x ∈ ↑ap1, AspisR1.LPi_FieldValues.canonE x) (cells out : NHX_LowDomain.Cells)
+  (hc : ∀ x ∈ ↑cells, AspisR1.LPi_FieldValues.canonE x)
+  (run :
+    FIo_Native.weights.Weights.pair_loop15 { start := 0#usize, «end» := 16#usize } ap0 ap1 cells =
+      Aeneas.Std.Result.ok out)
+  (x : AspisR1.LPi_FieldValues.NE) : x ∈ ↑out → AspisR1.LPi_FieldValues.canonE x
+'NIG_LowPost.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_NewDomain.map_holds {A B : Type} {n : Aeneas.Std.Usize} (f : A → B) (P : A → Prop) (Q : B → Prop)
+  (a : Aeneas.Std.Array A n) (ha : NGW_ConstructorArrays.Holds P a) (step : ∀ (x : A), P x → Q (f x)) :
+  NGW_ConstructorArrays.Holds Q (AspisR1.FIn_WeightsInstall.mapArray f a)
+'NIG_NewDomain.map_holds' depends on axioms: [propext, Quot.sound]
+NIG_NewDomain.q_canonical (q : FIn_WeightsExtract.field.QM31) (h : NGW_ConstructorQM.Canon q) :
+  AspisR1.LPi_FieldValues.canonQ (AspisR1.FIo_Install.toQ q)
+'NIG_NewDomain.q_canonical' does not depend on any axioms
+NIG_NewDomain.factors (w : FIn_WeightsExtract.Weights) (hf : NGW_FactorWrite.CanonFactors w.factors) :
+  NHI_TensorOuterStep.Factors (AspisR1.FIo_Install.toWeights w)
+'NIG_NewDomain.factors' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_NewDomain.extra (w : FIn_WeightsExtract.Weights)
+  (he : NGW_ConstructorArrays.Holds NGW_ConstructorQM.Canon w.extra) :
+  NHI_CellCanon.array (AspisR1.FIo_Install.toWeights w).extra
+'NIG_NewDomain.extra' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_NewDomain.variant (v : FIn_WeightsExtract.FInVariant)
+  (alpha : Aeneas.Std.Array FIn_WeightsExtract.field.QM31 10#usize)
+  (z : Aeneas.Std.Array FIn_WeightsExtract.circle.SecureCirclePoint 2#usize) (w : FIn_WeightsExtract.Weights)
+  (run : FIn_WeightsExtract.weights_new v alpha z = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok w)) :
+  w.variant = v
+'NIG_NewDomain.variant' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_NewReply.inner (alpha : Aeneas.Std.Array AspisR1Stage2.Stage2Finish.K 10#usize)
+  (z : Aeneas.Std.Array AspisR1Stage2.aspis_core.circle.SecureCirclePoint 2#usize) (w : FIn_WeightsExtract.Weights)
+  (run :
+    AspisR1.FIn_WeightsInstall.newWeights AspisR1Stage2.transport.Variant.S2 alpha z =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok w)) :
+  FIn_WeightsExtract.weights_new FIn_WeightsExtract.FInVariant.S2
+      (AspisR1.FIn_WeightsInstall.mapArray AspisR1.FIn_WeightsInstall.toQ alpha)
+      (AspisR1.FIn_WeightsInstall.mapArray AspisR1.FIn_WeightsInstall.toPoint z) =
+    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok w)
+'NIG_NewReply.inner' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_NewReply.returned (alpha : Aeneas.Std.Array AspisR1Stage2.Stage2Finish.K 10#usize)
+  (z : Aeneas.Std.Array AspisR1Stage2.aspis_core.circle.SecureCirclePoint 2#usize)
+  (ha : NGW_ConstructorArrays.Holds NGW_NewInterface.CanonK alpha)
+  (hz : NGW_ConstructorArrays.Holds (fun point => NGW_NewInterface.CanonK point.x ∧ NGW_NewInterface.CanonK point.y) z)
+  (w : FIn_WeightsExtract.Weights)
+  (run :
+    AspisR1.FIn_WeightsInstall.newWeights AspisR1Stage2.transport.Variant.S2 alpha z =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok w)) :
+  (AspisR1.FIo_Install.toWeights w).variant = FIo_Native.transport.Variant.S2 ∧
+    NHI_TensorOuterStep.Factors (AspisR1.FIo_Install.toWeights w) ∧
+      NHI_CellCanon.array (AspisR1.FIo_Install.toWeights w).extra
+'NIG_NewReply.returned' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_PairCaller.source (r : AspisR1.NP6_StdModel.Reservation) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : AspisR1Stage2.verifier.View) (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+  (domain : NIG_FinishInput.Domain proof v p a) (w : AspisR1.FIo_Install.W)
+  (new :
+    (NIG_Slots.installed r).op3 p.variant p.semantic_alpha p.z =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok w))
+  (out : NIG_PairCaller.E)
+  (run :
+    AspisR1.FIo_Install.pair r w p.alpha.to_slice v.final_message p.kappa =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out)) :
+  AspisR1.LPi_FieldValues.canonE (AspisR1.FIo_Install.toE out)
+'NIG_PairCaller.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_PairCanonical.source (r : AspisR1.NP6_StdModel.Reservation) (w : NIG_PairFrames.W)
+  (p : AspisR1Stage2.verifier.Prepared) (f : Aeneas.Std.Slice Aeneas.Std.U8) (kappa out : AspisR1.LPi_FieldValues.NE)
+  (width : (↑f).length = 2048) (s2 : w.variant = FIo_Native.transport.Variant.S2) (hf : NHI_TensorOuterStep.Factors w)
+  (he : NHI_CellCanon.array w.extra) (hk : AspisR1.LPi_FieldValues.canonE kappa)
+  (halpha : ∀ x ∈ ↑(AspisR1.FIo_Install.toSlice p.alpha.to_slice), AspisR1.LPi_FieldValues.canonE x) :
+  FIo_Native.weights.Weights.pair w (AspisR1.FIo_Install.toSlice p.alpha.to_slice) f kappa =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out) →
+    AspisR1.LPi_FieldValues.canonE out
+'NIG_PairCanonical.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_PairExport.source (r : AspisR1.NP6_StdModel.Reservation) (w : AspisR1.FIo_Install.W)
+  (alpha : Aeneas.Std.Slice NIG_PairExport.E) (message : Aeneas.Std.Slice Aeneas.Std.U8) (kappa : NIG_PairExport.E) :
+  AspisR1.FIo_Install.pair r w alpha message kappa = NIG_PairExport.packet r w alpha message kappa
+'NIG_PairExport.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_PairExport.NHM_pair (r : AspisR1.NP6_StdModel.Reservation) (p : AspisR1Stage2.verifier.Prepared)
+  (v : AspisR1Stage2.verifier.View) (w : NIG_Slots.W) :
+  (NIG_Slots.installed r).op3 p.variant p.semantic_alpha p.z =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok w) →
+    ∀ (alpha : Aeneas.Std.Slice NIG_PairExport.E),
+      Aeneas.Std.core.array.Array.index
+            (Aeneas.Std.core.ops.index.IndexSlice
+              (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice NIG_PairExport.E))
+            p.alpha { «end» := 2#usize } =
+          Aeneas.Std.Result.ok alpha →
+        NHT_FinishRelationModel.PairLaw (NIG_Slots.installed r) v p w alpha
+          (NIG_PairExport.packet r w alpha v.final_message p.kappa)
+'NIG_PairExport.NHM_pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_PairFrames.initial_canonical [FIo_Native.Allocation] : NIG_PairFrames.canon NIG_PairFrames.initial
+'NIG_PairFrames.initial_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_PairFrames.filled [FIo_Native.Allocation] (r : AspisR1.NP6_StdModel.Reservation) (v : NIG_PairFrames.Scratch)
+  (run :
+    FIo_Native.aspis_core.r0.heap.filled FIo_Native.aspis_core.field.QM31.Insts.CoreMarkerCopy 64#usize
+        NHX_FilledZero.zeroQ =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok v)) :
+  NHX_RegularPost.Inv v NIG_PairFrames.initial
+'NIG_PairFrames.filled' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_PairFrames.regular [FIo_Native.Allocation] (w : NIG_PairFrames.W) (b : Bool)
+  (alpha : Aeneas.Std.Slice AspisR1.LPi_FieldValues.NE) (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (ap0 ap1 : NIG_PairFrames.Powers) (s2 : w.variant = FIo_Native.transport.Variant.S2)
+  (hf : NHI_TensorOuterStep.Factors w) (ha : NIG_PairFrames.canon ap0) (hb : NIG_PairFrames.canon ap1)
+  (before after : NIG_PairFrames.Scratch) (parts out : NIG_PairFrames.Parts) (reply : NIG_PairFrames.RUnit)
+  (hi : NHX_RegularPost.Inv before parts)
+  (run :
+    FIo_Native.weights.process_regular_kinds w b alpha f 2#usize 64#usize ap0 ap1 before parts =
+      Aeneas.Std.Result.ok (reply, after, out)) :
+  NHX_RegularPost.Inv after out
+'NIG_PairFrames.regular' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_PairFrames.common [FIo_Native.Allocation] (w : NIG_PairFrames.W) (hf : NHI_TensorOuterStep.Factors w)
+  (w1 : NIG_PairFrames.W) (cells : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 16#usize)
+  (run :
+    FIo_Native.weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } w
+        (Aeneas.Std.Array.repeat 16#usize NHX_FilledZero.zeroQ) =
+      Aeneas.Std.Result.ok (w1, cells)) :
+  w1 = w ∧ NHI_CellCanon.array cells
+'NIG_PairFrames.common' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_PairFrames.partials [FIo_Native.Allocation] (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (common : Aeneas.Std.Array AspisR1.LPi_FieldValues.NQ 16#usize) (out : NIG_PairFrames.Powers)
+  (run : FIo_Native.weights.shared_partials f common = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out)) :
+  NIG_PairFrames.canon out
+'NIG_PairFrames.partials' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_PairFrames.high [FIo_Native.Allocation] (partials : NIG_PairFrames.Powers) (w : NIG_PairFrames.W)
+  (ap0 ap1 : NIG_PairFrames.Powers) (parts after : NIG_PairFrames.Parts) (hf : NHI_TensorOuterStep.Factors w)
+  (ha : NIG_PairFrames.canon ap0) (hb : NIG_PairFrames.canon ap1) (hp : NIG_PairFrames.canon parts)
+  (reply : NIG_PairFrames.RUnit)
+  (run : FIo_Native.weights.shared_high partials w ap0 ap1 parts = Aeneas.Std.Result.ok (reply, after)) :
+  NIG_PairFrames.canon after ∧ NHX_HighPost.Frame parts after
+'NIG_PairFrames.high' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_PairFrames.low [FIo_Native.Allocation] (ap0 ap1 : NIG_PairFrames.Powers) (ha : NIG_PairFrames.canon ap0)
+  (hb : NIG_PairFrames.canon ap1) (out : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 16#usize)
+  (run :
+    FIo_Native.weights.Weights.pair_loop15 { start := 0#usize, «end» := 16#usize } ap0 ap1
+        (Aeneas.Std.Array.repeat 16#usize NHI_Scalar.zero) =
+      Aeneas.Std.Result.ok out) :
+  NIG_PairFrames.canon out
+'NIG_PairFrames.low' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_PairFrames.factored [FIo_Native.Allocation] (w : NIG_PairFrames.W) (ap0 ap1 : NIG_PairFrames.Powers)
+  (ha : NIG_PairFrames.canon ap0) (hb : NIG_PairFrames.canon ap1) (he : NHI_CellCanon.array w.extra)
+  (out : NIG_PairFrames.Powers)
+  (run : FIo_Native.weights.factored_s2_libra_weights ap0 ap1 w.extra = Aeneas.Std.Result.ok out) :
+  NIG_PairFrames.canon out
+'NIG_PairFrames.factored' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_PairGeometry.length {T : Type} (s : Aeneas.Std.Slice T) (n : Aeneas.Std.Usize) (h : (↑s).length = ↑n) : s.len = n
+'NIG_PairGeometry.length' depends on axioms: [propext, Quot.sound]
+NIG_PairGeometry.alpha_length (p : AspisR1Stage2.verifier.Prepared) :
+  (AspisR1.FIo_Install.toSlice p.alpha.to_slice).len = 2#usize
+'NIG_PairGeometry.alpha_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_PairGeometry.message_cells (f : Aeneas.Std.Slice Aeneas.Std.U8) (width : (↑f).length = 2048) :
+  f.len / 32#usize = Aeneas.Std.Result.ok 64#usize
+'NIG_PairGeometry.message_cells' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_PairGeometry.expected (p : AspisR1Stage2.verifier.Prepared) :
+  FIo_Native.weights.Weights.pair_loop0
+      { start := 0#usize, «end» := (AspisR1.FIo_Install.toSlice p.alpha.to_slice).len } 1024#usize =
+    Aeneas.Std.Result.ok 64#usize
+'NIG_PairGeometry.expected' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_PairInputs.alpha_prefix (p : AspisR1Stage2.verifier.Prepared) :
+  Aeneas.Std.core.array.Array.index
+      (Aeneas.Std.core.ops.index.IndexSlice (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice NIG_PairInputs.E))
+      p.alpha { «end» := 2#usize } =
+    Aeneas.Std.Result.ok p.alpha.to_slice
+'NIG_PairInputs.alpha_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_PairInputs.alphas (proof : Aeneas.Std.Slice Aeneas.Std.U8) (v : AspisR1Stage2.verifier.View)
+  (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+  (h : NIG_FinishInput.Domain proof v p a) (x : AspisR1.FIo_Install.NE) :
+  x ∈ ↑(AspisR1.FIo_Install.toSlice p.alpha.to_slice) → AspisR1.LPi_FieldValues.canonE x
+'NIG_PairInputs.alphas' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_PairInputs.new_owner (r : AspisR1.NP6_StdModel.Reservation) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : AspisR1Stage2.verifier.View) (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+  (h : NIG_FinishInput.Domain proof v p a) (w : AspisR1.FIo_Install.W)
+  (run :
+    (NIG_Slots.installed r).op3 p.variant p.semantic_alpha p.z =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok w)) :
+  (AspisR1.FIo_Install.toWeights w).variant = FIo_Native.transport.Variant.S2 ∧
+    NHI_TensorOuterStep.Factors (AspisR1.FIo_Install.toWeights w) ∧
+      NHI_CellCanon.array (AspisR1.FIo_Install.toWeights w).extra
+'NIG_PairInputs.new_owner' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_PairInputs.final_width (proof : Aeneas.Std.Slice Aeneas.Std.U8) (v : AspisR1Stage2.verifier.View)
+  (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+  (h : NIG_FinishInput.Domain proof v p a) : (↑v.final_message).length = 2048
+'NIG_PairInputs.final_width' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_PairModel.low_alias [allocation : FIo_Native.Allocation] (ap0 ap1 : NHX_LowDomain.Powers)
+  (iter : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize) (cells : NHX_LowDomain.Cells) :
+  FIo_Native.weights.Weights.pair_loop7 iter ap0 ap1 cells = FIo_Native.weights.Weights.pair_loop15 iter ap0 ap1 cells
+'NIG_PairModel.low_alias' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_PairModel.final_alias [allocation : FIo_Native.Allocation] (parts powers : NHX_FinalLoop.Cells)
+  (iter : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize) (sum : FIo_Native.aspis_core.field.wide_exact.WideExact) :
+  FIo_Native.weights.Weights.pair_loop9 iter parts powers sum =
+    FIo_Native.weights.Weights.pair_loop17 iter parts powers sum
+'NIG_PairModel.final_alias' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_PairModel.source [allocation : FIo_Native.Allocation] (w : FIo_Native.weights.Weights)
+  (alpha : Aeneas.Std.Slice FIo_Native.aspis_core.field.wide_exact.WideExact) (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (kappa : FIo_Native.aspis_core.field.wide_exact.WideExact) :
+  w.pair alpha f kappa = NIG_PairModel.reference w alpha f kappa
+'NIG_PairModel.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_PairS2Body.source [FIo_Native.Allocation] (w : FIo_Native.weights.Weights) (p : AspisR1Stage2.verifier.Prepared)
+  (f : Aeneas.Std.Slice Aeneas.Std.U8) (width : (↑f).length = 2048)
+  (kappa : FIo_Native.aspis_core.field.wide_exact.WideExact) :
+  w.pair (AspisR1.FIo_Install.toSlice p.alpha.to_slice) f kappa =
+    NIG_PairS2Body.reference w (AspisR1.FIo_Install.toSlice p.alpha.to_slice) f kappa
+'NIG_PairS2Body.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_PairShared.canonical [FIo_Native.Allocation] (w : NIG_PairFrames.W) (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (ap0 ap1 : NIG_PairFrames.Powers) (kappa : AspisR1.LPi_FieldValues.NE) (parts : NIG_PairFrames.Parts)
+  (s2 : w.variant = FIo_Native.transport.Variant.S2) (width : (↑f).length = 2048) (hf : NHI_TensorOuterStep.Factors w)
+  (ha : NIG_PairFrames.canon ap0) (hb : NIG_PairFrames.canon ap1) (he : NHI_CellCanon.array w.extra)
+  (hk : AspisR1.LPi_FieldValues.canonE kappa) (hp : NIG_PairFrames.canon parts) (out : AspisR1.LPi_FieldValues.NE)
+  (run :
+    NIG_PairShared.reference w f ap0 ap1 kappa parts = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out)) :
+  AspisR1.LPi_FieldValues.canonE out
+'NIG_PairShared.canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_PairSuffix.source [FIo_Native.Allocation] (w : NIG_PairFrames.W) (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (ap0 ap1 : NIG_PairFrames.Powers) (kappa : AspisR1.LPi_FieldValues.NE) (parts : NIG_PairFrames.Parts)
+  (s2 : w.variant = FIo_Native.transport.Variant.S2) :
+  NIG_PairSuffix.dispatch w f ap0 ap1 kappa parts = NIG_TailControl.reference w f ap0 ap1 kappa parts
+'NIG_PairSuffix.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_PairTail.grouped (w : NIG_PairFrames.W) (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (low : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 16#usize) (s2 : w.variant = FIo_Native.transport.Variant.S2)
+  (width : (↑f).length = 2048) (hl : NIG_PairFrames.canon low) (out : AspisR1.LPi_FieldValues.NE)
+  (run : FIo_Native.weights.grouped_inactive_pair w f low = Aeneas.Std.Result.ok out) :
+  AspisR1.LPi_FieldValues.canonE out
+'NIG_PairTail.grouped' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_PairTail.put_zero (parts out : NIG_PairFrames.Parts) (value : AspisR1.LPi_FieldValues.NE)
+  (hp : NIG_PairFrames.canon parts) (hv : AspisR1.LPi_FieldValues.canonE value)
+  (run : Aeneas.Std.Array.update parts 0#usize value = Aeneas.Std.Result.ok out) :
+  NIG_PairFrames.canon out ∧ ∀ (i : ℕ), i ≠ 0 → (↑out)[i]? = (↑parts)[i]?
+'NIG_PairTail.put_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_PairTail.libra (f : Aeneas.Std.Slice Aeneas.Std.U8) (libra : NIG_PairFrames.Powers)
+  (parts out : NIG_PairFrames.Parts) (hl : NIG_PairFrames.canon libra) (hp : NIG_PairFrames.canon parts)
+  (run :
+    FIo_Native.weights.Weights.pair_loop16 { start := 0#usize, «end» := 4#usize } f parts libra =
+      Aeneas.Std.Result.ok out) :
+  NIG_PairFrames.canon out
+'NIG_PairTail.libra' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_PairTail.final (kappa : AspisR1.LPi_FieldValues.NE) (parts : NIG_PairFrames.Parts)
+  (hk : AspisR1.LPi_FieldValues.canonE kappa) (hp : NIG_PairFrames.canon parts) :
+  ∃ powers,
+    FIo_Native.weights.powers 7#usize kappa = Aeneas.Std.Result.ok powers ∧
+      NIG_PairFrames.canon powers ∧
+        ∃ out,
+          FIo_Native.weights.Weights.pair_loop17 { start := 0#usize, «end» := 7#usize } parts powers NHI_Scalar.zero =
+              Aeneas.Std.Result.ok out ∧
+            AspisR1.LPi_FieldValues.canonE out
+'NIG_PairTail.final' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_PairValues.slice_read {T : Type} (P : T → Prop) (xs : Aeneas.Std.Slice T) (i : Aeneas.Std.Usize) (x : T)
+  (all : ∀ y ∈ ↑xs, P y) (run : xs.index_usize i = Aeneas.Std.Result.ok x) : P x
+'NIG_PairValues.slice_read' depends on axioms: [propext]
+NIG_PairValues.powers4 (x : AspisR1.LPi_FieldValues.NE) (h : AspisR1.LPi_FieldValues.canonE x)
+  (powers : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 4#usize)
+  (run : FIo_Native.weights.powers 4#usize x = Aeneas.Std.Result.ok powers) (p : AspisR1.LPi_FieldValues.NE) :
+  p ∈ ↑powers → AspisR1.LPi_FieldValues.canonE p
+'NIG_PairValues.powers4' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_PairValues.power_inputs (proof : Aeneas.Std.Slice Aeneas.Std.U8) (v : AspisR1Stage2.verifier.View)
+  (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+  (domain : NIG_FinishInput.Domain proof v p a) (i : Aeneas.Std.Usize) (x : AspisR1.LPi_FieldValues.NE)
+  (run : (AspisR1.FIo_Install.toSlice p.alpha.to_slice).index_usize i = Aeneas.Std.Result.ok x) :
+  AspisR1.LPi_FieldValues.canonE x
+'NIG_PairValues.power_inputs' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_Slots.NHM_new (r : AspisR1.NP6_StdModel.Reservation) (p : AspisR1Stage2.verifier.Prepared) :
+  (NIG_Slots.installed r).op3 p.variant p.semantic_alpha p.z =
+    AspisR1.FIn_WeightsInstall.newWeights p.variant p.semantic_alpha p.z
+'NIG_Slots.NHM_new' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_Slots.NHM_pair (r : AspisR1.NP6_StdModel.Reservation) (p : AspisR1Stage2.verifier.Prepared)
+  (v : AspisR1Stage2.verifier.View) (weights : NIG_Slots.W) :
+  (NIG_Slots.installed r).op3 p.variant p.semantic_alpha p.z =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok weights) →
+    ∀ (alpha : Aeneas.Std.Slice AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+      Aeneas.Std.core.array.Array.index
+            (Aeneas.Std.core.ops.index.IndexSlice
+              (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice
+                AspisR1Stage2.aspis_core.field.wide_exact.WideExact))
+            p.alpha { «end» := 2#usize } =
+          Aeneas.Std.Result.ok alpha →
+        NHT_FinishRelationModel.PairLaw (NIG_Slots.installed r) v p weights alpha
+          (AspisR1.FIo_Install.pair r weights alpha v.final_message p.kappa)
+'NIG_Slots.NHM_pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_Slots.dot (r : AspisR1.NP6_StdModel.Reservation) (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (weights : Aeneas.Std.Slice AspisR1Stage2.aspis_core.field.QM31) :
+  (NIG_Slots.installed r).op4 f weights = AspisR1.SAG_DotClosed.source f weights
+'NIG_Slots.dot' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_Slots.folds (r : AspisR1.NP6_StdModel.Reservation) (p : AspisR1Stage2.verifier.Prepared)
+  (s2 : p.variant = AspisR1Stage2.transport.Variant.S2) :
+  (NIG_Slots.installed r).op6 p.variant = Aeneas.Std.Result.ok 2#usize
+'NIG_Slots.folds' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_Slots.release (r : AspisR1.NP6_StdModel.Reservation) :
+  AspisR1.Port3_FinishStage.release (AspisR1.IDa_Deployed.finish r) = AspisR1.IDa_Deployed.finish r
+'NIG_Slots.release' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_Slots.round0 (r : AspisR1.NP6_StdModel.Reservation) (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (alpha claim : AspisR1Stage2.aspis_core.field.wide_exact.WideExact) :
+  (NIG_Slots.installed r).op5 f alpha claim 0#usize =
+    AspisR1Stage2.Stage2Finish.verifier.finishRelationRoundWithOps (AspisR1.IDa_Deployed.finish r) f alpha claim 0#usize
+'NIG_Slots.round0' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_Slots.round1 (r : AspisR1.NP6_StdModel.Reservation) (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (alpha claim : AspisR1Stage2.aspis_core.field.wide_exact.WideExact) :
+  (NIG_Slots.installed r).op5 f alpha claim 1#usize =
+    AspisR1Stage2.Stage2Finish.verifier.finishRelationRoundWithOps (AspisR1.IDa_Deployed.finish r) f alpha claim 1#usize
+'NIG_Slots.round1' depends on axioms: [propext, Classical.choice, Quot.sound]
+NIG_TailControl.canonical [FIo_Native.Allocation] (w : NIG_PairFrames.W) (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (ap0 ap1 : NIG_PairFrames.Powers) (kappa : AspisR1.LPi_FieldValues.NE) (parts : NIG_PairFrames.Parts)
+  (s2 : w.variant = FIo_Native.transport.Variant.S2) (width : (↑f).length = 2048) (ha : NIG_PairFrames.canon ap0)
+  (hb : NIG_PairFrames.canon ap1) (he : NHI_CellCanon.array w.extra) (hk : AspisR1.LPi_FieldValues.canonE kappa)
+  (hp : NIG_PairFrames.canon parts) (out : AspisR1.LPi_FieldValues.NE)
+  (run :
+    NIG_TailControl.reference w f ap0 ap1 kappa parts = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out)) :
+  AspisR1.LPi_FieldValues.canonE out
+'NIG_TailControl.canonical' depends on axioms: [propext, Classical.choice, Quot.sound]

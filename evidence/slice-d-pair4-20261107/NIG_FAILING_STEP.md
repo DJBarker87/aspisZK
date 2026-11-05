@@ -1,0 +1,23 @@
+# NIG failing steps
+
+NIG_K001: own harness duplicate Vec import (KMX already imports Vec); compiler error, no proof credit. Fixed without weakening validation in K002.
+
+All open stages retain exact NHX_REMAINING obligations; no successful child premise introduced. Further failures are appended with receipts.
+
+NIG_K002: prefix_frame Box64 initializer/native resize shape TIMEOUT90s,95.67s wall,6346424KiB,swap0. No credit. Replacement K003 separates pre-state construction using SAME successful reserve plus valid zeroed storage, selected arbitrary old cell; one resize step with unwind6. No unchanged retry or cap increase.
+
+NIG_K003: arbitrary-prefix frame after native reserve and zeroed backing TIMEOUT90s;92.80s wall,6354684KiB,swap0. No credit. Further native split fixes prefix in disjoint two-length intervals; first checks largest62/63 interval, not unchanged shape. Full64 initialization remains OPEN until all intervals compose.
+
+NIG_K004: narrowed62/63 prefix with symbolic old-cell observation also TIMEOUT90s,92.57s wall,6354588KiB,swap0. No credit. K005 isolates only the newly initialized cell; uses valid zeroed backing and actual resize, leaves SAME reserve composition open.
+
+NIG_K005: arbitrary-prefix new-cell observation on zeroed64 backing TIMEOUT90s (95.45s,6354552KiB,swap0). K006 specialized p63 passed; K007 corruption failed, restricted support only. K008 high-prefix56..63 initialized-prefix observation with arbitrary overwritten spare cell TIMEOUT90s (96.45s,6353744KiB,swap0); no credit. No old timeout rerun unchanged.
+
+Stage4: K108 combined ownership/control prefix exceeded90s; classified tool limit, excluded. Split into guard109/110, initial111/112 and argument-edge113/114 records; all positives passed and corruption controls failed. K119/120 full finish source control passed/failed within the unchanged90s solver cap. No native budget remains. L038/041 geometry simplifier left a typed loop match; L043 diagnosed curried emitted body; L044 only redundant final tactic; corrected L045 passes via two symbolic body steps and terminal step. L039 filled dotted Result constructor ambiguity corrected L042. L048 unicode arrow lexer error corrected L049. No failed declaration is credited.
+
+Stage5 formal composition: successful sources are NIG_PairS2Body (fixed geometry, both guard arms), PairCanonical/PairCaller (actual source-ordered successful return canonicality from SAME NEW and primitive caller fields), PairExport (full Result emitted/cohort reference and exact NHT PairLaw), FinishPacket (full Result finish equation using that packet). L051/052 are diagnostics, renamed .diagnostic.lean.txt; no credit. L053 reserved prefix name/lookup coercion fixed L054; L055 missing explicit Allocation class fixed L057; L058/060/062 geometry let/if/association normalization fixed L064; L059 list lookup evidence fixed L061; L065 reserved partial name, L066 typed match simplification fixed L068; L069/070 typed high-reply match fixed L071. L072 packet letI syntax and L073 missing final reflexivity fixed L076. L067/L075 failed dependency pin lookup BEFORE launch, no process submitted or budget receipt, never counted as attempts.
+
+Last supplementary allocation-error theorem L078 had wrong reserve-error type; L079 corrected the type, then stopped at a residual preallocation-bind/allocator match equality. Classified missing Lean normalization/association proof, not mismatch or tool limit. The uncompiled draft is NIG_AllocationError.unproved.lean.txt, excluded from all audit roots and closure. No success premise was introduced. Full Error/Ok model identity is already in PairModel/PairExport; this supplementary standalone rejection corollary receives no credit. Three remaining formal slots reserved for changed-source combined replay, complete statements and final ax2/coherence audit; no more native slots.
+
+Final audit L080/L081/L082 all pass, standard only and zero coherence defects. No failed allocation-error draft is imported. All120 native and80 formal slots are consumed. Further model/native semantic association is explicitly OPEN in NIG_EDGES.json; no success premise or CLOSED promotion hides it.
+
+Export-script repair: the first private NIG_export.py invocation failed Python parsing before host admission/copy/cleanup; repaired its multiline source transport to a raw string. The unchanged hash-equality/admission validation then passed.37 object files,5582000 bytes exported into the retained own cache. Only this job's rebuildable target/object/temp/audit products were removed,1483601470 bytes total (exact individual sizes NIG_HOST_CLEANUP.json). The cache and all source/evidence remain; no keys or sibling paths touched. Host98% used,49G free at final read-only disk check.

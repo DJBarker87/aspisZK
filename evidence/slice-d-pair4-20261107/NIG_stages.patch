@@ -1,0 +1,293 @@
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani,feature(allocator_api))]
+ //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
+ #![no_std]
+ extern crate alloc;
+--- a/crates/aspis-r1-cost-probe/src/weights.rs
++++ b/crates/aspis-r1-cost-probe/src/weights.rs
+@@ -397,3 +397,5 @@
+         }
+     }
+ }
++
++#[cfg(kani)] #[path="NIG_stages.rs"] mod NIG_stages;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NIG_stages.rs
+@@ -0,0 +1,275 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn q(x:[u32;4])->K{K{c0:aspis_core::field::CM31{a:M31(x[0]),b:M31(x[1])},c1:aspis_core::field::CM31{a:M31(x[2]),b:M31(x[3])}}}
++fn anyq()->K{q(kani::any())}
++fn qw(x:K)->[u32;4]{[x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0]}
++struct Common{lhs:K,rhs:K,reply:K,calls:usize}
++fn qm(a:K,b:K,l:&mut Common)->K{l.lhs=a;l.rhs=b;l.calls+=1;l.reply}
++fn common_cut(row2:&[K;4],row3:&[K;4],j:usize,cells:&mut [K;16],l:&mut Common){
++ cells[j]=qm(row2[j&3],row3[j>>2u32],l);
++}
++fn common_check(g:usize){
++ let row2=core::array::from_fn(|_|anyq());let row3=core::array::from_fn(|_|anyq());
++ let before=core::array::from_fn(|_|anyq());let mut cells=before;
++ let j:usize=kani::any();kani::assume(j<16);let k:usize=kani::any();kani::assume(k<16);
++ let limb:usize=kani::any();kani::assume(limb<4);
++ let mut l=Common{lhs:K::ZERO,rhs:K::ZERO,reply:anyq(),calls:0};
++ common_cut(&row2,&row3,j,&mut cells,&mut l);
++ if cfg!(NIG_corrupt){match g{0=>l.lhs=q([qw(row2[j&3])[0]^1;4]),1=>l.rhs=q([qw(row3[j>>2])[0]^1;4]),2=>l.calls+=1,_=>cells[k]=q([qw(if k==j{l.reply}else{before[k]})[0]^1;4])}}
++ let good=match g{0=>qw(l.lhs)[limb]==qw(row2[j&3])[limb],1=>qw(l.rhs)[limb]==qw(row3[j>>2])[limb],2=>l.calls==1,_=>qw(cells[k])[limb]==qw(if k==j{l.reply}else{before[k]})[limb]};assert!(good);
++}
++macro_rules! gate{($name:ident,$g:expr)=>{#[kani::proof]#[kani::unwind(66)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn $name(){common_check($g)}};}
++gate!(common_lhs,0);gate!(common_rhs,1);gate!(common_count,2);gate!(common_frame,3);
++
++fn anye()->E{let v:[u32;8]=kani::any();for x in v{kani::assume(x<0x7fffffff);}E::from_limbs(v).unwrap()}
++struct Low{a:E,b:E,product:E,scale_a:E,scale_b:M31,scaled:E,base_a:M31,base_b:M31,tags:[u8;3],count:usize}
++fn emul(a:E,b:E,l:&mut Low)->E{l.a=a;l.b=b;l.tags[l.count]=0;l.count+=1;l.product}
++fn square(a:M31,b:M31,l:&mut Low)->M31{l.base_a=a;l.base_b=b;l.tags[l.count]=1;l.count+=1;M31(134217728)}
++fn scale(a:E,b:M31,l:&mut Low)->E{l.scale_a=a;l.scale_b=b;l.tags[l.count]=2;l.count+=1;l.scaled}
++fn low_cut(ap0:&[E;4],ap1:&[E;4],s:usize,cells:&mut [E;16],l:&mut Low){
++ let product=emul(ap0[PERM[s%4]],ap1[PERM[s/4]],l);
++ let base=square(QUARTER,QUARTER,l);
++ cells[s]=scale(product,base,l);
++}
++fn low_check(g:usize){
++ let ap0=core::array::from_fn(|_|anye());let ap1=core::array::from_fn(|_|anye());
++ let before=core::array::from_fn(|_|anye());let mut cells=before;
++ let s:usize=kani::any();kani::assume(s<16);let k:usize=kani::any();kani::assume(k<16);
++ let limb:usize=kani::any();kani::assume(limb<8);
++ let mut l=Low{a:E::ZERO,b:E::ZERO,product:anye(),scale_a:E::ZERO,scale_b:M31(0),scaled:anye(),base_a:M31(0),base_b:M31(0),tags:[99;3],count:0};
++ low_cut(&ap0,&ap1,s,&mut cells,&mut l);
++ if cfg!(NIG_corrupt){match g{0=>l.a=E::ZERO,1=>l.b=E::ZERO,2=>l.tags[0]=99,3=>l.base_b=M31(0),4=>l.scale_a=E::ZERO,_=>cells[k]=E::ZERO}}
++ let good=match g{0=>l.a.to_limbs()[limb]==ap0[PERM[s%4]].to_limbs()[limb],1=>l.b.to_limbs()[limb]==ap1[PERM[s/4]].to_limbs()[limb],2=>l.count==3&&l.tags==[0,1,2],3=>l.base_a==QUARTER&&l.base_b==QUARTER&&l.scale_b==M31(134217728),4=>l.scale_a.to_limbs()[limb]==l.product.to_limbs()[limb],_=>cells[k].to_limbs()[limb]==if k==s{l.scaled}else{before[k]}.to_limbs()[limb]};assert!(good);
++}
++macro_rules! lowgate{($name:ident,$g:expr)=>{#[kani::proof]#[kani::unwind(194)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn $name(){low_check($g)}};}
++lowgate!(low_lhs,0);lowgate!(low_rhs,1);lowgate!(low_order,2);lowgate!(low_scalar,3);lowgate!(low_scale,4);lowgate!(low_frame,5);
++
++struct Final{mul_a:E,mul_b:E,product:E,add_a:E,add_b:E,reply:E,count:usize,tags:[u8;2]}
++fn final_mul(a:E,b:E,l:&mut Final)->E{l.mul_a=a;l.mul_b=b;l.tags[l.count]=0;l.count+=1;l.product}
++fn final_add(a:E,b:E,l:&mut Final)->E{l.add_a=a;l.add_b=b;l.tags[l.count]=1;l.count+=1;l.reply}
++fn final_cut(parts:&[E;7],powers:&[E;7],kind:usize,sum:&mut E,l:&mut Final){
++ let product=final_mul(powers[kind],parts[kind],l);*sum=final_add(*sum,product,l);
++}
++fn final_check(g:usize){
++ let parts=core::array::from_fn(|_|anye());let powers=core::array::from_fn(|_|anye());
++ let before=anye();let mut sum=before;let kind:usize=kani::any();kani::assume(kind<7);
++ let limb:usize=kani::any();kani::assume(limb<8);
++ let mut l=Final{mul_a:E::ZERO,mul_b:E::ZERO,product:anye(),add_a:E::ZERO,add_b:E::ZERO,reply:anye(),count:0,tags:[99;2]};
++ final_cut(&parts,&powers,kind,&mut sum,&mut l);
++ if cfg!(NIG_corrupt){match g{0=>l.mul_a=E::ZERO,1=>l.mul_b=E::ZERO,2=>l.add_a=E::ZERO,3=>l.add_b=E::ZERO,4=>l.tags[0]=99,_=>sum=E::ZERO}}
++ let good=match g{0=>l.mul_a.to_limbs()[limb]==powers[kind].to_limbs()[limb],1=>l.mul_b.to_limbs()[limb]==parts[kind].to_limbs()[limb],2=>l.add_a.to_limbs()[limb]==before.to_limbs()[limb],3=>l.add_b.to_limbs()[limb]==l.product.to_limbs()[limb],4=>l.count==2&&l.tags==[0,1],_=>sum.to_limbs()[limb]==l.reply.to_limbs()[limb]};assert!(good);
++}
++macro_rules! finalgate{($name:ident,$g:expr)=>{#[kani::proof]#[kani::unwind(130)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn $name(){final_check($g)}};}
++finalgate!(final_power,0);finalgate!(final_part,1);finalgate!(final_sum,2);finalgate!(final_product,3);finalgate!(final_order,4);finalgate!(final_result,5);
++
++struct LibraLog{ptr:*const u8,len:usize,index:usize,coefficient:E,mul_a:E,mul_b:E,product:E,add_a:E,add_b:E,reply:E,count:usize,tags:[u8;3]}
++fn libra_field(f:&[u8],j:usize,l:&mut LibraLog)->E{l.ptr=f.as_ptr();l.len=f.len();l.index=j;l.tags[l.count]=0;l.count+=1;l.coefficient}
++fn libra_mul(a:E,b:E,l:&mut LibraLog)->E{l.mul_a=a;l.mul_b=b;l.tags[l.count]=1;l.count+=1;l.product}
++fn libra_add(a:E,b:E,l:&mut LibraLog)->E{l.add_a=a;l.add_b=b;l.tags[l.count]=2;l.count+=1;l.reply}
++fn libra_cut(f:&[u8],libra:&[E;4],j:usize,parts:&mut [E;7],l:&mut LibraLog){
++ let old=parts[4];let coefficient=libra_field(f,j,l);let weight=libra[j];let product=libra_mul(coefficient,weight,l);parts[4]=libra_add(old,product,l);
++}
++fn libra_check(g:usize){
++ let f:[u8;2048]=kani::any();let libra=core::array::from_fn(|_|anye());let before=core::array::from_fn(|_|anye());let mut parts=before;
++ let j:usize=kani::any();kani::assume(j<4);let k:usize=kani::any();kani::assume(k<7);let limb:usize=kani::any();kani::assume(limb<8);
++ let mut l=LibraLog{ptr:core::ptr::null(),len:0,index:99,coefficient:anye(),mul_a:E::ZERO,mul_b:E::ZERO,product:anye(),add_a:E::ZERO,add_b:E::ZERO,reply:anye(),count:0,tags:[99;3]};
++ libra_cut(&f,&libra,j,&mut parts,&mut l);
++ if cfg!(NIG_corrupt){match g{0=>l.index=99,1=>l.mul_a=E::ZERO,2=>l.mul_b=E::ZERO,3=>l.add_a=E::ZERO,4=>l.add_b=E::ZERO,_=>parts[k]=E::ZERO}}
++ let good=match g{0=>l.ptr==f.as_ptr()&&l.len==2048&&l.index==j&&l.count==3&&l.tags==[0,1,2],1=>l.mul_a.to_limbs()[limb]==l.coefficient.to_limbs()[limb],2=>l.mul_b.to_limbs()[limb]==libra[j].to_limbs()[limb],3=>l.add_a.to_limbs()[limb]==before[4].to_limbs()[limb],4=>l.add_b.to_limbs()[limb]==l.product.to_limbs()[limb],_=>parts[k].to_limbs()[limb]==if k==4{l.reply}else{before[k]}.to_limbs()[limb]};assert!(good);
++}
++macro_rules! libragate{($name:ident,$g:expr)=>{#[kani::proof]#[kani::unwind(2050)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn $name(){libra_check($g)}};}
++libragate!(libra_field_args,0);libragate!(libra_coefficient,1);libragate!(libra_weight,2);libragate!(libra_old,3);libragate!(libra_product,4);libragate!(libra_frame,5);
++
++fn error(i:u8)->Error{match i%8{0=>Error::Parse,1=>Error::Semantic,2=>Error::Transcript,3=>Error::Relation,4=>Error::Merkle,5=>Error::Query,6=>Error::Checkpoint,_=>Error::Allocation}}
++fn error_code(e:Error)->u8{match e{Error::Parse=>0,Error::Semantic=>1,Error::Transcript=>2,Error::Relation=>3,Error::Merkle=>4,Error::Query=>5,Error::Checkpoint=>6,Error::Allocation=>7}}
++fn unit_reply()->Result<(),Error>{if kani::any(){Ok(())}else{Err(error(kani::any()))}}
++struct GuardLog{events:[u8;9],count:usize,p0:E,p1:E,ap0:[E;4],ap1:[E;4],requested:usize,value:K,fill_ok:bool,ptr:*mut K,who:*const Weights,folds:usize,guard:bool,forwarded:bool,regular:Result<(),Error>,partial:Result<(),Error>,high:Result<(),Error>,regular_calls:usize,common_calls:usize,init:E,reg_ptr:*const K,reg_len:usize,reg_f:*const u8,reg_f_len:usize,reg_alpha:*const E,reg_alpha_len:usize,reg_who:*const Weights,reg_folds:usize,reg_n:usize,reg_ap0:E,reg_ap1:E,common_reply:[K;16],common_who:*const Weights,common_initial:K,partial_reply:[E;4],partial_ptr:*const u8,partial_len:usize,partial_common:K,high_who:*const Weights,high_partial:E,high_ap0:E,high_ap1:E,regular_parts:[E;7],high_parts:[E;7],high_before:E}
++fn event(l:&mut GuardLog,tag:u8){l.events[l.count]=tag;l.count+=1;}
++fn p0(x:E,l:&mut GuardLog)->[E;4]{l.p0=x;event(l,0);l.ap0}
++fn p1(x:E,l:&mut GuardLog)->[E;4]{l.p1=x;event(l,1);l.ap1}
++fn fill_call(n:usize,value:K,l:&mut GuardLog)->Result<Vec<K>,()>{l.requested=n;l.value=value;event(l,2);if !l.fill_ok{return Err(())}
++ let mut out=Vec::<K>::with_capacity(n);unsafe{core::ptr::write_bytes(out.as_mut_ptr(),0,n);out.set_len(n);}l.ptr=out.as_mut_ptr();Ok(out)}
++fn guard_call(w:&Weights,folds:usize,l:&mut GuardLog)->bool{l.who=w;l.folds=folds;event(l,3);l.guard}
++fn regular_call(w:&Weights,shared:bool,folds:usize,n:usize,ap0:&[E;4],ap1:&[E;4],power_index:usize,alpha:&[E],f:&[u8],scratch:&mut [K],parts:&mut [E;7],slot:usize,l:&mut GuardLog)->Result<(),Error>{l.reg_who=w;l.reg_folds=folds;l.reg_n=n;l.reg_ap0=ap0[power_index];l.reg_ap1=ap1[power_index];l.forwarded=shared;l.regular_calls+=1;l.init=parts[slot];l.reg_ptr=scratch.as_ptr();l.reg_len=scratch.len();l.reg_f=f.as_ptr();l.reg_f_len=f.len();l.reg_alpha=alpha.as_ptr();l.reg_alpha_len=alpha.len();event(l,4);parts[2]=l.regular_parts[2];parts[5]=l.regular_parts[5];parts[6]=l.regular_parts[6];if !shared{parts[1]=l.regular_parts[1];parts[3]=l.regular_parts[3];}l.regular}
++fn common_call(w:&Weights,qindex:usize,l:&mut GuardLog)->[K;16]{l.common_who=w;l.common_initial=[K::ZERO;16][qindex];l.common_calls+=1;event(l,5);l.common_reply}
++fn partial_call(f:&[u8],common:&[K;16],qindex:usize,l:&mut GuardLog)->Result<[E;4],Error>{l.partial_ptr=f.as_ptr();l.partial_len=f.len();l.partial_common=common[qindex];event(l,6);l.partial.map(|_|l.partial_reply)}
++fn high_call(partials:&[E;4],w:&Weights,ap0:&[E;4],ap1:&[E;4],power_index:usize,parts:&mut [E;7],slot:usize,l:&mut GuardLog)->Result<(),Error>{l.high_who=w;l.high_partial=partials[power_index];l.high_ap0=ap0[power_index];l.high_ap1=ap1[power_index];l.high_before=parts[slot];event(l,7);parts[1]=l.high_parts[1];parts[3]=l.high_parts[3];l.high}
++fn guard_cut(w:&Weights,alpha:&[E],f:&[u8],slot:usize,power_index:usize,qindex:usize,l:&mut GuardLog)->Result<(),Error>{
++ let n=f.len()/32;let folds=alpha.len();let mut expected_n=1024usize;for _ in 0..folds{expected_n>>=2u32;}if n!=expected_n{return Err(Error::Parse)}
++ let ap0=p0(alpha[0],l);let ap1=if folds==2{p1(alpha[1],l)}else{[E::ONE;4]};
++ let mut scratch=match fill_call(n,K::ZERO,l){Ok(v)=>v,Err(_)=>return Err(Error::Allocation)};
++ let mut parts=[E::ZERO;7];let shared=guard_call(w,folds,l);
++ regular_call(w,shared,folds,n,&ap0,&ap1,power_index,alpha,f,&mut scratch,&mut parts,slot,l)?;
++ if shared{let common=common_call(w,qindex,l);let partials=partial_call(f,&common,qindex,l)?;high_call(&partials,w,&ap0,&ap1,power_index,&mut parts,slot,l)?;}
++ event(l,8);Ok(())
++}
++fn guard_check(g:usize){
++ let w=Weights{variant:Variant::S2,factors:core::array::from_fn(|_|core::array::from_fn(|_|core::array::from_fn(|_|anyq()))),points:core::array::from_fn(|_|core::array::from_fn(|_|anyq())),extra:[anyq(),anyq()]};
++ let f:[u8;2048]=kani::any();let alpha:[E;2]=[anye(),anye()];let slot:usize=kani::any();kani::assume(slot<7);let limb:usize=kani::any();kani::assume(limb<8);let power_index:usize=kani::any();kani::assume(power_index<4);let qindex:usize=kani::any();kani::assume(qindex<16);
++ let mut l=GuardLog{events:[99;9],count:0,p0:E::ZERO,p1:E::ZERO,ap0:core::array::from_fn(|_|anye()),ap1:core::array::from_fn(|_|anye()),requested:0,value:K::ONE,fill_ok:kani::any(),ptr:core::ptr::null_mut(),who:core::ptr::null(),folds:0,guard:kani::any(),forwarded:false,regular:unit_reply(),partial:unit_reply(),high:unit_reply(),regular_calls:0,common_calls:0,init:E::ONE,reg_ptr:core::ptr::null(),reg_len:0,reg_f:core::ptr::null(),reg_f_len:0,reg_alpha:core::ptr::null(),reg_alpha_len:0,reg_who:core::ptr::null(),reg_folds:0,reg_n:0,reg_ap0:E::ZERO,reg_ap1:E::ZERO,common_reply:core::array::from_fn(|_|anyq()),common_who:core::ptr::null(),common_initial:K::ONE,partial_reply:core::array::from_fn(|_|anye()),partial_ptr:core::ptr::null(),partial_len:0,partial_common:K::ZERO,high_who:core::ptr::null(),high_partial:E::ZERO,high_ap0:E::ZERO,high_ap1:E::ZERO,regular_parts:core::array::from_fn(|_|anye()),high_parts:core::array::from_fn(|_|anye()),high_before:E::ZERO};
++ let r=guard_cut(&w,&alpha,&f,slot,power_index,qindex,&mut l);
++ let expected_reply=if !l.fill_ok{Err(7)}else if let Err(e)=l.regular{Err(error_code(e))}else if l.guard{if let Err(e)=l.partial{Err(error_code(e))}else if let Err(e)=l.high{Err(error_code(e))}else{Ok(())}}else{Ok(())};
++ let expected_count=if !l.fill_ok{3}else if l.regular.is_err(){5}else if !l.guard{6}else if l.partial.is_err(){7}else if l.high.is_err(){8}else{9};
++ let expected_common=l.fill_ok&&l.regular.is_ok()&&l.guard;
++ if cfg!(NIG_corrupt){match g{0=>l.requested=63,1=>l.forwarded=!l.guard,2=>l.events[0]=99,3=>l.count+=1,4=>l.init=E::ONE,_=>l.reg_len=63}}
++ let properties=[
++ l.requested==64&&l.value==K::ZERO&&l.p0.to_limbs()[limb]==alpha[0].to_limbs()[limb]&&l.p1.to_limbs()[limb]==alpha[1].to_limbs()[limb],
++ !l.fill_ok||(l.who==&w as *const Weights&&l.folds==2&&(l.regular_calls==0||l.forwarded==l.guard)),
++ l.events[0]==0&&l.events[1]==1&&l.events[2]==2&&(!l.fill_ok||(l.events[3]==3&&l.events[4]==4))&&(!expected_common||(l.events[5]==5&&l.events[6]==6))&&(!(expected_common&&l.partial.is_ok())||l.events[7]==7)&&(r.is_err()||l.events[expected_count-1]==8),
++ r.map_err(error_code)==expected_reply&&l.count==expected_count&&l.common_calls==usize::from(expected_common),
++ (l.regular_calls==0||l.init.to_limbs()[limb]==0)&&(!expected_common||l.common_initial==K::ZERO)&&(!(expected_common&&l.partial.is_ok())||l.high_before.to_limbs()[limb]==if slot==2||slot==5||slot==6{l.regular_parts[slot]}else{E::ZERO}.to_limbs()[limb]),
++ l.regular_calls==0||(l.reg_ptr==l.ptr&&l.reg_len==64&&l.reg_f==f.as_ptr()&&l.reg_f_len==2048&&l.reg_alpha==alpha.as_ptr()&&l.reg_alpha_len==2&&l.reg_who==&w as *const Weights&&l.reg_folds==2&&l.reg_n==64&&l.reg_ap0.to_limbs()[limb]==l.ap0[power_index].to_limbs()[limb]&&l.reg_ap1.to_limbs()[limb]==l.ap1[power_index].to_limbs()[limb])&&(!expected_common||(l.common_who==&w as *const Weights&&l.partial_ptr==f.as_ptr()&&l.partial_len==2048&&qw(l.partial_common)[limb&3]==qw(l.common_reply[qindex])[limb&3]))&&(!(expected_common&&l.partial.is_ok())||(l.high_who==&w as *const Weights&&l.high_partial.to_limbs()[limb]==l.partial_reply[power_index].to_limbs()[limb]&&l.high_ap0.to_limbs()[limb]==l.ap0[power_index].to_limbs()[limb]&&l.high_ap1.to_limbs()[limb]==l.ap1[power_index].to_limbs()[limb]))
++ ];
++ if g==6{assert!(properties.into_iter().all(|p|p));}else{assert!(properties[g]);}
++}
++macro_rules! guardgate{($name:ident,$g:expr)=>{#[kani::proof]#[kani::unwind(2200)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn $name(){guard_check($g)}};}
++guardgate!(guard_allocation,0);guardgate!(guard_same,1);guardgate!(guard_order,2);guardgate!(guard_result,3);guardgate!(guard_initial_parts,4);guardgate!(guard_scratch,5);guardgate!(guard_all,6);
++
++struct SameGuard{regular_arg:bool,regular:Result<(),Error>,partial:Result<(),Error>,high:Result<(),Error>,events:[u8;5],count:usize}
++fn same_event(l:&mut SameGuard,t:u8){l.events[l.count]=t;l.count+=1;}
++fn same_guard_cut(shared:bool,l:&mut SameGuard)->Result<(),Error>{
++ l.regular_arg=shared;same_event(l,0);l.regular?;
++ if shared{same_event(l,1);same_event(l,2);l.partial?;same_event(l,3);l.high?;}
++ same_event(l,4);Ok(())
++}
++#[kani::proof]#[kani::unwind(10)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn same_guard_stage(){
++ let shared:bool=kani::any();let mut l=SameGuard{regular_arg:false,regular:unit_reply(),partial:unit_reply(),high:unit_reply(),events:[99;5],count:0};
++ let out=same_guard_cut(shared,&mut l);
++ let expected=if let Err(e)=l.regular{Err(error_code(e))}else if shared{if let Err(e)=l.partial{Err(error_code(e))}else if let Err(e)=l.high{Err(error_code(e))}else{Ok(())}}else{Ok(())};
++ let count=if l.regular.is_err(){1}else if !shared{2}else if l.partial.is_err(){3}else if l.high.is_err(){4}else{5};
++ if cfg!(NIG_corrupt){l.regular_arg=!shared;}
++ assert!(l.regular_arg==shared);assert!(out.map_err(error_code)==expected);assert!(l.count==count);
++ assert!(l.events[0]==0);if shared&&l.regular.is_ok(){assert!(l.events[1]==1&&l.events[2]==2);if l.partial.is_ok(){assert!(l.events[3]==3);}}
++ if out.is_ok(){assert!(l.events[count-1]==4);}
++}
++struct Initial{inputs:[E;2],replies:[[E;4];2],calls:usize}
++fn initial_power(x:E,side:usize,l:&mut Initial)->[E;4]{l.inputs[side]=x;l.calls+=1;l.replies[side]}
++#[kani::proof]#[kani::unwind(130)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn initial_stage(){
++ let alpha:[E;2]=[anye(),anye()];let folds=alpha.len();let n=2048usize/32;
++ let mut expected=1024usize;for _ in 0..folds{expected>>=2u32;}
++ let mut l=Initial{inputs:[E::ZERO;2],replies:core::array::from_fn(|_|core::array::from_fn(|_|anye())),calls:0};
++ let ap0=initial_power(alpha[0],0,&mut l);let ap1=initial_power(alpha[1],1,&mut l);
++ let mut parts=[E::ZERO;7];let slot:usize=kani::any();kani::assume(slot<7);let limb:usize=kani::any();kani::assume(limb<8);let power:usize=kani::any();kani::assume(power<4);
++ if cfg!(NIG_corrupt){parts[slot]=E::ONE;}
++ assert!(n==64&&expected==64&&folds==2&&l.calls==2);
++ assert!(l.inputs[0].to_limbs()[limb]==alpha[0].to_limbs()[limb]&&l.inputs[1].to_limbs()[limb]==alpha[1].to_limbs()[limb]);
++ assert!(ap0[power].to_limbs()[limb]==l.replies[0][power].to_limbs()[limb]&&ap1[power].to_limbs()[limb]==l.replies[1][power].to_limbs()[limb]);
++ assert!(parts[slot].to_limbs()[limb]==0);
++}
++
++struct PairEdges{who:*const Weights,shared:bool,folds:usize,n:usize,alpha:*const E,alpha_len:usize,message:*const u8,message_len:usize,scratch:*const K,scratch_len:usize,parts:*const E,p0:E,p1:E,regular_post:[E;7],common:*const K,common_value:K,partial_message:*const u8,partial_message_len:usize,partial_reply:[E;4],high_who:*const Weights,high_partial:E,high_p0:E,high_p1:E,high_parts:*const E}
++fn edge_regular(w:&Weights,shared:bool,alpha:&[E],f:&[u8],folds:usize,n:usize,ap0:&[E;4],ap1:&[E;4],scratch:&mut [K],parts:&mut [E;7],power:usize,l:&mut PairEdges){
++ l.who=w;l.shared=shared;l.folds=folds;l.n=n;l.alpha=alpha.as_ptr();l.alpha_len=alpha.len();l.message=f.as_ptr();l.message_len=f.len();l.scratch=scratch.as_ptr();l.scratch_len=scratch.len();l.parts=parts.as_ptr();l.p0=ap0[power];l.p1=ap1[power];
++ parts[2]=l.regular_post[2];parts[5]=l.regular_post[5];parts[6]=l.regular_post[6];if !shared{parts[1]=l.regular_post[1];parts[3]=l.regular_post[3];}
++}
++fn edge_partial(f:&[u8],common:&[K;16],i:usize,l:&mut PairEdges)->[E;4]{l.common=common.as_ptr();l.common_value=common[i];l.partial_message=f.as_ptr();l.partial_message_len=f.len();l.partial_reply}
++fn edge_high(partials:&[E;4],w:&Weights,ap0:&[E;4],ap1:&[E;4],parts:&mut [E;7],power:usize,l:&mut PairEdges){l.high_who=w;l.high_partial=partials[power];l.high_p0=ap0[power];l.high_p1=ap1[power];l.high_parts=parts.as_ptr();}
++#[kani::proof]#[kani::unwind(2200)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn pair_argument_edges(){
++ let w=Weights{variant:Variant::S2,factors:core::array::from_fn(|_|core::array::from_fn(|_|core::array::from_fn(|_|anyq()))),points:core::array::from_fn(|_|core::array::from_fn(|_|anyq())),extra:[anyq(),anyq()]};
++ let alpha:[E;2]=[anye(),anye()];let f:[u8;2048]=kani::any();let ap0=core::array::from_fn(|_|anye());let ap1=core::array::from_fn(|_|anye());let mut scratch:[K;64]=core::array::from_fn(|_|anyq());let mut parts:[E;7]=core::array::from_fn(|_|anye());let common:[K;16]=core::array::from_fn(|_|anyq());
++ let shared:bool=kani::any();let power:usize=kani::any();kani::assume(power<4);let i:usize=kani::any();kani::assume(i<16);let limb:usize=kani::any();kani::assume(limb<8);
++ let mut l=PairEdges{who:core::ptr::null(),shared:false,folds:0,n:0,alpha:core::ptr::null(),alpha_len:0,message:core::ptr::null(),message_len:0,scratch:core::ptr::null(),scratch_len:0,parts:core::ptr::null(),p0:E::ZERO,p1:E::ZERO,regular_post:core::array::from_fn(|_|anye()),common:core::ptr::null(),common_value:K::ZERO,partial_message:core::ptr::null(),partial_message_len:0,partial_reply:core::array::from_fn(|_|anye()),high_who:core::ptr::null(),high_partial:E::ZERO,high_p0:E::ZERO,high_p1:E::ZERO,high_parts:core::ptr::null()};
++ edge_regular(&w,shared,&alpha,&f,2,64,&ap0,&ap1,&mut scratch,&mut parts,power,&mut l);
++ if shared{let partials=edge_partial(&f,&common,i,&mut l);edge_high(&partials,&w,&ap0,&ap1,&mut parts,power,&mut l);}
++ if cfg!(NIG_corrupt){l.alpha=l.alpha.wrapping_add(1);}
++ assert!(l.who==&w as *const Weights&&l.shared==shared&&l.folds==2&&l.n==64&&l.alpha==alpha.as_ptr()&&l.alpha_len==2&&l.message==f.as_ptr()&&l.message_len==2048&&l.scratch==scratch.as_ptr()&&l.scratch_len==64&&l.parts==parts.as_ptr());
++ assert!(l.p0.to_limbs()[limb]==ap0[power].to_limbs()[limb]&&l.p1.to_limbs()[limb]==ap1[power].to_limbs()[limb]);
++ if shared{assert!(l.common==common.as_ptr()&&qw(l.common_value)[limb&3]==qw(common[i])[limb&3]&&l.partial_message==f.as_ptr()&&l.partial_message_len==2048&&l.high_who==&w as *const Weights&&l.high_parts==parts.as_ptr());assert!(l.high_partial.to_limbs()[limb]==l.partial_reply[power].to_limbs()[limb]&&l.high_p0.to_limbs()[limb]==ap0[power].to_limbs()[limb]&&l.high_p1.to_limbs()[limb]==ap1[power].to_limbs()[limb]);}
++}
++
++use crate::verifier::{Prepared,View,Accumulator};
++fn prepared()->Prepared{Prepared{variant:Variant::S2,roots:[[0;32];2],gamma:E::ZERO,kappa:anye(),alpha:[anye(),anye()],rho:K::ZERO,queries:[0;22],semantic_alpha:core::array::from_fn(|_|anyq()),z:core::array::from_fn(|_|aspis_core::circle::SecureCirclePoint{x:anyq(),y:anyq()}),claim:anye(),state:[0;32]}}
++fn owned_weights()->Box<Weights>{Box::new(Weights{variant:Variant::S2,factors:core::array::from_fn(|_|core::array::from_fn(|_|core::array::from_fn(|_|anyq()))),points:core::array::from_fn(|_|core::array::from_fn(|_|anyq())),extra:[anyq(),anyq()]})}
++struct NewPort{variant:Variant,alpha:*const K,z:*const aspis_core::circle::SecureCirclePoint,reply:Option<Box<Weights>>,error:Option<Error>,calls:usize}
++fn new_packet(variant:Variant,alpha:&[K;10],z:&[aspis_core::circle::SecureCirclePoint;2],l:&mut NewPort)->Result<Box<Weights>,Error>{l.variant=variant;l.alpha=alpha.as_ptr();l.z=z.as_ptr();l.calls+=1;match l.error{Some(e)=>Err(e),None=>Ok(l.reply.take().unwrap())}}
++fn new_cut(p:&Prepared,l:&mut NewPort)->Result<Box<Weights>,Error>{let weights=new_packet(p.variant,&p.semantic_alpha,&p.z,l)?;Ok(weights)}
++#[kani::proof]#[kani::unwind(2200)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn new_slot(){
++ let p=prepared();let reply=owned_weights();let owner=&*reply as *const Weights;let error=if kani::any(){Some(error(kani::any()))}else{None};
++ let mut l=NewPort{variant:Variant::D,alpha:core::ptr::null(),z:core::ptr::null(),reply:Some(reply),error,calls:0};
++ let out=new_cut(&p,&mut l);if cfg!(NIG_corrupt){l.alpha=l.alpha.wrapping_add(1);}
++ assert!(l.variant==p.variant&&l.alpha==p.semantic_alpha.as_ptr()&&l.z==p.z.as_ptr()&&l.calls==1);
++ match out{Ok(w)=>{assert!(error.is_none()&&l.reply.is_none()&&&*w as *const Weights==owner);},Err(e)=>{assert!(Some(error_code(e))==error.map(error_code)&&l.reply.is_some());}}
++}
++struct PairPort{who:*const Weights,alpha:*const E,alpha_len:usize,message:*const u8,message_len:usize,kappa:E,reply:Result<E,Error>,calls:usize}
++fn pair_packet(weights:&Weights,alpha:&[E],f:&[u8],kappa:E,l:&mut PairPort)->Result<E,Error>{l.who=weights;l.alpha=alpha.as_ptr();l.alpha_len=alpha.len();l.message=f.as_ptr();l.message_len=f.len();l.kappa=kappa;l.calls+=1;l.reply}
++fn pair_cut(weights:&Box<Weights>,p:&Prepared,v:&View<'_>,l:&mut PairPort)->Result<E,Error>{let pair=pair_packet(weights,&p.alpha[..2],v.final_message,p.kappa,l)?;Ok(pair)}
++fn encoded(r:Result<E,Error>)->Result<[u32;8],u8>{r.map(|x|x.to_limbs()).map_err(error_code)}
++#[kani::proof]#[kani::unwind(2200)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn pair_slot(){
++ let p=prepared();let weights=owned_weights();let owner=&*weights as *const Weights;let f:[u8;2048]=kani::any();let v=View{variant:Variant::S2,semantic:&[],y1:&[],inactive:E::ZERO,round0:&[],folded_root:None,round1:&[],final_message:&f,query_bytes:&[]};
++ let reply=if kani::any(){Ok(anye())}else{Err(error(kani::any()))};let mut l=PairPort{who:core::ptr::null(),alpha:core::ptr::null(),alpha_len:0,message:core::ptr::null(),message_len:0,kappa:E::ZERO,reply,calls:0};
++ let out=pair_cut(&weights,&p,&v,&mut l);let limb:usize=kani::any();kani::assume(limb<8);if cfg!(NIG_corrupt){l.message=l.message.wrapping_add(1);}
++ assert!(l.who==owner&&l.alpha==p.alpha.as_ptr()&&l.alpha_len==2&&l.message==f.as_ptr()&&l.message_len==2048&&l.kappa.to_limbs()[limb]==p.kappa.to_limbs()[limb]&&l.calls==1);
++ assert!(encoded(out)==encoded(reply));assert!(&*weights as *const Weights==owner);
++}
++
++struct FinishLog{events:[u8;7],count:usize,round_reply:[Result<E,Error>;2],round_ptr:[*const u8;2],round_len:[usize;2],round_alpha:[E;2],round_claim:[E;2],new:NewPort,pair:PairPort,dot_reply:Result<E,Error>,dot_f:*const u8,dot_f_len:usize,dot_weights:*const K,dot_len:usize}
++fn finish_event(l:&mut FinishLog,tag:u8){l.events[l.count]=tag;l.count+=1;}
++fn round_packet(poly:&[u8],alpha:E,claim:E,round:usize,l:&mut FinishLog)->Result<E,Error>{l.round_ptr[round]=poly.as_ptr();l.round_len[round]=poly.len();l.round_alpha[round]=alpha;l.round_claim[round]=claim;finish_event(l,round as u8);l.round_reply[round]}
++fn dot_packet(f:&[u8],weights:&[K],l:&mut FinishLog)->Result<E,Error>{l.dot_f=f.as_ptr();l.dot_f_len=f.len();l.dot_weights=weights.as_ptr();l.dot_len=weights.len();finish_event(l,5);l.dot_reply}
++fn finish_cut(v:&View<'_>,p:&Prepared,a:&Accumulator,l:&mut FinishLog)->Result<(),Error>{
++ let mut claim=p.claim;claim=round_packet(v.round0,p.alpha[0],claim,0,l)?;
++ if p.variant.folds()==2{claim=round_packet(v.round1,p.alpha[1],claim,1,l)?;}
++ finish_event(l,2);let weights=new_packet(p.variant,&p.semantic_alpha,&p.z,&mut l.new)?;
++ finish_event(l,3);let pair=pair_packet(&weights,&p.alpha[..p.variant.folds()],v.final_message,p.kappa,&mut l.pair)?;
++ if pair!=claim{return Err(Error::Relation)}
++ finish_event(l,4);let actual=dot_packet(v.final_message,&a.weights,l)?;
++ if a.next!=22||actual!=a.rhs{return Err(Error::Query)}
++ finish_event(l,6);Ok(())
++}
++fn finish_expected(a:&Accumulator,l:&FinishLog)->(Result<(),u8>,usize){
++ if let Err(e)=l.round_reply[0]{return(Err(error_code(e)),1)}
++ let claim=match l.round_reply[1]{Ok(v)=>v,Err(e)=>return(Err(error_code(e)),2)};
++ if let Some(e)=l.new.error{return(Err(error_code(e)),3)}
++ let pair=match l.pair.reply{Ok(v)=>v,Err(e)=>return(Err(error_code(e)),4)};
++ if pair.to_limbs()!=claim.to_limbs(){return(Err(3),4)}
++ let actual=match l.dot_reply{Ok(v)=>v,Err(e)=>return(Err(error_code(e)),6)};
++ if a.next!=22||actual.to_limbs()!=a.rhs.to_limbs(){return(Err(5),6)}
++ (Ok(()),7)
++}
++#[kani::proof]#[kani::unwind(2600)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn finish_full_slot(){
++ let p=prepared();let proof:[u8;2528]=kani::any();let v=View{variant:Variant::S2,semantic:&[],y1:&[],inactive:anye(),round0:&proof[..224],folded_root:None,round1:&proof[256..480],final_message:&proof[480..],query_bytes:&[]};
++ let raw:[K;64]=core::array::from_fn(|_|anyq());let mut weights=Vec::with_capacity(64);for q in raw{weights.push(q);}
++ let a=Accumulator{weights,rhs:anye(),power:anyq(),next:kani::any()};let reply=owned_weights();let owner=&*reply as *const Weights;
++ let mut l=FinishLog{events:[99;7],count:0,round_reply:[if kani::any(){Ok(anye())}else{Err(error(kani::any()))},if kani::any(){Ok(anye())}else{Err(error(kani::any()))}],round_ptr:[core::ptr::null();2],round_len:[0;2],round_alpha:[E::ZERO;2],round_claim:[E::ZERO;2],new:NewPort{variant:Variant::D,alpha:core::ptr::null(),z:core::ptr::null(),reply:Some(reply),error:if kani::any(){Some(error(kani::any()))}else{None},calls:0},pair:PairPort{who:core::ptr::null(),alpha:core::ptr::null(),alpha_len:0,message:core::ptr::null(),message_len:0,kappa:E::ZERO,reply:if kani::any(){Ok(anye())}else{Err(error(kani::any()))},calls:0},dot_reply:if kani::any(){Ok(anye())}else{Err(error(kani::any()))},dot_f:core::ptr::null(),dot_f_len:0,dot_weights:core::ptr::null(),dot_len:0};
++ let out=finish_cut(&v,&p,&a,&mut l);let(expected,count)=finish_expected(&a,&l);let limb:usize=kani::any();kani::assume(limb<8);let event:usize=kani::any();kani::assume(event<count);
++ if cfg!(NIG_corrupt){l.round_ptr[0]=l.round_ptr[0].wrapping_add(1);}
++ assert!(out.map_err(error_code)==expected&&l.count==count&&usize::from(l.events[event])==event);
++ assert!(l.round_ptr[0]==v.round0.as_ptr()&&l.round_len[0]==224&&l.round_alpha[0].to_limbs()[limb]==p.alpha[0].to_limbs()[limb]&&l.round_claim[0].to_limbs()[limb]==p.claim.to_limbs()[limb]);
++ if count>=2{let claim=l.round_reply[0].unwrap();assert!(l.round_ptr[1]==v.round1.as_ptr()&&l.round_len[1]==224&&l.round_alpha[1].to_limbs()[limb]==p.alpha[1].to_limbs()[limb]&&l.round_claim[1].to_limbs()[limb]==claim.to_limbs()[limb]);}
++ if count>=3{assert!(l.new.calls==1&&l.new.variant==p.variant&&l.new.alpha==p.semantic_alpha.as_ptr()&&l.new.z==p.z.as_ptr());}
++ if count>=4{assert!(l.pair.calls==1&&l.pair.who==owner&&l.pair.alpha==p.alpha.as_ptr()&&l.pair.alpha_len==2&&l.pair.message==v.final_message.as_ptr()&&l.pair.message_len==2048&&l.pair.kappa.to_limbs()[limb]==p.kappa.to_limbs()[limb]);}
++ if count>=6{assert!(l.dot_f==v.final_message.as_ptr()&&l.dot_f_len==2048&&l.dot_weights==a.weights.as_ptr()&&l.dot_len==64);}
++}
