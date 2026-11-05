@@ -6,3 +6,5 @@
 - NHE_L011/L012: field selector proof elaboration errors in numeral projection, rewrite staging and indentation. Correcting the proof; no source or domain strengthening.
 
 Failed elaborations are excluded. No child success premise is introduced to repair a failed step. These are focused Lean attempts, not native correspondence credit or composed closure.
+
+L013..014 field proof rewrite-normalization/elaboration failures resolved in L015. L018 zero-canonical proof needed explicit predicate unfolding; L019 standard-only. L030/L031 round proof incorrectly split the outer Result map / attempted a redundant simplifier step; explicit arithmetic-comparison cases resolve it in L032. No native mismatch or success-premise repair.
