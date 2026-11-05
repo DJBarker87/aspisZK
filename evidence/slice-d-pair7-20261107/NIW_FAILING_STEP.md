@@ -13,3 +13,5 @@ L037: own runner rejected the non-prefixed audit target `final` after admission 
 Remaining proof step is NIW_OPEN_EDGE.md. No failed source, sorryAx diagnostic, timeout, count-only copy control, existential model log, or unproved local-call binding is counted as a closed native root.
 
 L046: Prop conditionals in the new native-control count bounds needed Classical decidability, and the high-error simplification needed the actual observed high reply. L047 fixes both; L048 uses the supplied actual afterParts in every terminal rejection witness. No callee success or endpoint equation is added.
+
+L051 is a source-change replay: L043-L048 added native guard projection/control/terminal witnesses, and L049/L050 compiled the new root closure. L042 and its graphs are preserved under NIW_L042. No unchanged full regression was rerun. Own retention script first failed before any file operation on an incorrectly escaped newline; its raw triple-string fix is recorded in NIW_RETENTION_TRANSPORT.jsonl. The runner budget counter now counts charged prelaunch records as well as scope receipts, so L037 is not lost on resume.
