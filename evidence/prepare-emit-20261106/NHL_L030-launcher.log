@@ -1,0 +1,55 @@
+{"attempt": "NHL_L030", "exit_status": 1, "wall_seconds": 3.021354123018682, "peak_rss_kib": "5948736", "swaps": "0", "print_axioms": ["'AspisR1.NHL_Tx1Model.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NHL_generated/NHL_Tx1Model.lean:66:9: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  base.op16 D c.prepared { weights := a.weights.deref_mut.2 cells, rhs := a.rhs, power := a.power, next := a.next }
+    proof public_bytes hash
+in the target expression
+  (do
+      let bytes ←
+        base.op16 D c.prepared { weights := (fun s => ⟨↑s, ⋯⟩) cells, rhs := a.rhs, power := a.power, next := a.next }
+            proof public_bytes hash
+      verifier.mark none verifier.Phase.CheckpointWrite
+      ok (core.result.Result.Ok bytes)) =
+    do
+    let bytes ←
+      expected.op16 D c.prepared { weights := (fun s => ⟨↑s, ⋯⟩) cells, rhs := a.rhs, power := a.power, next := a.next 
+...
+ights := a.weights.deref_mut.2 cells, rhs := a.rhs, power := a.power, next := a.next } proof
+                public_bytes hash
+c : Context
+prior :
+  beforeQuery base (verifier.candidate.prepare (children base expected)) D pub public_bytes proof k hash none =
+    ok (core.result.Result.Ok c)
+reached : Reaches base expected D pub public_bytes proof k hash c
+a : verifier.Accumulator
+pending : verifier.BatchedWeights
+queryCall :
+  expected.op7 proof c.prepared c.accumulator c.scratch none c.geometry c.pending k =
+    ok (core.result.Result.Ok (a, pending))
+cells : Slice aspis_core.field.QM31
+finishCall : base.op17 pending ⟨↑a.weights, ⋯⟩ = ok cells
+⊢ (do
+      let bytes ←
+        base.op16 D c.prepared { weights := (fun s => ⟨↑s, ⋯⟩) cells, rhs := a.rhs, power := a.power, next := a.next }
+            proof public_bytes hash
+      verifier.mark none verifier.Phase.CheckpointWrite
+      ok (core.result.Result.Ok bytes)) =
+    do
+    let bytes ←
+      expected.op16 D c.prepared { weights := (fun s => ⟨↑s, ⋯⟩) cells, rhs := a.rhs, power := a.power, next := a.next }
+          proof public_bytes hash
+    verifier.mark none verifier.Phase.CheckpointWrite
+    ok (core.result.Result.Ok bytes)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    s
+  has type
+    Slice aspis_core.field.QM31
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑s
+'AspisR1.NHL_Tx1Model.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r7e2ae245540f49aaa6fcbcc65fb0ec91.scope; invocation ID: dc5ac6904d4b4d1792b2f74620201d58

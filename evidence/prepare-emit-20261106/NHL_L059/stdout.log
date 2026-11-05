@@ -1,0 +1,316 @@
+AspisR1.NHL_PrepareModel.source (base expected : AspisR1CurrentCaller.Ops) (reserved : Bool) {H : Type}
+  (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H)
+  (pub : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8) (hash : H) (g : AspisR1.NHL_PrepareStages.Scratch)
+  (verify_observed :
+    ∀ (v : AspisR1CurrentCaller.verifier.View),
+      AspisR1.NHL_PrepareModel.Reaches base reserved D proof v →
+        Eq.{1} (base.op9 D pub v.semantic hash none.{0}) (expected.op9 D pub v.semantic hash none.{0}))
+  (prepared_new :
+    ∀ (v : AspisR1CurrentCaller.verifier.View) (sem : AspisR1CurrentCaller.r1_semantic.Verified H),
+      AspisR1.NHL_PrepareModel.Reaches base reserved D proof v →
+        Eq.{1} (expected.op9 D pub v.semantic hash none.{0})
+            (Aeneas.Std.Result.ok.{0} (Aeneas.Std.core.result.Result.Ok.{0, 0} sem)) →
+          Eq.{1} (base.op8 D sem v hash g) (expected.op8 D sem v hash g)) :
+  Eq.{1} (AspisR1.NHL_EmittedPrepare.prepare (AspisR1.NHL_Packets.installed base reserved) D pub proof hash none.{0} g)
+    (AspisR1CurrentCaller.verifier.candidate.prepare
+      (AspisR1.NHL_PrepareModel.children (AspisR1.NHL_Packets.installed base reserved) expected) D pub proof hash
+      none.{0} g)
+def AspisR1.NHL_PrepareModel.Reaches : AspisR1CurrentCaller.Ops →
+  Bool →
+    {H : Type} →
+      AspisR1CurrentCaller.aspis_core.digest.Digest32 H →
+        Aeneas.Std.Slice.{0} Aeneas.Std.U8 → AspisR1CurrentCaller.verifier.View → Prop :=
+fun base reserved {H} D proof v =>
+  Eq.{1} (AspisR1.NHL_PrepareStages.buffers (AspisR1.NHL_Packets.installed base reserved) D proof)
+    (Aeneas.Std.Result.ok.{0} (Aeneas.Std.core.result.Result.Ok.{0, 0} v))
+AspisR1.NHL_Tx1Model.source (base expected : AspisR1CurrentCaller.Ops) {H : Type}
+  (first : AspisR1.NHL_EmittedTx1.Prepare H) (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H)
+  (pub : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (public_bytes proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8) (k : Aeneas.Std.Usize) (hash : H)
+  (prepare :
+    ∀ (zero : AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact),
+      Eq.{1} (AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact.ZERO base) (Aeneas.Std.Result.ok.{0} zero) →
+        Eq.{1} (first D pub proof hash none.{0} (Aeneas.Std.Array.repeat.{0} 29#usize zero))
+          (AspisR1CurrentCaller.verifier.candidate.prepare (AspisR1.NHL_Tx1Model.children base expected) D pub proof
+            hash none.{0} (Aeneas.Std.Array.repeat.{0} 29#usize zero)))
+  (query_loop :
+    ∀ (c : AspisR1.NHL_Tx1Stages.Context),
+      AspisR1.NHL_Tx1Model.Reaches base expected D pub public_bytes proof k hash c →
+        Eq.{1} (base.op7 proof c.prepared c.accumulator c.scratch none.{0} c.geometry c.pending k)
+          (expected.op7 proof c.prepared c.accumulator c.scratch none.{0} c.geometry c.pending k))
+  (checkpoint :
+    ∀ (c : AspisR1.NHL_Tx1Stages.Context) (a : AspisR1CurrentCaller.verifier.Accumulator)
+      (pending : AspisR1CurrentCaller.verifier.BatchedWeights),
+      AspisR1.NHL_Tx1Model.Reaches base expected D pub public_bytes proof k hash c →
+        Eq.{1} (expected.op7 proof c.prepared c.accumulator c.scratch none.{0} c.geometry c.pending k)
+            (Aeneas.Std.Result.ok.{0} (Aeneas.Std.core.result.Result.Ok.{0, 0} (Prod.mk.{0, 0} a pending))) →
+          ∀ (cells : Aeneas.Std.Slice.{0} AspisR1CurrentCaller.aspis_core.field.QM31),
+            Eq.{1} (base.op17 pending a.weights.deref_mut.1) (Aeneas.Std.Result.ok.{0} cells) →
+              Eq.{1}
+                (base.op16 D c.prepared
+                  { weights := a.weights.deref_mut.2 cells, rhs := a.rhs, power := a.power, next := a.next } proof
+                  public_bytes hash)
+                (expected.op16 D c.prepared
+                  { weights := a.weights.deref_mut.2 cells, rhs := a.rhs, power := a.power, next := a.next } proof
+                  public_bytes hash)) :
+  Eq.{1} (AspisR1.NHL_EmittedTx1.tx1 base first D pub public_bytes proof k hash none.{0})
+    (AspisR1CurrentCaller.verifier.candidate.tx1 (AspisR1.NHL_Tx1Model.children base expected) D pub public_bytes proof
+      k hash none.{0})
+def AspisR1.NHL_Tx1Model.Reaches : AspisR1CurrentCaller.Ops →
+  AspisR1CurrentCaller.Ops →
+    {H : Type} →
+      AspisR1CurrentCaller.aspis_core.digest.Digest32 H →
+        AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+          Aeneas.Std.Slice.{0} Aeneas.Std.U8 →
+            Aeneas.Std.Slice.{0} Aeneas.Std.U8 → Aeneas.Std.Usize → H → AspisR1.NHL_Tx1Stages.Context → Prop :=
+fun base expected {H} D pub public_bytes proof k hash c =>
+  Eq.{1}
+    (AspisR1.NHL_Tx1Stages.beforeQuery base
+      (AspisR1CurrentCaller.verifier.candidate.prepare (AspisR1.NHL_Tx1Model.children base expected)) D pub public_bytes
+      proof k hash none.{0})
+    (Aeneas.Std.Result.ok.{0} (Aeneas.Std.core.result.Result.Ok.{0, 0} c))
+structure AspisR1.NHL_Tx1Stages.Context : Type
+number of parameters: 0
+fields:
+  AspisR1.NHL_Tx1Stages.Context.prepared : AspisR1CurrentCaller.verifier.Prepared
+  AspisR1.NHL_Tx1Stages.Context.accumulator : AspisR1CurrentCaller.verifier.Accumulator
+  AspisR1.NHL_Tx1Stages.Context.scratch : Aeneas.Std.Array.{0}
+      AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize
+  AspisR1.NHL_Tx1Stages.Context.geometry : AspisR1CurrentCaller.verifier.QueryGeometry
+  AspisR1.NHL_Tx1Stages.Context.pending : AspisR1CurrentCaller.verifier.BatchedWeights
+constructor:
+  AspisR1.NHL_Tx1Stages.Context.mk (prepared : AspisR1CurrentCaller.verifier.Prepared)
+    (accumulator : AspisR1CurrentCaller.verifier.Accumulator)
+    (scratch : Aeneas.Std.Array.{0} AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize)
+    (geometry : AspisR1CurrentCaller.verifier.QueryGeometry) (pending : AspisR1CurrentCaller.verifier.BatchedWeights) :
+    AspisR1.NHL_Tx1Stages.Context
+AspisR1.NHL_DriverModel.source (base expected : AspisR1CurrentCaller.Ops) (reserved : Bool) {H : Type}
+  (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H)
+  (pub : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (public_bytes proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8) (k : Aeneas.Std.Usize) (hash : H)
+  (verify_observed :
+    ∀ (v : AspisR1CurrentCaller.verifier.View),
+      AspisR1.NHL_PrepareModel.Reaches base reserved D proof v →
+        Eq.{1} (base.op9 D pub v.semantic hash none.{0}) (expected.op9 D pub v.semantic hash none.{0}))
+  (prepared_new :
+    ∀ (zero : AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact),
+      Eq.{1}
+          (AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact.ZERO
+            (AspisR1.NHL_Packets.installed base reserved))
+          (Aeneas.Std.Result.ok.{0} zero) →
+        ∀ (v : AspisR1CurrentCaller.verifier.View) (sem : AspisR1CurrentCaller.r1_semantic.Verified H),
+          AspisR1.NHL_PrepareModel.Reaches base reserved D proof v →
+            Eq.{1} (expected.op9 D pub v.semantic hash none.{0})
+                (Aeneas.Std.Result.ok.{0} (Aeneas.Std.core.result.Result.Ok.{0, 0} sem)) →
+              Eq.{1} (base.op8 D sem v hash (Aeneas.Std.Array.repeat.{0} 29#usize zero))
+                (expected.op8 D sem v hash (Aeneas.Std.Array.repeat.{0} 29#usize zero)))
+  (query_loop :
+    ∀ (c : AspisR1.NHL_Tx1Stages.Context),
+      AspisR1.NHL_Tx1Model.Reaches (AspisR1.NHL_DriverModel.preparedOps base expected reserved) expected D pub
+          public_bytes proof k hash c →
+        Eq.{1}
+          ((AspisR1.NHL_DriverModel.preparedOps base expected reserved).op7 proof c.prepared c.accumulator c.scratch
+            none.{0} c.geometry c.pending k)
+          (expected.op7 proof c.prepared c.accumulator c.scratch none.{0} c.geometry c.pending k))
+  (checkpoint :
+    ∀ (c : AspisR1.NHL_Tx1Stages.Context) (a : AspisR1CurrentCaller.verifier.Accumulator)
+      (pending : AspisR1CurrentCaller.verifier.BatchedWeights),
+      AspisR1.NHL_Tx1Model.Reaches (AspisR1.NHL_DriverModel.preparedOps base expected reserved) expected D pub
+          public_bytes proof k hash c →
+        Eq.{1} (expected.op7 proof c.prepared c.accumulator c.scratch none.{0} c.geometry c.pending k)
+            (Aeneas.Std.Result.ok.{0} (Aeneas.Std.core.result.Result.Ok.{0, 0} (Prod.mk.{0, 0} a pending))) →
+          ∀ (cells : Aeneas.Std.Slice.{0} AspisR1CurrentCaller.aspis_core.field.QM31),
+            Eq.{1} ((AspisR1.NHL_DriverModel.preparedOps base expected reserved).op17 pending a.weights.deref_mut.1)
+                (Aeneas.Std.Result.ok.{0} cells) →
+              Eq.{1}
+                ((AspisR1.NHL_DriverModel.preparedOps base expected reserved).op16 D c.prepared
+                  { weights := a.weights.deref_mut.2 cells, rhs := a.rhs, power := a.power, next := a.next } proof
+                  public_bytes hash)
+                (expected.op16 D c.prepared
+                  { weights := a.weights.deref_mut.2 cells, rhs := a.rhs, power := a.power, next := a.next } proof
+                  public_bytes hash)) :
+  Eq.{1}
+    (AspisR1.NHL_EmittedTx1.tx1 (AspisR1.NHL_Packets.installed base reserved)
+      (AspisR1.NHL_EmittedPrepare.prepare (AspisR1.NHL_Packets.installed base reserved)) D pub public_bytes proof k hash
+      none.{0})
+    (AspisR1CurrentCaller.verifier.candidate.tx1 (AspisR1.NHL_DriverModel.txOps base expected reserved) D pub
+      public_bytes proof k hash none.{0})
+AspisR1.NHL_PreparedRecompose.source (B : AspisR1PublicPreparation.FinishModel.Boundaries) {H : Type}
+  (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+  (pub : AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (pre : AspisR1PublicPreparation.r1_wire.Prefix)
+  (beforeSemantic : AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+  (challenges : AspisR1PublicPreparation.r1_wire.Challenges)
+  (obs : Option.{0} (RPz7_PhaseIso.Phase → Aeneas.Std.Result.{0} Unit))
+  (sem : AspisR1PublicPreparation.r1_semantic.Verified H)
+  (semantic_finish :
+    Eq.{1}
+      (AspisR1PublicPreparation.FinishModel.finish AspisS1ExtractedRoundChildren.children
+        { fromFn := @AspisR1PublicPreparation.FinishModel.Boundaries.fromFn B, mask := B.mask, add := B.add,
+          mul := B.mul, terminal := B.terminal, circle := B.circle, unwrapRoot := B.unwrapRoot,
+          claims :=
+            AspisR1.ClaimsUnrolledFinish.claims
+              (AspisR1.NP6_StdModel.calls (Aeneas.Std.core.result.Result.Ok.{0, 0} ())) }
+        D pub pre beforeSemantic challenges obs)
+      (Aeneas.Std.Result.ok.{0} (Aeneas.Std.core.result.Result.Ok.{0, 0} sem)))
+  (compact before y1 : Aeneas.Std.Slice.{0} Aeneas.Std.U8) (compact_length : Eq.{1} (List.length.{0} ↑compact) 464)
+  (before_length : Eq.{1} (List.length.{0} ↑before) 928)
+  (compact_check :
+    Eq.{1} (NFU_Retarget.compact.check_values compact)
+      (Aeneas.Std.Result.ok.{0} (Aeneas.Std.core.result.Result.Ok.{0, 0} ())))
+  (expansion : NFU_Retarget.LPn.Expand.NativeTrace (↑compact) (↑before) 29 ↑y1)
+  (v : AspisR1PublicPreparation.verifier.View) (hash : H) (old : AspisR1.NFW_PreparedControl.Scratch)
+  (packet : AspisR1.NHL_OpeningPacket.Packet D sem v hash) (same_y1 : Eq.{1} v.y1 y1)
+  (inactive_canonical : AspisR1.NFN_LPi_FieldValues.canonE (AspisR1.NFW_SampledDomains.toNative v.inactive))
+  (qs : Aeneas.Std.Array.{0} Aeneas.Std.U32 22#usize) (afterQueries : AspisR1PublicPreparation.transcript.Transcript H)
+  (queries :
+    Eq.{1}
+      (AspisR1.NHL_PreparedScalars.actual.sampling.queries D packet.opening.transcript packet.opening.row
+        v.final_message)
+      (Aeneas.Std.Result.ok.{0} (Prod.mk.{0, 0} (Aeneas.Std.core.result.Result.Ok.{0, 0} qs) afterQueries)))
+  (rhoBlock :
+    AspisR1.NGT_NBL_BlockTrace.Block D afterQueries (AspisR1.NHL_OpeningPacket.nextRow packet.opening)
+      AspisR1PublicPreparation.PreparedScratchReachability.emptyPayload)
+  (rho : AspisR1PublicPreparation.aspis_core.field.QM31) (rhoReduction : AspisR1.NGT_Reduction.K rhoBlock.value rho) :
+  ∃ g out,
+    Eq.{1} (FIo_Native.weights.powers 29#usize (AspisR1.NFW_SampledDomains.toNative packet.opening.gamma))
+        (Aeneas.Std.Result.ok.{0} g) ∧
+      AspisR1.NFN_LPi_FieldValues.canonE out ∧
+        Eq.{1} (AspisR1.NGN_Emitted.prepared AspisR1.NHL_PreparedScalars.actual D sem v hash old)
+          (Aeneas.Std.Result.ok.{0}
+            (Prod.mk.{0, 0}
+              (Aeneas.Std.core.result.Result.Ok.{0, 0}
+                (AspisR1PublicPreparation.PreparedScratchReachability.output sem v packet.opening.gamma
+                  packet.opening.kappa packet.opening.alpha rho qs (AspisR1.NFW_PowersCohort.toPublic out)
+                  { state := rhoBlock.final, hash := afterQueries.hash }))
+              (AspisR1.NFW_PowersCohort.mapArray AspisR1.NFW_PowersCohort.toPublic g)))
+structure AspisR1.NHL_OpeningPacket.Packet {H : Type} (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+  (sem : AspisR1PublicPreparation.r1_semantic.Verified H) (v : AspisR1PublicPreparation.verifier.View) (hash : H) : Type
+number of parameters: 5
+fields:
+  AspisR1.NHL_OpeningPacket.Packet.state : Aeneas.Std.Array.{0} Aeneas.Std.U8 32#usize
+  AspisR1.NHL_OpeningPacket.Packet.start : AspisR1PublicPreparation.transcript.Transcript H
+  AspisR1.NHL_OpeningPacket.Packet.seed : Eq.{1}
+      (AspisR1PublicPreparation.r1_wire.SemanticTranscript.impl.state D sem.transcript)
+      (Aeneas.Std.Result.ok.{0} self.state)
+  AspisR1.NHL_OpeningPacket.Packet.newStart : Eq.{1}
+      (AspisR1PublicPreparation.transcript.Transcript.new D hash self.state v.variant)
+      (Aeneas.Std.Result.ok.{0} self.start)
+  AspisR1.NHL_OpeningPacket.Packet.gammaBlock : AspisR1.NGT_NBL_BlockTrace.Block D self.start 27#u8 v.y1
+  AspisR1.NHL_OpeningPacket.Packet.gamma : AspisR1PublicPreparation.aspis_core.field.WideExact
+  AspisR1.NHL_OpeningPacket.Packet.gammaReduction : AspisR1.NGT_Reduction.Scalar self.gammaBlock.value true self.gamma
+  AspisR1.NHL_OpeningPacket.Packet.bytes : Aeneas.Std.Array.{0} Aeneas.Std.U8 32#usize
+  AspisR1.NHL_OpeningPacket.Packet.serialize : Eq.{1} (AspisR1.NHL_PreparedScalars.actual.sampling.toBytes v.inactive)
+      (Aeneas.Std.Result.ok.{0} self.bytes)
+  AspisR1.NHL_OpeningPacket.Packet.kappaBlock : AspisR1.NGT_NBL_BlockTrace.Block D
+      { state := self.gammaBlock.final, hash := self.start.hash } 28#u8 (Aeneas.Std.Array.to_slice.{0} self.bytes)
+  AspisR1.NHL_OpeningPacket.Packet.kappa : AspisR1PublicPreparation.aspis_core.field.WideExact
+  AspisR1.NHL_OpeningPacket.Packet.kappaReduction : AspisR1.NGT_Reduction.Scalar self.kappaBlock.value false self.kappa
+  AspisR1.NHL_OpeningPacket.Packet.alphaBlock : AspisR1.NGT_NBL_BlockTrace.Block D
+      { state := self.kappaBlock.final, hash := self.start.hash } 29#u8 v.round0
+  AspisR1.NHL_OpeningPacket.Packet.alpha0 : AspisR1PublicPreparation.aspis_core.field.WideExact
+  AspisR1.NHL_OpeningPacket.Packet.alphaReduction : AspisR1.NGT_Reduction.Scalar self.alphaBlock.value false self.alpha0
+  AspisR1.NHL_OpeningPacket.Packet.opening : AspisR1.NFW_PreparedControl.Opening H
+  AspisR1.NHL_OpeningPacket.Packet.fold : AspisR1.NHL_OpeningPacket.Fold D v self.gamma self.kappa self.alpha0
+      { state := self.alphaBlock.final, hash := self.start.hash } self.opening
+constructor:
+  AspisR1.NHL_OpeningPacket.Packet.mk {H : Type} {D : AspisR1PublicPreparation.aspis_core.Digest32 H}
+    {sem : AspisR1PublicPreparation.r1_semantic.Verified H} {v : AspisR1PublicPreparation.verifier.View} {hash : H}
+    (state : Aeneas.Std.Array.{0} Aeneas.Std.U8 32#usize) (start : AspisR1PublicPreparation.transcript.Transcript H)
+    (seed :
+      Eq.{1} (AspisR1PublicPreparation.r1_wire.SemanticTranscript.impl.state D sem.transcript)
+        (Aeneas.Std.Result.ok.{0} state))
+    (newStart :
+      Eq.{1} (AspisR1PublicPreparation.transcript.Transcript.new D hash state v.variant)
+        (Aeneas.Std.Result.ok.{0} start))
+    (gammaBlock : AspisR1.NGT_NBL_BlockTrace.Block D start 27#u8 v.y1)
+    (gamma : AspisR1PublicPreparation.aspis_core.field.WideExact)
+    (gammaReduction : AspisR1.NGT_Reduction.Scalar gammaBlock.value true gamma)
+    (bytes : Aeneas.Std.Array.{0} Aeneas.Std.U8 32#usize)
+    (serialize :
+      Eq.{1} (AspisR1.NHL_PreparedScalars.actual.sampling.toBytes v.inactive) (Aeneas.Std.Result.ok.{0} bytes))
+    (kappaBlock :
+      AspisR1.NGT_NBL_BlockTrace.Block D { state := gammaBlock.final, hash := start.hash } 28#u8
+        (Aeneas.Std.Array.to_slice.{0} bytes))
+    (kappa : AspisR1PublicPreparation.aspis_core.field.WideExact)
+    (kappaReduction : AspisR1.NGT_Reduction.Scalar kappaBlock.value false kappa)
+    (alphaBlock : AspisR1.NGT_NBL_BlockTrace.Block D { state := kappaBlock.final, hash := start.hash } 29#u8 v.round0)
+    (alpha0 : AspisR1PublicPreparation.aspis_core.field.WideExact)
+    (alphaReduction : AspisR1.NGT_Reduction.Scalar alphaBlock.value false alpha0)
+    (opening : AspisR1.NFW_PreparedControl.Opening H)
+    (fold :
+      AspisR1.NHL_OpeningPacket.Fold D v gamma kappa alpha0 { state := alphaBlock.final, hash := start.hash } opening) :
+    AspisR1.NHL_OpeningPacket.Packet D sem v hash
+inductive AspisR1.NHL_OpeningPacket.Fold : {H : Type} →
+  AspisR1PublicPreparation.aspis_core.Digest32 H →
+    AspisR1PublicPreparation.verifier.View →
+      AspisR1PublicPreparation.aspis_core.field.WideExact →
+        AspisR1PublicPreparation.aspis_core.field.WideExact →
+          AspisR1PublicPreparation.aspis_core.field.WideExact →
+            AspisR1PublicPreparation.transcript.Transcript H → AspisR1.NFW_PreparedControl.Opening H → Prop
+number of parameters: 7
+constructors:
+AspisR1.NHL_OpeningPacket.Fold.single : ∀ {H : Type} {D : AspisR1PublicPreparation.aspis_core.Digest32 H}
+  {v : AspisR1PublicPreparation.verifier.View}
+  {gamma kappa alpha0 : AspisR1PublicPreparation.aspis_core.field.WideExact}
+  {before : AspisR1PublicPreparation.transcript.Transcript H},
+  Eq.{1} v.variant.folds (Aeneas.Std.Result.ok.{0} 1#usize) →
+    AspisR1.NHL_OpeningPacket.Fold D v gamma kappa alpha0 before
+      { gamma := gamma, kappa := kappa,
+        alpha :=
+          Aeneas.Std.Array.make.{0} 2#usize
+            (List.cons.{0} alpha0 (List.cons.{0} AspisR1PublicPreparation.aspis_core.field.WideExact.ZERO List.nil.{0}))
+            ⋯,
+        transcript := before, row := 30#u8 }
+AspisR1.NHL_OpeningPacket.Fold.double : ∀ {H : Type} {D : AspisR1PublicPreparation.aspis_core.Digest32 H}
+  {v : AspisR1PublicPreparation.verifier.View}
+  {gamma kappa alpha0 : AspisR1PublicPreparation.aspis_core.field.WideExact}
+  {before : AspisR1PublicPreparation.transcript.Transcript H},
+  Eq.{1} v.variant.folds (Aeneas.Std.Result.ok.{0} 2#usize) →
+    ∀ (payload : Aeneas.Std.Slice.{0} Aeneas.Std.U8),
+      Eq.{1} (AspisR1.NHL_PreparedOpening.foldPayload v) (Aeneas.Std.Result.ok.{0} payload) →
+        ∀ (b : AspisR1.NGT_NBL_BlockTrace.Block D before 30#u8 payload)
+          (alpha1 : AspisR1PublicPreparation.aspis_core.field.WideExact),
+          AspisR1.NGT_Reduction.Scalar b.value false alpha1 →
+            AspisR1.NHL_OpeningPacket.Fold D v gamma kappa alpha0 before
+              { gamma := gamma, kappa := kappa,
+                alpha := Aeneas.Std.Array.make.{0} 2#usize (List.cons.{0} alpha0 (List.cons.{0} alpha1 List.nil.{0})) ⋯,
+                transcript := { state := b.final, hash := before.hash }, row := 31#u8 }
+AspisR1.NHL_QueryInterface.result (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result.{0} AspisR1.SdkC_Source.Digest)
+  (self : AspisR1PublicPreparation.transcript.Transcript Unit) (row : Aeneas.Std.U8)
+  (payload : Aeneas.Std.Slice.{0} Aeneas.Std.U8) (observed : AspisR1.NGP_L181.Observation AspisR1.NGQ_Effects.Reply)
+  (trace :
+    AspisR1.NGQ_Cuts.Trace hashv
+      (AspisR1.NGQ_Normalize.normalize (AspisR1.NGQ_Effects.code AspisR1.NGQ_TRANSCRIPT.boundaries self row payload))
+      observed.result observed.attempted) :
+  AspisR1.NGP_L181.NativeAssociation hashv (AspisR1.NGQ_Effects.code AspisR1.NGQ_TRANSCRIPT.boundaries self row payload)
+      observed ∧
+    Eq.{1} (AspisR1.NHL_PreparedScalars.actual.sampling.queries (AspisR1.NGQ_Effects.dictionary hashv) self row payload)
+        observed.result ∧
+      Eq.{1} observed.attempted
+        (AspisR1.SdkC_Source.run hashv (AspisR1.NGQ_Effects.code AspisR1.NGQ_TRANSCRIPT.boundaries self row payload)
+            List.nil.{0}).2
+AspisR1.NHL_QueryDomain.emitted {H : Type} (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+  (sem : AspisR1PublicPreparation.r1_semantic.Verified H) (v : AspisR1PublicPreparation.verifier.View) (hash : H)
+  (old scratch : AspisR1.NFW_PreparedControl.Scratch) (out : AspisR1PublicPreparation.verifier.Prepared)
+  (producer :
+    Eq.{1} (AspisR1.NGN_Emitted.prepared AspisR1.NHL_PreparedScalars.actual D sem v hash old)
+      (Aeneas.Std.Result.ok.{0} (Prod.mk.{0, 0} (Aeneas.Std.core.result.Result.Ok.{0, 0} out) scratch)))
+  (base : AspisR1.Port3_NativeQueryBody.Ops) (proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+  (geometry : AspisR1Stage2.verifier.QueryGeometry) (qPlace gPlace : ℕ) :
+  NEV_DotInputs.Canonical
+      (AspisR1.FIp_DotsAdapter.toArray (AspisR1.NFW_PreparedPort.map AspisR1.NFW_PreparedPort.e scratch)) ∧
+    AspisR1.NFS_QueryInvariant.Domain (AspisR1.NFW_PreparedPort.prepared out) 0 10 AspisR1.NFW_QueryEntry.initial
+        AspisR1.NFW_QueryEntry.pending ∧
+      Eq.{1}
+        (AspisR1.NFG_QueryLoopDefs.run
+          (AspisR1.NFS_QueryLoopRoot.child base proof (AspisR1.NFW_PreparedPort.prepared out)
+            (AspisR1.NFW_PreparedPort.map AspisR1.NFW_PreparedPort.e scratch) geometry qPlace gPlace)
+          10#usize 10
+          (Aeneas.Std.core.result.Result.Ok.{0, 0}
+            (Prod.mk.{0, 0} AspisR1.NFW_QueryEntry.initial AspisR1.NFW_QueryEntry.pending)))
+        (AspisR1.Port3_NativeQueryBody.verifier.candidate.query_loop (AspisR1.NFS_QueryOps.installed base) proof
+          (AspisR1.NFW_PreparedPort.prepared out) AspisR1.NFW_QueryEntry.initial
+          (AspisR1.NFW_PreparedPort.map AspisR1.NFW_PreparedPort.e scratch) none.{0} geometry
+          AspisR1.NFW_QueryEntry.pending 10#usize)

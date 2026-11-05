@@ -1,0 +1,85 @@
+NHL_generated/NHL_Tx1Model.lean:66:9: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  base.op16 D c.prepared { weights := a.weights.deref_mut.2 cells, rhs := a.rhs, power := a.power, next := a.next }
+    proof public_bytes hash
+in the target expression
+  (do
+      let bytes ←
+        base.op16 D c.prepared { weights := (fun s => ⟨↑s, ⋯⟩) cells, rhs := a.rhs, power := a.power, next := a.next }
+            proof public_bytes hash
+      verifier.mark none verifier.Phase.CheckpointWrite
+      ok (core.result.Result.Ok bytes)) =
+    do
+    let bytes ←
+      expected.op16 D c.prepared { weights := (fun s => ⟨↑s, ⋯⟩) cells, rhs := a.rhs, power := a.power, next := a.next }
+          proof public_bytes hash
+    verifier.mark none verifier.Phase.CheckpointWrite
+    ok (core.result.Result.Ok bytes)
+
+case Ok.Ok
+base expected : Ops
+H : Type
+first : NHL_EmittedTx1.Prepare H
+D : aspis_core.digest.Digest32 H
+pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+public_bytes proof : Slice U8
+k : Usize
+hash : H
+prepare :
+  ∀ (zero : aspis_core.field.wide_exact.WideExact),
+    aspis_core.field.wide_exact.WideExact.ZERO base = ok zero →
+      first D pub proof hash none (Array.repeat 29#usize zero) =
+        verifier.candidate.prepare (children base expected) D pub proof hash none (Array.repeat 29#usize zero)
+query_loop :
+  ∀ (c : Context),
+    Reaches base expected D pub public_bytes proof k hash c →
+      base.op7 proof c.prepared c.accumulator c.scratch none c.geometry c.pending k =
+        expected.op7 proof c.prepared c.accumulator c.scratch none c.geometry c.pending k
+checkpoint :
+  ∀ (c : Context) (a : verifier.Accumulator) (pending : verifier.BatchedWeights),
+    Reaches base expected D pub public_bytes proof k hash c →
+      expected.op7 proof c.prepared c.accumulator c.scratch none c.geometry c.pending k =
+          ok (core.result.Result.Ok (a, pending)) →
+        ∀ (cells : Slice aspis_core.field.QM31),
+          base.op17 pending a.weights.deref_mut.1 = ok cells →
+            base.op16 D c.prepared
+                { weights := a.weights.deref_mut.2 cells, rhs := a.rhs, power := a.power, next := a.next } proof
+                public_bytes hash =
+              expected.op16 D c.prepared
+                { weights := a.weights.deref_mut.2 cells, rhs := a.rhs, power := a.power, next := a.next } proof
+                public_bytes hash
+c : Context
+prior :
+  beforeQuery base (verifier.candidate.prepare (children base expected)) D pub public_bytes proof k hash none =
+    ok (core.result.Result.Ok c)
+reached : Reaches base expected D pub public_bytes proof k hash c
+a : verifier.Accumulator
+pending : verifier.BatchedWeights
+queryCall :
+  expected.op7 proof c.prepared c.accumulator c.scratch none c.geometry c.pending k =
+    ok (core.result.Result.Ok (a, pending))
+cells : Slice aspis_core.field.QM31
+finishCall : base.op17 pending ⟨↑a.weights, ⋯⟩ = ok cells
+⊢ (do
+      let bytes ←
+        base.op16 D c.prepared { weights := (fun s => ⟨↑s, ⋯⟩) cells, rhs := a.rhs, power := a.power, next := a.next }
+            proof public_bytes hash
+      verifier.mark none verifier.Phase.CheckpointWrite
+      ok (core.result.Result.Ok bytes)) =
+    do
+    let bytes ←
+      expected.op16 D c.prepared { weights := (fun s => ⟨↑s, ⋯⟩) cells, rhs := a.rhs, power := a.power, next := a.next }
+          proof public_bytes hash
+    verifier.mark none verifier.Phase.CheckpointWrite
+    ok (core.result.Result.Ok bytes)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    s
+  has type
+    Slice aspis_core.field.QM31
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑s
+'AspisR1.NHL_Tx1Model.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

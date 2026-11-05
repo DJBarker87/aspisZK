@@ -1,0 +1,26 @@
+NHL_generated/NHL_Tx1Model.lean:66:5: error: Type mismatch
+  congrArg (fun m => ?m.283) (checkpoint c a pending reached queryCall cells finishCall)
+has type
+  @Eq (Result (core.result.Result (alloc.vec.Vec U8) ?m.302))
+    (?m.284
+      (base.op16 D c.prepared { weights := a.weights.deref_mut.2 cells, rhs := a.rhs, power := a.power, next := a.next }
+        proof public_bytes hash))
+    (?m.284
+      (expected.op16 D c.prepared
+        { weights := a.weights.deref_mut.2 cells, rhs := a.rhs, power := a.power, next := a.next } proof public_bytes
+        hash))
+but is expected to have type
+  @Eq (Result Out)
+    (do
+      let bytes ←
+        base.op16 D c.prepared { weights := (fun s => ⟨↑s, ⋯⟩) cells, rhs := a.rhs, power := a.power, next := a.next }
+            proof public_bytes hash
+      verifier.mark none verifier.Phase.CheckpointWrite
+      ok (core.result.Result.Ok bytes))
+    do
+    let bytes ←
+      expected.op16 D c.prepared { weights := (fun s => ⟨↑s, ⋯⟩) cells, rhs := a.rhs, power := a.power, next := a.next }
+          proof public_bytes hash
+    verifier.mark none verifier.Phase.CheckpointWrite
+    ok (core.result.Result.Ok bytes)
+'AspisR1.NHL_Tx1Model.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

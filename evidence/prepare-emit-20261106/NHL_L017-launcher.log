@@ -1,0 +1,47 @@
+{"attempt": "NHL_L017", "exit_status": 1, "wall_seconds": 2.9520886479876935, "peak_rss_kib": "5920608", "swaps": "0", "print_axioms": ["'AspisR1.NHL_PrepareModel.buffers_children' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NHL_generated/NHL_BufferFrame.lean:11:87: error: unsolved goals
+base expected : Ops
+H : Type
+D : aspis_core.digest.Digest32 H
+proof : Slice U8
+⊢ (do
+      let i ←
+        compact.LOGICAL_SEMANTIC
+            { op0 := base.op0, op1 := @Ops.op1 base, op2 := base.op2, op3 := base.op3, op4 := base.op4, op5 := base.op5,
+              op6 := @Ops.op6 base, op7 := base.op7, op8 := fun {H} => expected.op8, op9 := fun {H} => expected.op9,
+              op10 := base.op10, op11 := base.op11, op12 := base.op12, op13 := base.op13, op14 := base.op14,
+              op15 := base.op15, op16 := @Ops.op16 base, op17 := base.op17, op18 := base.op18, op19 := base.op19,
+              op20 := base.op20, op21 := ba
+...
+slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                  { start := i3, «end» := i4 }
+            let (r3, y11) ← base.op11 s2 y1
+            let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+            match cf2 with
+              | core.ops.control_flow.ControlFlow.Continue a => do
+                let s4 ←
+                  alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                      (deref_mut_back (split_at_mut_back (semantic1, y11))) { «end» := i }
+                let s5 ←
+                  alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                      (deref_mut_back (split_at_mut_back (semantic1, y11))) { start := i }
+                let r4 ← base.op5 proof s4 s5
+                ok r4
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r4 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.View
+                      (verifier.Error.Insts.CoreConvertFromCodecError base) residual
+                ok r4
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r4 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.View
+                  (verifier.Error.Insts.CoreConvertFromCodecError base) residual
+            ok r4
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r4 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.View
+              (core.convert.FromSame verifier.Error) residual
+        ok r4
+'AspisR1.NHL_PrepareModel.buffers_children' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-ra70d95da127b45d680f497032cdab62a.scope; invocation ID: 921d3860af9c4d71b65031c82426fc9d

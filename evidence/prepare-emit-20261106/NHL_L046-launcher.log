@@ -1,0 +1,50 @@
+{"attempt": "NHL_L046", "exit_status": 1, "wall_seconds": 6.831477666972205, "peak_rss_kib": "5888028", "swaps": "0", "print_axioms": ["'AspisR1.NHL_PrefixPacket.rejected' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NHL_PrefixPacket.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NHL_generated/NHL_PrefixPacket.lean:63:11: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  do
+    let y ← ok ?x
+    ?f y
+in the target expression
+  (let (_x0, split_at_mut_back) := ((s0, y0), rejoin)
+    do
+    let i3 ← ok 7031#usize
+    let s1 ←
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+          { start := 16#usize, «end» := i3 }
+    let (r2, semantic1) ← (NHL_Packets.installed base true).op10 s1 _x0.1
+    let cf1 ←
+      match r2 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.R
+...
+plit_at_mut_back (semantic1, y11))) { «end» := 13831#usize }
+            let s5 ←
+              alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                  (logical.deref_mut.2 (split_at_mut_back (semantic1, y11))) { start := 13831#usize }
+            let r4 ← (NHL_Packets.installed base true).op5 proof s4 s5
+            ok r4
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r4 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.View
+                  (verifier.Error.Insts.CoreConvertFromCodecError (NHL_Packets.installed base true)) residual
+            ok r4
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r4 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.View
+              (verifier.Error.Insts.CoreConvertFromCodecError (NHL_Packets.installed base true)) residual
+        ok r4) =
+    InstalledPreparation.sourceView proof semantic y1
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (7031 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.NHL_PrefixPacket.rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NHL_PrefixPacket.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r6e08fbd17bd24ad496f7c8139fd22fdf.scope; invocation ID: cb45a9da655643ef810a4ae9917b9e32
