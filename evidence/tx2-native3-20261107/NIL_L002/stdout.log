@@ -1,0 +1,120 @@
+NIL_generated/NIL_ResultTransport.lean:19:24: error: Ambiguous term
+  inner
+Possible interpretations:
+  NIL_Carriers.inner : (?m.42 → ?m.43) → core.result.Result ?m.42 Fresh.Err → core.result.Result ?m.43 Cohort.Err
+  
+  Inner.inner : (𝕜 : Type ?u.28) → {E : Type ?u.27} → [self : Inner 𝕜 E] → E → E → 𝕜
+NIL_generated/NIL_ResultTransport.lean:19:24: error: Ambiguous term
+  inner
+Possible interpretations:
+  NIL_Carriers.inner : (?m.43 → ?m.44) → core.result.Result ?m.43 Fresh.Err → core.result.Result ?m.44 Cohort.Err
+  
+  Inner.inner : (𝕜 : Type ?u.32) → {E : Type ?u.31} → [self : Inner 𝕜 E] → E → E → 𝕜
+NIL_generated/NIL_ResultTransport.lean:18:89: error: unsolved goals
+case Ok
+A B : Type
+f : A → B
+g : B → A
+law : ∀ (x : A), g (f x) = x
+a✝ : A
+⊢ (match NIL_Carriers.inner f (core.result.Result.Ok a✝) with
+    | core.result.Result.Ok x => core.result.Result.Ok (g x)
+    | core.result.Result.Err err => core.result.Result.Err (unError err)) =
+    core.result.Result.Ok a✝
+
+case Err
+A B : Type
+f : A → B
+g : B → A
+law : ∀ (x : A), g (f x) = x
+a✝ : Fresh.Err
+⊢ (match NIL_Carriers.inner f (core.result.Result.Err a✝) with
+    | core.result.Result.Ok x => core.result.Result.Ok (g x)
+    | core.result.Result.Err err => core.result.Result.Err (unError err)) =
+    core.result.Result.Err a✝
+NIL_generated/NIL_ResultTransport.lean:19:38: warning: This simp argument is unused:
+  law
+
+Hint: Omit it from the simp argument list.
+  simp only [inner, ̲unInner,l̵a̵w̵,̵ ̲error_roundtrip]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NIL_generated/NIL_ResultTransport.lean:19:42: warning: This simp argument is unused:
+  error_roundtrip
+
+Hint: Omit it from the simp argument list.
+  simp only [̵i̵n̵n̵e̵r̵,̵u̵n̵I̵n̵n̵e̵r̵,̵l̵a̵w̵,̵e̵r̵r̵o̵r̵_̵r̵o̵u̵n̵d̵t̵r̵i̵p̵]̵[̲i̲n̲n̲e̲r̲,̲ ̲u̲n̲I̲n̲n̲e̲r̲,̲ ̲l̲a̲w̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NIL_generated/NIL_ResultTransport.lean:33:46: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Result.fail_ne_ok`
+NIL_generated/NIL_ResultTransport.lean:33:64: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Result.div_ne_ok`
+NIL_generated/NIL_ResultTransport.lean:33:46: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Result.fail_ne_ok`
+NIL_generated/NIL_ResultTransport.lean:33:64: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Result.div_ne_ok`
+NIL_generated/NIL_ResultTransport.lean:33:46: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Result.fail_ne_ok`
+NIL_generated/NIL_ResultTransport.lean:33:64: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Result.div_ne_ok`
+NIL_generated/NIL_ResultTransport.lean:32:40: error: unsolved goals
+case ok
+A B : Type
+f : A → B
+b : B
+v✝ : A
+⊢ f v✝ = b ↔ ∃ a, v✝ = a ∧ f a = b
+
+case fail
+A B : Type
+f : A → B
+b : B
+e✝ : Error
+⊢ fail e✝ = ok b ↔ ∃ a, fail e✝ = ok a ∧ f a = b
+
+case div
+A B : Type
+f : A → B
+b : B
+⊢ div = ok b ↔ ∃ a, div = ok a ∧ f a = b
+NIL_generated/NIL_ResultTransport.lean:33:81: warning: This simp argument is unused:
+  exists_eq_left
+
+Hint: Omit it from the simp argument list.
+  simp only [̵o̵u̵t̵e̵r̵,̵R̵e̵s̵u̵l̵t̵.̵o̵k̵.̵i̵n̵j̵E̵q̵,̵R̵e̵s̵u̵l̵t̵.̵f̵a̵i̵l̵_̵n̵e̵_̵o̵k̵,̵R̵e̵s̵u̵l̵t̵.̵d̵i̵v̵_̵n̵e̵_̵o̵k̵,̵e̵x̵i̵s̵t̵s̵_̵e̵q̵_̵l̵e̵f̵t̵]̵[̲o̲u̲t̲e̲r̲,̲ ̲R̲e̲s̲u̲l̲t̲.̲o̲k̲.̲i̲n̲j̲E̲q̲,̲ ̲R̲e̲s̲u̲l̲t̲.̲f̲a̲i̲l̲_̲n̲e̲_̲o̲k̲,̲ ̲R̲e̲s̲u̲l̲t̲.̲d̲i̲v̲_̲n̲e̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NIL_generated/NIL_ResultTransport.lean:39:66: error: unsolved goals
+A B : Type
+N : Usize
+f : A → B
+g : B → A
+law : ∀ (x : A), g (f x) = x
+a : Std.Array A N
+⊢ List.map (fun x => x) ↑a = ↑a
+NIL_generated/NIL_ResultTransport.lean:41:53: warning: This simp argument is unused:
+  List.map_id_fun
+
+Hint: Omit it from the simp argument list.
+  simp only [̵a̵r̵r̵a̵y̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵m̵a̵p̵,̵F̵u̵n̵c̵t̵i̵o̵n̵.̵c̵o̵m̵p̵_̵d̵e̵f̵,̵l̵a̵w̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵i̵d̵_̵f̵u̵n̵]̵[̲a̲r̲r̲a̲y̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲m̲a̲p̲,̲ ̲F̲u̲n̲c̲t̲i̲o̲n̲.̲c̲o̲m̲p̲_̲d̲e̲f̲,̲ ̲l̲a̲w̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NIL_generated/NIL_ResultTransport.lean:44:68: error: unsolved goals
+A B : Type
+f : A → B
+g : B → A
+law : ∀ (x : A), g (f x) = x
+a : alloc.vec.Vec A
+⊢ List.map (fun x => x) ↑a = ↑a
+NIL_generated/NIL_ResultTransport.lean:46:51: warning: This simp argument is unused:
+  List.map_id_fun
+
+Hint: Omit it from the simp argument list.
+  simp only [̵v̵e̵c̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵m̵a̵p̵,̵F̵u̵n̵c̵t̵i̵o̵n̵.̵c̵o̵m̵p̵_̵d̵e̵f̵,̵l̵a̵w̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵i̵d̵_̵f̵u̵n̵]̵[̲v̲e̲c̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲m̲a̲p̲,̲ ̲F̲u̲n̲c̲t̲i̲o̲n̲.̲c̲o̲m̲p̲_̲d̲e̲f̲,̲ ̲l̲a̲w̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NIL_ResultTransport.outer_bind' does not depend on any axioms
+'NIL_ResultTransport.outer_comp' does not depend on any axioms
+'NIL_ResultTransport.outer_roundtrip' depends on axioms: [propext]
+'NIL_ResultTransport.inner_roundtrip' depends on axioms: [sorryAx]
+'NIL_ResultTransport.outer_injective' depends on axioms: [propext]
+'NIL_ResultTransport.inner_injective' depends on axioms: [sorryAx]
+'NIL_ResultTransport.outer_ok_iff' depends on axioms: [propext, sorryAx, Quot.sound]
+'NIL_ResultTransport.array_comp' depends on axioms: [propext]
+'NIL_ResultTransport.array_roundtrip' depends on axioms: [propext, sorryAx, Quot.sound]
+'NIL_ResultTransport.vec_roundtrip' depends on axioms: [propext, sorryAx, Quot.sound]

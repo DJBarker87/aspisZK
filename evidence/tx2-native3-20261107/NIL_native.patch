@@ -1,0 +1,92 @@
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -1,5 +1,6 @@
+ //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
+ #![no_std]
++#![cfg_attr(kani,feature(allocator_api))]
+ extern crate alloc;
+ pub mod sampler;
+ pub mod semantic_wire;
+@@ -44,3 +45,5 @@
+ compile_error!("`audit-eight-way` is audit-only: it is never combined with the prover (PREREG-PROOF-SIZE-2 item 4)");
+ #[cfg(all(feature="audit-eight-way",any(target_os="solana",feature="program-build")))]
+ compile_error!("`audit-eight-way` is audit-only: it is never built for a program (PREREG-PROOF-SIZE-2 item 4)");
++
++#[cfg(kani)] include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -526,3 +526,7 @@
+ #[cfg(feature="audit-eight-way")]
+ #[path="eight_way.rs"]
+ pub mod eight_way;
++
++#[cfg(kani)]
++#[path="NIL_reader_native.rs"]
++mod NIL_reader_native;
+--- a/crates/aspis-r1-cost-probe/src/NIL_reader_native.rs
++++ b/crates/aspis-r1-cost-probe/src/NIL_reader_native.rs
+@@ -0,0 +1,64 @@
++use super::*;
++use crate::{KMX_copy_nonoverlapping,KMX_copy_from_slice};
++fn limb(x:E,j:usize)->u32{let q=if j<4{x.c0()}else{x.c1()};match j&3{0=>q.c0.a.0,1=>q.c0.b.0,2=>q.c1.a.0,_=>q.c1.b.0}}
++fn value<const O:usize>(){let bytes:[u8;1768]=kani::any();let mut r=Reader{bytes:&bytes,at:O};let j:usize=kani::any();kani::assume(j<8);let out=r.e();if let Ok(value)=out{let b=O+4*j;let expected=u32::from_le_bytes([bytes[b],bytes[b+1],bytes[b+2],bytes[b+3]]);let actual=limb(value,j);assert_eq!(actual,if cfg!(NIL_invert){expected^1}else{expected});}}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn e_value0(){value::<176>();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn e_value0_renamed(){value::<176>();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn e_value1(){value::<208>();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn e_value1_renamed(){value::<208>();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn e_value2(){value::<240>();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn e_value2_renamed(){value::<240>();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn e_value3(){value::<272>();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn e_value3_renamed(){value::<272>();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn e_value4(){value::<632>();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn e_value4_renamed(){value::<632>();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn e_value5(){value::<664>();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn e_value5_renamed(){value::<664>();}
