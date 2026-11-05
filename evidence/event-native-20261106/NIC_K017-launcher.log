@@ -1,0 +1,63 @@
+{"attempt": "NIC_K017", "exit_status": 0, "wall_seconds": 3.359846092062071, "peak_rss_kib": "344592", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+c/NIC_purity.rs:8:4
+  |
+8 | fn forbidden_signed(_i:&solana_program::instruction::Instruction,_a:&[AccountInfo],_s:&[&[&[u8]]]) -> ProgramResult { assert!(false,"...
+  |    ^^^^^^^^^^^^^^^^
+
+warning: function `forbidden_log` is never used
+ --> programs/r1-cost-probe/src/NIC_purity.rs:9:4
+  |
+9 | fn forbidden_log(_s:&str) { assert!(false,"NIC forbidden log"); }
+  |    ^^^^^^^^^^^^^
+
+warning: function `forbidden_cu` is never used
+  --> programs/r1-cost-probe/src/NIC_purity.rs:10:4
+   |
+10 | fn forbidden_cu() { assert!(false,"NIC forbidden compute-unit log"); }
+   |    ^^^^^^^^^^^^
+
+warning: function `m31_product_spec` is never used
+   --> programs/r1-cost-probe/src/NIC_purity.rs:297:4
+    |
+297 | fn m31_product_spec(a:aspis_core::field::M31,b:aspis_core::field::M31)->aspis_core::field::M31 {
+    |    ^^^^^^^^^^^^^^^^
+
+warning: module `NIC_purity` should have a snake case name
+   --> programs/r1-cost-probe/src/lib.rs:172:18
+    |
+172 | #[cfg(kani)] mod NIC_purity { include!("NIC_purity.rs"); }
+    |                  ^^^^^^^^^^ help: convert the identifier to snake case: `nic_purity`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.96s
+Checking harness NIC_purity::copy_positive...
+
+VERIFICATION RESULT:
+ ** 0 of 27 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.29274794s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r8177d6f083404eba92745c8a2d1cce01.scope; invocation ID: 94dbd46bb3b343b2889f14de1cda5389

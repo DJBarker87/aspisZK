@@ -1,0 +1,20 @@
+def FIo_Native.aspis_core.field.wide_exact.WideExact.mul_m31 : FIo_Native.aspis_core.field.wide_exact.WideExact →
+  FIo_Native.aspis_core.field.M31 → Aeneas.Std.Result FIo_Native.aspis_core.field.wide_exact.WideExact :=
+fun self rhs => do
+  let i ← rhs % FIo_Native.aspis_core.field.P
+  let q ← self.c0.mul_m31 i
+  let q1 ← self.c1.mul_m31 i
+  Aeneas.Std.Result.ok { c0 := q, c1 := q1 }
+def FIo_Native.aspis_core.field.wide_exact.WideExact.mul_qm31 : FIo_Native.aspis_core.field.wide_exact.WideExact →
+  FIo_Native.aspis_core.field.QM31 → Aeneas.Std.Result FIo_Native.aspis_core.field.wide_exact.WideExact :=
+fun self rhs => do
+  let rhs1 ← FIo_Native.aspis_core.field.wide_exact.canonical_qm31 rhs
+  let q ← self.c0.mul rhs1
+  let q1 ← self.c1.mul rhs1
+  Aeneas.Std.Result.ok { c0 := q, c1 := q1 }
+NIC_generated/NIC_FieldInspect.lean:4:7: error(lean.unknownIdentifier): Unknown constant `NFN_LPi_FieldValues.ew`
+NIC_generated/NIC_FieldInspect.lean:5:7: error(lean.unknownIdentifier): Unknown constant `NFN_LPi_FieldValues.canonE`
+NIC_generated/NIC_FieldInspect.lean:7:7: error(lean.unknownIdentifier): Unknown constant `NFN_LPi_FieldValues.mulC`
+NIC_generated/NIC_FieldInspect.lean:8:7: error(lean.unknownIdentifier): Unknown constant `NFN_LPi_FieldValues.mulQ`
+NIC_generated/NIC_FieldInspect.lean:9:7: error(lean.unknownIdentifier): Unknown constant `NFN_LPi_FieldValues.mulE`
+NIC_generated/NIC_FieldInspect.lean:10:7: error(lean.unknownIdentifier): Unknown constant `AspisR1.NFS_NBG_WideCarriers.wide_scale`

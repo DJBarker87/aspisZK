@@ -1,0 +1,11 @@
+use super::*;
+pub fn one() { let _value=M31::ONE; }
+pub fn double() { let a:u32=kani::any();kani::assume(a<2147483647);let _value=M31(a).double(); }
+pub fn subtract() { let a:u32=kani::any();let b:u32=kani::any();kani::assume(a<2147483647 && b<2147483647);let _value=M31(a).sub(M31(b)); }
+pub fn trace() { let tag:u16=kani::any();let index:usize=kani::any();let bytes:[u8;32]=kani::any();if let Some(value)=E::from_le_bytes(&bytes) {crate::trace::value(tag,index,value);} }
+pub fn fields() { let bytes:[u8;128]=kani::any();let s:usize=kani::any();kani::assume(s<4);kani::assume(E::from_le_bytes(&bytes[s*32..s*32+32]).is_some());let _value=field(&bytes,s); }
+pub fn geometry() { let raw:[u32;5]=kani::any();let start:usize=kani::any();let mut inverses=Vec::new();inverses.push(raw.map(M31));let geometry=QueryGeometry{start,inverses,line_z:Vec::new()};let _value=*geometry.for_query(start); }
+
+fn any_e()->E {let words:[u32;8]=kani::any();kani::assume(words.iter().all(|x|*x<2147483647));E::from_limbs(words).unwrap()}
+pub fn circle() {let alpha=any_e();let values=[any_e(),any_e(),any_e(),any_e()];let inverse=kani::any::<[u32;5]>().map(M31);let _value=circle_fold_with_inverses(alpha,values,&inverse);}
+pub fn line() {let alpha=any_e();let values=[any_e(),any_e(),any_e(),any_e()];let inverse=kani::any::<[u32;5]>().map(M31);let _value=line_fold_with_inverses(alpha,values,&inverse);}

@@ -1,0 +1,62 @@
+{"attempt": "NIC_K005", "exit_status": 0, "wall_seconds": 4.533626120071858, "peak_rss_kib": "425504", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-event-native-20261106/NIC_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `q
+...
+t` is never used
+ --> programs/r1-cost-probe/src/NIC_purity.rs:6:4
+  |
+6 | fn forbidden_get() -> Option<(Pubkey,Vec<u8>)> { assert!(false,"NIC forbidden return-data get");None }
+  |    ^^^^^^^^^^^^^
+
+warning: function `forbidden_invoke` is never used
+ --> programs/r1-cost-probe/src/NIC_purity.rs:7:4
+  |
+7 | fn forbidden_invoke(_i:&solana_program::instruction::Instruction,_a:&[AccountInfo]) -> ProgramResult { assert!(false,"NIC forbidden C...
+  |    ^^^^^^^^^^^^^^^^
+
+warning: function `forbidden_signed` is never used
+ --> programs/r1-cost-probe/src/NIC_purity.rs:8:4
+  |
+8 | fn forbidden_signed(_i:&solana_program::instruction::Instruction,_a:&[AccountInfo],_s:&[&[&[u8]]]) -> ProgramResult { assert!(false,"...
+  |    ^^^^^^^^^^^^^^^^
+
+warning: function `forbidden_log` is never used
+ --> programs/r1-cost-probe/src/NIC_purity.rs:9:4
+  |
+9 | fn forbidden_log(_s:&str) { assert!(false,"NIC forbidden log"); }
+  |    ^^^^^^^^^^^^^
+
+warning: function `forbidden_cu` is never used
+  --> programs/r1-cost-probe/src/NIC_purity.rs:10:4
+   |
+10 | fn forbidden_cu() { assert!(false,"NIC forbidden compute-unit log"); }
+   |    ^^^^^^^^^^^^
+
+warning: module `NIC_purity` should have a snake case name
+   --> programs/r1-cost-probe/src/lib.rs:172:18
+    |
+172 | #[cfg(kani)] mod NIC_purity { include!("NIC_purity.rs"); }
+    |                  ^^^^^^^^^^ help: convert the identifier to snake case: `nic_purity`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+    Finished `dev` profile [optimized] target(s) in 3.31s
+Checking harness NIC_purity::subtract_pure...
+
+VERIFICATION RESULT:
+ ** 0 of 3 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.027351744s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-rcd475efd53ef452f8e6046d924110e34.scope; invocation ID: ec4c8dbf81c642299375e8514c12c9c4

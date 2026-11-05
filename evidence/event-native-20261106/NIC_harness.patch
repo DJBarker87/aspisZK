@@ -1,0 +1,604 @@
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -338,3 +338,5 @@
+     mark(obs, Phase::Parsed);
+     tx2_common(public_bytes, proof, checkpoint, hash, obs)
+ }
++
++#[cfg(kani)] pub mod NIC_opening { include!("NIC_opening.rs"); }
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -1,5 +1,6 @@
+ //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
+ #![no_std]
++#![cfg_attr(kani,feature(allocator_api))]
+ extern crate alloc;
+ pub mod sampler;
+ pub mod semantic_wire;
+@@ -44,3 +45,5 @@
+ compile_error!("`audit-eight-way` is audit-only: it is never combined with the prover (PREREG-PROOF-SIZE-2 item 4)");
+ #[cfg(all(feature="audit-eight-way",any(target_os="solana",feature="program-build")))]
+ compile_error!("`audit-eight-way` is audit-only: it is never built for a program (PREREG-PROOF-SIZE-2 item 4)");
++
++#[cfg(kani)] pub mod NIC_copy { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs")); }
+--- a/crates/aspis-r1-cost-probe/src/transcript.rs
++++ b/crates/aspis-r1-cost-probe/src/transcript.rs
+@@ -78,3 +78,5 @@
+         Ok(q)
+     }
+ }
++
++#[cfg(kani)] pub mod NIC_transcript { include!("NIC_transcript.rs"); }
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -526,3 +526,5 @@
+ #[cfg(feature="audit-eight-way")]
+ #[path="eight_way.rs"]
+ pub mod eight_way;
++
++#[cfg(kani)] pub mod NIC_native { include!("NIC_native.rs"); }
+--- a/programs/r1-cost-probe/src/lib.rs
++++ b/programs/r1-cost-probe/src/lib.rs
+@@ -168,3 +168,5 @@
+ #[cfg(all(test, feature="pool-adapter"))]
+ #[path="r1_pool_adapter_original.rs"]
+ mod r1_pool_adapter_original;
++
++#[cfg(kani)] mod NIC_purity { include!("NIC_purity.rs"); }
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NIC_transcript.rs
+@@ -0,0 +1,2 @@
++use super::*;
++pub fn from_state<H:Digest32>(hash:H,state:[u8;32])->Transcript<H>{Transcript{state,hash}}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NIC_native.rs
+@@ -0,0 +1,11 @@
++use super::*;
++pub fn one() { let _value=M31::ONE; }
++pub fn double() { let a:u32=kani::any();kani::assume(a<2147483647);let _value=M31(a).double(); }
++pub fn subtract() { let a:u32=kani::any();let b:u32=kani::any();kani::assume(a<2147483647 && b<2147483647);let _value=M31(a).sub(M31(b)); }
++pub fn trace() { let tag:u16=kani::any();let index:usize=kani::any();let bytes:[u8;32]=kani::any();if let Some(value)=E::from_le_bytes(&bytes) {crate::trace::value(tag,index,value);} }
++pub fn fields() { let bytes:[u8;128]=kani::any();let s:usize=kani::any();kani::assume(s<4);kani::assume(E::from_le_bytes(&bytes[s*32..s*32+32]).is_some());let _value=field(&bytes,s); }
++pub fn geometry() { let raw:[u32;5]=kani::any();let start:usize=kani::any();let mut inverses=Vec::new();inverses.push(raw.map(M31));let geometry=QueryGeometry{start,inverses,line_z:Vec::new()};let _value=*geometry.for_query(start); }
++
++fn any_e()->E {let words:[u32;8]=kani::any();kani::assume(words.iter().all(|x|*x<2147483647));E::from_limbs(words).unwrap()}
++pub fn circle() {let alpha=any_e();let values=[any_e(),any_e(),any_e(),any_e()];let inverse=kani::any::<[u32;5]>().map(M31);let _value=circle_fold_with_inverses(alpha,values,&inverse);}
++pub fn line() {let alpha=any_e();let values=[any_e(),any_e(),any_e(),any_e()];let inverse=kani::any::<[u32;5]>().map(M31);let _value=line_fold_with_inverses(alpha,values,&inverse);}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NIC_opening.rs
+@@ -0,0 +1,2 @@
++use super::*;
++pub fn opening_window() { let proof:[u8;compact::PROOF_BYTES]=kani::any();let i:usize=kani::any();kani::assume(i<22);let _value=opening(&proof,i); }
+--- /dev/null
++++ b/programs/r1-cost-probe/src/NIC_purity.rs
+@@ -0,0 +1,530 @@
++use super::*;
++use aspis_core::Digest32;
++fn forbidden_digest(_self_: &SolanaDigest,_parts: &[&[u8]]) -> [u8;32] { assert!(false,"NIC forbidden digest");[0;32] }
++fn forbidden_hash(_parts: &[&[u8]]) -> solana_program::hash::Hash { assert!(false,"NIC forbidden hashv");solana_program::hash::Hash::default() }
++fn forbidden_set(_data:&[u8]) { assert!(false,"NIC forbidden return-data set"); }
++fn forbidden_get() -> Option<(Pubkey,Vec<u8>)> { assert!(false,"NIC forbidden return-data get");None }
++fn forbidden_invoke(_i:&solana_program::instruction::Instruction,_a:&[AccountInfo]) -> ProgramResult { assert!(false,"NIC forbidden CPI");Ok(()) }
++fn forbidden_signed(_i:&solana_program::instruction::Instruction,_a:&[AccountInfo],_s:&[&[&[u8]]]) -> ProgramResult { assert!(false,"NIC forbidden signed CPI");Ok(()) }
++fn forbidden_log(_s:&str) { assert!(false,"NIC forbidden log"); }
++fn forbidden_cu() { assert!(false,"NIC forbidden compute-unit log"); }
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++fn one_pure() { aspis_r1_cost_probe::verifier::NIC_native::one(); }
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++fn one_control() { let _=SolanaDigest.digest(&[b"NIC control"]);aspis_r1_cost_probe::verifier::NIC_native::one(); }
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++fn double_pure() { aspis_r1_cost_probe::verifier::NIC_native::double(); }
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++fn double_control() { let _=SolanaDigest.digest(&[b"NIC control"]);aspis_r1_cost_probe::verifier::NIC_native::double(); }
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++fn subtract_pure() { aspis_r1_cost_probe::verifier::NIC_native::subtract(); }
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++fn subtract_control() { let _=SolanaDigest.digest(&[b"NIC control"]);aspis_r1_cost_probe::verifier::NIC_native::subtract(); }
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++fn trace_pure() { aspis_r1_cost_probe::verifier::NIC_native::trace(); }
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++fn trace_control() { let _=SolanaDigest.digest(&[b"NIC control"]);aspis_r1_cost_probe::verifier::NIC_native::trace(); }
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++fn fields_pure() { aspis_r1_cost_probe::verifier::NIC_native::fields(); }
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++fn fields_control() { let _=SolanaDigest.digest(&[b"NIC control"]);aspis_r1_cost_probe::verifier::NIC_native::fields(); }
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++fn geometry_pure() { aspis_r1_cost_probe::verifier::NIC_native::geometry(); }
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++fn geometry_control() { let _=SolanaDigest.digest(&[b"NIC control"]);aspis_r1_cost_probe::verifier::NIC_native::geometry(); }
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++fn opening_pure() { aspis_r1_cost_probe::verifier::candidate::NIC_opening::opening_window(); }
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++fn opening_control() { let _=SolanaDigest.digest(&[b"NIC control"]);aspis_r1_cost_probe::verifier::candidate::NIC_opening::opening_window(); }
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++fn hash_frontier() {let _=solana_program::hash::hashv(&[b"NIC"]);}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++fn set_frontier() {solana_program::program::set_return_data(b"NIC");}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++fn get_frontier() {let _=solana_program::program::get_return_data();}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++fn invoke_frontier() {let i=solana_program::instruction::Instruction{program_id:Pubkey::default(),accounts:Vec::new(),data:Vec::new()};let _=solana_program::program::invoke(&i,&[]);}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++fn signed_frontier() {let i=solana_program::instruction::Instruction{program_id:Pubkey::default(),accounts:Vec::new(),data:Vec::new()};let _=solana_program::program::invoke_signed(&i,&[],&[]);}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++fn log_frontier() {solana_program::log::sol_log("NIC");}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++fn cu_frontier() {solana_program::log::sol_log_compute_units();}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++fn copy_positive() {let source:[u8;8]=kani::any();let mut out=[0u8;8];out.copy_from_slice(&source);let i:usize=kani::any();kani::assume(i<8);assert_eq!(out[i],source[i]);}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++fn copy_control() {let source:[u8;8]=kani::any();let mut out=[0u8;8];out.copy_from_slice(&source);let i:usize=kani::any();kani::assume(i<8);assert_ne!(out[i],source[i]);}
++
++fn m31_product_spec(a:aspis_core::field::M31,b:aspis_core::field::M31)->aspis_core::field::M31 {
++ let value:u32=kani::any();kani::assume(value as u64==(a.0 as u64*b.0 as u64)%2147483647);aspis_core::field::M31(value)
++}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++#[kani::stub(aspis_core::field::M31::mul,m31_product_spec)]
++fn product_pure() {let a:u32=kani::any();let b:u32=kani::any();let _value=aspis_core::field::M31(a).mul(aspis_core::field::M31(b));}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++#[kani::stub(aspis_core::field::M31::mul,m31_product_spec)]
++fn product_control() {let _=SolanaDigest.digest(&[b"NIC control"]);let a:u32=kani::any();let b:u32=kani::any();let _value=aspis_core::field::M31(a).mul(aspis_core::field::M31(b));}
++
++fn addn(a:u32,b:u32)->u32 {((a as u64+b as u64)%2147483647) as u32}
++fn subn(a:u32,b:u32)->u32 {((a as u64+2147483647-b as u64)%2147483647) as u32}
++fn muln(a:u32,b:u32)->u32 {((a as u64*b as u64)%2147483647) as u32}
++fn cmul(a:[u32;2],b:[u32;2])->[u32;2] {let m0=muln(a[0],b[0]);let m1=muln(a[1],b[1]);let m2=muln(addn(a[0],a[1]),addn(b[0],b[1]));[subn(m0,m1),subn(subn(m2,m0),m1)]}
++fn cr(a:[u32;2])->[u32;2] {[subn(addn(a[0],a[0]),a[1]),addn(a[0],addn(a[1],a[1]))]}
++fn qmul(a:[u32;4],b:[u32;4])->[u32;4] {let ac=cmul([a[0],a[1]],[b[0],b[1]]);let bd=cr(cmul([a[2],a[3]],[b[2],b[3]]));let ad=cmul([a[0],a[1]],[b[2],b[3]]);let bc=cmul([a[2],a[3]],[b[0],b[1]]);[addn(ac[0],bd[0]),addn(ac[1],bd[1]),addn(ad[0],bc[0]),addn(ad[1],bc[1])]}
++fn ewords(a:aspis_core::field::WideExact)->[u32;8] {let b=a.to_le_bytes();core::array::from_fn(|i|u32::from_le_bytes([b[4*i],b[4*i+1],b[4*i+2],b[4*i+3]]))}
++fn qpart(a:[u32;8],offset:usize)->[u32;4] {[a[offset],a[offset+1],a[offset+2],a[offset+3]]}
++fn wide_product_spec(a:aspis_core::field::WideExact,b:aspis_core::field::WideExact)->aspis_core::field::WideExact {
++ let a=ewords(a);let b=ewords(b);assert!(a.iter().all(|x|*x<2147483647) && b.iter().all(|x|*x<2147483647),"NIC wide product domain");
++ let ac=qmul(qpart(a,0),qpart(b,0));let bd=qmul(qpart(a,4),qpart(b,4));let ad=qmul(qpart(a,0),qpart(b,4));let bc=qmul(qpart(a,4),qpart(b,0));let r=cr([bd[2],bd[3]]);let expected=[addn(ac[0],r[0]),addn(ac[1],r[1]),addn(ac[2],bd[0]),addn(ac[3],bd[1]),addn(ad[0],bc[0]),addn(ad[1],bc[1]),addn(ad[2],bc[2]),addn(ad[3],bc[3])];
++ let out:[u32;8]=kani::any();kani::assume(out.iter().all(|x|*x<2147483647));kani::assume(out==expected);aspis_core::field::WideExact::from_limbs(out).unwrap()
++}
++fn wide_scale_spec(a:aspis_core::field::WideExact,b:aspis_core::field::M31)->aspis_core::field::WideExact {
++ let a=ewords(a);assert!(a.iter().all(|x|*x<2147483647),"NIC wide scale domain");let expected=a.map(|x|muln(x,b.0%2147483647));let out:[u32;8]=kani::any();kani::assume(out.iter().all(|x|*x<2147483647));kani::assume(out==expected);aspis_core::field::WideExact::from_limbs(out).unwrap()
++}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++#[kani::stub(aspis_core::field::M31::mul,m31_product_spec)]
++#[kani::stub(aspis_core::field::WideExact::mul,wide_product_spec)]
++#[kani::stub(aspis_core::field::WideExact::mul_m31,wide_scale_spec)]
++fn circle_pure() {aspis_r1_cost_probe::verifier::NIC_native::circle();}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++#[kani::stub(aspis_core::field::M31::mul,m31_product_spec)]
++#[kani::stub(aspis_core::field::WideExact::mul,wide_product_spec)]
++#[kani::stub(aspis_core::field::WideExact::mul_m31,wide_scale_spec)]
++fn circle_control() {let _=SolanaDigest.digest(&[b"NIC control"]);aspis_r1_cost_probe::verifier::NIC_native::circle();}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++#[kani::stub(aspis_core::field::M31::mul,m31_product_spec)]
++#[kani::stub(aspis_core::field::WideExact::mul,wide_product_spec)]
++#[kani::stub(aspis_core::field::WideExact::mul_m31,wide_scale_spec)]
++fn line_pure() {aspis_r1_cost_probe::verifier::NIC_native::line();}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++#[kani::stub(aspis_core::field::M31::mul,m31_product_spec)]
++#[kani::stub(aspis_core::field::WideExact::mul,wide_product_spec)]
++#[kani::stub(aspis_core::field::WideExact::mul_m31,wide_scale_spec)]
++fn line_control() {let _=SolanaDigest.digest(&[b"NIC control"]);aspis_r1_cost_probe::verifier::NIC_native::line();}
++
++use core::cell::Cell;
++#[derive(Clone,Copy)]
++struct AbortDigest<'a> { calls:&'a Cell<u8>,stopped:&'a Cell<bool>,stop:u8,continues:bool }
++impl Digest32 for AbortDigest<'_> {
++ fn digest(&self,_parts:&[&[u8]])->[u8;32] {
++  assert!(!self.stopped.get(),"NIC later digest after abort");let n=self.calls.get();self.calls.set(n+1);
++  if n==self.stop {self.stopped.set(true);kani::assume(self.continues);}
++  kani::any()
++ }
++}
++fn no_gamma(_block:&[u8;32])->aspis_core::field::WideExact {assert!(false,"NIC sampler after abort");aspis_core::field::WideExact::ONE}
++fn no_qsample(_block:&[u8;32])->aspis_core::field::QM31 {assert!(false,"NIC sampler after abort");aspis_core::field::QM31::ONE}
++fn no_queries(_blocks:&[[u8;32];8],_advances:&[[u8;32];8])->Result<([u32;22],[u8;32]),aspis_core::r0_transcript::QuerySampleError> {assert!(false,"NIC query reduction after abort");Ok(([0;22],[0;32]))}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++#[kani::stub(aspis_r1_cost_probe::sampler::gamma_sample,no_gamma)]
++#[kani::stub(aspis_r1_cost_probe::sampler::ordinary_sample,no_gamma)]
++#[kani::stub(aspis_r1_cost_probe::sampler::qm31_sample,no_qsample)]
++#[kani::stub(aspis_core::r0_transcript::queries_from_pairs,no_queries)]
++fn scalar_abort_prefix() {
++let calls=Cell::new(0u8);let stopped=Cell::new(false);let stop:u8=kani::any();kani::assume(stop<3);let hash=AbortDigest{calls:&calls,stopped:&stopped,stop,continues:false};let state:[u8;32]=kani::any();let mut t=aspis_r1_cost_probe::transcript::NIC_transcript::from_state(hash,state);let row:u8=kani::any();kani::assume(row<96);let payload:[u8;2048]=kani::any();let len:usize=kani::any();kani::assume(len<=2048);let mode:bool=kani::any();let _out=t.scalar(row,&payload[..len],mode);assert!(!stopped.get(),"NIC returning suffix after abort");}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++#[kani::stub(aspis_r1_cost_probe::sampler::gamma_sample,no_gamma)]
++#[kani::stub(aspis_r1_cost_probe::sampler::ordinary_sample,no_gamma)]
++#[kani::stub(aspis_r1_cost_probe::sampler::qm31_sample,no_qsample)]
++#[kani::stub(aspis_core::r0_transcript::queries_from_pairs,no_queries)]
++fn scalar_abort_control() {
++let calls=Cell::new(0u8);let stopped=Cell::new(false);let stop:u8=kani::any();kani::assume(stop<3);let hash=AbortDigest{calls:&calls,stopped:&stopped,stop,continues:true};let state:[u8;32]=kani::any();let mut t=aspis_r1_cost_probe::transcript::NIC_transcript::from_state(hash,state);let row:u8=kani::any();kani::assume(row<96);let payload:[u8;2048]=kani::any();let len:usize=kani::any();kani::assume(len<=2048);let mode:bool=kani::any();let _out=t.scalar(row,&payload[..len],mode);assert!(!stopped.get(),"NIC returning suffix after abort");}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++#[kani::stub(aspis_r1_cost_probe::sampler::gamma_sample,no_gamma)]
++#[kani::stub(aspis_r1_cost_probe::sampler::ordinary_sample,no_gamma)]
++#[kani::stub(aspis_r1_cost_probe::sampler::qm31_sample,no_qsample)]
++#[kani::stub(aspis_core::r0_transcript::queries_from_pairs,no_queries)]
++fn scalar_k_abort_prefix() {
++let calls=Cell::new(0u8);let stopped=Cell::new(false);let stop:u8=kani::any();kani::assume(stop<3);let hash=AbortDigest{calls:&calls,stopped:&stopped,stop,continues:false};let state:[u8;32]=kani::any();let mut t=aspis_r1_cost_probe::transcript::NIC_transcript::from_state(hash,state);let row:u8=kani::any();kani::assume(row<96);let payload:[u8;2048]=kani::any();let len:usize=kani::any();kani::assume(len<=2048);let _out=t.scalar_k(row,&payload[..len]);assert!(!stopped.get(),"NIC returning suffix after abort");}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++#[kani::stub(aspis_r1_cost_probe::sampler::gamma_sample,no_gamma)]
++#[kani::stub(aspis_r1_cost_probe::sampler::ordinary_sample,no_gamma)]
++#[kani::stub(aspis_r1_cost_probe::sampler::qm31_sample,no_qsample)]
++#[kani::stub(aspis_core::r0_transcript::queries_from_pairs,no_queries)]
++fn scalar_k_abort_control() {
++let calls=Cell::new(0u8);let stopped=Cell::new(false);let stop:u8=kani::any();kani::assume(stop<3);let hash=AbortDigest{calls:&calls,stopped:&stopped,stop,continues:true};let state:[u8;32]=kani::any();let mut t=aspis_r1_cost_probe::transcript::NIC_transcript::from_state(hash,state);let row:u8=kani::any();kani::assume(row<96);let payload:[u8;2048]=kani::any();let len:usize=kani::any();kani::assume(len<=2048);let _out=t.scalar_k(row,&payload[..len]);assert!(!stopped.get(),"NIC returning suffix after abort");}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++#[kani::stub(aspis_r1_cost_probe::sampler::gamma_sample,no_gamma)]
++#[kani::stub(aspis_r1_cost_probe::sampler::ordinary_sample,no_gamma)]
++#[kani::stub(aspis_r1_cost_probe::sampler::qm31_sample,no_qsample)]
++#[kani::stub(aspis_core::r0_transcript::queries_from_pairs,no_queries)]
++fn queries_abort_prefix() {
++let calls=Cell::new(0u8);let stopped=Cell::new(false);let stop:u8=kani::any();kani::assume(stop<17);let hash=AbortDigest{calls:&calls,stopped:&stopped,stop,continues:false};let state:[u8;32]=kani::any();let mut t=aspis_r1_cost_probe::transcript::NIC_transcript::from_state(hash,state);let row:u8=kani::any();kani::assume(row<96);let payload:[u8;2048]=kani::any();let len:usize=kani::any();kani::assume(len<=2048);let _out=t.queries(row,&payload[..len]);assert!(!stopped.get(),"NIC returning suffix after abort");}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,aspis_r1_cost_probe::NIC_copy::KMX_copy_nonoverlapping)]
++#[kani::unwind(10)]
++#[kani::stub(SolanaDigest::digest, forbidden_digest)]
++#[kani::stub(solana_program::hash::hashv, forbidden_hash)]
++#[kani::stub(solana_program::program::set_return_data, forbidden_set)]
++#[kani::stub(solana_program::program::get_return_data, forbidden_get)]
++#[kani::stub(solana_program::program::invoke, forbidden_invoke)]
++#[kani::stub(solana_program::program::invoke_signed, forbidden_signed)]
++#[kani::stub(solana_program::log::sol_log, forbidden_log)]
++#[kani::stub(solana_program::log::sol_log_compute_units, forbidden_cu)]
++#[kani::stub(aspis_r1_cost_probe::sampler::gamma_sample,no_gamma)]
++#[kani::stub(aspis_r1_cost_probe::sampler::ordinary_sample,no_gamma)]
++#[kani::stub(aspis_r1_cost_probe::sampler::qm31_sample,no_qsample)]
++#[kani::stub(aspis_core::r0_transcript::queries_from_pairs,no_queries)]
++fn queries_abort_control() {
++let calls=Cell::new(0u8);let stopped=Cell::new(false);let stop:u8=kani::any();kani::assume(stop<17);let hash=AbortDigest{calls:&calls,stopped:&stopped,stop,continues:true};let state:[u8;32]=kani::any();let mut t=aspis_r1_cost_probe::transcript::NIC_transcript::from_state(hash,state);let row:u8=kani::any();kani::assume(row<96);let payload:[u8;2048]=kani::any();let len:usize=kani::any();kani::assume(len<=2048);let _out=t.queries(row,&payload[..len]);assert!(!stopped.get(),"NIC returning suffix after abort");}

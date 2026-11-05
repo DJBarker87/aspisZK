@@ -1,0 +1,44 @@
+{"attempt": "NIC_K007", "exit_status": 0, "wall_seconds": 4.1554490379057825, "peak_rss_kib": "426020", "swaps": "0", "print_axioms": "N/A: kani"}
+:4
+  |
+7 | fn forbidden_invoke(_i:&solana_program::instruction::Instruction,_a:&[AccountInfo]) -> ProgramResult { assert!(false,"NIC forbidden C...
+  |    ^^^^^^^^^^^^^^^^
+
+warning: function `forbidden_signed` is never used
+ --> programs/r1-cost-probe/src/NIC_purity.rs:8:4
+  |
+8 | fn forbidden_signed(_i:&solana_program::instruction::Instruction,_a:&[AccountInfo],_s:&[&[&[u8]]]) -> ProgramResult { assert!(false,"...
+  |    ^^^^^^^^^^^^^^^^
+
+warning: function `forbidden_log` is never used
+ --> programs/r1-cost-probe/src/NIC_purity.rs:9:4
+  |
+9 | fn forbidden_log(_s:&str) { assert!(false,"NIC forbidden log"); }
+  |    ^^^^^^^^^^^^^
+
+warning: function `forbidden_cu` is never used
+  --> programs/r1-cost-probe/src/NIC_purity.rs:10:4
+   |
+10 | fn forbidden_cu() { assert!(false,"NIC forbidden compute-unit log"); }
+   |    ^^^^^^^^^^^^
+
+warning: module `NIC_purity` should have a snake case name
+   --> programs/r1-cost-probe/src/lib.rs:172:18
+    |
+172 | #[cfg(kani)] mod NIC_purity { include!("NIC_purity.rs"); }
+    |                  ^^^^^^^^^^ help: convert the identifier to snake case: `nic_purity`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+    Finished `dev` profile [optimized] target(s) in 2.59s
+Checking harness NIC_purity::trace_pure...
+
+VERIFICATION RESULT:
+ ** 0 of 225 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.36782292s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+

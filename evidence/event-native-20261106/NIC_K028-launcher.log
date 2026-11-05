@@ -1,0 +1,57 @@
+{"attempt": "NIC_K028", "exit_status": 1, "wall_seconds": 93.80205755797215, "peak_rss_kib": "4918372", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+never used
+   --> programs/r1-cost-probe/src/NIC_purity.rs:336:4
+    |
+336 | fn qpart(a:[u32;8],offset:usize)->[u32;4] {[a[offset],a[offset+1],a[offset+2],a[offset+3]]}
+    |    ^^^^^
+
+warning: function `wide_product_spec` is never used
+   --> programs/r1-cost-probe/src/NIC_purity.rs:337:4
+    |
+337 | fn wide_product_spec(a:aspis_core::field::WideExact,b:aspis_core::field::WideExact)->aspis_core::field::WideExact {
+    |    ^^^^^^^^^^^^^^^^^
+
+warning: function `wide_scale_spec` is never used
+   --> programs/r1-cost-probe/src/NIC_purity.rs:342:4
+    |
+342 | fn wide_scale_spec(a:aspis_core::field::WideExact,b:aspis_core::field::M31)->aspis_core::field::WideExact {
+    |    ^^^^^^^^^^^^^^^
+
+warning: module `NIC_purity` should have a snake case name
+   --> programs/r1-cost-probe/src/lib.rs:172:18
+    |
+172 | #[cfg(kani)] mod NIC_purity { include!("NIC_purity.rs"); }
+    |                  ^^^^^^^^^^ help: convert the identifier to snake case: `nic_purity`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.26s
+Checking harness NIC_purity::circle_pure...
+
+CBMC failed
+VERIFICATION:- FAILED
+CBMC timed out. You may want to rerun your proof with a larger timeout or use stubbing to reduce the size of the code the verifier reasons about.
+
+Manual Harness Summary:
+Verification failed for - NIC_purity::circle_pure
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r6469dcf2b35d4efda6d7f2dda3cdeea9.scope; invocation ID: 9fd2d32340f34146962d97a2268952a1
