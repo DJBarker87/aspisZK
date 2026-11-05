@@ -216,7 +216,7 @@ theorem source (R : RoundModel.Boundaries) (B : FinishModel.Boundaries)
     {H : Type} (D : aspis_core.Digest32 H)
     (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (pre : r1_wire.Prefix)
     (before : r1_wire.SemanticTranscript H) (challenges : r1_wire.Challenges)
-    (obs : Option (verifier.Phase → Result Unit)) (out : r1_semantic.Verified H)
+    (obs : Option (RPz7_PhaseIso.Phase → Result Unit)) (out : r1_semantic.Verified H)
     (h : FinishModel.finish R B D pub pre before challenges obs = ok (.Ok out)) :
     ∃ (record25 record26 : r1_wire.ValidatedRecord),
       B.claims pre=ok (.Ok out.claims) ∧
@@ -247,13 +247,13 @@ theorem source (R : RoundModel.Boundaries) (B : FinishModel.Boundaries)
       obtain ⟨terminalResult,hterminal,h⟩ := bind_success _ _ _ h
       cases terminalResult with
       | Err e =>
-        simp only [core.result.Result.map_err,FinishModel.closureFn11,FinishModel.closureFn10,
+        simp only [AspisR1PublicPreparation.core.result.Result.map_err,FinishModel.closureFn11,FinishModel.closureFn10,
           core.result.Result.Insts.CoreOpsTry.branch,
           core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
           core.convert.FromSame.from,bind_tc_ok] at h
         cases h
       | Ok terminal =>
-        simp only [core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch,
+        simp only [AspisR1PublicPreparation.core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch,
           bind_tc_ok,VerifyPrefix.mark] at h
         obtain ⟨mask16,hm16,h⟩ := bind_success _ _ _ h
         obtain ⟨mask10,hm10,h⟩ := bind_success _ _ _ h
@@ -382,7 +382,7 @@ theorem row (a : Array aspis_core.field.QM31 29#usize)
 theorem source (B : FinishModel.Boundaries) {H : Type} (D : aspis_core.Digest32 H)
     (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (pre : r1_wire.Prefix)
     (before : r1_wire.SemanticTranscript H) (challenges : r1_wire.Challenges)
-    (obs : Option (verifier.Phase → Result Unit)) (sem : r1_semantic.Verified H)
+    (obs : Option (RPz7_PhaseIso.Phase → Result Unit)) (sem : r1_semantic.Verified H)
     (finish : FinishModel.finish AspisS1ExtractedRoundChildren.children {B with claims:=ClaimsUnrolledFinish.claims (NP6_StdModel.calls (.Ok ()))}
       D pub pre before challenges obs=ok (.Ok sem)) :
     NGU_LPq_ReadPorts.SemCanonical (toClaimSem sem) := by
@@ -414,7 +414,7 @@ with LPq; this is NOT a native prepared_claim closure theorem. -/
 theorem native_result (B : FinishModel.Boundaries) {H : Type} (D : aspis_core.Digest32 H)
     (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (pre : r1_wire.Prefix)
     (beforeSemantic : r1_wire.SemanticTranscript H) (challenges : r1_wire.Challenges)
-    (obs : Option (verifier.Phase → Result Unit)) (sem : r1_semantic.Verified H)
+    (obs : Option (RPz7_PhaseIso.Phase → Result Unit)) (sem : r1_semantic.Verified H)
     (finish : FinishModel.finish AspisS1ExtractedRoundChildren.children {B with claims:=ClaimsUnrolledFinish.claims (NP6_StdModel.calls (.Ok ()))}
       D pub pre beforeSemantic challenges obs=ok (.Ok sem))
     (compact y1 : Slice U8) (len : y1.val.length=928)

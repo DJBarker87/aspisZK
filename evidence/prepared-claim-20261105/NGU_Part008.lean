@@ -62,7 +62,7 @@ semantic canonicality and powers canonicality are all derived from producers. -/
 theorem native_result (B : FinishModel.Boundaries) {H : Type} (D : aspis_core.Digest32 H)
     (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (pre : r1_wire.Prefix)
     (beforeSemantic : r1_wire.SemanticTranscript H) (challenges : r1_wire.Challenges)
-    (obs : Option (verifier.Phase → Result Unit)) (sem : r1_semantic.Verified H)
+    (obs : Option (RPz7_PhaseIso.Phase → Result Unit)) (sem : r1_semantic.Verified H)
     (finish : FinishModel.finish AspisS1ExtractedRoundChildren.children {B with claims:=ClaimsUnrolledFinish.claims (NP6_StdModel.calls (.Ok ()))}
       D pub pre beforeSemantic challenges obs=ok (.Ok sem))
     (compact before y1 : Slice U8) (len : compact.val.length=464)
@@ -85,7 +85,7 @@ Neither the output bytes nor prepared result are supplied as hypotheses. -/
 theorem construct (B : FinishModel.Boundaries) {H : Type} (D : aspis_core.Digest32 H)
     (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (pre : r1_wire.Prefix)
     (beforeSemantic : r1_wire.SemanticTranscript H) (challenges : r1_wire.Challenges)
-    (obs : Option (verifier.Phase → Result Unit)) (sem : r1_semantic.Verified H)
+    (obs : Option (RPz7_PhaseIso.Phase → Result Unit)) (sem : r1_semantic.Verified H)
     (finish : FinishModel.finish AspisS1ExtractedRoundChildren.children {B with claims:=ClaimsUnrolledFinish.claims (NP6_StdModel.calls (.Ok ()))}
       D pub pre beforeSemantic challenges obs=ok (.Ok sem))
     (compact before : Slice U8) (len : compact.val.length=464)

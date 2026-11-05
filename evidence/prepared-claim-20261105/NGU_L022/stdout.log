@@ -1,0 +1,399 @@
+NGU_generated/NGU_Part004.lean:64:64: error: unsolved goals
+H : Type
+inst : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+y1 : Slice U8
+g : Std.Array Concrete.E 29#usize
+point : Usize
+iter✝ : Range
+s✝ : Native
+xs✝ : List (NE × NQ)
+out✝ : NE
+iter iter' : Range
+s s' : Native
+out : NE
+xs : List (NE × NQ)
+l : Usize
+v : NE
+q : NQ
+next : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some l, iter')
+read : ClaimScalar.read ops sem y1 point l = ok (qPort q)
+weight : g.index_usize l = ok (ePort v)
+cv : canonE v
+cq : canonQ q
+count : ↑s.count < 29
+push : FIo_Native.fast_pairing.EbyKDot.push s v q = ok (core.result.Result.Ok (), s')
+tail : Trace sem y1 g point iter' s' xs out
+ih :
+  verifier.prepared_claim_dot_loop ops inst iter' sem y1 g point (statePort s') = ok (core.result.Result.Ok (ePort out))
+model : ops.pushDot (statePort s) (ePort v) (qPort q) = ok (core.result.Result.Ok (), statePort s')
+⊢ (do
+      let r1 ←
+        AspisR1CurrentPreparedClaim.core.result.Result.map_err
+            (verifier.prepared_claim_dot.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError inst)
+            (core.result.Result.Ok ()) ()
+      let cf ←
+        match r1 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (cont (iter', sem, point, statePort s'))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Concrete.E
+                (core.convert.FromSame verifier.Error) residual
+          ok (done r2)) =
+    ok (cont (iter', sem, point, statePort s'))
+NGU_generated/NGU_Part004.lean:67:8: warning: This simp argument is unused:
+  core.result.Result.map_err
+
+Hint: Omit it from the simp argument list.
+  simp only [ClaimScalar.body, ̲next, ̲bind_tc_ok, ̲read, ̲weight, ̲model,
+          c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵verifier.prepared_claim_dot.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError.call_once,
+          core.result.Result.Insts.CoreOpsTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGU_generated/NGU_Part004.lean:68:8: warning: This simp argument is unused:
+  verifier.prepared_claim_dot.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError.call_once
+
+Hint: Omit it from the simp argument list.
+  simp only [̵C̵l̵a̵i̵m̵S̵c̵a̵l̵a̵r̵.̵b̵o̵d̵y̵,̵n̵e̵x̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵r̵e̵a̵d̵,̵w̵e̵i̵g̵h̵t̵,̵m̵o̵d̵e̵l̵,̵[̲C̲l̲a̲i̲m̲S̲c̲a̲l̲a̲r̲.̲b̲o̲d̲y̲,̲ ̲n̲e̲x̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲r̲e̲a̲d̲,̲ ̲w̲e̲i̲g̲h̲t̲,̲ ̲m̲o̲d̲e̲l̲,̲
+          core.result.Result.map_err, v̵e̵r̵i̵f̵i̵e̵r̵.̵p̵r̵e̵p̵a̵r̵e̵d̵_̵c̵l̵a̵i̵m̵_̵d̵o̵t̵.̵c̵l̵o̵s̵u̵r̵e̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵T̵u̵p̵l̵e̵E̵r̵r̵o̵r̵.̵c̵a̵l̵l̵_̵o̵n̵c̵e̵,̵core.result.Result.Insts.CoreOpsTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NGU_LPm_PointLoop.model_push' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPm_PointLoop.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPm_SixPoints.erase' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPm_SixPoints.all_six' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPm_PointLength.length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPm_PointLength.all_six' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPq_PointConstruct.loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPq_PointConstruct.from_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPq_IndexPorts.add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPq_IndexPorts.mul' depends on axioms: [propext, Classical.choice, Quot.sound]
+NGU_generated/NGU_Part004.lean:293:4: error(lean.unknownIdentifier): Unknown identifier `mapR_bind`
+NGU_generated/NGU_Part004.lean:289:69: error: unsolved goals
+a : Std.Array U32 8#usize
+⊢ (mapR (Option.map record) do
+      let i ← a.index_usize 0#usize
+      if i ≥ 2147483647#u32 then ok none
+        else do
+          let i1 ← a.index_usize 1#usize
+          if i1 ≥ 2147483647#u32 then ok none
+            else do
+              let i2 ← a.index_usize 2#usize
+              if i2 ≥ 2147483647#u32 then ok none
+                else do
+                  let i3 ← a.index_usize 3#usize
+                  if i3 ≥ 2147483647#u32 then ok none
+                    else do
+                      let i4 ← a.index_usize 4#usize
+                      if i4 ≥ 2147483647#u32 then ok none
+                        else do
+                          let i5 ← a.index_usize 5#usize
+                          if i5 ≥ 2147483647#u32 then ok none
+                            else do
+                              let i6 ← a.index_usize 6#usize
+                              if i6 ≥ 2147483647#u32 then ok none
+                                else do
+                                  let i7 ← a.index_usize 7#usize
+                                  if i7 ≥ 2147483647#u32 then ok none
+                                    else
+                                      ok
+                                        (some
+                                          { c0 := { c0 := { a := i, b := i1 }, c1 := { a := i2, b := i3 } },
+                                            c1 := { c0 := { a := i4, b := i5 }, c1 := { a := i6, b := i7 } } })) =
+    do
+    let i ← a.index_usize 0#usize
+    if i ≥ 2147483647#u32 then ok none
+      else do
+        let i1 ← a.index_usize 1#usize
+        if i1 ≥ 2147483647#u32 then ok none
+          else do
+            let i2 ← a.index_usize 2#usize
+            if i2 ≥ 2147483647#u32 then ok none
+              else do
+                let i3 ← a.index_usize 3#usize
+                if i3 ≥ 2147483647#u32 then ok none
+                  else do
+                    let i4 ← a.index_usize 4#usize
+                    if i4 ≥ 2147483647#u32 then ok none
+                      else do
+                        let i5 ← a.index_usize 5#usize
+                        if i5 ≥ 2147483647#u32 then ok none
+                          else do
+                            let i6 ← a.index_usize 6#usize
+                            if i6 ≥ 2147483647#u32 then ok none
+                              else do
+                                let i7 ← a.index_usize 7#usize
+                                if i7 ≥ 2147483647#u32 then ok none
+                                  else
+                                    ok
+                                      (some
+                                        { c0 := { c0 := { a := i, b := i1 }, c1 := { a := i2, b := i3 } },
+                                          c1 := { c0 := { a := i4, b := i5 }, c1 := { a := i6, b := i7 } } })
+NGU_generated/NGU_Part004.lean:293:14: warning: This simp argument is unused:
+  map_if
+
+Hint: Omit it from the simp argument list.
+  simp only [FIo_Native.aspis_core.field.wide_exact.WideExact.from_limbs,
+      AspisR1RecordParser.field.wide_exact.WideExact.from_limbs,
+  ̵  ̵ ̵ ̵FIo_Native.aspis_core.field.P,
+  ̲ ̲ ̲ ̲ ̲AspisR1RecordParser.field.P,
+  ̵  ̵ ̵ ̵mapR_bind, ̲map_i̵f̵,̵m̵a̵p̵_̵ok, ̲Option.map_some, ̲Option.map_none, ̲record]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGU_generated/NGU_Part004.lean:293:21: warning: This simp argument is unused:
+  map_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [FIo_Native.aspis_core.field.wide_exact.WideExact.from_limbs,
+      AspisR1RecordParser.field.wide_exact.WideExact.from_limbs,
+  ̵  ̵ ̵ ̵FIo_Native.aspis_core.field.P,
+  ̲ ̲ ̲ ̲ ̲AspisR1RecordParser.field.P,
+  ̵  ̵ ̵ ̵mapR_bind, ̲map_if,m̵a̵p̵_̵o̵k̵,̵ ̲Option.map_some, ̲Option.map_none, ̲record]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGU_generated/NGU_Part004.lean:293:28: warning: This simp argument is unused:
+  Option.map_some
+
+Hint: Omit it from the simp argument list.
+  simp only [FIo_Native.aspis_core.field.wide_exact.WideExact.from_limbs,
+      AspisR1RecordParser.field.wide_exact.WideExact.from_limbs,
+  ̵  ̵ ̵ ̵FIo_Native.aspis_core.field.P,
+  ̲ ̲ ̲ ̲ ̲AspisR1RecordParser.field.P,
+  ̵  ̵ ̵ ̵mapR_bind, ̲map_if, ̲map_ok, ̲Option.map_s̵o̵m̵e̵,̵O̵p̵t̵i̵o̵n.̵m̵a̵p̵_̵n̵one, ̲record]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGU_generated/NGU_Part004.lean:293:44: warning: This simp argument is unused:
+  Option.map_none
+
+Hint: Omit it from the simp argument list.
+  simp only [FIo_Native.aspis_core.field.wide_exact.WideExact.from_limbs,
+      AspisR1RecordParser.field.wide_exact.WideExact.from_limbs,
+  ̵  ̵ ̵ ̵FIo_Native.aspis_core.field.P,
+  ̲ ̲ ̲ ̲ ̲AspisR1RecordParser.field.P,
+  ̵  ̵ ̵ ̵mapR_bind, ̲map_if, ̲map_ok, ̲Option.map_some,O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵n̵o̵n̵e̵,̵ ̲record]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGU_generated/NGU_Part004.lean:293:60: warning: This simp argument is unused:
+  record
+
+Hint: Omit it from the simp argument list.
+  simp only [FIo_Native.aspis_core.field.wide_exact.WideExact.from_limbs,
+      AspisR1RecordParser.field.wide_exact.WideExact.from_limbs,
+  ̵  ̵ ̵ ̵FIo_Native.aspis_core.field.P,
+  ̲ ̲ ̲ ̲ ̲AspisR1RecordParser.field.P,
+  ̵  ̵ ̵ ̵mapR_bind, ̲map_if, ̲map_ok, ̲Option.map_some, ̲Option.map_none,̵r̵e̵c̵o̵r̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGU_generated/NGU_Part004.lean:302:34: error(lean.unknownIdentifier): Unknown identifier `mapR_bind`
+NGU_generated/NGU_Part004.lean:297:72: error: unsolved goals
+b : Slice U8
+⊢ (if (b.len != 32#usize) = true then ok none
+    else
+      mapR (Option.map record) do
+        let i1 ← b.index_usize 0#usize
+        let i2 ← b.index_usize 1#usize
+        let i3 ← b.index_usize 2#usize
+        let i4 ← b.index_usize 3#usize
+        let i5 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i1, i2, i3, i4] ⋯))
+        let i6 ← b.index_usize 4#usize
+        let i7 ← b.index_usize 5#usize
+        let i8 ← b.index_usize 6#usize
+        let i9 ← b.index_usize 7#usize
+        let i10 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i6, i7, i8, i9] ⋯))
+        let i11 ← b.index_usize 8#usize
+        let i12 ← b.index_usize 9#usize
+        let i13 ← b.index_usize 10#usize
+        let i14 ← b.index_usize 11#usize
+        let i15 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i11, i12, i13, i14] ⋯))
+        let i16 ← b.index_usize 12#usize
+        let i17 ← b.index_usize 13#usize
+        let i18 ← b.index_usize 14#usize
+        let i19 ← b.index_usize 15#usize
+        let i20 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i16, i17, i18, i19] ⋯))
+        let i21 ← b.index_usize 16#usize
+        let i22 ← b.index_usize 17#usize
+        let i23 ← b.index_usize 18#usize
+        let i24 ← b.index_usize 19#usize
+        let i25 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i21, i22, i23, i24] ⋯))
+        let i26 ← b.index_usize 20#usize
+        let i27 ← b.index_usize 21#usize
+        let i28 ← b.index_usize 22#usize
+        let i29 ← b.index_usize 23#usize
+        let i30 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i26, i27, i28, i29] ⋯))
+        let i31 ← b.index_usize 24#usize
+        let i32 ← b.index_usize 25#usize
+        let i33 ← b.index_usize 26#usize
+        let i34 ← b.index_usize 27#usize
+        let i35 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i31, i32, i33, i34] ⋯))
+        let i36 ← b.index_usize 28#usize
+        let i37 ← b.index_usize 29#usize
+        let i38 ← b.index_usize 30#usize
+        let i39 ← b.index_usize 31#usize
+        let i40 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i36, i37, i38, i39] ⋯))
+        FIo_Native.aspis_core.field.wide_exact.WideExact.from_limbs
+            (Array.make 8#usize [i5, i10, i15, i20, i25, i30, i35, i40] ⋯)) =
+    if (b.len != 32#usize) = true then ok none
+    else do
+      let i1 ← b.index_usize 0#usize
+      let i2 ← b.index_usize 1#usize
+      let i3 ← b.index_usize 2#usize
+      let i4 ← b.index_usize 3#usize
+      let i5 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i1, i2, i3, i4] ⋯))
+      let i6 ← b.index_usize 4#usize
+      let i7 ← b.index_usize 5#usize
+      let i8 ← b.index_usize 6#usize
+      let i9 ← b.index_usize 7#usize
+      let i10 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i6, i7, i8, i9] ⋯))
+      let i11 ← b.index_usize 8#usize
+      let i12 ← b.index_usize 9#usize
+      let i13 ← b.index_usize 10#usize
+      let i14 ← b.index_usize 11#usize
+      let i15 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i11, i12, i13, i14] ⋯))
+      let i16 ← b.index_usize 12#usize
+      let i17 ← b.index_usize 13#usize
+      let i18 ← b.index_usize 14#usize
+      let i19 ← b.index_usize 15#usize
+      let i20 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i16, i17, i18, i19] ⋯))
+      let i21 ← b.index_usize 16#usize
+      let i22 ← b.index_usize 17#usize
+      let i23 ← b.index_usize 18#usize
+      let i24 ← b.index_usize 19#usize
+      let i25 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i21, i22, i23, i24] ⋯))
+      let i26 ← b.index_usize 20#usize
+      let i27 ← b.index_usize 21#usize
+      let i28 ← b.index_usize 22#usize
+      let i29 ← b.index_usize 23#usize
+      let i30 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i26, i27, i28, i29] ⋯))
+      let i31 ← b.index_usize 24#usize
+      let i32 ← b.index_usize 25#usize
+      let i33 ← b.index_usize 26#usize
+      let i34 ← b.index_usize 27#usize
+      let i35 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i31, i32, i33, i34] ⋯))
+      let i36 ← b.index_usize 28#usize
+      let i37 ← b.index_usize 29#usize
+      let i38 ← b.index_usize 30#usize
+      let i39 ← b.index_usize 31#usize
+      let i40 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i36, i37, i38, i39] ⋯))
+      AspisR1RecordParser.field.wide_exact.WideExact.from_limbs
+          (Array.make 8#usize [i5, i10, i15, i20, i25, i30, i35, i40] ⋯)
+NGU_generated/NGU_Part004.lean:302:44: warning: This simp argument is unused:
+  limbs
+
+Hint: Omit it from the simp argument list.
+  simp only [FIo_Native.aspis_core.field.wide_exact.WideExact.from_le_bytes,
+      AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes,
+      FIo_Native.aspis_core.field.wide_exact.WideExact.BYTE_LEN,
+      AspisR1RecordParser.field.wide_exact.WideExact.BYTE_LEN,
+  ̵  ̵ ̵ ̵map_if, ̲map_ok, ̲Option.map_none,
+  ̲ ̲ ̲ ̲ ̲mapR_bind,̵l̵i̵m̵b̵s̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGU_generated/NGU_Part004.lean:326:13: error(lean.unknownIdentifier): Unknown identifier `mapR_bind`
+NGU_generated/NGU_Part004.lean:326:30: error: Ambiguous term
+  bind_map
+Possible interpretations:
+  NGU_ResultTransport.bind_map : ∀ (f : ?m.176 → ?m.177) (r : Result ?m.176) (k : ?m.177 → Result ?m.178),
+    mapR f r >>= k = do
+      let a ← r
+      k (f a)
+  
+  LawfulMonad.bind_map : ∀ (f : ?m.176 (?m.179 → ?m.180)) (x : ?m.176 ?m.179),
+    (do
+        let x_1 ← f
+        x_1 <$> x) =
+      f <*> x
+NGU_generated/NGU_Part004.lean:311:76: error: unsolved goals
+b : Slice U8
+i : Usize
+hi : ↑i < 29
+hm : 928 < UScalar.size UScalarTy.Usize
+h32 : ↑32#usize = 32
+h1 : ↑1#usize = 1
+fitsAdd : ↑i + ↑1#usize < UScalar.size UScalarTy.Usize
+nextVal : ↑(i.wrapping_add 1#usize) = ↑i + 1
+rm : i * 32#usize = ok (i.wrapping_mul 32#usize)
+ra : i + 1#usize = ok (i.wrapping_add 1#usize)
+re : i.wrapping_add 1#usize * 32#usize = ok ((i.wrapping_add 1#usize).wrapping_mul 32#usize)
+⊢ (mapR record do
+      let s ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) b
+            { start := i.wrapping_mul 32#usize, «end» := (i.wrapping_add 1#usize).wrapping_mul 32#usize }
+      let o ← FIo_Native.aspis_core.field.wide_exact.WideExact.from_le_bytes s
+      core.option.Option.unwrap o) =
+    do
+    let s ←
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) b
+          { start := i.wrapping_mul 32#usize, «end» := (i.wrapping_add 1#usize).wrapping_mul 32#usize }
+    let o ← mapR (Option.map record) (FIo_Native.aspis_core.field.wide_exact.WideExact.from_le_bytes s)
+    core.option.Option.unwrap o
+NGU_generated/NGU_Part004.lean:326:39: warning: This simp argument is unused:
+  unwrap
+
+Hint: Omit it from the simp argument list.
+  simp only [̵m̵a̵p̵R̵_̵b̵i̵n̵d̵,̵←̵b̵y̵t̵e̵s̵,̵b̵i̵n̵d̵_̵m̵a̵p̵,̵u̵n̵w̵r̵a̵p̵,̵r̵m̵,̵r̵a̵,̵r̵e̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲m̲a̲p̲R̲_̲b̲i̲n̲d̲,̲ ̲←̲ ̲b̲y̲t̲e̲s̲,̲ ̲b̲i̲n̲d̲_̲m̲a̲p̲,̲ ̲r̲m̲,̲ ̲r̲a̲,̲ ̲r̲e̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGU_generated/NGU_Part004.lean:331:9: error(lean.unknownIdentifier): Unknown identifier `NGU_Powers.claim`
+'AspisR1.NGU_LPq_Decoder.limbs' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPq_Decoder.bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPq_Decoder.unwrap' does not depend on any axioms
+'AspisR1.NGU_LPq_Decoder.field' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPq_Decoder.claim_field' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPq_ReadPorts.q_roundtrip' does not depend on any axioms
+'AspisR1.NGU_LPq_ReadPorts.e_roundtrip' does not depend on any axioms
+'AspisR1.NGU_LPq_ReadPorts.weights' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPq_ReadPorts.semantic' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPq_ReadPorts.five_domains' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPq_Decoder.unwrap' does not depend on any axioms
+'_private.NGU_Part004.0.AspisR1CurrentPreparedClaim.ClaimScalar.body.match_1.eq_2' does not depend on any axioms
+'AspisR1.NGU_LPq_ReadPorts.semantic._proof_1' depends on axioms: [propext, Quot.sound]
+'AspisR1.NGU_LPm_PointLoop.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPq_Decoder.field' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'_private.NGU_Part004.0.AspisR1CurrentPreparedClaim.ClaimScalar.body.match_3.eq_2' does not depend on any axioms
+'AspisR1.NGU_LPq_PointConstruct.loop._proof_1' depends on axioms: [propext, Quot.sound]
+'AspisR1.NGU_LPq_PointConstruct.loop._proof_4' depends on axioms: [propext, Quot.sound]
+'AspisR1.NGU_LPq_PointConstruct.loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.NGU_Part004.0.AspisR1CurrentPreparedClaim.ClaimScalar.body.match_1.eq_1' does not depend on any axioms
+'AspisR1.NGU_LPq_Decoder.field._proof_5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.NGU_Part004.0.AspisR1CurrentPreparedClaim.ClaimScalar.body.match_3.eq_1' does not depend on any axioms
+'AspisR1.NGU_LPq_Decoder.field._simp_7' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPq_IndexPorts.mul._proof_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPq_ReadPorts.five_domains' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPq_Decoder.claim_field' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPq_Decoder.field._proof_7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPq_ReadPorts.semantic' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.NGU_Part004.0.Aeneas.Std.core.result.Result.is_ok.match_1.eq_2' does not depend on any axioms
+'AspisR1.NGU_LPm_PointLoop.Trace.brecOn' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPq_Decoder.field._proof_4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPq_Decoder.field._proof_1' depends on axioms: [propext, Quot.sound]
+'AspisR1.NGU_LPq_Decoder.limbs' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPm_SixPoints.erase' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPm_PointLoop.model_push._proof_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPm_SixPoints.all_six' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPq_Decoder.field._proof_6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPq_ReadPorts.e_roundtrip' does not depend on any axioms
+'AspisR1.NGU_LPq_IndexPorts.add._proof_1' depends on axioms: [propext, Quot.sound]
+'AspisR1.NGU_LPm_PointLength.length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPq_IndexPorts.add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPq_PointConstruct.ReadDomain._proof_1' depends on axioms: [propext]
+'AspisR1.NGU_LPq_Decoder.bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPq_ReadPorts.weights' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPq_ReadPorts.SemCanonical._proof_1' depends on axioms: [propext]
+'AspisR1.NGU_LPq_IndexPorts.mul' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPq_ReadPorts.q_roundtrip' does not depend on any axioms
+'AspisR1.NGU_LPq_Decoder.record.eq_1' does not depend on any axioms
+'AspisR1.NGU_LPm_PointLoop.model_push' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPq_PointConstruct.loop._proof_2' depends on axioms: [propext, Quot.sound]
+'_private.NGU_Part004.0.Aeneas.Std.core.result.Result.is_ok.match_1.eq_1' does not depend on any axioms
+'AspisR1.NGU_LPq_PointConstruct.loop._proof_3' depends on axioms: [propext, Quot.sound]
+'AspisR1.NGU_LPq_Decoder.field._proof_3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPq_Decoder.field._proof_2' depends on axioms: [propext, Quot.sound]
+'AspisR1.NGU_LPq_PointConstruct.from_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPm_PointLength.length._proof_1' depends on axioms: [propext, Quot.sound]
+'AspisR1.NGU_LPm_PointLength.length._proof_2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPm_PointLength.all_six' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NGU_LPm_PointLength.length._proof_3' depends on axioms: [propext, Classical.choice, Quot.sound]

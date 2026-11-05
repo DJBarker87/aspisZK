@@ -15,7 +15,7 @@ for n in ['LPi_PowersStep','LPi_PowersPrefix','LPi_PowersValue','LPi_PowersSourc
 custom={'LPq_Powers':'NGU_Powers','LPq_WeightedStep':'NGU_WeightedStep','LPq_Weighted':'NGU_Weighted','LPq_WeightedStep':'NGU_WeightedStep','XRy_ArrayRead':'NGU_ArrayRead','XRy_ArrayMap':'NGU_ArrayMap','XRo_Join_Carriers':'NGU_Carriers','XRo_Join_ResultTransport':'NGU_ResultTransport'}
 reuse.update(custom);rename.update(custom)
 # Index arithmetic has no dependency on powers; its old import was aggregate.
-overrides={'LPq_IndexPorts':['NGU_Carriers']}
+overrides={'LPq_IndexPorts':['NGU_Carriers'],'LPq_Decoder':G['LPq_Decoder']['imports']+['NGU_Powers']}
 order=[];seen=set()
 def visit(n):
  if n in seen:return
@@ -38,10 +38,24 @@ files=[]
 for n in order:
  r=G[n];src=r['source'];body='\n'.join(l for l in src.splitlines() if not l.startswith('import '))+'\n';text=pat.sub(lambda m:rename[m.group()],body)
  changes=['imports','qualified owner/proof names']
+ if 'verifier.Phase' in text:
+  text=re.sub(r'(?<![A-Za-z0-9_.])verifier.Phase','RPz7_PhaseIso.Phase',text)
+  changes+=['replace legacy observer owner by canonical finish Phase owner']
+ if n=='JGi_FinishFields':
+  text=re.sub(r'(?<![A-Za-z0-9_.])core.result.Result.map_err','AspisR1PublicPreparation.core.result.Result.map_err',text)
+  changes+=['fully qualify emitted PublicPreparation map_err owner']
+
+ if n=='LPm_PointLoop':
+  text=re.sub(r'(?<![A-Za-z0-9_.])core.result.Result.map_err','AspisR1CurrentPreparedClaim.core.result.Result.map_err',text)
+  changes+=['qualify SAME emitted map_err owner shadowed by canonical library']
+ if n=='LPq_Decoder':
+  text=text.replace('bind_map,unwrap,','NGU_ResultTransport.bind_map,NGU_LPq_Decoder.unwrap,')
+  changes+=['qualify SAME unwrap theorem shadowed by canonical library']
+
  # Zero carrier is the SAME eight zeros, independently of legacy arithmetic ports.
  if n=='LPq_PreparedTrace':
   a=text.index('  rw [NGU_Powers.claim,');b=text.index('\n',a)
-  text=text[:a]+'  rfl'+text[b:];changes+=['new definitional proof of zero_claim against canonical claim port']
+  text=text[:a]+'  unfold zero FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO\n    FIo_Native.aspis_core.field.QM31.ZERO aspis_core.field.WideExact.ZERO aspis_core.field.QM31.ZERO\n  rfl'+text[b:];changes+=['new definitional proof of zero_claim against canonical claim port']
  imports=[]
  for d in overrides.get(n,r['imports']):
   d=owner.get(d,d)

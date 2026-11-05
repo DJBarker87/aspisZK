@@ -156,6 +156,8 @@ abbrev zero := FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO
 def initial (inactive : NE) : Seven := (Array.repeat 7#usize zero).set 0#usize inactive
 
 theorem zero_claim : NGU_Powers.claim zero=aspis_core.field.WideExact.ZERO := by
+  unfold zero FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO
+    FIo_Native.aspis_core.field.QM31.ZERO aspis_core.field.WideExact.ZERO aspis_core.field.QM31.ZERO
   rfl
 
 theorem initial_canonical (inactive : NE) (hi : canonE inactive) :

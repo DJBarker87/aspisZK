@@ -5,7 +5,7 @@ E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90'
 B='/home/dombarker/project-offloads/codex-cx-prepared-claim-20261105';C='/home/dombarker/project-offloads/codex-cx-prepared-claim-cache-20261104';W='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025';T='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0'
 if (E/'NGU_HOLD').exists():sys.exit(75)
 guard=E/'NGU_CLIENT_ACTIVE'; fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,str(os.getpid()).encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
-a,kind,target=sys.argv[1:];assert re.fullmatch('NGU_[LKE][0-9]{3}',a) and 1<=int(a[-3:])<=(80 if kind=='kani' else 1 if kind=='extract' else 80) and not (E/a).exists()
+a,kind,target=sys.argv[1:];assert re.fullmatch('NGU_[LKE][0-9]{3}',a) and 1<=int(a[-3:])<=(40 if kind=='kani' else 1 if kind=='extract' else 80) and not (E/a).exists()
 def ssh(code,data=None,submitted=False):
  for retry in range(11):
   r=subprocess.run(['ssh','-o','ControlMaster=no','-o','ConnectTimeout=15',H,code],input=data,capture_output=True,text=True)
@@ -40,7 +40,7 @@ elif kind=='extract':
  files['NGU_extract.py']=(E/'NGU_extract.py').read_text();sources=['NGU_extract.py'];command=['python3','NGU_extract.py']
 elif kind=='kani':
  files['NGU_gate.py']=(E/'NGU_gate.py').read_text()
- files['NGU_src/crates/aspis-r1-cost-probe/src/NGU_stages.rs']=(E/'NGU_stages.rs.txt').read_text()
+ files['NGU_src/crates/aspis-r1-cost-probe/src/NGU_stages.rs']=(E/'NGU_native.rs.txt').read_text()
  files['NGU_src/crates/aspis-r1-cost-probe/src/verifier.rs']=(E/'NGU_verifier.rs.txt').read_text()
  files['NGU_src/crates/aspis-r1-cost-probe/src/lib.rs']=(E/'NGU_lib.rs.txt').read_text()
  files['NGU_SOURCE_PINS.json']=(E/'NGU_SOURCE_PINS.json').read_text()
@@ -60,6 +60,9 @@ elif kind=='audit':
  command=['python3','NGU_batch.py',target]
 else:raise ValueError(kind)
 config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NGU_tmp',LEAN_PATH=':'.join(json.loads((E/'NGU_PATHS.json').read_text()))))
+config['source_revision']=subprocess.check_output(['git','rev-parse','HEAD'],cwd=E,text=True).strip()
+config['source_tree_dirty']=bool(subprocess.check_output(['git','status','--porcelain'],cwd=E,text=True))
+config['frozen_revision']='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387'
 if kind=='kani':
  config['native_command']=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NGU_src/crates/aspis-r1-cost-probe/Cargo.toml','--target-dir',B+'/NGU_target','--features','private-leaf-salts,optimized-terminal,program-build','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse']
  config['env'].update(CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-Copt-level=3 -C link-arg=-Wl,--threads=1'+(' --cfg NGU_invert' if os.environ.get('NGU_INVERT') else ''))
@@ -100,9 +103,9 @@ b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if 
 if {kind!r}=='export': names += ['NGU_EXPORT.json','NGU_CLOSURE_PINS.json.sha256']
 if {kind!r}=='metadata': names += ['NGU_FULL_GRAPH.json.sha256','NGU_ALL_CRATE_FEATURES.json']
 if {kind!r}=='extract': names += ['NGU_EXTRACTION_PINS.json']+([str(p.relative_to(b)) for p in (b/'NGU_extracted').rglob('*') if p.is_file()])+(['NGU_actual.llbc'] if (b/'NGU_actual.llbc').exists() else [])
-if {kind!r}=='kani': names += [str(p.relative_to(b)) for p in b.glob(a+'-graph*')]+[str(p.relative_to(b)) for p in b.glob(a+'-source*')]+[str(p.relative_to(b)) for p in b.glob(a+'-lock*')]
+if {kind!r}=='kani': names += [a+'-all-crate-features.json']+ [str(p.relative_to(b)) for p in b.glob(a+'-graph*')]+[str(p.relative_to(b)) for p in b.glob(a+'-source*')]+[str(p.relative_to(b)) for p in b.glob(a+'-lock*')]
 if {kind!r}=='audit':names += [str(p.relative_to(b)) for p in (b/'NGU_audit'/{target!r}).rglob('*') if p.is_file()]+[str(p.relative_to(b)) for modepath in (b/'NGU_audit'/{target!r}).glob('*.json') for row in json.loads(modepath.read_text()).get('results',[]) for p in [b/('NEP_'+modepath.stem+'_'+row['root']+'_REACHABLE.txt')] if p.exists()]+([n for n in ['NGU_LOADED_scan.jsonl','NGU_POOL_LOADED_scan.jsonl'] if (b/n).exists()])
-out={{n:(b/n).read_text() for n in names}}
+out={{n:(b/n).read_text() for n in names if (b/n).is_file()}}
 for name in ['NGU_Driver','NGU_ProofDriver','NGU_PoolProofDriver','NGU_PoolDriver']:
  p=b/'NGU_native'/name
  if p.is_file():out[a+'/'+name+'_BINARY_PIN.json']=json.dumps(dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size))
@@ -116,4 +119,6 @@ for n,t in json.loads(r.stdout).items():
 assert (E/a/'receipt.json').exists(),'Missing receipt; never resubmit'
 rc=json.loads((E/a/'receipt.json').read_text());entry={k:v for k,v in rc.items() if k!='deps_fingerprint'};entry['full_receipt']=a+'/receipt.json'
 with (E/'NGU_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(entry)+'\n')
-print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}));print((E/a/'stdout.log').read_text()[-3500:]);sys.exit(rc['exit_status'])
+print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps']}|dict(axiom_lines=len(rc['print_axioms']))));
+if rc['exit_status']:print((E/a/'stdout.log').read_text()[:4500]);
+sys.exit(rc['exit_status'])

@@ -3,6 +3,7 @@ import NGU_Part003
 import NGU_ArrayRead
 import NGU_Carriers
 import NGU_ResultTransport
+import NGU_Powers
 -- Retargeted LPm_PointLoop
 set_option autoImplicit false
 namespace AspisR1.NGU_LPm_PointLoop
@@ -64,7 +65,7 @@ theorem source {H : Type} (inst : aspis_core.Digest32 H)
         ok (ControlFlow.cont (iter',sem,point,statePort s')) := by
       rw [ClaimScalar.body_eq_source]
       simp only [ClaimScalar.body,next,bind_tc_ok,read,weight,model,
-        core.result.Result.map_err,
+        AspisR1CurrentPreparedClaim.core.result.Result.map_err,
         verifier.prepared_claim_dot.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError.call_once,
         core.result.Result.Insts.CoreOpsTry.branch]
     change Aeneas.Std.loop _ _ = _
@@ -323,7 +324,7 @@ theorem field (b : Slice U8) (i : Usize) (hi : i.val<29) :
   have re := NGU_LPq_IndexPorts.mul (Usize.wrapping_add i 1#usize) 32#usize
     (by rw [nextVal,h32]; omega)
   unfold FIo_Native.weights.field AspisR1WeightsFieldCurrent.weights.field
-  simp only [mapR_bind,←bytes,bind_map,unwrap,rm,ra,re,lift,bind_tc_ok]
+  simp only [mapR_bind,←bytes,NGU_ResultTransport.bind_map,NGU_LPq_Decoder.unwrap,rm,ra,re,lift,bind_tc_ok]
 
 /-- SAME selected-byte parser, full Result including noncanonical and range
 failures, after the concrete eight-word cohort owner port. -/

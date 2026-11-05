@@ -37,6 +37,10 @@ theorem map_injective {A B : Type} (f : A → B) (hf : Function.Injective f)
  cases r <;> cases s <;> simp only [mapR,bind_tc_ok,bind_tc_fail,bind_tc_div] at h ⊢
  all_goals first | rfl | exact congrArg Result.ok (hf (Result.ok.inj h)) | (cases h <;> rfl)
 
+theorem mapR_bind {A B F : Type} (f : B → F) (r : Result A) (k : A → Result B) :
+ mapR f (r >>= k) = r >>= (fun a=>mapR f (k a)) := by cases r <;> rfl
+
+#print axioms mapR_bind
 #print axioms map_ok
 #print axioms map_fail
 #print axioms map_div

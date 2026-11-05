@@ -46,7 +46,10 @@ theorem source (k parts : Seven) (hk : canonical k) (hp : canonical parts) :
  refine ⟨out,en,co,?_⟩
  unfold verifier.prepared_claim_sum
  have zero : NGU_Powers.claim FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO=
-   aspis_core.field.WideExact.ZERO := rfl
+   aspis_core.field.WideExact.ZERO := by
+    unfold FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO
+      FIo_Native.aspis_core.field.QM31.ZERO aspis_core.field.WideExact.ZERO aspis_core.field.QM31.ZERO
+    rfl
  rw [←zero,model,bind_tc_ok]
  rfl
 
