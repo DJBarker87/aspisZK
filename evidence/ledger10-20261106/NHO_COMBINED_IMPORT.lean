@@ -1,0 +1,28 @@
+import NGK_COMBINED_IMPORT
+import NGC_COMBINED_IMPORT
+import NGN_COMBINED_IMPORT
+import NGO_COMBINED_IMPORT
+import NGV_COMBINED_IMPORT
+import NGM_COMBINED_IMPORT
+import NGT_COMBINED_IMPORT
+import NGU_COMBINED_IMPORT
+import NGH_COMBINED_IMPORT
+import NGD_COMBINED_IMPORT
+import NFW_COMBINED_IMPORT
+import NGP_COMBINED_IMPORT
+import NGR_COMBINED_IMPORT
+import NGS_COMBINED_IMPORT
+import NFW_STAGE2_IMPORT
+import NGW_COMBINED_IMPORT
+import NGY_COMBINED_IMPORT
+import NGX_COMBINED_IMPORT
+import NHE_COMBINED_IMPORT
+import NHF_COMBINED_IMPORT
+import NHI_COMBINED_IMPORT
+import NHH_COMBINED_IMPORT
+import NHC_COMBINED_IMPORT
+#print axioms AspisR1.RPx_Deployed.deployed
+#print axioms AspisR1.NGR_HISTORY.saved_to_loaded
+#print axioms AspisR1.NGS_CARRIERS.same_inputs_or_collision
+#print axioms AspisR1.NGP_OracleTransport.prefix_of_native
+#print axioms AspisR1.NGP_OracleTransport.exact_of_returns

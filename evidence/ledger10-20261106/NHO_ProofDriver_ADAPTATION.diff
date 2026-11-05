@@ -1,0 +1,18 @@
+diff --git a/evidence/ledger9-20261105/NGZ_ProofDriver.lean b/evidence/ledger10-20261106/NHO_ProofDriver.lean
+index 7ce94a60f79..275a206857e 100644
+--- a/evidence/ledger9-20261105/NGZ_ProofDriver.lean
++++ b/evidence/ledger10-20261106/NHO_ProofDriver.lean
+@@ -69,11 +69,11 @@ unsafe def main (args : List String) : IO UInt32 := do
+          `NEP_Planted.viaAux, `NEP_MutateMatch.matcher, `NEP_MutatePrivate.viaPrivate,
+          `NEP_MutateProof.proof, `NEP_MutateAux.viaAux])
+     else do
+-      let manifest ← IO.ofExcept (Json.parse (← IO.FS.readFile "NGZ_AUDIT_ROOTS.json"))
++      let manifest ← IO.ofExcept (Json.parse (← IO.FS.readFile "NHO_AUDIT_ROOTS.json"))
+       let groups ← IO.ofExcept (manifest.getObjValAs? (Array (Array String)) "groups")
+       let some idx := (mode.drop 5).toString.toNat? | throw (IO.userError "invalid proof mode")
+       let some names := groups[idx]? | throw (IO.userError "proof group out of range")
+-      pure (#[`NGZ_COMBINED_IMPORT], names.map String.toName)
++      pure (#[`NHO_COMBINED_IMPORT], names.map String.toName)
+   let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
+     {} (loadExts := true) (level := .private)
+   if mode == "scan" || mode == "queryscan" then
