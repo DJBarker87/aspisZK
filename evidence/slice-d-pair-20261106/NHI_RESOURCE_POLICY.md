@@ -1,0 +1,7 @@
+# Scope admission
+
+The JOB section specifically permits up to TWO concurrent capped scopes under admission, overriding the general one-scope default for this job. Native attempts remain sequential in one scope; one independent focused Lean/audit scope may overlap. Both require allowed:true AND exit0 admission, each 6G/8G/swap0/Tasks64. No third scope is allowed. No raised caps or timeout.
+
+Budget accounting correction: L033/L060 failed while pinning missing prerequisites, before submission; no Lean process ran. The own runner now enforces 90 actual L receipts (all Lean/link/audit scopes), not numerical identifier<=90. L091/L092 can therefore consume the two unused slots without raising any budget or resource cap. Kani still has exactly120 receipts, including its compile failure. NHI_PREFLIGHT_FAILURES.json is separate; every actual scope remains charged, including failures.
+
+All213 actual scopes are now complete:120 Kani,90 Lean/link/audit,3 extraction. Final raw/coherence checks run serially in one admitted scope (NHI_L092); this uses one formal slot while preserving both audit commands, the unchanged fixture-qualified binaries and exact resource receipt. No resource cap or formal-attempt budget was raised. The inherited runner phrase "scalar contract" in Kani expected_time was an imprecise label for the named per-scalar/window/control assertion; the NHI family uses local-record assertions, not proof_for_contract/stub_verified. Actual named targets, commands and timing are in the receipts; no native field multiplication or dense aggregation ran.

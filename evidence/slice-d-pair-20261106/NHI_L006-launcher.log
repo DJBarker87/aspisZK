@@ -1,0 +1,59 @@
+{"attempt": "NHI_L006", "exit_status": 1, "wall_seconds": 3.1441581691615283, "peak_rss_kib": "5545704", "swaps": "0", "print_axioms": ["'NHI_ScalarFold.active' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NHI_ScalarFold.done' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NHI_ScalarFold.finite' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NHI_generated/NHI_ScalarFold.lean:30:12: warning: This simp argument is unused:
+  fnmut
+
+Hint: Omit it from the simp argument list.
+  simp only [f̵n̵m̵u̵t̵,̵iterator, ̲core.iter.traits.iterator.IteratorRange]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NHI_generated/NHI_ScalarFold.lean:30:18: warning: This simp argument is unused:
+  iterator
+
+Hint: Omit it from the simp argument list.
+  simp only [fnmut,i̵t̵e̵r̵a̵t̵o̵r̵,̵ ̲core.iter.traits.iterator.IteratorRange]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NHI_generated/NHI_ScalarFold.lean:30:27: warning: This simp argument is unused:
+  core.iter.traits.iterator.Iterat
+...
+    ↑iter.end = 4 →
+      fuel + ↑iter.start = 4 →
+        ∀ (v : NE),
+          canonE v →
+            ∃ out,
+              loop (fun t => body t.1 t.2.1 t.2.2) (iter, (p, f), v) = ok out ∧
+                cells p f fuel iter.start v = ok out ∧ canonE out
+iter : Iter
+last : ↑iter.end = 4
+remaining : fuel + 1 + ↑iter.start = 4
+v : NE
+hv : canonE v
+rest : core.ops.range.Range (UScalar UScalarTy.Usize)
+next : FIo_Native.aspis_core.field.wide_exact.WideExact
+run : body iter (p, f) v = ok (cont (rest, (p, f), next))
+cell : NHI_ScalarStep.step p f v iter.start = ok (next, p, f)
+inc : ↑rest.start = ↑iter.start + 1
+finish : ↑rest.end = 4
+canonical : canonE next
+out : FIo_Native.aspis_core.field.wide_exact.WideExact
+fold : loop (fun t => body t.1 t.2.1 t.2.2) (rest, (p, f), next) = ok out
+reference : cells p f fuel rest.start next = ok out
+co : canonE out
+small : ↑iter.start + 1 < UScalar.size UScalarTy.Usize
+⊢ (↑iter.start + ↑1#usize) % UScalar.size UScalarTy.Usize = ↑rest.start
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'NHI_ScalarFold.active' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NHI_ScalarFold.done' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NHI_ScalarFold.finite' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r4f2e529e1be942b08cee2cc8451b2030.scope; invocation ID: 231e2e1bea3f42d3967e37c1c6e04144

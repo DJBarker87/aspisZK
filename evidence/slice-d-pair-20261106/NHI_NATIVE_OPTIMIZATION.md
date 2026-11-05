@@ -1,0 +1,7 @@
+# Native input construction change
+
+K001 onward initially used an arbitrary raw 64-cell array and a coordinate constructor map to create the arbitrary native prestate. For the previously unrun properties g04 onward the harness uses an arbitrary native [K;64] directly, saving only the exact pre-call x and arbitrary frame-cell words. This covers the identical full raw-word native prestate domain and preserves the same source_window, source order, four arbitrary replies, writes, and frame assertions. No passing property is rerun. Names and verdicts are not altered to obtain a pass. Both full frozen-relative patches are committed; the preparer selects the version by the predeclared group boundary g04. This reduces irrelevant aggregate-copy/constructor work without reducing any property. KMX stubs stay byte-identical. Each positive/control pair uses identical source hashes.
+
+Own preflight parser initially appended the wrong module name (NHI_scalar instead of NHI_tensor); strict patch reconstruction rejected it before submission. Corrected; validation was not relaxed.
+
+K009 discovered QM31 has no Arbitrary implementation, before verification. The corrected direct-prestate constructor uses four arbitrary u32 words for each native QM31 in place. No full raw-word array is retained or copied. This preserves exactly the same domain; the compiled g04 name is unchanged. K009 remains excluded and consumes one native attempt.

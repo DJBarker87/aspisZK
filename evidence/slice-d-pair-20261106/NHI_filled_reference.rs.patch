@@ -1,0 +1,8 @@
+--- /dev/null
++++ b/src/lib.rs
+@@ -0,0 +1,5 @@
++extern crate alloc;
++use alloc::vec::Vec;
++#[derive(Clone,Copy)] pub enum Error{Allocation}
++pub fn filled_ref(n:usize,value:[u32;4])->Result<Vec<[u32;4]>,Error>{let mut out=Vec::new();out.try_reserve_exact(n).map_err(|_|Error::Allocation)?;out.resize(n,value);Ok(out)}
++
