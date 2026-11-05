@@ -14,10 +14,18 @@ theorem source {C H : Type} (missing : IDa_Deployed.Uninstalled C) (err : C)
  (accepted : verifier.candidate.tx1
    (DrvC_Installation.currentInstalled (F3V_Install.configuration (NHW_DeployedQuery.configuration missing err r)))
    D pub publicBytes proof k hash none=ok (.Ok saved)) :
- ∃ p : verifier.Prepared, ∃ a : verifier.Accumulator,
- ∃ domain : NGC_KNE_Caller.WriterDomain (toPrepared (Tx1Q_Carriers.prepared p))
-   (toAccumulator (Tx1Q_Carriers.accumulator a)),
- NHW_CheckpointPort.source D p a domain proof publicBytes hash=ok saved := by
+ ∃ run : Tx1Q_Execution.Run
+   (DrvC_Installation.currentInstalled (F3V_Install.configuration (NHW_DeployedQuery.configuration missing err r)))
+   (NHW_DeployedQuery.configuration missing err r).reserved
+   (NHW_DeployedQuery.configuration missing err r).query
+   (NHW_DeployedQuery.configuration missing err r).geometry
+   D hash pub publicBytes proof k saved,
+ ∃ domain : NGC_KNE_Caller.WriterDomain (toPrepared (Tx1Q_Carriers.prepared run.p))
+   (toAccumulator (Tx1Q_Carriers.accumulator
+     {run.out with weights:=⟨run.flushed.val,run.flushed.property⟩})),
+ NHW_CheckpointPort.source D run.p
+   {run.out with weights:=⟨run.flushed.val,run.flushed.property⟩}
+   domain proof publicBytes hash=ok saved := by
  let c := NHW_DeployedQuery.configuration missing err r
  let installed := DrvC_Installation.currentInstalled (F3V_Install.configuration c)
  have slots : Tx1Q_Execution.Slots installed c.reserved c.query c.geometry :=
@@ -49,7 +57,7 @@ theorem source {C H : Type} (missing : IDa_Deployed.Uninstalled C) (err : C)
    initial.1 initial.2 fields query
  have same := Result.ok.inj (flush.symm.trans run.flush_call)
  subst out
- refine ⟨run.p,{run.out with weights:=⟨run.flushed.val,run.flushed.property⟩},domain,?_⟩
+ refine ⟨run,domain,?_⟩
  rw [NHW_CheckpointPort.slot]
  exact run.writer_call
 #print axioms source
