@@ -20,7 +20,7 @@ theorem source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest
  let zero : Cohort.K := ⟨⟨0#u32,0#u32⟩,⟨0#u32,0#u32⟩⟩
  let allocated := NIL_FreshOps.filled reserved
    (aspis_core.field.QM31.Insts.CoreMarkerCopy (fun x=>ok x)) n (unK zero)
- let convert := fun reply=>NIL_FreshOps.mapError
+ let convert := fun (reply : core.result.Result (alloc.vec.Vec Fresh.K) aspis_core.r0.Error)=>NIL_FreshOps.mapError
    (verifier.resume.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError (NIL_FreshOps.digest d)) reply ()
  let nextF := fun weights=>NIY_AllocationCut.suffix reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6 val7 val8 val9 val10 val11 val12 weights r50
  let nextC := fun weights=>NIY_C_AllocationCut.suffix (CheckpointBytes4Ops.ops reserved) bytes (variant v) end1 i4 state a3 a4 (e val) (e val1) (e val2) (e val3) (k val4) queries (array k semantic_alpha) (k val6) (k val7) (k val8) (k val9) (e val10) (e val11) (k val12) weights (reader r50)
@@ -37,6 +37,6 @@ theorem source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest
    (vec_roundtrip k unK k_roundtrip) _ _ port'
  intro weights
  have h := NIY_WeightsPort.source reserved d bytes v end1 i4 state a3 a4 val val1 val2 val3 val4 queries semantic_alpha val6 val7 val8 val9 val10 val11 val12 (vec unK weights) r50
- simpa only [vec_roundtrip unK k k_reverse] using h
+ simpa only [NIL_StatePort.reply,nextF,nextC,vec_roundtrip unK k k_reverse] using h
 #print axioms source
 end NIY_AllocationPort

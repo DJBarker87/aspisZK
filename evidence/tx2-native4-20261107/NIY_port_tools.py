@@ -5,7 +5,7 @@ E=Path(__file__).resolve().parent
 def params(mod,fn):
  s=(E/(mod+'.lean')).read_text();a=s.index('(reserved : Bool)',s.index('def '+fn));b=s.index(' :\n Result',a);return s[a:b]
 def context(p):
- p=p[p.index(' (state :'):];return [(n.strip(),t.strip()) for n,t in re.findall(r'\((\w+) : ([^()]+)\)',p)]
+ p=p[p.index(' (state'):];return [(name,t.strip()) for n,t in re.findall(r'\(([\w ]+) : ([^()]+)\)',p) for name in n.split()]
 def conv(n,t):
  if t=='aspis_core.field.wide_exact.WideExact':return '(e '+n+')'
  if t=='aspis_core.field.QM31':return '(k '+n+')'
@@ -21,9 +21,10 @@ open Aeneas Aeneas.Std Result NIL_Carriers NIL_ResultTransport NIL_ResultReverse
 open NID_ResumeEmission
 '''
 def statement(mod,fn):
- p=params(mod,fn);ctx=context(p);fa=' '.join(n for n,t in ctx);ca=' '.join(conv(n,t) for n,t in ctx);cm='NIY_C_'+mod.removeprefix('NIY_')
+ p=params(mod,fn);ctx=context(p);fa=' '.join(n for n,t in ctx);ca=' '.join(conv(n,t) for n,t in ctx);cm='NIY_C_'+mod.removeprefix('NIY_');cfn=fn
+ if mod=='NIY_FirstRawCut':cm='NIY_CohortRawCut';cfn='afterRaw'
  return p,ctx,fa,ca,f''' NIL_StatePort.reply ({mod}.{fn} reserved d bytes v end1 i4 {fa})=
- {cm}.{fn} (CheckpointBytes4Ops.ops reserved) bytes (variant v) end1 i4 {ca}'''
+ {cm}.{cfn} (CheckpointBytes4Ops.ops reserved) bytes (variant v) end1 i4 {ca}'''
 if __name__=='__main__':
  ns='NIY_WeightsPort';p,ctx,fa,ca,st=statement('NIY_AllocationCut','suffix')
  # Parameters before the allocated Vec and reader are common to the final cut.

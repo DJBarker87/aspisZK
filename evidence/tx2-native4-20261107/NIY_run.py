@@ -32,7 +32,12 @@ p=b/{(a+'-reservation.json')!r}; print(p.read_text() if p.exists() else 'MISSING
   print('reservation wait',flush=True);time.sleep(180);continue
  raise RuntimeError('STOP admission')
 files={};sources=[]
-if kind=='projection':
+if kind=='finalcheck':
+ for n in ['NIY_final_checks.py','NIY_MODULES.json','NIY_SOURCE_PINS.json']:files[n]=(E/n).read_text()
+ sources=list(files);command=['python3','NIY_final_checks.py']
+elif kind=='cleanup':
+ files['NIY_cleanup.py']=(E/'NIY_cleanup.py').read_text();sources=list(files);command=['python3','NIY_cleanup.py']
+elif kind=='projection':
  for n in ['NIY_projection_check.py','NIY_TREE_CUT.json','NIY_PREFIX_NATIVE_CUT.json','NIY_CTOR_CUT.json']:files[n]=(E/n).read_text()
  sources=list(files);command=['python3','NIY_projection_check.py']
 elif kind=='retention':
@@ -52,9 +57,9 @@ elif kind=='export':
  files['NIY_export.py']=(E/'NIY_export.py').read_text();files['NIY_MODULES.json']=(E/'NIY_MODULES.json').read_text();sources=list(files);command=['python3','NIY_export.py']
 elif kind=='metadata':
  files['NIY_capture_graph.py']=(E/'NIY_capture_graph.py').read_text();files['NIY_EXPECTED_GRAPH_HASHES.json']=(E/'NIY_EXPECTED_GRAPH_HASHES.json').read_text();sources=list(files);command=['python3','NIY_capture_graph.py']
-elif kind=='extract':
+elif kind in ['extract','preflight']:
  for n in ['NIY_extract.py','NIY_NHR_stage.py','NIY_EXTRACT_OPACITY.json','NIY_EXTRACT_INPUT_PINS.json']:files[n]=(E/n).read_text()
- sources=list(files);command=['python3','NIY_extract.py']
+ sources=list(files);command=['python3','NIY_extract.py']+(['--preflight'] if kind=='preflight' else [])
 elif kind=='kani':
  files['NIY_gate.py']=(E/'NIY_gate.py').read_text()
  for n,t in json.loads((E/'NIY_NATIVE_INPUTS.json').read_text()).items():files['NIY_src/'+n]=t
@@ -74,7 +79,7 @@ elif kind=='audit':
  command=['python3','NIY_batch.py',target]
 else:raise ValueError(kind)
 config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NIY_tmp',LEAN_PATH=':'.join([B+'/NIY_objects',C+'/NGI_exports_20261105',C+'/NFT_exports_20261104',C+'/NFU_exports_20261104',C+'/NFV_final_objects_20261104',C+'/NGE_exports_20261104',C+'/NGF_exports_20261104',C+'/NFY_exports_20261104',C+'/NFY_priority',W,W+'/objects',C+'/NIY_d_fallback/NFQ_exports_20261104',C+'/NIY_d_fallback',C+'/NIY_pool_fallback/NFR_final_objects_20261104',C+'/NIY_pool_fallback/NFO_final_objects_20261104',C+'/NIY_pool_fallback',C+'/NIY_pool_fallback/NEY_final_objects_20261104',C+'/NIY_pool_fallback/NEX_final_objects_20261104',C+'/NIY_pool_fallback/NEQ_final_objects_20261103',C+'/NIY_pool_fallback/NEM_final_objects_20261102',C+'/NIY_pool_fallback/NEU_final_objects_20261104',C,T+'/lib/lean'])),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')
-if kind=='extract':config['expected_time']='optimized dependency compilation, Charon tx2_common with resume transparent, then Aeneas; unchanged private NHR_stage.py'
+if kind in ['extract','preflight']:config['expected_time']='optimized dependency compilation, Charon tx2_common with resume transparent, then Aeneas; unchanged private NHR_stage.py'
 config['env']['LEAN_PATH']=':'.join(json.loads((E/'NIY_PATHS.json').read_text()))
 if kind=='kani':
  config['native_command']=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NIY_src/crates/aspis-r1-cost-probe/Cargo.toml','--target-dir',B+'/NIY_target','--features','private-leaf-salts,optimized-terminal,program-build','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse']
@@ -121,6 +126,8 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
+if {kind!r}=='finalcheck': names += ['NIY_SOURCE_VERIFICATION.json','NIY_TOOL_PINS.json','NIY_EXPORT.json','NIY_CLOSURE_PINS.json.xz','NIY_CLOSURE_PINS.json.sha256','NIY_RETENTION.json']
+if {kind!r}=='cleanup': names += ['NIY_CLEANUP.json']
 if {kind!r}=='projection': names += ['NIY_PROJECTION_CHECK.json']
 if {kind!r}=='retention': names += ['NIY_RETENTION.json']
 if {kind!r}=='sourcecheck': names += ['NIY_SOURCE_VERIFICATION.json']
@@ -129,7 +136,8 @@ if {kind!r}=='tools': names += ['NIY_TOOL_PINS.json']
 if {kind!r}=='stage': names += ['NIY_STAGE.json']
 if {kind!r}=='export': names += ['NIY_EXPORT.json','NIY_CLOSURE_PINS.json.sha256']
 if {kind!r}=='metadata': names += ['NIY_FULL_GRAPH.json.sha256','NIY_ALL_CRATE_FEATURES.json']
-if {kind!r}=='extract': names += ['NIY_EXTRACTION_PINS.json','NIY_EXTRACT_OUTPUTS.json.xz','NIY_EXTRACT_OUTPUTS.json.sha256']
+if {kind!r}=='extract': names += ['NIY_EXTRACT_PINS.json','NIY_EXTRACT_OUTPUTS.json.xz','NIY_EXTRACT_OUTPUTS.json.sha256']
+if {kind!r}=='preflight': names += ['NIY_PREFLIGHT_PINS.json','NIY_PREFLIGHT_OUTPUTS.json.xz','NIY_PREFLIGHT_OUTPUTS.json.sha256']
 if {kind!r}=='kani': names += [str(p.relative_to(b)) for p in b.glob(a+'-graph*')]+[str(p.relative_to(b)) for p in b.glob(a+'-source*')]+[str(p.relative_to(b)) for p in b.glob(a+'-lock*')]
 if {kind!r}=='audit':names += [str(p.relative_to(b)) for p in (b/'NIY_audit'/{target!r}).rglob('*') if p.is_file()]+[str(p.relative_to(b)) for modepath in (b/'NIY_audit'/{target!r}).glob('*.json') for row in json.loads(modepath.read_text()).get('results',[]) for p in [b/('NEP_'+modepath.stem+'_'+row['root']+'_REACHABLE.txt')] if p.exists()]+([n for n in ['NIY_LOADED_scan.jsonl','NIY_POOL_LOADED_scan.jsonl'] if (b/n).exists()])
 out={{}}

@@ -8,14 +8,17 @@ limit=int(sys.argv[3]) if len(sys.argv)>3 else len(rows)
 a=start
 for row in rows[familystart:limit]:
  for mode in ['positive','negative','rename']:
-  assert a<=100
+  if a>100:
+   (E/'NIY_KANI_BUDGET_END.json').write_text(json.dumps(dict(next_attempt=a,family=row['family'],mode=mode,budget=100)))
+   sys.exit(0)
   env=dict(os.environ)
   if mode=='negative':env['NIY_INVERT']='1'
   target=row['rename'] if mode=='rename' else row['function'];attempt=f'NIY_K{a:03d}'
   p=subprocess.run([sys.executable,str(E/'NIY_run.py'),attempt,'kani',target],env=env)
   row[mode]=attempt;a+=1
   r=json.loads((E/attempt/'receipt.json').read_text());raw=(E/attempt/'stdout.log').read_text()
-  semantic_fail='VERIFICATION:- FAILED' in raw or 'VERIFICATION: FAILED' in raw
+  terminal_limit=any(t in raw.lower() for t in ['timed out','timeout','out of memory','excessive memory'])
+  semantic_fail=('VERIFICATION:- FAILED' in raw or 'VERIFICATION: FAILED' in raw) and not terminal_limit
   semantic_pass='VERIFICATION:- SUCCESSFUL' in raw or 'VERIFICATION: SUCCESSFUL' in raw
   ok=(r['exit_status']!=0 and semantic_fail) if mode=='negative' else (r['exit_status']==0 and semantic_pass)
   row[mode+'_qualified']=ok

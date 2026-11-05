@@ -1,0 +1,85 @@
+NIY_generated/NIY_TailPort.lean:17:20: error: Tactic `apply` failed: could not unify the conclusion of `@NIY_RawTransport.first3`
+  (outer ?f do
+      let (state, r) ← NIL_FreshOps.raw 32#usize { bytes := ?bytes, «at» := 80#usize }
+      let (a3, r1) ← NIL_FreshOps.raw 32#usize r
+      let (a4, r2) ← NIL_FreshOps.raw 32#usize r1
+      ?left state a3 a4 r2) =
+    do
+    let (state, r) ← CheckpointBytes3Reader.raw 32#usize { bytes := ?bytes, «at» := 80#usize }
+    let (a3, r1) ← CheckpointBytes3Reader.raw 32#usize r
+    let (a4, r2) ← CheckpointBytes3Reader.raw 32#usize r1
+    ?right state a3 a4 r2
+with the goal
+  (outer (NIL_Carriers.inner NIL_StatePort.pair) do
+      let __x ← NIL_FreshOps.raw 32#usize { bytes := bytes, «at» := 80#usize }
+      match __x with
+        | (state, r) => do
+          let __x ← NIL_FreshOps.raw 32#usize r
+          match __x with
+            | (a3, r1) => do
+              let __x ← NIL_FreshOps.raw 32#usize r1
+              match __x with
+                | (a4, r2) =>
+                  NIY_FirstRawCut.freshAfterRaw reserved d bytes NID_ResumeEmission.transport.Variant.S2 end1 next state
+                    a3 a4 r2) =
+    do
+    let __x ← (CheckpointBytes4Ops.ops reserved).raw 32#usize { bytes := bytes, «at» := 80#usize }
+    match __x with
+      | (state, r) => do
+        let __x ← (CheckpointBytes4Ops.ops reserved).raw 32#usize r
+        match __x with
+          | (a3, r1) => do
+            let __x ← (CheckpointBytes4Ops.ops reserved).raw 32#usize r1
+            match __x with
+              | (a4, r2) =>
+                NIY_CohortRawCut.afterRaw (CheckpointBytes4Ops.ops reserved) bytes AspisR1Stage2.transport.Variant.S2
+                  end1 next state a3 a4 r2
+
+Note: The full type of `@NIY_RawTransport.first3` is
+  ∀ {A B : Type} (f : A → B) (bytes : Slice U8)
+    (left : Std.Array U8 32#usize → Std.Array U8 32#usize → Std.Array U8 32#usize → Fresh.R → Result A)
+    (right : Std.Array U8 32#usize → Std.Array U8 32#usize → Std.Array U8 32#usize → Cohort.R → Result B),
+    (∀ (state a3 a4 : Std.Array U8 32#usize) (out : Cohort.R),
+        outer f (left state a3 a4 (unReader out)) = right state a3 a4 out) →
+      (outer f do
+          let (state, r) ← NIL_FreshOps.raw 32#usize { bytes := bytes, «at» := 80#usize }
+          let (a3, r1) ← NIL_FreshOps.raw 32#usize r
+          let (a4, r2) ← NIL_FreshOps.raw 32#usize r1
+          left state a3 a4 r2) =
+        do
+        let (state, r) ← CheckpointBytes3Reader.raw 32#usize { bytes := bytes, «at» := 80#usize }
+        let (a3, r1) ← CheckpointBytes3Reader.raw 32#usize r
+        let (a4, r2) ← CheckpointBytes3Reader.raw 32#usize r1
+        right state a3 a4 r2
+
+reserved : Bool
+H : Type
+d : AspisR1Stage2.aspis_core.digest.Digest32 H
+bytes : Slice U8
+end1 : Usize
+next : U8
+⊢ (outer (NIL_Carriers.inner NIL_StatePort.pair) do
+      let __x ← NIL_FreshOps.raw 32#usize { bytes := bytes, «at» := 80#usize }
+      match __x with
+        | (state, r) => do
+          let __x ← NIL_FreshOps.raw 32#usize r
+          match __x with
+            | (a3, r1) => do
+              let __x ← NIL_FreshOps.raw 32#usize r1
+              match __x with
+                | (a4, r2) =>
+                  NIY_FirstRawCut.freshAfterRaw reserved d bytes NID_ResumeEmission.transport.Variant.S2 end1 next state
+                    a3 a4 r2) =
+    do
+    let __x ← (CheckpointBytes4Ops.ops reserved).raw 32#usize { bytes := bytes, «at» := 80#usize }
+    match __x with
+      | (state, r) => do
+        let __x ← (CheckpointBytes4Ops.ops reserved).raw 32#usize r
+        match __x with
+          | (a3, r1) => do
+            let __x ← (CheckpointBytes4Ops.ops reserved).raw 32#usize r1
+            match __x with
+              | (a4, r2) =>
+                NIY_CohortRawCut.afterRaw (CheckpointBytes4Ops.ops reserved) bytes AspisR1Stage2.transport.Variant.S2
+                  end1 next state a3 a4 r2
+'NIY_TailPort.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
