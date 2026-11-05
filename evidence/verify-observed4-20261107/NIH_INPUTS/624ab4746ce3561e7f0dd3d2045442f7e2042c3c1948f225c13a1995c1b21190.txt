@@ -1,0 +1,12 @@
+{
+  "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "path": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs",
+  "original": "        for coordinate in coordinates {\n            let prepared = PreparedQm31Multiplier::new(*coordinate);\n            for index in (0..len).rev() {\n                let parent = weights[index];\n                let right = prepared.mul(parent);\n                weights[2 * index] = parent.sub(right);\n                weights[2 * index + 1] = right;\n            }\n            len *= 2;\n        }",
+  "inner_loop": "            for index in (0..len).rev() {\n                let parent = weights[index];\n                let right = prepared.mul(parent);\n                weights[2 * index] = parent.sub(right);\n                weights[2 * index + 1] = right;\n            }",
+  "cut": "        if let Some(coordinate)=iter.next() {\n            let prepared = NIH_prepare(*coordinate,log);\n            NIH_inner(weights,&prepared,len,log);\n            len *= 2;\n        }",
+  "reverse_erasure": true,
+  "domain": "N16/C4 or N64/C6; arbitrary iterator suffix; 0<len<=N/2; coordinate canonical; weights/reply arbitrary raw words",
+  "modifies": "local weights overwritten by logged inner reply only; local iterator consumes one coordinate; returned len; local log; coordinates immutable",
+  "inner_packet": "NHU K057/058,N64 K070-075; NHU_ExpandFrame; JFy_SelectorInner.source/FJa_SplitFold.value",
+  "prepare_packet": "FIv_PreparedNewTotal.value; actual unchanged Prepared::new runs natively"
+}

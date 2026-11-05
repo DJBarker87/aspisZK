@@ -1,0 +1,53 @@
+{"attempt": "NIH_L013", "exit_status": 0, "wall_seconds": 4.8003986440598965, "peak_rss_kib": "5973964", "swaps": "0", "print_axioms": []}
+def FIq_Native.field.M31.reduce_u62 : Aeneas.Std.U64 → Aeneas.Std.Result FIq_Native.field.M31 :=
+fun value => do
+  let i ← FIq_Native.field.reduce_u64 value
+  Aeneas.Std.Result.ok i
+def FIq_Native.field.reduce_u64 : Aeneas.Std.U64 → Aeneas.Std.Result Aeneas.Std.U32 :=
+fun x => do
+  let i ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U64 FIq_Native.field.P)
+  let i1 ← Aeneas.Std.lift (x &&& i)
+  let i2 ← x >>> 31#u32
+  let x1 ← i1 + i2
+  let i3 ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U64 FIq_Native.field.P)
+  let i4 ← Aeneas.Std.lift (x1 &&& i3)
+  let i5 ← x1 >>> 31#u32
+  let x2 ← i4 + i5
+  let x3 ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.
+...
+ if x3 ≥ FIq_Native.field.P then x3 - FIq_Native.field.P else Aeneas.Std.Result.ok x3
+def AspisR1SelectedMaskProbe.field.M31.reduce_u62 : Aeneas.Std.U64 →
+  Aeneas.Std.Result AspisR1SelectedMaskProbe.field.M31 :=
+fun value => do
+  let i ← AspisR1SelectedMaskProbe.field.reduce_u64 value
+  Aeneas.Std.Result.ok i
+def AspisR1SelectedMaskProbe.field.reduce_u64 : Aeneas.Std.U64 → Aeneas.Std.Result Aeneas.Std.U32 :=
+fun x => do
+  let i ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U64 AspisR1SelectedMaskProbe.field.P)
+  let i1 ← Aeneas.Std.lift (x &&& i)
+  let i2 ← x >>> 31#u32
+  let x1 ← i1 + i2
+  let i3 ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U64 AspisR1SelectedMaskProbe.field.P)
+  let i4 ← Aeneas.Std.lift (x1 &&& i3)
+  let i5 ← x1 >>> 31#u32
+  let x2 ← i4 + i5
+  let x3 ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U32 x2)
+  if x3 ≥ AspisR1SelectedMaskProbe.field.P then x3 - AspisR1SelectedMaskProbe.field.P else Aeneas.Std.Result.ok x3
+def FIq_Native.field.CM31.new : FIq_Native.field.M31 → FIq_Native.field.M31 → Aeneas.Std.Result FIq_Native.field.CM31 :=
+fun a b => Aeneas.Std.Result.ok { a := a, b := b }
+def FIq_Native.state_only_poseidon.extension_from_raw_limbs : Aeneas.Std.Array Aeneas.Std.U64 4#usize →
+  Aeneas.Std.Result FIq_Native.field.QM31 :=
+fun limbs => do
+  let i ← limbs.index_usize 0#usize
+  let m ← FIq_Native.field.M31.reduce_u62 i
+  let i1 ← limbs.index_usize 1#usize
+  let m1 ← FIq_Native.field.M31.reduce_u62 i1
+  let c ← FIq_Native.field.CM31.new m m1
+  let i2 ← limbs.index_usize 2#usize
+  let m2 ← FIq_Native.field.M31.reduce_u62 i2
+  let i3 ← limbs.index_usize 3#usize
+  let m3 ← FIq_Native.field.M31.reduce_u62 i3
+  let c1 ← FIq_Native.field.CM31.new m2 m3
+  Aeneas.Std.Result.ok { c0 := c, c1 := c1 }
+
+Running as unit: run-ra7f17c41da4f41209f269aa5445c5b51.scope; invocation ID: afe628510431421fa73436903b9c3066

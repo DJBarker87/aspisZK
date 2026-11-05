@@ -1,0 +1,27 @@
+import NIH_RecordFraming
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result
+namespace AspisR1.NIH_RustBind
+/-- Full-error Rust bind: generic control-flow normalization only. -/
+def next {A B E : Type} (input : Result (core.result.Result A E))
+ (tail : A→Result (core.result.Result B E)) : Result (core.result.Result B E) := do
+ let value←input
+ let cf←core.result.Result.Insts.CoreOpsTry.branch value
+ match cf with
+ | .Continue a=>tail a
+ | .Break error=>core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+     B (core.convert.FromSame E) error
+/-- A reached predecessor, not a successful enclosing caller premise. -/
+theorem continued {A B E : Type} (input : Result (core.result.Result A E))
+ (tail : A→Result (core.result.Result B E)) (out : B)
+ (run : next input tail=ok (.Ok out)) :
+ ∃ a,input=ok (.Ok a) ∧ tail a=ok (.Ok out) := by
+ cases input with
+ | fail e=>cases run
+ | div=>cases run
+ | ok value=>
+  cases value with
+  | Err e=>cases run
+  | Ok a=>exact ⟨a,rfl,run⟩
+#print axioms continued
+end AspisR1.NIH_RustBind

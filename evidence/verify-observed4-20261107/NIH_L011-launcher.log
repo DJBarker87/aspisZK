@@ -1,0 +1,65 @@
+{"attempt": "NIH_L011", "exit_status": 1, "wall_seconds": 3.9077204200439155, "peak_rss_kib": "5840856", "swaps": "0", "print_axioms": []}
+def FIq_Native.state_only_poseidon.extension_from_raw_limbs : Aeneas.Std.Array Aeneas.Std.U64 4#usize →
+  Aeneas.Std.Result FIq_Native.field.QM31 :=
+fun limbs => do
+  let i ← limbs.index_usize 0#usize
+  let m ← FIq_Native.field.M31.reduce_u62 i
+  let i1 ← limbs.index_usize 1#usize
+  let m1 ← FIq_Native.field.M31.reduce_u62 i1
+  let c ← FIq_Native.field.CM31.new m m1
+  let i2 ← limbs.index_usize 2#usize
+  let m2 ← FIq_Native.field.M31.reduce_u62 i2
+  let i3 ← limbs.index_usize 3#usize
+  let m3 ← FIq_Native.field.M31.reduce_u62 i3
+  let c1 ← FIq_Native.field.CM31.new m2 m3
+  Aeneas.Std.Result.ok { c0 := c, c1 := c1 }
+def FIq_Native.state_only_poseidon.external_local_packed_raw : Aeneas.Std.Arr
+...
+size 3#usize
+  let i13 ← 2#u64 * i12
+  let i14 ← i11 - i13
+  let i15 ← a1.index_usize 1#usize
+  let i16 ← a2.index_usize 0#usize
+  let i17 ← i15 + i16
+  let i18 ← a3.index_usize 2#usize
+  let i19 ← i17 + i18
+  let i20 ← a3.index_usize 3#usize
+  let i21 ← 2#u64 * i20
+  let i22 ← i19 + i21
+  let i23 ← a4.index_usize 2#usize
+  let i24 ← 2#u64 * i23
+  let i25 ← i22 + i24
+  let i26 ← i25 + bound
+  let i27 ← a4.index_usize 3#usize
+  let i28 ← i26 - i27
+  let i29 ← a1.index_usize 2#usize
+  let i30 ← 2#u64 * bound
+  let i31 ← i29 + i30
+  let i32 ← a2.index_usize 3#usize
+  let i33 ← i31 - i32
+  let i34 ← a3.index_usize 0#usize
+  let i35 ← i33 + i34
+  let i36 ← a4.index_usize 1#usize
+  let i37 ← i35 - i36
+  let i38 ← a1.index_usize 3#usize
+  let i39 ← a2.index_usize 2#usize
+  let i40 ← i38 + i39
+  let i41 ← a3.index_usize 1#usize
+  let i42 ← i40 + i41
+  let i43 ← a4.index_usize 0#usize
+  let i44 ← i42 + i43
+  Aeneas.Std.Result.ok (Aeneas.Std.Array.make 4#usize [i14, i28, i37, i44] ⋯)
+NIH_generated/NIH_LeafInventory.lean:5:7: error(lean.unknownIdentifier): Unknown constant `FIq_Native.pool_v1.pair_forest_copy_terminal.selected_binary_weight`
+def FIq_Native.pool_v1.pair_forest_copy_terminal.lift_m31 : FIq_Native.field.M31 →
+  Aeneas.Std.Result FIq_Native.field.QM31 :=
+fun value => do
+  let c ← FIq_Native.field.CM31.from_m31 value
+  FIq_Native.field.QM31.from_cm31 c
+def FIq_Native.pool_v1.pair_forest_semantic_terminal.empty_root : Aeneas.Std.Usize →
+  Aeneas.Std.Result (Aeneas.Std.Array FIq_Native.field.M31 8#usize) :=
+fun level => do
+  let a ← FIq_Native.pool_v1.pair_forest_semantic_terminal.constants.POOL_V1_PAIR_EMPTY_ROOTS_V1.index_usize level
+  FIq_Native.core.array.Array.map (Aeneas.Std.BuiltinFnMut Aeneas.Std.U32 FIq_Native.field.M31) a
+      FIq_Native.field.M31_constructor
+
+Running as unit: run-r18691d45f2754528b6b3eb45717f595f.scope; invocation ID: 4355003012a14b9ba08a0b03aaa8e3e5

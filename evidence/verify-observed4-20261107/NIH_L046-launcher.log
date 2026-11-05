@@ -1,0 +1,51 @@
+{"attempt": "NIH_L046", "exit_status": 1, "wall_seconds": 4.395228306064382, "peak_rss_kib": "5954872", "swaps": "0", "print_axioms": ["'AspisR1.NIH_RecordFraming.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NIH_generated/NIH_RecordFraming.lean:18:8: error: unsolved goals
+case none
+row : U8
+frame payload : Slice U8
+parsed :
+  (do
+      let shape ← r1_wire.row_shape row
+      let result ← core.option.Option.ok_or shape r1_wire.Error.InvalidRow
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch result
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue pair =>
+          let (tag, size) := pair
+          have count := frame.len;
+          do
+          let length ← 5#usize + size
+          if (count != length) = true then ok (core.result.Result.Err (r1_wire.Error.Length row))
+            else do
+              let first ← frame.index_usize 0#usize
+              if (first !
+...
+            let b4 ← frame.index_usize 4#usize
+            let encoded ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [b1, b2, b3, b4] ⋯))
+            let decoded ← lift (UScalar.cast UScalarTy.Usize encoded)
+            if (decoded != size) = true then ok (core.result.Result.Err (r1_wire.Error.Length row))
+              else do
+                let payload ←
+                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) frame
+                      { start := 5#usize }
+                if row ≥ 14#u8 then do
+                    let validated ← r1_wire.validate_record_fields row payload
+                    let cf1 ←
+                      match validated with
+                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                        | core.result.Result.Err e =>
+                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                    match cf1 with
+                      | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok payload)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+                          (core.convert.FromSame NGX_ParseRecord.Error) residual
+                  else ok (core.result.Result.Ok payload)) =
+    ok (core.result.Result.Ok payload)
+cap : ↑size ≤ 3712
+length : UScalar UScalarTy.Usize
+addition : 5#usize + size = ok length
+value : ↑length = ↑5#usize + ↑size
+⊢ ∃ tag size, r1_wire.row_shape row = ok (some (tag, size)) ∧ (↑frame).length = 5 + ↑size
+'AspisR1.NIH_RecordFraming.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r680287e9baba4f8ea8fbd5b1823737d9.scope; invocation ID: cd0dbe7fafe941d9b0b8a0dc6acae8ba

@@ -1,0 +1,14 @@
+{
+  "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "path": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs",
+  "original": "    pub(crate) fn row(&self, row: usize) -> QM31 {\n        debug_assert!(row < POOL_V1_PAIR_FOREST_COPY_TERMINAL_ROWS_V1);\n        self.high[row >> 4].mul(self.low[row & 15])\n    }",
+  "cut": "    fn NIH_row(selectors:&Selectors, row: usize,log:&mut NIH_ProductLog) -> QM31 {\n        debug_assert!(row < POOL_V1_PAIR_FOREST_COPY_TERMINAL_ROWS_V1);\n        NIH_product(selectors.high[row >> 4],selectors.low[row & 15],log)\n    }",
+  "reverse_erasure": true,
+  "modifies": "only local product log left/right/calls; reply and borrowed selectors unchanged",
+  "field_stub": "NIH_product",
+  "paired_laws": [
+    "JFy_FieldTotal.mul",
+    "JFv_RawExtractedSemanticCallOpsV20.generated_qm_mul_eq_probe"
+  ],
+  "domain": "selected high/low canonical; row<1024; every other input cell arbitrary"
+}

@@ -1,0 +1,52 @@
+{"attempt": "NIH_K044", "exit_status": 1, "wall_seconds": 4.438595953863114, "peak_rss_kib": "548972", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition name: `NHU_bad_i`
+   --> crates/aspis-core/src/state_only_hiding.rs:438:25
+    |
+438 | #[cfg_attr(all(kani,not(NHU_bad_i)), kani::ensures(|result| *result==NHU_native::NHU_ref_i(value)))]
+    |                         ^^^^^^^^^
+    |
+    = help: expected names are: `docsrs`, `feature`, `kani`, and `test` and 31 more
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(NHU_bad_i)'] }
+    = help: or consider adding `println!("cargo::rustc-ch
+...
+/crates/aspis-statement/../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-verify-observed4-20261107/NIH_src/crates/aspis-statement/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.86s
+Checking harness pool_v1::pair_forest_copy_terminal::NIH_native::NIH_link_weight...
+
+VERIFICATION RESULT:
+ ** 1 of 150 failed (6 unreachable)
+Failed Checks: |result|
+(result.0 ==
+NIH_native::NIH_link_ref(link.weight_kind,link.weight_level,append_index,variant==PoolV1PairForestCompiledVariantV1::Withdrawal))
+!= cfg!(NIH_invert)
+ File: "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs", line 375, in pool_v1::pair_forest_copy_terminal::link_weight::{closure#2}
+
+VERIFICATION:- FAILED
+Verification Time: 0.25354138s
+
+Manual Harness Summary:
+Verification failed for - pool_v1::pair_forest_copy_terminal::NIH_native::NIH_link_weight
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r1a023cb16f114ae58821550530542a13.scope; invocation ID: 58365d3ecc044584b6418aacd4faefe3

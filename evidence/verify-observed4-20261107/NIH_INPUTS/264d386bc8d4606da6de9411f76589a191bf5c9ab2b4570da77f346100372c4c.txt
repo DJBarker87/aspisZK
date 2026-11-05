@@ -1,0 +1,37 @@
+import NIH_DecodeInstall
+import NGX_ParseRecord
+set_option autoImplicit false
+noncomputable section
+open Aeneas Aeneas.Std Result
+namespace AspisR1.NIH_RecordFraming
+open AspisR1PrefixAggregateParser
+/-- The predecessor parser's accepted reply entails its SAME framed length.
+This is a reached-predecessor fact, never a successful claims/finish premise. -/
+theorem accepted (row : U8) (frame payload : Slice U8)
+ (parsed : r1_wire.parse_record row frame=ok (.Ok payload)) :
+ ∃ tag size,r1_wire.row_shape row=ok (some (tag,size)) ∧
+ frame.val.length=5+size.val := by
+ rw [NGX_ParseRecord.source] at parsed
+ unfold NGX_ParseRecord.computation at parsed
+ obtain ⟨shape,shapeCall,tail⟩:=FIv_Map.bind_success _ _ _ parsed
+ cases shape with
+ | none =>
+  simp [core.option.Option.ok_or,core.result.Result.Insts.CoreOpsTry.branch,
+   core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,core.convert.FromSame] at tail
+ | some pair =>
+  rcases pair with ⟨tag,size⟩
+  simp only [core.option.Option.ok_or,bind_tc_ok,core.result.Result.Insts.CoreOpsTry.branch] at tail
+  dsimp only at tail
+  have cap: size.val≤3712 := (NFU_RowDomains.parser_shape row tag size shapeCall).1
+  obtain ⟨length,addition,value⟩:=WP.spec_imp_exists (UScalar.add_spec (x:=5#usize) (y:=size) (by scalar_tac))
+  rw [addition,bind_tc_ok] at tail
+  by_cases wrong : (Slice.len frame != length)=true
+  · simp only [if_pos wrong] at tail
+    cases tail
+  · have equal : Slice.len frame=length := by simpa using wrong
+    refine ⟨tag,size,shapeCall,?_⟩
+    have same:=congrArg UScalar.val equal
+    simpa only [Slice.len_val,show (5#usize).val=5 from rfl] using same.trans value
+#print axioms accepted
+end AspisR1.NIH_RecordFraming
+end

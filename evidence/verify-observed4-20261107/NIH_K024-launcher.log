@@ -1,0 +1,55 @@
+{"attempt": "NIH_K024", "exit_status": 0, "wall_seconds": 67.33477180404589, "peak_rss_kib": "606616", "swaps": "0", "print_axioms": "N/A: kani"}
+warning: unexpected `cfg` condition name: `kani`
+ --> crates/aspis-core/src/lib.rs:1:13
+  |
+1 | #![cfg_attr(kani, feature(allocator_api))]
+  |             ^^^^
+  |
+  = help: expected names are: `docsrs`, `feature`, and `test` and 31 more
+  = help: consider using a Cargo feature instead
+  = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+           [lints.rust]
+           unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+  = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+  = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checkin
+...
+ {
+     |    ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `append_value_reconstruction_links` is never used
+    --> crates/aspis-statement/src/trace_v4.rs:1190:4
+     |
+1190 | fn append_value_reconstruction_links(layout: &mut CopyLayout) {
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: module `NIH_runtime` should have a snake case name
+    --> crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs:2339:5
+     |
+2339 | mod NIH_runtime;
+     |     ^^^^^^^^^^^ help: convert the identifier to snake case: `nih_runtime`
+     |
+     = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: function `NHU_transition_step_cut` should have a snake case name
+ --> crates/aspis-statement/src/pool_v1/NHU_transition_step_body.rs:1:4
+  |
+1 | fn NHU_transition_step_cut(public:SemanticPublic,carry:usize,level:usize)->Result<usize,PoolV1PairForestSemanticTerminalErrorV1>{let ...
+  |    ^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nhu_transition_step_cut`
+
+warning: function `NIH_transition_witness` should have a snake case name
+ --> crates/aspis-statement/src/pool_v1/NIH_runtime.rs:4:4
+  |
+4 | fn NIH_transition_witness(){
+  |    ^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nih_transition_witness`
+
+warning: `aspis-statement` (lib test) generated 103 warnings (run `cargo fix --lib -p aspis-statement --tests` to apply 1 suggestion)
+    Finished `release` profile [optimized] target(s) in 1m 06s
+     Running unittests src/lib.rs (NIH_runtime_target/release/deps/aspis_statement-bf103ab1681fbb17)
+
+running 1 test
+test pool_v1::pair_forest_semantic_terminal::NIH_runtime::NIH_transition_witness ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 255 filtered out; finished in 0.00s
+
+
+Running as unit: run-r8a52363012b34e2eadd010cc8c69aecd.scope; invocation ID: 8acb713548ac409197da7ec4759d91ab

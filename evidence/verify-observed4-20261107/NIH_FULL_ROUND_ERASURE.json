@@ -1,0 +1,42 @@
+{
+  "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "path": "crates/aspis-statement/src/state_only_poseidon.rs",
+  "bodies": {
+    "full_round": "fn full_round(\n    mut state: [QM31; POSEIDON2_WIDTH],\n    constants: [QM31; POSEIDON2_WIDTH],\n) -> [QM31; POSEIDON2_WIDTH] {\n    for lane in 0..POSEIDON2_WIDTH {\n        state[lane] = pow5(state[lane].add(constants[lane]));\n    }\n    external_linear_lazy(&mut state);\n    state\n}",
+    "full_round_m31_constants": "fn full_round_m31_constants(\n    mut state: [QM31; POSEIDON2_WIDTH],\n    constants: [u32; POSEIDON2_WIDTH],\n) -> [QM31; POSEIDON2_WIDTH] {\n    for lane in 0..POSEIDON2_WIDTH {\n        state[lane].c0.a = state[lane].c0.a.add(M31(constants[lane]));\n        state[lane] = pow5(state[lane]);\n    }\n    external_linear_lazy(&mut state);\n    state\n}",
+    "full_round_packed": "fn full_round_packed(\n    mut state: [QM31; POSEIDON2_WIDTH],\n    constants: [QM31; POSEIDON2_WIDTH],\n) -> [QM31; STATE_ONLY_POSEIDON_PACKED_LANES] {\n    for lane in 0..POSEIDON2_WIDTH {\n        state[lane] = pow5(state[lane].add(constants[lane]));\n    }\n    external_linear_packed(state)\n}",
+    "full_round_m31_constants_packed": "fn full_round_m31_constants_packed(\n    mut state: [QM31; POSEIDON2_WIDTH],\n    constants: [u32; POSEIDON2_WIDTH],\n) -> [QM31; STATE_ONLY_POSEIDON_PACKED_LANES] {\n    for lane in 0..POSEIDON2_WIDTH {\n        state[lane].c0.a = state[lane].c0.a.add(M31(constants[lane]));\n        state[lane] = pow5(state[lane]);\n    }\n    external_linear_packed(state)\n}"
+  },
+  "qm_prefix": "        state[lane] = pow5(state[lane].add(constants[lane]));",
+  "m31_prefix": "        state[lane].c0.a = state[lane].c0.a.add(M31(constants[lane]));\n        state[lane] = pow5(state[lane]);",
+  "qm_cut": "        state[lane] = NIH_power_reply(state[lane].add(constants[lane]),log);",
+  "m31_cut": "        state[lane].c0.a = state[lane].c0.a.add(M31(constants[lane]));\n        state[lane] = NIH_power_reply(state[lane],log);",
+  "lazy_tail": "    external_linear_lazy(&mut state);\n    state",
+  "packed_tail": "    external_linear_packed(state)",
+  "reverse_erasure": true,
+  "modifies": "one selected lane/cursor/local log in nonlinear step; tail logs exact same full input and returns packet reply unchanged",
+  "domains": "canonical state16 and QM31 constants16 or bounded M31 constants16; arbitrary Range start<=16; power reply canonical, tail replies arbitrary raw instantiated by the closed layer packets",
+  "reused_identical_source_cuts": {
+    "qm_prefix": [
+      "full_round",
+      "full_round_packed"
+    ],
+    "m31_prefix": [
+      "full_round_m31_constants",
+      "full_round_m31_constants_packed"
+    ],
+    "lazy_tail": [
+      "full_round",
+      "full_round_m31_constants"
+    ],
+    "packed_tail": [
+      "full_round_packed",
+      "full_round_m31_constants_packed"
+    ]
+  },
+  "stubs": {
+    "NIH_power_reply": "NHU_Pow5.result/domains on actual canonical sum",
+    "NIH_internal_reply": "NIH_ExternalLazy.result on same nonlinear state",
+    "NIH_external_packed_reply": "NIH_ExternalPacked.result on same nonlinear state"
+  }
+}

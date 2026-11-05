@@ -1,0 +1,12 @@
+{
+  "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "path": "crates/aspis-statement/src/state_only_poseidon.rs",
+  "prefix": "    state[0] = pow5(state[0].add(constant));",
+  "prefix_cut": "    state[0] = NIH_power_reply(state[0].add(constant),log);",
+  "tail": "    internal_linear_lazy(&mut state);\n    state",
+  "tail_cut": "    NIH_internal_reply(&mut state,log);\n    state",
+  "reverse_erasure": true,
+  "power_stub": "NIH_power_reply paired NHU_Pow5.result/domains, SAME canonical state0+constant",
+  "linear_stub": "NIH_internal_reply paired NIH_InternalTotal.result, SAME canonical post-pow5 state, canonical full result instantiated from packet",
+  "modifies": "prefix selected state0 and local log; tail local state overwritten by SAME logged packet reply and input/call fields; no static or function pointer"
+}

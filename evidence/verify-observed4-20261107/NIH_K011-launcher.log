@@ -1,0 +1,26 @@
+{"attempt": "NIH_K011", "exit_status": 0, "wall_seconds": 0.6771733539644629, "peak_rss_kib": "98700", "swaps": "0", "print_axioms": "N/A: kani"}
+CBMC version 6.8.0 (cbmc-6.8.0) 64-bit x86_64 linux
+Reading GOTO program from file /home/dombarker/project-offloads/codex-cx-verify-observed4-20261107/NIH_target/kani/x86_64-unknown-linux-gnu/debug/deps/aspis_statement-7bbb061b86d42267__RNvNtNtNtCs37UJtixU7ll_15aspis_statement7pool_v129pair_forest_semantic_terminal10NHU_native19NHU_transition_step.out
+Generating GOTO Program
+Adding CPROVER library (x86_64)
+Removal of function pointers and virtual functions
+Generic Property Instrumentation
+Property core::ub_checks::is_valid_allocation_size.reachability_check.1:
+  file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ub_checks.rs
+...
+  file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs line 57 column 51 function <core::slice::IterMut<'_, u32> as core::iter::ExactSizeIterator>::len
+  dereference failure: pointer outside object bounds in self->ptr
+  (unsigned __CPROVER_bitvector[65])__CPROVER_OBJECT_SIZE(self) >= (unsigned __CPROVER_bitvector[65])__CPROVER_POINTER_OFFSET(self) + 8
+
+Property <core::slice::IterMut<'_, u32> as core::iter::ExactSizeIterator>::len.pointer_dereference.18:
+  file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs line 57 column 51 function <core::slice::IterMut<'_, u32> as core::iter::ExactSizeIterator>::len
+  dereference failure: invalid integer address in self->ptr
+  !(__CPROVER_POINTER_OBJECT(((struct _98386742879132372262313359221060041075 *)NULL)) == __CPROVER_POINTER_OBJECT(self)) || self == ((struct _4452470514409793102614952521282854069 *)NULL)
+
+Property core::array::try_from_fn::<core::ops::try_trait::NeverShortCircuit<aspis_core::field::M31>, 8, {closure@core::ops::try_trait::NeverShortCircuit<aspis_core::field::M31>::wrap_mut_1<usize, {closure@crates/aspis-statement/src/pool_v1/NHU_statement.rs:7:68: 7:71}>::{closure#0}}>.unreachable.1:
+  file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs line 153 column 11 function core::array::try_from_fn::<core::ops::try_trait::NeverShortCircuit<aspis_core::field::M31>, 8, {closure@core::ops::try_trait::NeverShortCircuit<aspis_core::field::M31>::wrap_mut_1<usize, {closure@crates/aspis-statement/src/pool_v1/NHU_statement.rs:7:68: 7:71}>::{closure#0}}>
+  unreachable code
+  FALSE
+
+
+Running as unit: run-r91b9111d06dc4e33a50d26d4e9965405.scope; invocation ID: 7a25956d1e54425eaa780cde8a572fe1

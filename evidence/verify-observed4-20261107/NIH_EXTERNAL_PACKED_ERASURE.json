@@ -1,0 +1,13 @@
+{
+  "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "path": "crates/aspis-statement/src/state_only_poseidon.rs",
+  "source_sha256": "4467d15c9d473cbd42caf33f21aa0192bed007b58ccaa4a61cb5691532cab7fe",
+  "group": "        let start = 4 * group;\n        let input = [\n            state[start],\n            state[start + 1],\n            state[start + 2],\n            state[start + 3],\n        ];\n        local_packed[group] = external_local_packed(input);\n        group += 1;",
+  "group_cut": "        let start = 4 * group;\n        let input = [\n            state[start],\n            state[start + 1],\n            state[start + 2],\n            state[start + 3],\n        ];\n        local_packed[group] = NIH_local_reply(input,log);\n        group += 1;",
+  "sum_expression": "QM31::ZERO\n        .add(local_packed[0])\n        .add(local_packed[1])\n        .add(local_packed[2])\n        .add(local_packed[3])",
+  "map_expression": "value.add(sum)",
+  "reverse_erasure": true,
+  "modifies": "group only local packed selected cell, group cursor and local log; sum/map pure record results",
+  "loop": "one arbitrary group<=4; no whole-buffer unwinding; emitted JGj_PackedLoopTotal/FJe_PackedLoopValue induction",
+  "stub": "NIH_local_reply paired NIH_LocalPacked.result; canonical original four operands and canonical packet reply"
+}

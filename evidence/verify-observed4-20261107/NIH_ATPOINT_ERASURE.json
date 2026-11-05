@@ -1,0 +1,11 @@
+{
+  "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "path": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs",
+  "original": "    pub(crate) fn at_point(point: &[QM31; 10]) -> Self {\n        Self {\n            high: Self::expand(&point[..6]),\n            low: Self::expand(&point[6..]),\n        }\n    }\n",
+  "cut": "    fn NIH_atpoint_cut(point: &[QM31; 10],log:&mut NIH_AtLog) -> Selectors {\n        Selectors {\n            high: NIH_expand_high(&point[..6],log),\n            low: NIH_expand_low(&point[6..],log),\n        }\n    }\n",
+  "reverse_erasure": true,
+  "boxed_original": "Box::new(Self::at_point(point))",
+  "boxed_cut": "Box::new(NIH_atpoint_cut(&point,&mut log))",
+  "domains": "canonical point[10]; prefix6 to expand64; suffix4 to expand16; arbitrary logged raw return arrays instantiated by NIH_ExpandOuter/NHU_ExpandPacket",
+  "modifies": "local log/call count; output record; boxed case retained Std Box allocation with abort-prefix semantics under an; point immutable"
+}
