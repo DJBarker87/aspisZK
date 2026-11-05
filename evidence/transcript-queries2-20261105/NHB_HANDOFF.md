@@ -60,3 +60,19 @@ Membership: borrowed fixed22 contracts0..6 and owned fixed22 contracts7..10
 have matched controls. Larger carriers and both initial partitions hit90s tool
 limits. No failed contract is used as a stub. The standalone word contract and
 its reference are prepared, not yet credited. TX1:168 still OPEN.
+
+## Stage 3 update
+
+Native stop word: K043 PASS/K044 intended stop-flag failure. Native low-length
+word: K046 PASS/K047 intended candidate corruption failure, composing ONLY the
+already-checked contains0..10 contracts; every requires is checked at the actual
+call site. Native block end: K050 PASS/K051 wrong post-word full-check failure.
+The last pair proves no extra stop check after the final word, even at full
+state. K030/K031 remain the exact copied-block-byte0 cursor control pair.
+
+L025 accepts the observed-window-to-full-frame adapter, stopped-state identity
+and ghost-input availability. L026 proves the complete stop/low/middle/high
+domain partition, and that bounds do NOT imply the smaller checked domains.
+Thus no caller can be silently restricted to len<=10. New domains/cuts remain
+partial inputs; no complete native sampler association or root Trace producer
+is claimed. Full/middle/high value/frame attempts remain tool limits.

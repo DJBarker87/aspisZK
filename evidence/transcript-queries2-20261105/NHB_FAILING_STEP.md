@@ -47,3 +47,30 @@ K030 pursues the independent block/word cursor association rather than waiting
 on membership. A possible remaining membership split uses the actual18-bit
 caller invariant; its Lean preservation and decoder-bound obligations are
 written and must pass before it can be relied on as a caller precondition.
+
+K032: canonical18-bit fixed11 prefix contract still times out at90s.
+K033/K034 test the independent absence/presence directions with owned fixed22
+carriers and the caller-proved18-bit invariant; both remain excluded if they
+fail. The next split restricts those directions to lengths11..15 and a fixed15
+prefix. Its required prefix/canonical/membership adapter laws are explicit.
+No shorter passing domain is substituted for full caller coverage.
+L016: the set-window rewrite did not unfold the intended Aeneas array carrier;
+stopped/continuing fields checked but the module failed. An explicit list
+projection replaces the ambiguous rewrite. No failed declaration is credited.
+
+K037: full word/cursor function contract with scalar pre-observations times out
+at90s. K038 adds the independently proved inactive-zero invariant (L021), also
+times out. K039 specializes to stopped states; it also times out although the
+native contains branch is unreachable. Thus these compound limits are NOT
+attributed solely to slice membership. K040 removes contract-snapshot machinery
+and computes pre-observations in an ordinary source-window harness; still90s.
+The replacement K041 separates the already-checked K030/K031 cursor/decode cut
+from the SAME candidate's scalar word body. It executes actual native contains;
+there is no unproved membership stub. The for-loop candidate binder is the
+source association point, not a separately chosen word or digest block.
+
+L018 repeated an own reserved-word naming error (`prefix`); L019 uses `view`
+and accepts the generic prefix adapter laws. L020 failed initial list-index and
+dependent-index rewrites; L021 uses a typed cell projection and accepts all
+inactive-zero laws. L022/L023 exposed only own field-abbreviation/proof-index
+elaboration errors in the observation adapter; failed roots remain excluded.

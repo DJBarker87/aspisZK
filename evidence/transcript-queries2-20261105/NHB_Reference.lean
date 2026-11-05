@@ -53,7 +53,8 @@ theorem set_window (s : State) (x : U32) (j : Fin 22) :
       omega)=
     (if j.val=s.accepted_len.val then x else
       s.accepted.val[j.val]'(by have := s.accepted.property; change s.accepted.val.length=22 at this; omega)) := by
-  simp only [Array.set,List.getElem_set,eq_comm]
+  change (s.accepted.val.set s.accepted_len.val x)[j.val] = _
+  simp only [List.getElem_set,eq_comm]
 
 #print axioms stopped
 #print axioms continuing

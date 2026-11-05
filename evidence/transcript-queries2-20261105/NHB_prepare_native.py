@@ -8,7 +8,7 @@ for part in patch.split('diff --git ')[1:]:
  head,*ls=part.splitlines();name=head.split(' b/')[1];files[name]='\n'.join(l[1:] for l in ls if l.startswith('+') and not l.startswith('+++'))+'\n'
 p='crates/aspis-core/src/lib.rs';files[p]=files[p].replace('#![no_std]','#![cfg_attr(kani, feature(allocator_api))]\n#![no_std]')+'\n#[cfg(kani)]\n#[path="../../../KMX_stubs.rs"]\npub mod KMX_stubs;\n'
 p='crates/aspis-core/src/r0_transcript.rs';files[p]+='\n#[cfg(kani)]\n#[path="NHB_harness.rs"]\nmod NHB_harness;\n'
-files['crates/aspis-core/src/NHB_harness.rs']=(E/'NHB_partition18.rs.txt').read_text()
+files['crates/aspis-core/src/NHB_harness.rs']=(E/'NHB_constant_contains.rs.txt').read_text()
 (E/'NHB_HARNESSES.patch').write_text(''.join(''.join(difflib.unified_diff(frozen.get(p,'').splitlines(True),t.splitlines(True),fromfile='a/'+p,tofile='b/'+p)) for p,t in files.items() if frozen.get(p)!=t))
 (E/'NHB_SOURCE_PINS.json').write_text(json.dumps({p:hashlib.sha256(t.encode()).hexdigest() for p,t in files.items()},indent=1)+'\n')
 # Revalidate admission before upload, never infer permission from exit alone.
