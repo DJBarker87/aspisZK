@@ -377,3 +377,7 @@ Both rows were ADDED by the lead (C3-BIN rulings (ab) and (ac)), reported to the
 ### RuntimeClockSlotBinding (ADDED-LEAD-20261105, under the owner decision of 2026-11-04 on Solana runtime assumptions)
 
 Statement: for the same instruction execution context, `clockGet ctx = ok v -> v = bankSlot ctx` (the Clock sysvar's slot, when the call succeeds, is the bank slot of the executing transaction). Says nothing about success of the call, slot monotonicity, epochs or account retention. Consumer: programs/r1-cost-probe/src/r1_pool_adapter.rs:910 (Clock::get()?.slot) and every forwarded current_slot. Source: evidence/exp-premises-20261105/NGP_CANDIDATE_ROWS.md (NGP-R1). Removal condition: a proved realization of the pinned Clock sysvar implementation. Ruling (aj).
+
+### ReviewedTranscription-prepared_claim (ruling (ah), ADDED-LEAD-20261106; reclassification, option A)
+
+Row TX1:193 crates/aspis-r1-cost-probe/src/verifier.rs::prepared_claim is CLOSED under ruling (ah) because Aeneas rejects its loop (Not_found at loop join). Trusted beyond the emitted-body route: the hand transcription of the prefix-owned reference f_ref into Lean (evidence/prepared-claim2-20261105/NGY_TRANSCRIPTION.md, line-by-line correspondence), with the frozen function proved equal to f_ref by Kani proof_for_contract with the Dot child as a logging oracle and a corruption control (NGY_ASSOCIATION.md, NGY_STUBS.md). Removal condition: an emitted body for prepared_claim from the pinned extractor (or an approved successor) proved equal to the transcription.
