@@ -1,0 +1,533 @@
+structure NID_ResumeFields.Domain (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator) : Prop
+number of parameters: 2
+fields:
+  NID_ResumeFields.Domain.variant : Eq.{1} p.variant AspisR1Stage2.transport.Variant.S2
+  NID_ResumeFields.Domain.gamma : NID_ResumeCanonical.ECanonical p.gamma
+  NID_ResumeFields.Domain.kappa : NID_ResumeCanonical.ECanonical p.kappa
+  NID_ResumeFields.Domain.alpha : ∀ (x : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+      Membership.mem.{0, 0} (↑p.alpha) x → NID_ResumeCanonical.ECanonical x
+  NID_ResumeFields.Domain.rho : NID_ResumeCanonical.KCanonical p.rho
+  NID_ResumeFields.Domain.semantic : ∀ (x : AspisR1Stage2.aspis_core.field.QM31),
+      Membership.mem.{0, 0} (↑p.semantic_alpha) x → NID_ResumeCanonical.KCanonical x
+  NID_ResumeFields.Domain.coordinates : ∀ (z : AspisR1Stage2.aspis_core.circle.SecureCirclePoint),
+      Membership.mem.{0, 0} (↑p.z) z → NID_ResumeCanonical.KCanonical z.x ∧ NID_ResumeCanonical.KCanonical z.y
+  NID_ResumeFields.Domain.claim : NID_ResumeCanonical.ECanonical p.claim
+  NID_ResumeFields.Domain.rhs : NID_ResumeCanonical.ECanonical a.rhs
+  NID_ResumeFields.Domain.power : NID_ResumeCanonical.KCanonical a.power
+  NID_ResumeFields.Domain.width : Eq.{1} (List.length.{0} ↑a.weights) 64
+  NID_ResumeFields.Domain.weights : ∀ (x : AspisR1Stage2.aspis_core.field.QM31),
+      Membership.mem.{0, 0} (↑a.weights) x → NID_ResumeCanonical.KCanonical x
+constructor:
+  NID_ResumeFields.Domain.mk {p : AspisR1Stage2.verifier.Prepared} {a : AspisR1Stage2.verifier.Accumulator}
+    (variant : Eq.{1} p.variant AspisR1Stage2.transport.Variant.S2) (gamma : NID_ResumeCanonical.ECanonical p.gamma)
+    (kappa : NID_ResumeCanonical.ECanonical p.kappa)
+    (alpha :
+      ∀ (x : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        Membership.mem.{0, 0} (↑p.alpha) x → NID_ResumeCanonical.ECanonical x)
+    (rho : NID_ResumeCanonical.KCanonical p.rho)
+    (semantic :
+      ∀ (x : AspisR1Stage2.aspis_core.field.QM31),
+        Membership.mem.{0, 0} (↑p.semantic_alpha) x → NID_ResumeCanonical.KCanonical x)
+    (coordinates :
+      ∀ (z : AspisR1Stage2.aspis_core.circle.SecureCirclePoint),
+        Membership.mem.{0, 0} (↑p.z) z → NID_ResumeCanonical.KCanonical z.x ∧ NID_ResumeCanonical.KCanonical z.y)
+    (claim : NID_ResumeCanonical.ECanonical p.claim) (rhs : NID_ResumeCanonical.ECanonical a.rhs)
+    (power : NID_ResumeCanonical.KCanonical a.power) (width : Eq.{1} (List.length.{0} ↑a.weights) 64)
+    (weights :
+      ∀ (x : AspisR1Stage2.aspis_core.field.QM31),
+        Membership.mem.{0, 0} (↑a.weights) x → NID_ResumeCanonical.KCanonical x) :
+    NID_ResumeFields.Domain p a
+NID_ResumeCanonical.sourceK_canonical : ∀ (x : AspisR1.OraclePortCheckpointAbiC5.K),
+  NID_ResumeCanonical.KCanonical (AspisR1.CheckpointBytes4ReaderFields.sourceK x)
+NID_ResumeCanonical.sourceE_canonical : ∀ (x : AspisR1.OraclePortCheckpointAbiC5.E),
+  NID_ResumeCanonical.ECanonical (AspisR1.CheckpointBytes4ReaderFields.sourceE x)
+NID_ResumeCanonical.k_at : ∀ (ck : Aeneas.Std.Slice.{0} Aeneas.Std.U8) (offset : ℕ)
+  (q : AspisR1Stage2.aspis_core.field.QM31),
+  AspisR1.CheckpointBytes4Layout.KAt ck offset q → NID_ResumeCanonical.KCanonical q
+NID_ResumeCanonical.e_at : ∀ (ck : Aeneas.Std.Slice.{0} Aeneas.Std.U8) (offset : ℕ)
+  (q : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+  AspisR1.CheckpointBytes4Layout.EAt ck offset q → NID_ResumeCanonical.ECanonical q
+NID_ResumeFields.returned : ∀ (reserved : Bool) {H : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (ck proof pub : Aeneas.Std.Slice.{0} Aeneas.Std.U8) (hash : H) (p : AspisR1Stage2.verifier.Prepared)
+  (a : AspisR1Stage2.verifier.Accumulator),
+  Eq.{1} (List.length.{0} ↑ck) 1768 →
+    Eq.{1}
+        (AspisR1Stage2.verifier.resumeWithOps (AspisR1.CheckpointBytes4Ops.ops reserved) D ck proof pub
+          AspisR1Stage2.transport.Variant.S2 hash)
+        (Aeneas.Std.Result.ok.{0} (Aeneas.Std.core.result.Result.Ok.{0, 0} (Prod.mk.{0, 0} p a))) →
+      NID_ResumeFields.Domain p a
+NID_ResumeCallerDomain.power : ∀ (q : AspisR1Stage2.aspis_core.field.QM31),
+  NID_ResumeCanonical.KCanonical q → NBF_PowerStep.Canonical q
+NID_ResumeCallerDomain.wide : ∀ (q : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+  NID_ResumeCanonical.ECanonical q → NBO_TailDomain.WideCanonical q
+NID_ResumeCallerDomain.gamma : ∀ (q : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+  NID_ResumeCanonical.ECanonical q → AspisR1.NFN_LPi_FieldValues.canonE (AspisR1.FIo_Install.toE q)
+NID_ResumeQuery.weights : ∀ (a : AspisR1Stage2.verifier.Accumulator),
+  (∀ (x : AspisR1Stage2.aspis_core.field.QM31),
+      Membership.mem.{0, 0} (↑a.weights) x → NID_ResumeCanonical.KCanonical x) →
+    NFS_NEV_WeightDomains.Canonical (NEV_AccumulateCarriers.fromAccumulator a).weights
+NID_ResumeQuery.domain : ∀ (reserved : Bool) {H : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (ck proof pub : Aeneas.Std.Slice.{0} Aeneas.Std.U8) (hash : H) (p : AspisR1Stage2.verifier.Prepared)
+  (a : AspisR1Stage2.verifier.Accumulator),
+  Eq.{1} (List.length.{0} ↑ck) 1768 →
+    Eq.{1}
+        (AspisR1Stage2.verifier.resumeWithOps (AspisR1.CheckpointBytes4Ops.ops reserved) D ck proof pub
+          AspisR1Stage2.transport.Variant.S2 hash)
+        (Aeneas.Std.Result.ok.{0} (Aeneas.Std.core.result.Result.Ok.{0, 0} (Prod.mk.{0, 0} p a))) →
+      Eq.{1} (↑a.next) 10 →
+        AspisR1.NFS_QueryInvariant.Domain p 10 22 a (AspisR1.NFW_QueryResume.pending a) ∧
+          AspisR1.NFN_LPi_FieldValues.canonE (AspisR1.FIo_Install.toE p.gamma)
+@NID_MerkleLeafPacket.selected : ∀ {H : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 H) (hash : H)
+  (proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8),
+  Eq.{1} (List.length.{0} ↑proof) 57607 →
+    ∀ (index kind : Aeneas.Std.Usize),
+      LT.lt.{0} (↑index) 22 →
+        ∀ (before : AspisR1.CheckpointBytes5Effect.Log),
+          ∃ view,
+            Eq.{1} (AspisR1.Port4B_Opening.opening proof index) (Aeneas.Std.Result.ok.{0} view) ∧
+              Eq.{1} (List.length.{0} ↑view) 832 ∧
+                Eq.{1} (AspisR1.MultiproofConeCanonical.bytesOf ↑view)
+                    (AspisR1.OraclePortCompactDraft.slice (AspisR1.MultiproofConeCanonical.bytesOf ↑proof)
+                      (HAdd.hAdd.{0, 0, 0} 10055 (HMul.hMul.{0, 0, 0} (↑index) 832)) 832) ∧
+                  Eq.{1} (AspisR1.CheckpointBytes5Effect.erase D hash (AspisR1.Port4B_LeafCode.code kind view))
+                      (D.digest hash (AspisR1.Port4B_LeafCode.input kind view)) ∧
+                    Eq.{1} (AspisR1.CheckpointBytes5Effect.run D hash (AspisR1.Port4B_LeafCode.code kind view) before)
+                      do
+                      let d ← D.digest hash (AspisR1.Port4B_LeafCode.input kind view)
+                      Aeneas.Std.Result.ok.{0}
+                          (Prod.mk.{0, 0} d
+                            (HAppend.hAppend.{0, 0, 0} before
+                              (List.cons.{0} (Prod.mk.{0, 0} (AspisR1.Port4B_LeafCode.input kind view) d)
+                                List.nil.{0})))
+@NID_MerkleLeafPacket.fail_no_suffix : ∀ {H A : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 H) (hash : H)
+  (kind : Aeneas.Std.Usize) (view : Aeneas.Std.Slice.{0} Aeneas.Std.U8),
+  Eq.{1} (List.length.{0} ↑view) 832 →
+    ∀ (e : Aeneas.Std.Error),
+      Eq.{1} (D.digest hash (AspisR1.Port4B_LeafCode.input kind view)) (Aeneas.Std.Result.fail.{0} e) →
+        ∀ (suffix : AspisR1.CheckpointBytes5Effect.Digest → AspisR1.CheckpointBytes5Effect.Code A),
+          Eq.{1}
+            (AspisR1.CheckpointBytes5Effect.erase D hash (bind.{0, 1} (AspisR1.Port4B_LeafCode.code kind view) suffix))
+            (Aeneas.Std.Result.fail.{0} e)
+@NID_MerkleLeafPacket.div_no_suffix : ∀ {H A : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 H) (hash : H)
+  (kind : Aeneas.Std.Usize) (view : Aeneas.Std.Slice.{0} Aeneas.Std.U8),
+  Eq.{1} (List.length.{0} ↑view) 832 →
+    Eq.{1} (D.digest hash (AspisR1.Port4B_LeafCode.input kind view)) Aeneas.Std.Result.div.{0} →
+      ∀ (suffix : AspisR1.CheckpointBytes5Effect.Digest → AspisR1.CheckpointBytes5Effect.Code A),
+        Eq.{1}
+          (AspisR1.CheckpointBytes5Effect.erase D hash (bind.{0, 1} (AspisR1.Port4B_LeafCode.code kind view) suffix))
+          Aeneas.Std.Result.div.{0}
+NID_BoundedReaders.k : ∀ (unwrap : AspisR1.T2Nat_RawJoin.Unwrap),
+  (∀ (N : Aeneas.Std.Usize) (b : Aeneas.Std.Array.{0} Aeneas.Std.U8 N),
+      Eq.{1} (unwrap N (Aeneas.Std.core.result.Result.Ok.{0, 0} b)) (Aeneas.Std.Result.ok.{0} b)) →
+    ∀ (r : AspisR1Stage2.verifier.Reader),
+      LE.le.{0} (HAdd.hAdd.{0, 0, 0} (↑r.at) 16) (List.length.{0} ↑r.bytes) →
+        Eq.{1} (AspisR1.T2Nat_ScalarJoin.readK unwrap r) (AspisR1.CheckpointBytes3Reader.readK r)
+NID_BoundedReaders.e : ∀ (unwrap : AspisR1.T2Nat_RawJoin.Unwrap),
+  (∀ (N : Aeneas.Std.Usize) (b : Aeneas.Std.Array.{0} Aeneas.Std.U8 N),
+      Eq.{1} (unwrap N (Aeneas.Std.core.result.Result.Ok.{0, 0} b)) (Aeneas.Std.Result.ok.{0} b)) →
+    ∀ (r : AspisR1Stage2.verifier.Reader),
+      LE.le.{0} (HAdd.hAdd.{0, 0, 0} (↑r.at) 32) (List.length.{0} ↑r.bytes) →
+        Eq.{1} (AspisR1.T2Nat_ScalarJoin.readE unwrap r) (AspisR1.CheckpointBytes3Reader.readE r)
+NID_BoundedReaders.weight : ∀ (unwrap : AspisR1.T2Nat_RawJoin.Unwrap),
+  (∀ (N : Aeneas.Std.Usize) (b : Aeneas.Std.Array.{0} Aeneas.Std.U8 N),
+      Eq.{1} (unwrap N (Aeneas.Std.core.result.Result.Ok.{0, 0} b)) (Aeneas.Std.Result.ok.{0} b)) →
+    ∀ (r : AspisR1Stage2.verifier.Reader) (i : ℕ),
+      Eq.{1} (List.length.{0} ↑r.bytes) 1768 →
+        Eq.{1} (↑r.at) (HAdd.hAdd.{0, 0, 0} 712 (HMul.hMul.{0, 0, 0} 16 i)) →
+          LT.lt.{0} i 64 → Eq.{1} (AspisR1.T2Nat_ScalarJoin.readK unwrap r) (AspisR1.CheckpointBytes3Reader.readK r)
+NID_BoundedReaders.semantic : ∀ (unwrap : AspisR1.T2Nat_RawJoin.Unwrap),
+  (∀ (N : Aeneas.Std.Usize) (b : Aeneas.Std.Array.{0} Aeneas.Std.U8 N),
+      Eq.{1} (unwrap N (Aeneas.Std.core.result.Result.Ok.{0, 0} b)) (Aeneas.Std.Result.ok.{0} b)) →
+    ∀ (r : AspisR1Stage2.verifier.Reader) (i : ℕ),
+      Eq.{1} (List.length.{0} ↑r.bytes) 1768 →
+        Eq.{1} (↑r.at) (HAdd.hAdd.{0, 0, 0} 408 (HMul.hMul.{0, 0, 0} 16 i)) →
+          LT.lt.{0} i 10 → Eq.{1} (AspisR1.T2Nat_ScalarJoin.readK unwrap r) (AspisR1.CheckpointBytes3Reader.readK r)
+NID_ReadListTransport.source : ∀ (unwrap : AspisR1.T2Nat_RawJoin.Unwrap),
+  (∀ (N : Aeneas.Std.Usize) (b : Aeneas.Std.Array.{0} Aeneas.Std.U8 N),
+      Eq.{1} (unwrap N (Aeneas.Std.core.result.Result.Ok.{0, 0} b)) (Aeneas.Std.Result.ok.{0} b)) →
+    ∀ (n : ℕ) (r : AspisR1Stage2.verifier.Reader),
+      LE.le.{0} (HAdd.hAdd.{0, 0, 0} (↑r.at) (HMul.hMul.{0, 0, 0} 16 n)) (List.length.{0} ↑r.bytes) →
+        Eq.{1} (AspisR1.CheckpointBytes4Sections.readList (AspisR1.T2Nat_ScalarJoin.readK unwrap) n r)
+          (AspisR1.CheckpointBytes4Sections.readList AspisR1.CheckpointBytes3Reader.readK n r)
+NID_WeightReadsTransport.reads : ∀ (unwrap : AspisR1.T2Nat_RawJoin.Unwrap),
+  (∀ (N : Aeneas.Std.Usize) (b : Aeneas.Std.Array.{0} Aeneas.Std.U8 N),
+      Eq.{1} (unwrap N (Aeneas.Std.core.result.Result.Ok.{0, 0} b)) (Aeneas.Std.Result.ok.{0} b)) →
+    ∀ (bytes : Aeneas.Std.Slice.{0} Aeneas.Std.U8) (n : ℕ) (start : Aeneas.Std.Usize),
+      LE.le.{0} (HAdd.hAdd.{0, 0, 0} (↑start) (HMul.hMul.{0, 0, 0} 16 n)) (List.length.{0} ↑bytes) →
+        Eq.{1} (AspisR1.Port5Q2_ReaderWeights.reads (AspisR1.T2Nat_ScalarJoin.readK unwrap) bytes n start)
+          (AspisR1.Port5Q2_ReaderWeights.reads AspisR1.CheckpointBytes3Reader.readK bytes n start)
+NID_WeightReadsTransport.weights : ∀ (unwrap : AspisR1.T2Nat_RawJoin.Unwrap),
+  (∀ (N : Aeneas.Std.Usize) (b : Aeneas.Std.Array.{0} Aeneas.Std.U8 N),
+      Eq.{1} (unwrap N (Aeneas.Std.core.result.Result.Ok.{0, 0} b)) (Aeneas.Std.Result.ok.{0} b)) →
+    ∀ (bytes : Aeneas.Std.Slice.{0} Aeneas.Std.U8) (start : Aeneas.Std.Usize)
+      (v : Aeneas.Std.alloc.vec.Vec.{0} AspisR1Stage2.aspis_core.field.QM31),
+      LE.le.{0} (HAdd.hAdd.{0, 0, 0} (↑start) (HMul.hMul.{0, 0, 0} 16 (List.length.{0} ↑v))) (List.length.{0} ↑bytes) →
+        Eq.{1} (AspisR1.Port5Q2_ReaderWeights.weights (AspisR1.T2Nat_ScalarJoin.readK unwrap) bytes start v)
+          (AspisR1.CheckpointBytes4Ops.readWeights bytes start v)
+NID_WeightReadsTransport.checkpoint : ∀ (unwrap : AspisR1.T2Nat_RawJoin.Unwrap),
+  (∀ (N : Aeneas.Std.Usize) (b : Aeneas.Std.Array.{0} Aeneas.Std.U8 N),
+      Eq.{1} (unwrap N (Aeneas.Std.core.result.Result.Ok.{0, 0} b)) (Aeneas.Std.Result.ok.{0} b)) →
+    ∀ (bytes : Aeneas.Std.Slice.{0} Aeneas.Std.U8) (start : Aeneas.Std.Usize)
+      (v : Aeneas.Std.alloc.vec.Vec.{0} AspisR1Stage2.aspis_core.field.QM31),
+      Eq.{1} (List.length.{0} ↑bytes) 1768 →
+        Eq.{1} (↑start) 712 →
+          Eq.{1} (List.length.{0} ↑v) 64 →
+            Eq.{1} (AspisR1.Port5Q2_ReaderWeights.weights (AspisR1.T2Nat_ScalarJoin.readK unwrap) bytes start v)
+              (AspisR1.CheckpointBytes4Ops.readWeights bytes start v)
+NID_ReadStepFrame.next : ∀ (r out : AspisR1Stage2.verifier.Reader)
+  (value : Aeneas.Std.core.result.Result.{0, 0} AspisR1Stage2.aspis_core.field.QM31 AspisR1Stage2.verifier.Error),
+  LE.le.{0} (HAdd.hAdd.{0, 0, 0} (↑r.at) 16) (List.length.{0} ↑r.bytes) →
+    Eq.{1} (AspisR1.CheckpointBytes3Reader.readK r) (Aeneas.Std.Result.ok.{0} (Prod.mk.{0, 0} value out)) →
+      Eq.{1} (↑out.at) (HAdd.hAdd.{0, 0, 0} (↑r.at) 16) ∧ Eq.{1} out.bytes r.bytes
+NID_ReadStepFrame.remaining : ∀ (r out : AspisR1Stage2.verifier.Reader) (n : ℕ)
+  (q : AspisR1Stage2.aspis_core.field.QM31),
+  LE.le.{0} (HAdd.hAdd.{0, 0, 0} (↑r.at) (HMul.hMul.{0, 0, 0} 16 (HAdd.hAdd.{0, 0, 0} n 1)))
+      (List.length.{0} ↑r.bytes) →
+    Eq.{1} (AspisR1.CheckpointBytes3Reader.readK r)
+        (Aeneas.Std.Result.ok.{0} (Prod.mk.{0, 0} (Aeneas.Std.core.result.Result.Ok.{0, 0} q) out)) →
+      LE.le.{0} (HAdd.hAdd.{0, 0, 0} (↑out.at) (HMul.hMul.{0, 0, 0} 16 n)) (List.length.{0} ↑out.bytes)
+@NID_WithKTransport.source : ∀ {T : Type} (unwrap : AspisR1.T2Nat_RawJoin.Unwrap),
+  (∀ (N : Aeneas.Std.Usize) (b : Aeneas.Std.Array.{0} Aeneas.Std.U8 N),
+      Eq.{1} (unwrap N (Aeneas.Std.core.result.Result.Ok.{0, 0} b)) (Aeneas.Std.Result.ok.{0} b)) →
+    ∀ (r : AspisR1Stage2.verifier.Reader)
+      (left right :
+        AspisR1Stage2.aspis_core.field.QM31 →
+          AspisR1Stage2.verifier.Reader →
+            Aeneas.Std.Result.{0} (Aeneas.Std.core.result.Result.{0, 0} T AspisR1Stage2.verifier.Error)),
+      LE.le.{0} (HAdd.hAdd.{0, 0, 0} (↑r.at) 16) (List.length.{0} ↑r.bytes) →
+        (∀ (q : AspisR1Stage2.aspis_core.field.QM31) (out : AspisR1Stage2.verifier.Reader),
+            Eq.{1} (AspisR1.CheckpointBytes3Reader.readK r)
+                (Aeneas.Std.Result.ok.{0} (Prod.mk.{0, 0} (Aeneas.Std.core.result.Result.Ok.{0, 0} q) out)) →
+              Eq.{1} (left q out) (right q out)) →
+          Eq.{1} (AspisR1.CheckpointBytes4Ops.withK (AspisR1.T2Nat_ScalarJoin.readK unwrap) r left)
+            (AspisR1.CheckpointBytes4Ops.withK AspisR1.CheckpointBytes3Reader.readK r right)
+NID_SemanticTransport.sequence : ∀ (unwrap : AspisR1.T2Nat_RawJoin.Unwrap),
+  (∀ (N : Aeneas.Std.Usize) (b : Aeneas.Std.Array.{0} Aeneas.Std.U8 N),
+      Eq.{1} (unwrap N (Aeneas.Std.core.result.Result.Ok.{0, 0} b)) (Aeneas.Std.Result.ok.{0} b)) →
+    ∀ (bytes : Aeneas.Std.Slice.{0} Aeneas.Std.U8) (start : Aeneas.Std.Usize),
+      LE.le.{0} (HAdd.hAdd.{0, 0, 0} (↑start) 160) (List.length.{0} ↑bytes) →
+        Eq.{1} (AspisR1.CheckpointBytes4Ops.semanticUsing (AspisR1.T2Nat_ScalarJoin.readK unwrap) bytes start)
+          (AspisR1.CheckpointBytes4Ops.readSemanticAlpha bytes start)
+NID_SemanticTransport.source : ∀ (unwrap : AspisR1.T2Nat_RawJoin.Unwrap),
+  (∀ (N : Aeneas.Std.Usize) (b : Aeneas.Std.Array.{0} Aeneas.Std.U8 N),
+      Eq.{1} (unwrap N (Aeneas.Std.core.result.Result.Ok.{0, 0} b)) (Aeneas.Std.Result.ok.{0} b)) →
+    ∀ (bytes : Aeneas.Std.Slice.{0} Aeneas.Std.U8) (start : Aeneas.Std.Usize),
+      LE.le.{0} (HAdd.hAdd.{0, 0, 0} (↑start) 160) (List.length.{0} ↑bytes) →
+        Eq.{1} (AspisR1.Port5Q2_ReaderSemantic.semantic (AspisR1.T2Nat_ScalarJoin.readK unwrap) bytes start)
+          (AspisR1.CheckpointBytes4Ops.readSemanticAlpha bytes start)
+NID_RawOffsetCover.cover : ∀ (offset : ℕ),
+  LE.le.{0} (HAdd.hAdd.{0, 0, 0} offset 32) 1768 →
+    ∃ block,
+      LT.lt.{0} block 7 ∧
+        LE.le.{0} (HMul.hMul.{0, 0, 0} 256 block) offset ∧
+          LT.lt.{0} offset (HMul.hMul.{0, 0, 0} 256 (HAdd.hAdd.{0, 0, 0} block 1))
+NID_RawOffsetCover.unique : ∀ (offset left right : ℕ),
+  LE.le.{0} (HMul.hMul.{0, 0, 0} 256 left) offset →
+    LT.lt.{0} offset (HMul.hMul.{0, 0, 0} 256 (HAdd.hAdd.{0, 0, 0} left 1)) →
+      LE.le.{0} (HMul.hMul.{0, 0, 0} 256 right) offset →
+        LT.lt.{0} offset (HMul.hMul.{0, 0, 0} 256 (HAdd.hAdd.{0, 0, 0} right 1)) → Eq.{1} left right
+NID_TailView.produced : ∀ (ops : VTop_Stages.Ops) (proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+  (p : AspisR1Stage2.verifier.Prepared) (inactive : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+  LE.le.{0} 10055 (List.length.{0} ↑proof) →
+    Eq.{1}
+      (NHT_TailView.view (NHT_Tx2CommonModel.constants ops) proof p none.{0} inactive 7527#usize 7751#usize 7783#usize)
+      (Aeneas.Std.Result.ok.{0} (NID_TailView.exactView proof inactive))
+NID_TailView.fields : ∀ (proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+  (inactive : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+  Eq.{1} (NID_TailView.exactView proof inactive).variant AspisR1Stage2.transport.Variant.S2 ∧
+    Eq.{1} (↑(NID_TailView.exactView proof inactive).round0) (List.take.{0} 224 (List.drop.{0} 7527 ↑proof)) ∧
+      Eq.{1} (↑(NID_TailView.exactView proof inactive).round1) (List.take.{0} 224 (List.drop.{0} 7783 ↑proof)) ∧
+        Eq.{1} (↑(NID_TailView.exactView proof inactive).final_message)
+            (List.take.{0} 2048 (List.drop.{0} 8007 ↑proof)) ∧
+          Eq.{1} (NID_TailView.exactView proof inactive).folded_root none.{0}
+NID_TailView.widths : ∀ (proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+  (inactive : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+  LE.le.{0} 10055 (List.length.{0} ↑proof) →
+    Eq.{1} (List.length.{0} ↑(NID_TailView.exactView proof inactive).round0) 224 ∧
+      Eq.{1} (List.length.{0} ↑(NID_TailView.exactView proof inactive).round1) 224 ∧
+        Eq.{1} (List.length.{0} ↑(NID_TailView.exactView proof inactive).final_message) 2048
+NID_FinishAlpha.supplied : ∀ (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator),
+  NID_ResumeFields.Domain p a →
+    ∀ (i : Fin 2),
+      Eq.{1} (Aeneas.Std.Array.index_usize.{0} p.alpha (↑i)#usize)
+          (Aeneas.Std.Result.ok.{0} (NID_FinishAlpha.alphaAt p i)) ∧
+        AspisR1.LPi_FieldValues.canonE (AspisR1.FIo_Install.toE (NID_FinishAlpha.alphaAt p i))
+NID_FinishAlpha.primitive : ∀ (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator),
+  NID_ResumeFields.Domain p a →
+    Eq.{1} p.variant AspisR1Stage2.transport.Variant.S2 ∧
+      AspisR1.LPi_FieldValues.canonE (AspisR1.FIo_Install.toE p.claim) ∧
+        AspisR1.LPi_FieldValues.canonE (AspisR1.FIo_Install.toE p.kappa) ∧
+          (∀ (x : AspisR1Stage2.aspis_core.field.QM31),
+              Membership.mem.{0, 0} (↑p.semantic_alpha) x → NBF_PowerStep.Canonical x) ∧
+            ∀ (z : AspisR1Stage2.aspis_core.circle.SecureCirclePoint),
+              Membership.mem.{0, 0} (↑p.z) z → NBF_PowerStep.Canonical z.x ∧ NBF_PowerStep.Canonical z.y
+NID_RawWindowFrame.row : ∀ (before after : Aeneas.Std.Array.{0} Aeneas.Std.U64 4#usize),
+  Eq.{1} (NID_RawWindowFrame.limb before 0) (NID_RawWindowFrame.limb after 0) →
+    Eq.{1} (NID_RawWindowFrame.limb before 1) (NID_RawWindowFrame.limb after 1) →
+      Eq.{1} (NID_RawWindowFrame.limb before 2) (NID_RawWindowFrame.limb after 2) →
+        Eq.{1} (NID_RawWindowFrame.limb before 3) (NID_RawWindowFrame.limb after 3) → Eq.{1} before after
+NID_RawWindowFrame.rows : ∀ (before after : List.{0} (Aeneas.Std.Array.{0} Aeneas.Std.U64 4#usize)),
+  Eq.{1} (List.length.{0} before) (List.length.{0} after) →
+    (∀ (i : ℕ) (hi : LT.lt.{0} i (List.length.{0} before)) (hj : LT.lt.{0} i (List.length.{0} after)) (j : Fin 4),
+        Eq.{1} (NID_RawWindowFrame.limb (getElem.{0, 0, 0} before i hi) j)
+          (NID_RawWindowFrame.limb (getElem.{0, 0, 0} after i hj) j)) →
+      Eq.{1} before after
+NID_RawWindowFrame.contiguous : ∀ (j : ℕ),
+  LT.lt.{0} j 4 →
+    LE.le.{0} (HAdd.hAdd.{0, 0, 0} (HMul.hMul.{0, 0, 0} 8 j) 8) 32 ∧
+      (LT.lt.{0} j 3 →
+        Eq.{1} (HAdd.hAdd.{0, 0, 0} (HMul.hMul.{0, 0, 0} 8 j) 8) (HMul.hMul.{0, 0, 0} 8 (HAdd.hAdd.{0, 0, 0} j 1)))
+AspisR1.NCI_QueryInvariant.accepted_head : ∀ (seen : List.{0} Aeneas.Std.U32) (q : Aeneas.Std.U32)
+  (qs : List.{0} Aeneas.Std.U32),
+  Eq.{1} (AspisR1.CheckpointBytes4Ops.queryLoop seen (List.cons.{0} q qs))
+      (Aeneas.Std.core.result.Result.Ok.{0, 0} ()) →
+    LT.lt.{0} (↑q) 262144 ∧
+      q ∉ seen ∧
+        Eq.{1}
+          (AspisR1.CheckpointBytes4Ops.queryLoop (HAppend.hAppend.{0, 0, 0} seen (List.cons.{0} q List.nil.{0})) qs)
+          (Aeneas.Std.core.result.Result.Ok.{0, 0} ())
+AspisR1.NCI_QueryInvariant.accepted_bounds : ∀ (seen qs : List.{0} Aeneas.Std.U32),
+  Eq.{1} (AspisR1.CheckpointBytes4Ops.queryLoop seen qs) (Aeneas.Std.core.result.Result.Ok.{0, 0} ()) →
+    ∀ (q : Aeneas.Std.U32), Membership.mem.{0, 0} qs q → LT.lt.{0} (↑q) 262144
+AspisR1.NCI_QueryInvariant.accepted_fresh : ∀ (seen qs : List.{0} Aeneas.Std.U32),
+  Eq.{1} (AspisR1.CheckpointBytes4Ops.queryLoop seen qs) (Aeneas.Std.core.result.Result.Ok.{0, 0} ()) →
+    ∀ (q : Aeneas.Std.U32), Membership.mem.{0, 0} qs q → q ∉ seen
+AspisR1.NCI_QueryInvariant.accepted_unique : ∀ (seen qs : List.{0} Aeneas.Std.U32),
+  Eq.{1} (AspisR1.CheckpointBytes4Ops.queryLoop seen qs) (Aeneas.Std.core.result.Result.Ok.{0, 0} ()) →
+    List.Nodup.{0} qs
+NID_ResumeQueries.returned : ∀ (reserved : Bool) {H : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (ck proof pub : Aeneas.Std.Slice.{0} Aeneas.Std.U8) (hash : H) (p : AspisR1Stage2.verifier.Prepared)
+  (a : AspisR1Stage2.verifier.Accumulator),
+  Eq.{1}
+      (AspisR1Stage2.verifier.resumeWithOps (AspisR1.CheckpointBytes4Ops.ops reserved) D ck proof pub
+        AspisR1Stage2.transport.Variant.S2 hash)
+      (Aeneas.Std.Result.ok.{0} (Aeneas.Std.core.result.Result.Ok.{0, 0} (Prod.mk.{0, 0} p a))) →
+    (∀ (q : Aeneas.Std.U32), Membership.mem.{0, 0} (↑p.queries) q → LT.lt.{0} (↑q) 262144) ∧ List.Nodup.{0} ↑p.queries
+NID_KOffsetCover.rho : NID_KOffsetCover.Allowed 304
+NID_KOffsetCover.semantic : ∀ (i : ℕ),
+  LT.lt.{0} i 10 → NID_KOffsetCover.Allowed (HAdd.hAdd.{0, 0, 0} 408 (HMul.hMul.{0, 0, 0} 16 i))
+NID_KOffsetCover.coordinates : NID_KOffsetCover.Allowed 568 ∧
+  NID_KOffsetCover.Allowed 584 ∧ NID_KOffsetCover.Allowed 600 ∧ NID_KOffsetCover.Allowed 616
+NID_KOffsetCover.power : NID_KOffsetCover.Allowed 696
+NID_KOffsetCover.weights : ∀ (i : ℕ),
+  LT.lt.{0} i 64 → NID_KOffsetCover.Allowed (HAdd.hAdd.{0, 0, 0} 712 (HMul.hMul.{0, 0, 0} 16 i))
+NID_KOffsetCover.bounded : ∀ (offset : ℕ),
+  NID_KOffsetCover.Allowed offset → LE.le.{0} (HAdd.hAdd.{0, 0, 0} offset 16) 1768
+@AspisR1.RPx_Deployed.deployed : ∀ {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W),
+          AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (missing : AspisR1.IDa_Deployed.Uninstalled CoreError) (indexError : CoreError)
+                (reservation : AspisR1.NP6_StdModel.Reservation) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+                (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+                (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result.{0} AspisR1.S2Z.Oracle.Digest),
+                AspisR1.S2W_DigestExtraction.AeneasExtraction
+                    (AspisR1.DrvC_Installation.sdk
+                      (AspisR1.FIp_Install.configuration indexError
+                        (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation))
+                    native1 native2 hashv →
+                  ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                    AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+                      AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                        ∀ (data1 data2 : Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+                          (slot : AspisR1.S2W_ExtractionBoundary.Slot) (state1 state2 final1 final2 : A)
+                          (saved : Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+                          (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)),
+                          Eq.{1}
+                              (AspisR1.S2W_D189Wrappers.first native1 copy allocator e1 AspisR1.CPH_Program.verifier
+                                data1 state1)
+                              (Aeneas.Std.Result.ok.{0}
+                                (Aeneas.Std.core.result.Result.Ok.{0, 0}
+                                  (Prod.mk.{0, 0} saved (Prod.mk.{0, 0} post1 final1)))) →
+                            Eq.{1}
+                                (AspisR1.S2W_D189Wrappers.second native2 allocator e2 AspisR1.CPH_Program.verifier data2
+                                  slot state2)
+                                (Aeneas.Std.Result.ok.{0}
+                                  (Aeneas.Std.core.result.Result.Ok.{0, 0} (Prod.mk.{0, 0} post2 final2))) →
+                              ∀ (root : Aeneas.Std.Array.{0} Aeneas.Std.U8 32#usize) (length : Aeneas.Std.U32)
+                                (prior :
+                                  AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                                    AspisV8R19.SourceDuplexStep.State Unit)
+                                (words : AspisR1.CanonicalCutEnrichedTranscript.Words)
+                                (p : AspisR1.CPG_Projection.Observations Tx A) (t u : Tx)
+                                (actions : List.{0} (AspisR1.CPP_BankState.Action A)),
+                                AspisR1.CPH_Game.DeployedPairExecution p t u e1 e2 saved actions native1 native2 copy
+                                    allocator AspisR1.CPH_Program.verifier →
+                                  AspisR1.CPR_DataPersistence.TwoTransactionLaw (AspisR1.CPG_Projection.adjacent p)
+                                      (AspisR1.CPG_Projection.ordinary p (AspisR1.Hist_Nonvacuity.key 0#u8))
+                                      (AspisR1.CPG_Projection.before p) (AspisR1.CPG_Projection.tentative p)
+                                      (AspisR1.CPG_Projection.success p) (AspisR1.CPG_Projection.loaded p) →
+                                    ∀ (D : AspisR1.LiteralByteProtocol.Decoder) (a : AspisR1.SCE_Experiment.Adversary A)
+                                      (Q0 Q1 : ℕ),
+                                      (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                                          LE.le.{0}
+                                            (List.length.{0}
+                                              (AspisR1.ARW_Induced.issued native1 copy allocator
+                                                AspisR1.CPH_Program.verifier a H))
+                                            (HAdd.hAdd.{0, 0, 0} Q0 Q1)) →
+                                        have P :=
+                                          AspisR1.ARW_Induced.program native1 copy allocator
+                                            AspisR1.CPH_Program.verifier a;
+                                        have runtime :=
+                                          AspisR1.ARX_AdmittedRuntime.runtime L copy allocator
+                                            (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation)
+                                            indexError reservation native1 native2 hashv a;
+                                        have select := fun x =>
+                                          AspisR1.P2P_NativeSelection.pair
+                                            (AspisR1.DrvC_Installation.sdk
+                                              (AspisR1.FIp_Install.configuration indexError
+                                                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                  reservation)
+                                                reservation))
+                                            AspisR1.CPH_Program.verifier e1 e2 data2 slot;
+                                        AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary
+                                            (AspisR1.P6C_Extension.dictionary hashv H) () H AspisR1.Op5T_P6.parent
+                                            AspisR1.Op5T_P6.parent AspisR1.Op5T_P6.parent
+                                            AspisR1.MultiproofConeP6Batch.referenceLeaf ∧
+                                          Eq.{1}
+                                              (AspisR1.DrvC_Implementation.driver
+                                                (AspisR1.FIp_Install.configuration indexError
+                                                  (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                    reservation)
+                                                  reservation))
+                                              (AspisR1.DrvC_SourceEntry.source
+                                                (AspisR1.FIp_Install.configuration indexError
+                                                  (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                    reservation)
+                                                  reservation)
+                                                hashv) ∧
+                                            Eq.{2}
+                                                (AspisR1.DrvC_Installation.sdk
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                    (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                      reservation)
+                                                    reservation))
+                                                (AspisR1.SdkD_PairBatches.dictionary
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).adapter
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).currentBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).stageBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).finish
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).reserved
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).query
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).geometry
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).boundaries
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).std) ∧
+                                              AspisR1.FJv_DResult.Outcome L e1 e2 w1 w2
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).adapter
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).currentBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).reserved
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).query
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).geometry
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).stageBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).finish
+                                                  (AspisR1.FIp_Install.boundaries
+                                                    (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation).boundaries)
+                                                  reservation AspisR1.CPH_Program.verifier data1 data2 slot saved post1
+                                                  post2 H
+                                                  (AspisR1.DrvC_Implementation.driver
+                                                    (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation))
+                                                  prior (p.physicalEvents t) hashv
+                                                  (AspisR1.BinRawByteCollisionTargets.event
+                                                    AspisR1.SelectedTranscriptParams.params.iv
+                                                    (HAdd.hAdd.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} Q0 Q1) 2965)
+                                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                                      (AspisR1.Hiq_RecordedJoint.program
+                                                        (AspisR1.F3X_Account.program
+                                                          (AspisR1.FIp_Install.configuration indexError
+                                                            (AspisR1.IDa_Deployed.deployedConfiguration missing
+                                                              indexError reservation)
+                                                            reservation)
+                                                          hashv P)
+                                                        AspisR1.F3X_Projection.project select))) ∧
+                                                (AspisR1.F3X_ModelClaims.Claims
+                                                      (AspisR1.FIp_Install.configuration indexError
+                                                        (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                          reservation)
+                                                        reservation)
+                                                      D P (HAdd.hAdd.{0, 0, 0} Q0 Q1) ∧
+                                                    AspisR1.F3Y_SourceClaims.Claims
+                                                        (AspisR1.FIp_Install.configuration indexError
+                                                          (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                            reservation)
+                                                          reservation)
+                                                        D hashv P (HAdd.hAdd.{0, 0, 0} Q0 Q1) select ∧
+                                                      AspisR1.F3Y_AccountMass.Claims
+                                                          (AspisR1.FIp_Install.configuration indexError
+                                                            (AspisR1.IDa_Deployed.deployedConfiguration missing
+                                                              indexError reservation)
+                                                            reservation)
+                                                          hashv P (HAdd.hAdd.{0, 0, 0} Q0 Q1) select ∧
+                                                        ⋯) ∧
+                                                  (Eq.{1} (native1 AspisR1.CPH_Program.verifier e1.first data1)
+                                                        (Aeneas.Std.Result.ok.{0}
+                                                          (Aeneas.Std.core.result.Result.Ok.{0, 0} saved)) ∧
+                                                      Eq.{1} (List.length.{0} ↑saved) 1768 ∧ ⋯) ∧
+                                                    AspisR1.Rc2_Events.Facts
+                                                        (AspisR1.FIp_Install.configuration indexError
+                                                          (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                            reservation)
+                                                          reservation)
+                                                        hashv native1 native2 copy allocator
+                                                        AspisR1.CPH_Program.verifier H saved ∧
+                                                      AspisR1.CPH_Protection.Facts p t saved
+                                                          AspisR1.CPH_Program.verifier ∧
+                                                        ⋯

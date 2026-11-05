@@ -1,0 +1,17 @@
+def NBF_PowerStep.Canonical : NBF_RowInstall.Q → Prop :=
+fun q => ∀ (k : Fin 4), ↑(S7Kani2OwnedRowRefinement.powerLimb (AspisR1.Port3_RowsInstall.toK q) k) < 2 ^ 31 - 1
+def NBO_TailDomain.WideCanonical : AspisR1Stage2.Stage2E → Prop :=
+fun x => NBF_PowerStep.Canonical x.c0 ∧ NBF_PowerStep.Canonical x.c1
+def NFS_NEV_WeightDomains.Canonical : Aeneas.Std.alloc.vec.Vec NEV_AccumulateCarriers.RawQ → Prop :=
+fun v => ∀ q ∈ ↑v, NBF_PowerStep.Canonical (NEV_AccumulateCarriers.toQ q)
+def NEV_AccumulateCarriers.fromAccumulator : AspisR1Stage2.verifier.Accumulator → NEV_AccumulateRaw.Accumulator :=
+fun a =>
+  { weights := NEV_AccumulateCarriers.mapVec NEV_AccumulateCarriers.fromQ a.weights,
+    rhs := NEV_AccumulateCarriers.fromE a.rhs, power := NEV_AccumulateCarriers.fromQ a.power, next := a.next }
+def AspisR1.NFN_LPi_FieldValues.canonQ : AspisR1.NFN_LPi_FieldValues.NQ → Prop :=
+fun x => AspisR1.NFN_LPi_FieldValues.canonC x.c0 ∧ AspisR1.NFN_LPi_FieldValues.canonC x.c1
+NID_generated/NID_InspectDomains.lean:7:7: error(lean.unknownIdentifier): Unknown constant `AspisR1.NFN_LPi_FieldValues.canonM`
+def AspisR1.FIo_Install.toE : AspisR1Stage2.Stage2Finish.E → AspisR1.FIo_Install.NE :=
+fun x =>
+  { c0 := { c0 := { a := x.c0.c0.a, b := x.c0.c0.b }, c1 := { a := x.c0.c1.a, b := x.c0.c1.b } },
+    c1 := { c0 := { a := x.c1.c0.a, b := x.c1.c0.b }, c1 := { a := x.c1.c1.a, b := x.c1.c1.b } } }

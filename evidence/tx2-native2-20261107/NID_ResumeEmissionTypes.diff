@@ -1,0 +1,55 @@
+--- raw/Types.lean
++++ NID_ResumeEmissionTypes.lean
+@@ -7,12 +7,10 @@
+ set_option linter.unusedVariables false
+ 
+ /- You can set the `maxHeartbeats` value with the `-max-heartbeats` CLI option -/
+-set_option maxHeartbeats 1000000
+ 
+ /- You can set the `maxRecDepth` value with the `-max-recdepth` CLI option -/
+-set_option maxRecDepth 2048
+ 
+-namespace NHR_tx2_common
++namespace NID_ResumeEmission
+ 
+ /-- [aspis_core::field::M31]
+     Source: 'crates/aspis-core/src/field.rs', lines 23:0-23:14
+@@ -71,7 +69,7 @@
+     Source: 'crates/aspis-core/src/r0/mod.rs', lines 39:0-39:14
+     Name pattern: [aspis_core::r0::Error]
+     Visibility: public -/
+-@[discriminant isize, rust_type "aspis_core::r0::Error"]
++@[rust_type "aspis_core::r0::Error"]
+ inductive aspis_core.r0.Error where
+ | IndexOutOfRange : aspis_core.r0.Error
+ | WrongLength : aspis_core.r0.Error
+@@ -94,7 +92,6 @@
+ /-- [aspis_r1_cost_probe::transport::Variant]
+     Source: 'crates/aspis-r1-cost-probe/src/transport.rs', lines 3:0-3:30
+     Visibility: public -/
+-@[discriminant isize]
+ inductive transport.Variant where
+ | S1 : transport.Variant
+ | S2 : transport.Variant
+@@ -119,7 +116,6 @@
+ /-- [aspis_r1_cost_probe::verifier::Error]
+     Source: 'crates/aspis-r1-cost-probe/src/verifier.rs', lines 20:0-27:38
+     Visibility: public -/
+-@[discriminant isize]
+ inductive verifier.Error where
+ | Parse : verifier.Error
+ | Semantic : verifier.Error
+@@ -155,7 +151,6 @@
+ /-- [aspis_r1_cost_probe::verifier::Phase]
+     Source: 'crates/aspis-r1-cost-probe/src/verifier.rs', lines 29:0-29:152
+     Visibility: public -/
+-@[discriminant isize]
+ inductive verifier.Phase where
+ | Parsed : verifier.Phase
+ | Semantic : verifier.Phase
+@@ -199,4 +194,4 @@
+   final_message : Slice Std.U8
+   query_bytes : Slice Std.U8
+ 
+-end NHR_tx2_common
++end NID_ResumeEmission
