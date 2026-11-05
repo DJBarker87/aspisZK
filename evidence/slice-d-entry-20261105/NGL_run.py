@@ -42,16 +42,22 @@ assert target.startswith('NGL_') or kind in ['auditbin','kani','extract','depend
 
 if kind=='kani':
  files['NGL_gate.py']=(E/'NGL_gate.py').read_text()
+ for n in ['NGL_erasure.py','NGL_FROZEN_SOURCE_PINS.json','NGL_ZERO_SOURCE_ERASURE.json','NGL_CONTRACT_ANNOTATIONS.json']:files[n]=(E/n).read_text()
  if (E/'NGL_NATIVE_INPUTS.json').exists():
   for n,t in json.loads((E/'NGL_NATIVE_INPUTS.json').read_text()).items():files['NGL_src/'+n]=t
   files['NGL_SOURCE_PINS.json']=(E/'NGL_SOURCE_PINS.json').read_text()
- sources=['NGL_gate.py','NGL_SOURCE_PINS.json','NGL_src/Cargo.lock','NGL_src/Cargo.toml','NGL_src/crates/aspis-r1-cost-probe/src/compact.rs','NGL_src/crates/aspis-r1-cost-probe/src/r1_wire.rs','NGL_src/crates/aspis-r1-cost-probe/src/transport.rs','NGL_src/crates/aspis-r1-cost-probe/src/verifier.rs']
+ sources=['NGL_CONTRACT_ANNOTATIONS.json','NGL_erasure.py','NGL_FROZEN_SOURCE_PINS.json','NGL_ZERO_SOURCE_ERASURE.json','NGL_gate.py','NGL_SOURCE_PINS.json','NGL_src/Cargo.lock','NGL_src/Cargo.toml','NGL_src/crates/aspis-r1-cost-probe/src/compact.rs','NGL_src/crates/aspis-r1-cost-probe/src/r1_wire.rs','NGL_src/crates/aspis-r1-cost-probe/src/transport.rs','NGL_src/crates/aspis-r1-cost-probe/src/verifier.rs']
  sources += [n for n in files if n.startswith('NGL_src/')]
  sources += ['NGL_src/crates/aspis-r1-cost-probe/src/'+n+'.rs' for n in ['NGL_reference','NGL_compact','NGL_wire','NGL_transport','NGL_verifier']]
  command=['python3','NGL_gate.py',a+'.json']
  env.update(CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-Copt-level=3 -C link-arg=-Wl,--threads=1')
  import os
  if os.environ.get('NGL_INVERT'):env['RUSTFLAGS']+=' --cfg NGL_invert'
+ if os.environ.get('NGL_RECORD_CASE') in ['borrow','rejected']:env['RUSTFLAGS']+=' --cfg NGL_record_'+os.environ['NGL_RECORD_CASE']
+ if os.environ.get('NGL_FALSE_TARGET') in ['length','data','checkpoint']:env['RUSTFLAGS']+=' --cfg NGL_false_'+os.environ['NGL_FALSE_TARGET']
+ if os.environ.get('NGL_CAP') in ['1768','1880','384','192','768','128','256','320']:env['RUSTFLAGS']+=' --cfg NGL_cap_'+os.environ['NGL_CAP']
+ if os.environ.get('NGL_DISTINCT_EXIT'):env['RUSTFLAGS']+=' --cfg NGL_distinct_exit'
+ if os.environ.get('NGL_GUARD_FALSE'):env['RUSTFLAGS']+=' --cfg NGL_guard_false'
 elif kind=='extract':
  files['NGL_extract.py']=(E/'NGL_extract.py').read_text()
  files['NGL_references.rs']=(E/'NGL_references.rs.txt').read_text()
@@ -59,10 +65,12 @@ elif kind=='extract':
 elif kind=='dependency':
  assert target=='JHe_ZeroGate'
  n='NGL_dependencies/'+target+'.lean';files[n]=(E.parent.parent/'lean'/ (target+'.lean')).read_text();sources=[n]
- command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NGL_dependencies','-o','NGL_objects/'+target+'.olean',n]
+ command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NGL_dependencies','-o','NGL_objects/'+target.replace('.','/')+'.olean',n]
 elif kind=='lean':
- n='NGL_generated/'+target+'.lean';files[n]=(E/(target+'.lean')).read_text();sources=[n]
- command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NGL_generated','-o','NGL_objects/'+target+'.olean',n]
+ n='NGL_generated/'+target.replace('.','/')+'.lean'
+ source=E/json.loads((E/'NGL_GENERATED_INPUTS.json').read_text())[target] if target in json.loads((E/'NGL_GENERATED_INPUTS.json').read_text()) else E/(target+'.lean')
+ files[n]=source.read_text();sources=[n]
+ command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NGL_generated','-o','NGL_objects/'+target.replace('.','/')+'.olean',n]
  if target in ['NGL_Driver','NGL_ProofDriver','NGL_Stage2Driver','NFA_WALKER','NFA_MemoryLimit']:command+=['-c','NGL_native/'+target+'.c']
 elif kind=='linkaudit':
  sources=['NGL_native/'+target+'.c','NGL_native/NFA_WALKER.c','NGL_native/NFA_MemoryLimit.c']
@@ -78,6 +86,8 @@ elif kind=='auditbatch':
 elif kind=='auditbin':
  sources=['NGL_generated/NGL_Driver.lean'];command=['NGL_native/NGL_Driver',target]
 else:raise ValueError(kind)
+if kind=='auditbatch':
+ files['NGL_AUDIT_ROOTS.json']=(E/'NGL_AUDIT_ROOTS.json').read_text();sources+=['NGL_AUDIT_ROOTS.json']
 if target in ['scan','queryscan']:
  name='NGL_QUERY_EXPECTED_IMPORTS.jsonl' if target=='queryscan' else 'NGL_EXPECTED_IMPORTS.jsonl'
  files[name]=(E/name).read_text();sources+=[name]
@@ -102,7 +112,7 @@ r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});files=json.loads({json.dumps(files)!r})
 for directory in ['NGL_objects','NGL_tmp','NGL_native']:(b/directory).mkdir(parents=True,exist_ok=True)
-(b/'NGL_objects'/{(target+'.olean')!r}).parent.mkdir(parents=True,exist_ok=True)
+(b/'NGL_objects'/{(target.replace('.','/')+'.olean')!r}).parent.mkdir(parents=True,exist_ok=True)
 for n,t in files.items():
  p=b/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
 x=json.loads((b/{(a+'.json')!r}).read_text());roots=x['env']['LEAN_PATH'].split(':');pins={{}}
@@ -128,7 +138,7 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
-names += [str(p.relative_to(b)) for p in b.glob(a+'-graph*')]+[str(p.relative_to(b)) for p in b.glob(a+'-source*')]+[str(p.relative_to(b)) for p in b.glob(a+'-lock*')] if {kind!r}=='kani' else []
+names += [str(p.relative_to(b)) for p in b.glob(a+'-graph*')]+[str(p.relative_to(b)) for p in b.glob(a+'-source*')]+[str(p.relative_to(b)) for p in b.glob(a+'-lock*')]+[str(p.relative_to(b)) for p in b.glob(a+'-erasure*')] if {kind!r}=='kani' else []
 if {kind!r}=='extract':names += [a+'-extraction-pins.json',a+'.llbc']+[str(p.relative_to(b)) for p in (b/'NGL_extracted'/{target!r}).rglob('*') if p.is_file()]
 names += [str(p.relative_to(b)) for p in b.glob('NEP_*_REACHABLE.txt')] if {kind!r}=='auditbatch' else [str(p.relative_to(b)) for p in b.glob('NEP_'+{target!r}+'_*_REACHABLE.txt')] if {kind!r}=='auditbin' else []
 if {kind!r}=='auditbatch':names += [str(p.relative_to(b)) for p in (b/('NGL_stage2_audit' if {target!r}=='NGL_Stage2Driver' else 'NGL_final_audit')).rglob('*') if p.is_file()]

@@ -4,14 +4,19 @@ set_option autoImplicit false
 noncomputable section
 namespace NGL_CheckpointModel
 open Aeneas Aeneas.Std Result
+attribute [local instance] Classical.propDecidable
 abbrev PE := AdapterRw.solana_program_error.ProgramError
 abbrev Key := AdapterRw.solana_pubkey.Pubkey
 abbrev Account := AdapterRw.r1_pool_adapter.owned.OwnedAccount
 
 def install (ops : AdapterRw.Ops) : AdapterRw.Ops := by
   classical
-  exact {ops with op35 := fun e => ok e, op36 := fun a b => ok (decide (a = b)),
-    op12 := fun _ => ok 1768#usize}
+  exact {ops with
+    op35 := fun e => ok e
+    op36 := fun a b => ok (decide (a = b))
+    op12 := fun v => match v with
+      | .S2 => ok 1768#usize
+      | other => ops.op12 other}
 
 def reply (a : Account) (program : Key) (writable : Bool) : core.result.Result Unit PE := by
   classical
@@ -32,9 +37,12 @@ theorem result (ops : AdapterRw.Ops) (a : Account) (program : Key) (writable : B
       cases h : decide (owner = program) <;> cases length <;>
       simp [install, reply, h, core.cmp.impls.PartialEqShared.ne,
         AdapterRw.solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey,
-        core.cmp.PartialEq.ne.trait_default,
+        core.cmp.PartialEq.ne.trait_default, core.cmp.PartialEq.ne.default,
         AdapterRw.r1_pool_adapter.owned.OwnedAccount.data_len,
         AdapterRw.core.result.Result.Insts.CoreCloneClone.clone,
-        AdapterRw.solana_program_error.ProgramError.Insts.CoreCloneClone]
+        AdapterRw.solana_program_error.ProgramError.Insts.CoreCloneClone,
+        core.result.Result.Insts.CoreOpsTry.branch,
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+        core.convert.FromSame] <;> split <;> rfl
 #print axioms result
 end NGL_CheckpointModel

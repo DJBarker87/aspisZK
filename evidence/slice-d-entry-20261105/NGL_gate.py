@@ -11,6 +11,11 @@ pins=json.loads((B/'NGL_SOURCE_PINS.json').read_text())
 errors=[n for n,h in pins.items() if sha(S/n)!=h]
 (B/(a+'-source-check.json')).write_text(json.dumps(dict(files=len(pins),errors=errors),indent=2)+'\n')
 assert not errors,errors
+from NGL_erasure import validate
+zero=json.loads((B/'NGL_ZERO_SOURCE_ERASURE.json').read_text())
+erased=validate(S,json.loads((B/'NGL_FROZEN_SOURCE_PINS.json').read_text()),zero)
+(B/(a+'-erasure-check.json')).write_text(json.dumps(erased,indent=1)+'\n')
+assert erased['passed'],erased['changed']
 features=x['metadata_features'] if 'metadata_features' in x else 'aspis-core/r0' if x.get('root_package')=='aspis-core' else 'aspis-r1-cost-probe-program/pool-adapter,aspis-r1-cost-probe-program/private-leaf-salts' if x.get('root_package')=='aspis-r1-cost-probe-program' else 'aspis-r1-cost-probe/optimized-terminal,aspis-r1-cost-probe/program-build'
 r=subprocess.run(['/home/dombarker/.cargo/bin/cargo','metadata','--locked','--offline','--format-version','1','--features',features],cwd=S,capture_output=True,text=True)
 (B/(a+'-graph.stderr')).write_text(r.stderr)

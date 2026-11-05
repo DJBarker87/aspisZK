@@ -10,4 +10,4 @@ for row in json.loads((E/sys.argv[1]).read_text()):
  x=json.loads(p.read_text());o=(E/row['attempt']/'stdout.log').read_text()
  with (E/'NGL_QUEUE_RESULTS.jsonl').open('a') as f:f.write(json.dumps(dict(row,client_exit=r.returncode,exit=x['exit_status'],matched=(x['exit_status']==row['expected'])))+'\n')
  if x['exit_status']!=row['expected']:raise SystemExit('Unexpected result; isolate before proceeding')
- if row['expected'] and ('VERIFICATION:- FAILED' not in o or 'assertion' not in o.lower()):raise SystemExit('Control is not an assertion failure')
+ if row['expected'] and ('VERIFICATION:- FAILED' not in o or not any(tag in o.lower() for tag in ['assertion','postcondition','ensures','failed checks: |r|'])):raise SystemExit('Control is not an assertion failure')
