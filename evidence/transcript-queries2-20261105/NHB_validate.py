@@ -1,11 +1,20 @@
 """Additive receipt and open-obligation validator; never promotes local facts."""
 from pathlib import Path
-import json,hashlib,sys,re,lzma
+import json,hashlib,sys,re,lzma,subprocess
 E=Path(__file__).resolve().parent;P=E.parent/'transcript-queries-20261105'
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 corr=json.loads((E/'NHB_SOURCE_CORRESPONDENCE.json').read_text())
 assert all(x['equal'] and x['frozen']['sha256']==x['historical']['sha256'] for x in corr['functions'])
 assert sha(P/'NGQ_FROZEN_INPUTS.json.xz')==corr['frozen_inputs_sha256']
+frozen=json.loads(lzma.decompress((P/'NGQ_FROZEN_INPUTS.json.xz').read_bytes()))['crates/aspis-core/src/r0_transcript.rs']
+historical=subprocess.check_output(['git','show',corr['comparison_revision']+':'+corr['historical_path']],text=True)
+for row in corr['functions']:
+ for label,source in [('frozen',frozen),('historical',historical)]:
+  expected=row[label];a=source.index(row['needle']);i=source.index('{',a)+1;depth=1
+  while depth:depth+=(source[i]=='{')-(source[i]=='}');i+=1
+  assert source[a:i]==expected['text'] and hashlib.sha256(source[a:i].encode()).hexdigest()==expected['sha256']
+  assert source[:a].count('\n')+1==expected['start_line'] and source[:i].count('\n')+1==expected['end_line']
+
 assert all(sha(Path(p))==h for p,h in json.loads((E/'NHB_REUSE.json').read_text()).items())
 results=[]
 for p in sorted(E.glob('NHB_K[0-9][0-9][0-9]/receipt.json')):

@@ -42,3 +42,21 @@ The initial handoff commit accidentally included the transient client-active
 marker; the following stage removes it and ignores only that transient and
 __pycache__. No proof/evidence input is excluded. Native logs retain initial
 missing-KMX-annotation timeout candidates; these have no credit.
+
+## Stage 2 update
+
+The block/word cursor native member is now independently checked: K030 passes;
+K031 changes only copied reply byte0 and fails the intended word/cursor
+assertion under the identical KMX configuration. Domain: arbitrary32 bytes,
+all cursors0..8, exhaustion included. L011 proves full22-cell array framing
+from arbitrary observation windows. L012 proves source-default canonicality,
+masked-word bounds and canonical preservation for ANY membership Bool. Thus an
+18-bit native membership domain is caller-established, not a hidden successful
+sampler premise. L015 proves explicit carried-state/first-stop association,
+including retaining advance7 on continuation and selecting current advance
+before finish. L013/L014 failed elaborations remain excluded.
+
+Membership: borrowed fixed22 contracts0..6 and owned fixed22 contracts7..10
+have matched controls. Larger carriers and both initial partitions hit90s tool
+limits. No failed contract is used as a stub. The standalone word contract and
+its reference are prepared, not yet credited. TX1:168 still OPEN.

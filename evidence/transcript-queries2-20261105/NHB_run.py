@@ -60,6 +60,7 @@ if kind=='kani':
  config['native_command']=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NHB_src/crates/aspis-core/Cargo.toml','--target-dir',B+'/NHB_target','--features','r0','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse']
  
  if os.environ.get('NHB_INVERT'):config['env']['RUSTFLAGS']+=' --cfg NHB_invert'
+ if os.environ.get('NHB_BYTE_INVERT'):config['env']['RUSTFLAGS']+=' --cfg NHB_reply_corrupt'
  if os.environ.get('NHB_VERIFIER'):
   config['root_package']='aspis-r1-cost-probe'
   i=config['native_command'].index('--manifest-path');config['native_command'][i+1]=B+'/NHB_src/crates/aspis-r1-cost-probe/Cargo.toml'

@@ -50,6 +50,38 @@
         "text": "fn finish(self) -> Result<[u32; QUERY_COUNT], QuerySampleError> {\n        if self.accepted_len == QUERY_COUNT {\n            Ok(self.accepted)\n        } else {\n            Err(QuerySampleError::DrawLimitExhausted {\n                accepted: self.accepted_len,\n                max_draws: QUERY_MAX_DRAWS,\n            })\n        }\n    }"
       },
       "equal": true
+    },
+    {
+      "needle": "fn query_words(",
+      "frozen": {
+        "start_line": 186,
+        "end_line": 188,
+        "sha256": "d2e74e0fae5950d15f5c25d7210929f69ad56cf6cd1c8d3b828a2e5ef4c921fc",
+        "text": "fn query_words(block: &[u8; 32]) -> [u32; 8] {\n    block_rank(block).map(|word| word & (QUERY_BOUND - 1))\n}"
+      },
+      "historical": {
+        "start_line": 186,
+        "end_line": 188,
+        "sha256": "d2e74e0fae5950d15f5c25d7210929f69ad56cf6cd1c8d3b828a2e5ef4c921fc",
+        "text": "fn query_words(block: &[u8; 32]) -> [u32; 8] {\n    block_rank(block).map(|word| word & (QUERY_BOUND - 1))\n}"
+      },
+      "equal": true
+    },
+    {
+      "needle": "fn block_rank(",
+      "frozen": {
+        "start_line": 89,
+        "end_line": 94,
+        "sha256": "f4e7b88f385944f61059cc4a7a75ca7f338df359650bd2349ac3b9cecfa23485",
+        "text": "fn block_rank(block: &[u8; 32]) -> Rank {\n    core::array::from_fn(|i| {\n        let j = 4 * i;\n        u32::from_le_bytes([block[j], block[j + 1], block[j + 2], block[j + 3]])\n    })\n}"
+      },
+      "historical": {
+        "start_line": 89,
+        "end_line": 94,
+        "sha256": "f4e7b88f385944f61059cc4a7a75ca7f338df359650bd2349ac3b9cecfa23485",
+        "text": "fn block_rank(block: &[u8; 32]) -> Rank {\n    core::array::from_fn(|i| {\n        let j = 4 * i;\n        u32::from_le_bytes([block[j], block[j + 1], block[j + 2], block[j + 3]])\n    })\n}"
+      },
+      "equal": true
     }
   ],
   "frozen_inputs_sha256": "c17052b5e1f9bae9ee591007681e6abeb8facb4f72cbaed6b142fce0cc2faaa7"
