@@ -1,0 +1,167 @@
+{
+  "aeneas_command": [
+    "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/aeneas-b59d5188-extended",
+    "-diagnose-translation",
+    "-sequential",
+    "-no-progress-bar",
+    "-abort-on-error",
+    "-backend",
+    "lean",
+    "-namespace",
+    "NHR_tx1",
+    "-dest",
+    "/home/dombarker/project-offloads/codex-cx-extract-stage-20261106/NHR_emitted/tx1/raw",
+    "-subdir",
+    "NHR_tx1",
+    "-split-files",
+    "/home/dombarker/project-offloads/codex-cx-extract-stage-20261106/NHR_emitted/tx1/tx1.llbc"
+  ],
+  "candidate_sha256": "5164975df10f79e9810f9321b8130a9865eb9bb9b6b9de7011f4359ece98c794",
+  "charon_command": [
+    "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon",
+    "cargo",
+    "--preset",
+    "aeneas",
+    "--mir",
+    "built",
+    "--sysroot",
+    "default",
+    "--include",
+    "core::option::Option",
+    "--include",
+    "core::result::Result",
+    "--include",
+    "core::option::_::ok_or",
+    "--start-from",
+    "crate::verifier::candidate::tx1",
+    "--opaque",
+    "crate::verifier::candidate::parse_shape",
+    "--opaque",
+    "crate::verifier::mark",
+    "--opaque",
+    "crate::verifier::candidate::batch_merkle",
+    "--opaque",
+    "crate::verifier::candidate::query_loop",
+    "--opaque",
+    "crate::verifier::_::for_range",
+    "--opaque",
+    "crate::verifier::_::new",
+    "--opaque",
+    "crate::verifier::_::finish",
+    "--opaque",
+    "crate::verifier::candidate::canonical_scan",
+    "--opaque",
+    "crate::verifier::candidate::prepare",
+    "--opaque",
+    "crate::verifier::_::new",
+    "--opaque",
+    "crate::verifier::candidate::checkpoint",
+    "--include",
+    "crate::verifier::Prepared",
+    "--include",
+    "crate::verifier::Accumulator",
+    "--include",
+    "crate::verifier::BatchedWeights",
+    "--include",
+    "crate::verifier::View",
+    "--include",
+    "crate::verifier::Error",
+    "--include",
+    "crate::verifier::Variant",
+    "--include",
+    "crate::verifier::Phase",
+    "--include",
+    "crate::verifier::QueryGeometry",
+    "--include",
+    "crate::r1_semantic::Verified",
+    "--include",
+    "crate::r1_wire::SemanticTranscript",
+    "--include",
+    "crate::r1_wire::Challenges",
+    "--include",
+    "aspis_core::field::M31",
+    "--include",
+    "aspis_core::field::CM31",
+    "--include",
+    "aspis_core::field::QM31",
+    "--include",
+    "aspis_core::field::wide_exact::WideExact",
+    "--include",
+    "aspis_core::circle::SecureCirclePoint",
+    "--dest-file",
+    "/home/dombarker/project-offloads/codex-cx-extract-stage-20261106/NHR_emitted/tx1/tx1.llbc",
+    "--",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-extract-stage-20261106/NHR_workspace/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--locked",
+    "--offline",
+    "--release",
+    "--lib",
+    "--jobs",
+    "1",
+    "--features",
+    "private-leaf-salts,optimized-terminal,program-build"
+  ],
+  "charon_exit": 0,
+  "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "llbc_sha256": "412845710bc3349156d810013152d741dcbea618b54d67c2febbc2e9a01961cb",
+  "lock_after": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+  "lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+  "manifest_sha256": "74a894c5ff7f4f3f3dda624b57891e6d7323fb2fa77c2b850d1c1ab4e3f18ad4",
+  "opacity": [
+    {
+      "path": "crate::verifier::candidate::parse_shape",
+      "why": "Existing shape packet."
+    },
+    {
+      "path": "crate::verifier::mark",
+      "why": "Deployed observer boundary; retained phase-erasure packet, no callback implementation expanded."
+    },
+    {
+      "path": "crate::verifier::candidate::batch_merkle",
+      "why": "Existing batch packet."
+    },
+    {
+      "path": "crate::verifier::candidate::query_loop",
+      "why": "NFS query-loop packet; retain its domain."
+    },
+    {
+      "path": "crate::verifier::{impl crate::verifier::QueryGeometry}::for_range",
+      "selector": "crate::verifier::_::for_range",
+      "why": "NFN geometry packet. Pinned NameMatcher inherent impl matching is TODO/false; single-element wildcard selector validated against LLBC span."
+    },
+    {
+      "path": "crate::verifier::{impl crate::verifier::BatchedWeights}::new",
+      "selector": "crate::verifier::_::new",
+      "why": "Existing batched-weights constructor packet. Pinned NameMatcher inherent impl matching is TODO/false; single-element wildcard selector validated against LLBC span."
+    },
+    {
+      "path": "crate::verifier::{impl crate::verifier::BatchedWeights}::finish",
+      "selector": "crate::verifier::_::finish",
+      "why": "Existing batched-weights completion packet. Pinned NameMatcher inherent impl matching is TODO/false; single-element wildcard selector validated against LLBC span."
+    },
+    {
+      "path": "crate::verifier::candidate::canonical_scan",
+      "why": "Existing canonical scanner packet."
+    },
+    {
+      "path": "crate::verifier::candidate::prepare",
+      "why": "Driver prepare emission is a separate attempt; no transitive inlining."
+    },
+    {
+      "path": "crate::verifier::{impl crate::verifier::Accumulator}::new",
+      "selector": "crate::verifier::_::new",
+      "why": "Existing accumulator constructor packet. Pinned NameMatcher inherent impl matching is TODO/false; single-element wildcard selector validated against LLBC span."
+    },
+    {
+      "path": "crate::verifier::candidate::checkpoint",
+      "why": "Existing checkpoint writer packet."
+    }
+  ],
+  "outputs": {},
+  "root": "crate::verifier::candidate::tx1",
+  "tools": {
+    "aeneas-b59d5188-extended": "c0cf4fccb0879db4ce342da991f6215732a19fc01345b9eec84e632f4673b958",
+    "charon": "daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8"
+  }
+}
