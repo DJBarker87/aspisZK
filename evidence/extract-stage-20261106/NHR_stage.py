@@ -19,6 +19,18 @@ def safe(p):
     assert p and not p.startswith('/') and '..' not in PurePosixPath(p).parts, p
     return p
 
+def dependency_paths(v):
+    if not isinstance(v,dict): return
+    for table, entries in v.items():
+        if table in ('dependencies','dev-dependencies','build-dependencies','replace'):
+            for dep in entries.values():
+                if isinstance(dep,dict) and isinstance(dep.get('path'),str): yield dep['path']
+        elif table == 'patch':
+            for registry in entries.values():
+                for dep in registry.values():
+                    if isinstance(dep,dict) and isinstance(dep.get('path'),str): yield dep['path']
+        elif isinstance(entries,dict): yield from dependency_paths(entries)
+
 def export():
     def git(*args): return subprocess.check_output(['git',*args])
     listing = git('ls-tree','-rz',REV).split(b'\0')
@@ -36,25 +48,14 @@ def export():
         assert matched, ('missing workspace member',pattern)
         roots.update(matched)
     members = sorted(roots); queue = list(roots)
-    def paths(v):
-        if not isinstance(v,dict): return
-        for table, entries in v.items():
-            if table in ('dependencies','dev-dependencies','build-dependencies','replace'):
-                for dep in entries.values():
-                    if isinstance(dep,dict) and isinstance(dep.get('path'),str): yield dep['path']
-            elif table == 'patch':
-                for registry in entries.values():
-                    for dep in registry.values():
-                        if isinstance(dep,dict) and isinstance(dep.get('path'),str): yield dep['path']
-            elif isinstance(entries,dict): yield from paths(entries)
     # Include root workspace.dependencies, patch/replace and target-specific tables.
-    for rel in paths(root):
+    for rel in dependency_paths(root):
         p = safe(posixpath.normpath(rel))
         if p not in roots: roots.add(p); queue.append(p)
     edges = []
     while queue:
         d = queue.pop(); m = tomllib.loads(blob(d+'/Cargo.toml').decode())
-        for rel in paths(m):
+        for rel in dependency_paths(m):
             p = safe(posixpath.normpath(posixpath.join(d,rel)))
             assert p+'/Cargo.toml' in tree, ('missing path manifest',d,rel)
             edges.append([d,p])
@@ -100,6 +101,23 @@ def stage(workspace):
         target.parent.mkdir(parents=True,exist_ok=True)
         if target.exists(): assert target.read_bytes()==data, ('staged drift',p)
         else: target.write_bytes(data); target.chmod(int(info['mode'],8)&0o777)
+    # Re-enumerate from staged manifests in --check, independently of exported roots.
+    root = tomllib.loads((workspace/'Cargo.toml').read_text())
+    roots = set()
+    for pattern in root['workspace']['members']:
+        matches = {str(p.relative_to(workspace)) for p in workspace.glob(pattern) if (p/'Cargo.toml').is_file()}
+        assert matches, ('missing staged member',pattern)
+        roots.update(matches)
+    assert roots==set(manifest['workspace_members'])
+    roots.update(safe(posixpath.normpath(x)) for x in dependency_paths(root))
+    queue = list(roots)
+    while queue:
+        d = queue.pop(); doc = tomllib.loads((workspace/d/'Cargo.toml').read_text())
+        for rel in dependency_paths(doc):
+            q = safe(posixpath.normpath(posixpath.join(d,rel)))
+            assert (workspace/q/'Cargo.toml').is_file(), ('missing staged dependency',d,q)
+            if q not in roots: roots.add(q); queue.append(q)
+    assert roots==set(manifest['package_roots']), 'staged manifest closure differs'
     return manifest
 
 def validate(workspace, out, cargo):
@@ -136,7 +154,7 @@ def options(args, workspace, out):
     opacity = spec[args.function]
     assert all(x['path'].startswith(('crate::','aspis_core::')) and x['why'] for x in opacity)
     cmd = [str(TOOLROOT/'charon'),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--include','core::option::Option','--include','core::result::Result','--include','core::option::_::ok_or','--start-from',root]
-    for x in opacity: cmd += ['--opaque',x['path']]
+    for x in opacity: cmd += ['--opaque',x.get('selector',x['path'])]
     for ty in spec['include_types']: cmd += ['--include',ty]
     llbc = out/(args.function+'.llbc')
     cmd += ['--dest-file',str(llbc),'--','--manifest-path',str(workspace/'crates/aspis-r1-cost-probe/Cargo.toml'),'--locked','--offline','--release','--lib','--jobs','1','--features',FEATURES]
@@ -156,7 +174,31 @@ def extract(args, workspace, out):
             llbc = out/(args.function+'.llbc'); pins['llbc_sha256']=sha(llbc.read_bytes())
             # Retain complete declarations and their opacity, before Aeneas starts.
             doc = json.loads(llbc.read_text())
-            write(out/'NHR_DECLARATIONS.json',doc.get('translated',doc).get('fun_decls',[]))
+            decls = doc.get('translated',doc).get('fun_decls',[])
+            inventory = []
+            for f in decls:
+                if f is None: continue
+                meta = f['item_meta']; name = meta['name']
+                ids = [x['Ident'][0] for x in name if 'Ident' in x]
+                inventory.append(dict(id=f['def_id'],name=name,span=meta['span'],opacity=meta.get('opacity'),body_kind=list(f['body']) if isinstance(f['body'],dict) else f['body'],source_sha256=sha((meta.get('source_text') or '').encode())))
+            write(out/'NHR_DECLARATIONS.json',inventory)
+            assert not doc['has_errors'], 'Charon reported translation errors'
+            # Check each direct native boundary on the actual declaration inventory.
+            # Wildcard impl selectors can match several methods: retain ALL matches.
+            matched = []
+            for boundary in pins['opacity']:
+                selector = boundary.get('selector',boundary['path']).replace('crate::','aspis_r1_cost_probe::')
+                parts = selector.split('::')
+                hits = []
+                for f in inventory:
+                    elems = [x['Ident'][0] if 'Ident' in x else '_' for x in f['name']]
+                    if len(parts)==len(elems) and all(p=='_' or p==e for p,e in zip(parts,elems)):
+                        hits.append(f)
+                assert hits, ('OWN INPUT: unmatched opacity',boundary)
+                assert all(f['body_kind'] in ('Opaque',['Opaque']) for f in hits), ('OWN INPUT: body not opaque',boundary,hits)
+                matched.append(dict(boundary=boundary,matches=hits))
+            pins['validated_opacity']=matched
+            write(out/'NHR_PINS.json',pins)
             r = subprocess.run(pins['aeneas_command'],cwd=E,env=env); pins['aeneas_exit']=r.returncode
         pins['exit']=r.returncode
     finally:

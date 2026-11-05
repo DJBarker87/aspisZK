@@ -13,3 +13,8 @@ Budget: zero Kani; at most 20 compiler slots and 8 extraction attempts, one
 admitted capped scope at a time. No theorem is requested. Failure and remaining
 obligations will be recorded without native-credit claims. No shipped source,
 wallet/key, sibling worktree or shared launcher is changed.
+
+Prepare extraction: NHR_E002 PASS,63.035177s,539840KiB RSS,swap0. Raw output is
+NHR_emitted/prepare_v2/raw/NHR_prepare; exact command, tool/source/lock hashes
+and checked opacity spans are in its NHR_PINS.json. E001 is retained as an OWN
+collector/input failure, not a tool limit. No Aeneas failure occurred there.

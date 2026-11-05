@@ -1,0 +1,152 @@
+{
+  "prepare": [
+    {
+      "path": "aspis_core::r0::heap::filled",
+      "why": "Existing allocation boundary; retains full Result and allocation trust."
+    },
+    {
+      "path": "crate::compact::expand_semantic",
+      "why": "Compact semantic-expansion packet boundary; caller/refinement remains successor work."
+    },
+    {
+      "path": "crate::compact::expand_values",
+      "why": "Compact value-expansion packet boundary."
+    },
+    {
+      "path": "crate::verifier::candidate::wide_view",
+      "why": "Existing candidate view packet and borrowed-return interface."
+    },
+    {
+      "path": "crate::r1_semantic::verify_observed",
+      "why": "Semantic verifier packet boundary; producer association remains explicitly OPEN."
+    },
+    {
+      "path": "crate::verifier::mark",
+      "why": "Deployed observer boundary; retained phase-erasure packet, no callback implementation expanded."
+    },
+    {
+      "path": "crate::verifier::{impl crate::verifier::Prepared}::new",
+      "why": "Prepared producer packet; inherent-impl spelling repairs NHF missed opacity. Packet completeness is OPEN."
+    }
+  ],
+  "tx1": [
+    {
+      "path": "crate::verifier::candidate::parse_shape",
+      "why": "Existing shape packet."
+    },
+    {
+      "path": "crate::verifier::mark",
+      "why": "Deployed observer boundary; retained phase-erasure packet, no callback implementation expanded."
+    },
+    {
+      "path": "crate::verifier::candidate::batch_merkle",
+      "why": "Existing batch packet."
+    },
+    {
+      "path": "crate::verifier::candidate::query_loop",
+      "why": "NFS query-loop packet; retain its domain."
+    },
+    {
+      "path": "crate::verifier::{impl crate::verifier::QueryGeometry}::for_range",
+      "why": "NFN geometry packet."
+    },
+    {
+      "path": "crate::verifier::{impl crate::verifier::BatchedWeights}::new",
+      "why": "Existing batched-weights constructor packet."
+    },
+    {
+      "path": "crate::verifier::{impl crate::verifier::BatchedWeights}::finish",
+      "why": "Existing batched-weights completion packet."
+    },
+    {
+      "path": "crate::verifier::candidate::canonical_scan",
+      "why": "Existing canonical scanner packet."
+    },
+    {
+      "path": "crate::verifier::candidate::prepare",
+      "why": "Driver prepare emission is a separate attempt; no transitive inlining."
+    },
+    {
+      "path": "crate::verifier::{impl crate::verifier::Accumulator}::new",
+      "why": "Existing accumulator constructor packet."
+    },
+    {
+      "path": "crate::verifier::candidate::checkpoint",
+      "why": "Existing checkpoint writer packet."
+    }
+  ],
+  "tx2_authenticated": [
+    {
+      "path": "crate::verifier::candidate::parse_shape",
+      "why": "Existing shape packet."
+    },
+    {
+      "path": "crate::verifier::mark",
+      "why": "Deployed observer boundary; retained phase-erasure packet, no callback implementation expanded."
+    },
+    {
+      "path": "crate::verifier::candidate::tx2_common",
+      "why": "Separate driver emission; preserve direct call boundary."
+    }
+  ],
+  "tx2_common": [
+    {
+      "path": "crate::verifier::mark",
+      "why": "Deployed observer boundary; retained phase-erasure packet, no callback implementation expanded."
+    },
+    {
+      "path": "crate::verifier::candidate::batch_merkle",
+      "why": "Existing batch packet."
+    },
+    {
+      "path": "crate::verifier::candidate::query_loop",
+      "why": "NFS query-loop packet; retain its domain."
+    },
+    {
+      "path": "crate::verifier::{impl crate::verifier::QueryGeometry}::for_range",
+      "why": "NFN geometry packet."
+    },
+    {
+      "path": "crate::verifier::{impl crate::verifier::BatchedWeights}::new",
+      "why": "Existing batched-weights constructor packet."
+    },
+    {
+      "path": "crate::verifier::{impl crate::verifier::BatchedWeights}::finish",
+      "why": "Existing batched-weights completion packet."
+    },
+    {
+      "path": "crate::verifier::candidate::resume",
+      "why": "Checkpoint resume packet; caller domains remain explicit."
+    },
+    {
+      "path": "crate::weights::powers",
+      "why": "Existing powers packet; no arithmetic unfolded."
+    },
+    {
+      "path": "aspis_core::field::wide_exact::{impl aspis_core::field::wide_exact::WideExact}::from_le_bytes",
+      "why": "Existing canonical field decoder boundary."
+    },
+    {
+      "path": "crate::verifier::finish_relation",
+      "why": "NHE/NHM finish packet boundary; pair producer obligation retained."
+    }
+  ],
+  "include_types": [
+    "crate::verifier::Prepared",
+    "crate::verifier::Accumulator",
+    "crate::verifier::BatchedWeights",
+    "crate::verifier::View",
+    "crate::verifier::Error",
+    "crate::verifier::Variant",
+    "crate::verifier::Phase",
+    "crate::verifier::QueryGeometry",
+    "crate::r1_semantic::Verified",
+    "crate::r1_wire::SemanticTranscript",
+    "crate::r1_wire::Challenges",
+    "aspis_core::field::M31",
+    "aspis_core::field::CM31",
+    "aspis_core::field::QM31",
+    "aspis_core::field::wide_exact::WideExact",
+    "aspis_core::circle::SecureCirclePoint"
+  ]
+}
