@@ -4,7 +4,7 @@ No new field multiplication stub, function contract or stub_verified use. No wri
 
 | Cut | Paired semantic law | Domain / SAME-value connection |
 |---|---|---|
-| NGN S0 | NHL_OpeningPacket.seed/newStart; retained NFW seed/state certificates | Original sem.transcript/hash, fixed seed29/tag1/state32 carriers; existing digest=H interpretation |
+| NGN S0 | NHS_Seed.state/start; NFW seed cut; CLOSED NGC_DigestBridge.forwarding | SAME sem.transcript/hash, fixed seed29/tag1/state32; NGC full arbitrary-byte forwarding (3 parts<=57607), unchanged reply; existing digest=H realization |
 | NGN S1 gamma | NGT_CallerInterface.scalar; NHL_PreparedScalars.gamma | row27,y1=928,true; NHS_CallerWidths.reached/scalar_bounds; SAME NGT block and reduction |
 | NGN S2 kappa | NGT_CallerInterface.scalar; NHL_PreparedScalars.kappa; original serializer sourceBytes | row28,exact32-byte array,false; original inactive from sourceView; SAME serialization and prior transcript |
 | NGN S3 alpha0 | NGT_CallerInterface.scalar; NHL_PreparedScalars.alpha0 | row29,round0=224,false; same block/reduction |
