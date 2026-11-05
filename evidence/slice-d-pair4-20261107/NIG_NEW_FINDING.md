@@ -1,0 +1,5 @@
+# NIG constructor boundary correction
+
+NHX_NHT_INTERFACE.md and NHX_REMAINING.md say no Weights::new/box_from_parts packet was supplied. Inspection of the retained NGW_CLOSED.json and authoritative ledger10 routes shows TX2:127/128 already CLOSED under (y)/(aa) on arbitrary constructor fields / SAME canonical ten-alpha and two-z-point domains. NGW_K079/080,K081/K090,K083/084,K085/086,K087/088 qualify box value/ownership windows; NGW_NewInterface.cohort and NewModel.source give full modeled reply and canonical factors/points/extra. No passing native shape is rerun and no candidate file/worktree is edited. Immutable Git input hashes: NIG_NEW_REUSE.json. Imported object hashes are recorded by the new focused launcher receipts.
+
+This correction does not export an arbitrary ops.op3 equality. The exact NHT dictionary association, SAME successful NEW weights provenance and translation into pair's Factors/extra/S2 domain still need proof and coherent replay. Native allocator fresh-owned-block-or-abort and all P6/Std/ABI trust remain explicit. No allocation availability or successful finish premise is added.

@@ -1,9 +1,20 @@
-# NIG pair cone handoff
+# NIG TX2 pair cone — stage3 checkpoint
 
-Active branch codex/cx-slice-d-pair4-20261107. Headline AspisR1.RPx_Deployed.deployed NOT ESTABLISHED. No new CLOSED rows yet. Work order: filled045; pair129; NEW127/128; finish115. NHX six CLOSED child domains retained without replay. No NHM_new/NHM_pair/NHM_finish export yet.
+Headline AspisR1.RPx_Deployed.deployed NOT ESTABLISHED. One new composed row CLOSED; no premise retirement. Exact domains/certificates: NIG_CLOSED.json and NIG_BRIDGES.md.
 
-Budget:120 Kani,80 Lean/link/audit,1 extraction via NHR_stage.py. One admitted scope at a time; allowed:true and exit0 required; MemoryHigh6G/Max8G/Swap0/Tasks64; Lean -M7000; offline optimized Rust with frozen graph checks before every run and unchanged lock afterwards. No unchanged timed-out shape, native field multiplication, writable static, quarantined function pointer or unauthorized contract credit. No shipped-file changes planned; no ELF rebuild triggered. No push or key actions.
+| Member | Row | Current status | Exact distance |
+| --- | --- | --- | --- |
+| filled | TX2:045 | CLOSED new | n64/QM31.ZERO; actual reserve, arbitrary initialized zero prefix and next cell, untouched initialized cells, same ptr/cap/len; full allocator Error/Ok law.24 native window pairs plus actual clone and KMX controls; finite Lean coverage/induction. |
+| factored_s2_libra_weights | TX2:133 | INHERITED CLOSED | NHX exact canonical ap0/ap1 E4 and extra Q2 domains retained. |
+| grouped_inactive_pair | TX2:135 | INHERITED CLOSED | S2, SAME canonical2048-byte message, canonical low E16; fallback outside packet. |
+| shared_partials | TX2:144 | INHERITED CLOSED | SAME canonical message and common Q16; source zero-init/sides/first Error/full reply retained. |
+| shared_high | TX2:143 | INHERITED CLOSED | SAME canonical partials/powers/factors, writes1/3 and omitted-slot frame. |
+| process_kind | TX2:139 | INHERITED CLOSED | Ordinary S2 kinds1/2/3/5/6, folds2/n64, canonical Factors/powers/message/scratch/parts. |
+| process_regular_kinds | TX2:140 | INHERITED CLOSED | Both guard values and exact kinds/error/order/frames; parent SAME guard association still needed. |
+| scalar_factor / tensor | TX2:130/131 | INHERITED CLOSED | NHI exact canonical operand and exclusive scratch domains. |
+| grouped / push / high / partial / powers / square / double / guard | TX2:142/141/136/137/138/022 and inherited | INHERITED CLOSED | All NHM/NHI/NHE domains and native certificates retained by hash; no repeat. |
+| pair | TX2:129 | OPEN | Filled obstruction resolved. New native common/low/final windows, finite source and canonical poststate, BOTH emitted branch aliases compile. Libra model support compiles and native windows run. Missing SAME guard/ownership driver cuts and full source-ordered frame/callee-domain chain, exact SAME kappa/powers7/parts fold composition and NHM_pair export. |
+| Weights::new / box_from_parts | TX2:128/127 | INHERITED CLOSED (NGW) | Corrects NHX's absent-packet note. Existing native ownership and constructor packet reused; pair domain port/variant compiles. Actual finish op3 dictionary equation remains to bind, not a new allocator-success premise. |
+| finish_relation | TX2:115 | OPEN | Needs CLOSED pair and exact op3/op2 dictionary/source association, NHE round/dot full Results and error branches, same Prepared/View fields. Named primitive NIG_FinishInput.Domain compiles; caller producer remains NHV/NID obligation. |
 
-First obligation: split the initialized-prefix frame observation from new-cell write after the SAME reserve. NHX_K005/K118 excluded; K119/K120 single-cell support reused, not rerun. Retained allocator trust does not assert reserve success. Pair and finish remain open until actual native/Lean frame chains and dictionary equations qualify. All P6/D188 optionA, compiler/Aeneas/Std/allocator/ABI/source-to-ELF, approved runtime and cryptographic trust retained. L154 parameter; slots43/44;100-bit PER-ATTEMPT/privacy/two-transaction design unchanged.
-
-Host read-only preflight:97% disk,54G available; own cache retained and small exports copied/hash checked only. Each stage records exact source/dependency pins, command, exit, wall,RSS,swap,axioms and source revision. No formal/native attempts at initial commit.
+Stage3 combined L023/raw ax2 and NFX-method scan L029 PASS; same audit binary eight fixtures L028 PASS.337 roots/13696 modules; standard axioms; zero dangling/owners/import mismatches. Resource receipt L029:46.6607s,7037576KiB peak,swap0,6G/8G/0/64. This is focused coherent cached replay, not a fresh frozen release build. Every receipt pins exact revision/target/command/object sources/admission and metrics. No shipped changes; inherited three ELF pins retained.

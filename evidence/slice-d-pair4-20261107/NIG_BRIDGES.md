@@ -1,0 +1,11 @@
+# NIG bridge status
+
+TX2:045 filled CLOSED under (y)/(B) on n64/QM31.ZERO, actual reserve and exclusive fresh scratch. NIG_CLOSED.json / SOURCE_ASSOCIATION.md state exact scope. K044-K091:24 positive/corruption pairs cover2080 prefix/cell positions; K092/093 exact KMX core controls; K094/095 actual clone/control. NIG_FilledCoverage.covered/extend_prefix/source use retained NHM/NHI/NHX induction and full allocator reply, with no allocator-success premise. L023 combined, L028 same-binary eight fixtures, L029 raw ax2/NFX-method scan all exit0,337 roots,13696 modules, standard axioms, no defects. Native validation and additive validator pass;15 adversarial mutations rejected.
+
+Pair129 OPEN. K009-K016 common, K019-K030 low, K031-K042 final:16 independent native local-record observation/control pairs qualified. NIG_CommonLoop/LowLoop/Post and NIG_LoopPost give finite emitted source and canonical post-states. NIG_BothBranches proves the actual duplicate low/Libra/final Aeneas bodies are equal under BOTH shared-guard branches on SAME arguments. NIG_LibraLoop/Window/Domain model support compiles; native Libra cuts are in progress. SAME guard and owning parent source/control/frame chain remain.
+
+NEW127/128 are INHERITED CLOSED from NGW, not newly promoted. NIG_NEW_FINDING.md corrects NHX's absent-packet claim; NIG_NEW_REUSE.json pins original inputs. NIG_NewDomain transports factor/extra canonicality to pair's exact Factors owner and preserves the constructor variant. The exact op3 installation equation for the actual finish dictionary is still OPEN; no arbitrary ops equality is assumed.
+
+Finish115 OPEN. NHE polynomial/round/dot packets retained. NIG_FinishInput.Domain is the named primitive Prepared/View/accumulator predicate the NHV/NID caller must provide; it contains no computed pair/claim/dot equality, child success or allocation availability. Full pair packet, dictionary op3/op2 association and full driver Error/no-suffix/frame composition remain. No NHM_pair/NHM_new/NHM_finish export is claimed.
+
+All trust retained/reclassified. No shipped-file change, ELF rebuild, push or key action. All source/dependency/admission/resource/axiom records are per-attempt; failed elaborations and timeouts excluded. New extraction unnecessary so far; existing pinned emitted bodies reused.

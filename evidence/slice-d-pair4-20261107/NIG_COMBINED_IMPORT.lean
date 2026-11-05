@@ -1,0 +1,17 @@
+import NGK_COMBINED_IMPORT
+import NHX_COMBINED_IMPORT
+import NIG_BothBranches
+import NIG_CommonLoop
+import NIG_CommonPost
+import NIG_FilledCoverage
+import NIG_FinishInput
+import NIG_LibraDomain
+import NIG_LibraLoop
+import NIG_LibraWindow
+import NIG_LoopPost
+import NIG_LowLoop
+import NIG_LowPost
+import NIG_NewDomain
+set_option autoImplicit false
+#check AspisR1.RPx_Deployed.deployed
+#print axioms AspisR1.RPx_Deployed.deployed
