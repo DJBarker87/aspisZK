@@ -133,7 +133,7 @@ b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if 
 names += [str(p.relative_to(b)) for p in b.glob(a+'-graph*')]+[str(p.relative_to(b)) for p in b.glob(a+'-source*')]+[str(p.relative_to(b)) for p in b.glob(a+'-lock*')] if {kind!r} in ['kani','metadata'] else []
 if {kind!r}=='extract':names += [a+'-extraction-pins.json',a+'.llbc']+[str(p.relative_to(b)) for p in (b/'NGV_extracted'/{target!r}).rglob('*') if p.is_file()]
 names += [str(p.relative_to(b)) for p in b.glob('NEP_*_REACHABLE.txt')] if {kind!r}=='auditbatch' else [str(p.relative_to(b)) for p in b.glob('NEP_'+{target!r}+'_*_REACHABLE.txt')] if {kind!r}=='auditbin' else []
-if {kind!r}=='auditbatch':names += [str(p.relative_to(b)) for p in (b/('NGV_stage2_audit' if {target!r}=='NGV_Stage2Driver' else 'NGV_final_audit')).rglob('*') if p.is_file()]
+if {kind!r}=='auditbatch':names += [str(p.relative_to(b)) for p in (b/(a+'_audit')).rglob('*') if p.is_file()]
 if {target!r} in ['scan','queryscan']:names+=['NGV_QUERY_LOADED_scan.jsonl' if {target!r}=='queryscan' else 'NGV_LOADED_scan.jsonl']
 out={{n:(b/n).read_text() for n in names}}
 for name in ['NGV_Driver','NGV_ProofDriver','NGV_Stage2Driver']:

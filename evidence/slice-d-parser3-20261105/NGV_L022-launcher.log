@@ -1,0 +1,62 @@
+{"attempt": "NGV_L022", "exit_status": 1, "wall_seconds": 2.6733568890485913, "peak_rss_kib": "5828688", "swaps": "0", "print_axioms": ["'NGV_ValidatorTotal.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NGV_generated/NGV_ValidatorTotal.lean:18:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  dite (i ≤ UScalar.cMax UScalarTy.Usize) ?m.85 ?m.86
+in the target expression
+  NFU_Retarget.r1_wire.validate_record_fields row bytes =
+    match some i, trace with
+    | none, trace => ok (core.result.Result.Ok ())
+    | some i, trace =>
+      if h : i ≤ UScalar.cMax UScalarTy.Usize then
+        ok (core.result.Result.Err (NFU_Retarget.LPl_Kit_Release.r1_wire.Error.NonCanonical row (UScalar.ofNat i h)))
+      else fail Error.panic
+
+case some
+row : U8
+bytes : Slice U8
+bound : (↑bytes).length ≤ 3712
+i : ℕ
+trace : NFU_Retarget.LPl.Scan.Trace (NFU_Retarget.LPl.Validate.predicat
+...
+elds row bytes =
+    match some i, trace with
+    | none, trace => ok (core.result.Result.Ok ())
+    | some i, trace =>
+      if h : i ≤ UScalar.cMax UScalarTy.Usize then
+        ok (core.result.Result.Err (NFU_Retarget.LPl_Kit_Release.r1_wire.Error.NonCanonical row (UScalar.ofNat i h)))
+      else fail Error.panic
+
+case some
+row : U8
+bytes : Slice U8
+bound : (↑bytes).length ≤ 3712
+i : ℕ
+trace : NFU_Retarget.LPl.Scan.Trace (NFU_Retarget.LPl.Validate.predicate ↑bytes) ((↑bytes).length / 32) 0 (some i)
+model :
+  NFU_Retarget.r1_wire.validate_record_fields row bytes =
+    match some i, trace with
+    | none, trace => ok (core.result.Result.Ok ())
+    | some i, trace =>
+      if h : i ≤ UScalar.cMax UScalarTy.Usize then
+        ok (core.result.Result.Err (NFU_Retarget.LPl_Kit_Release.r1_wire.Error.NonCanonical row (UScalar.ofNat i h)))
+      else fail Error.panic
+small : i ≤ UScalar.cMax UScalarTy.Usize
+⊢ ∃ reply,
+    NGD_ParseReference.mapResult NGO_ValidatorErrors.mapError (NFU_Retarget.r1_wire.validate_record_fields row bytes) =
+        ok reply ∧
+      NGD_ParseReference.mapResult NGO_ValidatorErrors.mapError
+          (NFU_Retarget.r1_wire.validate_record_fields row bytes) =
+        ok reply
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    bytes
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑bytes
+'NGV_ValidatorTotal.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-ra1b1b75fe5a94c3984bac30fbec67925.scope; invocation ID: 03ad864c8e9a46999a38d7f6a208b15a

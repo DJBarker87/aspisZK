@@ -1,0 +1,89 @@
+def Aeneas.Std.Slice.index_usize.{u} : {α : Type u} → Slice α → Usize → Result α :=
+fun {α} v i =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some x => ok x
+@[reducible] def Aeneas.Std.Slice.len.{u} : {α : Type u} → Slice α → Usize :=
+fun {α} v => Usize.ofNatCore (↑v).length ⋯
+NGV_generated/NGV_Api.lean:5:7: error(lean.unknownIdentifier): Unknown constant `loop_eq`
+theorem Aeneas.Std.loop.spec.{u, v, w} : ∀ {α : Type u} {β : Type v} {γ : Type w} (measure : α → γ)
+  [wf : WellFoundedRelation γ] (inv : α → Prop) (post : β → Prop) (body : α → Result (ControlFlow α β)) (x : α),
+  (∀ (x : α),
+      inv x →
+        body x ⦃ r =>
+          match r with
+          | ControlFlow.done y => post y
+          | ControlFlow.cont x' => inv x' ∧ WellFoundedRelation.rel (measure x') (measure x) ⦄) →
+    inv x → loop body x ⦃ post ⦄ :=
+fun {α} {β} {γ} measure [WellFoundedRelation γ] inv post body x hBody hInv =>
+  have this := WellFounded.fix WellFoundedRelation.wf (loop.spec._proof_1_9 measure inv post body x hBody hInv);
+  this (measure x) x (Eq.refl (measure x)) hInv
+inductive NFU_Retarget.LPl.Scan.Trace : (ℕ → Bool) → ℕ → ℕ → Option ℕ → Prop
+number of parameters: 2
+constructors:
+NFU_Retarget.LPl.Scan.Trace.done : ∀ {p : ℕ → Bool} {count : ℕ} (i : ℕ),
+  i = count → NFU_Retarget.LPl.Scan.Trace p count i none
+NFU_Retarget.LPl.Scan.Trace.reject : ∀ {p : ℕ → Bool} {count : ℕ},
+  ∀ i < count, p i = false → NFU_Retarget.LPl.Scan.Trace p count i (some i)
+NFU_Retarget.LPl.Scan.Trace.next : ∀ {p : ℕ → Bool} {count : ℕ},
+  ∀ i < count,
+    p i = true →
+      ∀ (out : Option ℕ), NFU_Retarget.LPl.Scan.Trace p count (i + 1) out → NFU_Retarget.LPl.Scan.Trace p count i out
+def Aeneas.Std.core.slice.Slice.chunks_exact : {T : Type} → Slice T → Usize → Result (core.slice.iter.ChunksExact T) :=
+fun {T} s chunk_size =>
+  if hcs : ↑chunk_size > 0 then
+    let result := List.toChunksExact (↑chunk_size) hcs ↑s;
+    have sliceChunks :=
+      List.map
+        (fun x =>
+          match x with
+          | ⟨c, hc⟩ => ⟨c, ⋯⟩)
+        result.1.attach;
+    ok { chunks := sliceChunks, remainder := ⟨result.2, ⋯⟩ }
+  else fail Error.panic
+def NFU_Retarget.LPl.Echeck.chunk : List U8 → Bool → Bool :=
+fun bs k =>
+  (List.range 8).all fun j =>
+    have n := NFU_Retarget.LPl.Echeck.word (List.take 4 (List.drop (4 * j) bs));
+    decide (n < 2147483647) && (!k || decide (j < 4 ∨ n = 0))
+def AspisR1PrefixAggregateParser.r1_wire.parse_record : U8 →
+  Slice U8 → Result (core.result.Result (Slice U8) AspisR1PrefixAggregateParser.r1_wire.Error) :=
+fun row record1 => do
+  let o ← AspisR1PrefixAggregateParser.r1_wire.row_shape row
+  let r ← AspisR1PrefixAggregateParser.core.option.Option.ok_or o AspisR1PrefixAggregateParser.r1_wire.Error.InvalidRow
+  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+  match cf with
+    | core.ops.control_flow.ControlFlow.Continue val =>
+      let (tag, size) := val
+      have i := record1.len;
+      do
+      let i1 ← 5#usize + size
+      if (i != i1) = true then ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length row))
+        else do
+          let i2 ← record1.index_usize 0#usize
+          if (i2 != tag) = true then ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Tag row))
+            else do
+              let i3 ← record1.index_usize 1#usize
+              let i4 ← record1.index_usize 2#usize
+              let i5 ← record1.index_usize 3#usize
+              let i6 ← record1.index_usize 4#usize
+              let i7 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i3, i4, i5, i6] ⋯))
+              let i8 ← lift (UScalar.cast UScalarTy.Usize i7)
+              if (i8 != size) = true then
+                  ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length row))
+                else do
+                  let payload ←
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) record1
+                        { start := 5#usize }
+                  if row ≥ 14#u8 then do
+                      let r1 ← AspisR1PrefixAggregateParser.r1_wire.validate_record_fields row payload
+                      let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                      match cf1 with
+                        | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok payload)
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+                            (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+                    else ok (core.result.Result.Ok payload)
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+        (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual

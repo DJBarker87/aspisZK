@@ -1,0 +1,22 @@
+NGV_generated/NGV_ChunkTail.lean:18:11: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+NGV_generated/NGV_ChunkTail.lean:30:3: error: Type mismatch
+  congrArg Prod.fst
+    (exact_chunks (↑bytes) ((↑bytes).length / 32) (Decidable.byContradiction fun a => construct._proof_1 bytes a)
+      (Decidable.byContradiction fun a => construct._proof_2 bytes a))
+has type
+  (List.toChunksExact 32 ⋯ ↑bytes).1 =
+    (NGO_ChunkSchedule.windows (↑bytes) ((↑bytes).length / 32), List.drop (32 * ((↑bytes).length / 32)) ↑bytes).1
+but is expected to have type
+  List.map (fun x => ↑x) (List.toChunksExact ↑32#usize ⋯ ↑bytes).1.attach =
+    NGO_ChunkSchedule.windows (↑bytes) ((↑bytes).length / 32)
+NGV_generated/NGV_ChunkTail.lean:29:45: warning: This simp argument is unused:
+  List.attach_map_val
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵m̵a̵p̵_̵m̵a̵p̵,̵F̵u̵n̵c̵t̵i̵o̵n̵.̵c̵o̵m̵p̵_̵d̵e̵f̵,̵L̵i̵s̵t̵.̵a̵t̵t̵a̵c̵h̵_̵m̵a̵p̵_̵v̵a̵l̵]̵[̲L̲i̲s̲t̲.̲m̲a̲p̲_̲m̲a̲p̲,̲ ̲F̲u̲n̲c̲t̲i̲o̲n̲.̲c̲o̲m̲p̲_̲d̲e̲f̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NGV_ChunkTail.exact_chunks' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NGV_ChunkTail.construct' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
