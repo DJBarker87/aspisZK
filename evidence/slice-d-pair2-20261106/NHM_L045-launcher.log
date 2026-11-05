@@ -1,0 +1,53 @@
+{"attempt": "NHM_L045", "exit_status": 1, "wall_seconds": 2.677334640175104, "peak_rss_kib": "5452780", "swaps": "0", "print_axioms": ["'NHM_GroupAccum.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NHM_GroupAccum.canonical' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NHM_GroupAccum.progress' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NHM_GroupAccum.decreases' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NHM_GroupAccum.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NHM_generated/NHM_GroupAccum.lean:26:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FIo_Native.weights.s2_grouped_inactive_pair_loop1_loop0 { start := 0#usize, «end» := 16#usize } ?low ?group ?weight
+in the target expression
+  (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize s.1
+      match o with
+        | none => ok (done s.2)
+        | some group => do
+          let weight ←
+            FIo_Native.weights.s2_grouped_inactive_pair_loop1_loop0 { start := 0#usize, «end» := 16#usize } low group
+                FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO
+          let we ← Array.index_usize cells group
+          l
+...
+roduct ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul coefficient weight
+            FIo_Native.aspis_core.field.wide_exact.WideExact.add s.2 product
+        ok (cont (next, out))
+
+low : Std.Array NE 16#usize
+cells : Cells
+s : State
+⊢ (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize s.1
+      match o with
+        | none => ok (done s.2)
+        | some group => do
+          let weight ←
+            FIo_Native.weights.s2_grouped_inactive_pair_loop1_loop0 { start := 0#usize, «end» := 16#usize } low group
+                FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO
+          let we ← Array.index_usize cells group
+          let we1 ← we.mul weight
+          let pair1 ← FIo_Native.aspis_core.field.wide_exact.WideExact.add s.2 we1
+          ok (cont (iter1, pair1))) =
+    do
+    let (o, next) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize s.1
+    match o with
+      | none => ok (done s.2)
+      | some group => do
+        let weight ← NHM_GroupWeight.reference low group NHI_Scalar.zero
+        let out ←
+          do
+            let coefficient ← Array.index_usize cells group
+            let product ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul coefficient weight
+            FIo_Native.aspis_core.field.wide_exact.WideExact.add s.2 product
+        ok (cont (next, out))
+'NHM_GroupAccum.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NHM_GroupAccum.canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NHM_GroupAccum.progress' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NHM_GroupAccum.decreases' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NHM_GroupAccum.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r2351e63a78b044669a6a41c7738aae72.scope; invocation ID: 835228c0e2174a08bb9721f566e0389f

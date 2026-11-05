@@ -1,0 +1,40 @@
+--- a/crates/aspis-core/src/lib.rs
++++ b/crates/aspis-core/src/lib.rs
+@@ -12,6 +12,7 @@
+ //! Stage 1 work and no soundness figure may be quoted from this code alone.
+ 
+ #![no_std]
++#![cfg_attr(kani, feature(allocator_api))]
+ 
+ extern crate alloc;
+ 
+@@ -97,3 +98,5 @@
+ 
+ #[cfg(feature = "r0-op-count")]
+ pub mod r0_op_count;
++
++#[cfg(kani)] #[path="NHM_filled.rs"] mod NHM_filled;
+--- /dev/null
++++ b/crates/aspis-core/src/NHM_filled.rs
+@@ -0,0 +1,21 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn exercise(g:usize){
++ let value:[u32;4]=kani::any();
++ let n=if g<4 {1} else if g==4 {0} else {usize::MAX};
++ let out=crate::r0::heap::filled(n,value);
++ let good=if n==usize::MAX {matches!(out,Err(crate::r0::Error::Allocation))} else {
++  match out {Ok(v)=>if g<4 {v.len()==n&&v[0][g]==value[g]}else{v.is_empty()},Err(_)=>false}
++ };
++ assert!(if cfg!(NHM_invert){!good}else{good});
++}
++macro_rules! gate{($name:ident,$n:expr)=>{#[kani::proof] #[kani::unwind(18)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn $name(){exercise($n)}};}
++gate!(filled00,0);
++gate!(filled01,1);
++gate!(filled02,2);
++gate!(filled03,3);
++gate!(filled04,4);
++gate!(filled05,5);

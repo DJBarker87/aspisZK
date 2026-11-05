@@ -1,0 +1,44 @@
+{"attempt": "NHM_L058", "exit_status": 0, "wall_seconds": 3.5154079631902277, "peak_rss_kib": "5811512", "swaps": "0", "print_axioms": ["'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NHM_HighDot.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NHM_PartialDot.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NHM_ByteProducts.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NHM_GroupRoot.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NHM_Filled64.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.RPx_Deployed.deployed {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)) (sdk : AspisR1.S2Trust.S2TrustedSdkBorrow L)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (std : AspisR1.S2W_TrustedStd.TrustedStd copy) (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W)
+  (admission1 : AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3)
+  (admission2 : AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7)
+  (missing : AspisR1.IDa_Deployed.U
+...
+o
+  let cells ←
+    NHI_CountedLoop.unroll (NHM_GroupCoefficient.body f) 65
+        ({ start := 0#usize, «end» := 64#usize }, NHM_GroupRoot.initial)
+  NHM_GroupAccum.reference low cells NHI_Scalar.zero
+def NHM_GroupCoefficient.window : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Usize → NHM_GroupCoefficient.Cells → Aeneas.Std.Result NHM_GroupCoefficient.Cells :=
+fun f j cells => do
+  let g ← FIo_Native.weights.S2_INACTIVE_GROUPS.index_usize j
+  have group : Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize := Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.Usize g
+  let before ← Aeneas.Std.Array.index_usize cells group
+  let x ← FIo_Native.weights.field f j
+  let after ← FIo_Native.aspis_core.field.wide_exact.WideExact.add before x
+  Aeneas.Std.Array.update cells group after
+def NHM_GroupWeight.window : Aeneas.Std.Array AspisR1.LPi_FieldValues.NE 16#usize →
+  Aeneas.Std.Usize → Aeneas.Std.Usize → AspisR1.LPi_FieldValues.NE → Aeneas.Std.Result AspisR1.LPi_FieldValues.NE :=
+fun low group bit weight => do
+  let challenge ← low.index_usize bit
+  let mask ← FIo_Native.weights.S2_INACTIVE_MASKS.index_usize group
+  let shifted ← 1#u16 <<< bit
+  have bits : Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U16 := mask &&& shifted
+  if (bits != 0#u16) = true then FIo_Native.aspis_core.field.wide_exact.WideExact.add weight challenge
+    else Aeneas.Std.Result.ok weight
+def NHM_GroupAccum.window : NHM_GroupAccum.Cells →
+  Aeneas.Std.Usize →
+    AspisR1.LPi_FieldValues.NE → AspisR1.LPi_FieldValues.NE → Aeneas.Std.Result AspisR1.LPi_FieldValues.NE :=
+fun cells group weight pair => do
+  let coefficient ← Aeneas.Std.Array.index_usize cells group
+  let product ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul coefficient weight
+  FIo_Native.aspis_core.field.wide_exact.WideExact.add pair product
+
+Running as unit: run-rae65cdb4c884498b845f4ac9b9afbbf4.scope; invocation ID: 5cf515d438ec4f34ab6d9c52d8781417

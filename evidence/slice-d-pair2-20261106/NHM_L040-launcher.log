@@ -1,0 +1,72 @@
+{"attempt": "NHM_L040", "exit_status": 1, "wall_seconds": 2.4133460719604045, "peak_rss_kib": "5457872", "swaps": "0", "print_axioms": ["'NHM_ControlLoop.progress' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NHM_ControlLoop.decreases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NHM_ControlLoop.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NHM_generated/NHM_ControlLoop.lean:18:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  (let (o, iter1) := (some j, next)
+    match o with
+    | none => ok (done (s.2, none))
+    | some j =>
+      if j = stop then
+        ok
+          (done
+            (s.2.wrapping_add 1#usize,
+              some (core.result.Result.Err NHM_ControlRef.NHM_ControlError.Parse, s.2.wrapping_add 1#usize)))
+      else ok (cont (iter1, s.2.wrapping_add 1#usize))) =
+    ok (cont t)
+of `run`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case some
+stop : Usize
+s t : State
+run✝ :
+  (do
+      let (o, iter1) ← core.iter.range.It
+...
+k (done (s.2, none))
+    | some j =>
+      if j = stop then
+        ok
+          (done
+            (s.2.wrapping_add 1#usize,
+              some (core.result.Result.Err NHM_ControlRef.NHM_ControlError.Parse, s.2.wrapping_add 1#usize)))
+      else ok (cont (iter1, s.2.wrapping_add 1#usize))) =
+    ok (cont t)
+of `run`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case some
+stop : Usize
+s t : State
+run✝ :
+  (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize s.1
+      match o with
+        | none => ok (done (s.2, none))
+        | some j => do
+          let calls1 ← lift (s.2.wrapping_add 1#usize)
+          if j = stop then
+              ok (done (calls1, some (core.result.Result.Err NHM_ControlRef.NHM_ControlError.Parse, calls1)))
+            else ok (cont (iter1, calls1))) =
+    ok (cont t)
+next : core.ops.range.Range (UScalar UScalarTy.Usize)
+j : UScalar UScalarTy.Usize
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize s.1 = ok (some j, next)
+run :
+  (let (o, iter1) := (some j, next)
+    match o with
+    | none => ok (done (s.2, none))
+    | some j =>
+      if j = stop then
+        ok
+          (done
+            (s.2.wrapping_add 1#usize,
+              some (core.result.Result.Err NHM_ControlRef.NHM_ControlError.Parse, s.2.wrapping_add 1#usize)))
+      else ok (cont (iter1, s.2.wrapping_add 1#usize))) =
+    ok (cont t)
+⊢ t.1.end = s.1.end ∧ ↑t.1.start = ↑s.1.start + 1 ∧ ↑s.1.start < ↑s.1.end
+'NHM_ControlLoop.progress' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NHM_ControlLoop.decreases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NHM_ControlLoop.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r4adc3acf0e29457d850f8dda5556f31c.scope; invocation ID: d0170f05b245405283c4067b921ff982

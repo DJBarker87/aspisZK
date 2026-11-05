@@ -1,0 +1,61 @@
+{"attempt": "NHM_L006", "exit_status": 1, "wall_seconds": 3.9303391468711197, "peak_rss_kib": "5475688", "swaps": "0", "print_axioms": ["'NHM_HighDot.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NHM_HighDot.cohort' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NHM_HighDot.invariant' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NHM_generated/NHM_HighDot.lean:26:66: error: unsolved goals
+partials : Std.Array NE 4#usize
+coeffs : Std.Array NQ 4#usize
+s : State
+⊢ (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize s.1
+      match o with
+        | none => do
+          let we ← FIo_Native.fast_pairing.EbyKDot.finish s.2
+          ok (done (core.result.Result.Ok we))
+        | some s_1 => do
+          let we ← partials.index_usize s_1
+          let q ← coeffs.index_usize s_1
+          let (r, high1) ← NHM_DotPacket.push s.2 we q
+          match r with
+            | core.result.Result.Ok a => ok (cont (iter1, high1))
+            | core.result.Result.Err a => ok (done (core.result.Result.
+...
+NHM_generated/NHM_HighDot.lean:26:66: error: unsolved goals
+partials : Std.Array NE 4#usize
+coeffs : Std.Array NQ 4#usize
+s : State
+⊢ (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize s.1
+      match o with
+        | none => do
+          let we ← FIo_Native.fast_pairing.EbyKDot.finish s.2
+          ok (done (core.result.Result.Ok we))
+        | some s_1 => do
+          let we ← partials.index_usize s_1
+          let q ← coeffs.index_usize s_1
+          let (r, high1) ← NHM_DotPacket.push s.2 we q
+          match r with
+            | core.result.Result.Ok a => ok (cont (iter1, high1))
+            | core.result.Result.Err a => ok (done (core.result.Result.Err FIo_Native.verifier.Error.Parse))) =
+    do
+    let (index, next) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize s.1
+    match index with
+      | none => do
+        let out ← FIo_Native.fast_pairing.EbyKDot.finish s.2
+        ok (done (core.result.Result.Ok out))
+      | some j => do
+        let x ← partials.index_usize j
+        let q ← coeffs.index_usize j
+        let (reply, after) ← NHM_DotPacket.push s.2 x q
+        match reply with
+          | core.result.Result.Ok a => ok (cont (next, after))
+          | core.result.Result.Err a => ok (done (core.result.Result.Err FIo_Native.verifier.Error.Parse))
+NHM_generated/NHM_HighDot.lean:52:17: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ f ≤ 3
+  1 ≤ e ≤ 4
+where
+ e := ↑↑t.2.count
+ f := ↑↑t.1.end
+'NHM_HighDot.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NHM_HighDot.cohort' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NHM_HighDot.invariant' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-re635359bdd304dd9a52cf41831c63e46.scope; invocation ID: eeb5bfd1563f4e21a5b430c9c16b9f25
