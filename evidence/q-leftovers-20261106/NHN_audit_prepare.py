@@ -4,7 +4,7 @@ E=Path(__file__).resolve().parent;P=E.parent/'q-field-rows-20261106';stage=sys.a
 roots=['NHN_CMInstantiation.association','NHN_CMInstantiation.packet','NHN_CMInstantiation.outcomes']
 mods=['NHN_CMInstantiation']
 if stage=='final':
- mods+=['NHN_QNegAssociation'];roots+=['NHN_QNegAssociation.scalar','NHN_QNegAssociation.association','NHN_QNegAssociation.enclosing']
+ mods+=['NHN_QNegAssociation'];roots+=['NHN_QNegAssociation.scalar','NHN_QNegAssociation.association','NHN_QNegAssociation.enclosing','NHN_QNegAssociation.child_domains','NHN_QNegAssociation.packet']
 roots+=['AspisR1.RPx_Deployed.deployed']
 (E/'NHN_COMBINED_IMPORT.lean').write_text('import NGK_COMBINED_IMPORT\nimport NHH_COMBINED_IMPORT\n'+''.join('import '+m+'\n'for m in mods)+'#print axioms AspisR1.RPx_Deployed.deployed\n')
 s=(P/'NHH_Driver.lean').read_text();a=s.index('    else if mode == "scan"');b=s.index('\n    else ',s.index('else if mode == "proof11"'))

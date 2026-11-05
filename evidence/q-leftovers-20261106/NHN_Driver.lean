@@ -101,7 +101,7 @@ unsafe def main (args : List String) : IO UInt32 := do
          `NEP_MutateProof.proof, `NEP_MutateAux.viaAux])
     else if mode == "scan" then (#[`NHN_COMBINED_IMPORT], #[])
     else if mode == "proof0" then
-      (#[`NHN_COMBINED_IMPORT], #[`NHN_CMInstantiation.association, `NHN_CMInstantiation.packet, `NHN_CMInstantiation.outcomes, `AspisR1.RPx_Deployed.deployed])
+      (#[`NHN_COMBINED_IMPORT], #[`NHN_CMInstantiation.association, `NHN_CMInstantiation.packet, `NHN_CMInstantiation.outcomes, `NHN_QNegAssociation.scalar, `NHN_QNegAssociation.association, `NHN_QNegAssociation.enclosing, `NHN_QNegAssociation.child_domains, `NHN_QNegAssociation.packet, `AspisR1.RPx_Deployed.deployed])
     else (#[], #[])
   let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
     {} (loadExts := true) (level := .private)

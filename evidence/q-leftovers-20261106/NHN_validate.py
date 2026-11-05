@@ -1,6 +1,6 @@
 """Read-only inherited gates plus additive NHN closure checks; no inherited writes."""
 from pathlib import Path
-import json,lzma,hashlib,runpy,copy,re
+import json,lzma,hashlib,runpy,copy,re,subprocess
 E=Path(__file__).resolve().parent;R=E.parents[1];P=E.parent/'q-field-rows-20261106'
 def J(p):
  p=Path(p);return json.loads(p.read_bytes()if p.exists()else lzma.decompress(Path(str(p)+'.xz').read_bytes()))
@@ -57,10 +57,30 @@ if __name__=='__main__':
   except AssertionError:tests.append(label)
   else:raise AssertionError('Accepted mutation '+label)
  # Static reuse and scan/runtime fidelity, with no imported evidence writes.
- for n,pin in J(E/'NHN_REUSE.json').items():assert H((R/n).read_bytes())==pin['sha256'],n
+ for n,pin in J(E/'NHN_REUSE.json').items():
+  raw=(R/n).read_bytes()if(R/n).is_file()else subprocess.check_output(['git','show','HEAD:'+n],cwd=R)
+  assert H(raw)==pin['sha256'],n
  old=(P/'NHH_Driver.lean').read_text();new=(E/'NHN_Driver.lean').read_text();marker='/-- Standalone runtime avoids';action='  let action : CommandElabM Bool := do'
  assert old.split(marker)[0]==new.split(marker)[0]and old[old.index(action):]==new[new.index(action):]
  walker=R/'evidence/axaudit2-20261102/NEP_WALKER.lean';assert H(walker.read_bytes())==J(E/'NHN_WALKER_PIN.json')['sha256']
+ coverage=J(E/'NHN_INSTANTIATION_COVERAGE.json')
+ assert coverage['instantiations']==['M31::inv']and not coverage['generic_forwarded_backends_certified']
+ assert coverage['incoming']==[{'row':'TX1:005','function':'crates/aspis-core/src/field.rs::CM31::inv'}]
+ assert coverage['occurrences']==[{'row':'TX1:006','function':'crates/aspis-core/src/field.rs::CM31::inv_with','transaction':'TX1'}]
+ assert set(coverage['absent_functions'])=={'cm31_batch_inverse','cm31_batch_inverse_with','verify_inner'}
+ census=J(E/'NHN_CENSUS.json')
+ assert [r['input']for r in census]==J(R/'evidence/inv-repair-20261104/NGB_MIR_EDGES.json')['inputs']
+ for row in census:
+  raw=(R/row['input']['path']).read_bytes();assert H(raw)==row['input']['sha256']
+  raw=lzma.decompress(raw);assert H(raw)==row['input']['uncompressed_sha256']
+  lines=raw.decode().splitlines();hits=[];fn=''
+  for i,line in enumerate(lines):
+   if line.startswith('fn '):fn=line
+   if any(k in line for k in ['CM31::inv_with(', 'cm31_batch_inverse_with(', 'cm31_batch_inverse(']):hits.append(dict(line=i+1,function=fn,context='\n'.join(lines[max(0,i-4):i+3])))
+  assert hits==row['hits']
+ core=census[2]['hits'];direct=[h for h in core if '>::inv('in h['function']and 'CM31::inv_with('in h['context']]
+ assert len(direct)==1 and 'field::M31::inv as fn(field::M31) -> field::M31'in direct[0]['context']
+ assert not census[0]['hits']and not census[1]['hits']
  er=J(E/'NHN_ERASURE.json');assert er['erasure_equal']and er['constant']=='M31::inv'
  for m in ['NHN_CMInstantiation','NHN_QNegAssociation']:
   s=(E/(m+'.lean')).read_text();assert not re.search(r'\b(?:sorry|admit|axiom|native_decide)\b|set_option\s+(?:maxRecDepth|maxHeartbeats)',s)

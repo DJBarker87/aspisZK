@@ -14,3 +14,5 @@ ledger=json.loads((R/'evidence/native-ledger3-20261029/NDT_LEDGER.json').read_te
 for x in out:
  print(x['input']['path'])
  for h in x['hits']: print(h['function'],h['context'])
+
+# Read-only adopted inventory coverage is retained separately in NHN_INSTANTIATION_COVERAGE.json.
