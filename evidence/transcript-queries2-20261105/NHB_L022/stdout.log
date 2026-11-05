@@ -1,0 +1,46 @@
+NHB_generated/NHB_Observation.lean:27:36: error(lean.unknownIdentifier): Unknown constant `AspisR1.NHB_Observation.Fields.stop`
+NHB_generated/NHB_Observation.lean:28:39: error(lean.unknownIdentifier): Unknown constant `AspisR1.NHB_Observation.Fields.cursor`
+NHB_generated/NHB_Observation.lean:29:54: error(lean.unknownIdentifier): Unknown constant `AspisR1.NHB_Observation.Fields.draws`
+NHB_generated/NHB_Observation.lean:32:14: error(lean.unknownIdentifier): Unknown constant `AspisR1.NHB_Observation.Fields.length`
+NHB_generated/NHB_Observation.lean:37:24: error(lean.unknownIdentifier): Unknown constant `AspisR1.NHB_Observation.Fields.word`
+NHB_generated/NHB_Observation.lean:23:81: error: unsolved goals
+s next : Scan
+x : U32
+cursor last : ℕ
+stop : Bool
+hlen : ↑s.accepted_len < 22
+hdraw : ↑s.draws < 64
+observed : Relation s next x cursor last stop
+zero : Fin 22 := ⟨0, ⋯⟩
+equal : observe next x last stop zero = NHB_Reference.fields s x cursor zero
+stats :
+  (NHB_Reference.fields s x cursor zero).stop = false ∧
+    (NHB_Reference.fields s x cursor zero).cursor = cursor + 1 ∧
+      (NHB_Reference.fields s x cursor zero).draws = ↑s.draws + 1 ∧
+        (NHB_Reference.fields s x cursor zero).length =
+          ↑s.accepted_len + if NHB_Membership.reference x (List.take ↑s.accepted_len ↑s.accepted) = true then 0 else 1
+hs : stop = false
+hc : last = cursor + 1
+hd : ↑next.draws = ↑s.draws + 1
+hn :
+  ↑next.accepted_len =
+    ↑s.accepted_len + if NHB_Membership.reference x (List.take ↑s.accepted_len ↑s.accepted) = true then 0 else 1
+j : ℕ
+hl : j < (↑next.accepted).length
+hr :
+  j <
+    (↑(if NHB_Membership.reference x (List.take ↑s.accepted_len ↑s.accepted) = true then s.accepted
+        else s.accepted.set s.accepted_len x)).length
+bound : j < 22
+index : Fin 22 := ⟨j, bound⟩
+⊢ (↑next.accepted)[j] =
+    (↑(if NHB_Membership.reference x (List.take ↑s.accepted_len ↑s.accepted) = true then s.accepted
+        else s.accepted.set s.accepted_len x))[j]
+NHB_generated/NHB_Observation.lean:56:35: error(lean.unknownIdentifier): Unknown constant `AspisR1.NHB_Observation.Fields.stop`
+NHB_generated/NHB_Observation.lean:57:39: error(lean.unknownIdentifier): Unknown constant `AspisR1.NHB_Observation.Fields.cursor`
+NHB_generated/NHB_Observation.lean:59:15: error(lean.unknownIdentifier): Unknown constant `AspisR1.NHB_Observation.Fields.length`
+NHB_generated/NHB_Observation.lean:61:15: error(lean.unknownIdentifier): Unknown constant `AspisR1.NHB_Observation.Fields.draws`
+NHB_generated/NHB_Observation.lean:67:26: error(lean.unknownIdentifier): Unknown constant `AspisR1.NHB_Observation.Fields.word`
+'AspisR1.NHB_Observation.continuing_frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NHB_Observation.stopped_state' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NHB_Observation.ghost_inputs' depends on axioms: [propext, Classical.choice, Quot.sound]

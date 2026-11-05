@@ -1,0 +1,80 @@
+def Query31ExplicitScanBody.body : {Iter : Type} →
+  Query31ExplicitScanBody.StdOps Iter →
+    Iter →
+      Query31ExplicitScanBody.CurrentScan →
+        Aeneas.Std.Result
+          (Aeneas.Std.ControlFlow (Iter × Query31ExplicitScanBody.CurrentScan)
+            (Query31ExplicitScanBody.CurrentScan × Option Bool)) :=
+fun {Iter} ops iter s => do
+  let __x ← ops.iterNext iter
+  match __x with
+    | (o, iter1) =>
+      match o with
+      | none => Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (s, some false))
+      | some candidate =>
+        if s.accepted_len = 22#usize then Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (s, none))
+        else
+          if s.draws = 64#usize then Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (s, none))
+          else do
+            let i ← ops.usizeAdd s.draws 1#usize
+            let sl ← ops.readPrefix s.accepted s.accepted_len
+            let b ← ops.contains sl candidate
+            if b = true then
+                Aeneas.Std.Result.ok
+                  (Aeneas.Std.ControlFlow.cont
+                    (iter1, { accepted := s.accepted, accepted_len := s.accepted_len, draws := i }))
+              else do
+                let a ← ops.update s.accepted s.accepted_len candidate
+                let i1 ← ops.usizeAdd s.accepted_len 1#usize
+                Aeneas.Std.Result.ok
+                    (Aeneas.Std.ControlFlow.cont (iter1, { accepted := a, accepted_len := i1, draws := i }))
+def Query31ExplicitListLoop.listNext : List Aeneas.Std.U32 →
+  Aeneas.Std.Result (Option Aeneas.Std.U32 × List Aeneas.Std.U32) :=
+fun x =>
+  match x with
+  | [] => Aeneas.Std.Result.ok (none, [])
+  | x :: xs => Aeneas.Std.Result.ok (some x, xs)
+def Query31ConcreteWordsDriverChain.actualQueryWords : Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+  Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U32 8#usize) :=
+AspisR1QueryScanUnrolled.r0_transcript.query_words
+def Query31ModelScanCall.modelScanFn : (Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+    Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U32 8#usize)) →
+  Query31ModelScanCall.QueryScan →
+    Aeneas.Std.Array Aeneas.Std.U8 32#usize → Aeneas.Std.Result (Bool × Query31ModelScanCall.QueryScan) :=
+fun decodeBlock s block => do
+  let words ← decodeBlock block
+  let __x ← Query31ExplicitListLoop.scanListLoop (↑words) s
+  match __x with
+    | (sf, pending) => Aeneas.Std.Result.ok (Query31ExplicitListLoop.optionStop pending, sf)
+NHB_generated/NHB_Inspect.lean:7:7: error(lean.unknownIdentifier): Unknown constant `Query31UnrolledDriverFirstStop.firstStop`
+NHB_generated/NHB_Inspect.lean:8:7: error(lean.unknownIdentifier): Unknown constant `Query31ModelDriverChain`
+AspisR1.NGQ_SamplerDriver.source
+  (scan :
+    AspisR1.NGQ_SamplerDriver.State →
+      AspisR1.NGQ_SamplerDriver.Bytes32 → Aeneas.Std.Result (Bool × AspisR1.NGQ_SamplerDriver.State))
+  (s : AspisR1.NGQ_SamplerDriver.State) (blocks advances : AspisR1.NGQ_SamplerDriver.Blocks) :
+  AspisR1Query31Transcript.queries_from_pairs_with_scan scan s blocks advances =
+    AspisR1.NGQ_SamplerDriver.walk scan advances 7#usize
+      ((↑blocks).zip [0#usize, 1#usize, 2#usize, 3#usize, 4#usize, 5#usize, 6#usize, 7#usize]) s
+AspisR1.NGQ_SamplerPacket.adopted_decoder (blocks advances : AspisR1.NGQ_SamplerPacket.Blocks) :
+  AspisR1.NGQ_SamplerPacket.decode blocks advances =
+    Query31ConcreteMaterializedSchedule.actualConcreteDecode AspisR1.NGQ_SamplerPacket.initial blocks advances
+AspisR1.NGQ_TRANSCRIPT.actual_queries (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (self : AspisR1PublicPreparation.transcript.Transcript Unit) (row : Aeneas.Std.U8)
+  (payload : Aeneas.Std.Slice Aeneas.Std.U8) (observed : AspisR1.NGP_L181.Observation AspisR1.NGQ_Effects.Reply)
+  (trace :
+    AspisR1.NGQ_Cuts.Trace hashv
+      (AspisR1.NGQ_Normalize.normalize (AspisR1.NGQ_Effects.code AspisR1.NGQ_TRANSCRIPT.boundaries self row payload))
+      observed.result observed.attempted) :
+  AspisR1.NGP_L181.NativeAssociation hashv (AspisR1.NGQ_Effects.code AspisR1.NGQ_TRANSCRIPT.boundaries self row payload)
+      observed ∧
+    observed.result =
+        AspisR1PublicPreparation.QueriesModel.queries AspisR1.NGQ_TRANSCRIPT.boundaries
+          (AspisR1.NGQ_Effects.dictionary hashv) self row payload ∧
+      AspisR1.NGQ_TRANSCRIPT.positions observed.result =
+          AspisR1.NGQ_TRANSCRIPT.positions
+            (AspisR1PublicPreparation.QueriesModel.queries AspisR1.NGQ_TRANSCRIPT.boundaries
+              (AspisR1.NGQ_Effects.dictionary hashv) self row payload) ∧
+        observed.attempted =
+          (AspisR1.SdkC_Source.run hashv (AspisR1.NGQ_Effects.code AspisR1.NGQ_TRANSCRIPT.boundaries self row payload)
+              []).2

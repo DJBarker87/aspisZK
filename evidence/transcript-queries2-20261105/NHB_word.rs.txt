@@ -1,0 +1,88 @@
+fn NHB_member(a:&[u32;22], n:usize, x:u32)->bool { match n {
+0 => NHB_contains_0(a,n,x),
+1 => NHB_contains_1(a,n,x),
+2 => NHB_contains_2(a,n,x),
+3 => NHB_contains_3(a,n,x),
+4 => NHB_contains_4(a,n,x),
+5 => NHB_contains_5(a,n,x),
+6 => NHB_contains_6(a,n,x),
+7 => NHB_contains_7(a,n,x),
+8 => NHB_contains_8(a,n,x),
+9 => NHB_contains_9(a,n,x),
+10 => NHB_contains_10(a,n,x),
+11 => NHB_contains_11(a,n,x),
+12 => NHB_contains_12(a,n,x),
+13 => NHB_contains_13(a,n,x),
+14 => NHB_contains_14(a,n,x),
+15 => NHB_contains_15(a,n,x),
+16 => NHB_contains_16(a,n,x),
+17 => NHB_contains_17(a,n,x),
+18 => NHB_contains_18(a,n,x),
+19 => NHB_contains_19(a,n,x),
+20 => NHB_contains_20(a,n,x),
+21 => NHB_contains_21(a,n,x),
+22 => NHB_contains_22(a,n,x),
+_ => unreachable!(),
+}}
+impl QueryScan {
+ fn NHB_word(&mut self,candidate:u32)->bool {
+            if self.accepted_len == QUERY_COUNT || self.draws == QUERY_MAX_DRAWS {
+                return true;
+            }
+            self.draws += 1;
+            if !NHB_member(&self.accepted,self.accepted_len,candidate) {
+                self.accepted[self.accepted_len] = candidate;
+                self.accepted_len += 1;
+            }
+ false
+ }
+ fn NHB_cursor_word(&mut self,block:&[u8;32],cursor:&mut usize)->(bool,u32) {
+  let words=query_words(block);
+  let mut iterator=words.into_iter();
+  if *cursor>0 {let _=iterator.nth(*cursor-1);}
+  let candidate=iterator.next().unwrap();
+  *cursor+=1;
+  (self.NHB_word(candidate),candidate)
+ }
+}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub_verified(NHB_contains_0)]
+#[kani::stub_verified(NHB_contains_1)]
+#[kani::stub_verified(NHB_contains_2)]
+#[kani::stub_verified(NHB_contains_3)]
+#[kani::stub_verified(NHB_contains_4)]
+#[kani::stub_verified(NHB_contains_5)]
+#[kani::stub_verified(NHB_contains_6)]
+#[kani::stub_verified(NHB_contains_7)]
+#[kani::stub_verified(NHB_contains_8)]
+#[kani::stub_verified(NHB_contains_9)]
+#[kani::stub_verified(NHB_contains_10)]
+#[kani::stub_verified(NHB_contains_11)]
+#[kani::stub_verified(NHB_contains_12)]
+#[kani::stub_verified(NHB_contains_13)]
+#[kani::stub_verified(NHB_contains_14)]
+#[kani::stub_verified(NHB_contains_15)]
+#[kani::stub_verified(NHB_contains_16)]
+#[kani::stub_verified(NHB_contains_17)]
+#[kani::stub_verified(NHB_contains_18)]
+#[kani::stub_verified(NHB_contains_19)]
+#[kani::stub_verified(NHB_contains_20)]
+#[kani::stub_verified(NHB_contains_21)]
+#[kani::stub_verified(NHB_contains_22)]
+fn NHB_cursor_word_frame() {
+ let accepted:[u32;22]=kani::any();let len:usize=kani::any();let draws:usize=kani::any();
+ let block:[u8;32]=kani::any();let start:usize=kani::any();let j:usize=kani::any();
+ kani::assume(len<=22 && draws<=64 && start<8 && j<22);
+ let candidate=u32::from_le_bytes([block[4*start],block[4*start+1],block[4*start+2],block[4*start+3]]) & ((1<<18)-1);
+ let member=NHB_member(&accepted,len,candidate);
+ let halted=len==22 || draws==64;
+ let expected_word=if !halted && !member && j==len {candidate} else {accepted[j]};
+ let expected_len=if halted || member {len} else {len+1};
+ let expected_draws=if halted {draws} else {draws+1};
+ let mut copied=block;
+ #[cfg(NHB_invert)] {copied[0]^=1;}
+ let mut scan=QueryScan{accepted,accepted_len:len,draws};let mut cursor=start;
+ let (stop,word)=scan.NHB_cursor_word(&copied,&mut cursor);
+ assert!(word==candidate && cursor==start+1 && stop==halted && scan.draws==expected_draws && scan.accepted_len==expected_len && scan.accepted[j]==expected_word);
+}

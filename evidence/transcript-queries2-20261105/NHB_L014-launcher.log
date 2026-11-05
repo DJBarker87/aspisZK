@@ -1,0 +1,65 @@
+{"attempt": "NHB_L014", "exit_status": 1, "wall_seconds": 4.173132761847228, "peak_rss_kib": "5867660", "swaps": "0", "print_axioms": ["'AspisR1.NHB_OuterState.finish_at' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NHB_OuterState.association' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NHB_generated/NHB_OuterState.lean:60:61: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  do
+    let y ← ok ?x
+    ?f y
+in the target expression
+  (let (stop, next) := (true, next)
+    if stop = true then do
+      let selected ← ok (↑advances)[↑head.2]
+      finishCurrent selected next
+    else walk scan advances (↑advances)[↑fallback] tail next) =
+    let (stop, next) := (true, next)
+    if stop = true then finishAdvance advances head.2 next else NGQ_SamplerDriver.walk scan advances fallback tail next
+
+case cons.ok.true
+scan : State → Bytes32 → Result (Bool × State)
+advances : Blocks
+fallback : Usize
+fallbackBound : ↑fallback < 8
+head : Bytes32 × Usize
+tail : List
+...
+nces)[↑fallback] tail next) =
+    let (stop, next) := (true, next)
+    if stop = true then finishAdvance advances head.2 next else NGQ_SamplerDriver.walk scan advances fallback tail next
+
+case cons.ok.true
+scan : State → Bytes32 → Result (Bool × State)
+advances : Blocks
+fallback : Usize
+fallbackBound : ↑fallback < 8
+head : Bytes32 × Usize
+tail : List (Bytes32 × Usize)
+ih :
+  (∀ p ∈ tail, ↑p.2 < 8) →
+    ∀ (s : State),
+      walk scan advances (↑advances)[↑fallback] tail s = NGQ_SamplerDriver.walk scan advances fallback tail s
+indices : ∀ p ∈ head :: tail, ↑p.2 < 8
+s : State
+headBound : ↑head.2 < 8
+tailBound : ∀ p ∈ tail, ↑p.2 < 8
+next : State
+call : scan s head.1 = ok (true, next)
+⊢ (let (stop, next) := (true, next)
+    if stop = true then do
+      let selected ← ok (↑advances)[↑head.2]
+      finishCurrent selected next
+    else walk scan advances (↑advances)[↑fallback] tail next) =
+    let (stop, next) := (true, next)
+    if stop = true then finishAdvance advances head.2 next else NGQ_SamplerDriver.walk scan advances fallback tail next
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.NHB_OuterState.finish_at' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NHB_OuterState.association' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r318bf3bf3ecd44c3a56d8f347b527db7.scope; invocation ID: 8259801e13cc4c258112057e0496b544

@@ -1,0 +1,48 @@
+NHB_generated/NHB_Inactive.lean:13:53: error: unsolved goals
+j : Fin 22
+a✝ : ↑NGQ_SamplerPacket.initial.accepted_len ≤ ↑j
+⊢ [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+        0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32][↑j] =
+    0#u32
+NHB_generated/NHB_Inactive.lean:36:8: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => (↑_a)[↑j] = 0#u32
+Error: Application type mismatch: The argument
+  State._proof_3 next j
+has type
+  ↑j < (↑next.accepted).length
+but is expected to have type
+  ↑j < (↑_a).length
+in the application
+  (↑_a)[↑j]
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case false
+s next : Scan
+x : U32
+initial : State s
+j : Fin 22
+after : ↑next.accepted_len ≤ ↑j
+frame : NGQ_SamplerStep.Frame s next x false
+len : ↑next.accepted_len = ↑s.accepted_len + 1
+array : ↑next.accepted = (↑s.accepted).set (↑s.accepted_len) x
+same : next.accepted = s.accepted.set s.accepted_len x
+before : ↑s.accepted_len ≤ ↑j
+different : ↑j ≠ ↑s.accepted_len
+⊢ (↑next.accepted)[↑j] = 0#u32
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    next.accepted
+  has type
+    Std.Array U32 22#usize
+  but is expected to have type
+    { l // l.length = ↑22#usize }
+  in the application
+    ↑next.accepted
+'AspisR1.NHB_Inactive.initial' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NHB_Inactive.frame_preserves' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NHB_Inactive.word_invariant' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

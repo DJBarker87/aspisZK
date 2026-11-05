@@ -1,0 +1,61 @@
+{"attempt": "NHB_L023", "exit_status": 1, "wall_seconds": 3.1597710959613323, "peak_rss_kib": "5800408", "swaps": "0", "print_axioms": ["'AspisR1.NHB_Observation.continuing_frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NHB_Observation.stopped_state' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NHB_Observation.ghost_inputs' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NHB_generated/NHB_Observation.lean:40:2: error: Tactic `generalize` failed: result is not type correct
+  ∀ (x_1 : Bool), (↑next.accepted)[j] = (↑(if x_1 = true then s.accepted else s.accepted.set s.accepted_len x))[j]
+
+s next : Scan
+x : U32
+cursor last : ℕ
+stop : Bool
+hlen : ↑s.accepted_len < 22
+hdraw : ↑s.draws < 64
+observed : Relation s next x cursor last stop
+zero : Fin 22 := ⟨0, ⋯⟩
+equal : observe next x last stop zero = NHB_Reference.fields s x cursor zero
+stats :
+  (NHB_Reference.fields s x cursor zero).stop = false ∧
+    (NHB_Reference.fields s x cursor zero).cursor = cursor + 1 ∧
+      (NHB_Reference.fields s x cursor zero).draws = ↑s.draws + 1 ∧
+        (NHB_Reference.fields s x cur
+...
+cepted.set s.accepted_len x))[j]
+
+s next : Scan
+x : U32
+cursor last : ℕ
+stop : Bool
+hlen : ↑s.accepted_len < 22
+hdraw : ↑s.draws < 64
+observed : Relation s next x cursor last stop
+zero : Fin 22 := ⟨0, ⋯⟩
+equal : observe next x last stop zero = NHB_Reference.fields s x cursor zero
+stats :
+  (NHB_Reference.fields s x cursor zero).stop = false ∧
+    (NHB_Reference.fields s x cursor zero).cursor = cursor + 1 ∧
+      (NHB_Reference.fields s x cursor zero).draws = ↑s.draws + 1 ∧
+        (NHB_Reference.fields s x cursor zero).length =
+          ↑s.accepted_len + if NHB_Membership.reference x (List.take ↑s.accepted_len ↑s.accepted) = true then 0 else 1
+hs : stop = false
+hc : last = cursor + 1
+hd : ↑next.draws = ↑s.draws + 1
+hn :
+  ↑next.accepted_len =
+    ↑s.accepted_len + if NHB_Membership.reference x (List.take ↑s.accepted_len ↑s.accepted) = true then 0 else 1
+j : ℕ
+hl : j < (↑next.accepted).length
+hr :
+  j <
+    (↑(if NHB_Membership.reference x (List.take ↑s.accepted_len ↑s.accepted) = true then s.accepted
+        else s.accepted.set s.accepted_len x)).length
+bound : j < 22
+index : Fin 22 := ⟨j, bound⟩
+cell : (observe next x last stop index).word = (NHB_Reference.fields s x cursor index).word
+notfull : ¬(↑s.accepted_len = 22 ∨ ↑s.draws = 64)
+halt : decide (↑s.accepted_len = 22 ∨ ↑s.draws = 64) = false
+⊢ (↑next.accepted)[j] =
+    (↑(if NHB_Membership.reference x (List.take ↑s.accepted_len ↑s.accepted) = true then s.accepted
+        else s.accepted.set s.accepted_len x))[j]
+'AspisR1.NHB_Observation.continuing_frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NHB_Observation.stopped_state' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NHB_Observation.ghost_inputs' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r3cfe628e0aff4a9a92872804ddd5eed5.scope; invocation ID: fd87b46d821743b383c4644849cd4657
