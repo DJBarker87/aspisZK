@@ -41,8 +41,11 @@ elif kind=='link':
  sources=['NIU_native/'+target+'.c','NIU_native/NFA_WALKER.c','NIU_native/NFA_MemoryLimit.c']
  command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NIU_native/'+target,*sources]
 elif kind=='audit':
- sources=['NIU_generated/NIU_ProofDriver.lean','NIU_generated/NIU_Driver.lean','NIU_batch.py','NIU_AUDIT_ROOTS.json','NIU_AUDIT_MODULES.json','NIU_EXPECTED_IMPORTS.jsonl']+(['NIU_POOL_ROOTS.json'] if target.startswith('pool') else [])
- for n in sources:files[n]=(E/Path(n).name).read_text()
+ if target=='close':
+  files['NIU_pin.py']=(E/'NIU_pin.py').read_text();files['NIU_PREDECESSOR_PINS.json']=lzma.decompress((E.parent/'ledger12-20261107/NIR_CLOSURE_PINS.json.xz').read_bytes()).decode()
+ sources=['NIU_generated/NIU_ProofDriver.lean','NIU_generated/NIU_Driver.lean','NIU_batch.py','NIU_AUDIT_ROOTS.json','NIU_AUDIT_MODULES.json','NIU_EXPECTED_IMPORTS.jsonl']+(['NIU_POOL_ROOTS.json'] if target.startswith('pool') else [])+(['NIU_pin.py','NIU_PREDECESSOR_PINS.json']if target=='close'else[])
+ for n in sources:
+  if n not in files:files[n]=(E/Path(n).name).read_text()
  command=['python3','NIU_batch.py',target]
 else:raise ValueError(kind)
 config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NIU_tmp',CARGO_TARGET_DIR=B+'/NIU_target',LEAN_PATH=':'.join([B+'/NIU_objects']+json.loads((E/'NIU_PATHS.json').read_text()))),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')
@@ -83,6 +86,9 @@ import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
 if {kind!r}=='audit':names += [str(p.relative_to(b)) for p in (b/'NIU_audit'/{target!r}).rglob('*') if p.is_file()]+[str(p.relative_to(b)) for modepath in (b/'NIU_audit'/{target!r}).glob('*.json') for row in json.loads(modepath.read_text()).get('results',[]) for p in [b/('NEP_'+modepath.stem+'_'+row['root']+'_REACHABLE.txt')] if p.exists()]+([n for n in ['NIU_LOADED_scan.jsonl','NIU_POOL_LOADED_scan.jsonl'] if (b/n).exists()])
 out={{n:(b/n).read_text() for n in names}}
+if {target!r}=='close':
+ for n in ['NIU_PREDECESSOR_COMPARISON.json','NIU_EXPORT.json','NIU_TOOL_PINS.json','NIU_CLOSURE_PINS.json.sha256']:out[n]=(b/n).read_text()
+ out['NIU_CLOSURE_PINS.json.xz.hex']=(b/'NIU_CLOSURE_PINS.json.xz').read_bytes().hex()
 for name in ['NIU_Driver','NIU_ProofDriver','NIU_PoolProofDriver','NIU_PoolDriver']:
  p=b/'NIU_native'/name
  if p.is_file():out[a+'/'+name+'_BINARY_PIN.json']=json.dumps(dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size))
@@ -90,6 +96,8 @@ print(json.dumps(out))
 ''');assert r.returncode==0,r.stderr
 for n,t in json.loads(r.stdout).items():
  p=E/n;p.parent.mkdir(parents=True,exist_ok=True)
+ if n.endswith('.xz.hex'):
+  (E/n[:-4]).write_bytes(bytes.fromhex(t));continue
  if n.startswith('NEP_') and n.endswith('_REACHABLE.txt'):
   raw=t.encode();(E/('NIU_'+n+'.sha256')).write_text(hashlib.sha256(raw).hexdigest()+'\n');(E/('NIU_'+n+'.xz')).write_bytes(lzma.compress(raw,preset=6 if len(raw)>20_000_000 else 1))
  else:p.write_text(t)

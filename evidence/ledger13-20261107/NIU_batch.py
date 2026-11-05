@@ -2,6 +2,8 @@
 from pathlib import Path
 import subprocess,json,time,hashlib,re,sys
 B=Path.cwd();mode=sys.argv[1];E=B/'NIU_audit'/mode;E.mkdir(parents=True,exist_ok=True)
+if mode=='close':
+ exec(compile((B/'NIU_pin.py').read_text(),'NIU_pin.py','exec'));sys.exit(0)
 if mode.startswith('inventory-'):jobs=[(mode,['NIU_native/NIU_InventoryDriver',mode.split('-')[1]])]
 elif mode in ['poolfixtures','poolroots','poolscan']:jobs=[('scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0',['NIU_native/'+('NIU_PoolDriver' if mode=='poolscan' else 'NIU_PoolProofDriver'), 'scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0'])]
 elif mode in ['fixtures','scan','scan2']:jobs=[('scan' if mode=='scan2' else mode,['NIU_native/'+('NIU_Driver' if mode.startswith('scan') else 'NIU_ProofDriver'),'scan' if mode=='scan2' else mode])]
