@@ -1,0 +1,41 @@
+{"attempt": "NLP_L004", "exit_status": 0, "wall_seconds": 14.806628359947354, "peak_rss_kib": "6063596", "swaps": "0", "print_axioms": ["'NLP_C04Query.domain' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLP_C04Query.packet' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLP_C04Query.domain : ∀ (wr rr : NP6_StdModel.Reservation) (merkle : Merkle) (finish : Finish) {X : Type}
+  (d : aspis_core.digest.Digest32 X) (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    ∀ (enteredProof : Slice U8) (p : verifier.Prepared) (folded : Std.Array U8 32#usize) (reply : R Unit),
+      Event.merkle enteredProof p folded reply ∈
+          (run wr rr (fun {H} => merkle) finish d pub proof ck hash none).events →
+        enteredProof = proof ∧ (↑enteredProof).length = 57607 ∧ ∀ j < 22, ↑(↑p.queries)[j]! < 262144 :=
+fun wr rr merkle finish {X} d pub proof ck hash len enteredProof p folded reply entered =>
+  let ⟨same, right✝⟩ :=
+    NLL_Tx2AtActual.sourc
+...
+ len enteredProof p folded reply entered =>
+  let ⟨same, right✝⟩ :=
+    NLL_Tx2AtActual.source wr rr (fun {H} => merkle) finish d pub proof ck hash enteredProof p folded reply entered
+  let ⟨a, h✝⟩ := right✝
+  let ⟨resumed, canonical⟩ := h✝
+  ⟨same, ⟨Eq.mpr (id (congrArg (fun _a => (↑_a).length = 57607) same)) len, canonical⟩⟩
+theorem NLP_C04Query.packet : ∀ (H : Bytes → State) (wr rr : NP6_StdModel.Reservation) (merkle : Merkle)
+  (finish : Finish) {X : Type} (d : aspis_core.digest.Digest32 X) (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    ∀ (enteredProof : Slice U8) (p : verifier.Prepared) (folded : Std.Array U8 32#usize) (reply : R Unit),
+      Event.merkle enteredProof p folded reply ∈
+          (run wr rr (fun {H} => merkle) finish d pub proof ck hash none).events →
+        ∀ (parsed : OraclePortCompactDraft.Parsed),
+          parsed.wire = MultiproofConeCanonical.bytesOf ↑proof →
+            (∀ (k : Fin 3),
+                Port3_NativeBatchCalls.rootAt (NLL_BatchSource.roots p folded) k =
+                  encodeState (OraclePortBatchDraft.committedRoot parsed ↑k)) →
+              NLN.BatchPacket H enteredProof parsed p folded 1#usize :=
+fun H wr rr merkle finish {X} d pub proof ck hash len enteredProof p folded reply entered parsed wire roots =>
+  let ⟨same, right✝⟩ :=
+    domain wr rr (fun {H} => merkle) finish d pub proof ck hash len enteredProof p folded reply entered
+  let ⟨extent, canonical⟩ := right✝
+  NLN_TX2_053.root H enteredProof extent parsed
+    (Eq.mpr (id (congrArg (fun _a => parsed.wire = MultiproofConeCanonical.bytesOf ↑_a) same)) wire) p folded canonical
+    roots
+'NLP_C04Query.domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLP_C04Query.packet' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-reef28a6846e042839a76416ff924093c.scope; invocation ID: 39e070674c3d4031b3cab95c4123de89
