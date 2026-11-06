@@ -1,0 +1,12 @@
+def AspisR1.NLI_FullInterface.RowSpec_136 : {H : Type} → Native H → Prop :=
+fun {H} native =>
+  ∀ (A : Type) (allocator : S2W_D189Wrappers.Allocator (Heap A)) (heap : Heap A) (base : Input H) (bytes : Slice U8),
+    match AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+    | ok (core.result.Result.Ok pre) =>
+      have input :=
+        { reservation := base.reservation, digest := base.digest, publicValue := base.publicValue,
+          prefix1 := PrefixAdapter.fromOld pre, transcript := base.transcript, challenges := base.challenges };
+      have observed := native A allocator heap input;
+      observed.lastInput = input ∧
+        observed = NLI_Resource.fold allocator (fuel (NLC_Finish.initial input)) (NLI_Resource.initial heap input)
+    | x => True

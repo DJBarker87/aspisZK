@@ -1,0 +1,33 @@
+{"attempt": "NLI_L072", "exit_status": 0, "wall_seconds": 23.211236417060718, "peak_rss_kib": "6360040", "swaps": "0", "print_axioms": ["'AspisR1.NLI_Source.finishSourceEquality' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NLI_Source.initialized_finish' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NLI_Source.finishSourceEquality' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLI_Source.initialized_finish' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLI_Source.finishSourceEquality : ∀ {H : Type} (input : Input H),
+  NLC_Goals.FinishSourceEquality input :=
+fun {H} input => id (id (Eq.trans (rounds input { }) (suffix_eq_finish input)))
+theorem AspisR1.NLI_Source.initialized_finish : ∀ {H : Type} (input : Input H),
+  ∃ out log events,
+    InitializedInvocation (fuel (initial input)) (initial input) out log events ∧
+      run
+          (S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries input.reservation) input.diges
+...
+'AspisR1.NLI_Source.finishSourceEquality' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLI_Source.initialized_finish' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLI_Source.finishSourceEquality : ∀ {H : Type} (input : Input H),
+  NLC_Goals.FinishSourceEquality input :=
+fun {H} input => id (id (Eq.trans (rounds input { }) (suffix_eq_finish input)))
+theorem AspisR1.NLI_Source.initialized_finish : ∀ {H : Type} (input : Input H),
+  ∃ out log events,
+    InitializedInvocation (fuel (initial input)) (initial input) out log events ∧
+      run
+          (S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries input.reservation) input.digest
+            input.publicValue input.prefix1 input.transcript input.challenges none) =
+        (log, out) :=
+fun {H} input =>
+  let ⟨out, h✝⟩ := initial_fold input
+  let ⟨log, h✝¹⟩ := h✝
+  let ⟨events, h✝²⟩ := h✝¹
+  let ⟨cuts, folded⟩ := h✝²
+  Exists.intro out
+    (Exists.intro log (Exists.intro events ⟨cuts, Eq.trans (Eq.symm (finishSourceEquality input)) folded⟩))
+
+Running as unit: run-r544cf45fa12f487dbb025c6ebd2381c5.scope; invocation ID: 92b92e0bdd2f4eb3944c806181002855

@@ -1,0 +1,455 @@
+NLI_generated/NLI_Inspect.lean:3:7: error(lean.unknownIdentifier): Unknown constant `AspisR1.S1SemanticCode.finish`
+NLI_generated/NLI_Inspect.lean:4:7: error(lean.unknownIdentifier): Unknown constant `AspisR1.PreparedHashCode.Code`
+NLI_generated/NLI_Inspect.lean:5:7: error(lean.unknownIdentifier): Unknown constant `AspisR1.PreparedHashCode.bind`
+NLI_generated/NLI_Inspect.lean:6:7: error(lean.unknownIdentifier): Unknown constant `AspisR1.PreparedHashCode.lift`
+theorem AspisR1.NKA_FinishTrace.source : ∀ (reservation : AspisR1.NP6_StdModel.Reservation) {H : Type}
+  (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+  (pub : AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (pre : AspisR1PublicPreparation.r1_wire.Prefix) (before : AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+  (challenges : AspisR1PublicPreparation.r1_wire.Challenges),
+  AspisR1PublicPreparation.S1SemanticCode.finish AspisR1.NJM_RoundJoin.R (AspisR1.IDa_Deployed.boundaries reservation) D
+      pub pre before challenges none =
+    do
+    let result ← AspisR1PublicPreparation.S1SemanticCode.rounds AspisR1.NJM_RoundJoin.R D pre before
+    AspisR1.NKA_FinishTrace.afterRounds reservation D pub pre challenges result :=
+fun reservation {H} D pub pre before challenges =>
+  Eq.refl
+    (AspisR1PublicPreparation.S1SemanticCode.finish AspisR1.NJM_RoundJoin.R
+      (AspisR1.IDa_Deployed.boundaries reservation) D pub pre before challenges none)
+theorem AspisR1.AuS1_Trace.run_bind : ∀ {A B : Type} (p : AspisR1PublicPreparation.PreparedHashCode.Code A)
+  (k : A → AspisR1PublicPreparation.PreparedHashCode.Code B),
+  AspisR1PublicPreparation.PreparedHashCode.run (AspisR1PublicPreparation.PreparedHashCode.bind p k) =
+    AspisR1.AuS1_Trace.continueRun (AspisR1PublicPreparation.PreparedHashCode.run p).1
+      (AspisR1PublicPreparation.PreparedHashCode.run p).2 k :=
+fun {A B} p k =>
+  AspisR1PublicPreparation.PreparedHashCode.Code.rec
+    (fun a => of_eq_true (eq_self (AspisR1PublicPreparation.PreparedHashCode.run (k a))))
+    (fun {B_1} r next ih =>
+      Aeneas.Std.Result.casesOn (motive := fun t =>
+        r = t →
+          AspisR1PublicPreparation.PreparedHashCode.run
+              (AspisR1PublicPreparation.PreparedHashCode.bind
+                (AspisR1PublicPreparation.PreparedHashCode.Code.step r next) k) =
+            AspisR1.AuS1_Trace.continueRun
+              (AspisR1PublicPreparation.PreparedHashCode.run
+                  (AspisR1PublicPreparation.PreparedHashCode.Code.step r next)).1
+              (AspisR1PublicPreparation.PreparedHashCode.run
+                  (AspisR1PublicPreparation.PreparedHashCode.Code.step r next)).2
+              k)
+        r (fun a h => Eq.symm h ▸ ih a)
+        (fun e h =>
+          Eq.symm h ▸
+            Eq.refl
+              (AspisR1PublicPreparation.PreparedHashCode.run
+                (AspisR1PublicPreparation.PreparedHashCode.bind
+                  (AspisR1PublicPreparation.PreparedHashCode.Code.step (Aeneas.Std.Result.fail e) next) k)))
+        (fun h =>
+          Eq.symm h ▸
+            Eq.refl
+              (AspisR1PublicPreparation.PreparedHashCode.run
+                (AspisR1PublicPreparation.PreparedHashCode.bind
+                  (AspisR1PublicPreparation.PreparedHashCode.Code.step Aeneas.Std.Result.div next) k)))
+        (Eq.refl r))
+    (fun {H} D hash parts next ih =>
+      Aeneas.Std.Result.casesOn (motive := fun t =>
+        D.digest hash parts = t →
+          AspisR1PublicPreparation.PreparedHashCode.run
+              (AspisR1PublicPreparation.PreparedHashCode.bind
+                (AspisR1PublicPreparation.PreparedHashCode.Code.digest D hash parts next) k) =
+            AspisR1.AuS1_Trace.continueRun
+              (AspisR1PublicPreparation.PreparedHashCode.run
+                  (AspisR1PublicPreparation.PreparedHashCode.Code.digest D hash parts next)).1
+              (AspisR1PublicPreparation.PreparedHashCode.run
+                  (AspisR1PublicPreparation.PreparedHashCode.Code.digest D hash parts next)).2
+              k)
+        (D.digest hash parts)
+        (fun a h =>
+          Eq.ndrec (motive := fun x =>
+            D.digest hash parts = x →
+              AspisR1PublicPreparation.PreparedHashCode.run
+                  (AspisR1PublicPreparation.PreparedHashCode.bind
+                    (AspisR1PublicPreparation.PreparedHashCode.Code.digest D hash parts next) k) =
+                AspisR1.AuS1_Trace.continueRun
+                  (AspisR1PublicPreparation.PreparedHashCode.run
+                      (AspisR1PublicPreparation.PreparedHashCode.Code.digest D hash parts next)).1
+                  (AspisR1PublicPreparation.PreparedHashCode.run
+                      (AspisR1PublicPreparation.PreparedHashCode.Code.digest D hash parts next)).2
+                  k)
+            (fun reply =>
+              Eq.mpr
+                (id
+                  (congr
+                    (congrArg Eq
+                      (Eq.trans
+                        (AspisR1PublicPreparation.PreparedHashCode.run.eq_5 H D hash parts fun b =>
+                          AspisR1PublicPreparation.PreparedHashCode.bind (next b) k)
+                        (Eq.trans
+                          (congrArg
+                            (fun x =>
+                              match x with
+                              | Aeneas.Std.Result.ok value =>
+                                match
+                                  AspisR1PublicPreparation.PreparedHashCode.run
+                                    (AspisR1PublicPreparation.PreparedHashCode.bind (next value) k) with
+                                | (log, result) =>
+                                  (AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                        (Aeneas.Std.Result.ok value) ::
+                                      log,
+                                    result)
+                              | Aeneas.Std.Result.fail error =>
+                                ([AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                      (Aeneas.Std.Result.fail error)],
+                                  Aeneas.Std.Result.fail error)
+                              | Aeneas.Std.Result.div =>
+                                ([AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                      Aeneas.Std.Result.div],
+                                  Aeneas.Std.Result.div))
+                            reply)
+                          (congr
+                            (congrArg Prod.mk
+                              (congrArg
+                                (List.cons
+                                  (AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                    (Aeneas.Std.Result.ok a)))
+                                (congrArg Prod.fst ((fun a => ih a) a))))
+                            (congrArg Prod.snd ((fun a => ih a) a))))))
+                    (congrFun'
+                      (congr
+                        (congrArg AspisR1.AuS1_Trace.continueRun
+                          (congrArg Prod.fst
+                            (Eq.trans (AspisR1PublicPreparation.PreparedHashCode.run.eq_5 H D hash parts next)
+                              (congrArg
+                                (fun x =>
+                                  match x with
+                                  | Aeneas.Std.Result.ok value =>
+                                    match AspisR1PublicPreparation.PreparedHashCode.run (next value) with
+                                    | (log, result) =>
+                                      (AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                            (Aeneas.Std.Result.ok value) ::
+                                          log,
+                                        result)
+                                  | Aeneas.Std.Result.fail error =>
+                                    ([AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                          (Aeneas.Std.Result.fail error)],
+                                      Aeneas.Std.Result.fail error)
+                                  | Aeneas.Std.Result.div =>
+                                    ([AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                          Aeneas.Std.Result.div],
+                                      Aeneas.Std.Result.div))
+                                reply))))
+                        (congrArg Prod.snd
+                          (Eq.trans (AspisR1PublicPreparation.PreparedHashCode.run.eq_5 H D hash parts next)
+                            (congrArg
+                              (fun x =>
+                                match x with
+                                | Aeneas.Std.Result.ok value =>
+                                  match AspisR1PublicPreparation.PreparedHashCode.run (next value) with
+                                  | (log, result) =>
+                                    (AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                          (Aeneas.Std.Result.ok value) ::
+                                        log,
+                                      result)
+                                | Aeneas.Std.Result.fail error =>
+                                  ([AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                        (Aeneas.Std.Result.fail error)],
+                                    Aeneas.Std.Result.fail error)
+                                | Aeneas.Std.Result.div =>
+                                  ([AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                        Aeneas.Std.Result.div],
+                                    Aeneas.Std.Result.div))
+                              reply))))
+                      k)))
+                (Aeneas.Std.Result.casesOn (motive := fun t =>
+                  (AspisR1PublicPreparation.PreparedHashCode.run (next a)).2 = t →
+                    (AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts (Aeneas.Std.Result.ok a) ::
+                          (AspisR1.AuS1_Trace.continueRun (AspisR1PublicPreparation.PreparedHashCode.run (next a)).1
+                              (AspisR1PublicPreparation.PreparedHashCode.run (next a)).2 k).1,
+                        (AspisR1.AuS1_Trace.continueRun (AspisR1PublicPreparation.PreparedHashCode.run (next a)).1
+                            (AspisR1PublicPreparation.PreparedHashCode.run (next a)).2 k).2) =
+                      AspisR1.AuS1_Trace.continueRun
+                        (AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts (Aeneas.Std.Result.ok a) ::
+                          (AspisR1PublicPreparation.PreparedHashCode.run (next a)).1)
+                        (AspisR1PublicPreparation.PreparedHashCode.run (next a)).2 k)
+                  (AspisR1PublicPreparation.PreparedHashCode.run (next a)).2
+                  (fun v h =>
+                    Eq.ndrec (motive := fun x =>
+                      (AspisR1PublicPreparation.PreparedHashCode.run (next a)).2 = x →
+                        (AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts (Aeneas.Std.Result.ok a) ::
+                              (AspisR1.AuS1_Trace.continueRun (AspisR1PublicPreparation.PreparedHashCode.run (next a)).1
+                                  x k).1,
+                            (AspisR1.AuS1_Trace.continueRun (AspisR1PublicPreparation.PreparedHashCode.run (next a)).1 x
+                                k).2) =
+                          AspisR1.AuS1_Trace.continueRun
+                            (AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                (Aeneas.Std.Result.ok a) ::
+                              (AspisR1PublicPreparation.PreparedHashCode.run (next a)).1)
+                            x k)
+                      (fun h =>
+                        of_eq_true
+                          (eq_self
+                            (AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                  (Aeneas.Std.Result.ok a) ::
+                                ((AspisR1PublicPreparation.PreparedHashCode.run (next a)).1 ++
+                                  (AspisR1PublicPreparation.PreparedHashCode.run (k v)).1),
+                              (AspisR1PublicPreparation.PreparedHashCode.run (k v)).2)))
+                      (Eq.symm h) (Eq.refl (AspisR1PublicPreparation.PreparedHashCode.run (next a)).2))
+                  (fun e h =>
+                    Eq.ndrec (motive := fun x =>
+                      (AspisR1PublicPreparation.PreparedHashCode.run (next a)).2 = x →
+                        (AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts (Aeneas.Std.Result.ok a) ::
+                              (AspisR1.AuS1_Trace.continueRun (AspisR1PublicPreparation.PreparedHashCode.run (next a)).1
+                                  x k).1,
+                            (AspisR1.AuS1_Trace.continueRun (AspisR1PublicPreparation.PreparedHashCode.run (next a)).1 x
+                                k).2) =
+                          AspisR1.AuS1_Trace.continueRun
+                            (AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                (Aeneas.Std.Result.ok a) ::
+                              (AspisR1PublicPreparation.PreparedHashCode.run (next a)).1)
+                            x k)
+                      (fun h =>
+                        of_eq_true
+                          (eq_self
+                            (AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                  (Aeneas.Std.Result.ok a) ::
+                                (AspisR1PublicPreparation.PreparedHashCode.run (next a)).1,
+                              Aeneas.Std.Result.fail e)))
+                      (Eq.symm h) (Eq.refl (AspisR1PublicPreparation.PreparedHashCode.run (next a)).2))
+                  (fun h =>
+                    Eq.ndrec (motive := fun x =>
+                      (AspisR1PublicPreparation.PreparedHashCode.run (next a)).2 = x →
+                        (AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts (Aeneas.Std.Result.ok a) ::
+                              (AspisR1.AuS1_Trace.continueRun (AspisR1PublicPreparation.PreparedHashCode.run (next a)).1
+                                  x k).1,
+                            (AspisR1.AuS1_Trace.continueRun (AspisR1PublicPreparation.PreparedHashCode.run (next a)).1 x
+                                k).2) =
+                          AspisR1.AuS1_Trace.continueRun
+                            (AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                (Aeneas.Std.Result.ok a) ::
+                              (AspisR1PublicPreparation.PreparedHashCode.run (next a)).1)
+                            x k)
+                      (fun h =>
+                        of_eq_true
+                          (eq_self
+                            (AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                  (Aeneas.Std.Result.ok a) ::
+                                (AspisR1PublicPreparation.PreparedHashCode.run (next a)).1,
+                              Aeneas.Std.Result.div)))
+                      (Eq.symm h) (Eq.refl (AspisR1PublicPreparation.PreparedHashCode.run (next a)).2))
+                  (Eq.refl (AspisR1PublicPreparation.PreparedHashCode.run (next a)).2)))
+            (Eq.symm h) (Eq.refl (D.digest hash parts)))
+        (fun e h =>
+          Eq.ndrec (motive := fun x =>
+            D.digest hash parts = x →
+              AspisR1PublicPreparation.PreparedHashCode.run
+                  (AspisR1PublicPreparation.PreparedHashCode.bind
+                    (AspisR1PublicPreparation.PreparedHashCode.Code.digest D hash parts next) k) =
+                AspisR1.AuS1_Trace.continueRun
+                  (AspisR1PublicPreparation.PreparedHashCode.run
+                      (AspisR1PublicPreparation.PreparedHashCode.Code.digest D hash parts next)).1
+                  (AspisR1PublicPreparation.PreparedHashCode.run
+                      (AspisR1PublicPreparation.PreparedHashCode.Code.digest D hash parts next)).2
+                  k)
+            (fun reply =>
+              of_eq_true
+                (Eq.trans
+                  (congr
+                    (congrArg Eq
+                      (Eq.trans
+                        (AspisR1PublicPreparation.PreparedHashCode.run.eq_5 H D hash parts fun b =>
+                          AspisR1PublicPreparation.PreparedHashCode.bind (next b) k)
+                        (congrArg
+                          (fun x =>
+                            match x with
+                            | Aeneas.Std.Result.ok value =>
+                              match
+                                AspisR1PublicPreparation.PreparedHashCode.run
+                                  (AspisR1PublicPreparation.PreparedHashCode.bind (next value) k) with
+                              | (log, result) =>
+                                (AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                      (Aeneas.Std.Result.ok value) ::
+                                    log,
+                                  result)
+                            | Aeneas.Std.Result.fail error =>
+                              ([AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                    (Aeneas.Std.Result.fail error)],
+                                Aeneas.Std.Result.fail error)
+                            | Aeneas.Std.Result.div =>
+                              ([AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                    Aeneas.Std.Result.div],
+                                Aeneas.Std.Result.div))
+                          reply)))
+                    (Eq.trans
+                      (congrArg
+                        (fun x =>
+                          match x.2 with
+                          | Aeneas.Std.Result.ok a =>
+                            have next_1 := AspisR1PublicPreparation.PreparedHashCode.run (k a);
+                            ((AspisR1PublicPreparation.PreparedHashCode.run
+                                    (AspisR1PublicPreparation.PreparedHashCode.Code.digest D hash parts next)).1 ++
+                                next_1.1,
+                              next_1.2)
+                          | Aeneas.Std.Result.fail e =>
+                            ((AspisR1PublicPreparation.PreparedHashCode.run
+                                  (AspisR1PublicPreparation.PreparedHashCode.Code.digest D hash parts next)).1,
+                              Aeneas.Std.Result.fail e)
+                          | Aeneas.Std.Result.div =>
+                            ((AspisR1PublicPreparation.PreparedHashCode.run
+                                  (AspisR1PublicPreparation.PreparedHashCode.Code.digest D hash parts next)).1,
+                              Aeneas.Std.Result.div))
+                        (Eq.trans (AspisR1PublicPreparation.PreparedHashCode.run.eq_5 H D hash parts next)
+                          (congrArg
+                            (fun x =>
+                              match x with
+                              | Aeneas.Std.Result.ok value =>
+                                match AspisR1PublicPreparation.PreparedHashCode.run (next value) with
+                                | (log, result) =>
+                                  (AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                        (Aeneas.Std.Result.ok value) ::
+                                      log,
+                                    result)
+                              | Aeneas.Std.Result.fail error =>
+                                ([AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                      (Aeneas.Std.Result.fail error)],
+                                  Aeneas.Std.Result.fail error)
+                              | Aeneas.Std.Result.div =>
+                                ([AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                      Aeneas.Std.Result.div],
+                                  Aeneas.Std.Result.div))
+                            reply)))
+                      (congrFun'
+                        (congrArg Prod.mk
+                          (congrArg Prod.fst
+                            (Eq.trans (AspisR1PublicPreparation.PreparedHashCode.run.eq_5 H D hash parts next)
+                              (congrArg
+                                (fun x =>
+                                  match x with
+                                  | Aeneas.Std.Result.ok value =>
+                                    match AspisR1PublicPreparation.PreparedHashCode.run (next value) with
+                                    | (log, result) =>
+                                      (AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                            (Aeneas.Std.Result.ok value) ::
+                                          log,
+                                        result)
+                                  | Aeneas.Std.Result.fail error =>
+                                    ([AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                          (Aeneas.Std.Result.fail error)],
+                                      Aeneas.Std.Result.fail error)
+                                  | Aeneas.Std.Result.div =>
+                                    ([AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                          Aeneas.Std.Result.div],
+                                      Aeneas.Std.Result.div))
+                                reply))))
+                        (Aeneas.Std.Result.fail e))))
+                  (eq_self
+                    ([AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts (Aeneas.Std.Result.fail e)],
+                      Aeneas.Std.Result.fail e))))
+            (Eq.symm h) (Eq.refl (D.digest hash parts)))
+        (fun h =>
+          Eq.ndrec (motive := fun x =>
+            D.digest hash parts = x →
+              AspisR1PublicPreparation.PreparedHashCode.run
+                  (AspisR1PublicPreparation.PreparedHashCode.bind
+                    (AspisR1PublicPreparation.PreparedHashCode.Code.digest D hash parts next) k) =
+                AspisR1.AuS1_Trace.continueRun
+                  (AspisR1PublicPreparation.PreparedHashCode.run
+                      (AspisR1PublicPreparation.PreparedHashCode.Code.digest D hash parts next)).1
+                  (AspisR1PublicPreparation.PreparedHashCode.run
+                      (AspisR1PublicPreparation.PreparedHashCode.Code.digest D hash parts next)).2
+                  k)
+            (fun reply =>
+              of_eq_true
+                (Eq.trans
+                  (congr
+                    (congrArg Eq
+                      (Eq.trans
+                        (AspisR1PublicPreparation.PreparedHashCode.run.eq_5 H D hash parts fun b =>
+                          AspisR1PublicPreparation.PreparedHashCode.bind (next b) k)
+                        (congrArg
+                          (fun x =>
+                            match x with
+                            | Aeneas.Std.Result.ok value =>
+                              match
+                                AspisR1PublicPreparation.PreparedHashCode.run
+                                  (AspisR1PublicPreparation.PreparedHashCode.bind (next value) k) with
+                              | (log, result) =>
+                                (AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                      (Aeneas.Std.Result.ok value) ::
+                                    log,
+                                  result)
+                            | Aeneas.Std.Result.fail error =>
+                              ([AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                    (Aeneas.Std.Result.fail error)],
+                                Aeneas.Std.Result.fail error)
+                            | Aeneas.Std.Result.div =>
+                              ([AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                    Aeneas.Std.Result.div],
+                                Aeneas.Std.Result.div))
+                          reply)))
+                    (Eq.trans
+                      (congrArg
+                        (fun x =>
+                          match x.2 with
+                          | Aeneas.Std.Result.ok a =>
+                            have next_1 := AspisR1PublicPreparation.PreparedHashCode.run (k a);
+                            ((AspisR1PublicPreparation.PreparedHashCode.run
+                                    (AspisR1PublicPreparation.PreparedHashCode.Code.digest D hash parts next)).1 ++
+                                next_1.1,
+                              next_1.2)
+                          | Aeneas.Std.Result.fail e =>
+                            ((AspisR1PublicPreparation.PreparedHashCode.run
+                                  (AspisR1PublicPreparation.PreparedHashCode.Code.digest D hash parts next)).1,
+                              Aeneas.Std.Result.fail e)
+                          | Aeneas.Std.Result.div =>
+                            ((AspisR1PublicPreparation.PreparedHashCode.run
+                                  (AspisR1PublicPreparation.PreparedHashCode.Code.digest D hash parts next)).1,
+                              Aeneas.Std.Result.div))
+                        (Eq.trans (AspisR1PublicPreparation.PreparedHashCode.run.eq_5 H D hash parts next)
+                          (congrArg
+                            (fun x =>
+                              match x with
+                              | Aeneas.Std.Result.ok value =>
+                                match AspisR1PublicPreparation.PreparedHashCode.run (next value) with
+                                | (log, result) =>
+                                  (AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                        (Aeneas.Std.Result.ok value) ::
+                                      log,
+                                    result)
+                              | Aeneas.Std.Result.fail error =>
+                                ([AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                      (Aeneas.Std.Result.fail error)],
+                                  Aeneas.Std.Result.fail error)
+                              | Aeneas.Std.Result.div =>
+                                ([AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                      Aeneas.Std.Result.div],
+                                  Aeneas.Std.Result.div))
+                            reply)))
+                      (congrFun'
+                        (congrArg Prod.mk
+                          (congrArg Prod.fst
+                            (Eq.trans (AspisR1PublicPreparation.PreparedHashCode.run.eq_5 H D hash parts next)
+                              (congrArg
+                                (fun x =>
+                                  match x with
+                                  | Aeneas.Std.Result.ok value =>
+                                    match AspisR1PublicPreparation.PreparedHashCode.run (next value) with
+                                    | (log, result) =>
+                                      (AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                            (Aeneas.Std.Result.ok value) ::
+                                          log,
+                                        result)
+                                  | Aeneas.Std.Result.fail error =>
+                                    ([AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                          (Aeneas.Std.Result.fail error)],
+                                      Aeneas.Std.Result.fail error)
+                                  | Aeneas.Std.Result.div =>
+                                    ([AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts
+                                          Aeneas.Std.Result.div],
+                                      Aeneas.Std.Result.div))
+                                reply))))
+                        Aeneas.Std.Result.div)))
+                  (eq_self
+                    ([AspisR1PublicPreparation.PreparedHashCode.Event.digest D hash parts Aeneas.Std.Result.div],
+                      Aeneas.Std.Result.div))))
+            (Eq.symm h) (Eq.refl (D.digest hash parts)))
+        (Eq.refl (D.digest hash parts)))
+    p

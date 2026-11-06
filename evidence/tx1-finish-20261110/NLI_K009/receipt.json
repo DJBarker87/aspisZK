@@ -1,0 +1,87 @@
+{
+  "attempt": "NLI_K009",
+  "kind": "kani",
+  "module": "NLI_program::rounds_alpha_control",
+  "sources": [
+    "NLI_gate.py",
+    "NLI_SOURCE_PINS.json",
+    "NLI_FROZEN_FILE_PINS.json",
+    "NLI_BASE_EXPECTED.json"
+  ],
+  "command": [
+    "python3",
+    "NLI_gate.py",
+    "NLI_K009.json"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-tx1-finish-20261110/NLI_target",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-Copt-level=3 -C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-tx1-finish-20261110/NLI_tmp"
+  },
+  "timeout": 180,
+  "expected_time": "Warm optimized compile then one named rounds-segment CBMC property; no field multiplication or SHA",
+  "root_package": "aspis-r1-cost-probe-program",
+  "metadata_features": "aspis-r1-cost-probe-program/pool-adapter,aspis-r1-cost-probe-program/private-leaf-salts",
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-tx1-finish-20261110/NLI_src/programs/r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-tx1-finish-20261110/NLI_target",
+    "--features",
+    "pool-adapter,private-leaf-salts",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "NLI_program::rounds_alpha_control",
+    "--output-format",
+    "terse"
+  ],
+  "codegen_only": false,
+  "collect": [
+    "NLI_K009-graph-check.json",
+    "NLI_K009-graph.stderr",
+    "NLI_K009-graph.json",
+    "NLI_K009-source-check.json",
+    "NLI_K009-lock-check.json",
+    "NLI_K009-baseline-check.json"
+  ],
+  "source_revision": "bb1a82dbeee9666bdc027032a97450b7b0477d6d",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "selected_objects": {}
+  },
+  "exit_status": 1,
+  "wall_seconds": 67.88512596301734,
+  "peak_rss_kib": "6108996",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-ra3a79e06227a4e98bc73ff5da9bba70a.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "6316392448",
+  "source_hashes": {
+    "NLI_gate.py": "d54e1c77f1e84ce8980fc1652898a009fbc66ad7f41e07f283867d35521886d2",
+    "NLI_SOURCE_PINS.json": "b49b72ec28e7e39432d9533151143ad67c74a60e88a92790663fd1342a157c70",
+    "NLI_FROZEN_FILE_PINS.json": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+    "NLI_BASE_EXPECTED.json": "7eb6cc705b1b2ad6207f3404ae8da3b2e7edcaf7dc7b6644bc4290a81ee2ddbc"
+  },
+  "print_axioms": "N/A: kani"
+}

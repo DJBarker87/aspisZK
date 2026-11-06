@@ -1,0 +1,402 @@
+{
+  "rootCopy": {
+    "module": "NLI_Suffix_rootCopy",
+    "live": [
+      "alpha",
+      "transcript",
+      "claims",
+      "extra",
+      "stateBefore",
+      "z0",
+      "beforeZ1",
+      "z1",
+      "payload"
+    ],
+    "next": "verified",
+    "n": 4
+  },
+  "payload2": {
+    "module": "NLI_Suffix_payload2",
+    "live": [
+      "alpha",
+      "transcript",
+      "claims",
+      "extra",
+      "stateBefore",
+      "z0",
+      "beforeZ1",
+      "z1"
+    ],
+    "next": "rootCopy",
+    "n": 5
+  },
+  "circleGuard": {
+    "module": "NLI_Suffix_circleGuard",
+    "live": [
+      "alpha",
+      "transcript",
+      "claims",
+      "extra",
+      "stateBefore",
+      "z0",
+      "beforeZ1",
+      "z1"
+    ],
+    "next": "payload2",
+    "n": 6
+  },
+  "mark5": {
+    "module": "NLI_Suffix_mark5",
+    "live": [
+      "alpha",
+      "transcript",
+      "claims",
+      "extra",
+      "stateBefore",
+      "z0",
+      "beforeZ1",
+      "z1"
+    ],
+    "next": "circleGuard",
+    "n": 7
+  },
+  "circle1": {
+    "module": "NLI_Suffix_circle1",
+    "live": [
+      "alpha",
+      "transcript",
+      "claims",
+      "extra",
+      "stateBefore",
+      "z0",
+      "record26",
+      "beforeZ1"
+    ],
+    "next": "mark5",
+    "n": 8
+  },
+  "record26b": {
+    "module": "NLI_Suffix_record26b",
+    "live": [
+      "alpha",
+      "transcript",
+      "claims",
+      "extra",
+      "stateBefore",
+      "z0",
+      "beforeZ1"
+    ],
+    "next": "circle1",
+    "n": 9
+  },
+  "decode26": {
+    "module": "NLI_Suffix_decode26",
+    "live": [
+      "alpha",
+      "transcript",
+      "claims",
+      "extra",
+      "stateBefore",
+      "z0",
+      "record26"
+    ],
+    "next": "record26b",
+    "n": 10
+  },
+  "record26a": {
+    "module": "NLI_Suffix_record26a",
+    "live": [
+      "alpha",
+      "transcript",
+      "claims",
+      "extra",
+      "stateBefore",
+      "z0"
+    ],
+    "next": "decode26",
+    "n": 11
+  },
+  "circle0": {
+    "module": "NLI_Suffix_circle0",
+    "live": [
+      "alpha",
+      "transcript",
+      "claims",
+      "record25",
+      "extra",
+      "stateBefore"
+    ],
+    "next": "record26a",
+    "n": 12
+  },
+  "record25b": {
+    "module": "NLI_Suffix_record25b",
+    "live": [
+      "alpha",
+      "transcript",
+      "claims",
+      "extra",
+      "stateBefore"
+    ],
+    "next": "circle0",
+    "n": 13
+  },
+  "stateBefore": {
+    "module": "NLI_Suffix_stateBefore",
+    "live": [
+      "alpha",
+      "transcript",
+      "claims",
+      "extra"
+    ],
+    "next": "record25b",
+    "n": 14
+  },
+  "mark4": {
+    "module": "NLI_Suffix_mark4",
+    "live": [
+      "alpha",
+      "transcript",
+      "claims",
+      "extra"
+    ],
+    "next": "stateBefore",
+    "n": 15
+  },
+  "terminalGuard": {
+    "module": "NLI_Suffix_terminalGuard",
+    "live": [
+      "running",
+      "alpha",
+      "transcript",
+      "claims",
+      "extra",
+      "masked"
+    ],
+    "next": "mark4",
+    "n": 16
+  },
+  "addExtra": {
+    "module": "NLI_Suffix_addExtra",
+    "live": [
+      "running",
+      "alpha",
+      "transcript",
+      "claims",
+      "extra",
+      "partialValue",
+      "extraCell"
+    ],
+    "next": "terminalGuard",
+    "n": 17
+  },
+  "extra28": {
+    "module": "NLI_Suffix_extra28",
+    "live": [
+      "running",
+      "alpha",
+      "transcript",
+      "claims",
+      "extra",
+      "partialValue"
+    ],
+    "next": "addExtra",
+    "n": 18
+  },
+  "addMask": {
+    "module": "NLI_Suffix_addMask",
+    "live": [
+      "running",
+      "alpha",
+      "transcript",
+      "claims",
+      "mask",
+      "extra",
+      "product"
+    ],
+    "next": "extra28",
+    "n": 19
+  },
+  "multiply": {
+    "module": "NLI_Suffix_multiply",
+    "live": [
+      "running",
+      "alpha",
+      "transcript",
+      "claims",
+      "terminal",
+      "mask",
+      "extra"
+    ],
+    "next": "addMask",
+    "n": 20
+  },
+  "decode25": {
+    "module": "NLI_Suffix_decode25",
+    "live": [
+      "running",
+      "alpha",
+      "transcript",
+      "claims",
+      "terminal",
+      "mask",
+      "record25"
+    ],
+    "next": "multiply",
+    "n": 21
+  },
+  "record25a": {
+    "module": "NLI_Suffix_record25a",
+    "live": [
+      "running",
+      "alpha",
+      "transcript",
+      "claims",
+      "terminal",
+      "mask"
+    ],
+    "next": "decode25",
+    "n": 22
+  },
+  "mask": {
+    "module": "NLI_Suffix_mask",
+    "live": [
+      "running",
+      "alpha",
+      "transcript",
+      "claims",
+      "terminal",
+      "low",
+      "high",
+      "blind"
+    ],
+    "next": "record25a",
+    "n": 23
+  },
+  "alpha": {
+    "module": "NLI_Suffix_alpha",
+    "live": [
+      "running",
+      "alpha",
+      "transcript",
+      "claims",
+      "terminal",
+      "low",
+      "high",
+      "blind"
+    ],
+    "next": "mask",
+    "n": 24
+  },
+  "blind": {
+    "module": "NLI_Suffix_blind",
+    "live": [
+      "running",
+      "alpha",
+      "transcript",
+      "claims",
+      "terminal",
+      "low",
+      "high"
+    ],
+    "next": "alpha",
+    "n": 25
+  },
+  "highArray": {
+    "module": "NLI_Suffix_highArray",
+    "live": [
+      "running",
+      "alpha",
+      "transcript",
+      "claims",
+      "terminal",
+      "low"
+    ],
+    "next": "blind",
+    "n": 26
+  },
+  "lowArray": {
+    "module": "NLI_Suffix_lowArray",
+    "live": [
+      "running",
+      "alpha",
+      "transcript",
+      "claims",
+      "terminal"
+    ],
+    "next": "highArray",
+    "n": 27
+  },
+  "mark3": {
+    "module": "NLI_Suffix_mark3",
+    "live": [
+      "running",
+      "alpha",
+      "transcript",
+      "claims",
+      "terminal"
+    ],
+    "next": "lowArray",
+    "n": 28
+  },
+  "mapPublic": {
+    "module": "NLI_Suffix_mapPublic",
+    "live": [
+      "running",
+      "alpha",
+      "transcript",
+      "claims",
+      "terminalReply"
+    ],
+    "next": "mark3",
+    "n": 29
+  },
+  "terminal": {
+    "module": "NLI_Suffix_terminal",
+    "live": [
+      "running",
+      "alpha",
+      "transcript",
+      "claims"
+    ],
+    "next": "mapPublic",
+    "n": 30
+  },
+  "original": {
+    "module": "NLI_Suffix_original",
+    "live": [
+      "running",
+      "alpha",
+      "transcript",
+      "claims"
+    ],
+    "next": "terminal",
+    "n": 31
+  },
+  "claims": {
+    "module": "NLI_Suffix_claims",
+    "live": [
+      "running",
+      "alpha",
+      "transcript"
+    ],
+    "next": "original",
+    "n": 32
+  },
+  "mark2": {
+    "module": "NLI_Suffix_mark2",
+    "live": [
+      "running",
+      "alpha",
+      "transcript"
+    ],
+    "next": "claims",
+    "n": 33
+  },
+  "rounds": {
+    "module": "NLI_Suffix_rounds",
+    "live": [],
+    "next": "mark2",
+    "n": 34
+  }
+}

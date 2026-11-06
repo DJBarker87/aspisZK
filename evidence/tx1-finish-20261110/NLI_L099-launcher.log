@@ -1,0 +1,25 @@
+{"attempt": "NLI_L099", "exit_status": 0, "wall_seconds": 19.697503136936575, "peak_rss_kib": "6352824", "swaps": "0", "print_axioms": []}
+def AspisR1.NLI_TerminalInterface.RowSpec_256 : Native → Prop :=
+fun native =>
+  ∀ (A : Type) (heap : A) (publicValue : Public) (claims : Claims) (alpha : Alpha) (challenges : Challenges),
+    have observed := native A heap publicValue claims alpha challenges;
+    observed.publicAfter = publicValue ∧
+      observed.claimsAfter = claims ∧
+        observed.alphaAfter = alpha ∧
+          observed.challengesAfter = challenges ∧
+            observed.heapAfter = heap ∧
+              observed.effects = [] ∧ observed.reply = FIq_Terminal.terminal publicValue claims alpha challenges
+
+...
+def AspisR1.NLI_TerminalInterface.RowSpec_256 : Native → Prop :=
+fun native =>
+  ∀ (A : Type) (heap : A) (publicValue : Public) (claims : Claims) (alpha : Alpha) (challenges : Challenges),
+    have observed := native A heap publicValue claims alpha challenges;
+    observed.publicAfter = publicValue ∧
+      observed.claimsAfter = claims ∧
+        observed.alphaAfter = alpha ∧
+          observed.challengesAfter = challenges ∧
+            observed.heapAfter = heap ∧
+              observed.effects = [] ∧ observed.reply = FIq_Terminal.terminal publicValue claims alpha challenges
+
+Running as unit: run-r5c37d815956a43bc9f442101ecc1568c.scope; invocation ID: ef9614485de34ffd8ea619cd8b326cde

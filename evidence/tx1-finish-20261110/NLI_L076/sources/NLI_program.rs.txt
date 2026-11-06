@@ -1,0 +1,66 @@
+//! The ACTUAL deployed SolanaDigest carrier; no digest is reached in this cut.
+use super::*;
+use aspis_core::field::{M31,CM31,QM31};
+use aspis_r1_cost_probe::r1_semantic::NLI_rounds::{source_rounds,RoundLog};
+use aspis_r1_cost_probe::r1_wire::{NLI_factory,Error};
+use aspis_r1_cost_probe::r1_semantic::NLI_rounds::KMX_copy_nonoverlapping;
+fn q()->QM31{let a:[u32;4]=kani::any();QM31{c0:CM31{a:M31(a[0]),b:M31(a[1])},c1:CM31{a:M31(a[2]),b:M31(a[3])}}}
+fn error()->Error{let tag:u8=kani::any();let row:u8=kani::any();let actual:u8=kani::any();let value:usize=kani::any();match tag%11{0=>Error::Allocation,1=>Error::RowOrder{expected:row,actual},2=>Error::InvalidRow,3=>Error::Tag{row},4=>Error::Length{row},5=>Error::NonCanonical{row,value},6=>Error::Boundary{round:value},7=>Error::Terminal,8=>Error::EqualCirclePoints,9=>Error::TrailingBytes,_=>Error::Public}}
+fn check_rounds(mode:u8,bad:bool){
+ let data:[u8;13831]=kani::any();let root:&[u8;32]=data[..32].try_into().unwrap();let offsets:[usize;27]=kani::any();let lengths:[usize;27]=kani::any();
+ let records:[&[u8];27]=core::array::from_fn(|i|{kani::assume(offsets[i]<=13831&&lengths[i]<=13831-offsets[i]);&data[offsets[i]..offsets[i]+lengths[i]]});let prefix=NLI_factory::prefix(root,records);
+ let row:usize=kani::any();let cell:usize=kani::any();let alpha_cell:usize=kani::any();kani::assume(row<27&&cell<13831&&alpha_cell<10);
+ let input_state:[u8;32]=kani::any();let input_next:u8=kani::any();let transcript=NLI_factory::make(SolanaDigest,input_state,input_next);
+ let running=q();let alpha=core::array::from_fn(|_|q());let output_state:[u8;32]=kani::any();let output_next:u8=kani::any();let err=error();let success:bool=kani::any();
+ let expected_running=running;let expected_alpha=alpha[alpha_cell];let expected_byte=output_state[cell%32];
+ let reply=if success{Ok((running,alpha,NLI_factory::make(SolanaDigest,output_state,output_next)))}else{Err(err)};
+ let mut log=RoundLog{reply:Some(reply),calls:0,row,cell,root_ptr:0,root_byte:0,record_ptr:0,record_len:0,record_byte:None,input_state:[0;32],input_next:0};
+ let root_before=root[cell%32];let data_before=data[cell];
+ let out=source_rounds(prefix,transcript,&mut log);
+ let entered=log.calls==1&&log.reply.is_none()&&log.root_ptr==root.as_ptr() as usize&&log.record_ptr==data.as_ptr() as usize+offsets[row]&&log.record_len==lengths[row];
+ let values=log.root_byte==root_before&&log.input_state[cell%32]==input_state[cell%32]&&log.input_next==input_next;
+ let frame=root[cell%32]==root_before&&data[cell]==data_before;
+ let selected=match out{Err(e)=>!success&&e==err&&(mode!=0||(values&&frame)),Ok((r,a,t))=>{let (s,_,n)=NLI_factory::snapshot(&t);success&&match mode{0=>entered&&values&&frame,1=>r==expected_running,2=>a[alpha_cell]==expected_alpha,3=>s[cell%32]==expected_byte&&n==output_next,_=>false}}};
+ assert!(entered);assert!(frame);kani::cover!(success);kani::cover!(!success);
+ if bad{assert!(!selected)}else{assert!(selected)}
+}
+
+#[kani::proof] #[kani::unwind(32)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn rounds_input_cut(){check_rounds(0,false)}
+
+#[kani::proof] #[kani::unwind(32)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn rounds_input_control(){check_rounds(0,true)}
+
+#[kani::proof] #[kani::unwind(32)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn rounds_running_cut(){check_rounds(1,false)}
+
+#[kani::proof] #[kani::unwind(32)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn rounds_running_control(){check_rounds(1,true)}
+
+#[kani::proof] #[kani::unwind(32)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn rounds_alpha_cut(){check_rounds(2,false)}
+
+#[kani::proof] #[kani::unwind(32)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn rounds_alpha_control(){check_rounds(2,true)}
+
+#[kani::proof] #[kani::unwind(32)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn rounds_transcript_cut(){check_rounds(3,false)}
+
+#[kani::proof] #[kani::unwind(32)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn rounds_transcript_control(){check_rounds(3,true)}
+
+#[kani::proof] #[kani::unwind(32)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn rounds_input_stability_cut(){check_rounds(0,false)}
+
+#[kani::proof] #[kani::unwind(32)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn rounds_input_stability_control(){check_rounds(0,true)}

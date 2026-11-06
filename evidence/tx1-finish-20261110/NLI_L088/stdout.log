@@ -1,0 +1,32 @@
+'AspisR1.NLI_RoundsInstall.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLI_RoundsInstall.source : ∀ {H : Type} (native : NLI_RoundsCarry.Native),
+  NLI_RoundsCarry.Cut native →
+    ∀ (childNative : NJM_RoundsCut.Observations),
+      NJM_RoundsCut.Cut childNative →
+        ∀ (token frame : ℕ) (D : aspis_core.Digest32 H) (bytes : Slice U8)
+          (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix)
+          (parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = ok (core.result.Result.Ok pre))
+          (before : r1_wire.SemanticTranscript H),
+          (∃ running,
+              NLI_RoundsCarry.afterChild native before.hash
+                  (NJM_RoundsInduction.chain childNative token frame D (PrefixAdapter.fromOld pre) sites
+                    (running, Array.repeat 10#usize aspis_core.field.QM31.ZERO, before)) =
+                run (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) before)) ∧
+            (∀ (r : Usize) (member : r ∈ sites) (carry : Carry H),
+                NJM_RoundsClosed.Child D bytes pre parsed carry.2.2 carry.2.1 carry.1 r ⋯) ∧
+              NLI_RoundsHash.Outcome before.hash
+                (run (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) before)).2 :=
+fun {H} native cut childNative childCut token frame D bytes pre parsed before =>
+  have accepted := NJM_RoundsClosed.source childNative childCut token frame D bytes pre parsed before;
+  let ⟨left✝, domains⟩ := accepted
+  let ⟨running, whole⟩ := left✝
+  ⟨Exists.intro running
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              NLI_RoundsCarry.afterChild native before.hash _a =
+                run (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) before))
+            (Eq.symm whole)))
+        (NLI_RoundsCarry.source native cut D bytes pre parsed before)),
+    ⟨domains, NLI_RoundsHash.source D bytes pre parsed before⟩⟩

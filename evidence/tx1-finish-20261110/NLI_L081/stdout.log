@@ -1,0 +1,79 @@
+NLI_generated/NLI_RoundsInstall.lean:25:5: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    match parsed : _a with
+    | ok (core.result.Result.Ok pre) =>
+      (∃ running,
+          run (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) before) =
+            NJM_RoundsInduction.chain childNative token frame D (PrefixAdapter.fromOld pre) sites
+              (running, Array.repeat 10#usize aspis_core.field.QM31.ZERO, before)) ∧
+        ∀ (r : Usize) (member : r ∈ sites) (carry : Carry H),
+          NJM_RoundsClosed.Child D bytes pre parsed carry.2.2 carry.2.1 carry.1 r ⋯
+    | ok (core.result.Result.Err a) => True
+    | fail e => True
+    | div => True
+Error: Application type mismatch: The argument
+  parsed
+has type
+  _a = ok (core.result.Result.Ok pre)
+but is expected to have type
+  AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = ok (core.result.Result.Ok pre)
+in the application
+  NJM_RoundsClosed.Child D bytes pre parsed
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+H : Type
+native : NLI_RoundsCarry.Native
+cut : NLI_RoundsCarry.Cut native
+childNative : NJM_RoundsCut.Observations
+childCut : NJM_RoundsCut.Cut childNative
+token frame : ℕ
+D : aspis_core.Digest32 H
+bytes : Slice U8
+pre : AspisR1PrefixAggregateParser.r1_wire.Prefix
+parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = ok (core.result.Result.Ok pre)
+before : r1_wire.SemanticTranscript H
+packet :
+  match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+  | ok (core.result.Result.Ok pre) =>
+    (∃ running,
+        run (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) before) =
+          NJM_RoundsInduction.chain childNative token frame D (PrefixAdapter.fromOld pre) sites
+            (running, Array.repeat 10#usize aspis_core.field.QM31.ZERO, before)) ∧
+      ∀ (r : Usize) (member : r ∈ sites) (carry : Carry H),
+        NJM_RoundsClosed.Child D bytes pre parsed carry.2.2 carry.2.1 carry.1 r ⋯
+  | ok (core.result.Result.Err a) => True
+  | fail e => True
+  | div => True
+⊢ (∃ running,
+      NLI_RoundsCarry.afterChild native before.hash
+          (NJM_RoundsInduction.chain childNative token frame D (PrefixAdapter.fromOld pre) sites
+            (running, Array.repeat 10#usize aspis_core.field.QM31.ZERO, before)) =
+        run (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) before)) ∧
+    (∀ (r : Usize) (member : r ∈ sites) (carry : Carry H),
+        NJM_RoundsClosed.Child D bytes pre parsed carry.2.2 carry.2.1 carry.1 r ⋯) ∧
+      NLI_RoundsHash.Outcome before.hash
+        (run (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) before)).2
+'AspisR1.NLI_RoundsInstall.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NLI_RoundsInstall.source : ∀ {H : Type} (native : NLI_RoundsCarry.Native),
+  NLI_RoundsCarry.Cut native →
+    ∀ (childNative : NJM_RoundsCut.Observations),
+      NJM_RoundsCut.Cut childNative →
+        ∀ (token frame : ℕ) (D : aspis_core.Digest32 H) (bytes : Slice U8)
+          (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix)
+          (parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = ok (core.result.Result.Ok pre))
+          (before : r1_wire.SemanticTranscript H),
+          (∃ running,
+              NLI_RoundsCarry.afterChild native before.hash
+                  (NJM_RoundsInduction.chain childNative token frame D (PrefixAdapter.fromOld pre) sites
+                    (running, Array.repeat 10#usize aspis_core.field.QM31.ZERO, before)) =
+                run (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) before)) ∧
+            (∀ (r : Usize) (member : r ∈ sites) (carry : Carry H),
+                NJM_RoundsClosed.Child D bytes pre parsed carry.2.2 carry.2.1 carry.1 r ⋯) ∧
+              NLI_RoundsHash.Outcome before.hash
+                (run (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) before)).2 :=
+fun {H} native cut childNative childCut token frame D bytes pre parsed before =>
+  have packet := NJM_InvocationRoots.rounds childNative childCut token frame D bytes before;
+  sorry packet

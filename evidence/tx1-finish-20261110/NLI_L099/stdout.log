@@ -1,0 +1,10 @@
+def AspisR1.NLI_TerminalInterface.RowSpec_256 : Native → Prop :=
+fun native =>
+  ∀ (A : Type) (heap : A) (publicValue : Public) (claims : Claims) (alpha : Alpha) (challenges : Challenges),
+    have observed := native A heap publicValue claims alpha challenges;
+    observed.publicAfter = publicValue ∧
+      observed.claimsAfter = claims ∧
+        observed.alphaAfter = alpha ∧
+          observed.challengesAfter = challenges ∧
+            observed.heapAfter = heap ∧
+              observed.effects = [] ∧ observed.reply = FIq_Terminal.terminal publicValue claims alpha challenges
