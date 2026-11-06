@@ -1,0 +1,570 @@
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -1,5 +1,6 @@
+ //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
+ #![no_std]
++#![cfg_attr(kani,feature(allocator_api))]
+ extern crate alloc;
+ pub mod sampler;
+ pub mod semantic_wire;
+@@ -44,3 +45,5 @@
+ compile_error!("`audit-eight-way` is audit-only: it is never combined with the prover (PREREG-PROOF-SIZE-2 item 4)");
+ #[cfg(all(feature="audit-eight-way",any(target_os="solana",feature="program-build")))]
+ compile_error!("`audit-eight-way` is audit-only: it is never built for a program (PREREG-PROOF-SIZE-2 item 4)");
++
++#[cfg(kani)] include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -526,3 +526,35 @@
+ #[cfg(feature="audit-eight-way")]
+ #[path="eight_way.rs"]
+ pub mod eight_way;
++
++#[cfg(kani)]
++#[path="NJC_readers.rs"]
++mod NJC_readers;
++
++#[cfg(kani)]
++#[path="NJC_weight_step.rs"]
++mod NJC_weight_step;
++
++#[cfg(kani)]
++#[path="NJC_box.rs"]
++mod NJC_box;
++
++#[cfg(kani)]
++#[path="NJC_semantic.rs"]
++mod NJC_semantic;
++
++#[cfg(kani)]
++#[path="NJC_weight_end.rs"]
++mod NJC_weight_end;
++
++#[cfg(kani)]
++#[path="NJC_validate.rs"]
++mod NJC_validate;
++
++#[cfg(kani)]
++#[path="NJC_vec.rs"]
++mod NJC_vec;
++
++#[cfg(kani)]
++#[path="NJC_chunks.rs"]
++mod NJC_chunks;
+--- a/crates/aspis-r1-cost-probe/src/NJC_readers.rs
++++ b/crates/aspis-r1-cost-probe/src/NJC_readers.rs
+@@ -0,0 +1,78 @@
++use super::*;
++use crate::{KMX_copy_nonoverlapping,KMX_copy_from_slice};
++fn word(bytes:&[u8],at:usize)->u32{u32::from_le_bytes([bytes[at],bytes[at+1],bytes[at+2],bytes[at+3]])}
++fn kw(q:K)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
++fn raw<const N:usize>(){
++ let bytes:[u8;32]=kani::any();let at=0usize;
++ let mut r=Reader{bytes:&bytes,at};let out=r.raw::<N>();
++ let mut i=0;while i<N{assert_eq!(out[i],bytes[at+i]^(if cfg!(NJC_invert){1}else{0}));i+=1;}
++ assert_eq!(r.at,at+N);assert_eq!(r.bytes.as_ptr(),bytes.as_ptr());assert_eq!(r.bytes.len(),32);
++}
++fn read_k(){
++ let bytes:[u8;16]=kani::any();let at=0usize;
++ let expected=[word(&bytes,at),word(&bytes,at+4),word(&bytes,at+8),word(&bytes,at+12)];
++ let good=expected[0]<2147483647&&expected[1]<2147483647&&expected[2]<2147483647&&expected[3]<2147483647;
++ let mut r=Reader{bytes:&bytes,at};let result=r.k();
++ assert_eq!(result.is_ok(),good^cfg!(NJC_invert));
++ match result{Ok(q)=>assert_eq!(kw(q),expected),Err(e)=>assert_eq!(e,Error::Checkpoint)}
++ assert_eq!(r.at,at+16);assert_eq!(r.bytes.as_ptr(),bytes.as_ptr());assert_eq!(r.bytes.len(),16);
++}
++fn read_e(){
++ let bytes:[u8;32]=kani::any();let at=0usize;
++ let expected=[word(&bytes,at),word(&bytes,at+4),word(&bytes,at+8),word(&bytes,at+12),word(&bytes,at+16),word(&bytes,at+20),word(&bytes,at+24),word(&bytes,at+28)];
++ let good=expected[0]<2147483647&&expected[1]<2147483647&&expected[2]<2147483647&&expected[3]<2147483647&&expected[4]<2147483647&&expected[5]<2147483647&&expected[6]<2147483647&&expected[7]<2147483647;
++ let mut r=Reader{bytes:&bytes,at};let result=r.e();
++ assert_eq!(result.is_ok(),good^cfg!(NJC_invert));
++ match result{Ok(q)=>assert_eq!(q.to_limbs(),expected),Err(e)=>assert_eq!(e,Error::Checkpoint)}
++ assert_eq!(r.at,at+32);assert_eq!(r.bytes.as_ptr(),bytes.as_ptr());assert_eq!(r.bytes.len(),32);
++}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn raw4(){raw::<4>();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn raw4_renamed(){raw::<4>();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn raw16(){raw::<16>();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn raw16_renamed(){raw::<16>();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn raw32(){raw::<32>();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn raw32_renamed(){raw::<32>();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn k(){read_k();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn k_renamed(){read_k();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn e(){read_e();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn e_renamed(){read_e();}
+--- a/crates/aspis-r1-cost-probe/src/NJC_weight_step.rs
++++ b/crates/aspis-r1-cost-probe/src/NJC_weight_step.rs
+@@ -0,0 +1,35 @@
++use super::*;
++use aspis_core::field::{M31,CM31};
++use crate::{KMX_copy_nonoverlapping,KMX_copy_from_slice};
++fn word(bytes:&[u8],at:usize)->u32{u32::from_le_bytes([bytes[at],bytes[at+1],bytes[at+2],bytes[at+3]])}
++fn make(x:[u32;4])->K{K{c0:CM31{a:M31(x[0]),b:M31(x[1])},c1:CM31{a:M31(x[2]),b:M31(x[3])}}}
++fn words(q:K)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
++// One literal frozen read_checkpoint_weights iteration, on an arbitrary
++// pre-iterator suffix. The parent establishes suffix=remaining SAME Vec.
++fn step(bytes:&[u8],at:usize,remaining:&mut[K])->Result<usize,Error>{
++ let mut iter=remaining.iter_mut();
++ match iter.next(){None=>Ok(at),Some(out)=>{
++  let mut reader=Reader{bytes,at};let value=reader.k()?;
++  let at=reader.at;*out=value;Ok(at)
++ }}
++}
++fn check(){
++ let bytes:[u8;16]=kani::any();let before:[[u32;4];64]=kani::any();
++ let mut values:[K;64]=core::array::from_fn(|i|make(before[i]));
++ let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<64&&j<64);
++ let expected=[word(&bytes,0),word(&bytes,4),word(&bytes,8),word(&bytes,12)];
++ let good=expected[0]<2147483647&&expected[1]<2147483647&&expected[2]<2147483647&&expected[3]<2147483647;
++ let result=step(&bytes,0,&mut values[i..]);
++ assert_eq!(result.is_ok(),good^cfg!(NJC_invert));
++ match result{Ok(at)=>{assert_eq!(at,16);assert_eq!(words(values[j]),if j==i{expected}else{before[j]});},Err(error)=>{assert_eq!(error,Error::Checkpoint);assert_eq!(words(values[j]),before[j]);}}
++}
++#[kani::proof]
++#[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn weight_step(){check();}
++#[kani::proof]
++#[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn weight_step_renamed(){check();}
+--- a/crates/aspis-r1-cost-probe/src/NJC_box.rs
++++ b/crates/aspis-r1-cost-probe/src/NJC_box.rs
+@@ -0,0 +1,28 @@
++use super::*;
++use aspis_core::field::{M31,CM31};
++use crate::{KMX_copy_nonoverlapping,KMX_copy_from_slice};
++fn k(x:[u32;4])->K{K{c0:CM31{a:M31(x[0]),b:M31(x[1])},c1:CM31{a:M31(x[2]),b:M31(x[3])}}}
++fn e(x:[u32;8])->E{E::new(k([x[0],x[1],x[2],x[3]]),k([x[4],x[5],x[6],x[7]]))}
++fn check(){
++ let roots:[[u8;32];2]=kani::any();let state:[u8;32]=kani::any();
++ let gamma=e(kani::any());let kappa=e(kani::any());let alpha=[e(kani::any()),e(kani::any())];let rho=k(kani::any());let claim=e(kani::any());
++ let queries:[u32;22]=kani::any();let semantic_alpha=[k(kani::any()),k(kani::any()),k(kani::any()),k(kani::any()),k(kani::any()),k(kani::any()),k(kani::any()),k(kani::any()),k(kani::any()),k(kani::any())];
++ let z=[SecureCirclePoint{x:k(kani::any()),y:k(kani::any())},SecureCirclePoint{x:k(kani::any()),y:k(kani::any())}];
++ let original=Box::new(Prepared{variant:Variant::S2,roots,gamma,kappa,alpha,rho,queries,semantic_alpha,z,claim,state});
++ let allocated=&*original as *const Prepared;
++ let mut result=if cfg!(NJC_bad_alloc){Box::new(Prepared{variant:Variant::S2,roots,gamma,kappa,alpha,rho,queries,semantic_alpha,z,claim,state})}else{original};
++ if cfg!(NJC_invert){result.gamma=if gamma==E::ZERO{E::ONE}else{E::ZERO};}
++ assert!((&*result as *const Prepared)==allocated);
++ assert!(result.variant==Variant::S2);assert_eq!(result.roots,roots);assert_eq!(result.gamma,gamma);assert_eq!(result.kappa,kappa);assert_eq!(result.alpha,alpha);assert_eq!(result.rho,rho);assert_eq!(result.queries,queries);assert_eq!(result.semantic_alpha,semantic_alpha);assert_eq!(result.claim,claim);assert_eq!(result.state,state);
++ assert_eq!(result.z[0].x,z[0].x);assert_eq!(result.z[0].y,z[0].y);assert_eq!(result.z[1].x,z[1].x);assert_eq!(result.z[1].y,z[1].y);
++}
++#[kani::proof]
++#[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn prepared_box(){check();}
++#[kani::proof]
++#[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn prepared_box_renamed(){check();}
+--- a/crates/aspis-r1-cost-probe/src/NJC_semantic.rs
++++ b/crates/aspis-r1-cost-probe/src/NJC_semantic.rs
+@@ -0,0 +1,32 @@
++use super::*;
++use aspis_core::field::{M31,CM31};
++use crate::{KMX_copy_nonoverlapping,KMX_copy_from_slice};
++fn word(bytes:&[u8],at:usize)->u32{u32::from_le_bytes([bytes[at],bytes[at+1],bytes[at+2],bytes[at+3]])}
++fn kw(q:K)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
++fn check(){let bytes:[u8;160]=kani::any();
++ let good=word(&bytes,0)<2147483647&&word(&bytes,4)<2147483647&&word(&bytes,8)<2147483647&&word(&bytes,12)<2147483647&&word(&bytes,16)<2147483647&&word(&bytes,20)<2147483647&&word(&bytes,24)<2147483647&&word(&bytes,28)<2147483647&&word(&bytes,32)<2147483647&&word(&bytes,36)<2147483647&&word(&bytes,40)<2147483647&&word(&bytes,44)<2147483647&&word(&bytes,48)<2147483647&&word(&bytes,52)<2147483647&&word(&bytes,56)<2147483647&&word(&bytes,60)<2147483647&&word(&bytes,64)<2147483647&&word(&bytes,68)<2147483647&&word(&bytes,72)<2147483647&&word(&bytes,76)<2147483647&&word(&bytes,80)<2147483647&&word(&bytes,84)<2147483647&&word(&bytes,88)<2147483647&&word(&bytes,92)<2147483647&&word(&bytes,96)<2147483647&&word(&bytes,100)<2147483647&&word(&bytes,104)<2147483647&&word(&bytes,108)<2147483647&&word(&bytes,112)<2147483647&&word(&bytes,116)<2147483647&&word(&bytes,120)<2147483647&&word(&bytes,124)<2147483647&&word(&bytes,128)<2147483647&&word(&bytes,132)<2147483647&&word(&bytes,136)<2147483647&&word(&bytes,140)<2147483647&&word(&bytes,144)<2147483647&&word(&bytes,148)<2147483647&&word(&bytes,152)<2147483647&&word(&bytes,156)<2147483647;
++ let result=read_checkpoint_semantic_alpha(&bytes,0);
++ assert_eq!(result.is_ok(),good^cfg!(NJC_invert));
++ match result{Ok((out,at))=>{assert_eq!(at,160);
++assert_eq!(kw(out[0]),[word(&bytes,0),word(&bytes,4),word(&bytes,8),word(&bytes,12)]);
++assert_eq!(kw(out[1]),[word(&bytes,16),word(&bytes,20),word(&bytes,24),word(&bytes,28)]);
++assert_eq!(kw(out[2]),[word(&bytes,32),word(&bytes,36),word(&bytes,40),word(&bytes,44)]);
++assert_eq!(kw(out[3]),[word(&bytes,48),word(&bytes,52),word(&bytes,56),word(&bytes,60)]);
++assert_eq!(kw(out[4]),[word(&bytes,64),word(&bytes,68),word(&bytes,72),word(&bytes,76)]);
++assert_eq!(kw(out[5]),[word(&bytes,80),word(&bytes,84),word(&bytes,88),word(&bytes,92)]);
++assert_eq!(kw(out[6]),[word(&bytes,96),word(&bytes,100),word(&bytes,104),word(&bytes,108)]);
++assert_eq!(kw(out[7]),[word(&bytes,112),word(&bytes,116),word(&bytes,120),word(&bytes,124)]);
++assert_eq!(kw(out[8]),[word(&bytes,128),word(&bytes,132),word(&bytes,136),word(&bytes,140)]);
++assert_eq!(kw(out[9]),[word(&bytes,144),word(&bytes,148),word(&bytes,152),word(&bytes,156)]);
++},Err(error)=>assert_eq!(error,Error::Checkpoint)}
++}
++#[kani::proof]
++#[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn semantic(){check();}
++#[kani::proof]
++#[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn semantic_renamed(){check();}
+--- a/crates/aspis-r1-cost-probe/src/NJC_weight_end.rs
++++ b/crates/aspis-r1-cost-probe/src/NJC_weight_end.rs
+@@ -0,0 +1,44 @@
++use super::*;
++use aspis_core::field::{M31,CM31};
++use crate::{KMX_copy_nonoverlapping,KMX_copy_from_slice};
++fn word(bytes:&[u8],at:usize)->u32{u32::from_le_bytes([bytes[at],bytes[at+1],bytes[at+2],bytes[at+3]])}
++fn make(x:[u32;4])->K{K{c0:CM31{a:M31(x[0]),b:M31(x[1])},c1:CM31{a:M31(x[2]),b:M31(x[3])}}}
++fn words(q:K)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
++// One literal frozen read_checkpoint_weights iteration, on an arbitrary
++// pre-iterator suffix. The parent establishes suffix=remaining SAME Vec.
++fn step(bytes:&[u8],at:usize,remaining:&mut[K])->Result<usize,Error>{
++ let mut iter=remaining.iter_mut();
++ match iter.next(){None=>Ok(at),Some(out)=>{
++  let mut reader=Reader{bytes,at};let value=reader.k()?;
++  let at=reader.at;*out=value;Ok(at)
++ }}
++}
++fn check(){
++ let bytes:[u8;16]=kani::any();let before:[[u32;4];64]=kani::any();
++ let mut values:[K;64]=core::array::from_fn(|i|make(before[i]));
++ let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<64&&j<64);
++ let expected=[word(&bytes,0),word(&bytes,4),word(&bytes,8),word(&bytes,12)];
++ let good=expected[0]<2147483647&&expected[1]<2147483647&&expected[2]<2147483647&&expected[3]<2147483647;
++ let result=step(&bytes,0,&mut values[i..]);
++ assert_eq!(result.is_ok(),good^cfg!(NJC_invert));
++ match result{Ok(at)=>{assert_eq!(at,16);assert_eq!(words(values[j]),if j==i{expected}else{before[j]});},Err(error)=>{assert_eq!(error,Error::Checkpoint);assert_eq!(words(values[j]),before[j]);}}
++}
++
++fn end_check(){
++ let bytes:[u8;16]=kani::any();let before:[[u32;4];64]=kani::any();
++ let mut values:[K;64]=core::array::from_fn(|i|make(before[i]));
++ let j:usize=kani::any();kani::assume(j<64);let at:usize=kani::any();
++ let reply=step(&bytes,at,&mut values[64..]);
++ assert_eq!(reply,Ok(at^(if cfg!(NJC_invert){1}else{0})));
++ assert_eq!(words(values[j]),before[j]);
++}
++#[kani::proof]
++#[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn weight_end(){end_check();}
++#[kani::proof]
++#[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn weight_end_renamed(){end_check();}
+--- a/crates/aspis-r1-cost-probe/src/NJC_validate.rs
++++ b/crates/aspis-r1-cost-probe/src/NJC_validate.rs
+@@ -0,0 +1,43 @@
++use super::*;
++use crate::{KMX_copy_nonoverlapping,KMX_copy_from_slice};
++struct Contains<'a>{queries:&'a[u32;22],i:usize,answer:bool,calls:usize}
++impl Contains<'_>{fn contains(&mut self,prefix:&[u32],q:&u32)->bool{
++ assert_eq!(prefix.as_ptr(),self.queries.as_ptr());assert_eq!(prefix.len(),self.i);assert_eq!(*q,self.queries[self.i]);self.calls+=1;self.answer
++}}
++// Literal one entered outer iteration; contains is the entered child cut.
++fn step(queries:&[u32;22],i:usize,log:&mut Contains)->Result<usize,Error>{
++ let q=queries[i];
++ if q>=1<<18||log.contains(&queries[..i],&q){return Err(Error::Checkpoint);}
++ Ok(i+1)
++}
++fn check(){let queries:[u32;22]=kani::any();let i:usize=kani::any();kani::assume(i<22);let answer:bool=kani::any();let mut log=Contains{queries:&queries,i,answer,calls:0};
++ let result=step(&queries,i,&mut log);let bad=queries[i]>=262144||answer;
++ assert_eq!(result.is_err(),bad^cfg!(NJC_invert));
++ match result{Ok(next)=>assert_eq!(next,i+1),Err(e)=>assert_eq!(e,Error::Checkpoint)}
++ assert_eq!(log.calls,if queries[i]>=262144{0}else{1});
++}
++#[kani::proof]
++#[kani::unwind(26)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn validate_step(){check();}
++#[kani::proof]
++#[kani::unwind(26)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn validate_step_renamed(){check();}
++
++fn end_check(){let queries:[u32;22]=kani::any();let i:usize=kani::any();kani::assume(i>=22);
++ let result:Result<(),Error>=if i<queries.len(){unreachable!()}else{Ok(())};
++ assert_eq!(result.is_ok(),!cfg!(NJC_invert));
++}
++#[kani::proof]
++#[kani::unwind(26)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn validate_end(){end_check();}
++#[kani::proof]
++#[kani::unwind(26)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn validate_end_renamed(){end_check();}
+--- a/crates/aspis-r1-cost-probe/src/NJC_vec.rs
++++ b/crates/aspis-r1-cost-probe/src/NJC_vec.rs
+@@ -0,0 +1,30 @@
++use super::*;
++use aspis_core::field::{M31,CM31};
++use crate::{KMX_copy_nonoverlapping,KMX_copy_from_slice};
++fn k(x:[u32;4])->K{K{c0:CM31{a:M31(x[0]),b:M31(x[1])},c1:CM31{a:M31(x[2]),b:M31(x[3])}}}
++fn kw(q:K)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
++fn e(x:[u32;8])->E{E::new(k([x[0],x[1],x[2],x[3]]),k([x[4],x[5],x[6],x[7]]))}
++fn construct(weights:Vec<K>,rhs:E,power:K,next:u8,at:usize,end:usize)->Result<Accumulator,Error>{
++ if at!=end{return Err(Error::Checkpoint);}
++ Ok(Accumulator{weights,rhs,power,next:next as usize})
++}
++fn check(){
++ let before:[[u32;4];64]=kani::any();let values:[K;64]=core::array::from_fn(|i|k(before[i]));let weights=Vec::from(values);let addr=weights.as_ptr();let cap=weights.capacity();
++ let rhs=e(kani::any());let power=k(kani::any());let next:u8=kani::any();let at:usize=kani::any();let end:usize=kani::any();let j:usize=kani::any();kani::assume(j<64);
++ let result=construct(weights,rhs,power,next,at,end);assert_eq!(result.is_ok(),at==end);
++ match result{Err(error)=>assert_eq!(error,Error::Checkpoint),Ok(mut a)=>{
++  if cfg!(NJC_invert){a.weights[j].c0.a.0^=1;}
++  if cfg!(NJC_bad_alloc){let other=Vec::from(values);a.weights=other;}
++  assert_eq!(a.weights.as_ptr(),addr);assert_eq!(a.weights.capacity(),cap);assert_eq!(a.weights.len(),64);assert_eq!(kw(a.weights[j]),before[j]);assert_eq!(a.rhs,rhs);assert_eq!(a.power,power);assert_eq!(a.next,next as usize);
++ }}
++}
++#[kani::proof]
++#[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn accumulator(){check();}
++#[kani::proof]
++#[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn accumulator_renamed(){check();}
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -338,3 +338,11 @@
+     mark(obs, Phase::Parsed);
+     tx2_common(public_bytes, proof, checkpoint, hash, obs)
+ }
++
++#[cfg(kani)]
++#[path="NJC_scan.rs"]
++mod NJC_scan;
++
++#[cfg(kani)]
++#[path="NJC_terminal.rs"]
++mod NJC_terminal;
+--- a/crates/aspis-r1-cost-probe/src/NJC_scan.rs
++++ b/crates/aspis-r1-cost-probe/src/NJC_scan.rs
+@@ -0,0 +1,80 @@
++use super::*;
++use crate::{KMX_copy_nonoverlapping,KMX_copy_from_slice};
++use aspis_core::field::{M31,CM31};
++fn error()->Error{match kani::any::<u8>()%8{0=>Error::Parse,1=>Error::Semantic,2=>Error::Transcript,3=>Error::Relation,4=>Error::Merkle,5=>Error::Query,6=>Error::Checkpoint,_=>Error::Allocation}}
++fn reply()->Option<Error>{if kani::any(){Some(error())}else{None}}
++fn k()->K{let x:[u32;4]=kani::any();K{c0:CM31{a:M31(x[0]),b:M31(x[1])},c1:CM31{a:M31(x[2]),b:M31(x[3])}}}
++struct SLog<'a>{q:&'a[u8],s:usize,replies:[Option<Error>;3],calls:usize}
++impl SLog<'_>{fn record(&mut self,tag:usize,b:&[u8])->Result<(),Error>{let c=self.calls;assert_eq!(tag,c);let off=if c==0{120*self.s}else if c==1{120*self.s+104}else{480+32*self.s};let len=if c==0{104}else if c==1{16}else{32};assert_eq!(b.as_ptr() as usize,self.q.as_ptr() as usize+off);assert_eq!(b.len(),len^(if cfg!(NJC_invert){1}else{0}));self.calls+=1;match self.replies[c]{Some(e)=>Err(e),None=>Ok(())}}
++fn m31s(&mut self,b:&[u8])->Result<(),Error>{self.record(0,b)}
++fn parse_k(&mut self,b:&[u8])->Option<K>{match self.record(1,b){Ok(())=>Some(k()),Err(_)=>None}}
++fn two_k(&mut self,b:&[u8])->Result<(),Error>{self.record(2,b)}}
++// One actual s iteration, with its two nested loops fissioned at source cuts.
++fn s_body(q:&[u8],s:usize,log:&mut SLog)->Result<usize,Error>{
++ log.m31s(&q[s*120..s*120+104])?;
++ log.parse_k(&q[s*120+104..s*120+120]).ok_or(Error::Parse)?;
++ log.two_k(&q[480+s*32..480+s*32+32])?;
++ Ok(s+1)
++}
++fn s_check(){let q:[u8;832]=kani::any();let s:usize=kani::any();kani::assume(s<4);let replies=[reply(),reply(),reply()];let mut log=SLog{q:&q,s,replies,calls:0};let out=s_body(&q,s,&mut log);let expected=if let Some(e)=replies[0]{Err(e)}else if replies[1].is_some(){Err(Error::Parse)}else if let Some(e)=replies[2]{Err(e)}else{Ok(s+1)};assert_eq!(out,expected);assert_eq!(log.calls,if replies[0].is_some(){1}else if replies[1].is_some(){2}else{3});}
++struct KLog<'a>{q:&'a[u8],s:usize,l:usize,some:bool,calls:usize}
++impl KLog<'_>{fn parse(&mut self,b:&[u8])->Option<K>{let off=480+self.s*32+self.l*16;assert_eq!(b.as_ptr() as usize,self.q.as_ptr() as usize+off);assert_eq!(b.len(),16);self.calls+=1;if self.some{Some(k())}else{None}}}
++fn k_body(q:&[u8],s:usize,l:usize,log:&mut KLog)->Result<usize,Error>{if l>=2{return Ok(l);}log.parse(&q[480+s*32+l*16..480+s*32+l*16+16]).ok_or(Error::Parse)?;Ok(l+1)}
++fn k_check(){let q:[u8;832]=kani::any();let s:usize=kani::any();let l:usize=kani::any();kani::assume(s<4&&l<=2);let some:bool=kani::any();let mut log=KLog{q:&q,s,l,some,calls:0};let out=k_body(&q,s,l,&mut log);let good=l==2||some;assert_eq!(out.is_ok(),good^cfg!(NJC_invert));assert_eq!(out,if l==2{Ok(l)}else if some{Ok(l+1)}else{Err(Error::Parse)});assert_eq!(log.calls,if l==2{0}else{1});}
++struct QLog<'a>{proof:&'a[u8],i:usize,replies:[Option<Error>;2],calls:usize}
++impl QLog<'_>{fn record(&mut self,c:usize,q:&[u8],off:usize,len:usize)->Result<(),Error>{assert_eq!(c,self.calls);assert_eq!(q.as_ptr() as usize,self.proof.as_ptr() as usize+10055+832*self.i+off);assert_eq!(q.len(),len^(if cfg!(NJC_invert){1}else{0}));self.calls+=1;match self.replies[c]{Some(e)=>Err(e),None=>Ok(())}}
++fn inner(&mut self,q:&[u8])->Result<(),Error>{self.record(0,q,0,832)}
++fn echeck(&mut self,q:&[u8],mode:bool)->Result<(),Error>{assert!(!mode);self.record(1,q,672,128)}}
++fn q_body(proof:&[u8],i:usize,log:&mut QLog)->Result<usize,Error>{let q=opening(proof,i);log.inner(q)?;log.echeck(&q[672..800],false)?;Ok(i+1)}
++fn q_check(){let proof:[u8;57607]=kani::any();let i:usize=kani::any();kani::assume(i<22);let replies=[reply(),reply()];let mut log=QLog{proof:&proof,i,replies,calls:0};let out=q_body(&proof,i,&mut log);assert_eq!(out,if let Some(e)=replies[0]{Err(e)}else if let Some(e)=replies[1]{Err(e)}else{Ok(i+1)});assert_eq!(log.calls,if replies[0].is_some(){1}else{2});}
++fn end_check<const N:usize>(){let i:usize=kani::any();kani::assume(i>=N);let out:Result<(),Error>=if i<N{unreachable!()}else{Ok(())};assert_eq!(out.is_ok(),!cfg!(NJC_invert));}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn scan_s(){s_check();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn scan_s_renamed(){s_check();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn scan_k2(){k_check();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn scan_k2_renamed(){k_check();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn scan_query(){q_check();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn scan_query_renamed(){q_check();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn scan_s_end(){end_check::<4>();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn scan_s_end_renamed(){end_check::<4>();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn scan_query_end(){end_check::<22>();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn scan_query_end_renamed(){end_check::<22>();}
+--- a/crates/aspis-r1-cost-probe/src/NJC_chunks.rs
++++ b/crates/aspis-r1-cost-probe/src/NJC_chunks.rs
+@@ -0,0 +1,36 @@
++use super::*;
++use crate::{KMX_copy_nonoverlapping,KMX_copy_from_slice};
++use aspis_core::field::{M31,CM31};
++fn k(x:[u32;4])->K{K{c0:CM31{a:M31(x[0]),b:M31(x[1])},c1:CM31{a:M31(x[2]),b:M31(x[3])}}}
++fn e(x:[u32;8])->E{E::new(k([x[0],x[1],x[2],x[3]]),k([x[4],x[5],x[6],x[7]]))}
++struct ELog<'a>{bytes:&'a[u8],at:usize,j:usize,reply:Option<E>,calls:usize}
++impl ELog<'_>{fn parse(&mut self,b:&[u8])->Option<E>{assert_eq!(b.len(),32);assert_eq!(b.as_ptr() as usize,self.bytes.as_ptr() as usize+self.at);assert_eq!(b[self.j],self.bytes[self.at+self.j]^(if cfg!(NJC_invert){1}else{0}));self.calls+=1;self.reply}}
++fn e_step(iter:&mut core::slice::ChunksExact<'_,u8>,mode:bool,log:&mut ELog)->Result<(),Error>{
++ if let Some(c)=iter.next(){let x=log.parse(c).ok_or(Error::Parse)?;if mode&&x.c1()!=K::ZERO{return Err(Error::Parse);}}
++ Ok(())
++}
++fn e_check(){let bytes:[u8;2272]=kani::any();let n:usize=kani::any();let i:usize=kani::any();let j:usize=kani::any();kani::assume(n<=71&&i<=n&&j<32);let mode:bool=kani::any();let q=e(kani::any());let reply=if kani::any(){Some(q)}else{None};let mut log=ELog{bytes:&bytes,at:32*i,j,reply,calls:0};let mut iter=bytes[32*i..32*n].chunks_exact(32);let result=e_step(&mut iter,mode,&mut log);let good=i==n||reply.is_some()&&(!mode||q.c1()==K::ZERO);assert_eq!(result,if good{Ok(())}else{Err(Error::Parse)});assert_eq!(log.calls,if i==n{0}else{1});assert_eq!(iter.len(),if i==n{0}else{n-i-1});}
++struct KLog<'a>{bytes:&'a[u8],at:usize,j:usize,reply:Option<K>,calls:usize}
++impl KLog<'_>{fn parse(&mut self,b:&[u8])->Option<K>{assert_eq!(b.len(),16);assert_eq!(b.as_ptr() as usize,self.bytes.as_ptr() as usize+self.at);assert_eq!(b[self.j],self.bytes[self.at+self.j]^(if cfg!(NJC_invert){1}else{0}));self.calls+=1;self.reply}}
++fn k_step(iter:&mut core::slice::ChunksExact<'_,u8>,log:&mut KLog)->Result<(),crate::compact::CodecError>{if let Some(c)=iter.next(){log.parse(c).ok_or(crate::compact::CodecError::NonCanonical)?;}Ok(())}
++fn k_check(){let bytes:[u8;464]=kani::any();let n:usize=kani::any();let i:usize=kani::any();let j:usize=kani::any();kani::assume(n<=29&&i<=n&&j<16);let reply=if kani::any(){Some(k(kani::any()))}else{None};let mut log=KLog{bytes:&bytes,at:16*i,j,reply,calls:0};let mut iter=bytes[16*i..16*n].chunks_exact(16);let result=k_step(&mut iter,&mut log);let good=i==n||reply.is_some();assert_eq!(result,if good{Ok(())}else{Err(crate::compact::CodecError::NonCanonical)});assert_eq!(log.calls,if i==n{0}else{1});assert_eq!(iter.len(),if i==n{0}else{n-i-1});}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn echeck_step(){e_check();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn echeck_step_renamed(){e_check();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn compact_step(){k_check();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn compact_step_renamed(){k_check();}
+--- a/crates/aspis-r1-cost-probe/src/NJC_terminal.rs
++++ b/crates/aspis-r1-cost-probe/src/NJC_terminal.rs
+@@ -0,0 +1,67 @@
++use super::*;
++use crate::{KMX_copy_nonoverlapping,KMX_copy_from_slice};
++use aspis_core::field::{M31,CM31};
++fn k(x:[u32;4])->K{K{c0:CM31{a:M31(x[0]),b:M31(x[1])},c1:CM31{a:M31(x[2]),b:M31(x[3])}}}
++fn e(x:[u32;8])->E{E::new(k([x[0],x[1],x[2],x[3]]),k([x[4],x[5],x[6],x[7]]))}
++fn codec(x:u8)->crate::compact::CodecError{match x%3{0=>crate::compact::CodecError::Length,1=>crate::compact::CodecError::NonZeroHigh,_=>crate::compact::CodecError::NonCanonical}}
++fn error()->Error{match kani::any::<u8>()%8{0=>Error::Parse,1=>Error::Semantic,2=>Error::Transcript,3=>Error::Relation,4=>Error::Merkle,5=>Error::Query,6=>Error::Checkpoint,_=>Error::Allocation}}
++struct Log<'a>{proof:&'a[u8],replies:[Option<Error>;4],calls:usize}
++impl Log<'_>{fn record(&mut self,b:&[u8],mode:bool)->Result<(),Error>{let n=self.calls;let off=[7031usize,7495,7527,7783][n];let len=[464usize,32,224,2272][n];assert_eq!(b.as_ptr() as usize,self.proof.as_ptr() as usize+off);assert_eq!(b.len(),len^(if cfg!(NJC_invert){1}else{0}));assert!(!mode);self.calls+=1;match self.replies[n]{None=>Ok(()),Some(e)=>Err(e)}}
++fn compact(&mut self,b:&[u8],c:crate::compact::CodecError)->Result<(),crate::compact::CodecError>{match self.record(b,false){Ok(())=>Ok(()),Err(_)=>Err(c)}}}
++fn prefix(proof:&[u8],log:&mut Log,c:crate::compact::CodecError)->Result<(),Error>{log.compact(&proof[7031..7495],c)?;log.record(&proof[7495..7527],false)?;log.record(&proof[7527..7751],false)?;log.record(&proof[7783..10055],false)?;Ok(())}
++fn prefix_check(){let proof:[u8;10055]=kani::any();let replies=core::array::from_fn(|_|if kani::any(){Some(error())}else{None});let mut log=Log{proof:&proof,replies,calls:0};let out=prefix(&proof,&mut log,codec(kani::any()));let mut expected=Ok(());let mut calls=4;let mut i=0;while i<4{if let Some(e)=replies[i]{expected=Err(if i==0{Error::Parse}else{e});calls=i+1;break;}i+=1;}assert_eq!(out,expected);assert_eq!(log.calls,calls);}
++fn codec_check(){let out:Error=codec(kani::any()).into();assert_eq!(out,if cfg!(NJC_invert){Error::Allocation}else{Error::Parse});}
++fn option_check(){let x:[u32;8]=kani::any();let present:bool=kani::any();let value=e(x);let limbs=value.to_limbs();let o=if present{Some(value)}else{None};let out=o.ok_or(Error::Parse);match out{Ok(v)=>{assert!(present);let mut expected=limbs;if cfg!(NJC_invert){expected[0]^=1;}assert_eq!(v.to_limbs(),expected);},Err(err)=>{assert!(!present);assert_eq!(err,if cfg!(NJC_bad_error){Error::Allocation}else{Error::Parse});}}}
++fn r0(x:u8)->aspis_core::r0::Error{use aspis_core::r0::Error::*;match x%17{0=>IndexOutOfRange,1=>WrongLength,2=>ZeroDenominator,3=>Allocation,4=>NonCanonical,5=>WrongField,6=>InvalidPoints,7=>QuotientNotInImage,8=>RankDeficient,9=>Parse,10=>Semantic,11=>Schedule,12=>Sampler,13=>Commitment,14=>Authentication,15=>V1,_=>V2}}
++fn map_check(){let a:[u32;4]=kani::any();let mut v=alloc::vec::Vec::new();v.push(k(a));let pointer=v.as_ptr() as usize;let len=v.len();let cap=v.capacity();let success:bool=kani::any();let input:Result<alloc::vec::Vec<K>,aspis_core::r0::Error>=if success{Ok(v)}else{Err(r0(kani::any()))};let out=input.map_err(|_|Error::Allocation);match out{Ok(w)=>{assert!(success);assert_eq!(w.as_ptr() as usize,pointer);assert_eq!(w.len(),len);assert_eq!(w.capacity(),cap);let mut expected=a;if cfg!(NJC_invert){expected[0]^=1;}let q=w[0];assert_eq!([q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0],expected);},Err(err)=>{assert!(!success);assert_eq!(err,if cfg!(NJC_bad_error){Error::Parse}else{Error::Allocation});}}}
++fn closure_check(){let b:u8=kani::any();let mut pred=|&b:&u8|b!=0;let result=pred(&b);assert_eq!(result,(b!=0)^cfg!(NJC_invert));assert_eq!(core::mem::size_of_val(&pred),0);}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn scan_prefix(){prefix_check();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn scan_prefix_renamed(){prefix_check();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn codec_error(){codec_check();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn codec_error_renamed(){codec_check();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn option_e(){option_check();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn option_e_renamed(){option_check();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn map_allocation(){map_check();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn map_allocation_renamed(){map_check();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn header_predicate(){closure_check();}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn header_predicate_renamed(){closure_check();}

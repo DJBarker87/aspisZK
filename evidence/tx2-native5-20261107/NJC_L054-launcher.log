@@ -1,0 +1,33 @@
+{"attempt": "NJC_L054", "exit_status": 0, "wall_seconds": 10.804456289857626, "peak_rss_kib": "6017632", "swaps": "0", "print_axioms": ["'NJC_ResumeCalls.clause' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJC_ResumeCalls.installed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJC_ResumeCalls.parent' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'NJC_ResumeCalls.clause' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJC_ResumeCalls.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJC_ResumeCalls.parent' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJC_ResumeCalls.parent : ∀ (base : VTop_Stages.Ops) (reserved : Bool) {H : Type}
+  (d : VTop_Stages.aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H),
+  NHT_EmittedCommon.tx2_common (literal base reserved) d pub proof ck hash none =
+    NHT_EmittedCommon.tx2_common (model base reserved) d pub proof ck hash none :=
+fun base reserved {H} d pub proof ck hash =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+       
+...
+'NJC_ResumeCalls.clause' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJC_ResumeCalls.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJC_ResumeCalls.parent' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJC_ResumeCalls.parent : ∀ (base : VTop_Stages.Ops) (reserved : Bool) {H : Type}
+  (d : VTop_Stages.aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H),
+  NHT_EmittedCommon.tx2_common (literal base reserved) d pub proof ck hash none =
+    NHT_EmittedCommon.tx2_common (model base reserved) d pub proof ck hash none :=
+fun base reserved {H} d pub proof ck hash =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          NHT_EmittedCommon.tx2_common _a d pub proof ck hash none =
+            NHT_EmittedCommon.tx2_common (model base reserved) d pub proof ck hash none)
+        (installed base reserved)))
+    (Eq.refl (NHT_EmittedCommon.tx2_common (model base reserved) d pub proof ck hash none))
+
+Running as unit: run-r37f8436c85c64c1b9a37b5f0404f6214.scope; invocation ID: e944010241024b48ba5ab0c2f28db114

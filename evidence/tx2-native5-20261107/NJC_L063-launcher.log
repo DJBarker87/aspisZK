@@ -1,0 +1,58 @@
+{"attempt": "NJC_L063", "exit_status": 1, "wall_seconds": 7.305058951955289, "peak_rss_kib": "5981428", "swaps": "0", "print_axioms": ["'NJC_ValidateResult.model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJC_ValidateResult.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJC_generated/NJC_ValidateResult.lean:32:4: error: Type mismatch
+  ih ?m.128
+has type
+  CheckpointBytes4Ops.queryLoop ?m.128 tail =
+    if ValidFrom ?m.128 tail then core.result.Result.Ok ()
+    else core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint
+but is expected to have type
+  (if ↑x ≥ 262144 ∨ False then core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint
+    else CheckpointBytes4Ops.queryLoop (pre ++ [x]) tail) =
+    if ¬False ∧ ValidFrom (pre ++ [x]) tail then core.result.Result.Ok ()
+    else core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint
+NJC_generated/NJC_ValidateResult.lean:31:15: warning: This simp argument is unused:
+  if_neg bad
+
+Hint: Omit
+...
+.Ok ()
+    else core.result.Result.Err NID_ResumeEmission.verifier.Error.Checkpoint)
+
+case pos
+queries : Std.Array U32 22#usize
+good : ValidFrom [] ↑queries
+⊢ (do
+      let pending_return ← ok (NJC_ValidatePort.pending (core.result.Result.Ok ()))
+      match pending_return with
+        | none => ok (core.result.Result.Err NID_ResumeEmission.verifier.Error.Checkpoint)
+        | some r => ok r) =
+    ok
+      (if ValidFrom [] ↑queries then core.result.Result.Ok ()
+      else core.result.Result.Err NID_ResumeEmission.verifier.Error.Checkpoint)
+NJC_generated/NJC_ValidateResult.lean:45:20: error: Tactic `rfl` failed: The left-hand side
+  do
+    let pending_return ← ok (NJC_ValidatePort.pending (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint))
+    match pending_return with
+      | none => ok (core.result.Result.Err NID_ResumeEmission.verifier.Error.Checkpoint)
+      | some r => ok r
+is not definitionally equal to the right-hand side
+  ok
+    (if ValidFrom [] ↑queries then core.result.Result.Ok ()
+    else core.result.Result.Err NID_ResumeEmission.verifier.Error.Checkpoint)
+
+case neg
+queries : Std.Array U32 22#usize
+good : ¬ValidFrom [] ↑queries
+⊢ (do
+      let pending_return ←
+        ok (NJC_ValidatePort.pending (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint))
+      match pending_return with
+        | none => ok (core.result.Result.Err NID_ResumeEmission.verifier.Error.Checkpoint)
+        | some r => ok r) =
+    ok
+      (if ValidFrom [] ↑queries then core.result.Result.Ok ()
+      else core.result.Result.Err NID_ResumeEmission.verifier.Error.Checkpoint)
+'NJC_ValidateResult.model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NJC_ValidateResult.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r1a305170084c4c568e6fb86f40ca8365.scope; invocation ID: 5c5d4a5877f54576a420c32659bf7911

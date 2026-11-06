@@ -1,0 +1,515 @@
+NJC_ClosedCalls.inactive_clause (bytes : Aeneas.Std.Slice Aeneas.Std.U8) :
+  NJC_ClosedCalls.inactive bytes = NHV_InactivePacket.packet bytes
+'NJC_ClosedCalls.inactive_clause' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_ClosedCalls.geometry_clause (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (start finish : Aeneas.Std.Usize) :
+  NJC_ClosedCalls.geometry queries start finish =
+    AspisR1.Port3_GeometryStage.geometry NFN_NEW_GeometryDictionary.adopted queries start finish
+'NJC_ClosedCalls.geometry_clause' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_ClosedCalls.installed (base : VTop_Stages.Ops) : NJC_ClosedCalls.literal base = NJC_ClosedCalls.cohort base
+'NJC_ClosedCalls.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_ClosedCalls.parent (base : VTop_Stages.Ops) {H : Type} (d : VTop_Stages.aspis_core.digest.Digest32 H)
+  (pub proof checkpoint : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) :
+  NHT_EmittedCommon.tx2_common (NJC_ClosedCalls.literal base) d pub proof checkpoint hash none =
+    NHT_EmittedCommon.tx2_common (NJC_ClosedCalls.cohort base) d pub proof checkpoint hash none
+'NJC_ClosedCalls.parent' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_ClosedCalls.opening_clause (proof : Aeneas.Std.Slice Aeneas.Std.U8) (index : Aeneas.Std.Usize) :
+  NEO_TailRef.opening proof index = AspisR1.Port4B_Opening.opening proof index
+'NJC_ClosedCalls.opening_clause' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_ReaderResults.decodeK (b : Aeneas.Std.Array Aeneas.Std.U8 16#usize) :
+  (do
+      let q ← OraclePortCkptAbi2Extracted.decode_k_spec b.to_slice
+      Aeneas.Std.Result.ok (AspisR1.CheckpointBytes3Reader.optionK q)) =
+    Aeneas.Std.Result.ok (NJC_ReaderResults.naturalK b)
+'NJC_ReaderResults.decodeK' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_ReaderResults.k (r : AspisR1Stage2.verifier.Reader) :
+  AspisR1.CheckpointBytes3Reader.readK r = do
+    let (b, out) ← AspisR1.CheckpointBytes3Reader.raw 16#usize r
+    Aeneas.Std.Result.ok (NJC_ReaderResults.naturalK b, out)
+'NJC_ReaderResults.k' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_ReaderResults.boundedK (r : AspisR1Stage2.verifier.Reader) (bound : ↑r.at + 16 ≤ (↑r.bytes).length) :
+  ∃ b out,
+    ↑b = List.take 16 (List.drop ↑r.at ↑r.bytes) ∧
+      ↑out.at = ↑r.at + 16 ∧
+        out.bytes = r.bytes ∧
+          AspisR1.CheckpointBytes3Reader.readK r = Aeneas.Std.Result.ok (NJC_ReaderResults.naturalK b, out)
+'NJC_ReaderResults.boundedK' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_EReaderResults.decodeE (b : Aeneas.Std.Array Aeneas.Std.U8 32#usize) :
+  (do
+      let q ← OraclePortCkptAbi2Extracted.decode_e_spec b.to_slice
+      Aeneas.Std.Result.ok (AspisR1.CheckpointBytes3Reader.optionE q)) =
+    Aeneas.Std.Result.ok (NJC_EReaderResults.naturalE b)
+'NJC_EReaderResults.decodeE' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_EReaderResults.e (r : AspisR1Stage2.verifier.Reader) :
+  AspisR1.CheckpointBytes3Reader.readE r = do
+    let (b, out) ← AspisR1.CheckpointBytes3Reader.raw 32#usize r
+    Aeneas.Std.Result.ok (NJC_EReaderResults.naturalE b, out)
+'NJC_EReaderResults.e' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_ReaderWindows.e (r : AspisR1Stage2.verifier.Reader) (bound : ↑r.at + 32 ≤ (↑r.bytes).length) :
+  ∃ b out,
+    ↑b = List.take 32 (List.drop ↑r.at ↑r.bytes) ∧
+      ↑out.at = ↑r.at + 32 ∧
+        out.bytes = r.bytes ∧
+          AspisR1.CheckpointBytes3Reader.readE r = do
+            let (reply, _) ← AspisR1.CheckpointBytes3Reader.readE { bytes := b.to_slice, «at» := 0#usize }
+            Aeneas.Std.Result.ok (reply, out)
+'NJC_ReaderWindows.e' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_ReaderWindows.k (r : AspisR1Stage2.verifier.Reader) (bound : ↑r.at + 16 ≤ (↑r.bytes).length) :
+  ∃ b out,
+    ↑b = List.take 16 (List.drop ↑r.at ↑r.bytes) ∧
+      ↑out.at = ↑r.at + 16 ∧
+        out.bytes = r.bytes ∧
+          AspisR1.CheckpointBytes3Reader.readK r = do
+            let (reply, _) ← AspisR1.CheckpointBytes3Reader.readK { bytes := b.to_slice, «at» := 0#usize }
+            Aeneas.Std.Result.ok (reply, out)
+'NJC_ReaderWindows.k' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_ReaderWindows.raw (n : Aeneas.Std.Usize) (r : AspisR1Stage2.verifier.Reader)
+  (bound : ↑r.at + ↑n ≤ (↑r.bytes).length) :
+  ∃ b out,
+    ↑b = List.take (↑n) (List.drop ↑r.at ↑r.bytes) ∧
+      ↑out.at = ↑r.at + ↑n ∧
+        out.bytes = r.bytes ∧ AspisR1.CheckpointBytes3Reader.raw n r = Aeneas.Std.Result.ok (b, out)
+'NJC_ReaderWindows.raw' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_Sections.child (r : AspisR1Stage2.verifier.Reader) : NJC_Sections.readK r = AspisR1.CheckpointBytes3Reader.readK r
+'NJC_Sections.child' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_Sections.semantic (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (start : Aeneas.Std.Usize) :
+  AspisR1.CheckpointBytes4Ops.semanticUsing NJC_Sections.readK bytes start =
+    AspisR1.CheckpointBytes4Ops.readSemanticAlpha bytes start
+'NJC_Sections.semantic' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_Sections.weights (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (start : Aeneas.Std.Usize)
+  (values : Aeneas.Std.alloc.vec.Vec AspisR1Stage2.aspis_core.field.QM31) :
+  AspisR1.CheckpointBytes4Ops.weightsUsing NJC_Sections.readK bytes start values =
+    AspisR1.CheckpointBytes4Ops.readWeights bytes start values
+'NJC_Sections.weights' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_Sections.induction (n : ℕ) (reader : AspisR1Stage2.verifier.Reader)
+  (iter : Aeneas.Std.core.slice.iter.IterMut AspisR1Stage2.aspis_core.field.QM31) :
+  AspisR1.CheckpointBytes4Sections.weightLoop NJC_Sections.readK n reader iter =
+    AspisR1.CheckpointBytes4Sections.weightLoop AspisR1.CheckpointBytes3Reader.readK n reader iter
+'NJC_Sections.induction' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_QueryOccurrence.checkpoint_size (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (ck proof pub : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) (p : NIL_StatePort.F.P) (a : NIL_StatePort.F.A)
+  (run :
+    NIL_FreshOps.resume reserved d ck proof pub NID_ResumeEmission.transport.Variant.S2 hash =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a))) :
+  (↑ck).length = 1768
+'NJC_QueryOccurrence.checkpoint_size' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_QueryOccurrence.closed (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (ck proof pub : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) (freshP : NIL_StatePort.F.P) (freshA : NIL_StatePort.F.A)
+  (run :
+    NIL_FreshOps.resume reserved d ck proof pub NID_ResumeEmission.transport.Variant.S2 hash =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (freshP, freshA)))
+  (start : ↑(NIL_StatePort.accumulator freshA).next = 10) (base : AspisR1.Port3_NativeQueryBody.Ops)
+  (geometry : AspisR1Stage2.verifier.QueryGeometry) (qPlace gPlace : ℕ) :
+  have p := NIL_StatePort.prepared freshP;
+  have a := NIL_StatePort.accumulator freshA;
+  ∃ g,
+    FIo_Native.weights.powers 29#usize (AspisR1.FIo_Install.toE p.gamma) = Aeneas.Std.Result.ok g ∧
+      NHT_PacketOps.powers 29#usize p.gamma = Aeneas.Std.Result.ok (AspisR1.FIp_DotsAdapter.fromArray g) ∧
+        NHT_PacketOps.query base qPlace gPlace proof p a (AspisR1.FIp_DotsAdapter.fromArray g) none geometry
+            (AspisR1.NFW_QueryResume.pending a) 22#usize =
+          NHT_ResultPort.action
+            (AspisR1.Port3_NativeQueryBody.verifier.candidate.query_loop (AspisR1.NFS_QueryOps.installed base) proof p a
+              (AspisR1.FIp_DotsAdapter.fromArray g) none geometry (AspisR1.NFW_QueryResume.pending a) 22#usize)
+'NJC_QueryOccurrence.closed' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_CutTypes.powers_array (gamma logged : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+  (reply output : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 29#usize) (calls : ℕ)
+  (cut : NJC_CutTypes.powers gamma logged reply output calls) : output = reply
+'NJC_CutTypes.powers_array' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_CutTypes.readerK (bytes : Aeneas.Std.Array Aeneas.Std.U8 16#usize)
+  (reply : Aeneas.Std.core.result.Result AspisR1Stage2.aspis_core.field.QM31 AspisR1Stage2.verifier.Error)
+  (postCursor postLength beforeAddress afterAddress : ℕ) : Prop
+'NJC_CutTypes.readerK' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_CutTypes.powers (gamma logged : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+  (reply output : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 29#usize) (calls : ℕ) : Prop
+'NJC_CutTypes.powers' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_CutTypes.weightStep (bytes : Aeneas.Std.Array Aeneas.Std.U8 16#usize)
+  (before after : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.QM31 64#usize) (i : Fin 64)
+  (reply : Aeneas.Std.core.result.Result Aeneas.Std.Usize AspisR1Stage2.verifier.Error) : Prop
+'NJC_CutTypes.weightStep' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_Contains.scalar (a b : Aeneas.Std.U32) :
+  Aeneas.Std.core.cmp.PartialEqU32.eq a b = Aeneas.Std.Result.ok (decide (a = b))
+'NJC_Contains.scalar' does not depend on any axioms
+NJC_Contains.list (xs : List Aeneas.Std.U32) (q : Aeneas.Std.U32) :
+  List.anyM (Aeneas.Std.core.cmp.PartialEqU32.eq q) xs = Aeneas.Std.Result.ok (decide (q ∈ xs))
+'NJC_Contains.list' depends on axioms: [propext, Quot.sound]
+NJC_Contains.source (s : Aeneas.Std.Slice Aeneas.Std.U32) (q : Aeneas.Std.U32) :
+  Aeneas.Std.core.slice.Slice.contains Aeneas.Std.core.cmp.PartialEqU32 s q = Aeneas.Std.Result.ok (decide (q ∈ ↑s))
+'NJC_Contains.source' depends on axioms: [propext, Quot.sound]
+NJC_ValidateArithmetic.shift : 1#u32 <<< 18#i32 = Aeneas.Std.Result.ok 262144#u32
+'NJC_ValidateArithmetic.shift' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_ValidateArithmetic.increment (i : Aeneas.Std.Usize) (small : ↑i < 22) :
+  i + 1#usize = Aeneas.Std.Result.ok (i.wrapping_add 1#usize)
+'NJC_ValidateArithmetic.increment' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_ValidateStep.source (q : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (i : Aeneas.Std.Usize)
+  (pre tail : List Aeneas.Std.U32) (x : Aeneas.Std.U32) (shape : ↑q = pre ++ x :: tail) (index : ↑i = pre.length) :
+  NJC_ValidateEmission.verifier.validate_checkpoint_queries_loop.body q i =
+    if ↑x ≥ 262144 ∨ x ∈ pre then Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done none)
+    else Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (i.wrapping_add 1#usize))
+'NJC_ValidateStep.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_ValidatePort.loop_exact (q : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (pre tail : List Aeneas.Std.U32)
+  (i : Aeneas.Std.Usize) (shape : ↑q = pre ++ tail) (index : ↑i = pre.length) :
+  NJC_ValidateEmission.verifier.validate_checkpoint_queries_loop q i =
+    Aeneas.Std.Result.ok (NJC_ValidatePort.pending (AspisR1.CheckpointBytes4Ops.queryLoop pre tail))
+'NJC_ValidatePort.loop_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_ValidatePort.source (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize) :
+  NIL_Carriers.outer (NIL_Carriers.inner id) (NJC_ValidateEmission.verifier.validate_checkpoint_queries queries) =
+    AspisR1.CheckpointBytes4Ops.validate queries
+'NJC_ValidatePort.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_ValidatePort.frame {S Event : Type} (state : S) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize) :
+  NEB_PureFrame.run state
+      (NIL_Carriers.outer (NIL_Carriers.inner id) (NJC_ValidateEmission.verifier.validate_checkpoint_queries queries)) =
+    NEB_PureFrame.run state (AspisR1.CheckpointBytes4Ops.validate queries)
+'NJC_ValidatePort.frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_ValidateCalls.clause (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize) :
+  NJC_ValidateEmission.verifier.validate_checkpoint_queries queries = NIL_FreshOps.validate queries
+'NJC_ValidateCalls.clause' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_ValidateCalls.reference (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes proof public1 : Aeneas.Std.Slice Aeneas.Std.U8) (v : NIL_Carriers.Fresh.V) (hash : H) :
+  NJC_ValidateCalls.resume reserved d bytes proof public1 v hash =
+    NIL_FreshOps.resume reserved d bytes proof public1 v hash
+'NJC_ValidateCalls.reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_ValidateCalls.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes proof public1 : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) :
+  NIL_StatePort.reply
+      (NJC_ValidateCalls.resume reserved d bytes proof public1 NID_ResumeEmission.transport.Variant.S2 hash) =
+    AspisR1Stage2.verifier.resumeWithOps (AspisR1.CheckpointBytes4Ops.ops reserved) d bytes proof public1
+      AspisR1Stage2.transport.Variant.S2 hash
+'NJC_ValidateCalls.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_FilledClause.zero :
+  NJC_FilledClause.value NHX_FilledZero.zeroQ = { c0 := { a := 0#u32, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } }
+'NJC_FilledClause.zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_FilledClause.source (reservation : AspisR1.NP6_StdModel.Reservation) :
+  NJC_FilledClause.native reservation =
+    AspisR1.CheckpointBytes3Allocation.filled (NJC_FilledClause.reserved reservation) 64#usize
+      { c0 := { a := 0#u32, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } }
+'NJC_FilledClause.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_RawPort.transport (n : Aeneas.Std.Usize)
+  (unwrap :
+    Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U8 n) Aeneas.Std.core.array.TryFromSliceError →
+      Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 n))
+  (r : NIL_Carriers.Fresh.R) :
+  NIL_Carriers.outer (fun p => (p.1, NIL_Carriers.reader p.2)) (NJC_ReaderEmission.verifier.Reader.raw n unwrap r) =
+    AspisR1Stage2.verifier.Reader.rawWithUnwrap n unwrap (NIL_Carriers.reader r)
+'NJC_RawPort.transport' depends on axioms: [propext, Quot.sound]
+NJC_RawPort.bounded (n : Aeneas.Std.Usize)
+  (unwrap :
+    Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U8 n) Aeneas.Std.core.array.TryFromSliceError →
+      Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 n))
+  (unwrap_ok :
+    ∀ (b : Aeneas.Std.Array Aeneas.Std.U8 n), unwrap (Aeneas.Std.core.result.Result.Ok b) = Aeneas.Std.Result.ok b)
+  (r : NIL_Carriers.Fresh.R) (bound : ↑r.at + ↑n ≤ (↑r.bytes).length) :
+  ∃ b out,
+    NJC_ReaderEmission.verifier.Reader.raw n unwrap r = Aeneas.Std.Result.ok (b, out) ∧
+      ↑b = List.take (↑n) (List.drop ↑r.at ↑r.bytes) ∧ ↑out.at = ↑r.at + ↑n ∧ out.bytes = r.bytes
+'NJC_RawPort.bounded' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_ScanPartition.thirty (p : ℕ → Prop) : ((∀ j < 26, p j) ∧ ∀ j < 4, p (26 + j)) ↔ ∀ j < 30, p j
+'NJC_ScanPartition.thirty' depends on axioms: [propext, Quot.sound]
+NJC_ScanPartition.blocks (width n : ℕ) (positive : 0 < width) (p : ℕ → Prop) :
+  (∀ i < n, ∀ j < width, p (width * i + j)) ↔ ∀ k < width * n, p k
+'NJC_ScanPartition.blocks' depends on axioms: [propext, Quot.sound]
+NJC_ScanPartition.opening (p : ℕ → Prop) :
+  (∀ s < 4, (∀ j < 30, p (30 * s + j)) ∧ ∀ j < 8, p (120 + 8 * s + j)) ↔ ∀ k < 152, p k
+'NJC_ScanPartition.opening' depends on axioms: [propext, Quot.sound]
+NJC_ScanViews.query (proof : Aeneas.Std.Slice Aeneas.Std.U8) (length : (↑proof).length = 57607) (i : Aeneas.Std.Usize)
+  (inside : ↑i < 22) :
+  ∃ q,
+    NEO_TailRef.opening proof i = Aeneas.Std.Result.ok q ∧
+      (↑q).length = 832 ∧ ↑q = List.take 832 (List.drop (10055 + ↑i * 832) ↑proof)
+'NJC_ScanViews.query' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_ScanViews.subwindow (proof q : List Aeneas.Std.U8) (i off n : ℕ)
+  (same : q = List.take 832 (List.drop (10055 + i * 832) proof)) (fit : off + n ≤ 832) :
+  List.take n (List.drop off q) = List.take n (List.drop (10055 + i * 832 + off) proof)
+'NJC_ScanViews.subwindow' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_ScanViews.final (proof : List Aeneas.Std.U8) (i : ℕ) (inside : i < 64) :
+  List.take 32 (List.drop (32 * (7 + i)) (List.take 2272 (List.drop 7783 proof))) =
+    List.take 32 (List.drop (8007 + 32 * i) proof)
+'NJC_ScanViews.final' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_RawWindows.k
+  (unwrap :
+    Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U8 16#usize) Aeneas.Std.core.array.TryFromSliceError →
+      Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 16#usize))
+  (unwrap_ok :
+    ∀ (b : Aeneas.Std.Array Aeneas.Std.U8 16#usize),
+      unwrap (Aeneas.Std.core.result.Result.Ok b) = Aeneas.Std.Result.ok b)
+  (parse : Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Result (Option NIL_Carriers.Fresh.K)) (r : NIL_Carriers.Fresh.R)
+  (bound : ↑r.at + 16 ≤ (↑r.bytes).length) :
+  ∃ b out,
+    ↑b = List.take 16 (List.drop ↑r.at ↑r.bytes) ∧
+      ↑out.at = ↑r.at + 16 ∧
+        out.bytes = r.bytes ∧
+          NJC_ReaderEmission.verifier.Reader.k unwrap parse r = do
+            let (reply, _) ← NJC_ReaderEmission.verifier.Reader.k unwrap parse { bytes := b.to_slice, «at» := 0#usize }
+            Aeneas.Std.Result.ok (reply, out)
+'NJC_RawWindows.k' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_RawWindows.e
+  (unwrap :
+    Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize) Aeneas.Std.core.array.TryFromSliceError →
+      Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (unwrap_ok :
+    ∀ (b : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+      unwrap (Aeneas.Std.core.result.Result.Ok b) = Aeneas.Std.Result.ok b)
+  (parse : Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Result (Option NIL_Carriers.Fresh.E)) (r : NIL_Carriers.Fresh.R)
+  (bound : ↑r.at + 32 ≤ (↑r.bytes).length) :
+  ∃ b out,
+    ↑b = List.take 32 (List.drop ↑r.at ↑r.bytes) ∧
+      ↑out.at = ↑r.at + 32 ∧
+        out.bytes = r.bytes ∧
+          NJC_ReaderEmission.verifier.Reader.e unwrap parse r = do
+            let (reply, _) ← NJC_ReaderEmission.verifier.Reader.e unwrap parse { bytes := b.to_slice, «at» := 0#usize }
+            Aeneas.Std.Result.ok (reply, out)
+'NJC_RawWindows.e' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_OrderedCalls.mark (base : VTop_Stages.Ops) (qbase : AspisR1.Port3_NativeQueryBody.Ops)
+  (phase : VTop_Stages.verifier.Phase) : NHV_ReleaseOps.mark none phase = Aeneas.Std.Result.ok ()
+'NJC_OrderedCalls.mark' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_OrderedCalls.powers (gamma : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+  (canonical : AspisR1.NFN_LPi_FieldValues.canonE (AspisR1.FIo_Install.toE gamma)) :
+  ∃ out,
+    FIo_Native.weights.powers 29#usize (AspisR1.FIo_Install.toE gamma) = Aeneas.Std.Result.ok out ∧
+      NHT_PacketOps.powers 29#usize gamma = Aeneas.Std.Result.ok (AspisR1.FIp_DotsAdapter.fromArray out) ∧
+        AspisR1ClaimPreparedBridge.powersPublic 29#usize
+              (AspisR1.NFW_PowersCohort.toPublic (AspisR1.FIo_Install.toE gamma)) =
+            Aeneas.Std.Result.ok (AspisR1.NFW_PowersCohort.mapArray AspisR1.NFW_PowersCohort.toPublic out) ∧
+          ∀ z ∈ ↑out, AspisR1.NFN_LPi_FieldValues.canonE z
+'NJC_OrderedCalls.powers' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_OrderedCalls.installed (base : VTop_Stages.Ops) (reserved : Bool) :
+  NJC_OrderedCalls.literal base reserved = NJC_OrderedCalls.model base reserved
+'NJC_OrderedCalls.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_OrderedCalls.parent (base : VTop_Stages.Ops) (reserved : Bool) {H : Type}
+  (d : VTop_Stages.aspis_core.digest.Digest32 H) (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) :
+  NHT_EmittedCommon.tx2_common (NJC_OrderedCalls.literal base reserved) d pub proof ck hash none =
+    NHT_EmittedCommon.tx2_common (NJC_OrderedCalls.model base reserved) d pub proof ck hash none
+'NJC_OrderedCalls.parent' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_OptionClause.source {A Err : Type} (value : Option A) (err : Err) :
+  NJC_ReaderEmission.core.option.Option.ok_or value err =
+    Aeneas.Std.Result.ok
+      (match value with
+      | none => Aeneas.Std.core.result.Result.Err err
+      | some x => Aeneas.Std.core.result.Result.Ok x)
+'NJC_OptionClause.source' does not depend on any axioms
+NJC_OptionClause.frame {A Err S Event : Type} (value : Option A) (err : Err) (state : S) :
+  NEB_PureFrame.run state (NJC_ReaderEmission.core.option.Option.ok_or value err) =
+    Aeneas.Std.Result.ok
+      (match value with
+        | none => Aeneas.Std.core.result.Result.Err err
+        | some x => Aeneas.Std.core.result.Result.Ok x,
+        state, [])
+'NJC_OptionClause.frame' does not depend on any axioms
+NJC_ValidateResult.model (pre tail : List Aeneas.Std.U32) :
+  AspisR1.CheckpointBytes4Ops.queryLoop pre tail =
+    if NJC_ValidateResult.ValidFrom pre tail then Aeneas.Std.core.result.Result.Ok ()
+    else Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint
+'NJC_ValidateResult.model' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_ValidateResult.source (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize) :
+  NJC_ValidateEmission.verifier.validate_checkpoint_queries queries =
+    Aeneas.Std.Result.ok
+      (if NJC_ValidateResult.ValidFrom [] ↑queries then Aeneas.Std.core.result.Result.Ok ()
+      else Aeneas.Std.core.result.Result.Err NID_ResumeEmission.verifier.Error.Checkpoint)
+'NJC_ValidateResult.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_CopyFrame.window {A : Type} (source target : ℕ → A) (offset width index : ℕ) :
+  KMX_CopyMeaning.loop (fun j => source (offset + j)) target 0 width index =
+    if index < width then source (offset + index) else target index
+'NJC_CopyFrame.window' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_CopyFrame.frame {A : Type} (source target : ℕ → A) (start width index : ℕ)
+  (outside : index < start ∨ start + width ≤ index) :
+  KMX_CopyMeaning.loop source target start width index = target index
+'NJC_CopyFrame.frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_CopyFrame.compose {A : Type} (first second target : ℕ → A) (a n b m index : ℕ) (separate : a + n ≤ b ∨ b + m ≤ a)
+  (inside : a ≤ index ∧ index < a + n) :
+  KMX_CopyMeaning.loop second (KMX_CopyMeaning.loop first target a n) b m index = first index
+'NJC_CopyFrame.compose' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_ConcreteUnwrap.source (n : Aeneas.Std.Usize) (b : Aeneas.Std.Array Aeneas.Std.U8 n) :
+  Aeneas.Std.core.result.Result.unwrap Aeneas.Std.core.fmt.DebugTryFromSliceError (Aeneas.Std.core.result.Result.Ok b) =
+    Aeneas.Std.Result.ok b
+'NJC_ConcreteUnwrap.source' does not depend on any axioms
+NJC_ConcreteUnwrap.bounded (n : Aeneas.Std.Usize) (r : NIL_Carriers.Fresh.R) (bound : ↑r.at + ↑n ≤ (↑r.bytes).length) :
+  ∃ b out,
+    NJC_ConcreteUnwrap.raw n r = Aeneas.Std.Result.ok (b, out) ∧
+      ↑b = List.take (↑n) (List.drop ↑r.at ↑r.bytes) ∧ ↑out.at = ↑r.at + ↑n ∧ out.bytes = r.bytes
+'NJC_ConcreteUnwrap.bounded' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_ConcreteUnwrap.clause (n : Aeneas.Std.Usize) (r : NIL_Carriers.Fresh.R) :
+  NJC_ConcreteUnwrap.raw n r = NIL_FreshOps.raw n r
+'NJC_ConcreteUnwrap.clause' depends on axioms: [propext, Quot.sound]
+NJC_RawCalls.reference (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes proof public1 : Aeneas.Std.Slice Aeneas.Std.U8) (v : NIL_Carriers.Fresh.V) (hash : H) :
+  NJC_RawCalls.resume reserved d bytes proof public1 v hash =
+    NJC_ValidateCalls.resume reserved d bytes proof public1 v hash
+'NJC_RawCalls.reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_RawCalls.source (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes proof public1 : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) :
+  NIL_StatePort.reply
+      (NJC_RawCalls.resume reserved d bytes proof public1 NID_ResumeEmission.transport.Variant.S2 hash) =
+    AspisR1Stage2.verifier.resumeWithOps (AspisR1.CheckpointBytes4Ops.ops reserved) d bytes proof public1
+      AspisR1Stage2.transport.Variant.S2 hash
+'NJC_RawCalls.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_ResumeCalls.clause (reserved : Bool) {H : Type} (d : VTop_Stages.aspis_core.digest.Digest32 H)
+  (ck proof pub : Aeneas.Std.Slice Aeneas.Std.U8) (v : AspisR1Stage2.transport.Variant) (hash : H) :
+  NJC_ResumeCalls.reference reserved d ck proof pub v hash = NJC_ResumeCalls.cohort reserved d ck proof pub v hash
+'NJC_ResumeCalls.clause' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_ResumeCalls.installed (base : VTop_Stages.Ops) (reserved : Bool) :
+  NJC_ResumeCalls.literal base reserved = NJC_ResumeCalls.model base reserved
+'NJC_ResumeCalls.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJC_ResumeCalls.parent (base : VTop_Stages.Ops) (reserved : Bool) {H : Type}
+  (d : VTop_Stages.aspis_core.digest.Digest32 H) (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) :
+  NHT_EmittedCommon.tx2_common (NJC_ResumeCalls.literal base reserved) d pub proof ck hash none =
+    NHT_EmittedCommon.tx2_common (NJC_ResumeCalls.model base reserved) d pub proof ck hash none
+'NJC_ResumeCalls.parent' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.RPx_Deployed.deployed {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)) (sdk : AspisR1.S2Trust.S2TrustedSdkBorrow L)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (std : AspisR1.S2W_TrustedStd.TrustedStd copy) (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W)
+  (admission1 : AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3)
+  (admission2 : AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7)
+  (missing : AspisR1.IDa_Deployed.Uninstalled CoreError) (indexError : CoreError)
+  (reservation : AspisR1.NP6_StdModel.Reservation) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+  (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest)
+  (extraction :
+    AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.DrvC_Installation.sdk
+        (AspisR1.FIp_Install.configuration indexError
+          (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation))
+      native1 native2 hashv)
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (p1 : AspisR1.S2W_ExtractionBoundary.P1 sha256 H)
+  (syscall : AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256) (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8)
+  (slot : AspisR1.S2W_ExtractionBoundary.Slot) (state1 state2 final1 final2 : A)
+  (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record))
+  (accepted1 :
+    AspisR1.S2W_D189Wrappers.first native1 copy allocator e1 AspisR1.CPH_Program.verifier data1 state1 =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)))
+  (accepted2 :
+    AspisR1.S2W_D189Wrappers.second native2 allocator e2 AspisR1.CPH_Program.verifier data2 slot state2 =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2)))
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (length : Aeneas.Std.U32)
+  (prior : AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Unit)
+  (words : AspisR1.CanonicalCutEnrichedTranscript.Words) (p : AspisR1.CPG_Projection.Observations Tx A) (t u : Tx)
+  (actions : List (AspisR1.CPP_BankState.Action A))
+  (game :
+    AspisR1.CPH_Game.DeployedPairExecution p t u e1 e2 saved actions native1 native2 copy allocator
+      AspisR1.CPH_Program.verifier)
+  (RuntimePersistence :
+    AspisR1.CPR_DataPersistence.TwoTransactionLaw (AspisR1.CPG_Projection.adjacent p)
+      (AspisR1.CPG_Projection.ordinary p (AspisR1.Hist_Nonvacuity.key 0#u8)) (AspisR1.CPG_Projection.before p)
+      (AspisR1.CPG_Projection.tentative p) (AspisR1.CPG_Projection.success p) (AspisR1.CPG_Projection.loaded p))
+  (D : AspisR1.LiteralByteProtocol.Decoder) (a : AspisR1.SCE_Experiment.Adversary A) (Q0 Q1 : ℕ)
+  (queries :
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisR1.ARW_Induced.issued native1 copy allocator AspisR1.CPH_Program.verifier a H).length ≤ Q0 + Q1) :
+  have P := AspisR1.ARW_Induced.program native1 copy allocator AspisR1.CPH_Program.verifier a;
+  have runtime :=
+    AspisR1.ARX_AdmittedRuntime.runtime L copy allocator
+      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) indexError reservation native1 native2
+      hashv a;
+  have select := fun x =>
+    AspisR1.P2P_NativeSelection.pair
+      (AspisR1.DrvC_Installation.sdk
+        (AspisR1.FIp_Install.configuration indexError
+          (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation))
+      AspisR1.CPH_Program.verifier e1 e2 data2 slot;
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary (AspisR1.P6C_Extension.dictionary hashv H) () H AspisR1.Op5T_P6.parent
+      AspisR1.Op5T_P6.parent AspisR1.Op5T_P6.parent AspisR1.MultiproofConeP6Batch.referenceLeaf ∧
+    AspisR1.DrvC_Implementation.driver
+          (AspisR1.FIp_Install.configuration indexError
+            (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation) =
+        AspisR1.DrvC_SourceEntry.source
+          (AspisR1.FIp_Install.configuration indexError
+            (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation)
+          hashv ∧
+      AspisR1.DrvC_Installation.sdk
+            (AspisR1.FIp_Install.configuration indexError
+              (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation) =
+          AspisR1.SdkD_PairBatches.dictionary
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).adapter
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).currentBase
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).stageBase
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).finish
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).reserved
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).query
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).geometry
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).boundaries
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).std ∧
+        AspisR1.FJv_DResult.Outcome L e1 e2 w1 w2
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).adapter
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).currentBase
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).reserved
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).query
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).geometry
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).stageBase
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).finish
+            (AspisR1.FIp_Install.boundaries
+              (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation).boundaries)
+            reservation AspisR1.CPH_Program.verifier data1 data2 slot saved post1 post2 H
+            (AspisR1.DrvC_Implementation.driver
+              (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation))
+            prior (p.physicalEvents t) hashv
+            (AspisR1.BinRawByteCollisionTargets.event AspisR1.SelectedTranscriptParams.params.iv (Q0 + Q1 + 2965)
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.Hiq_RecordedJoint.program
+                  (AspisR1.F3X_Account.program
+                    (AspisR1.FIp_Install.configuration indexError
+                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation)
+                    hashv P)
+                  AspisR1.F3X_Projection.project select))) ∧
+          (AspisR1.F3X_ModelClaims.Claims
+                (AspisR1.FIp_Install.configuration indexError
+                  (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation)
+                D P (Q0 + Q1) ∧
+              AspisR1.F3Y_SourceClaims.Claims
+                  (AspisR1.FIp_Install.configuration indexError
+                    (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation)
+                  D hashv P (Q0 + Q1) select ∧
+                AspisR1.F3Y_AccountMass.Claims
+                    (AspisR1.FIp_Install.configuration indexError
+                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation)
+                    hashv P (Q0 + Q1) select ∧
+                  AspisR1.F3T_RuntimeBound.failureModel runtime ≤ AspisR1.F3T_Numeric.total (Q0 + Q1) ∧
+                    (Q0 + Q1 ≤ AspisR1.F3U_RangeEdges.maxQueries →
+                        AspisR1.F3T_RuntimeBound.failureModel runtime ≤ (↑Q0 + ↑Q1 + 1) * (1 / 2 ^ 100)) ∧
+                      (Q0 + Q1 = 0 →
+                        AspisR1.F3U_Numeric.margin ≤ 1 / 2 ^ 100 - AspisR1.F3T_RuntimeBound.failureModel runtime ∧
+                          AspisR1.F3T_RuntimeBound.failureModel runtime < 1 / 2 ^ 100)) ∧
+            (native1 AspisR1.CPH_Program.verifier e1.first data1 =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) ∧
+                (↑saved).length = 1768 ∧
+                  AspisR1.S2W_EntryWriteHistory.payloadBytes AspisR1.S2W_ReturnedCheckpoint.encode
+                        (post1.payload (e1.heap.accounts 2).1) 1768 =
+                      AspisR1.MultiproofConeCanonical.bytesOf ↑saved ∧
+                    post1.ambient = e1.heap.ambient ∧
+                      post1.accounts = e1.heap.accounts ∧
+                        post1.counter = e1.heap.counter ∧
+                          ∀ (cell : ℕ), cell ≠ (e1.heap.accounts 2).1 → post1.payload cell = e1.heap.payload cell) ∧
+              AspisR1.Rc2_Events.Facts
+                  (AspisR1.FIp_Install.configuration indexError
+                    (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation)
+                  hashv native1 native2 copy allocator AspisR1.CPH_Program.verifier H saved ∧
+                AspisR1.CPH_Protection.Facts p t saved AspisR1.CPH_Program.verifier ∧
+                  AspisR1.CPH_Trace.Facts p t u saved native1 native2 copy allocator AspisR1.CPH_Program.verifier ∧
+                    AspisR1.CPH_Recorder.Facts
+                        (AspisR1.FIp_Install.configuration indexError
+                          (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation)
+                        hashv native1 native2 copy allocator AspisR1.CPH_Program.verifier H p t u saved ∧
+                      AspisR1.S6N_Installation.Facts
+                        (AspisR1.DrvC_Installation.sdk
+                          (AspisR1.FIp_Install.configuration indexError
+                            (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation))
+'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]

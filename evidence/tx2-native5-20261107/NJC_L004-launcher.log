@@ -1,0 +1,31 @@
+{"attempt": "NJC_L004", "exit_status": 0, "wall_seconds": 14.865411541890353, "peak_rss_kib": "5993944", "swaps": "0", "print_axioms": ["'NJC_ClosedCalls.inactive_clause' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJC_ClosedCalls.geometry_clause' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJC_ClosedCalls.installed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJC_ClosedCalls.parent' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJC_ClosedCalls.opening_clause' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'NJC_ClosedCalls.inactive_clause' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJC_ClosedCalls.geometry_clause' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJC_ClosedCalls.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJC_ClosedCalls.parent' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJC_ClosedCalls.opening_clause' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJC_ClosedCalls.parent : ∀ (base : VTop_Stages.Ops) {H : Type} (d : VTop_Stages.aspis_core.digest.Digest32 H)
+  (pub proof checkpoint : Slice U8) (hash : H),
+  NHT_EmittedCommon.tx2_common (literal base) d pub proof checkpoint hash none =
+    
+...
+'NJC_ClosedCalls.inactive_clause' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJC_ClosedCalls.geometry_clause' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJC_ClosedCalls.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJC_ClosedCalls.parent' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJC_ClosedCalls.opening_clause' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJC_ClosedCalls.parent : ∀ (base : VTop_Stages.Ops) {H : Type} (d : VTop_Stages.aspis_core.digest.Digest32 H)
+  (pub proof checkpoint : Slice U8) (hash : H),
+  NHT_EmittedCommon.tx2_common (literal base) d pub proof checkpoint hash none =
+    NHT_EmittedCommon.tx2_common (cohort base) d pub proof checkpoint hash none :=
+fun base {H} d pub proof checkpoint hash =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          NHT_EmittedCommon.tx2_common _a d pub proof checkpoint hash none =
+            NHT_EmittedCommon.tx2_common (cohort base) d pub proof checkpoint hash none)
+        (installed base)))
+    (Eq.refl (NHT_EmittedCommon.tx2_common (cohort base) d pub proof checkpoint hash none))
+
+Running as unit: run-r9f40cbaa9a8949b9be4ef1c9e116a5fd.scope; invocation ID: 2337a5268c614cf49aaf8769e7d3f691

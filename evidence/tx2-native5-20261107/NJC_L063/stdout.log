@@ -1,0 +1,65 @@
+NJC_generated/NJC_ValidateResult.lean:32:4: error: Type mismatch
+  ih ?m.128
+has type
+  CheckpointBytes4Ops.queryLoop ?m.128 tail =
+    if ValidFrom ?m.128 tail then core.result.Result.Ok ()
+    else core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint
+but is expected to have type
+  (if ↑x ≥ 262144 ∨ False then core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint
+    else CheckpointBytes4Ops.queryLoop (pre ++ [x]) tail) =
+    if ¬False ∧ ValidFrom (pre ++ [x]) tail then core.result.Result.Ok ()
+    else core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint
+NJC_generated/NJC_ValidateResult.lean:31:15: warning: This simp argument is unused:
+  if_neg bad
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵ ̵o̵n̵l̵y̵ ̵[̵i̵f̵_̵n̵e̵g̵ ̵b̵a̵d̵,̵V̵a̵l̵i̵d̵F̵r̵o̵m̵,̵s̵m̵a̵l̵l̵,̵a̵b̵s̵e̵n̵t̵,̵t̵r̵u̵e̵_̵a̵n̵d̵]̵s̲i̲m̲p̲ ̲o̲n̲l̲y̲ ̲[̲V̲a̲l̲i̲d̲F̲r̲o̲m̲,̲ ̲s̲m̲a̲l̲l̲,̲ ̲a̲b̲s̲e̲n̲t̲,̲ ̲t̲r̲u̲e̲_̲a̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJC_generated/NJC_ValidateResult.lean:44:20: error: Tactic `rfl` failed: The left-hand side
+  do
+    let pending_return ← ok (NJC_ValidatePort.pending (core.result.Result.Ok ()))
+    match pending_return with
+      | none => ok (core.result.Result.Err NID_ResumeEmission.verifier.Error.Checkpoint)
+      | some r => ok r
+is not definitionally equal to the right-hand side
+  ok
+    (if ValidFrom [] ↑queries then core.result.Result.Ok ()
+    else core.result.Result.Err NID_ResumeEmission.verifier.Error.Checkpoint)
+
+case pos
+queries : Std.Array U32 22#usize
+good : ValidFrom [] ↑queries
+⊢ (do
+      let pending_return ← ok (NJC_ValidatePort.pending (core.result.Result.Ok ()))
+      match pending_return with
+        | none => ok (core.result.Result.Err NID_ResumeEmission.verifier.Error.Checkpoint)
+        | some r => ok r) =
+    ok
+      (if ValidFrom [] ↑queries then core.result.Result.Ok ()
+      else core.result.Result.Err NID_ResumeEmission.verifier.Error.Checkpoint)
+NJC_generated/NJC_ValidateResult.lean:45:20: error: Tactic `rfl` failed: The left-hand side
+  do
+    let pending_return ← ok (NJC_ValidatePort.pending (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint))
+    match pending_return with
+      | none => ok (core.result.Result.Err NID_ResumeEmission.verifier.Error.Checkpoint)
+      | some r => ok r
+is not definitionally equal to the right-hand side
+  ok
+    (if ValidFrom [] ↑queries then core.result.Result.Ok ()
+    else core.result.Result.Err NID_ResumeEmission.verifier.Error.Checkpoint)
+
+case neg
+queries : Std.Array U32 22#usize
+good : ¬ValidFrom [] ↑queries
+⊢ (do
+      let pending_return ←
+        ok (NJC_ValidatePort.pending (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint))
+      match pending_return with
+        | none => ok (core.result.Result.Err NID_ResumeEmission.verifier.Error.Checkpoint)
+        | some r => ok r) =
+    ok
+      (if ValidFrom [] ↑queries then core.result.Result.Ok ()
+      else core.result.Result.Err NID_ResumeEmission.verifier.Error.Checkpoint)
+'NJC_ValidateResult.model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NJC_ValidateResult.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
