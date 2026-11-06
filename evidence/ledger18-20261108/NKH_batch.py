@@ -8,7 +8,7 @@ if mode.startswith('inventory-'):jobs=[(mode,['NKH_native/NKH_InventoryDriver',m
 elif mode in ['poolfixtures','poolroots','poolscan']:jobs=[('scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0',['NKH_native/'+('NKH_PoolDriver' if mode=='poolscan' else 'NKH_PoolProofDriver'), 'scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0'])]
 elif mode in ['fixtures','scan','scan2']:jobs=[('scan' if mode=='scan2' else mode,['NKH_native/'+('NKH_Driver' if mode.startswith('scan') else 'NKH_ProofDriver'),'scan' if mode=='scan2' else mode])]
 else:
- batch=int(mode.removeprefix('batch'));groups=json.loads((B/'NKH_AUDIT_ROOTS.json').read_text())['groups'];jobs=[('proof'+str(i),['NKH_native/NKH_ProofDriver','proof'+str(i)]) for i in range(batch,min(batch+1,len(groups)))];assert jobs
+ batch=int(mode.removeprefix('batch').split('-')[0]);last=29 if mode=='batch28-29' else batch;groups=json.loads((B/'NKH_AUDIT_ROOTS.json').read_text())['groups'];jobs=[('proof'+str(i),['NKH_native/NKH_ProofDriver','proof'+str(i)]) for i in range(batch,min(last+1,len(groups)))];assert jobs
 for name,command in jobs:
  start=time.monotonic()
  with (E/(name+'.log')).open('w') as out:r=subprocess.run(['/usr/bin/time','-v','-o',str(E/(name+'.time')),*command],stdout=out,stderr=subprocess.STDOUT)

@@ -1,3 +1,5 @@
+Resume authorized after lead host repair (2026-11-08): 15 scopes remain. L026 resubmits ENOSPC L025 after environment repair; retain 5367 completed roots and audit only 4699 missing roots. Disk checked before every scope; no admissions until complete gate. See NKH_RESUME.json.
+
 # NKH ledger18 handoff
 
 **Target not yet established. This job's gate is INCOMPLETE; no admissions. Ledger unchanged:514 CLOSED /0 QUALIFIED /85 OPEN of599.** Branch codex/cx-ledger18-20261107. Stage commits only, no push. NKH_LEDGER.json.xz is byte-identical to NKC; its inherited PASS is NKC's result, not a claim that NKH passed.

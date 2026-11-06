@@ -14,6 +14,12 @@ def ssh(code,data=None,submitted=False):
   if submitted:raise RuntimeError('Submitted; recover read-only, never resubmit')
   if retry<10:time.sleep(60)
  raise RuntimeError('Transport exhausted')
+disk=ssh('python3',"import shutil,json;print(json.dumps(shutil.disk_usage("+repr(B)+")._asdict()))")
+assert disk.returncode==0,disk.stderr
+disk_info=json.loads(disk.stdout)
+(E/(a+'-disk.json')).write_text(json.dumps(disk_info))
+assert disk_info['free']>=40_000_000_000,'STOP host free below40GB'
+assert disk_info['used']-1754012225536<40_000_000_000,'STOP host growth exceeds40GB conservative bound'
 for retry in range(11):
  r=ssh('python3',f'''from pathlib import Path
 import subprocess,sys
@@ -48,7 +54,7 @@ elif kind=='audit':
   if n not in files:files[n]=(E/Path(n).name).read_text()
  command=['python3','NKH_batch.py',target]
 else:raise ValueError(kind)
-config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NKH_tmp',CARGO_TARGET_DIR=B+'/NKH_target',LEAN_PATH=':'.join([B+'/NKH_objects']+json.loads((E/'NKH_PATHS.json').read_text()))),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')
+config=dict(resubmission_after_host_repair=(a=='NKH_L026'),resubmits_attempt='NKH_L025' if a=='NKH_L026' else None,attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NKH_tmp',CARGO_TARGET_DIR=B+'/NKH_target',LEAN_PATH=':'.join([B+'/NKH_objects']+json.loads((E/'NKH_PATHS.json').read_text()))),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')
 files[a+'.json']=json.dumps(config)
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib,re,shutil
