@@ -12,6 +12,7 @@ theorem value (u : U32) (j : Usize) (bound : j.val<16) :
  have wu : (u.bv.setWidth 64).toNat=u.val := BitVec.toNat_setWidth_of_le (by decide)
  have wj : (j.bv.setWidth 64).toNat=j.val := by
    rw [BitVec.toNat_setWidth]
+   change j.val % 18446744073709551616=j.val
    exact Nat.mod_eq_of_lt (by omega)
  rw [wu,wj]
  have ub : u.val<4294967296 := by scalar_tac

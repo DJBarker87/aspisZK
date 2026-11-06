@@ -100,8 +100,8 @@ include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../NJS_fragments.rs"));
 fn key_iteration_cut(){
  let queries:[u32;22]=kani::any();let before:[u64;16]=kani::any();let lo:usize=kani::any();let n:usize=kani::any();let tree:usize=kani::any();let start:usize=kani::any();let k:usize=kani::any();
  kani::assume(n<=16 && start<=n && lo<=22 && lo+n<=22 && k<16 && tree<3);
- let (after,next,entered)=key_iteration(&queries,lo,n,tree,before,start);
- assert_eq!(entered,start<n);assert_eq!(next,if start<n{start+1}else{start});
+ let (after,next,end,entered)=key_iteration(&queries,lo,n,tree,before,start);
+ assert_eq!(entered,start<n);assert_eq!(next,if start<n{start+1}else{start});assert_eq!(end,n);
  let expected=if start<n && k==start {let u=queries[lo+start];let index=if tree==2{u/4}else{u};(index as u64)*256+start as u64}else{before[k]};
  #[cfg(not(NJS_invert))] assert_eq!(after[k],expected);
  #[cfg(NJS_invert)] assert_ne!(after[k],expected);
@@ -158,6 +158,35 @@ fn shape_finish(hit:bool)->Result<Variant,Error>{if hit{return Err(Error::Parse)
 #[kani::proof]
 fn shape_finish_cut(){
  let hit:bool=kani::any();let actual=shape_finish(hit);let exact=match actual{Err(Error::Parse)=>hit,Ok(Variant::S2)=>!hit,_=>false};
+ #[cfg(not(NJS_invert))] assert!(exact);
+ #[cfg(NJS_invert)] assert!(!exact);
+}
+#[kani::proof]
+#[kani::unwind(18)]
+#[kani::stub(core::ptr::copy_nonoverlapping,kmx::KMX_copy_nonoverlapping)]
+fn key_initial_cut(){
+ let keys=[0u64;multiproof::MAX_BATCH];let k:usize=kani::any();kani::assume(k<16);
+ #[cfg(not(NJS_invert))] assert_eq!(keys[k],0);
+ #[cfg(NJS_invert)] assert_ne!(keys[k],0);
+}
+// ACTUAL frozen parser; only its fixed16-byte header is read. Standard any is
+// the pinned rule-3 pure-byte external; no loop over the57607-byte payload.
+#[kani::proof]
+#[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,kmx::KMX_copy_nonoverlapping)]
+fn shape_actual(){
+ let proof:[u8;57607]=kani::any();
+ let good=proof[0]==82&&proof[1]==49&&proof[2]==80&&proof[3]==51&&proof[4]==67&&proof[5]==66&&proof[6]==49&&proof[7]==56&&proof[8]==2&&proof[9]==0&&proof[10]==0&&proof[11]==0&&proof[12]==0&&proof[13]==0&&proof[14]==0&&proof[15]==0;
+ let exact=match parse_shape(&proof){Ok(Variant::S2)=>good,Err(Error::Parse)=>!good,_=>false};
+ #[cfg(not(NJS_invert))] assert!(exact);
+ #[cfg(NJS_invert)] assert!(!exact);
+}
+#[kani::proof]
+#[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,kmx::KMX_copy_nonoverlapping)]
+fn shape_actual_wrong_length(){
+ let proof:[u8;57607]=kani::any();let n:usize=kani::any();kani::assume(n<57607);
+ let exact=matches!(parse_shape(&proof[..n]),Err(Error::Parse));
  #[cfg(not(NJS_invert))] assert!(exact);
  #[cfg(NJS_invert)] assert!(!exact);
 }

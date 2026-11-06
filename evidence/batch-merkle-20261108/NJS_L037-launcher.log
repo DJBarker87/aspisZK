@@ -1,0 +1,35 @@
+{"attempt": "NJS_L037", "exit_status": 0, "wall_seconds": 2.2277347990311682, "peak_rss_kib": "2611988", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.Array.to_slice_mut.{u} : {α : Type u} →
+  {n : Usize} → Std.Array α n → Slice α × (Slice α → Std.Array α n) :=
+fun {α} {n} a => (a.to_slice, a.from_slice)
+def Aeneas.Std.Slice.update.{u} : {α : Type u} → Slice α → Usize → α → Result (Slice α) :=
+fun {α} v i x =>
+  match (↑v)[↑i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some val => ok ⟨(↑v).set (↑i) x, ⋯⟩
+def Aeneas.Std.Array.update.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → α → Result (Std.Array α n) :=
+fun {α} {n} v i x =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some val => ok ⟨(↑v).set (↑i) x, ⋯⟩
+def Array.set.{u_1} : {α : Type u_1} →
+  (xs : _root_.Array α) → (i : ℕ) → α → aut
+...
+def Aeneas.Std.Array.to_slice_mut.{u} : {α : Type u} →
+  {n : Usize} → Std.Array α n → Slice α × (Slice α → Std.Array α n) :=
+fun {α} {n} a => (a.to_slice, a.from_slice)
+def Aeneas.Std.Slice.update.{u} : {α : Type u} → Slice α → Usize → α → Result (Slice α) :=
+fun {α} v i x =>
+  match (↑v)[↑i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some val => ok ⟨(↑v).set (↑i) x, ⋯⟩
+def Aeneas.Std.Array.update.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → α → Result (Std.Array α n) :=
+fun {α} {n} v i x =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some val => ok ⟨(↑v).set (↑i) x, ⋯⟩
+def Array.set.{u_1} : {α : Type u_1} →
+  (xs : _root_.Array α) → (i : ℕ) → α → autoParam (i < xs.size) Array.set._auto_1 → _root_.Array α :=
+fun {α} xs i v h => { toList := xs.toList.set i v }
+
+Running as unit: run-r79b02d22caee4dfcad8959abfc2867c5.scope; invocation ID: 689aeed133624172b770ba9d2207b058

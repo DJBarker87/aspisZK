@@ -1,0 +1,38 @@
+{"attempt": "NJS_L055", "exit_status": 0, "wall_seconds": 10.35696961497888, "peak_rss_kib": "6321344", "swaps": "0", "print_axioms": ["'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJS_Leaves.key' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJS_Leaves.index' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJS_Leaves.leaf' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJS_RuntimeDigest.leaf' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJS_RuntimeDigest.parent' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJS_Slot.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJS_BatchLeaf.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJS_Parse.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJS_Keys.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJS_Sort.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.RPx_Deployed.deployed {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)) (sdk : AspisR1.S2Trust.S2TrustedSdkBorrow L)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (std : AspisR1.S2W_TrustedStd.TrustedStd copy) (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W)
+  (admission1 : AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3)
+  (admission2 : AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7)
+  (missing : AspisR1.IDa_Deployed.U
+...
+dge.flatten (AspisR1.Port4B_LeafCode.input kind q)))) ∧
+    AspisR1.CheckpointBytes5Effect.run (NJS_RuntimeDigest.stage H) () (AspisR1.Port4B_LeafCode.code kind q) before =
+      Aeneas.Std.Result.ok
+        (AspisV8R19.SqueezeOracleBridge.encodeState
+            (H (AspisV8R19.SqueezeOracleBridge.flatten (AspisR1.Port4B_LeafCode.input kind q))),
+          before ++
+            [(AspisR1.Port4B_LeafCode.input kind q,
+                AspisV8R19.SqueezeOracleBridge.encodeState
+                  (H (AspisV8R19.SqueezeOracleBridge.flatten (AspisR1.Port4B_LeafCode.input kind q))))])
+'NJS_BatchLeaf.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJS_Parse.source (proof : Aeneas.Std.Slice Aeneas.Std.U8) :
+  NJS_Parse.map NJS_Parse.reply
+      (NJS_Extract.verifier.candidate.parse_shape (fun {T U} {N} => Op3I_Std.ops.sliceNe)
+        (fun {T U} {N} => Op3I_Std.ops.sliceEq) (fun {T F} => Op3I_Std.ops.iterAny) proof) =
+    Op3I_Source.verifier.candidate.parse_shape Op3I_Std.ops proof
+'NJS_Parse.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJS_Keys.source (raw : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (lo n tree : Aeneas.Std.Usize)
+  (split : lo = 0#usize ∧ n = 10#usize ∨ lo = 10#usize ∧ n = 12#usize) (kind : ↑tree < 3)
+  (canonical : ∀ k < 22, ↑(↑raw)[k]! < 262144) :
+  NJS_Extract.verifier.candidate.batch_keys raw lo n tree = AspisR1.Port4B_KeyInstall.build raw lo n tree
+'NJS_Keys.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJS_Sort.source (keys : NJS_Sort.Keys) (n : Aeneas.Std.Usize) (positive : 0 < ↑n) (size : ↑n ≤ 16) :
+  NJS_Extract.verifier.candidate.sort_batch_keys keys n = MultiproofSortRef.sort_reference.sort_rows keys 1#usize n
+'NJS_Sort.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r472f06ceddf743ceab10bf9214376fca.scope; invocation ID: 9769d42758ea4d0b9d46b59885a05014

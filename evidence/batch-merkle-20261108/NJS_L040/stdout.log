@@ -1,0 +1,36 @@
+NJS_Keys.lean:15:19: error: Application type mismatch: The argument
+  ↑n
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.41
+of sort `Type (?u.41 + 1)` in the application
+  @InitialSeg ↑n
+NJS_Keys.lean:15:26: error(lean.unknownIdentifier): Unknown identifier `ter.start.val`
+NJS_Keys.lean:15:46: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ f ≤ 16
+  e ≥ 0
+  e + f ≤ 22
+where
+ e := ↑↑lo
+ f := ↑↑iter.start
+NJS_Keys.lean:46:79: error: Tactic `rfl` failed: The left-hand side
+  ↑{ start := 0#usize, «end» := n }.start + ↑n
+is not definitionally equal to the right-hand side
+  ↑n
+
+raw : Std.Array U32 22#usize
+lo n tree : Usize
+split : lo = 0#usize ∧ n = 10#usize ∨ lo = 10#usize ∧ n = 12#usize
+kind : ↑tree < 3
+canonical : ∀ k < 22, ↑(↑raw)[k]! < 262144
+size : ↑n ≤ 16
+fit : ↑lo + ↑n ≤ 22
+⊢ ↑{ start := 0#usize, «end» := n }.start + ↑n = ↑n
+NJS_Keys.source (raw : Std.Array U32 22#usize) (lo n tree : Usize)
+  (split : lo = 0#usize ∧ n = 10#usize ∨ lo = 10#usize ∧ n = 12#usize) (kind : ↑tree < 3)
+  (canonical : ∀ k < 22, ↑(↑raw)[k]! < 262144) :
+  NJS_Extract.verifier.candidate.batch_keys raw lo n tree = Port4B_KeyInstall.build raw lo n tree
+'NJS_Keys.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NJS_Keys.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -83,7 +83,9 @@
         ]
       ],
       "lean_roots": [
-        "NJS_DigestLeaves.leaf"
+        "NJS_RuntimeDigest.leaf",
+        "NJS_RuntimeDigest.forwarding",
+        "NJS_DigestDomains.leaf"
       ],
       "complete_carrier": true,
       "premise_policy": "Only the existing runtime SHA interpretation, no successful child or endpoint assumption",
@@ -104,7 +106,9 @@
         ]
       ],
       "lean_roots": [
-        "NJS_DigestLeaves.parent"
+        "NJS_RuntimeDigest.parent",
+        "NJS_RuntimeDigest.forwarding",
+        "NJS_DigestDomains.parent"
       ],
       "complete_carrier": true,
       "premise_policy": "Only the existing runtime SHA interpretation, no successful child or endpoint assumption",
@@ -148,13 +152,101 @@
         ]
       ],
       "lean_roots": [
+        "NJS_BatchLeaf.deployed",
         "NJS_BatchLeaf.source",
         "NJS_BatchLeaf.copied",
-        "AspisR1.Port4B_LeafCode.code_exact"
+        "NJS_BatchLeaf.domains"
       ],
       "complete_carrier": true,
       "premise_policy": "Input length only; concrete privateLeaf specialization and canonical tag constants, no callee success/endpoint assumption",
       "trust": "P6/D188 option A reclassification; exact KMX/std copy; existing SHA value law unchanged",
+      "local_status": "CANDIDATE; combined audit and next ledger gate pending"
+    },
+    {
+      "rows": [
+        "TX1:086",
+        "TX2:057"
+      ],
+      "function": "crates/aspis-r1-cost-probe/src/candidate.rs::parse_shape",
+      "route": "(y)/(ai) direct P6 hybrid",
+      "root_domain": "ALL typed proof Slices; full nominal Result mapping; concrete Op3I_Std models",
+      "native_pairs": [
+        [
+          "NJS_K022",
+          "NJS_K023"
+        ],
+        [
+          "NJS_K024",
+          "NJS_K025"
+        ],
+        [
+          "NJS_K030",
+          "NJS_K031"
+        ]
+      ],
+      "lean_roots": [
+        "NJS_Parse.source",
+        "NJS_Parse.proof_bytes"
+      ],
+      "complete_carrier": true,
+      "premise_policy": "No Prop hypothesis and no free Ops dictionary; initialized original readonly bytes under retained P6/ABI",
+      "trust": "P6/D188 option A RECLASSIFICATION; existing pinned Std/ABI/compiler/source-to-ELF retained; none added/removed",
+      "local_status": "CANDIDATE; combined audit and next ledger gate pending"
+    },
+    {
+      "rows": [
+        "TX1:079",
+        "TX2:051"
+      ],
+      "function": "crates/aspis-r1-cost-probe/src/candidate.rs::batch_keys",
+      "route": "(y)/(ai) direct P6 hybrid",
+      "root_domain": "lo/n=(0,10) or(10,12), tree<3, SAME22 canonical queries<262144",
+      "native_pairs": [
+        [
+          "NJS_K026",
+          "NJS_K027"
+        ],
+        [
+          "NJS_K028",
+          "NJS_K029"
+        ]
+      ],
+      "lean_roots": [
+        "NJS_Keys.source",
+        "NJS_Keys.loop",
+        "NJS_KeyStep.step",
+        "NJS_KeyStep.stop",
+        "NJS_KeyWord.value"
+      ],
+      "complete_carrier": true,
+      "premise_policy": "Only input split/kind/canonicality; no endpoint or child Result assumption; source Range induction includes full zero suffix",
+      "trust": "P6/D188 option A RECLASSIFICATION; existing pinned Std/ABI/compiler/source-to-ELF retained; none added/removed",
+      "local_status": "CANDIDATE; combined audit and next ledger gate pending"
+    },
+    {
+      "rows": [
+        "TX1:093",
+        "TX2:063"
+      ],
+      "function": "crates/aspis-r1-cost-probe/src/candidate.rs::sort_batch_keys",
+      "route": "(y)/(ai) direct P6 hybrid",
+      "root_domain": "arbitrary16 U64 keys;0<n<=16; SAME array, stable strict> insertion sort",
+      "native_pairs": [
+        [
+          "NJS_K020",
+          "NJS_K021"
+        ]
+      ],
+      "lean_roots": [
+        "NJS_Sort.source",
+        "NJS_Sort.inner",
+        "NJS_Sort.outer",
+        "NJS_SortStep.step",
+        "NJS_Swap.value"
+      ],
+      "complete_carrier": true,
+      "premise_policy": "Only positive/bounded occupied prefix; CLOSED getter and full mutable std-swap frame discharged internally",
+      "trust": "P6/D188 option A RECLASSIFICATION; existing pinned Std/ABI/compiler/source-to-ELF retained; none added/removed",
       "local_status": "CANDIDATE; combined audit and next ledger gate pending"
     }
   ]

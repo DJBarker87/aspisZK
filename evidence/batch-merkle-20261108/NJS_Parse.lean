@@ -88,6 +88,9 @@ theorem final {S : Type} (p : Bool×S) :
  (let (b,_):=p;if b then ok (.Err Op3I_Source.verifier.Error.Parse) else ok (.Ok Op3I_Source.transport.Variant.S2)) := by
  rcases p with ⟨b,s⟩;cases b <;>rfl
 
+theorem bind_same {A B : Type} (m : Result A) (f g : A→Result B) (h : ∀ a,f a=g a) :
+ (do let a←m;f a)=(do let a←m;g a) := by cases m <;> simp_all
+
 theorem source (proof : Slice U8) :
  map reply (NJS_Extract.verifier.candidate.parse_shape Op3I_Std.ops.sliceNe Op3I_Std.ops.sliceEq Op3I_Std.ops.iterAny proof) =
  Op3I_Source.verifier.candidate.parse_shape Op3I_Std.ops proof := by
@@ -96,8 +99,31 @@ theorem source (proof : Slice U8) :
    NJS_Extract.compact.MAGIC,Op3I_Source.compact.MAGIC,bind_tc_ok,
    NJS_Extract.Slice.Insts.CoreCmpPartialEqArray,Op3I_Source.Slice.Insts.CoreCmpPartialEqArray,
    NJS_Extract.transport.Variant.tag,Op3I_Source.transport.Variant.tag]
+ by_cases length : (Slice.len proof != 57607#usize)=true
+ · simp only [if_pos length]
+ · simp only [if_neg length]
+   apply bind_same
+   intro headBytes
+   apply bind_same
+   intro wrongMagic
+   by_cases magic : wrongMagic=true
+   · simp only [if_pos magic]
+   · simp only [if_neg magic]
+     apply bind_same
+     intro tag
+     by_cases badTag : (tag != 2#u8)=true
+     · simp only [if_pos badTag]
+     · simp only [if_neg badTag]
+       apply bind_same
+       intro tail
+       apply bind_same
+       intro iter
+       apply bind_same
+       rintro ⟨hit,rest⟩
+       cases hit <;>rfl
 
 #check source
+#print axioms bind_same
 #print axioms map_bind
 #print axioms map_ite
 #print axioms final

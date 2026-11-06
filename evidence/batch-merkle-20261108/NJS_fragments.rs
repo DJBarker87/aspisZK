@@ -1,5 +1,5 @@
 // Mechanically selected frozen candidate.rs loop94..98 body; wrapper only exposes the pre-state.
-fn key_iteration(queries:&[u32;22],lo:usize,n:usize,tree:usize,mut keys:[u64;16],start:usize)->([u64;16],usize,bool){
+fn key_iteration(queries:&[u32;22],lo:usize,n:usize,tree:usize,mut keys:[u64;16],start:usize)->([u64;16],usize,usize,bool){
  let mut iter=start..n;let next=iter.next();
  if let Some(j)=next {
 
@@ -7,8 +7,8 @@ fn key_iteration(queries:&[u32;22],lo:usize,n:usize,tree:usize,mut keys:[u64;16]
         let index = if tree == 2 { u / 4 } else { u };
         keys[j] = (u64::from(index) << 8) | j as u64;
     
- (keys,iter.start,true)
- }else{(keys,iter.start,false)}
+ (keys,iter.start,iter.end,true)
+ }else{(keys,iter.start,iter.end,false)}
 }
 
 fn sort_iteration(mut keys:[u64;16],mut j:usize)->([u64;16],usize,bool){

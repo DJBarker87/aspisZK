@@ -1,0 +1,58 @@
+{"attempt": "NJS_L044", "exit_status": 1, "wall_seconds": 4.442525692051277, "peak_rss_kib": "4426872", "swaps": "0", "print_axioms": ["'NJS_SortStep.predecessor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJS_SortStep.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJS_SortStep.lean:14:46: error: Type mismatch: After simplification, term
+  BitVec.isLt j.bv
+ has type
+  @LT.lt ℕ instLTNat j.bv.toNat (2 ^ System.Platform.numBits)
+but is expected to have type
+  @LT.lt ℕ instLTNat (↑j) (2 ^ UScalarTy.Usize.numBits)
+NJS_SortStep.lean:43:93: error: Application type mismatch: The argument
+  lowerBound
+has type
+  ↑lower < 16
+but is expected to have type
+  ↑lower < Array.length keys
+in the application
+  Array.index_usize_spec keys lower lowerBound
+NJS_SortStep.lean:44:92: error: Application type mismatch: The argument
+  bound
+has type
+  ↑j < 16
+but is expected to have type
+  ↑j < Array.length keys
+in the application
+  Array.index_usize_spec keys j bound
+NJS_Sort
+...
+ower = ok left
+leftValue : left = (↑keys)[↑lower]
+right : U64
+readRight : Array.index_usize keys j = ok right
+rightValue : right = (↑keys)[↑j]
+len : (↑keys).length = 16
+leftVal : left = (↑keys)[↑lower]!
+rightVal : right = (↑keys)[↑j]!
+body :
+  NJS_Extract.verifier.candidate.sort_batch_keys_loop0_loop0.body keys j =
+    if left > right then do
+      let _ ← NJS_Swap.run keys lower j
+      ok sorry
+    else ok (ControlFlow.done keys)
+compare : left > right
+out : NJS_Swap.Keys
+swapRun : NJS_Swap.run keys lower j = ok out
+outEq : out = (Std.Array.set keys lower (↑keys)[↑j]!).set j (↑keys)[↑lower]!
+post : NBI_Sort.NativeStep keys j (sort_reference.InsertStep.Next out lower)
+⊢ ok sorry = ok (ControlFlow.cont (out, lower))
+NJS_SortStep.lean:54:86: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp [̵N̵J̵S̵_̵E̵x̵t̵r̵a̵c̵t̵.̵v̵e̵r̵i̵f̵i̵e̵r̵.̵c̵a̵n̵d̵i̵d̵a̵t̵e̵.̵s̵o̵r̵t̵_̵b̵a̵t̵c̵h̵_̵k̵e̵y̵s̵_̵l̵o̵o̵p̵0̵_̵l̵o̵o̵p̵0̵.̵b̵o̵d̵y̵,̵g̵u̵a̵r̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵N̵J̵S̵_̵L̵e̵a̵v̵e̵s̵.̵k̵e̵y̵,̵l̵o̵w̵e̵r̵E̵q̵,̵r̵e̵a̵d̵L̵e̵f̵t̵,̵r̵e̵a̵d̵R̵i̵g̵h̵t̵,̵N̵J̵S̵_̵S̵w̵a̵p̵.̵r̵u̵n̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵_̵m̵u̵t̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]̵[̲N̲J̲S̲_̲E̲x̲t̲r̲a̲c̲t̲.̲v̲e̲r̲i̲f̲i̲e̲r̲.̲c̲a̲n̲d̲i̲d̲a̲t̲e̲.̲s̲o̲r̲t̲_̲b̲a̲t̲c̲h̲_̲k̲e̲y̲s̲_̲l̲o̲o̲p̲0̲_̲l̲o̲o̲p̲0̲.̲b̲o̲d̲y̲,̲ ̲g̲u̲a̲r̲d̲,̲ ̲N̲J̲S̲_̲L̲e̲a̲v̲e̲s̲.̲k̲e̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲l̲o̲w̲e̲r̲E̲q̲,̲ ̲r̲e̲a̲d̲L̲e̲f̲t̲,̲ ̲r̲e̲a̲d̲R̲i̲g̲h̲t̲,̲ ̲N̲J̲S̲_̲S̲w̲a̲p̲.̲r̲u̲n̲,̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲_̲m̲u̲t̲,̲ ̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NJS_SortStep.predecessor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NJS_SortStep.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-ra32d3ad57ee047fd959fcca0254c3700.scope; invocation ID: d23d61cd0bf94736b888494cc57a3458

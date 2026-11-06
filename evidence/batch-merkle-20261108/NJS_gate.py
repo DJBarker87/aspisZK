@@ -23,7 +23,8 @@ h=(E/'NJS_harness.rs').read_bytes();assert not any(t in h.decode() for t in ['st
 (S/'NJS_harness.rs').write_bytes(h);p.write_bytes(raw+append);lib.write_bytes(lib_patched)
 diff=''.join(difflib.unified_diff(raw.decode().splitlines(True),(raw+append).decode().splitlines(True),fromfile='a/'+str(p.relative_to(S)),tofile='b/'+str(p.relative_to(S))))
 libdiff=''.join(difflib.unified_diff(lib_raw.decode().splitlines(True),lib_patched.decode().splitlines(True),fromfile='a/'+str(lib.relative_to(S)),tofile='b/'+str(lib.relative_to(S))))
-(out/'NJS_harness.patch').write_text(diff+libdiff+'\n'+''.join(difflib.unified_diff([],h.decode().splitlines(True),fromfile='/dev/null',tofile='b/NJS_harness.rs')))
+fragmentdiff=''.join(difflib.unified_diff([],frag.decode().splitlines(True),fromfile='/dev/null',tofile='b/NJS_fragments.rs'))
+(out/'NJS_harness.patch').write_text(diff+libdiff+fragmentdiff+'\n'+''.join(difflib.unified_diff([],h.decode().splitlines(True),fromfile='/dev/null',tofile='b/NJS_harness.rs')))
 (out/'NJS_INPUTS.json').write_text(json.dumps(dict(frozen_revision=stage.REV,harness_sha256=stage.sha(h),patch_sha256=stage.sha(diff.encode()),KMX_patch_sha256=stage.sha(patch),cargo_target=os.environ['CARGO_TARGET_DIR'],source_sha256=stage.sha(raw),native_command=x['native_command']),indent=2)+'\n')
 try:r=subprocess.run(x['native_command'],cwd=E,env={**os.environ,'CARGO_NET_OFFLINE':'true'})
 finally:

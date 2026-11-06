@@ -1,0 +1,30 @@
+{"attempt": "NJS_L050", "exit_status": 0, "wall_seconds": 3.7663166688289493, "peak_rss_kib": "4385000", "swaps": "0", "print_axioms": ["'NJS_RuntimeDigest.input' depends on axioms: [propext]", "'NJS_RuntimeDigest.realization' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJS_RuntimeDigest.leaf' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJS_RuntimeDigest.parent' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NJS_RuntimeDigest.leaf (H : Bytes → State) (tag : U8) (value : Slice U8) (salt : Std.Array U8 32#usize)
+  (_width : (↑value).length ≤ 480) :
+  NDH_TranscriptReference.leaf_ref (reference H) () tag value salt =
+    ok
+      (AspisV8R19.SqueezeOracleBridge.encodeState
+        (H
+          (Merkle32Leaf.leafInput (NDH_MerkleGrammar.byte tag) (List.map NDH_MerkleGrammar.byte ↑value)
+            (List.map NDH_MerkleGrammar.byte ↑salt))))
+NJS_RuntimeDigest.parent (H : Bytes → State) (children : Std.Array (Std.Array U8 32#usize) 8#usize) :
+  NDH_TranscriptReference.parent_ref (reference H) () children =
+    ok (AspisV8R19.SqueezeOracleBridge.encodeState (H (Merkle32Path.nodeInput (NDH_MerkleGrammar
+...
+NJS_RuntimeDigest.leaf (H : Bytes → State) (tag : U8) (value : Slice U8) (salt : Std.Array U8 32#usize)
+  (_width : (↑value).length ≤ 480) :
+  NDH_TranscriptReference.leaf_ref (reference H) () tag value salt =
+    ok
+      (AspisV8R19.SqueezeOracleBridge.encodeState
+        (H
+          (Merkle32Leaf.leafInput (NDH_MerkleGrammar.byte tag) (List.map NDH_MerkleGrammar.byte ↑value)
+            (List.map NDH_MerkleGrammar.byte ↑salt))))
+NJS_RuntimeDigest.parent (H : Bytes → State) (children : Std.Array (Std.Array U8 32#usize) 8#usize) :
+  NDH_TranscriptReference.parent_ref (reference H) () children =
+    ok (AspisV8R19.SqueezeOracleBridge.encodeState (H (Merkle32Path.nodeInput (NDH_MerkleGrammar.children children))))
+'NJS_RuntimeDigest.input' depends on axioms: [propext]
+'NJS_RuntimeDigest.realization' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJS_RuntimeDigest.leaf' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJS_RuntimeDigest.parent' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r16ea8b6b26fc43dfbeda19bd786ef441.scope; invocation ID: 71ae7e479e7d451b8aa7908fc4bc9977
