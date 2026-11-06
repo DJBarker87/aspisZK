@@ -25,3 +25,17 @@ K002..K047 deliver23 matched pairs; K001 remains a code-generation failure with 
 ## Complete parent source stage
 
 All four exact-source roots pass:261 L049,237 L107,263 L109,256 L117; only propext/Classical.choice/Quot.sound. The full84 gather frame is L114; native23 pairs are complete. Gate manifest selects78 current-source modules,128 new audited theorem roots and10,962 total roots including private raw inventory. One combined gate is planned (118..138),16 initial raw partitions balanced by predecessor edge counts. Candidate source interfaces are recorded in NLH_ROOT_STATEMENTS.md. No authoritative credit before the next ledger gate.
+
+## Final delivery
+
+Four locally gated candidates:261 AspisR1.NLH_SemanticFold.source (L049),237 AspisR1.NLH_CompRoot.source (L107),263 AspisR1.NLH_PartsRoot.source (L109),256 AspisR1.NLH_WrapperRoot.source (L117). The exact caller domains and all11 SAME-argument substitutions are in NLH_ROOT_STATEMENTS.md and NLH_CALLEE_COMPOSITION.json. No endpoint/child-success/Run/Ops premise occurs in a source root.
+
+Combined L120 passes with the headline and all required NKW/NKR/NKY modules; no private source-name lookup. NFX scan L122 exits0, all8 planted fixtures L121 pass.16 disjoint raw partitions L123..L138 cover10,962 roots, including all128 new theorem roots and the complete private rows_ext inventory. Raw axioms are only propext/Classical.choice/Quot.sound. Original nonzero collector exits for NKR_ScheduleExt.transition and NHC_DecodeModel.decoder_error are retained and listed in NLH_AUDIT.json. Only one full combined audit was performed.
+
+47 Kani scopes supply23 positive/failing-control pairs plus retained K001 code-generation failure;138 Lean/support scopes;0 extraction. Caps never raised; no timed-out or memory-killed shape rerun unchanged. All native graphs match the frozen lock, all post-run lock hashes agree, source checks pass;239 selected Aeneas objects are identical throughout. Every scope carries exact target/command, source revision/hash, status, wall time, peak RSS, swap, cap/admission and axioms evidence. No shipped-file change or ELF rebuild; no new ELF reproducibility claim.
+
+Retained export: /home/dombarker/project-offloads/codex-cx-terminal6-20261110/NLH_exports_20261110 (79 modules,9,230,778 bytes). NLH_EXPORT.json pins every source/object hash and the complete import path. Seed size26,136,496 bytes; own workspace, target and TMPDIR retained. No sibling or session-A worktree touched.
+
+NLH_CLOSED.json and NLH_LEDGER_DELTA.json submit four conditional proposed closures. Authoritative baseline remains NKW ledger20:560 CLOSED/0 QUALIFIED/39 OPEN of599; delta0. Adoption, including predecessor candidates, is the next ledger gate's decision. NLC owns136 and must install the explicit256 input domain. Native contract semantic transport/std/runtime digest are retained option-A reclassifications, never trust removal.100-bit per-attempt soundness, privacy and two-transaction headline target are not established by this job.
+
+Native scope qualification: the retained predecessor scratch corpus contains older, off-path Pool source. Every selected native closure excludes the Pool program; the four owned statement functions use the pinned4bb source. Required Pool source revision is b936275465. No Pool source-parity, native bridge or ELF-rebuild result is claimed. This is disclosed for the next ledger/source review; it is not a Pool closure packet.

@@ -1,3 +1,7 @@
 # Own client validation changes
 
 Only NLH_run.py is changed; S2W_run_host.py, the reservation barrier, shim and shared infrastructure stay byte-identical. The client now resolves `lake env printenv LEAN_PATH` before a Lean compile and pins the Aeneas/direct objects that this effective path selects. Native auditors use the direct configured path and are pinned on that path. This strengthens the original client, which pinned the configured path only. Historical receipt parity must be checked against the effective library selection; no unchanged proof replay is authorized merely to repeat an already identical selection. No cap, timeout, scope admission, source check or budget guard is relaxed.
+
+Gate continuation repairs: pass attempt ID to NLH_run.py (pre-admission assertion, no scope charged); use the actual global raw name NHC_DecodeModel.decoder_error in the two-name disagreement allow-list. The previous AspisR1-prefixed spelling was wrong. L131 raw walk is standard-only, original exit1 retained; resume132 without replaying131. No allowed axiom, count check, artifact check or resource validation is relaxed.
+
+Evidence hygiene: all47 collected2,072,716-byte metadata payloads are byte-identical. NLH_dedup_graph.py verifies each against its per-run graph_sha256, stores one lossless NLH_RESOLVED_GRAPH.json.xz with checksum, and replaces only redundant local output payloads with explicit .ref.json records. Per-run validations and every host payload are retained. Final validation checks the archive and every reference; no proof or validator is weakened.

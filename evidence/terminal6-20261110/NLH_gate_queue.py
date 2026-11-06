@@ -2,10 +2,10 @@ from pathlib import Path
 import json,subprocess,sys
 p=Path(__file__).resolve().parent
 mapping=json.loads((p/'NLH_GATE_ATTEMPTS.json').read_text())
-allowed={'AspisR1.NKR_ScheduleExt.transition','AspisR1.NHC_DecodeModel.decoder_error'}
+allowed={'AspisR1.NKR_ScheduleExt.transition','NHC_DecodeModel.decoder_error'}
 for mode,a in mapping.items():
  if len(sys.argv)>1 and int(a[5:])<int(sys.argv[1]):continue
- r=subprocess.run(['python3',str(p/'NLH_run.py'),str(p/(a+'.json'))])
+ r=subprocess.run(['python3',str(p/'NLH_run.py'),a])
  if r.returncode:
   q=p/'NLH_audit'/mode/'receipt.json'
   if not(mode.startswith('proof')and q.exists()):sys.exit(r.returncode)
