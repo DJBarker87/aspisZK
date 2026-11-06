@@ -1,0 +1,73 @@
+{
+ "status": "PASS",
+ "reviewed_transcription": "PCB-RT-300-carriers (option-A P6/D188 reclassification after E004 dependency compilation timeout)",
+ "native_revision": "b936275465600469312d1f058cdc91ea2a11f3dc",
+ "input_fields": [
+  [
+   "current_page",
+   "u8"
+  ],
+  [
+   "next_page",
+   "u8"
+  ],
+  [
+   "vault_authority",
+   "u8"
+  ],
+  [
+   "vault_token_account",
+   "u8"
+  ]
+ ],
+ "output_fields": [
+  [
+   "vault_authority",
+   "u8"
+  ],
+  [
+   "vault_token_account",
+   "u8"
+  ]
+ ],
+ "projection_tokens": [
+  "{",
+  "VaultBumpHintsV1",
+  "{",
+  "vault_authority",
+  ":",
+  "h",
+  ".",
+  "vault_authority",
+  ",",
+  "vault_token_account",
+  ":",
+  "h",
+  ".",
+  "vault_token_account",
+  "}",
+  "}"
+ ],
+ "native_reference_body_identical": true,
+ "isolated_reference_body_identical": true,
+ "semantic_map": "identity on all labelled u8 fields; no ABI/layout equality asserted",
+ "mutations_rejected": 5,
+ "mutations_tested": [
+  "#[derive(Clone,Copy)]\npub struct PoolV1PairForestTerminalBumpHintsV1 {pub current_page:u8,pub next_page:u8,pub vault_authority:u8,pub vault_token_account:u8}\n#[derive(Clone,Copy)]\npub struct VaultBumpHintsV1 {pub vault_authority:u8,pub vault_token_account:u8}\npub fn reference(h:PoolV1PairForestTerminalBumpHintsV1)->VaultBumpHintsV1 {\n VaultBumpHintsV1 {vault_authority:h.current_page,vault_token_account:h.vault_token_account}\n}\n",
+  "#[derive(Clone,Copy)]\npub struct PoolV1PairForestTerminalBumpHintsV1 {pub current_page:u8,pub next_page:u8,pub vault_authority:u8,pub vault_token_account:u8}\n#[derive(Clone,Copy)]\npub struct VaultBumpHintsV1 {pub vault_authority:u8,pub vault_token_account:u8}\npub fn reference(h:PoolV1PairForestTerminalBumpHintsV1)->VaultBumpHintsV1 {\n VaultBumpHintsV1 {vault_authority:h.vault_authority,vault_token_account:h.next_page}\n}\n",
+  "#[derive(Clone,Copy)]\npub struct PoolV1PairForestTerminalBumpHintsV1 {pub current_page:u16,pub next_page:u8,pub vault_authority:u8,pub vault_token_account:u8}\n#[derive(Clone,Copy)]\npub struct VaultBumpHintsV1 {pub vault_authority:u8,pub vault_token_account:u8}\npub fn reference(h:PoolV1PairForestTerminalBumpHintsV1)->VaultBumpHintsV1 {\n VaultBumpHintsV1 {vault_authority:h.vault_authority,vault_token_account:h.vault_token_account}\n}\n",
+  "#[derive(Clone,Copy)]\npub struct PoolV1PairForestTerminalBumpHintsV1 {pub current_page:u8,pub next_page:u8,pub wrong_authority:u8,pub vault_token_account:u8}\n#[derive(Clone,Copy)]\npub struct VaultBumpHintsV1 {pub wrong_authority:u8,pub vault_token_account:u8}\npub fn reference(h:PoolV1PairForestTerminalBumpHintsV1)->VaultBumpHintsV1 {\n VaultBumpHintsV1 {vault_authority:h.vault_authority,vault_token_account:h.vault_token_account}\n}\n",
+  "#[derive(Clone,Copy)]\npub struct PoolV1PairForestTerminalBumpHintsV1 {pub current_page:u8,pub next_page:u8,pub vault_authority:u8,pub vault_token_account:u8}\n#[derive(Clone,Copy)]\npub struct VaultBumpHintsV1 {pub vault_authority:u8,pub vault_token_account:u8}\npub fn reference(h:PoolV1PairForestTerminalBumpHintsV1)->VaultBumpHintsV1 {\n VaultBumpHintsV1 {vault_authority:0,vault_token_account:h.vault_token_account}\n}\n"
+ ],
+ "reference_sha256": "3b293dbee27b25a1c735b78eb92cdbf4834c6cde0ca0af91672cd2c89cebd865",
+ "failed_full_extraction": "PCB_E004",
+ "isolated_extraction": "PCB_E005",
+ "native_positive": "PCB_K055",
+ "native_inverse": "PCB_K056",
+ "fidelity": [
+  "PCB_K041",
+  "PCB_K042",
+  "PCB_K043",
+  "PCB_K044"
+ ]
+}
