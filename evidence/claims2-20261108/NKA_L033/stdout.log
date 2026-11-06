@@ -1,0 +1,286 @@
+NKA_generated/NKA_FinishTrace.lean:194:98: error: unsolved goals
+reservation : NP6_StdModel.Reservation
+H : Type
+D : aspis_core.Digest32 H
+pub : pool_v1.pair_forest_semantic_terminal.r0.Public
+pre : r1_wire.Prefix
+challenges : r1_wire.Challenges
+e : r1_wire.Error
+⊢ (PreparedHashCode.run do
+      let cf ← liftM (ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          liftM (VerifyPrefix.mark none 2#u8)
+          let r1 ← liftM ((IDa_Deployed.boundaries reservation).claims pre)
+          let cf1 ←
+            liftM
+                (match r1 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← liftM ((IDa_Deployed.boundaries reservation).terminal pub val1 val.2.1 challenges)
+              let r3 ← liftM (core.result.Result.map_err (FinishModel.closureFn11 D) r2 ())
+              let cf2 ←
+                liftM
+                    (match r3 with
+                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    | core.result.Result.Err e =>
+                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  liftM (VerifyPrefix.mark none 3#u8)
+                  let a ← liftM ((IDa_Deployed.boundaries reservation).fromFn 16#usize (FinishModel.closureFn9 D) val1)
+                  let a1 ← liftM ((IDa_Deployed.boundaries reservation).fromFn 10#usize (FinishModel.closureFn5 D) val1)
+                  let a2 ← liftM (val1.index_usize 0#usize)
+                  let q ← liftM (a2.index_usize 27#usize)
+                  let mask ← liftM ((IDa_Deployed.boundaries reservation).mask a a1 q val.2.1)
+                  let r4 ← liftM (pre.validated_record 25#u8)
+                  let cf3 ←
+                    liftM
+                        (match r4 with
+                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                        | core.result.Result.Err e =>
+                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue vr => do
+                      let r5 ← liftM (NJM_RoundJoin.R.decode 29#usize vr 87#usize)
+                      let cf4 ←
+                        liftM
+                            (match r5 with
+                            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                            | core.result.Result.Err e =>
+                              ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                      match cf4 with
+                        | core.ops.control_flow.ControlFlow.Continue val3 => do
+                          let q1 ← liftM ((IDa_Deployed.boundaries reservation).mul challenges.eta val2)
+                          let q2 ← liftM ((IDa_Deployed.boundaries reservation).add mask q1)
+                          let q3 ← liftM (val3.index_usize 28#usize)
+                          let masked_terminal ← liftM ((IDa_Deployed.boundaries reservation).add q2 q3)
+                          let b ←
+                            liftM
+                                (core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31
+                                  val.1 masked_terminal)
+                          if b = true then pure (core.result.Result.Err r1_wire.Error.Terminal)
+                            else do
+                              liftM (VerifyPrefix.mark none 4#u8)
+                              let state_before_z0 ← liftM (r1_wire.SemanticTranscript.impl.state D val.2.2)
+                              let cf5 ←
+                                liftM
+                                    (match r4 with
+                                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                    | core.result.Result.Err e =>
+                                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                              match cf5 with
+                                | core.ops.control_flow.ControlFlow.Continue vr1 => do
+                                  let __x ← circleValidated (IDa_Deployed.boundaries reservation) D val.2.2 vr1
+                                  let cf6 ←
+                                    liftM
+                                        (match __x.1 with
+                                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                        | core.result.Result.Err e =>
+                                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                                  match cf6 with
+                                    | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                      let r7 ← liftM (pre.validated_record 26#u8)
+                                      let cf7 ←
+                                        liftM
+                                            (match r7 with
+                                            | core.result.Result.Ok v =>
+                                              ok (core.ops.control_flow.ControlFlow.Continue v)
+                                            | core.result.Result.Err e =>
+                                              ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                                      match cf7 with
+                                        | core.ops.control_flow.ControlFlow.Continue vr2 => do
+                                          let r8 ← liftM (NJM_RoundJoin.R.decode 29#usize vr2 0#usize)
+                                          let cf8 ←
+                                            liftM
+                                                (match r8 with
+                                                | core.result.Result.Ok v =>
+                                                  ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                | core.result.Result.Err e =>
+                                                  ok
+                                                    (core.ops.control_flow.ControlFlow.Break
+                                                      (core.result.Result.Err e)))
+                                          match cf8 with
+                                            | core.ops.control_flow.ControlFlow.Continue val5 => do
+                                              let cf9 ←
+                                                liftM
+                                                    (match r7 with
+                                                    | core.result.Result.Ok v =>
+                                                      ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                    | core.result.Result.Err e =>
+                                                      ok
+                                                        (core.ops.control_flow.ControlFlow.Break
+                                                          (core.result.Result.Err e)))
+                                              match cf9 with
+                                                | core.ops.control_flow.ControlFlow.Continue vr3 => do
+                                                  let __x ←
+                                                    circleValidated (IDa_Deployed.boundaries reservation) D __x.2 vr3
+                                                  let cf10 ←
+                                                    liftM
+                                                        (match __x.1 with
+                                                        | core.result.Result.Ok v =>
+                                                          ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                        | core.result.Result.Err e =>
+                                                          ok
+                                                            (core.ops.control_flow.ControlFlow.Break
+                                                              (core.result.Result.Err e)))
+                                                  match cf10 with
+                                                    | core.ops.control_flow.ControlFlow.Continue val6 => do
+                                                      liftM (VerifyPrefix.mark none 5#u8)
+                                                      let b1 ← liftM (FinishModel.pointEq val4 val6)
+                                                      if b1 = true then
+                                                          pure (core.result.Result.Err r1_wire.Error.EqualCirclePoints)
+                                                        else do
+                                                          let r10 ← liftM (FinishModel.payload pre 2#u8)
+                                                          let cf11 ←
+                                                            liftM
+                                                                (match r10 with
+                                                                | core.result.Result.Ok v =>
+                                                                  ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                                | core.result.Result.Err e =>
+                                                                  ok
+                                                                    (core.ops.control_flow.ControlFlow.Break
+                                                                      (core.result.Result.Err e)))
+                                                          match cf11 with
+                                                            | core.ops.control_flow.ControlFlow.Continue val7 => do
+                                                              let r11 ←
+                                                                liftM
+                                                                    (core.array.TryFromArrayCopySlice.try_from 32#usize
+                                                                      core.marker.CopyU8 val7)
+                                                              let a3 ←
+                                                                liftM
+                                                                    ((IDa_Deployed.boundaries reservation).unwrapRoot
+                                                                      r11)
+                                                              pure
+                                                                  (core.result.Result.Ok
+                                                                    { roots := Array.make 2#usize [pre.c1_root, a3] ⋯,
+                                                                      challenges := challenges, alpha := val.2.1,
+                                                                      claims := val1, extra := val3, before_z1 := val5,
+                                                                      state_before_z0 := state_before_z0,
+                                                                      z := Array.make 2#usize [val4, val6] ⋯,
+                                                                      transcript := __x.2 })
+                                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                                              liftM
+                                                                (match residual with
+                                                                | core.result.Result.Ok x =>
+                                                                  core.convert.Infallible.rec
+                                                                    (fun x =>
+                                                                      Result
+                                                                        (core.result.Result (r1_semantic.Verified H)
+                                                                          r1_wire.Error))
+                                                                    x
+                                                                | core.result.Result.Err v =>
+                                                                  ok (core.result.Result.Err v))
+                                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                                      liftM
+                                                        (match residual with
+                                                        | core.result.Result.Ok x =>
+                                                          core.convert.Infallible.rec
+                                                            (fun x =>
+                                                              Result
+                                                                (core.result.Result (r1_semantic.Verified H)
+                                                                  r1_wire.Error))
+                                                            x
+                                                        | core.result.Result.Err v => ok (core.result.Result.Err v))
+                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                  liftM
+                                                    (match residual with
+                                                    | core.result.Result.Ok x =>
+                                                      core.convert.Infallible.rec
+                                                        (fun x =>
+                                                          Result
+                                                            (core.result.Result (r1_semantic.Verified H) r1_wire.Error))
+                                                        x
+                                                    | core.result.Result.Err v => ok (core.result.Result.Err v))
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              liftM
+                                                (match residual with
+                                                | core.result.Result.Ok x =>
+                                                  core.convert.Infallible.rec
+                                                    (fun x =>
+                                                      Result
+                                                        (core.result.Result (r1_semantic.Verified H) r1_wire.Error))
+                                                    x
+                                                | core.result.Result.Err v => ok (core.result.Result.Err v))
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          liftM
+                                            (match residual with
+                                            | core.result.Result.Ok x =>
+                                              core.convert.Infallible.rec
+                                                (fun x =>
+                                                  Result (core.result.Result (r1_semantic.Verified H) r1_wire.Error))
+                                                x
+                                            | core.result.Result.Err v => ok (core.result.Result.Err v))
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      liftM
+                                        (match residual with
+                                        | core.result.Result.Ok x =>
+                                          core.convert.Infallible.rec
+                                            (fun x =>
+                                              Result (core.result.Result (r1_semantic.Verified H) r1_wire.Error))
+                                            x
+                                        | core.result.Result.Err v => ok (core.result.Result.Err v))
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  liftM
+                                    (match residual with
+                                    | core.result.Result.Ok x =>
+                                      core.convert.Infallible.rec
+                                        (fun x => Result (core.result.Result (r1_semantic.Verified H) r1_wire.Error)) x
+                                    | core.result.Result.Err v => ok (core.result.Result.Err v))
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          liftM
+                            (match residual with
+                            | core.result.Result.Ok x =>
+                              core.convert.Infallible.rec
+                                (fun x => Result (core.result.Result (r1_semantic.Verified H) r1_wire.Error)) x
+                            | core.result.Result.Err v => ok (core.result.Result.Err v))
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      liftM
+                        (match residual with
+                        | core.result.Result.Ok x =>
+                          core.convert.Infallible.rec
+                            (fun x => Result (core.result.Result (r1_semantic.Verified H) r1_wire.Error)) x
+                        | core.result.Result.Err v => ok (core.result.Result.Err v))
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (match residual with
+                    | core.result.Result.Ok x =>
+                      core.convert.Infallible.rec
+                        (fun x => Result (core.result.Result (r1_semantic.Verified H) r1_wire.Error)) x
+                    | core.result.Result.Err v => ok (core.result.Result.Err v))
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              liftM
+                (match residual with
+                | core.result.Result.Ok x =>
+                  core.convert.Infallible.rec
+                    (fun x => Result (core.result.Result (r1_semantic.Verified H) r1_wire.Error)) x
+                | core.result.Result.Err v => ok (core.result.Result.Err v))
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (match residual with
+            | core.result.Result.Ok x =>
+              core.convert.Infallible.rec (fun x => Result (core.result.Result (r1_semantic.Verified H) r1_wire.Error))
+                x
+            | core.result.Result.Err v => ok (core.result.Result.Err v))) =
+    ([], ok (core.result.Result.Err e))
+NKA_generated/NKA_FinishTrace.lean:195:19: warning: This simp argument is unused:
+  PreparedHashCode.run
+
+Hint: Omit it from the simp argument list.
+  simp [afterRounds,P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵r̵u̵n̵,̵
+  ̵  ̵core.result.Result.Insts.CoreOpsTry.branch,
+     ̲core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NKA_FinishTrace.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKA_FinishTrace.rounds_reject' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NKA_FinishTrace.source : ∀ (reservation : NP6_StdModel.Reservation) {H : Type}
+  (D : aspis_core.Digest32 H) (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (pre : r1_wire.Prefix)
+  (before : r1_wire.SemanticTranscript H) (challenges : r1_wire.Challenges),
+  finish NJM_RoundJoin.R (IDa_Deployed.boundaries reservation) D pub pre before challenges none = do
+    let result ← rounds NJM_RoundJoin.R D pre before
+    afterRounds reservation D pub pre challenges result :=
+fun reservation {H} D pub pre before challenges =>
+  Eq.refl (finish NJM_RoundJoin.R (IDa_Deployed.boundaries reservation) D pub pre before challenges none)

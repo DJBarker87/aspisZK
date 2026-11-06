@@ -11,3 +11,7 @@ Plan: seed NJT export first then NJW; pin selected dependencies including Aeneas
 136: check research read-only for 256; preserve source order and abort prefixes across 129/133/134/142/147/256.
 
 Validation pending. Exact target, exit, wall, peak RSS, swap, source revision, dependency hashes and printed axioms will be recorded per attempt. No keys touched; no shipped changes or ELF rebuild trigger. No pushes.
+
+## Focused stage complete
+
+ClaimsRoot L040 and OuterCut L014 compile standard-only;13current proof modules/34audit roots pinned. Allocation/error/data/initialized-prefix/owned-carrier support and the emitted-reference replay are composed, with r universally quantified. Exact native cuts and limits are NKA_CUTS.md; root hypotheses/hidden operations are NKA_HYPOTHESIS_INVENTORY.md. Explicit KMX campaign K018–028 passes all expected original-name positive/control verdicts; outer K004/K005already uses identical KMX. No OOM/leak-control credit.136Result/Code source-order and abort-prefix support compiles;256was absent from research. Combined/raw/coherence gate and next ledger admission remain pending. No authoritative count changes.

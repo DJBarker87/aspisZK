@@ -1,0 +1,33 @@
+--- a/crates/aspis-core/src/r0/heap.rs
++++ b/crates/aspis-core/src/r0/heap.rs
+@@ -70,3 +70,30 @@
+  #[kani::proof] #[kani::unwind(4)] fn cleanup_control(){check(1);}
+  #[kani::proof] #[kani::unwind(4)] fn rejection_control(){check(2);}
+ }
++
++#[cfg(kani)] mod NKA_reserve_continuation {
++ use super::*;
++ use core::mem::MaybeUninit;
++ type Claims=[[crate::field::QM31;29];3];
++ // Actual heap::uninit continuation after the mapped reserve Result. The
++ // reserve site remains a standard allocator action, not a child oracle.
++ fn continuation(mut out:Vec<MaybeUninit<Claims>>,mapped:Result<(),Error>)->Result<Box<MaybeUninit<Claims>>,Error>{
++  mapped?;
++  unsafe{out.set_len(1);}
++  let ptr=Box::into_raw(out.into_boxed_slice()) as *mut MaybeUninit<Claims>;
++  Ok(unsafe{Box::from_raw(ptr)})
++ }
++ fn check(negative:bool){
++  let returning:bool=kani::any();let mut out=Vec::<MaybeUninit<Claims>>::new();
++  if returning {out.try_reserve_exact(1).unwrap();}
++  let pointer=out.as_ptr();
++  let mapped=if returning{Ok(())}else{Err(Error::Allocation)};
++  let result=continuation(out,mapped);
++  match result {
++   Ok(value)=>{assert!(returning);assert_eq!(value.as_ptr(),pointer.cast::<Claims>());},
++   Err(error)=>{assert!(!returning);assert!(matches!(error,Error::Allocation));if negative{assert!(returning);}}
++  }
++ }
++ #[kani::proof] #[kani::unwind(4)] fn complete_reservation(){check(false);}
++ #[kani::proof] #[kani::unwind(4)] fn complete_reservation_control(){check(true);}
++}

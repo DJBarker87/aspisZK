@@ -1,0 +1,23 @@
+NKA_generated/NKA_FinishTrace.lean:194:75: error: Tactic `rfl` failed: The left-hand side
+  afterRounds reservation D pub pre challenges (core.result.Result.Err e)
+is not definitionally equal to the right-hand side
+  pure (core.result.Result.Err e)
+
+reservation : NP6_StdModel.Reservation
+H : Type
+D : aspis_core.Digest32 H
+pub : pool_v1.pair_forest_semantic_terminal.r0.Public
+pre : r1_wire.Prefix
+challenges : r1_wire.Challenges
+e : r1_wire.Error
+⊢ afterRounds reservation D pub pre challenges (core.result.Result.Err e) = pure (core.result.Result.Err e)
+'AspisR1.NKA_FinishTrace.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKA_FinishTrace.rounds_reject' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NKA_FinishTrace.source : ∀ (reservation : NP6_StdModel.Reservation) {H : Type}
+  (D : aspis_core.Digest32 H) (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (pre : r1_wire.Prefix)
+  (before : r1_wire.SemanticTranscript H) (challenges : r1_wire.Challenges),
+  finish NJM_RoundJoin.R (IDa_Deployed.boundaries reservation) D pub pre before challenges none = do
+    let result ← rounds NJM_RoundJoin.R D pre before
+    afterRounds reservation D pub pre challenges result :=
+fun reservation {H} D pub pre before challenges =>
+  Eq.refl (finish NJM_RoundJoin.R (IDa_Deployed.boundaries reservation) D pub pre before challenges none)

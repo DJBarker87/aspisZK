@@ -1,0 +1,51 @@
+{"attempt": "NKA_L033", "exit_status": 1, "wall_seconds": 12.313119967002422, "peak_rss_kib": "6336868", "swaps": "0", "print_axioms": ["'AspisR1.NKA_FinishTrace.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NKA_FinishTrace.rounds_reject' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKA_generated/NKA_FinishTrace.lean:194:98: error: unsolved goals
+reservation : NP6_StdModel.Reservation
+H : Type
+D : aspis_core.Digest32 H
+pub : pool_v1.pair_forest_semantic_terminal.r0.Public
+pre : r1_wire.Prefix
+challenges : r1_wire.Challenges
+e : r1_wire.Error
+⊢ (PreparedHashCode.run do
+      let cf ← liftM (ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          liftM (VerifyPrefix.mark none 2#u8)
+          let r1 ← liftM ((IDa_Deployed.boundaries reservation).claims pre)
+          let cf1 ←
+            liftM
+                (match r1 with
+                | core.result.Result.Ok 
+...
+ic.Verified H) r1_wire.Error)) x
+                | core.result.Result.Err v => ok (core.result.Result.Err v))
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (match residual with
+            | core.result.Result.Ok x =>
+              core.convert.Infallible.rec (fun x => Result (core.result.Result (r1_semantic.Verified H) r1_wire.Error))
+                x
+            | core.result.Result.Err v => ok (core.result.Result.Err v))) =
+    ([], ok (core.result.Result.Err e))
+NKA_generated/NKA_FinishTrace.lean:195:19: warning: This simp argument is unused:
+  PreparedHashCode.run
+
+Hint: Omit it from the simp argument list.
+  simp [afterRounds,P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵r̵u̵n̵,̵
+  ̵  ̵core.result.Result.Insts.CoreOpsTry.branch,
+     ̲core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NKA_FinishTrace.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKA_FinishTrace.rounds_reject' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NKA_FinishTrace.source : ∀ (reservation : NP6_StdModel.Reservation) {H : Type}
+  (D : aspis_core.Digest32 H) (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (pre : r1_wire.Prefix)
+  (before : r1_wire.SemanticTranscript H) (challenges : r1_wire.Challenges),
+  finish NJM_RoundJoin.R (IDa_Deployed.boundaries reservation) D pub pre before challenges none = do
+    let result ← rounds NJM_RoundJoin.R D pre before
+    afterRounds reservation D pub pre challenges result :=
+fun reservation {H} D pub pre before challenges =>
+  Eq.refl (finish NJM_RoundJoin.R (IDa_Deployed.boundaries reservation) D pub pre before challenges none)
+
+Running as unit: run-r8a50e89fea794988a63a4236add8306a.scope; invocation ID: bce8957c78ad4ccb882f49d88381291b

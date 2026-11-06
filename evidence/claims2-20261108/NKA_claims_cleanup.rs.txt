@@ -1,0 +1,26 @@
+#[cfg(kani)] mod NKA_claims_cleanup {
+ use super::*;
+ use core::mem::MaybeUninit;
+ type Claims=[[QM31;29];3];
+ type Row=[QM31;29];
+ // Literal ONE original claims loop iteration, with the decode reply
+ // explicit. Its Err exits through ? and compiler-generated Box cleanup.
+ fn stage(mut out:Box<MaybeUninit<Claims>>,p:usize,reply:Result<Row,Error>)->Result<Box<MaybeUninit<Claims>>,Error>{
+  unsafe{out.as_mut_ptr().cast::<Row>().add(p).write(reply?);}
+  Ok(out)
+ }
+ fn check(negative:bool){
+  let p:usize=kani::any();kani::assume(p<3);let bad:usize=kani::any();kani::assume(bad<29);
+  let tag:bool=kani::any();let error=if tag{Error::Length{row:25}}else{Error::NonCanonical{row:25,value:p*29+bad}};
+  let out=aspis_core::r0::heap::uninit::<Claims>().unwrap();
+  let pointer=(&*out) as *const MaybeUninit<Claims> as *mut MaybeUninit<Claims>;
+  assert!(!core::mem::needs_drop::<Claims>());
+  let result=stage(out,p,Err(error));
+  match result {Err(got)=>{assert_eq!(got,error);},Ok(_)=>assert!(false,"rejection must be retained")}
+  // Original is dead on this SAME Err path. A deliberate second free must
+  // fail under the identical Kani/CBMC configuration.
+  if negative{drop(unsafe{Box::from_raw(pointer)});}
+ }
+ #[kani::proof] #[kani::unwind(4)] fn error_cleanup(){check(false);}
+ #[kani::proof] #[kani::unwind(4)] fn error_cleanup_control(){check(true);}
+}

@@ -1,0 +1,131 @@
+NKA_generated/NKA_ClaimsRoot.lean:11:31: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+NKA_generated/NKA_ClaimsRoot.lean:90:7: warning: Variable name `parsed` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+'AspisR1.NKA_ClaimsRoot.outcome' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKA_ClaimsRoot.parsed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKA_ClaimsRoot.claims' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKA_ClaimsRoot.claims : ∀ {A : Type} (allocator : S2W_D189Wrappers.Allocator A) (state : A)
+  (reservation : NP6_StdModel.Reservation) (rows : NKA_HeapCarrier.RowNative),
+  NKA_HeapCarrier.RowCut rows →
+    ∀ (box : NKA_HeapCarrier.BoxNative),
+      NKA_HeapCarrier.BoxCut box →
+        ∀ (before : NKA_InitializedPrefix.Memory) (bytes : Slice U8),
+          match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+          | ok (core.result.Result.Ok pre) =>
+            ∃ value,
+              native allocator state reservation rows box before value =
+                  cohort allocator state reservation (PrefixAdapter.fromOld pre) ∧
+                native allocator state reservation rows box before value =
+                    reference allocator state reservation (PrefixAdapter.fromOld pre) ∧
+                  toMainStatus
+                      (NJT_ClaimsRef_Value.unbox
+                        (NKA_ClaimsReference.run reservation (fromMainPrefix (PrefixAdapter.fromOld pre)))) =
+                    ClaimsUnrolledFinish.claims (NP6_StdModel.calls reservation) (PrefixAdapter.fromOld pre)
+          | x => True :=
+fun {A} allocator state reservation rows rowCut box boxCut before bytes =>
+  claims.match_1.splitter
+    (fun x =>
+      AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = x →
+        match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+        | ok (core.result.Result.Ok pre) =>
+          ∃ value,
+            native allocator state reservation rows box before value =
+                cohort allocator state reservation (PrefixAdapter.fromOld pre) ∧
+              native allocator state reservation rows box before value =
+                  reference allocator state reservation (PrefixAdapter.fromOld pre) ∧
+                toMainStatus
+                    (NJT_ClaimsRef_Value.unbox
+                      (NKA_ClaimsReference.run reservation (fromMainPrefix (PrefixAdapter.fromOld pre)))) =
+                  ClaimsUnrolledFinish.claims (NP6_StdModel.calls reservation) (PrefixAdapter.fromOld pre)
+        | x => True)
+    (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes)
+    (fun pre parsed h =>
+      Eq.ndrec (motive := fun x =>
+        AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = x →
+          match parsed : x with
+          | ok (core.result.Result.Ok pre) =>
+            ∃ value,
+              native allocator state reservation rows box before value =
+                  cohort allocator state reservation (PrefixAdapter.fromOld pre) ∧
+                native allocator state reservation rows box before value =
+                    reference allocator state reservation (PrefixAdapter.fromOld pre) ∧
+                  toMainStatus
+                      (NJT_ClaimsRef_Value.unbox
+                        (NKA_ClaimsReference.run reservation (fromMainPrefix (PrefixAdapter.fromOld pre)))) =
+                    ClaimsUnrolledFinish.claims (NP6_StdModel.calls reservation) (PrefixAdapter.fromOld pre)
+          | x_1 => True)
+        (fun heq => id (NKA_ClaimsRoot.parsed allocator state reservation rows rowCut box boxCut before bytes pre heq))
+        (Eq.symm h) (Eq.refl (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes)))
+    (fun x x_1 parsed =>
+      Eq.ndrec (motive := fun x =>
+        (∀ (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix), x = ok (core.result.Result.Ok pre) → False) →
+          AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = x →
+            match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+            | ok (core.result.Result.Ok pre) =>
+              ∃ value,
+                native allocator state reservation rows box before value =
+                    cohort allocator state reservation (PrefixAdapter.fromOld pre) ∧
+                  native allocator state reservation rows box before value =
+                      reference allocator state reservation (PrefixAdapter.fromOld pre) ∧
+                    toMainStatus
+                        (NJT_ClaimsRef_Value.unbox
+                          (NKA_ClaimsReference.run reservation (fromMainPrefix (PrefixAdapter.fromOld pre)))) =
+                      ClaimsUnrolledFinish.claims (NP6_StdModel.calls reservation) (PrefixAdapter.fromOld pre)
+            | x => True)
+        (fun x h =>
+          Eq.ndrec (motive := fun x =>
+            (∀ (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix), x = ok (core.result.Result.Ok pre) → False) →
+              match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+              | ok (core.result.Result.Ok pre) =>
+                ∃ value,
+                  native allocator state reservation rows box before value =
+                      cohort allocator state reservation (PrefixAdapter.fromOld pre) ∧
+                    native allocator state reservation rows box before value =
+                        reference allocator state reservation (PrefixAdapter.fromOld pre) ∧
+                      toMainStatus
+                          (NJT_ClaimsRef_Value.unbox
+                            (NKA_ClaimsReference.run reservation (fromMainPrefix (PrefixAdapter.fromOld pre)))) =
+                        ClaimsUnrolledFinish.claims (NP6_StdModel.calls reservation) (PrefixAdapter.fromOld pre)
+              | x => True)
+            (fun x =>
+              Eq.ndrec (motive := fun x =>
+                (∀ (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix), x = ok (core.result.Result.Ok pre) → False) →
+                  match parsed : x with
+                  | ok (core.result.Result.Ok pre) =>
+                    ∃ value,
+                      native allocator state reservation rows box before value =
+                          cohort allocator state reservation (PrefixAdapter.fromOld pre) ∧
+                        native allocator state reservation rows box before value =
+                            reference allocator state reservation (PrefixAdapter.fromOld pre) ∧
+                          toMainStatus
+                              (NJT_ClaimsRef_Value.unbox
+                                (NKA_ClaimsReference.run reservation (fromMainPrefix (PrefixAdapter.fromOld pre)))) =
+                            ClaimsUnrolledFinish.claims (NP6_StdModel.calls reservation) (PrefixAdapter.fromOld pre)
+                  | x_3 => True)
+                (fun x =>
+                  Eq.mpr
+                    (id
+                      (claims.match_1.eq_2 (fun x => Prop) (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes)
+                        (fun pre parsed =>
+                          ∃ value,
+                            native allocator state reservation rows box before value =
+                                cohort allocator state reservation (PrefixAdapter.fromOld pre) ∧
+                              native allocator state reservation rows box before value =
+                                  reference allocator state reservation (PrefixAdapter.fromOld pre) ∧
+                                toMainStatus
+                                    (NJT_ClaimsRef_Value.unbox
+                                      (NKA_ClaimsReference.run reservation
+                                        (fromMainPrefix (PrefixAdapter.fromOld pre)))) =
+                                  ClaimsUnrolledFinish.claims (NP6_StdModel.calls reservation)
+                                    (PrefixAdapter.fromOld pre))
+                        (fun x parsed => True) x))
+                    True.intro)
+                (Eq.refl (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes)) x)
+            h x)
+        parsed x_1)
+    (Eq.refl (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes))
