@@ -1,0 +1,52 @@
+{"attempt": "NJL_L023", "exit_status": 0, "wall_seconds": 9.031614931998774, "peak_rss_kib": "6201172", "swaps": "0", "print_axioms": ["'AspisR1.NJL_OccupancyAssociation.cell_value' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJL_OccupancyAssociation.value' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJL_OccupancyAssociation.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+structure AspisR1.NJL_OccupancyPacket.Packet (input output : NQ) (expected : U32) (opened : Std.Array NQ 16#usize) :
+  Type
+number of parameters: 4
+fields:
+  AspisR1.NJL_OccupancyPacket.Packet.context : NJL_OccupancyContext.Context
+  AspisR1.NJL_OccupancyPacket.Packet.head : NJL_OccupancyHead.State
+  AspisR1.NJL_OccupancyPacket.Packet.middle : NJL_OccupancyHead.State
+  AspisR1.NJL_OccupancyPacket.Packet.last : NJL_OccupancyHead.State
+  AspisR1.NJL_OccupancyPacket.Packet.context_call : NJL_OccupancyContext.reference input output (cell opened 0) =
+      ok self.context
+  AspisR1.NJL_OccupancyPacket.Packet.context_domain : NJL_OccupancyContext.Domain self.context
+  AspisR1.NJL_OccupancyPacket.P
+...
+dle i)) :
+    Packet input output expected opened
+theorem AspisR1.NJL_OccupancyAssociation.source : ∀ (input output : NQ) (expected : U32)
+  (opened : Std.Array NQ 16#usize),
+  Canon input →
+    Canon output →
+      ↑expected < FIw_ScalarArithmetic.P →
+        FIw_ArrayValue.canonical opened →
+          ∃ p,
+            NJL_OccupancyPacket.reference input output expected opened = ok (pack p.last) ∧
+              FIq_Native.pool_v1.pair_forest_semantic_terminal.occupancy_lanes_literal input output expected opened =
+                  ok (pack p.last) ∧
+                FIw_ArrayValue.canonical (pack p.last) :=
+fun input output expected opened hi ho he ha =>
+  let ⟨p, h✝⟩ := NJL_OccupancyPacket.source input output expected opened hi ho he ha
+  let ⟨call, canonical⟩ := h✝
+  let ⟨old, h✝¹⟩ := WP.spec_imp_exists (JFy_OccupancyLiteral.source input output expected opened hi ho he ha)
+  let ⟨oldCall, oldCanonical⟩ := h✝¹
+  have oldValue := FIy_OccupancyMeaning.value input output expected opened old hi ho he ha oldCall;
+  have same :=
+    NJL_ArrayCodec.ext (pack p.last) old canonical oldCanonical
+      (Eq.trans (value input output expected opened p) (Eq.symm oldValue.right));
+  Exists.intro p
+    ⟨call,
+      ⟨Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                FIq_Native.pool_v1.pair_forest_semantic_terminal.occupancy_lanes_literal input output expected opened =
+                  ok _a)
+              same))
+          oldCall,
+        canonical⟩⟩
+'AspisR1.NJL_OccupancyAssociation.cell_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJL_OccupancyAssociation.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJL_OccupancyAssociation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r16bc32b918d943ada526a1d1e936eca6.scope; invocation ID: 8726c5f5bd704e6e8cf00b0a0ba7ed82

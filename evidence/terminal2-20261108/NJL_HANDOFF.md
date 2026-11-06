@@ -15,3 +15,7 @@ TX1:209/208 candidates: L003 low discharge and L005 full active invocation compi
 ## Stage 2
 
 TX1:227 candidate added: L009 prologue/full cache domains, L010 ordered traversal packet, L012 full invocation with exact old cohort Result. Native std array window K005 PASS/K006 matched control FAIL on arbitrary output lane/limb, exact KMX. All16 child Results supplied internally; no new trust or output premise. Local gate still PENDING. No extraction, shipped edit or ELF rebuild. Continue independent terminal leaves bottom-up.
+
+## Stage 3
+
+TX1:244 occupancy candidate added with a complete cut-consuming Packet and exact adopted cohort Result (L023/L024). All8 digest writes and the entire12cell frame are composed; no binary occupied premise. Existing four NJB nativepairs reused; missing fixed8 control K009PASS/K008FAIL added. Four candidate rows total (209,208,227,244), all awaiting combined/raw/scan and next ledger gate. Continue path247 (independent native windows already available), then actual callers. No target claim.

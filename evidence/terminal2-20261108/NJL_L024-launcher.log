@@ -1,0 +1,45 @@
+{"attempt": "NJL_L024", "exit_status": 0, "wall_seconds": 8.283034407999367, "peak_rss_kib": "6197688", "swaps": "0", "print_axioms": ["'AspisR1.NJL_OccupancyPacket.size12' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJL_OccupancyPacket.pack_decode' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJL_OccupancyPacket.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+structure AspisR1.NJL_OccupancyPacket.Packet (input output : NQ) (expected : U32) (opened : Std.Array NQ 16#usize) :
+  Type
+number of parameters: 4
+fields:
+  AspisR1.NJL_OccupancyPacket.Packet.context : Context
+  AspisR1.NJL_OccupancyPacket.Packet.head : State
+  AspisR1.NJL_OccupancyPacket.Packet.middle : State
+  AspisR1.NJL_OccupancyPacket.Packet.last : State
+  AspisR1.NJL_OccupancyPacket.Packet.context_call : NJL_OccupancyContext.reference input output (cell opened 0) =
+      ok self.context
+  AspisR1.NJL_OccupancyPacket.Packet.context_domain : NJL_OccupancyContext.Domain self.context
+  AspisR1.NJL_OccupancyPacket.Packet.context_clauses : NJL_OccupancyContext.Clauses input output (cell ope
+...
+ference middle input output (cell opened 0) (cell opened 10) c.oneMinus
+                            expected
+                      ok (pack last))
+                    (bind_tc_ok head fun y => do
+                      let middle ← NJL_OccupancyLanes.run c (cell opened) NJL_OccupancyFrame.indices y
+                      let last ←
+                        NJL_OccupancyTail.reference middle input output (cell opened 0) (cell opened 10) c.oneMinus
+                            expected
+                      ok (pack last)))
+                  (Eq.trans
+                    (Eq.trans
+                      (congrFun' (congrArg Bind.bind cm) fun middle => do
+                        let last ←
+                          NJL_OccupancyTail.reference middle input output (cell opened 0) (cell opened 10) c.oneMinus
+                              expected
+                        ok (pack last))
+                      (bind_tc_ok middle fun y => do
+                        let last ←
+                          NJL_OccupancyTail.reference y input output (cell opened 0) (cell opened 10) c.oneMinus
+                              expected
+                        ok (pack last)))
+                    (Eq.trans (congrFun' (congrArg Bind.bind ct) fun last => ok (pack last))
+                      (bind_tc_ok last fun y => ok (pack y)))))))
+            (ok (pack p.last))))
+        (Eq.refl (ok (pack last))),
+      NJB_ArrayCarrier.canonical_array (fun i => p.last (Fin.cast size12 i)) fun i => hl (Fin.cast size12 i)⟩
+'AspisR1.NJL_OccupancyPacket.size12' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJL_OccupancyPacket.pack_decode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJL_OccupancyPacket.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r6f9523013c8a414388d20ed26ea8b14f.scope; invocation ID: 09439e5d52254f83a383f5939d13a2ba

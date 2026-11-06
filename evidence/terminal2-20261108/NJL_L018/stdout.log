@@ -1,0 +1,70 @@
+NJL_OccupancyFrame.lean:29:53: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  OfNat (Type ?u.9) 3
+numerals are polymorphic in Lean, but the numeral `3` cannot be used in a context where the expected type is
+  Type ?u.9
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NJL_OccupancyFrame.lean:29:56: error(lean.invalidDottedIdent): Invalid dotted identifier notation: Not supported on type universe
+  Prop
+NJL_OccupancyFrame.lean:36:3: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ e ≤ 7
+where
+ e := ↑↑lane
+NJL_OccupancyFrame.lean:38:35: error: omega could not prove the goal:
+No usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants.
+NJL_OccupancyFrame.lean:40:3: error: unsolved goals
+case mpr.refine_1
+i : Fin 12
+bound : sorry
+lane : Fin 8 := ⟨↑i - 3, ⋯⟩
+⊢ lane = 0 ∨ lane = 1 ∨ lane = 2 ∨ lane = 3 ∨ lane = 4 ∨ lane = 5 ∨ lane = 6 ∨ lane = 7
+NJL_OccupancyFrame.lean:43:5: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ e ≤ 2
+where
+ e := ↑↑i
+NJL_OccupancyFrame.lean:50:26: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  OfNat (Type ?u.25) 3
+numerals are polymorphic in Lean, but the numeral `3` cannot be used in a context where the expected type is
+  Type ?u.25
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NJL_OccupancyFrame.lean:50:29: error(lean.invalidDottedIdent): Invalid dotted identifier notation: Not supported on type universe
+  Prop
+NJL_OccupancyFrame.lean:55:35: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => decode (after i) = if _a then value c opened i else decode (before i)
+Error: Application type mismatch: The argument
+  List.instDecidableMemOfLawfulBEq i (List.map slot indices)
+has type
+  Decidable (i ∈ List.map slot indices)
+but is expected to have type
+  Decidable _a
+in the application
+  @ite K _a (List.instDecidableMemOfLawfulBEq i (List.map slot indices))
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+c : Context
+opened : Fin 16 → NQ
+before : State
+hc : Domain c
+ho : ∀ (i : Fin 16), Canon (opened i)
+hb : ∀ (i : Fin 12), Canon (before i)
+after : Fin 12 → NQ
+call : NJL_OccupancyLanes.run c opened indices before = ok after
+trace : NJL_OccupancyLanes.Trace c opened indices before after
+ha : ∀ (i : Fin 12), Canon (after i)
+va : (fun i => decode (after i)) = List.foldl (fun s i => modelStep c opened i s) (fun i => decode (before i)) indices
+i : Fin 12
+point : decode (after i) = if i ∈ List.map slot indices then value c opened i else decode (before i)
+⊢ decode (after i) = sorry
+'AspisR1.NJL_OccupancyFrame.input_same' depends on axioms: [propext, Quot.sound]
+'AspisR1.NJL_OccupancyFrame.model_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJL_OccupancyFrame.model_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJL_OccupancyFrame.full_mem' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.NJL_OccupancyFrame.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
