@@ -6,7 +6,10 @@ H='dombarker@100.108.41.90'
 B='/home/dombarker/project-offloads/codex-cx-terminal-20261107'
 a=sys.argv[1]; assert re.fullmatch(r'NJB_[LKE][0-9]{3}',a)
 x=json.loads((E/(a+'.json')).read_text()); assert x['attempt']==a
-assert 1<=int(a[-3:])<=({'L':100,'K':120,'E':1}[a[4]])
+assert 1<=int(a[-3:])
+budget={'L':100,'K':120,'E':1}[a[4]]
+charged=sum(json.loads(row)['attempt'][4]==a[4] for row in (E/'NJB_ATTEMPTS.jsonl').read_text().splitlines())
+assert charged<budget, 'Authorized scope budget exhausted'
 if x['command'][:2]==['python3','NJB_gate.py']:assert x['command'][2]==a+'.json','Stale gate configuration'
 assert not (E/a/'receipt.json').exists(), 'Never resubmit'
 guard=E/'NJB_CLIENT_ACTIVE';fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,str(os.getpid()).encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
@@ -47,13 +50,17 @@ for n,t in json.loads({json.dumps(files)!r}).items():
  p=b/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
 for n in ['NJB_objects','NJB_generated','NJB_tmp','NJB_native']:(b/n).mkdir(exist_ok=True)
 p=b/{(a+'.json')!r};x=json.loads(p.read_text());roots=x.get('env',{{}}).get('LEAN_PATH','').split(':');rels=set();pins={{}}
-if x['kind']=='lean':
+if x['kind'] in ['lean','audit']:
  for root in roots:
   for stem in ['Aeneas','AeneasMeta']:
    q=Path(root)/stem
    if q.is_dir():rels.update(str(z.relative_to(root)) for z in q.rglob('*') if z.is_file() and any(str(z).endswith(s) for s in ['.olean','.olean.private','.olean.server','.ir']))
    if Path(root,stem+'.olean').is_file():rels.add(stem+'.olean')
- for n in re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M):rels.add(n.replace('.','/')+'.olean')
+ if x['kind']=='lean':
+  for n in re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M):rels.add(n.replace('.','/')+'.olean')
+ else:
+  modules=list(json.loads((b/'NJB_GATE_SOURCES.json').read_text())['passed'])+['NJB_COMBINED_IMPORT','NIU_COMBINED_IMPORT','NGK_COMBINED_IMPORT','NFA_WALKER','NFA_MemoryLimit']
+  for n in modules:rels.add(n.replace('.','/')+'.olean')
  for rel in sorted(rels):
   q=next((Path(root)/rel for root in roots if (Path(root)/rel).is_file()),None);assert q is not None,rel
   for z in [q,Path(str(q)+'.private'),Path(str(q)+'.server'),q.with_suffix('.ir')]:

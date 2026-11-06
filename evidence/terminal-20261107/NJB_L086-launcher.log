@@ -1,0 +1,41 @@
+{"attempt": "NJB_L086", "exit_status": 0, "wall_seconds": 9.714412342058495, "peak_rss_kib": "6172528", "swaps": "0", "print_axioms": ["'AspisR1.NJB_AbsorptionCuts.discharge' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJB_AbsorptionCuts.discharge : ∀ (scales : Fin 3 → NJB_AbsorptionScales.Scale) (opened : Fin 16 → NQ)
+  (i : Fin 16),
+  (∀ (j : Fin 3), Canon (scales j).value ∧ NJB_PreparedLaws.Domain (scales j).cache (scales j).value) →
+    (∀ (j : Fin 16), Canon (opened j)) →
+      ∃ reply,
+        FIq_Native.field.PreparedQm31Multiplier.mul (scales (NJB_AbsorptionLane.group i)).cache (opened i) = ok reply ∧
+          Canon reply ∧
+            ∀ (out : NQ) (seen : NP) (right : NQ) (kind calls : ℕ),
+              lane (fun j => (scales j).cache) opened i reply out seen right kind calls →
+                FIq_Native.field.PreparedQm31Multiplier.mul (scales (NJB_AbsorptionLane.group i)).cache 
+...
+theorem AspisR1.NJB_AbsorptionCuts.discharge : ∀ (scales : Fin 3 → NJB_AbsorptionScales.Scale) (opened : Fin 16 → NQ)
+  (i : Fin 16),
+  (∀ (j : Fin 3), Canon (scales j).value ∧ NJB_PreparedLaws.Domain (scales j).cache (scales j).value) →
+    (∀ (j : Fin 16), Canon (opened j)) →
+      ∃ reply,
+        FIq_Native.field.PreparedQm31Multiplier.mul (scales (NJB_AbsorptionLane.group i)).cache (opened i) = ok reply ∧
+          Canon reply ∧
+            ∀ (out : NQ) (seen : NP) (right : NQ) (kind calls : ℕ),
+              lane (fun j => (scales j).cache) opened i reply out seen right kind calls →
+                FIq_Native.field.PreparedQm31Multiplier.mul (scales (NJB_AbsorptionLane.group i)).cache (opened i) =
+                  ok out :=
+fun scales opened i prepared canonical =>
+  let ⟨reply, h✝⟩ := NJB_AbsorptionLane.result scales opened i prepared canonical
+  let ⟨call, right✝⟩ := h✝
+  let ⟨hr, right✝¹⟩ := right✝
+  Exists.intro reply
+    ⟨call,
+      ⟨hr, fun out seen right kind calls cut =>
+        Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                FIq_Native.field.PreparedQm31Multiplier.mul (scales (NJB_AbsorptionLane.group i)).cache (opened i) =
+                  ok _a)
+              cut.right.right.right.right))
+          call⟩⟩
+'AspisR1.NJB_AbsorptionCuts.discharge' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r897288b5c6fb4502832364f7816f91e1.scope; invocation ID: 366d528158b242ee975d68e7e891d4af

@@ -1,0 +1,18 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+use aspis_core::field::NJB_observe::{prepared_words,prepared_from_words};
+fn words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
+fn q(w:[u32;4])->QM31{QM31{c0:CM31{a:M31(w[0]),b:M31(w[1])},c1:CM31{a:M31(w[2]),b:M31(w[3])}}}
+fn canon(w:[u32;4])->bool{w[0]<2147483647&&w[1]<2147483647&&w[2]<2147483647&&w[3]<2147483647}
+struct NJB_Log{inputs:[[u32;4];32],right:[[u32;4];32],reply:[[u32;4];32],kind:[u8;32],calls:usize,cache:[[[u32;3];3];2],cache_seen:[[[u32;3];3];32],packs:[[[u32;4];4];32],lengths:[usize;32],news:usize}
+fn log(reply:[[u32;4];32],cache:[[[u32;3];3];2])->NJB_Log{NJB_Log{inputs:[[0;4];32],right:[[0;4];32],reply,kind:[0;32],calls:0,cache,cache_seen:[[[0;3];3];32],packs:[[[0;4];4];32],lengths:[0;32],news:0}}
+fn emit(a:QM31,b:QM31,k:u8,l:&mut NJB_Log)->QM31{let i=l.calls;assert!(i<32);assert!(canon(words(a))&&canon(words(b)));l.inputs[i]=words(a);l.right[i]=words(b);l.kind[i]=k;l.calls+=1;q(l.reply[i])}
+trait NJB_Ops{fn NJB_add(self,r:Self,l:&mut NJB_Log)->Self;fn NJB_mul(self,r:Self,l:&mut NJB_Log)->Self;fn NJB_sub(self,r:Self,l:&mut NJB_Log)->Self;}
+impl NJB_Ops for QM31{fn NJB_add(self,r:Self,l:&mut NJB_Log)->Self{emit(self,r,1,l)}fn NJB_mul(self,r:Self,l:&mut NJB_Log)->Self{emit(self,r,0,l)}fn NJB_sub(self,r:Self,l:&mut NJB_Log)->Self{emit(self,r,2,l)}}
+fn NJB_new(a:QM31,l:&mut NJB_Log)->PreparedQm31Multiplier{let i=l.calls;assert!(i<32);assert!(canon(words(a)));l.inputs[i]=words(a);l.kind[i]=3;l.calls+=1;{let j=l.news;assert!(j<2);l.news+=1;prepared_from_words(l.cache[j])}}
+trait NJB_PreparedOps{fn NJB_mul(self,r:QM31,l:&mut NJB_Log)->QM31;}
+impl NJB_PreparedOps for PreparedQm31Multiplier{fn NJB_mul(self,r:QM31,l:&mut NJB_Log)->QM31{let i=l.calls;assert!(i<32);assert!(canon(words(r)));l.cache_seen[i]=prepared_words(self);l.right[i]=words(r);l.kind[i]=4;l.calls+=1;q(l.reply[i])}}
+fn NJB_pack(a:&[QM31],l:&mut NJB_Log)->QM31{let i=l.calls;assert!(i<32);assert_eq!(a.len(),4);l.packs[i]=[words(a[0]),words(a[1]),words(a[2]),words(a[3])];l.lengths[i]=a.len();l.kind[i]=5;l.calls+=1;q(l.reply[i])}
+fn NJB_path_one(path:&mut[QM31;17],z:[QM31;16],succ:[QM31;16],k:usize,prepared:PreparedQm31Multiplier,right:bool,log:&mut NJB_Log){let current=z[k+1];let source=if right{RATE+k}else{k};let target=if right{9+k}else{1+k};path[target]=prepared.NJB_mul(succ[source].NJB_sub(current,log),log);}
+#[kani::proof]#[kani::unwind(35)]#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJB_path_one_side(){let z:[QM31;16]=unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())};let succ:[QM31;16]=unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())};let mut path:[QM31;17]=unsafe{core::mem::transmute::<[[u32;4];17],[QM31;17]>(kani::any())};let before=path;let right=cfg!(NJB_path_right);let k:usize=kani::any();let j:usize=kani::any();let limb:usize=kani::any();let row:usize=kani::any();let col:usize=kani::any();kani::assume(k<8&&j<17&&limb<4&&row<3&&col<3);let source=if right{RATE+k}else{k};let target=if right{9+k}else{1+k};let r:[[u32;4];32]=kani::any();let cache:[[u32;3];3]=kani::any();kani::assume(canon(words(z[k+1]))&&canon(words(succ[source]))&&canon(r[0])&&canon(r[1]));let mut l=log(r,[cache,[[0;3];3]]);NJB_path_one(&mut path,z,succ,k,prepared_from_words(cache),right,&mut l);assert_eq!(l.calls,2);assert_eq!(l.kind[0],2);assert_eq!(l.kind[1],4);assert_eq!(l.inputs[0][limb],words(succ[source])[limb]);assert_eq!(l.right[0][limb],words(z[k+1])[limb]);assert_eq!(l.cache_seen[1][row][col],cache[row][col]);assert_eq!(l.right[1][limb],r[0][limb]);assert_eq!(words(path[j])[limb],(if j==target{r[1][limb]}else{words(before[j])[limb]})^if cfg!(NJB_invert){1}else{0});}

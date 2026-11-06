@@ -1,0 +1,28 @@
+{"attempt": "NJB_L101", "exit_status": 0, "wall_seconds": 10.230979039799422, "peak_rss_kib": "6187004", "swaps": "0", "print_axioms": ["'AspisR1.NJB_TagRaw.four_products_fit' does not depend on any axioms", "'AspisR1.NJB_TagRaw.product_bound' depends on axioms: [propext, Quot.sound]", "'AspisR1.NJB_TagRaw.product' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJB_TagRaw.step_bound' depends on axioms: [propext, Quot.sound]", "'AspisR1.NJB_TagRaw.sum_bound' depends on axioms: [propext]", "'AspisR1.NJB_TagRaw.chunk_bound' depends on axioms: [propext]"]}
+theorem AspisR1.NJB_TagRaw.product : ∀ (x y : U64),
+  ↑x < 2147483647 → ↑y < 2147483647 → ∃ out, UScalar.mul x y = ok out ∧ ↑out = ↑x * ↑y ∧ ↑out ≤ B :=
+fun x y hx hy =>
+  have bound := product_bound (↑x) (↑y) hx hy;
+  let ⟨out, h✝⟩ := WP.spec_imp_exists (U64.mul_spec (product._proof_1 x y hx hy))
+  let ⟨call, value⟩ := h✝
+  Exists.intro out ⟨call, ⟨value, Eq.mpr (id (congrArg (fun _a => _a ≤ B) value)) bound⟩⟩
+'AspisR1.NJB_TagRaw.four_products_fit' does not depend on any axioms
+'AspisR1.NJB_TagRaw.product_bound' depends on axioms: [propext, Quot.sound]
+'AspisR1.NJB_TagRaw.product' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJB_TagRaw.step_bound' depends on axioms: [
+...
+theorem AspisR1.NJB_TagRaw.product : ∀ (x y : U64),
+  ↑x < 2147483647 → ↑y < 2147483647 → ∃ out, UScalar.mul x y = ok out ∧ ↑out = ↑x * ↑y ∧ ↑out ≤ B :=
+fun x y hx hy =>
+  have bound := product_bound (↑x) (↑y) hx hy;
+  let ⟨out, h✝⟩ := WP.spec_imp_exists (U64.mul_spec (product._proof_1 x y hx hy))
+  let ⟨call, value⟩ := h✝
+  Exists.intro out ⟨call, ⟨value, Eq.mpr (id (congrArg (fun _a => _a ≤ B) value)) bound⟩⟩
+'AspisR1.NJB_TagRaw.four_products_fit' does not depend on any axioms
+'AspisR1.NJB_TagRaw.product_bound' depends on axioms: [propext, Quot.sound]
+'AspisR1.NJB_TagRaw.product' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJB_TagRaw.step_bound' depends on axioms: [propext, Quot.sound]
+'AspisR1.NJB_TagRaw.sum_bound' depends on axioms: [propext]
+'AspisR1.NJB_TagRaw.chunk_bound' depends on axioms: [propext]
+
+Running as unit: run-radefe6d29ac74cb594ddba22ca293a5b.scope; invocation ID: 1bd729c067f84a51898a592477bdbda9

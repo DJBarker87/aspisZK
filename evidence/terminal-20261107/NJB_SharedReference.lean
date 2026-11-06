@@ -12,7 +12,7 @@ def lanes (v : Fin 33 → NQ) (g : Fin 9) (slot : Fin 4) : NQ :=
  if h : 49≤source ∧ source<82 then v ⟨source-49,by omega⟩ else FIq_Native.field.QM31.ZERO
 theorem lanes_canonical (v : Fin 33 → NQ) (hv : ∀ i,Canon (v i)) (g : Fin 9) (slot : Fin 4) :
  Canon (lanes v g slot) := by
- unfold lanes
+ dsimp only [lanes]
  split
  · exact hv _
  · exact FIv_NativeValue.zero.1

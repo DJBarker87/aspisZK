@@ -1,0 +1,16 @@
+from pathlib import Path
+import json
+E=Path(__file__).resolve().parent;helper=(E/'NJB_factored.rs.txt').read_text().split('fn NJB_path_head(')[0]
+s=helper+'''fn NJB_path_one(path:&mut[QM31;17],z:[QM31;16],succ:[QM31;16],k:usize,prepared:PreparedQm31Multiplier,right:bool,log:&mut NJB_Log){let current=z[k+1];let source=if right{RATE+k}else{k};let target=if right{9+k}else{1+k};path[target]=prepared.NJB_mul(succ[source].NJB_sub(current,log),log);}
+#[kani::proof]#[kani::unwind(35)]#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJB_path_one_side(){let z:[QM31;16]=unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())};let succ:[QM31;16]=unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())};let mut path:[QM31;17]=unsafe{core::mem::transmute::<[[u32;4];17],[QM31;17]>(kani::any())};let before=path;let right=cfg!(NJB_path_right);let k:usize=kani::any();let j:usize=kani::any();let limb:usize=kani::any();let row:usize=kani::any();let col:usize=kani::any();kani::assume(k<8&&j<17&&limb<4&&row<3&&col<3);let source=if right{RATE+k}else{k};let target=if right{9+k}else{1+k};let r:[[u32;4];32]=kani::any();let cache:[[u32;3];3]=kani::any();kani::assume(canon(words(z[k+1]))&&canon(words(succ[source]))&&canon(r[0])&&canon(r[1]));let mut l=log(r,[cache,[[0;3];3]]);NJB_path_one(&mut path,z,succ,k,prepared_from_words(cache),right,&mut l);assert_eq!(l.calls,2);assert_eq!(l.kind[0],2);assert_eq!(l.kind[1],4);assert_eq!(l.inputs[0][limb],words(succ[source])[limb]);assert_eq!(l.right[0][limb],words(z[k+1])[limb]);assert_eq!(l.cache_seen[1][row][col],cache[row][col]);assert_eq!(l.right[1][limb],r[0][limb]);assert_eq!(words(path[j])[limb],(if j==target{r[1][limb]}else{words(before[j])[limb]})^if cfg!(NJB_invert){1}else{0});}
+''';(E/'NJB_path_split.rs.txt').write_text(s)
+(E/'NJB_install_path_split_gate.py').write_text((E/'NJB_install_windowed_gate.py').read_text().replace('NJB_windowed','NJB_path_split').replace('windowed powers/callback/window/tail local-record windows installed','K082 timeout split into one left/right residual+prepared source window'))
+for region in range(2):
+ for inv in range(2):
+  old='NJB_K099'if inv else'NJB_K098';a=f'NJB_K{132+region*2+inv:03}';x=json.loads((E/(old+'.json')).read_text());x['attempt']=a;x['module']='NJB_path_one_side';x['sources']=[p for p in x['sources']if p!='NJB_install_windowed_gate.py']+['NJB_path_split.rs.txt'];x['command']=['python3','NJB_gate.py',a+'.json'];x['collect']=[p.replace(old,a)for p in x['collect']if p!='NJB_SOURCE_PINS.json'];x['native_command'][x['native_command'].index('--harness')+1]='pool_v1::pair_forest_semantic_terminal::NJB_path_split_native::NJB_path_one_side'
+  # Installer's parent is semantic, unlike windowed copy parent.
+  if a=='NJB_K132':x['command']=['python3','NJB_install_path_split_gate.py',a+'.json'];x['sources']+=['NJB_install_path_split_gate.py'];x['collect']+=['NJB_SOURCE_PINS.json']
+  if region:x['env']['RUSTFLAGS']+=' --cfg NJB_path_right'
+  x['expected_time']='K082 four-call timeout isolated into one '+('right'if region else'left')+' native residual/prepared pair';(E/(a+'.json')).write_text(json.dumps(x))
+p=E/'NJB_install_path_split_gate.py';s=p.read_text().replace('pair_forest_copy_terminal.rs','pair_forest_semantic_terminal.rs');p.write_text(s)

@@ -1,0 +1,45 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+fn words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
+fn q(w:[u32;4])->QM31{QM31{c0:CM31{a:M31(w[0]),b:M31(w[1])},c1:CM31{a:M31(w[2]),b:M31(w[3])}}}
+fn canon(w:[u32;4])->bool{w[0]<2147483647&&w[1]<2147483647&&w[2]<2147483647&&w[3]<2147483647}
+struct NJB_Log{left:[[u32;4];17],right:[[u32;4];17],reply:[[u32;4];17],kind:[u8;17],calls:usize}
+trait NJB_Ops{fn NJB_mul(self,r:Self,l:&mut NJB_Log)->Self;fn NJB_add(self,r:Self,l:&mut NJB_Log)->Self;fn NJB_sub(self,r:Self,l:&mut NJB_Log)->Self;}
+fn event(a:QM31,b:QM31,kind:u8,l:&mut NJB_Log)->QM31{let j=l.calls;assert!(j<17);assert!(canon(words(a))&&canon(words(b)));l.left[j]=words(a);l.right[j]=words(b);l.kind[j]=kind;l.calls+=1;q(l.reply[j])}
+impl NJB_Ops for QM31{
+fn NJB_mul(self,r:Self,l:&mut NJB_Log)->Self{event(self,r,0,l)}
+fn NJB_add(self,r:Self,l:&mut NJB_Log)->Self{event(self,r,1,l)}
+fn NJB_sub(self,r:Self,l:&mut NJB_Log)->Self{event(self,r,2,l)}}
+fn NJB_copy_residual(row: CopyRowExtension, helper: QM31, chi: QM31, log:&mut NJB_Log) -> QM31 {
+    let denominators = [
+        chi.NJB_sub(row.producer_values[0],log),
+        chi.NJB_sub(row.producer_values[1],log),
+        chi.NJB_sub(row.consumer_values[0],log),
+        chi.NJB_sub(row.consumer_values[1],log),
+    ];
+    let producer_denominator = denominators[0].NJB_mul(denominators[1],log);
+    let consumer_denominator = denominators[2].NJB_mul(denominators[3],log);
+    let producer_numerator = row.producer_weights[0]
+        .NJB_mul(denominators[1],log)
+        .NJB_add(row.producer_weights[1].NJB_mul(denominators[0],log),log);
+    let consumer_numerator = row.consumer_weights[0]
+        .NJB_mul(denominators[3],log)
+        .NJB_add(row.consumer_weights[1].NJB_mul(denominators[2],log),log);
+    producer_denominator
+        .NJB_mul(helper.NJB_mul(consumer_denominator,log).NJB_add(consumer_numerator,log),log)
+        .NJB_sub(consumer_denominator.NJB_mul(producer_numerator,log),log)
+}
+#[kani::proof] #[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJB_residual(){
+ let a:[[u32;4];10]=kani::any();let r:[[u32;4];17]=kani::any();
+ for w in a {kani::assume(canon(w));}for w in r {kani::assume(canon(w));}
+ let row=CopyRowExtension{producer_values:[q(a[0]),q(a[1])],consumer_values:[q(a[2]),q(a[3])],producer_weights:[q(a[4]),q(a[5])],consumer_weights:[q(a[6]),q(a[7])]};
+ let mut l=NJB_Log{left:[[0;4];17],right:[[0;4];17],reply:r,kind:[0;17],calls:0};
+ let out=NJB_copy_residual(row,q(a[8]),q(a[9]),&mut l);
+ let left=[a[9],a[9],a[9],a[9],r[0],r[2],a[4],a[5],r[6],a[6],a[7],r[9],a[8],r[12],r[4],r[5],r[14]];
+ let right=[a[0],a[1],a[2],a[3],r[1],r[3],r[1],r[0],r[7],r[3],r[2],r[10],r[5],r[11],r[13],r[8],r[15]];
+ let kind=[2,2,2,2,0,0,0,0,1,0,0,1,0,1,0,0,2];
+ let j:usize=kani::any();let limb:usize=kani::any();kani::assume(j<17&&limb<4);
+ assert_eq!(l.calls,17);assert_eq!(words(out)[limb],r[16][limb]);assert_eq!(l.kind[j],kind[j]);assert_eq!(l.left[j][limb],left[j][limb] ^ if cfg!(NJB_invert){1}else{0});assert_eq!(l.right[j][limb],right[j][limb]);
+}

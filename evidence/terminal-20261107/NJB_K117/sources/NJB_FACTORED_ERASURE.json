@@ -1,0 +1,36 @@
+{
+ "path_head": {
+  "source": "\n    let bit = openings.z[0];\n    let selected_bit = path_selector.mul(bit);\n    let selected_empty = path_selector.sub(selected_bit);\n    let left = PreparedQm31Multiplier::new(selected_empty);\n    let right = PreparedQm31Multiplier::new(selected_bit);\n    let mut path = [QM31::ZERO; 17];\n    path[0] = selected_bit.mul(bit.sub(QM31::ONE));\n    ",
+  "logged": "\n    let bit = z[0];\n    let selected_bit = path_selector.NJB_mul(bit,log);\n    let selected_empty = path_selector.NJB_sub(selected_bit,log);\n    let left = NJB_new(selected_empty,log);\n    let right = NJB_new(selected_bit,log);\n    let mut path = [QM31::ZERO; 17];\n    path[0] = selected_bit.NJB_mul(bit.NJB_sub(QM31::ONE,log),log);\n    "
+ },
+ "path_pairs": {
+  "literal_blocks": [
+   "let current0 = openings.z[1];\n    path[1] = left.mul(openings.succ_z[0].sub(current0));\n    path[9] = right.mul(openings.succ_z[RATE].sub(current0));\n    ",
+   "let current1 = openings.z[2];\n    path[2] = left.mul(openings.succ_z[1].sub(current1));\n    path[10] = right.mul(openings.succ_z[RATE + 1].sub(current1));\n    ",
+   "let current2 = openings.z[3];\n    path[3] = left.mul(openings.succ_z[2].sub(current2));\n    path[11] = right.mul(openings.succ_z[RATE + 2].sub(current2));\n    ",
+   "let current3 = openings.z[4];\n    path[4] = left.mul(openings.succ_z[3].sub(current3));\n    path[12] = right.mul(openings.succ_z[RATE + 3].sub(current3));\n    ",
+   "let current4 = openings.z[5];\n    path[5] = left.mul(openings.succ_z[4].sub(current4));\n    path[13] = right.mul(openings.succ_z[RATE + 4].sub(current4));\n    ",
+   "let current5 = openings.z[6];\n    path[6] = left.mul(openings.succ_z[5].sub(current5));\n    path[14] = right.mul(openings.succ_z[RATE + 5].sub(current5));\n    ",
+   "let current6 = openings.z[7];\n    path[7] = left.mul(openings.succ_z[6].sub(current6));\n    path[15] = right.mul(openings.succ_z[RATE + 6].sub(current6));\n    ",
+   "let current7 = openings.z[8];\n    path[8] = left.mul(openings.succ_z[7].sub(current7));\n    path[16] = right.mul(openings.succ_z[RATE + 7].sub(current7));"
+  ],
+  "parameterized_logged": "let current = z[k+1];path[1+k]=left.NJB_mul(succ[k].NJB_sub(current,log),log);path[9+k]=right.NJB_mul(succ[RATE+k].NJB_sub(current,log),log);",
+  "association": "k=0..7; source contains eight sequential literal blocks, not a native loop"
+ },
+ "occupancy_context": {
+  "source": "\n    let occupied = opened[0];\n    let inverse = opened[1];\n    let one_minus = QM31::ONE.sub(occupied);\n    let both = input_occupancy.add(output_occupancy);\n    let occupied_selector = both.mul(occupied);\n    let empty_selector = both.sub(occupied_selector);\n    let empty = PreparedQm31Multiplier::new(empty_selector);\n    ",
+  "logged": "\n    let occupied = opened[0];\n    let inverse = opened[1];\n    let one_minus = QM31::ONE.NJB_sub(occupied,log);\n    let both = input_occupancy.NJB_add(output_occupancy,log);\n    let occupied_selector = both.NJB_mul(occupied,log);\n    let empty_selector = both.NJB_sub(occupied_selector,log);\n    let empty = NJB_new(empty_selector,log);\n    "
+ },
+ "occupancy_head": {
+  "source": "let mut occupancy = [QM31::ZERO; 12];\n    occupancy[0] = occupied_selector.mul(occupied.sub(QM31::ONE));\n    occupancy[1] = both.mul(opened[9].mul(inverse).sub(occupied));\n    occupancy[2] = empty.mul(inverse);\n    ",
+  "logged": "let mut occupancy = [QM31::ZERO; 12];\n    occupancy[0] = occupied_selector.NJB_mul(occupied.NJB_sub(QM31::ONE,log),log);\n    occupancy[1] = both.NJB_mul(opened[9].NJB_mul(inverse,log).NJB_sub(occupied,log),log);\n    occupancy[2] = empty.NJB_mul(inverse,log);\n    "
+ },
+ "occupancy_lane": {
+  "source": "\n        occupancy[3 + lane] = empty.mul(opened[2 + lane]);",
+  "logged": "\n        occupancy[3 + lane] = empty.NJB_mul(opened[2 + lane],log);"
+ },
+ "occupancy_tail": {
+  "source": "\n    occupancy[11] = input_occupancy\n        .mul(opened[10].mul(one_minus))\n        .add(output_occupancy.mul(occupied.sub(lift_m31(expected_output))));",
+  "logged": "\n    occupancy[11] = input_occupancy\n        .NJB_mul(opened[10].NJB_mul(one_minus,log),log)\n        .NJB_add(output_occupancy.NJB_mul(occupied.NJB_sub(lift_m31(expected_output),log),log),log);"
+ }
+}

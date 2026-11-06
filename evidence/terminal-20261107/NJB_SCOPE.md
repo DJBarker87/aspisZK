@@ -475,3 +475,47 @@ Original obligation SHA256 `c7efb641d059a9fec46b35db6dfcfa6b5b981820fca50b389b37
 Source `crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs`; frozen body SHA256 `cefd39cf61e4755559619d43ff4951205b5a61b1dd5870f0234838ad855fbbab`.
 Cohort declaration to inspect: `AspisR1PublicPreparation.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public`.
 Original obligation SHA256 `d510a18144d0f23f6d084bf2f04bd8e4639930c1c0e63bb3dce17b7941237aab`; all original clauses retained in NJB_OBLIGATIONS.
+
+## Resolved retained-definition inventory
+
+Focused L005 prints the actual definitions and complete signatures (NJB_L005/stdout.log); L005’s source never treats a matching name as native equivalence. The retained active implementation calls active_literal. The ONE new extraction emitted no Lean definitions. Missing optimized helpers remain explicit source/model obligations; no stand-in is installed.
+
+Present retained definitions:
+
+- `FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.active`
+- `FIq_Native.pool_v1.pair_forest_copy_terminal.copy_residual`
+- `FIq_Native.pool_v1.pair_forest_copy_terminal.evaluate_with_selectors`
+- `FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values`
+- `FIq_Native.pool_v1.pair_forest_semantic_terminal.add_occupancy_lanes`
+- `FIq_Native.pool_v1.pair_forest_semantic_terminal.add_path_lanes`
+- `FIq_Native.pool_v1.pair_forest_semantic_terminal.add_schedule_lanes`
+- `FIq_Native.pool_v1.pair_forest_semantic_terminal.add_value_lanes`
+- `FIq_Native.pool_v1.pair_forest_semantic_terminal.composition_parts`
+- `FIq_Native.pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption`
+- `FIq_Native.pool_v1.pair_forest_semantic_terminal.semantic_packed`
+- `FIq_Native.pool_v1.pair_forest_semantic_terminal.terminal_parts`
+- `AspisR1PublicPreparation.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public`
+
+Missing optimized declarations:
+
+- `FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.active_mask_basis`
+- `FIq_Native.pool_v1.pair_forest_copy_terminal.accumulate_endpoint_selector_tensor_basis`
+- `FIq_Native.pool_v1.pair_forest_copy_terminal.copy_tag_coordinate_dot`
+- `FIq_Native.pool_v1.pair_forest_copy_terminal.copy_tag_coordinate_value`
+- `FIq_Native.pool_v1.pair_forest_copy_terminal.finish_pattern_basis_values`
+- `FIq_Native.pool_v1.pair_forest_copy_terminal.finish_selector_tensor_basis`
+- `FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values_windowed`
+- `FIq_Native.pool_v1.pair_forest_copy_terminal.qm31_sum_products_up_to4`
+- `FIq_Native.pool_v1.pair_forest_semantic_terminal.absorption_lanes_factored`
+- `FIq_Native.pool_v1.pair_forest_semantic_terminal.add_preweighted_shared_selector`
+- `FIq_Native.pool_v1.pair_forest_semantic_terminal.append_level_packed_selector_tensor`
+- `FIq_Native.pool_v1.pair_forest_semantic_terminal.append_levels_packed_selector_tensor`
+- `FIq_Native.pool_v1.pair_forest_semantic_terminal.left_digest_packed_selector_tensor`
+- `FIq_Native.pool_v1.pair_forest_semantic_terminal.occupancy_lanes_factored`
+- `FIq_Native.pool_v1.pair_forest_semantic_terminal.optional_carry_packed_selector_tensor`
+- `FIq_Native.pool_v1.pair_forest_semantic_terminal.optional_recipient_packed_selector_tensor`
+- `FIq_Native.pool_v1.pair_forest_semantic_terminal.path_lanes_factored`
+- `FIq_Native.pool_v1.pair_forest_semantic_terminal.public_digest_packed`
+- `FIq_Native.pool_v1.pair_forest_semantic_terminal.public_digest_packed_selector_tensor`
+
+Adopted support anchors actually used: R0P.copyActiveLiteral via NJB_ActiveAssociation; FIw_CopyMeaning.residual via NJB_CopyResidual; FIq absorption_lanes_literal via NJB_AbsorptionAssociation; the CLOSED NFT_Pack mathematicalPack and NHU_Preweighted/selected contribution meanings for the unfinished shared path. Other parent definitions/signatures are preserved in the inventory, not replaced by guessed endpoints. All positive root admission remains subject to the complete original NDT caller clauses in NJB_OBLIGATIONS.
