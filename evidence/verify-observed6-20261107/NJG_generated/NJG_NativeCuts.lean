@@ -37,7 +37,7 @@ def claimsDomain (s : ClaimsPre) : Prop := s.framed.val.length≤3717 ∧ s.coun
  match s.reply with
  | .Ok _=>True
  | .Err (.Length row)=>row=25#u8
- | .Err (.NonCanonical row value)=>row=25#u8 ∧ value.val<29
+ | .Err (.NonCanonical row value)=>row=25#u8 ∧ s.p.val*29≤value.val ∧ value.val<s.p.val*29+29
  | _=>False
 
 /-- Reviewed transcription of NJG_claims_loop::check(args), corrected K020/K021.

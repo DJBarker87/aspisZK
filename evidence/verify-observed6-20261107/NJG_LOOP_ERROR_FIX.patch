@@ -1,0 +1,20 @@
+--- a/crates/aspis-r1-cost-probe/src/r1_semantic.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_semantic.rs
+@@ -333,7 +333,7 @@
+   let p:usize=kani::any();kani::assume(p<3);let k:usize=kani::any();kani::assume(k<29);let limb:u8=kani::any();kani::assume(limb<4);
+   let ok:bool=kani::any();let tag:bool=kani::any();let bad:usize=kani::any();kani::assume(bad<29);
+   let row:[QM31;29]=core::array::from_fn(|_|QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}});
+-  let reply=if ok{Ok(row)}else{Err(if tag{Error::Length{row:25}}else{Error::NonCanonical{row:25,value:bad}})};
++  let reply=if ok{Ok(row)}else{Err(if tag{Error::Length{row:25}}else{Error::NonCanonical{row:25,value:p*29+bad}})};
+   let before:u32=kani::any();let count:u8=kani::any();kani::assume(count<255);let frame:u64=kani::any();
+   let mut log=Log{row:0,ptr:core::ptr::null(),len:0,offset:99,count,frame};let mut out=MaybeUninit::<Claims>::uninit();
+   let other:usize=kani::any();let j:usize=kani::any();kani::assume(other<3 && j<29);
+@@ -347,7 +347,7 @@
+    match result{
+     Ok(())=>{assert!(ok);let got=unsafe{out.as_mut_ptr().cast::<u32>().add(4*(29*p+k)+limb as usize).read()};
+      if negative {assert_eq!(got,word(row[k],limb)^1);}else{assert_eq!(got,word(row[k],limb));}},
+-    Err(e)=>{assert!(!ok);if tag{assert!(matches!(e,Error::Length{row:25}));}else{assert!(matches!(e,Error::NonCanonical{row:25,value:v} if v==bad));}if negative{assert!(ok);}}
++    Err(e)=>{assert!(!ok);if tag{assert!(matches!(e,Error::Length{row:25}));}else{assert!(matches!(e,Error::NonCanonical{row:25,value:v} if v==p*29+bad));}if negative{assert!(ok);}}
+    }
+    if p>0 {let got=unsafe{out.as_mut_ptr().cast::<u32>().add(4*(29*other+j)+limb as usize).read()};assert_eq!(got,before);}
+ 
