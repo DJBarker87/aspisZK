@@ -1,0 +1,47 @@
+{"attempt": "NKI_L018", "exit_status": 1, "wall_seconds": 9.893046863144264, "peak_rss_kib": "6136988", "swaps": "0", "print_axioms": ["'AspisR1.NKI_AppendRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NKI_AppendRoot.lean:23:41: error: don't know how to synthesize placeholder for argument `o`
+context:
+index : U64
+level : Usize
+frontier : D
+o : O
+high : NQ
+hl : ↑level < 20
+hf : dc frontier
+ho : FIw_ArrayValue.canonical o
+hh : Canon high
+p : NKI_AppendPacket.Packet index level frontier o high
+⊢ NJX_DigestResiduals.Residuals
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+theorem AspisR1.NKI_AppendRoot.source : ∀ (index : U64) (level : Usize) (frontier : D) (o : O) (high : NQ),
+  ↑level < 20 →
+    dc frontier →
+      FIw_ArrayValue.canonical o 
+...
+Packet.emptySide index level) level high
+                    (NKI_DigestView.opened o (NKI_AppendPacket.start (NKI_AppendPacket.emptySide index level)) ⋯)
+                    (NJX_DigestCohort.dcells p.expected) p.targets.last p.arithmetic.prepared p.arithmetic.residual
+                    p.arithmetic.packed p.arithmetic.out (NKI_AppendPacket.output p)
+                    (NKI_AppendCut.observations level high
+                      (NKI_DigestView.opened o (NKI_AppendPacket.start (NKI_AppendPacket.emptySide index level)) ⋯)
+                      (NJX_DigestCohort.dcells p.expected) p.targets.last (NKI_AppendPacket.emptySide index level)
+                      p.arithmetic.prepared p.arithmetic.residual p.arithmetic.packed)
+                    (if NKI_AppendPacket.emptySide index level = true then 23 else 21) ∧
+                  NKI_DigestTargets.cells p.targets =
+                    NKI_AppendCut.targets (NKI_AppendPacket.emptySide index level) (NJX_DigestCohort.dcells p.expected)
+                      p.targets.last :=
+fun index level frontier o high hl hf ho hh =>
+  let ⟨p, cp⟩ := NKI_AppendPacket.source index level frontier o high hl hf ho hh
+  Exists.intro p
+    ⟨cp,
+      ⟨NKI_AppendPacket.canonical p,
+        ⟨NKI_AppendCut.source (NKI_AppendPacket.emptySide index level) level high
+            (NKI_DigestView.opened o (NKI_AppendPacket.start (NKI_AppendPacket.emptySide index level))
+              (NKI_AppendPacket.start_bound (NKI_AppendPacket.emptySide index level)))
+            (NJX_DigestCohort.dcells p.expected) p.targets.last p.arithmetic.prepared p.arithmetic.residual
+            p.arithmetic.packed p.arithmetic.out,
+          NKI_TargetAssociation.source p.targets⟩⟩⟩
+'AspisR1.NKI_AppendRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r3be2f8d533dd416fb308e3e89bb59acb.scope; invocation ID: 5a3289443fd0418185da3dc0a3e02494

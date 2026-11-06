@@ -1,0 +1,49 @@
+theorem AspisR1.NKI_AppendPacket.source : ∀ (index : U64) (level : Usize) (frontier : D) (o : O) (high : NQ),
+  ↑level < 20 →
+    dc frontier → FIw_ArrayValue.canonical o → Canon high → ∃ p, cohort index level frontier o high = ok (output p) :=
+fun index level frontier o high hl hf ho hh =>
+  have child :=
+    Decidable.casesOn (instDecidableEqBool (emptySide index level) true)
+      (fun h =>
+        Eq.mpr
+          (id
+            (congrArg Exists
+              (funext fun d => congrFun' (congrArg And (congrFun' (congrArg Eq (if_neg h)) (ok d))) (dc d))))
+          (Exists.intro frontier ⟨rfl, hf⟩))
+      fun h =>
+      Eq.mpr
+        (id
+          (congrArg Exists
+            (funext fun d => congrFun' (congrArg And (congrFun' (congrArg Eq (if_pos h)) (ok d))) (dc d))))
+        (WP.spec_imp_exists
+          (JGa_EmptyRoot.source level (Decidable.byContradiction fun a => source._proof_1 level hl a)));
+  let ⟨d, h✝⟩ := child
+  let ⟨cd, hd⟩ := h✝
+  let ⟨t, h✝¹⟩ :=
+    NKI_BindingPacket.source high o d (start (emptySide index level)) (emptySide index level)
+      (start_bound (emptySide index level)) hh ho hd
+  let ⟨p, h✝²⟩ := h✝¹
+  let ⟨cp, co⟩ := h✝²
+  let packet :=
+    { expected := d, expected_call := cd, expected_canonical := hd, targets := t, arithmetic := p, call := cp,
+      association := co };
+  Exists.intro packet
+    (Eq.mpr
+      (id
+        (congrFun'
+          (congrArg Eq
+            (Eq.trans
+              (Eq.trans
+                (congrFun' (congrArg Bind.bind cd) fun d => do
+                  let out ← NKI_DigestPacked.cohort high o d (start (emptySide index level)) (emptySide index level)
+                  ok (carrier (emptySide index level) out))
+                (bind_tc_ok d fun y => do
+                  let out ← NKI_DigestPacked.cohort high o y (start (emptySide index level)) (emptySide index level)
+                  ok (carrier (emptySide index level) out)))
+              (Eq.trans (congrFun' (congrArg Bind.bind co) fun out => ok (carrier (emptySide index level) out))
+                (bind_tc_ok p.out fun y => ok (carrier (emptySide index level) y)))))
+          (ok (output packet))))
+      (Eq.refl (ok (carrier (emptySide index level) p.out))))
+'AspisR1.NKI_AppendPacket.start_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKI_AppendPacket.canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKI_AppendPacket.source' depends on axioms: [propext, Classical.choice, Quot.sound]

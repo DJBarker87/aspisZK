@@ -1,0 +1,28 @@
+def AspisR1.NKI_AppendCut.Cut : Bool →
+  Usize →
+    NQ →
+      Residuals →
+        Digest → Digest → NP → Residuals → (Fin 2 → NQ) → (Fin 2 → NQ) → (Fin 4 → NQ) → Observations → ℕ → Prop :=
+fun side level high o d targets cache residual packed reply out l calls =>
+  (calls = if side = true then 23 else 21) ∧
+    l.newEvent.kind = 3 ∧
+      l.newEvent.left = high ∧
+        (side = true →
+            l.emptyKind = 7 ∧
+              l.emptyLevel = level ∧
+                l.tweakEvent.kind = 8 ∧
+                  l.tweakEvent.left = FIw_ScalarArithmetic.lifted (d 7) ∧
+                    l.tweakEvent.right = FIw_ScalarArithmetic.lifted NJX_AppendTargets.tweak) ∧
+          (∀ (i : Fin 8),
+              (l.liftEvent i).kind = 5 ∧
+                (l.liftEvent i).left = FIw_ScalarArithmetic.lifted (targets i) ∧
+                  (l.subEvent i).kind = 2 ∧
+                    (l.subEvent i).left = o i ∧ (l.subEvent i).right = FIw_ScalarArithmetic.lifted (targets i)) ∧
+            (∀ (g : Fin 2),
+                l.packKind g = 6 ∧
+                  l.packArgs g = NJX_DigestGroups.group residual g ∧
+                    l.mulKind g = 4 ∧ l.mulCache g = NJB_PreparedCarrier.words cache ∧ l.mulRight g = packed g) ∧
+              out =
+                if side = true then ![reply 0, reply 1, FIq_Native.field.QM31.ZERO, FIq_Native.field.QM31.ZERO]
+                else ![FIq_Native.field.QM31.ZERO, FIq_Native.field.QM31.ZERO, reply 0, reply 1]
+'AspisR1.NKI_AppendCut.source' depends on axioms: [propext, Classical.choice, Quot.sound]
