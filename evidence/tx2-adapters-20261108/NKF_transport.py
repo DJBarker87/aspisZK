@@ -14,6 +14,11 @@ def ssh(code, data=None, submitted=False):
         if retry<10:time.sleep(60)
     raise RuntimeError('Transport exhausted')
 def admission(a):
+    disk=ssh('python3',"import shutil,json;print(json.dumps(dict(free_bytes=shutil.disk_usage('/').free)))")
+    assert disk.returncode==0, 'Host disk probe failed'
+    free=json.loads(disk.stdout)['free_bytes']
+    (E/(a+'-disk.json')).write_text(json.dumps(dict(free_bytes=free,minimum_bytes=40_000_000_000,allowed=free>=40_000_000_000))+'\n')
+    assert free>=40_000_000_000, 'STOP: host free disk below 40 GB'
     for retry in range(11):
         r=ssh('python3',f'''from pathlib import Path
 import subprocess,sys
