@@ -1,0 +1,53 @@
+{"attempt": "NJX_L002", "exit_status": 0, "wall_seconds": 8.067299159010872, "peak_rss_kib": "6141232", "swaps": "0", "print_axioms": []}
+@[irreducible] def FIq_Native.pool_v1.pair_forest_semantic_terminal.INPUT_OCCUPANCY_ROW : Aeneas.Std.Result
+  Aeneas.Std.Usize :=
+do
+  let i ← 63#usize * 16#usize
+  i + 9#usize
+@[irreducible] def FIq_Native.pool_v1.pair_forest_semantic_terminal.OUTPUT_OCCUPANCY_ROW : Aeneas.Std.Result
+  Aeneas.Std.Usize :=
+do
+  let i ← 63#usize * 16#usize
+  i + 10#usize
+def FIq_Native.pool_v1.pair_forest_semantic_terminal.add_path_lanes : Aeneas.Std.Array FIq_Native.field.QM31 24#usize →
+  FIq_Native.state_only_poseidon.StateOnlyPoseidonOpenings →
+    FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors →
+      Aeneas.Std.Result (Aeneas.Std.Array FIq_Native.field.QM31 24#usize) :=
+fun packed openings selec
+...
+@[irreducible] def FIq_Native.pool_v1.pair_forest_semantic_terminal.INPUT_OCCUPANCY_ROW : Aeneas.Std.Result
+  Aeneas.Std.Usize :=
+do
+  let i ← 63#usize * 16#usize
+  i + 9#usize
+@[irreducible] def FIq_Native.pool_v1.pair_forest_semantic_terminal.OUTPUT_OCCUPANCY_ROW : Aeneas.Std.Result
+  Aeneas.Std.Usize :=
+do
+  let i ← 63#usize * 16#usize
+  i + 10#usize
+def FIq_Native.pool_v1.pair_forest_semantic_terminal.add_path_lanes : Aeneas.Std.Array FIq_Native.field.QM31 24#usize →
+  FIq_Native.state_only_poseidon.StateOnlyPoseidonOpenings →
+    FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors →
+      Aeneas.Std.Result (Aeneas.Std.Array FIq_Native.field.QM31 24#usize) :=
+fun packed openings selectors => do
+  let s ←
+    Aeneas.Std.lift
+        (Aeneas.Std.Array.make 1#usize [{ start := 57#usize, «end» := 63#usize }]
+            FIq_Native.pool_v1.pair_forest_semantic_terminal.add_path_lanes._proof_4).to_slice
+  let q ← FIq_Native.pool_v1.pair_forest_semantic_terminal.sum_high selectors s
+  let q1 ← selectors.low.index_usize 1#usize
+  let q2 ← selectors.low.index_usize 5#usize
+  let q3 ← q1.add q2
+  let q4 ← selectors.low.index_usize 9#usize
+  let q5 ← q3.add q4
+  let q6 ← selectors.low.index_usize 13#usize
+  let q7 ← q5.add q6
+  let path_selector ← q.mul q7
+  let path ← FIq_Native.pool_v1.pair_forest_semantic_terminal.path_lanes_literal path_selector openings
+  FIq_Native.pool_v1.pair_forest_semantic_terminal.add_preweighted packed 32#usize path
+def Aeneas.Std.Array.to_slice.{u} : {α : Type u} → {n : Aeneas.Std.Usize} → Aeneas.Std.Array α n → Aeneas.Std.Slice α :=
+fun {α} {n} v => ⟨↑v, ⋯⟩
+def Aeneas.Std.lift.{u} : {α : Type u} → α → Aeneas.Std.Result α :=
+fun {α} x => Aeneas.Std.Result.ok x
+
+Running as unit: run-r327b0b9f6fb441f3af798c878ca10a40.scope; invocation ID: e4d68d9dae824e9db2a459d3193e4f99

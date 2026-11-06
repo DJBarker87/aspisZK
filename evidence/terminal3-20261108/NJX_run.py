@@ -59,6 +59,16 @@ for entry in manifest['files']:
 (b/'NJX_SEED.json').write_text(json.dumps(dict(files=records,total_bytes=sum(z['bytes'] for z in records))))
 
 
+manifest2=json.loads((b/'NJX_NJO_EXPORT.json').read_text());seed2=b/'NJX_NJO_seed';seed2.mkdir(exist_ok=True);records2=[]
+for entry in manifest2['files']:
+ src=Path(entry['path']);dst=seed2/src.name
+ assert hashlib.sha256(src.read_bytes()).hexdigest()==entry['sha256'],str(src)
+ if not dst.exists():shutil.copyfile(src,dst)
+ assert hashlib.sha256(dst.read_bytes()).hexdigest()==entry['sha256'],str(dst)
+ records2.append(dict(path=str(dst),sha256=entry['sha256'],bytes=dst.stat().st_size))
+(b/'NJX_NJO_SEED.json').write_text(json.dumps(dict(files=records2,total_bytes=sum(z['bytes'] for z in records2))))
+
+
 
 p=b/{(a+'.json')!r};x=json.loads(p.read_text());roots=x.get('env',{{}}).get('LEAN_PATH','').split(':');rels=set();pins={{}}
 if x['kind'] in ['lean','audit']:
