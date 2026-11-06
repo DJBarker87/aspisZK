@@ -13,18 +13,21 @@ The literal is a namespace/type port of retained emission, with explicit child
 slot. See NKY_LITERAL_CHECK.json; it is not an alias for a nonexistent FIq
 constant. Native transport uses existing (y)/(aq)(5), not a new trust row.
 
-TX2:216/218 (`NKY_BoxComplete.checkpoint/master`): allocator is the retained
+TX2:216/218 (`NKY_BoxTotal.checkpoint/master`): allocator is the retained
 headline Allocator item at the actual Box::new source site; before is that
 invocation's pre-state. Reservation is universally quantified, consumed at
 that site; no success premise. Allocated is the native captured allocation
 identity, not a separately created Box. Heap is an arbitrary logical pre-heap
-for the complete untouched-address frame. Bytes/raw/out are the SAME raw-child
-call and observed actual boxed carrier, including every mapped error.
+for the complete untouched-address frame. Bytes/raw are the SAME raw-child call. Observed is the actual boxed carrier
+only on allocation return; it is an unconstrained, unused ghost on abort.
 
-The only proof hypothesis is the own reviewed native Cut. Its decoder clause
+The proof hypotheses are the own reviewed returning native windows and the
+CLOSED decoder cut. The decoder clause
 is the existing CLOSED152/153 cut, discharged by NKP at exactly these bytes.
-Its fields clause is NKP's complete native field/error-window transcription,
-with `out.value` as observed payload. Its owner clause is the scalar native
+The returning window clause is NKP's complete native field transcription,
+with `observed.value` as payload; it is conditional on allocator and reservation
+return, in the CUT conclusion rather than as a root success hypothesis. Its
+owner clause is the scalar native
 pointer equality certified by K008/K011 (with payload/different-allocation
 controls). It is not a full endpoint equality. Native arbitrary existing
 allocation frame and freshness use K015/K018 and their mutation/alias controls.

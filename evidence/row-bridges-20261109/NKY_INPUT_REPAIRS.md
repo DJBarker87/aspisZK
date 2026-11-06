@@ -7,3 +7,12 @@ NKY_native_seed copied the retained predecessor source read-only into the own
 workspace; every imported file hash is retained. The strict validators are
 unchanged in meaning. NKY_K002 passed with the same harness name/property.
 No timeout or memory-killed shape has been replayed.
+
+NKY_L019 stopped before a scope: its changed dependency NKY_LevelsLoop had
+not yet compiled. No process was submitted. NKY_L034 scanner honestly exited1
+because the authored expected-import table omitted implicit Init. The strict
+matcher was unchanged; the source-based manifest parser now includes Lean's
+implicit Init. Final scan is on the changed final combined source, not an
+unchanged regression. NKY_K014 full-struct equality failed builtin memcmp
+unwinding at35; it was replaced by an arbitrary typed field/coordinate window
+under the SAME harness names, not rerun or given more unwind/time/memory.

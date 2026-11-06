@@ -7,7 +7,7 @@ for n in ['Driver','ProofDriver']:
 (E/'NKY_batch.py').write_text((P/'NKW_batch.py').read_text().replace('NKW','NKY'))
 s=(P/'NKW_pin.py').read_text().replace('NKW','NKY').replace('/home/dombarker/project-offloads/codex-cx-ledger8-cache-20261104/NKY_20261109/NKY_exports_20261109',B+'/NKY_exports_20261109')
 (E/'NKY_pin.py').write_text(s)
-mods=['NKY_LevelCarrier','NKY_LevelsLiteral','NKY_LevelsStep','NKY_LevelsBody','NKY_LevelSchedule','NKY_LevelsLoop','NKY_CanonicalLift','NKY_LevelsRoot','NKY_LevelsUnique','NKY_LevelsComplete','NKY_BoxAction','NKY_BoxFrame','NKY_BoxPacket','NKY_BoxRoots','NKY_BoxCarrier','NKY_BoxComplete']
+mods=['NKY_LevelCarrier','NKY_LevelsLiteral','NKY_LevelsStep','NKY_LevelsBody','NKY_LevelSchedule','NKY_LevelsLoop','NKY_CanonicalLift','NKY_LevelsRoot','NKY_LevelsUnique','NKY_LevelsComplete','NKY_BoxAction','NKY_BoxFrame','NKY_BoxPacket','NKY_BoxRoots','NKY_BoxCarrier','NKY_BoxComplete','NKY_BoxTotal']
 roots=[]
 for n in mods:
  s=(E/(n+'.lean')).read_text();namespace=re.search(r'^namespace ([\w.]+)',s,re.M)[1]
@@ -19,7 +19,7 @@ allroots=list(dict.fromkeys(prior+roots));groups=[allroots[i:i+360]for i in rang
 (E/'NKY_AUDIT_MODULES.json').write_text(json.dumps([['NKY_COMBINED_IMPORT']for _ in groups],indent=1)+'\n')
 expected=[json.loads(l)for l in(P/'NKW_EXPECTED_IMPORTS.jsonl').read_text().splitlines()]
 for n in mods+['NKY_COMBINED_IMPORT']:
- s=(E/(n+'.lean')).read_text();expected.append(dict(module=n,imports=re.findall(r'^import ([\w.]+)',s,re.M)))
+ s=(E/(n+'.lean')).read_text();expected.append(dict(module=n,imports=['Init']+re.findall(r'^import ([\w.]+)',s,re.M)))
 (E/'NKY_EXPECTED_IMPORTS.jsonl').write_text(''.join(json.dumps(r)+'\n'for r in expected))
 (E/'NKY_DRIVER_DIFF.md').write_text('''# Audit-driver adaptation
 
