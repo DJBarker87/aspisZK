@@ -21,6 +21,6 @@ for src in ['evidence/ledger20-20261109/NKW_EXPECTED_IMPORTS.jsonl','evidence/tx
   if row['module'] in expected:assert expected[row['module']]==row['imports'],row['module']
   expected[row['module']]=row['imports']
 for module in files+['NLE_COMBINED_IMPORT','NLE_Driver','NLE_ProofDriver']:
- expected[module]=re.findall(r'^import ([\w.]+)',(E/(module+'.lean')).read_text(),re.M)
+ expected[module]=['Init']+re.findall(r'^import ([\w.]+)',(E/(module+'.lean')).read_text(),re.M)
 (E/'NLE_EXPECTED_IMPORTS.jsonl').write_text(''.join(json.dumps(dict(module=k,imports=v))+'\n' for k,v in sorted(expected.items())))
 print(json.dumps(dict(modules=len(files),roots=len(roots),groups=len(groups))))

@@ -10,7 +10,7 @@ Target not yet established. Source-only support is not native credit.
 
 ## Hypothesis discipline
 
-NLE_Auth.parameterized_fold is an intermediate Result-erasure theorem with Ops and CommonResultPacket parameters. CommonResultPacket is ONLY the full source Result equation at every SAME frame. It is NOT the complete TX2:065 row packet: native post/frame and chronological effects remain absent, so it cannot license row credit or serve as a positive root under(aq)(2). This distinction is deliberate and audited. Closed parse/mark domains and source-to-emission type transport remain to be installed. No success/NoBad/current-proof-persistence hypothesis is inserted.
+NLE_Auth.parameterized_fold is an intermediate Result-erasure theorem with Ops and CommonResultPacket parameters. CommonResultPacket is ONLY the full source Result equation at every SAME frame. It is NOT the complete TX2:065 row packet: native post/frame and chronological effects remain absent, so it cannot license row credit or serve as a positive root under(aq)(2). This distinction is deliberate and audited. The CLOSED parser and release marker are installed in the source AuthScope; their native carrier/step association remains open. No success/NoBad/current-proof-persistence hypothesis is inserted.
 
 No RuntimeCpiReadonlyEntry7, PDA-value row, free allocator-success bit or new trust item is used. op38 remains quantified; coherent digest/error slots are op43/op44.
 
@@ -19,3 +19,7 @@ No RuntimeCpiReadonlyEntry7, PDA-value row, free allocator-success bit or new tr
 NLE_ParseInstall.emitted installs the CLOSED NJS_Parse.source on ALL proof slices through explicit nominal enum maps. NLE_ParseInstall.success reuses Op3I_ParseLaws.source_success, deriving S2 and57607 on the SAME slice. NLE_AuthScope.common_domain proves at every entered common event that proof.length=57607, public.length<=1880, and observer=None, from the parser and actual1880Array supplied by the owned encoder. No proof/public-size or parser-success hypothesis is supplied to that event theorem. This source-event fact still needs the native invocation/caller carrier association; it does not widen a native fixture scope.
 
 The module withPublic obtains public bytes from an Array carrier parameter. The owned caller's actual encoder return must be installed into that carrier in the complete parent fold; selecting an unrelated Array would fail SAME-call provenance. Error conversion is now recorded as a separate owned event, so a converter abort has an explicit prefix and no emit suffix.
+
+## Same caller carrier join
+
+NLE_CallerScope.scope joins the SAME computed snapshot0 and snapshot6 replies, checked suffix range, and encoded1880Array. It proves proof57607/public1880/checkpoint1768 under those source read/range facts, rather than choosing an unrelated buffer. The missing work is to obtain those facts from the actual SDK and owned native calls; no native root assumes the bounds.

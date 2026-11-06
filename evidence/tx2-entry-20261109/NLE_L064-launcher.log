@@ -1,0 +1,40 @@
+{"attempt": "NLE_L064", "exit_status": 0, "wall_seconds": 20.246767753968015, "peak_rss_kib": "6437124", "swaps": "0", "print_axioms": ["'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.RPx_Deployed.deployed : ∀ {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W),
+          AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀
+...
+Std.core.result.Result Aeneas.Std.U64 NLE_Wrapper.PE → Aeneas.Std.Result NLE_Wrapper.PR) :
+    NLE_Wrapper.Ops Account
+@NLE_Wrapper.fold_source : ∀ {Account : Type} (ops : NLE_Wrapper.Ops Account) (state : NLE_Wrapper.State Account),
+  (NLE_Wrapper.G ops state).result = NLE_Wrapper.source ops state
+@NLE_Dispatch.emitted : ∀ {Account : Type} (ops : AspisR1.Hiq_DispatchSource.Ops Account)
+  (state : NLE_Dispatch.State Account),
+  (NLE_Dispatch.G (AspisR1.NIV_RawBoundary.profile ops) state).2 =
+    AspisR1.NIV_ExtractedForward.process ops state.program state.accounts state.data
+@NLE_Entry.emitted : ∀ {Account : Type} (ops : AspisR1.Hiq_DispatchSource.Ops Account)
+  (state : NLE_Entry.State Account),
+  (NLE_Entry.G (AspisR1.NIV_RawBoundary.profile ops) state).2 =
+    AspisR1.NIV_ExtractedForward.entry ops state.program state.accounts state.data
+@NLE_RouteFold.child_packet : ∀ {Account State Event : Type} (children : NGL_EntryRouting.Children Account State Event)
+  (state : State) (program : AspisR1.Hiq_DispatchSource.Key) (accounts : Aeneas.Std.Slice Account)
+  (data : Aeneas.Std.Slice Aeneas.Std.U8),
+  AspisR1.Hiq_ReleaseRoute.asq8 data →
+    NGL_EntryRouting.run children program accounts data state =
+      (children.second program accounts data state, [NGL_EntryRouting.Call.second program accounts data])
+@NLE_AuthScope.common_domain : ∀ {H : Type} (ops : VTop_Stages.Ops) (child : NLE_Auth.Common H) (s : NLE_Auth.State H)
+  (bytes : Aeneas.Std.Array Aeneas.Std.U8 1880#usize) (frame : NLE_Auth.Frame H)
+  (reply : Aeneas.Std.Result NLE_Auth.Reply),
+  NLE_Auth.Event.common frame reply ∈
+      (NLE_Auth.G (NLE_AuthScope.install ops) child (NLE_AuthScope.withPublic s bytes)).events →
+    (↑frame.proof).length = 57607 ∧ (↑frame.publicBytes).length ≤ 1880 ∧ frame.observer = none
+
+Running as unit: run-r5b82a81199bd4c11aca9f71b8036d6e8.scope; invocation ID: 2392c627ede94b62a6ccf093a4cad53d
