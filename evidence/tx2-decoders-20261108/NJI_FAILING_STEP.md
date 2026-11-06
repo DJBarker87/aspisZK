@@ -1,0 +1,19 @@
+# Retained failures
+
+E001: Charon translated all eight roots; own collector failed because digest reexport selector did not name canonical atomic_statement owner. No Aeneas ran. E001_CONTINUE: own continuation omitted output directory mkdir; no compiler/Charon/Aeneas ran. Corrected own script, unchanged strict validation, continued SAME LLBC in E001_CONTINUE2: first/only Aeneas invocation, exit0. No extra extraction inferred.
+
+NJI-F1: Aeneas emitted only policy decoder, master validator and V1 validators; four decoder roots omitted after missing Iterator.any builtin-field warning. Exit0 alone is insufficient. L003 failed on incompatible IterMut.next ABI and capacity-parameter propagation in master closure, and four unknown omitted roots. No failing object supplies credit. L004 isolates available policy/registry roots, excludes incompatible unused trait/master SCC; exact diffs and raw outputs retained. No tool/library repair or second extraction.
+
+K001 gate lacked60 historical frozen input files; restored all60 by frozen Git hash, no pin relaxation. K002 compiler lacked frozen cfg(kani) tree_reference path; restored its17 tracked package inputs. K003/004 registry PASS/intended ensures FAIL; K005/006 entry PASS/intended ensures FAIL. K007 prelaunch owned script lacked format.rs in historical payload dictionary; no host launch, conservatively consumed native slot; supplied frozen Git body only after its expected hash check. No timeout/memory kill or harness rename.
+
+K016 stopped at an unwinding assertion in the64-byte builtin memcmp for last_checkpoint_lane_sequences == [0u64;8]; no semantic result. The parent any loop was already replaced by an unconstrained Bool. The replacement uses65 iterations solely for this fixed64-byte standard comparison; the independently checked algorithmic any remains ONE iteration, with unchanged90s timeout/8G cap.
+
+## Final failure accounting
+
+K008 whole-record policy contract timed out90s. No result credit and no unchanged replay. Replacement is the independently named coordinate stage (actual source, arbitrary output/argument coordinate), then full-record Lean extensionality and all-length join. Original harness was not renamed to conceal its verdict. Native log return codes alone are never interpreted as expected semantic failures.
+
+K047 exact-carrier verified-stub fidelity probe failed compilation because the frozen error enum lacks kani::Arbitrary. No credit. An own cfg(kani)-sidecar implementation enumerating ALL12 existing error variants was added, without changing the frozen enum or contract/assertion. Same named unimplied harness K050 now fails the intended assertion; K051 weak proof and K052 real body pass, K053 inverted ensures and K054 modifies violation fail semantically in the same configuration. These interface probes do not create a new row or a stub_verified implementation bridge.
+
+Focused Lean failures are completely indexed in NJI_FAILURES.json with raw logs and receipts. They include scalar numeral/port elaboration, raw aggregate incompatibility, master SCC capacity-parameter propagation, private std-loop name lookup (numeric private component, not a string), let-pattern simplification and symbolic guard normalization. The final proof sources contain no added success/callee/endpoint assumption to bypass them. L048 exceeded simp's STEP limit, not time/memory; replacement split the small conditional structure and simplified the monadic binds. L053 source and L056 native cut pass. L050 checkpoint Boolean normalization was corrected symbolically, green L052. Failed objects/experimental inspection modules are excluded from the combined import. All58 selected roots pass raw ax2 independently of any older failed log containing sorryAx.
+
+No memory-killed job, timeout/cap increase or unchanged timed-out-shape rerun. No full combined regression repeated: one combined import, one58-root raw audit and one15102-module NFX scan.

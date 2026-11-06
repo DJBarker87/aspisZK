@@ -1,0 +1,5 @@
+# Omitted-root boundary
+
+Single E001 LLBC has all eight frozen roots. Aeneas omitted152/153/201/203 after the missing Iterator.any trait-field warning, despite exit0. No second extraction or library/tool repair is authorized. These four remain OPEN under the requested emitted-body route. The independent native caller cuts and loop frames are support; they never substitute for the absent emitted-body equation. Rule(ah) additionally requires an actual frozen-function/full-reference contract; no acceptance-only or selected-probe result is reclassified as that contract. K008's whole-record timeout is retired. Coordinate source cuts are explicitly(y)/(ai) support, not an invented full-reference contract under(ah).
+
+Every header rejection returns before any later child; entered status/validator error is forwarded completely; checkpoint loop error writes its local selected word then aborts without a suffix iteration. Source ordered local-record cuts preserve these prefixes; no new runtime trust, no RuntimeCpiReadonlyEntry7.

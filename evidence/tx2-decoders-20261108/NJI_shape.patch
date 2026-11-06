@@ -1,0 +1,25 @@
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NJI_shape.rs
+@@ -0,0 +1,22 @@
++// Scratch-only contract interface controls; exact V1 validator Result carrier.
++use super::*;
++type F=PoolV1VerifierRegistryFormatError;
++impl kani::Arbitrary for F {fn any()->Self {let t:u8=kani::any();kani::assume(t<12);match t {0=>Self::WrongLength,1=>Self::WrongMagic,2=>Self::WrongVersion,3=>Self::NonZeroReserved,4=>Self::UnsupportedFlags,5=>Self::InvalidStatus,6=>Self::InvalidAuthorityMode,7=>Self::ZeroRequiredBinding,8=>Self::InvalidActivationDelay,9=>Self::InvalidStatementVersion,10=>Self::InvalidRetirementSlot,_=>Self::InvalidDeploymentMode}}}
++
++#[kani::ensures(|r| r.is_ok() || *r==Err(F::InvalidStatus))]
++#[kani::modifies()]
++fn weak()->Result<(),F>{Ok(())}
++#[kani::proof_for_contract(weak)]
++fn weak_proof(){let _=weak();}
++#[kani::proof]
++fn real(){assert!(weak()==Ok(()));}
++#[kani::proof] #[kani::stub_verified(weak)]
++fn unimplied(){assert!(weak()==Ok(()));}
++#[kani::ensures(|r| r.is_err())] #[kani::modifies()]
++fn inverted()->Result<(),F>{Ok(())}
++#[kani::proof_for_contract(inverted)]
++fn inverted_proof(){let _=inverted();}
++#[kani::modifies(&mut x[0])] #[kani::ensures(|r| r.is_ok())]
++fn badframe(x:&mut [u8;2])->Result<(),F>{x[1]=x[1].wrapping_add(1);Ok(())}
++#[kani::proof_for_contract(badframe)]
++fn frame(){let mut x:[u8;2]=kani::any();let _=badframe(&mut x);}

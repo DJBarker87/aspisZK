@@ -1,0 +1,50 @@
+{"attempt": "NJI_L055", "exit_status": 0, "wall_seconds": 7.0414681769907475, "peak_rss_kib": "5977524", "swaps": "0", "print_axioms": ["'NJI_PolicyTotal.native_source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJI_PolicyTotal.native_source : ∀ (b : Slice U8) (log : Option P) (out : core.result.Result P F),
+  Cut b log out → ok out = NJI_PolicyParser.raw b :=
+fun b log out h =>
+  Decidable.casesOn (instDecidableEqNat (↑b).length 104)
+    (fun h_1 =>
+      Eq.mpr (id (congrArg (fun _a => ok out = _a) (NJI_PolicyParser.source b)))
+        (Eq.mpr
+          (id
+            (congrArg (Eq (ok out))
+              ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => dif_neg h_1) x_0 x_1 x_2 x_3)
+                (instDecidableEqNat (↑b).length 104) (Result (core.result.Result P F))
+                (fun len =>
+                  if List.take 4 ↑b = ↑NJI_PolicyParser.magic then
+                    if NHY_
+...
+.casesOn (instDecidableEqNat (↑b).length 104)
+    (fun h_1 =>
+      Eq.mpr (id (congrArg (fun _a => ok out = _a) (NJI_PolicyParser.source b)))
+        (Eq.mpr
+          (id
+            (congrArg (Eq (ok out))
+              ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => dif_neg h_1) x_0 x_1 x_2 x_3)
+                (instDecidableEqNat (↑b).length 104) (Result (core.result.Result P F))
+                (fun len =>
+                  if List.take 4 ↑b = ↑NJI_PolicyParser.magic then
+                    if NHY_ZeroStep.byte b 4 = 1#u8 then
+                      if List.take 2 (List.drop 6 ↑b) = List.replicate 2 0#u8 then do
+                        let reply ← validator (NJI_PolicyParser.record b len)
+                        ok (NJI_PolicyParser.validation (NJI_PolicyParser.record b len) reply)
+                      else
+                        ok
+                          (core.result.Result.Err
+                            NJI_Extracted.aspis_statement.pool_v1.format.PoolV1FormatError.NonZeroReserved)
+                    else
+                      ok
+                        (core.result.Result.Err
+                          NJI_Extracted.aspis_statement.pool_v1.format.PoolV1FormatError.WrongVersion)
+                  else
+                    ok
+                      (core.result.Result.Err
+                        NJI_Extracted.aspis_statement.pool_v1.format.PoolV1FormatError.WrongMagic))
+                fun len =>
+                ok
+                  (core.result.Result.Err NJI_Extracted.aspis_statement.pool_v1.format.PoolV1FormatError.WrongLength))))
+          (congrArg ok (Eq.mp (dif_neg h_1) h).right)))
+    fun h_1 => NJI_PolicyCut.native_source b h_1 log out (Eq.mp (dif_pos h_1) h)
+'NJI_PolicyTotal.native_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r19cab823037f4159890438ff1ca89b4e.scope; invocation ID: e9f3b90b837d4835b41925f62dd638f1
