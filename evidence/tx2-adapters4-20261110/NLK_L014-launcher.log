@@ -1,0 +1,37 @@
+{"attempt": "NLK_L014", "exit_status": 0, "wall_seconds": 15.165235838852823, "peak_rss_kib": "5981392", "swaps": "0", "print_axioms": ["'NLK_DriverFold.then_assoc' does not depend on any axioms", "'NLK_DriverFold.source_order' depends on axioms: [propext, Quot.sound]", "'NLK_DriverFold.error_stops' depends on axioms: [propext]", "'NLK_DriverFold.abort_stops' depends on axioms: [propext]", "'NLK_DriverFold.divergence_stops' depends on axioms: [propext]"]}
+theorem NLK_DriverFold.source_order : ∀ {E C : Type} (step : Parent → C → Outcome E) (p : Parent) (xs ys : List C),
+  run step p (xs ++ ys) = thenRun (run step p xs) fun q => run step q ys :=
+fun {E C} step p xs ys =>
+  List.rec (motive := fun xs => ∀ (p : Parent), run step p (xs ++ ys) = thenRun (run step p xs) fun q => run step q ys)
+    (fun p => Eq.refl (run step p ([] ++ ys)))
+    (fun c cs ih p =>
+      of_eq_true
+        (Eq.trans
+          (congr
+            (congrArg Eq
+              (Eq.trans (run.eq_2 step p c (cs ++ ys))
+                (congrArg (thenRun (step p c)) (funext fun q => (fun p => ih p) q))))
+            (then_assoc (step p c) (fun q => run step q cs) fun q => run st
+...
+theorem NLK_DriverFold.source_order : ∀ {E C : Type} (step : Parent → C → Outcome E) (p : Parent) (xs ys : List C),
+  run step p (xs ++ ys) = thenRun (run step p xs) fun q => run step q ys :=
+fun {E C} step p xs ys =>
+  List.rec (motive := fun xs => ∀ (p : Parent), run step p (xs ++ ys) = thenRun (run step p xs) fun q => run step q ys)
+    (fun p => Eq.refl (run step p ([] ++ ys)))
+    (fun c cs ih p =>
+      of_eq_true
+        (Eq.trans
+          (congr
+            (congrArg Eq
+              (Eq.trans (run.eq_2 step p c (cs ++ ys))
+                (congrArg (thenRun (step p c)) (funext fun q => (fun p => ih p) q))))
+            (then_assoc (step p c) (fun q => run step q cs) fun q => run step q ys))
+          (eq_self (thenRun (step p c) fun q => thenRun (run step q cs) fun q => run step q ys))))
+    xs p
+'NLK_DriverFold.then_assoc' does not depend on any axioms
+'NLK_DriverFold.source_order' depends on axioms: [propext, Quot.sound]
+'NLK_DriverFold.error_stops' depends on axioms: [propext]
+'NLK_DriverFold.abort_stops' depends on axioms: [propext]
+'NLK_DriverFold.divergence_stops' depends on axioms: [propext]
+
+Running as unit: run-r07e9d4623f2e4d99a4bd9a7a08e7cd05.scope; invocation ID: b73ae9ae6c3d439284451a32f3415056

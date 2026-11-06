@@ -1,0 +1,31 @@
+{"attempt": "NLK_K019", "exit_status": 1, "wall_seconds": 1.2464591260068119, "peak_rss_kib": "188200", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+ of here
+   |                                                 move occurs because `replies[_]` has type `Result<__Pubkey, PubkeyError>`, which does not implement the `Copy` trait
+   |
+   = note: the full name for the type has been written to '/home/dombarker/project-offloads/codex-cx-tx2-adapters4-20261110/NLK_target/kani/x86_64-unknown-linux-gnu/debug/deps/aspis_r1_cost_probe_program.long-type-12082416189313351795.txt'
+   = note: consider using `--verbose` to print the full type name to the console
+help: consider borrowing here
+   |
+28 | fn pda(_seeds:&[&[u8]],_program:&Pubkey,log:&mut Log,replies:&[Result<Pubkey,solana_program::pubkey::PubkeyError>;4])->Result<Pubkey,solana_program::pubkey::PubkeyError>{emit(log,30+log.pda as u8);let r=&replies[log.pda];log.pda+=1;r}
+   |                                                                                                                                                                                                            +
+help: consider cloning the value if the performance cost is acceptable
+   |
+28 | fn pda(_seeds:&[&[u8]],_program:&Pubkey,log:&mut Log,replies:&[Result<Pubkey,solana_program::pubkey::PubkeyError>;4])->Result<Pubkey,solana_program::pubkey::PubkeyError>{emit(log,30+log.pda as u8);let r=replies[log.pda].clone();log.pda+=1;r}
+   |                                                                                                                                                                                                                            ++++++++
+
+For more information about this error, try `rustc --explain E0508`.
+error: could not compile `aspis-r1-cost-probe-program` (lib) due to 4 previous errors; 7 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 4 compilation errors.
+
+Running as unit: run-r77155ab1162e4e1a8befb4a33b631263.scope; invocation ID: 38fb2063019842798b8280fab1a863d2

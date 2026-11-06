@@ -1,0 +1,11 @@
+{
+ "source": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+ "segment": "        let loader = bpf_loader_upgradeable::id();\n        let registry = decode_verifier_registry_v2(registry_account.data()?)\n            .map_err(|_| ProgramError::InvalidAccountData)?;\n        let expected_registry = Pubkey::create_program_address(\n            &[\n                VERIFIER_REGISTRY_V2_SEED,\n                master_account.key().as_ref(),\n                &[registry.bump],\n            ],\n            &registry_program,\n        )\n        .map_err(|_| ProgramError::InvalidAccountData)?;\n        if registry_account.key() != &expected_registry {\n            return Err(ProgramError::InvalidAccountData);\n        }\n        let registry_programdata = Pubkey::create_program_address(\n            &[registry_program.as_ref(), &[registry.programdata_bump]],\n            &loader,\n        )\n        .map_err(|_| ProgramError::InvalidAccountData)?;\n        if registry.pool != master_account.key().to_bytes()\n            || registry.authority != master.verifier_policy.registry_authority\n            || registry.policy_binding != master.verifier_policy.policy_binding\n            || registry.registry_program != registry_program.to_bytes()\n            || registry.loader_program != loader.to_bytes()\n            || registry.programdata_address != registry_programdata.to_bytes()\n            || !registry.is_immutable()\n            || registry.is_paused()\n        {\n            return Err(ProgramError::InvalidAccountData);\n        }\n\nOk(())",
+ "segment_sha256": "add0494441f96f5c919a9a85796152c8192c2e013cf861754dcf359ed67d6fa4",
+ "version": 2,
+ "part": "registry",
+ "mode": "inverse",
+ "domain": "arbitrary owned account/master records, all data errors, unconstrained full typed decoder success or WrongLength, all typed PDA replies and arbitrary slot; post-policy versioned branch",
+ "modifies": "local output and full chronological call log; input accounts unchanged",
+ "limits": "expected gate ordering transcribed from same source; native branch certificate only; child domains/full invocation not yet composed"
+}

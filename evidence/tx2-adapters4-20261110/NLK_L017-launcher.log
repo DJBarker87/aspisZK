@@ -1,0 +1,51 @@
+{"attempt": "NLK_L017", "exit_status": 0, "wall_seconds": 17.719903068849817, "peak_rss_kib": "6363536", "swaps": "0", "print_axioms": ["'NLK_LaneSuffixLaw.value' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLK_LaneSuffixLaw.owned' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLK_LaneSuffixLaw.value : ∀ (bump : U8) (master : Std.Array U8 32#usize) (lane : U8) (next : U64)
+  (root emptyRoot : Node) (state : Frontier) (allocated : ℕ) (out : core.result.Result (NKY_BoxAction.Owned Lane) PE),
+  Cut bump master lane next root emptyRoot state allocated out →
+    NKY_BoxCarrier.erase out =
+      (NKP_LaneCompletion.finish bump master lane next root emptyRoot (core.result.Result.Ok (), state, [])).1 :=
+fun bump master lane next root emptyRoot state allocated out cut =>
+  core.result.Result.casesOn (motive := fun t =>
+    out = t →
+      NKY_BoxCarrier.erase out =
+        (NKP_LaneCompletion.finish bump master lane next root emptyRoot (core.result.Result.Ok (), st
+...
+ter lane next root emptyRoot state allocated out cut =>
+  have owner :=
+    core.result.Result.casesOn (motive := fun t => out = t → NKY_BoxCarrier.Owner allocated out) out
+      (fun box h =>
+        Eq.ndrec (motive := fun out =>
+          Cut bump master lane next root emptyRoot state allocated out → NKY_BoxCarrier.Owner allocated out)
+          (fun cut => cut.right.right) (Eq.symm h) cut)
+      (fun e h =>
+        Eq.ndrec (motive := fun out =>
+          Cut bump master lane next root emptyRoot state allocated out → NKY_BoxCarrier.Owner allocated out)
+          (fun cut => True.intro) (Eq.symm h) cut)
+      (Eq.refl out);
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          _a =
+            NKY_BoxAction.run allocator before 720 reservation allocated
+              (ok
+                (NKP_LaneCompletion.finish bump master lane next root emptyRoot
+                    (core.result.Result.Ok (), state, [])).1))
+        (NKY_BoxCarrier.association allocator before 720 reservation allocated out owner)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            NKY_BoxAction.run allocator before 720 reservation allocated (ok _a) =
+              NKY_BoxAction.run allocator before 720 reservation allocated
+                (ok
+                  (NKP_LaneCompletion.finish bump master lane next root emptyRoot
+                      (core.result.Result.Ok (), state, [])).1))
+          (value bump master lane next root emptyRoot state allocated out cut)))
+      (Eq.refl
+        (NKY_BoxAction.run allocator before 720 reservation allocated
+          (ok
+            (NKP_LaneCompletion.finish bump master lane next root emptyRoot (core.result.Result.Ok (), state, [])).1))))
+'NLK_LaneSuffixLaw.owned' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rddc50c6cfa814bffbc3261e3f468af03.scope; invocation ID: 957b0fea3e8e4d83b0b27559ded85731

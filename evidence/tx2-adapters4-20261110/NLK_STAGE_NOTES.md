@@ -10,3 +10,23 @@ native verdict was renamed. Local support only; row217 remains OPEN.
 All native submissions use the inherited frozen graph/edge validator offline,
 exact KMX mitigation and source-erasure checks. No function contracts or
 Ref/RefMut-return substitution. Each source/log input retained by sha256.
+
+K019/K020 owned chain own-input compile errors: trailing comma injection and
+non-Copy PDA reply; repaired in call parser / explicit Clone. K021 setup copy
+unwind failed; zero-copy Box-slice into_vec setup replaced it (same arbitrary
+owned payload). K022/K023 V1 PASS/intended assertion FAIL. K024 full V2 TIMEOUT;
+K026/K027 registry half and K028/K029 entry half PASS/intended FAIL, same caps.
+K025 complete lane invocation TIMEOUT, retired. K030/K031 initially restrict
+length to1, so no credit for metadata beyond the checkpoint gate. K032 expanded
+whole metadata TIMEOUT; K033/K034 front and K035/K036 owners halves pass with
+intended controls. K037 combined lane suffix TIMEOUT; split by field. K038
+scalar PASS but K039 control TIMEOUT: no paired credit. K040/K041 root,
+K042/K043 frontier and K044/K045 owner have matched assertions per strict
+NLK_validate_native.py. Exit1 alone is NEVER a matched control; the queue's
+initial exit-only check was insufficient and is superseded by that validator.
+
+L005/L007 source-support drafts fail only on missing namespace import / let
+unfolding; L008 passes. L013 adds the returned-Err Drop lemma. L014 rebuilds
+DriverFold because that direct dependency changed; not an unchanged regression.
+L012 PDA-domain draft had finite-list proof syntax errors; L015 corrected,
+L016 concrete site domains and L017 actual-owner suffix allocation law pass.
