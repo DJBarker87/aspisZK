@@ -1,0 +1,32 @@
+--- /dev/null
++++ b/NLK_registry_borrow.rs
+@@ -0,0 +1,29 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++
++use aspis_statement::pool_v1::{VerifierRegistryV1,VerifierRegistryV2,VerifierRegistryEntryV1,VerifierRegistryEntryV2,VerifierEntryStatusV1};
++fn status()->VerifierEntryStatusV1{let s:u8=kani::any();kani::assume(s<4);match s{0=>VerifierEntryStatusV1::Pending,1=>VerifierEntryStatusV1::Active,2=>VerifierEntryStatusV1::Paused,_=>VerifierEntryStatusV1::Retired}}
++fn registry1()->VerifierRegistryV1{VerifierRegistryV1{flags:kani::any(),bump:kani::any(),pool:kani::any(),authority:kani::any(),policy_binding:kani::any(),generation:kani::any(),minimum_activation_delay_slots:kani::any()}}
++fn registry2()->VerifierRegistryV2{VerifierRegistryV2{flags:kani::any(),bump:kani::any(),pool:kani::any(),authority:kani::any(),policy_binding:kani::any(),generation:kani::any(),minimum_activation_delay_slots:kani::any(),registry_program:kani::any(),loader_program:kani::any(),programdata_address:kani::any(),programdata_bump:kani::any(),executable_hash:kani::any()}}
++fn entry1()->VerifierRegistryEntryV1{VerifierRegistryEntryV1{status:status(),statement_version:kani::any(),bump:kani::any(),pool:kani::any(),verifier_program:kani::any(),profile_binding:kani::any(),release_binding:kani::any(),activation_slot:kani::any(),retirement_slot:kani::any(),policy_binding:kani::any()}}
++fn entry2()->VerifierRegistryEntryV2{VerifierRegistryEntryV2{status:status(),statement_version:kani::any(),bump:kani::any(),pool:kani::any(),verifier_program:kani::any(),profile_binding:kani::any(),release_binding:kani::any(),loader_program:kani::any(),programdata_address:kani::any(),programdata_bump:kani::any(),executable_hash:kani::any(),expected_upgrade_authority:kani::any(),activation_slot:kani::any(),retirement_slot:kani::any(),policy_binding:kani::any()}}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn stage(){
++ let mut data:[u8;256]=kani::any();let coordinate:usize=kani::any();kani::assume(coordinate<256);
++ let expected=data[coordinate];let key=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());let mut money:u64=kani::any();
++ let account=AccountInfo::new(&key,false,false,&mut money,&mut data,&owner,false,0);
++ let held:bool=kani::any();let exclusive=if held{Some(account.try_borrow_mut_data().unwrap())}else{None};
++ let good:bool=kani::any();let raw=registry2();let mut calls=0u8;let mut live=false;let mut byte=0u8;let mut length=0usize;
++ let mut oracle=|input:&[u8]|->Result<VerifierRegistryV2,aspis_statement::pool_v1::PoolV1VerifierRegistryFormatError>{
++ calls+=1;length=input.len();byte=input[coordinate];live=account.try_borrow_mut_data().is_err();
++ if good{Ok(raw)}else{Err(aspis_statement::pool_v1::PoolV1VerifierRegistryFormatError::WrongLength)}
++ };
++ let mut suffix=0u8;let mut out=(||->Result<VerifierRegistryV2,ProgramError>{        let registry = oracle(&account.try_borrow_data()?)
++            .map_err(|_| ProgramError::InvalidAccountData)?; suffix+=1;Ok(registry)})();
++ let mut released=if held{account.try_borrow_data().is_err()}else{account.try_borrow_mut_data().is_ok()};
++ 
++ let reply=if held{out==Err(ProgramError::AccountBorrowFailed)}else if good{out==Ok(raw)}else{out==Err(ProgramError::InvalidAccountData)};
++ assert!(reply&&released&&suffix==if !held&&good{1}else{0}&&if held{calls==0}else{calls==1&&live&&length==256&&byte==expected},"native caller SAME data borrow decoder Result token lifetime and lexical Drop");
++ drop(exclusive);
++}

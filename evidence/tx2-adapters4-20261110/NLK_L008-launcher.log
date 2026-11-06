@@ -1,0 +1,43 @@
+{"attempt": "NLK_L008", "exit_status": 0, "wall_seconds": 12.826018030988052, "peak_rss_kib": "5994912", "swaps": "0", "print_axioms": ["'NLK_BorrowScope.acquire_error' depends on axioms: [propext, Quot.sound]", "'NLK_BorrowScope.child_abort' depends on axioms: [propext, Quot.sound]", "'NLK_BorrowScope.child_divergence' depends on axioms: [propext, Quot.sound]", "'NLK_BorrowScope.invariant' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'NLK_BorrowScope.acquire_error' depends on axioms: [propext, Quot.sound]
+'NLK_BorrowScope.child_abort' depends on axioms: [propext, Quot.sound]
+'NLK_BorrowScope.child_divergence' depends on axioms: [propext, Quot.sound]
+theorem NLK_BorrowScope.invariant : ∀ {A : Type} (p : Parent) (account : ℕ)
+  (child : Payload → Result (Except ProgramError A)), Invariant p → Invariant (run p account child).parent :=
+fun {A} p account child valid =>
+  have ha := acquire_preserves p account NLF_RefCell.Kind.shared valid;
+  id
+    (run.match_4.splitter
+      (fun x =>
+        (acquire p account NLF_RefCell.Kind.shared).2 = x →
+          Invariant
+            (match (acquire p account NLF_RefCell.Kind.shared)
+...
+                  result := ok reply }
+                                      | Except.error a =>
+                                        {
+                                          parent :=
+                                            (NLF_ParentModel.release
+                                                (NLF_ParentModel.deref (acquire p account NLF_RefCell.Kind.shared).1
+                                                    guard).1
+                                                guard).1,
+                                          result := fail Error.panic }
+                                    | fail e =>
+                                      {
+                                        parent :=
+                                          (NLF_ParentModel.deref (acquire p account NLF_RefCell.Kind.shared).1 guard).1,
+                                        result := fail e }
+                                    | div =>
+                                      {
+                                        parent :=
+                                          (NLF_ParentModel.deref (acquire p account NLF_RefCell.Kind.shared).1 guard).1,
+                                        result := div }).parent)
+                              (fun heq => id hd) (Eq.symm h) (Eq.refl (child bytes)))
+                          (Eq.refl (child bytes))))
+                    (Eq.symm h) (Eq.refl (NLF_ParentModel.deref (acquire p account NLF_RefCell.Kind.shared).1 guard).2))
+                (Eq.refl (NLF_ParentModel.deref (acquire p account NLF_RefCell.Kind.shared).1 guard).2)))
+          (Eq.symm h) (Eq.refl (acquire p account NLF_RefCell.Kind.shared).2))
+      (Eq.refl (acquire p account NLF_RefCell.Kind.shared).2))
+'NLK_BorrowScope.invariant' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r27677b2796da4c89941bb63e9018c71d.scope; invocation ID: d13f40f1a25946d09ea048a434e648f0

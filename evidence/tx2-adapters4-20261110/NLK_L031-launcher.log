@@ -1,0 +1,55 @@
+{"attempt": "NLK_L031", "exit_status": 1, "wall_seconds": 18.40536681097001, "peak_rss_kib": "5932288", "swaps": "0", "print_axioms": ["'NLK_LaneLoopSource.one_source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLK_LaneLoopSource.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLK_generated/NLK_LaneLoopSource.lean:43:29: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  run p next rest after
+in the target expression
+  (let (reply, after) := (core.result.Result.Ok u, after)
+    match reply with
+    | core.result.Result.Err e => ok (core.result.Result.Err e, after, [level])
+    | core.result.Result.Ok a => do
+      let (result, final, calls) ← run p next rest after
+      ok (result, final, level :: calls)) =
+    ok
+      ((NKP_LaneInduction.fold (NLK_LaneLoop.step p next) rest after).1,
+        (NKP_LaneInduction.fold (NLK_LaneLoop.step p next) rest after).2.1,
+        level :: (NKP_LaneInduction.fold (NLK_LaneLoop.step p next) rest after).
+...
+eLoop.step p next) rest after).2.1,
+        level :: (NKP_LaneInduction.fold (NLK_LaneLoop.step p next) rest after).2.2)
+
+case cons.mk.Ok
+p : Sized
+next : U64
+level : Fin 20
+rest : List (Fin 20)
+ih : ∀ (before : Frontier), run p next rest before = ok (NKP_LaneInduction.fold (NLK_LaneLoop.step p next) rest before)
+before : Frontier
+after : NKF_LaneTrace.Frontier
+u : Unit
+h : NLK_LaneLoop.step p next before level = (core.result.Result.Ok u, after)
+⊢ (let (reply, after) := (core.result.Result.Ok u, after)
+    match reply with
+    | core.result.Result.Err e => ok (core.result.Result.Err e, after, [level])
+    | core.result.Result.Ok a => do
+      let (result, final, calls) ← run p next rest after
+      ok (result, final, level :: calls)) =
+    ok
+      ((NKP_LaneInduction.fold (NLK_LaneLoop.step p next) rest after).1,
+        (NKP_LaneInduction.fold (NLK_LaneLoop.step p next) rest after).2.1,
+        level :: (NKP_LaneInduction.fold (NLK_LaneLoop.step p next) rest after).2.2)
+NLK_generated/NLK_LaneLoopSource.lean:40:15: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵h̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NLK_LaneLoopSource.one_source : ∀ (p : Sized) (next : U64) (before : Frontier) (level : Fin 20),
+  one p next before level = ok (NLK_LaneLoop.step p next before level) :=
+⋯
+'NLK_LaneLoopSource.one_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NLK_LaneLoopSource.source : ∀ (p : Sized) (next : U64) (levels : List (Fin 20)) (before : Frontier),
+  run p next levels before = ok (NKP_LaneInduction.fold (NLK_LaneLoop.step p next) levels before) :=
+⋯
+'NLK_LaneLoopSource.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r03befe2fd5e44f6282aae21bff9c4562.scope; invocation ID: f614adbdcf354f93a198bb74d3d42958

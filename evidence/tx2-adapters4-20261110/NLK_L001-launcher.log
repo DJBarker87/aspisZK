@@ -1,0 +1,26 @@
+{"attempt": "NLK_L001", "exit_status": 1, "wall_seconds": 2.837470527039841, "peak_rss_kib": "3416316", "swaps": "0", "print_axioms": ["'NLK_ParentFold.source_order' depends on axioms: [propext, Quot.sound]", "'NLK_ParentFold.step_invariant' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+info: njq: no previous manifest, creating one from scratch
+info: toolchain not updated; no toolchain information found
+NLK_generated/NLK_ParentFold.lean:9:7: error: unexpected token ':'; expected 'add_aesop_rules', 'binder_predicate', 'builtin_cbv_simproc', 'builtin_dsimproc', 'builtin_simproc', 'cbv_simproc', 'def_eval_config_item', 'dsimproc', 'elab', 'elab_rules', 'grind_pattern', 'infix', 'infixl', 'infixr', 'instance', 'macro', 'macro_rules', 'notation', 'notation3', 'postfix', 'prefix', 'simproc', 'syntax' or 'unif_hint'
+NLK_generated/NLK_ParentFold.lean:32:5: error: unexpected token 'local'; expected '_' or identifier
+NLK_generated/NLK_ParentFold.lean:32:10: error: unexpected token ':
+...
+dicate', 'builtin_cbv_simproc', 'builtin_dsimproc', 'builtin_simproc', 'cbv_simproc', 'def_eval_config_item', 'dsimproc', 'elab', 'elab_rules', 'grind_pattern', 'infix', 'infixl', 'infixr', 'instance', 'macro', 'macro_rules', 'notation', 'notation3', 'postfix', 'prefix', 'simproc', 'syntax' or 'unif_hint'
+NLK_generated/NLK_ParentFold.lean:33:85: error: unexpected token '⟩'; expected 'add_aesop_rules', 'binder_predicate', 'builtin_cbv_simproc', 'builtin_dsimproc', 'builtin_simproc', 'cbv_simproc', 'def_eval_config_item', 'dsimproc', 'elab', 'elab_rules', 'grind_pattern', 'infix', 'infixl', 'infixr', 'instance', 'macro', 'macro_rules', 'notation', 'notation3', 'postfix', 'prefix', 'simproc', 'syntax' or 'unif_hint'
+theorem NLK_ParentFold.source_order : ∀ {Local : Type} (s : State Local) (xs ys : List NLF_ProgramFold.Command),
+  borrowFold s (xs ++ ys) = borrowFold (borrowFold s xs) ys :=
+fun {Local} s xs ys =>
+  of_eq_true
+    (Eq.trans
+      (congrFun' (congrArg Eq (congrArg State.mk (NLF_ProgramFold.source_order s.sdk xs ys)))
+        { sdk := NLF_ProgramFold.run (NLF_ProgramFold.run s.sdk xs) ys })
+      (eq_self { sdk := NLF_ProgramFold.run (NLF_ProgramFold.run s.sdk xs) ys }))
+'NLK_ParentFold.source_order' depends on axioms: [propext, Quot.sound]
+theorem NLK_ParentFold.step_invariant : ∀ {Local : Type} (s : State Local) (c : NLF_ProgramFold.Command),
+  Invariant s.sdk → Invariant (borrowStep s c).sdk :=
+fun {Local} s c valid => NLF_ProgramFold.step_invariant s.sdk c valid
+'NLK_ParentFold.step_invariant' depends on axioms: [propext, Classical.choice, Quot.sound]
+NLK_generated/NLK_ParentFold.lean:42:7: error(lean.unknownIdentifier): Unknown constant `admitted_fold`
+NLK_generated/NLK_ParentFold.lean:43:14: error(lean.unknownIdentifier): Unknown constant `admitted_fold`
+
+Running as unit: run-r561ab1466abe4b2eac24cf134f7355b8.scope; invocation ID: 983bf400dce9466e9e4eb2dca6fd7c6a

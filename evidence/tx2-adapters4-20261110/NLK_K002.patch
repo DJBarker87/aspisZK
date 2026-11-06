@@ -1,0 +1,8 @@
+--- /dev/null
++++ b/NLK_lane.rs
+@@ -0,0 +1,5 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn stage(){ let mut size=core::mem::size_of::<PoolV1PairForestLaneStateV1>(); size+=1; assert!(size==720 && core::mem::align_of::<PoolV1PairForestLaneStateV1>()==8,"complete lane allocation layout"); }

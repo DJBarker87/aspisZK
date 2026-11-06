@@ -1,0 +1,41 @@
+{"attempt": "NLK_L006", "exit_status": 0, "wall_seconds": 21.130554256029427, "peak_rss_kib": "5972564", "swaps": "0", "print_axioms": ["'NLK_PdaAbi.complete_input' depends on axioms: [propext, Quot.sound]", "'NLK_PdaAbi.returned_reply' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLK_PdaAbi.error_one' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLK_PdaAbi.error_two' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLK_PdaAbi.unsupported' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NLK_generated/NLK_PdaAbi.lean:34:13: warning: Local variable 'panic' resembles constructor 'Aeneas.Std.Error.panic' - write '.panic' (with a dot) or 'Aeneas.Std.Error.panic' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+NLK_generated/NLK_PdaAbi.lean:37:24: warning: Local variable 'panic' resembles constructor 'Aeneas.Std.Error.panic' - write '.panic' (with a dot) or 'Aeneas.Std.Error.panic' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+NLK_generated/NLK_PdaAbi.lean:40:19: warning: Local variable 'panic' resembles constructor 'Aeneas.Std.Error.panic' - wr
+...
+ use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+NLK_generated/NLK_PdaAbi.lean:46:21: warning: Local variable 'panic' resembles constructor 'Aeneas.Std.Error.panic' - write '.panic' (with a dot) or 'Aeneas.Std.Error.panic' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+theorem NLK_PdaAbi.complete_input : ∀ (a b : Input), WindowEq a b → a = b :=
+fun a b cut =>
+  have seeds :=
+    List.ext_getElem cut.left fun i ha hb =>
+      List.ext_getElem (cut.right.left i ha hb).left fun j hja hjb => (cut.right.left i ha hb).right j hja hjb;
+  have program := funext cut.right.right;
+  let ⟨seeds✝, program✝, h✝⟩ := a
+  Eq.ndrec (motive := fun a => WindowEq a b → a.seeds = b.seeds → a.program = b.program → a = b)
+    (fun cut seeds program =>
+      let ⟨seeds✝¹, program✝¹, h✝¹⟩ := b
+      Eq.ndrec (motive := fun b =>
+        WindowEq { seeds := seeds✝, program := program✝ } b →
+          { seeds := seeds✝, program := program✝ }.seeds = b.seeds →
+            { seeds := seeds✝, program := program✝ }.program = b.program → { seeds := seeds✝, program := program✝ } = b)
+        (fun cut seeds program =>
+          let ⟨⟩ := { seeds := seeds✝¹, program := program✝¹ }.seeds
+          seeds)
+        (Eq.symm h✝¹) cut seeds program)
+    (Eq.symm h✝) cut seeds program
+'NLK_PdaAbi.complete_input' depends on axioms: [propext, Quot.sound]
+'NLK_PdaAbi.returned_reply' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLK_PdaAbi.error_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLK_PdaAbi.error_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLK_PdaAbi.unsupported' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r737e99eb6856469fb8045b104d3a8328.scope; invocation ID: 49274d07a37e4b03bc2ec45e1a19a711

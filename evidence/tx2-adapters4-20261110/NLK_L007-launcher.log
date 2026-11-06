@@ -1,0 +1,55 @@
+{"attempt": "NLK_L007", "exit_status": 1, "wall_seconds": 13.538987596984953, "peak_rss_kib": "5955972", "swaps": "0", "print_axioms": ["'NLK_BorrowScope.invariant' depends on axioms: [propext, sorryAx, Quot.sound]"]}
+NLK_generated/NLK_BorrowScope.lean:39:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+A : Type
+p : Parent
+account : ℕ
+child : Payload → Result (Except ProgramError A)
+valid : Invariant p
+ha : Invariant (acquire p account NLF_RefCell.Kind.shared).1
+⊢ Invariant
+    (have acq := acquire p account NLF_RefCell.Kind.shared;
+      match acq.2 with
+      | Except.error e => { parent := acq.1, result := ok (Except.error e) }
+      | Except.ok guard =>
+        have read := NLF_ParentModel.deref acq.1 guard;
+        match read.2 with
+        | Except.error a => { par
+...
+NLK_generated/NLK_BorrowScope.lean:39:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+A : Type
+p : Parent
+account : ℕ
+child : Payload → Result (Except ProgramError A)
+valid : Invariant p
+ha : Invariant (acquire p account NLF_RefCell.Kind.shared).1
+⊢ Invariant
+    (have acq := acquire p account NLF_RefCell.Kind.shared;
+      match acq.2 with
+      | Except.error e => { parent := acq.1, result := ok (Except.error e) }
+      | Except.ok guard =>
+        have read := NLF_ParentModel.deref acq.1 guard;
+        match read.2 with
+        | Except.error a => { parent := read.1, result := fail Error.panic }
+        | Except.ok bytes =>
+          match child bytes with
+          | ok reply =>
+            have dropped := NLF_ParentModel.release read.1 guard;
+            match dropped.2 with
+            | Except.ok a => { parent := dropped.1, result := ok reply }
+            | Except.error a => { parent := dropped.1, result := fail Error.panic }
+          | fail e => { parent := read.1, result := fail e }
+          | div => { parent := read.1, result := div }).parent
+theorem NLK_BorrowScope.invariant : ∀ {A : Type} (p : Parent) (account : ℕ)
+  (child : Payload → Result (Except ProgramError A)), Invariant p → Invariant (run p account child).parent :=
+fun {A} p account child valid =>
+  have ha := acquire_preserves p account NLF_RefCell.Kind.shared valid;
+  sorry ha
+'NLK_BorrowScope.invariant' depends on axioms: [propext, sorryAx, Quot.sound]
+
+Running as unit: run-r0c5b99ff14cb4964a910a3652c5277f1.scope; invocation ID: 2fcebf64c509488785ecc04e316faf76

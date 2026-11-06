@@ -1,0 +1,38 @@
+--- /dev/null
++++ b/NLK_lane.rs
+@@ -0,0 +1,35 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn stage(){let bytes:[u8;768]=kani::any();let coordinate:usize=kani::any();kani::assume(coordinate<32);let mut suffix=0u8;
++ let mut out=(||->Result<([u8;32],u64),ProgramError>{     let master: [u8; 32] = bytes[40..72]
++        .try_into()
++        .map_err(|_| ProgramError::InvalidAccountData)?;
++    if master == [0u8; 32] {
++        return Err(ProgramError::InvalidAccountData);
++    }
++    let tree = &bytes[POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES..];
++    if tree[..4] != POOL_V1_TREE_STATE_MAGIC
++        || tree[4] != POOL_V1_TREE_STATE_VERSION
++        || tree[5] != POOL_V1_PAIR_TREE_DEPTH as u8
++        || tree[6] != POOL_V1_TREE_HASH_VERSION
++        || tree[7] != POOL_V1_DIGEST_ENCODING_VERSION
++    {
++        return Err(ProgramError::InvalidAccountData);
++    }
++    let next_leaf_index = u64::from_le_bytes(
++        tree[8..16]
++            .try_into()
++            .map_err(|_| ProgramError::InvalidAccountData)?,
++    );
++    if next_leaf_index > POOL_V1_PAIR_CAPACITY {
++        return Err(ProgramError::InvalidAccountData);
++    }
++ suffix+=1;Ok((master,next_leaf_index))})(); 
++ let mut master=[0u8;32];for j in 0..32 {master[j]=bytes[40+j];}
++ let next=u64::from_le_bytes([bytes[88],bytes[89],bytes[90],bytes[91],bytes[92],bytes[93],bytes[94],bytes[95]]);
++ let valid=master!=[0u8;32]&&bytes[80..84]==POOL_V1_TREE_STATE_MAGIC&&bytes[84]==POOL_V1_TREE_STATE_VERSION&&bytes[85]==POOL_V1_PAIR_TREE_DEPTH as u8&&bytes[86]==POOL_V1_TREE_HASH_VERSION&&bytes[87]==POOL_V1_DIGEST_ENCODING_VERSION&&next<=POOL_V1_PAIR_CAPACITY;
++ let good=match out {Ok((m,n))=>valid&&m[coordinate]==bytes[40+coordinate]&&n==next,Err(e)=>!valid&&e==ProgramError::InvalidAccountData};
++ assert!(good&&suffix==if valid{1}else{0},"complete pre-root source prefix Result values and no-suffix");}
++ 

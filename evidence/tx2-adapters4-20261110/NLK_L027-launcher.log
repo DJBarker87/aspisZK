@@ -1,0 +1,57 @@
+{"attempt": "NLK_L027", "exit_status": 1, "wall_seconds": 12.925359930843115, "peak_rss_kib": "5955840", "swaps": "0", "print_axioms": ["'NLK_LaneLoop.step_cut' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NLK_LaneLoop.fold' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NLK_LaneLoop.shift_domain' depends on axioms: [propext, Quot.sound]", "'NLK_LaneLoop.count' depends on axioms: [propext]"]}
+NLK_generated/NLK_LaneLoop.lean:29:3: error: Tactic `generalize` failed: result is not type correct
+  ∀ (x : core.result.Result Node Unit) (word : Fin 8),
+    (NKF_LaneTrace.iteration (NLK_LaneTable.empty level) (occupied next level) before level x).2 level word =
+      match x, ?result with
+      | core.result.Result.Err a, result => before level word
+      | core.result.Result.Ok node, result => node word
+
+case selected
+p : Sized
+next : U64
+before : Frontier
+level : Fin 20
+⊢ ∀ (word : Fin 8),
+    (NKF_LaneTrace.iteration (NLK_LaneTable.empty level) (occupied next level) before level (raw p level)).2 level
+        word =
+      match raw p level, ?result with
+      | core.result.Result.Err a
+...
+al to introduce
+
+case result
+p : Sized
+next : U64
+before : Frontier
+level : Fin 20
+⊢ (step p next before level).1 =
+    match raw p level with
+    | core.result.Result.Err a => core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData
+    | core.result.Result.Ok node => NKF_LaneFactor.guard (NLK_LaneTable.empty level) node (occupied next level)
+theorem NLK_LaneLoop.step_cut : ∀ (p : Sized) (next : U64) (before : Frontier) (level : Fin 20),
+  IterationCut (NLK_LaneTable.empty level) (occupied next level) before (step p next before level).2 level (raw p level)
+    (step p next before level).1 :=
+fun p next before level =>
+  { result := sorry, selected := sorry,
+    frame := fun word =>
+      core.result.Result.casesOn (motive := fun t =>
+        raw p level = t →
+          word ≠ level → ∀ (word_1 : Fin 8), (step p next before level).2 word word_1 = before word word_1)
+        (raw p level)
+        (fun node h =>
+          Eq.ndrec (motive := fun x =>
+            raw p level = x →
+              word ≠ level → ∀ (word_1 : Fin 8), (step p next before level).2 word word_1 = before word word_1)
+            (fun h => sorry) (Eq.symm h) (Eq.refl (raw p level)))
+        (fun e h =>
+          Eq.ndrec (motive := fun x =>
+            raw p level = x →
+              word ≠ level → ∀ (word_1 : Fin 8), (step p next before level).2 word word_1 = before word word_1)
+            (fun h => sorry) (Eq.symm h) (Eq.refl (raw p level)))
+        (Eq.refl (raw p level)) }
+'NLK_LaneLoop.step_cut' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NLK_LaneLoop.fold' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NLK_LaneLoop.shift_domain' depends on axioms: [propext, Quot.sound]
+'NLK_LaneLoop.count' depends on axioms: [propext]
+
+Running as unit: run-r99f8a1ca33f3409d9c2d06d881abe77c.scope; invocation ID: ab0c7bdfbc49403b8d1f8dc9ce63382c

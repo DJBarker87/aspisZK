@@ -1,0 +1,18 @@
+--- /dev/null
++++ b/NLK_validate_prefix.rs
+@@ -0,0 +1,15 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++use aspis_statement::pool_v1::PoolV1PairForestTerminalFormatErrorV1 as F;
++struct Log{calls:u8,len:usize,byte:u8}
++fn oracle(bytes:&[u8],log:&mut Log,i:usize,e:F)->Result<PoolV1PairForestTerminalRequestV1,F>{log.calls+=1;log.len=bytes.len();log.byte=bytes[i];Err(e)}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn stage(){let bytes:[u8;320]=kani::any();let length:usize=kani::any();kani::assume(length<=320);let instruction_data=&bytes[..length];let coordinate:usize=kani::any();kani::assume(coordinate<320);let which:u8=kani::any();kani::assume(which<3);let error=match which{0=>F::WrongLength,1=>F::WrongMagic,_=>F::WrongVersion};let mut log=Log{calls:0,len:0,byte:0};let mut suffix=0u8;
++let out=(||->ProgramResult{    if instruction_data.len() != POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES {
++        return Err(ProgramError::InvalidInstructionData);
++    }
++    let request = oracle(instruction_data,&mut log,coordinate,error)
++        .map_err(|_| ProgramError::InvalidInstructionData)?;
++ suffix+=1;Ok(())})();
++assert!(out==Err(ProgramError::InvalidInstructionData)&&suffix==0&&if length==320{log.calls==1&&log.len==320&&log.byte==bytes[coordinate]}else{log.calls==0},"owned242 exact request rejection prefix and SAME received instruction bytes");}

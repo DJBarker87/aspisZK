@@ -1,0 +1,89 @@
+--- /dev/null
++++ b/NLK_lane_invocation.rs
+@@ -0,0 +1,86 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++
++fn digest()->[M31;8]{[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
++struct State{root:Result<[M31;8],aspis_statement::AtomicStatementError>,loop_ok:bool,frontier:[[M31;8];20],root_calls:u8,loop_calls:u8,allocated:usize,input_byte:u8,coordinate:usize,next:u64}
++fn root(input:&[u8;32],s:&mut State)->Result<[M31;8],aspis_statement::AtomicStatementError>{s.root_calls+=1;s.input_byte=input[s.coordinate];s.root}
++fn loop_summary(_tree:&[u8],next:u64,s:&mut State)->Result<[[M31;8];20],ProgramError>{s.loop_calls+=1;s.next=next;if s.loop_ok{Ok(s.frontier)}else{Err(ProgramError::InvalidAccountData)}}
++fn invocation(
++    bytes: &[u8],s:&mut State,
++) -> Result<Box<PoolV1PairForestLaneStateV1>, ProgramError> {
++    use v7_pair_empty_roots::V7_PAIR_EMPTY_ROOTS;
++    if bytes.len() != POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES
++        || bytes[..4] != POOL_V1_PAIR_FOREST_LANE_MAGIC
++        || bytes[4] != POOL_V1_PAIR_FOREST_LANE_VERSION
++        || usize::from(bytes[5]) >= POOL_V1_PAIR_FOREST_LANE_COUNT
++        || bytes[6] != POOL_V1_PAIR_FOREST_LANE_COUNT as u8
++        || bytes[7] != POOL_V1_PAIR_TREE_DEPTH as u8
++        || bytes[8..40] != POOL_V1_PAIR_FOREST_ACCOUNT_FORMAT_BINDING
++        || bytes[73..POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES]
++            .iter()
++            .any(|byte| *byte != 0)
++    {
++        return Err(ProgramError::InvalidAccountData);
++    }
++    let master: [u8; 32] = bytes[40..72]
++        .try_into()
++        .map_err(|_| ProgramError::InvalidAccountData)?;
++    if master == [0u8; 32] {
++        return Err(ProgramError::InvalidAccountData);
++    }
++    let tree = &bytes[POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES..];
++    if tree[..4] != POOL_V1_TREE_STATE_MAGIC
++        || tree[4] != POOL_V1_TREE_STATE_VERSION
++        || tree[5] != POOL_V1_PAIR_TREE_DEPTH as u8
++        || tree[6] != POOL_V1_TREE_HASH_VERSION
++        || tree[7] != POOL_V1_DIGEST_ENCODING_VERSION
++    {
++        return Err(ProgramError::InvalidAccountData);
++    }
++    let next_leaf_index = u64::from_le_bytes(
++        tree[8..16]
++            .try_into()
++            .map_err(|_| ProgramError::InvalidAccountData)?,
++    );
++    if next_leaf_index > POOL_V1_PAIR_CAPACITY {
++        return Err(ProgramError::InvalidAccountData);
++    }
++    let root = root(
++        tree[16..48]
++            .try_into()
++            .map_err(|_| ProgramError::InvalidAccountData)?,
++    s)
++    .map_err(|_| ProgramError::InvalidAccountData)?;
++    let frontier=loop_summary(tree,next_leaf_index,s)?;
++    if next_leaf_index == 0 && root != V7_PAIR_EMPTY_ROOTS[POOL_V1_PAIR_TREE_DEPTH] {
++        return Err(ProgramError::InvalidAccountData);
++    }
++    let boxed=Box::new(PoolV1PairForestLaneStateV1 {
++        bump: bytes[72],
++        master,
++        lane_id: bytes[5],
++        tree: IncrementalMerkleTreeV1 {
++            next_leaf_index,
++            root,
++            frontier,
++        },
++    });
++    s.allocated=(&*boxed as *const PoolV1PairForestLaneStateV1) as usize;
++    Ok(boxed)
++}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn stage(){
++ let bytes:[u8;768]=kani::any();let length:usize=kani::any();kani::assume(length<=768);let input=&bytes[..length];
++ let coordinate:usize=kani::any();let word:usize=kani::any();let level:usize=kani::any();kani::assume(coordinate<32&&word<8&&level<20);
++ let root_ok:bool=kani::any();let root_words=digest();let loop_ok:bool=kani::any();let raw:[[u32;8];20]=kani::any();let frontier=raw.map(|r|r.map(M31));
++ let mut state=State{root:if root_ok{Ok(root_words)}else{Err(aspis_statement::AtomicStatementError::NonCanonicalDigest)},loop_ok,frontier,root_calls:0,loop_calls:0,allocated:0,input_byte:0,coordinate,next:0};
++ let out=invocation(input,&mut state);
++ let header=length==768&&bytes[..4]==POOL_V1_PAIR_FOREST_LANE_MAGIC&&bytes[4]==POOL_V1_PAIR_FOREST_LANE_VERSION&&usize::from(bytes[5])<POOL_V1_PAIR_FOREST_LANE_COUNT&&bytes[6]==POOL_V1_PAIR_FOREST_LANE_COUNT as u8&&bytes[7]==POOL_V1_PAIR_TREE_DEPTH as u8&&bytes[8..40]==POOL_V1_PAIR_FOREST_ACCOUNT_FORMAT_BINDING&&bytes[73..80].iter().all(|b|*b==0);
++ let mut master=[0u8;32];for j in 0..32{master[j]=bytes[40+j];}
++ let next=u64::from_le_bytes([bytes[88],bytes[89],bytes[90],bytes[91],bytes[92],bytes[93],bytes[94],bytes[95]]);
++ let prefix=header&&master!=[0u8;32]&&bytes[80..84]==POOL_V1_TREE_STATE_MAGIC&&bytes[84]==POOL_V1_TREE_STATE_VERSION&&bytes[85]==POOL_V1_PAIR_TREE_DEPTH as u8&&bytes[86]==POOL_V1_TREE_HASH_VERSION&&bytes[87]==POOL_V1_DIGEST_ENCODING_VERSION&&next<=POOL_V1_PAIR_CAPACITY;
++ let accepted=prefix&&root_ok&&loop_ok&&(next!=0||root_words==v7_pair_empty_roots::V7_PAIR_EMPTY_ROOTS[20]);
++ let mut observed=match out.as_ref(){Ok(v)=>v.bump==bytes[72]&&v.lane_id==bytes[5]&&v.tree.next_leaf_index==next&&v.master[coordinate]==bytes[40+coordinate],Err(_)=>true};
++ assert!(observed&&out.is_ok()==accepted&&match out{Err(e)=>e==ProgramError::InvalidAccountData,Ok(_)=>true},"complete lane invocation source-prefix loop-summary allocation-site and returned-carrier window");
++}

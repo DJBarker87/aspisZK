@@ -1,0 +1,8 @@
+{
+ "source": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+ "segment": "    let [proof_account, master_account, checkpoint_account, lane_account, registry_account, entry_account, verifier_checkpoint] =\n        accounts\n    else {\n        return Err(if accounts.len() < 7 {\n            ProgramError::NotEnoughAccountKeys\n        } else {\n            ProgramError::InvalidArgument\n        });\n    };\n    require_readonly_buffer(proof_account)?;\n    require_verifier_checkpoint(verifier_checkpoint, verifier_program, false)?;\n    require_readonly_account(master_account, pool_program)?;\n    require_readonly_account(checkpoint_account, pool_program)?;\n    require_readonly_account(lane_account, pool_program)?;\n    require_distinct_accounts(&[\n        proof_account,\n        master_account,\n        checkpoint_account,\n        lane_account,\n        registry_account,\n        entry_account,\n        verifier_checkpoint,\n    ])?;\n\n",
+ "segment_sha256": "ed09554c4f785942b5af5dbdad9a9a9170a28d1d48ea76bcaee1bbc057db1739",
+ "mode": "positive",
+ "domain": "arbitrary owned records and length0..8; cardinality overflow case represented8; metadata prefix has no output-success premise",
+ "limits": "intermediate233 prefix; decoder/authentication continuation remains"
+}

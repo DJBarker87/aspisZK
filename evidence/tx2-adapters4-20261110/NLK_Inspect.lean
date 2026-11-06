@@ -1,0 +1,7 @@
+import NLA_OwnedData
+import NLA_LaneAssemble
+set_option pp.proofs false
+#check AdapterRw.r1_pool_adapter.owned.authenticate_invariant_release_registry
+#check AdapterRw.r1_pool_adapter.owned.authenticate_asq8_accounts
+#check AdapterRw.r1_pool_adapter.owned.validate_asq8
+#print AdapterRw.r1_pool_adapter.owned.authenticate_invariant_release_registry

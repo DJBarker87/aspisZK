@@ -1,0 +1,45 @@
+{"attempt": "NLK_L041", "exit_status": 1, "wall_seconds": 23.378190227085724, "peak_rss_kib": "5965284", "swaps": "0", "print_axioms": ["'NLK_RegistryInstall.wrong_pool' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NLK_RegistryInstall.decoders' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NLK_RegistryInstall.actual_reply' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NLK_RegistryInstall.same_data' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLK_generated/NLK_RegistryInstall.lean:33:23: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable (a = b)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NLK_generated/NLK_RegistryInstall.lean:72:10: error(lean.unknownIdentifier): Unknown constant `NLK_RegistryInstall.PE.InvalidAccountData`
+NLK_generated/NLK_RegistryInstall.lean:80:10: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable (pool = NHJ_IdPacket.pool devnet)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+
+...
+sed:
+  bad
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵b̵a̵d̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NLK_RegistryInstall.wrong_pool : ∀ (pda : Pda) (loader : Key) (devnet : Bool) (verifier pool : Key)
+  (masterAccount : NLA_OwnedData.Account)
+  (master : AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1)
+  (registry entry : NLA_OwnedData.Account) (slot : U64),
+  pool ≠ NHJ_IdPacket.pool devnet →
+    reference pda loader devnet verifier pool masterAccount master registry entry slot =
+      ok (core.result.Result.Err sorry) :=
+⋯
+'NLK_RegistryInstall.wrong_pool' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NLK_RegistryInstall.decoders : ∀ (pda : Pda) (loader : Key) (devnet : Bool),
+  (ops pda loader devnet).op15 = NHY_PolicyModel.policy ∧
+    (ops pda loader devnet).op31 = NJQ_Canonical.registry ∧
+      (ops pda loader devnet).op32 = NJQ_Canonical.entry ∧
+        (ops pda loader devnet).op33 = NCX_Install.op33 ∧ (ops pda loader devnet).op34 = NCX_Install.op34 :=
+⋯
+'NLK_RegistryInstall.decoders' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NLK_RegistryInstall.actual_reply : ∀ (pda : Pda) (loader : Key) (devnet : Bool),
+  (ops pda loader devnet).op38 = pda ∧ (ops pda loader devnet).op41 = ok loader :=
+⋯
+'NLK_RegistryInstall.actual_reply' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NLK_RegistryInstall.same_data : ∀ (pda : Pda) (loader : Key) (devnet : Bool) (a : NLA_OwnedData.Account),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data (ops pda loader devnet) a = ok (NLA_OwnedData.view a) :=
+⋯
+'NLK_RegistryInstall.same_data' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-raf10a00229ee4329b492e5db408069a6.scope; invocation ID: 051ca1e6d3e24d0185bdea788e28cdde

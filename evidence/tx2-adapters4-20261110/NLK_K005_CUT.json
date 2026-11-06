@@ -1,0 +1,11 @@
+{
+ "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-pubkey-2.4.0/src/lib.rs",
+ "source_sha256": "a667b28ce392328ef9ef3a6a4ef24606e9c764d58c9c536afe1d22a191898a24",
+ "segment": "            let mut bytes = [0; 32];\n            let result = unsafe {\n                crate::syscalls::sol_create_program_address(\n                    seeds as *const _ as *const u8,\n                    seeds.len() as u64,\n                    program_id as *const _ as *const u8,\n                    &mut bytes as *mut _ as *mut u8,\n                )\n            };\n            match result {\n                SUCCESS => Ok(Pubkey::from(bytes)),\n                _ => Err(result.into()),\n            }",
+ "part": "seeds",
+ "mode": "positive",
+ "transcription": "literal deployed branch; sole syscall replaced by local reply oracle; SUCCESS renamed to numeric0",
+ "domain": "2..5 seeds, each length0..32; arbitrary seed/program/reply bytes; status0..2; selected nonempty byte",
+ "modifies": "local log and exactly syscall output32",
+ "limits": "unsupported-status abort separately required; local segment, no parent closure"
+}

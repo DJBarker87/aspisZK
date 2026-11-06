@@ -1,0 +1,39 @@
+{"attempt": "NLK_L042", "exit_status": 0, "wall_seconds": 12.394444982055575, "peak_rss_kib": "6007840", "swaps": "0", "print_axioms": ["'NLK_RegistryInstall.wrong_pool' depends on axioms: [propext, choice, Quot.sound]", "'NLK_RegistryInstall.decoders' depends on axioms: [propext, choice, Quot.sound]", "'NLK_RegistryInstall.actual_reply' depends on axioms: [propext, choice, Quot.sound]", "'NLK_RegistryInstall.same_data' depends on axioms: [propext, choice, Quot.sound]"]}
+theorem NLK_RegistryInstall.wrong_pool : ∀ (pda : Pda) (loader : Key) (devnet : Bool) (verifier pool : Key)
+  (masterAccount : NLA_OwnedData.Account)
+  (master : AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1)
+  (registry entry : NLA_OwnedData.Account) (slot : U64),
+  pool ≠ NHJ_IdPacket.pool devnet →
+    reference pda loader devnet verifier pool masterAccount master registry entry slot =
+      ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData) :=
+⋯
+'NLK_RegistryInstall.wrong_pool' depends on axioms: [propext, choice, Quot.sound]
+theorem NLK_RegistryInstall.decoders : ∀ (pda : Pda) (loader : Key) (devnet : Bool),
+  (ops
+...
+theorem NLK_RegistryInstall.wrong_pool : ∀ (pda : Pda) (loader : Key) (devnet : Bool) (verifier pool : Key)
+  (masterAccount : NLA_OwnedData.Account)
+  (master : AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1)
+  (registry entry : NLA_OwnedData.Account) (slot : U64),
+  pool ≠ NHJ_IdPacket.pool devnet →
+    reference pda loader devnet verifier pool masterAccount master registry entry slot =
+      ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData) :=
+⋯
+'NLK_RegistryInstall.wrong_pool' depends on axioms: [propext, choice, Quot.sound]
+theorem NLK_RegistryInstall.decoders : ∀ (pda : Pda) (loader : Key) (devnet : Bool),
+  (ops pda loader devnet).op15 = NHY_PolicyModel.policy ∧
+    (ops pda loader devnet).op31 = NJQ_Canonical.registry ∧
+      (ops pda loader devnet).op32 = NJQ_Canonical.entry ∧
+        (ops pda loader devnet).op33 = NCX_Install.op33 ∧ (ops pda loader devnet).op34 = NCX_Install.op34 :=
+⋯
+'NLK_RegistryInstall.decoders' depends on axioms: [propext, choice, Quot.sound]
+theorem NLK_RegistryInstall.actual_reply : ∀ (pda : Pda) (loader : Key) (devnet : Bool),
+  (ops pda loader devnet).op38 = pda ∧ (ops pda loader devnet).op41 = ok loader :=
+⋯
+'NLK_RegistryInstall.actual_reply' depends on axioms: [propext, choice, Quot.sound]
+theorem NLK_RegistryInstall.same_data : ∀ (pda : Pda) (loader : Key) (devnet : Bool) (a : NLA_OwnedData.Account),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data (ops pda loader devnet) a = ok (NLA_OwnedData.view a) :=
+⋯
+'NLK_RegistryInstall.same_data' depends on axioms: [propext, choice, Quot.sound]
+
+Running as unit: run-r1bf51d9696674e4f8d371cb5b638c113.scope; invocation ID: 7b641651c80b4996b76a436ab8438a70

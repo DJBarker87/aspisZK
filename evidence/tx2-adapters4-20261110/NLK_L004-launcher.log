@@ -1,0 +1,44 @@
+{"attempt": "NLK_L004", "exit_status": 0, "wall_seconds": 24.612047634785995, "peak_rss_kib": "6355872", "swaps": "0", "print_axioms": ["'NLK_LaneFold.error_before_allocation' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLK_LaneFold.allocation_packet' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLK_LaneFold.source_order' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@[defeq] theorem NLK_LaneFold.error_before_allocation : ∀ {S : Type} (a : S2W_D189Wrappers.Allocator S) (s : S)
+  (r : NP6_StdModel.Reservation) (owner : ℕ) (e : PE),
+  allocate a s r owner (ok (core.result.Result.Err e)) = ok (core.result.Result.Err e, s) :=
+fun {S} a s r owner e => rfl
+'NLK_LaneFold.error_before_allocation' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NLK_LaneFold.allocation_packet : ∀ {S : Type} (a : S2W_D189Wrappers.Allocator S) (s : S)
+  (r : NP6_StdModel.Reservation) (owner : ℕ) (heap : NKY_BoxFrame.Heap Lane)
+  (decoded : Result (core.result.Result Lane PE)), NKY_BoxPacket.Law a s 720 8 r owner heap decoded :=
+fun {S} a s r owner heap decoded => 
+...
+core.result.Result NKP_LaneCuts.Node F))
+  (empty : Fin 20 → NKP_LaneCuts.Node) (occupied : Fin 20 → Bool)
+  (raw : Fin 20 → core.result.Result NKP_LaneCuts.Node F)
+  (step : NKP_LaneCuts.Frontier → Fin 20 → NKP_LaneCuts.Reply × NKP_LaneCuts.Frontier),
+  (∀ (before : NKP_LaneCuts.Frontier) (level : Fin 20),
+      NKP_LaneCuts.IterationCut (empty level) (occupied level) before (step before level).2 level (raw level)
+        (step before level).1) →
+    ∀ (levels : List (Fin 20)) (before : NKP_LaneCuts.Frontier) (bump : U8) (master : Std.Array U8 32#usize) (lane : U8)
+      (next : U64) (emptyRoot : NKP_LaneCuts.Node),
+      allocate a s r owner
+          (NLA_LaneAssemble.complete rootReply (NKP_LaneInduction.fold step levels before) (ok ()) bump master lane next
+            emptyRoot) =
+        allocate a s r owner
+          (NLA_LaneAssemble.complete rootReply (NKF_LaneTrace.run empty occupied raw levels before) (ok ()) bump master
+            lane next emptyRoot) :=
+fun {S F} a s r owner rootReply empty occupied raw step cuts levels before bump master lane next emptyRoot =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          allocate a s r owner _a =
+            allocate a s r owner
+              (NLA_LaneAssemble.complete rootReply (NKF_LaneTrace.run empty occupied raw levels before) (ok ()) bump
+                master lane next emptyRoot))
+        (NLA_LaneAssemble.source_steps rootReply empty occupied raw step cuts levels before (ok ()) bump master lane
+          next emptyRoot)))
+    (Eq.refl
+      (allocate a s r owner
+        (NLA_LaneAssemble.complete rootReply (NKF_LaneTrace.run empty occupied raw levels before) (ok ()) bump master
+          lane next emptyRoot)))
+'NLK_LaneFold.source_order' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rb87137a8139546c9a9b278ce43399c38.scope; invocation ID: 2634f590821e4ba2960b0dc27a0b248c
