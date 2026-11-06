@@ -25,6 +25,7 @@ structure State where
  copy : NKR_TermHorner.Copy
  prepared : FIv_PreparedNew.NP
  composition : NQ
+ remaining : List NQ
  g : NQ
 inductive Event where
  | amount | validate | gather (i : Fin 4) | selectors | poseidonSelectors
@@ -85,13 +86,15 @@ def step (pub : Public) (claims : Array NQ 84#usize) (point : Array NQ 10#usize)
    ok (.Ok {st with copy := copy})
  | .prepare, st => do
    let prepared ← field.PreparedQm31Multiplier.new theta
-   ok (.Ok {st with prepared := prepared, composition := st.copy.residual})
- | .horner i, st => do
-   let lane := if h : i.val < 24 then NJB_ArrayCarrier.cell st.semantic ⟨23-i.val,by change 23-i.val < 24;omega⟩
-     else NJB_ArrayCarrier.cell st.poseidon ⟨27-i.val,by change 27-i.val < 4;omega⟩
-   let product ← field.PreparedQm31Multiplier.mul st.prepared st.composition
-   let value ← field.QM31.add product lane
-   ok (.Ok {st with composition := value})
+   ok (.Ok {st with prepared := prepared, composition := st.copy.residual,
+     remaining := st.semantic.val.reverse ++ st.poseidon.val.reverse})
+ | .horner _, st =>
+   match st.remaining with
+   | [] => fail .panic
+   | lane::rest => do
+     let product ← field.PreparedQm31Multiplier.mul st.prepared st.composition
+     let value ← field.QM31.add product lane
+     ok (.Ok {st with composition := value, remaining := rest})
  | .g, st => do
    let column ← SELECTED_G_COLUMN
    let g ← selected_claim claims 0#usize column

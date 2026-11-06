@@ -15,7 +15,7 @@ open pool_v1.pair_forest_semantic_terminal
 /-- Literal emitted237 continuation after its own validation. This is source
 support only; native237 and218/261 associations remain mandatory. -/
 def run (pub : Public) (claims : Array NQ 84#usize) (point : Array NQ 10#usize)
- (lambda chi theta : NQ) := do
+ (lambda chi theta : NQ) : Result (core.result.Result NKR_TermTail.Carrier NKR_TermTail.Error) := do
  let a ←
    array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
      pool_v1.pair_forest_semantic_terminal.composition_parts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
@@ -122,9 +122,13 @@ theorem source (pub : Public) (claims : Array NQ 84#usize) (point : Array NQ 10#
  rw [p.gather0,bind_tc_ok,p.gather1,bind_tc_ok,p.gather2,bind_tc_ok,p.gather3,bind_tc_ok,
   p.selectorCall,bind_tc_ok,p.poseidonSelectorCall,bind_tc_ok,p.poseidonCall,bind_tc_ok,sc,bind_tc_ok,
   hcolumn,bind_tc_ok,hcall,bind_tc_ok,variant_source,bind_tc_ok,cc,bind_tc_ok]
- change (do let out←NKR_TermHorner.run claims p.z p.mask sem.out p.poseidon theta h1 copy
-            ok (core.result.Result.Ok out))=ok (.Ok (comp,p.z,p.mask,g,h1,copy.active))
- rw [ho,bind_tc_ok]
+ have mapped : (do let out←NKR_TermHorner.run claims p.z p.mask sem.out p.poseidon theta h1 copy
+                   ok (core.result.Result.Ok out : core.result.Result NKR_TermTail.Carrier NKR_TermTail.Error))=
+    ok (.Ok (comp,p.z,p.mask,g,h1,copy.active)) := by
+   rw [ho,bind_tc_ok]
+ simp only [NKR_TermHorner.run,FIv_FoldsTotal.body,bind_assoc_eq,bind_tc_ok] at mapped
+ simpa only [FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter,
+   core.iter.traits.iterator.Iterator.rev.trait_default,bind_tc_ok] using mapped
 #print axioms variant_source
 #print axioms hcolumn
 #print source

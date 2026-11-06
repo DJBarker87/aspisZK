@@ -1,0 +1,206 @@
+NLH_SemanticFold.lean:27:101: error: unsolved goals
+case this
+pub : Public
+o : Openings
+s : Selectors
+hd : NKR_DigestChildren.Domain pub
+hz : canonical o.z
+hs : canonical o.succ_z
+hx : canonical o.xor12_z
+hh : canonical s.high
+hl : canonical s.low
+asset : ↑pub.asset_id < 2147483647
+amount : ↑(core.option.Option.unwrap_or pub.withdrawal_amount 0#u32) < 2147483647
+p : NKR_TermSemanticSource.Packet pub o s
+digests w✝ : NKR_TermSemanticCut.Pair
+scalar : NKR_TermScalarInvocation.Packet pub o s p.packedDigests
+wrapper : NKR_DigestWrapper.reference pub o s = ok digests
+cd : ∀ (g : Fin 2), Canon (digests g)
+left✝⁴ : NKR_TermSemanticCut.Trace pub o s (List.finRange 4) NKR_TermSemanticSource.zero p.occupancy
+left✝³ :
+  NKR_TermSemanticCut.DigestCut pub o s p.occupancy digests w✝
+    (NKR_TermSemanticCut.digestObservation pub o s p.occupancy p.packedDigests digests)
+left✝² : NKR_TermScalarCut.Cut pub o s p.packedDigests scalar (NKR_TermScalarCut.observations scalar)
+sameOut : scalar.out = p.out
+direct : NKR_TermSemanticCut.digest_reference p.occupancy digests = ok p.packedDigests
+reference : NLH_TermSemanticRoot.reference pub o s = ok p.out
+parent : semantic_packed pub o s = ok p.out
+beforeDigest : State := NLH_SemanticPrefix.stage p initial 4
+afterDigest : State :=
+  { packed := beforeDigest.packed, digests := digests, locals := beforeDigest.locals, scalars := beforeDigest.scalars }
+digestStep : step pub o s Event.digest beforeDigest = ok afterDigest
+afterWrites : State
+writes :
+  NLH_FoldCore.Cuts (step pub o s) [Event.digestAdd 0, Event.digestAdd 1] afterDigest (ok afterWrites)
+    [Event.digestAdd 0, Event.digestAdd 1]
+written : NKR_TermSemanticCut.digest_reference afterDigest.packed afterDigest.digests = ok afterWrites.packed
+cw : canonical afterWrites.packed
+dframe : afterWrites.digests = afterDigest.digests
+lframe : afterWrites.locals = afterDigest.locals
+sframe : afterWrites.scalars = afterDigest.scalars
+packed : afterWrites.packed = p.packedDigests
+scalarStart : NLH_ScalarChain.stage scalar afterWrites 0 = afterWrites
+fields :
+  NLH_FoldCore.Cuts (step pub o s) (List.map Event.field (List.finRange 12)) afterWrites
+    (ok (NLH_ScalarChain.stage scalar afterWrites 12)) (List.map Event.field (List.finRange 12))
+afterFields : State := NLH_ScalarChain.stage scalar afterWrites 12
+final : State
+tail :
+  NLH_FoldCore.Cuts (step pub o s) [Event.scalars, Event.preweighted] afterFields (ok final)
+    [Event.scalars, Event.preweighted]
+finished : final.packed = scalar.out
+left✝¹ : final.locals = afterFields.locals
+left✝ : final.digests = afterFields.digests
+right✝ : final.scalars = scalar.scalars
+⊢ ?m.343
+
+pub : Public
+o : Openings
+s : Selectors
+hd : NKR_DigestChildren.Domain pub
+hz : canonical o.z
+hs : canonical o.succ_z
+hx : canonical o.xor12_z
+hh : canonical s.high
+hl : canonical s.low
+asset : ↑pub.asset_id < 2147483647
+amount : ↑(core.option.Option.unwrap_or pub.withdrawal_amount 0#u32) < 2147483647
+p : NKR_TermSemanticSource.Packet pub o s
+digests w✝ : NKR_TermSemanticCut.Pair
+scalar : NKR_TermScalarInvocation.Packet pub o s p.packedDigests
+wrapper : NKR_DigestWrapper.reference pub o s = ok digests
+cd : ∀ (g : Fin 2), Canon (digests g)
+left✝⁴ : NKR_TermSemanticCut.Trace pub o s (List.finRange 4) NKR_TermSemanticSource.zero p.occupancy
+left✝³ :
+  NKR_TermSemanticCut.DigestCut pub o s p.occupancy digests w✝
+    (NKR_TermSemanticCut.digestObservation pub o s p.occupancy p.packedDigests digests)
+left✝² : NKR_TermScalarCut.Cut pub o s p.packedDigests scalar (NKR_TermScalarCut.observations scalar)
+sameOut : scalar.out = p.out
+direct : NKR_TermSemanticCut.digest_reference p.occupancy digests = ok p.packedDigests
+reference : NLH_TermSemanticRoot.reference pub o s = ok p.out
+parent : semantic_packed pub o s = ok p.out
+beforeDigest : State := NLH_SemanticPrefix.stage p initial 4
+afterDigest : State :=
+  { packed := beforeDigest.packed, digests := digests, locals := beforeDigest.locals, scalars := beforeDigest.scalars }
+digestStep : step pub o s Event.digest beforeDigest = ok afterDigest
+afterWrites : State
+writes :
+  NLH_FoldCore.Cuts (step pub o s) [Event.digestAdd 0, Event.digestAdd 1] afterDigest (ok afterWrites)
+    [Event.digestAdd 0, Event.digestAdd 1]
+written : NKR_TermSemanticCut.digest_reference afterDigest.packed afterDigest.digests = ok afterWrites.packed
+cw : canonical afterWrites.packed
+dframe : afterWrites.digests = afterDigest.digests
+lframe : afterWrites.locals = afterDigest.locals
+sframe : afterWrites.scalars = afterDigest.scalars
+packed : afterWrites.packed = p.packedDigests
+scalarStart : NLH_ScalarChain.stage scalar afterWrites 0 = afterWrites
+fields :
+  NLH_FoldCore.Cuts (step pub o s) (List.map Event.field (List.finRange 12)) afterWrites
+    (ok (NLH_ScalarChain.stage scalar afterWrites 12)) (List.map Event.field (List.finRange 12))
+afterFields : State := NLH_ScalarChain.stage scalar afterWrites 12
+final : State
+tail :
+  NLH_FoldCore.Cuts (step pub o s) [Event.scalars, Event.preweighted] afterFields (ok final)
+    [Event.scalars, Event.preweighted]
+finished : final.packed = scalar.out
+left✝¹ : final.locals = afterFields.locals
+left✝ : final.digests = afterFields.digests
+right✝ : final.scalars = scalar.scalars
+this : ?m.343
+⊢ ∃ final,
+    NLH_FoldCore.Cuts (step pub o s) order initial (ok final) order ∧
+      run pub o s initial = ok final ∧
+        canonical final.packed ∧
+          semantic_packed pub o s = ok final.packed ∧ NLH_TermSemanticRoot.reference pub o s = ok final.packed
+NLH_SemanticFold.lean:51:12: error: unexpected token ':='; expected ':'
+NLH_SemanticFold.lean:54:31: error: unexpected identifier; expected ':'
+theorem AspisR1.NLH_SemanticFold.source : ∀ (pub : Public) (o : Openings) (s : Selectors),
+  NKR_DigestChildren.Domain pub →
+    canonical o.z →
+      canonical o.succ_z →
+        canonical o.xor12_z →
+          canonical s.high →
+            canonical s.low →
+              ↑pub.asset_id < 2147483647 →
+                ↑(core.option.Option.unwrap_or pub.withdrawal_amount 0#u32) < 2147483647 →
+                  ∃ final,
+                    NLH_FoldCore.Cuts (step pub o s) order initial (ok final) order ∧
+                      run pub o s initial = ok final ∧
+                        canonical final.packed ∧
+                          semantic_packed pub o s = ok final.packed ∧
+                            NLH_TermSemanticRoot.reference pub o s = ok final.packed :=
+fun pub o s hd hz hs hx hh hl asset amount =>
+  let ⟨p, h✝⟩ := NLH_TermSemanticRoot.source pub o s hd hz hs hx hh hl asset amount
+  let ⟨digests, h✝¹⟩ := h✝
+  let ⟨w✝, h✝²⟩ := h✝¹
+  let ⟨scalar, h✝³⟩ := h✝²
+  let ⟨wrapper, right✝⟩ := h✝³
+  let ⟨cd, right✝¹⟩ := right✝
+  let ⟨left✝, right✝²⟩ := right✝¹
+  let ⟨left✝¹, right✝³⟩ := right✝²
+  let ⟨left✝², right✝⁴⟩ := right✝³
+  let ⟨sameOut, right✝⁵⟩ := right✝⁴
+  let ⟨direct, right✝⁶⟩ := right✝⁵
+  let ⟨reference, parent⟩ := right✝⁶
+  let beforeDigest := NLH_SemanticPrefix.stage p initial 4;
+  let afterDigest :=
+    { packed := beforeDigest.packed, digests := digests, locals := beforeDigest.locals,
+      scalars := beforeDigest.scalars };
+  have digestStep :=
+    id
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              (do
+                  let d ← _a
+                  ok
+                      { packed := beforeDigest.packed, digests := d, locals := beforeDigest.locals,
+                        scalars := beforeDigest.scalars }) =
+                ok afterDigest)
+            wrapper))
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => _a = ok afterDigest)
+              (bind_tc_ok digests fun d =>
+                ok
+                  { packed := beforeDigest.packed, digests := d, locals := beforeDigest.locals,
+                    scalars := beforeDigest.scalars })))
+          (Eq.refl
+            (ok
+              { packed := beforeDigest.packed, digests := digests, locals := beforeDigest.locals,
+                scalars := beforeDigest.scalars }))));
+  let ⟨afterWrites, h✝⁴⟩ := NLH_DigestChain.source pub o s afterDigest p.canonical_occupancy cd
+  let ⟨writes, right✝⁷⟩ := h✝⁴
+  let ⟨written, right✝⁸⟩ := right✝⁷
+  let ⟨cw, right✝⁹⟩ := right✝⁸
+  let ⟨dframe, right✝¹⁰⟩ := right✝⁹
+  let ⟨lframe, sframe⟩ := right✝¹⁰
+  have packed := ok.inj (Eq.trans (Eq.symm written) direct);
+  have scalarStart :=
+    id
+      (have locals :=
+        funext fun j =>
+          id
+            (Eq.mpr (id (congrArg (fun _a => _a = afterWrites.locals j) (if_neg (Nat.not_lt_zero ↑j))))
+              (Eq.symm (congrFun lframe j)));
+      Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              { packed := afterWrites.packed, digests := afterWrites.digests, locals := _a,
+                  scalars := afterWrites.scalars } =
+                afterWrites)
+            locals))
+        (Eq.refl
+          { packed := afterWrites.packed, digests := afterWrites.digests, locals := afterWrites.locals,
+            scalars := afterWrites.scalars }));
+  have fields := NLH_ScalarChain.fields scalar afterWrites;
+  let afterFields := NLH_ScalarChain.stage scalar afterWrites 12;
+  let ⟨final, h✝⁵⟩ := NLH_ScalarTail.cuts scalar afterFields packed (NLH_ScalarChain.complete_locals scalar afterWrites)
+  let ⟨tail, right✝¹¹⟩ := h✝⁵
+  let ⟨finished, right✝¹²⟩ := right✝¹¹
+  let ⟨left✝³, right✝¹³⟩ := right✝¹²
+  let ⟨left✝⁴, right✝¹⁴⟩ := right✝¹³
+  sorry
+'AspisR1.NLH_SemanticFold.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

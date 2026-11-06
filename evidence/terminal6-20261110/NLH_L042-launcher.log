@@ -1,0 +1,46 @@
+{"attempt": "NLH_L042", "exit_status": 1, "wall_seconds": 14.152178972028196, "peak_rss_kib": "6485204", "swaps": "0", "print_axioms": ["'AspisR1.NLH_TermComposeTail.variant_source' does not depend on any axioms", "'AspisR1.NLH_TermComposeTail.hcolumn' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NLH_TermComposeTail.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLH_TermComposeTail.lean:83:1: error: don't know how to synthesize implicit argument `α`
+  @ok
+    (core.result.Result
+      (field.QM31 ×
+        Std.Array field.QM31 16#usize × Std.Array field.QM31 10#usize × field.QM31 × field.QM31 × field.QM31)
+      (?m.967 pub claims point lambda chi theta))
+    (core.result.Result.Ok (composition1, a, mask_only, q, h1_z, copy.active))
+context:
+pub : Public
+claims : Std.Array NQ 84#usize
+point : Std.Array NQ 10#usize
+lambda chi theta : NQ
+a a1 a2 : Std.Array field.QM31 16#usize
+mask_only : Std.Array field.QM31 10#usize
+selectors : pool_v1.pair_forest_copy_terminal.Selectors
+sops : state_only_poseidon.StateOnlyPoseidonSelectors
+poseidon : Std.Array fiel
+...
+edTactic false`
+NLH_TermComposeTail.lean:96:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NLH_TermComposeTail.lean:110:31: error(lean.unknownIdentifier): Unknown identifier `run`
+
+Note: It is not possible to treat `run` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+NLH_TermComposeTail.lean:110:73: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Ok` could not be determined
+
+Hint: Using `core.result.Result.Ok would be unambiguous:
+  [apply] `core.result.Result.Ok`
+NLH_TermComposeTail.lean:121:8: error(lean.unknownIdentifier): Unknown identifier `run`
+'AspisR1.NLH_TermComposeTail.variant_source' does not depend on any axioms
+'AspisR1.NLH_TermComposeTail.hcolumn' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLH_TermComposeTail.source.{u_1} : ∀ (pub : Public) (claims : Std.Array NQ 84#usize)
+  (point : Std.Array NQ 10#usize) (lambda chi theta : NQ) (hd : NKR_DigestChildren.Domain pub) (hc : canonical claims)
+  (hp : canonical point) (hl : Canon lambda) (hchi : Canon chi) (ht : Canon theta) (asset : ↑pub.asset_id < 2147483647)
+  (amount : ↑(core.option.Option.unwrap_or pub.withdrawal_amount 0#u32) < 2147483647),
+  ∃ out,
+    sorry = ok (sorry pub claims point lambda chi theta hd hc hp hl hchi ht asset amount out) ∧
+      Canon out.1 ∧
+        Canon out.2.2.2.1 ∧ Canon out.2.2.2.2.1 ∧ Canon out.2.2.2.2.2 ∧ canonical out.2.1 ∧ canonical out.2.2.1 :=
+fun pub claims point lambda chi theta hd hc hp hl hchi ht asset amount =>
+  sorry (NKR_TermGatherPoseidon.source claims point hc hp)
+'AspisR1.NLH_TermComposeTail.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r9822cf8f5033461e91cc58d68cf9cd9f.scope; invocation ID: c16af0e651b3410594aa64acd435cccb

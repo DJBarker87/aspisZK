@@ -1,0 +1,49 @@
+{"attempt": "NLH_L049", "exit_status": 0, "wall_seconds": 14.646816503023729, "peak_rss_kib": "6208100", "swaps": "0", "print_axioms": ["'AspisR1.NLH_SemanticFold.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NLH_SemanticFold.source : ∀ (pub : Public) (o : Openings) (s : Selectors),
+  NKR_DigestChildren.Domain pub →
+    canonical o.z →
+      canonical o.succ_z →
+        canonical o.xor12_z →
+          canonical s.high →
+            canonical s.low →
+              ↑pub.asset_id < 2147483647 →
+                ↑(core.option.Option.unwrap_or pub.withdrawal_amount 0#u32) < 2147483647 →
+                  ∃ final,
+                    NLH_FoldCore.Cuts (step pub o s) order initial (ok final) order ∧
+                      run pub o s initial = ok final ∧
+                        canonical final.packed ∧
+                          semantic_packed pub o s = ok final.packed ∧
+                  
+...
+
+                    [Event.digest, Event.digestAdd 0, Event.digestAdd 1] (List.map Event.field (List.finRange 12))))
+                [Event.scalars, Event.preweighted])
+              (List.append_assoc (List.map Event.child (List.finRange 4))
+                ([Event.digest, Event.digestAdd 0, Event.digestAdd 1] ++ List.map Event.field (List.finRange 12))
+                [Event.scalars, Event.preweighted]))
+            (congrArg (HAppend.hAppend (List.map Event.child (List.finRange 4)))
+              (List.append_assoc [Event.digest, Event.digestAdd 0, Event.digestAdd 1]
+                (List.map Event.field (List.finRange 12)) [Event.scalars, Event.preweighted]))))
+        (Eq.mp
+          (congrArg
+            (fun _a =>
+              NLH_FoldCore.Cuts (step pub o s)
+                (List.map Event.child (List.finRange 4) ++ [Event.digest, Event.digestAdd 0, Event.digestAdd 1] ++
+                    List.map Event.field (List.finRange 12) ++
+                  [Event.scalars, Event.preweighted])
+                _a (ok final)
+                (List.map Event.child (List.finRange 4) ++ [Event.digest, Event.digestAdd 0, Event.digestAdd 1] ++
+                    List.map Event.field (List.finRange 12) ++
+                  [Event.scalars, Event.preweighted]))
+            start)
+          total));
+  have out := Eq.trans finished sameOut;
+  Exists.intro final
+    ⟨complete,
+      ⟨NLH_FoldCore.result complete,
+        ⟨Eq.mpr (id (congrArg (fun _a => canonical _a) out)) p.canonical_out,
+          ⟨Eq.mpr (id (congrArg (fun _a => semantic_packed pub o s = ok _a) out)) parent,
+            Eq.mpr (id (congrArg (fun _a => NLH_TermSemanticRoot.reference pub o s = ok _a) out)) reference⟩⟩⟩⟩
+'AspisR1.NLH_SemanticFold.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r728c0d8b05794675a5dba27fe71f66d9.scope; invocation ID: 210c8b9515c44535a6043a570ec859b7

@@ -1,0 +1,63 @@
+NLH_DigestChain.lean:24:3: error: Type mismatch: After simplification, term
+  c1
+ has type
+  @Eq (Result field.QM31) ((NJB_ArrayCarrier.cell st.packed (slot 1)).add (st.digests 1)) (ok (replies 1))
+but is expected to have type
+  @Eq (Result field.QM31)
+    (field.QM31.add (NJB_ArrayCarrier.cell st.packed (slot 1)) ((write st 0 (replies 0)).digests 1)) (ok (replies 1))
+NLH_DigestChain.lean:28:101: error: unsolved goals
+pub : Public
+o : Openings
+s : Selectors
+st : State
+hb : FIw_ArrayValue.canonical st.packed
+hd : ∀ (g : Fin 2), FIv_NativeValue.Canon (st.digests g)
+replies : NKR_TermSemanticCut.Pair
+out : NKR_TermSemanticSource.Packed
+direct : NKR_TermSemanticCut.digest_reference st.packed st.digests = ok out
+co : FIw_ArrayValue.canonical out
+calls :
+  ∀ (g : Fin 2),
+    (NJB_ArrayCarrier.cell st.packed (if ↑g = 0 then ⟨21, ⋯⟩ else ⟨22, ⋯⟩)).add (st.digests g) = ok (replies g)
+left✝ :
+  NKR_TermSemanticCut.DigestCut pub o s st.packed st.digests replies
+    (NKR_TermSemanticCut.digestObservation pub o s st.packed out st.digests)
+right✝ :
+  ∀ (g : Fin 2),
+    FIv_NativeValue.decode (replies g) =
+      FIv_NativeValue.decode (NJB_ArrayCarrier.cell st.packed (if ↑g = 0 then ⟨21, ⋯⟩ else ⟨22, ⋯⟩)) +
+        FIv_NativeValue.decode (st.digests g)
+c0 : (NJB_ArrayCarrier.cell st.packed (slot 0)).add (st.digests 0) = ok (replies 0)
+c1 : (NJB_ArrayCarrier.cell st.packed (slot 1)).add (st.digests 1) = ok (replies 1)
+second :
+  (NJB_ArrayCarrier.cell (write st 0 (replies 0)).packed (slot 1)).add ((write st 0 (replies 0)).digests 1) =
+    ok (replies 1)
+final : State := write (write st 0 (replies 0)) 1 (replies 1)
+samePair : ![replies 0, replies 1] = replies
+⊢ (do
+      let a ← (NJB_ArrayCarrier.cell st.packed ⟨21, NKR_TermSemanticCut.digest_reference._proof_1⟩).add (st.digests 0)
+      let b ← (NJB_ArrayCarrier.cell st.packed ⟨22, NKR_TermSemanticCut.digest_reference._proof_2⟩).add (st.digests 1)
+      ok (NJB_ArrayCarrier.array (NKR_TermSemanticCut.digestFrame st.packed ![a, b]))) =
+    ok (NJB_ArrayCarrier.array (NKR_TermSemanticCut.digestFrame st.packed ![replies 0, replies 1]))
+NLH_DigestChain.lean:29:51: warning: This simp argument is unused:
+  c0
+
+Hint: Omit it from the simp argument list.
+  simp only [NKR_TermSemanticCut.digest_reference, ̲c0̵,̵c̵1, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLH_DigestChain.lean:29:54: warning: This simp argument is unused:
+  c1
+
+Hint: Omit it from the simp argument list.
+  simp only [NKR_TermSemanticCut.digest_reference, ̲c0,c̵1̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLH_DigestChain.lean:29:57: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵K̵R̵_̵T̵e̵r̵m̵S̵e̵m̵a̵n̵t̵i̵c̵C̵u̵t̵.̵d̵i̵g̵e̵s̵t̵_̵r̵e̵f̵e̵r̵e̵n̵c̵e̵,̵c̵0̵,̵c̵1̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲N̲K̲R̲_̲T̲e̲r̲m̲S̲e̲m̲a̲n̲t̲i̲c̲C̲u̲t̲.̲d̲i̲g̲e̲s̲t̲_̲r̲e̲f̲e̲r̲e̲n̲c̲e̲,̲ ̲c̲0̲,̲ ̲c̲1̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NLH_DigestChain.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
