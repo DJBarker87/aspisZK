@@ -1,0 +1,42 @@
+{"attempt": "NIW_L068", "exit_status": 1, "wall_seconds": 3.8705735630355775, "peak_rss_kib": "5967272", "swaps": "0", "print_axioms": ["'AspisR1.NIW_AlignFinishErase.bind_ext' depends on axioms: [Quot.sound]", "'AspisR1.NIW_AlignFinishErase.skeleton' depends on axioms: [propext, sorryAx, choice, Quot.sound]", "'AspisR1.NIW_AlignFinishErase.source' depends on axioms: [propext, sorryAx, choice, Quot.sound]"]}
+NIW_generated/NIW_AlignFinishErase.lean:21:2: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Stage2Finish.verifier.finishRelationRoundWithOps (IDa_Deployed.finish r) v.round0 (NIG_FinishAlpha.alpha p ↑0#usize ⋯)
+    p.claim 0#usize
+in the target expression
+  (fullBind
+      (Stage2Finish.verifier.finishRelationRoundWithOps (IDa_Deployed.finish r) v.round0
+        (NIG_FinishAlpha.alpha p 0 run._proof_1) p.claim 0#usize)
+      fun x =>
+      (observe
+          (Stage2Finish.verifier.finishRelationRoundWithOps (IDa_Deployed.finish r) v.round1
+            (NIG_FinishAlpha.alpha p 1 run._proof_3) x 1#usize)
+          (Event.round 1 v.round1 (NIG_FinishAlpha.alpha p 1
+...
+              p.alpha { «end» := 2#usize } with
+            | fail e => (fail e, [])
+            | div => (div, [])
+            | ok alpha =>
+              observe (FIo_Install.pair r owner alpha v.final_message p.kappa)
+                (Event.pair owner alpha v.final_message p.kappa) fun pair =>
+                if pair ≠ claim then done (core.result.Result.Err verifier.Error.Relation)
+                else
+                  observe (NHQ_PacketPorts.dot v.final_message (NHQ_WeightPort.weights a.weights.deref))
+                    (Event.dot v.final_message (NHQ_WeightPort.weights a.weights.deref)) fun actual =>
+                    done
+                      (if a.next ≠ 22#usize ∨ actual ≠ a.rhs then core.result.Result.Err verifier.Error.Query
+                      else core.result.Result.Ok ())).1) =
+    fullBind (NHT_RoundPacket.packet v.round0 (NIG_FinishAlpha.alpha p 0 NIT_FinishSkeleton.run._proof_1) p.claim)
+      fun first =>
+      fullBind (NHT_RoundPacket.packet v.round1 (NIG_FinishAlpha.alpha p 1 NIT_FinishSkeleton.run._proof_2) first)
+        fun claim =>
+        fullBind (FIn_WeightsInstall.newWeights p.variant p.semantic_alpha p.z) fun owner => do
+          let alpha ←
+            core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice FE)) p.alpha
+                { «end» := 2#usize }
+          let reply ← NIG_PairExport.packet r owner alpha v.final_message p.kappa
+          NIT_FinishTail.afterPair r v a (NHQ_WeightPort.weights a.weights.deref) claim reply
+'AspisR1.NIW_AlignFinishErase.bind_ext' depends on axioms: [Quot.sound]
+'AspisR1.NIW_AlignFinishErase.skeleton' depends on axioms: [propext, sorryAx, choice, Quot.sound]
+'AspisR1.NIW_AlignFinishErase.source' depends on axioms: [propext, sorryAx, choice, Quot.sound]
+
+Running as unit: run-r5fb2d5bc605843aabd657efeb70d2b13.scope; invocation ID: a700aac06c464810b410b01d7f0c594d

@@ -1,0 +1,53 @@
+{"attempt": "NIW_L128", "exit_status": 0, "wall_seconds": 4.5856612080242485, "peak_rss_kib": "6009076", "swaps": "0", "print_axioms": ["'AspisR1.NIW_AlignFinishPort.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NIW_generated/NIW_AlignFinishPort.lean:49:20: warning: This simp argument is unused:
+  observed
+
+Hint: Omit it from the simp argument list.
+  simp only [̵B̵o̵u̵n̵d̵,̵o̵b̵s̵e̵r̵v̵e̵d̵,̵r̵e̵s̵u̵l̵t̵]̵[̲B̲o̲u̲n̲d̲,̲ ̲r̲e̲s̲u̲l̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem AspisR1.NIW_AlignFinishPort.source : ∀ (r : NP6_StdModel.Reservation) (loc : Locations) (proof : Slice U8)
+  (v : verifier.View) (p : verifier.Prepared) (a : verifier.Accumulator),
+  NIG_FinishInput.Domain proof v p a →
+    ∀ (log : PairPort) (afterOwner : ℕ),
+      Cut p log afterOwner (run r loc v p a).2.2 → Bound r log (run r loc v p a).2.2 :=
+fun r loc proof v p a domain log 
+...
+   (id
+                      (congrArg
+                        (fun x =>
+                          match x with
+                          | fail err =>
+                            FIo_Install.pair r info.owner.value info.alpha.value.to_slice info.message.value
+                                info.kappa =
+                              fail err
+                          | div =>
+                            FIo_Install.pair r info.owner.value info.alpha.value.to_slice info.message.value
+                                info.kappa =
+                              div
+                          | ok reply =>
+                            log.reply = NIT_ErrorTransport.reply reply ∧
+                              FIo_Install.pair r info.owner.value info.alpha.value.to_slice info.message.value
+                                    info.kappa =
+                                  ok log.reply ∧
+                                replyCanonical log.reply)
+                        result))
+                    (Eq.mp
+                      (congrArg
+                        (Eq
+                          (FIo_Install.pair r info.owner.value info.alpha.value.to_slice info.message.value info.kappa))
+                        (congrArg
+                          (fun x =>
+                            match x with
+                            | ok r => ok (NIT_ErrorTransport.reply r)
+                            | fail e => fail e
+                            | div => div)
+                          result))
+                      native))
+                (Eq.symm h) (Eq.refl info.native.1))
+            (Eq.refl info.native.1))
+        (Eq.symm h) (Eq.refl (run r loc v p a).2.2))
+    (Eq.refl (run r loc v p a).2.2)
+'AspisR1.NIW_AlignFinishPort.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rde22ec119c174100b40b8792e263ebed.scope; invocation ID: ef06f12fe6bd45c39c75e987f982f844

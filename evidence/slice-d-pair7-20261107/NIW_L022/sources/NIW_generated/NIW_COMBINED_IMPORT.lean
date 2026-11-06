@@ -1,0 +1,9 @@
+import NGK_COMBINED_IMPORT
+import NIG_COMBINED_IMPORT
+import NIQ_COMBINED_IMPORT
+import NIT_COMBINED_IMPORT
+import NIW_PairRoot
+import NIW_FinishRoot
+set_option autoImplicit false
+#check AspisR1.RPx_Deployed.deployed
+#print axioms AspisR1.RPx_Deployed.deployed

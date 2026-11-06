@@ -1,0 +1,51 @@
+NIW_generated/NIW_AlignFinishChildren.lean:22:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NIG_FinishAlpha.alpha p 0 ⋯
+in the target expression
+  LPi_FieldValues.canonE (FIo_Install.toE (NIG_FinishAlpha.alpha p ↑0#usize ⋯))
+
+r : NP6_StdModel.Reservation
+proof : Slice U8
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+domain : NIG_FinishInput.Domain proof v p a
+round0 round1 alpha semanticAlpha z message owner weights : ℕ
+l : FinishLog
+out : Reply Unit
+cut : cutFinishLog v p a round0 round1 alpha semanticAlpha z message owner weights l out
+left✝¹ : NIT_RefInterpretation.decode { address := round0, value := v.round0 } (l.round_ptr 0) = some v.round0
+left✝ : l.round_len 0 = 224
+same : l.round_alpha 0 = NIG_FinishAlpha.alpha p 0 ⋯
+right✝ : l.round_claim 0 = p.claim
+ca : LPi_FieldValues.canonE (FIo_Install.toE (NIG_FinishAlpha.alpha p ↑0#usize ⋯))
+⊢ NHT_RoundPacket.packet v.round0 (l.round_alpha 0) (l.round_claim 0) =
+    Stage2Finish.verifier.finishRelationRoundWithOps (IDa_Deployed.finish r) v.round0 (l.round_alpha 0)
+      (l.round_claim 0) 0#usize
+NIW_generated/NIW_AlignFinishChildren.lean:40:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NIG_FinishAlpha.alpha p 1 ⋯
+in the target expression
+  LPi_FieldValues.canonE (FIo_Install.toE (NIG_FinishAlpha.alpha p ↑1#usize ⋯))
+
+r : NP6_StdModel.Reservation
+proof : Slice U8
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+domain : NIG_FinishInput.Domain proof v p a
+round0 round1 alpha semanticAlpha z message owner weights : ℕ
+l : FinishLog
+out : Reply Unit
+cut : cutFinishLog v p a round0 round1 alpha semanticAlpha z message owner weights l out
+reached : 2 ≤ l.count
+left✝¹ : NIT_RefInterpretation.decode { address := round1, value := v.round1 } (l.round_ptr 1) = some v.round1
+left✝ : l.round_len 1 = 224
+same : l.round_alpha 1 = NIG_FinishAlpha.alpha p 1 ⋯
+claim : l.round_reply 0 = core.result.Result.Ok (l.round_claim 1)
+ca : LPi_FieldValues.canonE (FIo_Install.toE (NIG_FinishAlpha.alpha p ↑1#usize ⋯))
+⊢ l.round_reply 0 = core.result.Result.Ok (l.round_claim 1) ∧
+    NHT_RoundPacket.packet v.round1 (l.round_alpha 1) (l.round_claim 1) =
+      Stage2Finish.verifier.finishRelationRoundWithOps (IDa_Deployed.finish r) v.round1 (l.round_alpha 1)
+        (l.round_claim 1) 1#usize
+'AspisR1.NIW_AlignFinishChildren.round0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NIW_AlignFinishChildren.round1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NIW_AlignFinishChildren.new_child' depends on axioms: [propext, Classical.choice, Quot.sound]

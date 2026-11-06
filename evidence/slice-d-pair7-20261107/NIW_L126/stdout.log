@@ -1,0 +1,183 @@
+NIW_generated/NIW_AlignFinishPort.lean:46:10: error(lean.unknownIdentifier): Unknown identifier `NIT_PortInstantiation.canonical_reply`
+NIW_generated/NIW_AlignFinishPort.lean:47:4: error: No goals to be solved
+NIW_generated/NIW_AlignFinishPort.lean:48:20: warning: This simp argument is unused:
+  observed
+
+Hint: Omit it from the simp argument list.
+  simp only [̵B̵o̵u̵n̵d̵,̵o̵b̵s̵e̵r̵v̵e̵d̵,̵r̵e̵s̵u̵l̵t̵]̵[̲B̲o̲u̲n̲d̲,̲ ̲r̲e̲s̲u̲l̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem AspisR1.NIW_AlignFinishPort.source : ∀ (r : NP6_StdModel.Reservation) (loc : Locations) (proof : Slice U8)
+  (v : verifier.View) (p : verifier.Prepared) (a : verifier.Accumulator),
+  NIG_FinishInput.Domain proof v p a →
+    ∀ (log : PairPort) (afterOwner : ℕ),
+      Cut p log afterOwner (run r loc v p a).2.2 → Bound r log (run r loc v p a).2.2 :=
+fun r loc proof v p a domain log afterOwner cut =>
+  have linked := NIW_AlignFinishPairCertificate.source r loc proof v p a domain;
+  Option.casesOn (motive := fun t => (run r loc v p a).2.2 = t → Bound r log (run r loc v p a).2.2)
+    (run r loc v p a).2.2
+    (fun h =>
+      Eq.ndrec (motive := fun x => (run r loc v p a).2.2 = x → Bound r log x) (fun observed => True.intro) (Eq.symm h)
+        (Eq.refl (run r loc v p a).2.2))
+    (fun info h =>
+      Eq.ndrec (motive := fun x => (run r loc v p a).2.2 = x → Bound r log x)
+        (fun observed =>
+          let ⟨provenance, right✝⟩ :=
+            Eq.mp
+              (congrArg
+                (fun x =>
+                  match x with
+                  | none => True
+                  | some info => NIW_AlignFinishPairCertificate.Linked r info)
+                observed)
+              linked
+          let ⟨caller, right✝¹⟩ := right✝
+          let ⟨certificate, right✝²⟩ := right✝¹
+          let ⟨native, canonical⟩ := right✝²
+          casesOn (motive := fun t => info.native.1 = t → Bound r log (some info)) info.native.1
+            (fun reply h =>
+              Eq.ndrec (motive := fun x => info.native.1 = x → Bound r log (some info))
+                (fun result =>
+                  have same :=
+                    Eq.symm
+                      (NIT_FinishComposition.pair_port info.owner.address info.alpha.address info.message.address p log
+                        (NIT_ErrorTransport.reply reply) afterOwner
+                        (Eq.mp
+                          (Eq.trans
+                            (congrArg
+                              (fun x =>
+                                match x with
+                                | none => True
+                                | some info =>
+                                  match info.native.1 with
+                                  | fail e => True
+                                  | div => True
+                                  | ok reply =>
+                                    cutPairPort info.owner.address info.alpha.address info.message.address p log
+                                      (NIT_ErrorTransport.reply reply) afterOwner)
+                              observed)
+                            (congrArg
+                              (fun x =>
+                                match x with
+                                | fail e => True
+                                | div => True
+                                | ok reply =>
+                                  cutPairPort info.owner.address info.alpha.address info.message.address p log
+                                    (NIT_ErrorTransport.reply reply) afterOwner)
+                              result))
+                          cut));
+                  have canon := sorry;
+                  Eq.mpr
+                    (id
+                      (congrArg
+                        (fun x =>
+                          match x with
+                          | fail err =>
+                            FIo_Install.pair r info.owner.value info.alpha.value.to_slice info.message.value
+                                info.kappa =
+                              fail err
+                          | div =>
+                            FIo_Install.pair r info.owner.value info.alpha.value.to_slice info.message.value
+                                info.kappa =
+                              div
+                          | ok reply =>
+                            log.reply = NIT_ErrorTransport.reply reply ∧
+                              FIo_Install.pair r info.owner.value info.alpha.value.to_slice info.message.value
+                                    info.kappa =
+                                  ok log.reply ∧
+                                replyCanonical log.reply)
+                        result))
+                    ⟨same,
+                      ⟨Eq.mp
+                          (congrArg
+                            (Eq
+                              (FIo_Install.pair r info.owner.value info.alpha.value.to_slice info.message.value
+                                info.kappa))
+                            (Eq.trans
+                              (congrArg
+                                (fun x =>
+                                  match x with
+                                  | ok r => ok (NIT_ErrorTransport.reply r)
+                                  | fail e => fail e
+                                  | div => div)
+                                result)
+                              (congrArg ok (Eq.symm same))))
+                          native,
+                        Eq.symm same ▸ canon⟩⟩)
+                (Eq.symm h) (Eq.refl info.native.1))
+            (fun err h =>
+              Eq.ndrec (motive := fun x => info.native.1 = x → Bound r log (some info))
+                (fun result =>
+                  Eq.mpr
+                    (id
+                      (congrArg
+                        (fun x =>
+                          match x with
+                          | fail err =>
+                            FIo_Install.pair r info.owner.value info.alpha.value.to_slice info.message.value
+                                info.kappa =
+                              fail err
+                          | div =>
+                            FIo_Install.pair r info.owner.value info.alpha.value.to_slice info.message.value
+                                info.kappa =
+                              div
+                          | ok reply =>
+                            log.reply = NIT_ErrorTransport.reply reply ∧
+                              FIo_Install.pair r info.owner.value info.alpha.value.to_slice info.message.value
+                                    info.kappa =
+                                  ok log.reply ∧
+                                replyCanonical log.reply)
+                        result))
+                    (Eq.mp
+                      (congrArg
+                        (Eq
+                          (FIo_Install.pair r info.owner.value info.alpha.value.to_slice info.message.value info.kappa))
+                        (congrArg
+                          (fun x =>
+                            match x with
+                            | ok r => ok (NIT_ErrorTransport.reply r)
+                            | fail e => fail e
+                            | div => div)
+                          result))
+                      native))
+                (Eq.symm h) (Eq.refl info.native.1))
+            (fun h =>
+              Eq.ndrec (motive := fun x => info.native.1 = x → Bound r log (some info))
+                (fun result =>
+                  Eq.mpr
+                    (id
+                      (congrArg
+                        (fun x =>
+                          match x with
+                          | fail err =>
+                            FIo_Install.pair r info.owner.value info.alpha.value.to_slice info.message.value
+                                info.kappa =
+                              fail err
+                          | div =>
+                            FIo_Install.pair r info.owner.value info.alpha.value.to_slice info.message.value
+                                info.kappa =
+                              div
+                          | ok reply =>
+                            log.reply = NIT_ErrorTransport.reply reply ∧
+                              FIo_Install.pair r info.owner.value info.alpha.value.to_slice info.message.value
+                                    info.kappa =
+                                  ok log.reply ∧
+                                replyCanonical log.reply)
+                        result))
+                    (Eq.mp
+                      (congrArg
+                        (Eq
+                          (FIo_Install.pair r info.owner.value info.alpha.value.to_slice info.message.value info.kappa))
+                        (congrArg
+                          (fun x =>
+                            match x with
+                            | ok r => ok (NIT_ErrorTransport.reply r)
+                            | fail e => fail e
+                            | div => div)
+                          result))
+                      native))
+                (Eq.symm h) (Eq.refl info.native.1))
+            (Eq.refl info.native.1))
+        (Eq.symm h) (Eq.refl (run r loc v p a).2.2))
+    (Eq.refl (run r loc v p a).2.2)
+'AspisR1.NIW_AlignFinishPort.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

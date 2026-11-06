@@ -1,0 +1,57 @@
+{"attempt": "NIW_L079", "exit_status": 1, "wall_seconds": 3.827569692162797, "peak_rss_kib": "5968852", "swaps": "0", "print_axioms": ["'AspisR1.NIW_AlignCommonExecution.observed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NIW_generated/NIW_AlignCommonExecution.lean:40:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FIo_Native.aspis_core.field.QM31.mul (kpick (row2 w) (↑j % 4)) (kpick (row3 w) (↑j / 4))
+in the target expression
+  NIW_AlignFieldReply.Produced
+    (have lhs := kpick (row2 w) (↑j % 4);
+    have rhs := kpick (row3 w) (↑j / 4);
+    do
+    let reply ← FIo_Native.aspis_core.field.QM31.mul lhs rhs
+    let after ← Array.update before j reply
+    ok (after, { lhs := lhs, rhs := rhs, reply := reply, calls := 1 }))
+    fun result =>
+    cutCommon (row2 w) (row3 w) (↑j) before result.2 result.1 ∧
+      QMul result.2.lhs result.2.rhs result.2.reply ∧ NHI_CellCanon.array result
+...
+e.aspis_core.field.QM31.mul (kpick (row2 w) (↑j % 4)) (kpick (row3 w) (↑j / 4))
+in the target expression
+  NIW_AlignFieldReply.Produced
+    (have lhs := kpick (row2 w) (↑j % 4);
+    have rhs := kpick (row3 w) (↑j / 4);
+    do
+    let reply ← FIo_Native.aspis_core.field.QM31.mul lhs rhs
+    let after ← Array.update before j reply
+    ok (after, { lhs := lhs, rhs := rhs, reply := reply, calls := 1 }))
+    fun result =>
+    cutCommon (row2 w) (row3 w) (↑j) before result.2 result.1 ∧
+      QMul result.2.lhs result.2.rhs result.2.reply ∧ NHI_CellCanon.array result.1
+
+case ok
+w : W
+hf : NHI_TensorOuterStep.Factors w
+j : Usize
+small : ↑j < 16
+before : CommonCells
+hc : NHI_CellCanon.array before
+lhs : K := kpick (row2 w) (↑j % 4)
+rhs : K := kpick (row3 w) (↑j / 4)
+cl : canonQ (kpick (row2 w) (↑j % 4))
+cr : canonQ (kpick (row3 w) (↑j / 4))
+reply : FIo_Native.aspis_core.field.QM31
+actual : QMul lhs rhs reply ∧ canonQ reply
+update : Array.update before j reply = ok (NIT_ArrayFrames.put before (↑j) reply)
+frame : ∀ k < 16, kpick (NIT_ArrayFrames.put before (↑j) reply) k = if k = ↑j then reply else kpick before k
+call : FIo_Native.aspis_core.field.QM31.mul (kpick (row2 w) (↑j % 4)) (kpick (row3 w) (↑j / 4)) = ok reply
+⊢ NIW_AlignFieldReply.Produced
+    (have lhs := kpick (row2 w) (↑j % 4);
+    have rhs := kpick (row3 w) (↑j / 4);
+    do
+    let reply ← FIo_Native.aspis_core.field.QM31.mul lhs rhs
+    let after ← Array.update before j reply
+    ok (after, { lhs := lhs, rhs := rhs, reply := reply, calls := 1 }))
+    fun result =>
+    cutCommon (row2 w) (row3 w) (↑j) before result.2 result.1 ∧
+      QMul result.2.lhs result.2.rhs result.2.reply ∧ NHI_CellCanon.array result.1
+'AspisR1.NIW_AlignCommonExecution.observed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r10bb7249adcf451e87e546f1e8680505.scope; invocation ID: eb40f9dd79664ffab5c48d4675251df6

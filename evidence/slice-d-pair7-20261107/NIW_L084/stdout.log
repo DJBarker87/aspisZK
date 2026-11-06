@@ -1,0 +1,31 @@
+theorem AspisR1.NIW_AlignSourceRoots.regular : ∀ [inst : FIo_Native.Allocation] (w : W) (shared : Bool)
+  (alpha : Slice E) (f : Slice U8) (ap0 ap1 : Powers) (s : Scratch) (p : Parts),
+  w.variant = FIo_Native.transport.Variant.S2 →
+    NHI_TensorOuterStep.Factors w →
+      canonical ap0 →
+        canonical ap1 →
+          NHX_RegularPost.Inv s p →
+            have execution := NIW_AlignRegularExecution.execute w alpha f ap0 ap1 (NHM_RegularKinds.kinds shared) s p;
+            FIo_Native.weights.process_regular_kinds w shared alpha f 2#usize 64#usize ap0 ap1 s p = execution.1 ∧
+              NIW_AlignRegularStream.Ordered (NHM_RegularKinds.kinds shared) s p execution.2 execution.1 ∧
+                (∀ event ∈ execution.2, NIW_AlignRegularStream.Clause w f ap0 ap1 event) ∧
+                  ∀ event ∈ execution.2, NIW_AlignRegularFrames.Frame event :=
+fun [FIo_Native.Allocation] w shared alpha f ap0 ap1 s p s2 hf c0 c1 inv =>
+  ⟨NIW_AlignRegularExecution.source w shared alpha f ap0 ap1 s p,
+    ⟨NIW_AlignRegularInvocation.ordered w alpha f ap0 ap1 (NHM_RegularKinds.kinds shared) s p,
+      ⟨NIW_AlignRegularInvocation.clauses w alpha f ap0 ap1 s2 (NHM_RegularKinds.kinds shared) s p,
+        NIW_AlignRegularFrames.all w alpha f ap0 ap1 s2 hf c0 c1 (NHM_RegularKinds.kinds shared)
+          (fun k hk => NHM_RegularDomain.membership shared k hk) s p inv⟩⟩⟩
+theorem AspisR1.NIW_AlignSourceRoots.finish : ∀ (r : NP6_StdModel.Reservation) (proof : Slice U8)
+  (v : AspisR1Stage2.verifier.View) (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator),
+  NIG_FinishInput.Domain proof v p a →
+    have execution := NIW_AlignFinishExecution.run r v p a;
+    Port3_NativeFinishBody.verifier.finish_relation (NIG_Slots.installed r) v p a none = execution.1 ∧
+      (∀ event ∈ execution.2, NIW_AlignFinishInvocation.Clause r event) ∧
+        (∀ event ∈ execution.2, NIW_AlignFinishDomains.Inputs p v a event) ∧ NIW_AlignFinishPrefix.Prefix execution.2 :=
+fun r proof v p a domain =>
+  ⟨NIW_AlignFinishErase.source r proof v p a domain,
+    ⟨NIW_AlignFinishInvocation.clauses r proof v p a domain,
+      ⟨NIW_AlignFinishDomains.all r proof v p a domain, NIW_AlignFinishPrefix.source r v p a⟩⟩⟩
+'AspisR1.NIW_AlignSourceRoots.regular' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIW_AlignSourceRoots.finish' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,134 @@
+structure AspisR1.NIW_AlignNativeObligations.RegularObservation : Type
+number of parameters: 0
+fields:
+  AspisR1.NIW_AlignNativeObligations.RegularObservation.outcome : Result NHM_RegularKinds.Reply
+constructor:
+  AspisR1.NIW_AlignNativeObligations.RegularObservation.mk (outcome : Result NHM_RegularKinds.Reply) :
+    RegularObservation
+def AspisR1.NIW_AlignNativeObligations.RegularProjection : [FIo_Native.Allocation] →
+  Context → Scratch → RegularObservation → Prop :=
+fun [FIo_Native.Allocation] c before native => native.outcome = (NIW_AlignRegularPhase.run c before).2.outcome
+def AspisR1.NIW_AlignNativeObligations.PairWitness : NP6_StdModel.Reservation → Context → Result NR → Prop :=
+fun r c native => NIT_AllocatorChain.Trace c r native
+def AspisR1.NIW_AlignNativeObligations.FinishProjection : NP6_StdModel.Reservation →
+  NIW_AlignFinishComposed.Locations →
+    AspisR1Stage2.verifier.View →
+      AspisR1Stage2.verifier.Prepared →
+        AspisR1Stage2.verifier.Accumulator → List NIW_AlignFinishExecution.Event → Prop :=
+fun r loc v p a nativeEvents => nativeEvents = (NIW_AlignFinishComposed.run r loc v p a).2.1
+AspisR1.NIW_AlignComposedRoot.source (r : NP6_StdModel.Reservation) (loc : NIW_AlignFinishComposed.Locations)
+  (proof : Slice U8) (v : AspisR1Stage2.verifier.View) (p : AspisR1Stage2.verifier.Prepared)
+  (a : AspisR1Stage2.verifier.Accumulator) (domain : NIG_FinishInput.Domain proof v p a) (port : PairPort)
+  (afterOwner : ℕ) (cut : NIW_AlignFinishPort.Cut p port afterOwner (NIW_AlignFinishComposed.run r loc v p a).2.2) :
+  have execution := NIW_AlignFinishComposed.run r loc v p a;
+  Port3_NativeFinishBody.verifier.finish_relation (NIG_Slots.installed r) v p a none = execution.1 ∧
+    (∀ event ∈ execution.2.1, NIW_AlignFinishInvocation.Clause r event) ∧
+      (∀ event ∈ execution.2.1, NIW_AlignFinishDomains.Inputs p v a event) ∧
+        NIW_AlignFinishPrefix.Prefix execution.2.1 ∧
+          NIW_AlignFinishPairCertificate.Bound r execution.2.2 ∧
+            NIW_AlignFinishInfoEvent.HasPair execution ∧
+              NIW_AlignFinishInfoNew.HasNew p execution ∧ NIW_AlignFinishPort.Bound r port execution.2.2
+AspisR1.NIW_AlignPairInstalled.source (r : NP6_StdModel.Reservation) (w : Ref FIo_Install.W)
+  (alpha : Ref (Std.Array FE 2#usize)) (f : Ref (Slice U8)) (kappa : FE) (ap0 ap1 common low scratch parts : ℕ)
+  (domain :
+    NIT_PairDomain.Domain (FIo_Install.toWeights w.value) (NFW_PowersCohort.mapArray FIo_Install.toE alpha.value)
+      f.value (FIo_Install.toE kappa)) :
+  FIo_Install.pair r w.value alpha.value.to_slice f.value kappa =
+      NIT_ErrorTransport.full (NIW_AlignPairInstalled.observed r w alpha f kappa ap0 ap1 common low scratch parts).1 ∧
+    NIT_ResultCanonical.Canonical (NIW_AlignPairInstalled.observed r w alpha f kappa ap0 ap1 common low scratch parts).1
+AspisR1.NIW_AlignFinishPort.source (r : NP6_StdModel.Reservation) (loc : NIW_AlignFinishComposed.Locations)
+  (proof : Slice U8) (v : AspisR1Stage2.verifier.View) (p : AspisR1Stage2.verifier.Prepared)
+  (a : AspisR1Stage2.verifier.Accumulator) (domain : NIG_FinishInput.Domain proof v p a) (log : PairPort)
+  (afterOwner : ℕ) (cut : NIW_AlignFinishPort.Cut p log afterOwner (NIW_AlignFinishComposed.run r loc v p a).2.2) :
+  NIW_AlignFinishPort.Bound r log (NIW_AlignFinishComposed.run r loc v p a).2.2
+def AspisR1.NIW_AlignFinishPort.Cut : AspisR1Stage2.verifier.Prepared →
+  PairPort → ℕ → Option NIW_AlignFinishComposed.PairInfo → Prop :=
+fun p log afterOwner x =>
+  match x with
+  | none => True
+  | some info =>
+    match info.native.1 with
+    | fail e => True
+    | div => True
+    | ok reply =>
+      cutPairPort info.owner.address info.alpha.address info.message.address p log (NIT_ErrorTransport.reply reply)
+        afterOwner
+def AspisR1.NIW_AlignFinishPort.Bound : NP6_StdModel.Reservation →
+  PairPort → Option NIW_AlignFinishComposed.PairInfo → Prop :=
+fun r log x =>
+  match x with
+  | none => True
+  | some info =>
+    have call := FIo_Install.pair r info.owner.value info.alpha.value.to_slice info.message.value info.kappa;
+    match info.native.1 with
+    | fail err => call = fail err
+    | div => call = div
+    | ok reply => log.reply = NIT_ErrorTransport.reply reply ∧ call = ok log.reply ∧ replyCanonical log.reply
+def AspisR1.NIW_AlignPairPhase.Certificate : NP6_StdModel.Reservation →
+  NIW_AlignPairPhase.Input → Result NR × NIW_AlignPairPhase.Log → Prop :=
+fun r i observed =>
+  match observed.2.powers0, observed.2.powers1 with
+  | ok ap0, some (ok ap1) =>
+    FIo_Native.weights.powers 4#usize (epick i.alpha.value 0) = ok ap0 ∧
+      FIo_Native.weights.powers 4#usize (epick i.alpha.value 1) = ok ap1 ∧
+        canonical ap0 ∧ canonical ap1 ∧ NIT_AllocatorChain.Trace (NIW_AlignPairPhase.context i ap0 ap1) r observed.1
+  | x, x_1 => False
+structure NIG_FinishInput.Domain (proof : Slice U8) (v : AspisR1Stage2.verifier.View)
+  (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator) : Prop
+number of parameters: 4
+fields:
+  NIG_FinishInput.Domain.accumulator : NGM_FinishDomain.AccumulatorDomain a
+  NIG_FinishInput.Domain.s2 : p.variant = AspisR1Stage2.transport.Variant.S2
+  NIG_FinishInput.Domain.claim : NBO_TailDomain.WideCanonical p.claim
+  NIG_FinishInput.Domain.alpha : ∀ i < 2,
+      ∀ (x : AspisR1Stage2.Stage2E), (↑p.alpha)[i]? = some x → NBO_TailDomain.WideCanonical x
+  NIG_FinishInput.Domain.kappa : NBO_TailDomain.WideCanonical p.kappa
+  NIG_FinishInput.Domain.semantic : ∀ q ∈ ↑p.semantic_alpha, NGW_NewInterface.CanonK q
+  NIG_FinishInput.Domain.points : ∀ point ∈ ↑p.z, NGW_NewInterface.CanonK point.x ∧ NGW_NewInterface.CanonK point.y
+  NIG_FinishInput.Domain.round0 : ↑v.round0 = List.take 224 (List.drop 7527 ↑proof)
+  NIG_FinishInput.Domain.round1 : ↑v.round1 = List.take 224 (List.drop 7783 ↑proof)
+  NIG_FinishInput.Domain.final : ↑v.final_message = List.take 2048 (List.drop 8007 ↑proof)
+  NIG_FinishInput.Domain.round0_words : NIG_FinishInput.Windows v.round0 7
+  NIG_FinishInput.Domain.round1_words : NIG_FinishInput.Windows v.round1 7
+  NIG_FinishInput.Domain.final_words : NIG_FinishInput.Windows v.final_message 64
+constructor:
+  NIG_FinishInput.Domain.mk {proof : Slice U8} {v : AspisR1Stage2.verifier.View} {p : AspisR1Stage2.verifier.Prepared}
+    {a : AspisR1Stage2.verifier.Accumulator} (accumulator : NGM_FinishDomain.AccumulatorDomain a)
+    (s2 : p.variant = AspisR1Stage2.transport.Variant.S2) (claim : NBO_TailDomain.WideCanonical p.claim)
+    (alpha : ∀ i < 2, ∀ (x : AspisR1Stage2.Stage2E), (↑p.alpha)[i]? = some x → NBO_TailDomain.WideCanonical x)
+    (kappa : NBO_TailDomain.WideCanonical p.kappa) (semantic : ∀ q ∈ ↑p.semantic_alpha, NGW_NewInterface.CanonK q)
+    (points : ∀ point ∈ ↑p.z, NGW_NewInterface.CanonK point.x ∧ NGW_NewInterface.CanonK point.y)
+    (round0 : ↑v.round0 = List.take 224 (List.drop 7527 ↑proof))
+    (round1 : ↑v.round1 = List.take 224 (List.drop 7783 ↑proof))
+    (final : ↑v.final_message = List.take 2048 (List.drop 8007 ↑proof))
+    (round0_words : NIG_FinishInput.Windows v.round0 7) (round1_words : NIG_FinishInput.Windows v.round1 7)
+    (final_words : NIG_FinishInput.Windows v.final_message 64) : NIG_FinishInput.Domain proof v p a
+structure AspisR1.NIW_AlignNativeObligations.RegularObservation : Type
+number of parameters: 0
+fields:
+  AspisR1.NIW_AlignNativeObligations.RegularObservation.outcome : Result NHM_RegularKinds.Reply
+constructor:
+  AspisR1.NIW_AlignNativeObligations.RegularObservation.mk (outcome : Result NHM_RegularKinds.Reply) :
+    RegularObservation
+def AspisR1.NIW_AlignNativeObligations.RegularProjection : [FIo_Native.Allocation] →
+  Context → Scratch → RegularObservation → Prop :=
+fun [FIo_Native.Allocation] c before native => native.outcome = (NIW_AlignRegularPhase.run c before).2.outcome
+def AspisR1.NIW_AlignNativeObligations.PairWitness : NP6_StdModel.Reservation → Context → Result NR → Prop :=
+fun r c native => NIT_AllocatorChain.Trace c r native
+def AspisR1.NIW_AlignNativeObligations.FinishProjection : NP6_StdModel.Reservation →
+  NIW_AlignFinishComposed.Locations →
+    AspisR1Stage2.verifier.View →
+      AspisR1Stage2.verifier.Prepared →
+        AspisR1Stage2.verifier.Accumulator → List NIW_AlignFinishExecution.Event → Prop :=
+fun r loc v p a nativeEvents => nativeEvents = (NIW_AlignFinishComposed.run r loc v p a).2.1
+def AspisR1.NIW_AlignRegularNativeView.project : [FIo_Native.Allocation] →
+  Context → Scratch → Option NIW_AlignRegularNativeView.View :=
+fun [FIo_Native.Allocation] c before =>
+  match (NIW_AlignRegularPhase.run c before).2.outcome with
+  | fail e => none
+  | div => none
+  | ok (core.result.Result.Err err, after, parts) =>
+    some (NIW_AlignRegularNativeView.returning c (core.result.Result.Err err) after parts)
+  | ok (core.result.Result.Ok PUnit.unit, after, parts) =>
+    if NGM_GuardExact.guard c.w.value 2#usize = true then none
+    else some (NIW_AlignRegularNativeView.returning c (core.result.Result.Ok ()) after parts)

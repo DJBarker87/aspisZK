@@ -1,0 +1,80 @@
+NIW_generated/NIW_AlignFinishErase.lean:52:3: error: unsolved goals
+case pos
+r : NP6_StdModel.Reservation
+proof : Slice U8
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+domain : NIG_FinishInput.Domain proof v p a
+ca0 : LPi_FieldValues.canonE (FIo_Install.toE (NIG_FinishAlpha.alpha p ↑0#usize ⋯))
+ca1 : LPi_FieldValues.canonE (FIo_Install.toE (NIG_FinishAlpha.alpha p ↑1#usize ⋯))
+law0 :
+  Stage2Finish.verifier.finishRelationRoundWithOps (IDa_Deployed.finish r) v.round0 (NIG_FinishAlpha.alpha p 0 ⋯)
+      p.claim 0#usize =
+    NHT_RoundPacket.packet v.round0 (NIG_FinishAlpha.alpha p 0 ⋯) p.claim
+first : aspis_core.field.wide_exact.WideExact
+law1 :
+  Stage2Finish.verifier.finishRelationRoundWithOps (IDa_Deployed.finish r) v.round1 (NIG_FinishAlpha.alpha p 1 ⋯) first
+      1#usize =
+    NHT_RoundPacket.packet v.round1 (NIG_FinishAlpha.alpha p 1 ⋯) first
+claim : aspis_core.field.wide_exact.WideExact
+owner : NIG_Slots.W
+alpha : Slice FE
+range :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice FE)) p.alpha
+      { «end» := 2#usize } =
+    ok alpha
+value : Stage2Finish.E
+different : value ≠ claim
+⊢ (if value ≠ claim then (ok (core.result.Result.Err verifier.Error.Relation), [])
+      else
+        observe (NHQ_PacketPorts.dot v.final_message (NHQ_WeightPort.weights a.weights.deref))
+          (Event.dot v.final_message (NHQ_WeightPort.weights a.weights.deref)) fun actual =>
+          (ok
+              (if a.next ≠ 22#usize ∨ actual ≠ a.rhs then core.result.Result.Err verifier.Error.Query
+              else core.result.Result.Ok ()),
+            [])).1 =
+    if value ≠ claim then ok (core.result.Result.Err verifier.Error.Relation)
+    else do
+      let r ← NHQ_PacketPorts.dot v.final_message (NHQ_WeightPort.weights a.weights.deref)
+      match r with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok value => ok (NIT_FinishTail.dotReply a (core.result.Result.Ok value))
+NIW_generated/NIW_AlignFinishErase.lean:39:24: warning: This simp argument is unused:
+  range
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵r̵a̵n̵g̵e̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NIW_generated/NIW_AlignFinishErase.lean:40:21: warning: This simp argument is unused:
+  range
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵r̵a̵n̵g̵e̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NIW_generated/NIW_AlignFinishErase.lean:42:13: warning: This simp argument is unused:
+  range
+
+Hint: Omit it from the simp argument list.
+  simp only [r̵a̵n̵g̵e̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NIW_generated/NIW_AlignFinishErase.lean:52:16: warning: This simp argument is unused:
+  different
+
+Hint: Omit it from the simp argument list.
+  simp only [̵d̵i̵f̵f̵e̵r̵e̵n̵t̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵d̵o̵n̵e̵]̵[̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲d̲o̲n̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NIW_generated/NIW_AlignFinishErase.lean:52:26: warning: This simp argument is unused:
+  ite_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵d̵i̵f̵f̵e̵r̵e̵n̵t̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵d̵o̵n̵e̵]̵[̲d̲i̲f̲f̲e̲r̲e̲n̲t̲,̲ ̲d̲o̲n̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NIW_AlignFinishErase.bind_ext' depends on axioms: [Quot.sound]
+'AspisR1.NIW_AlignFinishErase.skeleton' depends on axioms: [propext, sorryAx, choice, Quot.sound]
+'AspisR1.NIW_AlignFinishErase.source' depends on axioms: [propext, sorryAx, choice, Quot.sound]
