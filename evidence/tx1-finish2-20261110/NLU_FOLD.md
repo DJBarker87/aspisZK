@@ -9,3 +9,11 @@ Native next: NLU high-read/frame split is substantively narrower than NLI_K025: 
 Own client note: an accidental early L003 client invocation was rejected by its active-client guard before admission or launch while L002 was collecting. L003 launched only after L002 completed. Guard remains intact; no parallel scope or resubmission occurred.
 
 Seed FIRST NLI then NLC/NLH/NLO: exact files, hashes and size in NLU_SEED_PINS.json. No predecessor writes. Every attempt has a separate admission, disk check, source/selected-object hashes and exact metrics; NLU_ATTEMPTS.jsonl is authoritative for actual usage.
+
+## Occurrence and child integration progress
+
+All34 fixed dispatcher head modules have focused successful receipts, with standard axioms. Only32 are major executed dispatch occurrences; lowIndex/highIndex are inert markers excluded by Major. Expanding the two actual from_fn callbacks and replacing rootCopy by rootTry/rootUnwrap gives35 executed source occurrences. NLU_Nested drafts the explicit SAME-owner callback/try/unwrap association; it is not credited before compilation.
+
+NLU_Terminal.install (L055) consumes the ACTUAL NLH_WrapperRoot.source packet at converted SAME arguments and its actual domains. It does not use NLI's stronger proposed RowSpec256. The canonical claims/alpha input facts and physical parent/callee integration still need proofs; the intermediate theorem is not a136 root. NLU_InputDomain records proposed own-input provenance/public/challenge clauses for137, pending exact printed root review. It contains no selected child reply, success or endpoint.
+
+Source-normalization generator repair and prelaunch historical-import diagnosis are retained in NLU_HEAD_REPAIR.md/NLU_PRELAUNCH_FINDINGS.md. No timed-out/memory-killed job was repeated; no cap or timeout increased. Source/Result/log projection, continuation ownership and all fixed source heads do not alone establish native parent heap/lifecycle or a CLOSED ledger row.

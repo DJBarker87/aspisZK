@@ -1,0 +1,26 @@
+NLU_generated/NLU_Head_mark2.lean:11:1: error: Type mismatch. The `do` element has monadic result type
+  Unit
+but the rest of the `do` block has monadic result type
+  Post H
+NLU_generated/NLU_Head_mark2.lean:11:8: error: Function expected at
+  s.locals
+but this term has type
+  Locals H
+
+Note: Expected a function because this term is being applied to the argument
+  VerifyPrefix.mark
+NLU_generated/NLU_Head_mark2.lean:19:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    liftM (VerifyPrefix.mark none 2#u8)
+    pure (Sum.inr (setNext s.machine Event.claims))
+is not definitionally equal to the right-hand side
+  head_mark2 s.machine
+
+H : Type
+s : NLU.State H
+atSite : s.machine.next = Event.mark2
+⊢ (do
+      liftM (VerifyPrefix.mark none 2#u8)
+      pure (Sum.inr (setNext s.machine Event.claims))) =
+    head_mark2 s.machine
+'AspisR1.NLU_Heads.source_mark2' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

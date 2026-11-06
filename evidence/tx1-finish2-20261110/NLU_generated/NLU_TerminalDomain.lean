@@ -1,7 +1,5 @@
 import NLU_State
 import NLH_WrapperRoot
-import FIq_Terminal
-import NKQ_FinishMaskDomain
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.NLU_Terminal
