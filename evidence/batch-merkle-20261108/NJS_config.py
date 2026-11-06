@@ -5,7 +5,7 @@ a,kind,target=sys.argv[1:4];invert='--invert' in sys.argv
 assert not (E/(a+'.json')).exists()
 upload=[];collect=[];env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_TARGET_DIR=B+'/NJS_target')
 if kind=='kani':
- upload=['NJS_gate.py','NJS_harness.rs','NJS_KMX.patch','NJS_NHR_stage.py','NJS_SUPPLEMENT.json'];command=['python3','NJS_gate.py',a+'.json'];collect=[a+'_validation']
+ upload=['NJS_gate.py','NJS_harness.rs','NJS_KMX.patch','NJS_NHR_stage.py','NJS_SUPPLEMENT.json','NJS_fragments.rs','NJS_FRAGMENT_ASSOCIATION.json'];command=['python3','NJS_gate.py',a+'.json'];collect=[a+'_validation']
  env.update(CARGO_NET_OFFLINE='true',CARGO_BUILD_JOBS='1',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',RUSTFLAGS='-Copt-level=3 -C link-arg=-Wl,--threads=1'+(' --cfg NJS_invert' if invert else ''))
 elif kind=='lean':
  upload=[target+'.lean'];command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-o','NJS_objects/'+target+'.olean',target+'.lean'];env.update(LEAN_SYSROOT=T,LEAN_PATH=':'.join(json.loads((E/'NJS_PATHS.json').read_text())))

@@ -1,0 +1,86 @@
+{
+  "attempt": "NJS_K013",
+  "kind": "kani",
+  "module": "slot_view",
+  "sources": [
+    "NJS_gate.py",
+    "NJS_harness.rs",
+    "NJS_KMX.patch",
+    "NJS_NHR_stage.py",
+    "NJS_SUPPLEMENT.json"
+  ],
+  "upload": [
+    "NJS_gate.py",
+    "NJS_harness.rs",
+    "NJS_KMX.patch",
+    "NJS_NHR_stage.py",
+    "NJS_SUPPLEMENT.json"
+  ],
+  "command": [
+    "python3",
+    "NJS_gate.py",
+    "NJS_K013.json"
+  ],
+  "collect": [
+    "NJS_K013_validation"
+  ],
+  "timeout": 180,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-batch-merkle-20261108/NJS_target",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-Copt-level=3 -C link-arg=-Wl,--threads=1 --cfg NJS_invert"
+  },
+  "deps_fingerprint": {},
+  "expected_time": "optimized compilation then named native helper/cut",
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-batch-merkle-20261108/NJS_workspace/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-batch-merkle-20261108/NJS_target",
+    "--features",
+    "private-leaf-salts,optimized-terminal,program-build",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "verifier::candidate::NJS_native::slot_view",
+    "--output-format",
+    "terse"
+  ],
+  "configuration_source_revision": null,
+  "source_revision": "d876576b86d06b30a2a1210393b897f87cc35733",
+  "source_tree_dirty": true,
+  "exit_status": 1,
+  "wall_seconds": 3.3930675049778074,
+  "peak_rss_kib": "328344",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r72831c5789964f1b96916b02e80200d2.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "422227968",
+  "source_hashes": {
+    "NJS_gate.py": "dba4d151f4a5881fb5555c892c66dbbd8fc81cfd6c17514e85784b023eceba84",
+    "NJS_harness.rs": "e071021dccf172cf13e4045e7d880f5f03e6ebb90e3bd732507cd86ea5ffca33",
+    "NJS_KMX.patch": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+    "NJS_NHR_stage.py": "fe808b7aa26e6f6aa21176241468e0b58193b186947066bfc7f854ffdfd182db",
+    "NJS_SUPPLEMENT.json": "1d8b3b2bf561958174ce453f2706adeaae70885cbe73de33576b34683add84eb"
+  },
+  "print_axioms": "N/A: kani"
+}

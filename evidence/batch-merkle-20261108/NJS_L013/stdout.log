@@ -1,0 +1,22 @@
+def Aeneas.Std.core.slice.Slice.swap : {T : Type} → Slice T → Usize → Usize → Result (Slice T) :=
+fun {T} s a b => do
+  let av ← s.index_usize a
+  let bv ← s.index_usize b
+  let s1 ← s.update a bv
+  s1.update b av
+def Aeneas.Std.Usize.wrapping_sub : Usize → Usize → Usize :=
+UScalar.wrapping_sub
+theorem Aeneas.Std.Usize.wrapping_sub_val_eq : ∀ (x y : Usize),
+  ↑(x.wrapping_sub y) = (↑x + (UScalar.size UScalarTy.Usize - ↑y)) % UScalar.size UScalarTy.Usize :=
+fun x y => UScalar.wrapping_sub_val_eq x y
+def Aeneas.Std.core.iter.range.IteratorRange.next : {A : Type} →
+  core.iter.range.Step A → core.ops.range.Range A → Result (Option A × core.ops.range.Range A) :=
+fun {A} StepInst range => do
+  let cmp ← StepInst.partialOrdInst.lt range.start range.end
+  if cmp = true then do
+      let range' ← StepInst.cloneInst.clone range.start
+      let n ← StepInst.forward_checked range' 1#usize
+      match n with
+        | none => fail Error.panic
+        | some n => ok (some range', { start := n, «end» := range.end })
+    else ok (none, range)

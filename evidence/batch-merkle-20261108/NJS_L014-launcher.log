@@ -1,0 +1,76 @@
+{"attempt": "NJS_L014", "exit_status": 1, "wall_seconds": 6.02823181101121, "peak_rss_kib": "4369156", "swaps": "0", "print_axioms": ["'NJS_BatchLeaf.copied' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJS_BatchLeaf.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJS_BatchLeaf.lean:32:55: error: unsolved goals
+case this
+H : Type
+d : NJS_Extract.aspis_core.digest.Digest32 H
+hash : H
+kind : Usize
+q : Slice U8
+len : (↑q).length = 832
+range :
+  ∀ (a b : Usize),
+    ↑a ≤ ↑b →
+      ↑b ≤ 832 →
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) q { start := a, «end» := b } =
+          ok (MultiproofConeSlices.sub q a b)
+⊢ ?m.53
+
+H : Type
+d : NJS_Extract.aspis_core.digest.Digest32 H
+hash : H
+kind : Usize
+q : Slice U8
+len : (↑q).length = 832
+range :
+  ∀ (a b : Usize),
+    ↑a ≤ ↑b →
+      ↑b ≤ 832 →
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) q { start := a, «end» := b } =
+          ok 
+...
+NJS_BatchLeaf.lean:32:55: error: unsolved goals
+case this
+H : Type
+d : NJS_Extract.aspis_core.digest.Digest32 H
+hash : H
+kind : Usize
+q : Slice U8
+len : (↑q).length = 832
+range :
+  ∀ (a b : Usize),
+    ↑a ≤ ↑b →
+      ↑b ≤ 832 →
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) q { start := a, «end» := b } =
+          ok (MultiproofConeSlices.sub q a b)
+⊢ ?m.53
+
+H : Type
+d : NJS_Extract.aspis_core.digest.Digest32 H
+hash : H
+kind : Usize
+q : Slice U8
+len : (↑q).length = 832
+range :
+  ∀ (a b : Usize),
+    ↑a ≤ ↑b →
+      ↑b ≤ 832 →
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) q { start := a, «end» := b } =
+          ok (MultiproofConeSlices.sub q a b)
+this : ?m.53
+⊢ NJS_Extract.verifier.candidate.batch_leaf (ok 113#u8) (ok 241#u8) (fun {H} => privateLeaf) d hash kind q =
+    (modelDigest d).digest hash (Port4B_LeafCode.input kind q)
+NJS_BatchLeaf.lean:36:12: error: unexpected token '('; expected ':'
+NJS_BatchLeaf.lean:47:61: error: unexpected token; expected ':'
+NJS_BatchLeaf.copied (s : Slice U8) (size : (↑s).length = 32) :
+  (do
+      let r ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s
+      core.result.Result.unwrap core.fmt.DebugTryFromSliceError r) =
+    ok ⟨↑s, size⟩
+NJS_BatchLeaf.source {H : Type} (d : NJS_Extract.aspis_core.digest.Digest32 H) (hash : H) (kind : Usize) (q : Slice U8)
+  (len : (↑q).length = 832) :
+  NJS_Extract.verifier.candidate.batch_leaf (ok 113#u8) (ok 241#u8) (fun {H} => privateLeaf) d hash kind q =
+    Port4B_LeafCode.native (modelDigest d) hash kind q
+'NJS_BatchLeaf.copied' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJS_BatchLeaf.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r63f29c0aeb1a402e9f1fca415fb4094a.scope; invocation ID: 6b4b088ed9e04b948b75a50473c8d63a

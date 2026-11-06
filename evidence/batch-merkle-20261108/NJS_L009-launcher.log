@@ -1,0 +1,48 @@
+{"attempt": "NJS_L009", "exit_status": 1, "wall_seconds": 5.051253553945571, "peak_rss_kib": "4401408", "swaps": "0", "print_axioms": ["'NJS_Slot.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJS_Slot.lean:14:65: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+proof : Slice U8
+s : Usize
+small : ↑s < 6
+⊢ ↑(s.wrapping_add 1#usize) = ↑s + 1
+NJS_Slot.lean:19:5: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+        { start := Port4B_SlotInstall.offset ↑s ⋯, «end» := Port4B_SlotInstall.offset _a nextbound } =
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+        { start := Port4B_SlotInstall.offset ↑s ⋯, «end» := Port4B_SlotInstall.offset (↑s + 1
+...
+ goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+proof : Slice U8
+s : Usize
+small : ↑s < 6
+nextval : ↑(s.wrapping_add 1#usize) = ↑s + 1
+nextbound : ↑(s.wrapping_add 1#usize) ≤ 6
+⊢ core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+      { start := Port4B_SlotInstall.offset ↑s ⋯,
+        «end» := Port4B_SlotInstall.offset (↑(s.wrapping_add 1#usize)) nextbound } =
+    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+      { start := Port4B_SlotInstall.offset ↑s ⋯, «end» := Port4B_SlotInstall.offset (↑s + 1) ⋯ }
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NJS_Slot.source (proof : Slice U8) (s : Usize) (small : ↑s < 6) :
+  NJS_Extract.verifier.candidate.slot NGD_SlotRef.slot_offset proof s = Port4B_SlotInstall.nodeSlot proof s
+'NJS_Slot.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r3a29050d899a4d8aa30d03f061c4c84a.scope; invocation ID: 33818b7b714a4a228d97b9021ff6f6b5

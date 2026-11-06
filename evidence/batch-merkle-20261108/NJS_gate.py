@@ -18,6 +18,7 @@ manifest=stage.validate(S,out,'/home/dombarker/.cargo/bin/cargo');frozen=manifes
 patch=(E/'NJS_KMX.patch').read_bytes();assert stage.sha(patch)=='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67'
 if not (S/'KMX_stubs.rs').exists():subprocess.run(['patch','--batch','-p1','-i',str(E/'NJS_KMX.patch')],cwd=S,check=True,stdout=subprocess.DEVNULL)
 assert stage.sha((S/'KMX_stubs.rs').read_bytes())=='ad8efb63d8ff791274c91eff9ccc5b9fb126f5a3ac7f27aa811ca11b8e25c138'
+frag=(E/'NJS_fragments.rs').read_bytes(); assoc=json.loads((E/'NJS_FRAGMENT_ASSOCIATION.json').read_text()); body=assoc['selected_body'];assert stage.sha(body.encode())==assoc['body_sha256'];assert body in raw.decode();assert body in frag.decode();sb=assoc['sort']['selected_body'];assert stage.sha(sb.encode())==assoc['sort']['body_sha256'];assert sb in raw.decode() and sb in frag.decode();assert assoc['sort']['condition'] in raw.decode() and assoc['sort']['condition'] in frag.decode();(S/'NJS_fragments.rs').write_bytes(frag)
 h=(E/'NJS_harness.rs').read_bytes();assert not any(t in h.decode() for t in ['static mut','UnsafeCell','Atomic'])
 (S/'NJS_harness.rs').write_bytes(h);p.write_bytes(raw+append);lib.write_bytes(lib_patched)
 diff=''.join(difflib.unified_diff(raw.decode().splitlines(True),(raw+append).decode().splitlines(True),fromfile='a/'+str(p.relative_to(S)),tofile='b/'+str(p.relative_to(S))))

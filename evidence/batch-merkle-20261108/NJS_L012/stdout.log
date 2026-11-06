@@ -1,0 +1,11 @@
+def Aeneas.Std.core.array.TryFromArrayCopySlice.try_from : {T : Type} →
+  (N : Usize) →
+    core.marker.Copy T → Slice T → Result (core.result.Result (Std.Array T N) core.array.TryFromSliceError) :=
+fun {T} N _copyInst s =>
+  if h0 : s.length = ↑N then ok (core.result.Result.Ok ⟨↑s, ⋯⟩) else ok (core.result.Result.Err ())
+def Aeneas.Std.core.result.Result.unwrap : {T E : Type} → core.fmt.Debug E → core.result.Result T E → Result T :=
+fun {T E} x e =>
+  match e with
+  | core.result.Result.Ok x => ok x
+  | core.result.Result.Err a => fail Error.panic
+'NJS_BatchLeaf.privateLeaf' depends on axioms: [propext, Classical.choice, Quot.sound]
