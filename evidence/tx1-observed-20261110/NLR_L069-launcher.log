@@ -1,0 +1,54 @@
+{"attempt": "NLR_L069", "exit_status": 1, "wall_seconds": 30.5097416669596, "peak_rss_kib": "6297656", "swaps": "0", "print_axioms": ["'AspisR1.NLR_Prepare.run_expandSemantic' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLR_generated/NLR_PrepareRun_expandSemantic.lean:18:9: error: unexpected token ':'; expected '=>'
+NLR_generated/NLR_PrepareRun_expandSemantic.lean:11:102: error: unsolved goals
+cfg : Configuration
+H : Type
+i : Input H
+n offY1 : Usize
+semantic y1 compressed : Slice U8
+splitBack : SplitBack
+vecBack : VecBack
+⊢ run
+      (AspisR1PublicPreparation.PreparedHashCode.bind (liftM ((ops cfg).op10 compressed semantic)) fun a =>
+        AspisR1PublicPreparation.PreparedHashCode.bind
+          (match a.1 with
+          | core.result.Result.Ok a_1 =>
+            Code.done (Sum.inr { input := i, locals := Local.valueRange n offY1 a.2 y1 splitBack vecBack })
+          | core.result.Result.Err e =>
+        
+...
+pandSemantic.lean:18:9: error: unexpected token ':'; expected '=>'
+NLR_generated/NLR_PrepareRun_expandSemantic.lean:11:102: error: unsolved goals
+cfg : Configuration
+H : Type
+i : Input H
+n offY1 : Usize
+semantic y1 compressed : Slice U8
+splitBack : SplitBack
+vecBack : VecBack
+⊢ run
+      (AspisR1PublicPreparation.PreparedHashCode.bind (liftM ((ops cfg).op10 compressed semantic)) fun a =>
+        AspisR1PublicPreparation.PreparedHashCode.bind
+          (match a.1 with
+          | core.result.Result.Ok a_1 =>
+            Code.done (Sum.inr { input := i, locals := Local.valueRange n offY1 a.2 y1 splitBack vecBack })
+          | core.result.Result.Err e =>
+            AspisR1PublicPreparation.PreparedHashCode.bind
+              (liftM
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                  (verifier.Error.Insts.CoreConvertFromCodecError (ops cfg)) (core.result.Result.Err e)))
+              fun r => Code.done (Sum.inl (r, i.scratch)))
+          (continuation cfg)) =
+    run
+      (AspisR1PublicPreparation.PreparedHashCode.bind (liftM ((ops cfg).op10 compressed semantic)) fun __x =>
+        match __x.1 with
+        | core.result.Result.Ok a => NLR_PrepareTails.tail_valueRange cfg i n offY1 __x.2 y1 splitBack vecBack
+        | core.result.Result.Err e =>
+          AspisR1PublicPreparation.PreparedHashCode.bind
+            (liftM
+              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                (verifier.Error.Insts.CoreConvertFromCodecError (ops cfg)) (core.result.Result.Err e)))
+            fun r => Code.done (r, i.scratch))
+'AspisR1.NLR_Prepare.run_expandSemantic' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r5131ac4b1b044da7bc1d4936407f378c.scope; invocation ID: faeddd0104b840dc9157ef87b94d9069

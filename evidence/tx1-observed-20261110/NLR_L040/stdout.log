@@ -1,0 +1,76 @@
+NLR_generated/NLR_PrepareRun_expandSemantic.lean:11:102: error: unsolved goals
+case h_2
+cfg : Configuration
+H : Type
+i : Input H
+n offY1 : Usize
+semantic y1 compressed : Slice U8
+splitBack : SplitBack
+vecBack : VecBack
+a✝¹ : core.result.Result Unit compact.CodecError × Slice U8
+r✝¹ : core.result.Result Unit compact.CodecError
+a✝ : Unit
+heq✝¹ : a✝¹.1 = core.result.Result.Ok a✝
+r✝ : core.result.Result Unit compact.CodecError
+e✝ : compact.CodecError
+heq✝ : a✝¹.1 = core.result.Result.Err e✝
+⊢ run
+      (AspisR1PublicPreparation.PreparedHashCode.bind
+        (Code.done (Sum.inr { input := i, locals := Local.valueRange n offY1 a✝¹.2 y1 splitBack vecBack }))
+        (continuation cfg)) =
+    run
+      (AspisR1PublicPreparation.PreparedHashCode.bind
+        (liftM
+          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+            (verifier.Error.Insts.CoreConvertFromCodecError (ops cfg)) (core.result.Result.Err e✝)))
+        fun r => Code.done (r, i.scratch))
+
+case h_1
+cfg : Configuration
+H : Type
+i : Input H
+n offY1 : Usize
+semantic y1 compressed : Slice U8
+splitBack : SplitBack
+vecBack : VecBack
+a✝¹ : core.result.Result Unit compact.CodecError × Slice U8
+r✝¹ : core.result.Result Unit compact.CodecError
+e✝ : compact.CodecError
+heq✝¹ : a✝¹.1 = core.result.Result.Err e✝
+r✝ : core.result.Result Unit compact.CodecError
+a✝ : Unit
+heq✝ : a✝¹.1 = core.result.Result.Ok a✝
+⊢ run
+      (AspisR1PublicPreparation.PreparedHashCode.bind
+        (AspisR1PublicPreparation.PreparedHashCode.bind
+          (liftM
+            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+              (verifier.Error.Insts.CoreConvertFromCodecError (ops cfg)) (core.result.Result.Err e✝)))
+          fun r => Code.done (Sum.inl (r, i.scratch)))
+        (continuation cfg)) =
+    run (NLR_PrepareTails.tail_valueRange cfg i n offY1 a✝¹.2 y1 splitBack vecBack)
+NLR_generated/NLR_PrepareRun_expandSemantic.lean:12:37: warning: This simp argument is unused:
+  continuation
+
+Hint: Omit it from the simp argument list.
+  simp only [Bind.bind, ̲Pure.pure, ̲step,c̵o̵n̵t̵i̵n̵u̵a̵t̵i̵o̵n̵,̵ ̲denote, ̲advance, ̲NLJ_Monad.bind_assoc, ̲NLJ_Monad.bind_pure,
+     ̲NLR_PrepareTails.tail_expandSemantic]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLR_generated/NLR_PrepareRun_expandSemantic.lean:12:50: warning: This simp argument is unused:
+  denote
+
+Hint: Omit it from the simp argument list.
+  simp only [̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵P̵u̵r̵e̵.̵p̵u̵r̵e̵,̵s̵t̵e̵p̵,̵c̵o̵n̵t̵i̵n̵u̵a̵t̵i̵o̵n̵,̵d̵e̵n̵o̵t̵e̵,̵a̵d̵v̵a̵n̵c̵e̵,̵N̵L̵J̵_̵M̵o̵n̵a̵d̵.̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵,̵N̵L̵J̵_̵M̵o̵n̵a̵d̵.̵b̵i̵n̵d̵_̵p̵u̵r̵e̵,̵[̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲P̲u̲r̲e̲.̲p̲u̲r̲e̲,̲ ̲s̲t̲e̲p̲,̲ ̲c̲o̲n̲t̲i̲n̲u̲a̲t̲i̲o̲n̲,̲ ̲a̲d̲v̲a̲n̲c̲e̲,̲ ̲N̲L̲J̲_̲M̲o̲n̲a̲d̲.̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲,̲
+  ̲ ̲ ̲ ̲N̲L̲J̲_̲M̲o̲n̲a̲d̲.̲b̲i̲n̲d̲_̲p̲u̲r̲e̲,̲ NLR_PrepareTails.tail_expandSemantic]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLR_generated/NLR_PrepareRun_expandSemantic.lean:12:86: warning: This simp argument is unused:
+  NLJ_Monad.bind_pure
+
+Hint: Omit it from the simp argument list.
+  simp only [̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵P̵u̵r̵e̵.̵p̵u̵r̵e̵,̵s̵t̵e̵p̵,̵c̵o̵n̵t̵i̵n̵u̵a̵t̵i̵o̵n̵,̵d̵e̵n̵o̵t̵e̵,̵a̵d̵v̵a̵n̵c̵e̵,̵N̵L̵J̵_̵M̵o̵n̵a̵d̵.̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵,̵N̵L̵J̵_̵M̵o̵n̵a̵d̵.̵b̵i̵n̵d̵_̵p̵u̵r̵e̵,̵[̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲P̲u̲r̲e̲.̲p̲u̲r̲e̲,̲ ̲s̲t̲e̲p̲,̲ ̲c̲o̲n̲t̲i̲n̲u̲a̲t̲i̲o̲n̲,̲ ̲d̲e̲n̲o̲t̲e̲,̲ ̲a̲d̲v̲a̲n̲c̲e̲,̲ ̲N̲L̲J̲_̲M̲o̲n̲a̲d̲.̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲,̲
+     NLR_PrepareTails.tail_expandSemantic]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NLR_Prepare.run_expandSemantic' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

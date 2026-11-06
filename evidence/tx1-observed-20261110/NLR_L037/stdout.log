@@ -1,0 +1,56 @@
+NLR_generated/NLR_PrepareRun_allocate.lean:10:48: error: unsolved goals
+cfg : Configuration
+H : Type
+i : Input H
+⊢ run
+      (AspisR1PublicPreparation.PreparedHashCode.bind
+        (do
+          let n ← liftM (compact.LOGICAL_SEMANTIC (ops cfg))
+          let ny ← liftM compact.LOGICAL_Y1
+          let total ← liftM (n + ny)
+          let r ← liftM ((ops cfg).op1 core.marker.CopyU8 total 0#u8)
+          match r with
+            | core.result.Result.Err a => pure (Sum.inl (core.result.Result.Err verifier.Error.Allocation, i.scratch))
+            | core.result.Result.Ok logical => pure (Sum.inr { input := i, locals := Local.split n logical }))
+        (continuation cfg)) =
+    run do
+      let n ← liftM (compact.LOGICAL_SEMANTIC (ops cfg))
+      let ny ← liftM compact.LOGICAL_Y1
+      let total ← liftM (n + ny)
+      let r ← liftM ((ops cfg).op1 core.marker.CopyU8 total 0#u8)
+      match r with
+        | core.result.Result.Err a => pure (core.result.Result.Err verifier.Error.Allocation, i.scratch)
+        | core.result.Result.Ok logical => NLR_PrepareTails.tail_split cfg i n logical
+NLR_generated/NLR_PrepareRun_allocate.lean:11:17: warning: This simp argument is unused:
+  continuation
+
+Hint: Omit it from the simp argument list.
+  simp only [step,c̵o̵n̵t̵i̵n̵u̵a̵t̵i̵o̵n̵,̵ ̲denote, ̲advance, ̲NLJ_Monad.bind_assoc, ̲NLJ_Monad.bind_pure,
+     ̲NLR_PrepareTails.tail_allocate]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLR_generated/NLR_PrepareRun_allocate.lean:11:30: warning: This simp argument is unused:
+  denote
+
+Hint: Omit it from the simp argument list.
+  simp only [step, ̲continuation,d̵e̵n̵o̵t̵e̵,̵ ̲advance, ̲NLJ_Monad.bind_assoc, ̲NLJ_Monad.bind_pure,
+     ̲NLR_PrepareTails.tail_allocate]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLR_generated/NLR_PrepareRun_allocate.lean:11:45: warning: This simp argument is unused:
+  NLJ_Monad.bind_assoc
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵e̵p̵,̵c̵o̵n̵t̵i̵n̵u̵a̵t̵i̵o̵n̵,̵d̵e̵n̵o̵t̵e̵,̵a̵d̵v̵a̵n̵c̵e̵,̵N̵L̵J̵_̵M̵o̵n̵a̵d̵.̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵,̵N̵L̵J̵_̵M̵o̵n̵a̵d̵.̵b̵i̵n̵d̵_̵p̵u̵r̵e̵,̵[̲s̲t̲e̲p̲,̲ ̲c̲o̲n̲t̲i̲n̲u̲a̲t̲i̲o̲n̲,̲ ̲d̲e̲n̲o̲t̲e̲,̲ ̲a̲d̲v̲a̲n̲c̲e̲,̲ ̲N̲L̲J̲_̲M̲o̲n̲a̲d̲.̲b̲i̲n̲d̲_̲p̲u̲r̲e̲,̲
+     NLR_PrepareTails.tail_allocate]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLR_generated/NLR_PrepareRun_allocate.lean:11:66: warning: This simp argument is unused:
+  NLJ_Monad.bind_pure
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵e̵p̵,̵c̵o̵n̵t̵i̵n̵u̵a̵t̵i̵o̵n̵,̵d̵e̵n̵o̵t̵e̵,̵a̵d̵v̵a̵n̵c̵e̵,̵N̵L̵J̵_̵M̵o̵n̵a̵d̵.̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵,̵N̵L̵J̵_̵M̵o̵n̵a̵d̵.̵b̵i̵n̵d̵_̵p̵u̵r̵e̵,̵[̲s̲t̲e̲p̲,̲ ̲c̲o̲n̲t̲i̲n̲u̲a̲t̲i̲o̲n̲,̲ ̲d̲e̲n̲o̲t̲e̲,̲ ̲a̲d̲v̲a̲n̲c̲e̲,̲ ̲N̲L̲J̲_̲M̲o̲n̲a̲d̲.̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲,̲
+     NLR_PrepareTails.tail_allocate]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NLR_Prepare.run_allocate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

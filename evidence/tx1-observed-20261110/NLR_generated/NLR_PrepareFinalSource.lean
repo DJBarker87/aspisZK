@@ -9,7 +9,7 @@ open AspisR1PublicPreparation.PreparedHashCode (run)
 native parent or child-domain admission in this theorem. -/
 theorem source (cfg : NLJ_Prepare.Configuration) {H : Type}
  (i : NLJ_Prepare.Input H) : NLJ_Prepare.SourceEquality cfg i := by
- exact (exact_source cfg 12 (NLJ_Prepare.initial i) (by decide)).trans
+ exact (exact_source cfg 12 (NLJ_Prepare.initial i) (by change 12≤12; decide)).trans
   (NLR_PrepareTails.tail_source cfg i)
 #print axioms source
 set_option pp.proofs false

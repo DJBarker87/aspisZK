@@ -1,0 +1,9 @@
+# NLR findings
+
+NLR-F1 — native payload domain is narrower than the actual caller. K032/034/036 and their controls prove a32-byte physical window with record lengths at most32. The actual parser can supply longer records in the original13831-byte allocation. Therefore those passes alone cannot be used as137 cuts. NLR_WindowFrame is a generic KMX VALUE law; it does not prove that the physical original buffer is the same window interpretation. That association and complete modifies/owned/abort chain are OPEN. No stronger caller precondition, root, qualification or ledger credit is adopted.
+
+NLR-F2 — native projections do not realize one parent Invocation. Root/record metadata in all three source windows, one root byte and a selected payload byte, plus parse-error relay, do not cover the actual public/begin/finish call logs and complete returned record/cleanup. The third window is a move projection, not an entered136 call. These remain local candidate support; they are not reviewed full(ai)/(aq) parent cut transcriptions. An arbitrary Invocation or decoder/heap relation cannot be added to a positive root to bridge this gap.
+
+NLR-F3 — early packet schemas need physical interpretation review.137's byte-extent clause and087's arbitrary schema-level configuration are explicit, not discharged by declaring the packet. A concrete producer must fix canonical deployed digest/operation interpretation, mutable scratch writeback, allocation outcomes, lifetimes and all external frames. No schema is claimed as an accepted parent-facing native certificate.
+
+L004/L006/L011/L037/L040/L064-L069 and L048/L073 are retained failed source attempts, excluded from positive source/axiom evidence unless a later changed proof of that SAME module compiles. Heartbeat-limited constructor shapes are retired, no limits raised. The final attempted/selected inventory is authoritative.

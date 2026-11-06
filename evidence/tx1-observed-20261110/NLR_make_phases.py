@@ -50,10 +50,25 @@ for phase in phases:
   else:txt+=' all_goals change rank _ < rank s\n all_goals simp only [rank,advance,atSite]\n all_goals decide\n'
   txt+=f'#print axioms {k}_{phase}\nend AspisR1.NLR_Prepare\nend\n'
   (P/f'NLR_Prepare{kind}_{phase}.lean').write_text(txt)
- # Per-phase continuation equality. No code producing a native certificate here.
- txt='import NLR_PrepareDenote\n'+header
+ # Per-phase continuation equality. Constructor is SYMBOLIC: never whnf its body.
+ txt='import NLR_PrepareDenote\nimport NLJ_RunAlgebra\n'+header
  par=par.replace('(s : State H)','(i : Input H)')
  txt+=f'theorem run_{phase} {par} :\n run (AspisR1PublicPreparation.PreparedHashCode.bind (step cfg ⟨i,.{phase} {a}⟩) (continuation cfg)) =\n run (NLR_PrepareTails.tail_{phase} cfg i {a}) := by\n'
- txt+=f' simp only [step,continuation,denote,advance,NLJ_Monad.bind_assoc,NLJ_Monad.bind_pure,\n  NLR_PrepareTails.tail_{phase}]\n'
- txt+=' try rfl\n'+f'#print axioms run_{phase}\nend AspisR1.NLR_Prepare\nend\n'
+ if phase=='constructor':
+  txt=txt.replace('import NLJ_RunAlgebra\n','import NLJ_RunAlgebra\nimport NLJ_CodeRight\nimport NLJ_PrepareWindow_constructor\n')
+  txt+=""" rw [step_constructor cfg ⟨i,.constructor logical v sem⟩ logical v sem rfl]
+ unfold window_constructor NLR_PrepareTails.tail_constructor
+ simp only [Bind.bind,Pure.pure,NLJ_Monad.bind_assoc]
+ generalize hclosed : BorrowedClaimPrepared.closedPreparationCode i.digest sem v i.hash i.scratch = closed
+ have terminal := NLJ_RunAlgebra.inl_return (B := State H) closed (continuation cfg (H := H)) (fun out => rfl)
+ rw [NLJ_Monad.bind_assoc] at terminal
+ exact terminal
+"""
+ else:
+  txt+=f' simp only [Bind.bind,Pure.pure,step,continuation,denote,advance,NLJ_Monad.bind_assoc,NLJ_Monad.bind_pure,\n  NLR_PrepareTails.tail_{phase}]\n'
+  if phase in ['expandSemantic','expandValues']:
+   txt+=' apply NLJ_RunAlgebra.bind_congr\n intro pair\n rcases pair with ⟨r,updated⟩\n cases r <;> rfl\n'
+  else:
+   txt+=" repeat' first\n | (solve | rfl)\n"+(" | (solve | contradiction)\n" if phase not in ['allocate','split','semanticRange'] else '')+" | (apply NLJ_RunAlgebra.bind_congr; intro)\n | split\n"
+ txt+=f'#print axioms run_{phase}\nend AspisR1.NLR_Prepare\nend\n'
  (P/f'NLR_PrepareRun_{phase}.lean').write_text(txt)
