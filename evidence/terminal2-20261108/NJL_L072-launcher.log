@@ -1,0 +1,60 @@
+{"attempt": "NJL_L072", "exit_status": 0, "wall_seconds": 8.383400840917602, "peak_rss_kib": "6189676", "swaps": "0", "print_axioms": ["'AspisR1.NJL_TagRawTrace.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJL_TagRawTrace.source : ∀ (s : Selectors) (xs : List (Fin 272)) (before : State) (k : ℕ),
+  k + xs.length ≤ 4 →
+    FIw_ArrayValue.canonical s.high →
+      (∀ (i : Fin 4), ↑(before i) ≤ k * B) →
+        ∃ after,
+          run s xs before = ok after ∧
+            Trace s xs k before after ∧
+              (∀ (i : Fin 4), ↑(after i) = ↑(before i) + dot s xs i) ∧
+                ∀ (i : Fin 4), ↑(after i) ≤ (k + xs.length) * B :=
+fun s xs before k small hs hb =>
+  List.rec (motive := fun xs =>
+    ∀ (before : State) (k : ℕ),
+      k + xs.length ≤ 4 →
+        (∀ (i : Fin 4), ↑(before i) ≤ k * B) →
+          ∃ after,
+            run s xs before = ok after ∧
+              Trace s xs
+...
+idable.byContradiction fun a => source._proof_3 ts k small a) hm
+      let ⟨rest, right✝³⟩ := h✝³
+      let ⟨tr, right✝⁴⟩ := right✝³
+      let ⟨values, bounds⟩ := right✝⁴
+      Exists.intro after
+        ⟨of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg Eq
+                  (Eq.trans
+                    (Eq.trans (congrFun' (congrArg Bind.bind call) fun after => run s ts after)
+                      (bind_tc_ok middle (run s ts)))
+                    rest))
+                (ok after))
+              (eq_self (ok after))),
+          ⟨Trace.cons (Exists.intro products (Exists.intro events ⟨call, ⟨cut, productsLaw⟩⟩)) tr,
+            ⟨fun i =>
+              Eq.mpr (id (congrArg (fun _a => _a = ↑(before i) + dot s (t :: ts) i) (values i)))
+                (Eq.mpr
+                  (id
+                    (congrArg (fun _a => _a + dot s ts i = ↑(before i) + dot s (t :: ts) i) (cut.right.right.right i)))
+                  (Eq.mpr
+                    (id
+                      (congrArg (fun _a => ↑(before i) + _a + dot s ts i = ↑(before i) + dot s (t :: ts) i)
+                        (productsLaw i).right.left))
+                    (id (Decidable.byContradiction fun a => source._proof_6 s t ts before k i a)))),
+              fun i =>
+              have h := bounds i;
+              id
+                (Eq.mp
+                  (congrArg (LE.le ↑(after i))
+                    (congrFun'
+                      (congrArg HMul.hMul
+                        (Eq.trans (Nat.add_assoc k 1 ts.length)
+                          (congrArg (HAdd.hAdd k) ((fun m => Nat.add_comm 1 m) ts.length))))
+                      B))
+                  h)⟩⟩⟩)
+    xs before k small hb
+'AspisR1.NJL_TagRawTrace.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rd0acf5c10b1547f8bcf1c336e14ac951.scope; invocation ID: bd30f0fc698746cdbe1ced036fff0d91

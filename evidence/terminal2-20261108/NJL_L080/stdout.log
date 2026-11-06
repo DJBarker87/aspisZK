@@ -1,0 +1,387 @@
+theorem AspisR1.NJL_TagReduction.step_source : ∀ (raw : NJL_TagRawStep.State) (limb : Fin 4) (before : State),
+  (∀ (i : Fin 4), ↑(before i) < P) →
+    ∃ after,
+      step raw limb before = ok after ∧
+        Step raw limb before after ∧
+          (∀ (i : Fin 4), ↑(after i) < P) ∧
+            ∀ (i : Fin 4), ↑(after i) = if i = limb then (↑(before i) + ↑(raw i) % P) % P else ↑(before i) :=
+fun raw limb before hb =>
+  let ⟨residue, h✝⟩ := NJB_TagReduce.reduce (raw limb)
+  let ⟨cr, right✝⟩ := h✝
+  let ⟨vr, hr⟩ := right✝
+  let ⟨reply, h✝¹⟩ := NJB_TagReduce.add (before limb) residue (hb limb) hr
+  let ⟨ca, right✝¹⟩ := h✝¹
+  let ⟨va, ha⟩ := right✝¹
+  let after := put before limb reply;
+  Exists.intro after
+    ⟨Eq.mpr
+        (id
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (congrFun'
+                  (congrArg Bind.bind
+                    (Eq.trans
+                      (Eq.trans
+                        (congrFun' (congrArg Bind.bind cr) fun residue =>
+                          FIq_Native.field.M31.add (before limb) residue)
+                        (bind_tc_ok residue (FIq_Native.field.M31.add (before limb))))
+                      ca))
+                  fun reply => ok (put before limb reply))
+                (bind_tc_ok reply fun y => ok (put before limb y))))
+            (ok after)))
+        (Eq.refl (ok (put before limb reply))),
+      ⟨Exists.intro residue (Exists.intro reply ⟨cr, ⟨ca, ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, rfl⟩⟩⟩⟩⟩⟩⟩⟩),
+        ⟨fun i =>
+          id
+            (Decidable.casesOn (instDecidableEqFin 4 i limb)
+              (fun h => Eq.mpr (id (congrFun' (congrArg LT.lt (congrArg UScalar.val (if_neg h))) P)) (hb i)) fun h =>
+              Eq.mpr (id (congrFun' (congrArg LT.lt (congrArg UScalar.val (if_pos h))) P)) ha),
+          fun i =>
+          if h : i = limb then
+            Eq.symm h ▸
+              of_eq_true
+                (Eq.trans
+                  (congr
+                    (congrArg Eq
+                      (Eq.trans
+                        (Eq.trans
+                          (congrArg UScalar.val
+                            (Eq.trans (put.eq_1 before limb reply limb)
+                              (ite_cond_eq_true reply (before limb) (eq_self limb))))
+                          va)
+                        (Eq.trans (congrFun' (congrArg HMod.hMod (congrArg (HAdd.hAdd ↑(before limb)) vr)) P)
+                          (Nat.add_mod_mod (↑(before limb)) (↑(raw limb)) P))))
+                    (Eq.trans
+                      (ite_cond_eq_true ((↑(before limb) + ↑(raw limb) % P) % P) (↑(before limb)) (eq_self limb))
+                      (Nat.add_mod_mod (↑(before limb)) (↑(raw limb)) P)))
+                  (eq_self ((↑(before limb) + ↑(raw limb)) % P)))
+          else
+            of_eq_true
+              (Eq.trans
+                (congr
+                  (congrArg Eq
+                    (congrArg UScalar.val
+                      (Eq.trans (put.eq_1 before limb reply i) (ite_cond_eq_false reply (before i) (eq_false h)))))
+                  (ite_cond_eq_false ((↑(before i) + ↑(raw i) % P) % P) (↑(before i)) (eq_false h)))
+                (eq_self ↑(before i)))⟩⟩⟩
+'AspisR1.NJL_TagReduction.step_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NJL_TagReduction.source : ∀ (raw : NJL_TagRawStep.State) (before : State),
+  (∀ (i : Fin 4), ↑(before i) < P) →
+    ∃ after,
+      run raw [0, 1, 2, 3] before = ok after ∧
+        Trace raw [0, 1, 2, 3] before after ∧
+          (∀ (i : Fin 4), ↑(after i) < P) ∧ ∀ (i : Fin 4), ↑(after i) = (↑(before i) + ↑(raw i) % P) % P :=
+fun raw before hb =>
+  let ⟨s0, h✝⟩ := step_source raw 0 before hb
+  let ⟨c0, right✝⟩ := h✝
+  let ⟨t0, right✝¹⟩ := right✝
+  let ⟨h0, v0⟩ := right✝¹
+  let ⟨s1, h✝¹⟩ := step_source raw 1 s0 h0
+  let ⟨c1, right✝²⟩ := h✝¹
+  let ⟨t1, right✝³⟩ := right✝²
+  let ⟨h1, v1⟩ := right✝³
+  let ⟨s2, h✝²⟩ := step_source raw 2 s1 h1
+  let ⟨c2, right✝⁴⟩ := h✝²
+  let ⟨t2, right✝⁵⟩ := right✝⁴
+  let ⟨h2, v2⟩ := right✝⁵
+  let ⟨s3, h✝³⟩ := step_source raw 3 s2 h2
+  let ⟨c3, right✝⁶⟩ := h✝³
+  let ⟨t3, right✝⁷⟩ := right✝⁶
+  let ⟨h3, v3⟩ := right✝⁷
+  Exists.intro s3
+    ⟨of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (Eq.trans
+                  (congrFun' (congrArg Bind.bind c0) fun middle => do
+                    let middle ← step raw 1 middle
+                    let middle ← step raw 2 middle
+                    let middle ← step raw 3 middle
+                    ok middle)
+                  (bind_tc_ok s0 fun y => do
+                    let middle ← step raw 1 y
+                    let middle ← step raw 2 middle
+                    let middle ← step raw 3 middle
+                    ok middle))
+                (Eq.trans
+                  (Eq.trans
+                    (congrFun' (congrArg Bind.bind c1) fun middle => do
+                      let middle ← step raw 2 middle
+                      let middle ← step raw 3 middle
+                      ok middle)
+                    (bind_tc_ok s1 fun y => do
+                      let middle ← step raw 2 y
+                      let middle ← step raw 3 middle
+                      ok middle))
+                  (Eq.trans
+                    (Eq.trans
+                      (congrFun' (congrArg Bind.bind c2) fun middle => do
+                        let middle ← step raw 3 middle
+                        ok middle)
+                      (bind_tc_ok s2 fun y => do
+                        let middle ← step raw 3 y
+                        ok middle))
+                    (Eq.trans (congrFun' (congrArg Bind.bind c3) fun middle => ok middle) (bind_tc_ok s3 ok))))))
+            (ok s3))
+          (eq_self (ok s3))),
+      ⟨Trace.cons t0 (Trace.cons t1 (Trace.cons t2 (Trace.cons t3 (Trace.nil s3)))),
+        ⟨h3, fun i =>
+          List.Mem.casesOn (motive := fun a x =>
+            List.finRange ({ len := 3 }.len + 1) = a →
+              Fintype.complete i ≍ x → ↑(s3 i) = (↑(before i) + ↑(raw i) % P) % P)
+            (Fintype.complete i)
+            (fun «as» h =>
+              List.cons.noConfusion h fun head_eq =>
+                Eq.ndrec (motive := fun i =>
+                  ∀ (this : i ∈ Fintype.elems),
+                    (fun x1 x2 => (fun i => i) x1 :: x2)
+                          ⟨1, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩
+                          ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                            ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ [])) ≍
+                        «as» →
+                      this ≍ List.Mem.head «as» → ↑(s3 i) = (↑(before i) + ↑(raw i) % P) % P)
+                  (fun this tail_eq =>
+                    Eq.ndrec (motive := fun «as» =>
+                      this ≍ List.Mem.head «as» →
+                        ↑(s3
+                              ((fun i => i)
+                                ⟨0, Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))))⟩)) =
+                          (↑(before
+                                  ((fun i => i)
+                                    ⟨0,
+                                      Nat.le_of_lt
+                                        (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))))⟩)) +
+                              ↑(raw
+                                    ((fun i => i)
+                                      ⟨0,
+                                        Nat.le_of_lt
+                                          (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))))⟩)) %
+                                P) %
+                            P)
+                      (fun h =>
+                        of_eq_true
+                          (Eq.trans
+                            (congr
+                              (congrArg Eq
+                                (Eq.trans ((fun i => v3 i) 0)
+                                  (Eq.trans
+                                    (ite_cond_eq_false ((↑(s2 0) + ↑(raw 0) % P) % P) (↑(s2 0))
+                                      (Eq.trans source._simp_4
+                                        (Eq.trans (congrArg (Eq 0) (Nat.mod_succ 3)) (OfNat.zero_ne_ofNat._simp_1 3))))
+                                    (Eq.trans ((fun i => v2 i) 0)
+                                      (Eq.trans
+                                        (ite_cond_eq_false ((↑(s1 0) + ↑(raw 0) % P) % P) (↑(s1 0))
+                                          (Eq.trans source._simp_4 (OfNat.zero_ne_ofNat._simp_1 2)))
+                                        (Eq.trans ((fun i => v1 i) 0)
+                                          (Eq.trans
+                                            (ite_cond_eq_false ((↑(s0 0) + ↑(raw 0) % P) % P) (↑(s0 0))
+                                              zero_ne_one._simp_1)
+                                            (Eq.trans ((fun i => v0 i) 0)
+                                              (Eq.trans
+                                                (ite_cond_eq_true ((↑(before 0) + ↑(raw 0) % P) % P) (↑(before 0))
+                                                  (eq_self 0))
+                                                (Nat.add_mod_mod (↑(before 0)) (↑(raw 0)) P))))))))))
+                              (Nat.add_mod_mod (↑(before 0)) (↑(raw 0)) P))
+                            (eq_self ((↑(before 0) + ↑(raw 0)) % P))))
+                      (eq_of_heq tail_eq))
+                  (eq_of_heq head_eq) (Fintype.complete i))
+            (fun b {«as»} a h =>
+              List.cons.noConfusion h fun head_eq =>
+                Eq.ndrec (motive := fun b =>
+                  (fun x1 x2 => (fun i => i) x1 :: x2)
+                        ⟨1, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩
+                        ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                          ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ [])) ≍
+                      «as» →
+                    Fintype.complete i ≍ List.Mem.tail b a → ↑(s3 i) = (↑(before i) + ↑(raw i) % P) % P)
+                  (fun tail_eq =>
+                    Eq.ndrec (motive := fun {«as»} =>
+                      ∀ (a : List.Mem i «as»),
+                        Fintype.complete i ≍
+                            List.Mem.tail
+                              ((fun i => i)
+                                ⟨0, Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))))⟩)
+                              a →
+                          ↑(s3 i) = (↑(before i) + ↑(raw i) % P) % P)
+                      (fun a h =>
+                        List.Mem.casesOn (motive := fun a_1 x =>
+                          (fun x1 x2 => (fun i => i) x1 :: x2)
+                                ⟨1, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩
+                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                  ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                  ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ [])) =
+                              a_1 →
+                            a ≍ x → ↑(s3 i) = (↑(before i) + ↑(raw i) % P) % P)
+                          a
+                          (fun «as» h =>
+                            List.cons.noConfusion h fun head_eq =>
+                              Eq.ndrec (motive := fun i =>
+                                ∀
+                                  (a :
+                                    List.Mem i
+                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                        ⟨1, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩
+                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                          ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                          ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩
+                                            [])))),
+                                  (fun x1 x2 => (fun i => i) x1 :: x2)
+                                        ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                        ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩
+                                          []) ≍
+                                      «as» →
+                                    a ≍ List.Mem.head «as» → ↑(s3 i) = (↑(before i) + ↑(raw i) % P) % P)
+                                (fun a tail_eq =>
+                                  Eq.ndrec (motive := fun «as» =>
+                                    a ≍ List.Mem.head «as» →
+                                      ↑(s3
+                                            ((fun i => i)
+                                              ⟨1, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩)) =
+                                        (↑(before
+                                                ((fun i => i)
+                                                  ⟨1,
+                                                    Nat.le_of_lt
+                                                      (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩)) +
+                                            ↑(raw
+                                                  ((fun i => i)
+                                                    ⟨1,
+                                                      Nat.le_of_lt
+                                                        (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩)) %
+                                              P) %
+                                          P)
+                                    (fun h =>
+                                      of_eq_true
+                                        (Eq.trans
+                                          (congr
+                                            (congrArg Eq
+                                              (Eq.trans ((fun i => v3 i) 1)
+                                                (Eq.trans
+                                                  (ite_cond_eq_false ((↑(s2 1) + ↑(raw 1) % P) % P) (↑(s2 1))
+                                                    (Eq.trans source._simp_4
+                                                      (Eq.trans (congr (congrArg Eq (Nat.one_mod 2)) (Nat.mod_succ 3))
+                                                        (OfNat.one_ne_ofNat._simp_1 3))))
+                                                  (Eq.trans ((fun i => v2 i) 1)
+                                                    (Eq.trans
+                                                      (ite_cond_eq_false ((↑(s1 1) + ↑(raw 1) % P) % P) (↑(s1 1))
+                                                        (Eq.trans source._simp_4
+                                                          (Eq.trans (congrFun' (congrArg Eq (Nat.one_mod 2)) 2)
+                                                            (OfNat.one_ne_ofNat._simp_1 2))))
+                                                      (Eq.trans ((fun i => v1 i) 1)
+                                                        (Eq.trans (ite_cond_eq_true ((⋯ + ⋯) % P) (↑(s0 1)) (eq_self 1))
+                                                          (Eq.trans (congrFun' (congrArg HMod.hMod ⋯) P)
+                                                            (Nat.add_mod_mod (↑(before 1)) (↑(raw 1)) P)))))))))
+                                            (Nat.add_mod_mod (↑(before 1)) (↑(raw 1)) P))
+                                          (eq_self ((↑(before 1) + ↑(raw 1)) % P))))
+                                    (eq_of_heq tail_eq))
+                                (eq_of_heq head_eq) a)
+                          (fun b {«as»} a_1 h =>
+                            List.cons.noConfusion h fun head_eq =>
+                              Eq.ndrec (motive := fun b =>
+                                (fun x1 x2 => (fun i => i) x1 :: x2)
+                                      ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                      ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩
+                                        []) ≍
+                                    «as» →
+                                  a ≍ List.Mem.tail b a_1 → ↑(s3 i) = (↑(before i) + ↑(raw i) % P) % P)
+                                (fun tail_eq =>
+                                  Eq.ndrec (motive := fun {«as»} =>
+                                    ∀ (a_2 : List.Mem i «as»),
+                                      a ≍
+                                          List.Mem.tail
+                                            ((fun i => i)
+                                              ⟨1, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩)
+                                            a_2 →
+                                        ↑(s3 i) = (↑(before i) + ↑(raw i) % P) % P)
+                                    (fun a_2 h =>
+                                      List.Mem.casesOn (motive := fun a x =>
+                                        (fun x1 x2 => (fun i => i) x1 :: x2)
+                                              ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ []) =
+                                            a →
+                                          a_2 ≍ x → ↑(s3 i) = (↑(before i) + ↑(raw i) % P) % P)
+                                        a_2
+                                        (fun «as» h =>
+                                          List.cons.noConfusion h fun head_eq =>
+                                            Eq.ndrec (motive := fun i =>
+                                              ∀
+                                                (a :
+                                                  List.Mem i
+                                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                      ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                        ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ []))),
+                                                (fun x1 x2 => (fun i => i) x1 :: x2)
+                                                      ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ [] ≍
+                                                    «as» →
+                                                  a ≍ List.Mem.head «as» → ↑(s3 i) = (↑(before i) + ↑(raw i) % P) % P)
+                                              (fun a tail_eq =>
+                                                Eq.ndrec (motive := fun «as» =>
+                                                  a ≍ List.Mem.head «as» →
+                                                    ↑(s3
+                                                          ((fun i => i)
+                                                            ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩)) =
+                                                      (↑⋯ + ⋯ % P) % P)
+                                                  (fun h =>
+                                                    of_eq_true
+                                                      (Eq.trans
+                                                        (congr (congrArg Eq (Eq.trans ((fun i => v3 i) 2) ⋯))
+                                                          (Nat.add_mod_mod (↑(before 2)) (↑(raw 2)) P))
+                                                        (eq_self ((↑(before 2) + ↑(raw 2)) % P))))
+                                                  (eq_of_heq tail_eq))
+                                              (eq_of_heq head_eq) a_2)
+                                        (fun b {«as»} a h =>
+                                          List.cons.noConfusion h fun head_eq =>
+                                            Eq.ndrec (motive := fun b =>
+                                              (fun x1 x2 => (fun i => i) x1 :: x2)
+                                                    ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ [] ≍
+                                                  «as» →
+                                                a_2 ≍ List.Mem.tail b a → ↑(s3 i) = (↑(before i) + ↑(raw i) % P) % P)
+                                              (fun tail_eq =>
+                                                Eq.ndrec (motive := fun {«as»} =>
+                                                  ∀ (a : List.Mem i «as»),
+                                                    a_2 ≍
+                                                        List.Mem.tail
+                                                          ((fun i => i)
+                                                            ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩)
+                                                          a →
+                                                      ↑(s3 i) = (↑(before i) + ↑(raw i) % P) % P)
+                                                  (fun a h =>
+                                                    List.Mem.casesOn (motive := fun a_3 x =>
+                                                      ⋯ ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ [] = a_3 →
+                                                        a ≍ x → ↑(s3 i) = (↑(before i) + ↑(raw i) % P) % P)
+                                                      a
+                                                      (fun «as» h =>
+                                                        List.cons.noConfusion h fun head_eq =>
+                                                          Eq.ndrec (motive := ⋯) ⋯ ⋯ a)
+                                                      (fun b {«as»} a_3 h =>
+                                                        List.cons.noConfusion h fun head_eq =>
+                                                          Eq.ndrec (motive := ⋯) ⋯ ⋯)
+                                                      (Eq.refl
+                                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                          ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ []))
+                                                      (HEq.refl a))
+                                                  (eq_of_heq tail_eq) a)
+                                              (eq_of_heq head_eq))
+                                        (Eq.refl
+                                          ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                            ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                              ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ [])))
+                                        (HEq.refl a_2))
+                                    (eq_of_heq tail_eq) a_1)
+                                (eq_of_heq head_eq))
+                          (Eq.refl
+                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                              ⟨1, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩
+                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ []))))
+                          (HEq.refl a))
+                      (eq_of_heq tail_eq) a)
+                  (eq_of_heq head_eq))
+            (Eq.refl (List.finRange ({ len := 3 }.len + 1))) (HEq.refl (Fintype.complete i))⟩⟩⟩
+'AspisR1.NJL_TagReduction.source' depends on axioms: [propext, Classical.choice, Quot.sound]

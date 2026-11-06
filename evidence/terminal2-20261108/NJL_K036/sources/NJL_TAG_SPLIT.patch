@@ -1,0 +1,30 @@
+--- a/crates/aspis-statement/src/pool_v1/NJL_control.rs
++++ b/crates/aspis-statement/src/pool_v1/NJL_control.rs
+@@ -202,3 +202,27 @@
+  let out=QM31{c0:CM31::new(M31(words[0]),M31(words[1])),c1:CM31::new(M31(words[2]),M31(words[3]))};
+  assert_eq!(NJL_words(out)[limb],words[limb] ^ if cfg!(NJL_invert){1}else{0});
+ }
++
++fn NJL_tag_chunk_control(mut index:usize,end:usize,seek:usize)->(usize,usize,usize,usize,[u64;4]){
++ let start=index;let chunk_end=core::cmp::min(index+4,end);let raw=[0u64;4];let mut seen=999;let mut terms=0;
++ while index<chunk_end{if terms==seek{seen=index;}terms+=1;index+=1;}
++ let mut limb=0;while limb<4{limb+=1;}
++ (index,terms,seen,limb,raw)
++}
++#[kani::proof] #[kani::unwind(6)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NJL_tag_chunk_control_cut(){
++ let start:usize=kani::any();let end:usize=kani::any();kani::assume(start<end&&end<=272);
++ let chunk_end=core::cmp::min(start+4,end);let seek:usize=kani::any();kani::assume(seek<chunk_end-start);
++ let(index,terms,seen,limbs,raw)=NJL_tag_chunk_control(start,end,seek);
++ assert_eq!(index,chunk_end);assert_eq!(terms,chunk_end-start);assert_eq!(seen,start+seek+if cfg!(NJL_invert){1}else{0});assert_eq!(limbs,4);
++ let i:usize=kani::any();kani::assume(i<4);assert_eq!(raw[i],0);
++}
++#[kani::proof] #[kani::unwind(6)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NJL_tag_init_exit_cut(){
++ let coordinate:usize=kani::any();kani::assume(coordinate<30);
++ let output=[M31::ZERO;4];let index=usize::from(COPY_TAG_COORDINATE_OFFSETS[coordinate]);let end=usize::from(COPY_TAG_COORDINATE_OFFSETS[coordinate+1]);
++ let limb:usize=kani::any();kani::assume(limb<4);assert_eq!(output[limb].0,if cfg!(NJL_invert){1}else{0});
++ assert!(index<end&&end<=272);let finished=end;assert!(!(finished<end));
++}

@@ -1,0 +1,25 @@
+--- a/crates/aspis-statement/src/pool_v1/NJL_control.rs
++++ b/crates/aspis-statement/src/pool_v1/NJL_control.rs
+@@ -68,8 +68,8 @@
+ fn NJL_words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
+ fn NJL_q(w:[u32;4])->QM31{QM31{c0:CM31{a:M31(w[0]),b:M31(w[1])},c1:CM31{a:M31(w[2]),b:M31(w[3])}}}
+ fn NJL_canon(w:[u32;4])->bool{w[0]<2147483647&&w[1]<2147483647&&w[2]<2147483647&&w[3]<2147483647}
+-struct NJL_AddLog {left:QM31,right:QM31,reply:QM31,calls:usize}
+-fn NJL_add(a:QM31,b:QM31,log:&mut NJL_AddLog)->QM31 {log.left=a;log.right=b;log.calls+=1;log.reply}
++struct NJL_AddLog {left:QM31,right:QM31,reply:QM31,calls:usize,kind:u8}
++fn NJL_add(a:QM31,b:QM31,log:&mut NJL_AddLog)->QM31 {log.left=a;log.right=b;log.kind=1;log.calls+=1;log.reply}
+ fn NJL_endpoint_write(scratch:&mut[QM31],index:usize,rhs:QM31,log:&mut NJL_AddLog){
+  scratch[index]=NJL_add(scratch[index],rhs,log);
+ }
+@@ -81,9 +81,9 @@
+  kani::assume(index<103&&observe<103&&limb<4);
+  let before=NJL_words(scratch[observe]);let old=scratch[index];let rhs:[u32;4]=kani::any();let reply:[u32;4]=kani::any();
+  kani::assume(NJL_canon(NJL_words(old))&&NJL_canon(rhs)&&NJL_canon(reply));
+- let mut log=NJL_AddLog{left:QM31::ZERO,right:QM31::ZERO,reply:NJL_q(reply),calls:0};
++ let mut log=NJL_AddLog{left:QM31::ZERO,right:QM31::ZERO,reply:NJL_q(reply),calls:0,kind:0};
+  NJL_endpoint_write(&mut scratch,index,NJL_q(rhs),&mut log);
+- assert_eq!(log.calls,1);assert_eq!(NJL_words(log.left)[limb],NJL_words(old)[limb]);assert_eq!(NJL_words(log.right)[limb],rhs[limb]);
++ assert_eq!(log.calls,1);assert_eq!(log.kind,1);assert_eq!(NJL_words(log.left)[limb],NJL_words(old)[limb]);assert_eq!(NJL_words(log.right)[limb],rhs[limb]);
+  assert_eq!(NJL_words(scratch[observe])[limb],(if observe==index{reply[limb]}else{before[limb]}) ^ if cfg!(NJL_invert){1}else{0});
+ }
+ 

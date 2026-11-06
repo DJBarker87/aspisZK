@@ -1,0 +1,50 @@
+{"attempt": "NJL_L096", "exit_status": 0, "wall_seconds": 8.780216141138226, "peak_rss_kib": "6190228", "swaps": "0", "print_axioms": ["'AspisR1.NJL_SharedRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJL_SharedRoot.source : ∀ (packed : Std.Array NQ 24#usize) (values : Std.Array NQ 33#usize)
+  (selector : NQ),
+  FIw_ArrayValue.canonical packed →
+    FIw_ArrayValue.canonical values →
+      Canon selector →
+        ∃ weighted after,
+          (∀ (i : Fin ↑33#usize), FIq_Native.field.QM31.mul selector (cell values i) = ok (cell weighted i)) ∧
+            reference packed values selector = ok (array after) ∧
+              NJL_SharedTrace.Trace (cell values) selector (List.finRange 9) (cell packed) after ∧
+                FIq_Native.pool_v1.pair_forest_semantic_terminal.add_preweighted packed 49#usize weighted =
+                    ok (array after) ∧
+                  FIw_Array
+...
+              (Eq.mpr
+                (id
+                  (congrArg (fun _a => FIq_Native.field.QM31.mul selector (cell values i) = ok (_a i))
+                    (NJB_ArrayCarrier.cell_array weights)))
+                (laws i).left),
+            ⟨of_eq_true
+                (Eq.trans
+                  (congrFun'
+                    (congrArg Eq
+                      (Eq.trans (congrFun' (congrArg Bind.bind call) fun after => ok (array after))
+                        (bind_tc_ok after fun y => ok (array y))))
+                    (ok (array after)))
+                  (eq_self (ok (array after)))),
+              ⟨trace,
+                ⟨Eq.mp
+                    (congrArg
+                      (Eq (FIq_Native.pool_v1.pair_forest_semantic_terminal.add_preweighted packed 49#usize weighted))
+                      (congrArg ok exactCarrier))
+                    adoptedCall,
+                  ⟨NJB_ArrayCarrier.canonical_array after ha, fun j =>
+                    id
+                      (Eq.mpr
+                        (id
+                          (congrArg
+                            (fun _a =>
+                              decode (_a j) =
+                                FIw_ArrayValue.decoded packed j +
+                                  FIx_SelectedMeaning.contribution
+                                    (fun i => decode selector * FIw_ArrayValue.decoded values i) 49 ↑j)
+                            (NJB_ArrayCarrier.cell_array after)))
+                        (decoded j))⟩⟩⟩⟩⟩))
+    (fun i => Classical.choose ((fun i => NJB_StubLaws.qm_mul selector (cell values i) hc (cv i)) i)) fun i =>
+    Classical.choose_spec ((fun i => NJB_StubLaws.qm_mul selector (cell values i) hc (cv i)) i)
+'AspisR1.NJL_SharedRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r01570ae152df4345931d2347c7f27f34.scope; invocation ID: 14f975f180874574b904dbb5addcdc94

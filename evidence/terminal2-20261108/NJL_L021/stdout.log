@@ -1,0 +1,209 @@
+NJL_OccupancyPacket.lean:19:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NJB_ArrayCarrier.cell (NJB_ArrayCarrier.array ?f)
+in the target expression
+  decode (NJB_ArrayCarrier.cell (pack s) i) = decode (s (Fin.cast size12 i))
+
+s : State
+i : Fin ↑12#usize
+⊢ decode (NJB_ArrayCarrier.cell (pack s) i) = decode (s (Fin.cast size12 i))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (12 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+structure AspisR1.NJL_OccupancyPacket.Packet (input output : NQ) (expected : U32) (opened : Std.Array NQ 16#usize) :
+  Type
+number of parameters: 4
+fields:
+  AspisR1.NJL_OccupancyPacket.Packet.context : Context
+  AspisR1.NJL_OccupancyPacket.Packet.head : State
+  AspisR1.NJL_OccupancyPacket.Packet.middle : State
+  AspisR1.NJL_OccupancyPacket.Packet.last : State
+  AspisR1.NJL_OccupancyPacket.Packet.context_call : NJL_OccupancyContext.reference input output (cell opened 0) =
+      ok self.context
+  AspisR1.NJL_OccupancyPacket.Packet.context_domain : NJL_OccupancyContext.Domain self.context
+  AspisR1.NJL_OccupancyPacket.Packet.context_clauses : NJL_OccupancyContext.Clauses input output (cell opened 0)
+      self.context
+  AspisR1.NJL_OccupancyPacket.Packet.context_cut : ∃ r events,
+      NJL_OccupancyContext.Cut input output (cell opened 0) r self.context.empty events 5 1 self.context
+  AspisR1.NJL_OccupancyPacket.Packet.one_value : decode self.context.oneMinus = 1 - decode (cell opened 0)
+  AspisR1.NJL_OccupancyPacket.Packet.both_value : decode self.context.both = decode input + decode output
+  AspisR1.NJL_OccupancyPacket.Packet.selected_value : decode self.context.selected =
+      (decode input + decode output) * decode (cell opened 0)
+  AspisR1.NJL_OccupancyPacket.Packet.empty_value : decode self.context.emptyValue =
+      (decode input + decode output) * (1 - decode (cell opened 0))
+  AspisR1.NJL_OccupancyPacket.Packet.head_call : NJL_OccupancyHead.reference self.context (cell opened 0)
+        (cell opened 1) (cell opened 9) =
+      ok self.head
+  AspisR1.NJL_OccupancyPacket.Packet.head_cut : ∃ r events,
+      NJL_OccupancyHead.Clauses self.context (cell opened 0) (cell opened 1) (cell opened 9) r ∧
+        NJL_OccupancyHead.Cut self.context (cell opened 0) (cell opened 1) (cell opened 9) r events self.context.empty 6
+          self.head
+  AspisR1.NJL_OccupancyPacket.Packet.head_value : (fun i => decode (self.head i)) =
+      NJL_OccupancyHead.model self.context (cell opened 0) (cell opened 1) (cell opened 9)
+  AspisR1.NJL_OccupancyPacket.Packet.middle_call : NJL_OccupancyLanes.run self.context (cell opened)
+        NJL_OccupancyFrame.indices self.head =
+      ok self.middle
+  AspisR1.NJL_OccupancyPacket.Packet.middle_trace : NJL_OccupancyLanes.Trace self.context (cell opened)
+      NJL_OccupancyFrame.indices self.head self.middle
+  AspisR1.NJL_OccupancyPacket.Packet.middle_value : ∀ (i : Fin 12),
+      decode (self.middle i) =
+        if 3 ≤ ↑i ∧ ↑i < 11 then NJL_OccupancyFrame.value self.context (cell opened) i else decode (self.head i)
+  AspisR1.NJL_OccupancyPacket.Packet.last_call : NJL_OccupancyTail.reference self.middle input output (cell opened 0)
+        (cell opened 10) self.context.oneMinus expected =
+      ok self.last
+  AspisR1.NJL_OccupancyPacket.Packet.last_cut : ∃ r events,
+      NJL_OccupancyTail.Clauses input output (cell opened 0) (cell opened 10) self.context.oneMinus expected r ∧
+        NJL_OccupancyTail.Cut self.middle self.last input output (cell opened 0) (cell opened 10) self.context.oneMinus
+          expected r events 5
+  AspisR1.NJL_OccupancyPacket.Packet.last_canonical : ∀ (i : Fin 12), Canon (self.last i)
+  AspisR1.NJL_OccupancyPacket.Packet.last_value : ∀ (i : Fin 12),
+      decode (self.last i) =
+        if ↑i = 11 then
+          decode input * (decode (cell opened 10) * decode self.context.oneMinus) +
+            decode output * (decode (cell opened 0) - ↑↑expected)
+        else decode (self.middle i)
+constructor:
+  AspisR1.NJL_OccupancyPacket.Packet.mk {input output : NQ} {expected : U32} {opened : Std.Array NQ 16#usize}
+    (context : Context) (head middle last : State)
+    (context_call : NJL_OccupancyContext.reference input output (cell opened 0) = ok context)
+    (context_domain : NJL_OccupancyContext.Domain context)
+    (context_clauses : NJL_OccupancyContext.Clauses input output (cell opened 0) context)
+    (context_cut : ∃ r events, NJL_OccupancyContext.Cut input output (cell opened 0) r context.empty events 5 1 context)
+    (one_value : decode context.oneMinus = 1 - decode (cell opened 0))
+    (both_value : decode context.both = decode input + decode output)
+    (selected_value : decode context.selected = (decode input + decode output) * decode (cell opened 0))
+    (empty_value : decode context.emptyValue = (decode input + decode output) * (1 - decode (cell opened 0)))
+    (head_call : NJL_OccupancyHead.reference context (cell opened 0) (cell opened 1) (cell opened 9) = ok head)
+    (head_cut :
+      ∃ r events,
+        NJL_OccupancyHead.Clauses context (cell opened 0) (cell opened 1) (cell opened 9) r ∧
+          NJL_OccupancyHead.Cut context (cell opened 0) (cell opened 1) (cell opened 9) r events context.empty 6 head)
+    (head_value :
+      (fun i => decode (head i)) = NJL_OccupancyHead.model context (cell opened 0) (cell opened 1) (cell opened 9))
+    (middle_call : NJL_OccupancyLanes.run context (cell opened) NJL_OccupancyFrame.indices head = ok middle)
+    (middle_trace : NJL_OccupancyLanes.Trace context (cell opened) NJL_OccupancyFrame.indices head middle)
+    (middle_value :
+      ∀ (i : Fin 12),
+        decode (middle i) =
+          if 3 ≤ ↑i ∧ ↑i < 11 then NJL_OccupancyFrame.value context (cell opened) i else decode (head i))
+    (last_call :
+      NJL_OccupancyTail.reference middle input output (cell opened 0) (cell opened 10) context.oneMinus expected =
+        ok last)
+    (last_cut :
+      ∃ r events,
+        NJL_OccupancyTail.Clauses input output (cell opened 0) (cell opened 10) context.oneMinus expected r ∧
+          NJL_OccupancyTail.Cut middle last input output (cell opened 0) (cell opened 10) context.oneMinus expected r
+            events 5)
+    (last_canonical : ∀ (i : Fin 12), Canon (last i))
+    (last_value :
+      ∀ (i : Fin 12),
+        decode (last i) =
+          if ↑i = 11 then
+            decode input * (decode (cell opened 10) * decode context.oneMinus) +
+              decode output * (decode (cell opened 0) - ↑↑expected)
+          else decode (middle i)) :
+    Packet input output expected opened
+theorem AspisR1.NJL_OccupancyPacket.source : ∀ (input output : NQ) (expected : U32) (opened : Std.Array NQ 16#usize),
+  Canon input →
+    Canon output →
+      ↑expected < FIw_ScalarArithmetic.P →
+        FIw_ArrayValue.canonical opened →
+          ∃ p, reference input output expected opened = ok (pack p.last) ∧ FIw_ArrayValue.canonical (pack p.last) :=
+fun input output expected opened hi ho he ha =>
+  have hc := fun i => ha (cell opened i) (List.getElem_mem (NJB_Absorption.cell._proof_2 opened i));
+  let ⟨c, h✝⟩ := NJL_OccupancyContext.source input output (cell opened 0) hi ho (hc 0)
+  let ⟨cc, right✝⟩ := h✝
+  let ⟨cd, right✝¹⟩ := right✝
+  let ⟨clauses, right✝²⟩ := right✝¹
+  let ⟨cut, right✝³⟩ := right✝²
+  let ⟨one, right✝⁴⟩ := right✝³
+  let ⟨both, right✝⁵⟩ := right✝⁴
+  let ⟨selected, empty⟩ := right✝⁵
+  let ⟨rh, h✝¹⟩ := NJL_OccupancyHead.source c (cell opened 0) (cell opened 1) (cell opened 9) cd (hc 0) (hc 1) (hc 9)
+  let ⟨head, h✝²⟩ := h✝¹
+  let ⟨eh, h✝³⟩ := h✝²
+  let ⟨ch, right✝⁶⟩ := h✝³
+  let ⟨hclauses, right✝⁷⟩ := right✝⁶
+  let ⟨hcut, right✝⁸⟩ := right✝⁷
+  let ⟨hh, vh⟩ := right✝⁸
+  let ⟨middle, h✝⁴⟩ := NJL_OccupancyFrame.source c (cell opened) head cd hc hh
+  let ⟨cm, right✝⁹⟩ := h✝⁴
+  let ⟨trace, right✝¹⁰⟩ := right✝⁹
+  let ⟨hm, vm⟩ := right✝¹⁰
+  let ⟨rt, h✝⁵⟩ :=
+    NJL_OccupancyTail.source middle input output (cell opened 0) (cell opened 10) c.oneMinus expected hm hi ho (hc 0)
+      (hc 10) cd.left he
+  let ⟨last, h✝⁶⟩ := h✝⁵
+  let ⟨et, h✝⁷⟩ := h✝⁶
+  let ⟨ct, right✝¹¹⟩ := h✝⁷
+  let ⟨tclauses, right✝¹²⟩ := right✝¹¹
+  let ⟨tcut, right✝¹³⟩ := right✝¹²
+  let ⟨hl, vl⟩ := right✝¹³
+  let p :=
+    { context := c, head := head, middle := middle, last := last, context_call := cc, context_domain := cd,
+      context_clauses := clauses, context_cut := cut, one_value := one, both_value := both, selected_value := selected,
+      empty_value := empty, head_call := ch, head_cut := Exists.intro rh (Exists.intro eh ⟨hclauses, hcut⟩),
+      head_value := vh, middle_call := cm, middle_trace := trace, middle_value := vm, last_call := ct,
+      last_cut := Exists.intro rt (Exists.intro et ⟨tclauses, tcut⟩), last_canonical := hl, last_value := vl };
+  Exists.intro p
+    ⟨Eq.mpr
+        (id
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (Eq.trans
+                  (congrFun' (congrArg Bind.bind cc) fun c => do
+                    let head ← NJL_OccupancyHead.reference c (cell opened 0) (cell opened 1) (cell opened 9)
+                    let middle ← NJL_OccupancyLanes.run c (cell opened) NJL_OccupancyFrame.indices head
+                    let last ←
+                      NJL_OccupancyTail.reference middle input output (cell opened 0) (cell opened 10) c.oneMinus
+                          expected
+                    ok (pack last))
+                  (bind_tc_ok c fun y => do
+                    let head ← NJL_OccupancyHead.reference y (cell opened 0) (cell opened 1) (cell opened 9)
+                    let middle ← NJL_OccupancyLanes.run y (cell opened) NJL_OccupancyFrame.indices head
+                    let last ←
+                      NJL_OccupancyTail.reference middle input output (cell opened 0) (cell opened 10) y.oneMinus
+                          expected
+                    ok (pack last)))
+                (Eq.trans
+                  (Eq.trans
+                    (congrFun' (congrArg Bind.bind ch) fun head => do
+                      let middle ← NJL_OccupancyLanes.run c (cell opened) NJL_OccupancyFrame.indices head
+                      let last ←
+                        NJL_OccupancyTail.reference middle input output (cell opened 0) (cell opened 10) c.oneMinus
+                            expected
+                      ok (pack last))
+                    (bind_tc_ok head fun y => do
+                      let middle ← NJL_OccupancyLanes.run c (cell opened) NJL_OccupancyFrame.indices y
+                      let last ←
+                        NJL_OccupancyTail.reference middle input output (cell opened 0) (cell opened 10) c.oneMinus
+                            expected
+                      ok (pack last)))
+                  (Eq.trans
+                    (Eq.trans
+                      (congrFun' (congrArg Bind.bind cm) fun middle => do
+                        let last ←
+                          NJL_OccupancyTail.reference middle input output (cell opened 0) (cell opened 10) c.oneMinus
+                              expected
+                        ok (pack last))
+                      (bind_tc_ok middle fun y => do
+                        let last ←
+                          NJL_OccupancyTail.reference y input output (cell opened 0) (cell opened 10) c.oneMinus
+                              expected
+                        ok (pack last)))
+                    (Eq.trans (congrFun' (congrArg Bind.bind ct) fun last => ok (pack last))
+                      (bind_tc_ok last fun y => ok (pack y)))))))
+            (ok (pack p.last))))
+        (Eq.refl (ok (pack last))),
+      NJB_ArrayCarrier.canonical_array (fun i => p.last (Fin.cast size12 i)) fun i => hl (Fin.cast size12 i)⟩
+'AspisR1.NJL_OccupancyPacket.size12' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJL_OccupancyPacket.pack_decode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJL_OccupancyPacket.source' depends on axioms: [propext, Classical.choice, Quot.sound]

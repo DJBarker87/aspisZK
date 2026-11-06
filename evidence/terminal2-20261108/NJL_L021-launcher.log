@@ -1,0 +1,45 @@
+{"attempt": "NJL_L021", "exit_status": 1, "wall_seconds": 8.819705036003143, "peak_rss_kib": "6157584", "swaps": "0", "print_axioms": ["'AspisR1.NJL_OccupancyPacket.size12' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJL_OccupancyPacket.pack_decode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NJL_OccupancyPacket.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NJL_OccupancyPacket.lean:19:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NJB_ArrayCarrier.cell (NJB_ArrayCarrier.array ?f)
+in the target expression
+  decode (NJB_ArrayCarrier.cell (pack s) i) = decode (s (Fin.cast size12 i))
+
+s : State
+i : Fin ↑12#usize
+⊢ decode (NJB_ArrayCarrier.cell (pack s) i) = decode (s (Fin.cast size12 i))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application ty
+...
+iddle input output (cell opened 0) (cell opened 10) c.oneMinus
+                            expected
+                      ok (pack last))
+                    (bind_tc_ok head fun y => do
+                      let middle ← NJL_OccupancyLanes.run c (cell opened) NJL_OccupancyFrame.indices y
+                      let last ←
+                        NJL_OccupancyTail.reference middle input output (cell opened 0) (cell opened 10) c.oneMinus
+                            expected
+                      ok (pack last)))
+                  (Eq.trans
+                    (Eq.trans
+                      (congrFun' (congrArg Bind.bind cm) fun middle => do
+                        let last ←
+                          NJL_OccupancyTail.reference middle input output (cell opened 0) (cell opened 10) c.oneMinus
+                              expected
+                        ok (pack last))
+                      (bind_tc_ok middle fun y => do
+                        let last ←
+                          NJL_OccupancyTail.reference y input output (cell opened 0) (cell opened 10) c.oneMinus
+                              expected
+                        ok (pack last)))
+                    (Eq.trans (congrFun' (congrArg Bind.bind ct) fun last => ok (pack last))
+                      (bind_tc_ok last fun y => ok (pack y)))))))
+            (ok (pack p.last))))
+        (Eq.refl (ok (pack last))),
+      NJB_ArrayCarrier.canonical_array (fun i => p.last (Fin.cast size12 i)) fun i => hl (Fin.cast size12 i)⟩
+'AspisR1.NJL_OccupancyPacket.size12' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJL_OccupancyPacket.pack_decode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJL_OccupancyPacket.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r6a43c0df7e374ecdb025de9034046c06.scope; invocation ID: ede4e8e4fd0c405291e618144177cc18

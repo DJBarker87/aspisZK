@@ -1,0 +1,148 @@
+structure AspisR1.NJL_OccupancyParent.Packet (packed : Std.Array NQ 24#usize) (pub : Public) (o : Openings)
+  (s : Selectors) : Type
+number of parameters: 4
+fields:
+  AspisR1.NJL_OccupancyParent.Packet.input : NQ
+  AspisR1.NJL_OccupancyParent.Packet.output : NQ
+  AspisR1.NJL_OccupancyParent.Packet.input_call : pair_forest_copy_terminal.Selectors.row s 1017#usize = ok self.input
+  AspisR1.NJL_OccupancyParent.Packet.output_call : pair_forest_copy_terminal.Selectors.row s 1018#usize = ok self.output
+  AspisR1.NJL_OccupancyParent.Packet.lanes : NJL_OccupancyPacket.Packet self.input self.output
+      (NFQ_StatementLaws.expected pub.variant) o.z
+  AspisR1.NJL_OccupancyParent.Packet.factored_call : NJL_OccupancyPacket.reference self.input self.output
+        (NFQ_StatementLaws.expected pub.variant) o.z =
+      ok (NJL_OccupancyPacket.pack self.lanes.last)
+  AspisR1.NJL_OccupancyParent.Packet.literal_call : pair_forest_semantic_terminal.occupancy_lanes_literal self.input
+        self.output (NFQ_StatementLaws.expected pub.variant) o.z =
+      ok (NJL_OccupancyPacket.pack self.lanes.last)
+  AspisR1.NJL_OccupancyParent.Packet.after : Std.Array NQ 24#usize
+  AspisR1.NJL_OccupancyParent.Packet.packed_call : pair_forest_semantic_terminal.add_preweighted packed 0#usize
+        (NJL_OccupancyPacket.pack self.lanes.last) =
+      ok self.after
+  AspisR1.NJL_OccupancyParent.Packet.canonical : FIw_ArrayValue.canonical self.after
+constructor:
+  AspisR1.NJL_OccupancyParent.Packet.mk {packed : Std.Array NQ 24#usize} {pub : Public} {o : Openings} {s : Selectors}
+    (input output : NQ) (input_call : pair_forest_copy_terminal.Selectors.row s 1017#usize = ok input)
+    (output_call : pair_forest_copy_terminal.Selectors.row s 1018#usize = ok output)
+    (lanes : NJL_OccupancyPacket.Packet input output (NFQ_StatementLaws.expected pub.variant) o.z)
+    (factored_call :
+      NJL_OccupancyPacket.reference input output (NFQ_StatementLaws.expected pub.variant) o.z =
+        ok (NJL_OccupancyPacket.pack lanes.last))
+    (literal_call :
+      pair_forest_semantic_terminal.occupancy_lanes_literal input output (NFQ_StatementLaws.expected pub.variant) o.z =
+        ok (NJL_OccupancyPacket.pack lanes.last))
+    (after : Std.Array NQ 24#usize)
+    (packed_call :
+      pair_forest_semantic_terminal.add_preweighted packed 0#usize (NJL_OccupancyPacket.pack lanes.last) = ok after)
+    (canonical : FIw_ArrayValue.canonical after) : Packet packed pub o s
+theorem AspisR1.NJL_OccupancyParent.source : ∀ (packed : Std.Array NQ 24#usize) (pub : Public) (o : Openings)
+  (s : Selectors),
+  FIw_ArrayValue.canonical packed →
+    FIw_ArrayValue.canonical s.high →
+      FIw_ArrayValue.canonical s.low →
+        FIw_ArrayValue.canonical o.z →
+          ∃ p,
+            pair_forest_semantic_terminal.add_occupancy_lanes packed pub o s = ok p.after ∧
+              Cut p.input p.output (NFQ_StatementLaws.expected pub.variant) o.z (NJL_OccupancyPacket.pack p.lanes.last)
+                (NJL_OccupancyPacket.pack p.lanes.last) p.after p.after p.input p.output
+                (NFQ_StatementLaws.expected pub.variant) o.z 4 1017 1018 0 :=
+fun packed pub o s hp hh hl hz =>
+  let ⟨input, h✝⟩ := NIH_SelectorRow.result s 1017#usize (of_decide_eq_true (id (Eq.refl true))) hh hl
+  let ⟨ci, right✝⟩ := h✝
+  let ⟨hi, right✝¹⟩ := right✝
+  let ⟨output, h✝¹⟩ := NIH_SelectorRow.result s 1018#usize (of_decide_eq_true (id (Eq.refl true))) hh hl
+  let ⟨co, right✝²⟩ := h✝¹
+  let ⟨ho, right✝³⟩ := right✝²
+  have he :=
+    pair_forest_semantic_terminal.CompiledVariant.casesOn (motive := fun t =>
+      pub.variant = t → ↑(NFQ_StatementLaws.expected pub.variant) < FIw_ScalarArithmetic.P) pub.variant
+      (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true)))
+      (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true))) (Eq.refl pub.variant);
+  let ⟨lanes, h✝²⟩ :=
+    NJL_OccupancyAssociation.source input output (NFQ_StatementLaws.expected pub.variant) o.z hi ho he hz
+  let ⟨cl, right✝⁴⟩ := h✝²
+  let ⟨cr, hc⟩ := right✝⁴
+  let ⟨after, h✝³⟩ :=
+    NHU_Preweighted.result packed 0#usize (NJL_OccupancyPacket.pack lanes.last) (of_decide_eq_true (id (Eq.refl true)))
+      (of_decide_eq_true (id (Eq.refl true))) hp hc
+  let ⟨ca, right✝⁵⟩ := h✝³
+  let ⟨ha, right✝⁶⟩ := right✝⁵
+  let p :=
+    { input := input, output := output, input_call := ci, output_call := co, lanes := lanes, factored_call := cl,
+      literal_call := cr, after := after, packed_call := ca, canonical := ha };
+  Exists.intro p
+    ⟨have c0 := FIy_OccupancyRows.input;
+      have c1 := FIy_OccupancyRows.output;
+      have expected := NFQ_StatementLaws.expected_reference pub.variant;
+      Eq.mpr
+        (id
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (Eq.trans
+                  (congr (congrArg Bind.bind c0)
+                    (funext fun i =>
+                      congrArg (Bind.bind (pair_forest_copy_terminal.Selectors.row s i))
+                        (funext fun input_occupancy =>
+                          Eq.trans
+                            (Eq.trans
+                              (congr (congrArg Bind.bind c1)
+                                (funext fun i1 =>
+                                  congrArg (Bind.bind (pair_forest_copy_terminal.Selectors.row s i1))
+                                    (funext fun output_occupancy =>
+                                      Eq.trans
+                                        (congrFun' (congrArg Bind.bind expected) fun expected_output => do
+                                          let occupancy ←
+                                            pair_forest_semantic_terminal.occupancy_lanes_literal input_occupancy
+                                                output_occupancy expected_output o.z
+                                          pair_forest_semantic_terminal.add_preweighted packed 0#usize occupancy)
+                                        (bind_tc_ok (NFQ_StatementLaws.expected pub.variant) fun y => do
+                                          let occupancy ←
+                                            pair_forest_semantic_terminal.occupancy_lanes_literal input_occupancy
+                                                output_occupancy y o.z
+                                          pair_forest_semantic_terminal.add_preweighted packed 0#usize occupancy))))
+                              (bind_tc_ok 1018#usize fun y => do
+                                let output_occupancy ← pair_forest_copy_terminal.Selectors.row s y
+                                let occupancy ←
+                                  pair_forest_semantic_terminal.occupancy_lanes_literal input_occupancy output_occupancy
+                                      (NFQ_StatementLaws.expected pub.variant) o.z
+                                pair_forest_semantic_terminal.add_preweighted packed 0#usize occupancy))
+                            (Eq.trans
+                              (congrFun' (congrArg Bind.bind co) fun output_occupancy => do
+                                let occupancy ←
+                                  pair_forest_semantic_terminal.occupancy_lanes_literal input_occupancy output_occupancy
+                                      (NFQ_StatementLaws.expected pub.variant) o.z
+                                pair_forest_semantic_terminal.add_preweighted packed 0#usize occupancy)
+                              (bind_tc_ok output fun y => do
+                                let occupancy ←
+                                  pair_forest_semantic_terminal.occupancy_lanes_literal input_occupancy y
+                                      (NFQ_StatementLaws.expected pub.variant) o.z
+                                pair_forest_semantic_terminal.add_preweighted packed 0#usize occupancy)))))
+                  (bind_tc_ok 1017#usize fun y => do
+                    let input_occupancy ← pair_forest_copy_terminal.Selectors.row s y
+                    let occupancy ←
+                      pair_forest_semantic_terminal.occupancy_lanes_literal input_occupancy output
+                          (NFQ_StatementLaws.expected pub.variant) o.z
+                    pair_forest_semantic_terminal.add_preweighted packed 0#usize occupancy))
+                (Eq.trans
+                  (Eq.trans
+                    (congrFun' (congrArg Bind.bind ci) fun input_occupancy => do
+                      let occupancy ←
+                        pair_forest_semantic_terminal.occupancy_lanes_literal input_occupancy output
+                            (NFQ_StatementLaws.expected pub.variant) o.z
+                      pair_forest_semantic_terminal.add_preweighted packed 0#usize occupancy)
+                    (bind_tc_ok input fun y => do
+                      let occupancy ←
+                        pair_forest_semantic_terminal.occupancy_lanes_literal y output
+                            (NFQ_StatementLaws.expected pub.variant) o.z
+                      pair_forest_semantic_terminal.add_preweighted packed 0#usize occupancy))
+                  (Eq.trans
+                    (Eq.trans
+                      (congrFun' (congrArg Bind.bind cr) fun occupancy =>
+                        pair_forest_semantic_terminal.add_preweighted packed 0#usize occupancy)
+                      (bind_tc_ok (NJL_OccupancyPacket.pack lanes.last)
+                        (pair_forest_semantic_terminal.add_preweighted packed 0#usize)))
+                    ca))))
+            (ok p.after)))
+        (Eq.refl (ok after)),
+      ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, rfl⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩
+'AspisR1.NJL_OccupancyParent.source' depends on axioms: [propext, Classical.choice, Quot.sound]

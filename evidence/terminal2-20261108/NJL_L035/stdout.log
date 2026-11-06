@@ -1,0 +1,225 @@
+NJL_EndpointWrites.lean:52:14: warning: This simp argument is unused:
+  hp
+
+Hint: Omit it from the simp argument list.
+  simp [hw,h̵p̵,̵ ̲separate, ̲Ne.symm separate]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJL_EndpointWrites.lean:52:26: warning: This simp argument is unused:
+  Ne.symm separate
+
+Hint: Omit it from the simp argument list.
+  simp [̵h̵w̵,̵h̵p̵,̵s̵e̵p̵a̵r̵a̵t̵e̵,̵N̵e̵.̵s̵y̵m̵m̵[̲h̲w̲,̲ ̲h̲p̲,̲ separate]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJL_EndpointWrites.lean:54:13: warning: This simp argument is unused:
+  hw
+
+Hint: Omit it from the simp argument list.
+  simp [hw̵,̵h̵p, ̲separate, ̲Ne.symm separate]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJL_EndpointWrites.lean:54:19: warning: This simp argument is unused:
+  separate
+
+Hint: Omit it from the simp argument list.
+  simp [̵h̵w̵,̵h̵p̵,̵s̵e̵p̵a̵r̵a̵t̵e̵,̵N̵e̵.̵s̵y̵m̵m̵[̲h̲w̲,̲ ̲h̲p̲,̲ ̲N̲e̲.̲s̲y̲m̲m̲ separate]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem AspisR1.NJL_EndpointWrites.source : ∀ (before : State) (gc : Fin 30) (pc : Fin 43) (high : NQ) (weight : U32),
+  (∀ (i : Fin 103), Canon (before i)) →
+    Canon high →
+      ∃ first second middle after,
+        (∀ (copy : core.marker.Copy NQ),
+            NDE_Reference12.selected_binary_ref copy high FIq_Native.field.QM31.ZERO weight =
+              ok (selected high weight)) ∧
+          FIq_Native.field.QM31.add (before (NJL_EndpointIndices.weight gc)) (selected high weight) = ok first ∧
+            FIq_Native.field.QM31.add (before (NJL_EndpointIndices.pattern pc)) high = ok second ∧
+              NJL_EndpointCell.Cut before middle (NJL_EndpointIndices.weight gc) (selected high weight) first
+                  { operation := 1, left := before (NJL_EndpointIndices.weight gc), right := selected high weight } 1 ∧
+                NJL_EndpointCell.Cut middle after (NJL_EndpointIndices.pattern pc) high second
+                    { operation := 1, left := middle (NJL_EndpointIndices.pattern pc), right := high } 1 ∧
+                  reference before gc pc high weight = ok after ∧
+                    (∀ (i : Fin 103), Canon (after i)) ∧
+                      ∀ (i : Fin 103),
+                        decode (after i) =
+                          if i = NJL_EndpointIndices.weight gc then decode (before i) + decode (selected high weight)
+                          else
+                            if i = NJL_EndpointIndices.pattern pc then decode (before i) + decode high
+                            else decode (before i) :=
+fun before gc pc high weight hb hh =>
+  let ⟨first, h✝⟩ :=
+    NJL_EndpointCell.source before (NJL_EndpointIndices.weight gc) (selected high weight) hb
+      (selected_canonical high weight hh)
+  let ⟨middle, h✝¹⟩ := h✝
+  let ⟨fcall, right✝⟩ := h✝¹
+  let ⟨left✝, right✝¹⟩ := right✝
+  let ⟨mcall, right✝²⟩ := right✝¹
+  let ⟨hm, right✝³⟩ := right✝²
+  let ⟨mcut, mvalue⟩ := right✝³
+  let ⟨second, h✝²⟩ := NJL_EndpointCell.source middle (NJL_EndpointIndices.pattern pc) high hm hh
+  let ⟨after, h✝³⟩ := h✝²
+  let ⟨scall, right✝⁴⟩ := h✝³
+  let ⟨left✝¹, right✝⁵⟩ := right✝⁴
+  let ⟨acall, right✝⁶⟩ := right✝⁵
+  let ⟨ha, right✝⁷⟩ := right✝⁶
+  let ⟨acut, avalue⟩ := right✝⁷
+  have separate := NJL_EndpointIndices.disjoint gc pc;
+  have middle_pattern :=
+    have frame := mcut.right.right.right.right;
+    Eq.mp
+      (congrArg (Eq (middle (NJL_EndpointIndices.pattern pc)))
+        ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg (Ne.symm separate)) x_0 x_1 x_2 x_3)
+          (instDecidableEqFin 103 (NJL_EndpointIndices.pattern pc) (NJL_EndpointIndices.weight gc)) NQ first
+          (before (NJL_EndpointIndices.pattern pc))))
+      (frame (NJL_EndpointIndices.pattern pc));
+  Exists.intro first
+    (Exists.intro second
+      (Exists.intro middle
+        (Exists.intro after
+          ⟨selected_call high weight,
+            ⟨fcall,
+              ⟨Eq.mp
+                  (congrFun' (congrArg Eq (congrFun' (congrArg FIq_Native.field.QM31.add middle_pattern) high))
+                    (ok second))
+                  scall,
+                ⟨mcut,
+                  ⟨acut,
+                    ⟨of_eq_true
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg Eq
+                              (Eq.trans
+                                (Eq.trans
+                                  (congrFun' (congrArg Bind.bind mcall) fun middle =>
+                                    NJB_StateUpdates.add middle (NJL_EndpointIndices.pattern pc) high)
+                                  (bind_tc_ok middle fun y =>
+                                    NJB_StateUpdates.add y (NJL_EndpointIndices.pattern pc) high))
+                                acall))
+                            (ok after))
+                          (eq_self (ok after))),
+                      ⟨ha, fun i =>
+                        Eq.mpr
+                          (id
+                            (congrArg
+                              (fun _a =>
+                                _a =
+                                  if i = NJL_EndpointIndices.weight gc then
+                                    decode (before i) + decode (selected high weight)
+                                  else
+                                    if i = NJL_EndpointIndices.pattern pc then decode (before i) + decode high
+                                    else decode (before i))
+                              (avalue i)))
+                          (Eq.mpr
+                            (id
+                              (congrArg
+                                (fun _a =>
+                                  (if i = NJL_EndpointIndices.pattern pc then _a + decode high else _a) =
+                                    if i = NJL_EndpointIndices.weight gc then
+                                      decode (before i) + decode (selected high weight)
+                                    else
+                                      if i = NJL_EndpointIndices.pattern pc then decode (before i) + decode high
+                                      else decode (before i))
+                                (mvalue i)))
+                            (if hw : i = NJL_EndpointIndices.weight gc then
+                              have hp :=
+                                Eq.mpr (id (congrArg (fun _a => _a ≠ NJL_EndpointIndices.pattern pc) hw)) separate;
+                              of_eq_true
+                                (Eq.trans
+                                  (congr
+                                    (congrArg Eq
+                                      (Eq.trans
+                                        (ite_cond_eq_false
+                                          ((if i = NJL_EndpointIndices.weight gc then
+                                              decode (before i) + decode (selected high weight)
+                                            else decode (before i)) +
+                                            decode high)
+                                          (if i = NJL_EndpointIndices.weight gc then
+                                            decode (before i) + decode (selected high weight)
+                                          else decode (before i))
+                                          (Eq.trans (congrFun' (congrArg Eq hw) (NJL_EndpointIndices.pattern pc))
+                                            (eq_false separate)))
+                                        (Eq.trans
+                                          (ite_cond_eq_true (decode (before i) + decode (selected high weight))
+                                            (decode (before i))
+                                            (Eq.trans (congrFun' (congrArg Eq hw) (NJL_EndpointIndices.weight gc))
+                                              (eq_self (NJL_EndpointIndices.weight gc))))
+                                          (congrFun' (congrArg HAdd.hAdd (congrArg decode (congrArg before hw)))
+                                            (decode (selected high weight))))))
+                                    (Eq.trans
+                                      (ite_cond_eq_true (decode (before i) + decode (selected high weight))
+                                        (if i = NJL_EndpointIndices.pattern pc then decode (before i) + decode high
+                                        else decode (before i))
+                                        (Eq.trans (congrFun' (congrArg Eq hw) (NJL_EndpointIndices.weight gc))
+                                          (eq_self (NJL_EndpointIndices.weight gc))))
+                                      (congrFun' (congrArg HAdd.hAdd (congrArg decode (congrArg before hw)))
+                                        (decode (selected high weight)))))
+                                  (eq_self
+                                    (decode (before (NJL_EndpointIndices.weight gc)) + decode (selected high weight))))
+                            else
+                              if hp : i = NJL_EndpointIndices.pattern pc then
+                                of_eq_true
+                                  (Eq.trans
+                                    (congr
+                                      (congrArg Eq
+                                        (Eq.trans
+                                          (ite_cond_eq_true
+                                            ((if i = NJL_EndpointIndices.weight gc then
+                                                decode (before i) + decode (selected high weight)
+                                              else decode (before i)) +
+                                              decode high)
+                                            (if i = NJL_EndpointIndices.weight gc then
+                                              decode (before i) + decode (selected high weight)
+                                            else decode (before i))
+                                            (Eq.trans (congrFun' (congrArg Eq hp) (NJL_EndpointIndices.pattern pc))
+                                              (eq_self (NJL_EndpointIndices.pattern pc))))
+                                          (congrFun'
+                                            (congrArg HAdd.hAdd
+                                              (Eq.trans
+                                                (ite_cond_eq_false (decode (before i) + decode (selected high weight))
+                                                  (decode (before i))
+                                                  (Eq.trans (congrFun' (congrArg Eq hp) (NJL_EndpointIndices.weight gc))
+                                                    (eq_false (Ne.symm separate))))
+                                                (congrArg decode (congrArg before hp))))
+                                            (decode high))))
+                                      (Eq.trans
+                                        (ite_cond_eq_false (decode (before i) + decode (selected high weight))
+                                          (if i = NJL_EndpointIndices.pattern pc then decode (before i) + decode high
+                                          else decode (before i))
+                                          (Eq.trans (congrFun' (congrArg Eq hp) (NJL_EndpointIndices.weight gc))
+                                            (eq_false (Ne.symm separate))))
+                                        (Eq.trans
+                                          (ite_cond_eq_true (decode (before i) + decode high) (decode (before i))
+                                            (Eq.trans (congrFun' (congrArg Eq hp) (NJL_EndpointIndices.pattern pc))
+                                              (eq_self (NJL_EndpointIndices.pattern pc))))
+                                          (congrFun' (congrArg HAdd.hAdd (congrArg decode (congrArg before hp)))
+                                            (decode high)))))
+                                    (eq_self (decode (before (NJL_EndpointIndices.pattern pc)) + decode high)))
+                              else
+                                of_eq_true
+                                  (Eq.trans
+                                    (congr
+                                      (congrArg Eq
+                                        (Eq.trans
+                                          (ite_cond_eq_false
+                                            ((if i = NJL_EndpointIndices.weight gc then
+                                                decode (before i) + decode (selected high weight)
+                                              else decode (before i)) +
+                                              decode high)
+                                            (if i = NJL_EndpointIndices.weight gc then
+                                              decode (before i) + decode (selected high weight)
+                                            else decode (before i))
+                                            (eq_false hp))
+                                          (ite_cond_eq_false (decode (before i) + decode (selected high weight))
+                                            (decode (before i)) (eq_false hw))))
+                                      (Eq.trans
+                                        (ite_cond_eq_false (decode (before i) + decode (selected high weight))
+                                          (if i = NJL_EndpointIndices.pattern pc then decode (before i) + decode high
+                                          else decode (before i))
+                                          (eq_false hw))
+                                        (ite_cond_eq_false (decode (before i) + decode high) (decode (before i))
+                                          (eq_false hp))))
+                                    (eq_self (decode (before i))))))⟩⟩⟩⟩⟩⟩⟩)))
+'AspisR1.NJL_EndpointWrites.selected_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJL_EndpointWrites.selected_call' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJL_EndpointWrites.source' depends on axioms: [propext, Classical.choice, Quot.sound]

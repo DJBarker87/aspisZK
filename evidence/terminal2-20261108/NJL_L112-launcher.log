@@ -1,0 +1,46 @@
+{"attempt": "NJL_L112", "exit_status": 0, "wall_seconds": 9.615471818950027, "peak_rss_kib": "6174292", "swaps": "0", "print_axioms": ["'AspisR1.NJL_CachedWindow.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJL_CachedWindow.source : ∀ (lambda : NQ) (o : Std.Array NQ 16#usize),
+  Canon lambda →
+    FIw_ArrayValue.canonical o →
+      ∃ p,
+        ∀ (start : Fin 9),
+          ∃ after,
+            NJL_WindowFold.run (NJL_CacheReads.cache p) o start (List.finRange 8) FIq_Native.field.QM31.ZERO =
+                ok after ∧
+              NJL_WindowFold.Trace (NJL_CacheReads.cache p) o start (List.finRange 8) FIq_Native.field.QM31.ZERO after ∧
+                Canon after ∧
+                  decode after =
+                    (List.ofFn fun i => decode lambda ^ (↑i + 1) * decode (NJL_WindowStep.opened o start i)).sum :=
+fun lambda o hl ho =>
+  let ⟨p⟩ := NJL_CachedPowers.source lambda hl
+...
+           (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        _a =
+                          (List.ofFn fun i => decode lambda ^ (↑i + 1) * decode (NJL_WindowStep.opened o start i)).sum)
+                      (zero_add
+                        (List.map
+                            (fun i => decode (NJL_CacheReads.power p i) * decode (NJL_WindowStep.opened o start i))
+                            (List.finRange 8)).sum)))
+                  ((fun {α} [Add α] [Zero α] a a_1 e_a => e_a ▸ Eq.refl a.sum)
+                    (List.map (fun i => decode (NJL_CacheReads.power p i) * decode (NJL_WindowStep.opened o start i))
+                      (List.finRange 8))
+                    (List.ofFn fun i => decode lambda ^ (↑i + 1) * decode (NJL_WindowStep.opened o start i))
+                    (id
+                      ((fun {α} {n} f f_1 e_f => e_f ▸ Eq.refl (List.ofFn f))
+                        (fun i => decode (NJL_CacheReads.power p i) * decode (NJL_WindowStep.opened o start i))
+                        (fun i => decode lambda ^ (↑i + 1) * decode (NJL_WindowStep.opened o start i))
+                        (funext fun i =>
+                          Eq.mpr
+                            (id
+                              (congrArg
+                                (fun _a =>
+                                  _a * decode (NJL_WindowStep.opened o start i) =
+                                    decode lambda ^ (↑i + 1) * decode (NJL_WindowStep.opened o start i))
+                                (NJL_CacheReads.value p i)))
+                            (Eq.refl (decode lambda ^ (↑i + 1) * decode (NJL_WindowStep.opened o start i)))))))))⟩⟩⟩
+'AspisR1.NJL_CachedWindow.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r60d488523fb744f88c57c0f86ff95c91.scope; invocation ID: d78093c6908e400f91aaa378d16de09a

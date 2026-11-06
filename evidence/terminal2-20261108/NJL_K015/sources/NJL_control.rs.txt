@@ -1,0 +1,113 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+struct NJL_Control { seek:usize, seen:usize, calls:usize }
+impl NJL_Control { fn enter(&mut self,position:usize) { if self.calls==self.seek {self.seen=position;} self.calls+=1; } }
+fn NJL_active_control(log:&mut NJL_Control)->([QM31;7],QM31,usize,usize){
+ const MASKS:[u16;7]=[6144,6145,4097,2048,2049,26214,1749];
+ let high_sums=[QM31::ZERO;MASKS.len()];
+ let mut block=0usize;
+        while block < constants::ACTIVE_ROW_MASKS.len() {
+            log.enter(block);
+            block += 1;
+        }
+ let sum=QM31::ZERO;
+ let mut coordinate=0usize;
+        while coordinate < MASKS.len() {
+            log.enter(64+coordinate);
+            coordinate += 1;
+        }
+ (high_sums,sum,block,coordinate)
+}
+
+#[kani::proof] #[kani::unwind(66)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJL_active_control_cut(){
+ let seek:usize=kani::any();kani::assume(seek<71);
+ let mut log=NJL_Control{seek,seen:999,calls:0};
+ let (high,sum,block,coordinate)=NJL_active_control(&mut log);
+ assert_eq!(log.calls,71);assert_eq!(block,64);assert_eq!(coordinate,7);
+ assert_eq!(log.seen,seek ^ if cfg!(NJL_invert){1}else{0});
+ let cell:usize=kani::any();kani::assume(cell<7);
+ assert_eq!(high[cell],QM31::ZERO);assert_eq!(sum,QM31::ZERO);
+}
+
+struct NJL_ArrayWindow { seek:usize, seen:usize, calls:usize, reply:[u32;4] }
+fn NJL_lane_oracle(lane:usize, log:&mut NJL_ArrayWindow)->QM31 {
+ let reply:[u32;4]=kani::any();
+ if log.calls==log.seek {log.seen=lane;log.reply=reply;}
+ log.calls+=1;
+ QM31{c0:CM31{a:M31(reply[0]),b:M31(reply[1])},c1:CM31{a:M31(reply[2]),b:M31(reply[3])}}
+}
+fn NJL_absorption_array(log:&mut NJL_ArrayWindow)->[QM31;16] {
+ core::array::from_fn(|lane| NJL_lane_oracle(lane,log))
+}
+#[kani::proof] #[kani::unwind(18)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJL_absorption_array_cut(){
+ let seek:usize=kani::any();kani::assume(seek<16);
+ let mut log=NJL_ArrayWindow{seek,seen:99,calls:0,reply:[0;4]};
+ let out=NJL_absorption_array(&mut log);
+ let limb:usize=kani::any();kani::assume(limb<4);
+ let value=[out[seek].c0.a.0,out[seek].c0.b.0,out[seek].c1.a.0,out[seek].c1.b.0];
+ assert_eq!(log.calls,16);assert_eq!(log.seen,seek);
+ assert_eq!(value[limb],log.reply[limb] ^ if cfg!(NJL_invert){1}else{0});
+}
+
+fn NJL_occupancy_control(log:&mut NJL_Control){
+ for lane in 0..crate::poseidon2::DIGEST_ELEMS {log.enter(lane);}
+}
+#[kani::proof] #[kani::unwind(10)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJL_occupancy_control_cut(){
+ let seek:usize=kani::any();kani::assume(seek<8);
+ let mut log=NJL_Control{seek,seen:999,calls:0};
+ NJL_occupancy_control(&mut log);
+ assert_eq!(log.calls,8);assert_eq!(log.seen,seek ^ if cfg!(NJL_invert){1}else{0});
+}
+
+fn NJL_words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
+fn NJL_q(w:[u32;4])->QM31{QM31{c0:CM31{a:M31(w[0]),b:M31(w[1])},c1:CM31{a:M31(w[2]),b:M31(w[3])}}}
+fn NJL_canon(w:[u32;4])->bool{w[0]<2147483647&&w[1]<2147483647&&w[2]<2147483647&&w[3]<2147483647}
+struct NJL_AddLog {left:QM31,right:QM31,reply:QM31,calls:usize,kind:u8}
+fn NJL_add(a:QM31,b:QM31,log:&mut NJL_AddLog)->QM31 {log.left=a;log.right=b;log.kind=1;log.calls+=1;log.reply}
+fn NJL_endpoint_write(scratch:&mut[QM31],index:usize,rhs:QM31,log:&mut NJL_AddLog){
+ scratch[index]=NJL_add(scratch[index],rhs,log);
+}
+#[kani::proof] #[kani::unwind(105)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJL_endpoint_write_cut(){
+ let mut scratch:[QM31;103]=unsafe{core::mem::transmute::<[[u32;4];103],[QM31;103]>(kani::any())};
+ let index:usize=kani::any();let observe:usize=kani::any();let limb:usize=kani::any();
+ kani::assume(index<103&&observe<103&&limb<4);
+ let before=NJL_words(scratch[observe]);let old=scratch[index];let rhs:[u32;4]=kani::any();let reply:[u32;4]=kani::any();
+ kani::assume(NJL_canon(NJL_words(old))&&NJL_canon(rhs)&&NJL_canon(reply));
+ let mut log=NJL_AddLog{left:QM31::ZERO,right:QM31::ZERO,reply:NJL_q(reply),calls:0,kind:0};
+ NJL_endpoint_write(&mut scratch,index,NJL_q(rhs),&mut log);
+ assert_eq!(log.calls,1);assert_eq!(log.kind,1);assert_eq!(NJL_words(log.left)[limb],NJL_words(old)[limb]);assert_eq!(NJL_words(log.right)[limb],rhs[limb]);
+ assert_eq!(NJL_words(scratch[observe])[limb],(if observe==index{reply[limb]}else{before[limb]}) ^ if cfg!(NJL_invert){1}else{0});
+}
+
+const NJL_GROUP_KEYS:[(usize,usize);30]=[(0,0),(0,1),(0,2),(0,4),(0,6),(0,10),(0,11),(0,12),(0,14),(1,2),(1,6),(1,10),(1,11),(1,12),(1,14),(2,0),(2,1),(2,2),(2,4),(2,5),(2,6),(2,7),(2,9),(2,10),(2,12),(2,13),(3,6),(3,7),(3,9),(3,12)];
+const NJL_PATTERN_KEYS:[(usize,usize,usize);43]=[(0,0,11),(0,1,2),(0,1,6),(0,1,10),(0,1,11),(0,1,12),(0,1,14),(0,2,12),(0,4,12),(0,6,1),(0,6,12),(0,7,0),(0,7,2),(0,7,4),(0,9,6),(0,10,0),(0,11,10),(1,1,11),(1,6,12),(1,13,2),(1,13,6),(1,13,10),(1,13,14),(2,0,0),(2,1,12),(2,3,12),(2,6,6),(2,7,0),(2,7,2),(2,7,4),(2,8,7),(2,10,0),(2,11,9),(2,11,10),(2,12,1),(2,12,5),(2,12,9),(2,12,13),(3,1,12),(3,5,12),(3,6,7),(3,7,9),(3,8,6)];
+fn NJL_group_model(g:usize,l:usize)->usize{let mut i=0;while i<30{if NJL_GROUP_KEYS[i]==(g,l){return i;}i+=1;}255}
+fn NJL_pattern_model(g:usize,p:usize,l:usize)->usize{let mut i=0;while i<43{if NJL_PATTERN_KEYS[i]==(g,p,l){return i;}i+=1;}255}
+fn NJL_endpoint_lookup(selectors:&Selectors,index:usize,consumer:bool)->(usize,usize,usize,QM31){
+ let link=constants::COPY_LINKS[index];let(side,endpoint)=if consumer{(2,link.consumer)}else{(0,link.producer)};
+ let group=side+usize::from(endpoint.slot);let row=usize::from(endpoint.row);let local=row&15;
+ let high=selectors.high[row>>4];let gc=usize::from(COPY_GROUP_LOCAL_COORDINATES[group][local]);
+ let pc=usize::from(COPY_PATTERN_LOCAL_COORDINATES[group][usize::from(endpoint.pattern)][local]);
+ (row,gc,pc,high)
+}
+#[kani::proof] #[kani::unwind(145)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJL_endpoint_lookup_cut(){
+ let selectors:Selectors=unsafe{core::mem::transmute::<[[u32;4];80],Selectors>(kani::any())};
+ let index:usize=kani::any();let consumer:bool=kani::any();let limb:usize=kani::any();kani::assume(index<136&&limb<4);
+ let(row,gc,pc,high)=NJL_endpoint_lookup(&selectors,index,consumer);
+ let link=constants::COPY_LINKS[index];let e=if consumer{link.consumer}else{link.producer};
+ let group=(if consumer{2}else{0})+usize::from(e.slot);let local=usize::from(e.row)&15;
+ assert!(row<1024&&gc<30&&pc<43);assert_eq!(row,usize::from(e.row));
+ assert_eq!(gc,NJL_group_model(group,local)+if cfg!(NJL_invert){1}else{0});
+ assert_eq!(pc,NJL_pattern_model(group,usize::from(e.pattern),local));
+ assert_eq!(NJL_words(high)[limb],NJL_words(selectors.high[row>>4])[limb]);
+}

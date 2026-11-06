@@ -1,0 +1,79 @@
+NJL_PathAssociation.lean:20:73: warning: 'ring' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NJL_PathAssociation.lean:20:73: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+structure AspisR1.NJL_PathPacket.Packet (selector : NQ) (o : Openings) : Type
+number of parameters: 2
+fields:
+  AspisR1.NJL_PathPacket.Packet.context : NJL_PathContext.Context
+  AspisR1.NJL_PathPacket.Packet.residual : NQ
+  AspisR1.NJL_PathPacket.Packet.after : NJL_PathContext.State
+  AspisR1.NJL_PathPacket.Packet.context_call : NJL_PathContext.reference selector (cell o.z 0) = ok self.context
+  AspisR1.NJL_PathPacket.Packet.context_domain : NJL_PathContext.Domain self.context
+  AspisR1.NJL_PathPacket.Packet.context_clauses : NJL_PathContext.Clauses selector (cell o.z 0) self.residual
+      self.context
+  AspisR1.NJL_PathPacket.Packet.context_cut : ∃ events,
+      NJL_PathContext.Cut selector (cell o.z 0) self.residual self.context events self.context.left self.context.right
+        (NJL_PathContext.initial self.context) 6 2
+  AspisR1.NJL_PathPacket.Packet.selected_value : decode self.context.selected = decode selector * decode (cell o.z 0)
+  AspisR1.NJL_PathPacket.Packet.empty_value : decode self.context.emptyValue =
+      decode selector * (1 - decode (cell o.z 0))
+  AspisR1.NJL_PathPacket.Packet.head_value : decode self.context.head =
+      decode selector * (decode (cell o.z 0) * (decode (cell o.z 0) - 1))
+  AspisR1.NJL_PathPacket.Packet.run_call : NJL_PathTrace.run self.context (cell o.z) (cell o.succ_z) NJL_PathTrace.jobs
+        (NJL_PathContext.initial self.context) =
+      ok self.after
+  AspisR1.NJL_PathPacket.Packet.trace : NJL_PathTrace.Trace self.context (cell o.z) (cell o.succ_z) NJL_PathTrace.jobs
+      (NJL_PathContext.initial self.context) self.after
+  AspisR1.NJL_PathPacket.Packet.canonical : ∀ (i : Fin 17), Canon (self.after i)
+  AspisR1.NJL_PathPacket.Packet.value : ∀ (i : Fin 17),
+      decode (self.after i) = NJL_PathFrame.value self.context (cell o.z) (cell o.succ_z) i
+constructor:
+  AspisR1.NJL_PathPacket.Packet.mk {selector : NQ} {o : Openings} (context : NJL_PathContext.Context) (residual : NQ)
+    (after : NJL_PathContext.State) (context_call : NJL_PathContext.reference selector (cell o.z 0) = ok context)
+    (context_domain : NJL_PathContext.Domain context)
+    (context_clauses : NJL_PathContext.Clauses selector (cell o.z 0) residual context)
+    (context_cut :
+      ∃ events,
+        NJL_PathContext.Cut selector (cell o.z 0) residual context events context.left context.right
+          (NJL_PathContext.initial context) 6 2)
+    (selected_value : decode context.selected = decode selector * decode (cell o.z 0))
+    (empty_value : decode context.emptyValue = decode selector * (1 - decode (cell o.z 0)))
+    (head_value : decode context.head = decode selector * (decode (cell o.z 0) * (decode (cell o.z 0) - 1)))
+    (run_call :
+      NJL_PathTrace.run context (cell o.z) (cell o.succ_z) NJL_PathTrace.jobs (NJL_PathContext.initial context) =
+        ok after)
+    (trace :
+      NJL_PathTrace.Trace context (cell o.z) (cell o.succ_z) NJL_PathTrace.jobs (NJL_PathContext.initial context) after)
+    (canonical : ∀ (i : Fin 17), Canon (after i))
+    (value : ∀ (i : Fin 17), decode (after i) = NJL_PathFrame.value context (cell o.z) (cell o.succ_z) i) :
+    Packet selector o
+theorem AspisR1.NJL_PathAssociation.source : ∀ (selector : NQ) (o : Openings),
+  Canon selector →
+    FIw_ArrayValue.canonical o.z →
+      FIw_ArrayValue.canonical o.succ_z →
+        ∃ p,
+          NJL_PathPacket.reference selector o = ok (pack p.after) ∧
+            FIq_Native.pool_v1.pair_forest_semantic_terminal.path_lanes_literal selector o = ok (pack p.after) ∧
+              FIw_ArrayValue.canonical (pack p.after) :=
+fun selector o hs hz hb =>
+  let ⟨p, h✝⟩ := NJL_PathPacket.source selector o hs hz hb
+  let ⟨call, canonical⟩ := h✝
+  let ⟨old, h✝¹⟩ := WP.spec_imp_exists (JFy_PathLiteral.source selector o hs hz hb)
+  let ⟨oldCall, oldCanonical⟩ := h✝¹
+  have oldValue := FIx_PathMeaning.value selector o old hs hz hb oldCall;
+  have same :=
+    NJL_ArrayCodec.ext (pack p.after) old canonical oldCanonical
+      (Eq.trans (value selector o p) (Eq.symm oldValue.right));
+  Exists.intro p
+    ⟨call,
+      ⟨Eq.mpr
+          (id
+            (congrArg (fun _a => FIq_Native.pool_v1.pair_forest_semantic_terminal.path_lanes_literal selector o = ok _a)
+              same))
+          oldCall,
+        canonical⟩⟩
+'AspisR1.NJL_PathAssociation.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJL_PathAssociation.source' depends on axioms: [propext, Classical.choice, Quot.sound]

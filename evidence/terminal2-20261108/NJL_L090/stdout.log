@@ -1,0 +1,16 @@
+theorem AspisR1.NJL_TagForward.source : ∀ (scratch : Slice NQ) (c : Fin 30) (s : Selectors),
+  FIw_ArrayValue.canonical s.high →
+    ∃ after,
+      reference scratch c s = ok (NJB_Words.value after) ∧
+        Cut s s (↑c) (↑c) 1 (NJB_Words.value after) (NJB_Words.value after) ∧
+          NJL_TagChunks.Trace s (NJL_TagPartition.chunks 68 (NJL_TagData.indices c)) NJL_TagRoot.zero after ∧
+            Canon (NJB_Words.value after) ∧
+              decode (NJB_Words.value after) = NJL_TagMeaning.model s (NJL_TagData.indices c) :=
+fun scratch c s hs =>
+  let ⟨after, h✝⟩ := NJL_TagRoot.source s c hs
+  let ⟨call, right✝⟩ := h✝
+  let ⟨left✝, right✝¹⟩ := right✝
+  let ⟨trace, right✝²⟩ := right✝¹
+  let ⟨ha, value⟩ := right✝²
+  Exists.intro after ⟨call, ⟨⟨rfl, ⟨rfl, ⟨rfl, rfl⟩⟩⟩, ⟨trace, ⟨ha, value⟩⟩⟩⟩
+'AspisR1.NJL_TagForward.source' depends on axioms: [propext, Classical.choice, Quot.sound]

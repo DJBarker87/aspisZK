@@ -1,0 +1,67 @@
+'AspisR1.NJL_SharedMeaning.group_injective' depends on axioms: [propext, Quot.sound]
+'AspisR1.NJL_SharedMeaning.contribution' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJL_SharedMeaning.outside' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJL_SharedMeaning.fold_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NJL_SharedMeaning.value : ∀ (v : Fin 33 → NQ) (selector : NQ) (before : Fin 24 → K) (j : Fin 24),
+  List.foldl (fun s g => stepModel v selector g s) before (List.finRange 9) j =
+    before j + FIx_SelectedMeaning.contribution (fun i => decode selector * decode (v i)) 49 ↑j :=
+fun v selector before j =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a => _a = before j + FIx_SelectedMeaning.contribution (fun i => decode selector * decode (v i)) 49 ↑j)
+        (fold_prefix v selector (List.finRange 9) before j)))
+    ((fun {α β γ} [HAdd α β γ] a a_1 e_a =>
+        Eq.rec (motive := fun a_2 e_a => ∀ (a_3 a_4 : β), a_3 = a_4 → a + a_3 = a_2 + a_4)
+          (fun a_2 a_3 e_a => e_a ▸ Eq.refl (a + a_2)) e_a)
+      (before j) (before j) (Eq.refl (before j))
+      (List.map (fun g => if group g = j then increment v selector g else 0) (List.finRange 9)).sum
+      (FIx_SelectedMeaning.contribution (fun i => decode selector * decode (v i)) 49 ↑j)
+      (id
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => _a = FIx_SelectedMeaning.contribution (fun i => decode selector * decode (v i)) 49 ↑j)
+              List.sum_ofFn))
+          (if inside : 12 ≤ ↑j ∧ ↑j ≤ 20 then
+            let g := ⟨↑j - 12, Decidable.byContradiction fun a => value._proof_1 j inside a⟩;
+            have same := Fin.ext (id (Decidable.byContradiction fun a => value._proof_2 j inside a));
+            Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    (∑ i, if group i = _a then increment v selector i else 0) =
+                      FIx_SelectedMeaning.contribution (fun i => decode selector * decode (v i)) 49 ↑_a)
+                  (Eq.symm same)))
+              (Eq.mpr
+                (id
+                  (congrFun'
+                    (congrArg Eq
+                      (Finset.sum_congr (Eq.refl Finset.univ) fun x a =>
+                        ite_congr
+                          ((fun x_0 x_1 => propext ((fun x_0 x_1 => Function.Injective.eq_iff group_injective) x_0 x_1))
+                            x g)
+                          (fun a => Eq.refl (increment v selector x)) fun a => Eq.refl 0))
+                    (FIx_SelectedMeaning.contribution (fun i => decode selector * decode (v i)) 49 ↑(group g))))
+                (Eq.mpr
+                  (id
+                    (congrFun'
+                      (congrArg Eq
+                        (Eq.trans (Finset.sum_ite_eq' Finset.univ g (increment v selector))
+                          (Eq.trans
+                            (ite_congr (value._simp_2 g) (fun a => Eq.refl (increment v selector g)) fun a => Eq.refl 0)
+                            (if_pos (of_eq_true (Eq.refl True))))))
+                      (FIx_SelectedMeaning.contribution (fun i => decode selector * decode (v i)) 49 ↑(group g))))
+                  (contribution v selector g)))
+          else
+            have out := Decidable.byContradiction fun a => value._proof_3 j inside a;
+            Eq.mpr
+              (id
+                (congrArg (fun _a => (∑ i, if group i = j then increment v selector i else 0) = _a)
+                  (outside v selector j out)))
+              (Finset.sum_eq_zero fun g a =>
+                have h := fun e =>
+                  have this := congrArg Fin.val e;
+                  have this_1 := g.isLt;
+                  value._proof_4 j out g e this;
+                if_neg h)))))
+'AspisR1.NJL_SharedMeaning.value' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,40 @@
+{"attempt": "NJL_L013", "exit_status": 0, "wall_seconds": 12.615479497006163, "peak_rss_kib": "6183272", "swaps": "0", "print_axioms": ["'AspisR1.NJL_OccupancyContext.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJL_OccupancyContext.source : ∀ (input output occupied : NQ),
+  Canon input →
+    Canon output →
+      Canon occupied →
+        ∃ c,
+          reference input output occupied = ok c ∧
+            Domain c ∧
+              Clauses input output occupied c ∧
+                (∃ r events, Cut input output occupied r c.empty events 5 1 c) ∧
+                  decode c.oneMinus = 1 - decode occupied ∧
+                    decode c.both = decode input + decode output ∧
+                      decode c.selected = (decode input + decode output) * decode occupied ∧
+                        decode c.emptyValue = (decode input + decode output) * (1 - decode occupied) :=
+fun input output occupie
+...
+de output ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                      (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                        (decode output ^ Nat.rawCast 1 *
+                                            (decode occupied ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast) +
+                                          0))))
+                                  (Mathlib.Tactic.Ring.Common.zero_mul
+                                    (Nat.rawCast 1 + (decode occupied ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast + 0)))
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                    (decode output ^ Nat.rawCast 1 * Nat.rawCast 1 +
+                                      (decode output ^ Nat.rawCast 1 *
+                                          (decode occupied ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast) +
+                                        0))))
+                                (Mathlib.Tactic.Ring.Common.add_pf_add_lt (decode input ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                    (decode input ^ Nat.rawCast 1 *
+                                      (decode occupied ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast))
+                                    (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                      (decode output ^ Nat.rawCast 1 * Nat.rawCast 1 +
+                                        (decode output ^ Nat.rawCast 1 *
+                                            (decode occupied ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast) +
+                                          0)))))))))))⟩⟩⟩⟩⟩⟩⟩
+'AspisR1.NJL_OccupancyContext.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r42cc20a23bd64c15a0e3d2bc9ba1867c.scope; invocation ID: 7ca85033152a484c8763ad5ff00c764d

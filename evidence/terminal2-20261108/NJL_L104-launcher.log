@@ -1,0 +1,47 @@
+{"attempt": "NJL_L104", "exit_status": 1, "wall_seconds": 7.831264259060845, "peak_rss_kib": "6151208", "swaps": "0", "print_axioms": ["'AspisR1.NJL_PathParent.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJL_PathParent.lean:45:49: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.199 = ?m.199
+but is expected to have type
+  events 3 = { operation := 0, left := p.selector.high, right := p.selector.c }
+in the application
+  And.intro rfl
+structure AspisR1.NJL_PathParent.Packet (packed : Std.Array NQ 24#usize) (o : Openings) (s : Selectors) : Type
+number of parameters: 3
+fields:
+  AspisR1.NJL_PathParent.Packet.selector : NJL_PathSelector.Packet s
+  AspisR1.NJL_PathParent.Packet.lanes : NJL_PathPacket.Packet self.selector.selector o
+  AspisR1.NJL_PathParent.Packet.factored_call : NJL_PathPacket.reference self.selector.selector o =
+      ok (NJL_PathPacket.pack self.lanes.after)
+  
+...
+(congrFun' (congrArg Bind.bind selector.high_call) fun q => do
+                      let path_selector ← q.mul selector.c
+                      let path ← pair_forest_semantic_terminal.path_lanes_literal path_selector o
+                      pair_forest_semantic_terminal.add_preweighted packed 32#usize path)
+                    (bind_tc_ok selector.high fun y => do
+                      let path_selector ← y.mul selector.c
+                      let path ← pair_forest_semantic_terminal.path_lanes_literal path_selector o
+                      pair_forest_semantic_terminal.add_preweighted packed 32#usize path))
+                  (Eq.trans
+                    (Eq.trans
+                      (congrFun' (congrArg Bind.bind selector.product_call) fun path_selector => do
+                        let path ← pair_forest_semantic_terminal.path_lanes_literal path_selector o
+                        pair_forest_semantic_terminal.add_preweighted packed 32#usize path)
+                      (bind_tc_ok selector.selector fun y => do
+                        let path ← pair_forest_semantic_terminal.path_lanes_literal y o
+                        pair_forest_semantic_terminal.add_preweighted packed 32#usize path))
+                    (Eq.trans
+                      (Eq.trans
+                        (congrFun' (congrArg Bind.bind cl) fun path =>
+                          pair_forest_semantic_terminal.add_preweighted packed 32#usize path)
+                        (bind_tc_ok (NJL_PathPacket.pack lanes.after)
+                          (pair_forest_semantic_terminal.add_preweighted packed 32#usize)))
+                      ca)))))
+            (ok p.after)))
+        (Eq.refl (ok after)),
+      sorry⟩
+'AspisR1.NJL_PathParent.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-ra243eafa277e4fb4855489c6a9019a48.scope; invocation ID: eeb6e57bbc8a43fa8e94697c9bdbe016

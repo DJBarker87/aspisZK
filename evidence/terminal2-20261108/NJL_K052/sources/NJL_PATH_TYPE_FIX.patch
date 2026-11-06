@@ -1,0 +1,19 @@
+--- a/crates/aspis-statement/src/pool_v1/NJL_control.rs
++++ b/crates/aspis-statement/src/pool_v1/NJL_control.rs
+@@ -278,7 +278,7 @@
+ struct NJL_PathParentLog{calls:usize,selectors:usize,range:[usize;2],left:[[u32;4];4],right:[[u32;4];4],kind:[u8;4],ops:usize,selector:QM31,opened:usize,packed:usize,start:usize,pick:usize,limb:usize,lane:u32}
+ fn NJL_path_sum(selectors:&Selectors,ranges:&[core::ops::Range<usize>],reply:QM31,l:&mut NJL_PathParentLog)->QM31{assert_eq!(l.calls,0);assert_eq!(ranges.len(),1);l.calls+=1;l.selectors=selectors as*const Selectors as usize;l.range=[ranges[0].start,ranges[0].end];reply}
+ fn NJL_path_op(left:QM31,right:QM31,kind:u8,reply:QM31,l:&mut NJL_PathParentLog)->QM31{let i=l.ops;assert!(i<4);l.left[i]=NJL_words(left);l.right[i]=NJL_words(right);l.kind[i]=kind;l.ops+=1;reply}
+-fn NJL_path_reply(selector:QM31,opened:&crate::state_only_poseidon::StateOnlyPoseidonOpenings,reply:[QM31;17],l:&mut NJL_PathParentLog)->[QM31;17]{assert_eq!(l.calls,1);l.calls+=1;l.selector=selector;l.opened=opened as*const crate::state_only_poseidon::StateOnlyPoseidonOpeningsas usize;reply}
++fn NJL_path_reply(selector:QM31,opened:&crate::state_only_poseidon::StateOnlyPoseidonOpenings,reply:[QM31;17],l:&mut NJL_PathParentLog)->[QM31;17]{assert_eq!(l.calls,1);l.calls+=1;l.selector=selector;l.opened=opened as*const crate::state_only_poseidon::StateOnlyPoseidonOpenings as usize;reply}
+ fn NJL_path_pack(packed:&mut[QM31;24],start:usize,lanes:&[QM31;17],reply:[QM31;24],l:&mut NJL_PathParentLog){assert_eq!(l.calls,2);l.calls+=1;l.packed=packed as*mut[QM31;24]as usize;l.start=start;l.lane=NJL_words(lanes[l.pick])[l.limb];*packed=reply;}
+ fn NJL_path_parent(packed:&mut[QM31;24],opened:&crate::state_only_poseidon::StateOnlyPoseidonOpenings,selectors:&Selectors,sum:QM31,ops:[QM31;4],lanes:[QM31;17],reply:[QM31;24],l:&mut NJL_PathParentLog){
+  let high=NJL_path_sum(selectors,&[57..63],sum,l);
+@@ -299,5 +299,5 @@
+  NJL_path_parent(&mut packed,&opened,&selectors,sum,ops,lanes,reply,&mut l);
+  assert_eq!(l.calls,3);assert_eq!(l.ops,4);assert_eq!(l.range,[57,63]);assert_eq!(l.selectors,&selectors as*const Selectors as usize);
+  let left=[selectors.low[1],ops[0],ops[1],sum];let right=[selectors.low[5],selectors.low[9],selectors.low[13],ops[2]];assert_eq!(l.left[op][limb],NJL_words(left[op])[limb]);assert_eq!(l.right[op][limb],NJL_words(right[op])[limb]);assert_eq!(l.kind[op],if op<3{1}else{0});
+- assert_eq!(NJL_words(l.selector)[limb],NJL_words(ops[3])[limb]);assert_eq!(l.opened,&opened as*const crate::state_only_poseidon::StateOnlyPoseidonOpeningsas usize);assert_eq!(l.packed,address);assert_eq!(l.start,32);assert_eq!(l.lane,NJL_words(lanes[pick])[limb]);assert_eq!(NJL_words(packed[k])[limb],NJL_words(reply[k])[limb]^if cfg!(NJL_invert){1}else{0});
+-}
++ assert_eq!(NJL_words(l.selector)[limb],NJL_words(ops[3])[limb]);assert_eq!(l.opened,&opened as*const crate::state_only_poseidon::StateOnlyPoseidonOpenings as usize);assert_eq!(l.packed,address);assert_eq!(l.start,32);assert_eq!(l.lane,NJL_words(lanes[pick])[limb]);assert_eq!(NJL_words(packed[k])[limb],NJL_words(reply[k])[limb]^if cfg!(NJL_invert){1}else{0});
++}

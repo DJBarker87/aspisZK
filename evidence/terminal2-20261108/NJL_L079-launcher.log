@@ -1,0 +1,55 @@
+{"attempt": "NJL_L079", "exit_status": 0, "wall_seconds": 9.167733098147437, "peak_rss_kib": "6188340", "swaps": "0", "print_axioms": ["'AspisR1.NJL_TagMeaning.encode_add' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJL_TagMeaning.encode_zero' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJL_TagMeaning.encode_decode' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJL_TagMeaning.scalar' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJL_TagMeaning.value' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJL_TagMeaning.residue' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NJL_TagMeaning.encode_add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJL_TagMeaning.encode_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJL_TagMeaning.encode_decode' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NJL_TagMeaning.scalar : ∀ (q : NQ) (n : ℕ),
+  (encode fun i => ↑(↑(NJB_Words.word q i) * n)) = decode q * ↑n :=
+fun q n =>
+  QuadraticAlgebra.ext
+    (QuadraticAlgebra.ext
+      (of_eq_true
+        (Eq.trans
+          (congr
+            (congrArg Eq
+              (congrArg QuadraticAlgebra.re
+                (congrArg QuadraticAlgebra.re
+                  (congr
+                    (congrArg 
+...
+NJL_TagWords.tagWord t)) ts).sum)));
+      Eq.mpr (id (congrArg (fun _a => encode _a = model s (t :: ts)) same))
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => _a = model s (t :: ts))
+              (encode_add (fun i => ↑(↑(NJL_TagWords.highWord s t i) * ↑(NJL_TagWords.tagWord t))) fun i =>
+                ↑(dot s ts i))))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  (encode fun i => ↑(↑(NJL_TagWords.highWord s t i) * ↑(NJL_TagWords.tagWord t))) + _a =
+                    model s (t :: ts))
+                ih))
+            (have castProduct :=
+              Eq.mpr
+                (id
+                  (congrFun'
+                    (congrArg Eq
+                      (congrArg encode
+                        (funext fun i =>
+                          congrArg Nat.cast
+                            (congr
+                              (congrArg HMul.hMul
+                                (NJL_TagWords.cast64
+                                  (NJB_Words.word (NJB_ActiveReference.high s (NJL_TagData.block t)) i)))
+                              (NJL_TagWords.cast64 (NJL_TagData.tag t))))))
+                    (decode (NJB_ActiveReference.high s (NJL_TagData.block t)) * ↑↑(NJL_TagData.tag t))))
+                (scalar (NJB_ActiveReference.high s (NJL_TagData.block t)) ↑(NJL_TagData.tag t));
+            Eq.mpr (id (congrArg (fun _a => _a + model s ts = model s (t :: ts)) castProduct))
+              (Eq.refl
+                (decode (NJB_ActiveReference.high s (NJL_TagData.block t)) * ↑↑(NJL_TagData.tag t) + model s ts))))))
+    xs
+'AspisR1.NJL_TagMeaning.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJL_TagMeaning.residue' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r6001aab855c44632955f318417becad9.scope; invocation ID: 41ac6e9969c14d0eada652093c6694b2

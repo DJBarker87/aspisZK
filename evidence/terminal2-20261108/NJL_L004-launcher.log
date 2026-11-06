@@ -1,0 +1,54 @@
+{"attempt": "NJL_L004", "exit_status": 1, "wall_seconds": 10.806061586132273, "peak_rss_kib": "6109072", "swaps": "0", "print_axioms": ["'AspisR1.NJL_ActiveInvocation.high_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NJL_ActiveInvocation.low_step' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJL_ActiveInvocation.high_run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NJL_ActiveInvocation.low_run' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJL_ActiveInvocation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJL_ActiveInvocation.lean:45:1: error: unsolved goals
+case refine_3
+source : Fin 64 → NQ
+before : Fin 7 → NQ
+b : Fin 64
+hh : ∀ (i : Fin 64), Canon (source i)
+hs : ∀ (i : Fin 7), Canon (before i)
+reply : FIq_Native.field.QM31
+call : FIq_Native.field.QM31.add (before (NJB_ActiveModel.key b)) (source b) = ok reply
+hr : Canon reply
+right✝ :
+  FIv_NativeValue.decode reply =
+    FIv_NativeValue.decode (before (NJB_ActiveModel.key b)) + FIv_NativeValue.decode (source b)
+after : Fin 7 → FIq_Native.field.QM31 := fun i => if NJB_ActiveModel.key b = i then reply else before i
+key : R0P.activeMaskCoordinate (NJB_MaskTable.nativeMasks b) = NJB_ActiveModel.key b
+⊢ (ok fun i => if NJB_ActiveModel.key b = i
+...
+nce.low s c) (List.getElem_mem (NJB_ActiveReference.low._proof_3 s c));
+  let ⟨grouped, h✝⟩ :=
+    high_run (NJB_ActiveReference.high s) (List.ofFn fun b => b) (fun x => FIq_Native.field.QM31.ZERO) hhigh fun x =>
+      FIv_NativeValue.zero.left
+  let ⟨highTrace, right✝⟩ := h✝
+  let ⟨hg, hcall⟩ := right✝
+  let ⟨out, h✝¹⟩ :=
+    low_run grouped (NJB_ActiveReference.low s) (List.ofFn fun c => c) FIq_Native.field.QM31.ZERO hg hlow
+      FIv_NativeValue.zero.left
+  let ⟨lowTrace, right✝¹⟩ := h✝¹
+  let ⟨ho, lcall⟩ := right✝¹
+  have reference :=
+    of_eq_true
+      (Eq.trans
+        (congrFun'
+          (congrArg Eq
+            (Eq.trans
+              (Eq.trans
+                (congrFun' (congrArg Bind.bind hcall) fun grouped =>
+                  NJB_ActiveRawLow.run grouped (NJB_ActiveReference.low s) (List.ofFn fun c => c)
+                    FIq_Native.field.QM31.ZERO)
+                (bind_tc_ok grouped fun y =>
+                  NJB_ActiveRawLow.run y (NJB_ActiveReference.low s) (List.ofFn fun c => c) FIq_Native.field.QM31.ZERO))
+              lcall))
+          (ok out))
+        (eq_self (ok out)));
+  Exists.intro grouped
+    (Exists.intro out
+      ⟨highTrace, ⟨lowTrace, ⟨ho, ⟨reference, Eq.trans (Eq.symm (NJB_ActiveAssociation.result s hh hl)) reference⟩⟩⟩⟩)
+'AspisR1.NJL_ActiveInvocation.high_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJL_ActiveInvocation.low_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJL_ActiveInvocation.high_run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJL_ActiveInvocation.low_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJL_ActiveInvocation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r37f5b4648d2b4df2abf78823622cf100.scope; invocation ID: e960b707e1bd48d4b982791157308b2c

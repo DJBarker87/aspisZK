@@ -1,0 +1,65 @@
+NJL_PathParent.lean:23:25: error: unexpected token 'prefix'; expected '_' or identifier
+NJL_PathParent.lean:23:33: error: unexpected identifier; expected prec
+NJL_PathParent.lean:36:10: error(lean.unknownIdentifier): Unknown identifier `Cut`
+
+Note: It is not possible to treat `Cut` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+NJL_PathParent.lean:37:33: error: unsolved goals
+case refine_1
+packed : Std.Array NQ 24#usize
+o : Openings
+s : Selectors
+hp : FIw_ArrayValue.canonical packed
+hh : FIw_ArrayValue.canonical s.high
+hl : FIw_ArrayValue.canonical s.low
+hz : FIw_ArrayValue.canonical o.z
+hb : FIw_ArrayValue.canonical o.succ_z
+selector : NJL_PathSelector.Packet s
+h✝ : NJL_PathSelector.reference s = ok selector.selector
+lanes : NJL_PathPacket.Packet selector.selector o
+cf : NJL_PathPacket.reference selector.selector o = ok (NJL_PathPacket.pack lanes.after)
+cl : pair_forest_semantic_terminal.path_lanes_literal selector.selector o = ok (NJL_PathPacket.pack lanes.after)
+hc : FIw_ArrayValue.canonical (NJL_PathPacket.pack lanes.after)
+after : Std.Array FIq_Native.field.QM31 24#usize
+ca : pair_forest_semantic_terminal.add_preweighted packed 32#usize (NJL_PathPacket.pack lanes.after) = ok after
+ha : FIw_ArrayValue.canonical after
+right✝ :
+  ∀ (j : Fin ↑24#usize),
+    FIw_ArrayValue.decoded after j =
+      FIw_ArrayValue.decoded packed j +
+        FIx_SelectedMeaning.contribution (FIw_ArrayValue.decoded (NJL_PathPacket.pack lanes.after)) ↑32#usize ↑j
+p : Packet packed o s :=
+  { selector := selector, lanes := lanes, factored_call := cf, literal_call := cl, after := after, packed_call := ca,
+    canonical := ha }
+r1 : s.low.index_usize 1#usize = ok (low s 1)
+r5 : s.low.index_usize 5#usize = ok (low s 5)
+r9 : s.low.index_usize 9#usize = ok (low s 9)
+r13 : s.low.index_usize 13#usize = ok (low s 13)
+rangeCall : lift (Array.make 1#usize [{ start := 57#usize, «end» := 63#usize }] ⋯).to_slice = ok NJL_PathSelector.ranges
+⊢ ok after = ok p.after
+structure AspisR1.NJL_PathParent.Packet (packed : Std.Array NQ 24#usize) (o : Openings) (s : Selectors) : Type
+number of parameters: 3
+fields:
+  AspisR1.NJL_PathParent.Packet.selector : NJL_PathSelector.Packet s
+  AspisR1.NJL_PathParent.Packet.lanes : NJL_PathPacket.Packet self.selector.selector o
+  AspisR1.NJL_PathParent.Packet.factored_call : NJL_PathPacket.reference self.selector.selector o =
+      ok (NJL_PathPacket.pack self.lanes.after)
+  AspisR1.NJL_PathParent.Packet.literal_call : pair_forest_semantic_terminal.path_lanes_literal self.selector.selector
+        o =
+      ok (NJL_PathPacket.pack self.lanes.after)
+  AspisR1.NJL_PathParent.Packet.after : Std.Array NQ 24#usize
+  AspisR1.NJL_PathParent.Packet.packed_call : pair_forest_semantic_terminal.add_preweighted packed 32#usize
+        (NJL_PathPacket.pack self.lanes.after) =
+      ok self.after
+  AspisR1.NJL_PathParent.Packet.canonical : FIw_ArrayValue.canonical self.after
+constructor:
+  AspisR1.NJL_PathParent.Packet.mk {packed : Std.Array NQ 24#usize} {o : Openings} {s : Selectors}
+    (selector : NJL_PathSelector.Packet s) (lanes : NJL_PathPacket.Packet selector.selector o)
+    (factored_call : NJL_PathPacket.reference selector.selector o = ok (NJL_PathPacket.pack lanes.after))
+    (literal_call :
+      pair_forest_semantic_terminal.path_lanes_literal selector.selector o = ok (NJL_PathPacket.pack lanes.after))
+    (after : Std.Array NQ 24#usize)
+    (packed_call :
+      pair_forest_semantic_terminal.add_preweighted packed 32#usize (NJL_PathPacket.pack lanes.after) = ok after)
+    (canonical : FIw_ArrayValue.canonical after) : Packet packed o s
+NJL_PathParent.lean:55:7: error(lean.unknownIdentifier): Unknown constant `source`
+NJL_PathParent.lean:56:14: error(lean.unknownIdentifier): Unknown constant `source`

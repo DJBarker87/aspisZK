@@ -1,0 +1,756 @@
+theorem AspisR1.NJL_OccupancyContext.source : ∀ (input output occupied : NQ),
+  Canon input →
+    Canon output →
+      Canon occupied →
+        ∃ c,
+          reference input output occupied = ok c ∧
+            Domain c ∧
+              Clauses input output occupied c ∧
+                (∃ r events, Cut input output occupied r c.empty events 5 1 c) ∧
+                  decode c.oneMinus = 1 - decode occupied ∧
+                    decode c.both = decode input + decode output ∧
+                      decode c.selected = (decode input + decode output) * decode occupied ∧
+                        decode c.emptyValue = (decode input + decode output) * (1 - decode occupied) :=
+fun input output occupied hi ho hc =>
+  let ⟨m, h✝⟩ := NJB_StubLaws.qm_sub FIq_Native.field.QM31.ONE occupied FIv_NativeValue.one.left hc
+  let ⟨hm, right✝⟩ := h✝
+  let ⟨cm, vm⟩ := right✝
+  let ⟨b, h✝¹⟩ := NJB_StubLaws.qm_add input output hi ho
+  let ⟨hb, right✝¹⟩ := h✝¹
+  let ⟨cb, vb⟩ := right✝¹
+  let ⟨s, h✝²⟩ := NJB_StubLaws.qm_mul b occupied cb hc
+  let ⟨hs, right✝²⟩ := h✝²
+  let ⟨cs, vs⟩ := right✝²
+  let ⟨e, h✝³⟩ := NJB_StubLaws.qm_sub b s cb cs
+  let ⟨he, right✝³⟩ := h✝³
+  let ⟨ce, ve⟩ := right✝³
+  let ⟨p, h✝⁴⟩ := NJB_PreparedLaws.new_result e ce
+  let ⟨hp, dp⟩ := h✝⁴
+  let c := { oneMinus := m, both := b, selected := s, emptyValue := e, empty := p };
+  let r := ![m, b, s, e];
+  let events := fun j =>
+    { operation := ![2, 1, 0, 2, 3] j, left := ![FIq_Native.field.QM31.ONE, input, b, b, e] j,
+      right := ![occupied, output, occupied, s, FIq_Native.field.QM31.ZERO] j };
+  Exists.intro c
+    ⟨Eq.mpr
+        (id
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (congr (congrArg Bind.bind hm)
+                  (funext fun oneMinus =>
+                    Eq.trans
+                      (Eq.trans
+                        (congrFun' (congrArg Bind.bind hb) fun both => do
+                          let selected ← both.mul occupied
+                          let emptyValue ← both.sub selected
+                          let empty ← FIq_Native.field.PreparedQm31Multiplier.new emptyValue
+                          ok
+                              { oneMinus := oneMinus, both := both, selected := selected, emptyValue := emptyValue,
+                                empty := empty })
+                        (bind_tc_ok b fun y => do
+                          let selected ← y.mul occupied
+                          let emptyValue ← y.sub selected
+                          let empty ← FIq_Native.field.PreparedQm31Multiplier.new emptyValue
+                          ok
+                              { oneMinus := oneMinus, both := y, selected := selected, emptyValue := emptyValue,
+                                empty := empty }))
+                      (Eq.trans
+                        (Eq.trans
+                          (congrFun' (congrArg Bind.bind hs) fun selected => do
+                            let emptyValue ← b.sub selected
+                            let empty ← FIq_Native.field.PreparedQm31Multiplier.new emptyValue
+                            ok
+                                { oneMinus := oneMinus, both := b, selected := selected, emptyValue := emptyValue,
+                                  empty := empty })
+                          (bind_tc_ok s fun y => do
+                            let emptyValue ← b.sub y
+                            let empty ← FIq_Native.field.PreparedQm31Multiplier.new emptyValue
+                            ok
+                                { oneMinus := oneMinus, both := b, selected := y, emptyValue := emptyValue,
+                                  empty := empty }))
+                        (Eq.trans
+                          (Eq.trans
+                            (congrFun' (congrArg Bind.bind he) fun emptyValue => do
+                              let empty ← FIq_Native.field.PreparedQm31Multiplier.new emptyValue
+                              ok
+                                  { oneMinus := oneMinus, both := b, selected := s, emptyValue := emptyValue,
+                                    empty := empty })
+                            (bind_tc_ok e fun y => do
+                              let empty ← FIq_Native.field.PreparedQm31Multiplier.new y
+                              ok { oneMinus := oneMinus, both := b, selected := s, emptyValue := y, empty := empty }))
+                          (Eq.trans
+                            (congrFun' (congrArg Bind.bind hp) fun empty =>
+                              ok { oneMinus := oneMinus, both := b, selected := s, emptyValue := e, empty := empty })
+                            (bind_tc_ok p fun y =>
+                              ok { oneMinus := oneMinus, both := b, selected := s, emptyValue := e, empty := y }))))))
+                (bind_tc_ok m fun y => ok { oneMinus := y, both := b, selected := s, emptyValue := e, empty := p })))
+            (ok c)))
+        (Eq.refl (ok { oneMinus := m, both := b, selected := s, emptyValue := e, empty := p })),
+      ⟨⟨cm, ⟨cb, ⟨cs, ⟨ce, dp⟩⟩⟩⟩,
+        ⟨⟨hm, ⟨hb, ⟨hs, ⟨he, hp⟩⟩⟩⟩,
+          ⟨Exists.intro r
+              (Exists.intro events
+                ⟨rfl,
+                  ⟨rfl,
+                    ⟨fun j =>
+                      List.Mem.casesOn (motive := fun a x =>
+                        List.finRange ({ len := 4 }.len + 1) = a →
+                          Fintype.complete j ≍ x →
+                            (events j).operation = ![2, 1, 0, 2, 3] j ∧
+                              (events j).left = ![FIq_Native.field.QM31.ONE, input, r 1, r 1, r 3] j)
+                        (Fintype.complete j)
+                        (fun «as» h =>
+                          List.cons.noConfusion h fun head_eq =>
+                            Eq.ndrec (motive := fun j =>
+                              ∀ (this : j ∈ Fintype.elems),
+                                (fun x1 x2 => (fun i => i) x1 :: x2)
+                                      ⟨1,
+                                        Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1))))⟩
+                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                        ⟨2, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1)))⟩
+                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                          ⟨3, Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1))⟩
+                                          ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨4, Nat.le_refl ({ len := 4 }.len + 1)⟩
+                                            []))) ≍
+                                    «as» →
+                                  this ≍ List.Mem.head «as» →
+                                    (events j).operation = ![2, 1, 0, 2, 3] j ∧
+                                      (events j).left = ![FIq_Native.field.QM31.ONE, input, r 1, r 1, r 3] j)
+                              (fun this tail_eq =>
+                                Eq.ndrec (motive := fun «as» =>
+                                  this ≍ List.Mem.head «as» →
+                                    (events
+                                            ((fun i => i)
+                                              ⟨0,
+                                                Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_refl ({ len := 4 }.len + 1)))))⟩)).operation =
+                                        ![2, 1, 0, 2, 3]
+                                          ((fun i => i)
+                                            ⟨0,
+                                              Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1)))))⟩) ∧
+                                      (events
+                                            ((fun i => i)
+                                              ⟨0,
+                                                Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1)))))⟩)).left =
+                                        ![FIq_Native.field.QM31.ONE, input, r 1, r 1, r 3]
+                                          ((fun i => i)
+                                            ⟨0,
+                                              Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1)))))⟩))
+                                  (fun h => ⟨rfl, rfl⟩) (eq_of_heq tail_eq))
+                              (eq_of_heq head_eq) (Fintype.complete j))
+                        (fun b {«as»} a h =>
+                          List.cons.noConfusion h fun head_eq =>
+                            Eq.ndrec (motive := fun b =>
+                              (fun x1 x2 => (fun i => i) x1 :: x2)
+                                    ⟨1, Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1))))⟩
+                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                      ⟨2, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1)))⟩
+                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                        ⟨3, Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1))⟩
+                                        ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨4, Nat.le_refl ({ len := 4 }.len + 1)⟩
+                                          []))) ≍
+                                  «as» →
+                                Fintype.complete j ≍ List.Mem.tail b a →
+                                  (events j).operation = ![2, 1, 0, 2, 3] j ∧
+                                    (events j).left = ![FIq_Native.field.QM31.ONE, input, r 1, r 1, r 3] j)
+                              (fun tail_eq =>
+                                Eq.ndrec (motive := fun {«as»} =>
+                                  ∀ (a : List.Mem j «as»),
+                                    Fintype.complete j ≍
+                                        List.Mem.tail
+                                          ((fun i => i)
+                                            ⟨0,
+                                              Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1)))))⟩)
+                                          a →
+                                      (events j).operation = ![2, 1, 0, 2, 3] j ∧
+                                        (events j).left = ![FIq_Native.field.QM31.ONE, input, r 1, r 1, r 3] j)
+                                  (fun a h =>
+                                    List.Mem.casesOn (motive := fun a_1 x =>
+                                      (fun x1 x2 => (fun i => i) x1 :: x2)
+                                            ⟨1,
+                                              Nat.le_of_lt
+                                                (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1))))⟩
+                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                              ⟨2, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1)))⟩
+                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                ⟨3, Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1))⟩
+                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                  ⟨4, Nat.le_refl ({ len := 4 }.len + 1)⟩ []))) =
+                                          a_1 →
+                                        a ≍ x →
+                                          (events j).operation = ![2, 1, 0, 2, 3] j ∧
+                                            (events j).left = ![FIq_Native.field.QM31.ONE, input, r 1, r 1, r 3] j)
+                                      a
+                                      (fun «as» h =>
+                                        List.cons.noConfusion h fun head_eq =>
+                                          Eq.ndrec (motive := fun j =>
+                                            ∀
+                                              (a :
+                                                List.Mem j
+                                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                    ⟨1,
+                                                      Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1))))⟩
+                                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                      ⟨2,
+                                                        Nat.le_of_lt
+                                                          (Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1)))⟩
+                                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                        ⟨3, Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1))⟩
+                                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                          ⟨4, Nat.le_refl ({ len := 4 }.len + 1)⟩ []))))),
+                                              (fun x1 x2 => (fun i => i) x1 :: x2)
+                                                    ⟨2,
+                                                      Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1)))⟩
+                                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                      ⟨3, Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1))⟩
+                                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                        ⟨4, Nat.le_refl ({ len := 4 }.len + 1)⟩ [])) ≍
+                                                  «as» →
+                                                a ≍ List.Mem.head «as» →
+                                                  (events j).operation = ![2, 1, 0, 2, 3] j ∧
+                                                    (events j).left =
+                                                      ![FIq_Native.field.QM31.ONE, input, r 1, r 1, r 3] j)
+                                            (fun a tail_eq =>
+                                              Eq.ndrec (motive := fun «as» =>
+                                                a ≍ List.Mem.head «as» →
+                                                  (events ((fun i => i) ⋯)).operation =
+                                                      ![2, 1, 0, 2, 3]
+                                                        ((fun i => i)
+                                                          ⟨1,
+                                                            Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1))))⟩) ∧
+                                                    (events ((fun i => i) ⋯)).left =
+                                                      ![FIq_Native.field.QM31.ONE, input, r 1, r 1, r 3]
+                                                        ((fun i => i)
+                                                          ⟨1,
+                                                            Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1))))⟩))
+                                                (fun h => ⟨rfl, rfl⟩) (eq_of_heq tail_eq))
+                                            (eq_of_heq head_eq) a)
+                                      (fun b {«as»} a_1 h =>
+                                        List.cons.noConfusion h fun head_eq =>
+                                          Eq.ndrec (motive := fun b =>
+                                            (fun x1 x2 => (fun i => i) x1 :: x2)
+                                                  ⟨2, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1)))⟩
+                                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                    ⟨3, Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1))⟩
+                                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                      ⟨4, Nat.le_refl ({ len := 4 }.len + 1)⟩ [])) ≍
+                                                «as» →
+                                              a ≍ List.Mem.tail b a_1 →
+                                                (events j).operation = ![2, 1, 0, 2, 3] j ∧
+                                                  (events j).left =
+                                                    ![FIq_Native.field.QM31.ONE, input, r 1, r 1, r 3] j)
+                                            (fun tail_eq =>
+                                              Eq.ndrec (motive := fun {«as»} =>
+                                                ∀ (a_2 : List.Mem j «as»),
+                                                  a ≍
+                                                      List.Mem.tail
+                                                        ((fun i => i)
+                                                          ⟨1,
+                                                            Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1))))⟩)
+                                                        a_2 →
+                                                    (events j).operation = ![2, 1, 0, 2, 3] j ∧
+                                                      (events j).left =
+                                                        Matrix.vecCons FIq_Native.field.QM31.ONE
+                                                          (Matrix.vecCons input ⋯) j)
+                                                (fun a_2 h =>
+                                                  List.Mem.casesOn (motive := fun a x =>
+                                                    (fun x1 x2 => ⋯)
+                                                          ⟨2,
+                                                            Nat.le_of_lt
+                                                              (Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1)))⟩
+                                                          (⋯ ⟨3, Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1))⟩ ⋯) =
+                                                        a →
+                                                      a_2 ≍ x →
+                                                        (events j).operation = ![2, 1, 0, 2, 3] j ∧ (events j).left = ⋯)
+                                                    a_2
+                                                    (fun «as» h =>
+                                                      List.cons.noConfusion h fun head_eq =>
+                                                        Eq.ndrec (motive := fun j => ⋯) (fun a tail_eq => ⋯)
+                                                          (eq_of_heq head_eq) a_2)
+                                                    (fun b {«as»} a h =>
+                                                      List.cons.noConfusion h fun head_eq =>
+                                                        Eq.ndrec (motive := fun b => ⋯) (fun tail_eq => ⋯)
+                                                          (eq_of_heq head_eq))
+                                                    (Eq.refl
+                                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                        ⟨2,
+                                                          Nat.le_of_lt
+                                                            (Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1)))⟩
+                                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                          ⟨3, Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1))⟩
+                                                          ((fun x1 x2 => ⋯) ⟨4, Nat.le_refl ({ len := 4 }.len + 1)⟩
+                                                            []))))
+                                                    (HEq.refl a_2))
+                                                (eq_of_heq tail_eq) a_1)
+                                            (eq_of_heq head_eq))
+                                      (Eq.refl
+                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                          ⟨1,
+                                            Nat.le_of_lt
+                                              (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1))))⟩
+                                          ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                            ⟨2, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1)))⟩
+                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                              ⟨3, Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1))⟩
+                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                ⟨4, Nat.le_refl ({ len := 4 }.len + 1)⟩ [])))))
+                                      (HEq.refl a))
+                                  (eq_of_heq tail_eq) a)
+                              (eq_of_heq head_eq))
+                        (Eq.refl (List.finRange ({ len := 4 }.len + 1))) (HEq.refl (Fintype.complete j)),
+                      ⟨fun j =>
+                        List.Mem.casesOn (motive := fun a x =>
+                          List.finRange ({ len := 3 }.len + 1) = a →
+                            Fintype.complete j ≍ x → (events j.castSucc).right = ![occupied, output, occupied, r 2] j)
+                          (Fintype.complete j)
+                          (fun «as» h =>
+                            List.cons.noConfusion h fun head_eq =>
+                              Eq.ndrec (motive := fun j =>
+                                ∀ (this : j ∈ Fintype.elems),
+                                  (fun x1 x2 => (fun i => i) x1 :: x2)
+                                        ⟨1, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩
+                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                          ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                          ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩
+                                            [])) ≍
+                                      «as» →
+                                    this ≍ List.Mem.head «as» →
+                                      (events j.castSucc).right = ![occupied, output, occupied, r 2] j)
+                                (fun this tail_eq =>
+                                  Eq.ndrec (motive := fun «as» =>
+                                    this ≍ List.Mem.head «as» →
+                                      (events
+                                            ((fun i => i)
+                                                ⟨0,
+                                                  Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_refl ({ len := 3 }.len + 1))))⟩).castSucc).right =
+                                        ![occupied, output, occupied, r 2]
+                                          ((fun i => i)
+                                            ⟨0,
+                                              Nat.le_of_lt
+                                                (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))))⟩))
+                                    (fun h =>
+                                      Eq.refl
+                                        (events
+                                            ((fun i => i)
+                                                ⟨0,
+                                                  Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_refl ({ len := 3 }.len + 1))))⟩).castSucc).right)
+                                    (eq_of_heq tail_eq))
+                                (eq_of_heq head_eq) (Fintype.complete j))
+                          (fun b {«as»} a h =>
+                            List.cons.noConfusion h fun head_eq =>
+                              Eq.ndrec (motive := fun b =>
+                                (fun x1 x2 => (fun i => i) x1 :: x2)
+                                      ⟨1, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩
+                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                        ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                        ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩
+                                          [])) ≍
+                                    «as» →
+                                  Fintype.complete j ≍ List.Mem.tail b a →
+                                    (events j.castSucc).right = ![occupied, output, occupied, r 2] j)
+                                (fun tail_eq =>
+                                  Eq.ndrec (motive := fun {«as»} =>
+                                    ∀ (a : List.Mem j «as»),
+                                      Fintype.complete j ≍
+                                          List.Mem.tail
+                                            ((fun i => i)
+                                              ⟨0,
+                                                Nat.le_of_lt
+                                                  (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))))⟩)
+                                            a →
+                                        (events j.castSucc).right = ![occupied, output, occupied, r 2] j)
+                                    (fun a h =>
+                                      List.Mem.casesOn (motive := fun a_1 x =>
+                                        (fun x1 x2 => (fun i => i) x1 :: x2)
+                                              ⟨1, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩
+                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                  ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ [])) =
+                                            a_1 →
+                                          a ≍ x → (events j.castSucc).right = ![occupied, output, occupied, r 2] j)
+                                        a
+                                        (fun «as» h =>
+                                          List.cons.noConfusion h fun head_eq =>
+                                            Eq.ndrec (motive := fun j =>
+                                              ∀
+                                                (a :
+                                                  List.Mem j
+                                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                      ⟨1,
+                                                        Nat.le_of_lt
+                                                          (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩
+                                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                        ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                          ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ [])))),
+                                                (fun x1 x2 => (fun i => i) x1 :: x2)
+                                                      ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                        ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ []) ≍
+                                                    «as» →
+                                                  a ≍ List.Mem.head «as» →
+                                                    (events j.castSucc).right = ![occupied, output, occupied, r 2] j)
+                                              (fun a tail_eq =>
+                                                Eq.ndrec (motive := fun «as» =>
+                                                  a ≍ List.Mem.head «as» →
+                                                    (events ⋯.castSucc).right =
+                                                      ![occupied, output, occupied, r 2]
+                                                        ((fun i => i)
+                                                          ⟨1,
+                                                            Nat.le_of_lt
+                                                              (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩))
+                                                  (fun h =>
+                                                    Eq.refl
+                                                      (events
+                                                          ((fun i => i)
+                                                              ⟨1,
+                                                                Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_refl
+                                                                      ({ len := 3 }.len + 1)))⟩).castSucc).right)
+                                                  (eq_of_heq tail_eq))
+                                              (eq_of_heq head_eq) a)
+                                        (fun b {«as»} a_1 h =>
+                                          List.cons.noConfusion h fun head_eq =>
+                                            Eq.ndrec (motive := fun b =>
+                                              (fun x1 x2 => (fun i => i) x1 :: x2)
+                                                    ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                      ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ []) ≍
+                                                  «as» →
+                                                a ≍ List.Mem.tail b a_1 →
+                                                  (events j.castSucc).right = ![occupied, output, occupied, r 2] j)
+                                              (fun tail_eq =>
+                                                Eq.ndrec (motive := fun {«as»} =>
+                                                  ∀ (a_2 : List.Mem j «as»),
+                                                    a ≍
+                                                        List.Mem.tail
+                                                          ((fun i => i)
+                                                            ⟨1,
+                                                              Nat.le_of_lt
+                                                                (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩)
+                                                          a_2 →
+                                                      (events j.castSucc).right = ![occupied, output, occupied, r 2] j)
+                                                  (fun a_2 h =>
+                                                    List.Mem.casesOn (motive := fun a x =>
+                                                      ⋯ ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩ ⋯ = a →
+                                                        a_2 ≍ x → (events j.castSucc).right = ⋯)
+                                                      a_2
+                                                      (fun «as» h =>
+                                                        List.cons.noConfusion h fun head_eq =>
+                                                          Eq.ndrec (motive := ⋯) ⋯ ⋯ a_2)
+                                                      (fun b {«as»} a h =>
+                                                        List.cons.noConfusion h fun head_eq =>
+                                                          Eq.ndrec (motive := ⋯) ⋯ ⋯)
+                                                      (Eq.refl
+                                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                          ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                                          ((fun x1 x2 => ⋯) ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩
+                                                            [])))
+                                                      (HEq.refl a_2))
+                                                  (eq_of_heq tail_eq) a_1)
+                                              (eq_of_heq head_eq))
+                                        (Eq.refl
+                                          ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                            ⟨1, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩
+                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                              ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ []))))
+                                        (HEq.refl a))
+                                    (eq_of_heq tail_eq) a)
+                                (eq_of_heq head_eq))
+                          (Eq.refl (List.finRange ({ len := 3 }.len + 1))) (HEq.refl (Fintype.complete j)),
+                        ⟨rfl, ⟨rfl, ⟨rfl, rfl⟩⟩⟩⟩⟩⟩⟩),
+            ⟨Eq.mp
+                (congrArg (Eq (decode m)) (congrFun' (congrArg HSub.hSub FIv_NativeValue.one.right) (decode occupied)))
+                vm,
+              ⟨vb,
+                ⟨id
+                    (Eq.mpr (id (congrArg (fun _a => _a = (decode input + decode output) * decode occupied) vs))
+                      (Eq.mpr
+                        (id
+                          (congrArg (fun _a => _a * decode occupied = (decode input + decode output) * decode occupied)
+                            vb))
+                        (Eq.refl ((decode input + decode output) * decode occupied)))),
+                  id
+                    (Eq.mpr (id (congrArg (fun _a => _a = (decode input + decode output) * (1 - decode occupied)) ve))
+                      (Eq.mpr
+                        (id
+                          (congrArg (fun _a => decode b - _a = (decode input + decode output) * (1 - decode occupied))
+                            vs))
+                        (Eq.mpr
+                          (id
+                            (congrArg
+                              (fun _a =>
+                                _a - _a * decode occupied = (decode input + decode output) * (1 - decode occupied))
+                              vb))
+                          (Mathlib.Tactic.Ring.of_eq
+                            (Mathlib.Tactic.Ring.Common.sub_congr
+                              (Mathlib.Tactic.Ring.Common.add_congr
+                                (Mathlib.Tactic.Ring.Common.atom_pf (decode input) rfl
+                                  (Eq.mpr
+                                    (id
+                                      (congrArg
+                                        (fun _a =>
+                                          decode input ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                            decode input ^ Nat.rawCast 1 * _a)
+                                        (Eq.symm rfl)))
+                                    (Eq.refl (decode input ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                (Mathlib.Tactic.Ring.Common.atom_pf (decode output) rfl
+                                  (Eq.mpr
+                                    (id
+                                      (congrArg
+                                        (fun _a =>
+                                          decode output ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                            decode output ^ Nat.rawCast 1 * _a)
+                                        (Eq.symm rfl)))
+                                    (Eq.refl (decode output ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                (Mathlib.Tactic.Ring.Common.add_pf_add_lt (decode input ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                  (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                    (decode output ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))))
+                              (Mathlib.Tactic.Ring.Common.mul_congr
+                                (Mathlib.Tactic.Ring.Common.add_congr
+                                  (Mathlib.Tactic.Ring.Common.atom_pf (decode input) rfl
+                                    (Eq.mpr
+                                      (id
+                                        (congrArg
+                                          (fun _a =>
+                                            decode input ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                              decode input ^ Nat.rawCast 1 * _a)
+                                          (Eq.symm rfl)))
+                                      (Eq.refl (decode input ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                  (Mathlib.Tactic.Ring.Common.atom_pf (decode output) rfl
+                                    (Eq.mpr
+                                      (id
+                                        (congrArg
+                                          (fun _a =>
+                                            decode output ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                              decode output ^ Nat.rawCast 1 * _a)
+                                          (Eq.symm rfl)))
+                                      (Eq.refl (decode output ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                    (decode input ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                    (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                      (decode output ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))))
+                                (Mathlib.Tactic.Ring.Common.atom_pf (decode occupied) rfl
+                                  (Eq.mpr
+                                    (id
+                                      (congrArg
+                                        (fun _a =>
+                                          decode occupied ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                            decode occupied ^ Nat.rawCast 1 * _a)
+                                        (Eq.symm rfl)))
+                                    (Eq.refl (decode occupied ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                (Mathlib.Tactic.Ring.Common.add_mul
+                                  (Mathlib.Tactic.Ring.Common.mul_add
+                                    (Mathlib.Tactic.Ring.Common.mul_pf_left (decode input) (Nat.rawCast 1)
+                                      (Mathlib.Tactic.Ring.Common.mul_pf_right (decode occupied) (Nat.rawCast 1)
+                                        (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                          (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                            (Mathlib.Meta.NormNum.IsNat.of_raw K 1)
+                                            (Mathlib.Meta.NormNum.IsNat.of_raw K 1) (Eq.refl 1)))))
+                                    (Mathlib.Tactic.Ring.Common.mul_zero (decode input ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                    (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                      (decode input ^ Nat.rawCast 1 *
+                                          (decode occupied ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                        0)))
+                                  (Mathlib.Tactic.Ring.Common.add_mul
+                                    (Mathlib.Tactic.Ring.Common.mul_add
+                                      (Mathlib.Tactic.Ring.Common.mul_pf_left (decode output) (Nat.rawCast 1)
+                                        (Mathlib.Tactic.Ring.Common.mul_pf_right (decode occupied) (Nat.rawCast 1)
+                                          (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                            (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw K 1)
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw K 1) (Eq.refl 1)))))
+                                      (Mathlib.Tactic.Ring.Common.mul_zero
+                                        (decode output ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                      (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                        (decode output ^ Nat.rawCast 1 *
+                                            (decode occupied ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                          0)))
+                                    (Mathlib.Tactic.Ring.Common.zero_mul
+                                      (decode occupied ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))
+                                    (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                      (decode output ^ Nat.rawCast 1 *
+                                          (decode occupied ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                        0)))
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                    (decode input ^ Nat.rawCast 1 * (decode occupied ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                    (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                      (decode output ^ Nat.rawCast 1 *
+                                          (decode occupied ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                        0)))))
+                              (Mathlib.Tactic.Ring.Common.sub_pf
+                                (Mathlib.Tactic.Ring.Common.neg_add
+                                  (Mathlib.Tactic.Ring.Common.neg_mul (decode input) (Nat.rawCast 1)
+                                    (Mathlib.Tactic.Ring.Common.neg_mul (decode occupied) (Nat.rawCast 1)
+                                      (Mathlib.Meta.NormNum.IsInt.to_raw_eq
+                                        (Mathlib.Meta.NormNum.isInt_neg (Eq.refl Neg.neg)
+                                          (Mathlib.Meta.NormNum.IsNat.to_isInt (Mathlib.Meta.NormNum.IsNat.of_raw K 1))
+                                          (Eq.refl (Int.negOfNat 1))))))
+                                  (Mathlib.Tactic.Ring.Common.neg_add
+                                    (Mathlib.Tactic.Ring.Common.neg_mul (decode output) (Nat.rawCast 1)
+                                      (Mathlib.Tactic.Ring.Common.neg_mul (decode occupied) (Nat.rawCast 1)
+                                        (Mathlib.Meta.NormNum.IsInt.to_raw_eq
+                                          (Mathlib.Meta.NormNum.isInt_neg (Eq.refl Neg.neg)
+                                            (Mathlib.Meta.NormNum.IsNat.to_isInt
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw K 1))
+                                            (Eq.refl (Int.negOfNat 1))))))
+                                    Mathlib.Tactic.Ring.Common.neg_zero))
+                                (Mathlib.Tactic.Ring.Common.add_pf_add_lt (decode input ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_gt
+                                    (decode input ^ Nat.rawCast 1 *
+                                      (decode occupied ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast))
+                                    (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                      (decode output ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                      (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                        (decode output ^ Nat.rawCast 1 *
+                                            (decode occupied ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast) +
+                                          0)))))))
+                            (Mathlib.Tactic.Ring.Common.mul_congr
+                              (Mathlib.Tactic.Ring.Common.add_congr
+                                (Mathlib.Tactic.Ring.Common.atom_pf (decode input) rfl
+                                  (Eq.mpr
+                                    (id
+                                      (congrArg
+                                        (fun _a =>
+                                          decode input ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                            decode input ^ Nat.rawCast 1 * _a)
+                                        (Eq.symm rfl)))
+                                    (Eq.refl (decode input ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                (Mathlib.Tactic.Ring.Common.atom_pf (decode output) rfl
+                                  (Eq.mpr
+                                    (id
+                                      (congrArg
+                                        (fun _a =>
+                                          decode output ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                            decode output ^ Nat.rawCast 1 * _a)
+                                        (Eq.symm rfl)))
+                                    (Eq.refl (decode output ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                (Mathlib.Tactic.Ring.Common.add_pf_add_lt (decode input ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                  (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                    (decode output ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))))
+                              (Mathlib.Tactic.Ring.Common.sub_congr
+                                (Mathlib.Tactic.Ring.cast_pos (Mathlib.Meta.NormNum.isNat_ofNat K Nat.cast_one))
+                                (Mathlib.Tactic.Ring.Common.atom_pf (decode occupied) rfl
+                                  (Eq.mpr
+                                    (id
+                                      (congrArg
+                                        (fun _a =>
+                                          decode occupied ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                            decode occupied ^ Nat.rawCast 1 * _a)
+                                        (Eq.symm rfl)))
+                                    (Eq.refl (decode occupied ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                (Mathlib.Tactic.Ring.Common.sub_pf
+                                  (Mathlib.Tactic.Ring.Common.neg_add
+                                    (Mathlib.Tactic.Ring.Common.neg_mul (decode occupied) (Nat.rawCast 1)
+                                      (Mathlib.Meta.NormNum.IsInt.to_raw_eq
+                                        (Mathlib.Meta.NormNum.isInt_neg (Eq.refl Neg.neg)
+                                          (Mathlib.Meta.NormNum.IsNat.to_isInt (Mathlib.Meta.NormNum.IsNat.of_raw K 1))
+                                          (Eq.refl (Int.negOfNat 1)))))
+                                    Mathlib.Tactic.Ring.Common.neg_zero)
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_lt (Nat.rawCast 1)
+                                    (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                      (decode occupied ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast + 0)))))
+                              (Mathlib.Tactic.Ring.Common.add_mul
+                                (Mathlib.Tactic.Ring.Common.mul_add
+                                  (Mathlib.Tactic.Ring.Common.mul_pf_left (decode input) (Nat.rawCast 1)
+                                    (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                      (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                        (Mathlib.Meta.NormNum.IsNat.of_raw K 1) (Mathlib.Meta.NormNum.IsNat.of_raw K 1)
+                                        (Eq.refl 1))))
+                                  (Mathlib.Tactic.Ring.Common.mul_add
+                                    (Mathlib.Tactic.Ring.Common.mul_pf_left (decode input) (Nat.rawCast 1)
+                                      (Mathlib.Tactic.Ring.Common.mul_pf_right (decode occupied) (Nat.rawCast 1)
+                                        (Mathlib.Meta.NormNum.IsInt.to_raw_eq
+                                          (Mathlib.Meta.NormNum.isInt_mul (Eq.refl HMul.hMul)
+                                            (Mathlib.Meta.NormNum.IsNat.to_isInt
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw K 1))
+                                            (Mathlib.Meta.NormNum.IsInt.of_raw K (Int.negOfNat 1))
+                                            (Eq.refl (Int.negOfNat 1))))))
+                                    (Mathlib.Tactic.Ring.Common.mul_zero (decode input ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                    (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                      (decode input ^ Nat.rawCast 1 *
+                                          (decode occupied ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast) +
+                                        0)))
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                    (decode input ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                    (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                      (decode input ^ Nat.rawCast 1 *
+                                          (decode occupied ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast) +
+                                        0))))
+                                (Mathlib.Tactic.Ring.Common.add_mul
+                                  (Mathlib.Tactic.Ring.Common.mul_add
+                                    (Mathlib.Tactic.Ring.Common.mul_pf_left (decode output) (Nat.rawCast 1)
+                                      (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                        (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                          (Mathlib.Meta.NormNum.IsNat.of_raw K 1)
+                                          (Mathlib.Meta.NormNum.IsNat.of_raw K 1) (Eq.refl 1))))
+                                    (Mathlib.Tactic.Ring.Common.mul_add
+                                      (Mathlib.Tactic.Ring.Common.mul_pf_left (decode output) (Nat.rawCast 1)
+                                        (Mathlib.Tactic.Ring.Common.mul_pf_right (decode occupied) (Nat.rawCast 1)
+                                          (Mathlib.Meta.NormNum.IsInt.to_raw_eq
+                                            (Mathlib.Meta.NormNum.isInt_mul (Eq.refl HMul.hMul)
+                                              (Mathlib.Meta.NormNum.IsNat.to_isInt
+                                                (Mathlib.Meta.NormNum.IsNat.of_raw K 1))
+                                              (Mathlib.Meta.NormNum.IsInt.of_raw K (Int.negOfNat 1))
+                                              (Eq.refl (Int.negOfNat 1))))))
+                                      (Mathlib.Tactic.Ring.Common.mul_zero
+                                        (decode output ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                      (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                        (decode output ^ Nat.rawCast 1 *
+                                            (decode occupied ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast) +
+                                          0)))
+                                    (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                      (decode output ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                      (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                        (decode output ^ Nat.rawCast 1 *
+                                            (decode occupied ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast) +
+                                          0))))
+                                  (Mathlib.Tactic.Ring.Common.zero_mul
+                                    (Nat.rawCast 1 + (decode occupied ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast + 0)))
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                    (decode output ^ Nat.rawCast 1 * Nat.rawCast 1 +
+                                      (decode output ^ Nat.rawCast 1 *
+                                          (decode occupied ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast) +
+                                        0))))
+                                (Mathlib.Tactic.Ring.Common.add_pf_add_lt (decode input ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                    (decode input ^ Nat.rawCast 1 *
+                                      (decode occupied ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast))
+                                    (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                      (decode output ^ Nat.rawCast 1 * Nat.rawCast 1 +
+                                        (decode output ^ Nat.rawCast 1 *
+                                            (decode occupied ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast) +
+                                          0)))))))))))⟩⟩⟩⟩⟩⟩⟩
+'AspisR1.NJL_OccupancyContext.source' depends on axioms: [propext, Classical.choice, Quot.sound]

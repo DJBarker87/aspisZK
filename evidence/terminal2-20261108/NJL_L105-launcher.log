@@ -1,0 +1,45 @@
+{"attempt": "NJL_L105", "exit_status": 0, "wall_seconds": 8.588714480167255, "peak_rss_kib": "6192072", "swaps": "0", "print_axioms": ["'AspisR1.NJL_WindowPowers.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJL_WindowPowers.source : ∀ (lambda power : NQ) (n : ℕ),
+  Canon lambda →
+    Canon power →
+      ∃ values next,
+        run lambda n power = ok (values, next) ∧
+          Trace lambda n power values next ∧
+            values.length = n ∧
+              (∀ x ∈ values, Canon x) ∧
+                Canon next ∧
+                  (∀ (i : ℕ) (hi : i < values.length), decode values[i] = decode power * decode lambda ^ i) ∧
+                    decode next = decode power * decode lambda ^ n :=
+fun lambda power n hl hp =>
+  Nat.recAux (motive := fun n =>
+    ∀ (power : NQ),
+      Canon power →
+        ∃ values next,
+          run lambda n power = ok (values, next) ∧
+            Trace lam
+...
+_pf_right (decode lambda)
+                                          (n ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                          (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                            (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1)
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1) (Eq.refl 1))))))
+                                    (Mathlib.Tactic.Ring.Common.mul_zero (decode power ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                    (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                      (decode power ^ Nat.rawCast 1 *
+                                          (decode lambda ^ Nat.rawCast 1 *
+                                            (decode lambda ^ (n ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1)) +
+                                        0)))
+                                  (Mathlib.Tactic.Ring.Common.zero_mul
+                                    (decode lambda ^ Nat.rawCast 1 *
+                                        (decode lambda ^ (n ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1) +
+                                      0))
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                    (decode power ^ Nat.rawCast 1 *
+                                        (decode lambda ^ Nat.rawCast 1 *
+                                          (decode lambda ^ (n ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1)) +
+                                      0)))))))⟩⟩⟩⟩⟩⟩))
+    n power hp
+'AspisR1.NJL_WindowPowers.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r13135f00b67e454aa61e6c438646af10.scope; invocation ID: 511e8146010d40c199d33db866f77fed

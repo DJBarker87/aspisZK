@@ -1,0 +1,66 @@
+{"attempt": "NJL_L078", "exit_status": 1, "wall_seconds": 8.42434657504782, "peak_rss_kib": "6154488", "swaps": "0", "print_axioms": ["'AspisR1.NJL_TagReduction.step_source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJL_TagReduction.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJL_TagReduction.lean:58:1: error: unsolved goals
+case refine_2.«0»
+raw : NJL_TagRawStep.State
+before : State
+hb : ∀ (i : Fin 4), ↑(before i) < P
+s0 : State
+c0 : step raw 0 before = ok s0
+t0 : Step raw 0 before s0
+h0 : ∀ (i : Fin 4), ↑(s0 i) < P
+v0 : ∀ (i : Fin 4), ↑(s0 i) = if i = 0 then (↑(before i) + ↑(raw i) % P) % P else ↑(before i)
+s1 : State
+c1 : step raw 1 s0 = ok s1
+t1 : Step raw 1 s0 s1
+h1 : ∀ (i : Fin 4), ↑(s1 i) < P
+v1 : ∀ (i : Fin 4), ↑(s1 i) = if i = 1 then (↑(s0 i) + ↑(raw i) % P) % P else ↑(s0 i)
+s2 : State
+c2 : step raw 2 s1 = ok s2
+t2 : Step raw 2 s1 s2
+h2 : ∀ (i : Fin 4), ↑(s2 i) < P
+v2 : ∀ (i : Fin 4), ↑(s2 i) = if i = 2 then (↑(s1 i) + ↑(raw i) % P) % P else ↑(s1 i)
+s3 :
+...
+✝⁷
+  Exists.intro s3
+    ⟨of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (Eq.trans
+                  (congrFun' (congrArg Bind.bind c0) fun middle => do
+                    let middle ← step raw 1 middle
+                    let middle ← step raw 2 middle
+                    let middle ← step raw 3 middle
+                    ok middle)
+                  (bind_tc_ok s0 fun y => do
+                    let middle ← step raw 1 y
+                    let middle ← step raw 2 middle
+                    let middle ← step raw 3 middle
+                    ok middle))
+                (Eq.trans
+                  (Eq.trans
+                    (congrFun' (congrArg Bind.bind c1) fun middle => do
+                      let middle ← step raw 2 middle
+                      let middle ← step raw 3 middle
+                      ok middle)
+                    (bind_tc_ok s1 fun y => do
+                      let middle ← step raw 2 y
+                      let middle ← step raw 3 middle
+                      ok middle))
+                  (Eq.trans
+                    (Eq.trans
+                      (congrFun' (congrArg Bind.bind c2) fun middle => do
+                        let middle ← step raw 3 middle
+                        ok middle)
+                      (bind_tc_ok s2 fun y => do
+                        let middle ← step raw 3 y
+                        ok middle))
+                    (Eq.trans (congrFun' (congrArg Bind.bind c3) fun middle => ok middle) (bind_tc_ok s3 ok))))))
+            (ok s3))
+          (eq_self (ok s3))),
+      ⟨Trace.cons t0 (Trace.cons t1 (Trace.cons t2 (Trace.cons t3 (Trace.nil s3)))), ⟨h3, sorry⟩⟩⟩
+'AspisR1.NJL_TagReduction.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r433742bc5e73449eb3e3cb6d4c3d39e8.scope; invocation ID: 5aa001a5c93b467d832276cccc5f6cbb

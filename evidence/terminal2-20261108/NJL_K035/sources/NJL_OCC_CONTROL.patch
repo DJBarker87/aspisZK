@@ -1,0 +1,18 @@
+--- a/crates/aspis-statement/src/pool_v1/NJL_control.rs
++++ b/crates/aspis-statement/src/pool_v1/NJL_control.rs
+@@ -52,3 +52,15 @@
+  assert_eq!(log.calls,16);assert_eq!(log.seen,seek);
+  assert_eq!(value[limb],log.reply[limb] ^ if cfg!(NJL_invert){1}else{0});
+ }
++
++fn NJL_occupancy_control(log:&mut NJL_Control){
++ for lane in 0..aspis_core::poseidon2::DIGEST_ELEMS {log.enter(lane);}
++}
++#[kani::proof] #[kani::unwind(10)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NJL_occupancy_control_cut(){
++ let seek:usize=kani::any();kani::assume(seek<8);
++ let mut log=NJL_Control{seek,seen:999,calls:0};
++ NJL_occupancy_control(&mut log);
++ assert_eq!(log.calls,8);assert_eq!(log.seen,seek ^ if cfg!(NJL_invert){1}else{0});
++}

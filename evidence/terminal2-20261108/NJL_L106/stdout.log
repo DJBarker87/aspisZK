@@ -1,0 +1,21 @@
+theorem AspisR1.NJL_WindowCache.source : ∀ (powers : List NQ),
+  (∀ x ∈ powers, Canon x) →
+    ∃ caches,
+      NJB_Traverse.run FIq_Native.field.PreparedQm31Multiplier.new powers = ok caches ∧
+        List.Forall₂
+          (fun power cache =>
+            FIq_Native.field.PreparedQm31Multiplier.new power = ok cache ∧ NJB_PreparedLaws.Domain cache power)
+          powers ↑caches :=
+fun powers canonical =>
+  let ⟨caches, h✝⟩ :=
+    NJL_Traverse.packet FIq_Native.field.PreparedQm31Multiplier.new (fun x => True)
+      (fun power cache =>
+        FIq_Native.field.PreparedQm31Multiplier.new power = ok cache ∧ NJB_PreparedLaws.Domain cache power)
+      powers fun power hp =>
+      let ⟨cache, h✝¹⟩ := NJB_PreparedLaws.new_result power (canonical power hp)
+      let ⟨call, domain⟩ := h✝¹
+      Exists.intro cache ⟨call, ⟨True.intro, ⟨call, domain⟩⟩⟩
+  let ⟨call, right✝⟩ := h✝
+  let ⟨left✝, relation⟩ := right✝
+  Exists.intro caches ⟨call, relation⟩
+'AspisR1.NJL_WindowCache.source' depends on axioms: [propext, Classical.choice, Quot.sound]

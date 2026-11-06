@@ -1,0 +1,66 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+struct NJL_Control { seek:usize, seen:usize, calls:usize }
+impl NJL_Control { fn enter(&mut self,position:usize) { if self.calls==self.seek {self.seen=position;} self.calls+=1; } }
+fn NJL_active_control(log:&mut NJL_Control)->([QM31;7],QM31,usize,usize){
+ const MASKS:[u16;7]=[6144,6145,4097,2048,2049,26214,1749];
+ let high_sums=[QM31::ZERO;MASKS.len()];
+ let mut block=0usize;
+        while block < constants::ACTIVE_ROW_MASKS.len() {
+            log.enter(block);
+            block += 1;
+        }
+ let sum=QM31::ZERO;
+ let mut coordinate=0usize;
+        while coordinate < MASKS.len() {
+            log.enter(64+coordinate);
+            coordinate += 1;
+        }
+ (high_sums,sum,block,coordinate)
+}
+
+#[kani::proof] #[kani::unwind(66)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJL_active_control_cut(){
+ let seek:usize=kani::any();kani::assume(seek<71);
+ let mut log=NJL_Control{seek,seen:999,calls:0};
+ let (high,sum,block,coordinate)=NJL_active_control(&mut log);
+ assert_eq!(log.calls,71);assert_eq!(block,64);assert_eq!(coordinate,7);
+ assert_eq!(log.seen,seek ^ if cfg!(NJL_invert){1}else{0});
+ let cell:usize=kani::any();kani::assume(cell<7);
+ assert_eq!(high[cell],QM31::ZERO);assert_eq!(sum,QM31::ZERO);
+}
+
+struct NJL_ArrayWindow { seek:usize, seen:usize, calls:usize, reply:[u32;4] }
+fn NJL_lane_oracle(lane:usize, log:&mut NJL_ArrayWindow)->QM31 {
+ let reply:[u32;4]=kani::any();
+ if log.calls==log.seek {log.seen=lane;log.reply=reply;}
+ log.calls+=1;
+ QM31{c0:CM31{a:M31(reply[0]),b:M31(reply[1])},c1:CM31{a:M31(reply[2]),b:M31(reply[3])}}
+}
+fn NJL_absorption_array(log:&mut NJL_ArrayWindow)->[QM31;16] {
+ core::array::from_fn(|lane| NJL_lane_oracle(lane,log))
+}
+#[kani::proof] #[kani::unwind(18)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJL_absorption_array_cut(){
+ let seek:usize=kani::any();kani::assume(seek<16);
+ let mut log=NJL_ArrayWindow{seek,seen:99,calls:0,reply:[0;4]};
+ let out=NJL_absorption_array(&mut log);
+ let limb:usize=kani::any();kani::assume(limb<4);
+ let value=[out[seek].c0.a.0,out[seek].c0.b.0,out[seek].c1.a.0,out[seek].c1.b.0];
+ assert_eq!(log.calls,16);assert_eq!(log.seen,seek);
+ assert_eq!(value[limb],log.reply[limb] ^ if cfg!(NJL_invert){1}else{0});
+}
+
+fn NJL_occupancy_control(log:&mut NJL_Control){
+ for lane in 0..aspis_core::poseidon2::DIGEST_ELEMS {log.enter(lane);}
+}
+#[kani::proof] #[kani::unwind(10)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJL_occupancy_control_cut(){
+ let seek:usize=kani::any();kani::assume(seek<8);
+ let mut log=NJL_Control{seek,seen:999,calls:0};
+ NJL_occupancy_control(&mut log);
+ assert_eq!(log.calls,8);assert_eq!(log.seen,seek ^ if cfg!(NJL_invert){1}else{0});
+}

@@ -1,0 +1,713 @@
+theorem AspisR1.NJL_PathContext.source : ∀ (selector bit : NQ),
+  Canon selector →
+    Canon bit →
+      ∃ c residual events,
+        reference selector bit = ok c ∧
+          Domain c ∧
+            Clauses selector bit residual c ∧
+              Cut selector bit residual c events c.left c.right (initial c) 6 2 ∧
+                (∀ (i : Fin 17), Canon (initial c i)) ∧
+                  decode c.selected = decode selector * decode bit ∧
+                    decode c.emptyValue = decode selector * (1 - decode bit) ∧
+                      decode c.head = decode selector * (decode bit * (decode bit - 1)) :=
+fun selector bit hs hb =>
+  let ⟨s, h✝⟩ := NJB_StubLaws.qm_mul selector bit hs hb
+  let ⟨h0, right✝⟩ := h✝
+  let ⟨c0, v0⟩ := right✝
+  let ⟨e, h✝¹⟩ := NJB_StubLaws.qm_sub selector s hs c0
+  let ⟨h1, right✝¹⟩ := h✝¹
+  let ⟨c1, v1⟩ := right✝¹
+  let ⟨l, h✝²⟩ := NJB_PreparedLaws.new_result e c1
+  let ⟨h2, d2⟩ := h✝²
+  let ⟨r, h✝³⟩ := NJB_PreparedLaws.new_result s c0
+  let ⟨h3, d3⟩ := h✝³
+  let ⟨b, h✝⁴⟩ := NJB_StubLaws.qm_sub bit FIq_Native.field.QM31.ONE hb FIv_NativeValue.one.left
+  let ⟨h4, right✝²⟩ := h✝⁴
+  let ⟨c4, v4⟩ := right✝²
+  let ⟨h, h✝⁵⟩ := NJB_StubLaws.qm_mul s b c0 c4
+  let ⟨h5, right✝³⟩ := h✝⁵
+  let ⟨c5, v5⟩ := right✝³
+  let c := { selected := s, emptyValue := e, left := l, right := r, head := h };
+  let events := fun j =>
+    { operation := ![0, 2, 3, 3, 2, 0] j, left := ![selector, selector, e, s, bit, s] j,
+      right := ![bit, s, FIq_Native.field.QM31.ZERO, FIq_Native.field.QM31.ZERO, FIq_Native.field.QM31.ONE, b] j };
+  Exists.intro c
+    (Exists.intro b
+      (Exists.intro events
+        ⟨Eq.mpr
+            (id
+              (congrFun'
+                (congrArg Eq
+                  (Eq.trans
+                    (Eq.trans
+                      (congr (congrArg Bind.bind h0)
+                        (funext fun selected =>
+                          congrArg (Bind.bind (FIq_Native.field.QM31.sub selector selected))
+                            (funext fun emptyValue =>
+                              congrArg (Bind.bind (FIq_Native.field.PreparedQm31Multiplier.new emptyValue))
+                                (funext fun left =>
+                                  congrArg (Bind.bind (FIq_Native.field.PreparedQm31Multiplier.new selected))
+                                    (funext fun right =>
+                                      Eq.trans
+                                        (congrFun' (congrArg Bind.bind h4) fun residual => do
+                                          let head ← selected.mul residual
+                                          ok
+                                              { selected := selected, emptyValue := emptyValue, left := left,
+                                                right := right, head := head })
+                                        (bind_tc_ok b fun y => do
+                                          let head ← selected.mul y
+                                          ok
+                                              { selected := selected, emptyValue := emptyValue, left := left,
+                                                right := right, head := head }))))))
+                      (bind_tc_ok s fun y => do
+                        let emptyValue ← FIq_Native.field.QM31.sub selector y
+                        let left ← FIq_Native.field.PreparedQm31Multiplier.new emptyValue
+                        let right ← FIq_Native.field.PreparedQm31Multiplier.new y
+                        let head ← y.mul b
+                        ok { selected := y, emptyValue := emptyValue, left := left, right := right, head := head }))
+                    (Eq.trans
+                      (Eq.trans
+                        (congr (congrArg Bind.bind h1)
+                          (funext fun emptyValue =>
+                            congrArg (Bind.bind (FIq_Native.field.PreparedQm31Multiplier.new emptyValue))
+                              (funext fun left =>
+                                Eq.trans
+                                  (congr (congrArg Bind.bind h3)
+                                    (funext fun right =>
+                                      Eq.trans
+                                        (congrFun' (congrArg Bind.bind h5) fun head =>
+                                          ok
+                                            { selected := s, emptyValue := emptyValue, left := left, right := right,
+                                              head := head })
+                                        (bind_tc_ok h fun y =>
+                                          ok
+                                            { selected := s, emptyValue := emptyValue, left := left, right := right,
+                                              head := y })))
+                                  (bind_tc_ok r fun y =>
+                                    ok
+                                      { selected := s, emptyValue := emptyValue, left := left, right := y,
+                                        head := h }))))
+                        (bind_tc_ok e fun y => do
+                          let left ← FIq_Native.field.PreparedQm31Multiplier.new y
+                          ok { selected := s, emptyValue := y, left := left, right := r, head := h }))
+                      (Eq.trans
+                        (congrFun' (congrArg Bind.bind h2) fun left =>
+                          ok { selected := s, emptyValue := e, left := left, right := r, head := h })
+                        (bind_tc_ok l fun y =>
+                          ok { selected := s, emptyValue := e, left := y, right := r, head := h })))))
+                (ok c)))
+            (Eq.refl (ok { selected := s, emptyValue := e, left := l, right := r, head := h })),
+          ⟨⟨c0, ⟨c1, ⟨c5, ⟨d2, d3⟩⟩⟩⟩,
+            ⟨⟨h0, ⟨h1, ⟨h2, ⟨h3, ⟨h4, h5⟩⟩⟩⟩⟩,
+              ⟨⟨rfl,
+                  ⟨rfl,
+                    ⟨rfl,
+                      ⟨rfl,
+                        ⟨fun j =>
+                          List.Mem.casesOn (motive := fun a x =>
+                            List.finRange ({ len := 5 }.len + 1) = a →
+                              Fintype.complete j ≍ x →
+                                (events j).operation = ![0, 2, 3, 3, 2, 0] j ∧
+                                  (events j).left = ![selector, selector, c.emptyValue, c.selected, bit, c.selected] j)
+                            (Fintype.complete j)
+                            (fun «as» h =>
+                              List.cons.noConfusion h fun head_eq =>
+                                Eq.ndrec (motive := fun j =>
+                                  ∀ (this : j ∈ Fintype.elems),
+                                    (fun x1 x2 => (fun i => i) x1 :: x2)
+                                          ⟨1,
+                                            Nat.le_of_lt
+                                              (Nat.le_of_lt
+                                                (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 5 }.len + 1)))))⟩
+                                          ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                            ⟨2,
+                                              Nat.le_of_lt
+                                                (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 5 }.len + 1))))⟩
+                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                              ⟨3, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 5 }.len + 1)))⟩
+                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                ⟨4, Nat.le_of_lt (Nat.le_refl ({ len := 5 }.len + 1))⟩
+                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                  ⟨5, Nat.le_refl ({ len := 5 }.len + 1)⟩ [])))) ≍
+                                        «as» →
+                                      this ≍ List.Mem.head «as» →
+                                        (events j).operation = ![0, 2, 3, 3, 2, 0] j ∧
+                                          (events j).left =
+                                            ![selector, selector, c.emptyValue, c.selected, bit, c.selected] j)
+                                  (fun this tail_eq =>
+                                    Eq.ndrec (motive := fun «as» =>
+                                      this ≍ List.Mem.head «as» →
+                                        (events
+                                                ((fun i => i)
+                                                  ⟨0,
+                                                    Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_refl ({ len := 5 }.len + 1))))))⟩)).operation =
+                                            ![0, 2, 3, 3, 2, 0]
+                                              ((fun i => i)
+                                                ⟨0,
+                                                  Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt (Nat.le_refl ({ len := 5 }.len + 1))))))⟩) ∧
+                                          (events
+                                                ((fun i => i)
+                                                  ⟨0,
+                                                    Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_refl ({ len := 5 }.len + 1))))))⟩)).left =
+                                            ![selector, selector, c.emptyValue, c.selected, bit, c.selected]
+                                              ((fun i => i)
+                                                ⟨0,
+                                                  Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt (Nat.le_refl ({ len := 5 }.len + 1))))))⟩))
+                                      (fun h => ⟨rfl, rfl⟩) (eq_of_heq tail_eq))
+                                  (eq_of_heq head_eq) (Fintype.complete j))
+                            (fun b {«as»} a h =>
+                              List.cons.noConfusion h fun head_eq =>
+                                Eq.ndrec (motive := fun b =>
+                                  (fun x1 x2 => (fun i => i) x1 :: x2)
+                                        ⟨1,
+                                          Nat.le_of_lt
+                                            (Nat.le_of_lt
+                                              (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 5 }.len + 1)))))⟩
+                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                          ⟨2,
+                                            Nat.le_of_lt
+                                              (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 5 }.len + 1))))⟩
+                                          ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                            ⟨3, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 5 }.len + 1)))⟩
+                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                              ⟨4, Nat.le_of_lt (Nat.le_refl ({ len := 5 }.len + 1))⟩
+                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                ⟨5, Nat.le_refl ({ len := 5 }.len + 1)⟩ [])))) ≍
+                                      «as» →
+                                    Fintype.complete j ≍ List.Mem.tail b a →
+                                      (events j).operation = ![0, 2, 3, 3, 2, 0] j ∧
+                                        (events j).left =
+                                          ![selector, selector, c.emptyValue, c.selected, bit, c.selected] j)
+                                  (fun tail_eq =>
+                                    Eq.ndrec (motive := fun {«as»} =>
+                                      ∀ (a : List.Mem j «as»),
+                                        Fintype.complete j ≍
+                                            List.Mem.tail
+                                              ((fun i => i)
+                                                ⟨0,
+                                                  Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt (Nat.le_refl ({ len := 5 }.len + 1))))))⟩)
+                                              a →
+                                          (events j).operation = ![0, 2, 3, 3, 2, 0] j ∧
+                                            (events j).left =
+                                              ![selector, selector, c.emptyValue, c.selected, bit, c.selected] j)
+                                      (fun a h =>
+                                        List.Mem.casesOn (motive := fun a_1 x =>
+                                          (fun x1 x2 => (fun i => i) x1 :: x2)
+                                                ⟨1,
+                                                  Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt (Nat.le_refl ({ len := 5 }.len + 1)))))⟩
+                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                  ⟨2,
+                                                    Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt (Nat.le_refl ({ len := 5 }.len + 1))))⟩
+                                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                    ⟨3,
+                                                      Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 5 }.len + 1)))⟩
+                                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                      ⟨4, Nat.le_of_lt (Nat.le_refl ({ len := 5 }.len + 1))⟩
+                                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                        ⟨5, Nat.le_refl ({ len := 5 }.len + 1)⟩ [])))) =
+                                              a_1 →
+                                            a ≍ x →
+                                              (events j).operation = ![0, 2, 3, 3, 2, 0] j ∧
+                                                (events j).left =
+                                                  ![selector, selector, c.emptyValue, c.selected, bit, c.selected] j)
+                                          a
+                                          (fun «as» h =>
+                                            List.cons.noConfusion h fun head_eq =>
+                                              Eq.ndrec (motive := fun j =>
+                                                ∀
+                                                  (a :
+                                                    List.Mem j
+                                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                        ⟨1,
+                                                          Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt (Nat.le_refl ({ len := 5 }.len + 1)))))⟩
+                                                        ((fun x1 x2 => ⋯)
+                                                          ⟨2,
+                                                            Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt (Nat.le_refl ({ len := 5 }.len + 1))))⟩
+                                                          (⋯
+                                                            ⟨3,
+                                                              Nat.le_of_lt
+                                                                (Nat.le_of_lt (Nat.le_refl ({ len := 5 }.len + 1)))⟩
+                                                            ⋯)))),
+                                                  (fun x1 x2 => ⋯)
+                                                        ⟨2,
+                                                          Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt (Nat.le_refl ({ len := 5 }.len + 1))))⟩
+                                                        (⋯
+                                                          ⟨3,
+                                                            Nat.le_of_lt
+                                                              (Nat.le_of_lt (Nat.le_refl ({ len := 5 }.len + 1)))⟩
+                                                          ⋯) ≍
+                                                      «as» →
+                                                    a ≍ List.Mem.head «as» →
+                                                      (events j).operation = ⋯ ∧ (events j).left = ⋯)
+                                                (fun a tail_eq =>
+                                                  Eq.ndrec (motive := fun «as» =>
+                                                    a ≍ List.Mem.head «as» → ⋯ = ⋯ ∧ ⋯ = ⋯) (fun h => ⟨rfl, rfl⟩)
+                                                    (eq_of_heq tail_eq))
+                                                (eq_of_heq head_eq) a)
+                                          (fun b {«as»} a_1 h =>
+                                            List.cons.noConfusion h fun head_eq =>
+                                              Eq.ndrec (motive := fun b =>
+                                                (fun x1 x2 => (fun i => i) x1 :: x2)
+                                                      ⟨2,
+                                                        Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt (Nat.le_refl ({ len := 5 }.len + 1))))⟩
+                                                      ((fun x1 x2 => ⋯)
+                                                        ⟨3,
+                                                          Nat.le_of_lt
+                                                            (Nat.le_of_lt (Nat.le_refl ({ len := 5 }.len + 1)))⟩
+                                                        (⋯ ⟨4, Nat.le_of_lt (Nat.le_refl ({ len := 5 }.len + 1))⟩ ⋯)) ≍
+                                                    «as» →
+                                                  a ≍ List.Mem.tail b a_1 →
+                                                    (events j).operation = ![0, 2, 3, 3, 2, 0] j ∧
+                                                      (events j).left =
+                                                        ![selector, selector, c.emptyValue, c.selected, bit, c.selected]
+                                                          j)
+                                                (fun tail_eq =>
+                                                  Eq.ndrec (motive := fun {«as»} =>
+                                                    ∀ (a_2 : List.Mem j «as»), a ≍ ⋯ → ⋯ ∧ ⋯)
+                                                    (fun a_2 h =>
+                                                      List.Mem.casesOn (motive := fun a x => ⋯ → ⋯) a_2
+                                                        (fun «as» h => List.cons.noConfusion h ⋯)
+                                                        (fun b {«as»} a h => List.cons.noConfusion h ⋯)
+                                                        (Eq.refl (⋯ ⋯ ⋯)) (HEq.refl a_2))
+                                                    (eq_of_heq tail_eq) a_1)
+                                                (eq_of_heq head_eq))
+                                          (Eq.refl
+                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                              ⟨1,
+                                                Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 5 }.len + 1)))))⟩
+                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                ⟨2,
+                                                  Nat.le_of_lt
+                                                    (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 5 }.len + 1))))⟩
+                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                  ⟨3, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 5 }.len + 1)))⟩
+                                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                    ⟨4, Nat.le_of_lt (Nat.le_refl ({ len := 5 }.len + 1))⟩
+                                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                      ⟨5, Nat.le_refl ({ len := 5 }.len + 1)⟩ []))))))
+                                          (HEq.refl a))
+                                      (eq_of_heq tail_eq) a)
+                                  (eq_of_heq head_eq))
+                            (Eq.refl (List.finRange ({ len := 5 }.len + 1))) (HEq.refl (Fintype.complete j)),
+                          ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, fun x => rfl⟩⟩⟩⟩⟩⟩⟩⟩⟩,
+                ⟨fun i =>
+                  id
+                    (Decidable.casesOn (instDecidableEqNat (↑i) 0)
+                      (fun h => Eq.mpr (id (congrArg Canon (if_neg h))) FIv_NativeValue.zero.left) fun h =>
+                      Eq.mpr (id (congrArg Canon (if_pos h))) c5),
+                  ⟨v0,
+                    ⟨id
+                        (Eq.mpr (id (congrArg (fun _a => _a = decode selector * (1 - decode bit)) v1))
+                          (Eq.mpr
+                            (id (congrArg (fun _a => decode selector - _a = decode selector * (1 - decode bit)) v0))
+                            (Mathlib.Tactic.Ring.of_eq
+                              (Mathlib.Tactic.Ring.Common.sub_congr
+                                (Mathlib.Tactic.Ring.Common.atom_pf (decode selector) rfl
+                                  (Eq.mpr
+                                    (id
+                                      (congrArg
+                                        (fun _a =>
+                                          decode selector ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                            decode selector ^ Nat.rawCast 1 * _a)
+                                        (Eq.symm rfl)))
+                                    (Eq.refl (decode selector ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                (Mathlib.Tactic.Ring.Common.mul_congr
+                                  (Mathlib.Tactic.Ring.Common.atom_pf (decode selector) rfl
+                                    (Eq.mpr
+                                      (id
+                                        (congrArg
+                                          (fun _a =>
+                                            decode selector ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                              decode selector ^ Nat.rawCast 1 * _a)
+                                          (Eq.symm rfl)))
+                                      (Eq.refl (decode selector ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                  (Mathlib.Tactic.Ring.Common.atom_pf (decode bit) rfl
+                                    (Eq.mpr
+                                      (id
+                                        (congrArg
+                                          (fun _a =>
+                                            decode bit ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                              decode bit ^ Nat.rawCast 1 * _a)
+                                          (Eq.symm rfl)))
+                                      (Eq.refl (decode bit ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                  (Mathlib.Tactic.Ring.Common.add_mul
+                                    (Mathlib.Tactic.Ring.Common.mul_add
+                                      (Mathlib.Tactic.Ring.Common.mul_pf_left (decode selector) (Nat.rawCast 1)
+                                        (Mathlib.Tactic.Ring.Common.mul_pf_right (decode bit) (Nat.rawCast 1)
+                                          (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                            (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw K 1)
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw K 1) (Eq.refl 1)))))
+                                      (Mathlib.Tactic.Ring.Common.mul_zero
+                                        (decode selector ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                      (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                        (decode selector ^ Nat.rawCast 1 *
+                                            (decode bit ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                          0)))
+                                    (Mathlib.Tactic.Ring.Common.zero_mul
+                                      (decode bit ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))
+                                    (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                      (decode selector ^ Nat.rawCast 1 * (decode bit ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                        0))))
+                                (Mathlib.Tactic.Ring.Common.sub_pf
+                                  (Mathlib.Tactic.Ring.Common.neg_add
+                                    (Mathlib.Tactic.Ring.Common.neg_mul (decode selector) (Nat.rawCast 1)
+                                      (Mathlib.Tactic.Ring.Common.neg_mul (decode bit) (Nat.rawCast 1)
+                                        (Mathlib.Meta.NormNum.IsInt.to_raw_eq
+                                          (Mathlib.Meta.NormNum.isInt_neg (Eq.refl Neg.neg)
+                                            (Mathlib.Meta.NormNum.IsNat.to_isInt
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw K 1))
+                                            (Eq.refl (Int.negOfNat 1))))))
+                                    Mathlib.Tactic.Ring.Common.neg_zero)
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                    (decode selector ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                    (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                      (decode selector ^ Nat.rawCast 1 *
+                                          (decode bit ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast) +
+                                        0)))))
+                              (Mathlib.Tactic.Ring.Common.mul_congr
+                                (Mathlib.Tactic.Ring.Common.atom_pf (decode selector) rfl
+                                  (Eq.mpr
+                                    (id
+                                      (congrArg
+                                        (fun _a =>
+                                          decode selector ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                            decode selector ^ Nat.rawCast 1 * _a)
+                                        (Eq.symm rfl)))
+                                    (Eq.refl (decode selector ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                (Mathlib.Tactic.Ring.Common.sub_congr
+                                  (Mathlib.Tactic.Ring.cast_pos (Mathlib.Meta.NormNum.isNat_ofNat K Nat.cast_one))
+                                  (Mathlib.Tactic.Ring.Common.atom_pf (decode bit) rfl
+                                    (Eq.mpr
+                                      (id
+                                        (congrArg
+                                          (fun _a =>
+                                            decode bit ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                              decode bit ^ Nat.rawCast 1 * _a)
+                                          (Eq.symm rfl)))
+                                      (Eq.refl (decode bit ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                  (Mathlib.Tactic.Ring.Common.sub_pf
+                                    (Mathlib.Tactic.Ring.Common.neg_add
+                                      (Mathlib.Tactic.Ring.Common.neg_mul (decode bit) (Nat.rawCast 1)
+                                        (Mathlib.Meta.NormNum.IsInt.to_raw_eq
+                                          (Mathlib.Meta.NormNum.isInt_neg (Eq.refl Neg.neg)
+                                            (Mathlib.Meta.NormNum.IsNat.to_isInt
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw K 1))
+                                            (Eq.refl (Int.negOfNat 1)))))
+                                      Mathlib.Tactic.Ring.Common.neg_zero)
+                                    (Mathlib.Tactic.Ring.Common.add_pf_add_lt (Nat.rawCast 1)
+                                      (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                        (decode bit ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast + 0)))))
+                                (Mathlib.Tactic.Ring.Common.add_mul
+                                  (Mathlib.Tactic.Ring.Common.mul_add
+                                    (Mathlib.Tactic.Ring.Common.mul_pf_left (decode selector) (Nat.rawCast 1)
+                                      (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                        (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                          (Mathlib.Meta.NormNum.IsNat.of_raw K 1)
+                                          (Mathlib.Meta.NormNum.IsNat.of_raw K 1) (Eq.refl 1))))
+                                    (Mathlib.Tactic.Ring.Common.mul_add
+                                      (Mathlib.Tactic.Ring.Common.mul_pf_left (decode selector) (Nat.rawCast 1)
+                                        (Mathlib.Tactic.Ring.Common.mul_pf_right (decode bit) (Nat.rawCast 1)
+                                          (Mathlib.Meta.NormNum.IsInt.to_raw_eq
+                                            (Mathlib.Meta.NormNum.isInt_mul (Eq.refl HMul.hMul)
+                                              (Mathlib.Meta.NormNum.IsNat.to_isInt
+                                                (Mathlib.Meta.NormNum.IsNat.of_raw K 1))
+                                              (Mathlib.Meta.NormNum.IsInt.of_raw K (Int.negOfNat 1))
+                                              (Eq.refl (Int.negOfNat 1))))))
+                                      (Mathlib.Tactic.Ring.Common.mul_zero
+                                        (decode selector ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                      (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                        (decode selector ^ Nat.rawCast 1 *
+                                            (decode bit ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast) +
+                                          0)))
+                                    (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                      (decode selector ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                      (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                        (decode selector ^ Nat.rawCast 1 *
+                                            (decode bit ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast) +
+                                          0))))
+                                  (Mathlib.Tactic.Ring.Common.zero_mul
+                                    (Nat.rawCast 1 + (decode bit ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast + 0)))
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                    (decode selector ^ Nat.rawCast 1 * Nat.rawCast 1 +
+                                      (decode selector ^ Nat.rawCast 1 *
+                                          (decode bit ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast) +
+                                        0)))))))),
+                      id
+                        (Eq.mpr (id (congrArg (fun _a => _a = decode selector * (decode bit * (decode bit - 1))) v5))
+                          (Eq.mpr
+                            (id
+                              (congrArg (fun _a => _a * decode b = decode selector * (decode bit * (decode bit - 1)))
+                                v0))
+                            (Eq.mpr
+                              (id
+                                (congrArg
+                                  (fun _a =>
+                                    decode selector * decode bit * _a =
+                                      decode selector * (decode bit * (decode bit - 1)))
+                                  v4))
+                              (Eq.mpr
+                                (id
+                                  (congrArg
+                                    (fun _a =>
+                                      decode selector * decode bit * (decode bit - _a) =
+                                        decode selector * (decode bit * (decode bit - 1)))
+                                    FIv_NativeValue.one.right))
+                                (Mathlib.Tactic.Ring.of_eq
+                                  (Mathlib.Tactic.Ring.Common.mul_congr
+                                    (Mathlib.Tactic.Ring.Common.mul_congr
+                                      (Mathlib.Tactic.Ring.Common.atom_pf (decode selector) rfl
+                                        (Eq.mpr
+                                          (id
+                                            (congrArg
+                                              (fun _a =>
+                                                decode selector ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                                  decode selector ^ Nat.rawCast 1 * _a)
+                                              (Eq.symm rfl)))
+                                          (Eq.refl (decode selector ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                      (Mathlib.Tactic.Ring.Common.atom_pf (decode bit) rfl
+                                        (Eq.mpr
+                                          (id
+                                            (congrArg
+                                              (fun _a =>
+                                                decode bit ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                                  decode bit ^ Nat.rawCast 1 * _a)
+                                              (Eq.symm rfl)))
+                                          (Eq.refl (decode bit ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                      (Mathlib.Tactic.Ring.Common.add_mul
+                                        (Mathlib.Tactic.Ring.Common.mul_add
+                                          (Mathlib.Tactic.Ring.Common.mul_pf_left (decode selector) (Nat.rawCast 1)
+                                            (Mathlib.Tactic.Ring.Common.mul_pf_right (decode bit) (Nat.rawCast 1)
+                                              (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                                (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw K 1)
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw K 1) (Eq.refl 1)))))
+                                          (Mathlib.Tactic.Ring.Common.mul_zero
+                                            (decode selector ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                          (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                            (decode selector ^ Nat.rawCast 1 *
+                                                (decode bit ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                              0)))
+                                        (Mathlib.Tactic.Ring.Common.zero_mul
+                                          (decode bit ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))
+                                        (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                          (decode selector ^ Nat.rawCast 1 *
+                                              (decode bit ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                            0))))
+                                    (Mathlib.Tactic.Ring.Common.sub_congr
+                                      (Mathlib.Tactic.Ring.Common.atom_pf (decode bit) rfl
+                                        (Eq.mpr
+                                          (id
+                                            (congrArg
+                                              (fun _a =>
+                                                decode bit ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                                  decode bit ^ Nat.rawCast 1 * _a)
+                                              (Eq.symm rfl)))
+                                          (Eq.refl (decode bit ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                      (Mathlib.Tactic.Ring.cast_pos (Mathlib.Meta.NormNum.isNat_ofNat K Nat.cast_one))
+                                      (Mathlib.Tactic.Ring.Common.sub_pf
+                                        (Mathlib.Tactic.Ring.Common.neg_add
+                                          (Mathlib.Meta.NormNum.IsInt.to_raw_eq
+                                            (Mathlib.Meta.NormNum.isInt_neg (Eq.refl Neg.neg)
+                                              (Mathlib.Meta.NormNum.IsNat.to_isInt
+                                                (Mathlib.Meta.NormNum.IsNat.of_raw K 1))
+                                              (Eq.refl (Int.negOfNat 1))))
+                                          Mathlib.Tactic.Ring.Common.neg_zero)
+                                        (Mathlib.Tactic.Ring.Common.add_pf_add_gt (Int.negOfNat 1).rawCast
+                                          (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                            (decode bit ^ Nat.rawCast 1 * Nat.rawCast 1 + 0)))))
+                                    (Mathlib.Tactic.Ring.Common.add_mul
+                                      (Mathlib.Tactic.Ring.Common.mul_add
+                                        (Mathlib.Tactic.Ring.Common.mul_pf_left (decode selector) (Nat.rawCast 1)
+                                          (Mathlib.Tactic.Ring.Common.mul_pf_left (decode bit) (Nat.rawCast 1)
+                                            (Mathlib.Meta.NormNum.IsInt.to_raw_eq
+                                              (Mathlib.Meta.NormNum.isInt_mul (Eq.refl HMul.hMul)
+                                                (Mathlib.Meta.NormNum.IsNat.to_isInt
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw K 1))
+                                                (Mathlib.Meta.NormNum.IsInt.of_raw K (Int.negOfNat 1))
+                                                (Eq.refl (Int.negOfNat 1))))))
+                                        (Mathlib.Tactic.Ring.Common.mul_add
+                                          (Mathlib.Tactic.Ring.Common.mul_pf_left (decode selector) (Nat.rawCast 1)
+                                            (Mathlib.Tactic.Ring.Common.mul_pp_pf_overlap (decode bit)
+                                              (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                                (Mathlib.Meta.NormNum.isNat_add (Eq.refl HAdd.hAdd)
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw ℕ 1)
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw ℕ 1) (Eq.refl 2)))
+                                              (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                                (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw K 1)
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw K 1) (Eq.refl 1)))))
+                                          (Mathlib.Tactic.Ring.Common.mul_zero
+                                            (decode selector ^ Nat.rawCast 1 *
+                                              (decode bit ^ Nat.rawCast 1 * Nat.rawCast 1)))
+                                          (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                            (decode selector ^ Nat.rawCast 1 *
+                                                (decode bit ^ Nat.rawCast 2 * Nat.rawCast 1) +
+                                              0)))
+                                        (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                          (decode selector ^ Nat.rawCast 1 *
+                                            (decode bit ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast))
+                                          (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                            (decode selector ^ Nat.rawCast 1 *
+                                                (decode bit ^ Nat.rawCast 2 * Nat.rawCast 1) +
+                                              0))))
+                                      (Mathlib.Tactic.Ring.Common.zero_mul
+                                        ((Int.negOfNat 1).rawCast + (decode bit ^ Nat.rawCast 1 * Nat.rawCast 1 + 0)))
+                                      (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                        (decode selector ^ Nat.rawCast 1 *
+                                            (decode bit ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast) +
+                                          (decode selector ^ Nat.rawCast 1 *
+                                              (decode bit ^ Nat.rawCast 2 * Nat.rawCast 1) +
+                                            0)))))
+                                  (Mathlib.Tactic.Ring.Common.mul_congr
+                                    (Mathlib.Tactic.Ring.Common.atom_pf (decode selector) rfl
+                                      (Eq.mpr
+                                        (id
+                                          (congrArg
+                                            (fun _a =>
+                                              decode selector ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                                decode selector ^ Nat.rawCast 1 * _a)
+                                            (Eq.symm rfl)))
+                                        (Eq.refl (decode selector ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                    (Mathlib.Tactic.Ring.Common.mul_congr
+                                      (Mathlib.Tactic.Ring.Common.atom_pf (decode bit) rfl
+                                        (Eq.mpr
+                                          (id
+                                            (congrArg
+                                              (fun _a =>
+                                                decode bit ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                                  decode bit ^ Nat.rawCast 1 * _a)
+                                              (Eq.symm rfl)))
+                                          (Eq.refl (decode bit ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                      (Mathlib.Tactic.Ring.Common.sub_congr
+                                        (Mathlib.Tactic.Ring.Common.atom_pf (decode bit) rfl
+                                          (Eq.mpr
+                                            (id
+                                              (congrArg
+                                                (fun _a =>
+                                                  decode bit ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                                    decode bit ^ Nat.rawCast 1 * _a)
+                                                (Eq.symm rfl)))
+                                            (Eq.refl (decode bit ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                        (Mathlib.Tactic.Ring.cast_pos (Mathlib.Meta.NormNum.isNat_ofNat K Nat.cast_one))
+                                        (Mathlib.Tactic.Ring.Common.sub_pf
+                                          (Mathlib.Tactic.Ring.Common.neg_add
+                                            (Mathlib.Meta.NormNum.IsInt.to_raw_eq
+                                              (Mathlib.Meta.NormNum.isInt_neg (Eq.refl Neg.neg)
+                                                (Mathlib.Meta.NormNum.IsNat.to_isInt
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw K 1))
+                                                (Eq.refl (Int.negOfNat 1))))
+                                            Mathlib.Tactic.Ring.Common.neg_zero)
+                                          (Mathlib.Tactic.Ring.Common.add_pf_add_gt (Int.negOfNat 1).rawCast
+                                            (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                              (decode bit ^ Nat.rawCast 1 * Nat.rawCast 1 + 0)))))
+                                      (Mathlib.Tactic.Ring.Common.add_mul
+                                        (Mathlib.Tactic.Ring.Common.mul_add
+                                          (Mathlib.Tactic.Ring.Common.mul_pf_left (decode bit) (Nat.rawCast 1)
+                                            (Mathlib.Meta.NormNum.IsInt.to_raw_eq
+                                              (Mathlib.Meta.NormNum.isInt_mul (Eq.refl HMul.hMul)
+                                                (Mathlib.Meta.NormNum.IsNat.to_isInt
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw K 1))
+                                                (Mathlib.Meta.NormNum.IsInt.of_raw K (Int.negOfNat 1))
+                                                (Eq.refl (Int.negOfNat 1)))))
+                                          (Mathlib.Tactic.Ring.Common.mul_add
+                                            (Mathlib.Tactic.Ring.Common.mul_pp_pf_overlap (decode bit)
+                                              (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                                (Mathlib.Meta.NormNum.isNat_add (Eq.refl HAdd.hAdd)
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw ℕ 1)
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw ℕ 1) (Eq.refl 2)))
+                                              (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                                (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw K 1)
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw K 1) (Eq.refl 1))))
+                                            (Mathlib.Tactic.Ring.Common.mul_zero
+                                              (decode bit ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                            (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                              (decode bit ^ Nat.rawCast 2 * Nat.rawCast 1 + 0)))
+                                          (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                            (decode bit ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast)
+                                            (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                              (decode bit ^ Nat.rawCast 2 * Nat.rawCast 1 + 0))))
+                                        (Mathlib.Tactic.Ring.Common.zero_mul
+                                          ((Int.negOfNat 1).rawCast + (decode bit ^ Nat.rawCast 1 * Nat.rawCast 1 + 0)))
+                                        (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                          (decode bit ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast +
+                                            (decode bit ^ Nat.rawCast 2 * Nat.rawCast 1 + 0)))))
+                                    (Mathlib.Tactic.Ring.Common.add_mul
+                                      (Mathlib.Tactic.Ring.Common.mul_add
+                                        (Mathlib.Tactic.Ring.Common.mul_pf_left (decode selector) (Nat.rawCast 1)
+                                          (Mathlib.Tactic.Ring.Common.mul_pf_right (decode bit) (Nat.rawCast 1)
+                                            (Mathlib.Meta.NormNum.IsInt.to_raw_eq
+                                              (Mathlib.Meta.NormNum.isInt_mul (Eq.refl HMul.hMul)
+                                                (Mathlib.Meta.NormNum.IsNat.to_isInt
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw K 1))
+                                                (Mathlib.Meta.NormNum.IsInt.of_raw K (Int.negOfNat 1))
+                                                (Eq.refl (Int.negOfNat 1))))))
+                                        (Mathlib.Tactic.Ring.Common.mul_add
+                                          (Mathlib.Tactic.Ring.Common.mul_pf_left (decode selector) (Nat.rawCast 1)
+                                            (Mathlib.Tactic.Ring.Common.mul_pf_right (decode bit) (Nat.rawCast 2)
+                                              (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                                (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw K 1)
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw K 1) (Eq.refl 1)))))
+                                          (Mathlib.Tactic.Ring.Common.mul_zero
+                                            (decode selector ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                          (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                            (decode selector ^ Nat.rawCast 1 *
+                                                (decode bit ^ Nat.rawCast 2 * Nat.rawCast 1) +
+                                              0)))
+                                        (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                          (decode selector ^ Nat.rawCast 1 *
+                                            (decode bit ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast))
+                                          (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                            (decode selector ^ Nat.rawCast 1 *
+                                                (decode bit ^ Nat.rawCast 2 * Nat.rawCast 1) +
+                                              0))))
+                                      (Mathlib.Tactic.Ring.Common.zero_mul
+                                        (decode bit ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast +
+                                          (decode bit ^ Nat.rawCast 2 * Nat.rawCast 1 + 0)))
+                                      (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                        (decode selector ^ Nat.rawCast 1 *
+                                            (decode bit ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast) +
+                                          (decode selector ^ Nat.rawCast 1 *
+                                              (decode bit ^ Nat.rawCast 2 * Nat.rawCast 1) +
+                                            0))))))))))⟩⟩⟩⟩⟩⟩⟩))
+'AspisR1.NJL_PathContext.source' depends on axioms: [propext, Classical.choice, Quot.sound]

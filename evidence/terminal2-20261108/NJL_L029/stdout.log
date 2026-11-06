@@ -1,0 +1,154 @@
+NJL_PathPacket.lean:51:2: error: unsolved goals
+case pos
+selector : NQ
+o : Openings
+hs : Canon selector
+hz : FIw_ArrayValue.canonical o.z
+hb : FIw_ArrayValue.canonical o.succ_z
+hc : ∀ (i : Fin 16), Canon (cell o.z i)
+hsucc : ∀ (i : Fin 16), Canon (cell o.succ_z i)
+c : Context
+residual : NQ
+events : Fin 6 → NJB_Cuts.Event
+cc : NJL_PathContext.reference selector (cell o.z 0) = ok c
+cd : Domain c
+clauses : NJL_PathContext.Clauses selector (cell o.z 0) residual c
+cut : NJL_PathContext.Cut selector (cell o.z 0) residual c events c.left c.right (NJL_PathContext.initial c) 6 2
+initial : ∀ (i : Fin 17), Canon (NJL_PathContext.initial c i)
+selected : decode c.selected = decode selector * decode (cell o.z 0)
+empty : decode c.emptyValue = decode selector * (1 - decode (cell o.z 0))
+head : decode c.head = decode selector * (decode (cell o.z 0) * (decode (cell o.z 0) - 1))
+after : Fin 17 → NQ
+run : NJL_PathTrace.run c (cell o.z) (cell o.succ_z) NJL_PathTrace.jobs (NJL_PathContext.initial c) = ok after
+trace : NJL_PathTrace.Trace c (cell o.z) (cell o.succ_z) NJL_PathTrace.jobs (NJL_PathContext.initial c) after
+ha : ∀ (i : Fin 17), Canon (after i)
+va :
+  ∀ (i : Fin 17),
+    decode (after i) =
+      if ↑i ≠ 0 then NJL_PathFrame.value c (cell o.z) (cell o.succ_z) i else decode (NJL_PathContext.initial c i)
+i : Fin 17
+same : ↑i = 0
+h9 : ¬9 ≤ ↑i
+h1 : ¬1 ≤ ↑i
+⊢ decode c.head =
+    if 9 ≤ 0 then
+      decode c.selected * (NJL_PathFrame.look (cell o.succ_z) (0 - 1) - NJL_PathFrame.look (cell o.z) (0 - 8))
+    else
+      if 1 ≤ 0 then decode c.emptyValue * (NJL_PathFrame.look (cell o.succ_z) (0 - 1) - NJL_PathFrame.look (cell o.z) 0)
+      else decode c.head
+NJL_PathPacket.lean:53:105: warning: This simp argument is unused:
+  if_neg h9
+
+Hint: Omit it from the simp argument list.
+  simp only [same, ̲ne_eq, ̲not_true_eq_false, ̲if_false, ̲NJL_PathContext.initial, ̲if_true,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲NJL_PathFrame.value,i̵f̵_̵n̵e̵g̵ h̵9̵,̵if_neg h1]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJL_PathPacket.lean:53:115: warning: This simp argument is unused:
+  if_neg h1
+
+Hint: Omit it from the simp argument list.
+  simp only [same, ̲ne_eq, ̲not_true_eq_false, ̲if_false, ̲NJL_PathContext.initial, ̲if_true,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲NJL_PathFrame.value, ̲if_neg h9,̵i̵f̵_̵n̵e̵g̵ ̵h̵1̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+structure AspisR1.NJL_PathPacket.Packet (selector : NQ) (o : Openings) : Type
+number of parameters: 2
+fields:
+  AspisR1.NJL_PathPacket.Packet.context : Context
+  AspisR1.NJL_PathPacket.Packet.residual : NQ
+  AspisR1.NJL_PathPacket.Packet.after : State
+  AspisR1.NJL_PathPacket.Packet.context_call : NJL_PathContext.reference selector (cell o.z 0) = ok self.context
+  AspisR1.NJL_PathPacket.Packet.context_domain : Domain self.context
+  AspisR1.NJL_PathPacket.Packet.context_clauses : NJL_PathContext.Clauses selector (cell o.z 0) self.residual
+      self.context
+  AspisR1.NJL_PathPacket.Packet.context_cut : ∃ events,
+      NJL_PathContext.Cut selector (cell o.z 0) self.residual self.context events self.context.left self.context.right
+        (NJL_PathContext.initial self.context) 6 2
+  AspisR1.NJL_PathPacket.Packet.selected_value : decode self.context.selected = decode selector * decode (cell o.z 0)
+  AspisR1.NJL_PathPacket.Packet.empty_value : decode self.context.emptyValue =
+      decode selector * (1 - decode (cell o.z 0))
+  AspisR1.NJL_PathPacket.Packet.head_value : decode self.context.head =
+      decode selector * (decode (cell o.z 0) * (decode (cell o.z 0) - 1))
+  AspisR1.NJL_PathPacket.Packet.run_call : NJL_PathTrace.run self.context (cell o.z) (cell o.succ_z) NJL_PathTrace.jobs
+        (NJL_PathContext.initial self.context) =
+      ok self.after
+  AspisR1.NJL_PathPacket.Packet.trace : NJL_PathTrace.Trace self.context (cell o.z) (cell o.succ_z) NJL_PathTrace.jobs
+      (NJL_PathContext.initial self.context) self.after
+  AspisR1.NJL_PathPacket.Packet.canonical : ∀ (i : Fin 17), Canon (self.after i)
+  AspisR1.NJL_PathPacket.Packet.value : ∀ (i : Fin 17),
+      decode (self.after i) = NJL_PathFrame.value self.context (cell o.z) (cell o.succ_z) i
+constructor:
+  AspisR1.NJL_PathPacket.Packet.mk {selector : NQ} {o : Openings} (context : Context) (residual : NQ) (after : State)
+    (context_call : NJL_PathContext.reference selector (cell o.z 0) = ok context) (context_domain : Domain context)
+    (context_clauses : NJL_PathContext.Clauses selector (cell o.z 0) residual context)
+    (context_cut :
+      ∃ events,
+        NJL_PathContext.Cut selector (cell o.z 0) residual context events context.left context.right
+          (NJL_PathContext.initial context) 6 2)
+    (selected_value : decode context.selected = decode selector * decode (cell o.z 0))
+    (empty_value : decode context.emptyValue = decode selector * (1 - decode (cell o.z 0)))
+    (head_value : decode context.head = decode selector * (decode (cell o.z 0) * (decode (cell o.z 0) - 1)))
+    (run_call :
+      NJL_PathTrace.run context (cell o.z) (cell o.succ_z) NJL_PathTrace.jobs (NJL_PathContext.initial context) =
+        ok after)
+    (trace :
+      NJL_PathTrace.Trace context (cell o.z) (cell o.succ_z) NJL_PathTrace.jobs (NJL_PathContext.initial context) after)
+    (canonical : ∀ (i : Fin 17), Canon (after i))
+    (value : ∀ (i : Fin 17), decode (after i) = NJL_PathFrame.value context (cell o.z) (cell o.succ_z) i) :
+    Packet selector o
+theorem AspisR1.NJL_PathPacket.source : ∀ (selector : NQ) (o : Openings),
+  Canon selector →
+    FIw_ArrayValue.canonical o.z →
+      FIw_ArrayValue.canonical o.succ_z →
+        ∃ p, reference selector o = ok (pack p.after) ∧ FIw_ArrayValue.canonical (pack p.after) :=
+fun selector o hs hz hb =>
+  have hc := fun i => hz (cell o.z i) (List.getElem_mem (NJB_Absorption.cell._proof_2 o.z i));
+  have hsucc := fun i => hb (cell o.succ_z i) (List.getElem_mem (NJB_Absorption.cell._proof_2 o.succ_z i));
+  let ⟨c, h✝⟩ := NJL_PathContext.source selector (cell o.z 0) hs (hc 0)
+  let ⟨residual, h✝¹⟩ := h✝
+  let ⟨events, h✝²⟩ := h✝¹
+  let ⟨cc, right✝⟩ := h✝²
+  let ⟨cd, right✝¹⟩ := right✝
+  let ⟨clauses, right✝²⟩ := right✝¹
+  let ⟨cut, right✝³⟩ := right✝²
+  let ⟨initial, right✝⁴⟩ := right✝³
+  let ⟨selected, right✝⁵⟩ := right✝⁴
+  let ⟨empty, head⟩ := right✝⁵
+  let ⟨after, h✝³⟩ := NJL_PathFrame.source c (cell o.z) (cell o.succ_z) (NJL_PathContext.initial c) cd hc hsucc initial
+  let ⟨run, right✝⁶⟩ := h✝³
+  let ⟨trace, right✝⁷⟩ := right✝⁶
+  let ⟨ha, va⟩ := right✝⁷
+  have value := fun i =>
+    Eq.mpr (id (congrArg (fun _a => _a = NJL_PathFrame.value c (cell o.z) (cell o.succ_z) i) (va i)))
+      (if same : ↑i = 0 then sorry
+      else
+        Eq.mpr (id (congrArg (fun _a => _a = NJL_PathFrame.value c (cell o.z) (cell o.succ_z) i) (if_pos same)))
+          (Eq.refl (NJL_PathFrame.value c (cell o.z) (cell o.succ_z) i)));
+  let p :=
+    { context := c, residual := residual, after := after, context_call := cc, context_domain := cd,
+      context_clauses := clauses, context_cut := Exists.intro events cut, selected_value := selected,
+      empty_value := empty, head_value := head, run_call := run, trace := trace, canonical := ha, value := value };
+  Exists.intro p
+    ⟨Eq.mpr
+        (id
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (Eq.trans
+                  (congrFun' (congrArg Bind.bind cc) fun c => do
+                    let out ←
+                      NJL_PathTrace.run c (cell o.z) (cell o.succ_z) NJL_PathTrace.jobs (NJL_PathContext.initial c)
+                    ok (pack out))
+                  (bind_tc_ok c fun y => do
+                    let out ←
+                      NJL_PathTrace.run y (cell o.z) (cell o.succ_z) NJL_PathTrace.jobs (NJL_PathContext.initial y)
+                    ok (pack out)))
+                (Eq.trans (congrFun' (congrArg Bind.bind run) fun out => ok (pack out))
+                  (bind_tc_ok after fun y => ok (pack y)))))
+            (ok (pack p.after))))
+        (Eq.refl (ok (pack after))),
+      NJB_ArrayCarrier.canonical_array (fun i => p.after (Fin.cast size17 i)) fun x => ha (Fin.cast size17 x)⟩
+'AspisR1.NJL_PathPacket.size17' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJL_PathPacket.pack_decode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJL_PathPacket.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

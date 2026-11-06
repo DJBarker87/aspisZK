@@ -1,0 +1,66 @@
+theorem AspisR1.NJL_TagRoot.source : ∀ (s : Selectors) (c : Fin 30),
+  FIw_ArrayValue.canonical s.high →
+    ∃ after,
+      reference s c = ok (NJB_Words.value after) ∧
+        NJL_TagSchedule.Schedule (NJL_TagData.indices c) (NJL_TagPartition.chunks 68 (NJL_TagData.indices c)) ∧
+          NJL_TagChunks.Trace s (NJL_TagPartition.chunks 68 (NJL_TagData.indices c)) zero after ∧
+            Canon (NJB_Words.value after) ∧
+              decode (NJB_Words.value after) = NJL_TagMeaning.model s (NJL_TagData.indices c) :=
+fun s c hs =>
+  let ⟨after, h✝⟩ :=
+    NJL_TagChunks.source s (NJL_TagPartition.chunks 68 (NJL_TagData.indices c)) zero
+      (NJL_TagPartition.coordinate c).right hs fun i => id (of_decide_eq_true (id (Eq.refl true)))
+  let ⟨call, right✝⟩ := h✝
+  let ⟨trace, right✝¹⟩ := right✝
+  let ⟨ha, va⟩ := right✝¹
+  Exists.intro after
+    ⟨of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans (congrFun' (congrArg Bind.bind call) fun words => ok (NJB_Words.value words))
+                (bind_tc_ok after fun y => ok (NJB_Words.value y))))
+            (ok (NJB_Words.value after)))
+          (eq_self (ok (NJB_Words.value after)))),
+      ⟨(NJL_TagSchedule.coordinate c).left,
+        ⟨trace,
+          ⟨⟨⟨ha 0, ha 1⟩, ⟨ha 2, ha 3⟩⟩,
+            Eq.mpr
+              (id
+                (congrArg (fun _a => _a = NJL_TagMeaning.model s (NJL_TagData.indices c))
+                  (Eq.symm (NJL_TagMeaning.encode_decode (NJB_Words.value after)))))
+              (Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      (NJL_TagMeaning.encode fun i => ↑↑(_a i)) = NJL_TagMeaning.model s (NJL_TagData.indices c))
+                    (NJB_Words.word_value after)))
+                (have words :=
+                  funext fun i =>
+                    have val := va i;
+                    have initial := rfl;
+                    Eq.mpr
+                      (id
+                        (congrArg (fun _a => ↑_a = ↑(NJL_TagRawTrace.dot s (NJL_TagData.indices c) i))
+                          (Eq.mp
+                            (congrArg (fun _a => ↑(after i) = _a % AspisV8R17.RawReducer.P)
+                              (Nat.zero_add (NJL_TagRawTrace.dot s (NJL_TagData.indices c) i)))
+                            (Eq.mp
+                              (congrArg
+                                (fun _a =>
+                                  ↑(after i) =
+                                    (_a + NJL_TagRawTrace.dot s (NJL_TagData.indices c) i) % AspisV8R17.RawReducer.P)
+                                initial)
+                              (Eq.mp
+                                (congrArg
+                                  (fun _a =>
+                                    ↑(after i) = (↑(zero i) + NJL_TagRawTrace.dot s _a i) % AspisV8R17.RawReducer.P)
+                                  (NJL_TagPartition.coordinate c).left)
+                                val)))))
+                      (NJL_TagMeaning.residue (NJL_TagRawTrace.dot s (NJL_TagData.indices c) i));
+                Eq.mpr
+                  (id
+                    (congrArg (fun _a => NJL_TagMeaning.encode _a = NJL_TagMeaning.model s (NJL_TagData.indices c))
+                      words))
+                  (NJL_TagMeaning.value s (NJL_TagData.indices c))))⟩⟩⟩⟩
+'AspisR1.NJL_TagRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]

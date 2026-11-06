@@ -1,0 +1,277 @@
+theorem AspisR1.NJL_WindowFold.source : ∀ (theta : Fin 8 → NQ) (cache : Fin 8 → NP) (o : Std.Array NQ 16#usize)
+  (start : Fin 9) (slots : List (Fin 8)) (before : NQ),
+  (∀ (i : Fin 8), Canon (theta i)) →
+    Canon before →
+      FIw_ArrayValue.canonical o →
+        (∀ (i : Fin 8), NJB_PreparedLaws.Domain (cache i) (theta i)) →
+          ∃ after,
+            run cache o start slots before = ok after ∧
+              Trace cache o start slots before after ∧
+                Canon after ∧
+                  decode after =
+                    decode before +
+                      (List.map (fun i => decode (theta i) * decode (NJL_WindowStep.opened o start i)) slots).sum :=
+fun theta cache o start slots before ht hb ho domains =>
+  List.rec (motive := fun slots =>
+    ∀ (before : NQ),
+      Canon before →
+        ∃ after,
+          run cache o start slots before = ok after ∧
+            Trace cache o start slots before after ∧
+              Canon after ∧
+                decode after =
+                  decode before +
+                    (List.map (fun i => decode (theta i) * decode (NJL_WindowStep.opened o start i)) slots).sum)
+    (fun before hb =>
+      Exists.intro before
+        ⟨rfl,
+          ⟨Trace.nil before,
+            ⟨hb,
+              of_eq_true
+                (Eq.trans (congrArg (Eq (decode before)) (add_zero (decode before))) (eq_self (decode before)))⟩⟩⟩)
+    (fun slot slots ih before hb =>
+      let ⟨product, h✝⟩ :=
+        NJL_WindowStep.source (theta slot) before (cache slot) o start slot (ht slot) hb ho (domains slot)
+      let ⟨middle, h✝¹⟩ := h✝
+      let ⟨cp, right✝⟩ := h✝¹
+      let ⟨cm, right✝¹⟩ := right✝
+      let ⟨call, right✝²⟩ := right✝¹
+      let ⟨cut, right✝³⟩ := right✝²
+      let ⟨hm, vm⟩ := right✝³
+      let ⟨after, h✝²⟩ := ih middle hm
+      let ⟨ca, right✝⁴⟩ := h✝²
+      let ⟨ta, right✝⁵⟩ := right✝⁴
+      let ⟨ha, va⟩ := right✝⁵
+      Exists.intro after
+        ⟨of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg Eq
+                  (Eq.trans
+                    (Eq.trans (congrFun' (congrArg Bind.bind call) fun middle => run cache o start slots middle)
+                      (bind_tc_ok middle (run cache o start slots)))
+                    ca))
+                (ok after))
+              (eq_self (ok after))),
+          ⟨Trace.cons (Exists.intro product ⟨cp, ⟨cm, cut⟩⟩) ta,
+            ⟨ha,
+              Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      _a =
+                        decode before +
+                          (List.map (fun i => decode (theta i) * decode (NJL_WindowStep.opened o start i))
+                              (slot :: slots)).sum)
+                    va))
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        _a +
+                            (List.map (fun i => decode (theta i) * decode (NJL_WindowStep.opened o start i))
+                                slots).sum =
+                          decode before +
+                            (List.map (fun i => decode (theta i) * decode (NJL_WindowStep.opened o start i))
+                                (slot :: slots)).sum)
+                      vm))
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          decode before + decode (theta slot) * decode (NJL_WindowStep.opened o start slot) +
+                              (List.map (fun i => decode (theta i) * decode (NJL_WindowStep.opened o start i))
+                                  slots).sum =
+                            decode before + _a.sum)
+                        List.map_cons))
+                    (Eq.mpr
+                      (id
+                        (congrArg
+                          (fun _a =>
+                            decode before + decode (theta slot) * decode (NJL_WindowStep.opened o start slot) +
+                                (List.map (fun i => decode (theta i) * decode (NJL_WindowStep.opened o start i))
+                                    slots).sum =
+                              decode before + _a)
+                          List.sum_cons))
+                      (Mathlib.Tactic.Ring.of_eq
+                        (Mathlib.Tactic.Ring.Common.add_congr
+                          (Mathlib.Tactic.Ring.Common.add_congr
+                            (Mathlib.Tactic.Ring.Common.atom_pf (decode before) rfl
+                              (Eq.mpr
+                                (id
+                                  (congrArg
+                                    (fun _a =>
+                                      decode before ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                        decode before ^ Nat.rawCast 1 * _a)
+                                    (Eq.symm rfl)))
+                                (Eq.refl (decode before ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                            (Mathlib.Tactic.Ring.Common.mul_congr
+                              (Mathlib.Tactic.Ring.Common.atom_pf (decode (theta slot)) rfl
+                                (Eq.mpr
+                                  (id
+                                    (congrArg
+                                      (fun _a =>
+                                        decode (theta slot) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                          decode (theta slot) ^ Nat.rawCast 1 * _a)
+                                      (Eq.symm rfl)))
+                                  (Eq.refl (decode (theta slot) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                              (Mathlib.Tactic.Ring.Common.atom_pf (decode (NJL_WindowStep.opened o start slot)) rfl
+                                (Eq.mpr
+                                  (id
+                                    (congrArg
+                                      (fun _a =>
+                                        decode (NJL_WindowStep.opened o start slot) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                          decode (NJL_WindowStep.opened o start slot) ^ Nat.rawCast 1 * _a)
+                                      (Eq.symm rfl)))
+                                  (Eq.refl
+                                    (decode (NJL_WindowStep.opened o start slot) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                              (Mathlib.Tactic.Ring.Common.add_mul
+                                (Mathlib.Tactic.Ring.Common.mul_add
+                                  (Mathlib.Tactic.Ring.Common.mul_pf_left (decode (theta slot)) (Nat.rawCast 1)
+                                    (Mathlib.Tactic.Ring.Common.mul_pf_right
+                                      (decode (NJL_WindowStep.opened o start slot)) (Nat.rawCast 1)
+                                      (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                        (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                          (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1)
+                                          (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1) (Eq.refl 1)))))
+                                  (Mathlib.Tactic.Ring.Common.mul_zero
+                                    (decode (theta slot) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                    (decode (theta slot) ^ Nat.rawCast 1 *
+                                        (decode (NJL_WindowStep.opened o start slot) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                      0)))
+                                (Mathlib.Tactic.Ring.Common.zero_mul
+                                  (decode (NJL_WindowStep.opened o start slot) ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))
+                                (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                  (decode (theta slot) ^ Nat.rawCast 1 *
+                                      (decode (NJL_WindowStep.opened o start slot) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                    0))))
+                            (Mathlib.Tactic.Ring.Common.add_pf_add_lt (decode before ^ Nat.rawCast 1 * Nat.rawCast 1)
+                              (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                (decode (theta slot) ^ Nat.rawCast 1 *
+                                    (decode (NJL_WindowStep.opened o start slot) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                  0))))
+                          (Mathlib.Tactic.Ring.Common.atom_pf
+                            (List.map (fun i => decode (theta i) * decode (NJL_WindowStep.opened o start i)) slots).sum
+                            rfl
+                            (Eq.mpr
+                              (id
+                                (congrArg
+                                  (fun _a =>
+                                    (List.map (fun i => decode (theta i) * decode (NJL_WindowStep.opened o start i))
+                                              slots).sum ^
+                                          Nat.rawCast 1 *
+                                        Nat.rawCast 1 =
+                                      (List.map (fun i => decode (theta i) * decode (NJL_WindowStep.opened o start i))
+                                              slots).sum ^
+                                          Nat.rawCast 1 *
+                                        _a)
+                                  (Eq.symm rfl)))
+                              (Eq.refl
+                                ((List.map (fun i => decode (theta i) * decode (NJL_WindowStep.opened o start i))
+                                        slots).sum ^
+                                    Nat.rawCast 1 *
+                                  Nat.rawCast 1))))
+                          (Mathlib.Tactic.Ring.Common.add_pf_add_lt (decode before ^ Nat.rawCast 1 * Nat.rawCast 1)
+                            (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                              (decode (theta slot) ^ Nat.rawCast 1 *
+                                (decode (NJL_WindowStep.opened o start slot) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                              (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                ((List.map (fun i => decode (theta i) * decode (NJL_WindowStep.opened o start i))
+                                          slots).sum ^
+                                      Nat.rawCast 1 *
+                                    Nat.rawCast 1 +
+                                  0)))))
+                        (Mathlib.Tactic.Ring.Common.add_congr
+                          (Mathlib.Tactic.Ring.Common.atom_pf (decode before) rfl
+                            (Eq.mpr
+                              (id
+                                (congrArg
+                                  (fun _a =>
+                                    decode before ^ Nat.rawCast 1 * Nat.rawCast 1 = decode before ^ Nat.rawCast 1 * _a)
+                                  (Eq.symm rfl)))
+                              (Eq.refl (decode before ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                          (Mathlib.Tactic.Ring.Common.add_congr
+                            (Mathlib.Tactic.Ring.Common.mul_congr
+                              (Mathlib.Tactic.Ring.Common.atom_pf (decode (theta slot)) rfl
+                                (Eq.mpr
+                                  (id
+                                    (congrArg
+                                      (fun _a =>
+                                        decode (theta slot) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                          decode (theta slot) ^ Nat.rawCast 1 * _a)
+                                      (Eq.symm rfl)))
+                                  (Eq.refl (decode (theta slot) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                              (Mathlib.Tactic.Ring.Common.atom_pf (decode (NJL_WindowStep.opened o start slot)) rfl
+                                (Eq.mpr
+                                  (id
+                                    (congrArg
+                                      (fun _a =>
+                                        decode (NJL_WindowStep.opened o start slot) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                          decode (NJL_WindowStep.opened o start slot) ^ Nat.rawCast 1 * _a)
+                                      (Eq.symm rfl)))
+                                  (Eq.refl
+                                    (decode (NJL_WindowStep.opened o start slot) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                              (Mathlib.Tactic.Ring.Common.add_mul
+                                (Mathlib.Tactic.Ring.Common.mul_add
+                                  (Mathlib.Tactic.Ring.Common.mul_pf_left (decode (theta slot)) (Nat.rawCast 1)
+                                    (Mathlib.Tactic.Ring.Common.mul_pf_right
+                                      (decode (NJL_WindowStep.opened o start slot)) (Nat.rawCast 1)
+                                      (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                        (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                          (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1)
+                                          (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1) (Eq.refl 1)))))
+                                  (Mathlib.Tactic.Ring.Common.mul_zero
+                                    (decode (theta slot) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                    (decode (theta slot) ^ Nat.rawCast 1 *
+                                        (decode (NJL_WindowStep.opened o start slot) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                      0)))
+                                (Mathlib.Tactic.Ring.Common.zero_mul
+                                  (decode (NJL_WindowStep.opened o start slot) ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))
+                                (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                  (decode (theta slot) ^ Nat.rawCast 1 *
+                                      (decode (NJL_WindowStep.opened o start slot) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                    0))))
+                            (Mathlib.Tactic.Ring.Common.atom_pf
+                              (List.map (fun i => decode (theta i) * decode (NJL_WindowStep.opened o start i))
+                                  slots).sum
+                              rfl
+                              (Eq.mpr
+                                (id
+                                  (congrArg
+                                    (fun _a =>
+                                      (List.map (fun i => decode (theta i) * decode (NJL_WindowStep.opened o start i))
+                                                slots).sum ^
+                                            Nat.rawCast 1 *
+                                          Nat.rawCast 1 =
+                                        (List.map (fun i => decode (theta i) * decode (NJL_WindowStep.opened o start i))
+                                                slots).sum ^
+                                            Nat.rawCast 1 *
+                                          _a)
+                                    (Eq.symm rfl)))
+                                (Eq.refl
+                                  ((List.map (fun i => decode (theta i) * decode (NJL_WindowStep.opened o start i))
+                                          slots).sum ^
+                                      Nat.rawCast 1 *
+                                    Nat.rawCast 1))))
+                            (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                              (decode (theta slot) ^ Nat.rawCast 1 *
+                                (decode (NJL_WindowStep.opened o start slot) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                              (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                ((List.map (fun i => decode (theta i) * decode (NJL_WindowStep.opened o start i))
+                                          slots).sum ^
+                                      Nat.rawCast 1 *
+                                    Nat.rawCast 1 +
+                                  0))))
+                          (Mathlib.Tactic.Ring.Common.add_pf_add_lt (decode before ^ Nat.rawCast 1 * Nat.rawCast 1)
+                            (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                              (decode (theta slot) ^ Nat.rawCast 1 *
+                                  (decode (NJL_WindowStep.opened o start slot) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                ((List.map (fun i => decode (theta i) * decode (NJL_WindowStep.opened o start i))
+                                          slots).sum ^
+                                      Nat.rawCast 1 *
+                                    Nat.rawCast 1 +
+                                  0)))))))))⟩⟩⟩)
+    slots before hb
+'AspisR1.NJL_WindowFold.source' depends on axioms: [propext, Classical.choice, Quot.sound]

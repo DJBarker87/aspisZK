@@ -1,0 +1,83 @@
+def AspisR1.NJL_EndpointRoot.copy : core.marker.Copy NQ :=
+{ cloneInst := { clone := fun x => ok x } }
+def AspisR1.NJL_EndpointLookup.Cut : Fin 136 → Bool → Prop :=
+fun index consumer =>
+  NJL_EndpointLookup.row index consumer < 1024 ∧
+    NJL_EndpointLookup.gc index consumer < 30 ∧ NJL_EndpointLookup.pc index consumer < 43
+theorem AspisR1.NJL_EndpointRoot.source : ∀ (before : State) (s : Selectors) (index : Fin 136) (consumer : Bool)
+  (tag weight : U32) (lookup : NJL_EndpointLookup.Cut index consumer),
+  (∀ (i : Fin 103), Canon (before i)) →
+    FIw_ArrayValue.canonical s.high →
+      ↑weight ≤ 1 →
+        have g := NJL_EndpointLookup.groupIndex index consumer lookup;
+        have p := NJL_EndpointLookup.patternIndex index consumer lookup;
+        have high := NJL_EndpointLookup.high s index consumer lookup;
+        ∃ first second middle after,
+          NDE_Reference12.selected_binary_ref copy high FIq_Native.field.QM31.ZERO weight =
+              ok (NJL_EndpointWrites.selected high weight) ∧
+            FIq_Native.field.QM31.add (before (NJL_EndpointIndices.weight g))
+                  (NJL_EndpointWrites.selected high weight) =
+                ok first ∧
+              FIq_Native.field.QM31.add (before (NJL_EndpointIndices.pattern p)) high = ok second ∧
+                NJL_EndpointCell.Cut before middle (NJL_EndpointIndices.weight g)
+                    (NJL_EndpointWrites.selected high weight) first
+                    { operation := 1, left := before (NJL_EndpointIndices.weight g),
+                      right := NJL_EndpointWrites.selected high weight }
+                    1 ∧
+                  NJL_EndpointCell.Cut middle after (NJL_EndpointIndices.pattern p) high second
+                      { operation := 1, left := middle (NJL_EndpointIndices.pattern p), right := high } 1 ∧
+                    reference before s index consumer lookup tag weight = ok after ∧
+                      (∀ (i : Fin 103), Canon (after i)) ∧
+                        ∀ (i : Fin 103),
+                          decode (after i) =
+                            if i = NJL_EndpointIndices.weight g then decode (before i) + decode high * ↑↑weight
+                            else
+                              if i = NJL_EndpointIndices.pattern p then decode (before i) + decode high
+                              else decode (before i) :=
+fun before s index consumer tag weight lookup hb hs bounded =>
+  have hhigh := NJL_EndpointLookup.high_canonical s index consumer lookup hs;
+  let ⟨first, h✝⟩ :=
+    NJL_EndpointWrites.source before (NJL_EndpointLookup.groupIndex index consumer lookup)
+      (NJL_EndpointLookup.patternIndex index consumer lookup) (NJL_EndpointLookup.high s index consumer lookup) weight
+      hb hhigh
+  let ⟨second, h✝¹⟩ := h✝
+  let ⟨middle, h✝²⟩ := h✝¹
+  let ⟨after, h✝³⟩ := h✝²
+  let ⟨selected, right✝⟩ := h✝³
+  let ⟨fcall, right✝¹⟩ := right✝
+  let ⟨scall, right✝²⟩ := right✝¹
+  let ⟨mcut, right✝³⟩ := right✝²
+  let ⟨acut, right✝⁴⟩ := right✝³
+  let ⟨call, right✝⁵⟩ := right✝⁴
+  let ⟨ha, value⟩ := right✝⁵
+  Exists.intro first
+    (Exists.intro second
+      (Exists.intro middle
+        (Exists.intro after
+          ⟨selected copy,
+            ⟨fcall,
+              ⟨scall,
+                ⟨mcut,
+                  ⟨acut,
+                    ⟨call,
+                      ⟨ha, fun i =>
+                        Eq.mp
+                          (congrArg (Eq (decode (after i)))
+                            (ite_congr
+                              (Eq.refl
+                                (i = NJL_EndpointIndices.weight (NJL_EndpointLookup.groupIndex index consumer lookup)))
+                              (fun a =>
+                                congrArg (HAdd.hAdd (decode (before i)))
+                                  (selected_value (NJL_EndpointLookup.high s index consumer lookup) weight hhigh
+                                    bounded))
+                              fun a =>
+                              Eq.refl
+                                (if
+                                    i =
+                                      NJL_EndpointIndices.pattern
+                                        (NJL_EndpointLookup.patternIndex index consumer lookup) then
+                                  decode (before i) + decode (NJL_EndpointLookup.high s index consumer lookup)
+                                else decode (before i))))
+                          (value i)⟩⟩⟩⟩⟩⟩⟩)))
+'AspisR1.NJL_EndpointRoot.selected_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJL_EndpointRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]

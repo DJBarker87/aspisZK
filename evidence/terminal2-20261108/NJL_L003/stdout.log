@@ -1,0 +1,2044 @@
+theorem AspisR1.NJL_LowDischarge.source : ∀ (high : Fin 7 → NQ) (low : Fin 16 → NQ) (sum : NQ) (c : Fin 7),
+  (∀ (i : Fin 7), Canon (high i)) →
+    (∀ (i : Fin 16), Canon (low i)) →
+      Canon sum →
+        ∃ r,
+          (∀ (j : Fin 17), Canon (r j)) ∧
+            Clauses high low sum r c ∧
+              ∀ (events : Fin (NJB_Cuts.lowCount c + 1) → NJB_Cuts.Event) (calls next : ℕ) (out : NQ),
+                NJB_Cuts.low high low sum r c events calls next out → NJB_ActiveRawLow.step high low sum c = ok out :=
+fun high low sum c hh hl hs =>
+  List.Mem.casesOn (motive := fun a x =>
+    List.finRange ({ len := 6 }.len + 1) = a →
+      Fintype.complete c ≍ x →
+        ∃ r,
+          (∀ (j : Fin 17), Canon (r j)) ∧
+            Clauses high low sum r c ∧
+              ∀ (events : Fin (NJB_Cuts.lowCount c + 1) → NJB_Cuts.Event) (calls next : ℕ) (out : NQ),
+                NJB_Cuts.low high low sum r c events calls next out → NJB_ActiveRawLow.step high low sum c = ok out)
+    (Fintype.complete c)
+    (fun «as» h =>
+      List.cons.noConfusion h fun head_eq =>
+        Eq.ndrec (motive := fun c =>
+          ∀ (this : c ∈ Fintype.elems),
+            (fun x1 x2 => (fun i => i) x1 :: x2)
+                  ⟨1,
+                    Nat.le_of_lt
+                      (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 6 }.len + 1))))))⟩
+                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                    ⟨2, Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 6 }.len + 1)))))⟩
+                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                      ⟨3, Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 6 }.len + 1))))⟩
+                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                        ⟨4, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 6 }.len + 1)))⟩
+                        ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨5, Nat.le_of_lt (Nat.le_refl ({ len := 6 }.len + 1))⟩
+                          ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨6, Nat.le_refl ({ len := 6 }.len + 1)⟩ []))))) ≍
+                «as» →
+              this ≍ List.Mem.head «as» →
+                ∃ r,
+                  (∀ (j : Fin 17), Canon (r j)) ∧
+                    Clauses high low sum r c ∧
+                      ∀ (events : Fin (NJB_Cuts.lowCount c + 1) → NJB_Cuts.Event) (calls next : ℕ) (out : NQ),
+                        NJB_Cuts.low high low sum r c events calls next out →
+                          NJB_ActiveRawLow.step high low sum c = ok out)
+          (fun this tail_eq =>
+            Eq.ndrec (motive := fun «as» =>
+              this ≍ List.Mem.head «as» →
+                ∃ r,
+                  (∀ (j : Fin 17), Canon (r j)) ∧
+                    Clauses high low sum r
+                        ((fun i => i)
+                          ⟨0,
+                            Nat.le_of_lt
+                              (Nat.le_of_lt
+                                (Nat.le_of_lt
+                                  (Nat.le_of_lt
+                                    (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 6 }.len + 1)))))))⟩) ∧
+                      ∀
+                        (events :
+                          Fin
+                              (NJB_Cuts.lowCount
+                                  ((fun i => i)
+                                    ⟨0,
+                                      Nat.le_of_lt
+                                        (Nat.le_of_lt
+                                          (Nat.le_of_lt
+                                            (Nat.le_of_lt
+                                              (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 6 }.len + 1)))))))⟩) +
+                                1) →
+                            NJB_Cuts.Event)
+                        (calls next : ℕ) (out : NQ),
+                        NJB_Cuts.low high low sum r
+                            ((fun i => i)
+                              ⟨0,
+                                Nat.le_of_lt
+                                  (Nat.le_of_lt
+                                    (Nat.le_of_lt
+                                      (Nat.le_of_lt
+                                        (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 6 }.len + 1)))))))⟩)
+                            events calls next out →
+                          NJB_ActiveRawLow.step high low sum
+                              ((fun i => i)
+                                ⟨0,
+                                  Nat.le_of_lt
+                                    (Nat.le_of_lt
+                                      (Nat.le_of_lt
+                                        (Nat.le_of_lt
+                                          (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 6 }.len + 1)))))))⟩) =
+                            ok out)
+              (fun h =>
+                let ⟨q0, h✝⟩ := NJB_StubLaws.qm_add (low 11) (low 12) (hl 11) (hl 12)
+                let ⟨h0, right✝⟩ := h✝
+                let ⟨c0, right✝¹⟩ := right✝
+                let ⟨p, h✝¹⟩ := NJB_StubLaws.qm_mul (high 0) q0 (hh 0) c0
+                let ⟨hp, right✝²⟩ := h✝¹
+                let ⟨cp, right✝³⟩ := right✝²
+                let ⟨v, h✝²⟩ := NJB_StubLaws.qm_add sum p hs cp
+                let ⟨hv, right✝⁴⟩ := h✝²
+                let ⟨cv, right✝⁵⟩ := right✝⁴
+                let r :=
+                  ![q0, p, v, FIq_Native.field.QM31.ZERO, FIq_Native.field.QM31.ZERO, FIq_Native.field.QM31.ZERO,
+                    FIq_Native.field.QM31.ZERO, FIq_Native.field.QM31.ZERO, FIq_Native.field.QM31.ZERO,
+                    FIq_Native.field.QM31.ZERO, FIq_Native.field.QM31.ZERO, FIq_Native.field.QM31.ZERO,
+                    FIq_Native.field.QM31.ZERO, FIq_Native.field.QM31.ZERO, FIq_Native.field.QM31.ZERO,
+                    FIq_Native.field.QM31.ZERO, FIq_Native.field.QM31.ZERO];
+                Exists.intro r
+                  ⟨fun j =>
+                    List.Mem.casesOn (motive := fun a x =>
+                      List.finRange ({ len := 16 }.len + 1) = a → Fintype.complete j ≍ x → Canon (r j))
+                      (Fintype.complete j)
+                      (fun «as» h =>
+                        List.cons.noConfusion h fun head_eq =>
+                          Eq.ndrec (motive := fun j =>
+                            ∀ (this : j ∈ Fintype.elems),
+                              (fun x1 x2 => (fun i => i) x1 :: x2)
+                                    ⟨1,
+                                      Nat.le_of_lt
+                                        (Nat.le_of_lt
+                                          (Nat.le_of_lt
+                                            (Nat.le_of_lt
+                                              (Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_refl ({ len := 16 }.len + 1))))))))))))))))⟩
+                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                      ⟨2,
+                                        Nat.le_of_lt
+                                          (Nat.le_of_lt
+                                            (Nat.le_of_lt
+                                              (Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_refl ({ len := 16 }.len + 1)))))))))))))))⟩
+                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                        ⟨3,
+                                          Nat.le_of_lt
+                                            (Nat.le_of_lt
+                                              (Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_refl ({ len := 16 }.len + 1))))))))))))))⟩
+                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                          ⟨4,
+                                            Nat.le_of_lt
+                                              (Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_refl ({ len := 16 }.len + 1)))))))))))))⟩
+                                          ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                            ⟨5,
+                                              Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_refl ({ len := 16 }.len + 1))))))))))))⟩
+                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                              ⟨6,
+                                                Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_refl ({ len := 16 }.len + 1)))))))))))⟩
+                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                ⟨7,
+                                                  Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_refl ({ len := 16 }.len + 1))))))))))⟩
+                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                  ⟨8,
+                                                    Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_refl ({ len := 16 }.len + 1)))))))))⟩
+                                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                    ⟨9,
+                                                      Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_refl ({ len := 16 }.len + 1))))))))⟩
+                                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                      ⟨10,
+                                                        Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_refl ({ len := 16 }.len + 1)))))))⟩
+                                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                        ⟨11,
+                                                          Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_refl ({ len := 16 }.len + 1))))))⟩
+                                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                          ⟨12,
+                                                            Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_refl ({ len := 16 }.len + 1)))))⟩
+                                                          ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                            ⟨13,
+                                                              Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt (Nat.le_refl ({ len := 16 }.len + 1))))⟩
+                                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                              ⟨14,
+                                                                Nat.le_of_lt
+                                                                  (Nat.le_of_lt (Nat.le_refl ({ len := 16 }.len + 1)))⟩
+                                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                ⟨15, Nat.le_of_lt (Nat.le_refl ({ len := 16 }.len + 1))⟩
+                                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                  ⟨16, Nat.le_refl ({ len := 16 }.len + 1)⟩
+                                                                  []))))))))))))))) ≍
+                                  «as» →
+                                this ≍ List.Mem.head «as» → Canon (r j))
+                            (fun this tail_eq =>
+                              Eq.ndrec (motive := fun «as» =>
+                                this ≍ List.Mem.head «as» →
+                                  Canon
+                                    (r
+                                      ((fun i => i)
+                                        ⟨0,
+                                          Nat.le_of_lt
+                                            (Nat.le_of_lt
+                                              (Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_refl
+                                                                            ({ len := 16 }.len + 1)))))))))))))))))⟩)))
+                                (fun h => id c0) (eq_of_heq tail_eq))
+                            (eq_of_heq head_eq) (Fintype.complete j))
+                      (fun b {«as»} a h =>
+                        List.cons.noConfusion h fun head_eq =>
+                          Eq.ndrec (motive := fun b =>
+                            (fun x1 x2 => (fun i => i) x1 :: x2)
+                                  ⟨1,
+                                    Nat.le_of_lt
+                                      (Nat.le_of_lt
+                                        (Nat.le_of_lt
+                                          (Nat.le_of_lt
+                                            (Nat.le_of_lt
+                                              (Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_refl ({ len := 16 }.len + 1))))))))))))))))⟩
+                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                    ⟨2,
+                                      Nat.le_of_lt
+                                        (Nat.le_of_lt
+                                          (Nat.le_of_lt
+                                            (Nat.le_of_lt
+                                              (Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_refl ({ len := 16 }.len + 1)))))))))))))))⟩
+                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                      ⟨3,
+                                        Nat.le_of_lt
+                                          (Nat.le_of_lt
+                                            (Nat.le_of_lt
+                                              (Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_refl ({ len := 16 }.len + 1))))))))))))))⟩
+                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                        ⟨4,
+                                          Nat.le_of_lt
+                                            (Nat.le_of_lt
+                                              (Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_refl ({ len := 16 }.len + 1)))))))))))))⟩
+                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                          ⟨5,
+                                            Nat.le_of_lt
+                                              (Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_refl ({ len := 16 }.len + 1))))))))))))⟩
+                                          ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                            ⟨6,
+                                              Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_refl ({ len := 16 }.len + 1)))))))))))⟩
+                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                              ⟨7,
+                                                Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_refl ({ len := 16 }.len + 1))))))))))⟩
+                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                ⟨8,
+                                                  Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_refl ({ len := 16 }.len + 1)))))))))⟩
+                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                  ⟨9,
+                                                    Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_refl ({ len := 16 }.len + 1))))))))⟩
+                                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                    ⟨10,
+                                                      Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_refl ({ len := 16 }.len + 1)))))))⟩
+                                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                      ⟨11,
+                                                        Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt (Nat.le_refl ({ len := 16 }.len + 1))))))⟩
+                                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                        ⟨12,
+                                                          Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt (Nat.le_refl ({ len := 16 }.len + 1)))))⟩
+                                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                          ⟨13,
+                                                            Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt (Nat.le_refl ({ len := 16 }.len + 1))))⟩
+                                                          ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                            ⟨14,
+                                                              Nat.le_of_lt
+                                                                (Nat.le_of_lt (Nat.le_refl ({ len := 16 }.len + 1)))⟩
+                                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                              ⟨15, Nat.le_of_lt (Nat.le_refl ({ len := 16 }.len + 1))⟩
+                                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                ⟨16, Nat.le_refl ({ len := 16 }.len + 1)⟩
+                                                                []))))))))))))))) ≍
+                                «as» →
+                              Fintype.complete j ≍ List.Mem.tail b a → Canon (r j))
+                            (fun tail_eq =>
+                              Eq.ndrec (motive := fun {«as»} =>
+                                ∀ (a : List.Mem j «as»),
+                                  Fintype.complete j ≍
+                                      List.Mem.tail
+                                        ((fun i => i)
+                                          ⟨0,
+                                            Nat.le_of_lt
+                                              (Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_refl
+                                                                              ({ len := 16 }.len + 1)))))))))))))))))⟩)
+                                        a →
+                                    Canon (r j))
+                                (fun a h =>
+                                  List.Mem.casesOn (motive := fun a_1 x =>
+                                    (fun x1 x2 => (fun i => i) x1 :: x2)
+                                          ⟨1,
+                                            Nat.le_of_lt
+                                              (Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_refl
+                                                                            ({ len := 16 }.len + 1))))))))))))))))⟩
+                                          ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                            ⟨2,
+                                              Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_refl
+                                                                            ({ len := 16 }.len + 1)))))))))))))))⟩
+                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                              ⟨3,
+                                                Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_refl
+                                                                            ({ len := 16 }.len + 1))))))))))))))⟩
+                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                ⟨4,
+                                                  Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_refl
+                                                                            ({ len := 16 }.len + 1)))))))))))))⟩
+                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                  ⟨5,
+                                                    Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_refl
+                                                                            ({ len := 16 }.len + 1))))))))))))⟩
+                                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                    ⟨6,
+                                                      Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_refl
+                                                                            ({ len := 16 }.len + 1)))))))))))⟩
+                                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                      ⟨7,
+                                                        Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_refl ({ len := 16 }.len + 1))))))))))⟩
+                                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                        ⟨8,
+                                                          Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_refl ({ len := 16 }.len + 1)))))))))⟩
+                                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                          ⟨9,
+                                                            Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_refl ({ len := 16 }.len + 1))))))))⟩
+                                                          ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                            ⟨10,
+                                                              Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_refl ({ len := 16 }.len + 1)))))))⟩
+                                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                              ⟨11,
+                                                                Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_refl ({ len := 16 }.len + 1))))))⟩
+                                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                ⟨12,
+                                                                  Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_refl ({ len := 16 }.len + 1)))))⟩
+                                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                  ⟨13,
+                                                                    Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_refl ({ len := 16 }.len + 1))))⟩
+                                                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                    ⟨14,
+                                                                      Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_refl ({ len := 16 }.len + 1)))⟩
+                                                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                      ⟨15,
+                                                                        Nat.le_of_lt
+                                                                          (Nat.le_refl ({ len := 16 }.len + 1))⟩
+                                                                      ((fun x1 x2 => ⋯)
+                                                                        ⟨16, Nat.le_refl ({ len := 16 }.len + 1)⟩
+                                                                        []))))))))))))))) =
+                                        a_1 →
+                                      a ≍ x → Canon (r j))
+                                    a
+                                    (fun «as» h =>
+                                      List.cons.noConfusion h fun head_eq =>
+                                        Eq.ndrec (motive := fun j =>
+                                          ∀
+                                            (a :
+                                              List.Mem j
+                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                  ⟨1,
+                                                    Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt (Nat.le_of_lt ⋯))))))))))⟩
+                                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                    ⟨2,
+                                                      Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt (Nat.le_of_lt ⋯)))))))))⟩
+                                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                      ⟨3,
+                                                        Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt ⋯))))))))⟩
+                                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                        ⟨4,
+                                                          Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt ⋯)))))))⟩
+                                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                          ⟨5,
+                                                            Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt ⋯))))))⟩
+                                                          ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                            ⟨6,
+                                                              Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt ⋯)))))⟩
+                                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                              ⟨7,
+                                                                Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt ⋯))))⟩
+                                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                ⟨8,
+                                                                  Nat.le_of_lt
+                                                                    (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt ⋯)))⟩
+                                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                  ⟨9, Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt ⋯))⟩
+                                                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                    ⟨10, Nat.le_of_lt (Nat.le_of_lt ⋯)⟩
+                                                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                      ⟨11, Nat.le_of_lt ⋯⟩
+                                                                      ((fun x1 x2 => ⋯) ⟨12, ⋯⟩ (⋯ ⋯ ⋯)))))))))))))),
+                                            (fun x1 x2 => (fun i => i) x1 :: x2)
+                                                  ⟨2,
+                                                    Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt ⋯)))))))))⟩
+                                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                    ⟨3,
+                                                      Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt ⋯))))))))⟩
+                                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                      ⟨4,
+                                                        Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt ⋯)))))))⟩
+                                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                        ⟨5,
+                                                          Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt ⋯))))))⟩
+                                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                          ⟨6,
+                                                            Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt ⋯)))))⟩
+                                                          ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                            ⟨7,
+                                                              Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt ⋯))))⟩
+                                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                              ⟨8,
+                                                                Nat.le_of_lt
+                                                                  (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt ⋯)))⟩
+                                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                ⟨9, Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt ⋯))⟩
+                                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                  ⟨10, Nat.le_of_lt (Nat.le_of_lt ⋯)⟩
+                                                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                    ⟨11, Nat.le_of_lt ⋯⟩
+                                                                    ((fun x1 x2 => ⋯) ⟨12, ⋯⟩ (⋯ ⋯ ⋯))))))))))) ≍
+                                                «as» →
+                                              a ≍ List.Mem.head «as» → Canon (r j))
+                                          (fun a tail_eq =>
+                                            Eq.ndrec (motive := fun «as» =>
+                                              a ≍ List.Mem.head «as» →
+                                                Canon
+                                                  (r
+                                                    ((fun i => i)
+                                                      ⟨1,
+                                                        Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt ⋯)))))))⟩)))
+                                              (fun h => id cp) (eq_of_heq tail_eq))
+                                          (eq_of_heq head_eq) a)
+                                    (fun b {«as»} a_1 h =>
+                                      List.cons.noConfusion h fun head_eq =>
+                                        Eq.ndrec (motive := fun b =>
+                                          (fun x1 x2 => (fun i => i) x1 :: x2)
+                                                ⟨2,
+                                                  Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_refl
+                                                                                ({ len := 16 }.len + 1)))))))))))))))⟩
+                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                  ⟨3,
+                                                    Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_refl
+                                                                                ({ len := 16 }.len + 1))))))))))))))⟩
+                                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                    ⟨4,
+                                                      Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_refl
+                                                                                ({ len := 16 }.len + 1)))))))))))))⟩
+                                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                      ⟨5,
+                                                        Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_refl
+                                                                                ({ len := 16 }.len + 1))))))))))))⟩
+                                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                        ⟨6,
+                                                          Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_refl
+                                                                                ({ len := 16 }.len + 1)))))))))))⟩
+                                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                          ⟨7,
+                                                            Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_refl
+                                                                                ({ len := 16 }.len + 1))))))))))⟩
+                                                          ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                            ⟨8,
+                                                              Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_refl
+                                                                                ({ len := 16 }.len + 1)))))))))⟩
+                                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                              ⟨9,
+                                                                Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_refl
+                                                                                ({ len := 16 }.len + 1))))))))⟩
+                                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                ⟨10,
+                                                                  Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_refl
+                                                                                ({ len := 16 }.len + 1)))))))⟩
+                                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                  ⟨11,
+                                                                    Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_refl ({ len := 16 }.len + 1))))))⟩
+                                                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                    ⟨12,
+                                                                      Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_refl ({ len := 16 }.len + 1)))))⟩
+                                                                    ((fun x1 x2 => ⋯)
+                                                                      ⟨13,
+                                                                        Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_refl ({ len := 16 }.len + 1))))⟩
+                                                                      (⋯
+                                                                        ⟨14,
+                                                                          Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_refl ({ len := 16 }.len + 1)))⟩
+                                                                        ⋯)))))))))))) ≍
+                                              «as» →
+                                            a ≍ List.Mem.tail b a_1 → Canon (r j))
+                                          (fun tail_eq =>
+                                            Eq.ndrec (motive := fun {«as»} =>
+                                              ∀ (a_2 : List.Mem j «as»),
+                                                a ≍
+                                                    List.Mem.tail
+                                                      ((fun i => i)
+                                                        ⟨1,
+                                                          Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt ⋯))))))⟩)
+                                                      a_2 →
+                                                  Canon (r j))
+                                              (fun a_2 h =>
+                                                List.Mem.casesOn (motive := fun a x =>
+                                                  (fun x1 x2 => (fun i => i) x1 :: x2)
+                                                        ⟨2,
+                                                          Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt ⋯))))))⟩
+                                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                          ⟨3,
+                                                            Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt ⋯)))))⟩
+                                                          ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                            ⟨4,
+                                                              Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt ⋯))))⟩
+                                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                              ⟨5,
+                                                                Nat.le_of_lt
+                                                                  (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt ⋯)))⟩
+                                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                ⟨6, Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt ⋯))⟩
+                                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                  ⟨7, Nat.le_of_lt (Nat.le_of_lt ⋯)⟩
+                                                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                    ⟨8, Nat.le_of_lt ⋯⟩
+                                                                    ((fun x1 x2 => ⋯) ⟨9, ⋯⟩ (⋯ ⋯ ⋯)))))))) =
+                                                      a →
+                                                    a_2 ≍ x → Canon (r j))
+                                                  a_2
+                                                  (fun «as» h =>
+                                                    List.cons.noConfusion h fun head_eq =>
+                                                      Eq.ndrec (motive := fun j =>
+                                                        ∀
+                                                          (a :
+                                                            List.Mem j
+                                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                ⟨2, Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt ⋯))⟩
+                                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                  ⟨3, Nat.le_of_lt (Nat.le_of_lt ⋯)⟩
+                                                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                    ⟨4, Nat.le_of_lt ⋯⟩
+                                                                    ((fun x1 x2 => ⋯) ⟨5, ⋯⟩ (⋯ ⋯ ⋯)))))),
+                                                          (fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                ⟨3, Nat.le_of_lt (Nat.le_of_lt ⋯)⟩
+                                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                  ⟨4, Nat.le_of_lt ⋯⟩
+                                                                  ((fun x1 x2 => ⋯) ⟨5, ⋯⟩ (⋯ ⋯ ⋯))) ≍
+                                                              «as» →
+                                                            a ≍ List.Mem.head «as» → Canon (r j))
+                                                        (fun a tail_eq =>
+                                                          Eq.ndrec (motive := fun «as» =>
+                                                            a ≍ List.Mem.head «as» → Canon (r ((fun i => i) ⟨2, ⋯⟩)))
+                                                            (fun h => id cv) (eq_of_heq tail_eq))
+                                                        (eq_of_heq head_eq) a_2)
+                                                  (fun b {«as»} a h =>
+                                                    List.cons.noConfusion h fun head_eq =>
+                                                      Eq.ndrec (motive := fun b =>
+                                                        (fun x1 x2 => (fun i => i) x1 :: x2)
+                                                              ⟨3, Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt ⋯))⟩
+                                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                ⟨4, Nat.le_of_lt (Nat.le_of_lt ⋯)⟩
+                                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                  ⟨5, Nat.le_of_lt ⋯⟩
+                                                                  ((fun x1 x2 => ⋯) ⟨6, ⋯⟩ (⋯ ⋯ ⋯)))) ≍
+                                                            «as» →
+                                                          a_2 ≍ List.Mem.tail b a → Canon (r j))
+                                                        (fun tail_eq =>
+                                                          Eq.ndrec (motive := fun {«as»} =>
+                                                            ∀ (a : List.Mem j «as»),
+                                                              a_2 ≍ List.Mem.tail ((fun i => i) ⋯) a → Canon (r j))
+                                                            (fun a h =>
+                                                              List.Mem.casesOn (motive := fun a_3 x =>
+                                                                ⋯ ⋯ ⋯ = a_3 → a ≍ x → Canon (r j)) a
+                                                                (fun «as» h =>
+                                                                  List.cons.noConfusion h fun head_eq =>
+                                                                    Eq.ndrec (motive := ⋯) ⋯ ⋯ a)
+                                                                (fun b {«as»} a_3 h =>
+                                                                  List.cons.noConfusion h fun head_eq =>
+                                                                    Eq.ndrec (motive := ⋯) ⋯ ⋯)
+                                                                (Eq.refl
+                                                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                    ⟨3, Nat.le_of_lt ⋯⟩
+                                                                    ((fun x1 x2 => ⋯) ⟨4, ⋯⟩ (⋯ ⋯ ⋯))))
+                                                                (HEq.refl a))
+                                                            (eq_of_heq tail_eq) a)
+                                                        (eq_of_heq head_eq))
+                                                  (Eq.refl
+                                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                      ⟨2,
+                                                        Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt ⋯))))))))⟩
+                                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                        ⟨3,
+                                                          Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt ⋯)))))))⟩
+                                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                          ⟨4,
+                                                            Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt ⋯))))))⟩
+                                                          ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                            ⟨5,
+                                                              Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt ⋯)))))⟩
+                                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                              ⟨6,
+                                                                Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt ⋯))))⟩
+                                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                ⟨7,
+                                                                  Nat.le_of_lt
+                                                                    (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt ⋯)))⟩
+                                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                  ⟨8, Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt ⋯))⟩
+                                                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                    ⟨9, Nat.le_of_lt (Nat.le_of_lt ⋯)⟩
+                                                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                      ⟨10, Nat.le_of_lt ⋯⟩
+                                                                      ((fun x1 x2 => ⋯) ⟨11, ⋯⟩ (⋯ ⋯ ⋯))))))))))))
+                                                  (HEq.refl a_2))
+                                              (eq_of_heq tail_eq) a_1)
+                                          (eq_of_heq head_eq))
+                                    (Eq.refl
+                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                        ⟨1,
+                                          Nat.le_of_lt
+                                            (Nat.le_of_lt
+                                              (Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_refl
+                                                                          ({ len := 16 }.len + 1))))))))))))))))⟩
+                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                          ⟨2,
+                                            Nat.le_of_lt
+                                              (Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_refl
+                                                                          ({ len := 16 }.len + 1)))))))))))))))⟩
+                                          ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                            ⟨3,
+                                              Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_refl
+                                                                          ({ len := 16 }.len + 1))))))))))))))⟩
+                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                              ⟨4,
+                                                Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_refl
+                                                                          ({ len := 16 }.len + 1)))))))))))))⟩
+                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                ⟨5,
+                                                  Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_refl ({ len := 16 }.len + 1))))))))))))⟩
+                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                  ⟨6,
+                                                    Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_refl ({ len := 16 }.len + 1)))))))))))⟩
+                                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                    ⟨7,
+                                                      Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_refl ({ len := 16 }.len + 1))))))))))⟩
+                                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                      ⟨8,
+                                                        Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_refl ({ len := 16 }.len + 1)))))))))⟩
+                                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                        ⟨9,
+                                                          Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_refl ({ len := 16 }.len + 1))))))))⟩
+                                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                          ⟨10,
+                                                            Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_refl ({ len := 16 }.len + 1)))))))⟩
+                                                          ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                            ⟨11,
+                                                              Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_refl ({ len := 16 }.len + 1))))))⟩
+                                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                              ⟨12,
+                                                                Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_refl ({ len := 16 }.len + 1)))))⟩
+                                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                ⟨13,
+                                                                  Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_refl ({ len := 16 }.len + 1))))⟩
+                                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                  ⟨14,
+                                                                    Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_refl ({ len := 16 }.len + 1)))⟩
+                                                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                    ⟨15,
+                                                                      Nat.le_of_lt
+                                                                        (Nat.le_refl ({ len := 16 }.len + 1))⟩
+                                                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                      ⟨16, Nat.le_refl ({ len := 16 }.len + 1)⟩
+                                                                      [])))))))))))))))))
+                                    (HEq.refl a))
+                                (eq_of_heq tail_eq) a)
+                            (eq_of_heq head_eq))
+                      (Eq.refl (List.finRange ({ len := 16 }.len + 1))) (HEq.refl (Fintype.complete j)),
+                    ⟨fun j =>
+                      List.Mem.casesOn (motive := fun a x =>
+                        List.finRange
+                              ({
+                                    len :=
+                                      NJB_Cuts.lowCount
+                                        ((fun i => i)
+                                          ⟨0,
+                                            Nat.le_of_lt
+                                              (Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt (Nat.le_refl ({ len := 6 }.len + 1)))))))⟩) }.len +
+                                1) =
+                            a →
+                          Fintype.complete j ≍ x →
+                            operation
+                                (if
+                                    ↑j =
+                                      NJB_Cuts.lowCount
+                                          ((fun i => i)
+                                            ⟨0,
+                                              Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt (Nat.le_refl ({ len := 6 }.len + 1)))))))⟩) -
+                                        1 then
+                                  0
+                                else 1)
+                                (NJB_Cuts.lowLeft high low sum r
+                                  ((fun i => i)
+                                    ⟨0,
+                                      Nat.le_of_lt
+                                        (Nat.le_of_lt
+                                          (Nat.le_of_lt
+                                            (Nat.le_of_lt
+                                              (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 6 }.len + 1)))))))⟩)
+                                  j)
+                                (NJB_Cuts.lowRight low r
+                                  ((fun i => i)
+                                    ⟨0,
+                                      Nat.le_of_lt
+                                        (Nat.le_of_lt
+                                          (Nat.le_of_lt
+                                            (Nat.le_of_lt
+                                              (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 6 }.len + 1)))))))⟩)
+                                  j) =
+                              ok
+                                (r
+                                  ⟨↑j,
+                                    Clauses._proof_2
+                                      ((fun i => i)
+                                        ⟨0,
+                                          Nat.le_of_lt
+                                            (Nat.le_of_lt
+                                              (Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt (Nat.le_refl ({ len := 6 }.len + 1)))))))⟩)
+                                      j⟩))
+                        (Fintype.complete j)
+                        (fun «as» h =>
+                          List.cons.noConfusion h fun head_eq =>
+                            Eq.ndrec (motive := fun j =>
+                              ∀ (this : j ∈ Fintype.elems),
+                                (fun x1 x2 => (fun i => i) x1 :: x2)
+                                      ⟨1,
+                                        Nat.le_of_lt
+                                          (Nat.le_refl
+                                            ({
+                                                  len :=
+                                                    NJB_Cuts.lowCount
+                                                      ((fun i => i)
+                                                        ⟨0,
+                                                          Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_refl
+                                                                        ({ len := 6 }.len + 1)))))))⟩) }.len +
+                                              1))⟩
+                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                        ⟨2,
+                                          Nat.le_refl
+                                            ({
+                                                  len :=
+                                                    NJB_Cuts.lowCount
+                                                      ((fun i => i)
+                                                        ⟨0,
+                                                          Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_refl
+                                                                        ({ len := 6 }.len + 1)))))))⟩) }.len +
+                                              1)⟩
+                                        []) ≍
+                                    «as» →
+                                  this ≍ List.Mem.head «as» →
+                                    operation
+                                        (if
+                                            ↑j =
+                                              NJB_Cuts.lowCount
+                                                  ((fun i => i)
+                                                    ⟨0,
+                                                      Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_refl ({ len := 6 }.len + 1)))))))⟩) -
+                                                1 then
+                                          0
+                                        else 1)
+                                        (NJB_Cuts.lowLeft high low sum r
+                                          ((fun i => i)
+                                            ⟨0,
+                                              Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt (Nat.le_refl ({ len := 6 }.len + 1)))))))⟩)
+                                          j)
+                                        (NJB_Cuts.lowRight low r
+                                          ((fun i => i)
+                                            ⟨0,
+                                              Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt (Nat.le_refl ({ len := 6 }.len + 1)))))))⟩)
+                                          j) =
+                                      ok
+                                        (r
+                                          ⟨↑j,
+                                            Clauses._proof_2
+                                              ((fun i => i)
+                                                ⟨0,
+                                                  Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt (Nat.le_refl ({ len := 6 }.len + 1)))))))⟩)
+                                              j⟩))
+                              (fun this tail_eq =>
+                                Eq.ndrec (motive := fun «as» =>
+                                  this ≍ List.Mem.head «as» →
+                                    operation
+                                        (if
+                                            ↑((fun i => i)
+                                                  ⟨0,
+                                                    Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_refl
+                                                          ({
+                                                                len :=
+                                                                  NJB_Cuts.lowCount
+                                                                    ((fun i => i)
+                                                                      ⟨0,
+                                                                        Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_of_lt
+                                                                                (Nat.le_of_lt
+                                                                                  (Nat.le_of_lt
+                                                                                    (Nat.le_refl
+                                                                                      ({ len := 6 }.len +
+                                                                                        1)))))))⟩) }.len +
+                                                            1)))⟩) =
+                                              NJB_Cuts.lowCount
+                                                  ((fun i => i)
+                                                    ⟨0,
+                                                      Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_refl ({ len := 6 }.len + 1)))))))⟩) -
+                                                1 then
+                                          0
+                                        else 1)
+                                        (NJB_Cuts.lowLeft high low sum r
+                                          ((fun i => i)
+                                            ⟨0,
+                                              Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt (Nat.le_refl ({ len := 6 }.len + 1)))))))⟩)
+                                          ((fun i => i)
+                                            ⟨0,
+                                              Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_refl
+                                                    ({
+                                                          len :=
+                                                            NJB_Cuts.lowCount
+                                                              ((fun i => i)
+                                                                ⟨0,
+                                                                  Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_refl
+                                                                                ({ len := 6 }.len + 1)))))))⟩) }.len +
+                                                      1)))⟩))
+                                        (NJB_Cuts.lowRight low r
+                                          ((fun i => i)
+                                            ⟨0,
+                                              Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt (Nat.le_refl ({ len := 6 }.len + 1)))))))⟩)
+                                          ((fun i => i)
+                                            ⟨0,
+                                              Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_refl
+                                                    ({
+                                                          len :=
+                                                            NJB_Cuts.lowCount
+                                                              ((fun i => i)
+                                                                ⟨0,
+                                                                  Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_refl
+                                                                                ({ len := 6 }.len + 1)))))))⟩) }.len +
+                                                      1)))⟩)) =
+                                      ok
+                                        (r
+                                          ⟨↑((fun i => i)
+                                                ⟨0,
+                                                  Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_refl
+                                                        ({
+                                                              len :=
+                                                                NJB_Cuts.lowCount
+                                                                  ((fun i => i)
+                                                                    ⟨0,
+                                                                      Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_of_lt
+                                                                                (Nat.le_of_lt
+                                                                                  (Nat.le_refl
+                                                                                    ({ len := 6 }.len +
+                                                                                      1)))))))⟩) }.len +
+                                                          1)))⟩),
+                                            Clauses._proof_2
+                                              ((fun i => i)
+                                                ⟨0,
+                                                  Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt (Nat.le_refl ({ len := 6 }.len + 1)))))))⟩)
+                                              ((fun i => i)
+                                                ⟨0,
+                                                  Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_refl
+                                                        ({
+                                                              len :=
+                                                                NJB_Cuts.lowCount
+                                                                  ((fun i => i)
+                                                                    ⟨0,
+                                                                      Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_of_lt
+                                                                                (Nat.le_of_lt
+                                                                                  (Nat.le_refl
+                                                                                    ({ len := 6 }.len +
+                                                                                      1)))))))⟩) }.len +
+                                                          1)))⟩)⟩))
+                                  (fun h =>
+                                    Eq.mpr
+                                      (id
+                                        (congrFun'
+                                          (congrArg Eq
+                                            (Eq.trans
+                                              (ite_cond_eq_false
+                                                (FIq_Native.field.QM31.mul
+                                                  (NJB_Cuts.lowLeft high low sum r
+                                                    ((fun i => i)
+                                                      ⟨0,
+                                                        Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_refl ({ len := 6 }.len + 1)))))))⟩)
+                                                    ((fun i => i)
+                                                      ⟨0,
+                                                        Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_refl
+                                                              ({
+                                                                    len :=
+                                                                      NJB_Cuts.lowCount
+                                                                        ((fun i => i) ⟨0, Nat.le_of_lt ⋯⟩) }.len +
+                                                                1)))⟩))
+                                                  (NJB_Cuts.lowRight low r
+                                                    ((fun i => i)
+                                                      ⟨0,
+                                                        Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_refl ({ len := 6 }.len + 1)))))))⟩)
+                                                    ((fun i => i)
+                                                      ⟨0,
+                                                        Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_refl
+                                                              ({
+                                                                    len :=
+                                                                      NJB_Cuts.lowCount
+                                                                        ((fun i => i) ⟨0, Nat.le_of_lt ⋯⟩) }.len +
+                                                                1)))⟩)))
+                                                (FIq_Native.field.QM31.add
+                                                  (NJB_Cuts.lowLeft high low sum r
+                                                    ((fun i => i)
+                                                      ⟨0,
+                                                        Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_refl ({ len := 6 }.len + 1)))))))⟩)
+                                                    ((fun i => i)
+                                                      ⟨0,
+                                                        Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_refl
+                                                              ({
+                                                                    len :=
+                                                                      NJB_Cuts.lowCount
+                                                                        ((fun i => i) ⟨0, Nat.le_of_lt ⋯⟩) }.len +
+                                                                1)))⟩))
+                                                  (NJB_Cuts.lowRight low r
+                                                    ((fun i => i)
+                                                      ⟨0,
+                                                        Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_refl ({ len := 6 }.len + 1)))))))⟩)
+                                                    ((fun i => i)
+                                                      ⟨0,
+                                                        Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_refl
+                                                              ({
+                                                                    len :=
+                                                                      NJB_Cuts.lowCount
+                                                                        ((fun i => i) ⟨0, Nat.le_of_lt ⋯⟩) }.len +
+                                                                1)))⟩)))
+                                                (Eq.trans
+                                                  (congrFun' (congrArg Eq (ite_cond_eq_false 0 1 zero_ne_one._simp_1))
+                                                    0)
+                                                  one_ne_zero._simp_1))
+                                              (congr
+                                                (congrArg FIq_Native.field.QM31.add
+                                                  (Eq.trans
+                                                    (ite_cond_eq_true
+                                                      (if
+                                                          ↑((fun i => i)
+                                                                ⟨0,
+                                                                  Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_refl ({ len := ⋯ }.len + 1)))⟩) =
+                                                            0 then
+                                                        low
+                                                          (NJB_Cuts.lowIndex
+                                                            ((fun i => i)
+                                                              ⟨0,
+                                                                Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_refl ({ len := 6 }.len + 1)))))))⟩)
+                                                            0)
+                                                      else
+                                                        r
+                                                          ⟨↑((fun i => i)
+                                                                  ⟨0,
+                                                                    Nat.le_of_lt
+                                                                      (Nat.le_of_lt (Nat.le_refl (⋯ + 1)))⟩) -
+                                                              1,
+                                                            NJB_Cuts.lowLeft._proof_2
+                                                              ((fun i => i)
+                                                                ⟨0,
+                                                                  Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_refl
+                                                                                ({ len := 6 }.len + 1)))))))⟩)
+                                                              ((fun i => i)
+                                                                ⟨0,
+                                                                  Nat.le_of_lt
+                                                                    (Nat.le_of_lt (Nat.le_refl (⋯.len + 1)))⟩)⟩)
+                                                      (if
+                                                          ↑((fun i => i)
+                                                                ⟨0,
+                                                                  Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_refl ({ len := ⋯ }.len + 1)))⟩) =
+                                                            NJB_Cuts.lowCount
+                                                                ((fun i => i)
+                                                                  ⟨0,
+                                                                    Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_of_lt
+                                                                                (Nat.le_refl
+                                                                                  ({ len := 6 }.len + 1)))))))⟩) -
+                                                              1 then
+                                                        high
+                                                          ((fun i => i)
+                                                            ⟨0,
+                                                              Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_refl ({ len := 6 }.len + 1)))))))⟩)
+                                                      else sum)
+                                                      (Eq.trans Order.lt_one_iff._simp_1 (eq_self 0)))
+                                                    (Eq.trans
+                                                      (ite_cond_eq_true
+                                                        (low
+                                                          (NJB_Cuts.lowIndex
+                                                            ((fun i => i)
+                                                              ⟨0,
+                                                                Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_refl ({ len := 6 }.len + 1)))))))⟩)
+                                                            0))
+                                                        (r
+                                                          ⟨↑((fun i => i)
+                                                                  ⟨0,
+                                                                    Nat.le_of_lt
+                                                                      (Nat.le_of_lt (Nat.le_refl (⋯ + 1)))⟩) -
+                                                              1,
+                                                            NJB_Cuts.lowLeft._proof_2
+                                                              ((fun i => i)
+                                                                ⟨0,
+                                                                  Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_refl
+                                                                                ({ len := 6 }.len + 1)))))))⟩)
+                                                              ((fun i => i)
+                                                                ⟨0,
+                                                                  Nat.le_of_lt
+                                                                    (Nat.le_of_lt (Nat.le_refl (⋯.len + 1)))⟩)⟩)
+                                                        (eq_self 0))
+                                                      (congrArg low
+                                                        (congrFun'
+                                                          (congrArg Option.getD
+                                                            (Eq.trans
+                                                              (congrFun'
+                                                                (congrArg getElem?
+                                                                  (NJB_Cuts.lowIndices.match_1.eq_1
+                                                                    (fun x => List (Fin 16)) (fun _ => [11, 12])
+                                                                    (fun _ => [0, 11, 12]) (fun _ => [0, 12])
+                                                                    (fun _ => [11]) (fun _ => [0, 11])
+                                                                    (fun _ => [1, 2, 5, ⋯]) fun x => [0, 2, 4, ⋯]))
+                                                                0)
+                                                              (getElem?_pos [11, 12] 0
+                                                                (of_eq_true
+                                                                  (Eq.trans
+                                                                    (Eq.trans
+                                                                      (congrArg (LT.lt 0)
+                                                                        (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                                                      Order.lt_two_iff._simp_1)
+                                                                    zero_le._simp_1)))))
+                                                          0)))))
+                                                (Eq.trans
+                                                  (ite_cond_eq_true
+                                                    (low
+                                                      (NJB_Cuts.lowIndex
+                                                        ((fun i => i)
+                                                          ⟨0,
+                                                            Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_refl ({ len := 6 }.len + 1)))))))⟩)
+                                                        (↑((fun i => i)
+                                                              ⟨0,
+                                                                Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_refl ({ len := ⋯ }.len + 1)))⟩) +
+                                                          1)))
+                                                    (if
+                                                        ↑((fun i => i)
+                                                              ⟨0,
+                                                                Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_refl
+                                                                      ({ len := NJB_Cuts.lowCount ⋯ }.len + 1)))⟩) =
+                                                          NJB_Cuts.lowCount
+                                                              ((fun i => i)
+                                                                ⟨0,
+                                                                  Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_refl
+                                                                                ({ len := 6 }.len + 1)))))))⟩) -
+                                                            1 then
+                                                      if
+                                                          NJB_Cuts.lowCount
+                                                              ((fun i => i)
+                                                                ⟨0,
+                                                                  Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_refl
+                                                                                ({ len := 6 }.len + 1)))))))⟩) =
+                                                            1 then
+                                                        low
+                                                          (NJB_Cuts.lowIndex
+                                                            ((fun i => i)
+                                                              ⟨0,
+                                                                Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_refl ({ len := 6 }.len + 1)))))))⟩)
+                                                            0)
+                                                      else
+                                                        r
+                                                          ⟨NJB_Cuts.lowCount
+                                                                ((fun i => i)
+                                                                  ⟨0,
+                                                                    Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_of_lt
+                                                                                (Nat.le_refl
+                                                                                  ({ len := 6 }.len + 1)))))))⟩) -
+                                                              2,
+                                                            NJB_Cuts.lowRight._proof_3
+                                                              ((fun i => i)
+                                                                ⟨0,
+                                                                  Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_refl
+                                                                                ({ len := 6 }.len + 1)))))))⟩)⟩
+                                                    else
+                                                      r
+                                                        ⟨NJB_Cuts.lowCount
+                                                              ((fun i => i)
+                                                                ⟨0,
+                                                                  Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_refl
+                                                                                ({ len := 6 }.len + 1)))))))⟩) -
+                                                            1,
+                                                          NJB_Cuts.lowRight._proof_4
+                                                            ((fun i => i)
+                                                              ⟨0,
+                                                                Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_refl
+                                                                              ({ len := 6 }.len + 1)))))))⟩)⟩)
+                                                    (Eq.trans Order.lt_one_iff._simp_1 (eq_self 0)))
+                                                  (congrArg low
+                                                    (congrFun'
+                                                      (congrArg Option.getD
+                                                        (Eq.trans
+                                                          (congr
+                                                            (congrArg getElem?
+                                                              (NJB_Cuts.lowIndices.match_1.eq_1 (fun x => List (Fin 16))
+                                                                (fun _ => [11, 12]) (fun _ => [0, 11, 12])
+                                                                (fun _ => [0, 12]) (fun _ => [11]) (fun _ => [0, 11])
+                                                                (fun _ => [1, 2, 5, 6, 9, 10, 13, 14]) fun x =>
+                                                                [0, 2, 4, 6, 7, 9, 10]))
+                                                            (zero_add 1))
+                                                          (getElem?_pos [11, 12] 1
+                                                            (of_eq_true
+                                                              (Eq.trans
+                                                                (Eq.trans
+                                                                  (congrArg (LT.lt 1)
+                                                                    (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                                                  Order.lt_two_iff._simp_1)
+                                                                (Std.le_refl._simp_1 1))))))
+                                                      0))))))
+                                          (ok q0)))
+                                      h0)
+                                  (eq_of_heq tail_eq))
+                              (eq_of_heq head_eq) (Fintype.complete j))
+                        (fun b {«as»} a h =>
+                          List.cons.noConfusion h fun head_eq =>
+                            Eq.ndrec (motive := fun b =>
+                              (fun x1 x2 => (fun i => i) x1 :: x2)
+                                    ⟨1, Nat.le_of_lt (Nat.le_refl ({ len := NJB_Cuts.lowCount (⋯ ⋯) }.len + ⋯))⟩ ⋯ ≍
+                                  ⋯ →
+                                Fintype.complete j ≍ List.Mem.tail b a →
+                                  operation
+                                      (if
+                                          ↑j =
+                                            NJB_Cuts.lowCount
+                                                ((fun i => i)
+                                                  ⟨0,
+                                                    Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_refl ({ len := 6 }.len + 1)))))))⟩) -
+                                              1 then
+                                        0
+                                      else 1)
+                                      (NJB_Cuts.lowLeft high low sum r
+                                        ((fun i => i)
+                                          ⟨0,
+                                            Nat.le_of_lt
+                                              (Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt (Nat.le_refl ({ len := 6 }.len + 1)))))))⟩)
+                                        j)
+                                      (NJB_Cuts.lowRight low r
+                                        ((fun i => i)
+                                          ⟨0,
+                                            Nat.le_of_lt
+                                              (Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt (Nat.le_refl ({ len := 6 }.len + 1)))))))⟩)
+                                        j) =
+                                    ok
+                                      (r
+                                        ⟨↑j,
+                                          Clauses._proof_2
+                                            ((fun i => i)
+                                              ⟨0,
+                                                Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt (Nat.le_refl ({ len := 6 }.len + 1)))))))⟩)
+                                            j⟩))
+                              ⋯ ⋯)
+                        ⋯ ⋯,
+                      ⋯⟩⟩)
+              ⋯)
+          ⋯ ⋯)
+    ⋯ ⋯ ⋯
+'AspisR1.NJL_LowDischarge.source' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,422 @@
+'AspisR1.NJL_TagMeaning.encode_add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJL_TagMeaning.encode_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJL_TagMeaning.encode_decode' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NJL_TagMeaning.scalar : ∀ (q : NQ) (n : ℕ),
+  (encode fun i => ↑(↑(NJB_Words.word q i) * n)) = decode q * ↑n :=
+fun q n =>
+  QuadraticAlgebra.ext
+    (QuadraticAlgebra.ext
+      (of_eq_true
+        (Eq.trans
+          (congr
+            (congrArg Eq
+              (congrArg QuadraticAlgebra.re
+                (congrArg QuadraticAlgebra.re
+                  (congr
+                    (congrArg QuadraticAlgebra.mk
+                      (congr
+                        (congrArg QuadraticAlgebra.mk
+                          (Eq.trans
+                            (congrArg Nat.cast
+                              (congrFun'
+                                (congrArg HMul.hMul
+                                  (congrArg Aeneas.Std.UScalar.val
+                                    (NJB_Words.word.match_1.eq_1 (fun x => Aeneas.Std.U32) (fun _ => q.c0.a)
+                                      (fun _ => q.c0.b) (fun _ => q.c1.a) fun x => q.c1.b)))
+                                n))
+                            (Nat.cast_mul (↑q.c0.a) n)))
+                        (Eq.trans
+                          (congrArg Nat.cast
+                            (congrFun'
+                              (congrArg HMul.hMul
+                                (congrArg Aeneas.Std.UScalar.val
+                                  (Eq.trans
+                                    (congrArg
+                                      (fun x =>
+                                        match x with
+                                        | 0 => q.c0.a
+                                        | 1 => q.c0.b
+                                        | 2 => q.c1.a
+                                        | x => q.c1.b)
+                                      (Nat.one_mod 2))
+                                    (NJB_Words.word.match_1.eq_2 (fun x => Aeneas.Std.U32) (fun _ => q.c0.a)
+                                      (fun _ => q.c0.b) (fun _ => q.c1.a) fun x => q.c1.b))))
+                              n))
+                          (Nat.cast_mul (↑q.c0.b) n))))
+                    (congr
+                      (congrArg QuadraticAlgebra.mk
+                        (Eq.trans
+                          (congrArg Nat.cast
+                            (congrFun'
+                              (congrArg HMul.hMul
+                                (congrArg Aeneas.Std.UScalar.val
+                                  (NJB_Words.word.match_1.eq_3 (fun x => Aeneas.Std.U32) (fun _ => q.c0.a)
+                                    (fun _ => q.c0.b) (fun _ => q.c1.a) fun x => q.c1.b)))
+                              n))
+                          (Nat.cast_mul (↑q.c1.a) n)))
+                      (Eq.trans
+                        (congrArg Nat.cast
+                          (congrFun'
+                            (congrArg HMul.hMul
+                              (congrArg Aeneas.Std.UScalar.val
+                                (Eq.trans
+                                  (congrArg
+                                    (fun x =>
+                                      match x with
+                                      | 0 => q.c0.a
+                                      | 1 => q.c0.b
+                                      | 2 => q.c1.a
+                                      | x => q.c1.b)
+                                    (Nat.mod_succ 3))
+                                  (NJB_Words.word.match_1.eq_4 (fun x => Aeneas.Std.U32) 3 (fun _ => q.c0.a)
+                                    (fun _ => q.c0.b) (fun _ => q.c1.a) (fun x => q.c1.b)
+                                    (fun x => False.elim (noConfusion_of_Nat Nat.ctorIdx x))
+                                    (fun x =>
+                                      Nat.elimOffset (0 + 2) 0 1 x fun x =>
+                                        False.elim (noConfusion_of_Nat Nat.ctorIdx x))
+                                    fun x =>
+                                    Nat.elimOffset (0 + 1) 0 2 x fun x =>
+                                      False.elim (noConfusion_of_Nat Nat.ctorIdx x)))))
+                            n))
+                        (Nat.cast_mul (↑q.c1.b) n)))))))
+            (Eq.trans
+              (congrArg QuadraticAlgebra.re
+                (Eq.trans
+                  (congrArg (HAdd.hAdd ({ re := ↑↑q.c0.a, im := ↑↑q.c0.b } * ↑n))
+                    (mul_zero (AspisV8R15.ExactTowerBase.qm31R * { re := ↑↑q.c1.a, im := ↑↑q.c1.b })))
+                  (add_zero ({ re := ↑↑q.c0.a, im := ↑↑q.c0.b } * ↑n))))
+              (Eq.trans
+                (congrArg (HAdd.hAdd (↑↑q.c0.a * ↑n))
+                  (Eq.trans
+                    (congrFun'
+                      (congrArg HMul.hMul (Eq.trans (neg_mul 1 ↑↑q.c0.b) (congrArg Neg.neg (one_mul ↑↑q.c0.b)))) 0)
+                    (mul_zero (-↑↑q.c0.b))))
+                (add_zero (↑↑q.c0.a * ↑n)))))
+          (eq_self (↑↑q.c0.a * ↑n))))
+      (of_eq_true
+        (Eq.trans
+          (congr
+            (congrArg Eq
+              (congrArg QuadraticAlgebra.im
+                (congrArg QuadraticAlgebra.re
+                  (congr
+                    (congrArg QuadraticAlgebra.mk
+                      (congr
+                        (congrArg QuadraticAlgebra.mk
+                          (Eq.trans
+                            (congrArg Nat.cast
+                              (congrFun'
+                                (congrArg HMul.hMul
+                                  (congrArg Aeneas.Std.UScalar.val
+                                    (NJB_Words.word.match_1.eq_1 (fun x => Aeneas.Std.U32) (fun _ => q.c0.a)
+                                      (fun _ => q.c0.b) (fun _ => q.c1.a) fun x => q.c1.b)))
+                                n))
+                            (Nat.cast_mul (↑q.c0.a) n)))
+                        (Eq.trans
+                          (congrArg Nat.cast
+                            (congrFun'
+                              (congrArg HMul.hMul
+                                (congrArg Aeneas.Std.UScalar.val
+                                  (Eq.trans
+                                    (congrArg
+                                      (fun x =>
+                                        match x with
+                                        | 0 => q.c0.a
+                                        | 1 => q.c0.b
+                                        | 2 => q.c1.a
+                                        | x => q.c1.b)
+                                      (Nat.one_mod 2))
+                                    (NJB_Words.word.match_1.eq_2 (fun x => Aeneas.Std.U32) (fun _ => q.c0.a)
+                                      (fun _ => q.c0.b) (fun _ => q.c1.a) fun x => q.c1.b))))
+                              n))
+                          (Nat.cast_mul (↑q.c0.b) n))))
+                    (congr
+                      (congrArg QuadraticAlgebra.mk
+                        (Eq.trans
+                          (congrArg Nat.cast
+                            (congrFun'
+                              (congrArg HMul.hMul
+                                (congrArg Aeneas.Std.UScalar.val
+                                  (NJB_Words.word.match_1.eq_3 (fun x => Aeneas.Std.U32) (fun _ => q.c0.a)
+                                    (fun _ => q.c0.b) (fun _ => q.c1.a) fun x => q.c1.b)))
+                              n))
+                          (Nat.cast_mul (↑q.c1.a) n)))
+                      (Eq.trans
+                        (congrArg Nat.cast
+                          (congrFun'
+                            (congrArg HMul.hMul
+                              (congrArg Aeneas.Std.UScalar.val
+                                (Eq.trans
+                                  (congrArg
+                                    (fun x =>
+                                      match x with
+                                      | 0 => q.c0.a
+                                      | 1 => q.c0.b
+                                      | 2 => q.c1.a
+                                      | x => q.c1.b)
+                                    (Nat.mod_succ 3))
+                                  (NJB_Words.word.match_1.eq_4 (fun x => Aeneas.Std.U32) 3 (fun _ => q.c0.a)
+                                    (fun _ => q.c0.b) (fun _ => q.c1.a) (fun x => q.c1.b)
+                                    (fun x => False.elim (noConfusion_of_Nat Nat.ctorIdx x))
+                                    (fun x =>
+                                      Nat.elimOffset (0 + 2) 0 1 x fun x =>
+                                        False.elim (noConfusion_of_Nat Nat.ctorIdx x))
+                                    fun x =>
+                                    Nat.elimOffset (0 + 1) 0 2 x fun x =>
+                                      False.elim (noConfusion_of_Nat Nat.ctorIdx x)))))
+                            n))
+                        (Nat.cast_mul (↑q.c1.b) n)))))))
+            (Eq.trans
+              (congrArg QuadraticAlgebra.im
+                (Eq.trans
+                  (congrArg (HAdd.hAdd ({ re := ↑↑q.c0.a, im := ↑↑q.c0.b } * ↑n))
+                    (mul_zero (AspisV8R15.ExactTowerBase.qm31R * { re := ↑↑q.c1.a, im := ↑↑q.c1.b })))
+                  (add_zero ({ re := ↑↑q.c0.a, im := ↑↑q.c0.b } * ↑n))))
+              (Eq.trans
+                (congr
+                  (congrArg HAdd.hAdd
+                    (Eq.trans (congrFun' (congrArg HAdd.hAdd (mul_zero ↑↑q.c0.a)) (↑↑q.c0.b * ↑n))
+                      (zero_add (↑↑q.c0.b * ↑n))))
+                  (Eq.trans (congrFun' (congrArg HMul.hMul (zero_mul ↑↑q.c0.b)) 0) (mul_zero 0)))
+                (add_zero (↑↑q.c0.b * ↑n)))))
+          (eq_self (↑↑q.c0.b * ↑n)))))
+    (QuadraticAlgebra.ext
+      (of_eq_true
+        (Eq.trans
+          (congr
+            (congrArg Eq
+              (congrArg QuadraticAlgebra.re
+                (congrArg QuadraticAlgebra.im
+                  (congr
+                    (congrArg QuadraticAlgebra.mk
+                      (congr
+                        (congrArg QuadraticAlgebra.mk
+                          (Eq.trans
+                            (congrArg Nat.cast
+                              (congrFun'
+                                (congrArg HMul.hMul
+                                  (congrArg Aeneas.Std.UScalar.val
+                                    (NJB_Words.word.match_1.eq_1 (fun x => Aeneas.Std.U32) (fun _ => q.c0.a)
+                                      (fun _ => q.c0.b) (fun _ => q.c1.a) fun x => q.c1.b)))
+                                n))
+                            (Nat.cast_mul (↑q.c0.a) n)))
+                        (Eq.trans
+                          (congrArg Nat.cast
+                            (congrFun'
+                              (congrArg HMul.hMul
+                                (congrArg Aeneas.Std.UScalar.val
+                                  (Eq.trans
+                                    (congrArg
+                                      (fun x =>
+                                        match x with
+                                        | 0 => q.c0.a
+                                        | 1 => q.c0.b
+                                        | 2 => q.c1.a
+                                        | x => q.c1.b)
+                                      (Nat.one_mod 2))
+                                    (NJB_Words.word.match_1.eq_2 (fun x => Aeneas.Std.U32) (fun _ => q.c0.a)
+                                      (fun _ => q.c0.b) (fun _ => q.c1.a) fun x => q.c1.b))))
+                              n))
+                          (Nat.cast_mul (↑q.c0.b) n))))
+                    (congr
+                      (congrArg QuadraticAlgebra.mk
+                        (Eq.trans
+                          (congrArg Nat.cast
+                            (congrFun'
+                              (congrArg HMul.hMul
+                                (congrArg Aeneas.Std.UScalar.val
+                                  (NJB_Words.word.match_1.eq_3 (fun x => Aeneas.Std.U32) (fun _ => q.c0.a)
+                                    (fun _ => q.c0.b) (fun _ => q.c1.a) fun x => q.c1.b)))
+                              n))
+                          (Nat.cast_mul (↑q.c1.a) n)))
+                      (Eq.trans
+                        (congrArg Nat.cast
+                          (congrFun'
+                            (congrArg HMul.hMul
+                              (congrArg Aeneas.Std.UScalar.val
+                                (Eq.trans
+                                  (congrArg
+                                    (fun x =>
+                                      match x with
+                                      | 0 => q.c0.a
+                                      | 1 => q.c0.b
+                                      | 2 => q.c1.a
+                                      | x => q.c1.b)
+                                    (Nat.mod_succ 3))
+                                  (NJB_Words.word.match_1.eq_4 (fun x => Aeneas.Std.U32) 3 (fun _ => q.c0.a)
+                                    (fun _ => q.c0.b) (fun _ => q.c1.a) (fun x => q.c1.b)
+                                    (fun x => False.elim (noConfusion_of_Nat Nat.ctorIdx x))
+                                    (fun x =>
+                                      Nat.elimOffset (0 + 2) 0 1 x fun x =>
+                                        False.elim (noConfusion_of_Nat Nat.ctorIdx x))
+                                    fun x =>
+                                    Nat.elimOffset (0 + 1) 0 2 x fun x =>
+                                      False.elim (noConfusion_of_Nat Nat.ctorIdx x)))))
+                            n))
+                        (Nat.cast_mul (↑q.c1.b) n)))))))
+            (Eq.trans
+              (congrArg QuadraticAlgebra.re
+                (Eq.trans
+                  (congr
+                    (congrArg HAdd.hAdd
+                      (Eq.trans
+                        (congrFun' (congrArg HAdd.hAdd (mul_zero { re := ↑↑q.c0.a, im := ↑↑q.c0.b }))
+                          ({ re := ↑↑q.c1.a, im := ↑↑q.c1.b } * ↑n))
+                        (zero_add ({ re := ↑↑q.c1.a, im := ↑↑q.c1.b } * ↑n))))
+                    (Eq.trans (congrFun' (congrArg HMul.hMul (zero_mul { re := ↑↑q.c1.a, im := ↑↑q.c1.b })) 0)
+                      (mul_zero 0)))
+                  (add_zero ({ re := ↑↑q.c1.a, im := ↑↑q.c1.b } * ↑n))))
+              (Eq.trans
+                (congrArg (HAdd.hAdd (↑↑q.c1.a * ↑n))
+                  (Eq.trans
+                    (congrFun'
+                      (congrArg HMul.hMul (Eq.trans (neg_mul 1 ↑↑q.c1.b) (congrArg Neg.neg (one_mul ↑↑q.c1.b)))) 0)
+                    (mul_zero (-↑↑q.c1.b))))
+                (add_zero (↑↑q.c1.a * ↑n)))))
+          (eq_self (↑↑q.c1.a * ↑n))))
+      (of_eq_true
+        (Eq.trans
+          (congr
+            (congrArg Eq
+              (congrArg QuadraticAlgebra.im
+                (congrArg QuadraticAlgebra.im
+                  (congr
+                    (congrArg QuadraticAlgebra.mk
+                      (congr
+                        (congrArg QuadraticAlgebra.mk
+                          (Eq.trans
+                            (congrArg Nat.cast
+                              (congrFun'
+                                (congrArg HMul.hMul
+                                  (congrArg Aeneas.Std.UScalar.val
+                                    (NJB_Words.word.match_1.eq_1 (fun x => Aeneas.Std.U32) (fun _ => q.c0.a)
+                                      (fun _ => q.c0.b) (fun _ => q.c1.a) fun x => q.c1.b)))
+                                n))
+                            (Nat.cast_mul (↑q.c0.a) n)))
+                        (Eq.trans
+                          (congrArg Nat.cast
+                            (congrFun'
+                              (congrArg HMul.hMul
+                                (congrArg Aeneas.Std.UScalar.val
+                                  (Eq.trans
+                                    (congrArg
+                                      (fun x =>
+                                        match x with
+                                        | 0 => q.c0.a
+                                        | 1 => q.c0.b
+                                        | 2 => q.c1.a
+                                        | x => q.c1.b)
+                                      (Nat.one_mod 2))
+                                    (NJB_Words.word.match_1.eq_2 (fun x => Aeneas.Std.U32) (fun _ => q.c0.a)
+                                      (fun _ => q.c0.b) (fun _ => q.c1.a) fun x => q.c1.b))))
+                              n))
+                          (Nat.cast_mul (↑q.c0.b) n))))
+                    (congr
+                      (congrArg QuadraticAlgebra.mk
+                        (Eq.trans
+                          (congrArg Nat.cast
+                            (congrFun'
+                              (congrArg HMul.hMul
+                                (congrArg Aeneas.Std.UScalar.val
+                                  (NJB_Words.word.match_1.eq_3 (fun x => Aeneas.Std.U32) (fun _ => q.c0.a)
+                                    (fun _ => q.c0.b) (fun _ => q.c1.a) fun x => q.c1.b)))
+                              n))
+                          (Nat.cast_mul (↑q.c1.a) n)))
+                      (Eq.trans
+                        (congrArg Nat.cast
+                          (congrFun'
+                            (congrArg HMul.hMul
+                              (congrArg Aeneas.Std.UScalar.val
+                                (Eq.trans
+                                  (congrArg
+                                    (fun x =>
+                                      match x with
+                                      | 0 => q.c0.a
+                                      | 1 => q.c0.b
+                                      | 2 => q.c1.a
+                                      | x => q.c1.b)
+                                    (Nat.mod_succ 3))
+                                  (NJB_Words.word.match_1.eq_4 (fun x => Aeneas.Std.U32) 3 (fun _ => q.c0.a)
+                                    (fun _ => q.c0.b) (fun _ => q.c1.a) (fun x => q.c1.b)
+                                    (fun x => False.elim (noConfusion_of_Nat Nat.ctorIdx x))
+                                    (fun x =>
+                                      Nat.elimOffset (0 + 2) 0 1 x fun x =>
+                                        False.elim (noConfusion_of_Nat Nat.ctorIdx x))
+                                    fun x =>
+                                    Nat.elimOffset (0 + 1) 0 2 x fun x =>
+                                      False.elim (noConfusion_of_Nat Nat.ctorIdx x)))))
+                            n))
+                        (Nat.cast_mul (↑q.c1.b) n)))))))
+            (Eq.trans
+              (congrArg QuadraticAlgebra.im
+                (Eq.trans
+                  (congr
+                    (congrArg HAdd.hAdd
+                      (Eq.trans
+                        (congrFun' (congrArg HAdd.hAdd (mul_zero { re := ↑↑q.c0.a, im := ↑↑q.c0.b }))
+                          ({ re := ↑↑q.c1.a, im := ↑↑q.c1.b } * ↑n))
+                        (zero_add ({ re := ↑↑q.c1.a, im := ↑↑q.c1.b } * ↑n))))
+                    (Eq.trans (congrFun' (congrArg HMul.hMul (zero_mul { re := ↑↑q.c1.a, im := ↑↑q.c1.b })) 0)
+                      (mul_zero 0)))
+                  (add_zero ({ re := ↑↑q.c1.a, im := ↑↑q.c1.b } * ↑n))))
+              (Eq.trans
+                (congr
+                  (congrArg HAdd.hAdd
+                    (Eq.trans (congrFun' (congrArg HAdd.hAdd (mul_zero ↑↑q.c1.a)) (↑↑q.c1.b * ↑n))
+                      (zero_add (↑↑q.c1.b * ↑n))))
+                  (Eq.trans (congrFun' (congrArg HMul.hMul (zero_mul ↑↑q.c1.b)) 0) (mul_zero 0)))
+                (add_zero (↑↑q.c1.b * ↑n)))))
+          (eq_self (↑↑q.c1.b * ↑n)))))
+'AspisR1.NJL_TagMeaning.scalar' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NJL_TagMeaning.value : ∀ (s : Selectors) (xs : List (Fin 272)),
+  (encode fun i => ↑(dot s xs i)) = model s xs :=
+fun s xs =>
+  List.rec encode_zero
+    (fun t ts ih =>
+      have same :=
+        funext fun i =>
+          of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg Eq
+                  (Nat.cast_add (↑(NJL_TagWords.highWord s t i) * ↑(NJL_TagWords.tagWord t))
+                    (List.map (fun t => ↑(NJL_TagWords.highWord s t i) * ↑(NJL_TagWords.tagWord t)) ts).sum))
+                (↑(↑(NJL_TagWords.highWord s t i) * ↑(NJL_TagWords.tagWord t)) +
+                  ↑(List.map (fun t => ↑(NJL_TagWords.highWord s t i) * ↑(NJL_TagWords.tagWord t)) ts).sum))
+              (eq_self
+                (↑(↑(NJL_TagWords.highWord s t i) * ↑(NJL_TagWords.tagWord t)) +
+                  ↑(List.map (fun t => ↑(NJL_TagWords.highWord s t i) * ↑(NJL_TagWords.tagWord t)) ts).sum)));
+      Eq.mpr (id (congrArg (fun _a => encode _a = model s (t :: ts)) same))
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => _a = model s (t :: ts))
+              (encode_add (fun i => ↑(↑(NJL_TagWords.highWord s t i) * ↑(NJL_TagWords.tagWord t))) fun i =>
+                ↑(dot s ts i))))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  (encode fun i => ↑(↑(NJL_TagWords.highWord s t i) * ↑(NJL_TagWords.tagWord t))) + _a =
+                    model s (t :: ts))
+                ih))
+            (have castProduct :=
+              Eq.mpr
+                (id
+                  (congrFun'
+                    (congrArg Eq
+                      (congrArg encode
+                        (funext fun i =>
+                          congrArg Nat.cast
+                            (congr
+                              (congrArg HMul.hMul
+                                (NJL_TagWords.cast64
+                                  (NJB_Words.word (NJB_ActiveReference.high s (NJL_TagData.block t)) i)))
+                              (NJL_TagWords.cast64 (NJL_TagData.tag t))))))
+                    (decode (NJB_ActiveReference.high s (NJL_TagData.block t)) * ↑↑(NJL_TagData.tag t))))
+                (scalar (NJB_ActiveReference.high s (NJL_TagData.block t)) ↑(NJL_TagData.tag t));
+            Eq.mpr (id (congrArg (fun _a => _a + model s ts = model s (t :: ts)) castProduct))
+              (Eq.refl
+                (decode (NJB_ActiveReference.high s (NJL_TagData.block t)) * ↑↑(NJL_TagData.tag t) + model s ts))))))
+    xs
+'AspisR1.NJL_TagMeaning.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJL_TagMeaning.residue' depends on axioms: [propext, Classical.choice, Quot.sound]

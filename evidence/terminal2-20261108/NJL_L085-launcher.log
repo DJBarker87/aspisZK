@@ -1,0 +1,53 @@
+{"attempt": "NJL_L085", "exit_status": 0, "wall_seconds": 8.584466232918203, "peak_rss_kib": "6170860", "swaps": "0", "print_axioms": ["'AspisR1.NJL_SharedCuts.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJL_SharedCuts.source : ∀ (values : Fin 33 → NQ) (selector : NQ) (g : Fin 9) (before : State),
+  (∀ (i : Fin 33), Canon (values i)) →
+    Canon selector →
+      (∀ (i : Fin 24), Canon (before i)) →
+        ∃ after,
+          NJB_SharedReference.step values selector g before = ok after ∧
+            Step values selector g before after ∧ ∀ (i : Fin 24), Canon (after i) :=
+fun values selector g before hv hc hb =>
+  let ⟨packed, h✝⟩ := NJB_PackLaw.result (lanes values g) (NJB_SharedReference.lanes_canonical values hv g)
+  let ⟨cp, right✝⟩ := h✝
+  let ⟨hp, right✝¹⟩ := right✝
+  let ⟨product, h✝¹⟩ := NJB_StubLaws.qm_mul selector packed hc hp
+  let ⟨cm, right✝²⟩ := h✝¹
+  let ⟨hm, rig
+...
+y => ok (NJB_StateUpdates.set before (group g) y))))))
+            (ok after)))
+        (Eq.refl (ok (NJB_StateUpdates.set before (group g) reply))),
+      ⟨Exists.intro packed
+          (Exists.intro product
+            (Exists.intro reply
+              (Exists.intro (lanes values g)
+                (Exists.intro events
+                  ⟨cp,
+                    ⟨cm,
+                      ⟨ca,
+                        ⟨hp,
+                          ⟨hm,
+                            ⟨ha,
+                              ⟨rfl,
+                                ⟨rfl,
+                                  ⟨rfl,
+                                    ⟨rfl,
+                                      ⟨rfl,
+                                        ⟨rfl, fun j =>
+                                          of_eq_true
+                                            (Eq.trans
+                                              (congrFun'
+                                                (congrArg Eq
+                                                  (Eq.trans (NJB_StateUpdates.set.eq_1 before (group g) reply j)
+                                                    (ite_congr source._simp_1 (fun a => Eq.refl reply) fun a =>
+                                                      Eq.refl (before j))))
+                                                (if j = group g then reply else before j))
+                                              (eq_self (if j = group g then reply else before j)))⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩)))),
+        fun j =>
+        id
+          (Decidable.casesOn (instDecidableEqFin 24 (group g) j)
+            (fun h => Eq.mpr (id (congrArg Canon (if_neg h))) (hb j)) fun h =>
+            Eq.mpr (id (congrArg Canon (if_pos h))) ha)⟩⟩
+'AspisR1.NJL_SharedCuts.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r781ec88f3df444e4b5260f6ff7f40711.scope; invocation ID: a16ce3356b98417d9ba8e6af12234411

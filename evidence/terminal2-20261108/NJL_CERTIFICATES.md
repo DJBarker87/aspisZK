@@ -1,0 +1,71 @@
+# NJL certificate register
+
+Target not established. TX1:209/208 are CANDIDATES pending combined/raw-ax2/NFX validation and the next ledger gate. Exact frozen bodies, native positive/control pairs, domains and roots are in NJL_CLOSED.json. TX1:215 is consumed from committed NIX,268 from NJB; neither is duplicated.
+
+`NJL_ActiveInvocation.source` (L005) establishes both full native-cut traces, canonical final out, exact complete reference Result and exact complete adopted cohort `Selectors.active` Result. Its full statement and axioms are printed in the receipt. `NJL_LowDischarge.source` (L003) discharges every logged multiplication/addition clause on canonical inputs; unused slots are canonical ZERO. No success/endpoint/Run/operation-dictionary premise. All canonicality is propagated from the same selectors.
+
+NJB raw high64/low7 induction and full cohort association are reused, not restated. New proof adds actual cut-consuming invocation and frame chains. K004/K002 supplies the missing constant loop control certificate (71 entries, exits64/7, zero initializers); deployed wrapper208 uses NJB_K044/045. This is a native semantic transport reclassification, not removal of P6/D188 or a trust item. Neither security headline nor enclosing physical codec obligations are claimed closed.
+
+Absorption/pattern work in progress remains SUPPORT until its complete native cut and cohort root is proved and audited. Failed elaborations and compiler failures earn no credit; receipt stdout may print Lean's error-recovery sorryAx but no such object is used in a passed root.
+
+## TX1:227 absorption candidate
+
+L009 proves the exact actual-cache prologue transcript and constructs all3 PreparedFor domains. L012 composes all16 actual lane Results and the complete returned array, equal to the adopted emitted absorption literal on the same inputs. Root statement/axioms printed, only standard axioms. K005 PASS/K006 FAIL adds the missing standard array constructor window/control; K040/041 andK046/047 reused from NJB. Domain: all canonical source operands/opened16, no bit-valued or independent-cache condition. Combined/scan/raw gate pending; no ledger credit yet.
+
+## TX1:244 occupancy candidate
+
+L013 context, L014 head, L016 arbitrary lane, L017 tail, L019 full8-lane frame, L024 complete source packet and L023 exact adopted-cohort Result compile; standard axioms only. The emitted literal is total on every SAME canonical input/output/expected<P/opened16 input. Factorization holds for arbitrary canonical occupied. The positive root derives its entire Packet internally and then uses canonical raw-array injectivity; Packet's complete fields and root statement are printed in L023/L024. No bit assumption, successful child, endpoint equation or generic Ops premise remains.
+
+Native windows: NJB_K084/085 context,086/087 head,088/089 arbitrarylane/full12frame,090/091 tail/full12frame. Missing fixed8 iterator control: NJL_K009 PASS/K008 FAIL (K007 missing own module alias compiler failure excluded; repaired crate::poseidon2 alias). No timeout or cap raised. Context source comment's provisional K122/123 label is superseded by this exact mapping. All source/harness hashes are pinned in their receipts and cut-input register. Combined/raw/scan gate pending.
+
+## TX1:247 path candidate
+
+L025 context/head, L026 single side/caller cache domain, L027 unrolled source-order trace, L028 full17cell frame, L031 complete Packet and L030 exact adopted-cohort Result compile with standard axioms. Root derives all constructor/field clauses, source ordered16 writes and canonical full returnarray internally. Arbitrary canonical bit accepted; no binary precondition. Native NJB_K096/097 head,132/133 allleft,141/142 right k<7,143/144 right k=7 reused. These disjoint domains cover all16source writes; two-sided timedouts82/134 excluded. No new native run needed for this unrolled source. Local combined/scan/raw gate pending.
+
+## TX1:214 endpoint candidate
+
+K012 PASS/K011 FAIL certifies ONE slice assignment at arbitrary index/observer over103cells without copying the full prestate (initializer unwind105, original90stimeout). K013 PASS/K014 FAIL supplies the strengthened genuine136link/bothside lookup: native reverse tables equal the pinned first-match source-key scan; actual selected high is the SAME selectors.high[row>>4]. NJB_K072 timedoutshape is never repeated. K010 initializer unwind failure is excluded.
+
+L032 one-cell cut, L033 disjoint indices, L035 both writes/full103frame, L039 lookup/caller provenance, L041 positive root compile with standard axioms. Exact first-match registries and uniqueness are pinned/proved; rowshift equals division16 by a named standard lemma. Input high canonicality is derived from SAME selectors.high. `caller_weight` instantiates NIH_LinkWeight.result on the SAME genuine compiled link, proving every enclosing call's weight≤1; no caller-success hypothesis. Root's only native-cut hypothesis is NJL_EndpointLookup.Cut (row<1024/gc<30/pc<43 after the native observed scan). This is precisely the allowed reviewed (ai)(5) predicate, not an endpoint/output equation. The concrete Copy marker is internal and unused by the CLOSED selected-binary reference, with every child Result instantiated.
+
+Complete model G: weightcell30+gc adds high*weight; patterncell60+pc adds high; every other103cell framed; tag ignored by deployed tagdot arm. This is the full mutable scratch helper Result, not a claim that the enclosing scratch basis/evaluator represents the old cohort; that parent association remains with218/220. Local combined/scan/raw gate pending.
+
+Endpoint preflight correction: typed operation kind1 is now explicitly logged/asserted by the strengthened K015PASS/K016FAIL pair. K012/011 remains frame SUPPORT only; row214 authority is K015/016. No Lean statement weakened, no timeout/cap raised, no unchanged replay or renaming.
+
+## First cumulative tool validation and final214 authority
+
+Gate1 all tool checks PASS, details NJL_GATE1.json: 15,157modules;63rawroots; standard axioms only; zero dangling/duplicate/import mismatch. Source-pinned historical import variant recorded, no loader override. This validates the old object snapshot and the five unchanged roots; final214 admission waits for the direct literal table source update.
+
+K019PASS/K020FAIL strengthens SAME lookup harness with direct136-cell expected arrays. L052/L053 compile the new exact shared-literal gc/pc definitions and dependent root; standard axioms. The former scan reference is NOT used as final cut authority. This is an explicit strengthening within the same input domain/source helper; no new extraction or trust. Final combined audit remains required and is budgeted once.
+
+## TX1:219 pattern basis candidate
+
+L054 exact inner/outer cuts, L055 arbitrary source interval inner trace, L056 four-group outer trace, L059 symbolic sparse meaning and L058 full4-array root compile with standard axioms. Root: SAME canonical input values4/weights26/terms14 only; both native traces and exact full reference Result are derived, each output g = input g + sum over its frozen coordinate interval of terms[pattern[c]]*weights[c]. The model interface is the retained NJB_PatternArray/reference basis model; no emitted optimized helper exists. The enclosing selector-tensor/evaluate proof must still associate its actual coefficient arrays with the retained whole Copy-row meaning; that parent obligation is not claimed here.
+
+NJB_K036/037 inner and038/039 outer reused. New control K017PASS/K018FAIL executes both frozen while guards/counters with LOCAL recording body: group ends4, calls26, each arbitrary seek observes exact source group and coordinate. All field multiplication is Lean-discharged. No native array payload is inferred from a separately written pointer: outer patterns are the SAME immutable borrowed source.
+
+Parser-only L057 reserved identifier failure excluded; corrected fold_prefix compiles L059. L058 first client submission was refused prelaunch on missing dependency, then launched only after L059 green; no prover process resubmitted. Final gate2 and next ledger admission remain required.
+
+## Stage8 tag registry and finite invocation
+NJL_TagData/NJL_TagWords pin the272source terms and31offsets without normalizing a deep literal. L060 default-recursion failure replaced by eight34-entry independently compiled chunks; L070 arithmetic simplification repaired at L073. NJL_TagRawStep/RawTrace establish actual checked arithmetic and native4call cuts. NJL_TagReduction supplies same-raw reductions and full4-cell frame at each limb. NJL_TagChunk/Chunks prove partial-tail and whole finite chunk results. NJL_TagPartition and Schedule give exact take4/drop4 source ordering on the contiguous coordinate interval. NJL_TagMeaning proves the natural limb sums equal the retained exact-tower weighted sum symbolically. NJL_TagRoot.source is the complete four-word invocation; NJL_TagForward.source discharges deployed217's child internally. Standard axioms only in successful scopes. Parent220 still owns consumption of this coordinate into its whole tensor; no parent is claimed closed.
+
+## Stage9 shared selector
+NJL_SharedMeaning.value proves the entire9group fold equals the adopted selected contribution at every24destination, with exact same selector distributed over all4pack lanes and zero boundary padding. NJL_SharedRoot.source builds canonical weighted33 via actual emitted products, invokes CLOSED NHU_Preweighted.result, and identifies BOTH canonical full returned arrays using predecessor NJB_DecodeInjective.qm. No child-success premise. L088 incoherent old FIx import rejected and replaced by canonical RPv import; L091 heartbeat failure in broad change replaced by4explicit named lane equalities, with no limit increase; L095 and dependent L096 pass standard axioms.
+
+## Stage10 occupancy parent228
+NJL_OccupancyParent.source L103 full Result equals the actual emitted add_occupancy_lanes. Uses retained FIy_OccupancyRows.input/output symbolic constant theorems (not kernel evaluation of checked usize arithmetic), NIH_SelectorRow.result with1017/1018<1024 and same canonical Selectors, NFQ_StatementLaws.expected_reference (expected<P by enum cases), NJL_OccupancyAssociation.source with same16opened cells, NHU_Preweighted.result at0/N12/positive/within96. Final canonicality internally retained; no restrictions on occupied bit and no public.variant-validation assumption.
+
+## Stage11 path parent229
+NJL_PathSelector.source L099 consumes actual CLOSED sum_high262, reads1/5/9/13, derives three adds and product (all canonical). NJL_PathParent.source L107 consumes child247 on same THREE-view Openings and CLOSED230 at32/N17. Complete emitted add_path_lanes Result equals returned full24array; all native cut counters/source operands and same17lane child result are internally constructed. No successful-call premise or binary-bit restriction.
+
+## Stage12 prefix-only224 and native remaining windows
+L105/106/108 powers recurrence and actual ordered new map; L117/L110 full arbitrary-prestate prepared-product/add window and finite8step induction; L111/L112 internally derive all cache/input domains and exact sum of lambda^(i+1)*opened[start+i]. L113/L114/L119 lift actual recurrence into all8mutable native frames and identify full final vector, including actual unused ninth power. No time/memory/heartbeat/recursion limit increased. The uncompiled same-packet join sketch is .lean.txt and excluded from combined imports and credit.14tail/cohort association remains Lean-only OPEN224.
+Native controls and additional independent group/loop windows are SUPPORT as itemized in CUTS/STUBS; every included pair is checked by NJL_pair_check.py against actual solver reach, frozen graph, unchanged lock, and same input hashes. K023 TIMEOUT excluded/replaced by small chunk proof and Lean induction; no unchanged timed-out shape rerun.
+
+## Final release evidence (target remains unestablished)
+- NJL_L200 target `NJL_COMBINED_IMPORT`; exit0; wall8.284759s; peakRSS6157028KiB; swap0; source `3e3276f7eb8594ab0283e8c6c17dc08c20caa2a0`; exact command/env/library pins in receipt.
+- NJL_L201 target `NJL_proof0`; exit0; wall22.783118s; peakRSS6370228KiB; swap0; source `3e3276f7eb8594ab0283e8c6c17dc08c20caa2a0`; exact command/env/library pins in receipt.
+- NJL_L202 target `NJL_proof1`; exit0; wall30.597889s; peakRSS6753164KiB; swap0; source `3e3276f7eb8594ab0283e8c6c17dc08c20caa2a0`; exact command/env/library pins in receipt.
+- NJL_L203 target `NJL_scan`; exit0; wall44.305058s; peakRSS7352396KiB; swap0; source `3e3276f7eb8594ab0283e8c6c17dc08c20caa2a0`; exact command/env/library pins in receipt.
+
+#print axioms/raw ax2: all164roots standard-only; headline `[Classical.choice, Quot.sound, propext]`; every raw/collector comparison equal. NFX15199modules, all3error counts0. Root statements/hypothesis inventory: NJL_ROOT_STATEMENTS.md. Exact native/source association register: NJL_NATIVE_TO_SOURCE.json. Credit awaits next authoritative ledger.

@@ -1,0 +1,48 @@
+structure AspisR1.NJL_CachedPowers.Packet (lambda : NQ) : Type
+number of parameters: 1
+fields:
+  AspisR1.NJL_CachedPowers.Packet.powers : List NQ
+  AspisR1.NJL_CachedPowers.Packet.next : NQ
+  AspisR1.NJL_CachedPowers.Packet.eight : self.powers.length = 8
+  AspisR1.NJL_CachedPowers.Packet.power_call : NJL_WindowPowers.run lambda 8 lambda = ok (self.powers, self.next)
+  AspisR1.NJL_CachedPowers.Packet.power_trace : NJL_WindowPowers.Trace lambda 8 lambda self.powers self.next
+  AspisR1.NJL_CachedPowers.Packet.canonical : ∀ x ∈ self.powers, Canon x
+  AspisR1.NJL_CachedPowers.Packet.values : ∀ (i : ℕ) (hi : i < self.powers.length),
+      decode self.powers[i] = decode lambda * decode lambda ^ i
+  AspisR1.NJL_CachedPowers.Packet.caches : { xs // xs.length = self.powers.length }
+  AspisR1.NJL_CachedPowers.Packet.cache_call : NJB_Traverse.run FIq_Native.field.PreparedQm31Multiplier.new
+        self.powers =
+      ok self.caches
+  AspisR1.NJL_CachedPowers.Packet.domains : List.Forall₂
+      (fun power cache =>
+        FIq_Native.field.PreparedQm31Multiplier.new power = ok cache ∧ NJB_PreparedLaws.Domain cache power)
+      self.powers ↑self.caches
+constructor:
+  AspisR1.NJL_CachedPowers.Packet.mk {lambda : NQ} (powers : List NQ) (next : NQ) (eight : powers.length = 8)
+    (power_call : NJL_WindowPowers.run lambda 8 lambda = ok (powers, next))
+    (power_trace : NJL_WindowPowers.Trace lambda 8 lambda powers next) (canonical : ∀ x ∈ powers, Canon x)
+    (values : ∀ (i : ℕ) (hi : i < powers.length), decode powers[i] = decode lambda * decode lambda ^ i)
+    (caches : { xs // xs.length = powers.length })
+    (cache_call : NJB_Traverse.run FIq_Native.field.PreparedQm31Multiplier.new powers = ok caches)
+    (domains :
+      List.Forall₂
+        (fun power cache =>
+          FIq_Native.field.PreparedQm31Multiplier.new power = ok cache ∧ NJB_PreparedLaws.Domain cache power)
+        powers ↑caches) :
+    Packet lambda
+theorem AspisR1.NJL_CachedPowers.source : ∀ (lambda : NQ), Canon lambda → Nonempty (Packet lambda) :=
+fun lambda hl =>
+  let ⟨powers, h✝⟩ := NJL_WindowPowers.source lambda lambda 8 hl hl
+  let ⟨next, h✝¹⟩ := h✝
+  let ⟨call, right✝⟩ := h✝¹
+  let ⟨trace, right✝¹⟩ := right✝
+  let ⟨length, right✝²⟩ := right✝¹
+  let ⟨canonical, right✝³⟩ := right✝²
+  let ⟨left✝, right✝⁴⟩ := right✝³
+  let ⟨values, right✝⁵⟩ := right✝⁴
+  let ⟨caches, h✝²⟩ := NJL_WindowCache.source powers canonical
+  let ⟨cacheCall, domains⟩ := h✝²
+  Nonempty.intro
+    { powers := powers, next := next, eight := length, power_call := call, power_trace := trace, canonical := canonical,
+      values := values, caches := caches, cache_call := cacheCall, domains := domains }
+'AspisR1.NJL_CachedPowers.source' depends on axioms: [propext, Classical.choice, Quot.sound]

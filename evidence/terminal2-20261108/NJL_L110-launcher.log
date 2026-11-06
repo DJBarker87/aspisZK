@@ -1,0 +1,44 @@
+{"attempt": "NJL_L110", "exit_status": 0, "wall_seconds": 8.185316056013107, "peak_rss_kib": "6191208", "swaps": "0", "print_axioms": ["'AspisR1.NJL_WindowFold.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJL_WindowFold.source : ∀ (theta : Fin 8 → NQ) (cache : Fin 8 → NP) (o : Std.Array NQ 16#usize)
+  (start : Fin 9) (slots : List (Fin 8)) (before : NQ),
+  (∀ (i : Fin 8), Canon (theta i)) →
+    Canon before →
+      FIw_ArrayValue.canonical o →
+        (∀ (i : Fin 8), NJB_PreparedLaws.Domain (cache i) (theta i)) →
+          ∃ after,
+            run cache o start slots before = ok after ∧
+              Trace cache o start slots before after ∧
+                Canon after ∧
+                  decode after =
+                    decode before +
+                      (List.map (fun i => decode (theta i) * decode (NJL_WindowStep.opened o start i)) slots).sum :=
+fun theta cache o start 
+...
+                   (Eq.symm rfl)))
+                                (Eq.refl
+                                  ((List.map (fun i => decode (theta i) * decode (NJL_WindowStep.opened o start i))
+                                          slots).sum ^
+                                      Nat.rawCast 1 *
+                                    Nat.rawCast 1))))
+                            (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                              (decode (theta slot) ^ Nat.rawCast 1 *
+                                (decode (NJL_WindowStep.opened o start slot) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                              (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                ((List.map (fun i => decode (theta i) * decode (NJL_WindowStep.opened o start i))
+                                          slots).sum ^
+                                      Nat.rawCast 1 *
+                                    Nat.rawCast 1 +
+                                  0))))
+                          (Mathlib.Tactic.Ring.Common.add_pf_add_lt (decode before ^ Nat.rawCast 1 * Nat.rawCast 1)
+                            (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                              (decode (theta slot) ^ Nat.rawCast 1 *
+                                  (decode (NJL_WindowStep.opened o start slot) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                ((List.map (fun i => decode (theta i) * decode (NJL_WindowStep.opened o start i))
+                                          slots).sum ^
+                                      Nat.rawCast 1 *
+                                    Nat.rawCast 1 +
+                                  0)))))))))⟩⟩⟩)
+    slots before hb
+'AspisR1.NJL_WindowFold.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r2a8595fba09a4a659887223c60b14da5.scope; invocation ID: e555035392cd45e5823e7d8c9df47a70

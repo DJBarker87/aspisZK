@@ -1,0 +1,54 @@
+{"attempt": "NJL_L029", "exit_status": 1, "wall_seconds": 8.592590542975813, "peak_rss_kib": "6158364", "swaps": "0", "print_axioms": ["'AspisR1.NJL_PathPacket.size17' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJL_PathPacket.pack_decode' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJL_PathPacket.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJL_PathPacket.lean:51:2: error: unsolved goals
+case pos
+selector : NQ
+o : Openings
+hs : Canon selector
+hz : FIw_ArrayValue.canonical o.z
+hb : FIw_ArrayValue.canonical o.succ_z
+hc : ∀ (i : Fin 16), Canon (cell o.z i)
+hsucc : ∀ (i : Fin 16), Canon (cell o.succ_z i)
+c : Context
+residual : NQ
+events : Fin 6 → NJB_Cuts.Event
+cc : NJL_PathContext.reference selector (cell o.z 0) = ok c
+cd : Domain c
+clauses : NJL_PathContext.Clauses selector (cell o.z 0) residual c
+cut : NJL_PathContext.Cut selector (cell o.z 0) residual c events c.left c.right (NJL_PathContext.initial c) 6 2
+initial : ∀ (i : Fin 17), Canon (NJL_PathContext.initial c i)
+selected : decode c.selected = decode selector * decode (cell
+...
+ (va i)))
+      (if same : ↑i = 0 then sorry
+      else
+        Eq.mpr (id (congrArg (fun _a => _a = NJL_PathFrame.value c (cell o.z) (cell o.succ_z) i) (if_pos same)))
+          (Eq.refl (NJL_PathFrame.value c (cell o.z) (cell o.succ_z) i)));
+  let p :=
+    { context := c, residual := residual, after := after, context_call := cc, context_domain := cd,
+      context_clauses := clauses, context_cut := Exists.intro events cut, selected_value := selected,
+      empty_value := empty, head_value := head, run_call := run, trace := trace, canonical := ha, value := value };
+  Exists.intro p
+    ⟨Eq.mpr
+        (id
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (Eq.trans
+                  (congrFun' (congrArg Bind.bind cc) fun c => do
+                    let out ←
+                      NJL_PathTrace.run c (cell o.z) (cell o.succ_z) NJL_PathTrace.jobs (NJL_PathContext.initial c)
+                    ok (pack out))
+                  (bind_tc_ok c fun y => do
+                    let out ←
+                      NJL_PathTrace.run y (cell o.z) (cell o.succ_z) NJL_PathTrace.jobs (NJL_PathContext.initial y)
+                    ok (pack out)))
+                (Eq.trans (congrFun' (congrArg Bind.bind run) fun out => ok (pack out))
+                  (bind_tc_ok after fun y => ok (pack y)))))
+            (ok (pack p.after))))
+        (Eq.refl (ok (pack after))),
+      NJB_ArrayCarrier.canonical_array (fun i => p.after (Fin.cast size17 i)) fun x => ha (Fin.cast size17 x)⟩
+'AspisR1.NJL_PathPacket.size17' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJL_PathPacket.pack_decode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJL_PathPacket.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r793a30bacb4345b19fa1fc4564553f95.scope; invocation ID: 6dd47221eeec444f9d475d14ef741daf

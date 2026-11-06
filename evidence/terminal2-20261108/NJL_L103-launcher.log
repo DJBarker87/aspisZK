@@ -1,0 +1,43 @@
+{"attempt": "NJL_L103", "exit_status": 0, "wall_seconds": 8.12150228698738, "peak_rss_kib": "6190084", "swaps": "0", "print_axioms": ["'AspisR1.NJL_OccupancyParent.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+structure AspisR1.NJL_OccupancyParent.Packet (packed : Std.Array NQ 24#usize) (pub : Public) (o : Openings)
+  (s : Selectors) : Type
+number of parameters: 4
+fields:
+  AspisR1.NJL_OccupancyParent.Packet.input : NQ
+  AspisR1.NJL_OccupancyParent.Packet.output : NQ
+  AspisR1.NJL_OccupancyParent.Packet.input_call : pair_forest_copy_terminal.Selectors.row s 1017#usize = ok self.input
+  AspisR1.NJL_OccupancyParent.Packet.output_call : pair_forest_copy_terminal.Selectors.row s 1018#usize = ok self.output
+  AspisR1.NJL_OccupancyParent.Packet.lanes : NJL_OccupancyPacket.Packet self.input self.output
+      (NFQ_StatementLaws.expected pub.variant) o.z
+  AspisR1.NJL_OccupancyParent.Packet.factored_call :
+...
+        let input_occupancy ← pair_forest_copy_terminal.Selectors.row s y
+                    let occupancy ←
+                      pair_forest_semantic_terminal.occupancy_lanes_literal input_occupancy output
+                          (NFQ_StatementLaws.expected pub.variant) o.z
+                    pair_forest_semantic_terminal.add_preweighted packed 0#usize occupancy))
+                (Eq.trans
+                  (Eq.trans
+                    (congrFun' (congrArg Bind.bind ci) fun input_occupancy => do
+                      let occupancy ←
+                        pair_forest_semantic_terminal.occupancy_lanes_literal input_occupancy output
+                            (NFQ_StatementLaws.expected pub.variant) o.z
+                      pair_forest_semantic_terminal.add_preweighted packed 0#usize occupancy)
+                    (bind_tc_ok input fun y => do
+                      let occupancy ←
+                        pair_forest_semantic_terminal.occupancy_lanes_literal y output
+                            (NFQ_StatementLaws.expected pub.variant) o.z
+                      pair_forest_semantic_terminal.add_preweighted packed 0#usize occupancy))
+                  (Eq.trans
+                    (Eq.trans
+                      (congrFun' (congrArg Bind.bind cr) fun occupancy =>
+                        pair_forest_semantic_terminal.add_preweighted packed 0#usize occupancy)
+                      (bind_tc_ok (NJL_OccupancyPacket.pack lanes.last)
+                        (pair_forest_semantic_terminal.add_preweighted packed 0#usize)))
+                    ca))))
+            (ok p.after)))
+        (Eq.refl (ok after)),
+      ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, rfl⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩
+'AspisR1.NJL_OccupancyParent.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rc18cfcd418f74406a7ade2f3c9039d7c.scope; invocation ID: 23216001e93146d698ea7d6e46838247
