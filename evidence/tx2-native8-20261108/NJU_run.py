@@ -35,7 +35,7 @@ files={};sources=[]
 if kind=='prune':
  files['NJU_prune.py']=(E/'NJU_prune.py').read_text();sources=list(files);command=['python3','NJU_prune.py']
 elif kind=='finalcheck':
- for n in ['NJU_final_checks.py','NJU_MODULES.json','NJU_SOURCE_PINS.json','NJU_PATHS.json']:files[n]=(E/n).read_text()
+ for n in ['NJU_final_checks.py','NJU_cleanup.py','NJU_MODULES.json','NJU_SOURCE_PINS.json','NJU_PATHS.json']:files[n]=(E/n).read_text()
  sources=list(files);command=['python3','NJU_final_checks.py']
 elif kind=='cleanup':
  files['NJU_cleanup.py']=(E/'NJU_cleanup.py').read_text();sources=list(files);command=['python3','NJU_cleanup.py']
@@ -140,10 +140,10 @@ r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
 if {kind!r}=='prune': names += ['NJU_PRUNE.json']
-if {kind!r}=='finalcheck': names += ['NJU_SOURCE_VERIFICATION.json','NJU_TOOL_PINS.json','NJU_EXPORT.json','NJU_CLOSURE_PINS.json.xz','NJU_CLOSURE_PINS.json.sha256','NJU_RETENTION.json']
+if {kind!r}=='finalcheck': names += ['NJU_SOURCE_VERIFICATION.json','NJU_TOOL_PINS.json','NJU_EXPORT.json','NJU_CLOSURE_PINS.json.xz','NJU_CLOSURE_PINS.json.sha256','NJU_RETENTION.json','NJU_CLEANUP.json']
 if {kind!r}=='cleanup': names += ['NJU_CLEANUP.json']
 if {kind!r}=='projection': names += ['NJU_PROJECTION_CHECK.json']
-if {kind!r}=='retention': names += ['NJU_RETENTION.json']
+if {kind!r}=='retention': names += ['NJU_RETENTION.json','NJU_CLEANUP.json']
 if {kind!r}=='sourcecheck': names += ['NJU_SOURCE_VERIFICATION.json']
 if {kind!r}=='verify': names += ['NJU_CACHE_VERIFICATION.json']
 if {kind!r}=='tools': names += ['NJU_TOOL_PINS.json']

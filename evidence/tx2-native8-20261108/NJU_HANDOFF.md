@@ -21,3 +21,19 @@ Five native decoder/window pairs and five raw no-return/control pairs are retain
 The pair/finish word-bound restriction has been generalized away. NJU_WeakPairInstantiation.root and NJU_GeneralFinishRoot.finish/ported compile on arbitrary current raw words; they reuse the SAME native G and source/trace carriers. NJU_FinishAtCurrent.source_view installs the generalized bridge from SAME resume/query/flush with only the actual slice bound. Full Result, ordered effects, abort prefix and reviewed PairPort cut are retained. Final-message length2048 remains, derived from the entered View construction. No history/NoBad/current-proof persistence or finish-success premise. Formal credit is pending the combined/raw/scan gate and next ledger.
 
 NJU_CommonObserved.source compiles for the complete common invocation, including the finish event. NJU_ResumeObserved definitions compile after 8/8/6 query-read outlining under unchanged limits. Its log-erasure and emitted-reference proofs are still being worked on; no M01 native-parent closure is claimed. M02 remains an unconsumed external dependency.
+
+## Stage 4: same-invocation source logs
+
+NJU_ResumeRoot.source erases one source-ordered full-reply resume log to the exact
+NJC_RawCalls.resume, universally over the actual Reservation; cohort transports
+it through the retained state port. All error/abort prefixes survive in the writer
+carrier. NJU_CommonObserved.source similarly erases the common log to NJJ_Common.run.
+These are SOURCE transport, not a claim that every native cut has been associated.
+NJU_RootAudit prints their full statements and the generalized finish statement.
+Focused L088/L089/L090 pass, standard axioms only. Earlier structural proofs hit
+local elaboration limits; the replacement uses named literal tail continuations
+and constructor injection, without raising limits or changing the evaluator.
+
+M02 refresh: research now contains NJP's merged handoff, which explicitly leaves
+TX2:093 OPEN and provides no CLOSED TX2:053 packet. NJU_MERKLE_STATUS.json pins that
+read-only check. No unrelated NJP permutation/compression candidate is consumed.

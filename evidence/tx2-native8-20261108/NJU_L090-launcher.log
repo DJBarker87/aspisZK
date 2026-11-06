@@ -1,0 +1,39 @@
+{"attempt": "NJU_L090", "exit_status": 0, "wall_seconds": 12.57899484410882, "peak_rss_kib": "6329204", "swaps": "0", "print_axioms": ["'NJU_ResumeRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJU_ResumeRoot.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJU_CommonObserved.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJU_GeneralFinishRoot.finish' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJU_GeneralFinishRoot.ported' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJU_FinishAtCurrent.source_view' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJU_ResumeRoot.source : ∀ (reservation : AspisR1.NP6_StdModel.Reservation) {H : Type}
+  (d : AspisR1Stage2.aspis_core.digest.Digest32 H) (ck proof pub : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : NID_ResumeEmission.transport.Variant) (hash : H),
+  (NJU_ResumeObserved.run reservation d ck proof pub v hash).result =
+    NJC_RawCalls.resume (NJC_FilledClause.reserved reservation) d ck proof pub v hash :=
+fun reservation {H} d ck proof pub v hash =>
+  Eq.trans (NJU_ResumeErase.header reservation d ck proof pub v hash)
+    (NJU_ResumeReference.source reservation d ck proof pub v hash)
+theorem NJU_ResumeRoot.cohort : ∀ (reservation : AspisR1.NP6_StdModel.Reservation) {H : Type}
+  (d : AspisR1S
+...
+cution := AspisR1.NJF_FinishObserved.G r loc v p actual;
+                    AspisR1.Port3_NativeFinishBody.verifier.finish_relation (NIG_Slots.installed r) v p actual none =
+                        execution.1 ∧
+                      AspisR1.NIW_AlignFinishComposedLog.forget execution =
+                          AspisR1.NIW_AlignFinishExecution.run r v p actual ∧
+                        AspisR1.NIW_AlignFinishPrefix.Prefix execution.2.1 ∧
+                          AspisR1.NJU_WeakFinishPairCertificate.Bound r execution.2.2 ∧
+                            AspisR1.NIW_AlignFinishPort.Bound r port execution.2.2 :=
+fun reserved r loc {H} d ck proof pub hash p a after g geometry pending inactive ckSize resume start query size =>
+  let ⟨out, h✝⟩ :=
+    NJU_FinishCaller.reached reserved d ck proof pub hash p a after g geometry pending
+      (NJR_ViewFinish.view proof inactive) ckSize resume start query size rfl rfl rfl
+  let ⟨flush, facts⟩ := h✝
+  Exists.intro out
+    ⟨flush,
+      id fun port afterOwner cut =>
+        AspisR1.NJU_GeneralFinishRoot.ported r loc proof (NJR_ViewFinish.view proof inactive) p
+          { weights := ⟨↑out, out.property⟩, rhs := after.rhs, power := after.power, next := after.next } facts port
+          afterOwner cut⟩
+'NJU_ResumeRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJU_ResumeRoot.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJU_CommonObserved.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJU_GeneralFinishRoot.finish' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJU_GeneralFinishRoot.ported' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJU_FinishAtCurrent.source_view' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rea9b78638ee842d3a269809aea623dd9.scope; invocation ID: 3a22b8df18de49248603f83a1c3c5843
