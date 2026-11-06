@@ -1,0 +1,42 @@
+{"attempt": "NLQ_L037", "exit_status": 0, "wall_seconds": 12.305042509222403, "peak_rss_kib": "6024132", "swaps": "0", "print_axioms": ["'NLQ_Stage1Copy.copy' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLQ_Stage1Copy.wrong_length' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+copy : ∀ (e : Entry) (src : List UInt8),
+  src.length = (S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 2).1)).length →
+    have s := (NLQ_SnapshotFold.final e).sdk;
+    (NLQ_CopyTrace.G s 2 3 src).outcome =
+      NLF_CopyStep.Outcome.returned
+        (put s (s.accounts 2).data
+          (have __src := s.cells (s.accounts 2).data;
+          {
+            payload :=
+              have __src := (s.cells (s.accounts 2).data).payload;
+              { bytes := src, money := __src.money },
+            readers := __src.readers, writer := __src.writer }))
+        (Except.ok ())
+wrong_length : ∀ (e : Entry) (src : List UInt8),
+  src.length ≠ (S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e
+...
+copy : ∀ (e : Entry) (src : List UInt8),
+  src.length = (S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 2).1)).length →
+    have s := (NLQ_SnapshotFold.final e).sdk;
+    (NLQ_CopyTrace.G s 2 3 src).outcome =
+      NLF_CopyStep.Outcome.returned
+        (put s (s.accounts 2).data
+          (have __src := s.cells (s.accounts 2).data;
+          {
+            payload :=
+              have __src := (s.cells (s.accounts 2).data).payload;
+              { bytes := src, money := __src.money },
+            readers := __src.readers, writer := __src.writer }))
+        (Except.ok ())
+wrong_length : ∀ (e : Entry) (src : List UInt8),
+  src.length ≠ (S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 2).1)).length →
+    have s := (NLQ_SnapshotFold.final e).sdk;
+    (NLQ_CopyTrace.G s 2 3 src).outcome =
+      NLF_CopyStep.Outcome.abort
+        (put s (s.accounts 2).data
+          (have __src := s.cells (s.accounts 2).data;
+          { payload := __src.payload, readers := __src.readers, writer := some 3 }))
+'NLQ_Stage1Copy.copy' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_Stage1Copy.wrong_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r8612096abc7f407880b2601d381c91df.scope; invocation ID: 757f9398d62b44f593a5d58de629bb00

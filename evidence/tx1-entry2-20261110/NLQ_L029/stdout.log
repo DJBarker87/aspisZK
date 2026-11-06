@@ -1,0 +1,17 @@
+source_frame : ∀ (e : Entry),
+  (do
+      let pair ← (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).result
+      ok (pair.1, pair.2.sdk, pair.2.next, pair.2.owned)) =
+    ok
+      (e.first, (NLM_RuntimeInput.initial e).state, 3,
+        [e.snapshot 0 58295 58295, e.snapshot 1 1880 1880, e.snapshot 2 1768 1768])
+current_payload : ∀ (e : Entry) (account : ℕ),
+  ((NLQ_SnapshotFold.final e).sdk.cells ((NLQ_SnapshotFold.final e).sdk.accounts account).data).payload.bytes =
+    S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles account).1)
+admitted : ∀ (e : Entry),
+  AdapterRw.RuntimeEntrypointAdmission e.heap (fun a => (NLM_RuntimeInput.records e a).key) 3 →
+    (∀ a < 3, e.heap.ownerLive a = true) ∧
+      ∀ (i : ℕ), NLF_RefCell.flag ((NLQ_SnapshotFold.final e).sdk.cells i) = e.heap.counter i
+'NLQ_SnapshotFrame.source_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_SnapshotFrame.current_payload' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_SnapshotFrame.admitted' depends on axioms: [propext, Classical.choice, Quot.sound]

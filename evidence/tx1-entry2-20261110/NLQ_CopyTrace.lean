@@ -21,16 +21,16 @@ def G (s : State) (a t : Nat) (src : List UInt8) : Run :=
  | .error e => ⟨.returned acquisition.1 (.error e),[first]⟩
  | .ok g =>
    let p := deref acquisition.1 g
-   let prefix := [first,Event.deref acquisition.1 g p]
+   let beforeCopy := [first,Event.deref acquisition.1 g p]
    if src.length=p.bytes.length then
      let v := {p with bytes:=NLF_CopyValue.copy src p.bytes 0 src.length}
      let written := NLF_ViewLaws.write acquisition.1 g v
      let release := NLF_SdkModel.release written g
-     let events := prefix++[.copy acquisition.1 written g src,.release written g release]
+     let events := beforeCopy++[.copy acquisition.1 written g src,.release written g release]
      match release with
      | .ok post => ⟨.returned post (.ok ()),events⟩
      | .error _ => ⟨.abort acquisition.1,events++[.abort acquisition.1]⟩
-   else ⟨.abort acquisition.1,prefix++[.abort acquisition.1]⟩
+   else ⟨.abort acquisition.1,beforeCopy++[.abort acquisition.1]⟩
 /-- Full outcome erasure: returning borrow errors and live-guard aborts, not
 only successful copies. Native association still uses NLF K044/K045 windows. -/
 theorem erasure (s : State) (a t : Nat) (src : List UInt8) :
@@ -43,7 +43,7 @@ theorem erasure (s : State) (a t : Nat) (src : List UInt8) :
    | ok g =>
      dsimp only
      split
-     · split <;> rfl
+     · split <;> simp_all only
      · rfl
 #check @erasure
 #print axioms erasure

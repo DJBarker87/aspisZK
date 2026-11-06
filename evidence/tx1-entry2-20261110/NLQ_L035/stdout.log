@@ -1,0 +1,8 @@
+@fold : ∀ {A E P : Type} (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest)
+  (childCode : Code (core.result.Result A E)) (handler : E → Result P)
+  (child : NGP_L181.Observation (core.result.Result A E)),
+  NGP_L181.NativeAssociation hashv childCode child →
+    NGP_L181.NativeAssociation hashv (CheckpointBytes5Effect.bind childCode (continuation handler))
+      (observed handler child)
+'NLQ_FirstMap.mapper_cut' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_FirstMap.fold' depends on axioms: [propext, Classical.choice, Quot.sound]

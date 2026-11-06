@@ -1,0 +1,60 @@
+{"attempt": "NLQ_L034", "exit_status": 1, "wall_seconds": 2.772604343947023, "peak_rss_kib": "3420312", "swaps": "0", "print_axioms": ["'NLQ_CopyTrace.erasure' depends on axioms: [propext, sorryAx, Quot.sound]"]}
+NLQ_generated/NLQ_CopyTrace.lean:46:17: error: Tactic `rfl` failed: The left-hand side
+  { outcome := NLF_CopyStep.Outcome.returned post✝ (Except.ok ()),
+      events :=
+        [Event.acquire s post a t (Except.ok g), Event.deref post g (deref post g)] ++
+          [Event.copy post
+              (NLF_ViewLaws.write post g
+                { bytes := NLF_CopyValue.copy src (deref post g).bytes 0 src.length, money := (deref post g).money })
+              g src,
+            Event.release
+              (NLF_ViewLaws.write post g
+                { bytes := NLF_CopyValue.copy src (deref post g).bytes 0 src.length, money := (deref post g).money })
+              g
+              (release
+            
+...
+ t : ℕ
+src : List UInt8
+post : State
+g : Guard
+h : try_borrow_mut_data s a t = (post, Except.ok g)
+h✝ : src.length = (deref post g).bytes.length
+release✝ : Except Error State
+a✝ : Error
+heq✝ :
+  release
+      (NLF_ViewLaws.write post g
+        { bytes := NLF_CopyValue.copy src (deref post g).bytes 0 src.length, money := (deref post g).money })
+      g =
+    Except.error a✝
+⊢ { outcome := NLF_CopyStep.Outcome.abort post,
+        events :=
+          [Event.acquire s post a t (Except.ok g), Event.deref post g (deref post g)] ++
+              [Event.copy post
+                  (NLF_ViewLaws.write post g
+                    { bytes := NLF_CopyValue.copy src (deref post g).bytes 0 src.length,
+                      money := (deref post g).money })
+                  g src,
+                Event.release
+                  (NLF_ViewLaws.write post g
+                    { bytes := NLF_CopyValue.copy src (deref post g).bytes 0 src.length,
+                      money := (deref post g).money })
+                  g
+                  (release
+                    (NLF_ViewLaws.write post g
+                      { bytes := NLF_CopyValue.copy src (deref post g).bytes 0 src.length,
+                        money := (deref post g).money })
+                    g)] ++
+            [Event.abort post] }.outcome =
+    match
+      release
+        (NLF_ViewLaws.write post g
+          { bytes := NLF_CopyValue.copy src (deref post g).bytes 0 src.length, money := (deref post g).money })
+        g with
+    | Except.ok s'' => NLF_CopyStep.Outcome.returned s'' (Except.ok ())
+    | Except.error a => NLF_CopyStep.Outcome.abort post
+erasure : ∀ (s : State) (a t : ℕ) (src : List UInt8), (G s a t src).outcome = NLF_CopyStep.run s a t src
+'NLQ_CopyTrace.erasure' depends on axioms: [propext, sorryAx, Quot.sound]
+
+Running as unit: run-r53c77fef78f749d89f7c2f5d731ccacd.scope; invocation ID: b5dc5083f8ef49a383f22f7c05186fe7

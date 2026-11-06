@@ -1,0 +1,23 @@
+copy : ∀ (e : Entry) (src : List UInt8),
+  src.length = (S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 2).1)).length →
+    have s := (NLQ_SnapshotFold.final e).sdk;
+    (NLQ_CopyTrace.G s 2 3 src).outcome =
+      NLF_CopyStep.Outcome.returned
+        (put s (s.accounts 2).data
+          (have __src := s.cells (s.accounts 2).data;
+          {
+            payload :=
+              have __src := (s.cells (s.accounts 2).data).payload;
+              { bytes := src, money := __src.money },
+            readers := __src.readers, writer := __src.writer }))
+        (Except.ok ())
+wrong_length : ∀ (e : Entry) (src : List UInt8),
+  src.length ≠ (S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 2).1)).length →
+    have s := (NLQ_SnapshotFold.final e).sdk;
+    (NLQ_CopyTrace.G s 2 3 src).outcome =
+      NLF_CopyStep.Outcome.abort
+        (put s (s.accounts 2).data
+          (have __src := s.cells (s.accounts 2).data;
+          { payload := __src.payload, readers := __src.readers, writer := some 3 }))
+'NLQ_Stage1Copy.copy' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_Stage1Copy.wrong_length' depends on axioms: [propext, Classical.choice, Quot.sound]

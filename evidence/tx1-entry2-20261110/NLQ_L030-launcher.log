@@ -1,0 +1,22 @@
+{"attempt": "NLQ_L030", "exit_status": 0, "wall_seconds": 36.11844685394317, "peak_rss_kib": "6022168", "swaps": "0", "print_axioms": ["'NLQ_SnapshotPrefixes.first_abort' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLQ_SnapshotPrefixes.first_diverge' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+first_abort : ∀ (e : Entry) (err : Error) (a1 a2 : Result Unit),
+  (S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 0).1)).length = 58295 →
+    NLQ_SnapshotFold.G e (fail err) a1 a2 =
+      { result := fail err, events := allocationPrefix (ready e 0 []) 0 (fail err) }
+first_diverge : ∀ (e : Entry) (a1 a2 : Result Unit),
+  (S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 0).1)).length = 58295 →
+    NLQ_SnapshotFold.G e div a1 a2 = { result := div, events := allocationPrefix (ready e 0 []) 0 div }
+'NLQ_SnapshotPrefixes.first_abort' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_SnapshotPrefixes.first_diverge' depends on axioms: [propext, Classical.choice, Quo
+...
+first_abort : ∀ (e : Entry) (err : Error) (a1 a2 : Result Unit),
+  (S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 0).1)).length = 58295 →
+    NLQ_SnapshotFold.G e (fail err) a1 a2 =
+      { result := fail err, events := allocationPrefix (ready e 0 []) 0 (fail err) }
+first_diverge : ∀ (e : Entry) (a1 a2 : Result Unit),
+  (S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 0).1)).length = 58295 →
+    NLQ_SnapshotFold.G e div a1 a2 = { result := div, events := allocationPrefix (ready e 0 []) 0 div }
+'NLQ_SnapshotPrefixes.first_abort' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_SnapshotPrefixes.first_diverge' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r8894a66d7c19436ba3261988d73c4bdd.scope; invocation ID: 490833bff6d548fda02ed5d758f3be9e

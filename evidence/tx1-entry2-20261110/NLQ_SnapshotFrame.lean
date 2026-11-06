@@ -6,8 +6,8 @@ open Aeneas Aeneas.Std Result AspisR1 AspisR1.S2W_D189Entry
 /-- Frame of the SAME returned snapshot chain, not an independently chosen
 post-state. This is source/std support; allocation admission is still separate. -/
 theorem source_frame (e : Entry) :
- ((NLQ_SnapshotFold.G e (.ok ()) (.ok ()) (.ok ())).result.map
-  (fun pair => (pair.1,pair.2.sdk,pair.2.next,pair.2.owned))) =
+ (do let pair ← (NLQ_SnapshotFold.G e (.ok ()) (.ok ()) (.ok ())).result
+     ok (pair.1,pair.2.sdk,pair.2.next,pair.2.owned)) =
  .ok (e.first,(NLM_RuntimeInput.initial e).state,3,
   [e.snapshot 0 58295 58295,e.snapshot 1 1880 1880,e.snapshot 2 1768 1768]) := by
  rw [NLQ_SnapshotFold.returned]

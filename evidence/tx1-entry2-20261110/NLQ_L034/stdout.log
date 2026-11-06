@@ -1,0 +1,135 @@
+NLQ_generated/NLQ_CopyTrace.lean:46:17: error: Tactic `rfl` failed: The left-hand side
+  { outcome := NLF_CopyStep.Outcome.returned post✝ (Except.ok ()),
+      events :=
+        [Event.acquire s post a t (Except.ok g), Event.deref post g (deref post g)] ++
+          [Event.copy post
+              (NLF_ViewLaws.write post g
+                { bytes := NLF_CopyValue.copy src (deref post g).bytes 0 src.length, money := (deref post g).money })
+              g src,
+            Event.release
+              (NLF_ViewLaws.write post g
+                { bytes := NLF_CopyValue.copy src (deref post g).bytes 0 src.length, money := (deref post g).money })
+              g
+              (release
+                (NLF_ViewLaws.write post g
+                  { bytes := NLF_CopyValue.copy src (deref post g).bytes 0 src.length, money := (deref post g).money })
+                g)] }.outcome
+is not definitionally equal to the right-hand side
+  match
+    release
+      (NLF_ViewLaws.write post g
+        { bytes := NLF_CopyValue.copy src (deref post g).bytes 0 src.length, money := (deref post g).money })
+      g with
+  | Except.ok s'' => NLF_CopyStep.Outcome.returned s'' (Except.ok ())
+  | Except.error a => NLF_CopyStep.Outcome.abort post
+
+case h_1
+s : State
+a t : ℕ
+src : List UInt8
+post : State
+g : Guard
+h : try_borrow_mut_data s a t = (post, Except.ok g)
+h✝ : src.length = (deref post g).bytes.length
+release✝ : Except Error State
+post✝ : State
+heq✝ :
+  release
+      (NLF_ViewLaws.write post g
+        { bytes := NLF_CopyValue.copy src (deref post g).bytes 0 src.length, money := (deref post g).money })
+      g =
+    Except.ok post✝
+⊢ { outcome := NLF_CopyStep.Outcome.returned post✝ (Except.ok ()),
+        events :=
+          [Event.acquire s post a t (Except.ok g), Event.deref post g (deref post g)] ++
+            [Event.copy post
+                (NLF_ViewLaws.write post g
+                  { bytes := NLF_CopyValue.copy src (deref post g).bytes 0 src.length, money := (deref post g).money })
+                g src,
+              Event.release
+                (NLF_ViewLaws.write post g
+                  { bytes := NLF_CopyValue.copy src (deref post g).bytes 0 src.length, money := (deref post g).money })
+                g
+                (release
+                  (NLF_ViewLaws.write post g
+                    { bytes := NLF_CopyValue.copy src (deref post g).bytes 0 src.length,
+                      money := (deref post g).money })
+                  g)] }.outcome =
+    match
+      release
+        (NLF_ViewLaws.write post g
+          { bytes := NLF_CopyValue.copy src (deref post g).bytes 0 src.length, money := (deref post g).money })
+        g with
+    | Except.ok s'' => NLF_CopyStep.Outcome.returned s'' (Except.ok ())
+    | Except.error a => NLF_CopyStep.Outcome.abort post
+NLQ_generated/NLQ_CopyTrace.lean:46:17: error: Tactic `rfl` failed: The left-hand side
+  { outcome := NLF_CopyStep.Outcome.abort post,
+      events :=
+        [Event.acquire s post a t (Except.ok g), Event.deref post g (deref post g)] ++
+            [Event.copy post
+                (NLF_ViewLaws.write post g
+                  { bytes := NLF_CopyValue.copy src (deref post g).bytes 0 src.length, money := (deref post g).money })
+                g src,
+              Event.release
+                (NLF_ViewLaws.write post g
+                  { bytes := NLF_CopyValue.copy src (deref post g).bytes 0 src.length, money := (deref post g).money })
+                g
+                (release
+                  (NLF_ViewLaws.write post g
+                    { bytes := NLF_CopyValue.copy src (deref post g).bytes 0 src.length,
+                      money := (deref post g).money })
+                  g)] ++
+          [Event.abort post] }.outcome
+is not definitionally equal to the right-hand side
+  match
+    release
+      (NLF_ViewLaws.write post g
+        { bytes := NLF_CopyValue.copy src (deref post g).bytes 0 src.length, money := (deref post g).money })
+      g with
+  | Except.ok s'' => NLF_CopyStep.Outcome.returned s'' (Except.ok ())
+  | Except.error a => NLF_CopyStep.Outcome.abort post
+
+case h_2
+s : State
+a t : ℕ
+src : List UInt8
+post : State
+g : Guard
+h : try_borrow_mut_data s a t = (post, Except.ok g)
+h✝ : src.length = (deref post g).bytes.length
+release✝ : Except Error State
+a✝ : Error
+heq✝ :
+  release
+      (NLF_ViewLaws.write post g
+        { bytes := NLF_CopyValue.copy src (deref post g).bytes 0 src.length, money := (deref post g).money })
+      g =
+    Except.error a✝
+⊢ { outcome := NLF_CopyStep.Outcome.abort post,
+        events :=
+          [Event.acquire s post a t (Except.ok g), Event.deref post g (deref post g)] ++
+              [Event.copy post
+                  (NLF_ViewLaws.write post g
+                    { bytes := NLF_CopyValue.copy src (deref post g).bytes 0 src.length,
+                      money := (deref post g).money })
+                  g src,
+                Event.release
+                  (NLF_ViewLaws.write post g
+                    { bytes := NLF_CopyValue.copy src (deref post g).bytes 0 src.length,
+                      money := (deref post g).money })
+                  g
+                  (release
+                    (NLF_ViewLaws.write post g
+                      { bytes := NLF_CopyValue.copy src (deref post g).bytes 0 src.length,
+                        money := (deref post g).money })
+                    g)] ++
+            [Event.abort post] }.outcome =
+    match
+      release
+        (NLF_ViewLaws.write post g
+          { bytes := NLF_CopyValue.copy src (deref post g).bytes 0 src.length, money := (deref post g).money })
+        g with
+    | Except.ok s'' => NLF_CopyStep.Outcome.returned s'' (Except.ok ())
+    | Except.error a => NLF_CopyStep.Outcome.abort post
+erasure : ∀ (s : State) (a t : ℕ) (src : List UInt8), (G s a t src).outcome = NLF_CopyStep.run s a t src
+'NLQ_CopyTrace.erasure' depends on axioms: [propext, sorryAx, Quot.sound]
