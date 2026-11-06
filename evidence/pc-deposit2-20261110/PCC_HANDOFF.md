@@ -1,9 +1,15 @@
 # PCC deposit owner round 2
 
-POOL:328 OPEN; zero rows promoted. Stage 0 PASS_INTERMEDIATE_ONLY (PCC_STAGE0.json): replayed PCA intermediates with ledger23 NLS_COMBINED_IMPORT (the required NLO receipt filename imports ledger22 plus NLH; NLO_HANDOFF specifies the canonical module map).
+POOL:328 OPEN; zero Pool rows CLOSED. Target not yet established.
 
-Budget: 7/70 formal scopes, 0/60 Kani, 0/0 extraction. One admitted scope at a time, 6G/8G/swap0/tasks64; Lean -M7000. PCA_L050/PCA_K009 retired; no unchanged retry. No native launch before repaired E1 and compiled full fold.
+Stage0 PASS_INTERMEDIATE_ONLY: ledger23 NLS_COMBINED_IMPORT plus PCA intermediates, 47 raw roots/standard axioms, eight same-binary fixtures and NFX-style scan of17067 modules with zero dangling/import defects. PCC_L006's own manifest omitted implicit Init; fixed input passed L007. Stage0 commit9180599d2e8.
 
-E1 next: fixed functional child meanings; pinned ProgramError ABI propagation audit; named native-view, word and initial-state obligations. E2: explicit per-mode suffix proofs. E3: global token schedule including child/error/abort cleanup, RuntimeCpiAccountView keyed on metas; counter stability separate. E4/E6 native bridges follow fold. E5 PCB four class-A dependencies read-only, no duplication. E7 stage0 gate is intermediate only.
+Stage1 remains INCOMPLETE. Eleven fixed child-reference drafts (PCC_CHILDREN.md), full SDK ProgramError/ABI/raw-status models, tag/constant-map/bind transport, nested shared-loan/error/abort components, page image/window/counter/live-token support, count cases and typed linkage obligations compile. PCC_L064 checks all45 current support modules against passing source/object hashes and frozen source pins. These are not child/native/owner certificates.
 
-No shipped source, sibling worktree, key, release artifact or PCA file modified. Frozen pins inherited, not rebuilt. Target not yet established.
+E1 NOT MET: fixed references for every child and a dictionary-free PCC_Owner.spec are missing; no corrected full owner state/trace integrates the ABI quotient. Error-consumer inventory is partial; native-view/word/initial-state relations are explicit OPEN obligations with PCC_ owners. E2 NOT MET: no full per-mode source suffix or Result/event/state fold. E3 NOT MET: no complete ParentLive fold/child schedules/CPI counter frame. E4 NOT MET: no CPI native bridges/controls. E5 NOT MET: no child root instantiated. E6 NOT MET: no actual-parent native cuts. E7 stage0 MET for intermediates; final support closure gate pending.
+
+Budget currently64/70 formal scopes,0/60 Kani,0/0 extraction. No timeout/memory kill, cap increase or unchanged retired rerun. Formal errors were owned elaboration/input errors, corrected with changed sources; all retained. Native work is prohibited until the E1 and full-fold prerequisites are met. Unused Kani allowance is not exhaustion.
+
+PCC_REMAINING.md and PCC_CHILDREN.md record exact member blockers. PCB_ four direct class-A children remain read-only dependencies; the branch snapshot is PCC_PCB_PIN.json and no unmerged candidate is instantiated. Stream A/B rows/worktrees and host caches untouched. No source adoption, shipped edit, key/fund/authority action or push. Frozen Pool/source/verifier checks PASS; ELF pins inherited, not rebuilt (PCC_FROZEN_SOURCE.json).
+
+Next deliverable: missing functional reference packets, fixed owner state/spec and complete transitive error audit, then three explicit mode continuations. The guard-owner class's full feasibility and per-child native closure cost remain UNKNOWN; the local support lemmas do not establish tractability or intractability.

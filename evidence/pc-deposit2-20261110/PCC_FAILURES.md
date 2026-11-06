@@ -1,0 +1,5 @@
+# PCC failed attempts
+
+All failed receipts retained; none earns credit. No timeout or memory kill occurred through L064. L006 was the omitted implicit Init in the PCC-owned expected-import row; changed input passed L007 (PCC_VALIDATION_REPAIR.md). L009/L011 used reserved Lean identifiers meta/prefix, repaired. L015 used nonexistent Except.isError, replaced by exact Result-tag match. L031 required explicit local-let normalization in shared-scope proof; L032 passed. L033 required unfolding the reused PCA count reference; L034 passed. L035 required zeta reduction before splitting the small infos branch; L036 passed. L043/L044 were shared-scope let/tactic no-progress issues; changed proof passed L045. L052's Bool/Prop simp proof was repaired at L053. L057's already-simplified True goal was repaired at L058. L059 unfolded canonical too broadly in the eight-zero-limb lemma; the symbolic canonical Bool is now held fixed and L060 passed. These are proof-client/declaration errors, not frozen-program findings.
+
+PCA_L050/PCA_K009 remain retired and were never rerun. No Kani, extraction, Option<fn>, writable-static or copy-dependent PASS exists in PCC_.
