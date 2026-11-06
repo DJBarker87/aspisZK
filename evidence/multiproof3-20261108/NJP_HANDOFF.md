@@ -13,3 +13,5 @@ Frozen source 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387. No shipped changes autho
 Validation: initial read-only source/rule review only; no prover launched. Exact claim established: none yet. No assumptions discharged or changed. Section 6 protocol/feature/toolchain/wire pins inherited from NJE release pins, will be independently recorded before native credit. Standard axioms required on each new top theorem; no theorem yet.
 
 Next deliverable: actual frozen permutation controller harness plus perturbation control. Four rows remain OPEN pending native cuts, Lean composition, combined NJK+NJE+deployed import, NFX scan, raw ax2 and next ledger gate. No keys created or removed; no push; no other worktree modified.
+
+Controller stage: K006/K007 and stability K008/K009 semantic pass/fail. L002 compiles witness-threading and chronology (standard axioms only). K001 compiler failure and L001 unsolved Fin goal excluded. No combined audit/row admission yet. Seed copied 43 files / 7,347,304 bytes; hashes in NJP_SEED.json.

@@ -1,0 +1,155 @@
+info: nhr: no previous manifest, creating one from scratch
+info: toolchain not updated; no toolchain information found
+NJP_lean/NJP_ControllerTrace.lean:50:1: error: unsolved goals
+case right
+input : State
+states : Fin 23 → State
+r : Fin 21
+⊢ states ⟨↑r + 1, ⋯⟩.castSucc = states ⟨↑r, ⋯⟩.succ
+theorem NJP_ControllerTrace.result : ∀ (input : State) (states : Fin 23 → State)
+  (control : Fin 22 → ℕ × NJA_Trace.Kind),
+  Cut input states control →
+    NJE_RoundTrace.Canonical (states (Fin.last 22)) ∧
+      NJE_RoundTrace.cast (states (Fin.last 22)) = R0P.poseidonPermutation (NJE_RoundTrace.cast input) ∧
+        (List.ofFn (NJE_RoundTrace.observed input states)).length = 22 ∧
+          ∀ (r : Fin 22),
+            ((NJE_RoundTrace.observed input states r).round, (NJE_RoundTrace.observed input states r).kind) =
+              control r :=
+fun input states control cut =>
+  let ⟨bs, h✝⟩ := cut.leading
+  let ⟨sums, h✝¹⟩ := h✝
+  let ⟨args, h✝²⟩ := h✝¹
+  let ⟨leading, h✝³⟩ := h✝²
+  let ⟨start, initial⟩ := h✝³
+  let ⟨canonical, value⟩ := NJE_RoundTrace.composition input states bs sums args leading start initial cut.stages
+  ⟨canonical,
+    ⟨value,
+      ⟨of_eq_true
+          (Eq.trans
+            (congrFun'
+              (congrArg Eq
+                (Eq.trans
+                  (congrArg List.length
+                    (Eq.trans List.ofFn_succ
+                      (congrArg (List.cons (NJE_RoundTrace.observed input states 0))
+                        (Eq.trans List.ofFn_succ
+                          (congrArg (List.cons (NJE_RoundTrace.observed input states 1))
+                            (Eq.trans List.ofFn_succ
+                              (congrArg (List.cons (NJE_RoundTrace.observed input states 2))
+                                (Eq.trans List.ofFn_succ
+                                  (congrArg (List.cons (NJE_RoundTrace.observed input states 3))
+                                    (Eq.trans List.ofFn_succ
+                                      (congrArg (List.cons (NJE_RoundTrace.observed input states 4))
+                                        (Eq.trans List.ofFn_succ
+                                          (congrArg (List.cons (NJE_RoundTrace.observed input states 5))
+                                            (Eq.trans List.ofFn_succ
+                                              (congrArg (List.cons (NJE_RoundTrace.observed input states 6))
+                                                (Eq.trans List.ofFn_succ
+                                                  (congrArg (List.cons (NJE_RoundTrace.observed input states 7))
+                                                    (Eq.trans List.ofFn_succ
+                                                      (congrArg (List.cons (NJE_RoundTrace.observed input states 8))
+                                                        (Eq.trans List.ofFn_succ
+                                                          (congrArg (List.cons (NJE_RoundTrace.observed input states 9))
+                                                            (Eq.trans List.ofFn_succ
+                                                              (congrArg
+                                                                (List.cons (NJE_RoundTrace.observed input states 10))
+                                                                (Eq.trans List.ofFn_succ
+                                                                  (congrArg
+                                                                    (List.cons
+                                                                      (NJE_RoundTrace.observed input states 11))
+                                                                    (Eq.trans List.ofFn_succ
+                                                                      (congrArg
+                                                                        (List.cons
+                                                                          (NJE_RoundTrace.observed input states 12))
+                                                                        (Eq.trans List.ofFn_succ
+                                                                          (congrArg
+                                                                            (List.cons
+                                                                              (NJE_RoundTrace.observed input states 13))
+                                                                            (Eq.trans List.ofFn_succ
+                                                                              (congrArg
+                                                                                (List.cons
+                                                                                  (NJE_RoundTrace.observed input states
+                                                                                    14))
+                                                                                (Eq.trans List.ofFn_succ
+                                                                                  (congrArg
+                                                                                    (List.cons
+                                                                                      (NJE_RoundTrace.observed input
+                                                                                        states 15))
+                                                                                    (Eq.trans List.ofFn_succ
+                                                                                      (congrArg
+                                                                                        (List.cons
+                                                                                          (NJE_RoundTrace.observed input
+                                                                                            states 16))
+                                                                                        (Eq.trans ⋯
+                                                                                          ⋯))))))))))))))))))))))))))))))))))))
+                  (congrFun'
+                    (congrArg HAdd.hAdd
+                      (congrFun'
+                        (congrArg HAdd.hAdd
+                          (congrFun'
+                            (congrArg HAdd.hAdd
+                              (congrFun'
+                                (congrArg HAdd.hAdd
+                                  (congrFun'
+                                    (congrArg HAdd.hAdd
+                                      (congrFun'
+                                        (congrArg HAdd.hAdd
+                                          (congrFun'
+                                            (congrArg HAdd.hAdd
+                                              (congrFun'
+                                                (congrArg HAdd.hAdd
+                                                  (congrFun'
+                                                    (congrArg HAdd.hAdd
+                                                      (congrFun'
+                                                        (congrArg HAdd.hAdd
+                                                          (congrFun'
+                                                            (congrArg HAdd.hAdd
+                                                              (congrFun'
+                                                                (congrArg HAdd.hAdd
+                                                                  (congrFun'
+                                                                    (congrArg HAdd.hAdd
+                                                                      (congrFun'
+                                                                        (congrArg HAdd.hAdd
+                                                                          (congrFun'
+                                                                            (congrArg HAdd.hAdd
+                                                                              (congrFun'
+                                                                                (congrArg HAdd.hAdd
+                                                                                  (congrFun'
+                                                                                    (congrArg HAdd.hAdd
+                                                                                      (congrFun' (congrArg HAdd.hAdd ⋯)
+                                                                                        1))
+                                                                                    1))
+                                                                                1))
+                                                                            1))
+                                                                        1))
+                                                                    1))
+                                                                1))
+                                                            1))
+                                                        1))
+                                                    1))
+                                                1))
+                                            1))
+                                        1))
+                                    1))
+                                1))
+                            1))
+                        1))
+                    1)))
+              22)
+            (eq_self 22)),
+        fun r =>
+        Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                ((NJE_RoundTrace.observed input states r).round, (NJE_RoundTrace.observed input states r).kind) = _a)
+              (cut.controller r)))
+          (Eq.refl ((NJE_RoundTrace.observed input states r).round, (NJE_RoundTrace.observed input states r).kind))⟩⟩⟩
+'NJP_ControllerTrace.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_ControllerTrace.chronology : ∀ (input : State) (states : Fin 23 → State),
+  (NJE_RoundTrace.observed input states 0).input = input ∧
+    ∀ (r : Fin 21),
+      (NJE_RoundTrace.observed input states ⟨↑r + 1, ⋯⟩).input =
+        (NJE_RoundTrace.observed input states ⟨↑r, ⋯⟩).output :=
+fun input states => ⟨Eq.refl (NJE_RoundTrace.observed input states 0).input, sorry⟩
+'NJP_ControllerTrace.chronology' depends on axioms: [propext, sorryAx, Quot.sound]

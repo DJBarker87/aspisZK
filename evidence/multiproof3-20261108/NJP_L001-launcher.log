@@ -1,0 +1,53 @@
+{"attempt": "NJP_L001", "exit_status": 1, "wall_seconds": 2.70393701386638, "peak_rss_kib": "3837252", "swaps": "0", "print_axioms": ["'NJP_ControllerTrace.result' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_ControllerTrace.chronology' depends on axioms: [propext, sorryAx, Quot.sound]"]}
+info: nhr: no previous manifest, creating one from scratch
+info: toolchain not updated; no toolchain information found
+NJP_lean/NJP_ControllerTrace.lean:50:1: error: unsolved goals
+case right
+input : State
+states : Fin 23 → State
+r : Fin 21
+⊢ states ⟨↑r + 1, ⋯⟩.castSucc = states ⟨↑r, ⋯⟩.succ
+theorem NJP_ControllerTrace.result : ∀ (input : State) (states : Fin 23 → State)
+  (control : Fin 22 → ℕ × NJA_Trace.Kind),
+  Cut input states control →
+    NJE_RoundTrace.Canonical (states (Fin.last 22)) ∧
+      NJE_RoundTrace.cast (states (Fin.last 22)) = R0P.poseidonPermutation (NJE_RoundTrace.cast input) ∧
+        (List.ofFn (NJE_RoundTrace.observed input states)).length = 22 ∧
+          ∀ (r : Fin 2
+...
+                                                       1))
+                                                                            1))
+                                                                        1))
+                                                                    1))
+                                                                1))
+                                                            1))
+                                                        1))
+                                                    1))
+                                                1))
+                                            1))
+                                        1))
+                                    1))
+                                1))
+                            1))
+                        1))
+                    1)))
+              22)
+            (eq_self 22)),
+        fun r =>
+        Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                ((NJE_RoundTrace.observed input states r).round, (NJE_RoundTrace.observed input states r).kind) = _a)
+              (cut.controller r)))
+          (Eq.refl ((NJE_RoundTrace.observed input states r).round, (NJE_RoundTrace.observed input states r).kind))⟩⟩⟩
+'NJP_ControllerTrace.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_ControllerTrace.chronology : ∀ (input : State) (states : Fin 23 → State),
+  (NJE_RoundTrace.observed input states 0).input = input ∧
+    ∀ (r : Fin 21),
+      (NJE_RoundTrace.observed input states ⟨↑r + 1, ⋯⟩).input =
+        (NJE_RoundTrace.observed input states ⟨↑r, ⋯⟩).output :=
+fun input states => ⟨Eq.refl (NJE_RoundTrace.observed input states 0).input, sorry⟩
+'NJP_ControllerTrace.chronology' depends on axioms: [propext, sorryAx, Quot.sound]
+
+Running as unit: run-r22f674be9dcc448d968328790a43e7ee.scope; invocation ID: e2dfef9cc8f6439a829c6e9ebf0eabd6

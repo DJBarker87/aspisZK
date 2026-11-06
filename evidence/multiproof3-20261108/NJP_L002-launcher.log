@@ -1,0 +1,51 @@
+{"attempt": "NJP_L002", "exit_status": 0, "wall_seconds": 2.5692383388523012, "peak_rss_kib": "3852608", "swaps": "0", "print_axioms": ["'NJP_ControllerTrace.result' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_ControllerTrace.chronology' depends on axioms: [propext, Quot.sound]"]}
+theorem NJP_ControllerTrace.result : ∀ (input : State) (states : Fin 23 → State)
+  (control : Fin 22 → ℕ × NJA_Trace.Kind),
+  Cut input states control →
+    NJE_RoundTrace.Canonical (states (Fin.last 22)) ∧
+      NJE_RoundTrace.cast (states (Fin.last 22)) = R0P.poseidonPermutation (NJE_RoundTrace.cast input) ∧
+        (List.ofFn (NJE_RoundTrace.observed input states)).length = 22 ∧
+          ∀ (r : Fin 22),
+            ((NJE_RoundTrace.observed input states r).round, (NJE_RoundTrace.observed input states r).kind) =
+              control r :=
+fun input states control cut =>
+  let ⟨bs, h✝⟩ := cut.leading
+  let ⟨sums, h✝¹⟩ := h✝
+  let ⟨args, h✝²⟩ := h✝¹
+  let ⟨leading, h✝³⟩ := h✝²
+  let ⟨start,
+...
+un _a =>
+                ((NJE_RoundTrace.observed input states r).round, (NJE_RoundTrace.observed input states r).kind) = _a)
+              (cut.controller r)))
+          (Eq.refl ((NJE_RoundTrace.observed input states r).round, (NJE_RoundTrace.observed input states r).kind))⟩⟩⟩
+'NJP_ControllerTrace.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_ControllerTrace.chronology : ∀ (input : State) (states : Fin 23 → State),
+  (NJE_RoundTrace.observed input states 0).input = input ∧
+    ∀ (r : Fin 21),
+      (NJE_RoundTrace.observed input states ⟨↑r + 1, ⋯⟩).input =
+        (NJE_RoundTrace.observed input states ⟨↑r, ⋯⟩).output :=
+fun input states =>
+  ⟨Eq.refl (NJE_RoundTrace.observed input states 0).input, fun r =>
+    id
+      (Eq.mpr
+        (id
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (ite_congr
+                  (eq_false
+                    (have this := fun a => chronology._proof_3 r a;
+                    this))
+                  (fun a => Eq.refl input) fun a =>
+                  Eq.refl (states ⟨↑r + 1, Decidable.byContradiction fun a => chronology._proof_1 r a⟩.castSucc))
+                (if_false input
+                  (states ⟨↑r + 1, Decidable.byContradiction fun a => chronology._proof_1 r a⟩.castSucc))))
+            (states ⟨↑r, Decidable.byContradiction fun a => chronology._proof_2 r a⟩.succ)))
+        ((fun a a_1 e_a => e_a ▸ Eq.refl (states a))
+          ⟨↑r + 1, Decidable.byContradiction fun a => chronology._proof_1 r a⟩.castSucc
+          ⟨↑r, Decidable.byContradiction fun a => chronology._proof_2 r a⟩.succ
+          (Eq.refl ⟨↑r + 1, Decidable.byContradiction fun a => chronology._proof_1 r a⟩.castSucc)))⟩
+'NJP_ControllerTrace.chronology' depends on axioms: [propext, Quot.sound]
+
+Running as unit: run-r00165ce9eb5e462599e4b128d46bbbbb.scope; invocation ID: 8d6f5586198547ab8bf87f5ee7d14633
