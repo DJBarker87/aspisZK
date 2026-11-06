@@ -1,0 +1,19 @@
+# PCC deposit owner feasibility
+
+**Incomplete E1 repair; POOL:328 OPEN; zero Pool rows CLOSED. Target not yet established.** Guard-owner feasibility remains undecided.
+
+* **E1 NOT MET.** Eleven fixed child-reference drafts now replace free reference arguments for the corresponding packets. Full SDK ProgramError, ABI projection, raw-status conversion and tag/constant-map/bind transport compile. Typed native-view, machine-word and initial-state obligations have owners. But the remaining complex/CPI packets and fixed dictionary-free PCC_Owner.spec are absent, the full owner state/trace has not integrated the ABI quotient, and the error-consumer audit is transitive-incomplete. No free Children dictionary is hidden inside a renamed structure.
+* **E2 NOT MET.** No complete explicit FreshGenesis/ExistingSamePage/FreshRollover continuation chain or full Result/event/post-state fold. PCA_L050 remains retired.
+* **E3 NOT MET.** Nested shared-scope/error/abort components, page windows/counters, ParentLive preservation for page writes, and lane cleanup after page-acquisition Err compile. Cell-ledger validity is explicitly distinguished from all-parent-guards-live. The global fold, every child schedule and CPI SDK/counter/header frames remain unproved.
+* **E4 NOT MET.** Neither CPI bridge/control exists. RuntimeCpiAccountView is transcribed with clause1 on metas; token/system semantics and readonly-entry are never assumed. Raw status conversion is modeled exactly rather than assuming identity on every u64.
+* **E5 NOT MET.** No child root instantiated. Four direct class-A children remain PCB_ dependencies. PCC_CHILDREN.md lists all25 direct children plus nested357, their exact missing references/domains/association and native work.
+* **E6 NOT MET.** No actual-parent native cuts or association to the transcription.
+* **E7 MET for SUPPORT only.** Final headline/ledger23/PCA/PCC import, all183 raw roots,66 new top-theorem audits, eight fixtures on the SAME binary and NFX-style scan of17112 modules pass.33705 selected object/sidecar hashes include resolved Aeneas objects;277 predecessor pins and45 support objects remain unchanged. This closes no native or Pool row.
+
+Measured cost: stage0: 7 scopes, 226.804s payload wall, 7982592KiB peak RSS; stage1: 57 scopes, 239.698s payload wall, 3322372KiB peak RSS; final_support_gate: 6 scopes, 194.157s payload wall, 7984040KiB peak RSS. Swaps0 throughout. All70/70 formal scopes used;0/60 Kani and0/0 extraction. Admission refusals were waited out; every actual launch had exit0 AND allowed:true and host free>=40GB. Caps6G/8G/swap0/tasks64; Lean-M7000. No timeout, memory kill, cap increase or retired unchanged rerun. Owned elaboration/input errors and their repairs are retained.
+
+Per-child remaining closure cost is UNKNOWN for every child here. There is no new CLOSED child example from which to derive native/owner cost; small reference elaboration times are not such examples. No estimate is extrapolated from compiler/setup failures. NLF support is reused within its domain, not promoted to a parent certificate.
+
+The full formal allowance was consumed during E1/support work and the required gates. Every unspent native member is blocked by the binding E1-before-native and compiled-full-fold prerequisites; PCC_REMAINING.md lists each source member and its further missing facts. Unused Kani allowance is not called exhaustion or evidence of impossibility.
+
+**Verdict:** local functional-reference and small loan/window proofs are feasible under the caps; the complete guard-owner class is not established tractable or intractable. The next deliverable is the missing fixed packets/owner state/spec and transitive error audit, then three explicit mode folds. The100-bit PER-ATTEMPT, privacy and two-transaction targets and frozen release remain unchanged. No shipped edit or ELF rebuild trigger; pins inherited, not reproduced.
