@@ -1,0 +1,31 @@
+import NLO_COMBINED_IMPORT
+import NLB_COMBINED_IMPORT
+import NKU_COMBINED_IMPORT
+import NLN_COMBINED_IMPORT
+import NLP_Assembly
+import NLP_C01
+import NLP_C04All
+import NLP_C04AtActual
+import NLP_C04Chronology
+import NLP_C04Effects
+import NLP_C04Folded
+import NLP_C04Query
+import NLP_C04Reply
+import NLP_C04Roots
+import NLP_C04Trees
+import NLP_EffectOrder
+import NLP_EnteredTransport
+import NLP_FoldedRange
+import NLP_FoldedValue
+import NLP_InputCounterexample
+import NLP_InputDomain
+import NLP_NativeFold
+import NLP_NativeMerkle
+import NLP_ResumeInstall
+import NLP_ResumeRoots
+import NLP_RootCodec
+import NLP_RootDomain
+import NLP_TransportDomain
+set_option pp.proofs false
+#check AspisR1.RPx_Deployed.deployed
+#print axioms AspisR1.RPx_Deployed.deployed
