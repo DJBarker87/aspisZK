@@ -1,0 +1,43 @@
+{"attempt": "NJS_L051", "exit_status": 0, "wall_seconds": 3.8580391220748425, "peak_rss_kib": "4394684", "swaps": "0", "print_axioms": ["'NJS_BatchLeaf.copied' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJS_BatchLeaf.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJS_BatchLeaf.domains' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJS_BatchLeaf.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NJS_BatchLeaf.copied (s : Slice U8) (size : (↑s).length = 32) :
+  (do
+      let r ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s
+      core.result.Result.unwrap core.fmt.DebugTryFromSliceError r) =
+    ok ⟨↑s, size⟩
+NJS_BatchLeaf.source {H : Type} (d : NJS_Extract.aspis_core.digest.Digest32 H) (hash : H) (kind : Usize) (q : Slice U8)
+  (len : (↑q).length = 832) :
+  NJS_Extract.verifier.candidate.batch_leaf (ok 113#u8) (ok 241#u8) (fun {H} => privateLeaf) d hash kind q =
+    Port4B_LeafCode.native (modelDigest d) hash kind q
+NJS_BatchLeaf.domains (q : Slice U8) (len : (↑q).length = 832) :
+  (↑(MultiproofConeSlices.sub q 0#usize 480#usize)).length = 480 ∧
+    (↑(Mult
+...
+sh kind q
+NJS_BatchLeaf.domains (q : Slice U8) (len : (↑q).length = 832) :
+  (↑(MultiproofConeSlices.sub q 0#usize 480#usize)).length = 480 ∧
+    (↑(MultiproofConeSlices.sub q 480#usize 608#usize)).length = 128 ∧
+      (↑(MultiproofConeSlices.sub q 672#usize 800#usize)).length = 128 ∧
+        (↑(MultiproofConeSlices.sub q 608#usize 640#usize)).length = 32 ∧
+          (↑(MultiproofConeSlices.sub q 640#usize 672#usize)).length = 32 ∧
+            (↑(MultiproofConeSlices.sub q 800#usize 832#usize)).length = 32
+NJS_BatchLeaf.deployed (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (kind : Usize)
+  (q : Slice U8) (len : (↑q).length = 832) (before : CheckpointBytes5Effect.Log) :
+  NJS_Extract.verifier.candidate.batch_leaf (ok 113#u8) (ok 241#u8) (fun {H} => privateLeaf)
+        (NJS_RuntimeDigest.backend H) () kind q =
+      ok
+        (AspisV8R19.SqueezeOracleBridge.encodeState
+          (H (AspisV8R19.SqueezeOracleBridge.flatten (Port4B_LeafCode.input kind q)))) ∧
+    CheckpointBytes5Effect.run (NJS_RuntimeDigest.stage H) () (Port4B_LeafCode.code kind q) before =
+      ok
+        (AspisV8R19.SqueezeOracleBridge.encodeState
+            (H (AspisV8R19.SqueezeOracleBridge.flatten (Port4B_LeafCode.input kind q))),
+          before ++
+            [(Port4B_LeafCode.input kind q,
+                AspisV8R19.SqueezeOracleBridge.encodeState
+                  (H (AspisV8R19.SqueezeOracleBridge.flatten (Port4B_LeafCode.input kind q))))])
+'NJS_BatchLeaf.copied' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJS_BatchLeaf.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJS_BatchLeaf.domains' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJS_BatchLeaf.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r3c13da79c2364e5cb3326f3006b16399.scope; invocation ID: 820d97e118ba4db5a46baa5c33b6795d

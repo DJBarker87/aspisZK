@@ -1,0 +1,83 @@
+{
+  "attempt": "NJS_K001",
+  "kind": "kani",
+  "module": "key_at",
+  "sources": [
+    "NJS_gate.py",
+    "NJS_harness.rs",
+    "NJS_KMX.patch",
+    "NJS_NHR_stage.py"
+  ],
+  "upload": [
+    "NJS_gate.py",
+    "NJS_harness.rs",
+    "NJS_KMX.patch",
+    "NJS_NHR_stage.py"
+  ],
+  "command": [
+    "python3",
+    "NJS_gate.py",
+    "NJS_K001.json"
+  ],
+  "collect": [
+    "NJS_K001_validation"
+  ],
+  "timeout": 180,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-batch-merkle-20261108/NJS_target",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-Copt-level=3 -C link-arg=-Wl,--threads=1"
+  },
+  "deps_fingerprint": {},
+  "expected_time": "optimized compilation then named native helper/cut",
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-batch-merkle-20261108/NJS_workspace/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-batch-merkle-20261108/NJS_target",
+    "--features",
+    "private-leaf-salts,optimized-terminal,program-build",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "verifier::candidate::NJS_native::key_at",
+    "--output-format",
+    "terse"
+  ],
+  "configuration_source_revision": null,
+  "source_revision": "d8a4855a4142739fed947123939b6d87d1d1e3f9",
+  "source_tree_dirty": true,
+  "exit_status": 1,
+  "wall_seconds": 5.615289635956287,
+  "peak_rss_kib": "533308",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rc30dd38c1cff4a5b9b0ed1675756d7a9.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "754327552",
+  "source_hashes": {
+    "NJS_gate.py": "fb4960d32163c77912b296fc12bd587eda5ddc089a25a7b19b408c65cd968cd7",
+    "NJS_harness.rs": "5fccc1bfe24154aeeaed6f341a2dfd0c19356700093a193492e9fe5625afc6ac",
+    "NJS_KMX.patch": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+    "NJS_NHR_stage.py": "fe808b7aa26e6f6aa21176241468e0b58193b186947066bfc7f854ffdfd182db"
+  },
+  "print_axioms": "N/A: kani"
+}

@@ -1,0 +1,114 @@
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -338,3 +338,5 @@
+     mark(obs, Phase::Parsed);
+     tx2_common(public_bytes, proof, checkpoint, hash, obs)
+ }
++
++#[cfg(kani)] mod NJS_native { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../NJS_harness.rs")); }
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -1,4 +1,5 @@
+ //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
++#![cfg_attr(kani, feature(allocator_api))]
+ #![no_std]
+ extern crate alloc;
+ pub mod sampler;
+
+--- /dev/null
++++ b/NJS_harness.rs
+@@ -0,0 +1,94 @@
++use super::*;
++#[allow(non_snake_case)]
++mod kmx { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs")); }
++#[kani::proof]
++#[kani::unwind(18)]
++#[kani::stub(core::ptr::copy_nonoverlapping,kmx::KMX_copy_nonoverlapping)]
++fn key_at() {
++ let keys:[u64;16]=kani::any();let i:usize=kani::any();kani::assume(i<16);
++ let actual=batch_key_at(&keys,i);
++ #[cfg(not(NJS_invert))] assert_eq!(actual,keys[i]);
++ #[cfg(NJS_invert)] assert_ne!(actual,keys[i]);
++}
++#[kani::proof]
++#[kani::unwind(18)]
++#[kani::stub(core::ptr::copy_nonoverlapping,kmx::KMX_copy_nonoverlapping)]
++fn same_index() {
++ let values:[u32;16]=kani::any();let i:usize=kani::any();let expected:u32=kani::any();kani::assume(i<16);
++ let actual=same_batch_index(&values,i,expected);
++ #[cfg(not(NJS_invert))] assert_eq!(actual,values[i]==expected);
++ #[cfg(NJS_invert)] assert_ne!(actual,values[i]==expected);
++}
++#[kani::proof]
++#[kani::unwind(34)]
++#[kani::stub(core::ptr::copy_nonoverlapping,kmx::KMX_copy_nonoverlapping)]
++fn same_leaf() {
++ let values:[[u8;32];16]=kani::any();let leaf:[u8;32]=kani::any();let i:usize=kani::any();kani::assume(i<16);
++ let actual=same_batch_leaf(&values,i,leaf);
++ #[cfg(not(NJS_invert))] assert_eq!(actual,values[i]==leaf);
++ #[cfg(NJS_invert)] assert_ne!(actual,values[i]==leaf);
++}
++#[derive(Clone,Copy)]
++struct LeafOracle<'a> { value: &'a [u8], salt: &'a [u8;32], tag:u8, byte:usize, salt_byte:usize, reply:[u8;32], count:&'a core::cell::Cell<usize> }
++impl aspis_core::Digest32 for LeafOracle<'_> {
++ fn digest(&self,parts:&[&[u8]])->[u8;32] {
++  assert_eq!(self.count.get(),0);self.count.set(1);
++  assert_eq!(parts.len(),3);assert_eq!(parts[0].len(),2);assert_eq!(parts[0][0],0x10);assert_eq!(parts[0][1],self.tag);
++  assert_eq!(parts[1].len(),self.value.len());assert_eq!(parts[1].as_ptr(),self.value.as_ptr());
++  if !self.value.is_empty(){assert_eq!(parts[1][self.byte],self.value[self.byte]);}
++  assert_eq!(parts[2].len(),32);assert_eq!(parts[2].as_ptr(),self.salt.as_ptr());assert_eq!(parts[2][self.salt_byte],self.salt[self.salt_byte]);
++  self.reply
++ }
++}
++#[kani::proof]
++#[kani::unwind(34)]
++#[kani::stub(core::ptr::copy_nonoverlapping,kmx::KMX_copy_nonoverlapping)]
++fn private_leaf() {
++ let value:[u8;480]=kani::any();let salt:[u8;32]=kani::any();let reply:[u8;32]=kani::any();let tag:u8=kani::any();let n:usize=kani::any();let k:usize=kani::any();kani::assume(n<=480);kani::assume(k<core::cmp::max(n,1));
++ let salt_byte:usize=kani::any();kani::assume(salt_byte<32);
++ let calls=core::cell::Cell::new(0);let hash=LeafOracle{value:&value[..n],salt:&salt,tag,byte:k,salt_byte,reply,count:&calls};
++ let actual=aspis_core::state_only_private_merkle::private_leaf_hash_with_digest(hash,tag,&value[..n],&salt);
++ assert_eq!(calls.get(),1);
++ let out:usize=kani::any();kani::assume(out<32);
++ #[cfg(not(NJS_invert))] assert_eq!(actual[out],reply[out]);
++ #[cfg(NJS_invert)] assert_ne!(actual[out],reply[out]);
++}
++#[derive(Clone,Copy)]
++struct ParentOracle<'a> { children:&'a [[u8;32];8], child:usize, byte:usize, reply:[u8;32], count:&'a core::cell::Cell<usize> }
++impl aspis_core::Digest32 for ParentOracle<'_> {
++ fn digest(&self,parts:&[&[u8]])->[u8;32] {
++  assert_eq!(self.count.get(),0);self.count.set(1);
++  assert_eq!(parts.len(),9);assert_eq!(parts[0].len(),1);assert_eq!(parts[0][0],0x18);
++  assert_eq!(parts[self.child+1].len(),32);
++  assert_eq!(parts[self.child+1].as_ptr(),self.children[self.child].as_ptr());
++  assert_eq!(parts[self.child+1][self.byte],self.children[self.child][self.byte]);
++  self.reply
++ }
++}
++#[kani::proof]
++#[kani::unwind(34)]
++#[kani::stub(core::ptr::copy_nonoverlapping,kmx::KMX_copy_nonoverlapping)]
++fn parent() {
++ let children:[[u8;32];8]=kani::any();let reply:[u8;32]=kani::any();let child:usize=kani::any();let byte:usize=kani::any();kani::assume(child<8);kani::assume(byte<32);
++ let calls=core::cell::Cell::new(0);let hash=ParentOracle{children:&children,child,byte,reply,count:&calls};
++ let actual=aspis_core::r0::merkle::parent_with_digest(hash,&children);
++ assert_eq!(calls.get(),1);
++ #[cfg(not(NJS_invert))] assert_eq!(actual[byte],reply[byte]);
++ #[cfg(NJS_invert)] assert_ne!(actual[byte],reply[byte]);
++}
++#[inline(never)]
++fn slot_offset_spec(s:usize)->usize {
++ assert!(s<=6);
++ [28359,33031,37703,41799,47303,52807,57607][s]
++}
++#[kani::proof]
++#[kani::unwind(34)]
++#[kani::stub(crate::compact::slot_offset,slot_offset_spec)]
++#[kani::stub(core::ptr::copy_nonoverlapping,kmx::KMX_copy_nonoverlapping)]
++fn slot_view() {
++ let proof:[u8;57607]=kani::any();let s:usize=kani::any();kani::assume(s<6);
++ let actual=slot(&proof,s);let start=slot_offset_spec(s);let end=slot_offset_spec(s+1);
++ assert_eq!(actual.as_ptr(),proof.as_ptr().wrapping_add(start));
++ #[cfg(not(NJS_invert))] assert_eq!(actual.len(),end-start);
++ #[cfg(NJS_invert)] assert_ne!(actual.len(),end-start);
++}

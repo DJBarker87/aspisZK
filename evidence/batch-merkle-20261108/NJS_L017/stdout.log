@@ -1,0 +1,11 @@
+def Aeneas.Std.U64.wrapping_shl : U64 → U32 → U64 :=
+fun x s => UScalar.wrapping_shl x s
+def Aeneas.Std.UScalar.cast : {src_ty : UScalarTy} → (tgt_ty : UScalarTy) → UScalar src_ty → UScalar tgt_ty :=
+fun {src_ty} tgt_ty x => BitVec.zeroExtend tgt_ty.numBits x.bv#uscalar
+instHOrUScalar
+theorem Nat.shiftLeft_add_eq_or_of_lt : ∀ {i b : ℕ}, b < 2 ^ i → ∀ (a : ℕ), a <<< i + b = a <<< i ||| b :=
+fun {i b} b_lt a =>
+  Eq.mpr (id (congrArg (fun _a => _a + b = _a ||| b) (Nat.shiftLeft_eq a i)))
+    (Eq.mpr (id (congrArg (fun _a => _a + b = _a ||| b) (Nat.mul_comm a (2 ^ i))))
+      (Eq.mpr (id (congrArg (fun _a => _a = 2 ^ i * a ||| b) (Nat.two_pow_add_eq_or_of_lt b_lt a)))
+        (Eq.refl (2 ^ i * a ||| b))))

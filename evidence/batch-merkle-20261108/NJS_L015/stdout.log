@@ -1,0 +1,368 @@
+NJS_BatchLeaf.lean:41:47: error: unsolved goals
+H : Type
+d : NJS_Extract.aspis_core.digest.Digest32 H
+hash : H
+kind : Usize
+q : Slice U8
+len : (↑q).length = 832
+range :
+  ∀ (a b : Usize),
+    ↑a ≤ ↑b →
+      ↑b ≤ 832 →
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) q { start := a, «end» := b } =
+          ok (MultiproofConeSlices.sub q a b)
+headRange :
+  ∀ (b : Usize),
+    ↑b ≤ 832 →
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) q { «end» := b } =
+        ok (MultiproofConeSlices.sub q 0#usize b)
+a b : Usize
+ha : ↑a ≤ ↑b
+hb : ↑b ≤ 832
+width : ↑b - ↑a = 32
+⊢ 32 = ↑32#usize
+NJS_BatchLeaf.lean:50:3: error: Tactic `rfl` failed: The left-hand side
+  match ↑0#usize with
+  | 0 => do
+    let r ←
+      core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8
+          (MultiproofConeSlices.sub q 608#usize 640#usize)
+    let salt ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+    (refDigest d).digest hash
+        (Array.make 3#usize
+            [(Array.make 2#usize [16#u8, 113#u8] ⋯).to_slice, MultiproofConeSlices.sub q 0#usize 480#usize,
+              salt.to_slice]
+            ⋯).to_slice
+  | 1 => do
+    let s ←
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) q
+          { start := 640#usize, «end» := 672#usize }
+    let r ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s
+    let salt ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+    let s1 ←
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) q
+          { start := 480#usize, «end» := 608#usize }
+    (refDigest d).digest hash
+        (Array.make 3#usize [(Array.make 2#usize [16#u8, 241#u8] ⋯).to_slice, s1, salt.to_slice] ⋯).to_slice
+  | x => do
+    let s ←
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) q
+          { start := 800#usize, «end» := 832#usize }
+    let r ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s
+    let salt ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+    let s1 ←
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) q
+          { start := 672#usize, «end» := 800#usize }
+    (refDigest d).digest hash
+        (Array.make 3#usize [(Array.make 2#usize [16#u8, 114#u8] ⋯).to_slice, s1, salt.to_slice] ⋯).to_slice
+is not definitionally equal to the right-hand side
+  (modelDigest d).digest hash
+    (if True then
+      Port4B_LeafCode.parts 113#u8 (MultiproofConeSlices.sub q 0#usize 480#usize)
+        (MultiproofConeSlices.sub q 608#usize 640#usize)
+    else
+      if 0#usize = 1#usize then
+        Port4B_LeafCode.parts 241#u8 (MultiproofConeSlices.sub q 480#usize 608#usize)
+          (MultiproofConeSlices.sub q 640#usize 672#usize)
+      else
+        Port4B_LeafCode.parts 114#u8 (MultiproofConeSlices.sub q 672#usize 800#usize)
+          (MultiproofConeSlices.sub q 800#usize 832#usize))
+
+case pos
+H : Type
+d : NJS_Extract.aspis_core.digest.Digest32 H
+hash : H
+q : Slice U8
+len : (↑q).length = 832
+range :
+  ∀ (a b : Usize),
+    ↑a ≤ ↑b →
+      ↑b ≤ 832 →
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) q { start := a, «end» := b } =
+          ok (MultiproofConeSlices.sub q a b)
+headRange :
+  ∀ (b : Usize),
+    ↑b ≤ 832 →
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) q { «end» := b } =
+        ok (MultiproofConeSlices.sub q 0#usize b)
+cp :
+  ∀ (a b : Usize) (ha : ↑a ≤ ↑b) (hb : ↑b ≤ 832) (width : ↑b - ↑a = 32),
+    (do
+        let r ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 (MultiproofConeSlices.sub q a b)
+        core.result.Result.unwrap core.fmt.DebugTryFromSliceError r) =
+      ok ⟨↑(MultiproofConeSlices.sub q a b), ⋯⟩
+⊢ (match ↑0#usize with
+    | 0 => do
+      let r ←
+        core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8
+            (MultiproofConeSlices.sub q 608#usize 640#usize)
+      let salt ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+      (refDigest d).digest hash
+          (Array.make 3#usize
+              [(Array.make 2#usize [16#u8, 113#u8] ⋯).to_slice, MultiproofConeSlices.sub q 0#usize 480#usize,
+                salt.to_slice]
+              ⋯).to_slice
+    | 1 => do
+      let s ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) q
+            { start := 640#usize, «end» := 672#usize }
+      let r ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s
+      let salt ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+      let s1 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) q
+            { start := 480#usize, «end» := 608#usize }
+      (refDigest d).digest hash
+          (Array.make 3#usize [(Array.make 2#usize [16#u8, 241#u8] ⋯).to_slice, s1, salt.to_slice] ⋯).to_slice
+    | x => do
+      let s ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) q
+            { start := 800#usize, «end» := 832#usize }
+      let r ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s
+      let salt ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+      let s1 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) q
+            { start := 672#usize, «end» := 800#usize }
+      (refDigest d).digest hash
+          (Array.make 3#usize [(Array.make 2#usize [16#u8, 114#u8] ⋯).to_slice, s1, salt.to_slice] ⋯).to_slice) =
+    (modelDigest d).digest hash
+      (if True then
+        Port4B_LeafCode.parts 113#u8 (MultiproofConeSlices.sub q 0#usize 480#usize)
+          (MultiproofConeSlices.sub q 608#usize 640#usize)
+      else
+        if 0#usize = 1#usize then
+          Port4B_LeafCode.parts 241#u8 (MultiproofConeSlices.sub q 480#usize 608#usize)
+            (MultiproofConeSlices.sub q 640#usize 672#usize)
+        else
+          Port4B_LeafCode.parts 114#u8 (MultiproofConeSlices.sub q 672#usize 800#usize)
+            (MultiproofConeSlices.sub q 800#usize 832#usize))
+NJS_BatchLeaf.lean:58:5: error: Tactic `rfl` failed: The left-hand side
+  match ↑1#usize with
+  | 0 => do
+    let s ←
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) q
+          { start := 608#usize, «end» := 640#usize }
+    let r ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s
+    let salt ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+    let s1 ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) q { «end» := 480#usize }
+    (refDigest d).digest hash
+        (Array.make 3#usize [(Array.make 2#usize [16#u8, 113#u8] ⋯).to_slice, s1, salt.to_slice] ⋯).to_slice
+  | 1 => do
+    let r ←
+      core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8
+          (MultiproofConeSlices.sub q 640#usize 672#usize)
+    let salt ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+    (refDigest d).digest hash
+        (Array.make 3#usize
+            [(Array.make 2#usize [16#u8, 241#u8] ⋯).to_slice, MultiproofConeSlices.sub q 480#usize 608#usize,
+              salt.to_slice]
+            ⋯).to_slice
+  | x => do
+    let s ←
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) q
+          { start := 800#usize, «end» := 832#usize }
+    let r ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s
+    let salt ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+    let s1 ←
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) q
+          { start := 672#usize, «end» := 800#usize }
+    (refDigest d).digest hash
+        (Array.make 3#usize [(Array.make 2#usize [16#u8, 114#u8] ⋯).to_slice, s1, salt.to_slice] ⋯).to_slice
+is not definitionally equal to the right-hand side
+  (modelDigest d).digest hash
+    (if True then
+      Port4B_LeafCode.parts 241#u8 (MultiproofConeSlices.sub q 480#usize 608#usize)
+        (MultiproofConeSlices.sub q 640#usize 672#usize)
+    else
+      Port4B_LeafCode.parts 114#u8 (MultiproofConeSlices.sub q 672#usize 800#usize)
+        (MultiproofConeSlices.sub q 800#usize 832#usize))
+
+case pos
+H : Type
+d : NJS_Extract.aspis_core.digest.Digest32 H
+hash : H
+q : Slice U8
+len : (↑q).length = 832
+range :
+  ∀ (a b : Usize),
+    ↑a ≤ ↑b →
+      ↑b ≤ 832 →
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) q { start := a, «end» := b } =
+          ok (MultiproofConeSlices.sub q a b)
+headRange :
+  ∀ (b : Usize),
+    ↑b ≤ 832 →
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) q { «end» := b } =
+        ok (MultiproofConeSlices.sub q 0#usize b)
+cp :
+  ∀ (a b : Usize) (ha : ↑a ≤ ↑b) (hb : ↑b ≤ 832) (width : ↑b - ↑a = 32),
+    (do
+        let r ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 (MultiproofConeSlices.sub q a b)
+        core.result.Result.unwrap core.fmt.DebugTryFromSliceError r) =
+      ok ⟨↑(MultiproofConeSlices.sub q a b), ⋯⟩
+z : ¬1#usize = 0#usize
+⊢ (match ↑1#usize with
+    | 0 => do
+      let s ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) q
+            { start := 608#usize, «end» := 640#usize }
+      let r ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s
+      let salt ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+      let s1 ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) q { «end» := 480#usize }
+      (refDigest d).digest hash
+          (Array.make 3#usize [(Array.make 2#usize [16#u8, 113#u8] ⋯).to_slice, s1, salt.to_slice] ⋯).to_slice
+    | 1 => do
+      let r ←
+        core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8
+            (MultiproofConeSlices.sub q 640#usize 672#usize)
+      let salt ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+      (refDigest d).digest hash
+          (Array.make 3#usize
+              [(Array.make 2#usize [16#u8, 241#u8] ⋯).to_slice, MultiproofConeSlices.sub q 480#usize 608#usize,
+                salt.to_slice]
+              ⋯).to_slice
+    | x => do
+      let s ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) q
+            { start := 800#usize, «end» := 832#usize }
+      let r ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s
+      let salt ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+      let s1 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) q
+            { start := 672#usize, «end» := 800#usize }
+      (refDigest d).digest hash
+          (Array.make 3#usize [(Array.make 2#usize [16#u8, 114#u8] ⋯).to_slice, s1, salt.to_slice] ⋯).to_slice) =
+    (modelDigest d).digest hash
+      (if True then
+        Port4B_LeafCode.parts 241#u8 (MultiproofConeSlices.sub q 480#usize 608#usize)
+          (MultiproofConeSlices.sub q 640#usize 672#usize)
+      else
+        Port4B_LeafCode.parts 114#u8 (MultiproofConeSlices.sub q 672#usize 800#usize)
+          (MultiproofConeSlices.sub q 800#usize 832#usize))
+NJS_BatchLeaf.lean:69:7: error: Tactic `rfl` failed: The left-hand side
+  do
+    let r ←
+      core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8
+          (MultiproofConeSlices.sub q 800#usize 832#usize)
+    let salt ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+    (refDigest d).digest hash
+        (Array.make 3#usize
+            [(Array.make 2#usize [16#u8, 114#u8] ⋯).to_slice, MultiproofConeSlices.sub q 672#usize 800#usize,
+              salt.to_slice]
+            ⋯).to_slice
+is not definitionally equal to the right-hand side
+  (modelDigest d).digest hash
+    (Port4B_LeafCode.parts 114#u8 (MultiproofConeSlices.sub q 672#usize 800#usize)
+      (MultiproofConeSlices.sub q 800#usize 832#usize))
+
+case h_3
+H : Type
+d : NJS_Extract.aspis_core.digest.Digest32 H
+hash : H
+kind : Usize
+q : Slice U8
+len : (↑q).length = 832
+range :
+  ∀ (a b : Usize),
+    ↑a ≤ ↑b →
+      ↑b ≤ 832 →
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) q { start := a, «end» := b } =
+          ok (MultiproofConeSlices.sub q a b)
+headRange :
+  ∀ (b : Usize),
+    ↑b ≤ 832 →
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) q { «end» := b } =
+        ok (MultiproofConeSlices.sub q 0#usize b)
+cp :
+  ∀ (a b : Usize) (ha : ↑a ≤ ↑b) (hb : ↑b ≤ 832) (width : ↑b - ↑a = 32),
+    (do
+        let r ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 (MultiproofConeSlices.sub q a b)
+        core.result.Result.unwrap core.fmt.DebugTryFromSliceError r) =
+      ok ⟨↑(MultiproofConeSlices.sub q a b), ⋯⟩
+z : ¬kind = 0#usize
+o : ¬kind = 1#usize
+zv : ↑kind ≠ 0
+ov : ↑kind ≠ 1
+x✝² : ℕ
+x✝¹ : ↑kind = 0 → False
+x✝ : ↑kind = 1 → False
+⊢ (do
+      let r ←
+        core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8
+            (MultiproofConeSlices.sub q 800#usize 832#usize)
+      let salt ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+      (refDigest d).digest hash
+          (Array.make 3#usize
+              [(Array.make 2#usize [16#u8, 114#u8] ⋯).to_slice, MultiproofConeSlices.sub q 672#usize 800#usize,
+                salt.to_slice]
+              ⋯).to_slice) =
+    (modelDigest d).digest hash
+      (Port4B_LeafCode.parts 114#u8 (MultiproofConeSlices.sub q 672#usize 800#usize)
+        (MultiproofConeSlices.sub q 800#usize 832#usize))
+NJS_BatchLeaf.lean:46:78: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [NJS_Extract.verifier.candidate.batch_leaf, ̲Port4B_LeafCode.input,i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵,̵
+       range 608#usize 640#usize (by decide) (by decide), ̲headRange 480#usize (by decide),
+       cp 608#usize 640#usize (by decide) (by decide) (by decide), ̲bind_tc_ok,
+  ̵  ̵ ̵ ̵ ̵privateLeaf,
+  ̲ ̲ ̲ ̲ ̲ ̲NDH_TranscriptReference.leaf_ref, ̲lift, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJS_BatchLeaf.lean:48:5: warning: This simp argument is unused:
+  cp 608#usize 640#usize (by decide) (by decide) (by decide)
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵J̵S̵_̵E̵x̵t̵r̵a̵c̵t̵.̵v̵e̵r̵i̵f̵i̵e̵r̵.̵c̵a̵n̵d̵i̵d̵a̵t̵e̵.̵b̵a̵t̵c̵h̵_̵l̵e̵a̵f̵,̵P̵o̵r̵t̵4̵B̵_̵L̵e̵a̵f̵C̵o̵d̵e̵.̵i̵n̵p̵u̵t̵,̵i̵f̵_̵p̵o̵s̵[̲N̲J̲S̲_̲E̲x̲t̲r̲a̲c̲t̲.̲v̲e̲r̲i̲f̲i̲e̲r̲.̲c̲a̲n̲d̲i̲d̲a̲t̲e̲.̲b̲a̲t̲c̲h̲_̲l̲e̲a̲f̲,̲ ̲P̲o̲r̲t̲4̲B̲_̲L̲e̲a̲f̲C̲o̲d̲e̲.̲i̲n̲p̲u̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲ rfl,
+       range 608#usize 640#usize (by decide) (by d̵e̵c̵i̵d̵e̵)̵,̵h̵e̵a̵d̵R̵a̵n̵g̵e̵d̲e̲c̲i̲d̲e̲)̲,̲ ̲h̲e̲a̲d̲R̲a̲n̲g̲e̲ 480#usize (by decide), c̵p̵ ̵6̵0̵8̵#̵u̵s̵i̵z̵e̵ ̵6̵4̵0̵#̵u̵s̵i̵z̵e̵ ̵(̵b̵y̵ ̵d̵e̵c̵i̵d̵e̵)̵ ̵(̵b̵y̵ ̵d̵e̵c̵i̵d̵e̵)̵ ̵(̵b̵y̵ ̵d̵e̵c̵i̵d̵e̵)̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵p̵r̵i̵v̵a̵t̵e̵L̵e̵a̵f̵,̵N̵D̵H̵_̵T̵r̵a̵n̵s̵c̵r̵i̵p̵t̵R̵e̵f̵e̵r̵e̵n̵c̵e̵.̵l̵e̵a̵f̵_̵r̵e̵f̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲p̲r̲i̲v̲a̲t̲e̲L̲e̲a̲f̲,̲ ̲N̲D̲H̲_̲T̲r̲a̲n̲s̲c̲r̲i̲p̲t̲R̲e̲f̲e̲r̲e̲n̲c̲e̲.̲l̲e̲a̲f̲_̲r̲e̲f̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJS_BatchLeaf.lean:54:48: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵J̵S̵_̵E̵x̵t̵r̵a̵c̵t̵.̵v̵e̵r̵i̵f̵i̵e̵r̵.̵c̵a̵n̵d̵i̵d̵a̵t̵e̵.̵b̵a̵t̵c̵h̵_̵l̵e̵a̵f̵,̵P̵o̵r̵t̵4̵B̵_̵L̵e̵a̵f̵C̵o̵d̵e̵.̵i̵n̵p̵u̵t̵,̵[̲N̲J̲S̲_̲E̲x̲t̲r̲a̲c̲t̲.̲v̲e̲r̲i̲f̲i̲e̲r̲.̲c̲a̲n̲d̲i̲d̲a̲t̲e̲.̲b̲a̲t̲c̲h̲_̲l̲e̲a̲f̲,̲ ̲P̲o̲r̲t̲4̲B̲_̲L̲e̲a̲f̲C̲o̲d̲e̲.̲i̲n̲p̲u̲t̲,̲
+         show ¬̵1̵#̵u̵s̵i̵z̵e̵=̵0̵#̵u̵s̵i̵z̵e̵¬̲1̲#̲u̲s̲i̲z̲e̲ ̲=̲ ̲0̲#̲u̲s̲i̲z̲e̲ by d̵e̵c̵i̵d̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵,̵d̲e̲c̲i̲d̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲
+         range 640#usize 672#usize (by decide) (by d̵e̵c̵i̵d̵e̵)̵,̵r̵a̵n̵g̵e̵d̲e̲c̲i̲d̲e̲)̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲r̲a̲n̲g̲e̲ 480#usize 608#usize (by decide) (by decide),
+         cp 640#usize 672#usize (by decide) (by decide) (by d̵e̵c̵i̵d̵e̵)̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵r̵i̵v̵a̵t̵e̵L̵e̵a̵f̵,̵N̵D̵H̵_̵T̵r̵a̵n̵s̵c̵r̵i̵p̵t̵R̵e̵f̵e̵r̵e̵n̵c̵e̵.̵l̵e̵a̵f̵_̵r̵e̵f̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵d̲e̲c̲i̲d̲e̲)̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲p̲r̲i̲v̲a̲t̲e̲L̲e̲a̲f̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲N̲D̲H̲_̲T̲r̲a̲n̲s̲c̲r̲i̲p̲t̲R̲e̲f̲e̲r̲e̲n̲c̲e̲.̲l̲e̲a̲f̲_̲r̲e̲f̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJS_BatchLeaf.lean:56:7: warning: This simp argument is unused:
+  cp 640#usize 672#usize (by decide) (by decide) (by decide)
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵J̵S̵_̵E̵x̵t̵r̵a̵c̵t̵.̵v̵e̵r̵i̵f̵i̵e̵r̵.̵c̵a̵n̵d̵i̵d̵a̵t̵e̵.̵b̵a̵t̵c̵h̵_̵l̵e̵a̵f̵,̵P̵o̵r̵t̵4̵B̵_̵L̵e̵a̵f̵C̵o̵d̵e̵.̵i̵n̵p̵u̵t̵,̵[̲N̲J̲S̲_̲E̲x̲t̲r̲a̲c̲t̲.̲v̲e̲r̲i̲f̲i̲e̲r̲.̲c̲a̲n̲d̲i̲d̲a̲t̲e̲.̲b̲a̲t̲c̲h̲_̲l̲e̲a̲f̲,̲ ̲P̲o̲r̲t̲4̲B̲_̲L̲e̲a̲f̲C̲o̲d̲e̲.̲i̲n̲p̲u̲t̲,̲
+         show ¬̵1̵#̵u̵s̵i̵z̵e̵=̵0̵#̵u̵s̵i̵z̵e̵¬̲1̲#̲u̲s̲i̲z̲e̲ ̲=̲ ̲0̲#̲u̲s̲i̲z̲e̲ by d̵e̵c̵i̵d̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵p̵o̵s̵d̲e̲c̲i̲d̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲i̲f̲_̲p̲o̲s̲ rfl,
+         range 640#usize 672#usize (by decide) (by d̵e̵c̵i̵d̵e̵)̵,̵r̵a̵n̵g̵e̵d̲e̲c̲i̲d̲e̲)̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲r̲a̲n̲g̲e̲ 480#usize 608#usize (by decide) (by decide), c̵p̵ ̵6̵4̵0̵#̵u̵s̵i̵z̵e̵ ̵6̵7̵2̵#̵u̵s̵i̵z̵e̵ ̵(̵b̵y̵ ̵d̵e̵c̵i̵d̵e̵)̵ ̵(̵b̵y̵ ̵d̵e̵c̵i̵d̵e̵)̵ ̵(̵b̵y̵ ̵d̵e̵c̵i̵d̵e̵)̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵r̵i̵v̵a̵t̵e̵L̵e̵a̵f̵,̵N̵D̵H̵_̵T̵r̵a̵n̵s̵c̵r̵i̵p̵t̵R̵e̵f̵e̵r̵e̵n̵c̵e̵.̵l̵e̵a̵f̵_̵r̵e̵f̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲p̲r̲i̲v̲a̲t̲e̲L̲e̲a̲f̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲N̲D̲H̲_̲T̲r̲a̲n̲s̲c̲r̲i̲p̲t̲R̲e̲f̲e̲r̲e̲n̲c̲e̲.̲l̲e̲a̲f̲_̲r̲e̲f̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJS_BatchLeaf.lean:67:9: warning: This simp argument is unused:
+  cp 800#usize 832#usize (by decide) (by decide) (by decide)
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵o̵r̵t̵4̵B̵_̵L̵e̵a̵f̵C̵o̵d̵e̵.̵i̵n̵p̵u̵t̵,̵i̵f̵_̵n̵e̵g̵ ̵z̵,̵i̵f̵_̵n̵e̵g̵[̲P̲o̲r̲t̲4̲B̲_̲L̲e̲a̲f̲C̲o̲d̲e̲.̲i̲n̲p̲u̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲z̲,̲ ̲i̲f̲_̲n̲e̲g̲ o,
+         range 800#usize 832#usize (by decide) (by d̵e̵c̵i̵d̵e̵)̵,̵r̵a̵n̵g̵e̵d̲e̲c̲i̲d̲e̲)̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲r̲a̲n̲g̲e̲ 672#usize 800#usize (by decide) (by decide), c̵p̵ ̵8̵0̵0̵#̵u̵s̵i̵z̵e̵ ̵8̵3̵2̵#̵u̵s̵i̵z̵e̵ ̵(̵b̵y̵ ̵d̵e̵c̵i̵d̵e̵)̵ ̵(̵b̵y̵ ̵d̵e̵c̵i̵d̵e̵)̵ ̵(̵b̵y̵ ̵d̵e̵c̵i̵d̵e̵)̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵r̵i̵v̵a̵t̵e̵L̵e̵a̵f̵,̵N̵D̵H̵_̵T̵r̵a̵n̵s̵c̵r̵i̵p̵t̵R̵e̵f̵e̵r̵e̵n̵c̵e̵.̵l̵e̵a̵f̵_̵r̵e̵f̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲p̲r̲i̲v̲a̲t̲e̲L̲e̲a̲f̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲N̲D̲H̲_̲T̲r̲a̲n̲s̲c̲r̲i̲p̲t̲R̲e̲f̲e̲r̲e̲n̲c̲e̲.̲l̲e̲a̲f̲_̲r̲e̲f̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJS_BatchLeaf.copied (s : Slice U8) (size : (↑s).length = 32) :
+  (do
+      let r ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s
+      core.result.Result.unwrap core.fmt.DebugTryFromSliceError r) =
+    ok ⟨↑s, size⟩
+NJS_BatchLeaf.source {H : Type} (d : NJS_Extract.aspis_core.digest.Digest32 H) (hash : H) (kind : Usize) (q : Slice U8)
+  (len : (↑q).length = 832) :
+  NJS_Extract.verifier.candidate.batch_leaf (ok 113#u8) (ok 241#u8) (fun {H} => privateLeaf) d hash kind q =
+    Port4B_LeafCode.native (modelDigest d) hash kind q
+'NJS_BatchLeaf.copied' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJS_BatchLeaf.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

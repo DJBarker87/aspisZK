@@ -1,0 +1,66 @@
+{"attempt": "NJS_L041", "exit_status": 1, "wall_seconds": 3.6970208070706576, "peak_rss_kib": "4408516", "swaps": "0", "print_axioms": ["'NJS_Swap.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJS_Swap.lean:31:47: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  e ≥ 0
+  d ≥ 16
+  d - e ≤ -1
+  d - f ≤ -1
+  c ≥ 0
+  0 ≤ b ≤ 15
+  0 ≤ a ≤ 15
+where
+ a := ↑↑i
+ b := ↑↑j
+ c := ↑(Array.to_slice keys).length
+ d := ↑k
+ e := ↑(↑((Std.Array.set keys i (↑keys)[↑j]!).set j (↑keys)[↑i]!)).length
+ f := ↑↑16#usize
+NJS_Swap.lean:37:9: error: Type mismatch: After simplification, term
+  right
+ has type
+  @Eq U64 (↑slice)[↑j]! (↑keys)[↑i]!
+but is expected to have type
+  @Eq U64 (↑slice)[↑j]! (if True then (↑keys)[↑i]! else if ↑j = ↑i then (↑keys)[↑j]! else (↑keys)[↑j]!)
+NJS_Swap.lean:40:11: error: Type mismatch: After simplification, term
+  left
+ has 
+...
+NJS_Swap.lean:31:47: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  e ≥ 0
+  d ≥ 16
+  d - e ≤ -1
+  d - f ≤ -1
+  c ≥ 0
+  0 ≤ b ≤ 15
+  0 ≤ a ≤ 15
+where
+ a := ↑↑i
+ b := ↑↑j
+ c := ↑(Array.to_slice keys).length
+ d := ↑k
+ e := ↑(↑((Std.Array.set keys i (↑keys)[↑j]!).set j (↑keys)[↑i]!)).length
+ f := ↑↑16#usize
+NJS_Swap.lean:37:9: error: Type mismatch: After simplification, term
+  right
+ has type
+  @Eq U64 (↑slice)[↑j]! (↑keys)[↑i]!
+but is expected to have type
+  @Eq U64 (↑slice)[↑j]! (if True then (↑keys)[↑i]! else if ↑j = ↑i then (↑keys)[↑j]! else (↑keys)[↑j]!)
+NJS_Swap.lean:40:11: error: Type mismatch: After simplification, term
+  left
+ has type
+  @Eq U64 (↑slice)[↑i]! (↑keys)[↑j]!
+but is expected to have type
+  @Eq U64 (↑slice)[↑i]! (if True then (↑keys)[↑j]! else (↑keys)[↑i]!)
+NJS_Swap.lean:42:5: error: Type mismatch: After simplification, term
+  cells
+ has type
+  (↑out)[k] = (↑((Std.Array.set keys i ((↑keys)[↑j]?.getD default)).set j ((↑keys)[↑i]?.getD default)))[k]?.getD default
+but is expected to have type
+  (↑out)[k] = (↑((Std.Array.set keys i ((↑keys)[↑j]?.getD default)).set j ((↑keys)[↑i]?.getD default)))[k]
+'NJS_Swap.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r4861c47317d745078860829e9e7daad2.scope; invocation ID: 6b2f2e2632464545966dfa2a70f7079d

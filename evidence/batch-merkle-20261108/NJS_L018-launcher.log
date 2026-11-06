@@ -1,0 +1,59 @@
+{"attempt": "NJS_L018", "exit_status": 1, "wall_seconds": 5.879506963072345, "peak_rss_kib": "4278012", "swaps": "0", "print_axioms": ["'NJS_Parse.map_bind' does not depend on any axioms", "'NJS_Parse.map_ite' does not depend on any axioms", "'NJS_Parse.map_ok' does not depend on any axioms", "'NJS_Parse.proof_bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJS_Parse.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJS_Parse.lean:30:89: error: unsolved goals
+⊢ (do
+      let i ←
+        do
+          let i ← 146#usize + 172#usize
+          let i1 ← 2#usize * i
+          let i2 ← 128#usize + 150#usize
+          i1 + i2
+      let i1 ← 32#usize * i
+      let i2 ←
+        do
+          let i ←
+            do
+              let i ← 480#usize + 128#usize
+              let i1 ← i + 32#usize
+              let i2 ← i1 + 32#usize
+              let i3 ← i2 + 128#usize
+              i3 + 32#usize
+          let i1 ← 22#usize * i
+          let i2 ←
+            do
+              let i ← 64#usize * 32#usize
+              let i1 ←
+                do
+                  let i ← NJS_Extract.compact.OFF_ROUND1
+                  
+...
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                      { start := 9#usize, «end» := 16#usize }
+                let i4 ← core.slice.Slice.iter s1
+                let (b1, _) ←
+                  Op3I_Std.ops.iterAny
+                      Op3I_Source.verifier.candidate.parse_shape.closure.Insts.CoreOpsFunctionFnMutTupleSharedU8Bool i4
+                      ()
+                if b1 = true then ok (core.result.Result.Err Op3I_Source.verifier.Error.Parse)
+                  else ok (core.result.Result.Ok Op3I_Source.transport.Variant.S2)
+NJS_Parse.lean:74:69: warning: This simp argument is unused:
+  variant
+
+Hint: Omit it from the simp argument list.
+  simp only [NJS_Extract.verifier.candidate.parse_shape, Op3I_Source.verifier.candidate.parse_shape,
+     proof_bytes, ̲Op3I_Header.proof_bytes, ̲map_bind, ̲map_ite, ̲map_ok, ̲reply,v̵a̵r̵i̵a̵n̵t̵,̵ ̲error,
+     NJS_Extract.Slice.Insts.CoreCmpPartialEqArray, ̲Op3I_Source.Slice.Insts.CoreCmpPartialEqArray,
+     NJS_Extract.transport.Variant.tag, ̲Op3I_Source.transport.Variant.tag]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJS_Parse.source (proof : Slice U8) :
+  map reply
+      (NJS_Extract.verifier.candidate.parse_shape (fun {T U} {N} => Op3I_Std.ops.sliceNe)
+        (fun {T U} {N} => Op3I_Std.ops.sliceEq) (fun {T F} => Op3I_Std.ops.iterAny) proof) =
+    Op3I_Source.verifier.candidate.parse_shape Op3I_Std.ops proof
+'NJS_Parse.map_bind' does not depend on any axioms
+'NJS_Parse.map_ite' does not depend on any axioms
+'NJS_Parse.map_ok' does not depend on any axioms
+'NJS_Parse.proof_bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NJS_Parse.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rfa0f84bc60894363a50fac7914892093.scope; invocation ID: c7399c5b89984a89a570dd7ab876cd7e

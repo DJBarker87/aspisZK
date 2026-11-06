@@ -1,0 +1,93 @@
+NJS_KeyStep.lean:47:3: error: unsolved goals
+case pos
+queries : Std.Array U32 22#usize
+lo n tree : Usize
+iter : core.ops.range.Range Usize
+keys : Std.Array U64 16#usize
+size : ↑n ≤ 16
+fit : ↑lo + ↑n ≤ 22
+finish : iter.end = n
+active : ↑iter.start < ↑n
+iter1 : core.ops.range.Range (UScalar UScalarTy.Usize)
+hs : ↑iter1.start = ↑iter.start + 1
+he : iter1.end = iter.end
+run :
+  core.iter.range.IteratorRange.next
+      (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize) iter =
+    ok (some iter.start, iter1)
+address : UScalar UScalarTy.Usize
+add : lo + iter.start = ok address
+addressVal : ↑address = ↑lo + ↑iter.start
+addressEq : lo.wrapping_add iter.start = address
+u : U32
+read : queries.index_usize address = ok u
+uval : u = (↑queries)[↑address]
+divided : UScalar UScalarTy.U32
+division : u / 4#u32 = ok divided
+dividedVal : ↑divided = ↑u / ↑4#u32
+chosen : U32 := if tree = 2#usize then divided else u
+select : (if tree = 2#usize then u / 4#u32 else ok u) = ok chosen
+value : U64 := NJS_KeyWord.pack chosen iter.start
+changed : Std.Array U64 16#usize
+write : keys.update iter.start value = ok changed
+changedEq : changed = keys.set iter.start value
+room : ↑lo + ↑iter.start < (↑queries).length
+ue : u = (↑queries)[↑lo + ↑iter.start]!
+val : ↑value = 256 * ↑chosen + ↑iter.start
+tag : tree = 2#usize
+⊢ 256 * (↑(↑queries)[↑lo + ↑iter.start]! / ↑4#u32) + ↑iter.start =
+    256 * (↑(↑queries)[↑lo + ↑iter.start]! / 4) + ↑iter.start
+NJS_KeyStep.lean:51:3: error: 'change' tactic failed, pattern
+  (do
+      let out ← keys.update iter.start value
+      ok (cont (iter1, out))) =
+    ?m.980
+is not definitionally equal to target
+  (let (o, iter1) := (some iter.start, iter1)
+    match o with
+    | none => ok (done keys)
+    | some j => do
+      let u ← queries.index_usize (lo.wrapping_add j)
+      let index ← if tree = 2#usize then u / 4#u32 else ok u
+      let keys1 ←
+        keys.update j ((core.convert.num.FromU64U32.from index).wrapping_shl 8#u32 ||| UScalar.cast UScalarTy.U64 j)
+      ok (cont (iter1, keys1))) =
+    ok (cont (iter1, keys.set iter.start value))
+NJS_KeyStep.lean:50:10: warning: This simp argument is unused:
+  addressEq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵J̵S̵_̵E̵x̵t̵r̵a̵c̵t̵.̵v̵e̵r̵i̵f̵i̵e̵r̵.̵c̵a̵n̵d̵i̵d̵a̵t̵e̵.̵b̵a̵t̵c̵h̵_̵k̵e̵y̵s̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵r̵u̵n̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵l̵i̵f̵t̵,̵a̵d̵d̵r̵e̵s̵s̵E̵q̵,̵r̵e̵a̵d̵,̵s̵e̵l̵e̵c̵t̵]̵[̲N̲J̲S̲_̲E̲x̲t̲r̲a̲c̲t̲.̲v̲e̲r̲i̲f̲i̲e̲r̲.̲c̲a̲n̲d̲i̲d̲a̲t̲e̲.̲b̲a̲t̲c̲h̲_̲k̲e̲y̲s̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲ ̲r̲u̲n̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲l̲i̲f̲t̲,̲ ̲r̲e̲a̲d̲,̲
+  ̲ ̲ ̲ ̲s̲e̲l̲e̲c̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJS_KeyStep.lean:50:20: warning: This simp argument is unused:
+  read
+
+Hint: Omit it from the simp argument list.
+  simp only [NJS_Extract.verifier.candidate.batch_keys_loop.body, ̲run, ̲bind_tc_ok,
+  ̵  ̵ ̵ ̵ ̵lift,
+  ̲ ̲ ̲ ̲addressEq,r̵e̵a̵d̵,̵ ̲select]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJS_KeyStep.lean:50:25: warning: This simp argument is unused:
+  select
+
+Hint: Omit it from the simp argument list.
+  simp only [NJS_Extract.verifier.candidate.batch_keys_loop.body, ̲run, ̲bind_tc_ok,
+  ̵  ̵ ̵ ̵ ̵lift,
+  ̲ ̲ ̲ ̲addressEq, ̲read,̵s̵e̵l̵e̵c̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJS_KeyStep.lean:56:9: error: Application type mismatch: The argument
+  ↑iter.end
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.15
+of sort `Type (?u.15 + 1)` in the application
+  @InitialSeg ↑iter.end
+NJS_KeyStep.lean:56:23: error(lean.unknownIdentifier): Unknown identifier `ter.start.val`
+'NJS_KeyStep.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NJS_KeyStep.stop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,50 @@
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -338,3 +338,5 @@
+     mark(obs, Phase::Parsed);
+     tx2_common(public_bytes, proof, checkpoint, hash, obs)
+ }
++
++#[cfg(kani)] mod NJS_native { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../NJS_harness.rs")); }
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -1,4 +1,5 @@
+ //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
++#![cfg_attr(kani, feature(allocator_api))]
+ #![no_std]
+ extern crate alloc;
+ pub mod sampler;
+
+--- /dev/null
++++ b/NJS_harness.rs
+@@ -0,0 +1,30 @@
++use super::*;
++#[allow(non_snake_case)]
++mod kmx { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs")); }
++#[kani::proof]
++#[kani::unwind(18)]
++#[kani::stub(core::ptr::copy_nonoverlapping,kmx::KMX_copy_nonoverlapping)]
++fn key_at() {
++ let keys:[u64;16]=kani::any();let i:usize=kani::any();kani::assume(i<16);
++ let actual=batch_key_at(&keys,i);
++ #[cfg(not(NJS_invert))] assert_eq!(actual,keys[i]);
++ #[cfg(NJS_invert)] assert_ne!(actual,keys[i]);
++}
++#[kani::proof]
++#[kani::unwind(18)]
++#[kani::stub(core::ptr::copy_nonoverlapping,kmx::KMX_copy_nonoverlapping)]
++fn same_index() {
++ let values:[u32;16]=kani::any();let i:usize=kani::any();let expected:u32=kani::any();kani::assume(i<16);
++ let actual=same_batch_index(&values,i,expected);
++ #[cfg(not(NJS_invert))] assert_eq!(actual,values[i]==expected);
++ #[cfg(NJS_invert)] assert_ne!(actual,values[i]==expected);
++}
++#[kani::proof]
++#[kani::unwind(34)]
++#[kani::stub(core::ptr::copy_nonoverlapping,kmx::KMX_copy_nonoverlapping)]
++fn same_leaf() {
++ let values:[[u8;32];16]=kani::any();let leaf:[u8;32]=kani::any();let i:usize=kani::any();kani::assume(i<16);
++ let actual=same_batch_leaf(&values,i,leaf);
++ #[cfg(not(NJS_invert))] assert_eq!(actual,values[i]==leaf);
++ #[cfg(NJS_invert)] assert_ne!(actual,values[i]==leaf);
++}

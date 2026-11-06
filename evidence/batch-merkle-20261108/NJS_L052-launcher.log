@@ -1,0 +1,33 @@
+{"attempt": "NJS_L052", "exit_status": 0, "wall_seconds": 7.9329510948155075, "peak_rss_kib": "5862832", "swaps": "0", "print_axioms": ["'NJS_RuntimeDigest.forwarding' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJS_RuntimeDigest.input' depends on axioms: [propext]", "'NJS_RuntimeDigest.realization' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJS_RuntimeDigest.leaf' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJS_RuntimeDigest.parent' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NJS_RuntimeDigest.leaf (H : Bytes → State) (tag : U8) (value : Slice U8) (salt : Std.Array U8 32#usize)
+  (_width : (↑value).length ≤ 480) :
+  NDH_TranscriptReference.leaf_ref (reference H) () tag value salt =
+    ok
+      (AspisV8R19.SqueezeOracleBridge.encodeState
+        (H
+          (Merkle32Leaf.leafInput (NDH_MerkleGrammar.byte tag) (List.map NDH_MerkleGrammar.byte ↑value)
+            (List.map NDH_MerkleGrammar.byte ↑salt))))
+NJS_RuntimeDigest.parent (H : Bytes → State) (children : Std.Array (Std.Array U8 32#usize) 8#usize) :
+  NDH_TranscriptReference.parent_ref (reference H) () children =
+    ok (AspisV8R19.SqueezeOracleBridge.encodeState (H (Merkle32Path.nodeInput (NDH_MerkleGrammar
+...
+NJS_RuntimeDigest.leaf (H : Bytes → State) (tag : U8) (value : Slice U8) (salt : Std.Array U8 32#usize)
+  (_width : (↑value).length ≤ 480) :
+  NDH_TranscriptReference.leaf_ref (reference H) () tag value salt =
+    ok
+      (AspisV8R19.SqueezeOracleBridge.encodeState
+        (H
+          (Merkle32Leaf.leafInput (NDH_MerkleGrammar.byte tag) (List.map NDH_MerkleGrammar.byte ↑value)
+            (List.map NDH_MerkleGrammar.byte ↑salt))))
+NJS_RuntimeDigest.parent (H : Bytes → State) (children : Std.Array (Std.Array U8 32#usize) 8#usize) :
+  NDH_TranscriptReference.parent_ref (reference H) () children =
+    ok (AspisV8R19.SqueezeOracleBridge.encodeState (H (Merkle32Path.nodeInput (NDH_MerkleGrammar.children children))))
+AspisR1.NGC_DigestBridge.forwarding (hashv : Slice (Slice U8) → Std.Array U8 32#usize) (parts : Slice (Slice U8)) :
+  (NGC_DigestBridge.backend hashv).digest () parts = ok (hashv parts)
+'NJS_RuntimeDigest.forwarding' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJS_RuntimeDigest.input' depends on axioms: [propext]
+'NJS_RuntimeDigest.realization' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJS_RuntimeDigest.leaf' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJS_RuntimeDigest.parent' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rb910dd61b46542a1a04c0a29be3fdce0.scope; invocation ID: 6abd0855f4734b099b7145f3b524b8a7

@@ -1,0 +1,31 @@
+{"attempt": "NJS_L008", "exit_status": 0, "wall_seconds": 1.805132295936346, "peak_rss_kib": "2627484", "swaps": "0", "print_axioms": ["'NJS_DigestLeaves.leaf' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJS_DigestLeaves.parent' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NJS_DigestLeaves.leaf {H : Type} (D : NDH_TranscriptReference.NDH_DigestRef H) (hash : H)
+  (oracle : List (Fin 256) → Result (Std.Array U8 32#usize))
+  (runtime : ∀ (parts : Slice (Slice U8)), D.digest hash parts = oracle (NDH_HashBridge.input parts)) (tag : U8)
+  (value : Slice U8) (salt : Std.Array U8 32#usize) :
+  NDH_TranscriptReference.leaf_ref D hash tag value salt =
+    oracle
+      (AspisR1.Merkle32Leaf.leafInput (NDH_MerkleGrammar.byte tag) (List.map NDH_MerkleGrammar.byte ↑value)
+        (List.map NDH_MerkleGrammar.byte ↑salt))
+NJS_DigestLeaves.parent {H : Type} (D : NDH_TranscriptReference.NDH_DigestRef H) (hash : H)
+  (oracle : List (Fin 256) → Result (Std.Array U8 32#usize))
+  
+...
+NJS_DigestLeaves.leaf {H : Type} (D : NDH_TranscriptReference.NDH_DigestRef H) (hash : H)
+  (oracle : List (Fin 256) → Result (Std.Array U8 32#usize))
+  (runtime : ∀ (parts : Slice (Slice U8)), D.digest hash parts = oracle (NDH_HashBridge.input parts)) (tag : U8)
+  (value : Slice U8) (salt : Std.Array U8 32#usize) :
+  NDH_TranscriptReference.leaf_ref D hash tag value salt =
+    oracle
+      (AspisR1.Merkle32Leaf.leafInput (NDH_MerkleGrammar.byte tag) (List.map NDH_MerkleGrammar.byte ↑value)
+        (List.map NDH_MerkleGrammar.byte ↑salt))
+NJS_DigestLeaves.parent {H : Type} (D : NDH_TranscriptReference.NDH_DigestRef H) (hash : H)
+  (oracle : List (Fin 256) → Result (Std.Array U8 32#usize))
+  (runtime : ∀ (parts : Slice (Slice U8)), D.digest hash parts = oracle (NDH_HashBridge.input parts))
+  (children : Std.Array (Std.Array U8 32#usize) 8#usize) :
+  NDH_TranscriptReference.parent_ref D hash children =
+    oracle (AspisR1.Merkle32Path.nodeInput (NDH_MerkleGrammar.children children))
+'NJS_DigestLeaves.leaf' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJS_DigestLeaves.parent' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rad6fcbc780b94137b946eb68d38c38f5.scope; invocation ID: b731ca702f6745deba75c8e6c4843099

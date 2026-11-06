@@ -1,0 +1,9 @@
+NJS_Leaves.key (keys : Std.Array U64 16#usize) (i : Usize) :
+  NJS_Extract.verifier.candidate.batch_key_at keys i = keys.index_usize i
+NJS_Leaves.index (values : Std.Array U32 16#usize) (i : Usize) (expected : U32) :
+  NJS_Extract.verifier.candidate.same_batch_index values i expected = AspisR1.Port3_BatchStd.sameIndex values i expected
+NJS_Leaves.leaf (values : Std.Array (Std.Array U8 32#usize) 16#usize) (i : Usize) (expected : Std.Array U8 32#usize) :
+  NJS_Extract.verifier.candidate.same_batch_leaf values i expected = AspisR1.Port3_BatchStd.sameLeaf values i expected
+'NJS_Leaves.key' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJS_Leaves.index' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJS_Leaves.leaf' depends on axioms: [propext, Classical.choice, Quot.sound]
