@@ -1,0 +1,26 @@
+--- NKO_ProofDriver.lean
++++ NLB_ProofDriver.lean
+@@ -14,21 +14,9 @@
+        `NEP_Planted.viaAux, `NEP_MutateMatch.matcher, `NEP_MutatePrivate.viaPrivate,
+        `NEP_MutateProof.proof, `NEP_MutateAux.viaAux])
+     else if mode == "proof0" then
+-      (#[`NKO_COMBINED_IMPORT], #[`NKO_Branch.continued, `NKO_C02.at_actual, `NKO_C02.source, `NKO_C03.step_source, `NKO_C03.select_abort, `NKO_C03.source_abort, `NKO_C03.occurrence, `NKO_C03.source, `NKO_C03.option_result, `NKO_C03.selected, `NKO_C03.short, `NKO_C03.at_actual])
++      (#[`NLB_COMBINED_IMPORT], #[`NLB_Parent.C01_step, `NLB_Parent.C02_step, `NLB_Parent.C03_step, `NLB_Parent.C04_step, `NLB_Parent.C05_step, `NLB_Parent.C06_step, `NLB_Parent.C07_step, `NLB_Parent.C08_step, `NLB_Parent.C09_step, `NLB_ErrorTransport.common_transport, `NLB_ErrorTransport.bind_congr, `NLB_ErrorTransport.question_rel])
+     else if mode == "proof1" then
+-      (#[`NKO_COMBINED_IMPORT], #[`NKO_C05.at_query, `NKO_C05.source, `NKO_C06.pending_eq, `NKO_C06.returned, `NKO_C07.at_actual, `NKO_C07.source, `NKO_C08.occurrence, `NKO_C08.row_at_actual, `NKO_C08.source, `NKO_C09.bounds_at_actual, `NKO_C09.child_at_actual, `NKO_C09.source])
+-    else if mode == "proof2" then
+-      (#[`NKO_COMBINED_IMPORT], #[`NKO_FinishDomain.writeback, `NKO_FrameAtActual.source, `NKO_FrameG.proof_source, `NKO_FrameG.args_source, `NKO_HalfProofWindows.retained_tail, `NKO_HalfProofWindows.cover, `NKO_HalfProofWindows.same, `NKO_IncomingCuts.transcribe, `NKO_IncomingCuts.at_actual, `NKO_LayoutArithmetic.weaken, `NKO_LayoutArithmetic.step0, `NKO_LayoutArithmetic.step1])
+-    else if mode == "proof3" then
+-      (#[`NKO_COMBINED_IMPORT], #[`NKO_LayoutArithmetic.step2, `NKO_LayoutArithmetic.step3, `NKO_LayoutArithmetic.step4, `NKO_LayoutArithmetic.step5, `NKO_LayoutArithmetic.step6, `NKO_LayoutArithmetic.step7, `NKO_LayoutArithmetic.step8, `NKO_LayoutArithmetic.step9, `NKO_LayoutArithmetic.step10, `NKO_LayoutArithmetic.step11, `NKO_LayoutArithmetic.step12, `NKO_LayoutArithmetic.step13])
+-    else if mode == "proof4" then
+-      (#[`NKO_COMBINED_IMPORT], #[`NKO_LayoutArithmetic.step14, `NKO_LayoutArithmetic.step15, `NKO_LayoutArithmetic.step16, `NKO_LayoutArithmetic.step17, `NKO_Offsets.inactive, `NKO_Offsets.round0, `NKO_Offsets.folded, `NKO_Offsets.round1, `NKO_Offsets.final_message, `NKO_Offsets.openings, `NKO_PowersResult.returned, `NKO_ProofWindows.cover])
+-    else if mode == "proof5" then
+-      (#[`NKO_COMBINED_IMPORT], #[`NKO_ProofWindows.same, `NKO_ProofWindows.disjoint, `NKO_QueryPost.returned, `NKO_QueryPost.widths, `NKO_QueryReturnG.full_result, `NKO_QueryReturnG.retained_return, `NKO_ReadonlyFrame.view_frame, `NKO_ReadonlyFrame.payload, `NKO_ReadonlyFrame.required_windows, `NKO_StageG.geometry_source, `NKO_StageG.pending_source, `NKO_StageG.geometry_error])
+-    else if mode == "proof6" then
+-      (#[`NKO_COMBINED_IMPORT], #[`NKO_StageG.geometry_success, `NKO_ViewRanges.val0, `NKO_ViewRanges.val1, `NKO_ViewRanges.valFinal, `NKO_ViewRanges.diff0, `NKO_ViewRanges.diff1, `NKO_ViewRanges.diffFinal, `NKO_ViewRanges.round0, `NKO_ViewRanges.round1, `NKO_ViewRanges.final_message, `AspisR1.NJU_GeneralFinishRoot.finish, `AspisR1.NJU_GeneralFinishRoot.ported])
+-    else if mode == "proof7" then
+-      (#[`NKO_COMBINED_IMPORT], #[`NJU_FinishAtCurrent.source_view, `AspisR1.RPx_Deployed.deployed])
++      (#[`NLB_COMBINED_IMPORT], #[`NLB_ErrorTransport.error_not_equal, `NLB_Parent.events_from_cuts, `NLB_Parent.observed_steps, `NLB_Parent.semantic_fold, `NLB_Parent.query_step, `NLB_ErrorTransport.question_trace, `NLB_ErrorTransport.native_error_prefix, `NLB_ErrorTransport.source_abort_prefix, `NLB_ErrorTransport.divergence_prefix, `NLB_Parent.steps, `NLB_Parent.execution, `AspisR1.RPx_Deployed.deployed])
+     else (#[], #[])
+   let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
+     {} (loadExts := true) (level := .private)

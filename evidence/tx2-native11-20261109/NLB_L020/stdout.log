@@ -1,0 +1,48 @@
+theorem NLB_Parent.semantic_fold : ∀ (wr rr fr : NP6_StdModel.Reservation) (loc : NIW_AlignFinishComposed.Locations)
+  (nativeResume : Resume) (nativeMerkle modelMerkle : Merkle),
+  (ResumeProjection wr fun {H} => nativeResume) →
+    (MerkleProjection (fun {H} => nativeMerkle) fun {H} => modelMerkle) →
+      ∀ {H : Type} (d : aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H),
+        (↑proof).length = 57607 →
+          ∀ (observe : NKE_QueryInput.Args → QueryObservation),
+            QueryCuts wr rr fr (fun {H} => modelMerkle) d pub proof ck hash observe →
+              ∀ (before : List Event),
+                have w :=
+                  queryWindow (window rr fr loc (fun {H} => nativeResume) (fun {H} => nativeMerkle) d hash) observe;
+                have p := NKE_CommonProgram.run wr rr (fun {H} => modelMerkle) (finish fr) d pub proof ck hash none;
+                G w p before =
+                  State.done (NJJ_Common.run wr rr (fun {H} => modelMerkle) (finish fr) d pub proof ck hash none)
+                    (before ++ (run wr rr (fun {H} => modelMerkle) (finish fr) d pub proof ck hash none).events) :=
+fun wr rr fr loc nativeResume nativeMerkle modelMerkle resumeProjection merkleProjection {H} d pub proof ck hash
+    headlineSize observe cuts before =>
+  id
+    (have localSteps :=
+      Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              ∀ e ∈ _a.events,
+                queryWindow (window rr fr loc (fun {H} => nativeResume) (fun {H} => nativeMerkle) d hash) observe e = e)
+            (NKE_CommonEval.source wr rr modelMerkle (finish fr) d pub proof ck hash)))
+        (observed_steps wr rr fr loc (fun {H} => nativeResume) (fun {H} => nativeMerkle) (fun {H} => modelMerkle)
+          (fun {H} => resumeProjection) (fun {H} => merkleProjection) d pub proof ck hash headlineSize observe cuts);
+    have folded :=
+      events_from_cuts
+        (queryWindow (window rr fr loc (fun {H} => nativeResume) (fun {H} => nativeMerkle) d hash) observe)
+        (NKE_CommonProgram.run wr rr (fun {H} => modelMerkle) (finish fr) d pub proof ck hash none) before localSteps;
+    Eq.mp
+      (congrArg
+        (fun _a =>
+          G (queryWindow (window rr fr loc (fun {H} => nativeResume) (fun {H} => nativeMerkle) d hash) observe)
+              (NKE_CommonProgram.run wr rr (fun {H} => modelMerkle) (finish fr) d pub proof ck hash none) before =
+            State.done _a (before ++ (run wr rr (fun {H} => modelMerkle) (finish fr) d pub proof ck hash none).events))
+        (source wr rr modelMerkle (finish fr) d pub proof ck hash))
+      (Eq.mp
+        (congrArg
+          (fun _a =>
+            G (queryWindow (window rr fr loc (fun {H} => nativeResume) (fun {H} => nativeMerkle) d hash) observe)
+                (NKE_CommonProgram.run wr rr (fun {H} => modelMerkle) (finish fr) d pub proof ck hash none) before =
+              State.done _a.result (before ++ _a.events))
+          (NKE_CommonEval.source wr rr modelMerkle (finish fr) d pub proof ck hash))
+        folded))
+'NLB_Parent.semantic_fold' depends on axioms: [propext, Classical.choice, Quot.sound]

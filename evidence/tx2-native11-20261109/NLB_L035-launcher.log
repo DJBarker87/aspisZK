@@ -1,0 +1,49 @@
+{"attempt": "NLB_L035", "exit_status": 1, "wall_seconds": 13.808453876059502, "peak_rss_kib": "6330288", "swaps": "0", "print_axioms": ["'NLB_ResumePacket.projection' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLB_generated/NLB_ResumePacket.lean:10:20: warning: Variable name `r` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+NLB_generated/NLB_ResumePacket.lean:22:1: error: Type mismatch
+  NJU_ResumeObserved.run r (NJC_ResumeCalls.digest d) ck proof pub NID_ResumeEmission.transport.Variant.S2 hash
+has type
+  NJU_Log.Run NJU_ResumeObserved.Event
+    (core.result.Result (NID_ResumeEmission.verifier.Prepared × NID_ResumeEmission.verifier.Accumulator)
+      NID_ResumeEmission.verifier.Error)
+but is expected to have type
+  Run
+NLB_generated/NLB_ResumePacket.lean:26:
+...
+n type mismatch: The argument
+  (native r (NJC_ResumeCalls.digest d) ck proof pub hash).result
+has type
+  Result
+    (core.result.Result (AspisR1Stage2.verifier.Prepared × AspisR1Stage2.verifier.Accumulator)
+      AspisR1Stage2.verifier.Error)
+but is expected to have type
+  Result (core.result.Result (NIL_StatePort.F.P × NIL_StatePort.F.A) NIL_Carriers.Fresh.Err)
+in the application
+  NIL_StatePort.reply (native r (NJC_ResumeCalls.digest d) ck proof pub hash).result
+NLB_generated/NLB_ResumePacket.lean:30:8: warning: declaration uses `sorry`
+NLB_generated/NLB_ResumePacket.lean:32:2: warning: Variable name `packet` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+NLB_generated/NLB_ResumePacket.lean:35:1: warning: 'rw [packet, NJU_ResumeRoot.source]' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLB_generated/NLB_ResumePacket.lean:36:1: warning: 'rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLB_generated/NLB_ResumePacket.lean:36:1: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+theorem NLB_ResumePacket.projection : ∀ (native : Native) (r : NP6_StdModel.Reservation) {H : Type}
+  (d : aspis_core.digest.Digest32 H) (ck proof pub : Slice U8) (hash : H),
+  At native r d ck proof pub hash →
+    action native r d ck proof pub hash = NJJ_Common.resume r d ck proof pub AspisR1Stage2.transport.Variant.S2 hash :=
+fun native r {H} d ck proof pub hash packet => id sorry
+'NLB_ResumePacket.projection' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-re23ff6dda6aa45679d8997e5381cf1ed.scope; invocation ID: 7fb345767d3544068d0fd53cdd620c59

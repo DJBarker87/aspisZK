@@ -1,0 +1,32 @@
+NLB_generated/NLB_ResumePacket.lean:10:20: warning: Variable name `r` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+theorem NLB_ResumePacket.projection : ∀ (native : Native) (r : NP6_StdModel.Reservation) {H : Type}
+  (d : aspis_core.digest.Digest32 H) (ck proof pub : Slice U8) (hash : H),
+  At native r d ck proof pub hash →
+    action native r d ck proof pub hash = NJJ_Common.resume r d ck proof pub AspisR1Stage2.transport.Variant.S2 hash :=
+fun native r {H} d ck proof pub hash packet =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            NHT_ResultPort.action (NIL_StatePort.reply _a.result) =
+              NJJ_Common.resume r d ck proof pub AspisR1Stage2.transport.Variant.S2 hash)
+          packet))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              NHT_ResultPort.action (NIL_StatePort.reply _a) =
+                NJJ_Common.resume r d ck proof pub AspisR1Stage2.transport.Variant.S2 hash)
+            (NJU_ResumeRoot.source r (NJC_ResumeCalls.digest d) ck proof pub NID_ResumeEmission.transport.Variant.S2
+              hash)))
+        (Eq.refl
+          (NHT_ResultPort.action
+            (NIL_StatePort.reply
+              (NJC_RawCalls.resume (NJC_FilledClause.reserved r) (NJC_ResumeCalls.digest d) ck proof pub
+                NID_ResumeEmission.transport.Variant.S2 hash))))))
+'NLB_ResumePacket.projection' depends on axioms: [propext, Classical.choice, Quot.sound]
