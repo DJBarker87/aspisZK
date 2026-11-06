@@ -1,0 +1,603 @@
+NKU_generated/NKU_SemanticSource.lean:24:59: error: unsolved goals
+case h_1
+H : Type
+d : AspisR1Stage2.aspis_core.digest.Digest32 H
+s : NKU.State
+next : U8
+end : Usize
+state a3 a4 : Std.Array U8 32#usize
+g k a0 a1 : NKU.E
+rho : NKU.K
+queries : Std.Array U32 22#usize
+r : verifier.Reader
+x✝ : core.result.Result (Std.Array K 10#usize × Usize) verifier.Error
+a✝ : Std.Array K 10#usize × Usize
+reply✝ : core.result.Result (Std.Array K 10#usize × Usize) verifier.Error
+value✝ : Std.Array K 10#usize × Usize
+heq✝ : core.result.Result.Ok a✝ = core.result.Result.Ok value✝
+⊢ (do
+      let __x ← recordK { bytes := r.bytes, «at» := a✝.2 }
+      let cf7 ←
+        liftM
+            (match __x.1 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+      match cf7 with
+        | core.ops.control_flow.ControlFlow.Continue val6 => do
+          let __x ← recordK __x.2
+          let cf8 ←
+            liftM
+                (match __x.1 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+          match cf8 with
+            | core.ops.control_flow.ControlFlow.Continue val7 => do
+              let __x ← recordK __x.2
+              let cf9 ←
+                liftM
+                    (match __x.1 with
+                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    | core.result.Result.Err e =>
+                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+              match cf9 with
+                | core.ops.control_flow.ControlFlow.Continue val8 => do
+                  let __x ← recordK __x.2
+                  let cf10 ←
+                    liftM
+                        (match __x.1 with
+                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                        | core.result.Result.Err e =>
+                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                  match cf10 with
+                    | core.ops.control_flow.ControlFlow.Continue val9 => do
+                      let __x ← recordE __x.2
+                      let cf11 ←
+                        liftM
+                            (match __x.1 with
+                            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                            | core.result.Result.Err e =>
+                              ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                      match cf11 with
+                        | core.ops.control_flow.ControlFlow.Continue val10 => do
+                          let __x ← recordE __x.2
+                          let cf12 ←
+                            liftM
+                                (match __x.1 with
+                                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                | core.result.Result.Err e =>
+                                  ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                          match cf12 with
+                            | core.ops.control_flow.ControlFlow.Continue val11 => do
+                              let __x ← recordK __x.2
+                              let cf13 ←
+                                liftM
+                                    (match __x.1 with
+                                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                    | core.result.Result.Err e =>
+                                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                              match cf13 with
+                                | core.ops.control_flow.ControlFlow.Continue val12 => do
+                                  let r51 ←
+                                    recordFilled s.frame.reservation
+                                        (aspis_core.field.QM31.Insts.CoreMarkerCopy fun x => ok x) 64#usize
+                                        (NIL_Carriers.unK
+                                          { c0 := { a := 0#u32, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } })
+                                  let r52 ←
+                                    liftM
+                                        (NIL_FreshOps.mapError
+                                          (verifier.resume.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                                            (NIL_FreshOps.digest d))
+                                          r51 ())
+                                  let cf14 ←
+                                    liftM
+                                        (match r52 with
+                                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                        | core.result.Result.Err e =>
+                                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                                  match cf14 with
+                                    | core.ops.control_flow.ControlFlow.Continue val13 => do
+                                      let r53 ← recordWeights s.frame.checkpoint __x.2.at val13
+                                      let cf15 ←
+                                        liftM
+                                            (match r53 with
+                                            | core.result.Result.Ok v =>
+                                              ok (core.ops.control_flow.ControlFlow.Continue v)
+                                            | core.result.Result.Err e =>
+                                              ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                                      match cf15 with
+                                        | core.ops.control_flow.ControlFlow.Continue val14 =>
+                                          if (val14.2 != «end») = true then
+                                            liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))
+                                          else do
+                                            let i31 ← liftM (lift (UScalar.cast UScalarTy.Usize next))
+                                            liftM
+                                                (ok
+                                                  (core.result.Result.Ok
+                                                    ({ variant := transport.Variant.S2,
+                                                        roots := Array.make 2#usize [a3, a4] ⋯, gamma := g, kappa := k,
+                                                        alpha := Array.make 2#usize [a0, a1] ⋯, rho := rho,
+                                                        queries := queries, semantic_alpha := a✝.1,
+                                                        z :=
+                                                          Array.make 2#usize
+                                                            [{ x := val6, y := val7 }, { x := val8, y := val9 }] ⋯,
+                                                        claim := val10, state := state },
+                                                      { weights := val14.1, rhs := val11, power := val12,
+                                                        next := i31 })))
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          liftM
+                                            (match residual with
+                                            | core.result.Result.Ok x =>
+                                              core.convert.Infallible.rec
+                                                (fun x =>
+                                                  Result
+                                                    (core.result.Result (verifier.Prepared × verifier.Accumulator)
+                                                      verifier.Error))
+                                                x
+                                            | core.result.Result.Err e => do
+                                              let v ← ok (core.convert.FromSame.from e)
+                                              ok (core.result.Result.Err v))
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      liftM
+                                        (match residual with
+                                        | core.result.Result.Ok x =>
+                                          core.convert.Infallible.rec
+                                            (fun x =>
+                                              Result
+                                                (core.result.Result (verifier.Prepared × verifier.Accumulator)
+                                                  verifier.Error))
+                                            x
+                                        | core.result.Result.Err e => do
+                                          let v ← ok (core.convert.FromSame.from e)
+                                          ok (core.result.Result.Err v))
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  liftM
+                                    (match residual with
+                                    | core.result.Result.Ok x =>
+                                      core.convert.Infallible.rec
+                                        (fun x =>
+                                          Result
+                                            (core.result.Result (verifier.Prepared × verifier.Accumulator)
+                                              verifier.Error))
+                                        x
+                                    | core.result.Result.Err e => do
+                                      let v ← ok (core.convert.FromSame.from e)
+                                      ok (core.result.Result.Err v))
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              liftM
+                                (match residual with
+                                | core.result.Result.Ok x =>
+                                  core.convert.Infallible.rec
+                                    (fun x =>
+                                      Result
+                                        (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error))
+                                    x
+                                | core.result.Result.Err e => do
+                                  let v ← ok (core.convert.FromSame.from e)
+                                  ok (core.result.Result.Err v))
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          liftM
+                            (match residual with
+                            | core.result.Result.Ok x =>
+                              core.convert.Infallible.rec
+                                (fun x =>
+                                  Result (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error))
+                                x
+                            | core.result.Result.Err e => do
+                              let v ← ok (core.convert.FromSame.from e)
+                              ok (core.result.Result.Err v))
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      liftM
+                        (match residual with
+                        | core.result.Result.Ok x =>
+                          core.convert.Infallible.rec
+                            (fun x =>
+                              Result (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error))
+                            x
+                        | core.result.Result.Err e => do
+                          let v ← ok (core.convert.FromSame.from e)
+                          ok (core.result.Result.Err v))
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (match residual with
+                    | core.result.Result.Ok x =>
+                      core.convert.Infallible.rec
+                        (fun x => Result (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error))
+                        x
+                    | core.result.Result.Err e => do
+                      let v ← ok (core.convert.FromSame.from e)
+                      ok (core.result.Result.Err v))
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              liftM
+                (match residual with
+                | core.result.Result.Ok x =>
+                  core.convert.Infallible.rec
+                    (fun x => Result (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error)) x
+                | core.result.Result.Err e => do
+                  let v ← ok (core.convert.FromSame.from e)
+                  ok (core.result.Result.Err v))
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (match residual with
+            | core.result.Result.Ok x =>
+              core.convert.Infallible.rec
+                (fun x => Result (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error)) x
+            | core.result.Result.Err e => do
+              let v ← ok (core.convert.FromSame.from e)
+              ok (core.result.Result.Err v))) =
+    do
+    let __x ← recordK { bytes := r.bytes, «at» := value✝.2 }
+    match __x.1 with
+      | core.result.Result.Ok value => do
+        let __x ← recordK __x.2
+        match __x.1 with
+          | core.result.Result.Ok value_1 => do
+            let __x ← recordK __x.2
+            match __x.1 with
+              | core.result.Result.Ok value_2 => do
+                let __x ← recordK __x.2
+                match __x.1 with
+                  | core.result.Result.Ok value_3 => do
+                    let __x ← recordE __x.2
+                    match __x.1 with
+                      | core.result.Result.Ok value_4 => do
+                        let __x ← recordE __x.2
+                        match __x.1 with
+                          | core.result.Result.Ok value_5 => do
+                            let __x ← recordK __x.2
+                            match __x.1 with
+                              | core.result.Result.Ok value_6 => do
+                                let a ←
+                                  recordFilled s.frame.reservation NKK_AllocationStage.copy 64#usize
+                                      NKK_AllocationStage.zero
+                                let allocated ←
+                                  liftM
+                                      (NIL_FreshOps.mapError
+                                        (verifier.resume.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                                          (NIL_FreshOps.digest d))
+                                        a ())
+                                match allocated with
+                                  | core.result.Result.Ok owner => do
+                                    let reply ← recordWeights s.frame.checkpoint __x.2.at owner
+                                    match reply with
+                                      | core.result.Result.Ok x =>
+                                        if (x.2 != «end») = true then
+                                          pure (core.result.Result.Err verifier.Error.Checkpoint)
+                                        else do
+                                          let n ← liftM (lift (UScalar.cast UScalarTy.Usize next))
+                                          pure
+                                              (core.result.Result.Ok
+                                                ({ variant := transport.Variant.S2,
+                                                    roots := Array.make 2#usize [a3, a4] ⋯, gamma := g, kappa := k,
+                                                    alpha := Array.make 2#usize [a0, a1] ⋯, rho := rho,
+                                                    queries := queries, semantic_alpha := value✝.1,
+                                                    z :=
+                                                      Array.make 2#usize
+                                                        [{ x := value, y := value_1 }, { x := value_2, y := value_3 }]
+                                                        ⋯,
+                                                    claim := value_4, state := state },
+                                                  { weights := x.1, rhs := value_5, power := value_6, next := n }))
+                                      | core.result.Result.Err err => pure (core.result.Result.Err err)
+                                  | core.result.Result.Err err => pure (core.result.Result.Err err)
+                              | core.result.Result.Err err => pure (core.result.Result.Err err)
+                          | core.result.Result.Err err => pure (core.result.Result.Err err)
+                      | core.result.Result.Err err => pure (core.result.Result.Err err)
+                  | core.result.Result.Err err => pure (core.result.Result.Err err)
+              | core.result.Result.Err err => pure (core.result.Result.Err err)
+          | core.result.Result.Err err => pure (core.result.Result.Err err)
+      | core.result.Result.Err err => pure (core.result.Result.Err err)
+
+case h_2
+H : Type
+d : AspisR1Stage2.aspis_core.digest.Digest32 H
+s : NKU.State
+next : U8
+end : Usize
+state a3 a4 : Std.Array U8 32#usize
+g k a0 a1 : NKU.E
+rho : NKU.K
+queries : Std.Array U32 22#usize
+r : verifier.Reader
+x✝ : core.result.Result (Std.Array K 10#usize × Usize) verifier.Error
+a✝ : Std.Array K 10#usize × Usize
+reply✝ : core.result.Result (Std.Array K 10#usize × Usize) verifier.Error
+err✝ : verifier.Error
+heq✝ : core.result.Result.Ok a✝ = core.result.Result.Err err✝
+⊢ (do
+      let __x ← recordK { bytes := r.bytes, «at» := a✝.2 }
+      let cf7 ←
+        liftM
+            (match __x.1 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+      match cf7 with
+        | core.ops.control_flow.ControlFlow.Continue val6 => do
+          let __x ← recordK __x.2
+          let cf8 ←
+            liftM
+                (match __x.1 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+          match cf8 with
+            | core.ops.control_flow.ControlFlow.Continue val7 => do
+              let __x ← recordK __x.2
+              let cf9 ←
+                liftM
+                    (match __x.1 with
+                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    | core.result.Result.Err e =>
+                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+              match cf9 with
+                | core.ops.control_flow.ControlFlow.Continue val8 => do
+                  let __x ← recordK __x.2
+                  let cf10 ←
+                    liftM
+                        (match __x.1 with
+                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                        | core.result.Result.Err e =>
+                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                  match cf10 with
+                    | core.ops.control_flow.ControlFlow.Continue val9 => do
+                      let __x ← recordE __x.2
+                      let cf11 ←
+                        liftM
+                            (match __x.1 with
+                            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                            | core.result.Result.Err e =>
+                              ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                      match cf11 with
+                        | core.ops.control_flow.ControlFlow.Continue val10 => do
+                          let __x ← recordE __x.2
+                          let cf12 ←
+                            liftM
+                                (match __x.1 with
+                                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                | core.result.Result.Err e =>
+                                  ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                          match cf12 with
+                            | core.ops.control_flow.ControlFlow.Continue val11 => do
+                              let __x ← recordK __x.2
+                              let cf13 ←
+                                liftM
+                                    (match __x.1 with
+                                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                    | core.result.Result.Err e =>
+                                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                              match cf13 with
+                                | core.ops.control_flow.ControlFlow.Continue val12 => do
+                                  let r51 ←
+                                    recordFilled s.frame.reservation
+                                        (aspis_core.field.QM31.Insts.CoreMarkerCopy fun x => ok x) 64#usize
+                                        (NIL_Carriers.unK
+                                          { c0 := { a := 0#u32, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } })
+                                  let r52 ←
+                                    liftM
+                                        (NIL_FreshOps.mapError
+                                          (verifier.resume.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                                            (NIL_FreshOps.digest d))
+                                          r51 ())
+                                  let cf14 ←
+                                    liftM
+                                        (match r52 with
+                                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                        | core.result.Result.Err e =>
+                                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                                  match cf14 with
+                                    | core.ops.control_flow.ControlFlow.Continue val13 => do
+                                      let r53 ← recordWeights s.frame.checkpoint __x.2.at val13
+                                      let cf15 ←
+                                        liftM
+                                            (match r53 with
+                                            | core.result.Result.Ok v =>
+                                              ok (core.ops.control_flow.ControlFlow.Continue v)
+                                            | core.result.Result.Err e =>
+                                              ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                                      match cf15 with
+                                        | core.ops.control_flow.ControlFlow.Continue val14 =>
+                                          if (val14.2 != «end») = true then
+                                            liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))
+                                          else do
+                                            let i31 ← liftM (lift (UScalar.cast UScalarTy.Usize next))
+                                            liftM
+                                                (ok
+                                                  (core.result.Result.Ok
+                                                    ({ variant := transport.Variant.S2,
+                                                        roots := Array.make 2#usize [a3, a4] ⋯, gamma := g, kappa := k,
+                                                        alpha := Array.make 2#usize [a0, a1] ⋯, rho := rho,
+                                                        queries := queries, semantic_alpha := a✝.1,
+                                                        z :=
+                                                          Array.make 2#usize
+                                                            [{ x := val6, y := val7 }, { x := val8, y := val9 }] ⋯,
+                                                        claim := val10, state := state },
+                                                      { weights := val14.1, rhs := val11, power := val12,
+                                                        next := i31 })))
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          liftM
+                                            (match residual with
+                                            | core.result.Result.Ok x =>
+                                              core.convert.Infallible.rec
+                                                (fun x =>
+                                                  Result
+                                                    (core.result.Result (verifier.Prepared × verifier.Accumulator)
+                                                      verifier.Error))
+                                                x
+                                            | core.result.Result.Err e => do
+                                              let v ← ok (core.convert.FromSame.from e)
+                                              ok (core.result.Result.Err v))
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      liftM
+                                        (match residual with
+                                        | core.result.Result.Ok x =>
+                                          core.convert.Infallible.rec
+                                            (fun x =>
+                                              Result
+                                                (core.result.Result (verifier.Prepared × verifier.Accumulator)
+                                                  verifier.Error))
+                                            x
+                                        | core.result.Result.Err e => do
+                                          let v ← ok (core.convert.FromSame.from e)
+                                          ok (core.result.Result.Err v))
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  liftM
+                                    (match residual with
+                                    | core.result.Result.Ok x =>
+                                      core.convert.Infallible.rec
+                                        (fun x =>
+                                          Result
+                                            (core.result.Result (verifier.Prepared × verifier.Accumulator)
+                                              verifier.Error))
+                                        x
+                                    | core.result.Result.Err e => do
+                                      let v ← ok (core.convert.FromSame.from e)
+                                      ok (core.result.Result.Err v))
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              liftM
+                                (match residual with
+                                | core.result.Result.Ok x =>
+                                  core.convert.Infallible.rec
+                                    (fun x =>
+                                      Result
+                                        (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error))
+                                    x
+                                | core.result.Result.Err e => do
+                                  let v ← ok (core.convert.FromSame.from e)
+                                  ok (core.result.Result.Err v))
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          liftM
+                            (match residual with
+                            | core.result.Result.Ok x =>
+                              core.convert.Infallible.rec
+                                (fun x =>
+                                  Result (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error))
+                                x
+                            | core.result.Result.Err e => do
+                              let v ← ok (core.convert.FromSame.from e)
+                              ok (core.result.Result.Err v))
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      liftM
+                        (match residual with
+                        | core.result.Result.Ok x =>
+                          core.convert.Infallible.rec
+                            (fun x =>
+                              Result (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error))
+                            x
+                        | core.result.Result.Err e => do
+                          let v ← ok (core.convert.FromSame.from e)
+                          ok (core.result.Result.Err v))
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (match residual with
+                    | core.result.Result.Ok x =>
+                      core.convert.Infallible.rec
+                        (fun x => Result (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error))
+                        x
+                    | core.result.Result.Err e => do
+                      let v ← ok (core.convert.FromSame.from e)
+                      ok (core.result.Result.Err v))
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              liftM
+                (match residual with
+                | core.result.Result.Ok x =>
+                  core.convert.Infallible.rec
+                    (fun x => Result (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error)) x
+                | core.result.Result.Err e => do
+                  let v ← ok (core.convert.FromSame.from e)
+                  ok (core.result.Result.Err v))
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (match residual with
+            | core.result.Result.Ok x =>
+              core.convert.Infallible.rec
+                (fun x => Result (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error)) x
+            | core.result.Result.Err e => do
+              let v ← ok (core.convert.FromSame.from e)
+              ok (core.result.Result.Err v))) =
+    pure (core.result.Result.Err err✝)
+NKU_generated/NKU_SemanticSource.lean:26:38: warning: This simp argument is unused:
+  NKK_LogReduce.pure_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [NKK_LogAlgebra.bind_assoc, ̲NKK_L̵o̵g̵R̵e̵d̵u̵c̵e̵.̵p̵u̵r̵e̵_̵b̵i̵n̵d̵,̵N̵K̵K̵_̵Try.branch, ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+  ̲ ̲ ̲ ̲NKK_LogReduce.lift_ok_bind, ̲CheckpointBytes4Ops.finalLen, ̲NIL_Carriers.variant]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKU_generated/NKU_SemanticSource.lean:31:35: warning: This simp argument is unused:
+  NKK_LogAlgebra.bind_assoc
+
+Hint: Omit it from the simp argument list.
+  simp only [NKK_LogA̵l̵g̵e̵b̵r̵a̵.̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵,̵N̵K̵K̵_̵L̵o̵g̵Reduce.pure_bind, ̲NKK_Try.branch, ̲NJU_Log.prod_cases,
+  ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+  ̲ ̲ ̲ ̲NKK_LogReduce.lift_ok_bind, ̲CheckpointBytes4Ops.finalLen, ̲NIL_Carriers.variant]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKU_generated/NKU_SemanticSource.lean:31:61: warning: This simp argument is unused:
+  NKK_LogReduce.pure_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [NKK_LogAlgebra.bind_assoc, ̲NKK_L̵o̵g̵R̵e̵d̵u̵c̵e̵.̵p̵u̵r̵e̵_̵b̵i̵n̵d̵,̵N̵K̵K̵_̵Try.branch, ̲NJU_Log.prod_cases,
+  ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+  ̲ ̲ ̲ ̲NKK_LogReduce.lift_ok_bind, ̲CheckpointBytes4Ops.finalLen, ̲NIL_Carriers.variant]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKU_generated/NKU_SemanticSource.lean:31:85: warning: This simp argument is unused:
+  NKK_Try.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [NKK_LogAlgebra.bind_assoc, ̲NKK_LogReduce.pure_bind,
+  ̲ ̲ ̲ ̲NK̵K̵_̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵N̵JU_Log.prod_cases, ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+  ̲ ̲ ̲ ̲NKK_LogReduce.lift_ok_bind, ̲CheckpointBytes4Ops.finalLen, ̲NIL_Carriers.variant]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKU_generated/NKU_SemanticSource.lean:31:100: warning: This simp argument is unused:
+  NJU_Log.prod_cases
+
+Hint: Omit it from the simp argument list.
+  simp only [NKK_LogAlgebra.bind_assoc, ̲NKK_LogReduce.pure_bind,
+  ̲ ̲ ̲ ̲NKK_Try.branch,N̵J̵U̵_̵L̵o̵g̵.̵p̵r̵o̵d̵_̵ ̲ca̵s̵e̵s̵,̵c̵ore.result.Result.Insts.CoreOpsTry.branch,
+  ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+  ̲ ̲ ̲ ̲NKK_LogReduce.lift_ok_bind, ̲CheckpointBytes4Ops.finalLen, ̲NIL_Carriers.variant]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKU_generated/NKU_SemanticSource.lean:31:119: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵K̵K̵_̵L̵o̵g̵A̵l̵g̵e̵b̵r̵a̵.̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵,̵N̵K̵K̵_̵L̵o̵g̵R̵e̵d̵u̵c̵e̵.̵p̵u̵r̵e̵_̵b̵i̵n̵d̵,̵N̵K̵K̵_̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵N̵J̵U̵_̵L̵o̵g̵.̵p̵r̵o̵d̵_̵c̵a̵s̵e̵s̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵T̵r̵a̵i̵t̵F̵r̵o̵m̵R̵e̵s̵i̵d̵u̵a̵l̵R̵e̵s̵u̵l̵t̵I̵n̵f̵a̵l̵l̵i̵b̵l̵e̵.̵f̵r̵o̵m̵_̵r̵e̵s̵i̵d̵u̵a̵l̵,̵N̵K̵K̵_̵L̵o̵g̵R̵e̵d̵u̵c̵e̵.̵l̵i̵f̵t̵_̵o̵k̵_̵b̵i̵n̵d̵,̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵4̵O̵p̵s̵.̵f̵i̵n̵a̵l̵L̵e̵n̵,̵N̵I̵L̵_̵C̵a̵r̵r̵i̵e̵r̵s̵.̵v̵a̵r̵i̵a̵n̵t̵]̵[̲N̲K̲K̲_̲L̲o̲g̲A̲l̲g̲e̲b̲r̲a̲.̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲,̲ ̲N̲K̲K̲_̲L̲o̲g̲R̲e̲d̲u̲c̲e̲.̲p̲u̲r̲e̲_̲b̲i̲n̲d̲,̲
+  ̲ ̲ ̲ ̲N̲K̲K̲_̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲N̲J̲U̲_̲L̲o̲g̲.̲p̲r̲o̲d̲_̲c̲a̲s̲e̲s̲,̲
+  ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲T̲r̲a̲i̲t̲F̲r̲o̲m̲R̲e̲s̲i̲d̲u̲a̲l̲R̲e̲s̲u̲l̲t̲I̲n̲f̲a̲l̲l̲i̲b̲l̲e̲.̲f̲r̲o̲m̲_̲r̲e̲s̲i̲d̲u̲a̲l̲,̲
+  ̲ ̲ ̲ ̲N̲K̲K̲_̲L̲o̲g̲R̲e̲d̲u̲c̲e̲.̲l̲i̲f̲t̲_̲o̲k̲_̲b̲i̲n̲d̲,̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲4̲O̲p̲s̲.̲f̲i̲n̲a̲l̲L̲e̲n̲,̲ ̲N̲I̲L̲_̲C̲a̲r̲r̲i̲e̲r̲s̲.̲v̲a̲r̲i̲a̲n̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKU_generated/NKU_SemanticSource.lean:31:162: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵K̵K̵_̵L̵o̵g̵A̵l̵g̵e̵b̵r̵a̵.̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵,̵N̵K̵K̵_̵L̵o̵g̵R̵e̵d̵u̵c̵e̵.̵p̵u̵r̵e̵_̵b̵i̵n̵d̵,̵N̵K̵K̵_̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵N̵J̵U̵_̵L̵o̵g̵.̵p̵r̵o̵d̵_̵c̵a̵s̵e̵s̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵T̵r̵a̵i̵t̵F̵r̵o̵m̵R̵e̵s̵i̵d̵u̵a̵l̵R̵e̵s̵u̵l̵t̵I̵n̵f̵a̵l̵l̵i̵b̵l̵e̵.̵f̵r̵o̵m̵_̵r̵e̵s̵i̵d̵u̵a̵l̵,̵N̵K̵K̵_̵L̵o̵g̵R̵e̵d̵u̵c̵e̵.̵l̵i̵f̵t̵_̵o̵k̵_̵b̵i̵n̵d̵,̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵4̵O̵p̵s̵.̵f̵i̵n̵a̵l̵L̵e̵n̵,̵N̵I̵L̵_̵C̵a̵r̵r̵i̵e̵r̵s̵.̵v̵a̵r̵i̵a̵n̵t̵]̵[̲N̲K̲K̲_̲L̲o̲g̲A̲l̲g̲e̲b̲r̲a̲.̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲,̲ ̲N̲K̲K̲_̲L̲o̲g̲R̲e̲d̲u̲c̲e̲.̲p̲u̲r̲e̲_̲b̲i̲n̲d̲,̲
+  ̲ ̲ ̲ ̲N̲K̲K̲_̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲N̲J̲U̲_̲L̲o̲g̲.̲p̲r̲o̲d̲_̲c̲a̲s̲e̲s̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲
+  ̲ ̲ ̲ ̲N̲K̲K̲_̲L̲o̲g̲R̲e̲d̲u̲c̲e̲.̲l̲i̲f̲t̲_̲o̲k̲_̲b̲i̲n̲d̲,̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲4̲O̲p̲s̲.̲f̲i̲n̲a̲l̲L̲e̲n̲,̲ ̲N̲I̲L̲_̲C̲a̲r̲r̲i̲e̲r̲s̲.̲v̲a̲r̲i̲a̲n̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKU_generated/NKU_SemanticSource.lean:31:272: warning: This simp argument is unused:
+  CheckpointBytes4Ops.finalLen
+
+Hint: Omit it from the simp argument list.
+  simp only [NKK_LogAlgebra.bind_assoc, ̲NKK_LogReduce.pure_bind,
+  ̲ ̲ ̲ ̲NKK_Try.branch, ̲NJU_Log.prod_cases, ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+  ̲ ̲ ̲ ̲NKK_LogReduce.lift_ok_bind,C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵4̵O̵p̵s̵.̵f̵i̵n̵a̵l̵L̵e̵n̵,̵ ̲NIL_Carriers.variant]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKU_generated/NKU_SemanticSource.lean:31:301: warning: This simp argument is unused:
+  NIL_Carriers.variant
+
+Hint: Omit it from the simp argument list.
+  simp only [NKK_LogAlgebra.bind_assoc, ̲NKK_LogReduce.pure_bind,
+  ̲ ̲ ̲ ̲NKK_Try.branch, ̲NJU_Log.prod_cases, ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+  ̲ ̲ ̲ ̲NKK_LogReduce.lift_ok_bind, ̲CheckpointBytes4Ops.finalLen,̵N̵I̵L̵_̵C̵a̵r̵r̵i̵e̵r̵s̵.̵v̵a̵r̵i̵a̵n̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NKU_SemanticSource.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

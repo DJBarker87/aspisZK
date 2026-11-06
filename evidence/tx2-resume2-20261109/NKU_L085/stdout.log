@@ -1,0 +1,51 @@
+NKU_generated/NKU_QueryMiddleJoin.lean:38:1: error: Type mismatch: After simplification, term
+  NKU_QueryLastJoin.source d s next «end» state a3 a4 g k a0 a1 rho q0 q1 q2 q3 q4 q5 q6 q7
+    (core.num.U32.from_le_bytes b0) (core.num.U32.from_le_bytes b1) (core.num.U32.from_le_bytes b2)
+    (core.num.U32.from_le_bytes b3) (core.num.U32.from_le_bytes b4) (core.num.U32.from_le_bytes b5)
+    (core.num.U32.from_le_bytes b6) (core.num.U32.from_le_bytes b7) r7
+ has type
+  @Eq (NJU_Log.Run Event (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error))
+    (queryEndG s.frame.reservation d s.frame.checkpoint transport.Variant.S2 next «end» state a3 a4 g k a0 a1 rho q0 q1
+      q2 q3 q4 q5 q6 q7 (core.num.U32.from_le_bytes b0) (core.num.U32.from_le_bytes b1) (core.num.U32.from_le_bytes b2)
+      (core.num.U32.from_le_bytes b3) (core.num.U32.from_le_bytes b4) (core.num.U32.from_le_bytes b5)
+      (core.num.U32.from_le_bytes b6) (core.num.U32.from_le_bytes b7) r7)
+    (NKU_QueryLastJoin.run d
+      { frame := s.frame, phase := NKU.Phase.queries,
+        decoded :=
+          { next := some next, endAt := some «end», roots := [state, a3, a4], gammaAlpha := [g, k, a0, a1],
+            rho := some rho,
+            queries :=
+              [q0, q1, q2, q3, q4, q5, q6, q7, core.num.U32.from_le_bytes b0, core.num.U32.from_le_bytes b1,
+                core.num.U32.from_le_bytes b2, core.num.U32.from_le_bytes b3, core.num.U32.from_le_bytes b4,
+                core.num.U32.from_le_bytes b5, core.num.U32.from_le_bytes b6, core.num.U32.from_le_bytes b7],
+            semantic := s.decoded.semantic, z := s.decoded.z, claim := s.decoded.claim, rhs := s.decoded.rhs,
+            power := s.decoded.power },
+        reader := r7, iterator := s.iterator, owned := s.owned, returned := s.returned, history := s.history })
+but is expected to have type
+  @Eq (NJU_Log.Run Event (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error))
+    (queryEndG s.frame.reservation d s.frame.checkpoint transport.Variant.S2 next «end» state a3 a4 g k a0 a1 rho q0 q1
+      q2 q3 q4 q5 q6 q7 (core.num.U32.from_le_bytes b0) (core.num.U32.from_le_bytes b1) (core.num.U32.from_le_bytes b2)
+      (core.num.U32.from_le_bytes b3) (core.num.U32.from_le_bytes b4) (core.num.U32.from_le_bytes b5)
+      (core.num.U32.from_le_bytes b6) (core.num.U32.from_le_bytes b7) r7)
+    (NKU_QueryLastJoin.run d
+      { frame := s.frame, phase := NKU.Phase.queries,
+        decoded :=
+          { next := some next, endAt := some «end», roots := [state, a3, a4], gammaAlpha := [g, k, a0, a1],
+            rho := some rho,
+            queries :=
+              [q0, q1, q2, q3, q4, q5, q6, q7] ++
+                [core.num.U32.from_le_bytes b0, core.num.U32.from_le_bytes b1, core.num.U32.from_le_bytes b2,
+                  core.num.U32.from_le_bytes b3, core.num.U32.from_le_bytes b4, core.num.U32.from_le_bytes b5,
+                  core.num.U32.from_le_bytes b6, core.num.U32.from_le_bytes b7],
+            semantic := s.decoded.semantic, z := s.decoded.z, claim := s.decoded.claim, rhs := s.decoded.rhs,
+            power := s.decoded.power },
+        reader := r7, iterator := s.iterator, owned := s.owned, returned := s.returned, history := s.history })
+NKU_generated/NKU_QueryMiddleJoin.lean:21:77: warning: This simp argument is unused:
+  NJU_Log.prod_cases
+
+Hint: Omit it from the simp argument list.
+  simp only [NKK_LogAlgebra.bind_assoc, ̲NKK_LogReduce.pure_bind, ̲NKK_Try.branch, ̲NJ̵U̵_̵L̵o̵g̵.̵p̵r̵o̵d̵_̵c̵a̵s̵e̵s̵,̵N̵KU_QueryPack.pack,
+  ̲ ̲ ̲ ̲NKU_GammaPack.pack, ̲NKU_QueryMid.post]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NKU_QueryMiddleJoin.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

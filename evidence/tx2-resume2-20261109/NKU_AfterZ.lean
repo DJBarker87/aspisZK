@@ -14,7 +14,7 @@ def run {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
  let weights ← NKU_Weights.run allocated
  NKK_Try.emitted weights fun (_,weighted)=>NKU_Tail.run weighted
 /-- Full source continuation at43 joins the SAME allocation44 and weights45
-and terminal value. Every error/abort prefix is preserved. -/
+and terminal value. Every error/abort pack is preserved. -/
 theorem source {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
  (s : NKU.State) (next : U8) («end» : Usize)
  (state a3 a4 : Array U8 32#usize) (g k a0 a1 : NKU.E) (rho : NKU.K)
@@ -22,7 +22,7 @@ theorem source {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
  (x0 y0 x1 y1 : NKU.K) (claim rhs : NKU.E) (power : NKU.K) (r : verifier.Reader) :
  NKU_AfterZSource.run d s next «end» state a3 a4 g k a0 a1 rho queries semantic x0 y0 x1 y1 claim rhs power r=
  run d (NKU_ZClaim.post (NKU_Semantic.post
-   (NKU_Pack.prefix s next «end» state a3 a4 g k a0 a1 rho queries r) semantic r.at)
+   (NKU_Pack.pack s next «end» state a3 a4 g k a0 a1 rho queries r) semantic r.at)
    x0 y0 x1 y1 claim rhs power r) := by
  unfold NKU_AfterZSource.run run NKU_Allocation.run NKU_Weights.run
  simp only [NKK_LogAlgebra.bind_assoc,NKK_Try.branch,NKK_LogReduce.pure_bind]
@@ -31,14 +31,14 @@ theorem source {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
  cases allocated with
  | Err err => rfl
  | Ok owner =>
+  simp only [NKU_Allocation.post,NKU_ZClaim.post,NKU_Semantic.post,NKU_Pack.pack,NKK_LogReduce.pure_bind,NKK_LogAlgebra.bind_assoc]
   apply NKK_LogAlgebra.bind_congr
   intro reply
   cases reply with
   | Err err => rfl
   | Ok pair =>
    rcases pair with ⟨weights,cursor⟩
-   unfold NKU_Tail.run NKU_Tail.build NKU_Weights.post NKU_Allocation.post NKU_ZClaim.post NKU_Semantic.post NKU_Pack.prefix
-   simp only [NKU_Array22.source]
+   simp only [NKU_Tail.run,NKU_Tail.build,NKU_Weights.post,NKU_Allocation.post,NKU_ZClaim.post,NKU_Semantic.post,NKU_Pack.pack,NKU_Array22.source,NKK_LogReduce.pure_bind]
    split <;> rfl
 #print source
 #print axioms source
