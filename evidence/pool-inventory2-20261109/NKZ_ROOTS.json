@@ -1,0 +1,65 @@
+{
+ "entry": "programs/aspis-pool/src/processor.rs::process_instruction",
+ "entrypoint": "SDK entrypoint! -> processor::process_instruction",
+ "invalid_magic": "Err(InvalidInstructionData); return-data cleared initially and on error",
+ "non_dispatch_admin": "No registry-maintenance/admin/standalone-close dispatch branch remains. Seven legacy magics now reject; see NKZ_DIFF.md.",
+ "roots": [
+  {
+   "classification": "OFF",
+   "emitted_in_sbf_MIR": true,
+   "function": "programs/aspis-pool/src/pair_forest.rs::process_pair_forest_initialize_with_runtime_v1",
+   "magic": "AS8I",
+   "reason": "Creates master/lane state; initialization before a spend.",
+   "source_line": 1994
+  },
+  {
+   "classification": "ON",
+   "emitted_in_sbf_MIR": true,
+   "function": "programs/aspis-pool/src/pair_forest.rs::process_pair_forest_checkpoint_with_runtime_v1",
+   "magic": "AS8C",
+   "reason": "Retains the authenticated forest checkpoint consumed by terminal settlement.",
+   "source_line": 2130
+  },
+  {
+   "classification": "ON",
+   "emitted_in_sbf_MIR": true,
+   "function": "programs/aspis-pool/src/pair_forest.rs::process_pair_forest_deposit_with_runtime_v1",
+   "magic": "AS8D",
+   "reason": "Vault-backed deposit updates the forest used by the spend.",
+   "source_line": 988
+  },
+  {
+   "classification": "ON",
+   "emitted_in_sbf_MIR": true,
+   "function": "programs/aspis-pool/src/pair_forest.rs::process_pair_forest_terminal_v1",
+   "magic": "ASQ8",
+   "reason": "Deployed compact verifier-gated terminal, transfer/withdrawal continuation.",
+   "source_line": 1823
+  },
+  {
+   "classification": "OFF",
+   "emitted_in_sbf_MIR": false,
+   "function": "programs/aspis-pool/src/pair_forest.rs::process_pair_forest_terminal_full_asf8_v1",
+   "magic": "ASF8",
+   "reason": "Full transport is cfg-disabled in pinned deployed features.",
+   "source_line": 1890
+  },
+  {
+   "classification": "OFF",
+   "emitted_in_sbf_MIR": true,
+   "function": "programs/aspis-pool/src/pair_processor.rs::process_pair_private_transfer_with_verifier_v1",
+   "magic": "ASJP",
+   "reason": "pair-afterstate-evidence is cfg-disabled in deployed features.",
+   "source_line": 277
+  },
+  {
+   "classification": "OFF",
+   "emitted_in_sbf_MIR": true,
+   "function": "programs/aspis-pool/src/pair_processor.rs::process_pair_withdrawal_with_verifier_v1",
+   "magic": "ASJW",
+   "reason": "pair-afterstate-evidence is cfg-disabled in deployed features; held-site review retained separately.",
+   "source_line": 418
+  }
+ ],
+ "scope": "Conservative union of all deployed spend/lifecycle alternatives; not a claim each instruction occurs in one two-transaction trace. AS8C included conservatively as checkpoint preparation."
+}
