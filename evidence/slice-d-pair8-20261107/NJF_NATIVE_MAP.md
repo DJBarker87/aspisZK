@@ -20,3 +20,9 @@ Target not yet established. This is the forward (y)(3)/(aq)(5) map, not an inver
 | NIT cutFinishLog | two round Results; NEW; pair Result; dot Result | exact chronological prefix, round claim chaining, all reached args, parent Result | NIW_AlignFinishComposed / ComposedRoot.source | Read-only parent data; nested NEW payload uses independent window law. Complete source abort prefixes supplied by NIW, never assume a successful suffix |
 
 Shared regular success has no complete prior native slice cut (NIW RegularNativeProject returns none). The new NJF cut must cover it, including common/partial/high entries and high Err writes. Native abort-only outer fail/div semantics are treated by ruling (an); Rust Err branches remain explicit constructors under (ak). No root takes RegularProjection, PairWitness, FinishProjection, child Result equations or endpoint equality as a premise.
+
+## Final selected native inventory and superseded gaps
+
+NIG Initial111/112; Common009/010,011/012,013/014,015/016; Low019/020 through029/030; Final031/032 through041/042; Libra096/097 through106/107; NewPort115/116; PairPort117/118; Finish119/120. NIQ allocator Err002/003, Ok005/006 and powers7-prefix007/008 fill the old allocation/prefix gaps. NIT tail003/004 is the corrected by-value-extra packet; NIT001/002 are rejected. NIW NEW factors006/008 and points/extra009/010 supply full owned payload. NIW005/007 were not rerun.
+
+NIG SameGuard109/110 remains control-only; PairEdges113/114 remains argument-only/narrow and is superseded for full mutable-state credit. NIW Boundary002/004 replaces a Vec, so it is not the corrected borrowed-slice full-state certificate. NJF's complete selected table is NJF_CERTIFICATES.md. Shared regular success now has its full borrowed-slice parent cut, including all Parts pre/post and partial/high arguments. No missing native branch remains in the two scoped functions.

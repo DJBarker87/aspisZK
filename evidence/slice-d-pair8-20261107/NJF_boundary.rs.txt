@@ -50,13 +50,14 @@ fn slice_boundary(){
  let entered_high=l.regular.is_ok()&&shared&&l.partial.is_ok();let entered_partial=l.regular.is_ok()&&shared;
  let expected=if let Err(e)=l.regular{Err(code(e))}else if !shared{Ok(())}else if let Err(e)=l.partial{Err(code(e))}else{l.high.map_err(code)};
  if cfg!(NJF_corrupt){l.events[0]=99;l.high_who=l.high_who.wrapping_add(1);l.high_ap0=E::ZERO;l.high_partial=E::ZERO;l.partial_message=l.partial_message.wrapping_add(1);l.alpha=l.alpha.wrapping_add(1);l.high_before=E::ZERO;scratch[index]=K::ZERO;parts[slot]=E::ZERO;l.partial_common=K::ZERO;}
+ if cfg!(NJF_common_wrong){match limb&3{0=>l.common[i].c0.a.0^=1,1=>l.common[i].c0.b.0^=1,2=>l.common[i].c1.a.0^=1,_=>l.common[i].c1.b.0^=1}}
  if cfg!(NJF_window_args){assert!(l.who==owner&&l.shared==shared&&l.alpha==alpha.as_ptr()&&l.alpha_len==2&&l.message==f.as_ptr()&&l.message_len==2048&&l.folds==2&&l.n==64&&l.scratch_ptr==scratch_ptr&&l.parts_ptr==parts_ptr);
  if cfg!(NJF_copy_wrong){assert!(l.ap0[power].to_limbs()[limb]!=ap0[power].to_limbs()[limb]);}else{assert!(l.ap0[power].to_limbs()[limb]==ap0[power].to_limbs()[limb]&&l.ap1[power].to_limbs()[limb]==ap1[power].to_limbs()[limb]);}
  } if cfg!(NJF_window_control){assert!(out.map_err(code)==expected&&l.count==if !entered_partial{1}else if !entered_high{3}else{4});
  assert!(l.events[0]==0&&(!entered_partial||(l.events[1]==1&&l.events[2]==2))&&(!entered_high||l.events[3]==3));
  } if cfg!(NJF_window_scratch){assert!(scratch.len()==64&&scratch.as_ptr()==scratch_ptr&&qw(scratch[index])[limb&3]==expected_q[limb&3]);
  } if cfg!(NJF_window_parts){assert!(parts.as_ptr()==parts_ptr&&parts[slot].to_limbs()[limb]==if entered_high{l.high_parts[slot]}else{l.parts[slot]}.to_limbs()[limb]);
- } if cfg!(NJF_window_shared)||cfg!(NJF_window_partial_args){if entered_partial{assert!(l.common_who==owner&&l.partial_message==f.as_ptr()&&l.partial_message_len==2048);if cfg!(NJF_copy_wrong){assert!(qw(l.partial_common)[limb&3]!=qw(l.common[i])[limb&3]);}else{assert!(qw(l.partial_common)[limb&3]==qw(l.common[i])[limb&3]);}}
+ } if cfg!(NJF_window_shared)||cfg!(NJF_window_partial_args){if entered_partial{assert!(l.common_who==owner&&l.partial_message==f.as_ptr()&&l.partial_message_len==2048);let same=match limb&3{0=>l.partial_common.c0.a.0==l.common[i].c0.a.0,1=>l.partial_common.c0.b.0==l.common[i].c0.b.0,2=>l.partial_common.c1.a.0==l.common[i].c1.a.0,_=>l.partial_common.c1.b.0==l.common[i].c1.b.0};if cfg!(NJF_copy_wrong){assert!(!same);}else{assert!(same);}}
  } if cfg!(NJF_window_shared)||cfg!(NJF_window_high_args){if entered_high{let values=l.partial.unwrap();if cfg!(NJF_copy_wrong){assert!(l.high_ap0.to_limbs()[limb]!=ap0[power].to_limbs()[limb]);}else{assert!(l.high_who==owner&&l.high_ap0.to_limbs()[limb]==ap0[power].to_limbs()[limb]&&l.high_ap1.to_limbs()[limb]==ap1[power].to_limbs()[limb]);}assert!(l.high_ptr==parts_ptr);let _=values;}
 }
  if cfg!(NJF_window_high_pre){if entered_high{if cfg!(NJF_mask_wrong){assert!(l.high_before.to_limbs()[limb]!=l.parts[slot].to_limbs()[limb]);}else{assert!(l.high_before.to_limbs()[limb]==l.parts[slot].to_limbs()[limb]);}}}
