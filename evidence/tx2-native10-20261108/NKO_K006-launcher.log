@@ -1,0 +1,47 @@
+{"attempt": "NKO_K006", "exit_status": 1, "wall_seconds": 7.3714233580976725, "peak_rss_kib": "525760", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-tx2-native10-20261108/NKO_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `q
+...
+candidate::NKO_parent::InactiveLog::<'_>::decode
+
+Check 72: verifier::candidate::NKO_parent::InactiveLog::<'_>::decode.pointer_dereference.40
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: crates/aspis-r1-cost-probe/src/NKO_parent.rs:11:2 in function verifier::candidate::NKO_parent::InactiveLog::<'_>::decode
+
+Check 73: verifier::candidate::NKO_parent::InactiveLog::<'_>::decode.pointer_dereference.41
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: crates/aspis-r1-cost-probe/src/NKO_parent.rs:11:2 in function verifier::candidate::NKO_parent::InactiveLog::<'_>::decode
+
+Check 74: verifier::candidate::NKO_parent::InactiveLog::<'_>::decode.pointer_dereference.42
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: crates/aspis-r1-cost-probe/src/NKO_parent.rs:11:2 in function verifier::candidate::NKO_parent::InactiveLog::<'_>::decode
+
+Check 75: core::panicking::assert_failed_inner.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panicking.rs:433:11 in function core::panicking::assert_failed_inner
+
+
+SUMMARY:
+ ** 1 of 75 failed
+Failed Checks: This is a placeholder message; Kani doesn't support message formatted at runtime
+ File: "crates/aspis-r1-cost-probe/src/NKO_parent.rs", line 40, in verifier::candidate::NKO_parent::inactive_short_no_return
+
+VERIFICATION:- FAILED
+Verification Time: 2.974193s
+
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NKO_parent::inactive_short_no_return
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r243209d6c78f4205aa8a34974ffcd761.scope; invocation ID: aa48adb177bf4659bc3633b2a2ab1430
