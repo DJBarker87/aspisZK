@@ -19,7 +19,9 @@ a=dict(status='VALIDATED SUPPORT ONLY; target not yet established',headline='Asp
 assert combined and combined[-1]['exit_status']==0 and len(combined)<=2
 assert scans[-1]['exit_status']==0 and not a['dangling']and not a['conflicting_owners']and not a['import_mismatches']
 assert not a['missing_raw_roots']and not a['unexpected_raw_roots']and not a['duplicate_raw_roots']and not nonstandard
-assert len(fixtures)==8 and all(any(x not in standard for x in r['walked_axioms'])for r in fixtures)
+expected_fixtures={'NEP_Planted.matcher':['NEP_Planted.matchAx'],'NEP_Planted.viaPrivate':['NEP_Planted.privateAx'],'NEP_Planted.proof':['NEP_Planted.proofAx'],'NEP_Planted.viaAux':['NEP_Planted.auxAx'],'NEP_MutateMatch.matcher':[],'NEP_MutatePrivate.viaPrivate':[],'NEP_MutateProof.proof':[],'NEP_MutateAux.viaAux':[]}
+assert len(fixtures)==8 and {r['root']for r in fixtures}==set(expected_fixtures)
+assert all(r['equal']and r['walked_axioms']==expected_fixtures[r['root']]and r['collect_axioms']==expected_fixtures[r['root']]for r in fixtures)
 assert all(r['root']=='NHC_DecodeModel.decoder_error'for r in disagreements)
 assert all(x['status']=='PASS'for x in comparison.values())
 (E/'NLI_AUDIT.json').write_text(json.dumps(a,indent=2)+'\n')

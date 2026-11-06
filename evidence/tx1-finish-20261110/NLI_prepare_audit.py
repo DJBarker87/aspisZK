@@ -52,3 +52,5 @@ print(json.dumps(dict(modules=len(mods),own_roots=len(roots),required_roots=len(
 (E/'NLI_PATHS.json').write_text(json.dumps(json.loads((E/'NLI_ENV.json').read_text())['LEAN_PATH'].split(':')))
 priors={tag:json.loads(lzma.decompress((base/(tag+'_CLOSURE_PINS.json.xz')).read_bytes())) for tag,base in [('NLG',W),('NLC',P)]}
 (E/'NLI_PREDECESSORS.json.xz').write_bytes(lzma.compress(json.dumps(priors).encode()))
+
+(E/'NLI_PREDECESSORS.json.sha256').write_text(hashlib.sha256(lzma.decompress((E/'NLI_PREDECESSORS.json.xz').read_bytes())).hexdigest()+'\n')

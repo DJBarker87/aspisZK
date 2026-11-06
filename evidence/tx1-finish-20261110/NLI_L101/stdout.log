@@ -1,0 +1,1302 @@
+'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.RPx_Deployed.deployed : ∀ {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W),
+          AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (missing : AspisR1.IDa_Deployed.Uninstalled CoreError) (indexError : CoreError)
+                (reservation : AspisR1.NP6_StdModel.Reservation) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+                (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+                (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest),
+                AspisR1.S2W_DigestExtraction.AeneasExtraction
+                    (AspisR1.DrvC_Installation.sdk
+                      (AspisR1.FIp_Install.configuration indexError
+                        (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation))
+                    native1 native2 hashv →
+                  ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                    AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+                      AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                        ∀ (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot)
+                          (state1 state2 final1 final2 : A) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+                          (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)),
+                          AspisR1.S2W_D189Wrappers.first native1 copy allocator e1 AspisR1.CPH_Program.verifier data1
+                                state1 =
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)) →
+                            AspisR1.S2W_D189Wrappers.second native2 allocator e2 AspisR1.CPH_Program.verifier data2 slot
+                                  state2 =
+                                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2)) →
+                              ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (length : Aeneas.Std.U32)
+                                (prior :
+                                  AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                                    AspisV8R19.SourceDuplexStep.State Unit)
+                                (words : AspisR1.CanonicalCutEnrichedTranscript.Words)
+                                (p : AspisR1.CPG_Projection.Observations Tx A) (t u : Tx)
+                                (actions : List (AspisR1.CPP_BankState.Action A)),
+                                AspisR1.CPH_Game.DeployedPairExecution p t u e1 e2 saved actions native1 native2 copy
+                                    allocator AspisR1.CPH_Program.verifier →
+                                  AspisR1.CPR_DataPersistence.TwoTransactionLaw (AspisR1.CPG_Projection.adjacent p)
+                                      (AspisR1.CPG_Projection.ordinary p (AspisR1.Hist_Nonvacuity.key 0#u8))
+                                      (AspisR1.CPG_Projection.before p) (AspisR1.CPG_Projection.tentative p)
+                                      (AspisR1.CPG_Projection.success p) (AspisR1.CPG_Projection.loaded p) →
+                                    ∀ (D : AspisR1.LiteralByteProtocol.Decoder) (a : AspisR1.SCE_Experiment.Adversary A)
+                                      (Q0 Q1 : ℕ),
+                                      (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                                          (AspisR1.ARW_Induced.issued native1 copy allocator
+                                                AspisR1.CPH_Program.verifier a H).length ≤
+                                            Q0 + Q1) →
+                                        have P :=
+                                          AspisR1.ARW_Induced.program native1 copy allocator
+                                            AspisR1.CPH_Program.verifier a;
+                                        have runtime :=
+                                          AspisR1.ARX_AdmittedRuntime.runtime L copy allocator
+                                            (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation)
+                                            indexError reservation native1 native2 hashv a;
+                                        have select := fun x =>
+                                          AspisR1.P2P_NativeSelection.pair
+                                            (AspisR1.DrvC_Installation.sdk
+                                              (AspisR1.FIp_Install.configuration indexError
+                                                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                  reservation)
+                                                reservation))
+                                            AspisR1.CPH_Program.verifier e1 e2 data2 slot;
+                                        AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary
+                                            (AspisR1.P6C_Extension.dictionary hashv H) () H AspisR1.Op5T_P6.parent
+                                            AspisR1.Op5T_P6.parent AspisR1.Op5T_P6.parent
+                                            AspisR1.MultiproofConeP6Batch.referenceLeaf ∧
+                                          AspisR1.DrvC_Implementation.driver
+                                                (AspisR1.FIp_Install.configuration indexError
+                                                  (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                    reservation)
+                                                  reservation) =
+                                              AspisR1.DrvC_SourceEntry.source
+                                                (AspisR1.FIp_Install.configuration indexError
+                                                  (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                    reservation)
+                                                  reservation)
+                                                hashv ∧
+                                            AspisR1.DrvC_Installation.sdk
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                    (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                      reservation)
+                                                    reservation) =
+                                                AspisR1.SdkD_PairBatches.dictionary
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).adapter
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).currentBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).stageBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).finish
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).reserved
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).query
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).geometry
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).boundaries
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).std ∧
+                                              AspisR1.FJv_DResult.Outcome L e1 e2 w1 w2
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).adapter
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).currentBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).reserved
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).query
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).geometry
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).stageBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).finish
+                                                  (AspisR1.FIp_Install.boundaries
+                                                    (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation).boundaries)
+                                                  reservation AspisR1.CPH_Program.verifier data1 data2 slot saved post1
+                                                  post2 H
+                                                  (AspisR1.DrvC_Implementation.driver
+                                                    (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation))
+                                                  prior (p.physicalEvents t) hashv
+                                                  (AspisR1.BinRawByteCollisionTargets.event
+                                                    AspisR1.SelectedTranscriptParams.params.iv (Q0 + Q1 + 2965)
+                                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                                      (AspisR1.Hiq_RecordedJoint.program
+                                                        (AspisR1.F3X_Account.program
+                                                          (AspisR1.FIp_Install.configuration indexError
+                                                            (AspisR1.IDa_Deployed.deployedConfiguration missing
+                                                              indexError reservation)
+                                                            reservation)
+                                                          hashv P)
+                                                        AspisR1.F3X_Projection.project select))) ∧
+                                                (AspisR1.F3X_ModelClaims.Claims
+                                                      (AspisR1.FIp_Install.configuration indexError
+                                                        (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                          reservation)
+                                                        reservation)
+                                                      D P (Q0 + Q1) ∧
+                                                    AspisR1.F3Y_SourceClaims.Claims
+                                                        (AspisR1.FIp_Install.configuration indexError
+                                                          (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                            reservation)
+                                                          reservation)
+                                                        D hashv P (Q0 + Q1) select ∧
+                                                      AspisR1.F3Y_AccountMass.Claims
+                                                          (AspisR1.FIp_Install.configuration indexError
+                                                            (AspisR1.IDa_Deployed.deployedConfiguration missing
+                                                              indexError reservation)
+                                                            reservation)
+                                                          hashv P (Q0 + Q1) select ∧
+                                                        ⋯) ∧
+                                                  (native1 AspisR1.CPH_Program.verifier e1.first data1 =
+                                                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) ∧
+                                                      (↑saved).length = 1768 ∧ ⋯) ∧
+                                                    AspisR1.Rc2_Events.Facts
+                                                        (AspisR1.FIp_Install.configuration indexError
+                                                          (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                            reservation)
+                                                          reservation)
+                                                        hashv native1 native2 copy allocator
+                                                        AspisR1.CPH_Program.verifier H saved ∧
+                                                      AspisR1.CPH_Protection.Facts p t saved
+                                                          AspisR1.CPH_Program.verifier ∧
+                                                        ⋯
+'AspisR1.NLI_CallbackAssociation.high' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_CallbackAssociation.high : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H)
+  (claims : AspisR1.NLC_Finish.Claims),
+  s.locals.claims = some claims →
+    ∀ (i : Aeneas.Std.Usize) (inside : ↑i < 10) (memory : AspisR1.NLI_FromFn.Memory),
+      (do
+            let c ← AspisR1.NLC_Finish.read s.locals.claims
+            (AspisR1PublicPreparation.FinishModel.closureFn5 s.input.digest).call_mut c i) =
+          Aeneas.Std.Result.ok (AspisR1.NKQ_MaskHighStep.highAt claims i inside, claims) ∧
+        AspisR1.NLI_FromFn.write memory (↑i) (AspisR1.NKQ_MaskHighStep.highAt claims i inside) ↑i =
+          some (AspisR1.NKQ_MaskHighStep.highAt claims i inside)
+'AspisR1.NLI_CallbackAssociation.low' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_CallbackAssociation.low : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H)
+  (claims : AspisR1.NLC_Finish.Claims),
+  s.locals.claims = some claims →
+    ∀ (i : Aeneas.Std.Usize) (inside : ↑i < 16) (memory : AspisR1.NLI_FromFn.Memory),
+      (do
+            let c ← AspisR1.NLC_Finish.read s.locals.claims
+            (AspisR1PublicPreparation.FinishModel.closureFn9 s.input.digest).call_mut c i) =
+          Aeneas.Std.Result.ok (AspisR1.NKQ_MaskLowStep.lowAt claims i inside, claims) ∧
+        AspisR1.NLI_FromFn.write memory (↑i) (AspisR1.NKQ_MaskLowStep.lowAt claims i inside) ↑i =
+          some (AspisR1.NKQ_MaskLowStep.lowAt claims i inside)
+'AspisR1.NLI_FoldPhase.mark4' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLI_FoldPhase.mark4 : ∀ (n : ℕ) {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.mark4 →
+    AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLC_Finish.fold (n + 1) s) =
+      AspisR1PublicPreparation.PreparedHashCode.run
+        (AspisR1.NLC_Finish.fold n (AspisR1.NLC_Finish.setNext s AspisR1.NLC_Finish.Event.stateBefore))
+'AspisR1.NLI_FoldTicks.alpha' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLI_FoldTicks.alpha : ∀ (n : ℕ) {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.alpha →
+    AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLC_Finish.fold (n + 1) s) =
+      AspisR1PublicPreparation.PreparedHashCode.run
+        (AspisR1.NLC_Finish.fold n (AspisR1.NLC_Finish.setNext s AspisR1.NLC_Finish.Event.mask))
+'AspisR1.NLI_FoldTicks.mark2' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLI_FoldTicks.mark2 : ∀ (n : ℕ) {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.mark2 →
+    AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLC_Finish.fold (n + 1) s) =
+      AspisR1PublicPreparation.PreparedHashCode.run
+        (AspisR1.NLC_Finish.fold n (AspisR1.NLC_Finish.setNext s AspisR1.NLC_Finish.Event.claims))
+'AspisR1.NLI_FoldTicks.mark3' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLI_FoldTicks.mark3 : ∀ (n : ℕ) {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.mark3 →
+    AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLC_Finish.fold (n + 1) s) =
+      AspisR1PublicPreparation.PreparedHashCode.run
+        (AspisR1.NLC_Finish.fold n (AspisR1.NLC_Finish.setNext s AspisR1.NLC_Finish.Event.lowArray))
+'AspisR1.NLI_FoldTicks.original' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLI_FoldTicks.original : ∀ (n : ℕ) {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.original →
+    AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLC_Finish.fold (n + 1) s) =
+      AspisR1PublicPreparation.PreparedHashCode.run
+        (AspisR1.NLC_Finish.fold n (AspisR1.NLC_Finish.setNext s AspisR1.NLC_Finish.Event.terminal))
+'AspisR1.NLI_FromFn.byte_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_FromFn.byte_frame : ∀ {T : Type} (src dst : ℕ → T) (base i outside : ℕ),
+  outside < base + 16 * i ∨ base + 16 * i + 16 ≤ outside →
+    KMX_CopyMeaning.loop src dst (base + 16 * i) 16 outside = dst outside
+'AspisR1.NLI_FromFn.fill_prefix' depends on axioms: [propext, Quot.sound]
+AspisR1.NLI_FromFn.fill_prefix : ∀ (values : ℕ → AspisR1.NLC_Finish.Q) (count start : ℕ)
+  (memory : AspisR1.NLI_FromFn.Memory),
+  AspisR1.NLI_FromFn.Initialized values start memory →
+    AspisR1.NLI_FromFn.Initialized values (start + count) (AspisR1.NLI_FromFn.fill values count start memory)
+'AspisR1.NLI_FromFn.write_prefix' depends on axioms: [propext, Quot.sound]
+AspisR1.NLI_FromFn.write_prefix : ∀ (values : ℕ → AspisR1.NLC_Finish.Q) (i : ℕ) (memory : AspisR1.NLI_FromFn.Memory),
+  AspisR1.NLI_FromFn.Initialized values i memory →
+    AspisR1.NLI_FromFn.Initialized values (i + 1) (AspisR1.NLI_FromFn.write memory i (values i))
+'AspisR1.NLI_LiftLaws.congr_lift' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_LiftLaws.congr_lift : ∀ {A B : Type} (r : Aeneas.Std.Result A)
+  (k l : A → AspisR1PublicPreparation.PreparedHashCode.Code B),
+  (∀ (a : A),
+      r = Aeneas.Std.Result.ok a →
+        AspisR1PublicPreparation.PreparedHashCode.run (k a) = AspisR1PublicPreparation.PreparedHashCode.run (l a)) →
+    AspisR1PublicPreparation.PreparedHashCode.run (liftM r >>= k) =
+      AspisR1PublicPreparation.PreparedHashCode.run (liftM r >>= l)
+'AspisR1.NLI_Monad.bind_assoc' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Monad.bind_assoc : ∀ {A B C : Type} (x : AspisR1PublicPreparation.PreparedHashCode.Code A)
+  (f : A → AspisR1PublicPreparation.PreparedHashCode.Code B) (g : B → AspisR1PublicPreparation.PreparedHashCode.Code C),
+  AspisR1PublicPreparation.PreparedHashCode.bind (AspisR1PublicPreparation.PreparedHashCode.bind x f) g =
+    AspisR1PublicPreparation.PreparedHashCode.bind x fun a => AspisR1PublicPreparation.PreparedHashCode.bind (f a) g
+'AspisR1.NLI_Monad.bind_done' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Monad.bind_done : ∀ {A B : Type} (a : A) (f : A → AspisR1PublicPreparation.PreparedHashCode.Code B),
+  AspisR1PublicPreparation.PreparedHashCode.bind (AspisR1PublicPreparation.PreparedHashCode.Code.done a) f = f a
+'AspisR1.NLI_Notation.assoc' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Notation.assoc : ∀ {A B C : Type} (p : AspisR1PublicPreparation.PreparedHashCode.Code A)
+  (f : A → AspisR1PublicPreparation.PreparedHashCode.Code B) (g : B → AspisR1PublicPreparation.PreparedHashCode.Code C),
+  p >>= f >>= g = p >>= fun a => f a >>= g
+'AspisR1.NLI_Notation.congr_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Notation.congr_bind : ∀ {A B : Type} (p : AspisR1PublicPreparation.PreparedHashCode.Code A)
+  (k l : A → AspisR1PublicPreparation.PreparedHashCode.Code B),
+  (∀ (a : A),
+      AspisR1PublicPreparation.PreparedHashCode.run (k a) = AspisR1PublicPreparation.PreparedHashCode.run (l a)) →
+    AspisR1PublicPreparation.PreparedHashCode.run (p >>= k) = AspisR1PublicPreparation.PreparedHashCode.run (p >>= l)
+'AspisR1.NLI_Notation.lift_ok' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Notation.lift_ok : ∀ {A B : Type} (a : A) (f : A → AspisR1PublicPreparation.PreparedHashCode.Code B),
+  AspisR1PublicPreparation.PreparedHashCode.run (liftM (Aeneas.Std.Result.ok a) >>= f) =
+    AspisR1PublicPreparation.PreparedHashCode.run (f a)
+'AspisR1.NLI_Notation.pure_left' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Notation.pure_left : ∀ {A B : Type} (a : A) (f : A → AspisR1PublicPreparation.PreparedHashCode.Code B),
+  pure a >>= f = f a
+'AspisR1.NLI_ParsedCase.success' depends on axioms: [propext]
+@AspisR1.NLI_ParsedCase.success : ∀ {A E : Type} (reply : Aeneas.Std.Result (Aeneas.Std.core.result.Result A E))
+  (P : (value : A) → reply = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok value) → Prop),
+  (match h : reply with
+    | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok value) => P value h
+    | x => True) →
+    ∀ (value : A) (parsed : reply = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok value)), P value parsed
+'AspisR1.NLI_RoundsCarry.from_child' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_RoundsCarry.from_child : ∀ {H : Type} (native : AspisR1.NLI_RoundsCarry.Native),
+  AspisR1.NLI_RoundsCarry.Cut native →
+    ∀ (childNative : AspisR1.NJM_RoundsCut.Observations),
+      AspisR1.NJM_RoundsCut.Cut childNative →
+        ∀ (token frame : ℕ) (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+          (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix),
+          AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre) →
+            ∀ (before : AspisR1PublicPreparation.r1_wire.SemanticTranscript H),
+              ∃ running,
+                AspisR1.NLI_RoundsCarry.afterChild native before.hash
+                    (AspisR1.NJM_RoundsInduction.chain childNative token frame D
+                      (AspisR1PublicPreparation.PrefixAdapter.fromOld pre) AspisR1.NJG_RoundsCode.sites
+                      (running, Aeneas.Std.Array.repeat 10#usize AspisR1PublicPreparation.aspis_core.field.QM31.ZERO,
+                        before)) =
+                  AspisR1PublicPreparation.PreparedHashCode.run
+                    (AspisR1PublicPreparation.S1SemanticCode.rounds AspisR1.NJM_RoundJoin.R D
+                      (AspisR1PublicPreparation.PrefixAdapter.fromOld pre) before)
+'AspisR1.NLI_RoundsCarry.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_RoundsCarry.source : ∀ {H : Type} (native : AspisR1.NLI_RoundsCarry.Native),
+  AspisR1.NLI_RoundsCarry.Cut native →
+    ∀ (D : AspisR1PublicPreparation.aspis_core.Digest32 H) (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+      (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix),
+      AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre) →
+        ∀ (before : AspisR1PublicPreparation.r1_wire.SemanticTranscript H),
+          AspisR1.NLI_RoundsCarry.afterChild native before.hash
+              (AspisR1PublicPreparation.PreparedHashCode.run
+                (AspisR1PublicPreparation.S1SemanticCode.rounds AspisR1.NJM_RoundJoin.R D
+                  (AspisR1PublicPreparation.PrefixAdapter.fromOld pre) before)) =
+            AspisR1PublicPreparation.PreparedHashCode.run
+              (AspisR1PublicPreparation.S1SemanticCode.rounds AspisR1.NJM_RoundJoin.R D
+                (AspisR1PublicPreparation.PrefixAdapter.fromOld pre) before)
+'AspisR1.NLI_RoundsHash.chain' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_RoundsHash.chain : ∀ {H : Type} (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+  (pre : AspisR1PublicPreparation.r1_wire.Prefix) (rows : List Aeneas.Std.Usize),
+  (∀ r ∈ rows, ↑r < 10) →
+    ∀ (carry : AspisR1.NJG_RoundsCode.Carry H),
+      AspisR1.NLI_RoundsHash.Outcome carry.2.2.hash
+        (AspisR1PublicPreparation.PreparedHashCode.run
+            (AspisR1.NJG_RoundsCode.chain AspisR1.NJM_RoundJoin.R D pre rows carry)).2
+'AspisR1.NLI_RoundsHash.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_RoundsHash.source : ∀ {H : Type} (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix),
+  AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre) →
+    ∀ (before : AspisR1PublicPreparation.r1_wire.SemanticTranscript H),
+      AspisR1.NLI_RoundsHash.Outcome before.hash
+        (AspisR1PublicPreparation.PreparedHashCode.run
+            (AspisR1PublicPreparation.S1SemanticCode.rounds AspisR1.NJM_RoundJoin.R D
+              (AspisR1PublicPreparation.PrefixAdapter.fromOld pre) before)).2
+'AspisR1.NLI_RoundsInstall.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_RoundsInstall.source : ∀ {H : Type} (native : AspisR1.NLI_RoundsCarry.Native),
+  AspisR1.NLI_RoundsCarry.Cut native →
+    ∀ (childNative : AspisR1.NJM_RoundsCut.Observations),
+      AspisR1.NJM_RoundsCut.Cut childNative →
+        ∀ (token frame : ℕ) (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+          (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix)
+          (parsed :
+            AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre))
+          (before : AspisR1PublicPreparation.r1_wire.SemanticTranscript H),
+          (∃ running,
+              AspisR1.NLI_RoundsCarry.afterChild native before.hash
+                  (AspisR1.NJM_RoundsInduction.chain childNative token frame D
+                    (AspisR1PublicPreparation.PrefixAdapter.fromOld pre) AspisR1.NJG_RoundsCode.sites
+                    (running, Aeneas.Std.Array.repeat 10#usize AspisR1PublicPreparation.aspis_core.field.QM31.ZERO,
+                      before)) =
+                AspisR1PublicPreparation.PreparedHashCode.run
+                  (AspisR1PublicPreparation.S1SemanticCode.rounds AspisR1.NJM_RoundJoin.R D
+                    (AspisR1PublicPreparation.PrefixAdapter.fromOld pre) before)) ∧
+            (∀ (r : Aeneas.Std.Usize) (member : r ∈ AspisR1.NJG_RoundsCode.sites)
+                (carry : AspisR1.NJG_RoundsCode.Carry H),
+                AspisR1.NJM_RoundsClosed.Child D bytes pre parsed carry.2.2 carry.2.1 carry.1 r ⋯) ∧
+              AspisR1.NLI_RoundsHash.Outcome before.hash
+                (AspisR1PublicPreparation.PreparedHashCode.run
+                    (AspisR1PublicPreparation.S1SemanticCode.rounds AspisR1.NJM_RoundJoin.R D
+                      (AspisR1PublicPreparation.PrefixAdapter.fromOld pre) before)).2
+'AspisR1.NLI_RoundsWindows.complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLI_RoundsWindows.complete : ∀ (native : AspisR1.NLI_RoundsCarry.Native),
+  AspisR1.NLI_RoundsWindows.Windows native → AspisR1.NLI_RoundsCarry.Cut native
+'AspisR1.NLI_RunLaws.bind_congr' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_RunLaws.bind_congr : ∀ {A B : Type} (p : AspisR1PublicPreparation.PreparedHashCode.Code A)
+  (k l : A → AspisR1PublicPreparation.PreparedHashCode.Code B),
+  (∀ (a : A),
+      AspisR1PublicPreparation.PreparedHashCode.run (k a) = AspisR1PublicPreparation.PreparedHashCode.run (l a)) →
+    AspisR1PublicPreparation.PreparedHashCode.run (AspisR1PublicPreparation.PreparedHashCode.bind p k) =
+      AspisR1PublicPreparation.PreparedHashCode.run (AspisR1PublicPreparation.PreparedHashCode.bind p l)
+'AspisR1.NLI_RunLaws.step_ok' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_RunLaws.step_ok : ∀ {A B : Type} (a : A) (k : A → AspisR1PublicPreparation.PreparedHashCode.Code B),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1PublicPreparation.PreparedHashCode.Code.step (Aeneas.Std.Result.ok a) k) =
+    AspisR1PublicPreparation.PreparedHashCode.run (k a)
+'AspisR1.NLI_Source.addExtra' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.addExtra : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (running : AspisR1.NLC_Finish.Q) (alpha : AspisR1.NLC_Finish.Alpha)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H) (claims : AspisR1.NLC_Finish.Claims)
+  (extra : AspisR1.NLC_Finish.Words) (partialValue extraCell : AspisR1.NLC_Finish.Q),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold 17
+        { input := i,
+          locals :=
+            { running := some running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := l.terminal, low := l.low, high := l.high, blind := l.blind,
+              mask := l.mask, extra := some extra, product := l.product, partialValue := some partialValue,
+              masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+              record25 := l.record25, record26 := l.record26, payload := l.payload, extraCell := some extraCell,
+              root := l.root },
+          next := AspisR1.NLC_Finish.Event.addExtra }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Source.suffix_addExtra i running alpha transcript claims extra partialValue extraCell)
+'AspisR1.NLI_Source.addMask' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.addMask : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (running : AspisR1.NLC_Finish.Q) (alpha : AspisR1.NLC_Finish.Alpha)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H) (claims : AspisR1.NLC_Finish.Claims)
+  (mask : AspisR1.NLC_Finish.Q) (extra : AspisR1.NLC_Finish.Words) (product : AspisR1.NLC_Finish.Q),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold 19
+        { input := i,
+          locals :=
+            { running := some running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := l.terminal, low := l.low, high := l.high, blind := l.blind,
+              mask := some mask, extra := some extra, product := some product, partialValue := l.partialValue,
+              masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+              record25 := l.record25, record26 := l.record26, payload := l.payload, extraCell := l.extraCell,
+              root := l.root },
+          next := AspisR1.NLC_Finish.Event.addMask }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Source.suffix_addMask i running alpha transcript claims mask extra product)
+'AspisR1.NLI_Source.alpha' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.alpha : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (running : AspisR1.NLC_Finish.Q) (alpha : AspisR1.NLC_Finish.Alpha)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H) (claims : AspisR1.NLC_Finish.Claims)
+  (terminal : AspisR1.NLC_Finish.Q) (low : AspisR1.NLC_Finish.Low) (high : AspisR1.NLC_Finish.High)
+  (blind : AspisR1.NLC_Finish.Q),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold 24
+        { input := i,
+          locals :=
+            { running := some running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := some terminal, low := some low, high := some high,
+              blind := some blind, mask := l.mask, extra := l.extra, product := l.product,
+              partialValue := l.partialValue, masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0,
+              beforeZ1 := l.beforeZ1, z1 := l.z1, record25 := l.record25, record26 := l.record26, payload := l.payload,
+              extraCell := l.extraCell, root := l.root },
+          next := AspisR1.NLC_Finish.Event.alpha }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Source.suffix_alpha i running alpha transcript claims terminal low high blind)
+'AspisR1.NLI_Source.blind' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.blind : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (running : AspisR1.NLC_Finish.Q) (alpha : AspisR1.NLC_Finish.Alpha)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H) (claims : AspisR1.NLC_Finish.Claims)
+  (terminal : AspisR1.NLC_Finish.Q) (low : AspisR1.NLC_Finish.Low) (high : AspisR1.NLC_Finish.High),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold 25
+        { input := i,
+          locals :=
+            { running := some running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := some terminal, low := some low, high := some high,
+              blind := l.blind, mask := l.mask, extra := l.extra, product := l.product, partialValue := l.partialValue,
+              masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+              record25 := l.record25, record26 := l.record26, payload := l.payload, extraCell := l.extraCell,
+              root := l.root },
+          next := AspisR1.NLC_Finish.Event.blind }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Source.suffix_blind i running alpha transcript claims terminal low high)
+'AspisR1.NLI_Source.circle0' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.circle0 : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (alpha : AspisR1.NLC_Finish.Alpha) (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+  (claims : AspisR1.NLC_Finish.Claims) (record25 : AspisR1PublicPreparation.r1_wire.ValidatedRecord)
+  (extra : AspisR1.NLC_Finish.Words) (stateBefore : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold 12
+        { input := i,
+          locals :=
+            { running := l.running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := l.terminal, low := l.low, high := l.high, blind := l.blind,
+              mask := l.mask, extra := some extra, product := l.product, partialValue := l.partialValue,
+              masked := l.masked, stateBefore := some stateBefore, z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+              record25 := some record25, record26 := l.record26, payload := l.payload, extraCell := l.extraCell,
+              root := l.root },
+          next := AspisR1.NLC_Finish.Event.circle0 }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Source.suffix_circle0 i alpha transcript claims record25 extra stateBefore)
+'AspisR1.NLI_Source.circle1' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.circle1 : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (alpha : AspisR1.NLC_Finish.Alpha) (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+  (claims : AspisR1.NLC_Finish.Claims) (extra : AspisR1.NLC_Finish.Words)
+  (stateBefore : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (z0 : AspisR1.NLC_Finish.Point)
+  (record26 : AspisR1PublicPreparation.r1_wire.ValidatedRecord) (beforeZ1 : AspisR1.NLC_Finish.Words),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold 8
+        { input := i,
+          locals :=
+            { running := l.running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := l.terminal, low := l.low, high := l.high, blind := l.blind,
+              mask := l.mask, extra := some extra, product := l.product, partialValue := l.partialValue,
+              masked := l.masked, stateBefore := some stateBefore, z0 := some z0, beforeZ1 := some beforeZ1, z1 := l.z1,
+              record25 := l.record25, record26 := some record26, payload := l.payload, extraCell := l.extraCell,
+              root := l.root },
+          next := AspisR1.NLC_Finish.Event.circle1 }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Source.suffix_circle1 i alpha transcript claims extra stateBefore z0 record26 beforeZ1)
+'AspisR1.NLI_Source.circleGuard' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.circleGuard : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (alpha : AspisR1.NLC_Finish.Alpha) (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+  (claims : AspisR1.NLC_Finish.Claims) (extra : AspisR1.NLC_Finish.Words)
+  (stateBefore : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (z0 : AspisR1.NLC_Finish.Point)
+  (beforeZ1 : AspisR1.NLC_Finish.Words) (z1 : AspisR1.NLC_Finish.Point),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold 6
+        { input := i,
+          locals :=
+            { running := l.running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := l.terminal, low := l.low, high := l.high, blind := l.blind,
+              mask := l.mask, extra := some extra, product := l.product, partialValue := l.partialValue,
+              masked := l.masked, stateBefore := some stateBefore, z0 := some z0, beforeZ1 := some beforeZ1,
+              z1 := some z1, record25 := l.record25, record26 := l.record26, payload := l.payload,
+              extraCell := l.extraCell, root := l.root },
+          next := AspisR1.NLC_Finish.Event.circleGuard }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Source.suffix_circleGuard i alpha transcript claims extra stateBefore z0 beforeZ1 z1)
+'AspisR1.NLI_Source.claims' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.claims : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (running : AspisR1.NLC_Finish.Q) (alpha : AspisR1.NLC_Finish.Alpha)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold 32
+        { input := i,
+          locals :=
+            { running := some running, alpha := some alpha, transcript := some transcript, claims := l.claims,
+              terminalReply := l.terminalReply, terminal := l.terminal, low := l.low, high := l.high, blind := l.blind,
+              mask := l.mask, extra := l.extra, product := l.product, partialValue := l.partialValue,
+              masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+              record25 := l.record25, record26 := l.record26, payload := l.payload, extraCell := l.extraCell,
+              root := l.root },
+          next := AspisR1.NLC_Finish.Event.claims }) =
+    AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLI_Source.suffix_claims i running alpha transcript)
+'AspisR1.NLI_Source.decode25' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.decode25 : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (running : AspisR1.NLC_Finish.Q) (alpha : AspisR1.NLC_Finish.Alpha)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H) (claims : AspisR1.NLC_Finish.Claims)
+  (terminal mask : AspisR1.NLC_Finish.Q) (record25 : AspisR1PublicPreparation.r1_wire.ValidatedRecord),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold 21
+        { input := i,
+          locals :=
+            { running := some running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := some terminal, low := l.low, high := l.high,
+              blind := l.blind, mask := some mask, extra := l.extra, product := l.product,
+              partialValue := l.partialValue, masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0,
+              beforeZ1 := l.beforeZ1, z1 := l.z1, record25 := some record25, record26 := l.record26,
+              payload := l.payload, extraCell := l.extraCell, root := l.root },
+          next := AspisR1.NLC_Finish.Event.decode25 }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Source.suffix_decode25 i running alpha transcript claims terminal mask record25)
+'AspisR1.NLI_Source.decode26' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.decode26 : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (alpha : AspisR1.NLC_Finish.Alpha) (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+  (claims : AspisR1.NLC_Finish.Claims) (extra : AspisR1.NLC_Finish.Words)
+  (stateBefore : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (z0 : AspisR1.NLC_Finish.Point)
+  (record26 : AspisR1PublicPreparation.r1_wire.ValidatedRecord),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold 10
+        { input := i,
+          locals :=
+            { running := l.running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := l.terminal, low := l.low, high := l.high, blind := l.blind,
+              mask := l.mask, extra := some extra, product := l.product, partialValue := l.partialValue,
+              masked := l.masked, stateBefore := some stateBefore, z0 := some z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+              record25 := l.record25, record26 := some record26, payload := l.payload, extraCell := l.extraCell,
+              root := l.root },
+          next := AspisR1.NLC_Finish.Event.decode26 }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Source.suffix_decode26 i alpha transcript claims extra stateBefore z0 record26)
+'AspisR1.NLI_Source.extra28' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.extra28 : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (running : AspisR1.NLC_Finish.Q) (alpha : AspisR1.NLC_Finish.Alpha)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H) (claims : AspisR1.NLC_Finish.Claims)
+  (extra : AspisR1.NLC_Finish.Words) (partialValue : AspisR1.NLC_Finish.Q),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold 18
+        { input := i,
+          locals :=
+            { running := some running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := l.terminal, low := l.low, high := l.high, blind := l.blind,
+              mask := l.mask, extra := some extra, product := l.product, partialValue := some partialValue,
+              masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+              record25 := l.record25, record26 := l.record26, payload := l.payload, extraCell := l.extraCell,
+              root := l.root },
+          next := AspisR1.NLC_Finish.Event.extra28 }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Source.suffix_extra28 i running alpha transcript claims extra partialValue)
+'AspisR1.NLI_Source.finishSourceEquality' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.finishSourceEquality : ∀ {H : Type} (input : AspisR1.NLC_Finish.Input H),
+  AspisR1.NLC_Goals.FinishSourceEquality input
+'AspisR1.NLI_Source.highArray' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.highArray : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (running : AspisR1.NLC_Finish.Q) (alpha : AspisR1.NLC_Finish.Alpha)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H) (claims : AspisR1.NLC_Finish.Claims)
+  (terminal : AspisR1.NLC_Finish.Q) (low : AspisR1.NLC_Finish.Low),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold 26
+        { input := i,
+          locals :=
+            { running := some running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := some terminal, low := some low, high := l.high,
+              blind := l.blind, mask := l.mask, extra := l.extra, product := l.product, partialValue := l.partialValue,
+              masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+              record25 := l.record25, record26 := l.record26, payload := l.payload, extraCell := l.extraCell,
+              root := l.root },
+          next := AspisR1.NLC_Finish.Event.highArray }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Source.suffix_highArray i running alpha transcript claims terminal low)
+'AspisR1.NLI_Source.initialized_finish' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.initialized_finish : ∀ {H : Type} (input : AspisR1.NLC_Finish.Input H),
+  ∃ out log events,
+    AspisR1.NLC_Finish.InitializedInvocation (AspisR1.NLC_Finish.fuel (AspisR1.NLC_Finish.initial input))
+        (AspisR1.NLC_Finish.initial input) out log events ∧
+      AspisR1PublicPreparation.PreparedHashCode.run
+          (AspisR1PublicPreparation.S1SemanticCode.finish AspisR1.NJM_RoundJoin.R
+            (AspisR1.IDa_Deployed.boundaries input.reservation) input.digest input.publicValue input.prefix1
+            input.transcript input.challenges none) =
+        (log, out)
+'AspisR1.NLI_Source.lowArray' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.lowArray : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (running : AspisR1.NLC_Finish.Q) (alpha : AspisR1.NLC_Finish.Alpha)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H) (claims : AspisR1.NLC_Finish.Claims)
+  (terminal : AspisR1.NLC_Finish.Q),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold 27
+        { input := i,
+          locals :=
+            { running := some running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := some terminal, low := l.low, high := l.high,
+              blind := l.blind, mask := l.mask, extra := l.extra, product := l.product, partialValue := l.partialValue,
+              masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+              record25 := l.record25, record26 := l.record26, payload := l.payload, extraCell := l.extraCell,
+              root := l.root },
+          next := AspisR1.NLC_Finish.Event.lowArray }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Source.suffix_lowArray i running alpha transcript claims terminal)
+'AspisR1.NLI_Source.mapPublic' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.mapPublic : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (running : AspisR1.NLC_Finish.Q) (alpha : AspisR1.NLC_Finish.Alpha)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H) (claims : AspisR1.NLC_Finish.Claims)
+  (terminalReply :
+    Aeneas.Std.core.result.Result AspisR1.NLC_Finish.Q AspisR1PublicPreparation.aspis_core.state_only_prefix.r0.Error),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold 29
+        { input := i,
+          locals :=
+            { running := some running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := some terminalReply, terminal := l.terminal, low := l.low, high := l.high,
+              blind := l.blind, mask := l.mask, extra := l.extra, product := l.product, partialValue := l.partialValue,
+              masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+              record25 := l.record25, record26 := l.record26, payload := l.payload, extraCell := l.extraCell,
+              root := l.root },
+          next := AspisR1.NLC_Finish.Event.mapPublic }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Source.suffix_mapPublic i running alpha transcript claims terminalReply)
+'AspisR1.NLI_Source.mark2' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.mark2 : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (running : AspisR1.NLC_Finish.Q) (alpha : AspisR1.NLC_Finish.Alpha)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold 33
+        { input := i,
+          locals :=
+            { running := some running, alpha := some alpha, transcript := some transcript, claims := l.claims,
+              terminalReply := l.terminalReply, terminal := l.terminal, low := l.low, high := l.high, blind := l.blind,
+              mask := l.mask, extra := l.extra, product := l.product, partialValue := l.partialValue,
+              masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+              record25 := l.record25, record26 := l.record26, payload := l.payload, extraCell := l.extraCell,
+              root := l.root },
+          next := AspisR1.NLC_Finish.Event.mark2 }) =
+    AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLI_Source.suffix_mark2 i running alpha transcript)
+'AspisR1.NLI_Source.mark3' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.mark3 : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (running : AspisR1.NLC_Finish.Q) (alpha : AspisR1.NLC_Finish.Alpha)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H) (claims : AspisR1.NLC_Finish.Claims)
+  (terminal : AspisR1.NLC_Finish.Q),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold 28
+        { input := i,
+          locals :=
+            { running := some running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := some terminal, low := l.low, high := l.high,
+              blind := l.blind, mask := l.mask, extra := l.extra, product := l.product, partialValue := l.partialValue,
+              masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+              record25 := l.record25, record26 := l.record26, payload := l.payload, extraCell := l.extraCell,
+              root := l.root },
+          next := AspisR1.NLC_Finish.Event.mark3 }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Source.suffix_mark3 i running alpha transcript claims terminal)
+'AspisR1.NLI_Source.mark4' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.mark4 : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (alpha : AspisR1.NLC_Finish.Alpha) (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+  (claims : AspisR1.NLC_Finish.Claims) (extra : AspisR1.NLC_Finish.Words),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold 15
+        { input := i,
+          locals :=
+            { running := l.running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := l.terminal, low := l.low, high := l.high, blind := l.blind,
+              mask := l.mask, extra := some extra, product := l.product, partialValue := l.partialValue,
+              masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+              record25 := l.record25, record26 := l.record26, payload := l.payload, extraCell := l.extraCell,
+              root := l.root },
+          next := AspisR1.NLC_Finish.Event.mark4 }) =
+    AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLI_Source.suffix_mark4 i alpha transcript claims extra)
+'AspisR1.NLI_Source.mark5' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.mark5 : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (alpha : AspisR1.NLC_Finish.Alpha) (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+  (claims : AspisR1.NLC_Finish.Claims) (extra : AspisR1.NLC_Finish.Words)
+  (stateBefore : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (z0 : AspisR1.NLC_Finish.Point)
+  (beforeZ1 : AspisR1.NLC_Finish.Words) (z1 : AspisR1.NLC_Finish.Point),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold 7
+        { input := i,
+          locals :=
+            { running := l.running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := l.terminal, low := l.low, high := l.high, blind := l.blind,
+              mask := l.mask, extra := some extra, product := l.product, partialValue := l.partialValue,
+              masked := l.masked, stateBefore := some stateBefore, z0 := some z0, beforeZ1 := some beforeZ1,
+              z1 := some z1, record25 := l.record25, record26 := l.record26, payload := l.payload,
+              extraCell := l.extraCell, root := l.root },
+          next := AspisR1.NLC_Finish.Event.mark5 }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Source.suffix_mark5 i alpha transcript claims extra stateBefore z0 beforeZ1 z1)
+'AspisR1.NLI_Source.mask' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.mask : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (running : AspisR1.NLC_Finish.Q) (alpha : AspisR1.NLC_Finish.Alpha)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H) (claims : AspisR1.NLC_Finish.Claims)
+  (terminal : AspisR1.NLC_Finish.Q) (low : AspisR1.NLC_Finish.Low) (high : AspisR1.NLC_Finish.High)
+  (blind : AspisR1.NLC_Finish.Q),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold 23
+        { input := i,
+          locals :=
+            { running := some running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := some terminal, low := some low, high := some high,
+              blind := some blind, mask := l.mask, extra := l.extra, product := l.product,
+              partialValue := l.partialValue, masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0,
+              beforeZ1 := l.beforeZ1, z1 := l.z1, record25 := l.record25, record26 := l.record26, payload := l.payload,
+              extraCell := l.extraCell, root := l.root },
+          next := AspisR1.NLC_Finish.Event.mask }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Source.suffix_mask i running alpha transcript claims terminal low high blind)
+'AspisR1.NLI_Source.multiply' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.multiply : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (running : AspisR1.NLC_Finish.Q) (alpha : AspisR1.NLC_Finish.Alpha)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H) (claims : AspisR1.NLC_Finish.Claims)
+  (terminal mask : AspisR1.NLC_Finish.Q) (extra : AspisR1.NLC_Finish.Words),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold 20
+        { input := i,
+          locals :=
+            { running := some running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := some terminal, low := l.low, high := l.high,
+              blind := l.blind, mask := some mask, extra := some extra, product := l.product,
+              partialValue := l.partialValue, masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0,
+              beforeZ1 := l.beforeZ1, z1 := l.z1, record25 := l.record25, record26 := l.record26, payload := l.payload,
+              extraCell := l.extraCell, root := l.root },
+          next := AspisR1.NLC_Finish.Event.multiply }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Source.suffix_multiply i running alpha transcript claims terminal mask extra)
+'AspisR1.NLI_Source.original' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.original : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (running : AspisR1.NLC_Finish.Q) (alpha : AspisR1.NLC_Finish.Alpha)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H) (claims : AspisR1.NLC_Finish.Claims),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold 31
+        { input := i,
+          locals :=
+            { running := some running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := l.terminal, low := l.low, high := l.high, blind := l.blind,
+              mask := l.mask, extra := l.extra, product := l.product, partialValue := l.partialValue,
+              masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+              record25 := l.record25, record26 := l.record26, payload := l.payload, extraCell := l.extraCell,
+              root := l.root },
+          next := AspisR1.NLC_Finish.Event.original }) =
+    AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLI_Source.suffix_original i running alpha transcript claims)
+'AspisR1.NLI_Source.payload2' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.payload2 : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (alpha : AspisR1.NLC_Finish.Alpha) (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+  (claims : AspisR1.NLC_Finish.Claims) (extra : AspisR1.NLC_Finish.Words)
+  (stateBefore : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (z0 : AspisR1.NLC_Finish.Point)
+  (beforeZ1 : AspisR1.NLC_Finish.Words) (z1 : AspisR1.NLC_Finish.Point),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold 5
+        { input := i,
+          locals :=
+            { running := l.running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := l.terminal, low := l.low, high := l.high, blind := l.blind,
+              mask := l.mask, extra := some extra, product := l.product, partialValue := l.partialValue,
+              masked := l.masked, stateBefore := some stateBefore, z0 := some z0, beforeZ1 := some beforeZ1,
+              z1 := some z1, record25 := l.record25, record26 := l.record26, payload := l.payload,
+              extraCell := l.extraCell, root := l.root },
+          next := AspisR1.NLC_Finish.Event.payload2 }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Source.suffix_payload2 i alpha transcript claims extra stateBefore z0 beforeZ1 z1)
+'AspisR1.NLI_Source.record25a' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.record25a : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (running : AspisR1.NLC_Finish.Q) (alpha : AspisR1.NLC_Finish.Alpha)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H) (claims : AspisR1.NLC_Finish.Claims)
+  (terminal mask : AspisR1.NLC_Finish.Q),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold 22
+        { input := i,
+          locals :=
+            { running := some running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := some terminal, low := l.low, high := l.high,
+              blind := l.blind, mask := some mask, extra := l.extra, product := l.product,
+              partialValue := l.partialValue, masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0,
+              beforeZ1 := l.beforeZ1, z1 := l.z1, record25 := l.record25, record26 := l.record26, payload := l.payload,
+              extraCell := l.extraCell, root := l.root },
+          next := AspisR1.NLC_Finish.Event.record25a }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Source.suffix_record25a i running alpha transcript claims terminal mask)
+'AspisR1.NLI_Source.record25b' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.record25b : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (alpha : AspisR1.NLC_Finish.Alpha) (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+  (claims : AspisR1.NLC_Finish.Claims) (extra : AspisR1.NLC_Finish.Words)
+  (stateBefore : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold 13
+        { input := i,
+          locals :=
+            { running := l.running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := l.terminal, low := l.low, high := l.high, blind := l.blind,
+              mask := l.mask, extra := some extra, product := l.product, partialValue := l.partialValue,
+              masked := l.masked, stateBefore := some stateBefore, z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+              record25 := l.record25, record26 := l.record26, payload := l.payload, extraCell := l.extraCell,
+              root := l.root },
+          next := AspisR1.NLC_Finish.Event.record25b }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Source.suffix_record25b i alpha transcript claims extra stateBefore)
+'AspisR1.NLI_Source.record26a' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.record26a : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (alpha : AspisR1.NLC_Finish.Alpha) (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+  (claims : AspisR1.NLC_Finish.Claims) (extra : AspisR1.NLC_Finish.Words)
+  (stateBefore : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (z0 : AspisR1.NLC_Finish.Point),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold 11
+        { input := i,
+          locals :=
+            { running := l.running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := l.terminal, low := l.low, high := l.high, blind := l.blind,
+              mask := l.mask, extra := some extra, product := l.product, partialValue := l.partialValue,
+              masked := l.masked, stateBefore := some stateBefore, z0 := some z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+              record25 := l.record25, record26 := l.record26, payload := l.payload, extraCell := l.extraCell,
+              root := l.root },
+          next := AspisR1.NLC_Finish.Event.record26a }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Source.suffix_record26a i alpha transcript claims extra stateBefore z0)
+'AspisR1.NLI_Source.record26b' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.record26b : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (alpha : AspisR1.NLC_Finish.Alpha) (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+  (claims : AspisR1.NLC_Finish.Claims) (extra : AspisR1.NLC_Finish.Words)
+  (stateBefore : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (z0 : AspisR1.NLC_Finish.Point)
+  (beforeZ1 : AspisR1.NLC_Finish.Words),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold 9
+        { input := i,
+          locals :=
+            { running := l.running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := l.terminal, low := l.low, high := l.high, blind := l.blind,
+              mask := l.mask, extra := some extra, product := l.product, partialValue := l.partialValue,
+              masked := l.masked, stateBefore := some stateBefore, z0 := some z0, beforeZ1 := some beforeZ1, z1 := l.z1,
+              record25 := l.record25, record26 := l.record26, payload := l.payload, extraCell := l.extraCell,
+              root := l.root },
+          next := AspisR1.NLC_Finish.Event.record26b }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Source.suffix_record26b i alpha transcript claims extra stateBefore z0 beforeZ1)
+'AspisR1.NLI_Source.rootCopy' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.rootCopy : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (payload : Aeneas.Std.Slice Aeneas.Std.U8) (alpha : AspisR1.NLC_Finish.Alpha) (claims : AspisR1.NLC_Finish.Claims)
+  (extra beforeZ1 : AspisR1.NLC_Finish.Words) (stateBefore : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (z0 z1 : AspisR1.NLC_Finish.Point) (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold 4
+        { input := i,
+          locals :=
+            { running := l.running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := l.terminal, low := l.low, high := l.high, blind := l.blind,
+              mask := l.mask, extra := some extra, product := l.product, partialValue := l.partialValue,
+              masked := l.masked, stateBefore := some stateBefore, z0 := some z0, beforeZ1 := some beforeZ1,
+              z1 := some z1, record25 := l.record25, record26 := l.record26, payload := some payload,
+              extraCell := l.extraCell, root := l.root },
+          next := AspisR1.NLC_Finish.Event.rootCopy }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Source.tailRoot i payload alpha claims extra beforeZ1 stateBefore z0 z1 transcript)
+'AspisR1.NLI_Source.rootCopy_uniform' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.rootCopy_uniform : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (alpha : AspisR1.NLC_Finish.Alpha) (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+  (claims : AspisR1.NLC_Finish.Claims) (extra : AspisR1.NLC_Finish.Words)
+  (stateBefore : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (z0 : AspisR1.NLC_Finish.Point)
+  (beforeZ1 : AspisR1.NLC_Finish.Words) (z1 : AspisR1.NLC_Finish.Point) (payload : Aeneas.Std.Slice Aeneas.Std.U8),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold 4
+        { input := i,
+          locals :=
+            { running := l.running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := l.terminal, low := l.low, high := l.high, blind := l.blind,
+              mask := l.mask, extra := some extra, product := l.product, partialValue := l.partialValue,
+              masked := l.masked, stateBefore := some stateBefore, z0 := some z0, beforeZ1 := some beforeZ1,
+              z1 := some z1, record25 := l.record25, record26 := l.record26, payload := some payload,
+              extraCell := l.extraCell, root := l.root },
+          next := AspisR1.NLC_Finish.Event.rootCopy }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Source.suffix_rootCopy i alpha transcript claims extra stateBefore z0 beforeZ1 z1 payload)
+'AspisR1.NLI_Source.rounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.rounds : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold 34 { input := i, locals := l, next := AspisR1.NLC_Finish.Event.rounds }) =
+    AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLI_Source.suffix_rounds i)
+'AspisR1.NLI_Source.stateBefore' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.stateBefore : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (alpha : AspisR1.NLC_Finish.Alpha) (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+  (claims : AspisR1.NLC_Finish.Claims) (extra : AspisR1.NLC_Finish.Words),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold 14
+        { input := i,
+          locals :=
+            { running := l.running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := l.terminal, low := l.low, high := l.high, blind := l.blind,
+              mask := l.mask, extra := some extra, product := l.product, partialValue := l.partialValue,
+              masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+              record25 := l.record25, record26 := l.record26, payload := l.payload, extraCell := l.extraCell,
+              root := l.root },
+          next := AspisR1.NLC_Finish.Event.stateBefore }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Source.suffix_stateBefore i alpha transcript claims extra)
+'AspisR1.NLI_Source.suffix_eq_finish' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.suffix_eq_finish : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H),
+  AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLI_Source.suffix_rounds i) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1PublicPreparation.S1SemanticCode.finish AspisR1.NJM_RoundJoin.R
+        (AspisR1.IDa_Deployed.boundaries i.reservation) i.digest i.publicValue i.prefix1 i.transcript i.challenges none)
+'AspisR1.NLI_Source.terminal' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.terminal : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (running : AspisR1.NLC_Finish.Q) (alpha : AspisR1.NLC_Finish.Alpha)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H) (claims : AspisR1.NLC_Finish.Claims),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold 30
+        { input := i,
+          locals :=
+            { running := some running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := l.terminal, low := l.low, high := l.high, blind := l.blind,
+              mask := l.mask, extra := l.extra, product := l.product, partialValue := l.partialValue,
+              masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+              record25 := l.record25, record26 := l.record26, payload := l.payload, extraCell := l.extraCell,
+              root := l.root },
+          next := AspisR1.NLC_Finish.Event.terminal }) =
+    AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLI_Source.suffix_terminal i running alpha transcript claims)
+'AspisR1.NLI_Source.terminalGuard' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.terminalGuard : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (running : AspisR1.NLC_Finish.Q) (alpha : AspisR1.NLC_Finish.Alpha)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H) (claims : AspisR1.NLC_Finish.Claims)
+  (extra : AspisR1.NLC_Finish.Words) (masked : AspisR1.NLC_Finish.Q),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold 16
+        { input := i,
+          locals :=
+            { running := some running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := l.terminal, low := l.low, high := l.high, blind := l.blind,
+              mask := l.mask, extra := some extra, product := l.product, partialValue := l.partialValue,
+              masked := some masked, stateBefore := l.stateBefore, z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+              record25 := l.record25, record26 := l.record26, payload := l.payload, extraCell := l.extraCell,
+              root := l.root },
+          next := AspisR1.NLC_Finish.Event.terminalGuard }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Source.suffix_terminalGuard i running alpha transcript claims extra masked)
+'AspisR1.NLI_Source.verified' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_Source.verified : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (alpha : AspisR1.NLC_Finish.Alpha)
+  (claims : AspisR1.NLC_Finish.Claims) (extra beforeZ1 : AspisR1.NLC_Finish.Words)
+  (stateBefore : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (z0 z1 : AspisR1.NLC_Finish.Point)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold 3
+        { input := i,
+          locals :=
+            { running := l.running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := l.terminal, low := l.low, high := l.high, blind := l.blind,
+              mask := l.mask, extra := some extra, product := l.product, partialValue := l.partialValue,
+              masked := l.masked, stateBefore := some stateBefore, z0 := some z0, beforeZ1 := some beforeZ1,
+              z1 := some z1, record25 := l.record25, record26 := l.record26, payload := l.payload,
+              extraCell := l.extraCell, root := some root },
+          next := AspisR1.NLC_Finish.Event.verified }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Source.tailVerified i root alpha claims extra beforeZ1 stateBefore z0 z1 transcript)
+'AspisR1.NLI_TerminalStep.reply_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLI_TerminalStep.reply_exact : ∀ (native : AspisR1.NLI_TerminalInterface.Native),
+  AspisR1.NLI_TerminalInterface.RowSpec_256 native →
+    ∀ (A : Type) (heap : A) (publicValue : AspisR1.NLI_TerminalInterface.Public) (claims : AspisR1.NLC_Finish.Claims)
+      (alpha : AspisR1.NLC_Finish.Alpha) (challenges : AspisR1.NLI_TerminalInterface.Challenges),
+      (native A heap publicValue claims alpha challenges).reply =
+        AspisR1.FIq_Terminal.terminal publicValue claims alpha challenges
+'AspisR1.NLI_TerminalStep.to_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLI_TerminalStep.to_source : ∀ {A H : Type} (native : AspisR1.NLI_TerminalInterface.Native),
+  AspisR1.NLI_TerminalInterface.RowSpec_256 native →
+    ∀ (heap : A) (s : AspisR1.NLC_Finish.State H),
+      s.next = AspisR1.NLC_Finish.Event.terminal →
+        AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLI_TerminalStep.nativeStep native heap s) =
+          AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLC_Finish.step s)
+'AspisR1.NLI_ViewFrames.bounded_family_frame' depends on axioms: [propext, Quot.sound]
+AspisR1.NLI_ViewFrames.bounded_family_frame : ∀ (before after : AspisR1.NLI_ViewFrames.Memory) (capacity : ℕ)
+  (views : Fin 27 → AspisR1.NLI_ViewFrames.View) (values : (row : Fin 27) → Fin (views row).length → Aeneas.Std.U8),
+  (∀ (row : Fin 27), (views row).start + (views row).length ≤ capacity) →
+    (∀ (row : Fin 27), AspisR1.NLI_ViewFrames.Realizes before (views row) (values row)) →
+      (∀ address < capacity, after address = before address) →
+        ∀ (row : Fin 27), AspisR1.NLI_ViewFrames.Realizes after (views row) (values row)
+'AspisR1.NLI_ViewFrames.disjoint_copy_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLI_ViewFrames.disjoint_copy_frame : ∀ (src before : AspisR1.NLI_ViewFrames.Memory) (start count : ℕ)
+  (view : AspisR1.NLI_ViewFrames.View) (value : Fin view.length → Aeneas.Std.U8),
+  AspisR1.NLI_ViewFrames.Realizes before view value →
+    view.start + view.length ≤ start ∨ start + count ≤ view.start →
+      AspisR1.NLI_ViewFrames.Realizes (KMX_CopyMeaning.loop src before start count) view value
+'AspisR1.NLI_ViewFrames.family_frame' does not depend on any axioms
+AspisR1.NLI_ViewFrames.family_frame : ∀ (before after : AspisR1.NLI_ViewFrames.Memory)
+  (views : Fin 27 → AspisR1.NLI_ViewFrames.View) (values : (row : Fin 27) → Fin (views row).length → Aeneas.Std.U8),
+  (∀ (row : Fin 27), AspisR1.NLI_ViewFrames.Realizes before (views row) (values row)) →
+    (∀ (address : ℕ), after address = before address) →
+      ∀ (row : Fin 27), AspisR1.NLI_ViewFrames.Realizes after (views row) (values row)
+'AspisR1.NLI_ViewFrames.realized_frame' does not depend on any axioms
+AspisR1.NLI_ViewFrames.realized_frame : ∀ (before after : AspisR1.NLI_ViewFrames.Memory)
+  (view : AspisR1.NLI_ViewFrames.View) (value : Fin view.length → Aeneas.Std.U8),
+  AspisR1.NLI_ViewFrames.Realizes before view value →
+    (∀ (i : Fin view.length), after (view.start + ↑i) = before (view.start + ↑i)) →
+      AspisR1.NLI_ViewFrames.Realizes after view value
+'AspisR1.NLI_Window.addExtra_head' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLI_Window.addExtra_head : ∀ (n : ℕ) {H : Type} (i : AspisR1.NLC_Finish.Input H)
+  (l : AspisR1.NLC_Finish.Locals H) (running : AspisR1.NLC_Finish.Q) (alpha : AspisR1.NLC_Finish.Alpha)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H) (claims : AspisR1.NLC_Finish.Claims)
+  (extra : AspisR1.NLC_Finish.Words) (partialValue extraCell : AspisR1.NLC_Finish.Q),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold (n + 1)
+        { input := i,
+          locals :=
+            { running := some running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := l.terminal, low := l.low, high := l.high, blind := l.blind,
+              mask := l.mask, extra := some extra, product := l.product, partialValue := some partialValue,
+              masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+              record25 := l.record25, record26 := l.record26, payload := l.payload, extraCell := some extraCell,
+              root := l.root },
+          next := AspisR1.NLC_Finish.Event.addExtra }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Window.window_addExtra n i l running alpha transcript claims extra partialValue extraCell)
+'AspisR1.NLI_Window.addMask_head' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLI_Window.addMask_head : ∀ (n : ℕ) {H : Type} (i : AspisR1.NLC_Finish.Input H)
+  (l : AspisR1.NLC_Finish.Locals H) (running : AspisR1.NLC_Finish.Q) (alpha : AspisR1.NLC_Finish.Alpha)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H) (claims : AspisR1.NLC_Finish.Claims)
+  (mask : AspisR1.NLC_Finish.Q) (extra : AspisR1.NLC_Finish.Words) (product : AspisR1.NLC_Finish.Q),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold (n + 1)
+        { input := i,
+          locals :=
+            { running := some running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := l.terminal, low := l.low, high := l.high, blind := l.blind,
+              mask := some mask, extra := some extra, product := some product, partialValue := l.partialValue,
+              masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+              record25 := l.record25, record26 := l.record26, payload := l.payload, extraCell := l.extraCell,
+              root := l.root },
+          next := AspisR1.NLC_Finish.Event.addMask }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Window.window_addMask n i l running alpha transcript claims mask extra product)
+'AspisR1.NLI_Window.blind_head' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLI_Window.blind_head : ∀ (n : ℕ) {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (running : AspisR1.NLC_Finish.Q) (alpha : AspisR1.NLC_Finish.Alpha)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H) (claims : AspisR1.NLC_Finish.Claims)
+  (terminal : AspisR1.NLC_Finish.Q) (low : AspisR1.NLC_Finish.Low) (high : AspisR1.NLC_Finish.High),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold (n + 1)
+        { input := i,
+          locals :=
+            { running := some running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := some terminal, low := some low, high := some high,
+              blind := l.blind, mask := l.mask, extra := l.extra, product := l.product, partialValue := l.partialValue,
+              masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+              record25 := l.record25, record26 := l.record26, payload := l.payload, extraCell := l.extraCell,
+              root := l.root },
+          next := AspisR1.NLC_Finish.Event.blind }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Window.window_blind n i l running alpha transcript claims terminal low high)
+'AspisR1.NLI_Window.claims_head' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLI_Window.claims_head : ∀ (n : ℕ) {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (running : AspisR1.NLC_Finish.Q) (alpha : AspisR1.NLC_Finish.Alpha)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold (n + 1)
+        { input := i,
+          locals :=
+            { running := some running, alpha := some alpha, transcript := some transcript, claims := l.claims,
+              terminalReply := l.terminalReply, terminal := l.terminal, low := l.low, high := l.high, blind := l.blind,
+              mask := l.mask, extra := l.extra, product := l.product, partialValue := l.partialValue,
+              masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+              record25 := l.record25, record26 := l.record26, payload := l.payload, extraCell := l.extraCell,
+              root := l.root },
+          next := AspisR1.NLC_Finish.Event.claims }) =
+    AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLI_Window.window_claims n i l running alpha transcript)
+'AspisR1.NLI_Window.decode25_head' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLI_Window.decode25_head : ∀ (n : ℕ) {H : Type} (i : AspisR1.NLC_Finish.Input H)
+  (l : AspisR1.NLC_Finish.Locals H) (running : AspisR1.NLC_Finish.Q) (alpha : AspisR1.NLC_Finish.Alpha)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H) (claims : AspisR1.NLC_Finish.Claims)
+  (terminal mask : AspisR1.NLC_Finish.Q) (record25 : AspisR1PublicPreparation.r1_wire.ValidatedRecord),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold (n + 1)
+        { input := i,
+          locals :=
+            { running := some running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := some terminal, low := l.low, high := l.high,
+              blind := l.blind, mask := some mask, extra := l.extra, product := l.product,
+              partialValue := l.partialValue, masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0,
+              beforeZ1 := l.beforeZ1, z1 := l.z1, record25 := some record25, record26 := l.record26,
+              payload := l.payload, extraCell := l.extraCell, root := l.root },
+          next := AspisR1.NLC_Finish.Event.decode25 }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Window.window_decode25 n i l running alpha transcript claims terminal mask record25)
+'AspisR1.NLI_Window.extra28_head' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLI_Window.extra28_head : ∀ (n : ℕ) {H : Type} (i : AspisR1.NLC_Finish.Input H)
+  (l : AspisR1.NLC_Finish.Locals H) (running : AspisR1.NLC_Finish.Q) (alpha : AspisR1.NLC_Finish.Alpha)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H) (claims : AspisR1.NLC_Finish.Claims)
+  (extra : AspisR1.NLC_Finish.Words) (partialValue : AspisR1.NLC_Finish.Q),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold (n + 1)
+        { input := i,
+          locals :=
+            { running := some running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := l.terminal, low := l.low, high := l.high, blind := l.blind,
+              mask := l.mask, extra := some extra, product := l.product, partialValue := some partialValue,
+              masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+              record25 := l.record25, record26 := l.record26, payload := l.payload, extraCell := l.extraCell,
+              root := l.root },
+          next := AspisR1.NLC_Finish.Event.extra28 }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Window.window_extra28 n i l running alpha transcript claims extra partialValue)
+'AspisR1.NLI_Window.highArray_head' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLI_Window.highArray_head : ∀ (n : ℕ) {H : Type} (i : AspisR1.NLC_Finish.Input H)
+  (l : AspisR1.NLC_Finish.Locals H) (running : AspisR1.NLC_Finish.Q) (alpha : AspisR1.NLC_Finish.Alpha)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H) (claims : AspisR1.NLC_Finish.Claims)
+  (terminal : AspisR1.NLC_Finish.Q) (low : AspisR1.NLC_Finish.Low),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold (n + 1)
+        { input := i,
+          locals :=
+            { running := some running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := some terminal, low := some low, high := l.high,
+              blind := l.blind, mask := l.mask, extra := l.extra, product := l.product, partialValue := l.partialValue,
+              masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+              record25 := l.record25, record26 := l.record26, payload := l.payload, extraCell := l.extraCell,
+              root := l.root },
+          next := AspisR1.NLC_Finish.Event.highArray }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Window.window_highArray n i l running alpha transcript claims terminal low)
+'AspisR1.NLI_Window.lowArray_head' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLI_Window.lowArray_head : ∀ (n : ℕ) {H : Type} (i : AspisR1.NLC_Finish.Input H)
+  (l : AspisR1.NLC_Finish.Locals H) (running : AspisR1.NLC_Finish.Q) (alpha : AspisR1.NLC_Finish.Alpha)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H) (claims : AspisR1.NLC_Finish.Claims)
+  (terminal : AspisR1.NLC_Finish.Q),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold (n + 1)
+        { input := i,
+          locals :=
+            { running := some running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := some terminal, low := l.low, high := l.high,
+              blind := l.blind, mask := l.mask, extra := l.extra, product := l.product, partialValue := l.partialValue,
+              masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+              record25 := l.record25, record26 := l.record26, payload := l.payload, extraCell := l.extraCell,
+              root := l.root },
+          next := AspisR1.NLC_Finish.Event.lowArray }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Window.window_lowArray n i l running alpha transcript claims terminal)
+'AspisR1.NLI_Window.mapPublic_head' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLI_Window.mapPublic_head : ∀ (n : ℕ) {H : Type} (i : AspisR1.NLC_Finish.Input H)
+  (l : AspisR1.NLC_Finish.Locals H) (running : AspisR1.NLC_Finish.Q) (alpha : AspisR1.NLC_Finish.Alpha)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H) (claims : AspisR1.NLC_Finish.Claims)
+  (terminalReply :
+    Aeneas.Std.core.result.Result AspisR1.NLC_Finish.Q AspisR1PublicPreparation.aspis_core.state_only_prefix.r0.Error),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold (n + 1)
+        { input := i,
+          locals :=
+            { running := some running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := some terminalReply, terminal := l.terminal, low := l.low, high := l.high,
+              blind := l.blind, mask := l.mask, extra := l.extra, product := l.product, partialValue := l.partialValue,
+              masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+              record25 := l.record25, record26 := l.record26, payload := l.payload, extraCell := l.extraCell,
+              root := l.root },
+          next := AspisR1.NLC_Finish.Event.mapPublic }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Window.window_mapPublic n i l running alpha transcript claims terminalReply)
+'AspisR1.NLI_Window.mask_head' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLI_Window.mask_head : ∀ (n : ℕ) {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (running : AspisR1.NLC_Finish.Q) (alpha : AspisR1.NLC_Finish.Alpha)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H) (claims : AspisR1.NLC_Finish.Claims)
+  (terminal : AspisR1.NLC_Finish.Q) (low : AspisR1.NLC_Finish.Low) (high : AspisR1.NLC_Finish.High)
+  (blind : AspisR1.NLC_Finish.Q),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold (n + 1)
+        { input := i,
+          locals :=
+            { running := some running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := some terminal, low := some low, high := some high,
+              blind := some blind, mask := l.mask, extra := l.extra, product := l.product,
+              partialValue := l.partialValue, masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0,
+              beforeZ1 := l.beforeZ1, z1 := l.z1, record25 := l.record25, record26 := l.record26, payload := l.payload,
+              extraCell := l.extraCell, root := l.root },
+          next := AspisR1.NLC_Finish.Event.mask }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Window.window_mask n i l running alpha transcript claims terminal low high blind)
+'AspisR1.NLI_Window.multiply_head' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLI_Window.multiply_head : ∀ (n : ℕ) {H : Type} (i : AspisR1.NLC_Finish.Input H)
+  (l : AspisR1.NLC_Finish.Locals H) (running : AspisR1.NLC_Finish.Q) (alpha : AspisR1.NLC_Finish.Alpha)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H) (claims : AspisR1.NLC_Finish.Claims)
+  (terminal mask : AspisR1.NLC_Finish.Q) (extra : AspisR1.NLC_Finish.Words),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold (n + 1)
+        { input := i,
+          locals :=
+            { running := some running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := some terminal, low := l.low, high := l.high,
+              blind := l.blind, mask := some mask, extra := some extra, product := l.product,
+              partialValue := l.partialValue, masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0,
+              beforeZ1 := l.beforeZ1, z1 := l.z1, record25 := l.record25, record26 := l.record26, payload := l.payload,
+              extraCell := l.extraCell, root := l.root },
+          next := AspisR1.NLC_Finish.Event.multiply }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Window.window_multiply n i l running alpha transcript claims terminal mask extra)
+'AspisR1.NLI_Window.record25a_head' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLI_Window.record25a_head : ∀ (n : ℕ) {H : Type} (i : AspisR1.NLC_Finish.Input H)
+  (l : AspisR1.NLC_Finish.Locals H) (running : AspisR1.NLC_Finish.Q) (alpha : AspisR1.NLC_Finish.Alpha)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H) (claims : AspisR1.NLC_Finish.Claims)
+  (terminal mask : AspisR1.NLC_Finish.Q),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold (n + 1)
+        { input := i,
+          locals :=
+            { running := some running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := some terminal, low := l.low, high := l.high,
+              blind := l.blind, mask := some mask, extra := l.extra, product := l.product,
+              partialValue := l.partialValue, masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0,
+              beforeZ1 := l.beforeZ1, z1 := l.z1, record25 := l.record25, record26 := l.record26, payload := l.payload,
+              extraCell := l.extraCell, root := l.root },
+          next := AspisR1.NLC_Finish.Event.record25a }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Window.window_record25a n i l running alpha transcript claims terminal mask)
+'AspisR1.NLI_Window.rounds_head' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLI_Window.rounds_head : ∀ (n : ℕ) {H : Type} (i : AspisR1.NLC_Finish.Input H)
+  (l : AspisR1.NLC_Finish.Locals H),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold (n + 1) { input := i, locals := l, next := AspisR1.NLC_Finish.Event.rounds }) =
+    AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLI_Window.window_rounds n i l)
+'AspisR1.NLI_Window.terminalGuard_head' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLI_Window.terminalGuard_head : ∀ (n : ℕ) {H : Type} (i : AspisR1.NLC_Finish.Input H)
+  (l : AspisR1.NLC_Finish.Locals H) (running : AspisR1.NLC_Finish.Q) (alpha : AspisR1.NLC_Finish.Alpha)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H) (claims : AspisR1.NLC_Finish.Claims)
+  (extra : AspisR1.NLC_Finish.Words) (masked : AspisR1.NLC_Finish.Q),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold (n + 1)
+        { input := i,
+          locals :=
+            { running := some running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := l.terminal, low := l.low, high := l.high, blind := l.blind,
+              mask := l.mask, extra := some extra, product := l.product, partialValue := l.partialValue,
+              masked := some masked, stateBefore := l.stateBefore, z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+              record25 := l.record25, record26 := l.record26, payload := l.payload, extraCell := l.extraCell,
+              root := l.root },
+          next := AspisR1.NLC_Finish.Event.terminalGuard }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Window.window_terminalGuard n i l running alpha transcript claims extra masked)
+'AspisR1.NLI_Window.terminal_head' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLI_Window.terminal_head : ∀ (n : ℕ) {H : Type} (i : AspisR1.NLC_Finish.Input H)
+  (l : AspisR1.NLC_Finish.Locals H) (running : AspisR1.NLC_Finish.Q) (alpha : AspisR1.NLC_Finish.Alpha)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H) (claims : AspisR1.NLC_Finish.Claims),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.fold (n + 1)
+        { input := i,
+          locals :=
+            { running := some running, alpha := some alpha, transcript := some transcript, claims := some claims,
+              terminalReply := l.terminalReply, terminal := l.terminal, low := l.low, high := l.high, blind := l.blind,
+              mask := l.mask, extra := l.extra, product := l.product, partialValue := l.partialValue,
+              masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+              record25 := l.record25, record26 := l.record26, payload := l.payload, extraCell := l.extraCell,
+              root := l.root },
+          next := AspisR1.NLC_Finish.Event.terminal }) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLI_Window.window_terminal n i l running alpha transcript claims)
