@@ -1,0 +1,2484 @@
+def NKU_ParentFold.G : {H : Type} →
+  (d : AspisR1Stage2.aspis_core.digest.Digest32 H) →
+    (hash : H) →
+      (s : NKU.State) →
+        NKU_Chronology.Run (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error) :=
+fun {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H) (hash : H) (s : NKU.State) =>
+  @Bind.bind.{0, 0} NKU_Chronology.Run
+    (@Monad.toBind.{0, 0} NKU_Chronology.Run (@NJU_Log.instMonadRun NJU_ResumeObserved.Event))
+    (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} Unit NKU.State) NID_ResumeEmission.verifier.Error)
+    (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error) (@NKU_FineHeader.run H d s)
+    fun (reply : Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} Unit NKU.State) NID_ResumeEmission.verifier.Error) =>
+    @NKK_Try.emitted NJU_ResumeObserved.Event (Prod.{0, 0} Unit NKU.State) NKU.Pair reply
+      fun (x : Prod.{0, 0} Unit NKU.State) =>
+      NKU_ParentFold.G.match_1.{1}
+        (fun (x : Prod.{0, 0} Unit NKU.State) =>
+          NJU_Log.Run NJU_ResumeObserved.Event
+            (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error))
+        x fun (fst : Unit) (post : NKU.State) => @NKU_Fold.suffix H d hash post
+theorem NKU_ParentFold.source : ∀ {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H) (hash : H)
+  (s : NKU.State),
+  @Eq.{1} (NKU_Chronology.Run (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error))
+    (@NKU_ParentFold.G H d hash s)
+    (@NJU_ResumeObserved.run (NKU.Frame.reservation (NKU.State.frame s)) H d (NKU.Frame.checkpoint (NKU.State.frame s))
+      (NKU.Frame.proof (NKU.State.frame s)) (NKU.Frame.publicBytes (NKU.State.frame s))
+      NID_ResumeEmission.transport.Variant.S2 hash) :=
+fun {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H) (hash : H) (s : NKU.State) =>
+  @Eq.trans.{1} (NKU_Chronology.Run (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error))
+    (@NKU_ParentFold.G H d hash s) (@NKU_Fold.G H d hash s)
+    (@NJU_ResumeObserved.run (NKU.Frame.reservation (NKU.State.frame s)) H d (NKU.Frame.checkpoint (NKU.State.frame s))
+      (NKU.Frame.proof (NKU.State.frame s)) (NKU.Frame.publicBytes (NKU.State.frame s))
+      NID_ResumeEmission.transport.Variant.S2 hash)
+    (@NKU_ParentFold.installed H d hash s) (@NKU_FineRoot.source H d hash s)
+theorem NKU_ParentFold.cohort : ∀ {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H) (hash : H)
+  (s : NKU.State),
+  @Eq.{1}
+    (Aeneas.Std.Result.{0}
+      (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} NIL_StatePort.C.P NIL_StatePort.C.A) NIL_Carriers.Cohort.Err))
+    (NIL_StatePort.reply
+      (@NJU_Log.Run.result NJU_ResumeObserved.Event
+        (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error)
+        (@NKU_ParentFold.G H d hash s)))
+    (@AspisR1Stage2.verifier.resumeWithOps
+      (AspisR1.CheckpointBytes4Ops.ops (NJC_FilledClause.reserved (NKU.Frame.reservation (NKU.State.frame s)))) H d
+      (NKU.Frame.checkpoint (NKU.State.frame s)) (NKU.Frame.proof (NKU.State.frame s))
+      (NKU.Frame.publicBytes (NKU.State.frame s)) AspisR1Stage2.transport.Variant.S2 hash) :=
+fun {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H) (hash : H) (s : NKU.State) =>
+  @Eq.mpr.{0}
+    (@Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} NIL_StatePort.C.P NIL_StatePort.C.A)
+          NIL_Carriers.Cohort.Err))
+      (NIL_StatePort.reply
+        (@NJU_Log.Run.result NJU_ResumeObserved.Event
+          (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error)
+          (@NKU_ParentFold.G H d hash s)))
+      (@AspisR1Stage2.verifier.resumeWithOps
+        (AspisR1.CheckpointBytes4Ops.ops (NJC_FilledClause.reserved (NKU.Frame.reservation (NKU.State.frame s)))) H d
+        (NKU.Frame.checkpoint (NKU.State.frame s)) (NKU.Frame.proof (NKU.State.frame s))
+        (NKU.Frame.publicBytes (NKU.State.frame s)) AspisR1Stage2.transport.Variant.S2 hash))
+    (@Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} NIL_StatePort.C.P NIL_StatePort.C.A)
+          NIL_Carriers.Cohort.Err))
+      (NIL_StatePort.reply
+        (@NJU_Log.Run.result NJU_ResumeObserved.Event
+          (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error) (@NKU_Fold.G H d hash s)))
+      (@AspisR1Stage2.verifier.resumeWithOps
+        (AspisR1.CheckpointBytes4Ops.ops (NJC_FilledClause.reserved (NKU.Frame.reservation (NKU.State.frame s)))) H d
+        (NKU.Frame.checkpoint (NKU.State.frame s)) (NKU.Frame.proof (NKU.State.frame s))
+        (NKU.Frame.publicBytes (NKU.State.frame s)) AspisR1Stage2.transport.Variant.S2 hash))
+    (@id.{0}
+      (@Eq.{1} Prop
+        (@Eq.{1}
+          (Aeneas.Std.Result.{0}
+            (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} NIL_StatePort.C.P NIL_StatePort.C.A)
+              NIL_Carriers.Cohort.Err))
+          (NIL_StatePort.reply
+            (@NJU_Log.Run.result NJU_ResumeObserved.Event
+              (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error)
+              (@NKU_ParentFold.G H d hash s)))
+          (@AspisR1Stage2.verifier.resumeWithOps
+            (AspisR1.CheckpointBytes4Ops.ops (NJC_FilledClause.reserved (NKU.Frame.reservation (NKU.State.frame s)))) H
+            d (NKU.Frame.checkpoint (NKU.State.frame s)) (NKU.Frame.proof (NKU.State.frame s))
+            (NKU.Frame.publicBytes (NKU.State.frame s)) AspisR1Stage2.transport.Variant.S2 hash))
+        (@Eq.{1}
+          (Aeneas.Std.Result.{0}
+            (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} NIL_StatePort.C.P NIL_StatePort.C.A)
+              NIL_Carriers.Cohort.Err))
+          (NIL_StatePort.reply
+            (@NJU_Log.Run.result NJU_ResumeObserved.Event
+              (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error)
+              (@NKU_Fold.G H d hash s)))
+          (@AspisR1Stage2.verifier.resumeWithOps
+            (AspisR1.CheckpointBytes4Ops.ops (NJC_FilledClause.reserved (NKU.Frame.reservation (NKU.State.frame s)))) H
+            d (NKU.Frame.checkpoint (NKU.State.frame s)) (NKU.Frame.proof (NKU.State.frame s))
+            (NKU.Frame.publicBytes (NKU.State.frame s)) AspisR1Stage2.transport.Variant.S2 hash)))
+      (@congrArg.{1, 1}
+        (NKU_Chronology.Run (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error)) Prop
+        (@NKU_ParentFold.G H d hash s) (@NKU_Fold.G H d hash s)
+        (fun
+            (_a :
+              NKU_Chronology.Run (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error)) =>
+          @Eq.{1}
+            (Aeneas.Std.Result.{0}
+              (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} NIL_StatePort.C.P NIL_StatePort.C.A)
+                NIL_Carriers.Cohort.Err))
+            (NIL_StatePort.reply
+              (@NJU_Log.Run.result NJU_ResumeObserved.Event
+                (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error) _a))
+            (@AspisR1Stage2.verifier.resumeWithOps
+              (AspisR1.CheckpointBytes4Ops.ops (NJC_FilledClause.reserved (NKU.Frame.reservation (NKU.State.frame s))))
+              H d (NKU.Frame.checkpoint (NKU.State.frame s)) (NKU.Frame.proof (NKU.State.frame s))
+              (NKU.Frame.publicBytes (NKU.State.frame s)) AspisR1Stage2.transport.Variant.S2 hash))
+        (@NKU_ParentFold.installed H d hash s)))
+    (@NKU_FineRoot.cohort H d hash s)
+theorem NKU_ParentFold.clauses : ∀ {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H) (hash : H)
+  (s : NKU.State),
+  @NKK_LogClauses.Holds NJU_ResumeObserved.Event
+    (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error)
+    (@NKK_Clauses.Clause (NKU.Frame.reservation (NKU.State.frame s)) H d hash) (@NKU_ParentFold.G H d hash s) :=
+fun {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H) (hash : H) (s : NKU.State) =>
+  @Eq.mpr.{0}
+    (@NKK_LogClauses.Holds NJU_ResumeObserved.Event
+      (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error)
+      (@NKK_Clauses.Clause (NKU.Frame.reservation (NKU.State.frame s)) H d hash) (@NKU_ParentFold.G H d hash s))
+    (@NKK_LogClauses.Holds NJU_ResumeObserved.Event
+      (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error)
+      (@NKK_Clauses.Clause (NKU.Frame.reservation (NKU.State.frame s)) H d hash) (@NKU_Fold.G H d hash s))
+    (@id.{0}
+      (@Eq.{1} Prop
+        (@NKK_LogClauses.Holds NJU_ResumeObserved.Event
+          (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error)
+          (@NKK_Clauses.Clause (NKU.Frame.reservation (NKU.State.frame s)) H d hash) (@NKU_ParentFold.G H d hash s))
+        (@NKK_LogClauses.Holds NJU_ResumeObserved.Event
+          (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error)
+          (@NKK_Clauses.Clause (NKU.Frame.reservation (NKU.State.frame s)) H d hash) (@NKU_Fold.G H d hash s)))
+      (@congrArg.{1, 1}
+        (NKU_Chronology.Run (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error)) Prop
+        (@NKU_ParentFold.G H d hash s) (@NKU_Fold.G H d hash s)
+        (fun
+            (_a :
+              NKU_Chronology.Run (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error)) =>
+          @NKK_LogClauses.Holds NJU_ResumeObserved.Event
+            (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error)
+            (@NKK_Clauses.Clause (NKU.Frame.reservation (NKU.State.frame s)) H d hash) _a)
+        (@NKU_ParentFold.installed H d hash s)))
+    (@Eq.mpr.{0}
+      (@NKK_LogClauses.Holds NJU_ResumeObserved.Event
+        (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error)
+        (@NKK_Clauses.Clause (NKU.Frame.reservation (NKU.State.frame s)) H d hash) (@NKU_Fold.G H d hash s))
+      (@NKK_LogClauses.Holds NJU_ResumeObserved.Event
+        (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error)
+        (@NKK_Clauses.Clause (NKU.Frame.reservation (NKU.State.frame s)) H d hash) (@NKU_ResumeRoot.G H d hash s))
+      (@id.{0}
+        (@Eq.{1} Prop
+          (@NKK_LogClauses.Holds NJU_ResumeObserved.Event
+            (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error)
+            (@NKK_Clauses.Clause (NKU.Frame.reservation (NKU.State.frame s)) H d hash) (@NKU_Fold.G H d hash s))
+          (@NKK_LogClauses.Holds NJU_ResumeObserved.Event
+            (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error)
+            (@NKK_Clauses.Clause (NKU.Frame.reservation (NKU.State.frame s)) H d hash) (@NKU_ResumeRoot.G H d hash s)))
+        (@congrArg.{1, 1}
+          (NKU_Chronology.Run (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error)) Prop
+          (@NKU_Fold.G H d hash s) (@NKU_ResumeRoot.G H d hash s)
+          (fun
+              (_a :
+                NKU_Chronology.Run (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error)) =>
+            @NKK_LogClauses.Holds NJU_ResumeObserved.Event
+              (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error)
+              (@NKK_Clauses.Clause (NKU.Frame.reservation (NKU.State.frame s)) H d hash) _a)
+          (@NKU_FineRoot.installed H d hash s)))
+      (@NKU_ResumeRoot.clauses H d hash s))
+def NKU_CallerScope.Inputs : (f : NKU.Frame) → Prop :=
+fun (f : NKU.Frame) =>
+  And
+    (@Eq.{1} Nat
+      (@List.length.{0} Aeneas.Std.U8
+        (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+          (fun (l : List.{0} Aeneas.Std.U8) =>
+            @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+          (NKU.Frame.proof f)))
+      (@OfNat.ofNat.{0} Nat (nat_lit 57607) (instOfNatNat (nat_lit 57607))))
+    (@LE.le.{0} Nat instLENat
+      (@List.length.{0} Aeneas.Std.U8
+        (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+          (fun (l : List.{0} Aeneas.Std.U8) =>
+            @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+          (NKU.Frame.publicBytes f)))
+      (@OfNat.ofNat.{0} Nat (nat_lit 1880) (instOfNatNat (nat_lit 1880))))
+theorem NKU_CallerScope.header_to_roots : ∀ {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H) (hash : H)
+  (s header after : NKU.State) (inputs : NKU_CallerScope.Inputs (NKU.State.frame s))
+  (hh :
+    @Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} Unit NKU.State) NID_ResumeEmission.verifier.Error))
+      (@NJU_Log.Run.result NJU_ResumeObserved.Event
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} Unit NKU.State) NID_ResumeEmission.verifier.Error)
+        (@NKU_HeaderStep.run H d s))
+      (@Aeneas.Std.Result.ok.{0}
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} Unit NKU.State) NID_ResumeEmission.verifier.Error)
+        (@Aeneas.Std.core.result.Result.Ok.{0, 0} (Prod.{0, 0} Unit NKU.State) NID_ResumeEmission.verifier.Error
+          (@Prod.mk.{0, 0} Unit NKU.State Unit.unit header))))
+  (hd :
+    @Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} Unit NKU.State) NID_ResumeEmission.verifier.Error))
+      (@NJU_Log.Run.result NJU_ResumeObserved.Event
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} Unit NKU.State) NID_ResumeEmission.verifier.Error)
+        (@NKU_DigestJoin.run H d hash
+          (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+            (@of_decide_eq_true
+              (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+              (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+              (@id.{0}
+                (@Eq.{1} Bool
+                  (@Decidable.decide
+                    (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                      (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                    (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                      (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))
+                  Bool.true)
+                (@Eq.refl.{1} Bool Bool.true))))
+          header))
+      (@Aeneas.Std.Result.ok.{0}
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} Unit NKU.State) NID_ResumeEmission.verifier.Error)
+        (@Aeneas.Std.core.result.Result.Ok.{0, 0} (Prod.{0, 0} Unit NKU.State) NID_ResumeEmission.verifier.Error
+          (@Prod.mk.{0, 0} Unit NKU.State Unit.unit after)))),
+  And (@Eq.{1} NKU.Frame (NKU.State.frame after) (NKU.State.frame s))
+    (And (NKU_CallerScope.Inputs (NKU.State.frame after))
+      (And
+        (@Eq.{1} (Option.{0} Aeneas.Std.Usize) (NKU.Decoded.endAt (NKU.State.decoded after))
+          (@Option.some.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+              (@of_decide_eq_true
+                (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                (@id.{0}
+                  (@Eq.{1} Bool
+                    (@Decidable.decide
+                      (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                        (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                      (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                        (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))
+                    Bool.true)
+                  (@Eq.refl.{1} Bool Bool.true))))))
+        (NKU_InputAt.At
+          (NKU.State.mk (NKU.State.frame after) (NKU.State.phase after) (NKU.State.decoded after)
+            (NKU_Roots.entry after) (NKU.State.iterator after) (NKU.State.owned after) (NKU.State.returned after)
+            (NKU.State.history after))
+          (@OfNat.ofNat.{0} Nat (nat_lit 80) (instOfNatNat (nat_lit 80)))))) :=
+fun {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H) (hash : H) (s header after : NKU.State)
+    (inputs : NKU_CallerScope.Inputs (NKU.State.frame s))
+    (hh :
+      @Eq.{1}
+        (Aeneas.Std.Result.{0}
+          (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} Unit NKU.State) NID_ResumeEmission.verifier.Error))
+        (@NJU_Log.Run.result NJU_ResumeObserved.Event
+          (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} Unit NKU.State) NID_ResumeEmission.verifier.Error)
+          (@NKU_HeaderStep.run H d s))
+        (@Aeneas.Std.Result.ok.{0}
+          (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} Unit NKU.State) NID_ResumeEmission.verifier.Error)
+          (@Aeneas.Std.core.result.Result.Ok.{0, 0} (Prod.{0, 0} Unit NKU.State) NID_ResumeEmission.verifier.Error
+            (@Prod.mk.{0, 0} Unit NKU.State Unit.unit header))))
+    (hd :
+      @Eq.{1}
+        (Aeneas.Std.Result.{0}
+          (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} Unit NKU.State) NID_ResumeEmission.verifier.Error))
+        (@NJU_Log.Run.result NJU_ResumeObserved.Event
+          (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} Unit NKU.State) NID_ResumeEmission.verifier.Error)
+          (@NKU_DigestJoin.run H d hash
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+              (@of_decide_eq_true
+                (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                (@id.{0}
+                  (@Eq.{1} Bool
+                    (@Decidable.decide
+                      (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                        (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                      (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                        (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))
+                    Bool.true)
+                  (@Eq.refl.{1} Bool Bool.true))))
+            header))
+        (@Aeneas.Std.Result.ok.{0}
+          (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} Unit NKU.State) NID_ResumeEmission.verifier.Error)
+          (@Aeneas.Std.core.result.Result.Ok.{0, 0} (Prod.{0, 0} Unit NKU.State) NID_ResumeEmission.verifier.Error
+            (@Prod.mk.{0, 0} Unit NKU.State Unit.unit after)))) =>
+  let ⟨hf, right✝⟩ := @NKU_HeaderState.returned H d s header hh
+  let ⟨hr, right✝¹⟩ := right✝
+  let ⟨ho, right✝²⟩ := right✝¹
+  let ⟨size, ending⟩ := right✝²
+  have kept :
+    @Eq.{1}
+      (Prod.{0, 0} NKU.Frame
+        (Prod.{0, 0} NKU.Decoded
+          (Prod.{0, 0} NID_ResumeEmission.verifier.Reader
+            (Prod.{0, 0} (Option.{0} (Aeneas.Std.core.slice.iter.Iter Aeneas.Std.U8))
+              (Prod.{0, 0} (Option.{0} (Aeneas.Std.alloc.vec.Vec.{0} NKU.K))
+                (Prod.{0, 0}
+                  (Option.{0}
+                    (Aeneas.Std.Result.{0}
+                      (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error)))
+                  (List.{0} NKU.Event)))))))
+      (NKU_Core.value after) (NKU_Core.value header) :=
+    @NKU_DigestState.preserved H d hash
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+        (@of_decide_eq_true
+          (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+          (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+          (@id.{0}
+            (@Eq.{1} Bool
+              (@Decidable.decide
+                (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))
+              Bool.true)
+            (@Eq.refl.{1} Bool Bool.true))))
+      header after hd;
+  have frame : @Eq.{1} NKU.Frame (NKU.State.frame after) (NKU.State.frame header) :=
+    @congrArg.{1, 1}
+      (Prod.{0, 0} NKU.Frame
+        (Prod.{0, 0} NKU.Decoded
+          (Prod.{0, 0} NID_ResumeEmission.verifier.Reader
+            (Prod.{0, 0} (Option.{0} (Aeneas.Std.core.slice.iter.Iter Aeneas.Std.U8))
+              (Prod.{0, 0} (Option.{0} (Aeneas.Std.alloc.vec.Vec.{0} NKU.K))
+                (Prod.{0, 0}
+                  (Option.{0}
+                    (Aeneas.Std.Result.{0}
+                      (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error)))
+                  (List.{0} NKU.Event)))))))
+      NKU.Frame (NKU_Core.value after) (NKU_Core.value header)
+      (@Prod.fst.{0, 0} NKU.Frame
+        (Prod.{0, 0} NKU.Decoded
+          (Prod.{0, 0} NID_ResumeEmission.verifier.Reader
+            (Prod.{0, 0} (Option.{0} (Aeneas.Std.core.slice.iter.Iter Aeneas.Std.U8))
+              (Prod.{0, 0} (Option.{0} (Aeneas.Std.alloc.vec.Vec.{0} NKU.K))
+                (Prod.{0, 0}
+                  (Option.{0}
+                    (Aeneas.Std.Result.{0}
+                      (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error)))
+                  (List.{0} NKU.Event)))))))
+      kept;
+  have decoded : @Eq.{1} NKU.Decoded (NKU.State.decoded after) (NKU.State.decoded header) :=
+    @congrArg.{1, 1}
+      (Prod.{0, 0} NKU.Frame
+        (Prod.{0, 0} NKU.Decoded
+          (Prod.{0, 0} NID_ResumeEmission.verifier.Reader
+            (Prod.{0, 0} (Option.{0} (Aeneas.Std.core.slice.iter.Iter Aeneas.Std.U8))
+              (Prod.{0, 0} (Option.{0} (Aeneas.Std.alloc.vec.Vec.{0} NKU.K))
+                (Prod.{0, 0}
+                  (Option.{0}
+                    (Aeneas.Std.Result.{0}
+                      (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error)))
+                  (List.{0} NKU.Event)))))))
+      NKU.Decoded (NKU_Core.value after) (NKU_Core.value header)
+      (fun
+          (x :
+            Prod.{0, 0} NKU.Frame
+              (Prod.{0, 0} NKU.Decoded
+                (Prod.{0, 0} NID_ResumeEmission.verifier.Reader
+                  (Prod.{0, 0} (Option.{0} (Aeneas.Std.core.slice.iter.Iter Aeneas.Std.U8))
+                    (Prod.{0, 0} (Option.{0} (Aeneas.Std.alloc.vec.Vec.{0} NKU.K))
+                      (Prod.{0, 0}
+                        (Option.{0}
+                          (Aeneas.Std.Result.{0}
+                            (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error)))
+                        (List.{0} NKU.Event))))))) =>
+        @Prod.fst.{0, 0} NKU.Decoded
+          (Prod.{0, 0} NID_ResumeEmission.verifier.Reader
+            (Prod.{0, 0} (Option.{0} (Aeneas.Std.core.slice.iter.Iter Aeneas.Std.U8))
+              (Prod.{0, 0} (Option.{0} (Aeneas.Std.alloc.vec.Vec.{0} NKU.K))
+                (Prod.{0, 0}
+                  (Option.{0}
+                    (Aeneas.Std.Result.{0}
+                      (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error)))
+                  (List.{0} NKU.Event)))))
+          (@Prod.snd.{0, 0} NKU.Frame
+            (Prod.{0, 0} NKU.Decoded
+              (Prod.{0, 0} NID_ResumeEmission.verifier.Reader
+                (Prod.{0, 0} (Option.{0} (Aeneas.Std.core.slice.iter.Iter Aeneas.Std.U8))
+                  (Prod.{0, 0} (Option.{0} (Aeneas.Std.alloc.vec.Vec.{0} NKU.K))
+                    (Prod.{0, 0}
+                      (Option.{0}
+                        (Aeneas.Std.Result.{0}
+                          (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error)))
+                      (List.{0} NKU.Event))))))
+            x))
+      kept;
+  @And.intro (@Eq.{1} NKU.Frame (NKU.State.frame after) (NKU.State.frame s))
+    (And (NKU_CallerScope.Inputs (NKU.State.frame after))
+      (And
+        (@Eq.{1} (Option.{0} Aeneas.Std.Usize) (NKU.Decoded.endAt (NKU.State.decoded after))
+          (@Option.some.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+              (@of_decide_eq_true
+                (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                (@id.{0}
+                  (@Eq.{1} Bool
+                    (@Decidable.decide
+                      (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                        (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                      (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                        (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))
+                    Bool.true)
+                  (@Eq.refl.{1} Bool Bool.true))))))
+        (NKU_InputAt.At
+          (NKU.State.mk (NKU.State.frame after) (NKU.State.phase after) (NKU.State.decoded after)
+            (NKU_Roots.entry after) (NKU.State.iterator after) (NKU.State.owned after) (NKU.State.returned after)
+            (NKU.State.history after))
+          (@OfNat.ofNat.{0} Nat (nat_lit 80) (instOfNatNat (nat_lit 80))))))
+    (@Eq.trans.{1} NKU.Frame (NKU.State.frame after) (NKU.State.frame header) (NKU.State.frame s) frame hf)
+    (@And.intro (NKU_CallerScope.Inputs (NKU.State.frame after))
+      (And
+        (@Eq.{1} (Option.{0} Aeneas.Std.Usize) (NKU.Decoded.endAt (NKU.State.decoded after))
+          (@Option.some.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+              (@of_decide_eq_true
+                (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                (@id.{0}
+                  (@Eq.{1} Bool
+                    (@Decidable.decide
+                      (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                        (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                      (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                        (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))
+                    Bool.true)
+                  (@Eq.refl.{1} Bool Bool.true))))))
+        (NKU_InputAt.At
+          (NKU.State.mk (NKU.State.frame after) (NKU.State.phase after) (NKU.State.decoded after)
+            (NKU_Roots.entry after) (NKU.State.iterator after) (NKU.State.owned after) (NKU.State.returned after)
+            (NKU.State.history after))
+          (@OfNat.ofNat.{0} Nat (nat_lit 80) (instOfNatNat (nat_lit 80)))))
+      (@Eq.mpr.{0} (NKU_CallerScope.Inputs (NKU.State.frame after)) (NKU_CallerScope.Inputs (NKU.State.frame header))
+        (@id.{0}
+          (@Eq.{1} Prop (NKU_CallerScope.Inputs (NKU.State.frame after))
+            (NKU_CallerScope.Inputs (NKU.State.frame header)))
+          (@congrArg.{1, 1} NKU.Frame Prop (NKU.State.frame after) (NKU.State.frame header)
+            (fun (_a : NKU.Frame) => NKU_CallerScope.Inputs _a) frame))
+        (@Eq.mpr.{0} (NKU_CallerScope.Inputs (NKU.State.frame header)) (NKU_CallerScope.Inputs (NKU.State.frame s))
+          (@id.{0}
+            (@Eq.{1} Prop (NKU_CallerScope.Inputs (NKU.State.frame header))
+              (NKU_CallerScope.Inputs (NKU.State.frame s)))
+            (@congrArg.{1, 1} NKU.Frame Prop (NKU.State.frame header) (NKU.State.frame s)
+              (fun (_a : NKU.Frame) => NKU_CallerScope.Inputs _a) hf))
+          inputs))
+      (@And.intro
+        (@Eq.{1} (Option.{0} Aeneas.Std.Usize) (NKU.Decoded.endAt (NKU.State.decoded after))
+          (@Option.some.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+              (@of_decide_eq_true
+                (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                (@id.{0}
+                  (@Eq.{1} Bool
+                    (@Decidable.decide
+                      (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                        (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                      (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                        (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))
+                    Bool.true)
+                  (@Eq.refl.{1} Bool Bool.true))))))
+        (NKU_InputAt.At
+          (NKU.State.mk (NKU.State.frame after) (NKU.State.phase after) (NKU.State.decoded after)
+            (NKU_Roots.entry after) (NKU.State.iterator after) (NKU.State.owned after) (NKU.State.returned after)
+            (NKU.State.history after))
+          (@OfNat.ofNat.{0} Nat (nat_lit 80) (instOfNatNat (nat_lit 80))))
+        (@Eq.mpr.{0}
+          (@Eq.{1} (Option.{0} Aeneas.Std.Usize) (NKU.Decoded.endAt (NKU.State.decoded after))
+            (@Option.some.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+              (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                (@of_decide_eq_true
+                  (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                    (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                  (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                    (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                  (@id.{0}
+                    (@Eq.{1} Bool
+                      (@Decidable.decide
+                        (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                          (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                        (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                          (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))
+                      Bool.true)
+                    (@Eq.refl.{1} Bool Bool.true))))))
+          (@Eq.{1} (Option.{0} Aeneas.Std.Usize) (NKU.Decoded.endAt (NKU.State.decoded header))
+            (@Option.some.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+              (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                (@of_decide_eq_true
+                  (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                    (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                  (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                    (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                  (@id.{0}
+                    (@Eq.{1} Bool
+                      (@Decidable.decide
+                        (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                          (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                        (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                          (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))
+                      Bool.true)
+                    (@Eq.refl.{1} Bool Bool.true))))))
+          (@id.{0}
+            (@Eq.{1} Prop
+              (@Eq.{1} (Option.{0} Aeneas.Std.Usize) (NKU.Decoded.endAt (NKU.State.decoded after))
+                (@Option.some.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+                  (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                    (@of_decide_eq_true
+                      (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                        (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                      (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                        (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                      (@id.{0}
+                        (@Eq.{1} Bool
+                          (@Decidable.decide
+                            (@LE.le.{0} Nat instLENat
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                              (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                            (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                              (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))
+                          Bool.true)
+                        (@Eq.refl.{1} Bool Bool.true))))))
+              (@Eq.{1} (Option.{0} Aeneas.Std.Usize) (NKU.Decoded.endAt (NKU.State.decoded header))
+                (@Option.some.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+                  (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                    (@of_decide_eq_true
+                      (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                        (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                      (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                        (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                      (@id.{0}
+                        (@Eq.{1} Bool
+                          (@Decidable.decide
+                            (@LE.le.{0} Nat instLENat
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                              (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                            (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                              (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))
+                          Bool.true)
+                        (@Eq.refl.{1} Bool Bool.true)))))))
+            (@congrArg.{1, 1} NKU.Decoded Prop (NKU.State.decoded after) (NKU.State.decoded header)
+              (fun (_a : NKU.Decoded) =>
+                @Eq.{1} (Option.{0} Aeneas.Std.Usize) (NKU.Decoded.endAt _a)
+                  (@Option.some.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+                    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                      (@of_decide_eq_true
+                        (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                          (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                        (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                          (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                        (@id.{0}
+                          (@Eq.{1} Bool
+                            (@Decidable.decide
+                              (@LE.le.{0} Nat instLENat
+                                (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                                (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                              (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 1736) (instOfNatNat (nat_lit 1736)))
+                                (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))
+                            Bool.true)
+                          (@Eq.refl.{1} Bool Bool.true))))))
+              decoded))
+          ending)
+        (NKU_HeaderState.root_entry after
+          (@Eq.mpr.{0}
+            (@Eq.{1} Nat
+              (@List.length.{0} Aeneas.Std.U8
+                (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+                  (fun (l : List.{0} Aeneas.Std.U8) =>
+                    @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+                  (NKU.Frame.checkpoint (NKU.State.frame after))))
+              (@OfNat.ofNat.{0} Nat (nat_lit 1768) (instOfNatNat (nat_lit 1768))))
+            (@Eq.{1} Nat
+              (@List.length.{0} Aeneas.Std.U8
+                (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+                  (fun (l : List.{0} Aeneas.Std.U8) =>
+                    @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+                  (NKU.Frame.checkpoint (NKU.State.frame header))))
+              (@OfNat.ofNat.{0} Nat (nat_lit 1768) (instOfNatNat (nat_lit 1768))))
+            (@id.{0}
+              (@Eq.{1} Prop
+                (@Eq.{1} Nat
+                  (@List.length.{0} Aeneas.Std.U8
+                    (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+                      (fun (l : List.{0} Aeneas.Std.U8) =>
+                        @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+                      (NKU.Frame.checkpoint (NKU.State.frame after))))
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1768) (instOfNatNat (nat_lit 1768))))
+                (@Eq.{1} Nat
+                  (@List.length.{0} Aeneas.Std.U8
+                    (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+                      (fun (l : List.{0} Aeneas.Std.U8) =>
+                        @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+                      (NKU.Frame.checkpoint (NKU.State.frame header))))
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1768) (instOfNatNat (nat_lit 1768)))))
+              (@congrArg.{1, 1} NKU.Frame Prop (NKU.State.frame after) (NKU.State.frame header)
+                (fun (_a : NKU.Frame) =>
+                  @Eq.{1} Nat
+                    (@List.length.{0} Aeneas.Std.U8
+                      (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+                        (fun (l : List.{0} Aeneas.Std.U8) =>
+                          @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+                        (NKU.Frame.checkpoint _a)))
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1768) (instOfNatNat (nat_lit 1768))))
+                frame))
+            size))))
+theorem NKU_Chronology.reject : ∀ {A B : Type} (head : NKU_Chronology.Stage A) (tail : A → NKU_Chronology.Stage B)
+  (s : NKU.State) (err : NID_ResumeEmission.verifier.Error)
+  (rejected :
+    @Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error))
+      (@NJU_Log.Run.result NJU_ResumeObserved.Event
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error) (head s))
+      (@Aeneas.Std.Result.ok.{0}
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error)
+        (@Aeneas.Std.core.result.Result.Err.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error err))),
+  And
+    (@Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} B NKU.State) NID_ResumeEmission.verifier.Error))
+      (@NJU_Log.Run.result NJU_ResumeObserved.Event
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} B NKU.State) NID_ResumeEmission.verifier.Error)
+        (@NKU_Chronology.bind A B head tail s))
+      (@Aeneas.Std.Result.ok.{0}
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} B NKU.State) NID_ResumeEmission.verifier.Error)
+        (@Aeneas.Std.core.result.Result.Err.{0, 0} (Prod.{0, 0} B NKU.State) NID_ResumeEmission.verifier.Error err)))
+    (@Eq.{1} (List.{0} NJU_ResumeObserved.Event)
+      (@NJU_Log.Run.events NJU_ResumeObserved.Event
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} B NKU.State) NID_ResumeEmission.verifier.Error)
+        (@NKU_Chronology.bind A B head tail s))
+      (@NJU_Log.Run.events NJU_ResumeObserved.Event
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error) (head s))) :=
+fun {A B : Type} (head : NKU_Chronology.Stage A) (tail : A → NKU_Chronology.Stage B) (s : NKU.State)
+    (err : NID_ResumeEmission.verifier.Error)
+    (rejected :
+      @Eq.{1}
+        (Aeneas.Std.Result.{0}
+          (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error))
+        (@NJU_Log.Run.result NJU_ResumeObserved.Event
+          (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error) (head s))
+        (@Aeneas.Std.Result.ok.{0}
+          (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error)
+          (@Aeneas.Std.core.result.Result.Err.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error
+            err))) =>
+  @id.{0}
+    (And
+      (@Eq.{1}
+        (Aeneas.Std.Result.{0}
+          (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} B NKU.State) NID_ResumeEmission.verifier.Error))
+        (@NJU_Log.Run.result NJU_ResumeObserved.Event
+          (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} B NKU.State) NID_ResumeEmission.verifier.Error)
+          (@NKU_Chronology.bind A B head tail s))
+        (@Aeneas.Std.Result.ok.{0}
+          (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} B NKU.State) NID_ResumeEmission.verifier.Error)
+          (@Aeneas.Std.core.result.Result.Err.{0, 0} (Prod.{0, 0} B NKU.State) NID_ResumeEmission.verifier.Error err)))
+      (@Eq.{1} (List.{0} NJU_ResumeObserved.Event)
+        (@NJU_Log.Run.events NJU_ResumeObserved.Event
+          (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} B NKU.State) NID_ResumeEmission.verifier.Error)
+          (@NKU_Chronology.bind A B head tail s))
+        (@NJU_Log.Run.events NJU_ResumeObserved.Event
+          (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error) (head s))))
+    (let ⟨result, events, h✝⟩ := head s
+    @Eq.ndrec.{0, 1}
+      (NKU_Chronology.Run
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error))
+      (@NJU_Log.Run.mk NJU_ResumeObserved.Event
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error) result
+        events)
+      (fun
+          (x :
+            NKU_Chronology.Run
+              (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error)) =>
+        ∀
+          (h :
+            @Eq.{1}
+              (NKU_Chronology.Run
+                (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error))
+              (head s) x),
+          And
+            (@Eq.{1}
+              (Aeneas.Std.Result.{0}
+                (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} B NKU.State) NID_ResumeEmission.verifier.Error))
+              (@NJU_Log.Run.result NJU_ResumeObserved.Event
+                (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} B NKU.State) NID_ResumeEmission.verifier.Error)
+                (@Bind.bind.{0, 0} NKU_Chronology.Run
+                  (@Monad.toBind.{0, 0} NKU_Chronology.Run (@NJU_Log.instMonadRun NJU_ResumeObserved.Event))
+                  (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error)
+                  (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} B NKU.State) NID_ResumeEmission.verifier.Error) x
+                  fun
+                    (reply :
+                      Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State)
+                        NID_ResumeEmission.verifier.Error) =>
+                  @NKK_Try.emitted NJU_ResumeObserved.Event (Prod.{0, 0} A NKU.State) (Prod.{0, 0} B NKU.State) reply
+                    fun (x : Prod.{0, 0} A NKU.State) =>
+                    @NKU_Chronology.bind.match_1.{1} A
+                      (fun (x : Prod.{0, 0} A NKU.State) =>
+                        NJU_Log.Run NJU_ResumeObserved.Event
+                          (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} B NKU.State)
+                            NID_ResumeEmission.verifier.Error))
+                      x fun (a : A) (post : NKU.State) => tail a post))
+              (@Aeneas.Std.Result.ok.{0}
+                (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} B NKU.State) NID_ResumeEmission.verifier.Error)
+                (@Aeneas.Std.core.result.Result.Err.{0, 0} (Prod.{0, 0} B NKU.State) NID_ResumeEmission.verifier.Error
+                  err)))
+            (@Eq.{1} (List.{0} NJU_ResumeObserved.Event)
+              (@NJU_Log.Run.events NJU_ResumeObserved.Event
+                (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} B NKU.State) NID_ResumeEmission.verifier.Error)
+                (@Bind.bind.{0, 0} NKU_Chronology.Run
+                  (@Monad.toBind.{0, 0} NKU_Chronology.Run (@NJU_Log.instMonadRun NJU_ResumeObserved.Event))
+                  (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error)
+                  (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} B NKU.State) NID_ResumeEmission.verifier.Error) x
+                  fun
+                    (reply :
+                      Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State)
+                        NID_ResumeEmission.verifier.Error) =>
+                  @NKK_Try.emitted NJU_ResumeObserved.Event (Prod.{0, 0} A NKU.State) (Prod.{0, 0} B NKU.State) reply
+                    fun (x : Prod.{0, 0} A NKU.State) =>
+                    @NKU_Chronology.bind.match_1.{1} A
+                      (fun (x : Prod.{0, 0} A NKU.State) =>
+                        NJU_Log.Run NJU_ResumeObserved.Event
+                          (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} B NKU.State)
+                            NID_ResumeEmission.verifier.Error))
+                      x fun (a : A) (post : NKU.State) => tail a post))
+              (@NJU_Log.Run.events NJU_ResumeObserved.Event
+                (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error) x)))
+      (fun
+          (h :
+            @Eq.{1}
+              (NKU_Chronology.Run
+                (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error))
+              (head s)
+              (@NJU_Log.Run.mk NJU_ResumeObserved.Event
+                (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error)
+                result events)) =>
+        let ⟨⟩ :=
+          @Aeneas.Std.Result.ok.{0}
+            (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error)
+            (@Aeneas.Std.core.result.Result.Err.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error err)
+        @Eq.mp.{0}
+          (@Eq.{1}
+            (Aeneas.Std.Result.{0}
+              (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error))
+            (@NJU_Log.Run.result NJU_ResumeObserved.Event
+              (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error)
+              (head s))
+            (@Aeneas.Std.Result.ok.{0}
+              (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error)
+              (@Aeneas.Std.core.result.Result.Err.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error
+                err)))
+          (@Eq.{1}
+            (Aeneas.Std.Result.{0}
+              (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error))
+            (@NJU_Log.Run.result NJU_ResumeObserved.Event
+              (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error)
+              (@NJU_Log.Run.mk NJU_ResumeObserved.Event
+                (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error)
+                result events))
+            (@Aeneas.Std.Result.ok.{0}
+              (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error)
+              (@Aeneas.Std.core.result.Result.Err.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error
+                err)))
+          (@congrArg.{1, 1}
+            (NKU_Chronology.Run
+              (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error))
+            Prop (head s)
+            (@NJU_Log.Run.mk NJU_ResumeObserved.Event
+              (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error) result
+              events)
+            (fun
+                (_a :
+                  NKU_Chronology.Run
+                    (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State)
+                      NID_ResumeEmission.verifier.Error)) =>
+              @Eq.{1}
+                (Aeneas.Std.Result.{0}
+                  (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error))
+                (@NJU_Log.Run.result NJU_ResumeObserved.Event
+                  (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error) _a)
+                (@Aeneas.Std.Result.ok.{0}
+                  (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error)
+                  (@Aeneas.Std.core.result.Result.Err.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error
+                    err)))
+            h)
+          rejected)
+      (head s)
+      (@Eq.symm.{1}
+        (NKU_Chronology.Run
+          (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error))
+        (head s)
+        (@NJU_Log.Run.mk NJU_ResumeObserved.Event
+          (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error) result
+          events)
+        h✝)
+      (@Eq.refl.{1}
+        (NKU_Chronology.Run
+          (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error))
+        (head s)))
+theorem NKU_Chronology.abort : ∀ {A B : Type} (head : NKU_Chronology.Stage A) (tail : A → NKU_Chronology.Stage B)
+  (s : NKU.State) (err : Aeneas.Std.Error)
+  (failed :
+    @Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error))
+      (@NJU_Log.Run.result NJU_ResumeObserved.Event
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error) (head s))
+      (@Aeneas.Std.Result.fail.{0}
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error) err)),
+  And
+    (@Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} B NKU.State) NID_ResumeEmission.verifier.Error))
+      (@NJU_Log.Run.result NJU_ResumeObserved.Event
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} B NKU.State) NID_ResumeEmission.verifier.Error)
+        (@NKU_Chronology.bind A B head tail s))
+      (@Aeneas.Std.Result.fail.{0}
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} B NKU.State) NID_ResumeEmission.verifier.Error) err))
+    (@Eq.{1} (List.{0} NJU_ResumeObserved.Event)
+      (@NJU_Log.Run.events NJU_ResumeObserved.Event
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} B NKU.State) NID_ResumeEmission.verifier.Error)
+        (@NKU_Chronology.bind A B head tail s))
+      (@NJU_Log.Run.events NJU_ResumeObserved.Event
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error) (head s))) :=
+fun {A B : Type} (head : NKU_Chronology.Stage A) (tail : A → NKU_Chronology.Stage B) (s : NKU.State)
+    (err : Aeneas.Std.Error)
+    (failed :
+      @Eq.{1}
+        (Aeneas.Std.Result.{0}
+          (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error))
+        (@NJU_Log.Run.result NJU_ResumeObserved.Event
+          (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error) (head s))
+        (@Aeneas.Std.Result.fail.{0}
+          (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error) err)) =>
+  @NJU_Log.fail_prefix NJU_ResumeObserved.Event
+    (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error)
+    (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} B NKU.State) NID_ResumeEmission.verifier.Error) (head s) err
+    failed
+    fun (reply : Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error) =>
+    @NKK_Try.emitted NJU_ResumeObserved.Event (Prod.{0, 0} A NKU.State) (Prod.{0, 0} B NKU.State) reply
+      fun (x : Prod.{0, 0} A NKU.State) =>
+      @NKU_Chronology.bind.match_1.{1} A
+        (fun (x : Prod.{0, 0} A NKU.State) =>
+          NJU_Log.Run NJU_ResumeObserved.Event
+            (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} B NKU.State) NID_ResumeEmission.verifier.Error))
+        x fun (a : A) (post : NKU.State) => tail a post
+theorem NKU_Chronology.diverge : ∀ {A B : Type} (head : NKU_Chronology.Stage A) (tail : A → NKU_Chronology.Stage B)
+  (s : NKU.State)
+  (failed :
+    @Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error))
+      (@NJU_Log.Run.result NJU_ResumeObserved.Event
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error) (head s))
+      (@Aeneas.Std.Result.div.{0}
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error))),
+  And
+    (@Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} B NKU.State) NID_ResumeEmission.verifier.Error))
+      (@NJU_Log.Run.result NJU_ResumeObserved.Event
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} B NKU.State) NID_ResumeEmission.verifier.Error)
+        (@NKU_Chronology.bind A B head tail s))
+      (@Aeneas.Std.Result.div.{0}
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} B NKU.State) NID_ResumeEmission.verifier.Error)))
+    (@Eq.{1} (List.{0} NJU_ResumeObserved.Event)
+      (@NJU_Log.Run.events NJU_ResumeObserved.Event
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} B NKU.State) NID_ResumeEmission.verifier.Error)
+        (@NKU_Chronology.bind A B head tail s))
+      (@NJU_Log.Run.events NJU_ResumeObserved.Event
+        (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error) (head s))) :=
+fun {A B : Type} (head : NKU_Chronology.Stage A) (tail : A → NKU_Chronology.Stage B) (s : NKU.State)
+    (failed :
+      @Eq.{1}
+        (Aeneas.Std.Result.{0}
+          (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error))
+        (@NJU_Log.Run.result NJU_ResumeObserved.Event
+          (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error) (head s))
+        (@Aeneas.Std.Result.div.{0}
+          (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error))) =>
+  @NJU_Log.div_prefix NJU_ResumeObserved.Event
+    (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error)
+    (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} B NKU.State) NID_ResumeEmission.verifier.Error) (head s) failed
+    fun (reply : Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} A NKU.State) NID_ResumeEmission.verifier.Error) =>
+    @NKK_Try.emitted NJU_ResumeObserved.Event (Prod.{0, 0} A NKU.State) (Prod.{0, 0} B NKU.State) reply
+      fun (x : Prod.{0, 0} A NKU.State) =>
+      @NKU_Chronology.bind.match_1.{1} A
+        (fun (x : Prod.{0, 0} A NKU.State) =>
+          NJU_Log.Run NJU_ResumeObserved.Event
+            (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} B NKU.State) NID_ResumeEmission.verifier.Error))
+        x fun (a : A) (post : NKU.State) => tail a post
+theorem AspisR1.NKY_LevelsComplete.source : ∀ (index : Aeneas.Std.U64) (f : AspisR1.NJX_AppendDomains.Frontier)
+  (o : AspisR1.NJX_DigestCohort.O) (s : AspisR1.NJX_AppendDomains.High)
+  (hf :
+    ∀ (d : AspisR1.NJX_AppendDomains.D),
+      @Membership.mem.{0, 0} AspisR1.NJX_AppendDomains.D (List.{0} AspisR1.NJX_AppendDomains.D)
+          (@List.instMembership.{0} AspisR1.NJX_AppendDomains.D)
+          (@Subtype.val.{1} (List.{0} AspisR1.NJX_AppendDomains.D)
+            (fun (l : List.{0} AspisR1.NJX_AppendDomains.D) =>
+              @Eq.{1} Nat (@List.length.{0} AspisR1.NJX_AppendDomains.D l)
+                (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize
+                  (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 20) (instOfNatNat (nat_lit 20)))
+                    AspisR1.NJX_AppendDomains.Frontier._proof_1)))
+            f)
+          d →
+        AspisR1.NJX_DigestCohort.dc d)
+  (ho :
+    @AspisR1.FIw_ArrayValue.canonical
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16)))
+        AspisR1.NJX_DigestCohort.O._proof_1)
+      o)
+  (hs :
+    @AspisR1.FIw_ArrayValue.canonical
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 64) (instOfNatNat (nat_lit 64)))
+        AspisR1.NJX_AppendDomains.High._proof_1)
+      s),
+  And
+    (∀ (packets : AspisR1.NKI_LevelsChildren.Family index f o s),
+      @Eq.{1} (Aeneas.Std.Result.{0} AspisR1.NKY_LevelCarrier.Pair)
+        (AspisR1.NKY_LevelsLiteral.append_levels_packed_selector_tensor AspisR1.NKY_LevelsLiteral.child index f o s)
+        (@Aeneas.Std.Result.ok.{0} AspisR1.NKY_LevelCarrier.Pair
+          (AspisR1.NKY_CanonicalLift.cohort index f o s packets)))
+    (@Exists.{1} AspisR1.NJX_AppendFold.State fun (out : AspisR1.NJX_AppendFold.State) =>
+      And
+        (@Eq.{1} (Aeneas.Std.Result.{0} AspisR1.NJX_AppendFold.State)
+          (AspisR1.NKI_LevelsFrame.run index f o s
+            (List.finRange (@OfNat.ofNat.{0} Nat (nat_lit 20) (instOfNatNat (nat_lit 20)))) AspisR1.NKI_LevelsRoot.zero)
+          (@Aeneas.Std.Result.ok.{0} AspisR1.NJX_AppendFold.State out))
+        (And
+          (∀ (j : Fin (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))),
+            AspisR1.FIv_NativeValue.Canon (out j))
+          (∀ (packets : AspisR1.NKI_LevelsChildren.Family index f o s),
+            @Eq.{1} AspisR1.NKY_LevelCarrier.Pair (AspisR1.NKY_LevelCarrier.pair out)
+              (AspisR1.NKY_CanonicalLift.cohort index f o s packets)))) :=
+fun (index : Aeneas.Std.U64) (f : AspisR1.NJX_AppendDomains.Frontier) (o : AspisR1.NJX_DigestCohort.O)
+    (s : AspisR1.NJX_AppendDomains.High)
+    (hf :
+      ∀ (d : AspisR1.NJX_AppendDomains.D),
+        @Membership.mem.{0, 0} AspisR1.NJX_AppendDomains.D (List.{0} AspisR1.NJX_AppendDomains.D)
+            (@List.instMembership.{0} AspisR1.NJX_AppendDomains.D)
+            (@Subtype.val.{1} (List.{0} AspisR1.NJX_AppendDomains.D)
+              (fun (l : List.{0} AspisR1.NJX_AppendDomains.D) =>
+                @Eq.{1} Nat (@List.length.{0} AspisR1.NJX_AppendDomains.D l)
+                  (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize
+                    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 20) (instOfNatNat (nat_lit 20)))
+                      AspisR1.NJX_AppendDomains.Frontier._proof_1)))
+              f)
+            d →
+          AspisR1.NJX_DigestCohort.dc d)
+    (ho :
+      @AspisR1.FIw_ArrayValue.canonical
+        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16)))
+          AspisR1.NJX_DigestCohort.O._proof_1)
+        o)
+    (hs :
+      @AspisR1.FIw_ArrayValue.canonical
+        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 64) (instOfNatNat (nat_lit 64)))
+          AspisR1.NJX_AppendDomains.High._proof_1)
+        s) =>
+  let ⟨p, h✝⟩ := AspisR1.NKY_LevelsRoot.source index f o s hf ho hs
+  let ⟨out, h✝¹⟩ := h✝
+  let ⟨literal, right✝⟩ := h✝¹
+  let ⟨run, right✝¹⟩ := right✝
+  let ⟨value, right✝²⟩ := right✝¹
+  let ⟨_trace, hout⟩ := right✝²
+  @And.intro
+    (∀ (packets : AspisR1.NKI_LevelsChildren.Family index f o s),
+      @Eq.{1} (Aeneas.Std.Result.{0} AspisR1.NKY_LevelCarrier.Pair)
+        (AspisR1.NKY_LevelsLiteral.append_levels_packed_selector_tensor AspisR1.NKY_LevelsLiteral.child index f o s)
+        (@Aeneas.Std.Result.ok.{0} AspisR1.NKY_LevelCarrier.Pair
+          (AspisR1.NKY_CanonicalLift.cohort index f o s packets)))
+    (@Exists.{1} AspisR1.NJX_AppendFold.State fun (out : AspisR1.NJX_AppendFold.State) =>
+      And
+        (@Eq.{1} (Aeneas.Std.Result.{0} AspisR1.NJX_AppendFold.State)
+          (AspisR1.NKI_LevelsFrame.run index f o s
+            (List.finRange (@OfNat.ofNat.{0} Nat (nat_lit 20) (instOfNatNat (nat_lit 20)))) AspisR1.NKI_LevelsRoot.zero)
+          (@Aeneas.Std.Result.ok.{0} AspisR1.NJX_AppendFold.State out))
+        (And
+          (∀ (j : Fin (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))),
+            AspisR1.FIv_NativeValue.Canon (out j))
+          (∀ (packets : AspisR1.NKI_LevelsChildren.Family index f o s),
+            @Eq.{1} AspisR1.NKY_LevelCarrier.Pair (AspisR1.NKY_LevelCarrier.pair out)
+              (AspisR1.NKY_CanonicalLift.cohort index f o s packets))))
+    (fun (q : AspisR1.NKI_LevelsChildren.Family index f o s) =>
+      @Eq.trans.{1} (Aeneas.Std.Result.{0} AspisR1.NKY_LevelCarrier.Pair)
+        (AspisR1.NKY_LevelsLiteral.append_levels_packed_selector_tensor AspisR1.NKY_LevelsLiteral.child index f o s)
+        (@Aeneas.Std.Result.ok.{0} AspisR1.NKY_LevelCarrier.Pair (AspisR1.NKY_CanonicalLift.cohort index f o s p))
+        (@Aeneas.Std.Result.ok.{0} AspisR1.NKY_LevelCarrier.Pair (AspisR1.NKY_CanonicalLift.cohort index f o s q))
+        literal
+        (@congrArg.{1, 1} AspisR1.NKY_LevelCarrier.Pair (Aeneas.Std.Result.{0} AspisR1.NKY_LevelCarrier.Pair)
+          (AspisR1.NKY_CanonicalLift.cohort index f o s p) (AspisR1.NKY_CanonicalLift.cohort index f o s q)
+          (@Aeneas.Std.Result.ok.{0} AspisR1.NKY_LevelCarrier.Pair)
+          (AspisR1.NKY_LevelsUnique.literal_unique index f o s p q)))
+    (@Exists.intro.{1} AspisR1.NJX_AppendFold.State
+      (fun (out : AspisR1.NJX_AppendFold.State) =>
+        And
+          (@Eq.{1} (Aeneas.Std.Result.{0} AspisR1.NJX_AppendFold.State)
+            (AspisR1.NKI_LevelsFrame.run index f o s
+              (List.finRange (@OfNat.ofNat.{0} Nat (nat_lit 20) (instOfNatNat (nat_lit 20))))
+              AspisR1.NKI_LevelsRoot.zero)
+            (@Aeneas.Std.Result.ok.{0} AspisR1.NJX_AppendFold.State out))
+          (And
+            (∀ (j : Fin (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))),
+              AspisR1.FIv_NativeValue.Canon (out j))
+            (∀ (packets : AspisR1.NKI_LevelsChildren.Family index f o s),
+              @Eq.{1} AspisR1.NKY_LevelCarrier.Pair (AspisR1.NKY_LevelCarrier.pair out)
+                (AspisR1.NKY_CanonicalLift.cohort index f o s packets))))
+      out
+      (@And.intro
+        (@Eq.{1} (Aeneas.Std.Result.{0} AspisR1.NJX_AppendFold.State)
+          (AspisR1.NKI_LevelsFrame.run index f o s
+            (List.finRange (@OfNat.ofNat.{0} Nat (nat_lit 20) (instOfNatNat (nat_lit 20)))) AspisR1.NKI_LevelsRoot.zero)
+          (@Aeneas.Std.Result.ok.{0} AspisR1.NJX_AppendFold.State out))
+        (And
+          (∀ (j : Fin (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))),
+            AspisR1.FIv_NativeValue.Canon (out j))
+          (∀ (packets : AspisR1.NKI_LevelsChildren.Family index f o s),
+            @Eq.{1} AspisR1.NKY_LevelCarrier.Pair (AspisR1.NKY_LevelCarrier.pair out)
+              (AspisR1.NKY_CanonicalLift.cohort index f o s packets)))
+        run
+        (@And.intro
+          (∀ (j : Fin (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))),
+            AspisR1.FIv_NativeValue.Canon (out j))
+          (∀ (packets : AspisR1.NKI_LevelsChildren.Family index f o s),
+            @Eq.{1} AspisR1.NKY_LevelCarrier.Pair (AspisR1.NKY_LevelCarrier.pair out)
+              (AspisR1.NKY_CanonicalLift.cohort index f o s packets))
+          hout fun (q : AspisR1.NKI_LevelsChildren.Family index f o s) =>
+          @Eq.trans.{1} AspisR1.NKY_LevelCarrier.Pair (AspisR1.NKY_LevelCarrier.pair out)
+            (AspisR1.NKY_CanonicalLift.cohort index f o s p) (AspisR1.NKY_CanonicalLift.cohort index f o s q) value
+            (AspisR1.NKY_LevelsUnique.literal_unique index f o s p q))))
+def AspisR1.NKY_LevelsLiteral.body : (child :
+    Aeneas.Std.U64 →
+      Aeneas.Std.Usize →
+        AspisR1.NJX_DigestCohort.D →
+          AspisR1.NJX_DigestCohort.O →
+            AspisR1.FIv_NativeArithmetic.NQ → Aeneas.Std.Result.{0} AspisR1.NKY_LevelCarrier.Pair) →
+  (next_pair_index : Aeneas.Std.U64) →
+    (frontier :
+        Aeneas.Std.Array.{0}
+          (Aeneas.Std.Array.{0} Aeneas.Std.U32
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+              (@of_decide_eq_true
+                (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                (@id.{0}
+                  (@Eq.{1} Bool
+                    (@Decidable.decide
+                      (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+                        (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                      (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+                        (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))
+                    Bool.true)
+                  (@Eq.refl.{1} Bool Bool.true)))))
+          (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 20) (instOfNatNat (nat_lit 20)))
+            (@of_decide_eq_true
+              (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 20) (instOfNatNat (nat_lit 20)))
+                (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+              (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 20) (instOfNatNat (nat_lit 20)))
+                (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+              (@id.{0}
+                (@Eq.{1} Bool
+                  (@Decidable.decide
+                    (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 20) (instOfNatNat (nat_lit 20)))
+                      (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                    (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 20) (instOfNatNat (nat_lit 20)))
+                      (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))
+                  Bool.true)
+                (@Eq.refl.{1} Bool Bool.true))))) →
+      (opened :
+          Aeneas.Std.Array.{0} FIq_Native.field.QM31
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16)))
+              (@of_decide_eq_true
+                (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16)))
+                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16)))
+                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                (@id.{0}
+                  (@Eq.{1} Bool
+                    (@Decidable.decide
+                      (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16)))
+                        (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                      (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16)))
+                        (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))
+                    Bool.true)
+                  (@Eq.refl.{1} Bool Bool.true))))) →
+        (selector_high :
+            Aeneas.Std.Array.{0} FIq_Native.field.QM31
+              (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 64) (instOfNatNat (nat_lit 64)))
+                (@of_decide_eq_true
+                  (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 64) (instOfNatNat (nat_lit 64)))
+                    (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                  (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 64) (instOfNatNat (nat_lit 64)))
+                    (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                  (@id.{0}
+                    (@Eq.{1} Bool
+                      (@Decidable.decide
+                        (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 64) (instOfNatNat (nat_lit 64)))
+                          (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                        (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 64) (instOfNatNat (nat_lit 64)))
+                          (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))
+                      Bool.true)
+                    (@Eq.refl.{1} Bool Bool.true))))) →
+          (local0 local12 :
+              Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                  (@of_decide_eq_true
+                    (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                      (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                    (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                      (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                    (@id.{0}
+                      (@Eq.{1} Bool
+                        (@Decidable.decide
+                          (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                          (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))
+                        Bool.true)
+                      (@Eq.refl.{1} Bool Bool.true))))) →
+            (level : Aeneas.Std.Usize) →
+              Aeneas.Std.Result.{0}
+                (Aeneas.Std.ControlFlow.{0, 0}
+                  (Prod.{0, 0}
+                    (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                        (@of_decide_eq_true
+                          (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                          (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                          (@id.{0}
+                            (@Eq.{1} Bool
+                              (@Decidable.decide
+                                (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                                (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))
+                              Bool.true)
+                            (@Eq.refl.{1} Bool Bool.true)))))
+                    (Prod.{0, 0}
+                      (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                          (@of_decide_eq_true
+                            (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                              (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                            (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                              (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                            (@id.{0}
+                              (@Eq.{1} Bool
+                                (@Decidable.decide
+                                  (@LE.le.{0} Nat instLENat
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                    (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                                  (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                    (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))
+                                Bool.true)
+                              (@Eq.refl.{1} Bool Bool.true)))))
+                      Aeneas.Std.Usize))
+                  (Prod.{0, 0}
+                    (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                        (@of_decide_eq_true
+                          (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                          (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                          (@id.{0}
+                            (@Eq.{1} Bool
+                              (@Decidable.decide
+                                (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                                (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))
+                              Bool.true)
+                            (@Eq.refl.{1} Bool Bool.true)))))
+                    (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                        (@of_decide_eq_true
+                          (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                          (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                          (@id.{0}
+                            (@Eq.{1} Bool
+                              (@Decidable.decide
+                                (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                                (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))
+                              Bool.true)
+                            (@Eq.refl.{1} Bool Bool.true))))))) :=
+fun
+    (child :
+      Aeneas.Std.U64 →
+        Aeneas.Std.Usize →
+          AspisR1.NJX_DigestCohort.D →
+            AspisR1.NJX_DigestCohort.O →
+              AspisR1.FIv_NativeArithmetic.NQ → Aeneas.Std.Result.{0} AspisR1.NKY_LevelCarrier.Pair)
+    (next_pair_index : Aeneas.Std.U64)
+    (frontier :
+      Aeneas.Std.Array.{0}
+        (Aeneas.Std.Array.{0} Aeneas.Std.U32
+          (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+            AspisR1.NKY_LevelsLiteral.body._proof_1))
+        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 20) (instOfNatNat (nat_lit 20)))
+          AspisR1.NKY_LevelsLiteral.body._proof_2))
+    (opened :
+      Aeneas.Std.Array.{0} FIq_Native.field.QM31
+        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16)))
+          AspisR1.NKY_LevelsLiteral.body._proof_3))
+    (selector_high :
+      Aeneas.Std.Array.{0} FIq_Native.field.QM31
+        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 64) (instOfNatNat (nat_lit 64)))
+          AspisR1.NKY_LevelsLiteral.body._proof_4))
+    (local0 local12 :
+      Aeneas.Std.Array.{0} FIq_Native.field.QM31
+        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+          AspisR1.NKY_LevelsLiteral.body._proof_5))
+    (level : Aeneas.Std.Usize) =>
+  @ite.{1}
+    (Aeneas.Std.Result.{0}
+      (Aeneas.Std.ControlFlow.{0, 0}
+        (Prod.{0, 0}
+          (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+              AspisR1.NKY_LevelsLiteral.body._proof_5))
+          (Prod.{0, 0}
+            (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+              (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                AspisR1.NKY_LevelsLiteral.body._proof_5))
+            Aeneas.Std.Usize))
+        (Prod.{0, 0}
+          (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+              AspisR1.NKY_LevelsLiteral.body._proof_5))
+          (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+              AspisR1.NKY_LevelsLiteral.body._proof_5)))))
+    (@LT.lt.{0} Aeneas.Std.Usize (@Aeneas.Std.instLTUScalar Aeneas.Std.UScalarTy.Usize) level
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 20) (instOfNatNat (nat_lit 20)))
+        AspisR1.NKY_LevelsLiteral.body._proof_2))
+    (@Aeneas.Std.UScalar.decLt Aeneas.Std.UScalarTy.Usize level
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 20) (instOfNatNat (nat_lit 20)))
+        AspisR1.NKY_LevelsLiteral.body._proof_2))
+    (@Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+      (Aeneas.Std.Array.{0} Aeneas.Std.U32
+        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+          AspisR1.NKY_LevelsLiteral.body._proof_1))
+      (Aeneas.Std.ControlFlow.{0, 0}
+        (Prod.{0, 0}
+          (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+              AspisR1.NKY_LevelsLiteral.body._proof_5))
+          (Prod.{0, 0}
+            (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+              (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                AspisR1.NKY_LevelsLiteral.body._proof_5))
+            Aeneas.Std.Usize))
+        (Prod.{0, 0}
+          (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+              AspisR1.NKY_LevelsLiteral.body._proof_5))
+          (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+              AspisR1.NKY_LevelsLiteral.body._proof_5))))
+      (@Aeneas.Std.Array.index_usize.{0}
+        (Aeneas.Std.Array.{0} Aeneas.Std.U32
+          (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+            AspisR1.NKY_LevelsLiteral.body._proof_1))
+        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 20) (instOfNatNat (nat_lit 20)))
+          AspisR1.NKY_LevelsLiteral.body._proof_2)
+        frontier level)
+      fun
+        (a :
+          Aeneas.Std.Array.{0} Aeneas.Std.U32
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+              AspisR1.NKY_LevelsLiteral.body._proof_1)) =>
+      @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+        (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+        (Aeneas.Std.ControlFlow.{0, 0}
+          (Prod.{0, 0}
+            (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+              (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                AspisR1.NKY_LevelsLiteral.body._proof_5))
+            (Prod.{0, 0}
+              (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                  AspisR1.NKY_LevelsLiteral.body._proof_5))
+              Aeneas.Std.Usize))
+          (Prod.{0, 0}
+            (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+              (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                AspisR1.NKY_LevelsLiteral.body._proof_5))
+            (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+              (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                AspisR1.NKY_LevelsLiteral.body._proof_5))))
+        (@HAdd.hAdd.{0, 0, 0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize) Aeneas.Std.Usize
+          (Aeneas.Std.Result.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize))
+          (@Aeneas.Std.instHAddUScalarResult Aeneas.Std.UScalarTy.Usize)
+          (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 34) (instOfNatNat (nat_lit 34)))
+            AspisR1.NKY_LevelsLiteral.body._proof_6)
+          level)
+        fun (i : Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize) =>
+        @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0} FIq_Native.field.QM31
+          (Aeneas.Std.ControlFlow.{0, 0}
+            (Prod.{0, 0}
+              (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                  AspisR1.NKY_LevelsLiteral.body._proof_5))
+              (Prod.{0, 0}
+                (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                  (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                    AspisR1.NKY_LevelsLiteral.body._proof_5))
+                Aeneas.Std.Usize))
+            (Prod.{0, 0}
+              (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                  AspisR1.NKY_LevelsLiteral.body._proof_5))
+              (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                  AspisR1.NKY_LevelsLiteral.body._proof_5))))
+          (@Aeneas.Std.Array.index_usize.{0} FIq_Native.field.QM31
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 64) (instOfNatNat (nat_lit 64)))
+              AspisR1.NKY_LevelsLiteral.body._proof_4)
+            selector_high i)
+          fun (q : FIq_Native.field.QM31) =>
+          @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0} AspisR1.NKY_LevelCarrier.Pair
+            (Aeneas.Std.ControlFlow.{0, 0}
+              (Prod.{0, 0}
+                (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                  (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                    AspisR1.NKY_LevelsLiteral.body._proof_5))
+                (Prod.{0, 0}
+                  (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                      AspisR1.NKY_LevelsLiteral.body._proof_5))
+                  Aeneas.Std.Usize))
+              (Prod.{0, 0}
+                (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                  (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                    AspisR1.NKY_LevelsLiteral.body._proof_5))
+                (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                  (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                    AspisR1.NKY_LevelsLiteral.body._proof_5))))
+            (child next_pair_index level a opened q)
+            (@Aeneas.Std.uncurry.{0, 0, 1}
+              (Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ
+                (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                  AspisR1.NKY_LevelCarrier.Pair._proof_1))
+              (Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ
+                (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                  AspisR1.NKY_LevelCarrier.Pair._proof_1))
+              (Aeneas.Std.Result.{0}
+                (Aeneas.Std.ControlFlow.{0, 0}
+                  (Prod.{0, 0}
+                    (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                        AspisR1.NKY_LevelsLiteral.body._proof_5))
+                    (Prod.{0, 0}
+                      (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                          AspisR1.NKY_LevelsLiteral.body._proof_5))
+                      Aeneas.Std.Usize))
+                  (Prod.{0, 0}
+                    (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                        AspisR1.NKY_LevelsLiteral.body._proof_5))
+                    (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                        AspisR1.NKY_LevelsLiteral.body._proof_5)))))
+              fun
+                (level0 level12 :
+                  Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ
+                    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                      AspisR1.NKY_LevelCarrier.Pair._proof_1)) =>
+              @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0} FIq_Native.field.QM31
+                (Aeneas.Std.ControlFlow.{0, 0}
+                  (Prod.{0, 0}
+                    (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                        AspisR1.NKY_LevelsLiteral.body._proof_5))
+                    (Prod.{0, 0}
+                      (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                          AspisR1.NKY_LevelsLiteral.body._proof_5))
+                      Aeneas.Std.Usize))
+                  (Prod.{0, 0}
+                    (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                        AspisR1.NKY_LevelsLiteral.body._proof_5))
+                    (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                        AspisR1.NKY_LevelsLiteral.body._proof_5))))
+                (@Aeneas.Std.Array.index_usize.{0} FIq_Native.field.QM31
+                  (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                    AspisR1.NKY_LevelsLiteral.body._proof_5)
+                  local0
+                  (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                    AspisR1.NKY_LevelsLiteral.body._proof_7))
+                fun (q1 : FIq_Native.field.QM31) =>
+                @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0} AspisR1.FIv_NativeArithmetic.NQ
+                  (Aeneas.Std.ControlFlow.{0, 0}
+                    (Prod.{0, 0}
+                      (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                          AspisR1.NKY_LevelsLiteral.body._proof_5))
+                      (Prod.{0, 0}
+                        (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                          (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                            AspisR1.NKY_LevelsLiteral.body._proof_5))
+                        Aeneas.Std.Usize))
+                    (Prod.{0, 0}
+                      (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                          AspisR1.NKY_LevelsLiteral.body._proof_5))
+                      (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                          AspisR1.NKY_LevelsLiteral.body._proof_5))))
+                  (@Aeneas.Std.Array.index_usize.{0} AspisR1.FIv_NativeArithmetic.NQ
+                    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                      AspisR1.NKY_LevelCarrier.Pair._proof_1)
+                    level0
+                    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                      AspisR1.NKY_LevelsLiteral.body._proof_7))
+                  fun (q2 : AspisR1.FIv_NativeArithmetic.NQ) =>
+                  @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0} FIq_Native.field.QM31
+                    (Aeneas.Std.ControlFlow.{0, 0}
+                      (Prod.{0, 0}
+                        (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                          (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                            AspisR1.NKY_LevelsLiteral.body._proof_5))
+                        (Prod.{0, 0}
+                          (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                              AspisR1.NKY_LevelsLiteral.body._proof_5))
+                          Aeneas.Std.Usize))
+                      (Prod.{0, 0}
+                        (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                          (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                            AspisR1.NKY_LevelsLiteral.body._proof_5))
+                        (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                          (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                            AspisR1.NKY_LevelsLiteral.body._proof_5))))
+                    (FIq_Native.field.QM31.add q1 q2) fun (q3 : FIq_Native.field.QM31) =>
+                    @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                      (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                          AspisR1.NKY_LevelsLiteral.body._proof_5))
+                      (Aeneas.Std.ControlFlow.{0, 0}
+                        (Prod.{0, 0}
+                          (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                              AspisR1.NKY_LevelsLiteral.body._proof_5))
+                          (Prod.{0, 0}
+                            (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                              (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                AspisR1.NKY_LevelsLiteral.body._proof_5))
+                            Aeneas.Std.Usize))
+                        (Prod.{0, 0}
+                          (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                              AspisR1.NKY_LevelsLiteral.body._proof_5))
+                          (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                              AspisR1.NKY_LevelsLiteral.body._proof_5))))
+                      (@Aeneas.Std.Array.update.{0} FIq_Native.field.QM31
+                        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                          AspisR1.NKY_LevelsLiteral.body._proof_5)
+                        local0
+                        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                          AspisR1.NKY_LevelsLiteral.body._proof_7)
+                        q3)
+                      fun
+                        (local01 :
+                          Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                              AspisR1.NKY_LevelsLiteral.body._proof_5)) =>
+                      @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0} FIq_Native.field.QM31
+                        (Aeneas.Std.ControlFlow.{0, 0}
+                          (Prod.{0, 0}
+                            (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                              (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                AspisR1.NKY_LevelsLiteral.body._proof_5))
+                            (Prod.{0, 0}
+                              (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                  AspisR1.NKY_LevelsLiteral.body._proof_5))
+                              Aeneas.Std.Usize))
+                          (Prod.{0, 0}
+                            (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                              (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                AspisR1.NKY_LevelsLiteral.body._proof_5))
+                            (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                              (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                AspisR1.NKY_LevelsLiteral.body._proof_5))))
+                        (@Aeneas.Std.Array.index_usize.{0} FIq_Native.field.QM31
+                          (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                            AspisR1.NKY_LevelsLiteral.body._proof_5)
+                          local01
+                          (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                            AspisR1.NKY_LevelsLiteral.body._proof_8))
+                        fun (q4 : FIq_Native.field.QM31) =>
+                        @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                          AspisR1.FIv_NativeArithmetic.NQ
+                          (Aeneas.Std.ControlFlow.{0, 0}
+                            (Prod.{0, 0}
+                              (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                  AspisR1.NKY_LevelsLiteral.body._proof_5))
+                              (Prod.{0, 0}
+                                (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                  (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                    AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                Aeneas.Std.Usize))
+                            (Prod.{0, 0}
+                              (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                  AspisR1.NKY_LevelsLiteral.body._proof_5))
+                              (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                  AspisR1.NKY_LevelsLiteral.body._proof_5))))
+                          (@Aeneas.Std.Array.index_usize.{0} AspisR1.FIv_NativeArithmetic.NQ
+                            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                              AspisR1.NKY_LevelCarrier.Pair._proof_1)
+                            level0
+                            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                              AspisR1.NKY_LevelsLiteral.body._proof_8))
+                          fun (q5 : AspisR1.FIv_NativeArithmetic.NQ) =>
+                          @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0} FIq_Native.field.QM31
+                            (Aeneas.Std.ControlFlow.{0, 0}
+                              (Prod.{0, 0}
+                                (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                  (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                    AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                (Prod.{0, 0}
+                                  (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                    (Aeneas.Std.Usize.ofNat
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                      AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                  Aeneas.Std.Usize))
+                              (Prod.{0, 0}
+                                (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                  (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                    AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                  (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                    AspisR1.NKY_LevelsLiteral.body._proof_5))))
+                            (FIq_Native.field.QM31.add q4 q5) fun (q6 : FIq_Native.field.QM31) =>
+                            @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                              (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                  AspisR1.NKY_LevelsLiteral.body._proof_5))
+                              (Aeneas.Std.ControlFlow.{0, 0}
+                                (Prod.{0, 0}
+                                  (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                    (Aeneas.Std.Usize.ofNat
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                      AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                  (Prod.{0, 0}
+                                    (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                      (Aeneas.Std.Usize.ofNat
+                                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                        AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                    Aeneas.Std.Usize))
+                                (Prod.{0, 0}
+                                  (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                    (Aeneas.Std.Usize.ofNat
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                      AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                  (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                    (Aeneas.Std.Usize.ofNat
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                      AspisR1.NKY_LevelsLiteral.body._proof_5))))
+                              (@Aeneas.Std.Array.update.{0} FIq_Native.field.QM31
+                                (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                  AspisR1.NKY_LevelsLiteral.body._proof_5)
+                                local01
+                                (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                                  AspisR1.NKY_LevelsLiteral.body._proof_8)
+                                q6)
+                              fun
+                                (a1 :
+                                  Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                    (Aeneas.Std.Usize.ofNat
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                      AspisR1.NKY_LevelsLiteral.body._proof_5)) =>
+                              @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                FIq_Native.field.QM31
+                                (Aeneas.Std.ControlFlow.{0, 0}
+                                  (Prod.{0, 0}
+                                    (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                      (Aeneas.Std.Usize.ofNat
+                                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                        AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                    (Prod.{0, 0}
+                                      (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                        (Aeneas.Std.Usize.ofNat
+                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                          AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                      Aeneas.Std.Usize))
+                                  (Prod.{0, 0}
+                                    (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                      (Aeneas.Std.Usize.ofNat
+                                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                        AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                    (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                      (Aeneas.Std.Usize.ofNat
+                                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                        AspisR1.NKY_LevelsLiteral.body._proof_5))))
+                                (@Aeneas.Std.Array.index_usize.{0} FIq_Native.field.QM31
+                                  (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                    AspisR1.NKY_LevelsLiteral.body._proof_5)
+                                  local12
+                                  (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                    AspisR1.NKY_LevelsLiteral.body._proof_7))
+                                fun (q7 : FIq_Native.field.QM31) =>
+                                @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                  AspisR1.FIv_NativeArithmetic.NQ
+                                  (Aeneas.Std.ControlFlow.{0, 0}
+                                    (Prod.{0, 0}
+                                      (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                        (Aeneas.Std.Usize.ofNat
+                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                          AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                      (Prod.{0, 0}
+                                        (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                          (Aeneas.Std.Usize.ofNat
+                                            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                            AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                        Aeneas.Std.Usize))
+                                    (Prod.{0, 0}
+                                      (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                        (Aeneas.Std.Usize.ofNat
+                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                          AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                      (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                        (Aeneas.Std.Usize.ofNat
+                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                          AspisR1.NKY_LevelsLiteral.body._proof_5))))
+                                  (@Aeneas.Std.Array.index_usize.{0} AspisR1.FIv_NativeArithmetic.NQ
+                                    (Aeneas.Std.Usize.ofNat
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                      AspisR1.NKY_LevelCarrier.Pair._proof_1)
+                                    level12
+                                    (Aeneas.Std.Usize.ofNat
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                      AspisR1.NKY_LevelsLiteral.body._proof_7))
+                                  fun (q8 : AspisR1.FIv_NativeArithmetic.NQ) =>
+                                  @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                    FIq_Native.field.QM31
+                                    (Aeneas.Std.ControlFlow.{0, 0}
+                                      (Prod.{0, 0}
+                                        (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                          (Aeneas.Std.Usize.ofNat
+                                            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                            AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                        (Prod.{0, 0}
+                                          (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                            (Aeneas.Std.Usize.ofNat
+                                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                              AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                          Aeneas.Std.Usize))
+                                      (Prod.{0, 0}
+                                        (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                          (Aeneas.Std.Usize.ofNat
+                                            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                            AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                        (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                          (Aeneas.Std.Usize.ofNat
+                                            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                            AspisR1.NKY_LevelsLiteral.body._proof_5))))
+                                    (FIq_Native.field.QM31.add q7 q8) fun (q9 : FIq_Native.field.QM31) =>
+                                    @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                      (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                        (Aeneas.Std.Usize.ofNat
+                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                          AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                      (Aeneas.Std.ControlFlow.{0, 0}
+                                        (Prod.{0, 0}
+                                          (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                            (Aeneas.Std.Usize.ofNat
+                                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                              AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                          (Prod.{0, 0}
+                                            (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                              (Aeneas.Std.Usize.ofNat
+                                                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                            Aeneas.Std.Usize))
+                                        (Prod.{0, 0}
+                                          (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                            (Aeneas.Std.Usize.ofNat
+                                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                              AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                          (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                            (Aeneas.Std.Usize.ofNat
+                                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                              AspisR1.NKY_LevelsLiteral.body._proof_5))))
+                                      (@Aeneas.Std.Array.update.{0} FIq_Native.field.QM31
+                                        (Aeneas.Std.Usize.ofNat
+                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                          AspisR1.NKY_LevelsLiteral.body._proof_5)
+                                        local12
+                                        (Aeneas.Std.Usize.ofNat
+                                          (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                          AspisR1.NKY_LevelsLiteral.body._proof_7)
+                                        q9)
+                                      fun
+                                        (local121 :
+                                          Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                            (Aeneas.Std.Usize.ofNat
+                                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                              AspisR1.NKY_LevelsLiteral.body._proof_5)) =>
+                                      @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                        FIq_Native.field.QM31
+                                        (Aeneas.Std.ControlFlow.{0, 0}
+                                          (Prod.{0, 0}
+                                            (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                              (Aeneas.Std.Usize.ofNat
+                                                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                            (Prod.{0, 0}
+                                              (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                                (Aeneas.Std.Usize.ofNat
+                                                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                  AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                              Aeneas.Std.Usize))
+                                          (Prod.{0, 0}
+                                            (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                              (Aeneas.Std.Usize.ofNat
+                                                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                            (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                              (Aeneas.Std.Usize.ofNat
+                                                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                AspisR1.NKY_LevelsLiteral.body._proof_5))))
+                                        (@Aeneas.Std.Array.index_usize.{0} FIq_Native.field.QM31
+                                          (Aeneas.Std.Usize.ofNat
+                                            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                            AspisR1.NKY_LevelsLiteral.body._proof_5)
+                                          local121
+                                          (Aeneas.Std.Usize.ofNat
+                                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                                            AspisR1.NKY_LevelsLiteral.body._proof_8))
+                                        fun (q10 : FIq_Native.field.QM31) =>
+                                        @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                          AspisR1.FIv_NativeArithmetic.NQ
+                                          (Aeneas.Std.ControlFlow.{0, 0}
+                                            (Prod.{0, 0}
+                                              (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                                (Aeneas.Std.Usize.ofNat
+                                                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                  AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                              (Prod.{0, 0}
+                                                (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                                  (Aeneas.Std.Usize.ofNat
+                                                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                    AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                                Aeneas.Std.Usize))
+                                            (Prod.{0, 0}
+                                              (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                                (Aeneas.Std.Usize.ofNat
+                                                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                  AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                              (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                                (Aeneas.Std.Usize.ofNat
+                                                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                  AspisR1.NKY_LevelsLiteral.body._proof_5))))
+                                          (@Aeneas.Std.Array.index_usize.{0} AspisR1.FIv_NativeArithmetic.NQ
+                                            (Aeneas.Std.Usize.ofNat
+                                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                              AspisR1.NKY_LevelCarrier.Pair._proof_1)
+                                            level12
+                                            (Aeneas.Std.Usize.ofNat
+                                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                                              AspisR1.NKY_LevelsLiteral.body._proof_8))
+                                          fun (q11 : AspisR1.FIv_NativeArithmetic.NQ) =>
+                                          @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                            FIq_Native.field.QM31
+                                            (Aeneas.Std.ControlFlow.{0, 0}
+                                              (Prod.{0, 0}
+                                                (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                                  (Aeneas.Std.Usize.ofNat
+                                                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                    AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                                (Prod.{0, 0}
+                                                  (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                                    (Aeneas.Std.Usize.ofNat
+                                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                      AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                                  Aeneas.Std.Usize))
+                                              (Prod.{0, 0}
+                                                (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                                  (Aeneas.Std.Usize.ofNat
+                                                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                    AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                                (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                                  (Aeneas.Std.Usize.ofNat
+                                                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                    AspisR1.NKY_LevelsLiteral.body._proof_5))))
+                                            (FIq_Native.field.QM31.add q10 q11) fun (q12 : FIq_Native.field.QM31) =>
+                                            @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                              (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                                (Aeneas.Std.Usize.ofNat
+                                                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                  AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                              (Aeneas.Std.ControlFlow.{0, 0}
+                                                (Prod.{0, 0}
+                                                  (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                                    (Aeneas.Std.Usize.ofNat
+                                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                      AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                                  (Prod.{0, 0}
+                                                    (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                                      (Aeneas.Std.Usize.ofNat
+                                                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                        AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                                    Aeneas.Std.Usize))
+                                                (Prod.{0, 0}
+                                                  (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                                    (Aeneas.Std.Usize.ofNat
+                                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                      AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                                  (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                                    (Aeneas.Std.Usize.ofNat
+                                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                      AspisR1.NKY_LevelsLiteral.body._proof_5))))
+                                              (@Aeneas.Std.Array.update.{0} FIq_Native.field.QM31
+                                                (Aeneas.Std.Usize.ofNat
+                                                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                  AspisR1.NKY_LevelsLiteral.body._proof_5)
+                                                local121
+                                                (Aeneas.Std.Usize.ofNat
+                                                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                                                  AspisR1.NKY_LevelsLiteral.body._proof_8)
+                                                q12)
+                                              fun
+                                                (a2 :
+                                                  Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                                    (Aeneas.Std.Usize.ofNat
+                                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                      AspisR1.NKY_LevelsLiteral.body._proof_5)) =>
+                                              @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                                (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+                                                (Aeneas.Std.ControlFlow.{0, 0}
+                                                  (Prod.{0, 0}
+                                                    (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                                      (Aeneas.Std.Usize.ofNat
+                                                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                        AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                                    (Prod.{0, 0}
+                                                      (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                                        (Aeneas.Std.Usize.ofNat
+                                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                          AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                                      Aeneas.Std.Usize))
+                                                  (Prod.{0, 0}
+                                                    (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                                      (Aeneas.Std.Usize.ofNat
+                                                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                        AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                                    (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                                      (Aeneas.Std.Usize.ofNat
+                                                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                        AspisR1.NKY_LevelsLiteral.body._proof_5))))
+                                                (@HAdd.hAdd.{0, 0, 0} Aeneas.Std.Usize
+                                                  (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+                                                  (Aeneas.Std.Result.{0}
+                                                    (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize))
+                                                  (@Aeneas.Std.instHAddUScalarResult Aeneas.Std.UScalarTy.Usize) level
+                                                  (Aeneas.Std.Usize.ofNat
+                                                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                                                    AspisR1.NKY_LevelsLiteral.body._proof_8))
+                                                fun (level1 : Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize) =>
+                                                @Aeneas.Std.Result.ok.{0}
+                                                  (Aeneas.Std.ControlFlow.{0, 0}
+                                                    (Prod.{0, 0}
+                                                      (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                                        (Aeneas.Std.Usize.ofNat
+                                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                          AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                                      (Prod.{0, 0}
+                                                        (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                                          (Aeneas.Std.Usize.ofNat
+                                                            (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                              (instOfNatNat (nat_lit 2)))
+                                                            AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                                        Aeneas.Std.Usize))
+                                                    (Prod.{0, 0}
+                                                      (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                                        (Aeneas.Std.Usize.ofNat
+                                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                          AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                                      (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                                        (Aeneas.Std.Usize.ofNat
+                                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                          AspisR1.NKY_LevelsLiteral.body._proof_5))))
+                                                  (@Aeneas.Std.ControlFlow.cont.{0, 0}
+                                                    (Prod.{0, 0}
+                                                      (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                                        (Aeneas.Std.Usize.ofNat
+                                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                          AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                                      (Prod.{0, 0}
+                                                        (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                                          (Aeneas.Std.Usize.ofNat
+                                                            (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                              (instOfNatNat (nat_lit 2)))
+                                                            AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                                        Aeneas.Std.Usize))
+                                                    (Prod.{0, 0}
+                                                      (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                                        (Aeneas.Std.Usize.ofNat
+                                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                          AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                                      (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                                        (Aeneas.Std.Usize.ofNat
+                                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                          AspisR1.NKY_LevelsLiteral.body._proof_5)))
+                                                    (@Prod.mk.{0, 0}
+                                                      (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                                        (Aeneas.Std.Usize.ofNat
+                                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                          AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                                      (Prod.{0, 0}
+                                                        (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                                          (Aeneas.Std.Usize.ofNat
+                                                            (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                              (instOfNatNat (nat_lit 2)))
+                                                            AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                                        Aeneas.Std.Usize)
+                                                      a1
+                                                      (@Prod.mk.{0, 0}
+                                                        (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                                          (Aeneas.Std.Usize.ofNat
+                                                            (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                              (instOfNatNat (nat_lit 2)))
+                                                            AspisR1.NKY_LevelsLiteral.body._proof_5))
+                                                        Aeneas.Std.Usize a2 level1)))))
+    (@Aeneas.Std.Result.ok.{0}
+      (Aeneas.Std.ControlFlow.{0, 0}
+        (Prod.{0, 0}
+          (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+              AspisR1.NKY_LevelsLiteral.body._proof_5))
+          (Prod.{0, 0}
+            (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+              (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                AspisR1.NKY_LevelsLiteral.body._proof_5))
+            Aeneas.Std.Usize))
+        (Prod.{0, 0}
+          (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+              AspisR1.NKY_LevelsLiteral.body._proof_5))
+          (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+              AspisR1.NKY_LevelsLiteral.body._proof_5))))
+      (@Aeneas.Std.ControlFlow.done.{0, 0}
+        (Prod.{0, 0}
+          (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+              AspisR1.NKY_LevelsLiteral.body._proof_5))
+          (Prod.{0, 0}
+            (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+              (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                AspisR1.NKY_LevelsLiteral.body._proof_5))
+            Aeneas.Std.Usize))
+        (Prod.{0, 0}
+          (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+              AspisR1.NKY_LevelsLiteral.body._proof_5))
+          (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+              AspisR1.NKY_LevelsLiteral.body._proof_5)))
+        (@Prod.mk.{0, 0}
+          (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+              AspisR1.NKY_LevelsLiteral.body._proof_5))
+          (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+              AspisR1.NKY_LevelsLiteral.body._proof_5))
+          local0 local12)))
+def AspisR1.NKY_LevelsLiteral.append_levels_packed_selector_tensor : (child : AspisR1.NKY_LevelsLiteral.Child) →
+  (index : Aeneas.Std.U64) →
+    (f : AspisR1.NJX_AppendDomains.Frontier) →
+      (o : AspisR1.NJX_DigestCohort.O) →
+        (s : AspisR1.NJX_AppendDomains.High) → Aeneas.Std.Result.{0} AspisR1.NKY_LevelCarrier.Pair :=
+fun (child : AspisR1.NKY_LevelsLiteral.Child) (index : Aeneas.Std.U64) (f : AspisR1.NJX_AppendDomains.Frontier)
+    (o : AspisR1.NJX_DigestCohort.O) (s : AspisR1.NJX_AppendDomains.High) =>
+  AspisR1.NKY_LevelsLiteral.loop child index f o s
+    (@Aeneas.Std.Array.repeat.{0} AspisR1.FIv_NativeArithmetic.NQ
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+        AspisR1.NKY_LevelsLiteral.body._proof_5)
+      FIq_Native.field.QM31.ZERO)
+    (@Aeneas.Std.Array.repeat.{0} AspisR1.FIv_NativeArithmetic.NQ
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+        AspisR1.NKY_LevelsLiteral.body._proof_5)
+      FIq_Native.field.QM31.ZERO)
+    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+      AspisR1.NKY_LevelsLiteral.body._proof_7)
+theorem AspisR1.NKY_BoxSource.checkpoint : ∀ {S : Type} (a : AspisR1.S2W_D189Wrappers.Allocator S) (s : S)
+  (before : AspisR1.NKY_BoxFrame.Heap NJQ_Carrier.CC) (r : AspisR1.NP6_StdModel.Reservation) (allocated : Nat)
+  (bytes : Aeneas.Std.Slice.{0} Aeneas.Std.U8) (raw : Aeneas.Std.core.result.Result.{0, 0} NJQ_Carrier.C NJQ_Carrier.F)
+  (box : AspisR1.NKY_BoxAction.Owned NJQ_Carrier.CC) (readsAfter : Nat → NJQ_Carrier.CC)
+  (decoder : NJQ_CheckpointTotal.Cut bytes raw)
+  (returned : @AspisR1.NKY_BoxTotal.CheckpointWindows S a s r allocated (NJQ_Carrier.checkpoint_result raw) box)
+  (frame :
+    @AspisR1.NKY_BoxPost.Windows NJQ_Carrier.CC NJQ_Carrier.CF S AspisR1.NKY_FrameObservation.Checkpoint a s
+      (@OfNat.ofNat.{0} Nat (nat_lit 176) (instOfNatNat (nat_lit 176))) r (NJQ_Carrier.checkpoint_result raw) box before
+      readsAfter),
+  @Eq.{1}
+    (Aeneas.Std.Result.{0}
+      (Prod.{0, 0}
+        (Aeneas.Std.core.result.Result.{0, 0} (AspisR1.NKY_BoxAction.Owned NJQ_Carrier.CC) AspisR1.NKY_BoxAction.PE)
+        (Prod.{0, 0} S (AspisR1.NKY_BoxFrame.Heap NJQ_Carrier.CC))))
+    (@AspisR1.NKY_BoxPost.native NJQ_Carrier.CC NJQ_Carrier.CF S a s
+      (@OfNat.ofNat.{0} Nat (nat_lit 176) (instOfNatNat (nat_lit 176))) r (NJQ_Carrier.checkpoint_result raw) box before
+      readsAfter)
+    (@AspisR1.NKY_BoxPost.attach NJQ_Carrier.CC S before
+      (@AspisR1.NKY_BoxAction.run NJQ_Carrier.CC S a s (@OfNat.ofNat.{0} Nat (nat_lit 176) (instOfNatNat (nat_lit 176)))
+        r allocated (NKF_CheckpointBox.reference bytes))) :=
+fun {S : Type} (a : AspisR1.S2W_D189Wrappers.Allocator S) (s : S) (before : AspisR1.NKY_BoxFrame.Heap NJQ_Carrier.CC)
+    (r : AspisR1.NP6_StdModel.Reservation) (allocated : Nat) (bytes : Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+    (raw : Aeneas.Std.core.result.Result.{0, 0} NJQ_Carrier.C NJQ_Carrier.F)
+    (box : AspisR1.NKY_BoxAction.Owned NJQ_Carrier.CC) (readsAfter : Nat → NJQ_Carrier.CC)
+    (decoder : NJQ_CheckpointTotal.Cut bytes raw)
+    (returned : @AspisR1.NKY_BoxTotal.CheckpointWindows S a s r allocated (NJQ_Carrier.checkpoint_result raw) box)
+    (frame :
+      @AspisR1.NKY_BoxPost.Windows NJQ_Carrier.CC NJQ_Carrier.CF S AspisR1.NKY_FrameObservation.Checkpoint a s
+        (@OfNat.ofNat.{0} Nat (nat_lit 176) (instOfNatNat (nat_lit 176))) r (NJQ_Carrier.checkpoint_result raw) box
+        before readsAfter) =>
+  have result :
+    @Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Prod.{0, 0}
+          (Aeneas.Std.core.result.Result.{0, 0} (AspisR1.NKY_BoxAction.Owned NJQ_Carrier.CC) AspisR1.NKY_BoxAction.PE)
+          S))
+      (@AspisR1.NKY_BoxTotal.native NJQ_Carrier.CC NJQ_Carrier.CF S a s
+        (@OfNat.ofNat.{0} Nat (nat_lit 176) (instOfNatNat (nat_lit 176))) r (NJQ_Carrier.checkpoint_result raw) box)
+      (@AspisR1.NKY_BoxAction.run NJQ_Carrier.CC S a s (@OfNat.ofNat.{0} Nat (nat_lit 176) (instOfNatNat (nat_lit 176)))
+        r allocated (NKF_CheckpointBox.reference bytes)) :=
+    @And.left
+      (@Eq.{1}
+        (Aeneas.Std.Result.{0}
+          (Prod.{0, 0}
+            (Aeneas.Std.core.result.Result.{0, 0} (AspisR1.NKY_BoxAction.Owned NJQ_Carrier.CC) AspisR1.NKY_BoxAction.PE)
+            S))
+        (@AspisR1.NKY_BoxTotal.native NJQ_Carrier.CC NJQ_Carrier.CF S a s
+          (@OfNat.ofNat.{0} Nat (nat_lit 176) (instOfNatNat (nat_lit 176))) r (NJQ_Carrier.checkpoint_result raw) box)
+        (@AspisR1.NKY_BoxAction.run NJQ_Carrier.CC S a s
+          (@OfNat.ofNat.{0} Nat (nat_lit 176) (instOfNatNat (nat_lit 176))) r allocated
+          (NKF_CheckpointBox.reference bytes)))
+      (@AspisR1.NKY_BoxPacket.Law NJQ_Carrier.CC S a s (@OfNat.ofNat.{0} Nat (nat_lit 176) (instOfNatNat (nat_lit 176)))
+        (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) r allocated before
+        (NKF_CheckpointBox.reference bytes))
+      (@AspisR1.NKY_BoxTotal.checkpoint S a s before r allocated bytes raw box decoder returned);
+  @Eq.trans.{1}
+    (Aeneas.Std.Result.{0}
+      (Prod.{0, 0}
+        (Aeneas.Std.core.result.Result.{0, 0} (AspisR1.NKY_BoxAction.Owned NJQ_Carrier.CC) AspisR1.NKY_BoxAction.PE)
+        (Prod.{0, 0} S (AspisR1.NKY_BoxFrame.Heap NJQ_Carrier.CC))))
+    (@AspisR1.NKY_BoxPost.native NJQ_Carrier.CC NJQ_Carrier.CF S a s
+      (@OfNat.ofNat.{0} Nat (nat_lit 176) (instOfNatNat (nat_lit 176))) r (NJQ_Carrier.checkpoint_result raw) box before
+      readsAfter)
+    (@AspisR1.NKY_BoxPost.attach NJQ_Carrier.CC S before
+      (@AspisR1.NKY_BoxTotal.native NJQ_Carrier.CC NJQ_Carrier.CF S a s
+        (@OfNat.ofNat.{0} Nat (nat_lit 176) (instOfNatNat (nat_lit 176))) r (NJQ_Carrier.checkpoint_result raw) box))
+    (@AspisR1.NKY_BoxPost.attach NJQ_Carrier.CC S before
+      (@AspisR1.NKY_BoxAction.run NJQ_Carrier.CC S a s (@OfNat.ofNat.{0} Nat (nat_lit 176) (instOfNatNat (nat_lit 176)))
+        r allocated (NKF_CheckpointBox.reference bytes)))
+    (@AspisR1.NKY_BoxPost.association NJQ_Carrier.CC NJQ_Carrier.CF S a s
+      (@OfNat.ofNat.{0} Nat (nat_lit 176) (instOfNatNat (nat_lit 176))) r (NJQ_Carrier.checkpoint_result raw) box before
+      readsAfter
+      (@AspisR1.NKY_BoxPostWindows.checkpoint S a s r (NJQ_Carrier.checkpoint_result raw) box before readsAfter frame))
+    (@congrArg.{1, 1}
+      (Aeneas.Std.Result.{0}
+        (Prod.{0, 0}
+          (Aeneas.Std.core.result.Result.{0, 0} (AspisR1.NKY_BoxAction.Owned NJQ_Carrier.CC) AspisR1.NKY_BoxAction.PE)
+          S))
+      (Aeneas.Std.Result.{0}
+        (Prod.{0, 0}
+          (Aeneas.Std.core.result.Result.{0, 0} (AspisR1.NKY_BoxAction.Owned NJQ_Carrier.CC) AspisR1.NKY_BoxAction.PE)
+          (Prod.{0, 0} S (AspisR1.NKY_BoxFrame.Heap NJQ_Carrier.CC))))
+      (@AspisR1.NKY_BoxTotal.native NJQ_Carrier.CC NJQ_Carrier.CF S a s
+        (@OfNat.ofNat.{0} Nat (nat_lit 176) (instOfNatNat (nat_lit 176))) r (NJQ_Carrier.checkpoint_result raw) box)
+      (@AspisR1.NKY_BoxAction.run NJQ_Carrier.CC S a s (@OfNat.ofNat.{0} Nat (nat_lit 176) (instOfNatNat (nat_lit 176)))
+        r allocated (NKF_CheckpointBox.reference bytes))
+      (@AspisR1.NKY_BoxPost.attach NJQ_Carrier.CC S before) result)
+theorem AspisR1.NKY_BoxSource.master : ∀ {S : Type} (a : AspisR1.S2W_D189Wrappers.Allocator S) (s : S)
+  (before : AspisR1.NKY_BoxFrame.Heap NJQ_Carrier.CM) (r : AspisR1.NP6_StdModel.Reservation) (allocated : Nat)
+  (bytes : Aeneas.Std.Slice.{0} Aeneas.Std.U8) (raw : Aeneas.Std.core.result.Result.{0, 0} NJQ_Carrier.M NJQ_Carrier.F)
+  (box : AspisR1.NKY_BoxAction.Owned NJQ_Carrier.CM) (readsAfter : Nat → NJQ_Carrier.CM)
+  (decoder : NJQ_MasterTotal.Cut bytes raw)
+  (returned : @AspisR1.NKY_BoxTotal.MasterWindows S a s r allocated (NJQ_Carrier.master_result raw) box)
+  (frame :
+    @AspisR1.NKY_BoxPost.Windows NJQ_Carrier.CM NJQ_Carrier.CF S AspisR1.NKY_FrameObservation.Master a s
+      (@OfNat.ofNat.{0} Nat (nat_lit 304) (instOfNatNat (nat_lit 304))) r (NJQ_Carrier.master_result raw) box before
+      readsAfter),
+  @Eq.{1}
+    (Aeneas.Std.Result.{0}
+      (Prod.{0, 0}
+        (Aeneas.Std.core.result.Result.{0, 0} (AspisR1.NKY_BoxAction.Owned NJQ_Carrier.CM) AspisR1.NKY_BoxAction.PE)
+        (Prod.{0, 0} S (AspisR1.NKY_BoxFrame.Heap NJQ_Carrier.CM))))
+    (@AspisR1.NKY_BoxPost.native NJQ_Carrier.CM NJQ_Carrier.CF S a s
+      (@OfNat.ofNat.{0} Nat (nat_lit 304) (instOfNatNat (nat_lit 304))) r (NJQ_Carrier.master_result raw) box before
+      readsAfter)
+    (@AspisR1.NKY_BoxPost.attach NJQ_Carrier.CM S before
+      (@AspisR1.NKY_BoxAction.run NJQ_Carrier.CM S a s (@OfNat.ofNat.{0} Nat (nat_lit 304) (instOfNatNat (nat_lit 304)))
+        r allocated (NKF_MasterBox.reference bytes))) :=
+fun {S : Type} (a : AspisR1.S2W_D189Wrappers.Allocator S) (s : S) (before : AspisR1.NKY_BoxFrame.Heap NJQ_Carrier.CM)
+    (r : AspisR1.NP6_StdModel.Reservation) (allocated : Nat) (bytes : Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+    (raw : Aeneas.Std.core.result.Result.{0, 0} NJQ_Carrier.M NJQ_Carrier.F)
+    (box : AspisR1.NKY_BoxAction.Owned NJQ_Carrier.CM) (readsAfter : Nat → NJQ_Carrier.CM)
+    (decoder : NJQ_MasterTotal.Cut bytes raw)
+    (returned : @AspisR1.NKY_BoxTotal.MasterWindows S a s r allocated (NJQ_Carrier.master_result raw) box)
+    (frame :
+      @AspisR1.NKY_BoxPost.Windows NJQ_Carrier.CM NJQ_Carrier.CF S AspisR1.NKY_FrameObservation.Master a s
+        (@OfNat.ofNat.{0} Nat (nat_lit 304) (instOfNatNat (nat_lit 304))) r (NJQ_Carrier.master_result raw) box before
+        readsAfter) =>
+  have result :
+    @Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Prod.{0, 0}
+          (Aeneas.Std.core.result.Result.{0, 0} (AspisR1.NKY_BoxAction.Owned NJQ_Carrier.CM) AspisR1.NKY_BoxAction.PE)
+          S))
+      (@AspisR1.NKY_BoxTotal.native NJQ_Carrier.CM NJQ_Carrier.CF S a s
+        (@OfNat.ofNat.{0} Nat (nat_lit 304) (instOfNatNat (nat_lit 304))) r (NJQ_Carrier.master_result raw) box)
+      (@AspisR1.NKY_BoxAction.run NJQ_Carrier.CM S a s (@OfNat.ofNat.{0} Nat (nat_lit 304) (instOfNatNat (nat_lit 304)))
+        r allocated (NKF_MasterBox.reference bytes)) :=
+    @And.left
+      (@Eq.{1}
+        (Aeneas.Std.Result.{0}
+          (Prod.{0, 0}
+            (Aeneas.Std.core.result.Result.{0, 0} (AspisR1.NKY_BoxAction.Owned NJQ_Carrier.CM) AspisR1.NKY_BoxAction.PE)
+            S))
+        (@AspisR1.NKY_BoxTotal.native NJQ_Carrier.CM NJQ_Carrier.CF S a s
+          (@OfNat.ofNat.{0} Nat (nat_lit 304) (instOfNatNat (nat_lit 304))) r (NJQ_Carrier.master_result raw) box)
+        (@AspisR1.NKY_BoxAction.run NJQ_Carrier.CM S a s
+          (@OfNat.ofNat.{0} Nat (nat_lit 304) (instOfNatNat (nat_lit 304))) r allocated
+          (NKF_MasterBox.reference bytes)))
+      (@AspisR1.NKY_BoxPacket.Law NJQ_Carrier.CM S a s (@OfNat.ofNat.{0} Nat (nat_lit 304) (instOfNatNat (nat_lit 304)))
+        (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) r allocated before
+        (NKF_MasterBox.reference bytes))
+      (@AspisR1.NKY_BoxTotal.master S a s before r allocated bytes raw box decoder returned);
+  @Eq.trans.{1}
+    (Aeneas.Std.Result.{0}
+      (Prod.{0, 0}
+        (Aeneas.Std.core.result.Result.{0, 0} (AspisR1.NKY_BoxAction.Owned NJQ_Carrier.CM) AspisR1.NKY_BoxAction.PE)
+        (Prod.{0, 0} S (AspisR1.NKY_BoxFrame.Heap NJQ_Carrier.CM))))
+    (@AspisR1.NKY_BoxPost.native NJQ_Carrier.CM NJQ_Carrier.CF S a s
+      (@OfNat.ofNat.{0} Nat (nat_lit 304) (instOfNatNat (nat_lit 304))) r (NJQ_Carrier.master_result raw) box before
+      readsAfter)
+    (@AspisR1.NKY_BoxPost.attach NJQ_Carrier.CM S before
+      (@AspisR1.NKY_BoxTotal.native NJQ_Carrier.CM NJQ_Carrier.CF S a s
+        (@OfNat.ofNat.{0} Nat (nat_lit 304) (instOfNatNat (nat_lit 304))) r (NJQ_Carrier.master_result raw) box))
+    (@AspisR1.NKY_BoxPost.attach NJQ_Carrier.CM S before
+      (@AspisR1.NKY_BoxAction.run NJQ_Carrier.CM S a s (@OfNat.ofNat.{0} Nat (nat_lit 304) (instOfNatNat (nat_lit 304)))
+        r allocated (NKF_MasterBox.reference bytes)))
+    (@AspisR1.NKY_BoxPost.association NJQ_Carrier.CM NJQ_Carrier.CF S a s
+      (@OfNat.ofNat.{0} Nat (nat_lit 304) (instOfNatNat (nat_lit 304))) r (NJQ_Carrier.master_result raw) box before
+      readsAfter
+      (@AspisR1.NKY_BoxPostWindows.master S a s r (NJQ_Carrier.master_result raw) box before readsAfter frame))
+    (@congrArg.{1, 1}
+      (Aeneas.Std.Result.{0}
+        (Prod.{0, 0}
+          (Aeneas.Std.core.result.Result.{0, 0} (AspisR1.NKY_BoxAction.Owned NJQ_Carrier.CM) AspisR1.NKY_BoxAction.PE)
+          S))
+      (Aeneas.Std.Result.{0}
+        (Prod.{0, 0}
+          (Aeneas.Std.core.result.Result.{0, 0} (AspisR1.NKY_BoxAction.Owned NJQ_Carrier.CM) AspisR1.NKY_BoxAction.PE)
+          (Prod.{0, 0} S (AspisR1.NKY_BoxFrame.Heap NJQ_Carrier.CM))))
+      (@AspisR1.NKY_BoxTotal.native NJQ_Carrier.CM NJQ_Carrier.CF S a s
+        (@OfNat.ofNat.{0} Nat (nat_lit 304) (instOfNatNat (nat_lit 304))) r (NJQ_Carrier.master_result raw) box)
+      (@AspisR1.NKY_BoxAction.run NJQ_Carrier.CM S a s (@OfNat.ofNat.{0} Nat (nat_lit 304) (instOfNatNat (nat_lit 304)))
+        r allocated (NKF_MasterBox.reference bytes))
+      (@AspisR1.NKY_BoxPost.attach NJQ_Carrier.CM S before) result)
+def AspisR1.NKY_BoxTotal.CheckpointWindows : {S : Type} →
+  (a : AspisR1.S2W_D189Wrappers.Allocator S) →
+    (s : S) →
+      (r : AspisR1.NP6_StdModel.Reservation) →
+        (allocated : Nat) →
+          (raw : Aeneas.Std.core.result.Result.{0, 0} NJQ_Carrier.CC NJQ_Carrier.CF) →
+            (observed : AspisR1.NKY_BoxAction.Owned NJQ_Carrier.CC) → Prop :=
+fun {S : Type} (a : AspisR1.S2W_D189Wrappers.Allocator S) (s : S) (r : AspisR1.NP6_StdModel.Reservation)
+    (allocated : Nat) (raw : Aeneas.Std.core.result.Result.{0, 0} NJQ_Carrier.CC NJQ_Carrier.CF)
+    (observed : AspisR1.NKY_BoxAction.Owned NJQ_Carrier.CC) =>
+  @AspisR1.NKY_BoxTotal.CheckpointWindows.match_1.{1} S
+    (fun (raw : Aeneas.Std.core.result.Result.{0, 0} NJQ_Carrier.CC NJQ_Carrier.CF) (x : Aeneas.Std.Result.{0} S)
+        (r : AspisR1.NP6_StdModel.Reservation) =>
+      Prop)
+    raw
+    (@AspisR1.S2W_D189Wrappers.Allocator.allocate S a s
+      (@OfNat.ofNat.{0} Nat (nat_lit 176) (instOfNatNat (nat_lit 176))))
+    r
+    (fun (value : NJQ_Carrier.CC) (v : S) (a : Unit) =>
+      And (NKF_Windows.Checkpoint value (@AspisR1.NKY_BoxAction.Owned.value NJQ_Carrier.CC observed))
+        (@Eq.{1} Nat (@AspisR1.NKY_BoxAction.Owned.owner NJQ_Carrier.CC observed) allocated))
+    fun (x : Aeneas.Std.core.result.Result.{0, 0} NJQ_Carrier.CC NJQ_Carrier.CF) (x_1 : Aeneas.Std.Result.{0} S)
+      (x_2 : AspisR1.NP6_StdModel.Reservation) =>
+    True
+def AspisR1.NKY_BoxTotal.MasterWindows : {S : Type} →
+  (a : AspisR1.S2W_D189Wrappers.Allocator S) →
+    (s : S) →
+      (r : AspisR1.NP6_StdModel.Reservation) →
+        (allocated : Nat) →
+          (raw : Aeneas.Std.core.result.Result.{0, 0} NJQ_Carrier.CM NJQ_Carrier.CF) →
+            (observed : AspisR1.NKY_BoxAction.Owned NJQ_Carrier.CM) → Prop :=
+fun {S : Type} (a : AspisR1.S2W_D189Wrappers.Allocator S) (s : S) (r : AspisR1.NP6_StdModel.Reservation)
+    (allocated : Nat) (raw : Aeneas.Std.core.result.Result.{0, 0} NJQ_Carrier.CM NJQ_Carrier.CF)
+    (observed : AspisR1.NKY_BoxAction.Owned NJQ_Carrier.CM) =>
+  @AspisR1.NKY_BoxTotal.MasterWindows.match_1.{1} S
+    (fun (raw : Aeneas.Std.core.result.Result.{0, 0} NJQ_Carrier.CM NJQ_Carrier.CF) (x : Aeneas.Std.Result.{0} S)
+        (r : AspisR1.NP6_StdModel.Reservation) =>
+      Prop)
+    raw
+    (@AspisR1.S2W_D189Wrappers.Allocator.allocate S a s
+      (@OfNat.ofNat.{0} Nat (nat_lit 304) (instOfNatNat (nat_lit 304))))
+    r
+    (fun (value : NJQ_Carrier.CM) (v : S) (a : Unit) =>
+      And (NKF_Windows.Master value (@AspisR1.NKY_BoxAction.Owned.value NJQ_Carrier.CM observed))
+        (@Eq.{1} Nat (@AspisR1.NKY_BoxAction.Owned.owner NJQ_Carrier.CM observed) allocated))
+    fun (x : Aeneas.Std.core.result.Result.{0, 0} NJQ_Carrier.CM NJQ_Carrier.CF) (x_1 : Aeneas.Std.Result.{0} S)
+      (x_2 : AspisR1.NP6_StdModel.Reservation) =>
+    True
+theorem AspisR1.NKY_BoxTotal.checkpoint : ∀ {S : Type} (a : AspisR1.S2W_D189Wrappers.Allocator S) (s : S)
+  (heap : AspisR1.NKY_BoxFrame.Heap NJQ_Carrier.CC) (r : AspisR1.NP6_StdModel.Reservation) (allocated : Nat)
+  (bytes : Aeneas.Std.Slice.{0} Aeneas.Std.U8) (raw : Aeneas.Std.core.result.Result.{0, 0} NJQ_Carrier.C NJQ_Carrier.F)
+  (observed : AspisR1.NKY_BoxAction.Owned NJQ_Carrier.CC) (decoder : NJQ_CheckpointTotal.Cut bytes raw)
+  (cut : @AspisR1.NKY_BoxTotal.CheckpointWindows S a s r allocated (NJQ_Carrier.checkpoint_result raw) observed),
+  And
+    (@Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Prod.{0, 0}
+          (Aeneas.Std.core.result.Result.{0, 0} (AspisR1.NKY_BoxAction.Owned NJQ_Carrier.CC) AspisR1.NKY_BoxAction.PE)
+          S))
+      (@AspisR1.NKY_BoxTotal.native NJQ_Carrier.CC NJQ_Carrier.CF S a s
+        (@OfNat.ofNat.{0} Nat (nat_lit 176) (instOfNatNat (nat_lit 176))) r (NJQ_Carrier.checkpoint_result raw)
+        observed)
+      (@AspisR1.NKY_BoxAction.run NJQ_Carrier.CC S a s (@OfNat.ofNat.{0} Nat (nat_lit 176) (instOfNatNat (nat_lit 176)))
+        r allocated (NKF_CheckpointBox.reference bytes)))
+    (@AspisR1.NKY_BoxPacket.Law NJQ_Carrier.CC S a s (@OfNat.ofNat.{0} Nat (nat_lit 176) (instOfNatNat (nat_lit 176)))
+      (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) r allocated heap
+      (NKF_CheckpointBox.reference bytes)) :=
+fun {S : Type} (a : AspisR1.S2W_D189Wrappers.Allocator S) (s : S) (heap : AspisR1.NKY_BoxFrame.Heap NJQ_Carrier.CC)
+    (r : AspisR1.NP6_StdModel.Reservation) (allocated : Nat) (bytes : Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+    (raw : Aeneas.Std.core.result.Result.{0, 0} NJQ_Carrier.C NJQ_Carrier.F)
+    (observed : AspisR1.NKY_BoxAction.Owned NJQ_Carrier.CC) (decoder : NJQ_CheckpointTotal.Cut bytes raw)
+    (cut : @AspisR1.NKY_BoxTotal.CheckpointWindows S a s r allocated (NJQ_Carrier.checkpoint_result raw) observed) =>
+  have value :
+    @Eq.{1} (Aeneas.Std.Result.{0} (Aeneas.Std.core.result.Result.{0, 0} NJQ_Carrier.CC NKF_BoxModel.PE))
+      (@Aeneas.Std.Result.ok.{0} (Aeneas.Std.core.result.Result.{0, 0} NJQ_Carrier.CC NKF_BoxModel.PE)
+        (@NKF_BoxModel.tail NJQ_Carrier.CC NJQ_Carrier.CF (NJQ_Carrier.checkpoint_result raw)))
+      (NKF_CheckpointBox.reference bytes) :=
+    NKF_CheckpointBox.source bytes raw decoder
+      (@NKF_BoxModel.tail NJQ_Carrier.CC NJQ_Carrier.CF (NJQ_Carrier.checkpoint_result raw))
+      (@rfl.{1} (Aeneas.Std.core.result.Result.{0, 0} NKF_CheckpointBox.C NKF_BoxModel.PE)
+        (@NKF_BoxModel.tail NJQ_Carrier.CC NJQ_Carrier.CF (NJQ_Carrier.checkpoint_result raw)));
+  @And.intro
+    (@Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Prod.{0, 0}
+          (Aeneas.Std.core.result.Result.{0, 0} (AspisR1.NKY_BoxAction.Owned NJQ_Carrier.CC) AspisR1.NKY_BoxAction.PE)
+          S))
+      (@AspisR1.NKY_BoxTotal.native NJQ_Carrier.CC NJQ_Carrier.CF S a s
+        (@OfNat.ofNat.{0} Nat (nat_lit 176) (instOfNatNat (nat_lit 176))) r (NJQ_Carrier.checkpoint_result raw)
+        observed)
+      (@AspisR1.NKY_BoxAction.run NJQ_Carrier.CC S a s (@OfNat.ofNat.{0} Nat (nat_lit 176) (instOfNatNat (nat_lit 176)))
+        r allocated (NKF_CheckpointBox.reference bytes)))
+    (@AspisR1.NKY_BoxPacket.Law NJQ_Carrier.CC S a s (@OfNat.ofNat.{0} Nat (nat_lit 176) (instOfNatNat (nat_lit 176)))
+      (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) r allocated heap
+      (NKF_CheckpointBox.reference bytes))
+    (@Eq.trans.{1}
+      (Aeneas.Std.Result.{0}
+        (Prod.{0, 0}
+          (Aeneas.Std.core.result.Result.{0, 0} (AspisR1.NKY_BoxAction.Owned NJQ_Carrier.CC) AspisR1.NKY_BoxAction.PE)
+          S))
+      (@AspisR1.NKY_BoxTotal.native NJQ_Carrier.CC NJQ_Carrier.CF S a s
+        (@OfNat.ofNat.{0} Nat (nat_lit 176) (instOfNatNat (nat_lit 176))) r (NJQ_Carrier.checkpoint_result raw)
+        observed)
+      (@AspisR1.NKY_BoxAction.run NJQ_Carrier.CC S a s (@OfNat.ofNat.{0} Nat (nat_lit 176) (instOfNatNat (nat_lit 176)))
+        r allocated
+        (@Aeneas.Std.Result.ok.{0} (Aeneas.Std.core.result.Result.{0, 0} NJQ_Carrier.CC AspisR1.NKY_BoxAction.PE)
+          (@NKF_BoxModel.tail NJQ_Carrier.CC NJQ_Carrier.CF (NJQ_Carrier.checkpoint_result raw))))
+      (@AspisR1.NKY_BoxAction.run NJQ_Carrier.CC S a s (@OfNat.ofNat.{0} Nat (nat_lit 176) (instOfNatNat (nat_lit 176)))
+        r allocated (NKF_CheckpointBox.reference bytes))
+      (@AspisR1.NKY_BoxTotal.association NJQ_Carrier.CC NJQ_Carrier.CF S a s
+        (@OfNat.ofNat.{0} Nat (nat_lit 176) (instOfNatNat (nat_lit 176))) r allocated
+        (NJQ_Carrier.checkpoint_result raw) observed
+        (@AspisR1.NKY_BoxTotal.checkpoint_ready S a s r allocated (NJQ_Carrier.checkpoint_result raw) observed cut))
+      (@congrArg.{1, 1}
+        (Aeneas.Std.Result.{0} (Aeneas.Std.core.result.Result.{0, 0} NJQ_Carrier.CC AspisR1.NKY_BoxAction.PE))
+        (Aeneas.Std.Result.{0}
+          (Prod.{0, 0}
+            (Aeneas.Std.core.result.Result.{0, 0} (AspisR1.NKY_BoxAction.Owned NJQ_Carrier.CC) AspisR1.NKY_BoxAction.PE)
+            S))
+        (@Aeneas.Std.Result.ok.{0} (Aeneas.Std.core.result.Result.{0, 0} NJQ_Carrier.CC AspisR1.NKY_BoxAction.PE)
+          (@NKF_BoxModel.tail NJQ_Carrier.CC NJQ_Carrier.CF (NJQ_Carrier.checkpoint_result raw)))
+        (NKF_CheckpointBox.reference bytes)
+        (@AspisR1.NKY_BoxAction.run NJQ_Carrier.CC S a s
+          (@OfNat.ofNat.{0} Nat (nat_lit 176) (instOfNatNat (nat_lit 176))) r allocated)
+        value))
+    (@AspisR1.NKY_BoxPacket.complete NJQ_Carrier.CC S a s
+      (@OfNat.ofNat.{0} Nat (nat_lit 176) (instOfNatNat (nat_lit 176)))
+      (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) r allocated heap
+      (NKF_CheckpointBox.reference bytes))
+theorem AspisR1.NKY_BoxTotal.master : ∀ {S : Type} (a : AspisR1.S2W_D189Wrappers.Allocator S) (s : S)
+  (heap : AspisR1.NKY_BoxFrame.Heap NJQ_Carrier.CM) (r : AspisR1.NP6_StdModel.Reservation) (allocated : Nat)
+  (bytes : Aeneas.Std.Slice.{0} Aeneas.Std.U8) (raw : Aeneas.Std.core.result.Result.{0, 0} NJQ_Carrier.M NJQ_Carrier.F)
+  (observed : AspisR1.NKY_BoxAction.Owned NJQ_Carrier.CM) (decoder : NJQ_MasterTotal.Cut bytes raw)
+  (cut : @AspisR1.NKY_BoxTotal.MasterWindows S a s r allocated (NJQ_Carrier.master_result raw) observed),
+  And
+    (@Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Prod.{0, 0}
+          (Aeneas.Std.core.result.Result.{0, 0} (AspisR1.NKY_BoxAction.Owned NJQ_Carrier.CM) AspisR1.NKY_BoxAction.PE)
+          S))
+      (@AspisR1.NKY_BoxTotal.native NJQ_Carrier.CM NJQ_Carrier.CF S a s
+        (@OfNat.ofNat.{0} Nat (nat_lit 304) (instOfNatNat (nat_lit 304))) r (NJQ_Carrier.master_result raw) observed)
+      (@AspisR1.NKY_BoxAction.run NJQ_Carrier.CM S a s (@OfNat.ofNat.{0} Nat (nat_lit 304) (instOfNatNat (nat_lit 304)))
+        r allocated (NKF_MasterBox.reference bytes)))
+    (@AspisR1.NKY_BoxPacket.Law NJQ_Carrier.CM S a s (@OfNat.ofNat.{0} Nat (nat_lit 304) (instOfNatNat (nat_lit 304)))
+      (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) r allocated heap (NKF_MasterBox.reference bytes)) :=
+fun {S : Type} (a : AspisR1.S2W_D189Wrappers.Allocator S) (s : S) (heap : AspisR1.NKY_BoxFrame.Heap NJQ_Carrier.CM)
+    (r : AspisR1.NP6_StdModel.Reservation) (allocated : Nat) (bytes : Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+    (raw : Aeneas.Std.core.result.Result.{0, 0} NJQ_Carrier.M NJQ_Carrier.F)
+    (observed : AspisR1.NKY_BoxAction.Owned NJQ_Carrier.CM) (decoder : NJQ_MasterTotal.Cut bytes raw)
+    (cut : @AspisR1.NKY_BoxTotal.MasterWindows S a s r allocated (NJQ_Carrier.master_result raw) observed) =>
+  have value :
+    @Eq.{1} (Aeneas.Std.Result.{0} (Aeneas.Std.core.result.Result.{0, 0} NJQ_Carrier.CM NKF_BoxModel.PE))
+      (@Aeneas.Std.Result.ok.{0} (Aeneas.Std.core.result.Result.{0, 0} NJQ_Carrier.CM NKF_BoxModel.PE)
+        (@NKF_BoxModel.tail NJQ_Carrier.CM NJQ_Carrier.CF (NJQ_Carrier.master_result raw)))
+      (NKF_MasterBox.reference bytes) :=
+    NKF_MasterBox.source bytes raw decoder
+      (@NKF_BoxModel.tail NJQ_Carrier.CM NJQ_Carrier.CF (NJQ_Carrier.master_result raw))
+      (@rfl.{1} (Aeneas.Std.core.result.Result.{0, 0} NKF_MasterBox.M NKF_BoxModel.PE)
+        (@NKF_BoxModel.tail NJQ_Carrier.CM NJQ_Carrier.CF (NJQ_Carrier.master_result raw)));
+  @And.intro
+    (@Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Prod.{0, 0}
+          (Aeneas.Std.core.result.Result.{0, 0} (AspisR1.NKY_BoxAction.Owned NJQ_Carrier.CM) AspisR1.NKY_BoxAction.PE)
+          S))
+      (@AspisR1.NKY_BoxTotal.native NJQ_Carrier.CM NJQ_Carrier.CF S a s
+        (@OfNat.ofNat.{0} Nat (nat_lit 304) (instOfNatNat (nat_lit 304))) r (NJQ_Carrier.master_result raw) observed)
+      (@AspisR1.NKY_BoxAction.run NJQ_Carrier.CM S a s (@OfNat.ofNat.{0} Nat (nat_lit 304) (instOfNatNat (nat_lit 304)))
+        r allocated (NKF_MasterBox.reference bytes)))
+    (@AspisR1.NKY_BoxPacket.Law NJQ_Carrier.CM S a s (@OfNat.ofNat.{0} Nat (nat_lit 304) (instOfNatNat (nat_lit 304)))
+      (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) r allocated heap (NKF_MasterBox.reference bytes))
+    (@Eq.trans.{1}
+      (Aeneas.Std.Result.{0}
+        (Prod.{0, 0}
+          (Aeneas.Std.core.result.Result.{0, 0} (AspisR1.NKY_BoxAction.Owned NJQ_Carrier.CM) AspisR1.NKY_BoxAction.PE)
+          S))
+      (@AspisR1.NKY_BoxTotal.native NJQ_Carrier.CM NJQ_Carrier.CF S a s
+        (@OfNat.ofNat.{0} Nat (nat_lit 304) (instOfNatNat (nat_lit 304))) r (NJQ_Carrier.master_result raw) observed)
+      (@AspisR1.NKY_BoxAction.run NJQ_Carrier.CM S a s (@OfNat.ofNat.{0} Nat (nat_lit 304) (instOfNatNat (nat_lit 304)))
+        r allocated
+        (@Aeneas.Std.Result.ok.{0} (Aeneas.Std.core.result.Result.{0, 0} NJQ_Carrier.CM AspisR1.NKY_BoxAction.PE)
+          (@NKF_BoxModel.tail NJQ_Carrier.CM NJQ_Carrier.CF (NJQ_Carrier.master_result raw))))
+      (@AspisR1.NKY_BoxAction.run NJQ_Carrier.CM S a s (@OfNat.ofNat.{0} Nat (nat_lit 304) (instOfNatNat (nat_lit 304)))
+        r allocated (NKF_MasterBox.reference bytes))
+      (@AspisR1.NKY_BoxTotal.association NJQ_Carrier.CM NJQ_Carrier.CF S a s
+        (@OfNat.ofNat.{0} Nat (nat_lit 304) (instOfNatNat (nat_lit 304))) r allocated (NJQ_Carrier.master_result raw)
+        observed (@AspisR1.NKY_BoxTotal.master_ready S a s r allocated (NJQ_Carrier.master_result raw) observed cut))
+      (@congrArg.{1, 1}
+        (Aeneas.Std.Result.{0} (Aeneas.Std.core.result.Result.{0, 0} NJQ_Carrier.CM AspisR1.NKY_BoxAction.PE))
+        (Aeneas.Std.Result.{0}
+          (Prod.{0, 0}
+            (Aeneas.Std.core.result.Result.{0, 0} (AspisR1.NKY_BoxAction.Owned NJQ_Carrier.CM) AspisR1.NKY_BoxAction.PE)
+            S))
+        (@Aeneas.Std.Result.ok.{0} (Aeneas.Std.core.result.Result.{0, 0} NJQ_Carrier.CM AspisR1.NKY_BoxAction.PE)
+          (@NKF_BoxModel.tail NJQ_Carrier.CM NJQ_Carrier.CF (NJQ_Carrier.master_result raw)))
+        (NKF_MasterBox.reference bytes)
+        (@AspisR1.NKY_BoxAction.run NJQ_Carrier.CM S a s
+          (@OfNat.ofNat.{0} Nat (nat_lit 304) (instOfNatNat (nat_lit 304))) r allocated)
+        value))
+    (@AspisR1.NKY_BoxPacket.complete NJQ_Carrier.CM S a s
+      (@OfNat.ofNat.{0} Nat (nat_lit 304) (instOfNatNat (nat_lit 304)))
+      (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) r allocated heap (NKF_MasterBox.reference bytes))
+def AspisR1.NKY_BoxAction.newBox : {T S : Type} →
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator S) →
+    (before : S) →
+      (bytes : Nat) →
+        (r : AspisR1.NP6_StdModel.Reservation) →
+          (owner : Nat) → (value : T) → Aeneas.Std.Result.{0} (Prod.{0, 0} (AspisR1.NKY_BoxAction.Owned T) S) :=
+fun {T S : Type} (allocator : AspisR1.S2W_D189Wrappers.Allocator S) (before : S) (bytes : Nat)
+    (r : AspisR1.NP6_StdModel.Reservation) (owner : Nat) (value : T) =>
+  @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0} S
+    (Prod.{0, 0} (AspisR1.NKY_BoxAction.Owned T) S)
+    (@AspisR1.S2W_D189Wrappers.Allocator.allocate S allocator before bytes) fun (post : S) =>
+    AspisR1.NKY_BoxAction.newBox.match_1.{1}
+      (fun (r : AspisR1.NP6_StdModel.Reservation) =>
+        Aeneas.Std.Result.{0} (Prod.{0, 0} (AspisR1.NKY_BoxAction.Owned T) S))
+      r
+      (fun (a : Unit) =>
+        @Aeneas.Std.Result.ok.{0} (Prod.{0, 0} (AspisR1.NKY_BoxAction.Owned T) S)
+          (@Prod.mk.{0, 0} (AspisR1.NKY_BoxAction.Owned T) S (@AspisR1.NKY_BoxAction.Owned.mk T owner value) post))
+      fun (a : AspisR1.NP6_StdModel.ReserveError) =>
+      @Aeneas.Std.Result.fail.{0} (Prod.{0, 0} (AspisR1.NKY_BoxAction.Owned T) S) Aeneas.Std.Error.panic
+def AspisR1.NKY_BoxAction.run : {T S : Type} →
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator S) →
+    (before : S) →
+      (bytes : Nat) →
+        (r : AspisR1.NP6_StdModel.Reservation) →
+          (owner : Nat) →
+            (decoded : Aeneas.Std.Result.{0} (Aeneas.Std.core.result.Result.{0, 0} T AspisR1.NKY_BoxAction.PE)) →
+              Aeneas.Std.Result.{0}
+                (Prod.{0, 0}
+                  (Aeneas.Std.core.result.Result.{0, 0} (AspisR1.NKY_BoxAction.Owned T) AspisR1.NKY_BoxAction.PE) S) :=
+fun {T S : Type} (allocator : AspisR1.S2W_D189Wrappers.Allocator S) (before : S) (bytes : Nat)
+    (r : AspisR1.NP6_StdModel.Reservation) (owner : Nat)
+    (decoded : Aeneas.Std.Result.{0} (Aeneas.Std.core.result.Result.{0, 0} T AspisR1.NKY_BoxAction.PE)) =>
+  @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+    (Aeneas.Std.core.result.Result.{0, 0} T AspisR1.NKY_BoxAction.PE)
+    (Prod.{0, 0} (Aeneas.Std.core.result.Result.{0, 0} (AspisR1.NKY_BoxAction.Owned T) AspisR1.NKY_BoxAction.PE) S)
+    decoded fun (raw : Aeneas.Std.core.result.Result.{0, 0} T AspisR1.NKY_BoxAction.PE) =>
+    @AspisR1.NKY_BoxAction.run.match_1.{1} T
+      (fun (raw : Aeneas.Std.core.result.Result.{0, 0} T AspisR1.NKY_BoxAction.PE) =>
+        Aeneas.Std.Result.{0}
+          (Prod.{0, 0} (Aeneas.Std.core.result.Result.{0, 0} (AspisR1.NKY_BoxAction.Owned T) AspisR1.NKY_BoxAction.PE)
+            S))
+      raw
+      (fun (e : AspisR1.NKY_BoxAction.PE) =>
+        @Aeneas.Std.Result.ok.{0}
+          (Prod.{0, 0} (Aeneas.Std.core.result.Result.{0, 0} (AspisR1.NKY_BoxAction.Owned T) AspisR1.NKY_BoxAction.PE)
+            S)
+          (@Prod.mk.{0, 0}
+            (Aeneas.Std.core.result.Result.{0, 0} (AspisR1.NKY_BoxAction.Owned T) AspisR1.NKY_BoxAction.PE) S
+            (@Aeneas.Std.core.result.Result.Err.{0, 0} (AspisR1.NKY_BoxAction.Owned T) AspisR1.NKY_BoxAction.PE e)
+            before))
+      fun (value : T) =>
+      @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+        (Prod.{0, 0} (AspisR1.NKY_BoxAction.Owned T) S)
+        (Prod.{0, 0} (Aeneas.Std.core.result.Result.{0, 0} (AspisR1.NKY_BoxAction.Owned T) AspisR1.NKY_BoxAction.PE) S)
+        (@AspisR1.NKY_BoxAction.newBox T S allocator before bytes r owner value)
+        (@Aeneas.Std.uncurry.{0, 0, 1} (AspisR1.NKY_BoxAction.Owned T) S
+          (Aeneas.Std.Result.{0}
+            (Prod.{0, 0} (Aeneas.Std.core.result.Result.{0, 0} (AspisR1.NKY_BoxAction.Owned T) AspisR1.NKY_BoxAction.PE)
+              S))
+          fun (box : AspisR1.NKY_BoxAction.Owned T) (post : S) =>
+          @Aeneas.Std.Result.ok.{0}
+            (Prod.{0, 0} (Aeneas.Std.core.result.Result.{0, 0} (AspisR1.NKY_BoxAction.Owned T) AspisR1.NKY_BoxAction.PE)
+              S)
+            (@Prod.mk.{0, 0}
+              (Aeneas.Std.core.result.Result.{0, 0} (AspisR1.NKY_BoxAction.Owned T) AspisR1.NKY_BoxAction.PE) S
+              (@Aeneas.Std.core.result.Result.Ok.{0, 0} (AspisR1.NKY_BoxAction.Owned T) AspisR1.NKY_BoxAction.PE box)
+              post))
+def AspisR1.NKY_BoxPost.Windows : {T F S : Type} →
+  (W : T → T → Prop) →
+    (a : AspisR1.S2W_D189Wrappers.Allocator S) →
+      (s : S) →
+        (bytes : Nat) →
+          (r : AspisR1.NP6_StdModel.Reservation) →
+            (raw : Aeneas.Std.core.result.Result.{0, 0} T F) →
+              (box : AspisR1.NKY_BoxAction.Owned T) →
+                (before : AspisR1.NKY_BoxFrame.Heap T) → (readsAfter : Nat → T) → Prop :=
+fun {T F S : Type} (W : T → T → Prop) (a : AspisR1.S2W_D189Wrappers.Allocator S) (s : S) (bytes : Nat)
+    (r : AspisR1.NP6_StdModel.Reservation) (raw : Aeneas.Std.core.result.Result.{0, 0} T F)
+    (box : AspisR1.NKY_BoxAction.Owned T) (before : AspisR1.NKY_BoxFrame.Heap T) (readsAfter : Nat → T) =>
+  @AspisR1.NKY_BoxPost.Windows.match_2.{1} T F (fun (raw : Aeneas.Std.core.result.Result.{0, 0} T F) => Prop) raw
+    (fun (a : F) => @AspisR1.NKY_BoxPost.Readonly T W before readsAfter) fun (a_1 : T) =>
+    @AspisR1.NKY_BoxPost.Windows.match_1.{1} S
+      (fun (x : Aeneas.Std.Result.{0} S) (r : AspisR1.NP6_StdModel.Reservation) => Prop)
+      (@AspisR1.S2W_D189Wrappers.Allocator.allocate S a s bytes) r
+      (fun (v : S) (a : Unit) =>
+        @AspisR1.NKY_BoxPost.Allocated T W before readsAfter (@AspisR1.NKY_BoxAction.Owned.owner T box))
+      fun (x : Aeneas.Std.Result.{0} S) (x_1 : AspisR1.NP6_StdModel.Reservation) => True
