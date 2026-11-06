@@ -1,0 +1,34 @@
+{"attempt": "NKV_L096", "exit_status": 0, "wall_seconds": 18.30387410102412, "peak_rss_kib": "6042504", "swaps": "0", "print_axioms": ["'NKV_TreeTotal.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NKV_TreeTotal.source : ∀ (H : Bytes → HashState) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Std.Array U32 22#usize) (root : Std.Array U8 32#usize) (batch kind : Usize),
+          ↑batch < 2 →
+            ↑kind < 3 →
+              (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+                ∀ (idx : Indices) (val : Values),
+                  ∃ r i v,
+                    NKV_FRef.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H)
+                        proof raw root batch kind idx val () =
+                      ok (r, i, v) :=
+⋯
+'NKV_T
+...
+theorem NKV_TreeTotal.source : ∀ (H : Bytes → HashState) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Std.Array U32 22#usize) (root : Std.Array U8 32#usize) (batch kind : Usize),
+          ↑batch < 2 →
+            ↑kind < 3 →
+              (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+                ∀ (idx : Indices) (val : Values),
+                  ∃ r i v,
+                    NKV_FRef.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H)
+                        proof raw root batch kind idx val () =
+                      ok (r, i, v) :=
+⋯
+'NKV_TreeTotal.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r0d1c99d71cf6477d93eab03cbc95f8fb.scope; invocation ID: 01ce28b602d648a9b9c43facd0c984c5

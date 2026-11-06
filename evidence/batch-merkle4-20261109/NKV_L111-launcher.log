@@ -1,0 +1,32 @@
+{"attempt": "NKV_L111", "exit_status": 0, "wall_seconds": 12.13484258018434, "peak_rss_kib": "6048972", "swaps": "0", "print_axioms": ["'NKV_QueryPlan.tail_history' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_QueryPlan.slot_history' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NKV_QueryPlan.tail_history : ∀ (H : Bytes → HashState) (p : OraclePortCompactDraft.Parsed) (batch kind : ℕ)
+  (nodes : Slice U8) (s : reference.Scratch),
+  (↑nodes).length = 32 * OraclePortSelectedDraft.capacity (3 * batch + kind) →
+    ∀ (root : Std.Array U8 32#usize),
+      root = encodeState (OraclePortBatchDraft.committedRoot p kind) →
+        (eval H (MultiproofConeVerifyState.tailState p batch kind nodes s)).1 = tail H batch kind nodes root s :=
+⋯
+theorem NKV_QueryPlan.slot_history : ∀ (H : Bytes → HashState) (p : OraclePortCompactDraft.Parsed)
+  (q : Fin 22 → Fin 262144) (batch kind : ℕ) (nodes : Slice U8),
+  (↑nodes).length = 32 * OraclePortSelectedDraft.capacity (3 * batch +
+...
+theorem NKV_QueryPlan.tail_history : ∀ (H : Bytes → HashState) (p : OraclePortCompactDraft.Parsed) (batch kind : ℕ)
+  (nodes : Slice U8) (s : reference.Scratch),
+  (↑nodes).length = 32 * OraclePortSelectedDraft.capacity (3 * batch + kind) →
+    ∀ (root : Std.Array U8 32#usize),
+      root = encodeState (OraclePortBatchDraft.committedRoot p kind) →
+        (eval H (MultiproofConeVerifyState.tailState p batch kind nodes s)).1 = tail H batch kind nodes root s :=
+⋯
+theorem NKV_QueryPlan.slot_history : ∀ (H : Bytes → HashState) (p : OraclePortCompactDraft.Parsed)
+  (q : Fin 22 → Fin 262144) (batch kind : ℕ) (nodes : Slice U8),
+  (↑nodes).length = 32 * OraclePortSelectedDraft.capacity (3 * batch + kind) →
+    ∀ (root : Std.Array U8 32#usize),
+      root = encodeState (OraclePortBatchDraft.committedRoot p kind) →
+        ∀ (before : reference.Scratch),
+          (eval H (MultiproofConeSlotState.slotState p q batch kind nodes before)).1 =
+            plan H p q batch kind nodes root before :=
+⋯
+'NKV_QueryPlan.tail_history' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_QueryPlan.slot_history' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rc44609017e9947b0b9bc3699bccb4778.scope; invocation ID: 6737acacf004421cb7b9891c6cb403ab

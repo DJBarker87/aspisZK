@@ -1,0 +1,22 @@
+theorem NKV_TreeModel.source : ∀ (H : Bytes → HashState) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Std.Array U32 22#usize) (root : Std.Array U8 32#usize) (batch kind : Usize),
+          ↑batch < 2 →
+            ↑kind < 3 →
+              (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+                root = encodeState (OraclePortBatchDraft.committedRoot p ↑kind) →
+                  ∀ (idx : Indices) (val : Values),
+                    ∃ nodes,
+                      (NKV_ConcreteChildren.ops H).op3 proof ((Usize.wrapping_mul 3#usize batch).wrapping_add kind) =
+                          ok nodes ∧
+                        reject
+                            (NKV_FRef.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H)
+                              (NKV_ConcreteChildren.digest H) proof raw root batch kind idx val ()) =
+                          NKV_TailModel.model
+                            (eval H
+                                (MultiproofConeSlotState.slotState p (Port4B_KeyInstall.queries raw) (↑batch) (↑kind)
+                                  nodes (NJV_EntryABI.initial idx val 0#usize))).2 :=
+⋯
+'NKV_TreeModel.source' depends on axioms: [propext, Classical.choice, Quot.sound]

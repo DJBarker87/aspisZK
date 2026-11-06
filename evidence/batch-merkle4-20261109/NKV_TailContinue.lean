@@ -4,7 +4,7 @@ set_option autoImplicit false
 noncomputable section
 namespace NKV_TailContinue
 open Aeneas Aeneas.Std Result ControlFlow AspisR1Stage2 AspisR1 MultiproofConeRef
-open NKV_StepErasure
+open NKV_StepErasure NKV_LoopTransport
 open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
 open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
 open MultiproofConeSlices MultiproofConeCanonical
@@ -65,18 +65,18 @@ theorem source (H : Bytes → AspisV8R19.SourceDuplexStep.State) (proof : Slice 
  rw [countRead]
  simp only [bind_tc_ok,Port3_BatchStd.okOr,core.result.Result.Insts.CoreOpsTry.branch]
  rw [nodeRead]
- simp only [bind_tc_ok]
+ simp only [bind_tc_ok,Aeneas.Std.uncurry]
  rw [capRead]
- simp only [bind_tc_ok]
+ simp only [bind_tc_ok,Aeneas.Std.uncurry]
  rw [if_neg notexceeds]
  simp only [lift,bind_tc_ok]
  rw [paddingRead]
- simp only [bind_tc_ok]
+ simp only [bind_tc_ok,Aeneas.Std.uncurry]
  rw [chunksRead]
- simp only [bind_tc_ok]
+ simp only [bind_tc_ok,Aeneas.Std.uncurry]
  simp only [NKV_PaddingInstall.predicate,NKV_ConcreteChildren.ops] at scanRead
  rw [scanRead]
- simp only [bind_tc_ok]
+ simp only [bind_tc_ok,Aeneas.Std.uncurry]
  cases guard : MultiproofConePadding.scan
      (4*(OraclePortSelectedDraft.capacity (3*batch+kind.val)-OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s)))
      ((bytesOf nodes.val).drop (32*OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s))) with
@@ -87,7 +87,7 @@ theorem source (H : Bytes → AspisV8R19.SourceDuplexStep.State) (proof : Slice 
    simp only [bind_tc_ok,NKV_ConcreteChildren.verify]
    cases verdict : (eval H (NJV_TX2Returning.endpoint root
      (MultiproofConeSlotTail.prefixNodes nodes (OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s)))
-       s.idx s.val s.n)).2.1 <;> simp only [verdict,bind_tc_ok,returned,if_true,if_false,Bool.not_true,Bool.not_false]
+       s.idx s.val s.n)).2.1 <;> simp only [verdict,bind_tc_ok,Aeneas.Std.uncurry,returned,if_true,if_false,Bool.not_true,Bool.not_false,Bool.false_eq_true]
 
 set_option pp.proofs false
 #print source

@@ -5,7 +5,8 @@ namespace NKV_AbortPrefix
 open Aeneas Aeneas.Std Result AspisR1 MultiproofConeRef
 open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
 open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
-open MultiproofConePhysicalTransport
+open MultiproofConePhysicalTransport AspisV8R19.SqueezeOracleBridge
+open CheckpointBytes5Effect
 
 theorem take_prefix {A : Type} (leaf prior tail : List A) (known : tail.take prior.length=prior) :
  (leaf++tail).take (leaf.length+prior.length)=leaf++prior := by
@@ -17,7 +18,7 @@ theorem take_prefix {A : Type} (leaf prior tail : List A) (known : tail.take pri
 theorem pending {A : Type} (leaf tail : List A) (offset : Nat) :
  (leaf++tail)[leaf.length+offset]?=tail[offset]? := by
  induction leaf with
- | nil => rfl
+ | nil => simp only [List.nil_append,List.length_nil,Nat.zero_add]
  | cons x xs ih => simpa only [List.cons_append,List.length_cons,Nat.succ_add,List.getElem?_cons_succ] using ih
 
 /-- The verifier abort is attached to the actual prior leaf history on the
