@@ -1,0 +1,15 @@
+theorem AspisR1.NJX_DigestResiduals.source : ∀ (o : Residuals) (d : Digest),
+  (∀ (i : Fin 8), Canon (o i)) →
+    (∀ (i : Fin 8), ↑(d i) < 2147483647) →
+      ∃ xs,
+        NJB_Traverse.run (reference o d) (List.finRange 8) = ok xs ∧
+          (∀ x ∈ ↑xs, Canon x) ∧ List.Forall₂ (Cell o d) (List.finRange 8) ↑xs :=
+fun o d ho hd =>
+  NJL_Traverse.packet (reference o d) Canon (Cell o d) (List.finRange 8) fun i a =>
+    let ⟨x, h✝⟩ := cell o d ho hd i
+    let ⟨cx, right✝⟩ := h✝
+    let ⟨cl, right✝¹⟩ := right✝
+    let ⟨hx, right✝²⟩ := right✝¹
+    Exists.intro x ⟨cx, ⟨hx, cl⟩⟩
+'AspisR1.NJX_DigestResiduals.cell' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJX_DigestResiduals.source' depends on axioms: [propext, Classical.choice, Quot.sound]

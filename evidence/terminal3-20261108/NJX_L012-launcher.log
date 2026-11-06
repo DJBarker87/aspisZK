@@ -1,0 +1,48 @@
+{"attempt": "NJX_L012", "exit_status": 0, "wall_seconds": 10.14838026696816, "peak_rss_kib": "6190640", "swaps": "0", "print_axioms": ["'AspisR1.NJX_PatternPacket.constant_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJX_PatternPacket.constant_value' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJX_PatternPacket.atoms_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJX_PatternPacket.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJX_PatternPacket.source : ∀ (lambda : NQ) (o : Std.Array NQ 16#usize),
+  Canon lambda →
+    FIw_ArrayValue.canonical o →
+      ∃ p w out,
+        NJL_WindowPowerFrame.run lambda (List.finRange 8) (fun x => FIq_Native.field.QM31.ZERO) lambda =
+            ok (NJL_CacheReads.power p, p.next) ∧
+          NJL_WindowPowerFrame.Trace lambda (List.finRange 8) (fun x => FIq_Native.field.QM31.ZERO) lambda
+              (NJL_CacheReads.power p) p.next ∧
+            (∀ (j : Fin 4),
+                NJL_WindowFold.run (NJL_CacheReads.cache p) o (starts j) (List.finRange 8) FIq_Native.field.QM31.ZERO =
+                    ok (w j) ∧
+                  NJL_WindowFold.Trace (NJL_CacheReads.c
+...
+(atoms o w)
+          (atoms_canonical o w ho fun j => ((fun j => ((fun j => (x j).right) j).right) j).left) (List.finRange 14)
+          (fun x => FIq_Native.field.QM31.ZERO) fun x => FIv_NativeValue.zero.left
+      let ⟨co, right✝¹⟩ := h✝¹
+      let ⟨tr, right✝²⟩ := right✝¹
+      let ⟨hout, vout⟩ := right✝²
+      Exists.intro p
+        (Exists.intro w
+          (Exists.intro out
+            ⟨pc,
+              ⟨pt,
+                ⟨fun j =>
+                  ⟨(fun j => (x j).left) j,
+                    ⟨(fun j => ((fun j => (x j).right) j).left) j,
+                      ⟨(fun j => ((fun j => ((fun j => (x j).right) j).right) j).left) j,
+                        (fun j => ((fun j => ((fun j => (x j).right) j).right) j).right) j⟩⟩⟩,
+                  ⟨co,
+                    ⟨tr,
+                      ⟨hout, fun i =>
+                        Eq.mp
+                          (congrArg (Eq (decode (out i)))
+                            (ite_cond_eq_true
+                              (NJX_TailExpr.value (decode lambda) (fun k => decode (atoms o w k))
+                                (NJX_PatternTail.expr i))
+                              (decode FIq_Native.field.QM31.ZERO) (List.mem_finRange._simp_1 i)))
+                          (vout i)⟩⟩⟩⟩⟩⟩)))
+    (fun j => Classical.choose ((fun j => windows (starts j)) j)) fun j =>
+    Classical.choose_spec ((fun j => windows (starts j)) j)
+'AspisR1.NJX_PatternPacket.constant_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJX_PatternPacket.constant_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJX_PatternPacket.atoms_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJX_PatternPacket.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rb9d3f563fca942c3b01bf2a5db972a8d.scope; invocation ID: df50c884a05a4d2482d3fd32b9cfcc7e

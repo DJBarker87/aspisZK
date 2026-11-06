@@ -1,0 +1,53 @@
+{"attempt": "NJX_L005", "exit_status": 1, "wall_seconds": 8.318022528896108, "peak_rss_kib": "6149600", "swaps": "0", "print_axioms": ["'AspisR1.NJX_PatternTail.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJX_PatternTail.lean:10:5: error: unknown namespace `Expr`
+NJX_PatternTail.lean:57:30: error(lean.unknownIdentifier): Unknown identifier `self_eq_true`
+NJX_PatternTail.lean:59:3: error: unsolved goals
+case neg
+lambda : NQ
+p : NJL_CachedPowers.Packet lambda
+a : Fin 21 → NQ
+ha : ∀ (i : Fin 21), Canon (a i)
+j : Fin 14
+js : List (Fin 14)
+ih :
+  ∀ (s : State),
+    (∀ (i : Fin 14), Canon (s i)) →
+      ∃ out,
+        run p a js s = ok out ∧
+          Trace p a js s out ∧
+            (∀ (i : Fin 14), Canon (out i)) ∧
+              ∀ (i : Fin 14),
+                decode (out i) =
+                  if i ∈ js then NJX_TailExpr.value (decode lambda) (fun k => decode (a k)) (expr i) else decode (s i)
+s 
+...
+           (Eq.trans
+                            (ite_congr
+                              (Eq.trans source._simp_4
+                                (Eq.trans (congrFun' (congrArg Or (eq_self j)) (j ∈ js)) (true_or (j ∈ js))))
+                              (fun a_1 => Eq.refl (NJX_TailExpr.value (decode lambda) (fun k => decode (a k)) (expr j)))
+                              fun a => Eq.refl (decode (s j)))
+                            (if_true (NJX_TailExpr.value (decode lambda) (fun k => decode (a k)) (expr j))
+                              (decode (s j))))))
+                      (Decidable.casesOn (List.instDecidableMemOfLawfulBEq j js)
+                        (fun h =>
+                          Eq.mpr
+                            (id
+                              (congrFun' (congrArg Eq (if_neg h))
+                                (NJX_TailExpr.value (decode lambda) (fun k => decode (a k)) (expr j))))
+                            (of_eq_true
+                              (Eq.trans
+                                (congrFun' (congrArg Eq vx)
+                                  (NJX_TailExpr.value (decode lambda) (fun i => decode (a i)) (expr j)))
+                                (eq_self (NJX_TailExpr.value (decode lambda) (fun i => decode (a i)) (expr j))))))
+                        fun h =>
+                        Eq.mpr
+                          (id
+                            (congrFun' (congrArg Eq (if_pos h))
+                              (NJX_TailExpr.value (decode lambda) (fun k => decode (a k)) (expr j))))
+                          (of_eq_true (eq_self (NJX_TailExpr.value (decode lambda) (fun k => decode (a k)) (expr j)))))
+                else sorry)⟩⟩⟩)
+    js s hs
+'AspisR1.NJX_PatternTail.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rcd0a4958c78448089b54c1eb14d61af5.scope; invocation ID: 1fbbda54055048df82a78cb8ddd74b13

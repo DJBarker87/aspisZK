@@ -1,0 +1,50 @@
+{"attempt": "NJX_L007", "exit_status": 0, "wall_seconds": 8.866245176875964, "peak_rss_kib": "6186860", "swaps": "0", "print_axioms": ["'AspisR1.NJX_PatternTail.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJX_PatternTail.source : ∀ {lambda : NQ} (p : NJL_CachedPowers.Packet lambda) (a : Fin 21 → NQ),
+  (∀ (i : Fin 21), Canon (a i)) →
+    ∀ (js : List (Fin 14)) (s : State),
+      (∀ (i : Fin 14), Canon (s i)) →
+        ∃ out,
+          run p a js s = ok out ∧
+            Trace p a js s out ∧
+              (∀ (i : Fin 14), Canon (out i)) ∧
+                ∀ (i : Fin 14),
+                  decode (out i) =
+                    if i ∈ js then NJX_TailExpr.value (decode lambda) (fun k => decode (a k)) (expr i)
+                    else decode (s i) :=
+fun {lambda} p a ha js s hs =>
+  List.rec (motive := fun js =>
+    ∀ (s : State),
+      (∀ (i : Fin 14), Canon (s i)) →
+        ∃ out,
+...
+eq_true
+                              (Eq.trans
+                                (congrFun' (congrArg Eq vx)
+                                  (NJX_TailExpr.value (decode lambda) (fun i => decode (a i)) (expr j)))
+                                (eq_self (NJX_TailExpr.value (decode lambda) (fun i => decode (a i)) (expr j))))))
+                        fun h =>
+                        Eq.mpr
+                          (id
+                            (congrFun' (congrArg Eq (if_pos h))
+                              (NJX_TailExpr.value (decode lambda) (fun k => decode (a k)) (expr j))))
+                          (of_eq_true (eq_self (NJX_TailExpr.value (decode lambda) (fun k => decode (a k)) (expr j)))))
+                else
+                  of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Eq
+                          (ite_congr (Eq.refl (i ∈ js))
+                            (fun a_1 => Eq.refl (NJX_TailExpr.value (decode lambda) (fun k => decode (a k)) (expr i)))
+                            fun a => congrArg decode (ite_cond_eq_false x (s i) (eq_false hij))))
+                        (ite_congr
+                          (Eq.trans List.mem_cons._simp_1
+                            (Eq.trans (congrFun' (congrArg Or (eq_false hij)) (i ∈ js)) (false_or (i ∈ js))))
+                          (fun a_1 => Eq.refl (NJX_TailExpr.value (decode lambda) (fun k => decode (a k)) (expr i)))
+                          fun a => Eq.refl (decode (s i))))
+                      (eq_self
+                        (if i ∈ js then NJX_TailExpr.value (decode lambda) (fun k => decode (a k)) (expr i)
+                        else decode (s i)))))⟩⟩⟩)
+    js s hs
+'AspisR1.NJX_PatternTail.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rb6e581f002d545919a3c1a46bfe54dc9.scope; invocation ID: 7152dd13c593457caa1a0da36b04dcff

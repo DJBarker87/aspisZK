@@ -1,0 +1,34 @@
+{"attempt": "NJX_L034", "exit_status": 0, "wall_seconds": 8.498689424013719, "peak_rss_kib": "6174960", "swaps": "0", "print_axioms": ["'AspisR1.NJX_DigestResiduals.cell' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJX_DigestResiduals.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJX_DigestResiduals.source : ∀ (o : Residuals) (d : Digest),
+  (∀ (i : Fin 8), Canon (o i)) →
+    (∀ (i : Fin 8), ↑(d i) < 2147483647) →
+      ∃ xs,
+        NJB_Traverse.run (reference o d) (List.finRange 8) = ok xs ∧
+          (∀ x ∈ ↑xs, Canon x) ∧ List.Forall₂ (Cell o d) (List.finRange 8) ↑xs :=
+fun o d ho hd =>
+  NJL_Traverse.packet (reference o d) Canon (Cell o d) (List.finRange 8) fun i a =>
+    let ⟨x, h✝⟩ := cell o d ho hd i
+    let ⟨cx, right✝⟩ := h✝
+    let ⟨cl, right✝¹⟩ := right✝
+    let ⟨hx, right✝²⟩ := right✝¹
+    Exists.intro x ⟨cx, ⟨hx, cl⟩⟩
+'AspisR1.NJX_DigestResiduals.cell' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJX_DigestResidual
+...
+theorem AspisR1.NJX_DigestResiduals.source : ∀ (o : Residuals) (d : Digest),
+  (∀ (i : Fin 8), Canon (o i)) →
+    (∀ (i : Fin 8), ↑(d i) < 2147483647) →
+      ∃ xs,
+        NJB_Traverse.run (reference o d) (List.finRange 8) = ok xs ∧
+          (∀ x ∈ ↑xs, Canon x) ∧ List.Forall₂ (Cell o d) (List.finRange 8) ↑xs :=
+fun o d ho hd =>
+  NJL_Traverse.packet (reference o d) Canon (Cell o d) (List.finRange 8) fun i a =>
+    let ⟨x, h✝⟩ := cell o d ho hd i
+    let ⟨cx, right✝⟩ := h✝
+    let ⟨cl, right✝¹⟩ := right✝
+    let ⟨hx, right✝²⟩ := right✝¹
+    Exists.intro x ⟨cx, ⟨hx, cl⟩⟩
+'AspisR1.NJX_DigestResiduals.cell' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJX_DigestResiduals.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r6b7e1b2638974d05a313f16ce3a707c4.scope; invocation ID: 051f58bbd34d438fa087adc7a98ff431

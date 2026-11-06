@@ -1,0 +1,6 @@
+# NJX cut register
+Target not yet established. Every native cut association is P6/D188 option A reclassification, not added/removed trust.
+
+224: NJX_PatternTail.Cut transcribes the arbitrary14cell prestate/one-coordinate reply/full frame from NJB_K104..131. Expr is the frozen source child-call sequence; eval instantiates each SAME actual Prepared/add/sub child Result. NJL_K053/054 binds the14writes in source order; NJL_K051/052 binds window starts0,1,2,8 on SAME cache/openings. NJX_WindowInvocation supplies power/map/window finite inductions on ONE internally constructed packet, not independent witnesses. NJX_PatternPacket supplies all actual tail child Results and ZERO-initialized14frame; NJX_PatternMeaning associates all14cohort polynomials by split symbolic proofs. Positive root NJX_PatternRoot.source is in progress. Candidate223 uses NJL_K055/056 forwarding only after224 is complete.
+
+242/245: new NJX_left_global_cut/NJX_carry_global_cut retain actual frozen child order (constructor, ALL8lift/sub pairs, pack0/product0, pack1/product1), including both9word caches, all exact operands and full two-cell return. Own source erasure asserts token equality after only named child replacements, and identity of carry true body after renaming frontier argument to expected. No native run claimed yet.

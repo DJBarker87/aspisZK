@@ -1,0 +1,156 @@
+NJX_PatternTail.lean:10:5: error: unknown namespace `Expr`
+NJX_PatternTail.lean:57:30: error(lean.unknownIdentifier): Unknown identifier `self_eq_true`
+NJX_PatternTail.lean:59:3: error: unsolved goals
+case neg
+lambda : NQ
+p : NJL_CachedPowers.Packet lambda
+a : Fin 21 → NQ
+ha : ∀ (i : Fin 21), Canon (a i)
+j : Fin 14
+js : List (Fin 14)
+ih :
+  ∀ (s : State),
+    (∀ (i : Fin 14), Canon (s i)) →
+      ∃ out,
+        run p a js s = ok out ∧
+          Trace p a js s out ∧
+            (∀ (i : Fin 14), Canon (out i)) ∧
+              ∀ (i : Fin 14),
+                decode (out i) =
+                  if i ∈ js then NJX_TailExpr.value (decode lambda) (fun k => decode (a k)) (expr i) else decode (s i)
+s : State
+hs : ∀ (i : Fin 14), Canon (s i)
+x : NQ
+cx : NJX_TailExpr.eval p a (expr j) = ok x
+hx : Canon x
+vx : decode x = NJX_TailExpr.value (decode lambda) (fun i => decode (a i)) (expr j)
+hm : ∀ (i : Fin 14), Canon (write s j x i)
+out : State
+co : run p a js (write s j x) = ok out
+tr : Trace p a js (write s j x) out
+ho : ∀ (i : Fin 14), Canon (out i)
+vo :
+  ∀ (i : Fin 14),
+    decode (out i) =
+      if i ∈ js then NJX_TailExpr.value (decode lambda) (fun k => decode (a k)) (expr i) else decode (write s j x i)
+i : Fin 14
+hij : ¬i = j
+⊢ (if i ∈ js then NJX_TailExpr.value (decode lambda) (fun k => decode (a k)) (expr i)
+    else decode (if False then x else s i)) =
+    if i ∈ js then NJX_TailExpr.value (decode lambda) (fun k => decode (a k)) (expr i) else decode (s i)
+NJX_PatternTail.lean:59:49: warning: This simp argument is unused:
+  if_neg hij
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵m̵e̵m̵_̵c̵o̵n̵s̵,̵h̵i̵j̵,̵f̵a̵l̵s̵e̵_̵o̵r̵,̵w̵r̵i̵t̵e̵,̵i̵f̵_̵n̵e̵g̵ ̵h̵i̵j̵]̵[̲L̲i̲s̲t̲.̲m̲e̲m̲_̲c̲o̲n̲s̲,̲ ̲h̲i̲j̲,̲ ̲f̲a̲l̲s̲e̲_̲o̲r̲,̲ ̲w̲r̲i̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem AspisR1.NJX_PatternTail.source : ∀ {lambda : NQ} (p : NJL_CachedPowers.Packet lambda) (a : Fin 21 → NQ),
+  (∀ (i : Fin 21), Canon (a i)) →
+    ∀ (js : List (Fin 14)) (s : State),
+      (∀ (i : Fin 14), Canon (s i)) →
+        ∃ out,
+          run p a js s = ok out ∧
+            Trace p a js s out ∧
+              (∀ (i : Fin 14), Canon (out i)) ∧
+                ∀ (i : Fin 14),
+                  decode (out i) =
+                    if i ∈ js then NJX_TailExpr.value (decode lambda) (fun k => decode (a k)) (expr i)
+                    else decode (s i) :=
+fun {lambda} p a ha js s hs =>
+  List.rec (motive := fun js =>
+    ∀ (s : State),
+      (∀ (i : Fin 14), Canon (s i)) →
+        ∃ out,
+          run p a js s = ok out ∧
+            Trace p a js s out ∧
+              (∀ (i : Fin 14), Canon (out i)) ∧
+                ∀ (i : Fin 14),
+                  decode (out i) =
+                    if i ∈ js then NJX_TailExpr.value (decode lambda) (fun k => decode (a k)) (expr i)
+                    else decode (s i))
+    (fun s hs =>
+      Exists.intro s
+        ⟨rfl,
+          ⟨Trace.nil s,
+            ⟨hs, fun i =>
+              of_eq_true
+                (Eq.trans
+                  (congrArg (Eq (decode (s i)))
+                    (ite_cond_eq_false (NJX_TailExpr.value (decode lambda) (fun k => decode (a k)) (expr i))
+                      (decode (s i)) List.not_mem_nil._simp_1))
+                  (eq_self (decode (s i))))⟩⟩⟩)
+    (fun j js ih s hs =>
+      let ⟨x, h✝⟩ := NJX_TailExpr.source p a ha (expr j)
+      let ⟨cx, right✝⟩ := h✝
+      let ⟨hx, vx⟩ := right✝
+      have hm := fun i =>
+        id
+          (Decidable.casesOn (instDecidableEqFin 14 i j)
+            (fun h => Eq.mpr (id (congrArg Canon (if_neg h))) (of_eq_true ((fun i => eq_true (hs i)) i))) fun h =>
+            Eq.mpr (id (congrArg Canon (if_pos h))) hx);
+      let ⟨out, h✝¹⟩ := ih (write s j x) hm
+      let ⟨co, right✝¹⟩ := h✝¹
+      let ⟨tr, right✝²⟩ := right✝¹
+      let ⟨ho, vo⟩ := right✝²
+      Exists.intro out
+        ⟨of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg Eq
+                  (Eq.trans
+                    (Eq.trans (congrFun' (congrArg Bind.bind cx) fun x => run p a js (write s j x))
+                      (bind_tc_ok x fun y => run p a js (write s j y)))
+                    co))
+                (ok out))
+              (eq_self (ok out))),
+          ⟨Trace.cons j js s x (write s j x) out cx (fun i => Eq.refl (write s j x i)) tr,
+            ⟨ho, fun i =>
+              Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      _a =
+                        if i ∈ j :: js then NJX_TailExpr.value (decode lambda) (fun k => decode (a k)) (expr i)
+                        else decode (s i))
+                    (vo i)))
+                (if hij : i = j then
+                  Eq.symm hij ▸
+                    Eq.mpr
+                      (id
+                        (congr
+                          (congrArg Eq
+                            (ite_congr (Eq.refl (j ∈ js))
+                              (fun a_1 => Eq.refl (NJX_TailExpr.value (decode lambda) (fun k => decode (a k)) (expr j)))
+                              fun a =>
+                              congrArg decode
+                                (Eq.trans (ite_congr (eq_self j) (fun a => Eq.refl x) fun a => Eq.refl (s j))
+                                  (if_true x (s j)))))
+                          (Eq.trans
+                            (ite_congr
+                              (Eq.trans source._simp_4
+                                (Eq.trans (congrFun' (congrArg Or (eq_self j)) (j ∈ js)) (true_or (j ∈ js))))
+                              (fun a_1 => Eq.refl (NJX_TailExpr.value (decode lambda) (fun k => decode (a k)) (expr j)))
+                              fun a => Eq.refl (decode (s j)))
+                            (if_true (NJX_TailExpr.value (decode lambda) (fun k => decode (a k)) (expr j))
+                              (decode (s j))))))
+                      (Decidable.casesOn (List.instDecidableMemOfLawfulBEq j js)
+                        (fun h =>
+                          Eq.mpr
+                            (id
+                              (congrFun' (congrArg Eq (if_neg h))
+                                (NJX_TailExpr.value (decode lambda) (fun k => decode (a k)) (expr j))))
+                            (of_eq_true
+                              (Eq.trans
+                                (congrFun' (congrArg Eq vx)
+                                  (NJX_TailExpr.value (decode lambda) (fun i => decode (a i)) (expr j)))
+                                (eq_self (NJX_TailExpr.value (decode lambda) (fun i => decode (a i)) (expr j))))))
+                        fun h =>
+                        Eq.mpr
+                          (id
+                            (congrFun' (congrArg Eq (if_pos h))
+                              (NJX_TailExpr.value (decode lambda) (fun k => decode (a k)) (expr j))))
+                          (of_eq_true (eq_self (NJX_TailExpr.value (decode lambda) (fun k => decode (a k)) (expr j)))))
+                else sorry)⟩⟩⟩)
+    js s hs
+'AspisR1.NJX_PatternTail.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,9 @@
+import RPv_FJk_PatternValues
+import RPv_JGa_CopyPatterns
+import NJX_WindowInvocation
+#print AspisR1.R0P.copyPatterns
+#print AspisR1.R0P.copyPatternValuesLiteral
+#print AspisR1.R0P.copyPowers
+#print AspisR1.R0P.copy_powers_eq
+#print Aeneas.Std.WP
+#print AspisR1.FIw_ArrayValue.decoded

@@ -1,0 +1,122 @@
+theorem AspisR1.NJX_TailExpr.source : ∀ {lambda : NQ} (p : NJL_CachedPowers.Packet lambda) (a : Fin 21 → NQ),
+  (∀ (i : Fin 21), Canon (a i)) →
+    ∀ (e : Expr),
+      ∃ out, eval p a e = ok out ∧ Canon out ∧ decode out = value (decode lambda) (fun i => decode (a i)) e :=
+fun {lambda} p a ha e =>
+  Expr.rec (fun i => Exists.intro (a i) ⟨rfl, ⟨ha i, rfl⟩⟩)
+    (fun i e ih =>
+      let ⟨x, h✝⟩ := ih
+      let ⟨cx, right✝⟩ := h✝
+      let ⟨hx, vx⟩ := right✝
+      let ⟨out, h✝¹⟩ :=
+        NJB_PreparedLaws.mul_result (NJL_CacheReads.cache p i) (NJL_CacheReads.power p i) x
+          (NJL_CacheReads.canonical p i) hx (NJL_CacheReads.constructor p i).right
+      let ⟨co, right✝¹⟩ := h✝¹
+      let ⟨ho, vo⟩ := right✝¹
+      Exists.intro out
+        ⟨of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg Eq
+                  (Eq.trans
+                    (Eq.trans
+                      (congrFun' (congrArg Bind.bind cx) fun x =>
+                        FIq_Native.field.PreparedQm31Multiplier.mul (NJL_CacheReads.cache p i) x)
+                      (bind_tc_ok x (FIq_Native.field.PreparedQm31Multiplier.mul (NJL_CacheReads.cache p i))))
+                    co))
+                (ok out))
+              (eq_self (ok out))),
+          ⟨ho,
+            Eq.mpr (id (congrArg (fun _a => _a = value (decode lambda) (fun i => decode (a i)) (Expr.product i e)) vo))
+              (Eq.mpr
+                (id
+                  (congrArg (fun _a => _a * decode x = value (decode lambda) (fun i => decode (a i)) (Expr.product i e))
+                    (NJL_CacheReads.value p i)))
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        decode lambda ^ (↑i + 1) * _a =
+                          value (decode lambda) (fun i => decode (a i)) (Expr.product i e))
+                      vx))
+                  (Eq.refl (decode lambda ^ (↑i + 1) * value (decode lambda) (fun i => decode (a i)) e))))⟩⟩)
+    (fun e f ihe ihf =>
+      let ⟨x, h✝²⟩ := ihe
+      let ⟨cx, right✝²⟩ := h✝²
+      let ⟨hx, vx⟩ := right✝²
+      let ⟨y, h✝³⟩ := ihf
+      let ⟨cy, right✝³⟩ := h✝³
+      let ⟨hy, vy⟩ := right✝³
+      let ⟨out, h✝⁴⟩ := NJB_StubLaws.qm_add x y hx hy
+      let ⟨co, right✝⁴⟩ := h✝⁴
+      let ⟨ho, vo⟩ := right✝⁴
+      Exists.intro out
+        ⟨of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg Eq
+                  (Eq.trans
+                    (Eq.trans
+                      (congr (congrArg Bind.bind cx)
+                        (funext fun x =>
+                          Eq.trans (congrFun' (congrArg Bind.bind cy) fun y => FIq_Native.field.QM31.add x y)
+                            (bind_tc_ok y (FIq_Native.field.QM31.add x))))
+                      (bind_tc_ok x fun y_1 => FIq_Native.field.QM31.add y_1 y))
+                    co))
+                (ok out))
+              (eq_self (ok out))),
+          ⟨ho,
+            Eq.mpr (id (congrArg (fun _a => _a = value (decode lambda) (fun i => decode (a i)) (e.add f)) vo))
+              (Eq.mpr
+                (id (congrArg (fun _a => _a + decode y = value (decode lambda) (fun i => decode (a i)) (e.add f)) vx))
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        value (decode lambda) (fun i => decode (a i)) e + _a =
+                          value (decode lambda) (fun i => decode (a i)) (e.add f))
+                      vy))
+                  (Eq.refl
+                    (value (decode lambda) (fun i => decode (a i)) e +
+                      value (decode lambda) (fun i => decode (a i)) f))))⟩⟩)
+    (fun e f ihe ihf =>
+      let ⟨x, h✝⁵⟩ := ihe
+      let ⟨cx, right✝⁵⟩ := h✝⁵
+      let ⟨hx, vx⟩ := right✝⁵
+      let ⟨y, h✝⁶⟩ := ihf
+      let ⟨cy, right✝⁶⟩ := h✝⁶
+      let ⟨hy, vy⟩ := right✝⁶
+      let ⟨out, h✝⁷⟩ := NJB_StubLaws.qm_sub x y hx hy
+      let ⟨co, right✝⁷⟩ := h✝⁷
+      let ⟨ho, vo⟩ := right✝⁷
+      Exists.intro out
+        ⟨of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg Eq
+                  (Eq.trans
+                    (Eq.trans
+                      (congr (congrArg Bind.bind cx)
+                        (funext fun x =>
+                          Eq.trans (congrFun' (congrArg Bind.bind cy) fun y => FIq_Native.field.QM31.sub x y)
+                            (bind_tc_ok y (FIq_Native.field.QM31.sub x))))
+                      (bind_tc_ok x fun y_1 => FIq_Native.field.QM31.sub y_1 y))
+                    co))
+                (ok out))
+              (eq_self (ok out))),
+          ⟨ho,
+            Eq.mpr (id (congrArg (fun _a => _a = value (decode lambda) (fun i => decode (a i)) (e.sub f)) vo))
+              (Eq.mpr
+                (id (congrArg (fun _a => _a - decode y = value (decode lambda) (fun i => decode (a i)) (e.sub f)) vx))
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        value (decode lambda) (fun i => decode (a i)) e - _a =
+                          value (decode lambda) (fun i => decode (a i)) (e.sub f))
+                      vy))
+                  (Eq.refl
+                    (value (decode lambda) (fun i => decode (a i)) e -
+                      value (decode lambda) (fun i => decode (a i)) f))))⟩⟩)
+    e
+'AspisR1.NJX_TailExpr.source' depends on axioms: [propext, Classical.choice, Quot.sound]
