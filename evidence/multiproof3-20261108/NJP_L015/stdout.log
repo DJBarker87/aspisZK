@@ -1,0 +1,169 @@
+NJP_lean/NJP_AbortPrefix.lean:15:3: warning: Variable name `n` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+NJP_lean/NJP_AbortPrefix.lean:43:68: error(lean.unknownIdentifier): Unknown identifier `request`
+theorem NJP_AbortPrefix.exact_prefix : ∀ {α : Type} (H : Request → Digest) (n : ℕ) (p : Program Request Digest α)
+  (history : List (Request × Digest)) (last : Request),
+  pending H n p = some (history, last) →
+    history = List.take n (eval H p).1 ∧ history.length = n ∧ Option.map Prod.fst (eval H p).1[n]? = some last :=
+fun {α} H n p history last aborted =>
+  Nat.recAux (motive := fun n =>
+    ∀ (p : Program Request Digest α) (history : List (Request × Digest)) (last : Request),
+      pending H n p = some (history, last) →
+        history = List.take n (eval H p).1 ∧ history.length = n ∧ Option.map Prod.fst (eval H p).1[n]? = some last)
+    (fun p history last aborted =>
+      Program.casesOn (motive := fun t =>
+        p = t →
+          history = List.take 0 (eval H p).1 ∧ history.length = 0 ∧ Option.map Prod.fst (eval H p).1[0]? = some last)
+        p
+        (fun x h =>
+          Eq.ndrec (motive := fun p =>
+            pending H 0 p = some (history, last) →
+              history = List.take 0 (eval H p).1 ∧
+                history.length = 0 ∧ Option.map Prod.fst (eval H p).1[0]? = some last)
+            (fun aborted => False.elim (noConfusion_of_Nat Option.ctorIdx aborted)) (Eq.symm h) aborted)
+        (fun q next h =>
+          Eq.ndrec (motive := fun p =>
+            pending H 0 p = some (history, last) →
+              history = List.take 0 (eval H p).1 ∧
+                history.length = 0 ∧ Option.map Prod.fst (eval H p).1[0]? = some last)
+            (fun aborted =>
+              have same := Option.some.inj aborted;
+              let ⟨⟩ := (history, last)
+              same)
+            (Eq.symm h) aborted)
+        (Eq.refl p))
+    (fun n ih p history last aborted =>
+      Program.casesOn (motive := fun t =>
+        p = t →
+          history = List.take (n + 1) (eval H p).1 ∧
+            history.length = n + 1 ∧ Option.map Prod.fst (eval H p).1[n + 1]? = some last)
+        p
+        (fun x h =>
+          Eq.ndrec (motive := fun p =>
+            pending H (n + 1) p = some (history, last) →
+              history = List.take (n + 1) (eval H p).1 ∧
+                history.length = n + 1 ∧ Option.map Prod.fst (eval H p).1[n + 1]? = some last)
+            (fun aborted => False.elim (noConfusion_of_Nat Option.ctorIdx aborted)) (Eq.symm h) aborted)
+        (fun q next h =>
+          Eq.ndrec (motive := fun p =>
+            pending H (n + 1) p = some (history, last) →
+              history = List.take (n + 1) (eval H p).1 ∧
+                history.length = n + 1 ∧ Option.map Prod.fst (eval H p).1[n + 1]? = some last)
+            (fun aborted =>
+              Option.casesOn (motive := fun t =>
+                pending H n (next (H q)) = t →
+                  history = List.take (n + 1) (eval H (Program.ask q next)).1 ∧
+                    history.length = n + 1 ∧ Option.map Prod.fst (eval H (Program.ask q next)).1[n + 1]? = some last)
+                (pending H n (next (H q)))
+                (fun h =>
+                  Eq.ndrec (motive := fun x =>
+                    pending H n (next (H q)) = x →
+                      history = List.take (n + 1) (eval H (Program.ask q next)).1 ∧
+                        history.length = n + 1 ∧
+                          Option.map Prod.fst (eval H (Program.ask q next)).1[n + 1]? = some last)
+                    (fun found =>
+                      False.elim
+                        (noConfusion_of_Nat Option.ctorIdx
+                          (Eq.mp
+                            (congrFun' (congrArg Eq (congrArg (Option.map fun x => ((q, H q) :: x.1, x.2)) found))
+                              (some (history, last)))
+                            aborted)))
+                    (Eq.symm h) (Eq.refl (pending H n (next (H q)))))
+                (fun pair h =>
+                  Eq.ndrec (motive := fun x =>
+                    pending H n (next (H q)) = x →
+                      history = List.take (n + 1) (eval H (Program.ask q next)).1 ∧
+                        history.length = n + 1 ∧
+                          Option.map Prod.fst (eval H (Program.ask q next)).1[n + 1]? = some last)
+                    (fun found =>
+                      let ⟨tail, request, found⟩ := pair
+                      have same :=
+                        Option.some.inj
+                          (Eq.mp
+                            (congrFun' (congrArg Eq (congrArg (Option.map fun x => ((q, H q) :: x.1, x.2)) found))
+                              (some (history, last)))
+                            aborted);
+                      let ⟨⟩ := (history, last)
+                      same)
+                    (Eq.symm h) (Eq.refl (pending H n (next (H q)))))
+                (Eq.refl (pending H n (next (H q)))))
+            (Eq.symm h) aborted)
+        (Eq.refl p))
+    n p history last aborted
+'NJP_AbortPrefix.exact_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NJP_AbortPrefix.occupied_pending : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length : ℕ) (s : Scratch)
+  (i w : ℕ), i < s.n → paired s i → pending H 0 (node nodes length s i w) = some ([], occupiedRequest s i) :=
+fun H nodes length s i w active both =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (congrArg (pending H 0)
+              (Eq.trans
+                (ite_congr (Eq.refl (i < s.n))
+                  (fun a =>
+                    (fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos both) x_0 x_1 x_2 x_3)
+                      (instDecidablePaired s i) Run
+                      (Program.ask (occupiedRequest s i) fun reply =>
+                        Program.done (ok (Row.next (write s i w s.cursor reply) (i + 2) (w + 1))))
+                      (if s.cursor + 32 ≤ length then
+                        Program.ask (siblingRequest s i nodes) fun reply =>
+                          Program.done (ok (Row.next (write s i w (s.cursor + 32) reply) (i + 1) (w + 1)))
+                      else Program.done (ok (Row.stop s))))
+                  fun a => Eq.refl (Program.done (ok (Row.next s i w))))
+                ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos active) x_0 x_1 x_2 x_3) (i.decLt s.n) Run
+                  (Program.ask (occupiedRequest s i) fun reply =>
+                    Program.done (ok (Row.next (write s i w s.cursor reply) (i + 2) (w + 1))))
+                  (Program.done (ok (Row.next s i w))))))
+            (pending.eq_2 H (occupiedRequest s i) fun reply =>
+              Program.done (ok (Row.next (write s i w s.cursor reply) (i + 2) (w + 1))))))
+        (some ([], occupiedRequest s i)))
+      (eq_self (some ([], occupiedRequest s i))))
+'NJP_AbortPrefix.occupied_pending' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_AbortPrefix.sibling_pending : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length : ℕ) (s : Scratch)
+  (i w : ℕ),
+  i < s.n →
+    ¬paired s i →
+      s.cursor + 32 ≤ length → pending H 0 (node nodes length s i w) = some ([], siblingRequest s i nodes) :=
+fun H nodes length s i w active single available =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (congrArg (pending H 0)
+              (Eq.trans
+                (ite_congr (Eq.refl (i < s.n))
+                  (fun a =>
+                    Eq.trans
+                      (ite_congr (Eq.refl (paired s i))
+                        (fun a =>
+                          Eq.refl
+                            (Program.ask (occupiedRequest s i) fun reply =>
+                              Program.done (ok (Row.next (write s i w s.cursor reply) (i + 2) (w + 1)))))
+                        fun a =>
+                        (fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos available) x_0 x_1 x_2 x_3)
+                          ((s.cursor + 32).decLe length) Run
+                          (Program.ask (siblingRequest s i nodes) fun reply =>
+                            Program.done (ok (Row.next (write s i w (s.cursor + 32) reply) (i + 1) (w + 1))))
+                          (Program.done (ok (Row.stop s))))
+                      ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg single) x_0 x_1 x_2 x_3)
+                        (instDecidablePaired s i) Run
+                        (Program.ask (occupiedRequest s i) fun reply =>
+                          Program.done (ok (Row.next (write s i w s.cursor reply) (i + 2) (w + 1))))
+                        (Program.ask (siblingRequest s i nodes) fun reply =>
+                          Program.done (ok (Row.next (write s i w (s.cursor + 32) reply) (i + 1) (w + 1))))))
+                  fun a => Eq.refl (Program.done (ok (Row.next s i w))))
+                ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos active) x_0 x_1 x_2 x_3) (i.decLt s.n) Run
+                  (Program.ask (siblingRequest s i nodes) fun reply =>
+                    Program.done (ok (Row.next (write s i w (s.cursor + 32) reply) (i + 1) (w + 1))))
+                  (Program.done (ok (Row.next s i w))))))
+            (pending.eq_2 H (siblingRequest s i nodes) fun reply =>
+              Program.done (ok (Row.next (write s i w (s.cursor + 32) reply) (i + 1) (w + 1))))))
+        (some ([], siblingRequest s i nodes)))
+      (eq_self (some ([], siblingRequest s i nodes))))
+'NJP_AbortPrefix.sibling_pending' depends on axioms: [propext, Classical.choice, Quot.sound]

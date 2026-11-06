@@ -1,0 +1,48 @@
+{"attempt": "NJP_L018", "exit_status": 0, "wall_seconds": 3.618699081009254, "peak_rss_kib": "4360832", "swaps": "0", "print_axioms": ["'NJP_LoopTotal.rows_total' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NJP_lean/NJP_LoopTotal.lean:50:25: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [eval,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NJP_LoopTotal.rows_total : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length fuel : ℕ) (s : Scratch) (i w : ℕ),
+  Domain length s i w →
+    s.n - i ≤ fuel →
+      (0 < i → 0 < w) → ∃ out, (eval H (rows nodes length fuel s i w)).2 = ok out ∧ LevelProgress length s out :=
+fun H nodes length fuel s i w domain budget nonempty =>
+  Nat.recAux (motive := fun fuel =>
+    ∀ (s : Scratch) (i w : ℕ),
+      Domain length s i w →
+  
+...
+let ⟨final, h✝¹⟩ := ih after ni nw nextDomain remaining prefix_nonempty
+                      let ⟨returned, valid⟩ := h✝¹
+                      Exists.intro final
+                        ⟨returned,
+                          Level.casesOn (motive := fun t => final = t → LevelProgress length s final) final
+                            (fun state h =>
+                              Eq.ndrec (motive := fun final =>
+                                (eval H (rows nodes length fuel after ni nw)).2 = ok final →
+                                  LevelProgress length after final → LevelProgress length s final)
+                                (fun returned valid =>
+                                  id
+                                    (Eq.mp (congrArg (And (LevelDomain length state)) (congrArg (Eq state.n) sameN))
+                                      valid))
+                                (Eq.symm h) returned valid)
+                            (fun state h =>
+                              Eq.ndrec (motive := fun final =>
+                                (eval H (rows nodes length fuel after ni nw)).2 = ok final →
+                                  LevelProgress length after final → LevelProgress length s final)
+                                (fun returned valid =>
+                                  id
+                                    (Eq.mp (congrArg (And (LevelDomain length state)) (congrArg (LE.le state.n) sameN))
+                                      valid))
+                                (Eq.symm h) returned valid)
+                            (Eq.refl final)⟩)
+                    (Eq.symm h) result progress observed)
+                (Eq.refl out)))))
+    fuel s i w domain budget nonempty
+'NJP_LoopTotal.rows_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rb5f67263886f4a32b27687abb493e547.scope; invocation ID: 64fe1563252e47c8993a3c126120a0cb

@@ -1,0 +1,64 @@
+{
+  "attempt": "NJP_K069",
+  "kind": "kani",
+  "module": "NJP_terminal_prefix",
+  "sources": [
+    "NJP_gate.py",
+    "NJP_multiproof.rs",
+    "NJP_poseidon.rs",
+    "NJP_CONTROLLER_SOURCE.json",
+    "NJP_frontier_cuts.rs"
+  ],
+  "upload": [
+    "NJP_gate.py",
+    "NJP_multiproof.rs",
+    "NJP_poseidon.rs",
+    "NJP_CONTROLLER_SOURCE.json",
+    "NJP_frontier_cuts.rs"
+  ],
+  "command": [
+    "python3",
+    "NJP_gate.py",
+    "NJP_K069.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-multiproof3-20261108/NJP_workspace/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-multiproof3-20261108/NJP_target",
+    "--features",
+    "private-leaf-salts,optimized-terminal,program-build",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "multiproof::NJP_native::NJP_terminal_prefix",
+    "--output-format",
+    "terse"
+  ],
+  "timeout": 180,
+  "source_revision": "",
+  "expected_time": "Isolated NJP_terminal_prefix; ONE step/prefix or fixed height controller; no SHA or field product",
+  "env": {
+    "LEAN_SYSROOT": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-multiproof3-20261108",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-multiproof3-20261108/NJP_target",
+    "CARGO_NET_OFFLINE": "true",
+    "RUSTFLAGS": "--cfg NJP_write_stage --cfg NJP_active_class --cfg NJP_bad_argument"
+  },
+  "collect": [
+    "NJP_K069_validation"
+  ],
+  "expected_failure": true,
+  "lane": "multiproof"
+}

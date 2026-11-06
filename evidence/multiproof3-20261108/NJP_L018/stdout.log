@@ -1,0 +1,250 @@
+NJP_lean/NJP_LoopTotal.lean:50:25: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [eval,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NJP_LoopTotal.rows_total : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length fuel : ℕ) (s : Scratch) (i w : ℕ),
+  Domain length s i w →
+    s.n - i ≤ fuel →
+      (0 < i → 0 < w) → ∃ out, (eval H (rows nodes length fuel s i w)).2 = ok out ∧ LevelProgress length s out :=
+fun H nodes length fuel s i w domain budget nonempty =>
+  Nat.recAux (motive := fun fuel =>
+    ∀ (s : Scratch) (i w : ℕ),
+      Domain length s i w →
+        s.n - i ≤ fuel →
+          (0 < i → 0 < w) → ∃ out, (eval H (rows nodes length fuel s i w)).2 = ok out ∧ LevelProgress length s out)
+    (fun s i w domain budget nonempty =>
+      have halted :=
+        let ⟨left✝, right✝⟩ := domain
+        let ⟨left✝¹, right✝¹⟩ := right✝
+        let ⟨read, right✝²⟩ := right✝¹
+        let ⟨left✝², right✝³⟩ := right✝²
+        let ⟨left✝³, right✝⁴⟩ := right✝³
+        Decidable.byContradiction fun a => rows_total._proof_1 length s i w budget nonempty a;
+      have same :=
+        let ⟨left✝⁴, right✝⁵⟩ := domain
+        let ⟨left✝⁵, right✝⁶⟩ := right✝⁵
+        let ⟨read, right✝⁷⟩ := right✝⁶
+        let ⟨left✝⁶, right✝⁸⟩ := right✝⁷
+        let ⟨left✝⁷, right✝⁹⟩ := right✝⁸
+        Decidable.byContradiction fun a => rows_total._proof_2 length s i w halted read a;
+      have positive :=
+        nonempty
+          (let ⟨positive, right✝¹⁰⟩ := domain
+          let ⟨left✝⁸, right✝¹¹⟩ := right✝¹⁰
+          let ⟨left✝⁹, right✝¹²⟩ := right✝¹¹
+          let ⟨left✝¹⁰, right✝¹³⟩ := right✝¹²
+          let ⟨left✝¹¹, right✝¹⁴⟩ := right✝¹³
+          Decidable.byContradiction fun a => rows_total._proof_3 length s i w same positive left✝⁸ a);
+      let ⟨left✝¹², right✝¹⁵⟩ := domain
+      let ⟨size, right✝¹⁶⟩ := right✝¹⁵
+      let ⟨left✝¹³, right✝¹⁷⟩ := right✝¹⁶
+      let ⟨writeBound, right✝¹⁸⟩ := right✝¹⁷
+      let ⟨cursorBound, byteBound⟩ := right✝¹⁸
+      Exists.intro (Level.done { indices := s.indices, values := s.values, n := w, cursor := s.cursor })
+        ⟨of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg Eq
+                  (congrArg Prod.snd
+                    (Eq.trans
+                      (congrArg (eval H)
+                        (congrArg Program.done
+                          ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos halted) x_0 x_1 x_2 x_3) (s.n.decLe i)
+                            (Result Level)
+                            (ok (Level.done { indices := s.indices, values := s.values, n := w, cursor := s.cursor }))
+                            div)))
+                      (eval.eq_1 H
+                        (ok (Level.done { indices := s.indices, values := s.values, n := w, cursor := s.cursor }))))))
+                (ok (Level.done { indices := s.indices, values := s.values, n := w, cursor := s.cursor })))
+              (eq_self (ok (Level.done { indices := s.indices, values := s.values, n := w, cursor := s.cursor })))),
+          id
+            ⟨⟨positive,
+                ⟨Decidable.byContradiction fun a => rows_total._proof_4 length s i w same left✝¹² size writeBound a,
+                  ⟨cursorBound, byteBound⟩⟩⟩,
+              Decidable.byContradiction fun a => rows_total._proof_5 length s i w same writeBound a⟩⟩)
+    (fun fuel ih s i w domain budget nonempty =>
+      if halted : s.n ≤ i then
+        have same :=
+          let ⟨left✝¹⁴, right✝¹⁹⟩ := domain
+          let ⟨left✝¹⁵, right✝²⁰⟩ := right✝¹⁹
+          let ⟨read, right✝²¹⟩ := right✝²⁰
+          let ⟨left✝¹⁶, right✝²²⟩ := right✝²¹
+          let ⟨left✝¹⁷, right✝²³⟩ := right✝²²
+          Decidable.byContradiction fun a => rows_total._proof_6 length fuel s i w halted read a;
+        have positive :=
+          nonempty
+            (let ⟨positive, right✝²⁴⟩ := domain
+            let ⟨left✝¹⁸, right✝²⁵⟩ := right✝²⁴
+            let ⟨left✝¹⁹, right✝²⁶⟩ := right✝²⁵
+            let ⟨left✝²⁰, right✝²⁷⟩ := right✝²⁶
+            let ⟨left✝²¹, right✝²⁸⟩ := right✝²⁷
+            Decidable.byContradiction fun a => rows_total._proof_7 length fuel s i w same positive left✝¹⁸ a);
+        let ⟨left✝²², right✝²⁹⟩ := domain
+        let ⟨size, right✝³⁰⟩ := right✝²⁹
+        let ⟨left✝²³, right✝³¹⟩ := right✝³⁰
+        let ⟨writeBound, right✝³²⟩ := right✝³¹
+        let ⟨cursorBound, byteBound⟩ := right✝³²
+        Exists.intro (Level.done { indices := s.indices, values := s.values, n := w, cursor := s.cursor })
+          ⟨of_eq_true
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (congrArg Prod.snd
+                      (Eq.trans
+                        (congrArg (eval H)
+                          ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos halted) x_0 x_1 x_2 x_3) (s.n.decLe i)
+                            (Program Request Digest (Result Level))
+                            (Program.done
+                              (ok
+                                (Level.done { indices := s.indices, values := s.values, n := w, cursor := s.cursor })))
+                            (bindRun (node nodes length s i w) fun result =>
+                              match result with
+                              | Row.stop stopped => Program.done (ok (Level.stop stopped))
+                              | Row.next after ni nw => rows nodes length fuel after ni nw)))
+                        (eval.eq_1 H
+                          (ok (Level.done { indices := s.indices, values := s.values, n := w, cursor := s.cursor }))))))
+                  (ok (Level.done { indices := s.indices, values := s.values, n := w, cursor := s.cursor })))
+                (eq_self (ok (Level.done { indices := s.indices, values := s.values, n := w, cursor := s.cursor })))),
+            id
+              ⟨⟨positive,
+                  ⟨Decidable.byContradiction fun a =>
+                      rows_total._proof_8 length fuel s i w same left✝²² size writeBound a,
+                    ⟨cursorBound, byteBound⟩⟩⟩,
+                Decidable.byContradiction fun a => rows_total._proof_9 length fuel s i w same writeBound a⟩⟩
+      else
+        have active := Decidable.byContradiction fun a => rows_total._proof_10 fuel s i halted a;
+        let ⟨out, h✝⟩ := node_progress H nodes length s i w domain active
+        let ⟨result, progress⟩ := h✝
+        let history := (eval H (node nodes length s i w)).1;
+        have observed := Prod.ext rfl result;
+        Eq.mpr
+          (id
+            (congrArg (fun _a => ∃ out, (eval H _a).2 = ok out ∧ LevelProgress length s out)
+              (rows.eq_2 nodes length s i w fuel)))
+          (Eq.mpr (id (congrArg (fun _a => ∃ out, (eval H _a).2 = ok out ∧ LevelProgress length s out) (if_neg halted)))
+            (Eq.mpr
+              (id
+                (congrArg (fun _a => ∃ out, _a.2 = ok out ∧ LevelProgress length s out)
+                  (NJP_LoopBind.returned H (node nodes length s i w)
+                    (fun result =>
+                      match result with
+                      | Row.stop stopped => Program.done (ok (Level.stop stopped))
+                      | Row.next after ni nw => rows nodes length fuel after ni nw)
+                    history out observed)))
+              (Row.casesOn (motive := fun t =>
+                out = t →
+                  ∃ out_1,
+                    (history ++
+                              (eval H
+                                  (match out with
+                                  | Row.stop stopped => Program.done (ok (Level.stop stopped))
+                                  | Row.next after ni nw => rows nodes length fuel after ni nw)).1,
+                            (eval H
+                                (match out with
+                                | Row.stop stopped => Program.done (ok (Level.stop stopped))
+                                | Row.next after ni nw => rows nodes length fuel after ni nw)).2).2 =
+                        ok out_1 ∧
+                      LevelProgress length s out_1)
+                out
+                (fun after h =>
+                  Eq.ndrec (motive := fun out =>
+                    (eval H (node nodes length s i w)).2 = ok out →
+                      Progress length s i w out →
+                        eval H (node nodes length s i w) = (history, ok out) →
+                          ∃ out_1,
+                            (history ++
+                                      (eval H
+                                          (match out with
+                                          | Row.stop stopped => Program.done (ok (Level.stop stopped))
+                                          | Row.next after ni nw => rows nodes length fuel after ni nw)).1,
+                                    (eval H
+                                        (match out with
+                                        | Row.stop stopped => Program.done (ok (Level.stop stopped))
+                                        | Row.next after ni nw => rows nodes length fuel after ni nw)).2).2 =
+                                ok out_1 ∧
+                              LevelProgress length s out_1)
+                    (fun result progress observed =>
+                      have same := progress;
+                      Eq.ndrec (motive := fun after =>
+                        (eval H (node nodes length s i w)).2 = ok (Row.stop after) →
+                          eval H (node nodes length s i w) = (history, ok (Row.stop after)) →
+                            after = s →
+                              ∃ out,
+                                (history ++
+                                          (eval H
+                                              (match Row.stop after with
+                                              | Row.stop stopped => Program.done (ok (Level.stop stopped))
+                                              | Row.next after ni nw => rows nodes length fuel after ni nw)).1,
+                                        (eval H
+                                            (match Row.stop after with
+                                            | Row.stop stopped => Program.done (ok (Level.stop stopped))
+                                            | Row.next after ni nw => rows nodes length fuel after ni nw)).2).2 =
+                                    ok out ∧
+                                  LevelProgress length s out)
+                        (fun result observed same =>
+                          Exists.intro (Level.stop s)
+                            ⟨of_eq_true (eq_self (ok (Level.stop s))),
+                              ⟨⟨domain.left,
+                                  ⟨domain.right.left,
+                                    ⟨domain.right.right.right.right.left, domain.right.right.right.right.right⟩⟩⟩,
+                                rfl⟩⟩)
+                        (Eq.symm progress) result observed same)
+                    (Eq.symm h) result progress observed)
+                (fun after ni nw h =>
+                  Eq.ndrec (motive := fun out =>
+                    (eval H (node nodes length s i w)).2 = ok out →
+                      Progress length s i w out →
+                        eval H (node nodes length s i w) = (history, ok out) →
+                          ∃ out_1,
+                            (history ++
+                                      (eval H
+                                          (match out with
+                                          | Row.stop stopped => Program.done (ok (Level.stop stopped))
+                                          | Row.next after ni nw => rows nodes length fuel after ni nw)).1,
+                                    (eval H
+                                        (match out with
+                                        | Row.stop stopped => Program.done (ok (Level.stop stopped))
+                                        | Row.next after ni nw => rows nodes length fuel after ni nw)).2).2 =
+                                ok out_1 ∧
+                              LevelProgress length s out_1)
+                    (fun result progress observed =>
+                      let ⟨sameN, right✝³³⟩ := progress
+                      let ⟨nextDomain, right✝³⁴⟩ := right✝³³
+                      let ⟨advance, writeAdvance⟩ := right✝³⁴
+                      have remaining :=
+                        Eq.mpr (id (congrArg (fun _a => _a - ni ≤ fuel) sameN))
+                          (Decidable.byContradiction fun a =>
+                            rows_total._proof_11 fuel s i w budget nonempty halted after ni nw sameN advance a);
+                      have prefix_nonempty := fun a =>
+                        Decidable.byContradiction fun a => rows_total._proof_12 fuel s i w after ni nw writeAdvance a;
+                      let ⟨final, h✝¹⟩ := ih after ni nw nextDomain remaining prefix_nonempty
+                      let ⟨returned, valid⟩ := h✝¹
+                      Exists.intro final
+                        ⟨returned,
+                          Level.casesOn (motive := fun t => final = t → LevelProgress length s final) final
+                            (fun state h =>
+                              Eq.ndrec (motive := fun final =>
+                                (eval H (rows nodes length fuel after ni nw)).2 = ok final →
+                                  LevelProgress length after final → LevelProgress length s final)
+                                (fun returned valid =>
+                                  id
+                                    (Eq.mp (congrArg (And (LevelDomain length state)) (congrArg (Eq state.n) sameN))
+                                      valid))
+                                (Eq.symm h) returned valid)
+                            (fun state h =>
+                              Eq.ndrec (motive := fun final =>
+                                (eval H (rows nodes length fuel after ni nw)).2 = ok final →
+                                  LevelProgress length after final → LevelProgress length s final)
+                                (fun returned valid =>
+                                  id
+                                    (Eq.mp (congrArg (And (LevelDomain length state)) (congrArg (LE.le state.n) sameN))
+                                      valid))
+                                (Eq.symm h) returned valid)
+                            (Eq.refl final)⟩)
+                    (Eq.symm h) result progress observed)
+                (Eq.refl out)))))
+    fuel s i w domain budget nonempty
+'NJP_LoopTotal.rows_total' depends on axioms: [propext, Classical.choice, Quot.sound]

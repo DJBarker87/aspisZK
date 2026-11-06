@@ -18,7 +18,7 @@ assert all(x['walked_axioms'] for x in fixtures[:4]) and all(not x['walked_axiom
 scan=[json.loads(l) for l in read(E/'NJP_LOADED_scan.jsonl').splitlines()]
 assert scan and all(not x['dangling'] and not x['duplicate_owners'] and x['imports_match'] for x in scan)
 KMX='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67'
-own_pairs=[['NJP_K006','NJP_K007'],['NJP_K008','NJP_K009'],['NJP_K010','NJP_K011'],['NJP_K010','NJP_K012']]
+own_pairs=[['NJP_K006','NJP_K007'],['NJP_K008','NJP_K009'],['NJP_K057','NJP_K058'],['NJP_K057','NJP_K059']]
 inherited=[['NJA_K121','NJA_K106'],['NJA_K107','NJA_K108'],['NJA_K109','NJA_K110'],['NJA_K111','NJA_K112'],['NJA_K113','NJA_K114']]
 closed_pre=json.load(open(E.parent/'multiproof2-20261107/NJE_CLOSED.json'))
 children=[f for f in closed_pre['functions'] if f['rows'][0] in ['TX1:302','TX1:303','TX1:304','TX1:307']]
