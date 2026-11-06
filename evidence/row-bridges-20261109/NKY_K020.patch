@@ -1,0 +1,29 @@
+--- /dev/null
++++ b/NKY_master_frame.rs
+@@ -0,0 +1,26 @@
++use super::*;
++use aspis_statement::pool_v1::{PoolV1PairForestAccountErrorV1 as F,PoolIdentityV1,VerifierPolicyV1};
++extern crate alloc;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn any_field()->M31{M31(kani::any())}
++fn any_digest()->[M31;8]{[any_field(),any_field(),any_field(),any_field(),any_field(),any_field(),any_field(),any_field()]}
++fn any_error()->F{
++ let i:u8=kani::any();kani::assume(i<=20);
++ match i{0=>F::WrongLength,1=>F::WrongMagic,2=>F::WrongVersion,3=>F::WrongLaneCount,4=>F::WrongDigestEncoding,5=>F::WrongDepth,6=>F::WrongFormatBinding,7=>F::NonZeroReserved,8=>F::ZeroRequiredBinding,9=>F::InvalidBoolean,10=>F::InvalidMasterState,11=>F::InvalidLane,12=>F::LaneMasterMismatch,13=>F::LaneOrderMismatch,14=>F::LaneSequenceDecreased,15=>F::DuplicateCheckpoint,16=>F::CheckpointSequenceOverflow,17=>F::NonCanonicalDigest,18=>F::Identity,19=>F::Policy,_=>{
++ use aspis_statement::pool_v1::PoolV1TreeError as T;let j:u8=kani::any();kani::assume(j<13);
++ F::Tree(match j{0=>T::TreeFull,1=>T::InsufficientCapacity,2=>T::IndexOutOfRange,3=>T::RootMismatch,4=>T::NonCanonicalFrontier,5=>T::WrongLength,6=>T::WrongMagic,7=>T::WrongVersion,8=>T::WrongDepth,9=>T::WrongTreeHash,10=>T::WrongDigestEncoding,11=>T::NonCanonicalDigest,_=>T::NonZeroReserved})}}
++}
++fn any_master()->PoolV1PairForestMasterV1{PoolV1PairForestMasterV1{
++ bump:kani::any(),identity:PoolIdentityV1{pool:kani::any(),asset_mint:kani::any(),token_program:kani::any(),asset_id:any_field(),deployment_domain:kani::any()},verifier_policy:VerifierPolicyV1{flags:kani::any(),registry_program:kani::any(),registry_authority:kani::any(),policy_binding:kani::any()},initialized_lane_mask:kani::any(),has_checkpoint:kani::any(),next_checkpoint_sequence:kani::any(),last_checkpoint_lane_sequences:kani::any()}}
++fn any_checkpoint()->PoolV1PairForestCheckpointV1{PoolV1PairForestCheckpointV1{bump:kani::any(),master:kani::any(),deployment_domain:kani::any(),checkpoint_sequence:kani::any(),global_root:any_digest(),lane_sequences:kani::any()}}
++fn observed(value:&PoolV1PairForestMasterV1,tag:usize,j:usize)->u64 {match tag {0=>(value.bump) as u64,1=>(value.identity.pool[j]) as u64,2=>(value.identity.asset_mint[j]) as u64,3=>(value.identity.token_program[j]) as u64,4=>(value.identity.asset_id.0) as u64,5=>(value.identity.deployment_domain[j]) as u64,6=>(value.verifier_policy.flags) as u64,7=>(value.verifier_policy.registry_program[j]) as u64,8=>(value.verifier_policy.registry_authority[j]) as u64,9=>(value.verifier_policy.policy_binding[j]) as u64,10=>(value.initialized_lane_mask) as u64,11=>(value.has_checkpoint) as u64,12=>(value.next_checkpoint_sequence) as u64,13=>(value.last_checkpoint_lane_sequences[j%8]) as u64,_=>0}}
++fn raw_oracle(_bytes:&[u8])->Result<PoolV1PairForestMasterV1,F>{if kani::any(){Ok(any_master())}else{Err(any_error())}}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(aspis_statement::pool_v1::decode_pool_v1_pair_forest_master_v1,raw_oracle)]
++fn returned(){
++ let tag:usize=kani::any();kani::assume(tag<14);let j:usize=kani::any();kani::assume(j<32);
++ let mut guard=Box::new(any_master());let snapshot=observed(&guard,tag,j);let pointer=&*guard as *const PoolV1PairForestMasterV1;
++ let bytes:[u8;1]=kani::any();let mut out=decode_master_box(&bytes);
++ kani::assume(out.is_ok());out=Ok(guard);if let Ok(b)=out {assert!(!core::ptr::eq(&*b,pointer),"new allocation disjoint from live heap");}
++}

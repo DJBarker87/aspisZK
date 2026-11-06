@@ -7,7 +7,10 @@ def run(a,kind,mode):
  frozen=subprocess.check_output(['git','show','HEAD:evidence/tx2-adapters-20261108/NKF_'+kind+'_SOURCE.json'],text=True);frozen=json.loads(frozen)['frozen_body']
  corrupt='if let Ok(ref mut b)=out { **b = { let mut v=**b;v.bump^=1;v }; }' if mode=='value' else ''
  different='if let Ok(ref mut b)=out { let second=Box::new(**b); **b=**b;out=Ok(second); }' if mode=='allocation' else ''
+ layout = 176 if kind=='checkpoint' else 304
  instrumented=f'''fn {name}(bytes: &[u8]) -> Result<Box<{typ}>, ProgramError> {{
+    assert!(core::mem::size_of::<{typ}>()=={layout},"exact Box layout bytes");
+    assert!(core::mem::align_of::<{typ}>()==8,"exact Box layout alignment");
     let raw={child}(bytes);
     let mut allocated: *const {typ}=core::ptr::null();
     let mut out=(|| {{let b=Box::new(raw.map_err(|_| ProgramError::InvalidAccountData)?);allocated=&*b;Ok(b)}})();

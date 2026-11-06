@@ -50,7 +50,7 @@ elif kind=='link':
  command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NKY_native/'+target,*sources]
 elif kind=='audit':
  if target in ['close','review-close']:
-  files['NKY_pin.py']=(E/'NKY_pin.py').read_text();files['NKY_PREDECESSOR_PINS.json']=lzma.decompress((E.parent/'ledger19-20261108/NKN_CLOSURE_PINS.json.xz').read_bytes()).decode()
+  files['NKY_pin.py']=(E/'NKY_pin.py').read_text();files['NKY_PREDECESSOR_PINS.json']=lzma.decompress((E.parent/'ledger20-20261109/NKW_CLOSURE_PINS.json.xz').read_bytes()).decode()
  if target=='review-close':files['NKY_generated/NKY_HypothesisReview.lean']=(E/'NKY_HypothesisReview.lean').read_text()
  sources=['NKY_generated/NKY_ProofDriver.lean','NKY_generated/NKY_Driver.lean','NKY_batch.py','NKY_AUDIT_ROOTS.json','NKY_AUDIT_MODULES.json','NKY_EXPECTED_IMPORTS.jsonl']+(['NKY_POOL_ROOTS.json'] if target.startswith('pool') else [])+(['NKY_pin.py','NKY_PREDECESSOR_PINS.json']if target in ['close','review-close']else[])+(['NKY_generated/NKY_HypothesisReview.lean']if target=='review-close'else[])
  for n in sources:
