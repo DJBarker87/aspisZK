@@ -84,7 +84,7 @@ config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,en
 if kind in ['extract','preflight']:config['expected_time']='optimized dependency compilation, Charon tx2_common with resume transparent, then Aeneas; unchanged private NHR_stage.py'
 config['env']['LEAN_PATH']=':'.join(json.loads((E/'NJU_PATHS.json').read_text()))
 if kind=='kani':
- config['native_command']=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NJU_src/crates/aspis-r1-cost-probe/Cargo.toml','--target-dir',B+'/NJU_target','--features','private-leaf-salts,optimized-terminal,program-build','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse']
+ config['native_command']=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NJU_src/crates/aspis-r1-cost-probe/Cargo.toml','--target-dir',B+'/NJU_target','--features','private-leaf-salts,optimized-terminal,program-build','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','regular']
  config['env'].update(CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-Copt-level=3 -C link-arg=-Wl,--threads=1'+(' --cfg NJU_invert' if os.environ.get('NJU_INVERT') else ''))
  if os.environ.get('NJU_BAD_QUERY_WEIGHT_OWNER'):config['env']['RUSTFLAGS']+=' --cfg NJU_bad_query_weight_owner'
  if os.environ.get('NJU_BAD_QUERY_RAW_OWNER'):config['env']['RUSTFLAGS']+=' --cfg NJU_bad_query_raw_owner'

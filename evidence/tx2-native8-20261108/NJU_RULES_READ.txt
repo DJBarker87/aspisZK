@@ -1,0 +1,315 @@
+## Addendum (lead, 2026-10-23 01:20): S2 diagnosis and route B adopted (delegated decision, D177)
+
+Diagnosis (`evidence/s2-lead-20261023/DIAGNOSIS.md`): the v7 counterexample shows
+the proposed contract's *representation* is insufficient. Its postcondition sees
+the borrow counter go 0→1 and passes the integer-address checks, but the typed
+guard's Drop reads 0 and leaves the account counter at 1. Integer address equality
+does not encode typed guard identity, provenance or borrow ownership. This is not
+evidence of a shipped SDK bug. Plan: `design/S2-LEAD-PLAN-20261023.md` (nine work
+packages, Required14 mapping).
+
+**Decision (lead, under the user's overnight delegation D177; reversible by the
+user):** adopt **route B**. Add one named trust item, `S2TrustedSdkBorrow`: the
+pinned Solana SDK `AccountInfo` data-borrow semantics and the underlying `RefCell`
+guard semantics, in exactly the fifteen fields of the plan
+(`account_data_cell`, `cell_payload`, `cell_counter`, `shared_ok`, `shared_err`,
+`exclusive_ok`, `exclusive_err`, `shared_deref`, `exclusive_deref`,
+`guard_move`, `shared_drop`, `exclusive_drop`, `error_move_drop`,
+`borrow_frame`, `guard_liveness`), pinned to solana-account-info 2.3.0 and the
+production dependency lock once checked. Reasons: the same policy as TrustedStd
+(D133/D145), which trusts documented library semantics rather than verifying library
+internals; route A has repeatedly timed out on the SDK's guard internals; the
+fields mention no caller success, bytes, output, log or interface field, per the plan's
+conclusion-hiding audit. D157 excluded interior mutability from its standing
+permission, so this is a distinct ruling. It is listed in the headline trust list
+beside TrustedStd, P6/P7, E1 and E2. Excluded and still requiring proof or a further
+ruling: `Ref::clone`/`map_split`/`leak`, realloc, Rc clone/free, lamport borrows,
+CPI, re-entrancy and concurrency. Every caller obligation remains a proof
+obligation.
+
+## Addendum (lead, 2026-10-23 02:40): S2 work packages A–D, partial; one shared obstruction
+
+Merged `codex/cx-s2{a,b,c,d}-20261023` (reports `design/S2A..S2D-20261023.md`); all
+use standard axioms only, and no shipped file changed.
+- **A:** borrow-admission inversion using only `S2TrustedSdkBorrow`; original-payload
+  transport; decoder/encoder carrier joins; the separate validator premise
+  removed; four native prefix windows covering all 688 bytes.
+- **B:** conditional transport of the same 1,768-byte checkpoint into `tx1` with
+  observer None; original suffix/split facts; error mapping; consistency of each
+  child's ordered digest log; syscall value laws.
+- **C:** symbolic copy regions; per-guard drops; ordered cleanup composition;
+  conditional CP-byte, proof/public-frame, geometry, counter-restoration and metadata
+  laws (ten isolated Kani targets, no whole-frame harness).
+
+### Lead addendum, 2026-10-28 evening: SBF stack-offset finding resolved (NDC_)
+
+NDC_ (native-sbfstack; relaunched with a neutral brief after a Codex safety refusal of the first wording) settled the 34 stack-offset diagnostics: NONE of the warned function instances is linked into any of the three deployed ELFs. Method: complete .symtab from the retained unstripped linked outputs, whose .text bytes and addresses equal the deployed files exactly; exact symbol-hash search; and platform-tools disassembly of all three deployed files. Generic-name collisions were checked explicitly; for example the three linked try_from_fn instances are different hashes, with direct frame accesses of at most 256 bytes. Across ALL linked functions the largest direct negative r10 memory operand is 4096, inside the frame. Warnings in library compilations come from instances that inlining and dead-code elimination removed from the deployed programs. Decision: no source or build change and no extra P7 qualification for these diagnostics. Retained limits: this is direct-operand evidence, not an alias or derived-pointer proof, and the live validator's feature set is not pinned by the artifacts (no chain query was made). Both stay within the existing P7 compiler/runtime trust row. All 34 source families are also compiled into the native client/prover libraries, where no 4 KiB SBF frame limit applies.
+
+### Lead addendum, 2026-10-28 late: NDB_ and NCX_ merged; TX2 fixture completion (JHv_); shared-checkout merge incident
+
+NDB_ (native-decnat): 22 control-paired native component gates and 49 Lean theorems for the op48-op50 decoders; their full shipped-equals-reference bridges stay OPEN (full-domain rejection, same-input call-site association, Box/error/allocator composition). NCX_ (native-decref2): current-format reference bodies for op33/op34 (the registry decoders), extracted, losslessly converted and installed under ruling (s), plus symbolic fixture observations (NCX_JHuObservations.registry/.entry) for the seventh TX2 authentication child; native bridges OPEN (15 passes, 6 timeouts excluded). JHv_ (joint-tx2fix3) composes the seventh child, validate_asq8 and the same-SDK wrapper, then JHv_TX2.accepted2 on the TX1 saved bytes (only digest certificates and the deferred FixturePdaRuntime as hypotheses), then the joint theorem.
+
+Incident: a plain `git merge` attempt in the shared checkout, made while Stream B had an uncommitted LOG.md entry and the index was briefly locked, removed their text from the working tree. Nothing was lost from history; Stream B re-committed it (3bc532bf80). Lead rule from now on: no `git merge` in the shared checkout. Merges use plumbing only (merge-tree, commit-tree, a guarded update-ref, restore of the changed paths only), and refuse on any dirty-path overlap, lock, conflict or blob over 20 MB.
+
+### Lead addendum, 2026-10-28 late: NDG_ merged (frontier lane 4); brief budget error; lane 5
+
+NDG_ (native-front4) gave eight local conditional bridge domains on the TX2 pool-adapter path and proved the cohort zero-check for slices up to 65,536 bytes (standard axioms; NCZ_ structural invariants pass). It stopped at 50 Kani and 16 Lean because the frontier briefs carried a stale template line ("at most 120 Lean and 50 Kani"), which conflicted with the JOB budget of 80/80; the worker correctly took the smaller limit. The brief error is the lead's. Lanes 1-3 carry the same line, and their continuations will omit it. Frontier lane 5, NDH_ (native-front5), takes the roughly 37 frontier representatives no lane owns; its brief states a single budget.
+
+### Lead addendum, 2026-10-28 late: JHv_ merged; TX2 wrapper/accepted2/joint run in the approved 16 GiB scope (JHw_)
+
+JHv_ (joint-tx2fix3) composed the seventh authentication child, the full JHv_Authentication.source (retaining only FixturePdaRuntime) and the same-SDK JHv_Validation.source; 23 statements, standard axioms. The wrapper composition (JHv_Wrapper) fails at IMPORT under -M7000 (exit 134, peak 7,226,936 KiB, swap 0): the same import-shaped aggregation pattern as JHn_TX1. Lead ruling: owner amendment four item 2 explicitly allows reusing the 16 GiB scope for "the later TX1+TX2 joint assembly"; the TX2 wrapper, accepted2 and joint compiles are that assembly. JHw_ (joint-agg2) runs them as one compile each in the scope, with the lead-owned agg16 runner, never rerunning or raising after a memory failure.
+
+### Lead addendum, 2026-10-28 late: JOINT TX1+TX2 NON-VACUITY WITNESS COMPILED (JHw_); FixturePdaRuntime adopted for non-vacuity
+
+JHw_ (joint-agg2) compiled, in the owner-approved 16 GiB scope (lead-owned agg16 runner; all exits 0, swap 0, largest peak 7,889,604 KiB):
+- JHw_Wrapper.source: the retained wrapper statement;
+- JHw_TX2.accepted2: the three byte-SHA equations are discharged;
+- JHw_Joint.source.
+Lead audit of JHw_Joint.source: for every adapter dictionary base and stage set, with JHe_SHARealization (453 concrete tree-SHA equations) and FixturePdaRuntime base, there exists a saved Vec such that the actual TX1 first wrapper accepts the fixture input with saved = the 1768-byte checkpoint fixture, and the actual TX2 second wrapper, on the same installed SDK (adapter base, which installs the NCV_/NCX_ decoder bodies and the PDA model in the free slots, ruling s) and the same saved bytes, accepts. Standard axioms only. This is the joint real-byte non-vacuity deployment item, conditional on exactly two named items.
+
+Lead decision (standing delegation): FixturePdaRuntime is ADOPTED as a narrow runtime row, for non-vacuity only (trust-inventory appendix). It does not touch soundness, because op38 is quantified, nor privacy, nor the two-transaction design. JHx_ (joint-sha453) is launched to PROVE the 453 tree-SHA equations as generated certificate chunks, following AGENTS' generated-certificate preflight, to remove JHe_SHARealization from the witness.
+
+### Lead addendum, 2026-10-28 late: 453 tree-SHA equations PROVED; joint witness now conditional only on FixturePdaRuntime (JHx_)
+
+JHx_ (joint-sha453) proved all 453 tree-SHA equations unconditionally (JHx_Tree0/1/2.source; JHx_Instance.source : JHe_SHARealization) in 41 generated modules, following the generated-certificate preflight (generator --check against independent Python SHA-256; one chunk measured first; chunk size scaled). Exact-source and standard-axiom audits pass; 44/60 normal compiles and 1/2 aggregation compiles; swap 0. JHx_Joint.source restates JHw_Joint's conclusion with NO SHA hypothesis: its ONLY hypothesis is FixturePdaRuntime base, the narrow runtime row adopted for non-vacuity under the delegation and flagged to the owner as reversible. Merged at research 8da83aaabe. The joint real-byte non-vacuity deployment item is therefore established at fixture level, modulo that one named runtime row.
+
+### Lead decision under the standing delegation, 2026-10-28 late: 16 GiB scope use for consumers of the joint witness
+
+Owner amendment four item 2 approved the 16 GiB scope for JHn_TX1.accepted1_saved and "the later TX1+TX2 joint assembly". Importing any module that depends on JHx_Joint/JHw_Joint loads that closure, which is about 7.9 GB, over -M7000; a statement-only wrapper does not avoid this. Lead decision (a resource matter within the delegation; no soundness, privacy or two-transaction property changes): modules whose ONLY added content consumes the joint non-vacuity witness (JHx_Joint.source, JHw_Joint.source) may compile in the same scope, by either stream. Conditions: the lead-owned agg16 runner with its three sha256s verified; admission through reservation_agg16.py (allowed:true AND exit 0, and the host's 55 GiB total respected); one such compile at a time across both streams; one compile per module, never rerun unchanged after a memory failure, never above 16 GiB; every receipt records target, exit, wall, peak RSS, swap, revision and #print axioms. Privacy decisions about USING the witness remain the owner's, through Stream B.
+
+### Lead addendum, 2026-10-29 early: NDK_ refreshed composition ledger (authoritative snapshot)
+
+NDK_ (native-ledger2) refreshed the validated ledger to research 898a8b0da7, admitting a status change only where the pinned evidence supports exactly that claim under rules 14 and 15. Local CLOSED-CONDITIONAL rows went from 213 to 243 (unique functions 120 to 141). OPEN rows went from 370 to 340, quarantined stayed at 4, and the critical frontier went from 133 to 130. All 587 composed rows stay OPEN and there are no unconditional closures. Several lane-reported closures were REJECTED with reasons. For example, CM31::square contains an inline u64 product not covered by the checked shape; qm31_pack_base4 had only timed-out full checks; Arity::bits has no named cohort counterpart yet. This rejection is the intended discipline. The extended validator passes 37 checks. evidence/native-ledger2-20261028/NDK_LEDGER.json supersedes NCZ_LEDGER.json as the authoritative coverage snapshot for the L188 manifest.
+
+### Lead addendum, 2026-10-29: L188 manifest (NDJ_) merged; L188 OPEN on five named obligations; reconciliation and axiom audit launched
+
+NDJ_ (native-l188) produced the release manifest (evidence/native-l188-20261028/NDJ_RELEASE_MANIFEST.md/.json, NDJ_validate.py; the live validation checked 14,415 evidence files, 1,243 frozen-source files and 134,935 host files). Separate root audits pass with standard axioms only: RPx_Deployed (12,712 modules, 6.3 GB) and JHx_Joint (15,068 modules, in the 16 GiB scope, 8.7 GB). The single COMBINED replay failed at IMPORT on duplicate declarations: the headline's replay renames some modules with an RPz7_ prefix, while the witness imports the historical names (e.g. ExtractedDigest32Transcript). So the witness is not yet about the headline's own constants. L188 stays OPEN with five named missing obligations:
+1. the shared-environment replay;
+2. D188/native extraction association and S10 completeness (the ledger: 243 local conditional, 340 open);
+3. the strict import-wide axiom audit;
+4. witness-to-headline reconciliation;
+5. runtime/ELF execution association (validator version and features, live program readback, upgrade authority).
+`extraction` is reported as TRUST throughout.
+
+Launched: NDO_ (native-reconcile) for 1 and 4, which inventories the duplicated module pairs with source hashes (any non-identical pair is reported first), retargets the witness chain to the RPx names as NDO_ copies, and runs one combined replay. NDP_ (native-axaudit) for 3, which enumerates every axiom in both closures, classifies each by reachability from the roots, and cross-checks against #print axioms. Item 5 needs read-only chain queries; it is scoped next. This briefly puts seven jobs on the host, which the delegation allows as a resource decision; the 55 GiB reservation barrier still bounds memory.
+
+### Lead addendum, 2026-10-29: NDP_ strict axiom audit merged (L188 obligation 3 CLOSED)
+
+NDP_ (native-axaudit) walked the kernel constant dependencies of both L188 roots. Both reach exactly propext, Classical.choice and Quot.sound, matching #print axioms. All 147 axiom declarations in the two import forests are inventoried: 3 standard; 144 unreachable from both roots, each with negative reachability evidence (e.g. Aeneas FunsExternal templates); 0 reachable nonstandard. L188 missing obligation 3 is CLOSED for the two pinned forests. Noted for NDO_: 32 axiom names occur in both forests with differing types. They are unreachable, but they confirm that the two forests are not identical copies; NDO_'s duplicate-pair hash inventory decides whether any REACHABLE definition differs.
+
+Lead decision (delegation): NDQ_ (native-chainassoc) may make strictly read-only public JSON-RPC queries (getAccountInfo, getVersion, feature-account reads, getSlot) of the clusters on which the repository records deployments. It may not send transactions, sign, airdrop, or read keys or wallets, and it may not poll in bulk. Purpose: L188 obligation 5. It compares the loaded ProgramData ELF bytes with the pinned hashes, and records the upgrade authority, the validator version and the stack-layout-relevant feature activations, with time-of-check limits.
+
+### Lead addendum, 2026-10-29: NDQ_ chain association merged; release verifier not deployed (owner decision needed)
+
+NDQ_ (native-chainassoc) made 17 public read-only RPC reads of devnet (finalized commitment; no transactions, keys or scans). The devnet Pool (BmsNik..., upgrade authority Xjb7ro...) loads ELF 121f3e29..., matching the release pin. The devnet R1 verifier (Gk16sp..., IMMUTABLE) loads fb2fc048..., which matches the historical pin in config/r1-devnet.template.json and NOT the release verifier pins (default f8c0ec72..., devnet 63ad3e9c...). The registry is also immutable. No mainnet deployment is recorded. The endpoint reports validator 4.4.0-beta.1, whereas NDC_ inspected the 4.2.1 rbpf, so the runtime interpretation stays conditional. Consequences: the proofs are about the frozen release artifacts, and that is unchanged; but no cluster runs the proved release verifier, and historical devnet success must not be attributed to it. L188 obligation 5 stays OPEN. Deploying the release verifier is an outward, key-using, irreversible action that also needs a new program ID (the old one is immutable) and Pool/registry wiring, so it is put to the OWNER; it is not taken under the delegation.
+
+Lead grant, 2026-10-29: env-J IDs 70000-79999 go to Stream B under the D392 rules (no Stream A use of 7xxxx found). The range-only run-joint.sh edit is to be recorded as D499, with a .pre-D499 backup and both sha256s.
+
+### Lead addendum, 2026-10-29: owner approved devnet deployment of the release verifier
+
+Owner: "approved". Plan: (1) NDS_ (devnet-plan) works out the procedure from the repository scripts (keys, registry/Pool wiring, commands) and rehearses it end to end on a local solana-test-validator with cloned devnet accounts, with no devnet writes; (2) the lead reviews; (3) the devnet deployment; (4) a read-only chain association re-run.
+
+### Lead addendum, 2026-10-29: L188 obligations 1 and 4 CLOSED: joint witness over the headline's own SDK in one shared environment (NDR_)
+
+NDR_ (native-reconcile2) adapted the 23 phase/observer modules through the proved carrier identities (observer None only, with any non-None case stated as retained). It built 3,113 retargeted modules individually under the normal caps (29 chunked scopes) and ran the single final aggregation in the 16 GiB scope: exit 0, 5.14 s, peak 8,282,464 KiB, swap 0. In ONE 16,057-module kernel environment it checks AspisR1.RPx_Deployed.deployed, NDO_Joint.source and AspisR1.NDR_CombinedAudit.sourceOnHeadline, all with standard axioms only. Lead audit of sourceOnHeadline: for every adapter dictionary base, stage set and slot, given FixturePdaRuntime base, there exists saved such that S2W_D189Wrappers.first, applied to stage1_owned (headlineSdk ...), accepts the fixture with saved = the 1768-byte checkpoint, and S2W_D189Wrappers.second, applied to stage2_owned (headlineSdk ...), accepts the TX2 request. Here headlineSdk is literally DrvC_Installation.sdk (FIp_Install.configuration () (IDa_Deployed.deployedConfiguration missing () (.Ok ())) (.Ok ())), the headline's own installed-SDK expression at one concrete parameter choice, and NDR_HeadlineNatives.firstNative/secondNative prove the fixture natives equal those stage functions. L188 obligations 1 (shared-environment replay) and 4 (witness on the headline's constants) are therefore CLOSED. Retained caveats: five thin bodies (including NDO_Joint.source) were checked verbatim inside the aggregation rather than as standalone module builds (strict packaging open); 76 historical provenance objects were excluded from the environment; non-None observer transport is not claimed. Merged at research 2a0b305f4a. Frontier lanes NDL_, NDN_, NDI_, NDH_ and NDM_ were merged too; their promotions await the next ledger refresh. NDN_ wasted 34 Kani calls on a queue bug, all excluded from credit.
+
+### Lead addendum, 2026-10-29: devnet deployment (L188 obligation 5) blocked at wiring; route chosen; owner-held resources needed (NDS_)
+
+NDS_ (devnet-plan, merged as 864aa656b4) stopped at its wiring gate, as briefed. The registry bound to the existing devnet Pool state (8YRunNHb...) is FUHo4ZRK..., which read-only RPC at finalized slot 516372115 shows as immutable with zero authority. Every registry mutation goes through require_authority_v2 (programs/aspis-registry/src/processor.rs:551), which returns RegistryFrozen for an immutable registry, and no instruction unfreezes it or replaces an entry. The lead checked this in source independently. The verifier is authenticated through the registry entry, not compiled into the Pool. So the owner-approved plan, wiring the release verifier into the existing Pool through normal instructions, cannot be carried out. Doing it would need a source or architecture change, which is outside the approval and is not proposed.
+
+Lead decision, under the 2026-10-28 delegation: the release verifier goes to devnet with a fresh Pool state and its own new registry, under the unchanged, already-deployed Pool and registry programs. That registry goes through the normal initialize, schedule, activate and freeze sequence. This changes neither the code nor the three protected items (100-bit per-attempt soundness, privacy, two transactions). It does not rewire the existing Pool or migrate its notes. The historical Pool state stays live with the historical verifier (fb2fc048). That instance is outside the proved release and must be reported as such. Obligation 5 will then mean that the release ELF (63ad3e9c) is loaded on devnet and bound through an immutable registry to a Pool state of the deployed Pool program.
+
+Two practical blockers need the owner. First, the payer (Xjb7roDV...) holds 3.708 SOL against about 7.95 SOL of permanent deployment rent, and the transient buffer route needs about 15.9 SOL. Second, every documented host keypair file is absent from its recorded path, so a payer that can sign is not available. No key was created, copied or read, and nothing was written on chain. Also open: does the release ELF embed its own program ID, so that a fresh verifier address would need the ID it was built with? The next job checks this before any rehearsal. Until then obligation 5 remains OPEN, and the target is not yet established.
+
+### Lead addendum, 2026-10-29: horizontal lanes stopped; two vertical slices (owner direction)
+
+The owner asked for fewer horizontal groundwork jobs and a couple of large vertical slices instead. The NDT_ ledger shows why that matters: all 587 composed rows are OPEN because no caller-domain edge certificate exists anywhere, including subtrees that are fully bridged. The lead stopped lanes NDU_-NDY_, including their host runs. Their WIP is kept as unreviewed snapshots on codex/cx-native-front{1..5}c-20261029; their worktrees were removed. Slices Q (the query check, 78 functions, 20 open) and S (statement binding and result, 61 functions, 19 open) are defined in VERTICAL-SLICES-20261029.{md,json}. Jobs: NEA_ (Q leaves), NEB_ (Q composition), NEC_ (S leaves), NED_ (S composition). The composition jobs extend the NDT_ validator, adding checks only, so that it can certify call-domain edges and mark composed rows CLOSED. The progress measure is composed slice rows CLOSED. The overnight idle period was caused by launching jobs with nohup and no completion watcher. Every job now has one.
+
+### Lead addendum, 2026-10-29: Lean object reproducibility finding (Stream B D510) booked for the soundness release replay
+
+Stream B (D510, research 44eac1e289, docs/research/v8-r0-zk-20261009/evidence/pv-nondet-20261029/) found 118 of 6,002 shared Lean modules whose object hashes differ between the event cohort (codex-pv-runjoin-20261026/runjoin32-lean) and the NDR cohort (codex-cx-reconcile-cache-20261028/objects), with identical toolchain and lake manifests. Among them are Mathlib (6), Aeneas (17) and project modules. The cause is not established. Consequence for soundness: L188's final coherent replay must be ONE cold build of the complete headline closure in a single cohort, with every object produced by that run. Mixing objects from separately built caches is not admissible release evidence, even when sources match, unless bit-reproducibility is proved for those modules. Existing focused results stay valid as development evidence; their proofs do not depend on object bytes. They are re-established by that one replay. Added to the L188 release manifest's open conditions.
+
+### Lead addendum, 2026-10-29: Stream B D521 (Aeneas core.fmt.Formatter axiom; always-Ok fmt) assessed for soundness
+
+The headline forest's axiom inventory (evidence/native-axaudit-20261028/NDP_AXIOMS.json: 144 declared axioms imported across both release roots, reachable set exactly propext, Classical.choice, Quot.sound) contains no core.fmt.Formatter declaration. The soundness cohort therefore holds the pinned Aeneas.Std, in which Formatter := Unit is a definition, and no accepted soundness theorem's #print axioms includes it. The always-Ok fmt model has no bearing on acceptance in the deployed release. Under the deployed features (pool-adapter, private-leaf-salts, no cu-profiling), the observer is None and the phase logger is not compiled. The only formatting left is msg!("r1:error:{:?}") inside error() on the rejection path. That formats into an owned String (the writer cannot fail), and its result never reaches acceptance: error() returns InvalidInstructionData unconditionally. No soundness obligation changes. D510's final single-cohort replay requirement still covers the object-provenance question. pv-fmtaudit results will be reviewed when they arrive.
+
+### Lead ruling (y), 2026-10-29: assume-guarantee composition for non-scalar native interfaces
+
+Finding (NED_, slice S composition, budget exhausted, 0/97 rows): every root stopped at the same point. The caller was proved natively with ARBITRARY child replies (K034/K035: frozen validator control, Result and ordered call log under arbitrary cached replies). The worker held that each reply still needed "the selected callee bridge instantiated on the identical carrier and state" natively, and found no medium for Box, large-array, account or effect interfaces. Kani 0.67 stub_verified does not cover slice or Vec returns (ruling w). That is a missing composition principle, not a missing proof, and the shared obstruction is resolved here as a method decision under the 2026-10-28 delegation.
+
+Ruling (y): a call edge caller -> child with a non-scalar interface is DISCHARGED by assume-guarantee composition when all three of the following hold.
+(1) Caller certificate (Kani, frozen caller, deployed features, KMX copy stubs where copies are reached). Each call to child is replaced by an oracle that records its exact arguments, including borrowed windows and the pre-state of every account or buffer the child may touch, and returns an UNCONSTRAINED value of the child's full return type (Result including every error variant). The oracle applies an UNCONSTRAINED mutation, limited to the child's declared modifies set. The harness proves the caller's Result, final state and ordered effects equal an explicit function G(args, oracle log), and that every logged argument lies in the child's PacketDomain. A matched failing control is required: corrupt one reply or one argument, and the assertion must fail.
+(2) Child certificate: the child's existing bridge (four-part, CLOSED-CONDITIONAL in NDT_) gives reply = f_ref_child(args) and effects = declared effects on its PacketDomain. Its proof_for_contract must include a modifies clause covering exactly those effects; a missing frame is a finding, not a pass.
+(3) Lean certificate: G(args, log with each reply and mutation := the child model on the logged arguments) = the caller's cohort model, including Result, state and ordered effects.
+Substituting the child's real execution for the unconstrained oracle is the standard assume-guarantee step. Its soundness rests on Kani's handling of the oracle and modifies set. That is the native-contract semantic transport already classified under amendment five, option A, as P6/D188 tool trust. Each use is reported as reclassification, never removal, and no new trust row is added. Model-only equalities never substitute for (1) or (2).
+Loops (scan_proof_buffer) keep ruling B: one native iteration from an arbitrary pre-state, with the same oracle treatment for calls inside the body.
+
+Also binding from now on: finish ONE root end to end before spreading. Slice S starts with validate_pool_v1_pair_forest_terminal_statement_v1, whose subtree is fully bridged and whose K034/K035 already supply part (1).
+
+### Lead addendum, 2026-10-29: L188 obligation 5 CLOSED for devnet: release verifier deployed and associated (NDZ_)
+
+With owner approval and the owner's go, the lead ran the reviewed NDZ_ runbook on devnet (evidence/devnet-rehearse-20261029/NDZ_DEVNET_RESULT.md, receipts in NDZ_devnet_receipts/). Release verifier CSnhzGdHQuzMW512CSunJzHrutcmh8ZAFzqx2z1zKorQ: immutable, ProgramData 7GVKbnPt..., exactly the pinned ELF 63ad3e9c.... It is bound through the fresh frozen registry CRqLcv1M... (active entry 6Hd8P6ne...) to fresh Pool master 4GQ9Gnmi... under the unchanged Pool and registry programs. Honest transfer and withdrawal settled through TX1 then TX2. Replays (0x41532026) and mutated proofs (InvalidInstructionData) were rejected. The read-only association at finalized slot 516454111 passes, and no buffers remain. Obligation 5 is CLOSED for the devnet instance. The historical Pool state 8YRunNHb... (verifier fb2fc048) is outside the release and is excluded from every claim. No mainnet deployment exists. L188 now stands with obligations 1, 3, 4 and 5 closed. Obligation 2 (native extraction: the headline's remaining trust premise, now worked as vertical slices) is OPEN, and the D510 single-cohort cold replay is required at release. Target not yet established.
+
+### Lead addendum, 2026-10-30: FINDING K-3, Kani false PASS; ruling (u) premise superseded; writable-static harness credits SUSPENDED
+
+NEF_ (slice-q-fnptr, evidence/slice-q-fnptr-20261029) demonstrated a reachable FALSE PASS in pinned Kani 0.67. NEF_K002 runs harness NBZ_return_carriers, which calls a mark stub asserting obs.is_some() on literal None; it verifies SUCCESSFUL, while optimized native execution fails. K004/K005 reproduce it for Option<NonZeroUsize> and Option<&u8>. NEF_'s root cause: Kani shares a mutable static initializer and an allocated constant through alloc_map, so a harness that writes a static (here static mut logs/counters) can corrupt a constant that other code reads. This SUPERSEDES the premise of ruling (u), "(A) shows only the sound direction, no other Kani credit is withdrawn". That claim was unsupported, and it is withdrawn.
+
+Exposure estimate, by lead scan: the NDT_ ledger's 648 active support receipts come from 37 evidence directories. Those directories contain 2,744 Kani harness source files; 774 of them, in 15 directories, declare static mut. The exact trigger is narrower than "any static mut", but until each case is checked, the following holds. Ruling (v'): every Kani credit whose harness, stubs or oracles write a static is SUSPENDED. That includes KMX_-era copy and call-log harnesses where they use static logs. Lean-only results, extraction results and Kani passes with no writable static are unaffected. The NDT_ coverage figures (288 local conditional rows) are therefore an upper bound until the audit reports. New worker rule 16 bans writable statics in harnesses. Audit job NEH_ re-runs each suspended credited harness in local-record form, with the same property, original names and a matched failing control, then reports restored and withdrawn credits with a ledger delta. The running jobs NEB_, NEC_, NEE_ and NEG_ were stopped at WIP and relaunched under rule 16 in their own worktrees, resuming their own work.
+
+NEF_'s proposed ruling (certified None-observer specialization and fixed-backend CM31 inverse) is NOT adopted yet. It is reviewed after NEH_ establishes a static-free harness discipline. NEF_ stopped early, cut off by a model-provider content filter, not by its budget.
+
+### Lead addendum, 2026-10-31: pv-fmtaudit (Stream B) results; Aeneas library provenance named; axiom-audit method confirmed
+
+Stream B's pv-fmtaudit (codex/pv-fmtaudit-20261029 at 64e3853c92, evidence/pv-fmtaudit-20261029/REPORT.md) found the following.
+(1) No cohort holds a real Formatter axiom. The earlier "core.fmt.Formatter" report came from cached per-module axiom metadata: Scalar.Display was compiled against upstream Fmt, which declared Formatter an axiom.
+(2) The Aeneas library actually in use is NOT the bare pin (b59d5188 plus the lean432 patch). It is that pin plus the formatter-repair source, stage2-generated-prefix-canonicality-formatter-repair-20261020/sources/Aeneas/Std/Core/Fmt.lean (sha daeafff8...), which defines Formatter := Unit. Of the 27 shared sources, only Core.Fmt differs.
+(3) The NDR cohort's Core.Fmt object (63b8efa3...) is a separate build from the h4-pinned object (9de08e38...). Against the h4 external manifest, NDR has 24 differing objects (18 Aeneas/AeneasMeta) and 1 missing.
+
+Lead actions. The trust inventory's D188/Aeneas row now names the library as "Aeneas b59d5188 + lean432 patch + formatter-repair Core.Fmt (daeafff8...)". This is a naming correction, with no trust added or removed, and it will go into TRUST-INVENTORY-APPENDIX at the next inventory refresh. The soundness axiom audit (NDP_) does NOT rely on cached summaries. Its raw walk visits every constant in declaration types and values, including opaque proof bodies, and must equal collectAxioms (NDP_AXIOM_AUDIT.md lines 29-45). The cached-metadata over- and under-reporting mechanism therefore cannot change NDP_'s result. That said, NDP_ ran on copied objects, and point (3) shows that cohort objects differ by build instance. This is further reason that the release axiom audit must run, as already required (D510 addendum), inside the single fresh cold replay of the headline closure, with the raw walk.
+
+### Lead addendum, 2026-11-01: K-3 review first pass (NEH_); slice status; tooling incidents
+
+NEH_ (evidence/k3-audit-20261030) re-ran writable-static Kani credits in local-record form with matched failing controls: 48 RESTORED, 111 UNAFFECTED (recorded inputs only), 638 OPEN, 0 WITHDRAWN. No re-run showed a semantic failure, so no implementation claim is contradicted so far. Of NEB_'s 66 slice-Q composed rows, 22 now have restored direct selected support, 34 have unaffected direct support, and 10 remain suspended. NEH_ did not check transitive support, so none of the 66 is yet reported as CLOSED. NEK_ runs the second pass (transitive slice support first, up to three concurrent capped scopes under admission).
+Slices: NEE_ closed 6/97 slice-S composed rows under ruling (y) and rule 16 (transfer_common, withdrawal_common, digest_is_canonical in TX1 and TX2), with no suspended support. The validator root stays OPEN on the common-encoder frame. NEJ_ continues, required to split the frame. NEG_ established the inline-multiplication route: actual-body extraction (field types visible, callee methods opaque), the dropped-restoration scan, native/emitted differentials, and admissibility of the exact product abstraction. NEI_ continues to the arithmetic closures and slice-Q edges.
+Tooling incidents, recorded for the record: three relaunches on 2026-10-31 never ran, because a zsh `set --` loop passed every argument as one string. About 1.5 days were lost. macOS /tmp cleanup deleted lead tools, which now live in ~/aspis-lead-infra with a backup in evidence/lead-tools-20261031. The provider content filter stopped NEF_ and NEH_ twice; briefs now use neutral wording. A DNS outage killed one launch; codex-retry2.sh now resumes failed runs after network errors.
+Status: target not yet established. Obligation 2 (native extraction) is OPEN. Slice rows are reported only once their full support is cleared.
+
+### Lead ruling (y'), 2026-11-01: borrowed-return interfaces under ruling (y)
+
+NEJ_ (slice-s-compose3, merged) reached 14/97 slice-S composed rows CLOSED and proved the common-encoder write frame. The validator root is blocked because Kani 0.67 cannot generate Arbitrary<&Common> for stub_verified of a getter that returns a borrowed reference (NEE_K039). Ruling (y) does not depend on stub_verified. Clarification, binding:
+(1) For a child whose return type borrows from the caller's state, such as a getter returning &self.field, the caller certificate uses kani::stub (not stub_verified). The oracle's return value is fixed by the child's frame contract, not arbitrary: a reference to the place the child's contract designates (for a field getter, the actual field of the actual receiver), so the borrow's provenance and lifetime are preserved. Where the contract allows any value, the oracle returns a reference to a harness-owned arbitrary value of that type, with the same mutability, that does not alias anything the caller can see. The pointee may then be any value, and the reference is the only thing introduced.
+(2) Child certificate for a pure field getter: a source-level identity check (the frozen body is exactly `&self.f` or an equivalent projection, checked by a script with mutation tests), plus the extracted-body Lean identity. For any other borrowed-return child, use the child's four-part bridge with a contract stating which place is returned.
+(3) A matched failing control is required: the oracle returns a reference to a different field or place, and the caller assertion must fail.
+This is a clarification of ruling (y) (option A reclassification), not new trust.
+
+Lead grant, 2026-11-02: env-J IDs 90000-99999 go to Stream B when 70000-79999 runs out, under the D392 rules: pre-scanned 100-blocks, IDs consumed only on an actual compiler launch. No Stream A use of 9xxxx exists in C3-BIN or on the host. The range-only run-joint.sh edit (adding a 9[0-9]{4} alternative) gets a backup and its new sha recorded, and is sent to the lead before use. 28000-29999 remains reserved for the final replay.
+
+### Lead addendum, 2026-11-02: K-3 second pass (NEK_): the slice rows stand; first composed rows counted
+
+NEK_ (evidence/k3-review2-20261101, merged at a0aa7e0285) completed the transitive K-3 review for the vertical slices. All 66 NEB_ slice-Q composed rows clear K-3, including the 10 previously suspended rows and the full transitive support of the other 56, as do all 6 NEE_ slice-S rows. NEJ_ and NEL_ built their later rows under rule 16 with no writable statics. Withdrawals: none. A provisional withdrawal (NEC_K036 index domain) was the reviewer's own error: the source already restricts the frontier index below 8, and the finding was retracted with its correction trail kept (NEK_FINDINGS_HISTORY.md). NCN's Vec row shape stays OPEN after timeout K031.
+
+Count, by each slice's validator (checks only added to NDT_): 66 slice-Q plus 22 slice-S composed rows CLOSED, i.e. 88 of 587. These are the first composed rows in the project. Every one stays conditional on the explicit trust inventory, including P6/D188 transport (option A reclassification), RuntimePersistence and the approved trust rows. None is a root theorem: no slice root is CLOSED yet. The authoritative count is set by one ledger refresh (NEN_) that merges the slice deltas under a single validator. Until NEN_ reports, 88 is the slice validators' figure. Target not yet established.
+
+### Lead addendum, 2026-11-02: NEN_ authoritative ledger; ruling (z) (observer specialization) adopted in part; rule 17
+
+NEN_ (evidence/ledger4-20261102, merged at 2ca410c825) is the authoritative ledger. 88/587 composed rows are CLOSED (slice Q 66, slice S 22; TX1 44, TX2 44; 44/434 unique functions). No slice-validator closure was rejected. The K-3 inventory stands at 143 RESTORED, 211 UNAFFECTED, 511 SUSPENDED and 221 OPEN. The lead re-ran NEN_validate.py and NEN_tests.py: both exit 0, and the composed counts are confirmed.
+
+Ruling (z), adopted in part from NEF_PROPOSED_RULING.md. (1) Adopted: the release-only observer specialization (NEF_ proposal item 2). For frozen 4bb3b3f5 under the deployed program feature graph, NEF_OBSERVER_CERTIFICATE pins the observer constructor (cfg-constant None), every forwarding use and both mark bodies. The lead re-ran NEF_OBSERVER_TESTS.py: positive true, 17 mutations rejected. A caller harness may replace each reached mark call with an oracle whose only admissible behaviour is to return unit and write nothing: no log, hash or runtime events; no rejection, panic or divergence. Phase arguments are still evaluated in their original order. The caller property must not depend on any function-pointer value. Rules 14 and 16 still apply. This is an option-A reclassification under ruling (y), not new trust. (2) Deferred: the fixed-backend CM31 inverse specialization (item 3). Its supporting reference inputs (NEF_*.rs.txt, NEF_SPECIALISATION_PAYLOAD.json) were excluded by the worker's own .gitignore and were never committed, so NEF_SPECIALISATION_TESTS.py cannot be re-run from the repository. The next slice-Q job must regenerate those inputs, commit them, and re-run the tests before item 3 is considered.
+New worker rule 17: never exclude evidence inputs from git (harness or reference sources, payloads, manifests). .gitignore may list only caches, locks, keys, transient state and build outputs. A scan of every evidence .gitignore found NEF_ to be the only violation.
+
+### Lead addendum, 2026-11-02: raw axiom walker completeness gap; L188 obligation 3 narrowed until fixed
+
+Stream B's combined privacy consumer (PV_BR_FixtureConsumer, agg16 attempt 90000) compiled with sourceOnHeadline and the soundness closure untouched. Its combined raw-walk audit (90001), run with the NDP_ method, failed on 3 of 31 roots: "missing reachable constant AdapterRw.r1_pool_adapter.owned.stage2_owned.match_3". NDP_ raw-walked only AspisR1.RPx_Deployed.deployed, never NDR_CombinedAudit.sourceOnHeadline. The working hypothesis, not yet verified, is that under the Lean 4.32 module system, private or generated auxiliaries are not loaded for plain importers, so the walker cannot see them. Consequences: L188 obligation 3 (logical-axiom audit) is narrowed to "closed for the RPx_Deployed root, with walker completeness under review". It is not claimed for sourceOnHeadline or the combined release closure. NEP_ (cx-walker) diagnoses the cause on planted cases, fixes the walker, which must never skip an unresolved constant, adds completeness mutation tests, and runs once in the 16 GiB scope on RPx_Deployed plus sourceOnHeadline. It must also say whether NDP_'s earlier result could have under-reported. Stream B adopted the same rule as (ax1)/D563: #print axioms output is summary-based, and a walk with any unresolved constant is INCOMPLETE.
+
+### Lead addendum, 2026-11-02: FIRST SLICE ROOT CLOSED (statement validator); slice S 50/97
+
+NEM_ (evidence/slice-s-compose5-20261102) closed the first slice root, crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::validate_pool_v1_pair_forest_terminal_statement_v1 (both inventory rows), and brought slice S to 50/97 composed rows. What is proved, exactly. (a) The Lean MODEL theorem NEM_ValidatorComposed.result_state_effects states that the validator run with the three certified reached-child laws (payment, output lane, late) equals the cohort validator's Result, leaves state unchanged, and produces the cohort trace effects. It has no inner callee hypotheses, and its #print axioms is the standard three. #print axioms is summary-based (see the walker completeness addendum); this closure is small, and NEP_ will raw-walk it. (b) The native link is the ruling-(y) hybrid certificate: Kani caller certificates on the frozen validator under deployed features with local records and matched controls (NEE_K052/053, NEL_K006/007), the closed child certificates, and NEM_root_checks.py, which checks source erasure, complete Results, ordered effects and same child places. (c) Conditions remaining: the root's own PacketDomain and PhysicalInterpretation, P6/D188 transport (option A reclassification), and the approved runtime trust rows. This is a hybrid certificate, not a single kernel theorem from Rust source. Slice S remaining roots: encode_pool_v1_pair_forest_terminal_statement_v1, emit_result, decode_pool_v1_pair_forest_terminal_request_v1, reconstruct_asq8_statement, decode_public_statement_box, scan_proof_buffer. NEQ_ continues. Target not yet established.
+
+### Lead addendum, 2026-11-02: CORRECTION. L188 obligations 1 and 4 REOPENED: the NDR shared environment contains a dangling compiled reference
+
+NEP_ (evidence/axaudit2-20261102) hardened the raw walker: explicit importAll, private-level loading, and 8 planted axiom/mutation controls, all passing. With it, AspisR1.RPx_Deployed.deployed walks completely in the NDR cohort: 115,256 constants, exactly propext, Classical.choice and Quot.sound, equal to collectAxioms. That keeps obligation 3 closed for the deployed root.
+
+It also found that AspisR1.NDR_CombinedAudit.sourceOnHeadline cannot be walked. Its closure contains JGx_SdkAfterValidationEq.olean, whose source theorem, two equation lemmas and a splitter reference AdapterRw.r1_pool_adapter.owned.stage2_owned.match_3. The AdapterRwModel.olean in the same cohort defines stage2_owned using only match_1 and match_2, and no loaded module declares match_3. That compiled object was therefore produced against a different build of AdapterRwModel from the one it is paired with. Lean does not re-check imported declarations, so the earlier aggregation compiled without noticing (NEP_FINDINGS.md). This is the D510 build-instance problem, now shown to produce an incoherent environment, not just differing hashes.
+
+Correction: the 2026-10-29 addendum "L188 obligations 1 and 4 CLOSED" is SUPERSEDED. sourceOnHeadline was "checked in one shared environment", but that environment is not a coherent build. Obligations 1 (joint non-vacuity on the headline's constants) and 4 are REOPENED until sourceOnHeadline is rebuilt from source in a single coherent cohort and walks completely. This concerns the evidence (object provenance), not the protocol. Whether the theorem holds against the CURRENT AdapterRwModel definition is unknown until the rebuild. NER_ investigates the provenance of both objects and the source of each, and rebuilds the affected downstream chain coherently. Stream B was informed, because PV_BR_FixtureConsumer (90000) uses the same cohort. Target not yet established.
+
+### Lead addendum, 2026-11-02: NER_ provenance result; batched coherent rebuild authorised
+
+NER_ (cx-coherent, in progress) found the following. The recovered AdapterRwModel sources have identical stage2_owned text, so the match_3 versus match_1/match_2 difference is a build-instance effect, not a source change, and the stale proofs were not about a different definition. A serialized scan of 16,058 modules found dangling references in exactly three modules (JGx_SdkAfterValidationEq, JFw_Validator, JFw_Record); its mutation tests pass. All three recompile UNCHANGED against the cohort's current AdapterRwModel, and their focused raw walks complete with standard axioms equal to collectAxioms. So the joint witness's proofs hold in substance, but the evidence still needs the full coherent downstream rebuild (1,387 modules). Lead decision: the rebuild may run as batched builds inside capped scopes (6G/8G, at most 2 Lean processes per scope, up to 2 concurrent scopes, 120 batch scopes), then one coherent agg16 aggregation, the incoherence scan, and the hardened walker on both roots, plus a cohort manifest for Stream B. Obligations 1 and 4 stay REOPENED until that completes.
+
+### Lead addendum, 2026-11-02: NEO_ merged; ruling (z)(2) CM31 fixed-backend specialization ADOPTED
+
+NEO_ (evidence/slice-q-compose2-20261102) brought slice Q to 54/78 functions and 124/257 edges, and reports 130/587 rows on its ledger copy. That copy does not yet include NEM_'s slice-S rows; the unified refresh will reconcile both. Both slice-Q roots remain OPEN. NEO_ reconstructed NEF_'s seventeen Rust text inputs from the committed NEF_REFERENCE_INPUTS.patch and regenerated the payload. The regenerated patch is byte-identical to the committed NEF_SPECIALISATION.patch. Everything is committed under rule 17. The lead replayed NEO_specialisation.py: 20 inputs restored, NEF_SPECIALISATION_TESTS.py positive true, 6 mutations rejected, exit 0. The replay's regenerated receipts were reverted, so the committed evidence is unchanged.
+
+   TX2 occurrences have union membership without a transaction-specific path; disclosed in NGB_COVERAGE.json and to
+   be settled by the L187 replay's reachability check, not by deletion.
+Target not yet established.
+
+## Lead ruling (ah): reference-contract route for helpers Aeneas cannot extract (2026-11-05)
+
+Evidence: evidence/slice-d-field2-20261104 (NGA_: E001/E002 fail at Aeneas InterpBorrows.ml:2731 on the nested loop
+of qm31_accumulate_product_channels; all surrounding Lean support checked and audited with RPx). Where the emitted-body
+route of ruling (y) is unavailable because the extractor rejects the frozen function, a row may be certified by the
+existing route (iv): Kani proof_for_contract of the actual frozen function against a prefix-owned handwritten reference
+f_ref (ensures result == f_ref(args); exact modifies; matched failing control; deployed features; rule 15), field
+products stubbed under rule A with paired Lean laws, loops under rule B; the model side is a Lean transcription of f_ref
+with a recorded line-by-line correspondence. Such rows are labelled "CLOSED under (ah)" and the trust inventory
+records the hand transcription of f_ref as a reviewed-transcription item (reclassification, option A; nothing removed).
+Rule 5 of AGENTS.md: the failed extraction and the replacement are both recorded. Job NGH_ applies it to TX1:036/044/
+040/041/043/056. Target not yet established.
+
+## Lead note: slice S CLOSED coherently, 97/97 rows, 7/7 roots (2026-11-05)
+
+Supersedes the 2026-11-04 note "ledger7 (NFX_) finding F1". The S certificate forests were retargeted onto the
+canonical owners in four jobs: NFY_ (base, 61 modules; evidence/slice-s-retarget-20261104), NGE_ (chain A;
+slice-s-retarget2), NGF_ (chain B; slice-s-retarget3) and NGI_ (join; slice-s-join-20261105, merged d7c3a8b468a).
+NGI_ loads both chains with AspisR1.RPx_Deployed.deployed and the NFX_ admitted forest in one import: 3,946 raw roots
+with standard axioms only, eight fixtures in the same binary, scanner zero defects, all 261 named certificate
+declarations present with matching owners, selected-callee denials propagated. The closing model-side declaration
+per root with its full #check and #print axioms is quoted in NGI_S_STATEMENT.md (e.g. decode_public_statement_box:
+NFY_NEX_PublicModel.result_state_effects; validate_pool_v1_pair_forest_terminal_statement_v1:
+NFY_NEM_ValidatorComposed.result_state_effects). These are model-side equalities over the committed source/native
+certificates, not headline security theorems. Honest count on the 599-row basis: 282 CLOSED / 0 QUALIFIED / 317 OPEN
+(S 97/97, Q 2/2 roots, D 47/345, Pool consumer 0). The combined import of ALL closed forests across slices is job
+NGJ_. Target not yet established.
+
+## Lead note: ledger8 (NGJ_) and the first all-slices composition test (2026-11-05)
+
+evidence/ledger8-20261105 (merged b76f439d2e2) is the authoritative ledger on the 599-row NGB_ basis: 281 CLOSED,
+0 QUALIFIED, 318 OPEN (S 97/97 with 7/7 roots; Q 2/2 roots; D 43/345 after NGJ_COUNT_RECONCILIATION; Pool consumer 0;
+NGH_'s three square rows land in the next refresh). Composition result: the verifier forests (S + Q + D helpers) load
+together with AspisR1.RPx_Deployed.deployed: 4,167 raw roots standard axioms only, eight fixtures, 13,375-module scan
+clean. The Pool forest (NFO_/NFR_/NFV_) does NOT: it imports the legacy session A owners S2SdkOwnedGuardBodyV1,
+PreparedFromQmSourceBridge and the legacy Phase, which conflict with the canonical RPz7 owners (NGJ_CONFLICTS.json,
+L002/L027/L028/L029; isolated Pool scan 650 dangling references, 548 import-baseline failures). Same defect class as
+(ab') for Q and the 2026-11-04 S finding; same remedy: canonical retarget by the NFY_ method, job NGK_. Until it passes,
+no Pool consumer row is admissible and NGG_'s prefix results are provisional. Shortest OPEN dependency paths
+(NGJ_SHORTEST_PATHS.md): TX1 entry -> adapter process -> stage1 -> stage1_owned -> first_decoded -> candidate tx1;
+TX2 entry -> process -> stage2 -> stage2_owned -> tx2_authenticated -> tx2_common -> finish_relation. These are the
+spine rows the driver jobs must close, in that order. Target not yet established.
+
+## Lead note: field helper family parked as a tool-boundary obligation (2026-11-05)
+
+Rows TX1:036 (qm31_accumulate_product_channels), TX1:044 (qm31_sum_products_small), TX1:040/041/043 (sum_products2/3/4).
+Evidence: slice-d-field-20261104 (NFT_), slice-d-field2-20261104 (NGA_), slice-d-field3-20261105 (NGH_). Aeneas rejects
+the nested loop (InterpBorrows.ml:2731); the ruling (ah) reference contract times out in CBMC for the whole function
+and for a single cell (raw u64 limb products are inside the cell, so rule A stubs do not remove them); outer-step
+contracts for the small helper time out likewise. No cap or timeout was raised; no shape rerun unchanged. All
+surrounding Lean support (cache/frame, invariants, induction, wrapper values, square equation) is proved and audited
+with RPx. The five rows stay OPEN, labelled TOOL-BOUNDARY in the next ledger, off the shortest spine paths; they
+reopen only with a new interface (Aeneas loop-shape fix, or a Lean bit-level proof of one cell against a native
+per-limb log). QM31::square (TX1:032/TX2:022) and WideExact::square (TX1:056) are CLOSED under (y) by NGH_.
+Target not yet established.
+
+## Lead ruling (ai): staged-cut composition for long driver functions (2026-11-05)
+## Lead note: entry/adapter layer (NGL_); ruling (t) calibration ordered; `first` excluded (2026-11-06)
+
+evidence/slice-d-entry-20261105 (merged c4942b86300; 120 Kani / 70 Lean / 3 extraction): the program-entry and adapter
+bridges are built and audited with RPx (56 roots, scan clean) but no row was admitted, because the per-shape fidelity
+controls that ruling (t) requires before relying on a contract interface were never calibrated for the three non-Bool
+interface families the adapter uses (ProgramResult, Result<&[u8], ProgramError>, borrowed-slice Result)
+(NGL_FIDELITY_FINDING.md). This is a scheduling omission, not a weakening: NHD_ calibrates the three families once
+(real-body PASS, stub_verified FAIL on an unimplied assertion, modifies-violation FAIL; local old-state records, rule
+16) and then closes the adapter leaves. Lead ruling: programs/r1-cost-probe/src/lib.rs::first, the legacy non-selected
+entry, is REACHABILITY-EXCLUDED under the deployed pool-adapter feature (NGB_ candidate C0034: cfg-disabled body); it
+is recorded, not a row. All 13 spine rows remain OPEN (NGL_SPINE.md); the dependency order is adapter leaves ->
+stage1_owned/stage2_owned -> stage1/stage2 -> adapter process -> entry, with candidate tx1/tx2 and finish_relation
+owned by the driver jobs. Target not yet established.
+
+## Lead note: first (ah) credit: prepared_claim TX1:193 (2026-11-06)
+
+evidence/prepared-claim2-20261105 (NGY_, merged): the one missing native association named in NGU_HYBRID_GAPS.md is
+delivered: an arbitrary-pre-state inner-point iteration harness on the SAME Verified/y1/g/EbyKDot pre-state with the
+CLOSED Dot child as a logging oracle, explicit G log including the Parse arm, corruption control; child-law
+substitution and logged post-state induction in Lean; G-to-model by the reference contract of ruling (ah) with the
+transcription in NGY_TRANSCRIPTION.md. 38 roots standard axioms, 36 owner checks, eight fixtures, 13,470-module scan
+clean, 23 validator mutations rejected. TX1:193 is CLOSED under (ah); the trust inventory draft gains the
+ReviewedTranscription-prepared_claim item (reclassification, option A). Parent producer obligations stay with their
+owners (S/NFW_ semantic finish; NFU_/NGV_ compact check; NGN_/NGT_ scalar/view/powers29). With scalars (NGT_) and
+prepared_claim (NGY_) closed, Prepared::new (TX1:179) waits only on Transcript::queries (TX1:168, NHB_).
+Target not yet established.
+
+## Lead ruling (ak): callees with non-Arbitrary Result carriers use explicit-constructor logging stubs, not stub_verified (2026-11-06)
+
+Evidence: evidence/slice-d-entry2-20261106 (NHD_, merged): the ruling (t) calibration for the three adapter interface
+families (ProgramResult, Result<&[u8], ProgramError>, borrowed-slice Result) is unexecutable as specified: the

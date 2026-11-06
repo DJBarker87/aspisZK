@@ -1,0 +1,42 @@
+{"attempt": "NJU_L011", "exit_status": 1, "wall_seconds": 9.912174134980887, "peak_rss_kib": "6315232", "swaps": "0", "print_axioms": ["'NJU_FinishObserved.bind_ext' depends on axioms: [Quot.sound]", "'NJU_FinishObserved.skeleton' depends on axioms: [propext, sorryAx, choice, Quot.sound]", "'NJU_FinishObserved.source' depends on axioms: [propext, sorryAx, choice, Quot.sound]"]}
+NJU_generated/NJU_FinishObserved.lean:38:20: error(lean.invalidField): Invalid field `array`: The environment does not contain `NJU_FinishCore.Holds.array`, so it is not possible to project the field `array` from an expression
+  core
+of type `NJU_FinishCore.Holds p a`
+NJU_generated/NJU_FinishObserved.lean:38:1: error: Tactic `cases` failed: major premise type is not an inductive type
+  ?m.122
+
+Explanation: the `cases` tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+r : NP6_StdModel.Reservation
+v : verifier.Vi
+...
+index (Std.core.ops.index.IndexSlice (Std.core.slice.index.SliceIndexRangeToUsizeSlice FE))
+          p.alpha { «end» := 2#usize } with
+      | fail e => (fail e, [])
+      | div => (div, [])
+      | ok alpha =>
+        observe (FIo_Install.pair r owner alpha v.final_message p.kappa)
+          (Event.pair owner alpha v.final_message p.kappa) fun pair =>
+          if pair ≠ claim then done (Std.core.result.Result.Err verifier.Error.Relation)
+          else
+            observe (NHQ_PacketPorts.dot v.final_message (NHQ_WeightPort.weights a.weights.deref))
+              (Event.dot v.final_message (NHQ_WeightPort.weights a.weights.deref)) fun actual =>
+              done
+                (if a.next ≠ 22#usize ∨ actual ≠ a.rhs then Std.core.result.Result.Err verifier.Error.Query
+                else Std.core.result.Result.Ok ())).1 =
+    do
+    let alpha ←
+      Std.core.array.Array.index (Std.core.ops.index.IndexSlice (Std.core.slice.index.SliceIndexRangeToUsizeSlice FE))
+          p.alpha { «end» := 2#usize }
+    let reply ← NIG_PairExport.packet r owner alpha v.final_message p.kappa
+    NIT_FinishTail.afterPair r v a (NHQ_WeightPort.weights a.weights.deref) claim reply
+theorem NJU_FinishObserved.source : ∀ (r : NP6_StdModel.Reservation) (v : verifier.View) (p : verifier.Prepared)
+  (a : verifier.Accumulator),
+  NJU_FinishCore.Holds p a →
+    Port3_NativeFinishBody.verifier.finish_relation (NIG_Slots.installed r) v p a none = (run r v p a).1 :=
+fun r v p a core => Eq.trans (NJU_FinishCore.source r v p a core) (Eq.symm (skeleton r v p a core))
+'NJU_FinishObserved.bind_ext' depends on axioms: [Quot.sound]
+'NJU_FinishObserved.skeleton' depends on axioms: [propext, sorryAx, choice, Quot.sound]
+'NJU_FinishObserved.source' depends on axioms: [propext, sorryAx, choice, Quot.sound]
+
+Running as unit: run-r4c7bb557635d4fdbb3ac81bc77cdf530.scope; invocation ID: f048faa45ae542b3926cc41779746209

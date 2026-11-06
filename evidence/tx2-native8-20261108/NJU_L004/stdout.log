@@ -1,0 +1,88 @@
+def AspisR1CurrentWide.Proof.finishField : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Usize → Aeneas.Std.Result AspisR1CurrentWide.Proof.FinishE :=
+fun bytes i => do
+  let value ←
+    AspisR1WeightsFieldCurrent.weights.field AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes bytes i
+  Aeneas.Std.Result.ok (AspisR1CurrentWide.Proof.recordWideToFinish value)
+NJU_generated/NJU_Inspect.lean:4:7: error(lean.unknownIdentifier): Unknown constant `AspisR1CurrentWide.field.wide_exact.WideExact.from_le_bytes`
+theorem AspisR1.NIT_FinishSkeleton.source : ∀ (r : AspisR1.NP6_StdModel.Reservation)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (v : AspisR1Stage2.verifier.View) (p : AspisR1Stage2.verifier.Prepared)
+  (a : AspisR1Stage2.verifier.Accumulator),
+  NIG_FinishInput.Domain proof v p a →
+    AspisR1.Port3_NativeFinishBody.verifier.finish_relation (NIG_Slots.installed r) v p a none =
+      AspisR1.NIT_FinishSkeleton.run r v p a :=
+fun r proof v p a domain =>
+  Eq.trans (NIG_FinishPacket.NHM_finish r proof v p a domain) (AspisR1.NIT_FinishSkeleton.packet r v p a)
+NJU_generated/NJU_Inspect.lean:6:7: error(lean.unknownIdentifier): Unknown constant `AspisR1.NHT_RoundPacket.source`
+structure AspisR1.NIT_PairDomain.Domain (w : AspisR1.NIT_Cuts.W) (alpha : Aeneas.Std.Array AspisR1.NIT_Cuts.E 2#usize)
+  (f : Aeneas.Std.Slice Aeneas.Std.U8) (kappa : AspisR1.NIT_Cuts.E) : Prop
+number of parameters: 4
+fields:
+  AspisR1.NIT_PairDomain.Domain.s2 : w.variant = FIo_Native.transport.Variant.S2
+  AspisR1.NIT_PairDomain.Domain.factors : NHI_TensorOuterStep.Factors w
+  AspisR1.NIT_PairDomain.Domain.extra : NHI_CellCanon.array w.extra
+  AspisR1.NIT_PairDomain.Domain.alphas : AspisR1.NIT_Cuts.canonical alpha
+  AspisR1.NIT_PairDomain.Domain.words : NIG_FinishInput.Windows f 64
+  AspisR1.NIT_PairDomain.Domain.kappa : AspisR1.LPi_FieldValues.canonE kappa
+constructor:
+  AspisR1.NIT_PairDomain.Domain.mk {w : AspisR1.NIT_Cuts.W} {alpha : Aeneas.Std.Array AspisR1.NIT_Cuts.E 2#usize}
+    {f : Aeneas.Std.Slice Aeneas.Std.U8} {kappa : AspisR1.NIT_Cuts.E} (s2 : w.variant = FIo_Native.transport.Variant.S2)
+    (factors : NHI_TensorOuterStep.Factors w) (extra : NHI_CellCanon.array w.extra)
+    (alphas : AspisR1.NIT_Cuts.canonical alpha) (words : NIG_FinishInput.Windows f 64) :
+    AspisR1.LPi_FieldValues.canonE kappa → AspisR1.NIT_PairDomain.Domain w alpha f kappa
+def NJC_RawCalls.resume : Bool →
+  {H : Type} →
+    AspisR1Stage2.aspis_core.digest.Digest32 H →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            NIL_Carriers.Fresh.V →
+              H →
+                Aeneas.Std.Result
+                  (Aeneas.Std.core.result.Result
+                    (NID_ResumeEmission.verifier.Prepared × NID_ResumeEmission.verifier.Accumulator)
+                    NID_ResumeEmission.verifier.Error) :=
+fun reserved {H} d bytes proof public1 v hash =>
+  NID_ResumeEmission.verifier.resume (fun {T U} {N} => AspisR1.CheckpointBytes4Ops.ne)
+    (fun {T U} {N} => AspisR1.CheckpointBytes4Ops.eq) (fun {T E F O} => NIL_FreshOps.mapError)
+    (fun {T F} => NIL_FreshOps.any) (fun x => Aeneas.Std.Result.ok x)
+    (Aeneas.Std.Result.ok (NIL_Carriers.unK { c0 := { a := 0#u32, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } }))
+    (fun {T} => NIL_FreshOps.filled reserved) NIL_FreshOps.semantic NIL_FreshOps.weights
+    NJC_ValidateEmission.verifier.validate_checkpoint_queries NIL_FreshOps.readK NIL_FreshOps.readE
+    NJC_ConcreteUnwrap.raw (fun v => AspisR1.CheckpointBytes4Ops.checkpointSize (NIL_Carriers.variant v))
+    (fun v => AspisR1.CheckpointBytes4Ops.finalLen (NIL_Carriers.variant v))
+    (fun v => AspisR1.CheckpointBytes4Ops.tag (NIL_Carriers.variant v)) (NIL_FreshOps.digest d) bytes proof public1 v
+    hash
+theorem NJC_RawCalls.source : ∀ (reserved : Bool) {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (bytes proof public1 : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H),
+  NIL_StatePort.reply
+      (NJC_RawCalls.resume reserved d bytes proof public1 NID_ResumeEmission.transport.Variant.S2 hash) =
+    AspisR1Stage2.verifier.resumeWithOps (AspisR1.CheckpointBytes4Ops.ops reserved) d bytes proof public1
+      AspisR1Stage2.transport.Variant.S2 hash :=
+fun reserved {H} d bytes proof public1 hash =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          NIL_StatePort.reply _a =
+            AspisR1Stage2.verifier.resumeWithOps (AspisR1.CheckpointBytes4Ops.ops reserved) d bytes proof public1
+              AspisR1Stage2.transport.Variant.S2 hash)
+        (NJC_RawCalls.reference reserved d bytes proof public1 NID_ResumeEmission.transport.Variant.S2 hash)))
+    (NJC_ValidateCalls.source reserved d bytes proof public1 hash)
+def AspisR1.NIW_AlignFinishComposed.observe : {A B : Type} →
+  Aeneas.Std.Result (AspisR1.NIT_Cuts.Reply A) →
+    (Aeneas.Std.Result (AspisR1.NIT_Cuts.Reply A) → AspisR1.NIW_AlignFinishComposed.Event) →
+      (A → AspisR1.NIW_AlignFinishComposed.Observed B) → AspisR1.NIW_AlignFinishComposed.Observed B :=
+fun {A B} call event next =>
+  match call with
+  | Aeneas.Std.Result.fail err => (Aeneas.Std.Result.fail err, [event call], none)
+  | Aeneas.Std.Result.div => (Aeneas.Std.Result.div, [event call], none)
+  | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err err) =>
+    (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err err), [event call], none)
+  | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok value) =>
+    have tail := next value;
+    (tail.1, event call :: tail.2.1, tail.2.2)
+@[reducible] def AspisR1.NIW_AlignFinishComposed.Event : Type :=
+AspisR1.NIW_AlignFinishExecution.Event
+NJU_generated/NJU_Inspect.lean:12:7: error(lean.unknownIdentifier): Unknown constant `AspisR1.NIG_FinishAlpha.alpha`
+NJU_generated/NJU_Inspect.lean:13:7: error(lean.unknownIdentifier): Unknown constant `AspisR1.NIG_FinishAlpha.selected`

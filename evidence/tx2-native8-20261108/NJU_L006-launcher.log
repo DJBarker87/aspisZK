@@ -1,0 +1,41 @@
+{"attempt": "NJU_L006", "exit_status": 0, "wall_seconds": 10.580771734938025, "peak_rss_kib": "6355016", "swaps": "0", "print_axioms": ["'NJU_FinishCase.current' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJU_FinishCase.current : ∀ (reserved : Bool) (r : NP6_StdModel.Reservation) {H : Type}
+  (d : aspis_core.digest.Digest32 H) (ck proof pub : Slice U8) (hash : H) (p : verifier.Prepared)
+  (a after : verifier.Accumulator) (g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize)
+  (geometry : verifier.QueryGeometry) (pending : verifier.BatchedWeights)
+  (inactive : aspis_core.field.wide_exact.WideExact),
+  (↑ck).length = 1768 →
+    verifier.resumeWithOps (CheckpointBytes4Ops.ops reserved) d ck proof pub transport.Variant.S2 hash =
+        ok (core.result.Result.Ok (p, a)) →
+      ↑a.next = 10 →
+        Port3_NativeQueryBody.verifier.candidate.query_loop (NFS_QueryOps.installed NJJ
+...
+of inactive))
+          (fun good =>
+            Or.inl
+              (let ⟨other, h✝¹⟩ :=
+                NJU_FinishDomain.reached reserved d ck proof pub hash p a after g geometry pending
+                  (NJR_ViewFinish.view proof inactive) ckSize resume start query
+                  (Decidable.byContradiction fun a_1 => current._proof_1 ck proof a size a_1) rfl rfl rfl good
+              let ⟨otherFlush, domain⟩ := h✝¹
+              have same := Eq.symm (ok.inj (Eq.mp (congrArg (fun _a => _a = ok other) flush) otherFlush));
+              Eq.ndrec (motive := fun other =>
+                Port3_FlushInstall.flush pending after.weights.deref = ok other →
+                  NIG_FinishInput.Domain proof (NJR_ViewFinish.view proof inactive) p
+                      { weights := ⟨↑other, other.property⟩, rhs := after.rhs, power := after.power,
+                        next := after.next } →
+                    NJU_CurrentWindows.Holds (NJR_ViewFinish.view proof inactive) ∧
+                      NIG_FinishInput.Domain proof (NJR_ViewFinish.view proof inactive) p
+                        { weights := ⟨↑out, out.property⟩, rhs := after.rhs, power := after.power, next := after.next })
+                (fun otherFlush domain => ⟨good, domain⟩) (Eq.symm same) otherFlush domain))
+          fun bad =>
+          Or.inr
+            (let ⟨r0, right✝²⟩ := NJR_AcceptedFinishDomain.lengths proof inactive size
+            let ⟨r1, fin⟩ := right✝²
+            ⟨bad,
+              NJU_CurrentWindows.rejects r (NJR_ViewFinish.view proof inactive) p
+                { weights := ⟨↑out, out.property⟩, rhs := after.rhs, power := after.power, next := after.next }
+                dom.variant acc.width r0 r1 fin bad⟩))⟩
+'NJU_FinishCase.current' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r7b4ce815c27e4a3986aac0077f696ec2.scope; invocation ID: 0b98335c64d94aecbd63a7c3d07d0e6e

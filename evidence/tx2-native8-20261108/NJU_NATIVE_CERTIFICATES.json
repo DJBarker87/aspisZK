@@ -1,0 +1,355 @@
+{
+  "rows": [
+    {
+      "harness": "weights::NJU_finish::decode_total",
+      "positive": {
+        "attempt": "NJU_K005",
+        "role": "PASS",
+        "receipt": "NJU_K005/receipt.json",
+        "source_sha256": "99209256b90823a21f92f9b930f68791daa6f90a404b291181d848a1e16c5d6d",
+        "wall_seconds": 5.591092165093869,
+        "peak_rss_kib": "344272",
+        "swaps": "0"
+      },
+      "control": {
+        "attempt": "NJU_K006",
+        "role": "matched FAIL",
+        "receipt": "NJU_K006/receipt.json",
+        "source_sha256": "99209256b90823a21f92f9b930f68791daa6f90a404b291181d848a1e16c5d6d",
+        "wall_seconds": 6.639708629110828,
+        "peak_rss_kib": "440736",
+        "swaps": "0"
+      },
+      "scope": "one arbitrary field read, not a whole finish invocation"
+    },
+    {
+      "harness": "weights::NJU_finish::field_canonical",
+      "positive": {
+        "attempt": "NJU_K007",
+        "role": "PASS",
+        "receipt": "NJU_K007/receipt.json",
+        "source_sha256": "99209256b90823a21f92f9b930f68791daa6f90a404b291181d848a1e16c5d6d",
+        "wall_seconds": 6.71050624595955,
+        "peak_rss_kib": "440736",
+        "swaps": "0"
+      },
+      "control": {
+        "attempt": "NJU_K008",
+        "role": "matched FAIL",
+        "receipt": "NJU_K008/receipt.json",
+        "source_sha256": "99209256b90823a21f92f9b930f68791daa6f90a404b291181d848a1e16c5d6d",
+        "wall_seconds": 10.839920880971476,
+        "peak_rss_kib": "441072",
+        "swaps": "0"
+      },
+      "scope": "one arbitrary field read, not a whole finish invocation"
+    },
+    {
+      "harness": "weights::NJU_finish::round0_window",
+      "positive": {
+        "attempt": "NJU_K017",
+        "role": "PASS",
+        "receipt": "NJU_K017/receipt.json",
+        "source_sha256": "5245aa548b197a25b775ae8ae5555a5c578988687fed9c06c88342e6353d2df3",
+        "wall_seconds": 12.777776475064456,
+        "peak_rss_kib": "502672",
+        "swaps": "0"
+      },
+      "control": {
+        "attempt": "NJU_K018",
+        "role": "matched FAIL",
+        "receipt": "NJU_K018/receipt.json",
+        "source_sha256": "5245aa548b197a25b775ae8ae5555a5c578988687fed9c06c88342e6353d2df3",
+        "wall_seconds": 6.784010234987363,
+        "peak_rss_kib": "441004",
+        "swaps": "0"
+      },
+      "scope": "one arbitrary field read, not a whole finish invocation"
+    },
+    {
+      "harness": "weights::NJU_finish::round1_window",
+      "positive": {
+        "attempt": "NJU_K019",
+        "role": "PASS",
+        "receipt": "NJU_K019/receipt.json",
+        "source_sha256": "5245aa548b197a25b775ae8ae5555a5c578988687fed9c06c88342e6353d2df3",
+        "wall_seconds": 11.214868960902095,
+        "peak_rss_kib": "490308",
+        "swaps": "0"
+      },
+      "control": {
+        "attempt": "NJU_K020",
+        "role": "matched FAIL",
+        "receipt": "NJU_K020/receipt.json",
+        "source_sha256": "5245aa548b197a25b775ae8ae5555a5c578988687fed9c06c88342e6353d2df3",
+        "wall_seconds": 6.151972418883815,
+        "peak_rss_kib": "441204",
+        "swaps": "0"
+      },
+      "scope": "one arbitrary field read, not a whole finish invocation"
+    },
+    {
+      "harness": "weights::NJU_finish::final_window",
+      "positive": {
+        "attempt": "NJU_K021",
+        "role": "PASS",
+        "receipt": "NJU_K021/receipt.json",
+        "source_sha256": "5245aa548b197a25b775ae8ae5555a5c578988687fed9c06c88342e6353d2df3",
+        "wall_seconds": 59.70597791299224,
+        "peak_rss_kib": "3455476",
+        "swaps": "0"
+      },
+      "control": {
+        "attempt": "NJU_K022",
+        "role": "matched FAIL",
+        "receipt": "NJU_K022/receipt.json",
+        "source_sha256": "5245aa548b197a25b775ae8ae5555a5c578988687fed9c06c88342e6353d2df3",
+        "wall_seconds": 24.699639971833676,
+        "peak_rss_kib": "2928856",
+        "swaps": "0"
+      },
+      "scope": "one arbitrary field read, not a whole finish invocation"
+    }
+  ],
+  "raw_abort_components": [
+    {
+      "harness": "noncanonical_no_return",
+      "classification": "raw universal no-return property, NOT an exit-zero Kani pass; should_panic alone never credited",
+      "positive": {
+        "attempt": "NJU_K013",
+        "exit_status": 1,
+        "full_kani_verdict": "FAILED; expected abort property retained",
+        "continuation_property": {
+          "id": "weights::NJU_finish::noncanonical_no_return.assertion.2",
+          "status": "SUCCESS",
+          "description": "This is a placeholder message; Kani doesn't support message formatted at runtime",
+          "location": "crates/aspis-r1-cost-probe/src/NJU_finish.rs:58:2 in function weights::NJU_finish::noncanonical_no_return"
+        },
+        "failed_checks": [
+          {
+            "id": "core::option::unwrap_failed.assertion.1",
+            "status": "FAILURE",
+            "description": "called `Option::unwrap()` on a `None` value",
+            "location": "../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:2175:5 in function core::option::unwrap_failed"
+          }
+        ],
+        "all_other_checks_pass_or_unreachable": true,
+        "checks": 370
+      },
+      "control": {
+        "attempt": "NJU_K014",
+        "exit_status": 1,
+        "full_kani_verdict": "FAILED; expected abort property retained",
+        "continuation_property": {
+          "id": "weights::NJU_finish::noncanonical_no_return.assertion.2",
+          "status": "FAILURE",
+          "description": "This is a placeholder message; Kani doesn't support message formatted at runtime",
+          "location": "crates/aspis-r1-cost-probe/src/NJU_finish.rs:58:2 in function weights::NJU_finish::noncanonical_no_return"
+        },
+        "failed_checks": [
+          {
+            "id": "weights::NJU_finish::noncanonical_no_return.assertion.2",
+            "status": "FAILURE",
+            "description": "This is a placeholder message; Kani doesn't support message formatted at runtime",
+            "location": "crates/aspis-r1-cost-probe/src/NJU_finish.rs:58:2 in function weights::NJU_finish::noncanonical_no_return"
+          }
+        ],
+        "all_other_checks_pass_or_unreachable": true,
+        "checks": 370
+      }
+    },
+    {
+      "harness": "short_no_return",
+      "classification": "raw universal no-return property, NOT an exit-zero Kani pass; should_panic alone never credited",
+      "positive": {
+        "attempt": "NJU_K015",
+        "exit_status": 1,
+        "full_kani_verdict": "FAILED; expected abort property retained",
+        "continuation_property": {
+          "id": "weights::NJU_finish::short_no_return.assertion.1",
+          "status": "SUCCESS",
+          "description": "This is a placeholder message; Kani doesn't support message formatted at runtime",
+          "location": "crates/aspis-r1-cost-probe/src/NJU_finish.rs:67:2 in function weights::NJU_finish::short_no_return"
+        },
+        "failed_checks": [
+          {
+            "id": "core::slice::index::slice_index_fail::do_panic::runtime.assertion.2",
+            "status": "FAILURE",
+            "description": "This is a placeholder message; Kani doesn't support message formatted at runtime",
+            "location": "../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs:49:9 in function core::slice::index::slice_index_fail::do_panic::runtime"
+          }
+        ],
+        "all_other_checks_pass_or_unreachable": true,
+        "checks": 245
+      },
+      "control": {
+        "attempt": "NJU_K016",
+        "exit_status": 1,
+        "full_kani_verdict": "FAILED; expected abort property retained",
+        "continuation_property": {
+          "id": "weights::NJU_finish::short_no_return.assertion.1",
+          "status": "FAILURE",
+          "description": "This is a placeholder message; Kani doesn't support message formatted at runtime",
+          "location": "crates/aspis-r1-cost-probe/src/NJU_finish.rs:67:2 in function weights::NJU_finish::short_no_return"
+        },
+        "failed_checks": [
+          {
+            "id": "weights::NJU_finish::short_no_return.assertion.1",
+            "status": "FAILURE",
+            "description": "This is a placeholder message; Kani doesn't support message formatted at runtime",
+            "location": "crates/aspis-r1-cost-probe/src/NJU_finish.rs:67:2 in function weights::NJU_finish::short_no_return"
+          }
+        ],
+        "all_other_checks_pass_or_unreachable": true,
+        "checks": 245
+      }
+    },
+    {
+      "harness": "round0_no_return",
+      "classification": "raw universal no-return property, NOT an exit-zero Kani pass; should_panic alone never credited",
+      "positive": {
+        "attempt": "NJU_K023",
+        "exit_status": 1,
+        "full_kani_verdict": "FAILED; expected abort property retained",
+        "continuation_property": {
+          "id": "weights::NJU_finish::bad_window::<224>.assertion.4",
+          "status": "SUCCESS",
+          "description": "This is a placeholder message; Kani doesn't support message formatted at runtime",
+          "location": "crates/aspis-r1-cost-probe/src/NJU_finish.rs:98:31 in function weights::NJU_finish::bad_window::<224>"
+        },
+        "failed_checks": [
+          {
+            "id": "core::option::unwrap_failed.assertion.1",
+            "status": "FAILURE",
+            "description": "called `Option::unwrap()` on a `None` value",
+            "location": "../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:2175:5 in function core::option::unwrap_failed"
+          }
+        ],
+        "all_other_checks_pass_or_unreachable": true,
+        "checks": 279
+      },
+      "control": {
+        "attempt": "NJU_K024",
+        "exit_status": 1,
+        "full_kani_verdict": "FAILED; expected abort property retained",
+        "continuation_property": {
+          "id": "weights::NJU_finish::bad_window::<224>.assertion.7",
+          "status": "FAILURE",
+          "description": "This is a placeholder message; Kani doesn't support message formatted at runtime",
+          "location": "crates/aspis-r1-cost-probe/src/NJU_finish.rs:98:31 in function weights::NJU_finish::bad_window::<224>"
+        },
+        "failed_checks": [
+          {
+            "id": "weights::NJU_finish::bad_window::<224>.assertion.7",
+            "status": "FAILURE",
+            "description": "This is a placeholder message; Kani doesn't support message formatted at runtime",
+            "location": "crates/aspis-r1-cost-probe/src/NJU_finish.rs:98:31 in function weights::NJU_finish::bad_window::<224>"
+          }
+        ],
+        "all_other_checks_pass_or_unreachable": true,
+        "checks": 311
+      }
+    },
+    {
+      "harness": "round1_no_return",
+      "classification": "raw universal no-return property, NOT an exit-zero Kani pass; should_panic alone never credited",
+      "positive": {
+        "attempt": "NJU_K026",
+        "exit_status": 1,
+        "full_kani_verdict": "FAILED; expected abort property retained",
+        "continuation_property": {
+          "id": "weights::NJU_finish::bad_window::<224>.assertion.4",
+          "status": "SUCCESS",
+          "description": "This is a placeholder message; Kani doesn't support message formatted at runtime",
+          "location": "crates/aspis-r1-cost-probe/src/NJU_finish.rs:98:31 in function weights::NJU_finish::bad_window::<224>"
+        },
+        "failed_checks": [
+          {
+            "id": "core::option::unwrap_failed.assertion.1",
+            "status": "FAILURE",
+            "description": "called `Option::unwrap()` on a `None` value",
+            "location": "../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:2175:5 in function core::option::unwrap_failed"
+          }
+        ],
+        "all_other_checks_pass_or_unreachable": true,
+        "checks": 279
+      },
+      "control": {
+        "attempt": "NJU_K027",
+        "exit_status": 1,
+        "full_kani_verdict": "FAILED; expected abort property retained",
+        "continuation_property": {
+          "id": "weights::NJU_finish::bad_window::<224>.assertion.7",
+          "status": "FAILURE",
+          "description": "This is a placeholder message; Kani doesn't support message formatted at runtime",
+          "location": "crates/aspis-r1-cost-probe/src/NJU_finish.rs:98:31 in function weights::NJU_finish::bad_window::<224>"
+        },
+        "failed_checks": [
+          {
+            "id": "weights::NJU_finish::bad_window::<224>.assertion.7",
+            "status": "FAILURE",
+            "description": "This is a placeholder message; Kani doesn't support message formatted at runtime",
+            "location": "crates/aspis-r1-cost-probe/src/NJU_finish.rs:98:31 in function weights::NJU_finish::bad_window::<224>"
+          }
+        ],
+        "all_other_checks_pass_or_unreachable": true,
+        "checks": 311
+      }
+    },
+    {
+      "harness": "final_no_return",
+      "classification": "raw universal no-return property, NOT an exit-zero Kani pass; should_panic alone never credited",
+      "positive": {
+        "attempt": "NJU_K028",
+        "exit_status": 1,
+        "full_kani_verdict": "FAILED; expected abort property retained",
+        "continuation_property": {
+          "id": "weights::NJU_finish::bad_window::<2048>.assertion.4",
+          "status": "SUCCESS",
+          "description": "This is a placeholder message; Kani doesn't support message formatted at runtime",
+          "location": "crates/aspis-r1-cost-probe/src/NJU_finish.rs:98:31 in function weights::NJU_finish::bad_window::<2048>"
+        },
+        "failed_checks": [
+          {
+            "id": "core::option::unwrap_failed.assertion.1",
+            "status": "FAILURE",
+            "description": "called `Option::unwrap()` on a `None` value",
+            "location": "../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:2175:5 in function core::option::unwrap_failed"
+          }
+        ],
+        "all_other_checks_pass_or_unreachable": true,
+        "checks": 279
+      },
+      "control": {
+        "attempt": "NJU_K030",
+        "exit_status": 1,
+        "full_kani_verdict": "FAILED; expected abort property retained",
+        "continuation_property": {
+          "id": "weights::NJU_finish::bad_window::<2048>.assertion.7",
+          "status": "FAILURE",
+          "description": "This is a placeholder message; Kani doesn't support message formatted at runtime",
+          "location": "crates/aspis-r1-cost-probe/src/NJU_finish.rs:98:31 in function weights::NJU_finish::bad_window::<2048>"
+        },
+        "failed_checks": [
+          {
+            "id": "weights::NJU_finish::bad_window::<2048>.assertion.7",
+            "status": "FAILURE",
+            "description": "This is a placeholder message; Kani doesn't support message formatted at runtime",
+            "location": "crates/aspis-r1-cost-probe/src/NJU_finish.rs:98:31 in function weights::NJU_finish::bad_window::<2048>"
+          }
+        ],
+        "all_other_checks_pass_or_unreachable": true,
+        "checks": 311
+      }
+    }
+  ],
+  "diagnostic_only": [
+    "NJU_K009",
+    "NJU_K010",
+    "NJU_K011",
+    "NJU_K012"
+  ],
+  "composition_status": "TX2:115 supplement and TX2:065 remain OPEN",
+  "transport": "option-A P6/D188 reclassification",
+  "kmx_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67"
+}

@@ -11,3 +11,7 @@ Budget: 80 Kani / 100 Lean / 0 extraction. One admitted scope at a time, 6G high
 Host workspace: /home/dombarker/project-offloads/codex-cx-tx2-native8-20261108; own CARGO_TARGET_DIR NJU_target. Seed NJR export first, NJO second, retain own cache and record hashes. Host initial free space 8.9G (100% rounded); avoid corpus duplication.
 
 Retained assumptions: approved headline/runtime trust and option-A P6/D188 native semantic transport (reclassification). Nothing discharged yet. Pending RuntimeCpiReadonlyEntry7 is not used.
+
+## Stage 2 checkpoint
+
+Five native decoder/window pairs and five raw no-return/control pairs are retained in NJU_NATIVE_CERTIFICATES.json. should_panic alone earns no universal credit. Current-window caller case split and no-window-premise source finish Result/observation erasure compile. Exact primitive short/None abort and all checked offsets compile. These do not yet close TX2:115 supplement or TX2:065. Generalization of the pair chain to arbitrary2048-byte messages is in progress; the existing composition appears to use canonical-window data only for its length. No promotion or new trust item.
