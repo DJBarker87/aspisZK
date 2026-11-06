@@ -1,0 +1,9 @@
+@process : ∀ {A : Type} (children : Hiq_DispatchSource.Ops A) (p : Hiq_DispatchSource.Key) (a : Slice A) (d : Slice U8),
+  NLQ_Route.Tx1 d → NIV_RawBoundary.process (NIV_RawBoundary.profile children) p a d = children.first p a d
+@entry : ∀ {A : Type} (children : Hiq_DispatchSource.Ops A) (p : Hiq_DispatchSource.Key) (a : Slice A) (d : Slice U8),
+  NIV_RawBoundary.entry (NIV_RawBoundary.profile children) p a d = do
+    let admitted ← (NIV_RawBoundary.profile children).admitted d
+    if admitted = true then NIV_RawBoundary.process (NIV_RawBoundary.profile children) p a d
+      else ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+'NLQ_SourceDispatch.process' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_SourceDispatch.entry' depends on axioms: [propext, Classical.choice, Quot.sound]

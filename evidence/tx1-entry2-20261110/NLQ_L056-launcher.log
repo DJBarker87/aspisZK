@@ -1,0 +1,23 @@
+{"attempt": "NLQ_L056", "exit_status": 0, "wall_seconds": 38.9293435360305, "peak_rss_kib": "6003924", "swaps": "0", "print_axioms": ["'NLQ_SnapshotThirdPrefix.abort' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+abort : ∀ (e : Entry) (err : Error),
+  (S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 2).1)).length = 1768 →
+    NLQ_SnapshotFold.G e (ok ()) (ok ()) (fail err) =
+      { result := fail err,
+        events :=
+          (G (ready e 0 []) 0 58295 58295 (ok ())).events ++
+            ((G (ready e 1 [e.snapshot 0 58295 58295]) 1 1880 1880 (ok ())).events ++
+              allocationPrefix (ready e 2 [e.snapshot 0 58295 58295, e.snapshot 1 1880 1880]) 2 (fail err)) }
+'NLQ_SnapshotThirdPrefix.abort' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+...
+abort : ∀ (e : Entry) (err : Error),
+  (S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 2).1)).length = 1768 →
+    NLQ_SnapshotFold.G e (ok ()) (ok ()) (fail err) =
+      { result := fail err,
+        events :=
+          (G (ready e 0 []) 0 58295 58295 (ok ())).events ++
+            ((G (ready e 1 [e.snapshot 0 58295 58295]) 1 1880 1880 (ok ())).events ++
+              allocationPrefix (ready e 2 [e.snapshot 0 58295 58295, e.snapshot 1 1880 1880]) 2 (fail err)) }
+'NLQ_SnapshotThirdPrefix.abort' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-re00aad67202645f9a0ac05a7f0e93329.scope; invocation ID: 073ac187df3e49c797e69230351351ca

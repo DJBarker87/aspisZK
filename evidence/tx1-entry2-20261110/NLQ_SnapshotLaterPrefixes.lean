@@ -14,11 +14,11 @@ theorem second_abort (e : Entry) (err : Aeneas.Std.Error) (a2 : Result Unit)
  change NJU_Log.bind (NLM_Snapshot.G (ready e 0 []) 0 58295 58295 (.ok ())) _ = _
  unfold NJU_Log.bind
  rw [NLM_Snapshot.normal_result]
- change (let rest : Run (Slice Owned × State) := do
+ change (let rest : NLM_Snapshot.Run (Slice NLM_Snapshot.Owned × NLM_Snapshot.State) := do
    let (pub,s2) ← NLM_Snapshot.G (ready e 1 [e.snapshot 0 58295 58295]) 1 1880 1880 (.fail err)
    let (cp,s3) ← NLM_Snapshot.G s2 2 1768 1768 a2
    pure (NLQ_SnapshotFold.owned3 (e.snapshot 0 58295 58295) pub cp,s3)
-  {result:=rest.result,events:=(NLM_Snapshot.G (ready e 0 []) 0 58295 58295 (.ok ())).events++rest.events}) = _
+  ({result:=rest.result,events:=(NLM_Snapshot.G (ready e 0 []) 0 58295 58295 (.ok ())).events++rest.events} : NLM_Snapshot.Run (Slice NLM_Snapshot.Owned × NLM_Snapshot.State))) = _
  rw [NLM_Snapshot.allocation_abort e 1 1 1880 1880 [e.snapshot 0 58295 58295] err (Or.inl extent)]
  rfl
 #check @second_abort

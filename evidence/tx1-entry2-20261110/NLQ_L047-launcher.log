@@ -1,0 +1,52 @@
+{"attempt": "NLQ_L047", "exit_status": 1, "wall_seconds": 26.54393832804635, "peak_rss_kib": "5967020", "swaps": "0", "print_axioms": ["'NLQ_SnapshotThirdPrefix.abort' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLQ_generated/NLQ_SnapshotThirdPrefix.lean:21:1: error: 'change' tactic failed, pattern
+  (let rest := do
+      let __x ← G (ready e 2 [e.snapshot 0 58295 58295, e.snapshot 1 1880 1880]) 2 1768 1768 (fail err)
+      match __x with
+        | (cp, s3) => pure (NLQ_SnapshotFold.owned3 (e.snapshot 0 58295 58295) (e.snapshot 1 1880 1880) cp, s3);
+    { result := rest.result,
+      events :=
+        (G (ready e 0 []) 0 58295 58295 (ok ())).events ++
+          ((G (ready e 1 [e.snapshot 0 58295 58295]) 1 1880 1880 (ok ())).events ++ rest.events) }) =
+    ?m.215
+is not definitionally equal to target
+  {
+      result :=
+        (do
+            let __x ← G (returned (ready e 0 []) 0 58295 58295) 1 188
+...
+3 (e.snapshot 0 58295 58295) (e.snapshot 1 1880 1880) cp, s3);
+    { result := rest.result,
+      events :=
+        (G (ready e 0 []) 0 58295 58295 (ok ())).events ++
+          ((G (ready e 1 [e.snapshot 0 58295 58295]) 1 1880 1880 (ok ())).events ++ rest.events) }) =
+    ?m.215
+is not definitionally equal to target
+  {
+      result :=
+        (do
+            let __x ← G (returned (ready e 0 []) 0 58295 58295) 1 1880 1880 (ok ())
+            let __x_1 ← G __x.2 2 1768 1768 (fail err)
+            pure (NLQ_SnapshotFold.owned3 (e.snapshot 0 58295 58295) __x.1 __x_1.1, __x_1.2)).result,
+      events :=
+        (G (ready e 0 []) 0 58295 58295 (ok ())).events ++
+          (do
+              let __x ← G (returned (ready e 0 []) 0 58295 58295) 1 1880 1880 (ok ())
+              let __x_1 ← G __x.2 2 1768 1768 (fail err)
+              pure (NLQ_SnapshotFold.owned3 (e.snapshot 0 58295 58295) __x.1 __x_1.1, __x_1.2)).events } =
+    { result := fail err,
+      events :=
+        (G (ready e 0 []) 0 58295 58295 (ok ())).events ++
+          ((G (ready e 1 [e.snapshot 0 58295 58295]) 1 1880 1880 (ok ())).events ++
+            allocationPrefix (ready e 2 [e.snapshot 0 58295 58295, e.snapshot 1 1880 1880]) 2 (fail err)) }
+abort : ∀ (e : Entry) (err : Error),
+  (S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 2).1)).length = 1768 →
+    NLQ_SnapshotFold.G e (ok ()) (ok ()) (fail err) =
+      { result := fail err,
+        events :=
+          (G (ready e 0 []) 0 58295 58295 (ok ())).events ++
+            ((G (ready e 1 [e.snapshot 0 58295 58295]) 1 1880 1880 (ok ())).events ++
+              allocationPrefix (ready e 2 [e.snapshot 0 58295 58295, e.snapshot 1 1880 1880]) 2 (fail err)) }
+'NLQ_SnapshotThirdPrefix.abort' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r511bbd9edec148c3b2419765292d68d3.scope; invocation ID: a9d62249e38f4a36b1419bef6c42a980
