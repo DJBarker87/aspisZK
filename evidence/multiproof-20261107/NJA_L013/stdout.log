@@ -1,0 +1,50 @@
+NJA_lean/NJA_ParentAddress.lean:27:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  values.index_usize (i.wrapping_add 1#usize)
+in the target expression
+  (do
+      let s ← lift (Array.make 1#usize [18#u8] multiproof.occupied_binary_parent._proof_1).to_slice
+      let s1 ← lift (Array.to_slice (↑values)[↑i])
+      let i ← lift (i.wrapping_add 1#usize)
+      let a1 ← values.index_usize i
+      let s2 ← lift a1.to_slice
+      let s3 ← lift (Array.make 3#usize [s, s1, s2] ⋯).to_slice
+      D.digest hash s3) =
+    D.digest hash (parts (↑values)[↑i] (↑values)[↑i + 1])
+
+H : Type
+D : aspis_core.digest.Digest32 H
+hash : H
+values : Std.Array Digest 16#usize
+i : Usize
+hi : ↑i + 1 < 16
+ib : ↑i < ↑16#usize
+next : ↑(i.wrapping_add 1#usize) = ↑i + 1
+⊢ (do
+      let s ← lift (Array.make 1#usize [18#u8] multiproof.occupied_binary_parent._proof_1).to_slice
+      let s1 ← lift (Array.to_slice (↑values)[↑i])
+      let i ← lift (i.wrapping_add 1#usize)
+      let a1 ← values.index_usize i
+      let s2 ← lift a1.to_slice
+      let s3 ← lift (Array.make 3#usize [s, s1, s2] ⋯).to_slice
+      D.digest hash s3) =
+    D.digest hash (parts (↑values)[↑i] (↑values)[↑i + 1])
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NJA_lean/NJA_ParentAddress.lean:40:13: warning: This simp argument is unused:
+  Bool.true_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [B̵o̵o̵l̵.̵t̵r̵u̵e̵_̵e̵q̵,̵ ̵if_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NJA_ParentAddress.occupied' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NJA_ParentAddress.sibling_left' depends on axioms: [propext, Classical.choice, Quot.sound]

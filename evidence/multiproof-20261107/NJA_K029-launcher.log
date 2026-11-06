@@ -1,0 +1,46 @@
+{"attempt": "NJA_K029", "exit_status": 1, "wall_seconds": 92.84046570817009, "peak_rss_kib": "2218216", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let n:usize=kani::any();kani::as...
+    |        ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nja_verify_invalid`
+
+warning: function `NJA_verify_invalid_control` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/multiproof.rs:420:8
+    |
+420 |     fn NJA_verify_invalid_control() {let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let n:usize=kani::any();...
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nja_verify_invalid_control`
+
+warning: function `NJA_verify_invalid_frame_control` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/multiproof.rs:422:8
+    |
+422 |     fn NJA_verify_invalid_frame_control() {let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let n:usize=kani::...
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nja_verify_invalid_frame_control`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.84s
+Checking harness multiproof::NJA_native::NJA_verify_invalid_control...
+
+CBMC failed
+VERIFICATION:- FAILED
+CBMC timed out. You may want to rerun your proof with a larger timeout or use stubbing to reduce the size of the code the verifier reasons about.
+
+Manual Harness Summary:
+Verification failed for - multiproof::NJA_native::NJA_verify_invalid_control
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rb9f3b322037f442b94bf4417d3f67f3f.scope; invocation ID: 82ef3f8507a84cffa2a26b15a91546bb

@@ -1,0 +1,80 @@
+{
+  "attempt": "NJA_K076",
+  "kind": "kani",
+  "module": "NJA_external_cell_control",
+  "sources": [
+    "NJA_gate.py",
+    "NJA_stage.py",
+    "NJA_harness.rs",
+    "NJA_SUPPLEMENT.json",
+    "NJA_HARNESS_HISTORY.json",
+    "NJA_contract_overlay.py",
+    "NJA_contracts.rs",
+    "NJA_SOURCE_HISTORY.json",
+    "NJA_poseidon.rs",
+    "NJA_KMX.patch"
+  ],
+  "upload": [
+    "NJA_gate.py",
+    "NJA_stage.py",
+    "NJA_harness.rs",
+    "NJA_SUPPLEMENT.json",
+    "NJA_HARNESS_HISTORY.json",
+    "NJA_contract_overlay.py",
+    "NJA_contracts.rs",
+    "NJA_SOURCE_HISTORY.json",
+    "NJA_poseidon.rs",
+    "NJA_KMX.patch"
+  ],
+  "command": [
+    "python3",
+    "NJA_gate.py",
+    "NJA_K076.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-multiproof-20261107/NJA_workspace/crates/aspis-statement/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-multiproof-20261107/NJA_target",
+    "--features",
+    "pool-v1-kernel,pool-v1-pair-forest-active-mask-basis-audit,pool-v1-pair-forest-binary-copy-weights-audit,pool-v1-pair-forest-copy-finish-dot-basis-audit,pool-v1-pair-forest-copy-pattern-basis-audit,pool-v1-pair-forest-copy-selector-tensor-basis-audit,pool-v1-pair-forest-copy-tag-dot-basis-audit,pool-v1-pair-forest-endpoint-selector-cache-audit,pool-v1-pair-forest-packed-digest-audit,pool-v1-pair-forest-packed-digest-selector-tensor-audit,pool-v1-pair-forest-packed-range-audit,pool-v1-pair-forest-pattern-window-audit,pool-v1-pair-forest-semantic-factor-audit,r0",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "-Z",
+    "function-contracts",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "poseidon2::NJA_native::NJA_external_cell",
+    "--output-format",
+    "terse"
+  ],
+  "timeout": 180,
+  "source_revision": "",
+  "expected_time": "One native arbitrary-prestate linear-layer step; local opaque reducer record, exact KMX where copies reached; no field products and no complete round/buffer loop",
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-multiproof-20261107/NJA_target",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1 --cfg NJA_bad_argument"
+  },
+  "collect": [
+    "NJA_K076_validation/NHR_GRAPH_CHECK.json",
+    "NJA_K076_validation/NJA_INPUTS.json",
+    "NJA_K076_validation/NJA_harness.patch",
+    "NJA_K076_validation/NJA_LOCK.json",
+    "NJA_K076_validation/NJA_KMX.json"
+  ],
+  "lane": "poseidon"
+}

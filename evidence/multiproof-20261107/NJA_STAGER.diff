@@ -1,0 +1,32 @@
+--- NHR_stage.py
++++ NJA_stage.py
+@@ -150,11 +150,19 @@
+ 
+ def options(args, workspace, out):
+     root = 'crate::verifier::candidate::'+args.function
++    if args.function == 'NJA_multiproof': root = 'crate::multiproof'
+     spec = json.loads(Path(args.opacity).read_text())
+-    opacity = spec[args.function]
++    opacity = spec[args.function] if args.function != 'NJA_multiproof' else []
+     assert all(x['path'].startswith(('crate::','aspis_core::')) and x['why'] for x in opacity)
+     cmd = [str(TOOLROOT/'charon'),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--include','core::option::Option','--include','core::result::Result','--include','core::option::_::ok_or','--start-from',root]
+     for x in opacity: cmd += ['--opaque',x.get('selector',x['path'])]
++    if args.function == 'NJA_multiproof':
++        for name in ['pow5', 'apply_mat4_lazy', 'external_linear_lazy', 'internal_linear_lazy', 'permute_optimized_with_trace', 'merkle_node_compress_v3']:
++            cmd += ['--include', 'aspis_statement::poseidon2::'+name]
++        for name in ['generate', 'verify', 'binary_parent', 'sort_dedup']:
++            cmd += ['--opaque', 'crate::multiproof::'+name]
++        for name in ['mul', 'add', 'reduce_u62']:
++            cmd += ['--opaque', 'aspis_core::field::_::'+name]
+     for ty in spec['include_types']: cmd += ['--include',ty]
+     llbc = out/(args.function+'.llbc')
+     cmd += ['--dest-file',str(llbc),'--','--manifest-path',str(workspace/'crates/aspis-r1-cost-probe/Cargo.toml'),'--locked','--offline','--release','--lib','--jobs','1','--features',FEATURES]
+@@ -214,7 +222,7 @@
+     modes=p.add_mutually_exclusive_group(required=True)
+     for name in ['export','check','extract','options']: modes.add_argument('--'+name,action='store_true')
+     p.add_argument('--workspace',type=Path,default=E/'NHR_workspace'); p.add_argument('--out',type=Path,default=E/'NHR_preflight')
+-    p.add_argument('--cargo',default='/home/dombarker/.cargo/bin/cargo'); p.add_argument('--function',choices=['prepare','tx1','tx2_authenticated','tx2_common']); p.add_argument('--opacity',default=str(E/'NHR_OPACITY.json'))
++    p.add_argument('--cargo',default='/home/dombarker/.cargo/bin/cargo'); p.add_argument('--function',choices=['prepare','tx1','tx2_authenticated','tx2_common','NJA_multiproof']); p.add_argument('--opacity',default=str(E/'NHR_OPACITY.json'))
+     a=p.parse_args()
+     if a.export: export(); return 0
+     a.workspace=a.workspace.resolve(); a.out=a.out.resolve(); a.out.mkdir(parents=True,exist_ok=True)

@@ -1,0 +1,50 @@
+{"attempt": "NJA_K019", "exit_status": 1, "wall_seconds": 2.9749560749623924, "peak_rss_kib": "332512", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+ eight{Arity::Eight}else{Arity::Two};asse...
+    |        ^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nja_count_empty_control`
+
+warning: function `NJA_count_large` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/multiproof.rs:395:8
+    |
+395 |     fn NJA_count_large() {let a:[u32;17]=kani::any();let eight:bool=kani::any();let arity=if eight{Arity::Eight}else{Arity::Two};as...
+    |        ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nja_count_large`
+
+warning: function `NJA_count_large_control` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/multiproof.rs:397:8
+    |
+397 |     fn NJA_count_large_control() {let a:[u32;17]=kani::any();let eight:bool=kani::any();let arity=if eight{Arity::Eight}else{Arity:...
+    |        ^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nja_count_large_control`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.83s
+Checking harness multiproof::NJA_native::NJA_count_large_control...
+
+VERIFICATION RESULT:
+ ** 1 of 249 failed (17 unreachable)
+Failed Checks: assertion failed: node_count(arity, &a).is_some()
+ File: "crates/aspis-r1-cost-probe/src/multiproof.rs", line 397, in multiproof::NJA_native::NJA_count_large_control
+
+VERIFICATION:- FAILED
+Verification Time: 0.13109578s
+
+Manual Harness Summary:
+Verification failed for - multiproof::NJA_native::NJA_count_large_control
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r9c278fd14e1746bd872a56c28fb46210.scope; invocation ID: 55eda918541c4ed3852b3b43237f4c49

@@ -1,0 +1,48 @@
+{"attempt": "NJA_K034", "exit_status": 1, "wall_seconds": 3.869964878074825, "peak_rss_kib": "440816", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-multiproof-20261107/NJA_workspace/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`
+...
+ fn NJA_levels_ref(a:Arity)->u32{match a{Arity::Two=>18,Arity::Eight=>6}}
+    |               ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nja_levels_ref`
+
+warning: function `NJA_bits_contract` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/multiproof.rs:438:5
+    |
+438 |  fn NJA_bits_contract(){let eight:bool=kani::any();let a=if eight{Arity::Eight}else{Arity::Two};let _=a.bits();}
+    |     ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nja_bits_contract`
+
+warning: function `NJA_width_contract` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/multiproof.rs:440:5
+    |
+440 |  fn NJA_width_contract(){let eight:bool=kani::any();let a=if eight{Arity::Eight}else{Arity::Two};let _=a.width();}
+    |     ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nja_width_contract`
+
+warning: function `NJA_levels_contract` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/multiproof.rs:442:5
+    |
+442 |  fn NJA_levels_contract(){let eight:bool=kani::any();let a=if eight{Arity::Eight}else{Arity::Two};let _=a.levels();}
+    |     ^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nja_levels_contract`
+
+    Finished `dev` profile [optimized] target(s) in 2.53s
+Checking harness multiproof::NJA_contracts::NJA_width_contract...
+
+VERIFICATION RESULT:
+ ** 1 of 83 failed (1 unreachable)
+Failed Checks: |result: &usize| *result != NJA_contracts::NJA_width_ref(self)
+ File: "crates/aspis-r1-cost-probe/src/multiproof.rs", line 42, in multiproof::Arity::width::{closure#2}
+
+VERIFICATION:- FAILED
+Verification Time: 0.07847364s
+
+Manual Harness Summary:
+Verification failed for - multiproof::NJA_contracts::NJA_width_contract
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r02146b476d9c453e8ad74937edd5f610.scope; invocation ID: d3da385495be445a8373b87b7c672374
