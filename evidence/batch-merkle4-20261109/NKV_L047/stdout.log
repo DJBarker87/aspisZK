@@ -1,0 +1,11 @@
+theorem NKV_ErrorKinds.loop : ∀ (base : Port3_NativeBatchBody.Ops) {X : Type} (D : aspis_core.digest.Digest32 X)
+  (hash : X) (proof : Slice U8) (root : Std.Array U8 32#usize) (tree lo n slot : Usize) (keys : Std.Array U64 16#usize),
+  ↑n ≤ 12 →
+    ∀ (idx : Indices) (val : Values) (d pos : Usize),
+      LoopAllowed
+        (NKV_FRef.verifier.candidate.batch_tree_loop (Port3_BatchStd.install base) D proof root tree idx val hash lo n
+          slot keys d pos) :=
+⋯
+'NKV_ErrorKinds.step_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_ErrorKinds.walk' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_ErrorKinds.loop' depends on axioms: [propext, Classical.choice, Quot.sound]

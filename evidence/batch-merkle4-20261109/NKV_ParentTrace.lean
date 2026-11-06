@@ -75,7 +75,6 @@ theorem second_error {E : Type} (c0 c1 c2 : Indices → Values → Tree E)
  rw [three,reply0]
  simp only [next]
  rw [reply1]
- rfl
 
 set_option pp.proofs false
 #print three_congr

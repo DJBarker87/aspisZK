@@ -1,0 +1,41 @@
+{"attempt": "NKV_K021", "exit_status": 1, "wall_seconds": 18.08700988907367, "peak_rss_kib": "353364", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+621: core::cmp::impls::<impl core::cmp::PartialEq<&[u8; 32]> for &[u8]>::ne.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:2094:34 in function core::cmp::impls::<impl core::cmp::PartialEq<&[u8; 32]> for &[u8]>::ne
+
+Check 622: core::cmp::impls::<impl core::cmp::PartialEq<&[u8; 32]> for &[u8]>::ne.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:2094:34 in function core::cmp::impls::<impl core::cmp::PartialEq<&[u8; 32]> for &[u8]>::ne
+
+Check 623: core::cmp::impls::<impl core::cmp::PartialEq<&[u8; 32]> for &[u8]>::ne.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:2094:34 in function core::cmp::impls::<impl core::cmp::PartialEq<&[u8; 32]> for &[u8]>::ne
+
+
+SUMMARY:
+ ** 1 of 623 failed (19 unreachable)
+Failed Checks: assertion failed: parts[3] != &self.roots[2]
+ File: "/home/dombarker/project-offloads/codex-cx-batch-merkle4-20261109/NKV_workspace/crates/aspis-r1-cost-probe/../../NKV_harness.rs", line 86, in <verifier::candidate::NKV_native::BatchOracle<'_> as aspis_core::Digest32>::digest
+
+VERIFICATION:- FAILED
+Verification Time: 14.526979s
+
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NKV_native::batch_calls
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r8616f73b767945109560e88118453bd1.scope; invocation ID: 6356fe1df9f7464793a06415f56019ef

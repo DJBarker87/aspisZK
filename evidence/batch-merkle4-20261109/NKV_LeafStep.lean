@@ -17,7 +17,7 @@ theorem project_source (s : reference.Scratch) (pos : Usize) (out : Option refer
 all duplicate/append/rejection arms. These local child reads are to be proved
 at SAME inputs by the concrete parent, not retained as a positive root premise. -/
 theorem source (base : Port3_NativeBatchBody.Ops) {X : Type}
- (D : aspis_core.digest.Digest32 X) (hash : X)
+ (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X)
  (proof : Slice U8) (root : Array U8 32#usize) (tree lo n slot pos : Usize)
  (keys : Array U64 16#usize) (s : reference.Scratch)
  (key : U64) (view : Slice U8) (leaf : Array U8 32#usize)

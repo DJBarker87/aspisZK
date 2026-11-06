@@ -1,0 +1,74 @@
+{"attempt": "NKV_L045", "exit_status": 1, "wall_seconds": 5.691962345037609, "peak_rss_kib": "4417032", "swaps": "0", "print_axioms": ["'NKV_ErrorKinds.step_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NKV_ErrorKinds.walk' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NKV_ErrorKinds.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKV_ErrorKinds.lean:18:25: error: unsolved goals
+case h_1.Err.refl
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+proof : Slice U8
+root : Std.Array U8 32#usize
+tree lo n slot : Usize
+keys : Std.Array U64 16#usize
+idx : Indices
+val : Values
+d pos : Usize
+h✝ : ¬pos < n
+x✝² : Result (Slice U32)
+a✝² : Slice U32
+heq✝² :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32)) idx
+      { «end» := d } =
+    ok a✝²
+x✝¹ : Result (Option Usize)
+a✝¹ : Option Usize
+heq✝¹ : base.op11 Port3_NativeBatchBody.multiproof.Arity.Two a✝² = ok a✝¹
+x✝ : Result (core.result.Result Usize verifier.Error)
+a✝ : verifier.Error
+heq✝ :
+  
+...
+ps
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+proof : Slice U8
+root : Std.Array U8 32#usize
+tree lo n slot : Usize
+keys : Std.Array U64 16#usize
+idx : Indices
+val : Values
+d pos : Usize
+h✝ : ¬pos < n
+x✝² : Result (Slice U32)
+a✝² : Slice U32
+heq✝² :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32)) idx
+      { «end» := d } =
+    ok a✝²
+x✝¹ : Result (Option Usize)
+a✝¹ : Option Usize
+heq✝¹ : base.op11 Port3_NativeBatchBody.multiproof.Arity.Two a✝² = ok a✝¹
+x✝ : Result (core.result.Result Usize verifier.Error)
+a✝ : verifier.Error
+heq✝ :
+  (match a✝¹ with
+    | some x => ok (core.result.Result.Ok x)
+    | none => ok (core.result.Result.Err verifier.Error.Merkle)) =
+    ok (core.result.Result.Err a✝)
+h :
+  ok (done (idx, val, core.result.Result.Err (core.convert.FromSame.from a✝), true)) =
+    ok (done (idx, val, core.result.Result.Err (core.convert.FromSame.from a✝), true))
+⊢ core.convert.FromSame.from a✝ = verifier.Error.Parse ∨ core.convert.FromSame.from a✝ = verifier.Error.Merkle
+theorem NKV_ErrorKinds.loop : ∀ (base : Port3_NativeBatchBody.Ops) {X : Type} (D : aspis_core.digest.Digest32 X)
+  (hash : X) (proof : Slice U8) (root : Std.Array U8 32#usize) (tree lo n slot : Usize) (keys : Std.Array U64 16#usize),
+  ↑n ≤ 12 →
+    ∀ (idx : Indices) (val : Values) (d pos : Usize),
+      LoopAllowed
+        (NKV_FRef.verifier.candidate.batch_tree_loop (Port3_BatchStd.install base) D proof root tree idx val hash lo n
+          slot keys d pos) :=
+⋯
+'NKV_ErrorKinds.step_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKV_ErrorKinds.walk' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKV_ErrorKinds.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rc2b85430fb524cacb787176fec71bb52.scope; invocation ID: 475ec642cf1e46ec977d63e9cf1edc8c

@@ -1,0 +1,33 @@
+{"attempt": "NKV_L043", "exit_status": 0, "wall_seconds": 11.544313118094578, "peak_rss_kib": "5889912", "swaps": "0", "print_axioms": ["'NKV_LeafStep.project_source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_LeafStep.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NKV_LeafStep.source : ∀ (base : Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X) (proof : Slice U8) (root : Std.Array U8 32#usize)
+  (tree lo n slot pos : Usize) (keys : Std.Array U64 16#usize) (s : reference.Scratch) (key : U64) (view : Slice U8)
+  (leaf : Std.Array U8 32#usize),
+  pos < n →
+    ↑s.n < 16 →
+      keys.index_usize pos = ok key →
+        base.op2 proof (Port4B_NativeLeaf.openingIndex lo key) = ok view →
+          base.op6 D hash tree view = ok leaf →
+            NKV_FRef.verifier.candidate.batch_tree_loop.body (Port3_BatchStd.install base) D proof root tree hash lo n
+                slot keys s.idx s.val s.n pos =
+   
+...
+theorem NKV_LeafStep.source : ∀ (base : Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X) (proof : Slice U8) (root : Std.Array U8 32#usize)
+  (tree lo n slot pos : Usize) (keys : Std.Array U64 16#usize) (s : reference.Scratch) (key : U64) (view : Slice U8)
+  (leaf : Std.Array U8 32#usize),
+  pos < n →
+    ↑s.n < 16 →
+      keys.index_usize pos = ok key →
+        base.op2 proof (Port4B_NativeLeaf.openingIndex lo key) = ok view →
+          base.op6 D hash tree view = ok leaf →
+            NKV_FRef.verifier.candidate.batch_tree_loop.body (Port3_BatchStd.install base) D proof root tree hash lo n
+                slot keys s.idx s.val s.n pos =
+              do
+              let out ← reference.leaf_step s (Port4B_NativeLeaf.decodedIndex key) leaf
+              ok (project s (pos.wrapping_add 1#usize) out) :=
+⋯
+'NKV_LeafStep.project_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_LeafStep.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r5972345fdcd3416db1c834458b48bd5e.scope; invocation ID: f609bc2cc4f6493fb10ab5188c462d6b

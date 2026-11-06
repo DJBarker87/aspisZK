@@ -1,0 +1,14 @@
+theorem NKV_LeafBuild.adopted : ∀ (H : Bytes → HashState) (p : OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+  (kind : ℕ) (positions : List ℕ) (s : reference.Scratch),
+  eval H (MultiproofConeLeafFold.leaves p q kind positions s) =
+    ((build H p q kind positions s).1, NKV_StepErasure.mapResult forget (build H p q kind positions s).2) :=
+⋯
+theorem NKV_LeafBuild.chain : ∀ (H : Bytes → HashState) (p : OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+  (kind : ℕ) (positions : List ℕ) (s after : reference.Scratch),
+  ↑s.n + positions.length ≤ 16 →
+    (build H p q kind positions s).2 = ok (true, after) →
+      NKB_LeafChain.Chain (leaves H p q kind positions) s (some after) :=
+⋯
+'NKV_LeafBuild.adopted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_LeafBuild.fold' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_LeafBuild.chain' depends on axioms: [propext, Classical.choice, Quot.sound]

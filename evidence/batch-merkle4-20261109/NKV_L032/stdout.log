@@ -1,0 +1,32 @@
+theorem NKV_ConcreteDomains.opening : ∀ (H : Bytes → HashState) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (i : Usize),
+      ↑i < 22 →
+        ∃ view,
+          (NKV_ConcreteChildren.ops H).op2 proof i = ok view ∧
+            (↑view).length = 832 ∧
+              MultiproofConeCanonical.bytesOf ↑view =
+                OraclePortCompactDraft.slice (MultiproofConeCanonical.bytesOf ↑proof) (10055 + ↑i * 832) 832 :=
+⋯
+theorem NKV_ConcreteDomains.leaf : ∀ {X : Type} (H : Bytes → HashState) (D : aspis_core.digest.Digest32 X) (hash : X)
+  (tree : Usize) (view : Slice U8),
+  (↑view).length = 832 → (NKV_ConcreteChildren.ops H).op6 D hash tree view = Port4B_LeafCode.native D hash tree view :=
+⋯
+theorem NKV_ConcreteDomains.verifier_bytes : ∀ (leaves : List MultiproofConeLiveFold.Leaf)
+  (before after : MultiproofConeRef.reference.Scratch) (slot : Slice U8),
+  ↑before.n = 0 →
+    leaves ≠ [] →
+      leaves.length ≤ 12 →
+        List.Pairwise (fun x1 x2 => x1 ≤ x2) (List.map (fun x => ↑x.1) leaves) →
+          (∀ leaf ∈ leaves, ↑leaf.1 < 262144) →
+            NKB_LeafChain.Chain leaves before (some after) →
+              32 * OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys after) ≤ (↑slot).length →
+                (↑(MultiproofConeSlotTail.prefixNodes slot
+                        (OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys after)))).length ≤
+                  9216 :=
+⋯
+'NKV_ConcreteDomains.count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_ConcreteDomains.opening' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_ConcreteDomains.leaf' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_ConcreteDomains.leaf_domains' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_ConcreteDomains.verifier_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]

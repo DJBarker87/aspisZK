@@ -1,0 +1,188 @@
+NKV_LeafTraversal.lean:53:12: error: unsolved goals
+case cons.fail
+H : Bytes → HashState
+proof : Slice U8
+len : (↑proof).length = 57607
+parsed : OraclePortCompactDraft.Parsed
+wire : parsed.wire = MultiproofConeCanonical.bytesOf ↑proof
+q : Fin 22 → Fin 262144
+batch : ℕ
+kind lo n slot : Usize
+root : Std.Array U8 32#usize
+keys : Std.Array U64 16#usize
+loValue : ↑lo = if batch = 0 then 0 else 10
+small : ↑n ≤ 16
+selected : ℕ
+rest : List ℕ
+ih :
+  ∀ (s : reference.Scratch) (pos : Usize),
+    (∀ selected ∈ rest, selected ∈ OraclePortFrozenOrder.sortedPositions q batch ↑kind) →
+      ↑pos + rest.length = ↑n →
+        ↑s.n + rest.length ≤ 16 →
+          Port4B_LeafLoop.KeyStream q batch (↑kind) keys pos rest →
+            NKV_FRef.verifier.candidate.batch_tree_loop (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H)
+                proof root kind s.idx s.val () lo n slot keys s.n pos =
+              finish H proof root kind lo n slot keys (NKV_LeafBuild.build H parsed q (↑kind) rest s).2
+s : reference.Scratch
+pos : Usize
+members : ∀ selected_1 ∈ selected :: rest, selected_1 ∈ OraclePortFrozenOrder.sortedPositions q batch ↑kind
+span : ↑pos + (selected :: rest).length = ↑n
+room : ↑s.n + (selected :: rest).length ≤ 16
+stream : Port4B_LeafLoop.KeyStream q batch (↑kind) keys pos (selected :: rest)
+more : pos < n
+bound : ↑s.n < 16
+keyRead : keys.index_usize pos = ok (MultiproofConeSortOrder.packed q batch (↑kind) selected)
+view : Slice U8
+viewRead :
+  (NKV_ConcreteChildren.ops H).op2 proof
+      (Port4B_NativeLeaf.openingIndex lo (MultiproofConeSortOrder.packed q batch (↑kind) selected)) =
+    ok view
+width : (↑view).length = 832
+address : flatten (Port4B_LeafCode.input kind view) = OraclePortSelectedDraft.leaf parsed (↑kind) selected
+reads :
+  CheckpointBytes5Effect.run (NKV_ConcreteChildren.digest H) () (Port4B_LeafCode.code kind view) [] =
+    ok
+      (encodeState (H (OraclePortSelectedDraft.leaf parsed (↑kind) selected)),
+        [] ++
+          [(Port4B_LeafCode.input kind view, encodeState (H (OraclePortSelectedDraft.leaf parsed (↑kind) selected)))])
+body :
+  NKV_FRef.verifier.candidate.batch_tree_loop.body (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof
+      root kind () lo n slot keys s.idx s.val s.n pos =
+    do
+    let out ←
+      reference.leaf_step s (MultiproofConeLeafFold.key q (↑kind) selected)
+          (encodeState (H (OraclePortSelectedDraft.leaf parsed (↑kind) selected)))
+    ok (NKV_LeafStep.project s (pos.wrapping_add 1#usize) out)
+e : Error
+reply :
+  reference.leaf_step s (MultiproofConeLeafFold.key q (↑kind) selected)
+      (encodeState (H (OraclePortSelectedDraft.leaf parsed (↑kind) selected))) =
+    fail e
+⊢ (match do
+      let out ← fail e
+      ok (NKV_LeafStep.project s (pos.wrapping_add 1#usize) out) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            NKV_FRef.verifier.candidate.batch_tree_loop.body (NKV_ConcreteChildren.ops H)
+              (NKV_ConcreteChildren.digest H) proof root kind () lo n slot keys x.1 x.2.1 x.2.2.1 x.2.2.2)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    fail e
+NKV_LeafTraversal.lean:54:9: error: unsolved goals
+case cons.div
+H : Bytes → HashState
+proof : Slice U8
+len : (↑proof).length = 57607
+parsed : OraclePortCompactDraft.Parsed
+wire : parsed.wire = MultiproofConeCanonical.bytesOf ↑proof
+q : Fin 22 → Fin 262144
+batch : ℕ
+kind lo n slot : Usize
+root : Std.Array U8 32#usize
+keys : Std.Array U64 16#usize
+loValue : ↑lo = if batch = 0 then 0 else 10
+small : ↑n ≤ 16
+selected : ℕ
+rest : List ℕ
+ih :
+  ∀ (s : reference.Scratch) (pos : Usize),
+    (∀ selected ∈ rest, selected ∈ OraclePortFrozenOrder.sortedPositions q batch ↑kind) →
+      ↑pos + rest.length = ↑n →
+        ↑s.n + rest.length ≤ 16 →
+          Port4B_LeafLoop.KeyStream q batch (↑kind) keys pos rest →
+            NKV_FRef.verifier.candidate.batch_tree_loop (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H)
+                proof root kind s.idx s.val () lo n slot keys s.n pos =
+              finish H proof root kind lo n slot keys (NKV_LeafBuild.build H parsed q (↑kind) rest s).2
+s : reference.Scratch
+pos : Usize
+members : ∀ selected_1 ∈ selected :: rest, selected_1 ∈ OraclePortFrozenOrder.sortedPositions q batch ↑kind
+span : ↑pos + (selected :: rest).length = ↑n
+room : ↑s.n + (selected :: rest).length ≤ 16
+stream : Port4B_LeafLoop.KeyStream q batch (↑kind) keys pos (selected :: rest)
+more : pos < n
+bound : ↑s.n < 16
+keyRead : keys.index_usize pos = ok (MultiproofConeSortOrder.packed q batch (↑kind) selected)
+view : Slice U8
+viewRead :
+  (NKV_ConcreteChildren.ops H).op2 proof
+      (Port4B_NativeLeaf.openingIndex lo (MultiproofConeSortOrder.packed q batch (↑kind) selected)) =
+    ok view
+width : (↑view).length = 832
+address : flatten (Port4B_LeafCode.input kind view) = OraclePortSelectedDraft.leaf parsed (↑kind) selected
+reads :
+  CheckpointBytes5Effect.run (NKV_ConcreteChildren.digest H) () (Port4B_LeafCode.code kind view) [] =
+    ok
+      (encodeState (H (OraclePortSelectedDraft.leaf parsed (↑kind) selected)),
+        [] ++
+          [(Port4B_LeafCode.input kind view, encodeState (H (OraclePortSelectedDraft.leaf parsed (↑kind) selected)))])
+body :
+  NKV_FRef.verifier.candidate.batch_tree_loop.body (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof
+      root kind () lo n slot keys s.idx s.val s.n pos =
+    do
+    let out ←
+      reference.leaf_step s (MultiproofConeLeafFold.key q (↑kind) selected)
+          (encodeState (H (OraclePortSelectedDraft.leaf parsed (↑kind) selected)))
+    ok (NKV_LeafStep.project s (pos.wrapping_add 1#usize) out)
+reply :
+  reference.leaf_step s (MultiproofConeLeafFold.key q (↑kind) selected)
+      (encodeState (H (OraclePortSelectedDraft.leaf parsed (↑kind) selected))) =
+    div
+⊢ (match do
+      let out ← div
+      ok (NKV_LeafStep.project s (pos.wrapping_add 1#usize) out) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            NKV_FRef.verifier.candidate.batch_tree_loop.body (NKV_ConcreteChildren.ops H)
+              (NKV_ConcreteChildren.digest H) proof root kind () lo n slot keys x.1 x.2.1 x.2.2.1 x.2.2.2)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    div
+NKV_LeafTraversal.lean:50:14: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵body]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKV_LeafTraversal.lean:53:32: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵p̵l̵y̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵N̵K̵V̵_̵L̵e̵a̵f̵B̵u̵i̵l̵d̵.̵b̵u̵i̵l̵d̵,̵f̵i̵n̵i̵s̵h̵]̵[̲r̲e̲p̲l̲y̲,̲ ̲N̲K̲V̲_̲L̲e̲a̲f̲B̲u̲i̲l̲d̲.̲b̲u̲i̲l̲d̲,̲ ̲f̲i̲n̲i̲s̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKV_LeafTraversal.lean:54:29: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵p̵l̵y̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵N̵K̵V̵_̵L̵e̵a̵f̵B̵u̵i̵l̵d̵.̵b̵u̵i̵l̵d̵,̵f̵i̵n̵i̵s̵h̵]̵[̲r̲e̲p̲l̲y̲,̲ ̲N̲K̲V̲_̲L̲e̲a̲f̲B̲u̲i̲l̲d̲.̲b̲u̲i̲l̲d̲,̲ ̲f̲i̲n̲i̲s̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NKV_LeafTraversal.source : ∀ (H : Bytes → HashState) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (parsed : OraclePortCompactDraft.Parsed),
+      parsed.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (q : Fin 22 → Fin 262144) (batch : ℕ) (kind lo n slot : Usize) (root : Std.Array U8 32#usize)
+          (keys : Std.Array U64 16#usize) (positions : List ℕ) (s : reference.Scratch) (pos : Usize),
+          (∀ selected ∈ positions, selected ∈ OraclePortFrozenOrder.sortedPositions q batch ↑kind) →
+            (↑lo = if batch = 0 then 0 else 10) →
+              ↑pos + positions.length = ↑n →
+                ↑n ≤ 16 →
+                  ↑s.n + positions.length ≤ 16 →
+                    Port4B_LeafLoop.KeyStream q batch (↑kind) keys pos positions →
+                      NKV_FRef.verifier.candidate.batch_tree_loop (NKV_ConcreteChildren.ops H)
+                          (NKV_ConcreteChildren.digest H) proof root kind s.idx s.val () lo n slot keys s.n pos =
+                        finish H proof root kind lo n slot keys
+                          (NKV_LeafBuild.build H parsed q (↑kind) positions s).2 :=
+⋯
+'NKV_LeafTraversal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,41 @@
+{"attempt": "NKV_L038", "exit_status": 0, "wall_seconds": 14.516698831925169, "peak_rss_kib": "5884148", "swaps": "0", "print_axioms": ["'NKV_OuterSource.bind_observed' does not depend on any axioms", "'NKV_OuterSource.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_OuterSource.values_concrete' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_OuterSource.concrete' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NKV_OuterSource.concrete : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (proof : Slice U8) (p : verifier.Prepared) (folded : Std.Array U8 32#usize) (batch : Usize),
+  ↑batch < 2 →
+    observe
+        (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle (NKV_ConcreteChildren.ops H)
+          (NKV_ConcreteChildren.digest H) proof p folded batch ()) =
+      observe
+        (NKV_FRef.verifier.candidate.batch_merkle (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof p
+          folded batch ()) :=
+⋯
+theorem NKV_OuterSource.values_concrete : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (proof : Slice U8
+...
+theorem NKV_OuterSource.concrete : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (proof : Slice U8) (p : verifier.Prepared) (folded : Std.Array U8 32#usize) (batch : Usize),
+  ↑batch < 2 →
+    observe
+        (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle (NKV_ConcreteChildren.ops H)
+          (NKV_ConcreteChildren.digest H) proof p folded batch ()) =
+      observe
+        (NKV_FRef.verifier.candidate.batch_merkle (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof p
+          folded batch ()) :=
+⋯
+theorem NKV_OuterSource.values_concrete : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (proof : Slice U8) (queries : Std.Array U32 22#usize) (roots : Std.Array (Std.Array U8 32#usize) 3#usize)
+  (batch : Usize),
+  ↑batch < 2 →
+    observe
+        (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle_values (NKV_ConcreteChildren.ops H)
+          (NKV_ConcreteChildren.digest H) proof queries roots batch ()) =
+      observe
+        (NKV_FRef.verifier.candidate.batch_merkle_values (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H)
+          proof queries roots batch ()) :=
+⋯
+'NKV_OuterSource.bind_observed' does not depend on any axioms
+'NKV_OuterSource.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_OuterSource.values_concrete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_OuterSource.concrete' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rb2de708529f84ad283d736654da45c0b.scope; invocation ID: f4a824a6e9cb416c9316386603dc337c

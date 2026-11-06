@@ -6,6 +6,19 @@
       "source": "crates/aspis-r1-cost-probe/src/candidate.rs:196",
       "boundary": "counted is the complete returned Option<usize> of the SAME closed node_count call, not its success arm",
       "continuation": "Ok(count) is the following segment-entry state; no later source operation is claimed"
+    },
+    {
+      "body": "32 * count",
+      "sha256": "7cfc717ea1b880161ed0e275c92edf730864295579b3f94fda4b8394d034c8d3",
+      "source": "crates/aspis-r1-cost-probe/src/candidate.rs:199,202",
+      "domain": "count<=172, derived from count<=SLOT_NODES[s],s<6"
+    },
+    {
+      "body": "    let (lo, hi) = if batch == 0 { (0, SPLIT) } else { (SPLIT, 22) };\n    let n = hi - lo;\n    let s = 3 * batch + tree;\n    let keys = sort_batch_keys(batch_keys(&queries, lo, n, tree), n);",
+      "sha256": "c895fbd0274ca8cc5d1ba6bf2cc2a79fc5082970488c017af294f2b9a8fd852b",
+      "source": "crates/aspis-r1-cost-probe/src/candidate.rs:174-177",
+      "ghost_erasure": "local closures log arguments/replies then forward unchanged to qualified original helpers; erase local records and beta/eta leaves the literal frozen block",
+      "no_static_or_function_pointer": true
     }
   ],
   "actual_functions": [

@@ -117,3 +117,11 @@ fn batch_calls(){
  #[cfg(NKV_invert)] assert!(!exact);
  let j:usize=kani::any();let k:usize=kani::any();kani::assume(j<2&&k<32);assert!(p.roots[j][k]==roots[j][k]);
 }
+
+#[kani::proof]
+fn prefix_size(){
+ let count:usize=kani::any();kani::assume(count<=172);
+ let size=prefix_size_fragment(count);assert!(size<=5504&&size<=9216);
+ #[cfg(not(NKV_invert))] assert!(size==count<<5);
+ #[cfg(NKV_invert)] assert!(size!=count<<5);
+}
