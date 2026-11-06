@@ -1,0 +1,27 @@
+# Opaque calls and paired laws
+
+No field multiplication is executed or proved in Kani. The local call-log form is (y)/(ai), with natural values supplied by the Lean laws below; it is not an unpaired natural-number assumption or a native field-product pass. Pairing is P6/D188 option A reclassification, never removal of tool trust. All domains are canonical on the SAME operands. No function contracts, stub_verified or Option<fn>-dependent native credit is used.
+
+| Native opaque port | Named Lean law(s) | Domain / caller discharge |
+|---|---|---|
+| NIX_circle::unary square | AspisV8R19.SamplerClosureCircleFieldExecution.square | canonical parameter; NIX_CircleLogLaw.packet derives replies/domain |
+| NIX_circle::binary add/sub | AspisV8R19.SamplerClosureCircleFieldExecution.add / sub | canonical operands, ONE via .one; encoded_law + encoded_domain |
+| NIX_circle::binary products | AspisV8R19.SamplerClosureProductCorrectness.public_product | canonical encoded operands, including inverse iff present; packet constructs every actual executed operand |
+| NIX_circle::inverse | AspisV8R19.SamplerClosureCircleFieldExecution.try_inverse_zero / try_inverse_nonzero | canonical denominator; both None/Some complete arms; no singular-success premise |
+| OOD oracle secure_circle | AspisR1.NIX_CircleLogLaw.source_of_log / packet | canonical sampled parameter; NIX_SecureOodLaw.source_of_log checks subfield only after mapper success |
+| Fallback oracle secure_ood | AspisR1.NIX_SecureOodLaw.wrapper_source; AspisR1CircleFallback.RawCircleFallbackOutputBridge.parameter0_canonical / parameter1_canonical / generated_parameter0_output / generated_parameter1_output | exactly native parameters [0,0,1,0] and [1,0,1,0]; K023 arguments; NIX_FallbackLaw.deployed covers both actual row indices |
+| sampler::NIX_sampler sample/map/fallback | AspisR1.NIX_SamplerLaw.packet / source_of_log / adopted; NIX_FallbackLaw.deployed | SAME block supplies canonical q; exact two CircleRow arms and both mapper errors, no retry |
+| circle_validated block | AspisR1.NGX_SemanticSample.returned/rejected; existing CLOSED TX1:144 packet | row=25/26, exact SAME frame/state/next; NIX_DispatchCut.row_domain and predecessor_domain. Only the three actually returning digest replies instantiate returned; NGX_SemanticDomain.total is not a global totality assumption. fail/div abort prefixes are retained; no SHA value/model in Kani |
+| circle_validated circle | AspisR1.NIX_DispatchRun.circle_packet / returned / rejected / first / second / abort_prefix | SAME returned 32-byte block and selected row; source is the installed F3M_CircleSource; full error/state/ordered Code preserved |
+| residual 17 arithmetic ports | AspisR1.JFy_FieldTotal.sub / mul; AspisR1.FIv_PreparedTotal.add | NIX_ResidualLog.packet derives all input reads, canonical intermediate replies and domains; NIX_ResidualCut.packet proves complete emitted result/meaning |
+| round pure getter | AspisR1.NIX_ProducerInstall.lookup / framed; NIX_CertificateFrames.same_record | SAME prefix identity, row=15+round with round<10, actual stored frame. No independent token or decoder-success premise |
+| round decode/boundary/semantic/value | existing NIH_DecodeInstall.round, NHG_FinishLeaves.boundary_result/value_result, NGX_Validated.source and imported sampler laws | Native cuts PASS; final same-carrier canonicality/Code substitution chain is OPEN. Therefore TX1:133/134 are OPEN, not passes |
+| Copy-tag raw u64 product ports | AspisR1.NIX_RawTag.product / product_bound / one_add | canonical source word and native-verified tag<P; emitted primitive multiplication returns exact natural product, bound<(2^64); no native product execution |
+| Additional pattern/active arithmetic cells | AspisR1.JFy_FieldTotal.mul; FIv_PreparedTotal.add; NIX_ActiveFrames.add_reply | Scalar value laws exist; exact typed-cut/loop/native-to-adopted installation remains OPEN; no parent row credit |
+| Additional Copy-tag reduce/add ports | baseline NEB reducer and additive CLOSED packets (TX1:020 and TX1:013; NEB_AdditiveFrames.m_add) | exact caller-specific theorem installation and full loop composition OPEN; native assertion passes alone give no packet credit |
+| Additional shared selector pack/product/add | CLOSED field/pack imports, with Q multiplication/addition laws above | exact pack specialization/typed-cut/adopted loop composition OPEN; no new row credit |
+| F2 try_reserve/constructor | actual Std successful Vec reserve or actual Std AllocError constructor from local Deny allocator | Only n=1,len=0; native allocation-only observations/controls retained. Arbitrary allocator and unsafe row-store/frame/abort-prefix association OPEN |
+
+Every reached copy builtin uses exactly NIX_KMX.patch, SHA256 bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67. K062/063 program, K064/065 core and K066/067 statement re-run the unchanged pointer fidelity controls under the same native feature graphs. Matching local negative controls are also retained. No custom copy stub exists.
+
+The standalone Core circle/heap source has no feature-dependent body branch on the proven path. Program-root circle/round harnesses instantiate the actual SolanaDigest under pool-adapter/private-leaf-salts/default; library caller harnesses use private-leaf-salts/optimized-terminal/program-build/default. Heap host allocator observations are not physical SBF reclamation claims.

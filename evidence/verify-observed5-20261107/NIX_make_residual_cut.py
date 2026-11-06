@@ -12,7 +12,7 @@ open NIX_ResidualLog
 structure Post where
  args : Fin 17 → Q × Q
  kind : Fin 17 → Nat
- at : Fin 17 → Nat
+ callAt : Fin 17 → Nat
  count : Nat
  frame : Nat
  result : Q
@@ -32,7 +32,7 @@ def cut (v : Inputs) (helper chi : Q) (r : Replies) (count frame : Nat) (p : Pos
  Domain v helper chi r ∧ count<239 ∧
  (∀ i,p.args i=operands v helper chi r i ∧
   FIv_NativeValue.Canon (p.args i).1 ∧ FIv_NativeValue.Canon (p.args i).2 ∧
-  p.kind i=kind i ∧ p.at i=count+i.val) ∧
+  p.kind i=kind i ∧ p.callAt i=count+i.val) ∧
  p.count=count+17 ∧ p.frame=frame ∧ p.result=r.q16
 
 theorem source (row : CopyRowExtension) (v : Inputs) (helper chi : Q) (r : Replies)

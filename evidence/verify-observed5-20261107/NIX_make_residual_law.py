@@ -4,7 +4,7 @@ ops=[('sub','chi','v.v0'),('sub','chi','v.v1'),('sub','chi','v.v4'),('sub','chi'
 reads=[('producer_values',0),('producer_values',1),('producer_weights',0),('producer_weights',1),('consumer_values',0),('consumer_values',1),('consumer_weights',0),('consumer_weights',1)]
 s='''import NIH_COMBINED_IMPORT
 import RPv_JFy_CopyResidual
-import RPv_JFy_CopyResidualValue
+import NDO_JFy_CopyResidualValue
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.NIX_ResidualLog
@@ -15,13 +15,13 @@ abbrev Q := field.QM31
 structure Inputs where
 '''+''.join(f' v{i} : Q\n' for i in range(8))+'structure Replies where\n'+''.join(f' q{i} : Q\n' for i in range(17))+'\ndef Reads (row : CopyRowExtension) (v : Inputs) : Prop :=\n '+' ∧\n '.join(f'row.{a}.index_usize {b}#usize=ok v.v{i}' for i,(a,b) in enumerate(reads))+'\n\ndef Law (v : Inputs) (helper chi : Q) (r : Replies) : Prop :=\n '+' ∧\n '.join(f'field.QM31.{op} {a} {b}=ok r.q{i}' for i,(op,a,b) in enumerate(ops))+'\n\ndef Domain (v : Inputs) (helper chi : Q) (r : Replies) : Prop :=\n '+' ∧ '.join(['Canon helper','Canon chi']+[f'Canon v.v{i}' for i in range(8)]+[f'Canon r.q{i}' for i in range(17)])+'\n\n'
 s+='''theorem array0 (a b c d : Q) :
- (Array.make 4#usize [a,b,c,d]).index_usize 0#usize=ok a := by simp
+ (Array.make 4#usize [a,b,c,d]).index_usize 0#usize=ok a := by rfl
  theorem array1 (a b c d : Q) :
- (Array.make 4#usize [a,b,c,d]).index_usize 1#usize=ok b := by simp
+ (Array.make 4#usize [a,b,c,d]).index_usize 1#usize=ok b := by rfl
  theorem array2 (a b c d : Q) :
- (Array.make 4#usize [a,b,c,d]).index_usize 2#usize=ok c := by simp
+ (Array.make 4#usize [a,b,c,d]).index_usize 2#usize=ok c := by rfl
  theorem array3 (a b c d : Q) :
- (Array.make 4#usize [a,b,c,d]).index_usize 3#usize=ok d := by simp
+ (Array.make 4#usize [a,b,c,d]).index_usize 3#usize=ok d := by rfl
 
 theorem source_of_log (row : CopyRowExtension) (v : Inputs) (helper chi : Q) (r : Replies)
  (reads : Reads row v) (law : Law v helper chi r) :
@@ -54,5 +54,5 @@ s+=' let r : Replies:=⟨'+','.join(f'q{i}' for i in range(17))+'⟩\n'
 s+=' have reads : Reads row v:=⟨'+','.join(f'h{i}' for i in range(8))+'⟩\n'
 s+=' have law : Law v helper chi r:=⟨'+','.join(f'c{i}' for i in range(17))+'⟩\n'
 s+=' exact ⟨v,r,reads,law,⟨hh,hc,'+','.join([f'd{i}' for i in range(8)]+[f'e{i}' for i in range(17)])+'⟩,source_of_log row v helper chi r reads law⟩\n'
-s+='\n#print axioms source_of_log\n#print axioms packet\nend AspisR1.NIX_ResidualLog\nend\n'
+s+='\n#print axioms array0\n#print axioms array1\n#print axioms array2\n#print axioms array3\n#print axioms source_of_log\n#print axioms packet\nend AspisR1.NIX_ResidualLog\nend\n'
 (E/'NIX_ResidualLog.lean').write_text(s)

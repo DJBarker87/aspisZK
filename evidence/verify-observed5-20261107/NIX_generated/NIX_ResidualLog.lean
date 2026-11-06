@@ -125,6 +125,10 @@ theorem packet (row : CopyRowExtension) (helper chi : Q)
  have law : Law v helper chi r:=⟨c0,c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16⟩
  exact ⟨v,r,reads,law,⟨hh,hc,d0,d1,d2,d3,d4,d5,d6,d7,e0,e1,e2,e3,e4,e5,e6,e7,e8,e9,e10,e11,e12,e13,e14,e15,e16⟩,source_of_log row v helper chi r reads law⟩
 
+#print axioms array0
+#print axioms array1
+#print axioms array2
+#print axioms array3
 #print axioms source_of_log
 #print axioms packet
 end AspisR1.NIX_ResidualLog

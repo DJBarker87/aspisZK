@@ -31,7 +31,7 @@ structure Post (Pointer : Type) where
  row : U8
  state : Block
  next : U8
- at : Nat
+ callAt : Nat
  count : Nat
  sampleRow : FinishModel.CircleRow
  sampleBlock : Block
@@ -62,7 +62,7 @@ def cut {Pointer : Type} (s : Pre Pointer) (p : Post Pointer) : Prop :=
  s.framed.val.length≤3717 ∧ s.count<254 ∧ childDomain s.reply ∧ p.frame=s.frame ∧
  (if valid s.row then
   p.row=s.row ∧ p.pointer=some s.pointer ∧ p.len=s.framed.val.length ∧
-  p.next=s.next ∧ p.state=s.state ∧ p.at=s.count ∧
+  p.next=s.next ∧ p.state=s.state ∧ p.callAt=s.count ∧
   p.transcriptState=s.newState ∧ p.transcriptNext=s.newNext ∧
   (match s.reply with
    | .Ok block=>p.sampleBlock=block ∧
@@ -71,7 +71,7 @@ def cut {Pointer : Type} (s : Pre Pointer) (p : Post Pointer) : Prop :=
  else
   p.transcriptState=s.state ∧ p.transcriptNext=s.next ∧ p.count=s.count ∧
   p.sampleBlock=s.oldSample ∧ p.sampleRow=.First ∧ p.row=0#u8 ∧ p.pointer=none ∧
-  p.len=0 ∧ p.state=s.oldState ∧ p.next=0#u8 ∧ p.at=0) ∧
+  p.len=0 ∧ p.state=s.oldState ∧ p.next=0#u8 ∧ p.callAt=0) ∧
  p.result=expected s
 
 /-- All SAME predecessor records meet the concrete native borrowed-window bound. -/
