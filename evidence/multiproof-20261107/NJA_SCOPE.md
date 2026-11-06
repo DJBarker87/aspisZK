@@ -343,3 +343,12 @@ Inventory domain: proof length57607, batch1/tree0..2, queries10..21 distinct<2^1
 Callees: none.
 
 Caller obligations: 6; exact clauses retained in the row snapshot. No clause discharged.
+
+
+## Final scope resolution
+
+All28 rows retain their complete original obligations in NJA_TARGET_ROWS.json.xz and NJA_LEDGER_DELTA.json. No original clause is silently dropped. The authoritative baseline remains432/0/167 of599; local promotions0.
+
+The eleven TX1/TX2 helper pairs have the same frozen bodies. Non-generic helpers are the same monomorphization. Parents and verify are tested at the concrete program-root SolanaDigest instance; with that SAME type their generic monomorphization is shared across paths. Actual incoming physical/root/site attachment remains an obligation for each occurrence; source identity alone does not earn either row. TX1's <=10 and TX2's <=12 contexts are retained independently. value_at's eight-way-only reachability finding remains unresolved. permute_optimized_with_trace is callback-generic: the three event-construction checks do not establish every reached callback monomorphization or its effects.
+
+Primitive consumers are now explicit: NJA_Context gives Result-continuation substitution for bits1, width2, levels18, SAME cohort Scratch index reads and SAME root comparison. Count grouping uses MultiproofConeCountPhysical.unread and MultiproofConeCountGroups.drop_group. Well-formed mathematical semantics are OraclePortFrozenOrder.wellFormed; the native-all ABI bridge is open. Parent addresses use MultiproofConePhysicalDigest.parts with actual selected children. M31 Poseidon arithmetic uses R0P.poseidonPow5/poseidonMat4/poseidonExternalLinear/poseidonInternalLinear/poseidonFullRound/poseidonInternalRound, with R0P.poseidonRoundKind for descriptors and R0P.Semantics.nodeCompress's lane15 seed. The full permutation fold/trace/callback and compression callee joins remain open. Exact CLOSED callee/physical-domain packet instantiation is not replaced by any XRn kit, state-only model or free output equality.

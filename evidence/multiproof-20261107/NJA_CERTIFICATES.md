@@ -1,6 +1,8 @@
-# NJA certificates — in progress
+# NJA certificate support — final budget handoff
 
-No composed row has been admitted. All 28 occurrences remain OPEN until the combined gate and next ledger review. Extraction pins are in NJA_emitted/NHR_PINS.json; exact declaration split hashes in NJA_SPLIT.json. Only NJA_Multiproof.Types, NJA_Small, NJA_Arity and NJA_Reads have successful focused compiles so far. The full Funs adaptation FAILED and is excluded; its sorryAx diagnostic is not accepted evidence.
+No composed row has been admitted. All28 assigned occurrences remain OPEN. Local support is checked in38 selected modules (NJA_SELECTED_MODULES.json). Final combined import L098, NFX coherence scan L099, raw ax2 groups L100..L102 and planted/mutation fixtures L073 all exit0. Every selected top theorem has a focused #print axioms receipt; all131 raw roots contain only standard axioms. No package-wide unchanged regression was repeated. NJA_KANI_INDEX.json indexes every native verdict; NJA_VERIFICATION_INDEX.json records exact target/exit/wall/RSS/swap/revision/axioms fields. The tables below preserve intermediate history; the final inventory follows.
+
+Selected support includes exact emitted scalar/context equations; complete emitted count inner-loop/physical drop-group/sorted association; exact well_formed predicates and list induction; concrete digest byte cuts; full invalid-length frame; pow5/matrix field-law cuts; external/internal argument bounds and cohort casts; staged point/block writes; scalar round cell composition; chronological trace/descriptor lemmas. NJA_ExternalCut.result derives all16 decoded external outputs from per-cell natural logs and native write transitions, with no model endpoint premise. Full native execution instantiation is still OPEN. The full emitted well_formed/verify modules remain excluded because of coherent-library ABI gaps. Detailed member limits are NJA_REMAINING.md.
 
 | Source helper | Native positive | Matched control | Lean support | Current limit |
 |---|---|---|---|---|
