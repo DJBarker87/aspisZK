@@ -1,0 +1,57 @@
+{"attempt": "NKG_L041", "exit_status": 0, "wall_seconds": 10.523775405017659, "peak_rss_kib": "6053724", "swaps": "0", "print_axioms": ["'AspisR1.NKG_LowFrame.loop' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NKG_LowFrame.full' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NKG_LowFrame.internal' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+theorem AspisR1.NKG_LowFrame.loop : ∀ (N : Usize) (rows : List (Fin 16)) (s : Selectors) (states : ℕ → NQ),
+  canonical s.local →
+    Canon (states 0) →
+      Steps s rows states →
+        core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold FJa_LocalWeightFold.Callback
+              (List.map index rows) (states 0) s =
+            ok (states rows.length) ∧
+          Canon (states rows.length) :=
+fun N rows s states hs hc cuts =>
+  List.rec (motive := fun rows =>
+    ∀ (states : ℕ → NQ),
+      Canon (states 0) →
+        Steps s rows states →
+          core.array.iter.IntoIter.Insts.CoreIterTrait
+...
+ed.closure.Insts.CoreOpsFunctionFnMutPairQM31UsizeQM31
+                  y field.QM31.ZERO s))
+            (ok (states 3))))
+        (Eq.mp
+            (congrArg
+              (fun _a =>
+                core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold FJa_LocalWeightFold.Callback
+                      (List.map index fullRows) _a s =
+                    ok (states fullRows.length) ∧
+                  Canon (states fullRows.length))
+              cut.initial)
+            h).left),
+    (Eq.mp
+        (congrArg
+          (fun _a =>
+            core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold FJa_LocalWeightFold.Callback
+                  (List.map index fullRows) _a s =
+                ok (states fullRows.length) ∧
+              Canon (states fullRows.length))
+          cut.initial)
+        h).right⟩
+'AspisR1.NKG_LowFrame.full' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKG_LowFrame.internal : ∀ (s : Selectors) (states : ℕ → NQ),
+  canonical s.local →
+    Trace s internalRows states → FJa_PoseidonOrigins.internalFold s = ok (states 7) ∧ Canon (states 7) :=
+fun s states hs cut =>
+  have h := loop 7#usize internalRows s states hs (Eq.symm cut.initial ▸ FIv_NativeValue.zero.left) cut.steps;
+  Eq.mpr (id (congrArg (fun _a => _a = ok (states 7) ∧ Canon (states 7)) (FJa_InternalLowShape.value s)))
+    (Eq.mp
+      (congrArg
+        (fun _a =>
+          core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold FJa_LocalWeightFold.Callback
+                (List.map index internalRows) _a s =
+              ok (states internalRows.length) ∧
+            Canon (states internalRows.length))
+        cut.initial)
+      h)
+'AspisR1.NKG_LowFrame.internal' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-re3229d5fbf364073bb490559373a0383.scope; invocation ID: ee509d5de2ea4fa8b68efa638f4ec3b7

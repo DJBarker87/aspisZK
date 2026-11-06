@@ -1,0 +1,148 @@
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+theorem AspisR1.NKG_GroupRaw.value : ∀ (o : Openings) (internal : State) (block : NP) (p : Prepared)
+  (lead full : Packed) (g : Fin 4) (out : NQ) (last : Capture),
+  canonical o.succ_z →
+    canonical internal →
+      call (o, internal, block, p, lead, full) (NKG_GroupFrame.index g) = ok (out, last) →
+        NKG_GroupFrame.model o.succ_z internal lead full p block g = out :=
+fun o internal block p lead full g out last ct ci run =>
+  let ⟨first, h✝⟩ := FJh_ProjectedCall.reached o internal block p lead full (NKG_GroupFrame.index g) out last run
+  let ⟨final, h✝¹⟩ := h✝
+  let ⟨ts, h✝²⟩ := h✝¹
+  let ⟨ins, h✝³⟩ := h✝²
+  let ⟨target, h✝⁴⟩ := h✝³
+  let ⟨ip, h✝⁵⟩ := h✝⁴
+  let ⟨rs, right✝⟩ := h✝⁵
+  let ⟨re, right✝¹⟩ := right✝
+  let ⟨rts, right✝²⟩ := right✝¹
+  let ⟨rt, right✝³⟩ := right✝²
+  let ⟨rins, right✝⁴⟩ := right✝³
+  let ⟨ri, right✝⁵⟩ := right✝⁴
+  let ⟨ra, right✝⁶⟩ := right✝⁵
+  have bounds := FJh_GroupBounds.value (NKG_GroupFrame.index g) first final g.isLt rs re;
+  have firstEq := UScalar.eq_of_val_eq (id bounds.left);
+  have finalEq := UScalar.eq_of_val_eq (id bounds.right.left);
+  Eq.ndrec (motive := fun first =>
+    4#usize * NKG_GroupFrame.index g = ok first →
+      first + 4#usize = ok final →
+        FJh_ProjectedCall.slice o.succ_z first final = ok ts →
+          FJh_ProjectedCall.slice internal first final = ok ins →
+            ↑first = 4 * ↑(NKG_GroupFrame.index g) ∧
+                ↑final = 4 * ↑(NKG_GroupFrame.index g) + 4 ∧ ↑first ≤ ↑final ∧ ↑final ≤ 16 →
+              NKG_GroupFrame.model o.succ_z internal lead full p block g = out)
+    (fun rs re rts rins bounds =>
+      Eq.ndrec (motive := fun final =>
+        NKG_GroupFrame.start g + 4#usize = ok final →
+          FJh_ProjectedCall.slice o.succ_z (NKG_GroupFrame.start g) final = ok ts →
+            FJh_ProjectedCall.slice internal (NKG_GroupFrame.start g) final = ok ins →
+              ↑(NKG_GroupFrame.start g) = 4 * ↑(NKG_GroupFrame.index g) ∧
+                  ↑final = 4 * ↑(NKG_GroupFrame.index g) + 4 ∧ ↑(NKG_GroupFrame.start g) ≤ ↑final ∧ ↑final ≤ 16 →
+                NKG_GroupFrame.model o.succ_z internal lead full p block g = out)
+        (fun re rts rins bounds =>
+          have hle := bounds.right.right.left;
+          have hb := bounds.right.right.right;
+          have span := rfl;
+          have st :=
+            (NKG_SliceTotal.slice o.succ_z (NKG_GroupFrame.start g) (NKG_GroupFrame.stop g) hle hb span ct).left;
+          have si :=
+            (NKG_SliceTotal.slice internal (NKG_GroupFrame.start g) (NKG_GroupFrame.stop g) hle hb span ci).left;
+          have ets := ok.inj (Eq.trans (Eq.symm rts) st);
+          have eis := ok.inj (Eq.trans (Eq.symm rins) si);
+          Eq.ndrec (motive := fun ts =>
+            field.qm31_pack_base4 ts = ok target →
+              FJh_ProjectedCall.slice o.succ_z (NKG_GroupFrame.start g) (NKG_GroupFrame.stop g) = ok ts →
+                NKG_GroupFrame.model o.succ_z internal lead full p block g = out)
+            (fun rt rts =>
+              Eq.ndrec (motive := fun ins =>
+                field.qm31_pack_base4 ins = ok ip →
+                  FJh_ProjectedCall.slice internal (NKG_GroupFrame.start g) (NKG_GroupFrame.stop g) = ok ins →
+                    NKG_GroupFrame.model o.succ_z internal lead full p block g = out)
+                (fun ri rins =>
+                  have tp :=
+                    get_ok
+                      (field.qm31_pack_base4
+                        (FJh_GroupSlices.sliceAt o.succ_z (NKG_GroupFrame.start g) (NKG_GroupFrame.stop g)))
+                      field.QM31.ZERO target rt;
+                  have ipack :=
+                    get_ok
+                      (field.qm31_pack_base4
+                        (FJh_GroupSlices.sliceAt internal (NKG_GroupFrame.start g) (NKG_GroupFrame.stop g)))
+                      field.QM31.ZERO ip ri;
+                  let ⟨l, h✝⁶⟩ :=
+                    FIv_Map.bind_success (Array.index_usize lead (NKG_GroupFrame.index g))
+                      (fun l => do
+                        let dl ← field.QM31.sub target l
+                        let f ← Array.index_usize full (NKG_GroupFrame.index g)
+                        let df ← field.QM31.sub target f
+                        let di ← field.QM31.sub target ip
+                        let sum ←
+                          field.qm31_sum_products3_prepared p
+                              (Array.make 3#usize [dl, df, di] (FJh_ProjectedAfter.source._proof_2 dl df di))
+                        field.PreparedQm31Multiplier.mul block sum)
+                      out ra
+                  let ⟨rl, ra⟩ := h✝⁶
+                  let ⟨dl, h✝⁷⟩ :=
+                    FIv_Map.bind_success (field.QM31.sub target l)
+                      (fun dl => do
+                        let f ← Array.index_usize full (NKG_GroupFrame.index g)
+                        let df ← field.QM31.sub target f
+                        let di ← field.QM31.sub target ip
+                        let sum ←
+                          field.qm31_sum_products3_prepared p
+                              (Array.make 3#usize [dl, df, di] (FJh_ProjectedAfter.source._proof_2 dl df di))
+                        field.PreparedQm31Multiplier.mul block sum)
+                      out ra
+                  let ⟨rdl, ra⟩ := h✝⁷
+                  let ⟨f, h✝⁸⟩ :=
+                    FIv_Map.bind_success (Array.index_usize full (NKG_GroupFrame.index g))
+                      (fun f => do
+                        let df ← field.QM31.sub target f
+                        let di ← field.QM31.sub target ip
+                        let sum ←
+                          field.qm31_sum_products3_prepared p
+                              (Array.make 3#usize [dl, df, di] (FJh_ProjectedAfter.source._proof_2 dl df di))
+                        field.PreparedQm31Multiplier.mul block sum)
+                      out ra
+                  let ⟨rf, ra⟩ := h✝⁸
+                  let ⟨df, h✝⁹⟩ :=
+                    FIv_Map.bind_success (field.QM31.sub target f)
+                      (fun df => do
+                        let di ← field.QM31.sub target ip
+                        let sum ←
+                          field.qm31_sum_products3_prepared p
+                              (Array.make 3#usize [dl, df, di] (FJh_ProjectedAfter.source._proof_2 dl df di))
+                        field.PreparedQm31Multiplier.mul block sum)
+                      out ra
+                  let ⟨rdf, ra⟩ := h✝⁹
+                  let ⟨di, h✝¹⁰⟩ :=
+                    FIv_Map.bind_success (field.QM31.sub target ip)
+                      (fun di => do
+                        let sum ←
+                          field.qm31_sum_products3_prepared p
+                              (Array.make 3#usize [dl, df, di] (FJh_ProjectedAfter.source._proof_2 dl df di))
+                        field.PreparedQm31Multiplier.mul block sum)
+                      out ra
+                  let ⟨rdi, ra⟩ := h✝¹⁰
+                  let ⟨sum, h✝¹¹⟩ :=
+                    FIv_Map.bind_success
+                      (field.qm31_sum_products3_prepared p
+                        (Array.make 3#usize [dl, df, di] (FJh_ProjectedAfter.source._proof_2 dl df di)))
+                      (fun sum => field.PreparedQm31Multiplier.mul block sum) out ra
+                  let ⟨rsum, ra⟩ := h✝¹¹
+                  have ll :=
+                    ok.inj
+                      (Eq.trans (Eq.symm rl)
+                        (RawPoseidonExternalRowReads.array_index_usize_ok lead (NKG_GroupFrame.index g) g.isLt));
+                  have ff :=
+                    ok.inj
+                      (Eq.trans (Eq.symm rf)
+                        (RawPoseidonExternalRowReads.array_index_usize_ok full (NKG_GroupFrame.index g) g.isLt));
+                  have dlv := Eq.mpr (id ⋯) (get_ok (field.QM31.sub target l) field.QM31.ZERO dl rdl);
+                  have dfv := Eq.mpr ⋯ (get_ok (field.QM31.sub target f) field.QM31.ZERO df rdf);
+                  have div := get_ok (field.QM31.sub target ip) field.QM31.ZERO di rdi;
+                  ⋯)
+                (Eq.symm eis) ri rins)
+            (Eq.symm ets) rt rts)
+        (Eq.symm finalEq) re rts rins bounds)
+    (Eq.symm firstEq) rs re rts rins bounds
+'AspisR1.NKG_GroupRaw.value' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,86 @@
+{
+  "attempt": "NKG_K039",
+  "kind": "kani",
+  "module": "NKG_sub_segment_cut",
+  "sources": [
+    "NKG_gate.py",
+    "NKG_state_native.rs",
+    "NKG_NATIVE_PROVENANCE.json",
+    "NKG_core_helpers.rs"
+  ],
+  "upload": [
+    "NKG_gate.py",
+    "NKG_state_native.rs",
+    "NKG_NATIVE_PROVENANCE.json",
+    "NKG_core_helpers.rs"
+  ],
+  "command": [
+    "python3",
+    "NKG_gate.py",
+    "NKG_K039.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-poseidon-state-20261108/NKG_workspace/crates/aspis-statement/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-poseidon-state-20261108/NKG_target",
+    "--features",
+    "pool-v1-kernel,pool-v1-pair-forest-active-mask-basis-audit,pool-v1-pair-forest-binary-copy-weights-audit,pool-v1-pair-forest-copy-finish-dot-basis-audit,pool-v1-pair-forest-copy-pattern-basis-audit,pool-v1-pair-forest-copy-selector-tensor-basis-audit,pool-v1-pair-forest-copy-tag-dot-basis-audit,pool-v1-pair-forest-endpoint-selector-cache-audit,pool-v1-pair-forest-packed-digest-audit,pool-v1-pair-forest-packed-digest-selector-tensor-audit,pool-v1-pair-forest-packed-range-audit,pool-v1-pair-forest-pattern-window-audit,pool-v1-pair-forest-semantic-factor-audit,r0,spend-dynamic-rate512",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "state_only_poseidon::NKG_native::NKG_sub_segment_cut",
+    "--output-format",
+    "terse"
+  ],
+  "timeout": 180,
+  "source_revision": "6d3d7ddf3953137c2597a14dad739224e2af2831",
+  "expected_time": "K023 replacement named source segment NKG_sub_segment_cut; arbitrary pre-state, complete arguments/reply, no arithmetic",
+  "env": {
+    "LEAN_SYSROOT": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-poseidon-state-20261108",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-poseidon-state-20261108/NKG_target",
+    "CARGO_NET_OFFLINE": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1 --cfg NKG_bad_output",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_BUILD_JOBS": "1"
+  },
+  "collect": [
+    "NKG_K039_validation"
+  ],
+  "expected_failure": true,
+  "configuration_source_revision": "",
+  "source_tree_dirty": true,
+  "exit_status": 1,
+  "wall_seconds": 12.532137622823939,
+  "peak_rss_kib": "594096",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rcfde88487068407ba0796349a3295696.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "846090240",
+  "source_hashes": {
+    "NKG_gate.py": "cfea1ebda20e4383ad29fd736f9acb698578cdc6a9bd3e43a782fade308e5b18",
+    "NKG_state_native.rs": "703147bd4186e0f173581c49b8680adf83585dbae0c7995fbdabe5671185a57b",
+    "NKG_NATIVE_PROVENANCE.json": "6df3145d434ac83b6fa333ba044d97fbbb21c868268df6be3220e343b4e8e3e2",
+    "NKG_core_helpers.rs": "c2501587ca7dad4a4b14a7a7ba4d2385043a12fb28f2f1e2a30778c604f4ad87"
+  },
+  "deps_fingerprint": "Std from pinned Lean sysroot only",
+  "print_axioms": "N/A: kani"
+}

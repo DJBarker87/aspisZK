@@ -47,14 +47,14 @@ fn NKG_group_iteration(){
  let prepared_weights:[PreparedQm31Multiplier;3]=core::array::from_fn(|_|NKG_p());let prepared_block=NKG_p();
  let pack_replies:[QM31;2]=core::array::from_fn(|_|NKG_q());let sub_replies:[QM31;3]=core::array::from_fn(|_|NKG_q());let sum_reply=NKG_q();let mul_reply=NKG_q();
  let mut log=NKG_GroupLog{pack_inputs:[[QM31::ZERO;4];2],pack_replies,pack_calls:0,sub_args:[[QM31::ZERO;2];3],sub_replies,sub_calls:0,sum_weights:core::array::from_fn(|_|NKG_p()),sum_right:[QM31::ZERO;3],sum_reply,sum_calls:0,mul_left:NKG_p(),mul_right:QM31::ZERO,mul_reply,mul_calls:0};
- let group:usize=kani::any();let k:usize=kani::any();let j:usize=kani::any();kani::assume(group<4&&k<4&&j<3);
+ let group:usize=kani::any();let k:usize=kani::any();let j:usize=kani::any();let a:usize=kani::any();let b:usize=kani::any();kani::assume(group<4&&k<4&&j<3&&a<3&&b<3);
  let mut out=NKG_group(&mut log,&succ,&internal,&leading,&full,&prepared_weights,prepared_block,group);
  if cfg!(NKG_bad_output){out.c0.a.0^=1;}
  if cfg!(NKG_bad_argument){log.pack_inputs[0][k].c0.a.0^=1;}
  assert_eq!(log.pack_calls,2);assert_eq!(log.sub_calls,3);assert_eq!(log.sum_calls,1);assert_eq!(log.mul_calls,1);
  assert_eq!(NKG_words(log.pack_inputs[0][k]),NKG_words(succ[4*group+k]));assert_eq!(NKG_words(log.pack_inputs[1][k]),NKG_words(internal[4*group+k]));
  assert_eq!(NKG_words(log.sub_args[j][0]),NKG_words(pack_replies[0]));assert_eq!(NKG_words(log.sub_args[j][1]),NKG_words(if j==0{leading[group]}else if j==1{full[group]}else{pack_replies[1]}));
- assert_eq!(aspis_core::field::NKG_prepared_words(log.sum_weights[j]),aspis_core::field::NKG_prepared_words(prepared_weights[j]));assert_eq!(NKG_words(log.sum_right[j]),NKG_words(sub_replies[j]));assert_eq!(aspis_core::field::NKG_prepared_words(log.mul_left),aspis_core::field::NKG_prepared_words(prepared_block));assert_eq!(NKG_words(log.mul_right),NKG_words(sum_reply));assert_eq!(NKG_words(out),NKG_words(mul_reply));
+ assert_eq!(aspis_core::field::NKG_prepared_words(log.sum_weights[j])[a][b],aspis_core::field::NKG_prepared_words(prepared_weights[j])[a][b]);assert_eq!(NKG_words(log.sum_right[j]),NKG_words(sub_replies[j]));assert_eq!(aspis_core::field::NKG_prepared_words(log.mul_left)[a][b],aspis_core::field::NKG_prepared_words(prepared_block)[a][b]);assert_eq!(NKG_words(log.mul_right),NKG_words(sum_reply));assert_eq!(NKG_words(out),NKG_words(mul_reply));
 }
 struct NKG_FromFnLog{replies:[QM31;4],indices:[usize;4],calls:usize}
 fn NKG_output(log:&mut NKG_FromFnLog,g:usize)->QM31{let k=log.calls;assert!(k<4);log.indices[k]=g;log.calls+=1;log.replies[g]}

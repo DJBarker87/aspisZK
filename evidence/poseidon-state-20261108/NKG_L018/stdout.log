@@ -1,0 +1,141 @@
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+theorem AspisR1.NKG_AfterTotal.result : ∀ (target internal theta : NQ) (lead full : Packed)
+  (w : FJe_Sum3BridgeBase.Right) (p : Std.Array NP 3#usize) (block : NP) (g : Usize),
+  ↑g < 4 →
+    Canon target →
+      Canon internal →
+        Canon theta →
+          canonical lead →
+            canonical full →
+              canonical w →
+                (∀ (i : Fin 3), PreparedFor (prepared (FJe_Sum3Value.cell p i)) (qm (FJe_Sum3Value.cell w i))) →
+                  PreparedFor (prepared block) (qm theta) →
+                    ∃ out, FJh_ProjectedAfter.source target internal lead full p block g = ok out ∧ Canon out :=
+fun target internal theta lead full w p block g hg ct ci cb cl cf cw hp hb =>
+  let ⟨l, h✝⟩ := JFy_ArrayTotal.read lead g hg cl
+  let ⟨rl, lc⟩ := h✝
+  let ⟨dl, h✝¹⟩ := JFy_FieldTotal.sub target l ct lc
+  let ⟨rdl, right✝⟩ := h✝¹
+  let ⟨cdl, right✝¹⟩ := right✝
+  let ⟨f, h✝²⟩ := JFy_ArrayTotal.read full g hg cf
+  let ⟨rf, fc⟩ := h✝²
+  let ⟨df, h✝³⟩ := JFy_FieldTotal.sub target f ct fc
+  let ⟨rdf, right✝²⟩ := h✝³
+  let ⟨cdf, right✝³⟩ := right✝²
+  let ⟨di, h✝⁴⟩ := JFy_FieldTotal.sub target internal ct ci
+  let ⟨rdi, right✝⁴⟩ := h✝⁴
+  let ⟨cdi, right✝⁵⟩ := right✝⁴
+  have cr := fun x hx =>
+    Or.casesOn
+      (Eq.mp
+        (Eq.trans result._simp_1
+          (congrArg (Or (x = dl))
+            (Eq.trans result._simp_1
+              (congrArg (Or (x = df))
+                (Eq.trans result._simp_1 (Eq.trans (congrArg (Or (x = di)) result._simp_2) (or_false (x = di))))))))
+        hx)
+      (fun h =>
+        Eq.ndrec (motive := fun dl =>
+          field.QM31.sub target l = ok dl →
+            Canon dl → FIv_NativeValue.decode dl = FIv_NativeValue.decode target - FIv_NativeValue.decode l → Canon x)
+          (fun rdl cdl right => cdl) h rdl cdl right✝¹)
+      fun h =>
+      Or.casesOn h
+        (fun h =>
+          Eq.ndrec (motive := fun df =>
+            field.QM31.sub target f = ok df →
+              Canon df → FIv_NativeValue.decode df = FIv_NativeValue.decode target - FIv_NativeValue.decode f → Canon x)
+            (fun rdf cdf right => cdf) h rdf cdf right✝³)
+        fun h =>
+        Eq.ndrec (motive := fun di =>
+          field.QM31.sub target internal = ok di →
+            Canon di →
+              FIv_NativeValue.decode di = FIv_NativeValue.decode target - FIv_NativeValue.decode internal → Canon x)
+          (fun rdi cdi right => cdi) h rdi cdi right✝⁵;
+  let ⟨sum, h✝⁵⟩ :=
+    NKG_Sum3Total.result p
+      (Array.make 3#usize [dl, df, di]
+        (of_eq_true
+          (Eq.trans
+            (congr (congrArg Eq (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+              (UScalar.ofNatCore_val_eq
+                (UScalar.bound_suffices UScalarTy.Usize 3 (of_decide_eq_true (id (Eq.refl true))))))
+            (eq_self 3))))
+      w cw cr hp
+  let ⟨rs, cs⟩ := h✝⁵
+  let ⟨out, h✝⁶⟩ := FIv_PreparedTotal.mul block theta sum cb cs hb
+  let ⟨ro, right✝⁶⟩ := h✝⁶
+  let ⟨co, right✝⁷⟩ := right✝⁶
+  Exists.intro out
+    ⟨of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (Eq.trans
+                  (congr (congrArg Bind.bind rl)
+                    (funext fun l =>
+                      congrArg (Bind.bind (field.QM31.sub target l))
+                        (funext fun dl =>
+                          Eq.trans
+                            (Eq.trans
+                              (congr (congrArg Bind.bind rf)
+                                (funext fun f =>
+                                  congrArg (Bind.bind (field.QM31.sub target f))
+                                    (funext fun df =>
+                                      Eq.trans
+                                        (congrFun' (congrArg Bind.bind rdi) fun di => do
+                                          let sum ←
+                                            field.qm31_sum_products3_prepared p
+                                                (Array.make 3#usize [dl, df, di]
+                                                  (FJh_ProjectedAfter.source._proof_2 dl df di))
+                                          field.PreparedQm31Multiplier.mul block sum)
+                                        (bind_tc_ok di fun y => do
+                                          let sum ←
+                                            field.qm31_sum_products3_prepared p
+                                                (Array.make 3#usize [dl, df, y]
+                                                  (FJh_ProjectedAfter.source._proof_2 dl df y))
+                                          field.PreparedQm31Multiplier.mul block sum))))
+                              (bind_tc_ok f fun y => do
+                                let df ← field.QM31.sub target y
+                                let sum ←
+                                  field.qm31_sum_products3_prepared p
+                                      (Array.make 3#usize [dl, df, di] (FJh_ProjectedAfter.source._proof_2 dl df di))
+                                field.PreparedQm31Multiplier.mul block sum))
+                            (Eq.trans
+                              (congrFun' (congrArg Bind.bind rdf) fun df => do
+                                let sum ←
+                                  field.qm31_sum_products3_prepared p
+                                      (Array.make 3#usize [dl, df, di] (FJh_ProjectedAfter.source._proof_2 dl df di))
+                                field.PreparedQm31Multiplier.mul block sum)
+                              (bind_tc_ok df fun y => do
+                                let sum ←
+                                  field.qm31_sum_products3_prepared p
+                                      (Array.make 3#usize [dl, y, di] (FJh_ProjectedAfter.source._proof_2 dl y di))
+                                field.PreparedQm31Multiplier.mul block sum)))))
+                  (bind_tc_ok l fun y => do
+                    let dl ← field.QM31.sub target y
+                    let sum ←
+                      field.qm31_sum_products3_prepared p
+                          (Array.make 3#usize [dl, df, di] (FJh_ProjectedAfter.source._proof_2 dl df di))
+                    field.PreparedQm31Multiplier.mul block sum))
+                (Eq.trans
+                  (Eq.trans
+                    (congrFun' (congrArg Bind.bind rdl) fun dl => do
+                      let sum ←
+                        field.qm31_sum_products3_prepared p
+                            (Array.make 3#usize [dl, df, di] (FJh_ProjectedAfter.source._proof_2 dl df di))
+                      field.PreparedQm31Multiplier.mul block sum)
+                    (bind_tc_ok dl fun y => do
+                      let sum ←
+                        field.qm31_sum_products3_prepared p
+                            (Array.make 3#usize [y, df, di] (FJh_ProjectedAfter.source._proof_2 y df di))
+                      field.PreparedQm31Multiplier.mul block sum))
+                  (Eq.trans
+                    (Eq.trans (congrFun' (congrArg Bind.bind rs) fun sum => field.PreparedQm31Multiplier.mul block sum)
+                      (bind_tc_ok sum (field.PreparedQm31Multiplier.mul block)))
+                    ro))))
+            (ok out))
+          (eq_self (ok out))),
+      co⟩
+'AspisR1.NKG_AfterTotal.result' depends on axioms: [propext, Classical.choice, Quot.sound]

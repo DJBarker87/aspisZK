@@ -1,0 +1,230 @@
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+theorem AspisR1.NKG_OracleSource.result : ∀ (o : Openings) (s : Selectors),
+  canonical o.z →
+    canonical o.succ_z →
+      canonical o.xor12_z →
+        canonical s.local →
+          Canon s.block →
+            ∃ out,
+              state_only_poseidon.evaluate_state_only_poseidon_oracle_projected o s = ok out ∧
+                canonical out ∧
+                  decoded out = fun g =>
+                    R0P.poseidonPackingFormula ExtractedMaskQmPackBase4Arithmetic.iBasis
+                      ExtractedMaskQmPackBase4Arithmetic.uBasis fun j =>
+                      R0P.poseidonScalarResidual (FJh_Native07RawValue.openings o) (decode s.block) (decoded s.local)
+                        (FJe_ExternalAdjoint.lane g j) :=
+fun o s hz ht hx hs hb =>
+  let ⟨leadingLow, h✝⟩ := JFy_ArrayTotal.read s.local 0#usize (of_decide_eq_true (id (Eq.refl true))) hs
+  let ⟨r0, c0⟩ := h✝
+  let ⟨fullLow, h✝¹⟩ := NKG_LowTotal.full s hs
+  let ⟨rlf, clf⟩ := h✝¹
+  let ⟨internalLow, h✝²⟩ := NKG_LowTotal.internal s hs
+  let ⟨rli, cli⟩ := h✝²
+  let ⟨lead, h✝³⟩ := NIH_Leading.result o hz hx
+  let ⟨rlead, right✝⟩ := h✝³
+  let ⟨clead, right✝¹⟩ := right✝
+  let ⟨full, h✝⁴⟩ := NKG_FullSource.result o.z s.local hz hs
+  let ⟨rfull, right✝²⟩ := h✝⁴
+  let ⟨cfull, right✝³⟩ := right✝²
+  let ⟨internal, h✝⁵⟩ := NKG_InternalSource.result o.z s.local hz hs
+  let ⟨rinternal, right✝⁴⟩ := h✝⁵
+  let ⟨cinternal, right✝⁵⟩ := right✝⁴
+  let w :=
+    Array.make 3#usize [leadingLow, fullLow, internalLow]
+      (of_eq_true
+        (Eq.trans
+          (congr (congrArg Eq (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+            (UScalar.ofNatCore_val_eq
+              (UScalar.bound_suffices UScalarTy.Usize 3 (of_decide_eq_true (id (Eq.refl true))))))
+          (eq_self 3)));
+  have cw := fun x hx =>
+    Or.casesOn
+      (Eq.mp
+        (Eq.trans
+          (Eq.trans
+            (congrFun'
+              (congrArg Membership.mem
+                (congrArg Subtype.val
+                  (Array.make.eq_1 3#usize [leadingLow, fullLow, internalLow]
+                    (of_eq_true
+                      (Eq.trans
+                        (congr
+                          (congrArg Eq
+                            (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                          (UScalar.ofNatCore_val_eq
+                            (UScalar.bound_suffices UScalarTy.Usize 3 (of_decide_eq_true (id (Eq.refl true))))))
+                        (eq_self 3))))))
+              x)
+            result._simp_1)
+          (congrArg (Or (x = leadingLow))
+            (Eq.trans result._simp_1
+              (congrArg (Or (x = fullLow))
+                (Eq.trans result._simp_1
+                  (Eq.trans (congrArg (Or (x = internalLow)) result._simp_2) (or_false (x = internalLow))))))))
+        hx)
+      (fun h =>
+        Eq.ndrec (motive := fun leadingLow =>
+          s.local.index_usize 0#usize = ok leadingLow →
+            Canon leadingLow →
+              let w :=
+                Array.make 3#usize [leadingLow, fullLow, internalLow]
+                  (of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Eq (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                        (UScalar.ofNatCore_val_eq
+                          (UScalar.bound_suffices UScalarTy.Usize 3 (of_decide_eq_true (id (Eq.refl true))))))
+                      (eq_self 3)));
+              Canon x)
+          (fun r0 c0 =>
+            let w :=
+              Array.make 3#usize [x, fullLow, internalLow]
+                (of_eq_true
+                  (Eq.trans
+                    (congr
+                      (congrArg Eq (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                      (UScalar.ofNatCore_val_eq
+                        (UScalar.bound_suffices UScalarTy.Usize 3 (of_decide_eq_true (id (Eq.refl true))))))
+                    (eq_self 3)));
+            c0)
+          h r0 c0)
+      fun h =>
+      Or.casesOn h
+        (fun h =>
+          Eq.ndrec (motive := fun fullLow =>
+            FJa_PoseidonOrigins.fullFold s = ok fullLow →
+              Canon fullLow →
+                let w :=
+                  Array.make 3#usize [leadingLow, fullLow, internalLow]
+                    (of_eq_true
+                      (Eq.trans
+                        (congr
+                          (congrArg Eq
+                            (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                          (UScalar.ofNatCore_val_eq
+                            (UScalar.bound_suffices UScalarTy.Usize 3 (of_decide_eq_true (id (Eq.refl true))))))
+                        (eq_self 3)));
+                Canon x)
+            (fun rlf clf =>
+              let w :=
+                Array.make 3#usize [leadingLow, x, internalLow]
+                  (of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Eq (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                        (UScalar.ofNatCore_val_eq
+                          (UScalar.bound_suffices UScalarTy.Usize 3 (of_decide_eq_true (id (Eq.refl true))))))
+                      (eq_self 3)));
+              clf)
+            h rlf clf)
+        fun h =>
+        Eq.ndrec (motive := fun internalLow =>
+          FJa_PoseidonOrigins.internalFold s = ok internalLow →
+            Canon internalLow →
+              let w :=
+                Array.make 3#usize [leadingLow, fullLow, internalLow]
+                  (of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Eq (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                        (UScalar.ofNatCore_val_eq
+                          (UScalar.bound_suffices UScalarTy.Usize 3 (of_decide_eq_true (id (Eq.refl true))))))
+                      (eq_self 3)));
+              Canon x)
+          (fun rli cli =>
+            let w :=
+              Array.make 3#usize [leadingLow, fullLow, x]
+                (of_eq_true
+                  (Eq.trans
+                    (congr
+                      (congrArg Eq (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                      (UScalar.ofNatCore_val_eq
+                        (UScalar.bound_suffices UScalarTy.Usize 3 (of_decide_eq_true (id (Eq.refl true))))))
+                    (eq_self 3)));
+            cli)
+          h rli cli;
+  let ⟨p, rp⟩ := NKG_PreparedMap.result w cw
+  let ⟨block, h✝⁶⟩ := FIv_PreparedNewTotal.value s.block hb
+  let ⟨rb, right✝⁶⟩ := h✝⁶
+  let ⟨out, h✝⁷⟩ := NKG_CellTotal.array o internal s.block block p lead full w ht cinternal hb clead cfull cw rp rb
+  let ⟨rout, cout⟩ := h✝⁷
+  have run :=
+    Eq.mpr (id (congrArg (fun _a => _a = ok out) (NKG_OracleFactor.factor o s)))
+      (of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (Eq.trans
+                  (congr (congrArg Bind.bind r0)
+                    (funext fun leadingLow =>
+                      Eq.trans
+                        (congr (congrArg Bind.bind rlf)
+                          (funext fun fullLow =>
+                            Eq.trans
+                              (congr (congrArg Bind.bind rli)
+                                (funext fun internalLow =>
+                                  Eq.trans
+                                    (congr (congrArg Bind.bind rlead)
+                                      (funext fun lead =>
+                                        Eq.trans (congr (congrArg Bind.bind rfull) (funext fun full => Eq.trans ⋯ ⋯))
+                                          (bind_tc_ok full fun y => do
+                                            let p ←
+                                              FIq_Native.core.array.Array.map (BuiltinFnMut NQ FJa_PoseidonOrigins.NP)
+                                                  (Array.make 3#usize [leadingLow, fullLow, internalLow]
+                                                    (NKG_OracleFactor.source._proof_5 leadingLow fullLow internalLow))
+                                                  field.PreparedQm31Multiplier.new
+                                            array_from_fn_copy 4#usize field.QM31.Insts.CoreMarkerCopy
+                                                state_only_poseidon.evaluate_state_only_poseidon_oracle_projected.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                                field.QM31.ZERO ⋯)))
+                                    (bind_tc_ok lead fun y => do
+                                      let p ←
+                                        FIq_Native.core.array.Array.map (BuiltinFnMut NQ FJa_PoseidonOrigins.NP)
+                                            (Array.make 3#usize [leadingLow, fullLow, internalLow]
+                                              (NKG_OracleFactor.source._proof_5 leadingLow fullLow internalLow))
+                                            field.PreparedQm31Multiplier.new
+                                      array_from_fn_copy 4#usize field.QM31.Insts.CoreMarkerCopy
+                                          state_only_poseidon.evaluate_state_only_poseidon_oracle_projected.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                          field.QM31.ZERO (o, internal, block, p, y, full))))
+                              (bind_tc_ok internalLow fun y => do
+                                let p ←
+                                  FIq_Native.core.array.Array.map (BuiltinFnMut NQ FJa_PoseidonOrigins.NP)
+                                      (Array.make 3#usize [leadingLow, fullLow, y]
+                                        (NKG_OracleFactor.source._proof_5 leadingLow fullLow y))
+                                      field.PreparedQm31Multiplier.new
+                                array_from_fn_copy 4#usize field.QM31.Insts.CoreMarkerCopy
+                                    state_only_poseidon.evaluate_state_only_poseidon_oracle_projected.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                    field.QM31.ZERO (o, internal, block, p, lead, full))))
+                        (bind_tc_ok fullLow fun y => do
+                          let p ←
+                            FIq_Native.core.array.Array.map (BuiltinFnMut NQ FJa_PoseidonOrigins.NP)
+                                (Array.make 3#usize [leadingLow, y, internalLow]
+                                  (NKG_OracleFactor.source._proof_5 leadingLow y internalLow))
+                                field.PreparedQm31Multiplier.new
+                          array_from_fn_copy 4#usize field.QM31.Insts.CoreMarkerCopy
+                              state_only_poseidon.evaluate_state_only_poseidon_oracle_projected.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                              field.QM31.ZERO (o, internal, block, p, lead, full))))
+                  (bind_tc_ok leadingLow fun y => do
+                    let p ←
+                      FIq_Native.core.array.Array.map (BuiltinFnMut NQ FJa_PoseidonOrigins.NP)
+                          (Array.make 3#usize [y, fullLow, internalLow]
+                            (NKG_OracleFactor.source._proof_5 y fullLow internalLow))
+                          field.PreparedQm31Multiplier.new
+                    array_from_fn_copy 4#usize field.QM31.Insts.CoreMarkerCopy
+                        state_only_poseidon.evaluate_state_only_poseidon_oracle_projected.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                        field.QM31.ZERO (o, internal, block, p, lead, full)))
+                (Eq.trans
+                  (Eq.trans
+                    (congrFun' (congrArg Bind.bind rp) fun p =>
+                      array_from_fn_copy 4#usize field.QM31.Insts.CoreMarkerCopy
+                        state_only_poseidon.evaluate_state_only_poseidon_oracle_projected.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                        field.QM31.ZERO (o, internal, block, p, lead, full))
+                    (bind_tc_ok p fun y =>
+                      array_from_fn_copy 4#usize field.QM31.Insts.CoreMarkerCopy
+                        state_only_poseidon.evaluate_state_only_poseidon_oracle_projected.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                        field.QM31.ZERO (o, internal, block, y, lead, full)))
+                  rout)))
+            (ok out))
+          (eq_self (ok out))));
+  Exists.intro out ⟨run, FJk_Native07Value.value o s out hz ht hx hs hb run⟩
+'AspisR1.NKG_OracleSource.result' depends on axioms: [propext, Classical.choice, Quot.sound]

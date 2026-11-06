@@ -1,0 +1,74 @@
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+NKG_lean/NKG_PreludeFrame.lean:39:9: error: unexpected identifier; expected prec
+NKG_lean/NKG_PreludeFrame.lean:62:111: error(lean.invalidField): Invalid field `prepares`: The environment does not contain `AspisR1.NKG_PreludeFrame.Cut.prepares`, so it is not possible to project the field `prepares` from an expression
+  cut
+of type `Cut o s n`
+NKG_lean/NKG_PreludeFrame.lean:66:28: error(lean.invalidField): Invalid field `prefix`: The environment does not contain `AspisR1.NKG_PreludeFrame.Cut.prefix`, so it is not possible to project the field `prefix` from an expression
+  cut
+of type `Cut o s n`
+NKG_lean/NKG_PreludeFrame.lean:66:53: error(lean.invalidField): Invalid field `prefix`: The environment does not contain `AspisR1.NKG_PreludeFrame.Cut.prefix`, so it is not possible to project the field `prefix` from an expression
+  cut
+of type `Cut o s n`
+NKG_lean/NKG_PreludeFrame.lean:66:75: error(lean.invalidField): Invalid field `prefix`: The environment does not contain `AspisR1.NKG_PreludeFrame.Cut.prefix`, so it is not possible to project the field `prefix` from an expression
+  cut
+of type `Cut o s n`
+theorem AspisR1.NKG_PreludeFrame.result : ∀ (o : Openings) (s : Selectors) (n : Observation),
+  canonical o.z →
+    canonical o.xor12_z →
+      canonical s.local →
+        Canon s.block →
+          Cut o s n →
+            n.prepared = NKG_OracleChoices.prepared s ∧
+              n.block = NKG_OracleChoices.block s ∧
+                n.leading = NKG_OracleChoices.leading o ∧
+                  n.full = NKG_OracleChoices.full o s ∧ n.internal = NKG_OracleChoices.internal o s :=
+fun o s n hz hx hs hb cut =>
+  have r0 :=
+    Eq.mpr (id (congrArg (fun _a => s.local.index_usize 0#usize = ok _a) cut.leadingRead))
+      (RawPoseidonExternalRowReads.array_index_usize_ok s.local 0#usize (of_decide_eq_true (id (Eq.refl true))));
+  have v0 := get_ok (s.local.index_usize 0#usize) field.QM31.ZERO n.leadingLow r0;
+  have vf :=
+    get_ok (FJa_PoseidonOrigins.fullFold s) field.QM31.ZERO (n.fullStates 3)
+      (NKG_LowFrame.full s n.fullStates hs cut.fullTrace).left;
+  have vi :=
+    get_ok (FJa_PoseidonOrigins.internalFold s) field.QM31.ZERO (n.internalStates 7)
+      (NKG_LowFrame.internal s n.internalStates hs cut.internalTrace).left;
+  have vw :=
+    Eq.trans
+      (congrArg₂
+        (fun a b =>
+          Array.make 3#usize [a, b, n.internalStates 7]
+            (of_eq_true
+              (Eq.trans
+                (congr (congrArg Eq (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                  (UScalar.ofNatCore_val_eq
+                    (UScalar.bound_suffices UScalarTy.Usize 3 (of_decide_eq_true (id (Eq.refl true))))))
+                (eq_self 3))))
+        (Eq.symm v0) (Eq.symm vf))
+      (congrArg
+        (fun c =>
+          Array.make 3#usize [NKG_OracleChoices.leadingLow s, NKG_OracleChoices.fullLow s, c]
+            (of_eq_true
+              (Eq.trans
+                (congr (congrArg Eq (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                  (UScalar.ofNatCore_val_eq
+                    (UScalar.bound_suffices UScalarTy.Usize 3 (of_decide_eq_true (id (Eq.refl true))))))
+                (eq_self 3))))
+        (Eq.symm vi));
+  have ready := NKG_OracleChoices.ready o s hz hx hs hb;
+  have native := NKG_PreparedRaw.native (weights n) s.block n.prepareArgs n.prepared n.block n.prepareCalls sorry;
+  have pmodel := NKG_PreparedRaw.source (NKG_OracleChoices.weights s) (NKG_OracleChoices.prepared s) ready.preparedCall;
+  have pvalue := Eq.trans native.left (Eq.trans (congrArg NKG_PreparedRaw.model vw) (Eq.symm pmodel));
+  ⟨pvalue, ⟨native.right, ⟨sorry, ⟨sorry, sorry⟩⟩⟩⟩
+'AspisR1.NKG_PreludeFrame.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+structure AspisR1.NKG_PreludeFrame.Cut (o : Openings) (s : Selectors) (n : Observation) : Prop
+number of parameters: 3
+fields:
+  AspisR1.NKG_PreludeFrame.Cut.leadingRead : n.leadingLow = cell s.local ⟨0, ⋯⟩
+  AspisR1.NKG_PreludeFrame.Cut.fullTrace : NKG_LowFrame.Trace s NKG_LowFrame.fullRows n.fullStates
+  AspisR1.NKG_PreludeFrame.Cut.internalTrace : NKG_LowFrame.Trace s NKG_LowFrame.internalRows n.internalStates
+constructor:
+  AspisR1.NKG_PreludeFrame.Cut.mk {o : Openings} {s : Selectors} {n : Observation}
+    (leadingRead : n.leadingLow = cell s.local ⟨0, ⋯⟩)
+    (fullTrace : NKG_LowFrame.Trace s NKG_LowFrame.fullRows n.fullStates)
+    (internalTrace : NKG_LowFrame.Trace s NKG_LowFrame.internalRows n.internalStates) : Cut o s n

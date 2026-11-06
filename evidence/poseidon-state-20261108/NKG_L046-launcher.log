@@ -1,0 +1,45 @@
+{"attempt": "NKG_L046", "exit_status": 0, "wall_seconds": 13.2979940851219, "peak_rss_kib": "6017784", "swaps": "0", "print_axioms": ["'AspisR1.NKG_PreludeFrame.result' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+theorem AspisR1.NKG_PreludeFrame.result : ∀ (o : Openings) (s : Selectors) (n : Observation),
+  canonical o.z →
+    canonical o.xor12_z →
+      canonical s.local →
+        Canon s.block →
+          Cut o s n →
+            n.prepared = NKG_OracleChoices.prepared s ∧
+              n.block = NKG_OracleChoices.block s ∧
+                n.leading = NKG_OracleChoices.leading o ∧
+                  n.full = NKG_OracleChoices.full o s ∧ n.internal = NKG_OracleChoices.internal o s :=
+fun o s n hz hx hs hb cut =>
+  have r0 :=
+    Eq.mpr (id (congrArg (fun _a => s.local.index_usize 0#usize = ok _a) cut.leadingRead))
+    
+...
+n, cut.branches.internalReturn⟩⟩⟩⟩
+'AspisR1.NKG_PreludeFrame.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure AspisR1.NKG_PreludeFrame.Cut (o : Openings) (s : Selectors) (n : Observation) : Prop
+number of parameters: 3
+fields:
+  AspisR1.NKG_PreludeFrame.Cut.leadingRead : n.leadingLow = cell s.local ⟨0, ⋯⟩
+  AspisR1.NKG_PreludeFrame.Cut.fullTrace : NKG_LowFrame.Trace s NKG_LowFrame.fullRows n.fullStates
+  AspisR1.NKG_PreludeFrame.Cut.internalTrace : NKG_LowFrame.Trace s NKG_LowFrame.internalRows n.internalStates
+  AspisR1.NKG_PreludeFrame.Cut.branches : NKG_OracleCuts.Prefix o s n.openingArg n.fullStateArg n.fullLocalArg
+      n.internalStateArg n.internalLocalArg (NKG_OracleChoices.leading o) (NKG_OracleChoices.full o s) n.leading n.full
+      (NKG_OracleChoices.internal o s) n.internal n.prefixCalls
+  AspisR1.NKG_PreludeFrame.Cut.prepares : NKG_OracleCuts.Prepare (weights n) s.block n.prepareArgs
+      (NKG_PreparedRaw.replies (weights n) s.block) n.prepared n.block n.prepareCalls
+constructor:
+  AspisR1.NKG_PreludeFrame.Cut.mk {o : Openings} {s : Selectors} {n : Observation}
+    (leadingRead : n.leadingLow = cell s.local ⟨0, ⋯⟩)
+    (fullTrace : NKG_LowFrame.Trace s NKG_LowFrame.fullRows n.fullStates)
+    (internalTrace : NKG_LowFrame.Trace s NKG_LowFrame.internalRows n.internalStates)
+    (branches :
+      NKG_OracleCuts.Prefix o s n.openingArg n.fullStateArg n.fullLocalArg n.internalStateArg n.internalLocalArg
+        (NKG_OracleChoices.leading o) (NKG_OracleChoices.full o s) n.leading n.full (NKG_OracleChoices.internal o s)
+        n.internal n.prefixCalls)
+    (prepares :
+      NKG_OracleCuts.Prepare (weights n) s.block n.prepareArgs (NKG_PreparedRaw.replies (weights n) s.block) n.prepared
+        n.block n.prepareCalls) :
+    Cut o s n
+
+Running as unit: run-r8618df0c677241e681a72d474062bd72.scope; invocation ID: b723098c6da641458c86a90c268f2327

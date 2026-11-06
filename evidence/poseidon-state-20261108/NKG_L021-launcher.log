@@ -1,0 +1,50 @@
+{"attempt": "NKG_L021", "exit_status": 0, "wall_seconds": 7.358748029917479, "peak_rss_kib": "5479012", "swaps": "0", "print_axioms": ["'AspisR1.NKG_CellTotal.cell' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NKG_CellTotal.array' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+theorem AspisR1.NKG_CellTotal.cell : ∀ (o : Openings) (internal : State) (theta : QM) (block : NP)
+  (p : Std.Array NP 3#usize) (lead full : Packed) (w : Std.Array QM 3#usize) (g : Usize),
+  ↑g < 4 →
+    canonical o.succ_z →
+      canonical internal →
+        Canonical theta →
+          canonical lead →
+            canonical full →
+              canonical w →
+                FIq_Native.core.array.Array.map (BuiltinFnMut QM NP) w field.PreparedQm31Multiplier.new = ok p →
+                  field.PreparedQm31Multiplier.new theta = ok block →
+                    ∃ out,
+                      call (o, internal, blo
+...
+                  (Eq.trans
+                                  (congrFun' (congrArg Bind.bind ra) fun out =>
+                                    ok (out, o, internal, block, p, lead, full))
+                                  (bind_tc_ok out fun y => ok (y, o, internal, block, p, lead, full))))))))
+                      (ok (out, o, internal, block, p, lead, full))))
+                  (Eq.refl (ok (out, o, internal, block, p, lead, full)))),
+              ca⟩)
+        ve)
+    vs
+'AspisR1.NKG_CellTotal.cell' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKG_CellTotal.array : ∀ (o : Openings) (internal : State) (theta : QM) (block : NP)
+  (p : Std.Array NP 3#usize) (lead full : Packed) (w : Std.Array QM 3#usize),
+  canonical o.succ_z →
+    canonical internal →
+      Canonical theta →
+        canonical lead →
+          canonical full →
+            canonical w →
+              FIq_Native.core.array.Array.map (BuiltinFnMut QM NP) w field.PreparedQm31Multiplier.new = ok p →
+                field.PreparedQm31Multiplier.new theta = ok block →
+                  ∃ out,
+                    array_from_fn_copy 4#usize field.QM31.Insts.CoreMarkerCopy FJh_ProjectedArrayValue.callback
+                          field.QM31.ZERO (o, internal, block, p, lead, full) =
+                        ok out ∧
+                      canonical out :=
+fun o internal theta block p lead full w ct ci cb cl cf cw rp rb =>
+  let ⟨out, h✝⟩ :=
+    JFy_BoundedCanonical.source Canonical 4#usize FJh_ProjectedArrayValue.callback (o, internal, block, p, lead, full)
+      fun g hg => cell o internal theta block p lead full w g hg ct ci cb cl cf cw rp rb
+  let ⟨run, co⟩ := h✝
+  Exists.intro out ⟨run, co⟩
+'AspisR1.NKG_CellTotal.array' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rc79e90178cdf467c8a0d9b5da49ae54d.scope; invocation ID: bd7ea1fac1bc4d86b43bd158a953690d

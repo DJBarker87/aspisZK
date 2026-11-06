@@ -1,0 +1,153 @@
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+theorem AspisR1.NKG_LowFrame.loop : ∀ (N : Usize) (rows : List (Fin 16)) (s : Selectors) (states : ℕ → NQ),
+  canonical s.local →
+    Canon (states 0) →
+      Steps s rows states →
+        core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold FJa_LocalWeightFold.Callback
+              (List.map index rows) (states 0) s =
+            ok (states rows.length) ∧
+          Canon (states rows.length) :=
+fun N rows s states hs hc cuts =>
+  List.rec (motive := fun rows =>
+    ∀ (states : ℕ → NQ),
+      Canon (states 0) →
+        Steps s rows states →
+          core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold FJa_LocalWeightFold.Callback
+                (List.map index rows) (states 0) s =
+              ok (states rows.length) ∧
+            Canon (states rows.length))
+    (fun states hc cuts => ⟨rfl, hc⟩)
+    (fun r rows ih states hc cuts =>
+      have rr := RawPoseidonExternalRowReads.array_index_usize_ok s.local (index r) r.isLt;
+      let ⟨next, h✝⟩ :=
+        FIv_PreparedTotal.add (states 0) (cell s.local r) hc
+          (hs (cell s.local r) (List.getElem_mem (cell._proof_1 s.local r)))
+      let ⟨ra, right✝⟩ := h✝
+      let ⟨cn, right✝¹⟩ := right✝
+      have valueStep := get_ok (field.QM31.add (states 0) (cell s.local r)) field.QM31.ZERO next ra;
+      let ⟨args, h✝¹⟩ :=
+        cuts 0
+          (of_eq_true
+            (Eq.trans (lt_add_iff_pos_left._simp_1 0) (Eq.trans Order.lt_add_one_iff._simp_1 zero_le._simp_1)))
+      let ⟨calls, head⟩ := h✝¹
+      have same := Eq.trans head.returned valueStep;
+      have cb :=
+        id
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  (do
+                      let q ← _a
+                      let q1 ← field.QM31.add (states 0) q
+                      ok (q1, s)) =
+                    ok (next, s))
+                rr))
+            (Eq.mpr
+              (id
+                (congrArg (fun _a => _a = ok (next, s))
+                  (bind_tc_ok (cell s.local r) fun q => do
+                    let q1 ← field.QM31.add (states 0) q
+                    ok (q1, s))))
+              (Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      (do
+                          let q1 ← _a
+                          ok (q1, s)) =
+                        ok (next, s))
+                    ra))
+                (Eq.mpr (id (congrArg (fun _a => _a = ok (next, s)) (bind_tc_ok next fun q1 => ok (q1, s))))
+                  (Eq.refl (ok (next, s)))))));
+      have tailSteps := fun n hn =>
+        have one := cuts (n + 1) (id (Nat.succ_lt_succ hn));
+        id (fun one => one) one;
+      have tail := ih (fun n => states (n + 1)) (Eq.symm same ▸ cn) tailSteps;
+      ⟨id
+          (have cb' := cb;
+          Eq.mpr
+            (id
+              (congrArg (fun _a => _a = ok (states (rows.length + 1)))
+                (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold.eq_2 FJa_LocalWeightFold.Callback
+                  (states 0) s (index r) (List.map index rows))))
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    (do
+                        let (acc', f') ← _a
+                        core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold FJa_LocalWeightFold.Callback
+                            (List.map index rows) acc' f') =
+                      ok (states (rows.length + 1)))
+                  cb'))
+              (Eq.mpr
+                (id
+                  (congrArg (fun _a => _a = ok (states (rows.length + 1)))
+                    (bind_tc_ok (next, s)
+                      (uncurry fun acc' f' =>
+                        core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold FJa_LocalWeightFold.Callback
+                          (List.map index rows) acc' f'))))
+                (id
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold
+                              FJa_LocalWeightFold.Callback (List.map index rows) _a s =
+                            ok (states (rows.length + 1)))
+                        (Eq.symm same)))
+                    tail.left))))),
+        tail.right⟩)
+    rows states hc cuts
+'AspisR1.NKG_LowFrame.loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKG_LowFrame.full : ∀ (s : Selectors) (states : ℕ → NQ),
+  canonical s.local → Trace s fullRows states → FJa_PoseidonOrigins.fullFold s = ok (states 3) ∧ Canon (states 3) :=
+fun s states hs cut =>
+  have h := loop 3#usize fullRows s states hs (Eq.symm cut.initial ▸ FIv_NativeValue.zero.left) cut.steps;
+  ⟨id
+      (Eq.mpr
+        (id
+          (congrFun'
+            (congrArg Eq
+              (bind_tc_ok ↑(Array.make 3#usize [1#usize, 9#usize, 10#usize] FJa_PoseidonOrigins.fullFold._proof_5)
+                fun y =>
+                core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold
+                  state_only_poseidon.evaluate_state_only_poseidon_oracle_projected.closure.Insts.CoreOpsFunctionFnMutPairQM31UsizeQM31
+                  y field.QM31.ZERO s))
+            (ok (states 3))))
+        (Eq.mp
+            (congrArg
+              (fun _a =>
+                core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold FJa_LocalWeightFold.Callback
+                      (List.map index fullRows) _a s =
+                    ok (states fullRows.length) ∧
+                  Canon (states fullRows.length))
+              cut.initial)
+            h).left),
+    (Eq.mp
+        (congrArg
+          (fun _a =>
+            core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold FJa_LocalWeightFold.Callback
+                  (List.map index fullRows) _a s =
+                ok (states fullRows.length) ∧
+              Canon (states fullRows.length))
+          cut.initial)
+        h).right⟩
+'AspisR1.NKG_LowFrame.full' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKG_LowFrame.internal : ∀ (s : Selectors) (states : ℕ → NQ),
+  canonical s.local →
+    Trace s internalRows states → FJa_PoseidonOrigins.internalFold s = ok (states 7) ∧ Canon (states 7) :=
+fun s states hs cut =>
+  have h := loop 7#usize internalRows s states hs (Eq.symm cut.initial ▸ FIv_NativeValue.zero.left) cut.steps;
+  Eq.mpr (id (congrArg (fun _a => _a = ok (states 7) ∧ Canon (states 7)) (FJa_InternalLowShape.value s)))
+    (Eq.mp
+      (congrArg
+        (fun _a =>
+          core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold FJa_LocalWeightFold.Callback
+                (List.map index internalRows) _a s =
+              ok (states internalRows.length) ∧
+            Canon (states internalRows.length))
+        cut.initial)
+      h)
+'AspisR1.NKG_LowFrame.internal' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,124 @@
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+NKG_lean/NKG_SliceTotal.lean:24:36: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+NKG_lean/NKG_SliceTotal.lean:26:41: warning: This simp argument is unused:
+  hlen
+
+Hint: Omit it from the simp argument list.
+  simp [Array.to_slice, ̲Slice.length, ̲hle,h̵l̵e̵n̵,̵ ̲sliceAt]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem AspisR1.NKG_SliceTotal.slice : ∀ (a : State) (start finish : Usize),
+  ↑start ≤ ↑finish →
+    ↑finish ≤ 16 →
+      ↑finish = ↑start + 4 →
+        canonical a →
+          FJh_ProjectedCall.slice a start finish = ok (sliceAt a start finish) ∧
+            (sliceAt a start finish).length = 4 ∧ ∀ x ∈ ↑(sliceAt a start finish), Canonical x :=
+fun a start finish hle hb span ca =>
+  have len := FJh_GroupSlices.slice_length_four a start finish hle hb span;
+  ⟨Eq.mpr (id (congrArg (fun _a => _a = ok (sliceAt a start finish)) (FJh_ProjectedCall.slice.eq_1 a start finish)))
+      (Eq.mpr
+        (id
+          (congrArg (fun _a => _a = ok (sliceAt a start finish))
+            (Array.index_SliceIndexRangeUsizeSlice a { start := start, «end» := finish })))
+        (Eq.mpr
+          (id
+            (congrFun'
+              (congrArg Eq
+                (ite_congr (Eq.refl (start ≤ finish ∧ ↑finish ≤ (Array.to_slice a).length))
+                  (fun a_1 =>
+                    Eq.refl
+                      (ok
+                        ⟨List.slice ↑start ↑finish ↑(Array.to_slice a),
+                          core.slice.index.SliceIndexRangeUsizeSlice.get._proof_1 { start := start, «end» := finish }
+                            (Array.to_slice a)⟩))
+                  fun a => Eq.refl (fail Error.panic)))
+              (ok (sliceAt a start finish))))
+          (have hlen :=
+            have h :=
+              of_eq_true
+                (Eq.trans
+                  (congrFun'
+                    (congrArg Eq
+                      (Eq.trans (List.Vector.length_val a)
+                        (UScalar.ofNatCore_val_eq (UScalar.bound_suffices UScalarTy.Usize 16 State._proof_1))))
+                    16)
+                  (eq_self 16));
+            Eq.mpr (id (congrArg (fun _a => ↑finish ≤ _a) h)) hb;
+          Eq.mpr
+            (id
+              (Eq.trans
+                (Eq.trans
+                  (Eq.trans
+                    (congrFun'
+                      (congrArg Eq
+                        (ite_congr
+                          (Eq.trans
+                            (congr (congrArg And (Eq.trans (UScalar.le_equiv._simp_1 start finish) (eq_true hle)))
+                              (congrArg (LE.le ↑finish)
+                                (Eq.trans (List.Vector.length_val a)
+                                  (UScalar.ofNatCore_val_eq
+                                    (UScalar.bound_suffices UScalarTy.Usize 16 State._proof_1)))))
+                            (true_and (↑finish ≤ 16)))
+                          (fun a_1 =>
+                            Eq.refl
+                              (ok
+                                ⟨List.slice ↑start ↑finish ↑a,
+                                  id (Eq.refl (List.slice ↑start ↑finish ↑a)) ▸
+                                    core.slice.index.SliceIndexRangeUsizeSlice.get._proof_1
+                                      { start := start, «end» := finish } (Array.to_slice a)⟩))
+                          fun a => Eq.refl (fail Error.panic)))
+                      (ok ⟨List.slice ↑start ↑finish ↑a, sliceAt._proof_3 a start finish⟩))
+                    ite_eq_left_iff._simp_1)
+                  (Eq.trans
+                    (Eq.trans
+                      (implies_congr not_le._simp_1
+                        (eq_false' fun h => False.elim (noConfusion_of_Nat Result.ctorIdx h)))
+                      imp_false._simp_1)
+                    not_lt._simp_1))
+                ge_iff_le._simp_1))
+            hb))),
+    ⟨len, fun x hx =>
+      let ⟨j, h✝⟩ := List.getElem_of_mem hx
+      let ⟨hj, h✝¹⟩ := h✝
+      Eq.ndrec (motive := fun x => x ∈ ↑(sliceAt a start finish) → Canonical x)
+        (fun hx =>
+          have h4 := Eq.mpr (id (congrArg (LT.lt j) (Eq.symm len))) hj;
+          Eq.mpr
+            (id (congrArg (fun _a => Canonical _a) (FJh_GroupSlices.slice_input_eq a start finish hle hb span ⟨j, h4⟩)))
+            (ca (FJh_GroupSlices.inputAt a start finish span hb ⟨j, h4⟩)
+              (List.getElem_mem (FJh_GroupSlices.inputAt._proof_2 a start finish span hb ⟨j, h4⟩))))
+        h✝¹ hx⟩⟩
+'AspisR1.NKG_SliceTotal.slice' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKG_SliceTotal.pack : ∀ (a : State) (start finish : Usize),
+  ↑start ≤ ↑finish →
+    ↑finish ≤ 16 →
+      ↑finish = ↑start + 4 →
+        canonical a →
+          ∃ out,
+            (do
+                  let values ← FJh_ProjectedCall.slice a start finish
+                  field.qm31_pack_base4 values) =
+                ok out ∧
+              Canonical out :=
+fun a start finish hle hb span ca =>
+  let ⟨rs, right✝⟩ := slice a start finish hle hb span ca
+  let ⟨len, cs⟩ := right✝
+  let ⟨out, h✝⟩ := FIw_PackTotal.source (sliceAt a start finish) len cs
+  let ⟨rp, cp⟩ := h✝
+  Exists.intro out
+    ⟨Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              (do
+                  let values ← _a
+                  field.qm31_pack_base4 values) =
+                ok out)
+            rs))
+        (Eq.mpr (id (congrArg (fun _a => _a = ok out) (bind_tc_ok (sliceAt a start finish) field.qm31_pack_base4)))
+          (Eq.mpr (id (congrArg (fun _a => _a = ok out) rp)) (Eq.refl (ok out)))),
+      cp⟩
+'AspisR1.NKG_SliceTotal.pack' depends on axioms: [propext, Classical.choice, Quot.sound]

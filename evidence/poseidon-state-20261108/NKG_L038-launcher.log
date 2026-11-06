@@ -1,0 +1,55 @@
+{"attempt": "NKG_L038", "exit_status": 1, "wall_seconds": 10.73762149293907, "peak_rss_kib": "6008560", "swaps": "0", "print_axioms": ["'AspisR1.NKG_LowFrame.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NKG_LowFrame.full' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NKG_LowFrame.internal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+NKG_lean/NKG_LowFrame.lean:45:5: error: Type mismatch: After simplification, term
+  cuts (n + 1) (id (Nat.succ_lt_succ hn))
+ has type
+  ∃ args calls,
+    NKG_OracleCuts.Low s.local (states (n + 1)) (r :: rows)[n + 1] (step s (states (n + 1)) (r :: rows)[n + 1])
+      (states (n + 1 + 1)) args calls
+but is expected to have type
+  ∃ args calls,
+    NKG_OracleCuts.Low s.local (states (n + 1)) rows[n] (step s (states (n + 1)) rows[n]) (states (n + 1 + 1)) args
+      calls
+NKG_lean/NKG_LowFrame.lean:50:74: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FJa_LocalWeightStep.Call s (state
+...
+oreOpsFunctionFnMutPairQM31UsizeQM31
+                  y field.QM31.ZERO s))
+            (ok (states 3))))
+        (Eq.mp
+            (congrArg
+              (fun _a =>
+                core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold FJa_LocalWeightFold.Callback
+                      (List.map index fullRows) _a s =
+                    ok (states fullRows.length) ∧
+                  Canon (states fullRows.length))
+              cut.initial)
+            h).left),
+    (Eq.mp
+        (congrArg
+          (fun _a =>
+            core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold FJa_LocalWeightFold.Callback
+                  (List.map index fullRows) _a s =
+                ok (states fullRows.length) ∧
+              Canon (states fullRows.length))
+          cut.initial)
+        h).right⟩
+'AspisR1.NKG_LowFrame.full' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NKG_LowFrame.internal : ∀ (s : Selectors) (states : ℕ → NQ),
+  canonical s.local →
+    Trace s internalRows states → FJa_PoseidonOrigins.internalFold s = ok (states 7) ∧ Canon (states 7) :=
+fun s states hs cut =>
+  have h := loop 7#usize internalRows s states hs (Eq.symm cut.initial ▸ FIv_NativeValue.zero.left) cut.steps;
+  Eq.mpr (id (congrArg (fun _a => _a = ok (states 7) ∧ Canon (states 7)) (FJa_InternalLowShape.value s)))
+    (Eq.mp
+      (congrArg
+        (fun _a =>
+          core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold FJa_LocalWeightFold.Callback
+                (List.map index internalRows) _a s =
+              ok (states internalRows.length) ∧
+            Canon (states internalRows.length))
+        cut.initial)
+      h)
+'AspisR1.NKG_LowFrame.internal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r8bba75b3bcca45409935a4fe71eeb85f.scope; invocation ID: 3cffd3caa1444b609358ec04eee7f1d3

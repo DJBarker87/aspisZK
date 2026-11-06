@@ -1,6 +1,7 @@
 """Owned scratch overlays; frozen graph before EACH Kani and lock after EACH run."""
 from pathlib import Path
 import importlib.util,json,sys,subprocess,os,base64,lzma,difflib,hashlib
+sys.dont_write_bytecode=True
 E=Path(__file__).resolve().parent; P=Path('/home/dombarker/project-offloads/codex-cx-multiproof2-20261107')
 assert hashlib.sha256((P/'NJE_stage.py').read_bytes()).hexdigest()=='3b05b7c5f1aff94fae52b4b2b50edbdae9c61f6d7bfc4fb8112b543ed8fdc081', 'STOP inherited input drift NJE_stage.py'
 assert hashlib.sha256((P/'NJE_SUPPLEMENT.json').read_bytes()).hexdigest()=='1d8b3b2bf561958174ce453f2706adeaae70885cbe73de33576b34683add84eb', 'STOP inherited input drift NJE_SUPPLEMENT.json'

@@ -1,0 +1,42 @@
+{"attempt": "NKG_L033", "exit_status": 0, "wall_seconds": 9.607710751937702, "peak_rss_kib": "6036052", "swaps": "0", "print_axioms": []}
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+structure AspisR1.NKG_OracleCuts.Low (l : State) (acc : NQ) (i : Fin 16) (reply out : NQ) (args : Fin 2 → NQ)
+  (calls : ℕ) : Prop
+number of parameters: 7
+fields:
+  AspisR1.NKG_OracleCuts.Low.count : calls = 1
+  AspisR1.NKG_OracleCuts.Low.left : args 0 = acc
+  AspisR1.NKG_OracleCuts.Low.right : args 1 = cell l i
+  AspisR1.NKG_OracleCuts.Low.returned : out = reply
+constructor:
+  AspisR1.NKG_OracleCuts.Low.mk {l : State} {acc : NQ} {i : Fin 16} {reply out : NQ} {args : Fin 2 → NQ} {calls : ℕ}
+    (count : calls = 1) (left : args 0 = acc) (right : args 1 = cell l i) (returned : out = reply) :
+    Low l acc i rep
+...
+ut = replies) : Output replies out indices calls
+structure AspisR1.NKG_OracleCuts.Prefix (o : FJa_PoseidonOrigins.Openings) (s : FJa_PoseidonOrigins.Selectors)
+  (opening : FJa_PoseidonOrigins.Openings) (fullState fullLocal internalState internalLocal : State)
+  (leadReply fullReply leadOut fullOut : Packed) (internalReply internalOut : State) (calls : ℕ) : Prop
+number of parameters: 14
+fields:
+  AspisR1.NKG_OracleCuts.Prefix.count : calls = 3
+  AspisR1.NKG_OracleCuts.Prefix.leadingArgs : opening = o
+  AspisR1.NKG_OracleCuts.Prefix.fullStateArg : fullState = o.z
+  AspisR1.NKG_OracleCuts.Prefix.fullLocalArg : fullLocal = s.local
+  AspisR1.NKG_OracleCuts.Prefix.internalStateArg : internalState = o.z
+  AspisR1.NKG_OracleCuts.Prefix.internalLocalArg : internalLocal = s.local
+  AspisR1.NKG_OracleCuts.Prefix.leadingReturn : leadOut = leadReply
+  AspisR1.NKG_OracleCuts.Prefix.fullReturn : fullOut = fullReply
+  AspisR1.NKG_OracleCuts.Prefix.internalReturn : internalOut = internalReply
+constructor:
+  AspisR1.NKG_OracleCuts.Prefix.mk {o : FJa_PoseidonOrigins.Openings} {s : FJa_PoseidonOrigins.Selectors}
+    {opening : FJa_PoseidonOrigins.Openings} {fullState fullLocal internalState internalLocal : State}
+    {leadReply fullReply leadOut fullOut : Packed} {internalReply internalOut : State} {calls : ℕ} (count : calls = 3)
+    (leadingArgs : opening = o) (fullStateArg : fullState = o.z) (fullLocalArg : fullLocal = s.local)
+    (internalStateArg : internalState = o.z) (internalLocalArg : internalLocal = s.local)
+    (leadingReturn : leadOut = leadReply) (fullReturn : fullOut = fullReply)
+    (internalReturn : internalOut = internalReply) :
+    Prefix o s opening fullState fullLocal internalState internalLocal leadReply fullReply leadOut fullOut internalReply
+      internalOut calls
+
+Running as unit: run-rec70351169784ee5ac10560e72fa9c1c.scope; invocation ID: b9ee943e92ef4ca5a7491231e7a7e7a5

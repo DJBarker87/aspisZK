@@ -15,9 +15,11 @@ theorem callback (s : Selectors) (acc : NQ) (i : Usize) (hs : canonical s.local)
  obtain ⟨q,rq,cq⟩ := JFy_ArrayTotal.read s.local i hi hs
  obtain ⟨out,ra,ca,_⟩ := FIv_PreparedTotal.add acc q hc cq
  refine ⟨out,?_,ca⟩
- simp only [FJa_LocalWeightStep.Call,
-   state_only_poseidon.evaluate_state_only_poseidon_oracle_projected.closure.Insts.CoreOpsFunctionFnMutPairQM31UsizeQM31.call_mut,
-   rq,ra,bind_tc_ok]
+ change (do let v ← Array.index_usize s.local i
+            let z ← field.QM31.add acc v
+            ok (z,s))=ok (out,s)
+ simp only [rq,ra,bind_tc_ok]
+
 
 theorem fold (N : Usize) (is : List Usize) (s : Selectors) (acc : NQ)
  (hs : canonical s.local) (hc : Canon acc) (bound : ∀ i∈is,i.val<16) :
@@ -29,7 +31,8 @@ theorem fold (N : Usize) (is : List Usize) (s : Selectors) (acc : NQ)
    obtain ⟨next,rn,cn⟩ := callback s acc i hs hc (bound i (by simp))
    obtain ⟨out,ro,co⟩ := ih next cn (by intro j hj;exact bound j (by simp [hj]))
    refine ⟨out,?_,co⟩
-   simp only [core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold,rn,bind_tc_ok,ro]
+   simp only [core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold,rn,bind_tc_ok]
+   exact ro
 
 theorem full (s : Selectors) (hs : canonical s.local) : ∃ out,fullFold s=ok out ∧ Canon out := by
  obtain ⟨out,run,co⟩ := fold 3#usize [1#usize,9#usize,10#usize] s field.QM31.ZERO hs

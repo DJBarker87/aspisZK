@@ -1,0 +1,142 @@
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+theorem AspisR1.NKG_LowTotal.callback : ∀ (s : Selectors) (acc : NQ) (i : Usize),
+  canonical s.local → Canon acc → ↑i < 16 → ∃ out, FJa_LocalWeightStep.Call s (acc, i) = ok (out, s) ∧ Canon out :=
+fun s acc i hs hc hi =>
+  let ⟨q, h✝⟩ := JFy_ArrayTotal.read s.local i hi hs
+  let ⟨rq, cq⟩ := h✝
+  let ⟨out, h✝¹⟩ := FIv_PreparedTotal.add acc q hc cq
+  let ⟨ra, right✝⟩ := h✝¹
+  let ⟨ca, right✝¹⟩ := right✝
+  Exists.intro out
+    ⟨id
+        (of_eq_true
+          (Eq.trans
+            (congrFun'
+              (congrArg Eq
+                (Eq.trans
+                  (Eq.trans
+                    (congrFun' (congrArg Bind.bind rq) fun v => do
+                      let z ← field.QM31.add acc v
+                      ok (z, s))
+                    (bind_tc_ok q fun y => do
+                      let z ← field.QM31.add acc y
+                      ok (z, s)))
+                  (Eq.trans (congrFun' (congrArg Bind.bind ra) fun z => ok (z, s))
+                    (bind_tc_ok out fun y => ok (y, s)))))
+              (ok (out, s)))
+            (eq_self (ok (out, s))))),
+      ca⟩
+'AspisR1.NKG_LowTotal.callback' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKG_LowTotal.fold : ∀ (N : Usize) (is : List Usize) (s : Selectors) (acc : NQ),
+  canonical s.local →
+    Canon acc →
+      (∀ i ∈ is, ↑i < 16) →
+        ∃ out,
+          core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold FJa_LocalWeightFold.Callback is acc s =
+              ok out ∧
+            Canon out :=
+fun N is s acc hs hc bound =>
+  List.rec (motive := fun is =>
+    ∀ (acc : NQ),
+      Canon acc →
+        (∀ i ∈ is, ↑i < 16) →
+          ∃ out,
+            core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold FJa_LocalWeightFold.Callback is acc s =
+                ok out ∧
+              Canon out)
+    (fun acc hc bound => Exists.intro acc ⟨rfl, hc⟩)
+    (fun i is ih acc hc bound =>
+      let ⟨next, h✝⟩ :=
+        callback s acc i hs hc
+          (bound i
+            (of_eq_true
+              (Eq.trans List.mem_cons._simp_1
+                (Eq.trans (congrFun' (congrArg Or (eq_self i)) (i ∈ is)) (true_or (i ∈ is))))))
+      let ⟨rn, cn⟩ := h✝
+      let ⟨out, h✝¹⟩ :=
+        ih next cn fun j hj =>
+          bound j
+            (of_eq_true
+              (Eq.trans List.mem_cons._simp_1 (Eq.trans (congrArg (Or (j = i)) (eq_true hj)) (or_true (j = i)))))
+      let ⟨ro, co⟩ := h✝¹
+      Exists.intro out
+        ⟨Eq.mpr
+            (id
+              (congrFun'
+                (congrArg Eq
+                  (Eq.trans
+                    (congrFun' (congrArg Bind.bind rn)
+                      (uncurry fun acc' f' =>
+                        core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold FJa_LocalWeightFold.Callback
+                          is acc' f'))
+                    (bind_tc_ok (next, s)
+                      (uncurry fun acc' f' =>
+                        core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold FJa_LocalWeightFold.Callback
+                          is acc' f'))))
+                (ok out)))
+            ro,
+          co⟩)
+    is acc hc bound
+'AspisR1.NKG_LowTotal.fold' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKG_LowTotal.full : ∀ (s : Selectors), canonical s.local → ∃ out, fullFold s = ok out ∧ Canon out :=
+fun s hs =>
+  let ⟨out, h✝⟩ :=
+    fold 3#usize [1#usize, 9#usize, 10#usize] s field.QM31.ZERO hs FIv_NativeValue.zero.left fun i hi =>
+      Or.casesOn
+        (Eq.mp
+          (Eq.trans full._simp_1
+            (congrArg (Or (i = 1#usize))
+              (Eq.trans full._simp_1
+                (congrArg (Or (i = 9#usize))
+                  (Eq.trans full._simp_1
+                    (Eq.trans (congrArg (Or (i = 10#usize)) full._simp_2) (or_false (i = 10#usize))))))))
+          hi)
+        (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true))) fun h =>
+        Or.casesOn h (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true))) fun h =>
+          Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true))
+  let ⟨run, co⟩ := h✝
+  Exists.intro out
+    ⟨Eq.mpr
+        (id
+          (congrFun'
+            (congrArg Eq
+              (bind_tc_ok [1#usize, 9#usize, 10#usize] fun y =>
+                core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold
+                  state_only_poseidon.evaluate_state_only_poseidon_oracle_projected.closure.Insts.CoreOpsFunctionFnMutPairQM31UsizeQM31
+                  y field.QM31.ZERO s))
+            (ok out)))
+        run,
+      co⟩
+'AspisR1.NKG_LowTotal.full' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKG_LowTotal.internal : ∀ (s : Selectors),
+  canonical s.local → ∃ out, internalFold s = ok out ∧ Canon out :=
+fun s hs =>
+  Eq.mpr (id (congrArg (fun _a => ∃ out, _a = ok out ∧ Canon out) (FJa_InternalLowShape.value s)))
+    (fold 7#usize [2#usize, 3#usize, 4#usize, 5#usize, 6#usize, 7#usize, 8#usize] s field.QM31.ZERO hs
+      FIv_NativeValue.zero.left fun i hi =>
+      Or.casesOn
+        (Eq.mp
+          (Eq.trans full._simp_1
+            (congrArg (Or (i = 2#usize))
+              (Eq.trans full._simp_1
+                (congrArg (Or (i = 3#usize))
+                  (Eq.trans full._simp_1
+                    (congrArg (Or (i = 4#usize))
+                      (Eq.trans full._simp_1
+                        (congrArg (Or (i = 5#usize))
+                          (Eq.trans full._simp_1
+                            (congrArg (Or (i = 6#usize))
+                              (Eq.trans full._simp_1
+                                (congrArg (Or (i = 7#usize))
+                                  (Eq.trans full._simp_1
+                                    (Eq.trans (congrArg (Or (i = 8#usize)) full._simp_2)
+                                      (or_false (i = 8#usize))))))))))))))))
+          hi)
+        (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true))) fun h =>
+        Or.casesOn h (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true))) fun h =>
+          Or.casesOn h (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true))) fun h =>
+            Or.casesOn h (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true))) fun h =>
+              Or.casesOn h (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true))) fun h =>
+                Or.casesOn h (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true))) fun h =>
+                  Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true)))
+'AspisR1.NKG_LowTotal.internal' depends on axioms: [propext, Classical.choice, Quot.sound]

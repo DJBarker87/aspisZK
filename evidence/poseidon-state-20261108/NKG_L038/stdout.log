@@ -1,0 +1,129 @@
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+NKG_lean/NKG_LowFrame.lean:45:5: error: Type mismatch: After simplification, term
+  cuts (n + 1) (id (Nat.succ_lt_succ hn))
+ has type
+  ∃ args calls,
+    NKG_OracleCuts.Low s.local (states (n + 1)) (r :: rows)[n + 1] (step s (states (n + 1)) (r :: rows)[n + 1])
+      (states (n + 1 + 1)) args calls
+but is expected to have type
+  ∃ args calls,
+    NKG_OracleCuts.Low s.local (states (n + 1)) rows[n] (step s (states (n + 1)) rows[n]) (states (n + 1 + 1)) args
+      calls
+NKG_lean/NKG_LowFrame.lean:50:74: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FJa_LocalWeightStep.Call s (states 0, index r)
+in the target expression
+  (do
+      let (acc', f') ← FJa_LocalWeightFold.Callback.call_mut s (states 0, index r)
+      core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold FJa_LocalWeightFold.Callback
+          (List.map index rows) acc' f') =
+    ok (states (rows.length + 1))
+
+case cons
+N : Usize
+s : Selectors
+hs : canonical s.local
+r : Fin 16
+rows : List (Fin 16)
+ih :
+  ∀ (states : ℕ → NQ),
+    Canon (states 0) →
+      Steps s rows states →
+        core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold FJa_LocalWeightFold.Callback
+              (List.map index rows) (states 0) s =
+            ok (states rows.length) ∧
+          Canon (states rows.length)
+states : ℕ → NQ
+hc : Canon (states 0)
+cuts : Steps s (r :: rows) states
+rr : s.local.index_usize (index r) = ok (cell s.local r)
+next : field.QM31
+ra : field.QM31.add (states 0) (cell s.local r) = ok next
+cn : Canon next
+right✝ : FIv_NativeValue.decode next = FIv_NativeValue.decode (states 0) + FIv_NativeValue.decode (cell s.local r)
+valueStep : step s (states 0) r = next
+args : Fin 2 → NQ
+calls : ℕ
+head :
+  NKG_OracleCuts.Low s.local (states 0) (r :: rows)[0] (step s (states 0) (r :: rows)[0]) (states (0 + 1)) args calls
+same : states 1 = next
+cb : FJa_LocalWeightStep.Call s (states 0, index r) = ok (next, s)
+tailSteps : Steps s rows fun n => states (n + 1)
+tail :
+  core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold FJa_LocalWeightFold.Callback (List.map index rows)
+        (states (0 + 1)) s =
+      ok (states (rows.length + 1)) ∧
+    Canon (states (rows.length + 1))
+⊢ (do
+      let (acc', f') ← FJa_LocalWeightFold.Callback.call_mut s (states 0, index r)
+      core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold FJa_LocalWeightFold.Callback
+          (List.map index rows) acc' f') =
+    ok (states (rows.length + 1))
+theorem AspisR1.NKG_LowFrame.loop : ∀ (N : Usize) (rows : List (Fin 16)) (s : Selectors) (states : ℕ → NQ),
+  canonical s.local →
+    Canon (states 0) →
+      Steps s rows states →
+        core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold FJa_LocalWeightFold.Callback
+              (List.map index rows) (states 0) s =
+            ok (states rows.length) ∧
+          Canon (states rows.length) :=
+fun N rows s states hs hc cuts =>
+  List.rec (motive := fun rows =>
+    ∀ (states : ℕ → NQ),
+      Canon (states 0) →
+        Steps s rows states →
+          core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold FJa_LocalWeightFold.Callback
+                (List.map index rows) (states 0) s =
+              ok (states rows.length) ∧
+            Canon (states rows.length))
+    (fun states hc cuts => ⟨rfl, hc⟩) (fun r rows ih states hc cuts => sorry) rows states hc cuts
+'AspisR1.NKG_LowFrame.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NKG_LowFrame.full : ∀ (s : Selectors) (states : ℕ → NQ),
+  canonical s.local → Trace s fullRows states → FJa_PoseidonOrigins.fullFold s = ok (states 3) ∧ Canon (states 3) :=
+fun s states hs cut =>
+  have h := loop 3#usize fullRows s states hs (Eq.symm cut.initial ▸ FIv_NativeValue.zero.left) cut.steps;
+  ⟨id
+      (Eq.mpr
+        (id
+          (congrFun'
+            (congrArg Eq
+              (bind_tc_ok ↑(Array.make 3#usize [1#usize, 9#usize, 10#usize] FJa_PoseidonOrigins.fullFold._proof_5)
+                fun y =>
+                core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold
+                  state_only_poseidon.evaluate_state_only_poseidon_oracle_projected.closure.Insts.CoreOpsFunctionFnMutPairQM31UsizeQM31
+                  y field.QM31.ZERO s))
+            (ok (states 3))))
+        (Eq.mp
+            (congrArg
+              (fun _a =>
+                core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold FJa_LocalWeightFold.Callback
+                      (List.map index fullRows) _a s =
+                    ok (states fullRows.length) ∧
+                  Canon (states fullRows.length))
+              cut.initial)
+            h).left),
+    (Eq.mp
+        (congrArg
+          (fun _a =>
+            core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold FJa_LocalWeightFold.Callback
+                  (List.map index fullRows) _a s =
+                ok (states fullRows.length) ∧
+              Canon (states fullRows.length))
+          cut.initial)
+        h).right⟩
+'AspisR1.NKG_LowFrame.full' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NKG_LowFrame.internal : ∀ (s : Selectors) (states : ℕ → NQ),
+  canonical s.local →
+    Trace s internalRows states → FJa_PoseidonOrigins.internalFold s = ok (states 7) ∧ Canon (states 7) :=
+fun s states hs cut =>
+  have h := loop 7#usize internalRows s states hs (Eq.symm cut.initial ▸ FIv_NativeValue.zero.left) cut.steps;
+  Eq.mpr (id (congrArg (fun _a => _a = ok (states 7) ∧ Canon (states 7)) (FJa_InternalLowShape.value s)))
+    (Eq.mp
+      (congrArg
+        (fun _a =>
+          core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold FJa_LocalWeightFold.Callback
+                (List.map index internalRows) _a s =
+              ok (states internalRows.length) ∧
+            Canon (states internalRows.length))
+        cut.initial)
+      h)
+'AspisR1.NKG_LowFrame.internal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

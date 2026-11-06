@@ -1,0 +1,62 @@
+{"attempt": "NKG_L030", "exit_status": 0, "wall_seconds": 9.368737065931782, "peak_rss_kib": "6036752", "swaps": "0", "print_axioms": ["'AspisR1.NKG_FullChoices.value' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+theorem AspisR1.NKG_FullChoices.value : ∀ (s l : State) (out : Std.Array field.QM31 4#usize),
+  state_only_poseidon.interpolated_full_pair_packed s l = ok out → last s l = out :=
+fun s l out run =>
+  let ⟨q0, h✝⟩ := FJe_FullCalls.value s l out run
+  let ⟨q1, h✝¹⟩ := h✝
+  let ⟨q2, h✝²⟩ := h✝¹
+  let ⟨e, h✝³⟩ := h✝²
+  let ⟨o, h✝⁴⟩ := h✝³
+  let ⟨mid, h✝⁵⟩ := h✝⁴
+  let ⟨r0, right✝⟩ := h✝⁵
+  let ⟨r1, right✝¹⟩ := right✝
+  let ⟨r2, right✝²⟩ := right✝¹
+  let ⟨re, right✝³⟩ := right✝²
+  let ⟨ro, right✝⁴⟩ := right✝³
+  let ⟨rm, rf⟩ := right✝⁴
+  have e0 :=
+    ok.inj
+      (Eq.trans (Eq.symm r0)
+        (RawPoseidonExterna
+...
+             get_ok
+                  (state_only_poseidon.interpolate_three_constant_columns (weights l) (FJb_InitialConstants.row 3)
+                    (FJe_FinalConstants.row 1) (FJe_FinalConstants.row 3))
+                  (Array.repeat 16#usize field.QM31.ZERO) o ro;
+              have vm :=
+                id
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          NKG_InternalChoices.get (state_only_poseidon.full_round s _a)
+                              (Array.repeat 16#usize field.QM31.ZERO) =
+                            mid)
+                        ve))
+                    (get_ok (state_only_poseidon.full_round s e) (Array.repeat 16#usize field.QM31.ZERO) mid rm));
+              id
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        NKG_InternalChoices.get (state_only_poseidon.full_round_packed _a (odd l))
+                            (Array.repeat 4#usize field.QM31.ZERO) =
+                          out)
+                      vm))
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          NKG_InternalChoices.get (state_only_poseidon.full_round_packed mid _a)
+                              (Array.repeat 4#usize field.QM31.ZERO) =
+                            out)
+                        vo))
+                    (get_ok (state_only_poseidon.full_round_packed mid o) (Array.repeat 4#usize field.QM31.ZERO) out
+                      rf))))
+            (Eq.symm e2) r2 re ro)
+        (Eq.symm e1) r1 re ro)
+    (Eq.symm e0) r0 re ro
+'AspisR1.NKG_FullChoices.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r4509ca62f09e498ab32ef76857d89185.scope; invocation ID: 3c4d8eefad6f449eb67ea7784eda0145

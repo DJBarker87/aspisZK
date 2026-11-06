@@ -1,0 +1,58 @@
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+theorem AspisR1.NKG_GroupFrame.result : ∀ (succ internal : State) (lead full : Packed) (p : Prepared) (block : NP)
+  (g : Fin 4) (o : Observation),
+  Frame succ internal lead full p block g o → o.out = model succ internal lead full p block g :=
+fun succ internal lead full p block g o cut =>
+  have target := cut.packs.targetReply;
+  have ip := cut.packs.internalReply;
+  id
+    (fun target =>
+      id
+        (fun ip =>
+          have ds := cut.subs.returned;
+          have sm := cut.sums.returned;
+          have out := cut.multiply.returned;
+          Eq.mpr (id (congrArg (fun _a => _a = model succ internal lead full p block g) out))
+            (Eq.mpr (id (congrArg (fun _a => mul block _a = model succ internal lead full p block g) sm))
+              (Eq.mpr (id (congrArg (fun _a => mul block (sum p _a) = model succ internal lead full p block g) ds))
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        mul block (sum p (differences _a o.ip lead full g)) = model succ internal lead full p block g)
+                      target))
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          mul block (sum p (differences (pack succ g) _a lead full g)) =
+                            model succ internal lead full p block g)
+                        ip))
+                    (Eq.refl (mul block (sum p (differences (pack succ g) (pack internal g) lead full g)))))))))
+        ip)
+    target
+'AspisR1.NKG_GroupFrame.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure AspisR1.NKG_GroupFrame.Frame (succ internal : State) (lead full : Packed) (p : Prepared) (block : NP)
+  (g : Fin 4) (o : Observation) : Prop
+number of parameters: 8
+fields:
+  AspisR1.NKG_GroupFrame.Frame.packs : NKG_OracleCuts.Pack succ internal g o.packInputs
+      (fun c => if ↑c = 0 then pack succ g else pack internal g) o.target o.ip o.packCalls
+  AspisR1.NKG_GroupFrame.Frame.subs : NKG_OracleCuts.Sub o.target o.ip lead full g o.subArgs
+      (differences o.target o.ip lead full g) o.differences o.subCalls
+  AspisR1.NKG_GroupFrame.Frame.sums : NKG_OracleCuts.Sum p o.sumCaches o.differences o.sumRight (sum p o.differences)
+      o.sum o.sumCalls
+  AspisR1.NKG_GroupFrame.Frame.multiply : NKG_OracleCuts.Mul block o.mulCache o.sum o.mulRight (mul block o.sum) o.out
+      o.mulCalls
+constructor:
+  AspisR1.NKG_GroupFrame.Frame.mk {succ internal : State} {lead full : Packed} {p : Prepared} {block : NP} {g : Fin 4}
+    {o : Observation}
+    (packs :
+      NKG_OracleCuts.Pack succ internal g o.packInputs (fun c => if ↑c = 0 then pack succ g else pack internal g)
+        o.target o.ip o.packCalls)
+    (subs :
+      NKG_OracleCuts.Sub o.target o.ip lead full g o.subArgs (differences o.target o.ip lead full g) o.differences
+        o.subCalls)
+    (sums : NKG_OracleCuts.Sum p o.sumCaches o.differences o.sumRight (sum p o.differences) o.sum o.sumCalls)
+    (multiply : NKG_OracleCuts.Mul block o.mulCache o.sum o.mulRight (mul block o.sum) o.out o.mulCalls) :
+    Frame succ internal lead full p block g o
