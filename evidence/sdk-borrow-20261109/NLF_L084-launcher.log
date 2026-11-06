@@ -1,0 +1,43 @@
+{"attempt": "NLF_L084", "exit_status": 0, "wall_seconds": 25.10438975901343, "peak_rss_kib": "6444632", "swaps": "0", "print_axioms": []}
+NLF_SharedDataLaw.result (s : NLF_SdkModel.State) (a t : Nat)
+  (fresh : t ∉ @NLF_RefCell.Cell.readers NLF_SdkModel.Payload (s.cells (s.accounts a).data)) :
+  @Eq.{1} (Prod.{0, 0} NLF_SdkModel.State (Except.{0, 0} NLF_SdkModel.ProgramError NLF_RefCell.Guard))
+    (NLF_SdkModel.try_borrow_data s a t)
+    (@ite.{1} (Prod.{0, 0} NLF_SdkModel.State (Except.{0, 0} NLF_SdkModel.ProgramError NLF_RefCell.Guard))
+      (NLF_WrapperFlagLaws.sharedAllowed s (s.accounts a).data)
+      (NLF_WrapperFlagLaws.instDecidableSharedAllowed s (s.accounts a).data)
+      (@Prod.mk.{0, 0} NLF_SdkModel.State (Except.{0, 0} NLF_SdkModel.ProgramError NLF_RefCell.Guard)
+        (NLF_SdkModel.put s (s.accounts a).data
+ 
+...
+))
+    (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+NLF_SdkBorrowLaw.admitted_events {F : Type} (h : AspisR1.S2Trust.Heap F) (records : Nat → NLF_SdkModel.Account)
+  (money : Nat → Nat) (n : Nat)
+  (runtime : @AspisR1.AdapterRw.RuntimeEntrypointAdmission F h (fun a => (records a).key) n)
+  (commands : List.{0} NLF_ProgramFold.Command) :
+  And (NLF_ParentModel.Invariant (NLF_ProgramFold.run (@NLF_RuntimeInterpretation.install F h records money) commands))
+    (And
+      (∀ (i : Nat),
+        @Eq.{1} Int
+          (@NLF_RefCell.flag NLF_SdkModel.Payload
+            ((@NLF_RuntimeInterpretation.install F h records money).state.cells i))
+          (@AspisR1.S2Trust.Heap.counter F h i))
+      (∀ (a : Nat), @LT.lt.{0} Nat instLTNat a n → @Eq.{1} Bool (@AspisR1.S2Trust.Heap.ownerLive F h a) true))
+NLF_SdkBorrowLaw.admitted_counter_range {F : Type} (h : AspisR1.S2Trust.Heap F) (records : Nat → NLF_SdkModel.Account)
+  (money : Nat → Nat) (n : Nat)
+  (runtime : @AspisR1.AdapterRw.RuntimeEntrypointAdmission F h (fun a => (records a).key) n)
+  (commands : List.{0} NLF_ProgramFold.Command) :
+  And
+    (NLF_BorrowBounds.Bounded
+      (NLF_ProgramFold.run (@NLF_RuntimeInterpretation.install F h records money) commands).state)
+    (∀ (i : Nat),
+      @Eq.{1} Int
+        (@NLF_RefCell.flag NLF_SdkModel.Payload ((@NLF_RuntimeInterpretation.install F h records money).state.cells i))
+        (@AspisR1.S2Trust.Heap.counter F h i))
+NLF_SdkBorrowLaw.unique_live_cell (p : NLF_ParentModel.Parent) (commands : List.{0} NLF_ProgramFold.Command)
+  (valid : NLF_ParentModel.Invariant p) (i j t : Nat)
+  (hi : NLF_ParentModel.HasToken ((NLF_ProgramFold.run p commands).state.cells i) t)
+  (hj : NLF_ParentModel.HasToken ((NLF_ProgramFold.run p commands).state.cells j) t) : @Eq.{1} Nat i j
+
+Running as unit: run-r603eef722bc7498e8df38d4ecfc5e88e.scope; invocation ID: bc40a679135147f2a507d0173d67685d

@@ -82,3 +82,10 @@ Universal counter/guard semantics and payload-size parametricity are the existin
 std interpretation explicitly authorized by (be)(2); thin wrapper projections
 and error mappings are transcribed line by line in NLF_CORRESPONDENCE.md and
 calibrated against actual SDK code. No new runtime premise is introduced.
+
+The final packet also derives the machine range: NLF_BorrowBounds.acquire_bound,
+release_bound, step_bound and fold_bound prove -1 <= flag <= 2^63-1 throughout
+all unsplit guard transitions from the installed empty ledger. The reusable
+NLF_SdkBorrowLaw.admitted_counter_range pairs that derived bound with the SAME
+runtime source-counter binding. It is not a fresh caller hypothesis and does
+not silently treat an unbounded mathematical Nat count as a native isize.

@@ -33,3 +33,12 @@ NJN's old extraction attempts and hand-model qualifications are retained.
 NLF does not retroactively relabel them native complete. No NJD_K038 or other
 retired timeout is rerun. No new Clock, PDA-value, CPI readonly/reentrancy,
 runtime persistence or allocator law is supplied.
+
+SnapshotFold is a fold of completed SDK loan/read/release scopes, not an
+allocator model for the frozen snapshot function. If to_vec/allocation or a
+caller action aborts inside a live scope, the parent stops at the matching
+acquire/deref prefix and retains the live-token state; it must NOT apply the
+completed-scope restoration theorem or invent a release event. The primitive
+ParentModel steps and ProgramFold invariant cover that prefix. Certifying the
+actual owned snapshot's complete Result/abort/frame still belongs to its native
+parent cut under the existing allocator/std items, as listed above.

@@ -61,3 +61,11 @@ The source-to-ELF gate is inherited, not reproduced (no shipped change).
 NLF_FAILING_STEP records rejected native queues; none is a failing control.
 Record contract calibrations, when used, apply only to their exact observation
 shape. No Ref/RefMut-returning function is ever stub_verified.
+
+The deployed unsplit-counter range is additionally proved by NLF_BorrowBounds,
+then exported as NLF_SdkBorrowLaw.admitted_counter_range. The source-use inventory
+NLF_SOURCE_USES.json finds no explicit Ref::map/RefMut::map, Ref clone/map_split/
+leak in the frozen verifier/Pool source selections. The map probes and pure
+current-payload projection laws are additional reusable support. An effectful
+arbitrary RefMut::map closure would need its own effect law; it is not licensed
+by a pure projection equality.

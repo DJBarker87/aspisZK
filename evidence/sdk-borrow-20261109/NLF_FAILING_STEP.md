@@ -19,3 +19,32 @@ remaining wrapper members will be grouped by real shared call dependency.
 The native seed initially tried UTF-8 on a frozen binary source input. It
 launched no scope. NLF_native_seed now transports every frozen file as base64,
 validating the same pinned hashes before and after the copy.
+
+Further focused Lean elaboration repairs are recorded in their raw attempts:
+L010 used reserved `meta`; L012 lacked a Decidable instance for the explicit
+live-token test; L014/L015 substituted away a Nat binder; L018 needed Invariant
+unfolded; L026 needed spaced Unicode comparison tokens; L028/L029 qualified the
+SDK release name and removed an already-reduced rewrite; L031/L039 needed
+Int.ofNat_eq_natCast for symbolic integer arithmetic; L048 used an over-broad
+split on the release match; L050 used reserved `prefix`; L051/L052 needed an
+explicit source-state projection and the direct next-token equality. Current
+files compile and have standard raw axioms. Failed olean candidates are never
+used for credit. No timeout, memory kill, cap increase or extraction occurred.
+
+K051 rejected ScalarReply's stub_verified calibration before checking the
+harness because Arbitrary was missing. K052 adds that derive under the SAME
+function name and genuinely fails the unimplied assertions. It is not a renamed
+verdict. K053 detects the modifies violation and K054 proves the effect contract.
+
+Harness packaging is now NLF_native_packets.patch plus exact receipt-input
+archives; standalone evidence .rs/.rs.txt staging files were removed. The patch
+contains only cfg(kani) crate attributes/module declaration and the new harness
+module. Its final SDK harness bytes equal K060's source hash. This is packaging,
+not a Rust logic change or an excuse to repeat a native gate.
+
+Owned runner metadata repair: early native receipts inherited the formal
+runner's generic expected_time description. Their exact native argv, frozen
+graph, optimization environment and target remain recorded. Future owned
+runner receipts now describe optimized Rust compilation plus the exact CBMC
+target; old raw receipts are retained unchanged. No arithmetic release gate,
+field multiplication, SBF rebuild or dependency build was run here.

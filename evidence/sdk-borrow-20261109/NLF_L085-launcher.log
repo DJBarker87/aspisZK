@@ -1,0 +1,44 @@
+{"attempt": "NLF_L085", "exit_status": 0, "wall_seconds": 32.82460762606934, "peak_rss_kib": "6431728", "swaps": "0", "print_axioms": []}
+NLF_ThreeAccounts.tx1_snapshots {F : Type} (h : AspisR1.S2Trust.Heap F) (records : Nat → NLF_SdkModel.Account)
+  (money : Nat → Nat)
+  (runtime :
+    @AspisR1.AdapterRw.RuntimeEntrypointAdmission F h (fun a => (records a).key)
+      (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))) :
+  have p := @NLF_RuntimeInterpretation.install F h records money;
+  have r := NLF_SnapshotFold.run p NLF_ThreeAccounts.accounts;
+  And
+    (@Eq.{1} NLF_SdkModel.State
+      (@Prod.fst.{0, 0} NLF_ParentModel.Parent (List.{0} (Except.{0, 0} NLF_SdkModel.ProgramError NLF_SdkModel.Payload))
+          r).state
+      p.state)
+    (And
+      (@Eq.{1} Nat
+        (@Prod.fst.{0, 0} NLF_ParentModel.Parent
+   
+...
+                    (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                          (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))
+                            (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+                              (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 5) (instOfNatNat (nat_lit 5)))
+                                (@List.nil.{0} Nat))))))))
+                  NLF_RefCell.Kind.shared (@Except.ok.{0, 0} NLF_SdkModel.ProgramError NLF_RefCell.Guard g))
+                (@List.cons.{0} NLF_ParentModel.Event
+                  (NLF_ParentModel.Event.deref g
+                    (@Except.ok.{0, 0} NLF_RefCell.Error NLF_SdkModel.Payload
+                      (@NLF_RefCell.Cell.payload NLF_SdkModel.Payload
+                        ((@NLF_RuntimeInterpretation.install F h records money).state.cells g.cell))))
+                  (@List.cons.{0} NLF_ParentModel.Event
+                    (NLF_ParentModel.Event.release g (@Except.ok.{0, 0} NLF_RefCell.Error Unit Unit.unit))
+                    (@List.nil.{0} NLF_ParentModel.Event))))))
+          (And
+            (@Eq.{1} Bool
+              (@AspisR1.S2Trust.Heap.ownerLive F h (@OfNat.ofNat.{0} Nat (nat_lit 6) (instOfNatNat (nat_lit 6)))) true)
+            (@Eq.{1} Int
+              (@AspisR1.S2Trust.Heap.counter F h
+                (@Prod.fst.{0, 0} Nat Nat
+                  (@AspisR1.S2Trust.Heap.accounts F h (@OfNat.ofNat.{0} Nat (nat_lit 6) (instOfNatNat (nat_lit 6))))))
+              (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))))))))
+AspisR1.AdapterRw.RuntimeEntrypointAdmission {F : Type} (s : AspisR1.S2Trust.Heap F) (keys : Nat → List.{0} UInt8)
+  (accountCount : Nat) : Prop
+
+Running as unit: run-rb80ef0e2b97c43c1bb4c3494d52e4cd7.scope; invocation ID: 7747658cf00645d4940014dde12abeb8
