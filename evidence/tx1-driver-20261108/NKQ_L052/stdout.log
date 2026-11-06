@@ -1,0 +1,99 @@
+NKQ_generated/NKQ_ClaimsDomain.lean:11:27: error(lean.unknownIdentifier): Unknown identifier `NKA_ClaimsEffects.main`
+NKQ_generated/NKQ_ClaimsDomain.lean:31:8: warning: declaration uses `sorry`
+NKQ_generated/NKQ_ClaimsDomain.lean:32:7: warning: Variable name `parsed` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+NKQ_generated/NKQ_ClaimsDomain.lean:45:8: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+NKQ_generated/NKQ_ClaimsDomain.lean:45:27: warning: 'exact canonical' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+'AspisR1.NKQ_ClaimsDomain.convert' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKQ_ClaimsDomain.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NKQ_ClaimsDomain.source : ∀ (reservation : NP6_StdModel.Reservation) (bytes : Slice U8),
+  match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+  | ok (core.result.Result.Ok pre) => Outcome (claims (NP6_StdModel.calls reservation) (PrefixAdapter.fromOld pre))
+  | x => True :=
+fun reservation bytes =>
+  source.match_1.splitter
+    (fun x =>
+      AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = x →
+        match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+        | ok (core.result.Result.Ok pre) =>
+          Outcome (claims (NP6_StdModel.calls reservation) (PrefixAdapter.fromOld pre))
+        | x => True)
+    (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes)
+    (fun pre parsed h =>
+      Eq.ndrec (motive := fun x =>
+        AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = x →
+          match parsed : x with
+          | ok (core.result.Result.Ok pre) =>
+            Outcome (claims (NP6_StdModel.calls reservation) (PrefixAdapter.fromOld pre))
+          | x_1 => True)
+        (fun heq =>
+          id
+            (let ⟨value, h✝⟩ := NKA_ClaimsModel.parsed reservation bytes pre heq
+            let ⟨pure, parent⟩ := h✝
+            have canonical :=
+              convert value (NKQ_ClaimsMatrix.reference (fromMainPrefix (PrefixAdapter.fromOld pre)) value pure);
+            have mapped := congrArg toMainStatus parent;
+            Eq.mpr (id (congrArg (fun _a => Outcome _a) mapped))
+              (core.result.Result.casesOn (motive := fun t =>
+                reservation = t → Outcome (toMainStatus (NKA_ClaimsModel.reserveResult reservation value))) reservation
+                (fun unit h =>
+                  Eq.ndrec (motive := fun reservation =>
+                    AspisR1ClaimsUnrolledParent.candidate_claims.claims (NKA_Reservation.external reservation)
+                          (fromMainPrefix (PrefixAdapter.fromOld pre)) =
+                        NKA_ClaimsModel.reserveResult reservation value →
+                      claims (NP6_StdModel.calls reservation) (PrefixAdapter.fromOld pre) =
+                          toMainStatus (NKA_ClaimsModel.reserveResult reservation value) →
+                        Outcome (toMainStatus (NKA_ClaimsModel.reserveResult reservation value)))
+                    (fun parent mapped => sorry) (Eq.symm h) parent mapped)
+                (fun error h =>
+                  Eq.ndrec (motive := fun reservation =>
+                    AspisR1ClaimsUnrolledParent.candidate_claims.claims (NKA_Reservation.external reservation)
+                          (fromMainPrefix (PrefixAdapter.fromOld pre)) =
+                        NKA_ClaimsModel.reserveResult reservation value →
+                      claims (NP6_StdModel.calls reservation) (PrefixAdapter.fromOld pre) =
+                          toMainStatus (NKA_ClaimsModel.reserveResult reservation value) →
+                        Outcome (toMainStatus (NKA_ClaimsModel.reserveResult reservation value)))
+                    (fun parent mapped => True.intro) (Eq.symm h) parent mapped)
+                (Eq.refl reservation))))
+        (Eq.symm h) (Eq.refl (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes)))
+    (fun x x_1 parsed =>
+      Eq.ndrec (motive := fun x =>
+        (∀ (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix), x = ok (core.result.Result.Ok pre) → False) →
+          AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = x →
+            match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+            | ok (core.result.Result.Ok pre) =>
+              Outcome (claims (NP6_StdModel.calls reservation) (PrefixAdapter.fromOld pre))
+            | x => True)
+        (fun x h =>
+          Eq.ndrec (motive := fun x =>
+            (∀ (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix), x = ok (core.result.Result.Ok pre) → False) →
+              match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+              | ok (core.result.Result.Ok pre) =>
+                Outcome (claims (NP6_StdModel.calls reservation) (PrefixAdapter.fromOld pre))
+              | x => True)
+            (fun x =>
+              Eq.ndrec (motive := fun x =>
+                (∀ (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix), x = ok (core.result.Result.Ok pre) → False) →
+                  match parsed : x with
+                  | ok (core.result.Result.Ok pre) =>
+                    Outcome (claims (NP6_StdModel.calls reservation) (PrefixAdapter.fromOld pre))
+                  | x_3 => True)
+                (fun x =>
+                  Eq.mpr
+                    (id
+                      (source.match_1.eq_2 (fun x => Prop) (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes)
+                        (fun pre parsed =>
+                          Outcome (claims (NP6_StdModel.calls reservation) (PrefixAdapter.fromOld pre)))
+                        (fun x parsed => True) x))
+                    True.intro)
+                (Eq.refl (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes)) x)
+            h x)
+        parsed x_1)
+    (Eq.refl (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes))

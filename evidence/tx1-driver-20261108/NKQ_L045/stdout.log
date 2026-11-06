@@ -1,0 +1,173 @@
+NKQ_generated/NKQ_AlphaDomain.lean:21:7: warning: Variable name `parsed` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+NKQ_generated/NKQ_AlphaDomain.lean:23:9: warning: Variable name `returned` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+'AspisR1.NKQ_AlphaDomain.full' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKQ_AlphaDomain.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKQ_AlphaDomain.source : ∀ {H : Type} (native : NJM_RoundsCut.Observations),
+  NJM_RoundsCut.Cut native →
+    ∀ (token frame : ℕ) (D : aspis_core.Digest32 H) (bytes : Slice U8) (t : r1_wire.SemanticTranscript H),
+      match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+      | ok (core.result.Result.Ok pre) =>
+        match returned :
+          (PreparedHashCode.run (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) t)).2 with
+        | ok (core.result.Result.Ok after) => NKQ_MaskCuts.CanonAlpha after.2.1
+        | x => True
+      | x => True :=
+fun {H} native cut token frame D bytes t =>
+  source.match_2.splitter
+    (fun x =>
+      AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = x →
+        match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+        | ok (core.result.Result.Ok pre) =>
+          match returned :
+            (PreparedHashCode.run (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) t)).2 with
+          | ok (core.result.Result.Ok after) => NKQ_MaskCuts.CanonAlpha after.2.1
+          | x => True
+        | x => True)
+    (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes)
+    (fun pre parsed h =>
+      Eq.ndrec (motive := fun x =>
+        AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = x →
+          match parsed : x with
+          | ok (core.result.Result.Ok pre) =>
+            match returned :
+              (PreparedHashCode.run (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) t)).2 with
+            | ok (core.result.Result.Ok after) => NKQ_MaskCuts.CanonAlpha after.2.1
+            | x => True
+          | x_1 => True)
+        (fun heq =>
+          id
+            (let ⟨left✝, right✝⟩ := NJM_RoundsClosed.source native cut token frame D bytes pre heq t
+            let ⟨running, whole⟩ := left✝
+            source.match_1.splitter
+              (fun x =>
+                (PreparedHashCode.run (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) t)).2 = x →
+                  match returned :
+                    (PreparedHashCode.run
+                        (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) t)).2 with
+                  | ok (core.result.Result.Ok after) => NKQ_MaskCuts.CanonAlpha after.2.1
+                  | x => True)
+              (PreparedHashCode.run (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) t)).2
+              (fun after returned h =>
+                Eq.ndrec (motive := fun x =>
+                  (PreparedHashCode.run (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) t)).2 = x →
+                    match returned : x with
+                    | ok (core.result.Result.Ok after) => NKQ_MaskCuts.CanonAlpha after.2.1
+                    | x_1 => True)
+                  (fun heq =>
+                    id
+                      (full after.2.1
+                        (NJM_RoundsClosed.canonical native cut token frame D (PrefixAdapter.fromOld pre)
+                          (running, Array.repeat 10#usize aspis_core.field.QM31.ZERO, t) after
+                          (Eq.mp (congrArg (fun _a => _a.2 = ok (core.result.Result.Ok after)) whole) heq))))
+                  (Eq.symm h)
+                  (Eq.refl
+                    (PreparedHashCode.run (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) t)).2))
+              (fun x x_1 returned =>
+                Eq.ndrec (motive := fun x =>
+                  (∀
+                      (after :
+                        aspis_core.field.QM31 ×
+                          Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H),
+                      x = ok (core.result.Result.Ok after) → False) →
+                    (PreparedHashCode.run (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) t)).2 =
+                        x →
+                      match returned :
+                        (PreparedHashCode.run
+                            (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) t)).2 with
+                      | ok (core.result.Result.Ok after) => NKQ_MaskCuts.CanonAlpha after.2.1
+                      | x => True)
+                  (fun x h =>
+                    Eq.ndrec (motive := fun x =>
+                      (∀
+                          (after :
+                            aspis_core.field.QM31 ×
+                              Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H),
+                          x = ok (core.result.Result.Ok after) → False) →
+                        match returned :
+                          (PreparedHashCode.run
+                              (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) t)).2 with
+                        | ok (core.result.Result.Ok after) => NKQ_MaskCuts.CanonAlpha after.2.1
+                        | x => True)
+                      (fun x =>
+                        Eq.ndrec (motive := fun x =>
+                          (∀
+                              (after :
+                                aspis_core.field.QM31 ×
+                                  Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H),
+                              x = ok (core.result.Result.Ok after) → False) →
+                            match returned : x with
+                            | ok (core.result.Result.Ok after) => NKQ_MaskCuts.CanonAlpha after.2.1
+                            | x_3 => True)
+                          (fun x =>
+                            Eq.mpr
+                              (id
+                                (source.match_1.eq_2 (fun x => Prop)
+                                  (PreparedHashCode.run
+                                      (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) t)).2
+                                  (fun after returned => NKQ_MaskCuts.CanonAlpha after.2.1) (fun x returned => True) x))
+                              True.intro)
+                          (Eq.refl
+                            (PreparedHashCode.run
+                                (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) t)).2)
+                          x)
+                      h x)
+                  returned x_1)
+              (Eq.refl
+                (PreparedHashCode.run (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) t)).2)))
+        (Eq.symm h) (Eq.refl (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes)))
+    (fun x x_1 parsed =>
+      Eq.ndrec (motive := fun x =>
+        (∀ (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix), x = ok (core.result.Result.Ok pre) → False) →
+          AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = x →
+            match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+            | ok (core.result.Result.Ok pre) =>
+              match returned :
+                (PreparedHashCode.run (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) t)).2 with
+              | ok (core.result.Result.Ok after) => NKQ_MaskCuts.CanonAlpha after.2.1
+              | x => True
+            | x => True)
+        (fun x h =>
+          Eq.ndrec (motive := fun x =>
+            (∀ (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix), x = ok (core.result.Result.Ok pre) → False) →
+              match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+              | ok (core.result.Result.Ok pre) =>
+                match returned :
+                  (PreparedHashCode.run (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) t)).2 with
+                | ok (core.result.Result.Ok after) => NKQ_MaskCuts.CanonAlpha after.2.1
+                | x => True
+              | x => True)
+            (fun x =>
+              Eq.ndrec (motive := fun x =>
+                (∀ (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix), x = ok (core.result.Result.Ok pre) → False) →
+                  match parsed : x with
+                  | ok (core.result.Result.Ok pre) =>
+                    match returned :
+                      (PreparedHashCode.run
+                          (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) t)).2 with
+                    | ok (core.result.Result.Ok after) => NKQ_MaskCuts.CanonAlpha after.2.1
+                    | x => True
+                  | x_3 => True)
+                (fun x =>
+                  Eq.mpr
+                    (id
+                      (source.match_2.eq_2 (fun x => Prop) (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes)
+                        (fun pre parsed =>
+                          match returned :
+                            (PreparedHashCode.run
+                                (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) t)).2 with
+                          | ok (core.result.Result.Ok after) => NKQ_MaskCuts.CanonAlpha after.2.1
+                          | x => True)
+                        (fun x parsed => True) x))
+                    True.intro)
+                (Eq.refl (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes)) x)
+            h x)
+        parsed x_1)
+    (Eq.refl (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes))

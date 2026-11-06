@@ -1,0 +1,1 @@
+Own input preflight failed before S2W submission: dependency NKQ_ClaimsMatrix.olean absent after L050 failed. Transport log records exit1, submitted:false. No Lean/Kani scope or receipt was created. L056 now supplies that changed dependency; L052 is being submitted for the first time.

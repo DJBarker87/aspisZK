@@ -1,0 +1,147 @@
+'AspisR1.NKQ_FinishSlots.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKQ_FinishSlots.source : ∀ (bytes : Slice U8),
+  match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+  | ok (core.result.Result.Ok pre) =>
+    ∃ record25 record26 extra beforeZ1,
+      (PrefixAdapter.fromOld pre).validated_record 25#u8 = ok (core.result.Result.Ok record25) ∧
+        (PrefixAdapter.fromOld pre).validated_record 26#u8 = ok (core.result.Result.Ok record26) ∧
+          record25.row = 25#u8 ∧
+            record26.row = 26#u8 ∧
+              decodeMain 29#usize record25 87#usize = ok (core.result.Result.Ok extra) ∧
+                NKQ_DecodeCanonical.MainRowCanon extra ∧
+                  decodeMain 29#usize record26 0#usize = ok (core.result.Result.Ok beforeZ1) ∧
+                    NKQ_DecodeCanonical.MainRowCanon beforeZ1
+  | x => True :=
+fun bytes =>
+  source.match_1.splitter
+    (fun x =>
+      AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = x →
+        match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+        | ok (core.result.Result.Ok pre) =>
+          ∃ record25 record26 extra beforeZ1,
+            (PrefixAdapter.fromOld pre).validated_record 25#u8 = ok (core.result.Result.Ok record25) ∧
+              (PrefixAdapter.fromOld pre).validated_record 26#u8 = ok (core.result.Result.Ok record26) ∧
+                record25.row = 25#u8 ∧
+                  record26.row = 26#u8 ∧
+                    decodeMain 29#usize record25 87#usize = ok (core.result.Result.Ok extra) ∧
+                      NKQ_DecodeCanonical.MainRowCanon extra ∧
+                        decodeMain 29#usize record26 0#usize = ok (core.result.Result.Ok beforeZ1) ∧
+                          NKQ_DecodeCanonical.MainRowCanon beforeZ1
+        | x => True)
+    (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes)
+    (fun pre parsed h =>
+      Eq.ndrec (motive := fun x =>
+        AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = x →
+          match parsed : x with
+          | ok (core.result.Result.Ok pre) =>
+            ∃ record25 record26 extra beforeZ1,
+              (PrefixAdapter.fromOld pre).validated_record 25#u8 = ok (core.result.Result.Ok record25) ∧
+                (PrefixAdapter.fromOld pre).validated_record 26#u8 = ok (core.result.Result.Ok record26) ∧
+                  record25.row = 25#u8 ∧
+                    record26.row = 26#u8 ∧
+                      decodeMain 29#usize record25 87#usize = ok (core.result.Result.Ok extra) ∧
+                        NKQ_DecodeCanonical.MainRowCanon extra ∧
+                          decodeMain 29#usize record26 0#usize = ok (core.result.Result.Ok beforeZ1) ∧
+                            NKQ_DecodeCanonical.MainRowCanon beforeZ1
+          | x_1 => True)
+        (fun heq =>
+          id
+            (have size := source._proof_2;
+            have tail := source._proof_3;
+            have zero := source._proof_4;
+            have firstCall :=
+              Eq.mpr (id (congrArg (fun _a => NGO_CallerDomains.Call (↑25#u8) _a ↑87#usize) size))
+                (Eq.mpr (id (congrArg (fun _a => NGO_CallerDomains.Call (↑25#u8) 29 _a) tail))
+                  NGO_CallerDomains.Call.extra);
+            have secondCall :=
+              Eq.mpr (id (congrArg (fun _a => NGO_CallerDomains.Call (↑26#u8) _a ↑0#usize) size))
+                (Eq.mpr (id (congrArg (fun _a => NGO_CallerDomains.Call (↑26#u8) 29 _a) zero))
+                  NGO_CallerDomains.Call.beforeZ1);
+            let ⟨r25, h✝⟩ :=
+              NKQ_RecordDomains.entered bytes pre heq 25#u8 29#usize 87#usize (of_decide_eq_true (id (Eq.refl true)))
+                (of_decide_eq_true (id (Eq.refl true))) firstCall
+            let ⟨g25, right✝⟩ := h✝
+            let ⟨t25, right✝¹⟩ := right✝
+            let ⟨c25, right✝²⟩ := right✝¹
+            let ⟨h25, s25⟩ := right✝²
+            let ⟨r26, h✝¹⟩ :=
+              NKQ_RecordDomains.entered bytes pre heq 26#u8 29#usize 0#usize (of_decide_eq_true (id (Eq.refl true)))
+                (of_decide_eq_true (id (Eq.refl true))) secondCall
+            let ⟨g26, right✝³⟩ := h✝¹
+            let ⟨t26, right✝⁴⟩ := right✝³
+            let ⟨c26, right✝⁵⟩ := right✝⁴
+            let ⟨h26, s26⟩ := right✝⁵
+            let ⟨extra, h✝²⟩ := NKQ_StrictDecode.total 29#usize 87#usize r25 c25 h25 s25
+            let ⟨d25, k25⟩ := h✝²
+            let ⟨before, h✝³⟩ := NKQ_StrictDecode.total 29#usize 0#usize r26 c26 h26 s26
+            let ⟨d26, k26⟩ := h✝³
+            Exists.intro r25
+              (Exists.intro r26
+                (Exists.intro extra (Exists.intro before ⟨g25, ⟨g26, ⟨t25, ⟨t26, ⟨d25, ⟨k25, ⟨d26, k26⟩⟩⟩⟩⟩⟩⟩)))))
+        (Eq.symm h) (Eq.refl (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes)))
+    (fun x x_1 parsed =>
+      Eq.ndrec (motive := fun x =>
+        (∀ (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix), x = ok (core.result.Result.Ok pre) → False) →
+          AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = x →
+            match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+            | ok (core.result.Result.Ok pre) =>
+              ∃ record25 record26 extra beforeZ1,
+                (PrefixAdapter.fromOld pre).validated_record 25#u8 = ok (core.result.Result.Ok record25) ∧
+                  (PrefixAdapter.fromOld pre).validated_record 26#u8 = ok (core.result.Result.Ok record26) ∧
+                    record25.row = 25#u8 ∧
+                      record26.row = 26#u8 ∧
+                        decodeMain 29#usize record25 87#usize = ok (core.result.Result.Ok extra) ∧
+                          NKQ_DecodeCanonical.MainRowCanon extra ∧
+                            decodeMain 29#usize record26 0#usize = ok (core.result.Result.Ok beforeZ1) ∧
+                              NKQ_DecodeCanonical.MainRowCanon beforeZ1
+            | x => True)
+        (fun x h =>
+          Eq.ndrec (motive := fun x =>
+            (∀ (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix), x = ok (core.result.Result.Ok pre) → False) →
+              match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+              | ok (core.result.Result.Ok pre) =>
+                ∃ record25 record26 extra beforeZ1,
+                  (PrefixAdapter.fromOld pre).validated_record 25#u8 = ok (core.result.Result.Ok record25) ∧
+                    (PrefixAdapter.fromOld pre).validated_record 26#u8 = ok (core.result.Result.Ok record26) ∧
+                      record25.row = 25#u8 ∧
+                        record26.row = 26#u8 ∧
+                          decodeMain 29#usize record25 87#usize = ok (core.result.Result.Ok extra) ∧
+                            NKQ_DecodeCanonical.MainRowCanon extra ∧
+                              decodeMain 29#usize record26 0#usize = ok (core.result.Result.Ok beforeZ1) ∧
+                                NKQ_DecodeCanonical.MainRowCanon beforeZ1
+              | x => True)
+            (fun x =>
+              Eq.ndrec (motive := fun x =>
+                (∀ (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix), x = ok (core.result.Result.Ok pre) → False) →
+                  match parsed : x with
+                  | ok (core.result.Result.Ok pre) =>
+                    ∃ record25 record26 extra beforeZ1,
+                      (PrefixAdapter.fromOld pre).validated_record 25#u8 = ok (core.result.Result.Ok record25) ∧
+                        (PrefixAdapter.fromOld pre).validated_record 26#u8 = ok (core.result.Result.Ok record26) ∧
+                          record25.row = 25#u8 ∧
+                            record26.row = 26#u8 ∧
+                              decodeMain 29#usize record25 87#usize = ok (core.result.Result.Ok extra) ∧
+                                NKQ_DecodeCanonical.MainRowCanon extra ∧
+                                  decodeMain 29#usize record26 0#usize = ok (core.result.Result.Ok beforeZ1) ∧
+                                    NKQ_DecodeCanonical.MainRowCanon beforeZ1
+                  | x_3 => True)
+                (fun x =>
+                  Eq.mpr
+                    (id
+                      (source.match_1.eq_2 (fun x => Prop) (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes)
+                        (fun pre parsed =>
+                          ∃ record25 record26 extra beforeZ1,
+                            (PrefixAdapter.fromOld pre).validated_record 25#u8 = ok (core.result.Result.Ok record25) ∧
+                              (PrefixAdapter.fromOld pre).validated_record 26#u8 = ok (core.result.Result.Ok record26) ∧
+                                record25.row = 25#u8 ∧
+                                  record26.row = 26#u8 ∧
+                                    decodeMain 29#usize record25 87#usize = ok (core.result.Result.Ok extra) ∧
+                                      NKQ_DecodeCanonical.MainRowCanon extra ∧
+                                        decodeMain 29#usize record26 0#usize = ok (core.result.Result.Ok beforeZ1) ∧
+                                          NKQ_DecodeCanonical.MainRowCanon beforeZ1)
+                        (fun x parsed => True) x))
+                    True.intro)
+                (Eq.refl (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes)) x)
+            h x)
+        parsed x_1)
+    (Eq.refl (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes))

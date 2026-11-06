@@ -1,4 +1,4 @@
-"""NIH-owned input client; unchanged S2W launcher and admission infrastructure."""
+"""NKQ-owned input client; unchanged S2W launcher and admission infrastructure."""
 from pathlib import Path
 import json, subprocess, sys, time, hashlib, shlex, re, os, atexit
 E=Path(__file__).resolve().parent
@@ -56,13 +56,15 @@ for n,t in json.loads({json.dumps(files)!r}).items():
  p=b/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(__import__('base64').b64decode(t['base64'])) if isinstance(t,dict) else p.write_text(t)
 for n in ['NKQ_objects','NKQ_generated','NKQ_tmp','NKQ_native']:(b/n).mkdir(exist_ok=True)
 p=b/{(a+'.json')!r};x=json.loads(p.read_text());roots=x.get('env',{{}}).get('LEAN_PATH','').split(':');rels=set();pins={{}}
-if x['kind']=='lean':
+if x['kind'] in ['lean','audit','link']:
  for root in roots:
   for stem in ['Aeneas','AeneasMeta']:
    q=Path(root)/stem
    if q.is_dir():rels.update(str(z.relative_to(root)) for z in q.rglob('*') if z.is_file() and any(str(z).endswith(s) for s in ['.olean','.olean.private','.olean.server','.ir']))
    if Path(root,stem+'.olean').is_file():rels.add(stem+'.olean')
  for n in re.findall(r'^import (?:all )?([\\w.]+)',(b/x['sources'][0]).read_text(),re.M):rels.add(n.replace('.','/')+'.olean')
+ if x['kind'] in ['audit','link']:
+  for n in ['NKQ_COMBINED_IMPORT','NFA_WALKER','NFA_MemoryLimit','NEP_Planted','NEP_Mutations']:rels.add(n.replace('.','/')+'.olean')
  for rel in sorted(rels):
   q=next((Path(root)/rel for root in roots if (Path(root)/rel).is_file()),None);assert q is not None,rel
   for z in [q,Path(str(q)+'.private'),Path(str(q)+'.server'),q.with_suffix('.ir')]:

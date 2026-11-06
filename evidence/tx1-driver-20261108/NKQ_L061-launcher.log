@@ -1,0 +1,44 @@
+{"attempt": "NKQ_L061", "exit_status": 0, "wall_seconds": 15.606877341168001, "peak_rss_kib": "6353260", "swaps": "0", "print_axioms": ["'AspisR1.NKQ_CircleDomains.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NKQ_generated/NKQ_CircleDomains.lean:13:7: warning: Variable name `parsed` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+'AspisR1.NKQ_CircleDomains.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKQ_CircleDomains.source : ∀ {Pointer H : Type} (D : aspis_core.Digest32 H)
+  (template : NIX_DispatchCut.Pre Pointer) (bytes : Slice U8) (beforeFirst beforeSecond : r1_wire.SemanticTranscript H),
+  match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+  | ok (core.result.Result.Ok pre) =>
+    ∃ first sec
+...
+fix), x = ok (core.result.Result.Ok pre) → False) →
+                  match parsed : x with
+                  | ok (core.result.Result.Ok pre) =>
+                    ∃ first second,
+                      (PrefixAdapter.fromOld pre).validated_record 25#u8 = ok (core.result.Result.Ok first) ∧
+                        (PrefixAdapter.fromOld pre).validated_record 26#u8 = ok (core.result.Result.Ok second) ∧
+                          first.row = 25#u8 ∧
+                            second.row = 26#u8 ∧
+                              NJM_InvocationRoots.Circle D template beforeFirst first ∧
+                                NJM_InvocationRoots.Circle D template beforeSecond second
+                  | x_3 => True)
+                (fun x =>
+                  Eq.mpr
+                    (id
+                      (source.match_1.eq_2 (fun x => Prop) (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes)
+                        (fun pre parsed =>
+                          ∃ first second,
+                            (PrefixAdapter.fromOld pre).validated_record 25#u8 = ok (core.result.Result.Ok first) ∧
+                              (PrefixAdapter.fromOld pre).validated_record 26#u8 = ok (core.result.Result.Ok second) ∧
+                                first.row = 25#u8 ∧
+                                  second.row = 26#u8 ∧
+                                    NJM_InvocationRoots.Circle D template beforeFirst first ∧
+                                      NJM_InvocationRoots.Circle D template beforeSecond second)
+                        (fun x parsed => True) x))
+                    True.intro)
+                (Eq.refl (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes)) x)
+            h x)
+        parsed x_1)
+    (Eq.refl (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes))
+
+Running as unit: run-r2c37e94af8c643a59f091e8af89a3cc2.scope; invocation ID: 6e9f268677d3420da01a7464738e759f

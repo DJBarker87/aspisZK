@@ -23,3 +23,6 @@ K001 missing frozen cfg-only path input, K002 exact KMX allocator_api cfg requir
 Actual136 rounds-error,137 parse-error and094 split/parse/scan rejection windows have passing/failing controls; each observer family has matching rename stability. H is the local zero-sized Hash with unreachable digest, and public construction covers Transfer only. Complete deployed-instance coverage and Withdrawal carrier coverage are not claimed by these partial windows. Any final root must instantiate the actual deployed callee interpretations and prove those domains, not silently generalize these receipts.
 
 All independent available Lean composition work continues; source continuation/domain/array proofs and one combined audit are next. No native budget remains, and no four-row packet has been admitted.
+
+## Stage: symbolic caller domains
+Successful focused modules establish SAME parsed-prefix claim canonicality, all ten returned-round alpha domains, exact mask array constructors, and record25/87 plus record26/0 getter/decoder domains. Source continuations retain error/abort alternatives. These are source support, not native root credits. Native allowance is exhausted at70 runs; zero row promotions. Final combined audit is pending. Failed focused snapshots are retained and excluded from selected modules.
