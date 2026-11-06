@@ -22,3 +22,7 @@ No retries of unchanged timed-out/killed shapes; all transport/admission retries
 
 Initial observation: malformed combined sparse path entry required adding NKZ/NLG paths
 individually. Local free35GiB; host free83GB. No scope launched during inspection.
+
+PCB_L001: source elaborated, output directory missing in own client; exit1. Own client repaired to create nested output directory; no infrastructure edited, no timeout/memory kill. PCB_L002 retries with corrected output environment.
+
+Stage1: POOL:246 CLOSED, PCB_Location.result; K006 positive/K007 inverted control, E001 extraction, L004 theorem, L005 combined, L009 eight fixtures, L010 scan, L011 raw ax2. P6 transport is RECLASSIFICATION. No parent closure. Gate also checked inherited loader root, pending separate body-identity receipt/commit for354. K001–K005 were preflight/compiler failures, not proofs. All historical static-mut warning sites are unreached by the scalar246 harness; no selected harness or stub writes a static.

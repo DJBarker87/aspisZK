@@ -1,0 +1,456 @@
+{
+ "PCB_E001": {
+  "kind": "extract",
+  "target": "PCB_reference.location",
+  "files": {
+   "PCB_extract.py": "PCB_extract.py",
+   "PCB_reference.rs": "PCB_reference.rs"
+  },
+  "command": [
+   "python3",
+   "PCB_extract.py"
+  ],
+  "collect": [
+   "PCB_EXTRACTION_PINS.json",
+   "PCB_extracted/PCB_Reference/Types.lean",
+   "PCB_extracted/PCB_Reference/Funs.lean",
+   "PCB_extracted/PCB_Reference/FunsExternal.lean"
+  ]
+ },
+ "PCB_L001": {
+  "kind": "lean",
+  "target": "PCB_Reference.Types"
+ },
+ "PCB_L002": {
+  "kind": "lean",
+  "target": "PCB_Reference.Types"
+ },
+ "PCB_L003": {
+  "kind": "lean",
+  "target": "PCB_Reference.Funs"
+ },
+ "PCB_K001": {
+  "kind": "kani",
+  "target": "POOL:246 actual contract",
+  "files": {
+   "PCB_gate.py": "PCB_gate.py",
+   "PCB_src/crates/aspis-statement/src/pool_v1/root_history.rs": "PCB_root_history.rs.txt",
+   "PCB_src/crates/aspis-statement/src/pool_v1/PCB_246.rs": "PCB_246.rs",
+   "PCB_src/crates/aspis-statement/src/pool_v1/PCB_reference.rs": "PCB_reference.rs"
+  },
+  "command": [
+   "python3",
+   "PCB_gate.py",
+   "PCB_K001.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-helpers1-20261110/PCB_src/crates/aspis-statement/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-helpers1-20261110/PCB_target",
+   "--lib",
+   "--features",
+   "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "pool_v1::root_history::PCB_246::location_contract",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCB_K001-graph-check.json",
+   "PCB_K001-graph.stderr",
+   "PCB_K001-lock-check.json",
+   "PCB_K001-source-check.json"
+  ],
+  "expected_time": "Frozen dependency compilation then scalar record contract; no field multiplication or loop"
+ },
+ "PCB_L004": {
+  "kind": "lean",
+  "target": "PCB_Location"
+ },
+ "PCB_K002": {
+  "kind": "kani",
+  "target": "POOL:246 actual contract",
+  "files": {
+   "PCB_gate.py": "PCB_gate.py",
+   "PCB_src/crates/aspis-statement/src/pool_v1/root_history.rs": "PCB_root_history.rs.txt",
+   "PCB_src/crates/aspis-statement/src/pool_v1/PCB_246.rs": "PCB_246.rs",
+   "PCB_src/crates/aspis-statement/src/pool_v1/PCB_reference.rs": "PCB_reference.rs"
+  },
+  "command": [
+   "python3",
+   "PCB_gate.py",
+   "PCB_K002.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-helpers1-20261110/PCB_src/crates/aspis-statement/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-helpers1-20261110/PCB_target",
+   "--lib",
+   "--features",
+   "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "pool_v1::root_history::PCB_246::location_contract",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCB_K002-graph-check.json",
+   "PCB_K002-graph.stderr",
+   "PCB_K002-lock-check.json",
+   "PCB_K002-source-check.json"
+  ],
+  "expected_time": "Frozen dependency compilation then scalar record contract; no field multiplication or loop"
+ },
+ "PCB_L005": {
+  "kind": "lean",
+  "target": "PCB_COMBINED_IMPORT"
+ },
+ "PCB_K003": {
+  "kind": "kani",
+  "target": "POOL:246 actual contract",
+  "files": {
+   "PCB_gate.py": "PCB_gate.py",
+   "PCB_src/crates/aspis-statement/src/pool_v1/root_history.rs": "PCB_root_history.rs.txt",
+   "PCB_src/crates/aspis-statement/src/pool_v1/PCB_246.rs": "PCB_246.rs",
+   "PCB_src/crates/aspis-statement/src/pool_v1/PCB_reference.rs": "PCB_reference.rs"
+  },
+  "command": [
+   "python3",
+   "PCB_gate.py",
+   "PCB_K003.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-helpers1-20261110/PCB_src/crates/aspis-statement/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-helpers1-20261110/PCB_target",
+   "--lib",
+   "--features",
+   "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "pool_v1::root_history::PCB_246::location_contract",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCB_K003-graph-check.json",
+   "PCB_K003-graph.stderr",
+   "PCB_K003-lock-check.json",
+   "PCB_K003-source-check.json"
+  ],
+  "expected_time": "Frozen dependency compilation then scalar record contract; no field multiplication or loop"
+ },
+ "PCB_K004": {
+  "kind": "kani",
+  "target": "POOL:246 actual contract",
+  "files": {
+   "PCB_gate.py": "PCB_gate.py",
+   "PCB_src/crates/aspis-statement/src/pool_v1/root_history.rs": "PCB_root_history.rs.txt",
+   "PCB_src/crates/aspis-statement/src/pool_v1/PCB_246.rs": "PCB_246.rs",
+   "PCB_src/crates/aspis-statement/src/pool_v1/PCB_reference.rs": "PCB_reference.rs"
+  },
+  "command": [
+   "python3",
+   "PCB_gate.py",
+   "PCB_K004.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-helpers1-20261110/PCB_src/crates/aspis-statement/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-helpers1-20261110/PCB_target",
+   "--lib",
+   "--features",
+   "pool-v1-kernel",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "pool_v1::root_history::PCB_246::location_contract",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCB_K004-graph-check.json",
+   "PCB_K004-graph.stderr",
+   "PCB_K004-lock-check.json",
+   "PCB_K004-source-check.json",
+   "PCB_K004-selected-features.txt"
+  ],
+  "expected_time": "Frozen dependency compilation then scalar record contract; no field multiplication or loop"
+ },
+ "PCB_L006": {
+  "kind": "lean",
+  "target": "PCB_AuditDriver",
+  "native": true
+ },
+ "PCB_L007": {
+  "kind": "lean",
+  "target": "PCB_AuditDriver",
+  "native": true
+ },
+ "PCB_L008": {
+  "kind": "link",
+  "target": "PCB_AuditDriver",
+  "command": [
+   "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+   "env",
+   "leanc",
+   "-O3",
+   "-rdynamic",
+   "-o",
+   "PCB_native/PCB_AuditDriver",
+   "PCB_native/PCB_AuditDriver.c",
+   "PCB_native/PCB_WALKER.c",
+   "PCB_native/PCB_MemoryLimit.c"
+  ]
+ },
+ "PCB_L009": {
+  "kind": "audit",
+  "target": "fixtures",
+  "files": {
+   "PCB_AUDIT_ROOTS.json": "PCB_AUDIT_ROOTS.json",
+   "PCB_EXPECTED_IMPORTS.jsonl": "PCB_EXPECTED_IMPORTS.jsonl"
+  },
+  "command": [
+   "PCB_native/PCB_AuditDriver",
+   "fixtures"
+  ],
+  "collect": []
+ },
+ "PCB_L010": {
+  "kind": "audit",
+  "target": "scan",
+  "files": {
+   "PCB_AUDIT_ROOTS.json": "PCB_AUDIT_ROOTS.json",
+   "PCB_EXPECTED_IMPORTS.jsonl": "PCB_EXPECTED_IMPORTS.jsonl"
+  },
+  "command": [
+   "PCB_native/PCB_AuditDriver",
+   "scan"
+  ],
+  "collect": [
+   "PCB_LOADED_scan.jsonl"
+  ]
+ },
+ "PCB_K005": {
+  "kind": "kani",
+  "target": "POOL:246 actual contract",
+  "files": {
+   "PCB_gate.py": "PCB_gate.py",
+   "PCB_src/crates/aspis-statement/src/pool_v1/root_history.rs": "PCB_root_history.rs.txt",
+   "PCB_src/crates/aspis-statement/src/pool_v1/PCB_246.rs": "PCB_246.rs",
+   "PCB_src/crates/aspis-statement/src/pool_v1/PCB_reference.rs": "PCB_reference.rs"
+  },
+  "command": [
+   "python3",
+   "PCB_gate.py",
+   "PCB_K005.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-helpers1-20261110/PCB_src/crates/aspis-statement/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-helpers1-20261110/PCB_target",
+   "--lib",
+   "--features",
+   "pool-v1-kernel",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "pool_v1::root_history::PCB_246::location_contract",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCB_K005-graph-check.json",
+   "PCB_K005-graph.stderr",
+   "PCB_K005-lock-check.json",
+   "PCB_K005-source-check.json",
+   "PCB_K005-selected-features.txt"
+  ],
+  "expected_time": "Frozen dependency compilation then scalar record contract; no field multiplication or loop"
+ },
+ "PCB_L011": {
+  "kind": "audit",
+  "target": "proof0",
+  "files": {
+   "PCB_AUDIT_ROOTS.json": "PCB_AUDIT_ROOTS.json",
+   "PCB_EXPECTED_IMPORTS.jsonl": "PCB_EXPECTED_IMPORTS.jsonl"
+  },
+  "command": [
+   "PCB_native/PCB_AuditDriver",
+   "proof0"
+  ]
+ },
+ "PCB_K006": {
+  "kind": "kani",
+  "target": "POOL:246 actual contract",
+  "files": {
+   "PCB_gate.py": "PCB_gate.py",
+   "PCB_src/crates/aspis-statement/src/pool_v1/root_history.rs": "PCB_root_history.rs.txt",
+   "PCB_src/crates/aspis-statement/src/pool_v1/PCB_246.rs": "PCB_246.rs",
+   "PCB_src/crates/aspis-statement/src/pool_v1/PCB_reference.rs": "PCB_reference.rs"
+  },
+  "command": [
+   "python3",
+   "PCB_gate.py",
+   "PCB_K006.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-helpers1-20261110/PCB_src/crates/aspis-statement/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-helpers1-20261110/PCB_target",
+   "--lib",
+   "--features",
+   "pool-v1-kernel",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "pool_v1::root_history::PCB_246::location_contract",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCB_K006-graph-check.json",
+   "PCB_K006-graph.stderr",
+   "PCB_K006-lock-check.json",
+   "PCB_K006-source-check.json",
+   "PCB_K006-selected-features.txt"
+  ],
+  "expected_time": "Frozen dependency compilation then scalar record contract; no field multiplication or loop"
+ },
+ "PCB_K007": {
+  "kind": "kani",
+  "target": "POOL:246 inverted ensures control",
+  "files": {
+   "PCB_gate.py": "PCB_gate.py",
+   "PCB_src/crates/aspis-statement/src/pool_v1/root_history.rs": "PCB_root_history.rs.txt",
+   "PCB_src/crates/aspis-statement/src/pool_v1/PCB_246.rs": "PCB_246.rs",
+   "PCB_src/crates/aspis-statement/src/pool_v1/PCB_reference.rs": "PCB_reference.rs"
+  },
+  "command": [
+   "python3",
+   "PCB_gate.py",
+   "PCB_K007.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-helpers1-20261110/PCB_src/crates/aspis-statement/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-helpers1-20261110/PCB_target",
+   "--lib",
+   "--features",
+   "pool-v1-kernel",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "pool_v1::root_history::PCB_246::location_contract",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCB_K007-graph-check.json",
+   "PCB_K007-graph.stderr",
+   "PCB_K007-lock-check.json",
+   "PCB_K007-source-check.json",
+   "PCB_K007-selected-features.txt"
+  ],
+  "expected_time": "Frozen dependency compilation then scalar record contract; no field multiplication or loop",
+  "env": {
+   "RUSTFLAGS": "-C link-arg=-Wl,--threads=1 --cfg PCB_NEG_246"
+  }
+ }
+}
