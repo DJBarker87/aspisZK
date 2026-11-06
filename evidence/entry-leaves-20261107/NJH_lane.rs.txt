@@ -1,0 +1,25 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+fn check<const WRONG:bool>(){
+ let raw:[[u32;8];20]=kani::any();let mut frontier=raw.map(|node|node.map(M31));
+ let level:usize=kani::any();kani::assume(level<20);
+ let other:usize=kani::any();kani::assume(other<20);
+ let word:usize=kani::any();kani::assume(word<8);
+ let before=frontier[other][word].0;
+ let decoded:[u32;8]=kani::any();let canonical:bool=kani::any();
+ // One source iteration's arbitrary decoded reply; no digest-value premise.
+ // nth selects the actual mutable slice iterator's level-th element. No
+ // user recurrence or whole decoder is executed by this cut.
+ let node=frontier.iter_mut().nth(level).unwrap();
+ if canonical {*node=decoded.map(M31);}
+ let expected=if canonical&&other==level {decoded[word]}else{before};
+ assert!((frontier[other][word].0==expected)!=WRONG,"NJH iterator selected element and full outside frame");
+}
+#[kani::proof] #[kani::unwind(22)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn iterator_cut(){check::<false>()}
+#[kani::proof] #[kani::unwind(22)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn iterator_cut_wrong(){check::<true>()}

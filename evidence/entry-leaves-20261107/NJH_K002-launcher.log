@@ -1,0 +1,53 @@
+{"attempt": "NJH_K002", "exit_status": 1, "wall_seconds": 26.262167313834652, "peak_rss_kib": "673612", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+nt, which should be handled
+help: use `let _ = ...` to ignore the resulting value
+   |
+23 | #[kani::proof] #[kani::stub_verified(shared)] fn shared_callsite(){let _ = account!(shared);}
+   |                                                                    +++++++
+
+warning: unused `std::result::Result` that must be used
+  --> programs/r1-cost-probe/src/NJH_sdk.rs:24:74
+   |
+24 | #[kani::proof] #[kani::stub_verified(exclusive)] fn exclusive_callsite(){account!(exclusive);}
+   |                                                                          ^^^^^^^^^^^^^^^^^^^
+   |
+   = note: this `Result` may be an `Err` variant, which should be handled
+help: use `let _ = ...` to ignore the resulting value
+   |
+24 | #[kani::proof] #[kani::stub_verified(exclusive)] fn exclusive_callsite(){let _ = account!(exclusive);}
+   |                                                                          +++++++
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 10.10s
+Checking harness NJH_sdk::shared_contract...
+
+VERIFICATION RESULT:
+ ** 1 of 382 failed (2 unreachable)
+Failed Checks: Check that *var_4 is assignable
+ File: "/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/mod.rs", line 894, in std::mem::replace::<isize>
+
+VERIFICATION:- FAILED
+Verification Time: 14.358591s
+
+Manual Harness Summary:
+Verification failed for - NJH_sdk::shared_contract
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r5e938a36d83a4d18bd7c118251f7d1fa.scope; invocation ID: 20eea24b61704000bd2aa52bc30186a8
