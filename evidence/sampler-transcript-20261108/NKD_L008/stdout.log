@@ -1,0 +1,189 @@
+theorem AspisR1.NKD_Block.root : ∀ {H : Type} (D : aspis_core.Digest32 H) (before : transcript.Transcript H) (row : U8)
+  (payload : Slice U8), transcript.Transcript.block D before row payload = G D before row payload :=
+fun {H} D before row payload =>
+  id
+    (id
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              (do
+                  let self1 ← _a
+                  let s ← lift self1.state.to_slice
+                  let s1 ←
+                    lift (Array.make 1#usize [1#u8] r1_wire.SemanticTranscript.sample_block_validated._proof_4).to_slice
+                  let s2 ←
+                    lift
+                        (Array.make 2#usize [s, s1]
+                            (r1_wire.SemanticTranscript.sample_block_validated._proof_5 s s1)).to_slice
+                  let block ← D.digest self1.hash s2
+                  let s3 ← lift self1.state.to_slice
+                  let s4 ←
+                    lift (Array.make 1#usize [2#u8] r1_wire.SemanticTranscript.sample_block_validated._proof_7).to_slice
+                  let s5 ←
+                    lift
+                        (Array.make 2#usize [s3, s4]
+                            (r1_wire.SemanticTranscript.sample_block_validated._proof_5 s3 s4)).to_slice
+                  let a ← D.digest self1.hash s5
+                  ok (block, { state := a, hash := self1.hash })) =
+                do
+                let absorbed ← NKD_Absorb.G D before row payload
+                let value ← D.digest absorbed.hash (NGT_NBA_Transcript.readParts absorbed.state 1#u8)
+                let final ← D.digest absorbed.hash (NGT_NBA_Transcript.readParts absorbed.state 2#u8)
+                ok (value, { state := final, hash := absorbed.hash }))
+            (NKD_Absorb.root D before row payload)))
+        (of_eq_true
+          (Eq.trans
+            (congrFun'
+              (congrArg Eq
+                (congrArg (Bind.bind (NKD_Absorb.G D before row payload))
+                  (funext fun self1 =>
+                    Eq.trans
+                      (congrArg (Bind.bind (ok self1.state.to_slice))
+                        (funext fun s =>
+                          Eq.trans
+                            (congrArg
+                              (Bind.bind
+                                (ok
+                                  (Array.make 1#usize [1#u8]
+                                      r1_wire.SemanticTranscript.sample_block_validated._proof_4).to_slice))
+                              (funext fun s1 =>
+                                Eq.trans
+                                  (congrArg
+                                    (Bind.bind
+                                      (ok
+                                        (Array.make 2#usize [s, s1]
+                                            (r1_wire.SemanticTranscript.sample_block_validated._proof_5 s
+                                              s1)).to_slice))
+                                    (funext fun s2 =>
+                                      congrArg (Bind.bind (D.digest self1.hash s2))
+                                        (funext fun block =>
+                                          Eq.trans
+                                            (congrArg (Bind.bind (ok self1.state.to_slice))
+                                              (funext fun s3 =>
+                                                Eq.trans
+                                                  (congrArg
+                                                    (Bind.bind
+                                                      (ok
+                                                        (Array.make 1#usize [2#u8]
+                                                            r1_wire.SemanticTranscript.sample_block_validated._proof_7).to_slice))
+                                                    (funext fun s4 =>
+                                                      bind_tc_ok
+                                                        (Array.make 2#usize [s3, s4]
+                                                            (r1_wire.SemanticTranscript.sample_block_validated._proof_5
+                                                              s3 s4)).to_slice
+                                                        fun y => do
+                                                        let a ← D.digest self1.hash y
+                                                        ok (block, { state := a, hash := self1.hash })))
+                                                  (bind_tc_ok
+                                                    (Array.make 1#usize [2#u8]
+                                                        r1_wire.SemanticTranscript.sample_block_validated._proof_7).to_slice
+                                                    fun y => do
+                                                    let a ←
+                                                      D.digest self1.hash
+                                                          (Array.make 2#usize [s3, y]
+                                                              (r1_wire.SemanticTranscript.sample_block_validated._proof_5
+                                                                s3 y)).to_slice
+                                                    ok (block, { state := a, hash := self1.hash }))))
+                                            (bind_tc_ok self1.state.to_slice fun y => do
+                                              let a ←
+                                                D.digest self1.hash
+                                                    (Array.make 2#usize
+                                                        [y,
+                                                          (Array.make 1#usize [2#u8]
+                                                              r1_wire.SemanticTranscript.sample_block_validated._proof_7).to_slice]
+                                                        (r1_wire.SemanticTranscript.sample_block_validated._proof_5 y
+                                                          (Array.make 1#usize [2#u8]
+                                                              r1_wire.SemanticTranscript.sample_block_validated._proof_7).to_slice)).to_slice
+                                              ok (block, { state := a, hash := self1.hash })))))
+                                  (bind_tc_ok
+                                    (Array.make 2#usize [s, s1]
+                                        (r1_wire.SemanticTranscript.sample_block_validated._proof_5 s s1)).to_slice
+                                    fun y => do
+                                    let block ← D.digest self1.hash y
+                                    let a ←
+                                      D.digest self1.hash
+                                          (Array.make 2#usize
+                                              [self1.state.to_slice,
+                                                (Array.make 1#usize [2#u8]
+                                                    r1_wire.SemanticTranscript.sample_block_validated._proof_7).to_slice]
+                                              (r1_wire.SemanticTranscript.sample_block_validated._proof_5
+                                                self1.state.to_slice
+                                                (Array.make 1#usize [2#u8]
+                                                    r1_wire.SemanticTranscript.sample_block_validated._proof_7).to_slice)).to_slice
+                                    ok (block, { state := a, hash := self1.hash }))))
+                            (bind_tc_ok
+                              (Array.make 1#usize [1#u8]
+                                  r1_wire.SemanticTranscript.sample_block_validated._proof_4).to_slice
+                              fun y => do
+                              let block ←
+                                D.digest self1.hash
+                                    (Array.make 2#usize [s, y]
+                                        (r1_wire.SemanticTranscript.sample_block_validated._proof_5 s y)).to_slice
+                              let a ←
+                                D.digest self1.hash
+                                    (Array.make 2#usize
+                                        [self1.state.to_slice,
+                                          (Array.make 1#usize [2#u8]
+                                              r1_wire.SemanticTranscript.sample_block_validated._proof_7).to_slice]
+                                        (r1_wire.SemanticTranscript.sample_block_validated._proof_5 self1.state.to_slice
+                                          (Array.make 1#usize [2#u8]
+                                              r1_wire.SemanticTranscript.sample_block_validated._proof_7).to_slice)).to_slice
+                              ok (block, { state := a, hash := self1.hash }))))
+                      (bind_tc_ok self1.state.to_slice fun y => do
+                        let block ←
+                          D.digest self1.hash
+                              (Array.make 2#usize
+                                  [y,
+                                    (Array.make 1#usize [1#u8]
+                                        r1_wire.SemanticTranscript.sample_block_validated._proof_4).to_slice]
+                                  (r1_wire.SemanticTranscript.sample_block_validated._proof_5 y
+                                    (Array.make 1#usize [1#u8]
+                                        r1_wire.SemanticTranscript.sample_block_validated._proof_4).to_slice)).to_slice
+                        let a ←
+                          D.digest self1.hash
+                              (Array.make 2#usize
+                                  [self1.state.to_slice,
+                                    (Array.make 1#usize [2#u8]
+                                        r1_wire.SemanticTranscript.sample_block_validated._proof_7).to_slice]
+                                  (r1_wire.SemanticTranscript.sample_block_validated._proof_5 self1.state.to_slice
+                                    (Array.make 1#usize [2#u8]
+                                        r1_wire.SemanticTranscript.sample_block_validated._proof_7).to_slice)).to_slice
+                        ok (block, { state := a, hash := self1.hash })))))
+              do
+              let absorbed ← NKD_Absorb.G D before row payload
+              let value ←
+                D.digest absorbed.hash
+                    (Array.make 2#usize
+                        [absorbed.state.to_slice,
+                          (Array.make 1#usize [1#u8] (NGT_NBA_Transcript.readParts._proof_2 1#u8)).to_slice]
+                        (NGT_NBA_Transcript.readParts._proof_3 absorbed.state 1#u8)).to_slice
+              let final ←
+                D.digest absorbed.hash
+                    (Array.make 2#usize
+                        [absorbed.state.to_slice,
+                          (Array.make 1#usize [2#u8] (NGT_NBA_Transcript.readParts._proof_2 2#u8)).to_slice]
+                        (NGT_NBA_Transcript.readParts._proof_3 absorbed.state 2#u8)).to_slice
+              ok (value, { state := final, hash := absorbed.hash }))
+            (eq_self do
+              let self1 ← NKD_Absorb.G D before row payload
+              let block ←
+                D.digest self1.hash
+                    (Array.make 2#usize
+                        [self1.state.to_slice,
+                          (Array.make 1#usize [1#u8]
+                              r1_wire.SemanticTranscript.sample_block_validated._proof_4).to_slice]
+                        (r1_wire.SemanticTranscript.sample_block_validated._proof_5 self1.state.to_slice
+                          (Array.make 1#usize [1#u8]
+                              r1_wire.SemanticTranscript.sample_block_validated._proof_4).to_slice)).to_slice
+              let a ←
+                D.digest self1.hash
+                    (Array.make 2#usize
+                        [self1.state.to_slice,
+                          (Array.make 1#usize [2#u8]
+                              r1_wire.SemanticTranscript.sample_block_validated._proof_7).to_slice]
+                        (r1_wire.SemanticTranscript.sample_block_validated._proof_5 self1.state.to_slice
+                          (Array.make 1#usize [2#u8]
+                              r1_wire.SemanticTranscript.sample_block_validated._proof_7).to_slice)).to_slice
+              ok (block, { state := a, hash := self1.hash }))))))
+'AspisR1.NKD_Block.root' depends on axioms: [propext, Classical.choice, Quot.sound]

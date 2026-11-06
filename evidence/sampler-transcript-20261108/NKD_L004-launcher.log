@@ -1,0 +1,29 @@
+{"attempt": "NKD_L004", "exit_status": 0, "wall_seconds": 2.4766953070648015, "peak_rss_kib": "3848496", "swaps": "0", "print_axioms": ["'AspisR1.NKD_Add.root' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NKD_Add.root : ∀ (digits : Digits) (amount : U32),
+  Canonical digits →
+    ↑amount ≤ 257 →
+      ∀ (out : Digits) (carry : U32),
+        Cut digits amount out carry →
+          AspisR1Post25SamplerIndexedAddSmallCandidate.sampler.add_small_base_p digits amount =
+              ok (carry != 0#u32, out) ∧
+            Canonical out :=
+fun digits amount canonical small out carry cut =>
+  ⟨NBL_AddNative.source digits amount canonical small out carry cut,
+    NBL_AddNative.canonical digits amount out carry cut⟩
+'AspisR1.NKD_Add.root' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+...
+theorem AspisR1.NKD_Add.root : ∀ (digits : Digits) (amount : U32),
+  Canonical digits →
+    ↑amount ≤ 257 →
+      ∀ (out : Digits) (carry : U32),
+        Cut digits amount out carry →
+          AspisR1Post25SamplerIndexedAddSmallCandidate.sampler.add_small_base_p digits amount =
+              ok (carry != 0#u32, out) ∧
+            Canonical out :=
+fun digits amount canonical small out carry cut =>
+  ⟨NBL_AddNative.source digits amount canonical small out carry cut,
+    NBL_AddNative.canonical digits amount out carry cut⟩
+'AspisR1.NKD_Add.root' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r1315e4a8f4524ca8b48666a83983f467.scope; invocation ID: 7abc252b40eb470d89a9ad9478093485

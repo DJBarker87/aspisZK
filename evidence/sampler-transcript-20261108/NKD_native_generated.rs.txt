@@ -1,0 +1,79 @@
+extern crate alloc;
+use super::SolanaDigest;
+use aspis_r1_cost_probe::transport::Variant;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+struct Transcript { state:[u8;32], hash:SolanaDigest }
+struct Log { replies:[[u8;32];3], count:usize, mode:u8, old:[u8;32], row:u8,
+ payload:*const u8, length:usize, k:usize, j:usize, tag:u8 }
+fn observed_digest(_: &SolanaDigest, parts:&[&[u8]], log:&mut Log)->[u8;32] {
+ let n=log.count;assert!(n<3);
+ if log.mode==0 {
+  assert_eq!(n,0);assert_eq!(parts.len(),3);assert_eq!(parts[0].len(),29);
+  assert_eq!(parts[0][log.j],b"UNPROVED:R1:PRIVATE-SALTED:P3"[log.j]);
+  assert_eq!(parts[1].len(),1);assert_eq!(parts[1][0],log.tag);
+  assert_eq!(parts[2].len(),32);assert_eq!(parts[2][log.k],log.old[log.k]);
+ } else if n==0 {
+  assert_eq!(parts.len(),4);assert_eq!(parts[0].len(),32);assert_eq!(parts[0][log.k],log.old[log.k]);
+  assert_eq!(parts[1].len(),2);assert_eq!(parts[1][0],0);assert_eq!(parts[1][1],160+log.row);
+  assert_eq!(parts[2].len(),4);let expected=(log.length as u32).to_le_bytes();
+  assert_eq!(parts[2][log.j%4],expected[log.j%4]);
+  assert_eq!(parts[3].len(),log.length);assert!(core::ptr::eq(parts[3].as_ptr(),log.payload));
+ } else {
+  assert_eq!(parts.len(),2);assert_eq!(parts[0].len(),32);assert_eq!(parts[0][log.k],log.replies[0][log.k]);
+  assert_eq!(parts[1].len(),1);assert_eq!(parts[1][0],n as u8);
+ }
+ log.count+=1;log.replies[n]
+}
+impl Transcript {
+ // NKD exact source-ordered cuts inserted by NKD_make_native.py.
+ pub fn new(hash:SolanaDigest, semantic_state:[u8;32], variant:Variant, log:&mut Log) -> Self {
+        #[cfg(not(feature = "private-leaf-salts"))]
+        let domain: &[u8] = b"UNPROVED:R1:COST-PROBE:P2";
+        #[cfg(feature = "private-leaf-salts")]
+        let domain: &[u8] = b"UNPROVED:R1:PRIVATE-SALTED:P3";
+        Self { state:observed_digest(&hash,&[domain,&[variant.tag()],&semantic_state],log), hash }
+    }
+pub fn absorb(&mut self, row:u8, payload:&[u8], log:&mut Log) {
+        self.state=observed_digest(&self.hash,&[&self.state,&[0,0xa0+row],&(payload.len() as u32).to_le_bytes(),payload],log);
+    }
+pub fn block(&mut self,row:u8,payload:&[u8], log:&mut Log)->[u8;32] {
+        self.absorb(row,payload,log);
+        let block=observed_digest(&self.hash,&[&self.state,&[1]],log);
+        self.state=observed_digest(&self.hash,&[&self.state,&[2]],log);
+        block
+    }
+}
+fn log(mode:u8,old:[u8;32],row:u8,payload:&[u8],tag:u8)->Log {
+ let k:usize=kani::any();kani::assume(k<32);let j:usize=kani::any();kani::assume(j<29);
+ Log{replies:kani::any(),count:0,mode,old,row,payload:payload.as_ptr(),length:payload.len(),k,j,tag}
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn deployed_new_cut() {
+ let state:[u8;32]=kani::any();let v:u8=kani::any();kani::assume(v<3);
+ let variant=match v{0=>Variant::S1,1=>Variant::S2,_=>Variant::D};let mut l=log(0,state,0,&[],v+1);
+ let out=Transcript::new(SolanaDigest,state,variant,&mut l);
+ assert_eq!(l.count,1);assert!((out.state[l.k]==l.replies[0][l.k])!=cfg!(NKD_invert));
+ let _:SolanaDigest=out.hash;
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn deployed_absorb_cut() {
+ let state:[u8;32]=kani::any();let payload:[u8;8192]=kani::any();let n:usize=kani::any();kani::assume(n<=8192);
+ let row:u8=kani::any();kani::assume(row<=95);let mut l=log(1,state,row,&payload[..n],0);
+ let mut out=Transcript{state,hash:SolanaDigest};out.absorb(row,&payload[..n],&mut l);
+ assert_eq!(l.count,1);assert!((out.state[l.k]==l.replies[0][l.k])!=cfg!(NKD_invert));
+ let _:SolanaDigest=out.hash;
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn deployed_block_cut() {
+ let state:[u8;32]=kani::any();let payload:[u8;8192]=kani::any();let n:usize=kani::any();kani::assume(n<=8192);
+ let row:u8=kani::any();kani::assume(row<=95);let mut l=log(2,state,row,&payload[..n],0);
+ let mut out=Transcript{state,hash:SolanaDigest};let value=out.block(row,&payload[..n],&mut l);
+ assert_eq!(l.count,3);assert_eq!(value[l.k],l.replies[1][l.k]);
+ assert!((out.state[l.k]==l.replies[2][l.k])!=cfg!(NKD_invert));let _:SolanaDigest=out.hash;
+}

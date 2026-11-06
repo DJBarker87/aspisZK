@@ -1,0 +1,346 @@
+theorem AspisR1.NKD_New.root : ∀ {H : Type} (D : aspis_core.Digest32 H) (hash : H) (semantic : Bytes32)
+  (variant : transport.Variant), transcript.Transcript.new D hash semantic variant = G D hash semantic variant :=
+fun {H} D hash semantic variant =>
+  transport.Variant.casesOn (motive := fun t =>
+    variant = t → transcript.Transcript.new D hash semantic variant = G D hash semantic variant) variant
+    (fun h =>
+      Eq.symm h ▸
+        of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg Eq
+                (Eq.trans
+                  (congrArg
+                    (Bind.bind
+                      (ok
+                        (Array.make 29#usize
+                            [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8, 80#u8,
+                              82#u8, 73#u8, 86#u8, 65#u8, 84#u8, 69#u8, 45#u8, 83#u8, 65#u8, 76#u8, 84#u8, 69#u8, 68#u8,
+                              58#u8, 80#u8, 51#u8]
+                            transcript.Transcript.new._proof_2).to_slice))
+                    (funext fun domain =>
+                      Eq.trans
+                        (congrArg (Bind.bind (ok 1#u8))
+                          (funext fun i =>
+                            Eq.trans
+                              (congrArg
+                                (Bind.bind
+                                  (ok (Array.make 1#usize [i] (transcript.Transcript.new._proof_3 i)).to_slice))
+                                (funext fun s =>
+                                  Eq.trans
+                                    (congrArg (Bind.bind (ok (Array.to_slice semantic)))
+                                      (funext fun s1 =>
+                                        bind_tc_ok
+                                          (Array.make 3#usize [domain, s, s1]
+                                              (transcript.Transcript.new._proof_4 domain s s1)).to_slice
+                                          fun y => do
+                                          let a ← D.digest hash y
+                                          ok { state := a, hash := hash }))
+                                    (bind_tc_ok (Array.to_slice semantic) fun y => do
+                                      let a ←
+                                        D.digest hash
+                                            (Array.make 3#usize [domain, s, y]
+                                                (transcript.Transcript.new._proof_4 domain s y)).to_slice
+                                      ok { state := a, hash := hash })))
+                              (bind_tc_ok (Array.make 1#usize [i] (transcript.Transcript.new._proof_3 i)).to_slice
+                                fun y => do
+                                let a ←
+                                  D.digest hash
+                                      (Array.make 3#usize [domain, y, Array.to_slice semantic]
+                                          (transcript.Transcript.new._proof_4 domain y
+                                            (Array.to_slice semantic))).to_slice
+                                ok { state := a, hash := hash })))
+                        (bind_tc_ok 1#u8 fun y => do
+                          let a ←
+                            D.digest hash
+                                (Array.make 3#usize
+                                    [domain, (Array.make 1#usize [y] (transcript.Transcript.new._proof_3 y)).to_slice,
+                                      Array.to_slice semantic]
+                                    (transcript.Transcript.new._proof_4 domain
+                                      (Array.make 1#usize [y] (transcript.Transcript.new._proof_3 y)).to_slice
+                                      (Array.to_slice semantic))).to_slice
+                          ok { state := a, hash := hash })))
+                  (bind_tc_ok
+                    (Array.make 29#usize
+                        [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8, 80#u8,
+                          82#u8, 73#u8, 86#u8, 65#u8, 84#u8, 69#u8, 45#u8, 83#u8, 65#u8, 76#u8, 84#u8, 69#u8, 68#u8,
+                          58#u8, 80#u8, 51#u8]
+                        transcript.Transcript.new._proof_2).to_slice
+                    fun y => do
+                    let a ←
+                      D.digest hash
+                          (Array.make 3#usize
+                              [y, (Array.make 1#usize [1#u8] (transcript.Transcript.new._proof_3 1#u8)).to_slice,
+                                Array.to_slice semantic]
+                              (transcript.Transcript.new._proof_4 y
+                                (Array.make 1#usize [1#u8] (transcript.Transcript.new._proof_3 1#u8)).to_slice
+                                (Array.to_slice semantic))).to_slice
+                    ok { state := a, hash := hash })))
+              (bind_tc_ok 1#u8 fun y => do
+                let reply ←
+                  D.digest hash
+                      (Array.make 3#usize
+                          [(Array.make 29#usize
+                                [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8,
+                                  80#u8, 82#u8, 73#u8, 86#u8, 65#u8, 84#u8, 69#u8, 45#u8, 83#u8, 65#u8, 76#u8, 84#u8,
+                                  69#u8, 68#u8, 58#u8, 80#u8, 51#u8]
+                                NGT_NBA_Transcript.domain._proof_19).to_slice,
+                            (Array.make 1#usize [y] (parts._proof_4 y)).to_slice, Array.to_slice semantic]
+                          (id
+                              (Eq.refl
+                                [(Array.make 29#usize
+                                      [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8,
+                                        58#u8, 80#u8, 82#u8, 73#u8, 86#u8, 65#u8, 84#u8, 69#u8, 45#u8, 83#u8, 65#u8,
+                                        76#u8, 84#u8, 69#u8, 68#u8, 58#u8, 80#u8, 51#u8]
+                                      NGT_NBA_Transcript.domain._proof_19).to_slice,
+                                  (Array.make 1#usize [y] (parts._proof_4 y)).to_slice, Array.to_slice semantic]) ▸
+                            parts._proof_5 semantic y)).to_slice
+                ok { state := reply, hash := hash }))
+            (eq_self do
+              let a ←
+                D.digest hash
+                    (Array.make 3#usize
+                        [(Array.make 29#usize
+                              [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8,
+                                80#u8, 82#u8, 73#u8, 86#u8, 65#u8, 84#u8, 69#u8, 45#u8, 83#u8, 65#u8, 76#u8, 84#u8,
+                                69#u8, 68#u8, 58#u8, 80#u8, 51#u8]
+                              transcript.Transcript.new._proof_2).to_slice,
+                          (Array.make 1#usize [1#u8] (transcript.Transcript.new._proof_3 1#u8)).to_slice,
+                          Array.to_slice semantic]
+                        (transcript.Transcript.new._proof_4
+                          (Array.make 29#usize
+                              [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8,
+                                80#u8, 82#u8, 73#u8, 86#u8, 65#u8, 84#u8, 69#u8, 45#u8, 83#u8, 65#u8, 76#u8, 84#u8,
+                                69#u8, 68#u8, 58#u8, 80#u8, 51#u8]
+                              transcript.Transcript.new._proof_2).to_slice
+                          (Array.make 1#usize [1#u8] (transcript.Transcript.new._proof_3 1#u8)).to_slice
+                          (Array.to_slice semantic))).to_slice
+              ok { state := a, hash := hash })))
+    (fun h =>
+      Eq.symm h ▸
+        of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg Eq
+                (Eq.trans
+                  (congrArg
+                    (Bind.bind
+                      (ok
+                        (Array.make 29#usize
+                            [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8, 80#u8,
+                              82#u8, 73#u8, 86#u8, 65#u8, 84#u8, 69#u8, 45#u8, 83#u8, 65#u8, 76#u8, 84#u8, 69#u8, 68#u8,
+                              58#u8, 80#u8, 51#u8]
+                            transcript.Transcript.new._proof_2).to_slice))
+                    (funext fun domain =>
+                      Eq.trans
+                        (congrArg (Bind.bind (ok 2#u8))
+                          (funext fun i =>
+                            Eq.trans
+                              (congrArg
+                                (Bind.bind
+                                  (ok (Array.make 1#usize [i] (transcript.Transcript.new._proof_3 i)).to_slice))
+                                (funext fun s =>
+                                  Eq.trans
+                                    (congrArg (Bind.bind (ok (Array.to_slice semantic)))
+                                      (funext fun s1 =>
+                                        bind_tc_ok
+                                          (Array.make 3#usize [domain, s, s1]
+                                              (transcript.Transcript.new._proof_4 domain s s1)).to_slice
+                                          fun y => do
+                                          let a ← D.digest hash y
+                                          ok { state := a, hash := hash }))
+                                    (bind_tc_ok (Array.to_slice semantic) fun y => do
+                                      let a ←
+                                        D.digest hash
+                                            (Array.make 3#usize [domain, s, y]
+                                                (transcript.Transcript.new._proof_4 domain s y)).to_slice
+                                      ok { state := a, hash := hash })))
+                              (bind_tc_ok (Array.make 1#usize [i] (transcript.Transcript.new._proof_3 i)).to_slice
+                                fun y => do
+                                let a ←
+                                  D.digest hash
+                                      (Array.make 3#usize [domain, y, Array.to_slice semantic]
+                                          (transcript.Transcript.new._proof_4 domain y
+                                            (Array.to_slice semantic))).to_slice
+                                ok { state := a, hash := hash })))
+                        (bind_tc_ok 2#u8 fun y => do
+                          let a ←
+                            D.digest hash
+                                (Array.make 3#usize
+                                    [domain, (Array.make 1#usize [y] (transcript.Transcript.new._proof_3 y)).to_slice,
+                                      Array.to_slice semantic]
+                                    (transcript.Transcript.new._proof_4 domain
+                                      (Array.make 1#usize [y] (transcript.Transcript.new._proof_3 y)).to_slice
+                                      (Array.to_slice semantic))).to_slice
+                          ok { state := a, hash := hash })))
+                  (bind_tc_ok
+                    (Array.make 29#usize
+                        [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8, 80#u8,
+                          82#u8, 73#u8, 86#u8, 65#u8, 84#u8, 69#u8, 45#u8, 83#u8, 65#u8, 76#u8, 84#u8, 69#u8, 68#u8,
+                          58#u8, 80#u8, 51#u8]
+                        transcript.Transcript.new._proof_2).to_slice
+                    fun y => do
+                    let a ←
+                      D.digest hash
+                          (Array.make 3#usize
+                              [y, (Array.make 1#usize [2#u8] (transcript.Transcript.new._proof_3 2#u8)).to_slice,
+                                Array.to_slice semantic]
+                              (transcript.Transcript.new._proof_4 y
+                                (Array.make 1#usize [2#u8] (transcript.Transcript.new._proof_3 2#u8)).to_slice
+                                (Array.to_slice semantic))).to_slice
+                    ok { state := a, hash := hash })))
+              (bind_tc_ok 2#u8 fun y => do
+                let reply ←
+                  D.digest hash
+                      (Array.make 3#usize
+                          [(Array.make 29#usize
+                                [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8,
+                                  80#u8, 82#u8, 73#u8, 86#u8, 65#u8, 84#u8, 69#u8, 45#u8, 83#u8, 65#u8, 76#u8, 84#u8,
+                                  69#u8, 68#u8, 58#u8, 80#u8, 51#u8]
+                                NGT_NBA_Transcript.domain._proof_19).to_slice,
+                            (Array.make 1#usize [y] (parts._proof_4 y)).to_slice, Array.to_slice semantic]
+                          (id
+                              (Eq.refl
+                                [(Array.make 29#usize
+                                      [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8,
+                                        58#u8, 80#u8, 82#u8, 73#u8, 86#u8, 65#u8, 84#u8, 69#u8, 45#u8, 83#u8, 65#u8,
+                                        76#u8, 84#u8, 69#u8, 68#u8, 58#u8, 80#u8, 51#u8]
+                                      NGT_NBA_Transcript.domain._proof_19).to_slice,
+                                  (Array.make 1#usize [y] (parts._proof_4 y)).to_slice, Array.to_slice semantic]) ▸
+                            parts._proof_5 semantic y)).to_slice
+                ok { state := reply, hash := hash }))
+            (eq_self do
+              let a ←
+                D.digest hash
+                    (Array.make 3#usize
+                        [(Array.make 29#usize
+                              [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8,
+                                80#u8, 82#u8, 73#u8, 86#u8, 65#u8, 84#u8, 69#u8, 45#u8, 83#u8, 65#u8, 76#u8, 84#u8,
+                                69#u8, 68#u8, 58#u8, 80#u8, 51#u8]
+                              transcript.Transcript.new._proof_2).to_slice,
+                          (Array.make 1#usize [2#u8] (transcript.Transcript.new._proof_3 2#u8)).to_slice,
+                          Array.to_slice semantic]
+                        (transcript.Transcript.new._proof_4
+                          (Array.make 29#usize
+                              [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8,
+                                80#u8, 82#u8, 73#u8, 86#u8, 65#u8, 84#u8, 69#u8, 45#u8, 83#u8, 65#u8, 76#u8, 84#u8,
+                                69#u8, 68#u8, 58#u8, 80#u8, 51#u8]
+                              transcript.Transcript.new._proof_2).to_slice
+                          (Array.make 1#usize [2#u8] (transcript.Transcript.new._proof_3 2#u8)).to_slice
+                          (Array.to_slice semantic))).to_slice
+              ok { state := a, hash := hash })))
+    (fun h =>
+      Eq.symm h ▸
+        of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg Eq
+                (Eq.trans
+                  (congrArg
+                    (Bind.bind
+                      (ok
+                        (Array.make 29#usize
+                            [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8, 80#u8,
+                              82#u8, 73#u8, 86#u8, 65#u8, 84#u8, 69#u8, 45#u8, 83#u8, 65#u8, 76#u8, 84#u8, 69#u8, 68#u8,
+                              58#u8, 80#u8, 51#u8]
+                            transcript.Transcript.new._proof_2).to_slice))
+                    (funext fun domain =>
+                      Eq.trans
+                        (congrArg (Bind.bind (ok 3#u8))
+                          (funext fun i =>
+                            Eq.trans
+                              (congrArg
+                                (Bind.bind
+                                  (ok (Array.make 1#usize [i] (transcript.Transcript.new._proof_3 i)).to_slice))
+                                (funext fun s =>
+                                  Eq.trans
+                                    (congrArg (Bind.bind (ok (Array.to_slice semantic)))
+                                      (funext fun s1 =>
+                                        bind_tc_ok
+                                          (Array.make 3#usize [domain, s, s1]
+                                              (transcript.Transcript.new._proof_4 domain s s1)).to_slice
+                                          fun y => do
+                                          let a ← D.digest hash y
+                                          ok { state := a, hash := hash }))
+                                    (bind_tc_ok (Array.to_slice semantic) fun y => do
+                                      let a ←
+                                        D.digest hash
+                                            (Array.make 3#usize [domain, s, y]
+                                                (transcript.Transcript.new._proof_4 domain s y)).to_slice
+                                      ok { state := a, hash := hash })))
+                              (bind_tc_ok (Array.make 1#usize [i] (transcript.Transcript.new._proof_3 i)).to_slice
+                                fun y => do
+                                let a ←
+                                  D.digest hash
+                                      (Array.make 3#usize [domain, y, Array.to_slice semantic]
+                                          (transcript.Transcript.new._proof_4 domain y
+                                            (Array.to_slice semantic))).to_slice
+                                ok { state := a, hash := hash })))
+                        (bind_tc_ok 3#u8 fun y => do
+                          let a ←
+                            D.digest hash
+                                (Array.make 3#usize
+                                    [domain, (Array.make 1#usize [y] (transcript.Transcript.new._proof_3 y)).to_slice,
+                                      Array.to_slice semantic]
+                                    (transcript.Transcript.new._proof_4 domain
+                                      (Array.make 1#usize [y] (transcript.Transcript.new._proof_3 y)).to_slice
+                                      (Array.to_slice semantic))).to_slice
+                          ok { state := a, hash := hash })))
+                  (bind_tc_ok
+                    (Array.make 29#usize
+                        [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8, 80#u8,
+                          82#u8, 73#u8, 86#u8, 65#u8, 84#u8, 69#u8, 45#u8, 83#u8, 65#u8, 76#u8, 84#u8, 69#u8, 68#u8,
+                          58#u8, 80#u8, 51#u8]
+                        transcript.Transcript.new._proof_2).to_slice
+                    fun y => do
+                    let a ←
+                      D.digest hash
+                          (Array.make 3#usize
+                              [y, (Array.make 1#usize [3#u8] (transcript.Transcript.new._proof_3 3#u8)).to_slice,
+                                Array.to_slice semantic]
+                              (transcript.Transcript.new._proof_4 y
+                                (Array.make 1#usize [3#u8] (transcript.Transcript.new._proof_3 3#u8)).to_slice
+                                (Array.to_slice semantic))).to_slice
+                    ok { state := a, hash := hash })))
+              (bind_tc_ok 3#u8 fun y => do
+                let reply ←
+                  D.digest hash
+                      (Array.make 3#usize
+                          [(Array.make 29#usize
+                                [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8,
+                                  80#u8, 82#u8, 73#u8, 86#u8, 65#u8, 84#u8, 69#u8, 45#u8, 83#u8, 65#u8, 76#u8, 84#u8,
+                                  69#u8, 68#u8, 58#u8, 80#u8, 51#u8]
+                                NGT_NBA_Transcript.domain._proof_19).to_slice,
+                            (Array.make 1#usize [y] (parts._proof_4 y)).to_slice, Array.to_slice semantic]
+                          (id
+                              (Eq.refl
+                                [(Array.make 29#usize
+                                      [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8,
+                                        58#u8, 80#u8, 82#u8, 73#u8, 86#u8, 65#u8, 84#u8, 69#u8, 45#u8, 83#u8, 65#u8,
+                                        76#u8, 84#u8, 69#u8, 68#u8, 58#u8, 80#u8, 51#u8]
+                                      NGT_NBA_Transcript.domain._proof_19).to_slice,
+                                  (Array.make 1#usize [y] (parts._proof_4 y)).to_slice, Array.to_slice semantic]) ▸
+                            parts._proof_5 semantic y)).to_slice
+                ok { state := reply, hash := hash }))
+            (eq_self do
+              let a ←
+                D.digest hash
+                    (Array.make 3#usize
+                        [(Array.make 29#usize
+                              [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8,
+                                80#u8, 82#u8, 73#u8, 86#u8, 65#u8, 84#u8, 69#u8, 45#u8, 83#u8, 65#u8, 76#u8, 84#u8,
+                                69#u8, 68#u8, 58#u8, 80#u8, 51#u8]
+                              transcript.Transcript.new._proof_2).to_slice,
+                          (Array.make 1#usize [3#u8] (transcript.Transcript.new._proof_3 3#u8)).to_slice,
+                          Array.to_slice semantic]
+                        (transcript.Transcript.new._proof_4
+                          (Array.make 29#usize
+                              [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8,
+                                80#u8, 82#u8, 73#u8, 86#u8, 65#u8, 84#u8, 69#u8, 45#u8, 83#u8, 65#u8, 76#u8, 84#u8,
+                                69#u8, 68#u8, 58#u8, 80#u8, 51#u8]
+                              transcript.Transcript.new._proof_2).to_slice
+                          (Array.make 1#usize [3#u8] (transcript.Transcript.new._proof_3 3#u8)).to_slice
+                          (Array.to_slice semantic))).to_slice
+              ok { state := a, hash := hash })))
+    (Eq.refl variant)
+'AspisR1.NKD_New.root' depends on axioms: [propext, Classical.choice, Quot.sound]
