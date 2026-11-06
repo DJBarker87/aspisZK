@@ -1,0 +1,74 @@
+NLP_generated/NLP_RootDomain.lean:14:73: error: unsolved goals
+proof : Slice U8
+parsed : OraclePortCompactDraft.Parsed
+wire : parsed.wire = MultiproofConeCanonical.bytesOf ↑proof
+⊢ ((SemanticRecordCodec.decodeState
+          (if True then OraclePortCompactDraft.slice (MultiproofConeCanonical.bytesOf ↑proof) 16 32
+          else if 0 = 1 then List.drop 5 (parsed.semantic[2]?.getD []) else OraclePortCompactDraft.root2 parsed)).getD
+      fun x => 0) =
+    (SemanticRecordCodec.decodeState (OraclePortCompactDraft.slice (MultiproofConeCanonical.bytesOf ↑proof) 16 32)).getD
+      fun x => 0
+NLP_generated/NLP_RootDomain.lean:15:47: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [̵O̵r̵a̵c̵l̵e̵P̵o̵r̵t̵B̵a̵t̵c̵h̵D̵r̵a̵f̵t̵.̵c̵o̵m̵m̵i̵t̵t̵e̵d̵R̵o̵o̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵,̵O̵r̵a̵c̵l̵e̵P̵o̵r̵t̵C̵o̵m̵p̵a̵c̵t̵D̵r̵a̵f̵t̵.̵r̵o̵o̵t̵0̵,̵w̵i̵r̵e̵]̵[̲O̲r̲a̲c̲l̲e̲P̲o̲r̲t̲B̲a̲t̲c̲h̲D̲r̲a̲f̲t̲.̲c̲o̲m̲m̲i̲t̲t̲e̲d̲R̲o̲o̲t̲,̲ ̲O̲r̲a̲c̲l̲e̲P̲o̲r̲t̲C̲o̲m̲p̲a̲c̲t̲D̲r̲a̲f̲t̲.̲r̲o̲o̲t̲0̲,̲ ̲w̲i̲r̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NLP_RootDomain.kind0_fixed : ∀ (proof : Slice U8) (parsed : OraclePortCompactDraft.Parsed),
+  parsed.wire = MultiproofConeCanonical.bytesOf ↑proof →
+    OraclePortBatchDraft.committedRoot parsed 0 =
+      (SemanticRecordCodec.decodeState
+            (OraclePortCompactDraft.slice (MultiproofConeCanonical.bytesOf ↑proof) 16 32)).getD
+        fun x => 0 :=
+fun proof parsed wire =>
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg Eq
+          (congrFun'
+            (congrArg Option.getD
+              (congrArg SemanticRecordCodec.decodeState
+                (ite_congr (eq_self 0)
+                  (fun a => congrFun' (congrFun' (congrArg OraclePortCompactDraft.slice wire) 16) 32) fun a =>
+                  Eq.refl
+                    (if 0 = 1 then List.drop 5 (parsed.semantic[2]?.getD [])
+                    else OraclePortCompactDraft.root2 parsed))))
+            fun x => 0))
+        ((SemanticRecordCodec.decodeState
+              (OraclePortCompactDraft.slice (MultiproofConeCanonical.bytesOf ↑proof) 16 32)).getD
+          fun x => 0)))
+    sorry
+theorem NLP_RootDomain.necessary : ∀ (proof : Slice U8) (parsed : OraclePortCompactDraft.Parsed),
+  parsed.wire = MultiproofConeCanonical.bytesOf ↑proof →
+    ∀ (p : verifier.Prepared) (folded : Std.Array U8 32#usize),
+      (∀ (k : Fin 3),
+          Port3_NativeBatchCalls.rootAt (NLL_BatchSource.roots p folded) k =
+            encodeState (OraclePortBatchDraft.committedRoot parsed ↑k)) →
+        Port3_BatchStage.root0 p =
+          encodeState
+            ((SemanticRecordCodec.decodeState
+                  (OraclePortCompactDraft.slice (MultiproofConeCanonical.bytesOf ↑proof) 16 32)).getD
+              fun x => 0) :=
+fun proof parsed wire p folded roots =>
+  have h := roots ⟨0, of_decide_eq_true (id (Eq.refl true))⟩;
+  id (fun h => Eq.mp (congrArg (fun _a => Port3_BatchStage.root0 p = encodeState _a) (kind0_fixed proof parsed wire)) h)
+    h
+theorem NLP_RootDomain.mismatch : ∀ (proof : Slice U8) (p : verifier.Prepared) (folded : Std.Array U8 32#usize),
+  Port3_BatchStage.root0 p ≠
+      encodeState
+        ((SemanticRecordCodec.decodeState
+              (OraclePortCompactDraft.slice (MultiproofConeCanonical.bytesOf ↑proof) 16 32)).getD
+          fun x => 0) →
+    ¬∃ parsed,
+        parsed.wire = MultiproofConeCanonical.bytesOf ↑proof ∧
+          ∀ (k : Fin 3),
+            Port3_NativeBatchCalls.rootAt (NLL_BatchSource.roots p folded) k =
+              encodeState (OraclePortBatchDraft.committedRoot parsed ↑k) :=
+fun proof p folded different a =>
+  let ⟨parsed, h✝⟩ := a
+  let ⟨wire, roots⟩ := h✝
+  different (necessary proof parsed wire p folded roots)
+'NLP_RootDomain.kind0_fixed' depends on axioms: [propext, sorryAx, Quot.sound]
+'NLP_RootDomain.necessary' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NLP_RootDomain.mismatch' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "row": "TX2:065",
+  "caller": "TX2:064",
+  "status": "NO_POSITIVE_ROOT; provisional input clauses only",
+  "ruling": [
+    "aq(2)",
+    "bf(2)",
+    "bf(3)"
+  ],
+  "clauses": [
+    {
+      "name": "proofLength",
+      "verbatim": "proof.val.length=57607",
+      "classification": "bf(2) own proof extent",
+      "consumer": "NKU native scope; NLN C04 extent",
+      "producer": "NLE_AuthScope.common_domain",
+      "producer_status": "source support; native caller association OPEN"
+    },
+    {
+      "name": "publicLength",
+      "verbatim": "pub.val.length\u22641880",
+      "classification": "bf(2) own public extent",
+      "consumer": "NKU native scope at SAME C01",
+      "producer": "NLE_AuthScope.common_domain / owned encoder Array1880",
+      "producer_status": "source support; native caller association OPEN"
+    },
+    {
+      "name": "root0Input",
+      "verbatim": "NLP_InputDomain.Root0 ck proof",
+      "expanded": "(ck.val.drop 112).take 32=(encodeState ((SemanticRecordCodec.decodeState (OraclePortCompactDraft.slice (MultiproofConeCanonical.bytesOf proof.val) 16 32)).getD (fun _=>0))).val",
+      "classification": "bf(2) additional original-input root provenance; NOT silently admitted",
+      "consumer": "NLN_TX2_053 first-root binding at C04",
+      "producer": null,
+      "producer_status": "OPEN; checkpoint writer/proof binding must be supplied; sizes alone insufficient"
+    }
+  ],
+  "internal": [
+    {
+      "clause": "C01 SAME ck/proof/public",
+      "discharged_by": "NLP_C01.native_scope/step"
+    },
+    {
+      "clause": "C04 SAME proof and query canonicality",
+      "discharged_by": "NLP_C04Query.domain"
+    },
+    {
+      "clause": "C04 root0 saved byte projection",
+      "discharged_by": "NLP_ResumeRoots.returned"
+    },
+    {
+      "clause": "C04 Parsed wire, root1 codec, folded root2",
+      "discharged_by": "NLP_RootCodec / NLP_C04Folded / NLP_C04Roots",
+      "status": "PASS_SOURCE_SUPPORT; original-input Root0 remains explicit"
+    },
+    {
+      "clause": "TX2 12-index / 9216 byte gate",
+      "discharged_by": "NLN.TreePacket.counts/abortCount/bytes at actual kind",
+      "status": "PASS_SOURCE_SUPPORT; original-input Root0 remains explicit"
+    }
+  ],
+  "no_child_result_success_endpoint_clause": true,
+  "no_new_trust": true
+}

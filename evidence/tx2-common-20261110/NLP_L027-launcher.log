@@ -1,0 +1,23 @@
+{"attempt": "NLP_L027", "exit_status": 0, "wall_seconds": 21.81459496403113, "peak_rss_kib": "6389868", "swaps": "0", "print_axioms": ["'NLP_C04AtActual.packet' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLP_C04AtActual.packet : ∀ (H : Bytes → State) (wr rr : NP6_StdModel.Reservation) (merkle : Merkle)
+  (finish : Finish) {X : Type} (d : aspis_core.digest.Digest32 X) (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    NLP_InputDomain.Root0 ck proof →
+      ∀ (pr : Slice U8) (p : verifier.Prepared) (folded : Std.Array U8 32#usize) (reply : R Unit),
+        Event.merkle pr p folded reply ∈ (run wr rr (fun {H} => merkle) finish d pub proof ck hash none).events →
+          NLN.BatchPacket H pr (NLP_RootCodec.parsed pr (Port3_BatchStage.root1 p)) p folded 1#usize :=
+⋯
+'NLP_C04AtActual.packet' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+...
+theorem NLP_C04AtActual.packet : ∀ (H : Bytes → State) (wr rr : NP6_StdModel.Reservation) (merkle : Merkle)
+  (finish : Finish) {X : Type} (d : aspis_core.digest.Digest32 X) (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    NLP_InputDomain.Root0 ck proof →
+      ∀ (pr : Slice U8) (p : verifier.Prepared) (folded : Std.Array U8 32#usize) (reply : R Unit),
+        Event.merkle pr p folded reply ∈ (run wr rr (fun {H} => merkle) finish d pub proof ck hash none).events →
+          NLN.BatchPacket H pr (NLP_RootCodec.parsed pr (Port3_BatchStage.root1 p)) p folded 1#usize :=
+⋯
+'NLP_C04AtActual.packet' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rab4d8e368b3448caa666b11770dcdad7.scope; invocation ID: 619c3f4e4b514e9a95f601a698007449

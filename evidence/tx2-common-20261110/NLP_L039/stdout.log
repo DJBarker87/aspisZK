@@ -1,0 +1,22 @@
+def NLP_TransportDomain.Domain : NP6_StdModel.Reservation →
+  {X : Type} →
+    aspis_core.digest.Digest32 X →
+      Slice U8 → Slice U8 → Slice U8 → X → Slice U8 → verifier.Prepared → Std.Array U8 32#usize → Prop :=
+fun wr {X} d ck proof pub hash pr p root =>
+  NLB_ErrorTransport.MerkleDomain wr d ck proof pub hash pr p ∧ ↑root = List.take 32 (List.drop 7751 ↑pr)
+theorem NLP_TransportDomain.at_branch : ∀ (wr : NP6_StdModel.Reservation) {X : Type} (d : aspis_core.digest.Digest32 X)
+  (ck proof pub : Slice U8) (hash : X)
+  (reply : core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error) (p : verifier.Prepared)
+  (a : verifier.Accumulator) (selected : Slice U8)
+  (r : core.result.Result (Std.Array U8 32#usize) core.array.TryFromSliceError) (root : Std.Array U8 32#usize),
+  NJJ_Common.resume wr d ck proof pub AspisR1Stage2.transport.Variant.S2 hash = ok reply →
+    core.result.Result.Insts.CoreOpsTry.branch reply = ok (core.ops.control_flow.ControlFlow.Continue (p, a)) →
+      ¬(a.next != NHT_Constants.compact.SPLIT) = true →
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+              { start := 7751#usize, «end» := 7783#usize } =
+            ok selected →
+          core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 selected = ok r →
+            core.result.Result.unwrap core.fmt.DebugTryFromSliceError r = ok root →
+              Domain wr d ck proof pub hash proof p root :=
+⋯
+'NLP_TransportDomain.at_branch' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,7 @@
+def NLP_InputDomain.Root0 : Slice U8 → Slice U8 → Prop :=
+fun ck proof =>
+  List.take 32 (List.drop 112 ↑ck) =
+    ↑(encodeState
+        ((SemanticRecordCodec.decodeState
+              (OraclePortCompactDraft.slice (MultiproofConeCanonical.bytesOf ↑proof) 16 32)).getD
+          fun x => 0))

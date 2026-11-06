@@ -1,0 +1,38 @@
+NLP_generated/NLP_RootCodec.lean:23:36: error: Ambiguous term
+  Byte
+Possible interpretations:
+  _root_.Byte : Type
+  
+  AspisV8R19.DuplexFrames.Byte : Type
+NLP_generated/NLP_RootCodec.lean:24:47: error: unsolved goals
+proof : Slice U8
+root1 : Std.Array U8 32#usize
+⊢ sorry () = MultiproofConeCanonical.bytesOf ↑root1
+def NLP_RootCodec.parsed : Slice U8 → Std.Array U8 32#usize → OraclePortCompactDraft.Parsed :=
+fun proof root1 =>
+  { wire := MultiproofConeCanonical.bytesOf ↑proof,
+    semantic := [[], [], List.replicate 5 0 ++ MultiproofConeCanonical.bytesOf ↑root1] }
+theorem NLP_RootCodec.decode_array : ∀ (root : Std.Array U8 32#usize),
+  encodeState ((SemanticRecordCodec.decodeState (MultiproofConeCanonical.bytesOf ↑root)).getD fun x => 0) = root :=
+fun root =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => encodeState ((SemanticRecordCodec.decodeState _a).getD fun x => 0) = root)
+        (Eq.symm (MultiproofConePhysicalTransport.digest_bytes root))))
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => encodeState (_a.getD fun x => 0) = root)
+          (SemanticRecordCodec.decodeState_bytes (decodeState root))))
+      (array_roundtrip root))
+@[defeq] theorem NLP_RootCodec.wire : ∀ (proof : Slice U8) (root1 : Std.Array U8 32#usize),
+  (parsed proof root1).wire = MultiproofConeCanonical.bytesOf ↑proof :=
+fun proof root1 => rfl
+theorem NLP_RootCodec.kind1 : ∀ (proof : Slice U8) (root1 : Std.Array U8 32#usize),
+  encodeState (OraclePortBatchDraft.committedRoot (parsed proof root1) 1) = root1 :=
+fun proof root1 =>
+  id
+    (have drop := sorry;
+    sorry drop)
+'NLP_RootCodec.decode_array' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLP_RootCodec.wire' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLP_RootCodec.kind1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,52 @@
+NLP_generated/NLP_RootCodec.lean:23:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.drop (List.length ?m.32) (?m.32 ++ ?m.33)
+in the target expression
+  encodeState
+      ((SemanticRecordCodec.decodeState
+            (List.drop 5 (List.replicate 5 0 ++ MultiproofConeCanonical.bytesOf ↑root1))).getD
+        fun x => 0) =
+    root1
+
+proof : Slice U8
+root1 : Std.Array U8 32#usize
+⊢ encodeState
+      ((SemanticRecordCodec.decodeState
+            (List.drop 5 (List.replicate 5 0 ++ MultiproofConeCanonical.bytesOf ↑root1))).getD
+        fun x => 0) =
+    root1
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+def NLP_RootCodec.parsed : Slice U8 → Std.Array U8 32#usize → OraclePortCompactDraft.Parsed :=
+fun proof root1 =>
+  { wire := MultiproofConeCanonical.bytesOf ↑proof,
+    semantic := [[], [], List.replicate 5 0 ++ MultiproofConeCanonical.bytesOf ↑root1] }
+theorem NLP_RootCodec.decode_array : ∀ (root : Std.Array U8 32#usize),
+  encodeState ((SemanticRecordCodec.decodeState (MultiproofConeCanonical.bytesOf ↑root)).getD fun x => 0) = root :=
+fun root =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => encodeState ((SemanticRecordCodec.decodeState _a).getD fun x => 0) = root)
+        (Eq.symm (MultiproofConePhysicalTransport.digest_bytes root))))
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => encodeState (_a.getD fun x => 0) = root)
+          (SemanticRecordCodec.decodeState_bytes (decodeState root))))
+      (array_roundtrip root))
+@[defeq] theorem NLP_RootCodec.wire : ∀ (proof : Slice U8) (root1 : Std.Array U8 32#usize),
+  (parsed proof root1).wire = MultiproofConeCanonical.bytesOf ↑proof :=
+fun proof root1 => rfl
+theorem NLP_RootCodec.kind1 : ∀ (proof : Slice U8) (root1 : Std.Array U8 32#usize),
+  encodeState (OraclePortBatchDraft.committedRoot (parsed proof root1) 1) = root1 :=
+fun proof root1 => id sorry
+'NLP_RootCodec.decode_array' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLP_RootCodec.wire' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLP_RootCodec.kind1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

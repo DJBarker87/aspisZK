@@ -1,0 +1,55 @@
+{"attempt": "NLP_L008", "exit_status": 0, "wall_seconds": 16.456654791953042, "peak_rss_kib": "6020580", "swaps": "0", "print_axioms": ["'NLP_ResumeRoots.returned' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLP_ResumeRoots.returned : ∀ (reservation : NP6_StdModel.Reservation) {H : Type}
+  (d : aspis_core.digest.Digest32 H) (ck proof pub : Slice U8) (hash : H) (p : verifier.Prepared)
+  (a : verifier.Accumulator),
+  NJJ_Common.resume reservation d ck proof pub AspisR1Stage2.transport.Variant.S2 hash =
+      ok (core.result.Result.Ok (p, a)) →
+    ↑(Port3_BatchStage.root0 p) = List.take 32 (List.drop 112 ↑ck) ∧
+      ↑(Port3_BatchStage.root1 p) = List.take 32 (List.drop 144 ↑ck) :=
+fun reservation {H} d ck proof pub hash p a entered =>
+  have size := NKE_ResumeWidth.checkpoint reservation d ck proof pub hash p a entered;
+  have same :=
+    NKE_ResumeDomain.action_ok
+      (NJC_ResumeCalls.
+...
+List.drop 144 ↑ck) :=
+fun reservation {H} d ck proof pub hash p a entered =>
+  have size := NKE_ResumeWidth.checkpoint reservation d ck proof pub hash p a entered;
+  have same :=
+    NKE_ResumeDomain.action_ok
+      (NJC_ResumeCalls.cohort (NJC_FilledClause.reserved reservation) d ck proof pub AspisR1Stage2.transport.Variant.S2
+        hash)
+      (p, a)
+      (Eq.mp
+        (congrArg (fun _a => NHT_ResultPort.action _a = ok (core.result.Result.Ok (p, a)))
+          (NJC_ResumeCalls.clause (NJC_FilledClause.reserved reservation) d ck proof pub
+            AspisR1Stage2.transport.Variant.S2 hash))
+        entered);
+  id
+    (fun same =>
+      let ⟨f⟩ :=
+        CheckpointBytes4Ops.successful_fields (NJC_FilledClause.reserved reservation) (NJC_ResumeCalls.digest d) ck
+          proof pub AspisR1Stage2.transport.Variant.S2 hash p a same
+      have flat := CheckpointBytes4Layout.flat_fields (NJC_FilledClause.reserved reservation) ck p a f size;
+      ⟨Eq.mpr
+          (id
+            (congrFun'
+              (congrArg Eq
+                (congrArg Subtype.val
+                  (GetElem.getElem.congr_simp ↑p.roots [f.root0, f.root1] (congrArg Subtype.val f.roots) 0 0 (Eq.refl 0)
+                    (Port3_BatchStage.root0._proof_2 p))))
+              (List.take 32 (List.drop 112 ↑ck))))
+          flat.root0Bytes,
+        Eq.mpr
+          (id
+            (congrFun'
+              (congrArg Eq
+                (congrArg Subtype.val
+                  (GetElem.getElem.congr_simp ↑p.roots [f.root0, f.root1] (congrArg Subtype.val f.roots) 1 1 (Eq.refl 1)
+                    (Port3_BatchStage.root1._proof_1 p))))
+              (List.take 32 (List.drop 144 ↑ck))))
+          flat.root1Bytes⟩)
+    same
+'NLP_ResumeRoots.returned' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-ree2ff7facdb24263a50b2693aabd5aec.scope; invocation ID: f950a4e5e18e4863a5a34649c3dd1a67

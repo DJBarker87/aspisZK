@@ -1,0 +1,50 @@
+NLP_generated/NLP_ResumeInstall.lean:10:47: error: Application type mismatch: The argument
+  d
+has type
+  Type
+of sort `Type 1` but is expected to have type
+  AspisR1Stage2.aspis_core.digest.Digest32 ?m.7
+of sort `Type` in the application
+  NKU_ParentFold.G d
+NLP_generated/NLP_ResumeInstall.lean:11:16: error: Application type mismatch: The argument
+  ck
+has type
+  AspisR1Stage2.aspis_core.digest.Digest32 d
+but is expected to have type
+  Slice U8
+in the application
+  NKU.Frame.mk ck
+NLP_generated/NLP_ResumeInstall.lean:15:1: error: Type mismatch
+  NKU_ParentFold.source (NJC_ResumeCalls.digest d) hash
+    (NKU.initial { checkpoint := ck, proof := proof, publicBytes := pub, reservation := r })
+has type
+  NKU_ParentFold.G (NJC_ResumeCalls.digest d) hash
+      (NKU.initial { checkpoint := ck, proof := proof, publicBytes := pub, reservation := r }) =
+    NJU_ResumeObserved.run
+      (NKU.initial { checkpoint := ck, proof := proof, publicBytes := pub, reservation := r }).frame.reservation
+      (NJC_ResumeCalls.digest d)
+      (NKU.initial { checkpoint := ck, proof := proof, publicBytes := pub, reservation := r }).frame.checkpoint
+      (NKU.initial { checkpoint := ck, proof := proof, publicBytes := pub, reservation := r }).frame.proof
+      (NKU.initial { checkpoint := ck, proof := proof, publicBytes := pub, reservation := r }).frame.publicBytes
+      NID_ResumeEmission.transport.Variant.S2 hash
+but is expected to have type
+  NLB_ResumePacket.At native r d ck proof pub hash
+def NLP_ResumeInstall.native : NLB_ResumePacket.Native :=
+fun r d ck proof pub hash => sorry
+theorem NLP_ResumeInstall.packet : ∀ (r : NP6_StdModel.Reservation) {H : Type} (d : aspis_core.digest.Digest32 H)
+  (ck proof pub : Slice U8) (hash : H), NLB_ResumePacket.At native r d ck proof pub hash :=
+fun r {H} d ck proof pub hash => sorry
+theorem NLP_ResumeInstall.scope : ∀ (r : NP6_StdModel.Reservation) (ck proof pub : Slice U8),
+  (↑proof).length = 57607 →
+    (↑pub).length ≤ 1880 →
+      NKU_CallerScope.Inputs
+        (NKU.initial { checkpoint := ck, proof := proof, publicBytes := pub, reservation := r }).frame :=
+fun r ck proof pub proofLength publicLength => ⟨proofLength, publicLength⟩
+theorem NLP_ResumeInstall.action : ∀ (r : NP6_StdModel.Reservation) {H : Type} (d : aspis_core.digest.Digest32 H)
+  (ck proof pub : Slice U8) (hash : H),
+  NLB_ResumePacket.action native r d ck proof pub hash =
+    NJJ_Common.resume r d ck proof pub AspisR1Stage2.transport.Variant.S2 hash :=
+fun r {H} d ck proof pub hash => NLB_ResumePacket.projection native r d ck proof pub hash (packet r d ck proof pub hash)
+'NLP_ResumeInstall.packet' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NLP_ResumeInstall.scope' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLP_ResumeInstall.action' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,13 @@
+def NLP_C04All.Clause : (Bytes → State) → Event → Prop :=
+fun H x =>
+  match x with
+  | Event.merkle proof p folded reply =>
+    NLN.BatchPacket H proof (NLP_RootCodec.parsed proof (Port3_BatchStage.root1 p)) p folded 1#usize
+  | x => True
+theorem NLP_C04All.source : ∀ (H : Bytes → State) (wr rr : NP6_StdModel.Reservation) (merkle : Merkle) (finish : Finish)
+  {X : Type} (d : aspis_core.digest.Digest32 X) (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    NLP_InputDomain.Root0 ck proof →
+      NKE_EventAll.Holds (Clause H) (run wr rr (fun {H} => merkle) finish d pub proof ck hash none) :=
+⋯
+'NLP_C04All.source' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,42 @@
+theorem NLP_C01.native_scope : ∀ (wr rr : NP6_StdModel.Reservation) (merkle : Merkle) (finish : Finish) {H : Type}
+  (d : aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H),
+  (↑proof).length = 57607 →
+    (↑pub).length ≤ 1880 →
+      ∀ (c pr pu : Slice U8) (reply : R (verifier.Prepared × verifier.Accumulator)),
+        Event.resume c pr pu reply ∈ (run wr rr (fun {H} => merkle) finish d pub proof ck hash none).events →
+          NKU_CallerScope.Inputs
+            (NKU.initial { checkpoint := c, proof := pr, publicBytes := pu, reservation := wr }).frame :=
+fun wr rr merkle finish {H} d pub proof ck hash proofLength publicLength c pr pu reply entered =>
+  let ⟨hc, right✝⟩ :=
+    NLB_C01Domain.source wr rr (fun {H} => merkle) finish d pub proof ck hash (Event.resume c pr pu reply) entered
+  let ⟨hpr, hpu⟩ := right✝
+  Eq.ndrec (motive := fun c =>
+    Event.resume c pr pu reply ∈ (run wr rr (fun {H} => merkle) finish d pub proof ck hash none).events →
+      NKU_CallerScope.Inputs (NKU.initial { checkpoint := c, proof := pr, publicBytes := pu, reservation := wr }).frame)
+    (fun entered =>
+      Eq.ndrec (motive := fun pr =>
+        Event.resume ck pr pu reply ∈ (run wr rr (fun {H} => merkle) finish d pub proof ck hash none).events →
+          NKU_CallerScope.Inputs
+            (NKU.initial { checkpoint := ck, proof := pr, publicBytes := pu, reservation := wr }).frame)
+        (fun entered =>
+          Eq.ndrec (motive := fun pu =>
+            Event.resume ck proof pu reply ∈ (run wr rr (fun {H} => merkle) finish d pub proof ck hash none).events →
+              NKU_CallerScope.Inputs
+                (NKU.initial { checkpoint := ck, proof := proof, publicBytes := pu, reservation := wr }).frame)
+            (fun entered => NLP_ResumeInstall.scope wr ck proof pub proofLength publicLength) (Eq.symm hpu) entered)
+        (Eq.symm hpr) entered)
+    (Eq.symm hc) entered
+theorem NLP_C01.step : ∀ (wr rr fr : NP6_StdModel.Reservation) (loc : NIW_AlignFinishComposed.Locations)
+  (nativeMerkle modelMerkle : Merkle) {H : Type} (d : aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H)
+  (c pr pu : Slice U8) (reply : R (verifier.Prepared × verifier.Accumulator)),
+  Event.resume c pr pu reply ∈
+      (run wr rr (fun {H} => modelMerkle) (NLB_Parent.finish fr) d pub proof ck hash none).events →
+    NLB_Parent.window rr fr loc (fun {H} => NLB_ResumePacket.action NLP_ResumeInstall.native wr)
+        (fun {H} => nativeMerkle) d hash (Event.resume c pr pu reply) =
+      Event.resume c pr pu reply :=
+fun wr rr fr loc nativeMerkle modelMerkle {H} d pub proof ck hash c pr pu reply entered =>
+  NLB_Parent.C01_step wr rr fr loc (fun {H} => NLB_ResumePacket.action NLP_ResumeInstall.native wr)
+    (fun {H} => nativeMerkle) (fun {H} => modelMerkle) d pub proof ck hash c pr pu reply entered
+    (NLP_ResumeInstall.action wr d c pr pu hash)
+'NLP_C01.native_scope' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLP_C01.step' depends on axioms: [propext, Classical.choice, Quot.sound]

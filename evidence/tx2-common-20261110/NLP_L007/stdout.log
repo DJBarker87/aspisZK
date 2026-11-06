@@ -1,0 +1,60 @@
+theorem NLP_RootDomain.kind0_fixed : ∀ (proof : Slice U8) (parsed : OraclePortCompactDraft.Parsed),
+  parsed.wire = MultiproofConeCanonical.bytesOf ↑proof →
+    OraclePortBatchDraft.committedRoot parsed 0 =
+      (SemanticRecordCodec.decodeState
+            (OraclePortCompactDraft.slice (MultiproofConeCanonical.bytesOf ↑proof) 16 32)).getD
+        fun x => 0 :=
+fun proof parsed wire =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (congrFun'
+            (congrArg Option.getD
+              (congrArg SemanticRecordCodec.decodeState
+                (ite_congr (eq_self 0)
+                  (fun a => congrFun' (congrFun' (congrArg OraclePortCompactDraft.slice wire) 16) 32) fun a =>
+                  Eq.refl
+                    (if 0 = 1 then List.drop 5 (parsed.semantic[2]?.getD [])
+                    else OraclePortCompactDraft.root2 parsed))))
+            fun x => 0))
+        ((SemanticRecordCodec.decodeState
+              (OraclePortCompactDraft.slice (MultiproofConeCanonical.bytesOf ↑proof) 16 32)).getD
+          fun x => 0))
+      (eq_self
+        ((SemanticRecordCodec.decodeState
+              (OraclePortCompactDraft.slice (MultiproofConeCanonical.bytesOf ↑proof) 16 32)).getD
+          fun x => 0)))
+theorem NLP_RootDomain.necessary : ∀ (proof : Slice U8) (parsed : OraclePortCompactDraft.Parsed),
+  parsed.wire = MultiproofConeCanonical.bytesOf ↑proof →
+    ∀ (p : verifier.Prepared) (folded : Std.Array U8 32#usize),
+      (∀ (k : Fin 3),
+          Port3_NativeBatchCalls.rootAt (NLL_BatchSource.roots p folded) k =
+            encodeState (OraclePortBatchDraft.committedRoot parsed ↑k)) →
+        Port3_BatchStage.root0 p =
+          encodeState
+            ((SemanticRecordCodec.decodeState
+                  (OraclePortCompactDraft.slice (MultiproofConeCanonical.bytesOf ↑proof) 16 32)).getD
+              fun x => 0) :=
+fun proof parsed wire p folded roots =>
+  have h := roots ⟨0, of_decide_eq_true (id (Eq.refl true))⟩;
+  id (fun h => Eq.mp (congrArg (fun _a => Port3_BatchStage.root0 p = encodeState _a) (kind0_fixed proof parsed wire)) h)
+    h
+theorem NLP_RootDomain.mismatch : ∀ (proof : Slice U8) (p : verifier.Prepared) (folded : Std.Array U8 32#usize),
+  Port3_BatchStage.root0 p ≠
+      encodeState
+        ((SemanticRecordCodec.decodeState
+              (OraclePortCompactDraft.slice (MultiproofConeCanonical.bytesOf ↑proof) 16 32)).getD
+          fun x => 0) →
+    ¬∃ parsed,
+        parsed.wire = MultiproofConeCanonical.bytesOf ↑proof ∧
+          ∀ (k : Fin 3),
+            Port3_NativeBatchCalls.rootAt (NLL_BatchSource.roots p folded) k =
+              encodeState (OraclePortBatchDraft.committedRoot parsed ↑k) :=
+fun proof p folded different a =>
+  let ⟨parsed, h✝⟩ := a
+  let ⟨wire, roots⟩ := h✝
+  different (necessary proof parsed wire p folded roots)
+'NLP_RootDomain.kind0_fixed' depends on axioms: [propext, Quot.sound]
+'NLP_RootDomain.necessary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLP_RootDomain.mismatch' depends on axioms: [propext, Classical.choice, Quot.sound]

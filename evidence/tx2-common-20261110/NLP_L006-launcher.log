@@ -1,0 +1,52 @@
+{"attempt": "NLP_L006", "exit_status": 1, "wall_seconds": 14.427910553989932, "peak_rss_kib": "5984836", "swaps": "0", "print_axioms": ["'NLP_ResumeRoots.returned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLP_generated/NLP_ResumeRoots.lean:27:3: error: Type mismatch: After simplification, term
+  flat.root0Bytes
+ has type
+  @Eq (List U8) (↑f.root0) (List.take 32 (List.drop 112 ↑ck))
+but is expected to have type
+  @Eq (List U8) (↑[f.root0, f.root1][0]) (List.take 32 (List.drop 112 ↑ck))
+NLP_generated/NLP_ResumeRoots.lean:28:3: error: Type mismatch: After simplification, term
+  flat.root1Bytes
+ has type
+  @Eq (List U8) (↑f.root1) (List.take 32 (List.drop 144 ↑ck))
+but is expected to have type
+  @Eq (List U8) (↑[f.root0, f.root1][1]) (List.take 32 (List.drop 144 ↑ck))
+theorem NLP_ResumeRoots.returned : ∀ (reservation : NP6_StdModel.Reservation) {H : Type}
+  (d : aspis_core.digest.Digest32 H) (ck 
+...
+n:28:3: error: Type mismatch: After simplification, term
+  flat.root1Bytes
+ has type
+  @Eq (List U8) (↑f.root1) (List.take 32 (List.drop 144 ↑ck))
+but is expected to have type
+  @Eq (List U8) (↑[f.root0, f.root1][1]) (List.take 32 (List.drop 144 ↑ck))
+theorem NLP_ResumeRoots.returned : ∀ (reservation : NP6_StdModel.Reservation) {H : Type}
+  (d : aspis_core.digest.Digest32 H) (ck proof pub : Slice U8) (hash : H) (p : verifier.Prepared)
+  (a : verifier.Accumulator),
+  NJJ_Common.resume reservation d ck proof pub AspisR1Stage2.transport.Variant.S2 hash =
+      ok (core.result.Result.Ok (p, a)) →
+    ↑(Port3_BatchStage.root0 p) = List.take 32 (List.drop 112 ↑ck) ∧
+      ↑(Port3_BatchStage.root1 p) = List.take 32 (List.drop 144 ↑ck) :=
+fun reservation {H} d ck proof pub hash p a entered =>
+  have size := NKE_ResumeWidth.checkpoint reservation d ck proof pub hash p a entered;
+  have same :=
+    NKE_ResumeDomain.action_ok
+      (NJC_ResumeCalls.cohort (NJC_FilledClause.reserved reservation) d ck proof pub AspisR1Stage2.transport.Variant.S2
+        hash)
+      (p, a)
+      (Eq.mp
+        (congrArg (fun _a => NHT_ResultPort.action _a = ok (core.result.Result.Ok (p, a)))
+          (NJC_ResumeCalls.clause (NJC_FilledClause.reserved reservation) d ck proof pub
+            AspisR1Stage2.transport.Variant.S2 hash))
+        entered);
+  id
+    (fun same =>
+      let ⟨f⟩ :=
+        CheckpointBytes4Ops.successful_fields (NJC_FilledClause.reserved reservation) (NJC_ResumeCalls.digest d) ck
+          proof pub AspisR1Stage2.transport.Variant.S2 hash p a same
+      have flat := CheckpointBytes4Layout.flat_fields (NJC_FilledClause.reserved reservation) ck p a f size;
+      ⟨sorry, sorry⟩)
+    same
+'NLP_ResumeRoots.returned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r98abd57dac9d46fda358857e711c3278.scope; invocation ID: 4055f3f7b0f141779d688c7ef8c9cbfe

@@ -1,0 +1,15 @@
+theorem NLP_FoldedRange.copied : ∀ (selected : Slice U8) (root : Std.Array U8 32#usize),
+  core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 selected = ok (core.result.Result.Ok root) →
+    ↑root = ↑selected :=
+fun selected root call =>
+  Decidable.casesOn (instDecidableEqNat selected.length ↑32#usize)
+    (fun h =>
+      let ⟨⟩ := ok (core.result.Result.Ok root)
+      Eq.mp (congrFun' (congrArg Eq (dif_neg h)) (ok (core.result.Result.Ok root))) call)
+    fun h =>
+    let ⟨⟩ := ok (core.result.Result.Ok root)
+    Eq.mp (congrFun' (congrArg Eq (dif_pos h)) (ok (core.result.Result.Ok root))) call
+'NLP_FoldedRange.diff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLP_FoldedRange.start' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLP_FoldedRange.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLP_FoldedRange.copied' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,42 @@
+{"attempt": "NLP_L002", "exit_status": 0, "wall_seconds": 39.09177623782307, "peak_rss_kib": "6382548", "swaps": "0", "print_axioms": ["'NLP_ResumeInstall.packet' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLP_ResumeInstall.scope' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLP_ResumeInstall.action' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NLP_generated/NLP_ResumeInstall.lean:10:8: warning: Variable name `H` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+def NLP_ResumeInstall.native : NLB_ResumePacket.Native :=
+fun r {H} d ck proof pub hash =>
+  NKU_ParentFold.G d hash (NKU.initial { checkpoint := ck, proof := proof, publicBytes := pub, reservation := r })
+theorem NLP_ResumeInstall.packet : ∀ (r : NP6_StdModel.Reservation) {H : Type} (d : aspis_core.digest.Digest32 H)
+  (ck proof pub : Slice U8) (hash : H), NLB_ResumePacket.At native r d ck proof pub hash :=
+fun r {H} d ck proof pub hash =
+...
+icitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+def NLP_ResumeInstall.native : NLB_ResumePacket.Native :=
+fun r {H} d ck proof pub hash =>
+  NKU_ParentFold.G d hash (NKU.initial { checkpoint := ck, proof := proof, publicBytes := pub, reservation := r })
+theorem NLP_ResumeInstall.packet : ∀ (r : NP6_StdModel.Reservation) {H : Type} (d : aspis_core.digest.Digest32 H)
+  (ck proof pub : Slice U8) (hash : H), NLB_ResumePacket.At native r d ck proof pub hash :=
+fun r {H} d ck proof pub hash =>
+  NKU_ParentFold.source (NJC_ResumeCalls.digest d) hash
+    (NKU.initial { checkpoint := ck, proof := proof, publicBytes := pub, reservation := r })
+theorem NLP_ResumeInstall.scope : ∀ (r : NP6_StdModel.Reservation) (ck proof pub : Slice U8),
+  (↑proof).length = 57607 →
+    (↑pub).length ≤ 1880 →
+      NKU_CallerScope.Inputs
+        (NKU.initial { checkpoint := ck, proof := proof, publicBytes := pub, reservation := r }).frame :=
+fun r ck proof pub proofLength publicLength => ⟨proofLength, publicLength⟩
+theorem NLP_ResumeInstall.action : ∀ (r : NP6_StdModel.Reservation) {H : Type} (d : aspis_core.digest.Digest32 H)
+  (ck proof pub : Slice U8) (hash : H),
+  NLB_ResumePacket.action native r d ck proof pub hash =
+    NJJ_Common.resume r d ck proof pub AspisR1Stage2.transport.Variant.S2 hash :=
+fun r {H} d ck proof pub hash => NLB_ResumePacket.projection native r d ck proof pub hash (packet r d ck proof pub hash)
+'NLP_ResumeInstall.packet' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLP_ResumeInstall.scope' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLP_ResumeInstall.action' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r05156d89ca3c4a8c98273bcc53dd4e34.scope; invocation ID: 62acd69c7b7c48d2be569c91d449b0a7
