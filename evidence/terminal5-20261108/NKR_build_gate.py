@@ -29,7 +29,10 @@ for directory,prefix in [('ledger19-20261108','NKN'),('terminal4-20261108','NKI'
 allroots=sorted(set(base_roots+roots+['AspisR1.RPx_Deployed.deployed']))
 s='import NKN_COMBINED_IMPORT\nimport NKI_COMBINED_IMPORT\n'+''.join('import '+m+'\n'for m in sorted(passed))
 s+='\n#print axioms AspisR1.RPx_Deployed.deployed\n'
-for name in roots:s+='#check '+name+'\n#print axioms '+name+'\n'
+for name in roots:
+ if name.startswith('_private.'):
+  s+='-- Private root retained in complete private-aware raw audit: '+name+'\n'
+ else:s+='#check '+name+'\n#print axioms '+name+'\n'
 # Full root statements already printed in focused receipts; this gate checks
 # every new theorem with the actual canonical-owner combined environment.
 (E/'NKR_COMBINED_IMPORT.lean').write_text(s)

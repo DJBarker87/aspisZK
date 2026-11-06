@@ -1,5 +1,7 @@
 # NKR native certificates
 
+Final status: CANDIDATE_NOT_GATE_APPROVED; combined import L182/L184 exit1, strict scan not run, authoritative delta0. TX1:256 not established.
+
 P6/D188 optionA semantic transport is RECLASSIFICATION. No trust row added/removed. No field multiplication is proved in Kani; all arithmetic replies instantiate named Lean laws on internally established canonical inputs.
 
 Each primitive below is a reviewed(ai)(5) transcription; source-only summaries and P7 input frames are distinguished in the Lean modules. Original timed-out windows grant no credit.
@@ -36,3 +38,9 @@ Retained predecessor44pairs are pinned and checked by NKI_NATIVE_PAIRS.json; NKI
 Exact KMX patch sha256: bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67. Matched controls use original harness names and identical common source inputs; negative RUSTFLAGS adds only cfgNKR_invert.
 
 Argument-only and state-only split windows are projections of the SAME source call/site/reply, never two calls; typed Lean composition fixes complete same decoded arguments and full mutable footprint.
+
+Final gate status: six focused source roots passed; NKR_COMBINED_IMPORT L182/L184 both exit1 on source-level resolution of an explicitly printed private helper name. The two allowed combined attempts are consumed. Diagnostic raw audit imports all61 validated own modules and NKN/NKI combined modules at private level with the byte-identical NKI walker; it cannot replace the missing NFX scan/combined import gate. All row packets are CANDIDATE_NOT_GATE_APPROVED and authoritative delta0. Exact root types and(aq)(2) hypothesis review are retained separately.
+
+Fidelity limits: K-2 Option<fn>/function-pointer-dependent credits remain quarantined; no such credit is requested by these primitive/native call-log packets. New instrumentation uses scalar/fixed-array carriers and generic direct callbacks; it introduces no Option<fn>, stored fn pointer or contract interface. No proof_for_contract/stub_verified contract is introduced here, so no new contract-shape fidelity inference is made. Copy-dependent packets retain the exact KMX patch hash and paired failing controls. All inherited quarantine/trust items remain in force.
+
+Final audit:140 formal/support +70 native/support slots consumed,0extraction.26disjoint raw groups cover10503unique roots with only propext,Classical.choice,Quot.sound, including the private rows_ext helper. Original exit1 collector omissions retained for NKR_ScheduleExt.transition and NHC_DecodeModel.decoder_error. Eight fidelity fixtures pass. Combined L182/L184 remain failed and strictscan NOT RUN; all six packets remain CANDIDATE_NOT_GATE_APPROVED, authoritative delta0. Export20,336,256bytes; seed14,326,680bytes/135files.
