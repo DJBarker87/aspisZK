@@ -1,0 +1,18 @@
+--- /dev/null
++++ b/NKP_lane_prefix.rs
+@@ -0,0 +1,15 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn digest()->[M31;8]{[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
++fn frontier()->[[M31;8];20]{let raw:[[u32;8];20]=kani::any();raw.map(|r|r.map(|x|M31(x)))}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn stage(){use v7_pair_empty_roots::V7_PAIR_EMPTY_ROOTS;
++ let next_leaf_index:u64=kani::any();let root=digest();
++ let mut result=(||->ProgramResult{    if next_leaf_index == 0 && root != V7_PAIR_EMPTY_ROOTS[POOL_V1_PAIR_TREE_DEPTH] {
++        return Err(ProgramError::InvalidAccountData);
++    }
++ Ok(())})();result=if result.is_ok(){Err(ProgramError::InvalidAccountData)}else{Ok(())};
++ let expected=next_leaf_index!=0||root==V7_PAIR_EMPTY_ROOTS[POOL_V1_PAIR_TREE_DEPTH];
++ assert!(if expected{matches!(result,Ok(()))}else{matches!(result,Err(ProgramError::InvalidAccountData))},"lane zero-root ordered Result");
++}

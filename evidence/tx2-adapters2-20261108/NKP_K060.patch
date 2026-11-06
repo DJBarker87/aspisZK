@@ -1,0 +1,17 @@
+--- /dev/null
++++ b/NKP_lane.rs
+@@ -0,0 +1,14 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn digest()->[M31;8]{[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
++fn frontier()->[[M31;8];20]{let raw:[[u32;8];20]=kani::any();raw.map(|r|r.map(|x|M31(x)))}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn iteration(){
++ let before=digest();let words=digest();let canonical:bool=kani::any();let word:usize=kani::any();kani::assume(word<8);
++ let mut frontier_node=before;
++ let result=(||->ProgramResult{let node=&mut frontier_node;*node=(if canonical{Ok(words)}else{Err(aspis_statement::AtomicStatementError::NonCanonicalDigest)}).map_err(|_|ProgramError::InvalidAccountData)?;Ok(())})();
++ 
++ let expected=if canonical{words[word].0}else{before[word].0};
++ assert!(frontier_node[word].0==expected&&matches!(result,Ok(()))==canonical,"lane iteration selected write and error frame");
++}
