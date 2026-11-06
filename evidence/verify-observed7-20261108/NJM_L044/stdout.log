@@ -1,0 +1,24 @@
+NJM_generated/NJM_RoundAdmissible.lean:20:41: error: Application type mismatch: The argument
+  semantic
+has type
+  match reply, call with
+  | core.result.Result.Ok a, call => True
+  | core.result.Result.Err (r1_wire.Error.RowOrder a a_1), call => True
+  | x, call => False
+but is expected to have type
+  match
+    (NJM_RoundStage.install
+        { prefixToken := template.prefixToken, framed := template.framed, round := template.round,
+          alpha := template.alpha, running := template.running, beforeState := template.beforeState,
+          beforeNext := template.beforeNext, polynomial := template.polynomial, boundary := template.boundary,
+          semantic := template.semantic, newState := template.newState, newNext := template.newNext,
+          value := template.value, count := 0, frame := template.frame, seed := template.seed,
+          oldState := template.oldState, times := template.times }
+        record p b running a r before after reply value).semantic with
+  | core.result.Result.Ok a => True
+  | core.result.Result.Err (r1_wire.Error.RowOrder a a_1) => True
+  | x => False
+in the application
+  ⟨trivial, semantic⟩
+'AspisR1.NJM_RoundAdmissible.returning' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJM_RoundAdmissible.skipped' depends on axioms: [propext, Classical.choice, Quot.sound]

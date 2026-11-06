@@ -1,0 +1,21 @@
+#[cfg(kani)] pub mod NJM_claims_box {
+ use super::*;
+ use aspis_core::field::{CM31,M31};
+ type Claims=[[QM31;29];3];
+ fn q()->QM31{QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}}}
+ pub fn check(mode:u8){
+  let payload:Claims=core::array::from_fn(|_|core::array::from_fn(|_|q()));
+  let offset:usize=kani::any();kani::assume(offset<348);
+  assert_eq!(core::mem::size_of::<Claims>(),1392);
+  let expected=unsafe{payload.as_ptr().cast::<u32>().add(offset).read()};
+  let mut out=aspis_core::r0::heap::uninit::<Claims>().unwrap();
+  unsafe{out.as_mut_ptr().write(payload);}
+  let original=out.as_ptr().cast::<Claims>();
+  let mut boxed=unsafe{out.assume_init()};
+  if mode==1{unsafe{boxed.as_mut().as_mut_ptr().cast::<u32>().add(offset).write(expected^1);}}
+  if mode==2{let mut other=aspis_core::r0::heap::uninit::<Claims>().unwrap();unsafe{other.as_mut_ptr().write(payload);}let alternate=unsafe{other.assume_init()};assert_eq!((&*alternate) as *const Claims,original);}
+  else{assert_eq!((&*boxed) as *const Claims,original);}
+  let got=unsafe{boxed.as_ref().as_ptr().cast::<u32>().add(offset).read()};
+  assert_eq!(got,expected);
+ }
+}

@@ -1,0 +1,176 @@
+def AspisS1ExtractedRoundChildren.generatedRoundBoundaries : ((N : Usize) →
+    r1_wire.ValidatedRecord →
+      Usize → Result (core.result.Result (Std.Array AspisS1ExtractedRoundChildren.MainQM N) r1_wire.Error)) →
+  RoundModel.Boundaries :=
+fun decodeMain =>
+  { decode := decodeMain, boundary := AspisS1ExtractedRoundChildren.generatedMainBoundary,
+    value := AspisS1ExtractedRoundChildren.generatedMainValue }
+structure AspisR1PublicPreparation.RoundModel.Boundaries : Type
+number of parameters: 0
+fields:
+  AspisR1PublicPreparation.RoundModel.Boundaries.decode : (N : Usize) →
+      r1_wire.ValidatedRecord → Usize → Result (core.result.Result (Std.Array aspis_core.field.QM31 N) r1_wire.Error)
+  AspisR1PublicPreparation.RoundModel.Boundaries.boundary : Std.Array aspis_core.field.QM31 28#usize →
+      Result aspis_core.field.QM31
+  AspisR1PublicPreparation.RoundModel.Boundaries.value : Std.Array aspis_core.field.QM31 28#usize →
+      Std.Array aspis_core.field.QM31 10#usize → Usize → Result aspis_core.field.QM31
+constructor:
+  AspisR1PublicPreparation.RoundModel.Boundaries.mk
+    (decode :
+      (N : Usize) →
+        r1_wire.ValidatedRecord → Usize → Result (core.result.Result (Std.Array aspis_core.field.QM31 N) r1_wire.Error))
+    (boundary : Std.Array aspis_core.field.QM31 28#usize → Result aspis_core.field.QM31)
+    (value :
+      Std.Array aspis_core.field.QM31 28#usize →
+        Std.Array aspis_core.field.QM31 10#usize → Usize → Result aspis_core.field.QM31) :
+    RoundModel.Boundaries
+def AspisR1PublicPreparation.S1SemanticCode.semanticValidated : {H : Type} →
+  aspis_core.Digest32 H →
+    r1_wire.SemanticTranscript H →
+      r1_wire.ValidatedRecord →
+        PreparedHashCode.Code (core.result.Result aspis_core.field.QM31 r1_wire.Error × r1_wire.SemanticTranscript H) :=
+fun {H} aspis_coreDigest32Inst self record1 => do
+  let row ← liftM (r1_wire.ValidatedRecord.impl.row record1)
+  if row > 24#u8 then pure (core.result.Result.Err r1_wire.Error.InvalidRow, self)
+    else do
+      let s ← liftM (r1_wire.ValidatedRecord.impl.framed record1)
+      let __x ← S1SemanticCode.sampleBlock aspis_coreDigest32Inst self row s
+      match __x with
+        | (r, self1) => do
+          let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let q ← liftM (AspisR1PublicPreparation.sampler.qm31_sample val)
+              pure (core.result.Result.Ok q, self1)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r1 ←
+                liftM
+                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      aspis_core.field.QM31 (core.convert.FromSame r1_wire.Error) residual)
+              pure (r1, self1)
+def AspisR1PublicPreparation.RoundModel.step : RoundModel.Boundaries →
+  {H : Type} →
+    aspis_core.Digest32 H →
+      r1_wire.Prefix →
+        r1_wire.SemanticTranscript H →
+          Std.Array aspis_core.field.QM31 10#usize →
+            aspis_core.field.QM31 →
+              Usize →
+                Result
+                  (core.result.Result
+                    (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+                    r1_wire.Error) :=
+fun B {H} aspis_coreDigest32Inst prefix1 transcript alpha running round => do
+  let i ← lift (UScalar.cast UScalarTy.U8 round)
+  let row ← 15#u8 + i
+  let r ← prefix1.validated_record row
+  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+  match cf with
+    | core.ops.control_flow.ControlFlow.Continue vr => do
+      let r1 ← B.decode 28#usize vr 0#usize
+      let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let boundary ← B.boundary val
+          let b ← core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 boundary running
+          if b = true then ok (core.result.Result.Err (r1_wire.Error.Boundary round))
+            else do
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue vr1 => do
+                  let (r2, transcript1) ←
+                    r1_wire.SemanticTranscript.semantic_validated aspis_coreDigest32Inst transcript vr1
+                  let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r2
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val1 => do
+                      let alpha1 ← alpha.update round val1
+                      let value ← B.value val alpha1 round
+                      ok (core.result.Result.Ok (value, alpha1, transcript1))
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (aspis_core.field.QM31 ×
+                          Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+                        (core.convert.FromSame r1_wire.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+                    (core.convert.FromSame r1_wire.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+            (core.convert.FromSame r1_wire.Error) residual
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+        (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+        (core.convert.FromSame r1_wire.Error) residual
+def AspisR1PublicPreparation.S1SemanticCode.roundStep : RoundModel.Boundaries →
+  {H : Type} →
+    aspis_core.Digest32 H →
+      r1_wire.Prefix →
+        r1_wire.SemanticTranscript H →
+          Std.Array aspis_core.field.QM31 10#usize →
+            aspis_core.field.QM31 →
+              Usize →
+                PreparedHashCode.Code
+                  (core.result.Result
+                    (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+                    r1_wire.Error) :=
+fun B {H} aspis_coreDigest32Inst prefix1 transcript alpha running round => do
+  let i ← liftM (lift (UScalar.cast UScalarTy.U8 round))
+  let row ← liftM (15#u8 + i)
+  let r ← liftM (prefix1.validated_record row)
+  let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+  match cf with
+    | core.ops.control_flow.ControlFlow.Continue vr => do
+      let r1 ← liftM (B.decode 28#usize vr 0#usize)
+      let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let boundary ← liftM (B.boundary val)
+          let b ←
+            liftM
+                (core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 boundary running)
+          if b = true then pure (core.result.Result.Err (r1_wire.Error.Boundary round))
+            else do
+              let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue vr1 => do
+                  let __x ← S1SemanticCode.semanticValidated aspis_coreDigest32Inst transcript vr1
+                  match __x with
+                    | (r2, transcript1) => do
+                      let cf3 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                      match cf3 with
+                        | core.ops.control_flow.ControlFlow.Continue val1 => do
+                          let alpha1 ← liftM (alpha.update round val1)
+                          let value ← liftM (B.value val alpha1 round)
+                          pure (core.result.Result.Ok (value, alpha1, transcript1))
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          liftM
+                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (aspis_core.field.QM31 ×
+                                Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+                              (core.convert.FromSame r1_wire.Error) residual)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame r1_wire.Error) residual)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+              (core.convert.FromSame r1_wire.Error) residual)
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      liftM
+        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+          (core.convert.FromSame r1_wire.Error) residual)
+NJM_generated/NJM_Inspect.lean:11:7: error(lean.unknownIdentifier): Unknown constant `F3M_CircleSource.install`
+NJM_generated/NJM_Inspect.lean:12:7: error(lean.unknownIdentifier): Unknown constant `NGX_RunBind.appendResult`
+NJM_generated/NJM_Inspect.lean:13:7: error(lean.unknownIdentifier): Unknown identifier `NGX_CodeTrace.lift_run`
+NJM_generated/NJM_Inspect.lean:14:7: error(lean.unknownIdentifier): Unknown identifier `NGX_CodeTrace.run_lift`
+AspisR1PublicPreparation.SemanticCallSelectedCanonical.semantic_success_selected_canonical {H : Type}
+  (D : aspis_core.Digest32 H) (self after : r1_wire.SemanticTranscript H) (record : r1_wire.ValidatedRecord)
+  (q : SemanticCallSelectedCanonical.PublicQM)
+  (h : r1_wire.SemanticTranscript.semantic_validated D self record = ok (core.result.Result.Ok q, after)) :
+  SemanticCallSelectedCanonical.SelectedCanonical (SemanticCallSelectedCanonical.toSelected q)

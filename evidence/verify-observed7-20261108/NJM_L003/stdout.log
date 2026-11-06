@@ -1,0 +1,124 @@
+NJM_generated/NJM_RoundJoin.lean:41:66: error: Application type mismatch: The argument
+  i
+has type
+  Fin 28
+but is expected to have type
+  Fin ↑?m.38
+in the application
+  FJb_TailCell.cell p i
+NJM_generated/NJM_RoundJoin.lean:52:41: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq ?a ?b
+in the target expression
+  (match core.cmp.PartialEq.ne.default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq b running with
+    | ok value =>
+      run
+        (if value = true then pure (core.result.Result.Err (r1_wire.Error.Boundary r))
+        else do
+          let cf2 ← liftM (ok (core.ops.control_flow.ControlFlow.Continue record))
+          match cf2 with
+            | core.ops.control_flow.ControlFlow.Continue vr1 => do
+              let __x ← S1SemanticCode.semanticValidated D t vr1
+              let cf3 ←
+                liftM
+                    (match __x.1 with
+                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    | core.result.Result.Err e =>
+                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+              match cf3 with
+                | core.ops.control_flow.ControlFlow.Continue val1 => do
+                  let alpha1 ← liftM (Array.update a r val1)
+                  let value ← liftM (generatedMainValue p alpha1 r)
+                  pure (core.result.Result.Ok (value, alpha1, __x.2))
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame r1_wire.Error) residual)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              liftM
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+                  (core.convert.FromSame r1_wire.Error) residual))
+    | fail error => ([], fail error)
+    | div => ([], div)) =
+    if b ≠ running then ([], ok (core.result.Result.Err (r1_wire.Error.Boundary r)))
+    else
+      NGX_RunBind.appendResult (run (S1SemanticCode.semanticValidated D t record)).1
+        (run (S1SemanticCode.semanticValidated D t record)).2 (afterSemantic p a r)
+
+H : Type
+D : aspis_core.Digest32 H
+bytes : Slice U8
+pre : AspisR1PrefixAggregateParser.r1_wire.Prefix
+parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = ok (core.result.Result.Ok pre)
+t : r1_wire.SemanticTranscript H
+a : Alpha
+running : Q
+r : Usize
+bound : ↑r < 10
+record : r1_wire.ValidatedRecord
+p : Std.Array MainQM 28#usize
+b : MainQM
+getter :
+  (PrefixAdapter.fromOld pre).validated_record (NJG_RoundProducer.row r bound) = ok (core.result.Result.Ok record)
+decode : decodeMain 28#usize record 0#usize = ok (core.result.Result.Ok p)
+canonical : ∀ (i : Fin 28), JFv_RoundArithmetic.Canonical (↑p)[↑i]
+bc : generatedMainBoundary p = ok b
+cb : JFv_RoundArithmetic.Canonical b
+⊢ (match core.cmp.PartialEq.ne.default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq b running with
+    | ok value =>
+      run
+        (if value = true then pure (core.result.Result.Err (r1_wire.Error.Boundary r))
+        else do
+          let cf2 ← liftM (ok (core.ops.control_flow.ControlFlow.Continue record))
+          match cf2 with
+            | core.ops.control_flow.ControlFlow.Continue vr1 => do
+              let __x ← S1SemanticCode.semanticValidated D t vr1
+              let cf3 ←
+                liftM
+                    (match __x.1 with
+                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    | core.result.Result.Err e =>
+                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+              match cf3 with
+                | core.ops.control_flow.ControlFlow.Continue val1 => do
+                  let alpha1 ← liftM (Array.update a r val1)
+                  let value ← liftM (generatedMainValue p alpha1 r)
+                  pure (core.result.Result.Ok (value, alpha1, __x.2))
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame r1_wire.Error) residual)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              liftM
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+                  (core.convert.FromSame r1_wire.Error) residual))
+    | fail error => ([], fail error)
+    | div => ([], div)) =
+    if b ≠ running then ([], ok (core.result.Result.Err (r1_wire.Error.Boundary r)))
+    else
+      NGX_RunBind.appendResult (run (S1SemanticCode.semanticValidated D t record)).1
+        (run (S1SemanticCode.semanticValidated D t record)).2 (afterSemantic p a r)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (10 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NJM_generated/NJM_RoundJoin.lean:50:116: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [R, ̲generatedRoundBoundaries, ̲NJG_RoundProducer.row_add r bound, ̲getter, ̲decode,
+  ̲ ̲ ̲ ̲NGX_CodeTrace.lift_bind,l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ l̲i̲f̲t̲,̲ core.result.Result.Insts.CoreOpsTry.branch, ̲bc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NJM_RoundJoin.prepared' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

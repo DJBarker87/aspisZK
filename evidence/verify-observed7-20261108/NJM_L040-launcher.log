@@ -1,0 +1,38 @@
+{"attempt": "NJM_L040", "exit_status": 1, "wall_seconds": 9.482149550924078, "peak_rss_kib": "6128988", "swaps": "0", "print_axioms": ["'AspisR1.NJM_SemanticDomain.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NJM_SemanticDomain.code' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJM_generated/NJM_SemanticDomain.lean:24:5: error: 'change' tactic failed, pattern
+  NJM_ChildDomain.Good do
+    let q ← sampler.qm31_sample block
+    ok (core.result.Result.Ok q, after)
+is not definitionally equal to target
+  NJM_ChildDomain.Good do
+    let (r, self1) ← ok (core.result.Result.Ok block, after)
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let q ← AspisR1PublicPreparation.sampler.qm31_sample val
+        ok (core.result.Result.Ok q, self1)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidual
+...
+NJM_generated/NJM_SemanticDomain.lean:24:5: error: 'change' tactic failed, pattern
+  NJM_ChildDomain.Good do
+    let q ← sampler.qm31_sample block
+    ok (core.result.Result.Ok q, after)
+is not definitionally equal to target
+  NJM_ChildDomain.Good do
+    let (r, self1) ← ok (core.result.Result.Ok block, after)
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let q ← AspisR1PublicPreparation.sampler.qm31_sample val
+        ok (core.result.Result.Ok q, self1)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual aspis_core.field.QM31
+              (core.convert.FromSame r1_wire.Error) residual
+        ok (r1, self1)
+'AspisR1.NJM_SemanticDomain.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJM_SemanticDomain.code' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r0eae7f34ba484e22937eb57f0401ca11.scope; invocation ID: 1e524fc5f5d04360a40c263b2674d28e
