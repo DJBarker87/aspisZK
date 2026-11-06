@@ -116,3 +116,19 @@ run_cmd do
     let statement ← liftTermElabM (PrettyPrinter.ppExpr c.type)
     let row := Json.mkObj [("root",toJson root),("owner_module",toJson env.header.moduleNames[idx]!.toString),("obligation_statement",toJson statement.pretty)]
     logInfo m!"NKH_OWNER {row.compress}"
+run_cmd do
+  let env ← getEnv
+  let mut seen : Std.HashSet Name := {}
+  for idx in [:env.header.moduleNames.size] do
+    let sourceModule := env.header.moduleNames[idx]!
+    for declared in env.header.moduleData[idx]!.constants do
+      let root := declared.name.toString
+      if ((root.splitOn "JFw_Validator").length > 1 ∨ (root.splitOn "JFw_Record").length > 1) ∧
+          (root.splitOn "match_").length > 1 then
+        let some owner := env.getModuleIdxFor? declared.name | throwError "missing matcher owner {root}"
+        let ownerModule := env.header.moduleNames[owner]!.toString
+        unless ownerModule == "JFw_Validator" || ownerModule == "JFw_Record" do
+          throwError "unexpected matcher owner {root}: {ownerModule}"
+        unless seen.contains declared.name do
+          seen := seen.insert declared.name
+          logInfo m!"NKH_MATCHER_OWNER {(Json.mkObj [("root",toJson root),("owner_module",toJson ownerModule),("selected_table",toJson sourceModule.toString)]).compress}"
