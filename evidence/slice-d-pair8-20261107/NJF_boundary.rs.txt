@@ -1,0 +1,65 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+fn q(x:[u32;4])->K{K{c0:aspis_core::field::CM31{a:M31(x[0]),b:M31(x[1])},c1:aspis_core::field::CM31{a:M31(x[2]),b:M31(x[3])}}}
+fn qw(x:K)->[u32;4]{[x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0]}
+fn anye()->E{let v:[u32;8]=kani::any();for x in v{kani::assume(x<0x7fffffff);}E::from_limbs(v).unwrap()}
+fn err(i:u8)->Error{match i%8{0=>Error::Parse,1=>Error::Transcript,2=>Error::Semantic,3=>Error::Relation,4=>Error::Merkle,5=>Error::Query,6=>Error::Checkpoint,_=>Error::Allocation}}
+fn code(e:Error)->u8{match e{Error::Parse=>0,Error::Transcript=>1,Error::Semantic=>2,Error::Relation=>3,Error::Merkle=>4,Error::Query=>5,Error::Checkpoint=>6,Error::Allocation=>7}}
+fn unit()->Result<(),Error>{if kani::any(){Ok(())}else{Err(err(kani::any()))}}
+struct Log{regular:Result<(),Error>,partial:Result<[E;4],Error>,high:Result<(),Error>,
+ scratch:Vec<K>,parts:[E;7],common:[K;16],high_parts:[E;7],
+ who:*const Weights,shared:bool,alpha:*const E,alpha_len:usize,message:*const u8,message_len:usize,folds:usize,n:usize,scratch_ptr:*const K,parts_ptr:*const E,ap0:[E;4],ap1:[E;4],
+ events:[u8;4],count:usize,partial_common:K,high_before:E,high_partial:E,high_ptr:*const E,common_who:*const Weights,partial_message:*const u8,partial_message_len:usize,high_who:*const Weights,high_ap0:E,high_ap1:E}
+fn event(l:&mut Log,e:u8){l.events[l.count]=e;l.count+=1;}
+fn regular(w:&Weights,shared:bool,alpha:&[E],f:&[u8],folds:usize,n:usize,ap0:&[E;4],ap1:&[E;4],scratch:&mut[K],parts:&mut[E;7],l:&mut Log)->Result<(),Error>{
+ l.who=w;l.shared=shared;l.alpha=alpha.as_ptr();l.alpha_len=alpha.len();l.message=f.as_ptr();l.message_len=f.len();l.folds=folds;l.n=n;l.scratch_ptr=scratch.as_ptr();l.parts_ptr=parts.as_ptr();l.ap0=*ap0;l.ap1=*ap1;
+ event(l,0);for i in 0..scratch.len(){scratch[i].c0.a.0=l.scratch[i].c0.a.0;scratch[i].c0.b.0=l.scratch[i].c0.b.0;scratch[i].c1.a.0=l.scratch[i].c1.a.0;scratch[i].c1.b.0=l.scratch[i].c1.b.0;}*parts=l.parts;l.regular
+}
+fn common(w:&Weights,l:&mut Log)->[K;16]{l.common_who=w;event(l,1);l.common}
+fn partial(f:&[u8],common:&[K;16],i:usize,l:&mut Log)->Result<[E;4],Error>{l.partial_message=f.as_ptr();l.partial_message_len=f.len();event(l,2);l.partial_common=common[i];l.partial}
+fn high(partials:&[E;4],w:&Weights,ap0:&[E;4],ap1:&[E;4],parts:&mut[E;7],slot:usize,power:usize,l:&mut Log)->Result<(),Error>{l.high_who=w;l.high_ap0=ap0[power];l.high_ap1=ap1[power];event(l,3);l.high_ptr=parts.as_ptr();l.high_before=parts[slot];l.high_partial=partials[power];*parts=l.high_parts;l.high}
+// Frozen weights.rs:279-288; the common loop has its own CLOSED one-step/induction packet.
+// Each outlined callee is opaque here. In particular regular may return Err after writes.
+fn boundary(w:&Weights,shared:bool,alpha:&[E],f:&[u8],ap0:&[E;4],ap1:&[E;4],scratch:&mut[K],parts:&mut[E;7],i:usize,slot:usize,power:usize,l:&mut Log)->Result<(),Error>{
+ regular(w,shared,alpha,f,2,64,ap0,ap1,scratch,parts,l)?;
+ if shared{let common=common(w,l);let partials=partial(f,&common,i,l)?;high(&partials,w,ap0,ap1,parts,slot,power,l)?;}
+ Ok(())
+}
+#[kani::proof]#[kani::unwind(2050)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn slice_boundary(){
+ let shared:bool=kani::any();let i:usize=kani::any();kani::assume(i<16);let slot:usize=if cfg!(NJF_literal_0){0}else if cfg!(NJF_literal_1){1}else if cfg!(NJF_literal_2){2}else{kani::any()};kani::assume(slot<7);let power:usize=kani::any();kani::assume(power<4);let index:usize=kani::any();kani::assume(index<64);let limb:usize=kani::any();kani::assume(limb<8);
+ if cfg!(NJF_select_slot_low){kani::assume(slot<3);} if cfg!(NJF_select_slot_high){kani::assume(slot>=3);}
+ if cfg!(NJF_select_power_low){kani::assume(power<2);} if cfg!(NJF_select_power_high){kani::assume(power>=2);}
+ let mut scratch=Vec::<K>::with_capacity(64);let mut post=Vec::<K>::with_capacity(64);for _ in 0..64{scratch.push(q(kani::any()));post.push(q(kani::any()));}
+ let raw=Box::into_raw(Box::<Weights>::new_uninit()) as *mut Weights;
+ let w=unsafe{
+ core::ptr::addr_of_mut!((*raw).variant).write(Variant::S2);
+ for row in 0..5{for digit in 0..5{for col in 0..4{core::ptr::addr_of_mut!((*raw).factors[row][digit][col]).write(q(kani::any()));}}}
+ for row in 0..3{for digit in 0..10{core::ptr::addr_of_mut!((*raw).points[row][digit]).write(q(kani::any()));}}
+ for col in 0..2{core::ptr::addr_of_mut!((*raw).extra[col]).write(q(kani::any()));}
+ Box::from_raw(raw)
+ };
+ let owner=&*w as *const Weights;
+ let alpha:[E;2]=[anye(),anye()];let f:[u8;2048]=kani::any();let ap0=core::array::from_fn(|_|anye());let ap1=core::array::from_fn(|_|anye());
+ let scratch_ptr=scratch.as_ptr();
+ let expected_q=qw(post[index]);let mut parts=core::array::from_fn(|_|anye());let parts_ptr=parts.as_ptr();
+ let mut l=Log{regular:unit(),partial:if kani::any(){Ok(core::array::from_fn(|_|anye()))}else{Err(err(kani::any()))},high:unit(),scratch:post,who:core::ptr::null(),shared:false,alpha:core::ptr::null(),alpha_len:0,message:core::ptr::null(),message_len:0,folds:0,n:0,scratch_ptr:core::ptr::null(),parts_ptr:core::ptr::null(),ap0:[E::ZERO;4],ap1:[E::ZERO;4],parts:core::array::from_fn(|_|anye()),common:core::array::from_fn(|_|q(kani::any())),high_parts:core::array::from_fn(|_|anye()),events:[99;4],count:0,partial_common:K::ZERO,high_before:E::ZERO,high_partial:E::ZERO,high_ptr:core::ptr::null(),common_who:core::ptr::null(),partial_message:core::ptr::null(),partial_message_len:0,high_who:core::ptr::null(),high_ap0:E::ZERO,high_ap1:E::ZERO};
+ let out=boundary(&w,shared,&alpha,&f,&ap0,&ap1,&mut scratch,&mut parts,i,slot,power,&mut l);
+ let entered_high=l.regular.is_ok()&&shared&&l.partial.is_ok();let entered_partial=l.regular.is_ok()&&shared;
+ let expected=if let Err(e)=l.regular{Err(code(e))}else if !shared{Ok(())}else if let Err(e)=l.partial{Err(code(e))}else{l.high.map_err(code)};
+ if cfg!(NJF_corrupt){l.events[0]=99;l.high_who=l.high_who.wrapping_add(1);l.high_ap0=E::ZERO;l.high_partial=E::ZERO;l.partial_message=l.partial_message.wrapping_add(1);l.alpha=l.alpha.wrapping_add(1);l.high_before=E::ZERO;scratch[index]=K::ZERO;parts[slot]=E::ZERO;l.partial_common=K::ZERO;}
+ if cfg!(NJF_common_wrong){match limb&3{0=>l.common[i].c0.a.0^=1,1=>l.common[i].c0.b.0^=1,2=>l.common[i].c1.a.0^=1,_=>l.common[i].c1.b.0^=1}}
+ if cfg!(NJF_window_args){assert!(l.who==owner&&l.shared==shared&&l.alpha==alpha.as_ptr()&&l.alpha_len==2&&l.message==f.as_ptr()&&l.message_len==2048&&l.folds==2&&l.n==64&&l.scratch_ptr==scratch_ptr&&l.parts_ptr==parts_ptr);
+ if cfg!(NJF_copy_wrong){assert!(l.ap0[power].to_limbs()[limb]!=ap0[power].to_limbs()[limb]);}else{assert!(l.ap0[power].to_limbs()[limb]==ap0[power].to_limbs()[limb]&&l.ap1[power].to_limbs()[limb]==ap1[power].to_limbs()[limb]);}
+ } if cfg!(NJF_window_control){assert!(out.map_err(code)==expected&&l.count==if !entered_partial{1}else if !entered_high{3}else{4});
+ assert!(l.events[0]==0&&(!entered_partial||(l.events[1]==1&&l.events[2]==2))&&(!entered_high||l.events[3]==3));
+ } if cfg!(NJF_window_scratch){assert!(scratch.len()==64&&scratch.as_ptr()==scratch_ptr&&qw(scratch[index])[limb&3]==expected_q[limb&3]);
+ } if cfg!(NJF_window_parts){assert!(parts.as_ptr()==parts_ptr&&parts[slot].to_limbs()[limb]==if entered_high{l.high_parts[slot]}else{l.parts[slot]}.to_limbs()[limb]);
+ } if cfg!(NJF_window_shared)||cfg!(NJF_window_partial_args){if entered_partial{assert!(l.common_who==owner&&l.partial_message==f.as_ptr()&&l.partial_message_len==2048);let same=match limb&3{0=>l.partial_common.c0.a.0==l.common[i].c0.a.0,1=>l.partial_common.c0.b.0==l.common[i].c0.b.0,2=>l.partial_common.c1.a.0==l.common[i].c1.a.0,_=>l.partial_common.c1.b.0==l.common[i].c1.b.0};if cfg!(NJF_copy_wrong){assert!(!same);}else{assert!(same);}}
+ } if cfg!(NJF_window_shared)||cfg!(NJF_window_high_args){if entered_high{let values=l.partial.unwrap();if cfg!(NJF_copy_wrong){assert!(l.high_ap0.to_limbs()[limb]!=ap0[power].to_limbs()[limb]);}else{assert!(l.high_who==owner&&l.high_ap0.to_limbs()[limb]==ap0[power].to_limbs()[limb]&&l.high_ap1.to_limbs()[limb]==ap1[power].to_limbs()[limb]);}assert!(l.high_ptr==parts_ptr);let _=values;}
+}
+ if cfg!(NJF_window_high_pre){if entered_high{if cfg!(NJF_mask_wrong){assert!(l.high_before.to_limbs()[limb]!=l.parts[slot].to_limbs()[limb]);}else{assert!(l.high_before.to_limbs()[limb]==l.parts[slot].to_limbs()[limb]);}}}
+ if cfg!(NJF_window_high_value){if entered_high{let values=l.partial.unwrap();assert!(l.high_partial.to_limbs()[limb]==values[power].to_limbs()[limb]);}}
+}

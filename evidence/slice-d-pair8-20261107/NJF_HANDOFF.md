@@ -1,0 +1,25 @@
+# NJF final pair/finish handoff
+
+**Two gate-checked hybrid closure candidates: TX2:129 pair and TX2:115 finish. Zero authoritative ledger promotions; credit waits for the next ledger gate. Target not yet established.** Branch codex/cx-slice-d-pair8-20261107; commits local only, no push.
+
+## Exact result
+
+NJF_SliceCuts / CutEvaluation transcribe the corrected arbitrary-pre-state borrowed-slice parent cut, covering full regular scratch/Parts mutation, shared success, exact arguments, full high pre/post, all returning errors and ordered prefixes. Every admitted copy window has a data-specific matched semantic failure under the exact KMX patch. The native map/certificate table and source snapshots identify all inherited and new cuts; narrow PairEdges regular_post and Vec replacement are not full-state credit.
+
+NJF_RegularInstantiation / RegularContinuation specialize the universal native replies with CLOSED child results at SAME decoded arguments and prove G equals the matching source segment. AllocatorInstantiation and PairInstantiation chain the whole pair. FinishInstantiation / FinishObserved preserve complete Result and the ENTIRE chronological source list. NJF_Root.finish is the deployed pair-and-finish capsule: data, retained SAME-call NIG_FinishInput.Domain and the reviewed PairPort cut only. Its Bound conjunct certifies the SAME actual nested pair. The generic pair-domain theorem is an internal source helper; its Domain is discharged at the actual NEW return, not a deployed-root premise. Exact statements/hypotheses: NJF_STATEMENTS.json and NJF_HYPOTHESIS_AUDIT.md.
+
+No RegularProjection/PairWitness/FinishProjection, child success, child endpoint equation, physical exporter or invocation ID is assumed. No oracle seed is equated wholesale with a child post; actual full post and CLOSED omitted-cell frame are substituted. No new trust row, security metric, model, adversary, privacy or two-transaction change. P6/D188 option-A semantic transport is RECLASSIFIED, never removed; RuntimeCpiReadonlyEntry7 remains PENDING/unused.
+
+## Validation and resources
+
+Budget:43/60 Kani,45/120 Lean/link/audit/retention,0 extraction. All launches admitted exit0 AND allowed:true. JOB-specific maximum two scopes used as one native queue plus one focused Lean;6G high/8G max/swap0/tasks64; Lean-M7000, optimized Rust. No cap/timeout increase, unchanged timed-out rerun or third combined audit. Failed shapes/replacements are NJF_FAILING_STEP.md. Early completion below80% is audited member by member in NJF_REMAINING.md; no scoped member remains open.
+
+L043 combined import loads NGK+NIU+NIW+NJF with AspisR1.RPx_Deployed.deployed. Final L044: exit0, wall102.397330009s, peak7314356KiB, swaps0;224 raw ax2 roots, standard axioms only; NFX15195 modules, zero dangling references/incompatible owners/import mismatches. L037 reproduces eight fixture identities in the SAME proof binary. Historical L041 was the first changed-closure audit; L044 adds LowSlots. No unchanged full regression or cold release rebuild. Every new final source has a passing exact-hash receipt and #print axioms; failed error-recovery output has no credit. NJF_validate.py checks source archives, frozen/offline/unchanged-lock graphs, deployed feature closure, native controls, resource limits, final source/axiom hashes and the complete raw/scan coverage.
+
+## Retention and freeze
+
+Own host workspace /home/dombarker/project-offloads/codex-cx-slice-d-pair8-20261107; CARGO_TARGET_DIR is its NJF_target in every receipt. NIW's read-only objects/seed/native export copied first:474252742 bytes. Imported Rust/source seed hashes are NJF_IMPORTED_CACHE_HASHES.json. No predecessor/sibling worktree or cache changed/deleted. Retained selected closure:15195 modules/31788 files; actual Aeneas/library paths and per-file SHA pins in NJF_RETENTION.json / NJF_retained_pins. New export:18 files/1992696 bytes at NJF_exports_20261107/objects. Prepend that export to the recorded LEAN_PATH for reuse. Source/objects/tools and same eight-fixture proof/scanner binaries remain pinned. Host free bytes at retention:22511861760. Caches retained; no own solver temporary remained.
+
+Frozen Rust4bb3b3f51e16b4525f1d10336e2b0bcbbd775387; research crates/programs trees rechecked byte-identical. No shipped/cfg source file edited; only scratch patches/receipts, hence no ELF rebuild trigger. Inherited (not newly reproduced) pins: default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4; devnet63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299; Pool121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548. Headline RPx_Deployed.deployed, frozen3, L154 parameter and narrowed D188 unchanged.
+
+No account/key/fund/deployment action, sibling edit, push, binary/object/ELF commit or file over20MB. NJF_CLOSED.json and NJF_LEDGER_DELTA.json are proposed admission packets on NIU ledger13; authoritative promotion is the next lead gate. Retained caller Domain, upstream native/entry/Pool association and release replay keep the global target not yet established.

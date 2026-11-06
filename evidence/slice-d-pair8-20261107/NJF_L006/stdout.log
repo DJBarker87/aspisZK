@@ -1,0 +1,782 @@
+NJF_generated/NJF_RegularInstantiation.lean:83:19: error: unsolved goals
+case ok.Ok.unit.true.ok.ok.Ok
+inst✝ : FIo_Native.Allocation
+c : Context
+before : Scratch
+scratch : NHM_RegularKinds.Scratch
+parts : NHM_RegularKinds.Parts
+hr : regularReply c before = ok (core.result.Result.Ok PUnit.unit, scratch, parts)
+hs : NGM_GuardExact.guard c.w.value 2#usize = true
+owner : W
+cells : CommonCells
+hc : commonReply c = ok (owner, cells)
+a✝ : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize
+hp : FIo_Native.weights.shared_partials c.f.value cells = ok (core.result.Result.Ok a✝)
+⊢ (match FIo_Native.weights.shared_high a✝ owner c.ap0.value c.ap1.value parts with
+    | fail err => (fail err, [0, 1, 2, 3])
+    | div => (div, [0, 1, 2, 3])
+    | ok (reply, after) => (ok (reply, scratch, after), [0, 1, 2, 3])) =
+    match FIo_Native.weights.shared_high a✝ owner c.ap0.value c.ap1.value parts with
+    | fail err => (fail err, [0, 1, 2, 3])
+    | div => (div, [0, 1, 2, 3])
+    | ok (reply, after) => (ok (reply, scratch, after), [0, 1, 2, 3])
+NJF_generated/NJF_RegularInstantiation.lean:70:7: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+NJF_generated/NJF_RegularInstantiation.lean:81:44: warning: This simp argument is unused:
+  ite_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵p̵,̵G̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵f̵a̵l̵s̵e̵]̵[̲h̲p̲,̲ ̲G̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJF_generated/NJF_RegularInstantiation.lean:82:39: warning: This simp argument is unused:
+  ite_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵p̵,̵G̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵f̵a̵l̵s̵e̵]̵[̲h̲p̲,̲ ̲G̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJF_generated/NJF_RegularInstantiation.lean:83:66: warning: This simp argument is unused:
+  ite_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵p̵,̵G̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵f̵a̵l̵s̵e̵]̵[̲h̲p̲,̲ ̲G̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem AspisR1.NJF_RegularInstantiation.source : ∀ [inst : FIo_Native.Allocation] (c : Context) (before : Scratch),
+  G (NGM_GuardExact.guard c.w.value 2#usize) (instantiate c before) = segment c before :=
+fun [⋯] c before =>
+  id
+    (id
+      (casesOn (motive := fun t =>
+        regularReply c before = t →
+          G (NGM_GuardExact.guard c.w.value 2#usize)
+              (have regular := regularReply c before;
+              match regular with
+              | ok (core.result.Result.Ok PUnit.unit, fst, parts) =>
+                if NGM_GuardExact.guard c.w.value 2#usize = true then
+                  have common := commonReply c;
+                  match common with
+                  | ok (owner, cells) =>
+                    have partialReply := FIo_Native.weights.shared_partials c.f.value cells;
+                    match partialReply with
+                    | ok (core.result.Result.Ok values) =>
+                      { regular := regular, common := common, partialReply := partialReply,
+                        high := FIo_Native.weights.shared_high values owner c.ap0.value c.ap1.value parts }
+                    | x => { regular := regular, common := common, partialReply := partialReply, high := div }
+                  | x => { regular := regular, common := common, partialReply := div, high := div }
+                else { regular := regular, common := div, partialReply := div, high := div }
+              | x => { regular := regular, common := div, partialReply := div, high := div }) =
+            match regularReply c before with
+            | fail err => (fail err, [0])
+            | div => (div, [0])
+            | ok (reply, scratch, parts) =>
+              match reply with
+              | core.result.Result.Err err => (ok (core.result.Result.Err err, scratch, parts), [0])
+              | core.result.Result.Ok a =>
+                if NGM_GuardExact.guard c.w.value 2#usize = true then
+                  match commonReply c with
+                  | fail err => (fail err, [0, 1])
+                  | div => (div, [0, 1])
+                  | ok (owner, cells) =>
+                    match FIo_Native.weights.shared_partials c.f.value cells with
+                    | fail err => (fail err, [0, 1, 2])
+                    | div => (div, [0, 1, 2])
+                    | ok (core.result.Result.Err err) => (ok (core.result.Result.Err err, scratch, parts), [0, 1, 2])
+                    | ok (core.result.Result.Ok values) =>
+                      match FIo_Native.weights.shared_high values owner c.ap0.value c.ap1.value parts with
+                      | fail err => (fail err, [0, 1, 2, 3])
+                      | div => (div, [0, 1, 2, 3])
+                      | ok (reply, after) => (ok (reply, scratch, after), [0, 1, 2, 3])
+                else (ok (core.result.Result.Ok (), scratch, parts), [0]))
+        (regularReply c before)
+        (fun value h =>
+          Eq.ndrec (motive := fun x =>
+            regularReply c before = x →
+              G (NGM_GuardExact.guard c.w.value 2#usize)
+                  (have regular := x;
+                  match regular with
+                  | ok (core.result.Result.Ok PUnit.unit, fst, parts) =>
+                    if NGM_GuardExact.guard c.w.value 2#usize = true then
+                      have common := commonReply c;
+                      match common with
+                      | ok (owner, cells) =>
+                        have partialReply := FIo_Native.weights.shared_partials c.f.value cells;
+                        match partialReply with
+                        | ok (core.result.Result.Ok values) =>
+                          { regular := regular, common := common, partialReply := partialReply,
+                            high := FIo_Native.weights.shared_high values owner c.ap0.value c.ap1.value parts }
+                        | x => { regular := regular, common := common, partialReply := partialReply, high := div }
+                      | x => { regular := regular, common := common, partialReply := div, high := div }
+                    else { regular := regular, common := div, partialReply := div, high := div }
+                  | x => { regular := regular, common := div, partialReply := div, high := div }) =
+                match x with
+                | fail err => (fail err, [0])
+                | div => (div, [0])
+                | ok (reply, scratch, parts) =>
+                  match reply with
+                  | core.result.Result.Err err => (ok (core.result.Result.Err err, scratch, parts), [0])
+                  | core.result.Result.Ok a =>
+                    if NGM_GuardExact.guard c.w.value 2#usize = true then
+                      match commonReply c with
+                      | fail err => (fail err, [0, 1])
+                      | div => (div, [0, 1])
+                      | ok (owner, cells) =>
+                        match FIo_Native.weights.shared_partials c.f.value cells with
+                        | fail err => (fail err, [0, 1, 2])
+                        | div => (div, [0, 1, 2])
+                        | ok (core.result.Result.Err err) =>
+                          (ok (core.result.Result.Err err, scratch, parts), [0, 1, 2])
+                        | ok (core.result.Result.Ok values) =>
+                          match FIo_Native.weights.shared_high values owner c.ap0.value c.ap1.value parts with
+                          | fail err => (fail err, [0, 1, 2, 3])
+                          | div => (div, [0, 1, 2, 3])
+                          | ok (reply, after) => (ok (reply, scratch, after), [0, 1, 2, 3])
+                    else (ok (core.result.Result.Ok (), scratch, parts), [0]))
+            (fun hr =>
+              let ⟨reply, snd✝, hr⟩ := value
+              let ⟨scratch, parts, hr⟩ := snd✝
+              core.result.Result.casesOn (motive := fun t =>
+                reply = t →
+                  G (NGM_GuardExact.guard c.w.value 2#usize)
+                      (have regular := ok (reply, scratch, parts);
+                      match regular with
+                      | ok (core.result.Result.Ok PUnit.unit, fst, parts) =>
+                        if NGM_GuardExact.guard c.w.value 2#usize = true then
+                          have common := commonReply c;
+                          match common with
+                          | ok (owner, cells) =>
+                            have partialReply := FIo_Native.weights.shared_partials c.f.value cells;
+                            match partialReply with
+                            | ok (core.result.Result.Ok values) =>
+                              { regular := regular, common := common, partialReply := partialReply,
+                                high := FIo_Native.weights.shared_high values owner c.ap0.value c.ap1.value parts }
+                            | x => { regular := regular, common := common, partialReply := partialReply, high := div }
+                          | x => { regular := regular, common := common, partialReply := div, high := div }
+                        else { regular := regular, common := div, partialReply := div, high := div }
+                      | x => { regular := regular, common := div, partialReply := div, high := div }) =
+                    match ok (reply, scratch, parts) with
+                    | fail err => (fail err, [0])
+                    | div => (div, [0])
+                    | ok (reply, scratch, parts) =>
+                      match reply with
+                      | core.result.Result.Err err => (ok (core.result.Result.Err err, scratch, parts), [0])
+                      | core.result.Result.Ok a =>
+                        if NGM_GuardExact.guard c.w.value 2#usize = true then
+                          match commonReply c with
+                          | fail err => (fail err, [0, 1])
+                          | div => (div, [0, 1])
+                          | ok (owner, cells) =>
+                            match FIo_Native.weights.shared_partials c.f.value cells with
+                            | fail err => (fail err, [0, 1, 2])
+                            | div => (div, [0, 1, 2])
+                            | ok (core.result.Result.Err err) =>
+                              (ok (core.result.Result.Err err, scratch, parts), [0, 1, 2])
+                            | ok (core.result.Result.Ok values) =>
+                              match FIo_Native.weights.shared_high values owner c.ap0.value c.ap1.value parts with
+                              | fail err => (fail err, [0, 1, 2, 3])
+                              | div => (div, [0, 1, 2, 3])
+                              | ok (reply, after) => (ok (reply, scratch, after), [0, 1, 2, 3])
+                        else (ok (core.result.Result.Ok (), scratch, parts), [0]))
+                reply
+                (fun unit h =>
+                  Eq.ndrec (motive := fun reply =>
+                    regularReply c before = ok (reply, scratch, parts) →
+                      G (NGM_GuardExact.guard c.w.value 2#usize)
+                          (have regular := ok (reply, scratch, parts);
+                          match regular with
+                          | ok (core.result.Result.Ok PUnit.unit, fst, parts) =>
+                            if NGM_GuardExact.guard c.w.value 2#usize = true then
+                              have common := commonReply c;
+                              match common with
+                              | ok (owner, cells) =>
+                                have partialReply := FIo_Native.weights.shared_partials c.f.value cells;
+                                match partialReply with
+                                | ok (core.result.Result.Ok values) =>
+                                  { regular := regular, common := common, partialReply := partialReply,
+                                    high := FIo_Native.weights.shared_high values owner c.ap0.value c.ap1.value parts }
+                                | x =>
+                                  { regular := regular, common := common, partialReply := partialReply, high := div }
+                              | x => { regular := regular, common := common, partialReply := div, high := div }
+                            else { regular := regular, common := div, partialReply := div, high := div }
+                          | x => { regular := regular, common := div, partialReply := div, high := div }) =
+                        match ok (reply, scratch, parts) with
+                        | fail err => (fail err, [0])
+                        | div => (div, [0])
+                        | ok (reply, scratch, parts) =>
+                          match reply with
+                          | core.result.Result.Err err => (ok (core.result.Result.Err err, scratch, parts), [0])
+                          | core.result.Result.Ok a =>
+                            if NGM_GuardExact.guard c.w.value 2#usize = true then
+                              match commonReply c with
+                              | fail err => (fail err, [0, 1])
+                              | div => (div, [0, 1])
+                              | ok (owner, cells) =>
+                                match FIo_Native.weights.shared_partials c.f.value cells with
+                                | fail err => (fail err, [0, 1, 2])
+                                | div => (div, [0, 1, 2])
+                                | ok (core.result.Result.Err err) =>
+                                  (ok (core.result.Result.Err err, scratch, parts), [0, 1, 2])
+                                | ok (core.result.Result.Ok values) =>
+                                  match FIo_Native.weights.shared_high values owner c.ap0.value c.ap1.value parts with
+                                  | fail err => (fail err, [0, 1, 2, 3])
+                                  | div => (div, [0, 1, 2, 3])
+                                  | ok (reply, after) => (ok (reply, scratch, after), [0, 1, 2, 3])
+                            else (ok (core.result.Result.Ok (), scratch, parts), [0]))
+                    (fun hr =>
+                      let ⟨h✝⟩ := unit
+                      Eq.ndrec (motive := fun unit =>
+                        regularReply c before = ok (core.result.Result.Ok unit, scratch, parts) →
+                          G (NGM_GuardExact.guard c.w.value 2#usize)
+                              (have regular := ok (core.result.Result.Ok unit, scratch, parts);
+                              match regular with
+                              | ok (core.result.Result.Ok PUnit.unit, fst, parts) =>
+                                if NGM_GuardExact.guard c.w.value 2#usize = true then
+                                  have common := commonReply c;
+                                  match common with
+                                  | ok (owner, cells) =>
+                                    have partialReply := FIo_Native.weights.shared_partials c.f.value cells;
+                                    match partialReply with
+                                    | ok (core.result.Result.Ok values) =>
+                                      { regular := regular, common := common, partialReply := partialReply,
+                                        high :=
+                                          FIo_Native.weights.shared_high values owner c.ap0.value c.ap1.value parts }
+                                    | x =>
+                                      { regular := regular, common := common, partialReply := partialReply,
+                                        high := div }
+                                  | x => { regular := regular, common := common, partialReply := div, high := div }
+                                else { regular := regular, common := div, partialReply := div, high := div }
+                              | x => { regular := regular, common := div, partialReply := div, high := div }) =
+                            match ok (core.result.Result.Ok unit, scratch, parts) with
+                            | fail err => (fail err, [0])
+                            | div => (div, [0])
+                            | ok (reply, scratch, parts) =>
+                              match reply with
+                              | core.result.Result.Err err => (ok (core.result.Result.Err err, scratch, parts), [0])
+                              | core.result.Result.Ok a =>
+                                if NGM_GuardExact.guard c.w.value 2#usize = true then
+                                  match commonReply c with
+                                  | fail err => (fail err, [0, 1])
+                                  | div => (div, [0, 1])
+                                  | ok (owner, cells) =>
+                                    match FIo_Native.weights.shared_partials c.f.value cells with
+                                    | fail err => (fail err, [0, 1, 2])
+                                    | div => (div, [0, 1, 2])
+                                    | ok (core.result.Result.Err err) =>
+                                      (ok (core.result.Result.Err err, scratch, parts), [0, 1, 2])
+                                    | ok (core.result.Result.Ok values) =>
+                                      match
+                                        FIo_Native.weights.shared_high values owner c.ap0.value c.ap1.value parts with
+                                      | fail err => (fail err, [0, 1, 2, 3])
+                                      | div => (div, [0, 1, 2, 3])
+                                      | ok (reply, after) => (ok (reply, scratch, after), [0, 1, 2, 3])
+                                else (ok (core.result.Result.Ok (), scratch, parts), [0]))
+                        (fun hr =>
+                          Bool.casesOn (motive := fun t =>
+                            NGM_GuardExact.guard c.w.value 2#usize = t →
+                              G (NGM_GuardExact.guard c.w.value 2#usize)
+                                  (have regular := ok (core.result.Result.Ok PUnit.unit, scratch, parts);
+                                  match regular with
+                                  | ok (core.result.Result.Ok PUnit.unit, fst, parts) =>
+                                    if NGM_GuardExact.guard c.w.value 2#usize = true then
+                                      have common := commonReply c;
+                                      match common with
+                                      | ok (owner, cells) =>
+                                        have partialReply := FIo_Native.weights.shared_partials c.f.value cells;
+                                        match partialReply with
+                                        | ok (core.result.Result.Ok values) =>
+                                          { regular := regular, common := common, partialReply := partialReply,
+                                            high :=
+                                              FIo_Native.weights.shared_high values owner c.ap0.value c.ap1.value
+                                                parts }
+                                        | x =>
+                                          { regular := regular, common := common, partialReply := partialReply,
+                                            high := div }
+                                      | x => { regular := regular, common := common, partialReply := div, high := div }
+                                    else { regular := regular, common := div, partialReply := div, high := div }
+                                  | x => { regular := regular, common := div, partialReply := div, high := div }) =
+                                match ok (core.result.Result.Ok PUnit.unit, scratch, parts) with
+                                | fail err => (fail err, [0])
+                                | div => (div, [0])
+                                | ok (reply, scratch, parts) =>
+                                  match reply with
+                                  | core.result.Result.Err err => (ok (core.result.Result.Err err, scratch, parts), [0])
+                                  | core.result.Result.Ok a =>
+                                    if NGM_GuardExact.guard c.w.value 2#usize = true then
+                                      match commonReply c with
+                                      | fail err => (fail err, [0, 1])
+                                      | div => (div, [0, 1])
+                                      | ok (owner, cells) =>
+                                        match FIo_Native.weights.shared_partials c.f.value cells with
+                                        | fail err => (fail err, [0, 1, 2])
+                                        | div => (div, [0, 1, 2])
+                                        | ok (core.result.Result.Err err) =>
+                                          (ok (core.result.Result.Err err, scratch, parts), [0, 1, 2])
+                                        | ok (core.result.Result.Ok values) =>
+                                          match
+                                            FIo_Native.weights.shared_high values owner c.ap0.value c.ap1.value
+                                              parts with
+                                          | fail err => (fail err, [0, 1, 2, 3])
+                                          | div => (div, [0, 1, 2, 3])
+                                          | ok (reply, after) => (ok (reply, scratch, after), [0, 1, 2, 3])
+                                    else (ok (core.result.Result.Ok (), scratch, parts), [0]))
+                            (NGM_GuardExact.guard c.w.value 2#usize)
+                            (fun h =>
+                              Eq.ndrec (motive := fun x =>
+                                NGM_GuardExact.guard c.w.value 2#usize = x →
+                                  G x
+                                      (have regular := ok (core.result.Result.Ok PUnit.unit, scratch, parts);
+                                      match regular with
+                                      | ok (core.result.Result.Ok PUnit.unit, fst, parts) =>
+                                        if x = true then
+                                          have common := commonReply c;
+                                          match common with
+                                          | ok (owner, cells) =>
+                                            have partialReply := FIo_Native.weights.shared_partials c.f.value cells;
+                                            match partialReply with
+                                            | ok (core.result.Result.Ok values) =>
+                                              { regular := regular, common := common, partialReply := partialReply,
+                                                high :=
+                                                  FIo_Native.weights.shared_high values owner c.ap0.value c.ap1.value
+                                                    parts }
+                                            | x =>
+                                              { regular := regular, common := common, partialReply := partialReply,
+                                                high := div }
+                                          | x =>
+                                            { regular := regular, common := common, partialReply := div, high := div }
+                                        else { regular := regular, common := div, partialReply := div, high := div }
+                                      | x => { regular := regular, common := div, partialReply := div, high := div }) =
+                                    match ok (core.result.Result.Ok PUnit.unit, scratch, parts) with
+                                    | fail err => (fail err, [0])
+                                    | div => (div, [0])
+                                    | ok (reply, scratch, parts) =>
+                                      match reply with
+                                      | core.result.Result.Err err =>
+                                        (ok (core.result.Result.Err err, scratch, parts), [0])
+                                      | core.result.Result.Ok a =>
+                                        if x = true then
+                                          match commonReply c with
+                                          | fail err => (fail err, [0, 1])
+                                          | div => (div, [0, 1])
+                                          | ok (owner, cells) =>
+                                            match FIo_Native.weights.shared_partials c.f.value cells with
+                                            | fail err => (fail err, [0, 1, 2])
+                                            | div => (div, [0, 1, 2])
+                                            | ok (core.result.Result.Err err) =>
+                                              (ok (core.result.Result.Err err, scratch, parts), [0, 1, 2])
+                                            | ok (core.result.Result.Ok values) =>
+                                              match
+                                                FIo_Native.weights.shared_high values owner c.ap0.value c.ap1.value
+                                                  parts with
+                                              | fail err => (fail err, [0, 1, 2, 3])
+                                              | div => (div, [0, 1, 2, 3])
+                                              | ok (reply, after) => (ok (reply, scratch, after), [0, 1, 2, 3])
+                                        else (ok (core.result.Result.Ok (), scratch, parts), [0]))
+                                (fun hs =>
+                                  Eq.refl
+                                    (G false
+                                      (have regular := ok (core.result.Result.Ok PUnit.unit, scratch, parts);
+                                      match regular with
+                                      | ok (core.result.Result.Ok PUnit.unit, fst, parts) =>
+                                        if false = true then
+                                          have common := commonReply c;
+                                          match common with
+                                          | ok (owner, cells) =>
+                                            have partialReply := FIo_Native.weights.shared_partials c.f.value cells;
+                                            match partialReply with
+                                            | ok (core.result.Result.Ok values) =>
+                                              { regular := regular, common := common, partialReply := partialReply,
+                                                high :=
+                                                  FIo_Native.weights.shared_high values owner c.ap0.value c.ap1.value
+                                                    parts }
+                                            | x =>
+                                              { regular := regular, common := common, partialReply := partialReply,
+                                                high := div }
+                                          | x =>
+                                            { regular := regular, common := common, partialReply := div, high := div }
+                                        else { regular := regular, common := div, partialReply := div, high := div }
+                                      | x => { regular := regular, common := div, partialReply := div, high := div })))
+                                (Eq.symm h) (Eq.refl (NGM_GuardExact.guard c.w.value 2#usize)))
+                            (fun h =>
+                              Eq.ndrec (motive := fun x =>
+                                NGM_GuardExact.guard c.w.value 2#usize = x →
+                                  G x
+                                      (have regular := ok (core.result.Result.Ok PUnit.unit, scratch, parts);
+                                      match regular with
+                                      | ok (core.result.Result.Ok PUnit.unit, fst, parts) =>
+                                        if x = true then
+                                          have common := commonReply c;
+                                          match common with
+                                          | ok (owner, cells) =>
+                                            have partialReply := FIo_Native.weights.shared_partials c.f.value cells;
+                                            match partialReply with
+                                            | ok (core.result.Result.Ok values) =>
+                                              { regular := regular, common := common, partialReply := partialReply,
+                                                high :=
+                                                  FIo_Native.weights.shared_high values owner c.ap0.value c.ap1.value
+                                                    parts }
+                                            | x =>
+                                              { regular := regular, common := common, partialReply := partialReply,
+                                                high := div }
+                                          | x =>
+                                            { regular := regular, common := common, partialReply := div, high := div }
+                                        else { regular := regular, common := div, partialReply := div, high := div }
+                                      | x => { regular := regular, common := div, partialReply := div, high := div }) =
+                                    match ok (core.result.Result.Ok PUnit.unit, scratch, parts) with
+                                    | fail err => (fail err, [0])
+                                    | div => (div, [0])
+                                    | ok (reply, scratch, parts) =>
+                                      match reply with
+                                      | core.result.Result.Err err =>
+                                        (ok (core.result.Result.Err err, scratch, parts), [0])
+                                      | core.result.Result.Ok a =>
+                                        if x = true then
+                                          match commonReply c with
+                                          | fail err => (fail err, [0, 1])
+                                          | div => (div, [0, 1])
+                                          | ok (owner, cells) =>
+                                            match FIo_Native.weights.shared_partials c.f.value cells with
+                                            | fail err => (fail err, [0, 1, 2])
+                                            | div => (div, [0, 1, 2])
+                                            | ok (core.result.Result.Err err) =>
+                                              (ok (core.result.Result.Err err, scratch, parts), [0, 1, 2])
+                                            | ok (core.result.Result.Ok values) =>
+                                              match
+                                                FIo_Native.weights.shared_high values owner c.ap0.value c.ap1.value
+                                                  parts with
+                                              | fail err => (fail err, [0, 1, 2, 3])
+                                              | div => (div, [0, 1, 2, 3])
+                                              | ok (reply, after) => (ok (reply, scratch, after), [0, 1, 2, 3])
+                                        else (ok (core.result.Result.Ok (), scratch, parts), [0]))
+                                (fun hs =>
+                                  casesOn (motive := fun t =>
+                                    commonReply c = t →
+                                      G true
+                                          (have regular := ok (core.result.Result.Ok PUnit.unit, scratch, parts);
+                                          match regular with
+                                          | ok (core.result.Result.Ok PUnit.unit, fst, parts) =>
+                                            if true = true then
+                                              have common := commonReply c;
+                                              match common with
+                                              | ok (owner, cells) =>
+                                                have partialReply := FIo_Native.weights.shared_partials c.f.value cells;
+                                                match partialReply with
+                                                | ok (core.result.Result.Ok values) =>
+                                                  { regular := regular, common := common, partialReply := partialReply,
+                                                    high :=
+                                                      FIo_Native.weights.shared_high values owner c.ap0.value
+                                                        c.ap1.value parts }
+                                                | x =>
+                                                  { regular := regular, common := common, partialReply := partialReply,
+                                                    high := div }
+                                              | x =>
+                                                { regular := regular, common := common, partialReply := div,
+                                                  high := div }
+                                            else { regular := regular, common := div, partialReply := div, high := div }
+                                          | x =>
+                                            { regular := regular, common := div, partialReply := div, high := div }) =
+                                        match ok (core.result.Result.Ok PUnit.unit, scratch, parts) with
+                                        | fail err => (fail err, [0])
+                                        | div => (div, [0])
+                                        | ok (reply, scratch, parts) =>
+                                          match reply with
+                                          | core.result.Result.Err err =>
+                                            (ok (core.result.Result.Err err, scratch, parts), [0])
+                                          | core.result.Result.Ok a =>
+                                            if true = true then
+                                              match commonReply c with
+                                              | fail err => (fail err, [0, 1])
+                                              | div => (div, [0, 1])
+                                              | ok (owner, cells) =>
+                                                match FIo_Native.weights.shared_partials c.f.value cells with
+                                                | fail err => (fail err, [0, 1, 2])
+                                                | div => (div, [0, 1, 2])
+                                                | ok (core.result.Result.Err err) =>
+                                                  (ok (core.result.Result.Err err, scratch, parts), [0, 1, 2])
+                                                | ok (core.result.Result.Ok values) =>
+                                                  match
+                                                    FIo_Native.weights.shared_high values owner c.ap0.value c.ap1.value
+                                                      parts with
+                                                  | fail err => (fail err, [0, 1, 2, 3])
+                                                  | div => (div, [0, 1, 2, 3])
+                                                  | ok (reply, after) => (ok (reply, scratch, after), [0, 1, 2, 3])
+                                            else (ok (core.result.Result.Ok (), scratch, parts), [0]))
+                                    (commonReply c)
+                                    (fun value h =>
+                                      Eq.ndrec (motive := fun x =>
+                                        commonReply c = x →
+                                          G true
+                                              (have regular := ok (core.result.Result.Ok PUnit.unit, scratch, parts);
+                                              match regular with
+                                              | ok (core.result.Result.Ok PUnit.unit, fst, parts) =>
+                                                if true = true then
+                                                  have common := x;
+                                                  match common with
+                                                  | ok (owner, cells) =>
+                                                    have partialReply :=
+                                                      FIo_Native.weights.shared_partials c.f.value cells;
+                                                    match partialReply with
+                                                    | ok (core.result.Result.Ok values) =>
+                                                      { regular := regular, common := common,
+                                                        partialReply := partialReply,
+                                                        high :=
+                                                          FIo_Native.weights.shared_high values owner c.ap0.value
+                                                            c.ap1.value parts }
+                                                    | x =>
+                                                      { regular := regular, common := common,
+                                                        partialReply := partialReply, high := div }
+                                                  | x =>
+                                                    { regular := regular, common := common, partialReply := div,
+                                                      high := div }
+                                                else
+                                                  { regular := regular, common := div, partialReply := div,
+                                                    high := div }
+                                              | x =>
+                                                { regular := regular, common := div, partialReply := div,
+                                                  high := div }) =
+                                            match ok (core.result.Result.Ok PUnit.unit, scratch, parts) with
+                                            | fail err => (fail err, [0])
+                                            | div => (div, [0])
+                                            | ok (reply, scratch, parts) =>
+                                              match reply with
+                                              | core.result.Result.Err err =>
+                                                (ok (core.result.Result.Err err, scratch, parts), [0])
+                                              | core.result.Result.Ok a =>
+                                                if true = true then
+                                                  match x with
+                                                  | fail err => (fail err, [0, 1])
+                                                  | div => (div, [0, 1])
+                                                  | ok (owner, cells) =>
+                                                    match FIo_Native.weights.shared_partials c.f.value cells with
+                                                    | fail err => (fail err, [0, 1, 2])
+                                                    | div => (div, [0, 1, 2])
+                                                    | ok (core.result.Result.Err err) =>
+                                                      (ok (core.result.Result.Err err, scratch, parts), [0, 1, 2])
+                                                    | ok (core.result.Result.Ok values) =>
+                                                      match
+                                                        FIo_Native.weights.shared_high values owner c.ap0.value
+                                                          c.ap1.value parts with
+                                                      | fail err => (fail err, [0, 1, 2, 3])
+                                                      | div => (div, [0, 1, 2, 3])
+                                                      | ok (reply, after) => (ok (reply, scratch, after), [0, 1, 2, 3])
+                                                else (ok (core.result.Result.Ok (), scratch, parts), [0]))
+                                        (fun hc =>
+                                          let ⟨owner, cells, hc⟩ := value
+                                          casesOn (motive := fun t =>
+                                            FIo_Native.weights.shared_partials c.f.value cells = t →
+                                              G true
+                                                  (have regular :=
+                                                    ok (core.result.Result.Ok PUnit.unit, scratch, parts);
+                                                  match regular with
+                                                  | ok (core.result.Result.Ok PUnit.unit, fst, parts) =>
+                                                    if true = true then
+                                                      have common := ok (owner, cells);
+                                                      match common with
+                                                      | ok (owner, cells) =>
+                                                        have partialReply :=
+                                                          FIo_Native.weights.shared_partials c.f.value cells;
+                                                        match partialReply with
+                                                        | ok (core.result.Result.Ok values) =>
+                                                          { regular := regular, common := common,
+                                                            partialReply := partialReply,
+                                                            high :=
+                                                              FIo_Native.weights.shared_high values owner c.ap0.value
+                                                                c.ap1.value parts }
+                                                        | x =>
+                                                          { regular := regular, common := common,
+                                                            partialReply := partialReply, high := div }
+                                                      | x =>
+                                                        { regular := regular, common := common, partialReply := div,
+                                                          high := div }
+                                                    else
+                                                      { regular := regular, common := div, partialReply := div,
+                                                        high := div }
+                                                  | x =>
+                                                    { regular := regular, common := div, partialReply := div,
+                                                      high := div }) =
+                                                match ok (core.result.Result.Ok PUnit.unit, scratch, parts) with
+                                                | fail err => (fail err, [0])
+                                                | div => (div, [0])
+                                                | ok (reply, scratch, parts) =>
+                                                  match reply with
+                                                  | core.result.Result.Err err =>
+                                                    (ok (core.result.Result.Err err, scratch, parts), [0])
+                                                  | core.result.Result.Ok a =>
+                                                    if true = true then
+                                                      match ok (owner, cells) with
+                                                      | fail err => (fail err, [0, 1])
+                                                      | div => (div, [0, 1])
+                                                      | ok (owner, cells) =>
+                                                        match FIo_Native.weights.shared_partials c.f.value cells with
+                                                        | fail err => (fail err, [0, 1, 2])
+                                                        | div => (div, [0, 1, 2])
+                                                        | ok (core.result.Result.Err err) =>
+                                                          (ok (core.result.Result.Err err, scratch, parts), [0, 1, 2])
+                                                        | ok (core.result.Result.Ok values) =>
+                                                          match
+                                                            FIo_Native.weights.shared_high values owner c.ap0.value
+                                                              c.ap1.value parts with
+                                                          | fail err => (fail err, [0, 1, 2, 3])
+                                                          | div => (div, [0, 1, 2, 3])
+                                                          | ok (reply, after) =>
+                                                            (ok (reply, scratch, after), [0, 1, 2, 3])
+                                                    else (ok (core.result.Result.Ok (), scratch, parts), [0]))
+                                            (FIo_Native.weights.shared_partials c.f.value cells)
+                                            (fun partials h =>
+                                              Eq.ndrec (motive := fun x =>
+                                                FIo_Native.weights.shared_partials c.f.value cells = x →
+                                                  G true
+                                                      (have regular :=
+                                                        ok (core.result.Result.Ok PUnit.unit, scratch, parts);
+                                                      match regular with
+                                                      | ok (core.result.Result.Ok PUnit.unit, fst, parts) =>
+                                                        if true = true then
+                                                          have common := ok (owner, cells);
+                                                          match common with
+                                                          | ok (owner, cells) =>
+                                                            have partialReply :=
+                                                              FIo_Native.weights.shared_partials c.f.value cells;
+                                                            match partialReply with
+                                                            | ok (core.result.Result.Ok values) =>
+                                                              { regular := regular, common := common,
+                                                                partialReply := partialReply,
+                                                                high :=
+                                                                  FIo_Native.weights.shared_high values owner
+                                                                    c.ap0.value c.ap1.value parts }
+                                                            | x =>
+                                                              { regular := regular, common := common,
+                                                                partialReply := partialReply, high := div }
+                                                          | x =>
+                                                            { regular := regular, common := common, partialReply := div,
+                                                              high := div }
+                                                        else
+                                                          { regular := regular, common := div, partialReply := div,
+                                                            high := div }
+                                                      | x =>
+                                                        { regular := regular, common := div, partialReply := div,
+                                                          high := div }) =
+                                                    match ok (core.result.Result.Ok PUnit.unit, scratch, parts) with
+                                                    | fail err => (fail err, [0])
+                                                    | div => (div, [0])
+                                                    | ok (reply, scratch, parts) =>
+                                                      match reply with
+                                                      | core.result.Result.Err err =>
+                                                        (ok (core.result.Result.Err err, scratch, parts), [0])
+                                                      | core.result.Result.Ok a =>
+                                                        if true = true then
+                                                          match ok (owner, cells) with
+                                                          | fail err => (fail err, [0, 1])
+                                                          | div => (div, [0, 1])
+                                                          | ok (owner, cells) =>
+                                                            match
+                                                              FIo_Native.weights.shared_partials c.f.value cells with
+                                                            | fail err => (fail err, [0, 1, 2])
+                                                            | div => (div, [0, 1, 2])
+                                                            | ok (core.result.Result.Err err) =>
+                                                              (ok (core.result.Result.Err err, scratch, parts),
+                                                                [0, 1, 2])
+                                                            | ok (core.result.Result.Ok values) =>
+                                                              match
+                                                                FIo_Native.weights.shared_high values owner c.ap0.value
+                                                                  c.ap1.value parts with
+                                                              | fail err => (fail err, [0, 1, 2, 3])
+                                                              | div => (div, [0, 1, 2, 3])
+                                                              | ok (reply, after) =>
+                                                                (ok (reply, scratch, after), [0, 1, 2, 3])
+                                                        else (ok (core.result.Result.Ok (), scratch, parts), [0]))
+                                                (fun hp => sorry) (Eq.symm h)
+                                                (Eq.refl (FIo_Native.weights.shared_partials c.f.value cells)))
+                                            (fun err h =>
+                                              Eq.ndrec (motive := fun x =>
+                                                FIo_Native.weights.shared_partials c.f.value cells = x →
+                                                  G true
+                                                      (have regular :=
+                                                        ok (core.result.Result.Ok PUnit.unit, scratch, parts);
+                                                      match regular with
+                                                      | ok (core.result.Result.Ok PUnit.unit, fst, parts) =>
+                                                        if true = true then
+                                                          have common := ok (owner, cells);
+                                                          match common with
+                                                          | ok (owner, cells) =>
+                                                            have partialReply :=
+                                                              FIo_Native.weights.shared_partials c.f.value cells;
+                                                            match partialReply with
+                                                            | ok (core.result.Result.Ok values) =>
+                                                              { regular := regular, common := common,
+                                                                partialReply := partialReply,
+                                                                high :=
+                                                                  FIo_Native.weights.shared_high values owner
+                                                                    c.ap0.value c.ap1.value parts }
+                                                            | x =>
+                                                              { regular := regular, common := common,
+                                                                partialReply := partialReply, high := div }
+                                                          | x =>
+                                                            { regular := regular, common := common, partialReply := div,
+                                                              high := div }
+                                                        else
+                                                          { regular := regular, common := div, partialReply := div,
+                                                            high := div }
+                                                      | x =>
+                                                        { regular := regular, common := div, partialReply := div,
+                                                          high := div }) =
+                                                    match ok (core.result.Result.Ok PUnit.unit, scratch, parts) with
+                                                    | fail err => (fail err, [0])
+                                                    | div => (div, [0])
+                                                    | ok (reply, scratch, parts) =>
+                                                      match reply with
+                                                      | core.result.Result.Err err =>
+                                                        (ok (core.result.Result.Err err, scratch, parts), [0])
+                                                      | core.result.Result.Ok a =>
+                                                        if true = true then
+                                                          match ok (owner, cells) with
+                                                          | fail err => (fail err, [0, 1])
+                                                          | div => (div, [0, 1])
+                                                          | ok (owner, cells) =>
+                                                            match
+                                                              FIo_Native.weights.shared_partials c.f.value cells with
+                                                            | fail err => (fail err, [0, 1, 2])
+                                                            | div => (div, [0, 1, 2])
+                                                            | ok (core.result.Result.Err err) =>
+                                                              (ok (core.result.Result.Err err, scratch, parts),
+                                                                [0, 1, 2])
+                                                            | ok (core.result.Result.Ok values) =>
+                                                              match
+                                                                FIo_Native.weights.shared_high values owner c.ap0.value
+                                                                  c.ap1.value parts with
+                                                              | fail err => (fail err, [0, 1, 2, 3])
+                                                              | div => (div, [0, 1, 2, 3])
+                                                              | ok (reply, after) =>
+                                                                (ok (reply, scratch, after), [0, 1, 2, 3])
+                                                        else (ok (core.result.Result.Ok (), scratch, parts), [0]))
+                                                (fun hp =>
+                                                  of_eq_true
+                                                    (Eq.trans
+                                                      (congr
+                                                        (congrArg Eq
+                                                          (Eq.trans
+                                                            (congrArg
+                                                              (fun x =>
+                                                                match x.regular with
+                                                                | ⋯ => (fail err, [0])
+                                                                | ⋯ => (div, [0])
+                                                                | ⋯ =>
+                                                                  match ⋯ with
+                                                                  | ⋯ => ⋯
+                                                                  | ⋯ => ⋯)
+                                                              ⋯)
+                                                            ⋯))
+                                                        ⋯)
+                                                      ⋯))
+                                                ⋯ ⋯)
+                                            ⋯ ⋯)
+                                        ⋯ ⋯)
+                                    ⋯ ⋯ ⋯)
+                                ⋯ ⋯)
+                            ⋯)
+                        ⋯ ⋯)
+                    ⋯ ⋯)
+                ⋯ ⋯)
+            ⋯ ⋯)
+        ⋯ ⋯ ⋯))
+'AspisR1.NJF_RegularInstantiation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

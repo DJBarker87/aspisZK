@@ -1,0 +1,43 @@
+{"attempt": "NJF_L022", "exit_status": 0, "wall_seconds": 4.204259485006332, "peak_rss_kib": "6009444", "swaps": "0", "print_axioms": ["'AspisR1.NJF_Root.finish' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJF_Root.finish : ∀ (r : NP6_StdModel.Reservation) (loc : Locations) (proof : Slice U8)
+  (v : verifier.View) (p : verifier.Prepared) (a : verifier.Accumulator),
+  NIG_FinishInput.Domain proof v p a →
+    ∀ (port : PairPort) (afterOwner : ℕ),
+      NIW_AlignFinishPort.Cut p port afterOwner (NJF_FinishObserved.G r loc v p a).2.2 →
+        have execution := NJF_FinishObserved.G r loc v p a;
+        Port3_NativeFinishBody.verifier.finish_relation (NIG_Slots.installed r) v p a none = execution.1 ∧
+          (∀ event ∈ execution.2.1, NIW_AlignFinishInvocation.Clause r event) ∧
+            (∀ event ∈ execution.2.1, NIW_AlignFinishDomains.Inputs p v a event) ∧
+              NIW_Alig
+...
+wner (NJF_FinishObserved.G r loc v p a).2.2 →
+        have execution := NJF_FinishObserved.G r loc v p a;
+        Port3_NativeFinishBody.verifier.finish_relation (NIG_Slots.installed r) v p a none = execution.1 ∧
+          (∀ event ∈ execution.2.1, NIW_AlignFinishInvocation.Clause r event) ∧
+            (∀ event ∈ execution.2.1, NIW_AlignFinishDomains.Inputs p v a event) ∧
+              NIW_AlignFinishPrefix.Prefix execution.2.1 ∧
+                NIW_AlignFinishPairCertificate.Bound r execution.2.2 ∧
+                  NIW_AlignFinishInfoEvent.HasPair execution ∧
+                    NIW_AlignFinishInfoNew.HasNew p execution ∧ NIW_AlignFinishPort.Bound r port execution.2.2 :=
+fun r loc proof v p a domain port afterOwner cut =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          let execution := _a;
+          Port3_NativeFinishBody.verifier.finish_relation (NIG_Slots.installed r) v p a none = execution.1 ∧
+            (∀ event ∈ execution.2.1, NIW_AlignFinishInvocation.Clause r event) ∧
+              (∀ event ∈ execution.2.1, NIW_AlignFinishDomains.Inputs p v a event) ∧
+                NIW_AlignFinishPrefix.Prefix execution.2.1 ∧
+                  NIW_AlignFinishPairCertificate.Bound r execution.2.2 ∧
+                    NIW_AlignFinishInfoEvent.HasPair execution ∧
+                      NIW_AlignFinishInfoNew.HasNew p execution ∧ NIW_AlignFinishPort.Bound r port execution.2.2)
+        (NJF_FinishObserved.source r loc proof v p a domain)))
+    (NIW_AlignComposedRoot.source r loc proof v p a domain port afterOwner
+      (Eq.mp
+        (congrArg (fun _a => NIW_AlignFinishPort.Cut p port afterOwner _a.2.2)
+          (NJF_FinishObserved.source r loc proof v p a domain))
+        cut))
+'AspisR1.NJF_Root.finish' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rba0282430502474dbafc06d1e18cfab0.scope; invocation ID: 90ab4bc5c43440ab979f8a18d2421e5c

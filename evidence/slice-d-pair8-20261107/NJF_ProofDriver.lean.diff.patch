@@ -1,0 +1,16 @@
+--- NIW_ProofDriver.lean
++++ NJF_ProofDriver.lean
+@@ -69,11 +69,11 @@
+          `NEP_Planted.viaAux, `NEP_MutateMatch.matcher, `NEP_MutatePrivate.viaPrivate,
+          `NEP_MutateProof.proof, `NEP_MutateAux.viaAux])
+     else do
+-      let manifest ← IO.ofExcept (Json.parse (← IO.FS.readFile "NIW_AUDIT_ROOTS.json"))
++      let manifest ← IO.ofExcept (Json.parse (← IO.FS.readFile "NJF_AUDIT_ROOTS.json"))
+       let groups ← IO.ofExcept (manifest.getObjValAs? (Array (Array String)) "groups")
+       let some idx := (mode.drop 5).toString.toNat? | throw (IO.userError "invalid proof mode")
+       let some names := groups[idx]? | throw (IO.userError "proof group out of range")
+-      pure (#[`NIW_COMBINED_IMPORT], names.map String.toName)
++      pure (#[`NJF_COMBINED_IMPORT], names.map String.toName)
+   let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
+     {} (loadExts := true) (level := .private)
+   if mode == "scan" || mode == "queryscan" then

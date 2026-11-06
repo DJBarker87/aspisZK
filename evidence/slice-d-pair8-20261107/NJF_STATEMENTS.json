@@ -1,0 +1,12 @@
+{
+  "AspisR1.NJF_PairInstantiation.root": {
+    "statement": "\u2200 (r : NP6_StdModel.Reservation) (i : NIW_AlignPairPhase.Input),\n  NIT_PairDomain.Domain i.owner.value i.alpha.value i.message.value i.kappa \u2192\n    FIo_Native.weights.Weights.pair i.owner.value i.alpha.value.to_slice i.message.value i.kappa =\n        NJF_PairInstantiation.G r i \u2227\n      NIT_ResultCanonical.Canonical (NJF_PairInstantiation.G r i)",
+    "receipt": "NJF_L028",
+    "kind": "internal source helper; primitive pair domain discharged in FinishObserved.source"
+  },
+  "AspisR1.NJF_Root.finish": {
+    "statement": "\u2200 (r : NP6_StdModel.Reservation) (loc : NIW_AlignFinishComposed.Locations)\n  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (v : AspisR1Stage2.verifier.View) (p : AspisR1Stage2.verifier.Prepared)\n  (a : AspisR1Stage2.verifier.Accumulator),\n  NIG_FinishInput.Domain proof v p a \u2192\n    \u2200 (port : NIT_Cuts.PairPort) (afterOwner : \u2115),\n      NIW_AlignFinishPort.Cut p port afterOwner (NJF_FinishObserved.G r loc v p a).2.2 \u2192\n        have execution := NJF_FinishObserved.G r loc v p a;\n        Port3_NativeFinishBody.verifier.finish_relation (NIG_Slots.installed r) v p a none = execution.1 \u2227\n          (\u2200 event \u2208 execution.2.1, NIW_AlignFinishInvocation.Clause r event) \u2227\n            (\u2200 event \u2208 execution.2.1, NIW_AlignFinishDomains.Inputs p v a event) \u2227\n              NIW_AlignFinishPrefix.Prefix execution.2.1 \u2227\n                NIW_AlignFinishPairCertificate.Bound r execution.2.2 \u2227\n                  NIW_AlignFinishInfoEvent.HasPair execution \u2227\n                    NIW_AlignFinishInfoNew.HasNew p execution \u2227 NIW_AlignFinishPort.Bound r port execution.2.2",
+    "receipt": "NJF_L028",
+    "kind": "deployed pair-and-finish positive hybrid certificate root"
+  }
+}

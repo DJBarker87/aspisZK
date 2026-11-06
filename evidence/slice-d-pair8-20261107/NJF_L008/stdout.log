@@ -1,0 +1,416 @@
+NJF_generated/NJF_SharedContinuation.lean:37:12: error: unsolved goals
+case fail
+c : Context
+scratch : Scratch
+parts : Parts
+hf : NHI_TensorOuterStep.Factors c.w.value
+cz : NHI_CellCanon.array (Array.repeat 16#usize NHX_FilledZero.zeroQ)
+err : Error
+hc : commonReply c = fail err
+common :
+  FIo_Native.weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } c.w.value
+        (Array.repeat 16#usize NHX_FilledZero.zeroQ) =
+      (NIW_AlignCommonCollect.collect c.w.value 17
+          ({ start := 0#usize, «end» := 16#usize }, Array.repeat 16#usize NHX_FilledZero.zeroQ)).1 ∧
+    False
+⊢ continueWith c (stage c scratch parts) = shared c parts
+NJF_generated/NJF_SharedContinuation.lean:40:7: error: unsolved goals
+case div
+c : Context
+scratch : Scratch
+parts : Parts
+hf : NHI_TensorOuterStep.Factors c.w.value
+cz : NHI_CellCanon.array (Array.repeat 16#usize NHX_FilledZero.zeroQ)
+hc : commonReply c = div
+common :
+  FIo_Native.weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } c.w.value
+        (Array.repeat 16#usize NHX_FilledZero.zeroQ) =
+      (NIW_AlignCommonCollect.collect c.w.value 17
+          ({ start := 0#usize, «end» := 16#usize }, Array.repeat 16#usize NHX_FilledZero.zeroQ)).1 ∧
+    False
+⊢ continueWith c (stage c scratch parts) = shared c parts
+NJF_generated/NJF_SharedContinuation.lean:55:97: error: Tactic `rfl` failed: The left-hand side
+  fail err
+is not definitionally equal to the right-hand side
+  let (w, common) := (c.w.value, cells)
+  do
+  let reply ← FIo_Native.weights.shared_partials c.f.value common
+  afterPartial c { address := c.w.address, value := w } parts reply
+
+case ok.fail
+c : Context
+scratch : Scratch
+parts : Parts
+hf : NHI_TensorOuterStep.Factors c.w.value
+cz : NHI_CellCanon.array (Array.repeat 16#usize NHX_FilledZero.zeroQ)
+cells : CommonCells
+common :
+  FIo_Native.weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } c.w.value
+        (Array.repeat 16#usize NHX_FilledZero.zeroQ) =
+      (NIW_AlignCommonCollect.collect c.w.value 17
+          ({ start := 0#usize, «end» := 16#usize }, Array.repeat 16#usize NHX_FilledZero.zeroQ)).1 ∧
+    NIW_AlignFieldReply.Produced (commonReply c) fun out =>
+      NIT_CommonChain.Trace c.w.value 17
+          ({ start := 0#usize, «end» := 16#usize }, Array.repeat 16#usize NHX_FilledZero.zeroQ) out ∧
+        out.1 = c.w.value ∧ NHI_CellCanon.array out.2
+hc : commonReply c = ok (c.w.value, cells)
+produced :
+  NIT_CommonChain.Trace c.w.value 17
+      ({ start := 0#usize, «end» := 16#usize }, Array.repeat 16#usize NHX_FilledZero.zeroQ) (c.w.value, cells) ∧
+    c.w.value = c.w.value ∧ NHI_CellCanon.array cells
+reference :
+  NIG_CommonLoop.common_reference c.w.value (Array.repeat 16#usize NHX_FilledZero.zeroQ) = ok (c.w.value, cells)
+err : Error
+hp : FIo_Native.weights.shared_partials c.f.value cells = fail err
+⊢ fail err =
+    let (w, common) := (c.w.value, cells)
+    do
+    let reply ← FIo_Native.weights.shared_partials c.f.value common
+    afterPartial c { address := c.w.address, value := w } parts reply
+NJF_generated/NJF_SharedContinuation.lean:56:92: error: Tactic `rfl` failed: The left-hand side
+  div
+is not definitionally equal to the right-hand side
+  let (w, common) := (c.w.value, cells)
+  do
+  let reply ← FIo_Native.weights.shared_partials c.f.value common
+  afterPartial c { address := c.w.address, value := w } parts reply
+
+case ok.div
+c : Context
+scratch : Scratch
+parts : Parts
+hf : NHI_TensorOuterStep.Factors c.w.value
+cz : NHI_CellCanon.array (Array.repeat 16#usize NHX_FilledZero.zeroQ)
+cells : CommonCells
+common :
+  FIo_Native.weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } c.w.value
+        (Array.repeat 16#usize NHX_FilledZero.zeroQ) =
+      (NIW_AlignCommonCollect.collect c.w.value 17
+          ({ start := 0#usize, «end» := 16#usize }, Array.repeat 16#usize NHX_FilledZero.zeroQ)).1 ∧
+    NIW_AlignFieldReply.Produced (commonReply c) fun out =>
+      NIT_CommonChain.Trace c.w.value 17
+          ({ start := 0#usize, «end» := 16#usize }, Array.repeat 16#usize NHX_FilledZero.zeroQ) out ∧
+        out.1 = c.w.value ∧ NHI_CellCanon.array out.2
+hc : commonReply c = ok (c.w.value, cells)
+produced :
+  NIT_CommonChain.Trace c.w.value 17
+      ({ start := 0#usize, «end» := 16#usize }, Array.repeat 16#usize NHX_FilledZero.zeroQ) (c.w.value, cells) ∧
+    c.w.value = c.w.value ∧ NHI_CellCanon.array cells
+reference :
+  NIG_CommonLoop.common_reference c.w.value (Array.repeat 16#usize NHX_FilledZero.zeroQ) = ok (c.w.value, cells)
+hp : FIo_Native.weights.shared_partials c.f.value cells = div
+⊢ div =
+    let (w, common) := (c.w.value, cells)
+    do
+    let reply ← FIo_Native.weights.shared_partials c.f.value common
+    afterPartial c { address := c.w.address, value := w } parts reply
+NJF_generated/NJF_SharedContinuation.lean:59:13: error: unsolved goals
+case ok.ok.Err
+c : Context
+scratch : Scratch
+parts : Parts
+hf : NHI_TensorOuterStep.Factors c.w.value
+cz : NHI_CellCanon.array (Array.repeat 16#usize NHX_FilledZero.zeroQ)
+cells : CommonCells
+common :
+  FIo_Native.weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } c.w.value
+        (Array.repeat 16#usize NHX_FilledZero.zeroQ) =
+      (NIW_AlignCommonCollect.collect c.w.value 17
+          ({ start := 0#usize, «end» := 16#usize }, Array.repeat 16#usize NHX_FilledZero.zeroQ)).1 ∧
+    NIW_AlignFieldReply.Produced (commonReply c) fun out =>
+      NIT_CommonChain.Trace c.w.value 17
+          ({ start := 0#usize, «end» := 16#usize }, Array.repeat 16#usize NHX_FilledZero.zeroQ) out ∧
+        out.1 = c.w.value ∧ NHI_CellCanon.array out.2
+hc : commonReply c = ok (c.w.value, cells)
+produced :
+  NIT_CommonChain.Trace c.w.value 17
+      ({ start := 0#usize, «end» := 16#usize }, Array.repeat 16#usize NHX_FilledZero.zeroQ) (c.w.value, cells) ∧
+    c.w.value = c.w.value ∧ NHI_CellCanon.array cells
+reference :
+  NIG_CommonLoop.common_reference c.w.value (Array.repeat 16#usize NHX_FilledZero.zeroQ) = ok (c.w.value, cells)
+err : FIo_Native.verifier.Error
+hp : FIo_Native.weights.shared_partials c.f.value cells = ok (core.result.Result.Err err)
+⊢ ok (core.result.Result.Err err) =
+    let (w, common) := (c.w.value, cells)
+    do
+    let reply ← FIo_Native.weights.shared_partials c.f.value common
+    match reply with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok partials => do
+        let (r, after) ← FIo_Native.weights.shared_high partials w c.ap0.value c.ap1.value parts
+        match r with
+          | core.result.Result.Err e => ok (core.result.Result.Err e)
+          | core.result.Result.Ok a => NIT_TailChain.sourceTail w c.f.value c.ap0.value c.ap1.value after c.kappa
+NJF_generated/NJF_SharedContinuation.lean:62:115: error: Tactic `rfl` failed: The left-hand side
+  fail err
+is not definitionally equal to the right-hand side
+  let (w, common) := (c.w.value, cells)
+  do
+  let reply ← FIo_Native.weights.shared_partials c.f.value common
+  match reply with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok partials => do
+      let (r, after) ← FIo_Native.weights.shared_high partials w c.ap0.value c.ap1.value parts
+      afterHigh c { address := c.w.address, value := w } after r
+
+case ok.ok.Ok.fail
+c : Context
+scratch : Scratch
+parts : Parts
+hf : NHI_TensorOuterStep.Factors c.w.value
+cz : NHI_CellCanon.array (Array.repeat 16#usize NHX_FilledZero.zeroQ)
+cells : CommonCells
+common :
+  FIo_Native.weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } c.w.value
+        (Array.repeat 16#usize NHX_FilledZero.zeroQ) =
+      (NIW_AlignCommonCollect.collect c.w.value 17
+          ({ start := 0#usize, «end» := 16#usize }, Array.repeat 16#usize NHX_FilledZero.zeroQ)).1 ∧
+    NIW_AlignFieldReply.Produced (commonReply c) fun out =>
+      NIT_CommonChain.Trace c.w.value 17
+          ({ start := 0#usize, «end» := 16#usize }, Array.repeat 16#usize NHX_FilledZero.zeroQ) out ∧
+        out.1 = c.w.value ∧ NHI_CellCanon.array out.2
+hc : commonReply c = ok (c.w.value, cells)
+produced :
+  NIT_CommonChain.Trace c.w.value 17
+      ({ start := 0#usize, «end» := 16#usize }, Array.repeat 16#usize NHX_FilledZero.zeroQ) (c.w.value, cells) ∧
+    c.w.value = c.w.value ∧ NHI_CellCanon.array cells
+reference :
+  NIG_CommonLoop.common_reference c.w.value (Array.repeat 16#usize NHX_FilledZero.zeroQ) = ok (c.w.value, cells)
+values : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize
+hp : FIo_Native.weights.shared_partials c.f.value cells = ok (core.result.Result.Ok values)
+err : Error
+hh : FIo_Native.weights.shared_high values c.w.value c.ap0.value c.ap1.value parts = fail err
+⊢ fail err =
+    let (w, common) := (c.w.value, cells)
+    do
+    let reply ← FIo_Native.weights.shared_partials c.f.value common
+    match reply with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok partials => do
+        let (r, after) ← FIo_Native.weights.shared_high partials w c.ap0.value c.ap1.value parts
+        afterHigh c { address := c.w.address, value := w } after r
+NJF_generated/NJF_SharedContinuation.lean:63:110: error: Tactic `rfl` failed: The left-hand side
+  div
+is not definitionally equal to the right-hand side
+  let (w, common) := (c.w.value, cells)
+  do
+  let reply ← FIo_Native.weights.shared_partials c.f.value common
+  match reply with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok partials => do
+      let (r, after) ← FIo_Native.weights.shared_high partials w c.ap0.value c.ap1.value parts
+      afterHigh c { address := c.w.address, value := w } after r
+
+case ok.ok.Ok.div
+c : Context
+scratch : Scratch
+parts : Parts
+hf : NHI_TensorOuterStep.Factors c.w.value
+cz : NHI_CellCanon.array (Array.repeat 16#usize NHX_FilledZero.zeroQ)
+cells : CommonCells
+common :
+  FIo_Native.weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } c.w.value
+        (Array.repeat 16#usize NHX_FilledZero.zeroQ) =
+      (NIW_AlignCommonCollect.collect c.w.value 17
+          ({ start := 0#usize, «end» := 16#usize }, Array.repeat 16#usize NHX_FilledZero.zeroQ)).1 ∧
+    NIW_AlignFieldReply.Produced (commonReply c) fun out =>
+      NIT_CommonChain.Trace c.w.value 17
+          ({ start := 0#usize, «end» := 16#usize }, Array.repeat 16#usize NHX_FilledZero.zeroQ) out ∧
+        out.1 = c.w.value ∧ NHI_CellCanon.array out.2
+hc : commonReply c = ok (c.w.value, cells)
+produced :
+  NIT_CommonChain.Trace c.w.value 17
+      ({ start := 0#usize, «end» := 16#usize }, Array.repeat 16#usize NHX_FilledZero.zeroQ) (c.w.value, cells) ∧
+    c.w.value = c.w.value ∧ NHI_CellCanon.array cells
+reference :
+  NIG_CommonLoop.common_reference c.w.value (Array.repeat 16#usize NHX_FilledZero.zeroQ) = ok (c.w.value, cells)
+values : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize
+hp : FIo_Native.weights.shared_partials c.f.value cells = ok (core.result.Result.Ok values)
+hh : FIo_Native.weights.shared_high values c.w.value c.ap0.value c.ap1.value parts = div
+⊢ div =
+    let (w, common) := (c.w.value, cells)
+    do
+    let reply ← FIo_Native.weights.shared_partials c.f.value common
+    match reply with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok partials => do
+        let (r, after) ← FIo_Native.weights.shared_high partials w c.ap0.value c.ap1.value parts
+        afterHigh c { address := c.w.address, value := w } after r
+NJF_generated/NJF_SharedContinuation.lean:64:16: error: unsolved goals
+case ok.ok.Ok.ok
+c : Context
+scratch : Scratch
+parts : Parts
+hf : NHI_TensorOuterStep.Factors c.w.value
+cz : NHI_CellCanon.array (Array.repeat 16#usize NHX_FilledZero.zeroQ)
+cells : CommonCells
+common :
+  FIo_Native.weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } c.w.value
+        (Array.repeat 16#usize NHX_FilledZero.zeroQ) =
+      (NIW_AlignCommonCollect.collect c.w.value 17
+          ({ start := 0#usize, «end» := 16#usize }, Array.repeat 16#usize NHX_FilledZero.zeroQ)).1 ∧
+    NIW_AlignFieldReply.Produced (commonReply c) fun out =>
+      NIT_CommonChain.Trace c.w.value 17
+          ({ start := 0#usize, «end» := 16#usize }, Array.repeat 16#usize NHX_FilledZero.zeroQ) out ∧
+        out.1 = c.w.value ∧ NHI_CellCanon.array out.2
+hc : commonReply c = ok (c.w.value, cells)
+produced :
+  NIT_CommonChain.Trace c.w.value 17
+      ({ start := 0#usize, «end» := 16#usize }, Array.repeat 16#usize NHX_FilledZero.zeroQ) (c.w.value, cells) ∧
+    c.w.value = c.w.value ∧ NHI_CellCanon.array cells
+reference :
+  NIG_CommonLoop.common_reference c.w.value (Array.repeat 16#usize NHX_FilledZero.zeroQ) = ok (c.w.value, cells)
+values : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize
+hp : FIo_Native.weights.shared_partials c.f.value cells = ok (core.result.Result.Ok values)
+reply : core.result.Result Unit FIo_Native.verifier.Error
+after : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize
+hh : FIo_Native.weights.shared_high values c.w.value c.ap0.value c.ap1.value parts = ok (reply, after)
+⊢ afterHigh c c.w after reply =
+    let (w, common) := (c.w.value, cells)
+    do
+    let reply ← FIo_Native.weights.shared_partials c.f.value common
+    match reply with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok partials => do
+        let (r, after) ← FIo_Native.weights.shared_high partials w c.ap0.value c.ap1.value parts
+        afterHigh c { address := c.w.address, value := w } after r
+theorem AspisR1.NJF_SharedContinuation.source : ∀ (c : Context) (scratch : Scratch) (parts : Parts),
+  NHI_TensorOuterStep.Factors c.w.value → continueWith c (stage c scratch parts) = shared c parts :=
+fun c scratch parts hf =>
+  have cz := fun x hx => Eq.symm (Eq.mp source._simp_1 hx).right ▸ NHX_FilledZero.zero_canonical;
+  have common := NIW_AlignCommonSource.source c.w.value hf (Array.repeat 16#usize NHX_FilledZero.zeroQ) cz;
+  casesOn (motive := fun t => commonReply c = t → continueWith c (stage c scratch parts) = shared c parts)
+    (commonReply c)
+    (fun value h =>
+      Eq.ndrec (motive := fun x => commonReply c = x → continueWith c (stage c scratch parts) = shared c parts)
+        (fun hc =>
+          let ⟨owner, cells, hc⟩ := value
+          id
+            (fun common =>
+              have produced := common.right;
+              have same :=
+                (Eq.mp
+                      (congrArg
+                        (fun x =>
+                          match x with
+                          | ok value =>
+                            (fun out =>
+                                NIT_CommonChain.Trace c.w.value 17
+                                    ({ start := 0#usize, «end» := 16#usize },
+                                      Array.repeat 16#usize NHX_FilledZero.zeroQ)
+                                    out ∧
+                                  out.1 = c.w.value ∧ NHI_CellCanon.array out.2)
+                              value
+                          | fail e => False
+                          | div => False)
+                        hc)
+                      produced).right.left;
+              Eq.ndrec (motive := fun owner =>
+                commonReply c = ok (owner, cells) →
+                  NIT_CommonChain.Trace c.w.value 17
+                        ({ start := 0#usize, «end» := 16#usize }, Array.repeat 16#usize NHX_FilledZero.zeroQ)
+                        (owner, cells) ∧
+                      owner = c.w.value ∧ NHI_CellCanon.array cells →
+                    continueWith c (stage c scratch parts) = shared c parts)
+                (fun hc produced =>
+                  have reference :=
+                    Eq.mpr
+                      (id
+                        (congrArg (fun _a => _a = ok (c.w.value, cells))
+                          (Eq.symm
+                            (NIG_CommonLoop.common_source c.w.value (Array.repeat 16#usize NHX_FilledZero.zeroQ)))))
+                      (Eq.trans common.left hc);
+                  casesOn (motive := fun t =>
+                    FIo_Native.weights.shared_partials c.f.value cells = t →
+                      continueWith c (stage c scratch parts) = shared c parts)
+                    (FIo_Native.weights.shared_partials c.f.value cells)
+                    (fun partials h =>
+                      Eq.ndrec (motive := fun x =>
+                        FIo_Native.weights.shared_partials c.f.value cells = x →
+                          continueWith c (stage c scratch parts) = shared c parts)
+                        (fun hp =>
+                          core.result.Result.casesOn (motive := fun t =>
+                            partials = t → continueWith c (stage c scratch parts) = shared c parts) partials
+                            (fun values h =>
+                              Eq.ndrec (motive := fun partials =>
+                                FIo_Native.weights.shared_partials c.f.value cells = ok partials →
+                                  continueWith c (stage c scratch parts) = shared c parts)
+                                (fun hp =>
+                                  casesOn (motive := fun t =>
+                                    FIo_Native.weights.shared_high values c.w.value c.ap0.value c.ap1.value parts = t →
+                                      continueWith c (stage c scratch parts) = shared c parts)
+                                    (FIo_Native.weights.shared_high values c.w.value c.ap0.value c.ap1.value parts)
+                                    (fun result h =>
+                                      Eq.ndrec (motive := fun x =>
+                                        FIo_Native.weights.shared_high values c.w.value c.ap0.value c.ap1.value parts =
+                                            x →
+                                          continueWith c (stage c scratch parts) = shared c parts)
+                                        (fun hh => sorry) (Eq.symm h)
+                                        (Eq.refl
+                                          (FIo_Native.weights.shared_high values c.w.value c.ap0.value c.ap1.value
+                                            parts)))
+                                    (fun err h =>
+                                      Eq.ndrec (motive := fun x =>
+                                        FIo_Native.weights.shared_high values c.w.value c.ap0.value c.ap1.value parts =
+                                            x →
+                                          continueWith c (stage c scratch parts) = shared c parts)
+                                        (fun hh => sorry) (Eq.symm h)
+                                        (Eq.refl
+                                          (FIo_Native.weights.shared_high values c.w.value c.ap0.value c.ap1.value
+                                            parts)))
+                                    (fun h =>
+                                      Eq.ndrec (motive := fun x =>
+                                        FIo_Native.weights.shared_high values c.w.value c.ap0.value c.ap1.value parts =
+                                            x →
+                                          continueWith c (stage c scratch parts) = shared c parts)
+                                        (fun hh => sorry) (Eq.symm h)
+                                        (Eq.refl
+                                          (FIo_Native.weights.shared_high values c.w.value c.ap0.value c.ap1.value
+                                            parts)))
+                                    (Eq.refl
+                                      (FIo_Native.weights.shared_high values c.w.value c.ap0.value c.ap1.value parts)))
+                                (Eq.symm h) hp)
+                            (fun err h =>
+                              Eq.ndrec (motive := fun partials =>
+                                FIo_Native.weights.shared_partials c.f.value cells = ok partials →
+                                  continueWith c (stage c scratch parts) = shared c parts)
+                                (fun hp => sorry) (Eq.symm h) hp)
+                            (Eq.refl partials))
+                        (Eq.symm h) (Eq.refl (FIo_Native.weights.shared_partials c.f.value cells)))
+                    (fun err h =>
+                      Eq.ndrec (motive := fun x =>
+                        FIo_Native.weights.shared_partials c.f.value cells = x →
+                          continueWith c (stage c scratch parts) = shared c parts)
+                        (fun hp => sorry) (Eq.symm h) (Eq.refl (FIo_Native.weights.shared_partials c.f.value cells)))
+                    (fun h =>
+                      Eq.ndrec (motive := fun x =>
+                        FIo_Native.weights.shared_partials c.f.value cells = x →
+                          continueWith c (stage c scratch parts) = shared c parts)
+                        (fun hp => sorry) (Eq.symm h) (Eq.refl (FIo_Native.weights.shared_partials c.f.value cells)))
+                    (Eq.refl (FIo_Native.weights.shared_partials c.f.value cells)))
+                (Eq.symm same) hc
+                (Eq.mp
+                  (congrArg
+                    (fun x =>
+                      match x with
+                      | ok value =>
+                        (fun out =>
+                            NIT_CommonChain.Trace c.w.value 17
+                                ({ start := 0#usize, «end» := 16#usize }, Array.repeat 16#usize NHX_FilledZero.zeroQ)
+                                out ∧
+                              out.1 = c.w.value ∧ NHI_CellCanon.array out.2)
+                          value
+                      | fail e => False
+                      | div => False)
+                    hc)
+                  produced))
+            common)
+        (Eq.symm h) (Eq.refl (commonReply c)))
+    (fun err h =>
+      Eq.ndrec (motive := fun x => commonReply c = x → continueWith c (stage c scratch parts) = shared c parts)
+        (fun hc => sorry) (Eq.symm h) (Eq.refl (commonReply c)))
+    (fun h =>
+      Eq.ndrec (motive := fun x => commonReply c = x → continueWith c (stage c scratch parts) = shared c parts)
+        (fun hc => sorry) (Eq.symm h) (Eq.refl (commonReply c)))
+    (Eq.refl (commonReply c))
+'AspisR1.NJF_SharedContinuation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

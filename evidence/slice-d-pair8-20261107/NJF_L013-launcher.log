@@ -1,0 +1,54 @@
+{"attempt": "NJF_L013", "exit_status": 1, "wall_seconds": 4.021017378894612, "peak_rss_kib": "5973648", "swaps": "0", "print_axioms": ["'AspisR1.NJF_StageProjection.erase' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJF_generated/NJF_StageProjection.lean:38:18: error: Tactic `rfl` failed: The left-hand side
+  (match ok (core.result.Result.Ok values) with
+    | fail err => (fail err, [0, 1, 2])
+    | div => (div, [0, 1, 2])
+    | ok (core.result.Result.Err err) => (ok (core.result.Result.Err err, scratch, parts), [0, 1, 2])
+    | ok (core.result.Result.Ok values) =>
+      match FIo_Native.weights.shared_high values owner c.ap0.value c.ap1.value parts with
+      | fail err => (fail err, [0, 1, 2, 3])
+      | div => (div, [0, 1, 2, 3])
+      | ok (reply, after) => (ok (reply, scratch, after), [0, 1, 2, 3])).1
+is not definitionally equal to the right-hand side
+  match ok (core.result.Result.Ok values) with
+
+...
+re.result.Result.Ok values) =>
+    match FIo_Native.weights.shared_high values owner c.ap0.value c.ap1.value parts with
+    | fail err => fail err
+    | div => div
+    | ok (reply, after) => ok (reply, scratch, after)
+
+case ok.ok.Ok.ok
+c : Context
+scratch : Scratch
+parts : Parts
+owner : W
+cells : CommonCells
+hc : commonReply c = ok (owner, cells)
+values : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize
+hp : FIo_Native.weights.shared_partials c.f.value cells = ok (core.result.Result.Ok values)
+reply : core.result.Result Unit FIo_Native.verifier.Error
+after : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize
+hh : FIo_Native.weights.shared_high values owner c.ap0.value c.ap1.value parts = ok (reply, after)
+⊢ (match ok (core.result.Result.Ok values) with
+      | fail err => (fail err, [0, 1, 2])
+      | div => (div, [0, 1, 2])
+      | ok (core.result.Result.Err err) => (ok (core.result.Result.Err err, scratch, parts), [0, 1, 2])
+      | ok (core.result.Result.Ok values) =>
+        match FIo_Native.weights.shared_high values owner c.ap0.value c.ap1.value parts with
+        | fail err => (fail err, [0, 1, 2, 3])
+        | div => (div, [0, 1, 2, 3])
+        | ok (reply, after) => (ok (reply, scratch, after), [0, 1, 2, 3])).1 =
+    match ok (core.result.Result.Ok values) with
+    | fail err => fail err
+    | div => div
+    | ok (core.result.Result.Err err) => ok (core.result.Result.Err err, scratch, parts)
+    | ok (core.result.Result.Ok values) =>
+      match FIo_Native.weights.shared_high values owner c.ap0.value c.ap1.value parts with
+      | fail err => fail err
+      | div => div
+      | ok (reply, after) => ok (reply, scratch, after)
+'AspisR1.NJF_StageProjection.erase' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rfa3c88a27fdc4980b377ffc0bb794657.scope; invocation ID: 7cfab8baf16d4461abdf240cbe9f9998

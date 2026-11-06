@@ -1,0 +1,27 @@
+NJF_generated/NJF_RegularCut.lean:56:39: error(lean.unknownIdentifier): Unknown identifier `verifier.Error`
+def AspisR1.NJF_RegularCut.G : Bool → Log → Result State × List ℕ :=
+fun shared l =>
+  match l.regular with
+  | fail err => (fail err, [0])
+  | div => (div, [0])
+  | ok (reply, scratch, parts) =>
+    match reply with
+    | core.result.Result.Err err => (ok (core.result.Result.Err err, scratch, parts), [0])
+    | core.result.Result.Ok a =>
+      if shared = true then
+        match l.common with
+        | fail err => (fail err, [0, 1])
+        | div => (div, [0, 1])
+        | ok v =>
+          match l.partialReply with
+          | fail err => (fail err, [0, 1, 2])
+          | div => (div, [0, 1, 2])
+          | ok (core.result.Result.Err err) => (ok (core.result.Result.Err err, scratch, parts), [0, 1, 2])
+          | ok (core.result.Result.Ok a) =>
+            match l.high with
+            | fail err => (fail err, [0, 1, 2, 3])
+            | div => (div, [0, 1, 2, 3])
+            | ok (reply, after) => (ok (reply, scratch, after), [0, 1, 2, 3])
+      else (ok (core.result.Result.Ok (), scratch, parts), [0])
+'AspisR1.NJF_RegularCut.specialize' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJF_RegularCut.regular_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

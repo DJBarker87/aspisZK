@@ -1,0 +1,54 @@
+{"attempt": "NJF_L008", "exit_status": 1, "wall_seconds": 5.50900942995213, "peak_rss_kib": "5976388", "swaps": "0", "print_axioms": ["'AspisR1.NJF_SharedContinuation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJF_generated/NJF_SharedContinuation.lean:37:12: error: unsolved goals
+case fail
+c : Context
+scratch : Scratch
+parts : Parts
+hf : NHI_TensorOuterStep.Factors c.w.value
+cz : NHI_CellCanon.array (Array.repeat 16#usize NHX_FilledZero.zeroQ)
+err : Error
+hc : commonReply c = fail err
+common :
+  FIo_Native.weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } c.w.value
+        (Array.repeat 16#usize NHX_FilledZero.zeroQ) =
+      (NIW_AlignCommonCollect.collect c.w.value 17
+          ({ start := 0#usize, «end» := 16#usize }, Array.repeat 16#usize NHX_FilledZero.zeroQ)).1 ∧
+    False
+⊢ continueWith c (stage c scratch parts) = shared c parts
+NJF_generated/NJF_SharedContinuation.lean:40:7
+...
+rry) (Eq.symm h) (Eq.refl (FIo_Native.weights.shared_partials c.f.value cells)))
+                    (fun h =>
+                      Eq.ndrec (motive := fun x =>
+                        FIo_Native.weights.shared_partials c.f.value cells = x →
+                          continueWith c (stage c scratch parts) = shared c parts)
+                        (fun hp => sorry) (Eq.symm h) (Eq.refl (FIo_Native.weights.shared_partials c.f.value cells)))
+                    (Eq.refl (FIo_Native.weights.shared_partials c.f.value cells)))
+                (Eq.symm same) hc
+                (Eq.mp
+                  (congrArg
+                    (fun x =>
+                      match x with
+                      | ok value =>
+                        (fun out =>
+                            NIT_CommonChain.Trace c.w.value 17
+                                ({ start := 0#usize, «end» := 16#usize }, Array.repeat 16#usize NHX_FilledZero.zeroQ)
+                                out ∧
+                              out.1 = c.w.value ∧ NHI_CellCanon.array out.2)
+                          value
+                      | fail e => False
+                      | div => False)
+                    hc)
+                  produced))
+            common)
+        (Eq.symm h) (Eq.refl (commonReply c)))
+    (fun err h =>
+      Eq.ndrec (motive := fun x => commonReply c = x → continueWith c (stage c scratch parts) = shared c parts)
+        (fun hc => sorry) (Eq.symm h) (Eq.refl (commonReply c)))
+    (fun h =>
+      Eq.ndrec (motive := fun x => commonReply c = x → continueWith c (stage c scratch parts) = shared c parts)
+        (fun hc => sorry) (Eq.symm h) (Eq.refl (commonReply c)))
+    (Eq.refl (commonReply c))
+'AspisR1.NJF_SharedContinuation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rd6e422606c244450be7b9879da806116.scope; invocation ID: 1e4db9782a294e23a9ed5b567609b0f9

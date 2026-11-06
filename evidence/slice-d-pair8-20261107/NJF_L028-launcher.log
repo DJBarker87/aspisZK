@@ -1,0 +1,40 @@
+{"attempt": "NJF_L028", "exit_status": 0, "wall_seconds": 5.331542891915888, "peak_rss_kib": "5977760", "swaps": "0", "print_axioms": ["'AspisR1.NJF_PairInstantiation.root' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJF_Root.finish' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJF_PairInstantiation.root : ∀ (r : NP6_StdModel.Reservation) (i : NIW_AlignPairPhase.Input),
+  NIT_PairDomain.Domain i.owner.value i.alpha.value i.message.value i.kappa →
+    FIo_Native.weights.Weights.pair i.owner.value i.alpha.value.to_slice i.message.value i.kappa =
+        NJF_PairInstantiation.G r i ∧
+      NIT_ResultCanonical.Canonical (NJF_PairInstantiation.G r i) :=
+fun r i domain =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          FIo_Native.weights.Weights.pair i.owner.value i.alpha.value.to_slice i.message.value i.kappa = _a ∧
+            NIT_ResultCanonical.Canonical _a)
+        (NJF_PairInstantiation.source r i domain)))
+    (NIW_AlignPairPhaseSourc
+...
+.scratch ∧
+                                          (parts =
+                                              if NJF_SliceCuts.enteredHigh shared l then l.highParts else l.parts) ∧
+                                            (NJF_SliceCuts.enteredPartial shared l →
+                                                events 1 = 1 ∧
+                                                  events 2 = 2 ∧
+                                                    args.commonOwner = c.w.address ∧
+                                                      args.partialMessage = c.f.address ∧
+                                                        args.partialMessageLength = 2048 ∧
+                                                          args.partialCommon = l.common) ∧
+                                              (NJF_SliceCuts.enteredHigh shared l →
+                                                events 3 = 3 ∧
+                                                  args.highOwner = c.w.address ∧
+                                                    args.highParts = c.partsAddress ∧
+                                                      args.highAP0 = c.ap0.value ∧
+                                                        args.highAP1 = c.ap1.value ∧
+                                                          args.highBefore = l.parts ∧
+                                                            ∀ (values : NIT_Cuts.Powers),
+                                                              l.partialReply = Aeneas.Std.core.result.Result.Ok values →
+                                                                args.highPartial = values)
+'AspisR1.NJF_PairInstantiation.root' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJF_Root.finish' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rf6a3fadc8d5b48e2837ceecaed2fa29f.scope; invocation ID: 0913bee5d300422aab7fdf2d1efd9da3

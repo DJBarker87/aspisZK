@@ -1,0 +1,70 @@
+{"attempt": "NJF_L002", "exit_status": 1, "wall_seconds": 3.6930921140592545, "peak_rss_kib": "5979168", "swaps": "0", "print_axioms": ["'AspisR1.NJF_RegularCut.specialize' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJF_RegularCut.regular_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJF_generated/NJF_RegularCut.lean:57:29: error: Application type mismatch: The argument
+  err
+has type
+  verifier.Error
+but is expected to have type
+  FIo_Native.verifier.Error
+in the application
+  core.result.Result.Err err
+NJF_generated/NJF_RegularCut.lean:58:22: error: Application type mismatch: The argument
+  err
+has type
+  verifier.Error
+but is expected to have type
+  NIT_ErrorTransport.NativeError
+in the application
+  core.result.Result.Err err
+def AspisR1.NJF_RegularCut.G : Bool → Log → Result State × List ℕ :=
+fun shared l =>
+  match l.regular with
+  | fail err => (fail err, [0])
+  | div => (div, [0])
+  | ok (reply, scratch, parts) =>
+    match reply with
+    | core.result.Result.Err
+...
+NJF_generated/NJF_RegularCut.lean:57:29: error: Application type mismatch: The argument
+  err
+has type
+  verifier.Error
+but is expected to have type
+  FIo_Native.verifier.Error
+in the application
+  core.result.Result.Err err
+NJF_generated/NJF_RegularCut.lean:58:22: error: Application type mismatch: The argument
+  err
+has type
+  verifier.Error
+but is expected to have type
+  NIT_ErrorTransport.NativeError
+in the application
+  core.result.Result.Err err
+def AspisR1.NJF_RegularCut.G : Bool → Log → Result State × List ℕ :=
+fun shared l =>
+  match l.regular with
+  | fail err => (fail err, [0])
+  | div => (div, [0])
+  | ok (reply, scratch, parts) =>
+    match reply with
+    | core.result.Result.Err err => (ok (core.result.Result.Err err, scratch, parts), [0])
+    | core.result.Result.Ok a =>
+      if shared = true then
+        match l.common with
+        | fail err => (fail err, [0, 1])
+        | div => (div, [0, 1])
+        | ok v =>
+          match l.partialReply with
+          | fail err => (fail err, [0, 1, 2])
+          | div => (div, [0, 1, 2])
+          | ok (core.result.Result.Err err) => (ok (core.result.Result.Err err, scratch, parts), [0, 1, 2])
+          | ok (core.result.Result.Ok a) =>
+            match l.high with
+            | fail err => (fail err, [0, 1, 2, 3])
+            | div => (div, [0, 1, 2, 3])
+            | ok (reply, after) => (ok (reply, scratch, after), [0, 1, 2, 3])
+      else (ok (core.result.Result.Ok (), scratch, parts), [0])
+'AspisR1.NJF_RegularCut.specialize' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJF_RegularCut.regular_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r1467938c223b4c699a74737b8282aea2.scope; invocation ID: 9c99c7848df74cc1af80dc6799f940cd

@@ -1,0 +1,38 @@
+{"attempt": "NJF_L016", "exit_status": 0, "wall_seconds": 4.536887709982693, "peak_rss_kib": "6005988", "swaps": "0", "print_axioms": ["'AspisR1.NJF_AllocatorInstantiation.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NJF_generated/NJF_AllocatorInstantiation.lean:26:6: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+theorem AspisR1.NJF_AllocatorInstantiation.source : ∀ (r : NP6_StdModel.Reservation) (c : Context),
+  NIT_PairDomain.Domain c.w.value c.alpha.value c.f.value c.kappa →
+    canonical c.ap0.value → canonical c.ap1.value → G r c = (NIW_AlignAllocatorPhase.run r c).1 :=
+fun r c domain c0 c1 =>
+  core.result.Result.casesOn (motive := fun t => r = t → G r c = (NIW_AlignAllocatorPhase.run r c).1) r
+    (fun unit h =>
+      E
+...
+NJF_generated/NJF_AllocatorInstantiation.lean:26:6: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+theorem AspisR1.NJF_AllocatorInstantiation.source : ∀ (r : NP6_StdModel.Reservation) (c : Context),
+  NIT_PairDomain.Domain c.w.value c.alpha.value c.f.value c.kappa →
+    canonical c.ap0.value → canonical c.ap1.value → G r c = (NIW_AlignAllocatorPhase.run r c).1 :=
+fun r c domain c0 c1 =>
+  core.result.Result.casesOn (motive := fun t => r = t → G r c = (NIW_AlignAllocatorPhase.run r c).1) r
+    (fun unit h =>
+      Eq.symm h ▸
+        let ⟨h✝⟩ := unit
+        Eq.symm h✝ ▸
+          have filled :=
+            Eq.mpr
+              (id
+                (congrArg
+                  (fun _a => _a = ok (core.result.Result.Ok (NHI_FilledModel.vector 64#usize NHX_FilledZero.zeroQ)))
+                  (NHI_FilledModel.qm (core.result.Result.Ok ()) 64#usize NHX_FilledZero.zeroQ)))
+              (Eq.refl (NHI_FilledModel.result (core.result.Result.Ok ()) 64#usize NHX_FilledZero.zeroQ));
+          NJF_RegularContinuation.source c (NHI_FilledModel.vector 64#usize NHX_FilledZero.zeroQ) domain c0 c1
+            (NIG_PairFrames.filled (core.result.Result.Ok ()) (NHI_FilledModel.vector 64#usize NHX_FilledZero.zeroQ)
+              filled))
+    (fun err h => Eq.symm h ▸ Eq.refl (G (core.result.Result.Err err) c)) (Eq.refl r)
+'AspisR1.NJF_AllocatorInstantiation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-raaf409fd0ef2408e8cbb492df57a5a86.scope; invocation ID: 6bedbde985bb4755961dbc00366cb439

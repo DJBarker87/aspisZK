@@ -1,0 +1,33 @@
+{"attempt": "NJF_L018", "exit_status": 0, "wall_seconds": 5.049993796972558, "peak_rss_kib": "6005752", "swaps": "0", "print_axioms": ["'AspisR1.NJF_PairInstantiation.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJF_PairInstantiation.root' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJF_PairInstantiation.root : ∀ (r : NP6_StdModel.Reservation) (i : Input),
+  NIT_PairDomain.Domain i.owner.value i.alpha.value i.message.value i.kappa →
+    FIo_Native.weights.Weights.pair i.owner.value i.alpha.value.to_slice i.message.value i.kappa = G r i ∧
+      NIT_ResultCanonical.Canonical (G r i) :=
+fun r i domain =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          FIo_Native.weights.Weights.pair i.owner.value i.alpha.value.to_slice i.message.value i.kappa = _a ∧
+            NIT_ResultCanonical.Canonical _a)
+        (source r i domain)))
+    (NIW_AlignPairPhaseSource.source r i domain)
+'AspisR1.NJF_PairInstantiation.source' depends on axioms: [propext, Clas
+...
+theorem AspisR1.NJF_PairInstantiation.root : ∀ (r : NP6_StdModel.Reservation) (i : Input),
+  NIT_PairDomain.Domain i.owner.value i.alpha.value i.message.value i.kappa →
+    FIo_Native.weights.Weights.pair i.owner.value i.alpha.value.to_slice i.message.value i.kappa = G r i ∧
+      NIT_ResultCanonical.Canonical (G r i) :=
+fun r i domain =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          FIo_Native.weights.Weights.pair i.owner.value i.alpha.value.to_slice i.message.value i.kappa = _a ∧
+            NIT_ResultCanonical.Canonical _a)
+        (source r i domain)))
+    (NIW_AlignPairPhaseSource.source r i domain)
+'AspisR1.NJF_PairInstantiation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJF_PairInstantiation.root' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r7434d0176d9d476e8c3c19e61d1c77f4.scope; invocation ID: c4df0e88955b41cf94706510d94b3805
