@@ -1,0 +1,84 @@
+NKK_generated/NKK_FieldStages.lean:28:19: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.fail` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `OptionT.fail`
+  [apply] `NBB_QueryTrace.Trace.fail`
+  [apply] `fail`
+  [apply] `R22TotalCheckedComposition.Code.fail`
+  [apply] `Lean.Parser.Tactic.fail`
+  [apply] `NBB_QueryTrace.Trace.below.fail`
+  [apply] `Std.Internal.Parsec.fail`
+  [apply] `Lean.Parser.Tactic.Grind.fail`
+  [apply] `Std.Http.Protocol.H1.Reader.fail`
+NKK_generated/NKK_FieldStages.lean:33:78: error: unsolved goals
+case Ok
+T : Type
+r : Reader
+next : E → E → E → E → K → Reader → NJU_Log.Run NJU_ResumeObserved.Event (core.result.Result T verifier.Error)
+last : verifier.Reader
+a✝ : NJU_ResumeObserved.E
+⊢ (do
+        let a ← NJU_ResumeObserved.recordE last
+        let tail ←
+          match a.1 with
+            | core.result.Result.Err err => pure (core.result.Result.Err err)
+            | core.result.Result.Ok value => do
+              let a ← NJU_ResumeObserved.recordE a.2
+              let tail ←
+                match a.1 with
+                  | core.result.Result.Err err => pure (core.result.Result.Err err)
+                  | core.result.Result.Ok value => do
+                    let a ← NJU_ResumeObserved.recordE a.2
+                    let tail ←
+                      match a.1 with
+                        | core.result.Result.Err err => pure (core.result.Result.Err err)
+                        | core.result.Result.Ok value => do
+                          let a ← NJU_ResumeObserved.recordK a.2
+                          let tail ←
+                            match a.1 with
+                              | core.result.Result.Err err => pure (core.result.Result.Err err)
+                              | core.result.Result.Ok value => pure (core.result.Result.Ok ([Value.k value], a.2))
+                          pure
+                              (match tail with
+                              | core.result.Result.Ok a => core.result.Result.Ok (Value.e value :: a.1, a.2)
+                              | core.result.Result.Err e => core.result.Result.Err e)
+                    pure
+                        (match tail with
+                        | core.result.Result.Ok a => core.result.Result.Ok (Value.e value :: a.1, a.2)
+                        | core.result.Result.Err e => core.result.Result.Err e)
+              pure
+                  (match tail with
+                  | core.result.Result.Ok a => core.result.Result.Ok (Value.e value :: a.1, a.2)
+                  | core.result.Result.Err e => core.result.Result.Err e)
+        pure
+            (match tail with
+            | core.result.Result.Ok a => core.result.Result.Ok (Value.e a✝ :: a.1, a.2)
+            | core.result.Result.Err e => core.result.Result.Err e)) >>=
+      sorry next =
+    do
+    let __x ← NJU_ResumeObserved.recordE last
+    match __x.1 with
+      | core.result.Result.Ok value => do
+        let __x ← NJU_ResumeObserved.recordE __x.2
+        match __x.1 with
+          | core.result.Result.Ok value_1 => do
+            let __x ← NJU_ResumeObserved.recordE __x.2
+            match __x.1 with
+              | core.result.Result.Ok value_2 => do
+                let __x ← NJU_ResumeObserved.recordK __x.2
+                match __x.1 with
+                  | core.result.Result.Ok value_3 => next a✝ value value_1 value_2 value_3 __x.2
+                  | core.result.Result.Err err => pure (core.result.Result.Err err)
+              | core.result.Result.Err err => pure (core.result.Result.Err err)
+          | core.result.Result.Err err => pure (core.result.Result.Err err)
+      | core.result.Result.Err err => pure (core.result.Result.Err err)
+
+case Err
+T : Type
+r : Reader
+next : E → E → E → E → K → Reader → NJU_Log.Run NJU_ResumeObserved.Event (core.result.Result T verifier.Error)
+last : verifier.Reader
+a✝ : verifier.Error
+⊢ sorry next (core.result.Result.Err a✝) = pure (core.result.Result.Err a✝)
+NKK_generated/NKK_FieldStages.lean:40:24: warning: declaration uses `sorry`
+'NKK_FieldStages.gamma_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

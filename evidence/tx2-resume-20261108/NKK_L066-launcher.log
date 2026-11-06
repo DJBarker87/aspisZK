@@ -1,0 +1,56 @@
+{"attempt": "NKK_L066", "exit_status": 1, "wall_seconds": 10.139767991146073, "peak_rss_kib": "5981008", "swaps": "0", "print_axioms": ["'NKK_SectionFrames.semantic' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NKK_SectionFrames.weights' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKK_generated/NKK_SectionFrames.lean:29:27: error: Application type mismatch: The argument
+  post.2.right
+has type
+  ↑old = List.map CheckpointBytes4ReaderFields.sourceK (List.ofFn post.1) ∧ ↑last = ↑start + 160
+but is expected to have type
+  last = ?m.226
+in the application
+  Eq.trans (Eq.symm cursor) post.2.right
+NKK_generated/NKK_SectionFrames.lean:45:12: error: unsolved goals
+case this
+bytes : Slice U8
+start finish : Usize
+before after : alloc.vec.Vec K
+bound : ↑start + (↑before).length * 16 ≤ (↑bytes).length
+old : alloc.vec.Vec CheckpointBytes4Sections.K
+last : Usize
+call :
+  CheckpointBytes4Ops.readWeights bytes start (NIL_Carriers.vec NIL_Carriers.k before) =
+    ok (core.result.Resul
+...
+result.Result.Ok (after, finish))
+same : (NIL_Carriers.vec NIL_Carriers.unK old, last) = (after, finish)
+value : (NIL_Carriers.vec NIL_Carriers.unK old, last).1 = (after, finish).1
+⊢ ?m.292
+
+case ok.Ok
+bytes : Slice U8
+start finish : Usize
+before after : alloc.vec.Vec K
+bound : ↑start + (↑before).length * 16 ≤ (↑bytes).length
+old : alloc.vec.Vec CheckpointBytes4Sections.K
+last : Usize
+call :
+  CheckpointBytes4Ops.readWeights bytes start (NIL_Carriers.vec NIL_Carriers.k before) =
+    ok (core.result.Result.Ok (old, last))
+oldBound : ↑start + (↑(NIL_Carriers.vec NIL_Carriers.k before)).length * 16 ≤ (↑bytes).length
+model : Fin (↑(NIL_Carriers.vec NIL_Carriers.k before)).length → OraclePortCheckpointAbiC5.K
+decode :
+  OraclePortCheckpointAbiC5.decodeKs (↑(NIL_Carriers.vec NIL_Carriers.k before)).length
+      (OraclePortCompactDraft.slice (MultiproofConeCanonical.bytesOf ↑bytes) (↑start)
+        ((↑(NIL_Carriers.vec NIL_Carriers.k before)).length * 16)) =
+    some model
+contents : ↑old = List.map CheckpointBytes4ReaderFields.sourceK (List.ofFn model)
+cursor : ↑last = ↑start + (↑(NIL_Carriers.vec NIL_Carriers.k before)).length * 16
+returned :
+  ok (core.result.Result.Ok (NIL_Carriers.vec NIL_Carriers.unK old, last)) = ok (core.result.Result.Ok (after, finish))
+same : (NIL_Carriers.vec NIL_Carriers.unK old, last) = (after, finish)
+value : (NIL_Carriers.vec NIL_Carriers.unK old, last).1 = (after, finish).1
+this : ?m.292
+⊢ ↑finish = ↑start + (↑before).length * 16 ∧ (↑after).length = (↑before).length
+NKK_generated/NKK_SectionFrames.lean:54:8: error: unexpected token 'at'; expected command
+'NKK_SectionFrames.semantic' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKK_SectionFrames.weights' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-re3e6aa773e7249ab96783d525f97d6e8.scope; invocation ID: ec27179abebf43e4af2ae4161be3c1af

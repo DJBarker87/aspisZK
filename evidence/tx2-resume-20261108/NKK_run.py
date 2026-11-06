@@ -5,7 +5,12 @@ E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90'
 B='/home/dombarker/project-offloads/codex-cx-tx2-resume-20261108';C='/home/dombarker/project-offloads/codex-cx-slice-d-prepared-cache-20261104';W='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025';T='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0'
 if (E/'NKK_HOLD').exists():sys.exit(75)
 guard=E/'NKK_CLIENT_ACTIVE'; fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,str(os.getpid()).encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
-a,kind,target=sys.argv[1:];assert re.fullmatch('NKK_[LKE][0-9]{3}',a) and 1<=int(a[-3:])<=(50 if kind=='kani' else 0 if kind=='extract' else 100) and not (E/a).exists()
+a,kind,target=sys.argv[1:];assert re.fullmatch('NKK_[LKE][0-9]{3}',a) and 1<=int(a[-3:])<=999 and not (E/a).exists()
+# Charge real Lean compiler invocations, not numeric labels or support jobs.
+prior=[json.loads(p.read_text()) for p in E.glob('NKK_[LKE]*/receipt.json')]
+if kind=='lean':assert sum(x['kind']=='lean' for x in prior)<100,'Lean budget exhausted'
+if kind=='kani':assert sum(x['kind']=='kani' for x in prior)<50,'Kani budget exhausted'
+assert kind!='extract','Extraction budget zero'
 def ssh(code,data=None,submitted=False):
  for retry in range(11):
   r=subprocess.run(['ssh','-o','ControlMaster=no','-o','ConnectTimeout=15',H,code],input=data,capture_output=True,text=True)
@@ -62,7 +67,9 @@ elif kind=='stage':
  files['NKK_KMX.patch']=Path('evidence/kani-mitig-20261028/KMX_copy_stubs.patch').read_text()
  sources=list(files);command=['python3','NKK_stage.py']
 elif kind=='export':
- files['NKK_export.py']=(E/'NKK_export.py').read_text();files['NKK_MODULES.json']=(E/'NKK_MODULES.json').read_text();sources=list(files);command=['python3','NKK_export.py']
+ 
+ for n in ['NKK_export.py','NKK_MODULES.json','NKK_PATHS.json','NKK_retention.py']:files[n]=(E/n).read_text()
+ sources=list(files);command=['python3','NKK_export.py']
 elif kind=='metadata':
  files['NKK_capture_graph.py']=(E/'NKK_capture_graph.py').read_text();files['NKK_EXPECTED_GRAPH_HASHES.json']=(E/'NKK_EXPECTED_GRAPH_HASHES.json').read_text();sources=list(files);command=['python3','NKK_capture_graph.py']
 elif kind in ['extract','preflight']:
@@ -148,13 +155,13 @@ b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if 
 if {kind!r}=='prune': names += ['NKK_PRUNE.json']
 if {kind!r}=='finalcheck': names += ['NKK_SOURCE_VERIFICATION.json','NKK_TOOL_PINS.json','NKK_EXPORT.json','NKK_CLOSURE_PINS.json.xz','NKK_CLOSURE_PINS.json.sha256','NKK_RETENTION.json','NKK_CLEANUP.json']
 if {kind!r}=='cleanup': names += ['NKK_CLEANUP.json']
-if {kind!r}=='verify': names += ['NKK_EXPORT_VERIFY.json']
+if {kind!r}=='verify': names += ['NKK_EXPORT_VERIFY.json','NKK_FINAL_WALK_MANIFEST.json']
 if {kind!r}=='projection': names += ['NKK_PROJECTION_CHECK.json']
 if {kind!r}=='retention': names += ['NKK_RETENTION.json','NKK_CLEANUP.json']
 if {kind!r}=='sourcecheck': names += ['NKK_SOURCE_VERIFICATION.json']
 if {kind!r}=='tools': names += ['NKK_TOOL_PINS.json']
 if {kind!r}=='stage': names += ['NKK_STAGE.json']
-if {kind!r}=='export': names += ['NKK_EXPORT.json','NKK_CLOSURE_PINS.json.sha256']
+if {kind!r}=='export': names += ['NKK_EXPORT.json','NKK_CLOSURE_PINS.json.sha256','NKK_RETENTION.json','NKK_CLEANUP.json']
 if {kind!r}=='metadata': names += ['NKK_FULL_GRAPH.json.sha256','NKK_ALL_CRATE_FEATURES.json']
 if {kind!r}=='extract': names += ['NKK_EXTRACT_PINS.json','NKK_EXTRACT_OUTPUTS.json.xz','NKK_EXTRACT_OUTPUTS.json.sha256']
 if {kind!r}=='preflight': names += ['NKK_PREFLIGHT_PINS.json','NKK_PREFLIGHT_OUTPUTS.json.xz','NKK_PREFLIGHT_OUTPUTS.json.sha256']

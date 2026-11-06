@@ -1,24 +1,28 @@
-# NKK certificates
+# NKK component certificates
 
-TX2:124 OPEN; target not yet established. These are native segment candidates, not composed-row credit.
+TX2:124 OPEN; target not yet established. These native component certificates are not composed-row credit. NKK_NATIVE_CERTIFICATES.json is authoritative for domains, source hashes, resource metrics, graph/lock checks and controls.
 
-| Native source segment | PASS | Matched failing controls | Scope |
+| Component | Positive | Matched failing controls | Native domain |
 |---|---|---|---|
-| query_chunk8 | K003 | K004 reply inversion | 8 raw4 calls, arbitrary incoming Reader/replies/posts, exact full array/cursor/immutable backing log |
-| query_chunk6 | K006 | K007 reply / K008 incoming cursor assertion | final6 raw4 calls, same interface |
-| state_roots_stage | K009 | K010 reply / K011 incoming cursor assertion | source state/root raw32 triple, all bytes and complete log |
-| gamma_stage | K013 | K014 result / K015 incoming cursor assertion | 4 E and1 K full replies; every exact error and prefix; E oracle values include constructor normalization |
-| z_claim_stage | K016 | K017 result / K018 incoming cursor assertion | 4 K,2 E,1 K; full outputs and every error prefix |
-| semantic_writeback_stage | K019 | K020 result; K021 wrong-cursor control invalid (PASS) | SAME bytes/cursor, full array10/cursor reply and following K call; F2 repair pending |
+| query_chunk8 | NKK_K003 | NKK_K004 | raw4×8; arbitrary replies/posts; backing1768 |
+| query_chunk6 | NKK_K006 | NKK_K007, NKK_K008 | raw4×6; arbitrary replies/posts; backing1768 |
+| state_roots_stage | NKK_K009 | NKK_K010, NKK_K011 | raw32×3; full payload/log/frame |
+| gamma_stage | NKK_K013 | NKK_K014, NKK_K015 | E×4 thenK; exact Result/error prefix; full cursor/backing |
+| z_claim_stage | NKK_K016 | NKK_K017, NKK_K018 | K×4,E×2,K; exact Result/error prefix |
+| semantic_writeback_stage | NKK_K025 | NKK_K026, NKK_K027 | full array10/cursor reply plus followingK; complete Err prefix |
+| owned_tail_stage | NKK_K022 | NKK_K023, NKK_K024 | SAME owned weights64; cursor guard and actual native Drop site; pinned std/allocator retained |
+| header_prefix_stage | NKK_K028 | NKK_K029, NKK_K030 | length/magic/tag/next/flag/reserved; exact any scan prefix |
+| proof_digest_frame_contract | NKK_K042 | NKK_K046, NKK_K047 | proof57607; stored32; unconstrained reply32; exact modifies calls/ptr/len; protects full heap outside these fields |
+| public_digest_stage | NKK_K034 | NKK_K035 | public0..1880; stored32; reply32; arbitrary public observation incl empty; checkpoint frame |
+| checkpoint_digest_stage | NKK_K036 | NKK_K043, NKK_K044 | literal22 + SAME prefix1736; arbitrary entire-prefix observation; reply32 |
+| pair_owned_window | NKK_K045 | NKK_K048, NKK_K049 | SAME Prepared+owned Vec64; returned weights/rhs/power/next + allocation frame; Prepared variant only |
 
-Attempt IDs above are NKK_ prefixed. Exact source versions and caps/resource fields are retained in each receipt. Every Kani run validates the frozen dependency graph/deployed features with offline resolution and checks the lock hash unchanged afterwards. Positive and negative source versions remain pinned even as independent later segments are added. KMX patch bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67 is unchanged.
+All 50 Kani attempts are terminal. Every positive and accepted control resolved the frozen dependency graph offline, with deployed features and an unchanged frozen Cargo.lock. Exact KMX patch SHA is `bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67`.
 
-K001/K002 were own-input compilation failures, repaired without changing validation. K012 is the incorrect raw E expectation described in NKK_FINDINGS. K021 is the cancelled worker control described in F2. No Option<fn>-dependent or writable-static credits. No field multiplication proof, new trust row, extraction or release build.
+K032/037–041 calibrate the borrowed-slice/record/Result<Unit,Error> contract shape before K042: inverted ensures fails, an unimplied caller assertion passes on the real body and fails under stub_verified, and modifies violation is detected. Supplementary K050 wrong-argument control fails. The native contract is the owner's existing option-A P6/D188 tool-trust reclassification.
 
-Lean source clause support: L002 focused retained-root statements; L004 generic clause composition; L005 all9 event clauses; L008 finish-tail clauses; L009 query-end clauses. L010 heartbeat-limit shape retired; explicit literal-tail replacement in progress. Only successful receipts with standard #print axioms are selected. Failed diagnostics containing sorryAx are never accepted roots.
+K001/K002 were own missing-input compile failures; K012 exposed an incorrect worker expectation for constructor-normalized E values; K021 was an invalid cancelled wrong-cursor control (PASS), repaired by K025/026/027. K031's 90s byte-selection timeout is retired unchanged. The replacement K042 uses a different checked modifies frame, protecting the complete proof/stored/reply buffers. All original verdicts remain; see NKK_FINDINGS.md.
 
-## Native allowance complete
+K045 asserts full weights/rhs/power/next and the returned owner, but only Prepared.variant. It is not a complete final Prepared frame; retained constructor cuts still need their SAME-argument frame chain. No function-pointer/Option<fn>, writable-static, field-multiplication or new runtime-trust credit is used. No extraction or release build was run.
 
-50/50 Kani attempts terminal. NKK_NATIVE_CERTIFICATES.json is the authoritative12 positive segment pairs with their exact resource/source/graph/lock receipts. Added: owned_tail K022/023/024; repaired semantic K025/026/027; header K028/029/030; proof-digest modifies contract K042/046/047 plus supplementary wrong-argument K050; public0..1880 K034/035; checkpoint entire-prefix1736 K036/043/044; returned-pair ownership K045/048/049. K032/037--041 calibrate the borrowed-slice/Result<Unit,Error> contract shape before K042. K031's90s byte-selection timeout is retired; the changed modifies-instrumented shape protects the entire proof with a checked write set. Native transport uses the existing option-A P6/D188 trust classification.
-
-The returned-pair ownership window asserts weights/rhs/power/next and Prepared.variant; it does not assert every Prepared scalar/array at the final return. Earlier NJJ_Prepared constructor cuts may not be promoted to that complete post-return frame without a SAME-argument frame chain. That assembly remains open. No row credit is claimed for12 passing segments or the source clause theorem.
+The selected Lean sources each have successful focused receipts and printed top-theorem axioms. Failed elaborations and their diagnostic sorryAx are excluded. NKK_COMBINED_IMPORT imports NKH_COMBINED_IMPORT, NJU_COMBINED_IMPORT, all selected modules and the deployed headline. Audit results and exact resource fields are in NKK_AUDIT.json and per-attempt receipts. Source clauses and phase joins are not a complete native parent proof.

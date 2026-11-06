@@ -1,0 +1,41 @@
+def AspisR1.CheckpointBytes4Ops.ne : {T U : Type} →
+  {N : Aeneas.Std.Usize} →
+    Aeneas.Std.core.cmp.PartialEq T U → Aeneas.Std.Slice T → Aeneas.Std.Array U N → Aeneas.Std.Result Bool :=
+fun {T U} {N} inst s a => do
+  let same ← AspisR1.CheckpointBytes4Ops.eq inst s a
+  Aeneas.Std.Result.ok !same
+def AspisR1.CheckpointBytes4Ops.eq : {T U : Type} →
+  {N : Aeneas.Std.Usize} →
+    Aeneas.Std.core.cmp.PartialEq T U → Aeneas.Std.Slice T → Aeneas.Std.Array U N → Aeneas.Std.Result Bool :=
+fun {T U} {N} inst s a =>
+  if (↑s).length = (↑a).length then AspisR1.CheckpointBytes4Ops.listEq inst ↑s ↑a else Aeneas.Std.Result.ok false
+def NIL_FreshOps.semantic : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Usize →
+    Aeneas.Std.Result
+      (Aeneas.Std.core.result.Result (Aeneas.Std.Array NIL_Carriers.Fresh.K 10#usize × Aeneas.Std.Usize)
+        NIL_Carriers.Fresh.Err) :=
+fun bytes start =>
+  NIL_Carriers.outer (NIL_Carriers.unInner fun x => (NIL_Carriers.array NIL_Carriers.unK x.1, x.2))
+    (AspisR1.CheckpointBytes4Ops.readSemanticAlpha bytes start)
+def NIL_FreshOps.weights : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Usize →
+    Aeneas.Std.alloc.vec.Vec NIL_Carriers.Fresh.K →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result (Aeneas.Std.alloc.vec.Vec NIL_Carriers.Fresh.K × Aeneas.Std.Usize)
+          NIL_Carriers.Fresh.Err) :=
+fun bytes start v =>
+  NIL_Carriers.outer (NIL_Carriers.unInner fun x => (NIL_Carriers.vec NIL_Carriers.unK x.1, x.2))
+    (AspisR1.CheckpointBytes4Ops.readWeights bytes start (NIL_Carriers.vec NIL_Carriers.k v))
+def AspisR1.CheckpointBytes4Ops.readSemanticAlpha : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Usize →
+    Aeneas.Std.Result
+      (Aeneas.Std.core.result.Result (Aeneas.Std.Array AspisR1.CheckpointBytes4Sections.K 10#usize × Aeneas.Std.Usize)
+        AspisR1Stage2.verifier.Error) :=
+AspisR1.CheckpointBytes4Ops.semanticUsing AspisR1.CheckpointBytes3Reader.readK
+def AspisR1.CheckpointBytes4Ops.readWeights : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Usize →
+    Aeneas.Std.alloc.vec.Vec AspisR1.CheckpointBytes4Sections.K →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result (Aeneas.Std.alloc.vec.Vec AspisR1.CheckpointBytes4Sections.K × Aeneas.Std.Usize)
+          AspisR1Stage2.verifier.Error) :=
+AspisR1.CheckpointBytes4Ops.weightsUsing AspisR1.CheckpointBytes3Reader.readK

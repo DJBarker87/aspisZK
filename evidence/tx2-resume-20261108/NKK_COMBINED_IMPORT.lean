@@ -33,7 +33,12 @@ import NKK_LogAlgebra
 import NKK_LogClauses
 import NKK_LogReduce
 import NKK_NativeRaw
+import NKK_QueryBlockJoin
+import NKK_QueryDomain
+import NKK_QueryEndJoin
+import NKK_QueryMidJoin
 import NKK_QueryStage
+import NKK_QueryWindows
 import NKK_RawAssociation
 import NKK_RawChain
 import NKK_RawCps
@@ -123,8 +128,14 @@ import NKK_ZStage
 #print axioms NKK_NativeRaw.backing
 #print axioms NKK_NativeRaw.advance
 #print axioms NKK_NativeRaw.one
+#print axioms NKK_QueryBlockJoin.source
+#print axioms NKK_QueryDomain.eight
+#print axioms NKK_QueryDomain.six
+#print axioms NKK_QueryEndJoin.source
+#print axioms NKK_QueryMidJoin.source
 #print axioms NKK_QueryStage.stage8
 #print axioms NKK_QueryStage.stage6
+#print axioms NKK_QueryWindows.domain
 #print axioms NKK_RawFold.association
 #print axioms NKK_NativeRaw.read_chain
 #print axioms NKK_NativeRaw.read_result

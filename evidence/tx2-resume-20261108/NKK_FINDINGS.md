@@ -13,3 +13,21 @@ NKK-F3 (K031): proof_digest_stage with an arbitrary byte observation into the576
 NKK-F4 (K033): public_digest_stage's extra checkpoint-frame observation incorrectly reused a public index (<1880) on the1768-byte checkpoint, so the worker harness failed a bounds check. Replacement uses the independently bounded checkpoint-prefix observation (<1736). No shipped mismatch or stronger caller precondition. The old K031 byte-observation shape also contained this invalid extra observation and remains retired; it is replaced by the successful full-heap modifies contract K042 with K046/K047 controls, not silently reclassified as a proof of byte-frame failure.
 
 K031 replacement: slice_fidelity_contract/real/unimplied/modifies controls K032/K037--041 pass/fail in the required pattern for borrowed slices and Result<Unit,Error>. K042 proof_digest_frame_contract passes with exact modifies(calls,ptr,len), protecting proof/stored bytes and log.reply; inverse ensures K046 and out-of-footprint reply write K047 fail. This is P6/D188 option-A native-contract semantic transport, reclassification, no new trust. Source/actual-log instantiation remains a Lean obligation.
+
+## F5: own export paths input omitted
+
+NKK_L019 exited1 after copying the selected objects but before closure pinning: own runner did not upload NKK_PATHS.json used by NKK_export.py. The client collector then failed trying to fetch the absent digest. The submitted receipt and diagnostics were recovered read-only, not resubmitted. Own runner now uploads paths and the read-only retention script, and collects their reports. NKK_L020 is the repaired export (same-or-stricter closure/hash validation), with retention included; L021 verifies it. No proof/audit rerun, shared infrastructure change or deletion.
+
+## Allowance accounting correction
+
+The inherited client initially limited numeric L labels to100, including setup/link/audit/export jobs. At that point only89 actual Lean compiler invocations had run. Own runner now enforces the user's100 actual Lean invocation maximum from terminal receipts (and50 actual Kani/zero extraction), independently of labels; it does not weaken admission, resource, source or audit checks. Additional source joins consume the remaining compiler allowance. The second combined audit is justified by these new sources, not an unchanged regression.
+
+## F6: query tail speculative reduction
+
+L104 hit the unchanged200000 heartbeat limit in isDefEq while a repeat-first rfl speculatively compared the full six-bind continuation. That shape is retired. L105 names each of the six raw bind prefixes and the validate reply explicitly before checking the literal emitted-try tail. No cap, timeout or elaboration limit was raised.
+
+L105 reached the now-small emitted-try tail and failed definitional equality; L106 split the full actual Result and passed. L108's generic simplification stopped before reducing the first Result bind; L109 names and rewrites each actual query-window Result in order and passed. Both original failed receipts remain; neither was a timeout or memory kill.
+
+## F7: final grouped raw walk exceeded the scope timeout
+
+L113 (second full combined raw walk, new110-root source set) exited124 at180s after proof0..proof9 completed with exit0; final proof10 did not complete. The old first-audit proof10 artifact is excluded from final acceptance. No cap/timeout increase and no full rerun. L118 isolates only final proof10 (the remaining10 roots), same driver/import/object pins and limits. NKK_FINAL_WALK_MANIFEST.json selects each final group from its exact parent attempt; final verification checks the ordered group matches the final110-root inventory and all roots have equal raw/Lean standard axioms. NFX/source/export checks then continue without any further Lean or Kani invocation. Full combined audit count remains two.

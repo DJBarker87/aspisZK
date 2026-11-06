@@ -28,13 +28,13 @@ unsafe def main (args : List String) : IO UInt32 := do
     else if mode == "proof6" then
       (#[`NKK_COMBINED_IMPORT], #[`NKK_LogClauses.pure, `NKK_LogClauses.lift, `NKK_LogClauses.liftM, `NKK_LogClauses.record, `NKK_LogClauses.bind, `NKK_LogClauses.branch, `NKK_LogClauses.flow, `NKK_LogReduce.pure_bind, `NKK_LogReduce.lift_ok_bind, `NKK_LogReduce.liftM_ok_bind])
     else if mode == "proof7" then
-      (#[`NKK_COMBINED_IMPORT], #[`NKK_NativeRaw.backing, `NKK_NativeRaw.advance, `NKK_NativeRaw.one, `NKK_QueryStage.stage8, `NKK_QueryStage.stage6, `NKK_RawFold.association, `NKK_NativeRaw.read_chain, `NKK_NativeRaw.read_result, `NKK_RawCps.source, `NKK_RawFold.fold_nil])
+      (#[`NKK_COMBINED_IMPORT], #[`NKK_NativeRaw.backing, `NKK_NativeRaw.advance, `NKK_NativeRaw.one, `NKK_QueryBlockJoin.source, `NKK_QueryDomain.eight, `NKK_QueryDomain.six, `NKK_QueryEndJoin.source, `NKK_QueryMidJoin.source, `NKK_QueryStage.stage8, `NKK_QueryStage.stage6])
     else if mode == "proof8" then
-      (#[`NKK_COMBINED_IMPORT], #[`NKK_RawFold.fold_cons, `NKK_RawFold.fail_stays, `NKK_RawFold.div_stays, `NKK_RawFold.length, `NKK_RawPrefix.source, `NKK_RawPrefix.associated, `NKK_RawResult.source, `NKK_RawSlots.query8, `NKK_RawSlots.query6, `NKK_RawSlots.roots])
+      (#[`NKK_COMBINED_IMPORT], #[`NKK_QueryWindows.domain, `NKK_RawFold.association, `NKK_NativeRaw.read_chain, `NKK_NativeRaw.read_result, `NKK_RawCps.source, `NKK_RawFold.fold_nil, `NKK_RawFold.fold_cons, `NKK_RawFold.fail_stays, `NKK_RawFold.div_stays, `NKK_RawFold.length])
     else if mode == "proof9" then
-      (#[`NKK_COMBINED_IMPORT], #[`NKK_RawFold.clauses, `NKK_RawFold.synchronized, `NKK_ReadFrames.k, `NKK_ReadFrames.e, `NKK_ResumeBodyFactor.source, `NKK_RunEval.bind_eq, `NKK_RunEval.pure_eq, `NKK_SectionFrames.semantic, `NKK_SectionFrames.weights, `NKK_Try.branch])
+      (#[`NKK_COMBINED_IMPORT], #[`NKK_RawPrefix.source, `NKK_RawPrefix.associated, `NKK_RawResult.source, `NKK_RawSlots.query8, `NKK_RawSlots.query6, `NKK_RawSlots.roots, `NKK_RawFold.clauses, `NKK_RawFold.synchronized, `NKK_ReadFrames.k, `NKK_ReadFrames.e])
     else if mode == "proof10" then
-      (#[`NKK_COMBINED_IMPORT], #[`NKK_ZStage.source_eq_model, `NJU_ResumeRoot.source, `NJU_ResumeRoot.cohort, `AspisR1.RPx_Deployed.deployed])
+      (#[`NKK_COMBINED_IMPORT], #[`NKK_ResumeBodyFactor.source, `NKK_RunEval.bind_eq, `NKK_RunEval.pure_eq, `NKK_SectionFrames.semantic, `NKK_SectionFrames.weights, `NKK_Try.branch, `NKK_ZStage.source_eq_model, `NJU_ResumeRoot.source, `NJU_ResumeRoot.cohort, `AspisR1.RPx_Deployed.deployed])
     else (#[], #[])
   let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
     {} (loadExts := true) (level := .private)
