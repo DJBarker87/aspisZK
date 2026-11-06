@@ -1,0 +1,33 @@
+--- a/crates/aspis-statement/src/pool_v1/NJL_control.rs
++++ b/crates/aspis-statement/src/pool_v1/NJL_control.rs
+@@ -305,7 +305,7 @@
+ #[kani::proof] #[kani::unwind(75)]
+ #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+ fn NJL_pattern_actual_map_cut(){
+- use aspis_core::field::NJB_observe::{prepared_words,prepared_from_words};
++ use aspis_core::field::NJL_observe::{prepared_words,prepared_from_words};
+  let powers:[QM31;8]=unsafe{core::mem::transmute::<[[u32;4];8],[QM31;8]>(kani::any())};let before=powers;
+  let caches:[[[[u32;3];3];8];1]=kani::any();let seek:usize=kani::any();let limb:usize=kani::any();let row:usize=kani::any();let col:usize=kani::any();kani::assume(seek<8&&limb<4&&row<3&&col<3);
+  let mut calls=0usize;let mut seen=QM31::ZERO;let mut index=999usize;
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -3266,3 +3266,7 @@
+     let s = a + P - b;
+     M31(if s >= P { s - P } else { s })
+ }
++
++#[cfg(kani)]
++#[path="NJL_observe.rs"]
++pub mod NJL_observe;
+--- /dev/null
++++ b/crates/aspis-core/src/NJL_observe.rs
+@@ -0,0 +1,9 @@
++use super::{PreparedQm31Multiplier,M31};
++pub fn prepared_words(p:PreparedQm31Multiplier)->[[u32;3];3]{[
++ [p.components[0][0].0,p.components[0][1].0,p.components[0][2].0],
++ [p.components[1][0].0,p.components[1][1].0,p.components[1][2].0],
++ [p.components[2][0].0,p.components[2][1].0,p.components[2][2].0]]}
++pub fn prepared_from_words(w:[[u32;3];3])->PreparedQm31Multiplier{PreparedQm31Multiplier{components:[
++ [M31(w[0][0]),M31(w[0][1]),M31(w[0][2])],
++ [M31(w[1][0]),M31(w[1][1]),M31(w[1][2])],
++ [M31(w[2][0]),M31(w[2][1]),M31(w[2][2])]]}}

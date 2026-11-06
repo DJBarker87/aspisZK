@@ -61,3 +61,6 @@ NJB_K048/049 gather,050/051 group pack/mul/add/full24frame,052/053 exact9groups1
 
 ## Stage10 occupancy parent228
 K037/K038 observe source-ordered selectors.row1017/1018, SAME immutable selector borrows, actual variant expected0/1, SAME openings.z16, full12child lanes into preweighted at0, and full24returned reply. NJL_OccupancyParent.Packet supplies all actual child Results; source invokes213/265/244/230 internally and proves each domain.
+
+## Stage11 path parent229
+K043/K044 captures actual range[57..63], same selectors, low1/5/9/13, three add operands and actual high*low product, same THREE-view Openings borrow (not a16cell token), full17path child argument to preweighted at32, all24final cells. NJL_PathSelector.Packet internally supplies actual checked Results and canonical selector. NJL_PathParent.Packet/Cut composes same child247/230 on proven domains.

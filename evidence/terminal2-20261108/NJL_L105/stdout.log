@@ -1,0 +1,645 @@
+theorem AspisR1.NJL_WindowPowers.source : ∀ (lambda power : NQ) (n : ℕ),
+  Canon lambda →
+    Canon power →
+      ∃ values next,
+        run lambda n power = ok (values, next) ∧
+          Trace lambda n power values next ∧
+            values.length = n ∧
+              (∀ x ∈ values, Canon x) ∧
+                Canon next ∧
+                  (∀ (i : ℕ) (hi : i < values.length), decode values[i] = decode power * decode lambda ^ i) ∧
+                    decode next = decode power * decode lambda ^ n :=
+fun lambda power n hl hp =>
+  Nat.recAux (motive := fun n =>
+    ∀ (power : NQ),
+      Canon power →
+        ∃ values next,
+          run lambda n power = ok (values, next) ∧
+            Trace lambda n power values next ∧
+              values.length = n ∧
+                (∀ x ∈ values, Canon x) ∧
+                  Canon next ∧
+                    (∀ (i : ℕ) (hi : i < values.length), decode values[i] = decode power * decode lambda ^ i) ∧
+                      decode next = decode power * decode lambda ^ n)
+    (fun power hp =>
+      Exists.intro []
+        (Exists.intro power
+          ⟨rfl,
+            ⟨Trace.nil power,
+              ⟨rfl,
+                ⟨of_eq_true
+                    (Eq.trans
+                      (forall_congr fun x =>
+                        Eq.trans (implies_congr List.not_mem_nil._simp_1 (Eq.refl (Canon x)))
+                          IsEmpty.forall_iff._simp_1)
+                      (implies_true NQ)),
+                  ⟨hp,
+                    ⟨fun i hi => False.elim (Eq.mp not_lt_zero._simp_1 hi),
+                      of_eq_true
+                        (Eq.trans
+                          (congrArg (Eq (decode power))
+                            (Eq.trans (congrArg (HMul.hMul (decode power)) (pow_zero (decode lambda)))
+                              (mul_one (decode power))))
+                          (eq_self (decode power)))⟩⟩⟩⟩⟩⟩))
+    (fun n ih power hp =>
+      let ⟨middle, h✝⟩ := NJB_StubLaws.qm_mul power lambda hp hl
+      let ⟨cm, right✝⟩ := h✝
+      let ⟨hm, vm⟩ := right✝
+      let ⟨values, h✝¹⟩ := ih middle hm
+      let ⟨next, h✝²⟩ := h✝¹
+      let ⟨cr, right✝¹⟩ := h✝²
+      let ⟨tr, right✝²⟩ := right✝¹
+      let ⟨length, right✝³⟩ := right✝²
+      let ⟨canon, right✝⁴⟩ := right✝³
+      let ⟨hn, right✝⁵⟩ := right✝⁴
+      let ⟨words, last⟩ := right✝⁵
+      Exists.intro (power :: values)
+        (Exists.intro next
+          ⟨of_eq_true
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (Eq.trans
+                      (Eq.trans
+                        (congrFun' (congrArg Bind.bind cm) fun next => do
+                          let rest ← run lambda n next
+                          ok (power :: rest.1, rest.2))
+                        (bind_tc_ok middle fun y => do
+                          let rest ← run lambda n y
+                          ok (power :: rest.1, rest.2)))
+                      (Eq.trans (congrFun' (congrArg Bind.bind cr) fun rest => ok (power :: rest.1, rest.2))
+                        (bind_tc_ok (values, next) fun y => ok (power :: y.1, y.2)))))
+                  (ok (power :: values, next)))
+                (eq_self (ok (power :: values, next)))),
+            ⟨Trace.cons cm tr,
+              ⟨of_eq_true
+                  (Eq.trans
+                    (Eq.trans (congrFun' (congrArg Eq (congrFun' (congrArg HAdd.hAdd length) 1)) (n + 1))
+                      Nat.add_left_cancel_iff._simp_1)
+                    (eq_self 1)),
+                ⟨fun x hx =>
+                  Or.casesOn (List.mem_cons.mp hx)
+                    (fun h =>
+                      Eq.ndrec (motive := fun power =>
+                        Canon power →
+                          FIq_Native.field.QM31.mul power lambda = ok middle →
+                            decode middle = decode power * decode lambda → x ∈ power :: values → Canon x)
+                        (fun hp cm vm hx => hp) h hp cm vm hx)
+                    fun h => canon x h,
+                  ⟨hn,
+                    ⟨fun i hi =>
+                      Nat.casesAuxOn (motive := fun a =>
+                        i = a → decode (power :: values)[i] = decode power * decode lambda ^ i) i
+                        (fun h =>
+                          Eq.ndrec (motive := fun i =>
+                            ∀ (hi : i < (power :: values).length),
+                              decode (power :: values)[i] = decode power * decode lambda ^ i)
+                            (fun hi =>
+                              of_eq_true
+                                (Eq.trans
+                                  (congrArg (Eq (decode power))
+                                    (Eq.trans (congrArg (HMul.hMul (decode power)) (pow_zero (decode lambda)))
+                                      (mul_one (decode power))))
+                                  (eq_self (decode power))))
+                            (Eq.symm h) hi)
+                        (fun i_1 h =>
+                          Eq.ndrec (motive := fun i =>
+                            ∀ (hi : i < (power :: values).length),
+                              decode (power :: values)[i] = decode power * decode lambda ^ i)
+                            (fun hi =>
+                              have bound := Eq.mp source._simp_4 hi;
+                              Eq.mpr
+                                (id
+                                  (congr
+                                    (congrArg Eq
+                                      (Eq.trans (words i_1 bound)
+                                        (congrFun' (congrArg HMul.hMul vm) (decode lambda ^ i_1))))
+                                    (congrArg (HMul.hMul (decode power)) (pow_succ (decode lambda) i_1))))
+                                (Mathlib.Tactic.Ring.of_eq
+                                  (Mathlib.Tactic.Ring.Common.mul_congr
+                                    (Mathlib.Tactic.Ring.Common.mul_congr
+                                      (Mathlib.Tactic.Ring.Common.atom_pf (decode power) rfl
+                                        (Eq.mpr
+                                          (id
+                                            (congrArg
+                                              (fun _a =>
+                                                decode power ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                                  decode power ^ Nat.rawCast 1 * _a)
+                                              (Eq.symm rfl)))
+                                          (Eq.refl (decode power ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                      (Mathlib.Tactic.Ring.Common.atom_pf (decode lambda) rfl
+                                        (Eq.mpr
+                                          (id
+                                            (congrArg
+                                              (fun _a =>
+                                                decode lambda ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                                  decode lambda ^ Nat.rawCast 1 * _a)
+                                              (Eq.symm rfl)))
+                                          (Eq.refl (decode lambda ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                      (Mathlib.Tactic.Ring.Common.add_mul
+                                        (Mathlib.Tactic.Ring.Common.mul_add
+                                          (Mathlib.Tactic.Ring.Common.mul_pf_left (decode power) (Nat.rawCast 1)
+                                            (Mathlib.Tactic.Ring.Common.mul_pf_right (decode lambda) (Nat.rawCast 1)
+                                              (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                                (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1)
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1)
+                                                  (Eq.refl 1)))))
+                                          (Mathlib.Tactic.Ring.Common.mul_zero
+                                            (decode power ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                          (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                            (decode power ^ Nat.rawCast 1 *
+                                                (decode lambda ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                              0)))
+                                        (Mathlib.Tactic.Ring.Common.zero_mul
+                                          (decode lambda ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))
+                                        (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                          (decode power ^ Nat.rawCast 1 *
+                                              (decode lambda ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                            0))))
+                                    (Mathlib.Tactic.Ring.Common.pow_congr
+                                      (Mathlib.Tactic.Ring.Common.atom_pf (decode lambda) rfl
+                                        (Eq.mpr
+                                          (id
+                                            (congrArg
+                                              (fun _a =>
+                                                decode lambda ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                                  decode lambda ^ Nat.rawCast 1 * _a)
+                                              (Eq.symm rfl)))
+                                          (Eq.refl (decode lambda ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                      (Mathlib.Tactic.Ring.Common.atom_pf i_1 rfl
+                                        (Eq.mpr
+                                          (id
+                                            (congrArg
+                                              (fun _a => i_1 ^ Nat.rawCast 1 * Nat.rawCast 1 = i_1 ^ Nat.rawCast 1 * _a)
+                                              (Eq.symm rfl)))
+                                          (Eq.refl (i_1 ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                      (Mathlib.Tactic.Ring.Common.pow_add
+                                        (Mathlib.Tactic.Ring.Common.single_pow
+                                          (Mathlib.Tactic.Ring.Common.mul_pow_mul
+                                            (Mathlib.Tactic.Ring.Common.mul_pf_right i_1 (Nat.rawCast 1)
+                                              (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                                (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw ℕ 1)
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw ℕ 1) (Eq.refl 1))))
+                                            (Mathlib.Tactic.Ring.Common.one_pow (i_1 ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                              { out := rfl })
+                                            (Eq.mpr
+                                              (id
+                                                (congrArg
+                                                  (fun _a =>
+                                                    decode lambda ^ (i_1 ^ Nat.rawCast 1 * Nat.rawCast 1) *
+                                                        Nat.rawCast 1 =
+                                                      decode lambda ^ (i_1 ^ Nat.rawCast 1 * Nat.rawCast 1) * _a)
+                                                  (Eq.symm rfl)))
+                                              (Eq.refl
+                                                (decode lambda ^ (i_1 ^ Nat.rawCast 1 * Nat.rawCast 1) *
+                                                  Nat.rawCast 1)))
+                                            (Mathlib.Tactic.Ring.Common.mul_pf_left (decode lambda)
+                                              (i_1 ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                              (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                                (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1)
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1)
+                                                  (Eq.refl 1))))))
+                                        (Mathlib.Tactic.Ring.Common.pow_zero
+                                          (decode lambda ^ Nat.rawCast 1 * Nat.rawCast 1 + 0) rfl)
+                                        (Mathlib.Tactic.Ring.Common.add_mul
+                                          (Mathlib.Tactic.Ring.Common.mul_add
+                                            (Mathlib.Tactic.Ring.Common.mul_pf_left (decode lambda)
+                                              (i_1 ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                              (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                                (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1)
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1) (Eq.refl 1))))
+                                            (Mathlib.Tactic.Ring.Common.mul_zero
+                                              (decode lambda ^ (i_1 ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1))
+                                            (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                              (decode lambda ^ (i_1 ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1 +
+                                                0)))
+                                          (Mathlib.Tactic.Ring.Common.zero_mul (Nat.rawCast 1 + 0))
+                                          (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                            (decode lambda ^ (i_1 ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1 +
+                                              0)))))
+                                    (Mathlib.Tactic.Ring.Common.add_mul
+                                      (Mathlib.Tactic.Ring.Common.mul_add
+                                        (Mathlib.Tactic.Ring.Common.mul_pf_left (decode power) (Nat.rawCast 1)
+                                          (Mathlib.Tactic.Ring.Common.mul_pf_left (decode lambda) (Nat.rawCast 1)
+                                            (Mathlib.Tactic.Ring.Common.mul_pf_right (decode lambda)
+                                              (i_1 ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                              (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                                (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1)
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1)
+                                                  (Eq.refl 1))))))
+                                        (Mathlib.Tactic.Ring.Common.mul_zero
+                                          (decode power ^ Nat.rawCast 1 *
+                                            (decode lambda ^ Nat.rawCast 1 * Nat.rawCast 1)))
+                                        (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                          (decode power ^ Nat.rawCast 1 *
+                                              (decode lambda ^ Nat.rawCast 1 *
+                                                (decode lambda ^ (i_1 ^ Nat.rawCast 1 * Nat.rawCast 1) *
+                                                  Nat.rawCast 1)) +
+                                            0)))
+                                      (Mathlib.Tactic.Ring.Common.zero_mul
+                                        (decode lambda ^ (i_1 ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1 + 0))
+                                      (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                        (decode power ^ Nat.rawCast 1 *
+                                            (decode lambda ^ Nat.rawCast 1 *
+                                              (decode lambda ^ (i_1 ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1)) +
+                                          0))))
+                                  (Mathlib.Tactic.Ring.Common.mul_congr
+                                    (Mathlib.Tactic.Ring.Common.atom_pf (decode power) rfl
+                                      (Eq.mpr
+                                        (id
+                                          (congrArg
+                                            (fun _a =>
+                                              decode power ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                                decode power ^ Nat.rawCast 1 * _a)
+                                            (Eq.symm rfl)))
+                                        (Eq.refl (decode power ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                    (Mathlib.Tactic.Ring.Common.mul_congr
+                                      (Mathlib.Tactic.Ring.Common.pow_congr
+                                        (Mathlib.Tactic.Ring.Common.atom_pf (decode lambda) rfl
+                                          (Eq.mpr
+                                            (id
+                                              (congrArg
+                                                (fun _a =>
+                                                  decode lambda ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                                    decode lambda ^ Nat.rawCast 1 * _a)
+                                                (Eq.symm rfl)))
+                                            (Eq.refl (decode lambda ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                        (Mathlib.Tactic.Ring.Common.atom_pf i_1 rfl
+                                          (Eq.mpr
+                                            (id
+                                              (congrArg
+                                                (fun _a =>
+                                                  i_1 ^ Nat.rawCast 1 * Nat.rawCast 1 = i_1 ^ Nat.rawCast 1 * _a)
+                                                (Eq.symm rfl)))
+                                            (Eq.refl (i_1 ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                        (Mathlib.Tactic.Ring.Common.pow_add
+                                          (Mathlib.Tactic.Ring.Common.single_pow
+                                            (Mathlib.Tactic.Ring.Common.mul_pow_mul
+                                              (Mathlib.Tactic.Ring.Common.mul_pf_right i_1 (Nat.rawCast 1)
+                                                (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                                  (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                                    (Mathlib.Meta.NormNum.IsNat.of_raw ℕ 1)
+                                                    (Mathlib.Meta.NormNum.IsNat.of_raw ℕ 1) (Eq.refl 1))))
+                                              (Mathlib.Tactic.Ring.Common.one_pow (i_1 ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                                { out := rfl })
+                                              (Eq.mpr
+                                                (id
+                                                  (congrArg
+                                                    (fun _a =>
+                                                      decode lambda ^ (i_1 ^ Nat.rawCast 1 * Nat.rawCast 1) *
+                                                          Nat.rawCast 1 =
+                                                        decode lambda ^ (i_1 ^ Nat.rawCast 1 * Nat.rawCast 1) * _a)
+                                                    (Eq.symm rfl)))
+                                                (Eq.refl
+                                                  (decode lambda ^ (i_1 ^ Nat.rawCast 1 * Nat.rawCast 1) *
+                                                    Nat.rawCast 1)))
+                                              (Mathlib.Tactic.Ring.Common.mul_pf_left (decode lambda)
+                                                (i_1 ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                                (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                                  (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                                    (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1)
+                                                    (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1)
+                                                    (Eq.refl 1))))))
+                                          (Mathlib.Tactic.Ring.Common.pow_zero
+                                            (decode lambda ^ Nat.rawCast 1 * Nat.rawCast 1 + 0) rfl)
+                                          (Mathlib.Tactic.Ring.Common.add_mul
+                                            (Mathlib.Tactic.Ring.Common.mul_add
+                                              (Mathlib.Tactic.Ring.Common.mul_pf_left (decode lambda)
+                                                (i_1 ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                                (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                                  (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                                    (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1)
+                                                    (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1)
+                                                    (Eq.refl 1))))
+                                              (Mathlib.Tactic.Ring.Common.mul_zero
+                                                (decode lambda ^ (i_1 ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1))
+                                              (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                                (decode lambda ^ (i_1 ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1 +
+                                                  0)))
+                                            (Mathlib.Tactic.Ring.Common.zero_mul (Nat.rawCast 1 + 0))
+                                            (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                              (decode lambda ^ (i_1 ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1 +
+                                                0)))))
+                                      (Mathlib.Tactic.Ring.Common.atom_pf (decode lambda) rfl
+                                        (Eq.mpr
+                                          (id
+                                            (congrArg
+                                              (fun _a =>
+                                                decode lambda ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                                  decode lambda ^ Nat.rawCast 1 * _a)
+                                              (Eq.symm rfl)))
+                                          (Eq.refl (decode lambda ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                      (Mathlib.Tactic.Ring.Common.add_mul
+                                        (Mathlib.Tactic.Ring.Common.mul_add
+                                          (Mathlib.Tactic.Ring.Common.mul_pf_right (decode lambda) (Nat.rawCast 1)
+                                            (Mathlib.Tactic.Ring.Common.mul_pf_left (decode lambda)
+                                              (i_1 ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                              (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                                (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1)
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1)
+                                                  (Eq.refl 1)))))
+                                          (Mathlib.Tactic.Ring.Common.mul_zero
+                                            (decode lambda ^ (i_1 ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1))
+                                          (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                            (decode lambda ^ Nat.rawCast 1 *
+                                                (decode lambda ^ (i_1 ^ Nat.rawCast 1 * Nat.rawCast 1) *
+                                                  Nat.rawCast 1) +
+                                              0)))
+                                        (Mathlib.Tactic.Ring.Common.zero_mul
+                                          (decode lambda ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))
+                                        (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                          (decode lambda ^ Nat.rawCast 1 *
+                                              (decode lambda ^ (i_1 ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1) +
+                                            0))))
+                                    (Mathlib.Tactic.Ring.Common.add_mul
+                                      (Mathlib.Tactic.Ring.Common.mul_add
+                                        (Mathlib.Tactic.Ring.Common.mul_pf_left (decode power) (Nat.rawCast 1)
+                                          (Mathlib.Tactic.Ring.Common.mul_pf_right (decode lambda) (Nat.rawCast 1)
+                                            (Mathlib.Tactic.Ring.Common.mul_pf_right (decode lambda)
+                                              (i_1 ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                              (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                                (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1)
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1)
+                                                  (Eq.refl 1))))))
+                                        (Mathlib.Tactic.Ring.Common.mul_zero
+                                          (decode power ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                        (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                          (decode power ^ Nat.rawCast 1 *
+                                              (decode lambda ^ Nat.rawCast 1 *
+                                                (decode lambda ^ (i_1 ^ Nat.rawCast 1 * Nat.rawCast 1) *
+                                                  Nat.rawCast 1)) +
+                                            0)))
+                                      (Mathlib.Tactic.Ring.Common.zero_mul
+                                        (decode lambda ^ Nat.rawCast 1 *
+                                            (decode lambda ^ (i_1 ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1) +
+                                          0))
+                                      (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                        (decode power ^ Nat.rawCast 1 *
+                                            (decode lambda ^ Nat.rawCast 1 *
+                                              (decode lambda ^ (i_1 ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1)) +
+                                          0))))))
+                            (Eq.symm h) hi)
+                        (Eq.refl i),
+                      Eq.mpr (id (congrArg (fun _a => _a = decode power * decode lambda ^ (n + 1)) last))
+                        (Eq.mpr
+                          (id (congrArg (fun _a => _a * decode lambda ^ n = decode power * decode lambda ^ (n + 1)) vm))
+                          (Eq.mpr
+                            (id
+                              (congrArg (fun _a => decode power * decode lambda * decode lambda ^ n = decode power * _a)
+                                (pow_succ (decode lambda) n)))
+                            (Mathlib.Tactic.Ring.of_eq
+                              (Mathlib.Tactic.Ring.Common.mul_congr
+                                (Mathlib.Tactic.Ring.Common.mul_congr
+                                  (Mathlib.Tactic.Ring.Common.atom_pf (decode power) rfl
+                                    (Eq.mpr
+                                      (id
+                                        (congrArg
+                                          (fun _a =>
+                                            decode power ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                              decode power ^ Nat.rawCast 1 * _a)
+                                          (Eq.symm rfl)))
+                                      (Eq.refl (decode power ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                  (Mathlib.Tactic.Ring.Common.atom_pf (decode lambda) rfl
+                                    (Eq.mpr
+                                      (id
+                                        (congrArg
+                                          (fun _a =>
+                                            decode lambda ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                              decode lambda ^ Nat.rawCast 1 * _a)
+                                          (Eq.symm rfl)))
+                                      (Eq.refl (decode lambda ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                  (Mathlib.Tactic.Ring.Common.add_mul
+                                    (Mathlib.Tactic.Ring.Common.mul_add
+                                      (Mathlib.Tactic.Ring.Common.mul_pf_left (decode power) (Nat.rawCast 1)
+                                        (Mathlib.Tactic.Ring.Common.mul_pf_right (decode lambda) (Nat.rawCast 1)
+                                          (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                            (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1)
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1) (Eq.refl 1)))))
+                                      (Mathlib.Tactic.Ring.Common.mul_zero
+                                        (decode power ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                      (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                        (decode power ^ Nat.rawCast 1 *
+                                            (decode lambda ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                          0)))
+                                    (Mathlib.Tactic.Ring.Common.zero_mul
+                                      (decode lambda ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))
+                                    (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                      (decode power ^ Nat.rawCast 1 * (decode lambda ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                        0))))
+                                (Mathlib.Tactic.Ring.Common.pow_congr
+                                  (Mathlib.Tactic.Ring.Common.atom_pf (decode lambda) rfl
+                                    (Eq.mpr
+                                      (id
+                                        (congrArg
+                                          (fun _a =>
+                                            decode lambda ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                              decode lambda ^ Nat.rawCast 1 * _a)
+                                          (Eq.symm rfl)))
+                                      (Eq.refl (decode lambda ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                  (Mathlib.Tactic.Ring.Common.atom_pf n rfl
+                                    (Eq.mpr
+                                      (id
+                                        (congrArg (fun _a => n ^ Nat.rawCast 1 * Nat.rawCast 1 = n ^ Nat.rawCast 1 * _a)
+                                          (Eq.symm rfl)))
+                                      (Eq.refl (n ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                  (Mathlib.Tactic.Ring.Common.pow_add
+                                    (Mathlib.Tactic.Ring.Common.single_pow
+                                      (Mathlib.Tactic.Ring.Common.mul_pow_mul
+                                        (Mathlib.Tactic.Ring.Common.mul_pf_right n (Nat.rawCast 1)
+                                          (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                            (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw ℕ 1)
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw ℕ 1) (Eq.refl 1))))
+                                        (Mathlib.Tactic.Ring.Common.one_pow (n ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                          { out := rfl })
+                                        (Eq.mpr
+                                          (id
+                                            (congrArg
+                                              (fun _a =>
+                                                decode lambda ^ (n ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1 =
+                                                  decode lambda ^ (n ^ Nat.rawCast 1 * Nat.rawCast 1) * _a)
+                                              (Eq.symm rfl)))
+                                          (Eq.refl
+                                            (decode lambda ^ (n ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1)))
+                                        (Mathlib.Tactic.Ring.Common.mul_pf_left (decode lambda)
+                                          (n ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                          (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                            (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1)
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1) (Eq.refl 1))))))
+                                    (Mathlib.Tactic.Ring.Common.pow_zero
+                                      (decode lambda ^ Nat.rawCast 1 * Nat.rawCast 1 + 0) rfl)
+                                    (Mathlib.Tactic.Ring.Common.add_mul
+                                      (Mathlib.Tactic.Ring.Common.mul_add
+                                        (Mathlib.Tactic.Ring.Common.mul_pf_left (decode lambda)
+                                          (n ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                          (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                            (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1)
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1) (Eq.refl 1))))
+                                        (Mathlib.Tactic.Ring.Common.mul_zero
+                                          (decode lambda ^ (n ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1))
+                                        (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                          (decode lambda ^ (n ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1 + 0)))
+                                      (Mathlib.Tactic.Ring.Common.zero_mul (Nat.rawCast 1 + 0))
+                                      (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                        (decode lambda ^ (n ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1 + 0)))))
+                                (Mathlib.Tactic.Ring.Common.add_mul
+                                  (Mathlib.Tactic.Ring.Common.mul_add
+                                    (Mathlib.Tactic.Ring.Common.mul_pf_left (decode power) (Nat.rawCast 1)
+                                      (Mathlib.Tactic.Ring.Common.mul_pf_left (decode lambda) (Nat.rawCast 1)
+                                        (Mathlib.Tactic.Ring.Common.mul_pf_right (decode lambda)
+                                          (n ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                          (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                            (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1)
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1) (Eq.refl 1))))))
+                                    (Mathlib.Tactic.Ring.Common.mul_zero
+                                      (decode power ^ Nat.rawCast 1 * (decode lambda ^ Nat.rawCast 1 * Nat.rawCast 1)))
+                                    (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                      (decode power ^ Nat.rawCast 1 *
+                                          (decode lambda ^ Nat.rawCast 1 *
+                                            (decode lambda ^ (n ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1)) +
+                                        0)))
+                                  (Mathlib.Tactic.Ring.Common.zero_mul
+                                    (decode lambda ^ (n ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1 + 0))
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                    (decode power ^ Nat.rawCast 1 *
+                                        (decode lambda ^ Nat.rawCast 1 *
+                                          (decode lambda ^ (n ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1)) +
+                                      0))))
+                              (Mathlib.Tactic.Ring.Common.mul_congr
+                                (Mathlib.Tactic.Ring.Common.atom_pf (decode power) rfl
+                                  (Eq.mpr
+                                    (id
+                                      (congrArg
+                                        (fun _a =>
+                                          decode power ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                            decode power ^ Nat.rawCast 1 * _a)
+                                        (Eq.symm rfl)))
+                                    (Eq.refl (decode power ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                (Mathlib.Tactic.Ring.Common.mul_congr
+                                  (Mathlib.Tactic.Ring.Common.pow_congr
+                                    (Mathlib.Tactic.Ring.Common.atom_pf (decode lambda) rfl
+                                      (Eq.mpr
+                                        (id
+                                          (congrArg
+                                            (fun _a =>
+                                              decode lambda ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                                decode lambda ^ Nat.rawCast 1 * _a)
+                                            (Eq.symm rfl)))
+                                        (Eq.refl (decode lambda ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                    (Mathlib.Tactic.Ring.Common.atom_pf n rfl
+                                      (Eq.mpr
+                                        (id
+                                          (congrArg
+                                            (fun _a => n ^ Nat.rawCast 1 * Nat.rawCast 1 = n ^ Nat.rawCast 1 * _a)
+                                            (Eq.symm rfl)))
+                                        (Eq.refl (n ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                    (Mathlib.Tactic.Ring.Common.pow_add
+                                      (Mathlib.Tactic.Ring.Common.single_pow
+                                        (Mathlib.Tactic.Ring.Common.mul_pow_mul
+                                          (Mathlib.Tactic.Ring.Common.mul_pf_right n (Nat.rawCast 1)
+                                            (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                              (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                                (Mathlib.Meta.NormNum.IsNat.of_raw ℕ 1)
+                                                (Mathlib.Meta.NormNum.IsNat.of_raw ℕ 1) (Eq.refl 1))))
+                                          (Mathlib.Tactic.Ring.Common.one_pow (n ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                            { out := rfl })
+                                          (Eq.mpr
+                                            (id
+                                              (congrArg
+                                                (fun _a =>
+                                                  decode lambda ^ (n ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1 =
+                                                    decode lambda ^ (n ^ Nat.rawCast 1 * Nat.rawCast 1) * _a)
+                                                (Eq.symm rfl)))
+                                            (Eq.refl
+                                              (decode lambda ^ (n ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1)))
+                                          (Mathlib.Tactic.Ring.Common.mul_pf_left (decode lambda)
+                                            (n ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                            (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                              (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                                (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1)
+                                                (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1) (Eq.refl 1))))))
+                                      (Mathlib.Tactic.Ring.Common.pow_zero
+                                        (decode lambda ^ Nat.rawCast 1 * Nat.rawCast 1 + 0) rfl)
+                                      (Mathlib.Tactic.Ring.Common.add_mul
+                                        (Mathlib.Tactic.Ring.Common.mul_add
+                                          (Mathlib.Tactic.Ring.Common.mul_pf_left (decode lambda)
+                                            (n ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                            (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                              (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                                (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1)
+                                                (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1) (Eq.refl 1))))
+                                          (Mathlib.Tactic.Ring.Common.mul_zero
+                                            (decode lambda ^ (n ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1))
+                                          (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                            (decode lambda ^ (n ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1 + 0)))
+                                        (Mathlib.Tactic.Ring.Common.zero_mul (Nat.rawCast 1 + 0))
+                                        (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                          (decode lambda ^ (n ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1 + 0)))))
+                                  (Mathlib.Tactic.Ring.Common.atom_pf (decode lambda) rfl
+                                    (Eq.mpr
+                                      (id
+                                        (congrArg
+                                          (fun _a =>
+                                            decode lambda ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                              decode lambda ^ Nat.rawCast 1 * _a)
+                                          (Eq.symm rfl)))
+                                      (Eq.refl (decode lambda ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                  (Mathlib.Tactic.Ring.Common.add_mul
+                                    (Mathlib.Tactic.Ring.Common.mul_add
+                                      (Mathlib.Tactic.Ring.Common.mul_pf_right (decode lambda) (Nat.rawCast 1)
+                                        (Mathlib.Tactic.Ring.Common.mul_pf_left (decode lambda)
+                                          (n ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                          (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                            (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1)
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1) (Eq.refl 1)))))
+                                      (Mathlib.Tactic.Ring.Common.mul_zero
+                                        (decode lambda ^ (n ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1))
+                                      (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                        (decode lambda ^ Nat.rawCast 1 *
+                                            (decode lambda ^ (n ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1) +
+                                          0)))
+                                    (Mathlib.Tactic.Ring.Common.zero_mul
+                                      (decode lambda ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))
+                                    (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                      (decode lambda ^ Nat.rawCast 1 *
+                                          (decode lambda ^ (n ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1) +
+                                        0))))
+                                (Mathlib.Tactic.Ring.Common.add_mul
+                                  (Mathlib.Tactic.Ring.Common.mul_add
+                                    (Mathlib.Tactic.Ring.Common.mul_pf_left (decode power) (Nat.rawCast 1)
+                                      (Mathlib.Tactic.Ring.Common.mul_pf_right (decode lambda) (Nat.rawCast 1)
+                                        (Mathlib.Tactic.Ring.Common.mul_pf_right (decode lambda)
+                                          (n ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                          (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                            (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1)
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw FIv_NativeValue.K 1) (Eq.refl 1))))))
+                                    (Mathlib.Tactic.Ring.Common.mul_zero (decode power ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                    (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                      (decode power ^ Nat.rawCast 1 *
+                                          (decode lambda ^ Nat.rawCast 1 *
+                                            (decode lambda ^ (n ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1)) +
+                                        0)))
+                                  (Mathlib.Tactic.Ring.Common.zero_mul
+                                    (decode lambda ^ Nat.rawCast 1 *
+                                        (decode lambda ^ (n ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1) +
+                                      0))
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                    (decode power ^ Nat.rawCast 1 *
+                                        (decode lambda ^ Nat.rawCast 1 *
+                                          (decode lambda ^ (n ^ Nat.rawCast 1 * Nat.rawCast 1) * Nat.rawCast 1)) +
+                                      0)))))))⟩⟩⟩⟩⟩⟩))
+    n power hp
+'AspisR1.NJL_WindowPowers.source' depends on axioms: [propext, Classical.choice, Quot.sound]

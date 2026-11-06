@@ -50,3 +50,6 @@ NJL_SharedRoot.source passes at L096: native std4callback, gather/group/control 
 
 ## Stage10 occupancy parent228
 L103 passes complete native/cohort parent root: same rows1017/1018, typed arbitrary variant, actual child244 full12array and CLOSED230 at0, all24final cells. K037/K038 fullparent pass/fail; no residual child-success hypothesis. Target not established; final gate2 and ledger pending.
+
+## Stage11 path parent229
+L107 passes: exact complete emitted add_path_lanes Result and native parent cut, SAME THREE-view Openings, actual closed sum_high262/threeadds/product/child247/preweighted230 domains. K043/K044 strengthened actual-struct pass/fail; K039/K040 single-view token shape excluded and K041 parse failure excluded. Final gate2 and authoritative ledger pending. Target not established.

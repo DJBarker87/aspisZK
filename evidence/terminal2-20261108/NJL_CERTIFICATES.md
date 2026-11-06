@@ -54,3 +54,6 @@ NJL_SharedMeaning.value proves the entire9group fold equals the adopted selected
 
 ## Stage10 occupancy parent228
 NJL_OccupancyParent.source L103 full Result equals the actual emitted add_occupancy_lanes. Uses retained FIy_OccupancyRows.input/output symbolic constant theorems (not kernel evaluation of checked usize arithmetic), NIH_SelectorRow.result with1017/1018<1024 and same canonical Selectors, NFQ_StatementLaws.expected_reference (expected<P by enum cases), NJL_OccupancyAssociation.source with same16opened cells, NHU_Preweighted.result at0/N12/positive/within96. Final canonicality internally retained; no restrictions on occupied bit and no public.variant-validation assumption.
+
+## Stage11 path parent229
+NJL_PathSelector.source L099 consumes actual CLOSED sum_high262, reads1/5/9/13, derives three adds and product (all canonical). NJL_PathParent.source L107 consumes child247 on same THREE-view Openings and CLOSED230 at32/N17. Complete emitted add_path_lanes Result equals returned full24array; all native cut counters/source operands and same17lane child result are internally constructed. No successful-call premise or binary-bit restriction.

@@ -1,0 +1,40 @@
+{"attempt": "NJL_L106", "exit_status": 0, "wall_seconds": 8.109687892021611, "peak_rss_kib": "6172100", "swaps": "0", "print_axioms": ["'AspisR1.NJL_WindowCache.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJL_WindowCache.source : ∀ (powers : List NQ),
+  (∀ x ∈ powers, Canon x) →
+    ∃ caches,
+      NJB_Traverse.run FIq_Native.field.PreparedQm31Multiplier.new powers = ok caches ∧
+        List.Forall₂
+          (fun power cache =>
+            FIq_Native.field.PreparedQm31Multiplier.new power = ok cache ∧ NJB_PreparedLaws.Domain cache power)
+          powers ↑caches :=
+fun powers canonical =>
+  let ⟨caches, h✝⟩ :=
+    NJL_Traverse.packet FIq_Native.field.PreparedQm31Multiplier.new (fun x => True)
+      (fun power cache =>
+        FIq_Native.field.PreparedQm31Multiplier.new power = ok cache ∧ NJB_PreparedLaws.Domain cache power)
+      powers fun power hp =>
+      let ⟨cache, h✝¹⟩ 
+...
+theorem AspisR1.NJL_WindowCache.source : ∀ (powers : List NQ),
+  (∀ x ∈ powers, Canon x) →
+    ∃ caches,
+      NJB_Traverse.run FIq_Native.field.PreparedQm31Multiplier.new powers = ok caches ∧
+        List.Forall₂
+          (fun power cache =>
+            FIq_Native.field.PreparedQm31Multiplier.new power = ok cache ∧ NJB_PreparedLaws.Domain cache power)
+          powers ↑caches :=
+fun powers canonical =>
+  let ⟨caches, h✝⟩ :=
+    NJL_Traverse.packet FIq_Native.field.PreparedQm31Multiplier.new (fun x => True)
+      (fun power cache =>
+        FIq_Native.field.PreparedQm31Multiplier.new power = ok cache ∧ NJB_PreparedLaws.Domain cache power)
+      powers fun power hp =>
+      let ⟨cache, h✝¹⟩ := NJB_PreparedLaws.new_result power (canonical power hp)
+      let ⟨call, domain⟩ := h✝¹
+      Exists.intro cache ⟨call, ⟨True.intro, ⟨call, domain⟩⟩⟩
+  let ⟨call, right✝⟩ := h✝
+  let ⟨left✝, relation⟩ := right✝
+  Exists.intro caches ⟨call, relation⟩
+'AspisR1.NJL_WindowCache.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-ra0b422089b95480fa337f9fdad610912.scope; invocation ID: 55c4e62d720648b6932ef92a0c655d1d

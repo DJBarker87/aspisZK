@@ -34,3 +34,6 @@ No field multiplication in Kani. Integer multiplies are opaque natural-value rep
 
 ## Stage9 shared selector
 Pack reply paired with NJB_PackLaw.result (CLOSED NFT_Pack.source), exact same gathered4cells canonical by lanes_canonical. Product/add reply paired NJB_StubLaws.qm_mul/qm_add; domains supplied from same input selector, pack Result, and evolving24state. NJL_SharedRoot.source constructs actual33selector products for adopted NHU_Preweighted.result; its positive/interval/canonical domains are discharged internally at N33/start49. Native pack is opaque, never field multiplication in Kani.
+
+## Parent228/229 child clauses
+228: NIH_SelectorRow.result at1017/1018<1024 with same canonical high/low; NFQ_StatementLaws.expected_reference at typed enum, expected<P by cases; NJL_OccupancyAssociation.source actual opened16; NHU_Preweighted.result0/N12 positive/within96. 229: NHG_ExtraLeaves.sum_result exact57..63 with rangebounds/high64 canonical; NJB_StubLaws.qm_add×3 and qm_mul with actual canonical returned operands (NJL_PathSelector.source); NJL_PathAssociation.source canonical selector and same z/succ_z16; NHU_Preweighted.result32/N17 positive/within96. Every native stub has full actual same-input Result internally in these root Packets.
