@@ -1,0 +1,54 @@
+{"attempt": "NJP_L044", "exit_status": 0, "wall_seconds": 3.748149217106402, "peak_rss_kib": "4352868", "swaps": "0", "print_axioms": ["'NJP_CohortWrite.finish' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_CohortWrite.writer' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJP_CohortWrite.finish : ∀ (s : reference.Scratch) (digest : RefDigest) (ni cursor : Usize) (index : U32)
+  (i w : Usize),
+  ↑w < 16 →
+    ↑index = NJP_RowModel.index (raw s) ↑i →
+      mapResult projectRow (AspisR1.MultiproofConePhysicalProgram.finish s digest ni cursor index w) =
+        ok (NJP_RowModel.Row.next (NJP_RowModel.write (raw s) (↑i) (↑w) (↑cursor) (decode digest)) (↑ni) (↑w + 1)) :=
+fun s digest ni cursor index i w bound index_value =>
+  let ⟨parent, h✝⟩ := NJP_CheckedWords.half index
+  let ⟨division, parent_value⟩ := h✝
+  let ⟨next, h✝¹⟩ := NJP_CheckedWords.add_one w bound
+  let ⟨addition, next_value⟩ := h✝¹
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun 
+...
+gest =>
+                    Program.done (AspisR1.MultiproofConePhysicalProgram.finish s digest ni cursor index w))))))
+          ([(AspisR1.MultiproofConePhysicalDigest.parts left right,
+                H (AspisR1.MultiproofConePhysicalDigest.parts left right))],
+            ok
+              (NJP_RowModel.Row.next
+                (NJP_RowModel.write (raw s) (↑i) (↑w) (↑cursor)
+                  (decode (H (AspisR1.MultiproofConePhysicalDigest.parts left right))))
+                (↑ni) (↑w + 1)))))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              ([(AspisR1.MultiproofConePhysicalDigest.parts left right,
+                      H (AspisR1.MultiproofConePhysicalDigest.parts left right))],
+                  _a) =
+                ([(AspisR1.MultiproofConePhysicalDigest.parts left right,
+                      H (AspisR1.MultiproofConePhysicalDigest.parts left right))],
+                  ok
+                    (NJP_RowModel.Row.next
+                      (NJP_RowModel.write (raw s) (↑i) (↑w) (↑cursor)
+                        (decode (H (AspisR1.MultiproofConePhysicalDigest.parts left right))))
+                      (↑ni) (↑w + 1))))
+            (finish s (H (AspisR1.MultiproofConePhysicalDigest.parts left right)) ni cursor index i w bound
+              index_value)))
+        (Eq.refl
+          ([(AspisR1.MultiproofConePhysicalDigest.parts left right,
+                H (AspisR1.MultiproofConePhysicalDigest.parts left right))],
+            ok
+              (NJP_RowModel.Row.next
+                (NJP_RowModel.write (raw s) (↑i) (↑w) (↑cursor)
+                  (decode (H (AspisR1.MultiproofConePhysicalDigest.parts left right))))
+                (↑ni) (↑w + 1))))))
+'NJP_CohortWrite.writer' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rbce257d1e3514d83934d8b1cb04be8f6.scope; invocation ID: 9d3495a376b744d39d8669563896d961

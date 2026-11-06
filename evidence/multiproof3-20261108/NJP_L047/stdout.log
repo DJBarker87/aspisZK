@@ -1,0 +1,580 @@
+NJP_lean/NJP_NativeStep.lean:32:5: error: unsolved goals
+case pos
+H : Request → Digest
+nodes : ℕ → U8
+length : ℕ
+s : Scratch
+i w : ℕ
+after : Scratch
+ni nw : ℕ
+returned : Bool
+log : Log
+cut : Cut s i w length nodes (H (request log)) after ni nw returned log
+post : after = if writes s i length then write s i w (cursor s i length) (H (request log)) else s
+active : i < s.n
+both : ¬paired s i
+available : s.cursor + 32 ≤ length
+entered : writes s i length
+args : request log = siblingRequest s i nodes
+⊢ ([(siblingRequest s i nodes, H (siblingRequest s i nodes))],
+      ok (Row.next (write s i w (s.cursor + 32) (H (siblingRequest s i nodes))) (i + 1) (w + 1))) =
+    ([(siblingRequest s i nodes, H (siblingRequest s i nodes))],
+      ok
+        (Row.next (write s i w (if ¬False then s.cursor + 32 else s.cursor) (H (siblingRequest s i nodes))) (i + 1)
+          (w + 1)))
+NJP_lean/NJP_NativeStep.lean:44:1: error: unsolved goals
+case neg
+H : Request → Digest
+nodes : ℕ → U8
+length : ℕ
+s : Scratch
+i w : ℕ
+after : Scratch
+ni nw : ℕ
+returned : Bool
+log : Log
+cut : Cut s i w length nodes (H (request log)) after ni nw returned log
+post : after = if writes s i length then write s i w (cursor s i length) (H (request log)) else s
+active : ¬i < s.n
+absent : ¬writes s i length
+⊢ ([], ok (Row.next s i w)) =
+    ([],
+      ok
+        (if decide (¬False ∨ paired s i ∨ s.cursor + 32 ≤ length) = true then
+          Row.next s (if False then if paired s i then i + 2 else if s.cursor + 32 ≤ length then i + 1 else i else i) w
+        else Row.stop s))
+NJP_lean/NJP_NativeStep.lean:27:26: warning: This simp argument is unused:
+  if_pos entered
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵u̵t̵.̵c̵o̵u̵n̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵s̵h̵o̵w̵ ̵¬̵(̵1̵:̵N̵a̵t̵)̵=̵0̵[̲c̲u̲t̲.̲c̲o̲u̲n̲t̲,̲ ̲s̲h̲o̲w̲ ̲¬̲(̲1̲ ̲:̲ ̲N̲a̲t̲)̲ ̲=̲ ̲0̲ by d̵e̵c̵i̵d̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵a̵r̵g̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵u̵t̵.̵r̵e̵t̵u̵r̵n̵V̵a̵l̵u̵e̵,̵a̵c̵t̵i̵v̵e̵,̵n̵o̵t̵_̵t̵r̵u̵e̵,̵b̵o̵t̵h̵,̵f̵a̵l̵s̵e̵_̵o̵r̵,̵t̵r̵u̵e̵_̵o̵r̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵o̵s̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵t̵.̵n̵e̵x̵t̵I̵n̵d̵e̵x̵,̵n̵e̵x̵t̵I̵,̵i̵f̵_̵p̵o̵s̵ ̵a̵c̵t̵i̵v̵e̵,̵i̵f̵_̵p̵o̵s̵d̲e̲c̲i̲d̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲r̲g̲s̲,̲ ̲c̲u̲t̲.̲r̲e̲t̲u̲r̲n̲V̲a̲l̲u̲e̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ both, c̵u̵t̵.̵n̵e̵x̵t̵W̵r̵i̵t̵e̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵r̵s̵o̵r̵,̵a̵c̵t̵i̵v̵e̵,̵b̵o̵t̵h̵,̵n̵o̵t̵_̵t̵r̵u̵e̵,̵a̵n̵d̵_̵f̵a̵l̵s̵e̵,̵f̵a̵l̵s̵e̵_̵a̵n̵d̵,̵t̵r̵u̵e̵_̵a̵n̵d̵,̵a̵n̵d̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵f̲a̲l̲s̲e̲_̲o̲r̲,̲ ̲t̲r̲u̲e̲_̲o̲r̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲p̲o̲s̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲I̲n̲d̲e̲x̲,̲ ̲n̲e̲x̲t̲I̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲b̲o̲t̲h̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲W̲r̲i̲t̲e̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲r̲s̲o̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲b̲o̲t̲h̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲a̲n̲d̲_̲f̲a̲l̲s̲e̲,̲ ̲f̲a̲l̲s̲e̲_̲a̲n̲d̲,̲ ̲t̲r̲u̲e̲_̲a̲n̲d̲,̲ ̲a̲n̲d̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_NativeStep.lean:28:23: warning: This simp argument is unused:
+  active
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵u̵t̵.̵c̵o̵u̵n̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵s̵h̵o̵w̵ ̵¬̵(̵1̵:̵N̵a̵t̵)̵=̵0̵[̲c̲u̲t̲.̲c̲o̲u̲n̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲s̲h̲o̲w̲ ̲¬̲(̲1̲ ̲:̲ ̲N̲a̲t̲)̲ ̲=̲ ̲0̲ by d̵e̵c̵i̵d̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵a̵r̵g̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵u̵t̵.̵r̵e̵t̵u̵r̵n̵V̵a̵l̵u̵e̵,̵a̵c̵t̵i̵v̵e̵,̵n̵o̵t̵_̵t̵r̵u̵e̵,̵b̵o̵t̵h̵,̵f̵a̵l̵s̵e̵_̵o̵r̵,̵t̵r̵u̵e̵_̵o̵r̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵o̵s̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵t̵.̵n̵e̵x̵t̵I̵n̵d̵e̵x̵,̵n̵e̵x̵t̵I̵,̵i̵f̵_̵p̵o̵s̵ ̵a̵c̵t̵i̵v̵e̵,̵i̵f̵_̵p̵o̵s̵d̲e̲c̲i̲d̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲r̲g̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲u̲t̲.̲r̲e̲t̲u̲r̲n̲V̲a̲l̲u̲e̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ both, c̵u̵t̵.̵n̵e̵x̵t̵W̵r̵i̵t̵e̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵r̵s̵o̵r̵,̵a̵c̵t̵i̵v̵e̵,̵b̵o̵t̵h̵,̵n̵o̵t̵_̵t̵r̵u̵e̵,̵a̵n̵d̵_̵f̵a̵l̵s̵e̵,̵f̵a̵l̵s̵e̵_̵a̵n̵d̵,̵t̵r̵u̵e̵_̵a̵n̵d̵,̵a̵n̵d̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵f̲a̲l̲s̲e̲_̲o̲r̲,̲ ̲t̲r̲u̲e̲_̲o̲r̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲p̲o̲s̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲I̲n̲d̲e̲x̲,̲ ̲n̲e̲x̲t̲I̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲b̲o̲t̲h̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲W̲r̲i̲t̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲r̲s̲o̲r̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲b̲o̲t̲h̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲a̲n̲d̲_̲f̲a̲l̲s̲e̲,̲ ̲f̲a̲l̲s̲e̲_̲a̲n̲d̲,̲ ̲t̲r̲u̲e̲_̲a̲n̲d̲,̲ ̲a̲n̲d̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_NativeStep.lean:28:39: warning: This simp argument is unused:
+  both
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵u̵t̵.̵c̵o̵u̵n̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵s̵h̵o̵w̵ ̵¬̵(̵1̵:̵N̵a̵t̵)̵=̵0̵[̲c̲u̲t̲.̲c̲o̲u̲n̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲s̲h̲o̲w̲ ̲¬̲(̲1̲ ̲:̲ ̲N̲a̲t̲)̲ ̲=̲ ̲0̲ by d̵e̵c̵i̵d̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵a̵r̵g̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵u̵t̵.̵r̵e̵t̵u̵r̵n̵V̵a̵l̵u̵e̵,̵a̵c̵t̵i̵v̵e̵,̵n̵o̵t̵_̵t̵r̵u̵e̵,̵b̵o̵t̵h̵,̵f̵a̵l̵s̵e̵_̵o̵r̵,̵t̵r̵u̵e̵_̵o̵r̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵o̵s̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵t̵.̵n̵e̵x̵t̵I̵n̵d̵e̵x̵,̵n̵e̵x̵t̵I̵,̵i̵f̵_̵p̵o̵s̵ ̵a̵c̵t̵i̵v̵e̵,̵i̵f̵_̵p̵o̵s̵d̲e̲c̲i̲d̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲r̲g̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲u̲t̲.̲r̲e̲t̲u̲r̲n̲V̲a̲l̲u̲e̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲f̲a̲l̲s̲e̲_̲o̲r̲,̲ ̲t̲r̲u̲e̲_̲o̲r̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲p̲o̲s̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲I̲n̲d̲e̲x̲,̲ ̲n̲e̲x̲t̲I̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲i̲f̲_̲p̲o̲s̲ both, c̵u̵t̵.̵n̵e̵x̵t̵W̵r̵i̵t̵e̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵r̵s̵o̵r̵,̵a̵c̵t̵i̵v̵e̵,̵b̵o̵t̵h̵,̵n̵o̵t̵_̵t̵r̵u̵e̵,̵a̵n̵d̵_̵f̵a̵l̵s̵e̵,̵f̵a̵l̵s̵e̵_̵a̵n̵d̵,̵t̵r̵u̵e̵_̵a̵n̵d̵,̵a̵n̵d̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵c̲u̲t̲.̲n̲e̲x̲t̲W̲r̲i̲t̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲r̲s̲o̲r̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲b̲o̲t̲h̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲a̲n̲d̲_̲f̲a̲l̲s̲e̲,̲ ̲f̲a̲l̲s̲e̲_̲a̲n̲d̲,̲ ̲t̲r̲u̲e̲_̲a̲n̲d̲,̲ ̲a̲n̲d̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_NativeStep.lean:29:12: warning: This simp argument is unused:
+  if_pos entered
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵u̵t̵.̵c̵o̵u̵n̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵s̵h̵o̵w̵ ̵¬̵(̵1̵:̵N̵a̵t̵)̵=̵0̵[̲c̲u̲t̲.̲c̲o̲u̲n̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲s̲h̲o̲w̲ ̲¬̲(̲1̲ ̲:̲ ̲N̲a̲t̲)̲ ̲=̲ ̲0̲ by d̵e̵c̵i̵d̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵a̵r̵g̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵u̵t̵.̵r̵e̵t̵u̵r̵n̵V̵a̵l̵u̵e̵,̵a̵c̵t̵i̵v̵e̵,̵n̵o̵t̵_̵t̵r̵u̵e̵,̵b̵o̵t̵h̵,̵f̵a̵l̵s̵e̵_̵o̵r̵,̵t̵r̵u̵e̵_̵o̵r̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵o̵s̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵t̵.̵n̵e̵x̵t̵I̵n̵d̵e̵x̵,̵n̵e̵x̵t̵I̵,̵i̵f̵_̵p̵o̵s̵ ̵a̵c̵t̵i̵v̵e̵,̵i̵f̵_̵p̵o̵s̵d̲e̲c̲i̲d̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲r̲g̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲u̲t̲.̲r̲e̲t̲u̲r̲n̲V̲a̲l̲u̲e̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ both, c̵u̵t̵.̵n̵e̵x̵t̵W̵r̵i̵t̵e̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵r̵s̵o̵r̵,̵a̵c̵t̵i̵v̵e̵,̵b̵o̵t̵h̵,̵n̵o̵t̵_̵t̵r̵u̵e̵,̵a̵n̵d̵_̵f̵a̵l̵s̵e̵,̵f̵a̵l̵s̵e̵_̵a̵n̵d̵,̵t̵r̵u̵e̵_̵a̵n̵d̵,̵a̵n̵d̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵f̲a̲l̲s̲e̲_̲o̲r̲,̲ ̲t̲r̲u̲e̲_̲o̲r̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲p̲o̲s̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲I̲n̲d̲e̲x̲,̲ ̲n̲e̲x̲t̲I̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲b̲o̲t̲h̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲W̲r̲i̲t̲e̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲r̲s̲o̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲b̲o̲t̲h̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲a̲n̲d̲_̲f̲a̲l̲s̲e̲,̲ ̲f̲a̲l̲s̲e̲_̲a̲n̲d̲,̲ ̲t̲r̲u̲e̲_̲a̲n̲d̲,̲ ̲a̲n̲d̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_NativeStep.lean:29:47: warning: This simp argument is unused:
+  if_pos active
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵u̵t̵.̵c̵o̵u̵n̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵s̵h̵o̵w̵ ̵¬̵(̵1̵:̵N̵a̵t̵)̵=̵0̵[̲c̲u̲t̲.̲c̲o̲u̲n̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲s̲h̲o̲w̲ ̲¬̲(̲1̲ ̲:̲ ̲N̲a̲t̲)̲ ̲=̲ ̲0̲ by d̵e̵c̵i̵d̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵a̵r̵g̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵u̵t̵.̵r̵e̵t̵u̵r̵n̵V̵a̵l̵u̵e̵,̵a̵c̵t̵i̵v̵e̵,̵n̵o̵t̵_̵t̵r̵u̵e̵,̵b̵o̵t̵h̵,̵f̵a̵l̵s̵e̵_̵o̵r̵,̵t̵r̵u̵e̵_̵o̵r̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵o̵s̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵t̵.̵n̵e̵x̵t̵I̵n̵d̵e̵x̵,̵n̵e̵x̵t̵I̵,̵i̵f̵_̵p̵o̵s̵ ̵a̵c̵t̵i̵v̵e̵,̵i̵f̵_̵p̵o̵s̵d̲e̲c̲i̲d̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲r̲g̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲u̲t̲.̲r̲e̲t̲u̲r̲n̲V̲a̲l̲u̲e̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ both, c̵u̵t̵.̵n̵e̵x̵t̵W̵r̵i̵t̵e̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵r̵s̵o̵r̵,̵a̵c̵t̵i̵v̵e̵,̵b̵o̵t̵h̵,̵n̵o̵t̵_̵t̵r̵u̵e̵,̵a̵n̵d̵_̵f̵a̵l̵s̵e̵,̵f̵a̵l̵s̵e̵_̵a̵n̵d̵,̵t̵r̵u̵e̵_̵a̵n̵d̵,̵a̵n̵d̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵f̲a̲l̲s̲e̲_̲o̲r̲,̲ ̲t̲r̲u̲e̲_̲o̲r̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲p̲o̲s̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲I̲n̲d̲e̲x̲,̲ ̲n̲e̲x̲t̲I̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲b̲o̲t̲h̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲W̲r̲i̲t̲e̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲r̲s̲o̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲b̲o̲t̲h̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲a̲n̲d̲_̲f̲a̲l̲s̲e̲,̲ ̲f̲a̲l̲s̲e̲_̲a̲n̲d̲,̲ ̲t̲r̲u̲e̲_̲a̲n̲d̲,̲ ̲a̲n̲d̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_NativeStep.lean:29:61: warning: This simp argument is unused:
+  if_pos both
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵u̵t̵.̵c̵o̵u̵n̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵s̵h̵o̵w̵ ̵¬̵(̵1̵:̵N̵a̵t̵)̵=̵0̵[̲c̲u̲t̲.̲c̲o̲u̲n̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲s̲h̲o̲w̲ ̲¬̲(̲1̲ ̲:̲ ̲N̲a̲t̲)̲ ̲=̲ ̲0̲ by d̵e̵c̵i̵d̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵a̵r̵g̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵u̵t̵.̵r̵e̵t̵u̵r̵n̵V̵a̵l̵u̵e̵,̵a̵c̵t̵i̵v̵e̵,̵n̵o̵t̵_̵t̵r̵u̵e̵,̵b̵o̵t̵h̵,̵f̵a̵l̵s̵e̵_̵o̵r̵,̵t̵r̵u̵e̵_̵o̵r̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵o̵s̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵t̵.̵n̵e̵x̵t̵I̵n̵d̵e̵x̵,̵n̵e̵x̵t̵I̵,̵i̵f̵_̵p̵o̵s̵ ̵a̵c̵t̵i̵v̵e̵,̵i̵f̵_̵p̵o̵s̵d̲e̲c̲i̲d̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲r̲g̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲u̲t̲.̲r̲e̲t̲u̲r̲n̲V̲a̲l̲u̲e̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ both, c̵u̵t̵.̵n̵e̵x̵t̵W̵r̵i̵t̵e̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵r̵s̵o̵r̵,̵a̵c̵t̵i̵v̵e̵,̵b̵o̵t̵h̵,̵n̵o̵t̵_̵t̵r̵u̵e̵,̵a̵n̵d̵_̵f̵a̵l̵s̵e̵,̵f̵a̵l̵s̵e̵_̵a̵n̵d̵,̵t̵r̵u̵e̵_̵a̵n̵d̵,̵a̵n̵d̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵f̲a̲l̲s̲e̲_̲o̲r̲,̲ ̲t̲r̲u̲e̲_̲o̲r̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲p̲o̲s̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲I̲n̲d̲e̲x̲,̲ ̲n̲e̲x̲t̲I̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲W̲r̲i̲t̲e̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲r̲s̲o̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲b̲o̲t̲h̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲a̲n̲d̲_̲f̲a̲l̲s̲e̲,̲ ̲f̲a̲l̲s̲e̲_̲a̲n̲d̲,̲ ̲t̲r̲u̲e̲_̲a̲n̲d̲,̲ ̲a̲n̲d̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_NativeStep.lean:30:84: warning: This simp argument is unused:
+  true_and
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵u̵t̵.̵c̵o̵u̵n̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵s̵h̵o̵w̵ ̵¬̵(̵1̵:̵N̵a̵t̵)̵=̵0̵[̲c̲u̲t̲.̲c̲o̲u̲n̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲s̲h̲o̲w̲ ̲¬̲(̲1̲ ̲:̲ ̲N̲a̲t̲)̲ ̲=̲ ̲0̲ by d̵e̵c̵i̵d̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵a̵r̵g̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵u̵t̵.̵r̵e̵t̵u̵r̵n̵V̵a̵l̵u̵e̵,̵a̵c̵t̵i̵v̵e̵,̵n̵o̵t̵_̵t̵r̵u̵e̵,̵b̵o̵t̵h̵,̵f̵a̵l̵s̵e̵_̵o̵r̵,̵t̵r̵u̵e̵_̵o̵r̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵o̵s̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵t̵.̵n̵e̵x̵t̵I̵n̵d̵e̵x̵,̵n̵e̵x̵t̵I̵,̵i̵f̵_̵p̵o̵s̵ ̵a̵c̵t̵i̵v̵e̵,̵i̵f̵_̵p̵o̵s̵d̲e̲c̲i̲d̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲r̲g̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲u̲t̲.̲r̲e̲t̲u̲r̲n̲V̲a̲l̲u̲e̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ both, c̵u̵t̵.̵n̵e̵x̵t̵W̵r̵i̵t̵e̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵r̵s̵o̵r̵,̵a̵c̵t̵i̵v̵e̵,̵b̵o̵t̵h̵,̵n̵o̵t̵_̵t̵r̵u̵e̵,̵a̵n̵d̵_̵f̵a̵l̵s̵e̵,̵f̵a̵l̵s̵e̵_̵a̵n̵d̵,̵t̵r̵u̵e̵_̵a̵n̵d̵,̵a̵n̵d̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵f̲a̲l̲s̲e̲_̲o̲r̲,̲ ̲t̲r̲u̲e̲_̲o̲r̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲p̲o̲s̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲I̲n̲d̲e̲x̲,̲ ̲n̲e̲x̲t̲I̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲b̲o̲t̲h̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲W̲r̲i̲t̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲r̲s̲o̲r̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲b̲o̲t̲h̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲a̲n̲d̲_̲f̲a̲l̲s̲e̲,̲ ̲f̲a̲l̲s̲e̲_̲a̲n̲d̲,̲ ̲a̲n̲d̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_NativeStep.lean:30:93: warning: This simp argument is unused:
+  and_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵u̵t̵.̵c̵o̵u̵n̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵s̵h̵o̵w̵ ̵¬̵(̵1̵:̵N̵a̵t̵)̵=̵0̵[̲c̲u̲t̲.̲c̲o̲u̲n̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲s̲h̲o̲w̲ ̲¬̲(̲1̲ ̲:̲ ̲N̲a̲t̲)̲ ̲=̲ ̲0̲ by d̵e̵c̵i̵d̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵a̵r̵g̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵u̵t̵.̵r̵e̵t̵u̵r̵n̵V̵a̵l̵u̵e̵,̵a̵c̵t̵i̵v̵e̵,̵n̵o̵t̵_̵t̵r̵u̵e̵,̵b̵o̵t̵h̵,̵f̵a̵l̵s̵e̵_̵o̵r̵,̵t̵r̵u̵e̵_̵o̵r̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵o̵s̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵t̵.̵n̵e̵x̵t̵I̵n̵d̵e̵x̵,̵n̵e̵x̵t̵I̵,̵i̵f̵_̵p̵o̵s̵ ̵a̵c̵t̵i̵v̵e̵,̵i̵f̵_̵p̵o̵s̵d̲e̲c̲i̲d̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲r̲g̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲u̲t̲.̲r̲e̲t̲u̲r̲n̲V̲a̲l̲u̲e̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ both, c̵u̵t̵.̵n̵e̵x̵t̵W̵r̵i̵t̵e̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵r̵s̵o̵r̵,̵a̵c̵t̵i̵v̵e̵,̵b̵o̵t̵h̵,̵n̵o̵t̵_̵t̵r̵u̵e̵,̵a̵n̵d̵_̵f̵a̵l̵s̵e̵,̵f̵a̵l̵s̵e̵_̵a̵n̵d̵,̵t̵r̵u̵e̵_̵a̵n̵d̵,̵a̵n̵d̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵f̲a̲l̲s̲e̲_̲o̲r̲,̲ ̲t̲r̲u̲e̲_̲o̲r̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲p̲o̲s̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲I̲n̲d̲e̲x̲,̲ ̲n̲e̲x̲t̲I̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲b̲o̲t̲h̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲W̲r̲i̲t̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲r̲s̲o̲r̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲b̲o̲t̲h̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲a̲n̲d̲_̲f̲a̲l̲s̲e̲,̲ ̲f̲a̲l̲s̲e̲_̲a̲n̲d̲,̲ ̲t̲r̲u̲e̲_̲a̲n̲d̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_NativeStep.lean:36:28: warning: This simp argument is unused:
+  if_pos entered
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵u̵t̵.̵c̵o̵u̵n̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵s̵h̵o̵w̵ ̵¬̵(̵1̵:̵N̵a̵t̵)̵=̵0̵[̲c̲u̲t̲.̲c̲o̲u̲n̲t̲,̲ ̲s̲h̲o̲w̲ ̲¬̲(̲1̲ ̲:̲ ̲N̲a̲t̲)̲ ̲=̲ ̲0̲ by d̵e̵c̵i̵d̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵a̵r̵g̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵u̵t̵.̵r̵e̵t̵u̵r̵n̵V̵a̵l̵u̵e̵,̵a̵c̵t̵i̵v̵e̵,̵n̵o̵t̵_̵t̵r̵u̵e̵,̵b̵o̵t̵h̵,̵f̵a̵l̵s̵e̵_̵o̵r̵,̵a̵v̵a̵i̵l̵a̵b̵l̵e̵,̵o̵r̵_̵t̵r̵u̵e̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵o̵s̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵t̵.̵n̵e̵x̵t̵I̵n̵d̵e̵x̵,̵n̵e̵x̵t̵I̵,̵i̵f̵_̵p̵o̵s̵ ̵a̵c̵t̵i̵v̵e̵,̵i̵f̵_̵n̵e̵g̵ ̵b̵o̵t̵h̵,̵i̵f̵_̵p̵o̵s̵d̲e̲c̲i̲d̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲r̲g̲s̲,̲ ̲c̲u̲t̲.̲r̲e̲t̲u̲r̲n̲V̲a̲l̲u̲e̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲b̲o̲t̲h̲,̲ ̲f̲a̲l̲s̲e̲_̲o̲r̲,̲ available, c̵u̵t̵.̵n̵e̵x̵t̵W̵r̵i̵t̵e̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵r̵s̵o̵r̵,̵a̵c̵t̵i̵v̵e̵,̵b̵o̵t̵h̵,̵n̵o̵t̵_̵f̵a̵l̵s̵e̵,̵a̵n̵d̵_̵s̵e̵l̵f̵,̵f̵a̵l̵s̵e̵_̵a̵n̵d̵,̵t̵r̵u̵e̵_̵a̵n̵d̵,̵a̵n̵d̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵]̵o̲r̲_̲t̲r̲u̲e̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲p̲o̲s̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲I̲n̲d̲e̲x̲,̲ ̲n̲e̲x̲t̲I̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲b̲o̲t̲h̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲a̲v̲a̲i̲l̲a̲b̲l̲e̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲W̲r̲i̲t̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲r̲s̲o̲r̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲b̲o̲t̲h̲,̲ ̲n̲o̲t̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲n̲d̲_̲s̲e̲l̲f̲,̲ ̲f̲a̲l̲s̲e̲_̲a̲n̲d̲,̲ ̲t̲r̲u̲e̲_̲a̲n̲d̲,̲ ̲a̲n̲d̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_NativeStep.lean:37:25: warning: This simp argument is unused:
+  active
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵u̵t̵.̵c̵o̵u̵n̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵s̵h̵o̵w̵ ̵¬̵(̵1̵:̵N̵a̵t̵)̵=̵0̵[̲c̲u̲t̲.̲c̲o̲u̲n̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲s̲h̲o̲w̲ ̲¬̲(̲1̲ ̲:̲ ̲N̲a̲t̲)̲ ̲=̲ ̲0̲ by d̵e̵c̵i̵d̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵a̵r̵g̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵u̵t̵.̵r̵e̵t̵u̵r̵n̵V̵a̵l̵u̵e̵,̵a̵c̵t̵i̵v̵e̵,̵n̵o̵t̵_̵t̵r̵u̵e̵,̵b̵o̵t̵h̵,̵f̵a̵l̵s̵e̵_̵o̵r̵,̵a̵v̵a̵i̵l̵a̵b̵l̵e̵,̵o̵r̵_̵t̵r̵u̵e̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵o̵s̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵t̵.̵n̵e̵x̵t̵I̵n̵d̵e̵x̵,̵n̵e̵x̵t̵I̵,̵i̵f̵_̵p̵o̵s̵ ̵a̵c̵t̵i̵v̵e̵,̵i̵f̵_̵n̵e̵g̵ ̵b̵o̵t̵h̵,̵i̵f̵_̵p̵o̵s̵d̲e̲c̲i̲d̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲r̲g̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲u̲t̲.̲r̲e̲t̲u̲r̲n̲V̲a̲l̲u̲e̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲b̲o̲t̲h̲,̲ ̲f̲a̲l̲s̲e̲_̲o̲r̲,̲ available, c̵u̵t̵.̵n̵e̵x̵t̵W̵r̵i̵t̵e̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵r̵s̵o̵r̵,̵a̵c̵t̵i̵v̵e̵,̵b̵o̵t̵h̵,̵n̵o̵t̵_̵f̵a̵l̵s̵e̵,̵a̵n̵d̵_̵s̵e̵l̵f̵,̵f̵a̵l̵s̵e̵_̵a̵n̵d̵,̵t̵r̵u̵e̵_̵a̵n̵d̵,̵a̵n̵d̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵]̵o̲r̲_̲t̲r̲u̲e̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲p̲o̲s̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲I̲n̲d̲e̲x̲,̲ ̲n̲e̲x̲t̲I̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲b̲o̲t̲h̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲a̲v̲a̲i̲l̲a̲b̲l̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲W̲r̲i̲t̲e̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲r̲s̲o̲r̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲b̲o̲t̲h̲,̲ ̲n̲o̲t̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲n̲d̲_̲s̲e̲l̲f̲,̲ ̲f̲a̲l̲s̲e̲_̲a̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲t̲r̲u̲e̲_̲a̲n̲d̲,̲ ̲a̲n̲d̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_NativeStep.lean:37:41: warning: This simp argument is unused:
+  both
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵u̵t̵.̵c̵o̵u̵n̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵s̵h̵o̵w̵ ̵¬̵(̵1̵:̵N̵a̵t̵)̵=̵0̵[̲c̲u̲t̲.̲c̲o̲u̲n̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲s̲h̲o̲w̲ ̲¬̲(̲1̲ ̲:̲ ̲N̲a̲t̲)̲ ̲=̲ ̲0̲ by d̵e̵c̵i̵d̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵a̵r̵g̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵u̵t̵.̵r̵e̵t̵u̵r̵n̵V̵a̵l̵u̵e̵,̵a̵c̵t̵i̵v̵e̵,̵n̵o̵t̵_̵t̵r̵u̵e̵,̵b̵o̵t̵h̵,̵f̵a̵l̵s̵e̵_̵o̵r̵,̵a̵v̵a̵i̵l̵a̵b̵l̵e̵,̵o̵r̵_̵t̵r̵u̵e̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵o̵s̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵t̵.̵n̵e̵x̵t̵I̵n̵d̵e̵x̵,̵n̵e̵x̵t̵I̵,̵i̵f̵_̵p̵o̵s̵ ̵a̵c̵t̵i̵v̵e̵,̵i̵f̵_̵n̵e̵g̵ ̵b̵o̵t̵h̵,̵i̵f̵_̵p̵o̵s̵d̲e̲c̲i̲d̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲r̲g̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲u̲t̲.̲r̲e̲t̲u̲r̲n̲V̲a̲l̲u̲e̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲f̲a̲l̲s̲e̲_̲o̲r̲,̲ available, c̵u̵t̵.̵n̵e̵x̵t̵W̵r̵i̵t̵e̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵r̵s̵o̵r̵,̵a̵c̵t̵i̵v̵e̵,̵b̵o̵t̵h̵,̵n̵o̵t̵_̵f̵a̵l̵s̵e̵,̵a̵n̵d̵_̵s̵e̵l̵f̵,̵f̵a̵l̵s̵e̵_̵a̵n̵d̵,̵t̵r̵u̵e̵_̵a̵n̵d̵,̵a̵n̵d̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵]̵o̲r̲_̲t̲r̲u̲e̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲p̲o̲s̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲I̲n̲d̲e̲x̲,̲ ̲n̲e̲x̲t̲I̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲b̲o̲t̲h̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲a̲v̲a̲i̲l̲a̲b̲l̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲W̲r̲i̲t̲e̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲r̲s̲o̲r̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲b̲o̲t̲h̲,̲ ̲n̲o̲t̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲n̲d̲_̲s̲e̲l̲f̲,̲ ̲f̲a̲l̲s̲e̲_̲a̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲t̲r̲u̲e̲_̲a̲n̲d̲,̲ ̲a̲n̲d̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_NativeStep.lean:37:46: warning: This simp argument is unused:
+  false_or
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵u̵t̵.̵c̵o̵u̵n̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵s̵h̵o̵w̵ ̵¬̵(̵1̵:̵N̵a̵t̵)̵=̵0̵[̲c̲u̲t̲.̲c̲o̲u̲n̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲s̲h̲o̲w̲ ̲¬̲(̲1̲ ̲:̲ ̲N̲a̲t̲)̲ ̲=̲ ̲0̲ by d̵e̵c̵i̵d̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵a̵r̵g̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵u̵t̵.̵r̵e̵t̵u̵r̵n̵V̵a̵l̵u̵e̵,̵a̵c̵t̵i̵v̵e̵,̵n̵o̵t̵_̵t̵r̵u̵e̵,̵b̵o̵t̵h̵,̵f̵a̵l̵s̵e̵_̵o̵r̵,̵a̵v̵a̵i̵l̵a̵b̵l̵e̵,̵o̵r̵_̵t̵r̵u̵e̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵o̵s̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵t̵.̵n̵e̵x̵t̵I̵n̵d̵e̵x̵,̵n̵e̵x̵t̵I̵,̵i̵f̵_̵p̵o̵s̵ ̵a̵c̵t̵i̵v̵e̵,̵i̵f̵_̵n̵e̵g̵ ̵b̵o̵t̵h̵,̵i̵f̵_̵p̵o̵s̵d̲e̲c̲i̲d̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲r̲g̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲u̲t̲.̲r̲e̲t̲u̲r̲n̲V̲a̲l̲u̲e̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲b̲o̲t̲h̲,̲ available, c̵u̵t̵.̵n̵e̵x̵t̵W̵r̵i̵t̵e̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵r̵s̵o̵r̵,̵a̵c̵t̵i̵v̵e̵,̵b̵o̵t̵h̵,̵n̵o̵t̵_̵f̵a̵l̵s̵e̵,̵a̵n̵d̵_̵s̵e̵l̵f̵,̵f̵a̵l̵s̵e̵_̵a̵n̵d̵,̵t̵r̵u̵e̵_̵a̵n̵d̵,̵a̵n̵d̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵]̵o̲r̲_̲t̲r̲u̲e̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲p̲o̲s̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲I̲n̲d̲e̲x̲,̲ ̲n̲e̲x̲t̲I̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲b̲o̲t̲h̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲a̲v̲a̲i̲l̲a̲b̲l̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲W̲r̲i̲t̲e̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲r̲s̲o̲r̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲b̲o̲t̲h̲,̲ ̲n̲o̲t̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲n̲d̲_̲s̲e̲l̲f̲,̲ ̲f̲a̲l̲s̲e̲_̲a̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲t̲r̲u̲e̲_̲a̲n̲d̲,̲ ̲a̲n̲d̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_NativeStep.lean:38:14: warning: This simp argument is unused:
+  if_pos entered
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵u̵t̵.̵c̵o̵u̵n̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵s̵h̵o̵w̵ ̵¬̵(̵1̵:̵N̵a̵t̵)̵=̵0̵[̲c̲u̲t̲.̲c̲o̲u̲n̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲s̲h̲o̲w̲ ̲¬̲(̲1̲ ̲:̲ ̲N̲a̲t̲)̲ ̲=̲ ̲0̲ by d̵e̵c̵i̵d̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵a̵r̵g̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵u̵t̵.̵r̵e̵t̵u̵r̵n̵V̵a̵l̵u̵e̵,̵a̵c̵t̵i̵v̵e̵,̵n̵o̵t̵_̵t̵r̵u̵e̵,̵b̵o̵t̵h̵,̵f̵a̵l̵s̵e̵_̵o̵r̵,̵a̵v̵a̵i̵l̵a̵b̵l̵e̵,̵o̵r̵_̵t̵r̵u̵e̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵o̵s̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵t̵.̵n̵e̵x̵t̵I̵n̵d̵e̵x̵,̵n̵e̵x̵t̵I̵,̵i̵f̵_̵p̵o̵s̵ ̵a̵c̵t̵i̵v̵e̵,̵i̵f̵_̵n̵e̵g̵ ̵b̵o̵t̵h̵,̵i̵f̵_̵p̵o̵s̵d̲e̲c̲i̲d̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲r̲g̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲u̲t̲.̲r̲e̲t̲u̲r̲n̲V̲a̲l̲u̲e̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲b̲o̲t̲h̲,̲ ̲f̲a̲l̲s̲e̲_̲o̲r̲,̲ available, c̵u̵t̵.̵n̵e̵x̵t̵W̵r̵i̵t̵e̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵r̵s̵o̵r̵,̵a̵c̵t̵i̵v̵e̵,̵b̵o̵t̵h̵,̵n̵o̵t̵_̵f̵a̵l̵s̵e̵,̵a̵n̵d̵_̵s̵e̵l̵f̵,̵f̵a̵l̵s̵e̵_̵a̵n̵d̵,̵t̵r̵u̵e̵_̵a̵n̵d̵,̵a̵n̵d̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵]̵o̲r̲_̲t̲r̲u̲e̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲p̲o̲s̲t̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲I̲n̲d̲e̲x̲,̲ ̲n̲e̲x̲t̲I̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲b̲o̲t̲h̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲a̲v̲a̲i̲l̲a̲b̲l̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲W̲r̲i̲t̲e̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲r̲s̲o̲r̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲b̲o̲t̲h̲,̲ ̲n̲o̲t̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲n̲d̲_̲s̲e̲l̲f̲,̲ ̲f̲a̲l̲s̲e̲_̲a̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲t̲r̲u̲e̲_̲a̲n̲d̲,̲ ̲a̲n̲d̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_NativeStep.lean:38:49: warning: This simp argument is unused:
+  if_pos active
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵u̵t̵.̵c̵o̵u̵n̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵s̵h̵o̵w̵ ̵¬̵(̵1̵:̵N̵a̵t̵)̵=̵0̵[̲c̲u̲t̲.̲c̲o̲u̲n̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲s̲h̲o̲w̲ ̲¬̲(̲1̲ ̲:̲ ̲N̲a̲t̲)̲ ̲=̲ ̲0̲ by d̵e̵c̵i̵d̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵a̵r̵g̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵u̵t̵.̵r̵e̵t̵u̵r̵n̵V̵a̵l̵u̵e̵,̵a̵c̵t̵i̵v̵e̵,̵n̵o̵t̵_̵t̵r̵u̵e̵,̵b̵o̵t̵h̵,̵f̵a̵l̵s̵e̵_̵o̵r̵,̵a̵v̵a̵i̵l̵a̵b̵l̵e̵,̵o̵r̵_̵t̵r̵u̵e̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵o̵s̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵t̵.̵n̵e̵x̵t̵I̵n̵d̵e̵x̵,̵n̵e̵x̵t̵I̵,̵i̵f̵_̵p̵o̵s̵ ̵a̵c̵t̵i̵v̵e̵,̵i̵f̵_̵n̵e̵g̵ ̵b̵o̵t̵h̵,̵i̵f̵_̵p̵o̵s̵d̲e̲c̲i̲d̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲r̲g̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲u̲t̲.̲r̲e̲t̲u̲r̲n̲V̲a̲l̲u̲e̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲b̲o̲t̲h̲,̲ ̲f̲a̲l̲s̲e̲_̲o̲r̲,̲ available, c̵u̵t̵.̵n̵e̵x̵t̵W̵r̵i̵t̵e̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵r̵s̵o̵r̵,̵a̵c̵t̵i̵v̵e̵,̵b̵o̵t̵h̵,̵n̵o̵t̵_̵f̵a̵l̵s̵e̵,̵a̵n̵d̵_̵s̵e̵l̵f̵,̵f̵a̵l̵s̵e̵_̵a̵n̵d̵,̵t̵r̵u̵e̵_̵a̵n̵d̵,̵a̵n̵d̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵]̵o̲r̲_̲t̲r̲u̲e̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲p̲o̲s̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲I̲n̲d̲e̲x̲,̲ ̲n̲e̲x̲t̲I̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲b̲o̲t̲h̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲a̲v̲a̲i̲l̲a̲b̲l̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲W̲r̲i̲t̲e̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲r̲s̲o̲r̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲b̲o̲t̲h̲,̲ ̲n̲o̲t̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲n̲d̲_̲s̲e̲l̲f̲,̲ ̲f̲a̲l̲s̲e̲_̲a̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲t̲r̲u̲e̲_̲a̲n̲d̲,̲ ̲a̲n̲d̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_NativeStep.lean:38:63: warning: This simp argument is unused:
+  if_neg both
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵u̵t̵.̵c̵o̵u̵n̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵s̵h̵o̵w̵ ̵¬̵(̵1̵:̵N̵a̵t̵)̵=̵0̵[̲c̲u̲t̲.̲c̲o̲u̲n̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲s̲h̲o̲w̲ ̲¬̲(̲1̲ ̲:̲ ̲N̲a̲t̲)̲ ̲=̲ ̲0̲ by d̵e̵c̵i̵d̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵a̵r̵g̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵u̵t̵.̵r̵e̵t̵u̵r̵n̵V̵a̵l̵u̵e̵,̵a̵c̵t̵i̵v̵e̵,̵n̵o̵t̵_̵t̵r̵u̵e̵,̵b̵o̵t̵h̵,̵f̵a̵l̵s̵e̵_̵o̵r̵,̵a̵v̵a̵i̵l̵a̵b̵l̵e̵,̵o̵r̵_̵t̵r̵u̵e̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵o̵s̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵t̵.̵n̵e̵x̵t̵I̵n̵d̵e̵x̵,̵n̵e̵x̵t̵I̵,̵i̵f̵_̵p̵o̵s̵ ̵a̵c̵t̵i̵v̵e̵,̵i̵f̵_̵n̵e̵g̵ ̵b̵o̵t̵h̵,̵i̵f̵_̵p̵o̵s̵d̲e̲c̲i̲d̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲r̲g̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲u̲t̲.̲r̲e̲t̲u̲r̲n̲V̲a̲l̲u̲e̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲b̲o̲t̲h̲,̲ ̲f̲a̲l̲s̲e̲_̲o̲r̲,̲ available, c̵u̵t̵.̵n̵e̵x̵t̵W̵r̵i̵t̵e̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵r̵s̵o̵r̵,̵a̵c̵t̵i̵v̵e̵,̵b̵o̵t̵h̵,̵n̵o̵t̵_̵f̵a̵l̵s̵e̵,̵a̵n̵d̵_̵s̵e̵l̵f̵,̵f̵a̵l̵s̵e̵_̵a̵n̵d̵,̵t̵r̵u̵e̵_̵a̵n̵d̵,̵a̵n̵d̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵]̵o̲r̲_̲t̲r̲u̲e̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲p̲o̲s̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲I̲n̲d̲e̲x̲,̲ ̲n̲e̲x̲t̲I̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲a̲v̲a̲i̲l̲a̲b̲l̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲W̲r̲i̲t̲e̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲r̲s̲o̲r̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲b̲o̲t̲h̲,̲ ̲n̲o̲t̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲n̲d̲_̲s̲e̲l̲f̲,̲ ̲f̲a̲l̲s̲e̲_̲a̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲t̲r̲u̲e̲_̲a̲n̲d̲,̲ ̲a̲n̲d̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_NativeStep.lean:38:75: warning: This simp argument is unused:
+  if_pos available
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵u̵t̵.̵c̵o̵u̵n̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵s̵h̵o̵w̵ ̵¬̵(̵1̵:̵N̵a̵t̵)̵=̵0̵[̲c̲u̲t̲.̲c̲o̲u̲n̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲s̲h̲o̲w̲ ̲¬̲(̲1̲ ̲:̲ ̲N̲a̲t̲)̲ ̲=̲ ̲0̲ by d̵e̵c̵i̵d̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵a̵r̵g̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵u̵t̵.̵r̵e̵t̵u̵r̵n̵V̵a̵l̵u̵e̵,̵a̵c̵t̵i̵v̵e̵,̵n̵o̵t̵_̵t̵r̵u̵e̵,̵b̵o̵t̵h̵,̵f̵a̵l̵s̵e̵_̵o̵r̵,̵a̵v̵a̵i̵l̵a̵b̵l̵e̵,̵o̵r̵_̵t̵r̵u̵e̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵o̵s̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵t̵.̵n̵e̵x̵t̵I̵n̵d̵e̵x̵,̵n̵e̵x̵t̵I̵,̵i̵f̵_̵p̵o̵s̵ ̵a̵c̵t̵i̵v̵e̵,̵i̵f̵_̵n̵e̵g̵ ̵b̵o̵t̵h̵,̵i̵f̵_̵p̵o̵s̵d̲e̲c̲i̲d̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲r̲g̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲u̲t̲.̲r̲e̲t̲u̲r̲n̲V̲a̲l̲u̲e̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲b̲o̲t̲h̲,̲ ̲f̲a̲l̲s̲e̲_̲o̲r̲,̲ available, c̵u̵t̵.̵n̵e̵x̵t̵W̵r̵i̵t̵e̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵r̵s̵o̵r̵,̵a̵c̵t̵i̵v̵e̵,̵b̵o̵t̵h̵,̵n̵o̵t̵_̵f̵a̵l̵s̵e̵,̵a̵n̵d̵_̵s̵e̵l̵f̵,̵f̵a̵l̵s̵e̵_̵a̵n̵d̵,̵t̵r̵u̵e̵_̵a̵n̵d̵,̵a̵n̵d̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵]̵o̲r̲_̲t̲r̲u̲e̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲p̲o̲s̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲I̲n̲d̲e̲x̲,̲ ̲n̲e̲x̲t̲I̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲b̲o̲t̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲W̲r̲i̲t̲e̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲r̲s̲o̲r̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲b̲o̲t̲h̲,̲ ̲n̲o̲t̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲n̲d̲_̲s̲e̲l̲f̲,̲ ̲f̲a̲l̲s̲e̲_̲a̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲t̲r̲u̲e̲_̲a̲n̲d̲,̲ ̲a̲n̲d̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_NativeStep.lean:39:57: warning: This simp argument is unused:
+  not_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵u̵t̵.̵c̵o̵u̵n̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵s̵h̵o̵w̵ ̵¬̵(̵1̵:̵N̵a̵t̵)̵=̵0̵[̲c̲u̲t̲.̲c̲o̲u̲n̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲s̲h̲o̲w̲ ̲¬̲(̲1̲ ̲:̲ ̲N̲a̲t̲)̲ ̲=̲ ̲0̲ by d̵e̵c̵i̵d̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵a̵r̵g̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵u̵t̵.̵r̵e̵t̵u̵r̵n̵V̵a̵l̵u̵e̵,̵a̵c̵t̵i̵v̵e̵,̵n̵o̵t̵_̵t̵r̵u̵e̵,̵b̵o̵t̵h̵,̵f̵a̵l̵s̵e̵_̵o̵r̵,̵a̵v̵a̵i̵l̵a̵b̵l̵e̵,̵o̵r̵_̵t̵r̵u̵e̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵o̵s̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵t̵.̵n̵e̵x̵t̵I̵n̵d̵e̵x̵,̵n̵e̵x̵t̵I̵,̵i̵f̵_̵p̵o̵s̵ ̵a̵c̵t̵i̵v̵e̵,̵i̵f̵_̵n̵e̵g̵ ̵b̵o̵t̵h̵,̵i̵f̵_̵p̵o̵s̵d̲e̲c̲i̲d̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲r̲g̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲u̲t̲.̲r̲e̲t̲u̲r̲n̲V̲a̲l̲u̲e̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲b̲o̲t̲h̲,̲ ̲f̲a̲l̲s̲e̲_̲o̲r̲,̲ available, c̵u̵t̵.̵n̵e̵x̵t̵W̵r̵i̵t̵e̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵r̵s̵o̵r̵,̵a̵c̵t̵i̵v̵e̵,̵b̵o̵t̵h̵,̵n̵o̵t̵_̵f̵a̵l̵s̵e̵,̵a̵n̵d̵_̵s̵e̵l̵f̵,̵f̵a̵l̵s̵e̵_̵a̵n̵d̵,̵t̵r̵u̵e̵_̵a̵n̵d̵,̵a̵n̵d̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵]̵o̲r̲_̲t̲r̲u̲e̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲p̲o̲s̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲I̲n̲d̲e̲x̲,̲ ̲n̲e̲x̲t̲I̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲b̲o̲t̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲p̲o̲s̲ ̲a̲v̲a̲i̲l̲a̲b̲l̲e̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲W̲r̲i̲t̲e̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲r̲s̲o̲r̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲b̲o̲t̲h̲,̲ ̲a̲n̲d̲_̲s̲e̲l̲f̲,̲ ̲f̲a̲l̲s̲e̲_̲a̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲t̲r̲u̲e̲_̲a̲n̲d̲,̲ ̲a̲n̲d̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_NativeStep.lean:39:67: warning: This simp argument is unused:
+  and_self
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵u̵t̵.̵c̵o̵u̵n̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵s̵h̵o̵w̵ ̵¬̵(̵1̵:̵N̵a̵t̵)̵=̵0̵[̲c̲u̲t̲.̲c̲o̲u̲n̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲s̲h̲o̲w̲ ̲¬̲(̲1̲ ̲:̲ ̲N̲a̲t̲)̲ ̲=̲ ̲0̲ by d̵e̵c̵i̵d̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵a̵r̵g̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵u̵t̵.̵r̵e̵t̵u̵r̵n̵V̵a̵l̵u̵e̵,̵a̵c̵t̵i̵v̵e̵,̵n̵o̵t̵_̵t̵r̵u̵e̵,̵b̵o̵t̵h̵,̵f̵a̵l̵s̵e̵_̵o̵r̵,̵a̵v̵a̵i̵l̵a̵b̵l̵e̵,̵o̵r̵_̵t̵r̵u̵e̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵o̵s̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵t̵.̵n̵e̵x̵t̵I̵n̵d̵e̵x̵,̵n̵e̵x̵t̵I̵,̵i̵f̵_̵p̵o̵s̵ ̵a̵c̵t̵i̵v̵e̵,̵i̵f̵_̵n̵e̵g̵ ̵b̵o̵t̵h̵,̵i̵f̵_̵p̵o̵s̵d̲e̲c̲i̲d̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲r̲g̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲u̲t̲.̲r̲e̲t̲u̲r̲n̲V̲a̲l̲u̲e̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲b̲o̲t̲h̲,̲ ̲f̲a̲l̲s̲e̲_̲o̲r̲,̲ available, c̵u̵t̵.̵n̵e̵x̵t̵W̵r̵i̵t̵e̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵r̵s̵o̵r̵,̵a̵c̵t̵i̵v̵e̵,̵b̵o̵t̵h̵,̵n̵o̵t̵_̵f̵a̵l̵s̵e̵,̵a̵n̵d̵_̵s̵e̵l̵f̵,̵f̵a̵l̵s̵e̵_̵a̵n̵d̵,̵t̵r̵u̵e̵_̵a̵n̵d̵,̵a̵n̵d̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵]̵o̲r̲_̲t̲r̲u̲e̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲p̲o̲s̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲I̲n̲d̲e̲x̲,̲ ̲n̲e̲x̲t̲I̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲b̲o̲t̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲p̲o̲s̲ ̲a̲v̲a̲i̲l̲a̲b̲l̲e̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲W̲r̲i̲t̲e̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲r̲s̲o̲r̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲b̲o̲t̲h̲,̲ ̲n̲o̲t̲_̲f̲a̲l̲s̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲f̲a̲l̲s̲e̲_̲a̲n̲d̲,̲ ̲t̲r̲u̲e̲_̲a̲n̲d̲,̲ ̲a̲n̲d̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_NativeStep.lean:39:76: warning: This simp argument is unused:
+  false_and
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵u̵t̵.̵c̵o̵u̵n̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵s̵h̵o̵w̵ ̵¬̵(̵1̵:̵N̵a̵t̵)̵=̵0̵[̲c̲u̲t̲.̲c̲o̲u̲n̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲s̲h̲o̲w̲ ̲¬̲(̲1̲ ̲:̲ ̲N̲a̲t̲)̲ ̲=̲ ̲0̲ by d̵e̵c̵i̵d̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵a̵r̵g̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵u̵t̵.̵r̵e̵t̵u̵r̵n̵V̵a̵l̵u̵e̵,̵a̵c̵t̵i̵v̵e̵,̵n̵o̵t̵_̵t̵r̵u̵e̵,̵b̵o̵t̵h̵,̵f̵a̵l̵s̵e̵_̵o̵r̵,̵a̵v̵a̵i̵l̵a̵b̵l̵e̵,̵o̵r̵_̵t̵r̵u̵e̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵o̵s̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵t̵.̵n̵e̵x̵t̵I̵n̵d̵e̵x̵,̵n̵e̵x̵t̵I̵,̵i̵f̵_̵p̵o̵s̵ ̵a̵c̵t̵i̵v̵e̵,̵i̵f̵_̵n̵e̵g̵ ̵b̵o̵t̵h̵,̵i̵f̵_̵p̵o̵s̵d̲e̲c̲i̲d̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲r̲g̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲u̲t̲.̲r̲e̲t̲u̲r̲n̲V̲a̲l̲u̲e̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲b̲o̲t̲h̲,̲ ̲f̲a̲l̲s̲e̲_̲o̲r̲,̲ available, c̵u̵t̵.̵n̵e̵x̵t̵W̵r̵i̵t̵e̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵r̵s̵o̵r̵,̵a̵c̵t̵i̵v̵e̵,̵b̵o̵t̵h̵,̵n̵o̵t̵_̵f̵a̵l̵s̵e̵,̵a̵n̵d̵_̵s̵e̵l̵f̵,̵f̵a̵l̵s̵e̵_̵a̵n̵d̵,̵t̵r̵u̵e̵_̵a̵n̵d̵,̵a̵n̵d̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵]̵o̲r̲_̲t̲r̲u̲e̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲p̲o̲s̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲I̲n̲d̲e̲x̲,̲ ̲n̲e̲x̲t̲I̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲b̲o̲t̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲p̲o̲s̲ ̲a̲v̲a̲i̲l̲a̲b̲l̲e̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲W̲r̲i̲t̲e̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲r̲s̲o̲r̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲b̲o̲t̲h̲,̲ ̲n̲o̲t̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲n̲d̲_̲s̲e̲l̲f̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲t̲r̲u̲e̲_̲a̲n̲d̲,̲ ̲a̲n̲d̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_NativeStep.lean:39:104: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵u̵t̵.̵c̵o̵u̵n̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵s̵h̵o̵w̵ ̵¬̵(̵1̵:̵N̵a̵t̵)̵=̵0̵[̲c̲u̲t̲.̲c̲o̲u̲n̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲s̲h̲o̲w̲ ̲¬̲(̲1̲ ̲:̲ ̲N̲a̲t̲)̲ ̲=̲ ̲0̲ by d̵e̵c̵i̵d̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵a̵r̵g̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵u̵t̵.̵r̵e̵t̵u̵r̵n̵V̵a̵l̵u̵e̵,̵a̵c̵t̵i̵v̵e̵,̵n̵o̵t̵_̵t̵r̵u̵e̵,̵b̵o̵t̵h̵,̵f̵a̵l̵s̵e̵_̵o̵r̵,̵a̵v̵a̵i̵l̵a̵b̵l̵e̵,̵o̵r̵_̵t̵r̵u̵e̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵o̵s̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵t̵.̵n̵e̵x̵t̵I̵n̵d̵e̵x̵,̵n̵e̵x̵t̵I̵,̵i̵f̵_̵p̵o̵s̵ ̵a̵c̵t̵i̵v̵e̵,̵i̵f̵_̵n̵e̵g̵ ̵b̵o̵t̵h̵,̵i̵f̵_̵p̵o̵s̵d̲e̲c̲i̲d̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲r̲g̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲u̲t̲.̲r̲e̲t̲u̲r̲n̲V̲a̲l̲u̲e̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲b̲o̲t̲h̲,̲ ̲f̲a̲l̲s̲e̲_̲o̲r̲,̲ available, c̵u̵t̵.̵n̵e̵x̵t̵W̵r̵i̵t̵e̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵r̵s̵o̵r̵,̵a̵c̵t̵i̵v̵e̵,̵b̵o̵t̵h̵,̵n̵o̵t̵_̵f̵a̵l̵s̵e̵,̵a̵n̵d̵_̵s̵e̵l̵f̵,̵f̵a̵l̵s̵e̵_̵a̵n̵d̵,̵t̵r̵u̵e̵_̵a̵n̵d̵,̵a̵n̵d̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵]̵o̲r̲_̲t̲r̲u̲e̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲p̲o̲s̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲I̲n̲d̲e̲x̲,̲ ̲n̲e̲x̲t̲I̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲b̲o̲t̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲p̲o̲s̲ ̲a̲v̲a̲i̲l̲a̲b̲l̲e̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲W̲r̲i̲t̲e̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲r̲s̲o̲r̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲b̲o̲t̲h̲,̲ ̲n̲o̲t̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲n̲d̲_̲s̲e̲l̲f̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲f̲a̲l̲s̲e̲_̲a̲n̲d̲,̲ ̲t̲r̲u̲e̲_̲a̲n̲d̲,̲ ̲a̲n̲d̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_NativeStep.lean:42:28: warning: This simp argument is unused:
+  if_neg absent
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵u̵t̵.̵c̵o̵u̵n̵t̵,̵i̵f̵_̵n̵e̵g̵ ̵a̵b̵s̵e̵n̵t̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵c̵u̵t̵.̵r̵e̵t̵u̵r̵n̵V̵a̵l̵u̵e̵,̵a̵c̵t̵i̵v̵e̵,̵n̵o̵t̵_̵t̵r̵u̵e̵,̵b̵o̵t̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵a̵v̵a̵i̵l̵a̵b̵l̵e̵,̵f̵a̵l̵s̵e̵_̵o̵r̵,̵d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵f̵a̵l̵s̵e̵,̵p̵o̵s̵t̵,̵i̵f̵_̵n̵e̵g̵[̲c̲u̲t̲.̲c̲o̲u̲n̲t̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲c̲u̲t̲.̲r̲e̲t̲u̲r̲n̲V̲a̲l̲u̲e̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲b̲o̲t̲h̲,̲ ̲a̲v̲a̲i̲l̲a̲b̲l̲e̲,̲ ̲f̲a̲l̲s̲e̲_̲o̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲d̲e̲c̲i̲d̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲t̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲p̲o̲s̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ absent]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_NativeStep.lean:46:24: warning: This simp argument is unused:
+  if_neg absent
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵ ̵o̵n̵l̵y̵ ̵[̵c̵u̵t̵.̵c̵o̵u̵n̵t̵,̵i̵f̵_̵n̵e̵g̵ ̵a̵b̵s̵e̵n̵t̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵c̵u̵t̵.̵r̵e̵t̵u̵r̵n̵V̵a̵l̵u̵e̵,̵a̵c̵t̵i̵v̵e̵,̵n̵o̵t̵_̵f̵a̵l̵s̵e̵,̵t̵r̵u̵e̵_̵o̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵p̵o̵s̵t̵,̵i̵f̵_̵n̵e̵g̵ ̵a̵b̵s̵e̵n̵t̵,̵c̵u̵t̵.̵n̵e̵x̵t̵I̵n̵d̵e̵x̵,̵n̵e̵x̵t̵I̵,̵i̵f̵_̵n̵e̵g̵ ̵a̵c̵t̵i̵v̵e̵,̵c̵u̵t̵.̵n̵e̵x̵t̵W̵r̵i̵t̵e̵,̵i̵f̵_̵n̵e̵g̵ ̵a̵b̵s̵e̵n̵t̵]̵s̲i̲m̲p̲ ̲o̲n̲l̲y̲ ̲[̲c̲u̲t̲.̲c̲o̲u̲n̲t̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲c̲u̲t̲.̲r̲e̲t̲u̲r̲n̲V̲a̲l̲u̲e̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲n̲o̲t̲_̲f̲a̲l̲s̲e̲,̲ ̲t̲r̲u̲e̲_̲o̲r̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲p̲o̲s̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲a̲b̲s̲e̲n̲t̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲I̲n̲d̲e̲x̲,̲ ̲n̲e̲x̲t̲I̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲W̲r̲i̲t̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲n̲e̲g̲ ̲a̲b̲s̲e̲n̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_NativeStep.lean:46:70: warning: This simp argument is unused:
+  not_false
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵ ̵o̵n̵l̵y̵ ̵[̵c̵u̵t̵.̵c̵o̵u̵n̵t̵,̵i̵f̵_̵n̵e̵g̵ ̵a̵b̵s̵e̵n̵t̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵c̵u̵t̵.̵r̵e̵t̵u̵r̵n̵V̵a̵l̵u̵e̵,̵a̵c̵t̵i̵v̵e̵,̵n̵o̵t̵_̵f̵a̵l̵s̵e̵,̵t̵r̵u̵e̵_̵o̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵p̵o̵s̵t̵,̵i̵f̵_̵n̵e̵g̵ ̵a̵b̵s̵e̵n̵t̵,̵c̵u̵t̵.̵n̵e̵x̵t̵I̵n̵d̵e̵x̵,̵n̵e̵x̵t̵I̵,̵i̵f̵_̵n̵e̵g̵ ̵a̵c̵t̵i̵v̵e̵,̵c̵u̵t̵.̵n̵e̵x̵t̵W̵r̵i̵t̵e̵,̵i̵f̵_̵n̵e̵g̵ ̵a̵b̵s̵e̵n̵t̵]̵s̲i̲m̲p̲ ̲o̲n̲l̲y̲ ̲[̲c̲u̲t̲.̲c̲o̲u̲n̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲a̲b̲s̲e̲n̲t̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲c̲u̲t̲.̲r̲e̲t̲u̲r̲n̲V̲a̲l̲u̲e̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲t̲r̲u̲e̲_̲o̲r̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲p̲o̲s̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲a̲b̲s̲e̲n̲t̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲I̲n̲d̲e̲x̲,̲ ̲n̲e̲x̲t̲I̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲W̲r̲i̲t̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲n̲e̲g̲ ̲a̲b̲s̲e̲n̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_NativeStep.lean:46:80: warning: This simp argument is unused:
+  true_or
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵ ̵o̵n̵l̵y̵ ̵[̵c̵u̵t̵.̵c̵o̵u̵n̵t̵,̵i̵f̵_̵n̵e̵g̵ ̵a̵b̵s̵e̵n̵t̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵c̵u̵t̵.̵r̵e̵t̵u̵r̵n̵V̵a̵l̵u̵e̵,̵a̵c̵t̵i̵v̵e̵,̵n̵o̵t̵_̵f̵a̵l̵s̵e̵,̵t̵r̵u̵e̵_̵o̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵p̵o̵s̵t̵,̵i̵f̵_̵n̵e̵g̵ ̵a̵b̵s̵e̵n̵t̵,̵c̵u̵t̵.̵n̵e̵x̵t̵I̵n̵d̵e̵x̵,̵n̵e̵x̵t̵I̵,̵i̵f̵_̵n̵e̵g̵ ̵a̵c̵t̵i̵v̵e̵,̵c̵u̵t̵.̵n̵e̵x̵t̵W̵r̵i̵t̵e̵,̵i̵f̵_̵n̵e̵g̵ ̵a̵b̵s̵e̵n̵t̵]̵s̲i̲m̲p̲ ̲o̲n̲l̲y̲ ̲[̲c̲u̲t̲.̲c̲o̲u̲n̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲a̲b̲s̲e̲n̲t̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲c̲u̲t̲.̲r̲e̲t̲u̲r̲n̲V̲a̲l̲u̲e̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲n̲o̲t̲_̲f̲a̲l̲s̲e̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲p̲o̲s̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲a̲b̲s̲e̲n̲t̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲I̲n̲d̲e̲x̲,̲ ̲n̲e̲x̲t̲I̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲W̲r̲i̲t̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲n̲e̲g̲ ̲a̲b̲s̲e̲n̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_NativeStep.lean:47:5: warning: This simp argument is unused:
+  decide_true
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵ ̵o̵n̵l̵y̵ ̵[̵c̵u̵t̵.̵c̵o̵u̵n̵t̵,̵i̵f̵_̵n̵e̵g̵ ̵a̵b̵s̵e̵n̵t̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵c̵u̵t̵.̵r̵e̵t̵u̵r̵n̵V̵a̵l̵u̵e̵,̵a̵c̵t̵i̵v̵e̵,̵n̵o̵t̵_̵f̵a̵l̵s̵e̵,̵t̵r̵u̵e̵_̵o̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵p̵o̵s̵t̵,̵i̵f̵_̵n̵e̵g̵ ̵a̵b̵s̵e̵n̵t̵,̵c̵u̵t̵.̵n̵e̵x̵t̵I̵n̵d̵e̵x̵,̵n̵e̵x̵t̵I̵,̵i̵f̵_̵n̵e̵g̵ ̵a̵c̵t̵i̵v̵e̵,̵c̵u̵t̵.̵n̵e̵x̵t̵W̵r̵i̵t̵e̵,̵i̵f̵_̵n̵e̵g̵ ̵a̵b̵s̵e̵n̵t̵]̵s̲i̲m̲p̲ ̲o̲n̲l̲y̲ ̲[̲c̲u̲t̲.̲c̲o̲u̲n̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲a̲b̲s̲e̲n̲t̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲c̲u̲t̲.̲r̲e̲t̲u̲r̲n̲V̲a̲l̲u̲e̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲n̲o̲t̲_̲f̲a̲l̲s̲e̲,̲ ̲t̲r̲u̲e̲_̲o̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲p̲o̲s̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲a̲b̲s̲e̲n̲t̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲I̲n̲d̲e̲x̲,̲ ̲n̲e̲x̲t̲I̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲W̲r̲i̲t̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲n̲e̲g̲ ̲a̲b̲s̲e̲n̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_NativeStep.lean:47:31: warning: This simp argument is unused:
+  if_neg absent
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵u̵t̵.̵c̵o̵u̵n̵t̵,̵i̵f̵_̵n̵e̵g̵ ̵a̵b̵s̵e̵n̵t̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵c̵u̵t̵.̵r̵e̵t̵u̵r̵n̵V̵a̵l̵u̵e̵,̵a̵c̵t̵i̵v̵e̵,̵n̵o̵t̵_̵f̵a̵l̵s̵e̵,̵t̵r̵u̵e̵_̵o̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵p̵o̵s̵t̵,̵i̵f̵_̵n̵e̵g̵ ̵a̵b̵s̵e̵n̵t̵,̵c̵u̵t̵.̵n̵e̵x̵t̵I̵n̵d̵e̵x̵,̵n̵e̵x̵t̵I̵,̵i̵f̵_̵n̵e̵g̵ ̵a̵c̵t̵i̵v̵e̵,̵c̵u̵t̵.̵n̵e̵x̵t̵W̵r̵i̵t̵e̵,̵i̵f̵_̵n̵e̵g̵[̲c̲u̲t̲.̲c̲o̲u̲n̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲a̲b̲s̲e̲n̲t̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲c̲u̲t̲.̲r̲e̲t̲u̲r̲n̲V̲a̲l̲u̲e̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲n̲o̲t̲_̲f̲a̲l̲s̲e̲,̲ ̲t̲r̲u̲e̲_̲o̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲p̲o̲s̲t̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲I̲n̲d̲e̲x̲,̲ ̲n̲e̲x̲t̲I̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲W̲r̲i̲t̲e̲,̲ ̲i̲f̲_̲n̲e̲g̲ absent]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_NativeStep.lean:47:65: warning: This simp argument is unused:
+  if_neg active
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵u̵t̵.̵c̵o̵u̵n̵t̵,̵i̵f̵_̵n̵e̵g̵ ̵a̵b̵s̵e̵n̵t̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵c̵u̵t̵.̵r̵e̵t̵u̵r̵n̵V̵a̵l̵u̵e̵,̵a̵c̵t̵i̵v̵e̵,̵n̵o̵t̵_̵f̵a̵l̵s̵e̵,̵t̵r̵u̵e̵_̵o̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵p̵o̵s̵t̵,̵i̵f̵_̵n̵e̵g̵ ̵a̵b̵s̵e̵n̵t̵,̵c̵u̵t̵.̵n̵e̵x̵t̵I̵n̵d̵e̵x̵,̵n̵e̵x̵t̵I̵,̵i̵f̵_̵n̵e̵g̵ ̵a̵c̵t̵i̵v̵e̵,̵c̵u̵t̵.̵n̵e̵x̵t̵W̵r̵i̵t̵e̵,̵i̵f̵_̵n̵e̵g̵[̲c̲u̲t̲.̲c̲o̲u̲n̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲a̲b̲s̲e̲n̲t̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲c̲u̲t̲.̲r̲e̲t̲u̲r̲n̲V̲a̲l̲u̲e̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲n̲o̲t̲_̲f̲a̲l̲s̲e̲,̲ ̲t̲r̲u̲e̲_̲o̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲p̲o̲s̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲a̲b̲s̲e̲n̲t̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲I̲n̲d̲e̲x̲,̲ ̲n̲e̲x̲t̲I̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲W̲r̲i̲t̲e̲,̲ ̲i̲f̲_̲n̲e̲g̲ absent]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NJP_NativeStep.one : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length : ℕ) (s : Scratch) (i w : ℕ)
+  (after : Scratch) (ni nw : ℕ) (returned : Bool) (log : Log),
+  Cut s i w length nodes (H (request log)) after ni nw returned log →
+    eval H (node nodes length s i w) =
+      (if log.calls = 0 then [] else [(request log, H (request log))],
+        ok (if returned = true then Row.next after ni nw else Row.stop after)) :=
+fun H nodes length s i w after ni nw returned log cut =>
+  have post := state s i w length nodes (H (request log)) after ni nw returned log cut;
+  if active : i < s.n then
+    if both : paired s i then
+      have entered := ⟨active, Or.inl both⟩;
+      have args := arguments s i w length nodes (H (request log)) after ni nw returned log cut entered;
+      Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              _a =
+                (if log.calls = 0 then [] else [(request log, H (request log))],
+                  ok (if returned = true then Row.next after ni nw else Row.stop after)))
+            (occupied_observation H nodes length s i w active both)))
+        (of_eq_true
+          (Eq.trans
+            (congrArg
+              (Eq
+                ([(occupiedRequest s i, H (occupiedRequest s i))],
+                  ok (Row.next (write s i w s.cursor (H (occupiedRequest s i))) (i + 2) (w + 1))))
+              (congr
+                (congrArg Prod.mk
+                  (Eq.trans
+                    (ite_congr
+                      (Eq.trans
+                        (congrFun'
+                          (congrArg Eq
+                            (Eq.trans cut.count
+                              ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos entered) x_0 x_1 x_2 x_3)
+                                (instDecidableWrites s i length) ℕ 1 0)))
+                          0)
+                        (eq_false
+                          (have this := of_decide_eq_true (id (Eq.refl true));
+                          this)))
+                      (fun a => Eq.refl []) fun a =>
+                      congrFun'
+                        (congrArg List.cons
+                          (congr
+                            (congrArg Prod.mk
+                              (Eq.mp
+                                (congrArg (Eq (request log))
+                                  ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos both) x_0 x_1 x_2 x_3)
+                                    (instDecidablePaired s i) Request (occupiedRequest s i) (siblingRequest s i nodes)))
+                                args))
+                            (congrArg H
+                              (Eq.mp
+                                (congrArg (Eq (request log))
+                                  ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos both) x_0 x_1 x_2 x_3)
+                                    (instDecidablePaired s i) Request (occupiedRequest s i) (siblingRequest s i nodes)))
+                                args))))
+                        [])
+                    (if_false [] [(occupiedRequest s i, H (occupiedRequest s i))])))
+                (congrArg ok
+                  (ite_congr
+                    (Eq.trans
+                      (congrFun'
+                        (congrArg Eq
+                          (Eq.trans cut.returnValue
+                            (Eq.trans
+                              (Decidable.decide.congr_simp (¬i < s.n ∨ paired s i ∨ s.cursor + 32 ≤ length) True
+                                (Eq.trans
+                                  (congr (congrArg Or (Eq.trans (congrArg Not (eq_true active)) one._simp_1))
+                                    (Eq.trans (congrFun' (congrArg Or (eq_true both)) (s.cursor + 32 ≤ length))
+                                      (true_or (s.cursor + 32 ≤ length))))
+                                  (false_or True)))
+                              (decide_true instDecidableTrue))))
+                        true)
+                      (eq_self true))
+                    (fun a =>
+                      congr
+                        (congr
+                          (congrArg Row.next
+                            (Eq.trans post
+                              (Eq.trans
+                                (ite_congr (Eq.refl (writes s i length))
+                                  (fun a =>
+                                    congr
+                                      (congrArg (write s i w)
+                                        (Eq.trans
+                                          (ite_congr
+                                            (Eq.trans
+                                              (congr (congrArg And (eq_true active))
+                                                (Eq.trans
+                                                  (congrFun'
+                                                    (congrArg And (Eq.trans (congrArg Not (eq_true both)) one._simp_1))
+                                                    (s.cursor + 32 ≤ length))
+                                                  (false_and (s.cursor + 32 ≤ length))))
+                                              (and_false True))
+                                            (fun a => Eq.refl (s.cursor + 32)) fun a => Eq.refl s.cursor)
+                                          (if_false (s.cursor + 32) s.cursor)))
+                                      (congrArg H
+                                        (Eq.mp
+                                          (congrArg (Eq (request log))
+                                            ((fun x_0 x_1 x_2 x_3 =>
+                                                (fun x_0 x_1 x_2 x_3 => if_pos both) x_0 x_1 x_2 x_3)
+                                              (instDecidablePaired s i) Request (occupiedRequest s i)
+                                              (siblingRequest s i nodes)))
+                                          args)))
+                                  fun a => Eq.refl s)
+                                ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos entered) x_0 x_1 x_2 x_3)
+                                  (instDecidableWrites s i length) Scratch
+                                  (write s i w s.cursor (H (occupiedRequest s i))) s))))
+                          (Eq.trans cut.nextIndex
+                            (ite_congr (eq_true active)
+                              (fun a =>
+                                ite_congr (eq_true both) (fun a => Eq.refl (i + 2)) fun a =>
+                                  Eq.refl (if s.cursor + 32 ≤ length then i + 1 else i))
+                              fun a => Eq.refl i)))
+                        (Eq.trans cut.nextWrite
+                          ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos entered) x_0 x_1 x_2 x_3)
+                            (instDecidableWrites s i length) ℕ (w + 1) w)))
+                    fun a =>
+                    congrArg Row.stop
+                      (Eq.trans post
+                        (Eq.trans
+                          (ite_congr (Eq.refl (writes s i length))
+                            (fun a =>
+                              congr
+                                (congrArg (write s i w)
+                                  (Eq.trans
+                                    (ite_congr
+                                      (Eq.trans
+                                        (congr (congrArg And (eq_true active))
+                                          (Eq.trans
+                                            (congrFun'
+                                              (congrArg And (Eq.trans (congrArg Not (eq_true both)) one._simp_1))
+                                              (s.cursor + 32 ≤ length))
+                                            (false_and (s.cursor + 32 ≤ length))))
+                                        (and_false True))
+                                      (fun a => Eq.refl (s.cursor + 32)) fun a => Eq.refl s.cursor)
+                                    (if_false (s.cursor + 32) s.cursor)))
+                                (congrArg H
+                                  (Eq.mp
+                                    (congrArg (Eq (request log))
+                                      ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos both) x_0 x_1 x_2 x_3)
+                                        (instDecidablePaired s i) Request (occupiedRequest s i)
+                                        (siblingRequest s i nodes)))
+                                    args)))
+                            fun a => Eq.refl s)
+                          ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos entered) x_0 x_1 x_2 x_3)
+                            (instDecidableWrites s i length) Scratch (write s i w s.cursor (H (occupiedRequest s i)))
+                            s)))))))
+            (eq_self
+              ([(occupiedRequest s i, H (occupiedRequest s i))],
+                ok (Row.next (write s i w s.cursor (H (occupiedRequest s i))) (i + 2) (w + 1))))))
+    else
+      if available : s.cursor + 32 ≤ length then sorry
+      else
+        have absent := fun h => available (Or.resolve_left h.right both);
+        Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                _a =
+                  (if log.calls = 0 then [] else [(request log, H (request log))],
+                    ok (if returned = true then Row.next after ni nw else Row.stop after)))
+              (missing_observation H nodes length s i w active both
+                (Decidable.byContradiction fun a => one._proof_2 length s i available a))))
+          (of_eq_true
+            (Eq.trans
+              (congrArg (Eq ([], ok (Row.stop s)))
+                (congr
+                  (congrArg Prod.mk
+                    (ite_congr
+                      (Eq.trans
+                        (congrFun'
+                          (congrArg Eq
+                            (Eq.trans cut.count
+                              ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg absent) x_0 x_1 x_2 x_3)
+                                (instDecidableWrites s i length) ℕ 1 0)))
+                          0)
+                        (eq_self 0))
+                      (fun a => Eq.refl []) fun a => Eq.refl [(request log, H (request log))]))
+                  (congrArg ok
+                    (ite_congr
+                      (Eq.trans
+                        (congrFun'
+                          (congrArg Eq
+                            (Eq.trans cut.returnValue
+                              (Eq.trans
+                                (Decidable.decide.congr_simp (¬i < s.n ∨ paired s i ∨ s.cursor + 32 ≤ length) False
+                                  (Eq.trans
+                                    (congr (congrArg Or (Eq.trans (congrArg Not (eq_true active)) one._simp_1))
+                                      (Eq.trans (congr (congrArg Or (eq_false both)) (eq_false available))
+                                        (false_or False)))
+                                    (false_or False)))
+                                (decide_false instDecidableFalse))))
+                          true)
+                        Bool.false_eq_true)
+                      (fun a =>
+                        congrFun'
+                          (congrFun'
+                            (congrArg Row.next
+                              (Eq.trans post
+                                ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg absent) x_0 x_1 x_2 x_3)
+                                  (instDecidableWrites s i length) Scratch
+                                  (write s i w (cursor s i length) (H (request log))) s)))
+                            ni)
+                          nw)
+                      fun a =>
+                      congrArg Row.stop
+                        (Eq.trans post
+                          ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg absent) x_0 x_1 x_2 x_3)
+                            (instDecidableWrites s i length) Scratch (write s i w (cursor s i length) (H (request log)))
+                            s))))))
+              (eq_self ([], ok (Row.stop s)))))
+  else sorry
+'NJP_NativeStep.one' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

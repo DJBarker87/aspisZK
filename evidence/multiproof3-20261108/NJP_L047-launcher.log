@@ -1,0 +1,56 @@
+{"attempt": "NJP_L047", "exit_status": 1, "wall_seconds": 3.2656785459257662, "peak_rss_kib": "4328612", "swaps": "0", "print_axioms": ["'NJP_NativeStep.one' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJP_lean/NJP_NativeStep.lean:32:5: error: unsolved goals
+case pos
+H : Request → Digest
+nodes : ℕ → U8
+length : ℕ
+s : Scratch
+i w : ℕ
+after : Scratch
+ni nw : ℕ
+returned : Bool
+log : Log
+cut : Cut s i w length nodes (H (request log)) after ni nw returned log
+post : after = if writes s i length then write s i w (cursor s i length) (H (request log)) else s
+active : i < s.n
+both : ¬paired s i
+available : s.cursor + 32 ≤ length
+entered : writes s i length
+args : request log = siblingRequest s i nodes
+⊢ ([(siblingRequest s i nodes, H (siblingRequest s i nodes))],
+      ok (Row.next (write s i w (s.cursor + 32) (H (siblingRequest s i nodes))) (i + 1) (w + 1))) =
+    ([(siblingRequest s i nodes, H (s
+...
+rArg Eq
+                            (Eq.trans cut.returnValue
+                              (Eq.trans
+                                (Decidable.decide.congr_simp (¬i < s.n ∨ paired s i ∨ s.cursor + 32 ≤ length) False
+                                  (Eq.trans
+                                    (congr (congrArg Or (Eq.trans (congrArg Not (eq_true active)) one._simp_1))
+                                      (Eq.trans (congr (congrArg Or (eq_false both)) (eq_false available))
+                                        (false_or False)))
+                                    (false_or False)))
+                                (decide_false instDecidableFalse))))
+                          true)
+                        Bool.false_eq_true)
+                      (fun a =>
+                        congrFun'
+                          (congrFun'
+                            (congrArg Row.next
+                              (Eq.trans post
+                                ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg absent) x_0 x_1 x_2 x_3)
+                                  (instDecidableWrites s i length) Scratch
+                                  (write s i w (cursor s i length) (H (request log))) s)))
+                            ni)
+                          nw)
+                      fun a =>
+                      congrArg Row.stop
+                        (Eq.trans post
+                          ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg absent) x_0 x_1 x_2 x_3)
+                            (instDecidableWrites s i length) Scratch (write s i w (cursor s i length) (H (request log)))
+                            s))))))
+              (eq_self ([], ok (Row.stop s)))))
+  else sorry
+'NJP_NativeStep.one' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r3187e4493d4d4dbdb9964e8ba1308538.scope; invocation ID: 2d25507c955f4925960df7e518758ea0

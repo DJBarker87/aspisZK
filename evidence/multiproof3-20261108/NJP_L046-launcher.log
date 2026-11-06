@@ -1,0 +1,55 @@
+{"attempt": "NJP_L046", "exit_status": 1, "wall_seconds": 3.186955142999068, "peak_rss_kib": "4337604", "swaps": "0", "print_axioms": ["'NJP_CohortRead.index' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJP_CohortRead.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJP_CohortRead.xor_one' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJP_CohortRead.parity' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJP_CohortRead.occupied_address' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJP_lean/NJP_CohortRead.lean:13:62: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  GetElem? ℕ ℕ ?m.31 Eq
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NJP_lean/NJP_CohortRead.lean:13:62: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  LawfulGetElem ℕ ℕ ?m.31 Eq
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NJP_lean/NJP_CohortRead.lean:11:61: error: unsolved goals
+s : reference.Scratch
+i : Usize
+bound : ↑i < 16
+size : (↑s.idx).length = 16
+⊢ (if h : ↑i < 16 then ↑(↑s.idx)[↑i] 
+...
+t_bound step =>
+  id
+    (id
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              AspisR1.MultiproofConePhysicalDigest.parts (encode (_a, NJP_RowModel.value (raw s) (↑i + 1)).1)
+                  (encode (_a, NJP_RowModel.value (raw s) (↑i + 1)).2) =
+                AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]! (↑s.val)[↑next]!)
+            (value s i bound)))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                AspisR1.MultiproofConePhysicalDigest.parts
+                    (encode (decode (↑s.val)[↑i]!, NJP_RowModel.value (raw s) _a).1)
+                    (encode (decode (↑s.val)[↑i]!, NJP_RowModel.value (raw s) _a).2) =
+                  AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]! (↑s.val)[↑next]!)
+              (Eq.symm step)))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  AspisR1.MultiproofConePhysicalDigest.parts (encode (decode (↑s.val)[↑i]!, _a).1)
+                      (encode (decode (↑s.val)[↑i]!, _a).2) =
+                    AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]! (↑s.val)[↑next]!)
+                (value s next next_bound)))
+            (of_eq_true
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (congr (congrArg AspisR1.MultiproofConePhysicalDigest.parts (encode_decode (↑s.val)[↑i]!))
+                      (encode_decode (↑s.val)[↑next]!)))
+                  (AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]! (↑s.val)[↑next]!))
+                (eq_self (AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]! (↑s.val)[↑next]!))))))))
+'NJP_CohortRead.occupied_address' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r417a4535fe494ab38b940cf54ad3f52d.scope; invocation ID: c23c6b29906244dfb114548f1aa862a9

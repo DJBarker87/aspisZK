@@ -1,0 +1,44 @@
+{"attempt": "NJP_L031", "exit_status": 1, "wall_seconds": 3.254425049992278, "peak_rss_kib": "4327476", "swaps": "0", "print_axioms": ["'NJP_LevelsTotal.level_total' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_LevelsTotal.levels_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJP_LevelsTotal.returning_carrier' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJP_lean/NJP_LevelsTotal.lean:30:13: error: unexpected token 'end'; expected '⟩'
+NJP_lean/NJP_LevelsTotal.lean:30:5: error: `obtain` requires either an expected type or a value.
+usage: `obtain ⟨patt⟩? : type (:= val)?` or `obtain ⟨patt⟩? (: type)? := val`
+NJP_lean/NJP_LevelsTotal.lean:30:13: error: Missing name after `end`: Expected the current scope name `NJP_LevelsTotal`
+
+Hint: To end the current scope `NJP_LevelsTotal`, specify its name:
+  end ̲N̲J̲P̲_̲L̲e̲v̲e̲l̲s̲T̲o̲t̲a̲l̲
+NJP_lean/NJP_LevelsTotal.lean:30:16: error: unexpected token ','; expected command
+NJP_lean/NJP_LevelsTotal.lean:31:13: error: Missing name after `end`: Expected the current scope name `NJP_LevelsTotal`
+
+Hint: To end 
+...
+out with
+                                    | Level.stop stopped => Program.done (ok (Level.stop stopped))
+                                    | Level.done after => levels nodes length height after)).2).2 =
+                            ok out_1 ∧
+                          LevelProgress length s out_1)
+                (fun result progress observed => sorry) (Eq.symm h) result progress observed)
+            (Eq.refl out))))
+    height s domain
+'NJP_LevelsTotal.levels_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NJP_LevelsTotal.returning_carrier : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length : ℕ) (root : Digest)
+  (s : Scratch),
+  0 < s.n → s.n ≤ 16 → length ≤ 9216 → ∃ accepted after, (eval H (run root nodes length s)).2 = ok (accepted, after) :=
+fun H nodes length root s positive size bytes =>
+  have domain := ⟨positive, ⟨size, ⟨Decidable.byContradiction fun a => sorry a, bytes⟩⟩⟩;
+  let ⟨out, h✝⟩ :=
+    levels_total H nodes length 18 { indices := s.indices, values := s.values, n := s.n, cursor := 0 } domain
+  let ⟨result, right✝⟩ := h✝
+  let history :=
+    (eval H (levels nodes length 18 { indices := s.indices, values := s.values, n := s.n, cursor := 0 })).1;
+  have observed := Prod.ext rfl result;
+  id
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => ∃ accepted after, _a.2 = ok (accepted, after))
+          (NJP_LoopBind.returned H
+            (levels nodes length 18 { indices := s.indices, values := s.values, n := s.n, cursor := 0 })
+            (fun result => Program.done (ok (finish root length result))) history out observed)))
+      (Exists.intro (finish root length out).1 (Exists.intro (finish root length out).2 rfl)))
+'NJP_LevelsTotal.returning_carrier' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-re3aea5b2a6e342bfbafd4ab57e5eb055.scope; invocation ID: b106a9c79f424384a034c2906d4d1afb

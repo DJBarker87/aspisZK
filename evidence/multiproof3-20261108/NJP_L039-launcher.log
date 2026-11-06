@@ -1,0 +1,55 @@
+{"attempt": "NJP_L039", "exit_status": 0, "wall_seconds": 3.737543744035065, "peak_rss_kib": "4367956", "swaps": "0", "print_axioms": ["'NJP_CheckedWords.add_one' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_CheckedWords.add_two' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_CheckedWords.add_window' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_CheckedWords.subtract' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_CheckedWords.half' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NJP_lean/NJP_CheckedWords.lean:12:13: warning: 'scalar_tac' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NJP_lean/NJP_CheckedWords.lean:12:13: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NJP_lean/NJP_CheckedWords.lean:18:13: warning: 'scalar_tac' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NJP_lean/NJP_CheckedWords.lean:18:13: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NJP_lean/NJP_CheckedWords.lean:24:13: warning: 'scalar_tac' 
+...
+c bound)
+      (Eq.mpr
+        (id
+          (Eq.trans
+            (add_one._simp_8 (fun z => ↑z = ↑length - ↑at1 ∧ ↑at1 ≤ ↑length) fun remaining =>
+              ↑remaining = ↑length - ↑at1)
+            (forall_congr fun x => add_one._simp_9 (↑x = ↑length - ↑at1) (↑at1 ≤ ↑length) (↑x = ↑length - ↑at1))))
+        (id fun _x =>
+          (fun _ remaining_post1 remaining_post2 => subtract._proof_1 length at1 _x remaining_post1)
+            (Step.eq_imp_prettyMonadEq (length - at1) _x)));
+  WP.spec_imp_exists spec
+'NJP_CheckedWords.subtract' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_CheckedWords.half : ∀ (index : U32), ∃ parent, index / 2#u32 = ok parent ∧ ↑parent = ↑index / 2 :=
+fun index =>
+  have spec :=
+    WP.spec_mono'
+      (U32.div_spec index
+        (of_eq_true
+          (Eq.trans
+            (congrFun'
+              (congrArg Ne
+                (UScalar.ofNatCore_val_eq
+                  (UScalar.bound_suffices UScalarTy.U32 2 (of_decide_eq_true (id (Eq.refl true))))))
+              0)
+            (Eq.trans (ScalarTac.Nat_neq_zero_iff._simp_1 2) (eq_true_of_decide (Eq.refl true))))))
+      (Eq.mpr (id (add_one._simp_8 (fun z => ↑z = ↑index / ↑2#u32) fun parent => ↑parent = ↑index / 2))
+        (id fun _x =>
+          (fun _ parent_post =>
+              half._proof_1 index _x
+                (Eq.mp
+                  (congrArg (Eq ↑_x)
+                    (congrArg (HDiv.hDiv ↑index)
+                      (UScalar.ofNatCore_val_eq
+                        (UScalar.bound_suffices UScalarTy.U32 2 (of_decide_eq_true (id (Eq.refl true)))))))
+                  parent_post))
+            (Step.eq_imp_prettyMonadEq (index / 2#u32) _x)));
+  WP.spec_imp_exists spec
+'NJP_CheckedWords.half' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-ra9cbbe0acb1b4a8c9b448d67bb495a5d.scope; invocation ID: ee8718c9eaac4f628186c31015179278

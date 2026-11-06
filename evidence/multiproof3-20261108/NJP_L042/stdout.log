@@ -1,0 +1,238 @@
+NJP_lean/NJP_CohortWrite.lean:37:71: error: unsolved goals
+s : reference.Scratch
+digest : RefDigest
+ni cursor : Usize
+index : U32
+i : ℕ
+w : Usize
+bound : ↑w < 16
+index_value : ↑index = NJP_RowModel.index (raw s) i
+parent : UScalar UScalarTy.U32
+division : index / 2#u32 = ok parent
+parent_value : ↑parent = ↑index / 2
+next : UScalar UScalarTy.Usize
+addition : w + 1#usize = ok next
+next_value : ↑next = ↑w + 1
+⊢ NJP_RowModel.index (raw s) i / 2 = NJP_RowModel.index (raw s) ↑?m.69 / 2
+NJP_lean/NJP_CohortWrite.lean:25:96: error: unsolved goals
+s : reference.Scratch
+digest : RefDigest
+ni cursor : Usize
+index : U32
+i : ℕ
+w : Usize
+bound : ↑w < 16
+index_value : ↑index = NJP_RowModel.index (raw s) i
+parent : UScalar UScalarTy.U32
+division : index / 2#u32 = ok parent
+parent_value : ↑parent = ↑index / 2
+next : UScalar UScalarTy.Usize
+addition : w + 1#usize = ok next
+next_value : ↑next = ↑w + 1
+⊢ ok (NJP_RowModel.Row.next (NJP_RowModel.write (raw s) (↑w + 1) (↑w) (↑cursor) (decode digest)) (↑ni) (↑w + 1)) =
+    ok (NJP_RowModel.Row.next (NJP_RowModel.write (raw s) i (↑w) (↑cursor) (decode digest)) (↑ni) (↑w + 1))
+theorem NJP_CohortWrite.finish : ∀ (s : reference.Scratch) (digest : RefDigest) (ni cursor : Usize) (index : U32)
+  (i : ℕ) (w : Usize),
+  ↑w < 16 →
+    ↑index = NJP_RowModel.index (raw s) i →
+      mapResult projectRow (AspisR1.MultiproofConePhysicalProgram.finish s digest ni cursor index w) =
+        ok (NJP_RowModel.Row.next (NJP_RowModel.write (raw s) i (↑w) (↑cursor) (decode digest)) (↑ni) (↑w + 1)) :=
+fun s digest ni cursor index i w bound index_value =>
+  let ⟨parent, h✝⟩ := NJP_CheckedWords.half index
+  let ⟨division, parent_value⟩ := h✝
+  let ⟨next, h✝¹⟩ := NJP_CheckedWords.add_one w bound
+  let ⟨addition, next_value⟩ := h✝¹
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (mapResult projectRow do
+                let parent ← _a
+                let idx ← s.idx.update w parent
+                let val ← s.val.update w digest
+                let nw ← w + 1#usize
+                ok (reference.Row.Next { idx := idx, val := val, n := s.n, «at» := cursor } ni nw)) =
+              ok (NJP_RowModel.Row.next (NJP_RowModel.write (raw s) i (↑w) (↑cursor) (decode digest)) (↑ni) (↑w + 1)))
+          division))
+      (Eq.mpr
+        (id
+          (congrFun'
+            (congrArg Eq
+              (congrArg (mapResult projectRow)
+                (bind_tc_ok parent fun y => do
+                  let idx ← s.idx.update w y
+                  let val ← s.val.update w digest
+                  let nw ← w + 1#usize
+                  ok (reference.Row.Next { idx := idx, val := val, n := s.n, «at» := cursor } ni nw))))
+            (ok (NJP_RowModel.Row.next (NJP_RowModel.write (raw s) i (↑w) (↑cursor) (decode digest)) (↑ni) (↑w + 1)))))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (mapResult projectRow do
+                    let idx ← _a
+                    let val ← s.val.update w digest
+                    let nw ← w + 1#usize
+                    ok (reference.Row.Next { idx := idx, val := val, n := s.n, «at» := cursor } ni nw)) =
+                  ok
+                    (NJP_RowModel.Row.next (NJP_RowModel.write (raw s) i (↑w) (↑cursor) (decode digest)) (↑ni)
+                      (↑w + 1)))
+              (NJE_CountArithmetic.update_result s.idx w parent bound)))
+          (Eq.mpr
+            (id
+              (congrFun'
+                (congrArg Eq
+                  (congrArg (mapResult projectRow)
+                    (bind_tc_ok (s.idx.set w parent) fun y => do
+                      let val ← s.val.update w digest
+                      let nw ← w + 1#usize
+                      ok (reference.Row.Next { idx := y, val := val, n := s.n, «at» := cursor } ni nw))))
+                (ok
+                  (NJP_RowModel.Row.next (NJP_RowModel.write (raw s) i (↑w) (↑cursor) (decode digest)) (↑ni)
+                    (↑w + 1)))))
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    (mapResult projectRow do
+                        let val ← _a
+                        let nw ← w + 1#usize
+                        ok
+                            (reference.Row.Next { idx := s.idx.set w parent, val := val, n := s.n, «at» := cursor } ni
+                              nw)) =
+                      ok
+                        (NJP_RowModel.Row.next (NJP_RowModel.write (raw s) i (↑w) (↑cursor) (decode digest)) (↑ni)
+                          (↑w + 1)))
+                  (NJE_CountArithmetic.update_result s.val w digest bound)))
+              (Eq.mpr
+                (id
+                  (congrFun'
+                    (congrArg Eq
+                      (congrArg (mapResult projectRow)
+                        (bind_tc_ok (s.val.set w digest) fun y => do
+                          let nw ← w + 1#usize
+                          ok
+                              (reference.Row.Next { idx := s.idx.set w parent, val := y, n := s.n, «at» := cursor } ni
+                                nw))))
+                    (ok
+                      (NJP_RowModel.Row.next (NJP_RowModel.write (raw s) i (↑w) (↑cursor) (decode digest)) (↑ni)
+                        (↑w + 1)))))
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        (mapResult projectRow do
+                            let nw ← _a
+                            ok
+                                (reference.Row.Next
+                                  { idx := s.idx.set w parent, val := s.val.set w digest, n := s.n, «at» := cursor } ni
+                                  nw)) =
+                          ok
+                            (NJP_RowModel.Row.next (NJP_RowModel.write (raw s) i (↑w) (↑cursor) (decode digest)) (↑ni)
+                              (↑w + 1)))
+                      addition))
+                  (Eq.mpr
+                    (id
+                      (congrFun'
+                        (congrArg Eq
+                          (congrArg
+                            (fun x =>
+                              match x with
+                              | ok x => ok (projectRow x)
+                              | fail e => fail e
+                              | div => div)
+                            (bind_tc_ok next fun y =>
+                              ok
+                                (reference.Row.Next
+                                  { idx := s.idx.set w parent, val := s.val.set w digest, n := s.n, «at» := cursor } ni
+                                  y))))
+                        (ok
+                          (NJP_RowModel.Row.next (NJP_RowModel.write (raw s) i (↑w) (↑cursor) (decode digest)) (↑ni)
+                            (↑w + 1)))))
+                    (Eq.mpr
+                      (id
+                        (congrArg
+                          (fun _a =>
+                            ok (NJP_RowModel.Row.next _a ↑ni ↑next) =
+                              ok
+                                (NJP_RowModel.Row.next (NJP_RowModel.write (raw s) i (↑w) (↑cursor) (decode digest))
+                                  (↑ni) (↑w + 1)))
+                          (NJP_WriteCarrier.complete_write s next w cursor parent digest bound
+                            (Eq.mpr (id (congrArg (fun _a => _a = NJP_RowModel.index (raw s) ↑next / 2) parent_value))
+                              (Eq.mpr
+                                (id (congrArg (fun _a => _a / 2 = NJP_RowModel.index (raw s) ↑next / 2) index_value))
+                                sorry)))))
+                      (Eq.mpr
+                        (id
+                          (congrArg
+                            (fun _a =>
+                              ok
+                                  (NJP_RowModel.Row.next (NJP_RowModel.write (raw s) _a (↑w) (↑cursor) (decode digest))
+                                    (↑ni) _a) =
+                                ok
+                                  (NJP_RowModel.Row.next (NJP_RowModel.write (raw s) i (↑w) (↑cursor) (decode digest))
+                                    (↑ni) (↑w + 1)))
+                            next_value))
+                        sorry))))))))))
+'NJP_CohortWrite.finish' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NJP_CohortWrite.writer : ∀ (H : Slice (Slice U8) → RefDigest) (s : reference.Scratch) (left right : RefDigest)
+  (ni cursor : Usize) (index : U32) (i : ℕ) (w : Usize),
+  ↑w < 16 →
+    ↑index = NJP_RowModel.index (raw s) i →
+      have observed := eval H (AspisR1.MultiproofConePhysicalProgram.writer s left right ni cursor index w);
+      (observed.1, mapResult projectRow observed.2) =
+        ([(AspisR1.MultiproofConePhysicalDigest.parts left right,
+              H (AspisR1.MultiproofConePhysicalDigest.parts left right))],
+          ok
+            (NJP_RowModel.Row.next
+              (NJP_RowModel.write (raw s) i (↑w) (↑cursor)
+                (decode (H (AspisR1.MultiproofConePhysicalDigest.parts left right))))
+              (↑ni) (↑w + 1))) :=
+fun H s left right ni cursor index i w bound index_value =>
+  id
+    (Eq.mpr
+      (id
+        (congrFun'
+          (congrArg Eq
+            (congr
+              (congrArg Prod.mk
+                (congrArg Prod.fst
+                  (eval.eq_2 H (AspisR1.MultiproofConePhysicalDigest.parts left right) fun digest =>
+                    Program.done (AspisR1.MultiproofConePhysicalProgram.finish s digest ni cursor index w))))
+              (congrArg (mapResult projectRow)
+                (congrArg Prod.snd
+                  (eval.eq_2 H (AspisR1.MultiproofConePhysicalDigest.parts left right) fun digest =>
+                    Program.done (AspisR1.MultiproofConePhysicalProgram.finish s digest ni cursor index w))))))
+          ([(AspisR1.MultiproofConePhysicalDigest.parts left right,
+                H (AspisR1.MultiproofConePhysicalDigest.parts left right))],
+            ok
+              (NJP_RowModel.Row.next
+                (NJP_RowModel.write (raw s) i (↑w) (↑cursor)
+                  (decode (H (AspisR1.MultiproofConePhysicalDigest.parts left right))))
+                (↑ni) (↑w + 1)))))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              ([(AspisR1.MultiproofConePhysicalDigest.parts left right,
+                      H (AspisR1.MultiproofConePhysicalDigest.parts left right))],
+                  _a) =
+                ([(AspisR1.MultiproofConePhysicalDigest.parts left right,
+                      H (AspisR1.MultiproofConePhysicalDigest.parts left right))],
+                  ok
+                    (NJP_RowModel.Row.next
+                      (NJP_RowModel.write (raw s) i (↑w) (↑cursor)
+                        (decode (H (AspisR1.MultiproofConePhysicalDigest.parts left right))))
+                      (↑ni) (↑w + 1))))
+            (finish s (H (AspisR1.MultiproofConePhysicalDigest.parts left right)) ni cursor index i w bound
+              index_value)))
+        (Eq.refl
+          ([(AspisR1.MultiproofConePhysicalDigest.parts left right,
+                H (AspisR1.MultiproofConePhysicalDigest.parts left right))],
+            ok
+              (NJP_RowModel.Row.next
+                (NJP_RowModel.write (raw s) i (↑w) (↑cursor)
+                  (decode (H (AspisR1.MultiproofConePhysicalDigest.parts left right))))
+                (↑ni) (↑w + 1))))))
+'NJP_CohortWrite.writer' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

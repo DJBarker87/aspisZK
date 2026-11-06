@@ -1,0 +1,57 @@
+NJP_lean/NJP_ScalarCarrier.lean:19:1: error: 'change' tactic failed, pattern
+  n % 2 ^ 64 = n
+is not definitionally equal to target
+  ↑(size n) = n
+NJP_lean/NJP_ScalarCarrier.lean:24:24: error: Application type mismatch: The argument
+  BitVec.isLt x.bv
+has type
+  x.bv.toNat < 2 ^ System.Platform.numBits
+but is expected to have type
+  ↑x < 2 ^ 64
+in the application
+  size_value (↑x) (BitVec.isLt x.bv)
+NJP_lean/NJP_ScalarCarrier.lean:26:55: error: unsolved goals
+x : U32
+⊢ x.bv.toNat / 2 = ↑x / 2
+NJP_lean/NJP_ScalarCarrier.lean:30:29: warning: This simp argument is unused:
+  BitVec.toNat_ofNat
+
+Hint: Omit it from the simp argument list.
+  simp only [BitVec.toNat_and,̵B̵i̵t̵V̵e̵c̵.̵t̵o̵N̵a̵t̵_̵o̵f̵N̵a̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_ScalarCarrier.lean:34:29: warning: This simp argument is unused:
+  BitVec.toNat_ofNat
+
+Hint: Omit it from the simp argument list.
+  simp only [BitVec.toNat_xor,̵B̵i̵t̵V̵e̵c̵.̵t̵o̵N̵a̵t̵_̵o̵f̵N̵a̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NJP_ScalarCarrier.word_value : ∀ n < 2 ^ 32, ↑(word n) = n :=
+fun n bound => id (Nat.mod_eq_of_lt bound)
+'NJP_ScalarCarrier.word_value' depends on axioms: [propext]
+theorem NJP_ScalarCarrier.word_roundtrip : ∀ (x : U32), word ↑x = x :=
+fun x => UScalar.eq_of_val_eq (word_value (↑x) (BitVec.isLt x.bv))
+'NJP_ScalarCarrier.word_roundtrip' depends on axioms: [propext]
+theorem NJP_ScalarCarrier.size_value : ∀ n < 2 ^ 64, ↑(size n) = n :=
+fun n bound => sorry
+'NJP_ScalarCarrier.size_value' depends on axioms: [propext, sorryAx]
+theorem NJP_ScalarCarrier.size_roundtrip : ∀ (x : Usize), size ↑x = x :=
+fun x => UScalar.eq_of_val_eq (size_value ↑x sorry)
+'NJP_ScalarCarrier.size_roundtrip' depends on axioms: [propext, sorryAx]
+theorem NJP_ScalarCarrier.half : ∀ (x : U32), (x.bv >>> 1).toNat = ↑x / 2 :=
+fun x =>
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans (Nat.shiftRight_eq_div_pow x.bv.toNat 1) (congrArg (HDiv.hDiv x.bv.toNat) (Nat.pow_one 2))))
+        (↑x / 2)))
+    sorry
+'NJP_ScalarCarrier.half' depends on axioms: [propext, sorryAx]
+theorem NJP_ScalarCarrier.parity : ∀ (x : U32), (x.bv &&& 1).toNat = ↑x % 2 :=
+fun x => id (Nat.and_one_is_mod x.bv.toNat)
+'NJP_ScalarCarrier.parity' depends on axioms: [propext, Quot.sound]
+theorem NJP_ScalarCarrier.sibling : ∀ (x : U32), (x.bv ^^^ 1).toNat = (↑x).xor 1 :=
+fun x => id (Eq.refl (x.bv.toNat ^^^ BitVec.toNat 1))
+'NJP_ScalarCarrier.sibling' depends on axioms: [propext, Quot.sound]

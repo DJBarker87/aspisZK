@@ -1,0 +1,50 @@
+{"attempt": "NJP_L048", "exit_status": 0, "wall_seconds": 4.924862871179357, "peak_rss_kib": "4371712", "swaps": "0", "print_axioms": []}
+NJP_BIT_OP Aeneas.Std.IScalar.xor_spec : ∀ {ty : Aeneas.Std.IScalarTy} (x y : Aeneas.Std.IScalar ty),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (x ^^^ y)) fun z =>
+    ↑z = ↑(x ^^^ y) ∧
+      z.bv =
+        x.bv ^^^
+          y.bv value=fun {ty} x y =>
+  Eq.mpr
+    (id
+      (Eq.trans (Aeneas.Std.WP.spec_ok._simp_1 (x ^^^ y))
+        (Eq.trans (congrFun' (congrArg And (eq_self ↑(x ^^^ y))) ((x ^^^ y).bv = x.bv ^^^ y.bv))
+          (true_and ((x ^^^ y).bv = x.bv ^^^ y.bv)))))
+    (Eq.refl (x ^^^ y).bv)
+NJP_BIT_OP Aeneas.Std.U32.and_zero : ∀ (x : Aeneas.Std.U32),
+  x &&& 0#u32 =
+    0#u32 value=fun x =>
+  Eq.mpr (id (congrArg (fun _a => _a) (propext (Aeneas.Std.UScalar.eq_equiv_bv_eq (x &&& 0#u32)
+...
+                                         true)))
+                                    (Std.Tactic.BVDecide.Normalize.BitVec.eq_to_beq a.bv b.bv))
+                                  (Std.Tactic.BVDecide.Normalize.Bool.iff_to_beq (a.bv == b.bv) (a.bv == b.bv)))
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Eq (Std.Tactic.BVDecide.Normalize.Bool.beq_self_eq_true (a.bv == b.bv)))
+                                    true)
+                                  (eq_self true))))
+                            not_true._simp_1)
+                          a_1))
+                  (Aeneas.Bvify.BitVec.iff_ofNat_eq' 32))
+              (Aeneas.Bvify.BitVec.lt_pow_n_iff_ofNat_le 32))
+          (Aeneas.Bvify.BitVec.lt_pow_lt_iff_ofNat_lt' 32))
+      (Aeneas.Bvify.BitVec.lt_pow_le_iff_ofNat_le' 32))
+NJP_BIT_OP Aeneas.Std.IScalar.xor : {ty : Aeneas.Std.IScalarTy} →
+  Aeneas.Std.IScalar ty → Aeneas.Std.IScalar ty → Aeneas.Std.IScalar ty value=fun {ty} x y => (x.bv ^^^ y.bv)#iscalar
+NJP_BIT_OP Aeneas.Std.U64.and_zero : ∀ (x : Aeneas.Std.U64),
+  x &&& 0#u64 =
+    0#u64 value=fun x =>
+  Eq.mpr (id (congrArg (fun _a => _a) (propext (Aeneas.Std.UScalar.eq_equiv_bv_eq (x &&& 0#u64) 0#u64))))
+    BitVec.and_zero
+NJP_BIT_OP Aeneas.Std.U32.xor_eq_zero_iff._simp_1 : ∀ (a b : Aeneas.Std.U32),
+  (a ^^^ b = 0#u32) = (a = b) value=fun a b => propext (Aeneas.Std.U32.xor_eq_zero_iff a b)
+NJP_BIT_OP Aeneas.Std.UScalar.xor_spec.mvcgen_spec : ∀ {ty : Aeneas.Std.UScalarTy} (x y : Aeneas.Std.UScalar ty),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.lift
+      (x ^^^
+        y) ⦃Std.Do.PostCond.noThrow fun r =>
+      ⌜↑r = ↑(x ^^^ y) ∧
+          r.bv = x.bv ^^^ y.bv⌝⦄ value=fun {ty} x y => Aeneas.Std.WP.spec_to_mvcgen (Aeneas.Std.UScalar.xor_spec x y)
+
+Running as unit: run-r84043f65a7f741feb4c8afb3e480eec2.scope; invocation ID: 206531da215546dca988acbb473222dd

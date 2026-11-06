@@ -1,0 +1,45 @@
+{"attempt": "NJP_K062", "exit_status": 0, "wall_seconds": 18.99416367406957, "peak_rss_kib": "920396", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-multiproof3-20261108/NJP_workspace/crates/aspis-core)
+   Compiling aspis-r0-block-writer-copies v0.0.0 (/home/dombarker/project-offloads/codex-cx-multiproof3-20261108/NJP_workspace/docs/research/v8-r0-zk-20261009/refine/blockwriters)
+   Compiling aspis-r0-writer-copies v0.0.0 (/home/dombarker/project-offloads/codex-cx-multiproof3-20261108/NJP_workspace/docs/research/v8-r0-zk-20261009/refine/writers)
+   Compiling aspis-r0-poseidon-copy v0.0.0 (/home/dombarker/project-offloads/codex-cx-multiproof3-20261108/NJP_workspace/docs/research/v8-r0-zk-20261009/refine/poseidon)
+warning: une
+...
+/NJP_workspace/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-multiproof3-20261108/NJP_workspace/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-multiproof3-20261108/NJP_workspace/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.80s
+Checking harness multiproof::NJP_native::NJP_rejection_prefix...
+
+VERIFICATION RESULT:
+ ** 0 of 646 failed (28 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 13.841171s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r850f64a5a38148d7a07d7f310d8ad72b.scope; invocation ID: 5862d4e1efd0441a86aea03813e17864

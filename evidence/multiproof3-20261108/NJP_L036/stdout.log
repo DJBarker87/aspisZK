@@ -1,0 +1,144 @@
+@[irreducible] def Aeneas.Std.UScalar.size : Aeneas.Std.UScalarTy → ℕ :=
+Aeneas.Std.wrapped✝.1
+NJP_lean/NJP_ABIInspect.lean:4:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.numBits`
+def Aeneas.Std.UScalar.ofNatCore : {ty : Aeneas.Std.UScalarTy} → (x : ℕ) → x < 2 ^ ty.numBits → Aeneas.Std.UScalar ty :=
+fun {ty} x h => { toFin := ⟨x, h⟩ }#uscalar
+theorem Aeneas.Std.UScalar.ofNatCore_val_eq : ∀ {x : ℕ} {ty : Aeneas.Std.UScalarTy} (h : x < 2 ^ ty.numBits),
+  ↑(Aeneas.Std.UScalar.ofNatCore x h) = x :=
+fun {x} {ty} h => of_eq_true (eq_self x)
+@[reducible] def Aeneas.Std.Usize : Type :=
+Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize
+NJP_ABI_FACT Aeneas.Std.alloc.vec.Vec.getElem!_Usize_eq : ∀ {α : Type u} [inst : Inhabited α]
+  (v : Aeneas.Std.alloc.vec.Vec α) (i : Aeneas.Std.Usize), v[i]! = (↑v)[↑i]!
+NJP_ABI_FACT _private.Init.Data.Range.Lemmas.0.Std.Legacy.Range.size_eq : ∀ {i : ℕ} (r : Std.Legacy.Range),
+  i < r.stop → (r.stop - i + r.step - 1) / r.step = (r.stop - (i + r.step) + r.step - 1) / r.step + 1
+NJP_ABI_FACT Aeneas.Std.U128.val_mod_size_eq : ∀ (x : Aeneas.Std.U128), ↑x % Aeneas.Std.U128.size = ↑x
+NJP_ABI_FACT Aeneas.Std.U64.size_eq : Aeneas.Std.U64.size = 18446744073709551616
+NJP_ABI_FACT Aeneas.Std.Isize.numBits_def : Aeneas.Std.Isize.numBits = Aeneas.Std.IScalarTy.Isize.numBits
+NJP_ABI_FACT AspisR1.WireBindingRecordCodec.asf8_size_eq : AspisR1.WireBindingRecordCodec.asf8_size = 1880
+NJP_ABI_FACT Aeneas.Step.uscalar_usize_eq : Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize = Aeneas.Std.Usize
+NJP_ABI_FACT Aeneas.Std.Isize.numBits : ℕ
+NJP_ABI_FACT Aeneas.Std.Usize.val_mod_size_eq : ∀ (x : Aeneas.Std.Usize), ↑x % Aeneas.Std.Usize.size = ↑x
+NJP_ABI_FACT CompPoly.CPolynomial.Raw.matchSize_size_eq : ∀ {Q : Type u_2} [inst : Semiring Q]
+  {p q : CompPoly.CPolynomial.Raw Q},
+  match Array.matchSize p q 0 with
+  | (p', q') => p'.size = q'.size
+NJP_ABI_FACT Aeneas.Std.I16.val_mod_size_eq : ∀ (x : Aeneas.Std.I16), (↑x).bmod Aeneas.Std.I16.size = ↑x
+NJP_ABI_FACT Array.Perm.size_eq : ∀ {α : Type u_1} {xs ys : Array α}, xs.Perm ys → xs.size = ys.size
+NJP_ABI_FACT Std.TreeSet.Equiv.size_eq : ∀ {α : Type u} {cmp : α → α → Ordering} {t₁ t₂ : Std.TreeSet α cmp},
+  t₁.Equiv t₂ → t₁.size = t₂.size
+NJP_ABI_FACT Aeneas.Std.I8.val_mod_size_eq : ∀ (x : Aeneas.Std.I8), (↑x).bmod Aeneas.Std.I8.size = ↑x
+NJP_ABI_FACT Aeneas.Std.Slice.getElem_Usize_eq : ∀ {α : Type u} (v : Aeneas.Std.Slice α) (i : Aeneas.Std.Usize)
+  (h : ↑i < (↑v).length), v[i] = (↑v)[↑i]
+NJP_ABI_FACT System.Platform.numBits_eq : System.Platform.numBits = 32 ∨ System.Platform.numBits = 64
+NJP_ABI_FACT Aeneas.Std.alloc.vec.Vec.getElem?_Usize_eq : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α)
+  (i : Aeneas.Std.Usize), v[i]? = (↑v)[↑i]?
+NJP_ABI_FACT Std.HashSet.Equiv.size_eq : ∀ {α : Type u} {x : BEq α} {x_1 : Hashable α} {m₁ m₂ : Std.HashSet α}
+  [EquivBEq α] [LawfulHashable α], m₁.Equiv m₂ → m₁.size = m₂.size
+NJP_ABI_FACT Aeneas.Std.IScalar.cMax_Isize_eq : Aeneas.Std.IScalar.cMax Aeneas.Std.IScalarTy.Isize = 2147483647
+NJP_ABI_FACT System.Platform.System.Platform.numBits_dvd._simp_1 : (System.Platform.numBits ∣ 64) = True
+NJP_ABI_FACT Std.DTreeMap.Internal.Impl.SameKeys.size_eq : ∀ {α : Type u} {β : α → Type v} {β' : α → Type u_1} [Ord α]
+  {t : Std.DTreeMap.Internal.Impl α β} {t' : Std.DTreeMap.Internal.Impl α β'}, t.SameKeys t' → t.size = t'.size
+NJP_ABI_FACT Std.HashSet.Raw.Equiv.size_eq : ∀ {α : Type u} [inst : BEq α] [inst_1 : Hashable α]
+  {m₁ m₂ : Std.HashSet.Raw α} [EquivBEq α] [LawfulHashable α], m₁.WF → m₂.WF → m₁.Equiv m₂ → m₁.size = m₂.size
+NJP_ABI_FACT System.Platform.numBits_le._simp_1 : (System.Platform.numBits ≤ 64) = True
+NJP_ABI_FACT Std.DHashMap.Internal.Raw.WFImp.size_eq : ∀ {α : Type u} {β : α → Type v} [inst : BEq α]
+  [inst_1 : Hashable α] {m : Std.DHashMap.Raw α β},
+  Std.DHashMap.Internal.Raw.WFImp m → m.size = (Std.DHashMap.Internal.toListModel m.buckets).length
+NJP_ABI_FACT System.Platform.two_pow_numBits_nonneg : 0 ≤ 2 ^ System.Platform.numBits
+NJP_ABI_FACT Aeneas.Std.I128.val_mod_size_eq : ∀ (x : Aeneas.Std.I128), (↑x).bmod Aeneas.Std.I128.size = ↑x
+NJP_ABI_FACT System.Platform.numBits_pos._simp_1 : (0 < System.Platform.numBits) = True
+NJP_ABI_FACT Aeneas.Std.IScalar.cMin_Isize_eq : Aeneas.Std.IScalar.cMin Aeneas.Std.IScalarTy.Isize = -2147483648
+NJP_ABI_FACT System.Platform.numBits : ℕ
+NJP_ABI_FACT System.Platform.sixteen_le_numBits._simp_1 : (16 ≤ System.Platform.numBits) = True
+NJP_ABI_FACT System.Platform.two_pow_numBits_ne_zero : 2 ^ System.Platform.numBits ≠ 0
+NJP_ABI_FACT Subarray.size_eq : ∀ {α : Type u_1} {xs : Subarray α}, Std.Slice.size xs = xs.stop - xs.start
+NJP_ABI_FACT Aeneas.Std.Slice.getElem!_Usize_eq : ∀ {α : Type u} [inst : Inhabited α] (v : Aeneas.Std.Slice α)
+  (i : Aeneas.Std.Usize), v[i]! = (↑v)[↑i]!
+NJP_ABI_FACT Aeneas.Std.Usize.numBits_eq : Aeneas.Std.Usize.numBits = System.Platform.numBits
+NJP_ABI_FACT System.Platform.le_numBits : 32 ≤ System.Platform.numBits
+NJP_ABI_FACT Aeneas.Std.I8.size_eq : Aeneas.Std.I8.size = 256
+NJP_ABI_FACT System.Platform.System.Platform.sixteen_dvd_numBits : 16 ∣ System.Platform.numBits
+NJP_ABI_FACT Aeneas.Std.Array.getElem!_Usize_eq : ∀ {α : Type u} [inst : Inhabited α] {n : Aeneas.Std.Usize}
+  (v : Aeneas.Std.Array α n) (i : Aeneas.Std.Usize), v[i]! = (↑v)[↑i]!
+NJP_ABI_FACT Aeneas.Std.IScalarTy.Isize_numBits_eq : Aeneas.Std.IScalarTy.Isize.numBits = System.Platform.numBits
+NJP_ABI_FACT Std.DHashMap.Raw.Equiv.size_eq : ∀ {α : Type u} {β : α → Type v} [inst : BEq α] [inst_1 : Hashable α]
+  {m₁ m₂ : Std.DHashMap.Raw α β} [EquivBEq α] [LawfulHashable α], m₁.WF → m₂.WF → m₁.Equiv m₂ → m₁.size = m₂.size
+NJP_ABI_FACT Std.DTreeMap.Internal.Impl.Equiv.size_eq : ∀ {α : Type u} {β : α → Type v} {instOrd : Ord α}
+  {t₁ t₂ : Std.DTreeMap.Internal.Impl α β}, t₁.WF → t₂.WF → t₁.Equiv t₂ → t₁.size = t₂.size
+NJP_ABI_FACT Aeneas.Std.Isize.val_mod_size_eq : ∀ (x : Aeneas.Std.Isize), (↑x).bmod Aeneas.Std.Isize.size = ↑x
+NJP_ABI_FACT _private.Aeneas.Data.Range.SRRange.Lemmas.0.Aeneas.SRRange.size_eq : ∀ {i : ℕ} (r : Aeneas.SRRange),
+  i < r.stop → (r.stop - i + r.step - 1) / r.step = (r.stop - (i + r.step) + r.step - 1) / r.step + 1
+NJP_ABI_FACT Aeneas.Std.I64.val_mod_size_eq : ∀ (x : Aeneas.Std.I64), (↑x).bmod Aeneas.Std.I64.size = ↑x
+NJP_ABI_FACT Aeneas.Std.U128.size_eq : Aeneas.Std.U128.size = 340282366920938463463374607431768211456
+NJP_ABI_FACT Aeneas.Std.alloc.vec.Vec.getElem_Usize_eq : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α)
+  (i : Aeneas.Std.Usize) (h : ↑i < (↑v).length), v[i] = (↑v)[↑i]
+NJP_ABI_FACT System.Platform.System.Platform.dvd_numBits : 32 ∣ System.Platform.numBits
+NJP_ABI_FACT Std.DTreeMap.Equiv.size_eq : ∀ {α : Type u} {β : α → Type v} {cmp : α → α → Ordering}
+  {t₁ t₂ : Std.DTreeMap α β cmp}, t₁.Equiv t₂ → t₁.size = t₂.size
+NJP_ABI_FACT Aeneas.Std.Array.getElem_Usize_eq : ∀ {α : Type u} {n : Aeneas.Std.Usize} (v : Aeneas.Std.Array α n)
+  (i : Aeneas.Std.Usize) (h : ↑i < (↑v).length), v[i] = (↑v)[↑i]
+NJP_ABI_FACT Aeneas.Std.Isize.numBits_eq : Aeneas.Std.Isize.numBits = System.Platform.numBits
+NJP_ABI_FACT USize.size_eq : USize.size = 4294967296 ∨ USize.size = 18446744073709551616
+NJP_ABI_FACT System.Platform.eight_le_numBits : 8 ≤ System.Platform.numBits
+NJP_ABI_FACT Std.PRange.UpwardEnumerable.Map.PreservesRxcSize.size_eq : ∀ {α : Type u_1} {β : Type u_2}
+  {inst : Std.PRange.UpwardEnumerable α} {inst_1 : Std.PRange.UpwardEnumerable β} {inst_2 : Std.Rxc.HasSize α}
+  {inst_3 : Std.Rxc.HasSize β} {f : Std.PRange.UpwardEnumerable.Map α β} [self : f.PreservesRxcSize] {a b : α},
+  Std.Rxc.HasSize.size a b = Std.Rxc.HasSize.size (f.toFun a) (f.toFun b)
+NJP_ABI_FACT Aeneas.Step.iscalar_isize_eq : Aeneas.Std.IScalar Aeneas.Std.IScalarTy.Isize = Aeneas.Std.Isize
+NJP_ABI_FACT System.Platform.numBits_le : System.Platform.numBits ≤ 64
+NJP_ABI_FACT Std.HashMap.Equiv.size_eq : ∀ {α : Type u} {β : Type v} {x : BEq α} {x_1 : Hashable α}
+  {m₁ m₂ : Std.HashMap α β} [EquivBEq α] [LawfulHashable α], m₁.Equiv m₂ → m₁.size = m₂.size
+NJP_ABI_FACT Aeneas.Std.U16.val_mod_size_eq : ∀ (x : Aeneas.Std.U16), ↑x % Aeneas.Std.U16.size = ↑x
+NJP_ABI_FACT System.Platform.numBits.eq_1 : System.Platform.numBits = ↑(System.Platform.getNumBits ())
+NJP_ABI_FACT Aeneas.Std.U8.val_mod_size_eq : ∀ (x : Aeneas.Std.U8), ↑x % Aeneas.Std.U8.size = ↑x
+NJP_ABI_FACT System.Platform.eight_dvd_numBits : 8 ∣ System.Platform.numBits
+NJP_ABI_FACT Std.PRange.UpwardEnumerable.Map.PreservesRxoSize.size_eq : ∀ {α : Type u_1} {β : Type u_2}
+  {inst : Std.PRange.UpwardEnumerable α} {inst_1 : Std.PRange.UpwardEnumerable β} {inst_2 : Std.Rxo.HasSize α}
+  {inst_3 : Std.Rxo.HasSize β} {f : Std.PRange.UpwardEnumerable.Map α β} [self : f.PreservesRxoSize] {a b : α},
+  Std.Rxo.HasSize.size a b = Std.Rxo.HasSize.size (f.toFun a) (f.toFun b)
+NJP_ABI_FACT Std.TreeSet.Raw.Equiv.size_eq : ∀ {α : Type u} {cmp : α → α → Ordering} {t₁ t₂ : Std.TreeSet.Raw α cmp},
+  t₁.WF → t₂.WF → t₁.Equiv t₂ → t₁.size = t₂.size
+NJP_ABI_FACT Aeneas.Std.I32.size_eq : Aeneas.Std.I32.size = 4294967296
+NJP_ABI_FACT Aeneas.Std.Usize.numBits_def : Aeneas.Std.Usize.numBits = Aeneas.Std.UScalarTy.Usize.numBits
+NJP_ABI_FACT Aeneas.Std.U32.val_mod_size_eq : ∀ (x : Aeneas.Std.U32), ↑x % Aeneas.Std.U32.size = ↑x
+NJP_ABI_FACT System.Platform.eight_le_numBits._simp_1 : (8 ≤ System.Platform.numBits) = True
+NJP_ABI_FACT Aeneas.Std.UScalarTy.Usize_numBits_eq : Aeneas.Std.UScalarTy.Usize.numBits = System.Platform.numBits
+NJP_ABI_FACT Aeneas.Std.U32.size_eq : Aeneas.Std.U32.size = 4294967296
+NJP_ABI_FACT System.Platform.numBits_pos : 0 < System.Platform.numBits
+NJP_ABI_FACT Aeneas.Std.I32.val_mod_size_eq : ∀ (x : Aeneas.Std.I32), (↑x).bmod Aeneas.Std.I32.size = ↑x
+NJP_ABI_FACT System.Platform.eight_dvd_numBits._simp_1 : (8 ∣ System.Platform.numBits) = True
+NJP_ABI_FACT Std.TreeMap.Raw.Equiv.size_eq : ∀ {α : Type u} {β : Type v} {cmp : α → α → Ordering}
+  {t₁ t₂ : Std.TreeMap.Raw α β cmp}, t₁.WF → t₂.WF → t₁.Equiv t₂ → t₁.size = t₂.size
+NJP_ABI_FACT Aeneas.Std.I16.size_eq : Aeneas.Std.I16.size = 65536
+NJP_ABI_FACT Std.HashMap.Raw.Equiv.size_eq : ∀ {α : Type u} {β : Type v} [inst : BEq α] [inst_1 : Hashable α]
+  {m₁ m₂ : Std.HashMap.Raw α β} [EquivBEq α] [LawfulHashable α], m₁.WF → m₂.WF → m₁.Equiv m₂ → m₁.size = m₂.size
+NJP_ABI_FACT System.Platform.System.Platform.sixteen_dvd_numBits._simp_1 : (16 ∣ System.Platform.numBits) = True
+NJP_ABI_FACT Aeneas.Std.Slice.getElem?_Usize_eq : ∀ {α : Type u} (v : Aeneas.Std.Slice α) (i : Aeneas.Std.Usize),
+  v[i]? = (↑v)[↑i]?
+NJP_ABI_FACT Std.DHashMap.Equiv.size_eq : ∀ {α : Type u} {β : α → Type v} {x : BEq α} {x_1 : Hashable α}
+  {m₁ m₂ : Std.DHashMap α β} [EquivBEq α] [LawfulHashable α], m₁.Equiv m₂ → m₁.size = m₂.size
+NJP_ABI_FACT System.Platform.sixteen_le_numBits : 16 ≤ System.Platform.numBits
+NJP_ABI_FACT Aeneas.Std.UScalar.cMax_Usize_eq : Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize = 4294967295
+NJP_ABI_FACT System.Platform.le_numBits._simp_1 : (32 ≤ System.Platform.numBits) = True
+NJP_ABI_FACT Std.DTreeMap.Raw.Equiv.size_eq : ∀ {α : Type u} {β : α → Type v} {cmp : α → α → Ordering}
+  {t₁ t₂ : Std.DTreeMap.Raw α β cmp}, t₁.WF → t₂.WF → t₁.Equiv t₂ → t₁.size = t₂.size
+NJP_ABI_FACT Aeneas.Std.U16.size_eq : Aeneas.Std.U16.size = 65536
+NJP_ABI_FACT Aeneas.Std.U8.size_eq : Aeneas.Std.U8.size = 256
+NJP_ABI_FACT Std.PRange.UpwardEnumerable.Map.PreservesRxiSize.size_eq : ∀ {α : Type u_1} {β : Type u_2}
+  {inst : Std.PRange.UpwardEnumerable α} {inst_1 : Std.PRange.UpwardEnumerable β} {inst_2 : Std.Rxi.HasSize α}
+  {inst_3 : Std.Rxi.HasSize β} {f : Std.PRange.UpwardEnumerable.Map α β} [self : f.PreservesRxiSize] {b : α},
+  Std.Rxi.HasSize.size b = Std.Rxi.HasSize.size (f.toFun b)
+NJP_ABI_FACT Std.TreeMap.Equiv.size_eq : ∀ {α : Type u} {β : Type v} {cmp : α → α → Ordering}
+  {t₁ t₂ : Std.TreeMap α β cmp}, t₁.Equiv t₂ → t₁.size = t₂.size
+NJP_ABI_FACT Aeneas.Std.I64.size_eq : Aeneas.Std.I64.size = 18446744073709551616
+NJP_ABI_FACT Aeneas.Std.Array.getElem?_Usize_eq : ∀ {α : Type u} {n : Aeneas.Std.Usize} (v : Aeneas.Std.Array α n)
+  (i : Aeneas.Std.Usize), v[i]? = (↑v)[↑i]?
+NJP_ABI_FACT Aeneas.Std.I128.size_eq : Aeneas.Std.I128.size = 340282366920938463463374607431768211456
+NJP_ABI_FACT System.Platform.System.Platform.dvd_numBits._simp_1 : (32 ∣ System.Platform.numBits) = True
+NJP_ABI_FACT Std.Sat.AIG.Entrypoint.relabel_size_eq : ∀ {α : Type} [inst : Hashable α] [inst_1 : DecidableEq α]
+  {β : Type} [inst_2 : Hashable β] [inst_3 : DecidableEq β] {entry : Std.Sat.AIG.Entrypoint α} {r : α → β},
+  (Std.Sat.AIG.Entrypoint.relabel r entry).aig.decls.size = entry.aig.decls.size
+NJP_ABI_FACT Aeneas.Std.U64.val_mod_size_eq : ∀ (x : Aeneas.Std.U64), ↑x % Aeneas.Std.U64.size = ↑x
+NJP_ABI_FACT System.Platform.System.Platform.numBits_dvd : System.Platform.numBits ∣ 64
+NJP_ABI_FACT Aeneas.Std.Usize.numBits : ℕ

@@ -95,3 +95,5 @@ fn NJP_digest_write_window() {
  val[w]=digest;
  if cfg!(NJP_bad_argument){assert_eq!(val[k][h],expected^1)}else{assert_eq!(val[k][h],expected)}
 }
+
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../NJP_frontier_cuts.rs"));

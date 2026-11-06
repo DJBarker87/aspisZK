@@ -1,0 +1,44 @@
+{"attempt": "NJP_L045", "exit_status": 1, "wall_seconds": 3.230781895807013, "peak_rss_kib": "4327556", "swaps": "0", "print_axioms": ["'NJP_NativeStep.one' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJP_lean/NJP_NativeStep.lean:23:3: error: unsolved goals
+case pos
+H : Request → Digest
+nodes : ℕ → U8
+length : ℕ
+s : Scratch
+i w : ℕ
+after : Scratch
+ni nw : ℕ
+returned : Bool
+log : Log
+cut : Cut s i w length nodes (H (request log)) after ni nw returned log
+post : after = if writes s i length then write s i w (cursor s i length) (H (request log)) else s
+active : i < s.n
+both : paired s i
+entered : writes s i length
+args : request log = occupiedRequest s i
+⊢ ([(occupiedRequest s i, H (occupiedRequest s i))],
+      ok (Row.next (write s i w s.cursor (H (occupiedRequest s i))) (i + 2) (w + 1))) =
+    ([(occupiedRequest s i, H (occupiedRequest s i))],
+      ok
+        (Row.next
+          (write s
+...
+,̵a̵c̵t̵i̵v̵e̵,̵n̵o̵t̵_̵t̵r̵u̵e̵,̵b̵o̵t̵h̵,̵f̵a̵l̵s̵e̵_̵o̵r̵,̵t̵r̵u̵e̵_̵o̵r̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵o̵s̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵t̵.̵n̵e̵x̵t̵I̵n̵d̵e̵x̵,̵n̵e̵x̵t̵I̵,̵i̵f̵_̵p̵o̵s̵ ̵a̵c̵t̵i̵v̵e̵,̵i̵f̵_̵p̵o̵s̵d̲e̲c̲i̲d̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲r̲g̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲u̲t̲.̲r̲e̲t̲u̲r̲n̲V̲a̲l̲u̲e̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ both, c̵u̵t̵.̵n̵e̵x̵t̵W̵r̵i̵t̵e̵,̵i̵f̵_̵p̵o̵s̵ ̵e̵n̵t̵e̵r̵e̵d̵,̵c̵u̵r̵s̵o̵r̵,̵a̵c̵t̵i̵v̵e̵,̵b̵o̵t̵h̵,̵n̵o̵t̵_̵t̵r̵u̵e̵,̵a̵n̵d̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵f̲a̲l̲s̲e̲_̲o̲r̲,̲ ̲t̲r̲u̲e̲_̲o̲r̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲p̲o̲s̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲I̲n̲d̲e̲x̲,̲ ̲n̲e̲x̲t̲I̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲b̲o̲t̲h̲,̲ ̲c̲u̲t̲.̲n̲e̲x̲t̲W̲r̲i̲t̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲p̲o̲s̲ ̲e̲n̲t̲e̲r̲e̲d̲,̲ ̲c̲u̲r̲s̲o̲r̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲b̲o̲t̲h̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NJP_NativeStep.one : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length : ℕ) (s : Scratch) (i w : ℕ)
+  (after : Scratch) (ni nw : ℕ) (returned : Bool) (log : Log),
+  Cut s i w length nodes (H (request log)) after ni nw returned log →
+    eval H (node nodes length s i w) =
+      (if log.calls = 0 then [] else [(request log, H (request log))],
+        ok (if returned = true then Row.next after ni nw else Row.stop after)) :=
+fun H nodes length s i w after ni nw returned log cut =>
+  have post := state s i w length nodes (H (request log)) after ni nw returned log cut;
+  if active : i < s.n then sorry else if available : s.cursor + 32 ≤ length then sorry else sorry
+'NJP_NativeStep.one' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rcdfdd356112445a3813caa9ff8b879b5.scope; invocation ID: f914983d226e48e3bee384b11845061b

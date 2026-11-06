@@ -1,0 +1,136 @@
+theorem NJP_LevelsTotal.level_total : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length : ℕ) (s : Scratch),
+  LevelDomain length s → ∃ out, (eval H (level nodes length s)).2 = ok out ∧ LevelProgress length s out :=
+fun H nodes length s domain =>
+  rows_total H nodes length s.n s 0 0
+    ⟨domain.left,
+      ⟨domain.right.left,
+        ⟨Decidable.byContradiction fun a => level_total._proof_1 s a,
+          ⟨Decidable.byContradiction fun a => level_total._proof_2 a,
+            ⟨domain.right.right.left, domain.right.right.right⟩⟩⟩⟩⟩
+    (Decidable.byContradiction fun a => level_total._proof_3 s a) fun a =>
+    Decidable.byContradiction fun a_1 => level_total._proof_4 a
+'NJP_LevelsTotal.level_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_LevelsTotal.levels_total : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length height : ℕ) (s : Scratch),
+  LevelDomain length s → ∃ out, (eval H (levels nodes length height s)).2 = ok out ∧ HeightProgress length s out :=
+fun H nodes length height s domain =>
+  Nat.recAux (motive := fun height =>
+    ∀ (s : Scratch),
+      LevelDomain length s → ∃ out, (eval H (levels nodes length height s)).2 = ok out ∧ HeightProgress length s out)
+    (fun s domain =>
+      Exists.intro (Level.done s) ⟨rfl, ⟨domain, Decidable.byContradiction fun a => levels_total._proof_1 s a⟩⟩)
+    (fun height ih s domain =>
+      let ⟨out, h✝⟩ := level_total H nodes length s domain
+      let ⟨result, progress⟩ := h✝
+      let history := (eval H (level nodes length s)).1;
+      have observed := Prod.ext rfl result;
+      Eq.mpr
+        (id
+          (congrArg (fun _a => ∃ out, (eval H _a).2 = ok out ∧ HeightProgress length s out)
+            (levels.eq_2 nodes length s height)))
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => ∃ out, _a.2 = ok out ∧ HeightProgress length s out)
+              (NJP_LoopBind.returned H (level nodes length s)
+                (fun result =>
+                  match result with
+                  | Level.stop stopped => Program.done (ok (Level.stop stopped))
+                  | Level.done after => levels nodes length height after)
+                history out observed)))
+          (Level.casesOn (motive := fun t =>
+            out = t →
+              ∃ out_1,
+                (history ++
+                          (eval H
+                              (match out with
+                              | Level.stop stopped => Program.done (ok (Level.stop stopped))
+                              | Level.done after => levels nodes length height after)).1,
+                        (eval H
+                            (match out with
+                            | Level.stop stopped => Program.done (ok (Level.stop stopped))
+                            | Level.done after => levels nodes length height after)).2).2 =
+                    ok out_1 ∧
+                  HeightProgress length s out_1)
+            out
+            (fun after h =>
+              Eq.ndrec (motive := fun out =>
+                (eval H (level nodes length s)).2 = ok out →
+                  LevelProgress length s out →
+                    eval H (level nodes length s) = (history, ok out) →
+                      ∃ out_1,
+                        (history ++
+                                  (eval H
+                                      (match out with
+                                      | Level.stop stopped => Program.done (ok (Level.stop stopped))
+                                      | Level.done after => levels nodes length height after)).1,
+                                (eval H
+                                    (match out with
+                                    | Level.stop stopped => Program.done (ok (Level.stop stopped))
+                                    | Level.done after => levels nodes length height after)).2).2 =
+                            ok out_1 ∧
+                          HeightProgress length s out_1)
+                (fun result progress observed =>
+                  Exists.intro (Level.stop after)
+                    ⟨rfl, ⟨progress.left, Eq.mpr (id (congrArg (fun _a => _a ≤ s.n) progress.right)) (le_refl s.n)⟩⟩)
+                (Eq.symm h) result progress observed)
+            (fun after h =>
+              Eq.ndrec (motive := fun out =>
+                (eval H (level nodes length s)).2 = ok out →
+                  LevelProgress length s out →
+                    eval H (level nodes length s) = (history, ok out) →
+                      ∃ out_1,
+                        (history ++
+                                  (eval H
+                                      (match out with
+                                      | Level.stop stopped => Program.done (ok (Level.stop stopped))
+                                      | Level.done after => levels nodes length height after)).1,
+                                (eval H
+                                    (match out with
+                                    | Level.stop stopped => Program.done (ok (Level.stop stopped))
+                                    | Level.done after => levels nodes length height after)).2).2 =
+                            ok out_1 ∧
+                          HeightProgress length s out_1)
+                (fun result progress observed =>
+                  let ⟨finalOutcome, h✝¹⟩ := ih after progress.left
+                  let ⟨returned, valid⟩ := h✝¹
+                  Exists.intro finalOutcome
+                    ⟨returned,
+                      Level.casesOn (motive := fun t => finalOutcome = t → HeightProgress length s finalOutcome)
+                        finalOutcome
+                        (fun final h =>
+                          Eq.ndrec (motive := fun finalOutcome =>
+                            (eval H (levels nodes length height after)).2 = ok finalOutcome →
+                              HeightProgress length after finalOutcome → HeightProgress length s finalOutcome)
+                            (fun returned valid => ⟨valid.left, LE.le.trans valid.right progress.right⟩) (Eq.symm h)
+                            returned valid)
+                        (fun final h =>
+                          Eq.ndrec (motive := fun finalOutcome =>
+                            (eval H (levels nodes length height after)).2 = ok finalOutcome →
+                              HeightProgress length after finalOutcome → HeightProgress length s finalOutcome)
+                            (fun returned valid => ⟨valid.left, LE.le.trans valid.right progress.right⟩) (Eq.symm h)
+                            returned valid)
+                        (Eq.refl finalOutcome)⟩)
+                (Eq.symm h) result progress observed)
+            (Eq.refl out))))
+    height s domain
+'NJP_LevelsTotal.levels_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_LevelsTotal.returning_carrier : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length : ℕ) (root : Digest)
+  (s : Scratch),
+  0 < s.n → s.n ≤ 16 → length ≤ 9216 → ∃ accepted after, (eval H (run root nodes length s)).2 = ok (accepted, after) :=
+fun H nodes length root s positive size bytes =>
+  have domain :=
+    id ⟨positive, ⟨size, ⟨Decidable.byContradiction fun a => returning_carrier._proof_1 length s bytes a, bytes⟩⟩⟩;
+  let ⟨out, h✝⟩ :=
+    levels_total H nodes length 18 { indices := s.indices, values := s.values, n := s.n, cursor := 0 } domain
+  let ⟨result, right✝⟩ := h✝
+  let history :=
+    (eval H (levels nodes length 18 { indices := s.indices, values := s.values, n := s.n, cursor := 0 })).1;
+  have observed := Prod.ext rfl result;
+  id
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => ∃ accepted after, _a.2 = ok (accepted, after))
+          (NJP_LoopBind.returned H
+            (levels nodes length 18 { indices := s.indices, values := s.values, n := s.n, cursor := 0 })
+            (fun result => Program.done (ok (finish root length result))) history out observed)))
+      (Exists.intro (finish root length out).1 (Exists.intro (finish root length out).2 rfl)))
+'NJP_LevelsTotal.returning_carrier' depends on axioms: [propext, Classical.choice, Quot.sound]

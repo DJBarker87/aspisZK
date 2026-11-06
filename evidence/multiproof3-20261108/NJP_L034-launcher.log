@@ -1,0 +1,45 @@
+{"attempt": "NJP_L034", "exit_status": 0, "wall_seconds": 3.495579724898562, "peak_rss_kib": "4350144", "swaps": "0", "print_axioms": ["'NJP_LevelsTotal.level_total' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_LevelsTotal.levels_total' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_LevelsTotal.returning_carrier' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJP_LevelsTotal.level_total : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length : ℕ) (s : Scratch),
+  LevelDomain length s → ∃ out, (eval H (level nodes length s)).2 = ok out ∧ LevelProgress length s out :=
+fun H nodes length s domain =>
+  rows_total H nodes length s.n s 0 0
+    ⟨domain.left,
+      ⟨domain.right.left,
+        ⟨Decidable.byContradiction fun a => level_total._proof_1 s a,
+          ⟨Decidable.byContradiction fun a => level_total._proof_2 a,
+            ⟨domain.right.right.left, domain.right.right.right⟩⟩⟩⟩⟩
+    (Decidable.byContradiction fun a => level_total._proof_3 s a) fun a =>
+    Decidable.byContradiction fun a_1 => level_total._proof_4 a
+'NJP_LevelsTotal.level_to
+...
+                           HeightProgress length after finalOutcome → HeightProgress length s finalOutcome)
+                            (fun returned valid => ⟨valid.left, LE.le.trans valid.right progress.right⟩) (Eq.symm h)
+                            returned valid)
+                        (Eq.refl finalOutcome)⟩)
+                (Eq.symm h) result progress observed)
+            (Eq.refl out))))
+    height s domain
+'NJP_LevelsTotal.levels_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_LevelsTotal.returning_carrier : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length : ℕ) (root : Digest)
+  (s : Scratch),
+  0 < s.n → s.n ≤ 16 → length ≤ 9216 → ∃ accepted after, (eval H (run root nodes length s)).2 = ok (accepted, after) :=
+fun H nodes length root s positive size bytes =>
+  have domain :=
+    id ⟨positive, ⟨size, ⟨Decidable.byContradiction fun a => returning_carrier._proof_1 length s bytes a, bytes⟩⟩⟩;
+  let ⟨out, h✝⟩ :=
+    levels_total H nodes length 18 { indices := s.indices, values := s.values, n := s.n, cursor := 0 } domain
+  let ⟨result, right✝⟩ := h✝
+  let history :=
+    (eval H (levels nodes length 18 { indices := s.indices, values := s.values, n := s.n, cursor := 0 })).1;
+  have observed := Prod.ext rfl result;
+  id
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => ∃ accepted after, _a.2 = ok (accepted, after))
+          (NJP_LoopBind.returned H
+            (levels nodes length 18 { indices := s.indices, values := s.values, n := s.n, cursor := 0 })
+            (fun result => Program.done (ok (finish root length result))) history out observed)))
+      (Exists.intro (finish root length out).1 (Exists.intro (finish root length out).2 rfl)))
+'NJP_LevelsTotal.returning_carrier' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r5c81430a50374fb0a01db7e0cdfab086.scope; invocation ID: 93a06ce7ac4b452792b50f66ec932293
