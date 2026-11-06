@@ -1,3 +1,6 @@
+import NIW_AlignComposedRoot
+import NIW_AlignFinishNewAbort
+import NIW_AlignNativeObligations
 import NIW_AlignFinish
 import NIW_AlignOwner
 import NIT_FinishArguments

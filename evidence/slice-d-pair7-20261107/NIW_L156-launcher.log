@@ -1,0 +1,46 @@
+{"attempt": "NIW_L156", "exit_status": 0, "wall_seconds": 4.300979488063604, "peak_rss_kib": "6002392", "swaps": "0", "print_axioms": []}
+structure AspisR1.NIW_AlignNativeObligations.RegularObservation : Type
+number of parameters: 0
+fields:
+  AspisR1.NIW_AlignNativeObligations.RegularObservation.outcome : Result NHM_RegularKinds.Reply
+constructor:
+  AspisR1.NIW_AlignNativeObligations.RegularObservation.mk (outcome : Result NHM_RegularKinds.Reply) :
+    RegularObservation
+def AspisR1.NIW_AlignNativeObligations.RegularProjection : [FIo_Native.Allocation] →
+  Context → Scratch → RegularObservation → Prop :=
+fun [FIo_Native.Allocation] c before native => native.outcome = (NIW_AlignRegularPhase.run c before).2.outcome
+def AspisR1.NIW_AlignNativeObligations.PairWitness : NP6_StdModel.Reservation → Context → Result NR → Prop :=
+fun r
+...
+ NIG_FinishInput.Domain proof v p a
+structure AspisR1.NIW_AlignNativeObligations.RegularObservation : Type
+number of parameters: 0
+fields:
+  AspisR1.NIW_AlignNativeObligations.RegularObservation.outcome : Result NHM_RegularKinds.Reply
+constructor:
+  AspisR1.NIW_AlignNativeObligations.RegularObservation.mk (outcome : Result NHM_RegularKinds.Reply) :
+    RegularObservation
+def AspisR1.NIW_AlignNativeObligations.RegularProjection : [FIo_Native.Allocation] →
+  Context → Scratch → RegularObservation → Prop :=
+fun [FIo_Native.Allocation] c before native => native.outcome = (NIW_AlignRegularPhase.run c before).2.outcome
+def AspisR1.NIW_AlignNativeObligations.PairWitness : NP6_StdModel.Reservation → Context → Result NR → Prop :=
+fun r c native => NIT_AllocatorChain.Trace c r native
+def AspisR1.NIW_AlignNativeObligations.FinishProjection : NP6_StdModel.Reservation →
+  NIW_AlignFinishComposed.Locations →
+    AspisR1Stage2.verifier.View →
+      AspisR1Stage2.verifier.Prepared →
+        AspisR1Stage2.verifier.Accumulator → List NIW_AlignFinishExecution.Event → Prop :=
+fun r loc v p a nativeEvents => nativeEvents = (NIW_AlignFinishComposed.run r loc v p a).2.1
+def AspisR1.NIW_AlignRegularNativeView.project : [FIo_Native.Allocation] →
+  Context → Scratch → Option NIW_AlignRegularNativeView.View :=
+fun [FIo_Native.Allocation] c before =>
+  match (NIW_AlignRegularPhase.run c before).2.outcome with
+  | fail e => none
+  | div => none
+  | ok (core.result.Result.Err err, after, parts) =>
+    some (NIW_AlignRegularNativeView.returning c (core.result.Result.Err err) after parts)
+  | ok (core.result.Result.Ok PUnit.unit, after, parts) =>
+    if NGM_GuardExact.guard c.w.value 2#usize = true then none
+    else some (NIW_AlignRegularNativeView.returning c (core.result.Result.Ok ()) after parts)
+
+Running as unit: run-r03b1d213040f469186b418aae470f646.scope; invocation ID: 42e2fe7d1e5e40a0a681f0e0f1760a04

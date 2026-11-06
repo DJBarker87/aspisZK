@@ -1,3 +1,6 @@
+import NIW_AlignPairInstalled
+import NIW_AlignRegularPostBoundary
+import NIW_AlignRegularNativeProject
 import NIW_AlignPair
 import NIW_AlignFrames
 import NIW_AlignScratch

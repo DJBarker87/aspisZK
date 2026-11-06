@@ -6,7 +6,7 @@ B='/home/dombarker/project-offloads/codex-cx-slice-d-pair7-20261107'
 code=r'''from pathlib import Path
 import json,hashlib,shutil
 b=Path(B)
-x=json.loads((b/'NIW_L051.json').read_text());roots=x['env']['LEAN_PATH'].split(':')
+x=json.loads((b/'NIW_L160.json').read_text());roots=x['env']['LEAN_PATH'].split(':')
 def digest(p):
  h=hashlib.sha256()
  with p.open('rb')as f:
@@ -27,7 +27,7 @@ removed=[]
 for p in (b/'NIW_tmp').rglob('*'):
  if p.is_file() and (p.name.startswith('external-sat')and p.suffix=='.cnf' or p.name.startswith('smt2_dec_problem')):
   removed.append({'path':str(p),'bytes':p.stat().st_size});p.unlink()
-result={'workspace':str(b),'cargo_target_dir':x['env']['CARGO_TARGET_DIR'],'lean_path':roots,'source':'actual loaded-module list in NIW_L051 scan, first matching recorded LEAN_PATH path','modules':len(scan),'closure_files':files,'own_objects':objects,'tools':tools,'removed_own_solver_temporary_files':removed,'disk_free_bytes':shutil.disk_usage(b).free,'retained':['NIW_seed','NIW_objects','NIW_target','NIW_native','all host attempt directories'],'no_workspace_or_cache_deleted':True}
+result={'workspace':str(b),'cargo_target_dir':x['env']['CARGO_TARGET_DIR'],'lean_path':roots,'source':'actual loaded-module list in final NIW_L160 scan, first matching recorded LEAN_PATH path','modules':len(scan),'closure_files':files,'own_objects':objects,'tools':tools,'removed_own_solver_temporary_files':removed,'disk_free_bytes':shutil.disk_usage(b).free,'retained':['NIW_seed','NIW_objects','NIW_target','NIW_native','all host attempt directories'],'no_workspace_or_cache_deleted':True}
 (b/'NIW_RETENTION.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result))
 '''
 code='B='+repr(B)+'\n'+code

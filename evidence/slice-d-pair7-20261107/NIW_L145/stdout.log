@@ -1,0 +1,43 @@
+NIW_generated/NIW_AlignHighPostBoundary.lean:12:0: warning: automatically included section variable(s) unused in theorem `AspisR1.NIW_AlignHighPostBoundary.observed`:
+  [FIo_Native.Allocation]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [FIo_Native.Allocation] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+NIW_generated/NIW_AlignHighPostBoundary.lean:37:16: error: Tactic `assumption` failed
+
+case Ok.fail
+inst✝ : FIo_Native.Allocation
+c : Context
+w : Ref W
+parts : Parts
+hf : NHI_TensorOuterStep.Factors w.value
+c0 : canonical c.ap0.value
+c1 : canonical c.ap1.value
+cp : canonical parts
+values : Powers
+err : Error
+call : FIo_Native.weights.shared_high values w.value c.ap0.value c.ap1.value parts = fail err
+⊢ Post parts (Call c w parts (core.result.Result.Ok values))
+NIW_generated/NIW_AlignHighPostBoundary.lean:38:11: error: Tactic `assumption` failed
+
+case Ok.div
+inst✝ : FIo_Native.Allocation
+c : Context
+w : Ref W
+parts : Parts
+hf : NHI_TensorOuterStep.Factors w.value
+c0 : canonical c.ap0.value
+c1 : canonical c.ap1.value
+cp : canonical parts
+values : Powers
+call : FIo_Native.weights.shared_high values w.value c.ap0.value c.ap1.value parts = div
+⊢ Post parts (Call c w parts (core.result.Result.Ok values))
+NIW_generated/NIW_AlignHighPostBoundary.lean:41:3: error: Type mismatch
+  NIG_PairFrames.high values w.value c.ap0.value c.ap1.value parts after hf c0 c1 cp returned call
+has type
+  NIG_PairFrames.canon after ∧ NHX_HighPost.Frame parts after
+but is expected to have type
+  Post parts (Call c w parts (core.result.Result.Ok values))
+'AspisR1.NIW_AlignHighPostBoundary.observed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIW_AlignHighPostBoundary.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
