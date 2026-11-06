@@ -59,9 +59,9 @@ elif kind=='export':
  files['NJZ_export.py']=(E/'NJZ_export.py').read_text();files['NJZ_MODULES.json']=(E/'NJZ_MODULES.json').read_text();sources=list(files);command=['python3','NJZ_export.py']
 elif kind=='metadata':
  files['NJZ_capture_graph.py']=(E/'NJZ_capture_graph.py').read_text();files['NJZ_EXPECTED_GRAPH_HASHES.json']=(E/'NJZ_EXPECTED_GRAPH_HASHES.json').read_text();sources=list(files);command=['python3','NJZ_capture_graph.py']
-elif kind in ['extract','preflight']:
- for n in ['NJZ_extract.py','NJZ_NHR_stage.py','NJZ_EXTRACT_OPACITY.json','NJZ_EXTRACT_INPUT_PINS.json']:files[n]=(E/n).read_text()
- sources=list(files);command=['python3','NJZ_extract.py']+(['--preflight'] if kind=='preflight' else [])
+elif kind=='extract':
+ for n in ['NJZ_extract.py','NJZ_FROZEN_INPUTS.json']:files[n]=(E/n).read_text()
+ sources=list(files);command=['python3','NJZ_extract.py']
 elif kind=='kani':
  files['NJZ_gate.py']=(E/'NJZ_gate.py').read_text()
  for n,t in json.loads((E/'NJZ_NATIVE_INPUTS.json').read_text()).items():files['NJZ_src/'+n]=t
@@ -150,7 +150,7 @@ if {kind!r}=='tools': names += ['NJZ_TOOL_PINS.json']
 if {kind!r}=='stage': names += ['NJZ_STAGE.json']
 if {kind!r}=='export': names += ['NJZ_EXPORT.json','NJZ_CLOSURE_PINS.json.sha256']
 if {kind!r}=='metadata': names += ['NJZ_FULL_GRAPH.json.sha256','NJZ_ALL_CRATE_FEATURES.json']
-if {kind!r}=='extract': names += ['NJZ_EXTRACT_PINS.json','NJZ_EXTRACT_OUTPUTS.json.xz','NJZ_EXTRACT_OUTPUTS.json.sha256']
+if {kind!r}=='extract': names += ['NJZ_EXTRACT_PINS.json']
 if {kind!r}=='preflight': names += ['NJZ_PREFLIGHT_PINS.json','NJZ_PREFLIGHT_OUTPUTS.json.xz','NJZ_PREFLIGHT_OUTPUTS.json.sha256']
 if {kind!r}=='kani': names += [str(p.relative_to(b)) for p in b.glob(a+'-graph*')]+[str(p.relative_to(b)) for p in b.glob(a+'-source*')]+[str(p.relative_to(b)) for p in b.glob(a+'-lock*')]
 if {kind!r}=='audit':names += [str(p.relative_to(b)) for p in (b/'NJZ_audit'/{target!r}).rglob('*') if p.is_file()]+[str(p.relative_to(b)) for modepath in (b/'NJZ_audit'/{target!r}).glob('*.json') for row in json.loads(modepath.read_text()).get('results',[]) for p in [b/('NEP_'+modepath.stem+'_'+row['root']+'_REACHABLE.txt')] if p.exists()]+([n for n in ['NJZ_LOADED_scan.jsonl','NJZ_POOL_LOADED_scan.jsonl'] if (b/n).exists()])

@@ -51,8 +51,64 @@ theorem e_window (r : Fresh.R) (bound : r.at.val+32≤r.bytes.val.length) :
   _ (NJC_ConcreteUnwrap.source _) parseE r bound
  exact ⟨bytes,out,⟨contents,cursor,backing⟩,run⟩
 
+/-- Frozen K reader after CLOSED codec substitution on the SAME raw window.
+Both canonical and Checkpoint error replies retain the advanced Reader. -/
+theorem k_source (r : Fresh.R) (bound : r.at.val+16≤r.bytes.val.length) :
+ ∃ bytes : Array U8 16#usize, ∃ out : Fresh.R,
+ RawCut 16#usize r out bytes ∧
+ k r=ok (unInner unK (NJC_ReaderResults.naturalK bytes),out) := by
+ obtain ⟨bytes,out,cut,run⟩ := raw_cut 16#usize r bound
+ refine ⟨bytes,out,cut,?_⟩
+ unfold k NJC_ReaderEmission.verifier.Reader.k
+ unfold NJC_ConcreteUnwrap.raw at run
+ rw [run]
+ simp only [bind_tc_ok]
+ change (do let value ← parseK bytes.to_slice
+            let reply ← NJC_ReaderEmission.core.option.Option.ok_or value
+              NID_ResumeEmission.verifier.Error.Checkpoint
+            ok (reply,out))=_
+ have codec := NJC_ReaderResults.decodeK bytes
+ cases h : OraclePortCkptAbi2Extracted.decode_k_spec bytes.to_slice with
+ | fail err => simp only [h,bind_tc_fail] at codec; cases codec
+ | div => simp only [h,bind_tc_div] at codec; cases codec
+ | ok value =>
+   simp only [h,bind_tc_ok] at codec
+   have valueEq := Result.ok.inj codec
+   cases value <;> simp only [CheckpointBytes3Reader.optionK] at valueEq <;>
+    simp [parseK,h,outer,NJC_ReaderEmission.core.option.Option.ok_or,
+      unInner,unError,←valueEq,Function.comp_def]
+
+/-- Frozen E reader after CLOSED codec substitution on the SAME raw window.
+Both canonical and Checkpoint error replies retain the advanced Reader. -/
+theorem e_source (r : Fresh.R) (bound : r.at.val+32≤r.bytes.val.length) :
+ ∃ bytes : Array U8 32#usize, ∃ out : Fresh.R,
+ RawCut 32#usize r out bytes ∧
+ e r=ok (unInner unE (NJC_EReaderResults.naturalE bytes),out) := by
+ obtain ⟨bytes,out,cut,run⟩ := raw_cut 32#usize r bound
+ refine ⟨bytes,out,cut,?_⟩
+ unfold e NJC_ReaderEmission.verifier.Reader.e
+ unfold NJC_ConcreteUnwrap.raw at run
+ rw [run]
+ simp only [bind_tc_ok]
+ change (do let value ← parseE bytes.to_slice
+            let reply ← NJC_ReaderEmission.core.option.Option.ok_or value
+              NID_ResumeEmission.verifier.Error.Checkpoint
+            ok (reply,out))=_
+ have codec := NJC_EReaderResults.decodeE bytes
+ cases h : OraclePortCkptAbi2Extracted.decode_e_spec bytes.to_slice with
+ | fail err => simp only [h,bind_tc_fail] at codec; cases codec
+ | div => simp only [h,bind_tc_div] at codec; cases codec
+ | ok value =>
+   simp only [h,bind_tc_ok] at codec
+   have valueEq := Result.ok.inj codec
+   cases value <;> simp only [CheckpointBytes3Reader.optionE] at valueEq <;>
+    simp [parseE,h,outer,NJC_ReaderEmission.core.option.Option.ok_or,
+      unInner,unError,←valueEq,Function.comp_def]
+
 #print axioms raw
 #print axioms raw_cut
 #print axioms k_window
 #print axioms e_window
+#print axioms k_source
+#print axioms e_source
 end NJZ_Readers

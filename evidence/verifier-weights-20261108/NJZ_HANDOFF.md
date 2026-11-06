@@ -12,3 +12,7 @@ Budgets: 90 Kani,100 Lean,1 extraction; serial admission by allowed:true AND exi
 Initial assumptions: all retained; none discharged, added or changed. Native semantic transport remains option-A reclassification. Retained cuts are inputs for review, not new row credit.
 
 Validation: source and receipt inspection only at this stage; no compilation or axioms result yet. Next deliverable: exact owned-row source inventory, copied NJW then NJR seed pins and focused Reader/echeck proof.
+
+## Stage 1
+
+NJZ_Readers.k_source/e_source compile at L006 with only propext/Classical.choice/Quot.sound. They substitute concrete codec maps into the emitted reader and retain full canonical-rejection Results, cursor and immutable backing frame on bounded inputs. This is a component result pending native-certificate revalidation and combined gates. L003 provides the earlier source/window component. L004 stages the frozen scratch. NJZ_K004 timed out; excluded and split, not rerun.
