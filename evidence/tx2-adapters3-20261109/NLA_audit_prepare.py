@@ -1,7 +1,7 @@
 from pathlib import Path
 import json,re,lzma,hashlib,difflib
 E=Path(__file__).resolve().parent
-mods=['NLA_RootPrefix','NLA_LaneStep','NLA_DataPrefix','NLA_OwnedData','NLA_AllocationPrefix','NLA_PdaStatus']
+mods=['NLA_RootPrefix','NLA_LaneStep','NLA_DataPrefix','NLA_OwnedData','NLA_AllocationPrefix','NLA_PdaStatus','NLA_LaneAssemble']
 roots=['AspisR1.RPx_Deployed.deployed']
 roots+=json.loads((E.parent/'tx2-adapters2-20261108/NKP_AUDIT_ROOTS.json').read_text())['groups'][0][1:]
 new=[]
