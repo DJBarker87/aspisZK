@@ -1,0 +1,50 @@
+{"attempt": "NLH_L051", "exit_status": 1, "wall_seconds": 20.160979776177555, "peak_rss_kib": "6468460", "swaps": "0", "print_axioms": ["'AspisR1.NLH_TermComposeTail.variant_source' does not depend on any axioms", "'AspisR1.NLH_TermComposeTail.hcolumn' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NLH_TermComposeTail.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLH_TermComposeTail.lean:96:12: warning: 'scalar_tac' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLH_TermComposeTail.lean:96:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NLH_TermComposeTail.lean:130:1: error: Type mismatch: After simplification, term
+  mapped
+ has type
+  @Eq (Result (core.result.Result NKR_TermTail.Carrier NKR_TermTail.Error))
+    (do
+      let x ← field.PreparedQm31Multiplier.new theta
+      let x_1 ← composition_parts_loop0 { iter := ↑sem.out } x copy.residual
+      let x ← composition_parts_loop1 { iter := ↑p.poseidon } x x_1
+      let 
+...
+ermTail.Error))
+    (do
+      let prepared_theta ← field.PreparedQm31Multiplier.new theta
+      let iter ← core.iter.traits.iterator.Iterator.rev.default ↑sem.out
+      let composition ← composition_parts_loop0 iter prepared_theta copy.residual
+      let iter1 ← core.iter.traits.iterator.Iterator.rev.default ↑p.poseidon
+      let composition1 ← composition_parts_loop1 iter1 prepared_theta composition
+      let i1 ← SELECTED_G_COLUMN
+      let q ← selected_claim claims 0#usize i1
+      ok (core.result.Result.Ok (composition1, p.z, p.mask, q, h1, copy.active)))
+    (ok (core.result.Result.Ok (comp, p.z, p.mask, g, h1, copy.active)))
+'AspisR1.NLH_TermComposeTail.variant_source' does not depend on any axioms
+'AspisR1.NLH_TermComposeTail.hcolumn' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLH_TermComposeTail.source : ∀ (pub : Public) (claims : Std.Array NQ 84#usize)
+  (point : Std.Array NQ 10#usize) (lambda chi theta : NQ),
+  NKR_DigestChildren.Domain pub →
+    canonical claims →
+      canonical point →
+        Canon lambda →
+          Canon chi →
+            Canon theta →
+              ↑pub.asset_id < 2147483647 →
+                ↑(core.option.Option.unwrap_or pub.withdrawal_amount 0#u32) < 2147483647 →
+                  ∃ out,
+                    run pub claims point lambda chi theta = ok (core.result.Result.Ok out) ∧
+                      Canon out.1 ∧
+                        Canon out.2.2.2.1 ∧
+                          Canon out.2.2.2.2.1 ∧ Canon out.2.2.2.2.2 ∧ canonical out.2.1 ∧ canonical out.2.2.1 :=
+fun pub claims point lambda chi theta hd hc hp hl hchi ht asset amount =>
+  sorry (NKR_TermGatherPoseidon.source claims point hc hp)
+'AspisR1.NLH_TermComposeTail.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r01fb55ab499d4ac59914c675ccd7dfe1.scope; invocation ID: 9a97d64e1dbb4c1db1c00fb5f391ab1c

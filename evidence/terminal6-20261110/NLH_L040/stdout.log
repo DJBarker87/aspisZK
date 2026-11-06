@@ -1,0 +1,99 @@
+theorem AspisR1.NLH_TermSemanticRoot.source : ∀ (pub : Public) (o : Openings) (s : Selectors),
+  NKR_DigestChildren.Domain pub →
+    canonical o.z →
+      canonical o.succ_z →
+        canonical o.xor12_z →
+          canonical s.high →
+            canonical s.low →
+              ↑pub.asset_id < 2147483647 →
+                ↑(core.option.Option.unwrap_or pub.withdrawal_amount 0#u32) < 2147483647 →
+                  ∃ p digests replies scalar,
+                    NKR_DigestWrapper.reference pub o s = ok digests ∧
+                      (∀ (g : Fin 2), Canon (digests g)) ∧
+                        NKR_TermSemanticCut.Trace pub o s (List.finRange 4) NKR_TermSemanticSource.zero p.occupancy ∧
+                          NKR_TermSemanticCut.DigestCut pub o s p.occupancy digests replies
+                              (NKR_TermSemanticCut.digestObservation pub o s p.occupancy p.packedDigests digests) ∧
+                            NKR_TermScalarCut.Cut pub o s p.packedDigests scalar
+                                (NKR_TermScalarCut.observations scalar) ∧
+                              scalar.out = p.out ∧
+                                NKR_TermSemanticCut.digest_reference p.occupancy digests = ok p.packedDigests ∧
+                                  reference pub o s = ok p.out ∧ semantic_packed pub o s = ok p.out :=
+fun pub o s hd hz hs hx hh hl asset amount =>
+  let ⟨p, parent⟩ := NKR_TermSemanticSource.source pub o s hd hz hs hx hh hl asset amount
+  let ⟨c, h✝⟩ := NKR_DigestRoot.source pub o s hd hz hh hl
+  let ⟨sums, h✝¹⟩ := h✝
+  let ⟨digests, h✝²⟩ := h✝¹
+  let ⟨old, h✝³⟩ := h✝²
+  let ⟨left✝, right✝⟩ := h✝³
+  let ⟨left✝¹, right✝¹⟩ := right✝
+  let ⟨left✝², right✝²⟩ := right✝¹
+  let ⟨left✝³, right✝³⟩ := right✝²
+  let ⟨dc, right✝⁴⟩ := right✝³
+  let ⟨cd, right✝⁵⟩ := right✝⁴
+  let ⟨oldCall, right✝⁶⟩ := right✝⁵
+  let ⟨cold, values⟩ := right✝⁶
+  have sameOld := ok.inj (Eq.trans (Eq.symm oldCall) p.digest_call);
+  have pairing := fun g =>
+    Eq.mpr (id (congrArg (fun _a => _a = NLH_TermDigestFrame.packed p.digests g) (values g)))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              (NJB_PackLinearity.pack fun j => FIw_ArrayValue.decoded _a (NJX_DigestGroups.index g j)) =
+                NLH_TermDigestFrame.packed p.digests g)
+            sameOld))
+        (Eq.refl (NJB_PackLinearity.pack fun j => FIw_ArrayValue.decoded p.digests (NJX_DigestGroups.index g j))));
+  let ⟨packed, h✝⁴⟩ :=
+    NLH_TermDigestFrame.source pub o s p.occupancy p.digests digests p.canonical_occupancy p.canonical_digests cd
+      pairing
+  let ⟨direct, right✝⁷⟩ := h✝⁴
+  let ⟨oldPacked, cp⟩ := right✝⁷
+  have samePacked := ok.inj (Eq.trans (Eq.symm oldPacked) p.packed_digest_call);
+  let ⟨replies, h✝⁵⟩ := NKR_TermSemanticCut.digest_source pub o s p.occupancy digests p.canonical_occupancy cd
+  let ⟨packed', h✝⁶⟩ := h✝⁵
+  let ⟨direct', right✝⁸⟩ := h✝⁶
+  let ⟨left✝⁴, right✝⁹⟩ := right✝⁸
+  let ⟨left✝⁵, right✝¹⁰⟩ := right✝⁹
+  let ⟨digestCut, right✝¹¹⟩ := right✝¹⁰
+  have samePacked' :=
+    ok.inj
+      (Eq.trans (Eq.symm direct')
+        (Eq.mp (congrArg (fun _a => NKR_TermSemanticCut.digest_reference p.occupancy digests = ok _a) samePacked)
+          direct));
+  let ⟨scalar, h✝⁷⟩ := NKR_TermScalarCut.source pub o s p.packedDigests hz hh hl p.canonical_packedDigests asset amount
+  let ⟨scalarCall, scalarCut⟩ := h✝⁷
+  have sameOut := ok.inj (Eq.trans (Eq.symm scalarCall) p.scalar_call);
+  have wrapper := dc;
+  Exists.intro p
+    (Exists.intro digests
+      (Exists.intro replies
+        (Exists.intro scalar
+          ⟨wrapper,
+            ⟨cd,
+              ⟨NKR_TermSemanticCut.prefix_source pub o s p,
+                ⟨Eq.mp
+                    (congrArg
+                      (fun _a =>
+                        NKR_TermSemanticCut.DigestCut pub o s p.occupancy digests replies
+                          (NKR_TermSemanticCut.digestObservation pub o s p.occupancy _a digests))
+                      samePacked')
+                    digestCut,
+                  ⟨scalarCut,
+                    ⟨sameOut,
+                      ⟨Eq.mp
+                          (congrArg (fun _a => NKR_TermSemanticCut.digest_reference p.occupancy digests = ok _a)
+                            samePacked)
+                          direct,
+                        ⟨of_eq_true
+                            (Eq.trans
+                              (congrFun'
+                                (congrArg Eq
+                                  (Eq.trans
+                                    (Eq.trans (congr (congrArg Bind.bind p.schedule_call) (funext ⋯))
+                                      (bind_tc_ok p.schedule fun y => ⋯))
+                                    (Eq.trans (Eq.trans (congrFun' ⋯ ⋯) (bind_tc_ok p.path ⋯))
+                                      (Eq.trans (Eq.trans ⋯ ⋯) (Eq.trans ⋯ ⋯)))))
+                                (ok p.out))
+                              (eq_self (ok p.out))),
+                          parent⟩⟩⟩⟩⟩⟩⟩⟩)))
+'AspisR1.NLH_TermSemanticRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]

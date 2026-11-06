@@ -1,0 +1,52 @@
+{"attempt": "NLH_L080", "exit_status": 1, "wall_seconds": 17.927389135817066, "peak_rss_kib": "6441788", "swaps": "0", "print_axioms": ["'AspisR1.NLH_CompGather0.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLH_CompGather0.lean:14:15: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  do
+    let y ← ok ?x
+    ?f y
+in the target expression
+  (match Event.gather 0, stage p base 0 with
+    | Event.amount, st =>
+      match pub.withdrawal_amount with
+      | none => ok (core.result.Result.Ok st)
+      | some a =>
+        if a = 0#u32 ∨ 1073741824 ≤ ↑a then
+          ok
+            (core.result.Result.Err
+              pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+        else ok (core.result.Result.Ok st)
+    | Event.validate, st => do
+      let r ← pool_v1.pair_forest_semantic_terminal.validate_transition pub
+      match
+...
+PreparedQm31Multiplier.mul st.prepared st.composition
+        let value ← product.add lane
+        ok
+            (core.result.Result.Ok
+              { openings := st.openings, mask := st.mask, selectors := st.selectors,
+                poseidonSelectors := st.poseidonSelectors, poseidon := st.poseidon, semantic := st.semantic, h := st.h,
+                copyVariant := st.copyVariant, copy := st.copy, prepared := st.prepared, composition := value,
+                remaining := rest, g := st.g })
+    | Event.g, st => do
+      let column ← pool_v1.pair_forest_semantic_terminal.SELECTED_G_COLUMN
+      let g ← pool_v1.pair_forest_semantic_terminal.selected_claim claims 0#usize column
+      ok
+          (core.result.Result.Ok
+            { openings := st.openings, mask := st.mask, selectors := st.selectors,
+              poseidonSelectors := st.poseidonSelectors, poseidon := st.poseidon, semantic := st.semantic, h := st.h,
+              copyVariant := st.copyVariant, copy := st.copy, prepared := st.prepared, composition := st.composition,
+              remaining := st.remaining, g := g })) =
+    ok (core.result.Result.Ok (stage p base 1))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.NLH_CompGather0.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r528e7d48ab0c4298b636e0109cc64295.scope; invocation ID: ea37a7e9fe104c05973585316b525a53

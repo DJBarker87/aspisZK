@@ -1,0 +1,146 @@
+theorem AspisR1.NLH_CompTailFold.source : ∀ (pub : Public) (claims : Std.Array NQ 84#usize)
+  (point : Std.Array NQ 10#usize) (lambda chi theta : NQ) (base : State),
+  NKR_DigestChildren.Domain pub →
+    canonical claims →
+      canonical point →
+        Canon lambda →
+          Canon chi →
+            Canon theta →
+              ↑pub.asset_id < 2147483647 →
+                ↑(core.option.Option.unwrap_or pub.withdrawal_amount 0#u32) < 2147483647 →
+                  ∃ final,
+                    NLH_RustCuts.Cuts (step pub claims point lambda chi theta) order base
+                        (ok (core.result.Result.Ok final)) order ∧
+                      NLH_TermComposeTail.run pub claims point lambda chi theta =
+                          ok (core.result.Result.Ok (returned final)) ∧
+                        Canon final.composition ∧
+                          canonical final.openings.z ∧
+                            canonical final.mask ∧ Canon final.g ∧ Canon final.h ∧ Canon final.copy.active :=
+fun pub claims point lambda chi theta base hd hc hp hl hchi ht asset amount =>
+  let ⟨p, h✝⟩ := NKR_TermGatherPoseidon.source claims point hc hp
+  let a := NLH_CompGathers.stage p base 4;
+  let b :=
+    { openings := a.openings, mask := a.mask, selectors := p.selectors, poseidonSelectors := a.poseidonSelectors,
+      poseidon := a.poseidon, semantic := a.semantic, h := a.h, copyVariant := a.copyVariant, copy := a.copy,
+      prepared := a.prepared, composition := a.composition, remaining := a.remaining, g := a.g };
+  let c :=
+    { openings := b.openings, mask := b.mask, selectors := b.selectors, poseidonSelectors := p.poseidonSelectors,
+      poseidon := b.poseidon, semantic := b.semantic, h := b.h, copyVariant := b.copyVariant, copy := b.copy,
+      prepared := b.prepared, composition := b.composition, remaining := b.remaining, g := b.g };
+  let d :=
+    { openings := c.openings, mask := c.mask, selectors := c.selectors, poseidonSelectors := c.poseidonSelectors,
+      poseidon := p.poseidon, semantic := c.semantic, h := c.h, copyVariant := c.copyVariant, copy := c.copy,
+      prepared := c.prepared, composition := c.composition, remaining := c.remaining, g := c.g };
+  have sSelectors := NLH_CompSelectors.selectors pub claims point lambda chi theta p a;
+  have sPoseidonSelectors := NLH_CompPoseidonSelectors.poseidon_selectors pub claims point lambda chi theta p b rfl;
+  have sPoseidon := NLH_CompPoseidon.step pub claims point lambda chi theta p c rfl rfl;
+  let ⟨semantic, h✝¹⟩ :=
+    NLH_CompSemantic.source pub claims point lambda chi theta d hd p.zCanonical p.succCanonical p.xorCanonical
+      p.selectorHigh p.selectorLow asset amount
+  let ⟨sSemantic, right✝⟩ := h✝¹
+  let ⟨cs, semanticCall⟩ := right✝
+  let e :=
+    { openings := d.openings, mask := d.mask, selectors := d.selectors, poseidonSelectors := d.poseidonSelectors,
+      poseidon := d.poseidon, semantic := semantic, h := d.h, copyVariant := d.copyVariant, copy := d.copy,
+      prepared := d.prepared, composition := d.composition, remaining := d.remaining, g := d.g };
+  let ⟨h, h✝²⟩ := NLH_CompH1.source pub claims point lambda chi theta e hc
+  let ⟨sH, right✝¹⟩ := h✝²
+  let ⟨ch, hCall⟩ := right✝¹
+  let f :=
+    { openings := e.openings, mask := e.mask, selectors := e.selectors, poseidonSelectors := e.poseidonSelectors,
+      poseidon := e.poseidon, semantic := e.semantic, h := h, copyVariant := e.copyVariant, copy := e.copy,
+      prepared := e.prepared, composition := e.composition, remaining := e.remaining, g := e.g };
+  let g :=
+    { openings := f.openings, mask := f.mask, selectors := f.selectors, poseidonSelectors := f.poseidonSelectors,
+      poseidon := f.poseidon, semantic := f.semantic, h := f.h, copyVariant := NLH_TermComposeTail.variant pub.variant,
+      copy := f.copy, prepared := f.prepared, composition := f.composition, remaining := f.remaining, g := f.g };
+  have sVariant := NLH_CompVariant.source pub claims point lambda chi theta f;
+  let ⟨copy, h✝³⟩ :=
+    NLH_CompCopy.source pub claims point lambda chi theta g p.zCanonical ch p.selectorHigh p.selectorLow hl hchi
+  let ⟨sCopy, right✝²⟩ := h✝³
+  let ⟨cr, right✝³⟩ := right✝²
+  let ⟨ca, copyCall⟩ := right✝³
+  let hstate :=
+    { openings := g.openings, mask := g.mask, selectors := g.selectors, poseidonSelectors := g.poseidonSelectors,
+      poseidon := g.poseidon, semantic := g.semantic, h := g.h, copyVariant := g.copyVariant, copy := copy,
+      prepared := g.prepared, composition := g.composition, remaining := g.remaining, g := g.g };
+  let ⟨prepared, h✝⁴⟩ := NLH_CompPrepared.source pub claims point lambda chi theta hstate ht
+  let ⟨sPrepared, right✝⁴⟩ := h✝⁴
+  let ⟨domain, preparedCall⟩ := right✝⁴
+  let preparedState :=
+    { openings := hstate.openings, mask := hstate.mask, selectors := hstate.selectors,
+      poseidonSelectors := hstate.poseidonSelectors, poseidon := hstate.poseidon, semantic := hstate.semantic,
+      h := hstate.h, copyVariant := hstate.copyVariant, copy := hstate.copy, prepared := prepared,
+      composition := copy.residual, remaining := (↑semantic).reverse ++ (↑p.poseidon).reverse, g := hstate.g };
+  have shape := fun ev mem =>
+    let ⟨i, h✝⁵⟩ := List.mem_map.mp mem
+    let ⟨left✝, right✝⁵⟩ := h✝⁵
+    Eq.ndrec (motive := fun ev => ev ∈ loopOrder → ∃ i, ev = Event.horner i) (fun mem => Exists.intro i rfl) right✝⁵
+      mem;
+  have length :=
+    id
+      (Eq.mpr
+        (id
+          (congr (congrArg Eq (Eq.trans (List.length_map Event.horner) List.length_finRange))
+            (Eq.trans List.length_append
+              (congr (congrArg HAdd.hAdd (Eq.trans List.length_reverse semantic.property))
+                (Eq.trans List.length_reverse p.poseidon.property)))))
+        (Eq.refl 28));
+  have remainingCanonical := fun x hx =>
+    Or.casesOn (List.mem_append.mp hx) (fun left => cs x (List.mem_reverse.mp left)) fun right =>
+      p.poseidonCanonical x (List.mem_reverse.mp right);
+  let ⟨composition, h✝⁶⟩ :=
+    NLH_CompHornerLoop.source pub claims point lambda chi theta loopOrder preparedState shape length ht cr
+      remainingCanonical domain
+  let ⟨loops, right✝⁶⟩ := h✝⁶
+  let ⟨cc, trace⟩ := right✝⁶
+  let beforeG :=
+    { openings := preparedState.openings, mask := preparedState.mask, selectors := preparedState.selectors,
+      poseidonSelectors := preparedState.poseidonSelectors, poseidon := preparedState.poseidon,
+      semantic := preparedState.semantic, h := preparedState.h, copyVariant := preparedState.copyVariant,
+      copy := preparedState.copy, prepared := preparedState.prepared, composition := composition, remaining := [],
+      g := preparedState.g };
+  let ⟨gv, h✝⁷⟩ := NLH_CompG.source pub claims point lambda chi theta beforeG hc
+  let ⟨sG, right✝⁷⟩ := h✝⁷
+  let ⟨cg, gCall⟩ := right✝⁷
+  let final :=
+    { openings := beforeG.openings, mask := beforeG.mask, selectors := beforeG.selectors,
+      poseidonSelectors := beforeG.poseidonSelectors, poseidon := beforeG.poseidon, semantic := beforeG.semantic,
+      h := beforeG.h, copyVariant := beforeG.copyVariant, copy := beforeG.copy, prepared := beforeG.prepared,
+      composition := beforeG.composition, remaining := beforeG.remaining, g := gv };
+  have head :=
+    id
+      (NLH_RustCuts.Cuts.next (NLH_CompGather0.step pub claims point lambda chi theta p base)
+        (NLH_RustCuts.Cuts.next (NLH_CompGather1.step pub claims point lambda chi theta p base)
+          (NLH_RustCuts.Cuts.next (NLH_CompGather2.step pub claims point lambda chi theta p base)
+            (NLH_RustCuts.Cuts.next (NLH_CompGather3.step pub claims point lambda chi theta p base)
+              (NLH_RustCuts.Cuts.next sSelectors
+                (NLH_RustCuts.Cuts.next sPoseidonSelectors
+                  (NLH_RustCuts.Cuts.next sPoseidon
+                    (NLH_RustCuts.Cuts.next sSemantic
+                      (NLH_RustCuts.Cuts.next sH (NLH_RustCuts.Cuts.next sVariant ⋯))))))))));
+  have start := Eq.refl (NLH_CompGathers.stage p base 0);
+  have endCut := NLH_RustCuts.Cuts.next sG (NLH_RustCuts.Cuts.nil final);
+  have complete :=
+    NLH_FoldAppend.rust
+      (NLH_FoldAppend.rust
+        (Eq.mp
+          (congrArg
+            (fun _a =>
+              NLH_RustCuts.Cuts (step pub claims point lambda chi theta) headOrder _a
+                (ok (core.result.Result.Ok preparedState)) headOrder)
+            start)
+          head)
+        loops)
+      endCut;
+  let ⟨oldPrepared, h✝⁸⟩ :=
+    NLH_TermHornerCut.source semantic p.poseidon theta copy.residual cs p.poseidonCanonical ht cr
+  let ⟨middle, h✝⁹⟩ := h✝⁸
+  let ⟨oldOut, h✝¹⁰⟩ := h✝⁹
+  let ⟨newCall, right✝⁸⟩ := h✝¹⁰
+  let ⟨left✝¹, right✝⁹⟩ := right✝⁸
+  let ⟨first, right✝¹⁰⟩ := right✝⁹
+  let ⟨second, right✝¹¹⟩ := right✝¹⁰
+  let ⟨bodyCall, right✝¹²⟩ := right✝¹¹
+  ⋯
+'AspisR1.NLH_CompTailFold.source' depends on axioms: [propext, Classical.choice, Quot.sound]

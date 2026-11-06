@@ -1,0 +1,11 @@
+{
+  "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "frozen_source": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs",
+  "frozen_sha256": "4e209947ac75532af1c7d79f339050aab6b57379fc3962e1df9ff5602087787e",
+  "frozen_body": "\n            let selected = core::array::from_fn(|i| claims[i / 28][i % 28]);\n            terminal_parts(\n                self.semantic(),\n                &selected,\n                alpha,\n                c.lambda,\n                c.chi,\n                c.theta,\n                &c.zc,\n                c.mu,\n            )\n            .map(|parts| parts.0)\n            .map_err(|_| Error::Public)\n        ",
+  "native_tail": "\n NLH_parts_oracle(public,selected,alpha,c.lambda,c.chi,c.theta,&c.zc,c.mu,l)\n .map(|parts|parts.0).map_err(|_|PrefixError::Public)\n",
+  "translation": "NLH_parts_oracle(\n                public,\n                selected,\n                alpha,\n                c.lambda,\n                c.chi,\n                c.theta,\n                &c.zc,\n                c.mu,l\n            )\n            .map(|parts| parts.0)\n            .map_err(|_| PrefixError::Public)\n        ",
+  "identity": true,
+  "scope": "SAME256 tail after gather and CLOSED255; full263 Rust Result including both Err variants, exact arguments, readonly frames and returned scalar. Not whole-parent credit by itself.",
+  "harness_sha256": "72b0c7a6c492481ffc44f3759900cec805bf222b8492d3485ba217565cef561a"
+}

@@ -1,0 +1,69 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
+@@ -2352,3 +2352,11 @@
+ #[cfg(kani)]
+ #[path="NLH_Composition_native.rs"]
+ mod NLH_composition_native;
++
++#[cfg(kani)]
++#[path="NLH_Leaves_native.rs"]
++mod NLH_leaves_native;
++
++#[cfg(kani)]
++#[path="NLH_Parts_native.rs"]
++mod NLH_parts_native;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NLH_Leaves_native.rs
+@@ -0,0 +1,28 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn NLH_leaf_words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
++macro_rules! NLH_leaf_array{($n:expr)=>{unsafe{core::mem::transmute::<[u32;4*$n],[QM31;$n]>(kani::any())}}}
++struct NLH_SelectorsLog{calls:usize,pick:usize,limb:usize,point:u32,reply:Selectors}
++fn NLH_selectors_oracle(point:&[QM31;10],l:&mut NLH_SelectorsLog)->alloc::boxed::Box<Selectors>{l.calls+=1;l.point=NLH_leaf_words(point[l.pick%10])[l.limb];alloc::boxed::Box::new(l.reply)}
++fn NLH_composition_selectors(point:&[QM31;10],l:&mut NLH_SelectorsLog)->alloc::boxed::Box<Selectors>{NLH_selectors_oracle(point,l)}
++#[kani::proof] #[kani::unwind(68)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NLH_composition_selectors_cut(){let point=NLH_leaf_array!(10);let high=NLH_leaf_array!(64);let low=NLH_leaf_array!(16);let pick:usize=kani::any();let limb:usize=kani::any();kani::assume(pick<64&&limb<4);let mut l=NLH_SelectorsLog{calls:0,pick,limb,point:0,reply:Selectors{high,low}};let out=NLH_composition_selectors(&point,&mut l);assert_eq!(l.calls,1);assert_eq!(l.point,NLH_leaf_words(point[pick%10])[limb]);assert_eq!(NLH_leaf_words(out.high[pick])[limb],NLH_leaf_words(high[pick])[limb]^if cfg!(NKR_invert){1}else{0});assert_eq!(NLH_leaf_words(out.low[pick%16])[limb],NLH_leaf_words(low[pick%16])[limb]);}
++struct NLH_PoseidonSelectorsLog{calls:usize,pick:usize,limb:usize,high:u32,low:u32,reply:StateOnlyPoseidonSelectors}
++fn NLH_poseidon_selectors_oracle(s:&Selectors,l:&mut NLH_PoseidonSelectorsLog)->StateOnlyPoseidonSelectors{l.calls+=1;l.high=NLH_leaf_words(s.high[l.pick])[l.limb];l.low=NLH_leaf_words(s.low[l.pick%16])[l.limb];l.reply}
++fn NLH_composition_poseidon_selectors(selectors:&Selectors,l:&mut NLH_PoseidonSelectorsLog)->StateOnlyPoseidonSelectors{NLH_poseidon_selectors_oracle(selectors,l)}
++#[kani::proof] #[kani::unwind(68)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NLH_composition_poseidon_selectors_cut(){let selectors=Selectors{high:NLH_leaf_array!(64),low:NLH_leaf_array!(16)};let block=NLH_leaf_array!(1)[0];let local=NLH_leaf_array!(16);let pick:usize=kani::any();let limb:usize=kani::any();kani::assume(pick<64&&limb<4);let mut l=NLH_PoseidonSelectorsLog{calls:0,pick,limb,high:0,low:0,reply:StateOnlyPoseidonSelectors{block,local}};let out=NLH_composition_poseidon_selectors(&selectors,&mut l);assert_eq!(l.calls,1);assert_eq!(l.high,NLH_leaf_words(selectors.high[pick])[limb]);assert_eq!(l.low,NLH_leaf_words(selectors.low[pick%16])[limb]);assert_eq!(NLH_leaf_words(out.block)[limb],NLH_leaf_words(block)[limb]^if cfg!(NKR_invert){1}else{0});assert_eq!(NLH_leaf_words(out.local[pick%16])[limb],NLH_leaf_words(local[pick%16])[limb]);}
++struct NLH_PreparedLog{calls:usize,theta:QM31,reply:PreparedQm31Multiplier}
++fn NLH_prepared_oracle(theta:QM31,l:&mut NLH_PreparedLog)->PreparedQm31Multiplier{l.calls+=1;l.theta=theta;l.reply}
++fn NLH_composition_prepared(theta:QM31,l:&mut NLH_PreparedLog)->PreparedQm31Multiplier{NLH_prepared_oracle(theta,l)}
++#[kani::proof] #[kani::unwind(5)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NLH_composition_prepared_cut(){let cache:[[u32;3];3]=kani::any();let reply=unsafe{core::mem::transmute::<[[u32;3];3],PreparedQm31Multiplier>(cache)};let theta=NLH_leaf_array!(1)[0];let row:usize=kani::any();let column:usize=kani::any();let limb:usize=kani::any();kani::assume(row<3&&column<3&&limb<4);let mut l=NLH_PreparedLog{calls:0,theta:QM31::ZERO,reply};let out=NLH_composition_prepared(theta,&mut l);let actual:[[u32;3];3]=unsafe{core::mem::transmute(out)};assert_eq!(l.calls,1);assert_eq!(NLH_leaf_words(l.theta)[limb],NLH_leaf_words(theta)[limb]);assert_eq!(actual[row][column],cache[row][column]^if cfg!(NKR_invert){1}else{0});}
++#[kani::proof] #[kani::unwind(5)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NLH_composition_selected_columns_cut(){let claims=NLH_leaf_array!(84);let which:bool=kani::any();let limb:usize=kani::any();kani::assume(limb<4);let column=if which{SELECTED_G_COLUMN}else{SELECTED_H1_COLUMN};let out=selected_claim(&claims,0,column);assert_eq!(column,if which{27}else{26});assert_eq!(NLH_leaf_words(out)[limb],NLH_leaf_words(claims[if which{27}else{26}])[limb]^if cfg!(NKR_invert){1}else{0});}
++#[kani::proof] #[kani::unwind(5)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NLH_composition_variant_cut(){let public_variant=if kani::any(){CompiledVariant::PrivateTransfer}else{CompiledVariant::Withdrawal};let out=copy_variant(public_variant);let actual=match out{PoolV1PairForestCompiledVariantV1::PrivateTransfer=>0u8,PoolV1PairForestCompiledVariantV1::Withdrawal=>1};let expected=match public_variant{CompiledVariant::PrivateTransfer=>0u8,CompiledVariant::Withdrawal=>1};assert_eq!(actual,expected^if cfg!(NKR_invert){1}else{0});}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NLH_Parts_native.rs
+@@ -0,0 +1,21 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn NLH_parts_words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
++macro_rules! NLH_parts_array{($n:expr)=>{unsafe{core::mem::transmute::<[u32;4*$n],[QM31;$n]>(kani::any())}}}
++fn NLH_parts_public<'a>(t:&'a PoolV1PairLatePublicStatementV1)->SemanticPublic<'a>{SemanticPublic{variant:if kani::any(){CompiledVariant::PrivateTransfer}else{CompiledVariant::Withdrawal},pool:kani::any(),deployment_domain:kani::any(),anchor:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},nullifier:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},asset_id:M31(kani::any()),recipient:if kani::any(){Some(unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())})}else{None},change:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},withdrawal_amount:if kani::any(){Some(kani::any())}else{None},transition:t}}
++fn NLH_parts_pubword(p:SemanticPublic<'_>,k:usize,b:usize,d:usize,t:usize)->u64{let source=&p.transition.live_snapshot;let after=&p.transition.candidate_afterstate;match k{0=>match p.variant{CompiledVariant::PrivateTransfer=>0,CompiledVariant::Withdrawal=>1},1=>p.pool[b]as u64,2=>p.deployment_domain[b]as u64,3=>p.anchor[d].0 as u64,4=>p.nullifier[d].0 as u64,5=>p.asset_id.0 as u64,6=>p.recipient.is_some()as u64,7=>p.recipient.map_or(0,|x|x[d].0 as u64),8=>p.change[d].0 as u64,9=>p.withdrawal_amount.is_some()as u64,10=>p.withdrawal_amount.map_or(0,|x|x as u64),11=>source.pool[b]as u64,12=>source.deployment_domain[b]as u64,13=>source.sequence,14=>source.next_pair_index,15=>source.current_root[d].0 as u64,16=>source.frontier[t][d].0 as u64,17=>after.next_pair_index,18=>after.next_root[d].0 as u64,19=>after.next_frontier[t][d].0 as u64,_=>unreachable!()}}
++
++type NLH_Child=(QM31,[QM31;16],[QM31;10],QM31,QM31,QM31);
++struct NLH_PartsLog{calls:usize,pick:usize,limb:usize,kind:usize,b:usize,d:usize,level:usize,public_word:u64,selected:u32,point:u32,lambda:QM31,chi:QM31,theta:QM31,reply:Result<NLH_Child,PoolV1PairForestSemanticTerminalErrorV1>}
++fn NLH_composition_oracle(public:SemanticPublic<'_>,claims:&[QM31;84],point:&[QM31;10],lambda:QM31,chi:QM31,theta:QM31,l:&mut NLH_PartsLog)->Result<NLH_Child,PoolV1PairForestSemanticTerminalErrorV1>{l.calls+=1;l.public_word=NLH_parts_pubword(public,l.kind,l.b,l.d,l.level);l.selected=NLH_parts_words(claims[l.pick])[l.limb];l.point=NLH_parts_words(point[l.pick%10])[l.limb];l.lambda=lambda;l.chi=chi;l.theta=theta;l.reply}
++fn NLH_terminal_composition(public:SemanticPublic<'_>,claims:&[QM31;84],point:&[QM31;10],lambda:QM31,chi:QM31,theta:QM31,l:&mut NLH_PartsLog)->Result<NLH_Child,PoolV1PairForestSemanticTerminalErrorV1>{NLH_composition_oracle(public,claims,point,lambda,chi,theta,l)}
++fn NLH_parts_channel(c:NLH_Child,channel:usize,pick:usize)->QM31{match channel{0=>c.0,1=>c.1[pick%16],2=>c.2[pick%10],3=>c.3,4=>c.4,5=>c.5,_=>unreachable!()}}
++#[kani::proof] #[kani::unwind(68)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NLH_terminal_composition_cut(){
++ let t:PoolV1PairLatePublicStatementV1=unsafe{core::mem::transmute::<[u8;core::mem::size_of::<PoolV1PairLatePublicStatementV1>()],PoolV1PairLatePublicStatementV1>(kani::any())};let public=NLH_parts_public(&t);let claims=NLH_parts_array!(84);let point=NLH_parts_array!(10);let lambda=NLH_parts_array!(1)[0];let chi=NLH_parts_array!(1)[0];let theta=NLH_parts_array!(1)[0];let pick:usize=kani::any();let limb:usize=kani::any();let kind:usize=kani::any();let b:usize=kani::any();let d:usize=kani::any();let level:usize=kani::any();let channel:usize=kani::any();kani::assume(pick<84&&limb<4&&kind<20&&b<32&&d<8&&level<20&&channel<6);
++ let error=if kani::any(){PoolV1PairForestSemanticTerminalErrorV1::InvalidPublicAmount}else{PoolV1PairForestSemanticTerminalErrorV1::InvalidAppendTransition};let reply=if kani::any(){Ok((NLH_parts_array!(1)[0],NLH_parts_array!(16),NLH_parts_array!(10),NLH_parts_array!(1)[0],NLH_parts_array!(1)[0],NLH_parts_array!(1)[0]))}else{Err(error)};
++ let expected=NLH_parts_pubword(public,kind,b,d,level);let mut l=NLH_PartsLog{calls:0,pick,limb,kind,b,d,level,public_word:0,selected:0,point:0,lambda:QM31::ZERO,chi:QM31::ZERO,theta:QM31::ZERO,reply};let out=NLH_terminal_composition(public,&claims,&point,lambda,chi,theta,&mut l);
++ assert_eq!(l.calls,1);assert_eq!(l.public_word,expected);assert_eq!(l.selected,NLH_parts_words(claims[pick])[limb]);assert_eq!(l.point,NLH_parts_words(point[pick%10])[limb]);assert_eq!(NLH_parts_words(l.lambda)[limb],NLH_parts_words(lambda)[limb]);assert_eq!(NLH_parts_words(l.chi)[limb],NLH_parts_words(chi)[limb]);assert_eq!(NLH_parts_words(l.theta)[limb],NLH_parts_words(theta)[limb]);
++ match(out,reply){(Ok(actual),Ok(expected))=>assert_eq!(NLH_parts_words(NLH_parts_channel(actual,channel,pick))[limb],NLH_parts_words(NLH_parts_channel(expected,channel,pick))[limb]^if cfg!(NKR_invert){1}else{0}),(Err(actual),Err(expected))=>assert_eq!(actual,if cfg!(NKR_invert){if expected==PoolV1PairForestSemanticTerminalErrorV1::InvalidPublicAmount{PoolV1PairForestSemanticTerminalErrorV1::InvalidAppendTransition}else{PoolV1PairForestSemanticTerminalErrorV1::InvalidPublicAmount}}else{expected}),_=>assert!(false)}
++}

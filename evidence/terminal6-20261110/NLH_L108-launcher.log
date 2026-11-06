@@ -1,0 +1,64 @@
+{"attempt": "NLH_L108", "exit_status": 1, "wall_seconds": 15.166996889049187, "peak_rss_kib": "6479892", "swaps": "0", "print_axioms": ["'AspisR1.NLH_PartsRoot.package' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NLH_PartsRoot.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLH_PartsRoot.lean:78:87: error: unsolved goals
+pub : Public
+claims : Std.Array NQ 84#usize
+point zc : Std.Array NQ 10#usize
+lambda chi theta mu : NQ
+hd : NKR_DigestChildren.Domain pub
+hc : canonical claims
+hp : canonical point
+hz : canonical zc
+hl : Canon lambda
+hchi : Canon chi
+ht : Canon theta
+hm : Canon mu
+asset : ↑pub.asset_id < 2147483647
+childResult : Result (core.result.Result NLH_CompositionState.State NLH_CompositionState.Error)
+w✝ : List NLH_CompositionState.Event
+left✝¹ :
+  NLH_RustCuts.Cuts (NLH_CompositionState.step pub claims point lambda chi theta) NLH_CompositionState.order
+    NLH_CompRun.initial childResult w✝
+left✝ : w✝ <+: NLH_CompositionState.order
+childCanonical : NLH_
+...
+H_CompRoot.projected div)));
+          have call :=
+            of_eq_true
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (Eq.trans
+                      (congrFun' (congrArg Bind.bind child) fun result =>
+                        match result with
+                        | core.result.Result.Err err => ok (core.result.Result.Err err)
+                        | core.result.Result.Ok child =>
+                          ok (core.result.Result.Ok { child := child, locals := initial.locals }))
+                      (bind_tc_div fun y =>
+                        match y with
+                        | core.result.Result.Err err => ok (core.result.Result.Err err)
+                        | core.result.Result.Ok child =>
+                          ok (core.result.Result.Ok { child := child, locals := initial.locals }))))
+                  div)
+                (eq_self div));
+          have cuts := NLH_RustCuts.Cuts.diverged call;
+          package pub claims point zc lambda chi theta mu div [Event.composition] cuts
+            (Eq.mpr
+              (id
+                (congrArg (fun _a => projected div = _a)
+                  (NLH_TermPartsFactor.source pub claims point lambda chi theta zc mu)))
+              (id
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        projected div = do
+                          let child ← _a
+                          NKR_TermTail.after zc point mu child)
+                      child))
+                  (Eq.refl (projected div)))))
+            True.intro)
+        (Eq.symm h) (Eq.refl childResult))
+    (Eq.refl childResult)
+'AspisR1.NLH_PartsRoot.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf992a7ddf5144e408d1955618c06dab3.scope; invocation ID: 7b2ee06e90554ead95dbc11ecf459992

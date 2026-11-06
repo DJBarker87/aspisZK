@@ -1,0 +1,35 @@
+{"attempt": "NLH_L045", "exit_status": 1, "wall_seconds": 13.019895894220099, "peak_rss_kib": "6159044", "swaps": "0", "print_axioms": ["'AspisR1.NLH_ScalarTail.cuts' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLH_ScalarTail.lean:16:53: error: unsolved goals
+pub : NKI_InitialPrefix.Public
+o : NKI_InitialPrefix.Openings
+s : NKI_InitialPrefix.Selectors
+before : NKR_TermScalarInvocation.Packed
+p : Packet pub o s before
+st : State
+hb : st.packed = before
+hl : st.locals = NLH_ScalarDefs.values p
+middle : State := { packed := st.packed, digests := st.digests, locals := st.locals, scalars := p.scalars }
+final : State := { packed := p.out, digests := middle.digests, locals := middle.locals, scalars := middle.scalars }
+call :
+  scalar_lanes pub.variant (core.option.Option.is_some pub.withdrawal_amount) (NLH_ScalarDefs.values p 3)
+      (NLH_ScalarDefs.values p 5) (NLH_ScalarDefs.values p 7) (NLH_ScalarDefs
+...
+NLH_ScalarTail.lean:16:53: error: unsolved goals
+pub : NKI_InitialPrefix.Public
+o : NKI_InitialPrefix.Openings
+s : NKI_InitialPrefix.Selectors
+before : NKR_TermScalarInvocation.Packed
+p : Packet pub o s before
+st : State
+hb : st.packed = before
+hl : st.locals = NLH_ScalarDefs.values p
+middle : State := { packed := st.packed, digests := st.digests, locals := st.locals, scalars := p.scalars }
+final : State := { packed := p.out, digests := middle.digests, locals := middle.locals, scalars := middle.scalars }
+call :
+  scalar_lanes pub.variant (core.option.Option.is_some pub.withdrawal_amount) (NLH_ScalarDefs.values p 3)
+      (NLH_ScalarDefs.values p 5) (NLH_ScalarDefs.values p 7) (NLH_ScalarDefs.values p 11) =
+    ok p.scalars
+⊢ ok { packed := st.packed, digests := st.digests, locals := NLH_ScalarDefs.values p, scalars := p.scalars } = ok middle
+'AspisR1.NLH_ScalarTail.cuts' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r276ac161591c4636a7162d89653320ea.scope; invocation ID: 96e0628ffedf43d0ae6e0ac620b425c6

@@ -1,0 +1,48 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
+@@ -2344,3 +2344,7 @@
+ #[cfg(kani)]
+ #[path="NLH_TermHorner_native.rs"]
+ mod NKR_horner_native;
++
++#[cfg(kani)]
++#[path="NLH_Forward_native.rs"]
++mod NLH_forward_native;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NLH_Forward_native.rs
+@@ -0,0 +1,35 @@
++use super::*;
++use aspis_core::state_only_prefix::r0::{Challenges,Error as PrefixError};
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn NLH_forward_words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
++macro_rules! NLH_forward_array{($n:expr)=>{unsafe{core::mem::transmute::<[u32;4*$n],[QM31;$n]>(kani::any())}}}
++fn NLH_forward_public<'a>(t:&'a PoolV1PairLatePublicStatementV1)->SemanticPublic<'a>{SemanticPublic{variant:if kani::any(){CompiledVariant::PrivateTransfer}else{CompiledVariant::Withdrawal},pool:kani::any(),deployment_domain:kani::any(),anchor:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},nullifier:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},asset_id:M31(kani::any()),recipient:if kani::any(){Some(unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())})}else{None},change:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},withdrawal_amount:if kani::any(){Some(kani::any())}else{None},transition:t}}
++fn NLH_forward_pubword(p:SemanticPublic<'_>,k:usize,b:usize,d:usize,t:usize)->u64{let source=&p.transition.live_snapshot;let after=&p.transition.candidate_afterstate;match k{0=>match p.variant{CompiledVariant::PrivateTransfer=>0,CompiledVariant::Withdrawal=>1},1=>p.pool[b]as u64,2=>p.deployment_domain[b]as u64,3=>p.anchor[d].0 as u64,4=>p.nullifier[d].0 as u64,5=>p.asset_id.0 as u64,6=>p.recipient.is_some()as u64,7=>p.recipient.map_or(0,|x|x[d].0 as u64),8=>p.change[d].0 as u64,9=>p.withdrawal_amount.is_some()as u64,10=>p.withdrawal_amount.map_or(0,|x|x as u64),11=>source.pool[b]as u64,12=>source.deployment_domain[b]as u64,13=>source.sequence,14=>source.next_pair_index,15=>source.current_root[d].0 as u64,16=>source.frontier[t][d].0 as u64,17=>after.next_pair_index,18=>after.next_root[d].0 as u64,19=>after.next_frontier[t][d].0 as u64,_=>unreachable!()}}
++
++type NLH_Output=(QM31,[QM31;16],[QM31;10],QM31);
++struct NLH_ForwardLog{calls:usize,pick:usize,limb:usize,kind:usize,b:usize,d:usize,level:usize,public_word:u64,selected_word:u32,point_word:u32,zc_word:u32,lambda:QM31,chi:QM31,theta:QM31,mu:QM31,reply:Result<NLH_Output,PoolV1PairForestSemanticTerminalErrorV1>}
++fn NLH_parts_oracle(public:SemanticPublic<'_>,selected:&[QM31;84],point:&[QM31;10],lambda:QM31,chi:QM31,theta:QM31,zc:&[QM31;10],mu:QM31,l:&mut NLH_ForwardLog)->Result<NLH_Output,PoolV1PairForestSemanticTerminalErrorV1>{
++ l.calls+=1;l.public_word=NLH_forward_pubword(public,l.kind,l.b,l.d,l.level);
++ l.selected_word=NLH_forward_words(selected[l.pick])[l.limb];l.point_word=NLH_forward_words(point[l.pick%10])[l.limb];l.zc_word=NLH_forward_words(zc[l.pick%10])[l.limb];l.lambda=lambda;l.chi=chi;l.theta=theta;l.mu=mu;l.reply
++}
++// Frozen terminal_qm31 continuation after SAME gather and CLOSED semantic255.
++fn NLH_terminal_forward(public:SemanticPublic<'_>,selected:&[QM31;84],alpha:&[QM31;10],c:&Challenges,l:&mut NLH_ForwardLog)->Result<QM31,PrefixError>{
++ NLH_parts_oracle(public,selected,alpha,c.lambda,c.chi,c.theta,&c.zc,c.mu,l)
++ .map(|parts|parts.0).map_err(|_|PrefixError::Public)
++}
++#[kani::proof] #[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NLH_terminal_forward_cut(){
++ let t:PoolV1PairLatePublicStatementV1=unsafe{core::mem::transmute::<[u8;core::mem::size_of::<PoolV1PairLatePublicStatementV1>()],PoolV1PairLatePublicStatementV1>(kani::any())};let public=NLH_forward_public(&t);
++ let selected=NLH_forward_array!(84);let point=NLH_forward_array!(10);let c=Challenges{lambda:NLH_forward_array!(1)[0],chi:NLH_forward_array!(1)[0],theta:NLH_forward_array!(1)[0],zc:NLH_forward_array!(10),mu:NLH_forward_array!(1)[0],eta:NLH_forward_array!(1)[0]};
++ let pick:usize=kani::any();let limb:usize=kani::any();let kind:usize=kani::any();let b:usize=kani::any();let d:usize=kani::any();let level:usize=kani::any();kani::assume(pick<84&&limb<4&&kind<20&&b<32&&d<8&&level<20);
++ let q=NLH_forward_array!(1)[0];let error=if kani::any(){PoolV1PairForestSemanticTerminalErrorV1::InvalidPublicAmount}else{PoolV1PairForestSemanticTerminalErrorV1::InvalidAppendTransition};let reply=if kani::any(){Ok((q,NLH_forward_array!(16),NLH_forward_array!(10),NLH_forward_array!(1)[0]))}else{Err(error)};
++ let public_word=NLH_forward_pubword(public,kind,b,d,level);let selected_word=NLH_forward_words(selected[pick])[limb];let point_word=NLH_forward_words(point[pick%10])[limb];let zc_word=NLH_forward_words(c.zc[pick%10])[limb];
++ let mut l=NLH_ForwardLog{calls:0,pick,limb,kind,b,d,level,public_word:0,selected_word:0,point_word:0,zc_word:0,lambda:QM31::ZERO,chi:QM31::ZERO,theta:QM31::ZERO,mu:QM31::ZERO,reply};
++ let out=NLH_terminal_forward(public,&selected,&point,&c,&mut l);
++ assert_eq!(l.calls,1);assert_eq!(l.public_word,public_word);assert_eq!(l.selected_word,selected_word);assert_eq!(l.point_word,point_word);assert_eq!(l.zc_word,zc_word);
++ assert_eq!(NLH_forward_words(l.lambda)[limb],NLH_forward_words(c.lambda)[limb]);assert_eq!(NLH_forward_words(l.chi)[limb],NLH_forward_words(c.chi)[limb]);assert_eq!(NLH_forward_words(l.theta)[limb],NLH_forward_words(c.theta)[limb]);assert_eq!(NLH_forward_words(l.mu)[limb],NLH_forward_words(c.mu)[limb]);
++ match(out,reply){(Ok(actual),Ok(parts))=>assert_eq!(NLH_forward_words(actual)[limb],NLH_forward_words(parts.0)[limb]^if cfg!(NKR_invert){1}else{0}),(Err(PrefixError::Public),Err(_))=>assert!(!cfg!(NKR_invert)),_=>assert!(false)}
++ // Readonly frame for every observed caller place.
++ assert_eq!(NLH_forward_words(selected[pick])[limb],selected_word);assert_eq!(NLH_forward_words(point[pick%10])[limb],point_word);assert_eq!(NLH_forward_words(c.zc[pick%10])[limb],zc_word);assert_eq!(NLH_forward_pubword(public,kind,b,d,level),public_word);
++}

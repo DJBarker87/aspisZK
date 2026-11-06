@@ -1,0 +1,313 @@
+theorem AspisR1.NLH_TermCompositionSource.source : ∀ (pub : Public) (claims : Std.Array NQ 84#usize)
+  (point : Std.Array NQ 10#usize) (lambda chi theta : NQ),
+  NKR_DigestChildren.Domain pub →
+    canonical claims →
+      canonical point →
+        Canon lambda →
+          Canon chi →
+            Canon theta →
+              ↑pub.asset_id < 2147483647 →
+                NLH_TermAmount.invalid pub.withdrawal_amount = true ∧
+                    composition_parts pub claims point lambda chi theta =
+                      ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount) ∨
+                  ∃ out,
+                    NLH_TermAmount.invalid pub.withdrawal_amount = false ∧
+                      composition_parts pub claims point lambda chi theta = validated pub out ∧
+                        Canon out.1 ∧
+                          Canon out.2.2.2.1 ∧
+                            Canon out.2.2.2.2.1 ∧ Canon out.2.2.2.2.2 ∧ canonical out.2.1 ∧ canonical out.2.2.1 :=
+fun pub claims point lambda chi theta hd hc hp hl hchi ht asset =>
+  Bool.casesOn (motive := fun t =>
+    NLH_TermAmount.invalid pub.withdrawal_amount = t →
+      NLH_TermAmount.invalid pub.withdrawal_amount = true ∧
+          composition_parts pub claims point lambda chi theta =
+            ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount) ∨
+        ∃ out,
+          NLH_TermAmount.invalid pub.withdrawal_amount = false ∧
+            composition_parts pub claims point lambda chi theta = validated pub out ∧
+              Canon out.1 ∧
+                Canon out.2.2.2.1 ∧ Canon out.2.2.2.2.1 ∧ Canon out.2.2.2.2.2 ∧ canonical out.2.1 ∧ canonical out.2.2.1)
+    (NLH_TermAmount.invalid pub.withdrawal_amount)
+    (fun h =>
+      Eq.ndrec (motive := fun x =>
+        NLH_TermAmount.invalid pub.withdrawal_amount = x →
+          x = true ∧
+              composition_parts pub claims point lambda chi theta =
+                ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount) ∨
+            ∃ out,
+              x = false ∧
+                composition_parts pub claims point lambda chi theta = validated pub out ∧
+                  Canon out.1 ∧
+                    Canon out.2.2.2.1 ∧
+                      Canon out.2.2.2.2.1 ∧ Canon out.2.2.2.2.2 ∧ canonical out.2.1 ∧ canonical out.2.2.1)
+        (fun bad =>
+          have amount := NLH_TermAmount.canonical pub bad;
+          let ⟨out, h✝⟩ := NLH_TermComposeTail.source pub claims point lambda chi theta hd hc hp hl hchi ht asset amount
+          let ⟨tail, right✝⟩ := h✝
+          let ⟨cc, right✝¹⟩ := right✝
+          let ⟨cg, right✝²⟩ := right✝¹
+          let ⟨ch, right✝³⟩ := right✝²
+          let ⟨ca, right✝⁴⟩ := right✝³
+          let ⟨cz, cm⟩ := right✝⁴
+          Or.inr
+            (Exists.intro out
+              ⟨rfl,
+                ⟨Eq.mpr
+                    (id
+                      (congrArg (fun _a => _a = validated pub out)
+                        (NLH_TermCompositionFactor.source pub claims point lambda chi theta)))
+                    (id
+                      (id
+                        (Eq.mpr
+                          (id
+                            (congrArg
+                              (fun _a =>
+                                (do
+                                    let (_, invalid) ← _a
+                                    if invalid = true then
+                                        ok
+                                          (core.result.Result.Err
+                                            PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+                                      else do
+                                        let validation ← validate_transition pub
+                                        match validation with
+                                          | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                          | core.result.Result.Ok a =>
+                                            NLH_TermComposeTail.run pub claims point lambda chi theta) =
+                                  do
+                                  let result ← validate_transition pub
+                                  match result with
+                                    | core.result.Result.Err error => ok (core.result.Result.Err error)
+                                    | core.result.Result.Ok a => ok (core.result.Result.Ok out))
+                              (NLH_TermAmount.source pub)))
+                          (Eq.mpr
+                            (id
+                              (congrArg
+                                (fun _a =>
+                                  _a = do
+                                    let result ← validate_transition pub
+                                    match result with
+                                      | core.result.Result.Err error => ok (core.result.Result.Err error)
+                                      | core.result.Result.Ok a => ok (core.result.Result.Ok out))
+                                (bind_tc_ok (pub.withdrawal_amount, NLH_TermAmount.invalid pub.withdrawal_amount)
+                                  (uncurry fun _ invalid =>
+                                    if invalid = true then
+                                      ok
+                                        (core.result.Result.Err
+                                          PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+                                    else do
+                                      let validation ← validate_transition pub
+                                      match validation with
+                                        | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                        | core.result.Result.Ok a =>
+                                          NLH_TermComposeTail.run pub claims point lambda chi theta))))
+                            (Eq.mpr
+                              (id
+                                (congrFun'
+                                  (congrArg Eq
+                                    (ite_congr (Eq.trans (congrFun' (congrArg Eq bad) true) Bool.false_eq_true)
+                                      (fun a =>
+                                        Eq.refl
+                                          (ok
+                                            (core.result.Result.Err
+                                              PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)))
+                                      fun a =>
+                                      Eq.refl do
+                                        let validation ← validate_transition pub
+                                        match validation with
+                                          | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                          | core.result.Result.Ok a =>
+                                            NLH_TermComposeTail.run pub claims point lambda chi theta))
+                                  do
+                                  let result ← validate_transition pub
+                                  match result with
+                                    | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                    | core.result.Result.Ok a => ok (core.result.Result.Ok out)))
+                              (casesOn (motive := fun t =>
+                                validate_transition pub = t →
+                                  (do
+                                      let validation ← validate_transition pub
+                                      match validation with
+                                        | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                        | core.result.Result.Ok a =>
+                                          NLH_TermComposeTail.run pub claims point lambda chi theta) =
+                                    do
+                                    let result ← validate_transition pub
+                                    match result with
+                                      | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                      | core.result.Result.Ok a => ok (core.result.Result.Ok out))
+                                (validate_transition pub)
+                                (fun value h =>
+                                  Eq.ndrec (motive := fun x =>
+                                    validate_transition pub = x →
+                                      (do
+                                          let validation ← x
+                                          match validation with
+                                            | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                            | core.result.Result.Ok a =>
+                                              NLH_TermComposeTail.run pub claims point lambda chi theta) =
+                                        do
+                                        let result ← x
+                                        match result with
+                                          | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                          | core.result.Result.Ok a => ok (core.result.Result.Ok out))
+                                    (fun result =>
+                                      core.result.Result.casesOn (motive := fun t =>
+                                        value = t →
+                                          (do
+                                              let validation ← ok value
+                                              match validation with
+                                                | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                                | core.result.Result.Ok a =>
+                                                  NLH_TermComposeTail.run pub claims point lambda chi theta) =
+                                            do
+                                            let result ← ok value
+                                            match result with
+                                              | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                              | core.result.Result.Ok a => ok (core.result.Result.Ok out))
+                                        value
+                                        (fun a h =>
+                                          Eq.ndrec (motive := fun value =>
+                                            validate_transition pub = ok value →
+                                              (do
+                                                  let validation ← ok value
+                                                  match validation with
+                                                    | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                                    | core.result.Result.Ok a =>
+                                                      NLH_TermComposeTail.run pub claims point lambda chi theta) =
+                                                do
+                                                let result ← ok value
+                                                match result with
+                                                  | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                                  | core.result.Result.Ok a => ok (core.result.Result.Ok out))
+                                            (fun result =>
+                                              of_eq_true
+                                                (Eq.trans
+                                                  (congr
+                                                    (congrArg Eq
+                                                      (Eq.trans
+                                                        (congrArg (Bind.bind (ok (core.result.Result.Ok a)))
+                                                          (funext fun validation =>
+                                                            congrArg
+                                                              (NLH_TermCompositionFactor.reference.match_1
+                                                                (fun validation =>
+                                                                  Result
+                                                                    (core.result.Result NKR_TermTail.Carrier
+                                                                      NKR_TermTail.Error))
+                                                                validation fun e => ok (core.result.Result.Err e))
+                                                              (funext fun a => tail)))
+                                                        (bind_tc_ok (core.result.Result.Ok a) fun y =>
+                                                          match y with
+                                                          | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                                          | core.result.Result.Ok a => ok (core.result.Result.Ok out))))
+                                                    (bind_tc_ok (core.result.Result.Ok a) fun y =>
+                                                      match y with
+                                                      | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                                      | core.result.Result.Ok a => ok (core.result.Result.Ok out)))
+                                                  (eq_self (ok (core.result.Result.Ok out)))))
+                                            (Eq.symm h) result)
+                                        (fun a h =>
+                                          Eq.ndrec (motive := fun value =>
+                                            validate_transition pub = ok value →
+                                              (do
+                                                  let validation ← ok value
+                                                  match validation with
+                                                    | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                                    | core.result.Result.Ok a =>
+                                                      NLH_TermComposeTail.run pub claims point lambda chi theta) =
+                                                do
+                                                let result ← ok value
+                                                match result with
+                                                  | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                                  | core.result.Result.Ok a => ok (core.result.Result.Ok out))
+                                            (fun result =>
+                                              of_eq_true
+                                                (Eq.trans
+                                                  (congr
+                                                    (congrArg Eq
+                                                      (Eq.trans
+                                                        (congrArg (Bind.bind (ok (core.result.Result.Err a)))
+                                                          (funext fun validation =>
+                                                            congrArg
+                                                              (NLH_TermCompositionFactor.reference.match_1
+                                                                (fun validation =>
+                                                                  Result
+                                                                    (core.result.Result NKR_TermTail.Carrier
+                                                                      NKR_TermTail.Error))
+                                                                validation fun e => ok (core.result.Result.Err e))
+                                                              (funext fun a => tail)))
+                                                        (bind_tc_ok (core.result.Result.Err a) fun y =>
+                                                          match y with
+                                                          | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                                          | core.result.Result.Ok a => ok (core.result.Result.Ok out))))
+                                                    (bind_tc_ok (core.result.Result.Err a) fun y =>
+                                                      match y with
+                                                      | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                                      | core.result.Result.Ok a => ok (core.result.Result.Ok out)))
+                                                  (eq_self (ok (core.result.Result.Err a)))))
+                                            (Eq.symm h) result)
+                                        (Eq.refl value))
+                                    (Eq.symm h) (Eq.refl (validate_transition pub)))
+                                (fun e h =>
+                                  Eq.ndrec (motive := fun x =>
+                                    validate_transition pub = x →
+                                      (do
+                                          let validation ← x
+                                          match validation with
+                                            | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                            | core.result.Result.Ok a =>
+                                              NLH_TermComposeTail.run pub claims point lambda chi theta) =
+                                        do
+                                        let result ← x
+                                        match result with
+                                          | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                          | core.result.Result.Ok a => ok (core.result.Result.Ok out))
+                                    (fun result =>
+                                      Eq.refl do
+                                        let validation ← fail e
+                                        match validation with
+                                          | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                          | core.result.Result.Ok a =>
+                                            NLH_TermComposeTail.run pub claims point lambda chi theta)
+                                    (Eq.symm h) (Eq.refl (validate_transition pub)))
+                                (fun h =>
+                                  Eq.ndrec (motive := fun x =>
+                                    validate_transition pub = x →
+                                      (do
+                                          let validation ← x
+                                          match validation with
+                                            | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                            | core.result.Result.Ok a =>
+                                              NLH_TermComposeTail.run pub claims point lambda chi theta) =
+                                        do
+                                        let result ← x
+                                        match result with
+                                          | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                          | core.result.Result.Ok a => ok (core.result.Result.Ok out))
+                                    (fun result =>
+                                      Eq.refl do
+                                        let validation ← div
+                                        match validation with
+                                          | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                          | core.result.Result.Ok a =>
+                                            NLH_TermComposeTail.run pub claims point lambda chi theta)
+                                    (Eq.symm h) (Eq.refl (validate_transition pub)))
+                                (Eq.refl (validate_transition pub)))))))),
+                  ⟨cc, ⟨cg, ⟨ch, ⟨ca, ⟨cz, cm⟩⟩⟩⟩⟩⟩⟩))
+        (Eq.symm h) (Eq.refl (NLH_TermAmount.invalid pub.withdrawal_amount)))
+    (fun h =>
+      Eq.ndrec (motive := fun x =>
+        NLH_TermAmount.invalid pub.withdrawal_amount = x →
+          x = true ∧
+              composition_parts pub claims point lambda chi theta =
+                ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount) ∨
+            ∃ out,
+              x = false ∧
+                composition_parts pub claims point lambda chi theta = validated pub out ∧
+                  Canon out.1 ∧
+                    Canon out.2.2.2.1 ∧
+                      Canon out.2.2.2.2.1 ∧ Canon out.2.2.2.2.2 ∧ canonical out.2.1 ∧ canonical out.2.2.1)
+        (fun bad => Or.inl ⟨rfl, NLH_TermAmount.rejected pub claims point lambda chi theta bad⟩) (Eq.symm h)
+        (Eq.refl (NLH_TermAmount.invalid pub.withdrawal_amount)))
+    (Eq.refl (NLH_TermAmount.invalid pub.withdrawal_amount))
+'AspisR1.NLH_TermCompositionSource.source' depends on axioms: [propext, Classical.choice, Quot.sound]

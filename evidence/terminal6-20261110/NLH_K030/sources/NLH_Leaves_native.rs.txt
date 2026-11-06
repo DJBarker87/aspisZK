@@ -1,0 +1,28 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+fn NLH_leaf_words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
+macro_rules! NLH_leaf_array{($n:expr)=>{unsafe{core::mem::transmute::<[u32;4*$n],[QM31;$n]>(kani::any())}}}
+struct NLH_SelectorsLog{calls:usize,pick:usize,limb:usize,point:u32,reply:Selectors}
+fn NLH_selectors_oracle(point:&[QM31;10],l:&mut NLH_SelectorsLog)->alloc::boxed::Box<Selectors>{l.calls+=1;l.point=NLH_leaf_words(point[l.pick%10])[l.limb];alloc::boxed::Box::new(l.reply)}
+fn NLH_composition_selectors(point:&[QM31;10],l:&mut NLH_SelectorsLog)->alloc::boxed::Box<Selectors>{NLH_selectors_oracle(point,l)}
+#[kani::proof] #[kani::unwind(68)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NLH_composition_selectors_cut(){let point=NLH_leaf_array!(10);let high=NLH_leaf_array!(64);let low=NLH_leaf_array!(16);let pick:usize=kani::any();let limb:usize=kani::any();kani::assume(pick<64&&limb<4);let mut l=NLH_SelectorsLog{calls:0,pick,limb,point:0,reply:Selectors{high,low}};let out=NLH_composition_selectors(&point,&mut l);assert_eq!(l.calls,1);assert_eq!(l.point,NLH_leaf_words(point[pick%10])[limb]);assert_eq!(NLH_leaf_words(out.high[pick])[limb],NLH_leaf_words(high[pick])[limb]^if cfg!(NKR_invert){1}else{0});assert_eq!(NLH_leaf_words(out.low[pick%16])[limb],NLH_leaf_words(low[pick%16])[limb]);}
+struct NLH_PoseidonSelectorsLog{calls:usize,pick:usize,limb:usize,high:u32,low:u32,reply:StateOnlyPoseidonSelectors}
+fn NLH_poseidon_selectors_oracle(s:&Selectors,l:&mut NLH_PoseidonSelectorsLog)->StateOnlyPoseidonSelectors{l.calls+=1;l.high=NLH_leaf_words(s.high[l.pick])[l.limb];l.low=NLH_leaf_words(s.low[l.pick%16])[l.limb];l.reply}
+fn NLH_composition_poseidon_selectors(selectors:&Selectors,l:&mut NLH_PoseidonSelectorsLog)->StateOnlyPoseidonSelectors{NLH_poseidon_selectors_oracle(selectors,l)}
+#[kani::proof] #[kani::unwind(68)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NLH_composition_poseidon_selectors_cut(){let selectors=Selectors{high:NLH_leaf_array!(64),low:NLH_leaf_array!(16)};let block=NLH_leaf_array!(1)[0];let local=NLH_leaf_array!(16);let pick:usize=kani::any();let limb:usize=kani::any();kani::assume(pick<64&&limb<4);let mut l=NLH_PoseidonSelectorsLog{calls:0,pick,limb,high:0,low:0,reply:StateOnlyPoseidonSelectors{block,local}};let out=NLH_composition_poseidon_selectors(&selectors,&mut l);assert_eq!(l.calls,1);assert_eq!(l.high,NLH_leaf_words(selectors.high[pick])[limb]);assert_eq!(l.low,NLH_leaf_words(selectors.low[pick%16])[limb]);assert_eq!(NLH_leaf_words(out.block)[limb],NLH_leaf_words(block)[limb]^if cfg!(NKR_invert){1}else{0});assert_eq!(NLH_leaf_words(out.local[pick%16])[limb],NLH_leaf_words(local[pick%16])[limb]);}
+struct NLH_PreparedLog{calls:usize,theta:QM31,reply:PreparedQm31Multiplier}
+fn NLH_prepared_oracle(theta:QM31,l:&mut NLH_PreparedLog)->PreparedQm31Multiplier{l.calls+=1;l.theta=theta;l.reply}
+fn NLH_composition_prepared(theta:QM31,l:&mut NLH_PreparedLog)->PreparedQm31Multiplier{NLH_prepared_oracle(theta,l)}
+#[kani::proof] #[kani::unwind(5)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NLH_composition_prepared_cut(){let cache:[[u32;3];3]=kani::any();let reply=unsafe{core::mem::transmute::<[[u32;3];3],PreparedQm31Multiplier>(cache)};let theta=NLH_leaf_array!(1)[0];let row:usize=kani::any();let column:usize=kani::any();let limb:usize=kani::any();kani::assume(row<3&&column<3&&limb<4);let mut l=NLH_PreparedLog{calls:0,theta:QM31::ZERO,reply};let out=NLH_composition_prepared(theta,&mut l);let actual:[[u32;3];3]=unsafe{core::mem::transmute(out)};assert_eq!(l.calls,1);assert_eq!(NLH_leaf_words(l.theta)[limb],NLH_leaf_words(theta)[limb]);assert_eq!(actual[row][column],cache[row][column]^if cfg!(NKR_invert){1}else{0});}
+#[kani::proof] #[kani::unwind(5)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NLH_composition_selected_columns_cut(){let claims=NLH_leaf_array!(84);let which:bool=kani::any();let limb:usize=kani::any();kani::assume(limb<4);let column=if which{SELECTED_G_COLUMN}else{SELECTED_H1_COLUMN};let out=selected_claim(&claims,0,column);assert_eq!(column,if which{27}else{26});assert_eq!(NLH_leaf_words(out)[limb],NLH_leaf_words(claims[if which{27}else{26}])[limb]^if cfg!(NKR_invert){1}else{0});}
+#[kani::proof] #[kani::unwind(5)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NLH_composition_variant_cut(){let public_variant=if kani::any(){CompiledVariant::PrivateTransfer}else{CompiledVariant::Withdrawal};let out=copy_variant(public_variant);let actual=match out{PoolV1PairForestCompiledVariantV1::PrivateTransfer=>0u8,PoolV1PairForestCompiledVariantV1::Withdrawal=>1};let expected=match public_variant{CompiledVariant::PrivateTransfer=>0u8,CompiledVariant::Withdrawal=>1};assert_eq!(actual,expected^if cfg!(NKR_invert){1}else{0});}

@@ -1,0 +1,83 @@
+NLH_TermCompositionSource.lean:15:19: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Err` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `NFY_NEQ_CommonDecode.Err`
+  [apply] `NIJ_EntryStatus.Err`
+  [apply] `NIL_Carriers.Cohort.Err`
+  [apply] `NIL_Carriers.Fresh.Err`
+  [apply] `core.result.Result.Err`
+NLH_TermCompositionSource.lean:16:14: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Ok` could not be determined
+
+Hint: Using `core.result.Result.Ok would be unambiguous:
+  [apply] `core.result.Result.Ok`
+NLH_TermCompositionSource.lean:29:54: error(lean.unknownIdentifier): Unknown identifier `validated`
+
+Note: It is not possible to treat `validated` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+NLH_TermCompositionSource.lean:33:23: error: Application type mismatch: The argument
+  bad
+has type
+  NLH_TermAmount.invalid pub.withdrawal_amount = true
+but is expected to have type
+  true = true
+in the application
+  And.intro bad
+NLH_TermCompositionSource.lean:39:46: error(lean.unknownIdentifier): Unknown identifier `validated`
+theorem AspisR1.NLH_TermCompositionSource.source : ∀ (pub : Public) (claims : Std.Array NQ 84#usize)
+  (point : Std.Array NQ 10#usize) (lambda chi theta : NQ),
+  NKR_DigestChildren.Domain pub →
+    canonical claims →
+      canonical point →
+        Canon lambda →
+          Canon chi →
+            Canon theta →
+              ↑pub.asset_id < 2147483647 →
+                NLH_TermAmount.invalid pub.withdrawal_amount = true ∧
+                    composition_parts pub claims point lambda chi theta =
+                      ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount) ∨
+                  ∃ out,
+                    NLH_TermAmount.invalid pub.withdrawal_amount = false ∧
+                      composition_parts pub claims point lambda chi theta = sorry ∧
+                        Canon out.1 ∧
+                          Canon out.2.2.2.1 ∧
+                            Canon out.2.2.2.2.1 ∧ Canon out.2.2.2.2.2 ∧ canonical out.2.1 ∧ canonical out.2.2.1 :=
+fun pub claims point lambda chi theta hd hc hp hl hchi ht asset =>
+  Bool.casesOn (motive := fun t =>
+    NLH_TermAmount.invalid pub.withdrawal_amount = t →
+      NLH_TermAmount.invalid pub.withdrawal_amount = true ∧
+          composition_parts pub claims point lambda chi theta =
+            ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount) ∨
+        ∃ out,
+          NLH_TermAmount.invalid pub.withdrawal_amount = false ∧
+            composition_parts pub claims point lambda chi theta = sorry ∧
+              Canon out.1 ∧
+                Canon out.2.2.2.1 ∧ Canon out.2.2.2.2.1 ∧ Canon out.2.2.2.2.2 ∧ canonical out.2.1 ∧ canonical out.2.2.1)
+    (NLH_TermAmount.invalid pub.withdrawal_amount)
+    (fun h =>
+      Eq.ndrec (motive := fun x =>
+        NLH_TermAmount.invalid pub.withdrawal_amount = x →
+          x = true ∧
+              composition_parts pub claims point lambda chi theta =
+                ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount) ∨
+            ∃ out,
+              x = false ∧
+                composition_parts pub claims point lambda chi theta = sorry ∧
+                  Canon out.1 ∧
+                    Canon out.2.2.2.1 ∧
+                      Canon out.2.2.2.2.1 ∧ Canon out.2.2.2.2.2 ∧ canonical out.2.1 ∧ canonical out.2.2.1)
+        (fun bad => sorry) (Eq.symm h) (Eq.refl (NLH_TermAmount.invalid pub.withdrawal_amount)))
+    (fun h =>
+      Eq.ndrec (motive := fun x =>
+        NLH_TermAmount.invalid pub.withdrawal_amount = x →
+          x = true ∧
+              composition_parts pub claims point lambda chi theta =
+                ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount) ∨
+            ∃ out,
+              x = false ∧
+                composition_parts pub claims point lambda chi theta = sorry ∧
+                  Canon out.1 ∧
+                    Canon out.2.2.2.1 ∧
+                      Canon out.2.2.2.2.1 ∧ Canon out.2.2.2.2.2 ∧ canonical out.2.1 ∧ canonical out.2.2.1)
+        (fun bad => Or.inl ⟨sorry, NLH_TermAmount.rejected pub claims point lambda chi theta bad⟩) (Eq.symm h)
+        (Eq.refl (NLH_TermAmount.invalid pub.withdrawal_amount)))
+    (Eq.refl (NLH_TermAmount.invalid pub.withdrawal_amount))
+'AspisR1.NLH_TermCompositionSource.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

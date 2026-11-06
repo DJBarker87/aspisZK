@@ -1,0 +1,538 @@
+NLH_WrapperRoot.lean:105:32: error: unsolved goals
+pub : r0.Public
+claims : Claims
+point : Std.Array NQ 10#usize
+c : Challenges
+hd : NKR_DigestChildren.Domain (NKR_TermPublic.value pub)
+hc : ∀ row ∈ ↑claims, canonical row
+hp : canonical point
+hz : canonical c.zc
+hl : Canon c.lambda
+hchi : Canon c.chi
+ht : Canon c.theta
+hm : Canon c.mu
+asset : ↑(NKR_TermPublic.value pub).asset_id < 2147483647
+selected : Std.Array NQ 84#usize
+gathers :
+  NLH_RustCuts.Cuts (step pub claims point c) (List.map Event.gather (List.finRange 84)) (initial pub)
+    (ok (core.result.Result.Ok (NLH_WrapperGathers.stage claims (initial pub) 84)))
+    (List.map Event.gather (List.finRange 84))
+cs : canonical selected
+sameSelected : (NLH_WrapperGathers.stage claims (initial pub) 84).selected = selected
+gatherCall :
+  array_from_fn_copy 84#usize field.QM31.Insts.CoreMarkerCopy NLH_TermSelected.builder field.QM31.ZERO claims =
+    ok selected
+start : NLH_WrapperGathers.stage claims (initial pub) 0 = initial pub
+beforePublic : State := NLH_WrapperGathers.stage claims (initial pub) 84
+afterPublic : State :=
+  { selected := beforePublic.selected, semanticPublic := NKR_TermPublic.value pub, parts := beforePublic.parts }
+publicCall :
+  step pub claims point c Event.semantic beforePublic =
+    ok
+      (core.result.Result.Ok
+        { selected := beforePublic.selected, semanticPublic := NKR_TermPublic.value pub, parts := beforePublic.parts })
+selected' : Std.Array NQ 84#usize
+gather' :
+  array_from_fn_copy 84#usize field.QM31.Insts.CoreMarkerCopy NLH_TermSelected.builder field.QM31.ZERO claims =
+    ok selected'
+left✝² : canonical selected'
+wrapper : pub.terminal_qm31 claims point c = NLH_TermWrapperFactor.reference pub selected point c
+unique : selected' = selected
+partsResult : Result (core.result.Result NLH_PartsState.State NKR_TermTail.Error)
+w✝ : List NLH_PartsState.Event
+left✝¹ :
+  NLH_RustCuts.Cuts (NLH_PartsState.step (NKR_TermPublic.value pub) selected point c.zc c.lambda c.chi c.theta c.mu)
+    NLH_PartsState.order NLH_PartsRoot.initial partsResult w✝
+left✝ : w✝ <+: NLH_PartsState.order
+partsCanonical : NLH_PartsRoot.Canonical partsResult
+partsEq :
+  NLH_PartsRoot.projected partsResult =
+    terminal_parts (NKR_TermPublic.value pub) selected point c.lambda c.chi c.theta c.zc c.mu
+right✝ :
+  NLH_PartsRoot.reference (NKR_TermPublic.value pub) selected point c.zc c.lambda c.chi c.theta c.mu =
+    terminal_parts (NKR_TermPublic.value pub) selected point c.lambda c.chi c.theta c.zc c.mu
+partsState : NLH_PartsState.State
+resultEq : partsResult = ok (core.result.Result.Ok partsState)
+parts : NKR_TermTail.Output := NLH_PartsState.returned partsState
+child :
+  terminal_parts (NKR_TermPublic.value pub) selected point c.lambda c.chi c.theta c.zc c.mu =
+    ok (core.result.Result.Ok parts)
+called :
+  terminal_parts (NKR_TermPublic.value pub) beforePublic.selected point c.lambda c.chi c.theta c.zc c.mu =
+    ok (core.result.Result.Ok parts)
+final : State := { selected := afterPublic.selected, semanticPublic := afterPublic.semanticPublic, parts := parts }
+⊢ ok
+      (core.result.Result.Ok
+        { selected := beforePublic.selected, semanticPublic := NKR_TermPublic.value pub, parts := parts }) =
+    ok (core.result.Result.Ok final)
+NLH_WrapperRoot.lean:68:51: warning: This simp argument is unused:
+  afterPublic
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵e̵p̵,̵a̵f̵t̵e̵r̵P̵u̵b̵l̵i̵c̵,̵c̵a̵l̵l̵e̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵f̵a̵i̵l̵]̵[̲s̲t̲e̲p̲,̲ ̲c̲a̲l̲l̲e̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲f̲a̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLH_WrapperRoot.lean:79:53: warning: This simp argument is unused:
+  afterPublic
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵e̵p̵,̵a̵f̵t̵e̵r̵P̵u̵b̵l̵i̵c̵,̵c̵a̵l̵l̵e̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵d̵i̵v̵]̵[̲s̲t̲e̲p̲,̲ ̲c̲a̲l̲l̲e̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲d̲i̲v̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLH_WrapperRoot.lean:92:55: warning: This simp argument is unused:
+  afterPublic
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵e̵p̵,̵a̵f̵t̵e̵r̵P̵u̵b̵l̵i̵c̵,̵c̵a̵l̵l̵e̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲s̲t̲e̲p̲,̲ ̲c̲a̲l̲l̲e̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLH_WrapperRoot.lean:105:51: warning: This simp argument is unused:
+  afterPublic
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵e̵p̵,̵a̵f̵t̵e̵r̵P̵u̵b̵l̵i̵c̵,̵c̵a̵l̵l̵e̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲s̲t̲e̲p̲,̲ ̲c̲a̲l̲l̲e̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NLH_WrapperRoot.package' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLH_WrapperRoot.source : ∀ (pub : r0.Public) (claims : Claims) (point : Std.Array NQ 10#usize)
+  (c : Challenges),
+  NKR_DigestChildren.Domain (NKR_TermPublic.value pub) →
+    (∀ row ∈ ↑claims, canonical row) →
+      canonical point →
+        canonical c.zc →
+          Canon c.lambda →
+            Canon c.chi →
+              Canon c.theta →
+                Canon c.mu →
+                  ↑(NKR_TermPublic.value pub).asset_id < 2147483647 →
+                    ∃ result events,
+                      NLH_RustCuts.Cuts (step pub claims point c) order (initial pub) result events ∧
+                        events <+: order ∧
+                          Canonical result ∧
+                            projected result = pub.terminal_qm31 claims point c ∧
+                              reference pub claims point c = pub.terminal_qm31 claims point c :=
+fun pub claims point c hd hc hp hz hl hchi ht hm asset =>
+  let ⟨selected, h✝⟩ := NLH_WrapperGathers.source pub claims point c (initial pub) hc
+  let ⟨gathers, right✝⟩ := h✝
+  let ⟨cs, right✝¹⟩ := right✝
+  let ⟨sameSelected, gatherCall⟩ := right✝¹
+  have start :=
+    id
+      (have cells :=
+        funext fun j =>
+          of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg Eq
+                  (ite_congr (source._simp_1 ↑j) (fun a => Eq.refl (selectedCell claims j)) fun a =>
+                    Eq.refl (NJB_ArrayCarrier.cell (initial pub).selected j)))
+                (NJB_ArrayCarrier.cell (initial pub).selected j))
+              (eq_self (NJB_ArrayCarrier.cell (initial pub).selected j)));
+      Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              { selected := NJB_ArrayCarrier.array _a, semanticPublic := (initial pub).semanticPublic,
+                  parts := (initial pub).parts } =
+                initial pub)
+            cells))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                { selected := _a, semanticPublic := (initial pub).semanticPublic, parts := (initial pub).parts } =
+                  initial pub)
+              (NJB_ArrayCarrier.array_cell (initial pub).selected)))
+          (Eq.refl
+            { selected := (initial pub).selected, semanticPublic := (initial pub).semanticPublic,
+              parts := (initial pub).parts })));
+  let beforePublic := NLH_WrapperGathers.stage claims (initial pub) 84;
+  let afterPublic :=
+    { selected := beforePublic.selected, semanticPublic := NKR_TermPublic.value pub, parts := beforePublic.parts };
+  have publicCall := semantic_step pub claims point c beforePublic;
+  let ⟨selected', h✝¹⟩ := NLH_TermWrapperFactor.source pub claims point c hc
+  let ⟨gather', right✝²⟩ := h✝¹
+  let ⟨left✝, wrapper⟩ := right✝²
+  have unique := ok.inj (Eq.trans (Eq.symm gather') gatherCall);
+  let ⟨partsResult, h✝²⟩ :=
+    NLH_PartsRoot.source (NKR_TermPublic.value pub) selected point c.zc c.lambda c.chi c.theta c.mu hd cs hp hz hl hchi
+      ht hm asset
+  let ⟨w✝, h✝³⟩ := h✝²
+  let ⟨left✝¹, right✝³⟩ := h✝³
+  let ⟨left✝², right✝⁴⟩ := right✝³
+  let ⟨partsCanonical, right✝⁵⟩ := right✝⁴
+  let ⟨partsEq, right✝⁶⟩ := right✝⁵
+  casesOn (motive := fun t =>
+    partsResult = t →
+      ∃ result events,
+        NLH_RustCuts.Cuts (step pub claims point c) order (initial pub) result events ∧
+          events <+: order ∧
+            Canonical result ∧
+              projected result = pub.terminal_qm31 claims point c ∧
+                reference pub claims point c = pub.terminal_qm31 claims point c)
+    partsResult
+    (fun r h =>
+      Eq.ndrec (motive := fun x =>
+        partsResult = x →
+          ∃ result events,
+            NLH_RustCuts.Cuts (step pub claims point c) order (initial pub) result events ∧
+              events <+: order ∧
+                Canonical result ∧
+                  projected result = pub.terminal_qm31 claims point c ∧
+                    reference pub claims point c = pub.terminal_qm31 claims point c)
+        (fun resultEq =>
+          core.result.Result.casesOn (motive := fun t =>
+            r = t →
+              ∃ result events,
+                NLH_RustCuts.Cuts (step pub claims point c) order (initial pub) result events ∧
+                  events <+: order ∧
+                    Canonical result ∧
+                      projected result = pub.terminal_qm31 claims point c ∧
+                        reference pub claims point c = pub.terminal_qm31 claims point c)
+            r
+            (fun partsState h =>
+              Eq.ndrec (motive := fun r =>
+                partsResult = ok r →
+                  ∃ result events,
+                    NLH_RustCuts.Cuts (step pub claims point c) order (initial pub) result events ∧
+                      events <+: order ∧
+                        Canonical result ∧
+                          projected result = pub.terminal_qm31 claims point c ∧
+                            reference pub claims point c = pub.terminal_qm31 claims point c)
+                (fun resultEq =>
+                  let parts := NLH_PartsState.returned partsState;
+                  have child :=
+                    Eq.mpr (id (congrArg (fun _a => _a = ok (core.result.Result.Ok parts)) (Eq.symm partsEq)))
+                      (Eq.mpr
+                        (id
+                          (congrArg (fun _a => NLH_PartsRoot.projected _a = ok (core.result.Result.Ok parts)) resultEq))
+                        (Eq.refl (NLH_PartsRoot.projected (ok (core.result.Result.Ok partsState)))));
+                  have called :=
+                    Eq.mpr
+                      (id
+                        (congrArg
+                          (fun _a =>
+                            terminal_parts (NKR_TermPublic.value pub) _a point c.lambda c.chi c.theta c.zc c.mu =
+                              ok (core.result.Result.Ok parts))
+                          sameSelected))
+                      child;
+                  let final :=
+                    { selected := afterPublic.selected, semanticPublic := afterPublic.semanticPublic, parts := parts };
+                  have suffix :=
+                    NLH_RustCuts.Cuts.next publicCall
+                      (NLH_RustCuts.Cuts.next
+                        (Eq.mpr
+                          (id
+                            (congrFun'
+                              (congrArg Eq
+                                (Eq.trans
+                                  (congrFun' (congrArg Bind.bind called) fun r =>
+                                    match r with
+                                    | core.result.Result.Err a =>
+                                      ok (core.result.Result.Err state_only_prefix.r0.Error.Public)
+                                    | core.result.Result.Ok parts =>
+                                      ok
+                                        (core.result.Result.Ok
+                                          { selected := beforePublic.selected,
+                                            semanticPublic := NKR_TermPublic.value pub, parts := parts }))
+                                  (bind_tc_ok (core.result.Result.Ok parts) fun y =>
+                                    match y with
+                                    | core.result.Result.Err a =>
+                                      ok (core.result.Result.Err state_only_prefix.r0.Error.Public)
+                                    | core.result.Result.Ok parts =>
+                                      ok
+                                        (core.result.Result.Ok
+                                          { selected := beforePublic.selected,
+                                            semanticPublic := NKR_TermPublic.value pub, parts := parts }))))
+                              (ok (core.result.Result.Ok final))))
+                          sorry)
+                        (NLH_RustCuts.Cuts.nil final));
+                  have cuts :=
+                    NLH_FoldAppend.rust
+                      (Eq.mp
+                        (congrArg
+                          (fun _a =>
+                            NLH_RustCuts.Cuts (step pub claims point c) (List.map Event.gather (List.finRange 84)) _a
+                              (ok (core.result.Result.Ok (NLH_WrapperGathers.stage claims (initial pub) 84)))
+                              (List.map Event.gather (List.finRange 84)))
+                          start)
+                        gathers)
+                      suffix;
+                  package pub claims point c (ok (core.result.Result.Ok final))
+                    (List.map Event.gather (List.finRange 84) ++ [Event.semantic, Event.parts]) cuts
+                    (Eq.mpr
+                      (id
+                        (congrArg (fun _a => projected (ok (core.result.Result.Ok final)) = _a)
+                          (Eq.mp
+                            (congrArg
+                              (fun _a =>
+                                pub.terminal_qm31 claims point c = NLH_TermWrapperFactor.reference pub _a point c)
+                              unique)
+                            wrapper)))
+                      (id
+                        (Eq.mpr
+                          (id
+                            (congrArg
+                              (fun _a =>
+                                projected (ok (core.result.Result.Ok final)) = do
+                                  let parts ← _a
+                                  NLH_TermWrapperFactor.after parts)
+                              child))
+                          (Eq.refl (projected (ok (core.result.Result.Ok final)))))))
+                    (have canon :=
+                      Eq.mpr (id (congrArg (fun _a => NLH_PartsRoot.Canonical _a) (Eq.symm resultEq))) partsCanonical;
+                    canon.left))
+                (Eq.symm h) resultEq)
+            (fun err h =>
+              Eq.ndrec (motive := fun r =>
+                partsResult = ok r →
+                  ∃ result events,
+                    NLH_RustCuts.Cuts (step pub claims point c) order (initial pub) result events ∧
+                      events <+: order ∧
+                        Canonical result ∧
+                          projected result = pub.terminal_qm31 claims point c ∧
+                            reference pub claims point c = pub.terminal_qm31 claims point c)
+                (fun resultEq =>
+                  have child :=
+                    Eq.mpr (id (congrArg (fun _a => _a = ok (core.result.Result.Err err)) (Eq.symm partsEq)))
+                      (Eq.mpr
+                        (id
+                          (congrArg (fun _a => NLH_PartsRoot.projected _a = ok (core.result.Result.Err err)) resultEq))
+                        (Eq.refl (NLH_PartsRoot.projected (ok (core.result.Result.Err err)))));
+                  have called :=
+                    Eq.mpr
+                      (id
+                        (congrArg
+                          (fun _a =>
+                            terminal_parts (NKR_TermPublic.value pub) _a point c.lambda c.chi c.theta c.zc c.mu =
+                              ok (core.result.Result.Err err))
+                          sameSelected))
+                      child;
+                  have suffix :=
+                    NLH_RustCuts.Cuts.next publicCall
+                      (NLH_RustCuts.Cuts.returned
+                        (of_eq_true
+                          (Eq.trans
+                            (congrFun'
+                              (congrArg Eq
+                                (Eq.trans
+                                  (congrFun' (congrArg Bind.bind called) fun r =>
+                                    match r with
+                                    | core.result.Result.Err a =>
+                                      ok (core.result.Result.Err state_only_prefix.r0.Error.Public)
+                                    | core.result.Result.Ok parts =>
+                                      ok
+                                        (core.result.Result.Ok
+                                          { selected := beforePublic.selected,
+                                            semanticPublic := NKR_TermPublic.value pub, parts := parts }))
+                                  (bind_tc_ok (core.result.Result.Err err) fun y =>
+                                    match y with
+                                    | core.result.Result.Err a =>
+                                      ok (core.result.Result.Err state_only_prefix.r0.Error.Public)
+                                    | core.result.Result.Ok parts =>
+                                      ok
+                                        (core.result.Result.Ok
+                                          { selected := beforePublic.selected,
+                                            semanticPublic := NKR_TermPublic.value pub, parts := parts }))))
+                              (ok (core.result.Result.Err state_only_prefix.r0.Error.Public)))
+                            (eq_self (ok (core.result.Result.Err state_only_prefix.r0.Error.Public))))));
+                  have cuts :=
+                    NLH_FoldAppend.rust
+                      (Eq.mp
+                        (congrArg
+                          (fun _a =>
+                            NLH_RustCuts.Cuts (step pub claims point c) (List.map Event.gather (List.finRange 84)) _a
+                              (ok (core.result.Result.Ok (NLH_WrapperGathers.stage claims (initial pub) 84)))
+                              (List.map Event.gather (List.finRange 84)))
+                          start)
+                        gathers)
+                      suffix;
+                  package pub claims point c (ok (core.result.Result.Err state_only_prefix.r0.Error.Public))
+                    (List.map Event.gather (List.finRange 84) ++ [Event.semantic, Event.parts]) cuts
+                    (Eq.mpr
+                      (id
+                        (congrArg
+                          (fun _a => projected (ok (core.result.Result.Err state_only_prefix.r0.Error.Public)) = _a)
+                          (Eq.mp
+                            (congrArg
+                              (fun _a =>
+                                pub.terminal_qm31 claims point c = NLH_TermWrapperFactor.reference pub _a point c)
+                              unique)
+                            wrapper)))
+                      (id
+                        (Eq.mpr
+                          (id
+                            (congrArg
+                              (fun _a =>
+                                projected (ok (core.result.Result.Err state_only_prefix.r0.Error.Public)) = do
+                                  let parts ← _a
+                                  NLH_TermWrapperFactor.after parts)
+                              child))
+                          (Eq.refl (projected (ok (core.result.Result.Err state_only_prefix.r0.Error.Public)))))))
+                    True.intro)
+                (Eq.symm h) resultEq)
+            (Eq.refl r))
+        (Eq.symm h) (Eq.refl partsResult))
+    (fun err h =>
+      Eq.ndrec (motive := fun x =>
+        partsResult = x →
+          ∃ result events,
+            NLH_RustCuts.Cuts (step pub claims point c) order (initial pub) result events ∧
+              events <+: order ∧
+                Canonical result ∧
+                  projected result = pub.terminal_qm31 claims point c ∧
+                    reference pub claims point c = pub.terminal_qm31 claims point c)
+        (fun resultEq =>
+          have child :=
+            Eq.mpr (id (congrArg (fun _a => _a = fail err) (Eq.symm partsEq)))
+              (Eq.mpr (id (congrArg (fun _a => NLH_PartsRoot.projected _a = fail err) resultEq))
+                (Eq.refl (NLH_PartsRoot.projected (fail err))));
+          have called :=
+            Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    terminal_parts (NKR_TermPublic.value pub) _a point c.lambda c.chi c.theta c.zc c.mu = fail err)
+                  sameSelected))
+              child;
+          have suffix :=
+            NLH_RustCuts.Cuts.next publicCall
+              (NLH_RustCuts.Cuts.failed
+                (of_eq_true
+                  (Eq.trans
+                    (congrFun'
+                      (congrArg Eq
+                        (Eq.trans
+                          (congrFun' (congrArg Bind.bind called) fun r =>
+                            match r with
+                            | core.result.Result.Err a => ok (core.result.Result.Err state_only_prefix.r0.Error.Public)
+                            | core.result.Result.Ok parts =>
+                              ok
+                                (core.result.Result.Ok
+                                  { selected := beforePublic.selected, semanticPublic := NKR_TermPublic.value pub,
+                                    parts := parts }))
+                          (bind_tc_fail err fun y =>
+                            match y with
+                            | core.result.Result.Err a => ok (core.result.Result.Err state_only_prefix.r0.Error.Public)
+                            | core.result.Result.Ok parts =>
+                              ok
+                                (core.result.Result.Ok
+                                  { selected := beforePublic.selected, semanticPublic := NKR_TermPublic.value pub,
+                                    parts := parts }))))
+                      (fail err))
+                    (eq_self (fail err)))));
+          have cuts :=
+            NLH_FoldAppend.rust
+              (Eq.mp
+                (congrArg
+                  (fun _a =>
+                    NLH_RustCuts.Cuts (step pub claims point c) (List.map Event.gather (List.finRange 84)) _a
+                      (ok (core.result.Result.Ok (NLH_WrapperGathers.stage claims (initial pub) 84)))
+                      (List.map Event.gather (List.finRange 84)))
+                  start)
+                gathers)
+              suffix;
+          package pub claims point c (fail err)
+            (List.map Event.gather (List.finRange 84) ++ [Event.semantic, Event.parts]) cuts
+            (Eq.mpr
+              (id
+                (congrArg (fun _a => projected (fail err) = _a)
+                  (Eq.mp
+                    (congrArg
+                      (fun _a => pub.terminal_qm31 claims point c = NLH_TermWrapperFactor.reference pub _a point c)
+                      unique)
+                    wrapper)))
+              (id
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        projected (fail err) = do
+                          let parts ← _a
+                          NLH_TermWrapperFactor.after parts)
+                      child))
+                  (Eq.refl (projected (fail err))))))
+            True.intro)
+        (Eq.symm h) (Eq.refl partsResult))
+    (fun h =>
+      Eq.ndrec (motive := fun x =>
+        partsResult = x →
+          ∃ result events,
+            NLH_RustCuts.Cuts (step pub claims point c) order (initial pub) result events ∧
+              events <+: order ∧
+                Canonical result ∧
+                  projected result = pub.terminal_qm31 claims point c ∧
+                    reference pub claims point c = pub.terminal_qm31 claims point c)
+        (fun resultEq =>
+          have child :=
+            Eq.mpr (id (congrArg (fun _a => _a = div) (Eq.symm partsEq)))
+              (Eq.mpr (id (congrArg (fun _a => NLH_PartsRoot.projected _a = div) resultEq))
+                (Eq.refl (NLH_PartsRoot.projected div)));
+          have called :=
+            Eq.mpr
+              (id
+                (congrArg
+                  (fun _a => terminal_parts (NKR_TermPublic.value pub) _a point c.lambda c.chi c.theta c.zc c.mu = div)
+                  sameSelected))
+              child;
+          have suffix :=
+            NLH_RustCuts.Cuts.next publicCall
+              (NLH_RustCuts.Cuts.diverged
+                (of_eq_true
+                  (Eq.trans
+                    (congrFun'
+                      (congrArg Eq
+                        (Eq.trans
+                          (congrFun' (congrArg Bind.bind called) fun r =>
+                            match r with
+                            | core.result.Result.Err a => ok (core.result.Result.Err state_only_prefix.r0.Error.Public)
+                            | core.result.Result.Ok parts =>
+                              ok
+                                (core.result.Result.Ok
+                                  { selected := beforePublic.selected, semanticPublic := NKR_TermPublic.value pub,
+                                    parts := parts }))
+                          (bind_tc_div fun y =>
+                            match y with
+                            | core.result.Result.Err a => ok (core.result.Result.Err state_only_prefix.r0.Error.Public)
+                            | core.result.Result.Ok parts =>
+                              ok
+                                (core.result.Result.Ok
+                                  { selected := beforePublic.selected, semanticPublic := NKR_TermPublic.value pub,
+                                    parts := parts }))))
+                      div)
+                    (eq_self div))));
+          have cuts :=
+            NLH_FoldAppend.rust
+              (Eq.mp
+                (congrArg
+                  (fun _a =>
+                    NLH_RustCuts.Cuts (step pub claims point c) (List.map Event.gather (List.finRange 84)) _a
+                      (ok (core.result.Result.Ok (NLH_WrapperGathers.stage claims (initial pub) 84)))
+                      (List.map Event.gather (List.finRange 84)))
+                  start)
+                gathers)
+              suffix;
+          package pub claims point c div (List.map Event.gather (List.finRange 84) ++ [Event.semantic, Event.parts])
+            cuts
+            (Eq.mpr
+              (id
+                (congrArg (fun _a => projected div = _a)
+                  (Eq.mp
+                    (congrArg
+                      (fun _a => pub.terminal_qm31 claims point c = NLH_TermWrapperFactor.reference pub _a point c)
+                      unique)
+                    wrapper)))
+              (id
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        projected div = do
+                          let parts ← _a
+                          NLH_TermWrapperFactor.after parts)
+                      child))
+                  (Eq.refl (projected div)))))
+            True.intro)
+        (Eq.symm h) (Eq.refl partsResult))
+    (Eq.refl partsResult)
+'AspisR1.NLH_WrapperRoot.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

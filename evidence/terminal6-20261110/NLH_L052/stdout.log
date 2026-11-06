@@ -1,0 +1,1175 @@
+NLH_TermComposeTail.lean:96:12: warning: 'scalar_tac' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLH_TermComposeTail.lean:96:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'AspisR1.NLH_TermComposeTail.variant_source' does not depend on any axioms
+'AspisR1.NLH_TermComposeTail.hcolumn' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLH_TermComposeTail.source : ∀ (pub : Public) (claims : Std.Array NQ 84#usize)
+  (point : Std.Array NQ 10#usize) (lambda chi theta : NQ),
+  NKR_DigestChildren.Domain pub →
+    canonical claims →
+      canonical point →
+        Canon lambda →
+          Canon chi →
+            Canon theta →
+              ↑pub.asset_id < 2147483647 →
+                ↑(core.option.Option.unwrap_or pub.withdrawal_amount 0#u32) < 2147483647 →
+                  ∃ out,
+                    run pub claims point lambda chi theta = ok (core.result.Result.Ok out) ∧
+                      Canon out.1 ∧
+                        Canon out.2.2.2.1 ∧
+                          Canon out.2.2.2.2.1 ∧ Canon out.2.2.2.2.2 ∧ canonical out.2.1 ∧ canonical out.2.2.1 :=
+fun pub claims point lambda chi theta hd hc hp hl hchi ht asset amount =>
+  let ⟨p, h✝⟩ := NKR_TermGatherPoseidon.source claims point hc hp
+  let ⟨sem, sc⟩ :=
+    NKR_TermSemanticSource.source pub { z := p.z, succ_z := p.succ, xor12_z := p.xor12 } p.selectors hd p.zCanonical
+      p.succCanonical p.xorCanonical p.selectorHigh p.selectorLow asset amount
+  let ⟨h1, h✝¹⟩ :=
+    JFy_SelectedRead.source claims hc 0#usize 26#usize (of_decide_eq_true (id (Eq.refl true)))
+      (of_decide_eq_true (id (Eq.refl true)))
+  let ⟨hcall, ch1⟩ := h✝¹
+  let ⟨copy, h✝²⟩ :=
+    JGa_Copy.source p.z h1 p.selectors lambda chi pub.transition.live_snapshot.next_pair_index (variant pub.variant)
+      p.zCanonical ch1 p.selectorHigh p.selectorLow hl hchi
+  let ⟨cc, right✝⟩ := h✝²
+  let ⟨cr, ca⟩ := right✝
+  let ⟨comp, h✝³⟩ :=
+    NKR_TermHorner.source claims p.z p.mask sem.out p.poseidon theta h1 copy hc sem.canonical_out p.poseidonCanonical ht
+      cr
+  let ⟨g, h✝⁴⟩ := h✝³
+  let ⟨ho, right✝¹⟩ := h✝⁴
+  let ⟨ccomp, right✝²⟩ := right✝¹
+  let ⟨cg, right✝³⟩ := right✝²
+  Exists.intro (comp, p.z, p.mask, g, h1, copy.active)
+    ⟨id
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (do
+                    let a ← _a
+                    let a1 ←
+                      array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                          composition_parts.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeQM31 field.QM31.ZERO claims
+                    let a2 ←
+                      array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                          composition_parts.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31 field.QM31.ZERO claims
+                    let mask_only ←
+                      array_from_fn_copy 10#usize field.QM31.Insts.CoreMarkerCopy
+                          composition_parts.closure_3.Insts.CoreOpsFunctionFnMutTupleUsizeQM31 field.QM31.ZERO claims
+                    let selectors ← pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point
+                    let sops ← poseidon_selectors selectors
+                    let poseidon ←
+                      state_only_poseidon.evaluate_state_only_poseidon_oracle_projected
+                          { z := a, succ_z := a1, xor12_z := a2 } sops
+                    let semantic ← semantic_packed pub { z := a, succ_z := a1, xor12_z := a2 } selectors
+                    let i ← SELECTED_H1_COLUMN
+                    let h1_z ← selected_claim claims 0#usize i
+                    let pvpfcvv ← copy_variant pub.variant
+                    let copy ←
+                      pool_v1.pair_forest_copy_terminal.evaluate_with_selectors a h1_z selectors lambda chi
+                          pub.transition.live_snapshot.next_pair_index pvpfcvv
+                    let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                    let ii ← FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter semantic
+                    let iter ←
+                      core.iter.traits.iterator.Iterator.rev.trait_default
+                          (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31 24#usize)
+                          (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator field.QM31
+                            24#usize)
+                          ii
+                    let composition ← composition_parts_loop0 iter prepared_theta copy.residual
+                    let ii1 ← FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter poseidon
+                    let iter1 ←
+                      core.iter.traits.iterator.Iterator.rev.trait_default
+                          (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31 4#usize)
+                          (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator field.QM31
+                            4#usize)
+                          ii1
+                    let composition1 ← composition_parts_loop1 iter1 prepared_theta composition
+                    let i1 ← SELECTED_G_COLUMN
+                    let q ← selected_claim claims 0#usize i1
+                    ok (core.result.Result.Ok (composition1, a, mask_only, q, h1_z, copy.active))) =
+                  ok (core.result.Result.Ok (comp, p.z, p.mask, g, h1, copy.active)))
+              p.gather0))
+          (Eq.mpr
+            (id
+              (congrArg (fun _a => _a = ok (core.result.Result.Ok (comp, p.z, p.mask, g, h1, copy.active)))
+                (bind_tc_ok p.z fun a => do
+                  let a1 ←
+                    array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                        composition_parts.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeQM31 field.QM31.ZERO claims
+                  let a2 ←
+                    array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                        composition_parts.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31 field.QM31.ZERO claims
+                  let mask_only ←
+                    array_from_fn_copy 10#usize field.QM31.Insts.CoreMarkerCopy
+                        composition_parts.closure_3.Insts.CoreOpsFunctionFnMutTupleUsizeQM31 field.QM31.ZERO claims
+                  let selectors ← pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point
+                  let sops ← poseidon_selectors selectors
+                  let poseidon ←
+                    state_only_poseidon.evaluate_state_only_poseidon_oracle_projected
+                        { z := a, succ_z := a1, xor12_z := a2 } sops
+                  let semantic ← semantic_packed pub { z := a, succ_z := a1, xor12_z := a2 } selectors
+                  let i ← SELECTED_H1_COLUMN
+                  let h1_z ← selected_claim claims 0#usize i
+                  let pvpfcvv ← copy_variant pub.variant
+                  let copy ←
+                    pool_v1.pair_forest_copy_terminal.evaluate_with_selectors a h1_z selectors lambda chi
+                        pub.transition.live_snapshot.next_pair_index pvpfcvv
+                  let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                  let ii ← FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter semantic
+                  let iter ←
+                    core.iter.traits.iterator.Iterator.rev.trait_default
+                        (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31 24#usize)
+                        (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator field.QM31
+                          24#usize)
+                        ii
+                  let composition ← composition_parts_loop0 iter prepared_theta copy.residual
+                  let ii1 ← FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter poseidon
+                  let iter1 ←
+                    core.iter.traits.iterator.Iterator.rev.trait_default
+                        (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31 4#usize)
+                        (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator field.QM31
+                          4#usize)
+                        ii1
+                  let composition1 ← composition_parts_loop1 iter1 prepared_theta composition
+                  let i1 ← SELECTED_G_COLUMN
+                  let q ← selected_claim claims 0#usize i1
+                  ok (core.result.Result.Ok (composition1, a, mask_only, q, h1_z, copy.active)))))
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    (do
+                        let a1 ← _a
+                        let a2 ←
+                          array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                              composition_parts.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31 field.QM31.ZERO
+                              claims
+                        let mask_only ←
+                          array_from_fn_copy 10#usize field.QM31.Insts.CoreMarkerCopy
+                              composition_parts.closure_3.Insts.CoreOpsFunctionFnMutTupleUsizeQM31 field.QM31.ZERO
+                              claims
+                        let selectors ← pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point
+                        let sops ← poseidon_selectors selectors
+                        let poseidon ←
+                          state_only_poseidon.evaluate_state_only_poseidon_oracle_projected
+                              { z := p.z, succ_z := a1, xor12_z := a2 } sops
+                        let semantic ← semantic_packed pub { z := p.z, succ_z := a1, xor12_z := a2 } selectors
+                        let i ← SELECTED_H1_COLUMN
+                        let h1_z ← selected_claim claims 0#usize i
+                        let pvpfcvv ← copy_variant pub.variant
+                        let copy ←
+                          pool_v1.pair_forest_copy_terminal.evaluate_with_selectors p.z h1_z selectors lambda chi
+                              pub.transition.live_snapshot.next_pair_index pvpfcvv
+                        let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                        let ii ← FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter semantic
+                        let iter ←
+                          core.iter.traits.iterator.Iterator.rev.trait_default
+                              (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31 24#usize)
+                              (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator field.QM31
+                                24#usize)
+                              ii
+                        let composition ← composition_parts_loop0 iter prepared_theta copy.residual
+                        let ii1 ← FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter poseidon
+                        let iter1 ←
+                          core.iter.traits.iterator.Iterator.rev.trait_default
+                              (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31 4#usize)
+                              (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator field.QM31
+                                4#usize)
+                              ii1
+                        let composition1 ← composition_parts_loop1 iter1 prepared_theta composition
+                        let i1 ← SELECTED_G_COLUMN
+                        let q ← selected_claim claims 0#usize i1
+                        ok (core.result.Result.Ok (composition1, p.z, mask_only, q, h1_z, copy.active))) =
+                      ok (core.result.Result.Ok (comp, p.z, p.mask, g, h1, copy.active)))
+                  p.gather1))
+              (Eq.mpr
+                (id
+                  (congrArg (fun _a => _a = ok (core.result.Result.Ok (comp, p.z, p.mask, g, h1, copy.active)))
+                    (bind_tc_ok p.succ fun a1 => do
+                      let a2 ←
+                        array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                            composition_parts.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31 field.QM31.ZERO claims
+                      let mask_only ←
+                        array_from_fn_copy 10#usize field.QM31.Insts.CoreMarkerCopy
+                            composition_parts.closure_3.Insts.CoreOpsFunctionFnMutTupleUsizeQM31 field.QM31.ZERO claims
+                      let selectors ← pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point
+                      let sops ← poseidon_selectors selectors
+                      let poseidon ←
+                        state_only_poseidon.evaluate_state_only_poseidon_oracle_projected
+                            { z := p.z, succ_z := a1, xor12_z := a2 } sops
+                      let semantic ← semantic_packed pub { z := p.z, succ_z := a1, xor12_z := a2 } selectors
+                      let i ← SELECTED_H1_COLUMN
+                      let h1_z ← selected_claim claims 0#usize i
+                      let pvpfcvv ← copy_variant pub.variant
+                      let copy ←
+                        pool_v1.pair_forest_copy_terminal.evaluate_with_selectors p.z h1_z selectors lambda chi
+                            pub.transition.live_snapshot.next_pair_index pvpfcvv
+                      let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                      let ii ← FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter semantic
+                      let iter ←
+                        core.iter.traits.iterator.Iterator.rev.trait_default
+                            (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31 24#usize)
+                            (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator field.QM31
+                              24#usize)
+                            ii
+                      let composition ← composition_parts_loop0 iter prepared_theta copy.residual
+                      let ii1 ← FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter poseidon
+                      let iter1 ←
+                        core.iter.traits.iterator.Iterator.rev.trait_default
+                            (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31 4#usize)
+                            (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator field.QM31
+                              4#usize)
+                            ii1
+                      let composition1 ← composition_parts_loop1 iter1 prepared_theta composition
+                      let i1 ← SELECTED_G_COLUMN
+                      let q ← selected_claim claims 0#usize i1
+                      ok (core.result.Result.Ok (composition1, p.z, mask_only, q, h1_z, copy.active)))))
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        (do
+                            let a2 ← _a
+                            let mask_only ←
+                              array_from_fn_copy 10#usize field.QM31.Insts.CoreMarkerCopy
+                                  composition_parts.closure_3.Insts.CoreOpsFunctionFnMutTupleUsizeQM31 field.QM31.ZERO
+                                  claims
+                            let selectors ← pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point
+                            let sops ← poseidon_selectors selectors
+                            let poseidon ←
+                              state_only_poseidon.evaluate_state_only_poseidon_oracle_projected
+                                  { z := p.z, succ_z := p.succ, xor12_z := a2 } sops
+                            let semantic ← semantic_packed pub { z := p.z, succ_z := p.succ, xor12_z := a2 } selectors
+                            let i ← SELECTED_H1_COLUMN
+                            let h1_z ← selected_claim claims 0#usize i
+                            let pvpfcvv ← copy_variant pub.variant
+                            let copy ←
+                              pool_v1.pair_forest_copy_terminal.evaluate_with_selectors p.z h1_z selectors lambda chi
+                                  pub.transition.live_snapshot.next_pair_index pvpfcvv
+                            let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                            let ii ←
+                              FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter semantic
+                            let iter ←
+                              core.iter.traits.iterator.Iterator.rev.trait_default
+                                  (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31 24#usize)
+                                  (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                    field.QM31 24#usize)
+                                  ii
+                            let composition ← composition_parts_loop0 iter prepared_theta copy.residual
+                            let ii1 ←
+                              FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter poseidon
+                            let iter1 ←
+                              core.iter.traits.iterator.Iterator.rev.trait_default
+                                  (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31 4#usize)
+                                  (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                    field.QM31 4#usize)
+                                  ii1
+                            let composition1 ← composition_parts_loop1 iter1 prepared_theta composition
+                            let i1 ← SELECTED_G_COLUMN
+                            let q ← selected_claim claims 0#usize i1
+                            ok (core.result.Result.Ok (composition1, p.z, mask_only, q, h1_z, copy.active))) =
+                          ok (core.result.Result.Ok (comp, p.z, p.mask, g, h1, copy.active)))
+                      p.gather2))
+                  (Eq.mpr
+                    (id
+                      (congrArg (fun _a => _a = ok (core.result.Result.Ok (comp, p.z, p.mask, g, h1, copy.active)))
+                        (bind_tc_ok p.xor12 fun a2 => do
+                          let mask_only ←
+                            array_from_fn_copy 10#usize field.QM31.Insts.CoreMarkerCopy
+                                composition_parts.closure_3.Insts.CoreOpsFunctionFnMutTupleUsizeQM31 field.QM31.ZERO
+                                claims
+                          let selectors ← pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point
+                          let sops ← poseidon_selectors selectors
+                          let poseidon ←
+                            state_only_poseidon.evaluate_state_only_poseidon_oracle_projected
+                                { z := p.z, succ_z := p.succ, xor12_z := a2 } sops
+                          let semantic ← semantic_packed pub { z := p.z, succ_z := p.succ, xor12_z := a2 } selectors
+                          let i ← SELECTED_H1_COLUMN
+                          let h1_z ← selected_claim claims 0#usize i
+                          let pvpfcvv ← copy_variant pub.variant
+                          let copy ←
+                            pool_v1.pair_forest_copy_terminal.evaluate_with_selectors p.z h1_z selectors lambda chi
+                                pub.transition.live_snapshot.next_pair_index pvpfcvv
+                          let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                          let ii ← FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter semantic
+                          let iter ←
+                            core.iter.traits.iterator.Iterator.rev.trait_default
+                                (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31 24#usize)
+                                (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator field.QM31
+                                  24#usize)
+                                ii
+                          let composition ← composition_parts_loop0 iter prepared_theta copy.residual
+                          let ii1 ← FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter poseidon
+                          let iter1 ←
+                            core.iter.traits.iterator.Iterator.rev.trait_default
+                                (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31 4#usize)
+                                (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator field.QM31
+                                  4#usize)
+                                ii1
+                          let composition1 ← composition_parts_loop1 iter1 prepared_theta composition
+                          let i1 ← SELECTED_G_COLUMN
+                          let q ← selected_claim claims 0#usize i1
+                          ok (core.result.Result.Ok (composition1, p.z, mask_only, q, h1_z, copy.active)))))
+                    (Eq.mpr
+                      (id
+                        (congrArg
+                          (fun _a =>
+                            (do
+                                let mask_only ← _a
+                                let selectors ← pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point
+                                let sops ← poseidon_selectors selectors
+                                let poseidon ←
+                                  state_only_poseidon.evaluate_state_only_poseidon_oracle_projected
+                                      { z := p.z, succ_z := p.succ, xor12_z := p.xor12 } sops
+                                let semantic ←
+                                  semantic_packed pub { z := p.z, succ_z := p.succ, xor12_z := p.xor12 } selectors
+                                let i ← SELECTED_H1_COLUMN
+                                let h1_z ← selected_claim claims 0#usize i
+                                let pvpfcvv ← copy_variant pub.variant
+                                let copy ←
+                                  pool_v1.pair_forest_copy_terminal.evaluate_with_selectors p.z h1_z selectors lambda
+                                      chi pub.transition.live_snapshot.next_pair_index pvpfcvv
+                                let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                                let ii ←
+                                  FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter semantic
+                                let iter ←
+                                  core.iter.traits.iterator.Iterator.rev.trait_default
+                                      (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31
+                                        24#usize)
+                                      (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                        field.QM31 24#usize)
+                                      ii
+                                let composition ← composition_parts_loop0 iter prepared_theta copy.residual
+                                let ii1 ←
+                                  FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter poseidon
+                                let iter1 ←
+                                  core.iter.traits.iterator.Iterator.rev.trait_default
+                                      (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31 4#usize)
+                                      (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                        field.QM31 4#usize)
+                                      ii1
+                                let composition1 ← composition_parts_loop1 iter1 prepared_theta composition
+                                let i1 ← SELECTED_G_COLUMN
+                                let q ← selected_claim claims 0#usize i1
+                                ok (core.result.Result.Ok (composition1, p.z, mask_only, q, h1_z, copy.active))) =
+                              ok (core.result.Result.Ok (comp, p.z, p.mask, g, h1, copy.active)))
+                          p.gather3))
+                      (Eq.mpr
+                        (id
+                          (congrArg (fun _a => _a = ok (core.result.Result.Ok (comp, p.z, p.mask, g, h1, copy.active)))
+                            (bind_tc_ok p.mask fun mask_only => do
+                              let selectors ← pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point
+                              let sops ← poseidon_selectors selectors
+                              let poseidon ←
+                                state_only_poseidon.evaluate_state_only_poseidon_oracle_projected
+                                    { z := p.z, succ_z := p.succ, xor12_z := p.xor12 } sops
+                              let semantic ←
+                                semantic_packed pub { z := p.z, succ_z := p.succ, xor12_z := p.xor12 } selectors
+                              let i ← SELECTED_H1_COLUMN
+                              let h1_z ← selected_claim claims 0#usize i
+                              let pvpfcvv ← copy_variant pub.variant
+                              let copy ←
+                                pool_v1.pair_forest_copy_terminal.evaluate_with_selectors p.z h1_z selectors lambda chi
+                                    pub.transition.live_snapshot.next_pair_index pvpfcvv
+                              let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                              let ii ←
+                                FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter semantic
+                              let iter ←
+                                core.iter.traits.iterator.Iterator.rev.trait_default
+                                    (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31 24#usize)
+                                    (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                      field.QM31 24#usize)
+                                    ii
+                              let composition ← composition_parts_loop0 iter prepared_theta copy.residual
+                              let ii1 ←
+                                FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter poseidon
+                              let iter1 ←
+                                core.iter.traits.iterator.Iterator.rev.trait_default
+                                    (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31 4#usize)
+                                    (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                      field.QM31 4#usize)
+                                    ii1
+                              let composition1 ← composition_parts_loop1 iter1 prepared_theta composition
+                              let i1 ← SELECTED_G_COLUMN
+                              let q ← selected_claim claims 0#usize i1
+                              ok (core.result.Result.Ok (composition1, p.z, mask_only, q, h1_z, copy.active)))))
+                        (Eq.mpr
+                          (id
+                            (congrArg
+                              (fun _a =>
+                                (do
+                                    let selectors ← _a
+                                    let sops ← poseidon_selectors selectors
+                                    let poseidon ←
+                                      state_only_poseidon.evaluate_state_only_poseidon_oracle_projected
+                                          { z := p.z, succ_z := p.succ, xor12_z := p.xor12 } sops
+                                    let semantic ←
+                                      semantic_packed pub { z := p.z, succ_z := p.succ, xor12_z := p.xor12 } selectors
+                                    let i ← SELECTED_H1_COLUMN
+                                    let h1_z ← selected_claim claims 0#usize i
+                                    let pvpfcvv ← copy_variant pub.variant
+                                    let copy ←
+                                      pool_v1.pair_forest_copy_terminal.evaluate_with_selectors p.z h1_z selectors
+                                          lambda chi pub.transition.live_snapshot.next_pair_index pvpfcvv
+                                    let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                                    let ii ←
+                                      FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                          semantic
+                                    let iter ←
+                                      core.iter.traits.iterator.Iterator.rev.trait_default
+                                          (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31
+                                            24#usize)
+                                          (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                            field.QM31 24#usize)
+                                          ii
+                                    let composition ← composition_parts_loop0 iter prepared_theta copy.residual
+                                    let ii1 ←
+                                      FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                          poseidon
+                                    let iter1 ←
+                                      core.iter.traits.iterator.Iterator.rev.trait_default
+                                          (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31
+                                            4#usize)
+                                          (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                            field.QM31 4#usize)
+                                          ii1
+                                    let composition1 ← composition_parts_loop1 iter1 prepared_theta composition
+                                    let i1 ← SELECTED_G_COLUMN
+                                    let q ← selected_claim claims 0#usize i1
+                                    ok (core.result.Result.Ok (composition1, p.z, p.mask, q, h1_z, copy.active))) =
+                                  ok (core.result.Result.Ok (comp, p.z, p.mask, g, h1, copy.active)))
+                              p.selectorCall))
+                          (Eq.mpr
+                            (id
+                              (congrArg
+                                (fun _a => _a = ok (core.result.Result.Ok (comp, p.z, p.mask, g, h1, copy.active)))
+                                (bind_tc_ok p.selectors fun selectors => do
+                                  let sops ← poseidon_selectors selectors
+                                  let poseidon ←
+                                    state_only_poseidon.evaluate_state_only_poseidon_oracle_projected
+                                        { z := p.z, succ_z := p.succ, xor12_z := p.xor12 } sops
+                                  let semantic ←
+                                    semantic_packed pub { z := p.z, succ_z := p.succ, xor12_z := p.xor12 } selectors
+                                  let i ← SELECTED_H1_COLUMN
+                                  let h1_z ← selected_claim claims 0#usize i
+                                  let pvpfcvv ← copy_variant pub.variant
+                                  let copy ←
+                                    pool_v1.pair_forest_copy_terminal.evaluate_with_selectors p.z h1_z selectors lambda
+                                        chi pub.transition.live_snapshot.next_pair_index pvpfcvv
+                                  let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                                  let ii ←
+                                    FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter semantic
+                                  let iter ←
+                                    core.iter.traits.iterator.Iterator.rev.trait_default
+                                        (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31
+                                          24#usize)
+                                        (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                          field.QM31 24#usize)
+                                        ii
+                                  let composition ← composition_parts_loop0 iter prepared_theta copy.residual
+                                  let ii1 ←
+                                    FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter poseidon
+                                  let iter1 ←
+                                    core.iter.traits.iterator.Iterator.rev.trait_default
+                                        (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31
+                                          4#usize)
+                                        (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                          field.QM31 4#usize)
+                                        ii1
+                                  let composition1 ← composition_parts_loop1 iter1 prepared_theta composition
+                                  let i1 ← SELECTED_G_COLUMN
+                                  let q ← selected_claim claims 0#usize i1
+                                  ok (core.result.Result.Ok (composition1, p.z, p.mask, q, h1_z, copy.active)))))
+                            (Eq.mpr
+                              (id
+                                (congrArg
+                                  (fun _a =>
+                                    (do
+                                        let sops ← _a
+                                        let poseidon ←
+                                          state_only_poseidon.evaluate_state_only_poseidon_oracle_projected
+                                              { z := p.z, succ_z := p.succ, xor12_z := p.xor12 } sops
+                                        let semantic ←
+                                          semantic_packed pub { z := p.z, succ_z := p.succ, xor12_z := p.xor12 }
+                                              p.selectors
+                                        let i ← SELECTED_H1_COLUMN
+                                        let h1_z ← selected_claim claims 0#usize i
+                                        let pvpfcvv ← copy_variant pub.variant
+                                        let copy ←
+                                          pool_v1.pair_forest_copy_terminal.evaluate_with_selectors p.z h1_z p.selectors
+                                              lambda chi pub.transition.live_snapshot.next_pair_index pvpfcvv
+                                        let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                                        let ii ←
+                                          FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                              semantic
+                                        let iter ←
+                                          core.iter.traits.iterator.Iterator.rev.trait_default
+                                              (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31
+                                                24#usize)
+                                              (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                                field.QM31 24#usize)
+                                              ii
+                                        let composition ← composition_parts_loop0 iter prepared_theta copy.residual
+                                        let ii1 ←
+                                          FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                              poseidon
+                                        let iter1 ←
+                                          core.iter.traits.iterator.Iterator.rev.trait_default
+                                              (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31
+                                                4#usize)
+                                              (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                                field.QM31 4#usize)
+                                              ii1
+                                        let composition1 ← composition_parts_loop1 iter1 prepared_theta composition
+                                        let i1 ← SELECTED_G_COLUMN
+                                        let q ← selected_claim claims 0#usize i1
+                                        ok (core.result.Result.Ok (composition1, p.z, p.mask, q, h1_z, copy.active))) =
+                                      ok (core.result.Result.Ok (comp, p.z, p.mask, g, h1, copy.active)))
+                                  p.poseidonSelectorCall))
+                              (Eq.mpr
+                                (id
+                                  (congrArg
+                                    (fun _a => _a = ok (core.result.Result.Ok (comp, p.z, p.mask, g, h1, copy.active)))
+                                    (bind_tc_ok p.poseidonSelectors fun sops => do
+                                      let poseidon ←
+                                        state_only_poseidon.evaluate_state_only_poseidon_oracle_projected
+                                            { z := p.z, succ_z := p.succ, xor12_z := p.xor12 } sops
+                                      let semantic ←
+                                        semantic_packed pub { z := p.z, succ_z := p.succ, xor12_z := p.xor12 }
+                                            p.selectors
+                                      let i ← SELECTED_H1_COLUMN
+                                      let h1_z ← selected_claim claims 0#usize i
+                                      let pvpfcvv ← copy_variant pub.variant
+                                      let copy ←
+                                        pool_v1.pair_forest_copy_terminal.evaluate_with_selectors p.z h1_z p.selectors
+                                            lambda chi pub.transition.live_snapshot.next_pair_index pvpfcvv
+                                      let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                                      let ii ←
+                                        FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                            semantic
+                                      let iter ←
+                                        core.iter.traits.iterator.Iterator.rev.trait_default
+                                            (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31
+                                              24#usize)
+                                            (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                              field.QM31 24#usize)
+                                            ii
+                                      let composition ← composition_parts_loop0 iter prepared_theta copy.residual
+                                      let ii1 ←
+                                        FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                            poseidon
+                                      let iter1 ←
+                                        core.iter.traits.iterator.Iterator.rev.trait_default
+                                            (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31
+                                              4#usize)
+                                            (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                              field.QM31 4#usize)
+                                            ii1
+                                      let composition1 ← composition_parts_loop1 iter1 prepared_theta composition
+                                      let i1 ← SELECTED_G_COLUMN
+                                      let q ← selected_claim claims 0#usize i1
+                                      ok (core.result.Result.Ok (composition1, p.z, p.mask, q, h1_z, copy.active)))))
+                                (Eq.mpr
+                                  (id
+                                    (congrArg
+                                      (fun _a =>
+                                        (do
+                                            let poseidon ← _a
+                                            let semantic ←
+                                              semantic_packed pub { z := p.z, succ_z := p.succ, xor12_z := p.xor12 }
+                                                  p.selectors
+                                            let i ← SELECTED_H1_COLUMN
+                                            let h1_z ← selected_claim claims 0#usize i
+                                            let pvpfcvv ← copy_variant pub.variant
+                                            let copy ←
+                                              pool_v1.pair_forest_copy_terminal.evaluate_with_selectors p.z h1_z
+                                                  p.selectors lambda chi pub.transition.live_snapshot.next_pair_index
+                                                  pvpfcvv
+                                            let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                                            let ii ←
+                                              FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                                  semantic
+                                            let iter ←
+                                              core.iter.traits.iterator.Iterator.rev.trait_default
+                                                  (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator
+                                                    field.QM31 24#usize)
+                                                  (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                                    field.QM31 24#usize)
+                                                  ii
+                                            let composition ← composition_parts_loop0 iter prepared_theta copy.residual
+                                            let ii1 ←
+                                              FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                                  poseidon
+                                            let iter1 ←
+                                              core.iter.traits.iterator.Iterator.rev.trait_default
+                                                  (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator
+                                                    field.QM31 4#usize)
+                                                  (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                                    field.QM31 4#usize)
+                                                  ii1
+                                            let composition1 ← composition_parts_loop1 iter1 prepared_theta composition
+                                            let i1 ← SELECTED_G_COLUMN
+                                            let q ← selected_claim claims 0#usize i1
+                                            ok
+                                                (core.result.Result.Ok
+                                                  (composition1, p.z, p.mask, q, h1_z, copy.active))) =
+                                          ok (core.result.Result.Ok (comp, p.z, p.mask, g, h1, copy.active)))
+                                      p.poseidonCall))
+                                  (Eq.mpr
+                                    (id
+                                      (congrArg
+                                        (fun _a =>
+                                          _a = ok (core.result.Result.Ok (comp, p.z, p.mask, g, h1, copy.active)))
+                                        (bind_tc_ok p.poseidon fun poseidon => do
+                                          let semantic ←
+                                            semantic_packed pub { z := p.z, succ_z := p.succ, xor12_z := p.xor12 }
+                                                p.selectors
+                                          let i ← SELECTED_H1_COLUMN
+                                          let h1_z ← selected_claim claims 0#usize i
+                                          let pvpfcvv ← copy_variant pub.variant
+                                          let copy ←
+                                            pool_v1.pair_forest_copy_terminal.evaluate_with_selectors p.z h1_z
+                                                p.selectors lambda chi pub.transition.live_snapshot.next_pair_index
+                                                pvpfcvv
+                                          let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                                          let ii ←
+                                            FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                                semantic
+                                          let iter ←
+                                            core.iter.traits.iterator.Iterator.rev.trait_default
+                                                (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator
+                                                  field.QM31 24#usize)
+                                                (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                                  field.QM31 24#usize)
+                                                ii
+                                          let composition ← composition_parts_loop0 iter prepared_theta copy.residual
+                                          let ii1 ←
+                                            FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                                poseidon
+                                          let iter1 ←
+                                            core.iter.traits.iterator.Iterator.rev.trait_default
+                                                (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator
+                                                  field.QM31 4#usize)
+                                                (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                                  field.QM31 4#usize)
+                                                ii1
+                                          let composition1 ← composition_parts_loop1 iter1 prepared_theta composition
+                                          let i1 ← SELECTED_G_COLUMN
+                                          let q ← selected_claim claims 0#usize i1
+                                          ok
+                                              (core.result.Result.Ok
+                                                (composition1, p.z, p.mask, q, h1_z, copy.active)))))
+                                    (Eq.mpr
+                                      (id
+                                        (congrArg
+                                          (fun _a =>
+                                            (do
+                                                let semantic ← _a
+                                                let i ← SELECTED_H1_COLUMN
+                                                let h1_z ← selected_claim claims 0#usize i
+                                                let pvpfcvv ← copy_variant pub.variant
+                                                let copy ←
+                                                  pool_v1.pair_forest_copy_terminal.evaluate_with_selectors p.z h1_z
+                                                      p.selectors lambda chi
+                                                      pub.transition.live_snapshot.next_pair_index pvpfcvv
+                                                let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                                                let ii ←
+                                                  FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                                      semantic
+                                                let iter ←
+                                                  core.iter.traits.iterator.Iterator.rev.trait_default
+                                                      (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator
+                                                        field.QM31 24#usize)
+                                                      (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                                        field.QM31 24#usize)
+                                                      ii
+                                                let composition ←
+                                                  composition_parts_loop0 iter prepared_theta copy.residual
+                                                let ii1 ←
+                                                  FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                                      p.poseidon
+                                                let iter1 ←
+                                                  core.iter.traits.iterator.Iterator.rev.trait_default
+                                                      (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator
+                                                        field.QM31 4#usize)
+                                                      (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                                        field.QM31 4#usize)
+                                                      ii1
+                                                let composition1 ←
+                                                  composition_parts_loop1 iter1 prepared_theta composition
+                                                let i1 ← SELECTED_G_COLUMN
+                                                let q ← selected_claim claims 0#usize i1
+                                                ok
+                                                    (core.result.Result.Ok
+                                                      (composition1, p.z, p.mask, q, h1_z, copy.active))) =
+                                              ok (core.result.Result.Ok (comp, p.z, p.mask, g, h1, copy.active)))
+                                          sc))
+                                      (Eq.mpr
+                                        (id
+                                          (congrArg
+                                            (fun _a =>
+                                              _a = ok (core.result.Result.Ok (comp, p.z, p.mask, g, h1, copy.active)))
+                                            (bind_tc_ok sem.out fun semantic => do
+                                              let i ← SELECTED_H1_COLUMN
+                                              let h1_z ← selected_claim claims 0#usize i
+                                              let pvpfcvv ← copy_variant pub.variant
+                                              let copy ←
+                                                pool_v1.pair_forest_copy_terminal.evaluate_with_selectors p.z h1_z
+                                                    p.selectors lambda chi pub.transition.live_snapshot.next_pair_index
+                                                    pvpfcvv
+                                              let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                                              let ii ←
+                                                FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                                    semantic
+                                              let iter ←
+                                                core.iter.traits.iterator.Iterator.rev.trait_default
+                                                    (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator
+                                                      field.QM31 24#usize)
+                                                    (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                                      field.QM31 24#usize)
+                                                    ii
+                                              let composition ←
+                                                composition_parts_loop0 iter prepared_theta copy.residual
+                                              let ii1 ←
+                                                FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                                    p.poseidon
+                                              let iter1 ←
+                                                core.iter.traits.iterator.Iterator.rev.trait_default
+                                                    (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator
+                                                      field.QM31 4#usize)
+                                                    (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                                      field.QM31 4#usize)
+                                                    ii1
+                                              let composition1 ←
+                                                composition_parts_loop1 iter1 prepared_theta composition
+                                              let i1 ← SELECTED_G_COLUMN
+                                              let q ← selected_claim claims 0#usize i1
+                                              ok
+                                                  (core.result.Result.Ok
+                                                    (composition1, p.z, p.mask, q, h1_z, copy.active)))))
+                                        (Eq.mpr
+                                          (id
+                                            (congrArg
+                                              (fun _a =>
+                                                (do
+                                                    let i ← _a
+                                                    let h1_z ← selected_claim claims 0#usize i
+                                                    let pvpfcvv ← copy_variant pub.variant
+                                                    let copy ←
+                                                      pool_v1.pair_forest_copy_terminal.evaluate_with_selectors p.z h1_z
+                                                          p.selectors lambda chi
+                                                          pub.transition.live_snapshot.next_pair_index pvpfcvv
+                                                    let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                                                    let ii ←
+                                                      FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                                          sem.out
+                                                    let iter ←
+                                                      core.iter.traits.iterator.Iterator.rev.trait_default
+                                                          (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator
+                                                            field.QM31 24#usize)
+                                                          (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                                            field.QM31 24#usize)
+                                                          ii
+                                                    let composition ←
+                                                      composition_parts_loop0 iter prepared_theta copy.residual
+                                                    let ii1 ←
+                                                      FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                                          p.poseidon
+                                                    let iter1 ←
+                                                      core.iter.traits.iterator.Iterator.rev.trait_default
+                                                          (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator
+                                                            field.QM31 4#usize)
+                                                          (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                                            field.QM31 4#usize)
+                                                          ii1
+                                                    let composition1 ←
+                                                      composition_parts_loop1 iter1 prepared_theta composition
+                                                    let i1 ← SELECTED_G_COLUMN
+                                                    let q ← selected_claim claims 0#usize i1
+                                                    ok
+                                                        (core.result.Result.Ok
+                                                          (composition1, p.z, p.mask, q, h1_z, copy.active))) =
+                                                  ok (core.result.Result.Ok (comp, p.z, p.mask, g, h1, copy.active)))
+                                              hcolumn))
+                                          (Eq.mpr
+                                            (id
+                                              (congrArg
+                                                (fun _a =>
+                                                  _a =
+                                                    ok (core.result.Result.Ok (comp, p.z, p.mask, g, h1, copy.active)))
+                                                (bind_tc_ok 26#usize fun i => do
+                                                  let h1_z ← selected_claim claims 0#usize i
+                                                  let pvpfcvv ← copy_variant pub.variant
+                                                  let copy ←
+                                                    pool_v1.pair_forest_copy_terminal.evaluate_with_selectors p.z h1_z
+                                                        p.selectors lambda chi
+                                                        pub.transition.live_snapshot.next_pair_index pvpfcvv
+                                                  let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                                                  let ii ←
+                                                    FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                                        sem.out
+                                                  let iter ←
+                                                    core.iter.traits.iterator.Iterator.rev.trait_default
+                                                        (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator
+                                                          field.QM31 24#usize)
+                                                        (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                                          field.QM31 24#usize)
+                                                        ii
+                                                  let composition ←
+                                                    composition_parts_loop0 iter prepared_theta copy.residual
+                                                  let ii1 ←
+                                                    FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                                        p.poseidon
+                                                  let iter1 ←
+                                                    core.iter.traits.iterator.Iterator.rev.trait_default
+                                                        (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator
+                                                          field.QM31 4#usize)
+                                                        (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                                          field.QM31 4#usize)
+                                                        ii1
+                                                  let composition1 ←
+                                                    composition_parts_loop1 iter1 prepared_theta composition
+                                                  let i1 ← SELECTED_G_COLUMN
+                                                  let q ← selected_claim claims 0#usize i1
+                                                  ok
+                                                      (core.result.Result.Ok
+                                                        (composition1, p.z, p.mask, q, h1_z, copy.active)))))
+                                            (Eq.mpr
+                                              (id
+                                                (congrArg
+                                                  (fun _a =>
+                                                    (do
+                                                        let h1_z ← _a
+                                                        let pvpfcvv ← copy_variant pub.variant
+                                                        let copy ←
+                                                          pool_v1.pair_forest_copy_terminal.evaluate_with_selectors p.z
+                                                              h1_z p.selectors lambda chi
+                                                              pub.transition.live_snapshot.next_pair_index pvpfcvv
+                                                        let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                                                        let ii ←
+                                                          FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                                              sem.out
+                                                        let iter ←
+                                                          core.iter.traits.iterator.Iterator.rev.trait_default
+                                                              (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator
+                                                                field.QM31 24#usize)
+                                                              (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                                                field.QM31 24#usize)
+                                                              ii
+                                                        let composition ←
+                                                          composition_parts_loop0 iter prepared_theta copy.residual
+                                                        let ii1 ←
+                                                          FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                                              p.poseidon
+                                                        let iter1 ←
+                                                          core.iter.traits.iterator.Iterator.rev.trait_default
+                                                              (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator
+                                                                field.QM31 4#usize)
+                                                              (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                                                field.QM31 4#usize)
+                                                              ii1
+                                                        let composition1 ←
+                                                          composition_parts_loop1 iter1 prepared_theta composition
+                                                        let i1 ← SELECTED_G_COLUMN
+                                                        let q ← selected_claim claims 0#usize i1
+                                                        ok
+                                                            (core.result.Result.Ok
+                                                              (composition1, p.z, p.mask, q, h1_z, copy.active))) =
+                                                      ok
+                                                        (core.result.Result.Ok (comp, p.z, p.mask, g, h1, copy.active)))
+                                                  hcall))
+                                              (Eq.mpr
+                                                (id
+                                                  (congrArg
+                                                    (fun _a =>
+                                                      _a =
+                                                        ok
+                                                          (core.result.Result.Ok
+                                                            (comp, p.z, p.mask, g, h1, copy.active)))
+                                                    (bind_tc_ok h1 fun h1_z => do
+                                                      let pvpfcvv ← copy_variant pub.variant
+                                                      let copy ←
+                                                        pool_v1.pair_forest_copy_terminal.evaluate_with_selectors p.z
+                                                            h1_z p.selectors lambda chi
+                                                            pub.transition.live_snapshot.next_pair_index pvpfcvv
+                                                      let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                                                      let ii ←
+                                                        FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                                            sem.out
+                                                      let iter ←
+                                                        core.iter.traits.iterator.Iterator.rev.trait_default
+                                                            (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator
+                                                              field.QM31 24#usize)
+                                                            (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                                              field.QM31 24#usize)
+                                                            ii
+                                                      let composition ←
+                                                        composition_parts_loop0 iter prepared_theta copy.residual
+                                                      let ii1 ←
+                                                        FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                                            p.poseidon
+                                                      let iter1 ←
+                                                        core.iter.traits.iterator.Iterator.rev.trait_default
+                                                            (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator
+                                                              field.QM31 4#usize)
+                                                            (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                                              field.QM31 4#usize)
+                                                            ii1
+                                                      let composition1 ←
+                                                        composition_parts_loop1 iter1 prepared_theta composition
+                                                      let i1 ← SELECTED_G_COLUMN
+                                                      let q ← selected_claim claims 0#usize i1
+                                                      ok
+                                                          (core.result.Result.Ok
+                                                            (composition1, p.z, p.mask, q, h1_z, copy.active)))))
+                                                (Eq.mpr
+                                                  (id
+                                                    (congrArg
+                                                      (fun _a =>
+                                                        (do
+                                                            let pvpfcvv ← _a
+                                                            let copy ←
+                                                              pool_v1.pair_forest_copy_terminal.evaluate_with_selectors
+                                                                  p.z h1 p.selectors lambda chi
+                                                                  pub.transition.live_snapshot.next_pair_index pvpfcvv
+                                                            let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                                                            let ii ←
+                                                              FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                                                  sem.out
+                                                            let iter ←
+                                                              core.iter.traits.iterator.Iterator.rev.trait_default
+                                                                  (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator
+                                                                    field.QM31 24#usize)
+                                                                  (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                                                    field.QM31 24#usize)
+                                                                  ii
+                                                            let composition ←
+                                                              composition_parts_loop0 iter prepared_theta copy.residual
+                                                            let ii1 ←
+                                                              FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                                                  p.poseidon
+                                                            let iter1 ←
+                                                              core.iter.traits.iterator.Iterator.rev.trait_default
+                                                                  (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator
+                                                                    field.QM31 4#usize)
+                                                                  (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                                                    field.QM31 4#usize)
+                                                                  ii1
+                                                            let composition1 ←
+                                                              composition_parts_loop1 iter1 prepared_theta composition
+                                                            let i1 ← SELECTED_G_COLUMN
+                                                            let q ← selected_claim claims 0#usize i1
+                                                            ok
+                                                                (core.result.Result.Ok
+                                                                  (composition1, p.z, p.mask, q, h1, copy.active))) =
+                                                          ok
+                                                            (core.result.Result.Ok
+                                                              (comp, p.z, p.mask, g, h1, copy.active)))
+                                                      (variant_source pub.variant)))
+                                                  (Eq.mpr
+                                                    (id
+                                                      (congrArg
+                                                        (fun _a =>
+                                                          _a =
+                                                            ok
+                                                              (core.result.Result.Ok
+                                                                (comp, p.z, p.mask, g, h1, copy.active)))
+                                                        (bind_tc_ok (variant pub.variant) fun pvpfcvv => do
+                                                          let copy ←
+                                                            pool_v1.pair_forest_copy_terminal.evaluate_with_selectors
+                                                                p.z h1 p.selectors lambda chi
+                                                                pub.transition.live_snapshot.next_pair_index pvpfcvv
+                                                          let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                                                          let ii ←
+                                                            FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                                                sem.out
+                                                          let iter ←
+                                                            core.iter.traits.iterator.Iterator.rev.trait_default
+                                                                (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator
+                                                                  field.QM31 24#usize)
+                                                                (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                                                  field.QM31 24#usize)
+                                                                ii
+                                                          let composition ←
+                                                            composition_parts_loop0 iter prepared_theta copy.residual
+                                                          let ii1 ←
+                                                            FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                                                p.poseidon
+                                                          let iter1 ←
+                                                            core.iter.traits.iterator.Iterator.rev.trait_default
+                                                                (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator
+                                                                  field.QM31 4#usize)
+                                                                (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                                                  field.QM31 4#usize)
+                                                                ii1
+                                                          let composition1 ←
+                                                            composition_parts_loop1 iter1 prepared_theta composition
+                                                          let i1 ← SELECTED_G_COLUMN
+                                                          let q ← selected_claim claims 0#usize i1
+                                                          ok
+                                                              (core.result.Result.Ok
+                                                                (composition1, p.z, p.mask, q, h1, copy.active)))))
+                                                    (Eq.mpr
+                                                      (id
+                                                        (congrArg
+                                                          (fun _a =>
+                                                            (do
+                                                                let copy ← _a
+                                                                let prepared_theta ←
+                                                                  field.PreparedQm31Multiplier.new theta
+                                                                let ii ←
+                                                                  FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                                                      sem.out
+                                                                let iter ←
+                                                                  core.iter.traits.iterator.Iterator.rev.trait_default
+                                                                      (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator
+                                                                        field.QM31 24#usize)
+                                                                      (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                                                        field.QM31 24#usize)
+                                                                      ii
+                                                                let composition ←
+                                                                  composition_parts_loop0 iter prepared_theta
+                                                                      copy.residual
+                                                                let ii1 ←
+                                                                  FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                                                      p.poseidon
+                                                                let iter1 ←
+                                                                  core.iter.traits.iterator.Iterator.rev.trait_default
+                                                                      (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator
+                                                                        field.QM31 4#usize)
+                                                                      (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                                                        field.QM31 4#usize)
+                                                                      ii1
+                                                                let composition1 ←
+                                                                  composition_parts_loop1 iter1 prepared_theta
+                                                                      composition
+                                                                let i1 ← SELECTED_G_COLUMN
+                                                                let q ← selected_claim claims 0#usize i1
+                                                                ok
+                                                                    (core.result.Result.Ok
+                                                                      (composition1, p.z, p.mask, q, h1,
+                                                                        copy.active))) =
+                                                              ok
+                                                                (core.result.Result.Ok
+                                                                  (comp, p.z, p.mask, g, h1, copy.active)))
+                                                          cc))
+                                                      (Eq.mpr
+                                                        (id
+                                                          (congrArg
+                                                            (fun _a =>
+                                                              _a =
+                                                                ok
+                                                                  (core.result.Result.Ok
+                                                                    (comp, p.z, p.mask, g, h1, copy.active)))
+                                                            (bind_tc_ok copy fun copy => do
+                                                              let prepared_theta ←
+                                                                field.PreparedQm31Multiplier.new theta
+                                                              let ii ←
+                                                                FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                                                    sem.out
+                                                              let iter ←
+                                                                core.iter.traits.iterator.Iterator.rev.trait_default
+                                                                    (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator
+                                                                      field.QM31 24#usize)
+                                                                    (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                                                      field.QM31 24#usize)
+                                                                    ii
+                                                              let composition ←
+                                                                composition_parts_loop0 iter prepared_theta
+                                                                    copy.residual
+                                                              let ii1 ←
+                                                                FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                                                    p.poseidon
+                                                              let iter1 ←
+                                                                core.iter.traits.iterator.Iterator.rev.trait_default
+                                                                    (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator
+                                                                      field.QM31 4#usize)
+                                                                    (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                                                      field.QM31 4#usize)
+                                                                    ii1
+                                                              let composition1 ←
+                                                                composition_parts_loop1 iter1 prepared_theta composition
+                                                              let i1 ← SELECTED_G_COLUMN
+                                                              let q ← selected_claim claims 0#usize i1
+                                                              ok
+                                                                  (core.result.Result.Ok
+                                                                    (composition1, p.z, p.mask, q, h1, copy.active)))))
+                                                        (have mapped :=
+                                                          Eq.mpr
+                                                            (id
+                                                              (congrArg
+                                                                (fun _a =>
+                                                                  (do
+                                                                      let out ← _a
+                                                                      ok (core.result.Result.Ok out)) =
+                                                                    ok
+                                                                      (core.result.Result.Ok
+                                                                        (comp, p.z, p.mask, g, h1, copy.active)))
+                                                                ho))
+                                                            (Eq.mpr
+                                                              (id
+                                                                (congrArg
+                                                                  (fun _a =>
+                                                                    _a =
+                                                                      ok
+                                                                        (core.result.Result.Ok
+                                                                          (comp, p.z, p.mask, g, h1, copy.active)))
+                                                                  (bind_tc_ok (comp, p.z, p.mask, g, h1, copy.active)
+                                                                    fun out => ok (core.result.Result.Ok out))))
+                                                              (Eq.refl
+                                                                (ok
+                                                                  (core.result.Result.Ok
+                                                                    (comp, p.z, p.mask, g, h1, copy.active)))));
+                                                        Eq.mpr
+                                                          (id
+                                                            (congrFun'
+                                                              (congrArg Eq
+                                                                (congrArg
+                                                                  (Bind.bind (field.PreparedQm31Multiplier.new theta))
+                                                                  (funext fun prepared_theta =>
+                                                                    Eq.trans
+                                                                      (congrArg (Bind.bind (ok ↑sem.out)) (funext ⋯))
+                                                                      (bind_tc_ok ↑sem.out fun y => ⋯))))
+                                                              (ok
+                                                                (core.result.Result.Ok
+                                                                  (comp, p.z, p.mask, g, h1, copy.active)))))
+                                                          (Eq.mp
+                                                            (congrFun'
+                                                              (congrArg Eq
+                                                                (Eq.trans
+                                                                  (Eq.trans
+                                                                    (congrFun'
+                                                                      (congrArg Bind.bind
+                                                                        (Eq.trans
+                                                                          (bind_assoc_eq
+                                                                            (field.PreparedQm31Multiplier.new theta) ⋯
+                                                                            ⋯)
+                                                                          (congrArg ⋯ ⋯)))
+                                                                      fun out => ok (core.result.Result.Ok out))
+                                                                    (bind_assoc_eq
+                                                                      (field.PreparedQm31Multiplier.new theta)
+                                                                      (fun x => do
+                                                                        let x_1 ←
+                                                                          composition_parts_loop0 { iter := ↑sem.out } x
+                                                                              copy.residual
+                                                                        let comp ←
+                                                                          composition_parts_loop1
+                                                                              { iter := ↑p.poseidon } x x_1
+                                                                        let col ← SELECTED_G_COLUMN
+                                                                        let g ← selected_claim claims 0#usize col
+                                                                        ok ⋯)
+                                                                      fun out => ok (core.result.Result.Ok out)))
+                                                                  (congrArg
+                                                                    (Bind.bind (field.PreparedQm31Multiplier.new theta))
+                                                                    (funext fun x =>
+                                                                      Eq.trans (bind_assoc_eq ⋯ ⋯ ⋯) (congrArg ⋯ ⋯)))))
+                                                              (ok
+                                                                (core.result.Result.Ok
+                                                                  (comp, p.z, p.mask, g, h1, copy.active))))
+                                                            mapped)))))))))))))))))))))))))),
+      ⟨ccomp, ⟨cg, ⟨ch1, ⟨ca, ⟨p.zCanonical, p.maskCanonical⟩⟩⟩⟩⟩⟩
+'AspisR1.NLH_TermComposeTail.source' depends on axioms: [propext, Classical.choice, Quot.sound]

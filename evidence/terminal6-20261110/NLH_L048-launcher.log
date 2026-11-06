@@ -1,0 +1,54 @@
+{"attempt": "NLH_L048", "exit_status": 1, "wall_seconds": 15.778434172971174, "peak_rss_kib": "6165716", "swaps": "0", "print_axioms": ["'AspisR1.NLH_SemanticFold.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLH_SemanticFold.lean:56:3: error: Type mismatch: After simplification, term
+  total
+ has type
+  @NLH_FoldCore.Cuts State Event (step pub o s)
+    (List.map Event.child (List.finRange 4) ++
+      ([Event.digest, Event.digestAdd 0, Event.digestAdd 1] ++
+        (List.map Event.field (List.finRange 12) ++ [Event.scalars, Event.preweighted])))
+    (NLH_SemanticPrefix.stage p initial 0) (ok final)
+    (List.map Event.child (List.finRange 4) ++
+      ([Event.digest, Event.digestAdd 0, Event.digestAdd 1] ++
+        (List.map Event.field (List.finRange 12) ++ [Event.scalars, Event.preweighted])))
+but is expected to have type
+  @NLH_FoldCore.Cuts State Event (step pub o s)
+    (List.map Event.child 
+...
+erWrites.packed, digests := afterWrites.digests, locals := _a,
+                  scalars := afterWrites.scalars } =
+                afterWrites)
+            locals))
+        (Eq.refl
+          { packed := afterWrites.packed, digests := afterWrites.digests, locals := afterWrites.locals,
+            scalars := afterWrites.scalars }));
+  have fields := NLH_ScalarChain.fields scalar afterWrites;
+  let afterFields := NLH_ScalarChain.stage scalar afterWrites 12;
+  let ⟨final, h✝⁵⟩ := NLH_ScalarTail.cuts scalar afterFields packed (NLH_ScalarChain.complete_locals scalar afterWrites)
+  let ⟨tail, right✝¹¹⟩ := h✝⁵
+  let ⟨finished, right✝¹²⟩ := right✝¹¹
+  let ⟨left✝³, right✝¹³⟩ := right✝¹²
+  let ⟨left✝⁴, right✝¹⁴⟩ := right✝¹³
+  have headCuts := NLH_SemanticPrefix.cuts pub o s p initial;
+  have digestCuts := NLH_FoldCore.Cuts.next digestStep writes;
+  have total :=
+    NLH_FoldAppend.plain
+      (NLH_FoldAppend.plain (NLH_FoldAppend.plain headCuts digestCuts)
+        (Eq.mp
+          (congrArg
+            (fun _a =>
+              NLH_FoldCore.Cuts (step pub o s) (List.map Event.field (List.finRange 12)) _a
+                (ok (NLH_ScalarChain.stage scalar afterWrites 12)) (List.map Event.field (List.finRange 12)))
+            scalarStart)
+          fields))
+      tail;
+  have complete := sorry;
+  have out := Eq.trans finished sameOut;
+  Exists.intro final
+    ⟨complete,
+      ⟨NLH_FoldCore.result complete,
+        ⟨Eq.mpr (id (congrArg (fun _a => canonical _a) out)) p.canonical_out,
+          ⟨Eq.mpr (id (congrArg (fun _a => semantic_packed pub o s = ok _a) out)) parent,
+            Eq.mpr (id (congrArg (fun _a => NLH_TermSemanticRoot.reference pub o s = ok _a) out)) reference⟩⟩⟩⟩
+'AspisR1.NLH_SemanticFold.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rffbd66c1a3ca4df6a8a10940399033b6.scope; invocation ID: f65e0256a9eb4719b42b36cc9f41496d

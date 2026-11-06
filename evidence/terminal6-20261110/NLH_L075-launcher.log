@@ -1,0 +1,50 @@
+{"attempt": "NLH_L075", "exit_status": 0, "wall_seconds": 16.131872212979943, "peak_rss_kib": "6485208", "swaps": "0", "print_axioms": ["'AspisR1.NLH_TermHornerCut.step_source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NLH_TermHornerCut.loops_source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NLH_TermHornerCut.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NLH_TermHornerCut.step_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLH_TermHornerCut.loops_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLH_TermHornerCut.source : ∀ (semantic : Std.Array NQ 24#usize) (poseidon : Std.Array NQ 4#usize)
+  (theta seed : NQ),
+  canonical semantic →
+    canonical poseidon →
+      Canon theta →
+        Canon seed →
+          ∃ p middle out,
+            field.PreparedQm31Multiplier.new theta = ok p ∧
+              NJB_PreparedLaws.Domain p theta ∧
+                Trace p (↑semantic).reverse seed middle ∧
+                  Trace p (↑poseidon).reverse middle out ∧
+                    FIv_Fo
+...
+q.trans
+                                (congrFun'
+                                  (congrArg Bind.bind
+                                    (Eq.mp
+                                      (congrFun'
+                                        (congrArg Eq
+                                          (congrFun'
+                                            (congrFun'
+                                              (congrArg composition_parts_loop0
+                                                (congrArg core.iter.adapters.rev.Rev.mk
+                                                  (List.reverse_reverse ↑semantic)))
+                                              p)
+                                            seed))
+                                        (ok middle))
+                                      l0))
+                                  fun middle => composition_parts_loop1 { iter := ↑poseidon } p middle)
+                                (bind_tc_ok middle (composition_parts_loop1 { iter := ↑poseidon } p)))
+                              (Eq.mp
+                                (congrFun'
+                                  (congrArg Eq
+                                    (congrFun'
+                                      (congrFun'
+                                        (congrArg composition_parts_loop1
+                                          (congrArg core.iter.adapters.rev.Rev.mk (List.reverse_reverse ↑poseidon)))
+                                        p)
+                                      middle))
+                                  (ok out))
+                                l1))))
+                        (ok out))
+                      (eq_self (ok out))),
+                  co⟩⟩⟩⟩⟩))
+'AspisR1.NLH_TermHornerCut.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r611ffe68c8694cde94a0bb2d76f493c3.scope; invocation ID: 12db269bc04b4fe1836d91adae905194

@@ -1,0 +1,55 @@
+{"attempt": "NLH_L040", "exit_status": 0, "wall_seconds": 13.080206820974126, "peak_rss_kib": "6207616", "swaps": "0", "print_axioms": ["'AspisR1.NLH_TermSemanticRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NLH_TermSemanticRoot.source : ∀ (pub : Public) (o : Openings) (s : Selectors),
+  NKR_DigestChildren.Domain pub →
+    canonical o.z →
+      canonical o.succ_z →
+        canonical o.xor12_z →
+          canonical s.high →
+            canonical s.low →
+              ↑pub.asset_id < 2147483647 →
+                ↑(core.option.Option.unwrap_or pub.withdrawal_amount 0#u32) < 2147483647 →
+                  ∃ p digests replies scalar,
+                    NKR_DigestWrapper.reference pub o s = ok digests ∧
+                      (∀ (g : Fin 2), Canon (digests g)) ∧
+                        NKR_TermSemanticCut.Trace pub o s (List.finRange 4) NKR_TermSemanticSource.zero p.occupancy ∧
+       
+...
+ackedDigests hz hh hl p.canonical_packedDigests asset amount
+  let ⟨scalarCall, scalarCut⟩ := h✝⁷
+  have sameOut := ok.inj (Eq.trans (Eq.symm scalarCall) p.scalar_call);
+  have wrapper := dc;
+  Exists.intro p
+    (Exists.intro digests
+      (Exists.intro replies
+        (Exists.intro scalar
+          ⟨wrapper,
+            ⟨cd,
+              ⟨NKR_TermSemanticCut.prefix_source pub o s p,
+                ⟨Eq.mp
+                    (congrArg
+                      (fun _a =>
+                        NKR_TermSemanticCut.DigestCut pub o s p.occupancy digests replies
+                          (NKR_TermSemanticCut.digestObservation pub o s p.occupancy _a digests))
+                      samePacked')
+                    digestCut,
+                  ⟨scalarCut,
+                    ⟨sameOut,
+                      ⟨Eq.mp
+                          (congrArg (fun _a => NKR_TermSemanticCut.digest_reference p.occupancy digests = ok _a)
+                            samePacked)
+                          direct,
+                        ⟨of_eq_true
+                            (Eq.trans
+                              (congrFun'
+                                (congrArg Eq
+                                  (Eq.trans
+                                    (Eq.trans (congr (congrArg Bind.bind p.schedule_call) (funext ⋯))
+                                      (bind_tc_ok p.schedule fun y => ⋯))
+                                    (Eq.trans (Eq.trans (congrFun' ⋯ ⋯) (bind_tc_ok p.path ⋯))
+                                      (Eq.trans (Eq.trans ⋯ ⋯) (Eq.trans ⋯ ⋯)))))
+                                (ok p.out))
+                              (eq_self (ok p.out))),
+                          parent⟩⟩⟩⟩⟩⟩⟩⟩)))
+'AspisR1.NLH_TermSemanticRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r3fe9c85e05e249408c47aa42234100f0.scope; invocation ID: b8cd2a700f6b411e8834a7974da61564

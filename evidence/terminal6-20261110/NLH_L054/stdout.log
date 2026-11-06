@@ -1,0 +1,1562 @@
+NLH_TermCompositionFactor.lean:47:14: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_ok, ̲Aeneas.Std.uncurry, ̲Bool.false_eq_true, ̲ite_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLH_TermCompositionFactor.lean:53:16: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵ ̵o̵n̵l̵y̵ ̵[̵h̵,̵i̵f̵_̵p̵o̵s̵ ̵z̵e̵r̵o̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵i̵t̵e̵_̵t̵r̵u̵e̵]̵s̲i̲m̲p̲ ̲o̲n̲l̲y̲ ̲[̲i̲f̲_̲p̲o̲s̲ ̲z̲e̲r̲o̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲u̲n̲c̲u̲r̲r̲y̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLH_TermCompositionFactor.lean:55:16: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵,̵i̵f̵_̵n̵e̵g̵ ̵z̵e̵r̵o̵,̵s̵h̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵]̵[̲i̲f̲_̲n̲e̲g̲ ̲z̲e̲r̲o̲,̲ ̲s̲h̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲u̲n̲c̲u̲r̲r̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem AspisR1.NLH_TermCompositionFactor.source : ∀ (pub : Public) (claims : Std.Array NQ 84#usize)
+  (point : Std.Array NQ 10#usize) (lambda chi theta : NQ),
+  composition_parts pub claims point lambda chi theta = reference pub claims point lambda chi theta :=
+fun pub claims point lambda chi theta =>
+  have contEq :=
+    casesOn (motive := fun t =>
+      validate_transition pub = t →
+        (do
+            let r ← validate_transition pub
+            let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+            match cf with
+              | core.ops.control_flow.ControlFlow.Continue a =>
+                NLH_TermComposeTail.run pub claims point lambda chi theta
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual NKR_TermTail.Carrier
+                  (core.convert.FromSame PoolV1PairForestSemanticTerminalErrorV1) residual) =
+          do
+          let r ← validate_transition pub
+          match r with
+            | core.result.Result.Err e => ok (core.result.Result.Err e)
+            | core.result.Result.Ok a => NLH_TermComposeTail.run pub claims point lambda chi theta)
+      (validate_transition pub)
+      (fun r h =>
+        Eq.ndrec (motive := fun x =>
+          validate_transition pub = x →
+            (do
+                let r ← x
+                let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                match cf with
+                  | core.ops.control_flow.ControlFlow.Continue a =>
+                    NLH_TermComposeTail.run pub claims point lambda chi theta
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      NKR_TermTail.Carrier (core.convert.FromSame PoolV1PairForestSemanticTerminalErrorV1) residual) =
+              do
+              let r ← x
+              match r with
+                | core.result.Result.Err e => ok (core.result.Result.Err e)
+                | core.result.Result.Ok a => NLH_TermComposeTail.run pub claims point lambda chi theta)
+          (fun v =>
+            core.result.Result.casesOn (motive := fun t =>
+              r = t →
+                (do
+                    let r ← ok r
+                    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                    match cf with
+                      | core.ops.control_flow.ControlFlow.Continue a =>
+                        NLH_TermComposeTail.run pub claims point lambda chi theta
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          NKR_TermTail.Carrier (core.convert.FromSame PoolV1PairForestSemanticTerminalErrorV1)
+                          residual) =
+                  do
+                  let r ← ok r
+                  match r with
+                    | core.result.Result.Err e => ok (core.result.Result.Err e)
+                    | core.result.Result.Ok a => NLH_TermComposeTail.run pub claims point lambda chi theta)
+              r
+              (fun a h =>
+                Eq.ndrec (motive := fun r =>
+                  validate_transition pub = ok r →
+                    (do
+                        let r ← ok r
+                        let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                        match cf with
+                          | core.ops.control_flow.ControlFlow.Continue a =>
+                            NLH_TermComposeTail.run pub claims point lambda chi theta
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              NKR_TermTail.Carrier (core.convert.FromSame PoolV1PairForestSemanticTerminalErrorV1)
+                              residual) =
+                      do
+                      let r ← ok r
+                      match r with
+                        | core.result.Result.Err e => ok (core.result.Result.Err e)
+                        | core.result.Result.Ok a => NLH_TermComposeTail.run pub claims point lambda chi theta)
+                  (fun v =>
+                    Eq.refl do
+                      let r ← ok (core.result.Result.Ok a)
+                      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                      match cf with
+                        | core.ops.control_flow.ControlFlow.Continue a =>
+                          NLH_TermComposeTail.run pub claims point lambda chi theta
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            NKR_TermTail.Carrier (core.convert.FromSame PoolV1PairForestSemanticTerminalErrorV1)
+                            residual)
+                  (Eq.symm h) v)
+              (fun a h =>
+                Eq.ndrec (motive := fun r =>
+                  validate_transition pub = ok r →
+                    (do
+                        let r ← ok r
+                        let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                        match cf with
+                          | core.ops.control_flow.ControlFlow.Continue a =>
+                            NLH_TermComposeTail.run pub claims point lambda chi theta
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              NKR_TermTail.Carrier (core.convert.FromSame PoolV1PairForestSemanticTerminalErrorV1)
+                              residual) =
+                      do
+                      let r ← ok r
+                      match r with
+                        | core.result.Result.Err e => ok (core.result.Result.Err e)
+                        | core.result.Result.Ok a => NLH_TermComposeTail.run pub claims point lambda chi theta)
+                  (fun v =>
+                    Eq.refl do
+                      let r ← ok (core.result.Result.Err a)
+                      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                      match cf with
+                        | core.ops.control_flow.ControlFlow.Continue a =>
+                          NLH_TermComposeTail.run pub claims point lambda chi theta
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            NKR_TermTail.Carrier (core.convert.FromSame PoolV1PairForestSemanticTerminalErrorV1)
+                            residual)
+                  (Eq.symm h) v)
+              (Eq.refl r))
+          (Eq.symm h) (Eq.refl (validate_transition pub)))
+      (fun e h =>
+        Eq.ndrec (motive := fun x =>
+          validate_transition pub = x →
+            (do
+                let r ← x
+                let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                match cf with
+                  | core.ops.control_flow.ControlFlow.Continue a =>
+                    NLH_TermComposeTail.run pub claims point lambda chi theta
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      NKR_TermTail.Carrier (core.convert.FromSame PoolV1PairForestSemanticTerminalErrorV1) residual) =
+              do
+              let r ← x
+              match r with
+                | core.result.Result.Err e => ok (core.result.Result.Err e)
+                | core.result.Result.Ok a => NLH_TermComposeTail.run pub claims point lambda chi theta)
+          (fun v =>
+            Eq.refl do
+              let r ← fail e
+              let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue a =>
+                  NLH_TermComposeTail.run pub claims point lambda chi theta
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    NKR_TermTail.Carrier (core.convert.FromSame PoolV1PairForestSemanticTerminalErrorV1) residual)
+          (Eq.symm h) (Eq.refl (validate_transition pub)))
+      (fun h =>
+        Eq.ndrec (motive := fun x =>
+          validate_transition pub = x →
+            (do
+                let r ← x
+                let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                match cf with
+                  | core.ops.control_flow.ControlFlow.Continue a =>
+                    NLH_TermComposeTail.run pub claims point lambda chi theta
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      NKR_TermTail.Carrier (core.convert.FromSame PoolV1PairForestSemanticTerminalErrorV1) residual) =
+              do
+              let r ← x
+              match r with
+                | core.result.Result.Err e => ok (core.result.Result.Err e)
+                | core.result.Result.Ok a => NLH_TermComposeTail.run pub claims point lambda chi theta)
+          (fun v =>
+            Eq.refl do
+              let r ← div
+              let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue a =>
+                  NLH_TermComposeTail.run pub claims point lambda chi theta
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    NKR_TermTail.Carrier (core.convert.FromSame PoolV1PairForestSemanticTerminalErrorV1) residual)
+          (Eq.symm h) (Eq.refl (validate_transition pub)))
+      (Eq.refl (validate_transition pub));
+  id
+    (id
+      (id
+        (Option.casesOn (motive := fun t =>
+          pub.withdrawal_amount = t →
+            (do
+                let (o, invalid_amount) ←
+                  match pub.withdrawal_amount with
+                    | none => ok (none, false)
+                    | some amount => do
+                      let b ←
+                        if amount = 0#u32 then ok true
+                          else do
+                            let i ← 1#u32 <<< 30#u32
+                            ok (decide (amount ≥ i))
+                      ok (pub.withdrawal_amount, b)
+                if invalid_amount = true then
+                    ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+                  else do
+                    let r ←
+                      validate_transition
+                          { variant := pub.variant, pool := pub.pool, deployment_domain := pub.deployment_domain,
+                            anchor := pub.anchor, nullifier := pub.nullifier, asset_id := pub.asset_id,
+                            recipient := pub.recipient, change := pub.change, withdrawal_amount := o,
+                            transition := pub.transition }
+                    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                    match cf with
+                      | core.ops.control_flow.ControlFlow.Continue a => do
+                        let a ←
+                          array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                              composition_parts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31 field.QM31.ZERO claims
+                        let a1 ←
+                          array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                              composition_parts.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeQM31 field.QM31.ZERO
+                              claims
+                        let a2 ←
+                          array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                              composition_parts.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31 field.QM31.ZERO
+                              claims
+                        let mask_only ←
+                          array_from_fn_copy 10#usize field.QM31.Insts.CoreMarkerCopy
+                              composition_parts.closure_3.Insts.CoreOpsFunctionFnMutTupleUsizeQM31 field.QM31.ZERO
+                              claims
+                        let selectors ← pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point
+                        let sops ← poseidon_selectors selectors
+                        let poseidon ←
+                          state_only_poseidon.evaluate_state_only_poseidon_oracle_projected
+                              { z := a, succ_z := a1, xor12_z := a2 } sops
+                        let semantic ←
+                          semantic_packed
+                              { variant := pub.variant, pool := pub.pool, deployment_domain := pub.deployment_domain,
+                                anchor := pub.anchor, nullifier := pub.nullifier, asset_id := pub.asset_id,
+                                recipient := pub.recipient, change := pub.change, withdrawal_amount := o,
+                                transition := pub.transition }
+                              { z := a, succ_z := a1, xor12_z := a2 } selectors
+                        let i ← SELECTED_H1_COLUMN
+                        let h1_z ← selected_claim claims 0#usize i
+                        let pvpfcvv ← copy_variant pub.variant
+                        let copy ←
+                          pool_v1.pair_forest_copy_terminal.evaluate_with_selectors a h1_z selectors lambda chi
+                              pub.transition.live_snapshot.next_pair_index pvpfcvv
+                        let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                        let ii ← FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter semantic
+                        let iter ←
+                          core.iter.traits.iterator.Iterator.rev.trait_default
+                              (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31 24#usize)
+                              (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator field.QM31
+                                24#usize)
+                              ii
+                        let composition ← composition_parts_loop0 iter prepared_theta copy.residual
+                        let ii1 ← FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter poseidon
+                        let iter1 ←
+                          core.iter.traits.iterator.Iterator.rev.trait_default
+                              (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31 4#usize)
+                              (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator field.QM31
+                                4#usize)
+                              ii1
+                        let composition1 ← composition_parts_loop1 iter1 prepared_theta composition
+                        let i1 ← SELECTED_G_COLUMN
+                        let q ← selected_claim claims 0#usize i1
+                        ok (core.result.Result.Ok (composition1, a, mask_only, q, h1_z, copy.active))
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (field.QM31 ×
+                            Std.Array field.QM31 16#usize ×
+                              Std.Array field.QM31 10#usize × field.QM31 × field.QM31 × field.QM31)
+                          (core.convert.FromSame PoolV1PairForestSemanticTerminalErrorV1) residual) =
+              do
+              let (_, invalid) ←
+                match pub.withdrawal_amount with
+                  | none => ok (none, false)
+                  | some amount => do
+                    let b ←
+                      if amount = 0#u32 then ok true
+                        else do
+                          let i ← 1#u32 <<< 30#u32
+                          ok (decide (amount ≥ i))
+                    ok (pub.withdrawal_amount, b)
+              if invalid = true then
+                  ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+                else do
+                  let validation ← validate_transition pub
+                  match validation with
+                    | core.result.Result.Err e => ok (core.result.Result.Err e)
+                    | core.result.Result.Ok a => NLH_TermComposeTail.run pub claims point lambda chi theta)
+          pub.withdrawal_amount
+          (fun h =>
+            Eq.ndrec (motive := fun x =>
+              pub.withdrawal_amount = x →
+                (do
+                    let (o, invalid_amount) ←
+                      match x with
+                        | none => ok (none, false)
+                        | some amount => do
+                          let b ←
+                            if amount = 0#u32 then ok true
+                              else do
+                                let i ← 1#u32 <<< 30#u32
+                                ok (decide (amount ≥ i))
+                          ok (x, b)
+                    if invalid_amount = true then
+                        ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+                      else do
+                        let r ←
+                          validate_transition
+                              { variant := pub.variant, pool := pub.pool, deployment_domain := pub.deployment_domain,
+                                anchor := pub.anchor, nullifier := pub.nullifier, asset_id := pub.asset_id,
+                                recipient := pub.recipient, change := pub.change, withdrawal_amount := o,
+                                transition := pub.transition }
+                        let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                        match cf with
+                          | core.ops.control_flow.ControlFlow.Continue a => do
+                            let a ←
+                              array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                  composition_parts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31 field.QM31.ZERO
+                                  claims
+                            let a1 ←
+                              array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                  composition_parts.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeQM31 field.QM31.ZERO
+                                  claims
+                            let a2 ←
+                              array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                  composition_parts.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31 field.QM31.ZERO
+                                  claims
+                            let mask_only ←
+                              array_from_fn_copy 10#usize field.QM31.Insts.CoreMarkerCopy
+                                  composition_parts.closure_3.Insts.CoreOpsFunctionFnMutTupleUsizeQM31 field.QM31.ZERO
+                                  claims
+                            let selectors ← pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point
+                            let sops ← poseidon_selectors selectors
+                            let poseidon ←
+                              state_only_poseidon.evaluate_state_only_poseidon_oracle_projected
+                                  { z := a, succ_z := a1, xor12_z := a2 } sops
+                            let semantic ←
+                              semantic_packed
+                                  { variant := pub.variant, pool := pub.pool,
+                                    deployment_domain := pub.deployment_domain, anchor := pub.anchor,
+                                    nullifier := pub.nullifier, asset_id := pub.asset_id, recipient := pub.recipient,
+                                    change := pub.change, withdrawal_amount := o, transition := pub.transition }
+                                  { z := a, succ_z := a1, xor12_z := a2 } selectors
+                            let i ← SELECTED_H1_COLUMN
+                            let h1_z ← selected_claim claims 0#usize i
+                            let pvpfcvv ← copy_variant pub.variant
+                            let copy ←
+                              pool_v1.pair_forest_copy_terminal.evaluate_with_selectors a h1_z selectors lambda chi
+                                  pub.transition.live_snapshot.next_pair_index pvpfcvv
+                            let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                            let ii ←
+                              FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter semantic
+                            let iter ←
+                              core.iter.traits.iterator.Iterator.rev.trait_default
+                                  (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31 24#usize)
+                                  (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                    field.QM31 24#usize)
+                                  ii
+                            let composition ← composition_parts_loop0 iter prepared_theta copy.residual
+                            let ii1 ←
+                              FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter poseidon
+                            let iter1 ←
+                              core.iter.traits.iterator.Iterator.rev.trait_default
+                                  (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31 4#usize)
+                                  (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                    field.QM31 4#usize)
+                                  ii1
+                            let composition1 ← composition_parts_loop1 iter1 prepared_theta composition
+                            let i1 ← SELECTED_G_COLUMN
+                            let q ← selected_claim claims 0#usize i1
+                            ok (core.result.Result.Ok (composition1, a, mask_only, q, h1_z, copy.active))
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (field.QM31 ×
+                                Std.Array field.QM31 16#usize ×
+                                  Std.Array field.QM31 10#usize × field.QM31 × field.QM31 × field.QM31)
+                              (core.convert.FromSame PoolV1PairForestSemanticTerminalErrorV1) residual) =
+                  do
+                  let (_, invalid) ←
+                    match x with
+                      | none => ok (none, false)
+                      | some amount => do
+                        let b ←
+                          if amount = 0#u32 then ok true
+                            else do
+                              let i ← 1#u32 <<< 30#u32
+                              ok (decide (amount ≥ i))
+                        ok (x, b)
+                  if invalid = true then
+                      ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+                    else do
+                      let validation ← validate_transition pub
+                      match validation with
+                        | core.result.Result.Err e => ok (core.result.Result.Err e)
+                        | core.result.Result.Ok a => NLH_TermComposeTail.run pub claims point lambda chi theta)
+              (fun h =>
+                Eq.mpr
+                  (id
+                    (congr
+                      (congrArg Eq
+                        (Eq.trans
+                          (bind_tc_ok (none, false)
+                            (uncurry fun o invalid_amount =>
+                              if invalid_amount = true then
+                                ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+                              else do
+                                let r ←
+                                  validate_transition
+                                      { variant := pub.variant, pool := pub.pool,
+                                        deployment_domain := pub.deployment_domain, anchor := pub.anchor,
+                                        nullifier := pub.nullifier, asset_id := pub.asset_id,
+                                        recipient := pub.recipient, change := pub.change, withdrawal_amount := o,
+                                        transition := pub.transition }
+                                let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                                match cf with
+                                  | core.ops.control_flow.ControlFlow.Continue a => do
+                                    let a ←
+                                      array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                          composition_parts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                          field.QM31.ZERO claims
+                                    let a1 ←
+                                      array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                          composition_parts.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                          field.QM31.ZERO claims
+                                    let a2 ←
+                                      array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                          composition_parts.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                          field.QM31.ZERO claims
+                                    let mask_only ←
+                                      array_from_fn_copy 10#usize field.QM31.Insts.CoreMarkerCopy
+                                          composition_parts.closure_3.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                          field.QM31.ZERO claims
+                                    let selectors ← pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point
+                                    let sops ← poseidon_selectors selectors
+                                    let poseidon ←
+                                      state_only_poseidon.evaluate_state_only_poseidon_oracle_projected
+                                          { z := a, succ_z := a1, xor12_z := a2 } sops
+                                    let semantic ←
+                                      semantic_packed
+                                          { variant := pub.variant, pool := pub.pool,
+                                            deployment_domain := pub.deployment_domain, anchor := pub.anchor,
+                                            nullifier := pub.nullifier, asset_id := pub.asset_id,
+                                            recipient := pub.recipient, change := pub.change, withdrawal_amount := o,
+                                            transition := pub.transition }
+                                          { z := a, succ_z := a1, xor12_z := a2 } selectors
+                                    let i ← SELECTED_H1_COLUMN
+                                    let h1_z ← selected_claim claims 0#usize i
+                                    let pvpfcvv ← copy_variant pub.variant
+                                    let copy ←
+                                      pool_v1.pair_forest_copy_terminal.evaluate_with_selectors a h1_z selectors lambda
+                                          chi pub.transition.live_snapshot.next_pair_index pvpfcvv
+                                    let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                                    let ii ←
+                                      FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                          semantic
+                                    let iter ←
+                                      core.iter.traits.iterator.Iterator.rev.trait_default
+                                          (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31
+                                            24#usize)
+                                          (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                            field.QM31 24#usize)
+                                          ii
+                                    let composition ← composition_parts_loop0 iter prepared_theta copy.residual
+                                    let ii1 ←
+                                      FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                          poseidon
+                                    let iter1 ←
+                                      core.iter.traits.iterator.Iterator.rev.trait_default
+                                          (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31
+                                            4#usize)
+                                          (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                            field.QM31 4#usize)
+                                          ii1
+                                    let composition1 ← composition_parts_loop1 iter1 prepared_theta composition
+                                    let i1 ← SELECTED_G_COLUMN
+                                    let q ← selected_claim claims 0#usize i1
+                                    ok (core.result.Result.Ok (composition1, a, mask_only, q, h1_z, copy.active))
+                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      (field.QM31 ×
+                                        Std.Array field.QM31 16#usize ×
+                                          Std.Array field.QM31 10#usize × field.QM31 × field.QM31 × field.QM31)
+                                      (core.convert.FromSame PoolV1PairForestSemanticTerminalErrorV1) residual))
+                          (ite_congr Bool.false_eq_true
+                            (fun a =>
+                              Eq.refl
+                                (ok
+                                  (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)))
+                            fun a =>
+                            Eq.refl do
+                              let r ←
+                                validate_transition
+                                    { variant := pub.variant, pool := pub.pool,
+                                      deployment_domain := pub.deployment_domain, anchor := pub.anchor,
+                                      nullifier := pub.nullifier, asset_id := pub.asset_id, recipient := pub.recipient,
+                                      change := pub.change, withdrawal_amount := none, transition := pub.transition }
+                              let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                              match cf with
+                                | core.ops.control_flow.ControlFlow.Continue a => do
+                                  let a ←
+                                    array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                        composition_parts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                        field.QM31.ZERO claims
+                                  let a1 ←
+                                    array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                        composition_parts.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                        field.QM31.ZERO claims
+                                  let a2 ←
+                                    array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                        composition_parts.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                        field.QM31.ZERO claims
+                                  let mask_only ←
+                                    array_from_fn_copy 10#usize field.QM31.Insts.CoreMarkerCopy
+                                        composition_parts.closure_3.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                        field.QM31.ZERO claims
+                                  let selectors ← pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point
+                                  let sops ← poseidon_selectors selectors
+                                  let poseidon ←
+                                    state_only_poseidon.evaluate_state_only_poseidon_oracle_projected
+                                        { z := a, succ_z := a1, xor12_z := a2 } sops
+                                  let semantic ←
+                                    semantic_packed
+                                        { variant := pub.variant, pool := pub.pool,
+                                          deployment_domain := pub.deployment_domain, anchor := pub.anchor,
+                                          nullifier := pub.nullifier, asset_id := pub.asset_id,
+                                          recipient := pub.recipient, change := pub.change, withdrawal_amount := none,
+                                          transition := pub.transition }
+                                        { z := a, succ_z := a1, xor12_z := a2 } selectors
+                                  let i ← SELECTED_H1_COLUMN
+                                  let h1_z ← selected_claim claims 0#usize i
+                                  let pvpfcvv ← copy_variant pub.variant
+                                  let copy ←
+                                    pool_v1.pair_forest_copy_terminal.evaluate_with_selectors a h1_z selectors lambda
+                                        chi pub.transition.live_snapshot.next_pair_index pvpfcvv
+                                  let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                                  let ii ←
+                                    FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter semantic
+                                  let iter ←
+                                    core.iter.traits.iterator.Iterator.rev.trait_default
+                                        (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31
+                                          24#usize)
+                                        (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                          field.QM31 24#usize)
+                                        ii
+                                  let composition ← composition_parts_loop0 iter prepared_theta copy.residual
+                                  let ii1 ←
+                                    FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter poseidon
+                                  let iter1 ←
+                                    core.iter.traits.iterator.Iterator.rev.trait_default
+                                        (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31
+                                          4#usize)
+                                        (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                          field.QM31 4#usize)
+                                        ii1
+                                  let composition1 ← composition_parts_loop1 iter1 prepared_theta composition
+                                  let i1 ← SELECTED_G_COLUMN
+                                  let q ← selected_claim claims 0#usize i1
+                                  ok (core.result.Result.Ok (composition1, a, mask_only, q, h1_z, copy.active))
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (field.QM31 ×
+                                      Std.Array field.QM31 16#usize ×
+                                        Std.Array field.QM31 10#usize × field.QM31 × field.QM31 × field.QM31)
+                                    (core.convert.FromSame PoolV1PairForestSemanticTerminalErrorV1) residual)))
+                      (Eq.trans
+                        (bind_tc_ok (none, false)
+                          (uncurry fun _ invalid =>
+                            if invalid = true then
+                              ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+                            else do
+                              let validation ← validate_transition pub
+                              match validation with
+                                | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                | core.result.Result.Ok a => NLH_TermComposeTail.run pub claims point lambda chi theta))
+                        (ite_congr Bool.false_eq_true
+                          (fun a =>
+                            Eq.refl
+                              (ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)))
+                          fun a =>
+                          Eq.refl do
+                            let validation ← validate_transition pub
+                            match validation with
+                              | core.result.Result.Err e => ok (core.result.Result.Err e)
+                              | core.result.Result.Ok a => NLH_TermComposeTail.run pub claims point lambda chi theta))))
+                  (have same :=
+                    Eq.mpr
+                      (id
+                        (congrArg
+                          (fun _a =>
+                            { variant := pub.variant, pool := pub.pool, deployment_domain := pub.deployment_domain,
+                                anchor := pub.anchor, nullifier := pub.nullifier, asset_id := pub.asset_id,
+                                recipient := pub.recipient, change := pub.change, withdrawal_amount := _a,
+                                transition := pub.transition } =
+                              pub)
+                          (Eq.symm h)))
+                      (Eq.refl
+                        { variant := pub.variant, pool := pub.pool, deployment_domain := pub.deployment_domain,
+                          anchor := pub.anchor, nullifier := pub.nullifier, asset_id := pub.asset_id,
+                          recipient := pub.recipient, change := pub.change, withdrawal_amount := pub.withdrawal_amount,
+                          transition := pub.transition });
+                  Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          (do
+                              let r ← validate_transition _a
+                              let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                              match cf with
+                                | core.ops.control_flow.ControlFlow.Continue a => do
+                                  let a ←
+                                    array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                        composition_parts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                        field.QM31.ZERO claims
+                                  let a1 ←
+                                    array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                        composition_parts.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                        field.QM31.ZERO claims
+                                  let a2 ←
+                                    array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                        composition_parts.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                        field.QM31.ZERO claims
+                                  let mask_only ←
+                                    array_from_fn_copy 10#usize field.QM31.Insts.CoreMarkerCopy
+                                        composition_parts.closure_3.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                        field.QM31.ZERO claims
+                                  let selectors ← pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point
+                                  let sops ← poseidon_selectors selectors
+                                  let poseidon ←
+                                    state_only_poseidon.evaluate_state_only_poseidon_oracle_projected
+                                        { z := a, succ_z := a1, xor12_z := a2 } sops
+                                  let semantic ← semantic_packed _a { z := a, succ_z := a1, xor12_z := a2 } selectors
+                                  let i ← SELECTED_H1_COLUMN
+                                  let h1_z ← selected_claim claims 0#usize i
+                                  let pvpfcvv ← copy_variant pub.variant
+                                  let copy ←
+                                    pool_v1.pair_forest_copy_terminal.evaluate_with_selectors a h1_z selectors lambda
+                                        chi pub.transition.live_snapshot.next_pair_index pvpfcvv
+                                  let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                                  let ii ←
+                                    FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter semantic
+                                  let iter ←
+                                    core.iter.traits.iterator.Iterator.rev.trait_default
+                                        (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31
+                                          24#usize)
+                                        (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                          field.QM31 24#usize)
+                                        ii
+                                  let composition ← composition_parts_loop0 iter prepared_theta copy.residual
+                                  let ii1 ←
+                                    FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter poseidon
+                                  let iter1 ←
+                                    core.iter.traits.iterator.Iterator.rev.trait_default
+                                        (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31
+                                          4#usize)
+                                        (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                          field.QM31 4#usize)
+                                        ii1
+                                  let composition1 ← composition_parts_loop1 iter1 prepared_theta composition
+                                  let i1 ← SELECTED_G_COLUMN
+                                  let q ← selected_claim claims 0#usize i1
+                                  ok (core.result.Result.Ok (composition1, a, mask_only, q, h1_z, copy.active))
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (field.QM31 ×
+                                      Std.Array field.QM31 16#usize ×
+                                        Std.Array field.QM31 10#usize × field.QM31 × field.QM31 × field.QM31)
+                                    (core.convert.FromSame PoolV1PairForestSemanticTerminalErrorV1) residual) =
+                            do
+                            let validation ← validate_transition pub
+                            match validation with
+                              | core.result.Result.Err e => ok (core.result.Result.Err e)
+                              | core.result.Result.Ok a => NLH_TermComposeTail.run pub claims point lambda chi theta)
+                        same))
+                    contEq))
+              (Eq.symm h) (Eq.refl pub.withdrawal_amount))
+          (fun a h =>
+            Eq.ndrec (motive := fun x =>
+              pub.withdrawal_amount = x →
+                (do
+                    let (o, invalid_amount) ←
+                      match x with
+                        | none => ok (none, false)
+                        | some amount => do
+                          let b ←
+                            if amount = 0#u32 then ok true
+                              else do
+                                let i ← 1#u32 <<< 30#u32
+                                ok (decide (amount ≥ i))
+                          ok (x, b)
+                    if invalid_amount = true then
+                        ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+                      else do
+                        let r ←
+                          validate_transition
+                              { variant := pub.variant, pool := pub.pool, deployment_domain := pub.deployment_domain,
+                                anchor := pub.anchor, nullifier := pub.nullifier, asset_id := pub.asset_id,
+                                recipient := pub.recipient, change := pub.change, withdrawal_amount := o,
+                                transition := pub.transition }
+                        let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                        match cf with
+                          | core.ops.control_flow.ControlFlow.Continue a => do
+                            let a ←
+                              array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                  composition_parts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31 field.QM31.ZERO
+                                  claims
+                            let a1 ←
+                              array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                  composition_parts.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeQM31 field.QM31.ZERO
+                                  claims
+                            let a2 ←
+                              array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                  composition_parts.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31 field.QM31.ZERO
+                                  claims
+                            let mask_only ←
+                              array_from_fn_copy 10#usize field.QM31.Insts.CoreMarkerCopy
+                                  composition_parts.closure_3.Insts.CoreOpsFunctionFnMutTupleUsizeQM31 field.QM31.ZERO
+                                  claims
+                            let selectors ← pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point
+                            let sops ← poseidon_selectors selectors
+                            let poseidon ←
+                              state_only_poseidon.evaluate_state_only_poseidon_oracle_projected
+                                  { z := a, succ_z := a1, xor12_z := a2 } sops
+                            let semantic ←
+                              semantic_packed
+                                  { variant := pub.variant, pool := pub.pool,
+                                    deployment_domain := pub.deployment_domain, anchor := pub.anchor,
+                                    nullifier := pub.nullifier, asset_id := pub.asset_id, recipient := pub.recipient,
+                                    change := pub.change, withdrawal_amount := o, transition := pub.transition }
+                                  { z := a, succ_z := a1, xor12_z := a2 } selectors
+                            let i ← SELECTED_H1_COLUMN
+                            let h1_z ← selected_claim claims 0#usize i
+                            let pvpfcvv ← copy_variant pub.variant
+                            let copy ←
+                              pool_v1.pair_forest_copy_terminal.evaluate_with_selectors a h1_z selectors lambda chi
+                                  pub.transition.live_snapshot.next_pair_index pvpfcvv
+                            let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                            let ii ←
+                              FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter semantic
+                            let iter ←
+                              core.iter.traits.iterator.Iterator.rev.trait_default
+                                  (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31 24#usize)
+                                  (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                    field.QM31 24#usize)
+                                  ii
+                            let composition ← composition_parts_loop0 iter prepared_theta copy.residual
+                            let ii1 ←
+                              FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter poseidon
+                            let iter1 ←
+                              core.iter.traits.iterator.Iterator.rev.trait_default
+                                  (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31 4#usize)
+                                  (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                    field.QM31 4#usize)
+                                  ii1
+                            let composition1 ← composition_parts_loop1 iter1 prepared_theta composition
+                            let i1 ← SELECTED_G_COLUMN
+                            let q ← selected_claim claims 0#usize i1
+                            ok (core.result.Result.Ok (composition1, a, mask_only, q, h1_z, copy.active))
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (field.QM31 ×
+                                Std.Array field.QM31 16#usize ×
+                                  Std.Array field.QM31 10#usize × field.QM31 × field.QM31 × field.QM31)
+                              (core.convert.FromSame PoolV1PairForestSemanticTerminalErrorV1) residual) =
+                  do
+                  let (_, invalid) ←
+                    match x with
+                      | none => ok (none, false)
+                      | some amount => do
+                        let b ←
+                          if amount = 0#u32 then ok true
+                            else do
+                              let i ← 1#u32 <<< 30#u32
+                              ok (decide (amount ≥ i))
+                        ok (x, b)
+                  if invalid = true then
+                      ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+                    else do
+                      let validation ← validate_transition pub
+                      match validation with
+                        | core.result.Result.Err e => ok (core.result.Result.Err e)
+                        | core.result.Result.Ok a => NLH_TermComposeTail.run pub claims point lambda chi theta)
+              (fun h =>
+                if zero : a = 0#u32 then
+                  of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Eq
+                          (Eq.trans
+                            (Eq.trans
+                              (congrFun'
+                                (congrArg Bind.bind
+                                  (Eq.trans
+                                    (congrFun'
+                                      (congrArg Bind.bind
+                                        ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos zero) x_0 x_1 x_2 x_3)
+                                          (instDecidableEqUScalar_1 UScalarTy.U32 a 0#u32) (Result Bool) (ok true) do
+                                          let i ← 1#u32 <<< 30#u32
+                                          ok (decide (a ≥ i))))
+                                      fun b => ok (some a, b))
+                                    (bind_tc_ok true fun y => ok (some a, y))))
+                                (uncurry fun o invalid_amount =>
+                                  if invalid_amount = true then
+                                    ok
+                                      (core.result.Result.Err
+                                        PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+                                  else do
+                                    let r ←
+                                      validate_transition
+                                          { variant := pub.variant, pool := pub.pool,
+                                            deployment_domain := pub.deployment_domain, anchor := pub.anchor,
+                                            nullifier := pub.nullifier, asset_id := pub.asset_id,
+                                            recipient := pub.recipient, change := pub.change, withdrawal_amount := o,
+                                            transition := pub.transition }
+                                    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                                    match cf with
+                                      | core.ops.control_flow.ControlFlow.Continue a => do
+                                        let a ←
+                                          array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                              composition_parts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                              field.QM31.ZERO claims
+                                        let a1 ←
+                                          array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                              composition_parts.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                              field.QM31.ZERO claims
+                                        let a2 ←
+                                          array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                              composition_parts.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                              field.QM31.ZERO claims
+                                        let mask_only ←
+                                          array_from_fn_copy 10#usize field.QM31.Insts.CoreMarkerCopy
+                                              composition_parts.closure_3.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                              field.QM31.ZERO claims
+                                        let selectors ← pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point
+                                        let sops ← poseidon_selectors selectors
+                                        let poseidon ←
+                                          state_only_poseidon.evaluate_state_only_poseidon_oracle_projected
+                                              { z := a, succ_z := a1, xor12_z := a2 } sops
+                                        let semantic ←
+                                          semantic_packed
+                                              { variant := pub.variant, pool := pub.pool,
+                                                deployment_domain := pub.deployment_domain, anchor := pub.anchor,
+                                                nullifier := pub.nullifier, asset_id := pub.asset_id,
+                                                recipient := pub.recipient, change := pub.change,
+                                                withdrawal_amount := o, transition := pub.transition }
+                                              { z := a, succ_z := a1, xor12_z := a2 } selectors
+                                        let i ← SELECTED_H1_COLUMN
+                                        let h1_z ← selected_claim claims 0#usize i
+                                        let pvpfcvv ← copy_variant pub.variant
+                                        let copy ←
+                                          pool_v1.pair_forest_copy_terminal.evaluate_with_selectors a h1_z selectors
+                                              lambda chi pub.transition.live_snapshot.next_pair_index pvpfcvv
+                                        let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                                        let ii ←
+                                          FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                              semantic
+                                        let iter ←
+                                          core.iter.traits.iterator.Iterator.rev.trait_default
+                                              (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31
+                                                24#usize)
+                                              (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                                field.QM31 24#usize)
+                                              ii
+                                        let composition ← composition_parts_loop0 iter prepared_theta copy.residual
+                                        let ii1 ←
+                                          FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                              poseidon
+                                        let iter1 ←
+                                          core.iter.traits.iterator.Iterator.rev.trait_default
+                                              (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31
+                                                4#usize)
+                                              (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                                field.QM31 4#usize)
+                                              ii1
+                                        let composition1 ← composition_parts_loop1 iter1 prepared_theta composition
+                                        let i1 ← SELECTED_G_COLUMN
+                                        let q ← selected_claim claims 0#usize i1
+                                        ok (core.result.Result.Ok (composition1, a, mask_only, q, h1_z, copy.active))
+                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          (field.QM31 ×
+                                            Std.Array field.QM31 16#usize ×
+                                              Std.Array field.QM31 10#usize × field.QM31 × field.QM31 × field.QM31)
+                                          (core.convert.FromSame PoolV1PairForestSemanticTerminalErrorV1) residual))
+                              (bind_tc_ok (some a, true)
+                                (uncurry fun o invalid_amount =>
+                                  if invalid_amount = true then
+                                    ok
+                                      (core.result.Result.Err
+                                        PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+                                  else do
+                                    let r ←
+                                      validate_transition
+                                          { variant := pub.variant, pool := pub.pool,
+                                            deployment_domain := pub.deployment_domain, anchor := pub.anchor,
+                                            nullifier := pub.nullifier, asset_id := pub.asset_id,
+                                            recipient := pub.recipient, change := pub.change, withdrawal_amount := o,
+                                            transition := pub.transition }
+                                    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                                    match cf with
+                                      | core.ops.control_flow.ControlFlow.Continue a => do
+                                        let a ←
+                                          array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                              composition_parts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                              field.QM31.ZERO claims
+                                        let a1 ←
+                                          array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                              composition_parts.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                              field.QM31.ZERO claims
+                                        let a2 ←
+                                          array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                              composition_parts.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                              field.QM31.ZERO claims
+                                        let mask_only ←
+                                          array_from_fn_copy 10#usize field.QM31.Insts.CoreMarkerCopy
+                                              composition_parts.closure_3.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                              field.QM31.ZERO claims
+                                        let selectors ← pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point
+                                        let sops ← poseidon_selectors selectors
+                                        let poseidon ←
+                                          state_only_poseidon.evaluate_state_only_poseidon_oracle_projected
+                                              { z := a, succ_z := a1, xor12_z := a2 } sops
+                                        let semantic ←
+                                          semantic_packed
+                                              { variant := pub.variant, pool := pub.pool,
+                                                deployment_domain := pub.deployment_domain, anchor := pub.anchor,
+                                                nullifier := pub.nullifier, asset_id := pub.asset_id,
+                                                recipient := pub.recipient, change := pub.change,
+                                                withdrawal_amount := o, transition := pub.transition }
+                                              { z := a, succ_z := a1, xor12_z := a2 } selectors
+                                        let i ← SELECTED_H1_COLUMN
+                                        let h1_z ← selected_claim claims 0#usize i
+                                        let pvpfcvv ← copy_variant pub.variant
+                                        let copy ←
+                                          pool_v1.pair_forest_copy_terminal.evaluate_with_selectors a h1_z selectors
+                                              lambda chi pub.transition.live_snapshot.next_pair_index pvpfcvv
+                                        let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                                        let ii ←
+                                          FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                              semantic
+                                        let iter ←
+                                          core.iter.traits.iterator.Iterator.rev.trait_default
+                                              (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31
+                                                24#usize)
+                                              (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                                field.QM31 24#usize)
+                                              ii
+                                        let composition ← composition_parts_loop0 iter prepared_theta copy.residual
+                                        let ii1 ←
+                                          FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                              poseidon
+                                        let iter1 ←
+                                          core.iter.traits.iterator.Iterator.rev.trait_default
+                                              (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31
+                                                4#usize)
+                                              (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                                field.QM31 4#usize)
+                                              ii1
+                                        let composition1 ← composition_parts_loop1 iter1 prepared_theta composition
+                                        let i1 ← SELECTED_G_COLUMN
+                                        let q ← selected_claim claims 0#usize i1
+                                        ok (core.result.Result.Ok (composition1, a, mask_only, q, h1_z, copy.active))
+                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          (field.QM31 ×
+                                            Std.Array field.QM31 16#usize ×
+                                              Std.Array field.QM31 10#usize × field.QM31 × field.QM31 × field.QM31)
+                                          (core.convert.FromSame PoolV1PairForestSemanticTerminalErrorV1) residual)))
+                            (ite_congr (eq_self true)
+                              (fun a =>
+                                Eq.refl
+                                  (ok
+                                    (core.result.Result.Err
+                                      PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)))
+                              fun a_1 =>
+                              Eq.refl do
+                                let r ←
+                                  validate_transition
+                                      { variant := pub.variant, pool := pub.pool,
+                                        deployment_domain := pub.deployment_domain, anchor := pub.anchor,
+                                        nullifier := pub.nullifier, asset_id := pub.asset_id,
+                                        recipient := pub.recipient, change := pub.change, withdrawal_amount := some a,
+                                        transition := pub.transition }
+                                let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                                match cf with
+                                  | core.ops.control_flow.ControlFlow.Continue a_2 => do
+                                    let a_3 ←
+                                      array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                          composition_parts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                          field.QM31.ZERO claims
+                                    let a1 ←
+                                      array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                          composition_parts.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                          field.QM31.ZERO claims
+                                    let a2 ←
+                                      array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                          composition_parts.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                          field.QM31.ZERO claims
+                                    let mask_only ←
+                                      array_from_fn_copy 10#usize field.QM31.Insts.CoreMarkerCopy
+                                          composition_parts.closure_3.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                          field.QM31.ZERO claims
+                                    let selectors ← pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point
+                                    let sops ← poseidon_selectors selectors
+                                    let poseidon ←
+                                      state_only_poseidon.evaluate_state_only_poseidon_oracle_projected
+                                          { z := a_3, succ_z := a1, xor12_z := a2 } sops
+                                    let semantic ←
+                                      semantic_packed
+                                          { variant := pub.variant, pool := pub.pool,
+                                            deployment_domain := pub.deployment_domain, anchor := pub.anchor,
+                                            nullifier := pub.nullifier, asset_id := pub.asset_id,
+                                            recipient := pub.recipient, change := pub.change,
+                                            withdrawal_amount := some a, transition := pub.transition }
+                                          { z := a_3, succ_z := a1, xor12_z := a2 } selectors
+                                    let i ← SELECTED_H1_COLUMN
+                                    let h1_z ← selected_claim claims 0#usize i
+                                    let pvpfcvv ← copy_variant pub.variant
+                                    let copy ←
+                                      pool_v1.pair_forest_copy_terminal.evaluate_with_selectors a_3 h1_z selectors
+                                          lambda chi pub.transition.live_snapshot.next_pair_index pvpfcvv
+                                    let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                                    let ii ←
+                                      FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                          semantic
+                                    let iter ←
+                                      core.iter.traits.iterator.Iterator.rev.trait_default
+                                          (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31
+                                            24#usize)
+                                          (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                            field.QM31 24#usize)
+                                          ii
+                                    let composition ← composition_parts_loop0 iter prepared_theta copy.residual
+                                    let ii1 ←
+                                      FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                          poseidon
+                                    let iter1 ←
+                                      core.iter.traits.iterator.Iterator.rev.trait_default
+                                          (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31
+                                            4#usize)
+                                          (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                            field.QM31 4#usize)
+                                          ii1
+                                    let composition1 ← composition_parts_loop1 iter1 prepared_theta composition
+                                    let i1 ← SELECTED_G_COLUMN
+                                    let q ← selected_claim claims 0#usize i1
+                                    ok (core.result.Result.Ok (composition1, a_3, mask_only, q, h1_z, copy.active))
+                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      (field.QM31 ×
+                                        Std.Array field.QM31 16#usize ×
+                                          Std.Array field.QM31 10#usize × field.QM31 × field.QM31 × field.QM31)
+                                      (core.convert.FromSame PoolV1PairForestSemanticTerminalErrorV1) residual)))
+                        (Eq.trans
+                          (Eq.trans
+                            (congrFun'
+                              (congrArg Bind.bind
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Bind.bind
+                                      ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos zero) x_0 x_1 x_2 x_3)
+                                        (instDecidableEqUScalar_1 UScalarTy.U32 a 0#u32) (Result Bool) (ok true) do
+                                        let i ← 1#u32 <<< 30#u32
+                                        ok (decide (a ≥ i))))
+                                    fun b => ok (some a, b))
+                                  (bind_tc_ok true fun y => ok (some a, y))))
+                              (uncurry fun _ invalid =>
+                                if invalid = true then
+                                  ok
+                                    (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+                                else do
+                                  let validation ← validate_transition pub
+                                  match validation with
+                                    | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                    | core.result.Result.Ok a =>
+                                      NLH_TermComposeTail.run pub claims point lambda chi theta))
+                            (bind_tc_ok (some a, true)
+                              (uncurry fun _ invalid =>
+                                if invalid = true then
+                                  ok
+                                    (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+                                else do
+                                  let validation ← validate_transition pub
+                                  match validation with
+                                    | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                    | core.result.Result.Ok a =>
+                                      NLH_TermComposeTail.run pub claims point lambda chi theta)))
+                          (ite_congr (eq_self true)
+                            (fun a =>
+                              Eq.refl
+                                (ok
+                                  (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)))
+                            fun a =>
+                            Eq.refl do
+                              let validation ← validate_transition pub
+                              match validation with
+                                | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                | core.result.Result.Ok a =>
+                                  NLH_TermComposeTail.run pub claims point lambda chi theta)))
+                      (eq_self
+                        (ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount))))
+                else
+                  have shift := Eq.refl (1#u32 <<< 30#u32);
+                  Eq.mpr
+                    (id
+                      (congr
+                        (congrArg Eq
+                          (Eq.trans
+                            (congrFun'
+                              (congrArg Bind.bind
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Bind.bind
+                                      (Eq.trans
+                                        (ite_congr (Eq.refl (a = 0#u32)) (fun a => Eq.refl (ok true)) fun a_1 =>
+                                          Eq.trans (congrFun' (congrArg Bind.bind shift) fun i => ok (decide (a ≥ i)))
+                                            (bind_tc_ok 1073741824#u32 fun y => ok (decide (a ≥ y))))
+                                        ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg zero) x_0 x_1 x_2 x_3)
+                                          (instDecidableEqUScalar_1 UScalarTy.U32 a 0#u32) (Result Bool) (ok true)
+                                          (ok (decide (a ≥ 1073741824#u32))))))
+                                    fun b => ok (some a, b))
+                                  (bind_tc_ok (decide (a ≥ 1073741824#u32)) fun y => ok (some a, y))))
+                              (uncurry fun o invalid_amount =>
+                                if invalid_amount = true then
+                                  ok
+                                    (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+                                else do
+                                  let r ←
+                                    validate_transition
+                                        { variant := pub.variant, pool := pub.pool,
+                                          deployment_domain := pub.deployment_domain, anchor := pub.anchor,
+                                          nullifier := pub.nullifier, asset_id := pub.asset_id,
+                                          recipient := pub.recipient, change := pub.change, withdrawal_amount := o,
+                                          transition := pub.transition }
+                                  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                                  match cf with
+                                    | core.ops.control_flow.ControlFlow.Continue a => do
+                                      let a ←
+                                        array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                            composition_parts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                            field.QM31.ZERO claims
+                                      let a1 ←
+                                        array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                            composition_parts.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                            field.QM31.ZERO claims
+                                      let a2 ←
+                                        array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                            composition_parts.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                            field.QM31.ZERO claims
+                                      let mask_only ←
+                                        array_from_fn_copy 10#usize field.QM31.Insts.CoreMarkerCopy
+                                            composition_parts.closure_3.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                            field.QM31.ZERO claims
+                                      let selectors ← pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point
+                                      let sops ← poseidon_selectors selectors
+                                      let poseidon ←
+                                        state_only_poseidon.evaluate_state_only_poseidon_oracle_projected
+                                            { z := a, succ_z := a1, xor12_z := a2 } sops
+                                      let semantic ←
+                                        semantic_packed
+                                            { variant := pub.variant, pool := pub.pool,
+                                              deployment_domain := pub.deployment_domain, anchor := pub.anchor,
+                                              nullifier := pub.nullifier, asset_id := pub.asset_id,
+                                              recipient := pub.recipient, change := pub.change, withdrawal_amount := o,
+                                              transition := pub.transition }
+                                            { z := a, succ_z := a1, xor12_z := a2 } selectors
+                                      let i ← SELECTED_H1_COLUMN
+                                      let h1_z ← selected_claim claims 0#usize i
+                                      let pvpfcvv ← copy_variant pub.variant
+                                      let copy ←
+                                        pool_v1.pair_forest_copy_terminal.evaluate_with_selectors a h1_z selectors
+                                            lambda chi pub.transition.live_snapshot.next_pair_index pvpfcvv
+                                      let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                                      let ii ←
+                                        FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                            semantic
+                                      let iter ←
+                                        core.iter.traits.iterator.Iterator.rev.trait_default
+                                            (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31
+                                              24#usize)
+                                            (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                              field.QM31 24#usize)
+                                            ii
+                                      let composition ← composition_parts_loop0 iter prepared_theta copy.residual
+                                      let ii1 ←
+                                        FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                            poseidon
+                                      let iter1 ←
+                                        core.iter.traits.iterator.Iterator.rev.trait_default
+                                            (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31
+                                              4#usize)
+                                            (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                              field.QM31 4#usize)
+                                            ii1
+                                      let composition1 ← composition_parts_loop1 iter1 prepared_theta composition
+                                      let i1 ← SELECTED_G_COLUMN
+                                      let q ← selected_claim claims 0#usize i1
+                                      ok (core.result.Result.Ok (composition1, a, mask_only, q, h1_z, copy.active))
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        (field.QM31 ×
+                                          Std.Array field.QM31 16#usize ×
+                                            Std.Array field.QM31 10#usize × field.QM31 × field.QM31 × field.QM31)
+                                        (core.convert.FromSame PoolV1PairForestSemanticTerminalErrorV1) residual))
+                            (bind_tc_ok (some a, decide (a ≥ 1073741824#u32))
+                              (uncurry fun o invalid_amount =>
+                                if invalid_amount = true then
+                                  ok
+                                    (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+                                else do
+                                  let r ←
+                                    validate_transition
+                                        { variant := pub.variant, pool := pub.pool,
+                                          deployment_domain := pub.deployment_domain, anchor := pub.anchor,
+                                          nullifier := pub.nullifier, asset_id := pub.asset_id,
+                                          recipient := pub.recipient, change := pub.change, withdrawal_amount := o,
+                                          transition := pub.transition }
+                                  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                                  match cf with
+                                    | core.ops.control_flow.ControlFlow.Continue a => do
+                                      let a ←
+                                        array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                            composition_parts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                            field.QM31.ZERO claims
+                                      let a1 ←
+                                        array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                            composition_parts.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                            field.QM31.ZERO claims
+                                      let a2 ←
+                                        array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                            composition_parts.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                            field.QM31.ZERO claims
+                                      let mask_only ←
+                                        array_from_fn_copy 10#usize field.QM31.Insts.CoreMarkerCopy
+                                            composition_parts.closure_3.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                            field.QM31.ZERO claims
+                                      let selectors ← pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point
+                                      let sops ← poseidon_selectors selectors
+                                      let poseidon ←
+                                        state_only_poseidon.evaluate_state_only_poseidon_oracle_projected
+                                            { z := a, succ_z := a1, xor12_z := a2 } sops
+                                      let semantic ←
+                                        semantic_packed
+                                            { variant := pub.variant, pool := pub.pool,
+                                              deployment_domain := pub.deployment_domain, anchor := pub.anchor,
+                                              nullifier := pub.nullifier, asset_id := pub.asset_id,
+                                              recipient := pub.recipient, change := pub.change, withdrawal_amount := o,
+                                              transition := pub.transition }
+                                            { z := a, succ_z := a1, xor12_z := a2 } selectors
+                                      let i ← SELECTED_H1_COLUMN
+                                      let h1_z ← selected_claim claims 0#usize i
+                                      let pvpfcvv ← copy_variant pub.variant
+                                      let copy ←
+                                        pool_v1.pair_forest_copy_terminal.evaluate_with_selectors a h1_z selectors
+                                            lambda chi pub.transition.live_snapshot.next_pair_index pvpfcvv
+                                      let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                                      let ii ←
+                                        FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                            semantic
+                                      let iter ←
+                                        core.iter.traits.iterator.Iterator.rev.trait_default
+                                            (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31
+                                              24#usize)
+                                            (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                              field.QM31 24#usize)
+                                            ii
+                                      let composition ← composition_parts_loop0 iter prepared_theta copy.residual
+                                      let ii1 ←
+                                        FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                            poseidon
+                                      let iter1 ←
+                                        core.iter.traits.iterator.Iterator.rev.trait_default
+                                            (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31
+                                              4#usize)
+                                            (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                              field.QM31 4#usize)
+                                            ii1
+                                      let composition1 ← composition_parts_loop1 iter1 prepared_theta composition
+                                      let i1 ← SELECTED_G_COLUMN
+                                      let q ← selected_claim claims 0#usize i1
+                                      ok (core.result.Result.Ok (composition1, a, mask_only, q, h1_z, copy.active))
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        (field.QM31 ×
+                                          Std.Array field.QM31 16#usize ×
+                                            Std.Array field.QM31 10#usize × field.QM31 × field.QM31 × field.QM31)
+                                        (core.convert.FromSame PoolV1PairForestSemanticTerminalErrorV1) residual))))
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg Bind.bind
+                              (Eq.trans
+                                (congrFun'
+                                  (congrArg Bind.bind
+                                    (Eq.trans
+                                      (ite_congr (Eq.refl (a = 0#u32)) (fun a => Eq.refl (ok true)) fun a_1 =>
+                                        Eq.trans (congrFun' (congrArg Bind.bind shift) fun i => ok (decide (a ≥ i)))
+                                          (bind_tc_ok 1073741824#u32 fun y => ok (decide (a ≥ y))))
+                                      ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg zero) x_0 x_1 x_2 x_3)
+                                        (instDecidableEqUScalar_1 UScalarTy.U32 a 0#u32) (Result Bool) (ok true)
+                                        (ok (decide (a ≥ 1073741824#u32))))))
+                                  fun b => ok (some a, b))
+                                (bind_tc_ok (decide (a ≥ 1073741824#u32)) fun y => ok (some a, y))))
+                            (uncurry fun _ invalid =>
+                              if invalid = true then
+                                ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+                              else do
+                                let validation ← validate_transition pub
+                                match validation with
+                                  | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                  | core.result.Result.Ok a =>
+                                    NLH_TermComposeTail.run pub claims point lambda chi theta))
+                          (bind_tc_ok (some a, decide (a ≥ 1073741824#u32))
+                            (uncurry fun _ invalid =>
+                              if invalid = true then
+                                ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+                              else do
+                                let validation ← validate_transition pub
+                                match validation with
+                                  | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                  | core.result.Result.Ok a =>
+                                    NLH_TermComposeTail.run pub claims point lambda chi theta)))))
+                    (if large : a ≥ 1073741824#u32 then
+                      of_eq_true
+                        (Eq.trans
+                          (congr
+                            (congrArg Eq
+                              (ite_congr
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Eq
+                                      (Eq.trans (Decidable.decide.congr_simp (a ≥ 1073741824#u32) True (eq_true large))
+                                        (decide_true instDecidableTrue)))
+                                    true)
+                                  (eq_self true))
+                                (fun a =>
+                                  Eq.refl
+                                    (ok
+                                      (core.result.Result.Err
+                                        PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)))
+                                fun a_1 =>
+                                Eq.refl do
+                                  let r ←
+                                    validate_transition
+                                        { variant := pub.variant, pool := pub.pool,
+                                          deployment_domain := pub.deployment_domain, anchor := pub.anchor,
+                                          nullifier := pub.nullifier, asset_id := pub.asset_id,
+                                          recipient := pub.recipient, change := pub.change, withdrawal_amount := some a,
+                                          transition := pub.transition }
+                                  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                                  match cf with
+                                    | core.ops.control_flow.ControlFlow.Continue a_2 => do
+                                      let a_3 ←
+                                        array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                            composition_parts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                            field.QM31.ZERO claims
+                                      let a1 ←
+                                        array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                            composition_parts.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                            field.QM31.ZERO claims
+                                      let a2 ←
+                                        array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                            composition_parts.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                            field.QM31.ZERO claims
+                                      let mask_only ←
+                                        array_from_fn_copy 10#usize field.QM31.Insts.CoreMarkerCopy
+                                            composition_parts.closure_3.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                            field.QM31.ZERO claims
+                                      let selectors ← pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point
+                                      let sops ← poseidon_selectors selectors
+                                      let poseidon ←
+                                        state_only_poseidon.evaluate_state_only_poseidon_oracle_projected
+                                            { z := a_3, succ_z := a1, xor12_z := a2 } sops
+                                      let semantic ←
+                                        semantic_packed
+                                            { variant := pub.variant, pool := pub.pool,
+                                              deployment_domain := pub.deployment_domain, anchor := pub.anchor,
+                                              nullifier := pub.nullifier, asset_id := pub.asset_id,
+                                              recipient := pub.recipient, change := pub.change,
+                                              withdrawal_amount := some a, transition := pub.transition }
+                                            { z := a_3, succ_z := a1, xor12_z := a2 } selectors
+                                      let i ← SELECTED_H1_COLUMN
+                                      let h1_z ← selected_claim claims 0#usize i
+                                      let pvpfcvv ← copy_variant pub.variant
+                                      let copy ←
+                                        pool_v1.pair_forest_copy_terminal.evaluate_with_selectors a_3 h1_z selectors
+                                            lambda chi pub.transition.live_snapshot.next_pair_index pvpfcvv
+                                      let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                                      let ii ←
+                                        FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                            semantic
+                                      let iter ←
+                                        core.iter.traits.iterator.Iterator.rev.trait_default
+                                            (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31
+                                              24#usize)
+                                            (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                              field.QM31 24#usize)
+                                            ii
+                                      let composition ← composition_parts_loop0 iter prepared_theta copy.residual
+                                      let ii1 ←
+                                        FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                            poseidon
+                                      let iter1 ←
+                                        core.iter.traits.iterator.Iterator.rev.trait_default
+                                            (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31
+                                              4#usize)
+                                            (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                              field.QM31 4#usize)
+                                            ii1
+                                      let composition1 ← composition_parts_loop1 iter1 prepared_theta composition
+                                      let i1 ← SELECTED_G_COLUMN
+                                      let q ← selected_claim claims 0#usize i1
+                                      ok (core.result.Result.Ok (composition1, a_3, mask_only, q, h1_z, copy.active))
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        (field.QM31 ×
+                                          Std.Array field.QM31 16#usize ×
+                                            Std.Array field.QM31 10#usize × field.QM31 × field.QM31 × field.QM31)
+                                        (core.convert.FromSame PoolV1PairForestSemanticTerminalErrorV1) residual))
+                            (ite_congr
+                              (Eq.trans
+                                (congrFun'
+                                  (congrArg Eq
+                                    (Eq.trans (Decidable.decide.congr_simp (a ≥ 1073741824#u32) True (eq_true large))
+                                      (decide_true instDecidableTrue)))
+                                  true)
+                                (eq_self true))
+                              (fun a =>
+                                Eq.refl
+                                  (ok
+                                    (core.result.Result.Err
+                                      PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)))
+                              fun a =>
+                              Eq.refl do
+                                let validation ← validate_transition pub
+                                match validation with
+                                  | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                  | core.result.Result.Ok a =>
+                                    NLH_TermComposeTail.run pub claims point lambda chi theta))
+                          (eq_self
+                            (ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount))))
+                    else
+                      Eq.mpr
+                        (id
+                          (congr
+                            (congrArg Eq
+                              (ite_congr
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Eq
+                                      (Eq.trans
+                                        (Decidable.decide.congr_simp (a ≥ 1073741824#u32) False (eq_false large))
+                                        (decide_false instDecidableFalse)))
+                                    true)
+                                  Bool.false_eq_true)
+                                (fun a =>
+                                  Eq.refl
+                                    (ok
+                                      (core.result.Result.Err
+                                        PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)))
+                                fun a_1 =>
+                                Eq.refl do
+                                  let r ←
+                                    validate_transition
+                                        { variant := pub.variant, pool := pub.pool,
+                                          deployment_domain := pub.deployment_domain, anchor := pub.anchor,
+                                          nullifier := pub.nullifier, asset_id := pub.asset_id,
+                                          recipient := pub.recipient, change := pub.change, withdrawal_amount := some a,
+                                          transition := pub.transition }
+                                  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                                  match cf with
+                                    | core.ops.control_flow.ControlFlow.Continue a_2 => do
+                                      let a_3 ←
+                                        array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                            composition_parts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                            field.QM31.ZERO claims
+                                      let a1 ←
+                                        array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                            composition_parts.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                            field.QM31.ZERO claims
+                                      let a2 ←
+                                        array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+                                            composition_parts.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                            field.QM31.ZERO claims
+                                      let mask_only ←
+                                        array_from_fn_copy 10#usize field.QM31.Insts.CoreMarkerCopy
+                                            composition_parts.closure_3.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                                            field.QM31.ZERO claims
+                                      let selectors ← pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point
+                                      let sops ← poseidon_selectors selectors
+                                      let poseidon ←
+                                        state_only_poseidon.evaluate_state_only_poseidon_oracle_projected
+                                            { z := a_3, succ_z := a1, xor12_z := a2 } sops
+                                      let semantic ←
+                                        semantic_packed
+                                            { variant := pub.variant, pool := pub.pool,
+                                              deployment_domain := pub.deployment_domain, anchor := pub.anchor,
+                                              nullifier := pub.nullifier, asset_id := pub.asset_id,
+                                              recipient := pub.recipient, change := pub.change,
+                                              withdrawal_amount := some a, transition := pub.transition }
+                                            { z := a_3, succ_z := a1, xor12_z := a2 } selectors
+                                      let i ← SELECTED_H1_COLUMN
+                                      let h1_z ← selected_claim claims 0#usize i
+                                      let pvpfcvv ← copy_variant pub.variant
+                                      let copy ←
+                                        pool_v1.pair_forest_copy_terminal.evaluate_with_selectors a_3 h1_z selectors
+                                            lambda chi pub.transition.live_snapshot.next_pair_index pvpfcvv
+                                      let prepared_theta ← field.PreparedQm31Multiplier.new theta
+                                      let ii ←
+                                        FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                            semantic
+                                      let iter ←
+                                        core.iter.traits.iterator.Iterator.rev.trait_default
+                                            (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31
+                                              24#usize)
+                                            (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                              field.QM31 24#usize)
+                                            ii
+                                      let composition ← composition_parts_loop0 iter prepared_theta copy.residual
+                                      let ii1 ←
+                                        FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+                                            poseidon
+                                      let iter1 ←
+                                        core.iter.traits.iterator.Iterator.rev.trait_default
+                                            (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31
+                                              4#usize)
+                                            (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+                                              field.QM31 4#usize)
+                                            ii1
+                                      let composition1 ← composition_parts_loop1 iter1 prepared_theta composition
+                                      let i1 ← SELECTED_G_COLUMN
+                                      let q ← selected_claim claims 0#usize i1
+                                      ok (core.result.Result.Ok (composition1, a_3, mask_only, q, h1_z, copy.active))
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        (field.QM31 ×
+                                          Std.Array field.QM31 16#usize ×
+                                            Std.Array field.QM31 10#usize × field.QM31 × field.QM31 × field.QM31)
+                                        (core.convert.FromSame PoolV1PairForestSemanticTerminalErrorV1) residual))
+                            (ite_congr
+                              (Eq.trans
+                                (congrFun'
+                                  (congrArg Eq (Eq.trans (Decidable.decide.congr_simp (a ≥ 1073741824#u32) ⋯ ⋯) ⋯)) ⋯)
+                                ⋯)
+                              ⋯ ⋯)))
+                        ⋯))
+              ⋯ ⋯)
+          ⋯)))
+'AspisR1.NLH_TermCompositionFactor.source' depends on axioms: [propext, Classical.choice, Quot.sound]

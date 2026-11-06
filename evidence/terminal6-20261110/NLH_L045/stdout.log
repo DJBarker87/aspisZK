@@ -1,0 +1,17 @@
+NLH_ScalarTail.lean:16:53: error: unsolved goals
+pub : NKI_InitialPrefix.Public
+o : NKI_InitialPrefix.Openings
+s : NKI_InitialPrefix.Selectors
+before : NKR_TermScalarInvocation.Packed
+p : Packet pub o s before
+st : State
+hb : st.packed = before
+hl : st.locals = NLH_ScalarDefs.values p
+middle : State := { packed := st.packed, digests := st.digests, locals := st.locals, scalars := p.scalars }
+final : State := { packed := p.out, digests := middle.digests, locals := middle.locals, scalars := middle.scalars }
+call :
+  scalar_lanes pub.variant (core.option.Option.is_some pub.withdrawal_amount) (NLH_ScalarDefs.values p 3)
+      (NLH_ScalarDefs.values p 5) (NLH_ScalarDefs.values p 7) (NLH_ScalarDefs.values p 11) =
+    ok p.scalars
+⊢ ok { packed := st.packed, digests := st.digests, locals := NLH_ScalarDefs.values p, scalars := p.scalars } = ok middle
+'AspisR1.NLH_ScalarTail.cuts' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

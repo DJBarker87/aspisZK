@@ -1,0 +1,76 @@
+NLH_CompHornerLoop.lean:23:35: error(lean.unknownIdentifier): Unknown constant `List.length_eq_zero.mp`
+NLH_CompHornerLoop.lean:45:9: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  st.remaining
+in the target expression
+  NLH_TermHornerCut.Trace st.prepared (lane :: rest) st.composition out
+
+case cons.cons
+pub : Public
+claims : Std.Array NQ 84#usize
+point : Std.Array NQ 10#usize
+lambda chi theta : NQ
+ht : Canon theta
+es : List Event
+ih :
+  ∀ (st : State),
+    (∀ e ∈ es, ∃ i, e = Event.horner i) →
+      es.length = st.remaining.length →
+        Canon st.composition →
+          (∀ x ∈ st.remaining, Canon x) →
+            NJB_PreparedLaws.Domain st.prepared theta →
+              ∃ out,
+                NLH_RustCuts.Cuts (step pub claims point lambda chi theta) es st
+                    (ok
+                      (core.result.Result.Ok
+                        { openings := st.openings, mask := st.mask, selectors := st.selectors,
+                          poseidonSelectors := st.poseidonSelectors, poseidon := st.poseidon, semantic := st.semantic,
+                          h := st.h, copyVariant := st.copyVariant, copy := st.copy, prepared := st.prepared,
+                          composition := out, remaining := [], g := st.g }))
+                    es ∧
+                  Canon out ∧ NLH_TermHornerCut.Trace st.prepared st.remaining st.composition out
+st : State
+hc : Canon st.composition
+hr : ∀ x ∈ st.remaining, Canon x
+hp : NJB_PreparedLaws.Domain st.prepared theta
+i : Fin 28
+shape : ∀ e ∈ Event.horner i :: es, ∃ i, e = Event.horner i
+length : (Event.horner i :: es).length = st.remaining.length
+lane : NQ
+rest : List NQ
+remaining : st.remaining = lane :: rest
+laneCanonical : Canon lane
+restCanonical : ∀ x ∈ rest, Canon x
+product middle : field.QM31
+pm : field.PreparedQm31Multiplier.mul st.prepared st.composition = ok product
+ma : product.add lane = ok middle
+window :
+  step pub claims point lambda chi theta (Event.horner i) st =
+    ok
+      (core.result.Result.Ok
+        { openings := st.openings, mask := st.mask, selectors := st.selectors,
+          poseidonSelectors := st.poseidonSelectors, poseidon := st.poseidon, semantic := st.semantic, h := st.h,
+          copyVariant := st.copyVariant, copy := st.copy, prepared := st.prepared, composition := middle,
+          remaining := rest, g := st.g })
+cm : Canon middle
+cut :
+  NLH_TermHornerCut.Cut st.prepared st.composition lane product middle
+    (NLH_TermHornerCut.observation st.prepared st.composition lane product middle)
+next : State :=
+  { openings := st.openings, mask := st.mask, selectors := st.selectors, poseidonSelectors := st.poseidonSelectors,
+    poseidon := st.poseidon, semantic := st.semantic, h := st.h, copyVariant := st.copyVariant, copy := st.copy,
+    prepared := st.prepared, composition := middle, remaining := rest, g := st.g }
+tailLength : es.length = next.remaining.length
+out : NQ
+tail :
+  NLH_RustCuts.Cuts (step pub claims point lambda chi theta) es next
+    (ok
+      (core.result.Result.Ok
+        { openings := next.openings, mask := next.mask, selectors := next.selectors,
+          poseidonSelectors := next.poseidonSelectors, poseidon := next.poseidon, semantic := next.semantic,
+          h := next.h, copyVariant := next.copyVariant, copy := next.copy, prepared := next.prepared,
+          composition := out, remaining := [], g := next.g }))
+    es
+co : Canon out
+trace : NLH_TermHornerCut.Trace next.prepared next.remaining next.composition out
+⊢ NLH_TermHornerCut.Trace st.prepared (lane :: rest) st.composition out
+'AspisR1.NLH_CompHornerLoop.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

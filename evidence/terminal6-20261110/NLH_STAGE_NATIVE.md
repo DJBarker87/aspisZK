@@ -1,0 +1,9 @@
+# Native window stage
+
+47 Kani scopes: K001 is a retained pre-verification code-generation failure (scratch allocator feature); K002..K047 are 23 positive/matched failing-control pairs. All positive scopes exit 0; all controls exit 1 with a failed property. No timeout or memory-killed native shape was replayed. Native controls use identical deployed features, frozen resolved dependency graph and KMX patch. Every run is offline, verifies its lock before and after, and records its own target directory.
+
+Pairs, in order: semantic child args; semantic full24 frame; digest args; digest two-add/full24 frame; scalar arbitrary-prestate statement; scalar/preweighted92 tail; four-stage source order; amount/validation full Result prefixes; terminal256 gather cell; prepared Horner iteration; 24+4 iteration control/cache; terminal256 complete263 forwarding/map/map_err; composition237 deterministic308; composition237 semantic261; composition237 copy218; composition237 gather callbacks; selectors; poseidon selectors; prepared constructor; selected H1/G columns; copy variant; terminal263 complete237 forwarding; singleton std::array::from_fn plus actual store/full arbitrary84 frame.
+
+K046/K047 finish the previously missing std callback/store window. The entire84 buffer is composed by induction in NLH_WrapperGathers, not unwound in Kani. Field products remain opaque call-log events paired with the Lean laws in NLH_LPh_STUBS.md. The selected frozen dependency closure excludes the Pool program, so this stage attributes no proof to its off-path scratch corpus. No shipped source changed and no ELF rebuild is triggered.
+
+This stage alone grants no CLOSED row. Child candidates, parent source folds, the combined closure, NFX scan and private-aware raw ax2 audit must all be checked; ledger credit remains conditional on the next gate.
