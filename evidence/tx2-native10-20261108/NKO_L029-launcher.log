@@ -1,0 +1,35 @@
+{"attempt": "NKO_L029", "exit_status": 0, "wall_seconds": 10.561680445913225, "peak_rss_kib": "6058904", "swaps": "0", "print_axioms": ["'NKO_QueryReturnG.full_result' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKO_QueryReturnG.retained_return' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NKO_QueryReturnG.full_result : ∀ (reply : Reply), G reply = reply :=
+fun reply =>
+  casesOn (motive := fun t => reply = t → G reply = reply) reply
+    (fun r h =>
+      Eq.symm h ▸
+        core.result.Result.casesOn (motive := fun t => r = t → G (ok r) = ok r) r
+          (fun pair h =>
+            Eq.symm h ▸
+              let ⟨fst✝, snd✝, h✝⟩ := pair
+              Eq.symm h✝ ▸ Eq.refl (G (ok (core.result.Result.Ok (fst✝, snd✝)))))
+          (fun e h => Eq.symm h ▸ Eq.refl (G (ok (core.result.Result.Err e)))) (Eq.refl r))
+    (fun e h => Eq.symm h ▸ Eq.refl (G (fail e))) (fun h => Eq.symm h ▸ Eq.refl (G div)) (Eq.refl reply)
+'NKO_QueryReturnG.full_result' depends on axioms: [propext
+...
+theorem NKO_QueryReturnG.full_result : ∀ (reply : Reply), G reply = reply :=
+fun reply =>
+  casesOn (motive := fun t => reply = t → G reply = reply) reply
+    (fun r h =>
+      Eq.symm h ▸
+        core.result.Result.casesOn (motive := fun t => r = t → G (ok r) = ok r) r
+          (fun pair h =>
+            Eq.symm h ▸
+              let ⟨fst✝, snd✝, h✝⟩ := pair
+              Eq.symm h✝ ▸ Eq.refl (G (ok (core.result.Result.Ok (fst✝, snd✝)))))
+          (fun e h => Eq.symm h ▸ Eq.refl (G (ok (core.result.Result.Err e)))) (Eq.refl r))
+    (fun e h => Eq.symm h ▸ Eq.refl (G (fail e))) (fun h => Eq.symm h ▸ Eq.refl (G div)) (Eq.refl reply)
+'NKO_QueryReturnG.full_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKO_QueryReturnG.retained_return : ∀ (reply : Reply), G (NKE_QueryReturn.observed reply) = reply :=
+fun reply =>
+  Eq.mpr (id (congrArg (fun _a => G _a = reply) (NKE_QueryReturn.observed_exact reply)))
+    (Eq.mpr (id (congrArg (fun _a => _a = reply) (full_result reply))) (Eq.refl reply))
+'NKO_QueryReturnG.retained_return' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-re3e9414930d74959a8e2e8088b3df5a7.scope; invocation ID: 27dba74c6c0a4ae3909a738ea4dbc41c

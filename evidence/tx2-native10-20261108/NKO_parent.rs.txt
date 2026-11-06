@@ -16,6 +16,7 @@ fn inactive_stage(proof:&[u8],log:&mut InactiveLog)->Result<E,Error>{
  Ok(inactive)
 }
 use aspis_core::field::{M31,CM31};
+fn kw(q:K)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
 fn k(x:[u32;4])->K{K{c0:CM31{a:M31(x[0]),b:M31(x[1])},c1:CM31{a:M31(x[2]),b:M31(x[3])}}}
 fn any_e()->E{let w:[u32;8]=kani::any();E::new(k([w[0],w[1],w[2],w[3]]),k([w[4],w[5],w[6],w[7]]))}
 #[kani::proof]
@@ -63,12 +64,12 @@ fn prepared()->Prepared{Prepared{variant:Variant::S2,roots:kani::any(),gamma:any
 fn geom(start:usize,cells:[[u32;5];12],lines:[u32;12])->QueryGeometry{
  QueryGeometry{start,inverses:Vec::from(cells.map(|r|r.map(M31))),line_z:Vec::from(lines.map(M31))}
 }
-struct QueryEntry<'a,const PART:usize>{proof:&'a[u8],words:&'a[[u32;4];64],rows:&'a[[u64;4];64],wp:*const K,wc:usize,rp:*const[u64;4],rc:usize,rhs:E,power:K,next:usize,terms:usize,calls:usize}
+struct QueryEntry<'a,const PART:usize>{proof:&'a[u8],words:&'a[K;64],rows:&'a[[u64;4];64],wp:*const K,wc:usize,rp:*const[u64;4],rc:usize,rhs:E,power:K,next:usize,terms:usize,calls:usize,block:Option<usize>}
 impl<const PART:usize> QueryEntry<'_,PART>{
  fn query(&mut self,proof:&[u8],_p:&Prepared,a:Accumulator,_g:&[E;29],_geometry:&QueryGeometry,pending:BatchedWeights,end:usize)->Result<(Accumulator,BatchedWeights),Error>{
  self.calls+=1;assert_eq!(self.calls,1);assert_eq!(end,22);
- if PART==0{assert_eq!(proof.as_ptr(),self.proof.as_ptr());assert_eq!(proof.len(),57607);let i=(kani::any::<u16>()&65535)as usize;kani::assume(i<57607);assert_eq!(proof[i],self.proof[i]^(if cfg!(NKO_invert){1}else{0}));}
- if PART==1{assert_eq!(a.weights.as_ptr(),self.wp);assert_eq!(a.weights.capacity(),self.wc);assert_eq!(a.weights.len(),64);let i=(kani::any::<u8>()&63)as usize;let j=(kani::any::<u8>()&3)as usize;let w=a.weights[i];let out=[w.c0.a.0,w.c0.b.0,w.c1.a.0,w.c1.b.0];assert_eq!(out[j],self.words[i][j]^(if cfg!(NKO_invert){1}else{0}));}
+ if PART==0{assert_eq!(proof.as_ptr(),self.proof.as_ptr());assert_eq!(proof.len(),57607);let offset=match self.block{None=>0,Some(block)=>if block>=8{(block-8)*4096}else{block*8192}};let i=if cfg!(NKO_invert){offset}else{match self.block{None=>kani::any::<u16>()as usize,Some(block)=>offset+((kani::any::<u16>()&(if block>=8{4095}else if block==7{511}else{8191}))as usize)}};kani::assume(i<57607);assert_eq!(proof[i],self.proof[i]^(if cfg!(NKO_invert){1}else{0}));}
+ if PART==1{assert_eq!(a.weights.as_ptr(),self.wp);assert_eq!(a.weights.capacity(),self.wc);assert_eq!(a.weights.len(),64);let i=(kani::any::<u8>()&63)as usize;let j=(kani::any::<u8>()&3)as usize;let w=a.weights[i];let out=[w.c0.a.0,w.c0.b.0,w.c1.a.0,w.c1.b.0];assert_eq!(out[j],kw(self.words[i])[j]^(if cfg!(NKO_invert){1}else{0}));}
  if PART==2{assert_eq!(pending.raw.as_ptr(),self.rp);assert_eq!(pending.raw.capacity(),self.rc);assert_eq!(pending.raw.len(),64);let i=(kani::any::<u8>()&63)as usize;let j=(kani::any::<u8>()&3)as usize;assert_eq!(pending.raw[i][j],self.rows[i][j]^(if cfg!(NKO_invert){1}else{0}));}
  if PART==3{assert_eq!(a.rhs,self.rhs);assert_eq!(a.power,self.power);assert_eq!(a.next,self.next^(if cfg!(NKO_invert){1}else{0}));assert_eq!(pending.terms,self.terms);}
  // This is the incoming call cut. No returning/drop property is asserted.
@@ -77,14 +78,15 @@ impl<const PART:usize> QueryEntry<'_,PART>{
 fn query_entry<const PART:usize>(proof:&[u8],p:&Prepared,a:Accumulator,g:&[E;29],geometry:&QueryGeometry,pending:BatchedWeights,log:&mut QueryEntry<PART>)->Result<(Accumulator,BatchedWeights),Error>{
  let (a,pending)=log.query(proof,p,a,g,geometry,pending,22)?;Ok((a,pending))
 }
-fn query_input<const PART:usize>(){
- let proof:[u8;57607]=kani::any();let p=prepared();let gs:[[u32;8];29]=kani::any();let g=gs.map(|w|E::new(k([w[0],w[1],w[2],w[3]]),k([w[4],w[5],w[6],w[7]])));
- let cells:[[u32;5];12]=kani::any();let lines:[u32;12]=kani::any();let geometry=geom(kani::any(),cells,lines);
- let words:[[u32;4];64]=kani::any();let rows:[[u64;4];64]=kani::any();let weights=Vec::from(words.map(k));let raw=Vec::from(rows);
+fn query_input_with<const PART:usize>(block:Option<usize>){
+ let proof:[u8;57607]=kani::any();let p=prepared();let gs:[[u32;8];29]=kani::any();let g:[E;29]=unsafe{core::mem::transmute(gs)};
+ let cells:[[u32;5];12]=kani::any();let lines:[u32;12]=kani::any();let inverse_cells:[[M31;5];12]=unsafe{core::mem::transmute(cells)};let line_cells:[M31;12]=unsafe{core::mem::transmute(lines)};let geometry=QueryGeometry{start:kani::any(),inverses:Vec::from(inverse_cells),line_z:Vec::from(line_cells)};
+ let words:[[u32;4];64]=kani::any();let rows:[[u64;4];64]=kani::any();let typed_words:[K;64]=unsafe{core::mem::transmute(words)};let weights=Vec::from(typed_words);let raw=Vec::from(rows);
  let rhs=any_e();let power=k(kani::any());let next:usize=kani::any();let terms:usize=kani::any();
- let mut log=QueryEntry::<PART>{proof:&proof,words:&words,rows:&rows,wp:weights.as_ptr(),wc:weights.capacity(),rp:raw.as_ptr(),rc:raw.capacity(),rhs,power,next,terms,calls:0};
+ let mut log=QueryEntry::<PART>{proof:&proof,words:&typed_words,rows:&rows,wp:weights.as_ptr(),wc:weights.capacity(),rp:raw.as_ptr(),rc:raw.capacity(),rhs,power,next,terms,calls:0,block};
  let a=Accumulator{weights,rhs,power,next};let pending=BatchedWeights{raw,terms};let _=query_entry(&proof,&p,a,&g,&geometry,pending,&mut log);
 }
+fn query_input<const PART:usize>(){query_input_with::<PART>(None);}
 #[kani::proof] #[kani::unwind(130)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
@@ -126,9 +128,9 @@ fn geometry_hold<const PART:usize>(){
  let words:[[u32;4];64]=kani::any();let weights=Vec::from(words.map(k));let rows:[[u64;4];64]=kani::any();let raw=Vec::from(rows);let good:bool=kani::any();let error=err(kani::any());let terms:usize=kani::any();let reply=if good{Ok(BatchedWeights{raw,terms})}else{Err(error)};let mut log=PendingFrame{reply:Some(reply),calls:0};let mut drops=GeometryDrop{start:0,inverse:core::ptr::null(),ic:0,line:core::ptr::null(),lc:0,dropped:false};
  let result=geometry_pending_stage(geometry,&weights,&mut log,&mut drops);assert_eq!(log.calls,1);assert!(log.reply.is_none());
  match result{Err(e)=>{assert!(!good);assert_eq!(e,error);assert!(drops.dropped);assert_eq!(drops.start,start);assert_eq!(drops.inverse,ip);assert_eq!(drops.ic,ic);assert_eq!(drops.line,lp);assert_eq!(drops.lc,lc);assert!(!cfg!(NKO_invert));},Ok((g,_pending))=>{assert!(good);assert!(!drops.dropped);
- if PART==0{assert_eq!(g.start,start^(if cfg!(NKO_invert){1}else{0}));}
- if PART==1{assert_eq!(g.inverses.as_ptr(),ip);assert_eq!(g.inverses.capacity(),ic);assert_eq!(g.inverses.len(),12);let i=(kani::any::<u8>()&15)as usize;kani::assume(i<12);let j=(kani::any::<u8>()&7)as usize;kani::assume(j<5);assert_eq!(g.inverses[i][j].0,cells[i][j]^(if cfg!(NKO_invert){1}else{0}));}
- if PART==2{assert_eq!(g.line_z.as_ptr(),lp);assert_eq!(g.line_z.capacity(),lc);assert_eq!(g.line_z.len(),12);let i=(kani::any::<u8>()&15)as usize;kani::assume(i<12);assert_eq!(g.line_z[i].0,lines[i]^(if cfg!(NKO_invert){1}else{0}));}
+ if PART==0||PART==3{assert_eq!(g.start,start^(if cfg!(NKO_invert){1}else{0}));}
+ if PART==1||PART==3{assert_eq!(g.inverses.as_ptr(),ip);assert_eq!(g.inverses.capacity(),ic);assert_eq!(g.inverses.len(),12);let i=(kani::any::<u8>()&15)as usize;kani::assume(i<12);let j=(kani::any::<u8>()&7)as usize;kani::assume(j<5);assert_eq!(g.inverses[i][j].0,cells[i][j]^(if cfg!(NKO_invert){1}else{0}));}
+ if PART==2||PART==3{assert_eq!(g.line_z.as_ptr(),lp);assert_eq!(g.line_z.capacity(),lc);assert_eq!(g.line_z.len(),12);let i=(kani::any::<u8>()&15)as usize;kani::assume(i<12);assert_eq!(g.line_z[i].0,lines[i]^(if cfg!(NKO_invert){1}else{0}));}
  }}
 }
 #[kani::proof] #[kani::unwind(130)]
@@ -143,3 +145,210 @@ fn geometry_pending_inverse(){geometry_hold::<1>();}
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 fn geometry_pending_line(){geometry_hold::<2>();}
+
+struct FinishFrame<'a,const PART:usize>{prepared:&'a Prepared,words:&'a[[u32;4];64],wp:*const K,wc:usize,rhs:E,power:K,next:usize,reply:Result<(),Error>,calls:usize,freed:bool,freed_ptr:*const K,freed_cap:usize,freed_len:usize}
+impl<const PART:usize> FinishFrame<'_,PART>{fn finish(&mut self,_v:&View,p:&Prepared,a:&Accumulator)->Result<(),Error>{
+ self.calls+=1;assert_eq!(self.calls,1);
+ if PART==0||PART==4{assert_eq!(a.weights.as_ptr(),self.wp);assert_eq!(a.weights.capacity(),self.wc);assert_eq!(a.weights.len(),64);let i=(kani::any::<u8>()&63)as usize;let j=(kani::any::<u8>()&3)as usize;let w=a.weights[i];let out=[w.c0.a.0,w.c0.b.0,w.c1.a.0,w.c1.b.0];assert_eq!(out[j],self.words[i][j]^(if cfg!(NKO_invert){1}else{0}));}
+ if PART==1||PART==4{assert_eq!(a.rhs,self.rhs);assert_eq!(a.power,self.power);assert_eq!(a.next,self.next^(if cfg!(NKO_invert){1}else{0}));}
+ if PART==2||PART==4{let j=(kani::any::<u8>()&31)as usize;let i=(kani::any::<u8>()&1)as usize;assert_eq!(p as *const Prepared,self.prepared as *const Prepared);assert!(p.variant==self.prepared.variant);assert_eq!(p.roots[i][j],self.prepared.roots[i][j]^(if cfg!(NKO_invert){1}else{0}));assert_eq!(p.state[j],self.prepared.state[j]);assert_eq!(p.gamma,self.prepared.gamma);assert_eq!(p.kappa,self.prepared.kappa);assert_eq!(p.alpha[i],self.prepared.alpha[i]);assert_eq!(p.rho,self.prepared.rho);assert_eq!(p.claim,self.prepared.claim);let q=(kani::any::<u8>()&31)as usize;kani::assume(q<22);assert_eq!(p.queries[q],self.prepared.queries[q]);let s=(kani::any::<u8>()&15)as usize;kani::assume(s<10);assert_eq!(p.semantic_alpha[s],self.prepared.semantic_alpha[s]);assert_eq!(p.z[i].x,self.prepared.z[i].x);assert_eq!(p.z[i].y,self.prepared.z[i].y);}
+ self.reply
+}}
+fn finish_frame_stage<const PART:usize>(proof:&[u8],p:&Prepared,a:Accumulator,inactive:E,log:&mut FinishFrame<PART>)->Result<(),Error>{
+ let v=View{variant:Variant::S2,semantic:&[],y1:&[],inactive,round0:&proof[compact::OFF_ROUND0..compact::OFF_FOLDED_ROOT],folded_root:None,round1:&proof[compact::OFF_ROUND1..compact::OFF_FINAL],final_message:&proof[compact::OFF_FINAL..compact::OFF_OPENINGS],query_bytes:&[]};
+ let result=log.finish(&v,p,&a);
+ log.freed_ptr=a.weights.as_ptr();log.freed_cap=a.weights.capacity();log.freed_len=a.weights.len();drop(a);log.freed=true;result
+}
+fn finish_input<const PART:usize>(){
+ let proof:[u8;57607]=kani::any();let p=prepared();let words:[[u32;4];64]=kani::any();let weights=Vec::from(words.map(k));let rhs=any_e();let power=k(kani::any());let next:usize=kani::any();let inactive=any_e();let reply=if kani::any(){Ok(())}else{Err(err(kani::any()))};
+ let mut log=FinishFrame::<PART>{prepared:&p,words:&words,wp:weights.as_ptr(),wc:weights.capacity(),rhs,power,next,reply,calls:0,freed:false,freed_ptr:core::ptr::null(),freed_cap:0,freed_len:0};let a=Accumulator{weights,rhs,power,next};let out=finish_frame_stage(&proof,&p,a,inactive,&mut log);assert_eq!(out,reply);assert_eq!(log.calls,1);
+ if PART==3||PART==4{assert!(log.freed);assert_eq!(log.freed_ptr,log.wp);assert_eq!(log.freed_cap,log.wc);assert_eq!(log.freed_len,64^(if cfg!(NKO_invert){1}else{0}));}
+}
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn finish_owned_weights(){finish_input::<0>();}
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn finish_scalars(){finish_input::<1>();}
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn finish_prepared(){finish_input::<2>();}
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn finish_owned_drop(){finish_input::<3>();}
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn finish_short_no_return(){
+ let bytes:[u8;10055]=kani::any();let len:usize=kani::any();kani::assume(len<10055);let proof=if cfg!(NKO_short_control){&bytes[..]}else{&bytes[..len]};
+ let p=prepared();let words:[[u32;4];64]=kani::any();let weights=Vec::from(words.map(k));let rhs=any_e();let power=k(kani::any());let next:usize=kani::any();let inactive=any_e();let mut log=FinishFrame::<3>{prepared:&p,words:&words,wp:weights.as_ptr(),wc:weights.capacity(),rhs,power,next,reply:Ok(()),calls:0,freed:false,freed_ptr:core::ptr::null(),freed_cap:0,freed_len:0};let a=Accumulator{weights,rhs,power,next};let _=finish_frame_stage(proof,&p,a,inactive,&mut log);assert!(false,"NKO finish short continuation is unreachable");
+}
+
+// C03 split replacement: immutable whole-proof frame ONLY. The dynamic-length
+// payload/result mux of retired K002 is absent; payload/result is K003/K004.
+struct InactiveFrame{reply:Option<E>,calls:usize}
+impl InactiveFrame{fn decode(&mut self,_bytes:&[u8])->Option<E>{self.calls+=1;self.reply}}
+fn inactive_frame_stage(proof:&[u8],log:&mut InactiveFrame)->Result<E,Error>{
+ let inactive=log.decode(&proof[compact::OFF_INACTIVE..compact::OFF_ROUND0]).ok_or(Error::Parse)?;Ok(inactive)
+}
+#[kani::proof] #[kani::unwind(36)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn inactive_immutable_frame(){
+ let bytes:[u8;57607]=kani::any();let proof=&bytes[..];let j=kani::any::<u16>()as usize;kani::assume(j<57607);let before=proof[j];let reply=if kani::any(){Some(any_e())}else{None};let mut log=InactiveFrame{reply,calls:0};let _=inactive_frame_stage(proof,&mut log);assert_eq!(log.calls,1);assert_eq!(proof[j],before^(if cfg!(NKO_invert){1}else{0}));
+}
+
+struct PowersFrame{gamma:E,reply:[E;29],calls:usize}
+impl PowersFrame{fn powers(&mut self,gamma:E)->[E;29]{self.calls+=1;assert_eq!(gamma,self.gamma);self.reply}}
+fn powers_frame_stage(p:&Prepared,log:&mut PowersFrame)->[E;29]{let g=log.powers(p.gamma);g}
+fn powers_parent_frame<const PART:usize>(){
+ let proof:[u8;57607]=kani::any();let p=prepared();let words:[[u32;4];64]=kani::any();let weights=Vec::from(words.map(k));let rhs=any_e();let power=k(kani::any());let next:usize=kani::any();let a=Accumulator{weights,rhs,power,next};let gs:[[u32;8];29]=kani::any();let reply=gs.map(|w|E::new(k([w[0],w[1],w[2],w[3]]),k([w[4],w[5],w[6],w[7]])));let mut log=PowersFrame{gamma:p.gamma,reply,calls:0};
+ let wp=a.weights.as_ptr();let wc=a.weights.capacity();let i=(kani::any::<u8>()&63)as usize;let wi=a.weights[i];let before_w=[wi.c0.a.0,wi.c0.b.0,wi.c1.a.0,wi.c1.b.0];
+ let r=(kani::any::<u8>()&1)as usize;let j=(kani::any::<u8>()&31)as usize;let q=(kani::any::<u8>()&31)as usize;kani::assume(q<22);let s=(kani::any::<u8>()&15)as usize;kani::assume(s<10);
+ let before=(p.variant,p.roots[r][j],p.state[j],p.gamma,p.kappa,p.alpha[r],p.rho,p.queries[q],p.semantic_alpha[s],p.z[r].x,p.z[r].y,p.claim);
+ let byte=(kani::any::<u16>())as usize;kani::assume(byte<57607);let proof_before=proof[byte];let _g=powers_frame_stage(&p,&mut log);assert_eq!(log.calls,1);
+ if PART==0{assert_eq!(a.weights.as_ptr(),wp);assert_eq!(a.weights.capacity(),wc);assert_eq!(a.weights.len(),64);let w=a.weights[i];let after=[w.c0.a.0,w.c0.b.0,w.c1.a.0,w.c1.b.0];let j=(kani::any::<u8>()&3)as usize;assert_eq!(after[j],before_w[j]^(if cfg!(NKO_invert){1}else{0}));}
+ if PART==1{assert!(p.variant==before.0);assert_eq!(p.roots[r][j],before.1^(if cfg!(NKO_invert){1}else{0}));assert_eq!(p.state[j],before.2);assert_eq!(p.gamma,before.3);assert_eq!(p.kappa,before.4);assert_eq!(p.alpha[r],before.5);assert_eq!(p.rho,before.6);assert_eq!(p.queries[q],before.7);assert_eq!(p.semantic_alpha[s],before.8);assert_eq!(p.z[r].x,before.9);assert_eq!(p.z[r].y,before.10);assert_eq!(p.claim,before.11);assert_eq!(a.rhs,rhs);assert_eq!(a.power,power);assert_eq!(a.next,next);}
+ if PART==2{assert_eq!(proof[byte],proof_before^(if cfg!(NKO_invert){1}else{0}));}
+}
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn powers_owned_weights_frame(){powers_parent_frame::<0>();}
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn powers_prepared_scalar_frame(){powers_parent_frame::<1>();}
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn powers_proof_frame(){powers_parent_frame::<2>();}
+
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn query_proof_block0(){query_input_with::<0>(Some(0));}
+
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn query_proof_block1(){query_input_with::<0>(Some(1));}
+
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn query_proof_block2(){query_input_with::<0>(Some(2));}
+
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn query_proof_block3(){query_input_with::<0>(Some(3));}
+
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn query_proof_block4(){query_input_with::<0>(Some(4));}
+
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn query_proof_block5(){query_input_with::<0>(Some(5));}
+
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn query_proof_block6(){query_input_with::<0>(Some(6));}
+
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn query_proof_block7(){query_input_with::<0>(Some(7));}
+
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn geometry_pending_full(){geometry_hold::<3>();}
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn finish_full_frame(){finish_input::<4>();}
+
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn query_proof_half0(){query_input_with::<0>(Some(8));}
+
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn query_proof_half1(){query_input_with::<0>(Some(9));}
+
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn query_proof_half2(){query_input_with::<0>(Some(10));}
+
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn query_proof_half3(){query_input_with::<0>(Some(11));}
+
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn query_proof_half4(){query_input_with::<0>(Some(12));}
+
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn query_proof_half5(){query_input_with::<0>(Some(13));}
+
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn query_proof_half6(){query_input_with::<0>(Some(14));}
+
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn query_proof_half7(){query_input_with::<0>(Some(15));}
+
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn query_proof_half8(){query_input_with::<0>(Some(16));}
+
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn query_proof_half9(){query_input_with::<0>(Some(17));}
+
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn query_proof_half10(){query_input_with::<0>(Some(18));}
+
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn query_proof_half11(){query_input_with::<0>(Some(19));}
+
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn query_proof_half12(){query_input_with::<0>(Some(20));}
+
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn query_proof_half13(){query_input_with::<0>(Some(21));}
+
+#[path="NKO_ProofFrame.rs"]
+mod NKO_ProofFrame;
+
+#[path="NKO_QueryFrame.rs"]
+mod NKO_QueryFrame;

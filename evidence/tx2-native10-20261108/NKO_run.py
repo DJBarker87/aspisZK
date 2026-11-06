@@ -21,9 +21,16 @@ def ssh(code,data=None,submitted=False):
   if submitted:raise RuntimeError('Submitted; recover read-only, never resubmit')
   if retry<10:time.sleep(60)
  raise RuntimeError('Transport exhausted')
-disk=ssh("python3 -c 'import shutil,json;print(json.dumps(dict(free=shutil.disk_usage(\"/home/dombarker/project-offloads\").free)))'")
-assert disk.returncode==0 and json.loads(disk.stdout)['free']>=40_000_000_000,'DISK WAIT required'
-(E/(a+'-disk.json')).write_text(disk.stdout)
+disk_checks=[]
+for disk_retry in range(7):
+ disk=ssh("python3 -c 'import shutil,json;print(json.dumps(dict(free=shutil.disk_usage(\"/home/dombarker/project-offloads\").free)))'")
+ assert disk.returncode==0,'disk transport failure'
+ disk_row=json.loads(disk.stdout);disk_row['retry']=disk_retry;disk_checks.append(disk_row)
+ (E/(a+'-disk.json')).write_text(json.dumps(dict(checks=disk_checks)))
+ if disk_row['free']>=40_000_000_000:break
+ if disk_retry==6:raise RuntimeError('STOP disk below40GB after six10-minute waits')
+ print('disk wait10 minutes',flush=True)
+ for minute in range(10):time.sleep(60)
 for retry in range(11):
  r=ssh('python3',f'''from pathlib import Path
 import subprocess,sys

@@ -1,0 +1,88 @@
+//! Full C07 staged argument/Result shape; contract effect is the proof frame.
+use super::*;
+#[derive(kani::Arbitrary)]
+struct Log{ptr:usize,len:usize,calls:usize,tag:u8,outside:usize}
+// Incoming argument capture only; owned transfer/return/drop remain the
+// independently retained K010--K015 and NJR windows, never assumed here.
+fn oracle(proof:&[u8],_p:&Prepared,_a:&Accumulator,_g:&[E;29],_geometry:&QueryGeometry,_pending:&BatchedWeights,end:usize,log:&mut Log){
+ assert_eq!(end,22);log.ptr=proof.as_ptr()as usize;log.len=proof.len();log.calls+=1;log.tag=7;
+}
+fn stage(proof:&[u8],p:&Prepared,a:&Accumulator,g:&[E;29],geometry:&QueryGeometry,pending:&BatchedWeights,log:&mut Log){oracle(proof,p,a,g,geometry,pending,22,log);}
+#[kani::requires(log.calls==0)]
+#[kani::modifies(log)]
+#[kani::ensures(|_| log.ptr==proof.as_ptr()as usize && log.len==(proof.len()^(if cfg!(NKO_invert){1}else{0})) && log.calls==1)]
+fn full(proof:&[u8],p:&Prepared,a:&Accumulator,g:&[E;29],geometry:&QueryGeometry,pending:&BatchedWeights,log:&mut Log){stage(proof,p,a,g,geometry,pending,log);}
+#[kani::requires(log.calls==0)]
+#[kani::modifies(log)]
+#[kani::ensures(|_| log.ptr==proof.as_ptr()as usize && log.len==proof.len() && log.calls==1)]
+fn bad_frame(proof:&[u8],p:&Prepared,a:&Accumulator,g:&[E;29],geometry:&QueryGeometry,pending:&BatchedWeights,log:&mut Log){unsafe{(log.outside as *mut u8).write(1)};stage(proof,p,a,g,geometry,pending,log);}
+fn accumulator()->Accumulator{let w:[[u32;4];64]=kani::any();let cells:[K;64]=unsafe{core::mem::transmute(w)};Accumulator{weights:Vec::from(cells),rhs:any_e(),power:k(kani::any()),next:kani::any()}}
+fn batched()->BatchedWeights{let r:[[u64;4];64]=kani::any();BatchedWeights{raw:Vec::from(r),terms:kani::any()}}
+fn powers()->[E;29]{let w:[[u32;8];29]=kani::any();unsafe{core::mem::transmute(w)}}
+fn geometry()->QueryGeometry{let c:[[u32;5];12]=kani::any();let l:[u32;12]=kani::any();let cc:[[M31;5];12]=unsafe{core::mem::transmute(c)};let ll:[M31;12]=unsafe{core::mem::transmute(l)};QueryGeometry{start:kani::any(),inverses:Vec::from(cc),line_z:Vec::from(ll)}}
+fn log(outside:&mut u8)->Log{Log{ptr:0,len:0,calls:0,tag:kani::any(),outside:outside as *mut u8 as usize}}
+#[kani::proof_for_contract(full)] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn full_contract(){let proof:[u8;57607]=kani::any();let mut outside:u8=kani::any();let mut log=log(&mut outside);full(&proof,&prepared(),&accumulator(),&powers(),&geometry(),&batched(),&mut log);}
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn full_real_tag(){let proof:[u8;57607]=kani::any();let mut outside:u8=kani::any();let mut log=log(&mut outside);full(&proof,&prepared(),&accumulator(),&powers(),&geometry(),&batched(),&mut log);assert_eq!(log.tag,7);}
+#[kani::proof] #[kani::stub_verified(full)] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn full_abstract_tag(){let proof:[u8;57607]=kani::any();let mut outside:u8=kani::any();let mut log=log(&mut outside);full(&proof,&prepared(),&accumulator(),&powers(),&geometry(),&batched(),&mut log);assert_eq!(log.tag,7);}
+#[kani::proof_for_contract(bad_frame)] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn full_modifies_violation(){let proof:[u8;57607]=kani::any();let mut outside:u8=kani::any();let mut log=log(&mut outside);bad_frame(&proof,&prepared(),&accumulator(),&powers(),&geometry(),&batched(),&mut log);}
+
+#[kani::requires(log.calls==0)]
+#[kani::modifies(log)]
+#[kani::ensures(|_| log.ptr==proof.as_ptr()as usize && log.len==proof.len() && log.calls==1)]
+fn restore_frame(proof:&[u8],p:&Prepared,a:&Accumulator,g:&[E;29],geometry:&QueryGeometry,pending:&BatchedWeights,log:&mut Log){
+ unsafe{let ptr=log.outside as *mut u8;let old=ptr.read();ptr.write(old^1);ptr.write(old);}
+ stage(proof,p,a,g,geometry,pending,log);
+}
+#[kani::proof_for_contract(restore_frame)] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn full_restore_violation(){let proof:[u8;57607]=kani::any();let mut outside:u8=kani::any();let mut log=log(&mut outside);restore_frame(&proof,&prepared(),&accumulator(),&powers(),&geometry(),&batched(),&mut log);}
+#[kani::proof] #[kani::stub_verified(full)] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn full_payload_frame(){
+ let proof:[u8;57607]=kani::any();let i=kani::any::<u16>()as usize;kani::assume(i<57607);let before=proof[i];
+ let mut outside:u8=kani::any();let mut log=log(&mut outside);
+ full(&proof,&prepared(),&accumulator(),&powers(),&geometry(),&batched(),&mut log);
+ assert_eq!(proof[i],before^(if cfg!(NKO_bad_reply){1}else{0}));
+}
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn full_real_payload_frame(){
+ let proof:[u8;57607]=kani::any();let i=kani::any::<u16>()as usize;kani::assume(i<57607);let before=proof[i];
+ let mut outside:u8=kani::any();let mut log=log(&mut outside);
+ full(&proof,&prepared(),&accumulator(),&powers(),&geometry(),&batched(),&mut log);
+ assert_eq!(proof[i],before^(if cfg!(NKO_bad_reply){1}else{0}));
+}
+// Owned callee boundary: arbitrary full reply; no function contract is used.
+fn owned_child(_proof:&[u8],_p:&Prepared,_a:Accumulator,_g:&[E;29],_geometry:&QueryGeometry,_pending:BatchedWeights,end:usize,reply:Result<(Accumulator,BatchedWeights),Error>)->Result<(Accumulator,BatchedWeights),Error>{assert_eq!(end,22);reply}
+fn owned_stage(proof:&[u8],p:&Prepared,a:Accumulator,g:&[E;29],geometry:&QueryGeometry,pending:BatchedWeights,reply:Result<(Accumulator,BatchedWeights),Error>)->Result<(Accumulator,BatchedWeights),Error>{let(a,pending)=owned_child(proof,p,a,g,geometry,pending,22,reply)?;Ok((a,pending))}
+fn owned_window<const PART:usize>(){
+ let proof:[u8;57607]=kani::any();let i=kani::any::<u16>()as usize;kani::assume(i<57607);let before=proof[i];
+ let returned=accumulator();let returned_pending=batched();let wp=returned.weights.as_ptr();let wc=returned.weights.capacity();let rp=returned_pending.raw.as_ptr();let rc=returned_pending.raw.capacity();let rhs=returned.rhs;let power=returned.power;let next=returned.next;let terms=returned_pending.terms;let good:bool=kani::any();let e=err(kani::any());
+ let reply=if good{Ok((returned,returned_pending))}else{Err(e)};
+ let result=owned_stage(&proof,&prepared(),accumulator(),&powers(),&geometry(),batched(),reply);
+ if PART==0{assert_eq!(proof[i],before^(if cfg!(NKO_bad_reply){1}else{0}));}
+ if PART==1{match result{Err(got)=>{assert!(!good);assert_eq!(got,e);assert!(!cfg!(NKO_bad_reply));},Ok((a,pending))=>{assert!(good);assert_eq!(a.weights.as_ptr(),wp);assert_eq!(a.weights.capacity(),wc);assert_eq!(a.weights.len(),64);assert_eq!(pending.raw.as_ptr(),rp);assert_eq!(pending.raw.capacity(),rc);assert_eq!(pending.raw.len(),64);assert_eq!(a.rhs,rhs);assert_eq!(a.power,power);assert_eq!(a.next,next^(if cfg!(NKO_bad_reply){1}else{0}));assert_eq!(pending.terms,terms);}}}
+}
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn owned_payload_frame(){owned_window::<0>();}
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn owned_result_frame(){owned_window::<1>();}

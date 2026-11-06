@@ -1,0 +1,45 @@
+{"attempt": "NKO_K026", "exit_status": 0, "wall_seconds": 59.184309411095455, "peak_rss_kib": "2629600", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+]>::post_inc_start
+
+Check 1184: core::slice::IterMut::<'_, [u32; 5]>::post_inc_start.pointer_dereference.21
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:108:33 in function core::slice::IterMut::<'_, [u32; 5]>::post_inc_start
+
+Check 1185: core::slice::IterMut::<'_, [u32; 5]>::post_inc_start.pointer_dereference.22
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:108:33 in function core::slice::IterMut::<'_, [u32; 5]>::post_inc_start
+
+Check 1186: core::slice::IterMut::<'_, [u32; 5]>::post_inc_start.pointer_dereference.23
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:108:33 in function core::slice::IterMut::<'_, [u32; 5]>::post_inc_start
+
+Check 1187: core::slice::IterMut::<'_, [u32; 5]>::post_inc_start.pointer_dereference.24
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:108:33 in function core::slice::IterMut::<'_, [u32; 5]>::post_inc_start
+
+
+SUMMARY:
+ ** 0 of 1187 failed (9 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 54.31384s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r417c0252a9eb43ff95b9a71ce87557b2.scope; invocation ID: b180d0c98fd64a69898045ca66f479bc

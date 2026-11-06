@@ -1,0 +1,32 @@
+//! Ruling (t) calibration and candidate immutable byte-frame route.
+//! No credits until EVERY shape control has the required verdict.
+use super::*;
+#[derive(kani::Arbitrary)]
+struct ProofLog{ptr:usize,len:usize,calls:usize,tag:u8,outside:usize}
+#[kani::requires(log.calls==0)]
+#[kani::modifies(log)]
+#[kani::ensures(|_| log.ptr==proof.as_ptr() as usize && log.len==(proof.len()^(if cfg!(NKO_invert){1}else{0})) && log.calls==1)]
+fn capture(proof:&[u8],log:&mut ProofLog){
+ // Exact read-only proof-argument projection; buffer bytes are never written.
+ log.ptr=proof.as_ptr() as usize;log.len=proof.len();log.calls+=1;log.tag=7;
+}
+fn inputs(outside:&mut u8)->ProofLog{ProofLog{ptr:0,len:0,calls:0,tag:kani::any(),outside:outside as *mut u8 as usize}}
+#[kani::proof_for_contract(capture)]
+#[kani::unwind(3)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn capture_contract(){let proof:[u8;57607]=kani::any();let mut outside:u8=kani::any();let mut log=inputs(&mut outside);capture(&proof,&mut log);}
+#[kani::proof]
+#[kani::unwind(3)]
+fn capture_real_tag(){let proof:[u8;57607]=kani::any();let mut outside:u8=kani::any();let mut log=inputs(&mut outside);capture(&proof,&mut log);assert_eq!(log.tag,7);}
+#[kani::proof]
+#[kani::stub_verified(capture)]
+#[kani::unwind(3)]
+fn capture_abstract_tag(){let proof:[u8;57607]=kani::any();let mut outside:u8=kani::any();let mut log=inputs(&mut outside);capture(&proof,&mut log);assert_eq!(log.tag,7);}
+#[kani::requires(log.calls==0)]
+#[kani::modifies(log)]
+#[kani::ensures(|_| log.ptr==proof.as_ptr() as usize && log.len==proof.len() && log.calls==1)]
+fn capture_bad_frame(proof:&[u8],log:&mut ProofLog){unsafe{(log.outside as *mut u8).write(1)};log.ptr=proof.as_ptr() as usize;log.len=proof.len();log.calls+=1;log.tag=7;}
+#[kani::proof_for_contract(capture_bad_frame)]
+#[kani::unwind(3)]
+fn capture_modifies_violation(){let proof:[u8;57607]=kani::any();let mut outside:u8=kani::any();let mut log=inputs(&mut outside);capture_bad_frame(&proof,&mut log);}

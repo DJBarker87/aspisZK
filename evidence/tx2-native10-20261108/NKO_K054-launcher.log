@@ -1,0 +1,48 @@
+{"attempt": "NKO_K054", "exit_status": 0, "wall_seconds": 14.628510812064633, "peak_rss_kib": "1024268", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+ueryFrame::full::{closure#3}.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: crates/aspis-r1-cost-probe/src/NKO_QueryFrame.rs:11:18 in function verifier::candidate::NKO_parent::NKO_QueryFrame::full::{closure#3}
+
+Check 735: verifier::candidate::NKO_parent::NKO_QueryFrame::full::{closure#3}.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: crates/aspis-r1-cost-probe/src/NKO_QueryFrame.rs:11:18 in function verifier::candidate::NKO_parent::NKO_QueryFrame::full::{closure#3}
+
+Check 736: verifier::candidate::NKO_parent::NKO_QueryFrame::full::{closure#3}.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: crates/aspis-r1-cost-probe/src/NKO_QueryFrame.rs:11:18 in function verifier::candidate::NKO_parent::NKO_QueryFrame::full::{closure#3}
+
+Check 737: verifier::candidate::NKO_parent::NKO_QueryFrame::full::{closure#3}.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: crates/aspis-r1-cost-probe/src/NKO_QueryFrame.rs:11:18 in function verifier::candidate::NKO_parent::NKO_QueryFrame::full::{closure#3}
+
+Check 738: verifier::candidate::NKO_parent::NKO_QueryFrame::full::{closure#3}.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: crates/aspis-r1-cost-probe/src/NKO_QueryFrame.rs:11:18 in function verifier::candidate::NKO_parent::NKO_QueryFrame::full::{closure#3}
+
+
+SUMMARY:
+ ** 0 of 738 failed (9 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 10.058915s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r3c20e9879fb34477a7a270fafc232e32.scope; invocation ID: 04cd4165f772455db035cd3b7ff7a4eb

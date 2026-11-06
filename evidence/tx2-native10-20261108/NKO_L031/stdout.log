@@ -1,0 +1,201 @@
+theorem NKO_C02.at_actual : ∀ (wr rr : AspisR1.NP6_StdModel.Reservation) (merkle : NJU_CommonObserved.Merkle)
+  (finish : NJU_CommonObserved.Finish) {H : Type} (d : VTop_Stages.aspis_core.digest.Digest32 H)
+  (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) (gamma : VTop_Stages.aspis_core.field.wide_exact.WideExact)
+  (reply : Aeneas.Std.Result (Aeneas.Std.Array VTop_Stages.aspis_core.field.wide_exact.WideExact 29#usize)),
+  NJU_CommonObserved.Event.powers gamma reply ∈
+      (NJU_CommonObserved.run wr rr (fun {H} => merkle) finish d pub proof ck hash none).events →
+    ∃ p a,
+      NJJ_Common.resume wr d ck proof pub AspisR1Stage2.transport.Variant.S2 hash =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a)) ∧
+        gamma = p.gamma ∧
+          NID_ResumeFields.Domain p a ∧ AspisR1.NFN_LPi_FieldValues.canonE (AspisR1.FIo_Install.toE gamma) :=
+fun wr rr merkle finish {H} d pub proof ck hash gamma reply entered =>
+  let ⟨p, h✝⟩ :=
+    NKO_C02.source wr rr (fun {H} => merkle) finish d pub proof ck hash (NJU_CommonObserved.Event.powers gamma reply)
+      entered
+  let ⟨a, h✝¹⟩ := h✝
+  let ⟨resume, right✝⟩ := h✝¹
+  let ⟨same, fields⟩ := right✝
+  Exists.intro p
+    (Exists.intro a
+      ⟨resume,
+        ⟨same,
+          ⟨fields,
+            Eq.mpr (id (congrArg (fun _a => AspisR1.NFN_LPi_FieldValues.canonE (AspisR1.FIo_Install.toE _a)) same))
+              (NID_ResumeCallerDomain.gamma p.gamma fields.gamma)⟩⟩⟩)
+theorem NKO_C03.occurrence : ∀ (wr rr : AspisR1.NP6_StdModel.Reservation) (merkle : NJU_CommonObserved.Merkle)
+  (finish : NJU_CommonObserved.Finish) {H : Type} (d : VTop_Stages.aspis_core.digest.Digest32 H)
+  (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (reply : Aeneas.Std.Result (Option NKO_C03.E)),
+  NJU_CommonObserved.Event.inactive bytes reply ∈
+      (NJU_CommonObserved.run wr rr (fun {H} => merkle) finish d pub proof ck hash none).events →
+    NKO_C03.select proof = Aeneas.Std.Result.ok bytes ∧
+      ↑bytes = List.take 32 (List.drop 7495 ↑proof) ∧ (↑bytes).length = 32 ∧ reply = NJC_ClosedCalls.inactive bytes :=
+fun wr rr merkle finish {H} d pub proof ck hash bytes reply entered =>
+  have range :=
+    NKO_C03.source wr rr (fun {H} => merkle) finish d pub proof ck hash (NJU_CommonObserved.Event.inactive bytes reply)
+      entered;
+  have payload := NKO_C03.selected proof bytes range;
+  ⟨range,
+    ⟨payload.left,
+      ⟨payload.right.left, NKO_C03.at_actual wr rr (fun {H} => merkle) finish d pub proof ck hash bytes reply entered⟩⟩⟩
+theorem NKO_C05.at_query : ∀ (wr rr : AspisR1.NP6_StdModel.Reservation) (merkle : NJU_CommonObserved.Merkle)
+  (finish : NJU_CommonObserved.Finish) {H : Type} (d : VTop_Stages.aspis_core.digest.Digest32 H)
+  (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) (p : VTop_Stages.verifier.Prepared)
+  (a : VTop_Stages.verifier.Accumulator)
+  (g : Aeneas.Std.Array VTop_Stages.aspis_core.field.wide_exact.WideExact 29#usize)
+  (geometry native : VTop_Stages.verifier.QueryGeometry) (pending : VTop_Stages.verifier.BatchedWeights)
+  (reply : NJU_CommonObserved.R (VTop_Stages.verifier.Accumulator × VTop_Stages.verifier.BatchedWeights)),
+  NJU_CommonObserved.Event.query proof p a g geometry pending reply ∈
+      (NJU_CommonObserved.run wr rr (fun {H} => merkle) finish d pub proof ck hash none).events →
+    NKE_GeometryCuts.Cut geometry native →
+      native = geometry ∧
+        NJJ_Common.query proof p a g none native pending 22#usize =
+          NJJ_Common.query proof p a g none geometry pending 22#usize :=
+fun wr rr merkle finish {H} d pub proof ck hash p a g geometry native pending reply entered cut =>
+  let ⟨left✝, right✝⟩ :=
+    NKO_C05.source wr rr (fun {H} => merkle) finish d pub proof ck hash
+      (NJU_CommonObserved.Event.query proof p a g geometry pending reply) entered
+  let ⟨inverseSize, lineSize⟩ := right✝
+  have same := NKE_GeometryCuts.same geometry native inverseSize lineSize cut;
+  ⟨same,
+    Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            NJJ_Common.query proof p a g none _a pending 22#usize =
+              NJJ_Common.query proof p a g none geometry pending 22#usize)
+          same))
+      (Eq.refl (NJJ_Common.query proof p a g none geometry pending 22#usize))⟩
+theorem NKO_C07.at_actual : ∀ (wr rr : AspisR1.NP6_StdModel.Reservation) (merkle : NJU_CommonObserved.Merkle)
+  (finish : NJU_CommonObserved.Finish) {H : Type} (d : VTop_Stages.aspis_core.digest.Digest32 H)
+  (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) (proofArg : Aeneas.Std.Slice Aeneas.Std.U8)
+  (p : VTop_Stages.verifier.Prepared) (a : VTop_Stages.verifier.Accumulator)
+  (g : Aeneas.Std.Array VTop_Stages.aspis_core.field.wide_exact.WideExact 29#usize)
+  (geometry : VTop_Stages.verifier.QueryGeometry) (pending : VTop_Stages.verifier.BatchedWeights)
+  (reply : NJU_CommonObserved.R (VTop_Stages.verifier.Accumulator × VTop_Stages.verifier.BatchedWeights)),
+  NJU_CommonObserved.Event.query proofArg p a g geometry pending reply ∈
+      (NJU_CommonObserved.run wr rr (fun {H} => merkle) finish d pub proof ck hash none).events →
+    proofArg = proof ∧
+      NJJ_Common.resume wr d ck proof pub AspisR1Stage2.transport.Variant.S2 hash =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a)) ∧
+        NID_ResumeFields.Domain p a ∧
+          a.next = 10#usize ∧
+            pending = AspisR1.NFW_QueryResume.pending a ∧
+              (↑a.weights).length = 64 ∧
+                (↑pending.raw).length = 64 ∧
+                  (↑geometry.inverses).length = 12 ∧
+                    (↑geometry.line_z).length = 12 ∧ NHT_PacketOps.powers 29#usize p.gamma = Aeneas.Std.Result.ok g :=
+fun wr rr merkle finish {H} d pub proof ck hash proofArg p a g geometry pending reply entered =>
+  let ⟨proofEq, right✝⟩ :=
+    NKO_C07.source wr rr (fun {H} => merkle) finish d pub proof ck hash
+      (NJU_CommonObserved.Event.query proofArg p a g geometry pending reply) entered
+  let ⟨resume, right✝¹⟩ := right✝
+  let ⟨start, right✝²⟩ := right✝¹
+  let ⟨fields, right✝³⟩ := right✝²
+  let ⟨pendingEq, powers⟩ := right✝³
+  let ⟨left✝, right✝⁴⟩ :=
+    NKO_C05.source wr rr (fun {H} => merkle) finish d pub proof ck hash
+      (NJU_CommonObserved.Event.query proofArg p a g geometry pending reply) entered
+  let ⟨inverses, lines⟩ := right✝⁴
+  have raw :=
+    Eq.mpr (id (congrArg (fun _a => (↑_a.raw).length = 64) pendingEq))
+      (AspisR1.NFW_QueryResume.progress a fields.width).right.left;
+  ⟨proofEq, ⟨resume, ⟨fields, ⟨start, ⟨pendingEq, ⟨fields.width, ⟨raw, ⟨inverses, ⟨lines, powers⟩⟩⟩⟩⟩⟩⟩⟩⟩
+theorem NKO_C08.occurrence : ∀ (wr rr : AspisR1.NP6_StdModel.Reservation) (merkle : NJU_CommonObserved.Merkle)
+  (finish : NJU_CommonObserved.Finish) {H : Type} (d : VTop_Stages.aspis_core.digest.Digest32 H)
+  (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) (pending : VTop_Stages.verifier.BatchedWeights)
+  (weights : Aeneas.Std.Slice VTop_Stages.aspis_core.field.QM31)
+  (reply : Aeneas.Std.Result (Aeneas.Std.Slice VTop_Stages.aspis_core.field.QM31)),
+  NJU_CommonObserved.Event.flush pending weights reply ∈
+      (NJU_CommonObserved.run wr rr (fun {H} => merkle) finish d pub proof ck hash none).events →
+    (↑pending.raw).length = 64 ∧
+      (↑weights).length = 64 ∧
+        reply = Aeneas.Std.Result.ok (NJJ_Flush.output pending) ∧
+          NKE_FlushNative.states pending weights 64 = ↑(NJJ_Flush.output pending) ∧
+            ∀ q ∈ NKE_FlushNative.states pending weights 64, AspisR1.Port3_FlushInstall.Canonical q :=
+fun wr rr merkle finish {H} d pub proof ck hash pending weights reply entered =>
+  let ⟨rawSize, right✝⟩ :=
+    NKO_C08.source wr rr (fun {H} => merkle) finish d pub proof ck hash
+      (NJU_CommonObserved.Event.flush pending weights reply) entered
+  let ⟨weightSize, value⟩ := right✝
+  have native := NKE_FlushNative.source pending weights rawSize weightSize;
+  ⟨rawSize, ⟨weightSize, ⟨value, native.right⟩⟩⟩
+theorem NKO_C09.child_at_actual : ∀ (wr rr : AspisR1.NP6_StdModel.Reservation) (merkle : NJU_CommonObserved.Merkle)
+  (finish : NJU_CommonObserved.Finish) {H : Type} (d : VTop_Stages.aspis_core.digest.Digest32 H)
+  (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) (v : VTop_Stages.verifier.View)
+  (p : VTop_Stages.verifier.Prepared) (a : VTop_Stages.verifier.Accumulator) (reply : NJU_CommonObserved.R Unit),
+  NJU_CommonObserved.Event.finish v p a reply ∈
+      (NJU_CommonObserved.run wr rr (fun {H} => merkle) finish d pub proof ck hash none).events →
+    ∀ (r : AspisR1.NP6_StdModel.Reservation) (loc : AspisR1.NIW_AlignFinishComposed.Locations),
+      have execution := AspisR1.NJF_FinishObserved.G r loc v p a;
+      AspisR1.Port3_NativeFinishBody.verifier.finish_relation (NIG_Slots.installed r) v p a none = execution.1 ∧
+        AspisR1.NIW_AlignFinishComposedLog.forget execution = AspisR1.NIW_AlignFinishExecution.run r v p a ∧
+          AspisR1.NIW_AlignFinishPrefix.Prefix execution.2.1 :=
+fun wr rr merkle finish {H} d pub proof ck hash v p a reply entered r loc =>
+  NKE_FinishSupplement.finish r loc proof v p a
+    (NKO_C09.source wr rr (fun {H} => merkle) finish d pub proof ck hash (NJU_CommonObserved.Event.finish v p a reply)
+      entered)
+theorem NKO_FrameAtActual.source : ∀ (wr rr : AspisR1.NP6_StdModel.Reservation) (merkle : NJU_CommonObserved.Merkle)
+  (finish : NJU_CommonObserved.Finish) {H : Type} (d : VTop_Stages.aspis_core.digest.Digest32 H)
+  (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) (p : VTop_Stages.verifier.Prepared)
+  (a : VTop_Stages.verifier.Accumulator)
+  (g : Aeneas.Std.Array VTop_Stages.aspis_core.field.wide_exact.WideExact 29#usize)
+  (geometry : VTop_Stages.verifier.QueryGeometry) (pending : VTop_Stages.verifier.BatchedWeights)
+  (reply : NJU_CommonObserved.R (VTop_Stages.verifier.Accumulator × VTop_Stages.verifier.BatchedWeights)),
+  NJU_CommonObserved.Event.query proof p a g geometry pending reply ∈
+      (NJU_CommonObserved.run wr rr (fun {H} => merkle) finish d pub proof ck hash none).events →
+    (↑proof).length = 57607 →
+      ∀ (written heap : ℕ → Aeneas.Std.U8) (logBase logSize proofBase : ℕ),
+        ↑proof = NKO_ReadonlyFrame.view heap proofBase (↑proof).length →
+          proofBase + (↑proof).length ≤ logBase ∨ logBase + logSize ≤ proofBase →
+            ∀ (observed : NKE_QueryInput.Args),
+              NJJ_Constructors.PreparedCut p observed.prepared →
+                NJJ_Constructors.AccumulatorCut a observed.accumulator →
+                  (∀ (i : Fin 29), (↑observed.powers)[↑i]? = (↑g)[↑i]?) →
+                    NKE_GeometryCuts.Cut geometry observed.geometry →
+                      (↑observed.pending.raw).length = 64 →
+                        (∀ i < 64, (↑observed.pending.raw)[i]? = (↑pending.raw)[i]?) →
+                          observed.pending.terms = pending.terms →
+                            NKE_QueryInput.child
+                                (NKO_FrameG.args written heap logBase logSize proofBase
+                                  { proof := proof, prepared := p, accumulator := a, powers := g, geometry := geometry,
+                                    pending := pending }
+                                  observed) =
+                              NJJ_Common.query proof p a g none geometry pending 22#usize :=
+fun wr rr merkle finish {H} d pub proof ck hash p a g geometry pending reply entered headlineSize written heap logBase
+    logSize proofBase inputView disjoint observed prepared accumulator powers geometryCut rawWidth rawCells terms =>
+  let ⟨left✝, right✝⟩ :=
+    NKO_C07.at_actual wr rr (fun {H} => merkle) finish d pub proof ck hash proof p a g geometry pending reply entered
+  let ⟨left✝¹, right✝¹⟩ := right✝
+  let ⟨left✝², right✝²⟩ := right✝¹
+  let ⟨left✝³, right✝³⟩ := right✝²
+  let ⟨left✝⁴, right✝⁴⟩ := right✝³
+  let ⟨weights, right✝⁵⟩ := right✝⁴
+  let ⟨raw, right✝⁶⟩ := right✝⁵
+  let ⟨inverses, right✝⁷⟩ := right✝⁶
+  let ⟨lines, right✝⁸⟩ := right✝⁷
+  have same :=
+    NKO_FrameG.args_source written heap logBase logSize proofBase
+      { proof := proof, prepared := p, accumulator := a, powers := g, geometry := geometry, pending := pending }
+      observed inputView disjoint headlineSize weights inverses lines raw prepared accumulator powers geometryCut
+      rawWidth rawCells terms;
+  Eq.mpr
+    (id
+      (congrArg (fun _a => NKE_QueryInput.child _a = NJJ_Common.query proof p a g none geometry pending 22#usize) same))
+    (Eq.refl
+      (NKE_QueryInput.child
+        { proof := proof, prepared := p, accumulator := a, powers := g, geometry := geometry, pending := pending }))
+theorem NKO_QueryReturnG.retained_return : ∀ (reply : NKO_QueryReturnG.Reply),
+  NKO_QueryReturnG.G (NKE_QueryReturn.observed reply) = reply :=
+fun reply =>
+  Eq.mpr (id (congrArg (fun _a => NKO_QueryReturnG.G _a = reply) (NKE_QueryReturn.observed_exact reply)))
+    (Eq.mpr (id (congrArg (fun _a => _a = reply) (NKO_QueryReturnG.full_result reply))) (Eq.refl reply))
+'NKO_C02.at_actual' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKO_C03.occurrence' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKO_C05.at_query' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKO_C07.at_actual' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKO_C08.occurrence' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKO_C09.child_at_actual' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKO_FrameAtActual.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKO_QueryReturnG.retained_return' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,42 @@
+{"attempt": "NKO_L028", "exit_status": 1, "wall_seconds": 10.817238609073684, "peak_rss_kib": "6022244", "swaps": "0", "print_axioms": ["'NKO_QueryReturnG.full_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NKO_QueryReturnG.retained_return' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKO_generated/NKO_QueryReturnG.lean:15:3: error: A placeholder `_` cannot be used where a function is expected
+NKO_generated/NKO_QueryReturnG.lean:10:33: error: Missing cases:
+(core.ops.control_flow.ControlFlow.Continue (Prod.mk (AspisR1Stage2.verifier.Accumulator.mk (Subtype.mk _ _) (AspisR1Stage2.aspis_core.field.wide_exact.WideExact.mk (AspisR1Stage2.aspis_core.field.QM31.mk (AspisR1Stage2.aspis_core.field.CM31.mk (UScalar.mk (BitVec.ofFin (Fin.mk _ _))) (UScalar.mk (BitVec.ofFin (Fin.mk _ _)))) (AspisR1Stage2.aspis_core.field.CM31.mk (UScalar.mk (BitVec.ofFin (Fin.mk _ _))) (UScalar.mk (BitVec.ofFin (Fin.mk _ _))))) (AspisR1Stage2.aspis_core.field.QM31.mk (AspisR1Stage2.aspis_core.field.
+...
+ected to have type
+  Result Unit
+of sort `Type`
+NKO_generated/NKO_QueryReturnG.lean:16:1: error: unexpected token '|'; expected command
+NKO_generated/NKO_QueryReturnG.lean:22:14: error: Tactic `rfl` failed: The left-hand side
+  G (ok (core.result.Result.Err e))
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Err e)
+
+case ok.Err
+e : verifier.Error
+⊢ G (ok (core.result.Result.Err e)) = ok (core.result.Result.Err e)
+NKO_generated/NKO_QueryReturnG.lean:23:27: error: Tactic `rfl` failed: The left-hand side
+  G (ok (core.result.Result.Ok (fst✝, snd✝)))
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Ok (fst✝, snd✝))
+
+case ok.Ok.mk
+fst✝ : verifier.Accumulator
+snd✝ : verifier.BatchedWeights
+⊢ G (ok (core.result.Result.Ok (fst✝, snd✝))) = ok (core.result.Result.Ok (fst✝, snd✝))
+theorem NKO_QueryReturnG.full_result : ∀ (reply : Reply), G reply = reply :=
+fun reply =>
+  casesOn (motive := fun t => reply = t → G reply = reply) reply
+    (fun r h =>
+      Eq.symm h ▸
+        core.result.Result.casesOn (motive := fun t => r = t → G (ok r) = ok r) r (fun pair h => Eq.symm h ▸ sorry)
+          (fun e h => Eq.symm h ▸ sorry) (Eq.refl r))
+    (fun e h => Eq.symm h ▸ Eq.refl (G (fail e))) (fun h => Eq.symm h ▸ Eq.refl (G div)) (Eq.refl reply)
+'NKO_QueryReturnG.full_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NKO_QueryReturnG.retained_return : ∀ (reply : Reply), G (NKE_QueryReturn.observed reply) = reply :=
+fun reply =>
+  Eq.mpr (id (congrArg (fun _a => G _a = reply) (NKE_QueryReturn.observed_exact reply)))
+    (Eq.mpr (id (congrArg (fun _a => _a = reply) (full_result reply))) (Eq.refl reply))
+'NKO_QueryReturnG.retained_return' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rca865a769f2342168cda53d8d1e42693.scope; invocation ID: b209a96b732d4385bda79ed98cd78cdf

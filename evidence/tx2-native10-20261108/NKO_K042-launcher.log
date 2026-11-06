@@ -1,0 +1,43 @@
+{"attempt": "NKO_K042", "exit_status": 1, "wall_seconds": 2.660554714035243, "peak_rss_kib": "343744", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+be/src/NKO_ProofFrame.rs:28:81 in function verifier::candidate::NKO_parent::NKO_ProofFrame::capture_bad_frame::{closure#2}::{closure#0}
+
+Check 173: verifier::candidate::NKO_parent::NKO_ProofFrame::capture_bad_frame::{closure#2}::{closure#0}.pointer_dereference.46
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: crates/aspis-r1-cost-probe/src/NKO_ProofFrame.rs:28:81 in function verifier::candidate::NKO_parent::NKO_ProofFrame::capture_bad_frame::{closure#2}::{closure#0}
+
+Check 174: verifier::candidate::NKO_parent::NKO_ProofFrame::capture_bad_frame::{closure#2}::{closure#0}.pointer_dereference.47
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: crates/aspis-r1-cost-probe/src/NKO_ProofFrame.rs:28:81 in function verifier::candidate::NKO_parent::NKO_ProofFrame::capture_bad_frame::{closure#2}::{closure#0}
+
+Check 175: verifier::candidate::NKO_parent::NKO_ProofFrame::capture_bad_frame::{closure#2}::{closure#0}.pointer_dereference.48
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: crates/aspis-r1-cost-probe/src/NKO_ProofFrame.rs:28:81 in function verifier::candidate::NKO_parent::NKO_ProofFrame::capture_bad_frame::{closure#2}::{closure#0}
+
+
+SUMMARY:
+ ** 1 of 175 failed (1 unreachable)
+Failed Checks: Check that *dst is assignable
+ File: "/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs", line 1908, in core::ptr::write::<u8>
+
+VERIFICATION:- FAILED
+Verification Time: 0.08249037s
+
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NKO_parent::NKO_ProofFrame::capture_modifies_violation
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r678b0fc4c0b64737a7d77c46576ae8f1.scope; invocation ID: b19f60229bcb4a8f8c4325c417b0e739
