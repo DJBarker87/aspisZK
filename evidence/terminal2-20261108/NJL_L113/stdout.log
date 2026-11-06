@@ -1,0 +1,109 @@
+theorem AspisR1.NJL_WindowPowerFrame.lift : ∀ (lambda : NQ) {n : ℕ} {power next : NQ} {values : List NQ},
+  NJL_WindowPowers.Trace lambda n power values next →
+    ∀ (indices : List (Fin 8)),
+      indices.length = n →
+        ∀ (before : State),
+          Canon lambda →
+            Canon power →
+              ∃ after,
+                run lambda indices before power = ok (after, next) ∧
+                  Trace lambda indices before power after next ∧
+                    after = List.foldl (fun state entry => put state entry.1 entry.2) before (indices.zip values) :=
+fun lambda {n} {power next} {values} actual indices length before hl hp =>
+  NJL_WindowPowers.Trace.rec (motive := fun {n} {power} {values} {next} actual =>
+    ∀ (indices : List (Fin 8)),
+      indices.length = n →
+        ∀ (before : State),
+          Canon power →
+            ∃ after,
+              run lambda indices before power = ok (after, next) ∧
+                Trace lambda indices before power after next ∧
+                  after = List.foldl (fun state entry => put state entry.1 entry.2) before (indices.zip values))
+    (fun power indices length before hp =>
+      List.casesOn (motive := fun t =>
+        indices = t →
+          ∃ after,
+            run lambda indices before power = ok (after, power) ∧
+              Trace lambda indices before power after power ∧
+                after = List.foldl (fun state entry => put state entry.1 entry.2) before (indices.zip []))
+        indices
+        (fun h =>
+          Eq.ndrec (motive := fun indices =>
+            indices.length = 0 →
+              ∃ after,
+                run lambda indices before power = ok (after, power) ∧
+                  Trace lambda indices before power after power ∧
+                    after = List.foldl (fun state entry => put state entry.1 entry.2) before (indices.zip []))
+            (fun length => Exists.intro before ⟨rfl, ⟨Trace.nil before power, rfl⟩⟩) (Eq.symm h) length)
+        (fun i is h =>
+          Eq.ndrec (motive := fun indices =>
+            indices.length = 0 →
+              ∃ after,
+                run lambda indices before power = ok (after, power) ∧
+                  Trace lambda indices before power after power ∧
+                    after = List.foldl (fun state entry => put state entry.1 entry.2) before (indices.zip []))
+            (fun length =>
+              False.elim
+                (Eq.mp
+                  (Eq.trans Nat.add_eq_zero_iff._simp_1
+                    (Eq.trans (congr (congrArg And List.length_eq_zero_iff._simp_1) one_ne_zero._simp_1)
+                      (and_false (is = []))))
+                  length))
+            (Eq.symm h) length)
+        (Eq.refl indices))
+    (fun {n} {power middle} {values} {last} multiply tail ih indices length before hp =>
+      List.casesOn (motive := fun t =>
+        indices = t →
+          ∃ after,
+            run lambda indices before power = ok (after, last) ∧
+              Trace lambda indices before power after last ∧
+                after =
+                  List.foldl (fun state entry => put state entry.1 entry.2) before (indices.zip (power :: values)))
+        indices
+        (fun h =>
+          Eq.ndrec (motive := fun indices =>
+            indices.length = n + 1 →
+              ∃ after,
+                run lambda indices before power = ok (after, last) ∧
+                  Trace lambda indices before power after last ∧
+                    after =
+                      List.foldl (fun state entry => put state entry.1 entry.2) before (indices.zip (power :: values)))
+            (fun length =>
+              False.elim
+                (Eq.mp
+                  (Eq.trans Nat.right_eq_add._simp_1
+                    (Eq.trans Nat.add_eq_zero_iff._simp_1
+                      (Eq.trans (congrArg (And (n = 0)) one_ne_zero._simp_1) (and_false (n = 0)))))
+                  length))
+            (Eq.symm h) length)
+        (fun i is h =>
+          Eq.ndrec (motive := fun indices =>
+            indices.length = n + 1 →
+              ∃ after,
+                run lambda indices before power = ok (after, last) ∧
+                  Trace lambda indices before power after last ∧
+                    after =
+                      List.foldl (fun state entry => put state entry.1 entry.2) before (indices.zip (power :: values)))
+            (fun length =>
+              have hm := (FIv_NativeValue.mul power lambda middle hp hl multiply).left;
+              let ⟨after, h✝⟩ := ih is (Eq.mp (Nat.succ.injEq is.length n) length) (put before i power) hm
+              let ⟨call, right✝⟩ := h✝
+              let ⟨trace, frame⟩ := right✝
+              Exists.intro after
+                ⟨of_eq_true
+                    (Eq.trans
+                      (congrFun'
+                        (congrArg Eq
+                          (Eq.trans
+                            (Eq.trans
+                              (congrFun' (congrArg Bind.bind multiply) fun next =>
+                                run lambda is (put before i power) next)
+                              (bind_tc_ok middle (run lambda is (put before i power))))
+                            call))
+                        (ok (after, last)))
+                      (eq_self (ok (after, last)))),
+                  ⟨Trace.cons multiply ⟨hl, ⟨hp, ⟨hm, ⟨rfl, ⟨rfl, rfl⟩⟩⟩⟩⟩ trace, id frame⟩⟩)
+            (Eq.symm h) length)
+        (Eq.refl indices))
+    actual indices length before hp
+'AspisR1.NJL_WindowPowerFrame.lift' depends on axioms: [propext, Classical.choice, Quot.sound]

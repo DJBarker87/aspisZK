@@ -163,3 +163,5 @@ Real in-job child occurrences: TX1:237.
 ## TX1:268 semantic_public
 
 Read-only NJB candidate; consume, no duplicate proof.
+
+Budget reservation: final4Lean scopes are reserved for combined audit2; uncompiled NJL_WindowInvocation.lean.txt is a next-job join sketch, not a module/Root credit. ParentInventory and abandoned duplicate-injectivity import-only note are also .lean.txt, not compiled modules. Retained NJB_DecodeInjective is used directly.

@@ -1,0 +1,60 @@
+{"attempt": "NJL_L116", "exit_status": 1, "wall_seconds": 8.89088796498254, "peak_rss_kib": "6147872", "swaps": "0", "print_axioms": ["'AspisR1.NJL_WindowStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJL_WindowStep.lean:11:99: error: No goals to be solved
+NJL_WindowStep.lean:11:45: error: unsolved goals
+o : Std.Array NQ 16#usize
+start : Fin 9
+slot : Fin 8
+size : ↑16#usize = 16
+⊢ ↑start + ↑slot < ↑16#usize
+NJL_WindowStep.lean:24:8: warning: declaration uses `sorry`
+theorem AspisR1.NJL_WindowStep.source : ∀ (theta before : NQ) (cache : NP) (o : Std.Array NQ 16#usize) (start : Fin 9)
+  (slot : Fin 8),
+  Canon theta →
+    Canon before →
+      FIw_ArrayValue.canonical o →
+        NJB_PreparedLaws.Domain cache theta →
+          ∃ product reply,
+            FIq_Native.field.PreparedQm31Multiplier.mul cache (opened o start slot) = ok product ∧
+              FIq_Native.field.QM31.add before produ
+...
+         (opened o start slot) { operation := 1, left := before, right := product } 2 (↑slot + 1) ∧
+                    Canon reply ∧ decode reply = decode before + decode theta * decode (opened o start slot) :=
+fun theta before cache o start slot ht hb ho domain =>
+  have oh :=
+    NJB_ArrayCarrier.canonical_cell o ho
+      ⟨↑start + ↑slot,
+        have size := sorry;
+        sorry⟩;
+  let ⟨product, h✝⟩ := NJB_PreparedLaws.mul_result cache theta (opened o start slot) ht oh domain
+  let ⟨cp, right✝⟩ := h✝
+  let ⟨hp, vp⟩ := right✝
+  let ⟨reply, h✝¹⟩ := NJB_StubLaws.qm_add before product hb hp
+  let ⟨cr, right✝¹⟩ := h✝¹
+  let ⟨hr, vr⟩ := right✝¹
+  Exists.intro product
+    (Exists.intro reply
+      ⟨cp,
+        ⟨cr,
+          ⟨of_eq_true
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (Eq.trans
+                      (Eq.trans
+                        (congrFun' (congrArg Bind.bind cp) fun product => FIq_Native.field.QM31.add before product)
+                        (bind_tc_ok product (FIq_Native.field.QM31.add before)))
+                      cr))
+                  (ok reply))
+                (eq_self (ok reply))),
+            ⟨⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, rfl⟩⟩⟩⟩⟩,
+              ⟨hr,
+                Eq.mpr (id (congrArg (fun _a => _a = decode before + decode theta * decode (opened o start slot)) vr))
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a => decode before + _a = decode before + decode theta * decode (opened o start slot))
+                        vp))
+                    (Eq.refl (decode before + decode theta * decode (opened o start slot))))⟩⟩⟩⟩⟩)
+'AspisR1.NJL_WindowStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-raab0c8a07a9b49189e1e1bf3862db748.scope; invocation ID: 107517362886488ab279049ae6ccfc69

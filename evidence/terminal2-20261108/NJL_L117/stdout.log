@@ -1,0 +1,46 @@
+theorem AspisR1.NJL_WindowStep.source : ∀ (theta before : NQ) (cache : NP) (o : Std.Array NQ 16#usize) (start : Fin 9)
+  (slot : Fin 8),
+  Canon theta →
+    Canon before →
+      FIw_ArrayValue.canonical o →
+        NJB_PreparedLaws.Domain cache theta →
+          ∃ product reply,
+            FIq_Native.field.PreparedQm31Multiplier.mul cache (opened o start slot) = ok product ∧
+              FIq_Native.field.QM31.add before product = ok reply ∧
+                reference cache o start slot before = ok reply ∧
+                  Cut cache o start slot before product reply reply (NJB_PreparedCarrier.words cache)
+                      (opened o start slot) { operation := 1, left := before, right := product } 2 (↑slot + 1) ∧
+                    Canon reply ∧ decode reply = decode before + decode theta * decode (opened o start slot) :=
+fun theta before cache o start slot ht hb ho domain =>
+  have oh := NJB_ArrayCarrier.canonical_cell o ho ⟨↑start + ↑slot, opened._proof_4 start slot⟩;
+  let ⟨product, h✝⟩ := NJB_PreparedLaws.mul_result cache theta (opened o start slot) ht oh domain
+  let ⟨cp, right✝⟩ := h✝
+  let ⟨hp, vp⟩ := right✝
+  let ⟨reply, h✝¹⟩ := NJB_StubLaws.qm_add before product hb hp
+  let ⟨cr, right✝¹⟩ := h✝¹
+  let ⟨hr, vr⟩ := right✝¹
+  Exists.intro product
+    (Exists.intro reply
+      ⟨cp,
+        ⟨cr,
+          ⟨of_eq_true
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (Eq.trans
+                      (Eq.trans
+                        (congrFun' (congrArg Bind.bind cp) fun product => FIq_Native.field.QM31.add before product)
+                        (bind_tc_ok product (FIq_Native.field.QM31.add before)))
+                      cr))
+                  (ok reply))
+                (eq_self (ok reply))),
+            ⟨⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, rfl⟩⟩⟩⟩⟩,
+              ⟨hr,
+                Eq.mpr (id (congrArg (fun _a => _a = decode before + decode theta * decode (opened o start slot)) vr))
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a => decode before + _a = decode before + decode theta * decode (opened o start slot))
+                        vp))
+                    (Eq.refl (decode before + decode theta * decode (opened o start slot))))⟩⟩⟩⟩⟩)
+'AspisR1.NJL_WindowStep.source' depends on axioms: [propext, Classical.choice, Quot.sound]

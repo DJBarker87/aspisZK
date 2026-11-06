@@ -64,3 +64,8 @@ K037/K038 observe source-ordered selectors.row1017/1018, SAME immutable selector
 
 ## Stage11 path parent229
 K043/K044 captures actual range[57..63], same selectors, low1/5/9/13, three add operands and actual high*low product, same THREE-view Openings borrow (not a16cell token), full17path child argument to preweighted at32, all24final cells. NJL_PathSelector.Packet internally supplies actual checked Results and canonical selector. NJL_PathParent.Packet/Cut composes same child247/230 on proven domains.
+
+## Stage12 native SUPPORT, not row admissions
+K049/050: actual std array::map8 powers→actual Prepared9word result; all callback inputs/order/output words. K047/048:8power-loop controls only. K051/052: captured SAME immutable cache8/opened16 objects and exact ordered starts0,1,2,8 with unchanged4window replies. K053/054: all14explicit assignments/ordered slots and full14cell reply/frame; arithmetic per coordinate remains predecessor K104..131. K055/056: deployed223 forwards same16opened and lambda to224, unchanged14reply.
+K057/058: append234/recipient group window uses exact opened offset0or8 plus4g, four lift/sub pairs, optional right-group1 M31 tweak at the actual source position, actual four pack operands, same9word cache and unchanged product reply. No empty_root/constructor/cohort claim is made by this group window.
+K059/060: append235 arbitrary level<20, SAME index/frontier[level]/opened16/high[34+level], actual4child replies, four ordered adds and complete4state/nextlevel. K063 deliberately falsifies u64 forwarding and FAILS; no new positive credit. K061/062:246 actual Some prepared constructor high, SAME9word cache to both groups, expected/opened payloads, two returned cells and zero None. Actual arithmetic group composition remains OPEN.

@@ -1,0 +1,72 @@
+use aspis_core::field::NJL_observe::{prepared_words as NJL_pwords,prepared_from_words as NJL_pfrom};
+#[kani::proof] #[kani::unwind(75)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJL_pattern_windows_control_cut(){
+ let c:[[[[u32;3];3];8];1]=kani::any();let prepared=c[0].map(|v|NJL_pfrom(v));let opened:[QM31;16]=unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())};let reply:[QM31;4]=unsafe{core::mem::transmute::<[[u32;4];4],[QM31;4]>(kani::any())};
+ let mut calls=0usize;let mut starts=[999usize;4];let mut pp=[0usize;4];let mut op=[0usize;4];
+ let mut window=|start:usize|{let i=calls;calls+=1;starts[i]=start;pp[i]=&prepared as*const[PreparedQm31Multiplier;8]as usize;op[i]=&opened as*const[QM31;16]as usize;reply[i]};
+ let window_0=window(0);let window_1=window(1);let window_2=window(2);let window_8=window(8);let out=[window_0,window_1,window_2,window_8];
+ let i:usize=kani::any();let limb:usize=kani::any();kani::assume(i<4&&limb<4);assert_eq!(calls,4);assert_eq!(starts[i],[0,1,2,8][i]);assert_eq!(pp[i],&prepared as*const[PreparedQm31Multiplier;8]as usize);assert_eq!(op[i],&opened as*const[QM31;16]as usize);assert_eq!(NJL_words(out[i])[limb],NJL_words(reply[i])[limb]^if cfg!(NJL_invert){1}else{0});
+}
+#[kani::proof] #[kani::unwind(18)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJL_pattern_tail_frame_cut(){
+ let reply:[QM31;14]=unsafe{core::mem::transmute::<[[u32;4];14],[QM31;14]>(kani::any())};let seek:usize=kani::any();let limb:usize=kani::any();kani::assume(seek<14&&limb<4);let mut calls=0usize;let mut seen=999;
+ let mut term=|coordinate:usize|{if calls==seek{seen=coordinate;}calls+=1;reply[coordinate]};let mut result=[QM31::ZERO;14];
+ result[0]=term(0);result[1]=term(1);result[2]=term(2);result[3]=term(3);result[4]=term(4);result[5]=term(5);result[6]=term(6);result[7]=term(7);result[8]=term(8);result[9]=term(9);result[10]=term(10);result[11]=term(11);result[12]=term(12);result[13]=term(13);
+ assert_eq!(calls,14);assert_eq!(seen,seek);assert_eq!(NJL_words(result[seek])[limb],NJL_words(reply[seek])[limb]^if cfg!(NJL_invert){1}else{0});
+}
+#[kani::proof] #[kani::unwind(18)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJL_pattern_forward_cut(){
+ let opened:[QM31;16]=unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())};let lambda=unsafe{core::mem::transmute::<[u32;4],QM31>(kani::any())};let reply:[QM31;14]=unsafe{core::mem::transmute::<[[u32;4];14],[QM31;14]>(kani::any())};let mut calls=0usize;let mut seen=0usize;let mut seen_lambda=QM31::ZERO;
+ let mut windowed=|o:&[QM31;16],l:QM31|{calls+=1;seen=o as*const[QM31;16]as usize;seen_lambda=l;reply};let out=windowed(&opened,lambda);
+ let k:usize=kani::any();let limb:usize=kani::any();kani::assume(k<14&&limb<4);assert_eq!(calls,1);assert_eq!(seen,&opened as*const[QM31;16]as usize);assert_eq!(NJL_words(seen_lambda)[limb],NJL_words(lambda)[limb]);assert_eq!(NJL_words(out[k])[limb],NJL_words(reply[k])[limb]^if cfg!(NJL_invert){1}else{0});
+}
+struct NJL_DigestGroup {targets:[u32;4],opened:[[u32;4];4],right:[[u32;4];4],pack:[[u32;4];4],cache:[[u32;3];3],mulright:[u32;4],reply:[QM31;10],calls:usize,tweaks:usize,tweak_at:usize,tweak_input:u32,tweak_value:u32,tweak_reply:u32}
+fn NJL_g_lift(v:M31,l:&mut NJL_DigestGroup)->QM31{let i=l.calls/2;assert!(i<4);l.targets[i]=v.0;let r=l.reply[l.calls];l.calls+=1;r}
+fn NJL_g_sub(a:QM31,b:QM31,l:&mut NJL_DigestGroup)->QM31{let i=l.calls/2;assert!(i<4);l.opened[i]=NJL_words(a);l.right[i]=NJL_words(b);let r=l.reply[l.calls];l.calls+=1;r}
+fn NJL_g_pack(v:&[QM31;4],l:&mut NJL_DigestGroup)->QM31{assert_eq!(l.calls,8);l.pack=v.map(|x|NJL_words(x));l.calls+=1;l.reply[8]}
+fn NJL_g_mul(p:PreparedQm31Multiplier,v:QM31,l:&mut NJL_DigestGroup)->QM31{assert_eq!(l.calls,9);l.cache=NJL_pwords(p);l.mulright=NJL_words(v);l.calls+=1;l.reply[9]}
+fn NJL_g_tweak(v:M31,l:&mut NJL_DigestGroup)->M31{l.tweaks+=1;l.tweak_at=l.calls;l.tweak_input=v.0;l.tweak_value=crate::poseidon2::MERKLE_NODE_COMPRESSION_V3_TWEAK.0;M31(l.tweak_reply)}
+fn NJL_digest_group(opened:&[QM31;16],expected:&[M31;8],prepared:PreparedQm31Multiplier,group:usize,right:bool,l:&mut NJL_DigestGroup)->QM31{
+ let lane=4*group;let offset=if right{8}else{0};
+ let a=NJL_g_sub(opened[offset+lane],NJL_g_lift(expected[lane],l),l);
+ let b=NJL_g_sub(opened[offset+lane+1],NJL_g_lift(expected[lane+1],l),l);
+ let c=NJL_g_sub(opened[offset+lane+2],NJL_g_lift(expected[lane+2],l),l);
+ let target=if right&&group==1{NJL_g_tweak(expected[lane+3],l)}else{expected[lane+3]};
+ let d=NJL_g_sub(opened[offset+lane+3],NJL_g_lift(target,l),l);
+ NJL_g_mul(prepared,NJL_g_pack(&[a,b,c,d],l),l)
+}
+#[kani::proof] #[kani::unwind(18)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJL_append_group_cut(){
+ let opened:[QM31;16]=unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())};let expected=unsafe{core::mem::transmute::<[u32;8],[M31;8]>(kani::any())};let cache:[[u32;3];3]=kani::any();let reply:[QM31;10]=unsafe{core::mem::transmute::<[[u32;4];10],[QM31;10]>(kani::any())};let tweak_reply:u32=kani::any();let group:usize=kani::any();let j:usize=kani::any();let limb:usize=kani::any();let row:usize=kani::any();let col:usize=kani::any();let right:bool=kani::any();kani::assume(group<2&&j<4&&limb<4&&row<3&&col<3);
+ let mut l=NJL_DigestGroup{targets:[0;4],opened:[[0;4];4],right:[[0;4];4],pack:[[0;4];4],cache:[[0;3];3],mulright:[0;4],reply,calls:0,tweaks:0,tweak_at:999,tweak_input:0,tweak_value:0,tweak_reply};let out=NJL_digest_group(&opened,&expected,NJL_pfrom(cache),group,right,&mut l);let lane=4*group;let offset=if right{8}else{0};
+ assert_eq!(l.calls,10);assert_eq!(l.targets[j],if right&&group==1&&j==3{tweak_reply}else{expected[lane+j].0});assert_eq!(l.opened[j][limb],NJL_words(opened[offset+lane+j])[limb]);assert_eq!(l.right[j][limb],NJL_words(reply[2*j])[limb]);assert_eq!(l.pack[j][limb],NJL_words(reply[2*j+1])[limb]);assert_eq!(l.cache[row][col],cache[row][col]);assert_eq!(l.mulright[limb],NJL_words(reply[8])[limb]);assert_eq!(NJL_words(out)[limb],NJL_words(reply[9])[limb]^if cfg!(NJL_invert){1}else{0});assert_eq!(l.tweaks,if right&&group==1{1}else{0});if right&&group==1{assert_eq!(l.tweak_at,6);assert_eq!(l.tweak_input,expected[7].0);assert_eq!(l.tweak_value,crate::poseidon2::MERKLE_NODE_COMPRESSION_V3_TWEAK.0);}
+}
+struct NJL_LevelsLog{index:u64,level:usize,frontier:u32,opened:u32,high:u32,calls:usize,pick:usize,limb:usize,adds:usize,left:[[u32;4];4],right:[[u32;4];4],reply:[QM31;4],child:[QM31;4]}
+fn NJL_levels_child(index:u64,level:usize,frontier:[M31;8],opened:[QM31;16],high:QM31,l:&mut NJL_LevelsLog)->([QM31;2],[QM31;2]){l.index=index;l.level=level;l.frontier=frontier[l.pick%8].0;l.opened=NJL_words(opened[l.pick])[l.limb];l.high=NJL_words(high)[l.limb];l.calls+=1;([l.child[0],l.child[1]],[l.child[2],l.child[3]])}
+fn NJL_levels_add(a:QM31,b:QM31,l:&mut NJL_LevelsLog)->QM31{let i=l.adds;assert!(i<4);l.left[i]=NJL_words(a);l.right[i]=NJL_words(b);l.adds+=1;l.reply[i]}
+fn NJL_levels_step(index:u64,frontier:&[[M31;8];20],opened:[QM31;16],high:&[QM31;64],before:[QM31;4],mut level:usize,l:&mut NJL_LevelsLog)->([QM31;4],usize){
+ let(level0,level12)=NJL_levels_child(index,level,frontier[level],opened,high[34+level],l);
+ let a=NJL_levels_add(before[0],level0[0],l);let b=NJL_levels_add(before[1],level0[1],l);let c=NJL_levels_add(before[2],level12[0],l);let d=NJL_levels_add(before[3],level12[1],l);level+=1;([a,b,c,d],level)
+}
+#[kani::proof] #[kani::unwind(67)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJL_append_levels_step_cut(){
+ let frontier=unsafe{core::mem::transmute::<[[u32;8];20],[[M31;8];20]>(kani::any())};let opened:[QM31;16]=unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())};let high:[QM31;64]=unsafe{core::mem::transmute::<[[u32;4];64],[QM31;64]>(kani::any())};let before:[QM31;4]=unsafe{core::mem::transmute::<[[u32;4];4],[QM31;4]>(kani::any())};let reply:[QM31;4]=unsafe{core::mem::transmute::<[[u32;4];4],[QM31;4]>(kani::any())};let child:[QM31;4]=unsafe{core::mem::transmute::<[[u32;4];4],[QM31;4]>(kani::any())};let index:u64=kani::any();let level:usize=kani::any();let pick:usize=kani::any();let limb:usize=kani::any();let j:usize=kani::any();kani::assume(level<20&&pick<16&&limb<4&&j<4);
+ let mut l=NJL_LevelsLog{index:0,level:999,frontier:0,opened:0,high:0,calls:0,pick,limb,adds:0,left:[[0;4];4],right:[[0;4];4],reply,child};let(out,next)=NJL_levels_step(index,&frontier,opened,&high,before,level,&mut l);
+ assert_eq!(l.calls,1);assert_eq!(l.adds,4);assert_eq!(l.index,index);assert_eq!(l.level,level);assert_eq!(l.frontier,frontier[level][pick%8].0);assert_eq!(l.opened,NJL_words(opened[pick])[limb]);assert_eq!(l.high,NJL_words(high[34+level])[limb]);assert_eq!(l.left[j][limb],NJL_words(before[j])[limb]);assert_eq!(l.right[j][limb],NJL_words(child[j])[limb]);assert_eq!(next,level+1);assert_eq!(NJL_words(out[j])[limb],NJL_words(reply[j])[limb]^if cfg!(NJL_invert){1}else{0});
+}
+struct NJL_RecipientLog{news:usize,high:u32,cache:[[[u32;3];3];2],expected:u32,opened:u32,groups:usize,pick:usize,limb:usize,reply:[QM31;2],new_reply:PreparedQm31Multiplier}
+fn NJL_recipient_new(high:QM31,l:&mut NJL_RecipientLog)->PreparedQm31Multiplier{l.news+=1;l.high=NJL_words(high)[l.limb];l.new_reply}
+fn NJL_recipient_group(prepared:PreparedQm31Multiplier,expected:&[M31;8],opened:&[QM31;16],group:usize,l:&mut NJL_RecipientLog)->QM31{assert!(group<2);l.cache[group]=NJL_pwords(prepared);l.expected=expected[l.pick%8].0;l.opened=NJL_words(opened[l.pick])[l.limb];l.groups+=1;l.reply[group]}
+fn NJL_recipient(recipient:Option<[M31;8]>,opened:[QM31;16],high:QM31,l:&mut NJL_RecipientLog)->[QM31;2]{match recipient{Some(expected)=>{let prepared_high=NJL_recipient_new(high,l);let mut contribution=[QM31::ZERO;2];let mut group=0;while group<2{contribution[group]=NJL_recipient_group(prepared_high,&expected,&opened,group,l);group+=1;}contribution},None=>[QM31::ZERO;2]}}
+#[kani::proof] #[kani::unwind(18)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJL_recipient_actual_groups_cut(){
+ let some:bool=kani::any();let expected=unsafe{core::mem::transmute::<[u32;8],[M31;8]>(kani::any())};let opened:[QM31;16]=unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())};let high=unsafe{core::mem::transmute::<[u32;4],QM31>(kani::any())};let cache:[[u32;3];3]=kani::any();let reply:[QM31;2]=unsafe{core::mem::transmute::<[[u32;4];2],[QM31;2]>(kani::any())};let pick:usize=kani::any();let limb:usize=kani::any();let group:usize=kani::any();let row:usize=kani::any();let col:usize=kani::any();kani::assume(pick<16&&limb<4&&group<2&&row<3&&col<3);
+ let mut l=NJL_RecipientLog{news:0,high:0,cache:[[[0;3];3];2],expected:0,opened:0,groups:0,pick,limb,reply,new_reply:NJL_pfrom(cache)};let out=NJL_recipient(if some{Some(expected)}else{None},opened,high,&mut l);
+ assert_eq!(l.news,if some{1}else{0});assert_eq!(l.groups,if some{2}else{0});if some{assert_eq!(l.high,NJL_words(high)[limb]);assert_eq!(l.cache[group][row][col],cache[row][col]);assert_eq!(l.expected,expected[pick%8].0);assert_eq!(l.opened,NJL_words(opened[pick])[limb]);}assert_eq!(NJL_words(out[group])[limb],(if some{NJL_words(reply[group])[limb]}else{0})^if cfg!(NJL_invert){1}else{0});
+}

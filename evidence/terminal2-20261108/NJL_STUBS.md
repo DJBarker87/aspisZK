@@ -37,3 +37,16 @@ Pack reply paired with NJB_PackLaw.result (CLOSED NFT_Pack.source), exact same g
 
 ## Parent228/229 child clauses
 228: NIH_SelectorRow.result at1017/1018<1024 with same canonical high/low; NFQ_StatementLaws.expected_reference at typed enum, expected<P by cases; NJL_OccupancyAssociation.source actual opened16; NHU_Preweighted.result0/N12 positive/within96. 229: NHG_ExtraLeaves.sum_result exact57..63 with rangebounds/high64 canonical; NJB_StubLaws.qm_add×3 and qm_mul with actual canonical returned operands (NJL_PathSelector.source); NJL_PathAssociation.source canonical selector and same z/succ_z16; NHU_Preweighted.result32/N17 positive/within96. Every native stub has full actual same-input Result internally in these root Packets.
+
+## Stage12 OPEN caller obligations (no row credit)
+|Native local stub|Paired full emitted Result law|Domain/remaining clause|
+|---|---|---|
+|std8map constructor reply|NJB_PreparedLaws.new_result; NJL_WindowCache.source/CachedPowers|Actual canonical lambda powers from WindowPowerArray; all9words NJB_PreparedCarrier.ext. Compiled prefix only.|
+|window prepared product/add|NJB_PreparedLaws.mul_result and NJB_StubLaws.qm_add; NJL_WindowStep.source|CacheReads.constructor discharges actual PreparedFor, canonical powers and same opened cell; CachedWindow derives every domain internally.|
+|NJL_g_lift/sub|JFy_Lift.source with rawM31<P; NJB_StubLaws.qm_sub|Actual empty_root/frontier canonical source binding and arithmetic group proof OPEN234/246.|
+|NJL_g_tweak|NJB_TagReduce.add (full M31.add Result, exact natural modular sum)|Actual expected[7] and deployed tweak canonical; caller/group proof OPEN234.|
+|NJL_g_pack/product|NJB_PackLaw.result; NJB_PreparedLaws.mul_result|Same four actual residual Results and actual constructor Domain still OPEN234/246.|
+|NJL_levels_child|Missing complete234 root|OPEN; passing235 step observations do NOT discharge this stub.|
+|NJL_levels_add|NJB_StubLaws.qm_add|Canonical actual234 outputs and full20iteration induction OPEN235.|
+|NJL_recipient_new/group|NJB_PreparedLaws.new_result; missing complete arithmetic group proof|Canonical high/expected + actual two groups and final cohort OPEN246.|
+Every generic field law is retained standard axioms; an unproved actual caller domain or child remains OPEN. No native control-only stub is counted as an arithmetic value proof.

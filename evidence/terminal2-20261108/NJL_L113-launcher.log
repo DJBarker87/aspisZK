@@ -1,0 +1,52 @@
+{"attempt": "NJL_L113", "exit_status": 0, "wall_seconds": 8.473167435033247, "peak_rss_kib": "6185440", "swaps": "0", "print_axioms": ["'AspisR1.NJL_WindowPowerFrame.lift' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJL_WindowPowerFrame.lift : ∀ (lambda : NQ) {n : ℕ} {power next : NQ} {values : List NQ},
+  NJL_WindowPowers.Trace lambda n power values next →
+    ∀ (indices : List (Fin 8)),
+      indices.length = n →
+        ∀ (before : State),
+          Canon lambda →
+            Canon power →
+              ∃ after,
+                run lambda indices before power = ok (after, next) ∧
+                  Trace lambda indices before power after next ∧
+                    after = List.foldl (fun state entry => put state entry.1 entry.2) before (indices.zip values) :=
+fun lambda {n} {power next} {values} actual indices length before hl hp =>
+  NJL_WindowPowers.Trace.rec (motive := fun {n} {powe
+...
+ans Nat.add_eq_zero_iff._simp_1
+                      (Eq.trans (congrArg (And (n = 0)) one_ne_zero._simp_1) (and_false (n = 0)))))
+                  length))
+            (Eq.symm h) length)
+        (fun i is h =>
+          Eq.ndrec (motive := fun indices =>
+            indices.length = n + 1 →
+              ∃ after,
+                run lambda indices before power = ok (after, last) ∧
+                  Trace lambda indices before power after last ∧
+                    after =
+                      List.foldl (fun state entry => put state entry.1 entry.2) before (indices.zip (power :: values)))
+            (fun length =>
+              have hm := (FIv_NativeValue.mul power lambda middle hp hl multiply).left;
+              let ⟨after, h✝⟩ := ih is (Eq.mp (Nat.succ.injEq is.length n) length) (put before i power) hm
+              let ⟨call, right✝⟩ := h✝
+              let ⟨trace, frame⟩ := right✝
+              Exists.intro after
+                ⟨of_eq_true
+                    (Eq.trans
+                      (congrFun'
+                        (congrArg Eq
+                          (Eq.trans
+                            (Eq.trans
+                              (congrFun' (congrArg Bind.bind multiply) fun next =>
+                                run lambda is (put before i power) next)
+                              (bind_tc_ok middle (run lambda is (put before i power))))
+                            call))
+                        (ok (after, last)))
+                      (eq_self (ok (after, last)))),
+                  ⟨Trace.cons multiply ⟨hl, ⟨hp, ⟨hm, ⟨rfl, ⟨rfl, rfl⟩⟩⟩⟩⟩ trace, id frame⟩⟩)
+            (Eq.symm h) length)
+        (Eq.refl indices))
+    actual indices length before hp
+'AspisR1.NJL_WindowPowerFrame.lift' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r0f7b660f971e4414bdf3e42247db5d45.scope; invocation ID: 508a2a11061646c3986e49be141c3e46

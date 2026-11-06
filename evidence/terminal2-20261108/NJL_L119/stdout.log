@@ -1,0 +1,41 @@
+theorem AspisR1.NJL_WindowPowerArray.source : ∀ (lambda : NQ),
+  Canon lambda →
+    ∃ p,
+      NJL_WindowPowerFrame.run lambda (List.finRange 8) (fun x => FIq_Native.field.QM31.ZERO) lambda =
+          ok (NJL_CacheReads.power p, p.next) ∧
+        NJL_WindowPowerFrame.Trace lambda (List.finRange 8) (fun x => FIq_Native.field.QM31.ZERO) lambda
+          (NJL_CacheReads.power p) p.next :=
+fun lambda hl =>
+  let ⟨p⟩ := NJL_CachedPowers.source lambda hl
+  let ⟨after, h✝⟩ :=
+    NJL_WindowPowerFrame.lift lambda p.power_trace (List.finRange 8)
+      (of_eq_true (Eq.trans (congrFun' (congrArg Eq List.length_finRange) 8) (eq_self 8)))
+      (fun x => FIq_Native.field.QM31.ZERO) hl hl
+  let ⟨call, right✝⟩ := h✝
+  let ⟨trace, frame⟩ := right✝
+  have same :=
+    Eq.mpr (id (congrArg (fun _a => _a = NJL_CacheReads.power p) frame))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              List.foldl (fun state entry => NJL_WindowPowerFrame.put state entry.1 entry.2)
+                  (fun x => FIq_Native.field.QM31.ZERO) ((List.finRange 8).zip _a) =
+                NJL_CacheReads.power p)
+            (Eq.symm (NJL_WindowPowerOverwrite.power_list p))))
+        (NJL_WindowPowerOverwrite.overwrite (fun x => FIq_Native.field.QM31.ZERO) (NJL_CacheReads.power p)));
+  Exists.intro p
+    ⟨Eq.mp
+        (congrArg
+          (fun _a =>
+            NJL_WindowPowerFrame.run lambda (List.finRange 8) (fun x => FIq_Native.field.QM31.ZERO) lambda =
+              ok (_a, p.next))
+          same)
+        call,
+      Eq.mp
+        (congrArg
+          (fun _a =>
+            NJL_WindowPowerFrame.Trace lambda (List.finRange 8) (fun x => FIq_Native.field.QM31.ZERO) lambda _a p.next)
+          same)
+        trace⟩
+'AspisR1.NJL_WindowPowerArray.source' depends on axioms: [propext, Classical.choice, Quot.sound]

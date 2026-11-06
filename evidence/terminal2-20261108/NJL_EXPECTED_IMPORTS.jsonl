@@ -13713,7 +13713,10 @@
 {"module": "NJL_AbsorptionPrologue", "imports": ["Init", "NJB_AbsorptionCuts", "NJB_Cuts"]}
 {"module": "NJL_ActiveInvocation", "imports": ["Init", "NJL_LowDischarge", "NJB_CutDischarge", "NJB_ActiveAssociation"]}
 {"module": "NJL_ArrayCodec", "imports": ["Init", "NJB_ArrayCarrier", "NJB_DecodeInjective"]}
-{"module": "NJL_COMBINED_IMPORT", "imports": ["Init", "NGK_COMBINED_IMPORT", "NIU_COMBINED_IMPORT", "NJB_COMBINED_IMPORT", "NIX_ResidualCut", "NIX_ResidualLog", "NJL_AbsorptionInvocation", "NJL_AbsorptionPrologue", "NJL_ActiveInvocation", "NJL_ArrayCodec", "NJL_EndpointCell", "NJL_EndpointIndices", "NJL_EndpointLookup", "NJL_EndpointRoot", "NJL_EndpointWrites", "NJL_LowDischarge", "NJL_OccupancyAssociation", "NJL_OccupancyContext", "NJL_OccupancyFrame", "NJL_OccupancyHead", "NJL_OccupancyLanes", "NJL_OccupancyPacket", "NJL_OccupancyTail", "NJL_PathAssociation", "NJL_PathContext", "NJL_PathFrame", "NJL_PathPacket", "NJL_PathStep", "NJL_PathTrace", "NJL_Traverse", "NJL_WriteFrame"]}
+{"module": "NJL_COMBINED_IMPORT", "imports": ["Init", "NGK_COMBINED_IMPORT", "NIU_COMBINED_IMPORT", "NJB_COMBINED_IMPORT", "NIX_ResidualCut", "NIX_ResidualLog", "NJL_AbsorptionInvocation", "NJL_AbsorptionPrologue", "NJL_ActiveInvocation", "NJL_ArrayCodec", "NJL_CacheReads", "NJL_CachedPowers", "NJL_CachedWindow", "NJL_EndpointCell", "NJL_EndpointIndices", "NJL_EndpointLookup", "NJL_EndpointRoot", "NJL_EndpointWrites", "NJL_LowDischarge", "NJL_OccupancyAssociation", "NJL_OccupancyContext", "NJL_OccupancyFrame", "NJL_OccupancyHead", "NJL_OccupancyLanes", "NJL_OccupancyPacket", "NJL_OccupancyParent", "NJL_OccupancyTail", "NJL_PathAssociation", "NJL_PathContext", "NJL_PathFrame", "NJL_PathPacket", "NJL_PathParent", "NJL_PathSelector", "NJL_PathStep", "NJL_PathTrace", "NJL_PatternCuts", "NJL_PatternInner", "NJL_PatternMeaning", "NJL_PatternOuter", "NJL_PatternRoot", "NJL_SharedCuts", "NJL_SharedMeaning", "NJL_SharedRoot", "NJL_SharedTrace", "NJL_TagChunk", "NJL_TagChunk00", "NJL_TagChunk01", "NJL_TagChunk02", "NJL_TagChunk03", "NJL_TagChunk04", "NJL_TagChunk05", "NJL_TagChunk06", "NJL_TagChunk07", "NJL_TagChunks", "NJL_TagData", "NJL_TagForward", "NJL_TagMeaning", "NJL_TagPartition", "NJL_TagRawStep", "NJL_TagRawTrace", "NJL_TagReduction", "NJL_TagRoot", "NJL_TagSchedule", "NJL_TagWords", "NJL_Traverse", "NJL_WindowCache", "NJL_WindowFold", "NJL_WindowPowerArray", "NJL_WindowPowerFrame", "NJL_WindowPowerOverwrite", "NJL_WindowPowers", "NJL_WindowStep", "NJL_WriteFrame"]}
+{"module": "NJL_CacheReads", "imports": ["Init", "NJL_CachedPowers"]}
+{"module": "NJL_CachedPowers", "imports": ["Init", "NJL_WindowPowers", "NJL_WindowCache"]}
+{"module": "NJL_CachedWindow", "imports": ["Init", "NJL_WindowFold", "NJL_CacheReads"]}
 {"module": "NJL_EndpointCell", "imports": ["Init", "NJB_StateUpdates", "NJB_Cuts"]}
 {"module": "NJL_EndpointIndices", "imports": ["Init", "NJL_EndpointCell"]}
 {"module": "NJL_EndpointLookup", "imports": ["Init", "NJL_EndpointWrites", "NIH_LinkWeight", "NJB_ActiveReference"]}
@@ -13726,14 +13729,53 @@
 {"module": "NJL_OccupancyHead", "imports": ["Init", "NJL_OccupancyContext"]}
 {"module": "NJL_OccupancyLanes", "imports": ["Init", "NJL_OccupancyHead", "NJL_WriteFrame"]}
 {"module": "NJL_OccupancyPacket", "imports": ["Init", "NJL_OccupancyFrame", "NJL_OccupancyTail", "NJB_Absorption", "NJB_ArrayCarrier"]}
+{"module": "NJL_OccupancyParent", "imports": ["Init", "NJL_OccupancyAssociation", "NIH_SelectorRow", "NFQ_StatementLaws", "NHU_Preweighted", "RPv_FIy_OccupancyRows"]}
 {"module": "NJL_OccupancyTail", "imports": ["Init", "NJL_OccupancyContext", "NJL_OccupancyHead", "RPv_FIw_ScalarArithmetic"]}
 {"module": "NJL_PathAssociation", "imports": ["Init", "NJL_PathPacket", "NJL_OccupancyAssociation", "RPv_FIx_PathMeaning", "NDO_JFy_PathLiteral"]}
 {"module": "NJL_PathContext", "imports": ["Init", "NJL_OccupancyContext"]}
 {"module": "NJL_PathFrame", "imports": ["Init", "NJL_PathTrace"]}
 {"module": "NJL_PathPacket", "imports": ["Init", "NJL_PathFrame", "NJL_OccupancyPacket"]}
+{"module": "NJL_PathParent", "imports": ["Init", "NJL_PathSelector", "NHU_Preweighted", "NJB_Cuts"]}
+{"module": "NJL_PathSelector", "imports": ["Init", "NJL_PathAssociation", "NIH_SelectorRow", "NHG_ExtraLeaves"]}
 {"module": "NJL_PathStep", "imports": ["Init", "NJL_PathContext", "NJL_WriteFrame"]}
 {"module": "NJL_PathTrace", "imports": ["Init", "NJL_PathStep"]}
+{"module": "NJL_PatternCuts", "imports": ["Init", "NJB_PatternCuts"]}
+{"module": "NJL_PatternInner", "imports": ["Init", "NJL_PatternCuts"]}
+{"module": "NJL_PatternMeaning", "imports": ["Init", "NJB_PatternReference"]}
+{"module": "NJL_PatternOuter", "imports": ["Init", "NJL_PatternInner"]}
+{"module": "NJL_PatternRoot", "imports": ["Init", "NJL_PatternOuter", "NJL_PatternMeaning", "NJB_PatternArray"]}
+{"module": "NJL_SharedCuts", "imports": ["Init", "NJB_SharedReference", "NJB_Cuts"]}
+{"module": "NJL_SharedMeaning", "imports": ["Init", "NJB_SharedReference", "NJB_PackLinearity", "RPv_FIx_SelectedMeaning"]}
+{"module": "NJL_SharedRoot", "imports": ["Init", "NJL_SharedTrace", "NJL_SharedMeaning", "NJB_DecodeInjective", "NHU_Preweighted"]}
+{"module": "NJL_SharedTrace", "imports": ["Init", "NJL_SharedCuts"]}
+{"module": "NJL_TagChunk", "imports": ["Init", "NJL_TagReduction"]}
+{"module": "NJL_TagChunk00", "imports": ["Init", "NJB_TagRaw"]}
+{"module": "NJL_TagChunk01", "imports": ["Init", "NJB_TagRaw"]}
+{"module": "NJL_TagChunk02", "imports": ["Init", "NJB_TagRaw"]}
+{"module": "NJL_TagChunk03", "imports": ["Init", "NJB_TagRaw"]}
+{"module": "NJL_TagChunk04", "imports": ["Init", "NJB_TagRaw"]}
+{"module": "NJL_TagChunk05", "imports": ["Init", "NJB_TagRaw"]}
+{"module": "NJL_TagChunk06", "imports": ["Init", "NJB_TagRaw"]}
+{"module": "NJL_TagChunk07", "imports": ["Init", "NJB_TagRaw"]}
+{"module": "NJL_TagChunks", "imports": ["Init", "NJL_TagChunk", "NJL_TagPartition"]}
+{"module": "NJL_TagData", "imports": ["Init", "NJL_TagChunk00", "NJL_TagChunk01", "NJL_TagChunk02", "NJL_TagChunk03", "NJL_TagChunk04", "NJL_TagChunk05", "NJL_TagChunk06", "NJL_TagChunk07", "NJB_Words"]}
+{"module": "NJL_TagForward", "imports": ["Init", "NJL_TagRoot"]}
+{"module": "NJL_TagMeaning", "imports": ["Init", "NJL_TagChunks"]}
+{"module": "NJL_TagPartition", "imports": ["Init", "NJL_TagData"]}
+{"module": "NJL_TagRawStep", "imports": ["Init", "NJL_TagWords"]}
+{"module": "NJL_TagRawTrace", "imports": ["Init", "NJL_TagRawStep"]}
+{"module": "NJL_TagReduction", "imports": ["Init", "NJB_TagReduce", "NJL_TagRawTrace"]}
+{"module": "NJL_TagRoot", "imports": ["Init", "NJL_TagMeaning", "NJL_TagSchedule"]}
+{"module": "NJL_TagSchedule", "imports": ["Init", "NJL_TagPartition"]}
+{"module": "NJL_TagWords", "imports": ["Init", "NJL_TagData", "NJB_ActiveReference"]}
 {"module": "NJL_Traverse", "imports": ["Init", "NJB_Traverse"]}
+{"module": "NJL_WindowCache", "imports": ["Init", "NJL_Traverse", "NJB_PreparedCarrier"]}
+{"module": "NJL_WindowFold", "imports": ["Init", "NJL_WindowStep"]}
+{"module": "NJL_WindowPowerArray", "imports": ["Init", "NJL_WindowPowerOverwrite"]}
+{"module": "NJL_WindowPowerFrame", "imports": ["Init", "NJL_WindowPowers"]}
+{"module": "NJL_WindowPowerOverwrite", "imports": ["Init", "NJL_WindowPowerFrame", "NJL_CacheReads"]}
+{"module": "NJL_WindowPowers", "imports": ["Init", "NJB_PreparedLaws"]}
+{"module": "NJL_WindowStep", "imports": ["Init", "NJL_CachedPowers", "NJB_Cuts"]}
 {"module": "NJL_WriteFrame", "imports": ["Init", "NJB_StateUpdates"]}
 {"module": "NP6_StdModel", "imports": ["Init", "ClaimsUnrolledFinish"]}
 {"module": "OccupancyRangeTraversal", "imports": ["Init", "Aeneas.Std.RangeIter"]}

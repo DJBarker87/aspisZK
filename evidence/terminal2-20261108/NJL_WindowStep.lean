@@ -8,7 +8,12 @@ open FIv_NativeArithmetic (NQ)
 open FIv_NativeValue (Canon decode)
 open FIv_PreparedNew (NP)
 def opened (o : Array NQ 16#usize) (start : Fin 9) (slot : Fin 8) : NQ :=
- NJB_ArrayCarrier.cell o ⟨start.val+slot.val,by have := start.isLt;have := slot.isLt;omega⟩
+ NJB_ArrayCarrier.cell o ⟨start.val+slot.val,by
+  have size : (16#usize).val=16 := by scalar_tac
+  rw [size]
+  have := start.isLt
+  have := slot.isLt
+  omega⟩
 /-- NJB_K102/K103: actual cache9words, actual opened[start+slot], one
 Prepared product followed by one add, full scalar reply and next counter. -/
 def Cut (cache : NP) (o : Array NQ 16#usize) (start : Fin 9) (slot : Fin 8)

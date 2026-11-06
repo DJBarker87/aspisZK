@@ -13,3 +13,5 @@ K022 stopped in own validator before Kani: broad string guard for endpoint initi
 K041 failed Rust parsing before verification: missing whitespace in `StateOnlyPoseidonOpenings as usize` generated replacement. K042 not run. Fix exactly whitespace; replacement K043/K044 same assertions and original harness name; no verdict bypass.
 
 K045 failed before verification because NJB_observe is not in the own frozen scratch. K046 not run. Copied exact predecessor9word observer into OWN NJL_observe cfg(kani)-only scratch module, with independent frozen field-prefix hash validation on every run. K049/K050 reestablish actual map, same harness/assertions; no verdict bypass.
+
+Stage12 focused support repair: WindowStep local usize16 bound explicitly normalized; L116 captured the pre-format snapshot and failed syntax, L117 checked the final source. WindowPowerArray L115 `subst after` selected its frame equation rather than the intended power-vector equality; L119 explicitly rewrites that equality into both call and trace and passes. Scope source snapshots preserved; no changed source is credited from a mismatched receipt.

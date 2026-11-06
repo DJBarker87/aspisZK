@@ -57,3 +57,7 @@ NJL_OccupancyParent.source L103 full Result equals the actual emitted add_occupa
 
 ## Stage11 path parent229
 NJL_PathSelector.source L099 consumes actual CLOSED sum_high262, reads1/5/9/13, derives three adds and product (all canonical). NJL_PathParent.source L107 consumes child247 on same THREE-view Openings and CLOSED230 at32/N17. Complete emitted add_path_lanes Result equals returned full24array; all native cut counters/source operands and same17lane child result are internally constructed. No successful-call premise or binary-bit restriction.
+
+## Stage12 prefix-only224 and native remaining windows
+L105/106/108 powers recurrence and actual ordered new map; L117/L110 full arbitrary-prestate prepared-product/add window and finite8step induction; L111/L112 internally derive all cache/input domains and exact sum of lambda^(i+1)*opened[start+i]. L113/L114/L119 lift actual recurrence into all8mutable native frames and identify full final vector, including actual unused ninth power. No time/memory/heartbeat/recursion limit increased. The uncompiled same-packet join sketch is .lean.txt and excluded from combined imports and credit.14tail/cohort association remains Lean-only OPEN224.
+Native controls and additional independent group/loop windows are SUPPORT as itemized in CUTS/STUBS; every included pair is checked by NJL_pair_check.py against actual solver reach, frozen graph, unchanged lock, and same input hashes. K023 TIMEOUT excluded/replaced by small chunk proof and Lean induction; no unchanged timed-out shape rerun.

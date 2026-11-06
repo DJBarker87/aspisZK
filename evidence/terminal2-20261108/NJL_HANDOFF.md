@@ -53,3 +53,8 @@ L103 passes complete native/cohort parent root: same rows1017/1018, typed arbitr
 
 ## Stage11 path parent229
 L107 passes: exact complete emitted add_path_lanes Result and native parent cut, SAME THREE-view Openings, actual closed sum_high262/threeadds/product/child247/preweighted230 domains. K043/K044 strengthened actual-struct pass/fail; K039/K040 single-view token shape excluded and K041 parse failure excluded. Final gate2 and authoritative ledger pending. Target not established.
+
+## Stage12 remaining independent work and budget reservation
+Compiled224 SUPPORT: WindowPowers, WindowCache, CachedPowers, CacheReads, WindowStep/Fold/CachedWindow, WindowPowerFrame/Overwrite/Array. L119 completes actual mutable8cell save/product frames, same ordered actual cache map, and internally derived domains. L112 supplies all8step windows; the same-packet join is retained UNCOMPILED as NJL_WindowInvocation.lean.txt.14tail/cohort assembly stays OPEN, no224 credit.
+Native SUPPORT: K049/050 actual std8map with all9cachewords; K047/048 power control; K051/052 SAME captured powers/openings for starts0,1,2,8; K053/054 full14tail write/frame; K055/056 deployed wrapper223; K057/058 append234 arbitrary group including right-side tweak; K059/060 actual append235 ONE iteration, all4adds/full4state; K061/062 actual recipient246 Some constructor/group/NoneZero. All pairs reached solver PASS/FAIL with frozen graph/unchanged lock/exact KMX. No field multiplication in Kani, no Option<fn>/contracts, no new trust. K063 is an additional FAILING u64-forwarding fidelity control, no additional row credit.
+All60native scopes and116Lean/support scopes now used; final4Lean scopes reserved for combined audit2/2. Continue audit now. Target not established.

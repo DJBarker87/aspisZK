@@ -1,0 +1,29 @@
+--- a/crates/aspis-statement/src/pool_v1/NJL_control.rs
++++ b/crates/aspis-statement/src/pool_v1/NJL_control.rs
+@@ -251,3 +251,26 @@
+  let limb:usize=kani::any();kani::assume(limb<4);assert_eq!(log.calls,1);assert_eq!(log.coordinate,coordinate);assert_eq!(log.selectors,&selectors as *const Selectors as usize);
+  assert_eq!(NJL_words(output)[limb],NJL_words(reply)[limb] ^ if cfg!(NJL_invert){1}else{0});
+ }
++
++struct NJL_OccParentLog{calls:usize,rows:[usize;2],selectors:[usize;2],input:QM31,output:QM31,expected:u32,opened:usize,packed:usize,start:usize,pick:usize,limb:usize,lane:u32}
++fn NJL_occ_row(selectors:&Selectors,row:usize,reply:QM31,l:&mut NJL_OccParentLog)->QM31{let i=l.calls;assert!(i<2);l.rows[i]=row;l.selectors[i]=selectors as *const Selectors as usize;l.calls+=1;reply}
++fn NJL_occ_reply(input:QM31,output:QM31,expected:M31,opened:&[QM31;16],reply:[QM31;12],l:&mut NJL_OccParentLog)->[QM31;12]{assert_eq!(l.calls,2);l.calls+=1;l.input=input;l.output=output;l.expected=expected.0;l.opened=opened as *const [QM31;16] as usize;reply}
++fn NJL_occ_pack(packed:&mut[QM31;24],start:usize,lanes:&[QM31;12],reply:[QM31;24],l:&mut NJL_OccParentLog){assert_eq!(l.calls,3);l.calls+=1;l.packed=packed as *mut[QM31;24]as usize;l.start=start;l.lane=NJL_words(lanes[l.pick])[l.limb];*packed=reply;}
++fn NJL_occ_parent(packed:&mut[QM31;24],variant:PoolV1PairForestCompiledVariantV1,opened:&[QM31;16],selectors:&Selectors,rows:[QM31;2],lanes:[QM31;12],reply:[QM31;24],l:&mut NJL_OccParentLog){
++ let input_occupancy=NJL_occ_row(selectors,63*16+9,rows[0],l);
++ let output_occupancy=NJL_occ_row(selectors,63*16+10,rows[1],l);
++ let expected_output=match variant{PoolV1PairForestCompiledVariantV1::PrivateTransfer=>M31(1),PoolV1PairForestCompiledVariantV1::Withdrawal=>M31(0)};
++ let occupancy=NJL_occ_reply(input_occupancy,output_occupancy,expected_output,opened,lanes,l);
++ NJL_occ_pack(packed,0,&occupancy,reply,l);
++}
++#[kani::proof] #[kani::unwind(67)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NJL_occupancy_parent_cut(){
++ let selectors=Selectors{high:unsafe{core::mem::transmute::<[[u32;4];64],[QM31;64]>(kani::any())},low:unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())}};
++ let opened:[QM31;16]=unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())};let rows:[QM31;2]=unsafe{core::mem::transmute::<[[u32;4];2],[QM31;2]>(kani::any())};let lanes:[QM31;12]=unsafe{core::mem::transmute::<[[u32;4];12],[QM31;12]>(kani::any())};let reply:[QM31;24]=unsafe{core::mem::transmute::<[[u32;4];24],[QM31;24]>(kani::any())};let mut packed:[QM31;24]=unsafe{core::mem::transmute::<[[u32;4];24],[QM31;24]>(kani::any())};
++ let pick:usize=kani::any();let limb:usize=kani::any();let k:usize=kani::any();kani::assume(pick<12&&limb<4&&k<24);let private:bool=kani::any();let variant=if private{PoolV1PairForestCompiledVariantV1::PrivateTransfer}else{PoolV1PairForestCompiledVariantV1::Withdrawal};
++ let address=&mut packed as *mut[QM31;24]as usize;let mut l=NJL_OccParentLog{calls:0,rows:[0;2],selectors:[0;2],input:QM31::ZERO,output:QM31::ZERO,expected:99,opened:0,packed:0,start:99,pick,limb,lane:0};
++ NJL_occ_parent(&mut packed,variant,&opened,&selectors,rows,lanes,reply,&mut l);
++ assert_eq!(l.calls,4);assert_eq!(l.rows,[1017,1018]);assert_eq!(l.selectors[0],&selectors as *const Selectors as usize);assert_eq!(l.selectors[1],&selectors as *const Selectors as usize);
++ assert_eq!(NJL_words(l.input)[limb],NJL_words(rows[0])[limb]);assert_eq!(NJL_words(l.output)[limb],NJL_words(rows[1])[limb]);assert_eq!(l.expected,if private{1}else{0});assert_eq!(l.opened,&opened as *const[QM31;16]as usize);assert_eq!(l.packed,address);assert_eq!(l.start,0);assert_eq!(l.lane,NJL_words(lanes[pick])[limb]);assert_eq!(NJL_words(packed[k])[limb],NJL_words(reply[k])[limb]^if cfg!(NJL_invert){1}else{0});
++}
