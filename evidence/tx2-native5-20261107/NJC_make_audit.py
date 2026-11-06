@@ -6,6 +6,13 @@ for p in sorted(E.glob('NJC_L[0-9][0-9][0-9]/receipt.json')):
  r=json.loads(p.read_text());m=r['module'];src=E/(m+'.lean')
  if r['kind']!='lean' or r['exit_status']!=0 or not src.exists() or m in ['NJC_Inspect','NJC_ValidateInspect','NJC_ValidateInspect2','NJC_Driver','NJC_ProofDriver','NJC_COMBINED_IMPORT']:continue
  if r['source_hashes'].get('NJC_generated/'+m+'.lean')!=hashlib.sha256(src.read_bytes()).hexdigest():continue
+ allowed={'propext','Classical.choice','Quot.sound'}
+ bad=[]
+ for line in r.get('print_axioms',[]):
+  if 'depends on axioms:' in line:
+   ax=re.search(r'\[([^]]*)\]',line)
+   if ax:bad += [a.strip() for a in ax[1].split(',') if a.strip() not in allowed]
+ if bad:continue
  selected[m]=dict(module=m,receipt=str(p.relative_to(E)),source_sha256=hashlib.sha256(src.read_bytes()).hexdigest())
 mods=list(selected);roots=[]
 for m in mods:

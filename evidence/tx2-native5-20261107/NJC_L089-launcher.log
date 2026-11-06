@@ -1,0 +1,30 @@
+{"attempt": "NJC_L089", "exit_status": 0, "wall_seconds": 7.220329288160428, "peak_rss_kib": "6016808", "swaps": "0", "print_axioms": ["'NJC_OrderedCalls.mark' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJC_OrderedCalls.powers' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJC_OrderedCalls.installed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJC_OrderedCalls.parent' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'NJC_OrderedCalls.mark' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJC_OrderedCalls.powers' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJC_OrderedCalls.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJC_OrderedCalls.parent' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJC_OrderedCalls.parent : ∀ (base : VTop_Stages.Ops) (reserved : Bool) {H : Type}
+  (d : VTop_Stages.aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H),
+  NHT_EmittedCommon.tx2_common (literal base reserved) d pub proof ck hash none =
+    NHT_EmittedCommon.tx2_common (model base reserved) d pub proof ck hash none :=
+fun base reserved
+...
+'NJC_OrderedCalls.mark' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJC_OrderedCalls.powers' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJC_OrderedCalls.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJC_OrderedCalls.parent' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJC_OrderedCalls.parent : ∀ (base : VTop_Stages.Ops) (reserved : Bool) {H : Type}
+  (d : VTop_Stages.aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H),
+  NHT_EmittedCommon.tx2_common (literal base reserved) d pub proof ck hash none =
+    NHT_EmittedCommon.tx2_common (model base reserved) d pub proof ck hash none :=
+fun base reserved {H} d pub proof ck hash =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          NHT_EmittedCommon.tx2_common _a d pub proof ck hash none =
+            NHT_EmittedCommon.tx2_common (model base reserved) d pub proof ck hash none)
+        (installed base reserved)))
+    (Eq.refl (NHT_EmittedCommon.tx2_common (model base reserved) d pub proof ck hash none))
+
+Running as unit: run-r224bac1f23d54df0942844717f2747d8.scope; invocation ID: c0694c9aefe14ec9963fe389c5ba1c2b

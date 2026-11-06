@@ -24,6 +24,7 @@ import NJC_RawWindows
 import NJC_OrderedCalls
 import NJC_OptionClause
 import NJC_ValidateResult
+import NJC_CopyFrame
 
 #check NJC_ClosedCalls.inactive_clause
 #print axioms NJC_ClosedCalls.inactive_clause
@@ -141,5 +142,11 @@ import NJC_ValidateResult
 #print axioms NJC_ValidateResult.model
 #check NJC_ValidateResult.source
 #print axioms NJC_ValidateResult.source
+#check NJC_CopyFrame.window
+#print axioms NJC_CopyFrame.window
+#check NJC_CopyFrame.frame
+#print axioms NJC_CopyFrame.frame
+#check NJC_CopyFrame.compose
+#print axioms NJC_CopyFrame.compose
 #check AspisR1.RPx_Deployed.deployed
 #print axioms AspisR1.RPx_Deployed.deployed
