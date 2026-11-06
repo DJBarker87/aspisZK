@@ -1,106 +1,66 @@
---- evidence/axaudit2-20261102/NEP_Driver.lean
-+++ NKR_ProofDriver.lean
-@@ -1,21 +1,93 @@
- import Lean
--import NEP_WALKER
-+import NFA_WALKER
-+import NFA_MemoryLimit
- open Lean Elab Command
-+namespace NER
-+/-- Include recursor reduction rules and constant-name metadata, not only values. -/
-+def referenceNames (c : ConstantInfo) : Array Name := Id.run do
-+ let mut refs := c.type.getUsedConstants ++ ((c.value? true).map Expr.getUsedConstants).getD #[]
-+ match c with
-+ | .defnInfo v => refs := refs ++ v.all.toArray
-+ | .thmInfo v => refs := refs ++ v.all.toArray
-+ | .opaqueInfo v => refs := refs ++ v.all.toArray
-+ | .inductInfo v => refs := refs ++ v.ctors.toArray ++ v.all.toArray
-+ | .ctorInfo v => refs := refs.push v.induct
-+ | .recInfo v =>
-+  refs := refs ++ v.all.toArray
-+  for rule in v.rules do refs := refs.push rule.ctor ++ rule.rhs.getUsedConstants
-+ | _ => pure ()
-+ return refs
-+/-- Same stable first-occurrence projection as NER_ModuleTables.inspect. -/
-+def canonicalImports (xs : Array String) : Array String := Id.run do
-+ let mut result := #[]
-+ for x in xs do
-+  if !result.contains x then result := result.push x
-+ return result
-+def importsMatch (actual expected : Array String) : Bool := canonicalImports actual == expected
-+/-- Inspect each module's own declarations against the checked private environment. -/
-+def loadedScan (env : Environment) (output : System.FilePath)
-+    (expected : Std.HashMap String (Array String)) : IO Bool := do
-+ let env := env.setExporting false
-+ let out ← IO.FS.Handle.mk output .write
-+ let mut failed := false
-+ for h : idx in [0:env.header.moduleNames.size] do
-+  let n := env.header.moduleNames[idx]
-+  let data := env.header.moduleData[idx]!
-+  let mut dangling : Array Json := #[]
-+  let mut edges := 0
-+  for declared in data.constants do
-+   let some c := env.checked.get.find? declared.name | do
-+    dangling := dangling.push (Json.mkObj [("parent",toJson declared.name.toString),("missing",toJson declared.name.toString),("phase",toJson "own_declaration")])
-+    continue
-+   let refs := referenceNames c
-+   for dep in refs do
-+    edges := edges + 1
-+    if (env.checked.get.find? dep).isNone then
-+     dangling := dangling.push (Json.mkObj [("parent",toJson c.name.toString),("missing",toJson dep.toString)])
-+  let loaderImports := data.imports.map (fun i => i.module.toString)
-+  let imports := canonicalImports loaderImports
-+  let importMatch := match expected[n.toString]? with
-+   | some baseline => imports == baseline
-+   | none => false
-+  if !dangling.isEmpty || !importMatch then failed := true
-+  out.putStrLn (Json.mkObj [("module",toJson n.toString), ("imports",toJson imports),
-+   ("loader_imports",toJson loaderImports), ("imports_match",toJson importMatch), ("dangling",toJson dangling),
-+   ("declarations",toJson data.constants.size), ("edges",toJson edges)]).compress
-+ return failed
-+end NER
+--- evidence/terminal4-20261108/NKI_Driver.lean
++++ evidence/terminal5-20261108/NKR_Driver.lean
+@@ -96 +96 @@
+-  let (modules, roots) := if mode == "scan" then (#[`NKI_COMBINED_IMPORT], #[]) else (#[], #[])
++  let (modules, roots) := if mode == "scan" then (#[`NKR_COMBINED_IMPORT], #[]) else (#[], #[])
+@@ -101 +101 @@
+-    for line in ← IO.FS.lines (if mode == "queryscan" then "NFN_QUERY_EXPECTED_IMPORTS.jsonl" else "NKI_EXPECTED_IMPORTS.jsonl") do
++    for line in ← IO.FS.lines (if mode == "queryscan" then "NFN_QUERY_EXPECTED_IMPORTS.jsonl" else "NKR_EXPECTED_IMPORTS.jsonl") do
+@@ -105 +105 @@
+-    let failed ← NER.loadedScan env (if mode == "queryscan" then "NFN_QUERY_LOADED_scan.jsonl" else "NKI_LOADED_scan.jsonl") expected
++    let failed ← NER.loadedScan env (if mode == "queryscan" then "NFN_QUERY_LOADED_scan.jsonl" else "NKR_LOADED_scan.jsonl") expected
+--- evidence/terminal4-20261108/NKI_batch.py
++++ evidence/terminal5-20261108/NKR_batch.py
+@@ -3,2 +3,5 @@
+-B=Path.cwd();mode=sys.argv[1];E=B/'NKI_audit'/mode;E.mkdir(parents=True,exist_ok=True)
+-command=['NKI_native/'+('NKI_Driver'if mode=='scan'else'NKI_ProofDriver'),mode]
++B=Path.cwd();mode=sys.argv[1];E=B/'NKR_audit'/mode;E.mkdir(parents=True,exist_ok=True)
++if mode!='scan':
++ for name in ['AUDIT_ROOTS.json','AUDIT_MODULES.json']:
++  assert (B/('NKR_'+name)).read_bytes()==(B/('NKI_'+name)).read_bytes(), 'Raw driver runtime alias changed'
++command=['NKR_native/'+('NKR_Driver'if mode=='scan'else'NKR_ProofDriver'),mode]
+@@ -12 +15 @@
+-assert re.fullmatch(r'NKI_L[0-9]{3}',attempt)
++assert re.fullmatch(r'NKR_L[0-9]{3}',attempt)
+@@ -14 +17 @@
+-assert config['attempt']==attempt and config['command']==['python3','NKI_batch.py',mode,attempt]
++assert config['attempt']==attempt and (config['command']==['python3','NKR_batch.py',mode,attempt] or (mode in ['fixtures','scan'] and config['command']==['python3','NKR_preflight.py',attempt]))
+@@ -21 +24 @@
+- p=B/'NKI_LOADED_scan.jsonl';raw=p.read_bytes();rows=[json.loads(l)for l in raw.splitlines()];row.update(modules=len(rows),dangling=sum(len(x['dangling'])for x in rows),duplicate_owners=sum(len(x['duplicate_owners'])for x in rows),import_mismatch=sum(not x['imports_match']for x in rows));(E/'scan.jsonl.xz.b64.txt').write_text(base64.b64encode(lzma.compress(raw)).decode());(E/'scan.jsonl.sha256').write_text(hashlib.sha256(raw).hexdigest());assert not(row['dangling']or row['duplicate_owners']or row['import_mismatch'])
++ p=B/'NKR_LOADED_scan.jsonl';raw=p.read_bytes();rows=[json.loads(l)for l in raw.splitlines()];row.update(modules=len(rows),dangling=sum(len(x['dangling'])for x in rows),duplicate_owners=sum(len(x['duplicate_owners'])for x in rows),import_mismatch=sum(not x['imports_match']for x in rows));(E/'scan.jsonl.xz.b64.txt').write_text(base64.b64encode(lzma.compress(raw)).decode());(E/'scan.jsonl.sha256').write_text(hashlib.sha256(raw).hexdigest());assert not(row['dangling']or row['duplicate_owners']or row['import_mismatch'])
+--- evidence/terminal4-20261108/NKI_link.py
++++ evidence/terminal5-20261108/NKR_link.py
+@@ -2,0 +3 @@
++exec((Path.cwd()/'NKR_gate_setup.py').read_text())
+@@ -4,3 +5,3 @@
+-for row in json.loads((b/'NKI_GATE_PINS.json').read_text()):assert hashlib.sha256(Path(row['target']).read_bytes()).hexdigest()==row['sha256']
+-for name in ['NKI_Driver','NKI_ProofDriver']:
+- cmd=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NKI_native/'+name,'NKI_native/'+name+'.c','NKI_native/NFA_WALKER.c','NKI_native/NFA_MemoryLimit.c'];start=time.monotonic();log=b/(name+'-link.log');timing=b/(name+'-link.time')
++for row in json.loads((b/'NKR_GATE_PINS.json').read_text()):assert hashlib.sha256(Path(row['target']).read_bytes()).hexdigest()==row['sha256']
++for name in ['NKR_Driver']:
++ cmd=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NKR_native/'+name,'NKR_native/'+name+'.c','NKR_native/NFA_WALKER.c','NKR_native/NFA_MemoryLimit.c'];start=time.monotonic();log=b/(name+'-link.log');timing=b/(name+'-link.time')
+@@ -8 +9 @@
+- t=timing.read_text();rows.append(dict(target=name,command=cmd,exit=r.returncode,wall=time.monotonic()-start,peak_rss_kib=re.search(r'Maximum resident set size \(kbytes\):\s*(\d+)',t)[1],swap=re.search(r'Swaps:\s*(\d+)',t)[1],sha256=hashlib.sha256((b/'NKI_native'/name).read_bytes()).hexdigest()if r.returncode==0 else None))
++ t=timing.read_text();rows.append(dict(target=name,command=cmd,exit=r.returncode,wall=time.monotonic()-start,peak_rss_kib=re.search(r'Maximum resident set size \(kbytes\):\s*(\d+)',t)[1],swap=re.search(r'Swaps:\s*(\d+)',t)[1],sha256=hashlib.sha256((b/'NKR_native'/name).read_bytes()).hexdigest()if r.returncode==0 else None))
+@@ -10 +11,13 @@
+-(b/'NKI_LINK.json').write_text(json.dumps(rows,indent=1));print(json.dumps(rows));sys.exit(r.returncode)
++(b/'NKR_LINK.json').write_text(json.dumps(rows,indent=1));print(json.dumps(rows))
++assert r.returncode==0
 +
- /-- Standalone runtime avoids restoring a pre-initialization command environment. -/
- unsafe def main (args : List String) : IO UInt32 := do
-+  NFA_MemoryLimit.set
-+  initSearchPath (← findSysroot)
-   enableInitializersExecution
-   let mode := args.headD "small"
--  let (modules, roots) := if mode == "final" then
--    (#[`RPx_Deployed, `NDR_CombinedAudit],
--     #[`AspisR1.RPx_Deployed.deployed, `AspisR1.NDR_CombinedAudit.sourceOnHeadline])
--    else if mode == "fixtures" then
--    (#[`NEP_Planted, `NEP_Mutations],
--     #[`NEP_Planted.matcher, `NEP_Planted.viaPrivate, `NEP_Planted.proof,
--       `NEP_Planted.viaAux, `NEP_MutateMatch.matcher, `NEP_MutatePrivate.viaPrivate,
--       `NEP_MutateProof.proof, `NEP_MutateAux.viaAux])
--    else (#[`JGx_SdkAfterValidationEq], #[`AspisR1.JGx_SdkAfterValidationEq.source])
-+  let (modules, roots) ←
-+    if mode == "fixtures" then
-+      pure (#[`NEP_Planted, `NEP_Mutations],
-+       #[`NEP_Planted.matcher, `NEP_Planted.viaPrivate, `NEP_Planted.proof,
-+         `NEP_Planted.viaAux, `NEP_MutateMatch.matcher, `NEP_MutatePrivate.viaPrivate,
-+         `NEP_MutateProof.proof, `NEP_MutateAux.viaAux])
-+    else do
-+      let manifest ← IO.ofExcept (Json.parse (← IO.FS.readFile "NKR_AUDIT_ROOTS.json"))
-+      let groups ← IO.ofExcept (manifest.getObjValAs? (Array (Array String)) "groups")
-+      let some idx := (mode.drop 5).toString.toNat? | throw (IO.userError "invalid proof mode")
-+      let some names := groups[idx]? | throw (IO.userError "proof group out of range")
-+      let selected ← IO.ofExcept (Json.parse (← IO.FS.readFile "NKR_AUDIT_MODULES.json"))
-+      let selected ← IO.ofExcept (fromJson? selected : Except String (Array (Array String)))
-+      let some modules := selected[idx]? | throw (IO.userError "module group out of range")
-+      pure (modules.map String.toName, names.map String.toName)
-   let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
-     {} (loadExts := true) (level := .private)
-+  if mode == "scan" || mode == "queryscan" then
-+    let mut expected : Std.HashMap String (Array String) := {}
-+    for line in ← IO.FS.lines (if mode == "queryscan" then "NFN_QUERY_EXPECTED_IMPORTS.jsonl" else "NFN_EXPECTED_IMPORTS.jsonl") do
-+      let j ← IO.ofExcept (Json.parse line)
-+      expected := expected.insert (← IO.ofExcept (j.getObjValAs? String "module"))
-+        (← IO.ofExcept (j.getObjValAs? (Array String) "imports"))
-+    let failed ← NER.loadedScan env (if mode == "queryscan" then "NFN_QUERY_LOADED_scan.jsonl" else "NFN_LOADED_scan.jsonl") expected
-+    IO.println (if failed then "NFN_SCAN_FAILED" else "NFN_SCAN_ZERO_DANGLING")
-+    return if failed then 1 else 0
-   let ctx : Command.Context := {
-     fileName := "NEP_Driver"
-     fileMap := FileMap.ofString ""
++# Reuse the byte-identical admitted raw driver; only runtime input/root lists change.
++import shutil
++origin=Path('/home/dombarker/project-offloads/codex-cx-terminal4-20261108')
++old=json.loads((origin/'NKI_LINK.json').read_text());pin=next(x for x in old if x['target']=='NKI_ProofDriver')
++exe=origin/'NKI_native/NKI_ProofDriver';assert hashlib.sha256(exe.read_bytes()).hexdigest()==pin['sha256']
++assert (b/'NKR_ProofDriver.lean').read_bytes()==(origin/'NKI_ProofDriver.lean').read_bytes()
++shutil.copyfile(exe,b/'NKR_native/NKR_ProofDriver');(b/'NKR_native/NKR_ProofDriver').chmod(0o755)
++for suffix in ['AUDIT_ROOTS.json','AUDIT_MODULES.json']:
++ shutil.copyfile(b/('NKR_'+suffix),b/('NKI_'+suffix))
++(b/'NKR_PROOF_DRIVER_REUSE.json').write_text(json.dumps(dict(source=str(origin/'NKI_ProofDriver.lean'),source_sha256=hashlib.sha256((b/'NKR_ProofDriver.lean').read_bytes()).hexdigest(),binary=str(exe),binary_sha256=pin['sha256'],unchanged=True,runtime_aliases=['NKI_AUDIT_ROOTS.json','NKI_AUDIT_MODULES.json'],reason='Exact unchanged driver/cache reuse under AGENTS resourcepolicy; new root/module lists only')));print('Pinned unchanged raw driver reused; no redundant compile/link')
+--- evidence/terminal4-20261108/NKI_gate_setup.py
++++ evidence/terminal5-20261108/NKR_gate_setup.py
+@@ -5,2 +5,2 @@
+- q=p/n;r=b/'NKI_native'/n;shutil.copyfile(q,r);rows.append(dict(source=str(q),target=str(r),sha256=hashlib.sha256(r.read_bytes()).hexdigest(),bytes=r.stat().st_size))
+-(b/'NKI_GATE_PINS.json').write_text(json.dumps(rows,indent=1));print('unchanged walker/memory C source copied and pinned')
++ q=p/n;r=b/'NKR_native'/n;shutil.copyfile(q,r);rows.append(dict(source=str(q),target=str(r),sha256=hashlib.sha256(r.read_bytes()).hexdigest(),bytes=r.stat().st_size))
++(b/'NKR_GATE_PINS.json').write_text(json.dumps(rows,indent=1));print('unchanged walker/memory C source copied and pinned')

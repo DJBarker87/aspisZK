@@ -62,6 +62,8 @@ for n,t in json.loads({json.dumps(files)!r}).items():
  p=b/n;p.parent.mkdir(parents=True,exist_ok=True);(p.write_bytes(base64.b64decode(t)) if n.endswith('.xz') else p.write_text(t))
 for n in ['NKR_objects','NKR_generated','NKR_tmp','NKR_native']:(b/n).mkdir(exist_ok=True)
 exec((b/'NKR_seed.py').read_text())
+for suffix in ['AUDIT_ROOTS.json','AUDIT_MODULES.json']:
+ if (b/('NKR_'+suffix)).is_file():(b/('NKI_'+suffix)).write_bytes((b/('NKR_'+suffix)).read_bytes())
 p=b/{(a+'.json')!r};x=json.loads(p.read_text());roots=x.get('env',{{}}).get('LEAN_PATH','').split(':');rels=set();pins={{}}
 if x['kind'] in ['lean','audit']:
  for root in roots:
@@ -72,7 +74,7 @@ if x['kind'] in ['lean','audit']:
  if x['kind']=='lean':
   for n in re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M):rels.add(n.replace('.','/')+'.olean')
  else:
-  modules=list(json.loads((b/'NKR_GATE_SOURCES.json').read_text())['passed'])+['NKR_COMBINED_IMPORT','NKN_COMBINED_IMPORT','NKI_COMBINED_IMPORT','NKC_COMBINED_IMPORT','NJX_COMBINED_IMPORT','NJO_COMBINED_IMPORT','NJL_COMBINED_IMPORT','NIU_COMBINED_IMPORT','NGK_COMBINED_IMPORT','NFA_WALKER','NFA_MemoryLimit']
+  modules=list(json.loads((b/'NKR_GATE_SOURCES.json').read_text())['passed'])+['NKN_COMBINED_IMPORT','NKI_COMBINED_IMPORT','NKC_COMBINED_IMPORT','NJX_COMBINED_IMPORT','NJO_COMBINED_IMPORT','NJL_COMBINED_IMPORT','NIU_COMBINED_IMPORT','NGK_COMBINED_IMPORT','NFA_WALKER','NFA_MemoryLimit']
   for n in modules:rels.add(n.replace('.','/')+'.olean')
  for rel in sorted(rels):
   q=next((Path(root)/rel for root in roots if (Path(root)/rel).is_file()),None);assert q is not None,rel

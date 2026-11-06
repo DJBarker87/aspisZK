@@ -1,0 +1,92 @@
+'AspisR1.NKR_SumFinishComposed.tag_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumFinishComposed.data_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumFinishComposed.callback_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKR_SumFinishComposed.source : ∀ (scratch : NKR_SumFinishInvocation.Scratch)
+  (s : NKR_SumFinishInvocation.Selectors) (terms : NKR_SumFinishInvocation.Patterns),
+  FIw_ArrayValue.canonical scratch →
+    FIw_ArrayValue.canonical s.high →
+      FIw_ArrayValue.canonical s.low →
+        FIw_ArrayValue.canonical terms →
+          ∃ dot coefficients finished,
+            BatchTrace (NKR_SumFinishInvocation.tagValues s) (NKR_SumFinishInvocation.weightValues scratch)
+                (NKR_SumFinishInvocation.lowValues s) NKR_SumFinishFold.order
+                (NKR_SumFinishInvocation.zero4, NKR_SumFinishInvocation.zero4) dot ∧
+              PatternTrace (NJB_ArrayCarrier.cell scratch) (NJB_ArrayCarrier.cell s.low) (List.finRange 43)
+                  NKR_SumFinishInvocation.zero26 coefficients ∧
+                NKR_SumFinishInvocation.reference scratch s terms =
+                    ok (NJB_ArrayCarrier.array finished, NJB_ArrayCarrier.array dot.2) ∧
+                  FIw_ArrayValue.canonical (NJB_ArrayCarrier.array finished) ∧
+                    FIw_ArrayValue.canonical (NJB_ArrayCarrier.array dot.2) ∧
+                      (∀ (g : Fin 4),
+                          FIv_NativeValue.decode (finished g) = NKR_SumFinishCohort.values scratch s terms g) ∧
+                        ∀ (g : Fin 4), FIv_NativeValue.decode (dot.2 g) = NKR_SumFinishCohort.baseWeights scratch s g :=
+fun scratch s terms hsc hh hl ht =>
+  let ⟨dot, h✝⟩ := NKR_SumFinishInvocation.source scratch s terms hsc hh hl ht
+  let ⟨coefficients, h✝¹⟩ := h✝
+  let ⟨finished, h✝²⟩ := h✝¹
+  let ⟨left✝, right✝⟩ := h✝²
+  let ⟨left✝¹, right✝¹⟩ := right✝
+  let ⟨dt, right✝²⟩ := right✝¹
+  let ⟨left✝², right✝³⟩ := right✝²
+  let ⟨pt, right✝⁴⟩ := right✝³
+  let ⟨left✝³, right✝⁵⟩ := right✝⁴
+  let ⟨left✝⁴, right✝⁶⟩ := right✝⁵
+  let ⟨call, right✝⁷⟩ := right✝⁶
+  let ⟨left✝⁵, right✝⁸⟩ := right✝⁷
+  let ⟨left✝⁶, right✝⁹⟩ := right✝⁸
+  let ⟨left✝⁷, right✝¹⁰⟩ := right✝⁹
+  let ⟨left✝⁸, right✝¹¹⟩ := right✝¹⁰
+  let ⟨left✝⁹, right✝¹²⟩ := right✝¹¹
+  let ⟨outV, h✝³⟩ := NKR_SumFinishCohort.source scratch s terms hsc hh hl ht
+  let ⟨outW, h✝⁴⟩ := h✝³
+  let ⟨outCall, right✝¹³⟩ := h✝⁴
+  let ⟨cv, right✝¹⁴⟩ := right✝¹³
+  let ⟨cw, right✝¹⁵⟩ := right✝¹⁴
+  let ⟨vv, ww⟩ := right✝¹⁵
+  have same := ok.inj (Eq.trans (Eq.symm outCall) call);
+  have hv := congrArg Prod.fst same;
+  have hw := congrArg Prod.snd same;
+  Exists.intro dot
+    (Exists.intro coefficients
+      (Exists.intro finished
+        ⟨batch_trace_from_source dt,
+          ⟨pattern_trace_from_source pt,
+            ⟨call,
+              ⟨Eq.mp (congrArg (fun _a => FIw_ArrayValue.canonical _a) hv) cv,
+                ⟨Eq.mp (congrArg (fun _a => FIw_ArrayValue.canonical _a) hw) cw,
+                  ⟨fun g =>
+                    Eq.mp
+                      (congrFun'
+                        (congrArg Eq
+                          (congrArg FIv_NativeValue.decode (congrFun (NJB_ArrayCarrier.cell_array finished) g)))
+                        (NKR_SumFinishCohort.values scratch s terms g))
+                      (Eq.mp
+                        (congrArg
+                          (fun _a =>
+                            ∀ (g : Fin ↑4#usize),
+                              FIv_NativeValue.decode (NJB_ArrayCarrier.cell _a g) =
+                                NKR_SumFinishCohort.values scratch s terms g)
+                          hv)
+                        vv g),
+                    fun g =>
+                    Eq.mp
+                      (congrFun'
+                        (congrArg Eq (congrArg FIv_NativeValue.decode (congrFun (NJB_ArrayCarrier.cell_array dot.2) g)))
+                        (NKR_SumFinishCohort.baseWeights scratch s g))
+                      (Eq.mp
+                        (congrArg
+                          (fun _a =>
+                            ∀ (g : Fin ↑4#usize),
+                              FIv_NativeValue.decode (NJB_ArrayCarrier.cell _a g) =
+                                NKR_SumFinishCohort.baseWeights scratch s g)
+                          hw)
+                        ww g)⟩⟩⟩⟩⟩⟩))
+'AspisR1.NKR_SumFinishComposed.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumFinishComposed.batch_to_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumFinishComposed.batch_from_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumFinishComposed.pattern_to_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumFinishComposed.pattern_from_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumFinishComposed.batch_trace_to_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumFinishComposed.batch_trace_from_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumFinishComposed.pattern_trace_to_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumFinishComposed.pattern_trace_from_source' depends on axioms: [propext, Classical.choice, Quot.sound]

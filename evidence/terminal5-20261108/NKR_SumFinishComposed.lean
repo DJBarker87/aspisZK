@@ -24,13 +24,13 @@ theorem tag_source (scratch : Fin 103 → NQ) (s : NKR_SumFinishInvocation.Selec
  · let c := batchCoordinate b ⟨i.val,hi⟩
    refine ⟨NKR_SumFinishInvocation.tags s c,?_,?_⟩
    · refine ⟨NKR_SumSplitCuts.batch_domain b,rfl,fun _=>⟨rfl,rfl,rfl,rfl⟩,?_⟩
-     simp only [padded,hi,dif_pos,if_pos,NKR_SumFinishInvocation.tagValues]
+     simp [padded,hi,c,NKR_SumFinishInvocation.tagValues]
    · intro h
      exact (NKR_SumFinishInvocation.tag_calls s hh c).1
  · refine ⟨FIq_Native.field.QM31.ZERO,?_,?_⟩
    · refine ⟨NKR_SumSplitCuts.batch_domain b,rfl,?_,?_⟩
      · intro h;exact False.elim (hi h)
-     · simp only [padded,hi,dif_neg,if_neg]
+     · simp [padded,hi]
    · intro h;exact False.elim (hi h)
 
 /-- Pure padding/read bookkeeping. Its source classification remains P7
@@ -79,9 +79,9 @@ theorem batch_to_source {tags weights lows : Fin 30 → NQ} {b : Fin 9} {before 
  refine ⟨v,vr,w,wr,hv,ha,hw,hwa,?_⟩
  refine ⟨rfl,rfl,rfl,rfl,fun _=>rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,?_,?_⟩
  · intro i
-   simpa only [eq_comm] using fv i
+   simpa [eq_comm] using fv i
  · intro i
-   simpa only [eq_comm] using fw i
+   simpa [eq_comm] using fw i
 
 /-- Source-side construction of NEW primitive observations. This is NOT a
 native proof:the independent native positive/negative pair supplies the
@@ -93,8 +93,8 @@ theorem batch_from_source {tags weights lows : Fin 30 → NQ} {b : Fin 9} {befor
  rcases cut with ⟨_,_,_,_,_,_,_,_,_,_,_,_,fv,fw⟩
  refine ⟨v,vr,w,wr,hv,ha,hw,hwa,NKR_SumSplitCuts.batch_domain b,rfl,rfl,rfl,rfl,rfl,?_,?_,?_⟩
  · intro seek;exact ⟨rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl⟩
- · intro i;simpa only [eq_comm] using fv i
- · intro i;simpa only [eq_comm] using fw i
+ · intro i;simpa [eq_comm] using fv i
+ · intro i;simpa [eq_comm] using fw i
 
 /-- NEW pattern primitives:product has no mutable26cell buffer;write has
 no103cell scratch. Their only shared channel is the complete product reply.
@@ -178,9 +178,9 @@ theorem source (scratch : NKR_SumFinishInvocation.Scratch)
  PatternTrace (NJB_ArrayCarrier.cell scratch) (NJB_ArrayCarrier.cell s.low)
   (List.finRange 43) NKR_SumFinishInvocation.zero26 coefficients ∧
  NKR_SumFinishInvocation.reference scratch s terms=
-  ok (NJB_ArrayCarrier.array finished,NJB_ArrayCarrier.array dot.2) ∧
- FIw_ArrayValue.canonical (NJB_ArrayCarrier.array finished) ∧
- FIw_ArrayValue.canonical (NJB_ArrayCarrier.array dot.2) ∧
+  ok (NJB_ArrayCarrier.array (N:=4#usize) finished,NJB_ArrayCarrier.array (N:=4#usize) dot.2) ∧
+ FIw_ArrayValue.canonical (NJB_ArrayCarrier.array (N:=4#usize) finished) ∧
+ FIw_ArrayValue.canonical (NJB_ArrayCarrier.array (N:=4#usize) dot.2) ∧
  (∀ g,FIv_NativeValue.decode (finished g)=NKR_SumFinishCohort.values scratch s terms g) ∧
  (∀ g,FIv_NativeValue.decode (dot.2 g)=NKR_SumFinishCohort.baseWeights scratch s g) := by
  obtain ⟨dot,coefficients,finished,_,_,dt,_,pt,_,_,call,_,_,_,_,_,_⟩ :=
@@ -188,8 +188,8 @@ theorem source (scratch : NKR_SumFinishInvocation.Scratch)
  obtain ⟨outV,outW,outCall,cv,cw,vv,ww⟩ :=
   NKR_SumFinishCohort.source scratch s terms hsc hh hl ht
  have same := Result.ok.inj (outCall.symm.trans call)
- have hv : outV=NJB_ArrayCarrier.array finished := congrArg Prod.fst same
- have hw : outW=NJB_ArrayCarrier.array dot.2 := congrArg Prod.snd same
+ have hv : outV=NJB_ArrayCarrier.array (N:=4#usize) finished := congrArg Prod.fst same
+ have hw : outW=NJB_ArrayCarrier.array (N:=4#usize) dot.2 := congrArg Prod.snd same
  rw [hv] at cv vv
  rw [hw] at cw ww
  refine ⟨dot,coefficients,finished,batch_trace_from_source dt,pattern_trace_from_source pt,call,cv,cw,?_,?_⟩

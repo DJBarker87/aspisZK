@@ -36,7 +36,7 @@ for name in roots:s+='#check '+name+'\n#print axioms '+name+'\n'
 for p in[E/(m+'.lean')for m in passed]+[E/'NKR_COMBINED_IMPORT.lean']:
  expected[p.stem]=list(dict.fromkeys(['Init']+re.findall(r'^import ([\w.]+)',p.read_text(),re.M)))
 (E/'NKR_EXPECTED_IMPORTS.jsonl').write_text(''.join(json.dumps(dict(module=m,imports=imports))+'\n'for m,imports in sorted(expected.items())))
-count=28;groups=[allroots[i*len(allroots)//count:(i+1)*len(allroots)//count]for i in range(count)]
+count=26;groups=[allroots[i*len(allroots)//count:(i+1)*len(allroots)//count]for i in range(count)]
 assert len(set(sum(groups,[])))==sum(map(len,groups))==len(allroots)
 (E/'NKR_AUDIT_ROOTS.json').write_text(json.dumps(dict(roots=allroots,groups=groups,new_roots=roots,baseline_pins=baseline,reason='One complete disjoint union NKN+NKI+NKR proof-body audit with unchanged hardened walker'),indent=1))
 (E/'NKR_AUDIT_MODULES.json').write_text(json.dumps([['NKR_COMBINED_IMPORT']]*count))

@@ -1,6 +1,9 @@
 from pathlib import Path
 import json,time,subprocess,re,sys,lzma,hashlib,base64
 B=Path.cwd();mode=sys.argv[1];E=B/'NKR_audit'/mode;E.mkdir(parents=True,exist_ok=True)
+if mode!='scan':
+ for name in ['AUDIT_ROOTS.json','AUDIT_MODULES.json']:
+  assert (B/('NKR_'+name)).read_bytes()==(B/('NKI_'+name)).read_bytes(), 'Raw driver runtime alias changed'
 command=['NKR_native/'+('NKR_Driver'if mode=='scan'else'NKR_ProofDriver'),mode]
 start=time.monotonic()
 with (E/'stdout.log').open('w')as f:r=subprocess.run(['/usr/bin/time','-v','-o',str(E/'time.log'),*command],stdout=f,stderr=subprocess.STDOUT)
@@ -11,7 +14,7 @@ results=[json.loads(l[11:])for l in s.splitlines()if l.startswith('NEP_RESULT ')
 attempt=sys.argv[2]
 assert re.fullmatch(r'NKR_L[0-9]{3}',attempt)
 config=json.loads((B/(attempt+'.json')).read_text())
-assert config['attempt']==attempt and config['command']==['python3','NKR_batch.py',mode,attempt]
+assert config['attempt']==attempt and (config['command']==['python3','NKR_batch.py',mode,attempt] or (mode in ['fixtures','scan'] and config['command']==['python3','NKR_preflight.py',attempt]))
 row=dict(target=mode,source_revision=config['source_revision'],scope_attempt=attempt,library_pins='see '+attempt+'/receipt.json deps_fingerprint',command=command,exit_status=r.returncode,wall_seconds=time.monotonic()-start,peak_rss_kib=metric('Maximum resident set size (kbytes)'),swaps=metric('Swaps'),results=results,print_axioms=axioms)
 if mode=='fixtures':
  expected=[['NEP_Planted.matchAx'],['NEP_Planted.privateAx'],['NEP_Planted.proofAx'],['NEP_Planted.auxAx'],[],[],[],[]];row['fixture_pass']=len(results)==8 and all(x['equal']and x['walked_axioms']==want for x,want in zip(results,expected));assert row['fixture_pass']

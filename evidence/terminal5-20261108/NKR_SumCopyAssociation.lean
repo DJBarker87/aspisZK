@@ -65,19 +65,19 @@ theorem pattern_group_key (lookup : Lookups) (keys : Keys) (i : Fin 136) (consum
  NKR_SumLookupCertificate.patternGroup (pi lookup i consumer)=NKR_SumFinishData.group (gi lookup i consumer) := by
  have key:=NKR_SumLookupCertificate.keys i consumer (lookup i consumer) (keys i consumer)
  apply Fin.ext
- exact (congrArg (fun k=>k.1.1) key.2).trans (congrArg Prod.fst key.1).symm
+ exact (congrArg (fun k=>k.1) key.2).trans (congrArg Prod.fst key.1).symm
 
 theorem pattern_key (lookup : Lookups) (keys : Keys) (i : Fin 136) (consumer : Bool) :
  NJB_PatternReference.pattern (NKR_SumFinishData.pOut (pi lookup i consumer))=(endpoint i consumer).pattern := by
  have key:=(NKR_SumLookupCertificate.keys i consumer (lookup i consumer) (keys i consumer)).2
  apply Fin.ext
- exact (congrArg (fun k=>k.1.2) key).trans (descriptor_pattern i consumer).symm
+ exact (congrArg (fun k=>k.2.1) key).trans (descriptor_pattern i consumer).symm
 
 theorem pattern_low_key (lookup : Lookups) (keys : Keys) (s : Selectors) (i : Fin 136) (consumer : Bool) :
  plow s (pi lookup i consumer)=low s (gi lookup i consumer) := by
  have key:=NKR_SumLookupCertificate.keys i consumer (lookup i consumer) (keys i consumer)
  have eq : NKR_SumFinishData.pLow (pi lookup i consumer)=NKR_SumFinishData.low (gi lookup i consumer) :=
-  Fin.ext ((congrArg Prod.snd key.2).trans (congrArg Prod.snd key.1).symm)
+  Fin.ext ((congrArg (fun k=>k.2.2) key.2).trans (congrArg Prod.snd key.1).symm)
  exact congrArg (fun c=>decode (NJB_ArrayCarrier.cell s.low c)) eq
 
 theorem selector (lookup : Lookups) (keys : Keys) (s : Selectors) (i : Fin 136) (consumer : Bool) :
@@ -94,11 +94,10 @@ theorem selector (lookup : Lookups) (keys : Keys) (s : Selectors) (i : Fin 136) 
   FIv_NativeArray.value s.high ((endpoint i consumer).row.val/16)*
    FIv_NativeArray.value s.low ((endpoint i consumer).row.val%16)
  rw [hr,lr,descriptor_row,low_key lookup keys]
- rfl
 
 theorem sum_finRange {n : Nat} (f : Fin n → K) : ((List.finRange n).map f).sum=∑ i,f i := by
  change ((List.ofFn (fun i : Fin n=>i)).map f).sum=_
- simp only [List.map_ofFn,List.sum_ofFn]
+ simp only [List.map_ofFn,List.sum_ofFn,Function.comp_apply]
 
 theorem sum_filter {A : Type} (xs : List A) (p : A → Bool) (f : A → K) :
  ((xs.filter p).map f).sum=(xs.map (fun x=>if p x then f x else 0)).sum := by
@@ -152,24 +151,32 @@ theorem canonical_encoded (domain : NKR_SumTagPermutation.Domain) (t : Fin 272) 
  pairDecode (NKR_SumTagPermutation.encoded domain t)=(NKR_SumTagPermutation.index domain t,NKR_SumTagPermutation.side t) := by
  exact pair_left (NKR_SumTagPermutation.index domain t,NKR_SumTagPermutation.side t)
 
+/-- Generic finite bijection transport prevents elaboration from unfolding
+concrete Fin272 enumerations. No cardinality-sized kernel recurrence. -/
+theorem sum_bijection {A B : Type} [Fintype A] [Fintype B]
+ (to : A → B) (back : B → A) (left : ∀ a,back (to a)=a)
+ (right : ∀ b,to (back b)=b) (f : B → K) :
+ (∑ a,f (to a))=∑ b,f b := by
+ classical
+ refine Finset.sum_bij (fun a _=>to a) ?_ ?_ ?_ ?_
+ · intro a ha;exact Finset.mem_univ _
+ · intro a ha b hb eq
+   exact (left a).symm.trans ((congrArg back eq).trans (left b))
+ · intro b hb;exact ⟨back b,Finset.mem_univ _,right b⟩
+ · intro a ha;rfl
+
+#print axioms sum_bijection
+
 theorem sum_pairs (f : Fin 136 → Bool → K) :
  (∑ t : Fin 272,f (canonicalIndex t) (canonicalSide t))=∑ i : Fin 136,(f i false+f i true) := by
  calc
-  _=∑ p : Fin 136 × Bool,f p.1 p.2 := by
-   refine Finset.sum_bij (fun t _=>pairDecode t) ?_ ?_ ?_ ?_
-   · intro t ht
-     exact Finset.mem_univ _
-   · intro t ht u hu h
-     exact (pair_right t).symm.trans ((congrArg pairEncode h).trans (pair_right u))
-   · intro p hp
-     exact ⟨pairEncode p,Finset.mem_univ _,pair_left p⟩
-   · intro t ht
-     rfl
+  _=∑ p : Fin 136 × Bool,f p.1 p.2 :=
+   sum_bijection pairDecode pairEncode pair_right pair_left (fun p=>f p.1 p.2)
   _=_ := by
    rw [Fintype.sum_prod_type]
    apply Finset.sum_congr rfl
    intro i hi
-   simp
+   simp [add_comm]
 
 /-- Arbitrary caller field expression is transported from the sorted272tag
 positions to136genuine producer/consumer entries by the native metadata
@@ -265,15 +272,17 @@ def patternTerm (s : Selectors) (terms : Array NQ 14#usize) (c : Fin 43) : K :=
 theorem dot_finite (terms : Fin 14 → K) (coefficients : Fin 26 → K) (g : Fin 4) :
  NJL_PatternMeaning.dot terms coefficients g=
  ∑ p : Fin 26,if p∈NJB_PatternReference.coordinates g then terms (NJB_PatternReference.pattern p)*coefficients p else 0 := by
- unfold NJL_PatternMeaning.dot NJB_PatternReference.coordinates
+ unfold NJL_PatternMeaning.dot
+ conv_lhs => unfold NJB_PatternReference.coordinates
  rw [sum_filter]
- simp only [List.map_ofFn,List.sum_ofFn]
+ simp only [List.map_ofFn,List.sum_ofFn,Function.comp_apply]
  apply Finset.sum_congr rfl
  intro p hp
  have member : p∈NJB_PatternReference.coordinates g ↔
   NJB_PatternReference.offset g.castSucc≤p.val ∧ p.val<NJB_PatternReference.offset g.succ := by
-  simp [NJB_PatternReference.coordinates]
- simp [member]
+  have all : p∈List.ofFn (fun c : Fin 26=>c) := List.mem_ofFn.mpr ⟨p,rfl⟩
+  simp only [NJB_PatternReference.coordinates,List.mem_filter,all,true_and,decide_eq_true_eq]
+ simp only [member,decide_eq_true_eq]
 
 theorem coefficient_finite (scratch : State) (s : Selectors) (p : Fin 26) :
  NKR_SumFinishCohort.coefficient (NJB_ArrayCarrier.array scratch) s p=
@@ -298,7 +307,7 @@ theorem pattern_value (scratch : State) (s : Selectors) (terms : Array NQ 14#usi
  rw [NKR_SumRegroup.contraction]
  apply Finset.sum_congr rfl
  intro c hc
- rw [NKR_SumRegroup.bucket_iff]
+ simp only [NKR_SumRegroup.bucket_iff]
  by_cases h : NKR_SumLookupCertificate.patternGroup c=g
  · simp only [if_pos h]
    unfold patternTerm
@@ -344,6 +353,7 @@ theorem weight_regroup (lookup : Lookups) (keys : Keys) (s : Selectors) (scratch
    rw [sum_finRange]
    apply Finset.sum_congr rfl
    intro c hc
+   simp only [NKR_SumFinishInvocation.weightValues,NJB_ArrayCarrier.cell_array,NKR_SumFinishCohort.low]
    change (if NKR_SumFinishData.group c=g then decode (scratch (NJL_EndpointIndices.weight c))*low s c else 0)=_
    rw [coordinates]
    split_ifs <;> ring
@@ -417,7 +427,7 @@ theorem legacy_values (s : Selectors) (terms : Array NQ 14#usize) (append : U64)
   unfold NKR_SumLegacyRows.values FJk_CopyFullFold.initial
   split <;> rfl
  rw [z,zero_add,link_sum] at v
- simpa only [FJk_CopyFullFold.model,valueTerm,endpoint,link,NKR_SumLegacyRows.endpoint,eq_comm] using v
+ simpa only [FJk_CopyFullFold.model,valueTerm,endpoint,link,NKR_SumLegacyRows.endpoint,eq_comm,Bool.false_eq_true,if_true,if_false] using v
 
 theorem legacy_weights (s : Selectors) (terms : Array NQ 14#usize) (append : U64)
  (variant : PoolV1PairForestCompiledVariantV1) (g : Fin 4) :
@@ -430,7 +440,7 @@ theorem legacy_weights (s : Selectors) (terms : Array NQ 14#usize) (append : U64
   unfold NKR_SumLegacyRows.weights FJk_CopyFullFold.initial
   split <;> rfl
  rw [z,zero_add,link_sum] at v
- simpa only [FJk_CopyFullFold.model,weightTerm,endpoint,link,NKR_SumLegacyRows.endpoint,eq_comm] using v
+ simpa only [FJk_CopyFullFold.model,weightTerm,endpoint,link,NKR_SumLegacyRows.endpoint,eq_comm,Bool.false_eq_true,if_true,if_false] using v
 
 /-- Algebraic join only:the two coordinate premises are internally derived
 by `source` below from the complete actual136link computation. They are not

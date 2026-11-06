@@ -1,18 +1,16 @@
-# NKR remaining
+# Remaining obligations
 
-Target TX1:256 not yet established. No authoritative promotion; all candidate credit waits for next ledger adoption.
+Target TX1:256 is not established. Ledger19 remains553 CLOSED/0 QUALIFIED/46 OPEN of599; authoritative delta0.
 
-|Member|Current exact obligation|
-|---|---|
-|232|ScheduleRoot,typedCut and fullsource compile; public/data/tuple/weight native pairs pass. Literalcall-order control, final native/source post association focused repair and combined gate remain. Conditional NKI260 child. |
-|225|Complete canonical SAME-array/count1..4 carrier root PASS; helper budget/n+remaining clauses internally derived, nativeK011/K004PASS/FAIL. Combined gate and next-ledger credit remain.|
-|251|Fullsource/cohort root authored; several generic/packing lemmas PASS. Keyassociation deterministic-heartbeat failure isolated into named tinyrow lemmas. Prefix input-generation bound repair and split middle native windows remain; wholemiddleK020timedout excluded.|
-|250|Concrete251and forwarding/2reply carrier; wholewrapperK022timedout excluded, split argument/return association required.|
-|220|9dotbatch/43pattern/full219tuple and unbatchedcohort endpoint authored; focusedBatch frame repair +dependent roots and nativeinputbound repairs remain.|
-|218|136linkcollection source PASS; complete source invocation and tensor-to-legacy endpoint/tag regrouping in progress; metadata/permutation nativecuts plus genericLeantransport remain.|
-|261|Complete source/model support PASS; optimized250/digest21/22frame and scalar14call composition authored, five native parent windows and focused root remain.|
-|237|SAME deterministic308source/gathers/Horner support PASS; full amount/validation/sourcefactor repairs and native parentprefix/frame association remain; consumes218/261.|
-|263|Arithmetic suffix/typedcut PASS, nativeK030/031anderrorprefixK032/033PASS/FAIL. Needs237atSAMEargs and complete parentcaller/tuple association.|
-|256|SAME255carrier+84gather/reference authored; one-cellgather nativeprepared. Needs263, complete gatherinduction/native-to-source and Result/error/fullreturn wrapper association.136excluded.|
+- TX1:225: focused canonical source root and native dispatcher pair pass; combined gate incomplete, next ledger adoption required. Its counts2/3/4 caller clauses are derived internally.
+- TX1:232: source/schedule association and all six native windows pass; child260 remains conditional on next ledger; combined gate incomplete.
+- TX1:251: full same-argument prefix/middle/wrapper chain, packed cohort equality and all returned channels pass focused; child235 conditional; combined gate incomplete.
+- TX1:250: wrapper source over251 passes focused; dependent candidate251 and combined gate/adoption remain.
+- TX1:220: all native split windows and complete source/cohort root pass focused; candidate225 and combined gate/adoption remain.
+- TX1:218: native copy/link/metadata windows and full Result source root pass focused; root hypothesis review in NKR_ROOT_HYPOTHESES_REVIEW.md; combined gate/adoption remain.
+- TX1:261: full semantic native child argument/state, digest argument/state and scalar windows need matched native controls. Prior whole shapes timed out and are retired. Split source support passes; repaired fixed-stage source composition is uncompiled. Needs candidate232/233/250 at SAME arguments.
+- TX1:237: needs261 and accepted218, full validation/amount/prefix/Horner native windows plus source composition;308 deterministic SAME-argument gather support already passes.
+- TX1:263: native suffix/error-prefix pairs and source tail support pass; full237 caller and tuple association still needed.
+- TX1:256: source public wrapper support passes; native gather/forward windows and full263 composition remain. TX1:136 is sibling-owned and untouched.
 
-No missing obligation is converted to a cryptographic assumption. P6/D188 optionA native semantictransport is reclassification. No added trust; RuntimeCpiReadonlyEntry7 unused. All resources and failedshapes retained; source-only support earns no composed-row credit.
+All70 native/support slots consumed, including final frozen-graph/input/lock/source validation. All140 formal/support slots allocated to focused work and diagnostic audits. Upper native obligations cannot be replaced by Lean-only endpoint assumptions; Lean work retained as explicitly uncompiled WIP. Two combined attempts failed on private helper visibility; no third permitted. Every timed-out/memory-heavy shape was isolated/split before a replacement; none received a larger cap/timeout.

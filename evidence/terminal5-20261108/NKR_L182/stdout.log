@@ -1,0 +1,1873 @@
+'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestAdd.fold_source (children : List AspisR1.NKI_LowMix.State) (before : AspisR1.NKI_LowMix.State)
+  (hc : ∀ child ∈ children, ∀ (j : Fin 2), AspisR1.FIv_NativeValue.Canon (child j))
+  (hb : ∀ (j : Fin 2), AspisR1.FIv_NativeValue.Canon (before j)) :
+  ∃ out,
+    AspisR1.NKR_DigestAdd.fold children before = Aeneas.Std.Result.ok out ∧
+      (∀ (j : Fin 2), AspisR1.FIv_NativeValue.Canon (out j)) ∧
+        ∀ (j : Fin 2),
+          AspisR1.FIv_NativeValue.decode (out j) =
+            AspisR1.FIv_NativeValue.decode (before j) +
+              (List.map (fun child => AspisR1.FIv_NativeValue.decode (child j)) children).sum
+'AspisR1.NKR_DigestAdd.fold_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestAdd.source (left right : AspisR1.NKI_LowMix.State)
+  (hl : ∀ (j : Fin 2), AspisR1.FIv_NativeValue.Canon (left j))
+  (hr : ∀ (j : Fin 2), AspisR1.FIv_NativeValue.Canon (right j)) :
+  ∃ out,
+    AspisR1.NKR_DigestAdd.add left right = Aeneas.Std.Result.ok out ∧
+      (∀ (j : Fin 2), AspisR1.FIv_NativeValue.Canon (out j)) ∧
+        ∀ (j : Fin 2),
+          AspisR1.FIv_NativeValue.decode (out j) =
+            AspisR1.FIv_NativeValue.decode (left j) + AspisR1.FIv_NativeValue.decode (right j)
+'AspisR1.NKR_DigestAdd.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestAppendValue.increment (p : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (s : AspisR1.NKI_InitialPrefix.Selectors) (i : Fin 20)
+  (packet :
+    AspisR1.NKI_LevelsChildren.Family p.transition.live_snapshot.next_pair_index p.transition.live_snapshot.frontier o.z
+      s.high)
+  (k : Fin 8) :
+  AspisR1.FIy_FrontierMeaning.increment p.transition.live_snapshot s o.z ↑i ↑k =
+    (if
+          AspisR1.NKI_AppendPacket.emptySide p.transition.live_snapshot.next_pair_index
+              (AspisR1.NJX_AppendDomains.level i) =
+            true then
+        AspisR1.NKR_DigestAppendValue.low0 s
+      else AspisR1.NKR_DigestAppendValue.low12 s) *
+      AspisR1.NKI_AppendMeaning.residual (packet i) k
+'AspisR1.NKR_DigestAppendValue.increment' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestAppendValue.packed (p : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (s : AspisR1.NKI_InitialPrefix.Selectors) (i : Fin 20)
+  (packets :
+    AspisR1.NKI_LevelsChildren.Family p.transition.live_snapshot.next_pair_index p.transition.live_snapshot.frontier o.z
+      s.high)
+  (g : Fin 2) :
+  (AspisR1.NJB_PackLinearity.pack fun k =>
+      AspisR1.FIy_FrontierMeaning.increment p.transition.live_snapshot s o.z ↑i ↑(AspisR1.NJX_DigestGroups.index g k)) =
+    AspisR1.NKR_DigestAppendValue.low0 s *
+        AspisR1.FIv_NativeValue.decode (AspisR1.NKI_AppendPacket.output (packets i) ⟨↑g, ⋯⟩) +
+      AspisR1.NKR_DigestAppendValue.low12 s *
+        AspisR1.FIv_NativeValue.decode (AspisR1.NKI_AppendPacket.output (packets i) ⟨2 + ↑g, ⋯⟩)
+'AspisR1.NKR_DigestAppendValue.packed' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestAssociation.keys (p : AspisR1.NKI_InitialPrefix.Public) :
+  R0P.digestKeys (AspisR1.FIw_PublicModel.ofPublic p) =
+    [R0P.DigestKey.anchor, R0P.DigestKey.nullifier] ++ AspisR1.NKR_DigestOptionalValue.recipientKeys p ++
+            [R0P.DigestKey.change] ++
+          List.ofFn R0P.DigestKey.frontier ++
+        [R0P.DigestKey.nextRoot] ++
+      AspisR1.NKR_DigestOptionalValue.carryKeys p
+'AspisR1.NKR_DigestAssociation.keys' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestAssociation.model (p : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (s : AspisR1.NKI_InitialPrefix.Selectors) (c : AspisR1.NKR_DigestChildren.Children)
+  (hp : AspisR1.NKR_DigestChildren.Domain p) (ho : AspisR1.FIw_ArrayValue.canonical o.z)
+  (hh : AspisR1.FIw_ArrayValue.canonical s.high) (hc : AspisR1.NKR_DigestChildren.Clauses p o s c) (g : Fin 2) :
+  AspisR1.NKR_DigestComplete.model s c g =
+    (List.map (fun key => AspisR1.NKR_DigestKeyValues.term p o s key g)
+        (R0P.digestKeys (AspisR1.FIw_PublicModel.ofPublic p))).sum
+'AspisR1.NKR_DigestAssociation.model' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestCarry.low (index : Aeneas.Std.U64) : index &&& 1#u64 = 0#u64 ↔ ↑index &&& 1 = 0
+'AspisR1.NKR_DigestCarry.low' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestCarry.source (index : Aeneas.Std.U64) :
+  ∃ out,
+    FIq_Native.pool_v1.pair_forest_semantic_terminal.bounded_append_carry index = Aeneas.Std.Result.ok out ∧
+      ↑out = R0P.digestCarry ↑index ∧ ↑out ≤ 20
+'AspisR1.NKR_DigestCarry.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestCarry.total (fuel : ℕ) (index : Aeneas.Std.U64) (carry : Aeneas.Std.Usize)
+  (span : ↑carry + fuel = 20) : ∃ out, AspisR1.NKR_DigestCarry.loop index carry = Aeneas.Std.Result.ok out ∧ ↑out ≤ 20
+'AspisR1.NKR_DigestCarry.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestCarry.value (fuel : ℕ) (index : Aeneas.Std.U64) (carry out : Aeneas.Std.Usize)
+  (span : ↑carry + fuel = 20) (success : AspisR1.NKR_DigestCarry.loop index carry = Aeneas.Std.Result.ok out) :
+  ↑out = ↑carry + R0P.digestTrailingOnes fuel ↑index
+'AspisR1.NKR_DigestCarry.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestChildren.source (p : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (s : AspisR1.NKI_InitialPrefix.Selectors) (hp : AspisR1.NKR_DigestChildren.Domain p)
+  (ho : AspisR1.FIw_ArrayValue.canonical o.z) (hs : AspisR1.FIw_ArrayValue.canonical s.high) :
+  ∃ c, AspisR1.NKR_DigestChildren.Clauses p o s c ∧ AspisR1.NKR_DigestChildren.Canonical c
+'AspisR1.NKR_DigestChildren.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestComplete.source (p : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (s : AspisR1.NKI_InitialPrefix.Selectors) (hp : AspisR1.NKR_DigestChildren.Domain p)
+  (ho : AspisR1.FIw_ArrayValue.canonical o.z) (hh : AspisR1.FIw_ArrayValue.canonical s.high)
+  (hl : AspisR1.FIw_ArrayValue.canonical s.low) :
+  ∃ c sums out,
+    AspisR1.NKR_DigestChildren.Clauses p o s c ∧
+      AspisR1.NKR_DigestChildren.Canonical c ∧
+        AspisR1.NKR_DigestPrefix.run p o s = Aeneas.Std.Result.ok (c, sums) ∧
+          AspisR1.NKR_DigestPrefix.Frame c sums ∧
+            AspisR1.NKR_DigestComplete.reference p o s = Aeneas.Std.Result.ok out ∧
+              (∀ (j : Fin 2), AspisR1.FIv_NativeValue.Canon (out j)) ∧
+                ∀ (j : Fin 2), AspisR1.FIv_NativeValue.decode (out j) = AspisR1.NKR_DigestComplete.model s c j
+'AspisR1.NKR_DigestComplete.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestComposed.source (p : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (s : AspisR1.NKI_InitialPrefix.Selectors) (hp : AspisR1.NKR_DigestChildren.Domain p)
+  (ho : AspisR1.FIw_ArrayValue.canonical o.z) (hh : AspisR1.FIw_ArrayValue.canonical s.high)
+  (hl : AspisR1.FIw_ArrayValue.canonical s.low) :
+  ∃ c sums out old v m,
+    AspisR1.NKR_DigestChildren.Clauses p o s c ∧
+      AspisR1.NKR_DigestChildren.Canonical c ∧
+        AspisR1.NKR_DigestInvocation.PrefixArithmetic c v ∧
+          AspisR1.NKR_DigestPrefixStep.Trace p o s c (List.finRange 4)
+              ![AspisR1.NKR_DigestCuts.zero, AspisR1.NKR_DigestCuts.zero, AspisR1.NKR_DigestCuts.zero]
+              ![AspisR1.NKR_DigestCuts.zero, v 3, AspisR1.NKR_DigestCuts.zero] ∧
+            AspisR1.NKR_DigestInvocation.MiddleArithmetic c
+                ![AspisR1.NKR_DigestCuts.zero, v 3, AspisR1.NKR_DigestCuts.zero] m ∧
+              AspisR1.NKR_DigestCuts.MiddleNative p o s c
+                  ![AspisR1.NKR_DigestCuts.zero, v 3, AspisR1.NKR_DigestCuts.zero] m ∧
+                AspisR1.NKR_DigestCuts.afterCarry m = sums ∧
+                  AspisR1.NKR_DigestWrapperView.NativeCut p o s p o s out out 1 ∧
+                    AspisR1.NKR_DigestCuts.WrapperCut p o s p o s out out 1 ∧
+                      AspisR1.NKR_DigestPrefix.run p o s = Aeneas.Std.Result.ok (c, sums) ∧
+                        AspisR1.NKR_DigestPrefix.Frame c sums ∧
+                          AspisR1.NKR_DigestComplete.reference p o s = Aeneas.Std.Result.ok out ∧
+                            AspisR1.NKR_DigestWrapper.reference p o s = Aeneas.Std.Result.ok out ∧
+                              AspisR1.NKR_DigestWrapper.cohort p o s = Aeneas.Std.Result.ok out ∧
+                                (∀ (j : Fin 2), AspisR1.FIv_NativeValue.Canon (out j)) ∧
+                                  FIq_Native.pool_v1.pair_forest_semantic_terminal.public_digest_lanes p o s =
+                                      Aeneas.Std.Result.ok old ∧
+                                    AspisR1.FIw_ArrayValue.canonical old
+'AspisR1.NKR_DigestComposed.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestCuts.middle_cut (p : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (s : AspisR1.NKI_InitialPrefix.Selectors) (c : AspisR1.NKR_DigestChildren.Children)
+  (pre : AspisR1.NKR_DigestCuts.Sums) (m : AspisR1.NKR_DigestCuts.MiddleFrames) :
+  AspisR1.NKR_DigestCuts.MiddleCut p o s c pre m ![m.local0, m.carried, m.local12]
+    (AspisR1.NKR_DigestCuts.middleEvents p o s c pre m) 12
+'AspisR1.NKR_DigestCuts.middle_cut' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestCuts.middle_native (p : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (s : AspisR1.NKI_InitialPrefix.Selectors) (c : AspisR1.NKR_DigestChildren.Children)
+  (pre : AspisR1.NKR_DigestCuts.Sums) (m : AspisR1.NKR_DigestCuts.MiddleFrames) :
+  AspisR1.NKR_DigestCuts.MiddleNative p o s c pre m
+'AspisR1.NKR_DigestCuts.middle_native' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestCuts.prefix_cut (p : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (s : AspisR1.NKI_InitialPrefix.Selectors) (c : AspisR1.NKR_DigestChildren.Children)
+  (v : AspisR1.NKR_DigestCuts.PrefixFrames) :
+  AspisR1.NKR_DigestCuts.PrefixCut p o s c v ![AspisR1.NKR_DigestCuts.zero, v 3, AspisR1.NKR_DigestCuts.zero]
+    (AspisR1.NKR_DigestCuts.prefixEvents p o s c v) 12 s.high o.succ_z o.xor12_z
+'AspisR1.NKR_DigestCuts.prefix_cut' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestCuts.wrapper_cut (p : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (s : AspisR1.NKI_InitialPrefix.Selectors) (reply : AspisR1.NKR_DigestChildren.Pair) :
+  AspisR1.NKR_DigestCuts.WrapperCut p o s p o s reply reply 1
+'AspisR1.NKR_DigestCuts.wrapper_cut' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestFrontierSum.source (p : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (s : AspisR1.NKI_InitialPrefix.Selectors) (c : AspisR1.NKR_DigestChildren.Children)
+  (hp : AspisR1.NKR_DigestChildren.Domain p) (ho : AspisR1.FIw_ArrayValue.canonical o.z)
+  (hh : AspisR1.FIw_ArrayValue.canonical s.high) (hc : AspisR1.NKR_DigestChildren.Clauses p o s c) (g : Fin 2) :
+  (List.map (fun key => AspisR1.NKR_DigestKeyValues.term p o s key g) (List.ofFn R0P.DigestKey.frontier)).sum =
+    AspisR1.NKR_DigestAppendValue.low0 s * AspisR1.FIv_NativeValue.decode (AspisR1.NKR_DigestPrefix.first c.levels g) +
+      AspisR1.NKR_DigestAppendValue.low12 s * AspisR1.FIv_NativeValue.decode (AspisR1.NKR_DigestPrefix.last c.levels g)
+'AspisR1.NKR_DigestFrontierSum.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestFrontierSum.sum_mix {α : Type} (xs : List α) (a b : AspisR1.FIv_NativeValue.K)
+  (x y : α → AspisR1.FIv_NativeValue.K) :
+  (List.map (fun i => a * x i + b * y i) xs).sum = a * (List.map x xs).sum + b * (List.map y xs).sum
+'AspisR1.NKR_DigestFrontierSum.sum_mix' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestInvocation.association (p : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (s : AspisR1.NKI_InitialPrefix.Selectors) (c : AspisR1.NKR_DigestChildren.Children)
+  (v : AspisR1.NKR_DigestCuts.PrefixFrames) (m : AspisR1.NKR_DigestCuts.MiddleFrames)
+  (hc : AspisR1.NKR_DigestChildren.Clauses p o s c) (hv : AspisR1.NKR_DigestInvocation.PrefixArithmetic c v)
+  (hm :
+    AspisR1.NKR_DigestInvocation.MiddleArithmetic c ![AspisR1.NKR_DigestCuts.zero, v 3, AspisR1.NKR_DigestCuts.zero]
+      m) :
+  AspisR1.NKR_DigestPrefix.run p o s = Aeneas.Std.Result.ok (c, ![m.local0, m.carried, m.local12])
+'AspisR1.NKR_DigestInvocation.association' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestInvocation.middle_source (c : AspisR1.NKR_DigestChildren.Children) (pre : AspisR1.NKR_DigestCuts.Sums)
+  (hc : AspisR1.NKR_DigestChildren.Canonical c)
+  (hp : ∀ (g : Fin 3) (j : Fin 2), AspisR1.FIv_NativeValue.Canon (pre g j)) :
+  ∃ m,
+    AspisR1.NKR_DigestInvocation.MiddleArithmetic c pre m ∧
+      ∀ (g : Fin (Nat.succ 2)) (j : Fin 2), AspisR1.FIv_NativeValue.Canon (![m.local0, m.carried, m.local12] g j)
+'AspisR1.NKR_DigestInvocation.middle_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestInvocation.prefix_source (c : AspisR1.NKR_DigestChildren.Children)
+  (hc : AspisR1.NKR_DigestChildren.Canonical c) :
+  ∃ v,
+    AspisR1.NKR_DigestInvocation.PrefixArithmetic c v ∧ ∀ (g : Fin 4) (j : Fin 2), AspisR1.FIv_NativeValue.Canon (v g j)
+'AspisR1.NKR_DigestInvocation.prefix_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestInvocation.source (p : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (s : AspisR1.NKI_InitialPrefix.Selectors) (c : AspisR1.NKR_DigestChildren.Children)
+  (hc : AspisR1.NKR_DigestChildren.Clauses p o s c) (hcan : AspisR1.NKR_DigestChildren.Canonical c) :
+  ∃ v m,
+    AspisR1.NKR_DigestInvocation.PrefixArithmetic c v ∧
+      AspisR1.NKR_DigestInvocation.MiddleArithmetic c ![AspisR1.NKR_DigestCuts.zero, v 3, AspisR1.NKR_DigestCuts.zero]
+          m ∧
+        AspisR1.NKR_DigestCuts.MiddleNative p o s c ![AspisR1.NKR_DigestCuts.zero, v 3, AspisR1.NKR_DigestCuts.zero] m ∧
+          AspisR1.NKR_DigestPrefix.run p o s = Aeneas.Std.Result.ok (c, AspisR1.NKR_DigestCuts.afterCarry m) ∧
+            ∀ (g : Fin 3) (j : Fin 2), AspisR1.FIv_NativeValue.Canon (AspisR1.NKR_DigestCuts.afterCarry m g j)
+'AspisR1.NKR_DigestInvocation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestKeyValues.ordinary (p : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (s : AspisR1.NKI_InitialPrefix.Selectors) (c : AspisR1.NKR_DigestChildren.Children)
+  (hp : AspisR1.NKR_DigestChildren.Domain p) (ho : AspisR1.FIw_ArrayValue.canonical o.z)
+  (hh : AspisR1.FIw_ArrayValue.canonical s.high) (hc : AspisR1.NKR_DigestChildren.Clauses p o s c) (g : Fin 2) :
+  AspisR1.NKR_DigestKeyValues.term p o s R0P.DigestKey.anchor g =
+      AspisR1.FIv_NativeArray.value s.low 11 * AspisR1.FIv_NativeValue.decode (c.anchor g) ∧
+    AspisR1.NKR_DigestKeyValues.term p o s R0P.DigestKey.nullifier g =
+        AspisR1.FIv_NativeArray.value s.low 11 * AspisR1.FIv_NativeValue.decode (c.nullifier g) ∧
+      AspisR1.NKR_DigestKeyValues.term p o s R0P.DigestKey.change g =
+          AspisR1.FIv_NativeArray.value s.low 11 * AspisR1.FIv_NativeValue.decode (c.change g) ∧
+        AspisR1.NKR_DigestKeyValues.term p o s R0P.DigestKey.nextRoot g =
+          AspisR1.FIv_NativeArray.value s.low 11 * AspisR1.FIv_NativeValue.decode (c.nextRoot g)
+'AspisR1.NKR_DigestKeyValues.ordinary' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestOldPack.fold (p : R0P.Public AspisR1.FIv_NativeValue.K) (o : R0P.Openings AspisR1.FIv_NativeValue.K)
+  (s : R0P.Sel AspisR1.FIv_NativeValue.K) (g : Fin 2) :
+  (AspisR1.NJB_PackLinearity.pack fun j => R0P.publicDigestLanes p o s (AspisR1.NJX_DigestGroups.index g j)) =
+    (List.map (fun key => AspisR1.NKR_DigestOldPack.contribution p o s key g) (R0P.digestKeys p)).sum
+'AspisR1.NKR_DigestOldPack.fold' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestOldPack.source (p : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (s : AspisR1.NKI_InitialPrefix.Selectors) (hp : AspisR1.NKR_DigestChildren.Domain p)
+  (hz : AspisR1.FIw_ArrayValue.canonical o.z) (hh : AspisR1.FIw_ArrayValue.canonical s.high)
+  (hl : AspisR1.FIw_ArrayValue.canonical s.low) :
+  ∃ old,
+    FIq_Native.pool_v1.pair_forest_semantic_terminal.public_digest_lanes p o s = Aeneas.Std.Result.ok old ∧
+      AspisR1.FIw_ArrayValue.canonical old ∧
+        ∀ (g : Fin 2),
+          (AspisR1.NJB_PackLinearity.pack fun j =>
+              AspisR1.FIw_ArrayValue.decoded old (AspisR1.NJX_DigestGroups.index g j)) =
+            (List.map
+                (fun key =>
+                  AspisR1.NKR_DigestOldPack.contribution (AspisR1.FIw_PublicModel.ofPublic p)
+                    (AspisR1.FIw_PublicModel.openings o) (AspisR1.FIw_PublicModel.selector s) key g)
+                (R0P.digestKeys (AspisR1.FIw_PublicModel.ofPublic p))).sum
+'AspisR1.NKR_DigestOldPack.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestOldSource.initial_prefix (p : AspisR1.NKI_InitialPrefix.Public)
+  (o : AspisR1.NKI_InitialPrefix.Openings) (s : AspisR1.NKI_InitialPrefix.Selectors)
+  (hp : AspisR1.NKR_DigestChildren.Domain p) (hz : AspisR1.FIw_ArrayValue.canonical o.z)
+  (hh : AspisR1.FIw_ArrayValue.canonical s.high) (hl : AspisR1.FIw_ArrayValue.canonical s.low) :
+  Aeneas.Std.WP.spec (AspisR1.FIy_PublicDigestPrefix.run p o s) fun out => AspisR1.FIw_ArrayValue.canonical out
+'AspisR1.NKR_DigestOldSource.initial_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestOldSource.source (p : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (s : AspisR1.NKI_InitialPrefix.Selectors) (hp : AspisR1.NKR_DigestChildren.Domain p)
+  (hz : AspisR1.FIw_ArrayValue.canonical o.z) (hh : AspisR1.FIw_ArrayValue.canonical s.high)
+  (hl : AspisR1.FIw_ArrayValue.canonical s.low) :
+  ∃ out,
+    FIq_Native.pool_v1.pair_forest_semantic_terminal.public_digest_lanes p o s = Aeneas.Std.Result.ok out ∧
+      AspisR1.FIw_ArrayValue.canonical out ∧ AspisR1.FIw_ArrayValue.decoded out = AspisR1.FIy_PublicDigest.model p o s
+'AspisR1.NKR_DigestOldSource.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestOldSource.suffix (p : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (s : AspisR1.NKI_InitialPrefix.Selectors) (before : Aeneas.Std.Array FIq_Native.field.QM31 8#usize)
+  (hp : AspisR1.NKR_DigestChildren.Domain p) (hz : AspisR1.FIw_ArrayValue.canonical o.z)
+  (hh : AspisR1.FIw_ArrayValue.canonical s.high) (hl : AspisR1.FIw_ArrayValue.canonical s.low)
+  (hb : AspisR1.FIw_ArrayValue.canonical before) :
+  Aeneas.Std.WP.spec (AspisR1.FIy_PublicDigestSuffix.run p o s before p.transition.live_snapshot) fun out =>
+    AspisR1.FIw_ArrayValue.canonical out
+'AspisR1.NKR_DigestOldSource.suffix' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestOptionalValue.carry (p : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (s : AspisR1.NKI_InitialPrefix.Selectors) (c : AspisR1.NKR_DigestChildren.Children)
+  (hp : AspisR1.NKR_DigestChildren.Domain p) (ho : AspisR1.FIw_ArrayValue.canonical o.z)
+  (hh : AspisR1.FIw_ArrayValue.canonical s.high) (hc : AspisR1.NKR_DigestChildren.Clauses p o s c) (g : Fin 2) :
+  (List.map (fun key => AspisR1.NKR_DigestKeyValues.term p o s key g)
+        (AspisR1.NKR_DigestOptionalValue.carryKeys p)).sum =
+    AspisR1.FIv_NativeArray.value s.low 11 * AspisR1.FIv_NativeValue.decode (c.carried g)
+'AspisR1.NKR_DigestOptionalValue.carry' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestOptionalValue.recipient (p : AspisR1.NKI_InitialPrefix.Public)
+  (o : AspisR1.NKI_InitialPrefix.Openings) (s : AspisR1.NKI_InitialPrefix.Selectors)
+  (c : AspisR1.NKR_DigestChildren.Children) (hp : AspisR1.NKR_DigestChildren.Domain p)
+  (ho : AspisR1.FIw_ArrayValue.canonical o.z) (hh : AspisR1.FIw_ArrayValue.canonical s.high)
+  (hc : AspisR1.NKR_DigestChildren.Clauses p o s c) (g : Fin 2) :
+  (List.map (fun key => AspisR1.NKR_DigestKeyValues.term p o s key g)
+        (AspisR1.NKR_DigestOptionalValue.recipientKeys p)).sum =
+    AspisR1.FIv_NativeArray.value s.low 11 * AspisR1.FIv_NativeValue.decode (c.recipient g)
+'AspisR1.NKR_DigestOptionalValue.recipient' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestPrefix.source (p : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (s : AspisR1.NKI_InitialPrefix.Selectors) (hp : AspisR1.NKR_DigestChildren.Domain p)
+  (ho : AspisR1.FIw_ArrayValue.canonical o.z) (hh : AspisR1.FIw_ArrayValue.canonical s.high) :
+  ∃ c sums,
+    AspisR1.NKR_DigestPrefix.run p o s = Aeneas.Std.Result.ok (c, sums) ∧
+      AspisR1.NKR_DigestChildren.Clauses p o s c ∧
+        AspisR1.NKR_DigestChildren.Canonical c ∧
+          (∀ (g : Fin 3) (j : Fin 2), AspisR1.FIv_NativeValue.Canon (sums g j)) ∧ AspisR1.NKR_DigestPrefix.Frame c sums
+'AspisR1.NKR_DigestPrefix.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestPrefixStep.cut (p : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (s : AspisR1.NKI_InitialPrefix.Selectors) (c : AspisR1.NKR_DigestChildren.Children) (g : Fin 4)
+  (pre : AspisR1.NKR_DigestCuts.Sums) (added : AspisR1.NKR_DigestChildren.Pair) :
+  AspisR1.NKR_DigestPrefixStep.Cut p o s c g pre added ![pre 0, added, pre 2]
+    (AspisR1.NKR_DigestPrefixStep.events p o s c g pre) 3
+'AspisR1.NKR_DigestPrefixStep.cut' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestPrefixStep.four (p : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (s : AspisR1.NKI_InitialPrefix.Selectors) (c : AspisR1.NKR_DigestChildren.Children)
+  (v : AspisR1.NKR_DigestCuts.PrefixFrames) (h : AspisR1.NKR_DigestInvocation.PrefixArithmetic c v) :
+  AspisR1.NKR_DigestPrefixStep.Trace p o s c (List.finRange 4)
+    ![AspisR1.NKR_DigestCuts.zero, AspisR1.NKR_DigestCuts.zero, AspisR1.NKR_DigestCuts.zero]
+    ![AspisR1.NKR_DigestCuts.zero, v 3, AspisR1.NKR_DigestCuts.zero]
+'AspisR1.NKR_DigestPrefixStep.four' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestReads.cell {n : Aeneas.Std.Usize} (a : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ n)
+  (i : Fin ↑n) : AspisR1.FIv_NativeValue.decode (AspisR1.NJB_ArrayCarrier.cell a i) = AspisR1.FIv_NativeArray.value a ↑i
+'AspisR1.NKR_DigestReads.cell' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestReads.opened (o : AspisR1.NJX_DigestCohort.O) (start : Aeneas.Std.Usize) (hb : ↑start + 8 ≤ 16)
+  (i : Fin 8) :
+  AspisR1.FIv_NativeValue.decode (AspisR1.NKI_DigestView.opened o start hb i) =
+    AspisR1.FIv_NativeArray.value o (↑start + ↑i)
+'AspisR1.NKR_DigestReads.opened' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestReads.residual {index : Aeneas.Std.U64} {level : Aeneas.Std.Usize}
+  {frontier : AspisR1.NJX_DigestCohort.D} {o : AspisR1.NJX_DigestCohort.O} {high : AspisR1.FIv_NativeArithmetic.NQ}
+  (p : AspisR1.NKI_AppendPacket.Packet index level frontier o high) (i : Fin 8) :
+  AspisR1.NKI_AppendMeaning.residual p i =
+    AspisR1.FIy_DigestLane.increment high o
+      (↑(AspisR1.NKI_AppendPacket.start (AspisR1.NKI_AppendPacket.emptySide index level))) p.expected
+      (AspisR1.NKI_AppendPacket.emptySide index level) ↑i
+'AspisR1.NKR_DigestReads.residual' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestReads.target (d : AspisR1.NJX_DigestCohort.D) (right : Bool) (i : Fin 8) :
+  AspisR1.NKI_DigestView.target d right i = AspisR1.FIy_DigestLane.target d right ↑i
+'AspisR1.NKR_DigestReads.target' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestRegularValue.left (high : AspisR1.FIv_NativeArithmetic.NQ) (o : AspisR1.NJX_DigestCohort.O)
+  (d : AspisR1.NJX_DigestCohort.D) (out : Fin 2 → AspisR1.FIv_NativeArithmetic.NQ)
+  (hh : AspisR1.FIv_NativeValue.Canon high) (ho : AspisR1.FIw_ArrayValue.canonical o)
+  (hd : AspisR1.NJX_DigestCohort.dc d)
+  (call :
+    AspisR1.NJX_DigestPacket.reference high (AspisR1.NJX_DigestCohort.ocells o) (AspisR1.NJX_DigestCohort.dcells d) =
+      Aeneas.Std.Result.ok out)
+  (g : Fin 2) :
+  AspisR1.FIv_NativeValue.decode (out g) =
+    AspisR1.FIv_NativeValue.decode high * AspisR1.NJB_PackLinearity.pack (AspisR1.NKR_DigestRegularValue.residual o d g)
+'AspisR1.NKR_DigestRegularValue.left' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestRegularValue.row_value (s : AspisR1.NKI_InitialPrefix.Selectors) (i : Fin 64) :
+  AspisR1.FIw_PublicModel.selector s (AspisR1.NKR_DigestRegularValue.row i) =
+    AspisR1.FIv_NativeValue.decode (AspisR1.NKR_DigestChildren.high s i) * AspisR1.FIv_NativeArray.value s.low 11
+'AspisR1.NKR_DigestRegularValue.row_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestRegularValue.scaled (s : AspisR1.NKI_InitialPrefix.Selectors) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (i : Fin 64) (d : AspisR1.NJX_DigestCohort.D) (out : Fin 2 → AspisR1.FIv_NativeArithmetic.NQ)
+  (hs : AspisR1.FIw_ArrayValue.canonical s.high) (ho : AspisR1.FIw_ArrayValue.canonical o.z)
+  (hd : AspisR1.NJX_DigestCohort.dc d) (call : AspisR1.NKR_DigestChildren.left s o i d = Aeneas.Std.Result.ok out)
+  (g : Fin 2) :
+  AspisR1.NKR_DigestRegularValue.binding s o.z i d g =
+    AspisR1.FIv_NativeArray.value s.low 11 * AspisR1.FIv_NativeValue.decode (out g)
+'AspisR1.NKR_DigestRegularValue.scaled' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestRegularValue.scaled_cohort (s : AspisR1.NKI_InitialPrefix.Selectors)
+  (o : AspisR1.NKI_InitialPrefix.Openings) (i : Fin 64) (d : AspisR1.NJX_DigestCohort.D)
+  (out : Fin 2 → AspisR1.FIv_NativeArithmetic.NQ) (hs : AspisR1.FIw_ArrayValue.canonical s.high)
+  (ho : AspisR1.FIw_ArrayValue.canonical o.z) (hd : AspisR1.NJX_DigestCohort.dc d)
+  (call : AspisR1.NJX_LeftRoot.cohort (AspisR1.NKR_DigestChildren.high s i) o.z d = Aeneas.Std.Result.ok out)
+  (g : Fin 2) :
+  AspisR1.NKR_DigestRegularValue.binding s o.z i d g =
+    AspisR1.FIv_NativeArray.value s.low 11 * AspisR1.FIv_NativeValue.decode (out g)
+'AspisR1.NKR_DigestRegularValue.scaled_cohort' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestRoot.source (p : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (s : AspisR1.NKI_InitialPrefix.Selectors) (hp : AspisR1.NKR_DigestChildren.Domain p)
+  (ho : AspisR1.FIw_ArrayValue.canonical o.z) (hh : AspisR1.FIw_ArrayValue.canonical s.high)
+  (hl : AspisR1.FIw_ArrayValue.canonical s.low) :
+  ∃ c sums out old,
+    AspisR1.NKR_DigestChildren.Clauses p o s c ∧
+      AspisR1.NKR_DigestChildren.Canonical c ∧
+        AspisR1.NKR_DigestPrefix.run p o s = Aeneas.Std.Result.ok (c, sums) ∧
+          AspisR1.NKR_DigestPrefix.Frame c sums ∧
+            AspisR1.NKR_DigestComplete.reference p o s = Aeneas.Std.Result.ok out ∧
+              (∀ (j : Fin 2), AspisR1.FIv_NativeValue.Canon (out j)) ∧
+                FIq_Native.pool_v1.pair_forest_semantic_terminal.public_digest_lanes p o s = Aeneas.Std.Result.ok old ∧
+                  AspisR1.FIw_ArrayValue.canonical old ∧
+                    ∀ (g : Fin 2),
+                      AspisR1.FIv_NativeValue.decode (out g) =
+                        AspisR1.NJB_PackLinearity.pack fun j =>
+                          AspisR1.FIw_ArrayValue.decoded old (AspisR1.NJX_DigestGroups.index g j)
+'AspisR1.NKR_DigestRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestRows.anchor_row : AspisR1.NKR_DigestRegularValue.row 56 = 56 * 16 + 11
+'AspisR1.NKR_DigestRows.anchor_row' depends on axioms: [propext, Quot.sound]
+AspisR1.NKR_DigestRows.change_row : AspisR1.NKR_DigestRegularValue.row 32 = 32 * 16 + 11
+'AspisR1.NKR_DigestRows.change_row' depends on axioms: [propext, Quot.sound]
+AspisR1.NKR_DigestRows.g2_row (i : Fin 64) : AspisR1.NKR_DigestRegularValue.row i = R0P.g2Row i 11
+'AspisR1.NKR_DigestRows.g2_row' depends on axioms: [propext, Quot.sound]
+AspisR1.NKR_DigestRows.nextRoot_row : AspisR1.NKR_DigestRegularValue.row 53 = 53 * 16 + 11
+'AspisR1.NKR_DigestRows.nextRoot_row' depends on axioms: [propext, Quot.sound]
+AspisR1.NKR_DigestRows.nullifier_row : AspisR1.NKR_DigestRegularValue.row 26 = 26 * 16 + 11
+'AspisR1.NKR_DigestRows.nullifier_row' depends on axioms: [propext, Quot.sound]
+AspisR1.NKR_DigestRows.recipient_row : AspisR1.NKR_DigestRegularValue.row 29 = 29 * 16 + 11
+'AspisR1.NKR_DigestRows.recipient_row' depends on axioms: [propext, Quot.sound]
+AspisR1.NKR_DigestWrapper.source (p : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (s : AspisR1.NKI_InitialPrefix.Selectors) (hp : AspisR1.NKR_DigestChildren.Domain p)
+  (ho : AspisR1.FIw_ArrayValue.canonical o.z) (hh : AspisR1.FIw_ArrayValue.canonical s.high)
+  (hl : AspisR1.FIw_ArrayValue.canonical s.low) :
+  ∃ c sums out old,
+    AspisR1.NKR_DigestChildren.Clauses p o s c ∧
+      AspisR1.NKR_DigestChildren.Canonical c ∧
+        AspisR1.NKR_DigestPrefix.run p o s = Aeneas.Std.Result.ok (c, sums) ∧
+          AspisR1.NKR_DigestPrefix.Frame c sums ∧
+            AspisR1.NKR_DigestComplete.reference p o s = Aeneas.Std.Result.ok out ∧
+              AspisR1.NKR_DigestWrapper.reference p o s = Aeneas.Std.Result.ok out ∧
+                AspisR1.NKR_DigestWrapper.cohort p o s = Aeneas.Std.Result.ok out ∧
+                  (∀ (j : Fin 2), AspisR1.FIv_NativeValue.Canon (out j)) ∧
+                    FIq_Native.pool_v1.pair_forest_semantic_terminal.public_digest_lanes p o s =
+                        Aeneas.Std.Result.ok old ∧
+                      AspisR1.FIw_ArrayValue.canonical old
+'AspisR1.NKR_DigestWrapper.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestWrapperView.appendArguments (f f' : AspisR1.NJX_AppendDomains.Frontier)
+  (o o' : AspisR1.NJX_DigestCohort.O) (s s' : AspisR1.NJX_AppendDomains.High)
+  (hf :
+    ∀ (i : Fin ↑20#usize) (j : Fin ↑8#usize),
+      ↑(AspisR1.NJB_ArrayCarrier.cell (AspisR1.NJB_ArrayCarrier.cell f i) j) =
+        ↑(AspisR1.NJB_ArrayCarrier.cell (AspisR1.NJB_ArrayCarrier.cell f' i) j))
+  (ho :
+    ∀ (i : Fin ↑16#usize) (j : Fin 4),
+      ↑(AspisR1.NKR_DigestWrapperView.words (AspisR1.NJB_ArrayCarrier.cell o i) j) =
+        ↑(AspisR1.NKR_DigestWrapperView.words (AspisR1.NJB_ArrayCarrier.cell o' i) j))
+  (hs :
+    ∀ (i : Fin ↑64#usize) (j : Fin 4),
+      ↑(AspisR1.NKR_DigestWrapperView.words (AspisR1.NJB_ArrayCarrier.cell s i) j) =
+        ↑(AspisR1.NKR_DigestWrapperView.words (AspisR1.NJB_ArrayCarrier.cell s' i) j)) :
+  f = f' ∧ o = o' ∧ s = s'
+'AspisR1.NKR_DigestWrapperView.appendArguments' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestWrapperView.byteArray {n : Aeneas.Std.Usize} (a b : Aeneas.Std.Array Aeneas.Std.U8 n)
+  (h : ∀ (i : Fin ↑n), ↑(AspisR1.NJB_ArrayCarrier.cell a i) = ↑(AspisR1.NJB_ArrayCarrier.cell b i)) : a = b
+'AspisR1.NKR_DigestWrapperView.byteArray' depends on axioms: [propext, Quot.sound]
+AspisR1.NKR_DigestWrapperView.ext (p p' : AspisR1.NKI_InitialPrefix.Public) (o o' : AspisR1.NKI_InitialPrefix.Openings)
+  (s s' : AspisR1.NKI_InitialPrefix.Selectors)
+  (h :
+    ∀ (probe : AspisR1.NKR_DigestWrapperView.Probe),
+      AspisR1.NKR_DigestWrapperView.view p o s probe = AspisR1.NKR_DigestWrapperView.view p' o' s' probe) :
+  p = p' ∧ o = o' ∧ s = s'
+'AspisR1.NKR_DigestWrapperView.ext' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestWrapperView.native_cut (p : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (s : AspisR1.NKI_InitialPrefix.Selectors) (reply : AspisR1.NKR_DigestChildren.Pair) :
+  AspisR1.NKR_DigestWrapperView.NativeCut p o s p o s reply reply 1
+'AspisR1.NKR_DigestWrapperView.native_cut' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestWrapperView.native_summary (p seenP : AspisR1.NKI_InitialPrefix.Public)
+  (o seenO : AspisR1.NKI_InitialPrefix.Openings) (s seenS : AspisR1.NKI_InitialPrefix.Selectors)
+  (reply out : AspisR1.NKR_DigestChildren.Pair) (calls : ℕ)
+  (h : AspisR1.NKR_DigestWrapperView.NativeCut p o s seenP seenO seenS reply out calls) :
+  AspisR1.NKR_DigestCuts.WrapperCut p o s seenP seenO seenS reply out calls
+'AspisR1.NKR_DigestWrapperView.native_summary' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestWrapperView.openings (a b : AspisR1.NKI_InitialPrefix.Openings) (hz : a.z = b.z)
+  (hs : a.succ_z = b.succ_z) (hx : a.xor12_z = b.xor12_z) : a = b
+'AspisR1.NKR_DigestWrapperView.openings' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestWrapperView.optionDigest (a b : Option AspisR1.NJX_DigestCohort.D)
+  (ht : AspisR1.NKR_DigestWrapperView.tag a = AspisR1.NKR_DigestWrapperView.tag b)
+  (hv :
+    ∀ (i : Fin ↑8#usize),
+      (Option.map (fun d => ↑(AspisR1.NJB_ArrayCarrier.cell d i)) a).getD 0 =
+        (Option.map (fun d => ↑(AspisR1.NJB_ArrayCarrier.cell d i)) b).getD 0) :
+  a = b
+'AspisR1.NKR_DigestWrapperView.optionDigest' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestWrapperView.optionWord (a b : Option Aeneas.Std.U32)
+  (ht : AspisR1.NKR_DigestWrapperView.tag a = AspisR1.NKR_DigestWrapperView.tag b)
+  (hv : (Option.map Aeneas.Std.UScalar.val a).getD 0 = (Option.map Aeneas.Std.UScalar.val b).getD 0) : a = b
+'AspisR1.NKR_DigestWrapperView.optionWord' depends on axioms: [propext]
+AspisR1.NKR_DigestWrapperView.post (a b : AspisR1.NKR_DigestCuts.Sums)
+  (h :
+    ∀ (g : Fin 3) (j : Fin 2) (k : Fin 4),
+      ↑(AspisR1.NKR_DigestWrapperView.words (a g j) k) = ↑(AspisR1.NKR_DigestWrapperView.words (b g j) k)) :
+  a = b
+'AspisR1.NKR_DigestWrapperView.post' depends on axioms: [propext, Quot.sound]
+AspisR1.NKR_DigestWrapperView.qm (a b : AspisR1.FIv_NativeArithmetic.NQ)
+  (h : ∀ (j : Fin 4), ↑(AspisR1.NKR_DigestWrapperView.words a j) = ↑(AspisR1.NKR_DigestWrapperView.words b j)) : a = b
+'AspisR1.NKR_DigestWrapperView.qm' depends on axioms: [propext, Quot.sound]
+AspisR1.NKR_DigestWrapperView.qmArray {n : Aeneas.Std.Usize} (a b : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ n)
+  (h :
+    ∀ (i : Fin ↑n) (j : Fin 4),
+      ↑(AspisR1.NKR_DigestWrapperView.words (AspisR1.NJB_ArrayCarrier.cell a i) j) =
+        ↑(AspisR1.NKR_DigestWrapperView.words (AspisR1.NJB_ArrayCarrier.cell b i) j)) :
+  a = b
+'AspisR1.NKR_DigestWrapperView.qmArray' depends on axioms: [propext, Quot.sound]
+AspisR1.NKR_DigestWrapperView.selectors (a b : AspisR1.NKI_InitialPrefix.Selectors) (hh : a.high = b.high)
+  (hl : a.low = b.low) : a = b
+'AspisR1.NKR_DigestWrapperView.selectors' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_DigestWrapperView.variant (a b : FIq_Native.pool_v1.pair_forest_semantic_terminal.CompiledVariant)
+  (h : AspisR1.NKR_DigestWrapperView.variantCode a = AspisR1.NKR_DigestWrapperView.variantCode b) : a = b
+'AspisR1.NKR_DigestWrapperView.variant' depends on axioms: [propext]
+AspisR1.NKR_DigestWrapperView.wordArray {n : Aeneas.Std.Usize} (a b : Aeneas.Std.Array Aeneas.Std.U32 n)
+  (h : ∀ (i : Fin ↑n), ↑(AspisR1.NJB_ArrayCarrier.cell a i) = ↑(AspisR1.NJB_ArrayCarrier.cell b i)) : a = b
+'AspisR1.NKR_DigestWrapperView.wordArray' depends on axioms: [propext, Quot.sound]
+AspisR1.NKR_DigestWrapperView.wrapper_cut (p seenP : AspisR1.NKI_InitialPrefix.Public)
+  (o seenO : AspisR1.NKI_InitialPrefix.Openings) (s seenS : AspisR1.NKI_InitialPrefix.Selectors)
+  (reply out : AspisR1.NKR_DigestChildren.Pair) (calls : ℕ) (hc : calls = 1)
+  (h :
+    ∀ (probe : AspisR1.NKR_DigestWrapperView.Probe),
+      AspisR1.NKR_DigestWrapperView.view seenP seenO seenS probe = AspisR1.NKR_DigestWrapperView.view p o s probe)
+  (hr : out = reply) : AspisR1.NKR_DigestCuts.WrapperCut p o s seenP seenO seenS reply out calls
+'AspisR1.NKR_DigestWrapperView.wrapper_cut' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_ScheduleAssociation.source (packed : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 24#usize)
+  (p : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (s : AspisR1.NKI_InitialPrefix.Selectors) (hp : AspisR1.FIw_ArrayValue.canonical packed)
+  (hz : AspisR1.FIw_ArrayValue.canonical o.z) (hh : AspisR1.FIw_ArrayValue.canonical s.high)
+  (hl : AspisR1.FIw_ArrayValue.canonical s.low) :
+  ∃ out,
+    AspisR1.NKR_ScheduleAssociation.reference packed p o s = Aeneas.Std.Result.ok out ∧
+      FIq_Native.pool_v1.pair_forest_semantic_terminal.add_schedule_lanes packed p o s = Aeneas.Std.Result.ok out ∧
+        AspisR1.FIw_ArrayValue.canonical out
+'AspisR1.NKR_ScheduleAssociation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_ScheduleCut.source (packed : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 24#usize)
+  (p : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (s : AspisR1.NKI_InitialPrefix.Selectors)
+  (initial absorption : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 16#usize)
+  (middle out : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 24#usize) :
+  AspisR1.NKR_ScheduleCut.Cut packed p o s initial absorption middle out
+    (AspisR1.NKR_ScheduleCut.observations packed p o s initial absorption middle out)
+'AspisR1.NKR_ScheduleCut.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_ScheduleExt.afterstate (a b : FIq_Native.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1)
+  (index : a.next_pair_index = b.next_pair_index) (root : a.next_root = b.next_root)
+  (frontier : a.next_frontier = b.next_frontier) : a = b
+'AspisR1.NKR_ScheduleExt.afterstate' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_ScheduleExt.array {A : Type} {n : Aeneas.Std.Usize} (a b : Aeneas.Std.Array A n)
+  (cells : ∀ (i : Fin ↑n), AspisR1.NJB_ArrayCarrier.cell a i = AspisR1.NJB_ArrayCarrier.cell b i) : a = b
+'AspisR1.NKR_ScheduleExt.array' depends on axioms: [propext, Quot.sound]
+AspisR1.NKR_ScheduleExt.semanticPublic (a b : FIq_Native.pool_v1.pair_forest_semantic_terminal.SemanticPublic)
+  (variant : a.variant = b.variant) (pool : a.pool = b.pool) (domain : a.deployment_domain = b.deployment_domain)
+  (anchor : a.anchor = b.anchor) (nullifier : a.nullifier = b.nullifier) (asset : a.asset_id = b.asset_id)
+  (recipient : a.recipient = b.recipient) (change : a.change = b.change)
+  (amount : a.withdrawal_amount = b.withdrawal_amount) (late : a.transition = b.transition) : a = b
+'AspisR1.NKR_ScheduleExt.semanticPublic' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_ScheduleExt.snapshot (a b : FIq_Native.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1)
+  (pool : a.pool = b.pool) (domain : a.deployment_domain = b.deployment_domain) (sequence : a.sequence = b.sequence)
+  (index : a.next_pair_index = b.next_pair_index) (root : a.current_root = b.current_root)
+  (frontier : a.frontier = b.frontier) : a = b
+'AspisR1.NKR_ScheduleExt.snapshot' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_ScheduleExt.transition (a b : FIq_Native.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1)
+  (source : a.live_snapshot = b.live_snapshot) (after : a.candidate_afterstate = b.candidate_afterstate) : a = b
+'AspisR1.NKR_ScheduleExt.transition' depends on axioms: [propext]
+AspisR1.NKR_ScheduleRoot.source (packed : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 24#usize)
+  (p : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (s : AspisR1.NKI_InitialPrefix.Selectors) (hp : AspisR1.FIw_ArrayValue.canonical packed)
+  (hz : AspisR1.FIw_ArrayValue.canonical o.z) (hh : AspisR1.FIw_ArrayValue.canonical s.high)
+  (hl : AspisR1.FIw_ArrayValue.canonical s.low) :
+  ∃ l absorption middle out,
+    AspisR1.NKI_InitialInvocation.Clauses p o s l ∧
+      FIq_Native.pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption p o s =
+          Aeneas.Std.Result.ok (l.initial2, absorption) ∧
+        FIq_Native.pool_v1.pair_forest_semantic_terminal.add_preweighted packed 0#usize l.initial2 =
+            Aeneas.Std.Result.ok middle ∧
+          FIq_Native.pool_v1.pair_forest_semantic_terminal.add_preweighted middle 16#usize absorption =
+              Aeneas.Std.Result.ok out ∧
+            AspisR1.NKR_ScheduleCut.Cut packed p o s l.initial2 absorption middle out
+                (AspisR1.NKR_ScheduleCut.observations packed p o s l.initial2 absorption middle out) ∧
+              FIq_Native.pool_v1.pair_forest_semantic_terminal.add_schedule_lanes packed p o s =
+                  Aeneas.Std.Result.ok out ∧
+                AspisR1.FIw_ArrayValue.canonical out ∧
+                  ∀ (j : Fin ↑24#usize),
+                    AspisR1.FIw_ArrayValue.decoded out j =
+                      AspisR1.FIw_ArrayValue.decoded packed j +
+                          AspisR1.FIx_SelectedMeaning.contribution (AspisR1.FIw_ArrayValue.decoded l.initial2) 0 ↑j +
+                        AspisR1.FIx_SelectedMeaning.contribution (AspisR1.FIw_ArrayValue.decoded absorption) 16 ↑j
+'AspisR1.NKR_ScheduleRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCarrier.back_roundtrip (x : AspisR1.FIv_NativeArithmetic.NQ) :
+  AspisR1.NKR_SumCarrier.back (AspisR1.FIv_NativeArithmetic.qm x) = x
+'AspisR1.NKR_SumCarrier.back_roundtrip' does not depend on any axioms
+AspisR1.NKR_SumCarrier.encoded_canonical {N : Aeneas.Std.Usize} (x : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ N)
+  (hx : AspisR1.FIw_ArrayValue.canonical x) (q : NKR_SumDispatch.Q) :
+  q ∈ ↑(AspisR1.NKR_SumCarrier.encode x) → NKR_SumDispatch.Canon q
+'AspisR1.NKR_SumCarrier.encoded_canonical' depends on axioms: [propext, Quot.sound]
+AspisR1.NKR_SumCarrier.roundtrip (x : NKR_SumDispatch.Q) :
+  AspisR1.FIv_NativeArithmetic.qm (AspisR1.NKR_SumCarrier.back x) = x
+'AspisR1.NKR_SumCarrier.roundtrip' does not depend on any axioms
+AspisR1.NKR_SumCarrier.source (l r : AspisR1.NKR_SumCarrier.A4) (count : ℕ) (lower : 1 ≤ count) (upper : count ≤ 4)
+  (hl : AspisR1.FIw_ArrayValue.canonical l) (hr : AspisR1.FIw_ArrayValue.canonical r) :
+  ∃ out,
+    AspisR1.NKR_SumCarrier.native l r count = Aeneas.Std.Result.ok out ∧
+      AspisR1.NKR_SumCarrier.reference l r count = Aeneas.Std.Result.ok out ∧
+        AspisR1.FIv_NativeValue.Canon out ∧
+          AspisR1.FIv_NativeValue.decode out =
+              NGA_SumAlgebra.sumProducts
+                (List.take count ((↑(AspisR1.NKR_SumCarrier.encode l)).zip ↑(AspisR1.NKR_SumCarrier.encode r))) ∧
+            ∀ (seek : Fin 4),
+              ↑seek < count →
+                NKR_SumCuts.Cut (AspisR1.NKR_SumCarrier.encode l) (AspisR1.NKR_SumCarrier.encode r) count seek
+                  (AspisR1.FIv_NativeArithmetic.qm out) (AspisR1.FIv_NativeArithmetic.qm out)
+                  (NGA_Indexed.selected (AspisR1.NKR_SumCarrier.encode l) seek)
+                  (NGA_Indexed.selected (AspisR1.NKR_SumCarrier.encode r) seek) 1 count
+'AspisR1.NKR_SumCarrier.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCollectMeaning.source (lookup : AspisR1.NKR_SumCopyCollect.Lookups) (append : Aeneas.Std.U64)
+  (variant : FIq_Native.pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1)
+  (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors) (indices : List (Fin 136))
+  (before : AspisR1.NKR_SumCopyCollect.State) (hs : AspisR1.FIw_ArrayValue.canonical s.high)
+  (hb : ∀ (i : Fin 103), AspisR1.FIv_NativeValue.Canon (before i)) :
+  ∃ after,
+    AspisR1.NJB_StateUpdates.run (fun i state => AspisR1.NKR_SumCopyCollect.step lookup append variant s i state)
+          indices before =
+        Aeneas.Std.Result.ok after ∧
+      (∀ (i : Fin 103), AspisR1.FIv_NativeValue.Canon (after i)) ∧
+        ∀ (j : Fin 103),
+          AspisR1.FIv_NativeValue.decode (after j) =
+            AspisR1.FIv_NativeValue.decode (before j) +
+              (List.map (fun i => AspisR1.NKR_SumCollectMeaning.delta lookup s i append variant j) indices).sum
+'AspisR1.NKR_SumCollectMeaning.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCollectMeaning.step_source (lookup : AspisR1.NKR_SumCopyCollect.Lookups) (append : Aeneas.Std.U64)
+  (variant : FIq_Native.pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1)
+  (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors) (index : Fin 136)
+  (before : AspisR1.NKR_SumCopyCollect.State) (hs : AspisR1.FIw_ArrayValue.canonical s.high)
+  (hb : ∀ (i : Fin 103), AspisR1.FIv_NativeValue.Canon (before i)) :
+  ∃ after,
+    AspisR1.NKR_SumCopyCollect.step lookup append variant s index before = Aeneas.Std.Result.ok after ∧
+      (∀ (i : Fin 103), AspisR1.FIv_NativeValue.Canon (after i)) ∧
+        ∀ (j : Fin 103),
+          AspisR1.FIv_NativeValue.decode (after j) =
+            AspisR1.FIv_NativeValue.decode (before j) +
+              AspisR1.NKR_SumCollectMeaning.delta lookup s index append variant j
+'AspisR1.NKR_SumCollectMeaning.step_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyAssociation.bounds (i : Fin 136) (consumer : Bool) :
+  ↑(AspisR1.NJL_EndpointLookup.endpoint i consumer).row < 1024 ∧
+    ↑(AspisR1.NJL_EndpointLookup.endpoint i consumer).slot < 2 ∧
+      ↑(AspisR1.NJL_EndpointLookup.endpoint i consumer).pattern < 14
+'AspisR1.NKR_SumCopyAssociation.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyAssociation.canonical_encoded (domain : AspisR1.NKR_SumTagPermutation.Domain) (t : Fin 272) :
+  AspisR1.NKR_SumCopyAssociation.pairDecode (AspisR1.NKR_SumTagPermutation.encoded domain t) =
+    (AspisR1.NKR_SumTagPermutation.index domain t, AspisR1.NKR_SumTagPermutation.side t)
+'AspisR1.NKR_SumCopyAssociation.canonical_encoded' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyAssociation.coefficient_finite (scratch : AspisR1.NKR_SumCopyCollect.State)
+  (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors) (p : Fin 26) :
+  AspisR1.NKR_SumFinishCohort.coefficient (AspisR1.NJB_ArrayCarrier.array scratch) s p =
+    ∑ c,
+      if AspisR1.NKR_SumFinishData.pOut c = p then
+        AspisR1.FIv_NativeValue.decode (scratch (AspisR1.NJL_EndpointIndices.pattern c)) *
+          AspisR1.NKR_SumCopyAssociation.plow s c
+      else 0
+'AspisR1.NKR_SumCopyAssociation.coefficient_finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyAssociation.descriptor_pattern (i : Fin 136) (consumer : Bool) :
+  ↑(AspisR1.NKR_SumCopyAssociation.endpoint i consumer).pattern =
+    ↑(AspisR1.NJL_EndpointLookup.endpoint i consumer).pattern
+'AspisR1.NKR_SumCopyAssociation.descriptor_pattern' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyAssociation.descriptor_row (i : Fin 136) (consumer : Bool) :
+  ↑(AspisR1.NKR_SumCopyAssociation.endpoint i consumer).row = AspisR1.NJL_EndpointLookup.row i consumer
+'AspisR1.NKR_SumCopyAssociation.descriptor_row' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyAssociation.descriptor_slot (i : Fin 136) (consumer : Bool) :
+  ↑(AspisR1.NKR_SumCopyAssociation.endpoint i consumer).slot = ↑(AspisR1.NJL_EndpointLookup.endpoint i consumer).slot
+'AspisR1.NKR_SumCopyAssociation.descriptor_slot' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyAssociation.dot_finite (terms : Fin 14 → AspisR1.FIv_NativeValue.K)
+  (coefficients : Fin 26 → AspisR1.FIv_NativeValue.K) (g : Fin 4) :
+  AspisR1.NJL_PatternMeaning.dot terms coefficients g =
+    ∑ p,
+      if p ∈ AspisR1.NJB_PatternReference.coordinates g then
+        terms (AspisR1.NJB_PatternReference.pattern p) * coefficients p
+      else 0
+'AspisR1.NKR_SumCopyAssociation.dot_finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyAssociation.group_key (lookup : AspisR1.NKR_SumCopyCollect.Lookups)
+  (keys : AspisR1.NKR_SumCopyAssociation.Keys) (i : Fin 136) (consumer : Bool) :
+  AspisR1.NKR_SumFinishData.group (AspisR1.NKR_SumCopyAssociation.gi lookup i consumer) =
+    AspisR1.NKR_SumLegacyRows.group consumer (AspisR1.NKR_SumCopyAssociation.endpoint i consumer)
+'AspisR1.NKR_SumCopyAssociation.group_key' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyAssociation.legacy_values (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors)
+  (terms : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 14#usize) (append : Aeneas.Std.U64)
+  (variant : FIq_Native.pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1) (g : Fin 4) :
+  AspisR1.NKR_SumLegacyRows.values (AspisR1.FJk_CopyFullFold.model s terms append variant) g =
+    ∑ i,
+      ((if AspisR1.NKR_SumLegacyRows.group false (AspisR1.NKR_SumCopyAssociation.endpoint i false) = g then
+          AspisR1.NKR_SumCopyAssociation.valueTerm s terms i false
+        else 0) +
+        if AspisR1.NKR_SumLegacyRows.group true (AspisR1.NKR_SumCopyAssociation.endpoint i true) = g then
+          AspisR1.NKR_SumCopyAssociation.valueTerm s terms i true
+        else 0)
+'AspisR1.NKR_SumCopyAssociation.legacy_values' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyAssociation.legacy_weights (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors)
+  (terms : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 14#usize) (append : Aeneas.Std.U64)
+  (variant : FIq_Native.pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1) (g : Fin 4) :
+  AspisR1.NKR_SumLegacyRows.weights (AspisR1.FJk_CopyFullFold.model s terms append variant) g =
+    ∑ i,
+      ((if AspisR1.NKR_SumLegacyRows.group false (AspisR1.NKR_SumCopyAssociation.endpoint i false) = g then
+          AspisR1.NKR_SumCopyAssociation.weightTerm s append variant i false
+        else 0) +
+        if AspisR1.NKR_SumLegacyRows.group true (AspisR1.NKR_SumCopyAssociation.endpoint i true) = g then
+          AspisR1.NKR_SumCopyAssociation.weightTerm s append variant i true
+        else 0)
+'AspisR1.NKR_SumCopyAssociation.legacy_weights' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyAssociation.link_sum (f : R0P.CopyLink → AspisR1.FIv_NativeValue.K) :
+  (List.map f R0P.copyLinks).sum = ∑ i, f (AspisR1.NKR_SumCopyAssociation.link i)
+'AspisR1.NKR_SumCopyAssociation.link_sum' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyAssociation.list_sum_mul {A : Type} (xs : List A) (f : A → AspisR1.FIv_NativeValue.K)
+  (x : AspisR1.FIv_NativeValue.K) : (List.map f xs).sum * x = (List.map (fun a => f a * x) xs).sum
+'AspisR1.NKR_SumCopyAssociation.list_sum_mul' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyAssociation.low_key (lookup : AspisR1.NKR_SumCopyCollect.Lookups)
+  (keys : AspisR1.NKR_SumCopyAssociation.Keys) (i : Fin 136) (consumer : Bool) :
+  ↑(AspisR1.NKR_SumFinishData.low (AspisR1.NKR_SumCopyAssociation.gi lookup i consumer)) =
+    AspisR1.NJL_EndpointLookup.row i consumer % 16
+'AspisR1.NKR_SumCopyAssociation.low_key' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyAssociation.native_list :
+  List.ofFn AspisR1.NJL_EndpointLookup.link = ↑FIq_Native.pool_v1.pair_forest_copy_terminal.constants.COPY_LINKS
+'AspisR1.NKR_SumCopyAssociation.native_list' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyAssociation.pair_left (p : Fin 136 × Bool) :
+  AspisR1.NKR_SumCopyAssociation.pairDecode (AspisR1.NKR_SumCopyAssociation.pairEncode p) = p
+'AspisR1.NKR_SumCopyAssociation.pair_left' depends on axioms: [propext, Quot.sound]
+AspisR1.NKR_SumCopyAssociation.pair_right (t : Fin 272) :
+  AspisR1.NKR_SumCopyAssociation.pairEncode (AspisR1.NKR_SumCopyAssociation.pairDecode t) = t
+'AspisR1.NKR_SumCopyAssociation.pair_right' depends on axioms: [propext, Quot.sound]
+AspisR1.NKR_SumCopyAssociation.pattern_group_key (lookup : AspisR1.NKR_SumCopyCollect.Lookups)
+  (keys : AspisR1.NKR_SumCopyAssociation.Keys) (i : Fin 136) (consumer : Bool) :
+  AspisR1.NKR_SumLookupCertificate.patternGroup (AspisR1.NKR_SumCopyAssociation.pi lookup i consumer) =
+    AspisR1.NKR_SumFinishData.group (AspisR1.NKR_SumCopyAssociation.gi lookup i consumer)
+'AspisR1.NKR_SumCopyAssociation.pattern_group_key' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyAssociation.pattern_key (lookup : AspisR1.NKR_SumCopyCollect.Lookups)
+  (keys : AspisR1.NKR_SumCopyAssociation.Keys) (i : Fin 136) (consumer : Bool) :
+  AspisR1.NJB_PatternReference.pattern
+      (AspisR1.NKR_SumFinishData.pOut (AspisR1.NKR_SumCopyAssociation.pi lookup i consumer)) =
+    (AspisR1.NKR_SumCopyAssociation.endpoint i consumer).pattern
+'AspisR1.NKR_SumCopyAssociation.pattern_key' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyAssociation.pattern_low_key (lookup : AspisR1.NKR_SumCopyCollect.Lookups)
+  (keys : AspisR1.NKR_SumCopyAssociation.Keys) (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors)
+  (i : Fin 136) (consumer : Bool) :
+  AspisR1.NKR_SumCopyAssociation.plow s (AspisR1.NKR_SumCopyAssociation.pi lookup i consumer) =
+    AspisR1.NKR_SumCopyAssociation.low s (AspisR1.NKR_SumCopyAssociation.gi lookup i consumer)
+'AspisR1.NKR_SumCopyAssociation.pattern_low_key' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyAssociation.pattern_regroup (lookup : AspisR1.NKR_SumCopyCollect.Lookups)
+  (keys : AspisR1.NKR_SumCopyAssociation.Keys) (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors)
+  (scratch : AspisR1.NKR_SumCopyCollect.State) (terms : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 14#usize)
+  (coordinates :
+    ∀ (c : Fin 43),
+      AspisR1.FIv_NativeValue.decode (scratch (AspisR1.NJL_EndpointIndices.pattern c)) =
+        AspisR1.NKR_SumCopyAssociation.patternSum lookup s c)
+  (g : Fin 4) :
+  AspisR1.NJL_PatternMeaning.dot (fun i => AspisR1.FIv_NativeValue.decode (AspisR1.NJB_ArrayCarrier.cell terms i))
+      (AspisR1.NKR_SumFinishCohort.coefficient (AspisR1.NJB_ArrayCarrier.array scratch) s) g =
+    ∑ i,
+      ((if AspisR1.NKR_SumLegacyRows.group false (AspisR1.NKR_SumCopyAssociation.endpoint i false) = g then
+          AspisR1.NKR_SumCopyAssociation.patternEndpoint s terms i false
+        else 0) +
+        if AspisR1.NKR_SumLegacyRows.group true (AspisR1.NKR_SumCopyAssociation.endpoint i true) = g then
+          AspisR1.NKR_SumCopyAssociation.patternEndpoint s terms i true
+        else 0)
+'AspisR1.NKR_SumCopyAssociation.pattern_regroup' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyAssociation.pattern_value (scratch : AspisR1.NKR_SumCopyCollect.State)
+  (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors)
+  (terms : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 14#usize) (g : Fin 4) :
+  AspisR1.NJL_PatternMeaning.dot (fun i => AspisR1.FIv_NativeValue.decode (AspisR1.NJB_ArrayCarrier.cell terms i))
+      (AspisR1.NKR_SumFinishCohort.coefficient (AspisR1.NJB_ArrayCarrier.array scratch) s) g =
+    ∑ c,
+      if AspisR1.NKR_SumLookupCertificate.patternGroup c = g then
+        AspisR1.NKR_SumCopyAssociation.patternTerm s terms c *
+          AspisR1.FIv_NativeValue.decode (scratch (AspisR1.NJL_EndpointIndices.pattern c))
+      else 0
+'AspisR1.NKR_SumCopyAssociation.pattern_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyAssociation.rows (lookup : AspisR1.NKR_SumCopyCollect.Lookups)
+  (keys : AspisR1.NKR_SumCopyAssociation.Keys) (domain : AspisR1.NKR_SumTagPermutation.Domain)
+  (permutation : AspisR1.NKR_SumTagPermutation.Cut) (metadata : AspisR1.NKR_SumTagAssociation.Cut domain)
+  (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors) (scratch : AspisR1.NKR_SumCopyCollect.State)
+  (terms : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 14#usize) (append : Aeneas.Std.U64)
+  (variant : FIq_Native.pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1)
+  (hw :
+    ∀ (c : Fin 30),
+      AspisR1.FIv_NativeValue.decode (scratch (AspisR1.NJL_EndpointIndices.weight c)) =
+        AspisR1.NKR_SumCopyAssociation.weightSum lookup s append variant c)
+  (hp :
+    ∀ (c : Fin 43),
+      AspisR1.FIv_NativeValue.decode (scratch (AspisR1.NJL_EndpointIndices.pattern c)) =
+        AspisR1.NKR_SumCopyAssociation.patternSum lookup s c) :
+  (∀ (g : Fin 4),
+      AspisR1.NKR_SumFinishCohort.values (AspisR1.NJB_ArrayCarrier.array scratch) s terms g =
+        AspisR1.NKR_SumLegacyRows.values (AspisR1.FJk_CopyFullFold.model s terms append variant) g) ∧
+    ∀ (g : Fin 4),
+      AspisR1.NKR_SumFinishCohort.baseWeights (AspisR1.NJB_ArrayCarrier.array scratch) s g =
+        AspisR1.NKR_SumLegacyRows.weights (AspisR1.FJk_CopyFullFold.model s terms append variant) g
+'AspisR1.NKR_SumCopyAssociation.rows' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyAssociation.selector (lookup : AspisR1.NKR_SumCopyCollect.Lookups)
+  (keys : AspisR1.NKR_SumCopyAssociation.Keys) (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors)
+  (i : Fin 136) (consumer : Bool) :
+  AspisR1.NKR_SumCopyAssociation.high lookup s i consumer *
+      AspisR1.NKR_SumCopyAssociation.low s (AspisR1.NKR_SumCopyAssociation.gi lookup i consumer) =
+    R0P.copySelectorRow (AspisR1.FIw_CopyEndpoint.modelSelectors s)
+      (AspisR1.NKR_SumCopyAssociation.endpoint i consumer).row
+'AspisR1.NKR_SumCopyAssociation.selector' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyAssociation.source (lookup : AspisR1.NKR_SumCopyCollect.Lookups)
+  (keys : AspisR1.NKR_SumCopyAssociation.Keys) (domain : AspisR1.NKR_SumTagPermutation.Domain)
+  (permutation : AspisR1.NKR_SumTagPermutation.Cut) (metadata : AspisR1.NKR_SumTagAssociation.Cut domain)
+  (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors)
+  (terms : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 14#usize) (append : Aeneas.Std.U64)
+  (variant : FIq_Native.pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1)
+  (hh : AspisR1.FIw_ArrayValue.canonical s.high) (hl : AspisR1.FIw_ArrayValue.canonical s.low)
+  (ht : AspisR1.FIw_ArrayValue.canonical terms) :
+  ∃ scratch outValues outWeights,
+    AspisR1.NJB_StateUpdates.run (fun i state => AspisR1.NKR_SumCopyCollect.step lookup append variant s i state)
+          (List.finRange 136) AspisR1.NKR_SumCopyInvocation.zero =
+        Aeneas.Std.Result.ok scratch ∧
+      AspisR1.NKR_SumFinishInvocation.reference (AspisR1.NJB_ArrayCarrier.array scratch) s terms =
+          Aeneas.Std.Result.ok (outValues, outWeights) ∧
+        AspisR1.FIw_ArrayValue.canonical outValues ∧
+          AspisR1.FIw_ArrayValue.canonical outWeights ∧
+            (∀ (g : Fin ↑4#usize),
+                AspisR1.FIv_NativeValue.decode (AspisR1.NJB_ArrayCarrier.cell outValues g) =
+                  AspisR1.NKR_SumLegacyRows.values (AspisR1.FJk_CopyFullFold.model s terms append variant) g) ∧
+              ∀ (g : Fin ↑4#usize),
+                AspisR1.FIv_NativeValue.decode (AspisR1.NJB_ArrayCarrier.cell outWeights g) =
+                  AspisR1.NKR_SumLegacyRows.weights (AspisR1.FJk_CopyFullFold.model s terms append variant) g
+'AspisR1.NKR_SumCopyAssociation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyAssociation.sum_bijection {A B : Type} [Fintype A] [Fintype B] (forward : A → B) (back : B → A)
+  (left : ∀ (a : A), back (forward a) = a) (right : ∀ (b : B), forward (back b) = b)
+  (f : B → AspisR1.FIv_NativeValue.K) : ∑ a, f (forward a) = ∑ b, f b
+'AspisR1.NKR_SumCopyAssociation.sum_bijection' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyAssociation.sum_filter {A : Type} (xs : List A) (p : A → Bool) (f : A → AspisR1.FIv_NativeValue.K) :
+  (List.map f (List.filter p xs)).sum = (List.map (fun x => if p x = true then f x else 0) xs).sum
+'AspisR1.NKR_SumCopyAssociation.sum_filter' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyAssociation.sum_finRange {n : ℕ} (f : Fin n → AspisR1.FIv_NativeValue.K) :
+  (List.map f (List.finRange n)).sum = ∑ i, f i
+'AspisR1.NKR_SumCopyAssociation.sum_finRange' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyAssociation.sum_pairs (f : Fin 136 → Bool → AspisR1.FIv_NativeValue.K) :
+  ∑ t, f (AspisR1.NKR_SumCopyAssociation.canonicalIndex t) (AspisR1.NKR_SumCopyAssociation.canonicalSide t) =
+    ∑ i, (f i false + f i true)
+'AspisR1.NKR_SumCopyAssociation.sum_pairs' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyAssociation.tag_bucket (lookup : AspisR1.NKR_SumCopyCollect.Lookups)
+  (keys : AspisR1.NKR_SumCopyAssociation.Keys) (domain : AspisR1.NKR_SumTagPermutation.Domain)
+  (metadata : AspisR1.NKR_SumTagAssociation.Cut domain) (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors)
+  (g : Fin 4) (c : Fin 30) :
+  (if AspisR1.NKR_SumFinishData.group c = g then
+      AspisR1.NKR_SumFinishCohort.tag s c * AspisR1.NKR_SumCopyAssociation.low s c
+    else 0) =
+    (List.map
+        (fun t =>
+          AspisR1.NKR_SumCopyAssociation.tagTerm lookup s g (AspisR1.NKR_SumTagPermutation.index domain t)
+            (AspisR1.NKR_SumTagPermutation.side t))
+        (AspisR1.NJL_TagData.indices c)).sum
+'AspisR1.NKR_SumCopyAssociation.tag_bucket' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyAssociation.tag_pattern (lookup : AspisR1.NKR_SumCopyCollect.Lookups)
+  (keys : AspisR1.NKR_SumCopyAssociation.Keys) (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors)
+  (terms : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 14#usize) (g : Fin 4) (i : Fin 136) (consumer : Bool) :
+  (AspisR1.NKR_SumCopyAssociation.tagTerm lookup s g i consumer +
+      if AspisR1.NKR_SumLegacyRows.group consumer (AspisR1.NKR_SumCopyAssociation.endpoint i consumer) = g then
+        AspisR1.NKR_SumCopyAssociation.patternEndpoint s terms i consumer
+      else 0) =
+    if AspisR1.NKR_SumLegacyRows.group consumer (AspisR1.NKR_SumCopyAssociation.endpoint i consumer) = g then
+      AspisR1.NKR_SumCopyAssociation.valueTerm s terms i consumer
+    else 0
+'AspisR1.NKR_SumCopyAssociation.tag_pattern' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyAssociation.tag_transport (domain : AspisR1.NKR_SumTagPermutation.Domain)
+  (permutation : AspisR1.NKR_SumTagPermutation.Cut) (f : Fin 136 → Bool → AspisR1.FIv_NativeValue.K) :
+  ∑ t, f (AspisR1.NKR_SumTagPermutation.index domain t) (AspisR1.NKR_SumTagPermutation.side t) =
+    ∑ i, (f i false + f i true)
+'AspisR1.NKR_SumCopyAssociation.tag_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyAssociation.tag_value (lookup : AspisR1.NKR_SumCopyCollect.Lookups)
+  (keys : AspisR1.NKR_SumCopyAssociation.Keys) (domain : AspisR1.NKR_SumTagPermutation.Domain)
+  (permutation : AspisR1.NKR_SumTagPermutation.Cut) (metadata : AspisR1.NKR_SumTagAssociation.Cut domain)
+  (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors) (g : Fin 4) :
+  AspisR1.NKR_SumFinishCohort.baseValues s g =
+    ∑ i,
+      (AspisR1.NKR_SumCopyAssociation.tagTerm lookup s g i false +
+        AspisR1.NKR_SumCopyAssociation.tagTerm lookup s g i true)
+'AspisR1.NKR_SumCopyAssociation.tag_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyAssociation.weight_regroup (lookup : AspisR1.NKR_SumCopyCollect.Lookups)
+  (keys : AspisR1.NKR_SumCopyAssociation.Keys) (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors)
+  (scratch : AspisR1.NKR_SumCopyCollect.State) (append : Aeneas.Std.U64)
+  (variant : FIq_Native.pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1)
+  (coordinates :
+    ∀ (c : Fin 30),
+      AspisR1.FIv_NativeValue.decode (scratch (AspisR1.NJL_EndpointIndices.weight c)) =
+        AspisR1.NKR_SumCopyAssociation.weightSum lookup s append variant c)
+  (g : Fin 4) :
+  AspisR1.NKR_SumFinishCohort.baseWeights (AspisR1.NJB_ArrayCarrier.array scratch) s g =
+    ∑ i,
+      ((if AspisR1.NKR_SumLegacyRows.group false (AspisR1.NKR_SumCopyAssociation.endpoint i false) = g then
+          AspisR1.NKR_SumCopyAssociation.weightTerm s append variant i false
+        else 0) +
+        if AspisR1.NKR_SumLegacyRows.group true (AspisR1.NKR_SumCopyAssociation.endpoint i true) = g then
+          AspisR1.NKR_SumCopyAssociation.weightTerm s append variant i true
+        else 0)
+'AspisR1.NKR_SumCopyAssociation.weight_regroup' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyCollect.source (lookup : AspisR1.NKR_SumCopyCollect.Lookups) (append : Aeneas.Std.U64)
+  (variant : FIq_Native.pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1)
+  (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors) (indices : List (Fin 136))
+  (before : AspisR1.NKR_SumCopyCollect.State) (hs : AspisR1.FIw_ArrayValue.canonical s.high)
+  (hb : ∀ (i : Fin 103), AspisR1.FIv_NativeValue.Canon (before i)) :
+  ∃ after,
+    AspisR1.NJB_StateUpdates.run (fun i state => AspisR1.NKR_SumCopyCollect.step lookup append variant s i state)
+          indices before =
+        Aeneas.Std.Result.ok after ∧
+      AspisR1.NKR_SumCopyCollect.Trace lookup append variant s indices before after ∧
+        ∀ (i : Fin 103), AspisR1.FIv_NativeValue.Canon (after i)
+'AspisR1.NKR_SumCopyCollect.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyCollect.step_source (lookup : AspisR1.NKR_SumCopyCollect.Lookups) (append : Aeneas.Std.U64)
+  (variant : FIq_Native.pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1)
+  (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors) (index : Fin 136)
+  (before : AspisR1.NKR_SumCopyCollect.State) (hs : AspisR1.FIw_ArrayValue.canonical s.high)
+  (hb : ∀ (i : Fin 103), AspisR1.FIv_NativeValue.Canon (before i)) :
+  ∃ after,
+    AspisR1.NKR_SumCopyCollect.step lookup append variant s index before = Aeneas.Std.Result.ok after ∧
+      AspisR1.NKR_SumCopyCollect.Invocation lookup append variant s index before after ∧
+        ∀ (i : Fin 103), AspisR1.FIv_NativeValue.Canon (after i)
+'AspisR1.NKR_SumCopyCollect.step_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyCuts.endpoint_frame (before middle after : AspisR1.NKR_SumCopyCollect.State) (g : Fin 30)
+  (p : Fin 43) (rhs high first second : AspisR1.FIv_NativeArithmetic.NQ)
+  (mcut :
+    AspisR1.NJL_EndpointCell.Cut before middle (AspisR1.NJL_EndpointIndices.weight g) rhs first
+      { operation := 1, left := before (AspisR1.NJL_EndpointIndices.weight g), right := rhs } 1)
+  (acut :
+    AspisR1.NJL_EndpointCell.Cut middle after (AspisR1.NJL_EndpointIndices.pattern p) high second
+      { operation := 1, left := middle (AspisR1.NJL_EndpointIndices.pattern p), right := high } 1) :
+  AspisR1.NKR_SumCopyCuts.EndpointFrame before after g p first second
+'AspisR1.NKR_SumCopyCuts.endpoint_frame' depends on axioms: [propext, Quot.sound]
+AspisR1.NKR_SumCopyCuts.link (lookup : AspisR1.NKR_SumCopyCollect.Lookups) (append : Aeneas.Std.U64)
+  (variant : FIq_Native.pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1)
+  (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors) (index : Fin 136)
+  (before : AspisR1.NKR_SumCopyCollect.State) (hs : AspisR1.FIw_ArrayValue.canonical s.high)
+  (hb : ∀ (i : Fin 103), AspisR1.FIv_NativeValue.Canon (before i)) :
+  ∃ after middle w pfirst psecond cfirst csecond,
+    AspisR1.NKR_SumCopyCollect.step lookup append variant s index before = Aeneas.Std.Result.ok after ∧
+      FIq_Native.pool_v1.pair_forest_copy_terminal.link_weight (AspisR1.NJL_EndpointLookup.link index) append variant =
+          Aeneas.Std.Result.ok w ∧
+        AspisR1.NKR_SumCopyCuts.LinkCut lookup s index append variant before middle after w pfirst psecond cfirst
+            csecond (AspisR1.NJL_EndpointLookup.link index) append variant s
+            (AspisR1.NJL_EndpointLookup.link index).producer (AspisR1.NJL_EndpointLookup.link index).consumer
+            (AspisR1.NJL_EndpointLookup.link index).tag (AspisR1.NJL_EndpointLookup.link index).tag w w before middle 3
+            (↑index + 1) ∧
+          ∀ (i : Fin 103), AspisR1.FIv_NativeValue.Canon (after i)
+'AspisR1.NKR_SumCopyCuts.link' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyInvocation.source (lookup : AspisR1.NKR_SumCopyCollect.Lookups)
+  (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors)
+  (openings : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 16#usize)
+  (helper lambda chi : AspisR1.FIv_NativeArithmetic.NQ) (append : Aeneas.Std.U64)
+  (variant : FIq_Native.pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1)
+  (hh : AspisR1.FIw_ArrayValue.canonical s.high) (hl : AspisR1.FIw_ArrayValue.canonical s.low)
+  (ho : AspisR1.FIw_ArrayValue.canonical openings) (hhelper : AspisR1.FIv_NativeValue.Canon helper)
+  (hlambda : AspisR1.FIv_NativeValue.Canon lambda) (hchi : AspisR1.FIv_NativeValue.Canon chi) :
+  ∃ patterns scratch values weights active residual scaled,
+    FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values openings lambda = Aeneas.Std.Result.ok patterns ∧
+      AspisR1.NJB_StateUpdates.run (fun i state => AspisR1.NKR_SumCopyCollect.step lookup append variant s i state)
+            (List.finRange 136) AspisR1.NKR_SumCopyInvocation.zero =
+          Aeneas.Std.Result.ok scratch ∧
+        AspisR1.NKR_SumCopyCollect.Trace lookup append variant s (List.finRange 136) AspisR1.NKR_SumCopyInvocation.zero
+            scratch ∧
+          AspisR1.NKR_SumFinishInvocation.reference (AspisR1.NJB_ArrayCarrier.array scratch) s patterns =
+              Aeneas.Std.Result.ok (values, weights) ∧
+            AspisR1.NKR_SumCopyTail.reference s values weights helper chi =
+                Aeneas.Std.Result.ok { residual := scaled, active := active } ∧
+              AspisR1.NKR_SumCopyInvocation.reference lookup s openings helper lambda chi append variant =
+                  Aeneas.Std.Result.ok { residual := scaled, active := active } ∧
+                AspisR1.FIv_NativeValue.Canon active ∧
+                  AspisR1.FIv_NativeValue.Canon residual ∧
+                    AspisR1.FIv_NativeValue.Canon scaled ∧
+                      FIq_Native.pool_v1.pair_forest_copy_terminal.copy_residual
+                            (AspisR1.NKR_SumCopyTail.row values weights) helper chi =
+                          Aeneas.Std.Result.ok residual ∧
+                        AspisR1.FIv_NativeValue.decode scaled =
+                          AspisR1.FIv_NativeValue.decode active *
+                            AspisR1.FIw_CopyMeaning.residual (AspisR1.NKR_SumCopyTail.row values weights)
+                              (AspisR1.FIv_NativeValue.decode helper) (AspisR1.FIv_NativeValue.decode chi)
+'AspisR1.NKR_SumCopyInvocation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyRoot.row (values weights : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 4#usize)
+  (model : R0P.CopyRowExtension AspisR1.FIv_NativeValue.K)
+  (hv :
+    ∀ (g : Fin ↑4#usize),
+      AspisR1.FIv_NativeValue.decode (AspisR1.NJB_ArrayCarrier.cell values g) =
+        AspisR1.NKR_SumLegacyRows.values model g)
+  (hw :
+    ∀ (g : Fin ↑4#usize),
+      AspisR1.FIv_NativeValue.decode (AspisR1.NJB_ArrayCarrier.cell weights g) =
+        AspisR1.NKR_SumLegacyRows.weights model g) :
+  AspisR1.FIw_CopyTransport.row (AspisR1.NKR_SumCopyTail.row values weights) = model
+'AspisR1.NKR_SumCopyRoot.row' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyRoot.source (lookup : AspisR1.NKR_SumCopyCollect.Lookups)
+  (keys : AspisR1.NKR_SumCopyAssociation.Keys) (domain : AspisR1.NKR_SumTagPermutation.Domain)
+  (permutation : AspisR1.NKR_SumTagPermutation.Cut) (metadata : AspisR1.NKR_SumTagAssociation.Cut domain)
+  (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors)
+  (openings : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 16#usize)
+  (helper lambda chi : AspisR1.FIv_NativeArithmetic.NQ) (append : Aeneas.Std.U64)
+  (variant : FIq_Native.pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1)
+  (ho : AspisR1.FIw_ArrayValue.canonical openings) (hhelper : AspisR1.FIv_NativeValue.Canon helper)
+  (hlambda : AspisR1.FIv_NativeValue.Canon lambda) (hchi : AspisR1.FIv_NativeValue.Canon chi)
+  (hh : AspisR1.FIw_ArrayValue.canonical s.high) (hl : AspisR1.FIw_ArrayValue.canonical s.low) :
+  AspisR1.NKR_SumCopyInvocation.reference lookup s openings helper lambda chi append variant =
+    FIq_Native.pool_v1.pair_forest_copy_terminal.evaluate_with_selectors openings helper s lambda chi append variant
+'AspisR1.NKR_SumCopyRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyTail.row_canonical (values weights : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 4#usize)
+  (hv : AspisR1.FIw_ArrayValue.canonical values) (hw : AspisR1.FIw_ArrayValue.canonical weights) :
+  AspisR1.FIw_ArrayValue.canonical (AspisR1.NKR_SumCopyTail.row values weights).producer_values ∧
+    AspisR1.FIw_ArrayValue.canonical (AspisR1.NKR_SumCopyTail.row values weights).producer_weights ∧
+      AspisR1.FIw_ArrayValue.canonical (AspisR1.NKR_SumCopyTail.row values weights).consumer_values ∧
+        AspisR1.FIw_ArrayValue.canonical (AspisR1.NKR_SumCopyTail.row values weights).consumer_weights
+'AspisR1.NKR_SumCopyTail.row_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumCopyTail.source (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors)
+  (values weights : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 4#usize)
+  (helper chi : AspisR1.FIv_NativeArithmetic.NQ) (hh : AspisR1.FIw_ArrayValue.canonical s.high)
+  (hl : AspisR1.FIw_ArrayValue.canonical s.low) (hv : AspisR1.FIw_ArrayValue.canonical values)
+  (hw : AspisR1.FIw_ArrayValue.canonical weights) (hhelper : AspisR1.FIv_NativeValue.Canon helper)
+  (hchi : AspisR1.FIv_NativeValue.Canon chi) :
+  ∃ active residual scaled,
+    s.active = Aeneas.Std.Result.ok active ∧
+      AspisR1.FIv_NativeValue.Canon active ∧
+        FIq_Native.pool_v1.pair_forest_copy_terminal.copy_residual (AspisR1.NKR_SumCopyTail.row values weights) helper
+              chi =
+            Aeneas.Std.Result.ok residual ∧
+          AspisR1.FIv_NativeValue.Canon residual ∧
+            active.mul residual = Aeneas.Std.Result.ok scaled ∧
+              AspisR1.FIv_NativeValue.Canon scaled ∧
+                AspisR1.NKR_SumCopyTail.reference s values weights helper chi =
+                    Aeneas.Std.Result.ok { residual := scaled, active := active } ∧
+                  AspisR1.FIv_NativeValue.decode residual =
+                      AspisR1.FIw_CopyMeaning.residual (AspisR1.NKR_SumCopyTail.row values weights)
+                        (AspisR1.FIv_NativeValue.decode helper) (AspisR1.FIv_NativeValue.decode chi) ∧
+                    AspisR1.FIv_NativeValue.decode scaled =
+                      AspisR1.FIv_NativeValue.decode active *
+                        AspisR1.FIw_CopyMeaning.residual (AspisR1.NKR_SumCopyTail.row values weights)
+                          (AspisR1.FIv_NativeValue.decode helper) (AspisR1.FIv_NativeValue.decode chi)
+'AspisR1.NKR_SumCopyTail.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishAlgebra.values (tags weights lows : Fin 30 → AspisR1.FIv_NativeArithmetic.NQ) (bs : List (Fin 9))
+  (before : AspisR1.NKR_SumFinishMeaning.ModelState) (j : Fin 4) :
+  (List.foldl (fun state b => AspisR1.NKR_SumFinishMeaning.stepModel tags weights lows b state) before bs).1 j =
+    before.1 j +
+      (List.map
+          (fun b =>
+            if AspisR1.NKR_SumFinishData.batchGroup b = j then AspisR1.NKR_SumFinishMeaning.delta tags lows b else 0)
+          bs).sum
+'AspisR1.NKR_SumFinishAlgebra.values' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishAlgebra.weights (tags weights lows : Fin 30 → AspisR1.FIv_NativeArithmetic.NQ) (bs : List (Fin 9))
+  (before : AspisR1.NKR_SumFinishMeaning.ModelState) (j : Fin 4) :
+  (List.foldl (fun state b => AspisR1.NKR_SumFinishMeaning.stepModel tags weights lows b state) before bs).2 j =
+    before.2 j +
+      (List.map
+          (fun b =>
+            if AspisR1.NKR_SumFinishData.batchGroup b = j then AspisR1.NKR_SumFinishMeaning.delta weights lows b else 0)
+          bs).sum
+'AspisR1.NKR_SumFinishAlgebra.weights' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishBatch.canonical_arguments (xs : Fin 30 → AspisR1.FIv_NativeArithmetic.NQ) (b : Fin 9)
+  (hx : ∀ (i : Fin 30), AspisR1.FIv_NativeValue.Canon (xs i)) :
+  AspisR1.FIw_ArrayValue.canonical (AspisR1.NKR_SumFinishBatch.arguments xs b)
+'AspisR1.NKR_SumFinishBatch.canonical_arguments' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishBatch.source (tags weights lows : Fin 30 → AspisR1.FIv_NativeArithmetic.NQ) (b : Fin 9)
+  (before : AspisR1.NKR_SumFinishBatch.State) (ht : ∀ (i : Fin 30), AspisR1.FIv_NativeValue.Canon (tags i))
+  (hw : ∀ (i : Fin 30), AspisR1.FIv_NativeValue.Canon (weights i))
+  (hl : ∀ (i : Fin 30), AspisR1.FIv_NativeValue.Canon (lows i))
+  (hb :
+    (∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (before.1 i)) ∧
+      ∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (before.2 i)) :
+  ∃ valueSum weightSum values afterWeights,
+    AspisR1.NKR_SumCarrier.reference (AspisR1.NKR_SumFinishBatch.arguments tags b)
+          (AspisR1.NKR_SumFinishBatch.arguments lows b) (AspisR1.NKR_SumFinishData.batchCount b) =
+        Aeneas.Std.Result.ok valueSum ∧
+      AspisR1.NKR_SumCarrier.reference (AspisR1.NKR_SumFinishBatch.arguments weights b)
+            (AspisR1.NKR_SumFinishBatch.arguments lows b) (AspisR1.NKR_SumFinishData.batchCount b) =
+          Aeneas.Std.Result.ok weightSum ∧
+        AspisR1.NJB_StateUpdates.add before.1 (AspisR1.NKR_SumFinishData.batchGroup b) valueSum =
+            Aeneas.Std.Result.ok values ∧
+          AspisR1.NJB_StateUpdates.add before.2 (AspisR1.NKR_SumFinishData.batchGroup b) weightSum =
+              Aeneas.Std.Result.ok afterWeights ∧
+            AspisR1.NKR_SumFinishBatch.step tags weights lows b before = Aeneas.Std.Result.ok (values, afterWeights) ∧
+              (∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (values i)) ∧
+                (∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (afterWeights i)) ∧
+                  ∀ (i : Fin 4),
+                    i ≠ AspisR1.NKR_SumFinishData.batchGroup b → values i = before.1 i ∧ afterWeights i = before.2 i
+'AspisR1.NKR_SumFinishBatch.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishCohort.source (scratch : AspisR1.NKR_SumFinishInvocation.Scratch)
+  (s : AspisR1.NKR_SumFinishInvocation.Selectors) (terms : AspisR1.NKR_SumFinishInvocation.Patterns)
+  (hsc : AspisR1.FIw_ArrayValue.canonical scratch) (hh : AspisR1.FIw_ArrayValue.canonical s.high)
+  (hl : AspisR1.FIw_ArrayValue.canonical s.low) (ht : AspisR1.FIw_ArrayValue.canonical terms) :
+  ∃ outValues outWeights,
+    AspisR1.NKR_SumFinishInvocation.reference scratch s terms = Aeneas.Std.Result.ok (outValues, outWeights) ∧
+      AspisR1.FIw_ArrayValue.canonical outValues ∧
+        AspisR1.FIw_ArrayValue.canonical outWeights ∧
+          (∀ (g : Fin ↑4#usize),
+              AspisR1.FIv_NativeValue.decode (AspisR1.NJB_ArrayCarrier.cell outValues g) =
+                AspisR1.NKR_SumFinishCohort.values scratch s terms g) ∧
+            ∀ (g : Fin ↑4#usize),
+              AspisR1.FIv_NativeValue.decode (AspisR1.NJB_ArrayCarrier.cell outWeights g) =
+                AspisR1.NKR_SumFinishCohort.baseWeights scratch s g
+'AspisR1.NKR_SumFinishCohort.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishComposed.batch_from_source {tags weights lows : Fin 30 → AspisR1.FIv_NativeArithmetic.NQ}
+  {b : Fin 9} {before after : AspisR1.NKR_SumFinishBatch.State}
+  (h : AspisR1.NKR_SumFinishTrace.Invocation tags weights lows b before after) :
+  AspisR1.NKR_SumFinishComposed.BatchInvocation tags weights lows b before after
+'AspisR1.NKR_SumFinishComposed.batch_from_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishComposed.batch_to_source {tags weights lows : Fin 30 → AspisR1.FIv_NativeArithmetic.NQ} {b : Fin 9}
+  {before after : AspisR1.NKR_SumFinishBatch.State}
+  (h : AspisR1.NKR_SumFinishComposed.BatchInvocation tags weights lows b before after) :
+  AspisR1.NKR_SumFinishTrace.Invocation tags weights lows b before after
+'AspisR1.NKR_SumFinishComposed.batch_to_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishComposed.batch_trace_from_source {tags weights lows : Fin 30 → AspisR1.FIv_NativeArithmetic.NQ}
+  {bs : List (Fin 9)} {before after : AspisR1.NKR_SumFinishBatch.State}
+  (h : AspisR1.NKR_SumFinishTrace.Trace tags weights lows bs before after) :
+  AspisR1.NKR_SumFinishComposed.BatchTrace tags weights lows bs before after
+'AspisR1.NKR_SumFinishComposed.batch_trace_from_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishComposed.batch_trace_to_source {tags weights lows : Fin 30 → AspisR1.FIv_NativeArithmetic.NQ}
+  {bs : List (Fin 9)} {before after : AspisR1.NKR_SumFinishBatch.State}
+  (h : AspisR1.NKR_SumFinishComposed.BatchTrace tags weights lows bs before after) :
+  AspisR1.NKR_SumFinishTrace.Trace tags weights lows bs before after
+'AspisR1.NKR_SumFinishComposed.batch_trace_to_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishComposed.callback_count (b : Fin 9) :
+  (List.map (fun i => if ↑i < AspisR1.NKR_SumFinishData.batchCount b then 1 else 0) (List.finRange 4)).sum =
+    AspisR1.NKR_SumFinishData.batchCount b
+'AspisR1.NKR_SumFinishComposed.callback_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishComposed.data_source (scratch : Fin 103 → AspisR1.FIv_NativeArithmetic.NQ)
+  (s : AspisR1.NKR_SumFinishInvocation.Selectors) (b : Fin 9) (i : Fin 4) :
+  AspisR1.NKR_SumSplitCuts.DataCell scratch s b i
+    (AspisR1.NKR_SumFinishBatch.padded (fun c => scratch (AspisR1.NJL_EndpointIndices.weight c)) b i)
+    (AspisR1.NKR_SumFinishBatch.padded (fun c => AspisR1.NJB_ArrayCarrier.cell s.low (AspisR1.NKR_SumFinishData.low c))
+      b i)
+'AspisR1.NKR_SumFinishComposed.data_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishComposed.pattern_from_source {scratch : Fin 103 → AspisR1.FIv_NativeArithmetic.NQ}
+  {lows : Fin 16 → AspisR1.FIv_NativeArithmetic.NQ} {c : Fin 43}
+  {before after : Fin 26 → AspisR1.FIv_NativeArithmetic.NQ}
+  (h : AspisR1.NKR_SumPatternTrace.Invocation scratch lows c before after) :
+  AspisR1.NKR_SumFinishComposed.PatternInvocation scratch lows c before after
+'AspisR1.NKR_SumFinishComposed.pattern_from_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishComposed.pattern_to_source {scratch : Fin 103 → AspisR1.FIv_NativeArithmetic.NQ}
+  {lows : Fin 16 → AspisR1.FIv_NativeArithmetic.NQ} {c : Fin 43}
+  {before after : Fin 26 → AspisR1.FIv_NativeArithmetic.NQ}
+  (h : AspisR1.NKR_SumFinishComposed.PatternInvocation scratch lows c before after) :
+  AspisR1.NKR_SumPatternTrace.Invocation scratch lows c before after
+'AspisR1.NKR_SumFinishComposed.pattern_to_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishComposed.pattern_trace_from_source {scratch : Fin 103 → AspisR1.FIv_NativeArithmetic.NQ}
+  {lows : Fin 16 → AspisR1.FIv_NativeArithmetic.NQ} {cs : List (Fin 43)}
+  {before after : Fin 26 → AspisR1.FIv_NativeArithmetic.NQ}
+  (h : AspisR1.NKR_SumPatternTrace.Trace scratch lows cs before after) :
+  AspisR1.NKR_SumFinishComposed.PatternTrace scratch lows cs before after
+'AspisR1.NKR_SumFinishComposed.pattern_trace_from_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishComposed.pattern_trace_to_source {scratch : Fin 103 → AspisR1.FIv_NativeArithmetic.NQ}
+  {lows : Fin 16 → AspisR1.FIv_NativeArithmetic.NQ} {cs : List (Fin 43)}
+  {before after : Fin 26 → AspisR1.FIv_NativeArithmetic.NQ}
+  (h : AspisR1.NKR_SumFinishComposed.PatternTrace scratch lows cs before after) :
+  AspisR1.NKR_SumPatternTrace.Trace scratch lows cs before after
+'AspisR1.NKR_SumFinishComposed.pattern_trace_to_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishComposed.source (scratch : AspisR1.NKR_SumFinishInvocation.Scratch)
+  (s : AspisR1.NKR_SumFinishInvocation.Selectors) (terms : AspisR1.NKR_SumFinishInvocation.Patterns)
+  (hsc : AspisR1.FIw_ArrayValue.canonical scratch) (hh : AspisR1.FIw_ArrayValue.canonical s.high)
+  (hl : AspisR1.FIw_ArrayValue.canonical s.low) (ht : AspisR1.FIw_ArrayValue.canonical terms) :
+  ∃ dot coefficients finished,
+    AspisR1.NKR_SumFinishComposed.BatchTrace (AspisR1.NKR_SumFinishInvocation.tagValues s)
+        (AspisR1.NKR_SumFinishInvocation.weightValues scratch) (AspisR1.NKR_SumFinishInvocation.lowValues s)
+        AspisR1.NKR_SumFinishFold.order (AspisR1.NKR_SumFinishInvocation.zero4, AspisR1.NKR_SumFinishInvocation.zero4)
+        dot ∧
+      AspisR1.NKR_SumFinishComposed.PatternTrace (AspisR1.NJB_ArrayCarrier.cell scratch)
+          (AspisR1.NJB_ArrayCarrier.cell s.low) (List.finRange 43) AspisR1.NKR_SumFinishInvocation.zero26 coefficients ∧
+        AspisR1.NKR_SumFinishInvocation.reference scratch s terms =
+            Aeneas.Std.Result.ok (AspisR1.NJB_ArrayCarrier.array finished, AspisR1.NJB_ArrayCarrier.array dot.2) ∧
+          AspisR1.FIw_ArrayValue.canonical (AspisR1.NJB_ArrayCarrier.array finished) ∧
+            AspisR1.FIw_ArrayValue.canonical (AspisR1.NJB_ArrayCarrier.array dot.2) ∧
+              (∀ (g : Fin 4),
+                  AspisR1.FIv_NativeValue.decode (finished g) = AspisR1.NKR_SumFinishCohort.values scratch s terms g) ∧
+                ∀ (g : Fin 4),
+                  AspisR1.FIv_NativeValue.decode (dot.2 g) = AspisR1.NKR_SumFinishCohort.baseWeights scratch s g
+'AspisR1.NKR_SumFinishComposed.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishComposed.tag_source (scratch : Fin 103 → AspisR1.FIv_NativeArithmetic.NQ)
+  (s : AspisR1.NKR_SumFinishInvocation.Selectors) (b : Fin 9) (i : Fin 4)
+  (hh : AspisR1.FIw_ArrayValue.canonical s.high) :
+  ∃ reply,
+    AspisR1.NKR_SumSplitCuts.TagCell scratch s (AspisR1.NKR_SumFinishData.batchStart b)
+        (AspisR1.NKR_SumFinishData.batchCount b) i reply
+        (AspisR1.NKR_SumFinishBatch.padded (AspisR1.NKR_SumFinishInvocation.tagValues s) b i)
+        (if ↑i < AspisR1.NKR_SumFinishData.batchCount b then 1 else 0) (AspisR1.NKR_SumFinishData.batchStart b + ↑i)
+        (AspisR1.NJB_ArrayCarrier.cell s.high) (AspisR1.NJB_ArrayCarrier.cell s.low) scratch ∧
+      ∀ (h : ↑i < AspisR1.NKR_SumFinishData.batchCount b),
+        AspisR1.NJL_TagRoot.reference s (AspisR1.NKR_SumFinishData.batchCoordinate b ⟨↑i, h⟩) =
+          Aeneas.Std.Result.ok reply
+'AspisR1.NKR_SumFinishComposed.tag_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishData.batch_domain (b : Fin 9) :
+  1 ≤ AspisR1.NKR_SumFinishData.batchCount b ∧
+    AspisR1.NKR_SumFinishData.batchCount b ≤ 4 ∧
+      AspisR1.NKR_SumFinishData.batchStart b + AspisR1.NKR_SumFinishData.batchCount b ≤ 30 ∧
+        AspisR1.NKR_SumFinishData.batchCount b =
+          min 4
+            (AspisR1.NKR_SumFinishData.offsets (AspisR1.NKR_SumFinishData.batchGroup b).succ -
+              AspisR1.NKR_SumFinishData.batchStart b)
+'AspisR1.NKR_SumFinishData.batch_domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishData.batch_group (g : Fin 4) (b : Fin 9) (hb : b ∈ AspisR1.NKR_SumFinishData.batches g) :
+  AspisR1.NKR_SumFinishData.batchGroup b = g
+'AspisR1.NKR_SumFinishData.batch_group' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishData.batch_interval (b : Fin 9) :
+  AspisR1.NKR_SumFinishData.offsets (AspisR1.NKR_SumFinishData.batchGroup b).castSucc ≤
+      AspisR1.NKR_SumFinishData.batchStart b ∧
+    AspisR1.NKR_SumFinishData.batchStart b <
+      AspisR1.NKR_SumFinishData.offsets (AspisR1.NKR_SumFinishData.batchGroup b).succ
+'AspisR1.NKR_SumFinishData.batch_interval' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishData.batch_same_group (b : Fin 9) (i : Fin (AspisR1.NKR_SumFinishData.batchCount b)) :
+  AspisR1.NKR_SumFinishData.group (AspisR1.NKR_SumFinishData.batchCoordinate b i) =
+    AspisR1.NKR_SumFinishData.batchGroup b
+'AspisR1.NKR_SumFinishData.batch_same_group' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishExpanded.batch_value (xs lows : Fin 30 → AspisR1.FIv_NativeArithmetic.NQ) (b : Fin 9) :
+  AspisR1.NKR_SumFinishMeaning.delta xs lows b =
+    (List.map (fun c => AspisR1.FIv_NativeValue.decode (xs c) * AspisR1.FIv_NativeValue.decode (lows c))
+        (AspisR1.NKR_SumFinishExpanded.coordinates b)).sum
+'AspisR1.NKR_SumFinishExpanded.batch_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishExpanded.coordinate_group (b : Fin 9) (c : Fin 30)
+  (hc : c ∈ AspisR1.NKR_SumFinishExpanded.coordinates b) :
+  AspisR1.NKR_SumFinishData.group c = AspisR1.NKR_SumFinishData.batchGroup b
+'AspisR1.NKR_SumFinishExpanded.coordinate_group' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishExpanded.group_value (xs lows : Fin 30 → AspisR1.FIv_NativeArithmetic.NQ) (g : Fin 4) :
+  (List.map
+        (fun b =>
+          if AspisR1.NKR_SumFinishData.batchGroup b = g then AspisR1.NKR_SumFinishMeaning.delta xs lows b else 0)
+        AspisR1.NKR_SumFinishFold.order).sum =
+    (List.map
+        (fun c =>
+          if AspisR1.NKR_SumFinishData.group c = g then
+            AspisR1.FIv_NativeValue.decode (xs c) * AspisR1.FIv_NativeValue.decode (lows c)
+          else 0)
+        (List.finRange 30)).sum
+'AspisR1.NKR_SumFinishExpanded.group_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishExpanded.partition :
+  List.flatMap AspisR1.NKR_SumFinishExpanded.coordinates AspisR1.NKR_SumFinishFold.order = List.finRange 30
+'AspisR1.NKR_SumFinishExpanded.partition' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishExpanded.sum_flatMap {A B : Type} (f : A → List B) (v : B → AspisR1.FIv_NativeValue.K)
+  (xs : List A) : (List.map v (List.flatMap f xs)).sum = (List.map (fun a => (List.map v (f a)).sum) xs).sum
+'AspisR1.NKR_SumFinishExpanded.sum_flatMap' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishFold.chronological :
+  AspisR1.NKR_SumFinishFold.order = List.flatMap AspisR1.NKR_SumFinishData.batches (List.ofFn fun g => g)
+'AspisR1.NKR_SumFinishFold.chronological' depends on axioms: [propext, Quot.sound]
+AspisR1.NKR_SumFinishFold.source (tags weights lows : Fin 30 → AspisR1.FIv_NativeArithmetic.NQ) (bs : List (Fin 9))
+  (before : AspisR1.NKR_SumFinishBatch.State) (ht : ∀ (i : Fin 30), AspisR1.FIv_NativeValue.Canon (tags i))
+  (hw : ∀ (i : Fin 30), AspisR1.FIv_NativeValue.Canon (weights i))
+  (hl : ∀ (i : Fin 30), AspisR1.FIv_NativeValue.Canon (lows i))
+  (hb :
+    (∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (before.1 i)) ∧
+      ∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (before.2 i)) :
+  ∃ after,
+    AspisR1.NKR_SumFinishFold.run tags weights lows bs before = Aeneas.Std.Result.ok after ∧
+      AspisR1.NKR_SumFinishFold.Trace tags weights lows bs before after ∧
+        (∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (after.1 i)) ∧
+          ∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (after.2 i)
+'AspisR1.NKR_SumFinishFold.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishInvocation.source (scratch : AspisR1.NKR_SumFinishInvocation.Scratch)
+  (s : AspisR1.NKR_SumFinishInvocation.Selectors) (terms : AspisR1.NKR_SumFinishInvocation.Patterns)
+  (hsc : AspisR1.FIw_ArrayValue.canonical scratch) (hh : AspisR1.FIw_ArrayValue.canonical s.high)
+  (hl : AspisR1.FIw_ArrayValue.canonical s.low) (ht : AspisR1.FIw_ArrayValue.canonical terms) :
+  ∃ dot coefficients finished,
+    (∀ (c : Fin 30),
+        AspisR1.NJL_TagRoot.reference s c = Aeneas.Std.Result.ok (AspisR1.NKR_SumFinishInvocation.tags s c) ∧
+          AspisR1.FIv_NativeValue.Canon (AspisR1.NKR_SumFinishInvocation.tags s c) ∧
+            AspisR1.FIv_NativeValue.decode (AspisR1.NKR_SumFinishInvocation.tags s c) =
+              AspisR1.NJL_TagMeaning.model s (AspisR1.NJL_TagData.indices c)) ∧
+      AspisR1.NKR_SumFinishFold.run (AspisR1.NKR_SumFinishInvocation.tagValues s)
+            (AspisR1.NKR_SumFinishInvocation.weightValues scratch) (AspisR1.NKR_SumFinishInvocation.lowValues s)
+            AspisR1.NKR_SumFinishFold.order
+            (AspisR1.NKR_SumFinishInvocation.zero4, AspisR1.NKR_SumFinishInvocation.zero4) =
+          Aeneas.Std.Result.ok dot ∧
+        AspisR1.NKR_SumFinishTrace.Trace (AspisR1.NKR_SumFinishInvocation.tagValues s)
+            (AspisR1.NKR_SumFinishInvocation.weightValues scratch) (AspisR1.NKR_SumFinishInvocation.lowValues s)
+            AspisR1.NKR_SumFinishFold.order
+            (AspisR1.NKR_SumFinishInvocation.zero4, AspisR1.NKR_SumFinishInvocation.zero4) dot ∧
+          AspisR1.NJB_StateUpdates.run
+                (AspisR1.NKR_SumFinishPattern.step (AspisR1.NJB_ArrayCarrier.cell scratch)
+                  (AspisR1.NJB_ArrayCarrier.cell s.low))
+                (List.finRange 43) AspisR1.NKR_SumFinishInvocation.zero26 =
+              Aeneas.Std.Result.ok coefficients ∧
+            AspisR1.NKR_SumPatternTrace.Trace (AspisR1.NJB_ArrayCarrier.cell scratch)
+                (AspisR1.NJB_ArrayCarrier.cell s.low) (List.finRange 43) AspisR1.NKR_SumFinishInvocation.zero26
+                coefficients ∧
+              AspisR1.NJB_PatternReference.reference (AspisR1.NJB_ArrayCarrier.cell terms) coefficients dot.1 =
+                  Aeneas.Std.Result.ok finished ∧
+                AspisR1.NJL_PatternOuter.Trace (AspisR1.NJB_ArrayCarrier.cell terms) coefficients (List.ofFn fun g => g)
+                    dot.1 finished ∧
+                  AspisR1.NKR_SumFinishInvocation.reference scratch s terms =
+                      Aeneas.Std.Result.ok
+                        (AspisR1.NJB_ArrayCarrier.array finished, AspisR1.NJB_ArrayCarrier.array dot.2) ∧
+                    AspisR1.NKR_SumFinishInvocation.TailCut (AspisR1.NJB_ArrayCarrier.array dot.1)
+                        (AspisR1.NJB_ArrayCarrier.array coefficients) terms (AspisR1.NJB_ArrayCarrier.array dot.2)
+                        (AspisR1.NJB_ArrayCarrier.array finished) (AspisR1.NJB_ArrayCarrier.array dot.1)
+                        (AspisR1.NJB_ArrayCarrier.array coefficients) terms
+                        (AspisR1.NJB_ArrayCarrier.array finished, AspisR1.NJB_ArrayCarrier.array dot.2) 1 ∧
+                      AspisR1.NKR_SumFinishMeaning.decoded dot =
+                          List.foldl
+                            (fun state b =>
+                              AspisR1.NKR_SumFinishMeaning.stepModel (AspisR1.NKR_SumFinishInvocation.tagValues s)
+                                (AspisR1.NKR_SumFinishInvocation.weightValues scratch)
+                                (AspisR1.NKR_SumFinishInvocation.lowValues s) b state)
+                            (AspisR1.NKR_SumFinishMeaning.decoded
+                              (AspisR1.NKR_SumFinishInvocation.zero4, AspisR1.NKR_SumFinishInvocation.zero4))
+                            AspisR1.NKR_SumFinishFold.order ∧
+                        AspisR1.NJB_StateUpdates.decoded coefficients =
+                            List.foldl
+                              (fun state c =>
+                                AspisR1.NKR_SumFinishPattern.modelStep
+                                  (fun i => AspisR1.FIv_NativeValue.decode (AspisR1.NJB_ArrayCarrier.cell scratch i))
+                                  (fun i => AspisR1.FIv_NativeValue.decode (AspisR1.NJB_ArrayCarrier.cell s.low i)) c
+                                  state)
+                              (AspisR1.NJB_StateUpdates.decoded AspisR1.NKR_SumFinishInvocation.zero26)
+                              (List.finRange 43) ∧
+                          (∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (finished i)) ∧
+                            (∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (dot.2 i)) ∧
+                              ∀ (g : Fin 4),
+                                AspisR1.FIv_NativeValue.decode (finished g) =
+                                  AspisR1.FIv_NativeValue.decode (dot.1 g) +
+                                    AspisR1.NJL_PatternMeaning.dot
+                                      (fun i => AspisR1.FIv_NativeValue.decode (AspisR1.NJB_ArrayCarrier.cell terms i))
+                                      (fun i => AspisR1.FIv_NativeValue.decode (coefficients i)) g
+'AspisR1.NKR_SumFinishInvocation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishInvocation.tag_calls (s : AspisR1.NKR_SumFinishInvocation.Selectors)
+  (hs : AspisR1.FIw_ArrayValue.canonical s.high) (c : Fin 30) :
+  AspisR1.NJL_TagRoot.reference s c = Aeneas.Std.Result.ok (AspisR1.NKR_SumFinishInvocation.tags s c) ∧
+    AspisR1.FIv_NativeValue.Canon (AspisR1.NKR_SumFinishInvocation.tags s c) ∧
+      AspisR1.FIv_NativeValue.decode (AspisR1.NKR_SumFinishInvocation.tags s c) =
+        AspisR1.NJL_TagMeaning.model s (AspisR1.NJL_TagData.indices c)
+'AspisR1.NKR_SumFinishInvocation.tag_calls' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishMeaning.source (tags weights lows : Fin 30 → AspisR1.FIv_NativeArithmetic.NQ) (bs : List (Fin 9))
+  (before : AspisR1.NKR_SumFinishBatch.State) (ht : ∀ (i : Fin 30), AspisR1.FIv_NativeValue.Canon (tags i))
+  (hw : ∀ (i : Fin 30), AspisR1.FIv_NativeValue.Canon (weights i))
+  (hl : ∀ (i : Fin 30), AspisR1.FIv_NativeValue.Canon (lows i))
+  (hb :
+    (∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (before.1 i)) ∧
+      ∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (before.2 i)) :
+  ∃ after,
+    AspisR1.NKR_SumFinishFold.run tags weights lows bs before = Aeneas.Std.Result.ok after ∧
+      (∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (after.1 i)) ∧
+        (∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (after.2 i)) ∧
+          AspisR1.NKR_SumFinishMeaning.decoded after =
+            List.foldl (fun state b => AspisR1.NKR_SumFinishMeaning.stepModel tags weights lows b state)
+              (AspisR1.NKR_SumFinishMeaning.decoded before) bs
+'AspisR1.NKR_SumFinishMeaning.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishMeaning.step_result (tags weights lows : Fin 30 → AspisR1.FIv_NativeArithmetic.NQ) (b : Fin 9)
+  (before : AspisR1.NKR_SumFinishBatch.State) (ht : ∀ (i : Fin 30), AspisR1.FIv_NativeValue.Canon (tags i))
+  (hw : ∀ (i : Fin 30), AspisR1.FIv_NativeValue.Canon (weights i))
+  (hl : ∀ (i : Fin 30), AspisR1.FIv_NativeValue.Canon (lows i))
+  (hb :
+    (∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (before.1 i)) ∧
+      ∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (before.2 i)) :
+  ∃ after,
+    AspisR1.NKR_SumFinishBatch.step tags weights lows b before = Aeneas.Std.Result.ok after ∧
+      (∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (after.1 i)) ∧
+        (∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (after.2 i)) ∧
+          AspisR1.NKR_SumFinishMeaning.decoded after =
+            AspisR1.NKR_SumFinishMeaning.stepModel tags weights lows b (AspisR1.NKR_SumFinishMeaning.decoded before)
+'AspisR1.NKR_SumFinishMeaning.step_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishPattern.source (scratch : AspisR1.NKR_SumFinishPattern.Scratch)
+  (lows : Fin 16 → AspisR1.FIv_NativeArithmetic.NQ) (cs : List (Fin 43)) (before : AspisR1.NKR_SumFinishPattern.State)
+  (hs : ∀ (i : Fin 103), AspisR1.FIv_NativeValue.Canon (scratch i))
+  (hl : ∀ (i : Fin 16), AspisR1.FIv_NativeValue.Canon (lows i))
+  (hb : ∀ (i : Fin 26), AspisR1.FIv_NativeValue.Canon (before i)) :
+  ∃ after,
+    AspisR1.NJB_StateUpdates.run (AspisR1.NKR_SumFinishPattern.step scratch lows) cs before =
+        Aeneas.Std.Result.ok after ∧
+      (∀ (i : Fin 26), AspisR1.FIv_NativeValue.Canon (after i)) ∧
+        AspisR1.NJB_StateUpdates.decoded after =
+          List.foldl
+            (fun state c =>
+              AspisR1.NKR_SumFinishPattern.modelStep (fun i => AspisR1.FIv_NativeValue.decode (scratch i))
+                (fun i => AspisR1.FIv_NativeValue.decode (lows i)) c state)
+            (AspisR1.NJB_StateUpdates.decoded before) cs
+'AspisR1.NKR_SumFinishPattern.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishTrace.batch (tags weights lows : Fin 30 → AspisR1.FIv_NativeArithmetic.NQ) (b : Fin 9)
+  (before : AspisR1.NKR_SumFinishBatch.State) (ht : ∀ (i : Fin 30), AspisR1.FIv_NativeValue.Canon (tags i))
+  (hw : ∀ (i : Fin 30), AspisR1.FIv_NativeValue.Canon (weights i))
+  (hl : ∀ (i : Fin 30), AspisR1.FIv_NativeValue.Canon (lows i))
+  (hb :
+    (∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (before.1 i)) ∧
+      ∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (before.2 i)) :
+  ∃ after,
+    AspisR1.NKR_SumFinishBatch.step tags weights lows b before = Aeneas.Std.Result.ok after ∧
+      AspisR1.NKR_SumFinishTrace.Invocation tags weights lows b before after ∧
+        (∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (after.1 i)) ∧
+          ∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (after.2 i)
+'AspisR1.NKR_SumFinishTrace.batch' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumFinishTrace.source (tags weights lows : Fin 30 → AspisR1.FIv_NativeArithmetic.NQ) (bs : List (Fin 9))
+  (before : AspisR1.NKR_SumFinishBatch.State) (ht : ∀ (i : Fin 30), AspisR1.FIv_NativeValue.Canon (tags i))
+  (hw : ∀ (i : Fin 30), AspisR1.FIv_NativeValue.Canon (weights i))
+  (hl : ∀ (i : Fin 30), AspisR1.FIv_NativeValue.Canon (lows i))
+  (hb :
+    (∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (before.1 i)) ∧
+      ∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (before.2 i)) :
+  ∃ after,
+    AspisR1.NKR_SumFinishFold.run tags weights lows bs before = Aeneas.Std.Result.ok after ∧
+      AspisR1.NKR_SumFinishTrace.Trace tags weights lows bs before after ∧
+        (∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (after.1 i)) ∧
+          ∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (after.2 i)
+'AspisR1.NKR_SumFinishTrace.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumIntervals.fin_values (n : ℕ) : List.map Fin.val (List.finRange n) = List.range n
+'AspisR1.NKR_SumIntervals.fin_values' depends on axioms: [propext, Quot.sound]
+AspisR1.NKR_SumIntervals.lists_ext {n : ℕ} (xs ys : List (Fin n)) (h : List.map Fin.val xs = List.map Fin.val ys) :
+  xs = ys
+'AspisR1.NKR_SumIntervals.lists_ext' depends on axioms: [propext]
+AspisR1.NKR_SumIntervals.map_flatMap {A B C : Type} (f : A → List B) (v : B → C) (xs : List A) :
+  List.map v (List.flatMap f xs) = List.flatMap (fun a => List.map v (f a)) xs
+'AspisR1.NKR_SumIntervals.map_flatMap' depends on axioms: [propext]
+AspisR1.NKR_SumIntervals.monotone : Monotone AspisR1.NKR_SumIntervals.off
+'AspisR1.NKR_SumIntervals.monotone' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumIntervals.partition (off : ℕ → ℕ) (mono : Monotone off) (n : ℕ) :
+  AspisR1.NKR_SumIntervals.intervals off n = List.range' (off 0) (off n - off 0)
+'AspisR1.NKR_SumIntervals.partition' depends on axioms: [propext, Quot.sound]
+AspisR1.NKR_SumIntervals.range_zero (n : ℕ) : List.range' 0 n = List.range n
+'AspisR1.NKR_SumIntervals.range_zero' depends on axioms: [propext, Quot.sound]
+AspisR1.NKR_SumIntervals.step (n : ℕ) : AspisR1.NKR_SumIntervals.off n ≤ AspisR1.NKR_SumIntervals.off (n + 1)
+'AspisR1.NKR_SumIntervals.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumIntervals.thirty : AspisR1.NKR_SumIntervals.intervals AspisR1.NKR_SumIntervals.off 30 = List.range 272
+'AspisR1.NKR_SumIntervals.thirty' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumLegacyRows.fold_values (s : R0P.CopySelectors AspisR1.FIv_NativeValue.K)
+  (patterns : Fin 14 → AspisR1.FIv_NativeValue.K) (append : ℕ) (variant : R0P.Variant)
+  (row : R0P.CopyRowExtension AspisR1.FIv_NativeValue.K) (links : List R0P.CopyLink) (g : Fin 4) :
+  AspisR1.NKR_SumLegacyRows.values (List.foldl (AspisR1.FJk_CopyStep.step s patterns append variant) row links) g =
+    AspisR1.NKR_SumLegacyRows.values row g +
+      (List.map
+          (fun link =>
+            (if g = AspisR1.NKR_SumLegacyRows.group false link.producer then
+                AspisR1.NKR_SumLegacyRows.valueTerm s patterns link false
+              else 0) +
+              if g = AspisR1.NKR_SumLegacyRows.group true link.consumer then
+                AspisR1.NKR_SumLegacyRows.valueTerm s patterns link true
+              else 0)
+          links).sum
+'AspisR1.NKR_SumLegacyRows.fold_values' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumLegacyRows.fold_weights (s : R0P.CopySelectors AspisR1.FIv_NativeValue.K)
+  (patterns : Fin 14 → AspisR1.FIv_NativeValue.K) (append : ℕ) (variant : R0P.Variant)
+  (row : R0P.CopyRowExtension AspisR1.FIv_NativeValue.K) (links : List R0P.CopyLink) (g : Fin 4) :
+  AspisR1.NKR_SumLegacyRows.weights (List.foldl (AspisR1.FJk_CopyStep.step s patterns append variant) row links) g =
+    AspisR1.NKR_SumLegacyRows.weights row g +
+      (List.map
+          (fun link =>
+            (if g = AspisR1.NKR_SumLegacyRows.group false link.producer then
+                AspisR1.NKR_SumLegacyRows.weightTerm s append variant link false
+              else 0) +
+              if g = AspisR1.NKR_SumLegacyRows.group true link.consumer then
+                AspisR1.NKR_SumLegacyRows.weightTerm s append variant link true
+              else 0)
+          links).sum
+'AspisR1.NKR_SumLegacyRows.fold_weights' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumLegacyRows.one_value (s : R0P.CopySelectors AspisR1.FIv_NativeValue.K)
+  (patterns : Fin 14 → AspisR1.FIv_NativeValue.K) (append : ℕ) (variant : R0P.Variant)
+  (row : R0P.CopyRowExtension AspisR1.FIv_NativeValue.K) (link : R0P.CopyLink) (g : Fin 4) :
+  AspisR1.NKR_SumLegacyRows.values (AspisR1.FJk_CopyStep.step s patterns append variant row link) g =
+    (AspisR1.NKR_SumLegacyRows.values row g +
+        if g = AspisR1.NKR_SumLegacyRows.group false link.producer then
+          AspisR1.NKR_SumLegacyRows.valueTerm s patterns link false
+        else 0) +
+      if g = AspisR1.NKR_SumLegacyRows.group true link.consumer then
+        AspisR1.NKR_SumLegacyRows.valueTerm s patterns link true
+      else 0
+'AspisR1.NKR_SumLegacyRows.one_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumLegacyRows.one_weight (s : R0P.CopySelectors AspisR1.FIv_NativeValue.K)
+  (patterns : Fin 14 → AspisR1.FIv_NativeValue.K) (append : ℕ) (variant : R0P.Variant)
+  (row : R0P.CopyRowExtension AspisR1.FIv_NativeValue.K) (link : R0P.CopyLink) (g : Fin 4) :
+  AspisR1.NKR_SumLegacyRows.weights (AspisR1.FJk_CopyStep.step s patterns append variant row link) g =
+    (AspisR1.NKR_SumLegacyRows.weights row g +
+        if g = AspisR1.NKR_SumLegacyRows.group false link.producer then
+          AspisR1.NKR_SumLegacyRows.weightTerm s append variant link false
+        else 0) +
+      if g = AspisR1.NKR_SumLegacyRows.group true link.consumer then
+        AspisR1.NKR_SumLegacyRows.weightTerm s append variant link true
+      else 0
+'AspisR1.NKR_SumLegacyRows.one_weight' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumLookupCertificate.column_mod (index : Fin 136) (consumer : Bool) :
+  AspisR1.NJL_EndpointLookup.column index consumer = AspisR1.NJL_EndpointLookup.row index consumer % 16
+'AspisR1.NKR_SumLookupCertificate.column_mod' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumLookupCertificate.group_key (c : Fin 30) :
+  AspisR1.NJL_EndpointLookup.groupKeys[↑c] = (↑(AspisR1.NKR_SumFinishData.group c), ↑(AspisR1.NKR_SumFinishData.low c))
+'AspisR1.NKR_SumLookupCertificate.group_key' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumLookupCertificate.group_length : AspisR1.NJL_EndpointLookup.groupKeys.length = 30
+'AspisR1.NKR_SumLookupCertificate.group_length' does not depend on any axioms
+AspisR1.NKR_SumLookupCertificate.keys (index : Fin 136) (consumer : Bool)
+  (bounds : AspisR1.NJL_EndpointLookup.Cut index consumer) (cut : AspisR1.NKR_SumLookupCertificate.Cut index consumer) :
+  (↑(AspisR1.NKR_SumFinishData.group (AspisR1.NJL_EndpointLookup.groupIndex index consumer bounds)),
+        ↑(AspisR1.NKR_SumFinishData.low (AspisR1.NJL_EndpointLookup.groupIndex index consumer bounds))) =
+      (AspisR1.NJL_EndpointLookup.group index consumer, AspisR1.NJL_EndpointLookup.column index consumer) ∧
+    (↑(AspisR1.NKR_SumLookupCertificate.patternGroup (AspisR1.NJL_EndpointLookup.patternIndex index consumer bounds)),
+        ↑(AspisR1.NJB_PatternReference.pattern
+            (AspisR1.NKR_SumFinishData.pOut (AspisR1.NJL_EndpointLookup.patternIndex index consumer bounds))),
+        ↑(AspisR1.NKR_SumFinishData.pLow (AspisR1.NJL_EndpointLookup.patternIndex index consumer bounds))) =
+      (AspisR1.NJL_EndpointLookup.group index consumer, ↑(AspisR1.NJL_EndpointLookup.endpoint index consumer).pattern,
+        AspisR1.NJL_EndpointLookup.column index consumer)
+'AspisR1.NKR_SumLookupCertificate.keys' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumLookupCertificate.pattern_key (c : Fin 43) :
+  AspisR1.NJL_EndpointLookup.patternKeys[↑c] =
+    (↑(AspisR1.NKR_SumLookupCertificate.patternGroup c),
+      ↑(AspisR1.NJB_PatternReference.pattern (AspisR1.NKR_SumFinishData.pOut c)), ↑(AspisR1.NKR_SumFinishData.pLow c))
+'AspisR1.NKR_SumLookupCertificate.pattern_key' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumLookupCertificate.pattern_length : AspisR1.NJL_EndpointLookup.patternKeys.length = 43
+'AspisR1.NKR_SumLookupCertificate.pattern_length' does not depend on any axioms
+AspisR1.NKR_SumLookupCertificate.scan_found {A : Type} [DecidableEq A] (key : A) (xs : List A) (start : ℕ)
+  (bounded : start + xs.length ≤ 255) (found : AspisR1.NJL_EndpointLookup.scanFrom key xs start < 255) :
+  ∃ i, AspisR1.NJL_EndpointLookup.scanFrom key xs start = start + ↑i ∧ xs[↑i]? = some key
+'AspisR1.NKR_SumLookupCertificate.scan_found' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumPatternMeaning.source (scratch : Fin 103 → AspisR1.FIv_NativeValue.K)
+  (lows : Fin 16 → AspisR1.FIv_NativeValue.K) (cs : List (Fin 43)) (before : Fin 26 → AspisR1.FIv_NativeValue.K)
+  (j : Fin 26) :
+  List.foldl (fun state c => AspisR1.NKR_SumFinishPattern.modelStep scratch lows c state) before cs j =
+    before j +
+      (List.map
+          (fun c =>
+            if AspisR1.NKR_SumFinishData.pOut c = j then
+              scratch (AspisR1.NKR_SumFinishPattern.scratchIndex c) * lows (AspisR1.NKR_SumFinishData.pLow c)
+            else 0)
+          cs).sum
+'AspisR1.NKR_SumPatternMeaning.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumPatternTrace.source (scratch : AspisR1.NKR_SumFinishPattern.Scratch)
+  (lows : Fin 16 → AspisR1.FIv_NativeArithmetic.NQ) (cs : List (Fin 43)) (before : AspisR1.NKR_SumFinishPattern.State)
+  (hs : ∀ (i : Fin 103), AspisR1.FIv_NativeValue.Canon (scratch i))
+  (hl : ∀ (i : Fin 16), AspisR1.FIv_NativeValue.Canon (lows i))
+  (hb : ∀ (i : Fin 26), AspisR1.FIv_NativeValue.Canon (before i)) :
+  ∃ after,
+    AspisR1.NJB_StateUpdates.run (AspisR1.NKR_SumFinishPattern.step scratch lows) cs before =
+        Aeneas.Std.Result.ok after ∧
+      AspisR1.NKR_SumPatternTrace.Trace scratch lows cs before after ∧
+        ∀ (i : Fin 26), AspisR1.FIv_NativeValue.Canon (after i)
+'AspisR1.NKR_SumPatternTrace.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumPatternTrace.step (scratch : AspisR1.NKR_SumFinishPattern.Scratch)
+  (lows : Fin 16 → AspisR1.FIv_NativeArithmetic.NQ) (c : Fin 43) (before : AspisR1.NKR_SumFinishPattern.State)
+  (hs : ∀ (i : Fin 103), AspisR1.FIv_NativeValue.Canon (scratch i))
+  (hl : ∀ (i : Fin 16), AspisR1.FIv_NativeValue.Canon (lows i))
+  (hb : ∀ (i : Fin 26), AspisR1.FIv_NativeValue.Canon (before i)) :
+  ∃ after,
+    AspisR1.NKR_SumFinishPattern.step scratch lows c before = Aeneas.Std.Result.ok after ∧
+      AspisR1.NKR_SumPatternTrace.Invocation scratch lows c before after ∧
+        ∀ (i : Fin 26), AspisR1.FIv_NativeValue.Canon (after i)
+'AspisR1.NKR_SumPatternTrace.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumRegroup.bucket (c : Fin 43) :
+  AspisR1.NKR_SumFinishData.pOut c ∈
+    AspisR1.NJB_PatternReference.coordinates (AspisR1.NKR_SumLookupCertificate.patternGroup c)
+'AspisR1.NKR_SumRegroup.bucket' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumRegroup.bucket_iff (g : Fin 4) (c : Fin 43) :
+  AspisR1.NKR_SumFinishData.pOut c ∈ AspisR1.NJB_PatternReference.coordinates g ↔
+    AspisR1.NKR_SumLookupCertificate.patternGroup c = g
+'AspisR1.NKR_SumRegroup.bucket_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumRegroup.bucket_unique (g h : Fin 4) (p : Fin 26) (hg : p ∈ AspisR1.NJB_PatternReference.coordinates g)
+  (hh : p ∈ AspisR1.NJB_PatternReference.coordinates h) : g = h
+'AspisR1.NKR_SumRegroup.bucket_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumRegroup.contraction {C P : Type} [Fintype C] [Fintype P] [DecidableEq P] (out : C → P)
+  (inside : P → Prop) [DecidablePred inside] (term : P → AspisR1.FIv_NativeValue.K)
+  (value : C → AspisR1.FIv_NativeValue.K) :
+  (∑ p, if inside p then term p * ∑ c, if out c = p then value c else 0 else 0) =
+    ∑ c, if inside (out c) then term (out c) * value c else 0
+'AspisR1.NKR_SumRegroup.contraction' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumRegroup.endpoint (high low tag pattern weight : AspisR1.FIv_NativeValue.K) :
+  high * low * (tag + pattern) = high * tag * low + pattern * (high * low) ∧ high * weight * low = high * low * weight
+'AspisR1.NKR_SumRegroup.endpoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumScratchCoordinates.pattern_contribution (lookup : AspisR1.NKR_SumCopyCollect.Lookups)
+  (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors) (index : Fin 136) (consumer : Bool)
+  (append : Aeneas.Std.U64) (variant : FIq_Native.pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1)
+  (p : Fin 43) :
+  AspisR1.NKR_SumCollectMeaning.contribution lookup s index consumer append variant
+      (AspisR1.NJL_EndpointIndices.pattern p) =
+    if p = AspisR1.NJL_EndpointLookup.patternIndex index consumer ⋯ then
+      AspisR1.FIv_NativeValue.decode (AspisR1.NJL_EndpointLookup.high s index consumer ⋯)
+    else 0
+'AspisR1.NKR_SumScratchCoordinates.pattern_contribution' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumScratchCoordinates.pattern_injective : Function.Injective AspisR1.NJL_EndpointIndices.pattern
+'AspisR1.NKR_SumScratchCoordinates.pattern_injective' depends on axioms: [propext, Quot.sound]
+AspisR1.NKR_SumScratchCoordinates.source (lookup : AspisR1.NKR_SumCopyCollect.Lookups) (append : Aeneas.Std.U64)
+  (variant : FIq_Native.pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1)
+  (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors) (indices : List (Fin 136))
+  (before : AspisR1.NKR_SumCopyCollect.State) (hs : AspisR1.FIw_ArrayValue.canonical s.high)
+  (hb : ∀ (i : Fin 103), AspisR1.FIv_NativeValue.Canon (before i)) :
+  ∃ after,
+    AspisR1.NJB_StateUpdates.run (fun i state => AspisR1.NKR_SumCopyCollect.step lookup append variant s i state)
+          indices before =
+        Aeneas.Std.Result.ok after ∧
+      (∀ (i : Fin 103), AspisR1.FIv_NativeValue.Canon (after i)) ∧
+        (∀ (g : Fin 30),
+            AspisR1.FIv_NativeValue.decode (after (AspisR1.NJL_EndpointIndices.weight g)) =
+              AspisR1.FIv_NativeValue.decode (before (AspisR1.NJL_EndpointIndices.weight g)) +
+                (List.map
+                    (fun i =>
+                      (if g = AspisR1.NJL_EndpointLookup.groupIndex i false ⋯ then
+                          AspisR1.FIv_NativeValue.decode (AspisR1.NJL_EndpointLookup.high s i false ⋯) *
+                            AspisR1.NKR_SumCollectMeaning.weight i append variant
+                        else 0) +
+                        if g = AspisR1.NJL_EndpointLookup.groupIndex i true ⋯ then
+                          AspisR1.FIv_NativeValue.decode (AspisR1.NJL_EndpointLookup.high s i true ⋯) *
+                            AspisR1.NKR_SumCollectMeaning.weight i append variant
+                        else 0)
+                    indices).sum) ∧
+          ∀ (p : Fin 43),
+            AspisR1.FIv_NativeValue.decode (after (AspisR1.NJL_EndpointIndices.pattern p)) =
+              AspisR1.FIv_NativeValue.decode (before (AspisR1.NJL_EndpointIndices.pattern p)) +
+                (List.map
+                    (fun i =>
+                      (if p = AspisR1.NJL_EndpointLookup.patternIndex i false ⋯ then
+                          AspisR1.FIv_NativeValue.decode (AspisR1.NJL_EndpointLookup.high s i false ⋯)
+                        else 0) +
+                        if p = AspisR1.NJL_EndpointLookup.patternIndex i true ⋯ then
+                          AspisR1.FIv_NativeValue.decode (AspisR1.NJL_EndpointLookup.high s i true ⋯)
+                        else 0)
+                    indices).sum
+'AspisR1.NKR_SumScratchCoordinates.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumScratchCoordinates.weight_contribution (lookup : AspisR1.NKR_SumCopyCollect.Lookups)
+  (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors) (index : Fin 136) (consumer : Bool)
+  (append : Aeneas.Std.U64) (variant : FIq_Native.pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1)
+  (g : Fin 30) :
+  AspisR1.NKR_SumCollectMeaning.contribution lookup s index consumer append variant
+      (AspisR1.NJL_EndpointIndices.weight g) =
+    if g = AspisR1.NJL_EndpointLookup.groupIndex index consumer ⋯ then
+      AspisR1.FIv_NativeValue.decode (AspisR1.NJL_EndpointLookup.high s index consumer ⋯) *
+        AspisR1.NKR_SumCollectMeaning.weight index append variant
+    else 0
+'AspisR1.NKR_SumScratchCoordinates.weight_contribution' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumScratchCoordinates.weight_injective : Function.Injective AspisR1.NJL_EndpointIndices.weight
+'AspisR1.NKR_SumScratchCoordinates.weight_injective' depends on axioms: [propext, Quot.sound]
+AspisR1.NKR_SumSplitCuts.batch_domain (b : Fin 9) :
+  AspisR1.NKR_SumSplitCuts.Domain (AspisR1.NKR_SumFinishData.batchStart b) (AspisR1.NKR_SumFinishData.batchCount b)
+'AspisR1.NKR_SumSplitCuts.batch_domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumSplitCuts.pure_receiver (before : Fin 26 → AspisR1.FIv_NativeArithmetic.NQ) (output : Fin 26)
+  (product : Aeneas.Std.Result AspisR1.FIv_NativeArithmetic.NQ) :
+  (have receiver := before output;
+    do
+    let p ← product
+    Aeneas.Std.Result.ok (receiver, p)) =
+    do
+    let p ← product
+    have receiver : AspisR1.FIv_NativeArithmetic.NQ := before output
+    Aeneas.Std.Result.ok (receiver, p)
+'AspisR1.NKR_SumSplitCuts.pure_receiver' does not depend on any axioms
+AspisR1.NKR_SumTagAssociation.coordinate (domain : AspisR1.NKR_SumTagPermutation.Domain)
+  (cut : AspisR1.NKR_SumTagAssociation.Cut domain) (lookup : AspisR1.NKR_SumCopyCollect.Lookups) (c : Fin 30)
+  (t : Fin 272) (ht : t ∈ AspisR1.NJL_TagData.indices c) :
+  AspisR1.NJL_EndpointLookup.groupIndex (AspisR1.NKR_SumTagPermutation.index domain t)
+      (AspisR1.NKR_SumTagPermutation.side t) ⋯ =
+    c
+'AspisR1.NKR_SumTagAssociation.coordinate' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumTagAssociation.high (domain : AspisR1.NKR_SumTagPermutation.Domain)
+  (cut : AspisR1.NKR_SumTagAssociation.Cut domain) (lookup : AspisR1.NKR_SumCopyCollect.Lookups)
+  (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors) (t : Fin 272) :
+  AspisR1.NJB_ActiveReference.high s (AspisR1.NJL_TagData.block t) =
+    AspisR1.NJL_EndpointLookup.high s (AspisR1.NKR_SumTagPermutation.index domain t)
+      (AspisR1.NKR_SumTagPermutation.side t) ⋯
+'AspisR1.NKR_SumTagAssociation.high' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumTagAssociation.low (domain : AspisR1.NKR_SumTagPermutation.Domain)
+  (cut : AspisR1.NKR_SumTagAssociation.Cut domain) (lookup : AspisR1.NKR_SumCopyCollect.Lookups)
+  (keys : ∀ (i : Fin 136) (consumer : Bool), AspisR1.NKR_SumLookupCertificate.Cut i consumer) (c : Fin 30) (t : Fin 272)
+  (ht : t ∈ AspisR1.NJL_TagData.indices c) :
+  ↑(AspisR1.NKR_SumFinishData.low c) =
+    AspisR1.NJL_EndpointLookup.row (AspisR1.NKR_SumTagPermutation.index domain t)
+        (AspisR1.NKR_SumTagPermutation.side t) %
+      16
+'AspisR1.NKR_SumTagAssociation.low' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumTagAssociation.term (domain : AspisR1.NKR_SumTagPermutation.Domain)
+  (cut : AspisR1.NKR_SumTagAssociation.Cut domain) (lookup : AspisR1.NKR_SumCopyCollect.Lookups)
+  (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors) (t : Fin 272) :
+  AspisR1.FIv_NativeValue.decode (AspisR1.NJB_ActiveReference.high s (AspisR1.NJL_TagData.block t)) *
+      ↑↑(AspisR1.NJL_TagData.tag t) =
+    AspisR1.FIv_NativeValue.decode
+        (AspisR1.NJL_EndpointLookup.high s (AspisR1.NKR_SumTagPermutation.index domain t)
+          (AspisR1.NKR_SumTagPermutation.side t) ⋯) *
+      ↑↑(AspisR1.NJL_EndpointLookup.link (AspisR1.NKR_SumTagPermutation.index domain t)).tag
+'AspisR1.NKR_SumTagAssociation.term' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumTagPartition.first (c : Fin 30) : AspisR1.NJL_TagData.first c = AspisR1.NKR_SumIntervals.off ↑c
+'AspisR1.NKR_SumTagPartition.first' depends on axioms: [propext, Quot.sound]
+AspisR1.NKR_SumTagPartition.flatMap_map {A B C : Type} (f : B → List C) (v : A → B) (xs : List A) :
+  List.flatMap f (List.map v xs) = List.flatMap (fun a => f (v a)) xs
+'AspisR1.NKR_SumTagPartition.flatMap_map' depends on axioms: [propext]
+AspisR1.NKR_SumTagPartition.last (c : Fin 30) : AspisR1.NJL_TagData.last c = AspisR1.NKR_SumIntervals.off (↑c + 1)
+'AspisR1.NKR_SumTagPartition.last' depends on axioms: [propext, Quot.sound]
+AspisR1.NKR_SumTagPartition.source : List.flatMap AspisR1.NJL_TagData.indices (List.finRange 30) = List.finRange 272
+'AspisR1.NKR_SumTagPartition.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumTagPermutation.injective (domain : AspisR1.NKR_SumTagPermutation.Domain)
+  (cut : AspisR1.NKR_SumTagPermutation.Cut) : Function.Injective (AspisR1.NKR_SumTagPermutation.encoded domain)
+'AspisR1.NKR_SumTagPermutation.injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumTagPermutation.sum_transport (domain : AspisR1.NKR_SumTagPermutation.Domain)
+  (cut : AspisR1.NKR_SumTagPermutation.Cut) (f : Fin 272 → AspisR1.FIv_NativeValue.K) :
+  (List.map (fun t => f (AspisR1.NKR_SumTagPermutation.encoded domain t)) (List.finRange 272)).sum =
+    (List.map f (List.finRange 272)).sum
+'AspisR1.NKR_SumTagPermutation.sum_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumTagPermutation.surjective (domain : AspisR1.NKR_SumTagPermutation.Domain)
+  (cut : AspisR1.NKR_SumTagPermutation.Cut) : Function.Surjective (AspisR1.NKR_SumTagPermutation.encoded domain)
+'AspisR1.NKR_SumTagPermutation.surjective' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_SumTensorAlgebra.contraction_two {C P : Type} [Fintype C] [Fintype P] [DecidableEq P] (out0 out1 : C → P)
+  (inside : P → Prop) [DecidablePred inside] (term : P → AspisR1.FIv_NativeValue.K)
+  (value0 value1 : C → AspisR1.FIv_NativeValue.K) :
+  (∑ p,
+      if inside p then term p * ∑ c, ((if out0 c = p then value0 c else 0) + if out1 c = p then value1 c else 0)
+      else 0) =
+    ∑ c,
+      ((if inside (out0 c) then term (out0 c) * value0 c else 0) +
+        if inside (out1 c) then term (out1 c) * value1 c else 0)
+'AspisR1.NKR_SumTensorAlgebra.contraction_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_TermCut.error_prefix (zc point : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 10#usize)
+  (mu : AspisR1.FIv_NativeArithmetic.NQ) (error : AspisR1.NKR_TermTail.Error) :
+  AspisR1.NKR_TermTail.after zc point mu (Aeneas.Std.core.result.Result.Err error) =
+    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err error)
+'AspisR1.NKR_TermCut.error_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_TermCut.source (zc point : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 10#usize)
+  (mu : AspisR1.FIv_NativeArithmetic.NQ) (child : AspisR1.NKR_TermTail.Carrier)
+  (hz : AspisR1.FIw_ArrayValue.canonical zc) (hp : AspisR1.FIw_ArrayValue.canonical point)
+  (hm : AspisR1.FIv_NativeValue.Canon mu) (hc : AspisR1.FIv_NativeValue.Canon child.1)
+  (hh : AspisR1.FIv_NativeValue.Canon child.2.2.2.2.1) (ha : AspisR1.FIv_NativeValue.Canon child.2.2.2.2.2) :
+  ∃ c,
+    AspisR1.NKR_TermTail.after zc point mu (Aeneas.Std.core.result.Result.Ok child) =
+        Aeneas.Std.Result.ok
+          (Aeneas.Std.core.result.Result.Ok (AspisR1.NKR_TermCut.observations zc point mu child c).result) ∧
+      AspisR1.NKR_TermCut.Cut zc point mu child c (AspisR1.NKR_TermCut.observations zc point mu child c) ∧
+        AspisR1.FIv_NativeValue.Canon c.out
+'AspisR1.NKR_TermCut.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_TermDigestFrame.increment (old : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 8#usize)
+  (j : Fin ↑24#usize) :
+  AspisR1.FIx_SelectedMeaning.contribution (AspisR1.FIw_ArrayValue.decoded old) 84 ↑j =
+    if ↑j = 21 then AspisR1.NKR_TermDigestFrame.packed old 0
+    else if ↑j = 22 then AspisR1.NKR_TermDigestFrame.packed old 1 else 0
+'AspisR1.NKR_TermDigestFrame.increment' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_TermDigestFrame.pack_eq (v : Fin 4 → AspisR1.FIv_NativeValue.K) :
+  AspisR1.FIx_PreweightedPack.pack v = AspisR1.NJB_PackLinearity.pack v
+'AspisR1.NKR_TermDigestFrame.pack_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_TermDigestFrame.selected_at (a : Fin 8 → AspisR1.FIv_NativeValue.K) (g : Fin 2) (lane : Fin 4) :
+  AspisR1.FIx_SelectedMeaning.selected a 84 (21 + ↑g) ↑lane = a (AspisR1.NJX_DigestGroups.index g lane)
+'AspisR1.NKR_TermDigestFrame.selected_at' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_TermDigestFrame.selected_outside (a : Fin 8 → AspisR1.FIv_NativeValue.K) (j : ℕ) (lane : Fin 4)
+  (h21 : j ≠ 21) (h22 : j ≠ 22) : AspisR1.FIx_SelectedMeaning.selected a 84 j ↑lane = 0
+'AspisR1.NKR_TermDigestFrame.selected_outside' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_TermGatherPoseidon.source (claims : AspisR1.NKR_TermGatherPoseidon.Claims)
+  (point : AspisR1.NKR_TermGatherPoseidon.Point) (hc : AspisR1.FIw_ArrayValue.canonical claims)
+  (hp : AspisR1.FIw_ArrayValue.canonical point) :
+  ∃ p,
+    AspisR1.FIw_ArrayValue.decoded p.poseidon = fun g =>
+      R0P.poseidonPackingFormula AspisR1.ExtractedMaskQmPackBase4Arithmetic.iBasis
+        AspisR1.ExtractedMaskQmPackBase4Arithmetic.uBasis fun j =>
+        R0P.poseidonScalarResidual
+          (AspisR1.FJh_Native07RawValue.openings { z := p.z, succ_z := p.succ, xor12_z := p.xor12 })
+          (AspisR1.FIv_NativeValue.decode p.poseidonSelectors.block)
+          (AspisR1.FIw_ArrayValue.decoded p.poseidonSelectors.local) (AspisR1.FJe_ExternalAdjoint.lane g j)
+'AspisR1.NKR_TermGatherPoseidon.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_TermHorner.column :
+  FIq_Native.pool_v1.pair_forest_semantic_terminal.SELECTED_G_COLUMN = Aeneas.Std.Result.ok 27#usize
+'AspisR1.NKR_TermHorner.column' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_TermHorner.source (claims : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 84#usize)
+  (z : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 16#usize)
+  (mask : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 10#usize)
+  (semantic : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 24#usize)
+  (poseidon : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 4#usize) (theta h1 : AspisR1.FIv_NativeArithmetic.NQ)
+  (copy : AspisR1.NKR_TermHorner.Copy) (hc : AspisR1.FIw_ArrayValue.canonical claims)
+  (hs : AspisR1.FIw_ArrayValue.canonical semantic) (hp : AspisR1.FIw_ArrayValue.canonical poseidon)
+  (ht : AspisR1.FIv_NativeValue.Canon theta) (hr : AspisR1.FIv_NativeValue.Canon copy.residual) :
+  ∃ comp g,
+    AspisR1.NKR_TermHorner.run claims z mask semantic poseidon theta h1 copy =
+        Aeneas.Std.Result.ok (comp, z, mask, g, h1, copy.active) ∧
+      AspisR1.FIv_NativeValue.Canon comp ∧
+        AspisR1.FIv_NativeValue.Canon g ∧
+          AspisR1.FIv_NativeValue.decode comp =
+            AspisR1.FIv_CompositionValue.polynomial (AspisR1.FIv_NativeValue.decode theta) semantic poseidon
+              copy.residual
+'AspisR1.NKR_TermHorner.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_TermPublic.source (pub : FIq_Native.pool_v1.pair_forest_semantic_terminal.r0.Public) :
+  pub.semantic = Aeneas.Std.Result.ok (AspisR1.NKR_TermPublic.value pub)
+'AspisR1.NKR_TermPublic.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_TermScalar.source (pub : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (s : AspisR1.NKI_InitialPrefix.Selectors) (packed : Aeneas.Std.Array FIq_Native.field.QM31 24#usize)
+  (hz : AspisR1.FIw_ArrayValue.canonical o.z) (hh : AspisR1.FIw_ArrayValue.canonical s.high)
+  (hl : AspisR1.FIw_ArrayValue.canonical s.low) (hp : AspisR1.FIw_ArrayValue.canonical packed)
+  (asset : ↑pub.asset_id < 2147483647)
+  (amount : ↑(Aeneas.Std.core.option.Option.unwrap_or pub.withdrawal_amount 0#u32) < 2147483647) :
+  ∃ out, AspisR1.FIw_ScalarSuffix.run pub o s packed = Aeneas.Std.Result.ok out ∧ AspisR1.FIw_ArrayValue.canonical out
+'AspisR1.NKR_TermScalar.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_TermScalarCut.source (pub : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (s : AspisR1.NKI_InitialPrefix.Selectors) (before : AspisR1.NKR_TermScalarInvocation.Packed)
+  (hz : AspisR1.FIw_ArrayValue.canonical o.z) (hh : AspisR1.FIw_ArrayValue.canonical s.high)
+  (hl : AspisR1.FIw_ArrayValue.canonical s.low) (hb : AspisR1.FIw_ArrayValue.canonical before)
+  (ha : ↑pub.asset_id < 2147483647) (hm : ↑(AspisR1.NKR_TermScalarInvocation.amount pub) < 2147483647) :
+  ∃ p,
+    AspisR1.FIw_ScalarSuffix.run pub o s before = Aeneas.Std.Result.ok p.out ∧
+      AspisR1.NKR_TermScalarCut.Cut pub o s before p (AspisR1.NKR_TermScalarCut.observations p)
+'AspisR1.NKR_TermScalarCut.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_TermScalarInvocation.source (pub : AspisR1.NKI_InitialPrefix.Public)
+  (o : AspisR1.NKI_InitialPrefix.Openings) (s : AspisR1.NKI_InitialPrefix.Selectors)
+  (before : AspisR1.NKR_TermScalarInvocation.Packed) (hz : AspisR1.FIw_ArrayValue.canonical o.z)
+  (hh : AspisR1.FIw_ArrayValue.canonical s.high) (hl : AspisR1.FIw_ArrayValue.canonical s.low)
+  (hb : AspisR1.FIw_ArrayValue.canonical before) (ha : ↑pub.asset_id < 2147483647)
+  (hm : ↑(AspisR1.NKR_TermScalarInvocation.amount pub) < 2147483647) :
+  ∃ p, AspisR1.FIw_ScalarSuffix.run pub o s before = Aeneas.Std.Result.ok p.out
+'AspisR1.NKR_TermScalarInvocation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_TermSemanticCut.cut_source (pub : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (s : AspisR1.NKI_InitialPrefix.Selectors) (i : Fin 4) (before reply : AspisR1.NKR_TermSemanticSource.Packed) :
+  AspisR1.NKR_TermSemanticCut.Cut pub o s i before reply
+    (AspisR1.NKR_TermSemanticCut.observation pub o s i before reply)
+'AspisR1.NKR_TermSemanticCut.cut_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_TermSemanticCut.digest_source (pub : AspisR1.NKI_InitialPrefix.Public)
+  (o : AspisR1.NKI_InitialPrefix.Openings) (s : AspisR1.NKI_InitialPrefix.Selectors)
+  (before : AspisR1.NKR_TermSemanticSource.Packed) (digests : AspisR1.NKR_TermSemanticCut.Pair)
+  (hb : AspisR1.FIw_ArrayValue.canonical before) (hd : ∀ (j : Fin 2), AspisR1.FIv_NativeValue.Canon (digests j)) :
+  ∃ replies out,
+    AspisR1.NKR_TermSemanticCut.digest_reference before digests = Aeneas.Std.Result.ok out ∧
+      AspisR1.FIw_ArrayValue.canonical out ∧
+        (∀ (g : Fin 2),
+            (AspisR1.NJB_ArrayCarrier.cell before (if ↑g = 0 then ⟨21, ⋯⟩ else ⟨22, ⋯⟩)).add (digests g) =
+              Aeneas.Std.Result.ok (replies g)) ∧
+          AspisR1.NKR_TermSemanticCut.DigestCut pub o s before digests replies
+              (AspisR1.NKR_TermSemanticCut.digestObservation pub o s before out digests) ∧
+            ∀ (g : Fin 2),
+              AspisR1.FIv_NativeValue.decode (replies g) =
+                AspisR1.FIv_NativeValue.decode
+                    (AspisR1.NJB_ArrayCarrier.cell before (if ↑g = 0 then ⟨21, ⋯⟩ else ⟨22, ⋯⟩)) +
+                  AspisR1.FIv_NativeValue.decode (digests g)
+'AspisR1.NKR_TermSemanticCut.digest_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_TermSemanticCut.prefix_source (pub : AspisR1.NKI_InitialPrefix.Public)
+  (o : AspisR1.NKI_InitialPrefix.Openings) (s : AspisR1.NKI_InitialPrefix.Selectors)
+  (p : AspisR1.NKR_TermSemanticSource.Packet pub o s) :
+  AspisR1.NKR_TermSemanticCut.Trace pub o s (List.finRange 4) AspisR1.NKR_TermSemanticSource.zero p.occupancy
+'AspisR1.NKR_TermSemanticCut.prefix_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_TermSemanticCut.zero (i : Fin ↑24#usize) :
+  AspisR1.NJB_ArrayCarrier.cell AspisR1.NKR_TermSemanticSource.zero i = FIq_Native.field.QM31.ZERO
+'AspisR1.NKR_TermSemanticCut.zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_TermSemanticModel.bounds (pub : AspisR1.NKI_InitialPrefix.Public)
+  (hd : AspisR1.NKR_DigestChildren.Domain pub) (asset : ↑pub.asset_id < 2147483647)
+  (amount : ↑(Aeneas.Std.core.option.Option.unwrap_or pub.withdrawal_amount 0#u32) < 2147483647) :
+  AspisR1.FJa_PublicBounds.Bounds pub
+'AspisR1.NKR_TermSemanticModel.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_TermSemanticModel.source (pub : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (point : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 10#usize) (hd : AspisR1.NKR_DigestChildren.Domain pub)
+  (hz : AspisR1.FIw_ArrayValue.canonical o.z) (hs : AspisR1.FIw_ArrayValue.canonical o.succ_z)
+  (hx : AspisR1.FIw_ArrayValue.canonical o.xor12_z) (hp : AspisR1.FIw_ArrayValue.canonical point)
+  (asset : ↑pub.asset_id < 2147483647)
+  (amount : ↑(Aeneas.Std.core.option.Option.unwrap_or pub.withdrawal_amount 0#u32) < 2147483647) :
+  ∃ s,
+    FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point = Aeneas.Std.Result.ok s ∧
+      ∃ p,
+        FIq_Native.pool_v1.pair_forest_semantic_terminal.semantic_packed pub o s = Aeneas.Std.Result.ok p.out ∧
+          (fun j => AspisR1.FIz_ConcretePack.embed (AspisR1.FIw_ArrayValue.decoded p.out j)) = fun j =>
+            R0P.pack4 AspisR1.ConcretePackBasis.basis fun i =>
+              R0P.SemSource.scalarLaneAt
+                (AspisR1.SpendDataMap.mapPublic (⇑AspisR1.FIz_ConcretePack.embed)
+                  (AspisR1.FIw_PublicModel.ofPublic pub))
+                (AspisR1.ValueFamilyFieldTransport.mapOpenings AspisR1.FIz_ConcretePack.embed
+                  (AspisR1.FIw_PublicModel.openings o))
+                (fun k => AspisR1.FIz_ConcretePack.embed (AspisR1.FIw_PublicModel.selector s k)) (4 * ↑j + ↑i)
+'AspisR1.NKR_TermSemanticModel.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_TermSemanticSource.source (pub : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (s : AspisR1.NKI_InitialPrefix.Selectors) (hd : AspisR1.NKR_DigestChildren.Domain pub)
+  (hz : AspisR1.FIw_ArrayValue.canonical o.z) (hs : AspisR1.FIw_ArrayValue.canonical o.succ_z)
+  (hx : AspisR1.FIw_ArrayValue.canonical o.xor12_z) (hh : AspisR1.FIw_ArrayValue.canonical s.high)
+  (hl : AspisR1.FIw_ArrayValue.canonical s.low) (asset : ↑pub.asset_id < 2147483647)
+  (amount : ↑(Aeneas.Std.core.option.Option.unwrap_or pub.withdrawal_amount 0#u32) < 2147483647) :
+  ∃ p, FIq_Native.pool_v1.pair_forest_semantic_terminal.semantic_packed pub o s = Aeneas.Std.Result.ok p.out
+'AspisR1.NKR_TermSemanticSource.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_TermSemanticSplitCuts.compose (pub : AspisR1.NKI_InitialPrefix.Public)
+  (o : AspisR1.NKI_InitialPrefix.Openings) (s : AspisR1.NKI_InitialPrefix.Selectors) (i : Fin 4)
+  (before reply : AspisR1.NKR_TermSemanticSource.Packed) (args : AspisR1.NKR_TermSemanticSplitCuts.Arguments)
+  (state : AspisR1.NKR_TermSemanticSplitCuts.State) (ha : AspisR1.NKR_TermSemanticSplitCuts.ArgCut pub o s i args)
+  (hs : AspisR1.NKR_TermSemanticSplitCuts.StateCut before reply state) :
+  AspisR1.NKR_TermSemanticCut.Cut pub o s i before reply (AspisR1.NKR_TermSemanticSplitCuts.joined args state)
+'AspisR1.NKR_TermSemanticSplitCuts.compose' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_TermSemanticSplitCuts.digest_compose (pub : AspisR1.NKI_InitialPrefix.Public)
+  (o : AspisR1.NKI_InitialPrefix.Openings) (s : AspisR1.NKI_InitialPrefix.Selectors)
+  (before : AspisR1.NKR_TermSemanticSource.Packed) (digests replies : AspisR1.NKR_TermSemanticCut.Pair)
+  (a : AspisR1.NKR_TermSemanticSplitCuts.DigestArguments) (st : AspisR1.NKR_TermSemanticSplitCuts.DigestState)
+  (ha : AspisR1.NKR_TermSemanticSplitCuts.DigestArgCut pub o s digests a)
+  (hs : AspisR1.NKR_TermSemanticSplitCuts.DigestStateCut before digests replies st) :
+  AspisR1.NKR_TermSemanticCut.DigestCut pub o s before digests replies
+    (AspisR1.NKR_TermSemanticSplitCuts.digestJoined a st)
+'AspisR1.NKR_TermSemanticSplitCuts.digest_compose' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NKR_TermTail.result (zc point : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 10#usize)
+  (mu comp h active : AspisR1.FIv_NativeArithmetic.NQ) (hz : AspisR1.FIw_ArrayValue.canonical zc)
+  (hp : AspisR1.FIw_ArrayValue.canonical point) (hm : AspisR1.FIv_NativeValue.Canon mu)
+  (hc : AspisR1.FIv_NativeValue.Canon comp) (hh : AspisR1.FIv_NativeValue.Canon h)
+  (ha : AspisR1.FIv_NativeValue.Canon active) :
+  ∃ c,
+    AspisR1.NKR_TermTail.arithmetic zc point mu comp h active = Aeneas.Std.Result.ok c.out ∧
+      AspisR1.FIv_NativeValue.Canon c.out ∧
+        AspisR1.FIv_NativeValue.decode c.out =
+          AspisR1.FIv_EqualityValue.weight zc point * AspisR1.FIv_NativeValue.decode comp +
+              AspisR1.FIv_NativeValue.decode mu * AspisR1.FIv_NativeValue.decode h +
+            AspisR1.FIv_NativeValue.decode mu ^ 2 *
+              ((1 - AspisR1.FIv_NativeValue.decode active) * AspisR1.FIv_NativeValue.decode h)
+'AspisR1.NKR_TermTail.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+NKR_SumCohort.first_canonical (a : NKR_SumDispatch.A4) (ha : ∀ q ∈ ↑a, NKR_SumDispatch.Canon q) :
+  NKR_SumDispatch.Canon (NKR_SumDispatch.first a)
+'NKR_SumCohort.first_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+NKR_SumCohort.first_pairs (l r : NKR_SumDispatch.A4) :
+  List.take 1 ((↑l).zip ↑r) = [(NKR_SumDispatch.first l, NKR_SumDispatch.first r)]
+'NKR_SumCohort.first_pairs' depends on axioms: [propext, Classical.choice, Quot.sound]
+NKR_SumCohort.result (l r : NKR_SumDispatch.A4) (count : ℕ) (lower : 1 ≤ count) (upper : count ≤ 4)
+  (hl : ∀ q ∈ ↑l, NKR_SumDispatch.Canon q) (hr : ∀ q ∈ ↑r, NKR_SumDispatch.Canon q) :
+  ∃ out,
+    NKR_SumDispatch.native l r count = Aeneas.Std.Result.ok out ∧
+      NKR_SumDispatch.reference l r count = Aeneas.Std.Result.ok out ∧
+        NKJ_Cohort.run (List.take count ((↑l).zip ↑r)) = Aeneas.Std.Result.ok out ∧
+          NKR_SumDispatch.Canon out ∧
+            AspisR1.ExtractedMaskQM31Exact.decode out = NGA_SumAlgebra.sumProducts (List.take count ((↑l).zip ↑r))
+'NKR_SumCohort.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+NKR_SumCohort.singleton (x y : NKR_SumDispatch.Q) (hx : NKR_SumDispatch.Canon x) (hy : NKR_SumDispatch.Canon y) :
+  AspisR1SelectedMaskProbe.field.QM31.mul x y = NKJ_Cohort.run [(x, y)]
+'NKR_SumCohort.singleton' depends on axioms: [propext, Classical.choice, Quot.sound]
+NKR_SumCohort.source (l r : NKR_SumDispatch.A4) (count : ℕ) (lower : 1 ≤ count) (upper : count ≤ 4)
+  (hl : ∀ q ∈ ↑l, NKR_SumDispatch.Canon q) (hr : ∀ q ∈ ↑r, NKR_SumDispatch.Canon q) :
+  NKR_SumDispatch.reference l r count = NKJ_Cohort.run (List.take count ((↑l).zip ↑r))
+'NKR_SumCohort.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NKR_SumCuts.source (l r : NKR_SumDispatch.A4) (count : ℕ) (lower : 1 ≤ count) (upper : count ≤ 4)
+  (hl : ∀ q ∈ ↑l, NKR_SumDispatch.Canon q) (hr : ∀ q ∈ ↑r, NKR_SumDispatch.Canon q) :
+  ∃ out,
+    NKR_SumDispatch.native l r count = Aeneas.Std.Result.ok out ∧
+      NKR_SumDispatch.reference l r count = Aeneas.Std.Result.ok out ∧
+        NKJ_Cohort.run (List.take count ((↑l).zip ↑r)) = Aeneas.Std.Result.ok out ∧
+          NKR_SumDispatch.Canon out ∧
+            AspisR1.ExtractedMaskQM31Exact.decode out = NGA_SumAlgebra.sumProducts (List.take count ((↑l).zip ↑r)) ∧
+              ∀ (seek : Fin 4),
+                ↑seek < count →
+                  NKR_SumCuts.Cut l r count seek out out (NGA_Indexed.selected l seek) (NGA_Indexed.selected r seek) 1
+                    count
+'NKR_SumCuts.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NKR_SumDispatch.canonical_prefix (n : Aeneas.Std.Usize) (h : ↑n ≤ 4) (x : NKR_SumDispatch.A4)
+  (hx : ∀ q ∈ ↑x, NKR_SumDispatch.Canon q) (q : NKR_SumDispatch.Q) :
+  q ∈ ↑(NKR_SumDispatch.selectedPrefix n h x) → NKR_SumDispatch.Canon q
+'NKR_SumDispatch.canonical_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+NKR_SumDispatch.helper_domains (l r : NKR_SumDispatch.A4) (hl : ∀ q ∈ ↑l, NKR_SumDispatch.Canon q)
+  (hr : ∀ q ∈ ↑r, NKR_SumDispatch.Canon q) (n : Aeneas.Std.Usize) (h : ↑n ≤ 4) :
+  ((↑(NKR_SumDispatch.selectedPrefix n h l)).zip ↑(NKR_SumDispatch.selectedPrefix n h r)).length = ↑n ∧
+    ∀ p ∈ (↑(NKR_SumDispatch.selectedPrefix n h l)).zip ↑(NKR_SumDispatch.selectedPrefix n h r),
+      NKR_SumDispatch.Canon p.1 ∧ NKR_SumDispatch.Canon p.2
+'NKR_SumDispatch.helper_domains' depends on axioms: [propext, Classical.choice, Quot.sound]
+NKR_SumDispatch.native_reference (l r : NKR_SumDispatch.A4) (count : ℕ) (hl : ∀ q ∈ ↑l, NKR_SumDispatch.Canon q)
+  (hr : ∀ q ∈ ↑r, NKR_SumDispatch.Canon q) : NKR_SumDispatch.native l r count = NKR_SumDispatch.reference l r count
+'NKR_SumDispatch.native_reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+NKR_SumDispatch.same_pairs (n : Aeneas.Std.Usize) (h : ↑n ≤ 4) (l r : NKR_SumDispatch.A4) :
+  (↑(NKR_SumDispatch.selectedPrefix n h l)).zip ↑(NKR_SumDispatch.selectedPrefix n h r) = List.take (↑n) ((↑l).zip ↑r)
+'NKR_SumDispatch.same_pairs' depends on axioms: [propext, Classical.choice, Quot.sound]
+NKR_SumDispatch.take_zip {A B : Type} (n : ℕ) (xs : List A) (ys : List B) :
+  (List.take n xs).zip (List.take n ys) = List.take n (xs.zip ys)
+'NKR_SumDispatch.take_zip' depends on axioms: [propext]
+NKR_COMBINED_IMPORT.lean:538:7: error(lean.unknownIdentifier): Unknown identifier `_private.NKR_SumCopyFull`
+NKR_COMBINED_IMPORT.lean:538:31: error: Invalid field notation: Identifier or numeral expected
+NKR_COMBINED_IMPORT.lean:538:32: error: unexpected identifier after decimal point; consider parenthesizing the number
+NKR_COMBINED_IMPORT.lean:539:14: error(lean.unknownIdentifier): Unknown constant `_private.NKR_SumCopyFull`
+NKR_COMBINED_IMPORT.lean:539:38: error: unexpected token '.'; expected command
