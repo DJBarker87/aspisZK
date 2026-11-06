@@ -1,0 +1,27 @@
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NJQ_library.rs
+@@ -0,0 +1,24 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[kani::proof] #[kani::unwind(2)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn iterator_any_step() {
++ let x:u8=kani::any();let threshold:u8=kani::any();let bytes=[x];
++ let mut it=bytes.iter();let mut calls=0usize;
++ let hit=it.any(|v|{calls+=1;*v!=threshold});
++ assert!(((hit==(x!=threshold)) && calls==1 && it.as_slice().is_empty()) !=cfg!(NJQ_invert));
++ let empty:&[u8]=&[];let mut calls_empty=0usize;let mut empty_it=empty.iter();
++ let empty_hit=empty_it.any(|_|{calls_empty+=1;true});
++ assert!(!empty_hit && calls_empty==0 && empty_it.as_slice().is_empty());
++}
++#[kani::proof] #[kani::unwind(2)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn iterator_mut_next_step() {
++ let x:u64=kani::any();let y:u64=kani::any();let replacement:u64=kani::any();
++ let mut values=[x,y];
++ let mut it=values.iter_mut();
++ let next=it.next().expect("nonempty");*next=replacement;
++ assert!(it.len()==1);let tail=it.next().expect("remaining");assert!(*tail==y);
++ assert!(it.next().is_none());
++ assert!((values[0]==replacement && values[1]==y)!=cfg!(NJQ_invert));
++}

@@ -1,0 +1,47 @@
+{"attempt": "NJQ_K007", "exit_status": 1, "wall_seconds": 5.8398835700936615, "peak_rss_kib": "557504", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+ note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: creating a shared reference to mutable static
+   --> crates/aspis-statement/src/../../../tools/r1-builder-reference/poseidon.rs:132:20
+    |
+132 |         assert_eq!(REFERENCE_CALL, 4);
+    |                    ^^^^^^^^^^^^^^ shared reference to mutable static
+    |
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.81s
+Checking harness pool_v1::format::NJQ_identity::decode_contract...
+
+VERIFICATION RESULT:
+ ** 1 of 206 failed (1 unreachable)
+Failed Checks: |r| (*r == NJQ_identity::decode_ref(bytes)) != cfg!(NJQ_invert)
+ File: "crates/aspis-statement/src/pool_v1/format.rs", line 143, in pool_v1::format::decode_pool_identity_v1::{closure#2}
+
+VERIFICATION:- FAILED
+Verification Time: 1.5655954s
+
+Manual Harness Summary:
+Verification failed for - pool_v1::format::NJQ_identity::decode_contract
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r6673bf72bab340e68697e9243e512024.scope; invocation ID: c61a4a98dec94964be8d3f4468f94f89

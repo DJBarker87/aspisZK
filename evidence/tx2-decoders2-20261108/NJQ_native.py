@@ -3,6 +3,8 @@ from NJQ_rerun import *
 def fresh(a,target,sidecars,invert=False):
     x,original,files=historical('NIJ_K120')
     files['NIJ_erasure.py']=files['NIJ_erasure.py'].replace("['NIJ_entry'","['NJQ_shape','NJQ_length_cut','NJQ_checkpoint_step','NJQ_master_cut','NJQ_checkpoint_cut','NJQ_registry_cut','NJQ_entry_cut','NJQ_policy_cut','NJQ_policy','NJQ_accounts','NJQ_v1','NJQ_decoder','NJQ_active','NIJ_entry'")
+    for _,own_module,_ in sidecars:
+        files['NIJ_erasure.py']=files['NIJ_erasure.py'].replace("for module in [","for module in ['"+own_module+"',")
     for parent,module,text in sidecars:
         suffix='\n#[cfg(kani)]\n#[path="'+module+'.rs"]\nmod '+module+';\n'
         key='NIJ_src/'+parent
