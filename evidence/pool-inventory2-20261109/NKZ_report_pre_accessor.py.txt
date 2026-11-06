@@ -1,0 +1,155 @@
+"""Owner-facing assessment, never a proof/ledger producer."""
+from pathlib import Path
+import json,lzma,hashlib,re,collections,subprocess,math
+E=Path(__file__).resolve().parent;R=E.parents[1];F='b936275465600469312d1f058cdc91ea2a11f3dc';C='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387'
+def load(p):return json.loads(Path(p).read_text())
+def put(n,d):(E/n).write_text(json.dumps(d,indent=1,sort_keys=True)+'\n')
+def md(n,s):(E/n).write_text(s)
+sha=lambda b:hashlib.sha256(b).hexdigest()
+inv=load(E/'NKZ_INVENTORY.json');rows=inv['rows'];review=inv['off_review_rows'];allrows=rows+review;by={r['function']:r for r in allrows}
+ast=json.loads(lzma.open(E/'NKZ_SOURCE_AST.json.xz').read());ast={d['function']:d for d in ast}
+nik=load(R/'evidence/pool-borrow-20261107/NIK_CENSUS.json');niz=load(R/'evidence/pool-borrow3-20261107/NIZ_OPEN_SITES.json');owners=[o for o in niz['owners'] if o['function'] in ast];ownerkeys={x['function'] for x in owners}
+# Read-only native/SBF cfg comparison; exact frozen file pins first.
+checks=[]
+for p in nik['source_pins']:
+ r=subprocess.run(['git','show',F+':'+p['path']],cwd=R,capture_output=True)
+ checks.append(dict(**p,actual_sha256=sha(r.stdout) if r.returncode==0 else None,matches=r.returncode==0 and sha(r.stdout)==p['sha256'],disposition='REUSE WHOLE FILE' if r.returncode==0 and sha(r.stdout)==p['sha256'] else 'REMOVED OR CHANGED: no whole-file native reuse'))
+native_bodies={f['function']:f for f in nik['functions']}
+corroborated=[r['id'] for r in rows if r['function'] in native_bodies and native_bodies[r['function']].get('body_sha256')==r['frozen_body_sha256'] and native_bodies[r['function']]['mir_headers']]
+put('NKZ_NATIVE_SBF.json',dict(native_census='evidence/pool-borrow-20261107/NIK_CENSUS.json',native_source_checks=checks,native_mir_sha256=nik['mir_sha256'],native_compiler='historical rustc 1.94.1 --release, deployed Pool features',sbf_compiler='rustc 1.89.0-sbpf-solana-v1.52 --target sbpf-solana-solana -C opt-level=3',on_rows_native_body_corroborated=corroborated,warning='Native historical whole-file reuse restricted to equal hashes; changed processor entry reviewed from new source and new deployed SBF MIR. Native-only cfg is source-reviewed separately. No native compilation or new native credit.',mir_builds_reused=True))
+# Retained helper laws are outside the 599-row basis and are not new production credit.
+helpercerts=[]
+for p in ['evidence/pool-leaves-20261105/NHC_LOADER_CERTIFICATE.json','evidence/pool-b3-20261106/NHP_GUARD_CERTIFICATE.json','evidence/pool-b3-20261106/NHP_POOL_ERROR_CERTIFICATE.json']:
+ c=load(R/p);matches=[r for r in rows if r['function']==c['function'] or p.endswith('POOL_ERROR_CERTIFICATE.json') and r['source_file']=='programs/aspis-pool/src/error.rs' and r['function'].endswith('::from')]
+ helpercerts.append(dict(certificate=p,sha256=sha((R/p).read_bytes()),historical_status=c['status'],historical_function=c['function'],numbered_rows=[r['id'] for r in matches],native_parent_still_open=True,source_body_hash_check='EXACT' if c.get('frozen_body_sha256') and matches and all(c['frozen_body_sha256'] in [r['frozen_body_sha256'],r.get('full_function_sha256')] for r in matches) else 'Conversion named by source trait/constructor; certificate has no body hash'))
+put('NKZ_HELPER_REUSE.json',helpercerts)
+shared=[r for r in rows if r['basis_overlap']];new=[r for r in rows if r['genuinely_new']]
+s='# Overlap with ledger19\n\nTarget not yet established. '+str(len(rows))+' conservative ON source occurrences; '+str(len(shared))+' match frozen bodies in '+str(inv['counts']['basis_rows_matched'])+' of the 599 TX rows. '+str(len(new))+' are outside that basis. '+str(len(review))+' OFF owner rows are numbered separately and excluded from those totals. A body match imports neither a Pool caller-domain proof nor a deployed-feature/model association. Status means composed **conditional** row on its original domain and retained trust.\n\nThe three historical Pool helper certificates are retained separately in NKZ_HELPER_REUSE.json; they are outside the 599 and are not counted as newly proved rows. ZERO production Pool closure or promotion is granted. No frozen-body hash disagreements for shared keys.\n\n| Pool occurrence | Frozen function | Existing rows and ledger19 status |\n|---|---|---|\n'
+for r in shared:s+='| '+r['id']+' | `'+r['function']+'` | '+', '.join(x['row']+' '+x['status'] for x in r['basis_overlap'])+' |\n'
+s+='\nOverlap statuses are historical evidence, not a fresh theorem replay. Exact obligation hashes, owner modules and evidence paths are in NKZ_INVENTORY.json; full binders remain in the pinned NKN ledger. Conservative alternatives and every corresponding callee are retained.\n'
+md('NKZ_OVERLAP.md',s)
+# Boundaries: every unresolved/SDK/std/indirect MIR call is retained, not just named syscalls.
+def boundary(raw,text):
+ s=raw+' '+text
+ if 'invoke' in raw and not 'Fn' in raw:return ('CPI / invoke_signed / reentrancy','NONE: would need a new trust row (owner decision) for any assumed CPI frame or token-program semantics; otherwise prove same-invocation forwarding/frame. RuntimeCpiReadonlyEntry7 is PENDING, UNUSED.')
+ if any(x in s for x in ['try_borrow_mut_lamports','try_borrow_lamports','::lamports','::assign','::resize','::realloc']):return ('lamports / owner / allocation mutation','NONE: would need a new trust row (owner decision) if trusted; data-only S2TrustedSdkBorrow does not cover it. Prove separate exact laws instead.')
+ if any(x in s for x in ['try_borrow','borrow_mut','data_is_empty','data_len','RefMut','BorrowRef','RefCell']):return ('data borrow / guard / accessor','S2TrustedSdkBorrow fifteen data-only fields, plus caller-proved enabledness/lifetimes and SAME physical cells; lamport/Rc operations excluded.')
+ if 'AccountInfo' in s and 'Clone' in s:return ('AccountInfo / Rc clone','NONE: would need a new trust row (owner decision) if assumed; Rc clone/free outside data-only SDK item.')
+ if any(x in s for x in ['set_return_data','get_return_data']):return ('return-data register','RuntimeReturnData (nonempty 1..1024) / RuntimeReturnDataClear (empty); source/native SAME invocation, program and no-intervening-write association remains open.')
+ if any(x in s for x in ['create_program_address','find_program_address']):return ('PDA syscall','Quantified op38 reply under (at): prove ordered seeds/program-id/status/reply/frame forwarding. No PDA value trust row; FixturePdaRuntime only non-vacuity.')
+ if 'Clock' in s:return ('Clock sysvar','RuntimeClockSlotBinding: successful slot equals SAME bank slot only; no success/monotonicity/epoch law.')
+ if 'Rent' in s:return ('Rent sysvar','NONE: would need a new trust row (owner decision) for any unproved Rent realization; pure arithmetic/model inputs may remain explicit, never assume rent success.')
+ if 'get_stack_height' in s:return ('stack-height syscall','NONE: would need a new trust row (owner decision) for any unproved syscall-value binding; CLOSED height predicate proves only supplied usize comparison.')
+ if 'hashv' in s or 'sol_sha256' in s:return ('digest syscall','RuntimeSha256Value realizes H; prove ordered request slices, reply unchanged and failure prefix. Coherent dictionary digest/error slots op43/op44.')
+ if 'Fn' in s or raw.startswith(('copy ','move ','_')):return ('indirect / trait callback','Retained conservative alternatives, concrete mono function items and source overlay; call-site law and SAME argument/carrier association required. No free success dictionary.')
+ if any(x in s for x in ['alloc','Vec','Box','RawVec']):return ('allocator / Vec / Box','Allocator plus pinned Aeneas std model/P6-D188 under (au); actual modifies, allocation failure/abort and KMX-controlled copies remain native obligations.')
+ if any(x in s for x in ['slice','copy','clone','raw_eq']):return ('std / derived / copy','TrustedStd / pinned Aeneas std and derive models under (au), valid references only; KMX copy mitigation plus failing control required for future native credit.')
+ if any(x in s for x in ['solana_','Pubkey','AccountInfo','transfer','allocate_with_seed','assign_with_seed']):return ('SDK / system or token program','NONE: would need a new trust row (owner decision) for any unproved SDK/runtime behavior beyond accepted named items; pure value calls can be bridged.')
+ return ('std / compiler / unresolved external','Pinned P6/D188/P7 and standard-library model only within stated scope; unresolved custom callback/SDK semantics are OPEN, never silently trusted.')
+bounds=[]
+for r in allrows:
+ for e in r['edges']:
+  if not e['targets'] or e['kind']=='SDK_STD_OR_EXTERNAL':
+   k,t=boundary(e['callee_spelling'],e['text']);bounds.append(dict(row=r['id'],scope=r['scope'],caller=r['function'],callee=e['callee_spelling'],kind=k,trust_or_obligation=t,artifact=e['artifact'],line=e['line'],text=e['text']))
+# Source accessors are independently pinned; all 21 retained, including OFF context.
+access=[]
+for d in ast.values():
+ if not d['file'].startswith('programs/aspis-pool/') or not any(r['function']==d['function'] for r in allrows):continue
+ for c in d['calls']:
+  name=c['expression'].split('.')[-1]
+  if name not in ['data_is_empty','data_len','lamports']:continue
+  r=by.get(d['function']);access.append(dict(function=d['function'],line=c['line'],accessor=name,row=r['id'] if r else None,scope=r['scope'] if r else 'OFF_HELPER_NOT_IN_ON_CLOSURE',status='OPEN caller borrowability; K086 production reachability/exclusion unproved' if name=='data_is_empty' else 'OPEN caller/data-or-lamport scope association'))
+held_names=['process_pair_forest_deposit_with_runtime_v1','process_pair_forest_terminal_with_verifier_v1','process_pair_withdrawal_with_verifier_v1','apply_authorized_append_after_checked_state_v1']
+held=[]
+layouts=['guards1/2 fresh/same or1/3 rollover; passed token_start+[1,0,3,2,4], token_start3/4','guards2/3 genesis/same or2/4 rollover plus marker cursor4/5; passed cursor+7+[1,0,2,3,4]','guard pool0, selected history<marker and marker; passed proof_index+1+[1,0,2,3,4], proof_index=marker+4','pool/current/optional-next guards across before_persist; deposit/prevalidated deposit/withdrawal and no-op instantiations']
+for name,layout in zip(held_names,layouts):
+ r=next((r for r in allrows if r['function'].endswith('::'+name)),None)
+ if r is None:continue
+ held.append(dict(row=r['id'],function=r['function'],scope=r['scope'],layout=layout,status='OPEN',predecessor='NIZ_CPI_GUARDS.md / NIO_CPI_GUARDS.md',entry_trust='RuntimeEntrypointAdmission-Pool seven initial fields only; (ap) enables physical separation after caller uniqueness and reached index disjointness are proved.',missing='SAME reached cell/layout/carrier, exact metas/payload/token-program, unrestricted child/CPI footprints and returning frame; no RuntimeCpiReadonlyEntry7 use.'))
+ownerrows=[]
+for o in owners:
+ r=by[o['function']];assert o['body_sha256']==r['frozen_body_sha256'];ownerrows.append(dict(row=r['id'],scope=r['scope'],**o))
+# P1..P4 source producer mapping. These are obligations, not new success hypotheses.
+predicates={
+ 'POOL.prefix_to_cpi':['process_pair_forest_terminal_v1','process_pair_forest_terminal_with_verifier_v1','plan_pair_forest_spend_layout_v1','plan_pair_forest_terminal_dispatch_with_bytes_v1','invoke_pair_forest_terminal_with_runtime_v1','dispatch_pair_forest_terminal_readonly_v1'],
+ 'NIB-P1':['invoke_pair_forest_terminal_with_runtime_v1','dispatch_pair_forest_terminal_readonly_v1','read_authenticated_result_v1'],
+ 'NIB-P2':['validate_authenticated_terminal_result_v1','decode_terminal_request_box_v1','decode_terminal_master_box_v1','decode_terminal_checkpoint_box_v1','decode_terminal_lane_box_v1'],
+ 'NIB-P3':['next_lane_image_box_v1','next_pair_forest_lane_v1'],
+ 'NIB-P4':['process_pair_forest_terminal_with_verifier_v1','process_settle_prepared_with_runtime_v1','process_withdrawal_with_runtime_v1','apply_authorized_append_after_checked_state_v1','close_program_account_v1']}
+# Catch exact read helper spelling from source even if predecessor used a shorter descriptive name.
+for r in rows:
+ if r['source_file'].endswith('/pair_forest_dispatch.rs') and ('read' in r['function'].split('::')[-1] or 'return' in r['function'].split('::')[-1]):predicates['NIB-P1'].append(r['function'].split('::')[-1])
+producers={k:[dict(row=r['id'],function=r['function']) for r in rows if r['function'].split('::')[-1] in names] for k,names in predicates.items()}
+producers['POOL.read_to_settlement']=[x for k in ['NIB-P1','NIB-P2','NIB-P3','NIB-P4'] for x in producers[k]]
+put('NKZ_OBLIGATIONS.json',dict(held_sites=held,exclusive_guard_owners=ownerrows,accessors=access,producers=producers,boundary_calls=bounds,runtime_cpi_readonly_entry7='ADDED-PENDING-LEAD; UNUSED. Does not cover token/system CPI or arbitrary callback/borrow/return continuity.',k086='NHP_K086: live exclusive data guard plus System-owned empty marker reaches infallible data_is_empty panic; production reachability/exclusion UNPROVED. Liveness/abort, not an accepted-spend exploit.',off_review='Pair withdrawal held site is cfg-disabled at Pool dispatch; generic MIR presence is retained, no physical exclusion proof supplied.'))
+s='# Pool physical obligations\n\nTarget not yet established. Inventory only; all retained held sites and exclusive-guard scopes remain OPEN; removed sites/owners are listed in NKZ_DIFF.md. NKZ_OBLIGATIONS.json retains every unresolved/SDK/std/indirect call with artifact and line, all current accessor sites, all owner source events, and numbered P1..P4 producers.\n\n| Held site | Numbered occurrence / scope | Exact guarded and passed layout |\n|---|---|---|\n'
+for x in held:s+='| `'+x['function']+'` | '+x['row']+' '+x['scope']+' | '+x['layout']+' |\n'
+s+='\nThe ASJW pair-withdrawal site is retained OFF because its dispatcher feature is absent. It is not evidence of an ON reached panic. Two held units remain in the ON union; the legacy transition callback was deleted. The checkpoint root remains ON; legacy close/cancel/prepared settlement were deleted.\n\n| Exclusive owner | Row / scope | Required next packet |\n|---|---|---|\n'
+for x in ownerrows:s+='| `'+x['function']+'` | '+x['row']+' '+x['scope']+' | '+x['necessary_packet']+' |\n'
+s+='\n| Composition obligation | Numbered producers | Remaining association |\n|---|---|---|\n'
+notes={'POOL.prefix_to_cpi':'Actual accepted prefix, exact selected CPI/meta/payload and live guards.', 'NIB-P1':'SAME CPI emission/program/context, immediate read and exact no-intervening-register-write frame.', 'NIB-P2':'Actual validation dictionary, every Result/error arm and SAME request/master/checkpoint/lane/result.', 'NIB-P3':'Actual lane dictionary and SAME state/carriers/image.', 'NIB-P4':'Complete settlement/withdrawal/account write, borrow, mutation and cleanup frame.', 'POOL.read_to_settlement':'Conditional NIB theorem retained; all P1..P4 production producers remain uninstantiated.'}
+for k,v in producers.items():s+='| '+k+' | '+', '.join(sorted({x['row'] for x in v}))+' | '+notes[k]+' |\n'
+s+='\nRuntimeEntrypointAdmission-Pool (ap) supplies valid/freshGuards/noExternalBorrows/liveAccount/counterZero/sharedCellsOnlyEqualKeys/duplicateKeysShareCell at initial entry only. It repairs the former missing entry premise. Caller uniqueness, reached layouts and preservation to the CPI remain to prove. S2TrustedSdkBorrow covers fifteen data-only fields; Rc clone/free, lamport borrows, assign/resize, CPI/reentrancy and token behavior are outside it. RuntimePersistence is data-only across the two transactions.\n\nRuntimeReturnData covers nonempty1..1024; RuntimeReturnDataClear covers empty clears. Neither supplies SAME invocation, selected program or caller register continuity. Clock binding covers slot only. RuntimeSha256Value supplies H realization, while native request/reply association remains. PDA op38 is quantified under(at), with seed/program/status/frame forwarding still required; no new PDA value trust.\n\nRuntimeCpiReadonlyEntry7 is PENDING and UNUSED. CPI/system/token program effects, Rent realization, stack-height value binding, lamport/assign/resize and Rc behavior have no blanket accepted row: NONE: would need a new trust row (owner decision) **if assumed**; a proof route can discharge them instead. This report proposes no such addition.\n\nK086: NHP_K086, `core::cell::panic_already_mutably_borrowed::do_panic::runtime`, core/cell.rs:898, “Kani doesn\'t support message formatted at runtime”; 1/1024 failed,12 unreachable. Source inspection explains the live-exclusive/System-empty/infallible-borrow mismatch. Production reachability/exclusion remains UNPROVED; it is liveness/abort, not a soundness counterexample.\n\nAll current accessor sites are numbered or explicitly OFF in NKZ_OBLIGATIONS.json. No accessor silently inherits initial counterZero at a later call.\n'
+md('NKZ_OBLIGATIONS.md',s)
+# Per-row tractability is an assessment, never a theorem result.
+failures={
+ 'guard':dict(job='NIE_',attempt='NIE_E002',diagnostic="Can't retrieve the variants of non-adt type: [(Generated_Types.PeIdent (\"solana_account_info\", 0)); (Generated_Types.PeIdent (\"AccountInfo\", 0))]",source='evidence/pool-b4-20261107/NIE_E002/stdout.log:1269-1273',relevance='Actual lane extraction hit opaque AccountInfo. This is a family obstruction, not a claimed run on this row.'),
+ 'close':dict(job='NIO_',attempt='NIO_K024 / NIO_K025',diagnostic='CBMC timed out.',source='evidence/pool-borrow2-20261107/NIO_K024/stdout.log:1876; NIO_FAILING_STEP.md',relevance='Actual close and its rejection prefix failed; assign/resize paired laws remain absent.'),
+ 'unique':dict(job='NIZ_',attempt='NIZ_K001 / NIZ_K003',diagnostic='CBMC timed out.',source='evidence/pool-borrow3-20261107/NIZ_K003/stdout.log:1852; NIZ_FAILING_STEP.md',relevance='Original key/uniqueness association is still OPEN; numeric separation and CFG cuts alone do not supply it.'),
+ 'checkpoint':dict(job='NIO_',attempt='NIO_K044 / NIO_K045',diagnostic='CBMC timed out.',source='evidence/pool-borrow2-20261107/NIO_K044/stdout.log:1934; NIO_FAILING_STEP.md',relevance='Checkpoint counter/copy/frame source association remains OPEN.'),
+ 'marker':dict(job='NHP_',attempt='NHP_K086',diagnostic="This is a placeholder message; Kani doesn't support message formatted at runtime",source='evidence/pool-b3-20261106/NHP_K086/stdout.log:1844-1845',relevance='Infallible marker data_is_empty reaches panic on stated live-exclusive prestate; production reachability/exclusion unproved.'),
+ 'init':dict(job='NIO_',attempt='NIO_K074 / NIO_K119 / NIO_K120',diagnostic='CBMC timed out.',source='evidence/pool-borrow2-20261107/NIO_FAILING_STEP.md',relevance='Fixed-prefix0..7 fragments are not the full original initializer/source/error law.')}
+assess=[]
+for r in allrows:
+ d=ast[r['function']];body=subprocess.check_output(['git','show',F+':'+r['source_file']],cwd=R)[d['body_range'][0]:d['body_range'][1]].decode();name=d['name'];hdr=' '.join(x['header'] for x in r['mir_headers']);callees=[e['callee_spelling'] for e in r['edges']]
+ sdk_d=any(re.search(r'(?:try_borrow|borrow_mut|data_is_empty|data_len|lamports|invoke_signed|program::invoke|::assign|::resize|::realloc|AccountInfo.*Clone)',c) for c in callees)
+ isD=r['function'] in ownerkeys or sdk_d or name in ['require_unique_accounts','require_unique','require_checkpoint_distinct','exact_transfer_account_infos_v1','exact_withdrawal_transfer_account_infos_v1']
+ if isD:
+  cls='D';why='Actual borrow/guard/cell/CPI or clone/accessor association meets predecessor family obstruction.'
+ elif (name.startswith(('process_','apply_','dispatch_','invoke_')) or len(r['callees'])>=4 and d['end']-d['start']>60):cls='C';why='Driver/call composition needs source-ordered (ai) cuts and CLOSED callee domains.'
+ elif 'Result<' in hdr or 'Box<' in hdr or name.startswith(('decode','encode','parse','validate','read','write')) or d['end']-d['start']>60 or any(x in body for x in ['.mul(','.square(']):cls='B';why='Decoder/arithmetic/Result/Box or loop family; full errors/effects and (ah)/(av)/(ay) interface required.'
+ else:cls='A';why='Small pure scalar/fixed-value helper candidate for NCO reference/extraction/native contract method.'
+ fail=None;route='NCO small-function route; matched controls, exact domain and deployed-feature/body parity remain required.'
+ if cls=='B':route='Prefer extracted borrow-minimal reference (av); documented extraction failure enables (ah)/(ay); source-ordered segments cover all Result/abort arms. Field products use Lean-discharged stubs only.'
+ if cls=='C':route='(ai)/(ai)(5)/(ar), bottom-up actual source cuts; no probes/free output dictionaries. (as) entry closes last; same inputs/carriers/effects and error prefixes required.'
+ if cls=='D':
+  kind='close' if any(z in name for z in ['close_program_account']) else 'unique' if 'unique' in name or 'distinct' in name else 'checkpoint' if 'checkpoint_with_runtime' in name else 'init' if 'initialize' in name else 'marker' if 'marker' in name else 'guard'
+  fail=failures[kind]
+  route='(ap) now supplies initial physical-cell/key relation only; (at) removes a PDA-value requirement only. (av) permits a guard-free value reference and (ay) actual-body segment contracts; these are candidate routes, not successful Pool whole-scope evidence. (ba) is field-specific; (bb) is batch Result/error-specific. Neither supplies Pool guard/CPI frames. Full original SAME-cell/callee/cleanup packets still needed; new native method or explicit owner trust decision needed for uncovered Rc/lamport/assign/resize/CPI semantics.'
+  owner=next((x for x in owners if x['function']==r['function']),None)
+  if owner:why+=' '+owner['unproved_fact']
+ rec=dict(row=r['id'],scope=r['scope'],function=r['function'],genuinely_new=r['genuinely_new'],class_=cls,reason=why,route=route,predecessor_failure=fail,assessment_only=True)
+ assess.append(rec)
+put('NKZ_TRACTABILITY.json',dict(rows=assess,new_on_counts=dict(collections.Counter(x['class_'] for x in assess if x['genuinely_new'] is True)),shared_on_counts=dict(collections.Counter(x['class_'] for x in assess if x['genuinely_new'] is False)),off_review_counts=dict(collections.Counter(x['class_'] for x in assess if x['scope'].startswith('OFF'))),warning='A/B/C/D are planning assessments. D cites exact family failures, not an invented per-row prover run. No D source function is called impossible.'))
+s='# Pool tractability assessment\n\nTarget not yet established. A=small pure helper; B=decoder/arithmetic/Result/Box; C=staged driver; D=predecessor borrow/guard/CPI obstruction. These are assessed routes, not proof results or solver predictions. Shared rows remain subject to SAME Pool caller domains; three retained Pool helper certificates are not re-promoted.\n\nThe native/SBF census and monomorphized function items preserve conservative alternatives; a generic emitted body is not physical production reachability. (ap) repairs initial admission only; (at) concerns op38 forwarding only; (av)/(ay) offer borrow-minimal references and actual-body segments, but no completed Pool guard/CPI packet. (ba)/(bb) do not widen SDK or runtime trust.\n\n| New row | Frozen function | Class | Reason / route |\n|---|---|---|---|\n'
+for x in assess:
+ if x['genuinely_new'] is True:s+='| '+x['row']+' | `'+x['function']+'` | '+x['class_']+' | '+x['reason']+' |\n'
+s+='\n## D predecessor failures and remaining routes\n\nEvery D item is listed below, including OFF review. A family failure is explicitly labelled when there was no exact row-specific run. No old timeout is scheduled for an unchanged replay.\n'
+for x in assess:
+ if x['class_']!='D':continue
+ f=x['predecessor_failure'];s+='\n- **'+x['row']+'** `'+x['function']+'` ('+x['scope']+'): '+f['job']+' '+f['attempt']+', diagnostic: “'+f['diagnostic']+'”. '+f['relevance']+' Source: `'+f['source']+'`. '+x['route']+'\n'
+md('NKZ_TRACTABILITY.md',s)
+# Actual measured predecessor throughput. No finite D extrapolation from zero rows.
+budgets=[]
+for dirname,prefix,k,l,e,closed in [('pool-prefix-20261105','NGG',120,60,2,0),('pool-retarget-20261105','NGK',0,110,0,0),('pool-leaves-20261105','NHC',120,67,2,1),('pool-settle-20261106','NIB',0,19,0,0),('pool-b3-20261106','NHP',120,23,2,2),('pool-b4-20261107','NIE',120,16,2,0),('pool-borrow-20261107','NIK',0,22,1,0),('pool-borrow2-20261107','NIO',120,22,1,0),('pool-borrow3-20261107','NIZ',37,30,0,0)]:
+ budgets.append(dict(job=prefix,evidence='evidence/'+dirname,kani_used=k,lean_aux_used=l,extraction_used=e,composed_helper_rows=closed,whole_pool_consumer_rows=0,helper_rows_per_job=closed))
+counts=collections.Counter(x['class_'] for x in assess if x['genuinely_new'] is True)
+# 1..2 helper rows per successful predecessor job is a sensitivity baseline only.
+abc=counts['A']+counts['B']+counts['C'];planning=[math.ceil(abc/2),abc]
+put('NKZ_ESTIMATE.json',dict(measured_predecessors=budgets,new_class_counts=dict(counts),abc_rows=abc,conditional_planning_job_slots=planning,unit='one predecessor-sized worker job (roughly120 Kani and60-90 Lean scopes plus extraction allowance); not a scope or elapsed-time measurement',assumption='A/B/C eventually achieve1..2 composed rows per job, borrowing ONLY successful helper job rates NHC1/NHP2. There is zero observed whole Pool-driver throughput; finite upper bound not empirically justified.',unconditional_empirical_range='No finite upper bound (zero completed whole Pool consumer rows in all predecessor jobs).',d_rows=counts['D'],d_estimate='Unbounded/unknown;0 complete guard owners across NIK/NIO/NIZ. Initial admission repair and newer routes are unmeasured for whole Pool scopes.',excludes='OFF owners and shared599 basis rows; includes the three retained helper occurrences among new-to-basis rows, without calling them new proof work.'))
+s=f'''# Pool estimate for the owner
+
+Target not yet established. This is an inventory and an estimate, with no proof credit.
+
+The conservative deployed spend/lifecycle union has {len(rows)} source occurrences. {len(shared)} match {inv['counts']['basis_rows_matched']} ledger19 verifier rows; {len(new)} are outside its599-row basis. {len(review)} OFF guard owners are separately numbered. The new-to-basis class counts are A {counts['A']}, B {counts['B']}, C {counts['C']}, D {counts['D']}. Three historical Pool helper certificates are retained within these counts; no new closure is claimed. Shared code still needs its Pool caller domains.
+
+The most relevant measured jobs closed only three helper rows: NHC one after120 Kani/67 Lean/2 extraction slots, NHP two after120/23/2. NGG, NGK, NIB, NIE, NIK, NIO and NIZ closed zero whole production Pool consumers. Historically,0/13 guard owners and0/4 held-boundary certificates were completed; removal is scope reduction, not proof closure. Local observations and model lemmas do not change those rates.
+
+For A/B/C ({abc} rows), applying the successful-helper rate of1–2 rows per predecessor-sized job gives a **conditional planning range of {planning[0]}–{planning[1]} job-slots**. This is a sensitivity estimate, not a measured forecast: decoders and drivers have no demonstrated comparable Pool throughput. The data justify **no finite upper bound**. Shared-body reuse and the three retained helpers may reduce work; Result/Box composition and actual error arms may increase it.
+
+D ({counts['D']} ON rows, plus the OFF review) has separate, unbounded uncertainty. Pool entry trust now supplies initial cell/key facts, and(av)/(ay) provide candidate reference/segment routes. Neither supplies original guard identity, Rc/lamport/assign/resize laws, returning CPI frames or token semantics. No unchanged predecessor timeout should be retried.
+
+Option A still requires the numbered prefix, same-CPI read and P1..P4 settlement producers in one admitted game. Option B reports the headline conditional on that external Pool association. This report makes neither owner decision and changes no trust. A bounded D pilot with exact whole-owner exit criteria is needed before a credible delivery estimate.
+'''
+md('NKZ_ESTIMATE.md',s)
+print('NKS assessment '+json.dumps(dict(new_classes=dict(counts),held_sites=len(held),owners=len(ownerrows),accessors=len(access),boundary_calls=len(bounds))))

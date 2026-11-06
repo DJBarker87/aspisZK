@@ -81,6 +81,26 @@ put('NKZ_CRATES.json',dict(project_compilers=externs,dependency_closure=external
 # Inventory never edits anything outside own prefix directory.
 changed=subprocess.check_output(['git','diff','--name-only',F,'--','crates','programs'],cwd=R,text=True).splitlines();assert not changed,changed
 large=[str(p.relative_to(E)) for p in E.rglob('*') if p.is_file() and p.stat().st_size>20_000_000];assert not large,large
+# Retarget-specific checks supplement (never weaken) NKS fail-closed checks.
+assert len(roots['roots'])==7
+assert {r['magic'] for r in roots['roots'] if r['classification']=='ON'}=={'AS8C','AS8D','ASQ8'}
+assert {r['magic'] for r in roots['roots'] if r['classification']=='OFF'}=={'AS8I','ASF8','ASJP','ASJW'}
+assert len(ob['accessors'])==15 and sum(x['accessor']=='data_is_empty' for x in ob['accessors'])==7
+assert sum(x['scope']=='ON_CONSERVATIVE_CLOSURE' for x in ob['held_sites'])==2
+assert sum(x['scope']=='ON_CONSERVATIVE_CLOSURE' for x in ob['exclusive_guard_owners'])==3
+baseline=json.loads((R/'evidence/pool-inventory-20261109/NKS_INVENTORY.json').read_text());previous={r['function']:r for r in baseline['rows']}
+assert len(previous)==613 and len(inv['rows'])==397
+assert all(r['function'] in previous for r in inv['rows'])
+assert [r['function'] for r in inv['rows'] if r['frozen_body_sha256']!=previous[r['function']]['frozen_body_sha256']]==[roots['entry']]
+diff=load('NKZ_DIFF.json');assert len(diff['removed_on_rows'])==216 and not diff['added_on_rows']
+assert sum(x['new_row'] is None for x in diff['guard_owner_dispositions'])==7
+assert sum(x['new_row'] is None for x in diff['held_site_dispositions'])==1
+assert diff['new_class_counts']=={k:dict(old=o,new=n,removed=o-n) for k,o,n in [('A',171,113),('B',235,124),('C',31,11),('D',57,30)]}
+assert sha((E/'NKZ_INVENTORY.json').read_bytes())==(E/'NKZ_INVENTORY.json.sha256').read_text().strip()
+det=load('NKZ_DETERMINISM.json');assert det['status']=='IDENTICAL' and det['first']==det['second']
+for n,h in det['second'].items():assert sha((E/n).read_bytes())==h,n
+for n in ['NKZ_ROOTS.md','NKZ_DIFF.md','NKZ_OVERLAP.md','NKZ_OBLIGATIONS.md','NKZ_TRACTABILITY.md','NKZ_ESTIMATE.md']:assert (E/n).exists()
+assert not subprocess.check_output(['git','diff','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387',F,'--','crates'],cwd=R)
 result=dict(status='PASS',controls=controls,counts=inv['counts'],frozen_revision=F,basis_sha256=sha((R/'evidence/ledger19-20261108/NKN_LEDGER.json.xz').read_bytes()),source_scripts={p.name:sha(p.read_bytes()) for p in E.glob('NKZ_*.py')},shipped_source_diff=[],formal_scopes=dict(Kani=0,Lean=0,MIR=0,extraction=0),proof_credit=0,target_established=False)
 put('NKZ_VALIDATION.json',result)
 print('NKS validation PASS: frozen body/graph/root/status checks; four corruption controls rejected; no shipped changes.')
