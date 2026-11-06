@@ -1,0 +1,42 @@
+--- NHR_stage.py
++++ NJS_NHR_stage.py
+@@ -150,15 +150,18 @@
+ 
+ def options(args, workspace, out):
+     root = 'crate::verifier::candidate::'+args.function
++    batch_roots = json.loads((E/'NJS_ROOTS.json').read_text()) if args.function == 'NJS_batch' else None
+     spec = json.loads(Path(args.opacity).read_text())
+     opacity = spec[args.function]
+     assert all(x['path'].startswith(('crate::','aspis_core::')) and x['why'] for x in opacity)
+     cmd = [str(TOOLROOT/'charon'),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--include','core::option::Option','--include','core::result::Result','--include','core::option::_::ok_or','--start-from',root]
++    if batch_roots:
++        i=cmd.index('--start-from'); cmd=cmd[:i]+[y for r in batch_roots for y in ['--start-from',r]]+cmd[i+2:]
+     for x in opacity: cmd += ['--opaque',x.get('selector',x['path'])]
+     for ty in spec['include_types']: cmd += ['--include',ty]
+     llbc = out/(args.function+'.llbc')
+     cmd += ['--dest-file',str(llbc),'--','--manifest-path',str(workspace/'crates/aspis-r1-cost-probe/Cargo.toml'),'--locked','--offline','--release','--lib','--jobs','1','--features',FEATURES]
+-    aeneas = [str(TOOLROOT/'aeneas-b59d5188-extended'),'-diagnose-translation','-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','NHR_'+args.function,'-dest',str(out/'raw'),'-subdir','NHR_'+args.function,'-split-files',str(llbc)]
++    aeneas = [str(TOOLROOT/'aeneas-b59d5188-extended'),'-diagnose-translation','-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace',('NJS_Extract' if batch_roots else 'NHR_'+args.function),'-dest',str(out/'raw'),'-subdir',('NJS_Extract' if batch_roots else 'NHR_'+args.function),'-split-files',str(llbc)]
+     return dict(charon_command=cmd,aeneas_command=aeneas,opacity=opacity,root=root)
+ 
+ def extract(args, workspace, out):
+@@ -166,7 +169,7 @@
+     pins = options(args,workspace,out)
+     for name,h in PINS.items(): assert sha((TOOLROOT/name).read_bytes())==h
+     pins.update(frozen_revision=REV,tools=PINS,lock_before=sha((workspace/'Cargo.lock').read_bytes()),manifest_sha256=sha((E/'NHR_STAGING_MANIFEST.json').read_bytes()),candidate_sha256=sha((workspace/'crates/aspis-r1-cost-probe/src/candidate.rs').read_bytes()))
+-    env = dict(os.environ,RUSTUP_TOOLCHAIN='nightly-2026-09-17',CARGO_TARGET_DIR=str(E/'NHR_target'),CARGO_NET_OFFLINE='true',CARGO_BUILD_JOBS='1',RUSTFLAGS='-Zthreads=1 -C link-arg=-Wl,--threads=1',RAYON_NUM_THREADS='1')
++    env = dict(os.environ,RUSTUP_TOOLCHAIN='nightly-2026-09-17',CARGO_TARGET_DIR=str(E/'NJS_target'),CARGO_NET_OFFLINE='true',CARGO_BUILD_JOBS='1',RUSTFLAGS='-Zthreads=1 -C link-arg=-Wl,--threads=1',RAYON_NUM_THREADS='1')
+     write(out/'NHR_PINS.json',pins); print(json.dumps(pins),flush=True)
+     try:
+         r = subprocess.run(pins['charon_command'],cwd=workspace,env=env); pins['charon_exit']=r.returncode
+@@ -213,8 +216,8 @@
+     p=argparse.ArgumentParser(description=__doc__)
+     modes=p.add_mutually_exclusive_group(required=True)
+     for name in ['export','check','extract','options']: modes.add_argument('--'+name,action='store_true')
+-    p.add_argument('--workspace',type=Path,default=E/'NHR_workspace'); p.add_argument('--out',type=Path,default=E/'NHR_preflight')
+-    p.add_argument('--cargo',default='/home/dombarker/.cargo/bin/cargo'); p.add_argument('--function',choices=['prepare','tx1','tx2_authenticated','tx2_common']); p.add_argument('--opacity',default=str(E/'NHR_OPACITY.json'))
++    p.add_argument('--workspace',type=Path,default=E/'NJS_workspace'); p.add_argument('--out',type=Path,default=E/'NHR_preflight')
++    p.add_argument('--cargo',default='/home/dombarker/.cargo/bin/cargo'); p.add_argument('--function',choices=['prepare','tx1','tx2_authenticated','tx2_common','NJS_batch']); p.add_argument('--opacity',default=str(E/'NHR_OPACITY.json'))
+     a=p.parse_args()
+     if a.export: export(); return 0
+     a.workspace=a.workspace.resolve(); a.out=a.out.resolve(); a.out.mkdir(parents=True,exist_ok=True)
