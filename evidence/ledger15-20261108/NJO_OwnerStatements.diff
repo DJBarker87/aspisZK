@@ -1,0 +1,20 @@
+--- NIU_OwnerStatements
++++ NJO_OwnerStatements
+@@ -1,9 +1,9 @@
+-import NJK_COMBINED_IMPORT
++import NJO_COMBINED_IMPORT
+ import Lean
+ open Lean Elab Command
+ set_option pp.all true
+ run_cmd do
+-  let manifest ← IO.ofExcept (Json.parse (← IO.FS.readFile "NJK_AUDIT_ROOTS.json"))
++  let manifest ← IO.ofExcept (Json.parse (← IO.FS.readFile "NJO_AUDIT_ROOTS.json"))
+   let roots ← IO.ofExcept (manifest.getObjValAs? (Array String) "roots")
+   let env ← getEnv
+   for root in roots do
+@@ -14,4 +14,4 @@
+     let row := Json.mkObj [("root",toJson root),
+       ("owner_module",toJson env.header.moduleNames[idx]!.toString),
+       ("obligation_statement",toJson statement.pretty)]
+-    logInfo m!"NJK_OWNER {row.compress}"
++    logInfo m!"NJO_OWNER {row.compress}"
