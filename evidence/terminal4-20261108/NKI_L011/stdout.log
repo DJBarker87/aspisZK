@@ -1,0 +1,32 @@
+NKI_RightTarget.lean:9:39: warning: Variable name `p` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+theorem AspisR1.NKI_RightTarget.source : ∀ (d : D), dc d → ∃ p, True :=
+fun d hd =>
+  have hc := hd (dcells d 7) (List.getElem_mem (NJB_ArrayCarrier.cell._proof_1 d ⟨↑7, dcells._proof_2 7⟩));
+  let ⟨t, h✝⟩ := NKI_TweakScalar.source (dcells d 7) hc
+  let ⟨ct, right✝⟩ := h✝
+  let ⟨vt, ht⟩ := right✝
+  have value :=
+    Eq.mpr
+      (id
+        (congrArg (Eq ↑t)
+          (Eq.trans
+            (ite_congr
+              (Eq.trans
+                (congr (congrArg And (eq_self true))
+                  (Eq.trans
+                    (congrFun'
+                      (congrArg Eq
+                        (have this := rfl;
+                        this))
+                      7)
+                    (eq_self 7)))
+                (and_self True))
+              (fun a => Eq.refl ((↑(dcells d 7) + 1095962629) % 2147483647)) fun a => Eq.refl ↑(dcells d 7))
+            (if_true ((↑(dcells d 7) + 1095962629) % 2147483647) ↑(dcells d 7)))))
+      vt;
+  Exists.intro { last := t, call := ct, bound := ht, value := value } True.intro
+'AspisR1.NKI_RightTarget.source' depends on axioms: [propext, Classical.choice, Quot.sound]

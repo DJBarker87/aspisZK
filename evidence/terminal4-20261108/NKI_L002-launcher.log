@@ -1,0 +1,54 @@
+{"attempt": "NKI_L002", "exit_status": 0, "wall_seconds": 8.666715031024069, "peak_rss_kib": "6140376", "swaps": "0", "print_axioms": []}
+def FIq_Native.pool_v1.pair_forest_semantic_terminal.public_digest_lanes : FIq_Native.pool_v1.pair_forest_semantic_terminal.SemanticPublic →
+  FIq_Native.state_only_poseidon.StateOnlyPoseidonOpenings →
+    FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors →
+      Aeneas.Std.Result (Aeneas.Std.Array FIq_Native.field.QM31 8#usize) :=
+fun public1 openings selectors =>
+  have digests := Aeneas.Std.Array.repeat 8#usize FIq_Native.field.QM31.ZERO;
+  do
+  let i ← 56#usize * 16#usize
+  let i1 ← i + 11#usize
+  let q ← selectors.row i1
+  let digests1 ←
+    FIq_Native.pool_v1.pair_forest_semantic_terminal.add_digest_binding digests q openings.z 0#usize public1.anchor
+        false
+  let i2 ← 26#us
+...
+l.reconstruct_10 openings3.succ_z
+  let i ← 1#u32 <<< 10#i32
+  let q7 ← q6.mul_m31 i
+  let q8 ← q5.add q7
+  let q9 ← FIq_Native.pool_v1.pair_forest_semantic_terminal.reconstruct_10 openings3.xor12_z
+  let i1 ← 1#u32 <<< 20#i32
+  let q10 ← q9.mul_m31 i1
+  let reconstructed ← q8.add q10
+  let q11 ← openings3.z.index_usize 10#usize
+  let q12 ← q11.sub reconstructed
+  let range4 ← range3.update 30#usize q12
+  let q13 ← openings3.succ_z.index_usize 10#usize
+  let range5 ← range4.update 31#usize q13
+  let q14 ← openings3.xor12_z.index_usize 10#usize
+  let range6 ← range5.update 32#usize q14
+  let (iter, into_iter_back) ← FIq_Native.MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter range6
+  let (im, back) ←
+    FIq_Native.pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop3 iter (fun im1 => im1) range_selector
+  have im1 : Aeneas.Std.core.slice.iter.IterMut FIq_Native.field.QM31 := back im
+  have range7 : Aeneas.Std.Array FIq_Native.field.QM31 33#usize := into_iter_back im1
+  let packed1 ← FIq_Native.pool_v1.pair_forest_semantic_terminal.add_preweighted packed 49#usize range7
+  let i2 ← 16#usize * FIq_Native.pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+  let i3 ← i2 + 6#usize
+  let conservation_selector ← selectors.row i3
+  let q15 ← openings3.z.index_usize 0#usize
+  let q16 ← openings3.z.index_usize 1#usize
+  let q17 ← q15.sub q16
+  let q18 ← openings3.z.index_usize 2#usize
+  let q19 ← q17.sub q18
+  let q20 ← conservation_selector.mul q19
+  let q21 ← openings3.succ_z.index_usize 0#usize
+  let q22 ← openings3.succ_z.index_usize 1#usize
+  let q23 ← q21.sub q22
+  let q24 ← conservation_selector.mul q23
+  FIq_Native.pool_v1.pair_forest_semantic_terminal.add_preweighted packed1 82#usize
+      (Aeneas.Std.Array.make 2#usize [q20, q24] ⋯)
+
+Running as unit: run-r38b7256190d9478982122203128cc0a6.scope; invocation ID: 02ac261299484686bc4c3efece543828

@@ -1,0 +1,32 @@
+{"attempt": "NKI_L005", "exit_status": 1, "wall_seconds": 15.801062302896753, "peak_rss_kib": "7168576", "swaps": "0", "print_axioms": ["'AspisR1.NKI_DigestTargets.canonical' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NKI_DigestTargets.values' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NKI_DigestTargets.source' depends on axioms: [propext, Classical.choice, Quot.sound, source]"]}
+NKI_DigestTargets.lean:34:8: error: (kernel) excessive memory consumption detected
+theorem AspisR1.NKI_DigestTargets.source : ∀ (d : D) (right : Bool), dc d → ∃ p, True :=
+fun d right hd =>
+  have hc := fun i => hd (dcells d i) (List.getElem_mem (NJB_ArrayCarrier.cell._proof_1 d ⟨↑i, dcells._proof_2 i⟩));
+  Bool.casesOn (motive := fun t => right = t → ∃ p, True) right
+    (fun h => Eq.symm h ▸ Exists.intro { last := dcells d 7, call := rfl, bound := hc 7, value := rfl } True.intro)
+    (fun h =>
+      Eq.symm h ▸
+        let ⟨t, h✝⟩ := NJX_AppendTargets.source (dcells d) hc
+        let ⟨ct, right✝⟩ := h✝
+        let ⟨vt, ht⟩ := right✝
+        Exists.intro { last := t, call := ct, bound := ht
+...
+NKI_DigestTargets.lean:34:8: error: (kernel) excessive memory consumption detected
+theorem AspisR1.NKI_DigestTargets.source : ∀ (d : D) (right : Bool), dc d → ∃ p, True :=
+fun d right hd =>
+  have hc := fun i => hd (dcells d i) (List.getElem_mem (NJB_ArrayCarrier.cell._proof_1 d ⟨↑i, dcells._proof_2 i⟩));
+  Bool.casesOn (motive := fun t => right = t → ∃ p, True) right
+    (fun h => Eq.symm h ▸ Exists.intro { last := dcells d 7, call := rfl, bound := hc 7, value := rfl } True.intro)
+    (fun h =>
+      Eq.symm h ▸
+        let ⟨t, h✝⟩ := NJX_AppendTargets.source (dcells d) hc
+        let ⟨ct, right✝⟩ := h✝
+        let ⟨vt, ht⟩ := right✝
+        Exists.intro { last := t, call := ct, bound := ht 7, value := vt } True.intro)
+    (Eq.refl right)
+'AspisR1.NKI_DigestTargets.canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKI_DigestTargets.values' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKI_DigestTargets.source' depends on axioms: [propext, Classical.choice, Quot.sound, source]
+
+Running as unit: run-rfe663edff169411fbf53ee4512393230.scope; invocation ID: 946a13d480bd48cfbdc46083a1b08008

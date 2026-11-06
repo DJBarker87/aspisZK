@@ -1,0 +1,16 @@
+NKI_DigestTargets.lean:34:8: error: (kernel) excessive memory consumption detected
+theorem AspisR1.NKI_DigestTargets.source : ∀ (d : D) (right : Bool), dc d → ∃ p, True :=
+fun d right hd =>
+  have hc := fun i => hd (dcells d i) (List.getElem_mem (NJB_ArrayCarrier.cell._proof_1 d ⟨↑i, dcells._proof_2 i⟩));
+  Bool.casesOn (motive := fun t => right = t → ∃ p, True) right
+    (fun h => Eq.symm h ▸ Exists.intro { last := dcells d 7, call := rfl, bound := hc 7, value := rfl } True.intro)
+    (fun h =>
+      Eq.symm h ▸
+        let ⟨t, h✝⟩ := NJX_AppendTargets.source (dcells d) hc
+        let ⟨ct, right✝⟩ := h✝
+        let ⟨vt, ht⟩ := right✝
+        Exists.intro { last := t, call := ct, bound := ht 7, value := vt } True.intro)
+    (Eq.refl right)
+'AspisR1.NKI_DigestTargets.canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKI_DigestTargets.values' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKI_DigestTargets.source' depends on axioms: [propext, Classical.choice, Quot.sound, source]

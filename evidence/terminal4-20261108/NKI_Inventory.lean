@@ -3,7 +3,7 @@ import NJX_AppendTargets
 import NJX_AppendFold
 import NJX_InitialLane
 import NJX_RangeFrame
-#print FIq_Native.pool_v1.pair_forest_semantic_terminal.append_level
-#print FIq_Native.pool_v1.pair_forest_semantic_terminal.append_lanes
-#print FIq_Native.pool_v1.pair_forest_semantic_terminal.absorption_lanes_factored
-#print FIq_Native.pool_v1.pair_forest_semantic_terminal.initial_lanes_factored
+#print FIq_Native.pool_v1.pair_forest_semantic_terminal.public_digest_lanes
+#print FIq_Native.pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption
+#print FIq_Native.pool_v1.pair_forest_semantic_terminal.absorption_lanes_literal
+#print FIq_Native.pool_v1.pair_forest_semantic_terminal.add_value_lanes
