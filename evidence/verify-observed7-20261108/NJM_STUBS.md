@@ -1,5 +1,9 @@
-# NJM stubs
+# NJM stubs and retained trust
 
-No new Kani stubs or contracts yet. Existing NIX/NJG packets are reused read-only with their original domains, exact KMX patch and matched controls. Field multiplication is never submitted to Kani. Existing field stub/Lean tables remain binding; no unpaired field stub is counted.
+No new field arithmetic stub or function contract is introduced. No field multiplication was submitted to Kani. NIX/NJG cuts and CLOSED child bridges are imported with their original domains and matched controls; see NJM_CUTS.md. Digest values remain the existing runtime realization, with exact call/effect slices preserved. No runtime or cryptographic trust row is added, removed, or widened. Native-cut semantic transport is the owner-approved P6/D188 option-A RECLASSIFICATION.
 
-All native logs remain local records; no writable static or function-pointer-dependent verdict is introduced. No quarantine is lifted. No trust row is added or removed.
+The only new memory stub is the exact KMX replacement `core::ptr::copy_nonoverlapping -> crate::NJM_kmx::KMX_copy_nonoverlapping`, with patch SHA256 `bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67`. Domain: initialized Copy source cells, valid aligned disjoint destination/source ranges and in-bounds counts. Its value/frame interpretation is the retained `KMX_CopyMeaning.loop_spec`, `copy_prefix`, `copy_frame`, and `realloc_prefix` family; NJG row-window/prefix composition is reused. No worker-written copy stub is used.
+
+Current native support: unrestricted data-borrow pair K011/K012, and arbitrary whole-payload Box value/allocation-identity K006 with failing controls K007/K008. Every run validates the resolved frozen dependency graph before Kani, is offline, uses deployed features, and checks the unchanged frozen lock afterward. Exact tables and classifications are in NJM_NATIVE_RESULTS.json. K005/K002 are excluded for their stronger sparse-row precondition. K009 timed out and was replaced by the changed buffer-borrow shape; K010 was never launched. None of these partial129 checks closes129 or fills the missing extracted safe-reference obligation. No Option<fn>, writable-static, or function-pointer-dependent pass is credited.
+
+Std constructors, scalar indexing and fixed-array operations at the three positive roots use their source equations and the retained (au) interpretation; no free Std/allocator Bool is a root premise. The unsafe allocation/write129 route is explicitly OPEN. RuntimeCpiReadonlyEntry7 is not used.

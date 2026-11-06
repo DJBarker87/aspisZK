@@ -15,7 +15,7 @@ for p in sorted(E.glob('NJM_*.lean')):
   assert 'sorryAx' not in line,line
   m=re.match("'([^']+)'",line)
   if m and m[1] not in roots:roots.append(m[1])
-assert {'NJM_RoundPacket','NJM_RoundsPacket','NJM_CircleRoot','NJM_CircleInvalid'}.issubset({x['module'] for x in mods})
+assert {'NJM_InvocationRoots','NJM_RoundAllArgs','NJM_RoundsClosed','NJM_CircleRoot','NJM_CircleInvalid'}.issubset({x['module'] for x in mods})
 (E/'NJM_MODULES.json').write_text(json.dumps(mods,indent=2)+'\n')
 (E/'NJM_EXCLUDED_DRAFTS.json').write_text(json.dumps(excluded,indent=2)+'\n')
 (E/'NJM_AUDIT_ROOTS.json').write_text(json.dumps(dict(groups=[roots[i:i+24] for i in range(0,len(roots),24)]),indent=2)+'\n')
@@ -28,7 +28,7 @@ for path in [E.parent/'ledger14-20261108/NJK_EXPECTED_IMPORTS.jsonl',E.parent/'v
   rows[n]=x
 for n in ['NJM_COMBINED_IMPORT',*[m['module'] for m in mods]]:
  text=(E/(n+'.lean')).read_text();imports=re.findall(r'^import ([\w.]+)',text,re.M)
- rows[n]=dict(module=n,imports=imports)
+ rows[n]=dict(module=n,imports=list(dict.fromkeys(["Init",*imports])))
 (E/'NJM_EXPECTED_IMPORTS.jsonl').write_text(''.join(json.dumps(rows[n])+'\n' for n in sorted(rows)))
 (E/'NJM_IMPORT_VARIANTS.json').write_text(json.dumps(variants,indent=2)+'\n')
 (E/'NJM_AUDIT_MODULES.json').write_text(json.dumps([m['module'] for m in mods],indent=2)+'\n')

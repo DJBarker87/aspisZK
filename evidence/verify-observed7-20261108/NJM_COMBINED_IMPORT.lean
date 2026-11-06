@@ -8,24 +8,33 @@ import NJM_CircleJoin
 import NJM_CircleNative
 import NJM_CirclePacket
 import NJM_CircleRoot
+import NJM_InvocationRoots
 import NJM_RecordDomain
 import NJM_RoundAdmissible
+import NJM_RoundAllArgs
 import NJM_RoundArgs
 import NJM_RoundContinuation
 import NJM_RoundDomainJoin
 import NJM_RoundJoin
+import NJM_RoundJoined
 import NJM_RoundNative
 import NJM_RoundNormalized
 import NJM_RoundPacket
 import NJM_RoundRoot
 import NJM_RoundStage
 import NJM_RoundValue
+import NJM_RoundsCanonical
+import NJM_RoundsClosed
+import NJM_RoundsCut
+import NJM_RoundsInduction
 import NJM_RoundsInvariant
 import NJM_RoundsJoin
 import NJM_RoundsNative
 import NJM_RoundsPacket
 import NJM_RoundsStart
+import NJM_RoundsTransport
 import NJM_SemanticDomain
+import NJM_TranscriptFrame
 #print axioms AspisR1.RPx_Deployed.deployed
 #print axioms AspisR1.NJM_ChildDomain.bind_good
 #print axioms AspisR1.NJM_ChildDomain.block
@@ -48,15 +57,20 @@ import NJM_SemanticDomain
 #print axioms AspisR1.NJM_CirclePacket.returned
 #print axioms AspisR1.NJM_CircleRoot.branch
 #print axioms AspisR1.NJM_CircleRoot.source
+#print axioms AspisR1.NJM_InvocationRoots.round
+#print axioms AspisR1.NJM_InvocationRoots.rounds
+#print axioms AspisR1.NJM_InvocationRoots.circle
 #print axioms AspisR1.NJM_RecordDomain.round
 #print axioms AspisR1.NJM_RecordDomain.semantic
 #print axioms AspisR1.NJM_RoundAdmissible.returning
 #print axioms AspisR1.NJM_RoundAdmissible.skipped
+#print axioms AspisR1.NJM_RoundAllArgs.source
 #print axioms AspisR1.NJM_RoundArgs.success
 #print axioms AspisR1.NJM_RoundContinuation.success
 #print axioms AspisR1.NJM_RoundContinuation.error
 #print axioms AspisR1.NJM_RoundDomainJoin.all
 #print axioms AspisR1.NJM_RoundJoin.prepared
+#print axioms AspisR1.NJM_RoundJoined.source
 #print axioms AspisR1.NJM_RoundNative.alpha
 #print axioms AspisR1.NJM_RoundNative.rejected
 #print axioms AspisR1.NJM_RoundNative.boundary
@@ -70,6 +84,15 @@ import NJM_SemanticDomain
 #print axioms AspisR1.NJM_RoundValue.canonical
 #print axioms AspisR1.NJM_RoundValue.update
 #print axioms AspisR1.NJM_RoundValue.value
+#print axioms AspisR1.NJM_RoundsCanonical.chain
+#print axioms AspisR1.NJM_RoundsCanonical.ten
+#print axioms AspisR1.NJM_RoundsClosed.source
+#print axioms AspisR1.NJM_RoundsClosed.canonical
+#print axioms AspisR1.NJM_RoundsCut.source
+#print axioms AspisR1.NJM_RoundsCut.arguments
+#print axioms AspisR1.NJM_RoundsInduction.one_source
+#print axioms AspisR1.NJM_RoundsInduction.source
+#print axioms AspisR1.NJM_RoundsInduction.rounds
 #print axioms AspisR1.NJM_RoundsInvariant.step
 #print axioms AspisR1.NJM_RoundsInvariant.cons_run
 #print axioms AspisR1.NJM_RoundsJoin.step_eq
@@ -81,5 +104,11 @@ import NJM_SemanticDomain
 #print axioms AspisR1.NJM_RoundsPacket.entered
 #print axioms AspisR1.NJM_RoundsStart.initial
 #print axioms AspisR1.NJM_RoundsStart.packet
+#print axioms AspisR1.NJM_RoundsTransport.roundtrip
+#print axioms AspisR1.NJM_RoundsTransport.source_frame
 #print axioms AspisR1.NJM_SemanticDomain.source
 #print axioms AspisR1.NJM_SemanticDomain.code
+#print axioms AspisR1.NJM_TranscriptFrame.bind_frame
+#print axioms AspisR1.NJM_TranscriptFrame.block
+#print axioms AspisR1.NJM_TranscriptFrame.semantic
+#print axioms AspisR1.NJM_TranscriptFrame.round

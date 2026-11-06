@@ -1,0 +1,41 @@
+{"attempt": "NJM_L078", "exit_status": 1, "wall_seconds": 8.531225126003847, "peak_rss_kib": "6115744", "swaps": "0", "print_axioms": ["'AspisR1.NJM_RoundJoined.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJM_RoundsClosed.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJM_CircleRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJM_CircleInvalid.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NJM_generated/NJM_Statements.lean:7:0: error: Unknown option `pp.width`
+@NJM_InvocationRoots.round : ∀ {H : Type} (D : aspis_core.Digest32 H) (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (before : r1_wire.SemanticTranscript H) (a : NIX_CertificateFrames.Alpha) (running : NJM_InvocationRoots.Q)
+  (r : Fin 10),
+  match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+  | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre) =>
+    NJM_RoundsClosed.Child D bytes pre parsed before a running (NJM_InvocationRoots.index r) ⋯
+  | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err a) => True
+  | Aeneas.Std.Result.fail e => True
+  | Aeneas.Std.Result.div => True
+@NJM_Invo
+...
+core.result.Result NJM_CircleJoin.Point r1_wire.Error × r1_wire.SemanticTranscript H) :=
+fun {H} D t record => NJM_CircleCode.dispatch D t record record.row
+def AspisR1.NJM_CirclePacket.inputs : {Pointer H : Type} →
+  NIX_DispatchCut.Pre Pointer →
+    r1_wire.ValidatedRecord →
+      FinishModel.CircleRow →
+        r1_wire.SemanticTranscript H →
+          r1_wire.SemanticTranscript H → NIX_DispatchCut.Reply → NIX_DispatchCut.Pre Pointer :=
+fun {Pointer H} template record row before after reply =>
+  { pointer := template.pointer, framed := record.framed, row := NJM_CirclePacket.tag row, state := before.state,
+    next := before.next_row, newState := after.state, newNext := after.next_row, reply := reply,
+    point := template.point, count := 0, frame := template.frame, oldState := template.oldState,
+    oldSample := template.oldSample }
+def AspisR1.NJM_CircleNative.install : {Pointer : Type} → NIX_DispatchCut.Pre Pointer → NIX_DispatchCut.Pre Pointer :=
+fun {Pointer} s =>
+  { pointer := s.pointer, framed := s.framed, row := s.row, state := s.state, next := s.next, newState := s.newState,
+    newNext := s.newNext, reply := s.reply,
+    point :=
+      match s.reply with
+      | Aeneas.Std.core.result.Result.Ok b => NJM_CircleJoin.point b (NJM_CircleNative.row s.row)
+      | Aeneas.Std.core.result.Result.Err a => s.point,
+    count := s.count, frame := s.frame, oldState := s.oldState, oldSample := s.oldSample }
+'AspisR1.NJM_RoundJoined.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJM_RoundsClosed.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJM_CircleRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJM_CircleInvalid.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r941947301b3641bd86cdbf0acf093bca.scope; invocation ID: 9160a4dc85444c159b52e74e18d80936

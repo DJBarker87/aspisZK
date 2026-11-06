@@ -1,0 +1,470 @@
+# Exact printed root statements and inventories
+
+Successful L087 prints the three public roots and their expanded Child/Cut/Circle/Args definitions. All print only standard axioms. This records the final current sources used in L086 and L085/L088/L089.
+
+```text
+@NJM_InvocationRoots.round : ∀ {H : Type} (D : aspis_core.Digest32 H) (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (before : r1_wire.SemanticTranscript H) (a : NIX_CertificateFrames.Alpha) (running : NJM_InvocationRoots.Q)
+  (r : Fin 10),
+  match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+  | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre) =>
+    NJM_RoundsClosed.Child D bytes pre parsed before a running (NJM_InvocationRoots.index r) ⋯
+  | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err a) => True
+  | Aeneas.Std.Result.fail e => True
+  | Aeneas.Std.Result.div => True
+@NJM_InvocationRoots.rounds : ∀ {H : Type} (native : NJM_RoundsCut.Observations),
+  NJM_RoundsCut.Cut native →
+    ∀ (token frame : ℕ) (D : aspis_core.Digest32 H) (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+      (t : r1_wire.SemanticTranscript H),
+      match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+      | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre) =>
+        (∃ running,
+            PreparedHashCode.run (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) t) =
+              NJM_RoundsInduction.chain native token frame D (PrefixAdapter.fromOld pre) NJG_RoundsCode.sites
+                (running, Aeneas.Std.Array.repeat 10#usize aspis_core.field.QM31.ZERO, t)) ∧
+          ∀ (r : Aeneas.Std.Usize) (member : r ∈ NJG_RoundsCode.sites) (carry : NJG_RoundsCode.Carry H),
+            NJM_RoundsClosed.Child D bytes pre parsed carry.2.2 carry.2.1 carry.1 r ⋯
+      | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err a) => True
+      | Aeneas.Std.Result.fail e => True
+      | Aeneas.Std.Result.div => True
+@NJM_InvocationRoots.circle : ∀ {Pointer H : Type} (D : aspis_core.Digest32 H) (template : NIX_DispatchCut.Pre Pointer)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (before : r1_wire.SemanticTranscript H) (slot : Fin 27),
+  match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+  | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre) =>
+    ∃ record,
+      (PrefixAdapter.fromOld pre).validated_record (NJM_InvocationRoots.row slot) =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok record) ∧
+        record.row = NJM_InvocationRoots.row slot ∧ NJM_InvocationRoots.Circle D template before record
+  | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err a) => True
+  | Aeneas.Std.Result.fail e => True
+  | Aeneas.Std.Result.div => True
+def AspisR1.NJM_InvocationRoots.Circle : {Pointer H : Type} →
+  aspis_core.Digest32 H → NIX_DispatchCut.Pre Pointer → r1_wire.SemanticTranscript H → r1_wire.ValidatedRecord → Prop :=
+fun {Pointer H} D template before record =>
+  (↑record.framed).length ≤ 3717 ∧
+    (record.row = 25#u8 → NJM_CircleRoot.Branch D template before record FinishModel.CircleRow.First) ∧
+      (record.row = 26#u8 → NJM_CircleRoot.Branch D template before record FinishModel.CircleRow.Second) ∧
+        (record.row ≠ 25#u8 →
+          record.row ≠ 26#u8 →
+            ∀ (post : NIX_DispatchCut.Post Pointer),
+              NIX_DispatchCut.cut (NJM_CircleNative.install (NJM_CircleInvalid.inputs template record before)) post →
+                PreparedHashCode.run (NJM_CircleCode.source D before record) =
+                    ([], Aeneas.Std.Result.ok (post.result, before)) ∧
+                  post.transcriptState = before.state ∧
+                    post.transcriptNext = before.next_row ∧ post.count = 0 ∧ post.frame = template.frame)
+@NJM_RoundJoined.source : ∀ {H : Type} (D : aspis_core.Digest32 H) (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix),
+  AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre) →
+    ∀ (before : r1_wire.SemanticTranscript H) (a : NIX_CertificateFrames.Alpha) (running : NIX_CertificateFrames.Q)
+      (r : Aeneas.Std.Usize) (bound : ↑r < 10),
+      ∃ record p b,
+        (PrefixAdapter.fromOld pre).validated_record (NJG_RoundProducer.row r bound) =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok record) ∧
+          AspisS1ExtractedRoundChildren.decodeMain 28#usize record 0#usize =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok p) ∧
+            AspisS1ExtractedRoundChildren.generatedMainBoundary p = Aeneas.Std.Result.ok b ∧
+              NJM_RoundRoot.Cases D record p b running a r before
+                  (PreparedHashCode.run
+                    (S1SemanticCode.roundStep NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) before a running r)) ∧
+                record.row = NJG_RoundProducer.row r bound ∧
+                  (↑record.framed).length = 901 ∧
+                    (∀ (template : NIX_CertificateFrames.RoundPre),
+                        NIX_CertificateFrames.domain
+                          (NJM_RoundStage.install
+                            { prefixToken := template.prefixToken, framed := template.framed, round := template.round,
+                              alpha := template.alpha, running := template.running, beforeState := template.beforeState,
+                              beforeNext := template.beforeNext, polynomial := template.polynomial,
+                              boundary := template.boundary, semantic := template.semantic,
+                              newState := template.newState, newNext := template.newNext, value := template.value,
+                              count := 0, frame := template.frame, seed := template.seed, oldState := template.oldState,
+                              times := template.times }
+                            record p b running a r before before
+                            (Aeneas.Std.core.result.Result.Ok aspis_core.field.QM31.ZERO) aspis_core.field.QM31.ZERO)) ∧
+                      (∀ (reply : Aeneas.Std.core.result.Result aspis_core.field.QM31 r1_wire.Error)
+                          (after : r1_wire.SemanticTranscript H),
+                          (PreparedHashCode.run (S1SemanticCode.semanticValidated D before record)).2 =
+                              Aeneas.Std.Result.ok (reply, after) →
+                            ∀ (template : NIX_CertificateFrames.RoundPre) (value : NIX_CertificateFrames.Q),
+                              NIX_CertificateFrames.domain
+                                (NJM_RoundStage.install
+                                  { prefixToken := template.prefixToken, framed := template.framed,
+                                    round := template.round, alpha := template.alpha, running := template.running,
+                                    beforeState := template.beforeState, beforeNext := template.beforeNext,
+                                    polynomial := template.polynomial, boundary := template.boundary,
+                                    semantic := template.semantic, newState := template.newState,
+                                    newNext := template.newNext, value := template.value, count := 0,
+                                    frame := template.frame, seed := template.seed, oldState := template.oldState,
+                                    times := template.times }
+                                  record p b running a r before after reply value)) ∧
+                        ∀ (after : r1_wire.SemanticTranscript H) (q : NIX_CertificateFrames.Q),
+                          (PreparedHashCode.run (S1SemanticCode.semanticValidated D before record)).2 =
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok q, after) →
+                            b = running →
+                              ∀ (template : NIX_CertificateFrames.RoundPre) (value : NIX_CertificateFrames.Q)
+                                (pointer : ℕ) (k : Fin 28) (j : Fin 10) (z : Fin 32)
+                                (log : NIX_CertificateFrames.RoundLog),
+                                NIX_CertificateFrames.roundArgs
+                                    (NJM_RoundStage.install
+                                      { prefixToken := template.prefixToken, framed := template.framed,
+                                        round := template.round, alpha := template.alpha, running := template.running,
+                                        beforeState := template.beforeState, beforeNext := template.beforeNext,
+                                        polynomial := template.polynomial, boundary := template.boundary,
+                                        semantic := template.semantic, newState := template.newState,
+                                        newNext := template.newNext, value := template.value, count := 0,
+                                        frame := template.frame, seed := template.seed, oldState := template.oldState,
+                                        times := template.times }
+                                      record p b running a r before after (Aeneas.Std.core.result.Result.Ok q) value)
+                                    pointer k j z log →
+                                  NJM_RoundJoined.Calls template record p a r before q pointer k j z log
+@NJM_RoundsClosed.source : ∀ {H : Type} (native : NJM_RoundsCut.Observations),
+  NJM_RoundsCut.Cut native →
+    ∀ (token frame : ℕ) (D : aspis_core.Digest32 H) (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+      (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix)
+      (parsed :
+        AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre))
+      (t : r1_wire.SemanticTranscript H),
+      (∃ running,
+          PreparedHashCode.run (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) t) =
+            NJM_RoundsInduction.chain native token frame D (PrefixAdapter.fromOld pre) NJG_RoundsCode.sites
+              (running, Aeneas.Std.Array.repeat 10#usize aspis_core.field.QM31.ZERO, t)) ∧
+        ∀ (r : Aeneas.Std.Usize) (member : r ∈ NJG_RoundsCode.sites) (carry : NJG_RoundsCode.Carry H),
+          NJM_RoundsClosed.Child D bytes pre parsed carry.2.2 carry.2.1 carry.1 r ⋯
+@NJM_CircleRoot.source : ∀ {Pointer H : Type} (D : aspis_core.Digest32 H) (template : NIX_DispatchCut.Pre Pointer)
+  (before : r1_wire.SemanticTranscript H) (record : r1_wire.ValidatedRecord),
+  (↑record.framed).length ≤ 3717 →
+    (record.row = 25#u8 → NJM_CircleRoot.Branch D template before record FinishModel.CircleRow.First) ∧
+      (record.row = 26#u8 → NJM_CircleRoot.Branch D template before record FinishModel.CircleRow.Second) ∧
+        (record.row ≠ 25#u8 →
+          record.row ≠ 26#u8 →
+            PreparedHashCode.run (NJM_CircleCode.source D before record) =
+              ([], Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err r1_wire.Error.InvalidRow, before)))
+@NJM_CircleRoot.branch : ∀ {Pointer H : Type} (D : aspis_core.Digest32 H) (template : NIX_DispatchCut.Pre Pointer)
+  (before : r1_wire.SemanticTranscript H) (record : r1_wire.ValidatedRecord) (row : FinishModel.CircleRow),
+  (↑record.framed).length ≤ 3717 → NJM_CircleRoot.Branch D template before record row
+@NJM_CircleInvalid.source : ∀ {Pointer H : Type} (D : aspis_core.Digest32 H) (template : NIX_DispatchCut.Pre Pointer)
+  (record : r1_wire.ValidatedRecord) (before : r1_wire.SemanticTranscript H),
+  record.row ≠ 25#u8 →
+    record.row ≠ 26#u8 →
+      ∀ (post : NIX_DispatchCut.Post Pointer),
+        NIX_DispatchCut.cut (NJM_CircleNative.install (NJM_CircleInvalid.inputs template record before)) post →
+          PreparedHashCode.run (NJM_CircleCode.source D before record) =
+              ([], Aeneas.Std.Result.ok (post.result, before)) ∧
+            post.transcriptState = before.state ∧
+              post.transcriptNext = before.next_row ∧ post.count = 0 ∧ post.frame = template.frame
+def AspisR1.NJM_RoundRoot.Cases : {H : Type} →
+  aspis_core.Digest32 H →
+    r1_wire.ValidatedRecord →
+      NIX_CertificateFrames.Polynomial →
+        NJM_RoundRoot.Q →
+          NJM_RoundRoot.Q →
+            NIX_CertificateFrames.Alpha →
+              Aeneas.Std.Usize →
+                r1_wire.SemanticTranscript H → PreparedHashCode.Log × Aeneas.Std.Result (NJG_RoundCode.Out H) → Prop :=
+fun {H} D record p b running a r before whole =>
+  if b ≠ running then
+    whole = ([], Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err (r1_wire.Error.Boundary r))) ∧
+      ∀ (template : NIX_CertificateFrames.RoundPre) (post : NIX_CertificateFrames.RoundOutput),
+        (∀ (j : Fin 10) (z : Fin 32),
+            NIX_CertificateFrames.roundResult
+              (NJM_RoundStage.install
+                { prefixToken := template.prefixToken, framed := template.framed, round := template.round,
+                  alpha := template.alpha, running := template.running, beforeState := template.beforeState,
+                  beforeNext := template.beforeNext, polynomial := template.polynomial, boundary := template.boundary,
+                  semantic := template.semantic, newState := template.newState, newNext := template.newNext,
+                  value := template.value, count := 0, frame := template.frame, seed := template.seed,
+                  oldState := template.oldState, times := template.times }
+                record p b running a r before before (Aeneas.Std.core.result.Result.Ok aspis_core.field.QM31.ZERO)
+                aspis_core.field.QM31.ZERO)
+              j z post) →
+          post = Aeneas.Std.core.result.Result.Err (r1_wire.Error.Boundary r)
+  else
+    have child := PreparedHashCode.run (S1SemanticCode.semanticValidated D before record);
+    match child.2 with
+    | Aeneas.Std.Result.fail error => whole = (child.1, Aeneas.Std.Result.fail error)
+    | Aeneas.Std.Result.div => whole = (child.1, Aeneas.Std.Result.div)
+    | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err error, after) =>
+      whole = (child.1, Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err error)) ∧
+        ∀ (template : NIX_CertificateFrames.RoundPre) (post : NIX_CertificateFrames.RoundOutput),
+          (∀ (j : Fin 10) (z : Fin 32),
+              NIX_CertificateFrames.roundResult
+                (NJM_RoundStage.install
+                  { prefixToken := template.prefixToken, framed := template.framed, round := template.round,
+                    alpha := template.alpha, running := template.running, beforeState := template.beforeState,
+                    beforeNext := template.beforeNext, polynomial := template.polynomial, boundary := template.boundary,
+                    semantic := template.semantic, newState := template.newState, newNext := template.newNext,
+                    value := template.value, count := 0, frame := template.frame, seed := template.seed,
+                    oldState := template.oldState, times := template.times }
+                  record p b running a r before after (Aeneas.Std.core.result.Result.Err error)
+                  aspis_core.field.QM31.ZERO)
+                j z post) →
+            post = Aeneas.Std.core.result.Result.Err error
+    | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok q, after) =>
+      ∃ value,
+        AspisS1ExtractedRoundChildren.generatedMainValue p (Aeneas.Std.Array.set a r q) r = Aeneas.Std.Result.ok value ∧
+          JFv_RoundArithmetic.Canonical value ∧
+            whole =
+                (child.1,
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (value, Aeneas.Std.Array.set a r q, after))) ∧
+              ∀ (template : NIX_CertificateFrames.RoundPre) (post : NIX_CertificateFrames.RoundOutput),
+                (∀ (j : Fin 10) (z : Fin 32),
+                    NIX_CertificateFrames.roundResult
+                      (NJM_RoundStage.install
+                        { prefixToken := template.prefixToken, framed := template.framed, round := template.round,
+                          alpha := template.alpha, running := template.running, beforeState := template.beforeState,
+                          beforeNext := template.beforeNext, polynomial := template.polynomial,
+                          boundary := template.boundary, semantic := template.semantic, newState := template.newState,
+                          newNext := template.newNext, value := template.value, count := 0, frame := template.frame,
+                          seed := template.seed, oldState := template.oldState, times := template.times }
+                        record p b running a r before after (Aeneas.Std.core.result.Result.Ok q) value)
+                      j z post) →
+                  post =
+                    Aeneas.Std.core.result.Result.Ok (value, Aeneas.Std.Array.set a r q, after.state, after.next_row)
+def AspisR1.NJM_RoundJoined.Calls : {H : Type} →
+  NIX_CertificateFrames.RoundPre →
+    r1_wire.ValidatedRecord →
+      NIX_CertificateFrames.Polynomial →
+        NIX_CertificateFrames.Alpha →
+          Aeneas.Std.Usize →
+            r1_wire.SemanticTranscript H →
+              NIX_CertificateFrames.Q → ℕ → Fin 28 → Fin 10 → Fin 32 → NIX_CertificateFrames.RoundLog → Prop :=
+fun {H} template record polynomial a r before q pointer k j z log =>
+  log.getterPrefix 0 = template.prefixToken ∧
+    log.getterRow 0 = 15 + ↑r ∧
+      log.getterCount = 2 ∧
+        log.getterPrefix 1 = template.prefixToken ∧
+          log.getterRow 1 = 15 + ↑r ∧
+            log.decodeRow = 15 + ↑r ∧
+              log.decodePointer = pointer ∧
+                log.decodeLength = (↑record.framed).length ∧
+                  log.decodeOffset = 0 ∧
+                    log.boundaryValue = NIX_CertificateFrames.cell polynomial k ∧
+                      log.semanticRow = 15 + ↑r ∧
+                        log.semanticPointer = some pointer ∧
+                          log.semanticLength = (↑record.framed).length ∧
+                            NIX_CertificateFrames.cell log.semanticState z = NIX_CertificateFrames.cell before.state z ∧
+                              log.semanticNext = before.next_row ∧
+                                log.valuePolynomial = NIX_CertificateFrames.cell polynomial k ∧
+                                  log.valueAlpha = NIX_CertificateFrames.cell (Aeneas.Std.Array.set a r q) j ∧
+                                    log.valueRound = ↑r ∧
+                                      log.times 0 = 0 ∧
+                                        log.times 1 = 1 ∧
+                                          log.times 2 = 2 ∧ log.times 3 = 3 ∧ log.count = 4 ∧ log.frame = template.frame
+def AspisR1.NJM_RoundAllArgs.Args : NIX_CertificateFrames.RoundPre →
+  ℕ → Fin 28 → Fin 10 → Fin 32 → NIX_CertificateFrames.RoundLog → Prop :=
+fun s pointer k j z p =>
+  p.getterPrefix 0 = s.prefixToken ∧
+    p.getterRow 0 = 15 + ↑s.round ∧
+      (p.getterCount = if NIX_CertificateFrames.sampled s = true then 2 else 1) ∧
+        (p.getterPrefix 1 = if NIX_CertificateFrames.sampled s = true then s.prefixToken else 0) ∧
+          (p.getterRow 1 = if NIX_CertificateFrames.sampled s = true then 15 + ↑s.round else 0) ∧
+            p.decodeRow = 15 + ↑s.round ∧
+              p.decodePointer = pointer ∧
+                p.decodeLength = (↑s.framed).length ∧
+                  p.decodeOffset = 0 ∧
+                    p.times 0 = s.count ∧
+                      p.frame = s.frame ∧
+                        p.boundaryValue = NIX_CertificateFrames.polyCell s k ∧
+                          (p.times 1 = if NIX_CertificateFrames.decoded s = true then s.count + 1 else s.times 1) ∧
+                            (p.semanticRow = if NIX_CertificateFrames.sampled s = true then 15 + ↑s.round else 0) ∧
+                              (p.semanticPointer =
+                                  if NIX_CertificateFrames.sampled s = true then some pointer else none) ∧
+                                (p.semanticLength =
+                                    if NIX_CertificateFrames.sampled s = true then (↑s.framed).length else 0) ∧
+                                  (NIX_CertificateFrames.cell p.semanticState z =
+                                      if NIX_CertificateFrames.sampled s = true then
+                                        NIX_CertificateFrames.cell s.beforeState z
+                                      else NIX_CertificateFrames.cell s.oldState z) ∧
+                                    (p.semanticNext =
+                                        if NIX_CertificateFrames.sampled s = true then s.beforeNext else 0#u8) ∧
+                                      (p.times 2 =
+                                          if NIX_CertificateFrames.sampled s = true then s.count + 2 else s.times 2) ∧
+                                        (p.valuePolynomial =
+                                            if NIX_CertificateFrames.finished s = true then
+                                              NIX_CertificateFrames.polyCell s k
+                                            else s.seed) ∧
+                                          (p.valueAlpha =
+                                              if NIX_CertificateFrames.finished s = true then
+                                                NIX_CertificateFrames.alphaCell s j
+                                              else s.seed) ∧
+                                            (p.valueRound =
+                                                if NIX_CertificateFrames.finished s = true then ↑s.round else 99) ∧
+                                              (p.times 3 =
+                                                  if NIX_CertificateFrames.finished s = true then s.count + 3
+                                                  else s.times 3) ∧
+                                                p.count =
+                                                  s.count +
+                                                    if (!NIX_CertificateFrames.decoded s) = true then 1
+                                                    else
+                                                      if (!decide (s.boundary = s.running)) = true then 2
+                                                      else
+                                                        match s.semantic with
+                                                        | Aeneas.Std.core.result.Result.Err a => 3
+                                                        | Aeneas.Std.core.result.Result.Ok a => 4
+def AspisR1.NJM_RoundsClosed.Child : {H : Type} →
+  aspis_core.Digest32 H →
+    (bytes : Aeneas.Std.Slice Aeneas.Std.U8) →
+      (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix) →
+        AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre) →
+          r1_wire.SemanticTranscript H →
+            NIX_CertificateFrames.Alpha → NJM_RoundsClosed.Q → (r : Aeneas.Std.Usize) → ↑r < 10 → Prop :=
+fun {H} D bytes pre parsed before a running r bound =>
+  ∃ record p b,
+    (PrefixAdapter.fromOld pre).validated_record (NJG_RoundProducer.row r bound) =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok record) ∧
+      AspisS1ExtractedRoundChildren.decodeMain 28#usize record 0#usize =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok p) ∧
+        AspisS1ExtractedRoundChildren.generatedMainBoundary p = Aeneas.Std.Result.ok b ∧
+          NJM_RoundRoot.Cases D record p b running a r before
+              (PreparedHashCode.run
+                (S1SemanticCode.roundStep NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) before a running r)) ∧
+            record.row = NJG_RoundProducer.row r bound ∧
+              (↑record.framed).length = 901 ∧
+                (∀ (template : NIX_CertificateFrames.RoundPre),
+                    NIX_CertificateFrames.domain
+                      (NJM_RoundStage.install
+                        { prefixToken := template.prefixToken, framed := template.framed, round := template.round,
+                          alpha := template.alpha, running := template.running, beforeState := template.beforeState,
+                          beforeNext := template.beforeNext, polynomial := template.polynomial,
+                          boundary := template.boundary, semantic := template.semantic, newState := template.newState,
+                          newNext := template.newNext, value := template.value, count := 0, frame := template.frame,
+                          seed := template.seed, oldState := template.oldState, times := template.times }
+                        record p b running a r before before
+                        (Aeneas.Std.core.result.Result.Ok aspis_core.field.QM31.ZERO) aspis_core.field.QM31.ZERO)) ∧
+                  (∀ (reply : Aeneas.Std.core.result.Result aspis_core.field.QM31 r1_wire.Error)
+                      (after : r1_wire.SemanticTranscript H),
+                      (PreparedHashCode.run (S1SemanticCode.semanticValidated D before record)).2 =
+                          Aeneas.Std.Result.ok (reply, after) →
+                        ∀ (template : NIX_CertificateFrames.RoundPre) (value : NJM_RoundsClosed.Q),
+                          NIX_CertificateFrames.domain
+                            (NJM_RoundStage.install
+                              { prefixToken := template.prefixToken, framed := template.framed, round := template.round,
+                                alpha := template.alpha, running := template.running,
+                                beforeState := template.beforeState, beforeNext := template.beforeNext,
+                                polynomial := template.polynomial, boundary := template.boundary,
+                                semantic := template.semantic, newState := template.newState,
+                                newNext := template.newNext, value := template.value, count := 0,
+                                frame := template.frame, seed := template.seed, oldState := template.oldState,
+                                times := template.times }
+                              record p b running a r before after reply value)) ∧
+                    (∀ (after : r1_wire.SemanticTranscript H) (q : NJM_RoundsClosed.Q),
+                        (PreparedHashCode.run (S1SemanticCode.semanticValidated D before record)).2 =
+                            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok q, after) →
+                          b = running →
+                            ∀ (template : NIX_CertificateFrames.RoundPre) (value : NJM_RoundsClosed.Q) (pointer : ℕ)
+                              (k : Fin 28) (j : Fin 10) (z : Fin 32) (log : NIX_CertificateFrames.RoundLog),
+                              NIX_CertificateFrames.roundArgs
+                                  (NJM_RoundStage.install
+                                    { prefixToken := template.prefixToken, framed := template.framed,
+                                      round := template.round, alpha := template.alpha, running := template.running,
+                                      beforeState := template.beforeState, beforeNext := template.beforeNext,
+                                      polynomial := template.polynomial, boundary := template.boundary,
+                                      semantic := template.semantic, newState := template.newState,
+                                      newNext := template.newNext, value := template.value, count := 0,
+                                      frame := template.frame, seed := template.seed, oldState := template.oldState,
+                                      times := template.times }
+                                    record p b running a r before after (Aeneas.Std.core.result.Result.Ok q) value)
+                                  pointer k j z log →
+                                NJM_RoundJoined.Calls template record p a r before q pointer k j z log) ∧
+                      ∀ (after : r1_wire.SemanticTranscript H)
+                        (reply : Aeneas.Std.core.result.Result NJM_RoundsClosed.Q r1_wire.Error)
+                        (template : NIX_CertificateFrames.RoundPre) (value : NJM_RoundsClosed.Q) (pointer : ℕ)
+                        (k : Fin 28) (j : Fin 10) (z : Fin 32) (log : NIX_CertificateFrames.RoundLog),
+                        NIX_CertificateFrames.roundArgs
+                            (NJM_RoundStage.install
+                              { prefixToken := template.prefixToken, framed := template.framed, round := template.round,
+                                alpha := template.alpha, running := template.running,
+                                beforeState := template.beforeState, beforeNext := template.beforeNext,
+                                polynomial := template.polynomial, boundary := template.boundary,
+                                semantic := template.semantic, newState := template.newState,
+                                newNext := template.newNext, value := template.value, count := 0,
+                                frame := template.frame, seed := template.seed, oldState := template.oldState,
+                                times := template.times }
+                              record p b running a r before after reply value)
+                            pointer k j z log →
+                          NJM_RoundAllArgs.Args
+                            (NJM_RoundStage.install
+                              { prefixToken := template.prefixToken, framed := template.framed, round := template.round,
+                                alpha := template.alpha, running := template.running,
+                                beforeState := template.beforeState, beforeNext := template.beforeNext,
+                                polynomial := template.polynomial, boundary := template.boundary,
+                                semantic := template.semantic, newState := template.newState,
+                                newNext := template.newNext, value := template.value, count := 0,
+                                frame := template.frame, seed := template.seed, oldState := template.oldState,
+                                times := template.times }
+                              record p b running a r before after reply value)
+                            pointer k j z log
+structure AspisR1.NJM_RoundsCut.Observations : Type
+number of parameters: 0
+fields:
+  AspisR1.NJM_RoundsCut.Observations.post : NJG_NativeCuts.RoundsPre → NIX_CertificateFrames.RoundOutput × ℕ
+  AspisR1.NJM_RoundsCut.Observations.args : NJG_NativeCuts.RoundsPre →
+      Fin 10 → Fin 32 → Fin 4 → NJG_NativeCuts.RoundsLog
+constructor:
+  AspisR1.NJM_RoundsCut.Observations.mk (post : NJG_NativeCuts.RoundsPre → NIX_CertificateFrames.RoundOutput × ℕ)
+    (args : NJG_NativeCuts.RoundsPre → Fin 10 → Fin 32 → Fin 4 → NJG_NativeCuts.RoundsLog) : NJM_RoundsCut.Observations
+def AspisR1.NJM_RoundsCut.Cut : NJM_RoundsCut.Observations → Prop :=
+fun native =>
+  (∀ (s : NJG_NativeCuts.RoundsPre) (k : Fin 10) (z : Fin 32) (limb : Fin 4),
+      NJG_NativeCuts.roundsArgs
+        { prefixToken := s.prefixToken, round := s.round, alpha := s.alpha, running := s.running, state := s.state,
+          next := s.next, reply := s.reply, count := 0, frame := s.frame }
+        k z limb (native.args s k z limb)) ∧
+    ∀ (s : NJG_NativeCuts.RoundsPre) (k : Fin 10) (z : Fin 32) (limb : Fin 4),
+      NJG_NativeCuts.roundsResult
+        { prefixToken := s.prefixToken, round := s.round, alpha := s.alpha, running := s.running, state := s.state,
+          next := s.next, reply := s.reply, count := 0, frame := s.frame }
+        k z limb (native.post s).1 (native.post s).2
+def AspisR1.NJM_CircleRoot.Branch : {Pointer H : Type} →
+  aspis_core.Digest32 H →
+    NIX_DispatchCut.Pre Pointer →
+      r1_wire.SemanticTranscript H → r1_wire.ValidatedRecord → FinishModel.CircleRow → Prop :=
+fun {Pointer H} D template before record row =>
+  have child := PreparedHashCode.run (S1SemanticCode.sampleBlock D before (NJM_CirclePacket.tag row) record.framed);
+  have whole := PreparedHashCode.run (NJM_CircleCode.dispatch D before record (NJM_CirclePacket.tag row));
+  match child.2 with
+  | Aeneas.Std.Result.fail e => whole = (child.1, Aeneas.Std.Result.fail e)
+  | Aeneas.Std.Result.div => whole = (child.1, Aeneas.Std.Result.div)
+  | Aeneas.Std.Result.ok (reply, after) =>
+    NIX_DispatchCut.childDomain reply ∧
+      (NJM_CircleNative.install (NJM_CirclePacket.inputs template record row before after reply)).count < 254 ∧
+        ∀ (post : NIX_DispatchCut.Post Pointer),
+          NIX_DispatchCut.cut
+              (NJM_CircleNative.install (NJM_CirclePacket.inputs template record row before after reply)) post →
+            whole = (child.1, Aeneas.Std.Result.ok (post.result, after)) ∧
+              post.transcriptState = after.state ∧ post.transcriptNext = after.next_row ∧ post.frame = template.frame
+def AspisR1.NJM_CircleCode.source : {H : Type} →
+  aspis_core.Digest32 H →
+    r1_wire.SemanticTranscript H →
+      r1_wire.ValidatedRecord →
+        PreparedHashCode.Code
+          (Aeneas.Std.core.result.Result NJM_CircleJoin.Point r1_wire.Error × r1_wire.SemanticTranscript H) :=
+fun {H} D t record => NJM_CircleCode.dispatch D t record record.row
+def AspisR1.NJM_CirclePacket.inputs : {Pointer H : Type} →
+  NIX_DispatchCut.Pre Pointer →
+    r1_wire.ValidatedRecord →
+      FinishModel.CircleRow →
+        r1_wire.SemanticTranscript H →
+          r1_wire.SemanticTranscript H → NIX_DispatchCut.Reply → NIX_DispatchCut.Pre Pointer :=
+fun {Pointer H} template record row before after reply =>
+  { pointer := template.pointer, framed := record.framed, row := NJM_CirclePacket.tag row, state := before.state,
+    next := before.next_row, newState := after.state, newNext := after.next_row, reply := reply,
+    point := template.point, count := 0, frame := template.frame, oldState := template.oldState,
+    oldSample := template.oldSample }
+def AspisR1.NJM_CircleNative.install : {Pointer : Type} → NIX_DispatchCut.Pre Pointer → NIX_DispatchCut.Pre Pointer :=
+fun {Pointer} s =>
+  { pointer := s.pointer, framed := s.framed, row := s.row, state := s.state, next := s.next, newState := s.newState,
+    newNext := s.newNext, reply := s.reply,
+    point :=
+      match s.reply with
+      | Aeneas.Std.core.result.Result.Ok b => NJM_CircleJoin.point b (NJM_CircleNative.row s.row)
+      | Aeneas.Std.core.result.Result.Err a => s.point,
+    count := s.count, frame := s.frame, oldState := s.oldState, oldSample := s.oldSample }
+'AspisR1.NJM_RoundJoined.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJM_RoundsClosed.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJM_CircleRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJM_CircleInvalid.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+```
